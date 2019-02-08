@@ -33,7 +33,6 @@ namespace tlp {
 class TLP_QT_SCOPE QGlBufferManager {
 
 public:
-
   static void clearBuffers();
 
   /**

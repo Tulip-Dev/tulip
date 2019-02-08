@@ -80,7 +80,6 @@ private:
   GlLabel *sliderLabel;
   Coord sliderCoord;
   float rotationAngle;
-
 };
 
 class ParallelCoordsAxisSliders : public GLInteractorComponent {

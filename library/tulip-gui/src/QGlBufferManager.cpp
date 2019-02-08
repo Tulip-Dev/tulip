@@ -28,8 +28,10 @@ using namespace std;
 
 namespace tlp {
 
-std::map<std::pair<int, int>, QOpenGLFramebufferObject *> QGlBufferManager::widthHeightToFramebuffer;
-std::map<QOpenGLFramebufferObject *, std::pair<int, int>> QGlBufferManager::framebufferToWidthHeight;
+std::map<std::pair<int, int>, QOpenGLFramebufferObject *>
+    QGlBufferManager::widthHeightToFramebuffer;
+std::map<QOpenGLFramebufferObject *, std::pair<int, int>>
+    QGlBufferManager::framebufferToWidthHeight;
 
 void QGlBufferManager::clearBuffers() {
   for (std::map<std::pair<int, int>, QOpenGLFramebufferObject *>::iterator it =
@@ -40,7 +42,6 @@ void QGlBufferManager::clearBuffers() {
   widthHeightToFramebuffer.clear();
   framebufferToWidthHeight.clear();
 }
-
 
 QOpenGLFramebufferObject *QGlBufferManager::getFramebufferObject(int width, int height) {
   map<pair<int, int>, QOpenGLFramebufferObject *>::iterator it =

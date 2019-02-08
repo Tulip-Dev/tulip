@@ -262,7 +262,7 @@ GraphPerspective::~GraphPerspective() {
 
   // disconnect to avoid any possible segfaults when deleting graphs
   disconnect(_graphs, SIGNAL(currentGraphChanged(tlp::Graph *)), this,
-	     SLOT(currentGraphChanged(tlp::Graph *)));
+             SLOT(currentGraphChanged(tlp::Graph *)));
 
   // delete the workspace, which causes views deletion, before the graphs
   // to avoid any possible segfaults when closing Tulip
@@ -271,7 +271,7 @@ GraphPerspective::~GraphPerspective() {
     _ui->workspace = nullptr;
     // more disconnection
     disconnect(_graphs, SIGNAL(currentGraphChanged(tlp::Graph *)), _ui->algorithmRunner,
-	       SLOT(setGraph(tlp::Graph *)));
+               SLOT(setGraph(tlp::Graph *)));
   }
 
   // ensure all loaded graphs are deleted

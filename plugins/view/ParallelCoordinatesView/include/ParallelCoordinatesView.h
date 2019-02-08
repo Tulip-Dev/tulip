@@ -166,7 +166,7 @@ public slots:
   void setupAndDrawView();
 
   void applySettings() override;
-    void resetHightlightedElementsSlot();
+  void resetHightlightedElementsSlot();
 
 protected slots:
 

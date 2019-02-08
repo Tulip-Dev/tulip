@@ -25,7 +25,7 @@
 #include <QWidget>
 
 namespace Ui {
-    class AxisSlidersOptions;
+class AxisSlidersOptions;
 }
 
 namespace tlp {
@@ -108,23 +108,23 @@ public:
  *
  */
 
-class AxisSliderOptions: public QWidget {
+class AxisSliderOptions : public QWidget {
 
-    Q_OBJECT
+  Q_OBJECT
 
-    Ui::AxisSlidersOptions *_ui;
+  Ui::AxisSlidersOptions *_ui;
 
 public:
- AxisSliderOptions(QWidget* parent=nullptr);
- ~AxisSliderOptions();
+  AxisSliderOptions(QWidget *parent = nullptr);
+  ~AxisSliderOptions();
 
 signals:
-    void resetSliders();
+  void resetSliders();
 };
 
 class InteractorAxisSliders : public ParallelCoordinatesInteractor {
 
-    AxisSliderOptions *configwidget;
+  AxisSliderOptions *configwidget;
 
 public:
   PLUGININFORMATION("InteractorAxisSliders", "Tulip Team", "02/04/2009", "Axis Sliders Interactor",
@@ -141,7 +141,6 @@ public:
    */
   void construct() override;
   virtual QWidget *configurationOptionsWidget() const;
-
 };
 
 /** \brief Parallel coordinates interactor to have boxplot

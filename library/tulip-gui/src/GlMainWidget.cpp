@@ -187,7 +187,8 @@ void GlMainWidget::setupOpenGlContext() {
 //==================================================
 void GlMainWidget::createRenderingStore(int width, int height) {
 
-  useFramebufferObject = advancedAntiAliasing && QOpenGLFramebufferObject::hasOpenGLFramebufferBlit();
+  useFramebufferObject =
+      advancedAntiAliasing && QOpenGLFramebufferObject::hasOpenGLFramebufferBlit();
 
   if (useFramebufferObject && (!glFrameBuf || glFrameBuf->size().width() != width ||
                                glFrameBuf->size().height() != height)) {
@@ -257,9 +258,8 @@ void GlMainWidget::render(RenderingOptions options, bool checkVisibility) {
 
       if (useFramebufferObject) {
         glFrameBuf->release();
-	QRect fbRect(0, 0, width, height);
-        QOpenGLFramebufferObject::blitFramebuffer(glFrameBuf2, fbRect,
-						  glFrameBuf, fbRect);
+        QRect fbRect(0, 0, width, height);
+        QOpenGLFramebufferObject::blitFramebuffer(glFrameBuf2, fbRect, glFrameBuf, fbRect);
       }
     } else {
       scene.initGlParameters();
@@ -273,8 +273,7 @@ void GlMainWidget::render(RenderingOptions options, bool checkVisibility) {
 
     if (useFramebufferObject) {
       QRect fbRect(0, 0, width, height);
-      QOpenGLFramebufferObject::blitFramebuffer(nullptr, fbRect,
-						glFrameBuf2, fbRect);
+      QOpenGLFramebufferObject::blitFramebuffer(nullptr, fbRect, glFrameBuf2, fbRect);
     } else {
       if (options.testFlag(RenderScene)) {
         // Copy the back buffer (containing the graph render) in the rendering store to reuse it
@@ -478,14 +477,13 @@ void GlMainWidget::getTextureRealSize(int width, int height, int &textureRealWid
 }
 //=====================================================
 QOpenGLFramebufferObject *GlMainWidget::createTexture(const std::string &textureName, int width,
-                                                  int height) {
+                                                      int height) {
 
   makeCurrent();
   scene.setViewport(0, 0, width, height);
   scene.ajustSceneToSize(width, height);
 
-  QOpenGLFramebufferObject *glFrameBuf =
-      QGlBufferManager::getFramebufferObject(width, height);
+  QOpenGLFramebufferObject *glFrameBuf = QGlBufferManager::getFramebufferObject(width, height);
   assert(glFrameBuf->size() == QSize(width, height));
 
   glFrameBuf->bind();
@@ -566,7 +564,7 @@ QImage GlMainWidget::createPicture(int width, int height, bool center) {
     frameBuf->release();
 
     QOpenGLFramebufferObject::blitFramebuffer(frameBuf2, QRect(0, 0, width, height), frameBuf,
-                                          QRect(0, 0, width, height));
+                                              QRect(0, 0, width, height));
 
     resultImage = frameBuf2->toImage();
 
@@ -594,10 +592,11 @@ QImage GlMainWidget::createPicture(int width, int height, bool center) {
   delete frameBuf;
   delete frameBuf2;
 
-  // The QOpenGLFramebufferObject returns the wrong image format QImage::Format_ARGB32_Premultiplied. We
-  // need to create an image from original data with the right format QImage::Format_ARGB32.
-  // We need to clone the data as when the image var will be destroy at the end of the function it's
-  // data will be destroyed too and the newly created image object will have invalid data pointer.
+  // The QOpenGLFramebufferObject returns the wrong image format
+  // QImage::Format_ARGB32_Premultiplied. We need to create an image from original data with the
+  // right format QImage::Format_ARGB32. We need to clone the data as when the image var will be
+  // destroy at the end of the function it's data will be destroyed too and the newly created image
+  // object will have invalid data pointer.
   return QImage(resultImage.bits(), resultImage.width(), resultImage.height(),
                 QImage::Format_ARGB32)
       .convertToFormat(QImage::Format_RGB32);
