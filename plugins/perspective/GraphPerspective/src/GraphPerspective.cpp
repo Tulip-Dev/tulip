@@ -260,10 +260,19 @@ GraphPerspective::~GraphPerspective() {
     qInstallMessageHandler(nullptr);
   }
 
-  // ensure the opened views and interactors get deleted before the loaded graphs
-  // to avoid possible segfaults when closing Tulip
-  if (_ui && _ui->workspace)
-    _ui->workspace->closeAll();
+  // disconnect to avoid any possible segfaults when deleting graphs
+  disconnect(_graphs, SIGNAL(currentGraphChanged(tlp::Graph *)), this,
+	     SLOT(currentGraphChanged(tlp::Graph *)));
+
+  // delete the workspace, which causes views deletion, before the graphs
+  // to avoid any possible segfaults when closing Tulip
+  if (_ui) {
+    delete _ui->workspace;
+    _ui->workspace = nullptr;
+    // more disconnection
+    disconnect(_graphs, SIGNAL(currentGraphChanged(tlp::Graph *)), _ui->algorithmRunner,
+	       SLOT(setGraph(tlp::Graph *)));
+  }
 
   // ensure all loaded graphs are deleted
   for (auto graph : _graphs->graphs()) {

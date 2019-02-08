@@ -120,7 +120,7 @@ const std::string &glGetErrorDescription(GLuint errorCode) {
 }
 
 //====================================================
-void glTest(const string &message) {
+void glTest(const string &message, int line, bool throwException) {
 #ifndef NDEBUG
   unsigned int i = 1;
   GLenum error = glGetError();
@@ -131,20 +131,26 @@ void glTest(const string &message) {
   while (error != GL_NO_ERROR) {
     haveError = true;
 
-    if (i == 1)
-      errorStream << "[OpenGL ERROR] : " << message << endl;
-
-    errorStream << "[" << i << "] ========> : " << glGetErrorDescription(error).c_str() << endl;
+    if (i == 1) {
+      errorStream << "[OpenGL ERROR] " << message;
+      if (line > -1)
+        errorStream << ':' << line << endl;
+    }
+    errorStream << "========> " << glGetErrorDescription(error) << endl;
     error = glGetError();
     ++i;
   }
 
-  if (haveError)
-    throw tlp::TulipException(errorStream.str());
+  if (haveError) {
+    if (throwException)
+      throw tlp::TulipException(errorStream.str());
+    tlp::warning() << errorStream.str();
+  }
 
 #else
-  // fixes unused parameter warning in release mode
+  // fixes unused parameter warnings in release mode
   (void)message;
+  (void)throwException;
 #endif
 }
 //====================================================

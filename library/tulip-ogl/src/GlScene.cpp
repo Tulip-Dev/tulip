@@ -105,6 +105,7 @@ GlScene::~GlScene() {
 }
 
 void GlScene::initGlParameters() {
+  GL_TEST_ERROR();
   OpenGlConfigManager::getInst().initExtensions();
 
   glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
@@ -148,15 +149,7 @@ void GlScene::initGlParameters() {
   }
 
   glDisable(GL_TEXTURE_2D);
-
-#ifndef NDEBUG
-  GLenum error = glGetError();
-
-  if (error != GL_NO_ERROR)
-    tlp::warning() << "[OpenGL Error] => " << glGetErrorDescription(error).c_str() << endl
-                   << "\tin : " << __PRETTY_FUNCTION__ << endl;
-
-#endif
+  GL_TEST_ERROR();
 }
 
 void GlScene::draw() {

@@ -157,15 +157,7 @@ void Camera::initGl() {
 }
 //====================================================
 void Camera::initLight() {
-
-#ifndef NDEBUG
-  GLuint error = glGetError();
-
-  if (error != GL_NO_ERROR)
-    tlp::warning() << "[OpenGL Error] => " << glGetErrorDescription(error).c_str() << endl
-                   << "\tin : " << __PRETTY_FUNCTION__ << " begin" << endl;
-
-#endif
+  GL_TEST_ERROR();
 
   GLfloat pos[4];
 
@@ -202,17 +194,12 @@ void Camera::initLight() {
   glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, attQ);
   glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 
-#ifndef NDEBUG
-  error = glGetError();
-
-  if (error != GL_NO_ERROR)
-    tlp::warning() << "[OpenGL Error] => " << glGetErrorDescription(error).c_str() << endl
-                   << "\tin : " << __PRETTY_FUNCTION__ << "end" << endl;
-
-#endif
+  GL_TEST_ERROR();
 }
 //====================================================
 void Camera::initProjection(const Vector<int, 4> &viewport, bool reset) {
+  GL_TEST_ERROR();
+
   glMatrixMode(GL_PROJECTION);
 
   if (reset)
@@ -263,14 +250,7 @@ void Camera::initProjection(const Vector<int, 4> &viewport, bool reset) {
     glDisable(GL_DEPTH_TEST);
   }
 
-#ifndef NDEBUG
-  GLenum error = glGetError();
-
-  if (error != GL_NO_ERROR)
-    tlp::warning() << "[OpenGL Error] => " << glGetErrorDescription(error).c_str() << endl
-                   << "\tin : " << __PRETTY_FUNCTION__ << endl;
-
-#endif
+  GL_TEST_ERROR();
 }
 //====================================================
 void Camera::initProjection(bool reset) {
@@ -280,6 +260,8 @@ void Camera::initProjection(bool reset) {
 }
 //====================================================
 void Camera::initModelView() {
+  GL_TEST_ERROR();
+
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
@@ -336,14 +318,7 @@ void Camera::initModelView() {
   glPopMatrix();
   matrixCoherent = true;
 
-#ifndef NDEBUG
-  GLenum error = glGetError();
-
-  if (error != GL_NO_ERROR)
-    tlp::warning() << "[OpenGL Error] => " << glGetErrorDescription(error).c_str() << endl
-                   << "\tin : " << __PRETTY_FUNCTION__ << endl;
-
-#endif
+  GL_TEST_ERROR();
 }
 //====================================================
 void Camera::setSceneRadius(double sceneRadius, const BoundingBox sceneBoundingBox) {
