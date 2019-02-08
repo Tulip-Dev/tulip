@@ -57,6 +57,8 @@ GlConvexHull::GlConvexHull(const vector<Coord> &points, const vector<Color> &fco
 }
 
 void GlConvexHull::draw(float, Camera *) {
+  GL_THROW_ON_ERROR();
+
   glEnable(GL_BLEND);
 
   if (_filled) {
@@ -95,7 +97,7 @@ void GlConvexHull::draw(float, Camera *) {
     glEnd();
   }
 
-  glTest(__PRETTY_FUNCTION__);
+  GL_THROW_ON_ERROR();
 }
 
 #define V_INC 30

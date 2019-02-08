@@ -23,7 +23,7 @@
 
 #include <GL/glew.h>
 
-#include <QGLFramebufferObject>
+#include <QOpenGLFramebufferObject>
 
 #include <tulip/Camera.h>
 #include <tulip/GlOffscreenRenderer.h>
@@ -31,6 +31,7 @@
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlTools.h>
 
 #include <sstream>
 
@@ -38,10 +39,12 @@ using namespace std;
 
 namespace tlp {
 
-GlOffscreenRenderer GlOffscreenRenderer::instance;
+GlOffscreenRenderer *GlOffscreenRenderer::instance = nullptr;
 
 GlOffscreenRenderer *GlOffscreenRenderer::getInstance() {
-  return &instance;
+  if (!instance)
+    instance = new GlOffscreenRenderer();
+  return instance;
 }
 
 GlOffscreenRenderer::GlOffscreenRenderer()
@@ -123,7 +126,7 @@ void GlOffscreenRenderer::clearScene(bool deleteGlEntities) {
 
 void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
 
-  antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit();
+  antialiasedFbo = antialiased && QOpenGLFramebufferObject::hasOpenGLFramebufferBlit();
 
   if (glFrameBuf != nullptr &&
       (vPWidth != uint(glFrameBuf->width()) || vPHeight != uint(glFrameBuf->height()))) {
@@ -134,17 +137,17 @@ void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
   }
 
   if (glFrameBuf == nullptr) {
-    QGLFramebufferObjectFormat fboFmt;
-    fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
+    QOpenGLFramebufferObjectFormat fboFmt;
+    fboFmt.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
 
     if (antialiasedFbo)
       fboFmt.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
 
-    glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, fboFmt);
+    glFrameBuf = new QOpenGLFramebufferObject(vPWidth, vPHeight, fboFmt);
   }
 
   if (antialiasedFbo && glFrameBuf2 == nullptr) {
-    glFrameBuf2 = new QGLFramebufferObject(vPWidth, vPHeight);
+    glFrameBuf2 = new QOpenGLFramebufferObject(vPWidth, vPHeight);
   }
 }
 
@@ -169,13 +172,17 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
 
-  Camera &camera = mainLayer->getCamera();
-
+  GL_TEST_ERROR();
   glFrameBuf->bind();
+  // the line above can produce an invalid op error, forget it
+  glGetError();
+  GL_TEST_ERROR();
 
   if (centerScene) {
     scene.centerScene();
   }
+
+  Camera &camera = mainLayer->getCamera();
 
   if (cameraCenter != Coord(FLT_MAX, FLT_MAX, FLT_MAX)) {
     camera.setCenter(cameraCenter);
@@ -192,7 +199,7 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
   glFrameBuf->release();
 
   if (antialiasedFbo)
-    QGLFramebufferObject::blitFramebuffer(
+    QOpenGLFramebufferObject::blitFramebuffer(
         glFrameBuf2, QRect(0, 0, glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf,
         QRect(0, 0, glFrameBuf->width(), glFrameBuf->height()));
 
@@ -202,7 +209,11 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
 
+  GL_TEST_ERROR();
   glPopAttrib();
+  // the line above can produce an invalid op error, forget it
+  glGetError();
+  GL_TEST_ERROR();
 }
 
 void GlOffscreenRenderer::renderExternalScene(GlScene *scene, const bool antialiased) {
@@ -232,7 +243,7 @@ void GlOffscreenRenderer::renderExternalScene(GlScene *scene, const bool antiali
   glFrameBuf->release();
 
   if (antialiasedFbo)
-    QGLFramebufferObject::blitFramebuffer(
+    QOpenGLFramebufferObject::blitFramebuffer(
         glFrameBuf2, QRect(0, 0, glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf,
         QRect(0, 0, glFrameBuf->width(), glFrameBuf->height()));
 
@@ -242,7 +253,11 @@ void GlOffscreenRenderer::renderExternalScene(GlScene *scene, const bool antiali
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
 
+  GL_TEST_ERROR();
   glPopAttrib();
+  // the line above can produce an invalid op error, forget it
+  glGetError();
+  GL_TEST_ERROR();
 
   scene->setViewport(backupViewport);
 }
@@ -285,7 +300,11 @@ GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
+  GL_TEST_ERROR();
   QImage image = getImage().mirrored();
+  // the line above can produce an invalid op error, forget it
+  glGetError();
+  GL_TEST_ERROR();
   unsigned char *buff = image.bits();
 
   glBindTexture(GL_TEXTURE_2D, textureId);
@@ -296,8 +315,9 @@ GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
   if (generateMipMaps && canUseMipmaps) {
     glGenerateMipmap(GL_TEXTURE_2D);
   }
-
+  GL_TEST_ERROR();
   glDisable(GL_TEXTURE_2D);
+  GL_TEST_ERROR();
 
   return textureId;
 }

@@ -31,7 +31,7 @@
 #include <tulip/GlCircle.h>
 #include <tulip/OpenGlConfigManager.h>
 
-#include <QGLFramebufferObject>
+#include <QOpenGLFramebufferObject>
 #include <QEvent>
 #include <QMouseEvent>
 
@@ -122,7 +122,7 @@ bool MouseMagnifyingGlassInteractorComponent::eventFilter(QObject *, QEvent *e) 
     }
   }
 
-  static bool canUseFbo = QGLFramebufferObject::hasOpenGLFramebufferObjects();
+  static bool canUseFbo = QOpenGLFramebufferObject::hasOpenGLFramebufferObjects();
 
   if (canUseFbo && updateMagnifyingGlass) {
     generateMagnifyingGlassTexture(screenCoords);
@@ -142,7 +142,7 @@ void MouseMagnifyingGlassInteractorComponent::generateMagnifyingGlassTexture(
   bool canUseMultisampleFbo =
       OpenGlConfigManager::getInst().isExtensionSupported("GL_EXT_framebuffer_multisample");
 
-  if (QGLFramebufferObject::hasOpenGLFramebufferBlit() && canUseMultisampleFbo) {
+  if (QOpenGLFramebufferObject::hasOpenGLFramebufferBlit() && canUseMultisampleFbo) {
     antialiased = true;
   }
 
@@ -150,17 +150,17 @@ void MouseMagnifyingGlassInteractorComponent::generateMagnifyingGlassTexture(
 
   // instantiate fbo if needed
   if (fbo == nullptr) {
-    QGLFramebufferObjectFormat fboFormat;
-    fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
+    QOpenGLFramebufferObjectFormat fboFormat;
+    fboFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
 
     if (antialiased) {
       fboFormat.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
     }
 
-    fbo = new QGLFramebufferObject(fboSize, fboSize, fboFormat);
+    fbo = new QOpenGLFramebufferObject(fboSize, fboSize, fboFormat);
 
     if (antialiased) {
-      fbo2 = new QGLFramebufferObject(fboSize, fboSize);
+      fbo2 = new QOpenGLFramebufferObject(fboSize, fboSize);
     }
 
     if (!antialiased) {
@@ -218,8 +218,8 @@ void MouseMagnifyingGlassInteractorComponent::generateMagnifyingGlassTexture(
   fbo->release();
 
   if (antialiased) {
-    QGLFramebufferObject::blitFramebuffer(fbo2, QRect(0, 0, fboSize, fboSize), fbo,
-                                          QRect(0, 0, fboSize, fboSize));
+    QRect fboRect(0, 0, fboSize, fboSize);
+    QOpenGLFramebufferObject::blitFramebuffer(fbo2, fboRect, fbo, fboRect);
   }
 
   // restore original camera parameters

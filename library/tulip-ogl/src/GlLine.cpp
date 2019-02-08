@@ -65,6 +65,7 @@ tlp::Color &GlLine::color(const unsigned int i) {
 }
 //=====================================================
 void GlLine::draw(float, Camera *) {
+  GL_THROW_ON_ERROR();
 
   glDisable(GL_LIGHTING);
   glLineWidth(width);
@@ -87,7 +88,8 @@ void GlLine::draw(float, Camera *) {
 
   glLineWidth(1.0);
   glEnable(GL_LIGHTING);
-  glTest(__PRETTY_FUNCTION__);
+
+  GL_THROW_ON_ERROR();
 }
 //=====================================================
 void GlLine::setLineWidth(float width) {

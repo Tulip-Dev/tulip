@@ -24,7 +24,6 @@
 
 #include <tulip/GlLabel.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
-#include <tulip/QGlPixelBufferManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/ColorScale.h>
 #include <tulip/GlQuad.h>

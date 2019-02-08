@@ -40,11 +40,11 @@ TLP_GL_SCOPE void glTest(const std::string &message = std::string("(no descripti
 #ifndef NDEBUG
 #define GL_TEST(throwEx) glTest(__FILE__, __LINE__, throwEx)
 #define GL_TEST_ERROR() GL_TEST(false)
-#define GL_THROW_ERROR() GL_TEST(true)
+#define GL_THROW_ON_ERROR() GL_TEST(true)
 #else
 #define GL_TEST(throwEx)
 #define GL_TEST_ERROR()
-#define GL_THROW_ERROR()
+#define GL_THROW_ON_ERROR()
 #endif
 TLP_GL_SCOPE void setColor(const Color &c);
 TLP_GL_SCOPE void setColor(GLfloat *);

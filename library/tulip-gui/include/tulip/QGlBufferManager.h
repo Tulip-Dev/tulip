@@ -24,69 +24,33 @@
 #include <map>
 
 #include <tulip/tulipconf.h>
-
-class QGLPixelBuffer;
-class QGLFramebufferObject;
+#include <QOpenGLFramebufferObject>
 
 namespace tlp {
 
-/** \brief Class to manage QGlPixelBuffer and QGlFramebufferObject
- * Singleton class to manager QGlPixelBuffer and QGlFramebufferObject
+/** \brief Class to manage QGlFramebufferObject
  */
 class TLP_QT_SCOPE QGlBufferManager {
 
 public:
-  /**
-   * Return the QGlBuffer manager singleton, il singleton doesn't exist this function create it
-   */
-  static QGlBufferManager &getInst() {
-    if (!inst)
-      inst = new QGlBufferManager();
-
-    return *inst;
-  }
 
   static void clearBuffers();
 
   /**
-   * Return if QGlPixelBuffer can be used
-   */
-  bool canUsePixelBuffer() {
-    return pixelBufferWork;
-  }
-
-  /**
    * Return if QGlFramebufferObject can be used
    */
-  bool canUseFramebufferObject() {
-    return framebufferObjectWork;
+  static bool canUseFramebufferObject() {
+    return QOpenGLFramebufferObject::hasOpenGLFramebufferObjects();
   }
 
   /**
-   * Return a QGlPixelBuffer with given size
+   * Return a QOpenGLFramebufferObject with given size
    */
-  QGLPixelBuffer *getPixelBuffer(int width, int height);
-
-  /**
-   * Return a QGLFramebufferObject with given size
-   */
-  QGLFramebufferObject *getFramebufferObject(int width, int height);
+  static QOpenGLFramebufferObject *getFramebufferObject(int width, int height);
 
 private:
-  /**
-   * empty private constructor for singleton
-   */
-  QGlBufferManager();
-
-  static QGlBufferManager *inst;
-
-  std::map<std::pair<int, int>, QGLPixelBuffer *> widthHeightToBuffer;
-  std::map<QGLPixelBuffer *, std::pair<int, int>> bufferToWidthHeight;
-  std::map<std::pair<int, int>, QGLFramebufferObject *> widthHeightToFramebuffer;
-  std::map<QGLFramebufferObject *, std::pair<int, int>> framebufferToWidthHeight;
-
-  bool pixelBufferWork;
-  bool framebufferObjectWork;
+  static std::map<std::pair<int, int>, QOpenGLFramebufferObject *> widthHeightToFramebuffer;
+  static std::map<QOpenGLFramebufferObject *, std::pair<int, int>> framebufferToWidthHeight;
 };
 } // namespace tlp
 

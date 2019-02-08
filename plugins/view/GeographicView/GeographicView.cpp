@@ -17,7 +17,6 @@
  *
  */
 
-#include <GL/glew.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlMainWidget.h>
@@ -35,7 +34,8 @@
 #include <QComboBox>
 #include <QTimeLine>
 #include <QApplication>
-#include <QGLFramebufferObject>
+#include <QOpenGLFramebufferObject>
+#include <QOpenGLPaintDevice>
 #include <QMessageBox>
 #include <QTimer>
 
@@ -482,37 +482,38 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
     }
   }
 
-  QGLFramebufferObjectFormat fboFormat;
-  fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
-  fboFormat.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
-
   int width = geoViewGraphicsView->width();
   int height = geoViewGraphicsView->height();
 
-  QGLFramebufferObject renderFbo(width, height, fboFormat);
-  QGLFramebufferObject renderFbo2(width, height);
+  QOpenGLFramebufferObjectFormat fboFormat;
+  fboFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
+  fboFormat.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
 
-  QPainter fboPainter(&renderFbo);
+  QOpenGLFramebufferObject fbo(width, height, fboFormat);
+  QOpenGLFramebufferObject fbo2(width, height);
+
+  fbo.bind();
+  QOpenGLPaintDevice device(QSize(width, height));
+  QPainter fboPainter(&device);
   fboPainter.setRenderHint(QPainter::Antialiasing);
   fboPainter.setRenderHint(QPainter::HighQualityAntialiasing);
   geoViewGraphicsView->scene()->render(&fboPainter);
-  fboPainter.end();
-
-  QGLFramebufferObject::blitFramebuffer(&renderFbo2, QRect(0, 0, width, height), &renderFbo,
-                                        QRect(0, 0, width, height));
+  QRect fboRect(0, 0, width, height);
+  QOpenGLFramebufferObject::blitFramebuffer(&fbo2, fboRect, nullptr, fboRect);
+  fbo.release();
 
   // restore the graphics widgets previously hidden
   for (int i = 0; i < gWidgetsToRestore.size(); ++i) {
     gWidgetsToRestore.at(i)->show();
   }
 
-  QImage snapshotImage = renderFbo2.toImage();
-  snapshotImage = QImage(snapshotImage.bits(), snapshotImage.width(), snapshotImage.height(),
-                         QImage::Format_ARGB32)
+  QImage snapshotImage = fbo2.toImage();
+  snapshotImage = QImage(snapshotImage.bits(), snapshotImage.width(),
+			 snapshotImage.height(), QImage::Format_ARGB32)
                       .convertToFormat(QImage::Format_RGB32);
 
-  return QPixmap::fromImage(snapshotImage)
-      .scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+  return QPixmap::fromImage(snapshotImage).scaled(size, Qt::KeepAspectRatio,
+						  Qt::SmoothTransformation);
 }
 
 PLUGIN(GeographicView)

@@ -138,6 +138,7 @@ void GlAbstractPolygon::setInvertYTexture(bool invertYTexture) {
 }
 //=====================================================
 void GlAbstractPolygon::draw(float lod, Camera *) {
+  GL_THROW_ON_ERROR();
 
   bool canUseVBO = OpenGlConfigManager::getInst().hasVertexBufferObject();
 
@@ -420,7 +421,7 @@ void GlAbstractPolygon::draw(float lod, Camera *) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
   }
 
-  glTest(__PRETTY_FUNCTION__);
+  GL_THROW_ON_ERROR();
 }
 //===========================================================
 void GlAbstractPolygon::translate(const Coord &vec) {

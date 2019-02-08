@@ -37,7 +37,6 @@ INSTALL(FILES
   tulip/Perspective.h
   tulip/PropertyCreationDialog.h
   tulip/QGlBufferManager.h
-  tulip/QGlPixelBufferManager.h
   tulip/QtGlSceneZoomAndPanAnimator.h
   tulip/RenamePropertyDialog.h
   tulip/SimplePluginProgressWidget.h
