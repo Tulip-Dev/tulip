@@ -195,7 +195,7 @@ private:
   void registerTriggers();
   void removeTriggers();
 
-  void interactorsInstalled(const QList<tlp::Interactor *> &);
+  void interactorsInstalled(const QList<tlp::Interactor *> &) override;
 
   QMenu *viewSetupMenu;
   QAction *classicLayout;
