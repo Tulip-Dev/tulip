@@ -255,10 +255,8 @@ IF(TULIP_BUILD_PYTHON_COMPONENTS)
   IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
     SET(TULIP_BUILD_CORE_ONLY ON)
     IF(APPLE)
-      # build universal binaries when generating Tulip Python wheels for MacOs
-      SET(CMAKE_OSX_ARCHITECTURES "i386;x86_64")
-      # build binaries with install rpath when generating Tulip Python wheels for MacOs
-      # as we don't install the project in that case
+      # build binaries with install rpath when generating Tulip Python wheels
+      # for MacOs as we don't install the project in that case
       SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
     ELSEIF(LINUX)
       FILE(READ /etc/issue LINUX_ISSUE)
