@@ -153,6 +153,7 @@ void glTest(const string &message, int line, bool throwException) {
 #else
   // fixes unused parameter warnings in release mode
   (void)message;
+  (void)line;
   (void)throwException;
 #endif
 }
