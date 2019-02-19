@@ -788,8 +788,8 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         // update index cache for subgraphs of parent graph
         int i = 0;
         for (auto sg2 : parentGraph->getSubGraphs()) {
-	  if (sg2 != sg)
-	    _indexCache[sg2] = createIndex(i++, 0, sg2);
+          if (sg2 != sg)
+            _indexCache[sg2] = createIndex(i++, 0, sg2);
         }
 
         // prevent dangling pointer to remain in the persistent indexes
