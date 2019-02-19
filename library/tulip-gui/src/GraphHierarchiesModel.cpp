@@ -765,7 +765,7 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         // when the treatEvents method is called
         _graphsChanged.insert(parentGraph);
 
-      } else if (ge->getType() == GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH) {
+      } else if (ge->getType() == GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH) {
         // that event must only be treated on a root graph
         if (ge->getGraph() != ge->getGraph()->getRoot()) {
           return;
@@ -788,7 +788,8 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         // update index cache for subgraphs of parent graph
         int i = 0;
         for (auto sg2 : parentGraph->getSubGraphs()) {
-          _indexCache[sg2] = createIndex(i++, 0, sg2);
+	  if (sg2 != sg)
+	    _indexCache[sg2] = createIndex(i++, 0, sg2);
         }
 
         // prevent dangling pointer to remain in the persistent indexes
