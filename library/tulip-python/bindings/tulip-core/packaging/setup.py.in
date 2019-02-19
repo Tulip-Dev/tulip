@@ -151,7 +151,11 @@ setup(
     packages=['tulip', 'tulip.native', 'tulipplugins'],
 
     package_data={
-        'tulip': tulip_native_libs + ['plugins/color/*.py', 'plugins/general/*.py', 'plugins/import/*.py'],
+        'tulip': tulip_native_libs + ['plugins/color/*',
+                                      'plugins/general/*',
+                                      'plugins/import/*',
+                                      'plugins/layout/*',
+                                      'plugins/layout/h3/*'],
     },
 
     include_package_data=True,
