@@ -292,12 +292,6 @@ public:
   }
 
   /**
-   * Grab the FrameBuffer of this GlMainWidget
-   * @param withAlpha use alpha chanel
-   */
-  virtual QImage grabFrameBuffer(bool withAlpha = false);
-
-  /**
    * Extend makeCurrent function of QGLWidget to inform TextureManager and DisplayListManager of
    * context changement
    */

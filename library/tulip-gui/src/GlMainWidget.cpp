@@ -345,13 +345,6 @@ void GlMainWidget::drawInteractors() {
   interactor->draw(this);
 }
 //==================================================
-// QGLWidget
-//==================================================
-QImage GlMainWidget::grabFrameBuffer(bool withAlpha) {
-  QImage img = QGLWidget::grabFrameBuffer(withAlpha);
-  return img;
-}
-//==================================================
 // QGLWidget slots
 //==================================================
 void GlMainWidget::resizeGL(int w, int h) {
