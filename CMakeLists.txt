@@ -15,6 +15,12 @@ IF(POLICY CMP0042)
   CMAKE_POLICY(SET CMP0042 NEW)
 ENDIF(POLICY CMP0042)
 
+# Ensure CMAKE_BUILD_WITH_INSTALL_RPATH is still honored with CMake >= 3.9
+# This is needed in order to build tulip-python wheels on MacOS
+IF(POLICY CMP0068)
+  CMAKE_POLICY(SET CMP0068 OLD)
+ENDIF(POLICY CMP0068)
+
 # enable the use of ccache for Tulip developers to speed up the build process
 IF(NOT MSVC)
   SET(TULIP_USE_CCACHE OFF CACHE BOOL "Do you want to use ccache to speed up the build process during Tulip development ? [OFF|ON]")
@@ -261,7 +267,7 @@ IF(TULIP_BUILD_PYTHON_COMPONENTS)
     ELSEIF(LINUX)
       FILE(READ /etc/issue LINUX_ISSUE)
       IF(NOT "${LINUX_ISSUE}" MATCHES ".*CentOS release 5\\.11 \\(Final\\).*" OR NOT EXISTS /usr/local/bin/auditwheel)
-	MESSAGE(FATAL_ERROR "Python binary wheels for Linux platform must be compiled using the CentOS 5.11 docker image provided by the manylinux project from the Python Packaging Authority.\nSee https://github.com/pypa/manylinux for more details.")
+        MESSAGE(FATAL_ERROR "Python binary wheels for Linux platform must be compiled using the CentOS 5.11 docker image provided by the manylinux project from the Python Packaging Authority.\nSee https://github.com/pypa/manylinux for more details.")
       ENDIF(NOT "${LINUX_ISSUE}" MATCHES ".*CentOS release 5\\.11 \\(Final\\).*" OR NOT EXISTS /usr/local/bin/auditwheel)
       # build binaries with install rpath when generating Tulip Python wheels for Linux
       # as we don't install the project in that case
@@ -319,8 +325,8 @@ IF(NOT CLANG OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 3.7.0 OR CMAKE_CXX_CO
       # TULIP_CXX_THREADS can be set to force the use of the cxx threads
       # regardless the OpenMP availability
       IF(NOT TULIP_CXX_THREADS)
-	FIND_PACKAGE(OpenMP)
-	IF(OPENMP_FOUND)
+        FIND_PACKAGE(OpenMP)
+        IF(OPENMP_FOUND)
           SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${OpenMP_CXX_FLAGS}")
           SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} ${OpenMP_CXX_FLAGS}")
           SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${OpenMP_CXX_FLAGS}")
@@ -336,7 +342,7 @@ IF(NOT CLANG OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 3.7.0 OR CMAKE_CXX_CO
               SET(OPENMP_LIBRARIES "-lgomp -lpthread")
             ENDIF()
           ENDIF()
-	ELSE(OPENMP_FOUND)
+        ELSE(OPENMP_FOUND)
           IF(WIN32)
             STRING(COMPARE NOTEQUAL "${OpenMP_C_FLAGS}" "" OMP_CFLAGS)
             IF(OMP_CFLAGS)
@@ -345,10 +351,10 @@ IF(NOT CLANG OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 3.7.0 OR CMAKE_CXX_CO
               SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} ${OpenMP_C_FLAGS}")
               SET(OPENMP_CXX_FLAGS "${OpenMP_C_FLAGS}")
               IF(NOT MSVC)
-		SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OpenMP_C_FLAGS}")
-		SET(OPENMP_LINKER_FLAGS "${OpenMP_C_FLAGS}")
-		SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lgomp -lpthread")
-		SET(OPENMP_LIBRARIES "-lgomp -lpthread")
+                SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OpenMP_C_FLAGS}")
+                SET(OPENMP_LINKER_FLAGS "${OpenMP_C_FLAGS}")
+                SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lgomp -lpthread")
+                SET(OPENMP_LIBRARIES "-lgomp -lpthread")
               ENDIF(NOT MSVC)
               SET(OPENMP_FOUND TRUE)
             ELSE(OMP_CFLAGS)
@@ -357,9 +363,9 @@ IF(NOT CLANG OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 3.7.0 OR CMAKE_CXX_CO
           ELSE(WIN32)
             MESSAGE("OpenMP not found: multithreaded code will use c++ threads")
           ENDIF(WIN32)
-	ENDIF(OPENMP_FOUND)
+        ENDIF(OPENMP_FOUND)
       ELSE(NOT TULIP_CXX_THREADS)
-	MESSAGE("Multithreaded code will use c++ threads")
+        MESSAGE("Multithreaded code will use c++ threads")
       ENDIF(NOT TULIP_CXX_THREADS)
     ELSE(TULIP_ENABLE_MULTI_THREADING)
       MESSAGE("Multithreaded code is disabled")
@@ -651,7 +657,7 @@ ENDIF(NOT TULIP_BUILD_FOR_APPIMAGE)
     # updated in plugins/view/GeographicView,
     # and finally used in software/tulip_perpective/CMakeLists.txt
     SET_PROPERTY(GLOBAL PROPERTY FIXUP_BUNDLE_LIBS "")
-    
+
     GET_FILENAME_COMPONENT(NSIS_PATH "[HKEY_LOCAL_MACHINE\\SOFTWARE\\NSIS]" ABSOLUTE)
     STRING(COMPARE EQUAL "${NSIS_PATH}" "" NSIS_PATH_EMPTY)
     IF(NSIS_PATH_EMPTY)
