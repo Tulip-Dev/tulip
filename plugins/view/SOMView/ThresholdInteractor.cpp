@@ -291,7 +291,7 @@ ThresholdInteractor::ThresholdInteractor()
 
 ThresholdInteractor::~ThresholdInteractor() {
   if (!textureName.empty()) {
-    static_cast<SOMView *>(view())->getMapWidget()->deleteTexture(textureId);
+    GlMainWidget::getFirstQGLWidget()->deleteTexture(textureId);
     GlTextureManager::getInst().deleteTexture(textureName);
   }
 
@@ -534,7 +534,7 @@ void ThresholdInteractor::buildSliders(SOMView *somView) {
   unsigned int propertyIndex = inputSample.findIndexForProperty(somView->getSelectedProperty());
 
   if (textureName.empty())
-    generateSliderTexture(somView->getMapWidget());
+    generateSliderTexture();
 
   lSlider = new ColorScaleSlider(ColorScaleSlider::ToRight, sliderSize, colorScale, textureName);
 
@@ -575,12 +575,12 @@ void ThresholdInteractor::clearSliders() {
   bar = nullptr;
 }
 
-void ThresholdInteractor::generateSliderTexture(GlMainWidget *widget) {
+void ThresholdInteractor::generateSliderTexture() {
   uintptr_t id = reinterpret_cast<uintptr_t>(this);
   ostringstream oss;
   oss << "ThresholdInteractorSliderTexture" << id;
-  widget->makeCurrent();
-  textureId = widget->bindTexture(QPixmap(":/sliderTexture.png"));
+  GlMainWidget::getFirstQGLWidget()->makeCurrent();
+  textureId = GlMainWidget::getFirstQGLWidget()->bindTexture(QPixmap(":/sliderTexture.png"));
   textureName = oss.str();
   GlTextureManager::getInst().registerExternalTexture(textureName, textureId);
 }

@@ -145,8 +145,6 @@ QList<QWidget *> ParallelCoordinatesView::configurationWidgets() const {
 
 void ParallelCoordinatesView::setState(const DataSet &dataSet) {
 
-  GlMainWidget *mainWidget = getGlMainWidget();
-
   if (!isConstruct) {
     initGlWidget();
     buildContextMenu();
@@ -158,11 +156,9 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
 
     if (linesTextureId == 0) {
       GlMainWidget::getFirstQGLWidget()->makeCurrent();
-      linesTextureId = mainWidget->bindTexture(QPixmap(":/parallel_texture.png"), GL_TEXTURE_2D,
-                                               GL_RGBA, QGLContext::LinearFilteringBindOption);
+      linesTextureId = GlMainWidget::getFirstQGLWidget()->bindTexture(QPixmap(":/parallel_texture.png"), GL_TEXTURE_2D, GL_RGBA, QGLContext::LinearFilteringBindOption);
       slidersTextureId =
-          mainWidget->bindTexture(QPixmap(":/parallel_sliders_texture.png"), GL_TEXTURE_2D, GL_RGBA,
-                                  QGLContext::LinearFilteringBindOption);
+          GlMainWidget::getFirstQGLWidget()->bindTexture(QPixmap(":/parallel_sliders_texture.png"), GL_TEXTURE_2D, GL_RGBA, QGLContext::LinearFilteringBindOption);
       GlTextureManager::getInst().registerExternalTexture(DEFAULT_TEXTURE_FILE, linesTextureId);
       GlTextureManager::getInst().registerExternalTexture(SLIDER_TEXTURE_NAME, slidersTextureId);
     }

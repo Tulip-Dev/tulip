@@ -137,7 +137,7 @@ protected:
   void performSelection(SOMView *somView, Iterator<node> *it);
   void buildSliders(SOMView *somView);
   void clearSliders();
-  void generateSliderTexture(tlp::GlMainWidget *widget);
+  void generateSliderTexture();
 
   tlp::GlLayer *layer;
 

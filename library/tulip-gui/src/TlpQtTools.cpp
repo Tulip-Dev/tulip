@@ -29,7 +29,6 @@
 #include <QAbstractButton>
 #include <QMessageBox>
 #include <QImage>
-#include <QGLWidget>
 #include <QEvent>
 #include <QMetaEnum>
 #include <QApplication>
@@ -272,7 +271,7 @@ public:
 
     GLuint *textureNum = new GLuint[spriteNumber];
 
-    image = QGLWidget::convertToGLFormat(image);
+    image = image.mirrored();
 
     glTexture.width = width;
     glTexture.height = height;
@@ -289,8 +288,9 @@ public:
 
       glTexture.id[0] = textureNum[0];
 
-      int GLFmt = image.hasAlphaChannel() ? GL_RGBA : GL_RGB;
-      glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE,
+      int glFmt = image.hasAlphaChannel() ? GL_RGBA : GL_RGB;
+      int imFmt = image.hasAlphaChannel() ? GL_BGRA : GL_BGR;
+      glTexImage2D(GL_TEXTURE_2D, 0, glFmt, width, height, 0, imFmt, GL_UNSIGNED_BYTE,
                    image.bits());
 
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
