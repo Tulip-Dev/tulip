@@ -294,14 +294,14 @@ public:
 
       int glFmt = GL_RGB;
       if (image.hasAlphaChannel()) {
-	glFmt = GL_RGBA;
-	if (image.format() != QImage::Format_RGBA8888)
-	  image = image.convertToFormat(QImage::Format_RGBA8888);
+        glFmt = GL_RGBA;
+        if (image.format() != QImage::Format_RGBA8888)
+          image = image.convertToFormat(QImage::Format_RGBA8888);
       } else if (image.format() != QImage::Format_RGB888)
         image = image.convertToFormat(QImage::Format_RGB888);
 
-      glTexImage2D(GL_TEXTURE_2D, 0, glFmt, width, height,
-		   0, glFmt, GL_UNSIGNED_BYTE, image.bits());
+      glTexImage2D(GL_TEXTURE_2D, 0, glFmt, width, height, 0, glFmt, GL_UNSIGNED_BYTE,
+                   image.bits());
 
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
