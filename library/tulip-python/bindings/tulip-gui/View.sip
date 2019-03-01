@@ -88,7 +88,7 @@ Sets the parameters for the view.
 
 // =========================================================================================================================
 
-    virtual void setGraph(tlp::Graph *graph) = 0;
+    void setGraph(tlp::Graph *graph);
 %Docstring
 tlpgui.View.setGraph(graph)
 
@@ -119,7 +119,7 @@ Returns the current parameters of the view.
 
 // =========================================================================================================================
 
-    virtual tlp::Graph *graph() = 0;
+    tlp::Graph *graph() const;
 %Docstring
 tlpgui.View.graph()
 

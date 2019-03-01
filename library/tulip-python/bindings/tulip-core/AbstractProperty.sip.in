@@ -500,7 +500,7 @@ whose associated value is equal to the one given in parameter.
 
 //===========================================================================================
 
-  virtual bool copy(tlp::node dst, tlp::node src, tlp::@PROPERTY_TYPE@Property* prop, bool ifNotDefault=false);
+  bool copy(tlp::node dst, tlp::node src, tlp::@PROPERTY_TYPE@Property* prop, bool ifNotDefault=false);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.copy(nodeDst, nodeSrc, prop, ifNotDefault=False)
 
@@ -520,7 +520,7 @@ Copies the value hold by a property on a node to another node in this property.
 
 //===========================================================================================
 
-  virtual bool copy(tlp::edge src, tlp::edge dst, tlp::@PROPERTY_TYPE@Property* prop, bool ifNotDefault=false);
+  bool copy(tlp::edge src, tlp::edge dst, tlp::@PROPERTY_TYPE@Property* prop, bool ifNotDefault=false);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.copy(edgeDst, edgeSrc, prop, ifNotDefault=False)
 
@@ -540,7 +540,7 @@ Copies the value hold by a property on an edge to another edge in this property.
 
 //===========================================================================================
 
-  virtual void copy(tlp::@PROPERTY_TYPE@Property* prop);
+  void copy(tlp::@PROPERTY_TYPE@Property* prop);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.copy(prop)
 
@@ -551,6 +551,7 @@ Copies the values hold by a property in this property.
 :param prop: the property to copy
 :type prop: :class:`tlp.@PROPERTY_TYPE@Property`
 %End
+
 //===========================================================================================
 
 @PROPERTY_SPECIFIC_METHODS@
@@ -1262,7 +1263,7 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 
 //===========================================================================================
 
-  virtual bool copy(tlp::node src, tlp::node dst, tlp::@VEC_PROPERTY_TYPE@VectorProperty* prop, bool ifNotDefault=false);
+  bool copy(tlp::node src, tlp::node dst, tlp::@VEC_PROPERTY_TYPE@VectorProperty* prop, bool ifNotDefault=false);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.copy(nodeDst, nodeSrc, prop, ifNotDefault=False)
 
@@ -1282,7 +1283,7 @@ Copies the value hold by a property on a node to another node in this property.
 
 //===========================================================================================
 
-  virtual bool copy(tlp::edge src, tlp::edge dst, tlp::@VEC_PROPERTY_TYPE@VectorProperty* prop, bool ifNotDefault=false);
+  bool copy(tlp::edge src, tlp::edge dst, tlp::@VEC_PROPERTY_TYPE@VectorProperty* prop, bool ifNotDefault=false);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.copy(edgeDst, edgeSrc, prop, ifNotDefault=False)
 
@@ -1302,7 +1303,7 @@ Copies the value hold by a property on an edge to another edge in this property.
 
 //===========================================================================================
 
-  virtual void copy(tlp::@VEC_PROPERTY_TYPE@VectorProperty* prop);
+  void copy(tlp::@VEC_PROPERTY_TYPE@VectorProperty* prop);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.copy(prop)
 

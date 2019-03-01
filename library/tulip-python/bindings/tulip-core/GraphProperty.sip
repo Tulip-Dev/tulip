@@ -39,7 +39,7 @@ public:
 
   tlp::Graph* getNodeDefaultValue();
   
-  std::set<tlp::edge> getEdgeDefaultValue() ;
+  std::set<tlp::edge> getEdgeDefaultValue();
 %Docstring
 tlp.GraphProperty.getEdgeDefaultValue() -> list of tlp.edge
 %End

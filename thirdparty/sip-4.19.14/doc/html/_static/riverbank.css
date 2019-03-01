@@ -1,0 +1,43 @@
+@import url("classic.css");
+
+div.body {
+    max-width: 2000px;
+}
+
+div.body p {
+    text-align: left;
+}
+
+div.body h1,
+div.body h2 {
+    border-radius: 10px;
+    margin-right: 0px;
+}
+
+div.body h3 {
+    background-color: white;
+    color: black;
+}
+
+h1 a,
+h1 a:visited,
+h2 a,
+h2 a:visited {
+    color: white;
+    text-decoration: none;
+}
+
+th.field-name {
+    background: none;
+}
+
+th.head {
+    background: lightgray;
+}
+
+div.legalese {
+    background-color: black;
+    color: white;
+    border: 10px solid white;
+    padding: 15px;
+}
