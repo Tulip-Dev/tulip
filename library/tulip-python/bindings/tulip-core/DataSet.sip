@@ -67,6 +67,7 @@ extern tlp::DataSet* convertPyDictToTlpDataSet(PyObject *dict, tlp::DataSet *ref
       ret = NULL;
       break;
     }
+    delete keyStr;
   }
   enableErrorMessages(true);
   return ret;
