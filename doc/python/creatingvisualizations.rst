@@ -159,7 +159,7 @@ the script execution). :ref:`Figure 1<fig1a>` introduces a screenshot of the cre
 
    Figure 1: Screenshot of the view created by the above script.
 
-The second script aims to generate a snapshot of a file system directory visualization.
+The second script aims to generate a snapshot of a file system directory visualization (here the Python standard libraries).
 It begins by calling the "File System Directory" import plugin, then it sets some
 visual attributes on graph elements and finally it creates a node link diagram view
 (that will not be displayed) with particular rendering parameters for taking the snapshot.
@@ -167,10 +167,16 @@ visual attributes on graph elements and finally it creates a node link diagram v
 
     from tulip import tlp
     from tulipgui import tlpgui
+    
+    import os
+    from os.path import expanduser
+    
+    # get the root directory of the Python Standard Libraries
+    pythonStdLibPath = os.path.dirname(os.__file__)
 
     # Set the parameters for the "File System Directory" Import module
-    fsImportParams = tlp.getDefaultPluginParameters("File System Directory", graph)
-    fsImportParams["directory"] = "/home/antoine/tulip_install"
+    fsImportParams = tlp.getDefaultPluginParameters("File System Directory")
+    fsImportParams["directory"] = pythonStdLibPath
 
     # Import a file system directory content as a tree
     graph = tlp.importGraph("File System Directory", fsImportParams)
@@ -219,12 +225,13 @@ visual attributes on graph elements and finally it creates a node link diagram v
     renderingParams.setMinSizeOfLabel(4)
     nodeLinkView.setRenderingParameters(renderingParams)
 
-    # Save a snapshot of the view to an image file on disk
-    nodeLinkView.saveSnapshot("/home/antoine/tulip_install_view.png", 1920, 1080)
+    # Save a snapshot of the view to an image file in your Home folder
+    home = expanduser("~")
+    nodeLinkView.saveSnapshot(home+"/python_lib_view.png", 1920, 1080)
 
 
 .. _fig2a:
-.. figure:: tulip_install_view.png
+.. figure:: python_lib_view.png
    :align: center
    :scale: 60%
 
