@@ -58,8 +58,7 @@ bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
       tmp = node();
       glw->setCursor(Qt::ArrowCursor);
     }
-  } else if (event->type() == QEvent::MouseButtonDblClick &&
-	     qMouseEv->button() == Qt::LeftButton) {
+  } else if (event->type() == QEvent::MouseButtonDblClick && qMouseEv->button() == Qt::LeftButton) {
     // double click will deselect all
     Observable::holdObservers();
 
@@ -83,19 +82,20 @@ bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
     Observable::unholdObservers();
 
     return true;
-  } else if (event->type() == QEvent::MouseButtonPress && qMouseEv->button() == Qt::LeftButton && tmp.isValid()) {
+  } else if (event->type() == QEvent::MouseButtonPress && qMouseEv->button() == Qt::LeftButton &&
+             tmp.isValid()) {
     if (!src.isValid()) {
       // user can select the path source with a simple click
       // if no source already exists
       Observable::holdObservers();
 
       BooleanProperty *selectionProperty =
-        glw->getScene()->getGlGraphComposite()->getInputData()->getElementSelected();
+          glw->getScene()->getGlGraphComposite()->getInputData()->getElementSelected();
       selectionProperty->setAllNodeValue(false);
       selectionProperty->setAllEdgeValue(false);
       // select it
       selectionProperty->setNodeValue(src = tmp, true);
-      
+
       Observable::unholdObservers();
     } else {
       // as the path source already exists
@@ -113,7 +113,7 @@ bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
       Observable::holdObservers();
 
       BooleanProperty *selectionProperty =
-        glw->getScene()->getGlGraphComposite()->getInputData()->getElementSelected();
+          glw->getScene()->getGlGraphComposite()->getInputData()->getElementSelected();
       selectionProperty->setAllNodeValue(false);
       selectionProperty->setAllEdgeValue(false);
       selectPath(glw, glw->getScene()->getGlGraphComposite()->getGraph());
