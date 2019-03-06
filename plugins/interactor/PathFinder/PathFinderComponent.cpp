@@ -26,6 +26,7 @@
 #include "highlighters/PathHighlighter.h"
 #include "PathFinder.h"
 
+#include <QApplication>
 #include <QMouseEvent>
 #include <QMessageBox>
 
@@ -52,11 +53,14 @@ bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
         entity.getEntityType() == SelectedEntity::NODE_SELECTED) {
       tmp.id = entity.getComplexEntityId();
       glw->setCursor(Qt::CrossCursor);
+      return true;
     } else {
       tmp = node();
       glw->setCursor(Qt::ArrowCursor);
     }
-  } else if (event->type() == QEvent::MouseButtonPress && qMouseEv->button() == Qt::LeftButton) {
+  } else if (event->type() == QEvent::MouseButtonDblClick &&
+	     qMouseEv->button() == Qt::LeftButton) {
+    // double click will deselect all
     Observable::holdObservers();
 
     BooleanProperty *selectionProperty =
@@ -64,31 +68,61 @@ bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
     selectionProperty->setAllNodeValue(false);
     selectionProperty->setAllEdgeValue(false);
 
-    if (!tmp.isValid()) {
+    if (tmp.isValid()) {
+      // double click on a node
+      // user is selecting a new path source
+      src = tmp;
+      // select it
+      selectionProperty->setNodeValue(src, true);
+    } else
       src = node();
-      tgt = node();
-      glw->setCursor(Qt::ArrowCursor);
-    } else {
-      if ((src.isValid() && tmp == src) ||
-          (tgt.isValid() &&
-           tmp == tgt)) { // User clicked back on the source or target node: reset the selection.
-        src = node();
-        tgt = node();
-      } else if (src.isValid())
-        tgt = tmp;
-      else
-        src = tmp;
 
-      glw->setCursor(Qt::CrossCursor);
-    }
-
-    selectPath(glw, glw->getScene()->getGlGraphComposite()->getGraph());
+    // invalidate the path target
+    tgt = node();
 
     Observable::unholdObservers();
 
-    glw->redraw();
+    return true;
+  } else if (event->type() == QEvent::MouseButtonPress && qMouseEv->button() == Qt::LeftButton && tmp.isValid()) {
+    if (!src.isValid()) {
+      // user can select the path source with a simple click
+      // if no source already exists
+      Observable::holdObservers();
 
-    return (src.isValid() || tgt.isValid());
+      BooleanProperty *selectionProperty =
+        glw->getScene()->getGlGraphComposite()->getInputData()->getElementSelected();
+      selectionProperty->setAllNodeValue(false);
+      selectionProperty->setAllEdgeValue(false);
+      // select it
+      selectionProperty->setNodeValue(src = tmp, true);
+      
+      Observable::unholdObservers();
+    } else {
+      // as the path source already exists
+      // we assume that the user is selecting a new path target
+      tgt = tmp;
+      // but we wait a bit to ensure the current event does not belong to a
+      // QEvent::MouseButtonDblClick event
+      obj->startTimer(QApplication::doubleClickInterval() + 5);
+    }
+    return true;
+  } else if (event->type() == QEvent::Timer) {
+    obj->killTimer(static_cast<QTimerEvent *>(event)->timerId());
+    // tgt could have been invalidate by a QEvent::MouseButtonDblClick event
+    if (tgt.isValid()) {
+      Observable::holdObservers();
+
+      BooleanProperty *selectionProperty =
+        glw->getScene()->getGlGraphComposite()->getInputData()->getElementSelected();
+      selectionProperty->setAllNodeValue(false);
+      selectionProperty->setAllEdgeValue(false);
+      selectPath(glw, glw->getScene()->getGlGraphComposite()->getGraph());
+
+      Observable::unholdObservers();
+
+      glw->redraw();
+    }
+    return true;
   }
 
   return false;
