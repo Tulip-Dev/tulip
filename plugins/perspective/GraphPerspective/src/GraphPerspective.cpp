@@ -761,27 +761,22 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
   showTrayMessage("GraphPerspective started");
 
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  // for 5.0 show message to indicate that
-  // Python Script view no longer exist
+  // for 5.3 show message to ask old user
+  // if he wants to use tlpb as default graph file format
   unsigned int mm_version = TULIP_INT_MM_VERSION;
 
-  if ((mm_version == 50) && TulipSettings::instance().isFirstTulipMMRun()) {
-    QTimer::singleShot(100, this, SLOT(showStartMessage()));
+  if ((mm_version == 503) && TulipSettings::instance().isFirstTulipMMRun() &&
+      !TulipSettings::instance().isFirstRun() &&
+      !TulipSettings::instance().isUseTlpbFileFormat()) {
+    QTimer::singleShot(500, this, SLOT(showStartMessage()));
   }
 
-#endif
   logCleared();
 }
 
 void GraphPerspective::showStartMessage() {
-  QMessageBox::information(
-      _mainWindow, QString("About Tulip Python IDE"),
-      QString("<html><body><p>Be aware that the <b>Python Script View</b> no longer exists. The "
-              "coding of python scripts is now available in using the <b>Tulip Python "
-              "IDE</b>.<br/>Click on the <img "
-              "src=\":/tulip/graphperspective/icons/16/python.png\">&nbsp;<b>Python IDE</b> button "
-              "(enabled when a graph is loaded) to launch it.</p></body></html>"));
+  if (QMessageBox::question(_mainWindow, QString("About graph file format in Tulip projects"), QString("<html><body><p>Since Tulip 5.0, the <b>tlpb</b> (Tulip binary) file format<br/>can be choosed to save graphs in project files.<br/>This format speeds up the save/load of graphs but is not human readable.<br/>The <b>Preferences</b> dialog allows to choose this format, but you can click on <b>Apply</b>, if you want to use it as of now for the save of graphs in your project files.</p></body></html>"), QMessageBox::Apply | QMessageBox::Close, QMessageBox::Close) == QMessageBox::Apply)
+    TulipSettings::instance().setUseTlpbFileFormat(true);
 }
 
 void GraphPerspective::openExternalFile() {
