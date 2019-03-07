@@ -403,8 +403,11 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   leafletMaps->setAdresseSelectionDialog(addressSelectionDialog, addressSelectionProxy);
 
   connect(leafletMaps, SIGNAL(currentZoomChanged()), _geoView, SLOT(currentZoomChanged()));
+#ifdef QT_HAS_WEBENGINE
   connect(leafletMaps, SIGNAL(refreshMap()), this, SLOT(queueMapRefresh()));
-
+#else
+  connect(leafletMaps, SIGNAL(refreshMap()), this, SLOT(refreshMap()));
+#endif
   _placeholderItem = new QGraphicsRectItem(0, 0, 1, 1);
   _placeholderItem->setBrush(Qt::transparent);
   _placeholderItem->setPen(QPen(Qt::transparent));
@@ -912,25 +915,25 @@ void GeographicViewGraphicsView::resizeEvent(QResizeEvent *event) {
         height() / 2 - addressSelectionProxy->sceneBoundingRect().height() / 2);
   }
 
-  if (scene())
+  if (scene()) {
     scene()->update();
-
-  // Hack : send a mouse event to force redraw of the scene (otherwise artifacts was displayed when
-  // maximizing or minimizing the graphics view)
-  QMouseEvent *eventModif =
-      new QMouseEvent(QEvent::MouseMove, QPoint(size().width() / 2, size().height() / 2),
-                      Qt::NoButton, Qt::NoButton, Qt::NoModifier);
-  QApplication::sendEvent(this, eventModif);
+  }
 }
 
-void GeographicViewGraphicsView::showDefaultMap() {
-  auto mapCenter = leafletMaps->getCurrentMapCenter();
-  auto mapZoom = leafletMaps->getCurrentMapZoom();
+void GeographicViewGraphicsView::queueMapRefresh() {
+  QTimer::singleShot(10, this, SLOT(refreshMap()));
+}
 
-  Observable::holdObservers();
+void GeographicViewGraphicsView::refreshMap() {
+
+  if (!leafletMaps->mapLoaded()) {
+    return;
+  }
+
+  auto mapCenter = leafletMaps->getCurrentMapCenter();
+  int mapZoom = leafletMaps->getCurrentMapZoom();
 
   if (currentMapCenter != mapCenter || currentMapZoom != mapZoom) {
-
     currentMapCenter = mapCenter;
     currentMapZoom = mapZoom;
 
@@ -952,29 +955,7 @@ void GeographicViewGraphicsView::showDefaultMap() {
       GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(), bb, "Main", 1);
       sceneZoomAndPan.zoomAndPanAnimationStep(1);
     }
-
-    glWidgetItem->setRedrawNeeded(true);
   }
-
-  Observable::unholdObservers();
-}
-
-void GeographicViewGraphicsView::paintEvent(QPaintEvent *event) {
-  if (graph && !geocodingActive) {
-
-    if (leafletMaps->isVisible())
-      // avoid Warning: QWidget::repaint: Recursive repaint detected
-      QTimer::singleShot(500, this, SLOT(showDefaultMap()));
-  }
-
-  QGraphicsView::paintEvent(event);
-}
-
-void GeographicViewGraphicsView::queueMapRefresh() {
-  QTimer::singleShot(500, this, SLOT(refreshMap()));
-}
-
-void GeographicViewGraphicsView::refreshMap() {
   glWidgetItem->setRedrawNeeded(true);
   scene()->update();
 }

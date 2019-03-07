@@ -139,12 +139,9 @@ public slots:
   void currentZoomChanged();
   void queueMapRefresh();
   void refreshMap();
-  void showDefaultMap();
 
 protected:
   void cleanup();
-
-  void paintEvent(QPaintEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
 
 private:

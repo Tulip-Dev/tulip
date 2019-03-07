@@ -63,6 +63,10 @@ class LeafletMaps : public QWebEngineView {
 public:
   LeafletMaps(QWidget *parent = nullptr);
 
+  bool pageLoaded();
+
+  bool mapLoaded();
+
   void setMapCenter(double latitude, double longitude);
 
   int getCurrentMapZoom();
