@@ -37,7 +37,7 @@ using namespace tlp;
 
 View::View()
     : _currentInteractor(nullptr), _graph(nullptr), _tturlManager(nullptr),
-      interactorsActivated(false) {}
+      interactorsActivated(false), _displayContextMenu(true) {}
 
 View::~View() {
   for (auto i : _interactors) {
