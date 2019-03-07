@@ -766,8 +766,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   unsigned int mm_version = TULIP_INT_MM_VERSION;
 
   if ((mm_version == 503) && TulipSettings::instance().isFirstTulipMMRun() &&
-      !TulipSettings::instance().isFirstRun() &&
-      !TulipSettings::instance().isUseTlpbFileFormat()) {
+      !TulipSettings::instance().isFirstRun() && !TulipSettings::instance().isUseTlpbFileFormat()) {
     QTimer::singleShot(500, this, SLOT(showStartMessage()));
   }
 
@@ -775,7 +774,15 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 }
 
 void GraphPerspective::showStartMessage() {
-  if (QMessageBox::question(_mainWindow, QString("About graph file format in Tulip projects"), QString("<html><body><p>Since Tulip 5.0, the <b>tlpb</b> (Tulip binary) file format<br/>can be choosed to save graphs in project files.<br/>This format speeds up the save/load of graphs but is not human readable.<br/>The <b>Preferences</b> dialog allows to choose this format, but you can click on <b>Apply</b>, if you want to use it as of now for the save of graphs in your project files.</p></body></html>"), QMessageBox::Apply | QMessageBox::Close, QMessageBox::Close) == QMessageBox::Apply)
+  if (QMessageBox::question(
+          _mainWindow, QString("About graph file format in Tulip projects"),
+          QString(
+              "<html><body><p>Since Tulip 5.0, the <b>tlpb</b> (Tulip binary) file format<br/>can "
+              "be choosed to save graphs in project files.<br/>This format speeds up the save/load "
+              "of graphs but is not human readable.<br/>The <b>Preferences</b> dialog allows to "
+              "choose this format, but you can click on <b>Apply</b>, if you want to use it as of "
+              "now for the save of graphs in your project files.</p></body></html>"),
+          QMessageBox::Apply | QMessageBox::Close, QMessageBox::Close) == QMessageBox::Apply)
     TulipSettings::instance().setUseTlpbFileFormat(true);
 }
 
