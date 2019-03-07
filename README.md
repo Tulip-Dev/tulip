@@ -73,7 +73,7 @@ The Tulip framework offers numerous features, notably:
 
 Below are some links to relevant documentation resources about the Tulip framework:
 
-  * [Tulip User Handbook](http://tulip.labri.fr/Documentation/current/tulip-user/html/index.html)
+  * [Tulip User Manual](http://tulip.labri.fr/Documentation/current/tulip-user/html/index.html)
   * [Tulip Developer Handbook](http://tulip.labri.fr/Documentation/current/tulip-dev/html/index.html)
   * [Tulip C++ API](http://tulip.labri.fr/Documentation/current/doxygen/html/index.html)
   * [Tulip Python](http://tulip.labri.fr/Documentation/current/tulip-python/html/index.html)
@@ -124,14 +124,14 @@ source tree if they can not be found on your system:
   
 In order to generate the documentation, the following tools must be installed:
 
-  * [Sphinx](http://www.sphinx-doc.org/en/stable/)
-  * [Doxygen](http://www.stack.nl/~dimitri/doxygen/)
+  * [Sphinx](http://www.sphinx-doc.org/en/stable/) to build the [User Manual](http://tulip.labri.fr/Documentation/current/tulip-user/html/index.html), [Developer Handbook](http://tulip.labri.fr/Documentation/current/tulip-dev/html/index.html) and [Python bindings documentation](http://tulip.labri.fr/Documentation/current/tulip-python/html/index.html)
+  * [Doxygen](http://www.stack.nl/~dimitri/doxygen/) to build the [C++ API documentation](http://tulip.labri.fr/Documentation/current/doxygen/html/index.html)
 
 If you are a Linux user, all these dependencies can be installed with the package manager of your distribution. 
 
 If you are a MacOS user, we recommend to use [MacPorts](https://www.macports.org/) or [Homebrew](https://brew.sh/) in order to easily install all these dependencies.
 
-If you are a Windows user, we recommend to use [MSYS2](http://www.msys2.org/) as it facilitates a lot the build of Tulip on
+If you are a Windows user, we recommend to use [MSYS2](http://www.msys2.org/) as it greatly facilitates the build of Tulip on
 that platform (notably by providing up to date compilers and precompiled dependencies).
 
 Hints on how to build Tulip for these three platforms can be found in the continuous integration setup for [TravisCI](https://travis-ci.org/) and
