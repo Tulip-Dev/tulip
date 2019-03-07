@@ -44,7 +44,7 @@ static const QString TS_DefaultLabelColor = "graph/defaults/color/labels";
 static const QString TS_DefaultSize = "graph/defaults/size/";
 static const QString TS_DefaultShape = "graph/defaults/shape/";
 static const QString TS_DefaultSelectionColor = "graph/defaults/selectioncolor/";
-// add a specific key which which must never exists in user settings
+// add a specific key which must never exists in user settings
 static const QString TS_DefaultOfDefault = "never written in user file";
 static const QString TS_FavoriteAlgorithms = "app/algorithms/favorites";
 
@@ -67,7 +67,6 @@ static const QString TS_AutomaticMapMetric = "graph/auto/colors";
 
 static const QString TS_ResultPropertyStored = "graph/auto/result";
 
-static const QString TS_RunningTimeComputed = "graph/auto/time";
 static const QString TS_LogPluginCall = "graph/auto/log";
 static const QString TS_UseTlpbFileFormat = "graph/auto/usetlpb";
 static const QString TS_SeedForRandomSequence = "graph/auto/seed";
@@ -401,31 +400,7 @@ void TulipSettings::setResultPropertyStored(bool f) {
   setValue(TS_ResultPropertyStored, f);
 }
 
-// deprecated
-bool TulipSettings::isRunningTimeComputed() const {
-  return logPluginCall() == LogCallWithExecutionTime;
-}
-
-// deprecated
-void TulipSettings::setRunningTimeComputed(bool f) {
-  if (f)
-    setLogPluginCall(LogCallWithExecutionTime);
-  else
-    setLogPluginCall(NoLog);
-}
-
 unsigned int TulipSettings::logPluginCall() const {
-  if (contains(TS_RunningTimeComputed)) {
-    bool val = value(TS_RunningTimeComputed, false).toBool();
-
-    // ensure compatibility
-    if (val)
-      const_cast<TulipSettings *>(this)->setValue(TS_LogPluginCall, LogCallWithExecutionTime);
-
-    // no longer used
-    const_cast<TulipSettings *>(this)->remove(TS_RunningTimeComputed);
-  }
-
   return value(TS_LogPluginCall, NoLog).toUInt();
 }
 
@@ -434,10 +409,10 @@ void TulipSettings::setLogPluginCall(unsigned int val) {
 }
 
 bool TulipSettings::isUseTlpbFileFormat() const {
-  return value(TS_UseTlpbFileFormat, false).toBool();
+  return value(TS_UseTlpbFileFormat, true).toBool();
 }
 
-void TulipSettings::setUseTlpFileFormat(bool f) {
+void TulipSettings::setUseTlpbFileFormat(bool f) {
   setValue(TS_UseTlpbFileFormat, f);
 }
 

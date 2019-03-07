@@ -241,7 +241,7 @@ void PreferencesDialog::writeSettings() {
   TulipSettings::instance().setViewOrtho(_ui->viewOrthoCheck->isChecked());
   TulipSettings::instance().setResultPropertyStored(_ui->resultPropertyStoredCheck->isChecked());
   TulipSettings::instance().setLogPluginCall(_ui->logCombo->currentIndex());
-  TulipSettings::instance().setUseTlpFileFormat(_ui->usetlpbformat->isChecked());
+  TulipSettings::instance().setUseTlpbFileFormat(_ui->usetlpbformat->isChecked());
 
   if (_ui->randomSeedCheck->isChecked()) {
     bool ok = true;

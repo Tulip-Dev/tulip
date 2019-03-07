@@ -162,15 +162,12 @@ public:
   bool isResultPropertyStored() const;
   void setResultPropertyStored(bool);
 
-  _DEPRECATED bool isRunningTimeComputed() const;
-  _DEPRECATED void setRunningTimeComputed(bool);
-
   enum LogPluginCall { NoLog = 0, LogCall = 1, LogCallWithExecutionTime = 2 };
   unsigned int logPluginCall() const;
   void setLogPluginCall(unsigned int);
 
   bool isUseTlpbFileFormat() const;
-  void setUseTlpFileFormat(bool);
+  void setUseTlpbFileFormat(bool);
 
   unsigned int seedOfRandomSequence() const;
   void setSeedOfRandomSequence(unsigned int);
