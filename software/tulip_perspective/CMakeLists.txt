@@ -64,8 +64,21 @@ IF(WIN32)
     STRING(REPLACE ";" "\;" LIB_DIRS "${LIB_DIRS}")
     GET_PROPERTY(FIXUP_BUNDLE_LIBS GLOBAL PROPERTY FIXUP_BUNDLE_LIBS)
     INSTALL(CODE
-          "INCLUDE(BundleUtilities)
-           FIXUP_BUNDLE(\"${APP}\" \"${FIXUP_BUNDLE_LIBS}\" \"${LIB_DIRS}\")"
+            "INCLUDE(BundleUtilities)
+             FIXUP_BUNDLE(\"${APP}\" \"${FIXUP_BUNDLE_LIBS}\" \"${LIB_DIRS}\")"
+    )
+    # When generating Tulip installers using MSYS2, we need to bundle OpenSSL
+    # libraries in order for the Geographic view to work correctly.
+    # As Qt5 does not link directly to OpenSSL for license issue and thus use
+    # a dynamic loading approach, we are forced to use the following trick to copy
+    # the needed dlls into the Tulip install folder.
+    IF(MINGW AND EXISTS ${MINGW_BIN_PATH}/openssl.exe)
+      INSTALL(CODE
+              "INCLUDE(BundleUtilities)
+               FILE(COPY \"${MINGW_BIN_PATH}/openssl.exe\" DESTINATION \"${CMAKE_INSTALL_PREFIX}/bin/\")
+               FIXUP_BUNDLE(\"${CMAKE_INSTALL_PREFIX}/bin/openssl.exe\" \"\" \"${LIB_DIRS}\")
+               FILE(REMOVE \"${CMAKE_INSTALL_PREFIX}/bin/openssl.exe\")"
       )
+    ENDIF(MINGW AND EXISTS ${MINGW_BIN_PATH}/openssl.exe)
   ENDIF(TULIP_FIXUP_BUNDLE)
 ENDIF(WIN32)
