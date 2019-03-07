@@ -274,7 +274,7 @@ Returns :const:`True` if the given string representation has been successfully c
 
 //===========================================================================================
 
-  virtual bool setAllNodeStringValue( const std::string & strVal , tlp::Graph *graph ) = 0;
+  virtual bool setAllNodeStringValue( const std::string & strVal , const tlp::Graph *graph ) = 0;
 %Docstring
 tlp.PropertyInterface.setAllNodeStringValue(str, graph)
 
@@ -304,7 +304,7 @@ Returns :const:`True` if the given string representation has been successfully c
 
 //===========================================================================================
 
- virtual bool setStringValueToGraphNodes( const std::string & strVal , tlp::Graph *graph ) = 0;
+ virtual bool setStringValueToGraphNodes( const std::string & strVal , const tlp::Graph *graph ) = 0;
 %Docstring
 tlp.PropertyInterface.setStringValueToGraphNodes(str, graph)
 
@@ -360,7 +360,7 @@ Returns :const:`True` if the given string representation has been successfully c
 
 //===========================================================================================
 
- virtual bool setAllEdgeStringValue( const std::string & strVal , tlp::Graph *graph ) = 0;
+ virtual bool setAllEdgeStringValue( const std::string & strVal , const tlp::Graph *graph ) = 0;
 %Docstring
 tlp.PropertyInterface.setAllEdgeStringValue(str, graph)
 
@@ -390,7 +390,7 @@ Returns :const:`True` if the given string representation has been successfully c
 
 //===========================================================================================
 
-virtual bool setStringValueToGraphEdges( const std::string & strVal , tlp::Graph *graph ) = 0;
+virtual bool setStringValueToGraphEdges( const std::string & strVal , const tlp::Graph *graph ) = 0;
 %Docstring
 tlp.PropertyInterface.setStringValueToGraphEdges(str, graph)
 
@@ -456,7 +456,7 @@ The new value for the edge is the default one.
 
 //===========================================================================================
 
-  virtual std::string getNodeStringValue( const tlp::node node )  = 0;
+  virtual std::string getNodeStringValue( const tlp::node node ) const = 0;
 %Docstring
 tlp.PropertyInterface.getNodeStringValue(node)
 
@@ -478,7 +478,7 @@ Returns a string conversion of the value registered for the given node.
 
 //===========================================================================================
 
-  virtual std::string getEdgeStringValue( const tlp::edge edge )  = 0;
+  virtual std::string getEdgeStringValue( const tlp::edge edge ) const = 0;
 %Docstring
 tlp.PropertyInterface.getEdgeStringValue(edge)
 

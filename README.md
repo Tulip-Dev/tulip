@@ -111,7 +111,7 @@ The following dependencies are required to build Tulip:
 In order to build the Python components, the following dependencies are needed:
 
   * [Python](https://www.python.org) >= 2.6
-  * [SIP](https://www.riverbankcomputing.com/software/sip/intro) >= 4.19.12
+  * [SIP](https://www.riverbankcomputing.com/software/sip/intro) >= 4.19.14
   (if SIP can not be found or its version does not match the required one, 
   it will be compiled using a copy of its source code in the Tulip tree)
   
