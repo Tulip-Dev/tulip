@@ -54,6 +54,9 @@ IF(WIN32)
     # copy required Qt plugins
     INSTALL(DIRECTORY ${QT_PLUGINS_DIR}/imageformats DESTINATION ${TulipBinInstallDir})
     INSTALL(DIRECTORY ${QT_PLUGINS_DIR}/platforms DESTINATION ${TulipBinInstallDir})
+    IF(EXISTS ${QT_PLUGINS_DIR}/styles)
+      INSTALL(DIRECTORY ${QT_PLUGINS_DIR}/styles DESTINATION ${TulipBinInstallDir})
+    ENDIF(EXISTS ${QT_PLUGINS_DIR}/styles)
 
     # then schedule a call to FIXUP_BUNDLE at the end of the CMake install process
     # this process is configured here instead in the root CMakeLists.txt as
