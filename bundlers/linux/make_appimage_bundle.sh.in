@@ -62,11 +62,7 @@ BUNDLE_USR_DIR=$BUNDLE_DIR/usr
 APPRUN_FILE=$BUNDLE_DIR/AppRun
 echo "#!/bin/sh" > $APPRUN_FILE
 echo "BUNDLE_DIR=\"\$(dirname \$0)\"" >> $APPRUN_FILE
-# do not set LD_LIBRARY_PATH to ensure a successful launch
-# of the default web browser to show the Tuip documentation
-#echo "export LD_LIBRARY_PATH=\${TLP_DIR}:\${LD_LIBRARY_PATH}" >> $APPRUN_FILE
 echo "export PYTHONHOME=\${BUNDLE_DIR}/usr" >> $APPRUN_FILE
-echo "export QT_PLUGIN_PATH=\${BUNDLE_DIR}/usr/plugins" >> $APPRUN_FILE
 echo "export TLP_DIR=\${BUNDLE_DIR}/usr/lib" >> $APPRUN_FILE
 echo "\${BUNDLE_DIR}/usr/bin/tulip_perspective -p $PERSPECTIVE -style plastique" >> $APPRUN_FILE
 chmod 755 $APPRUN_FILE
@@ -79,6 +75,11 @@ echo "Type=Application" >> $DESKTOP_FILE
 echo "Exec=tulip_perspective" >> $DESKTOP_FILE
 echo "Icon=Tulip" >> $DESKTOP_FILE
 echo "Categories=Science;" >> $DESKTOP_FILE
+
+# create qt.conf file
+QTCONF_FILE=$BUNDLE_BIN_DIR/qt.conf
+echo "[Paths]" > $QTCONF_FILE
+echo "Prefix=.." >> $QTCONF_FILE
 
 # copy Tulip.png
 cp @tulip_SOURCE_DIR@/bundlers/linux/Tulip.png $BUNDLE_DIR
@@ -107,7 +108,8 @@ if [ -e @QT_PLUGINS_DIR@/xcbglintegrations ]; then
 fi
 
 # set up LD_LIBRARY_PATH with the installation path of the Qt libs used
-export LD_LIBRARY_PATH=$(${QMAKE} -query QT_INSTALL_LIBS):${LD_LIBRARY_PATH}
+export QT_INSTALL_LIBS_DIR=$(${QMAKE} -query QT_INSTALL_LIBS)
+export LD_LIBRARY_PATH=${QT_INSTALL_LIBS_DIR}:${LD_LIBRARY_PATH}
 
 # copy tulip_perspective needed libs
 pushd $BUNDLE_DIR > /dev/null 2>&1

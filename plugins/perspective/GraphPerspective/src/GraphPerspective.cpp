@@ -1697,24 +1697,43 @@ void GraphPerspective::showPythonIDE() {
 #endif
 }
 
+#ifdef APPIMAGE_BUILD
+// When running the appimage
+// the LD_LIBRARY_PATH variable must be unset to ensure a successful launch
+// of the default web browser to show the Tulip documentation
+#define UNSET_LD_LIBRARY_PATH() auto ldPath=getenv("LD_LIBRARY_PATH"); unsetenv("LD_LIBRARY_PATH")
+#define RESTORE_LD_LIBRARY_PATH() setenv("LD_LIBRARY_PATH", ldPath, 1);
+#else
+#define UNSET_LD_LIBRARY_PATH()
+#define RESTORE_LD_LIBRARY_PATH()
+#endif
+
 void GraphPerspective::showUserDocumentation() {
+  UNSET_LD_LIBRARY_PATH();
   QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) +
                                                 "../doc/tulip/tulip-user/html/index.html"));
+  RESTORE_LD_LIBRARY_PATH();
 }
 
 void GraphPerspective::showDevelDocumentation() {
+  UNSET_LD_LIBRARY_PATH();
   QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) +
                                                 "../doc/tulip/tulip-dev/html/index.html"));
+  RESTORE_LD_LIBRARY_PATH();
 }
 
 void GraphPerspective::showPythonDocumentation() {
+  UNSET_LD_LIBRARY_PATH();
   QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) +
                                                 "../doc/tulip/tulip-python/html/index.html"));
+  RESTORE_LD_LIBRARY_PATH();
 }
 
 void GraphPerspective::showAPIDocumentation() {
+  UNSET_LD_LIBRARY_PATH();
   QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) +
                                                 "../doc/tulip/doxygen/html/index.html"));
+  RESTORE_LD_LIBRARY_PATH();
 }
 
 void GraphPerspective::showHideSideBar() {
