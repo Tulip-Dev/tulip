@@ -1701,7 +1701,9 @@ void GraphPerspective::showPythonIDE() {
 // When running the appimage
 // the LD_LIBRARY_PATH variable must be unset to ensure a successful launch
 // of the default web browser to show the Tulip documentation
-#define UNSET_LD_LIBRARY_PATH() auto ldPath=getenv("LD_LIBRARY_PATH"); unsetenv("LD_LIBRARY_PATH")
+#define UNSET_LD_LIBRARY_PATH()                                                                    \
+  auto ldPath = getenv("LD_LIBRARY_PATH");                                                         \
+  unsetenv("LD_LIBRARY_PATH")
 #define RESTORE_LD_LIBRARY_PATH() setenv("LD_LIBRARY_PATH", ldPath, 1);
 #else
 #define UNSET_LD_LIBRARY_PATH()
