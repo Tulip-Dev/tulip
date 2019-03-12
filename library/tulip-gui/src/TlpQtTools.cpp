@@ -36,10 +36,12 @@
 #include <QEvent>
 #include <QMetaEnum>
 #include <QApplication>
-
 #include <QDir>
 #include <QApplication>
 #include <QStandardPaths>
+#if defined(__MINGW32__) && defined(TULIP_BUILD_PYTHON_COMPONENTS)
+#include <QSslSocket>
+#endif
 
 #include <tulip/DataSet.h>
 #include <tulip/TulipSettings.h>
@@ -381,6 +383,13 @@ void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
 #if defined(__APPLE__)
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../");
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../lib/");
+#endif
+
+#if defined(__MINGW32__) && defined(TULIP_BUILD_PYTHON_COMPONENTS)
+  // When using MSYS2 platform to compile Tulip, force the dynamic loading of
+  // OpenSSL libraries Qt was compiled against before Python initialization to
+  // avoid a DLL Hell on windows
+  QSslSocket::supportsSsl();
 #endif
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS

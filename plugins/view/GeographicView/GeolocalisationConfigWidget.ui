@@ -42,16 +42,20 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Call the &lt;a href=&quot;https://nominatim.openstreetmap.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;Nominatim&lt;/span&gt;&lt;/a&gt; geocoding service&lt;br /&gt; to get the location associated to an address.&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This operation may take some time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Call the &lt;a href=&quot;https://nominatim.openstreetmap.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;Nominatim&lt;/span&gt;&lt;/a&gt; geocoding service to get the location associated to an address (this operation may take some time).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Select the string property containing
-addresses associated to nodes</string>
+      <string>Select the string property containing addresses associated to nodes</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -101,8 +105,7 @@ addresses associated to nodes</string>
       <string>If checked, a &quot;latitude&quot; and &quot;longitude&quot; properties are created to store the values retrieved for the geolocation server</string>
      </property>
      <property name="text">
-      <string>Create latitude/longitude properties
-(upcoming layout loading will be faster)</string>
+      <string>Save results in latitude/longitude properties</string>
      </property>
      <property name="checked">
       <bool>true</bool>
@@ -139,8 +142,10 @@ addresses associated to nodes</string>
    <item>
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Select the metric properties containing
-latitude and longitude associated to nodes</string>
+      <string>Select the metric properties containing latitude and longitude associated to nodes</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -197,8 +202,11 @@ latitude and longitude associated to nodes</string>
    </item>
    <item>
     <widget class="QGroupBox" name="edgesControlPointsGB">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="title">
-      <string>edges cont&amp;rol points</string>
+      <string>edges pat&amp;hs</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -208,44 +216,26 @@ latitude and longitude associated to nodes</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Select a double vector property containing lists of
-latitude/longitude (in the form [lat1, lng1, lat2, lng2, ...])
-defining paths for edges</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <layout class="QHBoxLayout" name="horizontalLayout_5">
         <item>
-         <spacer name="horizontalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>path:</string>
           </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
+         </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="edgesPathsPropertyCB"/>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_4">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+         <widget class="QComboBox" name="edgesPathsPropertyCB">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select a double vector property containing lists of &lt;br/&gt;latitude/longitude (in the form [lat1, lng1, lat2, lng2, ...]) &lt;br/&gt;defining paths for edges&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
-         </spacer>
+         </widget>
         </item>
        </layout>
       </item>

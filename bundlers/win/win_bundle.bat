@@ -21,15 +21,13 @@ xcopy "%TULIP_DIR%" "%DEST_DIR%\\files" /E /Q
 
 if NOT "%DEBUG_MODE%" == "TRUE" (
 echo 'Removing debug libs'
-del /Q /F /S "%DEST_DIR%\\files\\bin\\*d4.dll" >nul 2>&1
 del /Q /F /S "%DEST_DIR%\\files\\bin\\Qt5*d.dll" >nul 2>&1
-del /Q /F /S "%DEST_DIR%\\files\\bin\\imageformats\\q*d4.dll" >nul 2>&1
-del /Q /F /S "%DEST_DIR%\\files\\bin\\imageformats\\libq*.a" >nul 2>&1
-del /Q /F /S "%DEST_DIR%\\files\\bin\\imageformats\\q*d4.pdb" >nul 2>&1
 del /Q /F /S "%DEST_DIR%\\files\\bin\\imageformats\\q*d.dll" >nul 2>&1
 del /Q /F /S "%DEST_DIR%\\files\\bin\\imageformats\\q*d.pdb" >nul 2>&1
 del /Q /F /S "%DEST_DIR%\\files\\bin\\platforms\\q*d.dll" >nul 2>&1
 del /Q /F /S "%DEST_DIR%\\files\\bin\\platforms\\q*d.pdb" >nul 2>&1
+del /Q /F /S "%DEST_DIR%\\files\\bin\\styles\\q*d.dll" >nul 2>&1
+del /Q /F /S "%DEST_DIR%\\files\\bin\\styles\\q*d.pdb" >nul 2>&1
 )
 
 echo 'Copying NSIS script and licence'

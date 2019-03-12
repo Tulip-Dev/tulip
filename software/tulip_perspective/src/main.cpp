@@ -16,12 +16,13 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #include <QString>
 #include <QDir>
 #include <QApplication>
 #include <QMainWindow>
 #include <QMessageBox>
-
+#include <QDesktopWidget>
 #include <QStandardPaths>
 
 #include <CrashHandling.h>
@@ -337,14 +338,12 @@ int main(int argc, char **argv) {
   // the delay of geometry update until perspective execution
   // seems to ensure that the four parameters (x,y,w,h)
   // are taken into account
-  if (windowGeometry.isValid())
+  if (windowGeometry.isValid()) {
     mainWindow->setGeometry(windowGeometry);
-
-#ifdef WIN32
-  else
+  } else {
     mainWindow->move(0, 0);
-
-#endif
+    mainWindow->resize(QDesktopWidget().availableGeometry(mainWindow).size() * 0.9);
+  }
 
   TulipSettings::instance().setFirstRun(false);
   TulipSettings::instance().setFirstTulipMMRun(false);

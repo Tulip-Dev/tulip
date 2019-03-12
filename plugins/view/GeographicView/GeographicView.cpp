@@ -499,13 +499,14 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
   fboPainter.setRenderHint(QPainter::HighQualityAntialiasing);
   geoViewGraphicsView->scene()->render(&fboPainter);
   QRect fboRect(0, 0, width, height);
-  QOpenGLFramebufferObject::blitFramebuffer(&fbo2, fboRect, nullptr, fboRect);
   fbo.release();
 
   // restore the graphics widgets previously hidden
   for (int i = 0; i < gWidgetsToRestore.size(); ++i) {
     gWidgetsToRestore.at(i)->show();
   }
+
+  QOpenGLFramebufferObject::blitFramebuffer(&fbo2, fboRect, &fbo, fboRect);
 
   QImage snapshotImage = fbo2.toImage();
   snapshotImage = QImage(snapshotImage.bits(), snapshotImage.width(), snapshotImage.height(),

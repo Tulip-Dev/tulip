@@ -36,8 +36,8 @@ const string htmlMap =
 #ifdef QT_HAS_WEBENGINE
     "<script type=\"text/javascript\" src=\"qrc:///qtwebchannel/qwebchannel.js\"></script>"
 #endif
-    "<link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.3.4/dist/leaflet.css\" />"
-    "<script src=\"https://unpkg.com/leaflet@1.3.4/dist/leaflet.js\"></script>"
+    "<link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.4.0/dist/leaflet.css\" />"
+    "<script src=\"https://unpkg.com/leaflet@1.4.0/dist/leaflet.js\"></script>"
     "<script type=\"text/javascript\">"
     "var map;"
     "var mapBounds;"
@@ -46,56 +46,58 @@ const string htmlMap =
     "var esriTerrain;"
     "var esriGrayCanvas;"
     "var currentLayer;"
+    "function refreshMap() {"
+    "  leafletMapsQObject.refreshMap();"
+    "}"
+    "function refreshMapWithDelay() {"
+    "  setTimeout(function() {"
+    "    leafletMapsQObject.refreshMap();"
+    "  }, 500);"
+    "}"
+    "function addEventHandlersToLayer(layer) {"
+    "  layer.on('tileload', refreshMapWithDelay);"
+    "  layer.on('load', refreshMapWithDelay);"
+    "}"
     "function init(lat, lng, zoom) { "
-    " map = L.map('map_canvas', {"
-    "   zoomControl: false"
-    " });"
-    " osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {"
-    "    attribution: '&copy; <a "
+    "  map = L.map('map_canvas', {"
+    "    zoomControl: false"
+    "  });"
+    "  osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {"
+    "     attribution: '&copy; <a "
     "href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors'"
-    " });"
-    " osm.addTo(map);"
-    " esriSatellite = "
-    "L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/"
+    "  });"
+    "  addEventHandlersToLayer(osm);"
+    "  osm.addTo(map);"
+    "  esriSatellite = "
+    "    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/"
     "tile/{z}/{y}/{x}', {"
-    "   attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, "
+    "      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, "
     "Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'"
-    " });"
-    " esriTerrain = "
-    "L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/"
+    "  });"
+    "  addEventHandlersToLayer(esriSatellite);"
+    "  esriTerrain = "
+    "    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/"
     "tile/{z}/{y}/{x}', {"
-    "   attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, "
+    "      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, "
     "USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China "
     "(Hong Kong), and the GIS User Community'"
-    " });"
-    " esriGrayCanvas = "
-    "L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/"
+    "  });"
+    "  addEventHandlersToLayer(esriTerrain);"
+    "  esriGrayCanvas = "
+    "    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/"
     "World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {"
-    "   attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',"
-    "   maxZoom: 16"
-    " });"
-    " currentLayer = osm;"
-    " map.setView(L.latLng(lat, lng), zoom);"
-#ifdef QT_HAS_WEBENGINE
-    " map.on('zoomstart', function() {"
-    "  leafletMapsQObject.refreshMap();"
-    " });"
-    " map.on('zoom', function() {"
-    "  leafletMapsQObject.refreshMap();"
-    " });"
-    " map.on('movestart', function() {"
-    "  leafletMapsQObject.refreshMap();"
-    " });"
-    " map.on('move', function() {"
-    "  leafletMapsQObject.refreshMap();"
-    " });"
-#endif
-    " map.on('moveend', function() {"
-    "  leafletMapsQObject.refreshMap();"
-    " });"
-    " map.on('zoomend', function() {"
-    "  leafletMapsQObject.refreshMap();"
-    " });"
+    "      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',"
+    "      maxZoom: 16"
+    "  });"
+    "  addEventHandlersToLayer(esriGrayCanvas);"
+    "  currentLayer = osm;"
+    "  map.setView(L.latLng(lat, lng), zoom);"
+    "  map.on('zoomstart', refreshMap);"
+    "  map.on('zoom', refreshMap);"
+    "  map.on('zoomend', refreshMap);"
+    "  map.on('movestart', refreshMap);"
+    "  map.on('move', refreshMap);"
+    "  map.on('moveend', refreshMap);"
     "}"
     "function setMapBounds(latLngArray) {"
     "  var latLngBounds = L.latLngBounds();"
@@ -112,31 +114,31 @@ const string htmlMap =
     "  map.removeLayer(currentLayer);"
     "  map.addLayer(osm);"
     "  currentLayer = osm;"
-    "  leafletMapsQObject.refreshMap();"
+    "  refreshMap();"
     "}"
     "function switchToEsriSatellite() {"
     "  map.removeLayer(currentLayer);"
     "  map.addLayer(esriSatellite);"
     "  currentLayer = esriSatellite;"
-    "  leafletMapsQObject.refreshMap();"
+    "  refreshMap();"
     "}"
     "function switchToEsriTerrain() {"
     "  map.removeLayer(currentLayer);"
     "  map.addLayer(esriTerrain);"
     "  currentLayer = esriTerrain;"
-    "  leafletMapsQObject.refreshMap();"
+    "  refreshMap();"
     "}"
     "function switchToEsriGrayCanvas() {"
     "  map.removeLayer(currentLayer);"
     "  map.addLayer(esriGrayCanvas);"
     "  currentLayer = esriGrayCanvas;"
-    "  leafletMapsQObject.refreshMap();"
+    "  refreshMap();"
     "}"
 #ifdef QT_HAS_WEBENGINE
     "document.addEventListener(\"DOMContentLoaded\", function () {"
     "  new QWebChannel(qt.webChannelTransport, function (channel) {"
     "    leafletMapsQObject = channel.objects.leafletMapsQObject;"
-    "    leafletMapsQObject.refreshMap();"
+    "    refreshMap();"
     "  });"
     "});"
 #endif
@@ -176,7 +178,7 @@ LeafletMaps::LeafletMaps(QWidget *parent) : QWebEngineView(parent), init(false) 
   channel->registerObject(QStringLiteral("leafletMapsQObject"), mapRefresher);
 #endif
   frame->setHtml(content);
-  QTimer::singleShot(1500, this, SLOT(triggerLoading()));
+  QTimer::singleShot(500, this, SLOT(triggerLoading()));
 }
 
 QVariant LeafletMaps::executeJavascript(const QString &jsCode) {
@@ -191,7 +193,22 @@ QVariant LeafletMaps::executeJavascript(const QString &jsCode) {
 #endif
 }
 
+bool LeafletMaps::pageLoaded() {
+  QString code = "typeof init !== \"undefined\"";
+  QVariant ret = executeJavascript(code);
+  return ret.toBool();
+}
+
+bool LeafletMaps::mapLoaded() {
+  QString code = "typeof map !== \"undefined\"";
+  QVariant ret = executeJavascript(code);
+  return ret.toBool();
+}
+
 void LeafletMaps::triggerLoading() {
+  if (!pageLoaded()) {
+    QTimer::singleShot(500, this, SLOT(triggerLoading()));
+  }
 #ifdef QT_HAS_WEBKIT
   frame->addToJavaScriptWindowObject("leafletMapsQObject", this);
 #endif
@@ -324,26 +341,18 @@ void LeafletMaps::setMapBounds(Graph *graph, const map<node, pair<double, double
     }
 
     QString code = "mapBounds = [];";
-    executeJavascript(code);
-    code = "mapBounds.push(L.latLng(%1, %2));";
-    executeJavascript(code.arg(minLatLng.first).arg(minLatLng.second));
-    executeJavascript(code.arg(maxLatLng.first).arg(maxLatLng.second));
-    code = "setMapBounds(mapBounds);";
+    code += QString("mapBounds.push(L.latLng(%1, %2));").arg(minLatLng.first).arg(minLatLng.second);
+    code += QString("mapBounds.push(L.latLng(%1, %2));").arg(maxLatLng.first).arg(maxLatLng.second);
+    code += "setMapBounds(mapBounds);";
     executeJavascript(code);
   }
 }
 
 void LeafletMaps::setMapBounds(Coord nw, Coord se) {
   QString code = "mapBounds = [];";
-  executeJavascript(code);
-
-  code = "mapBounds.push(L.latLng(%1, %2));";
-  executeJavascript(code.arg(nw[1]).arg(nw[0]));
-
-  code = "mapBounds.push(L.latLng(%1, %2));";
-  executeJavascript(code.arg(se[1]).arg(se[0]));
-
-  code = "setMapBounds(mapBounds);";
+  code += QString("mapBounds.push(L.latLng(%1, %2));").arg(nw[1]).arg(nw[0]);
+  code += QString("mapBounds.push(L.latLng(%1, %2));").arg(se[1]).arg(se[0]);
+  code += "setMapBounds(mapBounds);";
   executeJavascript(code);
 }
 

@@ -145,12 +145,18 @@ bool GeolocalisationConfigWidget::resetLatAndLngValues() const {
 void GeolocalisationConfigWidget::enableDisableComboBoxes() {
   if (_ui->addressLocRB->isChecked()) {
     _ui->addressPropCB->setEnabled(true);
+    _ui->createLatLngPropsCB->setEnabled(true);
+    _ui->resetLatLngValuesCB->setEnabled(true);
     _ui->latPropCB->setEnabled(false);
     _ui->lngPropCB->setEnabled(false);
+    _ui->edgesControlPointsGB->setEnabled(false);
   } else {
     _ui->addressPropCB->setEnabled(false);
+    _ui->createLatLngPropsCB->setEnabled(false);
+    _ui->resetLatLngValuesCB->setEnabled(false);
     _ui->latPropCB->setEnabled(true);
     _ui->lngPropCB->setEnabled(true);
+    _ui->edgesControlPointsGB->setEnabled(true);
   }
 }
 
