@@ -310,10 +310,12 @@ bool GraphPerspective::terminated() {
   }
 
 #ifdef QT_HAS_WEBENGINE
-  // the perspective may hang if a QtWebEngineProcess
-  // is still running (launched by the GeographicView)
-  // so we call exit instead of return
-  exit(0);
+  // the perspective may hang - observed on linux with Qt5 from download.qt.io
+  // but not with qt5 linux distro packages - if a QtWebEngineProcess
+  // is still running (launched by the GeographicView).
+  // So we call QCoreApplication::quit() instead of return
+  // in order to force returning of the processEvents main loop
+  QCoreApplication::quit();
 #endif
 
   return true;
