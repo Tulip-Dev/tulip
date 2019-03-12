@@ -22,6 +22,7 @@
 #include <tulip/PythonInterpreter.h>
 #include <tulip/APIDataBase.h>
 #include <tulip/PythonIDE.h>
+#include <tulip/PythonCodeEditor.h>
 #include "PythonPanel.h"
 #endif
 
@@ -281,6 +282,7 @@ GraphPerspective::~GraphPerspective() {
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   delete _pythonIDEDialog;
+  PythonCodeEditor::deleteStaticResources();
 #endif
 
   delete _ui;

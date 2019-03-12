@@ -79,8 +79,8 @@ private:
 };
 } // namespace tlp
 
-AutoCompletionList::AutoCompletionList(PythonCodeEditor *parent)
-    : QListWidget(), _codeEditor(parent) {
+AutoCompletionList::AutoCompletionList()
+    : QListWidget(), _codeEditor(nullptr) {
 #if defined(__APPLE__)
   setWindowFlags(static_cast<Qt::WindowFlags>(Qt::Popup | Qt::FramelessWindowHint));
 #else
@@ -89,7 +89,6 @@ AutoCompletionList::AutoCompletionList(PythonCodeEditor *parent)
   setAttribute(Qt::WA_StaticContents);
   setFrameShape(StyledPanel);
   setFrameShadow(Plain);
-  setFocusProxy(parent);
   installEventFilter(&keyboardFocusEventFilter);
   _activated = false;
   _wasActivated = false;
@@ -116,8 +115,8 @@ void AutoCompletionList::keyPressEvent(QKeyEvent *e) {
     }
   } else if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return) {
     e->accept();
-    close();
     insertSelectedItem();
+    close();
   } else {
     QCoreApplication::sendEvent(_codeEditor, e);
   }
@@ -216,6 +215,7 @@ void AutoCompletionList::hideEvent(QHideEvent *event) {
   releaseKeyboard();
   _codeEditor->setFocus();
   _activated = false;
+  _codeEditor = nullptr;
 }
 
 void AutoCompletionList::setCodeEditor(PythonCodeEditor *parent) {
@@ -225,7 +225,7 @@ void AutoCompletionList::setCodeEditor(PythonCodeEditor *parent) {
 }
 
 bool AutoCompletionList::eventFilter(QObject *obj, QEvent *event) {
-  if (obj != _codeEditor && obj != _codeEditor->mainWindow()) {
+  if (_codeEditor == nullptr || (obj != _codeEditor && obj != _codeEditor->mainWindow())) {
     return false;
   }
 
@@ -473,31 +473,31 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent)
   _parenHighlighter = new ParenMatcherHighlighter(document());
   _highlighter = new PythonCodeHighlighter(document());
 
-  if (_autoCompletionList == nullptr)
-    _autoCompletionList = new AutoCompletionList(this);
-  if (_autoCompletionDb == nullptr)
+  if (_autoCompletionList == nullptr) {
+    _autoCompletionList = new AutoCompletionList();
     _autoCompletionDb = new AutoCompletionDataBase(APIDataBase::getInstance());
 
-  // Hack to get a pointer on the main window
-  // in order for the autocompletion dialog to catch
-  // window activate/desactivate events
-  if (Perspective::instance()) {
-    _mainWindow = Perspective::instance()->mainWindow();
-  } else {
-    QWidget *parente = dynamic_cast<QWidget *>(this->parent());
+    // Hack to get a pointer on the main window
+    // in order for the autocompletion dialog to catch
+    // window activate/desactivate events
+    if (Perspective::instance()) {
+      _mainWindow = Perspective::instance()->mainWindow();
+    } else {
+      QWidget *parente = dynamic_cast<QWidget *>(this->parent());
 
-    while (parente) {
-      _mainWindow = dynamic_cast<QMainWindow *>(parente);
+      while (parente) {
+        _mainWindow = dynamic_cast<QMainWindow *>(parente);
 
-      if (_mainWindow)
-        break;
+        if (_mainWindow)
+          break;
 
-      parente = dynamic_cast<QWidget *>(parente->parent());
+        parente = dynamic_cast<QWidget *>(parente->parent());
+      }
     }
-  }
 
-  if (_mainWindow) {
-    _mainWindow->installEventFilter(_autoCompletionList);
+    if (_mainWindow) {
+      _mainWindow->installEventFilter(_autoCompletionList);
+    }
   }
 
   _findReplaceDialog = new FindReplaceDialog(this);
