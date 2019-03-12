@@ -261,6 +261,20 @@ GraphPerspective::~GraphPerspective() {
     qInstallMessageHandler(nullptr);
   }
 
+  // ensure all loaded graphs are deleted
+  for (auto graph : _graphs->graphs()) {
+    delete graph;
+  }
+
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
+  delete _pythonIDEDialog;
+  PythonCodeEditor::deleteStaticResources();
+#endif
+
+  delete _ui;
+}
+
+void GraphPerspective::destroyWorkspace() {
   // disconnect to avoid any possible segfaults when deleting graphs
   disconnect(_graphs, SIGNAL(currentGraphChanged(tlp::Graph *)), this,
              SLOT(currentGraphChanged(tlp::Graph *)));
@@ -274,18 +288,6 @@ GraphPerspective::~GraphPerspective() {
     disconnect(_graphs, SIGNAL(currentGraphChanged(tlp::Graph *)), _ui->algorithmRunner,
                SLOT(setGraph(tlp::Graph *)));
   }
-
-  // ensure all loaded graphs are deleted
-  for (auto graph : _graphs->graphs()) {
-    delete graph;
-  }
-
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  delete _pythonIDEDialog;
-  PythonCodeEditor::deleteStaticResources();
-#endif
-
-  delete _ui;
 }
 
 bool GraphPerspective::terminated() {
@@ -311,15 +313,9 @@ bool GraphPerspective::terminated() {
     }
   }
 
-#ifdef QT_HAS_WEBENGINE
-  // the perspective may hang - observed on linux with Qt5 from download.qt.io
-  // but not with qt5 linux distro packages - if a QtWebEngineProcess
-  // is still running (launched by the GeographicView).
-  // So we call QCoreApplication::quit() instead of return
-  // in order to force returning of the processEvents main loop
-  QCoreApplication::quit();
-#endif
-
+  // force workspace and views destruction here to avoid hanging on exit
+  // when linking against QtWebEngine binaries provided by qt.io
+  destroyWorkspace();
   return true;
 }
 

@@ -1,7 +1,5 @@
 INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${OPENGL_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-QTXWEB_SET_INCLUDES_AND_DEFINITIONS()
-
 SET(LIB_SRCS
 src/AlgorithmRunner.cpp
 src/AlgorithmRunnerItem.cpp
