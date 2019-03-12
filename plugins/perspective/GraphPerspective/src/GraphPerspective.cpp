@@ -309,6 +309,13 @@ bool GraphPerspective::terminated() {
     }
   }
 
+#ifdef QT_HAS_WEBENGINE
+  // the perspective may hang if a QtWebEngineProcess
+  // is still running (launched by the GeographicView)
+  // so we call exit instead of return
+  exit(0);
+#endif
+
   return true;
 }
 
