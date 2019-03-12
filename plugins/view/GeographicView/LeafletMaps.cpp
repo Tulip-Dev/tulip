@@ -181,6 +181,12 @@ LeafletMaps::LeafletMaps(QWidget *parent) : QWebEngineView(parent), init(false) 
   QTimer::singleShot(500, this, SLOT(triggerLoading()));
 }
 
+LeafletMaps::~LeafletMaps() {
+#ifdef QT_HAS_WEBENGINE
+  delete mapRefresher;
+#endif
+}
+
 QVariant LeafletMaps::executeJavascript(const QString &jsCode) {
 #ifdef QT_HAS_WEBKIT
   return frame->evaluateJavaScript(jsCode);
