@@ -79,8 +79,7 @@ private:
 };
 } // namespace tlp
 
-AutoCompletionList::AutoCompletionList()
-    : QListWidget(), _codeEditor(nullptr) {
+AutoCompletionList::AutoCompletionList() : QListWidget(), _codeEditor(nullptr) {
 #if defined(__APPLE__)
   setWindowFlags(static_cast<Qt::WindowFlags>(Qt::Popup | Qt::FramelessWindowHint));
 #else
