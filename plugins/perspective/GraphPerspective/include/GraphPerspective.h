@@ -176,6 +176,7 @@ protected:
   bool eventFilter(QObject *, QEvent *) override;
   void importGraph(const std::string &module, tlp::DataSet &data);
   void updateLogIconsAndCounters();
+  void destroyWorkspace();
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   PythonPanel *_pythonPanel;

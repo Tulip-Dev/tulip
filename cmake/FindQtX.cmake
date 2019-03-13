@@ -1,17 +1,10 @@
-SET(Qt5Widgets_FOUND false)
-SET(Qt5OpenGL_FOUND false)
-SET(Qt5Xml_FOUND false)
-SET(Qt5XmlPatterns_FOUND false)
-SET(Qt5Network_FOUND false)
-
-SET(QT_HAS_WEBKIT FALSE)
-SET(QT_HAS_WEBENGINE FALSE)
-
 # If CMake does not automatically find Qt5 , the root directory
 # of the Qt5 installation must be provided in the CMAKE_PREFIX_PATH variable.
 
-# Unset related CMake variables in order to change the Qt5 version (by modifying the root Qt5 directory through the CMAKE_PREFIX_PATH variable)
-# without having to delete the current CMake cache
+# Unset related CMake variables in order to change the Qt5 version (by modifying
+# the root Qt5 directory through the CMAKE_PREFIX_PATH variable) without having
+# to delete the current CMake cache
+
 UNSET(Qt5Core_FOUND CACHE)
 UNSET(Qt5Gui_FOUND CACHE)
 UNSET(Qt5Widgets_FOUND CACHE)
@@ -52,6 +45,9 @@ UNSET(Qt5DBus_DIR CACHE)
 UNSET(Qt5WebEngineWidgets_DIR CACHE)
 UNSET(Qt5WebChannel_DIR CACHE)
 
+SET(QT_HAS_WEBKIT FALSE)
+SET(QT_HAS_WEBENGINE FALSE)
+
 # Macro used to workaround a small issue with QtWebkit components on MSYS2:
 # when compling in RelWithDebInfo mode, Qt debug libraries are selected instead
 # of the release one (this should only happen when compiling in Debug mode)
@@ -72,8 +68,9 @@ FIND_PACKAGE(Qt5OpenGL 5.5 REQUIRED)
 FIND_PACKAGE(Qt5Network 5.5 REQUIRED)
 
 STRING(REGEX MATCH "[0-9]\\.[0-9]+" QT_VERSION "${Qt5Widgets_VERSION_STRING}")
-# Qt5Widgets_VERSION_STRING has been deprecated in favor of Qt5Widgets_VERSION since a few releases of Qt5
-# and seems to have been removed in some Linux distributions (experienced on Kde Neon Developer edition that now uses Qt 5.9)
+# Qt5Widgets_VERSION_STRING has been deprecated in favor of Qt5Widgets_VERSION since
+# a few releases of Qt5 and seems to have been removed in some Linux distributions
+# (experienced on KDE Neon Developer edition that now uses Qt 5.9)
 IF(NOT QT_VERSION MATCHES "[0-9]\\.[0-9]+")
   STRING(REGEX MATCH "[0-9]\\.[0-9]+" QT_VERSION "${Qt5Widgets_VERSION}")
 ENDIF(NOT QT_VERSION MATCHES "[0-9]\\.[0-9]+")
@@ -117,8 +114,8 @@ GET_FILENAME_COMPONENT(QT_CMAKE_DIR "${Qt5Core_DIR}" DIRECTORY)
 
 # On Apple platform, we need to link against Qt5DBus and Qt5PrintSupport
 # when using the official Qt5 bundle provided by qt.io (dylibs dependencies side effect).
-# However, those modules are not necessarily present when using Qt5 from Homebrew or MacPorts,
-# so handle those special cases here.
+# However, those modules are not necessarily present when using Qt5 from
+# Homebrew or MacPorts, so handle those special cases here.
 IF(APPLE)
   SET(QT_DBUS_CMAKE_DIR "${QT_CMAKE_DIR}/Qt5DBus")
   SET(QT_PRINTSUPPORT_CMAKE_DIR "${QT_CMAKE_DIR}/Qt5PrintSupport")
@@ -146,8 +143,7 @@ IF(EXISTS ${QT_WEBKIT_WIDGETS_CMAKE_DIR})
 ENDIF(EXISTS ${QT_WEBKIT_WIDGETS_CMAKE_DIR})
 
 # If Qt5 is not bundled with WebKit then check if its installation
-# provides WebEngine (new web module since Qt 5.4)
-# and setup its use if it is the case.
+# provides WebEngine (new web module since Qt 5.4) and setup its use.
 SET(QT_WEBENGINE_WIDGETS_CMAKE_DIR "${QT_CMAKE_DIR}/Qt5WebEngineWidgets")
 IF(NOT QT_HAS_WEBKIT AND EXISTS ${QT_WEBENGINE_WIDGETS_CMAKE_DIR})
   FIND_PACKAGE(Qt5WebEngineWidgets 5.5)
@@ -191,7 +187,7 @@ MACRO(QTXWEB_SET_INCLUDES_AND_DEFINITIONS)
   ENDIF()
 ENDMACRO(QTXWEB_SET_INCLUDES_AND_DEFINITIONS)
 
-  # define aliases for Qt macros in order to build the project
+# Define aliases for Qt macros in order to build the project
 MACRO(QTX_WRAP_CPP outfiles)
   QT5_WRAP_CPP(${outfiles} ${ARGN})
 ENDMACRO()
@@ -204,7 +200,8 @@ MACRO(QTX_ADD_RESOURCES outfiles)
   QT5_ADD_RESOURCES(${outfiles} ${ARGN})
 ENDMACRO()
 
-# with MinGW, remove the -fPIC compiler option as it is not needed and generates a lot of warnings
+# With MinGW, remove the -fPIC compiler option as it is not needed and
+# generates a lot of warnings
 IF(MINGW)
   STRING(REPLACE "-fPIC" "" Qt5Widgets_EXECUTABLE_COMPILE_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 ENDIF(MINGW)

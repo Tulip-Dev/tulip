@@ -295,7 +295,6 @@ void simplifyPolyFile(QString fileName, float definition) {
 
   QString newName(fileName);
   newName.replace(".poly", QString("_") + QString::number(definition) + ".poly");
-  cout << "create : " << QStringToTlpString(newName) << endl;
   QFile fileW(newName);
 
   if (!fileW.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -418,6 +417,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   proxyGM->setParentItem(_placeholderItem);
 
   glMainWidget = new GlMainWidget(nullptr, geoView);
+  delete glMainWidget->getScene()->getCalculator();
   glMainWidget->getScene()->setCalculator(new GlCPULODCalculator());
   glMainWidget->getScene()->setBackgroundColor(Color(255, 255, 255, 0));
   glMainWidget->getScene()->setClearBufferAtDraw(false);
@@ -527,7 +527,8 @@ GeographicViewGraphicsView::~GeographicViewGraphicsView() {
   }
 
   cleanup();
-  delete glMainWidget;
+  // delete the graphics scene and all the items it contains
+  delete scene();
 }
 
 void GeographicViewGraphicsView::cleanup() {

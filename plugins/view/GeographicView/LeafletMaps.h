@@ -63,6 +63,8 @@ class LeafletMaps : public QWebEngineView {
 public:
   LeafletMaps(QWidget *parent = nullptr);
 
+  ~LeafletMaps();
+
   bool pageLoaded();
 
   bool mapLoaded();

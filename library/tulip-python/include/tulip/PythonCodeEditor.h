@@ -48,7 +48,7 @@ class TLP_PYTHON_SCOPE AutoCompletionList : public QListWidget {
   bool _wasActivated;
 
 public:
-  explicit AutoCompletionList(tlp::PythonCodeEditor *parent = nullptr);
+  explicit AutoCompletionList();
 
   void setCodeEditor(tlp::PythonCodeEditor *parent);
 
@@ -217,6 +217,11 @@ public:
 
   QMainWindow *mainWindow() const {
     return _mainWindow;
+  }
+
+  static void deleteStaticResources() {
+    delete _autoCompletionDb;
+    delete _autoCompletionList;
   }
 
 protected:
