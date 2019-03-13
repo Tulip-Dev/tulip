@@ -218,10 +218,9 @@ void LeafletMaps::triggerLoading() {
 #ifdef QT_HAS_WEBKIT
   frame->addToJavaScriptWindowObject("leafletMapsQObject", this);
 #endif
-  // map is first centered in the gulf of gascogne
-  // at the latitude of Bordeaux
-  // zoom level is pretty low to minimize the map display time
-  QString code = "init(44.8084000, -2.0, 2)";
+  // Use LaBRI GPS coordinates as center and use a zoom level
+  // showcasing Bordeaux and its neighborhood
+  QString code = "init(44.8084, -0.596805, 11)";
   executeJavascript(code);
   init = true;
 }
