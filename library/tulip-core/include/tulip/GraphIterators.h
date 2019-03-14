@@ -129,10 +129,10 @@ protected:
 //============================================================
 // Iterator for the Graph
 //============================================================
-class TLP_SCOPE GraphNodeIterator
-    : public NodeIterator
+class TLP_SCOPE GraphNodeIterator : public NodeIterator
 #if defined(NDEBUG) || defined(_OPENMP)
-  , public MemoryPool<GraphNodeIterator>
+    ,
+                                    public MemoryPool<GraphNodeIterator>
 #endif
 {
 private:
@@ -150,10 +150,10 @@ public:
 };
 //=============================================================
 /// Edge iterator for data sg
-class TLP_SCOPE GraphEdgeIterator
-    : public EdgeIterator
+class TLP_SCOPE GraphEdgeIterator : public EdgeIterator
 #if defined(NDEBUG) || defined(_OPENMP)
-  , public MemoryPool<GraphEdgeIterator>
+    ,
+                                    public MemoryPool<GraphEdgeIterator>
 #endif
 {
 private:

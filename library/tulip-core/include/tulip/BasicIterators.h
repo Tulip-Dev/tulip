@@ -46,8 +46,7 @@ protected:
   void disableListening(const Graph *sg);
 
 public:
- FactorNodeIterator(const Graph *sg)
-   : _parentGraph(sg->getSuperGraph()), ito(nullptr) {}
+  FactorNodeIterator(const Graph *sg) : _parentGraph(sg->getSuperGraph()), ito(nullptr) {}
 };
 
 class TLP_SCOPE FactorEdgeIterator : public EdgeIterator {
@@ -56,10 +55,9 @@ protected:
   void *ito;
   void enableListening(const Graph *sg);
   void disableListening(const Graph *sg);
-  
+
 public:
-  FactorEdgeIterator(const Graph *sg)
-    : _parentGraph(sg->getSuperGraph()), ito(nullptr) {}
+  FactorEdgeIterator(const Graph *sg) : _parentGraph(sg->getSuperGraph()), ito(nullptr) {}
 };
 //============================================================
 /// Subgraph node iterator

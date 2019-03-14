@@ -40,14 +40,14 @@ void decrNumIterators() {
 }
 
 struct TLP_SCOPE NodeIteratorObserver : public Observable {
-  NodeIterator* itn;
+  NodeIterator *itn;
   NodeIteratorObserver(NodeIterator *it) : itn(it) {}
   // Observable interface
   void treatEvent(const Event &);
 };
 
 struct TLP_SCOPE EdgeIteratorObserver : public Observable {
-  EdgeIterator* ite;
+  EdgeIterator *ite;
   EdgeIteratorObserver(EdgeIterator *it) : ite(it) {}
   // Observable interface
   void treatEvent(const Event &);
@@ -102,7 +102,7 @@ void FactorNodeIterator::enableListening(const Graph *sg) {
   sg->addListener(itno);
   ito = itno;
 #else
-  (void) sg;
+  (void)sg;
 #endif
 }
 
@@ -112,7 +112,7 @@ void FactorNodeIterator::disableListening(const Graph *sg) {
   sg->removeListener(itno);
   delete itno;
 #else
-  (void) sg;
+  (void)sg;
 #endif
 }
 //===================================================================
@@ -204,7 +204,7 @@ void FactorEdgeIterator::enableListening(const Graph *sg) {
   sg->addListener(iteo);
   ito = iteo;
 #else
-  (void) sg;
+  (void)sg;
 #endif
 }
 
@@ -214,7 +214,7 @@ void FactorEdgeIterator::disableListening(const Graph *sg) {
   sg->removeListener(iteo);
   delete iteo;
 #else
-  (void) sg;
+  (void)sg;
 #endif
 }
 //===================================================================
