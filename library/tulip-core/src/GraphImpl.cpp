@@ -23,7 +23,7 @@
 #include <tulip/GraphImpl.h>
 #include <tulip/PropertyManager.h>
 #include <tulip/GraphView.h>
-#include <tulip/GraphIterator.h>
+#include <tulip/GraphIterators.h>
 #include <tulip/GraphUpdatesRecorder.h>
 
 using namespace std;

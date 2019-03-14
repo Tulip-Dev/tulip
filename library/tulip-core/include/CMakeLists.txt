@@ -6,6 +6,7 @@ INSTALL(FILES
   tulip/Algorithm.h
   tulip/Array.h
   tulip/Bfs.h
+  tulip/BasicIterators.h
   tulip/BiconnectedTest.h
   tulip/BooleanProperty.h
   tulip/BoundingBox.h
@@ -32,7 +33,6 @@ INSTALL(FILES
   tulip/GraphAbstract.h
   tulip/GraphDecorator.h
   tulip/Graph.h
-  tulip/GraphIterator.h
   tulip/GraphTest.h
   tulip/GraphMeasure.h
   tulip/GraphParallelTools.h

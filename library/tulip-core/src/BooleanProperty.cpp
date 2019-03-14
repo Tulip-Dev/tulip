@@ -18,8 +18,6 @@
  */
 
 #include <tulip/BooleanProperty.h>
-#include <tulip/Observable.h>
-#include <tulip/GraphIterator.h>
 
 using namespace std;
 using namespace tlp;

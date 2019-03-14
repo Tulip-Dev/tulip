@@ -17,10 +17,14 @@
  *
  */
 #include <cassert>
+#include <iostream>
+
 #include <tulip/Graph.h>
 #include <tulip/GraphImpl.h>
 #include <tulip/GraphView.h>
-#include <tulip/GraphIterator.h>
+#include <tulip/GraphIterators.h>
+#include <tulip/Observable.h>
+#include <tulip/StoredType.h>
 
 namespace tlp {
 
@@ -35,12 +39,26 @@ void decrNumIterators() {
   NumIterators--;
 }
 
+struct TLP_SCOPE NodeIteratorObserver : public Observable {
+  NodeIterator* itn;
+  NodeIteratorObserver(NodeIterator *it) : itn(it) {}
+  // Observable interface
+  void treatEvent(const Event &);
+};
+
+struct TLP_SCOPE EdgeIteratorObserver : public Observable {
+  EdgeIterator* ite;
+  EdgeIteratorObserver(EdgeIterator *it) : ite(it) {}
+  // Observable interface
+  void treatEvent(const Event &);
+};
+
 void NodeIteratorObserver::treatEvent(const Event &evt) {
   switch (static_cast<const GraphEvent *>(&evt)->getType()) {
   case GraphEvent::TLP_ADD_NODE:
   case GraphEvent::TLP_DEL_NODE:
 
-    if (hasNext())
+    if (itn->hasNext())
       tlp::warning() << "Warning: node added or deleted while iterating!!!" << std::endl;
 
   default:
@@ -53,7 +71,7 @@ void EdgeIteratorObserver::treatEvent(const Event &evt) {
   case GraphEvent::TLP_ADD_EDGE:
   case GraphEvent::TLP_DEL_EDGE:
 
-    if (hasNext())
+    if (ite->hasNext())
       tlp::warning() << "Warning: edge added or deleted while iterating!!!" << std::endl;
 
   default:
@@ -78,17 +96,37 @@ int getNumIterators() {
 #endif
 
 //===================================================================
+void FactorNodeIterator::enableListening(const Graph *sg) {
+#if !defined(NDEBUG) && !defined(_OPENMP)
+  auto itno = new NodeIteratorObserver(this);
+  sg->addListener(itno);
+  ito = itno;
+#else
+  (void) sg;
+#endif
+}
+
+void FactorNodeIterator::disableListening(const Graph *sg) {
+#if !defined(NDEBUG) && !defined(_OPENMP)
+  auto itno = static_cast<NodeIteratorObserver *>(ito);
+  sg->removeListener(itno);
+  delete itno;
+#else
+  (void) sg;
+#endif
+}
+//===================================================================
 OutNodesIterator::OutNodesIterator(const GraphView *sG, node n) : FactorNodeIterator(sG) {
   _parentGraph = _parentGraph->getRoot();
   it = new OutEdgesIterator(sG, n);
 #if !defined(NDEBUG) && !defined(_OPENMP)
   sg = sG;
-  _parentGraph->addListener(this);
+  enableListening(_parentGraph);
 #endif
 }
 OutNodesIterator::~OutNodesIterator() {
 #if !defined(NDEBUG) && !defined(_OPENMP)
-  _parentGraph->removeListener(this);
+  disableListening(_parentGraph);
 #endif
   delete it;
 }
@@ -110,12 +148,12 @@ InNodesIterator::InNodesIterator(const GraphView *sG, node n)
   _parentGraph = _parentGraph->getRoot();
 #if !defined(NDEBUG) && !defined(_OPENMP)
   sg = sG;
-  _parentGraph->addListener(this);
+  enableListening(_parentGraph);
 #endif
 }
 InNodesIterator::~InNodesIterator() {
 #if !defined(NDEBUG) && !defined(_OPENMP)
-  _parentGraph->removeListener(this);
+  disableListening(_parentGraph);
 #endif
   delete it;
 }
@@ -137,12 +175,12 @@ InOutNodesIterator::InOutNodesIterator(const GraphView *sG, node n)
   _parentGraph = _parentGraph->getRoot();
 #if !defined(NDEBUG) && !defined(_OPENMP)
   sg = sG;
-  _parentGraph->addListener(this);
+  enableListening(_parentGraph);
 #endif
 }
 InOutNodesIterator::~InOutNodesIterator() {
 #if !defined(NDEBUG) && !defined(_OPENMP)
-  _parentGraph->removeListener(this);
+  disableListening(_parentGraph);
 #endif
   delete it;
 }
@@ -160,19 +198,39 @@ bool InOutNodesIterator::hasNext() {
   return (it->hasNext());
 }
 //===================================================================
+void FactorEdgeIterator::enableListening(const Graph *sg) {
+#if !defined(NDEBUG) && !defined(_OPENMP)
+  auto iteo = new EdgeIteratorObserver(this);
+  sg->addListener(iteo);
+  ito = iteo;
+#else
+  (void) sg;
+#endif
+}
+
+void FactorEdgeIterator::disableListening(const Graph *sg) {
+#if !defined(NDEBUG) && !defined(_OPENMP)
+  auto iteo = static_cast<EdgeIteratorObserver *>(ito);
+  sg->removeListener(iteo);
+  delete iteo;
+#else
+  (void) sg;
+#endif
+}
+//===================================================================
 OutEdgesIterator::OutEdgesIterator(const GraphView *sG, node n) : FactorEdgeIterator(sG), sg(sG) {
   assert(sG->isElement(n));
   _parentGraph = _parentGraph->getRoot();
   it = _parentGraph->getOutEdges(n);
 #if !defined(NDEBUG) && !defined(_OPENMP)
-  _parentGraph->addListener(this);
+  enableListening(_parentGraph);
 #endif
   // anticipate first iteration
   prepareNext();
 }
 OutEdgesIterator::~OutEdgesIterator() {
 #if !defined(NDEBUG) && !defined(_OPENMP)
-  _parentGraph->removeListener(this);
+  disableListening(_parentGraph);
 #endif
   delete it;
 }
@@ -204,14 +262,14 @@ InEdgesIterator::InEdgesIterator(const GraphView *sG, node n) : FactorEdgeIterat
   _parentGraph = _parentGraph->getRoot();
   it = _parentGraph->getInEdges(n);
 #if !defined(NDEBUG) && !defined(_OPENMP)
-  _parentGraph->addListener(this);
+  enableListening(_parentGraph);
 #endif
   // anticipate first iteration
   prepareNext();
 }
 InEdgesIterator::~InEdgesIterator() {
 #if !defined(NDEBUG) && !defined(_OPENMP)
-  _parentGraph->removeListener(this);
+  disableListening(_parentGraph);
 #endif
   delete it;
 }
@@ -244,14 +302,14 @@ InOutEdgesIterator::InOutEdgesIterator(const GraphView *sG, node n)
   _parentGraph = _parentGraph->getRoot();
   it = _parentGraph->getInOutEdges(n);
 #if !defined(NDEBUG) && !defined(_OPENMP)
-  _parentGraph->addListener(this);
+  enableListening(_parentGraph);
 #endif
   // anticipate first iteration
   prepareNext();
 }
 InOutEdgesIterator::~InOutEdgesIterator() {
 #if !defined(NDEBUG) && !defined(_OPENMP)
-  _parentGraph->removeListener(this);
+  disableListening(_parentGraph);
 #endif
   delete it;
 }
@@ -290,12 +348,16 @@ GraphNodeIterator::GraphNodeIterator(const Graph *
     : itId(it) {
 #if !defined(NDEBUG) && !defined(_OPENMP)
   graph = g;
-  graph->addListener(this);
+  auto itno = new NodeIteratorObserver(this);
+  graph->addListener(itno);
+  ito = itno;
 #endif
 }
 GraphNodeIterator::~GraphNodeIterator() {
 #if !defined(NDEBUG) && !defined(_OPENMP)
-  graph->removeListener(this);
+  auto itno = static_cast<NodeIteratorObserver *>(ito);
+  graph->removeListener(itno);
+  delete itno;
 #endif
   delete itId;
 }
@@ -316,12 +378,16 @@ GraphEdgeIterator::GraphEdgeIterator(const Graph *
     : itId(it) {
 #if !defined(NDEBUG) && !defined(_OPENMP)
   graph = g;
-  graph->addListener(this);
+  auto iteo = new EdgeIteratorObserver(this);
+  graph->addListener(iteo);
+  ito = iteo;
 #endif
 }
 GraphEdgeIterator::~GraphEdgeIterator() {
 #if !defined(NDEBUG) && !defined(_OPENMP)
-  graph->removeListener(this);
+  auto iteo = static_cast<EdgeIteratorObserver *>(ito);
+  graph->removeListener(iteo);
+  delete iteo;
 #endif
   delete itId;
 }

@@ -20,7 +20,7 @@ GraphAbstract.cpp
 Graph.cpp
 GraphDecorator.cpp
 GraphImpl.cpp
-GraphIterator.cpp
+GraphIterators.cpp
 GraphMeasure.cpp
 GraphProperty.cpp
 GraphStorage.cpp

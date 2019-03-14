@@ -17,7 +17,7 @@
  *
  */
 #include <cstdlib>
-#include <tulip/GraphIterator.h>
+#include <tulip/BasicIterators.h>
 
 template <class Tnode, class Tedge, class Tprop>
 tlp::AbstractProperty<Tnode, Tedge, Tprop>::AbstractProperty(tlp::Graph *sg, const std::string &n) {
