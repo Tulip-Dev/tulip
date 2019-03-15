@@ -51,7 +51,7 @@ static bool isWow64() {
 
   HMODULE module = GetModuleHandle(TEXT("kernel32"));
   const char funcName[] = "IsWow64Process";
-  fnIsWow64Process = (LPFN_ISWOW64PROCESS)GetProcAddress(module, funcName);
+  fnIsWow64Process = static_cast<LPFN_ISWOW64PROCESS>(GetProcAddress(module, funcName));
 
   if (fnIsWow64Process != nullptr) {
     fnIsWow64Process(GetCurrentProcess(), &bIsWow64);
