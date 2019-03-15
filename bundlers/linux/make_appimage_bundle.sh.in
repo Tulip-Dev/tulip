@@ -64,7 +64,7 @@ echo "#!/bin/sh" > $APPRUN_FILE
 echo "BUNDLE_DIR=\"\$(dirname \$0)\"" >> $APPRUN_FILE
 echo "export PYTHONHOME=\${BUNDLE_DIR}/usr" >> $APPRUN_FILE
 echo "export TLP_DIR=\${BUNDLE_DIR}/usr/lib" >> $APPRUN_FILE
-echo "\${BUNDLE_DIR}/usr/bin/tulip_perspective -p $PERSPECTIVE -style plastique" >> $APPRUN_FILE
+echo "\${BUNDLE_DIR}/usr/bin/tulip_perspective -p $PERSPECTIVE" >> $APPRUN_FILE
 chmod 755 $APPRUN_FILE
 
 # create desktop file
@@ -102,6 +102,9 @@ mkdir $BUNDLE_USR_DIR/plugins
 cp -v -Rp @QT_PLUGINS_DIR@/imageformats $BUNDLE_USR_DIR/plugins
 if [ -e @QT_PLUGINS_DIR@/platforms ]; then
   cp -v -Rp @QT_PLUGINS_DIR@/platforms $BUNDLE_USR_DIR/plugins
+fi
+if [ -e @QT_PLUGINS_DIR@/platformthemes ]; then
+  cp -v -Rp @QT_PLUGINS_DIR@/platformthemes $BUNDLE_USR_DIR/plugins
 fi
 if [ -e @QT_PLUGINS_DIR@/xcbglintegrations ]; then
   cp -v -Rp @QT_PLUGINS_DIR@/xcbglintegrations $BUNDLE_USR_DIR/plugins
@@ -189,7 +192,7 @@ popd > /dev/null 2>&1
 # tweak OS/ABI header part of libraries (System V instead of Linux)
 for LIB in $(find $BUNDLE_LIB_DIR -name '*.so*')
 do
-  # LIB may be in read only mode, make it writable before stripping it 
+  # LIB may be in read only mode, make it writable before stripping it
   chmod +w $LIB
   strip --strip-unneeded $LIB
 done;
