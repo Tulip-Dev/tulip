@@ -362,7 +362,7 @@ unsigned int GeographicViewGraphicsView::planisphereTextureId = 0;
 GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
                                                        QGraphicsScene *graphicsScene,
                                                        QWidget *parent)
-  : QGraphicsView(graphicsScene, parent), _geoView(geoView), graph(nullptr), leafletMaps(nullptr),
+    : QGraphicsView(graphicsScene, parent), _geoView(geoView), graph(nullptr), leafletMaps(nullptr),
       currentMapZoom(0), globeCameraBackup(nullptr, true), mapCameraBackup(nullptr, true),
       geoLayout(nullptr), geoViewSize(nullptr), geoViewShape(nullptr), geoLayoutBackup(nullptr),
       mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false),
@@ -936,7 +936,7 @@ void GeographicViewGraphicsView::queueMapRefresh() {
   tId = startTimer(10);
 }
 
-void GeographicViewGraphicsView::timerEvent(QTimerEvent* event) {
+void GeographicViewGraphicsView::timerEvent(QTimerEvent *event) {
   killTimer(event->timerId());
   // call refreshMap if needed
   // accessing this->tId may result in a Free Memory Read

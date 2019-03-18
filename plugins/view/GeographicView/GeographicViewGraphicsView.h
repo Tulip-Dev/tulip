@@ -147,7 +147,7 @@ protected:
   void resizeEvent(QResizeEvent *event) override;
 #ifdef QT_HAS_WEBENGINE
   int tId;
-  void timerEvent(QTimerEvent* event) override;
+  void timerEvent(QTimerEvent *event) override;
 #endif
 
 private:
