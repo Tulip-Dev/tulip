@@ -362,7 +362,7 @@ unsigned int GeographicViewGraphicsView::planisphereTextureId = 0;
 GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
                                                        QGraphicsScene *graphicsScene,
                                                        QWidget *parent)
-    : QGraphicsView(graphicsScene, parent), _geoView(geoView), graph(nullptr), leafletMaps(nullptr),
+  : QGraphicsView(graphicsScene, parent), tId(0), _geoView(geoView), graph(nullptr), leafletMaps(nullptr),
       currentMapZoom(0), globeCameraBackup(nullptr, true), mapCameraBackup(nullptr, true),
       geoLayout(nullptr), geoViewSize(nullptr), geoViewShape(nullptr), geoLayoutBackup(nullptr),
       mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false),
@@ -507,6 +507,15 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
 }
 
 GeographicViewGraphicsView::~GeographicViewGraphicsView() {
+#ifdef QT_HAS_WEBENGINE
+  // first kill refreshMap timer if any
+  // and reset tId to try to ensure refreshMap
+  // will not be called later
+  if (tId) {
+    killTimer(tId);
+    tId = 0;
+  }
+#endif
   if (geocodingActive) {
     if (addressSelectionDialog->isVisible()) {
       addressSelectionDialog->accept();
@@ -921,9 +930,23 @@ void GeographicViewGraphicsView::resizeEvent(QResizeEvent *event) {
   }
 }
 
+#ifdef QT_HAS_WEBENGINE
 void GeographicViewGraphicsView::queueMapRefresh() {
-  QTimer::singleShot(10, this, SLOT(refreshMap()));
+  tId = startTimer(10);
 }
+
+void GeographicViewGraphicsView::timerEvent(QTimerEvent* event) {
+  killTimer(event->timerId());
+  // call refreshMap if needed
+  // accessing this->tId may result in a Free Memory Read
+  // because surprisingly this method may be called
+  // after this has been deleted
+  if (tId == event->timerId()) {
+    tId = 0;
+    refreshMap();
+  }
+}
+#endif
 
 void GeographicViewGraphicsView::refreshMap() {
 

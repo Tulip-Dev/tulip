@@ -137,12 +137,18 @@ public slots:
   void zoomIn();
   void zoomOut();
   void currentZoomChanged();
+#ifdef QT_HAS_WEBENGINE
   void queueMapRefresh();
+#endif
   void refreshMap();
 
 protected:
   void cleanup();
   void resizeEvent(QResizeEvent *event) override;
+#ifdef QT_HAS_WEBENGINE
+  int tId;
+  void timerEvent(QTimerEvent* event) override;
+#endif
 
 private:
   GeographicView *_geoView;
