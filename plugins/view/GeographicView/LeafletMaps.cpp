@@ -219,9 +219,9 @@ void LeafletMaps::triggerLoading() {
 #ifdef QT_HAS_WEBKIT
   frame->addToJavaScriptWindowObject("leafletMapsQObject", this);
 #endif
-  // Use LaBRI GPS coordinates as center and use a zoom level
-  // showcasing Bordeaux and its neighborhood
-  QString code = "init(44.8084, -0.596805, 11)";
+  // map is first centered in the Atlantic Ocean
+  // in order to emphasize the need to configure geolocation
+  QString code = "init(44.8084, -40, 3)";
   executeJavascript(code);
   init = true;
 }
