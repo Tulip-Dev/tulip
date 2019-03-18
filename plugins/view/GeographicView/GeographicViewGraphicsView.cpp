@@ -362,7 +362,7 @@ unsigned int GeographicViewGraphicsView::planisphereTextureId = 0;
 GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
                                                        QGraphicsScene *graphicsScene,
                                                        QWidget *parent)
-  : QGraphicsView(graphicsScene, parent), tId(0), _geoView(geoView), graph(nullptr), leafletMaps(nullptr),
+  : QGraphicsView(graphicsScene, parent), _geoView(geoView), graph(nullptr), leafletMaps(nullptr),
       currentMapZoom(0), globeCameraBackup(nullptr, true), mapCameraBackup(nullptr, true),
       geoLayout(nullptr), geoViewSize(nullptr), geoViewShape(nullptr), geoLayoutBackup(nullptr),
       mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false),
@@ -403,6 +403,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
 
   connect(leafletMaps, SIGNAL(currentZoomChanged()), _geoView, SLOT(currentZoomChanged()));
 #ifdef QT_HAS_WEBENGINE
+  tId = 0;
   connect(leafletMaps, SIGNAL(refreshMap()), this, SLOT(queueMapRefresh()));
 #else
   connect(leafletMaps, SIGNAL(refreshMap()), this, SLOT(refreshMap()));
