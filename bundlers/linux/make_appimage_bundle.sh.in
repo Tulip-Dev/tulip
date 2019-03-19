@@ -62,6 +62,10 @@ BUNDLE_USR_DIR=$BUNDLE_DIR/usr
 APPRUN_FILE=$BUNDLE_DIR/AppRun
 echo "#!/bin/sh" > $APPRUN_FILE
 echo "BUNDLE_DIR=\"\$(dirname \$0)\"" >> $APPRUN_FILE
+# allow to find gtk modules when run on a x86_64 debian distro
+echo "if [ -d /usr/lib/x86_64-linux-gnu ]; then" >> $APPRUN_FILE
+echo "  export GTK_EXE_PREFIX=\${BUNDLE_DIR}/usr/x86_64-linux-gnu" >> $APPRUN_FILE
+echo "fi" >> $APPRUN_FILE
 echo "export PYTHONHOME=\${BUNDLE_DIR}/usr" >> $APPRUN_FILE
 echo "export TLP_DIR=\${BUNDLE_DIR}/usr/lib" >> $APPRUN_FILE
 echo "\${BUNDLE_DIR}/usr/bin/tulip_perspective -p $PERSPECTIVE" >> $APPRUN_FILE
@@ -183,10 +187,19 @@ if [ ! $? -eq 0 ]; then
 fi
 popd > /dev/null 2>&1
 
+pushd $BUNDLE_USR_DIR > /dev/null 2>&1
+
 # create a symbolic link lib64 pointing to lib in $BUNDLE_DIR/usr
 # in order for Python to find its standard library on a x86_64 AppImage
-pushd $BUNDLE_USR_DIR > /dev/null 2>&1
 ln -s lib @CMAKE_INSTALL_LIBDIR@ 2>/dev/null
+
+# create a symbolic link from $BUNDLE_USR_DIR/x86_64-linux-gnu/lib
+# to /usr/lib/x86_64-linux-gnu
+# to allow setting GTK_EXE_PREFIX at runtime (see above)
+mkdir x86_64-linux-gnu
+cd x86_64-linux-gnu
+ln -s /usr/lib/x86_64-linux-gnu lib
+
 popd > /dev/null 2>&1
 
 # tweak OS/ABI header part of libraries (System V instead of Linux)
