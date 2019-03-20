@@ -73,7 +73,7 @@ const unsigned int nbPropertiesTypes = sizeof(propertiesTypes) / sizeof(string);
 const vector<string> propertiesTypesFilter(propertiesTypes, propertiesTypes + nbPropertiesTypes);
 
 ScatterPlot2DView::ScatterPlot2DView(const PluginContext *)
-    : GlMainView(true), _bar(nullptr), propertiesSelectionWidget(nullptr), optionsWidget(nullptr),
+    : GlMainView(true), propertiesSelectionWidget(nullptr), optionsWidget(nullptr),
       scatterPlotGraph(nullptr), emptyGraph(nullptr), mainLayer(nullptr), glGraphComposite(nullptr),
       scatterPlotSize(nullptr), matrixComposite(nullptr), axisComposite(nullptr),
       labelsComposite(nullptr), detailedScatterPlot(nullptr),
@@ -439,7 +439,7 @@ void ScatterPlot2DView::computeNodeSizes() {
 }
 
 QuickAccessBar *ScatterPlot2DView::getQuickAccessBarImpl() {
-  _bar = new ScatterPlotQuickAccessBar(optionsWidget);
+  auto _bar = new ScatterPlotQuickAccessBar(optionsWidget);
   connect(_bar, SIGNAL(settingsChanged()), this, SLOT(applySettings()));
   return _bar;
 }
@@ -663,16 +663,16 @@ void ScatterPlot2DView::draw() {
     getGlMainWidget()->getScene()->centerScene();
     getGlMainWidget()->draw();
 
-    if (_bar && quickAccessBarVisible())
-      _bar->setEnabled(false);
+    if (quickAccessBarVisible())
+      _quickAccessBar->setEnabled(false);
 
     return;
   } else {
     removeEmptyViewLabel();
   }
 
-  if (_bar && quickAccessBarVisible())
-    _bar->setEnabled(true);
+  if (quickAccessBarVisible())
+    _quickAccessBar->setEnabled(true);
 
   computeNodeSizes();
   buildScatterPlotsMatrix();
@@ -727,8 +727,8 @@ void ScatterPlot2DView::centerView(bool) {
 void ScatterPlot2DView::applySettings() {
   if (propertiesSelectionWidget->configurationChanged() || optionsWidget->configurationChanged()) {
     viewConfigurationChanged();
-    if (_bar != nullptr && quickAccessBarVisible())
-      _bar->reset();
+    if (quickAccessBarVisible())
+      _quickAccessBar->reset();
   }
 }
 

@@ -72,7 +72,7 @@ namespace tlp {
 PLUGIN(PixelOrientedView)
 
 PixelOrientedView::PixelOrientedView(const PluginContext *)
-    : GlMainView(true), _bar(nullptr), pixelOrientedGraph(nullptr), graphComposite(nullptr),
+    : GlMainView(true), pixelOrientedGraph(nullptr), graphComposite(nullptr),
       mainLayer(nullptr), overviewsComposite(nullptr), optionsWidget(nullptr),
       propertiesSelectionWidget(nullptr), pixelOrientedMediator(nullptr), lastNbNodes(0),
       overviewWidth(0), overviewHeight(0), minWidth(0), refSize(0), hilbertLayout(nullptr),
@@ -516,15 +516,15 @@ void PixelOrientedView::draw() {
 
       removeEmptyViewLabel();
       addEmptyViewLabel();
-      if (_bar != nullptr && quickAccessBarVisible())
-        _bar->setEnabled(false);
+      if (quickAccessBarVisible())
+        _quickAccessBar->setEnabled(false);
       scene->centerScene();
       glw->draw();
       return;
     } else {
       removeEmptyViewLabel();
-      if (_bar != nullptr && quickAccessBarVisible())
-        _bar->setEnabled(true);
+      if (quickAccessBarVisible())
+        _quickAccessBar->setEnabled(true);
     }
 
     if (lastNbDimensionsSelected != selectedGraphProperties.size()) {
@@ -698,7 +698,7 @@ vector<PixelOrientedOverview *> PixelOrientedView::getOverviews() {
 }
 
 QuickAccessBar *PixelOrientedView::getQuickAccessBarImpl() {
-  _bar = new PixelOrientedViewQuickAccessBar(optionsWidget);
+  auto _bar = new PixelOrientedViewQuickAccessBar(optionsWidget);
 
   connect(_bar, SIGNAL(settingsChanged()), this, SLOT(applySettings()));
   return _bar;

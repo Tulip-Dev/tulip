@@ -61,7 +61,7 @@ GLuint HistogramView::binTextureId(0);
 unsigned int HistogramView::histoViewInstancesCount(0);
 
 HistogramView::HistogramView(const PluginContext *)
-    : GlMainView(true), _bar(nullptr), propertiesSelectionWidget(nullptr),
+    : GlMainView(true), propertiesSelectionWidget(nullptr),
       histoOptionsWidget(nullptr), xAxisDetail(nullptr), yAxisDetail(nullptr), _histoGraph(nullptr),
       emptyGraph(nullptr), emptyGlGraphComposite(nullptr), histogramsComposite(nullptr),
       labelsComposite(nullptr), axisComposite(nullptr), smallMultiplesView(true),
@@ -152,7 +152,7 @@ void HistogramView::cleanupGlScene() {
 }
 
 QuickAccessBar *HistogramView::getQuickAccessBarImpl() {
-  _bar = new QuickAccessBarImpl(
+  auto _bar = new QuickAccessBarImpl(
       nullptr, QuickAccessBarImpl::QuickAccessButtons(
                    QuickAccessBarImpl::SCREENSHOT | QuickAccessBarImpl::BACKGROUNDCOLOR |
                    QuickAccessBarImpl::SHOWLABELS | QuickAccessBarImpl::LABELSSCALED |
@@ -568,14 +568,14 @@ void HistogramView::draw() {
     addEmptyViewLabel();
     gl->centerScene();
 
-    if (_bar && quickAccessBarVisible())
-      _bar->setEnabled(false);
+    if (quickAccessBarVisible())
+      _quickAccessBar->setEnabled(false);
 
     return;
   }
 
-  if (_bar && quickAccessBarVisible())
-    _bar->setEnabled(true);
+  if (quickAccessBarVisible())
+    _quickAccessBar->setEnabled(true);
 
   if (detailedHistogram != nullptr) {
     needUpdateHistogram = true;

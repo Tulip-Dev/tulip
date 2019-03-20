@@ -63,8 +63,6 @@ class HistogramView : public GlMainView {
 
   Q_OBJECT
 
-  QuickAccessBarImpl *_bar;
-
 public:
   PLUGININFORMATION(ViewName::HistogramViewName, "Antoine Lambert", "02/2009",
                     "<p>The Histogram view allows to create frequency histograms from graph "

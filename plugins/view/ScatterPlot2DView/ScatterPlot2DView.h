@@ -68,7 +68,6 @@ class ScatterPlot2DView : public GlMainView {
   Q_OBJECT
 
   void registerTriggers();
-  ScatterPlotQuickAccessBar *_bar;
 
 public:
   PLUGININFORMATION(ViewName::ScatterPlot2DViewName, "Antoine Lambert", "03/2009",

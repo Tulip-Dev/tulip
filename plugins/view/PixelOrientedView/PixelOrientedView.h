@@ -70,7 +70,6 @@ class PixelOrientedView : public GlMainView {
   Q_OBJECT
 
   void registerTriggers();
-  PixelOrientedViewQuickAccessBar *_bar;
 
 public:
   PLUGININFORMATION(ViewName::PixelOrientedViewName, "Antoine Lambert", "12/2008",

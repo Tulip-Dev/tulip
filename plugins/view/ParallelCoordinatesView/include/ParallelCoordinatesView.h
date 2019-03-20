@@ -74,8 +74,6 @@ class ParallelCoordinatesView : public GlMainView {
 
   Q_OBJECT
 
-  ParallelCoordinatesViewQuickAccessBar *_bar;
-
 public:
   PLUGININFORMATION(ViewName::ParallelCoordinatesViewName, "Antoine Lambert", "16/04/2008",
                     "<p>The Parallel Coordinates view allows to create a parallel coordinates "

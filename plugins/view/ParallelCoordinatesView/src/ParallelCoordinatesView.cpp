@@ -70,7 +70,7 @@ static void toggleGraphView(GlGraphComposite *glGraph, bool displayNodes) {
 PLUGIN(ParallelCoordinatesView)
 
 ParallelCoordinatesView::ParallelCoordinatesView(const PluginContext *)
-    : GlMainView(true), _bar(nullptr), mainLayer(nullptr), axisSelectionLayer(nullptr),
+    : GlMainView(true), mainLayer(nullptr), axisSelectionLayer(nullptr),
       glGraphComposite(nullptr), axisPointsGraph(nullptr), graphProxy(nullptr),
       parallelCoordsDrawing(nullptr), dataConfigWidget(nullptr), drawConfigWidget(nullptr),
       firstSet(true), lastNbSelectedProperties(0), center(false), lastViewWindowWidth(0),
@@ -101,7 +101,7 @@ ParallelCoordinatesView::~ParallelCoordinatesView() {
 }
 
 QuickAccessBar *ParallelCoordinatesView::getQuickAccessBarImpl() {
-  _bar = new ParallelCoordinatesViewQuickAccessBar(drawConfigWidget);
+  auto _bar = new ParallelCoordinatesViewQuickAccessBar(drawConfigWidget);
   connect(_bar, SIGNAL(settingsChanged()), this, SLOT(applySettings()));
   return _bar;
 }
@@ -396,8 +396,8 @@ DataSet ParallelCoordinatesView::state() const {
 void ParallelCoordinatesView::graphChanged(tlp::Graph *) {
   if (isConstruct)
     setState(DataSet());
-  else if (_bar != nullptr && quickAccessBarVisible()) {
-    _bar->setEnabled(false);
+  else if (quickAccessBarVisible()) {
+    _quickAccessBar->setEnabled(false);
   }
 }
 
@@ -473,15 +473,15 @@ void ParallelCoordinatesView::draw() {
       removeEmptyViewLabel();
       addEmptyViewLabel();
       toggleInteractors(false);
-      if (_bar != nullptr && quickAccessBarVisible())
-        _bar->setEnabled(false);
+      if (quickAccessBarVisible())
+        _quickAccessBar->setEnabled(false);
       getGlMainWidget()->getScene()->centerScene();
       getGlMainWidget()->draw();
       return;
     } else {
       removeEmptyViewLabel();
-      if (_bar != nullptr && quickAccessBarVisible())
-        _bar->setEnabled(true);
+      if (quickAccessBarVisible())
+        _quickAccessBar->setEnabled(true);
       toggleInteractors(true);
       if (graphProxy->getDataCount() > PROGRESS_BAR_DISPLAY_NB_DATA_THRESHOLD) {
         updateWithProgressBar();
