@@ -1020,7 +1020,7 @@ public:
     } else {
       dataSet->get<std::string>("file::data", data);
       size = data.size();
-      std::stringstream *tmpss = new std::stringstream;
+      tmpss = new std::stringstream;
       (*tmpss) << data;
       input = tmpss;
     }
