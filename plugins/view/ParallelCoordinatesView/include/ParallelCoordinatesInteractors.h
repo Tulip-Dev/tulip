@@ -140,7 +140,7 @@ public:
    * Construct chain of responsibility
    */
   void construct() override;
-  virtual QWidget *configurationOptionsWidget() const;
+  virtual QWidget *configurationOptionsWidget() const override;
 };
 
 /** \brief Parallel coordinates interactor to have boxplot
