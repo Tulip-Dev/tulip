@@ -53,10 +53,6 @@ static const char *gouraudtriangleEPS[] = {
     "add 3 div 10 1 roll 9 {pop} repeat 3 array astore triangle } ifelse } bd",
     nullptr};
 
-struct Feedback3DColor {
-  float x, y, z, r, g, b, a;
-};
-
 void GlEPSFeedBackBuilder::begin(const Vector<int, 4> &viewport, GLfloat *, GLfloat,
                                  GLfloat lineWidth) {
   /* Emit EPS header. */

@@ -317,7 +317,8 @@ public:
         // sort nodes to ensure a predictable ordering of the ouput
         itN = new StableIterator<node>(itN, 0, true, true);
 
-      for (auto itn : itN) {
+      while (itN->hasNext()) {
+	auto itn = itN->next();
         if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
           pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
 
@@ -342,6 +343,7 @@ public:
 
         os << "(node " << getNode(itn).id << " \"" << convert(tmp) << "\")" << endl;
       }
+      delete itN;
 
       Iterator<edge> *itE = prop->getNonDefaultValuatedEdges(g);
 
@@ -350,7 +352,8 @@ public:
         itE = new StableIterator<edge>(itE, 0, true, true);
 
       if (prop->getTypename() == GraphProperty::propertyTypename) {
-        for (auto ite : itE) {
+        while (itE->hasNext()) {
+	  auto ite = itE->next();
           if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
             pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
 
@@ -372,7 +375,8 @@ public:
           os << "\")" << endl;
         }
       } else {
-        for (auto ite : itE) {
+        while (itE->hasNext()) {
+	  auto ite = itE->next();
           if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
 
             pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
@@ -391,6 +395,7 @@ public:
           os << "(edge " << getEdge(ite).id << " \"" << convert(tmp) << "\")" << endl;
         }
       }
+      delete itE;
 
       os << ")" << endl;
     }

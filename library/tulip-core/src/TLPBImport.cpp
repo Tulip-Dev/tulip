@@ -366,9 +366,10 @@ bool TLPBImport::importGraph() {
         // and https://github.com/llvm-mirror/libcxx/blob/master/include/streambuf#L360
         // and also in STL implementation of Microsoft Visual C++
         // so fallback writing directly to the output stream in these cases
-        bool canUsePubSetBuf = true;
 #if defined(_LIBCPP_VERSION) || defined(_MSC_VER)
-        canUsePubSetBuf = false;
+        bool canUsePubSetBuf = false;
+#else
+        bool canUsePubSetBuf = true;
 #endif
 
         // loop on nodes values

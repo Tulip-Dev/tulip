@@ -712,8 +712,7 @@ void ParallelCoordinatesDrawing::treatEvent(const tlp::Event &evt) {
 }
 
 void ParallelCoordinatesDrawing::removeHighlightedElt(const unsigned int dataId) {
-  if (lastHighlightedElements.find(dataId) != lastHighlightedElements.end()) {
-    lastHighlightedElements.erase(dataId);
+  if (lastHighlightedElements.erase(dataId)) {
     graphProxy->removeHighlightedElement(dataId);
 
     if (!graphProxy->highlightedEltsSet()) {

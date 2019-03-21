@@ -54,14 +54,12 @@ Bfs::Bfs(Graph *G, BooleanProperty *resultatAlgoSelection)
 
 void Bfs::computeBfs(Graph *G, BooleanProperty *resultatAlgoSelection, node root) {
   unsigned int taille = G->numberOfNodes();
-  unsigned int nb_n = 1;
   unsigned int i = 0;
   vector<node> next_roots;
   next_roots.push_back(root);
 
   while (taille != nbNodes) {
     node r = next_roots[i];
-    nb_n++;
 
     if (!G->isElement(r))
       tlp::error() << __PRETTY_FUNCTION__ << ": ERROR NODE R NOT IN G" << std::endl;
@@ -82,7 +80,7 @@ void Bfs::computeBfs(Graph *G, BooleanProperty *resultatAlgoSelection, node root
       }
     }
 
-    i++;
+    ++i;
   }
 }
 

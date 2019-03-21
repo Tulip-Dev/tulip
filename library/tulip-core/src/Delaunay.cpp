@@ -82,8 +82,8 @@ static bool runQHull(int dim, vector<double> &points,
     qh_triangulate();
 #endif
 
-    facetT *facet;
-    vertexT *vertex, **vertexp;
+    facetT *facet = nullptr;
+    vertexT *vertex = nullptr, **vertexp;
 
     // iterate over generated simplices (triangles or tetrahedra) and get corresponding delaunay
     // edges

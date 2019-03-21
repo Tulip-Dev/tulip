@@ -111,31 +111,31 @@ list<LR> *TreeReingoldAndTilfordExtended::mergeLRList(std::list<LR> *L, std::lis
   LR tmp;
 
   while ((itL != L->end()) && (itR != R->end())) {
-    tmp.L = (*itL).L;
-    tmp.R = (*itR).R + decal;
-    int min = std::min(((*itL).size - iL), ((*itR).size - iR));
+    tmp.L = itL->L;
+    tmp.R = itR->R + decal;
+    int min = std::min((itL->size - iL), (itR->size - iR));
     tmp.size = min;
 
-    if ((*itL).size == 1) { // start
+    if (itL->size == 1) { // start
       (*itL) = tmp;
     } else {
       if (iL == 0) {
-        if (iL + min >= (*itL).size) // block
+        if (iL + min >= itL->size) // block
           (*itL) = tmp;
         else {
           L->insert(itL, tmp);
-          (*itL).size -= min;
+          itL->size -= min;
           iL = -min;
         }
       } else {
-        if (iL + min >= (*itL).size) { // end
-          (*itL).size -= min;
+        if (iL + min >= itL->size) { // end
+          itL->size -= min;
           ++itL;
           L->insert(itL, tmp);
           iL = -min;
         } else { // middle
           LR tmp2 = *itL;
-          (*itL).size = iL;
+          itL->size = iL;
           ++itL;
           L->insert(itL, tmp);
           tmp2.size -= iL + min;
@@ -149,12 +149,12 @@ list<LR> *TreeReingoldAndTilfordExtended::mergeLRList(std::list<LR> *L, std::lis
     iL += min;
     iR += min;
 
-    if (iL >= (*itL).size) {
+    if (iL >= itL->size) {
       ++itL;
       iL = 0;
     }
 
-    if (iR >= (*itR).size) {
+    if (iR >= itR->size) {
       ++itR;
       iR = 0;
     }
@@ -162,26 +162,25 @@ list<LR> *TreeReingoldAndTilfordExtended::mergeLRList(std::list<LR> *L, std::lis
 
   if (itL != L->end()) {
     if (iL != 0) {
-      tmp.L = (*itL).L;
-      tmp.R = (*itL).R;
-      tmp.size = (*itL).size - iL;
-      ++itL;
+      tmp.L = itL->L;
+      tmp.R = itL->R;
+      tmp.size = itL->size - iL;
     }
   }
 
   if (itR != R->end()) {
     if (iR != 0) {
-      tmp.L = (*itR).L + decal;
-      tmp.R = (*itR).R + decal;
-      tmp.size = (*itR).size - iR;
+      tmp.L = itR->L + decal;
+      tmp.R = itR->R + decal;
+      tmp.size = itR->size - iR;
       L->push_back(tmp);
       ++itR;
     }
 
     for (; itR != R->end(); ++itR) {
-      tmp.L = (*itR).L + decal;
-      tmp.R = (*itR).R + decal;
-      tmp.size = (*itR).size;
+      tmp.L = itR->L + decal;
+      tmp.R = itR->R + decal;
+      tmp.size = itR->size;
       L->push_back(tmp);
     }
   }
