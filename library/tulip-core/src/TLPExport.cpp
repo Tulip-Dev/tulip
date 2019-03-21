@@ -318,7 +318,7 @@ public:
         itN = new StableIterator<node>(itN, 0, true, true);
 
       while (itN->hasNext()) {
-	auto itn = itN->next();
+        auto itn = itN->next();
         if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
           pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
 
@@ -353,7 +353,7 @@ public:
 
       if (prop->getTypename() == GraphProperty::propertyTypename) {
         while (itE->hasNext()) {
-	  auto ite = itE->next();
+          auto ite = itE->next();
           if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
             pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
 
@@ -376,7 +376,7 @@ public:
         }
       } else {
         while (itE->hasNext()) {
-	  auto ite = itE->next();
+          auto ite = itE->next();
           if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
 
             pluginProgress->progress(progress, nonDefaultvaluatedElementCount);

@@ -170,9 +170,8 @@ static bool biconnectedTest(const Graph *graph) {
   dfsNumber.setAll(UINT_MAX);
   MutableContainer<node> supergraph;
   unsigned int count = 1;
-  return (biconnectedTest(graph, graph->nodes()[0], low, dfsNumber,
-			  supergraph, count) &&
-	  (count == graph->numberOfNodes() + 1));
+  return (biconnectedTest(graph, graph->nodes()[0], low, dfsNumber, supergraph, count) &&
+          (count == graph->numberOfNodes() + 1));
 }
 //=================================================================
 BiconnectedTest::BiconnectedTest() {}

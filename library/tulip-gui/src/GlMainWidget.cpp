@@ -524,10 +524,8 @@ QImage GlMainWidget::createPicture(int width, int height, bool center) {
   QOpenGLFramebufferObjectFormat fboFormat;
   fboFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
   fboFormat.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
-  QOpenGLFramebufferObject *frameBuf =
-    new QOpenGLFramebufferObject(width, height, fboFormat);
-  QOpenGLFramebufferObject *frameBuf2 =
-    new QOpenGLFramebufferObject(width, height);
+  QOpenGLFramebufferObject *frameBuf = new QOpenGLFramebufferObject(width, height, fboFormat);
+  QOpenGLFramebufferObject *frameBuf2 = new QOpenGLFramebufferObject(width, height);
 
   if (frameBuf->isValid() && frameBuf2->isValid()) {
     frameBuf->bind();
