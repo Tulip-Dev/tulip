@@ -59,16 +59,14 @@ bool HierarchicalClustering::split(DoubleProperty *metric, list<node> &orderedNo
 
   itListNode = orderedNode.begin();
   tmpDbl = metric->getNodeValue(*itListNode);
-  int n = 0;
   ++itListNode;
-  nbElement--;
+  --nbElement;
 
   while ((itListNode != orderedNode.end()) &&
          ((nbElement > 0) || (tmpDbl == metric->getNodeValue(*itListNode)))) {
     tmpDbl = metric->getNodeValue(*itListNode);
     ++itListNode;
-    n++;
-    nbElement--;
+    --nbElement;
   }
 
   orderedNode.erase(itListNode, orderedNode.end());

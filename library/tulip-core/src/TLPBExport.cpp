@@ -360,11 +360,11 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         // and https://github.com/llvm-mirror/libcxx/blob/master/include/streambuf#L360
         // and also in STL implementation of Microsoft Visual C++
         // so fallback writing directly to the output stream in these cases
-        bool canUsePubSetBuf = true;
 #if defined(_LIBCPP_VERSION) || defined(_MSC_VER)
-        canUsePubSetBuf = false;
+        bool canUsePubSetBuf = false;
         std::ostream &s = os;
 #else
+        bool canUsePubSetBuf = true;
         std::ostream &s = vs;
 #endif
         char *vBuf = nullptr;
@@ -456,11 +456,11 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         // and https://github.com/llvm-mirror/libcxx/blob/master/include/streambuf#L360
         // and also in STL implementation of Microsoft Visual C++
         // so fallback writing directly to the output stream in these cases
-        bool canUsePubSetBuf = true;
 #if defined(_LIBCPP_VERSION) || defined(_MSC_VER)
-        canUsePubSetBuf = false;
+        bool canUsePubSetBuf = false;
         ostream &s = os;
 #else
+        bool canUsePubSetBuf = true;
         ostream &s = vs;
 #endif
         char *vBuf = nullptr;

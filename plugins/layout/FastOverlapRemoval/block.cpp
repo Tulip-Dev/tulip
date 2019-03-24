@@ -372,9 +372,8 @@ Constraint *Block::findMinLM() {
   return min_lm;
 }
 Constraint *Block::findMinLMBetween(Variable *const lv, Variable *const rv) {
-  Constraint *min_lm = nullptr;
   reset_active_lm(vars->front(), nullptr);
-  min_lm = compute_dfdv_between(rv, lv, nullptr).second;
+  Constraint *min_lm = compute_dfdv_between(rv, lv, nullptr).second;
   return min_lm;
 }
 

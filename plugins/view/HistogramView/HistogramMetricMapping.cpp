@@ -459,7 +459,7 @@ void GlSizeScale::translate(const Coord &move) {
 GlGlyphScale::GlGlyphScale(const Coord &baseCoord, const float length, Orientation orientation)
     : glyphGraph(newGraph()),
       glyphGraphInputData(new GlGraphInputData(glyphGraph, &glyphGraphRenderingParameters)),
-      baseCoord(baseCoord), length(length), orientation(orientation) {
+      baseCoord(baseCoord), length(length), orientation(orientation), size(0) {
   glyphGraphLayout = glyphGraph->getProperty<LayoutProperty>("viewLayout");
   glyphGraphSize = glyphGraph->getProperty<SizeProperty>("viewSize");
   glyphGraphColor = glyphGraph->getProperty<ColorProperty>("viewColor");

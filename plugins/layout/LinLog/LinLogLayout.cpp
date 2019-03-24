@@ -527,11 +527,8 @@ bool LinLogLayout::minimizeEnergyNoTree(int nrIterations) {
     }
 
     // move each node
-    int count = 0;
     energySum = 0.0;
     for (auto u : graph->nodes()) {
-
-      count++;
 
       double oldEnergy = getEnergy(u);
       // compute direction of the move of the node
@@ -644,10 +641,8 @@ bool LinLogLayout::minimizeEnergy(int nrIterations) {
     }
 
     // move each node
-    int count = 0;
     energySum = 0.0;
     for (auto u : graph->nodes()) {
-      ++count;
       double oldEnergy = getEnergy(u, octTree);
 
       // compute direction of the move of the node

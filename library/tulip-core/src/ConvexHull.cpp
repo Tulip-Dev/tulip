@@ -66,8 +66,8 @@ static bool runQHull(int dim, vector<double> &points, vector<vector<unsigned int
 #endif
 
   if (!qhullKo) {
-    facetT *facet;
-    vertexT *vertex, **vertexp;
+    facetT *facet = nullptr;
+    vertexT *vertex = nullptr, **vertexp;
     // iterate over generated facets
     std::map<unsigned int, unsigned int> faceIds;
     FORALLfacets {

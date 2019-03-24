@@ -403,26 +403,12 @@ void RectanglePacking::defaultPositionRestOfRectangles(vector<Rectangle<float>>:
 }
 
 void RectanglePacking::lineOrColumnToStart(bool &boolWidth, bool &boolHeight) {
-
-  float ratio;
-
-  if (bestHeightOfBoundingBox > bestWidthOfBoundingBox)
-    ratio = bestHeightOfBoundingBox / bestWidthOfBoundingBox;
-  else
-    ratio = bestWidthOfBoundingBox / bestHeightOfBoundingBox;
-
-  if ((ratio > 1.1) && (bestHeightOfBoundingBox >= bestWidthOfBoundingBox)) {
-    boolWidth = 0;
-    boolHeight = 1;
-  } else if ((ratio > 1.1) && (bestHeightOfBoundingBox < bestWidthOfBoundingBox)) {
+  if (bestHeightOfBoundingBox < bestWidthOfBoundingBox) {
     boolWidth = 1;
     boolHeight = 0;
-  } else if (bestHeightOfBoundingBox >= bestWidthOfBoundingBox) {
+  } else {
     boolWidth = 0;
     boolHeight = 1;
-  } else if (bestHeightOfBoundingBox < bestWidthOfBoundingBox) {
-    boolWidth = 1;
-    boolHeight = 0;
   }
 }
 

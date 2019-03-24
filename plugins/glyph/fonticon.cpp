@@ -146,10 +146,6 @@ private:
 
     FT_UInt glyph_index = FT_Get_Char_Index(face, iconCodePoint);
 
-    if (err) {
-      return;
-    }
-
     err = FT_Load_Glyph(face, glyph_index, FT_LOAD_NO_HINTING);
 
     if (err) {

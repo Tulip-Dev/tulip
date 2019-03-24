@@ -60,10 +60,12 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int sg
       iteN = new UINTIterator<node>(it);
     }
 
-    for (auto n : iteN) {
+    while (iteN->hasNext()) {
+      auto n = iteN->next();
       if (filter->getNodeValue(n))
         addNode(n);
     }
+    delete iteN;
   }
 
   if ((filter->getGraph() == supergraph) && (filter->getEdgeDefaultValue() == true) &&
@@ -93,10 +95,12 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int sg
       itE = new UINTIterator<edge>(it);
     }
 
-    for (auto e : itE) {
+    while (itE->hasNext()) {
+      auto e = itE->next();
       if (filter->getEdgeValue(e))
         addEdge(e);
     }
+    delete itE;
   }
 }
 //----------------------------------------------------------------

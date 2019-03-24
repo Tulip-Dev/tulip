@@ -155,7 +155,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
     pair<node, node> eEnds = ends(e_tmp);
     isInNewFace.set(eEnds.first.id, true);
     isInNewFace.set(eEnds.second.id, true);
-    nb_added++;
+    ++nb_added;
 
     if (e_tmp == e2)
       e2_found = true;
@@ -170,7 +170,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
     pair<node, node> eEnds = ends(e_tmp);
     isInNewFace.set(eEnds.first.id, true);
     isInNewFace.set(eEnds.second.id, true);
-    nb_added++;
+    ++nb_added;
     i = (i + 1) % nb_edges;
   }
 
@@ -178,7 +178,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
     v_edges2.push_back(e_tmp);
     nbAdjFace.set(e_tmp.id, nbAdjFace.get(e_tmp.id) + 1);
     isInVe2.set(e_tmp.id, true);
-    nb_added++;
+    ++nb_added;
     i = (i + 1) % nb_edges;
     e_tmp = facesEdges[f][i];
   }
@@ -186,7 +186,6 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   if (e1 == succ1 && e_tmp == facesEdges[f][(i + 1) % nb_edges]) {
     v_edges2.push_back(e_tmp);
     isInVe2.set(e_tmp.id, true);
-    nb_added++;
   }
 
   v_edges1.push_back(e);
@@ -326,7 +325,7 @@ void PlanarConMap::delEdgeMap(edge e, Face f) {
           edgesFaces[e_tmp][1] = f1;
 
         v_edges.push_back(e_tmp);
-        nb_added++;
+        ++nb_added;
       }
     }
 
