@@ -359,10 +359,13 @@ bool GEMLayout::run() {
       // apply "GEM (Frick)" on the subgraph induced
       // by the current connected component
       graph = graph->inducedSubGraph(components[i]);
-      run();
+      auto result = run();
       tmp->delSubGraph(graph);
       // restore current graph
       graph = tmp;
+      // return if needed
+      if (!result)
+	return result;
     }
 
     // call connected component packing
@@ -431,11 +434,11 @@ bool GEMLayout::run() {
       this->insert();
   }
 
-  if (pluginProgress->progress(100, 100) == TLP_CONTINUE)
-    if (a_finaltemp < a_starttemp)
-      this->arrange();
+  if ((pluginProgress->state() == TLP_CONTINUE) &&
+      (a_finaltemp < a_starttemp))
+    this->arrange();
 
-  if (pluginProgress->progress(100, 100) != TLP_CANCEL)
+  if (pluginProgress->state() != TLP_CANCEL)
     updateLayout();
 
   return pluginProgress->state() != TLP_CANCEL;
