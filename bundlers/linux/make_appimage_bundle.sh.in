@@ -62,13 +62,19 @@ BUNDLE_USR_DIR=$BUNDLE_DIR/usr
 APPRUN_FILE=$BUNDLE_DIR/AppRun
 echo "#!/bin/sh" > $APPRUN_FILE
 echo "BUNDLE_DIR=\"\$(dirname \$0)\"" >> $APPRUN_FILE
-# allow to find gtk modules when run on a x86_64 debian distro
-echo "if [ -d /usr/lib/x86_64-linux-gnu ]; then" >> $APPRUN_FILE
-echo "  export GTK_EXE_PREFIX=\${BUNDLE_DIR}/usr/x86_64-linux-gnu" >> $APPRUN_FILE
+# configure GTK2 for AppImage environment (needed for qt5 gtk2 platformthemes plugin)
+echo "export GTK_EXE_PREFIX=\${BUNDLE_DIR}/usr" >> $APPRUN_FILE
+echo "export GTK_MODULES=" >> $APPRUN_FILE
+# allow to find gtk modules when running the AppImage on a debian based distribution
+echo "if [ -d /usr/lib/x86_64-linux-gnu/gtk-2.0 ]; then" >> $APPRUN_FILE
+echo "  export GTK_PATH=/usr/lib/x86_64-linux-gnu/gtk-2.0" >> $APPRUN_FILE
+echo "fi" >> $APPRUN_FILE
+echo "if [ -d /usr/lib/i386-linux-gnu/gtk-2.0 ]; then" >> $APPRUN_FILE
+echo "  export GTK_PATH=/usr/lib/i386-linux-gnu/gtk-2.0" >> $APPRUN_FILE
 echo "fi" >> $APPRUN_FILE
 echo "export PYTHONHOME=\${BUNDLE_DIR}/usr" >> $APPRUN_FILE
 echo "export TLP_DIR=\${BUNDLE_DIR}/usr/lib" >> $APPRUN_FILE
-echo "\${BUNDLE_DIR}/usr/bin/tulip_perspective -p $PERSPECTIVE" >> $APPRUN_FILE
+echo "\${BUNDLE_DIR}/usr/bin/tulip_perspective -p $PERSPECTIVE 2>&1 | sed -n -e '/Gtk-/d'" >> $APPRUN_FILE
 chmod 755 $APPRUN_FILE
 
 # create desktop file
@@ -112,6 +118,11 @@ if [ -e @QT_PLUGINS_DIR@/platformthemes ]; then
 fi
 if [ -e @QT_PLUGINS_DIR@/xcbglintegrations ]; then
   cp -v -Rp @QT_PLUGINS_DIR@/xcbglintegrations $BUNDLE_USR_DIR/plugins
+fi
+
+# add gtk-2.0 plugins directory (needed for qt5 gtk2 platformthemes plugin)
+if [ -e /usr/@CMAKE_INSTALL_LIBDIR@/gtk-2.0 ]; then
+  cp -v -Rp /usr/@CMAKE_INSTALL_LIBDIR@/gtk-2.0 $BUNDLE_LIB_DIR
 fi
 
 # set up LD_LIBRARY_PATH with the installation path of the Qt libs used
@@ -158,7 +169,7 @@ function looking_for_plugin_dependencies() {
     for LIB in $(ldd $PLUGIN | grep "=> /" | awk '{print $3}')
     do
       if [ ! -e $BUNDLE_LIB_DIR/$(basename $LIB) ]; then
-	cp -v --preserve=mode $LIB $BUNDLE_LIB_DIR
+        cp -v --preserve=mode $LIB $BUNDLE_LIB_DIR
       fi
     done;
   done;
@@ -192,13 +203,6 @@ pushd $BUNDLE_USR_DIR > /dev/null 2>&1
 # create a symbolic link lib64 pointing to lib in $BUNDLE_DIR/usr
 # in order for Python to find its standard library on a x86_64 AppImage
 ln -s lib @CMAKE_INSTALL_LIBDIR@ 2>/dev/null
-
-# create a symbolic link from $BUNDLE_USR_DIR/x86_64-linux-gnu/lib
-# to /usr/lib/x86_64-linux-gnu
-# to allow setting GTK_EXE_PREFIX at runtime (see above)
-mkdir x86_64-linux-gnu
-cd x86_64-linux-gnu
-ln -s /usr/lib/x86_64-linux-gnu lib
 
 popd > /dev/null 2>&1
 
