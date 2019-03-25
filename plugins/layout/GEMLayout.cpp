@@ -365,7 +365,7 @@ bool GEMLayout::run() {
       graph = tmp;
       // return if needed
       if (!result)
-	return result;
+        return result;
     }
 
     // call connected component packing
@@ -434,8 +434,7 @@ bool GEMLayout::run() {
       this->insert();
   }
 
-  if ((pluginProgress->state() == TLP_CONTINUE) &&
-      (a_finaltemp < a_starttemp))
+  if ((pluginProgress->state() == TLP_CONTINUE) && (a_finaltemp < a_starttemp))
     this->arrange();
 
   if (pluginProgress->state() != TLP_CANCEL)
