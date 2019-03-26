@@ -37,6 +37,7 @@ public:
   bool isPreviewMode() const override;
   void setPreviewMode(bool) override;
   void showPreview(bool) override;
+  void showStops(bool) override;
   ProgressState state() const override;
   std::string getError() override {
     return _error;

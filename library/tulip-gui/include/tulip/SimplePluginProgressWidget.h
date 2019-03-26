@@ -63,6 +63,7 @@ public:
   bool isPreviewMode() const override;
   void setPreviewMode(bool drawPreview) override;
   void showPreview(bool showPreview) override;
+  void showStops(bool showButtons) override;
 
   tlp::ProgressState state() const override;
 
@@ -101,6 +102,7 @@ public:
   bool isPreviewMode() const override;
   void setPreviewMode(bool drawPreview) override;
   void showPreview(bool showPreview) override;
+  void showStops(bool showButtons) override;
 
   tlp::ProgressState state() const override;
 
@@ -109,6 +111,8 @@ public:
 
 protected:
   void closeEvent(QCloseEvent *) override;
+  void paintEvent(QPaintEvent *) override;
+  bool _painted;
 
 public slots:
   void setCancelButtonVisible(bool v);

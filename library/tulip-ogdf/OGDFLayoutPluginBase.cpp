@@ -37,6 +37,11 @@ OGDFLayoutPluginBase::~OGDFLayoutPluginBase() {
 }
 
 bool OGDFLayoutPluginBase::run() {
+  if (pluginProgress) {
+    // user cannot interact while computing
+    pluginProgress->showPreview(false);
+    pluginProgress->showStops(false);
+  }
 
   ogdf::GraphAttributes &gAttributes = tlpToOGDF->getOGDFGraphAttr();
 

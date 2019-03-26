@@ -93,6 +93,15 @@ void SimplePluginProgressWidget::showPreview(bool showPreview) {
   checkLastUpdate();
 }
 
+void SimplePluginProgressWidget::showStops(bool showButtons) {
+  _ui->cancelButton->setVisible(showButtons);
+  _ui->stopButton->setVisible(showButtons);
+  if (showButtons)
+    setComment("");
+  else
+    setComment("Processing in progress...");
+}
+
 ProgressState SimplePluginProgressWidget::state() const {
   return _state;
 }
@@ -131,7 +140,7 @@ void SimplePluginProgressWidget::stopClicked() {
 
 SimplePluginProgressDialog::SimplePluginProgressDialog(QWidget *parent)
     : QDialog(parent, Qt::WindowTitleHint | Qt::CustomizeWindowHint),
-      _progress(new SimplePluginProgressWidget(this)) {
+      _painted(false), _progress(new SimplePluginProgressWidget(this)) {
   setModal(true);
   QVBoxLayout *mainLayout = new QVBoxLayout(this);
   mainLayout->setContentsMargins(0, 0, 0, 0);
@@ -184,6 +193,22 @@ void SimplePluginProgressDialog::setPreviewMode(bool drawPreview) {
 
 void SimplePluginProgressDialog::showPreview(bool showPreview) {
   _progress->showPreview(showPreview);
+  if (_painted) {
+    _painted = false;
+    update();
+    while(!_painted)
+      QApplication::processEvents();
+    QApplication::processEvents();
+  }
+}
+
+void SimplePluginProgressDialog::showStops(bool showButtons) {
+  _progress->showStops(showButtons);
+  _painted = false;
+  update();
+  while(!_painted)
+    QApplication::processEvents();
+  QApplication::processEvents();
 }
 
 ProgressState SimplePluginProgressDialog::state() const {
@@ -196,6 +221,11 @@ std::string SimplePluginProgressDialog::getError() {
 
 void SimplePluginProgressDialog::setError(const std::string &error) {
   _progress->setError(error);
+}
+
+void SimplePluginProgressDialog::paintEvent(QPaintEvent *ev) {
+  QWidget::paintEvent(ev);
+  _painted = true;
 }
 
 void SimplePluginProgressDialog::closeEvent(QCloseEvent *ev) {

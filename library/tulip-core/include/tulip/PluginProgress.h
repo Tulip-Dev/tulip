@@ -49,8 +49,7 @@ public:
 /**
  * @ingroup Plugins
  *
- * @brief This enum describes callback actions for the underlaying system when calling
- *tlp::PluginProgress::progress();
+ * @brief This enum describes callback actions for the underlaying system when calling tlp::PluginProgress::progress();
  * @list
  * @li TLP_CONTINUE: tells that the process monitored by the the progress should continue.
  * @li TLP_CANCEL: The process should be cancelled, reverting all changes since it was started.
@@ -70,16 +69,12 @@ enum ProgressState {
 
 /**
  * @ingroup Plugins
- * @brief PluginProcess subclasses are meant to notify about the progress state of some process
- *(typically a plugin)
+ * @brief PluginProcess subclasses are meant to notify about the progress state of some process (typically a plugin)
  *
- * PluginProgress are mainly used alongside with tlp::Plugin instances to give user a visual
- *feedback about the progress of the plugin.
- * Every plugin in tulip got a pluginProgress member they can call to give progress feedbacks. When
- *running, the plugin should make a call to tlp::PluginProgress::progress() indicating the current
- *state of the compuation.
- * The tlp::PluginProgress returns a tlp::ProgressState indicating what behavior the underlaying
- *system should have (see tlp::ProgressState for details)
+ * PluginProgress are mainly used alongside with tlp::Plugin instances to give user a visual feedback about the progress of the plugin.
+ * Every plugin in tulip got a pluginProgress member they can call to give progress feedbacks.
+ * When running, the plugin should make a call to tlp::PluginProgress::progress() indicating the current state of the computation.
+ * The tlp::PluginProgress returns a tlp::ProgressState indicating what behavior the underlaying system should have (see tlp::ProgressState for details)
  **/
 class TLP_SCOPE PluginProgress {
   ProgressPreviewHandler *_previewHandler;
@@ -95,18 +90,16 @@ public:
    * @param step The current step number.
    * @param max_step The total number of steps.
    *
-   * * @warning For default previsualisation handling to work, be sure to call
-   *PluginProgress::progress in this method (the return value can be ignored)
+   * @warning For default previsualisation handling to work, be sure to call
+   * PluginProgress::progress in this method (the return value can be ignored)
    *
-   * @return tlp::ProgressState a value indicating whether the progress has been stopped, cancelled,
-   *or will continue.
+   * @return tlp::ProgressState a value indicating whether the progress has been stopped, cancelled, or will continue.
    * @see tlp::ProgressState
    **/
   virtual ProgressState progress(int step, int max_step);
 
   /**
-   * @brief Sets the state flag to cancel, notifying to the process that the user wants to cancel
-   *it.
+   * @brief Sets the state flag to cancel, notifying to the process that the user wants to cancel it.
    * Canceling a process must stop it and revert all the changes performed since its start.
    *
    * @return void
@@ -136,13 +129,22 @@ public:
   virtual void setPreviewMode(bool drawPreview) = 0;
 
   /**
-   * @brief This tells the widget if it should show a preview checkbox, allowing the user to decide
-   *if the algorithm should draw a preview or not.
+   * @brief This tells the progress if it can allow the user to decide
+   * if the algorithm should draw a preview or not.
    *
-   * @param showPreview Whether the progress widget should contain a preview checkbox or not.
+   * @param showPreview Whether preview display can be managed or not
    * @return void
    **/
   virtual void showPreview(bool showPreview) = 0;
+
+  /**
+   * @brief This tells the progress if it can allow the user to decide
+   * to stop or cancel the plugin execution
+   *
+   * @param show Whether stop or cancellation can be managed or not
+   * @return void
+   **/
+  virtual void showStops(bool show) = 0;
 
   /**
    * @brief Gets the current internal state of the PluginProgress.
@@ -170,8 +172,7 @@ public:
   /**
    * @brief Changes the comment about the process progression.
    *
-   * @param comment A description of what the plugin is currently doing, displayed to inform the
-   *user.
+   * @param comment A description of what the plugin is currently doing, displayed to inform the user.
    * @return void
    **/
   virtual void setComment(const std::string &comment) = 0;
