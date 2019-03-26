@@ -139,8 +139,8 @@ void SimplePluginProgressWidget::stopClicked() {
 // ===================
 
 SimplePluginProgressDialog::SimplePluginProgressDialog(QWidget *parent)
-    : QDialog(parent, Qt::WindowTitleHint | Qt::CustomizeWindowHint),
-      _painted(false), _progress(new SimplePluginProgressWidget(this)) {
+    : QDialog(parent, Qt::WindowTitleHint | Qt::CustomizeWindowHint), _painted(false),
+      _progress(new SimplePluginProgressWidget(this)) {
   setModal(true);
   QVBoxLayout *mainLayout = new QVBoxLayout(this);
   mainLayout->setContentsMargins(0, 0, 0, 0);
@@ -196,7 +196,7 @@ void SimplePluginProgressDialog::showPreview(bool showPreview) {
   if (_painted) {
     _painted = false;
     update();
-    while(!_painted)
+    while (!_painted)
       QApplication::processEvents();
     QApplication::processEvents();
   }
@@ -206,7 +206,7 @@ void SimplePluginProgressDialog::showStops(bool showButtons) {
   _progress->showStops(showButtons);
   _painted = false;
   update();
-  while(!_painted)
+  while (!_painted)
     QApplication::processEvents();
   QApplication::processEvents();
 }
