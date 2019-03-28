@@ -410,13 +410,12 @@ bool TreeReingoldAndTilfordExtended::run() {
   tree = TreeTest::computeTree(graph, pluginProgress);
 
   if (pluginProgress && pluginProgress->state() != TLP_CONTINUE) {
-    TreeTest::cleanComputedTree(graph, tree);
     graph->pop();
 
     if (deleteLenghtMetric)
       delete lengthMetric;
 
-    return false;
+    return pluginProgress->state() != TLP_CANCEL;
   }
 
   node startNode = tree->getSource();
@@ -473,8 +472,6 @@ bool TreeReingoldAndTilfordExtended::run() {
       result->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
   }
-
-  TreeTest::cleanComputedTree(graph, tree);
 
   // forget last temporary graph state
   graph->pop();

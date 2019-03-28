@@ -21,7 +21,6 @@
 
 #include <vector>
 #include "Number.h"
-#include <tulip/PluginProgress.h>
 #include "RectangleRelativePositionList.h"
 
 /**

@@ -268,6 +268,9 @@ BubblePack::BubblePack(const tlp::PluginContext *context) : LayoutAlgorithm(cont
 BubblePack::~BubblePack() {}
 
 bool BubblePack::run() {
+  if (pluginProgress)
+    pluginProgress->showPreview(false);
+
   if (!ConnectedTest::isConnected(graph)) {
     // for each component draw
     std::vector<std::vector<node>> components;
@@ -283,6 +286,8 @@ bool BubblePack::run() {
       tmp->delSubGraph(graph);
       // restore current graph
       graph = tmp;
+      if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
+	return pluginProgress->state() != TLP_CANCEL;
     }
 
     // call connected component packing
@@ -309,9 +314,6 @@ bool BubblePack::run() {
 
   result->setAllEdgeValue(vector<Coord>(0));
 
-  if (pluginProgress)
-    pluginProgress->showPreview(false);
-
   // push a temporary graph state (not redoable)
   // preserving layout updates
   std::vector<PropertyInterface *> propsToPreserve;
@@ -325,7 +327,7 @@ bool BubblePack::run() {
 
   if (pluginProgress && pluginProgress->state() != TLP_CONTINUE) {
     graph->pop();
-    return false;
+    return pluginProgress->state() != TLP_CANCEL;
   }
 
   node startNode = tree->getSource();

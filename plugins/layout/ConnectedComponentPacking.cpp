@@ -138,7 +138,8 @@ bool ConnectedComponentPacking::run() {
   }
 
   vector<Rectangle<float>> rectanglesBackup(rectangles);
-  RectanglePackingLimitRectangles(rectangles, complexity.c_str(), pluginProgress);
+  if (!RectanglePackingLimitRectangles(rectangles, complexity.c_str(), pluginProgress))
+    return pluginProgress ? pluginProgress->state() != TLP_CANCEL : false;
 
   for (auto n : graph->nodes()) {
     result->setNodeValue(n, layout->getNodeValue(n));
@@ -152,14 +153,12 @@ bool ConnectedComponentPacking::run() {
     Coord move(rectangles[i][0][0] - rectanglesBackup[i][0][0],
                rectangles[i][0][1] - rectanglesBackup[i][0][1], 0);
     const std::vector<node> &nodes = ccNodes[i];
-    Iterator<node> *itN =
-        new StlIterator<node, std::vector<node>::const_iterator>(nodes.begin(), nodes.end());
+    StlIterator<node, std::vector<node>::const_iterator> itN(nodes.begin(),
+							     nodes.end());
     const std::vector<edge> &edges = ccEdges[i];
-    Iterator<edge> *itE =
-        new StlIterator<edge, std::vector<edge>::const_iterator>(edges.begin(), edges.end());
-    result->translate(move, itN, itE);
-    delete itN;
-    delete itE;
+    StlIterator<edge, std::vector<edge>::const_iterator> itE(edges.begin(),
+							     edges.end());
+    result->translate(move, &itN, &itE);
   }
 
   return true;

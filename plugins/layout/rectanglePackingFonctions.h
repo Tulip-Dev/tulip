@@ -20,6 +20,7 @@
 #define RECTANGLEPACKINGFONCTIONS_H
 
 #include <vector>
+#include <tulip/PluginProgress.h>
 #include "RectanglePacking.h"
 
 /**
@@ -29,11 +30,10 @@
  *@param v a vector including the rectangles to pack.
  *@param quality give the complexity of the algorithm.
  *@param progress pointer on an instance of the PluginProgress class.
- *@return the vector v whose rectangles have had their co-ordinates changed.
+ *@return true if the computation has not stopped due to the PluginProgress.
  */
-std::vector<tlp::Rectangle<float>> &
-RectanglePackingLimitRectangles(std::vector<tlp::Rectangle<float>> &v, const char *quality,
-                                tlp::PluginProgress *progress);
+bool RectanglePackingLimitRectangles(std::vector<tlp::Rectangle<float>> &v, const char *quality,
+				     tlp::PluginProgress *progress);
 
 /**
  *This function is used for packing rectangles. It is used when we want to
@@ -42,10 +42,9 @@ RectanglePackingLimitRectangles(std::vector<tlp::Rectangle<float>> &v, const cha
  *@param v a vector including the rectangles to pack.
  *@param quality give the complexity of the algorithm.
  *@param progress pointer on an instance of the PluginProgress class.
- *@return the vector v whose rectangles have had their co-ordinates changed.
+ *@return true if the computation has not stopped due to the PluginProgress.
  */
-std::vector<tlp::Rectangle<float>> &
-RectanglePackingLimitPositions(std::vector<tlp::Rectangle<float>> &v, const char *quality,
-                               tlp::PluginProgress *progress);
+bool RectanglePackingLimitPositions(std::vector<tlp::Rectangle<float>> &v, const char *quality,
+				    tlp::PluginProgress *progress);
 
 #endif

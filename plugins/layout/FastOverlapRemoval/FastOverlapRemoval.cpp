@@ -79,6 +79,12 @@ FastOverlapRemoval::FastOverlapRemoval(const tlp::PluginContext *context)
  * used in the InkScape Open Source Software.
  */
 bool FastOverlapRemoval::run() {
+  if (pluginProgress) {
+    // user cannot interact while computing
+    pluginProgress->showPreview(false);
+    pluginProgress->showStops(false);
+  }
+
   tlp::StringCollection stringCollection(OVERLAP_TYPE);
   stringCollection.setCurrent(0);
   LayoutProperty *viewLayout = nullptr;
