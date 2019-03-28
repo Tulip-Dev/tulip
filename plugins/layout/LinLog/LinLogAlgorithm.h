@@ -33,7 +33,6 @@
  * from A. Noack's java implementation of the LinLog algorithm
  */
 #include <tulip/TulipPluginHeaders.h>
-class LinLogLayout;
 
 class LinLogAlgorithm : public tlp::LayoutAlgorithm {
 
@@ -50,9 +49,6 @@ public:
   ~LinLogAlgorithm() override;
 
   bool run() override;
-
-private:
-  LinLogLayout *linlog;
 };
 
 #endif
