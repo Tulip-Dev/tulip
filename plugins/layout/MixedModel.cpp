@@ -282,8 +282,7 @@ bool MixedModel::run() {
     string err = "";
     DataSet tmp;
     tmp.set("coordinates", result);
-    graph->applyPropertyAlgorithm("Connected Component Packing",
-				  result, err, &tmp, pluginProgress);
+    graph->applyPropertyAlgorithm("Connected Component Packing", result, err, &tmp, pluginProgress);
     if (pluginProgress->state() != TLP_CONTINUE)
       return pluginProgress->state() != TLP_CANCEL;
   }

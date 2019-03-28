@@ -183,7 +183,7 @@ bool PolyominoPacking::run() {
     polyominos.emplace_back(&ccNodes, ccBB);
 
     if (pluginProgress &&
-	(pluginProgress->progress(i + 1, connectedComponents.size()) != TLP_CONTINUE))
+        (pluginProgress->progress(i + 1, connectedComponents.size()) != TLP_CONTINUE))
       return pluginProgress->state() != TLP_CANCEL;
   }
 
@@ -201,8 +201,7 @@ bool PolyominoPacking::run() {
   for (size_t i = 0; i < polyominos.size(); ++i) {
     genPolyomino(polyominos[i], layout, size);
 
-    if (pluginProgress &&
-	(pluginProgress->progress(i + 1, polyominos.size()) != TLP_CONTINUE))
+    if (pluginProgress && (pluginProgress->progress(i + 1, polyominos.size()) != TLP_CONTINUE))
       return pluginProgress->state() != TLP_CANCEL;
   }
 
@@ -217,8 +216,7 @@ bool PolyominoPacking::run() {
   for (size_t i = 0; i < polyominos.size(); ++i) {
     placePolyomino(i, polyominos[i]);
 
-    if (pluginProgress &&
-	(pluginProgress->progress(i + 1, polyominos.size()) != TLP_CONTINUE))
+    if (pluginProgress && (pluginProgress->progress(i + 1, polyominos.size()) != TLP_CONTINUE))
       return pluginProgress->state() != TLP_CANCEL;
   }
 
@@ -235,7 +233,7 @@ bool PolyominoPacking::run() {
         const vector<Coord> &bends = layout->getEdgeValue(e);
 
         if (!bends.empty()) {
-	  vector<Coord> newBends(bends);
+          vector<Coord> newBends(bends);
           for (auto &coord : newBends) {
             coord += move;
           }
@@ -344,9 +342,8 @@ void PolyominoPacking::genPolyomino(Polyomino &poly, LayoutProperty *layout, Siz
   poly.perim = W + H;
 }
 
-void PolyominoPacking::fillEdge(edge e, const Vec2i &p,
-				std::vector<Vec2i> &cells,
-				int dx, int dy, LayoutProperty *layout) {
+void PolyominoPacking::fillEdge(edge e, const Vec2i &p, std::vector<Vec2i> &cells, int dx, int dy,
+                                LayoutProperty *layout) {
 
   Coord pf(p[0], p[1]);
   auto ends = graph->ends(e);
@@ -375,9 +372,9 @@ void PolyominoPacking::fillEdge(edge e, const Vec2i &p,
       computeBezierPoints(controlPoints, newBends, 20);
     } else if (eShape == EdgeShape::CubicBSplineCurve) {
       if (controlPoints.size() > 3)
-	computeOpenUniformBsplinePoints(controlPoints, newBends, 3, 20);
+        computeOpenUniformBsplinePoints(controlPoints, newBends, 3, 20);
       else
-	newBends = controlPoints;
+        newBends = controlPoints;
     } else if (eShape == EdgeShape::CatmullRomCurve) {
       computeCatmullRomPoints(controlPoints, newBends, false, 20);
     }

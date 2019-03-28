@@ -287,7 +287,7 @@ bool BubblePack::run() {
       // restore current graph
       graph = tmp;
       if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
-	return pluginProgress->state() != TLP_CANCEL;
+        return pluginProgress->state() != TLP_CANCEL;
     }
 
     // call connected component packing

@@ -22,9 +22,8 @@
 using namespace std;
 using namespace tlp;
 
-bool RectanglePackingLimitRectangles(vector<Rectangle<float>> &v,
-				     const char *quality,
-				     PluginProgress *progress) {
+bool RectanglePackingLimitRectangles(vector<Rectangle<float>> &v, const char *quality,
+                                     PluginProgress *progress) {
 
   int numberOfPackedRectangles;
   vector<Rectangle<float>>::iterator itNewRect;
@@ -50,9 +49,9 @@ bool RectanglePackingLimitRectangles(vector<Rectangle<float>> &v,
 
     /* to follow the algorithm progression on through the PluginProgress*/
     if (progress &&
-	(progress->progress(numberNewRect, numberOfPackedRectangles + 1) != TLP_CONTINUE)) {
-        return false;
-      }
+        (progress->progress(numberNewRect, numberOfPackedRectangles + 1) != TLP_CONTINUE)) {
+      return false;
+    }
   }
 
   /* we definitively change the co-ordinates of the rectangles which have been placed in an optimal
@@ -62,15 +61,14 @@ bool RectanglePackingLimitRectangles(vector<Rectangle<float>> &v,
   /* we calculate the co-ordinates of the rectangles which have not been packed in an optimal way */
   rectPack.defaultPositionRestOfRectangles(itNewRect, v.end());
 
-  /* added to enable the synchronisation of the PluginProgress closing and the end of the algorithm*/
-  return progress ?
-    (progress->progress(numberNewRect, numberOfPackedRectangles + 1) != TLP_CANCEL) :
-    true;
+  /* added to enable the synchronisation of the PluginProgress closing and the end of the
+   * algorithm*/
+  return progress ? (progress->progress(numberNewRect, numberOfPackedRectangles + 1) != TLP_CANCEL)
+                  : true;
 }
 
-bool RectanglePackingLimitPositions(vector<Rectangle<float>> &v,
-				    const char *quality,
-				    PluginProgress *progress) {
+bool RectanglePackingLimitPositions(vector<Rectangle<float>> &v, const char *quality,
+                                    PluginProgress *progress) {
 
   /*useful variables for the PluginProgress*/
   int counter = 1;
@@ -93,8 +91,7 @@ bool RectanglePackingLimitPositions(vector<Rectangle<float>> &v,
     rectPack.optimalPositionOfNewRectangleLimPos(itNewRect, numberTestedPositions);
 
     /* to follow the algorithm progression on through the PluginProgress*/
-    if (progress &&
-	(progress->progress(counter, entrySize + 1) != TLP_CONTINUE))
+    if (progress && (progress->progress(counter, entrySize + 1) != TLP_CONTINUE))
       return false;
 
     ++counter;
@@ -104,8 +101,7 @@ bool RectanglePackingLimitPositions(vector<Rectangle<float>> &v,
    * way */
   (rectPack.firstSequence)->allocateCoordinates();
 
-  /* added to enable the synchronisation of the PluginProgress closing and the end of the algorithm*/
-  return progress ?
-    (progress->progress(counter, entrySize + 1) != TLP_CANCEL) :
-    true;
+  /* added to enable the synchronisation of the PluginProgress closing and the end of the
+   * algorithm*/
+  return progress ? (progress->progress(counter, entrySize + 1) != TLP_CANCEL) : true;
 }

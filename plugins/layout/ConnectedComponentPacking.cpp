@@ -153,11 +153,9 @@ bool ConnectedComponentPacking::run() {
     Coord move(rectangles[i][0][0] - rectanglesBackup[i][0][0],
                rectangles[i][0][1] - rectanglesBackup[i][0][1], 0);
     const std::vector<node> &nodes = ccNodes[i];
-    StlIterator<node, std::vector<node>::const_iterator> itN(nodes.begin(),
-							     nodes.end());
+    StlIterator<node, std::vector<node>::const_iterator> itN(nodes.begin(), nodes.end());
     const std::vector<edge> &edges = ccEdges[i];
-    StlIterator<edge, std::vector<edge>::const_iterator> itE(edges.begin(),
-							     edges.end());
+    StlIterator<edge, std::vector<edge>::const_iterator> itE(edges.begin(), edges.end());
     result->translate(move, &itN, &itE);
   }
 

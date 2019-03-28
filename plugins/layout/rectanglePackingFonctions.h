@@ -33,7 +33,7 @@
  *@return true if the computation has not stopped due to the PluginProgress.
  */
 bool RectanglePackingLimitRectangles(std::vector<tlp::Rectangle<float>> &v, const char *quality,
-				     tlp::PluginProgress *progress);
+                                     tlp::PluginProgress *progress);
 
 /**
  *This function is used for packing rectangles. It is used when we want to
@@ -45,6 +45,6 @@ bool RectanglePackingLimitRectangles(std::vector<tlp::Rectangle<float>> &v, cons
  *@return true if the computation has not stopped due to the PluginProgress.
  */
 bool RectanglePackingLimitPositions(std::vector<tlp::Rectangle<float>> &v, const char *quality,
-				    tlp::PluginProgress *progress);
+                                    tlp::PluginProgress *progress);
 
 #endif
