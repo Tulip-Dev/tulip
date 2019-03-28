@@ -96,7 +96,7 @@ private:
   std::vector<tlp::edge> unplanar_edges;
   bool planar;
   tlp::SizeProperty *sizeResult;
-  tlp::IntegerProperty *glyphResult;
+  tlp::IntegerProperty *shapeResult;
 };
 
 #endif
