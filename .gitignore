@@ -55,3 +55,6 @@ __pycache__/
 
 git-commands.txt
 .idea/
+
+*.tmp
+doxygen_sqlite3.db
