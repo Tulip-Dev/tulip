@@ -50,8 +50,8 @@ static const char *paramHelp[] = {
     "This parameter defines the minimum x-spacing between any two nodes or between a node and an "
     "edge.",
 
-    // node shape
-    "This parameter defines the property holding node shapes."};
+    // shape property
+    "This parameter defines the property holding edges shapes."};
 
 #define ORIENTATION "vertical;horizontal;"
 //====================================================
@@ -61,7 +61,7 @@ MixedModel::MixedModel(const tlp::PluginContext *context) : LayoutAlgorithm(cont
                                    "vertical <br> horizontal");
   addInParameter<float>("y node-node spacing", paramHelp[1], "2");
   addInParameter<float>("x node-node and edge-node spacing", paramHelp[2], "2");
-  addOutParameter<IntegerProperty>("node shape", paramHelp[3], "viewShape");
+  addOutParameter<IntegerProperty>("shape property", paramHelp[3], "viewShape");
   addDependency("Connected Component Packing", "1.0");
 }
 //====================================================
@@ -70,7 +70,7 @@ MixedModel::~MixedModel() {}
 bool MixedModel::run() {
   string orientation = "vertical";
   sizeResult = nullptr;
-  glyphResult = nullptr;
+  shapeResult = nullptr;
 
   if (dataSet != nullptr) {
     getNodeSizePropertyParameter(dataSet, sizeResult);
@@ -82,14 +82,16 @@ bool MixedModel::run() {
 
     dataSet->get("y node-node spacing", spacing);
     dataSet->get("x node-node and edge-node spacing", edgeNodeSpacing);
-    dataSet->get("node shape", glyphResult);
+    // "shape property" was previously called "node shape"
+    if (!dataSet->get("node shape", shapeResult))
+      dataSet->get("shape property", shapeResult);
   }
 
   if (sizeResult == nullptr)
     sizeResult = graph->getProperty<SizeProperty>("viewSize");
 
-  if (glyphResult == nullptr)
-    glyphResult = graph->getLocalProperty<IntegerProperty>("viewShape");
+  if (shapeResult == nullptr)
+    shapeResult = graph->getLocalProperty<IntegerProperty>("viewShape");
 
   //=========================================================
   // rotate size if necessary
@@ -100,18 +102,21 @@ bool MixedModel::run() {
     }
   }
 
-  glyphResult->setAllEdgeValue(EdgeShape::Polyline);
+  shapeResult->setAllEdgeValue(EdgeShape::Polyline);
 
   vector<edge> edge_planar;
 
-  // give some empirical feedback of what we are doing 1 %
-  pluginProgress->progress(1, 1000);
+  // give some empirical feedback of what we are doing 0,1 %
+  if (pluginProgress->progress(1, 1000) != TLP_CONTINUE)
+    return pluginProgress->state() != TLP_CANCEL;
 
   // compute the connected components's subgraphs
   std::vector<std::vector<node>> components;
   ConnectedTest::computeConnectedComponents(graph, components);
 
   for (unsigned int i = 0; i < components.size(); ++i) {
+    if (pluginProgress->progress(2, 1000) != TLP_CONTINUE)
+      return pluginProgress->state() != TLP_CANCEL;
     std::vector<node> &nodes = components[i];
 
     //====================================================
@@ -210,8 +215,10 @@ bool MixedModel::run() {
 
     //===============================================
 
-    // give some empirical feedback of what we are doing 2%
-    pluginProgress->progress(5, 1000);
+    // give some empirical feedback of what we are doing 0,5%
+    if (pluginProgress->progress(5, 1000) != TLP_CONTINUE)
+      return pluginProgress->state() != TLP_CANCEL;
+
     vector<edge> added_edges;
 
     if (!BiconnectedTest::isBiconnected(G))
@@ -222,13 +229,7 @@ bool MixedModel::run() {
     assert(BiconnectedTest::isBiconnected(G));
     assert(BiconnectedTest::isBiconnected(carte));
 
-    // give some empirical feedback of what we are doing 2%
-    pluginProgress->progress(1, 100);
-
-    // give some empirical feedback (5%)
-    pluginProgress->progress(2, 100);
-
-    // give some empirical feedback of what we are doing (10%)
+    // give some empirical feedback of what we are doing (5%)
     if (pluginProgress->progress(5, 100) != TLP_CONTINUE)
       return pluginProgress->state() != TLP_CANCEL;
 
@@ -249,8 +250,9 @@ bool MixedModel::run() {
 
     initPartition();
 
-    if (pluginProgress->state() == TLP_CANCEL)
-      return false;
+    // give some empirical feedback of what we are doing (10%)
+    if (pluginProgress->progress(10, 100) != TLP_CONTINUE)
+      return pluginProgress->state() != TLP_CANCEL;
 
     assignInOutPoints();
 
@@ -280,7 +282,9 @@ bool MixedModel::run() {
     string err = "";
     DataSet tmp;
     tmp.set("coordinates", result);
-    graph->applyPropertyAlgorithm("Connected Component Packing", result, err, &tmp);
+    graph->applyPropertyAlgorithm("Connected Component Packing", result, err, &tmp, pluginProgress);
+    if (pluginProgress->state() != TLP_CONTINUE)
+      return pluginProgress->state() != TLP_CANCEL;
   }
 
   // rotate layout and size

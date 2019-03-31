@@ -248,6 +248,9 @@ bool StrahlerMetric::run() {
     }
   }
 
+  if (pluginProgress->state() != TLP_CONTINUE)
+    return pluginProgress->state() != TLP_CANCEL;
+
   if (!allNodes) {
 
     for (auto n : graph->nodes()) {

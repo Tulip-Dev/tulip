@@ -26,7 +26,6 @@ class LinLogLayout {
 
 public:
   LinLogLayout(tlp::Graph *_graph, tlp::PluginProgress *pluginProgress);
-  ~LinLogLayout();
   bool initAlgo(tlp::LayoutProperty *_layoutResult, tlp::NumericProperty *_weight,
                 double _attrExponent, double _repuExponent, double _gravFactor,
                 unsigned int _max_iter, bool _is3D, bool _useOctTree,
@@ -37,7 +36,7 @@ public:
 private:
   tlp::NumericProperty *edgeWeight;
   tlp::LayoutProperty *layoutResult;
-  tlp::DoubleProperty *linLogWeight;
+  tlp::DoubleProperty linLogWeight;
   tlp::BooleanProperty *skipNodes;
   tlp::Graph *graph;
 

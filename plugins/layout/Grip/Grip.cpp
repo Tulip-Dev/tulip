@@ -94,12 +94,12 @@ void Grip::computeCurrentGraphLayout() {
     // initialize a random sequence according the given seed
     tlp::initRandomSequence();
 
-    misf = new MISFiltering(currentGraph);
+    MISFiltering filtering(currentGraph);
+    misf = &filtering;
     computeOrdering();
     init();
     firstNodesPlacement();
     placement();
-    delete misf;
   }
 }
 //======================================================
@@ -115,6 +115,12 @@ bool Grip::run() {
     _dim = 3;
   else
     _dim = 2;
+
+  if (pluginProgress) {
+    // user cannot interact while computing
+    pluginProgress->showPreview(false);
+    pluginProgress->showStops(false);
+  }
 
   std::vector<std::vector<node>> components;
   ConnectedTest::computeConnectedComponents(graph, components);

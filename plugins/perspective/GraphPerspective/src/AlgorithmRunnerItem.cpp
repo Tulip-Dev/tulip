@@ -390,8 +390,6 @@ void AlgorithmRunnerItem::run(Graph *g) {
     progress->setPreviewHandler(nullptr);
 
   if (!result) {
-    g->pop();
-
     if (progress->state() == TLP_CANCEL && errorMessage.empty()) {
       errorMessage = "Cancelled by user";
       tlp::warning() << QStringToTlpString(name()) << ": " << errorMessage;
@@ -400,6 +398,8 @@ void AlgorithmRunnerItem::run(Graph *g) {
       tlp::error() << QStringToTlpString(name()) << ": " << errorMessage;
       QMessageBox::critical(parentWidget(), name(), errorMessage.c_str());
     }
+    progress->setComment("Cancelling graph changes...");
+    g->pop();
   } else {
     if (progress->state() == TLP_STOP) {
       errorMessage = "Stopped by user";
@@ -408,9 +408,8 @@ void AlgorithmRunnerItem::run(Graph *g) {
     }
   }
 
-  delete progress;
-
   if (result) {
+    progress->setComment("Applying graph changes...");
     // copy or cleanup out properties
     for (const OutPropertyParam &opp : outPropertyParams) {
       // copy computed property in the original output property
@@ -430,7 +429,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
       delete opp.tmp;
     }
 
-    // display it if needed
+    // display spentTime if needed
     if (TulipSettings::instance().logPluginCall() != TulipSettings::NoLog) {
       std::stringstream log;
       log << algorithm.c_str() << " - " << dataSet.toString().c_str();
@@ -463,6 +462,10 @@ void AlgorithmRunnerItem::run(Graph *g) {
     Observable::unholdObservers();
 
   g->popIfNoUpdates();
+
+  // keep progress alive until the end
+  // to give feedback to user
+  delete progress;
 }
 
 void AlgorithmRunnerItem::setStoreResultAsLocal(bool m) {

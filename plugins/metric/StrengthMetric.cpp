@@ -175,9 +175,7 @@ bool StrengthMetric::run() {
     result->setEdgeValue(e, getEdgeValue(e));
 
     if ((++steps % (maxSteps / 10)) == 0) {
-      pluginProgress->progress(steps, maxSteps);
-
-      if (pluginProgress->state() != TLP_CONTINUE)
+      if (pluginProgress->progress(steps, maxSteps) != TLP_CONTINUE)
         return pluginProgress->state() != TLP_CANCEL;
     }
   }
@@ -193,9 +191,7 @@ bool StrengthMetric::run() {
     result->setNodeValue(n, getNodeValue(n));
 
     if ((++steps % (maxSteps / 10)) == 0) {
-      pluginProgress->progress(steps, maxSteps);
-
-      if (pluginProgress->state() != TLP_CONTINUE)
+      if (pluginProgress->progress(steps, maxSteps) != TLP_CONTINUE)
         return pluginProgress->state() != TLP_CANCEL;
     }
   }

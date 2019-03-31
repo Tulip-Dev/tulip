@@ -98,6 +98,12 @@ list<node> findCycle(Graph *sg) {
 }
 //====================================================
 bool Tutte::run() {
+  if (pluginProgress) {
+    // user cannot interact while computing
+    pluginProgress->showPreview(false);
+    pluginProgress->showStops(false);
+  }
+
   result->setAllEdgeValue(vector<Coord>(0));
   std::list<node> tmp;
   tmp = findCycle(graph);

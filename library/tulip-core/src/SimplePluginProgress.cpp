@@ -49,6 +49,8 @@ void SimplePluginProgress::setPreviewMode(bool b) {
 //====================================================
 void SimplePluginProgress::showPreview(bool) {}
 //====================================================
+void SimplePluginProgress::showStops(bool) {}
+//====================================================
 ProgressState SimplePluginProgress::state() const {
   return _state;
 }

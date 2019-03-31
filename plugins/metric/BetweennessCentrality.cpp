@@ -156,6 +156,9 @@ public:
       }
     }
 
+    if (pluginProgress->state() != TLP_CONTINUE)
+      return pluginProgress->state() != TLP_CANCEL;
+
     // Normalization
     if (norm || !directed) {
       double n = graph->numberOfNodes();

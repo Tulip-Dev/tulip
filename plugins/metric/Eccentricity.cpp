@@ -127,6 +127,9 @@ bool EccentricityMetric::run() {
     }
   });
 
+  if (pluginProgress->state() != TLP_CONTINUE)
+    return pluginProgress->state() != TLP_CANCEL;
+
   TLP_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
     if (!allPaths && norm)
       result->setNodeValue(n, res[i] / diameter);

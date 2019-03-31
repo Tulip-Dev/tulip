@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>473</width>
-    <height>71</height>
+    <height>73</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -27,14 +27,11 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
    <property name="topMargin">
     <number>0</number>
    </property>
    <property name="rightMargin">
-    <number>0</number>
+    <number>6</number>
    </property>
    <property name="bottomMargin">
     <number>0</number>
