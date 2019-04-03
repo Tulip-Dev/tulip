@@ -58,3 +58,6 @@ git-commands.txt
 
 *.tmp
 doxygen_sqlite3.db
+
+# Visual Studio settings folder
+.vs/
