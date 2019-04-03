@@ -724,10 +724,7 @@ void PixelOrientedView::switchFromSmallMultiplesToDetailView(PixelOrientedOvervi
   graphComposite->acceptVisitor(&glBBSV);
   BoundingBox graphBoundingBox = glBBSV.getBoundingBox();
 
-  if (detailViewLabel != nullptr) {
-    delete detailViewLabel;
-  }
-
+  delete detailViewLabel;
   detailViewLabel = new GlLabel(
       Coord((graphBoundingBox[0][0] + graphBoundingBox[1][0]) / 2.f,
             graphBoundingBox[0][1] - (graphBoundingBox[1][1] - graphBoundingBox[0][1]) / 8.f),

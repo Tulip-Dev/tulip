@@ -607,7 +607,7 @@ void GlLabel::draw(float, Camera *camera) {
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  // The label is too small to be readed, draw a line
+  // The label is too small to be read, draw a line
   if (viewportH < 2 && useLOD) {
     float wAlign = 0;
     float hAlign = 0;

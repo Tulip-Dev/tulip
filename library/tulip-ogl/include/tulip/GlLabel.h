@@ -37,7 +37,7 @@ struct OcclusionTest;
  * @ingroup OpenGL
  * @brief Create a label into Tulip 3D engine
  *
- * The shortes way to create a label is :
+ * The shortest way to create a label is :
  * @code
  * GlLabel *label=new GlLabel(Coord(0,0,0), Size (1,1,1), Color(1,1,1));
  * label->setText("example");
@@ -210,7 +210,7 @@ public:
   }
 
   /**
-   * @brief Set the stencil and draw the Label, this function is usefull when we directly call draw
+   * @brief Set the stencil and draw the Label, this function is useful when we directly call draw
    * without tulip engine
    */
   void drawWithStencil(float lod, Camera *camera = nullptr);
