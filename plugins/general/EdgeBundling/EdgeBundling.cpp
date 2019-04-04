@@ -459,10 +459,9 @@ bool EdgeBundling::run() {
       unsigned int i = oriGraph->numberOfEdges() - vertexCoverGraph->numberOfEdges();
 
       if (((i % 10) == 0) &&
-	  (pluginProgress->progress(i, oriGraph->numberOfEdges())
-	   != TLP_CONTINUE)) {
-	oriGraph->delSubGraph(vertexCoverGraph);
-	return pluginProgress->state() != TLP_CANCEL;
+          (pluginProgress->progress(i, oriGraph->numberOfEdges()) != TLP_CONTINUE)) {
+        oriGraph->delSubGraph(vertexCoverGraph);
+        return pluginProgress->state() != TLP_CANCEL;
       }
 
       //====================================
