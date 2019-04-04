@@ -1,58 +1,56 @@
-*Maintainers*
-David Auber (Original Author), Patrick Mary
+Original Author
+---------------
+David Auber
 LaBRI, University of Bordeaux, France
-email: auber@labri.fr, mary@labri.fr
-web : dept-info.labri.fr/~auber
+email: auber@labri.fr
+web : https://www.labri.fr/perso/auber/
 
-*Active Contributors*
-    Romain Bourqui (LaBRI, University of Bordeaux)
-    Yann Dirson (Debian packager)
-    Romain Giot (LaBRI, University of Bordeaux)
-    Antoine Lambert (Inria, Paris)
-    Bruno Pinaud (LaBRI, University Bordeaux)
-    Benjamin Renoust (LaBRI, University Bordeaux)
-    Jason Vallet (LaBRI, University Bordeaux)
+Official maintainer
+-------------------
+Patrick Mary
+LaBRI, University of Bordeaux, France
+email: mary@labri.fr
 
-*Research Contributors*
-    Daniel Archambault (Clique Center)
-    Romain Bourqui (LaBRI, University of Bordeaux)
-    Mohamed Bouklit (Lirmm, University of Montpellier II)
-    Maylis Delest (LaBRI, University of Bordeaux)
-    Jean Philippe Domenger (LaBRI, University of Bordeaux)
-    Romain Giot (LaBRI, University of Bordeaux)
-    Antoine Lambert (LaBRI, University Bordeaux)
-    Guy Melançon (LaBRI, University of Bordeaux)
-    Tamara Munzner (University of British Columbia)
-    Bruno Pinaud (LaBRI, University Bordeaux)
-    François Queyroi (LaBRI, University Bordeaux)
-    Benjamin Renoust (LaBRI, University Bordeaux)
-    Jason Vallet (LaBRI, University Bordeaux)
-    Michel Westenberg (Eindhoven University of Technology)
-
-*Contributors*
-    Robert Auber
-    Sophie Bardet
-    Jérémy Compostella
-    Jean Darracq
-    Eric Dauchier
-    Maxime Delorme
-    Jonathan Dubois (Systrip/Porgy projects)
-    Antony Durand
-    David Duke
-    Ludwig Fiolka (Tanguy project)
-    Gérald Gainant
-    Sami Gasri
-    Sébastien Grivet
-    Charles Huet (Software engineer)
-    Loïc Jézéquel
-    Charles-Antoine Lami
-    Sebastien Leclerc
-    Morgan Mathiaut (OpenGL expert)
-    Bertrand Mathieu
-    Chris Myers
-    Yashvin Nababsing
-    Pascal Ollier
-    Thibault Ruchon
-    Julien Testut
-    Vincent Rabeux (Technical Writer)
-    Martin Schaffner (Mac OSX expert)
+Contributors
+------------
+Antoine Lambert (Inria / Software Heritage, Paris)
+Antony Durand
+Benjamin Renoust (LaBRI, University Bordeaux)
+Bertrand Mathieu
+Bruno Pinaud (LaBRI, University Bordeaux)
+Charles-Antoine Lami
+Charles Huet (Software engineer)
+Chris Myers
+Daniel Archambault (Clique Center)
+David Duke
+Eric Dauchier
+François Queyroi (LaBRI, University Bordeaux)
+Gérald Gainant
+Guy Melançon (LaBRI, University of Bordeaux)
+Jason Vallet (LaBRI, University Bordeaux)
+Jean Darracq
+Jean Philippe Domenger (LaBRI, University of Bordeaux)
+Jérémy Compostella
+Jonathan Dubois (Systrip/Porgy projects)
+Julien Testut
+Loïc Jézéquel
+Ludwig Fiolka (Tanguy project)
+Martin Schaffner (Mac OSX expert)
+Maxime Delorme
+Maylis Delest (LaBRI, University of Bordeaux)
+Michel Westenberg (Eindhoven University of Technology)
+Mohamed Bouklit (Lirmm, University of Montpellier II)
+Morgan Mathiaut (OpenGL expert)
+Pascal Ollier
+Robert Auber
+Romain Bourqui (LaBRI, University of Bordeaux)
+Romain Giot (LaBRI, University of Bordeaux)
+Sami Gasri
+Sébastien Grivet
+Sebastien Leclerc
+Sophie Bardet
+Tamara Munzner (University of British Columbia)
+Thibault Ruchon
+Vincent Rabeux (Technical Writer)
+Yann Dirson (Debian packager)
+Yashvin Nababsing
