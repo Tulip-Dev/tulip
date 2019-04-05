@@ -265,7 +265,7 @@ PyObject *getPyObjectFromCppObject(const T &cppObject) {
 
 template <typename T>
 T getCppObjectFromPyObject(PyObject *pyObj) {
-  T v {};
+  T v{};
   PyObjectToCppObjectConvertor<T> convertor;
   convertor.convert(pyObj, v);
   return v;
