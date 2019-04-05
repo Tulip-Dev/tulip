@@ -265,28 +265,8 @@ PyObject *getPyObjectFromCppObject(const T &cppObject) {
 
 template <typename T>
 T getCppObjectFromPyObject(PyObject *pyObj) {
-  T v;
+  T v {};
   PyObjectToCppObjectConvertor<T> convertor;
-  convertor.convert(pyObj, v);
-  return v;
-}
-
-// specialized the previous template for unsigned long
-// to fix a GCC warning about v being uninitialized
-template <>
-unsigned long getCppObjectFromPyObject(PyObject *pyObj) {
-  unsigned long v = 0;
-  PyObjectToCppObjectConvertor<unsigned long> convertor;
-  convertor.convert(pyObj, v);
-  return v;
-}
-
-// specialized the previous template for long
-// to fix a GCC warning about v being uninitialized
-template <>
-long getCppObjectFromPyObject(PyObject *pyObj) {
-  long v = 0;
-  PyObjectToCppObjectConvertor<long> convertor;
   convertor.convert(pyObj, v);
   return v;
 }
