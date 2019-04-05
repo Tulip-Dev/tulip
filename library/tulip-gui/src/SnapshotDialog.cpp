@@ -150,7 +150,7 @@ void SnapshotDialog::accept() {
   // remove last ;;
   formatedFormatList.resize(formatedFormatList.size() - 2);
 
-  QString fileName = QFileDialog::getSaveFileName(this, tr("Save image as..."), QDir::homePath(),
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Save image as..."), QString(),
                                                   formatedFormatList, &selectedFilter
 // on MacOSX selectedFilter is ignored by the
 // native dialog
