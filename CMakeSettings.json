@@ -6,9 +6,12 @@
           "MINGW64_ROOT": "D:\\porgydev\\msys64\\mingw64",
           "BIN_ROOT": "${env.MINGW64_ROOT}\\bin",
           "FLAVOR": "x86_64-w64-mingw32",
-          "TOOLSET_VERSION": "7.3.0",
-          "PATH": "${env.MINGW64_ROOT}\\bin;${env.MINGW64_ROOT}\\..\\usr\\local\\bin;${env.MINGW64_ROOT}\\..\\usr\\bin;${env.MINGW64_ROOT}\\..\\bin;${env.PATH}",
+          "TOOLSET_VERSION": "8.3.0",
+          "PATH": "${env.BIN_ROOT};${env.MINGW64_ROOT}\\..\\usr\\local\\bin;${env.MINGW64_ROOT}\\..\\usr\\bin;${env.MINGW64_ROOT}\\..\\bin;${env.PATH}",
           "INCLUDE": "${env.INCLUDE};${env.MINGW64_ROOT}\\include\\c++\\${env.TOOLSET_VERSION};${env.MINGW64_ROOT}\\include\\c++\\${env.TOOLSET_VERSION}\\tr1;${env.MINGW64_ROOT}\\include\\c++\\${env.TOOLSET_VERSION}\\${env.FLAVOR}",
+          "SHELL": "${env.MINGW64_ROOT}/../usr/bin/bash",
+          "TEMP": "${env.MINGW64_ROOT}/../tmp",
+          "TMP": "${env.TEMP}",
           "environment": "mingw_64"
         }
       ],
@@ -26,12 +29,17 @@
         {
           "name": "CMAKE_C_COMPILER",
           "value": "${env.BIN_ROOT}\\gcc.exe",
-          "type": "STRING"
+          "type": "FILEPATH"
         },
         {
           "name": "CMAKE_CXX_COMPILER",
           "value": "${env.BIN_ROOT}\\g++.exe",
-          "type": "STRING"
+          "type": "FILEPATH"
+        },
+        {
+          "name": "TULIP_USE_CCACHE",
+          "value": "OFF",
+          "type": "BOOL"
         }
       ]
     },
@@ -41,9 +49,12 @@
           "MINGW64_ROOT": "D:\\porgydev\\msys64\\mingw64",
           "BIN_ROOT": "${env.MINGW64_ROOT}\\bin",
           "FLAVOR": "x86_64-w64-mingw32",
-          "TOOLSET_VERSION": "7.3.0",
-          "PATH": "${env.MINGW64_ROOT}\\bin;${env.MINGW64_ROOT}\\..\\usr\\local\\bin;${env.MINGW64_ROOT}\\..\\usr\\bin;${env.MINGW64_ROOT}\\..\\bin;${env.PATH}",
+          "TOOLSET_VERSION": "8.3.0",
+          "PATH": "${env.BIN_ROOT};${env.MINGW64_ROOT}\\..\\usr\\local\\bin;${env.MINGW64_ROOT}\\..\\usr\\bin;${env.MINGW64_ROOT}\\..\\bin;${env.PATH}",
           "INCLUDE": "${env.INCLUDE};${env.MINGW64_ROOT}\\include\\c++\\${env.TOOLSET_VERSION};${env.MINGW64_ROOT}\\include\\c++\\${env.TOOLSET_VERSION}\\tr1;${env.MINGW64_ROOT}\\include\\c++\\${env.TOOLSET_VERSION}\\${env.FLAVOR}",
+          "SHELL": "${env.MINGW64_ROOT}/../usr/bin/bash",
+          "TEMP": "${env.MINGW64_ROOT}/../tmp",
+          "TMP": "${env.TEMP}",
           "environment": "mingw_64"
         }
       ],
@@ -61,12 +72,12 @@
         {
           "name": "CMAKE_C_COMPILER",
           "value": "${env.BIN_ROOT}\\gcc.exe",
-          "type": "STRING"
+          "type": "FILEPATH"
         },
         {
           "name": "CMAKE_CXX_COMPILER",
           "value": "${env.BIN_ROOT}\\g++.exe",
-          "type": "STRING"
+          "type": "FILEPATH"
         },
         {
           "name": "PORGY_RULE_DEBUG_MESSAGES",
@@ -76,6 +87,11 @@
         {
           "name": "PORGY_STRATEGY_DEBUG_MESSAGES",
           "value": "ON",
+          "type": "BOOL"
+        },
+        {
+          "name": "TULIP_USE_CCACHE",
+          "value": "OFF",
           "type": "BOOL"
         }
       ]
