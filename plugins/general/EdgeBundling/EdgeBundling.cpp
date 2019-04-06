@@ -458,8 +458,11 @@ bool EdgeBundling::run() {
       pluginProgress->setComment(strm.str());
       unsigned int i = oriGraph->numberOfEdges() - vertexCoverGraph->numberOfEdges();
 
-      if ((i % 10) == 0)
-        pluginProgress->progress(i, oriGraph->numberOfEdges());
+      if (((i % 10) == 0) &&
+          (pluginProgress->progress(i, oriGraph->numberOfEdges()) != TLP_CONTINUE)) {
+        oriGraph->delSubGraph(vertexCoverGraph);
+        return pluginProgress->state() != TLP_CANCEL;
+      }
 
       //====================================
       // Select the destination nodes. We do not have to compute

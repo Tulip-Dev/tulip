@@ -146,15 +146,15 @@ Hints on how to build Tulip for these three platforms can be found in the contin
 
 Below are some scientific publications related to Tulip (see [Tulip bibliography](http://tulip.labri.fr/TulipDrupal/?q=tulip-biblio) for more information):
 
-  * David Auber, Daniel Archambault, Romain Bourqui, Maylis Delest, Jonathan Dubois, Antoine Lambert, Patrick Mary, Morgan Mathiaut, Guy Mélançon, Bruno Pinaud, Benjamin Renoust and Jason Vallet. TULIP 5. In Encyclopedia of Social Network Analysis and Mining, Springer, pages 1-28, 2017. https://hal.archives-ouvertes.fr/hal-01654518
+  * David Auber, Daniel Archambault, Romain Bourqui, Maylis Delest, Jonathan Dubois, Antoine Lambert, Patrick Mary, Morgan Mathiaut, Guy Mélançon, Bruno Pinaud, Benjamin Renoust and Jason Vallet. [TULIP 5](https://hal.archives-ouvertes.fr/hal-01654518). In Encyclopedia of Social Network Analysis and Mining, Springer, pages 1-28, 2017.
 
-  * David Auber, Romain Bourqui, Maylis Delest, Antoine Lambert, Patrick Mary, Guy Mélançon, Bruno Pinaud, Benjamin Renoust and Jason Vallet. TULIP 4. Research report. LaBRI - Laboratoire Bordelais de Recherche en Informatique. 2016. https://hal.archives-ouvertes.fr/hal-01359308
+  * David Auber, Romain Bourqui, Maylis Delest, Antoine Lambert, Patrick Mary, Guy Mélançon, Bruno Pinaud, Benjamin Renoust and Jason Vallet. [TULIP 4](https://hal.archives-ouvertes.fr/hal-01359308). Research report. LaBRI - Laboratoire Bordelais de Recherche en Informatique. 2016.
 
-  * David Auber, Daniel Archambault, Romain Bourqui, Antoine Lambert, Morgan Mathiaut, Patrick Mary, Maylis Delest, Jonathan Dubois, and Guy Mélançon. The Tulip 3 Framework: A Scalable Software Library for Information Visualization Applications Based on Relational Data. Technical report RR-7860, INRIA, January 2012. https://hal.archives-ouvertes.fr/hal-00659880
+  * David Auber, Daniel Archambault, Romain Bourqui, Antoine Lambert, Morgan Mathiaut, Patrick Mary, Maylis Delest, Jonathan Dubois, and Guy Mélançon. [The Tulip 3 Framework: A Scalable Software Library for Information Visualization Applications Based on Relational Data](https://hal.archives-ouvertes.fr/hal-00659880). Technical report RR-7860, INRIA, January 2012.
 
-  * Antoine Lambert and David Auber. Graph analysis and visualization with Tulip-Python. EuroSciPy 2012 - 5th European meeting on Python in Science, Bruxelles. https://hal.archives-ouvertes.fr/hal-00744969
+  * Antoine Lambert and David Auber. [Graph analysis and visualization with Tulip-Python](https://hal.archives-ouvertes.fr/hal-00744969). EuroSciPy 2012 - 5th European meeting on Python in Science, Bruxelles.
 
-  * David Auber. Tulip - A Huge Graph Visualization Framework. Graph Drawing Software, Springer, pages 105-126. 2004. http://tulip.labri.fr/publi_tulip/auberChapterTulipGDSBook.pdf
+  * David Auber. [Tulip - A Huge Graph Visualization Framework](https://link.springer.com/content/pdf/10.1007%2F978-3-642-18638-7_5.pdf). Graph Drawing Software, Springer, pages 105-126. 2004.
 
 ## License
 

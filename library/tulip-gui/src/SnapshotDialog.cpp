@@ -104,8 +104,8 @@ SnapshotDialog::SnapshotDialog(const View *v, QWidget *parent)
           SLOT(clicked(QAbstractButton *)));
 
   lockLabel = new LockLabel();
-  ui->horizontalLayout_2->addWidget(lockLabel);
-  ui->horizontalLayout_2->setAlignment(lockLabel, Qt::AlignLeft | Qt::AlignVCenter);
+  ui->horizontalLayout_5->insertWidget(2, lockLabel);
+  ui->horizontalLayout_5->setAlignment(lockLabel, Qt::AlignLeft | Qt::AlignVCenter);
 }
 
 void SnapshotDialog::clicked(QAbstractButton *b) {
@@ -150,7 +150,7 @@ void SnapshotDialog::accept() {
   // remove last ;;
   formatedFormatList.resize(formatedFormatList.size() - 2);
 
-  QString fileName = QFileDialog::getSaveFileName(this, tr("Save image as..."), QDir::homePath(),
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Save image as..."), QString(),
                                                   formatedFormatList, &selectedFilter
 // on MacOSX selectedFilter is ignored by the
 // native dialog

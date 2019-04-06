@@ -120,8 +120,8 @@ sh "${SRC_DIR}/make_dmg.sh" ${APP_NAME} "@TulipVersion@" "${DEST_DIR}/applicatio
 if [ "$PYTHON_BUILD" = "ON" ]
 then
 echo "${APP_NAME}-@TulipVersion@_qt@QT_VERSION@.dmg has been correctly generated in ${DEST_DIR}"
-mv ${APP_NAME}-@TulipVersion@.dmg ${APP_NAME}-@TulipVersion@_qt$@QT_VERSION@.dmg
+mv ${APP_NAME}-@TulipVersion@.dmg ${APP_NAME}-@TulipVersion@_qt@QT_VERSION@.dmg
 else
-echo "${APP_NAME}-@TulipVersion@_qt$@QT_VERSION@_no_python.dmg has been correctly generated in ${DEST_DIR}"
-mv ${APP_NAME}-@TulipVersion@.dmg ${APP_NAME}-@TulipVersion@_qt$@QT_VERSION@_no_python.dmg
+echo "${APP_NAME}-@TulipVersion@_qt@QT_VERSION@_no_python.dmg has been correctly generated in ${DEST_DIR}"
+mv ${APP_NAME}-@TulipVersion@.dmg ${APP_NAME}-@TulipVersion@_qt@QT_VERSION@_no_python.dmg
 fi
