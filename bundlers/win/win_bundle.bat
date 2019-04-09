@@ -13,12 +13,12 @@ set SRC_DIR=%cd%
 
 echo 'Wiping destination directory'
 rem In order to remove the contents of a non empty folder
-rem we create an empty folder to clone in that one using robocopy
+rem we create an empty folder to clone in the first one using robocopy
 rem the empty folder will be removed at the end
-mkdir "%DEST_DIR%\\empty_folder"
-robocopy "%DEST_DIR%\\empty_folder" "%DEST_DIR%\\files" /MIR >nul 2>&1
-rmdir /Q /S "%DEST_DIR%\\files"
-mkdir "%DEST_DIR%\\files"
+if NOT EXIST "%DEST_DIR%\\empty_folder" ( mkdir "%DEST_DIR%\\empty_folder" )
+if EXIST "%DEST_DIR%\\files" (
+  robocopy "%DEST_DIR%\\empty_folder" "%DEST_DIR%\\files" /MIR >nul 2>&1
+) else ( mkdir "%DEST_DIR%\\files" )
 
 echo 'Copying Tulip files'
 xcopy "%TULIP_DIR%" "%DEST_DIR%\\files" /E /Q
@@ -34,7 +34,7 @@ del /Q /F /S "%DEST_DIR%\\files\\bin\\styles\\q*d.dll" >nul 2>&1
 del /Q /F /S "%DEST_DIR%\\files\\bin\\styles\\q*d.pdb" >nul 2>&1
 )
 
-echo 'Removing non dll files in lib directory'
+echo 'Removing non dll files from lib directory'
 del /Q /F /S "%DEST_DIR%\\files\\lib\\*.dll.a" >nul 2>&1
 rem same trick with our empty folder
 robocopy "%DEST_DIR%\\empty_folder" "%DEST_DIR%\\files\\lib\\cmake" /MIR >nul 2>&1
@@ -57,6 +57,4 @@ if "%OUT_FILE%" == "" (
 echo 'NSIS installer generator completed !'
 
 rem final removal
-robocopy "%DEST_DIR%\\empty_folder" "%DEST_DIR%\\files" /MIR >nul 2>&1
-rmdir /Q /S "%DEST_DIR%\\files"
-rmdir /Q /S "%DEST_DIR%\\empty_folder"
+rmdir /Q /S "%DEST_DIR%\\empty_folder" >nul 2>&1
