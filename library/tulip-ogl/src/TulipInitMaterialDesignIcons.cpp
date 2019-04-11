@@ -3601,7 +3601,7 @@ static void initIconCodePoints() {
   addIconCodePoint("md-zodiac-sagittarius", 0xFA84);
   addIconCodePoint("md-zodiac-scorpio", 0xFA85);
   addIconCodePoint("md-zodiac-taurus", 0xFA86);
-  addIconCodePoint("md-zodiac-virgo", 0xFA87);
+  addIconCodePoint("md-zodiac-virgo", 0xFA87);
 
   auto it = iconCodePoint.begin();
 
