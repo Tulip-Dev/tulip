@@ -5,7 +5,11 @@
 # the first parameter is the _variable.scss file
 # found in the scss sub directory after extracting files
 # from a Material Design icons downladable zip archive
-
+# the second is the cpp file which must be copied as
+# library/tulip-ogl/src/TulipInitMaterialDesignIcons.cpp
+# The files materialdesignicons-webfont.ttf materialdesignicons-webfont.woff
+# and materialdesignicons-webfont.woff2 from the fonts sub directory
+# must be copied in library/tulip-ogl/bitmaps
 
 MDI_VARIABLES_FILE=$1
 CPP_FILE=$2
