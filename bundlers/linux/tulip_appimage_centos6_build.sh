@@ -50,11 +50,19 @@ if [ "$1" == "NO_CCACHE" ]; then
 else
   CCACHE=ON
 fi
-cmake -DCMAKE_C_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/gcc -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/g++ -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=$USR_LIB/qt5 -DPYTHON_EXECUTABLE=/usr/bin/python3.6 -DTULIP_USE_CCACHE=$CCACHE -DTULIP_BUILD_FOR_APPIMAGE=ON -DTULIP_BUILD_TESTS=ON ..
+if [ "$2" == "RUN_TESTS" ]; then
+  RUN_TESTS=ON
+else
+  RUN_TESTS=OFF
+fi
+
+cmake -DCMAKE_C_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/gcc -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/g++ -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=$USR_LIB/qt5 -DPYTHON_EXECUTABLE=/usr/bin/python3.6 -DTULIP_USE_CCACHE=$CCACHE -DTULIP_BUILD_FOR_APPIMAGE=ON -DTULIP_BUILD_TESTS=$RUN_TESTS ..
 make -j4 install
 
 # run unit tests
-make test
+if [ "$2" == "RUN_TESTS" ]; then
+  make test
+fi
 
 # build a bundle dir suitable for AppImageKit
 sh bundlers/linux/make_appimage_bundle.sh --appdir $PWD
