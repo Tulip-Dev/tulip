@@ -42,7 +42,7 @@ using namespace std;
 
 namespace tlp {
 
-static map<std::string, vector<unsigned int>> iconCodePoint;
+static map<std::string, unsigned int> iconCodePoint;
 static unordered_map<std::string, const char *> iconFile;
 static vector<std::string> iconsNames;
 static map<std::string, FT_Face *> ftFaces;
@@ -93,7 +93,7 @@ static void addIconCodePoint(const string &iconName, unsigned int codePoint) {
       name.resize(iconName.size() - 2);
     else
       iconFound = true;
-    iconCodePoint[name].push_back(codePoint);
+    iconCodePoint[name] = codePoint;
     iconFile[name] = "fa-solid-900";
     iconRegistered = true;
   }
@@ -108,7 +108,7 @@ static void addIconCodePoint(const string &iconName, unsigned int codePoint) {
     string name(iconName);
     if (iconFound)
       name.append("-o");
-    iconCodePoint[name].push_back(codePoint);
+    iconCodePoint[name] = codePoint;
     iconFile[name] = "fa-regular-400";
     iconFound = iconRegistered = true;
   }
@@ -116,7 +116,7 @@ static void addIconCodePoint(const string &iconName, unsigned int codePoint) {
     string name(iconName);
     if (iconFound)
       name.append("-brand");
-    iconCodePoint[name].push_back(codePoint);
+    iconCodePoint[name] = codePoint;
     iconFile[name] = "fa-brands-400";
     iconRegistered = true;
   }
@@ -168,7 +168,7 @@ unsigned int TulipFontAwesome::getIconCodePoint(const std::string &iconName) {
   auto it = iconCodePoint.find(iconName.c_str());
 
   if (it != iconCodePoint.end())
-    return (it->second[0]);
+    return (it->second);
 
   return 0;
 }
@@ -187,8 +187,7 @@ std::string TulipFontAwesome::getIconUtf8String(const std::string &iconName) {
   }
 
   std::string iconString;
-  utf8::utf32to8(iconCodePoint[iconName.c_str()].begin(), iconCodePoint[iconName.c_str()].end(),
-                 back_inserter(iconString));
+  utf8::append(iconCodePoint[iconName.c_str()], back_inserter(iconString));
   return iconString;
 }
 } // namespace tlp
