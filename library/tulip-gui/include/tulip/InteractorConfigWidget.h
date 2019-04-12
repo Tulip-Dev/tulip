@@ -27,11 +27,12 @@ namespace Ui {
 class InteractorConfigWidget;
 }
 
+class QShowEvent;
+
 namespace tlp {
 class Interactor;
 
 class InteractorConfigWidget : public QDialog {
-  Q_OBJECT
 
   Ui::InteractorConfigWidget *_ui;
   Interactor *_interactor;
@@ -42,10 +43,10 @@ public:
   bool setWidgets(Interactor *interactor);
   void clearWidgets();
 
-signals:
+  void showEvent(QShowEvent *) override;
 
-public slots:
 };
 
-#endif // INTERACTORCONFIGWIDGET_H
 }
+
+#endif // INTERACTORCONFIGWIDGET_H

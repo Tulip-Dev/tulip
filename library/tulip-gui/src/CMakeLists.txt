@@ -233,7 +233,6 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/ShapeDialog.h
   ../include/tulip/ViewActionsManager.h
   ../include/tulip/ViewToolTipAndUrlManager.h
-  ../include/tulip/InteractorConfigWidget.h
 )
 
 QTX_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

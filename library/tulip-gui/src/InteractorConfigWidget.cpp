@@ -22,6 +22,7 @@
 
 #include <QScrollArea>
 #include <QLabel>
+#include <QShowEvent>
 
 #include <tulip/TlpQtTools.h>
 #include <tulip/Interactor.h>
@@ -31,6 +32,7 @@ using namespace tlp;
 InteractorConfigWidget::InteractorConfigWidget(QWidget *parent)
     : QDialog(parent), _ui(new Ui::InteractorConfigWidget), _interactor(nullptr) {
   _ui->setupUi(this);
+  resize(500, 600);
 }
 
 InteractorConfigWidget::~InteractorConfigWidget() {
@@ -98,7 +100,7 @@ bool InteractorConfigWidget::setWidgets(Interactor *interactor) {
     hide();
     return false;
   } else {
-    setWindowTitle(tlpStringToQString(interactor->name()));
+    setWindowTitle(tlpStringToQString(interactor->info()));
     // removes widget from the layout to not delete the object and give back parenthood. It is up to
     // the interactor developer to delete its config widget
     if (_interactor != nullptr) {
@@ -133,4 +135,12 @@ bool InteractorConfigWidget::setWidgets(Interactor *interactor) {
     _interactor = interactor;
   }
   return true;
+}
+
+void InteractorConfigWidget::showEvent(QShowEvent *ev) {
+  QDialog::showEvent(ev);
+
+  if (parentWidget())
+    move(parentWidget()->window()->frameGeometry().topLeft() +
+         parentWidget()->window()->rect().center() - rect().center());
 }
