@@ -44,9 +44,8 @@ public:
   void clearWidgets();
 
   void showEvent(QShowEvent *) override;
-
 };
 
-}
+} // namespace tlp
 
 #endif // INTERACTORCONFIGWIDGET_H
