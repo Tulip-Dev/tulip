@@ -66,10 +66,7 @@ print(str)"
   # check the tulip-core wheel
   pushd ./library/tulip-python/bindings/tulip-core/tulip_module/dist
   ${CPYBIN}/pip install $(ls -t | head -1)
-  ${CPYBIN}/python -c "import tulip
-from platform import python_version
-str = 'tulip successfully imported in Python ' + python_version()
-print(str)"
+  ${CPYBIN}/python -c "from tulip import tlp; from platform import python_version; str = 'Tulip ' + tlp.getTulipRelease() + ' successfully imported in Python ' + python_version(); print(str)"
   if [ $? -ne 0 ]
   then
      break
