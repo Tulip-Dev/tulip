@@ -38,14 +38,14 @@ environment:
     - CMAKE_VS_GENERATOR: "Visual Studio 14 2015 Win64"
       MSVC_PLATFORM: "x64"
       MSVC_PLATFORM_TOOLSET: "v140"
-      QT5_DIR: "C:/Qt/5.9/msvc2015_64"
+      QT5_DIR: "C:/Qt/5.12/msvc2015_64"
       PYTHON_EXECUTABLE: "C:/Python37-x64/python.exe"
 
     # 64 bits MSVC complete build
     - CMAKE_VS_GENERATOR: "Visual Studio 14 2015 Win64"
       MSVC_PLATFORM: "x64"
       MSVC_PLATFORM_TOOLSET: "v140"
-      QT5_DIR: "C:/Qt/5.9/msvc2015_64"
+      QT5_DIR: "C:/Qt/5.12/msvc2015_64"
       PYTHON_EXECUTABLE: "C:/Python37-x64/python.exe"
       
     ## 32 bits GCC core build
