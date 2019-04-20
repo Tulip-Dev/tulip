@@ -81,12 +81,12 @@ static const char *paramHelp[] = {
  *
  * <b>HISTORY</b>
  * - 16/06/2002 Version 1.0: Initial Release (David Auber)
- * - 08/04/2019 Version 1.1: Add directed parameter + fix for high-density (François Queyroi)
+ * - 08/04/2019 Version 2.0: Add directed parameter + fix for high-density (François Queyroi)
  */
 class RandomGraph : public ImportModule {
 public:
     PLUGININFORMATION("Random Graph", "Auber", "16/06/2002",
-                      "Imports a new randomly generated graph.", "1.1", "Graph")
+                      "Imports a new randomly generated graph.", "2.0", "Graph")
     RandomGraph(tlp::PluginContext *context) : ImportModule(context) {
         addInParameter<unsigned int>("nodes", paramHelp[0], "500");
         addInParameter<unsigned int>("edges", paramHelp[1], "1000");
@@ -186,3 +186,32 @@ public:
 };
 
 PLUGIN(RandomGraph)
+
+
+/** \addtogroup import */
+
+/// Random Simple Graph - Import of a random graph
+/** This plugin enables to create a random simple (undirected) graph
+ *
+ *  User can specify the number of nodes and the number of edges of the graph.
+ *
+ * <b>HISTORY</b>
+ * - 16/06/2002 Version 1.0: Initial Release (David Auber)
+ * - 20/04/2019 Version 2.0: Call to more general plugin "Random Graph"
+ */
+class RandomSimpleGraph : public ImportModule {
+public:
+  PLUGININFORMATION("Random Simple Graph", "Auber", "16/06/2002",
+                    "Imports a new randomly generated simple graph.", "1.0", "Graph")
+  RandomSimpleGraph(tlp::PluginContext *context) : ImportModule(context) {
+    addInParameter<unsigned int>("nodes", paramHelp[0], "500");
+    addInParameter<unsigned int>("edges", paramHelp[1], "1000");
+  }
+
+  bool importGraph() override {
+    // for backward compatibility
+    return tlp::importGraph("Random Graph", *dataSet, pluginProgress, graph) != nullptr;
+  }
+};
+
+PLUGIN(RandomSimpleGraph)
