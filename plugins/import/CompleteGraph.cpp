@@ -32,7 +32,7 @@ static const char *paramHelp[] = {
 class CompleteGraph : public ImportModule {
 public:
   PLUGININFORMATION("Complete General Graph", "Auber", "16/12/2002",
-                    "Imports a new complete graph.", "1.1", "Graph")
+                    "Imports a new complete graph.", "1.2", "Graph")
   CompleteGraph(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "5");
     addInParameter<bool>("directed", paramHelp[1], "false");
@@ -41,10 +41,14 @@ public:
   bool importGraph() override {
     unsigned int nbNodes = 5;
     bool directed = true;
+    bool undirected = false;
 
     if (dataSet != nullptr) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("directed", directed);
+      if (dataSet->get("undirected", undirected)) {
+        directed = !undirected;
+      }
     }
 
     if (nbNodes == 0) {
