@@ -52,7 +52,7 @@ public:
                     "positive integer n and a probability value in [0,1], define the graph G(n,p) "
                     "to be the undirected graph on n vertices whose edges are chosen as follows: "
                     "For all pairs of vertices v,w there is an edge (v,w) with probability p.",
-                    "1.0", "Graph")
+                    "1.1", "Graph")
   ERRandomGraph(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "50");
     addInParameter<double>("probability", paramHelp[1], "0.5");
