@@ -85,7 +85,7 @@ static const char *paramHelp[] = {
  */
 class RandomGraph : public ImportModule {
 public:
-    PLUGININFORMATION("Random Graph", "Auber", "16/06/2002",
+    PLUGININFORMATION("Random General Graph", "Auber", "16/06/2002",
                       "Imports a new randomly generated graph.", "2.0", "Graph")
     RandomGraph(tlp::PluginContext *context) : ImportModule(context) {
         addInParameter<unsigned int>("nodes", paramHelp[0], "500");
@@ -197,7 +197,7 @@ PLUGIN(RandomGraph)
  *
  * <b>HISTORY</b>
  * - 16/06/2002 Version 1.0: Initial Release (David Auber)
- * - 20/04/2019 Version 2.0: Call to more general plugin "Random Graph"
+ * - 20/04/2019 Version 2.0: Call to more general plugin "Random General Graph"
  */
 class RandomSimpleGraph : public ImportModule {
 public:
@@ -210,7 +210,7 @@ public:
 
   bool importGraph() override {
     // for backward compatibility
-    return tlp::importGraph("Random Graph", *dataSet, pluginProgress, graph) != nullptr;
+    return tlp::importGraph("Random General Graph", *dataSet, pluginProgress, graph) != nullptr;
   }
 };
 
