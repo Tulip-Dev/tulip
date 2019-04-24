@@ -36,11 +36,6 @@ ADD_LIBRARY(RandomGraph-${TulipVersion} SHARED ${RandomGraph_SRCS})
 TARGET_LINK_LIBRARIES(RandomGraph-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-SET(RandomSimpleGraph_SRCS RandomSimpleGraph.cpp)
-ADD_LIBRARY(RandomSimpleGraph-${TulipVersion} SHARED ${RandomSimpleGraph_SRCS})
-TARGET_LINK_LIBRARIES(RandomSimpleGraph-${TulipVersion} ${LibTulipCoreName})
-
-##----------------------------------------------------------------------------------------------------------------------------
 SET(AdjacencyMatrixImport_SRCS AdjacencyMatrixImport.cpp)
 ADD_LIBRARY(AdjacencyMatrixImport-${TulipVersion} SHARED ${AdjacencyMatrixImport_SRCS})
 TARGET_LINK_LIBRARIES(AdjacencyMatrixImport-${TulipVersion} ${LibTulipCoreName})
@@ -108,7 +103,6 @@ TULIP_INSTALL_PLUGIN(DotImport-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(Grid-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(GMLImport-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(RandomGraph-${TulipVersion} ${TulipPluginsInstallDir})
-TULIP_INSTALL_PLUGIN(RandomSimpleGraph-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(AdjacencyMatrixImport-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(CompleteGraph-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(RandomTree-${TulipVersion} ${TulipPluginsInstallDir})
