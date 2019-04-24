@@ -40,15 +40,14 @@ public:
 
   bool importGraph() override {
     unsigned int nbNodes = 5;
-    bool directed = true;
-    bool undirected = false;
+    bool directed = false;
 
     if (dataSet != nullptr) {
       dataSet->get("nodes", nbNodes);
-      dataSet->get("directed", directed);
-      if (dataSet->get("undirected", undirected)) {
-        directed = !undirected;
-      }
+      if (!dataSet->get("directed", directed) &&
+	  // for compatibility with version 1.1
+	  dataSet->get("undirected", directed))
+        directed = !directed;
     }
 
     if (nbNodes == 0) {
