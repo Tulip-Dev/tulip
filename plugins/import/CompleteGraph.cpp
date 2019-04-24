@@ -45,8 +45,8 @@ public:
     if (dataSet != nullptr) {
       dataSet->get("nodes", nbNodes);
       if (!dataSet->get("directed", directed) &&
-	  // for compatibility with version 1.1
-	  dataSet->get("undirected", directed))
+          // for compatibility with version 1.1
+          dataSet->get("undirected", directed))
         directed = !directed;
     }
 
