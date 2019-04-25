@@ -98,12 +98,12 @@ static void addIconCodePoint(const string &iconName, unsigned int codePoint) {
     iconRegistered = true;
   }
   // Warning !!!
-  // because of a bug in QtAwesome which does not allow to manage font style
-  // the fa-regular-400.ttf file embedded in Tulip
-  // gives a different family name (Font Awesome 5 outl)
+  // because of a bug in Qt which does not allow to manage regular/solid style
+  // the fa-regular-400.ttf file embedded in Tulip gives a different family name
   // that the one downloaded from fontawesome.com
   // which have the same family name (Font Awesome 5 Free) that fa-solid-900.ttf
-  // The first occurence of ^@F^@r^@e^@e" must be replaced by ^@o^@u^@t^@l
+  // So to patch fa-regular-400.ttf the occurence of ^@F^@o^@n^@t immediately
+  // following https://fontawesome.com must be replaced by ^@T^@F^@o^@n^@t
   if (codePointExists("fa-regular-400.ttf", codePoint)) {
     string name(iconName);
     if (iconFound)
