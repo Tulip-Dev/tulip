@@ -33,7 +33,10 @@ const char *paramHelp[] = {
 
     // self loop
     "Generate self loops (an edge with source and target on the same node) with the same "
-    "probability"};
+    "probability",
+
+    // directed
+    "Generate a directed graph (arcs u->v and v->u have the same probability)"};
 }
 
 /** \addtogroup import */
@@ -49,11 +52,12 @@ public:
                     "positive integer n and a probability value in [0,1], define the graph G(n,p) "
                     "to be the undirected graph on n vertices whose edges are chosen as follows: "
                     "For all pairs of vertices v,w there is an edge (v,w) with probability p.",
-                    "1.0", "Graph")
+                    "1.1", "Graph")
   ERRandomGraph(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "50");
     addInParameter<double>("probability", paramHelp[1], "0.5");
     addInParameter<bool>("self loop", paramHelp[2], "false");
+    addInParameter<bool>("directed", paramHelp[3], "false");
   }
 
   bool importGraph() override {
@@ -63,11 +67,13 @@ public:
     unsigned int nbNodes = 50;
     double proba = 0.5;
     bool self_loop = false;
+    bool directed = false;
 
     if (dataSet != nullptr) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("probability", proba);
       dataSet->get("self loop", self_loop);
+      dataSet->get("directed", directed);
     }
 
     if (nbNodes == 0) {
@@ -97,7 +103,11 @@ public:
       if (pluginProgress && pluginProgress->progress(i, nbNodes) != TLP_CONTINUE)
         return pluginProgress->state() != TLP_CANCEL;
 
-      for (unsigned int j = 0; j < nbNodes - i + 1; ++j) {
+      unsigned int max_index_j = nbNodes - i + 1;
+      if (directed)
+        max_index_j = nbNodes;
+
+      for (unsigned int j = 0; j < max_index_j; ++j) {
         node v = nodes[j];
 
         if ((u == v) && (!self_loop))

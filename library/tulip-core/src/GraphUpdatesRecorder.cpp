@@ -632,6 +632,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
 
     // remove from list of subgraphs + notify observers
     g->notifyBeforeDelSubGraph(sg);
+    g->setSubGraphToKeep(sg);
     g->removeSubGraph(sg);
 
     if (!undo) {
@@ -683,6 +684,8 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
     // notify its addition
     g->notifyBeforeAddSubGraph(sg);
     // restore sg as subgraph of g
+    if (undo)
+      g->setSubGraphToKeep(sg);
     g->restoreSubGraph(sg);
 
     // and sg subgraphs are no longer subgraphs of g

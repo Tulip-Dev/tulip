@@ -17,6 +17,18 @@
    <string notr="true">#contents { background-color: white; border: 1px solid #C9C9C9; }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
@@ -32,6 +44,12 @@
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QScrollArea" name="scrollAreaDoc">
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background: white</string>
+         </property>
          <property name="widgetResizable">
           <bool>true</bool>
          </property>
@@ -40,8 +58,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>372</width>
-            <height>185</height>
+            <width>384</width>
+            <height>213</height>
            </rect>
           </property>
          </widget>
@@ -64,8 +82,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>372</width>
-            <height>185</height>
+            <width>384</width>
+            <height>213</height>
            </rect>
           </property>
          </widget>

@@ -78,6 +78,10 @@ void GraphAbstract::clear() {
 void GraphAbstract::restoreSubGraph(Graph *sg) {
   subgraphs.push_back(sg);
   sg->setSuperGraph(this);
+  if (sg == subGraphToKeep) {
+    static_cast<GraphImpl *>(getRoot())->getSubGraphId(sg->getId());
+    subGraphToKeep = nullptr;
+  }
 }
 //=========================================================================
 void GraphAbstract::setSubGraphToKeep(Graph *sg) {
@@ -142,12 +146,17 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
       // avoid deletion of toRemove subgraphs
       toRemove->clearSubGraphs();
       delete toRemove;
-    } else
+    } else {
       // toRemove is not deleted,
       // and its subgraphs list is not erased;
-      // beacause it is registered into a GraphUpdatesRecorder
+      // because it is registered into a GraphUpdatesRecorder
       // in order it can be restored on undo or redo
       toRemove->notifyDestroy();
+      // free subgraph id which will be restored in case of undo
+      // see restoreSubGraph
+      static_cast<GraphImpl *>(getRoot())->freeSubGraphId(toRemove->getId());
+      subGraphToKeep = nullptr;
+    }
   }
 }
 //=========================================================================
@@ -156,6 +165,12 @@ void GraphAbstract::removeSubGraph(Graph *toRemove) {
 
   if (it != subgraphs.end()) {
     subgraphs.erase(it);
+  }
+  if (toRemove == subGraphToKeep) {
+    // free subgraph id which will be restored in case of undo
+    // see restoreSubGraph
+    static_cast<GraphImpl *>(getRoot())->freeSubGraphId(toRemove->getId());
+    subGraphToKeep = nullptr;
   }
 }
 //=========================================================================

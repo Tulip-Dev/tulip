@@ -42,7 +42,7 @@ using namespace std;
 
 namespace tlp {
 
-static map<std::string, vector<unsigned int>> iconCodePoint;
+static map<std::string, unsigned int> iconCodePoint;
 static unordered_map<std::string, const char *> iconFile;
 static vector<std::string> iconsNames;
 static map<std::string, FT_Face *> ftFaces;
@@ -93,22 +93,22 @@ static void addIconCodePoint(const string &iconName, unsigned int codePoint) {
       name.resize(iconName.size() - 2);
     else
       iconFound = true;
-    iconCodePoint[name].push_back(codePoint);
+    iconCodePoint[name] = codePoint;
     iconFile[name] = "fa-solid-900";
     iconRegistered = true;
   }
   // Warning !!!
-  // because of a bug in QtAwesome which does not allow to manage font style
-  // the fa-regular-400.ttf file embedded in Tulip
-  // gives a different family name (Font Awesome 5 outl)
+  // because of a bug in Qt which does not allow to manage regular/solid style
+  // the fa-regular-400.ttf file embedded in Tulip gives a different family name
   // that the one downloaded from fontawesome.com
   // which have the same family name (Font Awesome 5 Free) that fa-solid-900.ttf
-  // The first occurence of ^@F^@r^@e^@e" must be replaced by ^@o^@u^@t^@l
+  // So to patch fa-regular-400.ttf the occurence of ^@F^@o^@n^@t immediately
+  // following https://fontawesome.com must be replaced by ^@T^@F^@o^@n^@t
   if (codePointExists("fa-regular-400.ttf", codePoint)) {
     string name(iconName);
     if (iconFound)
       name.append("-o");
-    iconCodePoint[name].push_back(codePoint);
+    iconCodePoint[name] = codePoint;
     iconFile[name] = "fa-regular-400";
     iconFound = iconRegistered = true;
   }
@@ -116,7 +116,7 @@ static void addIconCodePoint(const string &iconName, unsigned int codePoint) {
     string name(iconName);
     if (iconFound)
       name.append("-brand");
-    iconCodePoint[name].push_back(codePoint);
+    iconCodePoint[name] = codePoint;
     iconFile[name] = "fa-brands-400";
     iconRegistered = true;
   }
@@ -168,7 +168,7 @@ unsigned int TulipFontAwesome::getIconCodePoint(const std::string &iconName) {
   auto it = iconCodePoint.find(iconName.c_str());
 
   if (it != iconCodePoint.end())
-    return (it->second[0]);
+    return (it->second);
 
   return 0;
 }
@@ -187,8 +187,7 @@ std::string TulipFontAwesome::getIconUtf8String(const std::string &iconName) {
   }
 
   std::string iconString;
-  utf8::utf32to8(iconCodePoint[iconName.c_str()].begin(), iconCodePoint[iconName.c_str()].end(),
-                 back_inserter(iconString));
+  utf8::append(iconCodePoint[iconName.c_str()], back_inserter(iconString));
   return iconString;
 }
 } // namespace tlp

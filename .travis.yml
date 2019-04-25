@@ -310,8 +310,8 @@ jobs:
     # modern Tulip core build on Mac OS (MacPorts)
     -
       os: osx
-      # use xcode10.1 travis image to get a recent clang compiler
-      osx_image: xcode10.1
+      # use xcode10.2 travis image to get a recent clang compiler
+      osx_image: xcode10.2
       compiler: clang
       cache: ccache
       install:
@@ -438,8 +438,8 @@ jobs:
     # modern Tulip complete build on Mac OS (MacPorts)
     -
       os: osx
-      # use xcode10.1 travis image to get a recent clang compiler and qt5 package
-      osx_image: xcode10.1
+      # use xcode10.2 travis image to get a recent clang compiler and qt5 package
+      osx_image: xcode10.2
       compiler: clang
       cache: ccache
       install:
