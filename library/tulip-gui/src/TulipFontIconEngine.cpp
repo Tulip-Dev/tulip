@@ -57,7 +57,8 @@ QFont &TulipFontIconEngine::init(const std::string &iconName) {
 
 TulipFontIconEngine::TulipFontIconEngine(const std::string &iconName) : font(init(iconName)) {}
 
-TulipFontIconEngine::TulipFontIconEngine(const QString &iconName) : font(init(QStringToTlpString(iconName))) {}
+TulipFontIconEngine::TulipFontIconEngine(const QString &iconName)
+    : font(init(QStringToTlpString(iconName))) {}
 
 void TulipFontIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mode mode,
                                 QIcon::State) {
