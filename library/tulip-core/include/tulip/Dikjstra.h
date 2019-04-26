@@ -22,14 +22,15 @@
 #define DIKJSTRA_TOOL_H
 #include <vector>
 #include <set>
+#include <stack>
+#include <list>
 #include <climits>
 #include <functional>
 #include <tulip/Graph.h>
-#include <tulip/Vector.h>
-#include <tulip/LayoutProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/StaticProperty.h>
 #include <tulip/MutableContainer.h>
+#include <tulip/tuliphash.h>
 
 namespace tlp {
 
@@ -37,13 +38,15 @@ class Dikjstra {
 public:
   //============================================================
   Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
-           NodeStaticProperty<double> &nodeDistance,
+           NodeStaticProperty<double> &nodeDistance, std::stack<node>& qN,MutableContainer<int>& nP,
            std::function<Iterator<edge> *(node)> &getFunc);
   //========================================================
   bool searchPaths(node n, BooleanProperty *result);
   //=========================================================
   bool searchPath(node n, BooleanProperty *result);
   //=============================================================
+  bool ancestors(TLP_HASH_MAP<node, std::list<node> >& result);
+
 private:
   void internalSearchPaths(node n, BooleanProperty *result);
   //=========================================================
@@ -77,6 +80,8 @@ private:
   node src;
   MutableContainer<bool> usedEdges;
   NodeStaticProperty<double> &nodeDistance;
+  std::stack<node>& queueNodes;
+  MutableContainer<int>& numberOfPaths;
 };
 } // namespace tlp
 #endif // DIKJSTRA_H

@@ -756,7 +756,9 @@ bool selectShortestPaths(const Graph *const graph, node src, node tgt, ShortestP
   }
 
   NodeStaticProperty<double> nodeDistance(graph);
-  Dikjstra dikjstra(graph, src, eWeights, nodeDistance, getEdges);
+  stack<node> queueNode;
+  MutableContainer<int> numberOfPaths;
+  Dikjstra dikjstra(graph, src, eWeights, nodeDistance, queueNode, numberOfPaths, getEdges);
 
   if (uint(pathType) < ShortestPathType::AllPaths)
     return dikjstra.searchPath(tgt, result);
