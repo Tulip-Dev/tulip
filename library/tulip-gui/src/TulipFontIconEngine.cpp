@@ -28,41 +28,36 @@
 
 using namespace tlp;
 
-std::unordered_map<std::string, QString> qFontNames;
-void TulipFontIconEngine::init(const std::string &iconName) {
-  codePoint = TulipIconicFont::getIconCodePoint(iconName);
-  auto fontFile = TulipIconicFont::getTTFLocation(iconName);
-  if (qFontNames.find(fontFile) == qFontNames.end()) {
-    // load the font file
-    QFile res(tlpStringToQString(fontFile));
-    if (!res.open(QIODevice::ReadOnly)) {
-      qDebug() << "Error when opening file " << tlpStringToQString(fontFile);
-      return;
-    }
-    QByteArray fontData(res.readAll());
-    res.close();
+std::unordered_map<std::string, QFont> qFonts;
+QFont nullFont;
 
-    // fetch the given font
-    auto fontId = QFontDatabase::addApplicationFontFromData(fontData);
+QFont &TulipFontIconEngine::init(const std::string &iconName) {
+  // first set code point
+  codePoint = TulipIconicFont::getIconCodePoint(iconName);
+  // then get font
+  auto &&fontFile = TulipIconicFont::getTTFLocation(iconName);
+  if (qFonts.find(fontFile) == qFonts.end()) {
+    // load the font file
+    auto fontId = QFontDatabase::addApplicationFont(tlpStringToQString(fontFile));
+    if (fontId == -1) {
+      qDebug() << "Error when loading font file " << tlpStringToQString(fontFile);
+      return nullFont;
+    }
 
     QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
     if (!fontFamilies.empty()) {
-      qFontNames[fontFile] = fontFamilies.at(0);
+      qFonts.emplace(std::make_pair(fontFile, QFont(fontFamilies.at(0))));
     } else {
       qDebug() << "No data found when loading file" << tlpStringToQString(fontFile);
-      return;
+      return nullFont;
     }
   }
-  fontName = qFontNames[fontFile];
+  return qFonts[fontFile];
 }
 
-TulipFontIconEngine::TulipFontIconEngine(const std::string &iconName) {
-  init(iconName);
-}
+TulipFontIconEngine::TulipFontIconEngine(const std::string &iconName) : font(init(iconName)) {}
 
-TulipFontIconEngine::TulipFontIconEngine(const QString &iconName) {
-  init(QStringToTlpString(iconName));
-}
+TulipFontIconEngine::TulipFontIconEngine(const QString &iconName) : font(init(QStringToTlpString(iconName))) {}
 
 void TulipFontIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mode mode,
                                 QIcon::State) {
@@ -77,10 +72,9 @@ void TulipFontIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mod
     color.setRgb(70, 70, 70, 60);
   painter->setPen(color);
 
-  // set the font
-  QFont font(fontName);
   // add some 'padding' around the icon
   font.setPixelSize(qRound(rect.height() * 0.9));
+  // set the font
   painter->setFont(font);
 
   painter->drawText(rect, QString(QChar(static_cast<int>(codePoint))),
