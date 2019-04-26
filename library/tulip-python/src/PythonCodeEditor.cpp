@@ -1346,7 +1346,11 @@ QString PythonCodeEditor::getEditedFunctionName() const {
 
 void PythonCodeEditor::setCursorPosition(int line, int col) {
   QTextCursor cursor = textCursor();
-  cursor.setPosition(document()->findBlockByNumber(line).position() + col);
+  QTextBlock lastBlock = document()->lastBlock();
+  int maxPosition = lastBlock.position() + lastBlock.length() - 1;
+  int position = document()->findBlockByNumber(line).position() + col;
+  position = min(position, maxPosition);
+  cursor.setPosition(position);
   setTextCursor(cursor);
 }
 
