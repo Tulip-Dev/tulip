@@ -22,13 +22,30 @@
 
 using namespace std;
 using namespace tlp;
+namespace {
+  inline Iterator<node> *getItNodes(const Graph *graph, node n, bool directed){
+    if(directed)
+      return graph->getInNodes(n);
+    else
+      return graph->getInOutNodes(n);
+  }
+  inline Iterator<edge> *getItEdges(const Graph *graph, node n, bool directed){
+    if(directed)
+      return graph->getInEdges(n);
+    else
+      return graph->getInOutEdges(n);
+  }
+}
 
 static const char *paramHelp[] = {
     // d
     "Enables to choose a damping factor in ]0,1[.",
 
     // directed
-    "Indicates if the graph should be considered as directed or not."};
+    "Indicates if the graph should be considered as directed or not.",
+
+    // weight
+    "An existing edge weight metric property."};
 
 /*@{*/
 /** \file
@@ -48,6 +65,8 @@ static const char *paramHelp[] = {
  *  by David Auber, LaBRI, University Bordeaux I, France
  *  - 2011 Version 2.0: fix computation for undirected graph
  *  by François Queyroi, LaBRI, University Bordeaux I, France
+ *  - 2019 Version 2.1: add edge weight as parameter
+ *  by François Queyroi, LS2N, University of Nantes, France
  *
  *
  */
@@ -58,20 +77,23 @@ struct PageRank : public DoubleAlgorithm {
                     "Nodes measure used for links analysis.<br/>"
                     "First designed by Larry Page and Sergey Brin, it is a link analysis algorithm "
                     "that assigns a measure to each node of an 'hyperlinked' graph.",
-                    "2.0", "Graph")
+                    "2.1", "Graph")
 
   PageRank(const PluginContext *context) : DoubleAlgorithm(context) {
     addInParameter<double>("d", paramHelp[0], "0.85");
     addInParameter<bool>("directed", paramHelp[1], "true");
+    addInParameter<NumericProperty *>("weight",paramHelp[2],"",false);
   }
 
   bool run() override {
     double d = 0.85;
     bool directed = true;
+    NumericProperty *weight = nullptr;
 
     if (dataSet != nullptr) {
       dataSet->get("d", d);
       dataSet->get("directed", directed);
+      dataSet->get("weight",weight);
     }
 
     if (d <= 0 || d >= 1)
@@ -89,19 +111,25 @@ struct PageRank : public DoubleAlgorithm {
     const double one_minus_d = (1 - d) / nbNodes;
     const unsigned int kMax = uint(15 * log(nbNodes));
 
+    NodeStaticProperty<double> deg(graph);
+    tlp::degree(graph,deg, directed ? DIRECTED : UNDIRECTED, weight, false);
+
     for (unsigned int k = 0; k < kMax + 1; ++k) {
-      if (directed) {
+      if(!weight){
         TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
-          double n_sum = 0;
-          for (auto nin : graph->getInNodes(n))
-            n_sum += pr.getNodeValue(nin) / graph->outdeg(nin);
-          next_pr[i] = one_minus_d + d * n_sum;
+            double n_sum = 0;
+            for (auto nin : getItNodes(graph,n,directed))
+                n_sum += pr.getNodeValue(nin) / deg.getNodeValue(nin);
+            next_pr[i] = one_minus_d + d * n_sum;
         });
       } else {
         TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
           double n_sum = 0;
-          for (auto nin : graph->getInOutNodes(n))
-            n_sum += pr.getNodeValue(nin) / graph->deg(nin);
+          for (auto e : getItEdges(graph,n,directed)){
+            node nin = graph->opposite(e,n);
+            if (deg.getNodeValue(nin) > 0)
+              n_sum += weight->getEdgeDoubleValue(e) * pr.getNodeValue(nin) / deg.getNodeValue(nin);
+          }
           next_pr[i] = one_minus_d + d * n_sum;
         });
       }
