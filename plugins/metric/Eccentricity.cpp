@@ -42,13 +42,17 @@ static const char *paramHelp[] = {
     "connected graph.",
 
     // directed
-    "If true, the graph is considered directed."};
+    "If true, the graph is considered directed.",
+
+    //weight
+    "An existing edge weight metric property."};
 
 EccentricityMetric::EccentricityMetric(const tlp::PluginContext *context)
     : DoubleAlgorithm(context), allPaths(false), norm(true), directed(false) {
   addInParameter<bool>("closeness centrality", paramHelp[0], "false");
   addInParameter<bool>("norm", paramHelp[1], "true");
   addInParameter<bool>("directed", paramHelp[2], "false");
+  addInParameter<NumericProperty *>("weight",paramHelp[3],"",false);
   addOutParameter<double>("graph diameter", "The computed diameter (-1 if not computed)", "-1");
 }
 //====================================================================
@@ -56,9 +60,9 @@ EccentricityMetric::~EccentricityMetric() {}
 //====================================================================
 double EccentricityMetric::compute(unsigned int nPos) {
 
-  NodeStaticProperty<unsigned int> distance(graph);
+  NodeStaticProperty<double> distance(graph);
   distance.setAll(0);
-  double val = tlp::maxDistance(graph, nPos, distance, directed ? DIRECTED : UNDIRECTED);
+  double val = tlp::maxDistance(graph, nPos, distance, weight, directed ? DIRECTED : UNDIRECTED);
 
   if (!allPaths)
     return val;
@@ -93,11 +97,19 @@ bool EccentricityMetric::run() {
   allPaths = false;
   norm = true;
   directed = false;
+  weight = nullptr;
 
   if (dataSet != nullptr) {
     dataSet->get("closeness centrality", allPaths);
     dataSet->get("norm", norm);
     dataSet->get("directed", directed);
+    dataSet->get("weight",weight);
+  }
+
+  // Edges weights should be positive
+  if (weight && weight->getEdgeDoubleMin() <= 0){
+      pluginProgress->setError("Edges weights should be positive.");
+      return false;
   }
 
   NodeStaticProperty<double> res(graph);

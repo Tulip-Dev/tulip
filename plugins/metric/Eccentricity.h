@@ -20,6 +20,7 @@
 #define _ECCENTRICITYMETRIC_H
 
 #include <tulip/DoubleProperty.h>
+#include <tulip/NumericProperty.h>
 
 /** \addtogroup metric */
 
@@ -44,8 +45,13 @@
  * (see "http://en.wikipedia.org/wiki/Closeness_(graph_theory)#Closeness_centrality" for more
  * details).
  *
- *  \note The complexity of the algorithm is O(|V| * |E|) time and O(1) space.
+ *  \note The complexity of the algorithm is O(|V| * |E|) time and O(1) space
+ *        for unweighted graphs and O(|V| * |E| \log |V|) time for weighted graphs.
  *
+ *   <b>HISTORY</b>
+ *
+ *   - 18/06/2004 Version 2.0: Normalisation and Closeness Centrality
+ *   - 27/04/2019 Version 2.1: Weighted version
  */
 class EccentricityMetric : public tlp::DoubleAlgorithm {
 public:
@@ -58,7 +64,7 @@ public:
                     "<b>Closeness Centrality</b> is the mean of shortest-paths lengths from a node "
                     "to others. The normalized values are computed using the reciprocal of the sum "
                     "of these distances.",
-                    "2.0", "Graph")
+                    "2.1", "Graph")
   EccentricityMetric(const tlp::PluginContext *context);
   ~EccentricityMetric() override;
   bool run() override;
@@ -68,6 +74,7 @@ private:
   bool allPaths;
   bool norm;
   bool directed;
+  tlp::NumericProperty *weight;
 };
 
 #endif

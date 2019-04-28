@@ -64,11 +64,7 @@ Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<
     dikjstraTable.erase(it);
     queueNodes.push(u.n);
 
-    edge e;
-    Iterator<edge> *iter = getEdges(u.n);
-
-    while (iter->hasNext()) {
-      e = iter->next();
+    for (auto e :  getEdges(u.n)){
       node v = graph->opposite(e, u.n);
       auto dEle = mapDik[v];
       double eWeight = weights.getEdgeValue(e);
@@ -91,7 +87,6 @@ Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<
         numberOfPaths.set(v.id,numberOfPaths.get(u.n.id));
       }
     }
-    delete iter;
   }
 
   usedEdges.setAll(false);
@@ -189,7 +184,6 @@ bool Dikjstra::ancestors(TLP_HASH_MAP<node, std::list<node> > &result){
         node tgt = graph->opposite(e,n);
         if (usedEdges.get(e.id) && nodeDistance[tgt] < nodeDistance[n] ){
           result[n].push_back(tgt);
-          //TODO: handle the case where weights[e] == 0
         }
       }
     }
