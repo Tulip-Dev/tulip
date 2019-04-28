@@ -70,16 +70,20 @@ double EccentricityMetric::compute(unsigned int nPos) {
   double nbAcc = 0.;
   val = 0.;
   unsigned int nbNodes = graph->numberOfNodes();
+  double max_d_acc = nbNodes + 0.;
+  if(weight)
+    max_d_acc = nbNodes * weight->getEdgeDoubleMax();
 
   for (unsigned int i = 0; i < nbNodes; ++i) {
-    unsigned int d = distance[i];
+    double d = distance[i];
 
-    if (d < nbNodes) {
+    if (d < max_d_acc) {
       nbAcc += 1.;
 
       if (i != nPos)
         val += d;
     }
+
   }
 
   if (nbAcc < 2.0)
