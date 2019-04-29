@@ -48,9 +48,7 @@
 using namespace std;
 using namespace tlp;
 
-static const string defaultIcon = "fa-question-circle";
-
-class FontIcon {
+struct FontIcon {
 
   string fontFile;
   unsigned int iconCodePoint;
@@ -66,8 +64,10 @@ public:
       : iconCodePoint(0), renderingDataBuffer(0), indicesBuffer(0), nbVertices(0), nbIndices(0),
         nbOutlineIndices(0) {}
 
-  FontIcon(const std::string &fontFile, unsigned int iconCodePoint)
-      : fontFile(fontFile), iconCodePoint(iconCodePoint), renderingDataBuffer(0), indicesBuffer(0),
+  FontIcon(const std::string &iconName)
+      : fontFile(TulipIconicFont::getTTFLocation(iconName)),
+	iconCodePoint(TulipIconicFont::getIconCodePoint(iconName)),
+	renderingDataBuffer(0), indicesBuffer(0),
         nbVertices(0), nbIndices(0), nbOutlineIndices(0) {}
 
   ~FontIcon() {
@@ -117,7 +117,6 @@ public:
     return boundingBox;
   }
 
-private:
   void tesselateIcon() {
 
     const FT_Library *library = FTLibrary::Instance().GetLibrary();
@@ -255,20 +254,34 @@ private:
   }
 };
 
+static FontIcon defaultFontIcon;
 static map<string, FontIcon> fontIcons;
 
-static void drawIcon(const string &iconName, const string &fontFile,
-                     const unsigned int iconCodePoint, const Color &color,
-                     const Color &outlineColor, const float outlineSize, const string &texture) {
-  if (fontIcons.find(iconName) == fontIcons.end()) {
-    fontIcons[iconName] = FontIcon(fontFile, iconCodePoint);
+static FontIcon &getFontIcon(const string &iconName) {
+  if (iconName.empty() || !TulipIconicFont::isIconSupported(iconName)) {
+    // initialization of defaultFontIcon is delayed
+    if (defaultFontIcon.iconCodePoint == 0) {
+      static const std::string defaultIconName = "fa-question-circle";
+      defaultFontIcon.iconCodePoint =
+	TulipIconicFont::getIconCodePoint(defaultIconName);
+      defaultFontIcon.fontFile =
+	TulipIconicFont::getTTFLocation(defaultIconName);
+    }
+    return defaultFontIcon;
   }
+  auto it = fontIcons.find(iconName);
+  if (it == fontIcons.end())
+    it = fontIcons.emplace(std::make_pair(iconName, FontIcon(iconName))).first;
+  return it->second;
+}
 
+static void drawIcon(FontIcon& fontIcon, const Color &color,
+                     const Color &outlineColor, const float outlineSize, const string &texture) {
   if (!texture.empty()) {
     GlTextureManager::getInst().activateTexture(texture);
   }
 
-  fontIcons[iconName].render(color, outlineColor, outlineSize);
+  fontIcon.render(color, outlineColor, outlineSize);
 
   GlTextureManager::getInst().desactivateTexture();
 }
@@ -283,38 +296,25 @@ public:
   ~FontIconGlyph() override {}
 
   void draw(node n, float) override {
-
-    string iconName = getNodeIcon(n);
-
     const tlp::Color &nodeColor = glGraphInputData->getElementColor()->getNodeValue(n);
     const tlp::Color &nodeBorderColor = glGraphInputData->getElementBorderColor()->getNodeValue(n);
     float nodeBorderWidth = glGraphInputData->getElementBorderWidth()->getNodeValue(n);
     const string &nodeTexture = glGraphInputData->parameters->getTexturePath() +
                                 glGraphInputData->getElementTexture()->getNodeValue(n);
 
-    drawIcon(iconName, TulipIconicFont::getTTFLocation(iconName),
-             TulipIconicFont::getIconCodePoint(iconName), nodeColor, nodeBorderColor,
-             nodeBorderWidth, nodeTexture);
+    drawIcon(getNodeFontIcon(n), nodeColor, nodeBorderColor,
+	     nodeBorderWidth, nodeTexture);
   }
 
   void getIncludeBoundingBox(BoundingBox &boundingBox, node n) override {
-    string iconName = getNodeIcon(n);
-
-    if (fontIcons.find(iconName) != fontIcons.end()) {
-      boundingBox = fontIcons[iconName].getBoundingBox();
-    }
+    boundingBox = getNodeFontIcon(n).getBoundingBox();
   }
 
 private:
-  string getNodeIcon(node n) {
+  FontIcon &getNodeFontIcon(node n) {
     StringProperty *viewIcon = glGraphInputData->getElementIcon();
-    string iconName = viewIcon->getNodeValue(n);
-
-    if (iconName.empty() || !TulipIconicFont::isIconSupported(iconName)) {
-      iconName = defaultIcon;
-    }
-
-    return iconName;
+    const string &iconName = viewIcon->getNodeValue(n);
+    return getFontIcon(iconName);
   }
 };
 
@@ -330,11 +330,7 @@ public:
 
   void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float) override {
     StringProperty *viewIcon = edgeExtGlGraphInputData->getElementIcon();
-    string iconName = viewIcon->getEdgeValue(e);
-
-    if (iconName.empty() || !TulipIconicFont::isIconSupported(iconName)) {
-      iconName = defaultIcon;
-    }
+    const string &iconName = viewIcon->getEdgeValue(e);
 
     string edgeTexture = edgeExtGlGraphInputData->parameters->getTexturePath() +
                          edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
@@ -342,9 +338,8 @@ public:
 
     glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
 
-    drawIcon(iconName, TulipIconicFont::getTTFLocation(iconName),
-             TulipIconicFont::getIconCodePoint(iconName), glyphColor, borderColor, borderWidth,
-             edgeTexture);
+    drawIcon(getFontIcon(iconName), glyphColor,
+	     borderColor, borderWidth, edgeTexture);
   }
 };
 
