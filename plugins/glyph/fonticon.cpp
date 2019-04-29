@@ -66,9 +66,8 @@ public:
 
   FontIcon(const std::string &iconName)
       : fontFile(TulipIconicFont::getTTFLocation(iconName)),
-	iconCodePoint(TulipIconicFont::getIconCodePoint(iconName)),
-	renderingDataBuffer(0), indicesBuffer(0),
-        nbVertices(0), nbIndices(0), nbOutlineIndices(0) {}
+        iconCodePoint(TulipIconicFont::getIconCodePoint(iconName)), renderingDataBuffer(0),
+        indicesBuffer(0), nbVertices(0), nbIndices(0), nbOutlineIndices(0) {}
 
   ~FontIcon() {
     if (renderingDataBuffer != 0) {
@@ -262,10 +261,8 @@ static FontIcon &getFontIcon(const string &iconName) {
     // initialization of defaultFontIcon is delayed
     if (defaultFontIcon.iconCodePoint == 0) {
       static const std::string defaultIconName = "fa-question-circle";
-      defaultFontIcon.iconCodePoint =
-	TulipIconicFont::getIconCodePoint(defaultIconName);
-      defaultFontIcon.fontFile =
-	TulipIconicFont::getTTFLocation(defaultIconName);
+      defaultFontIcon.iconCodePoint = TulipIconicFont::getIconCodePoint(defaultIconName);
+      defaultFontIcon.fontFile = TulipIconicFont::getTTFLocation(defaultIconName);
     }
     return defaultFontIcon;
   }
@@ -275,8 +272,8 @@ static FontIcon &getFontIcon(const string &iconName) {
   return it->second;
 }
 
-static void drawIcon(FontIcon& fontIcon, const Color &color,
-                     const Color &outlineColor, const float outlineSize, const string &texture) {
+static void drawIcon(FontIcon &fontIcon, const Color &color, const Color &outlineColor,
+                     const float outlineSize, const string &texture) {
   if (!texture.empty()) {
     GlTextureManager::getInst().activateTexture(texture);
   }
@@ -302,8 +299,7 @@ public:
     const string &nodeTexture = glGraphInputData->parameters->getTexturePath() +
                                 glGraphInputData->getElementTexture()->getNodeValue(n);
 
-    drawIcon(getNodeFontIcon(n), nodeColor, nodeBorderColor,
-	     nodeBorderWidth, nodeTexture);
+    drawIcon(getNodeFontIcon(n), nodeColor, nodeBorderColor, nodeBorderWidth, nodeTexture);
   }
 
   void getIncludeBoundingBox(BoundingBox &boundingBox, node n) override {
@@ -338,8 +334,7 @@ public:
 
     glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
 
-    drawIcon(getFontIcon(iconName), glyphColor,
-	     borderColor, borderWidth, edgeTexture);
+    drawIcon(getFontIcon(iconName), glyphColor, borderColor, borderWidth, edgeTexture);
   }
 };
 
