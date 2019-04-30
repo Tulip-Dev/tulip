@@ -362,7 +362,7 @@ void DoublePropertyTest::testStaticDoublePropertyCopyFrom() {
     CPPUNIT_ASSERT(nStaticProp[n] == 1.1);
   nStaticProp.copyFromNumericProperty(prop);
   for (auto n : graph->nodes())
-  CPPUNIT_ASSERT(nStaticProp[n] == prop->getNodeValue(n));
+    CPPUNIT_ASSERT(nStaticProp[n] == prop->getNodeValue(n));
   for (auto e : graph->edges())
     prop->setEdgeValue(e, tlp::randomDouble());
   EdgeStaticProperty<double> eStaticProp(graph);
@@ -374,5 +374,5 @@ void DoublePropertyTest::testStaticDoublePropertyCopyFrom() {
     CPPUNIT_ASSERT(eStaticProp[e] == 1.1);
   eStaticProp.copyFromNumericProperty(prop);
   for (auto e : graph->edges())
-  CPPUNIT_ASSERT(eStaticProp[e] == prop->getEdgeValue(e));
+    CPPUNIT_ASSERT(eStaticProp[e] == prop->getEdgeValue(e));
 }
