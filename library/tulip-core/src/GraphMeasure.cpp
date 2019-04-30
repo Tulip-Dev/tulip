@@ -133,7 +133,7 @@ double tlp::maxDistance(const Graph *graph, const unsigned int nPos,
 
     std::stack<node> queueNode;
     MutableContainer<int> nb_paths;
-    Dikjstra dikjstra(graph, graph->nodes()[nPos], eWeights, distance, queueNode, nb_paths, getEdges);
+    Dikjstra dikjstra(graph, graph->nodes()[nPos], eWeights, distance, getEdges, &queueNode, &nb_paths);
     // compute max distance from graph->nodes()[nPos]
     // by taking first reachable node in the queue
     while(!queueNode.empty()){

@@ -27,8 +27,9 @@ using namespace std;
 
 //============================================================
 Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
-                   NodeStaticProperty<double> &nd, std::stack<node> &qN, MutableContainer<int>& nP,
-                   std::function<Iterator<edge> *(node)> &getEdges)
+                   NodeStaticProperty<double> &nd,
+                   std::function<Iterator<edge> *(node)> &getEdges,
+                   std::stack<node> *qN, MutableContainer<int> *nP)
     : nodeDistance(nd),queueNodes(qN),numberOfPaths(nP) {
   assert(src.isValid());
   this->graph = graph;
@@ -37,10 +38,13 @@ Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<
   set<DikjstraElement *, LessDikjstraElement> dikjstraTable;
   NodeStaticProperty<DikjstraElement *> mapDik(graph);
   mapDik.setAll(nullptr);
-  while(!queueNodes.empty())
-      queueNodes.pop();
-  numberOfPaths.setAll(0);
-  numberOfPaths.set(this->src.id,1);
+  if(queueNodes)
+    while(!queueNodes->empty())
+      queueNodes->pop();
+  if(numberOfPaths){
+    numberOfPaths->setAll(0);
+    numberOfPaths->set(this->src.id,1);
+  }
 
   unsigned int i = 0;
   for (auto n : graph->nodes()) {
@@ -62,7 +66,8 @@ Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<
     set<DikjstraElement *, LessDikjstraElement>::iterator it = dikjstraTable.begin();
     DikjstraElement &u = *(*it);
     dikjstraTable.erase(it);
-    queueNodes.push(u.n);
+    if(queueNodes)
+      queueNodes->push(u.n);
 
     for (auto e :  getEdges(u.n)){
       node v = graph->opposite(e, u.n);
@@ -72,7 +77,8 @@ Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<
 
       if (fabs((u.dist + eWeight) - dEle->dist) < 1E-9){ // path of the same length
         dEle->usedEdge.push_back(e);
-        numberOfPaths.set(v.id,numberOfPaths.get(v.id) + numberOfPaths.get(u.n.id));
+        if(numberOfPaths)
+          numberOfPaths->set(v.id,numberOfPaths->get(v.id) + numberOfPaths->get(u.n.id));
       }
       else if ((u.dist + eWeight) < dEle->dist) {
         // we find a node closer with that path
@@ -84,7 +90,8 @@ Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<
         dEle->previous = u.n;
         dEle->usedEdge.push_back(e);
         dikjstraTable.insert(dEle);
-        numberOfPaths.set(v.id,numberOfPaths.get(u.n.id));
+        if(numberOfPaths)
+          numberOfPaths->set(v.id,numberOfPaths->get(u.n.id));
       }
     }
   }
@@ -175,7 +182,7 @@ bool Dikjstra::searchPaths(node n, BooleanProperty *result) {
 }
 
 //========================================
-bool Dikjstra::ancestors(TLP_HASH_MAP<node, std::list<node> > &result){
+bool Dikjstra::ancestors(unordered_map<node, std::list<node> > &result){
   result.clear();
   result[src].push_back(src);
   for (auto n : graph->getNodes()){

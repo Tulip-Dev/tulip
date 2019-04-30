@@ -19,7 +19,7 @@
 
 #include <stack>
 #include <queue>
-#include <tulip/tuliphash.h>
+#include <unordered_map>
 #include <tulip/DoubleProperty.h>
 #include <tulip/StaticProperty.h>
 #include <tulip/MutableContainer.h>
@@ -90,7 +90,7 @@ public:
     addInParameter<bool>("directed", paramHelp[0], "false");
     addInParameter<bool>("norm", paramHelp[1], "false", false);
     addInParameter<NumericProperty *>("weight",paramHelp[2],"",false);
-    addOutParameter<double>("Average Path Length",paramHelp[3],"-1");
+    addOutParameter<double>("average path length",paramHelp[3],"-1");
   }
   bool run() override {
     result->setAllNodeValue(0.0);
@@ -127,7 +127,7 @@ public:
         break;
 
       stack<node> S;
-      TLP_HASH_MAP<node, list<node>> P;
+      unordered_map<node, list<node>> P;
       MutableContainer<int> sigma;
 
       if(weight)
@@ -192,13 +192,13 @@ public:
       }
     }
     avg_path_length /= (nbNodes * (nbNodes - 1.));
-    dataSet->set("Average Path Length",avg_path_length);
+    dataSet->set("average path length",avg_path_length);
 
     return pluginProgress->state() != TLP_CANCEL;
   }
 
 private:
-  void computeBFS(node s,bool directed,stack<node>& S,TLP_HASH_MAP<node, list<node>>& P,MutableContainer<int>& sigma){
+  void computeBFS(node s,bool directed,stack<node>& S,unordered_map<node, list<node>>& P,MutableContainer<int>& sigma){
       sigma.setAll(0);
       sigma.set(s.id, 1);
       MutableContainer<int> d;
@@ -230,7 +230,7 @@ private:
       }
   }
 
-  void computeDikjstra(node s,bool directed, NumericProperty* weight, stack<node>& S,TLP_HASH_MAP<node, list<node>>& P,MutableContainer<int>& sigma){
+  void computeDikjstra(node s,bool directed, NumericProperty* weight, stack<node>& S,unordered_map<node, list<node>>& P,MutableContainer<int>& sigma){
       std::function<Iterator<edge> *(node)> getEdges = [&](node un) {
           return graph->getInOutEdges(un);
         };
@@ -240,16 +240,13 @@ private:
             };
       }
       EdgeStaticProperty<double> eWeights(graph);
-      auto fn = [&](edge e, unsigned int i) {
-        double val(weight->getEdgeDoubleValue(e));
-        eWeights[i] = val;
-      };
-      TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, fn);
+      for(auto e : graph->getEdges()){
+          eWeights[e] = weight->getEdgeDoubleValue(e);
+      }
       NodeStaticProperty<double> nodeDistance(graph);
-      Dikjstra dikjstra(graph, s, eWeights, nodeDistance, S, sigma, getEdges);
+      Dikjstra dikjstra(graph, s, eWeights, nodeDistance, getEdges, &S, &sigma);
       dikjstra.ancestors(P);
   }
-
 };
 
 PLUGIN(BetweennessCentrality)
