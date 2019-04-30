@@ -127,9 +127,7 @@ double tlp::maxDistance(const Graph *graph, const unsigned int nPos,
         return getItEdges(graph,un,direction);
     };
     EdgeStaticProperty<double> eWeights(graph);
-    for(auto e : graph->getEdges()){
-        eWeights[e] = weights->getEdgeDoubleValue(e);
-    }
+    eWeights.copyFromNumericProperty(weights);
 
     std::stack<node> queueNode;
     MutableContainer<int> nb_paths;

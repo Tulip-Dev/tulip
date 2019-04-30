@@ -240,9 +240,7 @@ private:
             };
       }
       EdgeStaticProperty<double> eWeights(graph);
-      for(auto e : graph->getEdges()){
-          eWeights[e] = weight->getEdgeDoubleValue(e);
-      }
+      eWeights.copyFromNumericProperty(weight);
       NodeStaticProperty<double> nodeDistance(graph);
       Dikjstra dikjstra(graph, s, eWeights, nodeDistance, getEdges, &S, &sigma);
       dikjstra.ancestors(P);
