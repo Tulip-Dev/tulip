@@ -23,6 +23,7 @@
 #include "DoublePropertyTest.h"
 
 #include <tulip/TlpTools.h>
+#include <tulip/StaticProperty.h>
 
 using namespace tlp;
 using namespace std;
@@ -348,4 +349,30 @@ void DoublePropertyTest::testDoublePropertySetDefaultValue() {
   graph->unpop();
   // node value should be v2
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(newNode), v2, 1e-6);
+}
+
+void DoublePropertyTest::testStaticDoublePropertyCopyFrom() {
+  auto prop = graph->getLocalProperty<DoubleProperty>(doublePropertyName);
+  NodeStaticProperty<double> nStaticProp(graph);
+  nStaticProp.copyFromProperty(prop);
+  for (auto n : graph->nodes())
+    CPPUNIT_ASSERT(nStaticProp[n] == prop->getNodeValue(n));
+  nStaticProp.setAll(1.1);
+  for (auto n : graph->nodes())
+    CPPUNIT_ASSERT(nStaticProp[n] == 1.1);
+  nStaticProp.copyFromNumericProperty(prop);
+  for (auto n : graph->nodes())
+  CPPUNIT_ASSERT(nStaticProp[n] == prop->getNodeValue(n));
+  for (auto e : graph->edges())
+    prop->setEdgeValue(e, tlp::randomDouble());
+  EdgeStaticProperty<double> eStaticProp(graph);
+  eStaticProp.copyFromProperty(prop);
+  for (auto e : graph->edges())
+    CPPUNIT_ASSERT(eStaticProp[e] == prop->getEdgeValue(e));
+  eStaticProp.setAll(1.1);
+  for (auto e : graph->edges())
+    CPPUNIT_ASSERT(eStaticProp[e] == 1.1);
+  eStaticProp.copyFromNumericProperty(prop);
+  for (auto e : graph->edges())
+  CPPUNIT_ASSERT(eStaticProp[e] == prop->getEdgeValue(e));
 }

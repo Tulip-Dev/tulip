@@ -21,6 +21,7 @@
 
 #include <tulip/Graph.h>
 #include <tulip/GraphParallelTools.h>
+#include <tulip/NumericProperty.h>
 
 namespace tlp {
 template <typename TYPE>
@@ -81,6 +82,12 @@ public:
   void copyFromProperty(PROP_PTR prop) {
     TLP_PARALLEL_MAP_NODES_AND_INDICES(
         graph, [&](const node n, unsigned int i) { (*this)[i] = prop->getNodeValue(n); });
+  }
+
+  // get values from a NumericProperty
+  void copyFromNumericProperty(const NumericProperty *prop) {
+    TLP_PARALLEL_MAP_NODES_AND_INDICES(
+        graph, [&](const node n, unsigned int i) { (*this)[i] = prop->getNodeDoubleValue(n); });
   }
 
   // copy values into a typed typed instance of PropertyInterface
@@ -230,6 +237,12 @@ public:
   void copyFromProperty(PROP_PTR prop) {
     TLP_PARALLEL_MAP_EDGES_AND_INDICES(
         graph, [&](const edge e, unsigned int i) { (*this)[i] = prop->getEdgeValue(e); });
+  }
+
+  // get values from a NumericProperty
+  void copyFromNumericProperty(const NumericProperty *prop) {
+    TLP_PARALLEL_MAP_EDGES_AND_INDICES(
+        graph, [&](const edge e, unsigned int i) { (*this)[i] = prop->getEdgeDoubleValue(e); });
   }
 
   // copy values into a typed instance of PropertyInterface
