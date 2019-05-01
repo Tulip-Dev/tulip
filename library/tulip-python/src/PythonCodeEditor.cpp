@@ -114,8 +114,8 @@ void AutoCompletionList::keyPressEvent(QKeyEvent *e) {
     }
   } else if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return) {
     e->accept();
-    insertSelectedItem();
     close();
+    insertSelectedItem();
   } else {
     QCoreApplication::sendEvent(_codeEditor, e);
   }
@@ -204,6 +204,7 @@ void AutoCompletionList::insertSelectedItem() {
 }
 
 void AutoCompletionList::showEvent(QShowEvent *event) {
+  setFocusProxy(_codeEditor);
   QListWidget::showEvent(event);
   grabKeyboard();
   _activated = true;
@@ -214,13 +215,11 @@ void AutoCompletionList::hideEvent(QHideEvent *event) {
   releaseKeyboard();
   _codeEditor->setFocus();
   _activated = false;
-  _codeEditor = nullptr;
 }
 
 void AutoCompletionList::setCodeEditor(PythonCodeEditor *parent) {
   _codeEditor = parent;
   parent->installEventFilter(this);
-  setFocusProxy(parent);
 }
 
 bool AutoCompletionList::eventFilter(QObject *obj, QEvent *event) {
@@ -1347,7 +1346,11 @@ QString PythonCodeEditor::getEditedFunctionName() const {
 
 void PythonCodeEditor::setCursorPosition(int line, int col) {
   QTextCursor cursor = textCursor();
-  cursor.setPosition(document()->findBlockByNumber(line).position() + col);
+  QTextBlock lastBlock = document()->lastBlock();
+  int maxPosition = lastBlock.position() + lastBlock.length() - 1;
+  int position = document()->findBlockByNumber(line).position() + col;
+  position = min(position, maxPosition);
+  cursor.setPosition(position);
   setTextCursor(cursor);
 }
 

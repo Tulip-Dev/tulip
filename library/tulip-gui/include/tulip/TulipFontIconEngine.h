@@ -23,20 +23,20 @@
 
 #include <QIconEngine>
 #include <QPixmap>
-#include <QString>
+#include <QFont>
 #include <tulip/tulipconf.h>
 
 class TLP_QT_SCOPE TulipFontIconEngine : public QIconEngine {
   unsigned int codePoint;
-  QString fontName;
+  QFont &font;
 
-  void init(const std::string &iconName);
+  QFont &init(const std::string &iconName);
 
 public:
   TulipFontIconEngine(const std::string &iconName);
   TulipFontIconEngine(const QString &iconName);
   TulipFontIconEngine(const TulipFontIconEngine &engine)
-      : QIconEngine(), codePoint(engine.codePoint), fontName(engine.fontName) {}
+      : QIconEngine(), codePoint(engine.codePoint), font(engine.font) {}
 
   TulipFontIconEngine *clone() const override {
     return new TulipFontIconEngine(*this);
