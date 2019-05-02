@@ -23,19 +23,19 @@
 using namespace std;
 using namespace tlp;
 namespace {
-  inline Iterator<node> *getItNodes(const Graph *graph, node n, bool directed){
-    if(directed)
-      return graph->getInNodes(n);
-    else
-      return graph->getInOutNodes(n);
-  }
-  inline Iterator<edge> *getItEdges(const Graph *graph, node n, bool directed){
-    if(directed)
-      return graph->getInEdges(n);
-    else
-      return graph->getInOutEdges(n);
-  }
+inline Iterator<node> *getItNodes(const Graph *graph, node n, bool directed) {
+  if (directed)
+    return graph->getInNodes(n);
+  else
+    return graph->getInOutNodes(n);
 }
+inline Iterator<edge> *getItEdges(const Graph *graph, node n, bool directed) {
+  if (directed)
+    return graph->getInEdges(n);
+  else
+    return graph->getInOutEdges(n);
+}
+} // namespace
 
 static const char *paramHelp[] = {
     // d
@@ -82,7 +82,7 @@ struct PageRank : public DoubleAlgorithm {
   PageRank(const PluginContext *context) : DoubleAlgorithm(context) {
     addInParameter<double>("d", paramHelp[0], "0.85");
     addInParameter<bool>("directed", paramHelp[1], "true");
-    addInParameter<NumericProperty *>("weight",paramHelp[2],"",false);
+    addInParameter<NumericProperty *>("weight", paramHelp[2], "", false);
   }
 
   bool run() override {
@@ -93,7 +93,7 @@ struct PageRank : public DoubleAlgorithm {
     if (dataSet != nullptr) {
       dataSet->get("d", d);
       dataSet->get("directed", directed);
-      dataSet->get("weight",weight);
+      dataSet->get("weight", weight);
     }
 
     if (d <= 0 || d >= 1)
@@ -112,21 +112,21 @@ struct PageRank : public DoubleAlgorithm {
     const unsigned int kMax = uint(15 * log(nbNodes));
 
     NodeStaticProperty<double> deg(graph);
-    tlp::degree(graph,deg, directed ? DIRECTED : UNDIRECTED, weight, false);
+    tlp::degree(graph, deg, directed ? DIRECTED : UNDIRECTED, weight, false);
 
     for (unsigned int k = 0; k < kMax + 1; ++k) {
-      if(!weight){
+      if (!weight) {
         TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
-            double n_sum = 0;
-            for (auto nin : getItNodes(graph,n,directed))
-                n_sum += pr.getNodeValue(nin) / deg.getNodeValue(nin);
-            next_pr[i] = one_minus_d + d * n_sum;
+          double n_sum = 0;
+          for (auto nin : getItNodes(graph, n, directed))
+            n_sum += pr.getNodeValue(nin) / deg.getNodeValue(nin);
+          next_pr[i] = one_minus_d + d * n_sum;
         });
       } else {
         TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
           double n_sum = 0;
-          for (auto e : getItEdges(graph,n,directed)){
-            node nin = graph->opposite(e,n);
+          for (auto e : getItEdges(graph, n, directed)) {
+            node nin = graph->opposite(e, n);
             if (deg.getNodeValue(nin) > 0)
               n_sum += weight->getEdgeDoubleValue(e) * pr.getNodeValue(nin) / deg.getNodeValue(nin);
           }

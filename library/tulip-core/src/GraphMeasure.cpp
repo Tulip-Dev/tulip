@@ -111,36 +111,36 @@ unsigned int tlp::maxDistance(const Graph *graph, unsigned int nPos,
 //================================================================
 double tlp::maxDistance(const Graph *graph, const unsigned int nPos,
                         tlp::NodeStaticProperty<double> &distance,
-                        const NumericProperty * const weights,
-                        EDGE_TYPE direction) {
-    if(!weights){
-      NodeStaticProperty<unsigned int> dist_int(graph);
-      dist_int.setAll(0);
-      unsigned int res = maxDistance(graph,nPos,dist_int,direction);
-      for(auto n : graph->getNodes()){
-          distance[n] = double(dist_int[n]);
-      }
-      return double(res);
+                        const NumericProperty *const weights, EDGE_TYPE direction) {
+  if (!weights) {
+    NodeStaticProperty<unsigned int> dist_int(graph);
+    dist_int.setAll(0);
+    unsigned int res = maxDistance(graph, nPos, dist_int, direction);
+    for (auto n : graph->getNodes()) {
+      distance[n] = double(dist_int[n]);
     }
+    return double(res);
+  }
 
-    std::function<Iterator<edge> *(node)> getEdges = [&](node un) {
-        return getItEdges(graph,un,direction);
-    };
-    EdgeStaticProperty<double> eWeights(graph);
-    eWeights.copyFromNumericProperty(weights);
+  std::function<Iterator<edge> *(node)> getEdges = [&](node un) {
+    return getItEdges(graph, un, direction);
+  };
+  EdgeStaticProperty<double> eWeights(graph);
+  eWeights.copyFromNumericProperty(weights);
 
-    std::stack<node> queueNode;
-    MutableContainer<int> nb_paths;
-    Dikjstra dikjstra(graph, graph->nodes()[nPos], eWeights, distance, getEdges, &queueNode, &nb_paths);
-    // compute max distance from graph->nodes()[nPos]
-    // by taking first reachable node in the queue
-    while(!queueNode.empty()){
-        node n = queueNode.top();
-        queueNode.pop();
-        if(nb_paths.get(n.id) > 0)
-            return distance[n];
-    }
-    return 0.;
+  std::stack<node> queueNode;
+  MutableContainer<int> nb_paths;
+  Dikjstra dikjstra(graph, graph->nodes()[nPos], eWeights, distance, getEdges, &queueNode,
+                    &nb_paths);
+  // compute max distance from graph->nodes()[nPos]
+  // by taking first reachable node in the queue
+  while (!queueNode.empty()) {
+    node n = queueNode.top();
+    queueNode.pop();
+    if (nb_paths.get(n.id) > 0)
+      return distance[n];
+  }
+  return 0.;
 }
 //================================================================
 // Warning the algorithm is not optimal

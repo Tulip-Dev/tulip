@@ -133,9 +133,9 @@ TLP_SCOPE unsigned int maxDistance(const Graph *graph, const unsigned int nPos,
  * all the edge's weight is set to 1. (it uses a bfs thus the complexity is o(m), m = |E|).
  */
 TLP_SCOPE double maxDistance(const Graph *graph, const unsigned int nPos,
-                                   tlp::NodeStaticProperty<double> &distance,
-                                   const NumericProperty *const weights,
-                                   EDGE_TYPE direction = UNDIRECTED);
+                             tlp::NodeStaticProperty<double> &distance,
+                             const NumericProperty *const weights,
+                             EDGE_TYPE direction = UNDIRECTED);
 
 /*
  * add to a result set, all the nodes, according to direction,

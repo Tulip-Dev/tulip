@@ -1398,11 +1398,22 @@ public:
   ImportBibTeX(const tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<string>(
         "file::filename", "This parameter indicates the pathname of the file(.bib) to import.", "");
-    addInParameter<StringCollection>("Nodes to import",
-                                     "The type of nodes to create: <b>Authors</b> (Create nodes for authors only, publications are represented as edges between authors)<br/><b>Authors and Publications</b> (Create nodes for both authors and publications and edges are created between the publications and their authors)<br/><b>Publications</b> (Create nodes for publications only)",
-                                     NODES_TO_IMPORT);
-    addInParameter<bool>("One edge per publication",
-			 "When only <b>Authors</b> are imported, this parameter indicates:<ul><li>if set to <b>true</b>, that a new edge will be created each time two authors are involved in the same publication.</li><li>if set to <b>false</b>, that only one edge will be created between two authors involved in at least one publication.<br/>Then the <b># publications</b> property edge value will indicate the number of publications they wrote in common.</li></ul>", "true", false);
+    addInParameter<StringCollection>(
+        "Nodes to import",
+        "The type of nodes to create: <b>Authors</b> (Create nodes for authors only, publications "
+        "are represented as edges between authors)<br/><b>Authors and Publications</b> (Create "
+        "nodes for both authors and publications and edges are created between the publications "
+        "and their authors)<br/><b>Publications</b> (Create nodes for publications only)",
+        NODES_TO_IMPORT);
+    addInParameter<bool>(
+        "One edge per publication",
+        "When only <b>Authors</b> are imported, this parameter indicates:<ul><li>if set to "
+        "<b>true</b>, that a new edge will be created each time two authors are involved in the "
+        "same publication.</li><li>if set to <b>false</b>, that only one edge will be created "
+        "between two authors involved in at least one publication.<br/>Then the <b># "
+        "publications</b> property edge value will indicate the number of publications they wrote "
+        "in common.</li></ul>",
+        "true", false);
   }
 
   std::string icon() const override {
@@ -1440,8 +1451,10 @@ public:
 
     // known properties to extract
     StringProperty *keyProp = oneEdgePerPubli ? graph->getProperty<StringProperty>("key") : nullptr;
-    StringProperty *typeProp = oneEdgePerPubli ? graph->getProperty<StringProperty>("type") : nullptr;
-    IntegerProperty *yearProp = oneEdgePerPubli ? graph->getProperty<IntegerProperty>("year") : nullptr;
+    StringProperty *typeProp =
+        oneEdgePerPubli ? graph->getProperty<StringProperty>("type") : nullptr;
+    IntegerProperty *yearProp =
+        oneEdgePerPubli ? graph->getProperty<IntegerProperty>("year") : nullptr;
     BooleanProperty *fromLabriProp =
         createAuthNodes ? graph->getProperty<BooleanProperty>("from LaBRI") : nullptr;
     IntegerVectorProperty *labriAuthorsProp =
@@ -2019,43 +2032,43 @@ public:
                 // stop processing publication fields
                 break;
               }
-	      auto addLink = [&](node a1, node a2) {
-		edge e = graph->existEdge(a1, a2);
-		unsigned int cnt = 0;
-		if (e.isValid())
-		  cnt = countProp->getEdgeValue(e);
-		else
-		  e = graph->addEdge(a1, a2);
-		countProp->setEdgeValue(e, cnt + 1);
-	      };
+              auto addLink = [&](node a1, node a2) {
+                edge e = graph->existEdge(a1, a2);
+                unsigned int cnt = 0;
+                if (e.isValid())
+                  cnt = countProp->getEdgeValue(e);
+                else
+                  e = graph->addEdge(a1, a2);
+                countProp->setEdgeValue(e, cnt + 1);
+              };
               // create edges between the authors of the publications
               if (authorNodes.size() == 1) {
-		if (oneEdgePerPubli) {
-		  // create a loop to record publication information
-		  edge e = graph->addEdge(authorNodes[0], authorNodes[0]);
-		  // setup key, type and year
-		  keyProp->setEdgeValue(e, key);
-		  typeProp->setEdgeValue(e, fe.type());
-		  yearProp->setEdgeValue(e, year);
-		} else
-		  addLink(authorNodes[0], authorNodes[0]);
+                if (oneEdgePerPubli) {
+                  // create a loop to record publication information
+                  edge e = graph->addEdge(authorNodes[0], authorNodes[0]);
+                  // setup key, type and year
+                  keyProp->setEdgeValue(e, key);
+                  typeProp->setEdgeValue(e, fe.type());
+                  yearProp->setEdgeValue(e, year);
+                } else
+                  addLink(authorNodes[0], authorNodes[0]);
               } else {
                 if (oneEdgePerPubli) {
-		  for (unsigned int j = 0; j < authorNodes.size() - 1; ++j) {
-		    for (unsigned int k = j + 1; k < authorNodes.size(); ++k) {
-		      edge e = graph->addEdge(authorNodes[j], authorNodes[k]);
-		      // setup key, type and year
-		      keyProp->setEdgeValue(e, key);
-		      typeProp->setEdgeValue(e, fe.type());
-		      yearProp->setEdgeValue(e, year);
-		    }
-		  }
-		} else {
-		  for (unsigned int j = 0; j < authorNodes.size() - 1; ++j) {
-		    for (unsigned int k = j + 1; k < authorNodes.size(); ++k)
-		      addLink(authorNodes[j], authorNodes[k]);
-		  }
-		}
+                  for (unsigned int j = 0; j < authorNodes.size() - 1; ++j) {
+                    for (unsigned int k = j + 1; k < authorNodes.size(); ++k) {
+                      edge e = graph->addEdge(authorNodes[j], authorNodes[k]);
+                      // setup key, type and year
+                      keyProp->setEdgeValue(e, key);
+                      typeProp->setEdgeValue(e, fe.type());
+                      yearProp->setEdgeValue(e, year);
+                    }
+                  }
+                } else {
+                  for (unsigned int j = 0; j < authorNodes.size() - 1; ++j) {
+                    for (unsigned int k = j + 1; k < authorNodes.size(); ++k)
+                      addLink(authorNodes[j], authorNodes[k]);
+                  }
+                }
               }
             }
           }
