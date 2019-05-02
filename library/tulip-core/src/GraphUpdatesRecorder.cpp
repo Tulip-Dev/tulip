@@ -306,7 +306,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl *g) {
     // loop on oldNodeDefaultValues
     for (const auto &itdv : oldNodeDefaultValues) {
       PropertyInterface *p = itdv.first;
-      newNodeDefaultValues[p] = p->getNodeDefaultDataMemValue();
+      newNodeDefaultValues.emplace(make_pair(p, p->getNodeDefaultDataMemValue()));
       recordNewNodeValues(p);
     }
 
@@ -347,7 +347,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl *g) {
 
       if (created) {
         if (hasNewValues)
-          newValues[p] = RecordedValues(nv, rn);
+          newValues.emplace(make_pair(p, RecordedValues(nv, rn)));
         else {
           delete nv;
           delete rn;
@@ -358,7 +358,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl *g) {
     // loop on oldEdgeDefaultValues
     for (const auto &itdv : oldEdgeDefaultValues) {
       PropertyInterface *p = itdv.first;
-      newEdgeDefaultValues[p] = p->getEdgeDefaultDataMemValue();
+      newEdgeDefaultValues.emplace(make_pair(p, p->getEdgeDefaultDataMemValue()));
       recordNewEdgeValues(p);
     }
 
@@ -399,7 +399,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl *g) {
 
       if (created) {
         if (hasNewValues)
-          newValues[p] = RecordedValues(nv, nullptr, re);
+          newValues.emplace(make_pair(p, RecordedValues(nv, nullptr, re)));
         else {
           delete nv;
           delete re;
@@ -462,7 +462,7 @@ void GraphUpdatesRecorder::recordNewNodeValues(PropertyInterface *p) {
 
   if (hasNewValues) {
     if (itnv == newValues.end())
-      newValues[p] = RecordedValues(nv, rn);
+      newValues.emplace(make_pair(p, RecordedValues(nv, rn)));
     else
       itnv->second.recordedNodes = rn;
   } else {
@@ -511,7 +511,7 @@ void GraphUpdatesRecorder::recordNewEdgeValues(PropertyInterface *p) {
 
   if (hasNewValues) {
     if (itnv == newValues.end())
-      newValues[p] = RecordedValues(nv, nullptr, re);
+      newValues.emplace(make_pair(p, RecordedValues(nv, nullptr, re)));
     else
       itnv->second.recordedEdges = re;
   } else {
@@ -1314,12 +1314,10 @@ void GraphUpdatesRecorder::addLocalProperty(Graph *g, const string &name) {
 
   PropertyInterface *prop = g->getProperty(name);
 
-  if (it == addedProperties.end()) {
-    set<PropertyInterface *> props;
-    props.insert(prop);
-    addedProperties[g] = props;
-  } else
-    addedProperties[g].insert(prop);
+  if (it == addedProperties.end())
+    addedProperties.emplace(make_pair(g, set<PropertyInterface *>({prop})));
+  else
+    it->second.insert(prop);
 }
 
 void GraphUpdatesRecorder::delLocalProperty(Graph *g, const string &name) {
@@ -1347,12 +1345,10 @@ void GraphUpdatesRecorder::delLocalProperty(Graph *g, const string &name) {
   // insert p into deletedProperties
   it = deletedProperties.find(g);
 
-  if (it == deletedProperties.end()) {
-    set<PropertyInterface *> props;
-    props.insert(prop);
-    deletedProperties[g] = props;
-  } else
-    deletedProperties[g].insert(prop);
+  if (it == deletedProperties.end())
+    deletedProperties.emplace(make_pair(g, set<PropertyInterface *>({prop})));
+  else
+    it->second.insert(prop);
 
   // the property is no longer observed
   prop->removeListener(this);
@@ -1366,7 +1362,7 @@ void GraphUpdatesRecorder::propertyRenamed(PropertyInterface *prop) {
     return;
   } else {
     if (renamedProperties.find(prop) == renamedProperties.end())
-      renamedProperties[prop] = prop->getName();
+      renamedProperties.emplace(std::make_pair(prop, prop->getName()));
   }
 }
 
@@ -1397,7 +1393,7 @@ void GraphUpdatesRecorder::beforeSetNodeValue(PropertyInterface *p, node n) {
 
       pv->copy(n, n, p);
       rn->set(n, true);
-      oldValues[p] = RecordedValues(pv, rn);
+      oldValues.emplace(make_pair(p, RecordedValues(pv, rn)));
     }
     // check for a previously recorded old value
     else {
@@ -1420,7 +1416,7 @@ void GraphUpdatesRecorder::beforeSetAllNodeValue(PropertyInterface *p) {
       beforeSetNodeValue(p, n);
     // then record the old default value
     // because beforeSetNodeValue does nothing if it has already been changed
-    oldNodeDefaultValues[p] = p->getNodeDefaultDataMemValue();
+    oldNodeDefaultValues.emplace(make_pair(p, p->getNodeDefaultDataMemValue()));
   }
 }
 
@@ -1451,7 +1447,7 @@ void GraphUpdatesRecorder::beforeSetEdgeValue(PropertyInterface *p, edge e) {
 
       pv->copy(e, e, p);
       re->set(e, true);
-      oldValues[p] = RecordedValues(pv, nullptr, re);
+      oldValues.emplace(make_pair(p, RecordedValues(pv, nullptr, re)));
     }
     // check for a previously recorded old value
     else {
@@ -1474,7 +1470,7 @@ void GraphUpdatesRecorder::beforeSetAllEdgeValue(PropertyInterface *p) {
       beforeSetEdgeValue(p, e);
     // then record the old default value
     // because beforeSetEdgeValue does nothing if it has already been changed
-    oldEdgeDefaultValues[p] = p->getEdgeDefaultDataMemValue();
+    oldEdgeDefaultValues.emplace(make_pair(p, p->getEdgeDefaultDataMemValue()));
   }
 }
 
