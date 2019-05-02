@@ -34,7 +34,7 @@
 
 namespace tlp {
 
-class Dikjstra {
+class TLP_SCOPE Dikjstra {
 public:
   //============================================================
   Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
