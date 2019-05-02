@@ -17,17 +17,19 @@
  *
  */
 #include <deque>
+#include <stack>
 #include <climits>
 
 #include <tulip/tuliphash.h>
 #include <tulip/GraphMeasure.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphParallelTools.h>
+#include <tulip/Dikjstra.h>
 
 using namespace std;
 using namespace tlp;
 namespace {
-inline Iterator<node> *getIt(const Graph *graph, node n, EDGE_TYPE direction) {
+inline Iterator<node> *getItNodes(const Graph *graph, node n, EDGE_TYPE direction) {
   switch (direction) {
   case DIRECTED:
     return graph->getOutNodes(n);
@@ -37,6 +39,25 @@ inline Iterator<node> *getIt(const Graph *graph, node n, EDGE_TYPE direction) {
 
   case UNDIRECTED:
     return graph->getInOutNodes(n);
+
+  default:
+    tlp::warning() << __PRETTY_FUNCTION__ << "serious bug..." << std::endl;
+    return nullptr;
+  }
+
+  return nullptr;
+}
+
+inline Iterator<edge> *getItEdges(const Graph *graph, node n, EDGE_TYPE direction) {
+  switch (direction) {
+  case DIRECTED:
+    return graph->getOutEdges(n);
+
+  case INV_DIRECTED:
+    return graph->getInEdges(n);
+
+  case UNDIRECTED:
+    return graph->getInOutEdges(n);
 
   default:
     tlp::warning() << __PRETTY_FUNCTION__ << "serious bug..." << std::endl;
@@ -75,7 +96,7 @@ unsigned int tlp::maxDistance(const Graph *graph, unsigned int nPos,
     fifo.pop_front();
     unsigned int nDist = distance[curPos] + 1;
 
-    for (auto n : getIt(graph, nodes[curPos], direction)) {
+    for (auto n : getItNodes(graph, nodes[curPos], direction)) {
       nPos = graph->nodePos(n);
       if (distance[nPos] == UINT_MAX) {
         fifo.push_back(nPos);
@@ -86,6 +107,40 @@ unsigned int tlp::maxDistance(const Graph *graph, unsigned int nPos,
   }
 
   return maxDist;
+}
+//================================================================
+double tlp::maxDistance(const Graph *graph, const unsigned int nPos,
+                        tlp::NodeStaticProperty<double> &distance,
+                        const NumericProperty * const weights,
+                        EDGE_TYPE direction) {
+    if(!weights){
+      NodeStaticProperty<unsigned int> dist_int(graph);
+      dist_int.setAll(0);
+      unsigned int res = maxDistance(graph,nPos,dist_int,direction);
+      for(auto n : graph->getNodes()){
+          distance[n] = double(dist_int[n]);
+      }
+      return double(res);
+    }
+
+    std::function<Iterator<edge> *(node)> getEdges = [&](node un) {
+        return getItEdges(graph,un,direction);
+    };
+    EdgeStaticProperty<double> eWeights(graph);
+    eWeights.copyFromNumericProperty(weights);
+
+    std::stack<node> queueNode;
+    MutableContainer<int> nb_paths;
+    Dikjstra dikjstra(graph, graph->nodes()[nPos], eWeights, distance, getEdges, &queueNode, &nb_paths);
+    // compute max distance from graph->nodes()[nPos]
+    // by taking first reachable node in the queue
+    while(!queueNode.empty()){
+        node n = queueNode.top();
+        queueNode.pop();
+        if(nb_paths.get(n.id) > 0)
+            return distance[n];
+    }
+    return 0.;
 }
 //================================================================
 // Warning the algorithm is not optimal
@@ -179,7 +234,7 @@ void tlp::markReachableNodes(const Graph *graph, const node startNode,
     fifo.pop_front();
 
     if (curDist < maxDistance) {
-      for (auto itn : getIt(graph, current, direction)) {
+      for (auto itn : getItNodes(graph, current, direction)) {
         if (!visited.get(itn.id)) {
           fifo.push_back(itn);
           result[itn] = true;
