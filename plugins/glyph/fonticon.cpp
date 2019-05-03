@@ -324,7 +324,7 @@ public:
 
   EEFontIconGlyph(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
 
-  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float) override {
+  void draw(edge e, node n, const Color &glyphColor, const Color &borderColor, float) override {
     StringProperty *viewIcon = edgeExtGlGraphInputData->getElementIcon();
     const string &iconName = viewIcon->getEdgeValue(e);
 
@@ -332,7 +332,18 @@ public:
                          edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
     float borderWidth = edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e);
 
-    glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
+    // apply some rotation before rendering the icon in order
+    // to visually encode the edge direction
+    if (edgeExtGlGraphInputData->getGraph()->source(e) == n) {
+      // anchor the bottom of the icon to the source node
+      glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
+    } else {
+      // anchor the top of the icon to the target node
+      glRotatef(-90.0f, 0.0f, 0.0f, 1.0f);
+    }
+
+    // icon must be mirrored along its Y axis to get a correct rendering
+    glScalef(-1.0f, 1.0f, 1.0f);
 
     drawIcon(getFontIcon(iconName), glyphColor, borderColor, borderWidth, edgeTexture);
   }
