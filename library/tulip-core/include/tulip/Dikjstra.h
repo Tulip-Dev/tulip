@@ -31,14 +31,15 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/StaticProperty.h>
 #include <tulip/MutableContainer.h>
+#include <tulip/GraphTools.h>
 
 namespace tlp {
 
-class TLP_SCOPE Dikjstra {
+class Dikjstra {
 public:
   //============================================================
   Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
-           NodeStaticProperty<double> &nodeDistance, std::function<Iterator<edge> *(node)> &getFunc,
+           NodeStaticProperty<double> &nodeDistance, EDGE_TYPE direction,
            std::stack<node> *qN = nullptr, MutableContainer<int> *nP = nullptr);
   //========================================================
   bool searchPaths(node n, BooleanProperty *result);

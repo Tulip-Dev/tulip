@@ -28,45 +28,7 @@
 
 using namespace std;
 using namespace tlp;
-namespace {
-inline Iterator<node> *getItNodes(const Graph *graph, node n, EDGE_TYPE direction) {
-  switch (direction) {
-  case DIRECTED:
-    return graph->getOutNodes(n);
 
-  case INV_DIRECTED:
-    return graph->getInNodes(n);
-
-  case UNDIRECTED:
-    return graph->getInOutNodes(n);
-
-  default:
-    tlp::warning() << __PRETTY_FUNCTION__ << "serious bug..." << std::endl;
-    return nullptr;
-  }
-
-  return nullptr;
-}
-
-inline Iterator<edge> *getItEdges(const Graph *graph, node n, EDGE_TYPE direction) {
-  switch (direction) {
-  case DIRECTED:
-    return graph->getOutEdges(n);
-
-  case INV_DIRECTED:
-    return graph->getInEdges(n);
-
-  case UNDIRECTED:
-    return graph->getInOutEdges(n);
-
-  default:
-    tlp::warning() << __PRETTY_FUNCTION__ << "serious bug..." << std::endl;
-    return nullptr;
-  }
-
-  return nullptr;
-}
-} // namespace
 //================================================================
 unsigned int tlp::maxDistance(const Graph *graph, const node n,
                               MutableContainer<unsigned int> &distance, EDGE_TYPE direction) {
@@ -90,13 +52,14 @@ unsigned int tlp::maxDistance(const Graph *graph, unsigned int nPos,
   distance[nPos] = 0;
   const std::vector<node> &nodes = graph->nodes();
   unsigned int maxDist = 0;
+  auto getNodes = getNodesIterator(direction);
 
   while (!fifo.empty()) {
     unsigned int curPos = fifo.front();
     fifo.pop_front();
     unsigned int nDist = distance[curPos] + 1;
 
-    for (auto n : getItNodes(graph, nodes[curPos], direction)) {
+    for (auto n : getNodes(graph, nodes[curPos])) {
       nPos = graph->nodePos(n);
       if (distance[nPos] == UINT_MAX) {
         fifo.push_back(nPos);
@@ -122,15 +85,12 @@ double tlp::maxDistance(const Graph *graph, const unsigned int nPos,
     return double(res);
   }
 
-  std::function<Iterator<edge> *(node)> getEdges = [&](node un) {
-    return getItEdges(graph, un, direction);
-  };
   EdgeStaticProperty<double> eWeights(graph);
   eWeights.copyFromNumericProperty(weights);
 
   std::stack<node> queueNode;
   MutableContainer<int> nb_paths;
-  Dikjstra dikjstra(graph, graph->nodes()[nPos], eWeights, distance, getEdges, &queueNode,
+  Dikjstra dikjstra(graph, graph->nodes()[nPos], eWeights, distance, direction, &queueNode,
                     &nb_paths);
   // compute max distance from graph->nodes()[nPos]
   // by taking first reachable node in the queue
@@ -201,49 +161,6 @@ unsigned int tlp::minDegree(const Graph *graph) {
   for (auto n : graph->nodes())
     mindeg = std::min(mindeg, graph->deg(n));
   return mindeg;
-}
-//================================================================
-void tlp::reachableNodes(const Graph *graph, const node startNode, std::set<node> &result,
-                         unsigned int maxDistance, EDGE_TYPE direction) {
-  TLP_HASH_MAP<node, bool> hResult;
-  markReachableNodes(graph, startNode, hResult, maxDistance, direction);
-  TLP_HASH_MAP<node, bool>::const_iterator itr = hResult.begin();
-  TLP_HASH_MAP<node, bool>::const_iterator ite = hResult.end();
-
-  while (itr != ite) {
-    result.insert(itr->first);
-    ++itr;
-  }
-}
-//================================================================
-void tlp::markReachableNodes(const Graph *graph, const node startNode,
-                             TLP_HASH_MAP<node, bool> &result, unsigned int maxDistance,
-                             EDGE_TYPE direction) {
-  deque<node> fifo;
-  MutableContainer<bool> visited;
-  MutableContainer<unsigned int> distance;
-  visited.setAll(false);
-  distance.setAll(graph->numberOfNodes());
-  fifo.push_back(startNode);
-  visited.set(startNode.id, true);
-  distance.set(startNode.id, 0);
-
-  while (!fifo.empty()) {
-    node current = fifo.front();
-    unsigned int curDist = distance.get(current.id);
-    fifo.pop_front();
-
-    if (curDist < maxDistance) {
-      for (auto itn : getItNodes(graph, current, direction)) {
-        if (!visited.get(itn.id)) {
-          fifo.push_back(itn);
-          result[itn] = true;
-          visited.set(itn.id, true);
-          distance.set(itn.id, curDist + 1);
-        }
-      }
-    }
-  }
 }
 //=================================================
 void tlp::clusteringCoefficient(const Graph *graph, MutableContainer<double> &clusters,

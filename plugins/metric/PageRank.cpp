@@ -22,20 +22,6 @@
 
 using namespace std;
 using namespace tlp;
-namespace {
-inline Iterator<node> *getItNodes(const Graph *graph, node n, bool directed) {
-  if (directed)
-    return graph->getInNodes(n);
-  else
-    return graph->getInOutNodes(n);
-}
-inline Iterator<edge> *getItEdges(const Graph *graph, node n, bool directed) {
-  if (directed)
-    return graph->getInEdges(n);
-  else
-    return graph->getInOutEdges(n);
-}
-} // namespace
 
 static const char *paramHelp[] = {
     // d
@@ -114,18 +100,21 @@ struct PageRank : public DoubleAlgorithm {
     NodeStaticProperty<double> deg(graph);
     tlp::degree(graph, deg, directed ? DIRECTED : UNDIRECTED, weight, false);
 
+    auto getNodes = getNodesIterator(directed ? DIRECTED : UNDIRECTED);
+    auto getEdges = getEdgesIterator(directed ? DIRECTED : UNDIRECTED);
+
     for (unsigned int k = 0; k < kMax + 1; ++k) {
       if (!weight) {
         TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
           double n_sum = 0;
-          for (auto nin : getItNodes(graph, n, directed))
+          for (auto nin : getNodes(graph, n))
             n_sum += pr.getNodeValue(nin) / deg.getNodeValue(nin);
           next_pr[i] = one_minus_d + d * n_sum;
         });
       } else {
         TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
           double n_sum = 0;
-          for (auto e : getItEdges(graph, n, directed)) {
+          for (auto e : getEdges(graph, n)) {
             node nin = graph->opposite(e, n);
             if (deg.getNodeValue(nin) > 0)
               n_sum += weight->getEdgeDoubleValue(e) * pr.getNodeValue(nin) / deg.getNodeValue(nin);

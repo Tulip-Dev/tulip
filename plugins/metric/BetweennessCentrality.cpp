@@ -23,7 +23,7 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/StaticProperty.h>
 #include <tulip/MutableContainer.h>
-#include <tulip/Dikjstra.h>
+#include <tulip/GraphTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -130,7 +130,7 @@ public:
       MutableContainer<int> sigma;
 
       if (weight)
-        computeDikjstra(s, directed, weight, S, P, sigma);
+        computeDijkstra(s, directed, weight, S, P, sigma);
       else
         computeBFS(s, directed, S, P, sigma);
 
@@ -230,19 +230,12 @@ private:
     }
   }
 
-  void computeDikjstra(node s, bool directed, NumericProperty *weight, stack<node> &S,
+  void computeDijkstra(node s, bool directed, NumericProperty *weight, stack<node> &S,
                        unordered_map<node, list<node>> &P, MutableContainer<int> &sigma) {
-    std::function<Iterator<edge> *(node)> getEdges = [&](node un) {
-      return graph->getInOutEdges(un);
-    };
-    if (directed) {
-      getEdges = [&](node un) { return graph->getOutEdges(un); };
-    }
     EdgeStaticProperty<double> eWeights(graph);
     eWeights.copyFromNumericProperty(weight);
     NodeStaticProperty<double> nodeDistance(graph);
-    Dikjstra dikjstra(graph, s, eWeights, nodeDistance, getEdges, &S, &sigma);
-    dikjstra.ancestors(P);
+    tlp::computeDijkstra(graph, s, eWeights, nodeDistance, directed ? DIRECTED : UNDIRECTED, P, &S, &sigma);
   }
 };
 

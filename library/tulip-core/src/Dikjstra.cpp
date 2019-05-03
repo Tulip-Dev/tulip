@@ -27,7 +27,7 @@ using namespace std;
 
 //============================================================
 Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
-                   NodeStaticProperty<double> &nd, std::function<Iterator<edge> *(node)> &getEdges,
+                   NodeStaticProperty<double> &nd, EDGE_TYPE direction,
                    std::stack<node> *qN, MutableContainer<int> *nP)
     : nodeDistance(nd), queueNodes(qN), numberOfPaths(nP) {
   assert(src.isValid());
@@ -60,6 +60,8 @@ Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<
     mapDik[i++] = tmp;
   }
 
+  auto getEdges = getEdgesIterator(direction);
+
   while (!dikjstraTable.empty()) {
     // select the first element in the list the one with min value
     set<DikjstraElement *, LessDikjstraElement>::iterator it = dikjstraTable.begin();
@@ -68,7 +70,7 @@ Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<
     if (queueNodes)
       queueNodes->push(u.n);
 
-    for (auto e : getEdges(u.n)) {
+    for (auto e : getEdges(graph, u.n)) {
       node v = graph->opposite(e, u.n);
       auto dEle = mapDik[v];
       double eWeight = weights.getEdgeValue(e);

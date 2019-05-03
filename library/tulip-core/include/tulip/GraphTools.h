@@ -22,13 +22,17 @@
 #define _TLPGRAPHTOOLS_H
 
 #include <map>
-#include <set>
 #include <list>
+#include <set>
+#include <stack>
 #include <vector>
+#include <unordered_map>
 #include <tulip/tulipconf.h>
 #include <tulip/tuliphash.h>
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
+#include <tulip/StaticProperty.h>
+#include <tulip/Iterator.h>
 
 namespace tlp {
 class BooleanProperty;
@@ -38,6 +42,26 @@ class IntegerProperty;
 class NumericProperty;
 class PlanarConMap;
 class PluginProgress;
+
+enum EDGE_TYPE { UNDIRECTED = 0, INV_DIRECTED = 1, DIRECTED = 2 };
+#define IN_EDGE INV_DIRECTED
+#define OUT_EDGE DIRECTED
+#define INOUT_EDGE UNDIRECTED
+
+typedef Iterator<node> * (*NodesIteratorFn) (const tlp::Graph*, const tlp::node);
+typedef Iterator<edge> * (*EdgesIteratorFn) (const tlp::Graph*, const tlp::node);
+
+/**
+ * return a function to get an Iterator on the adjacent nodes of a graph node
+ * according the given direction
+ */
+TLP_SCOPE NodesIteratorFn getNodesIterator(EDGE_TYPE direction);
+
+/**
+ * return a function to get an Iterator on the adjacent edges of a graph node
+ * according the given direction
+ */
+TLP_SCOPE EdgesIteratorFn getEdgesIterator(EDGE_TYPE direction);
 
 /**
  *  This ordering was first introduced by C. Gutwenger and P. Mutzel in \n
@@ -205,6 +229,26 @@ TLP_SCOPE bool selectShortestPaths(const Graph *const graph, node src, node tgt,
                                    ShortestPathType pathType, const DoubleProperty *const weights,
                                    BooleanProperty *selection);
 
+
+/*
+ * mark as reachable (set value in "reachables" hash map to true),
+ * all the nodes, according to direction,
+ * at distance less or equal to maxDistance of startNode.
+ * If direction is set to UNDIRECTED use undirected graph,
+ * DIRECTED use directed graph
+ * and INV_DIRECTED use reverse directed graph (ie. all edges are reversed)
+ */
+TLP_SCOPE void markReachableNodes(const Graph *graph, const node startNode,
+                                  TLP_HASH_MAP<node, bool> &reachables, unsigned int maxDistance,
+                                  EDGE_TYPE direction = UNDIRECTED);
+
+TLP_SCOPE void computeDijkstra(const Graph *const graph, node src,
+			       const EdgeStaticProperty<double> &weights,
+			       NodeStaticProperty<double> &nodeDistance,
+			       EDGE_TYPE direction,
+			       std::unordered_map<node, std::list<node> > &ancestors,
+			       std::stack<node>* queueNodes = nullptr,
+			       MutableContainer<int>* numberOfPaths = nullptr);
 } // namespace tlp
 #endif
 ///@endcond
