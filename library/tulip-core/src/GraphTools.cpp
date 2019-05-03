@@ -40,14 +40,14 @@
 using namespace std;
 
 namespace tlp {
-static Iterator<node> *getInNodes(const Graph* graph, const node n) {
-   return graph->getInNodes(n);
+static Iterator<node> *getInNodes(const Graph *graph, const node n) {
+  return graph->getInNodes(n);
 }
-static Iterator<node> *getOutNodes(const Graph* graph, const node n) {
-   return graph->getOutNodes(n);
+static Iterator<node> *getOutNodes(const Graph *graph, const node n) {
+  return graph->getOutNodes(n);
 }
-static Iterator<node> *getInOutNodes(const Graph* graph, const node n) {
-   return graph->getInOutNodes(n);
+static Iterator<node> *getInOutNodes(const Graph *graph, const node n) {
+  return graph->getInOutNodes(n);
 }
 
 NodesIteratorFn getNodesIterator(EDGE_TYPE direction) {
@@ -64,14 +64,14 @@ NodesIteratorFn getNodesIterator(EDGE_TYPE direction) {
   }
 }
 
-static Iterator<edge> *getInEdges(const Graph* graph, const node n) {
-   return graph->getInEdges(n);
+static Iterator<edge> *getInEdges(const Graph *graph, const node n) {
+  return graph->getInEdges(n);
 }
-static Iterator<edge> *getOutEdges(const Graph* graph, const node n) {
-   return graph->getOutEdges(n);
+static Iterator<edge> *getOutEdges(const Graph *graph, const node n) {
+  return graph->getOutEdges(n);
 }
-static Iterator<edge> *getInOutEdges(const Graph* graph, const node n) {
-   return graph->getInOutEdges(n);
+static Iterator<edge> *getInOutEdges(const Graph *graph, const node n) {
+  return graph->getInOutEdges(n);
 }
 
 EdgesIteratorFn getEdgesIterator(EDGE_TYPE direction) {
@@ -803,9 +803,8 @@ bool selectShortestPaths(const Graph *const graph, node src, node tgt, ShortestP
   return dikjstra.searchPaths(tgt, result);
 }
 
-void markReachableNodes(const Graph *graph, const node startNode,
-			TLP_HASH_MAP<node, bool> &result, unsigned int maxDistance,
-			EDGE_TYPE direction) {
+void markReachableNodes(const Graph *graph, const node startNode, TLP_HASH_MAP<node, bool> &result,
+                        unsigned int maxDistance, EDGE_TYPE direction) {
   deque<node> fifo;
   MutableContainer<bool> visited;
   MutableContainer<unsigned int> distance;
@@ -835,13 +834,10 @@ void markReachableNodes(const Graph *graph, const node startNode,
   }
 }
 
-void computeDijkstra(const Graph *const graph, node src,
-		     const EdgeStaticProperty<double> &weights,
-		     NodeStaticProperty<double> &nodeDistance,
-		     EDGE_TYPE direction,
-		     unordered_map<node, std::list<node> > &ancestors,
-		     std::stack<node>* queueNodes,
-		     MutableContainer<int>* numberOfPaths) {
+void computeDijkstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
+                     NodeStaticProperty<double> &nodeDistance, EDGE_TYPE direction,
+                     unordered_map<node, std::list<node>> &ancestors, std::stack<node> *queueNodes,
+                     MutableContainer<int> *numberOfPaths) {
   Dikjstra dikjstra(graph, src, weights, nodeDistance, direction, queueNodes, numberOfPaths);
   dikjstra.ancestors(ancestors);
 }

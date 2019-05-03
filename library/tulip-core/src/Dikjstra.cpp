@@ -27,8 +27,8 @@ using namespace std;
 
 //============================================================
 Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
-                   NodeStaticProperty<double> &nd, EDGE_TYPE direction,
-                   std::stack<node> *qN, MutableContainer<int> *nP)
+                   NodeStaticProperty<double> &nd, EDGE_TYPE direction, std::stack<node> *qN,
+                   MutableContainer<int> *nP)
     : nodeDistance(nd), queueNodes(qN), numberOfPaths(nP) {
   assert(src.isValid());
   this->graph = graph;

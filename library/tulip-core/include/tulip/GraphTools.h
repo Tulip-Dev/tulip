@@ -48,8 +48,8 @@ enum EDGE_TYPE { UNDIRECTED = 0, INV_DIRECTED = 1, DIRECTED = 2 };
 #define OUT_EDGE DIRECTED
 #define INOUT_EDGE UNDIRECTED
 
-typedef Iterator<node> * (*NodesIteratorFn) (const tlp::Graph*, const tlp::node);
-typedef Iterator<edge> * (*EdgesIteratorFn) (const tlp::Graph*, const tlp::node);
+typedef Iterator<node> *(*NodesIteratorFn)(const tlp::Graph *, const tlp::node);
+typedef Iterator<edge> *(*EdgesIteratorFn)(const tlp::Graph *, const tlp::node);
 
 /**
  * return a function to get an Iterator on the adjacent nodes of a graph node
@@ -229,7 +229,6 @@ TLP_SCOPE bool selectShortestPaths(const Graph *const graph, node src, node tgt,
                                    ShortestPathType pathType, const DoubleProperty *const weights,
                                    BooleanProperty *selection);
 
-
 /*
  * mark as reachable (set value in "reachables" hash map to true),
  * all the nodes, according to direction,
@@ -243,12 +242,11 @@ TLP_SCOPE void markReachableNodes(const Graph *graph, const node startNode,
                                   EDGE_TYPE direction = UNDIRECTED);
 
 TLP_SCOPE void computeDijkstra(const Graph *const graph, node src,
-			       const EdgeStaticProperty<double> &weights,
-			       NodeStaticProperty<double> &nodeDistance,
-			       EDGE_TYPE direction,
-			       std::unordered_map<node, std::list<node> > &ancestors,
-			       std::stack<node>* queueNodes = nullptr,
-			       MutableContainer<int>* numberOfPaths = nullptr);
+                               const EdgeStaticProperty<double> &weights,
+                               NodeStaticProperty<double> &nodeDistance, EDGE_TYPE direction,
+                               std::unordered_map<node, std::list<node>> &ancestors,
+                               std::stack<node> *queueNodes = nullptr,
+                               MutableContainer<int> *numberOfPaths = nullptr);
 } // namespace tlp
 #endif
 ///@endcond

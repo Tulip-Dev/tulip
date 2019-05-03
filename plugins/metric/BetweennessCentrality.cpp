@@ -235,7 +235,8 @@ private:
     EdgeStaticProperty<double> eWeights(graph);
     eWeights.copyFromNumericProperty(weight);
     NodeStaticProperty<double> nodeDistance(graph);
-    tlp::computeDijkstra(graph, s, eWeights, nodeDistance, directed ? DIRECTED : UNDIRECTED, P, &S, &sigma);
+    tlp::computeDijkstra(graph, s, eWeights, nodeDistance, directed ? DIRECTED : UNDIRECTED, P, &S,
+                         &sigma);
   }
 };
 
