@@ -618,7 +618,12 @@ void HistogramView::refresh() {
 }
 
 void HistogramView::graphChanged(Graph *) {
-  setState(DataSet());
+  DataSet old_ds = state();
+  unsigned nodes = NODE;
+  old_ds.get("Nodes/Edges", nodes);
+  DataSet new_ds;
+  new_ds.set("Nodes/Edges", nodes);
+  setState(new_ds);
   drawOverview();
 }
 

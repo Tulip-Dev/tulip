@@ -395,7 +395,15 @@ Graph *ScatterPlot2DView::getScatterPlotGraph() {
 }
 
 void ScatterPlot2DView::graphChanged(Graph *) {
-  setState(DataSet());
+  if(!initialized){
+    setState(DataSet());
+    return;
+  }
+  DataSet old_ds = state();
+  unsigned nodes = NODE;
+  old_ds.get("Nodes/Edges", nodes);
+  DataSet new_ds;
+  setState(new_ds);
 }
 
 void ScatterPlot2DView::toggleInteractors(const bool activate) {
