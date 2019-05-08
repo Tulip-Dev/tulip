@@ -61,3 +61,6 @@ doxygen_sqlite3.db
 
 # Visual Studio settings folder
 .vs/
+
+# HTML Documentation (generated)
+/doc/html
