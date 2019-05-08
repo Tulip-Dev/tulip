@@ -47,6 +47,11 @@
           "name": "CMAKE_CXX_FLAGS_DEBUG",
           "value": "-O1 -g",
           "type": "STRING"
+        },
+        {
+          "name": "OpenGL_GL_PREFERENCE",
+          "value": "GLVND",
+          "type": "STRING"
         }
       ],
       "intelliSenseMode": "linux-gcc-x64"
