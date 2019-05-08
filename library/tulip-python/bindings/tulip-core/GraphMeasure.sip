@@ -171,6 +171,39 @@ Computes the distances from a node to all the other nodes of a graph and return 
 
 //===========================================================================================
 
+  double maxDistanceWeighted(const tlp::Graph *graph, const tlp::node node, tlp::DoubleProperty *result, tlp::DoubleProperty *weight, tlp::EDGE_TYPE direction = tlp::UNDIRECTED);
+%Docstring
+tlp.maxDistanceWeighted(graph, node, result, weight, direction)
+
+Computes the distances from a node to all the other nodes of a weighted graph and return the maximum one.
+
+:param graph: the graph on which to compute the maximum distance
+:type graph: :class:`tlp.Graph`
+:param node: an existing graph node
+:type node: :class:`tlp.node`
+:param result: a graph property in which the results will be stored
+:type result: :class:`tlp.DoubleProperty`
+:param result: a graph property in which edges lengths are stored
+:type result: :class:`tlp.DoubleProperty`
+:param direction: specify if the graph must be directed or not
+:type direction: tlp.DIRECTED, tlp.INV_DIRECTED, tlp.UNDIRECTED
+:rtype: double
+:throws: an exception if the node does not belong to the graph
+%End
+
+%MethodCode
+  if (a0->isElement(*a1)) {
+    tlp::NodeStaticProperty<double> result(a0);
+    sipRes = tlp::maxDistance(a0, *a1, result, a3,a4);
+    result.copyToProperty(a2);
+  } else {
+    sipIsErr = throwInvalidNodeException(a0, *a1);
+  }
+%End
+
+
+//===========================================================================================
+
   void reachableNodes(const tlp::Graph *graph, const tlp::node startNode, std::set<tlp::node> &result /Out/, unsigned int maxDistance, tlp::EDGE_TYPE direction = tlp::UNDIRECTED);
 %Docstring
 tlp.reachableNodes(graph, startNode, maxDistance, direction)

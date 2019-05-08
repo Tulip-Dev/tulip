@@ -290,13 +290,21 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType, tlp::Prope
   if (dlg == nullptr) {
     QString title(
         QString("Set %1 %2").arg(elType == NODE ? "node" : "edge").arg(valid ? "value" : "values"));
+    bool displayPropertyName = true;
+    // adjust dialog title for some view properties
+    if (pi->getName() == "viewShape" && elType == EDGE) {
+      title = "Select an edge shape";
+      displayPropertyName = false;
+    }
     // create a dialog on the fly
     dlg = new QDialog(dialogParent);
     dlg->setWindowTitle(title);
     QVBoxLayout *layout = new QVBoxLayout;
     dlg->setLayout(layout);
     dlg->setMinimumWidth(250);
-    layout->addWidget(new QLabel(pi->getName().c_str()));
+    if (displayPropertyName) {
+      layout->addWidget(new QLabel(pi->getName().c_str()));
+    }
     layout->addWidget(w);
     QDialogButtonBox *buttonBox =
         new QDialogButtonBox(QDialogButtonBox::Cancel | QDialogButtonBox::Ok, Qt::Horizontal);

@@ -27,15 +27,12 @@
 #include <tulip/MutableContainer.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/StaticProperty.h>
+#include <tulip/GraphTools.h>
 
 namespace tlp {
 
 class Graph;
 class PluginProgress;
-enum EDGE_TYPE { UNDIRECTED = 0, INV_DIRECTED = 1, DIRECTED = 2 };
-#define IN_EDGE INV_DIRECTED
-#define OUT_EDGE DIRECTED
-#define INOUT_EDGE UNDIRECTED
 /**
  * returns the average path lengh of a graph, that is the sum
  * of the shortest distances for all pair of distinct nodes in that graph
@@ -122,27 +119,20 @@ TLP_SCOPE _DEPRECATED unsigned int maxDistance(const Graph *graph, const node n,
 TLP_SCOPE unsigned int maxDistance(const Graph *graph, const unsigned int nPos,
                                    tlp::NodeStaticProperty<unsigned int> &distance,
                                    EDGE_TYPE direction = UNDIRECTED);
+
 /*
- * add to a result set, all the nodes, according to direction,
- * at distance less or equal to maxDistance of startNode.
- * If direction is set to UNDIRECTED use undirected graph, DIRECTED use directed graph
+ * compute the maximum distance from the n (graph->nodes[nPos]) to all the other nodes of graph
+ * and store it into distance, (stored value is DBL_MAX for non connected nodes),
+ * if direction is set to UNDIRECTED use undirected graph, DIRECTED use directed graph
  * and INV_DIRECTED use reverse directed graph (ie. all edges are reversed)
- * WARNING: this function is deprecated use markReachableNodes instead
+ * Edge weights can be given, Dikjstra's algorithm is then used
+ * (the complexity is then o((m + n)log n)) otherwise
+ * all the edge's weight is set to 1. (it uses a bfs thus the complexity is o(m), m = |E|).
  */
-TLP_SCOPE _DEPRECATED void reachableNodes(const Graph *graph, const node startNode,
-                                          std::set<node> &result, unsigned int maxDistance,
-                                          EDGE_TYPE direction = UNDIRECTED);
-/*
- * mark as reachable (set value in "reachables" hash map to true),
- * all the nodes, according to direction,
- * at distance less or equal to maxDistance of startNode.
- * If direction is set to UNDIRECTED use undirected graph,
- * DIRECTED use directed graph
- * and INV_DIRECTED use reverse directed graph (ie. all edges are reversed)
- */
-TLP_SCOPE void markReachableNodes(const Graph *graph, const node startNode,
-                                  TLP_HASH_MAP<node, bool> &reachables, unsigned int maxDistance,
-                                  EDGE_TYPE direction = UNDIRECTED);
+TLP_SCOPE double maxDistance(const Graph *graph, const unsigned int nPos,
+                             tlp::NodeStaticProperty<double> &distance,
+                             const NumericProperty *const weights,
+                             EDGE_TYPE direction = UNDIRECTED);
 } // namespace tlp
 #endif
 ///@endcond

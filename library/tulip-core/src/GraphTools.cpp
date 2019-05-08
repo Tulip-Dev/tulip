@@ -40,6 +40,53 @@
 using namespace std;
 
 namespace tlp {
+static Iterator<node> *getInNodes(const Graph *graph, const node n) {
+  return graph->getInNodes(n);
+}
+static Iterator<node> *getOutNodes(const Graph *graph, const node n) {
+  return graph->getOutNodes(n);
+}
+static Iterator<node> *getInOutNodes(const Graph *graph, const node n) {
+  return graph->getInOutNodes(n);
+}
+
+NodesIteratorFn getNodesIterator(EDGE_TYPE direction) {
+  switch (direction) {
+  case DIRECTED:
+    return &getOutNodes;
+
+  case INV_DIRECTED:
+    return &getInNodes;
+
+  case UNDIRECTED:
+  default:
+    return &getInOutNodes;
+  }
+}
+
+static Iterator<edge> *getInEdges(const Graph *graph, const node n) {
+  return graph->getInEdges(n);
+}
+static Iterator<edge> *getOutEdges(const Graph *graph, const node n) {
+  return graph->getOutEdges(n);
+}
+static Iterator<edge> *getInOutEdges(const Graph *graph, const node n) {
+  return graph->getInOutEdges(n);
+}
+
+EdgesIteratorFn getEdgesIterator(EDGE_TYPE direction) {
+  switch (direction) {
+  case DIRECTED:
+    return &getOutEdges;
+
+  case INV_DIRECTED:
+    return &getInEdges;
+
+  case UNDIRECTED:
+  default:
+    return &getInOutEdges;
+  }
+}
 
 //======================================================================
 void makeProperDag(Graph *graph, list<node> &addedNodes, TLP_HASH_MAP<edge, edge> &replacedEdges,
@@ -719,28 +766,21 @@ unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool
 
 bool selectShortestPaths(const Graph *const graph, node src, node tgt, ShortestPathType pathType,
                          const DoubleProperty *const weights, BooleanProperty *result) {
-  std::function<Iterator<edge> *(node)> getOutEdges = [&](node un) {
-    return graph->getOutEdges(un);
-  };
-  std::function<Iterator<edge> *(node)> getInOutEdges = [&](node un) {
-    return graph->getInOutEdges(un);
-  };
-  std::function<Iterator<edge> *(node)> getInEdges = [&](node un) { return graph->getInEdges(un); };
+  EDGE_TYPE direction;
 
-  std::function<Iterator<edge> *(node)> getEdges;
   switch (pathType) {
   case ShortestPathType::OnePath:
   case ShortestPathType::AllPaths:
-    getEdges = getInOutEdges;
+    direction = UNDIRECTED;
     break;
   case ShortestPathType::OneDirectedPath:
   case ShortestPathType::AllDirectedPaths:
-    getEdges = getOutEdges;
+    direction = DIRECTED;
     break;
   case ShortestPathType::OneReversedPath:
   case ShortestPathType::AllReversedPaths:
-    getEdges = getInEdges;
-    break;
+  default:
+    direction = INV_DIRECTED;
   }
 
   EdgeStaticProperty<double> eWeights(graph);
@@ -756,11 +796,50 @@ bool selectShortestPaths(const Graph *const graph, node src, node tgt, ShortestP
   }
 
   NodeStaticProperty<double> nodeDistance(graph);
-  Dikjstra dikjstra(graph, src, eWeights, nodeDistance, getEdges);
+  Dikjstra dikjstra(graph, src, eWeights, nodeDistance, direction);
 
   if (uint(pathType) < ShortestPathType::AllPaths)
     return dikjstra.searchPath(tgt, result);
   return dikjstra.searchPaths(tgt, result);
+}
+
+void markReachableNodes(const Graph *graph, const node startNode, TLP_HASH_MAP<node, bool> &result,
+                        unsigned int maxDistance, EDGE_TYPE direction) {
+  deque<node> fifo;
+  MutableContainer<bool> visited;
+  MutableContainer<unsigned int> distance;
+  visited.setAll(false);
+  distance.setAll(graph->numberOfNodes());
+  fifo.push_back(startNode);
+  visited.set(startNode.id, true);
+  distance.set(startNode.id, 0);
+
+  auto getNodes = getNodesIterator(direction);
+
+  while (!fifo.empty()) {
+    node current = fifo.front();
+    unsigned int curDist = distance.get(current.id);
+    fifo.pop_front();
+
+    if (curDist < maxDistance) {
+      for (auto itn : getNodes(graph, current)) {
+        if (!visited.get(itn.id)) {
+          fifo.push_back(itn);
+          result[itn] = true;
+          visited.set(itn.id, true);
+          distance.set(itn.id, curDist + 1);
+        }
+      }
+    }
+  }
+}
+
+void computeDijkstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
+                     NodeStaticProperty<double> &nodeDistance, EDGE_TYPE direction,
+                     unordered_map<node, std::list<node>> &ancestors, std::stack<node> *queueNodes,
+                     MutableContainer<int> *numberOfPaths) {
+  Dikjstra dikjstra(graph, src, weights, nodeDistance, direction, queueNodes, numberOfPaths);
+  dikjstra.ancestors(ancestors);
 }
 
 } // namespace tlp

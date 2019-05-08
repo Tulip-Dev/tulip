@@ -738,8 +738,10 @@ QWidget *EdgeExtremityShapeEditorCreator::createWidget(QWidget *parent) const {
     shapes.push_back(std::make_pair(shapeName, pixmap));
   }
 
-  return new ShapeDialog(shapes,
-                         Perspective::instance() ? Perspective::instance()->mainWindow() : parent);
+  ShapeDialog *shapeDialog = new ShapeDialog(
+      shapes, Perspective::instance() ? Perspective::instance()->mainWindow() : parent);
+  shapeDialog->setWindowTitle("Select an edge extremity shape");
+  return shapeDialog;
 }
 
 void EdgeExtremityShapeEditorCreator::setEditorData(QWidget *w, const QVariant &data, bool,

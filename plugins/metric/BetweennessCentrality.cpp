@@ -19,8 +19,11 @@
 
 #include <stack>
 #include <queue>
-#include <tulip/tuliphash.h>
+#include <unordered_map>
 #include <tulip/DoubleProperty.h>
+#include <tulip/StaticProperty.h>
+#include <tulip/MutableContainer.h>
+#include <tulip/GraphTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -35,7 +38,13 @@ static const char *paramHelp[] = {
     " - if directed     : m(n) = c(n) / (#V - 1)(#V - 2)<br>"
     "If true the edge measure will be normalized<br>"
     " - if not directed : m(e) = 2*c(e) / (#V / 2)(#V / 2)<br>"
-    " - if directed     : m(e) = c(e) / (#V / 2)(#V / 2)"};
+    " - if directed     : m(e) = c(e) / (#V / 2)(#V / 2)",
+
+    // weight
+    "An existing edge weight metric property.",
+
+    // Average path length
+    "The computed average path length (-1 if not computed)"};
 
 /** \addtogroup metric */
 
@@ -61,8 +70,12 @@ static const char *paramHelp[] = {
  *
  *
  *  \note The complexity of the algorithm is O(|V| * |E|) in time
+ *        on unweighted graphs and O(|V||E| + |V|^2 log |V|) on
+ *        weighted graphs.
+ *
  *  <b>HISTORY</b>
  *
+ *  - 26/04/19 Version 1.3: Weighted version
  *  - 16/02/11 Version 1.2: Edge betweenness computation added
  *  - 08/02/11 Version 1.1: Normalisation option added
  *  - 03/01/05 Version 1.0: Initial release
@@ -71,26 +84,37 @@ static const char *paramHelp[] = {
 class BetweennessCentrality : public DoubleAlgorithm {
 public:
   PLUGININFORMATION("Betweenness Centrality", "David Auber", "03/01/2005",
-                    "Computes the betweenness centrality.", "1.2", "Graph")
+                    "Computes the betweenness centrality.", "1.3", "Graph")
   BetweennessCentrality(const PluginContext *context) : DoubleAlgorithm(context) {
     addInParameter<bool>("directed", paramHelp[0], "false");
     addInParameter<bool>("norm", paramHelp[1], "false", false);
+    addInParameter<NumericProperty *>("weight", paramHelp[2], "", false);
+    addOutParameter<double>("average path length", paramHelp[3], "-1");
   }
   bool run() override {
     result->setAllNodeValue(0.0);
     result->setAllEdgeValue(0.0);
     bool directed = false;
     bool norm = false;
+    NumericProperty *weight = nullptr;
 
     if (dataSet != nullptr) {
       dataSet->get("directed", directed);
       dataSet->get("norm", norm);
+      dataSet->get("weight", weight);
     }
 
     // Metric is 0 in this case
     if (graph->numberOfNodes() <= 2)
       return true;
 
+    // Edges weights should be positive
+    if (weight && weight->getEdgeDoubleMin() <= 0) {
+      pluginProgress->setError("Edges weights should be positive.");
+      return false;
+    }
+
+    double avg_path_length = 0.;
     unsigned int nbNodes = graph->numberOfNodes();
     unsigned int count = 0;
 
@@ -102,37 +126,13 @@ public:
         break;
 
       stack<node> S;
-      TLP_HASH_MAP<node, list<node>> P;
+      unordered_map<node, list<node>> P;
       MutableContainer<int> sigma;
-      sigma.setAll(0);
-      sigma.set(s.id, 1);
-      MutableContainer<int> d;
-      d.setAll(-1);
-      d.set(s.id, 0);
-      queue<node> Q;
-      Q.push(s);
 
-      while (!Q.empty()) {
-        node v = Q.front();
-        int vd = d.get(v.id);
-        int vs = sigma.get(v.id);
-        Q.pop();
-        S.push(v);
-
-        for (auto w : (directed ? graph->getOutNodes(v) : graph->getInOutNodes(v))) {
-          int wd = d.get(w.id);
-
-          if (wd < 0) {
-            Q.push(w);
-            d.set(w.id, wd = vd + 1);
-          }
-
-          if (wd == vd + 1) {
-            sigma.add(w.id, vs);
-            P[w].push_back(v);
-          }
-        }
-      }
+      if (weight)
+        computeDijkstra(s, directed, weight, S, P, sigma);
+      else
+        computeBFS(s, directed, S, P, sigma);
 
       MutableContainer<double> delta;
       delta.setAll(0.0);
@@ -147,8 +147,13 @@ public:
           delta.add(v.id, vd);
           edge e = graph->existEdge(v, w, directed);
 
-          if (e.isValid())
+          if (e.isValid()) {
             result->setEdgeValue(e, result->getEdgeValue(e) + vd);
+            if (weight)
+              avg_path_length += vd * weight->getEdgeDoubleValue(e);
+            else
+              avg_path_length += vd;
+          }
         }
 
         if (w != s)
@@ -185,8 +190,53 @@ public:
           result->setEdgeValue(e, result->getEdgeValue(e) * 0.5);
       }
     }
+    avg_path_length /= (nbNodes * (nbNodes - 1.));
+    dataSet->set("average path length", avg_path_length);
 
     return pluginProgress->state() != TLP_CANCEL;
+  }
+
+private:
+  void computeBFS(node s, bool directed, stack<node> &S, unordered_map<node, list<node>> &P,
+                  MutableContainer<int> &sigma) {
+    sigma.setAll(0);
+    sigma.set(s.id, 1);
+    MutableContainer<int> d;
+    d.setAll(-1);
+    d.set(s.id, 0);
+    queue<node> Q;
+    Q.push(s);
+
+    while (!Q.empty()) {
+      node v = Q.front();
+      int vd = d.get(v.id);
+      int vs = sigma.get(v.id);
+      Q.pop();
+      S.push(v);
+
+      for (auto w : (directed ? graph->getOutNodes(v) : graph->getInOutNodes(v))) {
+        int wd = d.get(w.id);
+
+        if (wd < 0) {
+          Q.push(w);
+          d.set(w.id, wd = vd + 1);
+        }
+
+        if (wd == vd + 1) {
+          sigma.add(w.id, vs);
+          P[w].push_back(v);
+        }
+      }
+    }
+  }
+
+  void computeDijkstra(node s, bool directed, NumericProperty *weight, stack<node> &S,
+                       unordered_map<node, list<node>> &P, MutableContainer<int> &sigma) {
+    EdgeStaticProperty<double> eWeights(graph);
+    eWeights.copyFromNumericProperty(weight);
+    NodeStaticProperty<double> nodeDistance(graph);
+    tlp::computeDijkstra(graph, s, eWeights, nodeDistance, directed ? DIRECTED : UNDIRECTED, P, &S,
+                         &sigma);
   }
 };
 

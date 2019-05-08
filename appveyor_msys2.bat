@@ -49,6 +49,9 @@ bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-libpng"
 bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-qt5"
 bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-quazip"
 bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-qtwebkit"
+rem Workaround a MSYS2 packaging issue for Qt5
+rem (see https://github.com/msys2/MINGW-packages/issues/5253)
+bash -lc "sed -i -e 's/C:\/building\/msys32/C:\/msys64/g' C:/msys64/mingw64/lib/cmake/Qt5Gui/Qt5GuiConfigExtras.cmake"
 set TULIP_BUILD_DOC=ON
 goto tulip_build
 

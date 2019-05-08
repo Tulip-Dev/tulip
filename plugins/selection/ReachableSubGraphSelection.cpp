@@ -20,7 +20,7 @@
 #include "ReachableSubGraphSelection.h"
 
 #include <tulip/StringCollection.h>
-#include <tulip/GraphMeasure.h>
+#include <tulip/GraphTools.h>
 #include <tulip/StableIterator.h>
 
 using namespace tlp;

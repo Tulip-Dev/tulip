@@ -27,8 +27,9 @@ using namespace std;
 
 //============================================================
 Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
-                   NodeStaticProperty<double> &nd, std::function<Iterator<edge> *(node)> &getEdges)
-    : nodeDistance(nd) {
+                   NodeStaticProperty<double> &nd, EDGE_TYPE direction, std::stack<node> *qN,
+                   MutableContainer<int> *nP)
+    : nodeDistance(nd), queueNodes(qN), numberOfPaths(nP) {
   assert(src.isValid());
   this->graph = graph;
   usedEdges.setAll(false);
@@ -36,6 +37,13 @@ Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<
   set<DikjstraElement *, LessDikjstraElement> dikjstraTable;
   NodeStaticProperty<DikjstraElement *> mapDik(graph);
   mapDik.setAll(nullptr);
+  if (queueNodes)
+    while (!queueNodes->empty())
+      queueNodes->pop();
+  if (numberOfPaths) {
+    numberOfPaths->setAll(0);
+    numberOfPaths->set(this->src.id, 1);
+  }
 
   unsigned int i = 0;
   for (auto n : graph->nodes()) {
@@ -52,26 +60,27 @@ Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<
     mapDik[i++] = tmp;
   }
 
+  auto getEdges = getEdgesIterator(direction);
+
   while (!dikjstraTable.empty()) {
     // select the first element in the list the one with min value
     set<DikjstraElement *, LessDikjstraElement>::iterator it = dikjstraTable.begin();
     DikjstraElement &u = *(*it);
     dikjstraTable.erase(it);
+    if (queueNodes)
+      queueNodes->push(u.n);
 
-    edge e;
-
-    Iterator<edge> *iter = getEdges(u.n);
-
-    while (iter->hasNext()) {
-      e = iter->next();
+    for (auto e : getEdges(graph, u.n)) {
       node v = graph->opposite(e, u.n);
       auto dEle = mapDik[v];
       double eWeight = weights.getEdgeValue(e);
       assert(eWeight > 0);
 
-      if (fabs((u.dist + eWeight) - dEle->dist) < 1E-9) // path of the same length
+      if (fabs((u.dist + eWeight) - dEle->dist) < 1E-9) { // path of the same length
         dEle->usedEdge.push_back(e);
-      else if ((u.dist + eWeight) < dEle->dist) {
+        if (numberOfPaths)
+          numberOfPaths->set(v.id, numberOfPaths->get(v.id) + numberOfPaths->get(u.n.id));
+      } else if ((u.dist + eWeight) < dEle->dist) {
         // we find a node closer with that path
         dEle->usedEdge.clear();
         //**********************************************
@@ -81,9 +90,10 @@ Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<
         dEle->previous = u.n;
         dEle->usedEdge.push_back(e);
         dikjstraTable.insert(dEle);
+        if (numberOfPaths)
+          numberOfPaths->set(v.id, numberOfPaths->get(u.n.id));
       }
     }
-    delete iter;
   }
 
   usedEdges.setAll(false);
@@ -172,53 +182,18 @@ bool Dikjstra::searchPaths(node n, BooleanProperty *result) {
 }
 
 //========================================
-#define SMALLEST_WEIGHT 1.E-6
-
-bool selectShortestPaths(const Graph *const graph, node src, node tgt, ShortestPathType pathType,
-                         const DoubleProperty *const weights, BooleanProperty *result) {
-  std::function<Iterator<edge> *(node)> getOutEdges = [&](node un) {
-    return graph->getOutEdges(un);
-  };
-  std::function<Iterator<edge> *(node)> getInOutEdges = [&](node un) {
-    return graph->getInOutEdges(un);
-  };
-  std::function<Iterator<edge> *(node)> getInEdges = [&](node un) { return graph->getInEdges(un); };
-
-  std::function<Iterator<edge> *(node)> getEdges;
-  switch (pathType) {
-  case ShortestPathType::OnePath:
-  case ShortestPathType::AllPaths:
-    getEdges = getInOutEdges;
-    break;
-  case ShortestPathType::OneDirectedPath:
-  case ShortestPathType::AllDirectedPaths:
-    getEdges = getOutEdges;
-    break;
-  case ShortestPathType::OneReversedPath:
-  case ShortestPathType::AllReversedPaths:
-    getEdges = getInEdges;
-    break;
+bool Dikjstra::ancestors(unordered_map<node, std::list<node>> &result) {
+  result.clear();
+  result[src].push_back(src);
+  for (auto n : graph->getNodes()) {
+    if (n != src) {
+      for (auto e : graph->getInOutEdges(n)) {
+        node tgt = graph->opposite(e, n);
+        if (usedEdges.get(e.id) && nodeDistance[tgt] < nodeDistance[n]) {
+          result[n].push_back(tgt);
+        }
+      }
+    }
   }
-
-  EdgeStaticProperty<double> eWeights(graph);
-  if (!weights) {
-    eWeights.setAll(SMALLEST_WEIGHT);
-  } else {
-    auto fn = [&](edge e, unsigned int i) {
-      double val(weights->getEdgeValue(e));
-
-      eWeights[i] = val ? val : SMALLEST_WEIGHT;
-    };
-    TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, fn);
-  }
-
-  NodeStaticProperty<double> nodeDistance(graph);
-  Dikjstra dikjstra(graph, src, eWeights, nodeDistance, getEdges);
-
-  result->setAllNodeValue(false);
-  result->setAllEdgeValue(false);
-
-  if (uint(pathType) < ShortestPathType::AllPaths)
-    return dikjstra.searchPath(tgt, result);
-  return dikjstra.searchPaths(tgt, result);
+  return true;
 }
