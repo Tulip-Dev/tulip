@@ -618,12 +618,15 @@ void HistogramView::refresh() {
 }
 
 void HistogramView::graphChanged(Graph *) {
-  DataSet old_ds = state();
+  // We copy the value of "Nodes/Edges"
+  // in the new state in order to keep
+  // the user choice when changing graph
+  DataSet oldDs = state();
   unsigned nodes = NODE;
-  old_ds.get("Nodes/Edges", nodes);
-  DataSet new_ds;
-  new_ds.set("Nodes/Edges", nodes);
-  setState(new_ds);
+  oldDs.get("Nodes/Edges", nodes);
+  DataSet newDs;
+  newDs.set("Nodes/Edges", nodes);
+  setState(newDs);
   drawOverview();
 }
 
