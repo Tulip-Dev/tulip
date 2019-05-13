@@ -395,7 +395,7 @@ Graph *ScatterPlot2DView::getScatterPlotGraph() {
 }
 
 void ScatterPlot2DView::graphChanged(Graph *) {
-  if(!initialized){
+  if (!initialized) {
     setState(DataSet());
     return;
   }

@@ -396,13 +396,13 @@ bool ParallelCoordsAxisBoxPlot::eventFilter(QObject *widget, QEvent *e) {
     selectedAxis = parallelView->getAxisUnderPointer(me->x(), me->y());
 
     if (selectedAxis != nullptr) {
-        QuantitativeParallelAxis* qaxis = dynamic_cast<QuantitativeParallelAxis *>(selectedAxis);
-        if (qaxis&&axisBoxPlotMap.find(qaxis) != axisBoxPlotMap.end()) {
-            if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
-                rotateVector(sceneCoords, -(selectedAxis->getRotationAngle()), Z_ROT);
-            }
-            axisBoxPlotMap[qaxis]->setHighlightRangeIfAny(sceneCoords);
+      QuantitativeParallelAxis *qaxis = dynamic_cast<QuantitativeParallelAxis *>(selectedAxis);
+      if (qaxis && axisBoxPlotMap.find(qaxis) != axisBoxPlotMap.end()) {
+        if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
+          rotateVector(sceneCoords, -(selectedAxis->getRotationAngle()), Z_ROT);
         }
+        axisBoxPlotMap[qaxis]->setHighlightRangeIfAny(sceneCoords);
+      }
     }
 
     parallelView->refresh();
