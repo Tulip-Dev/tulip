@@ -395,7 +395,19 @@ Graph *ScatterPlot2DView::getScatterPlotGraph() {
 }
 
 void ScatterPlot2DView::graphChanged(Graph *) {
-  setState(DataSet());
+  if(!initialized){
+    setState(DataSet());
+    return;
+  }
+  // We copy the value of "Nodes/Edges"
+  // in the new state in order to keep
+  // the user choice when changing graph
+  DataSet oldDs = state();
+  unsigned nodes = NODE;
+  oldDs.get("Nodes/Edges", nodes);
+  DataSet newDs;
+  newDs.set("Nodes/Edges", nodes);
+  setState(newDs);
 }
 
 void ScatterPlot2DView::toggleInteractors(const bool activate) {
