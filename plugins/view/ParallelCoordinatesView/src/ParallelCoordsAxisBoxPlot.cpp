@@ -395,15 +395,14 @@ bool ParallelCoordsAxisBoxPlot::eventFilter(QObject *widget, QEvent *e) {
         glWidget->screenToViewport(screenCoords)));
     selectedAxis = parallelView->getAxisUnderPointer(me->x(), me->y());
 
-    if (selectedAxis != nullptr && dynamic_cast<QuantitativeParallelAxis *>(selectedAxis)) {
-      if (axisBoxPlotMap.find(static_cast<QuantitativeParallelAxis *>(selectedAxis)) !=
-          axisBoxPlotMap.end())
-        if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
-          rotateVector(sceneCoords, -(selectedAxis->getRotationAngle()), Z_ROT);
+    if (selectedAxis != nullptr) {
+        QuantitativeParallelAxis* qaxis = dynamic_cast<QuantitativeParallelAxis *>(selectedAxis);
+        if (qaxis&&axisBoxPlotMap.find(qaxis) != axisBoxPlotMap.end()) {
+            if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
+                rotateVector(sceneCoords, -(selectedAxis->getRotationAngle()), Z_ROT);
+            }
+            axisBoxPlotMap[qaxis]->setHighlightRangeIfAny(sceneCoords);
         }
-
-      axisBoxPlotMap[static_cast<QuantitativeParallelAxis *>(selectedAxis)]->setHighlightRangeIfAny(
-          sceneCoords);
     }
 
     parallelView->refresh();
