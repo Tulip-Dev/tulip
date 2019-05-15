@@ -348,7 +348,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DCMAKE_C_FLAGS=-I/usr/local/opt/llvm/include -DCMAKE_CXX_FLAGS=-I/usr/local/opt/llvm/include -DCMAKE_EXE_LINKER_FLAGS=-L/usr/local/opt/llvm/lib -DCMAKE_SHARED_LINKER_FLAGS=-L/usr/local/opt/llvm/lib -DOpenMP_C_FLAGS=-fopenmp=libomp -DOpenMP_C_LIB_NAMES=libomp -DOpenMP_CXX_FLAGS=-fopenmp=libomp -DOpenMP_CXX_LIB_NAMES=libomp -DOpenMP_libomp_LIBRARY=libomp -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - sudo ninja -j4 install || travis_terminate 1
@@ -502,7 +502,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DCMAKE_C_FLAGS=-I/usr/local/opt/llvm/include -DCMAKE_CXX_FLAGS=-I/usr/local/opt/llvm/include -DCMAKE_EXE_LINKER_FLAGS=-L/usr/local/opt/llvm/lib -DCMAKE_SHARED_LINKER_FLAGS=-L/usr/local/opt/llvm/lib -DOpenMP_C_FLAGS=-fopenmp=libomp -DOpenMP_C_LIB_NAMES=libomp -DOpenMP_CXX_FLAGS=-fopenmp=libomp -DOpenMP_CXX_LIB_NAMES=libomp -DOpenMP_libomp_LIBRARY=libomp -DCMAKE_PREFIX_PATH=/usr/local/opt/qt -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DSPHINX_EXECUTABLE=$HOME/Library/Python/2.7/bin/sphinx-build -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DCMAKE_PREFIX_PATH=/usr/local/opt/qt -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DSPHINX_EXECUTABLE=$HOME/Library/Python/2.7/bin/sphinx-build -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - sudo ninja -j4 install || travis_terminate 1

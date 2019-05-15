@@ -186,6 +186,19 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
       # TULIP_CXX_THREADS can be set to force the use of the cxx threads
       # regardless the OpenMP availability
       IF(NOT TULIP_CXX_THREADS)
+        # When using clang provided by Homebrew on MacOS, some extra setup
+        # is required in order to detect and use OpenMP
+        IF(APPLE AND CLANG AND "${CMAKE_C_COMPILER}" STREQUAL "/usr/local/opt/llvm/bin/clang")
+          SET(OpenMP_C_FLAGS "-fopenmp=libomp" CACHE STRING "")
+          SET(OpenMP_C_LIB_NAMES "libomp" CACHE STRING "")
+          SET(OpenMP_CXX_FLAGS "-fopenmp=libomp" CACHE STRING "")
+          SET(OpenMP_CXX_LIB_NAMES "libomp" CACHE STRING "")
+          SET(OpenMP_libomp_LIBRARY "libomp" CACHE STRING "")
+          SET(CMAKE_C_FLAGS "-I/usr/local/opt/llvm/include ${CMAKE_C_FLAGS}" CACHE STRING "" FORCE)
+          SET(CMAKE_CXX_FLAGS "-I/usr/local/opt/llvm/include ${CMAKE_CXX_FLAGS}" CACHE STRING "" FORCE)
+          SET(CMAKE_EXE_LINKER_FLAGS "-L/usr/local/opt/llvm/lib ${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "" FORCE)
+          SET(CMAKE_SHARED_LINKER_FLAGS "-L/usr/local/opt/llvm/lib ${CMAKE_SHARED_LINKER_FLAGS}" CACHE STRING "" FORCE)
+        ENDIF(APPLE AND CLANG AND "${CMAKE_C_COMPILER}" STREQUAL "/usr/local/opt/llvm/bin/clang")
         FIND_PACKAGE(OpenMP)
         IF(OPENMP_FOUND)
           SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${OpenMP_CXX_FLAGS}")
