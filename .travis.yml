@@ -240,33 +240,6 @@ jobs:
       script:
         - sudo docker run --rm=true -e CCACHE_DIR=/ccache --volumes-from ccache --cap-add SYS_ADMIN --device /dev/fuse:/dev/fuse:mrw --rm=true -v `pwd`:/tulip:rw ${DOCKER_IMAGE} /bin/bash -c "bash -xe /tulip/bundlers/linux/tulip_appimage_centos6_build.sh"
 
-    #--------------------------------------------------------------------------------------------------------------------------------------------------------------
-    -
-      # Tulip i686 AppImage build on CentOS 6
-      os: linux
-      dist: trusty
-      cache:
-        directories:
-          - $HOME/ccache
-
-      sudo: required
-      env:
-        - ARCH=i686
-        - DOCKER_IMAGE=toopher/centos-i386:centos6
-
-      services:
-        - docker
-
-      before_install:
-        - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
-        - sudo service docker restart
-        - sleep 5
-        - sudo docker pull ${DOCKER_IMAGE}
-        - sudo docker create -v $HOME/ccache:/ccache --name ccache ${DOCKER_IMAGE}
-
-      script:
-        - sudo docker run --rm=true -e CCACHE_DIR=/ccache --volumes-from ccache --cap-add SYS_ADMIN --device /dev/fuse:/dev/fuse:mrw --rm=true -v `pwd`:/tulip:rw ${DOCKER_IMAGE} /bin/bash -c "bash -xe /tulip/bundlers/linux/tulip_appimage_centos6_build.sh"
-
   #==============================================================================================================================================================
     # Tulip core build stage on Mac OS
     - stage: Tulip core build (Mac OS)
