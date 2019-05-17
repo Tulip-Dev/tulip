@@ -534,37 +534,36 @@ INSTALL(FILES cmake/TulipUseFile.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TULIP/)
 ENDIF(NOT TULIP_BUILD_FOR_APPIMAGE)
 
-IF(NOT TULIP_BUILD_CORE_ONLY)
+## ========================================================
+## tulip-config script
+## ========================================================
+SET(prefix "${CMAKE_INSTALL_PREFIX}")
+SET(exec_prefix "\${prefix}")
+SET(includedir "\${prefix}/${TulipIncludeInstallDir}")
+SET(libdir "\${prefix}/${TulipLibInstallDir}")
+SET(libversion "${TulipMMVersion}")
+SET(VERSION "${TulipVersion}")
+SET(WIN_VERSION "${TulipMajorVersion}.${TulipMinorVersion}")
+SET(QT_CPPFLAGS "-DQT_MINOR_REL=${QT_VERSION_MINOR}")
+IF("${OPENGL_INCLUDE_DIR}" STRGREATER "")
+  SET(GL_INCLUDES "-I${OPENGL_INCLUDE_DIR}")
+ENDIF("${OPENGL_INCLUDE_DIR}" STRGREATER "")
+IF(WIN32)
+  SET(GL_LDFLAGS "-l${OPENGL_gl_LIBRARY} ${GLEW_LIBRARY}")
+ELSE(WIN32)
+  SET(GL_LDFLAGS "${OPENGL_gl_LIBRARY} ${GLEW_LIBRARY}")
+ENDIF(WIN32)
+SET(QT_LDFLAGS "${QT_QTCORE_LIBRARY_RELEASE} ${QT_QTGUI_LIBRARY_RELEASE} ${QT_QTOPENGL_LIBRARY_RELEASE} ${QT_QTXML_LIBRARY_RELEASE} ${QT_QTNETWORK_LIBRARY_RELEASE} ${QT_QTWEBKIT_LIBRARY_RELEASE}")
 
-  ADD_SUBDIRECTORY(bundlers)
-#  ADD_SUBDIRECTORY(deploy)
-
-  ## ========================================================
-  ## tulip-config script
-  ## ========================================================
-  SET(prefix "${CMAKE_INSTALL_PREFIX}")
-  SET(exec_prefix "\${prefix}")
-  SET(includedir "\${prefix}/${TulipIncludeInstallDir}")
-  SET(libdir "\${prefix}/${TulipLibInstallDir}")
-  SET(libversion "${TulipMMVersion}")
-  SET(VERSION "${TulipVersion}")
-  SET(WIN_VERSION "${TulipMajorVersion}.${TulipMinorVersion}")
-  SET(QT_CPPFLAGS "-DQT_MINOR_REL=${QT_VERSION_MINOR}")
-  IF("${OPENGL_INCLUDE_DIR}" STRGREATER "")
-    SET(GL_INCLUDES "-I${OPENGL_INCLUDE_DIR}")
-  ENDIF("${OPENGL_INCLUDE_DIR}" STRGREATER "")
-  IF(WIN32)
-    SET(GL_LDFLAGS "-l${OPENGL_gl_LIBRARY} ${GLEW_LIBRARY}")
-  ELSE(WIN32)
-    SET(GL_LDFLAGS "${OPENGL_gl_LIBRARY} ${GLEW_LIBRARY}")
-  ENDIF(WIN32)
-  SET(QT_LDFLAGS "${QT_QTCORE_LIBRARY_RELEASE} ${QT_QTGUI_LIBRARY_RELEASE} ${QT_QTOPENGL_LIBRARY_RELEASE} ${QT_QTXML_LIBRARY_RELEASE} ${QT_QTNETWORK_LIBRARY_RELEASE} ${QT_QTWEBKIT_LIBRARY_RELEASE}")
-
-  CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
-
+CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
 IF(NOT TULIP_BUILD_FOR_APPIMAGE)
   INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config DESTINATION ${TulipBinInstallDir})
 ENDIF(NOT TULIP_BUILD_FOR_APPIMAGE)
+
+IF(NOT TULIP_BUILD_CORE_ONLY)
+
+  ADD_SUBDIRECTORY(bundlers)
+  # ADD_SUBDIRECTORY(deploy)
 
   IF(MSVC)
     INCLUDE(InstallRequiredSystemLibraries)
