@@ -1,5 +1,3 @@
-IF(NOT TULIP_BUILD_FOR_APPIMAGE)
-
 INSTALL(FILES
   tulip/AbstractGlCurve.h
   tulip/AroundTexturedSphere.h
@@ -83,5 +81,3 @@ INSTALL(FILES
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_ogl_dev
 )
-
-ENDIF(NOT TULIP_BUILD_FOR_APPIMAGE)
