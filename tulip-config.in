@@ -19,7 +19,7 @@ if [ "@CMAKE_DEBUG_MODE@" == "FALSE" ]; then
   ndebugflag=-DNDEBUG
 fi
 
-WINNT=$(sh -c 'uname -s | grep -q MINGW32_NT; echo $?')
+WINDOWS=$(sh -c 'uname -s | grep -q MINGW; echo $?')
 MACOSX=$(sh -c 'uname -s | grep -q Darwin; echo $?')
 LINUX=$(sh -c 'uname -s | grep -q Linux; echo $?')
 
@@ -34,7 +34,7 @@ if [ $MACOSX -eq 0 ] ; then
     pluginpath=$(dirname $thisdir)/lib/tulip
   fi
 fi
-if [ $WINNT -eq 0 ] ; then
+if [ $WINDOWS -eq 0 ] ; then
   libversion=@WIN_VERSION@
   libextension=dll
   plugincxxflags=-DPIC
