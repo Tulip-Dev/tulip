@@ -1,0 +1,31 @@
+CXX = @CMAKE_CXX_COMPILER@
+CXXFLAGS = $(shell tulip-config --cxxflags --plugincxxflags)
+LDFLAGS = $(shell tulip-config --lib_tulip --pluginldflags)
+
+PLUGIN_NAME = TestPlugins
+TULIP_VERSION = $(shell tulip-config --version)
+LIB_EXTENSION = $(shell tulip-config --pluginextension)
+
+TARGET_LIB = lib${PLUGIN_NAME}-${TULIP_VERSION}.${LIB_EXTENSION}
+
+SRCS = TestPlugins.cpp
+OBJS = $(SRCS:.cpp=.o)
+
+.PHONY: all
+all: ${TARGET_LIB}
+
+$(TARGET_LIB): $(OBJS)
+	$(CXX) ${CXXFLAGS} -o $@ ${LDFLAGS} $^
+
+$(SRCS:.cpp=.d):%.d:%.cpp
+	$(CXX) $(CXXFLAGS) -MM $< >$@
+
+include $(SRCS:.cpp=.d)
+
+.PHONY: clean
+clean:
+	rm -f ${TARGET_LIB} ${OBJS} $(SRCS:.cpp=.d)
+
+.PHONY: install
+install:
+	cp ${TARGET_LIB} $(shell tulip-config --pluginpath)/test

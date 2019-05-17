@@ -62,7 +62,7 @@ IF(WIN32)
     # this process is configured here instead in the root CMakeLists.txt as
     # CMake inserts install commands before the ones defined in sub directories
     # and we need Tulip to be fully installed before running the bundle fixing process
-    SET(APP "${CMAKE_INSTALL_PREFIX}/bin/tulip_perspective.exe")
+    SET(APP "\${CMAKE_INSTALL_PREFIX}/bin/tulip_perspective.exe")
     SET(LIB_DIRS ${QT_BINARY_DIR} ${CMAKE_LIBRARY_PATH})
     STRING(REPLACE ";" "\;" LIB_DIRS "${LIB_DIRS}")
     GET_PROPERTY(FIXUP_BUNDLE_LIBS GLOBAL PROPERTY FIXUP_BUNDLE_LIBS)
@@ -78,9 +78,9 @@ IF(WIN32)
     IF(MINGW AND EXISTS ${MINGW_BIN_PATH}/openssl.exe)
       INSTALL(CODE
               "INCLUDE(BundleUtilities)
-               FILE(COPY \"${MINGW_BIN_PATH}/openssl.exe\" DESTINATION \"${CMAKE_INSTALL_PREFIX}/bin/\")
-               FIXUP_BUNDLE(\"${CMAKE_INSTALL_PREFIX}/bin/openssl.exe\" \"\" \"${LIB_DIRS}\")
-               FILE(REMOVE \"${CMAKE_INSTALL_PREFIX}/bin/openssl.exe\")"
+               FILE(COPY \"${MINGW_BIN_PATH}/openssl.exe\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}/bin/\")
+               FIXUP_BUNDLE(\"\${CMAKE_INSTALL_PREFIX}/bin/openssl.exe\" \"\" \"${LIB_DIRS}\")
+               FILE(REMOVE \"\${CMAKE_INSTALL_PREFIX}/bin/openssl.exe\")"
       )
     ENDIF(MINGW AND EXISTS ${MINGW_BIN_PATH}/openssl.exe)
   ENDIF(TULIP_FIXUP_BUNDLE)
