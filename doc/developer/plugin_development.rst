@@ -5,9 +5,9 @@
 Plug-ins development
 ********************
 
-Tulip has been built to be easily extensible. Therefore a mechanism of plug-ins has been set up. It enables to directly add new features into the Tulip kernel. One must keeps in mind that a plug-in have access to all the parts of Tulip. Thus, plug-ins have to be written very carefully to prevent memory leak, errors and "core dump". 
+Tulip has been built to be easily extensible. Therefore a mechanism of plug-ins has been set up. It enables to directly add new features into the Tulip kernel. One must keeps in mind that a plug-in have access to all the parts of Tulip. Thus, plug-ins have to be written very carefully to prevent memory leak, errors and "core dump".
 
-To enable the use of plug-ins, a program must call the initialization functions of the plug-ins. This function loads dynamically all the plug-ins and register them into a factory that will enable to direct access to it. 
+To enable the use of plug-ins, a program must call the initialization functions of the plug-ins. This function loads dynamically all the plug-ins and register them into a factory that will enable to direct access to it.
 
 To develop a plug-in, you need to create a new class that will inherits from a specific algorithm class. They are separated in 4 different types:
 
@@ -19,17 +19,117 @@ To develop a plug-in, you need to create a new class that will inherits from a s
 
 * *Export algorithms:* Plug-ins to save a graph to a specific type of file. See the section called :ref:`Export plug-ins <plugins_export>`.
 
+Plug-ins build setup
+====================
+
+Tulip provides two ways to easily setup the build configuration for a C++ plug-in:
+
+  * using the CMake tool to generate the build files (recommended way)
+
+  * using a simple Makefile and the ``tulip-config`` script
+
+In the sub-sections below, we will consider that your plug-in implementation
+is contained in a file named ``MyTulipPlugin.cpp`` and that ``<tulip_install_dir>``
+corresponds to the root directory of your Tulip local installation.
+
+Using CMake to build a plugin
+-----------------------------
+
+This is the recommended way as it ensures cross platforms configuration
+for your plug-in build.
+
+To generate the build files needed to compile your plug-in with CMake,
+the ``CMakeLists.txt`` file below is sufficient:
+
+.. code-block:: cmake
+
+  CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+
+  FIND_PACKAGE(TULIP REQUIRED)
+
+  TULIP_SET_COMPILER_OPTIONS()
+
+  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${TULIP_INCLUDE_DIR})
+
+  SET(PLUGIN_NAME MyTulipPlugin-${TULIP_VERSION})
+  SET(PLUGIN_SRCS MyTulipPlugin.cpp)
+
+  ADD_LIBRARY(${PLUGIN_NAME} SHARED ${PLUGIN_SRCS})
+  TARGET_LINK_LIBRARIES(${PLUGIN_NAME} ${TULIP_CORE_LIBRARY})
+
+  TULIP_INSTALL_PLUGIN(${PLUGIN_NAME} ${TULIP_PLUGINS_DIR})
+
+You need to place it in the same folder containing your plugin source file(s).
+To generate the build files then compile and install the plugin, execute the
+following commands inside the plugin source folder:
+
+.. code-block:: bash
+
+  $ cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_PREFIX_PATH=<tulip_install_dir>/lib/cmake .
+  $ make
+  $ make install
+
+Using ``tulip-config`` in a Makefile
+------------------------------------
+
+The legacy way for building a plug-in using a Makefile and the ``tulip-config``
+script can also still be used on Unix based systems.
+
+You will need the following Makefile and ensures that the path ``<tulip_install_dir>/bin``
+is contained in your ``PATH`` environment variable.
+
+.. code-block:: makefile
+
+  CXX = g++
+  CXXFLAGS = $(shell tulip-config --cxxflags --plugincxxflags)
+  LDFLAGS = $(shell tulip-config --lib_tulip --pluginldflags)
+
+  PLUGIN_NAME = MyTulipPlugin
+  TULIP_VERSION = $(shell tulip-config --version)
+  LIB_EXTENSION = $(shell tulip-config --pluginextension)
+
+  TARGET_LIB = lib${PLUGIN_NAME}-${TULIP_VERSION}.${LIB_EXTENSION}
+
+  SRCS = MyTulipPlugin.cpp
+  OBJS = $(SRCS:.cpp=.o)
+
+  .PHONY: all
+  all: ${TARGET_LIB}
+
+  $(TARGET_LIB): $(OBJS)
+    $(CXX) ${CXXFLAGS} -o $@ ${LDFLAGS} $^
+
+  $(SRCS:.cpp=.d):%.d:%.cpp
+    $(CXX) $(CXXFLAGS) -MM $< >$@
+
+  include $(SRCS:.cpp=.d)
+
+  .PHONY: clean
+  clean:
+    rm -f ${TARGET_LIB} ${OBJS} $(SRCS:.cpp=.d)
+
+  .PHONY: install
+  install:
+    cp ${TARGET_LIB} $(shell tulip-config --pluginpath)
+
+Put that Makefile inside your plug-in source folder, then use the classical make
+commands to build and install the plug-in:
+
+.. code-block:: bash
+
+  $ make
+  $ make install
 
 .. _plugins_property:
 
 The PropertyAlgorithm class
 ===========================
 
-The PropertyAlgorithm class (which inherits of the *Algorithm* class), is the ârent class of different types of algorithms such as the *BooleanAlgorithm* class or the *LayoutAlgorithm* class. This class is important as most of the specific algorithms developed will have to inherit from it. For example, if you write a plug-in to update the graph layout, your class will have to inherit from the *LayoutAlgorithm* class which, itself, inherits from the *PropertyAlgorithm* class.
+The PropertyAlgorithm class (which inherits of the *Algorithm* class), is the parent class of different types of algorithms such as the *BooleanAlgorithm* class or the *LayoutAlgorithm* class. This class is important as most of the specific algorithms developed will have to inherit from it. For example, if you write a plug-in to update the graph layout, your class will have to inherit from the *LayoutAlgorithm* class which, itself, inherits from the *PropertyAlgorithm* class.
 
  Following is a table showing the subclasses of PropertyAlgorithm, with the corresponding, class of result property, the default graph property and the 'Algorithms' group in the GUI :
 
-.. csv-table:: 
+.. csv-table::
    :header: "Class name", "Result class name", "Graph property replaced (by default)", "Algorithms group"
 
    "BooleanAlgorithm",		"BooleanProperty", 	"viewSelection", 	"Selection"
@@ -59,7 +159,7 @@ Public members
 
 Following is a list of all public members:
 
-* *PropertyAlgorithm (const tlp::PluginContext& context)*: 
+* *PropertyAlgorithm (const tlp::PluginContext& context)*:
   Even if the constructor is used to initialize the inner variables, it is also the right place to declare the parameters needed by the algorithm and to specify how we are going to use them (consult the :ref:`Parameter section <plugins_parameters_add>`).
 
   If needed, some dependencies can also be specified between two algorithms using the method::
@@ -67,16 +167,16 @@ Following is a list of all public members:
     void addDependency(const char *name, const char *release);
 
   which allows to declare that the current *PropertyAlgorithm* depends (in terms of programming call) from the *release* version of the *Algorithm*  *release* named *name*. .
-* *~PropertyAlgorithm ()*: 
+* *~PropertyAlgorithm ()*:
   Destructor of the class.
 
-* *bool run ()*: 
+* *bool run ()*:
   This is the main method:
 
     * It will be called out if the pre-condition method (bool check (..)) returned true.
     * It is the starting point of your algorithm. The returned value must be true if your algorithm succeeded.
 
-* *bool check (std::string& errMsg) {return true;}*: 
+* *bool check (std::string& errMsg) {return true;}*:
   This method can be used to check the graph about its topological properties, metric properties on graph elements or any other requirement for the algorithm to run flawlessly. The default implementation inherited from the class *PropertyAlgorithm* returns *true*;
 
 
@@ -160,19 +260,19 @@ On the following example, we declare a character buffer that will contain the pa
   };
 
 Then, we can add the parameters in the constructor by writing the following lines::
- 
+
   addInParameter<StringCollection>("type",
-                                   paramHelp[0], 
+                                   paramHelp[0],
                                    "linear;uniform;enumerated");
-  addInParameter<PropertyInterface*>("input property", 
-                                     paramHelp[1], 
+  addInParameter<PropertyInterface*>("input property",
+                                     paramHelp[1],
                                      "viewMetric");
-  addInParameter<StringCollection>("target", 
-                                   paramHelp[2], 
+  addInParameter<StringCollection>("target",
+                                   paramHelp[2],
                                    "nodes;edges");
-  addInParameter<ColorScale>("colorScale", 
-                             paramHelp[3], 
-                             "((75, 75, 255, 200), 
+  addInParameter<ColorScale>("colorScale",
+                             paramHelp[3],
+                             "((75, 75, 255, 200),
                              (156, 161, 255, 200),
                              (255, 255, 127, 200),
                              (255, 170, 0, 200),
@@ -233,14 +333,14 @@ Public members
 
 Following is a list of some Public members:
 
-* *ProgressState progress (int step, int max_step)*: 
+* *ProgressState progress (int step, int max_step)*:
   This method can be used to know the global progress of an algorithm (the number of steps accomplished).
 
-* *void showPreview (bool showPreview)*: 
-  Enables to specify if the preview check box has to be visible or not. 
+* *void showPreview (bool showPreview)*:
+  Enables to specify if the preview check box has to be visible or not.
 
-* *bool isPreviewMode () const*: 
-  Enables to know if the user has checked the preview box. 
+* *bool isPreviewMode () const*:
+  Enables to know if the user has checked the preview box.
 
 * *ProgressState state () const*:
   Indicates the state of the 'Cancel', 'Stop' buttons of the dialog
@@ -258,7 +358,7 @@ Plugin Progress example
 -----------------------
 
 In the following small example, we will iterate all the nodes and notify the user of the progression. ::
- 
+
   unsigned int i=0;
   unsigned int nbNodes = graph->numberOfNodes ();
   const unsigned int STEP = 10;
@@ -272,8 +372,8 @@ In the following small example, we will iterate all the nodes and notify the use
        if(pluginProgress->state() != TLP_CONTINUE) {
           returnForEach pluginProgress->state()!=TLP_CANCEL;
        }
-    }    
-    i++;    	
+    }
+    i++;
   }
 
 Before exiting, we check if the user pressed stop or cancel. If he pressed "cancel", the graph will not be modified. If he pressed "stop", all values computed till now will be saved to the graph.
@@ -285,26 +385,26 @@ Example of a PropertyAlgorithm skeleton
 =======================================
 
 Following is an example of a dummy color algorithm::
- 
+
   #include <tulip/TulipPluginHeaders.h>
   #include <string>
-  
+
   using namespace std;
   using namespace tlp;
-  
+
   /** Algorithm documentation */
   // MyColorAlgorithm is just an example
-  
-  class MyColorAlgorithm:public ColorAlgorithm { 
+
+  class MyColorAlgorithm : public ColorAlgorithm {
   public:
 
     // This line is used to pass information about the current plug-in.
     PLUGININFORMATION("Name of the Current Algorithm",
-                       "Name of the Author",
-                       "13/13/13",
-                       "A few words describing what kind of action the plug-in realizes",
-                       "Plug-in version",
-                       "Name of the Sub-menu under which the plug-in should be classified")
+                      "Name of the Author",
+                      "13/13/13",
+                      "A few words describing what kind of action the plug-in realizes",
+                      "Plug-in version",
+                      "Name of the Sub-menu under which the plug-in should be classified")
 
     // The constructor below has to be defined,
     // it is the right place to declare the parameters
@@ -312,13 +412,13 @@ Following is an example of a dummy color algorithm::
     //   addInParameter<ParameterType>("Name","Help string","Default value");
     // and declare the algorithm dependencies too.
     //   addDependency("name", "version");
-    MyColorAlgorithm(const PluginContext* context):ColorAlgorithm(context) {
+    MyColorAlgorithm(const PluginContext* context) : ColorAlgorithm(context) {
     }
-  
-    // Define the destructor only if needed 
+
+    // Define the destructor only if needed
     // ~MyColorAlgorithm() {
     // }
-  
+
     // Define the check method only if needed.
     // It can be used to check topological properties of the graph,
     // metric properties on graph elements or anything else you need.
@@ -326,12 +426,12 @@ Following is an example of a dummy color algorithm::
     //   errorMsg="";
     //   return true;
     // }
-  
+
     // The run method is the main method:
     //     - It will be called out if the pre-condition method (bool check (..)) returned true.
     //     - It is the starting point of your algorithm.
     // The returned value must be true if your algorithm succeeded.
-    bool run() {
+    bool run() override {
       return true;
     }
   };
@@ -389,10 +489,10 @@ Following is a list of all protected members, similar to the one found in the *P
   The graph passed as a parameter containing the data to visualize.
 
 * *PluginProgress * pluginProgress*:
-  The class reporting the algorithm evolution (see the section on :ref:`the PluginProgress class <plugins_pluginprogress>`). 
+  The class reporting the algorithm evolution (see the section on :ref:`the PluginProgress class <plugins_pluginprogress>`).
 
 * *DataSet * dataSet*:
-  The *dataSet* gathering all the parameters needed to run the algorithm. See the section above detailling :ref:`the DataSet accession <plugins_parameters_access>`.
+  The *dataSet* gathering all the parameters needed to run the algorithm. See the section above detailing :ref:`the DataSet accession <plugins_parameters_access>`.
 
 
 .. _plugins_import:
@@ -400,7 +500,7 @@ Following is a list of all protected members, similar to the one found in the *P
 Import plug-ins
 ===============
 
-In this section, we will learn how to create import plug-ins. Those plug-ins will inherit from ImportModule. 
+In this section, we will learn how to create import plug-ins. Those plug-ins will inherit from ImportModule.
 
 
 .. _plugins_import_public:
@@ -424,7 +524,7 @@ Following is a list of all public members :
 * *~ImportModule ()*:
   Destructor of the class.
 
-* *bool import (const std::string name)*: 
+* *bool import (const std::string name)*:
   This is the main method, the starting point of your algorithm. The returned value must be true if your algorithm succeeds.
 
 The methods above must be redefined in our plugin (as shown in the :ref:`import skeleton <plugins_import_skeleton>`).
@@ -441,10 +541,10 @@ Following is a list of all protected members :
   Still the same.
 
 * *PluginProgress * pluginProgress*:
-  Likewise (see the section on :ref:`the PluginProgress class <plugins_pluginprogress>`). 
+  Likewise (see the section on :ref:`the PluginProgress class <plugins_pluginprogress>`).
 
 * *DataSet * dataSet*:
-  Here too (see the section above detailling :ref:`the DataSet accession <plugins_parameters_access>`).
+  Here too (see the section above detailing :ref:`the DataSet accession <plugins_parameters_access>`).
 
 
 .. _plugins_import_skeleton:
@@ -454,25 +554,25 @@ Skeleton an ImportModule derived class
 
 Code example::
 
-  #include <tulip/ImportModule.h>
+  #include <tulip/TulipPluginHeaders.h>
   #include <string>
-  
+
   using namespace std;
   using namespace tlp;
-  
+
   /** Import module documentation */
   // MyImportModule is just an example
-  
-  class MyImportModule:public ImportModule { 
+
+  class MyImportModule : public ImportModule {
   public:
 
     // This line is used to pass information about the current plug-in.
     PLUGININFORMATION("Name of the Current Import Algorithm",
-                       "Name of the Author",
-                       "13/13/13",
-                       "A few words describing what kind of import the plug-in realizes",
-                       "Plug-in version",
-                       "Name of the Sub-menu under which the plug-in should be classified")
+                      "Name of the Author",
+                      "13/13/13",
+                      "A few words describing what kind of import the plug-in realizes",
+                      "Plug-in version",
+                      "Name of the Sub-menu under which the plug-in should be classified")
 
     // The constructor below has to be defined,
     // it is the right place to declare the parameters
@@ -480,16 +580,16 @@ Code example::
     //   addInParameter<ParameterType>("Name","Help string","Default value");
     // and declare the algorithm dependencies too.
     //   addDependency("name", "version");
-    MyImportModule(tlp::PluginContext* context):ImportModule(context) {
+    MyImportModule(tlp::PluginContext* context) : ImportModule(context) {
     }
-  
-    // Define the destructor only if needed 
+
+    // Define the destructor only if needed
     // ~MyImportModule() {
     // }
-  
+
     // The import method is the starting point of your import module.
     // The returned value must be true if it succeeded.
-    bool importGraph() {
+    bool importGraph() override {
       return true;
     }
   };
@@ -526,7 +626,7 @@ Following is a list of the usual public members :
 * *~ExportModule ()*:
   Destructor of the class.
 
-* *bool exportGraph(std::ostream &os)*: 
+* *bool exportGraph(std::ostream &os)*:
   This is the main method, the starting point of your algorithm. The returned value must be true if your algorithm succeeded.
 
 The methods above will be redefined in our plugin (see the :ref:`export skeleton <plugins_export_skeleton>`).
@@ -542,7 +642,7 @@ Following is a list of all protected members :
 * *Graph * graph*:
   Nothing new here...
 
-* *PluginProgress * pluginProgress*: 
+* *PluginProgress * pluginProgress*:
   ...or here... (see the section on :ref:`the PluginProgress class <plugins_pluginprogress>`)
 
 * *DataSet * dataSet*:
@@ -555,27 +655,27 @@ Skeleton of an ExportModule derived class
 -----------------------------------------
 
 Code example::
- 
-  #include <tulip/ExportModule.h>
+
+  #include <tulip/TulipPluginHeaders.h>
   #include <string>
   #include <iostream>
-  
+
   using namespace std;
   using namespace tlp;
-  
+
   /** Export module documentation */
   // MyExportModule is just an example
-  
-  class MyExportModule:public ExportModule { 
+
+  class MyExportModule : public ExportModule {
   public:
-  
+
   // This line is used to pass information about the current plug-in.
   PLUGININFORMATION("Name of the Current Export Algorithm",
-                     "Name of the Author",
-                     "13/13/13",
-                     "A few words describing what kind of export the plug-in realizes",
-                     "Plug-in version",
-                     "Name of the Sub-menu under which the plug-in should be classified")
+                    "Name of the Author",
+                    "13/13/13",
+                    "A few words describing what kind of export the plug-in realizes",
+                    "Plug-in version",
+                    "Name of the Sub-menu under which the plug-in should be classified")
 
     // The constructor below has to be defined,
     // it is the right place to declare the parameters
@@ -583,18 +683,25 @@ Code example::
     //   addInParameter<ParameterType>("Name","Help string","Default value");
     // and declare the algorithm dependencies too.
     //   addDependency("name", "version");
-    MyExportModule(tlp::PluginContext* context):ExportModule(context) {
+    MyExportModule(tlp::PluginContext* context) : ExportModule(context) {
     }
 
-    // Define the destructor only if needed 
+    // Define the destructor only if needed
     // ~MyExportModule() {
     // }
-  
+
     // The exportGraph method is the starting point of your export module.
     // The returned value must be true if it succeeded.
-    bool exportGraph(ostream &os) {
+    bool exportGraph(ostream &os) override {
       return true;
     }
+
+    // This pure virtual method returning a file extension
+    // must also be implemented.
+    std::string fileExtension() const override {
+      return "";
+    }
+
   };
   // This second line will be used to register your algorithm in tulip
   // using the information given above.
