@@ -333,34 +333,6 @@ IF(WIN32)
     ENDIF(found_paths)
   ENDMACRO(TULIP_FIND_EXTERNAL_LIB)
 
-  # Try to locate a dll whose name matches the regular expression passed as argument
-  # by looking in the following directories :
-  #    * those stored in the CMAKE_LIBRARY_PATH environment variable
-  #    * those stored in the CMAKE_LIBRARY_PATH CMake variable
-  #    * the MinGW binaries directory
-  #    * the Qt binaries directory
-  # If a dll is found, install it in the application binaries directory
-  MACRO(TULIP_INSTALL_EXTERNAL_LIB pattern component)
-    TULIP_FIND_EXTERNAL_LIB(${pattern} results)
-    IF(NOT results)
-      MESSAGE("${pattern} could not be located and will not be installed in the binary directory of the application.\n"
-              "That library is required to run the application. Please add its path in the CMAKE_LIBRARY_PATH variable in order to install it automatically.")
-    ELSE(NOT results)
-      FOREACH(F ${results})
-        INSTALL(FILES ${F} DESTINATION ${TulipBinInstallDir} COMPONENT ${component})
-      ENDFOREACH(F ${results})
-    ENDIF(NOT results)
-  ENDMACRO(TULIP_INSTALL_EXTERNAL_LIB)
-
-  MACRO(TULIP_COPY_EXTERNAL_LIB pattern destination)
-    TULIP_FIND_EXTERNAL_LIB(${pattern} results)
-    IF(results)
-      FOREACH(F ${results})
-        FILE(COPY ${F} DESTINATION ${destination})
-      ENDFOREACH(F ${results})
-    ENDIF(results)
-  ENDMACRO(TULIP_COPY_EXTERNAL_LIB)
-
   MACRO(TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY import_library dll_name)
     UNSET(${dll_name})
     IF(MINGW)
@@ -403,73 +375,6 @@ IF(WIN32)
       SET(ENV{PATH} "${PATH_BACKUP}")
     ENDIF(MSVC)
   ENDMACRO(TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY)
-
-  # That macro checks if an external library has to be installed in the application directory.
-  # It first checks if the library provided as argument is an import library or a static library (for MinGW and MSVC).
-  # For MinGW, it also checks if the provided library is a dll (as that compiler allows to directly link with such a library).
-  # If the library is static, it does not need to be installed in the application directory.
-  # If the library is an import one, the name of the associated dll is retrieved from it and then provided as parameter to the INSTALL_EXTERNAL_LIB macro.
-  # If the library is a dll, its name is provided as parameter to the INSTALL_EXTERNAL_LIB macro.
-  MACRO(TULIP_INSTALL_EXTERNAL_LIB_IF_NEEDED library component)
-
-    IF(MINGW)
-      STRING(REGEX MATCH ".*dll\\.a" IMPORT_LIBRARY ${library})
-      STRING(REGEX MATCH ".*dll" DLL_LIBRARY ${library})
-      # If an import library is used, we can easily retrieve the dll name with the dlltool utility
-      IF(IMPORT_LIBRARY)
-         TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
-         IF(DLL_NAME)
-           TULIP_INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
-         ENDIF(DLL_NAME)
-      # If a dll is directly used, just extract its name from its path
-      ELSEIF(DLL_LIBRARY)
-        GET_FILENAME_COMPONENT(DLL_DIRECTORY ${library} DIRECTORY)
-        GET_FILENAME_COMPONENT(DLL_NAME ${library} NAME)
-        SET(CMAKE_LIBRARY_PATH "${DLL_DIRECTORY} ${CMAKE_LIBRARY_PATH}")
-        TULIP_INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
-      ENDIF()
-    ENDIF(MINGW)
-
-    IF(MSVC)
-      TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
-      # If we found a dll name, we need to install that dll
-      IF(DLL_NAME)
-        TULIP_INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
-      ENDIF(DLL_NAME)
-    ENDIF(MSVC)
-
-  ENDMACRO(TULIP_INSTALL_EXTERNAL_LIB_IF_NEEDED)
-
-  MACRO(TULIP_COPY_EXTERNAL_LIB_IF_NEEDED library destination)
-
-    IF(MINGW)
-      STRING(REGEX MATCH ".*dll\\.a" IMPORT_LIBRARY ${library})
-      STRING(REGEX MATCH ".*dll" DLL_LIBRARY ${library})
-      # If an import library is used, we can easily retrieve the dll name with the dlltool utility
-      IF(IMPORT_LIBRARY)
-         TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
-         IF(DLL_NAME)
-           TULIP_COPY_EXTERNAL_LIB(${DLL_NAME} ${destination})
-         ENDIF(DLL_NAME)
-      # If a dll is directly used, just extract its name from its path
-      ELSEIF(DLL_LIBRARY)
-        GET_FILENAME_COMPONENT(DLL_DIRECTORY ${library} DIRECTORY)
-        GET_FILENAME_COMPONENT(DLL_NAME ${library} NAME)
-        SET(CMAKE_LIBRARY_PATH "${DLL_DIRECTORY} ${CMAKE_LIBRARY_PATH}")
-        TULIP_COPY_EXTERNAL_LIB(${DLL_NAME} ${destination})
-      ENDIF()
-    ENDIF(MINGW)
-
-    IF(MSVC)
-      TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
-      # If we found a dll name, we need to install that dll
-      IF(DLL_NAME)
-        TULIP_COPY_EXTERNAL_LIB(${DLL_NAME} ${destination})
-      ENDIF(DLL_NAME)
-    ENDIF(MSVC)
-
-  ENDMACRO(TULIP_COPY_EXTERNAL_LIB_IF_NEEDED)
-
 
 ENDIF(WIN32)
 
