@@ -733,12 +733,11 @@ void HistogramView::updateHistograms(Histogram *detailOverview) {
   needUpdateHistogram = false;
   getGlMainWidget()->makeCurrent();
 
-  for (auto it = histogramsMap.begin(); it != histogramsMap.end(); ++it) {
-    if (std::find(selectedProperties.begin(), selectedProperties.end(), it->first) !=
-        selectedProperties.end()) {
-      if (it->second != detailOverview) {
-        (it->second)->update();
-      }
+  for (auto &prop : selectedProperties) {
+    auto histo = histogramsMap[prop];
+    if (histo != detailOverview) {
+      histo->setUpdateNeeded();
+      histo->update();
     }
   }
 }
@@ -746,11 +745,8 @@ void HistogramView::updateHistograms(Histogram *detailOverview) {
 vector<Histogram *> HistogramView::getHistograms() const {
   vector<Histogram *> ret;
 
-  for (auto it = histogramsMap.cbegin(); it != histogramsMap.cend(); ++it) {
-    if (std::find(selectedProperties.begin(), selectedProperties.end(), it->first) !=
-        selectedProperties.end()) {
-      ret.push_back(it->second);
-    }
+  for (auto &prop : selectedProperties) {
+    ret.push_back(histogramsMap.find(prop)->second);
   }
 
   return ret;
@@ -759,9 +755,10 @@ vector<Histogram *> HistogramView::getHistograms() const {
 void HistogramView::destroyHistogramsIfNeeded() {
   vector<string> propertiesToRemove;
 
-  for (const string &selectedProp : selectedProperties) {
-    if (!_histoGraph || !_histoGraph->existProperty(selectedProp)) {
-      if (histogramsMap[selectedProp] == detailedHistogram) {
+  for (auto &prop : selectedProperties) {
+    if (!_histoGraph || !_histoGraph->existProperty(prop)) {
+      auto it = histogramsMap.find(prop);
+      if (it->second == detailedHistogram) {
         if (!smallMultiplesView) {
           mainLayer->deleteGlEntity(detailedHistogram->getBinsComposite());
         }
@@ -769,13 +766,13 @@ void HistogramView::destroyHistogramsIfNeeded() {
         detailedHistogram = nullptr;
       }
 
-      propertiesToRemove.push_back(selectedProp);
-      delete histogramsMap[selectedProp];
-      histogramsMap.erase(selectedProp);
+      propertiesToRemove.push_back(prop);
+      delete it->second;
+      histogramsMap.erase(it);
     }
   }
 
-  for (const string &prop : propertiesToRemove) {
+  for (auto &prop : propertiesToRemove) {
     selectedProperties.erase(remove(selectedProperties.begin(), selectedProperties.end(), prop),
                              selectedProperties.end());
   }
@@ -1006,7 +1003,7 @@ void HistogramView::afterSetNodeValue(PropertyInterface *p, const node n) {
     viewSelection->removeListener(this);
     viewSelection->setEdgeValue(nodeToEdge[n], edgeAsNodeGraphSelection->getNodeValue(n));
     viewSelection->addListener(this);
-    setTextureUpdateNeeded();
+    setUpdateNeeded();
     return;
   }
 
@@ -1021,7 +1018,7 @@ void HistogramView::afterSetEdgeValue(PropertyInterface *p, const edge e) {
     ColorProperty *edgeAsNodeGraphColors = edgeAsNodeGraph->getProperty<ColorProperty>("viewColor");
     ColorProperty *viewColor = static_cast<ColorProperty *>(p);
     edgeAsNodeGraphColors->setNodeValue(edgeToNode[e], viewColor->getEdgeValue(e));
-    setTextureUpdateNeeded();
+    setUpdateNeeded();
   } else if (p->getName() == "viewLabel") {
     StringProperty *edgeAsNodeGraphLabels =
         edgeAsNodeGraph->getProperty<StringProperty>("viewLabel");
@@ -1037,7 +1034,7 @@ void HistogramView::afterSetEdgeValue(PropertyInterface *p, const edge e) {
       edgeAsNodeGraphSelection->setNodeValue(edgeToNode[e], viewSelection->getEdgeValue(e));
 
     edgeAsNodeGraphSelection->addListener(this);
-    setTextureUpdateNeeded();
+    setUpdateNeeded();
   }
 }
 
@@ -1054,10 +1051,10 @@ void HistogramView::afterSetAllNodeValue(PropertyInterface *p) {
           edgeAsNodeGraphSelection->getNodeValue(edgeAsNodeGraph->getOneNode()));
     }
 
-    setTextureUpdateNeeded();
+    setUpdateNeeded();
   } else if (p->getName() == "viewColor" || p->getName() == "viewShape" ||
              p->getName() == "viewTexture") {
-    setTextureUpdateNeeded();
+    setUpdateNeeded();
   }
 }
 
@@ -1071,7 +1068,7 @@ void HistogramView::afterSetAllEdgeValue(PropertyInterface *p) {
     ColorProperty *edgeAsNodeGraphColors = edgeAsNodeGraph->getProperty<ColorProperty>("viewColor");
     ColorProperty *viewColor = static_cast<ColorProperty *>(p);
     edgeAsNodeGraphColors->setAllNodeValue(viewColor->getEdgeDefaultValue());
-    setTextureUpdateNeeded();
+    setUpdateNeeded();
   } else if (p->getName() == "viewLabel") {
     StringProperty *edgeAsNodeGraphLabels =
         edgeAsNodeGraph->getProperty<StringProperty>("viewLabel");
@@ -1087,7 +1084,7 @@ void HistogramView::afterSetAllEdgeValue(PropertyInterface *p) {
       }
     }
 
-    setTextureUpdateNeeded();
+    setUpdateNeeded();
   }
 }
 
