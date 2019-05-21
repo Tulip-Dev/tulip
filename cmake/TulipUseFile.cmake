@@ -4,6 +4,16 @@ IF(TulipUseFile_included)
 ENDIF(TulipUseFile_included)
 SET(TulipUseFile_included TRUE)
 
+## ========================================================
+## Build type detection
+## ========================================================
+
+IF(CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
+  SET(CMAKE_DEBUG_MODE TRUE)
+ELSE(CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
+  SET(CMAKE_DEBUG_MODE FALSE)
+ENDIF(CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
+
 ## -----------------------------------------------------------------------------------------------
 ## Toolchains options
 ## -----------------------------------------------------------------------------------------------
@@ -243,9 +253,7 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
       ENDIF(NOT TULIP_CXX_THREADS)
     ELSE(TULIP_ENABLE_MULTI_THREADING)
       MESSAGE("Multithreaded code is disabled")
-      SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DTLP_NO_THREADS")
-      SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -DTLP_NO_THREADS")
-      SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DTLP_NO_THREADS")
+      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DTLP_NO_THREADS")
     ENDIF(TULIP_ENABLE_MULTI_THREADING)
   ENDIF(NOT CLANG OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 3.7.0 OR CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 3.7.0)
 

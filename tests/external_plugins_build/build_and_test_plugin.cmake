@@ -8,6 +8,10 @@ SET(TULIP_INSTALL_DIR "${CMAKE_SOURCE_DIR}/tulip_install")
 # Temporary plugins build directory
 SET(PLUGINS_BIN_DIR "${CMAKE_SOURCE_DIR}/plugins_build")
 
+# Cleanup temporary directories
+FILE(REMOVE_RECURSE ${TULIP_INSTALL_DIR})
+FILE(REMOVE_RECURSE ${PLUGINS_BIN_DIR})
+
 IF(NOT MSVC)
   # Ensure plugins loading test executable is built
   EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND}
@@ -86,6 +90,13 @@ IF(NOT MSVC)
   FILE(WRITE ${TULIP_INSTALL_DIR}/bin/tulip-config "${TULIP_CONFIG}")
 
   IF("${CMD_RESULT}" STREQUAL "0")
+    # ensure a clean build
+    EXECUTE_PROCESS(COMMAND make clean
+      WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/plugins_src
+      RESULT_VARIABLE CMD_RESULT)
+  ENDIF("${CMD_RESULT}" STREQUAL "0")
+
+  IF("${CMD_RESULT}" STREQUAL "0")
     EXECUTE_PROCESS(COMMAND make
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/plugins_src
                     RESULT_VARIABLE CMD_RESULT)
@@ -103,10 +114,6 @@ IF(NOT MSVC)
   ENDIF("${CMD_RESULT}" STREQUAL "0")
 
 ENDIF(NOT MSVC)
-
-# Cleanup temporary directories
-FILE(REMOVE_RECURSE ${TULIP_INSTALL_DIR})
-FILE(REMOVE_RECURSE ${PLUGINS_BIN_DIR})
 
 # Exit with error if something went wrong
 IF(NOT "${CMD_RESULT}" STREQUAL "0")

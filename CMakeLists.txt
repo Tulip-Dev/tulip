@@ -47,16 +47,6 @@ IF(NOT MSVC AND "${CMAKE_BUILD_TYPE}" STREQUAL "")
 ENDIF(NOT MSVC AND "${CMAKE_BUILD_TYPE}" STREQUAL "")
 
 ## ========================================================
-## Build type detection
-## ========================================================
-
-IF(CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
-  SET(CMAKE_DEBUG_MODE TRUE)
-ELSE(CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
-  SET(CMAKE_DEBUG_MODE FALSE)
-ENDIF(CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
-
-## ========================================================
 ## Check processor architecture
 ## ========================================================
 STRING(COMPARE EQUAL "${CMAKE_SIZEOF_VOID_P}" "8" X86_64)
