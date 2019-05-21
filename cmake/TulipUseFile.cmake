@@ -87,7 +87,7 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
       ENDIF(CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 5.0.0 OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 5.0.0)
     ENDIF(BSD)
   ENDIF(NOT MSVC)
-  
+
   IF(EMSCRIPTEN)
     # Ensure emscripten port of zlib is compiled before compiling Tulip
     FIND_PACKAGE(PythonInterp REQUIRED)
@@ -165,14 +165,89 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
       ENDIF(X64)
 
     ENDIF(MSVC)
-	
+
     # Need to use response files with MSYS Makefiles and recent CMake version (>= 3.7) bundled by MSYS2
     # otherwise OGDF library in thirdparty fails to link
     IF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*")
       SET(CMAKE_NEED_RESPONSE TRUE CACHE BOOL "" FORCE)
     ENDIF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*")
-	
+
   ENDIF(WIN32)
+
+  # OpenMP (only available with clang starting the 3.7 version with libomp installed)
+  IF(NOT CLANG OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 3.7.0 OR CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 3.7.0)
+    FIND_PACKAGE(Threads)
+    IF(CMAKE_DEBUG_MODE)
+      OPTION(TULIP_ENABLE_MULTI_THREADING "Do you want to enable multithreaded code (debug mode)?" OFF)
+    ELSE()
+      OPTION(TULIP_ENABLE_MULTI_THREADING "Do you want to enable multithreaded code?" ON)
+    ENDIF()
+    IF(TULIP_ENABLE_MULTI_THREADING)
+      # TULIP_CXX_THREADS can be set to force the use of the cxx threads
+      # regardless the OpenMP availability
+      IF(NOT TULIP_CXX_THREADS)
+        # When using clang provided by Homebrew on MacOS, some extra setup
+        # is required in order to detect and use OpenMP
+        IF(APPLE AND CLANG AND "${CMAKE_C_COMPILER}" STREQUAL "/usr/local/opt/llvm/bin/clang")
+          SET(OpenMP_C_FLAGS "-fopenmp=libomp" CACHE STRING "")
+          SET(OpenMP_C_LIB_NAMES "libomp" CACHE STRING "")
+          SET(OpenMP_CXX_FLAGS "-fopenmp=libomp" CACHE STRING "")
+          SET(OpenMP_CXX_LIB_NAMES "libomp" CACHE STRING "")
+          SET(OpenMP_libomp_LIBRARY "libomp" CACHE STRING "")
+          SET(CMAKE_C_FLAGS "-I/usr/local/opt/llvm/include ${CMAKE_C_FLAGS}" CACHE STRING "" FORCE)
+          SET(CMAKE_CXX_FLAGS "-I/usr/local/opt/llvm/include ${CMAKE_CXX_FLAGS}" CACHE STRING "" FORCE)
+          SET(CMAKE_EXE_LINKER_FLAGS "-L/usr/local/opt/llvm/lib ${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "" FORCE)
+          SET(CMAKE_SHARED_LINKER_FLAGS "-L/usr/local/opt/llvm/lib ${CMAKE_SHARED_LINKER_FLAGS}" CACHE STRING "" FORCE)
+        ENDIF(APPLE AND CLANG AND "${CMAKE_C_COMPILER}" STREQUAL "/usr/local/opt/llvm/bin/clang")
+        FIND_PACKAGE(OpenMP)
+        IF(OPENMP_FOUND)
+          SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${OpenMP_CXX_FLAGS}")
+          SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} ${OpenMP_CXX_FLAGS}")
+          SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${OpenMP_CXX_FLAGS}")
+          SET(OPENMP_CXX_FLAGS "${OpenMP_CXX_FLAGS}")
+          IF(WIN32)
+            IF(MSVC)
+              SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /openmp")
+              SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /openmp")
+              SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /openmp")
+              SET(OPENMP_CXX_FLAGS "/openmp")
+            ELSE()
+              SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lgomp ${CMAKE_THREAD_LIBS_INIT}")
+              SET(OPENMP_LIBRARIES "-lgomp -lpthread")
+            ENDIF()
+          ENDIF()
+        ELSE(OPENMP_FOUND)
+          IF(WIN32)
+            STRING(COMPARE NOTEQUAL "${OpenMP_C_FLAGS}" "" OMP_CFLAGS)
+            IF(OMP_CFLAGS)
+              # Force setting OpenMP flags on Windows platforms
+              SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${OpenMP_C_FLAGS}")
+              SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} ${OpenMP_C_FLAGS}")
+              SET(OPENMP_CXX_FLAGS "${OpenMP_C_FLAGS}")
+              IF(NOT MSVC)
+                SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OpenMP_C_FLAGS}")
+                SET(OPENMP_LINKER_FLAGS "${OpenMP_C_FLAGS}")
+                SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lgomp -lpthread")
+                SET(OPENMP_LIBRARIES "-lgomp -lpthread")
+              ENDIF(NOT MSVC)
+              SET(OPENMP_FOUND TRUE)
+            ELSE(OMP_CFLAGS)
+              MESSAGE("OpenMP not found: multithreaded code will use c++ threads")
+            ENDIF(OMP_CFLAGS)
+          ELSE(WIN32)
+            MESSAGE("OpenMP not found: multithreaded code will use c++ threads")
+          ENDIF(WIN32)
+        ENDIF(OPENMP_FOUND)
+      ELSE(NOT TULIP_CXX_THREADS)
+        MESSAGE("Multithreaded code will use c++ threads")
+      ENDIF(NOT TULIP_CXX_THREADS)
+    ELSE(TULIP_ENABLE_MULTI_THREADING)
+      MESSAGE("Multithreaded code is disabled")
+      SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DTLP_NO_THREADS")
+      SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -DTLP_NO_THREADS")
+      SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DTLP_NO_THREADS")
+    ENDIF(TULIP_ENABLE_MULTI_THREADING)
+  ENDIF(NOT CLANG OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 3.7.0 OR CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 3.7.0)
 
 ENDMACRO(TULIP_SET_COMPILER_OPTIONS)
 
@@ -258,34 +333,6 @@ IF(WIN32)
     ENDIF(found_paths)
   ENDMACRO(TULIP_FIND_EXTERNAL_LIB)
 
-  # Try to locate a dll whose name matches the regular expression passed as argument
-  # by looking in the following directories :
-  #    * those stored in the CMAKE_LIBRARY_PATH environment variable
-  #    * those stored in the CMAKE_LIBRARY_PATH CMake variable
-  #    * the MinGW binaries directory
-  #    * the Qt binaries directory
-  # If a dll is found, install it in the application binaries directory
-  MACRO(TULIP_INSTALL_EXTERNAL_LIB pattern component)
-    TULIP_FIND_EXTERNAL_LIB(${pattern} results)
-    IF(NOT results)
-      MESSAGE("${pattern} could not be located and will not be installed in the binary directory of the application.\n"
-              "That library is required to run the application. Please add its path in the CMAKE_LIBRARY_PATH variable in order to install it automatically.")
-    ELSE(NOT results)
-      FOREACH(F ${results})
-        INSTALL(FILES ${F} DESTINATION ${TulipBinInstallDir} COMPONENT ${component})
-      ENDFOREACH(F ${results})
-    ENDIF(NOT results)
-  ENDMACRO(TULIP_INSTALL_EXTERNAL_LIB)
-
-  MACRO(TULIP_COPY_EXTERNAL_LIB pattern destination)
-    TULIP_FIND_EXTERNAL_LIB(${pattern} results)
-    IF(results)
-      FOREACH(F ${results})
-        FILE(COPY ${F} DESTINATION ${destination})
-      ENDFOREACH(F ${results})
-    ENDIF(results)
-  ENDMACRO(TULIP_COPY_EXTERNAL_LIB)
-
   MACRO(TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY import_library dll_name)
     UNSET(${dll_name})
     IF(MINGW)
@@ -328,73 +375,6 @@ IF(WIN32)
       SET(ENV{PATH} "${PATH_BACKUP}")
     ENDIF(MSVC)
   ENDMACRO(TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY)
-
-  # That macro checks if an external library has to be installed in the application directory.
-  # It first checks if the library provided as argument is an import library or a static library (for MinGW and MSVC).
-  # For MinGW, it also checks if the provided library is a dll (as that compiler allows to directly link with such a library).
-  # If the library is static, it does not need to be installed in the application directory.
-  # If the library is an import one, the name of the associated dll is retrieved from it and then provided as parameter to the INSTALL_EXTERNAL_LIB macro.
-  # If the library is a dll, its name is provided as parameter to the INSTALL_EXTERNAL_LIB macro.
-  MACRO(TULIP_INSTALL_EXTERNAL_LIB_IF_NEEDED library component)
-
-    IF(MINGW)
-      STRING(REGEX MATCH ".*dll\\.a" IMPORT_LIBRARY ${library})
-      STRING(REGEX MATCH ".*dll" DLL_LIBRARY ${library})
-      # If an import library is used, we can easily retrieve the dll name with the dlltool utility
-      IF(IMPORT_LIBRARY)
-         TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
-         IF(DLL_NAME)
-           TULIP_INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
-         ENDIF(DLL_NAME)
-      # If a dll is directly used, just extract its name from its path
-      ELSEIF(DLL_LIBRARY)
-        GET_FILENAME_COMPONENT(DLL_DIRECTORY ${library} DIRECTORY)
-        GET_FILENAME_COMPONENT(DLL_NAME ${library} NAME)
-        SET(CMAKE_LIBRARY_PATH "${DLL_DIRECTORY} ${CMAKE_LIBRARY_PATH}")
-        TULIP_INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
-      ENDIF()
-    ENDIF(MINGW)
-
-    IF(MSVC)
-      TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
-      # If we found a dll name, we need to install that dll
-      IF(DLL_NAME)
-        TULIP_INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
-      ENDIF(DLL_NAME)
-    ENDIF(MSVC)
-
-  ENDMACRO(TULIP_INSTALL_EXTERNAL_LIB_IF_NEEDED)
-
-  MACRO(TULIP_COPY_EXTERNAL_LIB_IF_NEEDED library destination)
-
-    IF(MINGW)
-      STRING(REGEX MATCH ".*dll\\.a" IMPORT_LIBRARY ${library})
-      STRING(REGEX MATCH ".*dll" DLL_LIBRARY ${library})
-      # If an import library is used, we can easily retrieve the dll name with the dlltool utility
-      IF(IMPORT_LIBRARY)
-         TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
-         IF(DLL_NAME)
-           TULIP_COPY_EXTERNAL_LIB(${DLL_NAME} ${destination})
-         ENDIF(DLL_NAME)
-      # If a dll is directly used, just extract its name from its path
-      ELSEIF(DLL_LIBRARY)
-        GET_FILENAME_COMPONENT(DLL_DIRECTORY ${library} DIRECTORY)
-        GET_FILENAME_COMPONENT(DLL_NAME ${library} NAME)
-        SET(CMAKE_LIBRARY_PATH "${DLL_DIRECTORY} ${CMAKE_LIBRARY_PATH}")
-        TULIP_COPY_EXTERNAL_LIB(${DLL_NAME} ${destination})
-      ENDIF()
-    ENDIF(MINGW)
-
-    IF(MSVC)
-      TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
-      # If we found a dll name, we need to install that dll
-      IF(DLL_NAME)
-        TULIP_COPY_EXTERNAL_LIB(${DLL_NAME} ${destination})
-      ENDIF(DLL_NAME)
-    ENDIF(MSVC)
-
-  ENDMACRO(TULIP_COPY_EXTERNAL_LIB_IF_NEEDED)
-
 
 ENDIF(WIN32)
 

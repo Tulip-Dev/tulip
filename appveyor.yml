@@ -12,9 +12,9 @@ os: Visual Studio 2015
 # in order to speedup incremental builds.
 # Appveyor cache storage is limited to 1GB, so cache should be cleared once it is exceeding this quota
 # (see https://www.appveyor.com/docs/build-cache/)
-cache:      
+cache:
   - C:\msys64\home\appveyor\.ccache
-  - C:\Users\appveyor\clcache	
+  - C:\Users\appveyor\clcache
 
 init:
   - ps: $env:APPVEYOR_SAVE_CACHE_ON_ERROR = "true"
@@ -47,7 +47,7 @@ environment:
       MSVC_PLATFORM_TOOLSET: "v140"
       QT5_DIR: "C:/Qt/5.12/msvc2015_64"
       PYTHON_EXECUTABLE: "C:/Python37-x64/python.exe"
-      
+
     ## 32 bits GCC core build
     #- MSYS2_ARCH: i686
       #MSYSTEM: MINGW32
@@ -59,7 +59,7 @@ environment:
       #MSYSTEM: MINGW32
       #PYTHON2_HOME: "C:/Python27"
       #PYTHON3_HOME: "C:/Python37"
-    
+
     ## 32 bits MSVC core build
     #- CMAKE_VS_GENERATOR: "Visual Studio 14 2015"
       #MSVC_PLATFORM: "Win32"

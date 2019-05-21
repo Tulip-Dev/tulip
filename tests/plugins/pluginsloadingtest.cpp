@@ -20,7 +20,9 @@
 #include <iostream>
 #include <cstdlib>
 
+#ifndef TULIP_BUILD_CORE_ONLY
 #include <QApplication>
+#endif
 
 #include <tulip/TlpTools.h>
 #include <tulip/PluginLoaderTxt.h>
@@ -53,17 +55,23 @@ public:
 // This can be helpfull to catch possible segfaults or memory leaks.
 int main(int argc, char **argv) {
 
+#ifndef TULIP_BUILD_CORE_ONLY
   // we need to create a QApplication as some plugins (view, perspective, interactor)
   // need one to load correctly
   QApplication app(argc, argv);
+#endif
 
-  std::string tulipBuildDir = TULIP_BUILD_DIR;
+  std::string tulipPluginsDir = TULIP_PLUGINS_DIR;
+
+  if (tulipPluginsDir.empty() && argc > 1) {
+    tulipPluginsDir = argv[1];
+  }
 
   tlp::initTulipLib();
 
   // load all plugins from the Tulip build folder
   PluginLoaderTest pLoader;
-  tlp::PluginLibraryLoader::loadPluginsFromDir(tulipBuildDir + "/plugins", &pLoader);
+  tlp::PluginLibraryLoader::loadPluginsFromDir(tulipPluginsDir, &pLoader);
 
   // create an instance of each of them, then destroy it
   std::list<std::string> pluginNames = tlp::PluginLister::instance()->availablePlugins();

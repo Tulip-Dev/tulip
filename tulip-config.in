@@ -19,7 +19,7 @@ if [ "@CMAKE_DEBUG_MODE@" == "FALSE" ]; then
   ndebugflag=-DNDEBUG
 fi
 
-WINNT=$(sh -c 'uname -s | grep -q MINGW32_NT; echo $?')
+WINDOWS=$(sh -c 'uname -s | grep -q MINGW; echo $?')
 MACOSX=$(sh -c 'uname -s | grep -q Darwin; echo $?')
 LINUX=$(sh -c 'uname -s | grep -q Linux; echo $?')
 
@@ -34,12 +34,12 @@ if [ $MACOSX -eq 0 ] ; then
     pluginpath=$(dirname $thisdir)/lib/tulip
   fi
 fi
-if [ $WINNT -eq 0 ] ; then
+if [ $WINDOWS -eq 0 ] ; then
   libversion=@WIN_VERSION@
   libextension=dll
   plugincxxflags=-DPIC
   if [ -f "$thisdir/../Uninstall.exe" ] ; then
-#   Windows installation
+# Windows installation
     drive=`echo ${thisdir} | awk -F / '{print $2}'`
     ndir=${thisdir/\/$drive\//$drive:/}
     if [ -d ${ndir} ]; then
@@ -58,7 +58,7 @@ fi
 if [ "@QUAZIP_FOUND@" == "FALSE" ]; then
    quaziplib=${libdir}lib${quaziplib}.${libextension}
 fi
-   
+
 usage()
 {
     cat <<EOF
@@ -78,7 +78,7 @@ Options:
         --qtincludes (return the Qt includes)
         --qtlibs (return the Qt libs needed by Tulip)
         --sharepath (return the path where share data are installed)
-	
+
 EOF
     exit $1
 }
@@ -108,10 +108,10 @@ while test $# -gt 0; do
       OUTPUT=`echo ${OUTPUT} @GL_LDFLAGS@ @LIB_GL@`
       ;;
     --libs)
-      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} ${libdir}/lib@GZStreamLibrary@.${libextension} ${libdir}/libtulip-ogl-${libversion}.${libextension} ${libdir}/lib@FTGLLibrary@.${libextension} ${libdir}/libtulip-gui-${libversion}.${libextension} ${quaziplib} @OPENMP_CXX_FLAGS@`
+      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} ${libdir}/lib@GZStreamLibrary@.${libextension} ${libdir}/libtulip-ogl-${libversion}.${libextension} ${libdir}/lib@FTGLLibrary@.${libextension} ${libdir}/libtulip-gui-${libversion}.${libextension} ${quaziplib} @CMAKE_SHARED_LINKER_FLAGS@ @OPENMP_CXX_FLAGS@`
       ;;
     --lib_tulip)
-      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} ${libdir}/lib@GZStreamLibrary@.${libextension} @OPENMP_CXX_FLAGS@`
+      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} ${libdir}/lib@GZStreamLibrary@.${libextension} @CMAKE_SHARED_LINKER_FLAGS@ @OPENMP_CXX_FLAGS@`
       ;;
     --lib_ogl)
       OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-ogl-${libversion}.${libextension}  ${libdir}/lib@FTGLLibrary@.${libextension}`

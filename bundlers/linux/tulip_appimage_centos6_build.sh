@@ -61,7 +61,7 @@ make -j4 install
 
 # run unit tests
 if [ "$2" == "RUN_TESTS" ]; then
-  make test
+  make runTests
 fi
 
 # build a bundle dir suitable for AppImageKit

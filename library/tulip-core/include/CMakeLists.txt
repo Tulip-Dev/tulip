@@ -1,5 +1,3 @@
-IF(NOT TULIP_BUILD_FOR_APPIMAGE)
-
 INSTALL(FILES
   tulip/AbstractProperty.h
   tulip/AcyclicTest.h
@@ -117,5 +115,3 @@ INSTALL(FILES
 DESTINATION ${TulipIncludeInstallDir}/tulip/cxx/
 COMPONENT tulip_core_dev
 )
-
-ENDIF(NOT TULIP_BUILD_FOR_APPIMAGE)

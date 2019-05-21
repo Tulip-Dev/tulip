@@ -16,16 +16,18 @@
  * See the GNU General Public License for more details.
  *
  */
+
 ///@cond DOXYGEN_HIDDEN
 
-#ifndef __TULIPPLUGININCLUDE_H
-#define __TULIPPLUGININCLUDE_H
+#ifndef TULIP_PLUGIN_HEADERS_H
+#define TULIP_PLUGIN_HEADERS_H
 
 #include <tulip/DoubleProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/StringProperty.h>
 #include <tulip/Algorithm.h>
+#include <tulip/PropertyAlgorithm.h>
 #include <tulip/ImportModule.h>
 #include <tulip/ExportModule.h>
 #include <tulip/SizeProperty.h>
@@ -42,5 +44,7 @@
 #include <tulip/StringCollection.h>
 #include <tulip/TlpTools.h>
 #include <tulip/StaticProperty.h>
-#endif
+
+#endif // TULIP_PLUGIN_HEADERS_H
+
 ///@endcond
