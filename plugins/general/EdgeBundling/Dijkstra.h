@@ -17,8 +17,9 @@
  *
  */
 
-#ifndef DIKJSTRA_H
-#define DIKJSTRA_H
+#ifndef DIJKSTRA_H
+#define DIJKSTRA_H
+
 #include <vector>
 #include <set>
 #include <climits>
@@ -150,4 +151,4 @@ private:
   }
 };
 
-#endif // DIKJSTRA_H
+#endif // DIJKSTRA_H

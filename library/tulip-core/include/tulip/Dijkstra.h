@@ -18,8 +18,9 @@
  */
 
 ///@cond DOXYGEN_HIDDEN
-#ifndef DIKJSTRA_TOOL_H
-#define DIKJSTRA_TOOL_H
+#ifndef DIJKSTRA_H
+#define DIJKSTRA_H
+
 #include <vector>
 #include <set>
 #include <stack>
@@ -35,10 +36,10 @@
 
 namespace tlp {
 
-class Dikjstra {
+class Dijkstra {
 public:
   //============================================================
-  Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
+  Dijkstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
            NodeStaticProperty<double> &nodeDistance, EDGE_TYPE direction,
            std::stack<node> *qN = nullptr, MutableContainer<int> *nP = nullptr);
   //========================================================
@@ -51,14 +52,14 @@ public:
 private:
   void internalSearchPaths(node n, BooleanProperty *result);
   //=========================================================
-  struct DikjstraElement {
-    DikjstraElement(const double dist = DBL_MAX, const node previous = node(),
+  struct DijkstraElement {
+    DijkstraElement(const double dist = DBL_MAX, const node previous = node(),
                     const node n = node())
         : dist(dist), previous(previous), n(n) {}
-    bool operator==(const DikjstraElement &b) const {
+    bool operator==(const DijkstraElement &b) const {
       return n == b.n;
     }
-    bool operator!=(const DikjstraElement &b) const {
+    bool operator!=(const DijkstraElement &b) const {
       return n != b.n;
     }
     double dist;
@@ -67,8 +68,8 @@ private:
     std::vector<edge> usedEdge;
   };
 
-  struct LessDikjstraElement {
-    bool operator()(const DikjstraElement *const a, const DikjstraElement *const b) const {
+  struct LessDijkstraElement {
+    bool operator()(const DijkstraElement *const a, const DijkstraElement *const b) const {
       if (fabs(a->dist - b->dist) > 1.E-9) {
         return (a->dist < b->dist);
       } else {
@@ -84,6 +85,7 @@ private:
   std::stack<node> *queueNodes;
   MutableContainer<int> *numberOfPaths;
 };
-} // namespace tlp
-#endif // DIKJSTRA_H
+}
+
+#endif // DIJKSTRA_H
 ///@endcond
