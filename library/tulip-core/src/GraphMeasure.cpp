@@ -24,7 +24,7 @@
 #include <tulip/GraphMeasure.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphParallelTools.h>
-#include <tulip/Dikjstra.h>
+#include <tulip/Dijkstra.h>
 
 using namespace std;
 using namespace tlp;
@@ -90,7 +90,7 @@ double tlp::maxDistance(const Graph *graph, const unsigned int nPos,
 
   std::stack<node> queueNode;
   MutableContainer<int> nb_paths;
-  Dikjstra dikjstra(graph, graph->nodes()[nPos], eWeights, distance, direction, &queueNode,
+  Dijkstra dijkstra(graph, graph->nodes()[nPos], eWeights, distance, direction, &queueNode,
                     &nb_paths);
   // compute max distance from graph->nodes()[nPos]
   // by taking first reachable node in the queue

@@ -52,7 +52,7 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
 
   usedEdges.setAll(false);
 
-  set<DijkstraElement *, LessDijkstraElement> dikjstraTable;
+  set<DijkstraElement *, LessDijkstraElement> dijkstraTable;
   set<DijkstraElement *, LessDijkstraElement> focusTable;
 
   mapDik.setAll(0);
@@ -64,7 +64,7 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
   for (auto n : graph.nodes()) {
     if (n != src) { // init all nodes to +inf
       DijkstraElement *tmp = new DijkstraElement(DBL_MAX / 2. + 10., node(), n);
-      dikjstraTable.insert(tmp);
+      dijkstraTable.insert(tmp);
 
       if (focus[n])
         focusTable.insert(tmp);
@@ -72,7 +72,7 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
       mapDik[n] = tmp;
     } else { // init starting node to 0
       DijkstraElement *tmp = new DijkstraElement(0, n, n);
-      dikjstraTable.insert(tmp);
+      dijkstraTable.insert(tmp);
       mapDik[n] = tmp;
     }
   }
@@ -80,11 +80,11 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
   nodeDistance.setAll(DBL_MAX);
   nodeDistance[src] = 0;
 
-  while (!dikjstraTable.empty()) {
+  while (!dijkstraTable.empty()) {
     // select the first element in the list the one with min value
-    set<DijkstraElement *, LessDijkstraElement>::iterator it = dikjstraTable.begin();
+    set<DijkstraElement *, LessDijkstraElement>::iterator it = dijkstraTable.begin();
     DijkstraElement &u = *(*it);
-    dikjstraTable.erase(it);
+    dijkstraTable.erase(it);
 
     if (!focusTable.empty()) {
       set<DijkstraElement *, LessDijkstraElement>::reverse_iterator it = focusTable.rbegin();
@@ -110,7 +110,7 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
         // we find a node closer with that path
         dEle.usedEdge.clear();
         //**********************************************
-        dikjstraTable.erase(&dEle);
+        dijkstraTable.erase(&dEle);
 
         if (focus[dEle.n]) {
           focusTable.erase(&dEle);
@@ -119,7 +119,7 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
         dEle.dist = u.dist + eWeight;
         dEle.previous = n;
         dEle.usedEdge.push_back(e);
-        dikjstraTable.insert(&dEle);
+        dijkstraTable.insert(&dEle);
 
         if (focus[dEle.n]) {
           focusTable.insert(&dEle);

@@ -12,7 +12,7 @@ ConnectedTest.cpp
 ConvexHull.cpp
 DataSet.cpp
 Delaunay.cpp
-Dikjstra.cpp
+Dijkstra.cpp
 DoubleProperty.cpp
 DrawingTools.cpp
 FaceIterator.cpp
