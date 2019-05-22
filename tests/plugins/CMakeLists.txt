@@ -9,7 +9,10 @@ SET(TULIP_PLUGINS_TESTS_SRCS
   BasicLayoutTest.cpp
   pluginstest.cpp)
 
-SET_SOURCE_FILES_PROPERTIES(pluginstest.cpp pluginsloadingtest.cpp
+SET_SOURCE_FILES_PROPERTIES(pluginsloadingtest.cpp
+                            PROPERTIES COMPILE_DEFINITIONS TULIP_PLUGINS_DIR="${CMAKE_BINARY_DIR}/plugins")
+
+SET_SOURCE_FILES_PROPERTIES(pluginstest.cpp
                             PROPERTIES COMPILE_DEFINITIONS TULIP_BUILD_DIR="${CMAKE_BINARY_DIR}")
 
 ADD_CUSTOM_TARGET(copy_data ALL ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/data ${CMAKE_CURRENT_BINARY_DIR}/data VERBATIM)

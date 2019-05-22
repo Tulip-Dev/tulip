@@ -162,9 +162,9 @@ private:
       detailedHistogram->setSizesUpdateNeeded();
   }
 
-  void setTextureUpdateNeeded() {
+  void setUpdateNeeded() {
     if (detailedHistogram)
-      detailedHistogram->setTextureUpdateNeeded();
+      detailedHistogram->setUpdateNeeded();
   }
 
   ViewGraphPropertiesSelectionWidget *propertiesSelectionWidget;

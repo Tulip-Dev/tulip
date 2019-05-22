@@ -162,7 +162,7 @@ public:
 
   void setLayoutUpdateNeeded();
   void setSizesUpdateNeeded();
-  void setTextureUpdateNeeded();
+  void setUpdateNeeded();
   void update();
 
   void setBackgroundColor(const Color &color) {
@@ -224,7 +224,7 @@ private:
   bool displayEdges;
   bool layoutUpdateNeeded;
   bool sizesUpdateNeeded;
-  bool textureUpdateNeeded;
+  bool updateNeeded;
 
   bool xAxisScaleDefined, yAxisScaleDefined;
   std::pair<double, double> xAxisScale, yAxisScale;

@@ -130,7 +130,7 @@ void usage(const QString &error) {
       << endl
       << "FILE: a Tulip project file to open. The perspective to use will be read from the project "
          "meta-information. If the \"--perspective\" flag is used, tulip_perspective will try to "
-         "open the file with the given perspective (the project meta-information are ignored)."
+         "open the file with the given perspective (the project meta-information is ignored)."
       << endl
       << "List of OPTIONS:" << endl
       << "  --perspective=<perspective_name> (-p perspective_name)\tStart the perspective "
@@ -145,6 +145,7 @@ void usage(const QString &error) {
       << "  --help (-h)\tDisplay this help message and ignore other options." << endl
       << endl
       << "Available perspectives:" << endl;
+  tlp::initTulipSoftware();
   list<string> perspectives = PluginLister::instance()->availablePlugins<Perspective>();
 
   for (list<string>::const_iterator it = perspectives.begin(); it != perspectives.end(); ++it) {

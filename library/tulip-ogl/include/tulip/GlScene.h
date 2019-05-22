@@ -190,36 +190,55 @@ public:
   void centerScene();
 
   /**
-   * Compute information for ajustSceneToSize
-   * \param width : request width
-   * \param height : request height
-   * \param center : the result center will be stored in (if center != nullptr)
-   * \param eye : the result eye will be stored in (if eye != nullptr)
-   * \param sceneRadius : the result sceneRadius will be stored in (if sceneRadius != nullptr)
-   * \param xWhiteFactor : xWhiteFactor is the white part on x borders (left and right), the result
-   * xWhiteFactor will be stored in (if xWhiteFactor != nullptr)
-   * \param yWhiteFactor : yWhiteFactor is the white part on y borders (top and bottom), the result
-   * yWhiteFactor will be stored in (if yWhiteFactor != nullptr)
-   * \param sceneBoundingBox : the result sceneBoundingBox will be stored in (if sceneBoundingBox !=
-   * nullptr)
+   * Compute information for adjustSceneToSize
+   * @param width request width
+   * @param height request height
+   * @param center the result center will be stored in (if center != nullptr)
+   * @param eye the result eye will be stored in (if eye != nullptr)
+   * @param sceneRadius the result sceneRadius will be stored in (if sceneRadius != nullptr)
+   * @param xWhiteFactor the white part on x borders (left and right), the computed empty space size will be stored in (if xWhiteFactor != nullptr)
+   * @param yWhiteFactor the white part on y borders (top and bottom), the computed empty space size will be stored in (if yWhiteFactor != nullptr)
+   * @param sceneBoundingBox the computed sceneBoundingBox will be stored in (if sceneBoundingBox != nullptr)
+   * @param zoomFactor the computed zoomFactor will be stored in (if zoomFactor != nullptr)
    */
-  void computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye, float *sceneRadius,
-                               float *xWhiteFactor, float *yWhiteFactor,
-                               BoundingBox *sceneBoundingBox = nullptr,
-                               float *zoomFactor = nullptr);
+  void computeAdjustSceneToSize(int width, int height, Coord *center,
+				Coord *eye, float *sceneRadius,
+				float *xWhiteFactor, float *yWhiteFactor,
+				BoundingBox *sceneBoundingBox = nullptr,
+				float *zoomFactor = nullptr);
+
+  // use computeAdjustSceneToSize instead
+  _DEPRECATED void computeAjustSceneToSize(int width, int height, Coord *center,
+					   Coord *eye, float *sceneRadius,
+					   float *xWhiteFactor, float *yWhiteFactor,
+				BoundingBox *sceneBoundingBox = nullptr,
+					   float *zoomFactor = nullptr) {
+    computeAdjustSceneToSize(width, height, center, eye, sceneRadius,
+			     xWhiteFactor, yWhiteFactor, sceneBoundingBox, zoomFactor);
+  }
 
   /**
-   * Ajust camera to have entities near borders
+   * Adjust camera to have entities near borders
    * @param width requested width
    * @param height requested height
    */
-  void ajustSceneToSize(int width, int height);
+  void adjustSceneToSize(int width, int height);
+
+  _DEPRECATED inline void ajustSceneToSize(int width, int height) {
+    adjustSceneToSize(width, height);
+  }
 
   /**
    * @brief Zoom by step to given x,y screen coordinates
    * @param step of zoom
    */
   void zoomXY(int step, const int x, const int y);
+
+  /**
+   * @brief Zoom by factor
+   * @param factor of zoom
+   */
+  void zoomFactor(float factor);
 
   /**
    * @brief Zoom to given world coordinate
@@ -231,13 +250,9 @@ public:
    * @brief Zoom by step
    * @param step of zoom
    */
-  void zoom(int step);
-
-  /**
-   * @brief Zoom by factor
-   * @param factor of zoom
-   */
-  void zoomFactor(float factor);
+  void zoom(int step) {
+    zoomFactor(powf(1.1, step));
+  }
 
   /**
    * @brief Translate camera by (x,y,z)
@@ -250,7 +265,12 @@ public:
    * @param y rotation over Y axis in degree
    * @param z rotation over Z axis in degree
    */
-  void rotateScene(const int x, const int y, const int z);
+  void rotateCamera(const int x, const int y, const int z);
+
+  // use rotateCamera instead
+  _DEPRECATED inline void rotateScene(const int x, const int y, const int z) {
+    rotateCamera(x, y, z);
+  }
 
   /**
    * @brief Select entities in scene

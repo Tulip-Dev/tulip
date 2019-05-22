@@ -474,7 +474,7 @@ QOpenGLFramebufferObject *GlMainWidget::createTexture(const std::string &texture
 
   makeCurrent();
   scene.setViewport(0, 0, width, height);
-  scene.ajustSceneToSize(width, height);
+  scene.adjustSceneToSize(width, height);
 
   QOpenGLFramebufferObject *glFrameBuf = QGlBufferManager::getFramebufferObject(width, height);
   assert(glFrameBuf->size() == QSize(width, height));
@@ -546,7 +546,7 @@ QImage GlMainWidget::createPicture(int width, int height, bool center) {
     scene.setViewport(0, 0, width, height);
 
     if (center)
-      scene.ajustSceneToSize(width, height);
+      scene.adjustSceneToSize(width, height);
 
     computeInteractors();
     scene.draw();

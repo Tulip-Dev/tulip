@@ -395,7 +395,19 @@ Graph *ScatterPlot2DView::getScatterPlotGraph() {
 }
 
 void ScatterPlot2DView::graphChanged(Graph *) {
-  setState(DataSet());
+  if (!initialized) {
+    setState(DataSet());
+    return;
+  }
+  // We copy the value of "Nodes/Edges"
+  // in the new state in order to keep
+  // the user choice when changing graph
+  DataSet oldDs = state();
+  unsigned nodes = NODE;
+  oldDs.get("Nodes/Edges", nodes);
+  DataSet newDs;
+  newDs.set("Nodes/Edges", nodes);
+  setState(newDs);
 }
 
 void ScatterPlot2DView::toggleInteractors(const bool activate) {
@@ -707,13 +719,13 @@ void ScatterPlot2DView::draw() {
 void ScatterPlot2DView::centerView(bool) {
   if (!getGlMainWidget()->isVisible()) {
     if (lastViewWindowWidth != 0 && lastViewWindowHeight != 0) {
-      getGlMainWidget()->getScene()->ajustSceneToSize(lastViewWindowWidth, lastViewWindowHeight);
+      getGlMainWidget()->getScene()->adjustSceneToSize(lastViewWindowWidth, lastViewWindowHeight);
     } else {
       getGlMainWidget()->getScene()->centerScene();
     }
   } else {
-    getGlMainWidget()->getScene()->ajustSceneToSize(getGlMainWidget()->width(),
-                                                    getGlMainWidget()->height());
+    getGlMainWidget()->getScene()->adjustSceneToSize(getGlMainWidget()->width(),
+						     getGlMainWidget()->height());
   }
 
   // we apply a zoom factor to preserve a 50 px margin width

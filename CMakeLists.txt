@@ -22,16 +22,15 @@ IF(POLICY CMP0068)
 ENDIF(POLICY CMP0068)
 
 # enable the use of ccache for Tulip developers to speed up the build process
-#IF(NOT MSVC)
+IF(NOT MSVC)
   SET(TULIP_USE_CCACHE OFF CACHE BOOL "Do you want to use ccache to speed up the build process during Tulip development ? [OFF|ON]")
   IF(TULIP_USE_CCACHE)
     FIND_PROGRAM(CCACHE_PROGRAM ccache)
     IF(CCACHE_PROGRAM)
       SET_PROPERTY(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
-      SET_PROPERTY(GLOBAL PROPERTY RULE_LAUNCH_LINK "${CCACHE_PROGRAM}")
     ENDIF(CCACHE_PROGRAM)
   ENDIF(TULIP_USE_CCACHE)
-#ENDIF(NOT MSVC)
+ENDIF(NOT MSVC)
 
 PROJECT(tulip)
 
@@ -43,19 +42,9 @@ SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 FILE(TO_CMAKE_PATH "${CMAKE_INSTALL_PREFIX}" CMAKE_INSTALL_PREFIX)
 
 # Force build type to release with debug info if none has been provided
-IF("${CMAKE_BUILD_TYPE}" STREQUAL "")
+IF(NOT MSVC AND "${CMAKE_BUILD_TYPE}" STREQUAL "")
   SET(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "" FORCE)
-ENDIF("${CMAKE_BUILD_TYPE}" STREQUAL "")
-
-## ========================================================
-## Build type detection
-## ========================================================
-
-IF(CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
-  SET(CMAKE_DEBUG_MODE TRUE)
-ELSE(CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
-  SET(CMAKE_DEBUG_MODE FALSE)
-ENDIF(CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
+ENDIF(NOT MSVC AND "${CMAKE_BUILD_TYPE}" STREQUAL "")
 
 ## ========================================================
 ## Check processor architecture
@@ -312,76 +301,6 @@ ENDIF(NOT TULIP_USE_THIRDPARTY_QHULL)
 #Yajl
 FIND_PACKAGE(Yajl)
 
-# OpenMP (only available with clang starting the 3.7 version with libomp installed)
-IF(NOT CLANG OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 3.7.0 OR CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 3.7.0)
-
-  FIND_PACKAGE(Threads)
-  IF (NOT CMAKE_BUILD_TYPE STREQUAL "")
-    IF(CMAKE_DEBUG_MODE)
-      OPTION(TULIP_ENABLE_MULTI_THREADING "Do you want to enable multithreaded code (debug mode)?" OFF)
-    ELSE()
-      OPTION(TULIP_ENABLE_MULTI_THREADING "Do you want to enable multithreaded code?" ON)
-    ENDIF()
-    IF(TULIP_ENABLE_MULTI_THREADING)
-      # TULIP_CXX_THREADS can be set to force the use of the cxx threads
-      # regardless the OpenMP availability
-      IF(NOT TULIP_CXX_THREADS)
-        FIND_PACKAGE(OpenMP)
-        IF(OPENMP_FOUND)
-          SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${OpenMP_CXX_FLAGS}")
-          SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} ${OpenMP_CXX_FLAGS}")
-          SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${OpenMP_CXX_FLAGS}")
-          SET(OPENMP_CXX_FLAGS "${OpenMP_CXX_FLAGS}")
-          IF(WIN32)
-            IF(MSVC)
-              SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /openmp")
-              SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /openmp")
-              SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /openmp")
-              SET(OPENMP_CXX_FLAGS "/openmp")
-            ELSE()
-              SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lgomp ${CMAKE_THREAD_LIBS_INIT}")
-              SET(OPENMP_LIBRARIES "-lgomp -lpthread")
-            ENDIF()
-          ENDIF()
-        ELSE(OPENMP_FOUND)
-          IF(WIN32)
-            STRING(COMPARE NOTEQUAL "${OpenMP_C_FLAGS}" "" OMP_CFLAGS)
-            IF(OMP_CFLAGS)
-              # Force setting OpenMP flags on Windows platforms
-              SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${OpenMP_C_FLAGS}")
-              SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} ${OpenMP_C_FLAGS}")
-              SET(OPENMP_CXX_FLAGS "${OpenMP_C_FLAGS}")
-              IF(NOT MSVC)
-                SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OpenMP_C_FLAGS}")
-                SET(OPENMP_LINKER_FLAGS "${OpenMP_C_FLAGS}")
-                SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lgomp -lpthread")
-                SET(OPENMP_LIBRARIES "-lgomp -lpthread")
-              ENDIF(NOT MSVC)
-              SET(OPENMP_FOUND TRUE)
-            ELSE(OMP_CFLAGS)
-              MESSAGE("OpenMP not found: multithreaded code will use c++ threads")
-            ENDIF(OMP_CFLAGS)
-          ELSE(WIN32)
-            MESSAGE("OpenMP not found: multithreaded code will use c++ threads")
-          ENDIF(WIN32)
-        ENDIF(OPENMP_FOUND)
-      ELSE(NOT TULIP_CXX_THREADS)
-        MESSAGE("Multithreaded code will use c++ threads")
-      ENDIF(NOT TULIP_CXX_THREADS)
-    ELSE(TULIP_ENABLE_MULTI_THREADING)
-      MESSAGE("Multithreaded code is disabled")
-      SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DTLP_NO_THREADS")
-      SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -DTLP_NO_THREADS")
-      SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DTLP_NO_THREADS")
-    ENDIF(TULIP_ENABLE_MULTI_THREADING)
-  ENDIF(NOT CMAKE_BUILD_TYPE STREQUAL "")
-ENDIF(NOT CLANG OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 3.7.0 OR CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 3.7.0)
-
-IF(CMAKE_DEBUG_MODE)
-  #CACHE STRING "" FORCE
-  SET(CMAKE_CXX_FLAGS_DEBUG "-O1 ${CMAKE_CXX_FLAGS_DEBUG}")
-ENDIF()
-
 IF(NOT TULIP_BUILD_CORE_ONLY)
   # OpenGL
   FIND_PACKAGE(OpenGL REQUIRED)
@@ -593,7 +512,6 @@ INSTALL(FILES AUTHORS
               COPYING.LESSER
         DESTINATION ${TulipShareInstallDir})
 
-IF(NOT TULIP_BUILD_FOR_APPIMAGE)
 INSTALL(FILES cmake/FindTULIP.cmake
         RENAME TULIPConfig.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TULIP/)
@@ -603,39 +521,35 @@ CONFIGURE_FILE(cmake/TULIPConfigVersion.cmake.in ${CMAKE_BINARY_DIR}/cmake/TULIP
 INSTALL(FILES cmake/TulipUseFile.cmake
               ${CMAKE_BINARY_DIR}/cmake/TULIPConfigVersion.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TULIP/)
-ENDIF(NOT TULIP_BUILD_FOR_APPIMAGE)
+
+## ========================================================
+## tulip-config script
+## ========================================================
+SET(prefix "${CMAKE_INSTALL_PREFIX}")
+SET(exec_prefix "\${prefix}")
+SET(includedir "\${prefix}/${TulipIncludeInstallDir}")
+SET(libdir "\${prefix}/${TulipLibInstallDir}")
+SET(libversion "${TulipMMVersion}")
+SET(VERSION "${TulipVersion}")
+SET(WIN_VERSION "${TulipMajorVersion}.${TulipMinorVersion}")
+SET(QT_CPPFLAGS "-DQT_MINOR_REL=${QT_VERSION_MINOR}")
+IF("${OPENGL_INCLUDE_DIR}" STRGREATER "")
+  SET(GL_INCLUDES "-I${OPENGL_INCLUDE_DIR}")
+ENDIF("${OPENGL_INCLUDE_DIR}" STRGREATER "")
+IF(WIN32)
+  SET(GL_LDFLAGS "-l${OPENGL_gl_LIBRARY} ${GLEW_LIBRARY}")
+ELSE(WIN32)
+  SET(GL_LDFLAGS "${OPENGL_gl_LIBRARY} ${GLEW_LIBRARY}")
+ENDIF(WIN32)
+SET(QT_LDFLAGS "${QT_QTCORE_LIBRARY_RELEASE} ${QT_QTGUI_LIBRARY_RELEASE} ${QT_QTOPENGL_LIBRARY_RELEASE} ${QT_QTXML_LIBRARY_RELEASE} ${QT_QTNETWORK_LIBRARY_RELEASE} ${QT_QTWEBKIT_LIBRARY_RELEASE}")
+
+CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
+INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config DESTINATION ${TulipBinInstallDir})
 
 IF(NOT TULIP_BUILD_CORE_ONLY)
 
   ADD_SUBDIRECTORY(bundlers)
-#  ADD_SUBDIRECTORY(deploy)
-
-  ## ========================================================
-  ## tulip-config script
-  ## ========================================================
-  SET(prefix "${CMAKE_INSTALL_PREFIX}")
-  SET(exec_prefix "\${prefix}")
-  SET(includedir "\${prefix}/${TulipIncludeInstallDir}")
-  SET(libdir "\${prefix}/${TulipLibInstallDir}")
-  SET(libversion "${TulipMMVersion}")
-  SET(VERSION "${TulipVersion}")
-  SET(WIN_VERSION "${TulipMajorVersion}.${TulipMinorVersion}")
-  SET(QT_CPPFLAGS "-DQT_MINOR_REL=${QT_VERSION_MINOR}")
-  IF("${OPENGL_INCLUDE_DIR}" STRGREATER "")
-    SET(GL_INCLUDES "-I${OPENGL_INCLUDE_DIR}")
-  ENDIF("${OPENGL_INCLUDE_DIR}" STRGREATER "")
-  IF(WIN32)
-    SET(GL_LDFLAGS "-l${OPENGL_gl_LIBRARY} ${GLEW_LIBRARY}")
-  ELSE(WIN32)
-    SET(GL_LDFLAGS "${OPENGL_gl_LIBRARY} ${GLEW_LIBRARY}")
-  ENDIF(WIN32)
-  SET(QT_LDFLAGS "${QT_QTCORE_LIBRARY_RELEASE} ${QT_QTGUI_LIBRARY_RELEASE} ${QT_QTOPENGL_LIBRARY_RELEASE} ${QT_QTXML_LIBRARY_RELEASE} ${QT_QTNETWORK_LIBRARY_RELEASE} ${QT_QTWEBKIT_LIBRARY_RELEASE}")
-
-  CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
-
-IF(NOT TULIP_BUILD_FOR_APPIMAGE)
-  INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config DESTINATION ${TulipBinInstallDir})
-ENDIF(NOT TULIP_BUILD_FOR_APPIMAGE)
+  # ADD_SUBDIRECTORY(deploy)
 
   IF(MSVC)
     INCLUDE(InstallRequiredSystemLibraries)

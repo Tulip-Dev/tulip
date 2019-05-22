@@ -17,7 +17,7 @@
  *
  */
 
-#include <tulip/Dikjstra.h>
+#include <tulip/Dijkstra.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/GraphTools.h>
@@ -26,7 +26,7 @@ using namespace tlp;
 using namespace std;
 
 //============================================================
-Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
+Dijkstra::Dijkstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
                    NodeStaticProperty<double> &nd, EDGE_TYPE direction, std::stack<node> *qN,
                    MutableContainer<int> *nP)
     : nodeDistance(nd), queueNodes(qN), numberOfPaths(nP) {
@@ -34,8 +34,8 @@ Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<
   this->graph = graph;
   usedEdges.setAll(false);
   this->src = src;
-  set<DikjstraElement *, LessDikjstraElement> dikjstraTable;
-  NodeStaticProperty<DikjstraElement *> mapDik(graph);
+  set<DijkstraElement *, LessDijkstraElement> dijkstraTable;
+  NodeStaticProperty<DijkstraElement *> mapDik(graph);
   mapDik.setAll(nullptr);
   if (queueNodes)
     while (!queueNodes->empty())
@@ -47,26 +47,26 @@ Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<
 
   unsigned int i = 0;
   for (auto n : graph->nodes()) {
-    DikjstraElement *tmp;
+    DijkstraElement *tmp;
     if (n != src)
       // init all nodes to +inf
-      tmp = new DikjstraElement(DBL_MAX / 2. + 10., node(), n);
+      tmp = new DijkstraElement(DBL_MAX / 2. + 10., node(), n);
     else
       // init starting node to 0
-      tmp = new DikjstraElement(0, n, n);
+      tmp = new DijkstraElement(0, n, n);
 
-    dikjstraTable.insert(tmp);
+    dijkstraTable.insert(tmp);
 
     mapDik[i++] = tmp;
   }
 
   auto getEdges = getEdgesIterator(direction);
 
-  while (!dikjstraTable.empty()) {
+  while (!dijkstraTable.empty()) {
     // select the first element in the list the one with min value
-    set<DikjstraElement *, LessDikjstraElement>::iterator it = dikjstraTable.begin();
-    DikjstraElement &u = *(*it);
-    dikjstraTable.erase(it);
+    set<DijkstraElement *, LessDijkstraElement>::iterator it = dijkstraTable.begin();
+    DijkstraElement &u = *(*it);
+    dijkstraTable.erase(it);
     if (queueNodes)
       queueNodes->push(u.n);
 
@@ -84,12 +84,12 @@ Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<
         // we find a node closer with that path
         dEle->usedEdge.clear();
         //**********************************************
-        dikjstraTable.erase(dEle);
+        dijkstraTable.erase(dEle);
 
         dEle->dist = u.dist + eWeight;
         dEle->previous = u.n;
         dEle->usedEdge.push_back(e);
-        dikjstraTable.insert(dEle);
+        dijkstraTable.insert(dEle);
         if (numberOfPaths)
           numberOfPaths->set(v.id, numberOfPaths->get(u.n.id));
       }
@@ -99,7 +99,7 @@ Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<
   usedEdges.setAll(false);
   i = 0;
   for (auto n : graph->nodes()) {
-    DikjstraElement *dEle = mapDik[i++];
+    DijkstraElement *dEle = mapDik[i++];
     nodeDistance[n] = dEle->dist;
 
     for (auto e : dEle->usedEdge) {
@@ -110,7 +110,7 @@ Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<
   }
 }
 //=============================================================================
-bool Dikjstra::searchPath(node n, BooleanProperty *result) {
+bool Dijkstra::searchPath(node n, BooleanProperty *result) {
   bool ok = true;
 
   while (ok) {
@@ -150,7 +150,7 @@ bool Dikjstra::searchPath(node n, BooleanProperty *result) {
   return true;
 }
 //=======================================================================
-void Dikjstra::internalSearchPaths(node n, BooleanProperty *result) {
+void Dijkstra::internalSearchPaths(node n, BooleanProperty *result) {
   result->setNodeValue(n, true);
   for (auto e : graph->getInOutEdges(n)) {
     if (!usedEdges.get(e.id))
@@ -170,7 +170,7 @@ void Dikjstra::internalSearchPaths(node n, BooleanProperty *result) {
   }
 }
 //========================================
-bool Dikjstra::searchPaths(node n, BooleanProperty *result) {
+bool Dijkstra::searchPaths(node n, BooleanProperty *result) {
   internalSearchPaths(n, result);
   if (!result->getNodeValue(src)) {
     result->setAllNodeValue(false);
@@ -182,7 +182,7 @@ bool Dikjstra::searchPaths(node n, BooleanProperty *result) {
 }
 
 //========================================
-bool Dikjstra::ancestors(unordered_map<node, std::list<node>> &result) {
+bool Dijkstra::ancestors(unordered_map<node, std::list<node>> &result) {
   result.clear();
   result[src].push_back(src);
   for (auto n : graph->getNodes()) {

@@ -77,7 +77,7 @@ Histogram::Histogram(Graph *graph, Graph *edgeGraph, std::map<edge, node> &edgeM
       uniformQuantification(false), cumulativeFreqHisto(false), lastCumulHisto(false),
       edgeAsNodeGraph(edgeGraph), edgeToNode(edgeMap), backgroundColor(backgroundColor),
       textColor(textColor), integerScale(false), dataLocation(dataLocation), displayEdges(false),
-      layoutUpdateNeeded(true), sizesUpdateNeeded(true), textureUpdateNeeded(true),
+      layoutUpdateNeeded(true), sizesUpdateNeeded(true), updateNeeded(true),
       xAxisScaleDefined(false), yAxisScaleDefined(false), xAxisScale(make_pair(0, 0)),
       yAxisScale(make_pair(0, 0)), initXAxisScale(make_pair(0, 0)),
       initYAxisScale(make_pair(0, 0)) {
@@ -589,7 +589,7 @@ void Histogram::updateSizes() {
 
 void Histogram::update() {
 
-  if (!textureUpdateNeeded)
+  if (!updateNeeded)
     return;
 
   if (layoutUpdateNeeded)
@@ -716,7 +716,7 @@ void Histogram::update() {
 
   lastCumulHisto = cumulativeFreqHisto;
 
-  textureUpdateNeeded = false;
+  updateNeeded = false;
 }
 
 void Histogram::setBLCorner(const Coord &blCorner) {
@@ -739,15 +739,15 @@ void Histogram::setTextColor(const Color &color) {
 
 void Histogram::setLayoutUpdateNeeded() {
   layoutUpdateNeeded = true;
-  textureUpdateNeeded = true;
+  updateNeeded = true;
 }
 
 void Histogram::setSizesUpdateNeeded() {
   sizesUpdateNeeded = true;
-  textureUpdateNeeded = true;
+  updateNeeded = true;
 }
 
-void Histogram::setTextureUpdateNeeded() {
-  textureUpdateNeeded = true;
+void Histogram::setUpdateNeeded() {
+  updateNeeded = true;
 }
 } // namespace tlp

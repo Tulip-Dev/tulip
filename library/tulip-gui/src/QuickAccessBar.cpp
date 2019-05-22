@@ -580,8 +580,9 @@ void QuickAccessBarImpl::selectFont() {
   Observable::holdObservers();
 
   inputData()->getElementFont()->setAllNodeValue(QStringToTlpString(dlg.font().fontFile()));
-
   inputData()->getElementFont()->setAllEdgeValue(QStringToTlpString(dlg.font().fontFile()));
+  inputData()->getElementFontSize()->setAllNodeValue(dlg.fontSize());
+  inputData()->getElementFontSize()->setAllEdgeValue(dlg.fontSize());
 
   Observable::unholdObservers();
   _mainView->graph()->popIfNoUpdates();
@@ -595,6 +596,4 @@ void QuickAccessBarImpl::updateFontButtonStyle() {
   _ui->fontButton->setStyleSheet("font-family: " + selectedFont.fontFamily() + "; " +
                                  (selectedFont.isItalic() ? "font-style: italic; " : "") +
                                  (selectedFont.isBold() ? "font-weight: bold; " : ""));
-  //_ui->fontButton->setText(selectedFont.fontName() + (selectedFont.isBold() ? " Bold" : "") +
-  //(selectedFont.isItalic() ? " Italic" : ""));
 }

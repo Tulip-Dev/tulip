@@ -31,7 +31,7 @@
 #include <tulip/Ordering.h>
 #include <tulip/PlanarConMap.h>
 #include <tulip/GraphParallelTools.h>
-#include <tulip/Dikjstra.h>
+#include <tulip/Dijkstra.h>
 
 #include <queue>
 #include <stack>
@@ -796,11 +796,11 @@ bool selectShortestPaths(const Graph *const graph, node src, node tgt, ShortestP
   }
 
   NodeStaticProperty<double> nodeDistance(graph);
-  Dikjstra dikjstra(graph, src, eWeights, nodeDistance, direction);
+  Dijkstra dijkstra(graph, src, eWeights, nodeDistance, direction);
 
   if (uint(pathType) < ShortestPathType::AllPaths)
-    return dikjstra.searchPath(tgt, result);
-  return dikjstra.searchPaths(tgt, result);
+    return dijkstra.searchPath(tgt, result);
+  return dijkstra.searchPaths(tgt, result);
 }
 
 void markReachableNodes(const Graph *graph, const node startNode, TLP_HASH_MAP<node, bool> &result,
@@ -838,8 +838,8 @@ void computeDijkstra(const Graph *const graph, node src, const EdgeStaticPropert
                      NodeStaticProperty<double> &nodeDistance, EDGE_TYPE direction,
                      unordered_map<node, std::list<node>> &ancestors, std::stack<node> *queueNodes,
                      MutableContainer<int> *numberOfPaths) {
-  Dikjstra dikjstra(graph, src, weights, nodeDistance, direction, queueNodes, numberOfPaths);
-  dikjstra.ancestors(ancestors);
+  Dijkstra dijkstra(graph, src, weights, nodeDistance, direction, queueNodes, numberOfPaths);
+  dijkstra.ancestors(ancestors);
 }
 
 } // namespace tlp
