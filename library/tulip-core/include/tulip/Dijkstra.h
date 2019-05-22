@@ -85,7 +85,7 @@ private:
   std::stack<node> *queueNodes;
   MutableContainer<int> *numberOfPaths;
 };
-}
+} // namespace tlp
 
 #endif // DIJKSTRA_H
 ///@endcond

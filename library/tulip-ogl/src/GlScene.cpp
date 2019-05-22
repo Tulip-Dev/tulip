@@ -469,8 +469,8 @@ void GlScene::centerScene() {
 }
 
 void GlScene::computeAdjustSceneToSize(int width, int height, Coord *center, Coord *eye,
-                                      float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor,
-                                      BoundingBox *sceneBoundingBox, float *zoomFactor) {
+                                       float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor,
+                                       BoundingBox *sceneBoundingBox, float *zoomFactor) {
   if (xWhiteFactor)
     *xWhiteFactor = 0.;
 
@@ -595,7 +595,7 @@ void GlScene::adjustSceneToSize(int width, int height) {
   BoundingBox sceneBoundingBox;
 
   computeAdjustSceneToSize(width, height, &center, &eye, &sceneRadius, nullptr, nullptr,
-                          &sceneBoundingBox, &zoomFactor);
+                           &sceneBoundingBox, &zoomFactor);
 
   for (vector<pair<string, GlLayer *>>::iterator it = layersList.begin(); it != layersList.end();
        ++it) {

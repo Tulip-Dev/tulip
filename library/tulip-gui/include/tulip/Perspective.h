@@ -203,8 +203,8 @@ public:
   /**
    * @brief usage Displays a usage message when called from the tulip_perspective executable
    */
-  virtual void usage(std::string &usage_str) const{
-      usage_str = "No options for this perspective.";
+  virtual void usage(std::string &usage_str) const {
+    usage_str = "No options for this perspective.";
   }
 
   /**

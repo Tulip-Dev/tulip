@@ -725,7 +725,7 @@ void ScatterPlot2DView::centerView(bool) {
     }
   } else {
     getGlMainWidget()->getScene()->adjustSceneToSize(getGlMainWidget()->width(),
-						     getGlMainWidget()->height());
+                                                     getGlMainWidget()->height());
   }
 
   // we apply a zoom factor to preserve a 50 px margin width
