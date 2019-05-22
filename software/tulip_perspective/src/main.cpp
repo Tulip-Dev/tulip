@@ -145,6 +145,7 @@ void usage(const QString &error) {
       << "  --help (-h)\tDisplay this help message and ignore other options." << endl
       << endl
       << "Available perspectives:" << endl;
+  tlp::initTulipSoftware();
   list<string> perspectives = PluginLister::instance()->availablePlugins<Perspective>();
 
   for (list<string>::const_iterator it = perspectives.begin(); it != perspectives.end(); ++it) {
