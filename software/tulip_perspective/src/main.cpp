@@ -144,18 +144,21 @@ void usage(const QString &error) {
       << endl
       << "  --help (-h)\tDisplay this help message and ignore other options." << endl
       << endl
+      << "Other options (written as --<option_name>=<value>) will be passed to the perspective." << endl
       << "Available perspectives:" << endl;
   tlp::initTulipSoftware();
   list<string> perspectives = PluginLister::instance()->availablePlugins<Perspective>();
 
-  for (list<string>::const_iterator it = perspectives.begin(); it != perspectives.end(); ++it) {
-    cout << *it;
-
-    if ((*it) != perspectives.back())
-      cout << ", ";
+  for (auto perspective_name : perspectives) {
+    cout << perspective_name << endl;
+    string usage_str("");
+    Perspective *p(PluginLister::instance()->getPluginObject<Perspective>(perspective_name, nullptr));
+    p->usage(usage_str);
+    delete p;
+    cout << usage_str << endl;
+    cout << endl;
   }
 
-  cerr << endl;
 
   exit(returnCode);
 }
