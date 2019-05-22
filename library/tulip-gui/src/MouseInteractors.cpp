@@ -218,10 +218,10 @@ bool MouseRotXRotY::eventFilter(QObject *widget, QEvent *e) {
       deltaX = 0;
 
     if (deltaY != 0)
-      glMainWidget->getScene()->rotateScene(glMainWidget->screenToViewport(deltaY), 0, 0);
+      glMainWidget->getScene()->rotateCamera(glMainWidget->screenToViewport(deltaY), 0, 0);
 
     if (deltaX != 0)
-      glMainWidget->getScene()->rotateScene(0, glMainWidget->screenToViewport(deltaX), 0);
+      glMainWidget->getScene()->rotateCamera(0, glMainWidget->screenToViewport(deltaX), 0);
 
     x = qMouseEv->x();
     y = qMouseEv->y();
@@ -283,7 +283,7 @@ bool MouseZoomRotZ::eventFilter(QObject *widget, QEvent *e) {
     if (inRotation) {
       // Rotation
       deltaX = qMouseEv->x() - x;
-      glMainWidget->getScene()->rotateScene(0, 0, glMainWidget->screenToViewport(deltaX));
+      glMainWidget->getScene()->rotateCamera(0, 0, glMainWidget->screenToViewport(deltaX));
       x = qMouseEv->x();
     }
 
@@ -534,11 +534,11 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
       break;
 
     case Qt::Key_Insert:
-      glmainwidget->getScene()->rotateScene(0, 0, glmainwidget->screenToViewport(-1 * delta * 2));
+      glmainwidget->getScene()->rotateCamera(0, 0, glmainwidget->screenToViewport(-1 * delta * 2));
       break;
 
     case Qt::Key_Delete:
-      glmainwidget->getScene()->rotateScene(0, 0, glmainwidget->screenToViewport(delta * 2));
+      glmainwidget->getScene()->rotateCamera(0, 0, glmainwidget->screenToViewport(delta * 2));
       break;
 
     default:

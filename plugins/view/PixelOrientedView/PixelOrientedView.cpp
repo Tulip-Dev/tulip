@@ -594,18 +594,18 @@ Color PixelOrientedView::getTextColor() const {
 void PixelOrientedView::centerView(bool) {
   if (!getGlMainWidget()->isVisible()) {
     if (lastViewWindowWidth != 0 && lastViewWindowHeight != 0) {
-      getGlMainWidget()->getScene()->ajustSceneToSize(lastViewWindowWidth, lastViewWindowHeight);
+      getGlMainWidget()->getScene()->adjustSceneToSize(lastViewWindowWidth, lastViewWindowHeight);
     } else {
       getGlMainWidget()->getScene()->centerScene();
     }
   } else {
-    getGlMainWidget()->getScene()->ajustSceneToSize(getGlMainWidget()->width(),
-                                                    getGlMainWidget()->height());
+    getGlMainWidget()->getScene()->adjustSceneToSize(getGlMainWidget()->width(),
+						     getGlMainWidget()->height());
   }
 
   // we apply a zoom factor to preserve a 50 px margin height
   // to ensure the scene will not be drawn under the configuration tabs title
-  float glHeight = graphicsView()->height();
+  float glHeight = graphicsView()->width();
   getGlMainWidget()->getScene()->zoomFactor((glHeight - 50) / glHeight);
   getGlMainWidget()->draw();
 }

@@ -465,10 +465,10 @@ void GlScene::notifyDeletedEntity(GlSimpleEntity *entity) {
 }
 
 void GlScene::centerScene() {
-  ajustSceneToSize(viewport[2], viewport[3]);
+  adjustSceneToSize(viewport[2], viewport[3]);
 }
 
-void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye,
+void GlScene::computeAdjustSceneToSize(int width, int height, Coord *center, Coord *eye,
                                       float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor,
                                       BoundingBox *sceneBoundingBox, float *zoomFactor) {
   if (xWhiteFactor)
@@ -586,7 +586,7 @@ void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coor
   }
 }
 
-void GlScene::ajustSceneToSize(int width, int height) {
+void GlScene::adjustSceneToSize(int width, int height) {
 
   Coord center;
   Coord eye;
@@ -594,7 +594,7 @@ void GlScene::ajustSceneToSize(int width, int height) {
   float zoomFactor;
   BoundingBox sceneBoundingBox;
 
-  computeAjustSceneToSize(width, height, &center, &eye, &sceneRadius, nullptr, nullptr,
+  computeAdjustSceneToSize(width, height, &center, &eye, &sceneRadius, nullptr, nullptr,
                           &sceneBoundingBox, &zoomFactor);
 
   for (vector<pair<string, GlLayer *>>::iterator it = layersList.begin(); it != layersList.end();
@@ -611,13 +611,7 @@ void GlScene::ajustSceneToSize(int width, int height) {
 }
 
 void GlScene::zoomXY(int step, const int x, const int y) {
-
-  for (vector<pair<string, GlLayer *>>::iterator it = layersList.begin(); it != layersList.end();
-       ++it) {
-    if (it->second->getCamera().is3D() && (!it->second->useSharedCamera()))
-      it->second->getCamera().setZoomFactor(it->second->getCamera().getZoomFactor() *
-                                            pow(1.1, step));
-  }
+  zoom(step);
 
   if (step < 0)
     step *= -1;
@@ -653,16 +647,6 @@ void GlScene::translateCamera(const int x, const int y, const int z) {
   }
 }
 
-void GlScene::zoom(int step) {
-  for (vector<pair<string, GlLayer *>>::iterator it = layersList.begin(); it != layersList.end();
-       ++it) {
-    if (it->second->getCamera().is3D() && (!it->second->useSharedCamera())) {
-      it->second->getCamera().setZoomFactor(it->second->getCamera().getZoomFactor() *
-                                            pow(1.1, step));
-    }
-  }
-}
-
 void GlScene::zoomFactor(float factor) {
   for (vector<pair<string, GlLayer *>>::iterator it = layersList.begin(); it != layersList.end();
        ++it) {
@@ -672,7 +656,7 @@ void GlScene::zoomFactor(float factor) {
   }
 }
 
-void GlScene::rotateScene(const int x, const int y, const int z) {
+void GlScene::rotateCamera(const int x, const int y, const int z) {
   for (vector<pair<string, GlLayer *>>::iterator it = layersList.begin(); it != layersList.end();
        ++it) {
     if (it->second->getCamera().is3D() && (!it->second->useSharedCamera())) {
