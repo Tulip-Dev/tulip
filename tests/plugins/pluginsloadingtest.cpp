@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
   std::list<std::string> pluginNames = tlp::PluginLister::instance()->availablePlugins();
   std::list<std::string>::const_iterator it = pluginNames.begin();
   for (; it != pluginNames.end(); ++it) {
-    tlp::Plugin *plugin = tlp::PluginLister::instance()->getPluginObject(*it, nullptr);
+    tlp::Plugin *plugin = tlp::PluginLister::instance()->getPluginObject(*it);
     delete plugin;
   }
 

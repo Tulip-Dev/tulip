@@ -101,7 +101,7 @@ public:
    * @param p The context to give to the plug-in.
    * @return ObjectType* The newly constructed plug-in.
    **/
-  static tlp::Plugin *getPluginObject(const std::string &name, tlp::PluginContext *context);
+  static tlp::Plugin *getPluginObject(const std::string &name, tlp::PluginContext *context = nullptr);
 
   /**
    * @brief Checks if a plugin of a given type is loaded
@@ -129,7 +129,7 @@ public:
    * required type, this method returns nullptr
    */
   template <typename PluginType>
-  PluginType *getPluginObject(const std::string &name, tlp::PluginContext *context) {
+  PluginType *getPluginObject(const std::string &name, tlp::PluginContext *context = nullptr) {
     auto it = _plugins.find(name);
     if (it != _plugins.end() && (dynamic_cast<const PluginType *>(it->second.info) != nullptr)) {
       std::string pluginName = it->second.info->name();

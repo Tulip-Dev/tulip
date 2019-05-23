@@ -312,7 +312,7 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *p
 
   for (const string &pluginName : exportPlugins) {
     ExportModule *exportPlugin =
-        PluginLister::instance()->getPluginObject<ExportModule>(pluginName, nullptr);
+        PluginLister::instance()->getPluginObject<ExportModule>(pluginName);
     string ext(exportPlugin->fileExtension());
 
     if (filename.rfind(ext) != string::npos &&

@@ -77,7 +77,7 @@ tlp::View *PanelSelectionWizard::panel() const {
 
 void PanelSelectionWizard::createView() {
   _view =
-      PluginLister::instance()->getPluginObject<View>(QStringToTlpString(_currentItem), nullptr);
+      PluginLister::instance()->getPluginObject<View>(QStringToTlpString(_currentItem));
   _view->setupUi();
   _view->setGraph(graph());
   _view->setState(DataSet());

@@ -153,7 +153,7 @@ void usage(const QString &error) {
   for (auto &name : perspectives) {
     cout << " - " << name << endl;
     string usage_str("");
-    auto p = PluginLister::instance()->getPluginObject<Perspective>(name, nullptr);
+    auto p = PluginLister::instance()->getPluginObject<Perspective>(name);
 #if TULIP_INT_MM_VERSION > 503
   #error "The check tulipRelease() != 5.3.0 in non longer needed"
 #endif
