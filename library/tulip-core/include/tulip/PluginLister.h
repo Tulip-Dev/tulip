@@ -101,7 +101,8 @@ public:
    * @param p The context to give to the plug-in.
    * @return ObjectType* The newly constructed plug-in.
    **/
-  static tlp::Plugin *getPluginObject(const std::string &name, tlp::PluginContext *context = nullptr);
+  static tlp::Plugin *getPluginObject(const std::string &name,
+                                      tlp::PluginContext *context = nullptr);
 
   /**
    * @brief Checks if a plugin of a given type is loaded

@@ -155,7 +155,7 @@ void usage(const QString &error) {
     string usage_str("");
     auto p = PluginLister::instance()->getPluginObject<Perspective>(name);
 #if TULIP_INT_MM_VERSION > 503
-  #error "The check tulipRelease() != 5.3.0 in non longer needed"
+#error "The check tulipRelease() != 5.3.0 in non longer needed"
 #endif
     if (p->tulipRelease() != "5.3.0")
       p->usage(usage_str);

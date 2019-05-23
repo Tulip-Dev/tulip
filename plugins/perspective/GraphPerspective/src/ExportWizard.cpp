@@ -191,8 +191,8 @@ bool ExportWizard::validateCurrentPage() {
   QString exportFile = outputFile();
 
   // check correct extension
-  ExportModule *p = PluginLister::instance()->getPluginObject<ExportModule>(
-      tlp::QStringToTlpString(algorithm()));
+  ExportModule *p =
+      PluginLister::instance()->getPluginObject<ExportModule>(tlp::QStringToTlpString(algorithm()));
   std::list<std::string> extension;
 
   if (p != nullptr)
