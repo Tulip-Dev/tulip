@@ -201,13 +201,6 @@ public:
   progress(ProgressOptions options = ProgressOptions(IsPreviewable | IsStoppable | IsCancellable));
 
   /**
-   * @brief usage Displays a usage message when called from the tulip_perspective executable
-   */
-  virtual void usage(std::string &usage_str) const {
-    usage_str = "No options for this perspective.";
-  }
-
-  /**
    * @return The Perspective's main window.
    */
   QMainWindow *mainWindow() const;
@@ -328,6 +321,22 @@ protected slots:
    * @param action a QAction
    */
   void showStatusTipOf(QAction *action);
+
+public:
+  /**
+   * @brief usage Displays a usage message when called from the tulip_perspective executable
+   */
+#if TULIP_INT_MM_VERSION > 503
+  #error "The declaration of Perspective::usage() can now be moved"
+#endif
+  // As this method has been added in Tulip 5.3.1,
+  // in order to maximize the binary compatibility with Tulip 5.3.0
+  // it must be added after all the preexisting virtual methods;
+  // and we must ensure that tulipRelease() != "5.3.0"
+  // before calling it (cf usage() in software/tulip_perspective/src/main.cpp)
+  virtual void usage(std::string &usage_str) const {
+    usage_str = "No options for this perspective.";
+  }
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Perspective::ProgressOptions)
 } // namespace tlp
