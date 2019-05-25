@@ -196,25 +196,27 @@ public:
    * @param center the result center will be stored in (if center != nullptr)
    * @param eye the result eye will be stored in (if eye != nullptr)
    * @param sceneRadius the result sceneRadius will be stored in (if sceneRadius != nullptr)
-   * @param xWhiteFactor the white part on x borders (left and right), the computed empty space size will be stored in (if xWhiteFactor != nullptr)
-   * @param yWhiteFactor the white part on y borders (top and bottom), the computed empty space size will be stored in (if yWhiteFactor != nullptr)
-   * @param sceneBoundingBox the computed sceneBoundingBox will be stored in (if sceneBoundingBox != nullptr)
+   * @param xWhiteFactor the white part on x borders (left and right), the computed empty space size
+   * will be stored in (if xWhiteFactor != nullptr)
+   * @param yWhiteFactor the white part on y borders (top and bottom), the computed empty space size
+   * will be stored in (if yWhiteFactor != nullptr)
+   * @param sceneBoundingBox the computed sceneBoundingBox will be stored in (if sceneBoundingBox !=
+   * nullptr)
    * @param zoomFactor the computed zoomFactor will be stored in (if zoomFactor != nullptr)
    */
-  void computeAdjustSceneToSize(int width, int height, Coord *center,
-				Coord *eye, float *sceneRadius,
-				float *xWhiteFactor, float *yWhiteFactor,
-				BoundingBox *sceneBoundingBox = nullptr,
-				float *zoomFactor = nullptr);
+  void computeAdjustSceneToSize(int width, int height, Coord *center, Coord *eye,
+                                float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor,
+                                BoundingBox *sceneBoundingBox = nullptr,
+                                float *zoomFactor = nullptr);
 
   // use computeAdjustSceneToSize instead
-  _DEPRECATED void computeAjustSceneToSize(int width, int height, Coord *center,
-					   Coord *eye, float *sceneRadius,
-					   float *xWhiteFactor, float *yWhiteFactor,
-				BoundingBox *sceneBoundingBox = nullptr,
-					   float *zoomFactor = nullptr) {
-    computeAdjustSceneToSize(width, height, center, eye, sceneRadius,
-			     xWhiteFactor, yWhiteFactor, sceneBoundingBox, zoomFactor);
+  _DEPRECATED void computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye,
+                                           float *sceneRadius, float *xWhiteFactor,
+                                           float *yWhiteFactor,
+                                           BoundingBox *sceneBoundingBox = nullptr,
+                                           float *zoomFactor = nullptr) {
+    computeAdjustSceneToSize(width, height, center, eye, sceneRadius, xWhiteFactor, yWhiteFactor,
+                             sceneBoundingBox, zoomFactor);
   }
 
   /**

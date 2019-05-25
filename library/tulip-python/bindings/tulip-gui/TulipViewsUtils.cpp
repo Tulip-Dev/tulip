@@ -89,25 +89,19 @@ std::vector<tlp::View *> TulipViewsManager::getOpenedViewsWithName(const std::st
 tlp::View *TulipViewsManager::addView(const std::string &viewName, tlp::Graph *graph,
                                       const DataSet &dataSet, bool show) {
   tlp::Workspace *workspace = tlpWorkspace();
-  tlp::View *view = nullptr;
+  tlp::View *view = PluginLister::instance()->getPluginObject<View>(viewName);
+  view->setupUi();
+  view->setGraph(graph);
+  view->setState(dataSet);
 
   if (workspace) {
     workspace->graphModel()->addGraph(graph);
-    view = PluginLister::instance()->getPluginObject<View>(viewName, nullptr);
-    view->setupUi();
-    view->setGraph(graph);
-    view->setState(dataSet);
     workspace->addPanel(view);
   } else {
 
     graph->addListener(this);
 
     model->addGraph(graph);
-
-    view = PluginLister::instance()->getPluginObject<View>(viewName, nullptr);
-    view->setupUi();
-    view->setGraph(graph);
-    view->setState(dataSet);
 
     WorkspacePanel *panel = new WorkspacePanel(view);
     panel->setGraphsModel(model);

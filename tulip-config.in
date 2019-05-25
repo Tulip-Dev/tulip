@@ -4,50 +4,49 @@ thisdir=$(dirname "$0")
 if test "$thisdir" = "." ; then
   thisdir=$PWD
 fi
+upthisdir=$(dirname ${thisdir})
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 includedir=@includedir@
 libdir=@libdir@
 sharedir=${prefix}/share
 libversion=@libversion@
-libextension=so
+libextension=$(echo @CMAKE_SHARED_LIBRARY_SUFFIX@ | cut -d'.' -f 2)
 plugincxxflags="-fPIC -DPIC"
 pluginldflags=-shared
 pluginpath=@libdir@/tulip
 quaziplib=@QuazipLibrary@
-if [ "@CMAKE_DEBUG_MODE@" == "FALSE" ]; then
+if [ "@CMAKE_DEBUG_MODE@" = "FALSE" ]; then
   ndebugflag=-DNDEBUG
 fi
 
-WINDOWS=$(sh -c 'uname -s | grep -q MINGW; echo $?')
-MACOSX=$(sh -c 'uname -s | grep -q Darwin; echo $?')
-LINUX=$(sh -c 'uname -s | grep -q Linux; echo $?')
+WINDOWS=$(test ${libextension} = dll; echo $?)
+MACOSX=$(test ${libextension} = dylib; echo $?)
+LINUX=$(test ${libextension} = so; echo $?)
 
 # check for MacOS or Windows installation
 if [ $MACOSX -eq 0 ] ; then
-  libextension=dylib
   pluginldflags="-bundle -Wl,-bind_at_load -flat_namespace"
-  if [ -e $(dirname $thisdir)/Frameworks/QtCore ] ; then
+  if [ -e ${upthisdir}/Frameworks/QtCore ] ; then
 # MacOS bundle
-    includedir=$(dirname $thisdir)/include
-    libdir=$(dirname $thisdir)/Frameworks
-    pluginpath=$(dirname $thisdir)/lib/tulip
+    includedir=${upthisdir}/include
+    libdir=${upthisdir}/Frameworks
+    pluginpath=${upthisdir}/lib/tulip
   fi
 fi
 if [ $WINDOWS -eq 0 ] ; then
   libversion=@WIN_VERSION@
-  libextension=dll
   plugincxxflags=-DPIC
-  if [ -f "$thisdir/../Uninstall.exe" ] ; then
+  if [ -f "${upthisdir}/Uninstall.exe" ] ; then
 # Windows installation
     drive=`echo ${thisdir} | awk -F / '{print $2}'`
     ndir=${thisdir/\/$drive\//$drive:/}
     if [ -d ${ndir} ]; then
       thisdir=${ndir}
     fi
-    includedir=${thisdir}/../include
-    libdir=${thisdir}/../bin
-    pluginpath=${thisdir}/../lib/tulip
+    includedir=${upthisdir}/include
+    libdir=${upthisdir}/bin
+    pluginpath=${upthisdir}/lib/tulip
   else
     pluginpath=${prefix}/lib/tulip
     libdir=${prefix}/bin
@@ -55,7 +54,7 @@ if [ $WINDOWS -eq 0 ] ; then
 fi
 
 # check QuazipLibrary
-if [ "@QUAZIP_FOUND@" == "FALSE" ]; then
+if [ "@QUAZIP_FOUND@" = "FALSE" ]; then
    quaziplib=${libdir}lib${quaziplib}.${libextension}
 fi
 

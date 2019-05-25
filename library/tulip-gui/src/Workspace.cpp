@@ -663,8 +663,7 @@ void Workspace::readProject(TulipProject *project, QMap<QString, Graph *> rootId
         xmlFile->close();
         delete xmlFile;
 
-        View *view =
-            PluginLister::instance()->getPluginObject<View>(QStringToTlpString(viewName), nullptr);
+        View *view = PluginLister::instance()->getPluginObject<View>(QStringToTlpString(viewName));
 
         if (view == nullptr)
           continue;
