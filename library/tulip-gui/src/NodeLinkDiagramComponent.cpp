@@ -173,6 +173,13 @@ tlp::DataSet NodeLinkDiagramComponent::state() const {
   return data;
 }
 
+void NodeLinkDiagramComponent::initRenderingParameters(GlGraphRenderingParameters *rp) {
+  rp->setViewNodeLabel(true);
+  rp->setEdgeColorInterpolate(false);
+  rp->setNodesStencil(0x0002);
+  rp->setNodesLabelStencil(0x0001);
+}
+
 //==================================================
 void NodeLinkDiagramComponent::createScene(Graph *graph, DataSet dataSet) {
   if (manager) {
@@ -210,10 +217,7 @@ void NodeLinkDiagramComponent::createScene(Graph *graph, DataSet dataSet) {
     scene->addExistingLayer(foregroundLayer);
     GlGraphComposite *graphComposite = new GlGraphComposite(graph, scene);
     scene->getLayer("Main")->addGlEntity(graphComposite, "graph");
-    graphComposite->getRenderingParametersPointer()->setViewNodeLabel(true);
-    graphComposite->getRenderingParametersPointer()->setEdgeColorInterpolate(false);
-    graphComposite->getRenderingParametersPointer()->setNodesStencil(0x0002);
-    graphComposite->getRenderingParametersPointer()->setNodesLabelStencil(0x0001);
+    initRenderingParameters(graphComposite->getRenderingParametersPointer());
     scene->centerScene();
   } else {
     size_t pos = sceneInput.find("TulipBitmapDir/");

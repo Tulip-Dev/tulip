@@ -28,6 +28,7 @@
 #include <tulip/GlComplexPolygon.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/OpenGlConfigManager.h>
+#include <tulip/NodeLinkDiagramComponent.h>
 
 #include <QMenu>
 #include <QThread>
@@ -191,22 +192,25 @@ void GeographicView::setState(const DataSet &dataSet) {
     computeGeoLayout();
   }
 
-  if (dataSet.exists("renderingParameters")) {
-    GlGraphComposite *graphComposite =
+  GlGraphComposite *graphComposite =
         geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite();
+  GlGraphRenderingParameters rp = graphComposite->getRenderingParameters();
+
+  if (dataSet.exists("renderingParameters")) {
     DataSet renderingParameters;
     dataSet.get("renderingParameters", renderingParameters);
-    GlGraphRenderingParameters rp = graphComposite->getRenderingParameters();
     rp.setParameters(renderingParameters);
     string s;
 
     if (renderingParameters.get("elementsOrderingPropertyName", s) && !s.empty()) {
       rp.setElementOrderingProperty(dynamic_cast<tlp::NumericProperty *>(graph()->getProperty(s)));
     }
+  } else
+    // same default initialization as NodeLinkDiagramComponent
+    NodeLinkDiagramComponent::initRenderingParameters(&rp);
 
-    graphComposite->setRenderingParameters(rp);
-    sceneConfigurationWidget->resetChanges();
-  }
+  graphComposite->setRenderingParameters(rp);
+  sceneConfigurationWidget->resetChanges();
 
   View::setState(dataSet);
 
