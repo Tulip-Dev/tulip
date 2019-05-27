@@ -193,7 +193,7 @@ void GeographicView::setState(const DataSet &dataSet) {
   }
 
   GlGraphComposite *graphComposite =
-        geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite();
+      geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite();
   GlGraphRenderingParameters rp = graphComposite->getRenderingParameters();
 
   if (dataSet.exists("renderingParameters")) {
