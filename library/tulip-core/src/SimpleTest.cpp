@@ -19,55 +19,70 @@
 
 #include <vector>
 #include <tulip/Graph.h>
+#include <tulip/GraphTools.h>
 #include <tulip/SimpleTest.h>
 #include <tulip/MutableContainer.h>
 
 using namespace std;
 using namespace tlp;
 //=================================================================
-SimpleTest *SimpleTest::instance = nullptr;
+SimpleTest *SimpleTest::undirInstance = nullptr;
+SimpleTest *SimpleTest::dirInstance = nullptr;
+
 //=================================================================
 SimpleTest::SimpleTest() {}
 //=================================================================
-bool SimpleTest::isSimple(const tlp::Graph *graph) {
-  if (instance == nullptr)
-    instance = new SimpleTest();
+bool SimpleTest::isSimple(const tlp::Graph *graph, const bool directed) {
+  SimpleTest* instance = nullptr;
+  if(directed){
+    if(!dirInstance){
+      dirInstance = new SimpleTest();
+    }
+    instance = dirInstance;
+  }else{
+    if(!undirInstance){
+      undirInstance = new SimpleTest();
+    }
+    instance = undirInstance;
+  }
 
   if (instance->resultsBuffer.find(graph) == instance->resultsBuffer.end()) {
-    instance->resultsBuffer[graph] = simpleTest(graph);
+    instance->resultsBuffer[graph] = simpleTest(graph,nullptr,nullptr,directed);
     graph->addListener(instance);
   }
 
   return instance->resultsBuffer[graph];
 }
 //**********************************************************************
-void SimpleTest::makeSimple(Graph *graph, vector<edge> &removed) {
-  if (SimpleTest::isSimple(graph))
+void SimpleTest::makeSimple(Graph *graph, vector<edge> &removed, const bool directed) {
+  if (SimpleTest::isSimple(graph,directed))
     return;
 
-  SimpleTest::simpleTest(graph, &removed, &removed);
+  SimpleTest::simpleTest(graph, &removed, &removed,directed);
   vector<edge>::const_iterator it;
 
   for (it = removed.begin(); it != removed.end(); ++it) {
     graph->delEdge(*it);
   }
 
-  assert(SimpleTest::simpleTest(graph));
+  assert(SimpleTest::isSimple(graph,directed));
 }
 //=================================================================
 bool SimpleTest::simpleTest(const tlp::Graph *graph, vector<edge> *multipleEdges,
-                            vector<edge> *loops) {
+                            vector<edge> *loops, const bool directed) {
   bool result = true;
   bool computeAll = (loops != nullptr) || (multipleEdges != nullptr);
   MutableContainer<bool> visited;
   visited.setAll(false);
+
+ auto getEdges = getEdgesIterator(directed ? DIRECTED : UNDIRECTED);
 
   for (auto current : graph->nodes()) {
     // Search for multiple edges and loops
     MutableContainer<bool> targeted;
     targeted.setAll(false);
 
-    for (auto e : graph->getInOutEdges(current)) {
+    for (auto e : getEdges(graph,current)) {
 
       // check if edge has already been visited
       if (visited.get(e.id))

@@ -20,7 +20,7 @@
 #ifndef TULIP_SIMPLETEST_H
 #define TULIP_SIMPLETEST_H
 
-#include <tulip/tuliphash.h>
+#include <unordered_map>
 #include <tulip/Observable.h>
 #include <tulip/Graph.h>
 
@@ -29,8 +29,10 @@ namespace tlp {
 /**
  * @ingroup Checks
  * @brief Performs test to check if a graph is Simple.
- * From Wikipedia: "A simple graph is an undirected graph that has no loops and no more than one
- *edge between any two different vertices."
+ * An undirected graph is simple if it has no loops and no more than one
+ * edge between any unordered pair of vertices.
+ * A directed graph is simple if has no loops and no more than one
+ * edge between any ordered pair of vertices.
  **/
 class TLP_SCOPE SimpleTest : private Observable {
 public:
@@ -38,9 +40,10 @@ public:
    * @brief Checks if the graph is simple (i.e. it contains no self loops or parallel edges).
    *
    * @param graph The graph to check.
+   * @param directed Whether the graph shall be considered directed or not.
    * @return bool True if the graph is simple, false otherwise.
    **/
-  static bool isSimple(const Graph *graph);
+  static bool isSimple(const Graph *graph, const bool directed = false);
 
   /**
    * Makes the graph  simple by removing self loops and parallel edges if any.
@@ -51,9 +54,10 @@ public:
    *
    * @param graph The graph to make simple.
    * @param removed The edges that were removed to make the graph simple.
+   * @param directed Whether the graph shall be considered directed or not.
    * @return void
    **/
-  static void makeSimple(Graph *graph, std::vector<edge> &removed);
+  static void makeSimple(Graph *graph, std::vector<edge> &removed, const bool directed = false);
 
   /**
    * Performs simple test and stores found parallel edges in the multipleEdges vector
@@ -68,10 +72,11 @@ public:
    * @param multipleEdges The parallel edges that need to be removed to make the graph simple.
    *Defaults to 0.
    * @param loops The self loops that need to be removed to make the graph simple. Defaults to 0.
+   * @param directed Whether the graph shall be considered directed or not.
    * @return bool True if the graph is simple, false otherwise.
    **/
   static bool simpleTest(const Graph *graph, std::vector<edge> *multipleEdges = nullptr,
-                         std::vector<edge> *loops = nullptr);
+                         std::vector<edge> *loops = nullptr, const bool directed = false);
 
 private:
   SimpleTest();
@@ -80,14 +85,18 @@ private:
   void deleteResult(Graph *graph);
 
   /**
-   * @brief Singleton instance of this class.
+   * @brief Singleton instance of this class for undirected graphs.
    **/
-  static SimpleTest *instance;
+  static SimpleTest *undirInstance;
+  /**
+   * @brief Singleton instance of this class for directed graphs.
+   **/
+  static SimpleTest *dirInstance;
   /**
    * @brief Stored results for graphs. When a graph is updated, its entry is removed from the
    *hashmap.
    **/
-  TLP_HASH_MAP<const Graph *, bool> resultsBuffer;
+  std::unordered_map<const Graph *, bool> resultsBuffer;
 };
 } // namespace tlp
 #endif
