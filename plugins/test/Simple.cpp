@@ -30,15 +30,16 @@ public:
                     "edge between any ordered pair of vertices.",
                     "1.1", "Topological Test")
   SimpleTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {
-    addInParameter<bool>("directed", "Indicates if the graph should be considered as directed or not.", "false");
+    addInParameter<bool>(
+        "directed", "Indicates if the graph should be considered as directed or not.", "false");
   }
 
   bool test() override {
     bool directed = false;
-    if(dataSet){
-      dataSet->get("directed",directed);
+    if (dataSet) {
+      dataSet->get("directed", directed);
     }
-    return tlp::SimpleTest::isSimple(graph,directed);
+    return tlp::SimpleTest::isSimple(graph, directed);
   }
 };
 PLUGIN(SimpleTest)
@@ -53,13 +54,14 @@ public:
                     "edge between any ordered pair of vertices.",
                     "1.1", "Topology Update")
   MakeSimple(const tlp::PluginContext *context) : tlp::Algorithm(context) {
-    addInParameter<bool>("directed", "Indicates if the graph should be considered as directed or not.", "false");
+    addInParameter<bool>(
+        "directed", "Indicates if the graph should be considered as directed or not.", "false");
   }
 
   bool run() override {
     bool directed = false;
-    if(dataSet)
-      dataSet->get("directed",directed);
+    if (dataSet)
+      dataSet->get("directed", directed);
     std::vector<tlp::edge> edges;
     tlp::SimpleTest::makeSimple(graph, edges, directed);
     return true;

@@ -33,21 +33,21 @@ SimpleTest *SimpleTest::dirInstance = nullptr;
 SimpleTest::SimpleTest() {}
 //=================================================================
 bool SimpleTest::isSimple(const tlp::Graph *graph, const bool directed) {
-  SimpleTest* instance = nullptr;
-  if(directed){
-    if(!dirInstance){
+  SimpleTest *instance = nullptr;
+  if (directed) {
+    if (!dirInstance) {
       dirInstance = new SimpleTest();
     }
     instance = dirInstance;
-  }else{
-    if(!undirInstance){
+  } else {
+    if (!undirInstance) {
       undirInstance = new SimpleTest();
     }
     instance = undirInstance;
   }
 
   if (instance->resultsBuffer.find(graph) == instance->resultsBuffer.end()) {
-    instance->resultsBuffer[graph] = simpleTest(graph,nullptr,nullptr,directed);
+    instance->resultsBuffer[graph] = simpleTest(graph, nullptr, nullptr, directed);
     graph->addListener(instance);
   }
 
@@ -55,17 +55,17 @@ bool SimpleTest::isSimple(const tlp::Graph *graph, const bool directed) {
 }
 //**********************************************************************
 void SimpleTest::makeSimple(Graph *graph, vector<edge> &removed, const bool directed) {
-  if (SimpleTest::isSimple(graph,directed))
+  if (SimpleTest::isSimple(graph, directed))
     return;
 
-  SimpleTest::simpleTest(graph, &removed, &removed,directed);
+  SimpleTest::simpleTest(graph, &removed, &removed, directed);
   vector<edge>::const_iterator it;
 
   for (it = removed.begin(); it != removed.end(); ++it) {
     graph->delEdge(*it);
   }
 
-  assert(SimpleTest::isSimple(graph,directed));
+  assert(SimpleTest::isSimple(graph, directed));
 }
 //=================================================================
 bool SimpleTest::simpleTest(const tlp::Graph *graph, vector<edge> *multipleEdges,
@@ -75,14 +75,14 @@ bool SimpleTest::simpleTest(const tlp::Graph *graph, vector<edge> *multipleEdges
   MutableContainer<bool> visited;
   visited.setAll(false);
 
- auto getEdges = getEdgesIterator(directed ? DIRECTED : UNDIRECTED);
+  auto getEdges = getEdgesIterator(directed ? DIRECTED : UNDIRECTED);
 
   for (auto current : graph->nodes()) {
     // Search for multiple edges and loops
     MutableContainer<bool> targeted;
     targeted.setAll(false);
 
-    for (auto e : getEdges(graph,current)) {
+    for (auto e : getEdges(graph, current)) {
 
       // check if edge has already been visited
       if (visited.get(e.id))

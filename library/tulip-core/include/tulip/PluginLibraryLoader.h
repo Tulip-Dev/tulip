@@ -115,7 +115,7 @@ private:
   PluginLibraryLoader() {}
 #ifndef EMSCRIPTEN
   static bool initPluginDir(PluginLoader *loader, bool recursive = false,
-			    const std::string &userPluginsPath = "");
+                            const std::string &userPluginsPath = "");
 #endif
 
   static std::string _message;

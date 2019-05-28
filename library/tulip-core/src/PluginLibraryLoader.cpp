@@ -40,7 +40,8 @@
 
 using namespace tlp;
 
-std::string PluginLibraryLoader::_message, PluginLibraryLoader::_pluginPath, PluginLibraryLoader::_currentPluginLibrary;
+std::string PluginLibraryLoader::_message, PluginLibraryLoader::_pluginPath,
+    PluginLibraryLoader::_currentPluginLibrary;
 
 #ifndef EMSCRIPTEN
 void PluginLibraryLoader::loadPlugins(PluginLoader *loader, const std::string &folder) {
@@ -418,8 +419,8 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive,
 
             if (isNumber && loader) {
               loader->aborted(_currentPluginLibrary, _currentPluginLibrary +
-                                                        " is not compatible with Tulip " +
-                                                        TULIP_VERSION);
+                                                         " is not compatible with Tulip " +
+                                                         TULIP_VERSION);
               return n > 0;
             }
           }
