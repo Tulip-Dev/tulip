@@ -39,13 +39,7 @@ using namespace std;
 
 namespace tlp {
 
-GlOffscreenRenderer *GlOffscreenRenderer::instance = nullptr;
-
-GlOffscreenRenderer *GlOffscreenRenderer::getInstance() {
-  if (!instance)
-    instance = new GlOffscreenRenderer();
-  return instance;
-}
+GlOffscreenRenderer *GlOffscreenRenderer::instance = new GlOffscreenRenderer();
 
 GlOffscreenRenderer::GlOffscreenRenderer()
     : vPWidth(512), vPHeight(512), glFrameBuf(nullptr), glFrameBuf2(nullptr),
