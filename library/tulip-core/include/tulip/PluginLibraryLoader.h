@@ -108,28 +108,19 @@ public:
    * @return :string& The name of the plugin library being loaded.
    **/
   static const std::string &getCurrentPluginFileName() {
-    return getInstance()->currentPluginLibrary;
+    return _currentPluginLibrary;
   }
 
 private:
   PluginLibraryLoader() {}
 #ifndef EMSCRIPTEN
-  bool initPluginDir(PluginLoader *loader, bool recursive = false,
-                     const std::string &userPluginsPath = "");
+  static bool initPluginDir(PluginLoader *loader, bool recursive = false,
+			    const std::string &userPluginsPath = "");
 #endif
 
-  static PluginLibraryLoader *getInstance() {
-    if (_instance == nullptr) {
-      _instance = new PluginLibraryLoader();
-    }
-
-    return _instance;
-  }
-  static PluginLibraryLoader *_instance;
-
-  std::string message;
-  std::string pluginPath;
-  std::string currentPluginLibrary;
+  static std::string _message;
+  static std::string _pluginPath;
+  static std::string _currentPluginLibrary;
 };
 } // namespace tlp
 
