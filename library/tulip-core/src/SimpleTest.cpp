@@ -61,6 +61,12 @@ void SimpleTest::makeSimple(Graph *graph, vector<edge> &removed, const bool dire
   SimpleTest::simpleTest(graph, &removed, &removed, directed);
   vector<edge>::const_iterator it;
 
+  // multiple edges and loops were pushed back into the removed vector
+  // but an edge can be a loop and a multiple one at the same time
+  // so ensure no duplicate edges in the removed vector
+  sort(removed.begin(), removed.end());
+  removed.erase(unique(removed.begin(), removed.end()), removed.end());
+
   for (it = removed.begin(); it != removed.end(); ++it) {
     graph->delEdge(*it);
   }
