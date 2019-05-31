@@ -34,7 +34,6 @@
 #include <tulip/Curves.h>
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/GlLines.h>
-#include <tulip/GlDisplayListManager.h>
 #include <tulip/OcclusionTest.h>
 #include <tulip/GlTLPFeedBackBuilder.h>
 #include <tulip/GlGraphRenderingParameters.h>
