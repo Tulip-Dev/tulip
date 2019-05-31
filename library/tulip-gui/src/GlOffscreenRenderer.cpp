@@ -274,9 +274,8 @@ QImage GlOffscreenRenderer::getImage() {
 
 GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
 
-  bool canUseMipmaps =
-      OpenGlConfigManager::isExtensionSupported("GL_ARB_framebuffer_object") ||
-      OpenGlConfigManager::isExtensionSupported("GL_EXT_framebuffer_object");
+  bool canUseMipmaps = OpenGlConfigManager::isExtensionSupported("GL_ARB_framebuffer_object") ||
+                       OpenGlConfigManager::isExtensionSupported("GL_EXT_framebuffer_object");
 
   GLuint textureId = 0;
   glGenTextures(1, &textureId);

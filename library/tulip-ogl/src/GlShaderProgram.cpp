@@ -287,8 +287,7 @@ void GlShaderProgram::desactivate() {
 
 bool GlShaderProgram::shaderProgramsSupported() {
 
-  static bool vertexShaderExtOk =
-      OpenGlConfigManager::isExtensionSupported("GL_ARB_vertex_shader");
+  static bool vertexShaderExtOk = OpenGlConfigManager::isExtensionSupported("GL_ARB_vertex_shader");
   static bool fragmentShaderExtOk =
       OpenGlConfigManager::isExtensionSupported("GL_ARB_fragment_shader");
   return (vertexShaderExtOk && fragmentShaderExtOk);

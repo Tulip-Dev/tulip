@@ -81,8 +81,7 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       tlpStringToQString(qVersion()) +
       ": <a href=\"https://www.qt.io\">https://www.qt.io</a></li>"
       "  <li> <b> OpenGL </b> " +
-      (openGL_OK ? QString::number(OpenGlConfigManager::getOpenGLVersion())
-                 : QString("?.?")) +
+      (openGL_OK ? QString::number(OpenGlConfigManager::getOpenGLVersion()) : QString("?.?")) +
       " (from vendor " +
       (openGL_OK ? tlpStringToQString(OpenGlConfigManager::getOpenGLVendor())
                  : QString("unknown")) +

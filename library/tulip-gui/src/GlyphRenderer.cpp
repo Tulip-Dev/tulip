@@ -58,11 +58,11 @@ QPixmap GlyphRenderer::render(int glyphId) {
       renderer->getScene()->getGraphCamera().setZoomFactor(0.9);
       // init previews
       for (const std::string &glyphName : PluginLister::instance()->availablePlugins<Glyph>()) {
-	auto glId = GlyphManager::glyphId(glyphName);
-	// Create the glyph preview
-	graph->getProperty<IntegerProperty>("viewShape")->setNodeValue(node, glId);
-	renderer->renderScene(false, true);
-	previews.emplace(std::make_pair(glId, QPixmap::fromImage(renderer->getImage())));
+        auto glId = GlyphManager::glyphId(glyphName);
+        // Create the glyph preview
+        graph->getProperty<IntegerProperty>("viewShape")->setNodeValue(node, glId);
+        renderer->renderScene(false, true);
+        previews.emplace(std::make_pair(glId, QPixmap::fromImage(renderer->getImage())));
       }
       renderer->clearScene(true);
     }
@@ -112,21 +112,22 @@ QPixmap EdgeExtremityGlyphRenderer::render(int glyphId) {
       renderer->clearScene();
       renderer->addGraphToScene(graph);
       GlGraphRenderingParameters renderingParamerters =
-	renderer->getScene()->getGlGraphComposite()->getRenderingParameters();
+          renderer->getScene()->getGlGraphComposite()->getRenderingParameters();
       renderingParamerters.setEdgeColorInterpolate(false);
       renderingParamerters.setEdgeSizeInterpolate(false);
       renderingParamerters.setViewArrow(true);
       renderer->getScene()->getGlGraphComposite()->setRenderingParameters(renderingParamerters);
       // init previews
-      for (std::string glyphName : PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>()) {
-	const tlp::Plugin &info = PluginLister::pluginInformation(glyphName);
-	int glId = info.id();
-	// Create the glyph preview
-	graph->getProperty<IntegerProperty>("viewTgtAnchorShape")->setEdgeValue(e, glId);
-	renderer->renderScene(true);
-	previews.emplace(std::make_pair(glId, QPixmap::fromImage(renderer->getImage())));
+      for (std::string glyphName :
+           PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>()) {
+        const tlp::Plugin &info = PluginLister::pluginInformation(glyphName);
+        int glId = info.id();
+        // Create the glyph preview
+        graph->getProperty<IntegerProperty>("viewTgtAnchorShape")->setEdgeValue(e, glId);
+        renderer->renderScene(true);
+        previews.emplace(std::make_pair(glId, QPixmap::fromImage(renderer->getImage())));
       }
-     renderer->clearScene(true);
+      renderer->clearScene(true);
     }
     // graph is no longer needed
     delete graph;

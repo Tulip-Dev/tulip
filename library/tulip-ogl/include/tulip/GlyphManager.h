@@ -57,12 +57,12 @@ public:
    * Create the glyph list and store it in glyphs parameter
    */
   static void initGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
-			    MutableContainer<Glyph *> &glyphs);
+                            MutableContainer<Glyph *> &glyphs);
   /**
    * Clear the glyph list
    */
   static void clearGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
-			     MutableContainer<Glyph *> &glyphs);
+                             MutableContainer<Glyph *> &glyphs);
 };
 } // namespace tlp
 

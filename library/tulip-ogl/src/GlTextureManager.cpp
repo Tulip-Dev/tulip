@@ -371,9 +371,8 @@ static bool generateTexture(const std::string &filename, const TextureInfo &text
     }
   }
 
-  bool canUseMipmaps =
-      OpenGlConfigManager::isExtensionSupported("GL_ARB_framebuffer_object") ||
-      OpenGlConfigManager::isExtensionSupported("GL_EXT_framebuffer_object");
+  bool canUseMipmaps = OpenGlConfigManager::isExtensionSupported("GL_ARB_framebuffer_object") ||
+                       OpenGlConfigManager::isExtensionSupported("GL_EXT_framebuffer_object");
 
   GLuint *textureNum = new GLuint[spriteNumber];
 

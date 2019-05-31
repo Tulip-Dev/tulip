@@ -37,7 +37,6 @@ namespace tlp {
 class TLP_GL_SCOPE OpenGlConfigManager {
 
 public:
-
   /**
    * Returns the OpenGL version number supported by the host system as a string.
    *
@@ -103,7 +102,7 @@ public:
    */
   static int maxNumberOfSamples();
 
- private:
+private:
   static bool _glewIsInit;
   static bool _antialiased;
   static std::unordered_map<std::string, bool> _checkedExtensions;

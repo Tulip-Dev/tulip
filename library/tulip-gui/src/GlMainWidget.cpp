@@ -365,8 +365,7 @@ void GlMainWidget::resizeGL(int w, int h) {
 void GlMainWidget::makeCurrent() {
   if (isVisible()) {
     QGLWidget::makeCurrent();
-    GlTextureManager::changeContext(
-        reinterpret_cast<uintptr_t>(GlMainWidget::firstQGLWidget));
+    GlTextureManager::changeContext(reinterpret_cast<uintptr_t>(GlMainWidget::firstQGLWidget));
     int width = contentsRect().width();
     int height = contentsRect().height();
     scene.setViewport(0, 0, screenToViewport(width), screenToViewport(height));

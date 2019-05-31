@@ -51,12 +51,12 @@ public:
    * Create the glyph list and store it in glyphs parameter
    */
   static void initGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
-			    MutableContainer<EdgeExtremityGlyph *> &glyphs);
+                            MutableContainer<EdgeExtremityGlyph *> &glyphs);
   /**
    * Clear the glyph list
    */
   static void clearGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
-			     MutableContainer<EdgeExtremityGlyph *> &glyphs);
+                             MutableContainer<EdgeExtremityGlyph *> &glyphs);
 };
 } // namespace tlp
 #endif /* EDGEEXTREMITYGLYPHMANAGER_H_ */

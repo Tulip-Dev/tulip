@@ -65,7 +65,6 @@ class TLP_GL_SCOPE GlTextureManager {
   typedef std::unordered_map<uintptr_t, TextureUnit> ContextAndTextureMap;
 
 public:
-
   /**
    * Change the current OpenGl context (each OpenGl window have a different OpenGl context)
    */

@@ -733,8 +733,7 @@ QWidget *EdgeExtremityShapeEditorCreator::createWidget(QWidget *parent) const {
 
   for (std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
     QString shapeName = tlpStringToQString(*it);
-    QPixmap pixmap = EdgeExtremityGlyphRenderer::render(
-							EdgeExtremityGlyphManager::glyphId(*it));
+    QPixmap pixmap = EdgeExtremityGlyphRenderer::render(EdgeExtremityGlyphManager::glyphId(*it));
     shapes.push_back(std::make_pair(shapeName, pixmap));
   }
 
@@ -747,21 +746,20 @@ QWidget *EdgeExtremityShapeEditorCreator::createWidget(QWidget *parent) const {
 void EdgeExtremityShapeEditorCreator::setEditorData(QWidget *w, const QVariant &data, bool,
                                                     tlp::Graph *) {
   ShapeDialog *nsd = static_cast<ShapeDialog *>(w);
-  nsd->setSelectedShapeName(tlpStringToQString(EdgeExtremityGlyphManager::glyphName(
-      data.value<EdgeExtremityShape::EdgeExtremityShapes>())));
+  nsd->setSelectedShapeName(tlpStringToQString(
+      EdgeExtremityGlyphManager::glyphName(data.value<EdgeExtremityShape::EdgeExtremityShapes>())));
 }
 
 QVariant EdgeExtremityShapeEditorCreator::editorData(QWidget *w, tlp::Graph *) {
   ShapeDialog *nsd = static_cast<ShapeDialog *>(w);
   return QVariant::fromValue<EdgeExtremityShape::EdgeExtremityShapes>(
       static_cast<EdgeExtremityShape::EdgeExtremityShapes>(
-          EdgeExtremityGlyphManager::glyphId(
-              QStringToTlpString(nsd->getSelectedShapeName()))));
+          EdgeExtremityGlyphManager::glyphId(QStringToTlpString(nsd->getSelectedShapeName()))));
 }
 
 QString EdgeExtremityShapeEditorCreator::displayText(const QVariant &data) const {
-  return tlpStringToQString(EdgeExtremityGlyphManager::glyphName(
-      data.value<EdgeExtremityShape::EdgeExtremityShapes>()));
+  return tlpStringToQString(
+      EdgeExtremityGlyphManager::glyphName(data.value<EdgeExtremityShape::EdgeExtremityShapes>()));
 }
 
 bool EdgeExtremityShapeEditorCreator::paint(QPainter *painter, const QStyleOptionViewItem &option,
@@ -778,8 +776,8 @@ bool EdgeExtremityShapeEditorCreator::paint(QPainter *painter, const QStyleOptio
   opt.features |= QStyleOptionViewItemV2::HasDisplay;
 #endif
 
-  QPixmap pixmap = EdgeExtremityGlyphRenderer::render(
-      data.value<EdgeExtremityShape::EdgeExtremityShapes>());
+  QPixmap pixmap =
+      EdgeExtremityGlyphRenderer::render(data.value<EdgeExtremityShape::EdgeExtremityShapes>());
   opt.icon = QIcon(pixmap);
   opt.decorationSize = pixmap.size();
 
@@ -793,8 +791,8 @@ bool EdgeExtremityShapeEditorCreator::paint(QPainter *painter, const QStyleOptio
 QSize EdgeExtremityShapeEditorCreator::sizeHint(const QStyleOptionViewItem &option,
                                                 const QModelIndex &index) const {
   QVariant data = index.model()->data(index);
-  static QPixmap pixmap = EdgeExtremityGlyphRenderer::render(
-      data.value<EdgeExtremityShape::EdgeExtremityShapes>());
+  static QPixmap pixmap =
+      EdgeExtremityGlyphRenderer::render(data.value<EdgeExtremityShape::EdgeExtremityShapes>());
   QFontMetrics fontMetrics(option.font);
   return QSize(pixmap.width() + fontMetrics.boundingRect(displayText(data)).width() + 40,
                pixmap.height());

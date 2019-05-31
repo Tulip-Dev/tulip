@@ -237,9 +237,8 @@ public:
       addIconToPool(qFilename, QIcon(QPixmap::fromImage(image)));
     }
 
-    bool canUseMipmaps =
-        OpenGlConfigManager::isExtensionSupported("GL_ARB_framebuffer_object") ||
-        OpenGlConfigManager::isExtensionSupported("GL_EXT_framebuffer_object");
+    bool canUseMipmaps = OpenGlConfigManager::isExtensionSupported("GL_ARB_framebuffer_object") ||
+                         OpenGlConfigManager::isExtensionSupported("GL_EXT_framebuffer_object");
 
     unsigned int width = image.width();
     unsigned int height = image.height();
