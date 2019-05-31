@@ -23,69 +23,64 @@
 
 #include <tulip/tulipconf.h>
 
-#include <map>
 #include <string>
+#include <unordered_map>
 
 #define BUFFER_OFFSET(bytes) (reinterpret_cast<GLubyte *>(bytes))
 
 namespace tlp {
 
-/** \brief Singleton used to manage OpenGl configuration
+/**
  *
- * Singleton used to manage OpenGl configuration
+ * Used to manage OpenGl configuration
  */
 class TLP_GL_SCOPE OpenGlConfigManager {
 
 public:
-  /**
-   * Return the current instance. If instance doesn't exist, create it.
-   *
-   */
-  static OpenGlConfigManager &getInst();
 
   /**
    * Returns the OpenGL version number supported by the host system as a string.
    *
    * \since Tulip 5.0
    */
-  std::string getOpenGLVersionString() const;
+  static std::string getOpenGLVersionString();
 
   /**
    * Returns the OpenGL version number supported by the host system as a number.
    */
-  double getOpenGLVersion() const;
+  static double getOpenGLVersion();
 
   /**
    * Return the vendor name of the OpenGL driver installed on the host system.
    */
-  std::string getOpenGLVendor() const;
+  static std::string getOpenGLVendor();
 
-  void initExtensions();
+  static void initExtensions();
 
   /**
    * Checks if an OpenGL extension is supported by the driver installed on the host system.
    * \param extensionName the name of the OpenGL extension to check in the form "GL_.*" (for
    * instance "GL_ARB_vertex_buffer_object")
    */
-  bool isExtensionSupported(const std::string &extensionName);
+  static bool isExtensionSupported(const std::string &extensionName);
 
   /**
    * Returns if vertex buffer objects can be used on the host system.
    */
-  bool hasVertexBufferObject();
+  static bool hasVertexBufferObject();
 
   /**
    * Enables / disables anti-aliasing rendering.
    */
-  void setAntiAliasing(const bool antialiasing) {
-    antialiased = antialiasing;
+  static void setAntiAliasing(const bool antialiasing) {
+    _antialiased = antialiasing;
   }
 
   /**
    * Returns the anti-aliasing state
    */
-  bool antiAliasing() const {
-    return antialiased;
+  static bool antiAliasing() {
+    return _antialiased;
   }
 
   /**
@@ -93,60 +88,25 @@ public:
    * This method has no effect if anti-aliasing has been disabled by a call to
    * setAntiAliasing(false).
    */
-  void activateAntiAliasing();
+  static void activateAntiAliasing();
 
   /**
    * Desactivates anti-aliasing
    * This method has no effect if anti-aliasing has been disabled by a call to
    * setAntiAliasing(false).
    */
-  void desactivateAntiAliasing();
+  static void desactivateAntiAliasing();
 
   /**
    * Returns a maximum number of samples for anti-aliasing based on graphics hardware capability
    *
    */
-  int maxNumberOfSamples() const;
+  static int maxNumberOfSamples();
 
-  /**
-   * Activates the anti-aliasing of lines and points primitives.
-   * This method has no effect if anti-aliasing has been disabled by a call to
-   * setAntiAliasing(false).
-   */
-  _DEPRECATED void activateLineAndPointAntiAliasing();
-
-  /**
-   * Desactivates the anti-aliasing of lines and points primitives.
-   * This method has no effect if anti-aliasing has been disabled by a call to
-   * setAntiAliasing(false).
-   */
-  _DEPRECATED void desactivateLineAndPointAntiAliasing();
-
-  /**
-   * Activates the anti-aliasing of polygons primitives.
-   * This method has no effect if anti-aliasing has been disabled by a call to
-   * setAntiAliasing(false).
-   */
-  _DEPRECATED void activatePolygonAntiAliasing();
-  /**
-   * Desactivates the anti-aliasing of polygons primitives.
-   * This method has no effect if anti-aliasing has been disabled by a call to
-   * setAntiAliasing(false).
-   */
-  _DEPRECATED void desactivatePolygonAntiAliasing();
-
-private:
-  /**
-   * Private constructor for singleton
-   */
-  OpenGlConfigManager();
-
-  static OpenGlConfigManager *inst;
-
-  bool glewIsInit;
-  bool antialiased;
-
-  std::map<std::string, bool> checkedExtensions;
+ private:
+  static bool _glewIsInit;
+  static bool _antialiased;
+  static std::unordered_map<std::string, bool> _checkedExtensions;
 };
 } // namespace tlp
 

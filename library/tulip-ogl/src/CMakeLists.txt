@@ -24,7 +24,6 @@ SET(tulip-ogl_LIB_SRCS
   GlCPULODCalculator.cpp
   GlCubicBSplineInterpolation.cpp
   GlCurve.cpp
-  GlDisplayListManager.cpp
   GlEdge.cpp
   GlEPSFeedBackBuilder.cpp
   GlFeedBackRecorder.cpp

@@ -135,7 +135,7 @@ void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
     fboFmt.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
 
     if (antialiasedFbo)
-      fboFmt.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
+      fboFmt.setSamples(OpenGlConfigManager::maxNumberOfSamples());
 
     glFrameBuf = new QOpenGLFramebufferObject(vPWidth, vPHeight, fboFmt);
   }
@@ -275,8 +275,8 @@ QImage GlOffscreenRenderer::getImage() {
 GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
 
   bool canUseMipmaps =
-      OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_framebuffer_object") ||
-      OpenGlConfigManager::getInst().isExtensionSupported("GL_EXT_framebuffer_object");
+      OpenGlConfigManager::isExtensionSupported("GL_ARB_framebuffer_object") ||
+      OpenGlConfigManager::isExtensionSupported("GL_EXT_framebuffer_object");
 
   GLuint textureId = 0;
   glGenTextures(1, &textureId);

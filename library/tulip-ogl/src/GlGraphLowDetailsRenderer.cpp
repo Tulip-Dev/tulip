@@ -21,7 +21,6 @@
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlTools.h>
-#include <tulip/GlDisplayListManager.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/OcclusionTest.h>
@@ -137,7 +136,7 @@ void GlGraphLowDetailsRenderer::initNodesArray() {
 void GlGraphLowDetailsRenderer::draw(float, Camera *) {
 
   if (!inputData->renderingParameters()->isAntialiased()) {
-    OpenGlConfigManager::getInst().desactivateAntiAliasing();
+    OpenGlConfigManager::desactivateAntiAliasing();
   }
 
   if (buildVBO) {
@@ -184,7 +183,7 @@ void GlGraphLowDetailsRenderer::draw(float, Camera *) {
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_COLOR_ARRAY);
 
-  OpenGlConfigManager::getInst().activateAntiAliasing();
+  OpenGlConfigManager::activateAntiAliasing();
 }
 
 void GlGraphLowDetailsRenderer::addObservers() {

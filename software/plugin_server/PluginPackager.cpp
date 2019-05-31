@@ -80,8 +80,8 @@ int main(int argc, char **argv) {
   tlp::PluginLibraryLoader::loadPlugins();
   tlp::PluginLister::checkLoadedPluginsDependencies(nullptr);
   tlp::InteractorLister::initInteractorsDependencies();
-  tlp::GlyphManager::getInst().loadGlyphPlugins();
-  tlp::EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
+  tlp::GlyphManager::loadGlyphPlugins();
+  tlp::EdgeExtremityGlyphManager::loadGlyphPlugins();
 
   QDir outputDir(destinationDir);
 

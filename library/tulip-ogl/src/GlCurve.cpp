@@ -71,13 +71,13 @@ void GlCurve::draw(float, Camera *) {
   glPopAttrib();
 
   if (!texture.empty()) {
-    GlTextureManager::getInst().activateTexture(texture);
+    GlTextureManager::activateTexture(texture);
   }
 
   tlp::splineQuad(newPoints, _beginFillColor, _endFillColor, _beginSize, _endSize,
                   newPoints[0] - Coord(1., 0.0, 0.), newPoints[3] + Coord(1., 0.0, 0.));
 
-  GlTextureManager::getInst().desactivateTexture();
+  GlTextureManager::desactivateTexture();
   glEnable(GL_LIGHTING);
   glEnable(GL_CULL_FACE);
 }

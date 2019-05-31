@@ -238,8 +238,8 @@ public:
     }
 
     bool canUseMipmaps =
-        OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_framebuffer_object") ||
-        OpenGlConfigManager::getInst().isExtensionSupported("GL_EXT_framebuffer_object");
+        OpenGlConfigManager::isExtensionSupported("GL_ARB_framebuffer_object") ||
+        OpenGlConfigManager::isExtensionSupported("GL_EXT_framebuffer_object");
 
     unsigned int width = image.width();
     unsigned int height = image.height();
@@ -428,8 +428,8 @@ void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
       QStringToTlpString(tlp::getPluginLocalInstallationDir()), loader);
   tlp::PluginLister::checkLoadedPluginsDependencies(loader);
   tlp::InteractorLister::initInteractorsDependencies();
-  tlp::GlyphManager::getInst().loadGlyphPlugins();
-  tlp::EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
+  tlp::GlyphManager::loadGlyphPlugins();
+  tlp::EdgeExtremityGlyphManager::loadGlyphPlugins();
 }
 
 // tlp::debug redirection

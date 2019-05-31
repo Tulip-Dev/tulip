@@ -192,12 +192,12 @@ void Cylinder::draw(node n, float) {
 
   if (!texFile.empty()) {
     string texturePath = glGraphInputData->parameters->getTexturePath();
-    GlTextureManager::getInst().activateTexture(texturePath + texFile);
+    GlTextureManager::activateTexture(texturePath + texFile);
   }
 
   drawCylinder();
 
-  GlTextureManager::getInst().desactivateTexture();
+  GlTextureManager::desactivateTexture();
 }
 
 Coord Cylinder::getAnchor(const Coord &vector) const {
@@ -264,12 +264,12 @@ void HalfCylinder::draw(node n, float) {
 
   if (!texFile.empty()) {
     string texturePath = glGraphInputData->parameters->getTexturePath();
-    GlTextureManager::getInst().activateTexture(texturePath + texFile);
+    GlTextureManager::activateTexture(texturePath + texFile);
   }
 
   drawCylinder(0.5, 0.25);
 
-  GlTextureManager::getInst().desactivateTexture();
+  GlTextureManager::desactivateTexture();
 }
 //=================================================================================================
 Coord HalfCylinder::getAnchor(const Coord &vector) const {
@@ -300,12 +300,12 @@ public:
 
     if (!texFile.empty()) {
       string texturePath = edgeExtGlGraphInputData->parameters->getTexturePath();
-      GlTextureManager::getInst().activateTexture(texturePath + texFile);
+      GlTextureManager::activateTexture(texturePath + texFile);
     }
 
     drawCylinder();
 
-    GlTextureManager::getInst().desactivateTexture();
+    GlTextureManager::desactivateTexture();
   }
 };
 

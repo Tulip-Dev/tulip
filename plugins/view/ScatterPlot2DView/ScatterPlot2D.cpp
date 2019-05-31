@@ -110,7 +110,7 @@ ScatterPlot2D::~ScatterPlot2D() {
   delete glGraphComposite;
   delete scatterLayout;
   delete scatterEdgeLayout;
-  GlTextureManager::getInst().deleteTexture(textureName);
+  GlTextureManager::deleteTexture(textureName);
 }
 
 void ScatterPlot2D::setBLCorner(const Coord &blCorner) {
@@ -198,8 +198,8 @@ void ScatterPlot2D::generateOverview(GlMainWidget *glWidget, LayoutProperty *rev
   glOffscreenRenderer->renderScene(true);
 
   GLuint textureId = glOffscreenRenderer->getGLTexture(true);
-  GlTextureManager::getInst().deleteTexture(textureName);
-  GlTextureManager::getInst().registerExternalTexture(textureName, textureId);
+  GlTextureManager::deleteTexture(textureName);
+  GlTextureManager::registerExternalTexture(textureName, textureId);
 
   glOffscreenRenderer->clearScene();
 

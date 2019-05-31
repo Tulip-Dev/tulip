@@ -552,7 +552,7 @@ void polyQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2, f
   }
 
   if (!textureName.empty()) {
-    GlTextureManager::getInst().activateTexture(textureName);
+    GlTextureManager::activateTexture(textureName);
   }
 
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -566,7 +566,7 @@ void polyQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2, f
   glDrawArrays(GL_QUAD_STRIP, 0, quadVertices.size());
 
   if (!textureName.empty()) {
-    GlTextureManager::getInst().desactivateTexture();
+    GlTextureManager::desactivateTexture();
   }
 
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -667,7 +667,7 @@ void simpleQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2,
   if (!textureName.empty()) {
     glActiveTexture(GL_TEXTURE0);
     glEnable(GL_TEXTURE_2D);
-    GlTextureManager::getInst().activateTexture(textureName);
+    GlTextureManager::activateTexture(textureName);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
     glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
@@ -677,7 +677,7 @@ void simpleQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2,
   string newTextureName1 = TulipBitmapDir + "cylinderTexture.png";
   glActiveTexture(GL_TEXTURE1);
   glEnable(GL_TEXTURE_2D);
-  GlTextureManager::getInst().activateTexture(newTextureName1);
+  GlTextureManager::activateTexture(newTextureName1);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 
   float length = 0;
@@ -718,7 +718,7 @@ void simpleQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2,
 
   if (!textureName.empty()) {
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    GlTextureManager::getInst().desactivateTexture();
+    GlTextureManager::desactivateTexture();
   }
 
   if (outlineWidth > 0) {

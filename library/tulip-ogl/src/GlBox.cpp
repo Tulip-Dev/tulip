@@ -168,7 +168,7 @@ GlBox::~GlBox() {
 //===========================================================
 void GlBox::draw(float lod, Camera *) {
 
-  bool canUseVBO = OpenGlConfigManager::getInst().hasVertexBufferObject();
+  bool canUseVBO = OpenGlConfigManager::hasVertexBufferObject();
 
   if (canUseVBO) {
     if (!generated) {
@@ -232,7 +232,7 @@ void GlBox::draw(float lod, Camera *) {
     }
 
     if (!textureName.empty()) {
-      GlTextureManager::getInst().activateTexture(textureName);
+      GlTextureManager::activateTexture(textureName);
       glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
       if (canUseVBO) {
@@ -253,7 +253,7 @@ void GlBox::draw(float lod, Camera *) {
     glDisableClientState(GL_NORMAL_ARRAY);
 
     if (!textureName.empty()) {
-      GlTextureManager::getInst().desactivateTexture();
+      GlTextureManager::desactivateTexture();
       glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     }
   }
@@ -387,7 +387,7 @@ void GlBox::clearGenerated() {
   delete[] newCubeCoordArrays;
   newCubeCoordArrays = nullptr;
 
-  if (OpenGlConfigManager::getInst().hasVertexBufferObject()) {
+  if (OpenGlConfigManager::hasVertexBufferObject()) {
     if (generated)
       glDeleteBuffers(5, buffers);
   }

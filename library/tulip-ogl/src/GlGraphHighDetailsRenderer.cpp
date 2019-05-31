@@ -22,7 +22,6 @@
 #include <tulip/GraphProperty.h>
 #include <tulip/NumericProperty.h>
 #include <tulip/GlTools.h>
-#include <tulip/GlDisplayListManager.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
@@ -176,7 +175,7 @@ GlGraphHighDetailsRenderer::~GlGraphHighDetailsRenderer() {
 void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
 
   if (!inputData->renderingParameters()->isAntialiased()) {
-    OpenGlConfigManager::getInst().desactivateAntiAliasing();
+    OpenGlConfigManager::desactivateAntiAliasing();
   }
 
   Graph *graph = inputData->getGraph();
@@ -482,7 +481,7 @@ void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
   } else {
     selectionDrawActivate = false;
     vertexArrayManager->activate(true);
-    OpenGlConfigManager::getInst().activateAntiAliasing();
+    OpenGlConfigManager::activateAntiAliasing();
     return;
   }
 
@@ -513,7 +512,7 @@ void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
 
   selectionDrawActivate = false;
 
-  OpenGlConfigManager::getInst().activateAntiAliasing();
+  OpenGlConfigManager::activateAntiAliasing();
 }
 //===================================================================
 void GlGraphHighDetailsRenderer::selectEntities(Camera *camera, RenderingEntitiesFlag type, int x,

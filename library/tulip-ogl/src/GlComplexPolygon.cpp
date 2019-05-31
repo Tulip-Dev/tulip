@@ -450,7 +450,7 @@ void GlComplexPolygon::draw(float, Camera *) {
   glEnable(GL_COLOR_MATERIAL);
 
   if (!textureName.empty()) {
-    if (GlTextureManager::getInst().activateTexture(textureName))
+    if (GlTextureManager::activateTexture(textureName))
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   }
 
@@ -468,7 +468,7 @@ void GlComplexPolygon::draw(float, Camera *) {
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
   if (!textureName.empty()) {
-    GlTextureManager::getInst().desactivateTexture();
+    GlTextureManager::desactivateTexture();
   }
 
   if (outlined) {
@@ -513,7 +513,7 @@ void GlComplexPolygon::draw(float, Camera *) {
           glEnableVertexAttribArray(vertexPosLoc);
 
           if (!(quadBorderTexture[v]).empty()) {
-            GlTextureManager::getInst().activateTexture(quadBorderTexture[v]);
+            GlTextureManager::activateTexture(quadBorderTexture[v]);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
           }
 
@@ -534,7 +534,7 @@ void GlComplexPolygon::draw(float, Camera *) {
           glDrawArrays(GL_LINE_STRIP_ADJACENCY_EXT, 0, points[v].size());
 
           if (!(quadBorderTexture[v]).empty()) {
-            GlTextureManager::getInst().desactivateTexture();
+            GlTextureManager::desactivateTexture();
           }
 
           outlineExtrusionShader->desactivate();

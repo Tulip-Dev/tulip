@@ -25,7 +25,6 @@
 #include <tulip/TulipSettings.h>
 #include <tulip/Graph.h>
 #include <tulip/GlTools.h>
-#include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/Gl2DRect.h>
 #include <tulip/GlQuadTreeLODCalculator.h>
@@ -76,7 +75,7 @@ static QGLFormat GlInit() {
   if (maxSamples < 0) {
     maxSamples = 0;
     GlMainWidget::getFirstQGLWidget()->makeCurrent();
-    maxSamples = OpenGlConfigManager::getInst().maxNumberOfSamples();
+    maxSamples = OpenGlConfigManager::maxNumberOfSamples();
     GlMainWidget::getFirstQGLWidget()->doneCurrent();
   }
 
@@ -151,7 +150,7 @@ GlMainWidget::GlMainWidget(QWidget *parent, View *view)
   grabGesture(Qt::SwipeGesture);
   renderingStore = nullptr;
   getScene()->setViewOrtho(TulipSettings::instance().isViewOrtho());
-  OpenGlConfigManager::getInst().initExtensions();
+  OpenGlConfigManager::initExtensions();
 }
 //==================================================
 GlMainWidget::~GlMainWidget() {
@@ -196,7 +195,7 @@ void GlMainWidget::createRenderingStore(int width, int height) {
     deleteRenderingStore();
     QOpenGLFramebufferObjectFormat fboFormat;
     fboFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
-    fboFormat.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
+    fboFormat.setSamples(OpenGlConfigManager::maxNumberOfSamples());
     glFrameBuf = new QOpenGLFramebufferObject(width, height, fboFormat);
     glFrameBuf2 = new QOpenGLFramebufferObject(width, height);
     useFramebufferObject = glFrameBuf->isValid();
@@ -366,9 +365,7 @@ void GlMainWidget::resizeGL(int w, int h) {
 void GlMainWidget::makeCurrent() {
   if (isVisible()) {
     QGLWidget::makeCurrent();
-    GlDisplayListManager::getInst().changeContext(
-        reinterpret_cast<uintptr_t>(GlMainWidget::firstQGLWidget));
-    GlTextureManager::getInst().changeContext(
+    GlTextureManager::changeContext(
         reinterpret_cast<uintptr_t>(GlMainWidget::firstQGLWidget));
     int width = contentsRect().width();
     int height = contentsRect().height();
@@ -503,7 +500,7 @@ QOpenGLFramebufferObject *GlMainWidget::createTexture(const std::string &texture
 
   glFrameBuf->release();
 
-  GlTextureManager::getInst().registerExternalTexture(textureName, textureId);
+  GlTextureManager::registerExternalTexture(textureName, textureId);
 
   return nullptr;
 }
@@ -523,7 +520,7 @@ QImage GlMainWidget::createPicture(int width, int height, bool center) {
 
   QOpenGLFramebufferObjectFormat fboFormat;
   fboFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
-  fboFormat.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
+  fboFormat.setSamples(OpenGlConfigManager::maxNumberOfSamples());
   QOpenGLFramebufferObject *frameBuf = new QOpenGLFramebufferObject(width, height, fboFormat);
   QOpenGLFramebufferObject *frameBuf2 = new QOpenGLFramebufferObject(width, height);
 

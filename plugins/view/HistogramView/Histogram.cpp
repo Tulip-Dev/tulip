@@ -100,7 +100,7 @@ Histogram::Histogram(Graph *graph, Graph *edgeGraph, std::map<edge, node> &edgeM
 }
 
 Histogram::~Histogram() {
-  GlTextureManager::getInst().deleteTexture(textureName);
+  GlTextureManager::deleteTexture(textureName);
   delete histogramLayout;
   delete histogramEdgeLayout;
   delete histogramSize;
@@ -704,8 +704,8 @@ void Histogram::update() {
   glOffscreenRenderer->addGraphCompositeToScene(graphComposite);
   glOffscreenRenderer->renderScene(true);
   GLuint textureId = glOffscreenRenderer->getGLTexture(true);
-  GlTextureManager::getInst().deleteTexture(textureName);
-  GlTextureManager::getInst().registerExternalTexture(textureName, textureId);
+  GlTextureManager::deleteTexture(textureName);
+  GlTextureManager::registerExternalTexture(textureName, textureId);
   glOffscreenRenderer->clearScene();
 
   Gl2DRect *rectTextured = new Gl2DRect(blCorner.getY() + size, blCorner.getY(), blCorner.getX(),

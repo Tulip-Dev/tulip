@@ -106,7 +106,7 @@ GlScene::~GlScene() {
 
 void GlScene::initGlParameters() {
   GL_TEST_ERROR();
-  OpenGlConfigManager::getInst().initExtensions();
+  OpenGlConfigManager::initExtensions();
 
   glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
   glScissor(viewport[0], viewport[1], viewport[2], viewport[3]);
@@ -128,10 +128,10 @@ void GlScene::initGlParameters() {
   glColorMask(1, 1, 1, 1);
   glIndexMask(UINT_MAX);
 
-  if (OpenGlConfigManager::getInst().antiAliasing()) {
-    OpenGlConfigManager::getInst().activateAntiAliasing();
+  if (OpenGlConfigManager::antiAliasing()) {
+    OpenGlConfigManager::activateAntiAliasing();
   } else {
-    OpenGlConfigManager::getInst().desactivateAntiAliasing();
+    OpenGlConfigManager::desactivateAntiAliasing();
   }
 
   if (clearBufferAtDraw) {
@@ -242,7 +242,7 @@ void GlScene::draw() {
 
   inDraw = false;
 
-  OpenGlConfigManager::getInst().desactivateAntiAliasing();
+  OpenGlConfigManager::desactivateAntiAliasing();
 }
 
 /******************************************************************************

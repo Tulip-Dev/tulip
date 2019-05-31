@@ -20,7 +20,6 @@
 #include <tulip/GraphProperty.h>
 #include <tulip/GlXMLTools.h>
 #include <tulip/GlTools.h>
-#include <tulip/GlDisplayListManager.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>

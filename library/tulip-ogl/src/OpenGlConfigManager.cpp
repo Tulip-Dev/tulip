@@ -26,54 +26,46 @@
 #include <sstream>
 
 //====================================================
-tlp::OpenGlConfigManager *tlp::OpenGlConfigManager::inst = nullptr;
 
 using namespace std;
 
 namespace tlp {
 
-OpenGlConfigManager &OpenGlConfigManager::getInst() {
-  TLP_LOCK_SECTION(OpenglConfigManagerInited) {
-    if (!inst)
-      inst = new OpenGlConfigManager();
-  }
-  TLP_UNLOCK_SECTION(OpenglConfigManagerInited);
-  return *inst;
-}
-
-OpenGlConfigManager::OpenGlConfigManager() : glewIsInit(false), antialiased(true) {}
+bool OpenGlConfigManager::_glewIsInit = false;
+bool OpenGlConfigManager::_antialiased = true;
+std::unordered_map<std::string, bool> OpenGlConfigManager::_checkedExtensions;
 
 void OpenGlConfigManager::initExtensions() {
-  if (!glewIsInit) {
+  if (!_glewIsInit) {
     glewExperimental = true;
-    glewIsInit = (glewInit() == GLEW_OK);
+    _glewIsInit = (glewInit() == GLEW_OK);
   }
 }
 
-string OpenGlConfigManager::getOpenGLVersionString() const {
+string OpenGlConfigManager::getOpenGLVersionString() {
   return reinterpret_cast<const char *>(glGetString(GL_VERSION));
 }
 
-double OpenGlConfigManager::getOpenGLVersion() const {
+double OpenGlConfigManager::getOpenGLVersion() {
   double ret = 0;
   std::istringstream iss(getOpenGLVersionString()); //.substr(0,3));
   iss >> ret;
   return ret;
 }
 
-string OpenGlConfigManager::getOpenGLVendor() const {
+string OpenGlConfigManager::getOpenGLVendor() {
   return string(reinterpret_cast<const char *>(glGetString(GL_VENDOR)));
 }
 
 bool OpenGlConfigManager::isExtensionSupported(const string &extensionName) {
-  if (!glewIsInit)
+  if (!_glewIsInit)
     return false;
 
   bool supported = false;
   TLP_LOCK_SECTION(OpenGlConfigManagerExtensionSupported) {
-    auto it = checkedExtensions.find(extensionName);
-    if (it == checkedExtensions.end()) {
-      supported = checkedExtensions[extensionName] =
+    auto it = _checkedExtensions.find(extensionName);
+    if (it == _checkedExtensions.end()) {
+      supported = _checkedExtensions[extensionName] =
           (glewIsSupported(extensionName.c_str()) == GL_TRUE);
     } else
       supported = it->second;
@@ -87,7 +79,7 @@ bool OpenGlConfigManager::hasVertexBufferObject() {
 }
 
 void OpenGlConfigManager::activateAntiAliasing() {
-  if (antialiased) {
+  if (_antialiased) {
     glEnable(GL_MULTISAMPLE);
   }
 }
@@ -96,40 +88,7 @@ void OpenGlConfigManager::desactivateAntiAliasing() {
   glDisable(GL_MULTISAMPLE);
 }
 
-void OpenGlConfigManager::activateLineAndPointAntiAliasing() {
-  if (antialiased) {
-    glDisable(GL_MULTISAMPLE);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_LINE_SMOOTH);
-    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-    glEnable(GL_POINT_SMOOTH);
-    glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
-  }
-}
-
-void OpenGlConfigManager::desactivateLineAndPointAntiAliasing() {
-  if (antialiased) {
-    glDisable(GL_LINE_SMOOTH);
-    glDisable(GL_POINT_SMOOTH);
-  }
-}
-
-void OpenGlConfigManager::activatePolygonAntiAliasing() {
-  if (antialiased) {
-    glDisable(GL_LINE_SMOOTH);
-    glDisable(GL_POINT_SMOOTH);
-    glEnable(GL_MULTISAMPLE);
-  }
-}
-
-void OpenGlConfigManager::desactivatePolygonAntiAliasing() {
-  if (antialiased) {
-    glDisable(GL_MULTISAMPLE);
-  }
-}
-
-int OpenGlConfigManager::maxNumberOfSamples() const {
+int OpenGlConfigManager::maxNumberOfSamples() {
   static int maxSamples = -1;
 
   if (maxSamples < 0)

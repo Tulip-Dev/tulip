@@ -34,49 +34,35 @@ namespace tlp {
 class GlGraphInputData;
 class Graph;
 
-/** \ brief Singleton class use to store Glyphs plugins
- * This class is a singleton use to sore Glyphs plugins
+/**
+ * Used to store Glyphs plugins
  */
 class TLP_GL_SCOPE GlyphManager {
 
 public:
   /**
-   * Return the singleton (if the singleton doesn't exist this function create it)
-   */
-  static GlyphManager &getInst() {
-    return inst;
-  }
-
-  /**
    * Return the name of glyph with given id
    */
-  std::string glyphName(int id);
+  static std::string glyphName(int id);
   /**
    * Return the id if glyph with given name
    */
-  int glyphId(const std::string &name, bool warnIfNotFound = true);
+  static int glyphId(const std::string &name, bool warnIfNotFound = true);
   /**
    * Load glyphs plugins
    */
-  void loadGlyphPlugins();
+  static void loadGlyphPlugins();
 
   /**
    * Create the glyph list and store it in glyphs parameter
    */
-  void initGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
-                     MutableContainer<Glyph *> &glyphs);
+  static void initGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
+			    MutableContainer<Glyph *> &glyphs);
   /**
    * Clear the glyph list
    */
-  void clearGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
-                      MutableContainer<Glyph *> &glyphs);
-
-private:
-  GlyphManager();
-
-  static std::list<std::string> glyphList;
-
-  static GlyphManager inst;
+  static void clearGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
+			     MutableContainer<Glyph *> &glyphs);
 };
 } // namespace tlp
 

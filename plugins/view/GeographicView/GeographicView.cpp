@@ -17,7 +17,6 @@
  *
  */
 
-#include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/Camera.h>
@@ -491,7 +490,7 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
 
   QOpenGLFramebufferObjectFormat fboFormat;
   fboFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
-  fboFormat.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
+  fboFormat.setSamples(OpenGlConfigManager::maxNumberOfSamples());
 
   QOpenGLFramebufferObject fbo(width, height, fboFormat);
   QOpenGLFramebufferObject fbo2(width, height);

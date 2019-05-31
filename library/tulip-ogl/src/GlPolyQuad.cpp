@@ -175,7 +175,7 @@ void GlPolyQuad::draw(float, Camera *) {
   outlineIndices.push_back(0);
 
   if (!textureName.empty()) {
-    GlTextureManager::getInst().activateTexture(textureName);
+    GlTextureManager::activateTexture(textureName);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   }
 
@@ -201,7 +201,7 @@ void GlPolyQuad::draw(float, Camera *) {
   glDisableClientState(GL_COLOR_ARRAY);
 
   if (!textureName.empty()) {
-    GlTextureManager::getInst().desactivateTexture();
+    GlTextureManager::desactivateTexture();
   }
 
   if (outlined) {

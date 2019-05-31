@@ -88,7 +88,7 @@ ScatterPlot2DView::~ScatterPlot2DView() {
     --scatterplotViewInstancesCount;
 
   if (scatterplotViewInstancesCount == 0) {
-    GlTextureManager::getInst().deleteTexture("gaussian_text_back");
+    GlTextureManager::deleteTexture("gaussian_text_back");
     backgroundTextureId = 0;
   }
 
@@ -174,7 +174,7 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     getGlMainWidget()->getFirstQGLWidget()->makeCurrent();
     backgroundTextureId = getGlMainWidget()->getFirstQGLWidget()->bindTexture(
         QPixmap(":/background_texture.png").transformed(QTransform().rotate(90)), GL_TEXTURE_2D);
-    GlTextureManager::getInst().registerExternalTexture("gaussian_tex_back", backgroundTextureId);
+    GlTextureManager::registerExternalTexture("gaussian_tex_back", backgroundTextureId);
   }
 
   Graph *lastGraph = scatterPlotGraph;

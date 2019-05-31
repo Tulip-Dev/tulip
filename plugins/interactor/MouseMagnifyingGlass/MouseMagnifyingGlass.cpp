@@ -75,7 +75,7 @@ MouseMagnifyingGlassInteractorComponent::MouseMagnifyingGlassInteractorComponent
 MouseMagnifyingGlassInteractorComponent::~MouseMagnifyingGlassInteractorComponent() {
   delete fbo;
   delete fbo2;
-  GlTextureManager::getInst().deleteTexture(textureName);
+  GlTextureManager::deleteTexture(textureName);
 }
 
 bool MouseMagnifyingGlassInteractorComponent::eventFilter(QObject *, QEvent *e) {
@@ -140,7 +140,7 @@ void MouseMagnifyingGlassInteractorComponent::generateMagnifyingGlassTexture(
   bool antialiased = false;
 
   bool canUseMultisampleFbo =
-      OpenGlConfigManager::getInst().isExtensionSupported("GL_EXT_framebuffer_multisample");
+      OpenGlConfigManager::isExtensionSupported("GL_EXT_framebuffer_multisample");
 
   if (QOpenGLFramebufferObject::hasOpenGLFramebufferBlit() && canUseMultisampleFbo) {
     antialiased = true;
@@ -154,7 +154,7 @@ void MouseMagnifyingGlassInteractorComponent::generateMagnifyingGlassTexture(
     fboFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
 
     if (antialiased) {
-      fboFormat.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
+      fboFormat.setSamples(OpenGlConfigManager::maxNumberOfSamples());
     }
 
     fbo = new QOpenGLFramebufferObject(fboSize, fboSize, fboFormat);
@@ -164,9 +164,9 @@ void MouseMagnifyingGlassInteractorComponent::generateMagnifyingGlassTexture(
     }
 
     if (!antialiased) {
-      GlTextureManager::getInst().registerExternalTexture(textureName, fbo->texture());
+      GlTextureManager::registerExternalTexture(textureName, fbo->texture());
     } else {
-      GlTextureManager::getInst().registerExternalTexture(textureName, fbo2->texture());
+      GlTextureManager::registerExternalTexture(textureName, fbo2->texture());
     }
   }
 

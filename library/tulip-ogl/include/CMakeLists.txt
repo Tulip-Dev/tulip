@@ -22,7 +22,6 @@ INSTALL(FILES
   tulip/GlCPULODCalculator.h
   tulip/GlCubicBSplineInterpolation.h
   tulip/GlCurve.h
-  tulip/GlDisplayListManager.h
   tulip/GlEdge.h
   tulip/GlEntity.h
   tulip/GlFeedBackBuilder.h
