@@ -34,44 +34,29 @@ class Graph;
 class TLP_GL_SCOPE EdgeExtremityGlyphManager {
 
 public:
-  virtual ~EdgeExtremityGlyphManager() {}
-
-  /**
-   * Return the singleton (if the singleton doesn't exist this function create it)
-   */
-  static EdgeExtremityGlyphManager &getInst() {
-    return eeinst;
-  }
-
   /**
    * Return the name of glyph with given id
    */
-  std::string glyphName(int id);
+  static std::string glyphName(int id);
   /**
    * Return the id if glyph with given name
    */
-  int glyphId(const std::string &name);
+  static int glyphId(const std::string &name);
   /**
    * Load glyphs plugins
    */
-  void loadGlyphPlugins();
+  static void loadGlyphPlugins();
 
   /**
    * Create the glyph list and store it in glyphs parameter
    */
-  void initGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
-                     MutableContainer<EdgeExtremityGlyph *> &glyphs);
+  static void initGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
+                            MutableContainer<EdgeExtremityGlyph *> &glyphs);
   /**
    * Clear the glyph list
    */
-  void clearGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
-                      MutableContainer<EdgeExtremityGlyph *> &glyphs);
-
-private:
-  EdgeExtremityGlyphManager();
-
-  static std::list<std::string> plugins;
-  static EdgeExtremityGlyphManager eeinst;
+  static void clearGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
+                             MutableContainer<EdgeExtremityGlyph *> &glyphs);
 };
 } // namespace tlp
 #endif /* EDGEEXTREMITYGLYPHMANAGER_H_ */

@@ -16,7 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <map>
 
+#include <tulip/Node.h>
+#include <tulip/Edge.h>
 #include <tulip/GlyphRenderer.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/Graph.h>
@@ -29,143 +32,108 @@
 using namespace tlp;
 using namespace std;
 
-GlyphRenderer *GlyphRenderer::_instance = nullptr;
+QPixmap GlyphRenderer::render(int glyphId) {
+  static std::unordered_map<int, QPixmap> previews;
+  static bool inited = false;
+  if (!inited) {
+    inited = true;
+    // Init graph parameters.
+    GlGraphRenderingParameters parameters;
+    auto graph = newGraph();
+    auto node = graph->addNode();
+    {
+      // need a block to ensure inputData
+      // will be destroyed before graph
+      GlGraphInputData inputData(graph, &parameters);
+      inputData.getElementSize()->setAllNodeValue(Size(1, 1, 1));
+      inputData.getElementColor()->setAllNodeValue(Color(192, 192, 192));
+      inputData.getElementBorderColor()->setAllNodeValue(Color(0, 0, 0));
+      inputData.getElementBorderWidth()->setAllNodeValue(1);
 
-GlyphRenderer::GlyphRenderer() : _graph(newGraph()), _node(_graph->addNode()) {
-  // Init graph parameters.
-  GlGraphRenderingParameters parameters;
-  {
-    // need a block to ensure inputData
-    // will be destroyed before _graph
-    GlGraphInputData inputData(_graph, &parameters);
-    inputData.getElementSize()->setAllNodeValue(Size(1, 1, 1));
-    inputData.getElementColor()->setAllNodeValue(Color(192, 192, 192));
-    inputData.getElementBorderColor()->setAllNodeValue(Color(0, 0, 0));
-    inputData.getElementBorderWidth()->setAllNodeValue(1);
-
-    // init previews
-    std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<Glyph>());
-
-    for (std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
-      std::string glyphName(*it);
-      int glyphIndex = GlyphManager::getInst().glyphId(glyphName);
-      // Create the glyph preview
-      render(glyphIndex);
-    }
-  }
-
-  // _graph is no longer needed
-  delete _graph;
-  _graph = nullptr;
-}
-
-GlyphRenderer::~GlyphRenderer() {
-  assert(_graph = nullptr);
-}
-
-GlyphRenderer &GlyphRenderer::getInst() {
-  if (_instance == nullptr) {
-    _instance = new GlyphRenderer();
-  }
-
-  return *_instance;
-}
-
-QPixmap GlyphRenderer::render(unsigned int pluginId) {
-  if (_previews.find(pluginId) == _previews.end()) {
-    if (_graph) {
-      _graph->getProperty<IntegerProperty>("viewShape")->setNodeValue(_node, pluginId);
       GlOffscreenRenderer *renderer = GlOffscreenRenderer::getInstance();
       renderer->setViewPortSize(16, 16);
       renderer->clearScene();
-      renderer->addGraphToScene(_graph);
+      renderer->addGraphToScene(graph);
       renderer->getScene()->centerScene();
       renderer->getScene()->getGraphCamera().setZoomFactor(0.9);
-      renderer->renderScene(false, true);
-      QImage preview = renderer->getImage();
-      _previews[pluginId] = QPixmap::fromImage(preview);
+      // init previews
+      for (const std::string &glyphName : PluginLister::instance()->availablePlugins<Glyph>()) {
+        auto glId = GlyphManager::glyphId(glyphName);
+        // Create the glyph preview
+        graph->getProperty<IntegerProperty>("viewShape")->setNodeValue(node, glId);
+        renderer->renderScene(false, true);
+        previews.emplace(std::make_pair(glId, QPixmap::fromImage(renderer->getImage())));
+      }
       renderer->clearScene(true);
-    } else
-      return QPixmap(":/tulip/gui/icons/i_invalid.png");
+    }
+    // graph is no longer needed
+    delete graph;
   }
-
-  return _previews[pluginId];
+  auto it = previews.find(glyphId);
+  if (it == previews.end())
+    return QPixmap(":/tulip/gui/icons/i_invalid.png");
+  return it->second;
 }
 
-EdgeExtremityGlyphRenderer *EdgeExtremityGlyphRenderer::_instance = nullptr;
-EdgeExtremityGlyphRenderer::EdgeExtremityGlyphRenderer() : _graph(newGraph()) {
-  // No edge extremity pixmap
-  _previews[EdgeExtremityShape::None] = QPixmap();
+QPixmap EdgeExtremityGlyphRenderer::render(int glyphId) {
+  static std::unordered_map<int, QPixmap> previews;
+  static bool inited = false;
+  if (!inited) {
+    inited = true;
+    previews[EdgeExtremityShape::None] = QPixmap();
+    // Init graph parameters.
+    GlGraphRenderingParameters parameters;
+    auto graph = newGraph();
+    node n1 = graph->addNode();
+    node n2 = graph->addNode();
+    edge e = graph->addEdge(n1, n2);
+    {
+      // need a block to ensure inputData
+      // will be destroyed before graph
+      GlGraphInputData inputData(graph, &parameters);
+      Color white(255, 255, 255, 0), black(0, 0, 0, 0);
+      inputData.getElementSize()->setAllNodeValue(Size(0.01f, 0.2f, 0.1f));
+      inputData.getElementSize()->setAllEdgeValue(Size(0.125f, 0.125f, 0.125f));
+      inputData.getElementColor()->setAllNodeValue(white);
+      inputData.getElementBorderColor()->setAllNodeValue(white);
+      inputData.getElementColor()->setAllEdgeValue(Color(192, 192, 192));
+      inputData.getElementBorderColor()->setAllEdgeValue(black);
+      inputData.getElementLayout()->setNodeValue(n1, Coord(0, 0, 0));
+      inputData.getElementLayout()->setNodeValue(n2, Coord(0.3f, 0, 0));
+      vector<Coord> bends;
+      bends.push_back(Coord(0.01f, 0, 0));
+      inputData.getElementLayout()->setAllEdgeValue(bends);
 
-  // Init graph.
-  GlGraphRenderingParameters parameters;
-  GlGraphInputData inputData(_graph, &parameters);
-  inputData.getElementSize()->setAllNodeValue(Size(0.01f, 0.2f, 0.1f));
-  inputData.getElementSize()->setAllEdgeValue(Size(0.125f, 0.125f, 0.125f));
-  inputData.getElementColor()->setAllNodeValue(Color(255, 255, 255, 0));
-  inputData.getElementBorderColor()->setAllNodeValue(Color(255, 255, 255, 0));
-  inputData.getElementColor()->setAllEdgeValue(Color(192, 192, 192));
-  inputData.getElementBorderColor()->setAllEdgeValue(Color(0, 0, 0));
-  node n1 = _graph->addNode();
-  node n2 = _graph->addNode();
-  _edge = _graph->addEdge(n1, n2);
-  inputData.getElementLayout()->setNodeValue(n1, Coord(0, 0, 0));
-  inputData.getElementLayout()->setNodeValue(n2, Coord(0.3f, 0, 0));
-  vector<Coord> bends;
-  bends.push_back(Coord(0.01f, 0, 0));
-  inputData.getElementLayout()->setAllEdgeValue(bends);
+      inputData.getElementSrcAnchorShape()->setAllEdgeValue(EdgeExtremityShape::None);
+      inputData.getElementTgtAnchorSize()->setAllEdgeValue(Size(2, 2, 1));
 
-  inputData.getElementSrcAnchorShape()->setAllEdgeValue(EdgeExtremityShape::None);
-  inputData.getElementTgtAnchorSize()->setAllEdgeValue(Size(2, 2, 1));
-
-  // init previews
-  std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>());
-
-  for (std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
-    std::string glyphName(*it);
-    const tlp::Plugin &info = PluginLister::pluginInformation(glyphName);
-    int glyphIndex = info.id();
-    // Create the glyph preview
-    render(glyphIndex);
-  }
-
-  // _graph is no longer needed
-  delete _graph;
-  _graph = nullptr;
-}
-
-EdgeExtremityGlyphRenderer::~EdgeExtremityGlyphRenderer() {
-  assert(_graph == nullptr);
-}
-
-EdgeExtremityGlyphRenderer &EdgeExtremityGlyphRenderer::getInst() {
-  if (_instance == nullptr) {
-    _instance = new EdgeExtremityGlyphRenderer();
-  }
-
-  return *_instance;
-}
-
-QPixmap EdgeExtremityGlyphRenderer::render(unsigned int pluginId) {
-  if (_previews.find(pluginId) == _previews.end()) {
-    if (_graph) {
-      _graph->getProperty<IntegerProperty>("viewTgtAnchorShape")->setEdgeValue(_edge, pluginId);
       GlOffscreenRenderer *renderer = GlOffscreenRenderer::getInstance();
       renderer->setViewPortSize(16, 16);
       renderer->clearScene();
-      renderer->addGraphToScene(_graph);
+      renderer->addGraphToScene(graph);
       GlGraphRenderingParameters renderingParamerters =
           renderer->getScene()->getGlGraphComposite()->getRenderingParameters();
       renderingParamerters.setEdgeColorInterpolate(false);
       renderingParamerters.setEdgeSizeInterpolate(false);
       renderingParamerters.setViewArrow(true);
       renderer->getScene()->getGlGraphComposite()->setRenderingParameters(renderingParamerters);
-      renderer->renderScene(true);
-      QImage preview = renderer->getImage();
-      _previews[pluginId] = QPixmap::fromImage(preview);
-    } else
-      return QPixmap(":/tulip/gui/icons/i_invalid.png");
+      // init previews
+      for (std::string glyphName :
+           PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>()) {
+        const tlp::Plugin &info = PluginLister::pluginInformation(glyphName);
+        int glId = info.id();
+        // Create the glyph preview
+        graph->getProperty<IntegerProperty>("viewTgtAnchorShape")->setEdgeValue(e, glId);
+        renderer->renderScene(true);
+        previews.emplace(std::make_pair(glId, QPixmap::fromImage(renderer->getImage())));
+      }
+      renderer->clearScene(true);
+    }
+    // graph is no longer needed
+    delete graph;
   }
-
-  return _previews[pluginId];
+  auto it = previews.find(glyphId);
+  if (it == previews.end())
+    return QPixmap(":/tulip/gui/icons/i_invalid.png");
+  return it->second;
 }

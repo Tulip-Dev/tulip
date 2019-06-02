@@ -574,7 +574,7 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName,
                                  const std::string &curveSpecificShaderCode) {
   // restrict shaders compilation on compatible hardware, crashs can happen
   // when using a software implementation of OpenGL
-  static string glVendor = OpenGlConfigManager::getInst().getOpenGLVendor();
+  static string glVendor = OpenGlConfigManager::getOpenGLVendor();
   static bool glVendorOk = (glVendor.find("NVIDIA") != string::npos) ||
                            (glVendor.find("ATI") != string::npos) ||
                            (glVendor.find("Intel") != string::npos);
@@ -742,11 +742,11 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
   }
 
   static bool canUseFloatTextures =
-      OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_texture_float");
+      OpenGlConfigManager::isExtensionSupported("GL_ARB_texture_float");
 
   if (curveShaderProgram != nullptr && canUseFloatTextures && renderMode != GL_SELECT) {
 
-    static bool vboOk = OpenGlConfigManager::getInst().hasVertexBufferObject();
+    static bool vboOk = OpenGlConfigManager::hasVertexBufferObject();
 
     pair<GlShaderProgram *, GlShaderProgram *> geometryShaders = std::make_pair(
         static_cast<GlShaderProgram *>(nullptr), static_cast<GlShaderProgram *>(nullptr));
@@ -872,14 +872,14 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
     } else {
       if (!texture.empty()) {
         glActiveTexture(GL_TEXTURE0);
-        GlTextureManager::getInst().activateTexture(texture);
+        GlTextureManager::activateTexture(texture);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
       }
 
       if (billboardCurve) {
         glActiveTexture(GL_TEXTURE1);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        GlTextureManager::getInst().activateTexture(TulipBitmapDir + "cylinderTexture.png");
+        GlTextureManager::activateTexture(TulipBitmapDir + "cylinderTexture.png");
       }
 
       if (vboOk) {
@@ -902,12 +902,12 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 
       if (billboardCurve) {
         glActiveTexture(GL_TEXTURE1);
-        GlTextureManager::getInst().desactivateTexture();
+        GlTextureManager::desactivateTexture();
       }
 
       if (!texture.empty()) {
         glActiveTexture(GL_TEXTURE0);
-        GlTextureManager::getInst().desactivateTexture();
+        GlTextureManager::desactivateTexture();
       }
 
       if (outlined) {

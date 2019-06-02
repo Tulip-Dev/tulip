@@ -113,7 +113,7 @@ PixelOrientedOverview::PixelOrientedOverview(TulipGraphDimension *data,
 }
 
 PixelOrientedOverview::~PixelOrientedOverview() {
-  GlTextureManager::getInst().deleteTexture(textureName);
+  GlTextureManager::deleteTexture(textureName);
   reset(true);
 }
 
@@ -217,8 +217,8 @@ void PixelOrientedOverview::computePixelView(GlMainWidget *glWidget) {
   }
 
   GLuint textureId = glOffscreenRenderer->getGLTexture(true);
-  GlTextureManager::getInst().deleteTexture(textureName);
-  GlTextureManager::getInst().registerExternalTexture(textureName, textureId);
+  GlTextureManager::deleteTexture(textureName);
+  GlTextureManager::registerExternalTexture(textureName, textureId);
 
   if (findGlEntity(dimName) == nullptr) {
     addGlEntity(new Gl2DRect(blCornerPos.getY() + pixelOrientedMediator->getImageHeight(),

@@ -1178,7 +1178,7 @@ void GeographicViewGraphicsView::switchViewType() {
         planisphereTextureId = GlMainWidget::getFirstQGLWidget()->bindTexture(
             QPixmap(":/planisphere.jpg").transformed(QTransform().scale(1, -1)), GL_TEXTURE_2D,
             GL_RGBA, QGLContext::LinearFilteringBindOption);
-        GlTextureManager::getInst().registerExternalTexture("Planisphere", planisphereTextureId);
+        GlTextureManager::registerExternalTexture("Planisphere", planisphereTextureId);
       }
 
       planisphereEntity = new GlSphere(Coord(0., 0., 0.), 50., "Planisphere", 255, 0, 0, 90);

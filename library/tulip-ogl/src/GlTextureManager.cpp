@@ -32,8 +32,11 @@
 #include <tulip/OpenGlConfigManager.h>
 
 //====================================================
-tlp::GlTextureManager *tlp::GlTextureManager::inst = nullptr;
 tlp::GlTextureLoader *tlp::GlTextureManager::loader = nullptr;
+uintptr_t tlp::GlTextureManager::currentContext = 0;
+tlp::GlTextureManager::ContextAndTextureMap tlp::GlTextureManager::texturesMap;
+std::set<std::string> tlp::GlTextureManager::texturesWithError;
+unsigned int tlp::GlTextureManager::animationFrame = 0;
 
 using namespace std;
 
@@ -335,7 +338,7 @@ static bool generateTexture(const std::string &filename, const TextureInfo &text
     }
 
     bool canUseNpotTextures =
-        OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_texture_non_power_of_two");
+        OpenGlConfigManager::isExtensionSupported("GL_ARB_texture_non_power_of_two");
 
     if (!canUseNpotTextures) {
       bool formatOk = false;
@@ -368,9 +371,8 @@ static bool generateTexture(const std::string &filename, const TextureInfo &text
     }
   }
 
-  bool canUseMipmaps =
-      OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_framebuffer_object") ||
-      OpenGlConfigManager::getInst().isExtensionSupported("GL_EXT_framebuffer_object");
+  bool canUseMipmaps = OpenGlConfigManager::isExtensionSupported("GL_ARB_framebuffer_object") ||
+                       OpenGlConfigManager::isExtensionSupported("GL_EXT_framebuffer_object");
 
   GLuint *textureNum = new GLuint[spriteNumber];
 
@@ -485,10 +487,6 @@ bool GlTextureLoader::loadTexture(const string &filename, GlTexture &texture) {
   delete[] texti.data;
 
   return result;
-}
-//====================================================================
-GlTextureManager::GlTextureManager() : currentContext(0), animationFrame(0) {
-  texturesMap[currentContext] = TextureUnit();
 }
 //====================================================================
 void GlTextureManager::changeContext(uintptr_t context) {

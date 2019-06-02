@@ -81,10 +81,9 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       tlpStringToQString(qVersion()) +
       ": <a href=\"https://www.qt.io\">https://www.qt.io</a></li>"
       "  <li> <b> OpenGL </b> " +
-      (openGL_OK ? QString::number(OpenGlConfigManager::getInst().getOpenGLVersion())
-                 : QString("?.?")) +
+      (openGL_OK ? QString::number(OpenGlConfigManager::getOpenGLVersion()) : QString("?.?")) +
       " (from vendor " +
-      (openGL_OK ? tlpStringToQString(OpenGlConfigManager::getInst().getOpenGLVendor())
+      (openGL_OK ? tlpStringToQString(OpenGlConfigManager::getOpenGLVendor())
                  : QString("unknown")) +
       "): <a href=\"https://www.opengl.org\">https://www.opengl.org</a> </li>"
       "  <li> <b>OGDF</b> v2015.05 (Baobab) aka the Open Graph Drawing Framework : <a "

@@ -275,12 +275,12 @@ static FontIcon &getFontIcon(const string &iconName) {
 static void drawIcon(FontIcon &fontIcon, const Color &color, const Color &outlineColor,
                      const float outlineSize, const string &texture) {
   if (!texture.empty()) {
-    GlTextureManager::getInst().activateTexture(texture);
+    GlTextureManager::activateTexture(texture);
   }
 
   fontIcon.render(color, outlineColor, outlineSize);
 
-  GlTextureManager::getInst().desactivateTexture();
+  GlTextureManager::desactivateTexture();
 }
 
 class FontIconGlyph : public Glyph {

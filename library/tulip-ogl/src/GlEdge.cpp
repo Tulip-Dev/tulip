@@ -34,7 +34,6 @@
 #include <tulip/Curves.h>
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/GlLines.h>
-#include <tulip/GlDisplayListManager.h>
 #include <tulip/OcclusionTest.h>
 #include <tulip/GlTLPFeedBackBuilder.h>
 #include <tulip/GlGraphRenderingParameters.h>
@@ -292,13 +291,13 @@ void GlEdge::draw(float lod, const GlGraphInputData *data, Camera *camera) {
     return;
 
   // Reset in case of drawing extremity glyph that can alterate value
-  GlTextureManager::getInst().setAnimationFrame(data->getElementAnimationFrame()->getEdgeValue(e));
+  GlTextureManager::setAnimationFrame(data->getElementAnimationFrame()->getEdgeValue(e));
   // draw Edge
   drawEdge(srcCoord, tgtCoord, beginLineAnchor, endLineAnchor, bends, srcCol, tgtCol,
            camera->getCenter() - camera->getEyes(), data->parameters->isEdgeColorInterpolate(),
            strokeColor, edgeSize, data->getElementShape()->getEdgeValue(e),
            data->parameters->isEdge3D(), lodSize, edgeTexture, borderWidth);
-  GlTextureManager::getInst().setAnimationFrame(0);
+  GlTextureManager::setAnimationFrame(0);
 
   if (data->parameters->getFeedbackRender()) {
     glPassThrough(TLP_FB_END_EDGE);

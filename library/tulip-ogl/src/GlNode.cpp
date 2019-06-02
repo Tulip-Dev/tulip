@@ -110,7 +110,7 @@ void GlNode::draw(float lod, const GlGraphInputData *data, Camera *camera) {
 
   const Color &textColor = data->getElementLabelColor()->getNodeValue(n);
 
-  GlTextureManager::getInst().setAnimationFrame(data->getElementAnimationFrame()->getNodeValue(n));
+  GlTextureManager::setAnimationFrame(data->getElementAnimationFrame()->getNodeValue(n));
 
   if (data->parameters->getFeedbackRender()) {
     glPassThrough(TLP_FB_COLOR_INFO);
@@ -195,7 +195,7 @@ void GlNode::draw(float lod, const GlGraphInputData *data, Camera *camera) {
     glPopMatrix();
   }
 
-  GlTextureManager::getInst().setAnimationFrame(0);
+  GlTextureManager::setAnimationFrame(0);
 
   if (data->parameters->getFeedbackRender()) {
     glPassThrough(TLP_FB_END_NODE);

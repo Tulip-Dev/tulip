@@ -561,7 +561,7 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
     edgeEntity->setCoordinates(start, end, coordinates);
     glMainWidget->getScene()->getGraphLayer()->addGlEntity(edgeEntity, "edgeEntity");
   } else {
-    int complexPolygonGlyphId = GlyphManager::getInst().glyphId("2D - Complex Polygon", false);
+    int complexPolygonGlyphId = GlyphManager::glyphId("2D - Complex Polygon", false);
 
     if (complexPolygonGlyphId && (_shape->getNodeValue(mNode) == complexPolygonGlyphId)) {
       if (_coordsVectorProperty) {

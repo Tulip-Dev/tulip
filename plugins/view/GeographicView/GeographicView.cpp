@@ -17,7 +17,6 @@
  *
  */
 
-#include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/Camera.h>
@@ -28,6 +27,7 @@
 #include <tulip/GlComplexPolygon.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/OpenGlConfigManager.h>
+#include <tulip/NodeLinkDiagramComponent.h>
 
 #include <QMenu>
 #include <QThread>
@@ -191,22 +191,25 @@ void GeographicView::setState(const DataSet &dataSet) {
     computeGeoLayout();
   }
 
+  GlGraphComposite *graphComposite =
+      geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite();
+  GlGraphRenderingParameters rp = graphComposite->getRenderingParameters();
+
   if (dataSet.exists("renderingParameters")) {
-    GlGraphComposite *graphComposite =
-        geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite();
     DataSet renderingParameters;
     dataSet.get("renderingParameters", renderingParameters);
-    GlGraphRenderingParameters rp = graphComposite->getRenderingParameters();
     rp.setParameters(renderingParameters);
     string s;
 
     if (renderingParameters.get("elementsOrderingPropertyName", s) && !s.empty()) {
       rp.setElementOrderingProperty(dynamic_cast<tlp::NumericProperty *>(graph()->getProperty(s)));
     }
+  } else
+    // same default initialization as NodeLinkDiagramComponent
+    NodeLinkDiagramComponent::initRenderingParameters(&rp);
 
-    graphComposite->setRenderingParameters(rp);
-    sceneConfigurationWidget->resetChanges();
-  }
+  graphComposite->setRenderingParameters(rp);
+  sceneConfigurationWidget->resetChanges();
 
   View::setState(dataSet);
 
@@ -487,7 +490,7 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
 
   QOpenGLFramebufferObjectFormat fboFormat;
   fboFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
-  fboFormat.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
+  fboFormat.setSamples(OpenGlConfigManager::maxNumberOfSamples());
 
   QOpenGLFramebufferObject fbo(width, height, fboFormat);
   QOpenGLFramebufferObject fbo2(width, height);

@@ -37,7 +37,6 @@
 #include <tulip/ColorProperty.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlyphManager.h>
-#include <tulip/GlDisplayListManager.h>
 #include <tulip/OcclusionTest.h>
 #include <tulip/GlTLPFeedBackBuilder.h>
 #include <tulip/OcclusionTest.h>
@@ -708,14 +707,14 @@ void GlLabel::draw(float, Camera *camera) {
                         yShift + (textBoundingBox[1][1] - textBoundingBox[0][1]) * yShiftFactor);
 
       if (!textureName.empty())
-        GlTextureManager::getInst().activateTexture(textureName);
+        GlTextureManager::activateTexture(textureName);
 
       setMaterial(color);
 
       font->Render((*it).c_str(), -1, shift);
 
       if (!textureName.empty())
-        GlTextureManager::getInst().desactivateTexture();
+        GlTextureManager::desactivateTexture();
 
       if (outlineSize > 0) {
         if (!useLOD || viewportH > 25) {

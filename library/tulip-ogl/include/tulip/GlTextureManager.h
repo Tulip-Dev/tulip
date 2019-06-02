@@ -26,7 +26,7 @@
 #include <tulip/OpenGlIncludes.h>
 
 #include <set>
-#include <map>
+#include <unordered_map>
 #include <string>
 
 #include <cstdint>
@@ -56,101 +56,91 @@ public:
   virtual ~GlTextureLoader() {}
 };
 
-/** \brief Class to manage textures
- * Singleton class to load/store textures need by OpenGL rendering
+/**
+ * class to load/store textures need by OpenGL rendering
  */
 class TLP_GL_SCOPE GlTextureManager {
 
-  typedef std::map<std::string, GlTexture> TextureUnit;
-  typedef std::map<uintptr_t, TextureUnit> ContextAndTextureMap;
+  typedef std::unordered_map<std::string, GlTexture> TextureUnit;
+  typedef std::unordered_map<uintptr_t, TextureUnit> ContextAndTextureMap;
 
 public:
   /**
-   * Return the texture manager singleton, il singleton doesn't exist this function create it
-   */
-  static GlTextureManager &getInst() {
-    if (!inst)
-      inst = new GlTextureManager();
-
-    return *inst;
-  }
-
-  /**
    * Change the current OpenGl context (each OpenGl window have a different OpenGl context)
    */
-  void changeContext(uintptr_t context);
+  static void changeContext(uintptr_t context);
   /**
    * Remove all textures of an OpenGl context and remove this context
    */
-  void removeContext(uintptr_t context);
+  static void removeContext(uintptr_t context);
 
   /**
    * Return texture info (id, width and height) for the given name
    */
-  GlTexture getTextureInfo(const std::string &);
+  static GlTexture getTextureInfo(const std::string &);
 
   /**
    * Check if a texture fo the given name exists in the current context
    */
-  bool existsTexture(const std::string &filename);
+  static bool existsTexture(const std::string &filename);
   /**
    * Load texture with given name
    */
-  bool loadTexture(const std::string &);
+  static bool loadTexture(const std::string &);
   /**
    * Remove texture with given name
    */
-  void deleteTexture(const std::string &);
+  static void deleteTexture(const std::string &);
   /**
    * Begin a new texture with given name
    */
-  void beginNewTexture(const std::string &);
+  static void beginNewTexture(const std::string &);
   /**
    * Activate a texture with given name
    */
-  bool activateTexture(const std::string &, unsigned int);
+  static bool activateTexture(const std::string &, unsigned int);
   /**
    * Activate a texture with given name
    */
-  bool activateTexture(const std::string &);
+  static bool activateTexture(const std::string &);
   /**
    * Disable texture with given name
    */
-  void desactivateTexture();
+  static void desactivateTexture();
   /**
    * Set animationStep for next textures (for next activateTexture)
    */
-  void setAnimationFrame(unsigned int id) {
+  static inline void setAnimationFrame(unsigned int id) {
     animationFrame = id;
   }
   /**
    * Get animationStep of next textures
    */
-  unsigned int getAnimationFrame() {
+  static inline unsigned int getAnimationFrame() {
     return animationFrame;
   }
   /**
    * Clear vector of textures with error
    */
-  void clearErrorVector() {
+  static inline void clearErrorVector() {
     texturesWithError.clear();
   }
   /**
    * Remove an entry of vector of textures with error
    */
-  void removeEntryOfErrorVector(const std::string &name) {
+  static inline void removeEntryOfErrorVector(const std::string &name) {
     texturesWithError.erase(name);
   }
 
   /**
    * Register an external texture is GlTextureManager
    */
-  void registerExternalTexture(const std::string &textureName, const GLuint textureId);
+  static void registerExternalTexture(const std::string &textureName, const GLuint textureId);
 
   /**
    * Get Texture loader
    */
-  static GlTextureLoader *getTextureLoader() {
+  static inline GlTextureLoader *getTextureLoader() {
     return loader ? loader : (loader = new GlTextureLoader());
   }
 
@@ -165,20 +155,14 @@ public:
   }
 
 private:
-  /**
-   * empty private constructor for singleton
-   */
-  GlTextureManager();
-
-  static GlTextureManager *inst;
   static GlTextureLoader *loader;
 
-  uintptr_t currentContext;
+  static uintptr_t currentContext;
 
-  ContextAndTextureMap texturesMap;
-  std::set<std::string> texturesWithError;
+  static ContextAndTextureMap texturesMap;
+  static std::set<std::string> texturesWithError;
 
-  unsigned int animationFrame;
+  static unsigned int animationFrame;
 };
 } // namespace tlp
 

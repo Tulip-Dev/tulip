@@ -292,7 +292,7 @@ ThresholdInteractor::ThresholdInteractor()
 ThresholdInteractor::~ThresholdInteractor() {
   if (!textureName.empty()) {
     GlMainWidget::getFirstQGLWidget()->deleteTexture(textureId);
-    GlTextureManager::getInst().deleteTexture(textureName);
+    GlTextureManager::deleteTexture(textureName);
   }
 
   layer->getComposite()->reset(true);
@@ -582,5 +582,5 @@ void ThresholdInteractor::generateSliderTexture() {
   GlMainWidget::getFirstQGLWidget()->makeCurrent();
   textureId = GlMainWidget::getFirstQGLWidget()->bindTexture(QPixmap(":/sliderTexture.png"));
   textureName = oss.str();
-  GlTextureManager::getInst().registerExternalTexture(textureName, textureId);
+  GlTextureManager::registerExternalTexture(textureName, textureId);
 }

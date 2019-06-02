@@ -140,7 +140,7 @@ void GlAbstractPolygon::setInvertYTexture(bool invertYTexture) {
 void GlAbstractPolygon::draw(float lod, Camera *) {
   GL_THROW_ON_ERROR();
 
-  bool canUseVBO = OpenGlConfigManager::getInst().hasVertexBufferObject();
+  bool canUseVBO = OpenGlConfigManager::hasVertexBufferObject();
 
   glDisable(GL_CULL_FACE);
 
@@ -324,7 +324,7 @@ void GlAbstractPolygon::draw(float lod, Camera *) {
 
     // texture Array
     if (!textureName.empty()) {
-      GlTextureManager::getInst().activateTexture(textureName);
+      GlTextureManager::activateTexture(textureName);
       glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
       if (canUseVBO) {
@@ -363,7 +363,7 @@ void GlAbstractPolygon::draw(float lod, Camera *) {
     glDisableClientState(GL_COLOR_ARRAY);
 
     if (!textureName.empty()) {
-      GlTextureManager::getInst().desactivateTexture();
+      GlTextureManager::desactivateTexture();
       glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     }
   }
@@ -513,7 +513,7 @@ void GlAbstractPolygon::clearGenerated() {
   normalArray.clear();
 
   if (generated)
-    if (OpenGlConfigManager::getInst().hasVertexBufferObject()) {
+    if (OpenGlConfigManager::hasVertexBufferObject()) {
       glDeleteBuffers(7, buffers);
     }
 

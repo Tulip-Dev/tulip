@@ -16,30 +16,29 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <list>
+#include <unordered_map>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
-#include <tulip/tuliphash.h>
 #include <tulip/Glyph.h>
 #include <tulip/TulipViewSettings.h>
-
-std::list<std::string> tlp::EdgeExtremityGlyphManager::plugins;
-tlp::EdgeExtremityGlyphManager tlp::EdgeExtremityGlyphManager::eeinst;
 
 using namespace std;
 
 namespace tlp {
-static TLP_HASH_MAP<int, std::string> eeglyphIdToName;
-static TLP_HASH_MAP<std::string, int> nameToEeGlyphId;
+static std::list<std::string> plugins;
+static std::unordered_map<int, std::string> eeglyphIdToName;
+static std::unordered_map<std::string, int> nameToEeGlyphId;
 
-EdgeExtremityGlyphManager::EdgeExtremityGlyphManager() {}
 //====================================================
 string EdgeExtremityGlyphManager::glyphName(int id) {
   if (id == EdgeExtremityShape::None) {
     return string("NONE");
   }
 
-  if (eeglyphIdToName.find(id) != eeglyphIdToName.end()) {
-    return eeglyphIdToName[id];
+  auto it = eeglyphIdToName.find(id);
+  if (it != eeglyphIdToName.end()) {
+    return it->second;
   } else {
     tlp::warning() << __PRETTY_FUNCTION__ << endl;
     tlp::warning() << "Invalid glyph id" << endl;
@@ -52,8 +51,9 @@ int EdgeExtremityGlyphManager::glyphId(const string &name) {
     return EdgeExtremityShape::None;
   }
 
-  if (nameToEeGlyphId.find(name) != nameToEeGlyphId.end()) {
-    return nameToEeGlyphId[name];
+  auto it = nameToEeGlyphId.find(name);
+  if (it != nameToEeGlyphId.end()) {
+    return it->second;
   } else {
     tlp::warning() << __PRETTY_FUNCTION__ << endl;
     tlp::warning() << "Invalid glyph name" << endl;

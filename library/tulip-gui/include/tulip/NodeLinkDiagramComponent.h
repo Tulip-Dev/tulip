@@ -34,6 +34,7 @@ class QAction;
 namespace tlp {
 class GlGrid;
 class GlCompositeHierarchyManager;
+class GlGraphRenderingParameters;
 class PropertyInterface;
 class StringProperty;
 
@@ -67,6 +68,9 @@ public:
   }
   void setState(const tlp::DataSet &) override;
   tlp::DataSet state() const override;
+  // default initialization of scene rendering parameters
+  // can be used by other view
+  static void initRenderingParameters(tlp::GlGraphRenderingParameters *);
 
 public slots:
   void draw() override;

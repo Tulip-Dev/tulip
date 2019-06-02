@@ -71,7 +71,7 @@ GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *i)
 GlVertexArrayManager::~GlVertexArrayManager() {
   clearObservers();
   clearData();
-  bool canUseVBO = OpenGlConfigManager::getInst().hasVertexBufferObject();
+  bool canUseVBO = OpenGlConfigManager::hasVertexBufferObject();
 
   if (canUseVBO && pointsVerticesVBO != 0) {
     glDeleteBuffers(1, &pointsVerticesVBO);
@@ -338,7 +338,7 @@ void GlVertexArrayManager::endRendering() {
 
   isBegin = false;
 
-  static bool canUseVBO = OpenGlConfigManager::getInst().hasVertexBufferObject();
+  static bool canUseVBO = OpenGlConfigManager::hasVertexBufferObject();
 
   if (canUseVBO && quadsVerticesVBO == 0) {
     glGenBuffers(1, &pointsVerticesVBO);

@@ -151,12 +151,12 @@ void Cone::draw(node n, float) {
 
   if (!texFile.empty()) {
     string texturePath = glGraphInputData->parameters->getTexturePath();
-    GlTextureManager::getInst().activateTexture(texturePath + texFile);
+    GlTextureManager::activateTexture(texturePath + texFile);
   }
 
   drawCone();
 
-  GlTextureManager::getInst().desactivateTexture();
+  GlTextureManager::desactivateTexture();
 }
 Coord Cone::getAnchor(const Coord &vector) const {
   Coord anchor = vector;
@@ -208,11 +208,11 @@ public:
 
     if (!texFile.empty()) {
       string texturePath = edgeExtGlGraphInputData->parameters->getTexturePath();
-      GlTextureManager::getInst().activateTexture(texturePath + texFile);
+      GlTextureManager::activateTexture(texturePath + texFile);
     }
 
     drawCone();
-    GlTextureManager::getInst().desactivateTexture();
+    GlTextureManager::desactivateTexture();
   }
 };
 

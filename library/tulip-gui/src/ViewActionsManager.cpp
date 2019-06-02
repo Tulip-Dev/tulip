@@ -81,7 +81,7 @@ void ViewActionsManager::openSnapshotDialog() {
 }
 
 void ViewActionsManager::setAntiAliasing(bool aa) {
-  OpenGlConfigManager::getInst().setAntiAliasing(aa);
+  OpenGlConfigManager::setAntiAliasing(aa);
   if (_advAntiAliasingAction) {
     _advAntiAliasingAction->setVisible(aa);
     if (_advAntiAliasingAction->isChecked())
@@ -106,7 +106,7 @@ void ViewActionsManager::fillContextMenu(QMenu *menu) {
   QAction *action = menu->addAction("Anti-aliasing");
   action->setToolTip(QString("Improve line rendering quality"));
   action->setCheckable(true);
-  action->setChecked(OpenGlConfigManager::getInst().antiAliasing());
+  action->setChecked(OpenGlConfigManager::antiAliasing());
   connect(action, SIGNAL(triggered(bool)), this, SLOT(setAntiAliasing(bool)));
 
   if (_advAntiAliasingAction)

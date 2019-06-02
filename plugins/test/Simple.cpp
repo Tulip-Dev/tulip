@@ -23,13 +23,23 @@
 class SimpleTest : public tlp::GraphTest {
 public:
   PLUGININFORMATION("Simple", "Tulip team", "18/04/2012",
-                    "Tests whether a graph is simple or not.<br/>A simple graph is an undirected "
-                    "graph with no loops and no multiple edges.",
-                    "1.0", "Topological Test")
-  SimpleTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {}
+                    "Tests whether a graph is simple or not.<br/>An undirected graph "
+                    "is simple if it has no loops and no more than one "
+                    "edge between any unordered pair of vertices. "
+                    "A directed graph is simple if has no loops and no more than one "
+                    "edge between any ordered pair of vertices.",
+                    "1.1", "Topological Test")
+  SimpleTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {
+    addInParameter<bool>(
+        "directed", "Indicates if the graph should be considered as directed or not.", "false");
+  }
 
   bool test() override {
-    return tlp::SimpleTest::isSimple(graph);
+    bool directed = false;
+    if (dataSet) {
+      dataSet->get("directed", directed);
+    }
+    return tlp::SimpleTest::isSimple(graph, directed);
   }
 };
 PLUGIN(SimpleTest)
@@ -37,15 +47,23 @@ PLUGIN(SimpleTest)
 class MakeSimple : public tlp::Algorithm {
 public:
   PLUGININFORMATION("Make Simple", "Tulip team", "18/04/2012",
-                    "Makes a graph simple.<br/>A simple "
-                    "graph is an undirected graph with "
-                    "no loops and no multiple edges.",
-                    "1.0", "Topology Update")
-  MakeSimple(const tlp::PluginContext *context) : tlp::Algorithm(context) {}
+                    "Makes a graph simple.<br/>An undirected graph "
+                    "is simple if it has no loops and no more than one "
+                    "edge between any unordered pair of vertices. "
+                    "A directed graph is simple if has no loops and no more than one "
+                    "edge between any ordered pair of vertices.",
+                    "1.1", "Topology Update")
+  MakeSimple(const tlp::PluginContext *context) : tlp::Algorithm(context) {
+    addInParameter<bool>(
+        "directed", "Indicates if the graph should be considered as directed or not.", "false");
+  }
 
   bool run() override {
+    bool directed = false;
+    if (dataSet)
+      dataSet->get("directed", directed);
     std::vector<tlp::edge> edges;
-    tlp::SimpleTest::makeSimple(graph, edges);
+    tlp::SimpleTest::makeSimple(graph, edges, directed);
     return true;
   }
 };

@@ -361,7 +361,7 @@ void RoundedBox::draw(node n, float lod) {
     bool textureOK = false;
 
     if (!texture.empty()) {
-      textureOK = GlTextureManager::getInst().activateTexture(texture);
+      textureOK = GlTextureManager::activateTexture(texture);
     }
 
     roundedBoxShader->activate();
@@ -373,7 +373,7 @@ void RoundedBox::draw(node n, float lod) {
     roundedBoxShader->desactivate();
 
     if (textureOK) {
-      GlTextureManager::getInst().desactivateTexture();
+      GlTextureManager::desactivateTexture();
     }
 
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);

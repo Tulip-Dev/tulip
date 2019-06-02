@@ -86,8 +86,8 @@ ParallelCoordinatesView::~ParallelCoordinatesView() {
   --parallelViewInstancesCount;
 
   if (parallelViewInstancesCount == 0) {
-    GlTextureManager::getInst().deleteTexture(DEFAULT_TEXTURE_FILE);
-    GlTextureManager::getInst().deleteTexture(SLIDER_TEXTURE_NAME);
+    GlTextureManager::deleteTexture(DEFAULT_TEXTURE_FILE);
+    GlTextureManager::deleteTexture(SLIDER_TEXTURE_NAME);
     linesTextureId = 0;
     slidersTextureId = 0;
   }
@@ -161,8 +161,8 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
       slidersTextureId = GlMainWidget::getFirstQGLWidget()->bindTexture(
           QPixmap(":/parallel_sliders_texture.png"), GL_TEXTURE_2D, GL_RGBA,
           QGLContext::LinearFilteringBindOption);
-      GlTextureManager::getInst().registerExternalTexture(DEFAULT_TEXTURE_FILE, linesTextureId);
-      GlTextureManager::getInst().registerExternalTexture(SLIDER_TEXTURE_NAME, slidersTextureId);
+      GlTextureManager::registerExternalTexture(DEFAULT_TEXTURE_FILE, linesTextureId);
+      GlTextureManager::registerExternalTexture(SLIDER_TEXTURE_NAME, slidersTextureId);
     }
 
     isConstruct = true;

@@ -80,7 +80,7 @@ HistogramView::~HistogramView() {
     --histoViewInstancesCount;
 
     if (histoViewInstancesCount == 0) {
-      GlTextureManager::getInst().deleteTexture(BIN_RECT_TEXTURE);
+      GlTextureManager::deleteTexture(BIN_RECT_TEXTURE);
       binTextureId = 0;
     }
 
@@ -181,7 +181,7 @@ void HistogramView::setState(const DataSet &dataSet) {
     gl->getFirstQGLWidget()->makeCurrent();
     binTextureId = gl->getFirstQGLWidget()->bindTexture(
         QImage(":/histo_texture.png").transformed(QTransform().rotate(90)), GL_TEXTURE_2D);
-    GlTextureManager::getInst().registerExternalTexture(BIN_RECT_TEXTURE, binTextureId);
+    GlTextureManager::registerExternalTexture(BIN_RECT_TEXTURE, binTextureId);
   }
 
   GlMainView::setState(dataSet);

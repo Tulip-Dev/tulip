@@ -35,9 +35,9 @@ GlGraphInputData::GlGraphInputData(Graph *graph, GlGraphRenderingParameters *par
     graph->addListener(this);
   }
 
-  GlyphManager::getInst().initGlyphList(&this->graph, this, glyphs);
+  GlyphManager::initGlyphList(&this->graph, this, glyphs);
 
-  EdgeExtremityGlyphManager::getInst().initGlyphList(&this->graph, this, extremityGlyphs);
+  EdgeExtremityGlyphManager::initGlyphList(&this->graph, this, extremityGlyphs);
 
   if (renderer)
     _metaNodeRenderer = renderer;
@@ -58,8 +58,8 @@ void GlGraphInputData::setMetaNodeRenderer(GlMetaNodeRenderer *renderer,
 
 GlGraphInputData::~GlGraphInputData() {
   delete _glVertexArrayManager;
-  GlyphManager::getInst().clearGlyphList(&this->graph, this, glyphs);
-  EdgeExtremityGlyphManager::getInst().clearGlyphList(&this->graph, this, extremityGlyphs);
+  GlyphManager::clearGlyphList(&this->graph, this, glyphs);
+  EdgeExtremityGlyphManager::clearGlyphList(&this->graph, this, extremityGlyphs);
   delete _metaNodeRenderer;
   delete _glGlyphRenderer;
 }

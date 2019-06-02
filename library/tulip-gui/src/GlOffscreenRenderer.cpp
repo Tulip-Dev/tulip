@@ -39,13 +39,7 @@ using namespace std;
 
 namespace tlp {
 
-GlOffscreenRenderer *GlOffscreenRenderer::instance = nullptr;
-
-GlOffscreenRenderer *GlOffscreenRenderer::getInstance() {
-  if (!instance)
-    instance = new GlOffscreenRenderer();
-  return instance;
-}
+GlOffscreenRenderer *GlOffscreenRenderer::instance = new GlOffscreenRenderer();
 
 GlOffscreenRenderer::GlOffscreenRenderer()
     : vPWidth(512), vPHeight(512), glFrameBuf(nullptr), glFrameBuf2(nullptr),
@@ -141,7 +135,7 @@ void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
     fboFmt.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
 
     if (antialiasedFbo)
-      fboFmt.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
+      fboFmt.setSamples(OpenGlConfigManager::maxNumberOfSamples());
 
     glFrameBuf = new QOpenGLFramebufferObject(vPWidth, vPHeight, fboFmt);
   }
@@ -280,9 +274,8 @@ QImage GlOffscreenRenderer::getImage() {
 
 GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
 
-  bool canUseMipmaps =
-      OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_framebuffer_object") ||
-      OpenGlConfigManager::getInst().isExtensionSupported("GL_EXT_framebuffer_object");
+  bool canUseMipmaps = OpenGlConfigManager::isExtensionSupported("GL_ARB_framebuffer_object") ||
+                       OpenGlConfigManager::isExtensionSupported("GL_EXT_framebuffer_object");
 
   GLuint textureId = 0;
   glGenTextures(1, &textureId);

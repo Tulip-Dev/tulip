@@ -765,7 +765,7 @@ struct WebImport : public ImportModule {
     redirectionColor = &rColor;
 
     graph->getProperty<IntegerProperty>("viewShape")
-        ->setAllNodeValue(14); // GlyphManager::getInst().glyphId("2D - Circle")
+        ->setAllNodeValue(14); // GlyphManager::glyphId("2D - Circle")
 
     if (!mySite.load()) {
       if (pluginProgress) {

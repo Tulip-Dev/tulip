@@ -551,7 +551,7 @@ void MatrixView::updateLayout() {
 
   IntegerProperty *shapes =
       getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementShape();
-  int shape = GlyphManager::getInst().glyphId("2D - Square");
+  int shape = GlyphManager::glyphId("2D - Square");
   for (auto e : graph()->edges()) {
     const std::pair<node, node> eEnds = graph()->ends(e);
     const vector<int> &srcNodes = _graphEntitiesToDisplayedNodes->getNodeValue(eEnds.first),

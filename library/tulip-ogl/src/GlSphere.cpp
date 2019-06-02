@@ -157,7 +157,7 @@ void GlSphere::draw(float, Camera *) {
   glRotatef(rot[2], 0, 0, 1);
 
   if (!textureFile.empty()) {
-    GlTextureManager::getInst().activateTexture(textureFile);
+    GlTextureManager::activateTexture(textureFile);
   }
 
   setMaterial(color);
@@ -189,7 +189,7 @@ void GlSphere::draw(float, Camera *) {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-  GlTextureManager::getInst().desactivateTexture();
+  GlTextureManager::desactivateTexture();
   glPopMatrix();
 }
 //===========================================================
