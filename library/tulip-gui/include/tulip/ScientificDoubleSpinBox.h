@@ -21,6 +21,8 @@
 // https://jdreaver.com/posts/2014-07-28-scientific-notation-spin-box-pyside.html
 // see also https://gist.github.com/jdreaver/0be2e44981159d0854f5
 
+///@cond DOXYGEN_HIDDEN
+
 #ifndef SCIENTIFICDOUBLESPINBOX_H
 #define SCIENTIFICDOUBLESPINBOX_H
 
@@ -69,3 +71,5 @@ public:
 } // namespace tlp
 
 #endif // SCIENTIFICDOUBLESPINBOX_H
+
+///@endcond

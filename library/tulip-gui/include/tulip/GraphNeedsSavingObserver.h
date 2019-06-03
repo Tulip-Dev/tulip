@@ -17,6 +17,8 @@
  *
  */
 
+///@cond DOXYGEN_HIDDEN
+
 #ifndef GRAPHNEEDSSAVINGOBSERVER_H
 #define GRAPHNEEDSSAVINGOBSERVER_H
 
@@ -107,3 +109,5 @@ signals:
 };
 } // namespace tlp
 #endif // GRAPHNEEDSSAVINGOBSERVER_H
+
+///@endcond
