@@ -17,6 +17,8 @@
  *
  */
 
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIPFONTAWESOME_H
 #define TULIPFONTAWESOME_H
 
@@ -111,3 +113,5 @@ public:
 } // namespace tlp
 
 #endif // TULIPFONTAWESOME_H
+
+///@endcond
