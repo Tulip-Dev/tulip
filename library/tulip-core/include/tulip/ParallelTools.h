@@ -17,6 +17,8 @@
  *
  */
 
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TLP_PARALLEL_TOOLS_H
 #define TLP_PARALLEL_TOOLS_H
 
@@ -402,3 +404,5 @@ void inline TLP_PARALLEL_SECTIONS(const F1 &f1, const F2 &f2, const F3 &f3, cons
 } // namespace tlp
 
 #endif // TLP_PARALLEL_TOOLS_H
+
+///@endcond
