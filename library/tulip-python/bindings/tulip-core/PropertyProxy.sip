@@ -529,10 +529,21 @@ public:
   }
 %End
 
- void __setitem__(const tlp::node n, const tlp::Coord &val);
+ void __setitem__(const tlp::node n, const tlp::Coord &val /GetWrapper/);
 %MethodCode
   if (sipCpp->getGraph()->isElement(*a0)) {
-    sipCpp->setNodeValue(*a0, *a1);
+    // when a tuple is provided as input, constrain its elements to float type
+    // for creating a layout property otherwise create a color property
+    const sipTypeDef *sipType = sipFindType("tlp::Color");
+    if (sipCanConvertToType(a1Wrapper, sipType, SIP_NOT_NONE)) {
+      int state=0, err=0;
+      void *cppType = sipConvertToType(a1Wrapper, sipType, Py_None, SIP_NOT_NONE, &state, &err);
+      tlp::Color *c = new tlp::Color(*static_cast<tlp::Color*>(cppType));
+      sipCpp->setNodeValue(*a0, *c);
+      delete c;
+    } else {
+      sipCpp->setNodeValue(*a0, *a1);
+    }
   } else {
     sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
   }
@@ -592,10 +603,22 @@ void __setitem__(const tlp::node n, const std::vector<int> &val /Constrained/);
   }
 %End
 
-  void __setitem__(const tlp::node n, const std::vector<tlp::Coord> &val);
+  void __setitem__(const tlp::node n, const std::vector<tlp::Coord> &val /GetWrapper/);
 %MethodCode
   if (sipCpp->getGraph()->isElement(*a0)) {
-    sipCpp->setNodeValue(*a0, *a1);
+    // when a list of tuples is provided as input, constrain tuples elements to float type
+    // for creating a coord vector property otherwise create a color vector property
+    const sipTypeDef *sipType = sipFindType("std::vector<tlp::Color>");
+    if (sipCanConvertToType(a1Wrapper, sipType, SIP_NOT_NONE)) {
+      int state=0, err=0;
+      void *cppType = sipConvertToType(a1Wrapper, sipType, Py_None, SIP_NOT_NONE, &state, &err);
+      std::vector<tlp::Color> *vc =
+        new std::vector<tlp::Color>(*static_cast<std::vector<tlp::Color>*>(cppType));
+      sipCpp->setNodeValue(*a0, *vc);
+      delete vc;
+    } else {
+      sipCpp->setNodeValue(*a0, *a1);
+    }
   } else {
     sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
   }
@@ -768,9 +791,20 @@ void __setitem__(const tlp::node n, const std::vector<int> &val /Constrained/);
   sipCpp->setAllNodeValue(*a0);
 %End
 
-  void setAllNodeValue(const tlp::Coord &val);
+  void setAllNodeValue(const tlp::Coord &val /GetWrapper/);
 %MethodCode
-  sipCpp->setAllNodeValue(*a0);
+  // when a tuple is provided as input, constrain its elements to float type
+  // for creating a layout property otherwise create a color property
+  const sipTypeDef *sipType = sipFindType("tlp::Color");
+  if (sipCanConvertToType(a0Wrapper, sipType, SIP_NOT_NONE)) {
+    int state=0, err=0;
+    void *cppType = sipConvertToType(a0Wrapper, sipType, Py_None, SIP_NOT_NONE, &state, &err);
+    tlp::Color *c = new tlp::Color(*static_cast<tlp::Color*>(cppType));
+    sipCpp->setAllNodeValue(*c);
+    delete c;
+  } else {
+    sipCpp->setAllNodeValue(*a0);
+  }
 %End
 
   void setAllNodeValue(const tlp::Color &val);
@@ -803,9 +837,21 @@ void __setitem__(const tlp::node n, const std::vector<int> &val /Constrained/);
   sipCpp->setAllNodeValue(*a0);
 %End
 
-  void setAllNodeValue(const std::vector<tlp::Coord> &val);
+  void setAllNodeValue(const std::vector<tlp::Coord> &val /GetWrapper/);
 %MethodCode
-  sipCpp->setAllNodeValue(*a0);
+  // when a list of tuples is provided as input, constrain tuples elements to float type
+  // for creating a coord vector property otherwise create a color vector property
+  const sipTypeDef *sipType = sipFindType("std::vector<tlp::Color>");
+  if (sipCanConvertToType(a0Wrapper, sipType, SIP_NOT_NONE)) {
+    int state=0, err=0;
+    void *cppType = sipConvertToType(a0Wrapper, sipType, Py_None, SIP_NOT_NONE, &state, &err);
+    std::vector<tlp::Color> *vc =
+      new std::vector<tlp::Color>(*static_cast<std::vector<tlp::Color>*>(cppType));
+    sipCpp->setAllNodeValue(*vc);
+    delete vc;
+  } else {
+    sipCpp->setAllNodeValue(*a0);
+  }
 %End
 
   void setAllNodeValue(const std::vector<tlp::Color> &val);
@@ -886,7 +932,7 @@ void setAllNodeValue(SIP_PYOBJECT val);
   sipCpp->setAllEdgeValue(*a0);
 %End
 
-void setAllEdgeValue(SIP_PYOBJECT val);
+  void setAllEdgeValue(SIP_PYOBJECT val);
 %MethodCode
   std::string pythonType(a0->ob_type->tp_name);
   std::string errMsg = "Error : unable to create a graph property for Python type '" + pythonType + "'.";
