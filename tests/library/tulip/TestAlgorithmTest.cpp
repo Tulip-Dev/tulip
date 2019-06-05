@@ -52,7 +52,7 @@ void TestAlgorithmTest::tearDown() {
 //==========================================================
 void TestAlgorithmTest::testSimple() {
   std::vector<edge> multi;
-  std::vector<edge>loops;
+  std::vector<edge> loops;
   // build a simple graph
   node n1, n2, n3, n4;
   edge e1, e2, e3;

@@ -102,7 +102,7 @@ bool SimpleTest::simpleTest(const tlp::Graph *graph, vector<edge> *multipleEdges
         }
 
         if (loops != nullptr) {
-	  loopFound = true;
+          loopFound = true;
           loops->push_back(e);
           result = false;
         }
@@ -115,10 +115,10 @@ bool SimpleTest::simpleTest(const tlp::Graph *graph, vector<edge> *multipleEdges
         }
 
         if (multipleEdges != nullptr) {
-	  // e is not added in multipleEdges
-	  // if it is already a loop and loops == multipleEdges
-	  if (vDiff || !loopFound)
-	    multipleEdges->push_back(e);
+          // e is not added in multipleEdges
+          // if it is already a loop and loops == multipleEdges
+          if (vDiff || !loopFound)
+            multipleEdges->push_back(e);
           result = false;
         }
       } else
