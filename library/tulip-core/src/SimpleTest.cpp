@@ -60,16 +60,8 @@ void SimpleTest::makeSimple(Graph *graph, vector<edge> &removed, const bool dire
 
   SimpleTest::simpleTest(graph, &removed, &removed, directed);
 
-  edge prev;
   for (edge e : removed) {
-    // multiple edges and loops were pushed back into the removed vector
-    // but an edge can be a loop and a multiple one at the same time
-    // so it may have been added twice in the vector.
-    // As the edges are only processed once (see static function below)
-    // the two occurences are necessarily consecutives
-    if (e != prev)
-      graph->delEdge(e);
-    prev = e;
+    graph->delEdge(e);
   }
 
   assert(SimpleTest::isSimple(graph, directed));
@@ -78,7 +70,8 @@ void SimpleTest::makeSimple(Graph *graph, vector<edge> &removed, const bool dire
 bool SimpleTest::simpleTest(const tlp::Graph *graph, vector<edge> *multipleEdges,
                             vector<edge> *loops, const bool directed) {
   bool result = true;
-  bool computeAll = (loops != nullptr) || (multipleEdges != nullptr);
+  const bool computeAll = (loops != nullptr) || (multipleEdges != nullptr);
+  const bool vDiff = loops != multipleEdges;
   MutableContainer<bool> visited;
   visited.setAll(false);
 
@@ -100,6 +93,7 @@ bool SimpleTest::simpleTest(const tlp::Graph *graph, vector<edge> *multipleEdges
       // mark edge as already visited
       visited.set(e.id, true);
       node target = graph->opposite(e, current);
+      bool loopFound = false;
 
       if (target == current) { // loop
         if (!computeAll) {
@@ -108,6 +102,7 @@ bool SimpleTest::simpleTest(const tlp::Graph *graph, vector<edge> *multipleEdges
         }
 
         if (loops != nullptr) {
+	  loopFound = true;
           loops->push_back(e);
           result = false;
         }
@@ -120,7 +115,10 @@ bool SimpleTest::simpleTest(const tlp::Graph *graph, vector<edge> *multipleEdges
         }
 
         if (multipleEdges != nullptr) {
-          multipleEdges->push_back(e);
+	  // e is not added in multipleEdges
+	  // if it is already a loop and loops == multipleEdges
+	  if (vDiff || !loopFound)
+	    multipleEdges->push_back(e);
           result = false;
         }
       } else
