@@ -1,4 +1,4 @@
-/*
+/**
  *
  * This file is part of Tulip (http://tulip.labri.fr)
  *
@@ -16,49 +16,31 @@
  * See the GNU General Public License for more details.
  *
  */
-
 ///@cond DOXYGEN_HIDDEN
 
-#ifndef SHAPEDIALOG_H
-#define SHAPEDIALOG_H
+#ifndef TEST_LISTENER
+#define TEST_LISTENER
 
-#include <tulip/tulipconf.h>
+#include <unordered_map>
 
-#include <QDialog>
-#include <QString>
-#include <QPixmap>
-
-namespace Ui {
-class ShapeDialog;
-}
+#include <tulip/Graph.h>
+#include <tulip/Observable.h>
 
 namespace tlp {
+  
+class ConnectedTestListener :public Observable {
+ public:
+  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
+  void treatEvent(const Event &) override;
 
-class TLP_QT_SCOPE ShapeDialog : public QDialog {
-
-  Q_OBJECT
-
-  Ui::ShapeDialog *_ui;
-  QString _selectedShapeName;
-  std::list<std::pair<QString, QPixmap>> shapes;
-
-public:
-  ShapeDialog(std::list<std::pair<QString, QPixmap>> &nodeShapes, QWidget *parent = nullptr);
-  ~ShapeDialog() override;
-
-  QString getSelectedShapeName() const;
-
-  void setSelectedShapeName(const QString &shapeName);
-
-  void accept() override;
-
-  void showEvent(QShowEvent *) override;
-
-protected slots:
-  void updateShapeList();
+  /**
+   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the map.
+   **/
+  std::unordered_map<const Graph *, bool> resultsBuffer;
 };
-} // namespace tlp
 
+}
 #endif
 
 ///@endcond
+

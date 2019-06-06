@@ -17,6 +17,8 @@
  *
  */
 
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIPMATERIALDESIGNICONS_H
 #define TULIPMATERIALDESIGNICONS_H
 
@@ -117,3 +119,5 @@ public:
 } // namespace tlp
 
 #endif // TULIPMATERIALDESIGNICONS_H
+
+///@endcond

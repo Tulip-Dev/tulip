@@ -19,6 +19,7 @@
 
 #include <tulip/ConnectedTest.h>
 #include <tulip/GraphTest.h>
+#include <tulip/Edge.h>
 
 class ConnectedTest : public tlp::GraphTest {
 public:

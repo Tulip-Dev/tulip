@@ -20,11 +20,14 @@
 #ifndef TULIP_BICONNEX_H
 #define TULIP_BICONNEX_H
 
-#include <tulip/MutableContainer.h>
-#include <tulip/Observable.h>
-#include <tulip/Graph.h>
+#include <vector>
+
+#include <tulip/tulipconf.h>
 
 namespace tlp {
+
+class Graph;
+struct edge;
 
 /**
  * @ingroup Checks
@@ -33,7 +36,7 @@ namespace tlp {
  * From Wikipedia: "A biconnected graph is connected and nonseparable, meaning that if any vertex
  *were to be removed, the graph will remain connected."
  **/
-class TLP_SCOPE BiconnectedTest : private Observable {
+class TLP_SCOPE BiconnectedTest {
 
 public:
   /**
@@ -57,39 +60,6 @@ public:
    * @return void
    **/
   static void makeBiconnected(Graph *graph, std::vector<edge> &addedEdges);
-
-private:
-  BiconnectedTest();
-
-  /**
-   * @brief Makes the graph biconnected.
-   *
-   * @param graph The graph to make biconnected.
-   * @param addedEdges The edges that were added to make it biconnected.
-   * @return void
-   **/
-  void connect(Graph *graph, std::vector<edge> &addedEdges);
-
-  /**
-   * @brief check if the graph is biconnected.
-   *
-   * @param graph the graph to check.
-   * @return bool true if the graph is biconnected, false otherwise.
-   **/
-  bool compute(const Graph *graph);
-
-  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
-  void treatEvent(const Event &) override;
-
-  /**
-   * @brief Singleton instance of this class.
-   **/
-  static BiconnectedTest *instance;
-  /**
-   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the
-   *hashmap.
-   **/
-  TLP_HASH_MAP<const Graph *, bool> resultsBuffer;
 };
 } // namespace tlp
 

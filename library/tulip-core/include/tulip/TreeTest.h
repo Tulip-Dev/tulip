@@ -20,13 +20,14 @@
 #ifndef TULIP_TREETEST_H
 #define TULIP_TREETEST_H
 
-#include <tulip/tuliphash.h>
-#include <tulip/Observable.h>
-#include <tulip/Graph.h>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
 
+class Graph;
 class PluginProgress;
+struct node;
+
 /**
  * @ingroup Checks
  * @brief Performs test to check whether a graph is a simple or rooted tree.
@@ -34,7 +35,7 @@ class PluginProgress;
  *one simple path."
  * Free trees have no designated root, while rooted trees do.
  **/
-class TLP_SCOPE TreeTest : private Observable {
+class TLP_SCOPE TreeTest {
 public:
   /**
    * @brief Checks if the graph is a rooted tree (i.e. one node is designated as the root).
@@ -98,24 +99,7 @@ public:
   static void cleanComputedTree(Graph *graph, Graph *tree);
 
 private:
-  TreeTest();
-
-  bool compute(const Graph *graph);
-
-  bool isFreeTree(const Graph *graph, node curRoot);
-
-  // override Observable::treatEvent
-  void treatEvent(const Event &) override;
-
-  /**
-   * @brief Singleton instance of this class.
-   **/
-  static TreeTest *instance;
-  /**
-   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the
-   *hashmap.
-   **/
-  TLP_HASH_MAP<const Graph *, bool> resultsBuffer;
+  static bool isFreeTree(const Graph *graph, node curRoot);
 };
 } // namespace tlp
 #endif

@@ -3,6 +3,36 @@
 Release notes and API changes
 =============================
 
+Tulip-Python 5.3.1
+------------------
+
+API improvements
+^^^^^^^^^^^^^^^^
+
+Values for graph properties of type :class:`tlp.ColorProperty`, :class:`tlp.LayoutProperty` and
+:class:`tlp.SizeProperty` can be set using tuples since Tulip-Python 5.1. But some restrictions
+regarding the types they should contain was making this feature confusing to use. In particular,
+trying to set a node value for a :class:`tlp.LayoutProperty` or a :class:`tlp.SizeProperty`
+using a tuple filled with ``int`` was raising an error as a tuple only filled with ``float``
+was expected.
+
+These type restrictions have been removed and you can now safely write::
+
+  viewLayout = graph.getLayoutProperty('viewLayout')
+  viewLayout[n] = (0, 0)
+  viewLayout[n] = (10.5, 0, 1.5)
+
+  viewSize = graph.getSizeProperty('viewSize')
+  viewSize[n] = (2, 2)
+  viewSize[n] = (1.5, 1, 1)
+
+  # or even shorter
+  graph['viewLayout'][n] = (0, 0)
+  graph['viewLayout'][n] = (10.5, 0, 1.5)
+
+  graph['viewSize'][n] = (2, 2)
+  graph['viewSize'][n] = (1.5, 1, 1)
+
 Tulip-Python 5.2
 -----------------
 

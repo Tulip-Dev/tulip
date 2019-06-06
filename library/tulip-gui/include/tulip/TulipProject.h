@@ -17,6 +17,8 @@
  *
  */
 
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIPPROJECT_H
 #define TULIPPROJECT_H
 
@@ -394,3 +396,5 @@ private:
 };
 } // namespace tlp
 #endif // TULIPPROJECT_H
+
+///@endcond

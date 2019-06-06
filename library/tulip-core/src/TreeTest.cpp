@@ -26,29 +26,87 @@
 
 using namespace std;
 using namespace tlp;
-TreeTest *TreeTest::instance = nullptr;
 
-TreeTest::TreeTest() {}
+//=================================================================
+class TreeTestListener :public Observable {
+ public:
+  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
+  void treatEvent(const Event &) override;
 
-bool TreeTest::isTree(const tlp::Graph *graph) {
-  if (instance == nullptr)
-    instance = new TreeTest();
+  /**
+   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the map.
+   **/
+  std::unordered_map<const Graph *, bool> resultsBuffer;
+};
 
-  return instance->compute(graph);
+void TreeTestListener::treatEvent(const Event &evt) {
+  const GraphEvent *gEvt = dynamic_cast<const GraphEvent *>(&evt);
+
+  if (gEvt) {
+    Graph *graph = gEvt->getGraph();
+
+    switch (gEvt->getType()) {
+    case GraphEvent::TLP_ADD_NODE:
+    case GraphEvent::TLP_DEL_NODE:
+    case GraphEvent::TLP_ADD_EDGE:
+    case GraphEvent::TLP_DEL_EDGE:
+    case GraphEvent::TLP_REVERSE_EDGE:
+      graph->removeListener(this);
+      resultsBuffer.erase(graph);
+      break;
+
+    default:
+      break;
+    }
+  } else {
+
+    Graph *graph = static_cast<Graph *>(evt.sender());
+
+    if (evt.type() == Event::TLP_DELETE)
+      resultsBuffer.erase(graph);
+  }
 }
+//=================================================================
+static TreeTestListener *instance = new TreeTestListener();
+//====================================================================
+static bool treeTest(const Graph *graph) {
+  if (graph->numberOfEdges() != graph->numberOfNodes() - 1)
+    return false;
 
+  bool rootNodeFound = false;
+
+  for (auto tmp : graph->nodes()) {
+    if (graph->indeg(tmp) > 1)
+      return false;
+
+    if (graph->indeg(tmp) == 0) {
+      if (rootNodeFound)
+        return false;
+      else
+        rootNodeFound = true;
+    }
+  }
+
+  return AcyclicTest::acyclicTest(graph);
+}
+//====================================================================
+bool TreeTest::isTree(const tlp::Graph *graph) {
+  auto it = instance->resultsBuffer.find(graph);
+  if (it != instance->resultsBuffer.end())
+    return it->second;
+
+  graph->addListener(instance);
+  return instance->resultsBuffer[graph] = treeTest(graph);
+}
 //====================================================================
 // Determines if a graph is a topological tree.  This means that
 // if the graph was undirected, there would be no cycle
 bool TreeTest::isFreeTree(const tlp::Graph *graph) {
-  if (instance == nullptr)
-    instance = new TreeTest();
-
   node firstNode = graph->getOneNode();
-  return (firstNode.isValid() && instance->isFreeTree(graph, firstNode))
+  return (firstNode.isValid() && isFreeTree(graph, firstNode))
              ? ConnectedTest::isConnected(graph)
              : false;
-} // isFreeTree
+}
 //====================================================================
 // simple structure to implement
 // the further isFreeTree dfs loop
@@ -114,27 +172,6 @@ bool TreeTest::isFreeTree(const Graph *graph, node curRoot) {
   }
 
   return true;
-} // end isFreeTree
-//====================================================================
-static bool treeTest(const Graph *graph) {
-  if (graph->numberOfEdges() != graph->numberOfNodes() - 1)
-    return false;
-
-  bool rootNodeFound = false;
-
-  for (auto tmp : graph->nodes()) {
-    if (graph->indeg(tmp) > 1)
-      return false;
-
-    if (graph->indeg(tmp) == 0) {
-      if (rootNodeFound)
-        return false;
-      else
-        rootNodeFound = true;
-    }
-  }
-
-  return AcyclicTest::acyclicTest(graph);
 }
 //====================================================================
 // simple structure to implement
@@ -189,14 +226,11 @@ static void makeRootedTree(Graph *graph, node curRoot, vector<edge> *reversedEdg
       }   // end while
     }     // end else
   }       // end while
-} // end makeRootedTree
+}
 //====================================================================
 // Turns a topological tree graph into a directed tree starting at
 // the node root.
 void TreeTest::makeRootedTree(Graph *graph, node root) {
-  if (instance == nullptr)
-    instance = new TreeTest();
-
   graph->removeListener(instance);
   instance->resultsBuffer.erase(graph);
 
@@ -355,57 +389,4 @@ void TreeTest::cleanComputedTree(tlp::Graph *graph, tlp::Graph *tree) {
 
   // delete the clone
   graph->delAllSubGraphs(sg);
-}
-//====================================================================
-bool TreeTest::compute(const Graph *graph) {
-  if (resultsBuffer.find(graph) != resultsBuffer.end()) {
-    return resultsBuffer[graph];
-  }
-
-  graph->addListener(this);
-  return resultsBuffer[graph] = treeTest(graph);
-}
-
-void TreeTest::treatEvent(const Event &evt) {
-  const GraphEvent *gEvt = dynamic_cast<const GraphEvent *>(&evt);
-
-  if (gEvt) {
-    Graph *graph = gEvt->getGraph();
-
-    switch (gEvt->getType()) {
-    case GraphEvent::TLP_ADD_NODE:
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
-      break;
-
-    case GraphEvent::TLP_DEL_NODE:
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
-      break;
-
-    case GraphEvent::TLP_ADD_EDGE:
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
-      break;
-
-    case GraphEvent::TLP_DEL_EDGE:
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
-      break;
-
-    case GraphEvent::TLP_REVERSE_EDGE:
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
-      break;
-
-    default:
-      break;
-    }
-  } else {
-
-    Graph *graph = static_cast<Graph *>(evt.sender());
-
-    if (evt.type() == Event::TLP_DELETE)
-      resultsBuffer.erase(graph);
-  }
 }

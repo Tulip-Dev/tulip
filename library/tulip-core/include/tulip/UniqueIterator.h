@@ -17,6 +17,8 @@
  *
  */
 
+///@cond DOXYGEN_HIDDEN
+
 #ifndef UNIQUEITERATOR_H
 #define UNIQUEITERATOR_H
 
@@ -165,3 +167,5 @@ typename std::enable_if<has_const_iterator<Container>::value,
 }
 } // namespace tlp
 #endif // UNIQUEITERATOR_H
+
+///@endcond

@@ -562,6 +562,7 @@ private:
   NumericProperty *_elementOrderingProperty;
 };
 
+///@cond DOXYGEN_HIDDEN
 /** \brief Class to get the default selection color
  */
 class TLP_GL_SCOPE GlDefaultSelectionColorManager {
@@ -573,6 +574,9 @@ public:
 private:
   static GlDefaultSelectionColorManager *manager;
 };
+
+///@endcond
+
 } // namespace tlp
 
 #endif // Tulip_GLGRAPH_H

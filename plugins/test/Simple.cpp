@@ -19,6 +19,7 @@
 
 #include <tulip/SimpleTest.h>
 #include <tulip/GraphTest.h>
+#include <tulip/Edge.h>
 
 class SimpleTest : public tlp::GraphTest {
 public:

@@ -17,6 +17,8 @@
  *
  */
 
+///@cond DOXYGEN_HIDDEN
+
 #ifndef ABOUTTULIPPAGE_H
 #define ABOUTTULIPPAGE_H
 
@@ -52,3 +54,5 @@ private:
 } // namespace tlp
 
 #endif // ABOUTTULIPPAGE_H
+
+///@endcond

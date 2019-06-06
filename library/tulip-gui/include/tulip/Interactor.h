@@ -172,6 +172,7 @@ protected:
   }
 };
 
+///@cond DOXYGEN_HIDDEN
 /**
  * @ingroup Plugins
  * @brief The InteractorLister class lists compatible interactors for a given tlp::View
@@ -183,6 +184,7 @@ public:
   static void initInteractorsDependencies();
   static QList<std::string> compatibleInteractors(const std::string &viewName);
 };
+///@endcond
 
 /**
  * @ingroup Plugins

@@ -17,6 +17,8 @@
  *
  */
 
+///@cond DOXYGEN_HIDDEN
+
 #ifndef _TULIPWITHDEPENDENCY
 #define _TULIPWITHDEPENDENCY
 
@@ -98,3 +100,5 @@ public:
 };
 } // namespace tlp
 #endif
+
+///@endcond

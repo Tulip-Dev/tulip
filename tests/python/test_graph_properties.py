@@ -53,6 +53,9 @@ def random_coord():
 def random_coord_tuple():
   return (rand_c_float(), rand_c_float(), rand_c_float())
 
+def random_coord_tuple_int():
+  return (rand_int(), rand_int(), rand_int())
+
 def random_size():
   return tlp.Size(rand_c_float(), rand_c_float(), rand_c_float())
 
@@ -80,6 +83,10 @@ def random_coord_list():
 def random_coord_tuple_list():
   size = random.randint(1, max_list_size)
   return [random_coord_tuple() for i in range(size)]
+
+def random_coord_tuple_int_list():
+  size = random.randint(1, max_list_size)
+  return [random_coord_tuple_int() for i in range(size)]
 
 def random_double_list():
   size = random.randint(1, max_list_size)
@@ -110,14 +117,15 @@ class TestGraphProperties(unittest.TestCase):
     self.sub_graph = self.graph.inducedSubGraph(sg_nodes)
 
   def tearDown(self):
-    self.graph.delLocalProperty(self.prop_name)
+    if self.graph.existProperty(self.prop_name):
+        self.graph.delLocalProperty(self.prop_name)
     self.prop = None
     self.graph = None
     self.n = None
     self.e = None
 
-  def generic_property_test(self, prop_type, node_default_value, edge_defaul_value,
-                            node_value, edge_value):
+  def generic_property_test(self, prop_type, node_default_value, edge_default_value,
+                            node_value, edge_value, check_type_inference = True):
     # test some basic operations on property
     self.assertTrue(self.graph.existProperty(self.prop_name))
     self.assertTrue(isinstance(self.graph.getProperty(self.prop_name), prop_type))
@@ -142,27 +150,30 @@ class TestGraphProperties(unittest.TestCase):
       else:
         self.assertEqual(self.prop[n], node_default_value)
 
-    self.prop.setAllEdgeValue(edge_defaul_value)
+    self.prop.setAllEdgeValue(edge_default_value)
     self.prop.setValueToGraphEdges(edge_value, self.sub_graph)
     for e in self.graph.getEdges():
       if self.sub_graph.isElement(e):
         self.assertEqual(self.prop[e], edge_value)
       else:
-        self.assertEqual(self.prop[e], edge_defaul_value)
+        self.assertEqual(self.prop[e], edge_default_value)
 
     # ensure that an exception is correctly thrown when the property is deleted from the C++ layer
     # but there is still a reference to it in the Python one
     self.graph.delLocalProperty(self.prop_name)
     self.assertFalse(self.graph.existProperty(self.prop_name))
     with self.assertRaisesRegexp(RuntimeError, 'wrapped C/C\+\+ object .* has been deleted'):
-     self.prop.setAllEdgeValue(edge_defaul_value)
+     self.prop.setAllEdgeValue(edge_default_value)
+
+    if not check_type_inference:
+        return
 
     # test that the property can be automatically created by type inference
     self.graph[self.prop_name][self.graph.getRandomNode()] = node_value
     self.prop = self.graph[self.prop_name]
     self.assertTrue(isinstance(self.graph.getProperty(self.prop_name), prop_type))
     self.assertTrue(self.graph.existProperty(self.prop_name))
-    
+
 
   def test_boolean_property(self):
     self.prop = self.graph.getBooleanProperty(self.prop_name)
@@ -171,97 +182,121 @@ class TestGraphProperties(unittest.TestCase):
 
   def test_color_property(self):
     self.prop = self.graph.getColorProperty(self.prop_name)
-    self.generic_property_test(tlp.ColorProperty, random_color(), random_color(), 
+    self.generic_property_test(tlp.ColorProperty, random_color(), random_color(),
                                random_color(), random_color())
 
   def test_color_property_tuple(self):
     self.prop = self.graph.getColorProperty(self.prop_name)
-    self.generic_property_test(tlp.ColorProperty, random_color_tuple(), random_color_tuple(), 
+    self.generic_property_test(tlp.ColorProperty, random_color_tuple(), random_color_tuple(),
                                random_color_tuple(), random_color_tuple())
 
-    
+
   def test_double_property(self):
     self.prop = self.graph.getDoubleProperty(self.prop_name)
-    self.generic_property_test(tlp.DoubleProperty, rand_float(), rand_float(), 
+    self.generic_property_test(tlp.DoubleProperty, rand_float(), rand_float(),
                                rand_float(), rand_float())
 
-    
+
   def test_integer_property(self):
     self.prop = self.graph.getIntegerProperty(self.prop_name)
-    self.generic_property_test(tlp.IntegerProperty, rand_int(), rand_int(), 
+    self.generic_property_test(tlp.IntegerProperty, rand_int(), rand_int(),
                                rand_int(), rand_int())
 
 
   def test_layout_property(self):
     self.prop = self.graph.getLayoutProperty(self.prop_name)
-    self.generic_property_test(tlp.LayoutProperty, random_coord(), random_coord_list(), 
+    self.generic_property_test(tlp.LayoutProperty, random_coord(), random_coord_list(),
                                random_coord(), random_coord_list())
+
 
   def test_layout_property_tuple(self):
     self.prop = self.graph.getLayoutProperty(self.prop_name)
-    self.generic_property_test(tlp.LayoutProperty, random_coord_tuple(), random_coord_tuple_list(), 
+    self.generic_property_test(tlp.LayoutProperty, random_coord_tuple(), random_coord_tuple_list(),
                                random_coord_tuple(), random_coord_tuple_list())
+
+
+  def test_layout_property_tuple_int(self):
+    self.prop = self.graph.getLayoutProperty(self.prop_name)
+    self.generic_property_test(tlp.LayoutProperty, random_coord_tuple_int(), random_coord_tuple_list(),
+                               random_coord_tuple_int(), random_coord_tuple_list(), check_type_inference=False)
+
 
   def test_size_property(self):
     self.prop = self.graph.getSizeProperty(self.prop_name)
-    self.generic_property_test(tlp.SizeProperty, random_size(), random_size(), 
+    self.generic_property_test(tlp.SizeProperty, random_size(), random_size(),
                                random_size(), random_size())
+
+
+  def test_size_property_tuple_int(self):
+    self.prop = self.graph.getSizeProperty(self.prop_name)
+    self.generic_property_test(tlp.SizeProperty, random_coord_tuple_int(), random_coord_tuple_int(),
+                               random_coord_tuple_int(), random_coord_tuple_int(), check_type_inference=False)
 
 
   def test_string_property(self):
     self.prop = self.graph.getStringProperty(self.prop_name)
-    self.generic_property_test(tlp.StringProperty, random_string(), random_string(), 
+    self.generic_property_test(tlp.StringProperty, random_string(), random_string(),
                                random_string(), random_string())
 
-    
+
   def test_boolean_vector_property(self):
     self.prop = self.graph.getBooleanVectorProperty(self.prop_name)
-    self.generic_property_test(tlp.BooleanVectorProperty, random_boolean_list(), random_boolean_list(), 
+    self.generic_property_test(tlp.BooleanVectorProperty, random_boolean_list(), random_boolean_list(),
                                random_boolean_list(True), random_boolean_list(True))
 
 
   def test_color_vector_property(self):
     self.prop = self.graph.getColorVectorProperty(self.prop_name)
-    self.generic_property_test(tlp.ColorVectorProperty, random_color_list(), random_color_list(), 
+    self.generic_property_test(tlp.ColorVectorProperty, random_color_list(), random_color_list(),
                                random_color_list(), random_color_list())
 
 
   def test_color_tuple_vector_property(self):
     self.prop = self.graph.getColorVectorProperty(self.prop_name)
-    self.generic_property_test(tlp.ColorVectorProperty, random_color_tuple_list(), random_color_tuple_list(), 
+    self.generic_property_test(tlp.ColorVectorProperty, random_color_tuple_list(), random_color_tuple_list(),
                                random_color_tuple_list(), random_color_tuple_list())
-  
+
 
   def test_coord_vector_property(self):
     self.prop = self.graph.getCoordVectorProperty(self.prop_name)
-    self.generic_property_test(tlp.CoordVectorProperty, random_coord_list(), random_coord_list(), 
+    self.generic_property_test(tlp.CoordVectorProperty, random_coord_list(), random_coord_list(),
                                random_coord_list(), random_coord_list())
 
 
   def test_coord_tuple_vector_property(self):
     self.prop = self.graph.getCoordVectorProperty(self.prop_name)
-    self.generic_property_test(tlp.CoordVectorProperty, random_coord_tuple_list(), random_coord_tuple_list(), 
+    self.generic_property_test(tlp.CoordVectorProperty, random_coord_tuple_list(), random_coord_tuple_list(),
                                random_coord_tuple_list(), random_coord_tuple_list())
-  
+
+
+  def test_coord_tuple_int_vector_property(self):
+    self.prop = self.graph.getCoordVectorProperty(self.prop_name)
+    self.generic_property_test(tlp.CoordVectorProperty, random_coord_tuple_int_list(), random_coord_tuple_int_list(),
+                               random_coord_tuple_int_list(), random_coord_tuple_int_list(), check_type_inference=False)
+
 
   def test_double_vector_property(self):
     self.prop = self.graph.getDoubleVectorProperty(self.prop_name)
-    self.generic_property_test(tlp.DoubleVectorProperty, random_double_list(), random_double_list(), 
+    self.generic_property_test(tlp.DoubleVectorProperty, random_double_list(), random_double_list(),
                                random_double_list(), random_double_list())
 
   def test_int_vector_property(self):
     self.prop = self.graph.getIntegerVectorProperty(self.prop_name)
-    self.generic_property_test(tlp.IntegerVectorProperty, random_int_list(), random_int_list(), 
+    self.generic_property_test(tlp.IntegerVectorProperty, random_int_list(), random_int_list(),
                                random_int_list(), random_int_list())
 
 
   def test_size_vector_property(self):
     self.prop = self.graph.getSizeVectorProperty(self.prop_name)
-    self.generic_property_test(tlp.SizeVectorProperty, random_size_list(), random_size_list(), 
+    self.generic_property_test(tlp.SizeVectorProperty, random_size_list(), random_size_list(),
                                random_size_list(), random_size_list())
 
+  def test_size_tuple_int_vector_property(self):
+    self.prop = self.graph.getSizeVectorProperty(self.prop_name)
+    self.generic_property_test(tlp.SizeVectorProperty, random_coord_tuple_int_list(), random_coord_tuple_int_list(),
+                               random_coord_tuple_int_list(), random_coord_tuple_int_list(), check_type_inference=False)
 
   def test_string_vector_property(self):
     self.prop = self.graph.getStringVectorProperty(self.prop_name)
-    self.generic_property_test(tlp.StringVectorProperty, random_string_list(), random_string_list(), 
+    self.generic_property_test(tlp.StringVectorProperty, random_string_list(), random_string_list(),
                                random_string_list(), random_string_list())

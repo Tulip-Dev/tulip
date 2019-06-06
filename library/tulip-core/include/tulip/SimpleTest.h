@@ -20,11 +20,14 @@
 #ifndef TULIP_SIMPLETEST_H
 #define TULIP_SIMPLETEST_H
 
-#include <unordered_map>
-#include <tulip/Observable.h>
-#include <tulip/Graph.h>
+#include <vector>
+
+#include <tulip/tulipconf.h>
 
 namespace tlp {
+
+class Graph;
+struct edge;
 
 /**
  * @ingroup Checks
@@ -34,7 +37,7 @@ namespace tlp {
  * A directed graph is simple if has no loops and no more than one
  * edge between any ordered pair of vertices.
  **/
-class TLP_SCOPE SimpleTest : private Observable {
+class TLP_SCOPE SimpleTest {
 public:
   /**
    * @brief Checks if the graph is simple (i.e. it contains no self loops or parallel edges).
@@ -77,26 +80,6 @@ public:
    **/
   static bool simpleTest(const Graph *graph, std::vector<edge> *multipleEdges = nullptr,
                          std::vector<edge> *loops = nullptr, const bool directed = false);
-
-private:
-  SimpleTest();
-  // override Observable::treatEvent
-  void treatEvent(const Event &) override;
-  void deleteResult(Graph *graph);
-
-  /**
-   * @brief Singleton instance of this class for undirected graphs.
-   **/
-  static SimpleTest *undirInstance;
-  /**
-   * @brief Singleton instance of this class for directed graphs.
-   **/
-  static SimpleTest *dirInstance;
-  /**
-   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the
-   *hashmap.
-   **/
-  std::unordered_map<const Graph *, bool> resultsBuffer;
 };
 } // namespace tlp
 #endif

@@ -20,12 +20,14 @@
 #ifndef TULIP_ACYCLICITY_TEST_H
 #define TULIP_ACYCLICITY_TEST_H
 #include <vector>
-#include <tulip/Observable.h>
-#include <tulip/MutableContainer.h>
-#include <tulip/Graph.h>
+
+#include <tulip/tulipconf.h>
+#include <tulip/Node.h>
+#include <tulip/Edge.h>
 
 namespace tlp {
-class BooleanProperty;
+
+class Graph;
 
 /**
  * @ingroup Checks
@@ -55,7 +57,7 @@ public:
  *is modified.
  * This forces the use of the singleton pattern instead of simply using static functions/members.
  **/
-class TLP_SCOPE AcyclicTest : private Observable {
+class TLP_SCOPE AcyclicTest {
 public:
   /**
    * @brief Checks whether the graph is acyclic or not.
@@ -88,21 +90,6 @@ public:
    * @return bool
    **/
   static bool acyclicTest(const Graph *graph, std::vector<edge> *obstructionEdges = nullptr);
-
-private:
-  AcyclicTest();
-  /**
-   * @brief Singleton instance of this class.
-   **/
-  static AcyclicTest *instance;
-  /**
-   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the
-   *hashmap.
-   **/
-  TLP_HASH_MAP<const Graph *, bool> resultsBuffer;
-
-  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
-  void treatEvent(const Event &) override;
 };
 } // namespace tlp
 

@@ -26,16 +26,88 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-PlanarityTest *PlanarityTest::instance = nullptr;
+class PlanarityTestListener :public Observable {
+ public:
+  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
+  void treatEvent(const Event &) override;
+
+  /**
+   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the map.
+   **/
+  std::unordered_map<const Graph *, bool> resultsBuffer;
+};
+
+void PlanarityTestListener::treatEvent(const Event &evt) {
+  const GraphEvent *gEvt = dynamic_cast<const GraphEvent *>(&evt);
+
+  if (gEvt) {
+    Graph *graph = gEvt->getGraph();
+
+    switch (gEvt->getType()) {
+    case GraphEvent::TLP_DEL_EDGE:
+    case GraphEvent::TLP_DEL_NODE:
+
+      if (resultsBuffer.find(graph) != resultsBuffer.end())
+        if (resultsBuffer[graph])
+          return;
+
+      graph->removeListener(this);
+      resultsBuffer.erase(graph);
+      break;
+
+    case GraphEvent::TLP_ADD_EDGE:
+
+      if (resultsBuffer.find(graph) != resultsBuffer.end())
+        if (!resultsBuffer[graph])
+          return;
+
+      graph->removeListener(this);
+      resultsBuffer.erase(graph);
+      break;
+
+    default:
+      break;
+    }
+  } else {
+
+    Graph *graph = static_cast<Graph *>(evt.sender());
+
+    if (evt.type() == Event::TLP_DELETE)
+      resultsBuffer.erase(graph);
+  }
+}
+//=================================================================
+static PlanarityTestListener *instance = new PlanarityTestListener();
 //=================================================================
 bool PlanarityTest::isPlanar(Graph *graph) {
-  if (instance == nullptr)
-    instance = new PlanarityTest();
+  auto itr = instance->resultsBuffer.find(graph);
+  if (itr != instance->resultsBuffer.end())
+    return itr->second;
+
+  unsigned int nbOfNodes = graph->numberOfNodes();
+
+  if (nbOfNodes == 0)
+    return instance->resultsBuffer[graph] = true;
+
+  // quick test
+  if ((nbOfNodes >= 3) && (graph->numberOfEdges() > ((3 * nbOfNodes) - 6))) {
+    graph->addListener(instance);
+    return instance->resultsBuffer[graph] = false;
+  }
 
   Observable::holdObservers();
-  bool result = instance->compute(graph);
+  vector<edge> addedEdges;
+  BiconnectedTest::makeBiconnected(graph, addedEdges);
+  PlanarityTestImpl planarTest(graph);
+  instance->resultsBuffer[graph] = planarTest.isPlanar(true);
+  vector<edge>::const_iterator it = addedEdges.begin();
+
+  for (; it != addedEdges.end(); ++it)
+    graph->delEdge(*it, true);
+
   Observable::unholdObservers();
-  return result;
+  graph->addListener(instance);
+  return instance->resultsBuffer[graph];
 }
 bool PlanarityTest::isPlanarEmbedding(const tlp::Graph *graph) {
   return PlanarityTestImpl::isPlanarEmbedding(graph);
@@ -85,84 +157,4 @@ list<edge> PlanarityTest::getObstructionsEdges(Graph *graph) {
   }
 
   return result;
-}
-//=================================================================
-bool PlanarityTest::compute(Graph *graph) {
-
-  if (resultsBuffer.find(graph) != resultsBuffer.end())
-    return resultsBuffer[graph];
-
-  unsigned int nbOfNodes = graph->numberOfNodes();
-
-  if (nbOfNodes == 0) {
-    resultsBuffer[graph] = true;
-    return true;
-  }
-
-  // quick test
-  if ((nbOfNodes >= 3) && (graph->numberOfEdges() > ((3 * nbOfNodes) - 6))) {
-    graph->addListener(this);
-    return resultsBuffer[graph] = false;
-  }
-
-  vector<edge> addedEdges;
-  BiconnectedTest::makeBiconnected(graph, addedEdges);
-  PlanarityTestImpl planarTest(graph);
-  resultsBuffer[graph] = planarTest.isPlanar(true);
-  vector<edge>::const_iterator it = addedEdges.begin();
-
-  for (; it != addedEdges.end(); ++it)
-    graph->delEdge(*it, true);
-
-  graph->addListener(this);
-  return resultsBuffer[graph];
-}
-//=================================================================
-void PlanarityTest::treatEvent(const Event &evt) {
-  const GraphEvent *gEvt = dynamic_cast<const GraphEvent *>(&evt);
-
-  if (gEvt) {
-    Graph *graph = gEvt->getGraph();
-
-    switch (gEvt->getType()) {
-    case GraphEvent::TLP_DEL_NODE:
-
-      if (resultsBuffer.find(graph) != resultsBuffer.end())
-        if (resultsBuffer[graph])
-          return;
-
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
-      break;
-
-    case GraphEvent::TLP_ADD_EDGE:
-
-      if (resultsBuffer.find(graph) != resultsBuffer.end())
-        if (!resultsBuffer[graph])
-          return;
-
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
-      break;
-
-    case GraphEvent::TLP_DEL_EDGE:
-
-      if (resultsBuffer.find(graph) != resultsBuffer.end())
-        if (resultsBuffer[graph])
-          return;
-
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
-      break;
-
-    default:
-      break;
-    }
-  } else {
-
-    Graph *graph = static_cast<Graph *>(evt.sender());
-
-    if (evt.type() == Event::TLP_DELETE)
-      resultsBuffer.erase(graph);
-  }
 }

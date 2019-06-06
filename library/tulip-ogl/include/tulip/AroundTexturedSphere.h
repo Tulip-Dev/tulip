@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #include <tulip/TlpTools.h>
 #include <tulip/Graph.h>
 #include <tulip/Glyph.h>
@@ -57,3 +59,5 @@ public:
                         unsigned char alpha = 255);
 };
 } // end of namespace tlp
+
+///@endcond

@@ -51,7 +51,95 @@ void TestAlgorithmTest::tearDown() {
 }
 //==========================================================
 void TestAlgorithmTest::testSimple() {
-  tlp::warning() << __FUNCTION__ << " : not implemented" << endl;
+  std::vector<edge> multi;
+  std::vector<edge> loops;
+  // build a simple graph
+  node n1, n2, n3, n4;
+  edge e1, e2, e3;
+  n1 = graph->addNode();
+  n2 = graph->addNode();
+  n3 = graph->addNode();
+
+  e1 = graph->addEdge(n1, n2);
+  e2 = graph->addEdge(n2, n3);
+  e2 = graph->addEdge(n3, n1);
+
+  // not directed test
+  CPPUNIT_ASSERT(SimpleTest::isSimple(graph));
+  // directed test
+  CPPUNIT_ASSERT(SimpleTest::isSimple(graph, true));
+
+  // add new edge inverted from e3
+  auto e = graph->addEdge(n1, n3);
+
+  // not directed tests
+  CPPUNIT_ASSERT(!SimpleTest::isSimple(graph));
+  CPPUNIT_ASSERT(!SimpleTest::simpleTest(graph, &multi, &loops));
+  CPPUNIT_ASSERT(multi.size() == 1);
+  CPPUNIT_ASSERT(loops.size() == 0);
+  CPPUNIT_ASSERT(multi[0] == e || multi[0] == e3);
+
+  // directed tests
+  CPPUNIT_ASSERT(SimpleTest::isSimple(graph, true));
+  multi.clear();
+  CPPUNIT_ASSERT(SimpleTest::simpleTest(graph, &multi, &loops, true));
+  CPPUNIT_ASSERT(multi.empty());
+  CPPUNIT_ASSERT(loops.empty());
+
+  // add loop
+  auto loop1 = graph->addEdge(n1, n1);
+
+  // not directed tests
+  CPPUNIT_ASSERT(!SimpleTest::isSimple(graph));
+  CPPUNIT_ASSERT(!SimpleTest::simpleTest(graph, &multi, &loops));
+  CPPUNIT_ASSERT(multi.size() == 1);
+  CPPUNIT_ASSERT(multi[0] == e || multi[0] == e3);
+  CPPUNIT_ASSERT(loops.size() == 1);
+  CPPUNIT_ASSERT(loops[0] == loop1);
+
+  // directed tests
+  CPPUNIT_ASSERT(!SimpleTest::isSimple(graph, true));
+  multi.clear();
+  loops.clear();
+  CPPUNIT_ASSERT(!SimpleTest::simpleTest(graph, &multi, &loops, true));
+  CPPUNIT_ASSERT(multi.empty());
+  CPPUNIT_ASSERT(loops.size() == 1);
+  CPPUNIT_ASSERT(loops[0] == loop1);
+
+  // add new loop and multiple edge
+  auto loop2 = graph->addEdge(n1, n1);
+
+  // not directed tests
+  CPPUNIT_ASSERT(!SimpleTest::isSimple(graph));
+  multi.clear();
+  loops.clear();
+  CPPUNIT_ASSERT(!SimpleTest::simpleTest(graph, &multi, &loops));
+  CPPUNIT_ASSERT(multi.size() == 2);
+  CPPUNIT_ASSERT(multi[0] == e || multi[0] == e3);
+  CPPUNIT_ASSERT(multi[1] == loop1 || multi[1] == loop2);
+  CPPUNIT_ASSERT(loops.size() == 2);
+  CPPUNIT_ASSERT(loops[0] == loop1 && loops[1] == loop2);
+  multi.clear();
+  CPPUNIT_ASSERT(!SimpleTest::simpleTest(graph, &multi, &multi));
+  CPPUNIT_ASSERT(multi.size() == 3);
+  CPPUNIT_ASSERT(multi[0] == e || multi[0] == e3);
+  CPPUNIT_ASSERT(multi[1] == loop1 || multi[1] == loop2);
+  CPPUNIT_ASSERT(multi[2] == loop1 || multi[2] == loop2);
+
+  // directed tests
+  CPPUNIT_ASSERT(!SimpleTest::isSimple(graph, true));
+  multi.clear();
+  loops.clear();
+  CPPUNIT_ASSERT(!SimpleTest::simpleTest(graph, &multi, &loops, true));
+  CPPUNIT_ASSERT(multi.size() == 1);
+  CPPUNIT_ASSERT(multi[0] == loop1 || multi[0] == loop2);
+  CPPUNIT_ASSERT(loops.size() == 2);
+  CPPUNIT_ASSERT(loops[0] == loop1 && loops[1] == loop2);
+  multi.clear();
+  CPPUNIT_ASSERT(!SimpleTest::simpleTest(graph, &multi, &multi, true));
+  CPPUNIT_ASSERT(multi.size() == 2);
+  CPPUNIT_ASSERT(multi[0] == loop1 && multi[1] == loop2);
+  CPPUNIT_ASSERT(loops[0] == loop1 && loops[1] == loop2);
 }
 //==========================================================
 void TestAlgorithmTest::testFreeTree() {

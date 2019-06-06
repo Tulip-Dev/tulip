@@ -19,6 +19,7 @@
 #include "CliqueEnumeration.h"
 
 #include <tulip/SimpleTest.h>
+#include <tulip/Graph.h>
 
 #include <sstream>
 #include <algorithm>

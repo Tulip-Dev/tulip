@@ -20,13 +20,11 @@
 #ifndef OUTERPLANARTEST_H
 #define OUTERPLANARTEST_H
 
-#include <tulip/tuliphash.h>
-#include <tulip/Observable.h>
-#include <tulip/Graph.h>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
-struct edge;
-struct node;
+
+class Graph;
 
 /**
  * @ingroup Checks
@@ -37,7 +35,7 @@ struct node;
  * Alternatively, a graph G is outerplanar if the graph formed from G by adding a new vertex, with
  *edges connecting it to all the other vertices, is a planar graph."
  **/
-class TLP_SCOPE OuterPlanarTest : private Observable {
+class TLP_SCOPE OuterPlanarTest {
 public:
   /**
    * Returns true if the graph is outerplanar (i.e. a graph with an embedding
@@ -54,23 +52,6 @@ public:
    *complex (impossible?) to make const.
    **/
   static bool isOuterPlanar(Graph *graph);
-
-private:
-  OuterPlanarTest() {}
-  // override Observable::treatEvent
-  void treatEvent(const Event &) override;
-
-  bool compute(Graph *graph);
-
-  /**
-   * @brief Singleton instance of this class.
-   **/
-  static OuterPlanarTest *instance;
-  /**
-   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the
-   *hashmap.
-   **/
-  TLP_HASH_MAP<const Graph *, bool> resultsBuffer;
 };
 } // namespace tlp
 

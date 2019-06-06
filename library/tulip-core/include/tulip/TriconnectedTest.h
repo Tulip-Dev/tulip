@@ -20,17 +20,17 @@
 #ifndef TULIP_TRICONNECTEDTEST_H
 #define TULIP_TRICONNECTEDTEST_H
 
-#include <tulip/tuliphash.h>
-#include <tulip/Observable.h>
-#include <tulip/Graph.h>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
+
+class Graph;
 
 /**
  * @ingroup Checks
  * @brief Provides functions to test if a graph is triconnected.
  **/
-class TLP_SCOPE TriconnectedTest : private Observable {
+class TLP_SCOPE TriconnectedTest {
 public:
   /**
    * @brief Checks if the graph is triconnected.
@@ -43,23 +43,6 @@ public:
    * @return bool True if the graph is triconnected, false otherwise.
    **/
   static bool isTriconnected(Graph *graph);
-
-private:
-  TriconnectedTest();
-
-  bool compute(tlp::Graph *graph);
-  // override Observable::treatEvent
-  void treatEvent(const Event &) override;
-
-  /**
-   * @brief Singleton instance of this class.
-   **/
-  static TriconnectedTest *instance;
-  /**
-   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the
-   *hashmap.
-   **/
-  TLP_HASH_MAP<const Graph *, bool> resultsBuffer;
 };
 } // namespace tlp
 #endif
