@@ -20,146 +20,164 @@ import os.path
 import sys
 import traceback
 import platform
-from datetime import date
 
 _tulipNativeLibsPath = os.path.dirname(__file__) + '/native/'
 sys.path.append(_tulipNativeLibsPath)
 
 if platform.system() == 'Windows':
-  os.environ['PATH'] = _tulipNativeLibsPath + ';' + _tulipNativeLibsPath + '../../../;' + os.environ['PATH']
+    os.environ['PATH'] = '%s;%s../../../;%s' % (_tulipNativeLibsPath,
+                                                _tulipNativeLibsPath,
+                                                os.environ['PATH'])
 
-import _tulip
+import _tulip # noqa
 
 sys.path.pop()
 
+
 class tlpType(_tulip.tlp.__class__):
 
-  def __getattr__(cls, name):
-    if hasattr(_tulip.tlp, name):
-      return _tulip.tlp.getTulipGlobalVar(name)
-    else:
-      raise AttributeError(name)
+    def __getattr__(cls, name):
+        if hasattr(_tulip.tlp, name):
+            return _tulip.tlp.getTulipGlobalVar(name)
+        else:
+            raise AttributeError(name)
 
-  def __setattr__(cls, name, value):
-    if hasattr(_tulip.tlp, name):
-      _tulip.tlp.setTulipGlobalVar(name, value)
-    else:
-      super(tlpType, cls).__setattr__(name, value)
+    def __setattr__(cls, name, value):
+        if hasattr(_tulip.tlp, name):
+            _tulip.tlp.setTulipGlobalVar(name, value)
+        else:
+            super(tlpType, cls).__setattr__(name, value)
+
 
 # utility function from the 'six' module
 def with_metaclass(meta, *bases):
-  """Create a base class with a metaclass."""
-  # This requires a bit of explanation: the basic idea is to make a dummy
-  # metaclass for one level of class instantiation that replaces itself with
-  # the actual metaclass.
-  class metaclass(meta):
-    def __new__(cls, name, this_bases, d):
-      return meta(name, bases, d)
-    
-  return type.__new__(metaclass, 'temporary_class', (), {})
+    """Create a base class with a metaclass."""
+    # This requires a bit of explanation: the basic idea is to make a dummy
+    # metaclass for one level of class instantiation that replaces itself with
+    # the actual metaclass.
+    class metaclass(meta):
+        def __new__(cls, name, this_bases, d):
+            return meta(name, bases, d)
+
+    return type.__new__(metaclass, 'temporary_class', (), {})
+
 
 class tlp(with_metaclass(tlpType, _tulip.tlp)):
-  @staticmethod
-  def loadTulipPythonPlugin(pluginFilePath):
-    if not os.path.isfile(pluginFilePath) or not pluginFilePath.endswith('.py'):
-      return False
 
-    try:
-      pluginFile = open(pluginFilePath)
-      pluginFileContent = pluginFile.read()
-    except:
-      return False
+    @staticmethod
+    def loadTulipPythonPlugin(pluginFilePath):
+        if (not os.path.isfile(pluginFilePath) or
+                not pluginFilePath.endswith('.py')):
+            return False
 
-    if not 'tulipplugins.register' in pluginFileContent:
-      return False
+        try:
+            pluginFile = open(pluginFilePath)
+            pluginFileContent = pluginFile.read()
+        except Exception:
+            return False
 
-    modulePath = os.path.dirname(pluginFilePath)
-    moduleName = os.path.basename(pluginFilePath)[:-3]
+        if 'tulipplugins.register' not in pluginFileContent:
+            return False
 
-    if not modulePath in sys.path:
-      sys.path.append(modulePath)
+        modulePath = os.path.dirname(pluginFilePath)
+        moduleName = os.path.basename(pluginFilePath)[:-3]
 
-    try:
-      mod = __import__(moduleName)
-    except ImportError:
-      sys.stdout.write('There was an error when trying to load the Tulip Python plugin from the file ' + pluginFilePath + '. See stack trace below.\\n')
-      traceback.print_exc()
-      return False
+        if modulePath not in sys.path:
+            sys.path.append(modulePath)
 
-    return True
+        try:
+            __import__(moduleName)
+        except ImportError:
+            sys.stdout.write(('There was an error when trying to load the'
+                              ' Tulip Python plugin from the file %s. See '
+                              'stack trace below.\\n') % pluginFilePath)
+            traceback.print_exc()
+            return False
 
-  @staticmethod
-  def loadTulipPluginsFromDir(pluginsDirPath, loadCppPlugin=True, pluginLoader=None):
-    if not os.path.exists(pluginsDirPath):
-      return False
+        return True
 
-    if loadCppPlugin:
-      tlp.loadPluginsFromDir(pluginsDirPath, pluginLoader, False)
+    @staticmethod
+    def loadTulipPluginsFromDir(pluginsDirPath, loadCppPlugin=True,
+                                pluginLoader=None):
+        if not os.path.exists(pluginsDirPath):
+            return False
 
-    files = os.listdir(pluginsDirPath)
+        if loadCppPlugin:
+            tlp.loadPluginsFromDir(pluginsDirPath, pluginLoader, False)
 
-    for file in files:
-      filePath = pluginsDirPath+'/'+file
-      if not os.path.isdir(filePath):
-        tlp.loadTulipPythonPlugin(filePath)
+        files = os.listdir(pluginsDirPath)
 
-    for file in files:
-      filePath = pluginsDirPath+'/'+file
-      if os.path.isdir(filePath):
-        tlp.loadTulipPluginsFromDir(filePath, loadCppPlugin, pluginLoader)
+        for file in files:
+            filePath = pluginsDirPath+'/'+file
+            if not os.path.isdir(filePath):
+                tlp.loadTulipPythonPlugin(filePath)
 
-    return True
+        for file in files:
+            filePath = pluginsDirPath+'/'+file
+            if os.path.isdir(filePath):
+                tlp.loadTulipPluginsFromDir(filePath, loadCppPlugin,
+                                            pluginLoader)
+
+        return True
+
 
 tulipVersion = tlp.getTulipRelease()
 tulipVersion = tulipVersion[:tulipVersion.rfind('.')]
 
-startupScriptsPath = tlp.TulipLibDir + '/tulip/python/startup'
-startupScriptsHomePath = os.path.expanduser('~') + '/.Tulip-' + tulipVersion + '/python/startup'
+startupScriptsPath = '%s/tulip/python/startup' % tlp.TulipLibDir
+startupScriptsHomePath = '%s/.Tulip-%s/python/startup' % (
+    os.path.expanduser('~'), tulipVersion)
+
 
 def runStartupScripts(scriptsPath):
-  if not os.path.exists(scriptsPath):
-    return
+    if not os.path.exists(scriptsPath):
+        return
 
-  files = os.listdir(scriptsPath)
+    files = os.listdir(scriptsPath)
 
-  for file in files:
-    filePath = scriptsPath+'/'+file
-    if os.path.isfile(filePath) and filePath.endswith('.py'):
-      exec(compile(open(filePath).read(), filePath, 'exec'), globals(), locals())
+    for file in files:
+        filePath = scriptsPath+'/'+file
+        if os.path.isfile(filePath) and filePath.endswith('.py'):
+            exec(compile(open(filePath).read(), filePath, 'exec'),
+                 globals(), locals())
+
 
 runStartupScripts(startupScriptsPath)
 runStartupScripts(startupScriptsHomePath)
 
-tlpPythonPluginsPath = tlp.TulipLibDir + '/tulip/python/tulip/plugins'
-tlpPythonPluginsHomePath = os.path.expanduser('~') + '/.Tulip-' + tulipVersion + '/plugins/python'
+tlpPythonPluginsPath = '%s/tulip/python/tulip/plugins' % tlp.TulipLibDir
+tlpPythonPluginsHomePath = '%s/.Tulip-%s/plugins/python' % (
+    os.path.expanduser('~'), tulipVersion)
 
 tlp.loadTulipPluginsFromDir(tlpPythonPluginsPath, False)
 tlp.loadTulipPluginsFromDir(tlpPythonPluginsHomePath, False)
 
 _tulipNativePluginsPath = _tulipNativeLibsPath + 'plugins'
 
-# fix loading of Tulip plugins when the tulip module has been installed through pip
+# fix loading of Tulip plugins when the tulip module has been
+# installed with the pip tool
 if platform.system() == 'Linux' and os.path.exists(_tulipNativePluginsPath):
-  dlOpenFlagsBackup = sys.getdlopenflags()
-  if sys.version_info < (3, 6):
-    import DLFCN
-    dlOpenFlags = DLFCN.RTLD_NOW | DLFCN.RTLD_GLOBAL
-  else:
-    dlOpenFlags = os.RTLD_NOW | os.RTLD_GLOBAL
-  sys.setdlopenflags(dlOpenFlags)
+    dlOpenFlagsBackup = sys.getdlopenflags()
+    if sys.version_info < (3, 6):
+        import DLFCN
+        dlOpenFlags = DLFCN.RTLD_NOW | DLFCN.RTLD_GLOBAL
+    else:
+        dlOpenFlags = os.RTLD_NOW | os.RTLD_GLOBAL
+    sys.setdlopenflags(dlOpenFlags)
 
 tlp.loadTulipPluginsFromDir(_tulipNativePluginsPath)
 
-# load bundled Tulip Python plugins when the tulip module has been installed with pip
+# load bundled Tulip Python plugins when the tulip module has been
+# installed with the pip tool
 if not sys.argv[0] == 'tulip':
-  tlp.loadTulipPluginsFromDir(os.path.dirname(__file__) + '/plugins/')
+    tlp.loadTulipPluginsFromDir('%s/plugins/' % os.path.dirname(__file__))
 
 if platform.system() == 'Linux' and os.path.exists(_tulipNativePluginsPath):
-  sys.setdlopenflags(dlOpenFlagsBackup)
+    sys.setdlopenflags(dlOpenFlagsBackup)
 
 __all__ = ['tlp']
-__author__ = "David Auber and the Tulip development Team"
-__license__ = "LGPLv3"
+__author__ = 'David Auber and the Tulip development Team'
+__license__ = 'LGPLv3'
 __version__ = tlp.getTulipRelease()
-__email__ = "tulipdev@labri.fr"
-__status__ = "Production"
+__email__ = 'tulipdev@labri.fr'
+__status__ = 'Production'

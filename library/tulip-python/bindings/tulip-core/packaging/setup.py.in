@@ -14,7 +14,8 @@ import shutil
 # On MacOS, we need to relink dylibs and set correct rpaths in
 # order for the modules to be imported in a portable way when
 # distributed through pip
-if platform.system() == 'Darwin' and len(sys.argv) > 1 and sys.argv[1] == 'bdist_wheel':
+if platform.system() == 'Darwin' and len(sys.argv) > 1 \
+        and sys.argv[1] == 'bdist_wheel':
 
     def getDyLibDependencies(dylib):
         otool = subprocess.check_output('otool -L %s' % dylib, shell=True)
@@ -39,8 +40,8 @@ if platform.system() == 'Darwin' and len(sys.argv) > 1 and sys.argv[1] == 'bdist
         for rpath in rpaths:
             subprocess.call(
                 'install_name_tool -add_rpath %s %s 2>/dev/null' %
-                 (rpath, dylib),
-                 shell=True)
+                (rpath, dylib),
+                shell=True)
 
     def relinkDyLibsInDirAndSetRpaths(dirPath, rpaths):
         for lib in os.listdir(dirPath):
@@ -49,7 +50,7 @@ if platform.system() == 'Darwin' and len(sys.argv) > 1 and sys.argv[1] == 'bdist
                 if not os.path.isdir(libPath):
                     relinkDyLibAndSetRpaths(libPath, rpaths)
 
-    def copyDyLibsDependencies(dirPath, relativeCopyPath = './'):
+    def copyDyLibsDependencies(dirPath, relativeCopyPath='./'):
         lastNbProcessed = 0
         toProcess = os.listdir(dirPath)
         while lastNbProcessed == 0 or len(toProcess) > lastNbProcessed:
@@ -64,12 +65,11 @@ if platform.system() == 'Darwin' and len(sys.argv) > 1 and sys.argv[1] == 'bdist
                             if not os.path.isfile(dylibCopy):
                                 shutil.copyfile(L, dylibCopy)
                                 subprocess.call(
-                                    'install_name_tool -id @rpath/%s %s 2>/dev/null' %
-                                    (filename, dylibCopy),
+                                    ('install_name_tool -id @rpath/%s %s '
+                                     '2>/dev/null') % (filename, dylibCopy),
                                     shell=True)
             lastNbProcessed = len(toProcess)
             toProcess = os.listdir(dirPath)
-
 
     tulipNativeLibsPath = os.getcwd() + '/tulip/native/'
     tulipNativePluginsLibsPath = os.getcwd() + '/tulip/native/plugins/'
@@ -79,7 +79,9 @@ if platform.system() == 'Darwin' and len(sys.argv) > 1 and sys.argv[1] == 'bdist
     copyDyLibsDependencies(tulipNativePluginsLibsPath, '../')
     print("Relinking dylibs and setting rpaths in tulip-python wheel ...")
     relinkDyLibsInDirAndSetRpaths(tulipNativeLibsPath, ['@loader_path/'])
-    relinkDyLibsInDirAndSetRpaths(tulipNativePluginsLibsPath, ['@loader_path/..'])
+    relinkDyLibsInDirAndSetRpaths(tulipNativePluginsLibsPath,
+                                  ['@loader_path/..'])
+
 
 class BinaryDistribution(Distribution):
     def is_pure(self):
@@ -88,14 +90,20 @@ class BinaryDistribution(Distribution):
     def has_ext_modules(self):
         return True
 
+
 tulip_native_libs = []
 if platform.system() == 'Windows':
-    tulip_native_libs = ['native/*.pyd', 'native/*.dll', 'native/plugins/*.dll']
-    # on Windows, call a CMake script that will gather all the required DLLs to import the modules and copy them to the wheel native folder
-    command='"${CMAKE_COMMAND}" -DCWD=' + os.getcwd() + ' -DLIBRARY_PATHS=${CMAKE_LIBRARY_PATH} -P copyTulipCoreDllDependencies.cmake'
+    tulip_native_libs = ['native/*.pyd', 'native/*.dll',
+                         'native/plugins/*.dll']
+    # on Windows, call a CMake script that will gather all the required DLLs
+    # to import the modules and copy them to the wheel native folder
+    command = ('"${CMAKE_COMMAND}" -DCWD=%s '
+               '-DLIBRARY_PATHS=${CMAKE_LIBRARY_PATH} '
+               '-P copyTulipCoreDllDependencies.cmake') % os.getcwd()
     p = subprocess.call(command, shell=True)
 elif platform.system() == 'Darwin':
-    tulip_native_libs = ['native/*.so', 'native/*.dylib', 'native/plugins/*.dylib']
+    tulip_native_libs = ['native/*.so', 'native/*.dylib',
+                         'native/plugins/*.dylib']
 elif platform.system() == 'Linux':
     tulip_native_libs = ['native/*.so*', 'native/plugins/*.so']
 
@@ -135,7 +143,7 @@ setup(
         'Topic :: Scientific/Engineering :: Mathematics',
         'Topic :: Scientific/Engineering :: Visualization',
 
-        'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
+        'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)', # noqa
 
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: 2',
