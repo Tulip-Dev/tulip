@@ -28,8 +28,8 @@ using namespace std;
 using namespace tlp;
 
 //=================================================================
-class TreeTestListener :public Observable {
- public:
+class TreeTestListener : public Observable {
+public:
   // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
   void treatEvent(const Event &) override;
 
@@ -103,9 +103,8 @@ bool TreeTest::isTree(const tlp::Graph *graph) {
 // if the graph was undirected, there would be no cycle
 bool TreeTest::isFreeTree(const tlp::Graph *graph) {
   node firstNode = graph->getOneNode();
-  return (firstNode.isValid() && isFreeTree(graph, firstNode))
-             ? ConnectedTest::isConnected(graph)
-             : false;
+  return (firstNode.isValid() && isFreeTree(graph, firstNode)) ? ConnectedTest::isConnected(graph)
+                                                               : false;
 }
 //====================================================================
 // simple structure to implement

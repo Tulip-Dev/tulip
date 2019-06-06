@@ -23,8 +23,8 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-class OuterPlanarTestListener :public Observable {
- public:
+class OuterPlanarTestListener : public Observable {
+public:
   // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
   void treatEvent(const Event &) override;
 

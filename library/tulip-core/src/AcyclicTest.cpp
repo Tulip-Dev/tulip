@@ -25,8 +25,8 @@ using namespace std;
 using namespace tlp;
 
 //**********************************************************************
-class TestAcyclicListener :public Observable {
- public:
+class TestAcyclicListener : public Observable {
+public:
   // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
   void treatEvent(const Event &) override;
 

@@ -50,7 +50,7 @@ void ConnectedTestListener::treatEvent(const Event &evt) {
       resultsBuffer.erase(graph);
       break;
 
-   case GraphEvent::TLP_DEL_EDGE:
+    case GraphEvent::TLP_DEL_EDGE:
 
       if (resultsBuffer.find(graph) != resultsBuffer.end())
         if (!resultsBuffer[graph])
