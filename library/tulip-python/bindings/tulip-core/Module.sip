@@ -187,21 +187,32 @@ extern bool isTupleAndCanConvertToVec3fType(PyObject *pyObj);
 template <typename VEC_TYPE>
 VEC_TYPE *convertToVec3fType(PyObject *pyObj, float zVal = 0) {
   float x = 0, y = 0, z = zVal;
+  long xl = 0, yl = 0, zl = 0;
+  double xd = 0, yd = 0, zd = 0;
 
   bool isList = PyList_Check(pyObj);
 
-  PyObject *f = PyNumber_Float(isList ? PyList_GET_ITEM(pyObj, 0) : PyTuple_GET_ITEM(pyObj, 0));
-  x = float(PyFloat_AsDouble(f));
-  Py_XDECREF(f);
+  PyObject *f = isList ? PyList_GET_ITEM(pyObj, 0) : PyTuple_GET_ITEM(pyObj, 0);
+  if (convertPyObjectToLong(f, xl)) {
+    x = float(xl);
+  } else if (convertPyObjectToDouble(f, xd)) {
+    x = float(xd);
+  }
 
-  f = PyNumber_Float(isList ? PyList_GET_ITEM(pyObj, 1) : PyTuple_GET_ITEM(pyObj, 1));
-  y = float(PyFloat_AsDouble(f));
-  Py_XDECREF(f);
+  f = isList ? PyList_GET_ITEM(pyObj, 1) : PyTuple_GET_ITEM(pyObj, 1);
+  if (convertPyObjectToLong(f, yl)) {
+    y = float(yl);
+  } else if (convertPyObjectToDouble(f, yd)) {
+    y = float(yd);
+  }
 
   if ((isList && PyList_GET_SIZE(pyObj) > 2) || PyTuple_GET_SIZE(pyObj) > 2) {
-    f = PyNumber_Float(isList ? PyList_GET_ITEM(pyObj, 2) : PyTuple_GET_ITEM(pyObj, 2));
-    z = float(PyFloat_AsDouble(f));
-    Py_XDECREF(f);
+    f = isList ? PyList_GET_ITEM(pyObj, 2) : PyTuple_GET_ITEM(pyObj, 2);
+    if (convertPyObjectToLong(f, zl)) {
+      z = float(zl);
+    } else if (convertPyObjectToDouble(f, zd)) {
+      z = float(zd);
+    }
   }
 
   return new VEC_TYPE(x, y, z);
@@ -321,7 +332,18 @@ bool isTupleAndCanConvertToVec3fType(PyObject *pyObj) {
 
   for (SIP_SSIZE_T i = 0; i < PyTuple_GET_SIZE(pyObj); ++i) {
     PyObject *item = PyTuple_GET_ITEM(pyObj, i);
-    if (PyBool_Check(item) || !PyFloat_Check(item)) {
+    bool canConvert = false;
+#if PY_MAJOR_VERSION >= 3
+    if (!PyBool_Check(item) && PyLong_Check(item)) {
+#else
+    if (!PyBool_Check(item) && (PyLong_Check(item) || PyInt_Check(item))) {
+#endif
+      canConvert = canConvert || true;
+    }
+    if (!PyBool_Check(item) && PyFloat_Check(item)) {
+      canConvert = canConvert || true;
+    }
+    if (!canConvert) {
       return false;
     }
   }
