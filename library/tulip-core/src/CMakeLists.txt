@@ -9,6 +9,7 @@ Color.cpp
 ColorProperty.cpp
 ColorScale.cpp
 ConnectedTest.cpp
+ConnectedTestListener.cpp
 ConvexHull.cpp
 DataSet.cpp
 Delaunay.cpp

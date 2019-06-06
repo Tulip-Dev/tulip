@@ -17,20 +17,67 @@
  *
  */
 #include <stack>
-#include <tulip/Graph.h>
 #include <tulip/AcyclicTest.h>
+#include <tulip/Graph.h>
+#include <tulip/MutableContainer.h>
 
 using namespace std;
 using namespace tlp;
 
-AcyclicTest *AcyclicTest::instance = nullptr;
 //**********************************************************************
-AcyclicTest::AcyclicTest() {}
+class TestAcyclicListener :public Observable {
+ public:
+  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
+  void treatEvent(const Event &) override;
+
+  /**
+   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the map.
+   **/
+  std::unordered_map<const Graph *, bool> resultsBuffer;
+};
+
+void TestAcyclicListener::treatEvent(const Event &evt) {
+  const GraphEvent *graphEvent = dynamic_cast<const GraphEvent *>(&evt);
+
+  if (graphEvent) {
+    Graph *graph = graphEvent->getGraph();
+
+    switch (graphEvent->getType()) {
+    case GraphEvent::TLP_ADD_EDGE:
+
+      if (!resultsBuffer[graph])
+        return;
+
+      graph->removeListener(this);
+      resultsBuffer.erase(graph);
+      break;
+
+    case GraphEvent::TLP_DEL_EDGE:
+
+      if (resultsBuffer[graph])
+        return;
+
+    case GraphEvent::TLP_REVERSE_EDGE:
+      graph->removeListener(this);
+      resultsBuffer.erase(graph);
+      break;
+
+    default:
+      // we don't care about other events
+      break;
+    }
+  } else {
+
+    Graph *graph = static_cast<Graph *>(evt.sender());
+
+    if (evt.type() == Event::TLP_DELETE)
+      resultsBuffer.erase(graph);
+  }
+}
+//**********************************************************************
+static TestAcyclicListener *instance = new TestAcyclicListener();
 //**********************************************************************
 bool AcyclicTest::isAcyclic(const Graph *graph) {
-  if (instance == nullptr)
-    instance = new AcyclicTest();
-
   if (instance->resultsBuffer.find(graph) == instance->resultsBuffer.end()) {
     instance->resultsBuffer[graph] = acyclicTest(graph);
     graph->addListener(instance);
@@ -165,47 +212,4 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
   }
 
   return result;
-}
-//**********************************************************************
-void AcyclicTest::treatEvent(const Event &evt) {
-  const GraphEvent *graphEvent = dynamic_cast<const GraphEvent *>(&evt);
-
-  if (graphEvent) {
-    Graph *graph = graphEvent->getGraph();
-
-    switch (graphEvent->getType()) {
-    case GraphEvent::TLP_ADD_EDGE:
-
-      if (resultsBuffer[graph] == false)
-        return;
-
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
-      break;
-
-    case GraphEvent::TLP_DEL_EDGE:
-
-      if (resultsBuffer[graph] == true)
-        return;
-
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
-      break;
-
-    case GraphEvent::TLP_REVERSE_EDGE:
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
-      break;
-
-    default:
-      // we don't care about other events
-      break;
-    }
-  } else {
-
-    Graph *graph = static_cast<Graph *>(evt.sender());
-
-    if (evt.type() == Event::TLP_DELETE)
-      resultsBuffer.erase(graph);
-  }
 }

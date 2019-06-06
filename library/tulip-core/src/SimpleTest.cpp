@@ -26,32 +26,79 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-SimpleTest *SimpleTest::undirInstance = nullptr;
-SimpleTest *SimpleTest::dirInstance = nullptr;
+class SimpleTestListener :public Observable {
+ public:
+  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
+  void treatEvent(const Event &) override;
+
+  /**
+   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the map.
+   **/
+  std::unordered_map<const Graph *, bool> resultsBuffer;
+
+  inline void deleteResult(Graph* graph) {
+    resultsBuffer.erase(graph);
+    graph->removeListener(this);
+  }
+
+};
 
 //=================================================================
-SimpleTest::SimpleTest() {}
+void SimpleTestListener::treatEvent(const Event &evt) {
+  const GraphEvent *gEvt = dynamic_cast<const GraphEvent *>(&evt);
+
+  if (gEvt) {
+    Graph *graph = gEvt->getGraph();
+
+    switch (gEvt->getType()) {
+    case GraphEvent::TLP_ADD_EDGE:
+
+      if (resultsBuffer[graph])
+        deleteResult(graph);
+
+      break;
+
+    case GraphEvent::TLP_DEL_EDGE:
+
+      if (!resultsBuffer[graph])
+        deleteResult(graph);
+
+      break;
+
+    case GraphEvent::TLP_REVERSE_EDGE:
+      deleteResult(graph);
+      break;
+
+    default:
+      break;
+    }
+  } else {
+
+    Graph *graph = static_cast<Graph *>(evt.sender());
+
+    if (evt.type() == Event::TLP_DELETE)
+      deleteResult(graph);
+  }
+}
+//=================================================================
+static SimpleTestListener *undirInstance = new SimpleTestListener();
+static SimpleTestListener *dirInstance = new SimpleTestListener();
 //=================================================================
 bool SimpleTest::isSimple(const tlp::Graph *graph, const bool directed) {
-  SimpleTest *instance = nullptr;
+  SimpleTestListener *instance = nullptr;
   if (directed) {
-    if (!dirInstance) {
-      dirInstance = new SimpleTest();
-    }
     instance = dirInstance;
   } else {
-    if (!undirInstance) {
-      undirInstance = new SimpleTest();
-    }
     instance = undirInstance;
   }
 
-  if (instance->resultsBuffer.find(graph) == instance->resultsBuffer.end()) {
-    instance->resultsBuffer[graph] = simpleTest(graph, nullptr, nullptr, directed);
-    graph->addListener(instance);
-  }
+  auto it = instance->resultsBuffer.find(graph);
+  if (it != instance->resultsBuffer.end())
+    return it->second;
 
-  return instance->resultsBuffer[graph];
+  graph->addListener(instance);
+  return instance->resultsBuffer[graph] =
+    simpleTest(graph, nullptr, nullptr, directed);
 }
 //**********************************************************************
 void SimpleTest::makeSimple(Graph *graph, vector<edge> &removed, const bool directed) {
@@ -130,47 +177,4 @@ bool SimpleTest::simpleTest(const tlp::Graph *graph, vector<edge> *multipleEdges
   }
 
   return result;
-}
-//=================================================================
-void SimpleTest::deleteResult(Graph *graph) {
-  resultsBuffer.erase(graph);
-  graph->removeListener(this);
-}
-//=================================================================
-void SimpleTest::treatEvent(const Event &evt) {
-  const GraphEvent *gEvt = dynamic_cast<const GraphEvent *>(&evt);
-
-  if (gEvt) {
-    Graph *graph = gEvt->getGraph();
-
-    switch (gEvt->getType()) {
-    case GraphEvent::TLP_ADD_EDGE:
-
-      if (resultsBuffer[graph])
-        deleteResult(graph);
-
-      break;
-
-    case GraphEvent::TLP_DEL_EDGE:
-
-      if (!resultsBuffer[graph])
-        deleteResult(graph);
-
-      break;
-
-    case GraphEvent::TLP_REVERSE_EDGE:
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
-      break;
-
-    default:
-      break;
-    }
-  } else {
-
-    Graph *graph = static_cast<Graph *>(evt.sender());
-
-    if (evt.type() == Event::TLP_DELETE)
-      deleteResult(graph);
-  }
 }

@@ -23,45 +23,18 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-OuterPlanarTest *OuterPlanarTest::instance = nullptr;
-//=================================================================
-bool OuterPlanarTest::isOuterPlanar(tlp::Graph *graph) {
-  if (instance == nullptr)
-    instance = new OuterPlanarTest();
+class OuterPlanarTestListener :public Observable {
+ public:
+  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
+  void treatEvent(const Event &) override;
 
-  Observable::holdObservers();
-  bool result = instance->compute(graph);
-  Observable::unholdObservers();
-  return result;
-}
-//=================================================================
-bool OuterPlanarTest::compute(tlp::Graph *graph) {
+  /**
+   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the map.
+   **/
+  std::unordered_map<const Graph *, bool> resultsBuffer;
+};
 
-  if (resultsBuffer.find(graph) != resultsBuffer.end())
-    return resultsBuffer[graph];
-  else if (graph->isEmpty()) {
-    resultsBuffer[graph] = true;
-    return true;
-  }
-
-  PlanarityTestImpl planarTest(graph);
-
-  if (!planarTest.isPlanar(true))
-    return (resultsBuffer[graph] = false);
-  else {
-    node n = graph->addNode();
-    for (auto current : graph->nodes()) {
-      if (current != n)
-        graph->addEdge(n, current);
-    }
-    resultsBuffer[graph] = planarTest.isPlanar(true);
-    graph->delNode(n);
-    graph->addListener(this);
-    return resultsBuffer[graph];
-  }
-}
-//=================================================================
-void OuterPlanarTest::treatEvent(const Event &evt) {
+void OuterPlanarTestListener::treatEvent(const Event &evt) {
   const GraphEvent *gEvt = dynamic_cast<const GraphEvent *>(&evt);
 
   if (gEvt) {
@@ -69,9 +42,8 @@ void OuterPlanarTest::treatEvent(const Event &evt) {
 
     switch (gEvt->getType()) {
     case GraphEvent::TLP_ADD_EDGE:
-
       if (resultsBuffer.find(graph) != resultsBuffer.end())
-        if (!resultsBuffer[graph])
+        if (resultsBuffer[graph])
           return;
 
       graph->removeListener(this);
@@ -79,24 +51,11 @@ void OuterPlanarTest::treatEvent(const Event &evt) {
       break;
 
     case GraphEvent::TLP_DEL_EDGE:
-
-      if (resultsBuffer.find(graph) != resultsBuffer.end())
-        if (resultsBuffer[graph])
-          return;
-
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
-      break;
-
     case GraphEvent::TLP_DEL_NODE:
 
       if (resultsBuffer.find(graph) != resultsBuffer.end())
-        if (resultsBuffer[graph])
+        if (!resultsBuffer[graph])
           return;
-
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
-      break;
 
     case GraphEvent::TLP_REVERSE_EDGE:
       graph->removeListener(this);
@@ -113,5 +72,33 @@ void OuterPlanarTest::treatEvent(const Event &evt) {
 
     if (evt.type() == Event::TLP_DELETE)
       resultsBuffer.erase(graph);
+  }
+}
+//=================================================================
+static OuterPlanarTestListener *instance = new OuterPlanarTestListener();
+//=================================================================
+bool OuterPlanarTest::isOuterPlanar(tlp::Graph *graph) {
+  auto it = instance->resultsBuffer.find(graph);
+  if (it != instance->resultsBuffer.end())
+    return it->second;
+  else if (graph->isEmpty())
+    return instance->resultsBuffer[graph] = true;
+
+  PlanarityTestImpl planarTest(graph);
+
+  if (!planarTest.isPlanar(true))
+    return (instance->resultsBuffer[graph] = false);
+  else {
+    Observable::holdObservers();
+    node n = graph->addNode();
+    for (auto current : graph->nodes()) {
+      if (current != n)
+        graph->addEdge(n, current);
+    }
+    instance->resultsBuffer[graph] = planarTest.isPlanar(true);
+    graph->delNode(n);
+    Observable::unholdObservers();
+    graph->addListener(instance);
+    return instance->resultsBuffer[graph];
   }
 }

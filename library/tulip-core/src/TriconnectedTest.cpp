@@ -23,49 +23,19 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-TriconnectedTest *TriconnectedTest::instance = nullptr;
+class TriconnectedTestListener :public Observable {
+ public:
+  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
+  void treatEvent(const Event &) override;
+
+  /**
+   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the map.
+   **/
+  std::unordered_map<const Graph *, bool> resultsBuffer;
+};
+
 //=================================================================
-TriconnectedTest::TriconnectedTest() {}
-//=================================================================
-bool TriconnectedTest::isTriconnected(Graph *graph) {
-  if (instance == nullptr)
-    instance = new TriconnectedTest();
-
-  return instance->compute(graph);
-}
-//=================================================================
-bool TriconnectedTest::compute(Graph *graph) {
-  if (resultsBuffer.find(graph) != resultsBuffer.end())
-    return resultsBuffer[graph];
-
-  if (graph->isEmpty())
-    return false;
-
-  graph->addListener(this);
-  bool result = true;
-  Graph *tmp = graph->addCloneSubGraph();
-
-  for (auto n : graph->nodes()) {
-    tmp->delNode(n);
-
-    if (!BiconnectedTest::isBiconnected(tmp)) {
-      result = false;
-      break;
-    }
-
-    tmp->addNode(n);
-
-    for (auto e : graph->getInOutEdges(n)) {
-      tmp->addEdge(e);
-    }
-  }
-
-  graph->delSubGraph(tmp);
-  resultsBuffer[graph] = result;
-  return result;
-}
-//=================================================================
-void TriconnectedTest::treatEvent(const Event &evt) {
+void TriconnectedTestListener::treatEvent(const Event &evt) {
   const GraphEvent *gEvt = dynamic_cast<const GraphEvent *>(&evt);
 
   if (gEvt) {
@@ -78,15 +48,7 @@ void TriconnectedTest::treatEvent(const Event &evt) {
         if (resultsBuffer[graph])
           return;
 
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
-      break;
-
     case GraphEvent::TLP_DEL_EDGE:
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
-      break;
-
     case GraphEvent::TLP_DEL_NODE:
       graph->removeListener(this);
       resultsBuffer.erase(graph);
@@ -107,4 +69,37 @@ void TriconnectedTest::treatEvent(const Event &evt) {
     if (evt.type() == Event::TLP_DELETE)
       resultsBuffer.erase(graph);
   }
+}
+//=================================================================
+static TriconnectedTestListener *instance = new TriconnectedTestListener();
+//=================================================================
+bool TriconnectedTest::isTriconnected(Graph *graph) {
+  auto it = instance->resultsBuffer.find(graph);
+  if (it != instance->resultsBuffer.end())
+    return it->second;
+
+  if (graph->isEmpty())
+    return false;
+
+  bool result = true;
+  Graph *tmp = graph->addCloneSubGraph();
+
+  for (auto n : graph->nodes()) {
+    tmp->delNode(n);
+
+    if (!BiconnectedTest::isBiconnected(tmp)) {
+      result = false;
+      break;
+    }
+
+    tmp->addNode(n);
+
+    for (auto e : graph->getInOutEdges(n)) {
+      tmp->addEdge(e);
+    }
+  }
+
+  graph->delSubGraph(tmp);
+  graph->addListener(instance);
+  return instance->resultsBuffer[graph] = result;
 }

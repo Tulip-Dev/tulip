@@ -22,11 +22,14 @@
 
 #include <set>
 #include <vector>
-#include <tulip/tuliphash.h>
-#include <tulip/Observable.h>
-#include <tulip/Graph.h>
+
+#include <tulip/tulipconf.h>
 
 namespace tlp {
+
+class Graph;
+struct node;
+struct edge;
 
 /**
  * @ingroup Checks
@@ -35,7 +38,7 @@ namespace tlp {
  * From Wikipedia: "A graph is said to be connected if every pair of vertices in the graph are
  *connected." (i.e. there is a path between every pair of vertices).
  **/
-class TLP_SCOPE ConnectedTest : public Observable {
+class TLP_SCOPE ConnectedTest {
 public:
   /**
    * @brief Checks if a graph is connected (i.e. there is a path between every pair of vertices).
@@ -84,8 +87,6 @@ public:
                                                      std::vector<std::set<node>> &components);
 
 private:
-  ConnectedTest();
-
   /**
    * @brief Makes the graph connected.
    *
@@ -93,28 +94,7 @@ private:
    * @param toLink The nodes that need to be linked so the graph is connected.
    * @return void
    **/
-  void connect(const Graph *const, std::vector<node> &toLink);
-
-  /**
-   * @brief check if the graph is biconnected.
-   *
-   * @param graph the graph to check.
-   * @return bool true if the graph is connected, false otherwise.
-   **/
-  bool compute(const Graph *const);
-
-  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
-  void treatEvent(const Event &) override;
-
-  /**
-   * @brief Singleton instance of this class.
-   **/
-  static ConnectedTest *instance;
-  /**
-   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the
-   *hashmap.
-   **/
-  TLP_HASH_MAP<const Graph *, bool> resultsBuffer;
+  static void connect(const Graph *const, std::vector<node> &toLink);
 };
 } // namespace tlp
 

@@ -17,17 +17,20 @@
  *
  */
 #include <stack>
+#include <unordered_map>
 
-#include <tulip/Graph.h>
-#include <tulip/StableIterator.h>
 #include <tulip/BiconnectedTest.h>
 #include <tulip/ConnectedTest.h>
+#include <tulip/ConnectedTestListener.h>
+#include <tulip/Graph.h>
 #include <tulip/MutableContainer.h>
+#include <tulip/StableIterator.h>
 
 using namespace std;
 using namespace tlp;
+
 //=================================================================
-BiconnectedTest *BiconnectedTest::instance = nullptr;
+static ConnectedTestListener *instance = new ConnectedTestListener();
 //=================================================================
 // structure below is used to implement dfs loop
 struct dfsBiconnectStruct {
@@ -174,90 +177,23 @@ static bool biconnectedTest(const Graph *graph) {
           (count == graph->numberOfNodes() + 1));
 }
 //=================================================================
-BiconnectedTest::BiconnectedTest() {}
-//=================================================================
 bool BiconnectedTest::isBiconnected(const tlp::Graph *graph) {
-  if (instance == nullptr) {
-    instance = new BiconnectedTest();
-  }
-
-  return instance->compute(graph);
-}
-//=================================================================
-void BiconnectedTest::makeBiconnected(Graph *graph, vector<edge> &addedEdges) {
-  if (instance == nullptr) {
-    instance = new BiconnectedTest();
-  }
-
-  graph->removeListener(instance);
-  instance->resultsBuffer.erase(graph);
-  instance->connect(graph, addedEdges);
-  assert(BiconnectedTest::isBiconnected(graph));
-}
-//=================================================================
-void BiconnectedTest::connect(Graph *graph, vector<edge> &addedEdges) {
-  ConnectedTest::makeConnected(graph, addedEdges);
-  makeBiconnectedDFS(graph, addedEdges);
-}
-//=================================================================
-bool BiconnectedTest::compute(const tlp::Graph *graph) {
   if (graph->isEmpty()) {
     return true;
   }
 
-  if (resultsBuffer.find(graph) != resultsBuffer.end())
-    return resultsBuffer[graph];
+  auto it = instance->resultsBuffer.find(graph);
+  if (it != instance->resultsBuffer.end())
+    return it->second;
 
-  graph->addListener(this);
-  return resultsBuffer[graph] = biconnectedTest(graph);
+  graph->addListener(instance);
+  return instance->resultsBuffer[graph] = biconnectedTest(graph);
 }
 //=================================================================
-void BiconnectedTest::treatEvent(const Event &evt) {
-  const GraphEvent *gEvt = dynamic_cast<const GraphEvent *>(&evt);
-
-  if (gEvt) {
-    Graph *graph = gEvt->getGraph();
-
-    switch (gEvt->getType()) {
-    case GraphEvent::TLP_ADD_NODE:
-      resultsBuffer[graph] = false;
-      break;
-
-    case GraphEvent::TLP_DEL_NODE:
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
-      break;
-
-    case GraphEvent::TLP_ADD_EDGE:
-
-      if (resultsBuffer.find(graph) != resultsBuffer.end())
-        if (resultsBuffer[graph])
-          return;
-
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
-      break;
-
-    case GraphEvent::TLP_DEL_EDGE:
-
-      if (resultsBuffer.find(graph) != resultsBuffer.end())
-        if (!resultsBuffer[graph])
-          return;
-
-      graph->removeListener(this);
-      resultsBuffer.erase(graph);
-      break;
-
-    default:
-      // we don't care about other events
-      break;
-    }
-  } else {
-
-    Graph *graph = static_cast<Graph *>(evt.sender());
-
-    if (evt.type() == Event::TLP_DELETE) {
-      resultsBuffer.erase(graph);
-    }
-  }
+void BiconnectedTest::makeBiconnected(Graph *graph, vector<edge> &addedEdges) {
+  graph->removeListener(instance);
+  instance->resultsBuffer.erase(graph);
+  ConnectedTest::makeConnected(graph, addedEdges);
+  makeBiconnectedDFS(graph, addedEdges);
+  assert(BiconnectedTest::isBiconnected(graph));
 }
