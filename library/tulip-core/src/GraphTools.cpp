@@ -17,6 +17,11 @@
  *
  */
 
+#include <algorithm>
+#include <queue>
+#include <stack>
+#include <cmath>
+
 #include <tulip/tuliphash.h>
 #include <tulip/GraphTools.h>
 #include <tulip/GraphMeasure.h>
@@ -24,6 +29,7 @@
 #include <tulip/TreeTest.h>
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/NumericProperty.h>
 #include <tulip/ConnectedTest.h>
@@ -33,9 +39,6 @@
 #include <tulip/GraphParallelTools.h>
 #include <tulip/Dijkstra.h>
 
-#include <queue>
-#include <stack>
-#include <cmath>
 
 using namespace std;
 
@@ -89,7 +92,7 @@ EdgesIteratorFn getEdgesIterator(EDGE_TYPE direction) {
 }
 
 //======================================================================
-void makeProperDag(Graph *graph, list<node> &addedNodes, TLP_HASH_MAP<edge, edge> &replacedEdges,
+void makeProperDag(Graph *graph, list<node> &addedNodes, std::unordered_map<edge, edge> &replacedEdges,
                    IntegerProperty *edgeLength) {
   if (TreeTest::isTree(graph))
     return;
@@ -135,7 +138,7 @@ void makeProperDag(Graph *graph, list<node> &addedNodes, TLP_HASH_MAP<edge, edge
     }
   }
 
-  for (TLP_HASH_MAP<edge, edge>::const_iterator it = replacedEdges.begin();
+  for (std::unordered_map<edge, edge>::const_iterator it = replacedEdges.begin();
        it != replacedEdges.end(); ++it)
     graph->delEdge((*it).first);
 
@@ -803,7 +806,7 @@ bool selectShortestPaths(const Graph *const graph, node src, node tgt, ShortestP
   return dijkstra.searchPaths(tgt, result);
 }
 
-void markReachableNodes(const Graph *graph, const node startNode, TLP_HASH_MAP<node, bool> &result,
+void markReachableNodes(const Graph *graph, const node startNode, std::unordered_map<node, bool> &result,
                         unsigned int maxDistance, EDGE_TYPE direction) {
   deque<node> fifo;
   MutableContainer<bool> visited;

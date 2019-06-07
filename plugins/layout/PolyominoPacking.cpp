@@ -28,6 +28,7 @@
  *  \author Antoine LAMBERT, University of Bordeaux 1, FR: Email: antoine.lambert@labri.fr
  *  Version 1.0: May 2011
  */
+#include <algorithm>
 #include <vector>
 #include <set>
 #include <tulip/TulipPluginHeaders.h>

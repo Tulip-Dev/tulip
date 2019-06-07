@@ -77,29 +77,29 @@ void PlanarityTestListener::treatEvent(const Event &evt) {
   }
 }
 //=================================================================
-static PlanarityTestListener *instance = new PlanarityTestListener();
+static PlanarityTestListener instance;
 //=================================================================
 bool PlanarityTest::isPlanar(Graph *graph) {
-  auto itr = instance->resultsBuffer.find(graph);
-  if (itr != instance->resultsBuffer.end())
+  auto itr = instance.resultsBuffer.find(graph);
+  if (itr != instance.resultsBuffer.end())
     return itr->second;
 
   unsigned int nbOfNodes = graph->numberOfNodes();
 
   if (nbOfNodes == 0)
-    return instance->resultsBuffer[graph] = true;
+    return instance.resultsBuffer[graph] = true;
 
   // quick test
   if ((nbOfNodes >= 3) && (graph->numberOfEdges() > ((3 * nbOfNodes) - 6))) {
     graph->addListener(instance);
-    return instance->resultsBuffer[graph] = false;
+    return instance.resultsBuffer[graph] = false;
   }
 
   Observable::holdObservers();
   vector<edge> addedEdges;
   BiconnectedTest::makeBiconnected(graph, addedEdges);
   PlanarityTestImpl planarTest(graph);
-  instance->resultsBuffer[graph] = planarTest.isPlanar(true);
+  instance.resultsBuffer[graph] = planarTest.isPlanar(true);
   vector<edge>::const_iterator it = addedEdges.begin();
 
   for (; it != addedEdges.end(); ++it)
@@ -107,7 +107,7 @@ bool PlanarityTest::isPlanar(Graph *graph) {
 
   Observable::unholdObservers();
   graph->addListener(instance);
-  return instance->resultsBuffer[graph];
+  return instance.resultsBuffer[graph];
 }
 bool PlanarityTest::isPlanarEmbedding(const tlp::Graph *graph) {
   return PlanarityTestImpl::isPlanarEmbedding(graph);

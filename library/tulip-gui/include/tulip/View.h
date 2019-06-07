@@ -19,12 +19,15 @@
 #ifndef VIEW_H
 #define VIEW_H
 
+#include <unordered_set>
+
 #include <QObject>
 #include <QSet>
 #include <QList>
 #include <QSize>
 
 #include <tulip/tulipconf.h>
+#include <tulip/Edge.h>
 #include <tulip/Observable.h>
 #include <tulip/Plugin.h>
 

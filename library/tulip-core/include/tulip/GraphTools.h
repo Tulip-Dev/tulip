@@ -28,9 +28,9 @@
 #include <vector>
 #include <unordered_map>
 #include <tulip/tulipconf.h>
-#include <tulip/tuliphash.h>
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
+#include <tulip/MutableContainer.h>
 #include <tulip/StaticProperty.h>
 #include <tulip/Iterator.h>
 
@@ -92,7 +92,7 @@ TLP_SCOPE node graphCenterHeuristic(Graph *graph, PluginProgress *pluginProgress
 TLP_SCOPE node makeSimpleSource(Graph *graph);
 
 TLP_SCOPE void makeProperDag(Graph *graph, std::list<node> &addedNodes,
-                             TLP_HASH_MAP<edge, edge> &replacedEdges,
+                             std::unordered_map<edge, edge> &replacedEdges,
                              IntegerProperty *edgeLength = nullptr);
 
 /**
@@ -238,7 +238,7 @@ TLP_SCOPE bool selectShortestPaths(const Graph *const graph, node src, node tgt,
  * and INV_DIRECTED use reverse directed graph (ie. all edges are reversed)
  */
 TLP_SCOPE void markReachableNodes(const Graph *graph, const node startNode,
-                                  TLP_HASH_MAP<node, bool> &reachables, unsigned int maxDistance,
+                                  std::unordered_map<node, bool> &reachables, unsigned int maxDistance,
                                   EDGE_TYPE direction = UNDIRECTED);
 
 TLP_SCOPE void computeDijkstra(const Graph *const graph, node src,

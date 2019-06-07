@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <algorithm>
+
 #include "ReadGraph.h"
 #include "ExportInterface.h"
 

@@ -22,6 +22,7 @@
 #include <tulip/StaticProperty.h>
 #include <tulip/TlpTools.h>
 #include <tulip/ParallelTools.h>
+#include <tulip/vectorgraph.h>
 
 using namespace std;
 using namespace tlp;

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <algorithm>
+
 #include <tulip/TLPBExportImport.h>
 #include <tulip/TlpTools.h>
 #include <tulip/PropertyTypes.h>

@@ -57,6 +57,7 @@
 #include <tulip/PythonCppTypesConverter.h>
 #include <tulip/Vector.h>
 #include <tulip/Color.h>
+#include <algorithm>
 #include <string>
 #include <sstream>
 #include <iostream>

@@ -41,6 +41,7 @@
 #include <tulip/BoundingBox.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/vectorgraph.h>
 
 using namespace std;
 using namespace tlp;

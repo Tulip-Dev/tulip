@@ -80,15 +80,15 @@ void SimpleTestListener::treatEvent(const Event &evt) {
   }
 }
 //=================================================================
-static SimpleTestListener *undirInstance = new SimpleTestListener();
-static SimpleTestListener *dirInstance = new SimpleTestListener();
+static SimpleTestListener undirInstance;
+static SimpleTestListener dirInstance;
 //=================================================================
 bool SimpleTest::isSimple(const tlp::Graph *graph, const bool directed) {
   SimpleTestListener *instance = nullptr;
   if (directed) {
-    instance = dirInstance;
+    instance = &dirInstance;
   } else {
-    instance = undirInstance;
+    instance = &undirInstance;
   }
 
   auto it = instance->resultsBuffer.find(graph);

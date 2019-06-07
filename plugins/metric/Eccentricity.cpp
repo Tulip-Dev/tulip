@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <atomic>
 
 #include <tulip/ConnectedTest.h>
 #include <tulip/StaticProperty.h>

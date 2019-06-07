@@ -21,6 +21,8 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/DoubleProperty.h>
+#include <tulip/TulipException.h>
+
 #include "QuadTree.h"
 using namespace tlp;
 using namespace std;

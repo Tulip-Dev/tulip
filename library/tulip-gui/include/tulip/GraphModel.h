@@ -25,6 +25,7 @@
 #include <QSet>
 #include <QSortFilterProxyModel>
 
+#include <tulip/Edge.h>
 #include <tulip/Observable.h>
 #include <tulip/TulipModel.h>
 

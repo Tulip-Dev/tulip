@@ -30,6 +30,7 @@
 #include "../../utils/PluginNames.h"
 
 #include <tulip/GlMainView.h>
+#include <tulip/Graph.h>
 
 class QMenu;
 

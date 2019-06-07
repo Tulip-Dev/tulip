@@ -28,6 +28,7 @@
 #include <tulip/SimpleTest.h>
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/StableIterator.h>
+#include <tulip/vectorgraph.h>
 
 using namespace tlp;
 using namespace std;

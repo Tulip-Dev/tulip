@@ -71,11 +71,11 @@ void TriconnectedTestListener::treatEvent(const Event &evt) {
   }
 }
 //=================================================================
-static TriconnectedTestListener *instance = new TriconnectedTestListener();
+static TriconnectedTestListener instance;
 //=================================================================
 bool TriconnectedTest::isTriconnected(Graph *graph) {
-  auto it = instance->resultsBuffer.find(graph);
-  if (it != instance->resultsBuffer.end())
+  auto it = instance.resultsBuffer.find(graph);
+  if (it != instance.resultsBuffer.end())
     return it->second;
 
   if (graph->isEmpty())
@@ -101,5 +101,5 @@ bool TriconnectedTest::isTriconnected(Graph *graph) {
 
   graph->delSubGraph(tmp);
   graph->addListener(instance);
-  return instance->resultsBuffer[graph] = result;
+  return instance.resultsBuffer[graph] = result;
 }

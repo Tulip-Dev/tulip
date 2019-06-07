@@ -26,6 +26,7 @@
 #include <tulip/Observable.h>
 #include <tulip/Size.h>
 #include <tulip/Color.h>
+#include <tulip/Graph.h>
 
 namespace tlp {
 

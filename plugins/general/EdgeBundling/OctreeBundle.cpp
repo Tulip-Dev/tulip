@@ -22,6 +22,7 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/SimpleTest.h>
+#include <tulip/TulipException.h>
 
 #include "OctreeBundle.h"
 

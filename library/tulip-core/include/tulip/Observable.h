@@ -20,13 +20,14 @@
 #ifndef OBSERVABLE_H
 #define OBSERVABLE_H
 
-#include <tulip/TulipException.h>
-#include <tulip/vectorgraph.h>
-#include <atomic>
-#include <set>
+#include <vector>
+
+#include <tulip/tulipconf.h>
+#include <tulip/Iterator.h>
+#include <tulip/Node.h>
 
 namespace tlp {
-
+class VectorGraph;
 class Observable;
 //=======================================
 /**
@@ -66,21 +67,6 @@ private:
   Event() {}
   tlp::node _sender;
   EventType _type;
-};
-//=======================================
-/**
- * @ingroup Observation
- * @class ObservableException
- * @brief ObservableException is the base class of all exceptions sent by the
- *Observable/Listener/Observer system.
- *
- * @see Listener
- * @see Observer
- * @see Observable
- **/
-class TLP_SCOPE ObservableException : public tlp::TulipException {
-public:
-  ObservableException(const std::string &desc) : tlp::TulipException(desc) {}
 };
 
 /**
@@ -218,6 +204,16 @@ public:
   void addObserver(Observable *const observer) const;
 
   /**
+   * @brief Adds an Observer to this object.
+   *
+   * The observer will receive events sent by this object, if there is no hold applied.
+   * @param observer The object that will receive events.
+   */
+  void addObserver(Observable &observer) const {
+    addObserver(&observer);
+  }
+
+  /**
    * @brief Adds a Listener to this object.
    *
    * The Listener will receive events regardless of the state of holdObservers() and
@@ -227,12 +223,33 @@ public:
   void addListener(Observable *const listener) const;
 
   /**
+   * @brief Adds a Listener to this object.
+   *
+   * The Listener will receive events regardless of the state of holdObservers() and
+   * unholdObservers().
+   * @param listener The object that will receive events.
+   */
+  inline void addListener(Observable &listener) const {
+    addListener(&listener);
+  }
+
+  /**
    * @brief Removes an observer from this object.
    *
    * The observer will no longer receive events from this object.
    * @param observer The observer to remove from this object.
    */
-  void removeObserver(Observable *const observerver) const;
+  void removeObserver(Observable *const observer) const;
+
+  /**
+   * @brief Removes an observer from this object.
+   *
+   * The observer will no longer receive events from this object.
+   * @param observer The observer to remove from this object.
+   */
+  inline void removeObserver(Observable &observer) const {
+    removeObserver(&observer);
+  }
 
   /**
    * @brief Removes a listener from this object.
@@ -241,6 +258,16 @@ public:
    * @param listener The listener to remove from this object.
    */
   void removeListener(Observable *const listener) const;
+
+  /**
+   * @brief Removes a listener from this object.
+   *
+   * The listener will no longer receive events from this object.
+   * @param listener The listener to remove from this object.
+   */
+  inline void removeListener(Observable &listener) const {
+    removeListener(&listener);
+  }
 
   /**
    * @brief gets the number of sent events.
@@ -471,58 +498,9 @@ private:
 
   // static members and methods
   /**
-   * @brief _oGraph the graph used to store all observers and connection between them.
-   */
-  static tlp::VectorGraph _oGraph;
-
-  /**
-   * @brief _oPointer a pointer to the object represented by a node
-   */
-  static tlp::NodeProperty<Observable *> _oPointer;
-
-  /**
-   * @brief _oAlive whether an object has been deleted or not
-   */
-  static tlp::NodeProperty<bool> _oAlive;
-
-  /**
-   * @brief _oEventsToTreat the count of events scheduled to be treated by an object
-   * the object's associated node is deleted only when this count is null
-   * in order to prevent the node reuse and ensure the _oAlive associated value
-   */
-  static tlp::NodeProperty<unsigned int> _oEventsToTreat;
-
-  /**
-   * @brief _oType the type of relation between two Observable Objects
-   */
-  static tlp::EdgeProperty<unsigned char> _oType;
-
-  /**
-   * @brief _oDelayedDelNode store deleted nodes, to remove them at the end of the notify
-   */
-  static std::vector<tlp::node> _oDelayedDelNode;
-
-  static std::set<std::pair<tlp::node, tlp::node>> _oDelayedEvents;
-
-  /**
-   * @brief _oNotifying counter of nested notify calls
-   */
-  static unsigned int _oNotifying;
-
-  /**
-   * @brief _oUnholding counter of nested unhold calls
-   */
-  static unsigned int _oUnholding;
-
-  /**
    * @brief _oHoldCounter counter of nested holds
    */
   static unsigned int _oHoldCounter;
-
-  /**
-   * @brief _oInitialized used to initialize oGraph when the library is loaded (nice hack)
-   */
-  static bool _oInitialized;
 
   /**
    * @brief _oDisabled used to disable the events notification
@@ -544,28 +522,22 @@ private:
   bool isBound() const {
     return _n.isValid();
   }
-
-  /**
-   * @brief Trick to init the ObservableGraph properties (called at the loading of the library,
-   * during static initialization).
-   */
-  static bool init();
 };
 
 /**
- * @brief The ObserverHolder class is a convenience class to automatically hold and unhold
- * observers.
- * It performs a call to Observable::holdObserver() at its creation and a call to
- * Observable::unholdObserver() at its destruction.
+ * @ingroup Observation
+ * @brief The ObserverHolder class is a convenience class to automatically hold and unhold observers.
+ * It performs a call to Observable::holdObservers() at its creation and a call to
+ * Observable::unholdObservers() at its destruction.
  * You can use it if you have to hold observers in a function with multiple return points to avoid
- * to call Observable::unholdObserver() for each of them.
+ * to call Observable::unholdObservers() for each of them.
  * @code
  * void myFunc(){
- *  ObserverHolder holder;//Automatically call Observable::holdObserver()
+ *  ObserverHolder holder;//Automatically call Observable::holdObservers()
  *
  *  if(someTest()){
  *      someOperation1();
- *      return;//No need to call Observable::unholdObserver() it will be called with the destruction
+ *      return;//No need to call Observable::unholdObservers() it will be called with the destruction
  * of the locker object
  *  }
  *

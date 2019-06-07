@@ -17,6 +17,7 @@
  *
  */
 
+#include <algorithm>
 #include <climits>
 #include "NodeNeighborhoodView.h"
 
