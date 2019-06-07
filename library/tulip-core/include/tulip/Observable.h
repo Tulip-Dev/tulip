@@ -526,8 +526,8 @@ private:
 
 /**
  * @ingroup Observation
- * @brief The ObserverHolder class is a convenience class to automatically hold and unhold observers.
- * It performs a call to Observable::holdObservers() at its creation and a call to
+ * @brief The ObserverHolder class is a convenience class to automatically hold and unhold
+ * observers. It performs a call to Observable::holdObservers() at its creation and a call to
  * Observable::unholdObservers() at its destruction.
  * You can use it if you have to hold observers in a function with multiple return points to avoid
  * to call Observable::unholdObservers() for each of them.
@@ -537,8 +537,8 @@ private:
  *
  *  if(someTest()){
  *      someOperation1();
- *      return;//No need to call Observable::unholdObservers() it will be called with the destruction
- * of the locker object
+ *      return;//No need to call Observable::unholdObservers() it will be called with the
+ * destruction of the locker object
  *  }
  *
  * }

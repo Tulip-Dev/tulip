@@ -238,8 +238,8 @@ TLP_SCOPE bool selectShortestPaths(const Graph *const graph, node src, node tgt,
  * and INV_DIRECTED use reverse directed graph (ie. all edges are reversed)
  */
 TLP_SCOPE void markReachableNodes(const Graph *graph, const node startNode,
-                                  std::unordered_map<node, bool> &reachables, unsigned int maxDistance,
-                                  EDGE_TYPE direction = UNDIRECTED);
+                                  std::unordered_map<node, bool> &reachables,
+                                  unsigned int maxDistance, EDGE_TYPE direction = UNDIRECTED);
 
 TLP_SCOPE void computeDijkstra(const Graph *const graph, node src,
                                const EdgeStaticProperty<double> &weights,

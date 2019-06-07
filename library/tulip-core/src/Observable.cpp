@@ -55,11 +55,11 @@ static tlp::NodeProperty<unsigned int> _oEventsToTreat;
 //_oType the type of relation between two Observable Objects
 static tlp::EdgeProperty<unsigned char> _oType;
 //=================================
-class ObservationGraph :public VectorGraph {
+class ObservationGraph : public VectorGraph {
 public:
   static ObservationGraph _oGraph;
   static bool _oGraphDestroyed;
-  
+
   ObservationGraph() {
     _oGraph.alloc(_oPointer);
     _oGraph.alloc(_oAlive);
@@ -74,7 +74,6 @@ public:
     _oGraph.free(_oEventsToTreat);
     _oGraph.free(_oType);
   }
-  
 };
 // _oGraph the graph used to store all observers and connection between them.
 ObservationGraph ObservationGraph::_oGraph;
@@ -99,12 +98,14 @@ public:
 //----------------------------------
 Iterator<node> *Observable::getInObjects() const {
   assert(_n.isValid());
-  return filterIterator(ObservationGraph::_oGraph.getInNodes(_n), [&](node n) { return _oAlive[n]; });
+  return filterIterator(ObservationGraph::_oGraph.getInNodes(_n),
+                        [&](node n) { return _oAlive[n]; });
 }
 //----------------------------------
 Iterator<node> *Observable::getOutObjects() const {
   assert(_n.isValid());
-  return filterIterator(ObservationGraph::_oGraph.getOutNodes(_n), [&](node n) { return _oAlive[n]; });
+  return filterIterator(ObservationGraph::_oGraph.getOutNodes(_n),
+                        [&](node n) { return _oAlive[n]; });
 }
 //----------------------------------
 node Observable::getNode() const {
@@ -367,7 +368,7 @@ void Observable::addOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) con
       // add new link
       // at this time both Observables need to be bound
       link = ObservationGraph::_oGraph.addEdge(const_cast<Observable &>(obs).getBoundNode(),
-                             const_cast<Observable *>(this)->getBoundNode());
+                                               const_cast<Observable *>(this)->getBoundNode());
       _oType[link] = type;
     } else {
 #ifndef NDEBUG
@@ -418,7 +419,8 @@ void Observable::sendEvent(const Event &message) {
     return;
 
   // cerr << "send event " << _oPointer[_n] << " " << message.type() << " indeg " <<
-  // ObservationGraph::_oGraph.indeg(_n) << " outdeg: " << ObservationGraph::_oGraph.outdeg(_n) << endl;
+  // ObservationGraph::_oGraph.indeg(_n) << " outdeg: " << ObservationGraph::_oGraph.outdeg(_n) <<
+  // endl;
   if (!ObservationGraph::_oGraph.isElement(_n) || !_oAlive[_n]) {
     throw ObservableException("Notify called on a deleted Observable");
   }

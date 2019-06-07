@@ -39,7 +39,6 @@
 #include <tulip/GraphParallelTools.h>
 #include <tulip/Dijkstra.h>
 
-
 using namespace std;
 
 namespace tlp {
@@ -92,8 +91,8 @@ EdgesIteratorFn getEdgesIterator(EDGE_TYPE direction) {
 }
 
 //======================================================================
-void makeProperDag(Graph *graph, list<node> &addedNodes, std::unordered_map<edge, edge> &replacedEdges,
-                   IntegerProperty *edgeLength) {
+void makeProperDag(Graph *graph, list<node> &addedNodes,
+                   std::unordered_map<edge, edge> &replacedEdges, IntegerProperty *edgeLength) {
   if (TreeTest::isTree(graph))
     return;
 
@@ -806,8 +805,9 @@ bool selectShortestPaths(const Graph *const graph, node src, node tgt, ShortestP
   return dijkstra.searchPaths(tgt, result);
 }
 
-void markReachableNodes(const Graph *graph, const node startNode, std::unordered_map<node, bool> &result,
-                        unsigned int maxDistance, EDGE_TYPE direction) {
+void markReachableNodes(const Graph *graph, const node startNode,
+                        std::unordered_map<node, bool> &result, unsigned int maxDistance,
+                        EDGE_TYPE direction) {
   deque<node> fifo;
   MutableContainer<bool> visited;
   MutableContainer<unsigned int> distance;
