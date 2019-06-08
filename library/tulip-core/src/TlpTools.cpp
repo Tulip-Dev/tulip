@@ -17,6 +17,7 @@
  *
  */
 
+#include <algorithm>
 #include <cstring>
 #include <ctime>
 #include <string>
