@@ -49,6 +49,10 @@ private slots:
   void upButtonColorClicked();
   void downButtonColorClicked();
   void scrollBarValueChanged(int value);
+  void interpolateCheckBoxChange(int state);
+
+private:
+  std::vector<Color> lastNonInterpolateValues;
 };
 } // namespace tlp
 

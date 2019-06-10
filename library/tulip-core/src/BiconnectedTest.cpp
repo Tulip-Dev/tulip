@@ -30,7 +30,7 @@ using namespace std;
 using namespace tlp;
 
 //=================================================================
-static ConnectedTestListener *instance = new ConnectedTestListener();
+static ConnectedTestListener instance;
 //=================================================================
 // structure below is used to implement dfs loop
 struct dfsBiconnectStruct {
@@ -182,17 +182,17 @@ bool BiconnectedTest::isBiconnected(const tlp::Graph *graph) {
     return true;
   }
 
-  auto it = instance->resultsBuffer.find(graph);
-  if (it != instance->resultsBuffer.end())
+  auto it = instance.resultsBuffer.find(graph);
+  if (it != instance.resultsBuffer.end())
     return it->second;
 
   graph->addListener(instance);
-  return instance->resultsBuffer[graph] = biconnectedTest(graph);
+  return instance.resultsBuffer[graph] = biconnectedTest(graph);
 }
 //=================================================================
 void BiconnectedTest::makeBiconnected(Graph *graph, vector<edge> &addedEdges) {
   graph->removeListener(instance);
-  instance->resultsBuffer.erase(graph);
+  instance.resultsBuffer.erase(graph);
   ConnectedTest::makeConnected(graph, addedEdges);
   makeBiconnectedDFS(graph, addedEdges);
   assert(BiconnectedTest::isBiconnected(graph));

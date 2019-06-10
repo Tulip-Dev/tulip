@@ -28,8 +28,8 @@ using namespace std;
 using namespace tlp;
 
 //=================================================================
-class TreeTestListener :public Observable {
- public:
+class TreeTestListener : public Observable {
+public:
   // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
   void treatEvent(const Event &) override;
 
@@ -67,7 +67,7 @@ void TreeTestListener::treatEvent(const Event &evt) {
   }
 }
 //=================================================================
-static TreeTestListener *instance = new TreeTestListener();
+static TreeTestListener instance;
 //====================================================================
 static bool treeTest(const Graph *graph) {
   if (graph->numberOfEdges() != graph->numberOfNodes() - 1)
@@ -91,21 +91,20 @@ static bool treeTest(const Graph *graph) {
 }
 //====================================================================
 bool TreeTest::isTree(const tlp::Graph *graph) {
-  auto it = instance->resultsBuffer.find(graph);
-  if (it != instance->resultsBuffer.end())
+  auto it = instance.resultsBuffer.find(graph);
+  if (it != instance.resultsBuffer.end())
     return it->second;
 
   graph->addListener(instance);
-  return instance->resultsBuffer[graph] = treeTest(graph);
+  return instance.resultsBuffer[graph] = treeTest(graph);
 }
 //====================================================================
 // Determines if a graph is a topological tree.  This means that
 // if the graph was undirected, there would be no cycle
 bool TreeTest::isFreeTree(const tlp::Graph *graph) {
   node firstNode = graph->getOneNode();
-  return (firstNode.isValid() && isFreeTree(graph, firstNode))
-             ? ConnectedTest::isConnected(graph)
-             : false;
+  return (firstNode.isValid() && isFreeTree(graph, firstNode)) ? ConnectedTest::isConnected(graph)
+                                                               : false;
 }
 //====================================================================
 // simple structure to implement
@@ -232,7 +231,7 @@ static void makeRootedTree(Graph *graph, node curRoot, vector<edge> *reversedEdg
 // the node root.
 void TreeTest::makeRootedTree(Graph *graph, node root) {
   graph->removeListener(instance);
-  instance->resultsBuffer.erase(graph);
+  instance.resultsBuffer.erase(graph);
 
   if (!graph->isElement(root)) {
     tlp::warning() << "makeRootedTree:  Passed root is not an element of the graph" << endl;

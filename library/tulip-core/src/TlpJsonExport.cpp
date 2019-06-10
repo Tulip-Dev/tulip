@@ -21,6 +21,7 @@
 #include <time.h>
 #endif
 
+#include <algorithm>
 #include <sstream>
 
 #include <tulip/ExportModule.h>

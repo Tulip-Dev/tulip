@@ -21,6 +21,7 @@
 #ifndef EDGEEXTREMITYGLYPH_H_
 #define EDGEEXTREMITYGLYPH_H_
 
+#include <tulip/Edge.h>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Matrix.h>

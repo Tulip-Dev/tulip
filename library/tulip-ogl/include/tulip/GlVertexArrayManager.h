@@ -28,6 +28,7 @@
 #include <tulip/Observable.h>
 #include <tulip/GlSceneVisitor.h>
 
+#include <map>
 #include <vector>
 
 namespace tlp {

@@ -27,9 +27,9 @@
 #include <tulip/Observable.h>
 
 namespace tlp {
-  
-class ConnectedTestListener :public Observable {
- public:
+
+class ConnectedTestListener : public Observable {
+public:
   // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
   void treatEvent(const Event &) override;
 
@@ -39,8 +39,7 @@ class ConnectedTestListener :public Observable {
   std::unordered_map<const Graph *, bool> resultsBuffer;
 };
 
-}
+} // namespace tlp
 #endif
 
 ///@endcond
-

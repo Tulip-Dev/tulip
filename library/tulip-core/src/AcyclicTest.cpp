@@ -25,8 +25,8 @@ using namespace std;
 using namespace tlp;
 
 //**********************************************************************
-class TestAcyclicListener :public Observable {
- public:
+class TestAcyclicListener : public Observable {
+public:
   // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
   void treatEvent(const Event &) override;
 
@@ -75,15 +75,15 @@ void TestAcyclicListener::treatEvent(const Event &evt) {
   }
 }
 //**********************************************************************
-static TestAcyclicListener *instance = new TestAcyclicListener();
+static TestAcyclicListener instance;
 //**********************************************************************
 bool AcyclicTest::isAcyclic(const Graph *graph) {
-  if (instance->resultsBuffer.find(graph) == instance->resultsBuffer.end()) {
-    instance->resultsBuffer[graph] = acyclicTest(graph);
+  if (instance.resultsBuffer.find(graph) == instance.resultsBuffer.end()) {
+    instance.resultsBuffer[graph] = acyclicTest(graph);
     graph->addListener(instance);
   }
 
-  return instance->resultsBuffer[graph];
+  return instance.resultsBuffer[graph];
 }
 //**********************************************************************
 void AcyclicTest::makeAcyclic(Graph *graph, vector<edge> &reversed,

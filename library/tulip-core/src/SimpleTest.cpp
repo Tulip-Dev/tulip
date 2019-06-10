@@ -26,8 +26,8 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-class SimpleTestListener :public Observable {
- public:
+class SimpleTestListener : public Observable {
+public:
   // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
   void treatEvent(const Event &) override;
 
@@ -36,11 +36,10 @@ class SimpleTestListener :public Observable {
    **/
   std::unordered_map<const Graph *, bool> resultsBuffer;
 
-  inline void deleteResult(Graph* graph) {
+  inline void deleteResult(Graph *graph) {
     resultsBuffer.erase(graph);
     graph->removeListener(this);
   }
-
 };
 
 //=================================================================
@@ -81,15 +80,15 @@ void SimpleTestListener::treatEvent(const Event &evt) {
   }
 }
 //=================================================================
-static SimpleTestListener *undirInstance = new SimpleTestListener();
-static SimpleTestListener *dirInstance = new SimpleTestListener();
+static SimpleTestListener undirInstance;
+static SimpleTestListener dirInstance;
 //=================================================================
 bool SimpleTest::isSimple(const tlp::Graph *graph, const bool directed) {
   SimpleTestListener *instance = nullptr;
   if (directed) {
-    instance = dirInstance;
+    instance = &dirInstance;
   } else {
-    instance = undirInstance;
+    instance = &undirInstance;
   }
 
   auto it = instance->resultsBuffer.find(graph);
@@ -97,8 +96,7 @@ bool SimpleTest::isSimple(const tlp::Graph *graph, const bool directed) {
     return it->second;
 
   graph->addListener(instance);
-  return instance->resultsBuffer[graph] =
-    simpleTest(graph, nullptr, nullptr, directed);
+  return instance->resultsBuffer[graph] = simpleTest(graph, nullptr, nullptr, directed);
 }
 //**********************************************************************
 void SimpleTest::makeSimple(Graph *graph, vector<edge> &removed, const bool directed) {

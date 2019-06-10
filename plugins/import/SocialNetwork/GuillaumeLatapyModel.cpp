@@ -17,6 +17,7 @@
  *
  */
 
+#include <algorithm>
 #include <cmath>
 #include <tulip/ImportModule.h>
 #include <tulip/TlpTools.h>

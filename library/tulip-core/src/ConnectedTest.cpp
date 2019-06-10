@@ -26,7 +26,7 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-static ConnectedTestListener *instance = new ConnectedTestListener();
+static ConnectedTestListener instance;
 //=================================================================
 static unsigned int connectedTest(const Graph *const graph, node n,
                                   NodeStaticProperty<bool> &visited) {
@@ -68,8 +68,8 @@ static bool connectedTest(const Graph *const graph) {
 #endif
 //=================================================================
 bool ConnectedTest::isConnected(const tlp::Graph *const graph) {
-  if (instance->resultsBuffer.find(graph) != instance->resultsBuffer.end())
-    return instance->resultsBuffer[graph];
+  if (instance.resultsBuffer.find(graph) != instance.resultsBuffer.end())
+    return instance.resultsBuffer[graph];
 
   if (graph->isEmpty())
     return true;
@@ -79,12 +79,12 @@ bool ConnectedTest::isConnected(const tlp::Graph *const graph) {
   unsigned int count = connectedTest(graph, graph->getOneNode(), visited);
   bool result = (count == graph->numberOfNodes());
   graph->addListener(instance);
-  return instance->resultsBuffer[graph] = result;
+  return instance.resultsBuffer[graph] = result;
 }
 //=================================================================
 void ConnectedTest::makeConnected(Graph *graph, vector<edge> &addedEdges) {
   graph->removeListener(instance);
-  instance->resultsBuffer.erase(graph);
+  instance.resultsBuffer.erase(graph);
   vector<node> toLink;
   connect(graph, toLink);
 
@@ -108,7 +108,7 @@ unsigned int ConnectedTest::numberOfConnectedComponents(const tlp::Graph *const 
   else
     result = 1u;
 
-  instance->resultsBuffer[graph] = (result == 1u);
+  instance.resultsBuffer[graph] = (result == 1u);
   graph->addListener(instance);
   return result;
 }
@@ -172,8 +172,8 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
 }
 //=================================================================
 void ConnectedTest::connect(const tlp::Graph *const graph, vector<node> &toLink) {
-  auto it = instance->resultsBuffer.find(graph);
-  if (it != instance->resultsBuffer.end()) {
+  auto it = instance.resultsBuffer.find(graph);
+  if (it != instance.resultsBuffer.end()) {
     if (it->second)
       return;
   }

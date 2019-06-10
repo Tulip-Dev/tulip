@@ -17,14 +17,15 @@
  *
  */
 
+#include <iostream>
+#include <algorithm>
+
 #include <tulip/Delaunay.h>
 #include <tulip/Matrix.h>
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/BoundingBox.h>
 #include <tulip/DrawingTools.h>
-
-#include <iostream>
 
 #ifdef __GNUC__
 #pragma GCC diagnostic push
