@@ -358,7 +358,7 @@ jobs:
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
         # run Tulip unit tests
-        - ninja runTests
+        # ninja runTests
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip core build on Mac OS (Homebrew)
@@ -394,7 +394,7 @@ jobs:
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
         # run Tulip unit tests
-        - ninja runTests
+        # ninja runTests
 
   #==============================================================================================================================================================
     # Tulip complete build stage on Mac OS
@@ -548,7 +548,7 @@ jobs:
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
         # run Tulip unit tests
-        - ninja runTests
+        # ninja runTests
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip complete build on Mac OS (Homebrew)
@@ -597,4 +597,4 @@ jobs:
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
         # run Tulip unit tests
-        - ninja runTests
+        # ninja runTests
