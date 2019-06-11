@@ -325,11 +325,47 @@ jobs:
         - ninja runTests
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # legacy Tulip core build on Mac OS (Homebrew)
+    -
+      os: osx
+      # use xcode8.3 travis image to get the Homebrew older supported env
+      osx_image: xcode8.3
+      compiler: clang
+      cache: ccache
+      addons:
+        homebrew:
+          # install Tulip core build dependencies
+          packages:
+            - ccache
+            - cmake
+            - ninja
+            - llvm
+            - qhull
+            - yajl
+            - cppunit
+            - pkg-config
+          update: true
+
+      env:
+        # use system Python 2.7
+        - PYTHON_EXECUTABLE=/usr/bin/python2.7
+      script:
+        # create build directory
+        - mkdir build && cd build
+        # configure Tulip core build using cmake
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        # compile Tulip using ninja for faster builds
+        - ninja -j4 || travis_terminate 1
+        - ninja -j4 install || travis_terminate 1
+        # run Tulip unit tests
+        - ninja runTests
+
+    #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip core build on Mac OS (Homebrew)
     -
       os: osx
-      # use xcode9.2 travis image to get a recent clang compiler
-      osx_image: xcode9.2
+      # use xcode10.2 travis image to get a recent clang compiler
+      osx_image: xcode10.2
       compiler: clang
       cache: ccache
       addons:
@@ -466,11 +502,60 @@ jobs:
         - ninja bundle
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # legacy Tulip complete build on Mac OS (Homebrew)
+    -
+      os: osx
+      # use xcode8.3 travis image to get the Homebrew older supported env
+      osx_image: xcode8.3
+      compiler: clang
+      cache: ccache
+      addons:
+        homebrew:
+          # install Tulip complete build dependencies
+          packages:
+            - ccache
+            - cmake
+            - ninja
+            - llvm
+            - qhull
+            - yajl
+            - cppunit
+            - pkg-config
+            - glew
+            - freetype
+            - jpeg
+            - libpng
+            - qt5
+            - quazip
+          update: true
+
+      install:
+        # set columns in terminal, required for curl to work correctly:
+        - export COLUMNS=80
+        - curl -O https://bootstrap.pypa.io/get-pip.py
+        - sudo python get-pip.py
+        - pip install --user sphinx==1.7.9
+      env:
+        # use system Python 2.7
+        - PYTHON_EXECUTABLE=/usr/bin/python2.7
+
+      script:
+        # create build directory
+        - mkdir build && cd build
+        # configure Tulip build using cmake
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DCMAKE_PREFIX_PATH=/usr/local/opt/qt -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DSPHINX_EXECUTABLE=$HOME/Library/Python/2.7/bin/sphinx-build -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        # compile Tulip using ninja for faster builds
+        - ninja -j4 || travis_terminate 1
+        - ninja -j4 install || travis_terminate 1
+        # run Tulip unit tests
+        - ninja runTests
+
+    #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip complete build on Mac OS (Homebrew)
     -
       os: osx
-      # use xcode9.2 travis image to get a recent qt5 package
-      osx_image: xcode9.2
+      # use xcode10.2 travis image to get a recent qt5 package
+      osx_image: xcode10.2
       compiler: clang
       cache: ccache
       addons:
