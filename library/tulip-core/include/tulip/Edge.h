@@ -99,7 +99,7 @@ struct edge {
 #include <vector>
 #include <tulip/tulipconf.h>
 // needed by MSVC to avoid multiple definitions
-struct TLP_SCOPE __tlp_vector_edge :public std::vector<tlp::edge> {};
+struct TLP_SCOPE __tlp_vector_edge : public std::vector<tlp::edge> {};
 #endif
 
 ///@cond DOXYGEN_HIDDEN

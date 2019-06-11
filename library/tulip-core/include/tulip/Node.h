@@ -99,7 +99,7 @@ struct node {
 #include <vector>
 #include <tulip/tulipconf.h>
 // needed by MSVC to avoid multiple definitions
-struct TLP_SCOPE __tlp_vector_node :public std::vector<tlp::node> {};
+struct TLP_SCOPE __tlp_vector_node : public std::vector<tlp::node> {};
 #endif
 
 ///@cond DOXYGEN_HIDDEN
