@@ -387,7 +387,7 @@ jobs:
         - PYTHON_EXECUTABLE=/usr/bin/python2.7
       script:
         # install missing headers
-	- sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
+        - sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
@@ -592,7 +592,7 @@ jobs:
 
       script:
         # install missing headers
-	- sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
+        - sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
         # create build directory
         - mkdir build && cd build
         # configure Tulip build using cmake
