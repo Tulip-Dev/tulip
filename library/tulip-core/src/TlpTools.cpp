@@ -108,21 +108,20 @@ char *getTulipLibDir(char *buf) {
 #else
   libTulipName = "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".so";
 #endif
-  void *ptr;
-  Dl_info info;
-
-  ptr = dlopen(libTulipName.c_str(), RTLD_LAZY);
+  void *ptr = dlopen(libTulipName.c_str(), RTLD_LAZY);
 
   if (ptr != nullptr) {
     void *symbol = dlsym(ptr, "getTulipLibDir");
 
     if (symbol != nullptr) {
+      Dl_info info;
       if (dladdr(symbol, &info)) {
         std::string tmp = info.dli_fname;
         tulipLibDir = tmp.substr(0, tmp.rfind('/') + 1);
         tulipLibDir.append("../").append(TULIP_INSTALL_LIBDIR_STR);
       }
     }
+    dlclose(ptr);
   }
 
 #endif
