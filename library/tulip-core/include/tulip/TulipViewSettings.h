@@ -154,38 +154,6 @@ public:
 
   int defaultFontSize() const;
   void setDefaultFontSize(int fontSize);
-
-private:
-  TulipViewSettings();
-
-  static TulipViewSettings *_instance;
-
-  Color _defaultNodeColor;
-  Color _defaultEdgeColor;
-  Color _defaultNodeBorderColor;
-  Color _defaultEdgeBorderColor;
-  Color _defaultLabelColor;
-  Color _defaultLabelBorderColor;
-
-  float _defaultNodeBorderWidth;
-  float _defaultEdgeBorderWidth;
-  float _defaultLabelBorderWidth;
-
-  int _defaultLabelPosition;
-
-  Size _defaultNodeSize;
-  Size _defaultEdgeSize;
-
-  int _defaultNodeShape;
-  int _defaultEdgeShape;
-  int _defaultEdgeExtremitySrcShape;
-  int _defaultEdgeExtremityTgtShape;
-
-  Size _defaultEdgeExtremitySrcSize;
-  Size _defaultEdgeExtremityTgtSize;
-
-  std::string _defaultFontFile;
-  int _defaultFontSize;
 };
 
 class TLP_SCOPE ViewSettingsEvent : public tlp::Event {
