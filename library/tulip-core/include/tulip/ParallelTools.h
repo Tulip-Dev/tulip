@@ -26,7 +26,6 @@
 #include <vector>
 
 #ifndef TLP_NO_THREADS
-#include <mutex>
 
 #ifdef _OPENMP
 // _OPENMP is supposed to be defined as an integer
@@ -51,6 +50,7 @@ typedef size_t OMP_ITER_TYPE;
 // OPENMP no available use c++11 threads
 #include <iostream>
 #include <algorithm>
+#include <mutex>
 #include <thread>
 
 #endif
@@ -181,6 +181,17 @@ public:
 
 #define TLP_NB_THREADS tlp::ThreadManager::getNumberOfThreads()
 
+#if defined(_OPENMP) && !defined(BREW_CLANG)
+
+#define TLP_LOCK_SECTION(mtx) OMP_CRITICAL_SECTION(mtx)
+#define TLP_UNLOCK_SECTION(mtx)
+#define TLP_DECLARE_GLOBAL_LOCK(mtx) extern void mtx()
+#define TLP_DEFINE_GLOBAL_LOCK(mtx) extern void mtx()
+#define TLP_GLOBALLY_LOCK_SECTION(mtx) OMP_CRITICAL_SECTION(mtx)
+#define TLP_GLOBALLY_UNLOCK_SECTION(mtx)
+
+#else
+
 #define TLP_LOCK_SECTION(mtx)                                                                      \
   static std::mutex mtx;                                                                           \
   mtx.lock();
@@ -189,6 +200,8 @@ public:
 #define TLP_DEFINE_GLOBAL_LOCK(mtx) std::mutex mtx
 #define TLP_GLOBALLY_LOCK_SECTION(mtx) mtx.lock();
 #define TLP_GLOBALLY_UNLOCK_SECTION(mtx) mtx.unlock()
+
+#endif
 
 #else
 
