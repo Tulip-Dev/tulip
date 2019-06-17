@@ -40,7 +40,7 @@ static int _defaultEdgeExtremitySrcShape(EdgeExtremityShape::None);
 static int _defaultEdgeExtremityTgtShape(EdgeExtremityShape::Arrow);
 static Size _defaultEdgeExtremitySrcSize(Size(1, 1, 0));
 static Size _defaultEdgeExtremityTgtSize(Size(1, 1, 0));
-static std::string _defaultFontFile(tlp::TulipBitmapDir + "font.ttf");
+static std::string _defaultFontFile;
 static int _defaultFontSize(18);
 
 TulipViewSettings &TulipViewSettings::instance() {
@@ -218,6 +218,10 @@ void TulipViewSettings::setDefaultEdgeExtremityTgtSize(const Size &size) {
 }
 
 std::string TulipViewSettings::defaultFontFile() const {
+  // _defaultFontFile initialization must be delayed
+  // until TulipBitmapDir is set
+  if (_defaultFontFile.empty())
+    _defaultFontFile = tlp::TulipBitmapDir + "font.ttf";
   return _defaultFontFile;
 }
 
