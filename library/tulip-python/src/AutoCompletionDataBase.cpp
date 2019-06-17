@@ -1145,7 +1145,7 @@ static QSet<QString> getAlgorithmPluginsListOfType(const QString &type, const QS
   list<string> pluginNames = PluginLister::availablePlugins();
 
   for (list<string>::iterator it = pluginNames.begin(); it != pluginNames.end(); ++it) {
-    Plugin *plugin = PluginLister::instance()->getPluginObject(*it);
+    Plugin *plugin = PluginLister::getPluginObject(*it);
 
     if (plugin->category() != GLYPH_CATEGORY && plugin->category() != EEGLYPH_CATEGORY &&
         plugin->category() != INTERACTOR_CATEGORY && plugin->category() != VIEW_CATEGORY &&

@@ -90,10 +90,10 @@ static bool tulipCanOpenFile(const QString &path) {
     return true;
   }
 
-  std::list<std::string> imports = PluginLister::instance()->availablePlugins<ImportModule>();
+  std::list<std::string> imports = PluginLister::availablePlugins<ImportModule>();
 
   for (auto &import : imports) {
-    ImportModule *m = PluginLister::instance()->getPluginObject<ImportModule>(import);
+    ImportModule *m = PluginLister::getPluginObject<ImportModule>(import);
     std::list<std::string> fileExtensions(m->allFileExtensions());
 
     for (auto &ext : fileExtensions) {
@@ -1038,13 +1038,13 @@ bool GraphPerspective::saveAs(const QString &path) {
 
 void GraphPerspective::open(QString fileName) {
   QMap<std::string, std::string> modules;
-  std::list<std::string> imports = PluginLister::instance()->availablePlugins<ImportModule>();
+  std::list<std::string> imports = PluginLister::availablePlugins<ImportModule>();
 
   std::string filters("Tulip project (*.tlpx);;");
   std::string filterAny("Any supported format (");
 
   for (auto &import : imports) {
-    ImportModule *m = PluginLister::instance()->getPluginObject<ImportModule>(import);
+    ImportModule *m = PluginLister::getPluginObject<ImportModule>(import);
     std::list<std::string> fileExtension(m->allFileExtensions());
 
     std::string currentFilter;
@@ -1553,7 +1553,7 @@ void GraphPerspective::showStartPanels(Graph *g) {
   View *firstPanel = nullptr;
 
   for (auto panelName : {"Spreadsheet view", "Node Link Diagram view"}) {
-    View *view = PluginLister::instance()->getPluginObject<View>(panelName);
+    View *view = PluginLister::getPluginObject<View>(panelName);
 
     if (firstPanel == nullptr) {
       firstPanel = view;

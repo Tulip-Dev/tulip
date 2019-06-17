@@ -35,7 +35,7 @@ PerspectiveItemWidget::PerspectiveItemWidget(const QString &perspectiveName, QWi
   _ui->setupUi(this);
   _ui->name->setText(_perspectiveName);
   const tlp::Plugin &info =
-      PluginLister::instance()->pluginInformation(QStringToTlpString(_perspectiveName));
+      PluginLister::pluginInformation(QStringToTlpString(_perspectiveName));
   _ui->description->setText(info.info().c_str());
 
   QPixmap px(info.icon().c_str());

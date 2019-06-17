@@ -148,12 +148,12 @@ void usage(const QString &error) {
       << endl
       << "Available perspectives:" << endl;
   tlp::initTulipSoftware();
-  list<string> perspectives = PluginLister::instance()->availablePlugins<Perspective>();
+  list<string> perspectives = PluginLister::availablePlugins<Perspective>();
 
   for (auto &name : perspectives) {
     cout << " - " << name << endl;
     string usage_str("");
-    auto p = PluginLister::instance()->getPluginObject<Perspective>(name);
+    auto p = PluginLister::getPluginObject<Perspective>(name);
 #if TULIP_INT_MM_VERSION > 503
 #error "The check tulipRelease() != 5.3.0 in non longer needed"
 #endif
@@ -324,7 +324,7 @@ int main(int argc, char **argv) {
   context->mainWindow = mainWindow;
 
   // Create perspective object
-  Perspective *perspective = PluginLister::instance()->getPluginObject<Perspective>(
+  Perspective *perspective = PluginLister::getPluginObject<Perspective>(
       tlp::QStringToTlpString(perspectiveName), context);
 
   if (perspective == nullptr) {

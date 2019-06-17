@@ -60,7 +60,7 @@ void PluginsTest::testloadPlugin() {
   PluginLibraryLoader::loadPluginLibrary("./testPlugin." + suffix, &loader);
   // plugin should exist now
   CPPUNIT_ASSERT(tlp::PluginLister::pluginExists("Test"));
-  const list<Dependency> &deps = tlp::PluginLister::instance()->getPluginDependencies("Test");
+  const list<Dependency> &deps = tlp::PluginLister::getPluginDependencies("Test");
   // only one dependency (see testPlugin.cpp)
   CPPUNIT_ASSERT_EQUAL(size_t(1), deps.size());
   CPPUNIT_ASSERT_EQUAL(string("Test"), deps.front().pluginName);
@@ -136,12 +136,12 @@ void PluginsTest::availablePlugins() {
 void PluginsTest::pluginInformation() {
   CPPUNIT_ASSERT_MESSAGE("'Test' plugin must be loaded", PluginLister::pluginExists("Test"));
 
-  std::list<Dependency> dependencies = PluginLister::instance()->getPluginDependencies("Test");
+  std::list<Dependency> dependencies = PluginLister::getPluginDependencies("Test");
   CPPUNIT_ASSERT_EQUAL(size_t(1), dependencies.size());
   CPPUNIT_ASSERT_EQUAL(string("Test"), dependencies.begin()->pluginName);
   CPPUNIT_ASSERT_EQUAL(string("1.0"), dependencies.begin()->pluginRelease);
 
-  tlp::ParameterDescriptionList parameters = PluginLister::instance()->getPluginParameters("Test");
+  tlp::ParameterDescriptionList parameters = PluginLister::getPluginParameters("Test");
 
   Iterator<ParameterDescription> *it = parameters.getParameters();
   CPPUNIT_ASSERT_MESSAGE("Test plugin has no parameters", it->hasNext());
@@ -158,7 +158,7 @@ void PluginsTest::pluginInformation() {
 #endif
   delete it;
 
-  const Plugin &factory(PluginLister::instance()->pluginInformation("Test"));
+  const Plugin &factory(PluginLister::pluginInformation("Test"));
   CPPUNIT_ASSERT_EQUAL(string("Jezequel"), factory.author());
   CPPUNIT_ASSERT_EQUAL(string("03/11/2004"), factory.date());
   CPPUNIT_ASSERT_EQUAL(string(""), factory.group());

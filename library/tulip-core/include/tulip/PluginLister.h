@@ -70,9 +70,6 @@ private:
     Plugin *info;
 
     PluginDescription() : factory(nullptr), info(nullptr) {}
-    ~PluginDescription() {
-      delete info;
-    }
   };
 
 public:
@@ -113,7 +110,7 @@ public:
    * @return true if a matching plugin is currently loaded into Tulip.
    */
   template <typename PluginType>
-  bool pluginExists(const std::string &pluginName) {
+  static bool pluginExists(const std::string &pluginName) {
     auto it = _plugins.find(pluginName);
     return (it != _plugins.end() && (dynamic_cast<const PluginType *>(it->second.info) != nullptr));
   }
@@ -130,7 +127,7 @@ public:
    * required type, this method returns nullptr
    */
   template <typename PluginType>
-  PluginType *getPluginObject(const std::string &name, tlp::PluginContext *context = nullptr) {
+  static PluginType *getPluginObject(const std::string &name, tlp::PluginContext *context = nullptr) {
     auto it = _plugins.find(name);
     if (it != _plugins.end() && (dynamic_cast<const PluginType *>(it->second.info) != nullptr)) {
       std::string pluginName = it->second.info->name();
@@ -150,7 +147,7 @@ public:
   static std::list<std::string> availablePlugins();
 
   template <typename PluginType>
-  std::list<std::string> availablePlugins() {
+  static std::list<std::string> availablePlugins() {
     std::list<std::string> keys;
 
     for (auto it = _plugins.begin(); it != _plugins.end(); ++it) {
@@ -226,16 +223,17 @@ public:
 
   ///@cond DOXYGEN_HIDDEN
 protected:
-  void sendPluginAddedEvent(const std::string &pluginName);
-  void sendPluginRemovedEvent(const std::string &pluginName);
-
-  static PluginLister *_instance;
-
   /**
-   * @brief Stores the factory, dependencies, and parameters of all the plugins that register into
-   *this factory.
+   * @brief Stores the factory, dependencies, and parameters of all the plugins that register into this map.
    **/
-  std::map<std::string, PluginDescription> _plugins;
+  // We use a reference to allow to get an initialized
+  // plugins map to register plugins in the same translation unit;
+  // that is while loading the shared lib containing the Plugins class
+  static std::map<std::string, PluginDescription> &_plugins;
+
+  // used to initialize the plugins map as soon as a plugin is registered
+  // and at least when the _plugins is dynamically initialized
+   static std::map<std::string, PluginDescription> &getPluginsMap();
 
   /**
    * @brief Gets the release number of the given plug-in.

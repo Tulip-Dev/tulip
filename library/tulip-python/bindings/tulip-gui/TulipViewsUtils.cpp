@@ -37,7 +37,7 @@ ViewMainWindow::ViewMainWindow() : QMainWindow() {
 
 std::vector<std::string> TulipViewsManager::getTulipViews() {
   std::vector<std::string> ret;
-  std::list<std::string> views = PluginLister::instance()->availablePlugins<View>();
+  std::list<std::string> views = PluginLister::availablePlugins<View>();
 
   for (std::list<std::string>::iterator it = views.begin(); it != views.end(); ++it) {
     if (*it != "Python Script view") {
@@ -89,7 +89,7 @@ std::vector<tlp::View *> TulipViewsManager::getOpenedViewsWithName(const std::st
 tlp::View *TulipViewsManager::addView(const std::string &viewName, tlp::Graph *graph,
                                       const DataSet &dataSet, bool show) {
   tlp::Workspace *workspace = tlpWorkspace();
-  tlp::View *view = PluginLister::instance()->getPluginObject<View>(viewName);
+  tlp::View *view = PluginLister::getPluginObject<View>(viewName);
   view->setupUi();
   view->setGraph(graph);
   view->setState(dataSet);

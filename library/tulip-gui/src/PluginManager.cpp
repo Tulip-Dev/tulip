@@ -168,11 +168,11 @@ PluginManager::PluginInformationList PluginManager::listPlugins(PluginLocations 
   QMap<QString, PluginInformation> nameToInfo;
 
   if (locations.testFlag(Local)) {
-    std::list<std::string> localResults = PluginLister::instance()->availablePlugins();
+    std::list<std::string> localResults = PluginLister::availablePlugins();
 
     for (std::list<std::string>::iterator it = localResults.begin(); it != localResults.end();
          ++it) {
-      const Plugin &info = PluginLister::instance()->pluginInformation(*it);
+      const Plugin &info = PluginLister::pluginInformation(*it);
 
       if (QString(info.category().c_str()).contains(categoryFilter) &&
           QString(info.name().c_str()).contains(nameFilter, Qt::CaseInsensitive)) {
@@ -252,7 +252,7 @@ void PluginInformation::fillLocalInfo(const Plugin &info) {
   installedVersion.libraryLocation =
       tlp::tlpStringToQString(PluginLister::getPluginLibrary(info.name()));
   std::list<tlp::Dependency> dependencies =
-      PluginLister::instance()->getPluginDependencies(info.name());
+      PluginLister::getPluginDependencies(info.name());
 
   for (std::list<tlp::Dependency>::iterator it = dependencies.begin(); it != dependencies.end();
        ++it) {

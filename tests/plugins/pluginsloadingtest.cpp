@@ -74,10 +74,10 @@ int main(int argc, char **argv) {
   tlp::PluginLibraryLoader::loadPluginsFromDir(tulipPluginsDir, &pLoader);
 
   // create an instance of each of them, then destroy it
-  std::list<std::string> pluginNames = tlp::PluginLister::instance()->availablePlugins();
+  std::list<std::string> pluginNames = tlp::PluginLister::availablePlugins();
   std::list<std::string>::const_iterator it = pluginNames.begin();
   for (; it != pluginNames.end(); ++it) {
-    tlp::Plugin *plugin = tlp::PluginLister::instance()->getPluginObject(*it);
+    tlp::Plugin *plugin = tlp::PluginLister::getPluginObject(*it);
     delete plugin;
   }
 
