@@ -51,6 +51,9 @@
 #include <tulip/PluginLoader.h>
 #include <tulip/PropertyTypes.h>
 #include <tulip/TulipRelease.h>
+#if defined(_OPENMP) && defined(__APPLE__)
+#include <tulip/ParallelTools.h>
+#endif
 
 using namespace std;
 using namespace tlp;
@@ -238,6 +241,13 @@ void tlp::initTulipLib(const char *appDirPath) {
     pos = TulipLibDir.rfind("/", pos - 1);
     curDir = TulipLibDir.substr(0, pos + 1) + "share/tulip/";
   }
+#endif
+
+#if defined(_OPENMP) && defined(__APPLE__)
+  // Register an exit handler to prevent using OpenMP locks
+  // when application shutdowns as some crashes have been observed
+  // on some MacOS runtimes (10.12 for instance)
+  OpenMPLock::registerExitHandler();
 #endif
 
   // check that TulipShareDir exists
