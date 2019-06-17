@@ -167,8 +167,7 @@ void AlgorithmRunner::refreshTreeUi(QWidget *w) {
     }
   }
 
-  std::list<std::string> installedPlugins =
-      PluginLister::availablePlugins<tlp::Algorithm>();
+  std::list<std::string> installedPlugins = PluginLister::availablePlugins<tlp::Algorithm>();
 
   for (const auto &name : installedPlugins) {
     if (!visibleItems.contains(name.c_str())) {

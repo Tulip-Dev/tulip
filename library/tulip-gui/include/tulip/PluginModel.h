@@ -99,8 +99,7 @@ class PluginModel : public tlp::TulipModel {
         qSort(pluginTree[cat][group].begin(), pluginTree[cat][group].end(), QStringCaseCmp);
 
         for (const QString &alg : pluginTree[cat][group]) {
-          const Plugin &plugin =
-              PluginLister::pluginInformation(tlp::QStringToTlpString(alg));
+          const Plugin &plugin = PluginLister::pluginInformation(tlp::QStringToTlpString(alg));
           std::string info = plugin.info();
 
           // set info only if they contain more than one word

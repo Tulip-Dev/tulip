@@ -50,8 +50,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent)
       _storeResultAsLocal(true) {
   _ui->setupUi(this);
   connect(_ui->favoriteCheck, SIGNAL(toggled(bool)), this, SIGNAL(favorized(bool)));
-  const Plugin &plugin =
-      PluginLister::pluginInformation(QStringToTlpString(pluginName));
+  const Plugin &plugin = PluginLister::pluginInformation(QStringToTlpString(pluginName));
   // split pluginName after the second word if needed
   QStringList words = pluginName.split(' ');
 

@@ -26,13 +26,13 @@ using namespace std;
 
 PluginLoader *PluginLister::currentLoader = nullptr;
 
-struct PluginListerInstance :public PluginLister {
+struct PluginListerInstance : public PluginLister {
   // there is only one instance of this class
   // It is first used by PluginLister::registerPlugin
   // at the tulip-core library loading time while
   // it is only 'zero' initialized
   bool created;
-  PluginListerInstance() :created(true) {}
+  PluginListerInstance() : created(true) {}
   inline void sendPluginAddedEvent(const std::string &pluginName) {
     if (created)
       sendEvent(PluginEvent(PluginEvent::TLP_ADD_PLUGIN, pluginName));
@@ -123,7 +123,8 @@ std::map<std::string, PluginLister::PluginDescription> &PluginLister::getPlugins
 }
 
 // the _plugins map
-std::map<std::string, PluginLister::PluginDescription> &PluginLister::_plugins = PluginLister::getPluginsMap();
+std::map<std::string, PluginLister::PluginDescription> &PluginLister::_plugins =
+    PluginLister::getPluginsMap();
 
 void PluginLister::registerPlugin(FactoryInterface *objectFactory) {
   // because the tulip-core library contains some import/export plugins
@@ -150,11 +151,11 @@ void PluginLister::registerPlugin(FactoryInterface *objectFactory) {
     std::string oldName = information->deprecatedName();
     if (!oldName.empty()) {
       if (!pluginExists(oldName))
-	plugins[oldName] = plugins[pluginName];
+        plugins[oldName] = plugins[pluginName];
       else if (currentLoader != nullptr) {
-	std::string tmpStr;
-	tmpStr += "'" + oldName + "' cannot be a deprecated name of plugin '" + pluginName + "'";
-	currentLoader->aborted(tmpStr, "multiple definitions found; check your plugin librairies.");
+        std::string tmpStr;
+        tmpStr += "'" + oldName + "' cannot be a deprecated name of plugin '" + pluginName + "'";
+        currentLoader->aborted(tmpStr, "multiple definitions found; check your plugin librairies.");
       }
     }
   } else {
@@ -188,8 +189,7 @@ tlp::Plugin *PluginLister::getPluginObject(const std::string &name, PluginContex
   return nullptr;
 }
 
-const tlp::ParameterDescriptionList &
-PluginLister::getPluginParameters(const std::string &name) {
+const tlp::ParameterDescriptionList &PluginLister::getPluginParameters(const std::string &name) {
   return pluginInformation(name).getParameters();
 }
 
@@ -197,8 +197,7 @@ std::string PluginLister::getPluginRelease(const std::string &name) {
   return pluginInformation(name).release();
 }
 
-const std::list<tlp::Dependency> &
-PluginLister::getPluginDependencies(const std::string &name) {
+const std::list<tlp::Dependency> &PluginLister::getPluginDependencies(const std::string &name) {
   return pluginInformation(name).dependencies();
 }
 

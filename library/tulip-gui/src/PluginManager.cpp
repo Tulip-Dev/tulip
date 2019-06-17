@@ -251,8 +251,7 @@ void PluginInformation::fillLocalInfo(const Plugin &info) {
   installedVersion.author = tlp::tlpStringToQString(info.author());
   installedVersion.libraryLocation =
       tlp::tlpStringToQString(PluginLister::getPluginLibrary(info.name()));
-  std::list<tlp::Dependency> dependencies =
-      PluginLister::getPluginDependencies(info.name());
+  std::list<tlp::Dependency> dependencies = PluginLister::getPluginDependencies(info.name());
 
   for (std::list<tlp::Dependency>::iterator it = dependencies.begin(); it != dependencies.end();
        ++it) {

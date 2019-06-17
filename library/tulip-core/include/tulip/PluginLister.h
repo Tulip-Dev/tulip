@@ -127,7 +127,8 @@ public:
    * required type, this method returns nullptr
    */
   template <typename PluginType>
-  static PluginType *getPluginObject(const std::string &name, tlp::PluginContext *context = nullptr) {
+  static PluginType *getPluginObject(const std::string &name,
+                                     tlp::PluginContext *context = nullptr) {
     auto it = _plugins.find(name);
     if (it != _plugins.end() && (dynamic_cast<const PluginType *>(it->second.info) != nullptr)) {
       std::string pluginName = it->second.info->name();
@@ -224,7 +225,8 @@ public:
   ///@cond DOXYGEN_HIDDEN
 protected:
   /**
-   * @brief Stores the factory, dependencies, and parameters of all the plugins that register into this map.
+   * @brief Stores the factory, dependencies, and parameters of all the plugins that register into
+   *this map.
    **/
   // We use a reference to allow to get an initialized
   // plugins map to register plugins in the same translation unit;
@@ -233,7 +235,7 @@ protected:
 
   // used to initialize the plugins map as soon as a plugin is registered
   // and at least when the _plugins is dynamically initialized
-   static std::map<std::string, PluginDescription> &getPluginsMap();
+  static std::map<std::string, PluginDescription> &getPluginsMap();
 
   /**
    * @brief Gets the release number of the given plug-in.

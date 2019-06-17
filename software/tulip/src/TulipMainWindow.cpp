@@ -287,8 +287,7 @@ void TulipMainWindow::openProject(const QString &file) {
         perspectiveName = dlg.perspectiveName();
       }
     } else {
-      std::string stdName =
-          *(PluginLister::availablePlugins<tlp::Perspective>().begin());
+      std::string stdName = *(PluginLister::availablePlugins<tlp::Perspective>().begin());
       perspectiveName = stdName.c_str();
     }
 

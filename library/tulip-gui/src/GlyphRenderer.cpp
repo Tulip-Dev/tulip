@@ -118,8 +118,7 @@ QPixmap EdgeExtremityGlyphRenderer::render(int glyphId) {
       renderingParamerters.setViewArrow(true);
       renderer->getScene()->getGlGraphComposite()->setRenderingParameters(renderingParamerters);
       // init previews
-      for (std::string glyphName :
-           PluginLister::availablePlugins<EdgeExtremityGlyph>()) {
+      for (std::string glyphName : PluginLister::availablePlugins<EdgeExtremityGlyph>()) {
         const tlp::Plugin &info = PluginLister::pluginInformation(glyphName);
         int glId = info.id();
         // Create the glyph preview

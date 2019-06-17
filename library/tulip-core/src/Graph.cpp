@@ -312,8 +312,7 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *p
   list<string> exportPlugins = PluginLister::availablePlugins<ExportModule>();
 
   for (const string &pluginName : exportPlugins) {
-    ExportModule *exportPlugin =
-        PluginLister::getPluginObject<ExportModule>(pluginName);
+    ExportModule *exportPlugin = PluginLister::getPluginObject<ExportModule>(pluginName);
     string ext(exportPlugin->fileExtension());
 
     if (filename.rfind(ext) != string::npos &&
@@ -397,8 +396,7 @@ Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgr
     tmpProgress = progress;
 
   AlgorithmContext *tmp = new AlgorithmContext(graph, &dataSet, tmpProgress);
-  ImportModule *newImportModule =
-      PluginLister::getPluginObject<ImportModule>(format, tmp);
+  ImportModule *newImportModule = PluginLister::getPluginObject<ImportModule>(format, tmp);
   assert(newImportModule != nullptr);
 
   // ensure that the parsing of float or double does not depend on locale
@@ -449,8 +447,7 @@ bool tlp::exportGraph(Graph *graph, std::ostream &outputStream, const std::strin
     tmpProgress = progress;
 
   AlgorithmContext *context = new AlgorithmContext(graph, &dataSet, tmpProgress);
-  ExportModule *newExportModule =
-      PluginLister::getPluginObject<ExportModule>(format, context);
+  ExportModule *newExportModule = PluginLister::getPluginObject<ExportModule>(format, context);
   assert(newExportModule != nullptr);
   std::string filename;
 
@@ -774,8 +771,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm, PropertyIn
 
   tlp::Observable::holdObservers();
   circularCalls[algorithm] = prop;
-  Algorithm *tmpAlgo =
-      tlp::PluginLister::getPluginObject<PropertyAlgorithm>(algorithm, &context);
+  Algorithm *tmpAlgo = tlp::PluginLister::getPluginObject<PropertyAlgorithm>(algorithm, &context);
 
   if (tmpAlgo != nullptr) {
     result = tmpAlgo->check(errorMessage);
