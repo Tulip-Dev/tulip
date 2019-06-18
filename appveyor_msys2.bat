@@ -51,7 +51,10 @@ bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-quazip"
 bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-qtwebkit"
 rem Workaround a MSYS2 packaging issue for Qt5
 rem (see https://github.com/msys2/MINGW-packages/issues/5253)
-bash -lc "sed -i -e 's/C:\/building\/msys32/C:\/msys64/g' C:/msys64/mingw64/lib/cmake/Qt5Gui/Qt5GuiConfigExtras.cmake"
+rem Qt 5.12.3
+bash -lc "sed -i -e 's/C:\/building\/msys32/C:\/msys64/g' C:/msys64/mingw64/lib/cmake/Qt5Gui/Qt5GuiConfigExtras.cmake || true"
+rem Qt 5.12.4
+bash -lc "sed -i -e 's/C:\/building\/msys64/C:\/msys64/g' C:/msys64/mingw64/lib/cmake/Qt5Gui/Qt5GuiConfigExtras.cmake || true"
 set TULIP_BUILD_DOC=ON
 goto tulip_build
 
