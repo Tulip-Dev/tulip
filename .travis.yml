@@ -270,14 +270,13 @@ jobs:
         - sudo port -N install pkgconfig
         - sudo port -N install cppunit
       env:
-        # use system Python 2.7
-        - PYTHON_EXECUTABLE=/usr/bin/python2.7
+        - ENV="MacOS 10.11, AppleClang, MacPorts"
 
       script:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
@@ -302,7 +301,7 @@ jobs:
         - export PATH=/opt/local/bin:$PATH
         # install Tulip core build dependencies
         - sudo port -N install cmake
-        - sudo port -N install clang-7.0
+        - sudo port -N install clang-8.0
         - sudo port -N install ccache
         - sudo port -N install ninja
         - sudo port -N install qhull
@@ -310,14 +309,13 @@ jobs:
         - sudo port -N install pkgconfig
         - sudo port -N install cppunit
       env:
-        # use system Python 2.7
-        - PYTHON_EXECUTABLE=/usr/bin/python2.7
+        - ENV="MacOS 10.14, LLVM Clang, MacPorts"
 
       script:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/opt/local/bin/clang-mp-7.0 -DCMAKE_CXX_COMPILER=/opt/local/bin/clang++-mp-7.0 -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/opt/local/bin/clang-mp-8.0 -DCMAKE_CXX_COMPILER=/opt/local/bin/clang++-mp-8.0 -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
@@ -347,13 +345,12 @@ jobs:
           update: true
 
       env:
-        # use system Python 2.7
-        - PYTHON_EXECUTABLE=/usr/bin/python2.7
+        - ENV="MacOS 10.12, LLVM Clang, Homebrew"
       script:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
@@ -383,15 +380,14 @@ jobs:
           update: true
 
       env:
-        # use system Python 2.7
-        - PYTHON_EXECUTABLE=/usr/bin/python2.7
+        - ENV="MacOS 10.14, LLVM Clang, Homebrew"
       script:
         # install missing headers
         - sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
@@ -435,13 +431,12 @@ jobs:
         - sudo pip install sphinx==1.7.9
 
       env:
-        # use system Python 2.7
-        - PYTHON_EXECUTABLE=/usr/bin/python2.7
+        - ENV="MacOS 10.11, AppleClang, MacPorts"
       script:
         # create build directory
         - mkdir build && cd build
         # configure Tulip complete build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DPNG_INCLUDE_DIR=/opt/local/include -DPNG_LIBRARY_RELEASE=/opt/local/lib/libpng.dylib -DJPEG_INCLUDE_DIR=/opt/local/include -DJPEG_LIBRARY=/opt/local/lib/libjpeg.dylib || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DPNG_INCLUDE_DIR=/opt/local/include -DPNG_LIBRARY_RELEASE=/opt/local/lib/libpng.dylib -DJPEG_INCLUDE_DIR=/opt/local/include -DJPEG_LIBRARY=/opt/local/lib/libjpeg.dylib || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
@@ -468,7 +463,7 @@ jobs:
         - export PATH=/opt/local/bin:$PATH
         # install Tulip complete build dependencies
         - sudo port -N install cmake
-        - sudo port -N install clang-7.0
+        - sudo port -N install clang-8.0
         - sudo port -N install ccache
         - sudo port -N install ninja
         - sudo port -N install qt5-qtbase
@@ -487,14 +482,13 @@ jobs:
         - sudo python get-pip.py
         - sudo pip install sphinx==1.7.9 --ignore-installed six
       env:
-        # use system Python 2.7
-        - PYTHON_EXECUTABLE=/usr/bin/python2.7
+        - ENV="MacOS 10.14, LLVM Clang, MacPorts"
 
       script:
         # create build directory
         - mkdir build && cd build
         # configure Tulip complete build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/opt/local/bin/clang-mp-7.0 -DCMAKE_CXX_COMPILER=/opt/local/bin/clang++-mp-7.0 -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DPNG_INCLUDE_DIR=/opt/local/include -DPNG_LIBRARY_RELEASE=/opt/local/lib/libpng.dylib -DJPEG_INCLUDE_DIR=/opt/local/include -DJPEG_LIBRARY=/opt/local/lib/libjpeg.dylib
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/opt/local/bin/clang-mp-8.0 -DCMAKE_CXX_COMPILER=/opt/local/bin/clang++-mp-8.0 -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DPNG_INCLUDE_DIR=/opt/local/include -DPNG_LIBRARY_RELEASE=/opt/local/lib/libpng.dylib -DJPEG_INCLUDE_DIR=/opt/local/include -DJPEG_LIBRARY=/opt/local/lib/libjpeg.dylib
         # compile Tulip using ninja for faster builds
         - ninja -j4
         - ninja -j4 install
@@ -538,19 +532,18 @@ jobs:
         - sudo python get-pip.py
         - pip install --user sphinx==1.7.9
       env:
-        # use system Python 2.7
-        - PYTHON_EXECUTABLE=/usr/bin/python2.7
+        - ENV="MacOS 10.12, LLVM Clang, Homebrew"
 
       script:
         # create build directory
         - mkdir build && cd build
         # configure Tulip build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DCMAKE_PREFIX_PATH=/usr/local/opt/qt -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DSPHINX_EXECUTABLE=$HOME/Library/Python/2.7/bin/sphinx-build -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DCMAKE_PREFIX_PATH=/usr/local/opt/qt -DSPHINX_EXECUTABLE=$HOME/Library/Python/2.7/bin/sphinx-build -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
         # run Tulip unit tests
-        # ninja runTests
+        - ninja runTests
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip complete build on Mac OS (Homebrew)
@@ -587,8 +580,7 @@ jobs:
         - sudo python get-pip.py
         - pip install --user sphinx==1.7.9
       env:
-        # use system Python 2.7
-        - PYTHON_EXECUTABLE=/usr/bin/python2.7
+        - ENV="MacOS 10.14, LLVM Clang, Homebrew"
 
       script:
         # install missing headers
@@ -596,7 +588,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DCMAKE_PREFIX_PATH=/usr/local/opt/qt -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DSPHINX_EXECUTABLE=$HOME/Library/Python/2.7/bin/sphinx-build -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DCMAKE_PREFIX_PATH=/usr/local/opt/qt -DSPHINX_EXECUTABLE=$HOME/Library/Python/2.7/bin/sphinx-build -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
