@@ -24,9 +24,19 @@ bash -lc "pacman --noconfirm --sync --refresh --sysupgrade"
 rem Install required tools
 bash -lc "pacman --noconfirm -S --needed base-devel unzip"
 
+rem Remove Ada and ObjC compilers as they are now dropped by MSYS2
+rem and cause conflicts for installing GCC 9
+rem (see https://github.com/msys2/MINGW-packages/issues/5434)
+bash -lc "pacman --noconfirm -R mingw-w64-%MSYS2_ARCH%-gcc-ada"
+bash -lc "pacman --noconfirm -R mingw-w64-%MSYS2_ARCH%-gcc-objc"
+rem These two packages must also be removed as they are outdated
+rem and break GCC 9 install on AppVeyor environment
+bash -lc "pacman --noconfirm -Rdd mingw-w64-%MSYS2_ARCH%-ncurses"
+bash -lc "pacman --noconfirm -Rdd mingw-w64-%MSYS2_ARCH%-termcap"
+
 rem Always install latest GCC toolchain in order to detect possible build failures
 rem when its version evolves
-bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-toolchain"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-toolchain"
 
 rem Install the relevant native dependencies
 bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-ccache"
