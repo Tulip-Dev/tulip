@@ -21,6 +21,7 @@
 #define Tulip_GLMAINVIEW_H
 
 #include <tulip/ViewWidget.h>
+#include <tulip/GlMainWidget.h>
 
 class QGraphicsProxyWidget;
 class QAction;
@@ -31,7 +32,6 @@ namespace tlp {
 class GlOverviewGraphicsItem;
 class SceneConfigWidget;
 class SceneLayersConfigWidget;
-class GlMainWidget;
 class QuickAccessBar;
 class ViewActionsManager;
 
@@ -105,6 +105,85 @@ public:
 
   void setState(const tlp::DataSet &) override;
   tlp::DataSet state() const override;
+
+  /** @brief Pick a node or an edge at a view position
+   *  First take a look at a node located at (x,y); if none is found, take a look at an edge
+   *  @param x the x coordinate of the position
+   *  @param y the y coordinate of the position
+   *  @param n on return holds the node found under the (x,y) position, n.isValid() return false if none has been found
+   *  @param e on return holds the edge found under the (x,y) position, e.isValid() return false if none has been found
+   *  @param pickNode enable or disable the node picking
+   *  @param pickEdge enable or disable the edge picking
+   *  @return true if something has been found, false otherwise
+   */
+  bool pickNodeEdge(const int x, const int y, tlp::node &n, tlp::edge &e, bool pickNode = true, bool pickEdge = true);
+
+  /**
+   * @brief Rotate the view camera by (x,y,z)
+   * @param x rotation around the X axis in degree
+   * @param y rotation around the Y axis in degree
+   * @param z rotation around Z axis in degree
+   */
+  inline void rotateCamera(int x, int y, int z) {
+    getGlMainWidget()->getScene()->rotateCamera(x, y, z);
+  }
+
+  /**
+   * @brief Translate the view camera by (x,y,z)
+   * @param x offset along the X axis
+   * @param y offset along the Y axis
+   * @param z offset along the Z axis
+   */
+  inline void translateCamera(int x, int y, int z) {
+    getGlMainWidget()->getScene()->translateCamera(x, y, z);
+  }
+
+  /**
+   * @brief Return the 3D world position for the given view position
+   */
+  inline Coord viewToWorld(const Coord &vpos) const {
+    return getGlMainWidget()->getScene()->getGraphCamera().viewportTo3DWorld(vpos);
+  }
+
+  /**
+   * @brief Return the view position for the given 3D position
+   */
+  inline Coord worldToView(const Coord &wpos) const {
+   return getGlMainWidget()->getScene()->getGraphCamera().worldTo2DViewport(wpos);
+  }
+
+  /**
+   * @brief Zoom by step to the given (x,y) view position
+   * @param step of zoom
+   */
+  inline void zoomXY(int step, const int x, const int y) {
+    getGlMainWidget()->getScene()->zoomXY(step, x, y);
+  }
+
+  /**
+   * @brief Zoom by step
+   * @param step of zoom
+   */
+  inline void zoom(int step) {
+    getGlMainWidget()->getScene()->zoom(step);
+  }
+
+  /**
+   * @brief Zoom by factor
+   * @param factor of zoom
+   */
+  inline void zoomFactor(float factor) {
+    getGlMainWidget()->getScene()->zoomFactor(factor);
+  }
+
+  /**
+   * @brief Do a zoom and pan animation
+   * @param boundingBox the bounding box in scene coordinates on which the view
+   * has to be zoomed and panned. If it is not valid, the scene bounding box will be used.
+   * At the end of the animation, the view will be zoomed and centered on the content of that bounding box.
+   * @param duration the animation duration in msecs
+   */
+  void zoomAndPanAnimation(const tlp::BoundingBox &boundingBox, const double duration = 1000.);
 
 public slots:
   /**
