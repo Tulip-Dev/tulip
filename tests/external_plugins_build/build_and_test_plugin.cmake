@@ -86,7 +86,7 @@ IF(NOT MSVC)
   # Adjust Tulip install prefix in tulip-config file copied
   # in temporary Tulip installation directory
   FILE(READ ${TULIP_INSTALL_DIR}/bin/tulip-config TULIP_CONFIG)
-  STRING(REPLACE "${CMAKE_INSTALL_PREFIX}" "${TULIP_INSTALL_DIR}" TULIP_CONFIG "${TULIP_CONFIG}")
+  STRING(REPLACE "prefix=${CMAKE_INSTALL_PREFIX}" "prefix=${TULIP_INSTALL_DIR}" TULIP_CONFIG "${TULIP_CONFIG}")
   FILE(WRITE ${TULIP_INSTALL_DIR}/bin/tulip-config "${TULIP_CONFIG}")
 
   IF("${CMD_RESULT}" STREQUAL "0")
