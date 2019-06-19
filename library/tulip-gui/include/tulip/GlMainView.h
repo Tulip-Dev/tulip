@@ -110,13 +110,16 @@ public:
    *  First take a look at a node located at (x,y); if none is found, take a look at an edge
    *  @param x the x coordinate of the position
    *  @param y the y coordinate of the position
-   *  @param n on return holds the node found under the (x,y) position, n.isValid() return false if none has been found
-   *  @param e on return holds the edge found under the (x,y) position, e.isValid() return false if none has been found
+   *  @param n on return holds the node found under the (x,y) position, n.isValid() return false if
+   * none has been found
+   *  @param e on return holds the edge found under the (x,y) position, e.isValid() return false if
+   * none has been found
    *  @param pickNode enable or disable the node picking
    *  @param pickEdge enable or disable the edge picking
    *  @return true if something has been found, false otherwise
    */
-  bool pickNodeEdge(const int x, const int y, tlp::node &n, tlp::edge &e, bool pickNode = true, bool pickEdge = true);
+  bool pickNodeEdge(const int x, const int y, tlp::node &n, tlp::edge &e, bool pickNode = true,
+                    bool pickEdge = true);
 
   /**
    * @brief Rotate the view camera by (x,y,z)
@@ -149,7 +152,7 @@ public:
    * @brief Return the view position for the given 3D position
    */
   inline Coord worldToView(const Coord &wpos) const {
-   return getGlMainWidget()->getScene()->getGraphCamera().worldTo2DViewport(wpos);
+    return getGlMainWidget()->getScene()->getGraphCamera().worldTo2DViewport(wpos);
   }
 
   /**
@@ -180,7 +183,8 @@ public:
    * @brief Do a zoom and pan animation
    * @param boundingBox the bounding box in scene coordinates on which the view
    * has to be zoomed and panned. If it is not valid, the scene bounding box will be used.
-   * At the end of the animation, the view will be zoomed and centered on the content of that bounding box.
+   * At the end of the animation, the view will be zoomed and centered on the content of that
+   * bounding box.
    * @param duration the animation duration in msecs
    */
   void zoomAndPanAnimation(const tlp::BoundingBox &boundingBox, const double duration = 1000.);
