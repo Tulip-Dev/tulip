@@ -27,7 +27,44 @@
 #else
 
 #ifdef _OPENMP
+
 #include <omp.h>
+
+#ifdef __APPLE__
+
+#include <cstdlib>
+
+bool tlp::OpenMPLock::_canUseLock = true;
+tlp::OpenMPLock::OpenMPLock() : _lock(nullptr) {
+  if (_canUseLock) {
+    _lock = new omp_lock_t;
+    omp_init_lock(_lock);
+  }
+}
+tlp::OpenMPLock::~OpenMPLock() {
+  if (_canUseLock) {
+    omp_destroy_lock(_lock);
+  }
+  delete _lock;
+}
+void tlp::OpenMPLock::lock() {
+  if (_canUseLock) {
+    omp_set_lock(_lock);
+  }
+}
+void tlp::OpenMPLock::unlock() {
+  if (_canUseLock) {
+    omp_unset_lock(_lock);
+  }
+}
+void tlp::OpenMPLock::exitHandler() {
+  _canUseLock = false;
+}
+void tlp::OpenMPLock::registerExitHandler() {
+  atexit(tlp::OpenMPLock::exitHandler);
+}
+
+#endif // __APPLE__
 
 struct OpenMPDefaultOptions {
   OpenMPDefaultOptions() {
