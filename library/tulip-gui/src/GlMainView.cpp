@@ -364,7 +364,8 @@ QPixmap GlMainView::snapshot(const QSize &outputSize) const {
 
 QImage GlMainView::getRGBImage() const {
   QSize currentSize = _glMainWidget->size();
-  return _glMainWidget->createPicture(currentSize.width(), currentSize.height(), false, QImage::Format_RGB888);
+  return _glMainWidget->createPicture(currentSize.width(), currentSize.height(), false,
+                                      QImage::Format_RGB888);
 }
 
 void GlMainView::undoCallback() {

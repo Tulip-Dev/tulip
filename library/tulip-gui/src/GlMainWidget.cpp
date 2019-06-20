@@ -511,8 +511,7 @@ void GlMainWidget::createPicture(const std::string &pictureName, int width, int 
 }
 
 //=====================================================
-QImage GlMainWidget::createPicture(int width, int height, bool center,
-				   QImage::Format format) {
+QImage GlMainWidget::createPicture(int width, int height, bool center, QImage::Format format) {
 
   QImage resultImage;
 

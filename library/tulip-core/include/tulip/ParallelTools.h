@@ -195,20 +195,21 @@ public:
 // gives more detail about the issue
 
 class OpenMPLock {
-  public:
-    OpenMPLock();
-    ~OpenMPLock();
-    void lock();
-    void unlock();
-    static void exitHandler();
-    static void registerExitHandler();
-  private:
-    omp_lock_t *_lock;
-    static bool _canUseLock;
+public:
+  OpenMPLock();
+  ~OpenMPLock();
+  void lock();
+  void unlock();
+  static void exitHandler();
+  static void registerExitHandler();
+
+private:
+  omp_lock_t *_lock;
+  static bool _canUseLock;
 };
 
-#define TLP_LOCK_SECTION(mtx) \
-  static tlp::OpenMPLock mtx; \
+#define TLP_LOCK_SECTION(mtx)                                                                      \
+  static tlp::OpenMPLock mtx;                                                                      \
   mtx.lock();
 #define TLP_UNLOCK_SECTION(mtx) mtx.unlock();
 #define TLP_DECLARE_GLOBAL_LOCK(mtx) extern tlp::OpenMPLock mtx
@@ -229,8 +230,8 @@ class OpenMPLock {
 
 #else
 
-#define TLP_LOCK_SECTION(mtx) \
-  static std::mutex mtx; \
+#define TLP_LOCK_SECTION(mtx)                                                                      \
+  static std::mutex mtx;                                                                           \
   mtx.lock();
 #define TLP_UNLOCK_SECTION(mtx) mtx.unlock()
 #define TLP_DECLARE_GLOBAL_LOCK(mtx) extern std::mutex mtx
