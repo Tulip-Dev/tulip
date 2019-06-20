@@ -106,25 +106,20 @@ Perspective projection is used when orthogonal one is disabled.
 
 // =======================================================
 
-  bool pickNodeEdge(int x, int y, tlp::node &n, tlp::edge &e, bool pickNode = true, bool pickEdge = true);
+  bool pickNodeEdge(int x, int y, tlp::node &n /Out/, tlp::edge &e /Out/, bool pickNode = true, bool pickEdge = true)/TypeHint="Tuple[bool, node, edge]"/ ;
 %Docstring
-tlpgui.GlMainView.pickNodeEdge(x, y, node, edge, pickNode, pickEdge)
- Returns True if a node/edge is found at the (x,y) position in the view
- The node/edge found is returned in the node or edge parameter.
+tlpgui.GlMainView.pickNodeEdge(x, y, pickNode, pickEdge)
+ Returns a tuple of 3 elements. The first one is a bool indicating if a node/edge has been found found at the (x,y) position in the view, the second element is the node found, the third the edge found.
 
 :param x: the x coordinate
 :type x: integer
 :param y: the y coordinate
 :type y: integer
-:param node: on return holds the node found under the (x,y) position, node.isValid() return False if none has been found
-:type node: :class:`tlp.node`
-:param edge: on return holds the edge found under the (x,y) position, edge.isValid() return False if none has been found
-:type edge: :class:`tlp.edge`
 :param pickNode: enable/disable the node picking
 :type pickNode: boolean
 :param pickEdge: enable/disable the edge picking
 :type pickNode: boolean
-:rtype: boolean
+:rtype: (boolean, node, edge)
 %End
 
 // =======================================================
@@ -232,33 +227,18 @@ tlpgui.GlMainView.zoomAndPanAnimation(bb, duration)
 
 // =======================================================
 
-  PyObject *getRGBImage();
+  PyObject *getRGBImage(int &width /Out/, int &height /Out/);
 %Docstring
-tlpgui.GlMainView.getRGBImage(w, h)
-  return the RGB image of the viewport scene as a bytes object.
-:rtype: :class: `bytes`
+tlpgui.GlMainView.getRGBImage()
+  return a tuple of 3 elements. The first element is the image in RGB format (3 bytes per pixel) as a bytearray object; the second is the width of the image and the third is its height.
+:rtype: (:class: `bytearray`, int ,int)
 %End
 
 %MethodCode
-   auto vp = sipCpp->getGlMainWidget()->getScene()->getViewport();
-   auto img = sipCpp->getGlMainWidget()->getScene()->getImage();
-   sipRes = PyByteArray_FromStringAndSize((const char *) img, 3 * vp[2] * vp[3]);
-   free(img);
-%End
-
-// =======================================================
-
-  std::vector<int> getViewportSize();
-%Docstring
-tlpgui.GlMainView.getViewportSize(w, h)
-  return the width and height of the viewport scene.
-:rtype: list of 2 integers
-%End
-
-%MethodCode
-   auto vp = sipCpp->getGlMainWidget()->getScene()->getViewport();
-   sipRes = new std::vector<int>(2);
-   (*sipRes)[0] = vp[2], (*sipRes)[1] = vp[3];
+   auto img = sipCpp->getRGBImage();
+   sipRes = PyByteArray_FromStringAndSize((const char *) img.constBits(), 3 * img.width() * img.height());
+   a0 = img.width();
+   a1 = img.height();
 %End
 };
 

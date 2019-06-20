@@ -362,6 +362,11 @@ QPixmap GlMainView::snapshot(const QSize &outputSize) const {
       _glMainWidget->createPicture(realSize.width(), realSize.height(), false));
 }
 
+QImage GlMainView::getRGBImage() const {
+  QSize currentSize = _glMainWidget->size();
+  return _glMainWidget->createPicture(currentSize.width(), currentSize.height(), false, QImage::Format_RGB888);
+}
+
 void GlMainView::undoCallback() {
   float gvWidth = graphicsView()->width();
   // we apply a zoom factor to preserve a 50 px margin width

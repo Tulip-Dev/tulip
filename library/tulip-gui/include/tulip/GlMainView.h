@@ -239,6 +239,11 @@ public slots:
     return getNodeOrEdgeAtViewportPos(_glMainWidget, x, y, n, e);
   }
 
+  /**
+   * @brief Return the glMainWidget current display in the RGB888 format.
+   */
+  QImage getRGBImage() const;
+
 protected slots:
   virtual void glMainViewDrawn(bool graphChanged);
   virtual void sceneRectChanged(const QRectF &);
