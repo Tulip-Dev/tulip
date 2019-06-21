@@ -201,8 +201,6 @@ private:
   MutableContainer<SGraphNodeDataPtr> _nodeData;
   SGraphIdContainer<node> _nodes;
   SGraphIdContainer<edge> _edges;
-  void outDegreeAdd(node n, int i);
-  void inDegreeAdd(node n, int i);
   edge addEdgeInternal(edge);
   void reverseInternal(const edge, const node src, const node tgt);
   void setEndsInternal(const edge, node src, node tgt, const node newSrc, const node newTgt);
