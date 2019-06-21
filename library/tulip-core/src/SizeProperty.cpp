@@ -165,7 +165,7 @@ void SizeProperty::resetMinMax() {
 }
 //=================================================================================
 void SizeProperty::setNodeValue(const node n, tlp::StoredType<Size>::ReturnedConstValue v) {
-  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOk.begin();
+  std::unordered_map<unsigned int, bool>::const_iterator it = minMaxOk.begin();
 
   if (it != minMaxOk.end()) {
     const Size &oldV = getNodeValue(n);

@@ -20,7 +20,6 @@
 #ifndef TULIP_LAYOUT_H
 #define TULIP_LAYOUT_H
 
-#include <tulip/tuliphash.h>
 #include <tulip/PropertyTypes.h>
 #include <tulip/Observable.h>
 #include <tulip/AbstractProperty.h>

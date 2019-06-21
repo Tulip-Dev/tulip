@@ -12,21 +12,13 @@ INSTALL(FILES
   tulip/Color.h
   tulip/ColorProperty.h
   tulip/ColorScale.h
-  tulip/ConcatIterator.h
   tulip/ConnectedTest.h
-  tulip/ConsoleUtils.h
-  tulip/ConversionIterator.h
-  tulip/ConvexHull.h
   tulip/Coord.h
   tulip/DataSet.h
-  tulip/Delaunay.h
   tulip/DoubleProperty.h
   tulip/DrawingTools.h
   tulip/Edge.h
   tulip/ExportModule.h
-  tulip/Face.h
-  tulip/FaceIterator.h
-  tulip/FilterIterator.h
   tulip/ForEach.h
   tulip/GraphAbstract.h
   tulip/GraphDecorator.h
@@ -39,9 +31,7 @@ INSTALL(FILES
   tulip/ImportModule.h
   tulip/IntegerProperty.h
   tulip/Iterator.h
-  tulip/IdManager.h
   tulip/LayoutProperty.h
-  tulip/MapIterator.h
   tulip/Matrix.h
   tulip/memorypool.h
   tulip/minmaxproperty.h
@@ -49,11 +39,9 @@ INSTALL(FILES
   tulip/Node.h
   tulip/NumericProperty.h
   tulip/Observable.h
-  tulip/Ordering.h
   tulip/OuterPlanarTest.h
   tulip/ParametricCurves.h
   tulip/ParallelTools.h
-  tulip/PlanarConMap.h
   tulip/PlanarityTest.h
   tulip/Plugin.h
   tulip/PluginContext.h
@@ -66,7 +54,6 @@ INSTALL(FILES
   tulip/PropertyAlgorithm.h
   tulip/PropertyInterface.h
   tulip/PropertyTypes.h
-  tulip/QuadTree.h
   tulip/Rectangle.h
   tulip/SimplePluginProgress.h
   tulip/SimpleTest.h
@@ -75,7 +62,6 @@ INSTALL(FILES
   tulip/SortIterator.h
   tulip/StableIterator.h
   tulip/StaticProperty.h
-  tulip/StlFunctions.h
   tulip/StlIterator.h
   tulip/StoredType.h
   tulip/StringCollection.h
@@ -89,14 +75,11 @@ INSTALL(FILES
   tulip/TulipPluginHeaders.h
   tulip/TulipViewSettings.h
   tulip/UniqueIterator.h
-  tulip/vectorgraph.h
-  tulip/vectorgraphproperty.h
   tulip/Vector.h
   tulip/WithDependency.h
   tulip/WithParameter.h
   tulip/TypeInterface.h
   tulip/SerializableType.h
-  tulip/YajlFacade.h
   ${CMAKE_CURRENT_BINARY_DIR}/tulip/TulipRelease.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_core_dev

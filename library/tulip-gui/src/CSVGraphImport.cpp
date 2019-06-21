@@ -319,7 +319,7 @@ CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<vector<string>> &tok
       for (unsigned int j = 0; j < keyTokens[i].size(); ++j)
         key.append(keyTokens[i][j]);
 
-      TLP_HASH_MAP<string, unsigned int>::iterator it = srcValueToId.find(key);
+      std::unordered_map<string, unsigned int>::iterator it = srcValueToId.find(key);
 
       // token exists in the map
       if (it != srcValueToId.end()) {
@@ -370,7 +370,7 @@ CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<vector<string>> &tok
       }
     }
 
-    TLP_HASH_MAP<string, unsigned int> &valueToId =
+    std::unordered_map<string, unsigned int> &valueToId =
         sameSrcTgtProperties ? srcValueToId : tgtValueToId;
 
     for (unsigned int i = 0; i < keyTokens.size(); ++i) {
@@ -381,7 +381,7 @@ CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<vector<string>> &tok
       for (unsigned int j = 0; j < keyTokens[i].size(); ++j)
         key.append(keyTokens[i][j]);
 
-      TLP_HASH_MAP<string, unsigned int>::iterator it = valueToId.find(key);
+      std::unordered_map<string, unsigned int>::iterator it = valueToId.find(key);
 
       // token exists in the map
       if (it != valueToId.end()) {
@@ -434,7 +434,7 @@ CSVImportColumnToGraphPropertyMappingProxy::generateApproximateProperty(const st
 PropertyInterface *
 CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int column,
                                                                  const string &) {
-  TLP_HASH_MAP<unsigned int, PropertyInterface *>::iterator it = propertiesBuffer.find(column);
+  std::unordered_map<unsigned int, PropertyInterface *>::iterator it = propertiesBuffer.find(column);
 
   // No properties
   if (it == propertiesBuffer.end()) {

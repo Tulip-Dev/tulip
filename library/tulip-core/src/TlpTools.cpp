@@ -48,6 +48,7 @@
 #include <gzstream.h>
 #include <tulip/TulipException.h>
 #include <tulip/TlpTools.h>
+#include <tulip/Plugin.h>
 #include <tulip/PluginLoader.h>
 #include <tulip/PropertyTypes.h>
 #include <tulip/TulipRelease.h>

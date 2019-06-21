@@ -20,7 +20,7 @@
 #ifndef Tulip_NODE_H
 #define Tulip_NODE_H
 #include <climits>
-#include <tulip/tuliphash.h>
+#include <functional>
 
 namespace tlp {
 
@@ -105,17 +105,13 @@ struct TLP_SCOPE __tlp_vector_node : public std::vector<tlp::node> {};
 ///@cond DOXYGEN_HIDDEN
 // these three functions allow to use tlp::node as a key in a hash-based data structure (e.g.
 // hashmap).
-TLP_BEGIN_HASH_NAMESPACE {
-  template <>
-  struct hash<tlp::node> {
-    size_t operator()(const tlp::node n) const {
-      return n.id;
-    }
-  };
-}
-TLP_END_HASH_NAMESPACE
-
 namespace std {
+template <>
+struct hash<tlp::node> {
+  size_t operator()(const tlp::node n) const {
+    return n.id;
+  }
+};
 template <>
 struct equal_to<tlp::node> {
   size_t operator()(const tlp::node n, const tlp::node n2) const {

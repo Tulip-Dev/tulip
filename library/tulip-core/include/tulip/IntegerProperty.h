@@ -20,11 +20,8 @@
 #ifndef TULIP_INT_H
 #define TULIP_INT_H
 
-#include <tulip/tuliphash.h>
 #include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
-#include <tulip/PropertyAlgorithm.h>
-#include <tulip/Observable.h>
 #include <tulip/minmaxproperty.h>
 #include <tulip/NumericProperty.h>
 

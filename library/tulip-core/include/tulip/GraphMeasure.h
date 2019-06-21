@@ -25,7 +25,6 @@
 
 #include <tulip/Node.h>
 #include <tulip/MutableContainer.h>
-#include <tulip/DoubleProperty.h>
 #include <tulip/StaticProperty.h>
 #include <tulip/GraphTools.h>
 

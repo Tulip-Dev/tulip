@@ -22,14 +22,17 @@
 
 #include <string>
 #include <iostream>
+#include <functional>
+
 #include <tulip/tulipconf.h>
 #include <tulip/Observable.h>
-#include <tulip/Node.h>
+//#include <tulip/Node.h>
 #include <tulip/Edge.h>
 
 namespace tlp {
 
 struct DataMem;
+struct node;
 
 class Graph;
 template <class itType>
@@ -752,7 +755,7 @@ protected:
 //================================================================================
 
 ///@cond DOXYGEN_HIDDEN
-TLP_BEGIN_HASH_NAMESPACE {
+namespace std {
   template <>
   struct TLP_SCOPE hash<const tlp::PropertyInterface *> {
     size_t operator()(const tlp::PropertyInterface *prop) const {
@@ -766,7 +769,6 @@ TLP_BEGIN_HASH_NAMESPACE {
     }
   };
 }
-TLP_END_HASH_NAMESPACE
 ///@endcond
 
 #endif // PROPERTY_INTERFACE_H

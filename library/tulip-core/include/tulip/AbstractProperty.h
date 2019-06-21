@@ -28,7 +28,6 @@
 #include <tulip/MutableContainer.h>
 #include <tulip/PropertyInterface.h>
 #include <tulip/Iterator.h>
-#include <tulip/PropertyAlgorithm.h>
 #include <tulip/DataSet.h>
 #include <tulip/Graph.h>
 

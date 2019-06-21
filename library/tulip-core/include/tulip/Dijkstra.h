@@ -22,14 +22,13 @@
 #define DIJKSTRA_H
 
 #include <vector>
-#include <set>
 #include <stack>
 #include <list>
 #include <unordered_map>
 #include <climits>
 #include <functional>
 #include <tulip/Graph.h>
-#include <tulip/DoubleProperty.h>
+#include <tulip/BooleanProperty.h>
 #include <tulip/StaticProperty.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/GraphTools.h>

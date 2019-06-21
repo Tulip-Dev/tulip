@@ -22,7 +22,10 @@
 #define TLPBIMPORTEXPORT_H
 
 #include <iostream>
-#include <tulip/TulipPluginHeaders.h>
+#include <list>
+#include <vector>
+
+#include <tulip/Graph.h>
 #include <tulip/ExportModule.h>
 #include <tulip/ImportModule.h>
 

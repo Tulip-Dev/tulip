@@ -22,7 +22,6 @@
 #include <tulip/Coord.h>
 #include <tulip/Size.h>
 #include <tulip/TulipViewSettings.h>
-#include <tulip/ParametricCurves.h>
 
 class QString;
 

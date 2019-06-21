@@ -21,11 +21,8 @@
 #ifndef ORDERING_H
 #define ORDERING_H
 #include <tulip/Face.h>
-//#include <tulip/PlanarConMap.h>
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
-//#include <vector>
-//#include <map>
 
 #include <tulip/MutableContainer.h>
 
