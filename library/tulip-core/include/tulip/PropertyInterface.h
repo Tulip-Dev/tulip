@@ -756,19 +756,19 @@ protected:
 
 ///@cond DOXYGEN_HIDDEN
 namespace std {
-  template <>
-  struct TLP_SCOPE hash<const tlp::PropertyInterface *> {
-    size_t operator()(const tlp::PropertyInterface *prop) const {
-      return size_t(prop);
-    }
-  };
-  template <>
-  struct TLP_SCOPE hash<tlp::PropertyInterface *> {
-    size_t operator()(tlp::PropertyInterface *prop) const {
-      return size_t(prop);
-    }
-  };
-}
+template <>
+struct TLP_SCOPE hash<const tlp::PropertyInterface *> {
+  size_t operator()(const tlp::PropertyInterface *prop) const {
+    return size_t(prop);
+  }
+};
+template <>
+struct TLP_SCOPE hash<tlp::PropertyInterface *> {
+  size_t operator()(tlp::PropertyInterface *prop) const {
+    return size_t(prop);
+  }
+};
+} // namespace std
 ///@endcond
 
 #endif // PROPERTY_INTERFACE_H

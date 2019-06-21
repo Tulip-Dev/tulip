@@ -111,7 +111,7 @@ struct hash<tlp::edge> {
   size_t operator()(const tlp::edge e) const {
     return e.id;
   }
- };
+};
 template <>
 struct equal_to<tlp::edge> {
   size_t operator()(const tlp::edge e, const tlp::edge e2) const {

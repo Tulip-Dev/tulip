@@ -434,7 +434,8 @@ CSVImportColumnToGraphPropertyMappingProxy::generateApproximateProperty(const st
 PropertyInterface *
 CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int column,
                                                                  const string &) {
-  std::unordered_map<unsigned int, PropertyInterface *>::iterator it = propertiesBuffer.find(column);
+  std::unordered_map<unsigned int, PropertyInterface *>::iterator it =
+      propertiesBuffer.find(column);
 
   // No properties
   if (it == propertiesBuffer.end()) {
