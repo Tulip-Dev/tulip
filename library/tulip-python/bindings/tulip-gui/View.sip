@@ -146,8 +146,7 @@ Draws/Updates the view.
 %Docstring
 tlpgui.View.setVisible(visible)
 
-Hides / Shows the view window. That method has effects only when working trough the
-classical Python interpreter.
+Hides / Shows the view window. That method only has an effect when working through the classical Python interpreter.
 
 :param visible: the state of the view window visibility
 :type visible: boolean
@@ -164,7 +163,7 @@ classical Python interpreter.
 %Docstring
 tlpgui.View.resize(width, height)
 
-Resizes the view windows. That method has effects only when working trough the
+Resizes the view windows. That method only has an effect when working through the
 classical Python interpreter.
 
 :param width: the new width of the view window
@@ -183,8 +182,7 @@ classical Python interpreter.
 %Docstring
 tlpgui.View.setPos(x, y)
 
-Set the position on screen of the view windows. That method has effects only when working trough the
-classical Python interpreter.
+Set the position on screen of the view windows. That method only has an effect when working through the classical Python interpreter.
 
 :param x: the new x position of the view window
 :type x: integer

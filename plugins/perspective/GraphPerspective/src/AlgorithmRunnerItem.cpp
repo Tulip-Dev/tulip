@@ -50,8 +50,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent)
       _storeResultAsLocal(true) {
   _ui->setupUi(this);
   connect(_ui->favoriteCheck, SIGNAL(toggled(bool)), this, SIGNAL(favorized(bool)));
-  const Plugin &plugin =
-      PluginLister::instance()->pluginInformation(QStringToTlpString(pluginName));
+  const Plugin &plugin = PluginLister::pluginInformation(QStringToTlpString(pluginName));
   // split pluginName after the second word if needed
   QStringList words = pluginName.split(' ');
 
@@ -516,10 +515,9 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
 }
 
 void AlgorithmRunnerItem::afterRun(Graph *g, const tlp::DataSet &dataSet) {
-  PluginLister *pluginLister = PluginLister::instance();
   std::string stdName = QStringToTlpString(name());
 
-  if (pluginLister->pluginExists<LayoutAlgorithm>(stdName)) {
+  if (PluginLister::pluginExists<LayoutAlgorithm>(stdName)) {
     if (TulipSettings::instance().isAutomaticRatio()) {
       LayoutProperty *prop = nullptr;
       dataSet.get<LayoutProperty *>("result", prop);
@@ -531,11 +529,11 @@ void AlgorithmRunnerItem::afterRun(Graph *g, const tlp::DataSet &dataSet) {
     if (TulipSettings::instance().isAutomaticCentering())
       Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
   } else if (TulipSettings::instance().isAutomaticCentering() &&
-             pluginLister->pluginExists<Algorithm>(stdName) &&
-             !pluginLister->pluginExists<PropertyAlgorithm>(stdName) &&
-             !pluginLister->pluginExists<GraphTest>(stdName)) {
+             PluginLister::pluginExists<Algorithm>(stdName) &&
+             !PluginLister::pluginExists<PropertyAlgorithm>(stdName) &&
+             !PluginLister::pluginExists<GraphTest>(stdName)) {
     Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
-  } else if (pluginLister->pluginExists<DoubleAlgorithm>(stdName) &&
+  } else if (PluginLister::pluginExists<DoubleAlgorithm>(stdName) &&
              TulipSettings::instance().isAutomaticMapMetric()) {
     DoubleProperty *prop = nullptr;
     dataSet.get<DoubleProperty *>("result", prop);
@@ -577,7 +575,7 @@ void AlgorithmRunnerItem::afterRun(Graph *g, const tlp::DataSet &dataSet) {
         g->applyPropertyAlgorithm("Color Mapping", color, errMsg, &data);
       }
     }
-  } else if (pluginLister->pluginExists<GraphTest>(stdName)) {
+  } else if (PluginLister::pluginExists<GraphTest>(stdName)) {
     bool result = true;
     dataSet.get<bool>("result", result);
     std::string str = "\"" + stdName + "\" test " + (result ? "succeeded" : "failed") + " on:\n" +

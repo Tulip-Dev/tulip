@@ -21,12 +21,7 @@
 #ifndef TYPEINTERFACE_H
 #define TYPEINTERFACE_H
 
-#include <set>
-#include <vector>
-#include <string>
-#include <list>
 #include <iostream>
-#include <sstream>
 
 namespace tlp {
 template <typename T>

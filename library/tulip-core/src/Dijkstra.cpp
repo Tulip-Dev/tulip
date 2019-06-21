@@ -16,11 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <set>
 
 #include <tulip/Dijkstra.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/GraphTools.h>
 
 using namespace tlp;
 using namespace std;

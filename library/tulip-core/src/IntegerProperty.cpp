@@ -18,7 +18,6 @@
  */
 #include <climits>
 #include <tulip/IntegerProperty.h>
-#include <tulip/PropertyAlgorithm.h>
 #include <tulip/GraphTools.h>
 
 using namespace std;

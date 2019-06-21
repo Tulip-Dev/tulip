@@ -56,7 +56,7 @@ int GlyphManager::glyphId(const string &name, bool warnIfNotFound) {
 }
 //====================================================
 void GlyphManager::loadGlyphPlugins() {
-  glyphList = PluginLister::instance()->availablePlugins<Glyph>();
+  glyphList = PluginLister::availablePlugins<Glyph>();
 
   for (std::string pluginName : glyphList) {
     int pluginId = PluginLister::pluginInformation(pluginName).id();
@@ -75,10 +75,10 @@ void GlyphManager::initGlyphList(Graph **graph, GlGraphInputData *glGraphInputDa
 
   // then set a new one
   GlyphContext gc = GlyphContext(graph, glGraphInputData);
-  glyphs.setAll(PluginLister::instance()->getPluginObject<Glyph>("3D - Cube OutLined", &gc));
+  glyphs.setAll(PluginLister::getPluginObject<Glyph>("3D - Cube OutLined", &gc));
 
   for (const std::string &glyphName : glyphList) {
-    Glyph *newGlyph = PluginLister::instance()->getPluginObject<Glyph>(glyphName, &gc);
+    Glyph *newGlyph = PluginLister::getPluginObject<Glyph>(glyphName, &gc);
     glyphs.set(PluginLister::pluginInformation(glyphName).id(), newGlyph);
   }
 }

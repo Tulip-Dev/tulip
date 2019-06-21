@@ -23,13 +23,11 @@
 
 #include <string>
 #include <set>
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
-#include <tulip/Node.h>
-//#include <tulip/Edge.h>
 #include <tulip/Graph.h>
-//#include <tulip/Observable.h>
 #include <tulip/MutableContainer.h>
 
 namespace std {

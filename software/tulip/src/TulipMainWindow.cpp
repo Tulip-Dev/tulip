@@ -280,15 +280,14 @@ void TulipMainWindow::openProject(const QString &file) {
   } else {
     QString perspectiveName;
 
-    if (PluginLister::instance()->availablePlugins<tlp::Perspective>().size() > 1) {
+    if (PluginLister::availablePlugins<tlp::Perspective>().size() > 1) {
       PerspectiveSelectionDialog dlg;
 
       if (dlg.exec() == QDialog::Accepted) {
         perspectiveName = dlg.perspectiveName();
       }
     } else {
-      std::string stdName =
-          *(PluginLister::instance()->availablePlugins<tlp::Perspective>().begin());
+      std::string stdName = *(PluginLister::availablePlugins<tlp::Perspective>().begin());
       perspectiveName = stdName.c_str();
     }
 

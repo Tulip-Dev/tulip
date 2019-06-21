@@ -23,6 +23,7 @@
 #include <tulip/BoundingBox.h>
 #include <tulip/TulipIconicFont.h>
 #include <tulip/TlpTools.h>
+#include <tulip/ParametricCurves.h>
 
 #include <QFile>
 

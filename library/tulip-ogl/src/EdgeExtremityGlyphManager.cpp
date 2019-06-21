@@ -62,7 +62,7 @@ int EdgeExtremityGlyphManager::glyphId(const string &name) {
 }
 //====================================================
 void EdgeExtremityGlyphManager::loadGlyphPlugins() {
-  plugins = PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>();
+  plugins = PluginLister::availablePlugins<EdgeExtremityGlyph>();
 
   for (std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
     string pluginName = *it;
@@ -80,7 +80,7 @@ void EdgeExtremityGlyphManager::initGlyphList(Graph **graph, GlGraphInputData *g
   for (std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
     string glyphName = *it;
     EdgeExtremityGlyph *newGlyph =
-        PluginLister::instance()->getPluginObject<EdgeExtremityGlyph>(glyphName, &gc);
+        PluginLister::getPluginObject<EdgeExtremityGlyph>(glyphName, &gc);
     glyphs.set(PluginLister::pluginInformation(glyphName).id(), newGlyph);
   }
 }

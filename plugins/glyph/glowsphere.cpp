@@ -16,12 +16,12 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/TlpTools.h>
-#include <tulip/Graph.h>
+#include <tulip/TulipViewSettings.h>
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/OpenGlIncludes.h>
 #include <tulip/AroundTexturedSphere.h>
 
 using namespace std;

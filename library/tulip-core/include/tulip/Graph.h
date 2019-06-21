@@ -21,9 +21,11 @@
 #define Tulip_SUPERGRAPH_H
 
 #include <iostream>
+#include <functional>
 #include <set>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 #include <climits>
 #include <tulip/tulipconf.h>
@@ -1771,7 +1773,7 @@ protected:
   }
 
   unsigned int id;
-  TLP_HASH_MAP<std::string, tlp::PropertyInterface *> circularCalls;
+  std::unordered_map<std::string, tlp::PropertyInterface *> circularCalls;
   ///@endcond
 };
 
@@ -1932,24 +1934,23 @@ protected:
 TLP_SCOPE std::ostream &operator<<(std::ostream &, const tlp::Graph *);
 
 //================================================================================
-// these functions allow to use tlp::Graph as a key in a hash-based data structure (e.g. hashmap).
+// these functions allow to use tlp::Graph as a key in a hash-based data structure (e.g. map).
 //================================================================================
 ///@cond DOXYGEN_HIDDEN
-TLP_BEGIN_HASH_NAMESPACE {
-  template <>
-  struct TLP_SCOPE hash<const tlp::Graph *> {
-    size_t operator()(const tlp::Graph *s) const {
-      return size_t(s->getId());
-    }
-  };
-  template <>
-  struct TLP_SCOPE hash<tlp::Graph *> {
-    size_t operator()(tlp::Graph *s) const {
-      return size_t(s->getId());
-    }
-  };
-}
-TLP_END_HASH_NAMESPACE
+namespace std {
+template <>
+struct TLP_SCOPE hash<const tlp::Graph *> {
+  size_t operator()(const tlp::Graph *s) const {
+    return size_t(s->getId());
+  }
+};
+template <>
+struct TLP_SCOPE hash<tlp::Graph *> {
+  size_t operator()(tlp::Graph *s) const {
+    return size_t(s->getId());
+  }
+};
+} // namespace std
 ///@endcond
 
 #include "cxx/Graph.cxx"

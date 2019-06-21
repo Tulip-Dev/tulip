@@ -20,7 +20,8 @@
 #ifndef TULIP_SIZES_H
 #define TULIP_SIZES_H
 
-#include <tulip/tuliphash.h>
+#include <unordered_map>
+
 #include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
 #include <tulip/PropertyAlgorithm.h>
@@ -67,8 +68,8 @@ protected:
   void resetMinMax();
 
 private:
-  TLP_HASH_MAP<unsigned int, Size> max, min;
-  TLP_HASH_MAP<unsigned int, bool> minMaxOk;
+  std::unordered_map<unsigned int, Size> max, min;
+  std::unordered_map<unsigned int, bool> minMaxOk;
   void computeMinMax(const Graph *sg = nullptr);
 };
 

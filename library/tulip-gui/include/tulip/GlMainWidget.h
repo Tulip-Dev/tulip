@@ -225,8 +225,10 @@ public:
    * @param width size
    * @param height size
    * @param center if true this function call a centerScene() before picture output
+   * @param format indicates the format of the created image
    */
-  QImage createPicture(int width, int height, bool center = true);
+  QImage createPicture(int width, int height, bool center = true,
+                       QImage::Format format = QImage::Format_RGB32);
 
   /**
    * @brief Function to do picking on entities in a screen region

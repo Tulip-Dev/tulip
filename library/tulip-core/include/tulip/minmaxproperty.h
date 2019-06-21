@@ -20,12 +20,13 @@
 #ifndef MINMAXPROPERTY_H
 #define MINMAXPROPERTY_H
 
-#include <tulip/tuliphash.h>
+#include <unordered_map>
+
 #include <tulip/Observable.h>
 #include <tulip/AbstractProperty.h>
 
 #define MINMAX_PAIR(TYPE) std::pair<typename TYPE::RealType, typename TYPE::RealType>
-#define MINMAX_MAP(TYPE) typename TLP_HASH_MAP<unsigned int, MINMAX_PAIR(TYPE)>
+#define MINMAX_MAP(TYPE) typename std::unordered_map<unsigned int, MINMAX_PAIR(TYPE)>
 
 namespace tlp {
 

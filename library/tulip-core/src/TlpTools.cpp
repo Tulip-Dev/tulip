@@ -48,9 +48,13 @@
 #include <gzstream.h>
 #include <tulip/TulipException.h>
 #include <tulip/TlpTools.h>
+#include <tulip/Plugin.h>
 #include <tulip/PluginLoader.h>
 #include <tulip/PropertyTypes.h>
 #include <tulip/TulipRelease.h>
+#if defined(_OPENMP) && defined(__APPLE__)
+#include <tulip/ParallelTools.h>
+#endif
 
 using namespace std;
 using namespace tlp;
@@ -108,21 +112,20 @@ char *getTulipLibDir(char *buf) {
 #else
   libTulipName = "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".so";
 #endif
-  void *ptr;
-  Dl_info info;
-
-  ptr = dlopen(libTulipName.c_str(), RTLD_LAZY);
+  void *ptr = dlopen(libTulipName.c_str(), RTLD_LAZY);
 
   if (ptr != nullptr) {
     void *symbol = dlsym(ptr, "getTulipLibDir");
 
     if (symbol != nullptr) {
+      Dl_info info;
       if (dladdr(symbol, &info)) {
         std::string tmp = info.dli_fname;
         tulipLibDir = tmp.substr(0, tmp.rfind('/') + 1);
         tulipLibDir.append("../").append(TULIP_INSTALL_LIBDIR_STR);
       }
     }
+    dlclose(ptr);
   }
 
 #endif
@@ -239,6 +242,13 @@ void tlp::initTulipLib(const char *appDirPath) {
     pos = TulipLibDir.rfind("/", pos - 1);
     curDir = TulipLibDir.substr(0, pos + 1) + "share/tulip/";
   }
+#endif
+
+#if defined(_OPENMP) && defined(__APPLE__)
+  // Register an exit handler to prevent using OpenMP locks
+  // when application shutdowns as some crashes have been observed
+  // on some MacOS runtimes (10.12 for instance)
+  OpenMPLock::registerExitHandler();
 #endif
 
   // check that TulipShareDir exists

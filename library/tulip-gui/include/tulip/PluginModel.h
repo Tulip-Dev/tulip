@@ -76,11 +76,11 @@ class PluginModel : public tlp::TulipModel {
     delete _root;
     _root = new TreeItem("root");
     QMap<QString, QMap<QString, QStringList>> pluginTree;
-    std::list<std::string> plugins = PluginLister::instance()->availablePlugins<PLUGIN>();
+    std::list<std::string> plugins = PluginLister::availablePlugins<PLUGIN>();
 
     for (std::list<std::string>::iterator it = plugins.begin(); it != plugins.end(); ++it) {
       std::string name = *it;
-      const Plugin &plugin = PluginLister::instance()->pluginInformation(name);
+      const Plugin &plugin = PluginLister::pluginInformation(name);
       pluginTree[tlp::tlpStringToQString(plugin.category())]
                 [tlp::tlpStringToQString(plugin.group())]
                     .append(tlp::tlpStringToQString(name));
@@ -99,8 +99,7 @@ class PluginModel : public tlp::TulipModel {
         qSort(pluginTree[cat][group].begin(), pluginTree[cat][group].end(), QStringCaseCmp);
 
         for (const QString &alg : pluginTree[cat][group]) {
-          const Plugin &plugin =
-              PluginLister::instance()->pluginInformation(tlp::QStringToTlpString(alg));
+          const Plugin &plugin = PluginLister::pluginInformation(tlp::QStringToTlpString(alg));
           std::string info = plugin.info();
 
           // set info only if they contain more than one word
@@ -208,7 +207,7 @@ public:
     if (index.isValid()) {
       TreeItem *item = static_cast<TreeItem *>(index.internalPointer());
 
-      if (!PluginLister::instance()->pluginExists<PLUGIN>(tlp::QStringToTlpString(item->name)))
+      if (!PluginLister::pluginExists<PLUGIN>(tlp::QStringToTlpString(item->name)))
         result = Qt::ItemIsEnabled;
     }
 

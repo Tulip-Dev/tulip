@@ -20,7 +20,7 @@
 #ifndef Tulip_EDGE_H
 #define Tulip_EDGE_H
 #include <climits>
-#include <tulip/tuliphash.h>
+#include <functional>
 
 namespace tlp {
 
@@ -95,20 +95,23 @@ struct edge {
 };
 } // namespace tlp
 
+#ifdef _MSC_VER
+#include <vector>
+#include <tulip/tulipconf.h>
+// needed by MSVC to avoid multiple definitions
+struct TLP_SCOPE __tlp_vector_edge : public std::vector<tlp::edge> {};
+#endif
+
 ///@cond DOXYGEN_HIDDEN
 // these three functions allow to use tlp::edge as a key in a hash-based data structure (e.g.
 // hashmap).
-TLP_BEGIN_HASH_NAMESPACE {
-  template <>
-  struct hash<tlp::edge> {
-    size_t operator()(const tlp::edge e) const {
-      return e.id;
-    }
-  };
-}
-TLP_END_HASH_NAMESPACE
-
 namespace std {
+template <>
+struct hash<tlp::edge> {
+  size_t operator()(const tlp::edge e) const {
+    return e.id;
+  }
+};
 template <>
 struct equal_to<tlp::edge> {
   size_t operator()(const tlp::edge e, const tlp::edge e2) const {

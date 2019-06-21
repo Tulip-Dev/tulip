@@ -62,7 +62,7 @@ public:
 #endif
     );
     push_back(new MousePanNZoomNavigator);
-    push_back(new MouseSelector);
+    push_back(new MouseSelector(Qt::LeftButton, Qt::NoModifier, MouseSelector::EdgesOnly));
     push_back(new MouseEdgeBendEditor);
   }
 

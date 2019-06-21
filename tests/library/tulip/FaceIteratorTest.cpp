@@ -26,7 +26,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(FaceIteratorTest);
 // FaceIteratorTest
 //============================================================
 void FaceIteratorTest::setUp() {
-  map = computePlanarConMap(tlp::newGraph());
+  map = computePlanarConMap(graph = tlp::newGraph());
 
   map->clear();
   edges.clear();
@@ -59,6 +59,7 @@ void FaceIteratorTest::setUp() {
 
 void FaceIteratorTest::tearDown() {
   delete map;
+  delete graph;
 }
 
 //============================================================

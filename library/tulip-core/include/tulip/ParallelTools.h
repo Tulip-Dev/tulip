@@ -45,9 +45,13 @@ typedef size_t OMP_ITER_TYPE;
 #define OMP_CRITICAL_SECTION(x) __pragma(omp critical(x))
 #endif
 
+#ifdef __APPLE__
+struct omp_lock_t;
+#endif
+
 #else
 
-// OPENMP no available use c++11 threads
+// OpenMP no available use C++11 threads
 #include <iostream>
 #include <algorithm>
 #include <mutex>
@@ -63,7 +67,7 @@ class TlpThread;
 // ===================================================================================
 
 /**
- * @brief Static wrapper class around the std::thread
+ * @brief Static wrapper class around std::thread
  *
  * @since Tulip 5.2
  */
@@ -183,12 +187,46 @@ public:
 
 #ifdef _OPENMP
 
+#ifdef __APPLE__
+
+// In order to workaround an odd phenomenon on some MacOS runtimes when an application
+// shutdows, use OpenMP C API to declare critical sections instead of directives.
+// https://www.imagemagick.org/discourse-server/viewtopic.php?f=3&t=29031&start=15#p129707
+// gives more detail about the issue
+
+class OpenMPLock {
+public:
+  OpenMPLock();
+  ~OpenMPLock();
+  void lock();
+  void unlock();
+  static void exitHandler();
+  static void registerExitHandler();
+
+private:
+  omp_lock_t *_lock;
+  static bool _canUseLock;
+};
+
+#define TLP_LOCK_SECTION(mtx)                                                                      \
+  static tlp::OpenMPLock mtx;                                                                      \
+  mtx.lock();
+#define TLP_UNLOCK_SECTION(mtx) mtx.unlock();
+#define TLP_DECLARE_GLOBAL_LOCK(mtx) extern tlp::OpenMPLock mtx
+#define TLP_DEFINE_GLOBAL_LOCK(mtx) tlp::OpenMPLock mtx
+#define TLP_GLOBALLY_LOCK_SECTION(mtx) mtx.lock();
+#define TLP_GLOBALLY_UNLOCK_SECTION(mtx) mtx.unlock()
+
+#else // __APPLE__
+
 #define TLP_LOCK_SECTION(mtx) OMP_CRITICAL_SECTION(mtx)
 #define TLP_UNLOCK_SECTION(mtx)
 #define TLP_DECLARE_GLOBAL_LOCK(mtx) extern void mtx()
 #define TLP_DEFINE_GLOBAL_LOCK(mtx) extern void mtx()
 #define TLP_GLOBALLY_LOCK_SECTION(mtx) OMP_CRITICAL_SECTION(mtx)
 #define TLP_GLOBALLY_UNLOCK_SECTION(mtx)
+
+#endif // __APPLE__
 
 #else
 

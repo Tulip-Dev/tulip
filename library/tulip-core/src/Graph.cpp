@@ -276,11 +276,11 @@ Graph *tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
   DataSet dataSet;
   std::string importPluginName = "TLP Import";
 
-  list<string> importPlugins = PluginLister::instance()->availablePlugins<ImportModule>();
+  list<string> importPlugins = PluginLister::availablePlugins<ImportModule>();
 
   for (const string &pluginName : importPlugins) {
     const ImportModule &importPlugin =
-        static_cast<const ImportModule &>(PluginLister::instance()->pluginInformation(pluginName));
+        static_cast<const ImportModule &>(PluginLister::pluginInformation(pluginName));
     list<string> extensions(importPlugin.fileExtensions());
 
     for (const string &ext : extensions)
@@ -309,11 +309,10 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *p
   bool gzip = false;
 
   string exportPluginName;
-  list<string> exportPlugins = PluginLister::instance()->availablePlugins<ExportModule>();
+  list<string> exportPlugins = PluginLister::availablePlugins<ExportModule>();
 
   for (const string &pluginName : exportPlugins) {
-    ExportModule *exportPlugin =
-        PluginLister::instance()->getPluginObject<ExportModule>(pluginName);
+    ExportModule *exportPlugin = PluginLister::getPluginObject<ExportModule>(pluginName);
     string ext(exportPlugin->fileExtension());
 
     if (filename.rfind(ext) != string::npos &&
@@ -397,8 +396,7 @@ Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgr
     tmpProgress = progress;
 
   AlgorithmContext *tmp = new AlgorithmContext(graph, &dataSet, tmpProgress);
-  ImportModule *newImportModule =
-      PluginLister::instance()->getPluginObject<ImportModule>(format, tmp);
+  ImportModule *newImportModule = PluginLister::getPluginObject<ImportModule>(format, tmp);
   assert(newImportModule != nullptr);
 
   // ensure that the parsing of float or double does not depend on locale
@@ -449,8 +447,7 @@ bool tlp::exportGraph(Graph *graph, std::ostream &outputStream, const std::strin
     tmpProgress = progress;
 
   AlgorithmContext *context = new AlgorithmContext(graph, &dataSet, tmpProgress);
-  ExportModule *newExportModule =
-      PluginLister::instance()->getPluginObject<ExportModule>(format, context);
+  ExportModule *newExportModule = PluginLister::getPluginObject<ExportModule>(format, context);
   assert(newExportModule != nullptr);
   std::string filename;
 
@@ -692,7 +689,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm, std::string &errorMessa
     tmpProgress = progress;
 
   AlgorithmContext *context = new AlgorithmContext(this, parameters, tmpProgress);
-  Algorithm *newAlgo = PluginLister::instance()->getPluginObject<Algorithm>(algorithm, context);
+  Algorithm *newAlgo = PluginLister::getPluginObject<Algorithm>(algorithm, context);
 
   if ((result = newAlgo->check(errorMessage))) {
     result = newAlgo->run();
@@ -774,8 +771,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm, PropertyIn
 
   tlp::Observable::holdObservers();
   circularCalls[algorithm] = prop;
-  Algorithm *tmpAlgo =
-      tlp::PluginLister::instance()->getPluginObject<PropertyAlgorithm>(algorithm, &context);
+  Algorithm *tmpAlgo = tlp::PluginLister::getPluginObject<PropertyAlgorithm>(algorithm, &context);
 
   if (tmpAlgo != nullptr) {
     result = tmpAlgo->check(errorMessage);

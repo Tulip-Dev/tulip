@@ -169,7 +169,7 @@ DataTypeSerializerContainer DataSet::serializerContainer;
 void DataSet::registerDataTypeSerializer(const std::string &typeName, DataTypeSerializer *dts) {
 
 #ifndef NDEBUG
-  TLP_HASH_MAP<std::string, DataTypeSerializer *>::iterator it =
+  std::unordered_map<std::string, DataTypeSerializer *>::iterator it =
       serializerContainer.tnTodts.find(typeName);
 
   if (it != serializerContainer.tnTodts.end())
@@ -189,7 +189,7 @@ void DataSet::registerDataTypeSerializer(const std::string &typeName, DataTypeSe
 
 // data write
 void DataSet::writeData(std::ostream &os, const std::string &prop, const DataType *dt) const {
-  TLP_HASH_MAP<std::string, DataTypeSerializer *>::iterator it =
+  std::unordered_map<std::string, DataTypeSerializer *>::iterator it =
       serializerContainer.tnTodts.find(dt->getTypeName());
 
   if (it == serializerContainer.tnTodts.end()) {
@@ -217,7 +217,7 @@ void DataSet::write(std::ostream &os, const DataSet &ds) {
 // data read
 bool DataSet::readData(std::istream &is, const std::string &prop,
                        const std::string &outputTypeName) {
-  TLP_HASH_MAP<std::string, DataTypeSerializer *>::iterator it =
+  std::unordered_map<std::string, DataTypeSerializer *>::iterator it =
       serializerContainer.otnTodts.find(outputTypeName);
 
   if (it == serializerContainer.otnTodts.end()) {

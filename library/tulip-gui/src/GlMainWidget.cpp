@@ -511,7 +511,7 @@ void GlMainWidget::createPicture(const std::string &pictureName, int width, int 
 }
 
 //=====================================================
-QImage GlMainWidget::createPicture(int width, int height, bool center) {
+QImage GlMainWidget::createPicture(int width, int height, bool center, QImage::Format format) {
 
   QImage resultImage;
 
@@ -585,7 +585,7 @@ QImage GlMainWidget::createPicture(int width, int height, bool center) {
   // object will have invalid data pointer.
   return QImage(resultImage.bits(), resultImage.width(), resultImage.height(),
                 QImage::Format_ARGB32)
-      .convertToFormat(QImage::Format_RGB32);
+      .convertToFormat(format);
 }
 
 void GlMainWidget::centerScene(bool graphChanged, float zf) {

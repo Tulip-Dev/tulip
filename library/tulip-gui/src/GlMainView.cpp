@@ -30,8 +30,10 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/SceneConfigWidget.h>
 #include <tulip/SceneLayersConfigWidget.h>
+#include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/GlOverviewGraphicsItem.h>
 #include <tulip/QuickAccessBar.h>
+#include <tulip/QtGlSceneZoomAndPanAnimator.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/Gl2DRect.h>
 #include <tulip/ViewActionsManager.h>
@@ -360,6 +362,12 @@ QPixmap GlMainView::snapshot(const QSize &outputSize) const {
       _glMainWidget->createPicture(realSize.width(), realSize.height(), false));
 }
 
+QImage GlMainView::getRGBImage() const {
+  QSize currentSize = _glMainWidget->size();
+  return _glMainWidget->createPicture(currentSize.width(), currentSize.height(), false,
+                                      QImage::Format_RGB888);
+}
+
 void GlMainView::undoCallback() {
   float gvWidth = graphicsView()->width();
   // we apply a zoom factor to preserve a 50 px margin width
@@ -448,4 +456,39 @@ bool GlMainView::getNodeOrEdgeAtViewportPos(GlMainWidget *glw, int x, int y, nod
     }
   }
   return false;
+}
+
+bool GlMainView::pickNodeEdge(const int x, const int y, node &n, edge &e, bool pickNode,
+                              bool pickEdge) {
+  SelectedEntity selectedEntity;
+  bool foundEntity =
+      getGlMainWidget()->pickNodesEdges(x, y, selectedEntity, nullptr, pickNode, pickEdge);
+  n = node();
+  e = edge();
+  if (foundEntity) {
+    if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
+      n.id = selectedEntity.getComplexEntityId();
+      return true;
+    }
+    if (selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
+      e.id = selectedEntity.getComplexEntityId();
+      return true;
+    }
+  }
+  return false;
+}
+
+void GlMainView::zoomAndPanAnimation(const tlp::BoundingBox &boundingBox, const double duration) {
+  BoundingBox bb;
+  if (bb.isValid())
+    bb = boundingBox;
+  else {
+    auto scene = getGlMainWidget()->getScene();
+    GlGraphInputData *inputData = scene->getGlGraphComposite()->getInputData();
+    GlBoundingBoxSceneVisitor bbVisitor(inputData);
+    scene->getLayer("Main")->acceptVisitor(&bbVisitor);
+    bb = bbVisitor.getBoundingBox();
+  }
+  QtGlSceneZoomAndPanAnimator zoomAnPan(getGlMainWidget(), bb, duration);
+  zoomAnPan.animateZoomAndPan();
 }

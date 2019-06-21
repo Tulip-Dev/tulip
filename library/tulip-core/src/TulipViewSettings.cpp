@@ -1,29 +1,50 @@
+/**
+ *
+ * This file is part of Tulip (http://tulip.labri.fr)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
 #include <tulip/TulipViewSettings.h>
 #include <tulip/TlpTools.h>
 
 namespace tlp {
 
-TulipViewSettings *TulipViewSettings::_instance(nullptr);
-
-TulipViewSettings::TulipViewSettings()
-    : _defaultNodeColor(Color::Red), _defaultEdgeColor(Color::Black),
-      _defaultNodeBorderColor(Color::Black), _defaultEdgeBorderColor(Color::Black),
-      _defaultLabelColor(Color::Black), _defaultLabelBorderColor(Color::Black),
-      _defaultNodeBorderWidth(0), _defaultEdgeBorderWidth(0), _defaultLabelBorderWidth(1),
-      _defaultLabelPosition(LabelPosition::Center), _defaultNodeSize(Size(1, 1, 1)),
-      _defaultEdgeSize(Size(0.125, 0.125, 0.5)), _defaultNodeShape(NodeShape::Circle),
-      _defaultEdgeShape(EdgeShape::Polyline),
-      _defaultEdgeExtremitySrcShape(EdgeExtremityShape::None),
-      _defaultEdgeExtremityTgtShape(EdgeExtremityShape::Arrow),
-      _defaultEdgeExtremitySrcSize(Size(1, 1, 0)), _defaultEdgeExtremityTgtSize(Size(1, 1, 0)),
-      _defaultFontFile(tlp::TulipBitmapDir + "font.ttf"), _defaultFontSize(18) {}
+static TulipViewSettings _instance;
+static Color _defaultNodeColor(Color::Red);
+static Color _defaultEdgeColor(Color::Black);
+static Color _defaultNodeBorderColor(Color::Black);
+static Color _defaultEdgeBorderColor(Color::Black);
+static Color _defaultLabelColor(Color::Black);
+static Color _defaultLabelBorderColor(Color::Black);
+static float _defaultNodeBorderWidth(0);
+static float _defaultEdgeBorderWidth(0);
+static float _defaultLabelBorderWidth(1);
+static int _defaultLabelPosition(LabelPosition::Center);
+static Size _defaultNodeSize(Size(1, 1, 1));
+static Size _defaultEdgeSize(Size(0.125, 0.125, 0.5));
+static int _defaultNodeShape(NodeShape::Circle);
+static int _defaultEdgeShape(EdgeShape::Polyline);
+static int _defaultEdgeExtremitySrcShape(EdgeExtremityShape::None);
+static int _defaultEdgeExtremityTgtShape(EdgeExtremityShape::Arrow);
+static Size _defaultEdgeExtremitySrcSize(Size(1, 1, 0));
+static Size _defaultEdgeExtremityTgtSize(Size(1, 1, 0));
+static std::string _defaultFontFile;
+static int _defaultFontSize(18);
 
 TulipViewSettings &TulipViewSettings::instance() {
-  if (!_instance) {
-    _instance = new TulipViewSettings();
-  }
-
-  return *_instance;
+  return _instance;
 }
 
 Color TulipViewSettings::defaultColor(ElementType elem) const {
@@ -44,7 +65,7 @@ void TulipViewSettings::setDefaultColor(ElementType elem, const Color &color) {
     _defaultEdgeColor = color;
   }
 
-  sendEvent(ViewSettingsEvent(elem, color));
+  _instance.sendEvent(ViewSettingsEvent(elem, color));
 }
 
 Color TulipViewSettings::defaultBorderColor(ElementType elem) const {
@@ -88,7 +109,7 @@ void TulipViewSettings::setDefaultLabelColor(const Color &color) {
     return;
 
   _defaultLabelColor = color;
-  sendEvent(ViewSettingsEvent(color));
+  _instance.sendEvent(ViewSettingsEvent(color));
 }
 
 Color TulipViewSettings::defaultLabelBorderColor() const {
@@ -140,7 +161,7 @@ void TulipViewSettings::setDefaultSize(ElementType elem, const Size &size) {
     _defaultEdgeSize = size;
   }
 
-  sendEvent(ViewSettingsEvent(elem, size));
+  _instance.sendEvent(ViewSettingsEvent(elem, size));
 }
 
 int TulipViewSettings::defaultShape(ElementType elem) const {
@@ -161,7 +182,7 @@ void TulipViewSettings::setDefaultShape(ElementType elem, int shape) {
     _defaultEdgeShape = shape;
   }
 
-  sendEvent(ViewSettingsEvent(elem, shape));
+  _instance.sendEvent(ViewSettingsEvent(elem, shape));
 }
 
 int TulipViewSettings::defaultEdgeExtremitySrcShape() const {
@@ -197,6 +218,10 @@ void TulipViewSettings::setDefaultEdgeExtremityTgtSize(const Size &size) {
 }
 
 std::string TulipViewSettings::defaultFontFile() const {
+  // _defaultFontFile initialization must be delayed
+  // until TulipBitmapDir is set
+  if (_defaultFontFile.empty())
+    _defaultFontFile = tlp::TulipBitmapDir + "font.ttf";
   return _defaultFontFile;
 }
 
