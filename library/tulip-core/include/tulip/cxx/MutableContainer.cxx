@@ -51,8 +51,8 @@ tlp::MutableContainer<TYPE>::~MutableContainer() {
 
     if (StoredType<TYPE>::isPointer) {
       // delete stored values
-      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it =
-          hData->begin();
+      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::const_iterator
+          it = hData->begin();
 
       while (it != hData->end()) {
         StoredType<TYPE>::destroy(it->second);
@@ -103,8 +103,8 @@ void tlp::MutableContainer<TYPE>::setAll(typename StoredType<TYPE>::ReturnedCons
 
     if (StoredType<TYPE>::isPointer) {
       // delete stored values
-      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it =
-          hData->begin();
+      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::const_iterator
+          it = hData->begin();
 
       while (it != hData->end()) {
         StoredType<TYPE>::destroy(it->second);

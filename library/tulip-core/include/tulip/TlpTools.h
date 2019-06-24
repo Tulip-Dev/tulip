@@ -46,12 +46,12 @@ typedef struct stat tlp_stat_t;
 // small range of values,
 // differences will soon be spread across all the bits.
 namespace std {
-  template <class T>
-  inline void tlp_hash_combine(std::size_t & seed, const T &v) {
-    hash<T> hasher;
-    seed ^= hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
-  }
+template <class T>
+inline void tlp_hash_combine(std::size_t &seed, const T &v) {
+  hash<T> hasher;
+  seed ^= hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
 }
+} // namespace std
 
 namespace tlp {
 extern TLP_SCOPE const char PATH_DELIMITER;

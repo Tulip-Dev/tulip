@@ -736,7 +736,8 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm, PropertyIn
     }
   }
 
-  std::unordered_map<std::string, PropertyInterface *>::const_iterator it = circularCalls.find(algorithm);
+  std::unordered_map<std::string, PropertyInterface *>::const_iterator it =
+      circularCalls.find(algorithm);
 
   if (it != circularCalls.end() && (*it).second == prop) {
     errorMessage = std::string("Circular call of ") + __PRETTY_FUNCTION__;
@@ -1530,7 +1531,8 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
       }
 
       // iterate on newMetaEdges
-      std::unordered_map<node, std::unordered_map<node, set<edge>>>::iterator itme = newMetaEdges.begin();
+      std::unordered_map<node, std::unordered_map<node, set<edge>>>::iterator itme =
+          newMetaEdges.begin();
 
       while (itme != newMetaEdges.end()) {
         node src = itme->first;

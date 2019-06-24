@@ -301,8 +301,9 @@ void TreeReingoldAndTilfordExtended::TreeLevelSizing(tlp::node n, std::map<int, 
   }
 }
 //=============================================================================
-void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n, std::unordered_map<tlp::node, double> *p,
-                                                double x, double y, int level,
+void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n,
+                                                std::unordered_map<tlp::node, double> *p, double x,
+                                                double y, int level,
                                                 map<int, double> &maxLevelSize) {
   Coord tmpCoord;
 

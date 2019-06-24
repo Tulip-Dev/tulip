@@ -243,8 +243,8 @@ public:
     }
 
     // restore previous calculators
-    std::unordered_map<PropertyInterface *, PropertyInterface::MetaValueCalculator *>::iterator itC =
-        prevCalcs.begin();
+    std::unordered_map<PropertyInterface *, PropertyInterface::MetaValueCalculator *>::iterator
+        itC = prevCalcs.begin();
 
     while (itC != prevCalcs.end()) {
       if (dynamic_cast<DoubleProperty *>((*itC).first)) {

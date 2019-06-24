@@ -224,14 +224,13 @@ void tlp::Color::setA(unsigned char alpha) {
 }
 
 namespace std {
-  template <>
-  struct hash<tlp::Color> {
-    inline std::size_t operator()(const tlp::Color &c) const {
-      return hash_vector(c);
-    }
-  };
-}
-
+template <>
+struct hash<tlp::Color> {
+  inline std::size_t operator()(const tlp::Color &c) const {
+    return hash_vector(c);
+  }
+};
+} // namespace std
 
 #endif
 

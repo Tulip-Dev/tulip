@@ -46,8 +46,9 @@ public:
 
 private:
   int attachNumerotation(tlp::node, std::unordered_map<tlp::node, bool> &,
-                         std::unordered_map<tlp::node, bool> &, std::unordered_map<tlp::node, int> &, int &,
-                         std::stack<tlp::node> &, int &);
+                         std::unordered_map<tlp::node, bool> &,
+                         std::unordered_map<tlp::node, int> &, int &, std::stack<tlp::node> &,
+                         int &);
 };
 
 #endif

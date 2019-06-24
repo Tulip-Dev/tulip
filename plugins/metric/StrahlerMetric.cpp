@@ -67,7 +67,8 @@ struct GreaterStackEval {
   }
 };
 
-Strahler StrahlerMetric::topSortStrahler(tlp::node n, int &curPref, std::unordered_map<node, int> &tofree,
+Strahler StrahlerMetric::topSortStrahler(tlp::node n, int &curPref,
+                                         std::unordered_map<node, int> &tofree,
                                          std::unordered_map<node, int> &prefix,
                                          std::unordered_map<node, bool> &visited,
                                          std::unordered_map<node, bool> &finished,

@@ -326,18 +326,17 @@ struct Face {
 };
 
 namespace std {
-  template <>
-  struct hash<Face> {
-    inline std::size_t operator()(const Face &f) const {
-      size_t seed = 0;
-      tlp_hash_combine(seed, f.sortedIndexes[0]);
-      tlp_hash_combine(seed, f.sortedIndexes[1]);
-      tlp_hash_combine(seed, f.sortedIndexes[2]);
-      return seed;
-    }
-  };
-}
-
+template <>
+struct hash<Face> {
+  inline std::size_t operator()(const Face &f) const {
+    size_t seed = 0;
+    tlp_hash_combine(seed, f.sortedIndexes[0]);
+    tlp_hash_combine(seed, f.sortedIndexes[1]);
+    tlp_hash_combine(seed, f.sortedIndexes[2]);
+    return seed;
+  }
+};
+} // namespace std
 
 //================================================================================================
 

@@ -300,7 +300,8 @@ bool EqualValueClustering::computeClusters(PropertyInterface *prop, bool onNodes
           sstr << prop->getName().c_str() << ": " << curValue.c_str();
 
           if (connected) {
-            std::unordered_map<std::string, unsigned int>::iterator itv = valuesCount.find(curValue);
+            std::unordered_map<std::string, unsigned int>::iterator itv =
+                valuesCount.find(curValue);
 
             if (itv != valuesCount.end()) {
               itv->second += 1;
@@ -392,7 +393,8 @@ bool EqualValueClustering::computeClusters(PropertyInterface *prop, bool onNodes
           sstr << prop->getName().c_str() << ": " << curValue.c_str();
 
           if (connected) {
-            std::unordered_map<std::string, unsigned int>::iterator itv = valuesCount.find(curValue);
+            std::unordered_map<std::string, unsigned int>::iterator itv =
+                valuesCount.find(curValue);
 
             if (itv != valuesCount.end()) {
               itv->second += 1;

@@ -116,7 +116,8 @@ void MCLClustering::power(node n) {
     }
   }
 
-  for (std::unordered_map<node, double>::iterator it = newTargets.begin(); it != newTargets.end(); ++it) {
+  for (std::unordered_map<node, double>::iterator it = newTargets.begin(); it != newTargets.end();
+       ++it) {
     edge ne;
     ne = g.addEdge(n, it->first);
     inW[ne] = 0.;

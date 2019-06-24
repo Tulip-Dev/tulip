@@ -291,7 +291,8 @@ bool EdgeBundling::run() {
         // instead of relying on the x, y exact values
         std::string key = tlp::PointType::toString(coord);
 
-        std::unordered_map<std::string, std::pair<node, unsigned int>>::iterator it = clusters.find(key);
+        std::unordered_map<std::string, std::pair<node, unsigned int>>::iterator it =
+            clusters.find(key);
 
         if (it == clusters.end())
           // register the first node at position represented by key
