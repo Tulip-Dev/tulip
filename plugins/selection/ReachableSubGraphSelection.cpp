@@ -119,7 +119,7 @@ bool ReachableSubGraphSelection::run() {
     Iterator<node> *itN = (result == startNodes) ? stableIterator(startNodes->getNodesEqualTo(true))
                                                  : startNodes->getNodesEqualTo(true);
 
-    TLP_HASH_MAP<node, bool> reachables;
+    std::unordered_map<node, bool> reachables;
 
     result->setAllEdgeValue(false);
     result->setAllNodeValue(false);
@@ -130,8 +130,8 @@ bool ReachableSubGraphSelection::run() {
       markReachableNodes(graph, current, reachables, maxDistance, edgeDirection);
     }
 
-    TLP_HASH_MAP<node, bool>::const_iterator itr = reachables.begin();
-    TLP_HASH_MAP<node, bool>::const_iterator ite = reachables.end();
+    std::unordered_map<node, bool>::const_iterator itr = reachables.begin();
+    std::unordered_map<node, bool>::const_iterator ite = reachables.end();
 
     // select nodes
     while (itr != ite) {

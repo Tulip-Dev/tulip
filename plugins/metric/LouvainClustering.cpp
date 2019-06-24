@@ -17,7 +17,6 @@
  *
  */
 
-#include <tulip/tuliphash.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/StaticProperty.h>
 #include <tulip/TlpTools.h>

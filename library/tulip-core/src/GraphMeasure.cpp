@@ -20,7 +20,7 @@
 #include <stack>
 #include <climits>
 
-#include <tulip/tuliphash.h>
+#include <unordered_map>
 #include <tulip/GraphMeasure.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphParallelTools.h>
@@ -176,12 +176,12 @@ void tlp::clusteringCoefficient(const Graph *graph, tlp::NodeStaticProperty<doub
                                 unsigned int maxDepth) {
 
   TLP_MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
-    TLP_HASH_MAP<node, bool> reachables;
+    std::unordered_map<node, bool> reachables;
     markReachableNodes(graph, n, reachables, maxDepth);
     double nbEdge = 0; // e(N_v)*2$
 
-    TLP_HASH_MAP<node, bool>::const_iterator itr = reachables.begin();
-    TLP_HASH_MAP<node, bool>::const_iterator ite = reachables.end();
+    std::unordered_map<node, bool>::const_iterator itr = reachables.begin();
+    std::unordered_map<node, bool>::const_iterator ite = reachables.end();
 
     while (itr != ite) {
       node itn = itr->first;

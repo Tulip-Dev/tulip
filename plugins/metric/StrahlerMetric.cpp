@@ -67,11 +67,11 @@ struct GreaterStackEval {
   }
 };
 
-Strahler StrahlerMetric::topSortStrahler(tlp::node n, int &curPref, TLP_HASH_MAP<node, int> &tofree,
-                                         TLP_HASH_MAP<node, int> &prefix,
-                                         TLP_HASH_MAP<node, bool> &visited,
-                                         TLP_HASH_MAP<node, bool> &finished,
-                                         TLP_HASH_MAP<node, Strahler> &cachedValues) {
+Strahler StrahlerMetric::topSortStrahler(tlp::node n, int &curPref, std::unordered_map<node, int> &tofree,
+                                         std::unordered_map<node, int> &prefix,
+                                         std::unordered_map<node, bool> &visited,
+                                         std::unordered_map<node, bool> &finished,
+                                         std::unordered_map<node, Strahler> &cachedValues) {
   visited[n] = true;
   Strahler result;
   prefix[n] = curPref;
@@ -200,11 +200,11 @@ bool StrahlerMetric::run() {
     dataSet->get(COMPUTATION_TYPE, computationTypes);
   }
 
-  TLP_HASH_MAP<node, bool> visited;
-  TLP_HASH_MAP<node, bool> finished;
-  TLP_HASH_MAP<node, int> prefix;
-  TLP_HASH_MAP<node, int> tofree;
-  TLP_HASH_MAP<node, Strahler> cachedValues;
+  std::unordered_map<node, bool> visited;
+  std::unordered_map<node, bool> finished;
+  std::unordered_map<node, int> prefix;
+  std::unordered_map<node, int> tofree;
+  std::unordered_map<node, Strahler> cachedValues;
   int curPref = 0;
 
   unsigned int i = 0;

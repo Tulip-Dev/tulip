@@ -1480,8 +1480,8 @@ public:
         ->setAllNodeValue(LabelPosition::Bottom);
     graph->getProperty<IntegerProperty>("viewShape")->setAllNodeValue(tlp::NodeShape::Icon);
 
-    TLP_HASH_MAP<std::string, node> authorsMap;
-    TLP_HASH_MAP<std::string, bool> publisMap;
+    std::unordered_map<std::string, node> authorsMap;
+    std::unordered_map<std::string, bool> publisMap;
 
     try {
       xdkbib::File bibFile;
@@ -1986,7 +1986,7 @@ public:
 
               node author;
               // check if the author already exists
-              TLP_HASH_MAP<std::string, node>::const_iterator itAuth = authorsMap.find(aKey);
+              std::unordered_map<std::string, node>::const_iterator itAuth = authorsMap.find(aKey);
 
               if (itAuth != authorsMap.end()) {
                 authorNodes.push_back(author = itAuth->second);

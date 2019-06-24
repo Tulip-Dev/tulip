@@ -22,7 +22,7 @@
 #include <stack>
 #include <cmath>
 
-#include <tulip/tuliphash.h>
+#include <unordered_map>
 #include <tulip/GraphTools.h>
 #include <tulip/GraphMeasure.h>
 #include <tulip/AcyclicTest.h>

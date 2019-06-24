@@ -24,7 +24,7 @@
 #include <cassert>
 #include <tulip/Array.h>
 #include <tulip/tulipconf.h>
-#include <tulip/tuliphash.h>
+#include <tulip/TlpTools.h>
 #include <cmath>
 #include <limits>
 #include <cstring>
@@ -494,7 +494,7 @@ template class TLP_SCOPE tlp::Vector<unsigned char, 4>;
 
 #endif
 
-TLP_BEGIN_HASH_NAMESPACE {
+namespace std {
   TEMPLATEVECTOR
   size_t hash_vector(const tlp::VECTOR &v) {
     size_t seed = 0;
@@ -590,7 +590,7 @@ TLP_BEGIN_HASH_NAMESPACE {
     }
   };
 }
-TLP_END_HASH_NAMESPACE
+
 
 #include "cxx/Vector.cxx"
 

@@ -60,8 +60,8 @@ void ConeTreeExtended::computeYCoodinates(tlp::node root) {
   }
 }
 //===============================================================
-double ConeTreeExtended::treePlace3D(tlp::node n, TLP_HASH_MAP<tlp::node, double> *posRelX,
-                                     TLP_HASH_MAP<tlp::node, double> *posRelY) {
+double ConeTreeExtended::treePlace3D(tlp::node n, std::unordered_map<tlp::node, double> *posRelX,
+                                     std::unordered_map<tlp::node, double> *posRelY) {
   (*posRelX)[n] = 0;
   (*posRelY)[n] = 0;
 
@@ -143,8 +143,8 @@ double ConeTreeExtended::treePlace3D(tlp::node n, TLP_HASH_MAP<tlp::node, double
   return circleH.radius;
 }
 //===============================================================
-void ConeTreeExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node, double> *px,
-                                  TLP_HASH_MAP<tlp::node, double> *py, double x, double y,
+void ConeTreeExtended::calcLayout(tlp::node n, std::unordered_map<tlp::node, double> *px,
+                                  std::unordered_map<tlp::node, double> *py, double x, double y,
                                   int level) {
   result->setNodeValue(
       n, Coord(float(x + (*px)[n]), -float(yCoordinates[level]), float(y + (*py)[n])));
@@ -225,8 +225,8 @@ bool ConeTreeExtended::run() {
 
   node root = tree->getSource();
   assert(root.isValid());
-  TLP_HASH_MAP<node, double> posX;
-  TLP_HASH_MAP<node, double> posY;
+  std::unordered_map<node, double> posX;
+  std::unordered_map<node, double> posY;
   treePlace3D(root, &posX, &posY);
   computeYCoodinates(root);
   calcLayout(root, &posX, &posY, 0, 0, 0);

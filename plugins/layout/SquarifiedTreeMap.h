@@ -21,12 +21,12 @@
 
 #include <vector>
 #include <utility>
-#include <tulip/tuliphash.h>
+#include <unordered_map>
 #include "tulip/TulipPluginHeaders.h"
 #include "tulip/Rectangle.h"
 
 typedef std::vector<tlp::node> VecNode;
-typedef TLP_HASH_MAP<tlp::node, double> MapNode;
+typedef std::unordered_map<tlp::node, double> MapNode;
 typedef std::pair<tlp::node, double> PairNodeF;
 typedef std::vector<PairNodeF> PairVector;
 /** \addtogroup layout */

@@ -189,7 +189,7 @@ list<LR> *TreeReingoldAndTilfordExtended::mergeLRList(std::list<LR> *L, std::lis
 }
 //=============================================================================
 list<LR> *TreeReingoldAndTilfordExtended::TreePlace(tlp::node n,
-                                                    TLP_HASH_MAP<tlp::node, double> *p) {
+                                                    std::unordered_map<tlp::node, double> *p) {
   if (tree->outdeg(n) == 0) {
     list<LR> *result = new list<LR>();
     LR tmpLR;
@@ -301,7 +301,7 @@ void TreeReingoldAndTilfordExtended::TreeLevelSizing(tlp::node n, std::map<int, 
   }
 }
 //=============================================================================
-void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node, double> *p,
+void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n, std::unordered_map<tlp::node, double> *p,
                                                 double x, double y, int level,
                                                 map<int, double> &maxLevelSize) {
   Coord tmpCoord;
@@ -343,7 +343,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::n
 }
 //===============================================================
 bool TreeReingoldAndTilfordExtended::run() {
-  TLP_HASH_MAP<node, double> posRelative;
+  std::unordered_map<node, double> posRelative;
 
   result->setAllEdgeValue(vector<Coord>(0));
 

@@ -20,6 +20,8 @@
 #include <iomanip>
 #include <fstream>
 #include <stack>
+#include <unordered_map>
+#include <unordered_set>
 
 #include <tulip/StlIterator.h>
 #include <tulip/TlpTools.h>
@@ -734,7 +736,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm, PropertyIn
     }
   }
 
-  TLP_HASH_MAP<std::string, PropertyInterface *>::const_iterator it = circularCalls.find(algorithm);
+  std::unordered_map<std::string, PropertyInterface *>::const_iterator it = circularCalls.find(algorithm);
 
   if (it != circularCalls.end() && (*it).second == prop) {
     errorMessage = std::string("Circular call of ") + __PRETTY_FUNCTION__;
@@ -1312,9 +1314,9 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 
   // create new meta edges from nodes to metanode
   Graph *super = getSuperGraph();
-  TLP_HASH_MAP<node, TLP_HASH_SET<node>> edges;
-  TLP_HASH_MAP<node, edge> metaEdges;
-  TLP_HASH_MAP<edge, set<edge>> subEdges;
+  std::unordered_map<node, std::unordered_set<node>> edges;
+  std::unordered_map<node, edge> metaEdges;
+  std::unordered_map<edge, set<edge>> subEdges;
 
   for (auto n : subGraph->nodes()) {
     for (auto e : getSuperGraph()->getInOutEdges(n)) {
@@ -1390,7 +1392,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   }
 
   // update metaInfo of new meta edges
-  TLP_HASH_MAP<edge, set<edge>>::const_iterator it;
+  std::unordered_map<edge, set<edge>>::const_iterator it;
 
   for (it = subEdges.begin(); it != subEdges.end(); ++it) {
     edge mE = it->first;
@@ -1494,7 +1496,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
       if (!super->isElement(metaEdge))
         continue;
       Color metaColor = graphColors->getEdgeValue(metaEdge);
-      TLP_HASH_MAP<node, TLP_HASH_MAP<node, set<edge>>> newMetaEdges;
+      std::unordered_map<node, std::unordered_map<node, set<edge>>> newMetaEdges;
 
       for (auto e : getEdgeMetaInfo(metaEdge)) {
         auto eEnds = super->ends(e);
@@ -1528,12 +1530,12 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
       }
 
       // iterate on newMetaEdges
-      TLP_HASH_MAP<node, TLP_HASH_MAP<node, set<edge>>>::iterator itme = newMetaEdges.begin();
+      std::unordered_map<node, std::unordered_map<node, set<edge>>>::iterator itme = newMetaEdges.begin();
 
       while (itme != newMetaEdges.end()) {
         node src = itme->first;
-        TLP_HASH_MAP<node, set<edge>>::iterator itnme = itme->second.begin();
-        TLP_HASH_MAP<node, set<edge>>::iterator itnmeEnd = itme->second.end();
+        std::unordered_map<node, set<edge>>::iterator itnme = itme->second.begin();
+        std::unordered_map<node, set<edge>>::iterator itnmeEnd = itme->second.end();
 
         while (itnme != itnmeEnd) {
           Graph *graph = this;
@@ -1569,7 +1571,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
     buildMapping(root->getInOutNodes(metaNode), mappingC, metaInfo, node());
     buildMapping(metaGraph->getNodes(), mappingN, metaInfo, node());
 
-    TLP_HASH_MAP<node, Color> metaEdgeToColor;
+    std::unordered_map<node, Color> metaEdgeToColor;
 
     for (auto metaEdge : super->getInOutEdges(metaNode)) {
       metaEdgeToColor[opposite(metaEdge, metaNode)] = graphColors->getEdgeValue(metaEdge);
@@ -1577,7 +1579,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
 
     // Remove the metagraph from the hierarchy and remove the metanode
     root->delNode(metaNode, true);
-    TLP_HASH_MAP<node, TLP_HASH_SET<node>> edges;
+    std::unordered_map<node, std::unordered_set<node>> edges;
     //=================================
     for (auto e : root->edges()) {
 

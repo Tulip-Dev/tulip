@@ -27,10 +27,10 @@ StrengthMetric::StrengthMetric(const tlp::PluginContext *context) : DoubleAlgori
 
 StrengthMetric::~StrengthMetric() {}
 //=============================================================
-double StrengthMetric::e(TLP_HASH_SET<tlp::node> &U, TLP_HASH_SET<tlp::node> &V) {
-  TLP_HASH_SET<node>::const_iterator itU;
+double StrengthMetric::e(std::unordered_set<tlp::node> &U, std::unordered_set<tlp::node> &V) {
+  std::unordered_set<node>::const_iterator itU;
   double result = 0;
-  TLP_HASH_SET<node> *A, *B;
+  std::unordered_set<node> *A, *B;
 
   if (U.size() < V.size()) {
     A = &U;
@@ -51,7 +51,7 @@ double StrengthMetric::e(TLP_HASH_SET<tlp::node> &U, TLP_HASH_SET<tlp::node> &V)
   return result;
 }
 //=============================================================
-double StrengthMetric::e(const TLP_HASH_SET<tlp::node> &U) {
+double StrengthMetric::e(const std::unordered_set<tlp::node> &U) {
   double result = 0.0;
 
   for (auto u : U) {
@@ -64,14 +64,14 @@ double StrengthMetric::e(const TLP_HASH_SET<tlp::node> &U) {
   return result / 2.0;
 }
 //=============================================================
-double StrengthMetric::s(TLP_HASH_SET<tlp::node> &U, TLP_HASH_SET<tlp::node> &V) {
+double StrengthMetric::s(std::unordered_set<tlp::node> &U, std::unordered_set<tlp::node> &V) {
   if ((U.empty()) || (V.empty()))
     return 0;
 
   return (e(U, V) / double(U.size() * V.size()));
 }
 //=============================================================
-double StrengthMetric::s(const TLP_HASH_SET<tlp::node> &U) {
+double StrengthMetric::s(const std::unordered_set<tlp::node> &U) {
   if (U.size() < 2)
     return 0.0;
 
@@ -82,7 +82,7 @@ double StrengthMetric::getEdgeValue(const tlp::edge ee) {
   const std::pair<node, node> eEnds = graph->ends(ee);
   node u = eEnds.first;
   node v = eEnds.second;
-  TLP_HASH_SET<node> Nu, Nv, Wuv;
+  std::unordered_set<node> Nu, Nv, Wuv;
 
   // Compute Nu
   for (auto n : graph->getInOutNodes(u)) {
@@ -103,7 +103,7 @@ double StrengthMetric::getEdgeValue(const tlp::edge ee) {
     return 0;
 
   // Compute Wuv, choose the minimum set to minimize operation
-  TLP_HASH_SET<node> *A, *B;
+  std::unordered_set<node> *A, *B;
 
   if (Nu.size() < Nv.size()) {
     A = &Nu;
@@ -118,8 +118,8 @@ double StrengthMetric::getEdgeValue(const tlp::edge ee) {
       Wuv.insert(na);
   }
 
-  TLP_HASH_SET<node> &Mu = Nu;
-  TLP_HASH_SET<node> &Mv = Nv;
+  std::unordered_set<node> &Mu = Nu;
+  std::unordered_set<node> &Mv = Nv;
 
   /* Compute Mu and Mv, we do not need Nu and Nv anymore,
      thus we modify them to speed up computation

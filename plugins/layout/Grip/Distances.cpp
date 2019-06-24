@@ -17,7 +17,6 @@
  *
  */
 #include "Distances.h"
-#include <tulip/tuliphash.h>
 
 #include <tulip/MutableContainer.h>
 
@@ -26,7 +25,7 @@ using namespace std;
 
 unsigned int getDist(Graph *g, node n1, node n2) {
   vector<node> nextNodes;
-  TLP_HASH_MAP<node, unsigned int> nodeDepth;
+  std::unordered_map<node, unsigned int> nodeDepth;
   MutableContainer<bool> alreadyTreated;
   bool found = false;
   alreadyTreated.setAll(false);

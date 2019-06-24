@@ -24,9 +24,9 @@ PLUGIN(StrongComponent)
 using namespace std;
 using namespace tlp;
 
-int StrongComponent::attachNumerotation(tlp::node n, TLP_HASH_MAP<tlp::node, bool> &visited,
-                                        TLP_HASH_MAP<tlp::node, bool> &finished,
-                                        TLP_HASH_MAP<tlp::node, int> &minAttach, int &id,
+int StrongComponent::attachNumerotation(tlp::node n, std::unordered_map<tlp::node, bool> &visited,
+                                        std::unordered_map<tlp::node, bool> &finished,
+                                        std::unordered_map<tlp::node, int> &minAttach, int &id,
                                         std::stack<tlp::node> &renum, int &curComponent) {
   if (visited[n])
     return minAttach[n];
@@ -73,10 +73,10 @@ StrongComponent::StrongComponent(const tlp::PluginContext *context) : DoubleAlgo
 StrongComponent::~StrongComponent() {}
 
 bool StrongComponent::run() {
-  TLP_HASH_MAP<node, bool> visited(graph->numberOfNodes());
-  TLP_HASH_MAP<node, bool> finished(graph->numberOfNodes());
+  std::unordered_map<node, bool> visited(graph->numberOfNodes());
+  std::unordered_map<node, bool> finished(graph->numberOfNodes());
   stack<node> renum;
-  TLP_HASH_MAP<node, int> cachedValues(graph->numberOfNodes());
+  std::unordered_map<node, int> cachedValues(graph->numberOfNodes());
   int id = 1;
   int curComponent = 0;
 

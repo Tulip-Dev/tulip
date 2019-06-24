@@ -18,7 +18,6 @@
  */
 #include <cstring>
 #include <cerrno>
-#include <tulip/tuliphash.h>
 #include <tulip/TulipPluginHeaders.h>
 #include "dotImportCLUT.h"
 

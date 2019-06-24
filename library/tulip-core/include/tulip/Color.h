@@ -223,7 +223,7 @@ void tlp::Color::setA(unsigned char alpha) {
   (*this)[3] = alpha;
 }
 
-TLP_BEGIN_HASH_NAMESPACE {
+namespace std {
   template <>
   struct hash<tlp::Color> {
     inline std::size_t operator()(const tlp::Color &c) const {
@@ -231,7 +231,7 @@ TLP_BEGIN_HASH_NAMESPACE {
     }
   };
 }
-TLP_END_HASH_NAMESPACE
+
 
 #endif
 

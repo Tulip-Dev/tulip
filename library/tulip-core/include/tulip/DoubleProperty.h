@@ -20,7 +20,6 @@
 #ifndef TULIP_METRIC_H
 #define TULIP_METRIC_H
 
-#include <tulip/tuliphash.h>
 #include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
 #include <tulip/PropertyAlgorithm.h>

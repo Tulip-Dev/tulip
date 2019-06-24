@@ -18,7 +18,7 @@
  */
 #ifndef Tulip_HierarchicalGraph_H
 #define Tulip_HierarchicalGraph_H
-#include <tulip/tuliphash.h>
+#include <unordered_map>
 #include <tulip/TulipPluginHeaders.h>
 
 class LessThanNode2 {
@@ -64,7 +64,7 @@ private:
   void twoLayerCrossReduction(tlp::Graph *sg, unsigned int freeLayer);
   void crossReduction(tlp::Graph *sg);
   void computeEdgeBends(const tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout,
-                        const TLP_HASH_MAP<tlp::edge, tlp::edge> &replacedEdges,
+                        const std::unordered_map<tlp::edge, tlp::edge> &replacedEdges,
                         const std::vector<tlp::edge> &reversedEdges);
   void computeSelfLoops(tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout,
                         std::vector<tlp::SelfLoops> &listSelfLoops);

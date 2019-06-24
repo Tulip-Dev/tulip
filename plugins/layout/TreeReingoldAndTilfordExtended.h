@@ -20,7 +20,7 @@
 #define _TreeReingoldAndTilfordExtended_H
 #include <string>
 #include <cmath>
-#include <tulip/tuliphash.h>
+#include <unordered_map>
 #include <tulip/TulipPluginHeaders.h>
 
 struct LR {
@@ -61,11 +61,11 @@ public:
   bool run() override;
 
 private:
-  void calcLayout(tlp::node, TLP_HASH_MAP<tlp::node, double> *, double, double, int,
+  void calcLayout(tlp::node, std::unordered_map<tlp::node, double> *, double, double, int,
                   std::map<int, double> &);
   double calcDecal(const std::list<LR> &, const std::list<LR> &);
   std::list<LR> *mergeLRList(std::list<LR> *, std::list<LR> *, double decal);
-  std::list<LR> *TreePlace(tlp::node, TLP_HASH_MAP<tlp::node, double> *);
+  std::list<LR> *TreePlace(tlp::node, std::unordered_map<tlp::node, double> *);
   void TreeLevelSizing(tlp::node, std::map<int, double> &, int, std::map<tlp::node, int> &levels);
 
   tlp::Graph *tree;

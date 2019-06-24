@@ -19,7 +19,7 @@
 #ifndef _TREE3DLAYOUT_H
 #define _TREE3DLAYOUT_H
 
-#include <tulip/tuliphash.h>
+#include <unordered_map>
 #include <tulip/TulipPluginHeaders.h>
 /** \addtogroup layout */
 
@@ -60,10 +60,10 @@ public:
   bool run() override;
 
 private:
-  double treePlace3D(tlp::node n, TLP_HASH_MAP<tlp::node, double> *posRelX,
-                     TLP_HASH_MAP<tlp::node, double> *posRelY);
-  void calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node, double> *px,
-                  TLP_HASH_MAP<tlp::node, double> *py, double x, double y, int level);
+  double treePlace3D(tlp::node n, std::unordered_map<tlp::node, double> *posRelX,
+                     std::unordered_map<tlp::node, double> *posRelY);
+  void calcLayout(tlp::node n, std::unordered_map<tlp::node, double> *px,
+                  std::unordered_map<tlp::node, double> *py, double x, double y, int level);
   void computeLayerSize(tlp::node n, unsigned int level);
   void computeYCoodinates(tlp::node root);
   tlp::Graph *tree;
