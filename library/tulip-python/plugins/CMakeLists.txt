@@ -3,7 +3,7 @@ TULIP_INSTALL_PYTHON_FILES(tulip/plugins ${CMAKE_CURRENT_SOURCE_DIR}/import
                                          ${CMAKE_CURRENT_SOURCE_DIR}/layout)
 
 TULIP_INSTALL_PYTHON_FILES(tulip/plugins/general ${CMAKE_CURRENT_SOURCE_DIR}/general/SquarifiedTreeMapHelper.py)
-TULIP_INSTALL_PYTHON_FILES(tulipgui/plugins/general ${CMAKE_CURRENT_SOURCE_DIR}/general/H3LayoutHelper.py)
+TULIP_INSTALL_PYTHON_FILES(tulip/plugins/general ${CMAKE_CURRENT_SOURCE_DIR}/general/H3LayoutHelper.py)
 
 ADD_CUSTOM_TARGET(copyTulipPythonPlugins ALL
                                          COMMAND ${CMAKE_COMMAND} -E make_directory ${TULIP_PYTHON_FOLDER}/plugins/color
