@@ -183,8 +183,7 @@ bool NodeFaceIterator::hasNext() {
 //============================================================
 // EdgeFaceIterator
 //============================================================
-EdgeFaceIterator::EdgeFaceIterator(PlanarConMap *m, const Face f) : ve(m->facesEdges[f]), i(0) {
-}
+EdgeFaceIterator::EdgeFaceIterator(PlanarConMap *m, const Face f) : ve(m->facesEdges[f]), i(0) {}
 
 //============================================================
 /**
