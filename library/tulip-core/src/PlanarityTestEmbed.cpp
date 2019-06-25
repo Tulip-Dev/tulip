@@ -25,13 +25,15 @@
 using namespace std;
 using namespace tlp;
 
-void sortEdges(Graph *graph, const vector<edge> &order, map<edge, edge> &rev) {
+void sortEdges(Graph *graph, const vector<edge> &order, unordered_map<edge, edge> &rev) {
   map<node, vector<edge>> graphMap;
   vector<edge>::const_iterator it = order.begin();
 
   for (; it != order.end(); ++it) {
-    graphMap[graph->source(*it)].push_back(*it);
-    graphMap[graph->source(*it)].push_back(rev[*it]);
+    edge e = *it;
+    auto &v = graphMap[graph->source(e)];
+    v.push_back(e);
+    v.push_back(rev[e]);
   }
 
   map<node, vector<edge>>::const_iterator itM = graphMap.begin();

@@ -27,10 +27,8 @@ using namespace tlp;
 //============================================================
 // Iterator for Face : FaceIterator
 //============================================================
-FaceIterator::FaceIterator(PlanarConMap *m) {
+FaceIterator::FaceIterator(PlanarConMap *m) : i(0), mgraph(m) {
   assert(m);
-  mgraph = m;
-  i = 0;
 }
 
 //============================================================
@@ -38,8 +36,7 @@ FaceIterator::FaceIterator(PlanarConMap *m) {
  * return the next element
  */
 Face FaceIterator::next() {
-  Face tmp = mgraph->faces[i++];
-  return tmp;
+  return mgraph->faces[i++];
 }
 
 //============================================================
@@ -47,18 +44,14 @@ Face FaceIterator::next() {
  * test if there's a next element
  */
 bool FaceIterator::hasNext() {
-  if (i == mgraph->faces.size())
-    return false;
-  else
-    return true;
+  return (i != mgraph->faces.size());
 }
 
 //============================================================
 // Iterator for Face : FaceAdjIterator
 //============================================================
-FaceAdjIterator::FaceAdjIterator(PlanarConMap *m, const node n) {
+FaceAdjIterator::FaceAdjIterator(PlanarConMap *m, const node n) : i(0) {
   assert(m->isElement(n));
-  i = 0;
   facesAdj.erase(facesAdj.begin(), facesAdj.end());
   edge e;
   Face f_tmp, f_tmp2;
@@ -128,9 +121,7 @@ FaceAdjIterator::FaceAdjIterator(PlanarConMap *m, const node n) {
  * return the next element
  */
 Face FaceAdjIterator::next() {
-  Face tmp = facesAdj[i];
-  ++i;
-  return tmp;
+  return facesAdj[i++];
 }
 
 //============================================================
@@ -144,14 +135,13 @@ bool FaceAdjIterator::hasNext() {
 //============================================================
 // NodeFaceIterator
 //============================================================
-NodeFaceIterator::NodeFaceIterator(PlanarConMap *m, const Face face) {
-  i = 0;
-  vector<edge> e = m->facesEdges[face];
+NodeFaceIterator::NodeFaceIterator(PlanarConMap *m, const Face face) : i(0) {
+  vector<edge> &e = m->facesEdges[face];
   edge e1 = e[0];
   edge e2 = e[1];
   node prev;
   pair<node, node> e1Ends = m->ends(e1);
-  pair<node, node> e2Ends = m->ends(e2);
+  const pair<node, node> &e2Ends = m->ends(e2);
 
   if (e1Ends.first == e2Ends.first || e1Ends.first == e2Ends.second)
     prev = e1Ends.first;
@@ -179,9 +169,7 @@ NodeFaceIterator::NodeFaceIterator(PlanarConMap *m, const Face face) {
  * return the next element
  */
 node NodeFaceIterator::next() {
-  node n = nodes[i];
-  i++;
-  return n;
+  return nodes[i++];
 }
 
 //============================================================
@@ -195,9 +183,7 @@ bool NodeFaceIterator::hasNext() {
 //============================================================
 // EdgeFaceIterator
 //============================================================
-EdgeFaceIterator::EdgeFaceIterator(PlanarConMap *m, const Face f) {
-  i = 0;
-  ve = m->facesEdges[f];
+EdgeFaceIterator::EdgeFaceIterator(PlanarConMap *m, const Face f) : ve(m->facesEdges[f]), i(0) {
 }
 
 //============================================================
@@ -205,9 +191,7 @@ EdgeFaceIterator::EdgeFaceIterator(PlanarConMap *m, const Face f) {
  * return the next element
  */
 edge EdgeFaceIterator::next() {
-  edge tmp = ve[i];
-  i++;
-  return tmp;
+  return ve[i++];
 }
 
 //============================================================

@@ -110,7 +110,7 @@ void makeProperDag(Graph *graph, list<node> &addedNodes,
   unsigned int nbEdges = edges.size();
   for (unsigned int i = 0; i < nbEdges; ++i) {
     edge e = edges[i];
-    pair<node, node> eEnds = graph->ends(e);
+    auto eEnds = graph->ends(e);
     unsigned int fLevel = dLevel.getNodeValue(eEnds.first);
     unsigned int sLevel = dLevel.getNodeValue(eEnds.second);
     int delta = sLevel - fLevel;
@@ -483,11 +483,10 @@ void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selection,
 
   while (numClasses > 1) {
     edge cur;
-    pair<node, node> curEnds;
     unsigned int srcClass = 0, tgtClass = 0;
 
     for (; iE < nbEdges; ++iE) {
-      curEnds = graph->ends(cur = sortedEdges[iE]);
+      auto curEnds = graph->ends(cur = sortedEdges[iE]);
 
       if ((srcClass = classes[curEnds.first]) != (tgtClass = classes[curEnds.second]))
         break;
@@ -726,7 +725,7 @@ unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool
   Observable::holdObservers();
   unsigned added = 0;
   for (auto e : selection->getEdgesEqualTo(true, graph)) {
-    const pair<node, node> ends = graph->ends(e);
+    auto ends = graph->ends(e);
 
     if (!selection->getNodeValue(ends.first)) {
 #ifndef NDEBUG

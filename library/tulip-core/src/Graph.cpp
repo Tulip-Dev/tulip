@@ -80,7 +80,7 @@ ostream &operator<<(ostream &os, const Graph *graph) {
   os << ";(edge <edge_id> <source_id> <target_id>)" << endl;
 
   for (auto e : graph->edges()) {
-    std::pair<node, node> ends = graph->ends(e);
+    auto ends = graph->ends(e);
     os << "(edge " << e.id << " " << ends.first.id << " " << ends.second.id << ")" << endl;
   }
 
@@ -507,7 +507,7 @@ void tlp::removeFromGraph(Graph *ioG, BooleanProperty *inSel) {
       edgeA.push_back(e);
     } else {
       // unselected edge -> don't remove node ends !
-      std::pair<node, node> ends = ioG->ends(e);
+      auto ends = ioG->ends(e);
       inSel->setNodeValue(ends.first, false);
       inSel->setNodeValue(ends.second, false);
     }
@@ -538,7 +538,7 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
   // extend the selection to edge ends
   if (inSel) {
     for (auto e : inSel->getNonDefaultValuatedEdges(inG)) {
-      const pair<node, node> eEnds = inG->ends(e);
+      auto eEnds = inG->ends(e);
       inSel->setNodeValue(eEnds.first, true);
       inSel->setNodeValue(eEnds.second, true);
     }
@@ -1321,7 +1321,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 
   for (auto n : subGraph->nodes()) {
     for (auto e : getSuperGraph()->getInOutEdges(n)) {
-      const pair<node, node> eEnds = ends(e);
+      auto eEnds = ends(e);
       node src = eEnds.first;
       node tgt = eEnds.second;
       unsigned int toDelete = isElement(src);
@@ -1588,7 +1588,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
       if (isElement(e))
         continue;
 
-      pair<node, node> eEnds = root->ends(e);
+      auto eEnds = root->ends(e);
       unsigned int srcId = eEnds.first.id;
       unsigned int tgtId = eEnds.second.id;
       node sourceC = mappingC.get(srcId);
@@ -1688,7 +1688,7 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
       unsigned int nbEdges = edges.size();
       for (unsigned int i = 0; i < nbEdges; ++i) {
         edge e = edges[i];
-        pair<node, node> eEnds = ends(e);
+        auto eEnds = ends(e);
         set<node> &metaSources = nMapping[eEnds.first];
         set<node> &metaTargets = nMapping[eEnds.second];
 
@@ -1734,7 +1734,7 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
 
 Graph *Graph::getNthSubGraph(unsigned int n) const {
   unsigned int i = 0;
-  for (tlp::Graph *sg : getSubGraphs()) {
+  for (tlp::Graph *sg : subGraphs()) {
     if (i++ == n) {
       return sg;
     }

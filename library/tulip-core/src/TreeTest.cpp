@@ -317,7 +317,7 @@ static Graph *computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
   rGraph->setAttribute(CLONE_ROOT, root);
 
   // connected components subgraphs loop
-  for (Graph *gConn : rGraph->getSubGraphs()) {
+  for (Graph *gConn : rGraph->subGraphs()) {
     if (gConn == tree)
       continue;
 

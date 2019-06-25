@@ -273,7 +273,7 @@ void GraphView::addNodes(Iterator<node> *addedNodes) {
 //----------------------------------------------------------------
 edge GraphView::addEdgeInternal(edge e) {
   _edges.add(e);
-  const std::pair<node, node> eEnds = ends(e);
+  auto eEnds = ends(e);
   node src = eEnds.first;
   node tgt = eEnds.second;
   _nodeData.get(src.id)->outDegreeAdd(1);
@@ -308,7 +308,7 @@ void GraphView::addEdgesInternal(unsigned int nbAdded, const std::vector<edge> *
     edge e = *it;
     assert(getRootImpl()->isElement(e));
     _edges.add(e);
-    std::pair<node, node> eEnds(hasEnds ? ends[i] : this->ends(e));
+    auto eEnds = hasEnds ? ends[i] : this->ends(e);
     node src = eEnds.first;
     node tgt = eEnds.second;
     _nodeData.get(src.id)->outDegreeAdd(1);

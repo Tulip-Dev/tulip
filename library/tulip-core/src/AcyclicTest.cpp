@@ -100,7 +100,7 @@ void AcyclicTest::makeAcyclic(Graph *graph, vector<edge> &reversed,
   unsigned int nbEdges = edges.size();
   for (unsigned int i = 0; i < nbEdges; ++i) {
     edge e = edges[i];
-    const pair<node, node> eEnds = graph->ends(e);
+    auto eEnds = graph->ends(e);
 
     if (eEnds.first == eEnds.second) {
       node n1 = graph->addNode();

@@ -187,7 +187,7 @@ void tlp::clusteringCoefficient(const Graph *graph, tlp::NodeStaticProperty<doub
       node itn = itr->first;
 
       for (auto e : graph->getInOutEdges(itn)) {
-        const pair<node, node> eEnds = graph->ends(e);
+        auto eEnds = graph->ends(e);
 
         if ((reachables.find(eEnds.first) != ite) && (reachables.find(eEnds.second) != ite)) {
           ++nbEdge;

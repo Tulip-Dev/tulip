@@ -291,7 +291,7 @@ std::vector<edge> GraphImpl::getEdges(const node src, const node tgt, bool direc
 //----------------------------------------------------------------
 void GraphImpl::reverse(const edge e) {
   assert(isElement(e));
-  std::pair<node, node> eEnds = storage.ends(e);
+  auto eEnds = storage.ends(e);
 
   // notification
   notifyReverseEdge(e);
