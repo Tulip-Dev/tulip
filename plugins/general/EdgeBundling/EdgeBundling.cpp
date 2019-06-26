@@ -368,10 +368,21 @@ bool EdgeBundling::run() {
   EdgeStaticProperty<unsigned int> ntype(graph);
   fixEdgeType(ntype);
 
-  // remove all original graph edges
+
   //==========================================================
-  gridGraph = graph->getSubGraph("Voronoi");
+  // get the freshly created Voronoi subgraph,
+  // this should be the last one in the list but we prefer
+  // to iterate on that latter in reverse order in case the
+  // Voronoi plugin implementation changes
+  for (auto i = graph->numberOfSubGraphs() ; i > 0 ; --i) {
+    auto sg = graph->getNthSubGraph(i - 1);
+    if (sg->getName() == "Voronoi") {
+      gridGraph = sg;
+      break;
+    }
+  }
   gridGraph->setName("Grid Graph");
+  // remove all original graph edges
   TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, [&](edge e, unsigned int i) {
     if (ntype[i] == 1 && gridGraph->isElement(e)) {
       gridGraph->delEdge(e);
