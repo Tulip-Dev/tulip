@@ -62,6 +62,8 @@ public:
    */
   Camera(GlScene *scene, bool d3);
 
+  Camera(const Camera &camera) = default;
+
   Camera &operator=(const Camera &camera);
 
   /**

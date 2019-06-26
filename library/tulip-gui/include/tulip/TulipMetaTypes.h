@@ -57,6 +57,7 @@ struct TulipFileDescriptor {
     type = d.type;
     mustExist = d.mustExist;
   }
+  TulipFileDescriptor &operator=(const TulipFileDescriptor &) = default;
   QString absolutePath;
   FileType type;
   // indicate if the file or dir must exist

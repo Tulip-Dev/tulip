@@ -37,6 +37,7 @@ public:
 
   UrlElement();
   UrlElement(const UrlElement &c);
+  UrlElement &operator=(const UrlElement &) = default;
   bool load();
   void clear();
   bool isHtmlPage();

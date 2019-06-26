@@ -352,6 +352,8 @@ public:
   }
   inline DTYPE dist(const VECTOR &) const;
   inline TYPE dotProduct(const VECTOR &) const;
+
+  inline VECTOR &operator=(const VECTOR &) = default;
 };
 
 TEMPLATEVECTOR
