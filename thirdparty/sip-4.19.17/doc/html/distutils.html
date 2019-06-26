@@ -1,0 +1,136 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Building Your Extension with distutils &#8212; SIP v4.19.17 Reference Guide</title>
+    <link rel="stylesheet" href="_static/riverbank.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/logo_tn.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="The Build System" href="build_system.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="build_system.html" title="The Build System"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">SIP v4.19.17 Reference Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="building-your-extension-with-distutils">
+<span id="ref-distutils"></span><h1>Building Your Extension with distutils<a class="headerlink" href="#building-your-extension-with-distutils" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This should not be used for new projects as it will not be supported by SIP
+v5.</p>
+</div>
+<p>To build the example in <a class="reference internal" href="using.html#ref-simple-c-example"><span class="std std-ref">A Simple C++ Example</span></a> using distutils, it is
+sufficient to create a standard <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>, listing <code class="docutils literal notranslate"><span class="pre">word.sip</span></code> among the
+files to build, and hook-up SIP into distutils:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">distutils.core</span> <span class="k">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">Extension</span>
+<span class="kn">import</span> <span class="nn">sipdistutils</span>
+
+<span class="n">setup</span><span class="p">(</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;word&#39;</span><span class="p">,</span>
+  <span class="n">versione</span> <span class="o">=</span> <span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
+  <span class="n">ext_modules</span><span class="o">=</span><span class="p">[</span>
+    <span class="n">Extension</span><span class="p">(</span><span class="s2">&quot;word&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;word.sip&quot;</span><span class="p">,</span> <span class="s2">&quot;word.cpp&quot;</span><span class="p">]),</span>
+    <span class="p">],</span>
+
+  <span class="n">cmdclass</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;build_ext&#39;</span><span class="p">:</span> <span class="n">sipdistutils</span><span class="o">.</span><span class="n">build_ext</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>As we can see, the above is a normal distutils setup script, with just a
+special line which is needed so that SIP can see and process <code class="docutils literal notranslate"><span class="pre">word.sip</span></code>.
+Then, running <code class="docutils literal notranslate"><span class="pre">setup.py</span> <span class="pre">build</span></code> will build our extension module.</p>
+<p>If you want to use any of sip’s command-line options described in
+<a class="reference internal" href="command_line.html#ref-command-line"><span class="std std-ref">The SIP Command Line</span></a>, there is a new option available for the
+<code class="docutils literal notranslate"><span class="pre">build_ext</span></code> command in distutils: <code class="docutils literal notranslate"><span class="pre">--sip-opts</span></code>. So you can either invoke
+distutils as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python setup.py build_ext --sip-opts=&quot;-e -g&quot; build
+</pre></div>
+</div>
+<p>or you can leverage distutils’ config file support by creating a <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code>
+file in the supported system or local paths (eg: in the same directory of
+<code class="docutils literal notranslate"><span class="pre">setup.py</span></code>) with these contents:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">build_ext</span><span class="p">]</span>
+<span class="n">sip</span><span class="o">-</span><span class="n">opts</span> <span class="o">=</span> <span class="o">-</span><span class="n">e</span> <span class="o">-</span><span class="n">g</span>
+</pre></div>
+</div>
+<p>and then run <code class="docutils literal notranslate"><span class="pre">setup.py</span> <span class="pre">build</span></code> as usual.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">sip-opts</span></code> has not been specified then any <code class="docutils literal notranslate"><span class="pre">swig_opts</span></code> defined when
+creating the <code class="docutils literal notranslate"><span class="pre">Extension</span></code> will be used.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="build_system.html"
+                        title="previous chapter">The Build System</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="build_system.html" title="The Build System"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">SIP v4.19.17 Reference Guide</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019 Riverbank Computing Limited.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

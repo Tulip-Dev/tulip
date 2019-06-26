@@ -1,0 +1,739 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>SIP Specification Files &#8212; SIP v4.19.17 Reference Guide</title>
+    <link rel="stylesheet" href="_static/riverbank.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/logo_tn.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Directives" href="directives.html" />
+    <link rel="prev" title="The SIP Command Line" href="command_line.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="directives.html" title="Directives"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="command_line.html" title="The SIP Command Line"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">SIP v4.19.17 Reference Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="sip-specification-files">
+<h1>SIP Specification Files<a class="headerlink" href="#sip-specification-files" title="Permalink to this headline">¶</a></h1>
+<p>A SIP specification consists of some C/C++ type and function declarations and
+some directives.  The declarations may contain annotations which provide SIP
+with additional information that cannot be expressed in C/C++.  SIP does not
+include a full C/C++ parser.</p>
+<p>It is important to understand that a SIP specification describes the Python
+API, i.e. the API available to the Python programmer when they <code class="docutils literal notranslate"><span class="pre">import</span></code> the
+generated module.  It does not have to accurately represent the underlying
+C/C++ library.  There is nothing wrong with omitting functions that make
+little sense in a Python context, or adding functions implemented with
+handwritten code that have no C/C++ equivalent.  It is even possible (and
+sometimes necessary) to specify a different super-class hierarchy for a C++
+class.  All that matters is that the generated code compiles properly.</p>
+<p>In most cases the Python API matches the C/C++ API.  In some cases handwritten
+code (see <a class="reference internal" href="directives.html#directive-%MethodCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%MethodCode</span></code></a>) is used to map from one to the other
+without SIP having to know the details itself.  However, there are a few cases
+where SIP generates a thin wrapper around a C++ method or constructor (see
+<a class="reference internal" href="c_api.html#ref-derived-classes"><span class="std std-ref">Generated Derived Classes</span></a>) and needs to know the exact C++ signature.  To deal
+with these cases SIP allows two signatures to be specified.  For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>class Klass
+{
+public:
+    // The Python signature is a tuple, but the underlying C++ signature
+    // is a 2 element array.
+    Klass(SIP_PYTUPLE) [(int *)];
+%MethodCode
+        int iarr[2];
+
+        if (PyArg_ParseTuple(a0, &quot;ii&quot;, &amp;iarr[0], &amp;iarr[1]))
+        {
+            // Note that we use the SIP generated derived class
+            // constructor.
+            Py_BEGIN_ALLOW_THREADS
+            sipCpp = new sipKlass(iarr);
+            Py_END_ALLOW_THREADS
+        }
+%End
+};
+</pre></div>
+</div>
+<div class="section" id="syntax-definition">
+<h2>Syntax Definition<a class="headerlink" href="#syntax-definition" title="Permalink to this headline">¶</a></h2>
+<p>The following is a semi-formal description of the syntax of a specification
+file.</p>
+<pre class="literal-block">
+<em>specification</em> ::= {<em>module-statement</em>}
+
+<em>module-statement</em> ::= [<em>module-directive</em> | <em>statement</em>]
+
+<em>module-directive</em> ::= [
+        <a class="reference internal" href="directives.html#directive-%API"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%API</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%CompositeModule"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%CompositeModule</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%ConsolidatedModule"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%ConsolidatedModule</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%Copying"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%Copying</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%DefaultEncoding"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%DefaultEncoding</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%DefaultMetatype"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%DefaultMetatype</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%DefaultSupertype"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%DefaultSupertype</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%ExportedHeaderCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%ExportedHeaderCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%ExportedTypeHintCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%ExportedTypeHintCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%Extract"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%Extract</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%Feature"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%Feature</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%Import"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%Import</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%Include"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%Include</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%InitialisationCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%InitialisationCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%License"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%License</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%MappedType"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%MappedType</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%Module"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%Module</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%ModuleCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%ModuleCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%ModuleHeaderCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%ModuleHeaderCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%OptionalInclude"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%OptionalInclude</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%Platforms"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%Platforms</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%PreInitialisationCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%PreInitialisationCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%PostInitialisationCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%PostInitialisationCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%Timeline"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%Timeline</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%TypeHintCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%TypeHintCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%UnitCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%UnitCode</span></code></a> |
+        <em>mapped-type-template</em>]
+
+<em>statement</em> :: [<em>class-statement</em> | <em>function</em> | <em>variable</em>]
+
+<em>class-statement</em> :: [
+        <a class="reference internal" href="directives.html#directive-%If"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%If</span></code></a> |
+        <em>class</em> |
+        <em>class-template</em> |
+        <em>enum</em> |
+        <em>namespace</em> |
+        <em>opaque-class</em> |
+        <em>operator</em> |
+        <em>struct</em> |
+        <em>typedef</em> |
+        <em>exception</em>]
+
+<em>class</em> ::= <strong>class</strong> <em>name</em> [<strong>:</strong> <em>super-classes</em>] [<em>class-annotations</em>]
+        <strong>{</strong> {<em>class-line</em>} <strong>};</strong>
+
+<em>super-classes</em> ::= [<strong>public</strong> | <strong>protected</strong> | <strong>private</strong>] <em>name</em>
+        [<strong>,</strong> <em>super-classes</em>]
+
+<em>class-line</em> ::= [
+        <em>class-statement</em> |
+        <a class="reference internal" href="directives.html#directive-%BIGetBufferCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%BIGetBufferCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%BIGetReadBufferCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%BIGetReadBufferCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%BIGetWriteBufferCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%BIGetWriteBufferCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%BIGetSegCountCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%BIGetSegCountCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%BIGetCharBufferCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%BIGetCharBufferCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%BIReleaseBufferCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%BIReleaseBufferCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%ConvertToSubClassCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%ConvertToSubClassCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%ConvertToTypeCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%ConvertToTypeCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%Docstring"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%Docstring</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%GCClearCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%GCClearCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%GCTraverseCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%GCTraverseCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%InstanceCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%InstanceCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%PickleCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%PickleCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%TypeCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%TypeCode</span></code></a> |
+        <a class="reference internal" href="directives.html#directive-%TypeHeaderCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%TypeHeaderCode</span></code></a> |
+        <em>constructor</em> |
+        <em>destructor</em> |
+        <em>method</em> |
+        <em>static-method</em> |
+        <em>virtual-method</em> |
+        <em>special-method</em> |
+        <em>operator</em> |
+        <em>virtual-operator</em> |
+        <em>class-variable</em> |
+        <strong>public:</strong> |
+        <strong>public Q_SLOTS:</strong> |
+        <strong>public slots:</strong> |
+        <strong>protected:</strong> |
+        <strong>protected Q_SLOTS:</strong> |
+        <strong>protected slots:</strong> |
+        <strong>private:</strong> |
+        <strong>private Q_SLOTS:</strong> |
+        <strong>private slots:</strong> |
+        <strong>Q_SIGNALS:</strong> |
+        <strong>signals:</strong>]
+
+<em>constructor</em> ::= [<strong>explicit</strong>] <em>name</em> <strong>(</strong> [<em>argument-list</em>] <strong>)</strong>
+        [<em>exceptions</em>] [<em>function-annotations</em>]
+        [<em>c++-constructor-signature</em>] <strong>;</strong> [<a class="reference internal" href="directives.html#directive-%Docstring"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%Docstring</span></code></a>]
+        [<a class="reference internal" href="directives.html#directive-%MethodCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%MethodCode</span></code></a>]
+
+<em>c++-constructor-signature</em> ::= <strong>[(</strong> [<em>argument-list</em>] <strong>)]</strong>
+
+<em>destructor</em> ::= [<strong>virtual</strong>] <strong>~</strong> <em>name</em> <strong>()</strong> [<em>exceptions</em>] [<strong>= 0</strong>]
+        [<em>function-annotations</em>] <strong>;</strong> [<a class="reference internal" href="directives.html#directive-%MethodCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%MethodCode</span></code></a>]
+        [<a class="reference internal" href="directives.html#directive-%VirtualCatcherCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%VirtualCatcherCode</span></code></a>]
+
+<em>method</em> ::= [<strong>Q_SIGNAL</strong>] [<strong>Q_SLOT</strong>] <em>type</em> <em>name</em> <strong>(</strong>
+        [<em>argument-list</em>] <strong>)</strong> [<strong>const</strong>] [<strong>final</strong>] [<em>exceptions</em>]
+        [<strong>= 0</strong>] [<em>function-annotations</em>] [<em>c++-signature</em>] <strong>;</strong>
+        [<a class="reference internal" href="directives.html#directive-%Docstring"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%Docstring</span></code></a>] [<a class="reference internal" href="directives.html#directive-%MethodCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%MethodCode</span></code></a>]
+
+<em>c++-signature</em> ::= <strong>[</strong> <em>type</em> <strong>(</strong> [<em>argument-list</em>] <strong>)]</strong>
+
+<em>static-method</em> ::= <strong>static</strong> <em>function</em>
+
+<em>virtual-method</em> ::= [<strong>Q_SIGNAL</strong>] [<strong>Q_SLOT</strong>] <strong>virtual</strong> <em>type</em> <em>name</em>
+        <strong>(</strong> [<em>argument-list</em>] <strong>)</strong> [<strong>const</strong>] [<strong>final</strong>]
+        [<em>exceptions</em>] [<strong>= 0</strong>] [<em>function-annotations</em>] [<em>c++-signature</em>]
+        <strong>;</strong> [<a class="reference internal" href="directives.html#directive-%MethodCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%MethodCode</span></code></a>] [<a class="reference internal" href="directives.html#directive-%VirtualCatcherCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%VirtualCatcherCode</span></code></a>]
+        [<a class="reference internal" href="directives.html#directive-%VirtualCallCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%VirtualCallCode</span></code></a>]
+
+<em>special-method</em> ::= <em>type</em> <em>special-method-name</em>
+        <strong>(</strong> [<em>argument-list</em>] <strong>)</strong> [<em>function-annotations</em>] <strong>;</strong>
+        [<a class="reference internal" href="directives.html#directive-%MethodCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%MethodCode</span></code></a>]
+
+<em>special-method-name</em> ::= [<strong>__abs__</strong> | <strong>__add__</strong> | <strong>__and__</strong> |
+        <strong>__aiter__</strong> | <strong>__anext__</strong> | <strong>__await__</strong> | <strong>__bool__</strong> |
+        <strong>__call__</strong> | <strong>__cmp__</strong> | <strong>__contains__</strong> | <strong>__delattr__</strong> |
+        <strong>__delitem__</strong> | <strong>__div__</strong> | <strong>__eq__</strong> | <strong>__float__</strong> |
+        <strong>__floordiv__</strong> | <strong>__ge__</strong> | <strong>__getattr__</strong> |
+        <strong>__getattribute__</strong> | <strong>__getitem__</strong> | <strong>__gt__</strong> |
+        <strong>__hash__</strong> | <strong>__iadd__</strong> | <strong>__iand__</strong> | <strong>__idiv__</strong> |
+        <strong>__ifloordiv__</strong> | <strong>__ilshift__</strong> | <strong>__imatmul__</strong> |
+        <strong>__imod__</strong> | <strong>__imul__</strong> | <strong>__index__</strong> | <strong>__int__</strong> |
+        <strong>__invert__</strong> | <strong>__ior__</strong> | <strong>__irshift__</strong> | <strong>__isub__</strong> |
+        <strong>__iter__</strong> | <strong>__itruediv__</strong> | <strong>__ixor__</strong> | <strong>__le__</strong> |
+        <strong>__len__</strong> | <strong>__long__</strong> | <strong>__lshift__</strong> | <strong>__lt__</strong> |
+        <strong>__matmul</strong> | <strong>__mod__</strong> | <strong>__mul__</strong> | <strong>__ne__</strong> |
+        <strong>__neg__</strong> | <strong>__next__</strong> | <strong>__nonzero__</strong> | <strong>__or__</strong> |
+        <strong>__pos__</strong> | <strong>__repr__</strong> | <strong>__rshift__</strong> | <strong>__setattr__</strong> |
+        <strong>__setitem__</strong> | <strong>__str__</strong> | <strong>__sub__</strong> | <strong>__truediv__</strong> |
+        <strong>__xor__</strong>]
+
+<em>operator</em> ::= <em>operator-type</em>
+        <strong>(</strong> [<em>argument-list</em>] <strong>)</strong> [<strong>const</strong>] [<strong>final</strong>]
+        [<em>exceptions</em>] [<em>function-annotations</em>] <strong>;</strong>
+        [<a class="reference internal" href="directives.html#directive-%MethodCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%MethodCode</span></code></a>]
+
+<em>virtual-operator</em> ::= <strong>virtual</strong> <em>operator-type</em>
+        <strong>(</strong> [<em>argument-list</em>] <strong>)</strong> [<strong>const</strong>] [<strong>final</strong>]
+        [<em>exceptions</em>] [<strong>= 0</strong>] [<em>function-annotations</em>] <strong>;</strong>
+        [<a class="reference internal" href="directives.html#directive-%MethodCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%MethodCode</span></code></a>] [<a class="reference internal" href="directives.html#directive-%VirtualCatcherCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%VirtualCatcherCode</span></code></a>]
+        [<a class="reference internal" href="directives.html#directive-%VirtualCallCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%VirtualCallCode</span></code></a>]
+
+<em>operatator-type</em> ::= [ <em>operator-function</em> | <em>operator-cast</em> ]
+
+<em>operator-function</em> ::= <em>type</em> <strong>operator</strong> <em>operator-name</em>
+
+<em>operator-cast</em> ::= <strong>operator</strong> <em>type</em>
+
+<em>operator-name</em> ::= [<strong>+</strong> | <strong>-</strong> | <strong>*</strong> | <strong>/</strong> | <strong>%</strong> | <strong>&amp;</strong> |
+        <strong>|</strong> | <strong>^</strong> | <strong>&lt;&lt;</strong> | <strong>&gt;&gt;</strong> | <strong>+=</strong> | <strong>-=</strong> | <strong>*=</strong> |
+        <strong>/=</strong> | <strong>%=</strong> | <strong>&amp;=</strong> | <strong>|=</strong> | <strong>^=</strong> | <strong>&lt;&lt;=</strong> | <strong>&gt;&gt;=</strong> |
+        <strong>~</strong> | <strong>()</strong> | <strong>[]</strong> | <strong>&lt;</strong> | <strong>&lt;=</strong> | <strong>==</strong> | <strong>!=</strong> |
+        <strong>&gt;</strong> | <strong>&gt;&gt;=</strong> | <strong>=</strong>]
+
+<em>class-variable</em> ::= [<strong>static</strong>] <em>variable</em>
+
+<em>class-template</em> :: = <strong>template</strong> <strong>&lt;</strong> <em>type-list</em> <strong>&gt;</strong> <em>class</em>
+
+<em>mapped-type-template</em> :: = <strong>template</strong> <strong>&lt;</strong> <em>type-list</em> <strong>&gt;</strong>
+        <a class="reference internal" href="directives.html#directive-%MappedType"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%MappedType</span></code></a>
+
+<em>enum</em> ::= <strong>enum</strong> [<em>enum-key</em>] [<em>name</em>] [<em>enum-annotations</em>] <strong>{</strong> {<em>enum-line</em>} <strong>};</strong>
+
+<em>enum-key</em> ::= [<strong>class</strong> | <strong>struct</strong>]
+
+<em>enum-line</em> ::= [<a class="reference internal" href="directives.html#directive-%If"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%If</span></code></a> | <em>name</em> [<em>enum-annotations</em>] <strong>,</strong>
+
+<em>function</em> ::= <em>type</em> <em>name</em> <strong>(</strong> [<em>argument-list</em>] <strong>)</strong> [<em>exceptions</em>]
+        [<em>function-annotations</em>] <strong>;</strong> [<a class="reference internal" href="directives.html#directive-%Docstring"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%Docstring</span></code></a>]
+        [<a class="reference internal" href="directives.html#directive-%MethodCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%MethodCode</span></code></a>]
+
+<em>namespace</em> ::= <strong>namespace</strong> <em>name</em> [<strong>{</strong> {<em>namespace-line</em>} <strong>}</strong>] <strong>;</strong>
+
+<em>namespace-line</em> ::= [<a class="reference internal" href="directives.html#directive-%TypeHeaderCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%TypeHeaderCode</span></code></a> | <em>statement</em>]
+
+<em>opaque-class</em> ::= <strong>class</strong> <em>scoped-name</em> <strong>;</strong>
+
+<em>struct</em> ::= <strong>struct</strong> <em>name</em> <strong>{</strong> {<em>class-line</em>} <strong>};</strong>
+
+<em>typedef</em> ::= <strong>typedef</strong> [<em>typed-name</em> | <em>function-pointer</em>]
+        <em>typedef-annotations</em> <strong>;</strong>
+
+<em>variable</em>::= <em>typed-name</em> [<em>variable-annotations</em>] <strong>;</strong>
+        [<a class="reference internal" href="directives.html#directive-%AccessCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%AccessCode</span></code></a>] [<a class="reference internal" href="directives.html#directive-%GetCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%GetCode</span></code></a>]
+        [<a class="reference internal" href="directives.html#directive-%SetCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%SetCode</span></code></a>]
+
+<em>exception</em> ::= <a class="reference internal" href="directives.html#directive-%Exception"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%Exception</span></code></a> <em>exception-name</em> [<em>exception-base</em>]
+        <strong>{</strong> [<a class="reference internal" href="directives.html#directive-%TypeHeaderCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%TypeHeaderCode</span></code></a>] <a class="reference internal" href="directives.html#directive-%RaiseCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%RaiseCode</span></code></a> <strong>};</strong>
+
+<em>exception-name</em> ::= <em>scoped-name</em>
+
+<em>exception-base</em> ::= <strong>(</strong> [<em>exception-name</em> | <em>python-exception</em>] <strong>)</strong>
+
+<em>python-exception</em> ::= [<strong>SIP_ArithmeticError</strong> | <strong>SIP_AssertionError</strong> |
+        <strong>SIP_AttributeError</strong> | <strong>SIP_BaseException</strong> |
+        <strong>SIP_BlockingIOError</strong> | <strong>SIP_BrokenPipeError</strong> |
+        <strong>SIP_BufferError</strong> | <strong>SIP_ChildProcessError</strong> |
+        <strong>SIP_ConnectionAbortedError</strong> | <strong>SIP_ConnectionError</strong> |
+        <strong>SIP_ConnectionRefusedError</strong> | <strong>SIP_ConnectionResetError</strong> |
+        <strong>SIP_EnvironmentError</strong> | <strong>SIP_EOFError</strong> | <strong>SIP_Exception</strong> |
+        <strong>SIP_FileExistsError</strong> | <strong>SIP_FileNotFoundError</strong> |
+        <strong>SIP_FloatingPointError</strong> | <strong>SIP_GeneratorExit</strong> |
+        <strong>SIP_ImportError</strong> | <strong>SIP_IndentationError</strong> |
+        <strong>SIP_IndexError</strong> | <strong>SIP_InterruptedError</strong> | <strong>SIP_IOError</strong> |
+        <strong>SIP_IsADirectoryError</strong> | <strong>SIP_KeyboardInterrupt</strong> |
+        <strong>SIP_KeyError</strong> | <strong>SIP_LookupError</strong> | <strong>SIP_MemoryError</strong> |
+        <strong>SIP_NameError</strong> | <strong>SIP_NotADirectoryError</strong> |
+        <strong>SIP_NotImplementedError</strong> | <strong>SIP_OSError</strong> |
+        <strong>SIP_OverflowError</strong> | <strong>SIP_PermissionError</strong> |
+        <strong>SIP_ProcessLookupError</strong> | <strong>SIP_ReferenceError</strong> |
+        <strong>SIP_RuntimeError</strong> | <strong>SIP_StandardError</strong> |
+        <strong>SIP_StopIteration</strong> | <strong>SIP_SyntaxError</strong> | <strong>SIP_SystemError</strong> |
+        <strong>SIP_SystemExit</strong> | <strong>SIP_TabError</strong> | <strong>SIP_TimeoutError</strong> |
+        <strong>SIP_TypeError</strong> | <strong>SIP_UnboundLocalError</strong> |
+        <strong>SIP_UnicodeDecodeError</strong> | <strong>SIP_UnicodeEncodeError</strong> |
+        <strong>SIP_UnicodeError</strong> | <strong>SIP_UnicodeTranslateError</strong> |
+        <strong>SIP_ValueError</strong> | <strong>SIP_VMSError</strong> | <strong>SIP_WindowsError</strong> |
+        <strong>SIP_ZeroDivisionError</strong> | <strong>SIP_Warning</strong> |
+        <strong>SIP_BytesWarning</strong> | <strong>SIP_DeprecationWarning</strong> |
+        <strong>SIP_FutureWarning</strong> | <strong>SIP_ImportWarning</strong> |
+        <strong>SIP_PendingDeprecationWarning</strong> | <strong>SIP_ResourceWarning</strong> |
+        <strong>SIP_RuntimeWarning</strong> | <strong>SIP_SyntaxWarning</strong> |
+        <strong>SIP_UnicodeWarning</strong> | <strong>SIP_UserWarning</strong>]
+
+<em>exceptions</em> ::= <strong>throw (</strong> [<em>exception-list</em>] <strong>)</strong>
+
+<em>exception-list</em> ::= <em>scoped-name</em> [<strong>,</strong> <em>exception-list</em>]
+
+<em>argument-list</em> ::= <em>argument</em> [<strong>,</strong> <em>argument-list</em>] [<strong>,</strong> <strong>...</strong>]
+
+<em>argument</em> ::= [
+        <em>type</em> [<em>name</em>] [<em>argument-annotations</em>] [<em>default-value</em>] |
+        <a class="reference internal" href="#sip-type-SIP_ANYSLOT"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_ANYSLOT</span></code></a> [<em>default-value</em>] |
+        <a class="reference internal" href="#sip-type-SIP_QOBJECT"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_QOBJECT</span></code></a> |
+        <a class="reference internal" href="#sip-type-SIP_RXOBJ_CON"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_RXOBJ_CON</span></code></a> |
+        <a class="reference internal" href="#sip-type-SIP_RXOBJ_DIS"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_RXOBJ_DIS</span></code></a> |
+        <a class="reference internal" href="#sip-type-SIP_SIGNAL"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_SIGNAL</span></code></a> [<em>default-value</em>] |
+        <a class="reference internal" href="#sip-type-SIP_SLOT"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_SLOT</span></code></a> [<em>default-value</em>] |
+        <a class="reference internal" href="#sip-type-SIP_SLOT_CON"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_SLOT_CON</span></code></a> |
+        <a class="reference internal" href="#sip-type-SIP_SLOT_DIS"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_SLOT_DIS</span></code></a> |
+        <a class="reference internal" href="#sip-type-SIP_SSIZE_T"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_SSIZE_T</span></code></a>]
+
+<em>default-value</em> ::= <strong>=</strong> <em>expression</em>
+
+<em>expression</em> ::= [<em>value</em> | <em>value</em> <em>binary-operator</em> <em>expression</em>]
+
+<em>value</em> ::= [<em>unary-operator</em>] <em>simple-value</em>
+
+<em>simple-value</em> ::= [<em>scoped-name</em> | <em>function-call</em> | <em>real-value</em> |
+        <em>integer-value</em> | <em>boolean-value</em> | <em>string-value</em> |
+        <em>character-value</em>]
+
+<em>typed-name</em>::= <em>type</em> <em>name</em>
+
+<em>function-pointer</em>::= <em>type</em> <strong>(*</strong> <em>name</em> <strong>)(</strong> [<em>type-list</em>] <strong>)</strong>
+
+<em>type-list</em> ::= <em>type</em> [<strong>,</strong> <em>type-list</em>]
+
+<em>function-call</em> ::= <em>scoped-name</em> <strong>(</strong> [<em>value-list</em>] <strong>)</strong>
+
+<em>value-list</em> ::= <em>value</em> [<strong>,</strong> <em>value-list</em>]
+
+<em>real-value</em> ::= a floating point number
+
+<em>integer-value</em> ::= a number
+
+<em>boolean-value</em> ::= [<strong>true</strong> | <strong>false</strong>]
+
+<em>string-value</em> ::= <strong>&quot;</strong> {<em>character</em>} <strong>&quot;</strong>
+
+<em>character-value</em> ::= <strong>'</strong> <em>character</em> <strong>'</strong>
+
+<em>unary-operator</em> ::= [<strong>!</strong> | <strong>~</strong> | <strong>-</strong> | <strong>+</strong> | <strong>*</strong> | <strong>&amp;</strong>]
+
+<em>binary-operator</em> ::= [<strong>-</strong> | <strong>+</strong> | <strong>*</strong> | <strong>/</strong> | <strong>&amp;</strong> | <strong>|</strong>]
+
+<em>argument-annotations</em> ::= see <a class="reference internal" href="annotations.html#ref-arg-annos"><span class="std std-ref">Argument Annotations</span></a>
+
+<em>class-annotations</em> ::= see <a class="reference internal" href="annotations.html#ref-class-annos"><span class="std std-ref">Class Annotations</span></a>
+
+<em>enum-annotations</em> ::= see <a class="reference internal" href="annotations.html#ref-enum-annos"><span class="std std-ref">Enum Annotations</span></a>
+
+<em>function-annotations</em> ::= see <a class="reference internal" href="annotations.html#ref-function-annos"><span class="std std-ref">Function Annotations</span></a>
+
+<em>typedef-annotations</em> ::= see <a class="reference internal" href="annotations.html#ref-typedef-annos"><span class="std std-ref">Typedef Annotations</span></a>
+
+<em>variable-annotations</em> ::= see <a class="reference internal" href="annotations.html#ref-variable-annos"><span class="std std-ref">Variable Annotations</span></a>
+
+<em>type</em> ::= [<strong>const</strong>] <em>base-type</em> {<strong>*</strong>} [<strong>&amp;</strong>]
+
+<em>type-list</em> ::= <em>type</em> [<strong>,</strong> <em>type-list</em>]
+
+<em>base-type</em> ::= [<em>scoped-name</em> | <em>template</em> | <strong>struct</strong> <em>scoped-name</em> |
+        <strong>char</strong> | <strong>signed char</strong> | <strong>unsigned char</strong> | <strong>wchar_t</strong> |
+        <strong>int</strong> | <strong>unsigned</strong> | <strong>unsigned int</strong> | <strong>size_t</strong> |
+        <strong>short</strong> | <strong>unsigned short</strong> |
+        <strong>long</strong> | <strong>unsigned long</strong> |
+        <strong>long long</strong> | <strong>unsigned long long</strong> |
+        <strong>float</strong> | <strong>double</strong> |
+        <strong>bool</strong> |
+        <strong>void</strong> |
+        <strong>PyObject</strong> |
+        <a class="reference internal" href="#sip-type-SIP_PYBUFFER"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYBUFFER</span></code></a> |
+        <a class="reference internal" href="#sip-type-SIP_PYCALLABLE"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYCALLABLE</span></code></a> |
+        <a class="reference internal" href="#sip-type-SIP_PYDICT"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYDICT</span></code></a> |
+        <a class="reference internal" href="#sip-type-SIP_PYLIST"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYLIST</span></code></a> |
+        <a class="reference internal" href="#sip-type-SIP_PYOBJECT"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYOBJECT</span></code></a> |
+        <a class="reference internal" href="#sip-type-SIP_PYSLICE"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYSLICE</span></code></a> |
+        <a class="reference internal" href="#sip-type-SIP_PYTUPLE"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYTUPLE</span></code></a> |
+        <a class="reference internal" href="#sip-type-SIP_PYTYPE"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYTYPE</span></code></a>]
+
+<em>scoped-name</em> ::= <em>name</em> [<strong>::</strong> <em>scoped-name</em>]
+
+<em>template</em> ::= <em>scoped-name</em> <strong>&lt;</strong> <em>type-list</em> <strong>&gt;</strong>
+
+<em>dotted-name</em> ::= <em>name</em> [<strong>.</strong> <em>dotted-name</em>]
+
+<em>name</em> ::= _A-Za-z {_A-Za-z0-9}
+</pre>
+<p>Here is a short list of differences between C++ and the subset supported by
+SIP that might trip you up.</p>
+<blockquote>
+<div><ul class="simple">
+<li>SIP does not support the use of <code class="docutils literal notranslate"><span class="pre">[]</span></code> in types.  Use pointers instead.</li>
+<li>A global <code class="docutils literal notranslate"><span class="pre">operator</span></code> can only be defined if its first argument is a
+class or a named enum that has been wrapped in the same module.</li>
+<li>Variables declared outside of a class are effectively read-only.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="variable-numbers-of-arguments">
+<h2>Variable Numbers of Arguments<a class="headerlink" href="#variable-numbers-of-arguments" title="Permalink to this headline">¶</a></h2>
+<p>SIP supports the use of <code class="docutils literal notranslate"><span class="pre">...</span></code> as the last part of a function signature.  Any
+remaining arguments are collected as a Python tuple.</p>
+</div>
+<div class="section" id="additional-sip-types">
+<h2>Additional SIP Types<a class="headerlink" href="#additional-sip-types" title="Permalink to this headline">¶</a></h2>
+<p>SIP supports a number of additional data types that can be used in Python
+signatures.</p>
+<dl class="sip-type">
+<dt id="sip-type-SIP_ANYSLOT">
+<code class="descname">SIP_ANYSLOT</code><a class="headerlink" href="#sip-type-SIP_ANYSLOT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 4.18.</span></p>
+</div>
+<p>This is both a <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> and a <code class="docutils literal notranslate"><span class="pre">PyObject</span> <span class="pre">*</span></code> that is used as the type
+of the member instead of <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> in functions that implement the
+connection or disconnection of an explicitly generated signal to a slot.
+Handwritten code must be provided to interpret the conversion correctly.</p>
+<dl class="sip-type">
+<dt id="sip-type-SIP_PYBUFFER">
+<code class="descname">SIP_PYBUFFER</code><a class="headerlink" href="#sip-type-SIP_PYBUFFER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This is a <code class="docutils literal notranslate"><span class="pre">PyObject</span> <span class="pre">*</span></code> that implements the Python buffer protocol.</p>
+<dl class="sip-type">
+<dt id="sip-type-SIP_PYCALLABLE">
+<code class="descname">SIP_PYCALLABLE</code><a class="headerlink" href="#sip-type-SIP_PYCALLABLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This is a <code class="docutils literal notranslate"><span class="pre">PyObject</span> <span class="pre">*</span></code> that is a Python callable object.</p>
+<dl class="sip-type">
+<dt id="sip-type-SIP_PYDICT">
+<code class="descname">SIP_PYDICT</code><a class="headerlink" href="#sip-type-SIP_PYDICT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This is a <code class="docutils literal notranslate"><span class="pre">PyObject</span> <span class="pre">*</span></code> that is a Python dictionary object.</p>
+<dl class="sip-type">
+<dt id="sip-type-SIP_PYLIST">
+<code class="descname">SIP_PYLIST</code><a class="headerlink" href="#sip-type-SIP_PYLIST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This is a <code class="docutils literal notranslate"><span class="pre">PyObject</span> <span class="pre">*</span></code> that is a Python list object.</p>
+<dl class="sip-type">
+<dt id="sip-type-SIP_PYOBJECT">
+<code class="descname">SIP_PYOBJECT</code><a class="headerlink" href="#sip-type-SIP_PYOBJECT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This is a <code class="docutils literal notranslate"><span class="pre">PyObject</span> <span class="pre">*</span></code> of any Python type.  The type <code class="docutils literal notranslate"><span class="pre">PyObject</span> <span class="pre">*</span></code> can also
+be used.</p>
+<dl class="sip-type">
+<dt id="sip-type-SIP_PYSLICE">
+<code class="descname">SIP_PYSLICE</code><a class="headerlink" href="#sip-type-SIP_PYSLICE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This is a <code class="docutils literal notranslate"><span class="pre">PyObject</span> <span class="pre">*</span></code> that is a Python slice object.</p>
+<dl class="sip-type">
+<dt id="sip-type-SIP_PYTUPLE">
+<code class="descname">SIP_PYTUPLE</code><a class="headerlink" href="#sip-type-SIP_PYTUPLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This is a <code class="docutils literal notranslate"><span class="pre">PyObject</span> <span class="pre">*</span></code> that is a Python tuple object.</p>
+<dl class="sip-type">
+<dt id="sip-type-SIP_PYTYPE">
+<code class="descname">SIP_PYTYPE</code><a class="headerlink" href="#sip-type-SIP_PYTYPE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This is a <code class="docutils literal notranslate"><span class="pre">PyObject</span> <span class="pre">*</span></code> that is a Python type object.</p>
+<dl class="sip-type">
+<dt id="sip-type-SIP_QOBJECT">
+<code class="descname">SIP_QOBJECT</code><a class="headerlink" href="#sip-type-SIP_QOBJECT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 4.18.</span></p>
+</div>
+<p>This is a <code class="docutils literal notranslate"><span class="pre">QObject</span> <span class="pre">*</span></code> that is a C++ instance of a class derived from Qt’s
+<code class="docutils literal notranslate"><span class="pre">QObject</span></code> class.</p>
+<dl class="sip-type">
+<dt id="sip-type-SIP_RXOBJ_CON">
+<code class="descname">SIP_RXOBJ_CON</code><a class="headerlink" href="#sip-type-SIP_RXOBJ_CON" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 4.18.</span></p>
+</div>
+<p>This is a <code class="docutils literal notranslate"><span class="pre">QObject</span> <span class="pre">*</span></code> that is a C++ instance of a class derived from Qt’s
+<code class="docutils literal notranslate"><span class="pre">QObject</span></code> class.  It is used as the type of the receiver instead of <code class="docutils literal notranslate"><span class="pre">const</span>
+<span class="pre">QObject</span> <span class="pre">*</span></code> in functions that implement a connection to a slot.</p>
+<dl class="sip-type">
+<dt id="sip-type-SIP_RXOBJ_DIS">
+<code class="descname">SIP_RXOBJ_DIS</code><a class="headerlink" href="#sip-type-SIP_RXOBJ_DIS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 4.18.</span></p>
+</div>
+<p>This is a <code class="docutils literal notranslate"><span class="pre">QObject</span> <span class="pre">*</span></code> that is a C++ instance of a class derived from Qt’s
+<code class="docutils literal notranslate"><span class="pre">QObject</span></code> class.  It is used as the type of the receiver instead of <code class="docutils literal notranslate"><span class="pre">const</span>
+<span class="pre">QObject</span> <span class="pre">*</span></code> in functions that implement a disconnection from a slot.</p>
+<dl class="sip-type">
+<dt id="sip-type-SIP_SIGNAL">
+<code class="descname">SIP_SIGNAL</code><a class="headerlink" href="#sip-type-SIP_SIGNAL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 4.18.</span></p>
+</div>
+<p>This is a <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> that is used as the type of the signal instead of
+<code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> in functions that implement the connection or disconnection
+of an explicitly generated signal to a slot.</p>
+<dl class="sip-type">
+<dt id="sip-type-SIP_SLOT">
+<code class="descname">SIP_SLOT</code><a class="headerlink" href="#sip-type-SIP_SLOT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 4.18.</span></p>
+</div>
+<p>This is a <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> that is used as the type of the member instead of
+<code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> in functions that implement the connection or disconnection
+of an explicitly generated signal to a slot.</p>
+<dl class="sip-type">
+<dt id="sip-type-SIP_SLOT_CON">
+<code class="descname">SIP_SLOT_CON</code><a class="headerlink" href="#sip-type-SIP_SLOT_CON" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 4.18.</span></p>
+</div>
+<p>This is a <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> that is used as the type of the member instead of
+<code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> in functions that implement the connection of an internally
+generated signal to a slot.  The type includes a comma separated list of types
+that is the C++ signature of of the signal.</p>
+<p>To take an example, <code class="docutils literal notranslate"><span class="pre">QAccel::connectItem()</span></code> connects an internally generated
+signal to a slot.  The signal is emitted when the keyboard accelerator is
+activated and it has a single integer argument that is the ID of the
+accelerator.  The C++ signature is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">bool</span> <span class="n">connectItem</span><span class="p">(</span><span class="nb">int</span> <span class="nb">id</span><span class="p">,</span> <span class="n">const</span> <span class="n">QObject</span> <span class="o">*</span><span class="n">receiver</span><span class="p">,</span> <span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">member</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The corresponding SIP specification is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">bool</span> <span class="n">connectItem</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">SIP_RXOBJ_CON</span><span class="p">,</span> <span class="n">SIP_SLOT_CON</span><span class="p">(</span><span class="nb">int</span><span class="p">));</span>
+</pre></div>
+</div>
+<dl class="sip-type">
+<dt id="sip-type-SIP_SLOT_DIS">
+<code class="descname">SIP_SLOT_DIS</code><a class="headerlink" href="#sip-type-SIP_SLOT_DIS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 4.18.</span></p>
+</div>
+<p>This is a <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> that is used as the type of the member instead of
+<code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code> in functions that implement the disconnection of an
+internally generated signal to a slot.  The type includes a comma separated
+list of types that is the C++ signature of of the signal.</p>
+<dl class="sip-type">
+<dt id="sip-type-SIP_SSIZE_T">
+<code class="descname">SIP_SSIZE_T</code><a class="headerlink" href="#sip-type-SIP_SSIZE_T" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This is a <code class="docutils literal notranslate"><span class="pre">Py_ssize_t</span></code> in Python v2.5 and later and <code class="docutils literal notranslate"><span class="pre">int</span></code> in earlier
+versions of Python.</p>
+</div>
+<div class="section" id="classic-division-and-true-division">
+<h2>Classic Division and True Division<a class="headerlink" href="#classic-division-and-true-division" title="Permalink to this headline">¶</a></h2>
+<p>SIP supports the <code class="docutils literal notranslate"><span class="pre">__div__</span></code> and <code class="docutils literal notranslate"><span class="pre">__truediv__</span></code> special methods (and the
+corresponding inplace versions) for both Python v2 and v3.</p>
+<p>For Python v2 the <code class="docutils literal notranslate"><span class="pre">__div__</span></code> method will be used for both classic and true
+division if a <code class="docutils literal notranslate"><span class="pre">__truediv__</span></code> method is not defined.</p>
+<p>For Python v3 the <code class="docutils literal notranslate"><span class="pre">__div__</span></code> method will be used for true division if a
+<code class="docutils literal notranslate"><span class="pre">__truediv__</span></code> method is not defined.</p>
+<p>For all versions of Python, if both methods are defined then <code class="docutils literal notranslate"><span class="pre">__div__</span></code>
+should be defined first.</p>
+</div>
+<div class="section" id="namespaces">
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h2>
+<p>SIP implements C++ namespaces as a Python class which cannot be instantiated.
+The contents of the namespace, including nested namespaces, are implemented as
+attributes of the class.</p>
+<p>The namespace class is created in the module that SIP is parsing when it first
+sees the namespace defined.  If a function (for example) is defined in a
+namespace that is first defined in another module then the function is added to
+the namespace class in that other module.</p>
+<p>Say that we have a file <code class="docutils literal notranslate"><span class="pre">a.sip</span></code> that defines a module <code class="docutils literal notranslate"><span class="pre">a_module</span></code> as
+follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">Module</span> <span class="n">a_module</span>
+
+<span class="n">namespace</span> <span class="n">N</span>
+<span class="p">{</span>
+    <span class="n">void</span> <span class="n">hello</span><span class="p">();</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>We also have a file <code class="docutils literal notranslate"><span class="pre">b.sip</span></code> that defines a module <code class="docutils literal notranslate"><span class="pre">b_module</span></code> as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">Module</span> <span class="n">b_module</span>
+
+<span class="o">%</span><span class="n">Import</span> <span class="n">a</span><span class="o">.</span><span class="n">sip</span>
+
+<span class="n">namespace</span> <span class="n">N</span>
+<span class="p">{</span>
+    <span class="n">void</span> <span class="n">bye</span><span class="p">();</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>When SIP parses <code class="docutils literal notranslate"><span class="pre">b.sip</span></code> it first sees the <code class="docutils literal notranslate"><span class="pre">N</span></code> namespace defined in module
+<code class="docutils literal notranslate"><span class="pre">a_module</span></code>.  Therefore it places the <code class="docutils literal notranslate"><span class="pre">bye()</span></code> function in the <code class="docutils literal notranslate"><span class="pre">N</span></code> Python
+class in the <code class="docutils literal notranslate"><span class="pre">a_module</span></code>.  It does not create an <code class="docutils literal notranslate"><span class="pre">N</span></code> Python class in the
+<code class="docutils literal notranslate"><span class="pre">b_module</span></code>.  Consequently the following code will call the <code class="docutils literal notranslate"><span class="pre">bye()</span></code>
+function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">a_module</span>
+<span class="kn">import</span> <span class="nn">b_module</span>
+<span class="n">a_module</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">bye</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>While this reflects the C++ usage it may not be obvious to the Python
+programmer who might expect to call the <code class="docutils literal notranslate"><span class="pre">bye()</span></code> function using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">b_module</span>
+<span class="n">b_module</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">bye</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>In order to achieve this behavior make sure that the <code class="docutils literal notranslate"><span class="pre">N</span></code> namespace is first
+defined in the <code class="docutils literal notranslate"><span class="pre">b_module</span></code>.  The following version of <code class="docutils literal notranslate"><span class="pre">b.sip</span></code> does this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">Module</span> <span class="n">b_module</span>
+
+<span class="n">namespace</span> <span class="n">N</span><span class="p">;</span>
+
+<span class="o">%</span><span class="n">Import</span> <span class="n">a</span><span class="o">.</span><span class="n">sip</span>
+
+<span class="n">namespace</span> <span class="n">N</span>
+<span class="p">{</span>
+    <span class="n">void</span> <span class="n">bye</span><span class="p">();</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>Alternatively you could just move the <a class="reference internal" href="directives.html#directive-%Import"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%Import</span></code></a> directive so that it
+is at the end of the file.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">SIP Specification Files</a><ul>
+<li><a class="reference internal" href="#syntax-definition">Syntax Definition</a></li>
+<li><a class="reference internal" href="#variable-numbers-of-arguments">Variable Numbers of Arguments</a></li>
+<li><a class="reference internal" href="#additional-sip-types">Additional SIP Types</a></li>
+<li><a class="reference internal" href="#classic-division-and-true-division">Classic Division and True Division</a></li>
+<li><a class="reference internal" href="#namespaces">Namespaces</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="command_line.html"
+                        title="previous chapter">The SIP Command Line</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="directives.html"
+                        title="next chapter">Directives</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="directives.html" title="Directives"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="command_line.html" title="The SIP Command Line"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">SIP v4.19.17 Reference Guide</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019 Riverbank Computing Limited.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

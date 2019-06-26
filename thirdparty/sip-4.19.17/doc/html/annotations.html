@@ -1,0 +1,1624 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Annotations &#8212; SIP v4.19.17 Reference Guide</title>
+    <link rel="stylesheet" href="_static/riverbank.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/logo_tn.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="C API for Handwritten Code" href="c_api.html" />
+    <link rel="prev" title="Directives" href="directives.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="c_api.html" title="C API for Handwritten Code"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="directives.html" title="Directives"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">SIP v4.19.17 Reference Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="annotations">
+<h1>Annotations<a class="headerlink" href="#annotations" title="Permalink to this headline">¶</a></h1>
+<p>In this section we describe each of the annotations that can be used in
+specification files.</p>
+<p>Annotations can either be <a class="reference internal" href="#ref-arg-annos"><span class="std std-ref">argument annotations</span></a>,
+<a class="reference internal" href="#ref-class-annos"><span class="std std-ref">class annotations</span></a>, <a class="reference internal" href="#ref-mapped-type-annos"><span class="std std-ref">mapped type annotations</span></a>, <a class="reference internal" href="#ref-enum-annos"><span class="std std-ref">enum annotations</span></a>,
+<a class="reference internal" href="#ref-exception-annos"><span class="std std-ref">exception annotations</span></a>, <a class="reference internal" href="#ref-function-annos"><span class="std std-ref">function annotations</span></a>, <a class="reference internal" href="#ref-typedef-annos"><span class="std std-ref">typedef annotations</span></a> or
+<a class="reference internal" href="#ref-variable-annos"><span class="std std-ref">variable annotations</span></a> depending on the context in
+which they can be used.</p>
+<p>Annotations are placed between forward slashes (<code class="docutils literal notranslate"><span class="pre">/</span></code>).  Multiple annotations
+are comma separated within the slashes.</p>
+<p>Annotations have a type and, possibly, a value.  The type determines the
+format of the value.  The name of an annotation and its value are separated by
+<code class="docutils literal notranslate"><span class="pre">=</span></code>.</p>
+<p>Annotations can have one of the following types:</p>
+<dl class="docutils">
+<dt><em>boolean</em></dt>
+<dd>This type of annotation has no value and is implicitly true.</dd>
+<dt><em>integer</em></dt>
+<dd>This type of annotation is an integer.  In some cases the value is
+optional.</dd>
+<dt><em>name</em></dt>
+<dd>The value is a name that is compatible with a C/C++ identifier.  In some
+cases the value is optional.</dd>
+<dt><em>dotted name</em></dt>
+<dd>The value is a name that is compatible with an identifier preceded by a
+Python scope.</dd>
+<dt><em>string</em></dt>
+<dd>The value is a double quoted string.</dd>
+<dt><em>API range</em></dt>
+<dd><p class="first">The value is the name of an API (defined using the <a class="reference internal" href="directives.html#directive-%API"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%API</span></code></a>
+directive) separated by a range of version numbers with a colon.</p>
+<p>The range of version numbers is a pair of numbers separated by a hyphen
+specifying the lower and upper bounds of the range.  A version number is
+within the range if it is greater or equal to the lower bound and less
+than the upper bound.  Each bound can be omitted meaning that the range is
+unbounded in that direction.</p>
+<p>For example:</p>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># This is part of the PyQt4 API up to but excluding v2.</span>
+<span class="n">void</span> <span class="nb">hex</span><span class="p">()</span> <span class="o">/</span><span class="n">API</span><span class="o">=</span><span class="n">PyQt4</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="o">/</span>
+
+<span class="c1"># This is part of the PyQt4 API starting from v2.</span>
+<span class="n">void</span> <span class="nb">hex</span><span class="p">()</span> <span class="o">/</span><span class="n">PyName</span><span class="o">=</span><span class="n">hex_</span><span class="p">,</span> <span class="n">API</span><span class="o">=</span><span class="n">PyQt4</span><span class="p">:</span><span class="mi">2</span><span class="o">-/</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>The following example shows argument and function annotations:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">exec</span><span class="p">(</span><span class="n">QWidget</span> <span class="o">*</span> <span class="o">/</span><span class="n">Transfer</span><span class="o">/</span><span class="p">)</span> <span class="o">/</span><span class="n">ReleaseGIL</span><span class="p">,</span> <span class="n">PyName</span><span class="o">=</span><span class="n">call_exec</span><span class="o">/</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="section" id="argument-annotations">
+<span id="ref-arg-annos"></span><h2>Argument Annotations<a class="headerlink" href="#argument-annotations" title="Permalink to this headline">¶</a></h2>
+<dl class="argument-annotation">
+<dt id="argument-annotation-AllowNone">
+<code class="descname">AllowNone</code><a class="headerlink" href="#argument-annotation-AllowNone" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation specifies that the value of the corresponding
+argument (which should be either <a class="reference internal" href="specification_files.html#sip-type-SIP_PYBUFFER"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYBUFFER</span></code></a>,
+<a class="reference internal" href="specification_files.html#sip-type-SIP_PYCALLABLE"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYCALLABLE</span></code></a>, <a class="reference internal" href="specification_files.html#sip-type-SIP_PYDICT"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYDICT</span></code></a>, <a class="reference internal" href="specification_files.html#sip-type-SIP_PYLIST"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYLIST</span></code></a>,
+<a class="reference internal" href="specification_files.html#sip-type-SIP_PYSLICE"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYSLICE</span></code></a>, <a class="reference internal" href="specification_files.html#sip-type-SIP_PYTUPLE"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYTUPLE</span></code></a> or <a class="reference internal" href="specification_files.html#sip-type-SIP_PYTYPE"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYTYPE</span></code></a>) may be
+<code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-Array">
+<code class="descname">Array</code><a class="headerlink" href="#argument-annotation-Array" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation specifies that the corresponding argument refers
+to an array.</p>
+<p>The argument should be either a pointer to a wrapped type, a <code class="docutils literal notranslate"><span class="pre">char</span> <span class="pre">*</span></code> or
+a <code class="docutils literal notranslate"><span class="pre">unsigned</span> <span class="pre">char</span> <span class="pre">*</span></code>.  If the argument is a character array then the
+annotation also implies the <a class="reference internal" href="#argument-annotation-Encoding"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">Encoding</span></code></a> annotation with an encoding
+of <code class="docutils literal notranslate"><span class="pre">&quot;None&quot;</span></code>.</p>
+<p>There must be a corresponding argument with the <a class="reference internal" href="#argument-annotation-ArraySize"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">ArraySize</span></code></a>
+annotation specified.  The annotation may only be specified once in a list
+of arguments.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-ArraySize">
+<code class="descname">ArraySize</code><a class="headerlink" href="#argument-annotation-ArraySize" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation specifies that the corresponding argument (which
+should be either <code class="docutils literal notranslate"><span class="pre">short</span></code>, <code class="docutils literal notranslate"><span class="pre">unsigned</span> <span class="pre">short</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">unsigned</span></code>,
+<code class="docutils literal notranslate"><span class="pre">long</span></code> or <code class="docutils literal notranslate"><span class="pre">unsigned</span> <span class="pre">long</span></code>) refers to the size of an array.  There must
+be a corresponding argument with the <a class="reference internal" href="#argument-annotation-Array"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">Array</span></code></a> annotation specified.
+The annotation may only be specified once in a list of arguments.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-Constrained">
+<code class="descname">Constrained</code><a class="headerlink" href="#argument-annotation-Constrained" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python will automatically convert between certain compatible types.  For
+example, if a floating pointer number is expected and an integer supplied,
+then the integer will be converted appropriately.  This can cause problems
+when wrapping C or C++ functions with similar signatures.  For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">The</span> <span class="n">wrapper</span> <span class="k">for</span> <span class="n">this</span> <span class="n">function</span> <span class="n">will</span> <span class="n">also</span> <span class="n">accept</span> <span class="n">an</span> <span class="n">integer</span> <span class="n">argument</span>
+<span class="o">//</span> <span class="n">which</span> <span class="n">Python</span> <span class="n">will</span> <span class="n">automatically</span> <span class="n">convert</span> <span class="n">to</span> <span class="n">a</span> <span class="n">floating</span> <span class="n">point</span> <span class="n">number</span><span class="o">.</span>
+<span class="n">void</span> <span class="n">foo</span><span class="p">(</span><span class="n">double</span><span class="p">);</span>
+
+<span class="o">//</span> <span class="n">The</span> <span class="n">wrapper</span> <span class="k">for</span> <span class="n">this</span> <span class="n">function</span> <span class="n">will</span> <span class="n">never</span> <span class="n">get</span> <span class="n">used</span><span class="o">.</span>
+<span class="n">void</span> <span class="n">foo</span><span class="p">(</span><span class="nb">int</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This boolean annotation specifies that the corresponding argument (which
+should be either <code class="docutils literal notranslate"><span class="pre">bool</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">double</span></code>, <code class="docutils literal notranslate"><span class="pre">enum</span></code> or a
+wrapped class) must match the type without any automatic conversions.  In
+the context of a wrapped class the invocation of any
+<a class="reference internal" href="directives.html#directive-%ConvertToTypeCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%ConvertToTypeCode</span></code></a> is suppressed.</p>
+<p>The following example gets around the above problem:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">The</span> <span class="n">wrapper</span> <span class="k">for</span> <span class="n">this</span> <span class="n">function</span> <span class="n">will</span> <span class="n">only</span> <span class="n">accept</span> <span class="n">floating</span> <span class="n">point</span>
+<span class="o">//</span> <span class="n">numbers</span><span class="o">.</span>
+<span class="n">void</span> <span class="n">foo</span><span class="p">(</span><span class="n">double</span> <span class="o">/</span><span class="n">Constrained</span><span class="o">/</span><span class="p">);</span>
+
+<span class="o">//</span> <span class="n">The</span> <span class="n">wrapper</span> <span class="k">for</span> <span class="n">this</span> <span class="n">function</span> <span class="n">will</span> <span class="n">be</span> <span class="n">used</span> <span class="k">for</span> <span class="n">anything</span> <span class="n">that</span> <span class="n">Python</span>
+<span class="o">//</span> <span class="n">can</span> <span class="n">convert</span> <span class="n">to</span> <span class="n">an</span> <span class="n">integer</span><span class="p">,</span> <span class="k">except</span> <span class="k">for</span> <span class="n">floating</span> <span class="n">point</span> <span class="n">numbers</span><span class="o">.</span>
+<span class="n">void</span> <span class="n">foo</span><span class="p">(</span><span class="nb">int</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Any type hint for the argument will be ignored.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-DisallowNone">
+<code class="descname">DisallowNone</code><a class="headerlink" href="#argument-annotation-DisallowNone" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.16.4.</span></p>
+</div>
+<p>This boolean annotation specifies that the value of the corresponding
+argument (which should be a pointer to either a C++ class or a mapped type)
+must not be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-DocType">
+<code class="descname">DocType</code><a class="headerlink" href="#argument-annotation-DocType" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.10.</span></p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 4.18: </span>Use the <a class="reference internal" href="#argument-annotation-TypeHint"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">TypeHint</span></code></a> annotation instead.</p>
+</div>
+<p>This string annotation specifies the type of the argument as it will appear
+in any generated docstrings.  It is usually used with arguments of type
+<a class="reference internal" href="specification_files.html#sip-type-SIP_PYOBJECT"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYOBJECT</span></code></a> to provide a more specific type.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-DocValue">
+<code class="descname">DocValue</code><a class="headerlink" href="#argument-annotation-DocValue" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.10.</span></p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 4.18: </span>Use the <a class="reference internal" href="#argument-annotation-TypeHintValue"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">TypeHintValue</span></code></a> annotation instead.</p>
+</div>
+<p>This string annotation specifies the default value of the argument as it
+will appear in any generated docstrings.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-Encoding">
+<code class="descname">Encoding</code><a class="headerlink" href="#argument-annotation-Encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>This string annotation specifies that the corresponding argument (which
+should be either <code class="docutils literal notranslate"><span class="pre">char</span></code>, <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span></code>, <code class="docutils literal notranslate"><span class="pre">char</span> <span class="pre">*</span></code> or <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code>)
+refers to an encoded character or <code class="docutils literal notranslate"><span class="pre">'\0'</span></code> terminated encoded string with
+the specified encoding.  The encoding can be either <code class="docutils literal notranslate"><span class="pre">&quot;ASCII&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;Latin-1&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;UTF-8&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;None&quot;</span></code>.  An encoding of <code class="docutils literal notranslate"><span class="pre">&quot;None&quot;</span></code> means
+that the corresponding argument refers to an unencoded character or string.</p>
+<p>The default encoding is specified by the <a class="reference internal" href="directives.html#directive-%DefaultEncoding"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%DefaultEncoding</span></code></a>
+directive.  If the directive is not specified then <code class="docutils literal notranslate"><span class="pre">None</span></code> is used.</p>
+<p>Python v3 will use the <code class="docutils literal notranslate"><span class="pre">bytes</span></code> type to represent the argument if the
+encoding is <code class="docutils literal notranslate"><span class="pre">&quot;None&quot;</span></code> and the <code class="docutils literal notranslate"><span class="pre">str</span></code> type otherwise.</p>
+<p>Python v2 will use the <code class="docutils literal notranslate"><span class="pre">str</span></code> type to represent the argument if the
+encoding is <code class="docutils literal notranslate"><span class="pre">&quot;None&quot;</span></code> and the <code class="docutils literal notranslate"><span class="pre">unicode</span></code> type otherwise.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-GetWrapper">
+<code class="descname">GetWrapper</code><a class="headerlink" href="#argument-annotation-GetWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation is only ever used in conjunction with handwritten
+code specified with the <a class="reference internal" href="directives.html#directive-%MethodCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%MethodCode</span></code></a> directive.  It causes an
+extra variable to be generated for the corresponding argument which is a
+pointer to the Python object that wraps the argument.</p>
+<p>See the <a class="reference internal" href="directives.html#directive-%MethodCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%MethodCode</span></code></a> directive for more detail.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-In">
+<code class="descname">In</code><a class="headerlink" href="#argument-annotation-In" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation is used to specify that the corresponding argument
+(which should be a pointer type) is used to pass a value to the function.</p>
+<p>For pointers to wrapped C structures or C++ class instances, <code class="docutils literal notranslate"><span class="pre">char</span> <span class="pre">*</span></code> and
+<code class="docutils literal notranslate"><span class="pre">unsigned</span> <span class="pre">char</span> <span class="pre">*</span></code> then this annotation is assumed unless the <a class="reference internal" href="#argument-annotation-Out"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">Out</span></code></a>
+annotation is specified.</p>
+<p>For pointers to other types then this annotation must be explicitly
+specified if required.  The argument will be dereferenced to obtain the
+actual value.</p>
+<p>Both <a class="reference internal" href="#argument-annotation-In"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">In</span></code></a> and <a class="reference internal" href="#argument-annotation-Out"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">Out</span></code></a> may be specified for the same argument.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-KeepReference">
+<code class="descname">KeepReference</code><a class="headerlink" href="#argument-annotation-KeepReference" title="Permalink to this definition">¶</a></dt>
+<dd><p>This optional integer annotation is used to specify that a reference to the
+corresponding argument should be kept to ensure that the object is not
+garbage collected.  If the method is called again with a new argument then
+the reference to the previous argument is discarded.  Note that ownership
+of the argument is not changed.</p>
+<p>If the function is a method then the reference is kept by the instance,
+i.e. <code class="docutils literal notranslate"><span class="pre">self</span></code>.  Therefore the extra reference is released when the instance
+is garbage collected.</p>
+<p>If the function is a class method or an ordinary function and it is
+annotated using the <a class="reference internal" href="#function-annotation-Factory"><code class="xref std std-fanno docutils literal notranslate"><span class="pre">Factory</span></code></a> annotation, then the reference is
+kept by the object created by the function.  Therefore the extra reference
+is released when that object is garbage collected.</p>
+<p>Otherwise the reference is not kept by any specific object and will never
+be released.</p>
+<p>If a value is specified then it defines the argument’s key.  Arguments of
+different constructors or methods that have the same key are assumed to
+refer to the same value.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-NoCopy">
+<code class="descname">NoCopy</code><a class="headerlink" href="#argument-annotation-NoCopy" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.10.1.</span></p>
+</div>
+<p>This boolean annotation is used with arguments of virtual methods that are
+a <code class="docutils literal notranslate"><span class="pre">const</span></code> reference to a class.  Normally, if the class defines a copy
+constructor then a copy of the returned reference is automatically created
+and wrapped before being passed to a Python reimplementation of the method.
+The copy will be owned by Python.  This means that the reimplementation may
+take a reference to the argument without having to make an explicit copy.</p>
+<p>If the annotation is specified then the copy is not made and the original
+reference is wrapped instead and will be owned by C++.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-Out">
+<code class="descname">Out</code><a class="headerlink" href="#argument-annotation-Out" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation is used to specify that the corresponding argument
+(which should be a pointer type) is used by the function to return a value
+as an element of a tuple.</p>
+<p>For pointers to wrapped C structures or C++ class instances, <code class="docutils literal notranslate"><span class="pre">char</span> <span class="pre">*</span></code> and
+<code class="docutils literal notranslate"><span class="pre">unsigned</span> <span class="pre">char</span> <span class="pre">*</span></code> then this annotation must be explicitly specified if
+required.</p>
+<p>For pointers to other types then this annotation is assumed unless the
+<a class="reference internal" href="#argument-annotation-In"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">In</span></code></a> annotation is specified.</p>
+<p>Both <a class="reference internal" href="#argument-annotation-In"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">In</span></code></a> and <a class="reference internal" href="#argument-annotation-Out"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">Out</span></code></a> may be specified for the same argument.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-PyInt">
+<code class="descname">PyInt</code><a class="headerlink" href="#argument-annotation-PyInt" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.12.</span></p>
+</div>
+<p>This boolean annotation is used with <code class="docutils literal notranslate"><span class="pre">char</span></code>, <code class="docutils literal notranslate"><span class="pre">signed</span> <span class="pre">char</span></code> and
+<code class="docutils literal notranslate"><span class="pre">unsigned</span> <span class="pre">char</span></code> arguments to specify that they should be interpreted as
+integers rather than strings of one character.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-ResultSize">
+<code class="descname">ResultSize</code><a class="headerlink" href="#argument-annotation-ResultSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation is used with functions or methods that return a
+<code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">*</span></code> or <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">void</span> <span class="pre">*</span></code>.  It identifies an argument that defines the
+size of the block of memory whose address is being returned.  This allows
+the <a class="reference internal" href="python_api.html#sip.voidptr" title="sip.voidptr"><code class="xref py py-class docutils literal notranslate"><span class="pre">sip.voidptr</span></code></a> object that wraps the address to support the
+Python buffer protocol.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-SingleShot">
+<code class="descname">SingleShot</code><a class="headerlink" href="#argument-annotation-SingleShot" title="Permalink to this definition">¶</a></dt>
+<dd><div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 4.18.</span></p>
+</div>
+<p>This boolean annotation is used only with arguments of type
+<a class="reference internal" href="specification_files.html#sip-type-SIP_RXOBJ_CON"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_RXOBJ_CON</span></code></a> to specify that the signal connected to the slot
+will only ever be emitted once.  This prevents a certain class of memory
+leaks.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-ScopesStripped">
+<code class="descname">ScopesStripped</code><a class="headerlink" href="#argument-annotation-ScopesStripped" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.19.11.</span></p>
+</div>
+<p>This integer annotation is only used with Qt signal arguments.  Normally
+the fully scoped type of the argument is used but this annotation specifies
+that the given number of scopes should be removed.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-Transfer">
+<code class="descname">Transfer</code><a class="headerlink" href="#argument-annotation-Transfer" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation is used to specify that ownership of the
+corresponding argument (which should be a wrapped C structure or C++ class
+instance) is transferred from Python to C++.  In addition, if the argument
+is of a class method, then it is associated with the class instance with
+regard to the cyclic garbage collector.</p>
+<p>If the annotation is used with the <a class="reference internal" href="#argument-annotation-Array"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">Array</span></code></a> annotation then the
+array of pointers to the sequence of C structures or C++ class instances
+that is created on the heap is not automatically freed.</p>
+<p>See <a class="reference internal" href="using.html#ref-object-ownership"><span class="std std-ref">Ownership of Objects</span></a> for more detail.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-TransferBack">
+<code class="descname">TransferBack</code><a class="headerlink" href="#argument-annotation-TransferBack" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation is used to specify that ownership of the
+corresponding argument (which should be a wrapped C structure or C++ class
+instance) is transferred back to Python from C++.  In addition, any
+association of the argument with regard to the cyclic garbage collector
+with another instance is removed.</p>
+<p>See <a class="reference internal" href="using.html#ref-object-ownership"><span class="std std-ref">Ownership of Objects</span></a> for more detail.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-TransferThis">
+<code class="descname">TransferThis</code><a class="headerlink" href="#argument-annotation-TransferThis" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation is only used in C++ constructors or methods.  In
+the context of a constructor or factory method it specifies that ownership
+of the instance being created is transferred from Python to C++ if the
+corresponding argument (which should be a wrapped C structure or C++ class
+instance) is not <code class="docutils literal notranslate"><span class="pre">None</span></code>.  In addition, the newly created instance is
+associated with the argument with regard to the cyclic garbage collector.</p>
+<p>In the context of a non-factory method it specifies that ownership of
+<code class="docutils literal notranslate"><span class="pre">this</span></code> is transferred from Python to C++ if the corresponding argument is
+not <code class="docutils literal notranslate"><span class="pre">None</span></code>.  If it is <code class="docutils literal notranslate"><span class="pre">None</span></code> then ownership is transferred to Python.</p>
+<p>The annotation may be used more that once, in which case ownership is
+transferred to last instance that is not <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<p>See <a class="reference internal" href="using.html#ref-object-ownership"><span class="std std-ref">Ownership of Objects</span></a> for more detail.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-TypeHint">
+<code class="descname">TypeHint</code><a class="headerlink" href="#argument-annotation-TypeHint" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This string annotation specifies the type of the argument as it will appear
+in any generated docstrings and PEP 484 type hints.  It is the equivalent
+of specifying <a class="reference internal" href="#argument-annotation-TypeHintIn"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">TypeHintIn</span></code></a> and <a class="reference internal" href="#argument-annotation-TypeHintOut"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">TypeHintOut</span></code></a> with the same
+value.  It is usually used with arguments of type <a class="reference internal" href="specification_files.html#sip-type-SIP_PYOBJECT"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYOBJECT</span></code></a> to
+provide a more specific type.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-TypeHintIn">
+<code class="descname">TypeHintIn</code><a class="headerlink" href="#argument-annotation-TypeHintIn" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This string annotation specifies the type of the argument as it will appear
+in any generated docstrings and PEP 484 type hints when the argument is
+used to pass a value to a function (rather than being used to return a
+value from a function).  It is usually used with arguments of type
+<a class="reference internal" href="specification_files.html#sip-type-SIP_PYOBJECT"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYOBJECT</span></code></a> to provide a more specific type.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-TypeHintOut">
+<code class="descname">TypeHintOut</code><a class="headerlink" href="#argument-annotation-TypeHintOut" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This string annotation specifies the type of the argument as it will appear
+in any generated docstrings and PEP 484 type hints when the argument is
+used to return a value from a function (rather than being used to pass a
+value to a function).  It is usually used with arguments of type
+<a class="reference internal" href="specification_files.html#sip-type-SIP_PYOBJECT"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYOBJECT</span></code></a> to provide a more specific type.</p>
+</dd></dl>
+
+<dl class="argument-annotation">
+<dt id="argument-annotation-TypeHintValue">
+<code class="descname">TypeHintValue</code><a class="headerlink" href="#argument-annotation-TypeHintValue" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This string annotation specifies the default value of the argument as it
+will appear in any generated docstrings.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="class-annotations">
+<span id="ref-class-annos"></span><h2>Class Annotations<a class="headerlink" href="#class-annotations" title="Permalink to this headline">¶</a></h2>
+<dl class="class-annotation">
+<dt id="class-annotation-Abstract">
+<code class="descname">Abstract</code><a class="headerlink" href="#class-annotation-Abstract" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation is used to specify that the class has additional
+pure virtual methods that have not been specified and so it cannot be
+instantiated or sub-classed from Python.  It should not be specified if all
+pure virtual methods have been specified.</p>
+</dd></dl>
+
+<dl class="class-annotation">
+<dt id="class-annotation-AllowNone">
+<code class="descname">AllowNone</code><a class="headerlink" href="#class-annotation-AllowNone" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.8.2.</span></p>
+</div>
+<p>Normally when a Python object is converted to a C/C++ instance <code class="docutils literal notranslate"><span class="pre">None</span></code>
+is handled automatically before the class’s
+<a class="reference internal" href="directives.html#directive-%ConvertToTypeCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%ConvertToTypeCode</span></code></a> is called.  This boolean annotation
+specifies that the handling of <code class="docutils literal notranslate"><span class="pre">None</span></code> will be left to the
+<a class="reference internal" href="directives.html#directive-%ConvertToTypeCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%ConvertToTypeCode</span></code></a>.  The annotation is ignored if the class
+does not have any <a class="reference internal" href="directives.html#directive-%ConvertToTypeCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%ConvertToTypeCode</span></code></a>.</p>
+</dd></dl>
+
+<dl class="class-annotation">
+<dt id="class-annotation-API">
+<code class="descname">API</code><a class="headerlink" href="#class-annotation-API" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.9.</span></p>
+</div>
+<p>This API range annotation is used to specify an API and corresponding
+range of version numbers that the class is enabled for.</p>
+<p>If a class or mapped type has different implementations enabled for
+different ranges of version numbers then those ranges must not overlap.</p>
+<p>Note that sub-classing from a class that has different implementations is
+not currently supported.</p>
+<p>See <a class="reference internal" href="using.html#ref-incompat-apis"><span class="std std-ref">Managing Incompatible APIs</span></a> for more detail.</p>
+</dd></dl>
+
+<dl class="class-annotation">
+<dt id="class-annotation-DelayDtor">
+<code class="descname">DelayDtor</code><a class="headerlink" href="#class-annotation-DelayDtor" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation is used to specify that the class’s destructor
+should not be called until the Python interpreter exits.  It would normally
+only be applied to singleton classes.</p>
+<p>When the Python interpreter exits the order in which any wrapped instances
+are garbage collected is unpredictable.  However, the underlying C or C++
+instances may need to be destroyed in a certain order.  If this annotation
+is specified then when the wrapped instance is garbage collected the C or
+C++ instance is not destroyed but instead added to a list of delayed
+instances.  When the interpreter exits then the function
+<a class="reference internal" href="#c.sipDelayedDtors" title="sipDelayedDtors"><code class="xref c c-func docutils literal notranslate"><span class="pre">sipDelayedDtors()</span></code></a> is called with the list of delayed instances.
+<a class="reference internal" href="#c.sipDelayedDtors" title="sipDelayedDtors"><code class="xref c c-func docutils literal notranslate"><span class="pre">sipDelayedDtors()</span></code></a> can then choose to call (or ignore) the
+destructors in any desired order.</p>
+<p>The <a class="reference internal" href="#c.sipDelayedDtors" title="sipDelayedDtors"><code class="xref c c-func docutils literal notranslate"><span class="pre">sipDelayedDtors()</span></code></a> function must be specified using the
+<a class="reference internal" href="directives.html#directive-%ModuleCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%ModuleCode</span></code></a> directive.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.sipDelayedDtors">
+void <code class="descname">sipDelayedDtors</code><span class="sig-paren">(</span>const <a class="reference internal" href="#c.sipDelayedDtor" title="sipDelayedDtor">sipDelayedDtor</a><em>&nbsp;*dd_list</em><span class="sig-paren">)</span><a class="headerlink" href="#c.sipDelayedDtors" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dd_list</strong> – the linked list of delayed instances.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.sipDelayedDtor">
+<code class="descname">sipDelayedDtor</code><a class="headerlink" href="#c.sipDelayedDtor" title="Permalink to this definition">¶</a></dt>
+<dd><p>This structure describes a particular delayed destructor.</p>
+<dl class="member">
+<dt id="c.sipDelayedDtor.dd_name">
+const char* <code class="descname">dd_name</code><a class="headerlink" href="#c.sipDelayedDtor.dd_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the name of the class excluding any package or module name.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.sipDelayedDtor.dd_ptr">
+void* <code class="descname">dd_ptr</code><a class="headerlink" href="#c.sipDelayedDtor.dd_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the address of the C or C++ instance to be destroyed.  It’s
+exact type depends on the value of <code class="xref c c-member docutils literal notranslate"><span class="pre">dd_isderived</span></code>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.sipDelayedDtor.dd_isderived">
+int <code class="descname">dd_isderived</code><a class="headerlink" href="#c.sipDelayedDtor.dd_isderived" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is non-zero if the type of <code class="xref c c-member docutils literal notranslate"><span class="pre">dd_ptr</span></code> is actually the
+generated derived class.  This allows the correct destructor to be
+called.  See <a class="reference internal" href="c_api.html#ref-derived-classes"><span class="std std-ref">Generated Derived Classes</span></a>.</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.sipDelayedDtor.dd_next">
+<a class="reference internal" href="#c.sipDelayedDtor" title="sipDelayedDtor">sipDelayedDtor</a>* <code class="descname">dd_next</code><a class="headerlink" href="#c.sipDelayedDtor.dd_next" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the address of the next entry in the list or zero if this is
+the last one.</p>
+</dd></dl>
+
+<p>Note that the above applies only to C and C++ instances that are owned by
+Python.</p>
+</dd></dl>
+
+<dl class="class-annotation">
+<dt id="class-annotation-Deprecated">
+<code class="descname">Deprecated</code><a class="headerlink" href="#class-annotation-Deprecated" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation is used to specify that the class is deprecated.
+It is the equivalent of annotating all the class’s constructors, function
+and methods as being deprecated.</p>
+</dd></dl>
+
+<dl class="class-annotation">
+<dt id="class-annotation-FileExtension">
+<code class="descname">FileExtension</code><a class="headerlink" href="#class-annotation-FileExtension" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.16.6.</span></p>
+</div>
+<p>This string annotation is used to specify the filename extension to be used
+for the file containing the generated code for this class.  A separate file
+will be generated even if the <a class="reference internal" href="command_line.html#cmdoption-sip-j"><code class="xref std std-option docutils literal notranslate"><span class="pre">-j</span></code></a> command line option is
+specified.</p>
+</dd></dl>
+
+<dl class="class-annotation">
+<dt id="class-annotation-ExportDerived">
+<code class="descname">ExportDerived</code><a class="headerlink" href="#class-annotation-ExportDerived" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.15.</span></p>
+</div>
+<p>In many cases SIP generates a derived class for each class being wrapped
+(see <a class="reference internal" href="c_api.html#ref-derived-classes"><span class="std std-ref">Generated Derived Classes</span></a>).  Normally this is used internally.  This
+boolean annotation specifies that the declaration of the class is exported
+and able to be used by handwritten code.</p>
+</dd></dl>
+
+<dl class="class-annotation">
+<dt id="class-annotation-External">
+<code class="descname">External</code><a class="headerlink" href="#class-annotation-External" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation is used to specify that the class is defined in
+another module.  Declarations of external classes are private to the module
+in which they appear.</p>
+</dd></dl>
+
+<dl class="class-annotation">
+<dt id="class-annotation-Metatype">
+<code class="descname">Metatype</code><a class="headerlink" href="#class-annotation-Metatype" title="Permalink to this definition">¶</a></dt>
+<dd><p>This dotted name annotation specifies the name of the Python type object
+(i.e. the value of the <code class="docutils literal notranslate"><span class="pre">tp_name</span></code> field) used as the meta-type used when
+creating the type object for this C structure or C++ type.</p>
+<p>See the section <a class="reference internal" href="using.html#ref-types-metatypes"><span class="std std-ref">Types and Meta-types</span></a> for more details.</p>
+</dd></dl>
+
+<dl class="class-annotation">
+<dt id="class-annotation-Mixin">
+<code class="descname">Mixin</code><a class="headerlink" href="#class-annotation-Mixin" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.15.</span></p>
+</div>
+<p>This boolean annotation specifies that the class can be used as a mixin
+with other wrapped classes.</p>
+<p>Normally a Python application cannot define a new class that is derived
+from more than one wrapped class.  In C++ this would create a new C++
+class.  This cannot be done from Python.  At best a C++ instance of each of
+the wrapped classes can be created and wrapped as separate Python objects.
+However some C++ classes may function perfectly well with this restriction.
+Such classes are often intended to be used as mixins.</p>
+<p>If this annotation is specified then a separate instance of the class is
+created.  The main instance automatically delegates to the instance of the
+mixin when required.  A mixin class should have the following
+characteristics:</p>
+<ul class="simple">
+<li>Any constructor arguments should be able to be specified using keyword
+arguments.</li>
+<li>The class should not have any virtual methods.</li>
+</ul>
+</dd></dl>
+
+<dl class="class-annotation">
+<dt id="class-annotation-NoDefaultCtors">
+<code class="descname">NoDefaultCtors</code><a class="headerlink" href="#class-annotation-NoDefaultCtors" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation is used to suppress the automatic generation of
+default constructors for the class.</p>
+</dd></dl>
+
+<dl class="class-annotation">
+<dt id="class-annotation-NoTypeHint">
+<code class="descname">NoTypeHint</code><a class="headerlink" href="#class-annotation-NoTypeHint" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This boolean annotation is used to suppress the generation of the PEP 484
+type hint for the class and its contents.</p>
+</dd></dl>
+
+<dl class="class-annotation">
+<dt id="class-annotation-PyName">
+<code class="descname">PyName</code><a class="headerlink" href="#class-annotation-PyName" title="Permalink to this definition">¶</a></dt>
+<dd><p>This name annotation specifies an alternative name for the class being
+wrapped which is used when it is referred to from Python.  It is required
+when a class name is the same as a Python keyword.  It may also be used to
+avoid name clashes with other objects (e.g. enums, exceptions, functions)
+that have the same name in the same C++ scope.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="directives.html#directive-%AutoPyName"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%AutoPyName</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="class-annotation">
+<dt id="class-annotation-Supertype">
+<code class="descname">Supertype</code><a class="headerlink" href="#class-annotation-Supertype" title="Permalink to this definition">¶</a></dt>
+<dd><p>This dotted name annotation specifies the name of the Python type object
+(i.e. the value of the <code class="docutils literal notranslate"><span class="pre">tp_name</span></code> field) used as the super-type used when
+creating the type object for this C structure or C++ type.</p>
+<p>See the section <a class="reference internal" href="using.html#ref-types-metatypes"><span class="std std-ref">Types and Meta-types</span></a> for more details.</p>
+</dd></dl>
+
+<dl class="class-annotation">
+<dt id="class-annotation-TypeHint">
+<code class="descname">TypeHint</code><a class="headerlink" href="#class-annotation-TypeHint" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This string annotation specifies the type of the class as it will appear
+in any generated docstrings and PEP 484 type hints.  It is the equivalent
+of specifying <a class="reference internal" href="#class-annotation-TypeHintIn"><code class="xref std std-canno docutils literal notranslate"><span class="pre">TypeHintIn</span></code></a> and <a class="reference internal" href="#class-annotation-TypeHintOut"><code class="xref std std-canno docutils literal notranslate"><span class="pre">TypeHintOut</span></code></a> with the same
+value.</p>
+</dd></dl>
+
+<dl class="class-annotation">
+<dt id="class-annotation-TypeHintIn">
+<code class="descname">TypeHintIn</code><a class="headerlink" href="#class-annotation-TypeHintIn" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This string annotation specifies the type of the class as it will appear
+in any generated docstrings and PEP 484 type hints when an instance of the
+class is passed as an argument to a function (rather than being returned
+from a function).  It is usually used with classes that implement
+<a class="reference internal" href="directives.html#directive-%ConvertToTypeCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%ConvertToTypeCode</span></code></a> to allow additional types to be used
+whenever an instance of the class is expected.</p>
+</dd></dl>
+
+<dl class="class-annotation">
+<dt id="class-annotation-TypeHintOut">
+<code class="descname">TypeHintOut</code><a class="headerlink" href="#class-annotation-TypeHintOut" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This string annotation specifies the type of the class as it will appear
+in any generated docstrings and PEP 484 type hints when an instance of the
+class is returned from a function (rather than being used to pass a
+value to a function).</p>
+</dd></dl>
+
+<dl class="class-annotation">
+<dt id="class-annotation-TypeHintValue">
+<code class="descname">TypeHintValue</code><a class="headerlink" href="#class-annotation-TypeHintValue" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This string annotation specifies the default value of the class as it will
+appear in any generated docstrings.</p>
+</dd></dl>
+
+<dl class="class-annotation">
+<dt id="class-annotation-VirtualErrorHandler">
+<code class="descname">VirtualErrorHandler</code><a class="headerlink" href="#class-annotation-VirtualErrorHandler" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.14.</span></p>
+</div>
+<p>This name annotation specifies the handler (defined by the
+<a class="reference internal" href="directives.html#directive-%VirtualErrorHandler"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%VirtualErrorHandler</span></code></a> directive) that is called when a Python
+re-implementation of any of the class’s virtual C++ functions raises a
+Python exception.  If not specified then the handler specified by the
+<code class="docutils literal notranslate"><span class="pre">default_VirtualErrorHandler</span></code> argument of the <a class="reference internal" href="directives.html#directive-%Module"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%Module</span></code></a>
+directive is used.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#function-annotation-NoVirtualErrorHandler"><code class="xref std std-fanno docutils literal notranslate"><span class="pre">NoVirtualErrorHandler</span></code></a>, <a class="reference internal" href="#function-annotation-VirtualErrorHandler"><code class="xref std std-fanno docutils literal notranslate"><span class="pre">VirtualErrorHandler</span></code></a>, <a class="reference internal" href="directives.html#directive-%VirtualErrorHandler"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%VirtualErrorHandler</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="mapped-type-annotations">
+<span id="ref-mapped-type-annos"></span><h2>Mapped Type Annotations<a class="headerlink" href="#mapped-type-annotations" title="Permalink to this headline">¶</a></h2>
+<dl class="mapped-type-annotation">
+<dt id="mapped-type-annotation-AllowNone">
+<code class="descname">AllowNone</code><a class="headerlink" href="#mapped-type-annotation-AllowNone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normally when a Python object is converted to a C/C++ instance <code class="docutils literal notranslate"><span class="pre">None</span></code>
+is handled automatically before the mapped type’s
+<a class="reference internal" href="directives.html#directive-%ConvertToTypeCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%ConvertToTypeCode</span></code></a> is called.  This boolean annotation
+specifies that the handling of <code class="docutils literal notranslate"><span class="pre">None</span></code> will be left to the
+<a class="reference internal" href="directives.html#directive-%ConvertToTypeCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%ConvertToTypeCode</span></code></a>.</p>
+</dd></dl>
+
+<dl class="mapped-type-annotation">
+<dt id="mapped-type-annotation-API">
+<code class="descname">API</code><a class="headerlink" href="#mapped-type-annotation-API" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.9.</span></p>
+</div>
+<p>This API range annotation is used to specify an API and corresponding
+range of version numbers that the mapped type is enabled for.</p>
+<p>If a class or mapped type has different implementations enabled for
+different ranges of version numbers then those ranges must not overlap.</p>
+<p>It should not be used with mapped type templates.</p>
+<p>See <a class="reference internal" href="using.html#ref-incompat-apis"><span class="std std-ref">Managing Incompatible APIs</span></a> for more detail.</p>
+</dd></dl>
+
+<dl class="mapped-type-annotation">
+<dt id="mapped-type-annotation-DocType">
+<code class="descname">DocType</code><a class="headerlink" href="#mapped-type-annotation-DocType" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.10.</span></p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 4.18: </span>Use the <a class="reference internal" href="#mapped-type-annotation-TypeHint"><code class="xref std std-manno docutils literal notranslate"><span class="pre">TypeHint</span></code></a> annotation instead.</p>
+</div>
+<p>This string annotation serves the same purpose as the <a class="reference internal" href="#argument-annotation-DocType"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">DocType</span></code></a>
+argument annotation when applied to the mapped type being defined.</p>
+</dd></dl>
+
+<dl class="mapped-type-annotation">
+<dt id="mapped-type-annotation-NoRelease">
+<code class="descname">NoRelease</code><a class="headerlink" href="#mapped-type-annotation-NoRelease" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation is used to specify that the mapped type does not
+support the <a class="reference internal" href="c_api.html#c.sipReleaseType" title="sipReleaseType"><code class="xref c c-func docutils literal notranslate"><span class="pre">sipReleaseType()</span></code></a> function.  Any
+<a class="reference internal" href="directives.html#directive-%ConvertToTypeCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%ConvertToTypeCode</span></code></a> should not create temporary instances of
+the mapped type, i.e. it should not return <code class="xref c c-macro docutils literal notranslate"><span class="pre">SIP_TEMPORARY</span></code>.</p>
+</dd></dl>
+
+<dl class="mapped-type-annotation">
+<dt id="mapped-type-annotation-PyName">
+<code class="descname">PyName</code><a class="headerlink" href="#mapped-type-annotation-PyName" title="Permalink to this definition">¶</a></dt>
+<dd><p>This name annotation specifies an alternative name for the mapped type
+being wrapped which is used when it is referred to from Python.  The only
+time a Python type is created for a mapped type is when it is used as a
+scope for static methods or enums.</p>
+<p>It should not be used with mapped type templates.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="directives.html#directive-%AutoPyName"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%AutoPyName</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="mapped-type-annotation">
+<dt id="mapped-type-annotation-TypeHint">
+<code class="descname">TypeHint</code><a class="headerlink" href="#mapped-type-annotation-TypeHint" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This string annotation specifies the type of the mapped type as it will
+appear in any generated docstrings and PEP 484 type hints.  It is the
+equivalent of specifying <a class="reference internal" href="#mapped-type-annotation-TypeHintIn"><code class="xref std std-manno docutils literal notranslate"><span class="pre">TypeHintIn</span></code></a> and <a class="reference internal" href="#mapped-type-annotation-TypeHintOut"><code class="xref std std-manno docutils literal notranslate"><span class="pre">TypeHintOut</span></code></a> with
+the same value.</p>
+</dd></dl>
+
+<dl class="mapped-type-annotation">
+<dt id="mapped-type-annotation-TypeHintIn">
+<code class="descname">TypeHintIn</code><a class="headerlink" href="#mapped-type-annotation-TypeHintIn" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This string annotation specifies the type of the mapped type as it will
+appear in any generated docstrings and PEP 484 type hints when it is passed
+to a function (rather than being returned from a function).</p>
+</dd></dl>
+
+<dl class="mapped-type-annotation">
+<dt id="mapped-type-annotation-TypeHintOut">
+<code class="descname">TypeHintOut</code><a class="headerlink" href="#mapped-type-annotation-TypeHintOut" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This string annotation specifies the type of the mapped type as it will
+appear in any generated docstrings and PEP 484 type hints when it is
+returned from a function (rather than being passed to a function).</p>
+</dd></dl>
+
+<dl class="mapped-type-annotation">
+<dt id="mapped-type-annotation-TypeHintValue">
+<code class="descname">TypeHintValue</code><a class="headerlink" href="#mapped-type-annotation-TypeHintValue" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This string annotation specifies the default value of the mapped type as it
+will appear in any generated docstrings.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="enum-annotations">
+<span id="ref-enum-annos"></span><h2>Enum Annotations<a class="headerlink" href="#enum-annotations" title="Permalink to this headline">¶</a></h2>
+<dl class="enum-annotation">
+<dt id="enum-annotation-NoScope">
+<code class="descname">NoScope</code><a class="headerlink" href="#enum-annotation-NoScope" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.15.</span></p>
+</div>
+<p>This boolean annotation specifies the that scope of an enum’s members
+should be omitted in the generated code.  Normally this would mean that the
+generated code will not compile.  However it is useful when defining
+pseudo-enums, for example, to wrap global values so that they are defined
+(in Python) within the scope of a class.</p>
+</dd></dl>
+
+<dl class="enum-annotation">
+<dt id="enum-annotation-NoTypeHint">
+<code class="descname">NoTypeHint</code><a class="headerlink" href="#enum-annotation-NoTypeHint" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This boolean annotation is used to suppress the generation of the PEP 484
+type hint for the enum or enum member.</p>
+</dd></dl>
+
+<dl class="enum-annotation">
+<dt id="enum-annotation-PyName">
+<code class="descname">PyName</code><a class="headerlink" href="#enum-annotation-PyName" title="Permalink to this definition">¶</a></dt>
+<dd><p>This name annotation specifies an alternative name for the enum or enum
+member being wrapped which is used when it is referred to from Python.  It
+is required when an enum or enum member name is the same as a Python
+keyword.  It may also be used to avoid name clashes with other objects
+(e.g. classes, exceptions, functions) that have the same name in the same
+C++ scope.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="directives.html#directive-%AutoPyName"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%AutoPyName</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="exception-annotations">
+<span id="ref-exception-annos"></span><h2>Exception Annotations<a class="headerlink" href="#exception-annotations" title="Permalink to this headline">¶</a></h2>
+<dl class="exception-annotation">
+<dt id="exception-annotation-Default">
+<code class="descname">Default</code><a class="headerlink" href="#exception-annotation-Default" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation specifies that the exception being defined will be
+used as the default exception to be caught if a function or constructor
+does not have a <code class="docutils literal notranslate"><span class="pre">throw</span></code> clause.</p>
+</dd></dl>
+
+<dl class="exception-annotation">
+<dt id="exception-annotation-PyName">
+<code class="descname">PyName</code><a class="headerlink" href="#exception-annotation-PyName" title="Permalink to this definition">¶</a></dt>
+<dd><p>This name annotation specifies an alternative name for the exception being
+defined which is used when it is referred to from Python.  It is required
+when an exception name is the same as a Python keyword.  It may also be
+used to avoid name clashes with other objects (e.g. classes, enums,
+functions) that have the same name.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="directives.html#directive-%AutoPyName"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%AutoPyName</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="function-annotations">
+<span id="ref-function-annos"></span><h2>Function Annotations<a class="headerlink" href="#function-annotations" title="Permalink to this headline">¶</a></h2>
+<dl class="function-annotation">
+<dt id="function-annotation-AbortOnException">
+<code class="descname">AbortOnException</code><a class="headerlink" href="#function-annotation-AbortOnException" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.16.4.</span></p>
+</div>
+<p>This boolean annotation specifies that when a Python re-implementation of a
+virtual C++ function raises a Python exception then <code class="docutils literal notranslate"><span class="pre">abort()</span></code> is
+called after the error handler returns.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-AllowNone">
+<code class="descname">AllowNone</code><a class="headerlink" href="#function-annotation-AllowNone" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.16.4.</span></p>
+</div>
+<p>This boolean annotation is used to specify that the value returned by the
+function (which should be either <a class="reference internal" href="specification_files.html#sip-type-SIP_PYBUFFER"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYBUFFER</span></code></a>,
+<a class="reference internal" href="specification_files.html#sip-type-SIP_PYCALLABLE"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYCALLABLE</span></code></a>, <a class="reference internal" href="specification_files.html#sip-type-SIP_PYDICT"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYDICT</span></code></a>, <a class="reference internal" href="specification_files.html#sip-type-SIP_PYLIST"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYLIST</span></code></a>,
+<a class="reference internal" href="specification_files.html#sip-type-SIP_PYSLICE"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYSLICE</span></code></a>, <a class="reference internal" href="specification_files.html#sip-type-SIP_PYTUPLE"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYTUPLE</span></code></a> or <a class="reference internal" href="specification_files.html#sip-type-SIP_PYTYPE"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYTYPE</span></code></a>) may be
+<code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-API">
+<code class="descname">API</code><a class="headerlink" href="#function-annotation-API" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.9.</span></p>
+</div>
+<p>This API range annotation is used to specify an API and corresponding
+range of version numbers that the function is enabled for.</p>
+<p>See <a class="reference internal" href="using.html#ref-incompat-apis"><span class="std std-ref">Managing Incompatible APIs</span></a> for more detail.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-AutoGen">
+<code class="descname">AutoGen</code><a class="headerlink" href="#function-annotation-AutoGen" title="Permalink to this definition">¶</a></dt>
+<dd><p>This optional name annotation is used with class methods to specify that
+the method be automatically included in all sub-classes.  The value is the
+name of a feature (specified using the <a class="reference internal" href="directives.html#directive-%Feature"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%Feature</span></code></a> directive)
+which must be enabled for the method to be generated.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-Default">
+<code class="descname">Default</code><a class="headerlink" href="#function-annotation-Default" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation is only used with C++ constructors.  Sometimes SIP
+needs to create a class instance.  By default it uses a constructor with no
+compulsory arguments if one is specified.  (SIP will automatically generate
+a constructor with no arguments if no constructors are specified.)  This
+annotation is used to explicitly specify which constructor to use.  Zero is
+passed as the value of any arguments to the constructor.  This annotation
+is ignored if the class defines <a class="reference internal" href="directives.html#directive-%InstanceCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%InstanceCode</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-Deprecated">
+<code class="descname">Deprecated</code><a class="headerlink" href="#function-annotation-Deprecated" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation is used to specify that the constructor or function
+is deprecated.  A deprecation warning is issued whenever the constructor or
+function is called.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-DisallowNone">
+<code class="descname">DisallowNone</code><a class="headerlink" href="#function-annotation-DisallowNone" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.16.4.</span></p>
+</div>
+<p>This boolean annotation is used to specify that the value returned by the
+function (which should be a pointer to either a C++ class or a mapped type)
+must not be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-DocType">
+<code class="descname">DocType</code><a class="headerlink" href="#function-annotation-DocType" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.10.</span></p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 4.18: </span>Use the <a class="reference internal" href="#function-annotation-TypeHint"><code class="xref std std-fanno docutils literal notranslate"><span class="pre">TypeHint</span></code></a> annotation instead.</p>
+</div>
+<p>This string annotation serves the same purpose as the <a class="reference internal" href="#argument-annotation-DocType"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">DocType</span></code></a>
+argument annotation when applied to the type of the value returned by the
+function.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-Encoding">
+<code class="descname">Encoding</code><a class="headerlink" href="#function-annotation-Encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>This string annotation serves the same purpose as the <a class="reference internal" href="#argument-annotation-Encoding"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">Encoding</span></code></a>
+argument annotation when applied to the type of the value returned by the
+function.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-Factory">
+<code class="descname">Factory</code><a class="headerlink" href="#function-annotation-Factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation specifies that the value returned by the function
+(which should be a wrapped C structure or C++ class instance) is a newly
+created instance and is owned by Python.</p>
+<p>See <a class="reference internal" href="using.html#ref-object-ownership"><span class="std std-ref">Ownership of Objects</span></a> for more detail.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-HoldGIL">
+<code class="descname">HoldGIL</code><a class="headerlink" href="#function-annotation-HoldGIL" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation specifies that the Python Global Interpreter Lock
+(GIL) is not released before the call to the underlying C or C++ function.
+See <a class="reference internal" href="using.html#ref-gil"><span class="std std-ref">The Python Global Interpreter Lock</span></a> and the <a class="reference internal" href="#function-annotation-ReleaseGIL"><code class="xref std std-fanno docutils literal notranslate"><span class="pre">ReleaseGIL</span></code></a> annotation.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-__imatmul__">
+<code class="descname">__imatmul__</code><a class="headerlink" href="#function-annotation-__imatmul__" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.17.</span></p>
+</div>
+<p>This boolean annotation specifies that a <code class="docutils literal notranslate"><span class="pre">__imatmul__()</span></code> method should be
+automatically generated that will use the method being annotated to compute
+the value that the <code class="docutils literal notranslate"><span class="pre">__imatmul__()</span></code> method will return.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-KeepReference">
+<code class="descname">KeepReference</code><a class="headerlink" href="#function-annotation-KeepReference" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.12.2.</span></p>
+</div>
+<p>This optional integer annotation serves the same purpose as the
+<a class="reference internal" href="#argument-annotation-KeepReference"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">KeepReference</span></code></a> argument annotation when applied to the type of the
+value returned by the function.</p>
+<p>If the function is a class method or an ordinary function then the
+reference is not kept by any other object and so the returned value will
+never be garbage collected.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-KeywordArgs">
+<code class="descname">KeywordArgs</code><a class="headerlink" href="#function-annotation-KeywordArgs" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.10.</span></p>
+</div>
+<p>This string annotation specifies the level of support the argument parser
+generated for this function will provide for passing the parameters using
+Python’s keyword argument syntax.  The value of the annotation can be
+either <code class="docutils literal notranslate"><span class="pre">&quot;None&quot;</span></code> meaning that keyword arguments are not supported,
+<code class="docutils literal notranslate"><span class="pre">&quot;All&quot;</span></code> meaning that all named arguments can be passed as keyword
+arguments, or <code class="docutils literal notranslate"><span class="pre">&quot;Optional&quot;</span></code> meaning that all named optional arguments
+(i.e. those with a default value) can be passed as keyword arguments.</p>
+<p>If the annotation is not used then the value specified by the
+<code class="docutils literal notranslate"><span class="pre">keyword_arguments</span></code> argument of the <a class="reference internal" href="directives.html#directive-%Module"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%Module</span></code></a> directive is
+used.</p>
+<p>Keyword arguments cannot be used for functions that use an ellipsis to
+designate that the function has a variable number of arguments.</p>
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 4.12: </span>It can also be used as a boolean annotation which is the equivalent of
+specifiying a value of <code class="docutils literal notranslate"><span class="pre">&quot;All&quot;</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-__len__">
+<code class="descname">__len__</code><a class="headerlink" href="#function-annotation-__len__" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.10.3.</span></p>
+</div>
+<p>This boolean annotation specifies that a <code class="docutils literal notranslate"><span class="pre">__len__()</span></code> method should be
+automatically generated that will use the method being annotated to compute
+the value that the <code class="docutils literal notranslate"><span class="pre">__len__()</span></code> method will return.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-__matmul__">
+<code class="descname">__matmul__</code><a class="headerlink" href="#function-annotation-__matmul__" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.17.</span></p>
+</div>
+<p>This boolean annotation specifies that a <code class="docutils literal notranslate"><span class="pre">__matmul__()</span></code> method should be
+automatically generated that will use the method being annotated to compute
+the value that the <code class="docutils literal notranslate"><span class="pre">__matmul__()</span></code> method will return.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-NewThread">
+<code class="descname">NewThread</code><a class="headerlink" href="#function-annotation-NewThread" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation specifies that the function (which must be a
+virtual) will be executed in a new thread.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-NoArgParser">
+<code class="descname">NoArgParser</code><a class="headerlink" href="#function-annotation-NoArgParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation is used with methods and global functions to
+specify that the supplied <a class="reference internal" href="directives.html#directive-%MethodCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%MethodCode</span></code></a> will handle the parsing
+of the arguments.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-NoCopy">
+<code class="descname">NoCopy</code><a class="headerlink" href="#function-annotation-NoCopy" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.10.1.</span></p>
+</div>
+<p>This boolean annotation is used with methods and global functions that
+return a <code class="docutils literal notranslate"><span class="pre">const</span></code> reference to a class.  Normally, if the class defines a
+copy constructor then a copy of the returned reference is automatically
+created and wrapped.  The copy will be owned by Python.</p>
+<p>If the annotation is specified then the copy is not made and the original
+reference is wrapped instead and will be owned by C++.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-NoDerived">
+<code class="descname">NoDerived</code><a class="headerlink" href="#function-annotation-NoDerived" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation is only used with C++ constructors.  In many cases
+SIP generates a derived class for each class being wrapped (see
+<a class="reference internal" href="c_api.html#ref-derived-classes"><span class="std std-ref">Generated Derived Classes</span></a>).  This derived class contains constructors with
+the same C++ signatures as the class being wrapped.  Sometimes you may want
+to define a Python constructor that has no corresponding C++ constructor.
+This annotation is used to suppress the generation of the constructor in
+the derived class.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-NoKeywordArgs">
+<code class="descname">NoKeywordArgs</code><a class="headerlink" href="#function-annotation-NoKeywordArgs" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.10.</span></p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 4.12: </span>Use the <a class="reference internal" href="#function-annotation-KeywordArgs"><code class="xref std std-fanno docutils literal notranslate"><span class="pre">KeywordArgs</span></code></a> annotation with a value of <code class="docutils literal notranslate"><span class="pre">&quot;None&quot;</span></code>.</p>
+</div>
+<p>This boolean annotation specifies that the argument parser generated for
+this function will not support passing the parameters using Python’s
+keyword argument syntax.  In other words, the argument parser will only
+support normal positional arguments.  This annotation is useful when the
+default setting of allowing keyword arguments has been changed via the
+command line or the <a class="reference internal" href="directives.html#directive-%Module"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%Module</span></code></a> directive, but you would still
+like certain functions to only support positional arguments.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-NoRaisesPyException">
+<code class="descname">NoRaisesPyException</code><a class="headerlink" href="#function-annotation-NoRaisesPyException" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.13.1.</span></p>
+</div>
+<p>This boolean annotation specifies that the function or constructor does not
+raise a Python exception to indicate that an error occurred.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#function-annotation-RaisesPyException"><code class="xref std std-fanno docutils literal notranslate"><span class="pre">RaisesPyException</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-NoTypeHint">
+<code class="descname">NoTypeHint</code><a class="headerlink" href="#function-annotation-NoTypeHint" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This boolean annotation is used to suppress the generation of the PEP 484
+type hint for the function or constructor.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-NoVirtualErrorHandler">
+<code class="descname">NoVirtualErrorHandler</code><a class="headerlink" href="#function-annotation-NoVirtualErrorHandler" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.14.</span></p>
+</div>
+<p>This boolean annotation specifies that when a Python re-implementation of a
+virtual C++ function raises a Python exception then <code class="docutils literal notranslate"><span class="pre">PyErr_Print()</span></code> is
+always called.  Any error handler specified by either the
+<a class="reference internal" href="#function-annotation-VirtualErrorHandler"><code class="xref std std-fanno docutils literal notranslate"><span class="pre">VirtualErrorHandler</span></code></a> function annotation, the
+<a class="reference internal" href="#class-annotation-VirtualErrorHandler"><code class="xref std std-canno docutils literal notranslate"><span class="pre">VirtualErrorHandler</span></code></a> class annotation or the
+<code class="docutils literal notranslate"><span class="pre">default_VirtualErrorHandler</span></code> argument of the <a class="reference internal" href="directives.html#directive-%Module"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%Module</span></code></a>
+directive is ignored.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#function-annotation-VirtualErrorHandler"><code class="xref std std-fanno docutils literal notranslate"><span class="pre">VirtualErrorHandler</span></code></a>, <a class="reference internal" href="#class-annotation-VirtualErrorHandler"><code class="xref std std-canno docutils literal notranslate"><span class="pre">VirtualErrorHandler</span></code></a>, <a class="reference internal" href="directives.html#directive-%VirtualErrorHandler"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%VirtualErrorHandler</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-Numeric">
+<code class="descname">Numeric</code><a class="headerlink" href="#function-annotation-Numeric" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation specifies that the operator should be interpreted
+as a numeric operator rather than a sequence operator.</p>
+<p>Python uses the <code class="docutils literal notranslate"><span class="pre">+</span></code> operator for adding numbers and concatanating
+sequences, and the <code class="docutils literal notranslate"><span class="pre">*</span></code> operator for multiplying numbers and repeating
+sequences.  Unless this or the <a class="reference internal" href="#function-annotation-Sequence"><code class="xref std std-fanno docutils literal notranslate"><span class="pre">Sequence</span></code></a> annotation is specified,
+SIP tries to work out which is meant by looking at other operators that
+have been defined for the type.  If it finds either <code class="docutils literal notranslate"><span class="pre">-</span></code>, <code class="docutils literal notranslate"><span class="pre">-=</span></code>, <code class="docutils literal notranslate"><span class="pre">/</span></code>,
+<code class="docutils literal notranslate"><span class="pre">/=</span></code>, <code class="docutils literal notranslate"><span class="pre">%</span></code> or <code class="docutils literal notranslate"><span class="pre">%=</span></code> defined then it assumes that <code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">+=</span></code>, <code class="docutils literal notranslate"><span class="pre">*</span></code>
+and <code class="docutils literal notranslate"><span class="pre">*=</span></code> should be numeric operators.  Otherwise, if it finds either
+<code class="docutils literal notranslate"><span class="pre">[]</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">__getitem__()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">__setitem__()</span></code> or <code class="xref py py-meth docutils literal notranslate"><span class="pre">__delitem__()</span></code>
+defined then it assumes that they should be sequence operators.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-PostHook">
+<code class="descname">PostHook</code><a class="headerlink" href="#function-annotation-PostHook" title="Permalink to this definition">¶</a></dt>
+<dd><p>This name annotation is used to specify the name of a Python builtin that
+is called immediately after the call to the underlying C or C++ function or
+any handwritten code.  The builtin is not called if an error occurred.  It
+is primarily used to integrate with debuggers.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-PreHook">
+<code class="descname">PreHook</code><a class="headerlink" href="#function-annotation-PreHook" title="Permalink to this definition">¶</a></dt>
+<dd><p>This name annotation is used to specify the name of a Python builtin that
+is called immediately after the function’s arguments have been successfully
+parsed and before the call to the underlying C or C++ function or any
+handwritten code.  It is primarily used to integrate with debuggers.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-PyName">
+<code class="descname">PyName</code><a class="headerlink" href="#function-annotation-PyName" title="Permalink to this definition">¶</a></dt>
+<dd><p>This name annotation specifies an alternative name for the function being
+wrapped which is used when it is referred to from Python.  It is required
+when a function or method name is the same as a Python keyword.  It may
+also be used to avoid name clashes with other objects (e.g. classes, enums,
+exceptions) that have the same name in the same C++ scope.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="directives.html#directive-%AutoPyName"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%AutoPyName</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-PyInt">
+<code class="descname">PyInt</code><a class="headerlink" href="#function-annotation-PyInt" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.12.</span></p>
+</div>
+<p>This boolean annotation serves the same purpose as the <a class="reference internal" href="#argument-annotation-PyInt"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">PyInt</span></code></a>
+argument annotation when applied to the type of the value returned by the
+function.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-RaisesPyException">
+<code class="descname">RaisesPyException</code><a class="headerlink" href="#function-annotation-RaisesPyException" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.12.1.</span></p>
+</div>
+<p>This boolean annotation specifies that the function or constructor raises a
+Python exception to indicate that an error occurred.  Any current exception
+is cleared before the function or constructor is called.  It is ignored if
+the <a class="reference internal" href="directives.html#directive-%MethodCode"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%MethodCode</span></code></a> directive is used.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#function-annotation-NoRaisesPyException"><code class="xref std std-fanno docutils literal notranslate"><span class="pre">NoRaisesPyException</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-ReleaseGIL">
+<code class="descname">ReleaseGIL</code><a class="headerlink" href="#function-annotation-ReleaseGIL" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation specifies that the Python Global Interpreter Lock
+(GIL) is released before the call to the underlying C or C++ function and
+reacquired afterwards.  It should be used for functions that might block or
+take a significant amount of time to execute.  See <a class="reference internal" href="using.html#ref-gil"><span class="std std-ref">The Python Global Interpreter Lock</span></a> and the
+<a class="reference internal" href="#function-annotation-HoldGIL"><code class="xref std std-fanno docutils literal notranslate"><span class="pre">HoldGIL</span></code></a> annotation.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-Sequence">
+<code class="descname">Sequence</code><a class="headerlink" href="#function-annotation-Sequence" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.14.7.</span></p>
+</div>
+<p>This boolean annotation specifies that the operator should be interpreted
+as a sequence operator rather than a numeric operator.</p>
+<p>Python uses the <code class="docutils literal notranslate"><span class="pre">+</span></code> operator for adding numbers and concatanating
+sequences, and the <code class="docutils literal notranslate"><span class="pre">*</span></code> operator for multiplying numbers and repeating
+sequences.  Unless this or the <a class="reference internal" href="#function-annotation-Numeric"><code class="xref std std-fanno docutils literal notranslate"><span class="pre">Numeric</span></code></a> annotation is specified,
+SIP tries to work out which is meant by looking at other operators that
+have been defined for the type.  If it finds either <code class="docutils literal notranslate"><span class="pre">-</span></code>, <code class="docutils literal notranslate"><span class="pre">-=</span></code>, <code class="docutils literal notranslate"><span class="pre">/</span></code>,
+<code class="docutils literal notranslate"><span class="pre">/=</span></code>, <code class="docutils literal notranslate"><span class="pre">%</span></code> or <code class="docutils literal notranslate"><span class="pre">%=</span></code> defined then it assumes that <code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">+=</span></code>, <code class="docutils literal notranslate"><span class="pre">*</span></code>
+and <code class="docutils literal notranslate"><span class="pre">*=</span></code> should be numeric operators.  Otherwise, if it finds either
+<code class="docutils literal notranslate"><span class="pre">[]</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">__getitem__()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">__setitem__()</span></code> or <code class="xref py py-meth docutils literal notranslate"><span class="pre">__delitem__()</span></code>
+defined then it assumes that they should be sequence operators.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-Transfer">
+<code class="descname">Transfer</code><a class="headerlink" href="#function-annotation-Transfer" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation specifies that ownership of the value returned by
+the function (which should be a wrapped C structure or C++ class instance)
+is transferred to C++.  It is only used in the context of a class
+constructor or a method.</p>
+<p>In the case of methods returned values (unless they are new references to
+already wrapped values) are normally owned by C++ anyway.  However, in
+addition, an association between the returned value and the instance
+containing the method is created with regard to the cyclic garbage
+collector.</p>
+<p>See <a class="reference internal" href="using.html#ref-object-ownership"><span class="std std-ref">Ownership of Objects</span></a> for more detail.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-TransferBack">
+<code class="descname">TransferBack</code><a class="headerlink" href="#function-annotation-TransferBack" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation specifies that ownership of the value returned by
+the function (which should be a wrapped C structure or C++ class instance)
+is transferred back to Python from C++.  Normally returned values (unless
+they are new references to already wrapped values) are owned by C++.  In
+addition, any association of the returned value with regard to the cyclic
+garbage collector with another instance is removed.</p>
+<p>See <a class="reference internal" href="using.html#ref-object-ownership"><span class="std std-ref">Ownership of Objects</span></a> for more detail.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-TransferThis">
+<code class="descname">TransferThis</code><a class="headerlink" href="#function-annotation-TransferThis" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation specifies that ownership of <code class="docutils literal notranslate"><span class="pre">this</span></code> is transferred
+from Python to C++.</p>
+<p>See <a class="reference internal" href="using.html#ref-object-ownership"><span class="std std-ref">Ownership of Objects</span></a> for more detail.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-TypeHint">
+<code class="descname">TypeHint</code><a class="headerlink" href="#function-annotation-TypeHint" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This string annotation specifies the type of the value returned by the
+function as it will appear in any generated docstrings and PEP 484 type
+hints.  It is usually used with results of type <a class="reference internal" href="specification_files.html#sip-type-SIP_PYOBJECT"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYOBJECT</span></code></a> to
+provide a more specific type.</p>
+</dd></dl>
+
+<dl class="function-annotation">
+<dt id="function-annotation-VirtualErrorHandler">
+<code class="descname">VirtualErrorHandler</code><a class="headerlink" href="#function-annotation-VirtualErrorHandler" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.14.</span></p>
+</div>
+<p>This name annotation specifies the handler (defined by the
+<a class="reference internal" href="directives.html#directive-%VirtualErrorHandler"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%VirtualErrorHandler</span></code></a> directive) that is called when a Python
+re-implementation of the virtual C++ function raises a Python exception.
+If not specified then the handler specified by the class’s
+<a class="reference internal" href="#class-annotation-VirtualErrorHandler"><code class="xref std std-canno docutils literal notranslate"><span class="pre">VirtualErrorHandler</span></code></a> is used.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#function-annotation-NoVirtualErrorHandler"><code class="xref std std-fanno docutils literal notranslate"><span class="pre">NoVirtualErrorHandler</span></code></a>, <a class="reference internal" href="#class-annotation-VirtualErrorHandler"><code class="xref std std-canno docutils literal notranslate"><span class="pre">VirtualErrorHandler</span></code></a>, <a class="reference internal" href="directives.html#directive-%VirtualErrorHandler"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%VirtualErrorHandler</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="typedef-annotations">
+<span id="ref-typedef-annos"></span><h2>Typedef Annotations<a class="headerlink" href="#typedef-annotations" title="Permalink to this headline">¶</a></h2>
+<dl class="typedef-annotation">
+<dt id="typedef-annotation-Capsule">
+<code class="descname">Capsule</code><a class="headerlink" href="#typedef-annotation-Capsule" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.14.1.</span></p>
+</div>
+<p>This boolean annotation may only be used when the base type is <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">*</span></code>
+and specifies that a Python capsule object is used to wrap the value rather
+than a <a class="reference internal" href="python_api.html#sip.voidptr" title="sip.voidptr"><code class="xref py py-class docutils literal notranslate"><span class="pre">sip.voidptr</span></code></a>.  The advantage of using a capsule is that name
+based type checking is performed using the name of the type being defined.</p>
+<p>For versions of Python that do not support capules <a class="reference internal" href="python_api.html#sip.voidptr" title="sip.voidptr"><code class="xref py py-class docutils literal notranslate"><span class="pre">sip.voidptr</span></code></a> is
+used instead and name based type checking is not performed.</p>
+</dd></dl>
+
+<dl class="typedef-annotation">
+<dt id="typedef-annotation-DocType">
+<code class="descname">DocType</code><a class="headerlink" href="#typedef-annotation-DocType" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.10.</span></p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 4.18: </span>Use the <a class="reference internal" href="#typedef-annotation-TypeHint"><code class="xref std std-tanno docutils literal notranslate"><span class="pre">TypeHint</span></code></a> annotation instead.</p>
+</div>
+<p>This string annotation serves the same purpose as the <a class="reference internal" href="#argument-annotation-DocType"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">DocType</span></code></a>
+argument annotation when applied to the mapped type being defined.</p>
+</dd></dl>
+
+<dl class="typedef-annotation">
+<dt id="typedef-annotation-Encoding">
+<code class="descname">Encoding</code><a class="headerlink" href="#typedef-annotation-Encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>This string annotation serves the same purpose as the <a class="reference internal" href="#argument-annotation-Encoding"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">Encoding</span></code></a>
+argument annotation when applied to the mapped type being defined.</p>
+</dd></dl>
+
+<dl class="typedef-annotation">
+<dt id="typedef-annotation-NoTypeName">
+<code class="descname">NoTypeName</code><a class="headerlink" href="#typedef-annotation-NoTypeName" title="Permalink to this definition">¶</a></dt>
+<dd><p>This boolean annotation specifies that the definition of the type rather
+than the name of the type being defined should be used in the generated
+code.</p>
+<p>Normally a typedef would be defined as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">typedef</span> <span class="nb">bool</span> <span class="n">MyBool</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This would result in <code class="docutils literal notranslate"><span class="pre">MyBool</span></code> being used in the generated code.</p>
+<p>Specifying the annotation means that <code class="docutils literal notranslate"><span class="pre">bool</span></code> will be used in the generated
+code instead.</p>
+</dd></dl>
+
+<dl class="typedef-annotation">
+<dt id="typedef-annotation-PyInt">
+<code class="descname">PyInt</code><a class="headerlink" href="#typedef-annotation-PyInt" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.12.</span></p>
+</div>
+<p>This boolean annotation serves the same purpose as the <a class="reference internal" href="#argument-annotation-PyInt"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">PyInt</span></code></a>
+argument annotation when applied to the type being defined.</p>
+</dd></dl>
+
+<dl class="typedef-annotation">
+<dt id="typedef-annotation-PyName">
+<code class="descname">PyName</code><a class="headerlink" href="#typedef-annotation-PyName" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.13.1.</span></p>
+</div>
+<p>This name annotation only applies when the typedef is being used to create
+the wrapping for a class defined using a template and specifies an
+alternative name for the class when it is referred to from Python.  It is
+required when a class name is the same as a Python keyword.  It may also
+be used to avoid name clashes with other objects (e.g. enums, exceptions,
+functions) that have the same name in the same C++ scope.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="directives.html#directive-%AutoPyName"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%AutoPyName</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="typedef-annotation">
+<dt id="typedef-annotation-TypeHint">
+<code class="descname">TypeHint</code><a class="headerlink" href="#typedef-annotation-TypeHint" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This string annotation specifies the type as it will appear in any
+generated docstrings and PEP 484 type hints.  It is the equivalent of
+specifying <a class="reference internal" href="#typedef-annotation-TypeHintIn"><code class="xref std std-tanno docutils literal notranslate"><span class="pre">TypeHintIn</span></code></a> and <a class="reference internal" href="#typedef-annotation-TypeHintOut"><code class="xref std std-tanno docutils literal notranslate"><span class="pre">TypeHintOut</span></code></a> with the same
+value.</p>
+</dd></dl>
+
+<dl class="typedef-annotation">
+<dt id="typedef-annotation-TypeHintIn">
+<code class="descname">TypeHintIn</code><a class="headerlink" href="#typedef-annotation-TypeHintIn" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This string annotation specifies the type as it will appear in any
+generated docstrings and PEP 484 type hints when it is passed to a function
+(rather than being returned from a function).  It is usually used with
+arguments of type <a class="reference internal" href="specification_files.html#sip-type-SIP_PYOBJECT"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYOBJECT</span></code></a> to provide a more specific type.</p>
+</dd></dl>
+
+<dl class="typedef-annotation">
+<dt id="typedef-annotation-TypeHintOut">
+<code class="descname">TypeHintOut</code><a class="headerlink" href="#typedef-annotation-TypeHintOut" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This string annotation specifies the type as it will appear in any
+generated docstrings and PEP 484 type hints when it is returned from a
+function (rather than being passed to a function).  It is usually used with
+arguments of type <a class="reference internal" href="specification_files.html#sip-type-SIP_PYOBJECT"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYOBJECT</span></code></a> to provide a more specific type.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="variable-annotations">
+<span id="ref-variable-annos"></span><h2>Variable Annotations<a class="headerlink" href="#variable-annotations" title="Permalink to this headline">¶</a></h2>
+<dl class="variable-annotation">
+<dt id="variable-annotation-DocType">
+<code class="descname">DocType</code><a class="headerlink" href="#variable-annotation-DocType" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.10.</span></p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 4.18: </span>Use the <a class="reference internal" href="#variable-annotation-TypeHint"><code class="xref std std-vanno docutils literal notranslate"><span class="pre">TypeHint</span></code></a> annotation instead.</p>
+</div>
+<p>This string annotation serves the same purpose as the <a class="reference internal" href="#argument-annotation-DocType"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">DocType</span></code></a>
+argument annotation when applied to the type of the variable being defined.</p>
+</dd></dl>
+
+<dl class="variable-annotation">
+<dt id="variable-annotation-Encoding">
+<code class="descname">Encoding</code><a class="headerlink" href="#variable-annotation-Encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>This string annotation serves the same purpose as the <a class="reference internal" href="#argument-annotation-Encoding"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">Encoding</span></code></a>
+argument annotation when applied to the type of the variable being defined.</p>
+</dd></dl>
+
+<dl class="variable-annotation">
+<dt id="variable-annotation-NoSetter">
+<code class="descname">NoSetter</code><a class="headerlink" href="#variable-annotation-NoSetter" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.16.</span></p>
+</div>
+<p>This boolean annotation specifies that the variable will have no setter and
+will be read-only.  Because SIP does not fully understand C/C++ types
+(particularly <code class="docutils literal notranslate"><span class="pre">const</span></code> arrays) it is sometimes necessary to explicitly
+annotate a variable as being read-only.</p>
+</dd></dl>
+
+<dl class="variable-annotation">
+<dt id="variable-annotation-NoTypeHint">
+<code class="descname">NoTypeHint</code><a class="headerlink" href="#variable-annotation-NoTypeHint" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This boolean annotation is used to suppress the generation of the PEP 484
+type hint for the variable.</p>
+</dd></dl>
+
+<dl class="variable-annotation">
+<dt id="variable-annotation-PyInt">
+<code class="descname">PyInt</code><a class="headerlink" href="#variable-annotation-PyInt" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.12.</span></p>
+</div>
+<p>This boolean annotation serves the same purpose as the <a class="reference internal" href="#argument-annotation-PyInt"><code class="xref std std-aanno docutils literal notranslate"><span class="pre">PyInt</span></code></a>
+argument annotation when applied to the type of the variable being defined.</p>
+</dd></dl>
+
+<dl class="variable-annotation">
+<dt id="variable-annotation-PyName">
+<code class="descname">PyName</code><a class="headerlink" href="#variable-annotation-PyName" title="Permalink to this definition">¶</a></dt>
+<dd><p>This name annotation specifies an alternative name for the variable being
+wrapped which is used when it is referred to from Python.  It is required
+when a variable name is the same as a Python keyword.  It may also be used
+to avoid name clashes with other objects (e.g. classes, functions) that
+have the same name in the same C++ scope.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="directives.html#directive-%AutoPyName"><code class="xref std std-directive docutils literal notranslate"><span class="pre">%AutoPyName</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="variable-annotation">
+<dt id="variable-annotation-TypeHint">
+<code class="descname">TypeHint</code><a class="headerlink" href="#variable-annotation-TypeHint" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 4.18.</span></p>
+</div>
+<p>This string annotation specifies the type of the variable as it will appear
+in any generated docstrings and PEP 484 type hints.  It is usually used
+with arguments of type <a class="reference internal" href="specification_files.html#sip-type-SIP_PYOBJECT"><code class="xref std std-stype docutils literal notranslate"><span class="pre">SIP_PYOBJECT</span></code></a> to provide a more specific
+type.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Annotations</a><ul>
+<li><a class="reference internal" href="#argument-annotations">Argument Annotations</a></li>
+<li><a class="reference internal" href="#class-annotations">Class Annotations</a></li>
+<li><a class="reference internal" href="#mapped-type-annotations">Mapped Type Annotations</a></li>
+<li><a class="reference internal" href="#enum-annotations">Enum Annotations</a></li>
+<li><a class="reference internal" href="#exception-annotations">Exception Annotations</a></li>
+<li><a class="reference internal" href="#function-annotations">Function Annotations</a></li>
+<li><a class="reference internal" href="#typedef-annotations">Typedef Annotations</a></li>
+<li><a class="reference internal" href="#variable-annotations">Variable Annotations</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="directives.html"
+                        title="previous chapter">Directives</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="c_api.html"
+                        title="next chapter">C API for Handwritten Code</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="c_api.html" title="C API for Handwritten Code"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="directives.html" title="Directives"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">SIP v4.19.17 Reference Guide</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019 Riverbank Computing Limited.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>
