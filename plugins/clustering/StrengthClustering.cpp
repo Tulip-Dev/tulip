@@ -101,7 +101,8 @@ double StrengthClustering::computeMQValue(const vector<unordered_set<node>> &par
 }
 
 //==============================================================================
-void StrengthClustering::computeNodePartition(double threshold, vector<unordered_set<node>> &result) {
+void StrengthClustering::computeNodePartition(double threshold,
+                                              vector<unordered_set<node>> &result) {
   Graph *tmpGraph = graph->addCloneSubGraph();
 
   for (auto e : graph->edges()) {

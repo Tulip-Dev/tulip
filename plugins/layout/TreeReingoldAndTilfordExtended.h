@@ -66,7 +66,8 @@ private:
   double calcDecal(const std::list<LR> &, const std::list<LR> &);
   std::list<LR> *mergeLRList(std::list<LR> *, std::list<LR> *, double decal);
   std::list<LR> *TreePlace(tlp::node, std::unordered_map<tlp::node, double> *);
-  void TreeLevelSizing(tlp::node, std::unordered_map<int, double> &, int, std::unordered_map<tlp::node, int> &levels);
+  void TreeLevelSizing(tlp::node, std::unordered_map<int, double> &, int,
+                       std::unordered_map<tlp::node, int> &levels);
 
   tlp::Graph *tree;
   tlp::SizeProperty *sizes;

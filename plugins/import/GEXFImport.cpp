@@ -187,7 +187,7 @@ public:
   void createPropertiesFromAttributes(QXmlStreamReader &xmlReader) {
     bool nodeProperties = xmlReader.attributes().value("class") == "node";
     unordered_map<string, PropertyInterface *> &propertiesMap =
-      nodeProperties ? nodePropertiesMap : edgePropertiesMap;
+        nodeProperties ? nodePropertiesMap : edgePropertiesMap;
 
     while (!(xmlReader.isEndElement() && xmlReader.name() == "attributes")) {
       xmlReader.readNext();

@@ -368,13 +368,12 @@ bool EdgeBundling::run() {
   EdgeStaticProperty<unsigned int> ntype(graph);
   fixEdgeType(ntype);
 
-
   //==========================================================
   // get the freshly created Voronoi subgraph,
   // this should be the last one in the list but we prefer
   // to iterate on that latter in reverse order in case the
   // Voronoi plugin implementation changes
-  for (auto i = graph->numberOfSubGraphs() ; i > 0 ; --i) {
+  for (auto i = graph->numberOfSubGraphs(); i > 0; --i) {
     auto sg = graph->getNthSubGraph(i - 1);
     if (sg->getName() == "Voronoi") {
       gridGraph = sg;

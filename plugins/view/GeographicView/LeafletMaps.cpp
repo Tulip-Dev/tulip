@@ -328,7 +328,8 @@ pair<double, double> LeafletMaps::getCurrentMapCenter() {
   return latLng;
 }
 
-void LeafletMaps::setMapBounds(Graph *graph, const unordered_map<node, pair<double, double>> &nodesLatLngs) {
+void LeafletMaps::setMapBounds(Graph *graph,
+                               const unordered_map<node, pair<double, double>> &nodesLatLngs) {
 
   if (!nodesLatLngs.empty()) {
 

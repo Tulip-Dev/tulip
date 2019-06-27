@@ -148,8 +148,8 @@ public:
    * @param maxElement The maximum number of element linked with a SOM node.
    */
   void computeMapping(SOMMap *map, InputSample &inputSample,
-                      std::unordered_map<tlp::node, std::set<tlp::node>> &mappingTab, double &medDist,
-                      unsigned int &maxElement);
+                      std::unordered_map<tlp::node, std::set<tlp::node>> &mappingTab,
+                      double &medDist, unsigned int &maxElement);
 
 protected:
   TimeDecreasingFunction *learningRateFunction;

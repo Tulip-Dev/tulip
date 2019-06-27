@@ -278,8 +278,10 @@ list<LR> *TreeReingoldAndTilfordExtended::TreePlace(tlp::node n,
   }
 }
 //=============================================================================
-void TreeReingoldAndTilfordExtended::TreeLevelSizing(tlp::node n, std::unordered_map<int, double> &maxSize,
-                                                     int level, std::unordered_map<tlp::node, int> &levels) {
+void TreeReingoldAndTilfordExtended::TreeLevelSizing(tlp::node n,
+                                                     std::unordered_map<int, double> &maxSize,
+                                                     int level,
+                                                     std::unordered_map<tlp::node, int> &levels) {
   levels[n] = level;
 
   if (maxSize.find(level) != maxSize.end()) {
