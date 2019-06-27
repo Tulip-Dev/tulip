@@ -94,42 +94,46 @@ through the TLP graph format. The imported graph can then be visualized through 
 
   from tulip import tlp
 
-  # create a new empty graph
+  # Create a new empty graph
   graph = tlp.newGraph()
 
-  # dictionnary mapping package name to graph node
+  # Dictionnary mapping package name to graph node
   packageNode = {}
 
+
   def addPackageNode(package):
-    if not package in packageNode:
-      n = graph.addNode()
-      packageNode[package] = n
-      # set node label for use with Tulip visualizations components
-      graph['viewLabel'][n] = package
+      if package not in packageNode:
+          n = graph.addNode()
+          packageNode[package] = n
+          # Set node label for use with Tulip visualizations components
+          graph['viewLabel'][n] = package
 
-  # iterate over locally installed pip packages
+
+  # Iterate over locally installed pip packages
   for d in pip.get_installed_distributions():
-    # add a node associated to the package
-    addPackageNode(d.key)
+      # Add a node associated to the package
+      addPackageNode(d.key)
 
-  # iterate over locally installed pip packages
+  # Iterate over locally installed pip packages
   for d in pip.get_installed_distributions():
-    # iterate over package requirements
-    for r in d.requires():
-      # process requirement name to get its pip package name :
-      # switch to lower case and remove version info if any
-      s = str(r).lower()
-      match = re.search('|'.join(map(re.escape, '<=>;!')), s)
-      if match:
-        s = s[:match.start()]
-      # add dependency package node if it does not exist yet
-      addPackageNode(s)
-      # add an edge between the pip package and its dependency in the graph
-      graph.addEdge(packageNode[d.key], packageNode[s])
+      # Iterate over package requirements
+      for r in d.requires():
+          # Process requirement name to get its pip package name:
+          # switch to lower case and remove version info if any
+          s = str(r).lower()
+          match = re.search('|'.join(map(re.escape, '<=>;!')), s)
+          if match:
+              s = s[:match.start()]
+          # Add dependency package node if it does not exist yet
+          addPackageNode(s)
+          # Add an edge between the pip package and its dependency in the graph
+          graph.addEdge(packageNode[d.key], packageNode[s])
 
-  # apply a force directed layout algorithm on the graph then a connected component packing algorithm.
-  # algorithms are called with their default parameters.
-  # resulting layout will be stored in the defaut graph layout property named 'viewLayout'
+  # Apply a force directed layout algorithm on the graph
+  # then a connected component packing algorithm
+  # Algorithms are called with their default parameters
+  # Resulting layout will be stored in the defaut graph
+  # layout property named 'viewLayout'
   graph.applyLayoutAlgorithm('Fast Multipole Multilevel Embedder (OGDF)')
   graph.applyLayoutAlgorithm('Connected Component Packing (Polyomino)')
 

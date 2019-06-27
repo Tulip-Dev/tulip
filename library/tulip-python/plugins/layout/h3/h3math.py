@@ -4,7 +4,7 @@ import math
 import numpy as np
 
 """
-Scaling factor for compute_radius(), compute_hyperbolic_area(), 
+Scaling factor for compute_radius(), compute_hyperbolic_area(),
 compute_delta_theta() and compute_delta_phi().
 """
 K = 2.0
@@ -34,8 +34,10 @@ class Point4d(object):
     """
     Transform coodinate from spherical space to cartesian space
 
-    :param float theta: the theta coordinate for a node in spherical space, polar angle
-    :param float phi: the phi coordinate for a node in spherical space, elevation angle
+    :param float theta: the theta coordinate for a node in spherical space,
+        polar angle
+    :param float phi: the phi coordinate for a node in spherical space,
+        elevation angle
     :param float r: the radius for a node in spherical space, radial distance
     """
 
@@ -66,21 +68,28 @@ class Point4d(object):
                                        [0, 1, 0, offset.y],
                                        [0, 0, 1, offset.z],
                                        [0, 0, 0, 1]])
-        target = translation_matrix.dot(np.array([self.x, self.y, self.z, self.w]))
-        self.x, self.y, self.z, self.w = target[0], target[1], target[2], target[3]
+        target = translation_matrix.dot(np.array([self.x, self.y,
+                                                  self.z, self.w]))
+        self.x, self.y, self.z, self.w = (target[0], target[1],
+                                          target[2], target[3])
 
     """
-    Transform node's coordinate in cartesian space by transformation matrix by 
+    Transform node's coordinate in cartesian space by transformation matrix by
     spherical space coordinate values
 
-    :param float theta: the theta coordinate for a node in spherical space, polar angle
-    :param float phi: the phi coordinate for a node in spherical space, elevation angle
+    :param float theta: the theta coordinate for a node in spherical space,
+        polar angle
+    :param float phi: the phi coordinate for a node in spherical space,
+        elevation angle
     """
 
     def coordinate_transformation(self, theta, phi):
         rotation_matrix = rotation_matrix_z(theta).dot(rotation_matrix_y(phi))
-        target = rotation_matrix.dot(np.array([self.x, self.y, self.z, self.w]))
-        self.x, self.y, self.z, self.w = target[0], target[1], target[2], target[3]
+        target = rotation_matrix.dot(np.array([self.x, self.y,
+                                               self.z, self.w]))
+        self.x, self.y, self.z, self.w = (target[0], target[1],
+                                          target[2], target[3])
+
 
 """
 Compute the node's hemisphere radius by its hemisphere space reserved
@@ -105,11 +114,11 @@ def compute_hyperbolic_area(radius):
 
 
 """
-Compute the proper delta variant value for node's hemisphere placement, similar to 
-the space reservation the size of the node's hemisphere radius
+Compute the proper delta variant value for node's hemisphere placement,
+similar to the space reservation the size of the node's hemisphere radius
 
-:returns: return the node's half hemisphere space reservation as angle delta_theta 
-          in spherical space as a float number
+:returns: return the node's half hemisphere space reservation as angle
+    delta_theta in spherical space as a float number
 """
 
 
@@ -119,26 +128,28 @@ def compute_delta_theta(r, rp, phi):
 
 
 """
-Compute the proper phi variant value for a band of nodes' hemisphere placement, 
-similar to the space reservation the size of the largest node's hemisphere radius
-of the whole band
+Compute the proper phi variant value for a band of nodes' hemisphere placement,
+similar to the space reservation the size of the largest node's hemisphere
+radius of the whole band
 
-:returns: return the nodes' max half hemisphere space reservation in the same band
-          as angle delta_phi in spherical space as a float number
+:returns: return the nodes' max half hemisphere space reservation in the same
+band as angle delta_phi in spherical space as a float number
 """
 
 
 def compute_delta_phi(r, rp):
     return math.atan(math.tanh(r / K) / math.sinh(rp / K))
 
+
 """
-The Klein metric for visualizing hyperbolic space: unusual uses of 4x4 matrices 
+The Klein metric for visualizing hyperbolic space: unusual uses of 4x4 matrices
 by Phillips and Gunn
 """
 
 
 def minkowski(x, y):
     return (x.x * y.x + x.y * y.y + x.z * y.z - x.w * y.w)
+
 
 """
 Calculate 3D hyperbolic distance as a Klein metric
@@ -150,6 +161,7 @@ def hyperbolic_distance(x, y):
     t2 = minkowski(x, x)
     t3 = minkowski(y, y)
     return (2 * math.acosh(((t1 * t1) / (t2 * t3))**2))
+
 
 """
 Rotation matrix around X axis
