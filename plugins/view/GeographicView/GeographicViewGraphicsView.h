@@ -20,6 +20,8 @@
 #ifndef GEOGRAPHIC_VIEW_GRAPHICSVIEW_H
 #define GEOGRAPHIC_VIEW_GRAPHICSVIEW_H
 
+#include <unordered_map>
+
 #include "LeafletMaps.h"
 
 #include <tulip/GlGraphComposite.h>
@@ -155,9 +157,9 @@ private:
   GlMainWidget *glWidget;
   Graph *graph;
   LeafletMaps *leafletMaps;
-  std::map<node, std::pair<double, double>> nodeLatLng;
-  std::map<node, std::pair<double, double>> nodeLatLngFOR;
-  std::map<edge, std::vector<std::pair<double, double>>> edgeBendsLatLng;
+  std::unordered_map<node, std::pair<double, double>> nodeLatLng;
+  std::unordered_map<node, std::pair<double, double>> nodeLatLngFOR;
+  std::unordered_map<edge, std::vector<std::pair<double, double>>> edgeBendsLatLng;
   std::pair<double, double> currentMapCenter;
   int currentMapZoom;
   Camera globeCameraBackup;

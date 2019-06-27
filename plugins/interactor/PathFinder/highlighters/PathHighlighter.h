@@ -21,7 +21,7 @@
 #define PATHHIGHLIGHTER_H_
 
 #include <string>
-#include <map>
+#include <unordered_map>
 
 #include <tulip/Node.h>
 #include <tulip/Observable.h>
@@ -63,7 +63,7 @@ protected:
 private:
   std::string name;
   tlp::GlScene *backupScene;
-  std::map<std::string, bool> entities;
+  std::unordered_map<std::string, bool> entities;
   int entityId;
 };
 } // namespace tlp

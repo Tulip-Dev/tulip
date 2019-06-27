@@ -158,7 +158,7 @@ bool KCores::run() {
             edge ee = edges[j];
 
             if (noEdgeCheck || graph->isElement(ee)) {
-              std::pair<node, node> ends = graph->ends(ee);
+              auto ends = graph->ends(ee);
               node m;
 
               switch (degree_type) {

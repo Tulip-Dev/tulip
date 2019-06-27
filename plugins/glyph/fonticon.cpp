@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <unordered_map>
 #include <GL/glew.h>
 
 #ifdef __GNUC__
@@ -163,7 +164,7 @@ public:
     vector<unsigned short> indices;
     vector<unsigned short> outlineIndices;
 
-    map<Coord, unsigned int> vertexIdx;
+    unordered_map<Coord, unsigned int> vertexIdx;
 
     unsigned int idx = 0;
 
@@ -254,7 +255,7 @@ public:
 };
 
 static FontIcon defaultFontIcon;
-static map<string, FontIcon> fontIcons;
+static unordered_map<string, FontIcon> fontIcons;
 
 static FontIcon &getFontIcon(const string &iconName) {
   if (iconName.empty() || !TulipIconicFont::isIconSupported(iconName)) {

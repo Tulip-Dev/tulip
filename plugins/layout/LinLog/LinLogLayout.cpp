@@ -740,7 +740,7 @@ void LinLogLayout::initWeights() {
   if (edgeWeight == nullptr) {
     linLogWeight.setAllEdgeValue(1.0);
     for (auto e : graph->edges()) {
-      const std::pair<node, node> eEnds = graph->ends(e);
+      auto eEnds = graph->ends(e);
       node u = eEnds.first;
       node v = eEnds.second;
       double wu = linLogWeight.getNodeValue(u);

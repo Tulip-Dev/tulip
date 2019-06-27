@@ -21,7 +21,7 @@
 #define SOMMAP_H_
 
 #include <tulip/GraphDecorator.h>
-#include <map>
+#include <unordered_map>
 #include "DynamicVector.h"
 
 /**
@@ -128,7 +128,7 @@ protected:
   unsigned int width;
   unsigned int height;
 
-  std::map<tlp::node, DynamicVector<double>> nodeToNodeVec;
+  std::unordered_map<tlp::node, DynamicVector<double>> nodeToNodeVec;
 
   SOMMapConnectivity connectivity;
   bool oppositeConnected;

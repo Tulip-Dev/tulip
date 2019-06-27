@@ -79,7 +79,7 @@ double StrengthMetric::s(const std::unordered_set<tlp::node> &U) {
 }
 //=============================================================
 double StrengthMetric::getEdgeValue(const tlp::edge ee) {
-  const std::pair<node, node> eEnds = graph->ends(ee);
+  auto eEnds = graph->ends(ee);
   node u = eEnds.first;
   node v = eEnds.second;
   std::unordered_set<node> Nu, Nv, Wuv;

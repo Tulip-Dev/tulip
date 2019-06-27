@@ -586,7 +586,7 @@ void SOMView::cleanSOMMap() {
   }
 
   // Clear the color properties
-  for (map<string, ColorProperty *>::iterator it = propertyToColorProperty.begin();
+  for (auto it = propertyToColorProperty.begin();
        it != propertyToColorProperty.end(); ++it) {
     delete it->second;
   }
@@ -1118,7 +1118,7 @@ void SOMView::internalSwitchToPreviewMode(bool animation) {
   previewWidget->draw();
   GlBoundingBoxSceneVisitor bbsv(previewWidget->getScene()->getGlGraphComposite()->getInputData());
 
-  for (map<string, SOMPreviewComposite *>::iterator it = propertyToPreviews.begin();
+  for (auto it = propertyToPreviews.begin();
        it != propertyToPreviews.end(); ++it)
     it->second->acceptVisitor(&bbsv);
 

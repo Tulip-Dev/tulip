@@ -65,7 +65,7 @@ static void setGraphView(GlGraphComposite *glGraph, bool displayEdges, bool node
   glGraph->setRenderingParameters(param);
 }
 
-ScatterPlot2D::ScatterPlot2D(Graph *graph, Graph *edgeGraph, std::map<node, edge> &nodeMap,
+ScatterPlot2D::ScatterPlot2D(Graph *graph, Graph *edgeGraph, std::unordered_map<node, edge> &nodeMap,
                              const string &xDim, const string &yDim,
                              const ElementType &dataLocation, Coord blCorner, unsigned int size,
                              const Color &backgroundColor, const Color &foregroundColor)

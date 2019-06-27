@@ -20,9 +20,9 @@
 #define _StrengthClustering_H
 
 #include <string>
-#include <set>
+#include <unordered_set>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup clustering */
@@ -54,8 +54,8 @@ public:
   bool check(std::string &) override;
 
 private:
-  void computeNodePartition(double threshold, std::vector<std::set<tlp::node>> &);
-  double computeMQValue(const std::vector<std::set<tlp::node>> &partition, tlp::Graph *);
+  void computeNodePartition(double threshold, std::vector<std::unordered_set<tlp::node>> &);
+  double computeMQValue(const std::vector<std::unordered_set<tlp::node>> &partition, tlp::Graph *);
   double findBestThreshold(int numberOfSteps, bool &stopped);
   tlp::DoubleProperty *values;
 };

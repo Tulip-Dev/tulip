@@ -272,7 +272,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
         if (eltType == BOTH_TYPES)
           os << fieldSeparator;
 
-        const std::pair<node, node> ends = graph->ends(e);
+        auto ends = graph->ends(e);
         os << ends.first << fieldSeparator << ends.second.id;
 
         if (nbProps > 0)

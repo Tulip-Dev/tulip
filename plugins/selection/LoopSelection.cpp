@@ -31,7 +31,7 @@ bool LoopSelection::run() {
   result->setAllNodeValue(false);
   unsigned cpt = 0;
   for (auto e : graph->edges()) {
-    const std::pair<node, node> eEnds = graph->ends(e);
+    auto eEnds = graph->ends(e);
 
     if (eEnds.first == eEnds.second) {
       result->setEdgeValue(e, true);

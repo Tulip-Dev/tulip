@@ -29,7 +29,7 @@ PLUGIN(StrengthClustering)
 //================================================================================
 StrengthClustering::~StrengthClustering() {}
 //==============================================================================
-double StrengthClustering::computeMQValue(const vector<set<node>> &partition, Graph *sg) {
+double StrengthClustering::computeMQValue(const vector<unordered_set<node>> &partition, Graph *sg) {
 
   vector<unsigned int> nbIntraEdges(partition.size(), 0);
 
@@ -47,7 +47,7 @@ double StrengthClustering::computeMQValue(const vector<set<node>> &partition, Gr
   }
 
   for (auto e : sg->edges()) {
-    const pair<node, node> eEnds = sg->ends(e);
+    auto eEnds = sg->ends(e);
     node n1 = eEnds.first;
     node n2 = eEnds.second;
 
@@ -86,7 +86,7 @@ double StrengthClustering::computeMQValue(const vector<set<node>> &partition, Gr
   map<pair<unsigned int, unsigned int>, unsigned int>::const_iterator itMap = nbExtraEdges.begin();
 
   for (; itMap != nbExtraEdges.end(); ++itMap) {
-    pair<unsigned int, unsigned int> pp = itMap->first;
+    const pair<unsigned int, unsigned int> &pp = itMap->first;
     unsigned int val = itMap->second;
 
     if (!partition[pp.first].empty() && !partition[pp.second].empty())
@@ -101,12 +101,12 @@ double StrengthClustering::computeMQValue(const vector<set<node>> &partition, Gr
 }
 
 //==============================================================================
-void StrengthClustering::computeNodePartition(double threshold, vector<set<node>> &result) {
+void StrengthClustering::computeNodePartition(double threshold, vector<unordered_set<node>> &result) {
   Graph *tmpGraph = graph->addCloneSubGraph();
 
   for (auto e : graph->edges()) {
     if (values->getEdgeValue(e) < threshold) {
-      const pair<node, node> eEnds = graph->ends(e);
+      auto eEnds = graph->ends(e);
 
       if (graph->deg(eEnds.first) > 1 && graph->deg(eEnds.second) > 1)
         tmpGraph->delEdge(e);
@@ -114,7 +114,7 @@ void StrengthClustering::computeNodePartition(double threshold, vector<set<node>
   }
 
   // Select SubGraph singleton in graph
-  set<node> singleton;
+  unordered_set<node> singleton;
 
   for (auto n : tmpGraph->nodes()) {
     if (tmpGraph->deg(n) == 0)
@@ -123,7 +123,7 @@ void StrengthClustering::computeNodePartition(double threshold, vector<set<node>
 
   // restore edges to reconnect singleton by computing induced subgraph
   for (auto e : graph->edges()) {
-    const pair<node, node> eEnds = graph->ends(e);
+    auto eEnds = graph->ends(e);
 
     if (singleton.find(eEnds.first) != singleton.end() &&
         singleton.find(eEnds.second) != singleton.end()) {
@@ -138,15 +138,15 @@ void StrengthClustering::computeNodePartition(double threshold, vector<set<node>
 
   // Compute the node partition
   int index = 0;
-  map<double, int> resultIndex;
+  unordered_map<double, int> resultIndex;
 
   for (auto n : tmpGraph->nodes()) {
-    const double &val = connected.getNodeValue(n);
+    double val = connected.getNodeValue(n);
 
     if (resultIndex.find(val) != resultIndex.end())
       result[resultIndex[val]].insert(n);
     else {
-      set<node> tmp;
+      unordered_set<node> tmp;
       result.push_back(tmp);
       resultIndex[val] = index;
       result[index].insert(n);
@@ -165,7 +165,7 @@ double StrengthClustering::findBestThreshold(int numberOfSteps, bool &stopped) {
   int steps = 0;
 
   for (double i = values->getEdgeMin(graph); i < values->getEdgeMax(graph); i += deltaThreshold) {
-    vector<set<node>> tmp;
+    vector<unordered_set<node>> tmp;
     computeNodePartition(i, tmp);
 
     if (pluginProgress && ((++steps % (numberOfSteps / 10)) == 0)) {
@@ -252,11 +252,11 @@ bool StrengthClustering::run() {
   if (stopped)
     return pluginProgress->state() != TLP_CANCEL;
 
-  vector<set<node>> tmp;
+  vector<unordered_set<node>> tmp;
   computeNodePartition(threshold, tmp);
 
   for (unsigned int i = 0; i < tmp.size(); ++i) {
-    set<node>::const_iterator it;
+    unordered_set<node>::const_iterator it;
 
     for (it = tmp[i].begin(); it != tmp[i].end(); ++it) {
       result->setNodeValue(*it, i);

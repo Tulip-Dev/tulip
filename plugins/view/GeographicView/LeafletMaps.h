@@ -88,7 +88,7 @@ public:
     return init;
   }
 
-  void setMapBounds(Graph *graph, const std::map<node, std::pair<double, double>> &nodesLatLngs);
+  void setMapBounds(Graph *graph, const std::unordered_map<node, std::pair<double, double>> &nodesLatLngs);
 
   void setMapBounds(Coord nw, Coord se);
 

@@ -36,7 +36,7 @@ ClusterMetric::ClusterMetric(const tlp::PluginContext *context) : DoubleAlgorith
 //=================================================
 static double clusterGetEdgeValue(Graph *graph, tlp::NodeStaticProperty<double> &clusters,
                                   const edge e) {
-  pair<node, node> eEnds = graph->ends(e);
+  auto eEnds = graph->ends(e);
   const double v1 = clusters.getNodeValue(eEnds.first);
   const double v2 = clusters.getNodeValue(eEnds.second);
 

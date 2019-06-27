@@ -157,7 +157,7 @@ void EdgeBundling::fixEdgeType(EdgeStaticProperty<unsigned int> &ntype) {
     if (oriGraph->isElement(e)) {
       ntype[i] = 1;
     } else {
-      pair<node, node> ends = graph->ends(e);
+      auto ends = graph->ends(e);
 
       if (oriGraph->isElement(ends.first) || oriGraph->isElement(ends.second))
         ntype[i] = 2;
@@ -424,7 +424,7 @@ bool EdgeBundling::run() {
   EdgeStaticProperty<double> mWeights(graph);
   EdgeStaticProperty<double> mWeightsInit(graph);
   TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, [&](edge e, unsigned int i) {
-    pair<node, node> ends = graph->ends(e);
+    auto ends = graph->ends(e);
     const Coord &a = layout->getNodeValue(ends.first);
     const Coord &b = layout->getNodeValue(ends.second);
     double abNorm = (a - b).norm();
@@ -645,7 +645,7 @@ bool EdgeBundling::run() {
 
   // Reinsert multiple edges if any and update their layout
   for (size_t i = 0; i < removedEdges.size(); ++i) {
-    std::pair<node, node> eEnds = graph->ends(removedEdges[i]);
+    auto eEnds = graph->ends(removedEdges[i]);
 
     if (eEnds.first == eEnds.second)
       oriGraph->addEdge(removedEdges[i]);

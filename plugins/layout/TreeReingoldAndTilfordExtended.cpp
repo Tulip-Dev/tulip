@@ -278,8 +278,8 @@ list<LR> *TreeReingoldAndTilfordExtended::TreePlace(tlp::node n,
   }
 }
 //=============================================================================
-void TreeReingoldAndTilfordExtended::TreeLevelSizing(tlp::node n, std::map<int, double> &maxSize,
-                                                     int level, std::map<tlp::node, int> &levels) {
+void TreeReingoldAndTilfordExtended::TreeLevelSizing(tlp::node n, std::unordered_map<int, double> &maxSize,
+                                                     int level, std::unordered_map<tlp::node, int> &levels) {
   levels[n] = level;
 
   if (maxSize.find(level) != maxSize.end()) {
@@ -304,7 +304,7 @@ void TreeReingoldAndTilfordExtended::TreeLevelSizing(tlp::node n, std::map<int, 
 void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n,
                                                 std::unordered_map<tlp::node, double> *p, double x,
                                                 double y, int level,
-                                                map<int, double> &maxLevelSize) {
+                                                unordered_map<int, double> &maxLevelSize) {
   Coord tmpCoord;
 
   if (!compactLayout)
@@ -422,8 +422,8 @@ bool TreeReingoldAndTilfordExtended::run() {
   node startNode = tree->getSource();
   assert(startNode.isValid());
 
-  map<int, double> maxSizeLevel;
-  map<node, int> levels;
+  unordered_map<int, double> maxSizeLevel;
+  unordered_map<node, int> levels;
   TreeLevelSizing(startNode, maxSizeLevel, 0, levels);
 
   // check if the specified layer spacing is greater

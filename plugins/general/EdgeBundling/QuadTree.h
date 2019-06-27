@@ -19,7 +19,7 @@
 
 #ifndef QUADTREE_H
 #define QUADTREE_H
-#include <map>
+#include <unordered_map>
 #include <vector>
 #include <tulip/Graph.h>
 #include <tulip/Vector.h>
@@ -45,25 +45,8 @@ private:
   tlp::DoubleProperty *rot;
   tlp::Graph *graph;
   double splitRatio;
-  typedef tlp::Vector<double, 2> Vec2D;
-  struct LessPair {
-    bool operator()(const Vec2D &a, const Vec2D &b) const {
-      if ((a - b).norm() < 1E-6)
-        return false;
-
-      if (a[0] < b[0])
-        return true;
-
-      if (a[0] > b[0])
-        return false;
-
-      if (a[1] < b[1])
-        return true;
-
-      return false;
-    }
-  };
-  typedef std::map<Vec2D, tlp::node, LessPair> MapVecNode;
+  typedef tlp::Vec2d Vec2D;
+  typedef std::unordered_map<Vec2D, tlp::node> MapVecNode;
   MapVecNode mapN;
   //=====================================
   tlp::node splitEdge(tlp::node a, tlp::node b);

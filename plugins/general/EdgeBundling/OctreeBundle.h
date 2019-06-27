@@ -43,31 +43,7 @@ private:
   tlp::DoubleProperty *rot;
   tlp::Graph *graph;
   double splitRatio;
-  typedef tlp::Vector<double, 3> Vec3D;
-  struct LessPair {
-    bool operator()(const tlp::Coord &a, const tlp::Coord &b) const {
-      if ((a - b).norm() < 1E-6)
-        return false;
-
-      if (a[0] < b[0])
-        return true;
-
-      if (a[0] > b[0])
-        return false;
-
-      if (a[1] < b[1])
-        return true;
-
-      if (a[1] > b[1])
-        return false;
-
-      if (a[2] < b[2])
-        return true;
-
-      return false;
-    }
-  };
-  typedef std::map<tlp::Coord, tlp::node, LessPair> MapVecNode;
+  typedef std::unordered_map<tlp::Coord, tlp::node> MapVecNode;
   MapVecNode mapN;
   //=====================================
   tlp::node splitEdge(tlp::node a, tlp::node b);

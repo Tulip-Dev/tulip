@@ -19,6 +19,8 @@
 #ifndef _MixedModel_H
 #define _MixedModel_H
 
+#include <unordered_map>
+
 /** \addtogroup layout */
 
 /** This plugin is an implementation of the planar polyline graph
@@ -73,25 +75,25 @@ private:
 
   tlp::PlanarConMap *carte;
   std::vector<std::vector<tlp::node>> V;
-  std::map<tlp::node, tlp::Coord> NodeCoords;
+  std::unordered_map<tlp::node, tlp::Coord> NodeCoords;
 
-  std::map<tlp::node, int> outl;
-  std::map<tlp::node, int> outr;
-  std::map<tlp::node, int> inl;
-  std::map<tlp::node, int> inr;
+  std::unordered_map<tlp::node, int> outl;
+  std::unordered_map<tlp::node, int> outr;
+  std::unordered_map<tlp::node, int> inl;
+  std::unordered_map<tlp::node, int> inr;
 
-  std::map<tlp::node, unsigned int> rank;
-  std::map<tlp::node, std::vector<tlp::edge>> EdgesIN;
-  std::map<tlp::node, std::vector<tlp::edge>> EdgesOUT;
+  std::unordered_map<tlp::node, unsigned int> rank;
+  std::unordered_map<tlp::node, std::vector<tlp::edge>> EdgesIN;
+  std::unordered_map<tlp::node, std::vector<tlp::edge>> EdgesOUT;
 
-  std::map<tlp::edge, std::vector<tlp::Coord>> InPoints;
-  std::map<tlp::edge, tlp::Coord> OutPoints;
+  std::unordered_map<tlp::edge, std::vector<tlp::Coord>> InPoints;
+  std::unordered_map<tlp::edge, tlp::Coord> OutPoints;
 
   tlp::Graph *Pere;
   tlp::PlanarConMap *graphMap;
   tlp::Graph *currentGraph;
   std::vector<tlp::edge> dummy;
-  std::map<tlp::node, std::vector<tlp::Coord>> out_points;
+  std::unordered_map<tlp::node, std::vector<tlp::Coord>> out_points;
   tlp::MutableContainer<tlp::Coord> nodeSize;
   std::vector<tlp::edge> unplanar_edges;
   bool planar;

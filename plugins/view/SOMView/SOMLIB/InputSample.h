@@ -20,7 +20,7 @@
 #ifndef INPUTSAMPLE_H_
 #define INPUTSAMPLE_H_
 
-#include <map>
+#include <unordered_map>
 #include <vector>
 #include <tulip/Graph.h>
 #include <tulip/Observable.h>
@@ -122,7 +122,7 @@ protected:
 
   // Cache for data avoid to create a somVector each time we need
   // tlp::MutableContainer<DynamicVector<double> > mWeightTab;
-  std::map<unsigned int, DynamicVector<double>> mWeightTab;
+  std::unordered_map<unsigned int, DynamicVector<double>> mWeightTab;
 
   // Container used to store random list
   std::vector<tlp::node> randomVector;

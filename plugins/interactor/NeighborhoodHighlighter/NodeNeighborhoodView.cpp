@@ -82,7 +82,7 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
       if (property == nullptr) {
         graphViewNodes.erase(graphViewNodes.begin() + nbNodes + 1, graphViewNodes.end());
       } else {
-        map<double, vector<node>> nodesTokeep;
+        unordered_map<double, vector<node>> nodesTokeep;
         nodesAtDist[currentDist].clear();
 
         for (auto n : graphViewNodes) {

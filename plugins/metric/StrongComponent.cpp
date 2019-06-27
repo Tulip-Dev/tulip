@@ -87,7 +87,7 @@ bool StrongComponent::run() {
   }
 
   for (auto ite : graph->edges()) {
-    const std::pair<node, node> eEnds = graph->ends(ite);
+    auto eEnds = graph->ends(ite);
 
     if (result->getNodeValue(eEnds.first) == result->getNodeValue(eEnds.second))
       result->setEdgeValue(ite, result->getNodeValue(eEnds.first));

@@ -20,6 +20,7 @@
 #include <fstream>
 #include <string>
 #include <cctype>
+#include <unordered_map>
 
 #include <tulip/ImportModule.h>
 #include <tulip/TulipViewSettings.h>
@@ -185,13 +186,8 @@ public:
   // according to data types
   void createPropertiesFromAttributes(QXmlStreamReader &xmlReader) {
     bool nodeProperties = xmlReader.attributes().value("class") == "node";
-    map<string, PropertyInterface *> *propertiesMap = nullptr;
-
-    if (nodeProperties) {
-      propertiesMap = &nodePropertiesMap;
-    } else {
-      propertiesMap = &edgePropertiesMap;
-    }
+    unordered_map<string, PropertyInterface *> &propertiesMap =
+      nodeProperties ? nodePropertiesMap : edgePropertiesMap;
 
     while (!(xmlReader.isEndElement() && xmlReader.name() == "attributes")) {
       xmlReader.readNext();
@@ -203,13 +199,13 @@ public:
         string attributeType = QStringToTlpString(xmlReader.attributes().value("type").toString());
 
         if (attributeType == "string") {
-          (*propertiesMap)[attributeId] = graph->getProperty<StringProperty>(attributeName);
+          propertiesMap[attributeId] = graph->getProperty<StringProperty>(attributeName);
         } else if (attributeType == "float" || attributeType == "double") {
-          (*propertiesMap)[attributeId] = graph->getProperty<DoubleProperty>(attributeName);
+          propertiesMap[attributeId] = graph->getProperty<DoubleProperty>(attributeName);
         } else if (attributeType == "integer") {
-          (*propertiesMap)[attributeId] = graph->getProperty<IntegerProperty>(attributeName);
+          propertiesMap[attributeId] = graph->getProperty<IntegerProperty>(attributeName);
         } else if (attributeType == "boolean") {
-          (*propertiesMap)[attributeId] = graph->getProperty<BooleanProperty>(attributeName);
+          propertiesMap[attributeId] = graph->getProperty<BooleanProperty>(attributeName);
         }
       }
     }
@@ -533,7 +529,7 @@ public:
   // Methods which compute Cubic Bézier control points for each edge
   void curveGraphEdges() {
     for (auto e : graph->edges()) {
-      std::pair<node, node> eEnds = graph->ends(e);
+      auto eEnds = graph->ends(e);
       const Coord &srcCoord = viewLayout->getNodeValue(eEnds.first);
       const Coord &tgtCoord = viewLayout->getNodeValue(eEnds.second);
       Coord dir = tgtCoord - srcCoord;
@@ -564,11 +560,11 @@ public:
 
 private:
   // maps associating attribute id to Tulip property
-  map<string, PropertyInterface *> nodePropertiesMap;
-  map<string, PropertyInterface *> edgePropertiesMap;
+  unordered_map<string, PropertyInterface *> nodePropertiesMap;
+  unordered_map<string, PropertyInterface *> edgePropertiesMap;
 
   // map associating GEXF node id to Tulip node
-  map<string, node> nodesMap;
+  unordered_map<string, node> nodesMap;
 
   // vector to store edge information in case edges are declared before nodes in GEXF file
   vector<pair<string, string>> edgesTmp;

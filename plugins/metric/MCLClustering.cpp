@@ -318,7 +318,7 @@ bool MCLClustering::run() {
   });
 
   for (auto e : graph->edges()) {
-    std::pair<node, node> eEnds = graph->ends(e);
+    auto eEnds = graph->ends(e);
     node src = nodeMapping[eEnds.first];
     node tgt = nodeMapping[eEnds.second];
     edge tmp = g.addEdge(src, tgt);

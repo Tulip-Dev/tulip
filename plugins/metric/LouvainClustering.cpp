@@ -114,7 +114,7 @@ private:
       double weight = (*weights)[e];
       wdg += weight;
       // self loop must be counted only once
-      std::pair<node, node> ends = quotient->ends(e);
+      auto ends = quotient->ends(e);
 
       if (ends.first == ends.second) {
         nsl = weight;
@@ -162,7 +162,7 @@ private:
     neigh_last = 1;
 
     for (auto e : quotient->star(node(n))) {
-      std::pair<node, node> ends = quotient->ends(e);
+      auto ends = quotient->ends(e);
       unsigned int neigh = (ends.first == node(n)) ? ends.second : ends.first;
       unsigned int neigh_comm = n2c[neigh];
       double neigh_w = (*weights)[e];

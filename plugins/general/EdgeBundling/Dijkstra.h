@@ -85,7 +85,7 @@ public:
     }
 
     for (auto e : src->edges()) {
-      const std::pair<tlp::node, tlp::node> eEnds = src->ends(e);
+      auto eEnds = src->ends(e);
       tlp::edge tmp = graph.addEdge(ntlp2dik.get(eEnds.first), ntlp2dik.get(eEnds.second));
       etlp2dik.set(e, tmp);
       edik2tlp[tmp] = e;
