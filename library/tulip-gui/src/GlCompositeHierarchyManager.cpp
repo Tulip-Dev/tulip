@@ -85,7 +85,7 @@ void GlCompositeHierarchyManager::buildComposite(Graph *current, GlComposite *co
     naming << " - " << _subCompositesSuffix;
     composite->addGlEntity(newComposite, naming.str());
 
-    for (Graph *sg : current->getSubGraphs()) {
+    for (Graph *sg : current->subGraphs()) {
       this->buildComposite(sg, newComposite);
     }
   }
@@ -211,9 +211,7 @@ void GlCompositeHierarchyManager::treatEvent(const Event &evt) {
 }
 
 void GlCompositeHierarchyManager::treatEvents(const std::vector<Event> &) {
-  for (std::map<tlp::Graph *,
-                std::pair<tlp::GlComposite *, tlp::GlConvexGraphHull *>>::const_iterator it =
-           _graphsComposites.begin();
+  for (auto it = _graphsComposites.begin();
        it != _graphsComposites.end(); ++it) {
     if (!it->first->isEmpty()) {
       it->second.second->updateHull(_layout, _size, _rotation);
@@ -276,9 +274,7 @@ bool GlCompositeHierarchyManager::isVisible() const {
 DataSet GlCompositeHierarchyManager::getData() {
   DataSet set;
 
-  for (std::map<tlp::Graph *,
-                std::pair<tlp::GlComposite *, tlp::GlConvexGraphHull *>>::const_iterator it =
-           _graphsComposites.begin();
+  for (auto it = _graphsComposites.begin();
        it != _graphsComposites.end(); ++it) {
     unsigned int graphId = it->first->getId();
     unsigned int visibility =
@@ -292,9 +288,7 @@ DataSet GlCompositeHierarchyManager::getData() {
 }
 
 void GlCompositeHierarchyManager::setData(const DataSet &dataSet) {
-  for (std::map<tlp::Graph *,
-                std::pair<tlp::GlComposite *, tlp::GlConvexGraphHull *>>::const_iterator it =
-           _graphsComposites.begin();
+  for (auto it = _graphsComposites.begin();
        it != _graphsComposites.end(); ++it) {
     stringstream graph;
     graph << it->first->getId();

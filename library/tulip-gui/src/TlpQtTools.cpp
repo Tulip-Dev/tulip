@@ -27,6 +27,7 @@
 
 #include <ostream>
 #include <ios>
+#include <unordered_map>
 
 #include <QDebug>
 #include <QColorDialog>
@@ -77,8 +78,8 @@ using namespace tlp;
 /**
  * Init property type to property label conversion map
  **/
-static map<string, QString> buildPropertyTypeToPropertyTypeLabelMap() {
-  map<string, QString> propertyTypeToPropertyTypeLabel;
+static unordered_map<string, QString> &buildPropertyTypeToPropertyTypeLabelMap() {
+  static unordered_map<string, QString> propertyTypeToPropertyTypeLabel;
   propertyTypeToPropertyTypeLabel[BooleanProperty::propertyTypename] = QString("Boolean");
   propertyTypeToPropertyTypeLabel[ColorProperty::propertyTypename] = QString("Color");
   propertyTypeToPropertyTypeLabel[DoubleProperty::propertyTypename] = QString("Double");
@@ -98,14 +99,15 @@ static map<string, QString> buildPropertyTypeToPropertyTypeLabelMap() {
   propertyTypeToPropertyTypeLabel[StringVectorProperty::propertyTypename] = QString("StringVector");
   return propertyTypeToPropertyTypeLabel;
 }
+
 // Property type to property label conversion map
-static const map<string, QString> propertyTypeToPropertyTypeLabelMap =
+static const unordered_map<string, QString> &propertyTypeToPropertyTypeLabelMap =
     buildPropertyTypeToPropertyTypeLabelMap();
 /**
  * Init property type label to property type conversion map
  **/
 static map<QString, string> buildPropertyTypeLabelToPropertyTypeMap() {
-  map<QString, string> propertyTypeLabelToPropertyType;
+  static map<QString, string> propertyTypeLabelToPropertyType;
   propertyTypeLabelToPropertyType[QString("Boolean")] = BooleanProperty::propertyTypename;
   propertyTypeLabelToPropertyType[QString("Color")] = ColorProperty::propertyTypename;
   propertyTypeLabelToPropertyType[QString("Double")] = DoubleProperty::propertyTypename;
@@ -126,7 +128,7 @@ static map<QString, string> buildPropertyTypeLabelToPropertyTypeMap() {
   return propertyTypeLabelToPropertyType;
 }
 // Property type label to property type conversion map
-static const map<QString, string> propertyTypeLabelToPropertyTypeMap =
+static const map<QString, string> &propertyTypeLabelToPropertyTypeMap =
     buildPropertyTypeLabelToPropertyTypeMap();
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 8, 0))
@@ -165,12 +167,12 @@ bool getColorDialog(const QColor &color, QWidget *parent, const QString &title, 
 }
 
 QString propertyTypeToPropertyTypeLabel(const string &typeName) {
-  map<string, QString>::const_iterator it = propertyTypeToPropertyTypeLabelMap.find(typeName);
+  auto it = propertyTypeToPropertyTypeLabelMap.find(typeName);
   return it != propertyTypeToPropertyTypeLabelMap.end() ? it->second : QString();
 }
 
 string propertyTypeLabelToPropertyType(const QString &typeNameLabel) {
-  map<QString, string>::const_iterator it = propertyTypeLabelToPropertyTypeMap.find(typeNameLabel);
+  auto it = propertyTypeLabelToPropertyTypeMap.find(typeNameLabel);
   return it != propertyTypeLabelToPropertyTypeMap.end() ? it->second : string();
 }
 

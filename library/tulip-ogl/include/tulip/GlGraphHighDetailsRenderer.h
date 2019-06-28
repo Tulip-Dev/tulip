@@ -23,7 +23,7 @@
 
 #include <tulip/GlGraphRenderer.h>
 
-#include <map>
+#include <unordered_map>
 
 namespace tlp {
 
@@ -55,7 +55,7 @@ public:
 
 protected:
   void initSelectionRendering(RenderingEntitiesFlag type, int x, int y, int w, int h,
-                              std::map<unsigned int, SelectedEntity> &idMap,
+                              std::unordered_map<unsigned int, SelectedEntity> &idMap,
                               unsigned int &currentId);
 
   void buildSortedList();

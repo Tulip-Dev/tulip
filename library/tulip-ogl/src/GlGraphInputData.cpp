@@ -85,7 +85,7 @@ public:
   }
 };
 
-std::map<std::string, GlGraphInputData::PropertyName> GlGraphInputData::_propertiesNameMap;
+std::unordered_map<std::string, GlGraphInputData::PropertyName> GlGraphInputData::_propertiesNameMap;
 
 void GlGraphInputData::reloadGraphProperties() {
   if (_propertiesNameMap.empty()) {
@@ -168,7 +168,7 @@ void GlGraphInputData::reloadGraphProperties() {
 }
 
 bool GlGraphInputData::setProperty(const std::string &name, PropertyInterface *property) {
-  std::map<std::string, PropertyName>::iterator it = _propertiesNameMap.find(name);
+  auto it = _propertiesNameMap.find(name);
   bool result = it != _propertiesNameMap.end();
 
   if (result)
@@ -179,7 +179,7 @@ bool GlGraphInputData::setProperty(const std::string &name, PropertyInterface *p
 
 bool GlGraphInputData::installProperties(
     const std::map<std::string, tlp::PropertyInterface *> &propsMap) {
-  std::map<std::string, tlp::PropertyInterface *>::const_iterator pmIt = propsMap.begin();
+  auto pmIt = propsMap.begin();
   bool result = false;
 
   for (; pmIt != propsMap.end(); ++pmIt) {

@@ -20,6 +20,8 @@
 #ifndef Tulip_GLGRAPHRENDERER_H
 #define Tulip_GLGRAPHRENDERER_H
 
+#include <unordered_map>
+
 #include <tulip/GlScene.h>
 #include <tulip/tulipconf.h>
 
@@ -97,7 +99,7 @@ protected:
 
   bool selectionDrawActivate;
   RenderingEntitiesFlag selectionType;
-  std::map<unsigned int, SelectedEntity> *selectionIdMap;
+  std::unordered_map<unsigned int, SelectedEntity> *selectionIdMap;
   unsigned int *selectionCurrentId;
 };
 } // namespace tlp

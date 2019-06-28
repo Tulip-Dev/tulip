@@ -22,11 +22,12 @@
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
 
+#include <unordered_map>
 #include "tulip/PythonIncludes.h"
 #include "tulip/PythonCppTypesConverter.h"
 
-static std::map<std::string, std::string> getTypenamesMap() {
-  std::map<std::string, std::string> ret;
+static std::unordered_map<std::string, std::string> &getTypenamesMap() {
+  static std::unordered_map<std::string, std::string> ret;
   ret[tlp::demangleClassName(typeid(std::string).name())] = "std::string";
   ret[tlp::demangleClassName(typeid(tlp::Vec3f).name())] = "tlp::Vec3f";
   ret[tlp::demangleClassName(typeid(std::vector<int>).name())] = "std::vector<int>";
@@ -115,7 +116,7 @@ static std::map<std::string, std::string> getTypenamesMap() {
   return ret;
 }
 
-static std::map<std::string, std::string> cppTypenameToSipTypename = getTypenamesMap();
+static std::unordered_map<std::string, std::string> &cppTypenameToSipTypename = getTypenamesMap();
 
 void *convertSipWrapperToCppType(PyObject *sipWrapper, const std::string &cppTypename,
                                  const bool transferTo) {

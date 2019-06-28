@@ -1652,10 +1652,10 @@ struct less<MetaEdge> {
 
 void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector<node> &metaNodes) {
   GraphProperty *metaInfo = static_cast<GraphAbstract *>(getRoot())->getMetaGraphProperty();
-  map<edge, set<edge>> eMapping;
+  unordered_map<edge, set<edge>> eMapping;
   Observable::holdObservers();
   {
-    map<node, set<node>> nMapping;
+    unordered_map<node, set<node>> nMapping;
 
     while (itS->hasNext()) {
       Graph *its = itS->next();
@@ -1715,7 +1715,7 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
     }
   }
   // set viewMetaGraph for added meta edges
-  map<edge, set<edge>>::const_iterator itm = eMapping.begin();
+  unordered_map<edge, set<edge>>::const_iterator itm = eMapping.begin();
 
   while (itm != eMapping.end()) {
     edge mE = itm->first;

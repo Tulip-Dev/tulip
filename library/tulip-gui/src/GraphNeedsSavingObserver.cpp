@@ -80,7 +80,7 @@ void GraphNeedsSavingObserver::addObserver() {
     }
 
     // Fetch subgraphs
-    for (Graph *subgraph : current->getSubGraphs()) {
+    for (Graph *subgraph : current->subGraphs()) {
       toObserve.push_back(subgraph);
     }
   }
@@ -105,7 +105,7 @@ void GraphNeedsSavingObserver::removeObservers() {
     }
 
     // Fetch subgraphs
-    for (Graph *subgraph : current->getSubGraphs()) {
+    for (Graph *subgraph : current->subGraphs()) {
       toUnobserve.push_back(subgraph);
     }
   }

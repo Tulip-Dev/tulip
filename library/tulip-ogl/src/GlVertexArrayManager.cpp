@@ -653,7 +653,7 @@ void GlVertexArrayManager::activate(bool act) {
 
 void GlVertexArrayManager::visit(GlEdge *glEdge) {
   edge e(glEdge->id);
-  const pair<node, node> ends = graph->ends(e);
+  auto ends = graph->ends(e);
   node src = ends.first;
   node tgt = ends.second;
 

@@ -519,7 +519,7 @@ void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
 void GlGraphHighDetailsRenderer::selectEntities(Camera *camera, RenderingEntitiesFlag type, int x,
                                                 int y, int w, int h,
                                                 vector<SelectedEntity> &selectedEntities) {
-  map<unsigned int, SelectedEntity> idToEntity;
+  unordered_map<unsigned int, SelectedEntity> idToEntity;
   unsigned int id = 1;
 
   unsigned int size =
@@ -547,7 +547,7 @@ void GlGraphHighDetailsRenderer::selectEntities(Camera *camera, RenderingEntitie
 //===================================================================
 void GlGraphHighDetailsRenderer::initSelectionRendering(RenderingEntitiesFlag type, int x, int y,
                                                         int w, int h,
-                                                        map<unsigned int, SelectedEntity> &idMap,
+                                                        unordered_map<unsigned int, SelectedEntity> &idMap,
                                                         unsigned int &currentId) {
   selectionType = type;
   selectionIdMap = &idMap;

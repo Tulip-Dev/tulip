@@ -190,7 +190,7 @@ void GlMetaNodeRenderer::treatEvent(const Event &e) {
 }
 
 void GlMetaNodeRenderer::clearScenes() {
-  for (map<Graph *, GlScene *>::iterator it = _metaGraphToSceneMap.begin();
+  for (auto it = _metaGraphToSceneMap.begin();
        it != _metaGraphToSceneMap.end(); ++it) {
     delete it->second;
   }
@@ -199,7 +199,7 @@ void GlMetaNodeRenderer::clearScenes() {
 }
 
 GlScene *GlMetaNodeRenderer::getSceneForMetaGraph(Graph *g) const {
-  std::map<Graph *, GlScene *>::const_iterator sceneit(_metaGraphToSceneMap.find(g));
+  auto sceneit = _metaGraphToSceneMap.find(g);
   return (sceneit == _metaGraphToSceneMap.end()) ? (nullptr) : (sceneit->second);
 }
 } // namespace tlp

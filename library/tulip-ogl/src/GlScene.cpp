@@ -813,7 +813,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int w, in
     glDisable(GL_BLEND);
     glDisable(GL_STENCIL_TEST);
 
-    map<unsigned int, SelectedEntity> idToEntity;
+    unordered_map<unsigned int, SelectedEntity> idToEntity;
 
     if (type & RenderingSimpleEntities) {
       unsigned int id = 1;

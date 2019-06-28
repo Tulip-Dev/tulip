@@ -23,7 +23,7 @@
 
 #include <tulip/tulipconf.h>
 #include <tulip/Observable.h>
-#include <map>
+#include <unordered_map>
 
 namespace tlp {
 
@@ -59,7 +59,7 @@ protected:
 
 private:
   GlGraphInputData *_inputData;
-  std::map<Graph *, GlScene *> _metaGraphToSceneMap;
+  std::unordered_map<Graph *, GlScene *> _metaGraphToSceneMap;
 };
 } // namespace tlp
 

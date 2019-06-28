@@ -56,11 +56,6 @@ public:
 
   void draw(float lod, Camera *camera) override;
 
-  void initSelectionRendering(RenderingEntitiesFlag, std::map<unsigned int, SelectedEntity> &,
-                              unsigned int &) {
-    assert(false);
-  }
-
 protected:
   void initEdgesArray();
   void initTexArray(unsigned int glyph, Vec2f tex[4]);
