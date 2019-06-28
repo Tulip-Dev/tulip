@@ -85,7 +85,8 @@ public:
   }
 };
 
-std::unordered_map<std::string, GlGraphInputData::PropertyName> GlGraphInputData::_propertiesNameMap;
+std::unordered_map<std::string, GlGraphInputData::PropertyName>
+    GlGraphInputData::_propertiesNameMap;
 
 void GlGraphInputData::reloadGraphProperties() {
   if (_propertiesNameMap.empty()) {

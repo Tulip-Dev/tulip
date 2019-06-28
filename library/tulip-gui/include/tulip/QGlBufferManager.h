@@ -50,7 +50,8 @@ public:
 
 private:
   static std::map<std::pair<int, int>, QOpenGLFramebufferObject *> widthHeightToFramebuffer;
-  static std::unordered_map<QOpenGLFramebufferObject *, std::pair<int, int>> framebufferToWidthHeight;
+  static std::unordered_map<QOpenGLFramebufferObject *, std::pair<int, int>>
+      framebufferToWidthHeight;
 };
 } // namespace tlp
 

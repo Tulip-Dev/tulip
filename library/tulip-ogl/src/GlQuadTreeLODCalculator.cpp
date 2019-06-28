@@ -123,8 +123,7 @@ bool GlQuadTreeLODCalculator::needEntities() {
   }
 
   // Check if a camera have changed (diff between old backup camera and current camera)
-  for (auto it = layerToCamera.begin(); it != layerToCamera.end();
-       ++it) {
+  for (auto it = layerToCamera.begin(); it != layerToCamera.end(); ++it) {
     if (((*it).first->getCamera()).is3D()) {
       Camera camera = (*it).first->getCamera();
       Camera oldCamera = (*it).second;

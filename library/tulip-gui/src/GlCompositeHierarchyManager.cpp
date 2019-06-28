@@ -211,8 +211,7 @@ void GlCompositeHierarchyManager::treatEvent(const Event &evt) {
 }
 
 void GlCompositeHierarchyManager::treatEvents(const std::vector<Event> &) {
-  for (auto it = _graphsComposites.begin();
-       it != _graphsComposites.end(); ++it) {
+  for (auto it = _graphsComposites.begin(); it != _graphsComposites.end(); ++it) {
     if (!it->first->isEmpty()) {
       it->second.second->updateHull(_layout, _size, _rotation);
     } else {
@@ -274,8 +273,7 @@ bool GlCompositeHierarchyManager::isVisible() const {
 DataSet GlCompositeHierarchyManager::getData() {
   DataSet set;
 
-  for (auto it = _graphsComposites.begin();
-       it != _graphsComposites.end(); ++it) {
+  for (auto it = _graphsComposites.begin(); it != _graphsComposites.end(); ++it) {
     unsigned int graphId = it->first->getId();
     unsigned int visibility =
         uint(it->second.first->isVisible()) * 2 + uint(it->second.second->isVisible());
@@ -288,8 +286,7 @@ DataSet GlCompositeHierarchyManager::getData() {
 }
 
 void GlCompositeHierarchyManager::setData(const DataSet &dataSet) {
-  for (auto it = _graphsComposites.begin();
-       it != _graphsComposites.end(); ++it) {
+  for (auto it = _graphsComposites.begin(); it != _graphsComposites.end(); ++it) {
     stringstream graph;
     graph << it->first->getId();
 

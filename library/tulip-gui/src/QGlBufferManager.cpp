@@ -34,8 +34,7 @@ std::unordered_map<QOpenGLFramebufferObject *, std::pair<int, int>>
     QGlBufferManager::framebufferToWidthHeight;
 
 void QGlBufferManager::clearBuffers() {
-  for (auto it = widthHeightToFramebuffer.begin();
-       it != widthHeightToFramebuffer.end(); ++it)
+  for (auto it = widthHeightToFramebuffer.begin(); it != widthHeightToFramebuffer.end(); ++it)
     delete (*it).second;
 
   widthHeightToFramebuffer.clear();

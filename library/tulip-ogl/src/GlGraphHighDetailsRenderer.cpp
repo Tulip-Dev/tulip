@@ -545,10 +545,9 @@ void GlGraphHighDetailsRenderer::selectEntities(Camera *camera, RenderingEntitie
   }
 }
 //===================================================================
-void GlGraphHighDetailsRenderer::initSelectionRendering(RenderingEntitiesFlag type, int x, int y,
-                                                        int w, int h,
-                                                        unordered_map<unsigned int, SelectedEntity> &idMap,
-                                                        unsigned int &currentId) {
+void GlGraphHighDetailsRenderer::initSelectionRendering(
+    RenderingEntitiesFlag type, int x, int y, int w, int h,
+    unordered_map<unsigned int, SelectedEntity> &idMap, unsigned int &currentId) {
   selectionType = type;
   selectionIdMap = &idMap;
   selectionCurrentId = &currentId;
