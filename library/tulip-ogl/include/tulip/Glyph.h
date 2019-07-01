@@ -26,13 +26,13 @@
 #include <tulip/Plugin.h>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
-#include <tulip/BoundingBox.h>
 #include <tulip/PluginContext.h>
 
 namespace tlp {
 
 static const std::string GLYPH_CATEGORY = "Node shape";
 
+struct BoundingBox;
 class Graph;
 struct node;
 class GlGraphInputData;
@@ -64,14 +64,9 @@ public:
     return "";
   }
 
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node) {
-    boundingBox[0] = Coord(-0.5, -0.5, -0.5);
-    boundingBox[1] = Coord(0.5, 0.5, 0.5);
-  }
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
 
-  virtual void getTextBoundingBox(BoundingBox &boundingBox, node n) {
-    getIncludeBoundingBox(boundingBox, n);
-  }
+  virtual void getTextBoundingBox(BoundingBox &boundingBox, node n);
 
   virtual void draw(node, float) = 0;
   /*

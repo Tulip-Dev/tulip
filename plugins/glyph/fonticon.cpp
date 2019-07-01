@@ -29,6 +29,7 @@
 #pragma GCC diagnostic pop
 #endif
 
+#include <tulip/BoundingBox.h>
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/TlpTools.h>

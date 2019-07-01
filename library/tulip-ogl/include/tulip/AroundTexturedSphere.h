@@ -25,7 +25,7 @@ using namespace tlp;
 
 namespace tlp {
 
-class BoundingBox;
+struct BoundingBox;
 
 /** \addtogroup glyph */
 /*@{*/
