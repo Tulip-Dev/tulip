@@ -136,14 +136,14 @@ select the shortest paths between two nodes. Returns True if a path exists betwe
 :type pathType: tlp.OnePath, tlp.OneDirectedPath, tlp.OneReversedPath, tlp.AllPaths, tlp.AllDirectedPaths, tlp.AllReversedPaths (Reversed is the same than Directed from target node to source node)
 :param weights: A graph property giving the edges weight if weighted paths have to be considered. Can be set to null to select unweighted paths.
 :type weights:class:`tlp.DoubleProperty`
-:param selection: The graph property to consider as selection.
+:param selection: The graph property for which the values corresponding to the nodes/edges owning to the shortests path(s) will be set to True.
 :type selection:class:`tlp.BooleanProperty`
 :rtype: boolean (True if a path is found)
 :throws: an exception if one of the source or target nodes does not belong to the graph.
 
 One usage would be:
 tlp.selectShortestPaths(graph, tlp.node(1), tlp.node(2), tlp.AllPaths, graph['viewMetric'], graph['viewSelection'])
-Then the existing paths will correspond to the edges (and connected nodes) of graph for which graph['viewSelection'] value is equal to True.
+Then the existing shortest paths will correspond to the edges (and connected nodes) of graph for which graph['viewSelection'] value is equal to True.
 %End
 
 %MethodCode
