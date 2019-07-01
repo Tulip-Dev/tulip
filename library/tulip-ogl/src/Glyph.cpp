@@ -42,7 +42,7 @@ void Glyph::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
 
 //=============================================
 void Glyph::getTextBoundingBox(BoundingBox &boundingBox, node n) {
-    getIncludeBoundingBox(boundingBox, n);
+  getIncludeBoundingBox(boundingBox, n);
 }
 
 //=============================================
