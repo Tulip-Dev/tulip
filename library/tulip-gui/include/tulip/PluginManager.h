@@ -46,6 +46,7 @@ struct TLP_QT_SCOPE PluginVersionInformation {
 
   PluginVersionInformation();
   PluginVersionInformation(const PluginVersionInformation &copy);
+  PluginVersionInformation &operator=(const PluginVersionInformation &) = default;
 };
 
 struct TLP_QT_SCOPE PluginInformation {
@@ -56,6 +57,7 @@ struct TLP_QT_SCOPE PluginInformation {
 
   PluginInformation();
   PluginInformation(const PluginInformation &copy);
+  PluginInformation &operator=(const PluginInformation &) = default;
 
   void fillLocalInfo(const tlp::Plugin &info);
 };

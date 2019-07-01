@@ -43,6 +43,7 @@ struct Circle : public Vector<Obj, 2, OTYPE> {
     (*this)[0] = x;
     (*this)[1] = y;
   }
+  Circle &operator=(const Circle &) = default;
   /**
    * Translate "this" by vector v
    */
