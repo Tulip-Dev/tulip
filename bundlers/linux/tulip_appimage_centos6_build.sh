@@ -30,8 +30,14 @@ else
   USR_LIB=/usr/lib
 fi
 
-# install qt5
-yum install -y qt5-qtbase-devel qt5-qtwebkit-devel
+if [ "$3" == "" ]; then
+  # install qt5
+  yum install -y qt5-qtbase-devel qt5-qtwebkit-devel
+  QT_PATH=$USR_LIB/qt5
+else
+  # we can use our own build of qt5
+  QT_PATH=$3
+fi
 
 # install Python 3.6 from the IUS Community Project
 wget https://centos6.iuscommunity.org/ius-release.rpm
@@ -56,7 +62,7 @@ else
   RUN_TESTS=OFF
 fi
 
-cmake -DCMAKE_C_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/gcc -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/g++ -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=$USR_LIB/qt5 -DPYTHON_EXECUTABLE=/usr/bin/python3.6 -DTULIP_USE_CCACHE=$CCACHE -DTULIP_BUILD_FOR_APPIMAGE=ON -DTULIP_BUILD_TESTS=$RUN_TESTS ..
+cmake -DCMAKE_C_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/gcc -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/g++ -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=$QT_PATH -DPYTHON_EXECUTABLE=/usr/bin/python3.6 -DTULIP_USE_CCACHE=$CCACHE -DTULIP_BUILD_FOR_APPIMAGE=ON -DTULIP_BUILD_TESTS=$RUN_TESTS ..
 make -j4 install
 
 # run unit tests
