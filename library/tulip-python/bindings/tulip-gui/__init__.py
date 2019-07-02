@@ -81,22 +81,22 @@ if platform.system() == 'Linux' and os.path.exists(_tulipGuiNativePluginsPath):
         dlOpenFlags = os.RTLD_NOW | os.RTLD_GLOBAL
     sys.setdlopenflags(dlOpenFlags)
 
-    tlp.loadTulipPluginsFromDir(_tulipGuiPluginsPath)
+tlp.loadTulipPluginsFromDir(_tulipGuiPluginsPath)
 
-    if (platform.system() == 'Linux'
-            and os.path.exists(_tulipGuiNativePluginsPath)):
-        sys.setdlopenflags(dlOpenFlagsBackup)
+if (platform.system() == 'Linux'
+        and os.path.exists(_tulipGuiNativePluginsPath)):
+    sys.setdlopenflags(dlOpenFlagsBackup)
 
-    # Check if we are in script execution mode
-    # (sys.ps1 is not defined in that case)
-    # If so, register an exit callback that will run the Qt event loop
-    # if some widgets are still in a visible state
-    if not hasattr(sys, 'ps1') and not sys.flags.interactive:
-        import atexit
-        atexit.register(tulipguiExitFunc)
+# Check if we are in script execution mode
+# (sys.ps1 is not defined in that case)
+# If so, register an exit callback that will run the Qt event loop
+# if some widgets are still in a visible state
+if not hasattr(sys, 'ps1') and not sys.flags.interactive:
+    import atexit
+    atexit.register(tulipguiExitFunc)
 
-    import signal
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
+import signal # noqa
+signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 __all__ = ['tlpgui']
 __author__ = 'David Auber, and the Tulip development Team'
