@@ -36,8 +36,8 @@ const string htmlMap =
 #ifdef QT_HAS_WEBENGINE
     "<script type=\"text/javascript\" src=\"qrc:///qtwebchannel/qwebchannel.js\"></script>"
 #endif
-    "<link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.4.0/dist/leaflet.css\" />"
-    "<script src=\"https://unpkg.com/leaflet@1.4.0/dist/leaflet.js\"></script>"
+    "<link rel=\"stylesheet\" href=\"qrc:///tulip/geoview/leaflet/leaflet.css\" />"
+    "<script src=\"qrc:///tulip/geoview/leaflet/leaflet.js\"></script>"
     "<script type=\"text/javascript\">"
     "var map;"
     "var mapBounds;"
@@ -133,6 +133,17 @@ const string htmlMap =
     "  map.removeLayer(currentLayer);"
     "  map.addLayer(esriGrayCanvas);"
     "  currentLayer = esriGrayCanvas;"
+    "  refreshMap();"
+    "}"
+    "function switchToCustomTileLayer(customTileLayerUrl) {"
+    "  map.removeLayer(currentLayer);"
+    "  var customTileLayer = L.tileLayer(customTileLayerUrl, {"
+    "      attribution: customTileLayerUrl,"
+    "      errorTileUrl: 'qrc:///tulip/geoview/leaflet/no-tile.png'"
+    "  });"
+    "  addEventHandlersToLayer(customTileLayer);"
+    "  map.addLayer(customTileLayer);"
+    "  currentLayer = customTileLayer;"
     "  refreshMap();"
     "}"
 #ifdef QT_HAS_WEBENGINE
@@ -244,6 +255,11 @@ void LeafletMaps::switchToEsriTerrain() {
 void LeafletMaps::switchToEsriGrayCanvas() {
   QString code = "switchToEsriGrayCanvas()";
   executeJavascript(code);
+}
+
+void LeafletMaps::switchToCustomTileLayer(const QString &customTileLayerUrl) {
+  QString code = "switchToCustomTileLayer('%1')";
+  executeJavascript(code.arg(customTileLayerUrl));
 }
 
 void LeafletMaps::setMapCenter(double latitude, double longitude) {

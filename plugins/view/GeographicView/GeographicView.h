@@ -70,16 +70,17 @@ class GeographicView : public View {
       "latitude/longitude), they are used to layout the nodes on the maps or on the globe.</p>"
       "<p>An interactor for performing selection on graph elements is also bundled "
       "with the view.</p>",
-      "3.0", "View")
+      "3.1", "View")
 
 public:
-  enum ViewType { OpenStreetMap = 0, EsriSatellite, EsriTerrain, EsriGrayCanvas, Polygon, Globe };
+  enum ViewType { OpenStreetMap = 0, EsriSatellite, EsriTerrain, EsriGrayCanvas,
+                  LeafletCustomTileLayer, Polygon, Globe };
 
   GeographicView(PluginContext *);
   ~GeographicView() override;
 
   std::string icon() const override {
-    return ":/geographic_view.png";
+    return ":/tulip/geoview/geographic_view.png";
   }
 
   void setupUi() override;
@@ -120,6 +121,10 @@ public:
   bool getNodeOrEdgeAtViewportPos(int x, int y, node &n, edge &e) const override {
     return GlMainView::getNodeOrEdgeAtViewportPos(geoViewGraphicsView->getGlMainWidget(), x, y, n,
                                                   e);
+  }
+
+  GeographicViewConfigWidget *getConfigWidget() const {
+    return geoViewConfigWidget;
   }
 
 public slots:

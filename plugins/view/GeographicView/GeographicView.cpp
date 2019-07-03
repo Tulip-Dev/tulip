@@ -107,6 +107,8 @@ void GeographicView::viewTypeChanged(QString viewTypeName) {
     _viewType = Polygon;
   } else if (viewTypeName == "Globe") {
     _viewType = Globe;
+  } else if (viewTypeName == "Custom Tile Layer (Leaflet)") {
+    _viewType = LeafletCustomTileLayer;
   }
 
   geoViewGraphicsView->switchViewType();
@@ -166,6 +168,8 @@ void GeographicView::setState(const DataSet &dataSet) {
     viewTypeName = "Polygon";
   } else if (_viewType == Globe) {
     viewTypeName = "Globe";
+  } else if (_viewType == LeafletCustomTileLayer) {
+    viewTypeName = "Custom Tile Layer (Leaflet)";
   }
 
   viewTypeChanged(viewTypeName.c_str());
