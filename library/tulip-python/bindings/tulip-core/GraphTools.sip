@@ -118,32 +118,42 @@ containing the nodes of the graph in the order they have been visited.
 enum ShortestPathType { OnePath = 0, OneDirectedPath = 1 , OneReversedPath = 2,
 			AllPaths = 3, AllDirectedPaths = 4, AllReversedPaths = 5 };
 
-bool selectShortestPaths(const tlp::Graph *graph, tlp::node src, tlp::node tgt, tlp::ShortestPathType pathType, const tlp::DoubleProperty *weights, tlp::BooleanProperty* selection);
+bool selectShortestPaths(const tlp::Graph *graph, tlp::node src, tlp::node tgt, tlp::ShortestPathType pathType,
+                         const tlp::DoubleProperty *weights, tlp::BooleanProperty* selection);
 %Docstring
 tlp.selectShortestPaths(graph, src, tgt, pathType, weights, selection)
 
 .. versionadded::5.3
 
-select the shortest paths between two nodes. Returns True if a path exists between the src and tgt nodes; False if not.
+Select the shortest paths between two nodes.
+Returns :const:`True` if a path exists between the src and tgt nodes.
+
+One usage would be::
+
+  tlp.selectShortestPaths(graph, tlp.node(1), tlp.node(2), tlp.AllPaths,
+                          graph['viewMetric'], graph['viewSelection'])
+
+Then the existing shortest paths will correspond to the edges (and connected nodes)
+of graph for which ``graph['viewSelection']`` value is equal to :const:`True`.
 
 :param graph: The graph to compute on.
 :type graph: :class:`tlp.Graph`
 :param src: The source node of the paths
-:type node: :class:`tlp.node`
+:type src: :class:`tlp.node`
 :param tgt: The target node of the paths
-:type node: :class:`tlp.node`
-:param pathType: The type of path to consider
-:type pathType: tlp.OnePath, tlp.OneDirectedPath, tlp.OneReversedPath, tlp.AllPaths, tlp.AllDirectedPaths, tlp.AllReversedPaths (Reversed is the same than Directed from target node to source node)
-:param weights: A graph property giving the edges weight if weighted paths have to be considered. Can be set to null to select unweighted paths.
-:type weights:class:`tlp.DoubleProperty`
-:param selection: The graph property for which the values corresponding to the nodes/edges owning to the shortests path(s) will be set to True.
-:type selection:class:`tlp.BooleanProperty`
-:rtype: boolean (True if a path is found)
+:type tgt: :class:`tlp.node`
+:param pathType: The type of path to consider (:const:`Reversed` is the same than
+  :const:`Directed` from target node to source node)
+:type pathType: :const:`tlp.OnePath`, :const:`tlp.OneDirectedPath`, :const:`tlp.OneReversedPath`,
+  :const:`tlp.AllPaths`, :const:`tlp.AllDirectedPaths`, :const:`tlp.AllReversedPaths`
+:param weights: A graph property giving the edges weight if weighted paths
+  have to be considered. Can be set to null to select unweighted paths.
+:type weights: :class:`tlp.DoubleProperty`
+:param selection: The graph property for which the values corresponding to
+  the nodes/edges owning to the shortests path(s) will be set to True.
+:type selection: :class:`tlp.BooleanProperty`
+:rtype: boolean
 :throws: an exception if one of the source or target nodes does not belong to the graph.
-
-One usage would be:
-tlp.selectShortestPaths(graph, tlp.node(1), tlp.node(2), tlp.AllPaths, graph['viewMetric'], graph['viewSelection'])
-Then the existing shortest paths will correspond to the edges (and connected nodes) of graph for which graph['viewSelection'] value is equal to True.
 %End
 
 %MethodCode
