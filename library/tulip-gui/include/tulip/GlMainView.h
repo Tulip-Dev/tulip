@@ -95,6 +95,7 @@ public:
   tlp::GlMainWidget *getGlMainWidget() const;
   QList<QWidget *> configurationWidgets() const override;
   bool overviewVisible() const;
+  bool quickAccessBarVisible() const;
   QPixmap snapshot(const QSize &outputSize = QSize()) const override;
 
   void setOverviewPosition(const OverviewPosition &position);
@@ -222,6 +223,11 @@ public slots:
   void setOverviewVisible(bool);
 
   /**
+   * @brief allows to control the quick access bar visibility
+   */
+  void setQuickAccessBarVisible(bool);
+
+  /**
    * @brief Toggles the orthogonal projection on or off, then draws
    */
   void setViewOrtho(bool);
@@ -247,12 +253,10 @@ public slots:
 protected slots:
   virtual void glMainViewDrawn(bool graphChanged);
   virtual void sceneRectChanged(const QRectF &);
-  void setQuickAccessBarVisible(bool);
   void fillContextMenu(QMenu *menu, const QPointF &) override;
 
 protected:
   void setupWidget() override;
-  bool quickAccessBarVisible() const;
   void assignNewGlMainWidget(GlMainWidget *glMainWidget, bool deleteOldGlMainWidget = true);
   bool eventFilter(QObject *obj, QEvent *event) override;
 

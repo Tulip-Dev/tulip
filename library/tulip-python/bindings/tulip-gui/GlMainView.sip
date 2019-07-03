@@ -74,6 +74,29 @@ Sets the visibility state of the overview window.
 
 // =======================================================
 
+  bool quickAccessBarVisible() const;
+%Docstring
+tlpgui.GlMainView.quickAccessBarVisible()
+
+Returns the visibility state of the quick access bar.
+
+:rtype: boolean
+%End
+
+// =======================================================
+
+  void setQuickAccessBarVisible(bool);
+%Docstring
+tlpgui.GlMainView.setQuickAccessBarVisible(state)
+
+Allows to control the quiack access bar visibility.
+
+:param state: the visibility state of the quick access bar.
+:type state: boolean
+%End
+
+// =======================================================
+
   virtual void drawOverview(bool generatePixmap=true);
 %Docstring
 tlpgui.GlMainView.drawOverview()
