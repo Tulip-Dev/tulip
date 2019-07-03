@@ -267,7 +267,7 @@ void TulipViewsManager::resizeView(tlp::View *view, int width, int height) {
 
   if (!workspace) {
     viewToWindow[view]->resize(width, height);
-    tlp::GlMainView *glView = dynamic_cast<tlp::GlMainView*>(view);
+    tlp::GlMainView *glView = dynamic_cast<tlp::GlMainView *>(view);
     if (glView) {
       glView->getGlMainWidget()->resize(width, height);
       glView->getGlMainWidget()->resizeGL(width, height);
