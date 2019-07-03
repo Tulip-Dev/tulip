@@ -15,7 +15,7 @@ SET(TULIP_GUI_PYTHON_BINDINGS_SRC
 )
 
 ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_GUI_PYTHON_BINDINGS_SRC}
-  COMMAND ${SIP_EXE} -n tulip.native.sip -I ${CMAKE_CURRENT_BINARY_DIR} -I ${CMAKE_CURRENT_BINARY_DIR}/../tulip-core -I ${CMAKE_CURRENT_SOURCE_DIR}/../tulip-core -c ${CMAKE_CURRENT_BINARY_DIR} -j3 ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
+  COMMAND ${SIP_EXE} -n ${SIP_MODULE} -I ${CMAKE_CURRENT_BINARY_DIR} -I ${CMAKE_CURRENT_BINARY_DIR}/../tulip-core -I ${CMAKE_CURRENT_SOURCE_DIR}/../tulip-core -c ${CMAKE_CURRENT_BINARY_DIR} -j3 ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
   COMMENT "Generating Python Bindings for libtulip-gui"
   DEPENDS ${TULIP_GUI_SIP_FILES} ${TULIP_SIP_FILES} ${STL_SIP_FILES} VERBATIM)
 
@@ -85,7 +85,7 @@ TULIP_INSTALL_PYTHON_FILES(tulipgui/native ${LibTulipGUIPythonBindingsName})
 
 ADD_CUSTOM_COMMAND(TARGET ${LibTulipGUIPythonBindingsName}
                    POST_BUILD
-                   COMMAND ${SIP_EXE} -n tulip.native.sip -I ${CMAKE_CURRENT_BINARY_DIR}/../tulip-core -I ${CMAKE_CURRENT_SOURCE_DIR}/../tulip-core -a ${CMAKE_CURRENT_BINARY_DIR}/tulipgui.api ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
+                   COMMAND ${SIP_EXE} -n ${SIP_MODULE} -I ${CMAKE_CURRENT_BINARY_DIR}/../tulip-core -I ${CMAKE_CURRENT_SOURCE_DIR}/../tulip-core -a ${CMAKE_CURRENT_BINARY_DIR}/tulipgui.api ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
                    COMMENT "Generating API file for Tulip GUI Python bindings"
                    VERBATIM)
 
