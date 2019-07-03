@@ -23,6 +23,8 @@
 
 #include <tulip/PluginLister.h>
 #include <tulip/WorkspacePanel.h>
+#include <tulip/GlMainView.h>
+#include <tulip/GlMainWidget.h>
 
 #include "TulipViewsUtils.h"
 
@@ -265,6 +267,11 @@ void TulipViewsManager::resizeView(tlp::View *view, int width, int height) {
 
   if (!workspace) {
     viewToWindow[view]->resize(width, height);
+    tlp::GlMainView *glView = dynamic_cast<tlp::GlMainView*>(view);
+    if (glView) {
+      glView->getGlMainWidget()->resize(width, height);
+      glView->getGlMainWidget()->resizeGL(width, height);
+    }
     QApplication::processEvents();
   }
 }
