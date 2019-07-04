@@ -152,7 +152,7 @@ def process_docstring(app, what, name, obj, options, lines):
         del lines[0]
     if len(lines) > 0 and methodIdx < nbMethods - 1:
         start = signaturePos[methodIdx+1]
-        end = obj.__doc__.find(')\n', i) + 1
+        end = obj.__doc__.find(')\n', start) + 1
         nextSignature = obj.__doc__[start:end]
         linesIdx = 0
         while lines[linesIdx].find(nextSignature) == -1:

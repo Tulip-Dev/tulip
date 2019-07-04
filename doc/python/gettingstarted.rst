@@ -203,24 +203,20 @@ The modules are also located within the Tulip software installation, but some se
 Installing the Tulip-Python modules from the Python Packaging Index
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Tulip-Python modules can be easily otained by using the pip tool for Windows, MacOS and Linux users.
-For that latter case, pip >= 8.1 has to be used, be sure to upgrade it first through that command.
+Tulip-Python modules can be easily obtained by using the pip tool for Windows, MacOS and Linux users.
 
-.. code:: shell
+.. important::
 
-    $ pip install --upgrade pip
+  Please not that the ``tulipgui`` module is no more distributed on the Python
+  Packaging Index since Tulip 5.3 as its package maintenance was too complex.
+  Nevertheless, the module is still available to use from a standard Tulip
+  installation (see next section).
 
 To install the :mod:`tulip` module, issue the following command from a terminal prompt:
 
 .. code:: shell
 
     $ pip install tulip-python
-
-To install the :mod:`tulipgui` module, issue the following command from a terminal prompt:
-
-.. code:: shell
-
-    $ pip install tulipgui-python
 
 And you're done, you can now import the modules in your Python session.
 

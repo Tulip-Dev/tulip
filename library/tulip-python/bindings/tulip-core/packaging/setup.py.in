@@ -124,6 +124,11 @@ setup(
     long_description=long_description,
 
     url='http://tulip.labri.fr/',
+    project_urls={
+        'Documentation': 'http://tulip.labri.fr/Documentation/current/tulip-python/html/index.html',
+        'Issue Tracker': 'https://github.com/Tulip-dev/tulip/issues',
+        'Sources': 'https://github.com/Tulip-dev/tulip',
+    },
 
     author='David Auber and the Tulip development team',
     author_email='tulipdev@labri.fr',
