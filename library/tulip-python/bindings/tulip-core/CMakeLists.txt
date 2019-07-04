@@ -81,7 +81,7 @@ SET(TULIP_PYTHON_BINDINGS_SRC
 
 ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_PYTHON_BINDINGS_SRC}
                    COMMAND ${CMAKE_COMMAND} -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR} -DBINARY_DIR=${CMAKE_CURRENT_BINARY_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/generatePropertiesBindings.cmake
-                   COMMAND ${SIP_EXE} -n tulip.native.sip -y ${CMAKE_CURRENT_BINARY_DIR}/tulip.pyi -o -I ${CMAKE_CURRENT_BINARY_DIR} -I ${CMAKE_CURRENT_SOURCE_DIR} -c ${CMAKE_CURRENT_BINARY_DIR} -j8 ${SIP_FLAGS} ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
+                   COMMAND ${SIP_EXE} -n ${SIP_MODULE} -y ${CMAKE_CURRENT_BINARY_DIR}/tulip.pyi -o -I ${CMAKE_CURRENT_BINARY_DIR} -I ${CMAKE_CURRENT_SOURCE_DIR} -c ${CMAKE_CURRENT_BINARY_DIR} -j8 ${SIP_FLAGS} ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
                    COMMENT "Generating Python Bindings for libtulip"
                    DEPENDS ${TULIP_SIP_FILES} ${STL_SIP_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/../../include/tulip/PythonCppTypesConverter.h VERBATIM)
            
@@ -181,7 +181,7 @@ TULIP_INSTALL_PYTHON_FILES(tulip/native ${LibTulipCorePythonBindingsName})
 IF(NOT TULIP_BUILD_CORE_ONLY)
   ADD_CUSTOM_COMMAND(TARGET ${LibTulipCorePythonBindingsName}
                      POST_BUILD
-                     COMMAND ${SIP_EXE} -n tulip.native.sip -I ${CMAKE_CURRENT_BINARY_DIR} -I ${CMAKE_CURRENT_SOURCE_DIR} -a ${CMAKE_CURRENT_BINARY_DIR}/tulip.api ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
+                     COMMAND ${SIP_EXE} -n ${SIP_MODULE} -I ${CMAKE_CURRENT_BINARY_DIR} -I ${CMAKE_CURRENT_SOURCE_DIR} -a ${CMAKE_CURRENT_BINARY_DIR}/tulip.api ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
                      COMMENT "Generating API file for Tulip Python bindings"
                      VERBATIM)
   INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)

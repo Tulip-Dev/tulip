@@ -20,7 +20,7 @@ SET(STL_PYTHON_BINDINGS_SRC
 )
 
 ADD_CUSTOM_COMMAND(OUTPUT ${STL_PYTHON_BINDINGS_SRC}
-                   COMMAND ${SIP_EXE} -n tulip.native.sip -I ${CMAKE_CURRENT_BINARY_DIR} -c ${CMAKE_CURRENT_BINARY_DIR} -j4 ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
+                   COMMAND ${SIP_EXE} -n ${SIP_MODULE} -I ${CMAKE_CURRENT_BINARY_DIR} -c ${CMAKE_CURRENT_BINARY_DIR} -j4 ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
                    COMMENT "Generating Python Bindings for stl"
                    DEPENDS ${STL_SIP_FILES} VERBATIM)
            
