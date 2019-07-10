@@ -317,13 +317,13 @@ public:
         // sort nodes to ensure a predictable ordering of the ouput
         itN = new StableIterator<node>(itN, 0, true, true);
 
-      while (itN->hasNext()) {
-        auto itn = itN->next();
+      for (auto n : itN) {
+
         if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
           pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
 
         ++progress;
-        string tmp = prop->getNodeStringValue(itn);
+        string tmp = prop->getNodeStringValue(n);
 
         // replace real path with symbolic one using TulipBitmapDir
         if (isPathViewProp && !TulipBitmapDir.empty()) {
@@ -341,9 +341,8 @@ public:
             continue;
         }
 
-        os << "(node " << getNode(itn).id << " \"" << convert(tmp) << "\")" << endl;
+        os << "(node " << getNode(n).id << " \"" << convert(tmp) << "\")" << endl;
       }
-      delete itN;
 
       Iterator<edge> *itE = prop->getNonDefaultValuatedEdges(g);
 
@@ -351,39 +350,33 @@ public:
         // sort edges to ensure a predictable ordering of the ouput
         itE = new StableIterator<edge>(itE, 0, true, true);
 
-      if (prop->getTypename() == GraphProperty::propertyTypename) {
-        while (itE->hasNext()) {
-          auto ite = itE->next();
-          if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
+      for (auto e : itE) {
+
+        if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
             pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
 
           ++progress;
+
+        if (prop->getTypename() == GraphProperty::propertyTypename) {
 
           // for GraphProperty we must ensure the reindexing
           // of embedded edges
-          const set<edge> &edges = static_cast<GraphProperty *>(prop)->getEdgeValue(ite);
+          const set<edge> &edges = static_cast<GraphProperty *>(prop)->getEdgeValue(e);
           set<edge> rEdges;
-          set<edge>::const_iterator its;
 
-          for (its = edges.begin(); its != edges.end(); ++its) {
-            rEdges.insert(getEdge(*its));
+          for (auto ee : edges) {
+            rEdges.insert(getEdge(ee));
           }
 
           // finally save the vector
-          os << "(edge " << getEdge(ite).id << " \"";
+          os << "(edge " << getEdge(e).id << " \"";
           EdgeSetType::write(os, rEdges);
           os << "\")" << endl;
-        }
-      } else {
-        while (itE->hasNext()) {
-          auto ite = itE->next();
-          if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
 
-            pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
+        } else {
 
-          ++progress;
           // replace real path with symbolic one using TulipBitmapDir
-          string tmp = prop->getEdgeStringValue(ite);
+          string tmp = prop->getEdgeStringValue(e);
 
           if (isPathViewProp && !TulipBitmapDir.empty()) {
             size_t pos = tmp.find(TulipBitmapDir);
@@ -392,11 +385,9 @@ public:
               tmp.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
           }
 
-          os << "(edge " << getEdge(ite).id << " \"" << convert(tmp) << "\")" << endl;
+          os << "(edge " << getEdge(e).id << " \"" << convert(tmp) << "\")" << endl;
         }
       }
-      delete itE;
-
       os << ")" << endl;
     }
   }
