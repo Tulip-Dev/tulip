@@ -382,16 +382,22 @@ public:
 
           if (_parsingPathViewProperty) {
             // if needed replace symbolic path by real path
-            size_t pos = value.find("TulipBitmapDir/");
-
+            string eValue(value);
+            size_t pos = eValue.find("TulipBitmapDir/");
             if (pos != std::string::npos) {
-              string eValue(value);
               eValue.replace(pos, 15, TulipBitmapDir);
-              _currentProperty->setEdgeStringValue(e, eValue);
-            } else
+            }
+            _currentProperty->setEdgeStringValue(e, eValue);
+          } else {
+            // setEdgeStringValue is a no-op with GraphProperty
+            if (_currentProperty->getTypename() == GraphProperty::propertyTypename) {
+              set<edge> edges;
+              EdgeSetType::fromString(edges, value);
+              static_cast<GraphProperty*>(_currentProperty)->setEdgeValue(e, edges);
+            } else {
               _currentProperty->setEdgeStringValue(e, value);
-          } else
-            _currentProperty->setEdgeStringValue(e, value);
+            }
+          }
         }
       } else {
         tlp::error() << "The property '" << _propertyName << "'was null when trying to fill it"
