@@ -69,11 +69,14 @@ bool GraphType::readb(istream &, RealType &) {
 // EdgeSetType
 void EdgeSetType::write(ostream &os, const RealType &v) {
   os << '(';
-  set<edge>::const_iterator it;
-
-  for (it = v.begin(); it != v.end(); ++it)
-    os << (*it).id << ' ';
-
+  size_t i = 0;
+  size_t vsize = v.size();
+  for (auto e : v) {
+    os << e.id;
+    if (++i != vsize) {
+      os << ' ';
+    }
+  }
   os << ')';
 }
 
