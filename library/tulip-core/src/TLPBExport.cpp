@@ -490,24 +490,32 @@ bool TLPBExport::exportGraph(std::ostream &os) {
             // re-index embedded edges
             const set<edge> &edges = static_cast<GraphProperty *>(prop)->getEdgeValue(e);
             set<edge> rEdges;
-            set<edge>::const_iterator its;
 
-            for (its = edges.begin(); its != edges.end(); ++its) {
-              rEdges.insert(getEdge(*its));
+            for (auto ee : edges) {
+              edge rEdge = getEdge(ee);
+              // do not export edges that are not elements of the root graph
+              if (rEdge.isValid()) {
+                rEdges.insert(rEdge);
+              }
             }
 
             // finally save set
             EdgeSetType::writeb(s, rEdges);
-          } else if (pnViewProp && !TulipBitmapDir.empty()) { // viewFont || viewTexture
-            string sVal = prop->getEdgeStringValue(e);
-            size_t pos = sVal.find(TulipBitmapDir);
 
-            if (pos != string::npos)
-              sVal.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+          } else {
 
-            StringType::writeb(s, sVal);
-          } else
-            prop->writeEdgeValue(s, e);
+            if (pnViewProp && !TulipBitmapDir.empty()) { // viewFont || viewTexture
+              string sVal = prop->getEdgeStringValue(e);
+              size_t pos = sVal.find(TulipBitmapDir);
+
+              if (pos != string::npos)
+                sVal.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+
+              StringType::writeb(s, sVal);
+            } else {
+              prop->writeEdgeValue(s, e);
+            }
+          }
 
           ++nbValues;
 

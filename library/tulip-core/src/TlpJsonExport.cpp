@@ -282,9 +282,6 @@ public:
         _writer.writeString(EdgesValuesToken);
         _writer.writeMapOpen();
         for (auto e : property->getNonDefaultValuatedEdges(g)) {
-          stringstream temp;
-          temp << graph->edgePos(e);
-          _writer.writeString(temp.str());
 
           string sValue;
 
@@ -295,7 +292,15 @@ public:
             const set<edge> &edges = static_cast<GraphProperty *>(property)->getEdgeValue(e);
             set<edge> rEdges;
             for (auto ee : edges) {
-              rEdges.insert(edge(graph->edgePos(ee)));
+              edge rEdge = edge(graph->edgePos(ee));
+              // do not export edges that are not elements of the root graph
+              if (rEdge.isValid()) {
+                rEdges.insert(rEdge);
+              }
+            }
+
+            if (rEdges.empty()) {
+              continue;
             }
 
             sValue = EdgeSetType::toString(rEdges);
@@ -311,6 +316,9 @@ public:
             }
           }
 
+          stringstream temp;
+          temp << graph->edgePos(e);
+          _writer.writeString(temp.str());
           _writer.writeString(sValue);
         }
         _writer.writeMapClose();

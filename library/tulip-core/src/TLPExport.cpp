@@ -365,13 +365,19 @@ public:
           set<edge> rEdges;
 
           for (auto ee : edges) {
-            rEdges.insert(getEdge(ee));
+            edge rEdge = getEdge(ee);
+            // do not export edges that are not elements of the root graph
+            if (rEdge.isValid()) {
+              rEdges.insert(rEdge);
+            }
           }
 
-          // finally save the vector
-          os << "(edge " << getEdge(e).id << " \"";
-          EdgeSetType::write(os, rEdges);
-          os << "\")" << endl;
+          if (!rEdges.empty()) {
+            // finally save the vector
+            os << "(edge " << getEdge(e).id << " \"";
+            EdgeSetType::write(os, rEdges);
+            os << "\")" << endl;
+          }
 
         } else {
 
