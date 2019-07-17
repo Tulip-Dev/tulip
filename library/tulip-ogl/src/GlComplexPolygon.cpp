@@ -376,7 +376,7 @@ void GlComplexPolygon::runTesselation() {
     const float *verts = tessGetVertices(tess);
     const int *elems = tessGetElements(tess);
     const int nelems = tessGetElementCount(tess);
-    std::map<Coord, unsigned int> vidx;
+    std::unordered_map<Coord, unsigned int> vidx;
 
     // iterate over polygons computed by tesselation
     for (int i = 0; i < nelems; ++i) {

@@ -152,7 +152,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   while (nb_added != nb_edges && !(e_tmp == succ2 && e2_found)) {
     v_edges1.push_back(e_tmp);
     nbAdjFace.set(e_tmp.id, nbAdjFace.get(e_tmp.id) + 1);
-    pair<node, node> eEnds = ends(e_tmp);
+    auto eEnds = ends(e_tmp);
     isInNewFace.set(eEnds.first.id, true);
     isInNewFace.set(eEnds.second.id, true);
     ++nb_added;
@@ -167,7 +167,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   if (e2 == succ2 && e_tmp == facesEdges[f][(i + 1) % nb_edges]) {
     v_edges1.push_back(e_tmp);
     nbAdjFace.set(e_tmp.id, nbAdjFace.get(e_tmp.id) + 1);
-    pair<node, node> eEnds = ends(e_tmp);
+    auto eEnds = ends(e_tmp);
     isInNewFace.set(eEnds.first.id, true);
     isInNewFace.set(eEnds.second.id, true);
     ++nb_added;
@@ -240,7 +240,7 @@ void PlanarConMap::delEdgeMap(edge e, Face f) {
   vector<edge> v_edges;
   MutableContainer<bool> isInF2;
   isInF2.setAll(false);
-  pair<node, node> eEnds = ends(e);
+  auto eEnds = ends(e);
   n1 = eEnds.first;
   n2 = eEnds.second;
   f1 = f;
@@ -311,7 +311,7 @@ void PlanarConMap::delEdgeMap(edge e, Face f) {
 
     for (unsigned int i = 0; nb_added < nb_edges - 1; i = (i + 1) % nb_edges) {
       edge e_tmp = facesEdges[f2][i];
-      pair<node, node> eEnds = ends(e_tmp);
+      auto eEnds = ends(e_tmp);
       isInF2.set(eEnds.first.id, true);
       isInF2.set(eEnds.second.id, true);
 
@@ -655,7 +655,7 @@ Iterator<edge> *PlanarConMap::getFaceEdges(const Face f) {
 
 //============================================================
 Face PlanarConMap::splitFace(Face f, const edge e) {
-  pair<node, node> eEnds = ends(e);
+  auto eEnds = ends(e);
   return splitFace(f, eEnds.first, eEnds.second);
 }
 
@@ -852,7 +852,7 @@ void PlanarConMap::mergeFaces(Face f, Face g) {
 
   for (unsigned int i = 1; i < toDel.size(); ++i, cpt = (cpt + 1) % toDel.size()) {
     edge e = toDel[cpt];
-    pair<node, node> eEnds = ends(e);
+    auto eEnds = ends(e);
 
     if (deg(eEnds.first) == 1 || deg(eEnds.second) == 1)
       delEdgeMap(e, f);
@@ -911,11 +911,11 @@ Face PlanarConMap::getFaceContaining(node v, node w) {
     cpt++;
 
   if (cpt != 0) {
-    pair<node, node> eEnds = ends(facesEdges[f_tmp][cpt - 1]);
+    auto eEnds = ends(facesEdges[f_tmp][cpt - 1]);
     return ((eEnds.first == v) || (eEnds.second == v)) ? f_tmp : f_tmp2;
   }
 
-  pair<node, node> eEnds = ends(facesEdges[f_tmp][taille1 - 1]);
+  auto eEnds = ends(facesEdges[f_tmp][taille1 - 1]);
   return ((eEnds.first == v) || (eEnds.second == v)) ? f_tmp : f_tmp2;
 }
 

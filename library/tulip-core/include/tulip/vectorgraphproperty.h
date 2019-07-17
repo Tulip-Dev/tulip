@@ -140,6 +140,7 @@ protected:
   VectorGraphProperty() : _values(nullptr), _graph(nullptr) {}
   VectorGraphProperty(const VectorGraphProperty &obj) : _values(obj._values), _graph(obj._graph) {}
   VectorGraphProperty(ValuesImpl *values, VectorGraph *graph) : _values(values), _graph(graph) {}
+  VectorGraphProperty &operator=(const VectorGraphProperty &) = default;
 
   ValuesImpl *_values; /**< TODO */
   VectorGraph *_graph; /**< TODO */
@@ -187,6 +188,7 @@ class EdgeProperty : public VectorGraphProperty<TYPE> {
 public:
   EdgeProperty() : VectorGraphProperty<TYPE>() {}
   EdgeProperty(const EdgeProperty &obj) : VectorGraphProperty<TYPE>(obj) {}
+  EdgeProperty &operator=(const EdgeProperty &) = default;
 #ifndef NDEBUG
   bool isValid() const;
 #endif
@@ -236,6 +238,7 @@ class NodeProperty : public VectorGraphProperty<TYPE> {
 public:
   NodeProperty() : VectorGraphProperty<TYPE>() {}
   NodeProperty(const NodeProperty &obj) : VectorGraphProperty<TYPE>(obj) {}
+  NodeProperty &operator=(const NodeProperty &) = default;
 #ifndef NDEBUG
   bool isValid() const;
 #endif

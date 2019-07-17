@@ -58,7 +58,7 @@ namespace tlp {
 BoundingBox GlEdge::getBoundingBox(const GlGraphInputData *data) {
   edge e = edge(id);
 
-  const std::pair<node, node> ends = data->graph->ends(e);
+  auto ends = data->graph->ends(e);
   const node src = ends.first;
   const node tgt = ends.second;
   const Coord &srcCoord = data->getElementLayout()->getNodeValue(src);
@@ -129,7 +129,7 @@ void GlEdge::draw(float lod, const GlGraphInputData *data, Camera *camera) {
 
   edge e(id);
 
-  const std::pair<node, node> ends = data->graph->ends(e);
+  auto ends = data->graph->ends(e);
   const node src = ends.first;
   const node tgt = ends.second;
 
@@ -480,7 +480,7 @@ void GlEdge::drawLabel(OcclusionTest *test, const GlGraphInputData *data, float 
   label->setOutlineColor(outlineColor);
   label->setOutlineSize(outlineWidth);
 
-  const std::pair<node, node> ends = data->graph->ends(e);
+  auto ends = data->graph->ends(e);
   const node src = ends.first;
   const node tgt = ends.second;
 

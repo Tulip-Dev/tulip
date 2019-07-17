@@ -25,13 +25,15 @@
 using namespace std;
 using namespace tlp;
 
-void sortEdges(Graph *graph, const vector<edge> &order, map<edge, edge> &rev) {
+void sortEdges(Graph *graph, const vector<edge> &order, unordered_map<edge, edge> &rev) {
   map<node, vector<edge>> graphMap;
   vector<edge>::const_iterator it = order.begin();
 
   for (; it != order.end(); ++it) {
-    graphMap[graph->source(*it)].push_back(*it);
-    graphMap[graph->source(*it)].push_back(rev[*it]);
+    edge e = *it;
+    auto &v = graphMap[graph->source(e)];
+    v.push_back(e);
+    v.push_back(rev[e]);
   }
 
   map<node, vector<edge>>::const_iterator itM = graphMap.begin();
@@ -200,10 +202,8 @@ void PlanarityTestImpl::calculatePartialEmbedding(Graph *sG, node w, node newCNo
     // marks as VISITED all nodes in the boundary cycle;
     markPathInT(term, w, backEdgeRepresentant, traversedNodes);
     // map<node, list<edge> > bEdgesRepres;
-    map<node, list<edge>> bEdgesRepres;
-
-    bEdgesRepres = groupBackEdgesByRepr(sG, listBackEdges, backEdgeRepresentant, traversedNodes,
-                                        listRepresentants);
+    map<node, list<edge>> &&bEdgesRepres = groupBackEdgesByRepr(
+        sG, listBackEdges, backEdgeRepresentant, traversedNodes, listRepresentants);
     list<node> toEmbedLater;
 
     //    if (embedList.find(newCNode)==embedList.end())
@@ -254,9 +254,8 @@ void PlanarityTestImpl::calculatePartialEmbedding(Graph *sG, node w, node newCNo
     markPathInT(term1, t1, backEdgeRepresentant, traversedNodes);
 
     // MutableContainer<list<edge>* > *bEdgesRepres;
-    map<node, list<edge>> bEdgesRepres;
-    bEdgesRepres = groupBackEdgesByRepr(sG, listBackEdges, backEdgeRepresentant, traversedNodes,
-                                        listRepresentants);
+    map<node, list<edge>> &&bEdgesRepres = groupBackEdgesByRepr(
+        sG, listBackEdges, backEdgeRepresentant, traversedNodes, listRepresentants);
     list<node> toEmbedLater;
     toEmbedLater =
         embedUpwardT(true, term2, w, sG, w, bEdgesRepres, traversedNodes, embedList[newCNode]);

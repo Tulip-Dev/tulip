@@ -291,7 +291,7 @@ void simplifyPolyFile(QString fileName, float definition) {
     clearPolygons[polygonName] = datas;
   }
 
-  map<Coord, Coord> simplifiedCoord;
+  unordered_map<Coord, Coord> simplifiedCoord;
 
   QString newName(fileName);
   newName.replace(".poly", QString("_") + QString::number(definition) + ".poly");
@@ -766,7 +766,7 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
     progressWidget->show();
 
     pair<double, double> latLng;
-    map<string, pair<double, double>> addressesLatLngMap;
+    unordered_map<string, pair<double, double>> addressesLatLngMap;
 
     NominatimGeocoder nominatimGeocoder;
 

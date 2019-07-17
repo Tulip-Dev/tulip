@@ -222,7 +222,8 @@ enum ShortestPathType {
  * values)
  * @param weights A Double property giving the edges weight if weighted paths have to be considered.
  * Can be set to null to select unweighted paths.
- * @param selection The Boolean property to consider as selection.
+ * @param selection The Boolean property to consider as selection for which the values corresponding
+ * to the nodes/edges owning to the shortests path(s) will be set to True.
  * @return true if a path exists between the src and tgt nodes; false if not.
  */
 TLP_SCOPE bool selectShortestPaths(const Graph *const graph, node src, node tgt,
@@ -230,7 +231,7 @@ TLP_SCOPE bool selectShortestPaths(const Graph *const graph, node src, node tgt,
                                    BooleanProperty *selection);
 
 /*
- * mark as reachable (set value in "reachables" hash map to true),
+ * mark as reachable (set the corresponding value in "reachables" map to true),
  * all the nodes, according to direction,
  * at distance less or equal to maxDistance of startNode.
  * If direction is set to UNDIRECTED use undirected graph,

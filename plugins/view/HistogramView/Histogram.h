@@ -34,7 +34,7 @@ const std::string BIN_RECT_TEXTURE = "histo_texture";
 class Histogram : public GlComposite {
 
 public:
-  Histogram(Graph *graph, Graph *edgeGraph, std::map<edge, node> &edgeMap,
+  Histogram(Graph *graph, Graph *edgeGraph, std::unordered_map<edge, node> &edgeMap,
             const std::string &propertyName, const ElementType &dataLocation, const Coord &blCorner,
             unsigned int size, const Color &backgroundColor, const Color &textColor);
   ~Histogram() override;
@@ -212,11 +212,11 @@ private:
   std::vector<std::string> uniformQuantificationAxisLabels;
   bool uniformQuantification;
   bool cumulativeFreqHisto, lastCumulHisto;
-  std::map<unsigned int, std::pair<double, double>> binMinMaxMap;
+  std::unordered_map<unsigned int, std::pair<double, double>> binMinMaxMap;
   std::string textureName;
   GlGraphComposite *graphComposite;
   Graph *edgeAsNodeGraph;
-  std::map<edge, node> &edgeToNode;
+  std::unordered_map<edge, node> &edgeToNode;
   Color backgroundColor;
   Color textColor;
   bool integerScale;

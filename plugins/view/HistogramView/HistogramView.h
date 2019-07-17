@@ -23,7 +23,7 @@
 #include <tulip/GlMainView.h>
 
 #include <vector>
-#include <map>
+#include <unordered_map>
 
 #include "../../utils/PluginNames.h"
 #include "Histogram.h"
@@ -205,8 +205,8 @@ private:
   bool needUpdateHistogram;
 
   Graph *edgeAsNodeGraph;
-  std::map<edge, node> edgeToNode;
-  std::map<node, edge> nodeToEdge;
+  std::unordered_map<edge, node> edgeToNode;
+  std::unordered_map<node, edge> nodeToEdge;
 };
 } // namespace tlp
 

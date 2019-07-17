@@ -126,7 +126,7 @@ void PlanarityTestImpl::restore() {
   }
 
   // delete edges added in bidirected
-  map<edge, edge>::const_iterator it2;
+  unordered_map<edge, edge>::const_iterator it2;
 
   for (it2 = bidirectedEdges.begin(); it2 != bidirectedEdges.end(); ++it2) {
     sg->delEdge(it2->first, true);

@@ -282,10 +282,12 @@ inline void vector_set_size(std::vector<T> &v, unsigned int sz) {
 }
 
 void GlVertexArrayManager::reserveMemoryForGraphElts(unsigned int nbNodes, unsigned int nbEdges) {
-  auto nbSelectedNodes = inputData->getElementSelected()->numberOfNonDefaultValuatedNodes();
+  auto nbSelectedNodes =
+      inputData->getElementSelected()->numberOfNonDefaultValuatedNodes(inputData->getGraph());
   pointsNodesRenderingIndexArray.reserve(nbNodes - nbSelectedNodes);
   pointsNodesSelectedRenderingIndexArray.reserve(nbSelectedNodes);
-  auto nbSelectedEdges = inputData->getElementSelected()->numberOfNonDefaultValuatedEdges();
+  auto nbSelectedEdges =
+      inputData->getElementSelected()->numberOfNonDefaultValuatedEdges(inputData->getGraph());
   pointsEdgesRenderingIndexArray.reserve(nbEdges - nbSelectedEdges);
   pointsEdgesSelectedRenderingIndexArray.reserve(nbSelectedEdges);
 
@@ -653,7 +655,7 @@ void GlVertexArrayManager::activate(bool act) {
 
 void GlVertexArrayManager::visit(GlEdge *glEdge) {
   edge e(glEdge->id);
-  const pair<node, node> ends = graph->ends(e);
+  auto ends = graph->ends(e);
   node src = ends.first;
   node tgt = ends.second;
 

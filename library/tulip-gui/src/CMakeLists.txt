@@ -49,10 +49,6 @@ SET(SRCS
   TulipItemDelegate.cpp
   TulipMetaTypes.cpp
   TulipItemEditorCreators.cpp
-  Animation.cpp
-  DoublePropertyAnimation.cpp
-  LayoutPropertyAnimation.cpp
-  PropertyAnimation.cpp
   ColorButton.cpp
   TulipModel.cpp
   ColorScaleButton.cpp
@@ -167,7 +163,6 @@ QTX_WRAP_UI(UI_HEADERS
 
 QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/AboutTulipPage.h
-  ../include/tulip/Animation.h
   ../include/tulip/CaptionGraphicsItem.h
   ../include/tulip/CaptionGraphicsSubItems.h
   ../include/tulip/CaptionItem.h

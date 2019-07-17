@@ -31,7 +31,7 @@ using namespace std;
 //================================================================================
 void TLPBExport::getSubGraphs(Graph *g, vector<Graph *> &vsg) {
   // get subgraphs in a vector
-  for (Graph *sg : g->getSubGraphs()) {
+  for (Graph *sg : g->subGraphs()) {
     vsg.push_back(sg);
     getSubGraphs(sg, vsg);
   }

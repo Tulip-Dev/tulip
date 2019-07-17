@@ -16,17 +16,14 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <tulip/BoundingBox.h>
+#include <tulip/Color.h>
+#include <tulip/Coord.h>
 #include <tulip/TlpTools.h>
-#include <tulip/Graph.h>
-#include <tulip/Glyph.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/GlTextureManager.h>
-#include <tulip/GlTools.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGraphInputData.h>
-#include <tulip/GlSphere.h>
 #include <tulip/GlRect.h>
+#include <tulip/GlSphere.h>
 #include <tulip/AroundTexturedSphere.h>
 
 using namespace std;

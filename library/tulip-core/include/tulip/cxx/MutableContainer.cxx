@@ -51,8 +51,8 @@ tlp::MutableContainer<TYPE>::~MutableContainer() {
 
     if (StoredType<TYPE>::isPointer) {
       // delete stored values
-      typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it =
-          hData->begin();
+      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::const_iterator
+          it = hData->begin();
 
       while (it != hData->end()) {
         StoredType<TYPE>::destroy(it->second);
@@ -103,8 +103,8 @@ void tlp::MutableContainer<TYPE>::setAll(typename StoredType<TYPE>::ReturnedCons
 
     if (StoredType<TYPE>::isPointer) {
       // delete stored values
-      typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it =
-          hData->begin();
+      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::const_iterator
+          it = hData->begin();
 
       while (it != hData->end()) {
         StoredType<TYPE>::destroy(it->second);
@@ -237,7 +237,7 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i,
       return;
 
     case HASH: {
-      typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
+      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
           hData->find(i);
 
       if (it != hData->end()) {
@@ -265,7 +265,7 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i,
       return;
 
     case HASH: {
-      typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
+      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
           hData->find(i);
 
       if (it != hData->end()) {
@@ -321,7 +321,7 @@ void tlp::MutableContainer<TYPE>::add(const unsigned int i, TYPE val) {
     }
 
     case HASH: {
-      typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
+      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
           hData->find(i);
 
       if (it != hData->end()) {
@@ -365,7 +365,7 @@ tlp::MutableContainer<TYPE>::get(const unsigned int i) const {
       return StoredType<TYPE>::get((*vData)[i - minIndex]);
 
   case HASH: {
-    typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
+    typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
         hData->find(i);
 
     if (it != hData->end())
@@ -402,7 +402,7 @@ void tlp::MutableContainer<TYPE>::invertBooleanValue(const unsigned int i) {
     }
 
     case HASH: {
-      typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
+      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
           hData->find(i);
 
       if (it != hData->end()) {
@@ -471,7 +471,7 @@ tlp::MutableContainer<TYPE>::get(const unsigned int i, bool &notDefault) const {
     }
 
   case HASH: {
-    typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
+    typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
         hData->find(i);
 
     if (it != hData->end()) {
@@ -498,7 +498,7 @@ unsigned int tlp::MutableContainer<TYPE>::numberOfNonDefaultValues() const {
 //===================================================================
 template <typename TYPE>
 void tlp::MutableContainer<TYPE>::vecttohash() {
-  hData = new TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>(elementInserted);
+  hData = new std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>(elementInserted);
 
   unsigned int newMaxIndex = 0;
   unsigned int newMinIndex = UINT_MAX;
@@ -527,7 +527,7 @@ void tlp::MutableContainer<TYPE>::hashtovect() {
   maxIndex = UINT_MAX;
   elementInserted = 0;
   state = VECT;
-  typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it;
+  typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it;
 
   for (it = hData->begin(); it != hData->end(); ++it) {
     if (it->second != defaultValue)

@@ -149,7 +149,7 @@ public:
    */
   void setColorToMap(tlp::ColorProperty *newColor);
 
-  std::map<tlp::node, std::set<tlp::node>> &getMappingTab() {
+  std::unordered_map<tlp::node, std::set<tlp::node>> &getMappingTab() {
     return mappingTab;
   }
 
@@ -344,12 +344,12 @@ private:
   SOMMap *som;
   InputSample inputSample;
 
-  std::map<tlp::node, std::set<tlp::node>> mappingTab;
+  std::unordered_map<tlp::node, std::set<tlp::node>> mappingTab;
 
   std::string selection;
 
-  std::map<std::string, ColorProperty *> propertyToColorProperty;
-  std::map<std::string, SOMPreviewComposite *> propertyToPreviews;
+  std::unordered_map<std::string, ColorProperty *> propertyToColorProperty;
+  std::unordered_map<std::string, SOMPreviewComposite *> propertyToPreviews;
 
   GlMainWidget *previewWidget;
   GlMainWidget *mapWidget;

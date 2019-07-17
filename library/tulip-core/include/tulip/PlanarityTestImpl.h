@@ -24,6 +24,7 @@
 #include <map>
 #include <list>
 #include <vector>
+#include <unordered_map>
 
 #include <tulip/Edge.h>
 #include <tulip/MutableContainer.h>
@@ -124,8 +125,8 @@ private:
   int totalCNodes;
   bool embed, biconnected;
   node lastNodeInQLinha;
-  std::map<edge, edge> bidirectedEdges;
-  std::map<edge, edge> reversalEdge;
+  std::unordered_map<edge, edge> bidirectedEdges;
+  std::unordered_map<edge, edge> reversalEdge;
 
   //   // auxiliary variable to help detecting obstruction;
   node cNodeOfPossibleK33Obstruction;
@@ -135,7 +136,7 @@ private:
   //   // (it helps to update label_b's in constant time);
   //   //node_array<list<node>> childrenInT0;
   //   //std::map<node, std::list<node>* > childrenInT0;
-  std::map<node, std::list<node>> childrenInT0;
+  std::unordered_map<node, std::list<node>> childrenInT0;
 
   //   // for each 2-connected component represented by r,
   //   // list_back_edges[r] is the list of all back-edges in component r
@@ -151,10 +152,10 @@ private:
   //   // for each node u in G, the algorithm calculates the
   //   // clockwise ordering of edges with source u around u, such that
   //   // G.sort_edges(embed_list) is a plane map, if it exists
-  std::map<node, BmdList<edge>> embedList;
+  std::unordered_map<node, BmdList<edge>> embedList;
 
   //   // to avoid path compression of c-nodes;
-  std::map<tlp::BmdLink<node> *, node> activeCNode;
+  std::unordered_map<tlp::BmdLink<node> *, node> activeCNode;
 
   //   // (it helps to calculate an embedding of G, if G is planar, in
   //   // case of 2 terminal nodes);

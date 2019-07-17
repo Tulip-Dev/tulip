@@ -24,7 +24,7 @@
 #include <cassert>
 #include <tulip/Array.h>
 #include <tulip/tulipconf.h>
-#include <tulip/tuliphash.h>
+#include <tulip/TlpTools.h>
 #include <cmath>
 #include <limits>
 #include <cstring>
@@ -352,6 +352,8 @@ public:
   }
   inline DTYPE dist(const VECTOR &) const;
   inline TYPE dotProduct(const VECTOR &) const;
+
+  inline VECTOR &operator=(const VECTOR &) = default;
 };
 
 TEMPLATEVECTOR
@@ -494,103 +496,102 @@ template class TLP_SCOPE tlp::Vector<unsigned char, 4>;
 
 #endif
 
-TLP_BEGIN_HASH_NAMESPACE {
-  TEMPLATEVECTOR
-  size_t hash_vector(const tlp::VECTOR &v) {
-    size_t seed = 0;
+namespace std {
+TEMPLATEVECTOR
+size_t hash_vector(const tlp::VECTOR &v) {
+  size_t seed = 0;
 
-    for (size_t i = 0; i < SIZE; ++i) {
-      tlp_hash_combine(seed, v[i]);
-    }
-
-    return seed;
+  for (size_t i = 0; i < SIZE; ++i) {
+    tlp_hash_combine(seed, v[i]);
   }
 
-  template <>
-  struct hash<tlp::Vec2ui> {
-    inline std::size_t operator()(const tlp::Vec2ui &v) const {
-      return hash_vector(v);
-    }
-  };
-
-  template <>
-  struct hash<tlp::Vec3ui> {
-    inline std::size_t operator()(const tlp::Vec3ui &v) const {
-      return hash_vector(v);
-    }
-  };
-
-  template <>
-  struct hash<tlp::Vec4ui> {
-    inline std::size_t operator()(const tlp::Vec4ui &v) const {
-      return hash_vector(v);
-    }
-  };
-
-  template <>
-  struct hash<tlp::Vec2i> {
-    inline std::size_t operator()(const tlp::Vec2i &v) const {
-      return hash_vector(v);
-    }
-  };
-
-  template <>
-  struct hash<tlp::Vec3i> {
-    inline std::size_t operator()(const tlp::Vec3i &v) const {
-      return hash_vector(v);
-    }
-  };
-
-  template <>
-  struct hash<tlp::Vec4i> {
-    inline std::size_t operator()(const tlp::Vec4i &v) const {
-      return hash_vector(v);
-    }
-  };
-
-  template <>
-  struct hash<tlp::Vec2d> {
-    inline std::size_t operator()(const tlp::Vec2d &v) const {
-      return hash_vector(v);
-    }
-  };
-
-  template <>
-  struct hash<tlp::Vec3d> {
-    inline std::size_t operator()(const tlp::Vec3f &v) const {
-      return hash_vector(v);
-    }
-  };
-
-  template <>
-  struct hash<tlp::Vec4d> {
-    inline std::size_t operator()(const tlp::Vec4d &v) const {
-      return hash_vector(v);
-    }
-  };
-
-  template <>
-  struct hash<tlp::Vec2f> {
-    inline std::size_t operator()(const tlp::Vec2f &v) const {
-      return hash_vector(v);
-    }
-  };
-
-  template <>
-  struct hash<tlp::Vec3f> {
-    inline std::size_t operator()(const tlp::Vec3f &v) const {
-      return hash_vector(v);
-    }
-  };
-
-  template <>
-  struct hash<tlp::Vec4f> {
-    inline std::size_t operator()(const tlp::Vec4f &v) const {
-      return hash_vector(v);
-    }
-  };
+  return seed;
 }
-TLP_END_HASH_NAMESPACE
+
+template <>
+struct hash<tlp::Vec2ui> {
+  inline std::size_t operator()(const tlp::Vec2ui &v) const {
+    return hash_vector(v);
+  }
+};
+
+template <>
+struct hash<tlp::Vec3ui> {
+  inline std::size_t operator()(const tlp::Vec3ui &v) const {
+    return hash_vector(v);
+  }
+};
+
+template <>
+struct hash<tlp::Vec4ui> {
+  inline std::size_t operator()(const tlp::Vec4ui &v) const {
+    return hash_vector(v);
+  }
+};
+
+template <>
+struct hash<tlp::Vec2i> {
+  inline std::size_t operator()(const tlp::Vec2i &v) const {
+    return hash_vector(v);
+  }
+};
+
+template <>
+struct hash<tlp::Vec3i> {
+  inline std::size_t operator()(const tlp::Vec3i &v) const {
+    return hash_vector(v);
+  }
+};
+
+template <>
+struct hash<tlp::Vec4i> {
+  inline std::size_t operator()(const tlp::Vec4i &v) const {
+    return hash_vector(v);
+  }
+};
+
+template <>
+struct hash<tlp::Vec2d> {
+  inline std::size_t operator()(const tlp::Vec2d &v) const {
+    return hash_vector(v);
+  }
+};
+
+template <>
+struct hash<tlp::Vec3d> {
+  inline std::size_t operator()(const tlp::Vec3f &v) const {
+    return hash_vector(v);
+  }
+};
+
+template <>
+struct hash<tlp::Vec4d> {
+  inline std::size_t operator()(const tlp::Vec4d &v) const {
+    return hash_vector(v);
+  }
+};
+
+template <>
+struct hash<tlp::Vec2f> {
+  inline std::size_t operator()(const tlp::Vec2f &v) const {
+    return hash_vector(v);
+  }
+};
+
+template <>
+struct hash<tlp::Vec3f> {
+  inline std::size_t operator()(const tlp::Vec3f &v) const {
+    return hash_vector(v);
+  }
+};
+
+template <>
+struct hash<tlp::Vec4f> {
+  inline std::size_t operator()(const tlp::Vec4f &v) const {
+    return hash_vector(v);
+  }
+};
+} // namespace std
 
 #include "cxx/Vector.cxx"
 

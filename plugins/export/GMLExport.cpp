@@ -122,7 +122,7 @@ public:
 
     // Save edges
     for (auto e : graph->edges()) {
-      const std::pair<node, node> ends = graph->ends(e);
+      auto ends = graph->ends(e);
       os << "edge [" << endl;
       os << "source " << ends.first.id << endl;
       os << "target " << ends.second.id << endl;

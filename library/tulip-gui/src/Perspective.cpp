@@ -180,8 +180,11 @@ void Perspective::showStatusMessage(const QString &msg) {
 }
 
 void Perspective::redirectStatusTipOfMenu(QMenu *menu) {
-  connect(menu, SIGNAL(hovered(QAction *)), instance(), SLOT(showStatusTipOf(QAction *)));
-  connect(menu, SIGNAL(aboutToHide()), instance()->mainWindow()->statusBar(), SLOT(clearMessage()));
+  if (Perspective::instance()) {
+    connect(menu, SIGNAL(hovered(QAction *)), instance(), SLOT(showStatusTipOf(QAction *)));
+    connect(menu, SIGNAL(aboutToHide()), instance()->mainWindow()->statusBar(),
+            SLOT(clearMessage()));
+  }
 }
 
 void Perspective::showStatusTipOf(QAction *action) {

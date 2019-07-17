@@ -19,6 +19,7 @@
 
 #include <cerrno>
 #include <fstream>
+#include <unordered_map>
 
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/AbstractProperty.h>
@@ -55,7 +56,7 @@ void edgeAttributeError() {
 //=================================================================================
 struct GMLGraphBuilder : public GMLTrue {
   Graph *_graph;
-  map<int, node> nodeIndex;
+  unordered_map<int, node> nodeIndex;
   ~GMLGraphBuilder() override {}
   GMLGraphBuilder(Graph *graph) : _graph(graph) {
     // cer << "buil GraphBuilder" << endl;

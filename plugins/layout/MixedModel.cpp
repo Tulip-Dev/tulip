@@ -185,7 +185,7 @@ bool MixedModel::run() {
 
       for (auto e : graph->edges()) {
         if (resultatAlgoSelection.getEdgeValue(e)) {
-          const pair<node, node> eEnds = currentGraph->ends(e);
+          auto eEnds = currentGraph->ends(e);
           G->addNode(eEnds.first);
           G->addNode(eEnds.second);
           G->addEdge(e);
@@ -328,7 +328,7 @@ vector<edge> MixedModel::getPlanarSubGraph(tlp::PlanarConMap *sg,
   vector<edge> res;
 
   for (auto e : unplanar_edges) {
-    const pair<node, node> eEnds = sg->ends(e);
+    auto eEnds = sg->ends(e);
     Face f = sg->sameFace(eEnds.first, eEnds.second);
 
     if (f != Face()) {
@@ -352,7 +352,7 @@ void MixedModel::placeNodesEdges() {
   }
 
   for (auto e : carte->edges()) {
-    const pair<node, node> eEnds = carte->ends(e);
+    auto eEnds = carte->ends(e);
     node src = eEnds.first;
     node tgt = eEnds.second;
     Coord cs, ct, c;
@@ -407,7 +407,7 @@ void MixedModel::placeNodesEdges() {
     maxY /= 8;
 
     for (auto e : unplanar_edges) {
-      const pair<node, node> eEnds = carte->ends(e);
+      auto eEnds = carte->ends(e);
       node n = eEnds.first;
       node v = eEnds.second;
       auto c_n = NodeCoords[n];
@@ -495,7 +495,7 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
       tmp.clear();
 
       for (auto e : carte->getInOutEdges(v)) {
-        const pair<node, node> eEnds = carte->ends(e);
+        auto eEnds = carte->ends(e);
 
         node n = (eEnds.first == v) ? eEnds.second : eEnds.first;
 
@@ -835,7 +835,7 @@ void MixedModel::computeCoords() {
     nodeSize.set(n.id, c);
   }
 
-  map<node, node> father; // permet de connaître le noeud de référence
+  unordered_map<node, node> father; // permet de connaître le noeud de référence
   father.clear();
   assert(!V.empty());
 
@@ -1040,7 +1040,7 @@ void MixedModel::computeCoords() {
 node MixedModel::leftV(unsigned int k) {
   assert((0 < k) && (k < V.size()));
   edge el = EdgesIN[V[k][0]][0];
-  const pair<node, node> eEnds = carte->ends(el);
+  auto eEnds = carte->ends(el);
   return (eEnds.first == V[k][0]) ? eEnds.second : eEnds.first;
 }
 
@@ -1050,7 +1050,7 @@ node MixedModel::rightV(unsigned int k) {
   unsigned int p = V[k].size();
   unsigned int n = EdgesIN[V[k][p - 1]].size();
   edge er = EdgesIN[V[k][p - 1]][n - 1];
-  const pair<node, node> eEnds = carte->ends(er);
+  auto eEnds = carte->ends(er);
   return (eEnds.first == V[k][p - 1]) ? eEnds.second : eEnds.first;
 }
 //====================================================

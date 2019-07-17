@@ -333,7 +333,7 @@ public:
     // saving subgraphs
     _writer.writeString(SubgraphsToken);
     _writer.writeArrayOpen();
-    for (Graph *sub : g->getSubGraphs()) {
+    for (Graph *sub : g->subGraphs()) {
       _writer.writeMapOpen();
       saveGraph_V4(sub);
       _writer.writeMapClose();

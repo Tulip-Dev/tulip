@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef PYTHONINCLUDES_H_
-#define PYTHONINCLUDES_H_
+#ifndef PYTHONINCLUDES_H
+#define PYTHONINCLUDES_H
 
 // Need to include cmath before Python.h when compiling with MinGW and C++11 standard
 // to avoid a compilation error (see http://stackoverflow.com/questions/28683358/)
@@ -66,24 +66,20 @@
 #include <sip.h>
 #endif
 
+#include <tulip/tulipconf.h>
+
+#define SIP_MODULE_STR STRINGIFY(SIP_MODULE)
+
 static const sipAPIDef *getSipAPI() {
 #if defined(SIP_USE_PYCAPSULE)
-#ifdef TULIP_SIP
-  return static_cast<const sipAPIDef *>(PyCapsule_Import("tulip.native.sip._C_API", 0));
-#else
-  return static_cast<const sipAPIDef *>(PyCapsule_Import("sip._C_API", 0));
-#endif
+  return static_cast<const sipAPIDef *>(PyCapsule_Import(SIP_MODULE_STR "._C_API", 0));
 #else
   PyObject *sip_module;
   PyObject *sip_module_dict;
   PyObject *c_api;
 
-/* Import the SIP module. */
-#ifdef TULIP_SIP
-  sip_module = PyImport_ImportModule("tulip.native.sip");
-#else
-  sip_module = PyImport_ImportModule("sip");
-#endif
+  /* Import the SIP module. */
+  sip_module = PyImport_ImportModule(SIP_MODULE_STR);
 
   if (sip_module == nullptr)
     return nullptr;
@@ -244,4 +240,4 @@ inline const sipAPIDef *sipAPI() {
 #define sipSetUserObject sipAPI()->api_set_user_object
 #define sipRegisterEventHandler sipAPI()->api_register_event_handler
 
-#endif /* PYTHONINCLUDES_H_ */
+#endif // PYTHONINCLUDES_H

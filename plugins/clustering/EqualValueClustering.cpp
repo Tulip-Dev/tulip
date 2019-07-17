@@ -75,8 +75,8 @@ bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes, 
   unsigned int step = 0;
   unsigned int maxSteps;
 
-  TLP_HASH_MAP<double, Graph *> clusters;
-  TLP_HASH_MAP<std::string, unsigned int> valuesCount;
+  std::unordered_map<double, Graph *> clusters;
+  std::unordered_map<std::string, unsigned int> valuesCount;
   MutableContainer<bool> visited;
   visited.setAll(false);
 
@@ -105,7 +105,7 @@ bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes, 
           sstr << curValue;
 
           if (connected) {
-            TLP_HASH_MAP<std::string, unsigned int>::iterator itv = valuesCount.find(strVal);
+            std::unordered_map<std::string, unsigned int>::iterator itv = valuesCount.find(strVal);
 
             if (itv != valuesCount.end()) {
               itv->second += 1;
@@ -199,7 +199,7 @@ bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes, 
           sstr << curValue;
 
           if (connected) {
-            TLP_HASH_MAP<std::string, unsigned int>::iterator itv = valuesCount.find(strVal);
+            std::unordered_map<std::string, unsigned int>::iterator itv = valuesCount.find(strVal);
 
             if (itv != valuesCount.end()) {
               itv->second += 1;
@@ -272,8 +272,8 @@ bool EqualValueClustering::computeClusters(PropertyInterface *prop, bool onNodes
   unsigned int step = 0;
   unsigned int maxSteps;
 
-  TLP_HASH_MAP<std::string, Graph *> clusters;
-  TLP_HASH_MAP<std::string, unsigned int> valuesCount;
+  std::unordered_map<std::string, Graph *> clusters;
+  std::unordered_map<std::string, unsigned int> valuesCount;
   MutableContainer<bool> visited;
   visited.setAll(false);
 
@@ -300,7 +300,8 @@ bool EqualValueClustering::computeClusters(PropertyInterface *prop, bool onNodes
           sstr << prop->getName().c_str() << ": " << curValue.c_str();
 
           if (connected) {
-            TLP_HASH_MAP<std::string, unsigned int>::iterator itv = valuesCount.find(curValue);
+            std::unordered_map<std::string, unsigned int>::iterator itv =
+                valuesCount.find(curValue);
 
             if (itv != valuesCount.end()) {
               itv->second += 1;
@@ -392,7 +393,8 @@ bool EqualValueClustering::computeClusters(PropertyInterface *prop, bool onNodes
           sstr << prop->getName().c_str() << ": " << curValue.c_str();
 
           if (connected) {
-            TLP_HASH_MAP<std::string, unsigned int>::iterator itv = valuesCount.find(curValue);
+            std::unordered_map<std::string, unsigned int>::iterator itv =
+                valuesCount.find(curValue);
 
             if (itv != valuesCount.end()) {
               itv->second += 1;

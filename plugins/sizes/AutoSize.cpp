@@ -77,7 +77,7 @@ private:
   }
 
   Size getEdgeValue(const edge e) {
-    const std::pair<node, node> eEnds = graph->ends(e);
+    auto eEnds = graph->ends(e);
     Size s(result->getNodeValue(eEnds.first));
     Size t(result->getNodeValue(eEnds.second));
     Coord tmp(s.getW(), s.getH(), s.getD());

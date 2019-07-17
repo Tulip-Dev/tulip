@@ -325,19 +325,18 @@ struct Face {
   vector<unsigned int> sortedIndexes;
 };
 
-TLP_BEGIN_HASH_NAMESPACE {
-  template <>
-  struct hash<Face> {
-    inline std::size_t operator()(const Face &f) const {
-      size_t seed = 0;
-      tlp_hash_combine(seed, f.sortedIndexes[0]);
-      tlp_hash_combine(seed, f.sortedIndexes[1]);
-      tlp_hash_combine(seed, f.sortedIndexes[2]);
-      return seed;
-    }
-  };
-}
-TLP_END_HASH_NAMESPACE
+namespace std {
+template <>
+struct hash<Face> {
+  inline std::size_t operator()(const Face &f) const {
+    size_t seed = 0;
+    tlp_hash_combine(seed, f.sortedIndexes[0]);
+    tlp_hash_combine(seed, f.sortedIndexes[1]);
+    tlp_hash_combine(seed, f.sortedIndexes[2]);
+    return seed;
+  }
+};
+} // namespace std
 
 //================================================================================================
 
@@ -515,7 +514,7 @@ bool tlp::voronoiDiagram(vector<Coord> &sites, VoronoiDiagram &voronoiDiagram) {
   // now compute the dual voronoi diagram
   if (ret) {
     // Iterate over each delaunay simplex
-    TLP_HASH_MAP<Face, unsigned int> faceToCircumCenter;
+    std::unordered_map<Face, unsigned int> faceToCircumCenter;
     map<Coord, unsigned int> circumCenterToIdx;
     tlp::Coord A(0), B(0), C(0), D(0);
 
@@ -590,7 +589,7 @@ bool tlp::voronoiDiagram(vector<Coord> &sites, VoronoiDiagram &voronoiDiagram) {
         face4 = Face(simplices[i][0], simplices[i][1], simplices[i][3]);
       }
 
-      TLP_HASH_MAP<Face, unsigned int>::const_iterator it = faceToCircumCenter.find(face1);
+      std::unordered_map<Face, unsigned int>::const_iterator it = faceToCircumCenter.find(face1);
 
       if (it != faceToCircumCenter.end()) {
         VoronoiDiagram::Edge edge = make_pair(circumCenterIdx, faceToCircumCenter[face1]);

@@ -30,13 +30,11 @@ namespace tlp {
 
 std::map<std::pair<int, int>, QOpenGLFramebufferObject *>
     QGlBufferManager::widthHeightToFramebuffer;
-std::map<QOpenGLFramebufferObject *, std::pair<int, int>>
+std::unordered_map<QOpenGLFramebufferObject *, std::pair<int, int>>
     QGlBufferManager::framebufferToWidthHeight;
 
 void QGlBufferManager::clearBuffers() {
-  for (std::map<std::pair<int, int>, QOpenGLFramebufferObject *>::iterator it =
-           widthHeightToFramebuffer.begin();
-       it != widthHeightToFramebuffer.end(); ++it)
+  for (auto it = widthHeightToFramebuffer.begin(); it != widthHeightToFramebuffer.end(); ++it)
     delete (*it).second;
 
   widthHeightToFramebuffer.clear();
@@ -44,8 +42,7 @@ void QGlBufferManager::clearBuffers() {
 }
 
 QOpenGLFramebufferObject *QGlBufferManager::getFramebufferObject(int width, int height) {
-  map<pair<int, int>, QOpenGLFramebufferObject *>::iterator it =
-      widthHeightToFramebuffer.find(pair<int, int>(width, height));
+  auto it = widthHeightToFramebuffer.find(pair<int, int>(width, height));
 
   if (it != widthHeightToFramebuffer.end())
     return (*it).second;

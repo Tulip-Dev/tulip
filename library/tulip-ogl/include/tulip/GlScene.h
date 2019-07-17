@@ -21,6 +21,7 @@
 #define Tulip_GLSCENE_H
 
 #include <tulip/tulipconf.h>
+#include <tulip/BoundingBox.h>
 #include <tulip/GlLODCalculator.h>
 #include <tulip/GlLayer.h>
 #include <tulip/Color.h>
@@ -30,7 +31,6 @@ namespace tlp {
 
 class GlSimpleEntity;
 class Graph;
-class GlLODCalculator;
 class GlGraphComposite;
 
 /**

@@ -42,15 +42,6 @@ public:
   GlMainView();
   virtual ~GlMainView();
 
-// =======================================================
-
-//  tlp::GlScene *getScene();
-//%MethodCode
-//    sipRes = sipCpp->getGlMainWidget()->getScene();
-//%End
-
-// =======================================================
-
   bool overviewVisible() const;
 %Docstring
 tlpgui.GlMainView.overviewVisible()
@@ -69,6 +60,29 @@ tlpgui.GlMainView.setOverviewVisible(state)
 Sets the visibility state of the overview window.
 
 :param state: the visibility state of the overview window.
+:type state: boolean
+%End
+
+// =======================================================
+
+  bool quickAccessBarVisible() const;
+%Docstring
+tlpgui.GlMainView.quickAccessBarVisible()
+
+Returns the visibility state of the quick access bar.
+
+:rtype: boolean
+%End
+
+// =======================================================
+
+  void setQuickAccessBarVisible(bool);
+%Docstring
+tlpgui.GlMainView.setQuickAccessBarVisible(state)
+
+Allows to control the quiack access bar visibility.
+
+:param state: the visibility state of the quick access bar.
 :type state: boolean
 %End
 
@@ -109,7 +123,8 @@ Perspective projection is used when orthogonal one is disabled.
   bool pickNodeEdge(int x, int y, tlp::node &n /Out/, tlp::edge &e /Out/, bool pickNode = true, bool pickEdge = true)/TypeHint="Tuple[bool, node, edge]"/ ;
 %Docstring
 tlpgui.GlMainView.pickNodeEdge(x, y, pickNode, pickEdge)
- Returns a tuple of 3 elements. The first one is a bool indicating if a node/edge has been found found at the (x,y) position in the view, the second element is the node found, the third the edge found.
+
+Returns a tuple of 3 elements. The first one is a bool indicating if a node/edge has been found found at the (x,y) position in the view, the second element is the node found, the third the edge found.
 
 :param x: the x coordinate
 :type x: integer
@@ -119,7 +134,7 @@ tlpgui.GlMainView.pickNodeEdge(x, y, pickNode, pickEdge)
 :type pickNode: boolean
 :param pickEdge: enable/disable the edge picking
 :type pickNode: boolean
-:rtype: (boolean, node, edge)
+:rtype: (boolean, :class:`tulip.tlp.node`, :class:`tulip.tlp.edge`)
 %End
 
 // =======================================================
@@ -127,7 +142,8 @@ tlpgui.GlMainView.pickNodeEdge(x, y, pickNode, pickEdge)
   void rotateCamera(int x, int y, int z);
 %Docstring
 tlpgui.GlMainView.rotateCamera(x, y, z)
- Rotate the view camera by (x, y, z)
+
+Rotate the view camera by (x, y, z)
 
 :param x: the angle of the rotation around X axis in degree
 :type x: integer
@@ -142,7 +158,8 @@ tlpgui.GlMainView.rotateCamera(x, y, z)
   void translateCamera(int x, int y, int z);
 %Docstring
 tlpgui.GlMainView.translateCamera(x, y, z)
- Translate the view camera by (x, y, z)
+
+Translate the view camera by (x, y, z)
 
 :param x: the translation offset along the X axis
 :type x: integer
@@ -157,7 +174,8 @@ tlpgui.GlMainView.translateCamera(x, y, z)
   Coord viewToWorld(const Coord &vpos);
 %Docstring
 tlpgui.GlMainView.viewToWorld(vpos)
- Return the 3D world position for the given view position
+
+Return the 3D world position for the given view position
 
 :param vpos: the view position
 :type vpos: :class:`tlp.Coord`
@@ -168,7 +186,8 @@ tlpgui.GlMainView.viewToWorld(vpos)
   Coord worldToView(const Coord &wpos);
 %Docstring
 tlpgui.GlMainView.viewToWorld(wpos)
- Return the view position for the given 3D position
+
+Return the view position for the given 3D position
 
 :param wpos: the world position
 :type wpos: :class:`tlp.Coord`
@@ -179,7 +198,8 @@ tlpgui.GlMainView.viewToWorld(wpos)
   void zoomXY(int step, int x, int y);
 %Docstring
 tlpgui.GlMainView.zoomXY(step, x, y)
- Zoom by step to the given (x,y) view position
+
+Zoom by step to the given (x,y) view position
 
 :param step: the zoom step
 :type step: integer
@@ -194,7 +214,8 @@ tlpgui.GlMainView.zoomXY(step, x, y)
   void zoom(int step);
 %Docstring
 tlpgui.GlMainView.zoom(step)
- Zoom by step
+
+Zoom by step
 
 :param step: the zoom step
 :type step: integer
@@ -205,7 +226,8 @@ tlpgui.GlMainView.zoom(step)
   void zoomFactor(float factor);
 %Docstring
 tlpgui.GlMainView.zoom(factor)
- Zoom by factor
+
+Zoom by factor
 
 :param factor: the zoom factor
 :type factor: float
@@ -216,8 +238,9 @@ tlpgui.GlMainView.zoom(factor)
   void zoomAndPanAnimation(const tlp::BoundingBox &bb, double duration = 1000.);
 %Docstring
 tlpgui.GlMainView.zoomAndPanAnimation(bb, duration)
- Do a zoom and pan animation during a specific duration.
- At the end of the animation, the view will be zoomed and centered on the content of the given bounding box.
+
+Do a zoom and pan animation during a specific duration.
+At the end of the animation, the view will be zoomed and centered on the content of the given bounding box.
 
 :param bb: the bounding box in scene coordinates on which the view has to be zoomed and panned. If it is not valid, the scene bounding box will be used.
 :type bb: :class: `tlp.BoundingBox`
@@ -230,8 +253,10 @@ tlpgui.GlMainView.zoomAndPanAnimation(bb, duration)
   PyObject *getRGBImage(int &width /Out/, int &height /Out/);
 %Docstring
 tlpgui.GlMainView.getRGBImage()
-  return a tuple of 3 elements. The first element is the image in RGB format (3 bytes per pixel) as a bytearray object; the second is the width of the image and the third is its height.
-:rtype: (:class: `bytearray`, int ,int)
+
+Return a tuple of 3 elements. The first element is the image in RGB format (3 bytes per pixel) as a bytearray object; the second is the width of the image and the third is its height.
+
+:rtype: (:class:`bytearray`, int ,int)
 %End
 
 %MethodCode

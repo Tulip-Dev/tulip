@@ -150,7 +150,7 @@ ConvexHullItem *GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
   }
 
   // build convex hulls from subgraphs
-  for (Graph *sg : graph->getSubGraphs()) {
+  for (Graph *sg : graph->subGraphs()) {
     ////
     // if(sg->numberOfNodes() <= 1) continue;
 

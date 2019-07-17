@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <tulip/BoundingBox.h>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Glyph.h>
@@ -32,6 +33,17 @@ Glyph::Glyph(const tlp::PluginContext *context) : glGraphInputData(nullptr) {
 }
 //=============================================
 Glyph::~Glyph() {}
+
+//=============================================
+void Glyph::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
+  boundingBox[0] = Coord(-0.5, -0.5, -0.5);
+  boundingBox[1] = Coord(0.5, 0.5, 0.5);
+}
+
+//=============================================
+void Glyph::getTextBoundingBox(BoundingBox &boundingBox, node n) {
+  getIncludeBoundingBox(boundingBox, n);
+}
 
 //=============================================
 Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from, const Size &scale,

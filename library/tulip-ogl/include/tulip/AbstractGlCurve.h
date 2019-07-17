@@ -23,9 +23,11 @@
 
 #include <tulip/OpenGlIncludes.h>
 
-#include <map>
-#include <tulip/GlSimpleEntity.h>
+#include <unordered_map>
+
 #include <tulip/Color.h>
+#include <tulip/Coord.h>
+#include <tulip/GlSimpleEntity.h>
 
 namespace tlp {
 
@@ -114,20 +116,20 @@ protected:
 
   void initShader(const std::string &shaderProgramName, const std::string &curveSpecificShaderCode);
 
-  static std::map<unsigned int, GLfloat *> curveVertexBuffersData;
-  static std::map<unsigned int, std::vector<GLushort *>> curveVertexBuffersIndices;
-  static std::map<unsigned int, GLuint *> curveVertexBuffersObject;
-  static std::map<std::string, GlShaderProgram *> curvesShadersMap;
-  static std::map<std::string, GlShaderProgram *> curvesBillboardShadersMap;
+  static std::unordered_map<unsigned int, GLfloat *> curveVertexBuffersData;
+  static std::unordered_map<unsigned int, std::vector<GLushort *>> curveVertexBuffersIndices;
+  static std::unordered_map<unsigned int, GLuint *> curveVertexBuffersObject;
+  static std::unordered_map<std::string, GlShaderProgram *> curvesShadersMap;
+  static std::unordered_map<std::string, GlShaderProgram *> curvesBillboardShadersMap;
   static GlShader *curveVertexShaderNormalMain;
   static GlShader *curveVertexShaderBillboardMain;
   static GlShader *fisheyeDistortionVertexShader;
   static GlShader *curveFragmentShader;
   static bool canUseGeometryShader;
-  static std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *>>
+  static std::unordered_map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *>>
       curvesGeometryShadersMap;
   static GlShader *curveVertexGeometryShaderNormalMain;
-  static std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *>>
+  static std::unordered_map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *>>
       curvesBillboardGeometryShadersMap;
 
   std::string shaderProgramName;

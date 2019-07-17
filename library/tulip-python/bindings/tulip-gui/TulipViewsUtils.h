@@ -20,6 +20,8 @@
 #ifndef VIEW_MAIN_WINDOW_H
 #define VIEW_MAIN_WINDOW_H
 
+#include <unordered_map>
+
 #include <QMainWindow>
 
 #include <tulip/Graph.h>
@@ -87,8 +89,8 @@ public slots:
 
 private:
   std::vector<tlp::View *> openedViews;
-  std::map<tlp::View *, tlp::WorkspacePanel *> viewToPanel;
-  std::map<tlp::View *, ViewMainWindow *> viewToWindow;
+  std::unordered_map<tlp::View *, tlp::WorkspacePanel *> viewToPanel;
+  std::unordered_map<tlp::View *, ViewMainWindow *> viewToWindow;
   tlp::GraphHierarchiesModel *model;
 };
 

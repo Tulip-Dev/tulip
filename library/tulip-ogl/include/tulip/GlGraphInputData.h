@@ -131,7 +131,7 @@ public:
    * to a given name
    */
   tlp::PropertyInterface *getProperty(const std::string &name) const {
-    std::map<std::string, PropertyName>::iterator it = _propertiesNameMap.find(name);
+    auto it = _propertiesNameMap.find(name);
 
     if (it != _propertiesNameMap.end())
       return _propertiesMap[it->second];
@@ -493,7 +493,7 @@ protected:
   std::set<PropertyInterface *> _properties;
 
   PropertyInterface *_propertiesMap[NB_PROPS];
-  static std::map<std::string, PropertyName> _propertiesNameMap;
+  static std::unordered_map<std::string, PropertyName> _propertiesNameMap;
 
   GlMetaNodeRenderer *_metaNodeRenderer;
   GlVertexArrayManager *_glVertexArrayManager;

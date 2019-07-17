@@ -1933,25 +1933,5 @@ protected:
 /// Print the graph (only nodes and edges) in ostream, in the tulip format
 TLP_SCOPE std::ostream &operator<<(std::ostream &, const tlp::Graph *);
 
-//================================================================================
-// these functions allow to use tlp::Graph as a key in a hash-based data structure (e.g. map).
-//================================================================================
-///@cond DOXYGEN_HIDDEN
-namespace std {
-template <>
-struct TLP_SCOPE hash<const tlp::Graph *> {
-  size_t operator()(const tlp::Graph *s) const {
-    return size_t(s->getId());
-  }
-};
-template <>
-struct TLP_SCOPE hash<tlp::Graph *> {
-  size_t operator()(tlp::Graph *s) const {
-    return size_t(s->getId());
-  }
-};
-} // namespace std
-///@endcond
-
 #include "cxx/Graph.cxx"
 #endif

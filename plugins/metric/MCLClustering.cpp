@@ -87,7 +87,7 @@ const double epsilon = 1E-9;
 
 //=================================================
 void MCLClustering::power(node n) {
-  TLP_HASH_MAP<node, double> newTargets;
+  std::unordered_map<node, double> newTargets;
 
   for (auto e1 : g.getOutEdges(n)) {
     double v1 = inW[e1];
@@ -103,7 +103,7 @@ void MCLClustering::power(node n) {
           if (ne.isValid())
             outW[ne] += v2;
           else {
-            TLP_HASH_MAP<node, double>::iterator it = newTargets.find(tgt);
+            std::unordered_map<node, double>::iterator it = newTargets.find(tgt);
 
             if (it != newTargets.end())
               // newTargets[tgt] += v2;
@@ -116,7 +116,8 @@ void MCLClustering::power(node n) {
     }
   }
 
-  for (TLP_HASH_MAP<node, double>::iterator it = newTargets.begin(); it != newTargets.end(); ++it) {
+  for (std::unordered_map<node, double>::iterator it = newTargets.begin(); it != newTargets.end();
+       ++it) {
     edge ne;
     ne = g.addEdge(n, it->first);
     inW[ne] = 0.;
@@ -317,7 +318,7 @@ bool MCLClustering::run() {
   });
 
   for (auto e : graph->edges()) {
-    std::pair<node, node> eEnds = graph->ends(e);
+    auto eEnds = graph->ends(e);
     node src = nodeMapping[eEnds.first];
     node tgt = nodeMapping[eEnds.second];
     edge tmp = g.addEdge(src, tgt);

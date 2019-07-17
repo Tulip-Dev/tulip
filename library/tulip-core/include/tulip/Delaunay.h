@@ -22,6 +22,7 @@
 #define DELAUNAY_H
 #include <vector>
 #include <set>
+#include <unordered_map>
 
 #include <tulip/Coord.h>
 
@@ -123,9 +124,9 @@ public:
   std::vector<Vertex> vertices;
   std::vector<Edge> edges;
   std::vector<Cell> cells;
-  TLP_HASH_MAP<unsigned int, std::vector<unsigned int>> siteToCellEdges;
-  TLP_HASH_MAP<unsigned int, unsigned int> siteToCell;
-  TLP_HASH_MAP<unsigned int, unsigned int> verticesDegree;
+  std::unordered_map<unsigned int, std::vector<unsigned int>> siteToCellEdges;
+  std::unordered_map<unsigned int, unsigned int> siteToCell;
+  std::unordered_map<unsigned int, unsigned int> verticesDegree;
 };
 
 /**

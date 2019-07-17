@@ -39,7 +39,7 @@ class Graph;
 class ScatterPlot2D : public GlComposite {
 
 public:
-  ScatterPlot2D(Graph *graph, Graph *edgeGraph, std::map<node, edge> &nodeMap,
+  ScatterPlot2D(Graph *graph, Graph *edgeGraph, std::unordered_map<node, edge> &nodeMap,
                 const std::string &xDim, const std::string &yDim, const ElementType &dataLocation,
                 Coord blCorner, unsigned int size, const Color &backgroundColor,
                 const Color &foregroundColor);
@@ -172,7 +172,7 @@ private:
   Color minusOneColor, zeroColor, oneColor;
 
   Graph *edgeAsNodeGraph;
-  std::map<node, edge> &nodeToEdge;
+  std::unordered_map<node, edge> &nodeToEdge;
   ElementType dataLocation;
   bool xAxisScaleDefined, yAxisScaleDefined;
   std::pair<double, double> xAxisScale, yAxisScale;

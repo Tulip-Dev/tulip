@@ -20,7 +20,7 @@
 #define GRIP_H
 
 #include <tulip/TulipPluginHeaders.h>
-#include <tulip/tuliphash.h>
+#include <unordered_map>
 #include "MISFiltering.h"
 
 /*@{*/
@@ -81,13 +81,13 @@ private:
   MISFiltering *misf;
   float edgeLength;
   int level;
-  TLP_HASH_MAP<tlp::node, std::vector<unsigned int>> neighbors_dist;
-  TLP_HASH_MAP<tlp::node, std::vector<tlp::node>> neighbors;
-  TLP_HASH_MAP<unsigned int, unsigned int> levelToNbNeighbors;
-  TLP_HASH_MAP<tlp::node, tlp::Coord> disp;
-  TLP_HASH_MAP<tlp::node, tlp::Coord> oldDisp;
-  TLP_HASH_MAP<tlp::node, double> heat;
-  TLP_HASH_MAP<tlp::node, double> oldCos;
+  std::unordered_map<tlp::node, std::vector<unsigned int>> neighbors_dist;
+  std::unordered_map<tlp::node, std::vector<tlp::node>> neighbors;
+  std::unordered_map<unsigned int, unsigned int> levelToNbNeighbors;
+  std::unordered_map<tlp::node, tlp::Coord> disp;
+  std::unordered_map<tlp::node, tlp::Coord> oldDisp;
+  std::unordered_map<tlp::node, double> heat;
+  std::unordered_map<tlp::node, double> oldCos;
 
   tlp::Graph *currentGraph;
   int _dim;

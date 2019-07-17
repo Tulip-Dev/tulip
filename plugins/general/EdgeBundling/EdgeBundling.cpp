@@ -157,7 +157,7 @@ void EdgeBundling::fixEdgeType(EdgeStaticProperty<unsigned int> &ntype) {
     if (oriGraph->isElement(e)) {
       ntype[i] = 1;
     } else {
-      pair<node, node> ends = graph->ends(e);
+      auto ends = graph->ends(e);
 
       if (oriGraph->isElement(ends.first) || oriGraph->isElement(ends.second))
         ntype[i] = 2;
@@ -280,7 +280,7 @@ bool EdgeBundling::run() {
       Graph *workGraph = graph->addCloneSubGraph();
       // we use a hash map to ease the retrieve of the vector of the nodes
       // having the same position
-      TLP_HASH_MAP<std::string, std::pair<node, unsigned int>> clusters;
+      std::unordered_map<std::string, std::pair<node, unsigned int>> clusters;
 
       // iterate on graph nodes
       for (auto n : graph->nodes()) {
@@ -291,7 +291,8 @@ bool EdgeBundling::run() {
         // instead of relying on the x, y exact values
         std::string key = tlp::PointType::toString(coord);
 
-        TLP_HASH_MAP<std::string, std::pair<node, unsigned int>>::iterator it = clusters.find(key);
+        std::unordered_map<std::string, std::pair<node, unsigned int>>::iterator it =
+            clusters.find(key);
 
         if (it == clusters.end())
           // register the first node at position represented by key
@@ -367,10 +368,20 @@ bool EdgeBundling::run() {
   EdgeStaticProperty<unsigned int> ntype(graph);
   fixEdgeType(ntype);
 
-  // remove all original graph edges
   //==========================================================
-  gridGraph = graph->getSubGraph("Voronoi");
+  // get the freshly created Voronoi subgraph,
+  // this should be the last one in the list but we prefer
+  // to iterate on that latter in reverse order in case the
+  // Voronoi plugin implementation changes
+  for (auto i = graph->numberOfSubGraphs(); i > 0; --i) {
+    auto sg = graph->getNthSubGraph(i - 1);
+    if (sg->getName() == "Voronoi") {
+      gridGraph = sg;
+      break;
+    }
+  }
   gridGraph->setName("Grid Graph");
+  // remove all original graph edges
   TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, [&](edge e, unsigned int i) {
     if (ntype[i] == 1 && gridGraph->isElement(e)) {
       gridGraph->delEdge(e);
@@ -412,7 +423,7 @@ bool EdgeBundling::run() {
   EdgeStaticProperty<double> mWeights(graph);
   EdgeStaticProperty<double> mWeightsInit(graph);
   TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, [&](edge e, unsigned int i) {
-    pair<node, node> ends = graph->ends(e);
+    auto ends = graph->ends(e);
     const Coord &a = layout->getNodeValue(ends.first);
     const Coord &b = layout->getNodeValue(ends.second);
     double abNorm = (a - b).norm();
@@ -633,7 +644,7 @@ bool EdgeBundling::run() {
 
   // Reinsert multiple edges if any and update their layout
   for (size_t i = 0; i < removedEdges.size(); ++i) {
-    std::pair<node, node> eEnds = graph->ends(removedEdges[i]);
+    auto eEnds = graph->ends(removedEdges[i]);
 
     if (eEnds.first == eEnds.second)
       oriGraph->addEdge(removedEdges[i]);

@@ -19,9 +19,11 @@
 #ifndef MISFILTERING_H
 #define MISFILTERING_H
 
+#include <unordered_map>
+#include <unordered_set>
+
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/MutableContainer.h>
-#include <tulip/tuliphash.h>
 
 class MISFiltering {
 
@@ -43,7 +45,7 @@ private:
   tlp::MutableContainer<bool> removed;
   std::vector<unsigned int> v_dist;
 
-  TLP_HASH_MAP<unsigned int, TLP_HASH_SET<tlp::node>> levelToNodes;
+  std::unordered_map<unsigned int, std::unordered_set<tlp::node>> levelToNodes;
 
   void bfsDepth(tlp::node, unsigned int);
   void updateVectors();

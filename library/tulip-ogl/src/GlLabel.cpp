@@ -51,11 +51,11 @@ using namespace std;
 namespace tlp {
 
 // FTGL fonts must be cached to avoid to much memory consumption
-static TLP_HASH_MAP<std::string, FTPolygonFont *> PolygonFonts;
-static TLP_HASH_MAP<std::string, FTGLOutlineFont *> OutlineFonts;
+static std::unordered_map<std::string, FTPolygonFont *> PolygonFonts;
+static std::unordered_map<std::string, FTGLOutlineFont *> OutlineFonts;
 
 static FTPolygonFont *getPolygonFont(const std::string &name) {
-  TLP_HASH_MAP<std::string, FTPolygonFont *>::iterator itf = PolygonFonts.find(name);
+  std::unordered_map<std::string, FTPolygonFont *>::iterator itf = PolygonFonts.find(name);
 
   if (itf != PolygonFonts.end())
     return itf->second;
@@ -64,7 +64,7 @@ static FTPolygonFont *getPolygonFont(const std::string &name) {
 }
 
 static FTGLOutlineFont *getOutlineFont(const std::string &name) {
-  TLP_HASH_MAP<std::string, FTGLOutlineFont *>::iterator itf = OutlineFonts.find(name);
+  std::unordered_map<std::string, FTGLOutlineFont *>::iterator itf = OutlineFonts.find(name);
 
   if (itf != OutlineFonts.end())
     return itf->second;

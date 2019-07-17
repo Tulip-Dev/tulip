@@ -132,7 +132,7 @@ void PropertyManager::setLocalProperty(const string &str, PropertyInterface *p) 
   }
 
   // loop on subgraphs
-  for (Graph *sg : graph->getSubGraphs()) {
+  for (Graph *sg : graph->subGraphs()) {
     // to set p as inherited property
     static_cast<GraphAbstract *>(sg)->propertyContainer->setInheritedProperty(str, p);
   }
@@ -171,7 +171,7 @@ bool PropertyManager::renameLocalProperty(PropertyInterface *prop, const string 
   }
 
   // Warn subgraphs for deletion.
-  for (Graph *sg : graph->getSubGraphs()) {
+  for (Graph *sg : graph->subGraphs()) {
     static_cast<GraphAbstract *>(sg)->propertyContainer->notifyBeforeDelInheritedProperty(propName);
   }
 
@@ -200,7 +200,7 @@ bool PropertyManager::renameLocalProperty(PropertyInterface *prop, const string 
   }
 
   // loop on subgraphs
-  for (Graph *sg : graph->getSubGraphs()) {
+  for (Graph *sg : graph->subGraphs()) {
     // to set p as inherited property
     static_cast<GraphAbstract *>(sg)->propertyContainer->setInheritedProperty(newName, prop);
   }
@@ -241,7 +241,7 @@ void PropertyManager::setInheritedProperty(const string &str, PropertyInterface 
     }
 
     // loop on subgraphs
-    for (Graph *sg : graph->getSubGraphs()) {
+    for (Graph *sg : graph->subGraphs()) {
       // to set p as inherited property
       static_cast<GraphAbstract *>(sg)->propertyContainer->setInheritedProperty(str, p);
     }
@@ -293,7 +293,7 @@ void PropertyManager::delLocalProperty(const string &str) {
     }
 
     // Warn subgraphs.
-    for (Graph *sg : graph->getSubGraphs()) {
+    for (Graph *sg : graph->subGraphs()) {
       static_cast<GraphAbstract *>(sg)->propertyContainer->notifyBeforeDelInheritedProperty(str);
     }
 
@@ -321,7 +321,7 @@ void PropertyManager::notifyBeforeDelInheritedProperty(const string &str) {
     // graph observers notification
     static_cast<GraphAbstract *>(graph)->notifyBeforeDelInheritedProperty(str);
     // loop on subgraphs
-    for (Graph *sg : graph->getSubGraphs()) {
+    for (Graph *sg : graph->subGraphs()) {
       // to remove as inherited property
       static_cast<GraphAbstract *>(sg)->propertyContainer->notifyBeforeDelInheritedProperty(str);
     }

@@ -328,14 +328,15 @@ pair<double, double> LeafletMaps::getCurrentMapCenter() {
   return latLng;
 }
 
-void LeafletMaps::setMapBounds(Graph *graph, const map<node, pair<double, double>> &nodesLatLngs) {
+void LeafletMaps::setMapBounds(Graph *graph,
+                               const unordered_map<node, pair<double, double>> &nodesLatLngs) {
 
   if (!nodesLatLngs.empty()) {
 
     pair<double, double> minLatLng = make_pair(90, 180);
     pair<double, double> maxLatLng = make_pair(-90, -180);
 
-    map<node, pair<double, double>>::const_iterator it;
+    unordered_map<node, pair<double, double>>::const_iterator it;
 
     for (it = nodesLatLngs.begin(); it != nodesLatLngs.end(); ++it) {
       if (graph->isElement(it->first)) {

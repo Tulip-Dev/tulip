@@ -21,7 +21,7 @@
 #ifndef Tulip_GLDRAWSCENEVISITOR_H
 #define Tulip_GLDRAWSCENEVISITOR_H
 
-#include <tulip/tuliphash.h>
+#include <unordered_map>
 #include <tulip/GlSceneVisitor.h>
 
 namespace tlp {
@@ -31,7 +31,7 @@ class GlGraphInputData;
 class TLP_GL_SCOPE GlDrawSceneVisitor : public GlSceneVisitor {
 
 public:
-  GlDrawSceneVisitor(TLP_HASH_MAP<unsigned int, float> *lod, GlGraphInputData *inputData)
+  GlDrawSceneVisitor(std::unordered_map<unsigned int, float> *lod, GlGraphInputData *inputData)
       : inputData(inputData) {
     lodMap = lod;
   }
@@ -41,7 +41,7 @@ public:
   virtual void visit(GlLayout *layout);
 
 private:
-  TLP_HASH_MAP<unsigned int, float> *lodMap;
+  std::unordered_map<unsigned int, float> *lodMap;
   GlGraphInputData *inputData;
 };
 } // namespace tlp

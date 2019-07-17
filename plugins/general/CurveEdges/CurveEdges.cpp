@@ -105,7 +105,7 @@ public:
   }
 
   std::vector<tlp::Coord> computeCubicBezierControlPoints(tlp::edge e) {
-    std::pair<tlp::node, tlp::node> eEnds = graph->ends(e);
+    auto eEnds = graph->ends(e);
     const tlp::Coord &srcCoord = layout->getNodeValue(eEnds.first);
     const tlp::Coord &tgtCoord = layout->getNodeValue(eEnds.second);
     tlp::Coord dir = tgtCoord - srcCoord;
@@ -154,7 +154,7 @@ public:
   std::vector<tlp::Coord> computeQuadraticBezierControlPoints(tlp::edge e) {
     float x = FLT_MAX, y = FLT_MAX;
     float factor = curveRoundness;
-    std::pair<tlp::node, tlp::node> eEnds = graph->ends(e);
+    auto eEnds = graph->ends(e);
     const tlp::Coord &srcCoord = layout->getNodeValue(eEnds.first);
     const tlp::Coord &tgtCoord = layout->getNodeValue(eEnds.second);
     float dx = std::abs(srcCoord[0] - tgtCoord[0]);

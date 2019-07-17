@@ -26,8 +26,8 @@
 #include <cassert>
 #include <climits>
 #include <cstring>
+#include <unordered_map>
 #include <tulip/tulipconf.h>
-#include <tulip/tuliphash.h>
 #include <tulip/StoredType.h>
 #include <tulip/DataSet.h>
 #include <tulip/Iterator.h>
@@ -127,7 +127,7 @@ private:
 
 private:
   std::deque<typename StoredType<TYPE>::Value> *vData;
-  TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value> *hData;
+  std::unordered_map<unsigned int, typename StoredType<TYPE>::Value> *hData;
   unsigned int minIndex, maxIndex;
   typename StoredType<TYPE>::Value defaultValue;
   enum State { VECT = 0, HASH = 1 };
@@ -191,7 +191,7 @@ template <typename TYPE>
 class IteratorHash : public IteratorValue {
 public:
   IteratorHash(const TYPE &value, bool equal,
-               TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value> *hData)
+               std::unordered_map<unsigned int, typename StoredType<TYPE>::Value> *hData)
       : _value(value), _equal(equal), hData(hData) {
     it = (*hData).begin();
 
@@ -224,8 +224,8 @@ public:
 private:
   const TYPE _value;
   bool _equal;
-  TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value> *hData;
-  typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it;
+  std::unordered_map<unsigned int, typename StoredType<TYPE>::Value> *hData;
+  typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it;
 };
 ///@endcond
 } // namespace tlp

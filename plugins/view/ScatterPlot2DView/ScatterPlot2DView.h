@@ -20,6 +20,8 @@
 #ifndef SCATTERPLOT2DVIEW_H_
 #define SCATTERPLOT2DVIEW_H_
 
+#include <unordered_map>
+
 #include <tulip/Graph.h>
 #include <tulip/GlMainView.h>
 #include <tulip/BoundingBox.h>
@@ -198,8 +200,8 @@ private:
 
   ElementType dataLocation;
   Graph *edgeAsNodeGraph;
-  std::map<edge, node> edgeToNode;
-  std::map<node, edge> nodeToEdge;
+  std::unordered_map<edge, node> edgeToNode;
+  std::unordered_map<node, edge> nodeToEdge;
 };
 } // namespace tlp
 

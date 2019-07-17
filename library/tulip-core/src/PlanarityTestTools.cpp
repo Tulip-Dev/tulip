@@ -65,7 +65,7 @@ list<edge> posDFS(Graph *sG, MutableContainer<int> &dfsPos) {
 //=================================================================
 void PlanarityTestImpl::makeBidirected(Graph *sG) {
   for (auto e : stableIterator(sG->getEdges())) {
-    const pair<node, node> &eEnds = sG->ends(e);
+    auto eEnds = sG->ends(e);
     edge newEdge = sG->addEdge(eEnds.second, eEnds.first);
     bidirectedEdges[newEdge] = e;
     reversalEdge[newEdge] = e;
@@ -78,12 +78,12 @@ void PlanarityTestImpl::makeBidirected(Graph *sG) {
  *         false otherwise.
  */
 bool PlanarityTestImpl::isT0Edge(Graph *g, edge e) {
-  pair<node, node> eEnds = g->ends(e);
+  auto eEnds = g->ends(e);
   edge e1 = T0EdgeIn.get(eEnds.second.id);
 
   // test ą revoir je pense qu'en testant juste e == e1 ēa suffit !
   if (e1.isValid()) {
-    pair<node, node> e1Ends = g->ends(e1);
+    auto e1Ends = g->ends(e1);
 
     if (e1Ends.first == eEnds.first && e1Ends.second == eEnds.second)
       return true;
@@ -92,7 +92,7 @@ bool PlanarityTestImpl::isT0Edge(Graph *g, edge e) {
   e1 = T0EdgeIn.get(eEnds.first.id);
 
   if (e1.isValid()) {
-    pair<node, node> e1Ends = g->ends(e1);
+    auto e1Ends = g->ends(e1);
     return (e1Ends.second == eEnds.first && e1Ends.first == eEnds.second);
   }
 
@@ -172,7 +172,7 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
 
   for (list<edge>::iterator it = edgeInT0.begin(); it != edgeInT0.end(); ++it) {
     edge e = *it;
-    std::pair<node, node> ends = g->ends(e);
+    auto ends = g->ends(e);
     node n = ends.first;
     node v = ends.second;
     parent.set(v.id, n);

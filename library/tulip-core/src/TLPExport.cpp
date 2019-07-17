@@ -245,7 +245,7 @@ public:
       os << endl;
     }
 
-    for (Graph *sg : g->getSubGraphs())
+    for (Graph *sg : g->subGraphs())
       saveGraphElements(os, sg);
 
     if (g->getSuperGraph() != g)
@@ -404,7 +404,7 @@ public:
   void saveProperties(ostream &os, Graph *g) {
     saveLocalProperties(os, g);
 
-    for (Graph *sg : g->getSubGraphs())
+    for (Graph *sg : g->subGraphs())
       saveProperties(os, sg);
   }
   //=====================================================
@@ -450,7 +450,7 @@ public:
 
     // save subgraph attributes
 
-    for (Graph *sg : g->getSubGraphs())
+    for (Graph *sg : g->subGraphs())
       saveAttributes(os, sg);
   }
   //=====================================================

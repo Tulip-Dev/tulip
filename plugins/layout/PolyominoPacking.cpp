@@ -102,7 +102,7 @@ private:
 
   int gridStepSize;
 
-  TLP_HASH_MAP<tlp::Vec2i, bool> pointsSet;
+  std::unordered_map<tlp::Vec2i, bool> pointsSet;
 
   tlp::IntegerProperty *shape;
 };

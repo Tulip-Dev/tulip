@@ -21,7 +21,7 @@
 #ifndef Tulip_QLQUADTREELODCALCULATOR_H
 #define Tulip_QLQUADTREELODCALCULATOR_H
 
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 #include <tulip/GlCPULODCalculator.h>
@@ -127,7 +127,7 @@ protected:
   const unsigned int eBBOffset;
 
   std::vector<Camera *> cameras;
-  std::map<GlLayer *, Camera> layerToCamera;
+  std::unordered_map<GlLayer *, Camera> layerToCamera;
   Camera *currentCamera;
   Graph *currentGraph;
   PropertyInterface *layoutProperty;

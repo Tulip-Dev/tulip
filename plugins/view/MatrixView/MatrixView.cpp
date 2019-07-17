@@ -553,7 +553,7 @@ void MatrixView::updateLayout() {
       getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementShape();
   int shape = GlyphManager::glyphId("2D - Square");
   for (auto e : graph()->edges()) {
-    const std::pair<node, node> eEnds = graph()->ends(e);
+    auto eEnds = graph()->ends(e);
     const vector<int> &srcNodes = _graphEntitiesToDisplayedNodes->getNodeValue(eEnds.first),
                       &tgtNodes = _graphEntitiesToDisplayedNodes->getNodeValue(eEnds.second),
                       &edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
@@ -574,12 +574,10 @@ void MatrixView::updateLayout() {
   }
 
   for (auto e : _matrixGraph->edges()) {
-    const std::pair<node, node> eEnds = _matrixGraph->ends(e);
-    node src = eEnds.first;
-    node tgt = eEnds.second;
+    auto eEnds = _matrixGraph->ends(e);
 
-    Coord srcPos = layout->getNodeValue(src);
-    Coord tgtPos = layout->getNodeValue(tgt);
+    auto srcPos = layout->getNodeValue(eEnds.first);
+    auto tgtPos = layout->getNodeValue(eEnds.second);
     float xMax = max(srcPos[0], tgtPos[0]);
     float xMin = min(srcPos[0], tgtPos[0]);
     float dist = (xMax - xMin);

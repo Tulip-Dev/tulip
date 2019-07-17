@@ -20,6 +20,8 @@
 #ifndef SOMMAPELEMENT_H_
 #define SOMMAPELEMENT_H_
 
+#include <unordered_map>
+
 #include <tulip/GlComposite.h>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
@@ -66,7 +68,7 @@ protected:
 
   SOMMap *som;
 
-  std::map<node, GlSimpleEntity *> nodesMap;
+  std::unordered_map<node, GlSimpleEntity *> nodesMap;
 
   Coord position;
   Size size;

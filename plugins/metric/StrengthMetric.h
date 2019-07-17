@@ -18,7 +18,7 @@
  */
 #ifndef _STRENGTHMETRIC_H
 #define _STRENGTHMETRIC_H
-#include <tulip/tuliphash.h>
+#include <unordered_set>
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup metric */
@@ -45,10 +45,10 @@ public:
   bool run() override;
 
 private:
-  double e(const TLP_HASH_SET<tlp::node> &U);
-  double e(TLP_HASH_SET<tlp::node> &U, TLP_HASH_SET<tlp::node> &V);
-  double s(TLP_HASH_SET<tlp::node> &U, TLP_HASH_SET<tlp::node> &V);
-  double s(const TLP_HASH_SET<tlp::node> &U);
+  double e(const std::unordered_set<tlp::node> &U);
+  double e(std::unordered_set<tlp::node> &U, std::unordered_set<tlp::node> &V);
+  double s(std::unordered_set<tlp::node> &U, std::unordered_set<tlp::node> &V);
+  double s(const std::unordered_set<tlp::node> &U);
 };
 
 #endif

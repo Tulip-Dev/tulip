@@ -62,7 +62,7 @@ static bool treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface &e
     if ((++i % 100) == 0)
       pp->progress(i, nb_elements);
 
-    const pair<node, node> ends = graph->ends(e);
+    auto ends = graph->ends(e);
     ret = exportint.startEdge(e.id);
 
     if (!ret) {

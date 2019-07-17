@@ -18,24 +18,14 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-#include <tulip/TlpTools.h>
-#include <tulip/Graph.h>
 #include <tulip/Glyph.h>
-#include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/GlTextureManager.h>
-#include <tulip/GlTools.h>
-#include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/GlGraphInputData.h>
-#include <tulip/TulipViewSettings.h>
-#include <tulip/GlSphere.h>
-#include <tulip/GlRect.h>
 
 using namespace std;
 using namespace tlp;
 
 namespace tlp {
+
+struct BoundingBox;
 
 /** \addtogroup glyph */
 /*@{*/

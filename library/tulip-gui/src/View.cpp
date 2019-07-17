@@ -126,8 +126,10 @@ void View::showContextMenu(const QPoint &point, const QPointF &scenePoint) {
 
     if (!menu.actions().empty()) {
       // clean up status bar when menu is hidden
-      connect(&menu, SIGNAL(aboutToHide()), Perspective::instance()->mainWindow()->statusBar(),
-              SLOT(clearMessage()));
+      if (Perspective::instance()) {
+        connect(&menu, SIGNAL(aboutToHide()), Perspective::instance()->mainWindow()->statusBar(),
+                SLOT(clearMessage()));
+      }
       menu.move(point);
       menu.exec();
     }
