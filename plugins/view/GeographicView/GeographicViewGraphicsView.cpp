@@ -447,14 +447,16 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
 #if defined(__APPLE__)
   viewTypeComboBox->setWindowOpacity(0.99);
 #endif
-  viewTypeComboBox->addItems(QStringList() << "Open Street Map (Leaflet)"
-                                           << "Open Street Map (Leaflet)"
-                                           << "Esri Satellite (Leaflet)"
-                                           << "Esri Terrain (Leaflet)"
-                                           << "Esri Gray Canvas (Leaflet)"
-                                           << "Custom Tile Layer (Leaflet)"
-                                           << "Polygon"
-                                           << "Globe");
+  viewTypeComboBox->addItems(
+    QStringList() << _geoView->getViewNameFromType(GeographicView::OpenStreetMap)
+                  << _geoView->getViewNameFromType(GeographicView::OpenStreetMap)
+                  << _geoView->getViewNameFromType(GeographicView::EsriSatellite)
+                  << _geoView->getViewNameFromType(GeographicView::EsriTerrain)
+                  << _geoView->getViewNameFromType(GeographicView::EsriGrayCanvas)
+                  << _geoView->getViewNameFromType(GeographicView::LeafletCustomTileLayer)
+                  << _geoView->getViewNameFromType(GeographicView::Polygon)
+                  << _geoView->getViewNameFromType(GeographicView::Globe)
+  );
   viewTypeComboBox->insertSeparator(1);
 
   QGraphicsProxyWidget *comboBoxProxy = scene()->addWidget(viewTypeComboBox);

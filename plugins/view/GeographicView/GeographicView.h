@@ -33,6 +33,7 @@
 #include <QGraphicsItem>
 #include <QDialog>
 #include <QThread>
+#include <QMap>
 
 #include <map>
 
@@ -161,6 +162,9 @@ public slots:
   void zoomOut();
   void currentZoomChanged();
 
+  ViewType getViewTypeFromName(const QString &name) const;
+  QString getViewNameFromType(ViewType viewType) const;
+
 protected slots:
 
   void fillContextMenu(QMenu *, const QPointF &) override;
@@ -194,6 +198,8 @@ private:
   double mapCenterLatitudeInit, mapCenterLongitudeInit;
   int mapZoomInit;
   ViewActionsManager *_viewActionsManager;
+
+  QMap<ViewType, QString> _viewTypeToName;
 };
 } // namespace tlp
 
