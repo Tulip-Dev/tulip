@@ -329,16 +329,20 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
   dataSet.get("detailed scatterplot x dim", detailScatterPlotX);
   dataSet.get("detailed scatterplot y dim", detailScatterPlotY);
 
-  if (!detailScatterPlotX.empty() && !detailScatterPlotY.empty()) {
-    pair<string, string> x_y = make_pair(detailScatterPlotX, detailScatterPlotY);
+  auto scatterPlotIdx = make_pair(detailScatterPlotX, detailScatterPlotY);
 
-    if (!scatterPlotsGenMap[x_y]) {
-      scatterPlotsMap[x_y]->generateOverview();
-      scatterPlotsGenMap[x_y] = true;
+  if (!detailScatterPlotX.empty() && !detailScatterPlotY.empty()) {
+
+    if (!scatterPlotsGenMap[scatterPlotIdx]) {
+      scatterPlotsMap[scatterPlotIdx]->generateOverview();
+      scatterPlotsGenMap[scatterPlotIdx] = true;
     }
 
-    switchFromMatrixToDetailView(scatterPlotsMap[make_pair(detailScatterPlotX, detailScatterPlotY)],
-                                 true);
+    auto *scatterPlot = scatterPlotsMap[scatterPlotIdx];
+
+    if (scatterPlot) {
+      switchFromMatrixToDetailView(scatterPlot, true);
+    }
   }
 
   registerTriggers();
