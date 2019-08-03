@@ -268,7 +268,9 @@ GraphPerspective::~GraphPerspective() {
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   delete _pythonIDEDialog;
-  PythonCodeEditor::deleteStaticResources();
+  if (Perspective::instance() == this) {
+    PythonCodeEditor::deleteStaticResources();
+  }
 #endif
 
   delete _ui;
