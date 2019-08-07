@@ -1,5 +1,12 @@
 ADD_SUBDIRECTORY(bitmaps)
 ADD_SUBDIRECTORY(crash_handling)
+
+# Override the CMAKE_RC_COMPILE_OBJECT variable to fix an issue with
+# the windres compiler coming with binutils 2.32 on MSYS2
+IF(WIN32 AND MINGW)
+  SET(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> -O coff -o <OBJECT> <SOURCE>")
+ENDIF(WIN32 AND MINGW)
+
 ADD_SUBDIRECTORY(tulip_perspective)
 IF(NOT TULIP_BUILD_FOR_APPIMAGE)
 ADD_SUBDIRECTORY(tulip)
