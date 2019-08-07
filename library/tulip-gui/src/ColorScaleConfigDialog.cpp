@@ -115,7 +115,7 @@ void ColorScaleConfigDialog::accept() {
     }
   } else {
     for (int i = 0; i < _ui->colorsTable->rowCount(); ++i) {
-      QColor itemColor = _ui->colorsTable->item(i, 0)->backgroundColor();
+      QColor itemColor = _ui->colorsTable->item(i, 0)->background().color();
       colors.push_back(
           Color(itemColor.red(), itemColor.green(), itemColor.blue(), itemColor.alpha()));
     }
@@ -253,7 +253,7 @@ void ColorScaleConfigDialog::displayUserGradientPreview() {
   QList<QColor> colorsVector;
 
   for (int i = 0; i < _ui->colorsTable->rowCount(); ++i) {
-    colorsVector.push_back(_ui->colorsTable->item(i, 0)->backgroundColor());
+    colorsVector.push_back(_ui->colorsTable->item(i, 0)->background().color());
   }
 
   displayGradientPreview(colorsVector, _ui->gradientCB->isChecked(), _ui->userGradientPreview);
@@ -323,7 +323,7 @@ void ColorScaleConfigDialog::nbColorsValueChanged(int value) {
         color.setAlpha(_ui->globalAlphaSB->value());
       }
 
-      item->setBackgroundColor(color);
+      item->setBackground(QBrush(color));
       item->setFlags(Qt::ItemIsEnabled);
       _ui->colorsTable->setItem(0, lastCount + j, item);
     }
@@ -333,7 +333,7 @@ void ColorScaleConfigDialog::nbColorsValueChanged(int value) {
 }
 
 void ColorScaleConfigDialog::colorTableItemDoubleClicked(QTableWidgetItem *item) {
-  QColor itemBgColor = item->backgroundColor();
+  QColor itemBgColor = item->background().color();
   QColor newColor;
 
   if (getColorDialog(itemBgColor, this, "Select Color", newColor)) {
@@ -341,7 +341,7 @@ void ColorScaleConfigDialog::colorTableItemDoubleClicked(QTableWidgetItem *item)
       newColor.setAlpha(_ui->globalAlphaSB->value());
     }
 
-    item->setBackgroundColor(newColor);
+    item->setBackground(QBrush(newColor));
     displayUserGradientPreview();
   }
 }
@@ -369,7 +369,7 @@ void ColorScaleConfigDialog::saveCurrentColorScale() {
     QList<QVariant> colorsVector;
 
     for (int i = 0; i < _ui->colorsTable->rowCount(); ++i) {
-      colorsVector.push_back(QVariant(_ui->colorsTable->item(i, 0)->backgroundColor()));
+      colorsVector.push_back(QVariant(_ui->colorsTable->item(i, 0)->background().color()));
     }
 
     TulipSettings::instance().setValue(text, colorsVector);
@@ -494,8 +494,8 @@ void ColorScaleConfigDialog::setColorScale(const ColorScale &colorScale) {
     for (std::map<float, tlp::Color>::iterator it = colorMap.begin(); it != colorMap.end();) {
       QTableWidgetItem *item = new QTableWidgetItem();
       item->setFlags(Qt::ItemIsEnabled);
-      item->setBackgroundColor(
-          QColor(it->second.getR(), it->second.getG(), it->second.getB(), it->second.getA()));
+      item->setBackground(
+			  QBrush(QColor(it->second.getR(), it->second.getG(), it->second.getB(), it->second.getA())));
       _ui->colorsTable->setItem(row, 0, item);
       --row;
 
@@ -522,9 +522,9 @@ const ColorScale &ColorScaleConfigDialog::getColorScale() const {
 void ColorScaleConfigDialog::applyGlobalAlphaToColorScale() {
   if (_ui->globalAlphaCB->isChecked()) {
     for (int i = 0; i < _ui->colorsTable->rowCount(); ++i) {
-      QColor itemColor = _ui->colorsTable->item(i, 0)->backgroundColor();
+      QColor itemColor = _ui->colorsTable->item(i, 0)->background().color();
       itemColor.setAlpha(_ui->globalAlphaSB->value());
-      _ui->colorsTable->item(i, 0)->setBackgroundColor(itemColor);
+      _ui->colorsTable->item(i, 0)->setBackground(QBrush(itemColor));
     }
 
     displayUserGradientPreview();

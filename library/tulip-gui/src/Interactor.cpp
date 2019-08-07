@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <algorithm>
 
 #include <tulip/Interactor.h>
 #include <tulip/View.h>
@@ -52,7 +53,7 @@ void InteractorLister::initInteractorsDependencies() {
         compatibleInteractors << i;
     }
 
-    qSort(compatibleInteractors.begin(), compatibleInteractors.end(), interactorLessThan);
+    std::sort(compatibleInteractors.begin(), compatibleInteractors.end(), interactorLessThan);
 
     QList<string> compatibleNames;
 

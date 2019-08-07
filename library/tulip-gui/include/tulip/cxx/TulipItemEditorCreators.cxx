@@ -207,7 +207,7 @@ void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget *w, const QVariant &
     model = new GraphPropertiesModel<PROPTYPE>(g, false, combo);
   else
     model =
-        new GraphPropertiesModel<PROPTYPE>(QObject::trUtf8("Select a property"), g, false, combo);
+        new GraphPropertiesModel<PROPTYPE>(QObject::tr("Select a property"), g, false, combo);
 
   combo->setModel(model);
   combo->setCurrentIndex(model->rowOf(prop));
@@ -232,7 +232,7 @@ QString PropertyEditorCreator<PROPTYPE>::displayText(const QVariant &v) const {
   PROPTYPE *prop = v.value<PROPTYPE *>();
 
   if (prop == nullptr)
-    return QObject::trUtf8("Select a property");
+    return QObject::tr("Select a property");
 
   return tlpStringToQString(prop->getName());
 }
@@ -311,6 +311,6 @@ QString VectorEditorCreator<ElementType>::displayText(const QVariant &data) cons
   if (v.size() == 1)
     return QString("1 element");
 
-  return QString::number(v.size()) + QObject::trUtf8(" elements");
+  return QString::number(v.size()) + QObject::tr(" elements");
 }
 } // namespace tlp

@@ -57,7 +57,7 @@ void ItemsListWidget::beginDrag(QListWidgetItem *item) {
     QDrag *drag = new QDrag(this);
     drag->setMimeData(mimeData);
 
-    if (drag->start(Qt::MoveAction) == Qt::MoveAction) {
+    if (drag->exec(Qt::MoveAction) == Qt::MoveAction) {
       changeStatus(item);
       delete item;
     }
