@@ -494,8 +494,8 @@ void ColorScaleConfigDialog::setColorScale(const ColorScale &colorScale) {
     for (std::map<float, tlp::Color>::iterator it = colorMap.begin(); it != colorMap.end();) {
       QTableWidgetItem *item = new QTableWidgetItem();
       item->setFlags(Qt::ItemIsEnabled);
-      item->setBackground(
-			  QBrush(QColor(it->second.getR(), it->second.getG(), it->second.getB(), it->second.getA())));
+      item->setBackground(QBrush(
+          QColor(it->second.getR(), it->second.getG(), it->second.getB(), it->second.getA())));
       _ui->colorsTable->setItem(row, 0, item);
       --row;
 

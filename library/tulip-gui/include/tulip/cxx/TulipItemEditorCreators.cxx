@@ -206,8 +206,7 @@ void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget *w, const QVariant &
   if (isMandatory)
     model = new GraphPropertiesModel<PROPTYPE>(g, false, combo);
   else
-    model =
-        new GraphPropertiesModel<PROPTYPE>(QObject::tr("Select a property"), g, false, combo);
+    model = new GraphPropertiesModel<PROPTYPE>(QObject::tr("Select a property"), g, false, combo);
 
   combo->setModel(model);
   combo->setCurrentIndex(model->rowOf(prop));
