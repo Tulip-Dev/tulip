@@ -448,15 +448,14 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   viewTypeComboBox->setWindowOpacity(0.99);
 #endif
   viewTypeComboBox->addItems(
-    QStringList() << _geoView->getViewNameFromType(GeographicView::OpenStreetMap)
-                  << _geoView->getViewNameFromType(GeographicView::OpenStreetMap)
-                  << _geoView->getViewNameFromType(GeographicView::EsriSatellite)
-                  << _geoView->getViewNameFromType(GeographicView::EsriTerrain)
-                  << _geoView->getViewNameFromType(GeographicView::EsriGrayCanvas)
-                  << _geoView->getViewNameFromType(GeographicView::LeafletCustomTileLayer)
-                  << _geoView->getViewNameFromType(GeographicView::Polygon)
-                  << _geoView->getViewNameFromType(GeographicView::Globe)
-  );
+      QStringList() << _geoView->getViewNameFromType(GeographicView::OpenStreetMap)
+                    << _geoView->getViewNameFromType(GeographicView::OpenStreetMap)
+                    << _geoView->getViewNameFromType(GeographicView::EsriSatellite)
+                    << _geoView->getViewNameFromType(GeographicView::EsriTerrain)
+                    << _geoView->getViewNameFromType(GeographicView::EsriGrayCanvas)
+                    << _geoView->getViewNameFromType(GeographicView::LeafletCustomTileLayer)
+                    << _geoView->getViewNameFromType(GeographicView::Polygon)
+                    << _geoView->getViewNameFromType(GeographicView::Globe));
   viewTypeComboBox->insertSeparator(1);
 
   QGraphicsProxyWidget *comboBoxProxy = scene()->addWidget(viewTypeComboBox);
@@ -1186,8 +1185,8 @@ void GeographicViewGraphicsView::switchViewType() {
       if (planisphereTextureId == 0) {
         GlMainWidget::getFirstQGLWidget()->makeCurrent();
         planisphereTextureId = GlMainWidget::getFirstQGLWidget()->bindTexture(
-            QPixmap(":/tulip/geoview/planisphere.jpg").transformed(QTransform().scale(1, -1)), GL_TEXTURE_2D,
-            GL_RGBA, QGLContext::LinearFilteringBindOption);
+            QPixmap(":/tulip/geoview/planisphere.jpg").transformed(QTransform().scale(1, -1)),
+            GL_TEXTURE_2D, GL_RGBA, QGLContext::LinearFilteringBindOption);
         GlTextureManager::registerExternalTexture("Planisphere", planisphereTextureId);
       }
 

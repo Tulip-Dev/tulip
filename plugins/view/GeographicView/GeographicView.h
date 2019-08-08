@@ -74,8 +74,15 @@ class GeographicView : public View {
       "3.1", "View")
 
 public:
-  enum ViewType { OpenStreetMap = 0, EsriSatellite, EsriTerrain, EsriGrayCanvas,
-                  LeafletCustomTileLayer, Polygon, Globe };
+  enum ViewType {
+    OpenStreetMap = 0,
+    EsriSatellite,
+    EsriTerrain,
+    EsriGrayCanvas,
+    LeafletCustomTileLayer,
+    Polygon,
+    Globe
+  };
 
   GeographicView(PluginContext *);
   ~GeographicView() override;
