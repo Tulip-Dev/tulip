@@ -944,7 +944,10 @@ void GraphModel::treatEvents(const std::vector<tlp::Event> &) {
       }
     } else {
       // get model index of the element to remove
-      unsigned int index = _elements.indexOf(id);
+      // as _elements vector is always sorted in ascending order,
+      // for performance improvement with large graphs,
+      // we perform a binary search instead of using QVector::indexOf method
+      unsigned int index = *std::lower_bound(_elements.begin(), _elements.end(), id);
 
       // if the index to remove is not contiguous with the last one stored in the current sequence
       // of indices to remove,
@@ -953,7 +956,7 @@ void GraphModel::treatEvents(const std::vector<tlp::Event> &) {
         addRemoveRowsSequence(rowsSequence, add);
         rowsSequence.clear();
         // get updated index of the element to remove
-        index = _elements.indexOf(id);
+        index = *std::lower_bound(_elements.begin(), _elements.end(), id);
       }
 
       // add the index to remove to the sequence
