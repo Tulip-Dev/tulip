@@ -758,7 +758,10 @@ void Workspace::swapPanelsRequested(WorkspacePanel *panel) {
   WorkspacePanel *sourcePanel = static_cast<WorkspacePanel *>(sender());
 
   if (sourcePanel) {
-    _panels.swap(_panels.indexOf(sourcePanel), _panels.indexOf(panel));
+    auto pb = _panels.begin();
+    auto pe = _panels.end();
+    std::iter_swap(std::lower_bound(pb, pe, sourcePanel),
+	      std::lower_bound(pb, pe, panel));
     updatePanels();
   }
 }
