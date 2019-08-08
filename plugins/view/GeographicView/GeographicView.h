@@ -33,6 +33,7 @@
 #include <QGraphicsItem>
 #include <QDialog>
 #include <QThread>
+#include <QMap>
 
 #include <map>
 
@@ -70,16 +71,17 @@ class GeographicView : public View {
       "latitude/longitude), they are used to layout the nodes on the maps or on the globe.</p>"
       "<p>An interactor for performing selection on graph elements is also bundled "
       "with the view.</p>",
-      "3.0", "View")
+      "3.1", "View")
 
 public:
-  enum ViewType { OpenStreetMap = 0, EsriSatellite, EsriTerrain, EsriGrayCanvas, Polygon, Globe };
+  enum ViewType { OpenStreetMap = 0, EsriSatellite, EsriTerrain, EsriGrayCanvas,
+                  LeafletCustomTileLayer, Polygon, Globe };
 
   GeographicView(PluginContext *);
   ~GeographicView() override;
 
   std::string icon() const override {
-    return ":/geographic_view.png";
+    return ":/tulip/geoview/geographic_view.png";
   }
 
   void setupUi() override;
@@ -122,6 +124,10 @@ public:
                                                   e);
   }
 
+  GeographicViewConfigWidget *getConfigWidget() const {
+    return geoViewConfigWidget;
+  }
+
 public slots:
 
   void computeGeoLayout();
@@ -156,6 +162,9 @@ public slots:
   void zoomOut();
   void currentZoomChanged();
 
+  ViewType getViewTypeFromName(const QString &name) const;
+  QString getViewNameFromType(ViewType viewType) const;
+
 protected slots:
 
   void fillContextMenu(QMenu *, const QPointF &) override;
@@ -189,6 +198,8 @@ private:
   double mapCenterLatitudeInit, mapCenterLongitudeInit;
   int mapZoomInit;
   ViewActionsManager *_viewActionsManager;
+
+  QMap<ViewType, QString> _viewTypeToName;
 };
 } // namespace tlp
 

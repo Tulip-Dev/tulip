@@ -52,6 +52,8 @@ public:
 
   bool polyOptionsChanged();
 
+  QString getCustomTileLayerUrl() const;
+
   void setState(const DataSet &dataSet);
 
   DataSet state() const;

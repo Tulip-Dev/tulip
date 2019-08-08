@@ -54,6 +54,13 @@ GeographicView::GeographicView(PluginContext *)
       useSharedShapeProperty(true), mapCenterLatitudeInit(0), mapCenterLongitudeInit(0),
       mapZoomInit(0), _viewActionsManager(nullptr) {
   _viewType = OpenStreetMap;
+  _viewTypeToName[OpenStreetMap] = "Open Street Map (Leaflet)";
+  _viewTypeToName[EsriSatellite] = "Esri Satellite (Leaflet)";
+  _viewTypeToName[EsriTerrain] = "Esri Terrain (Leaflet)";
+  _viewTypeToName[EsriGrayCanvas] = "Esri Gray Canvas (Leaflet)";
+  _viewTypeToName[Polygon] = "Polygon";
+  _viewTypeToName[Globe] = "Globe";
+  _viewTypeToName[LeafletCustomTileLayer] = "Custom Tile Layer (Leaflet)";
 }
 
 GeographicView::~GeographicView() {
@@ -95,19 +102,7 @@ void GeographicView::viewTypeChanged(QString viewTypeName) {
 
   disconnect(comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(viewTypeChanged(QString)));
 
-  if (viewTypeName == "Open Street Map (Leaflet)") {
-    _viewType = OpenStreetMap;
-  } else if (viewTypeName == "Esri Satellite (Leaflet)") {
-    _viewType = EsriSatellite;
-  } else if (viewTypeName == "Esri Terrain (Leaflet)") {
-    _viewType = EsriTerrain;
-  } else if (viewTypeName == "Esri Gray Canvas (Leaflet)") {
-    _viewType = EsriGrayCanvas;
-  } else if (viewTypeName == "Polygon") {
-    _viewType = Polygon;
-  } else if (viewTypeName == "Globe") {
-    _viewType = Globe;
-  }
+  _viewType = getViewTypeFromName(viewTypeName);
 
   geoViewGraphicsView->switchViewType();
 
@@ -154,19 +149,7 @@ void GeographicView::setState(const DataSet &dataSet) {
     _viewType = static_cast<ViewType>(viewType);
   }
 
-  string viewTypeName = "Open Street Map (Leaflet)";
-
-  if (_viewType == EsriSatellite) {
-    viewTypeName = "Esri Satellite (Leaflet)";
-  } else if (_viewType == EsriTerrain) {
-    viewTypeName = "Esri Terrain (Leaflet)";
-  } else if (_viewType == EsriGrayCanvas) {
-    viewTypeName = "Esri Gray Canvas (Leaflet)";
-  } else if (_viewType == Polygon) {
-    viewTypeName = "Polygon";
-  } else if (_viewType == Globe) {
-    viewTypeName = "Globe";
-  }
+  string viewTypeName = QStringToTlpString(getViewNameFromType(_viewType));
 
   viewTypeChanged(viewTypeName.c_str());
 
@@ -518,6 +501,22 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
 
   return QPixmap::fromImage(snapshotImage)
       .scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+}
+
+GeographicView::ViewType GeographicView::getViewTypeFromName(const QString &name) const {
+  for (auto vt : _viewTypeToName.keys()) {
+    if (_viewTypeToName[vt] == name) {
+      return vt;
+    }
+  }
+  return OpenStreetMap;
+}
+
+QString GeographicView::getViewNameFromType(GeographicView::ViewType viewType) const {
+  if (_viewTypeToName.contains(viewType)) {
+    return _viewTypeToName[viewType];
+  }
+  return _viewTypeToName[OpenStreetMap];
 }
 
 PLUGIN(GeographicView)

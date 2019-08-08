@@ -447,13 +447,16 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
 #if defined(__APPLE__)
   viewTypeComboBox->setWindowOpacity(0.99);
 #endif
-  viewTypeComboBox->addItems(QStringList() << "Open Street Map (Leaflet)"
-                                           << "Open Street Map (Leaflet)"
-                                           << "Esri Satellite (Leaflet)"
-                                           << "Esri Terrain (Leaflet)"
-                                           << "Esri Gray Canvas (Leaflet)"
-                                           << "Polygon"
-                                           << "Globe");
+  viewTypeComboBox->addItems(
+    QStringList() << _geoView->getViewNameFromType(GeographicView::OpenStreetMap)
+                  << _geoView->getViewNameFromType(GeographicView::OpenStreetMap)
+                  << _geoView->getViewNameFromType(GeographicView::EsriSatellite)
+                  << _geoView->getViewNameFromType(GeographicView::EsriTerrain)
+                  << _geoView->getViewNameFromType(GeographicView::EsriGrayCanvas)
+                  << _geoView->getViewNameFromType(GeographicView::LeafletCustomTileLayer)
+                  << _geoView->getViewNameFromType(GeographicView::Polygon)
+                  << _geoView->getViewNameFromType(GeographicView::Globe)
+  );
   viewTypeComboBox->insertSeparator(1);
 
   QGraphicsProxyWidget *comboBoxProxy = scene()->addWidget(viewTypeComboBox);
@@ -466,7 +469,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
 
   // 2 push buttons
   // zoom +
-  zoomInButton = new QPushButton(QIcon(":/zoom+.png"), "");
+  zoomInButton = new QPushButton(QIcon(":/tulip/geoview/zoom+.png"), "");
 // workaround to get rid of Qt5 warnings: QMacCGContext:: Unsupported painter devtype type 1
 // see https://bugreports.qt.io/browse/QTBUG-32639
 #if defined(__APPLE__)
@@ -480,7 +483,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   buttonProxy->setPos(20, 50);
 
   // zoom -
-  zoomOutButton = new QPushButton(QIcon(":/zoom-.png"), "");
+  zoomOutButton = new QPushButton(QIcon(":/tulip/geoview/zoom-.png"), "");
 // workaround to get rid of Qt5 warnings : QMacCGContext:: Unsupported painter devtype type 1
 // see https://bugreports.qt.io/browse/QTBUG-32639
 #if defined(__APPLE__)
@@ -612,7 +615,7 @@ void GeographicViewGraphicsView::loadDefaultMap() {
     delete polygonEntity;
   }
 
-  polygonEntity = readCsvFile(":/MAPAGR4.txt");
+  polygonEntity = readCsvFile(":/tulip/geoview/MAPAGR4.txt");
   polygonEntity->setVisible(oldPolyVisible);
 
   GlScene *scene = glMainWidget->getScene();
@@ -1093,6 +1096,13 @@ void GeographicViewGraphicsView::switchViewType() {
     break;
   }
 
+  case GeographicView::LeafletCustomTileLayer: {
+    enableLeafletMap = true;
+    QString customTileLayerUrl = _geoView->getConfigWidget()->getCustomTileLayerUrl();
+    leafletMaps->switchToCustomTileLayer(customTileLayerUrl);
+    break;
+  }
+
   case GeographicView::Polygon: {
     enablePolygon = true;
     glWidgetItem->setRedrawNeeded(true);
@@ -1176,7 +1186,7 @@ void GeographicViewGraphicsView::switchViewType() {
       if (planisphereTextureId == 0) {
         GlMainWidget::getFirstQGLWidget()->makeCurrent();
         planisphereTextureId = GlMainWidget::getFirstQGLWidget()->bindTexture(
-            QPixmap(":/planisphere.jpg").transformed(QTransform().scale(1, -1)), GL_TEXTURE_2D,
+            QPixmap(":/tulip/geoview/planisphere.jpg").transformed(QTransform().scale(1, -1)), GL_TEXTURE_2D,
             GL_RGBA, QGLContext::LinearFilteringBindOption);
         GlTextureManager::registerExternalTexture("Planisphere", planisphereTextureId);
       }
