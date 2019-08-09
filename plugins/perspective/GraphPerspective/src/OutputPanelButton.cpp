@@ -41,9 +41,13 @@ QSize OutputPanelButton::sizeHint() const {
 void OutputPanelButton::paintEvent(QPaintEvent *event) {
   QPushButton::paintEvent(event);
 
-  const QFontMetrics fm = fontMetrics();
+  auto fm = fontMetrics();
   int baseLine = (height() - fm.height() + 1) / 2 + fm.ascent();
+#if (QT_VERSION < QT_VERSION_CHECK(5, 11, 0))
   const int numberWidth = fm.width(QString::number(_number));
+#else
+  const int numberWidth = fm.horizontalAdvance(QString::number(_number));
+#endif
 
   QPainter p(this);
   p.setFont(font());
