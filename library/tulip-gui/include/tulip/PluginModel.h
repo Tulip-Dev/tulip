@@ -21,6 +21,8 @@
 #ifndef PLUGINMODEL_H
 #define PLUGINMODEL_H
 
+#include <algorithm>
+
 #include <QIcon>
 #include <QFont>
 
@@ -96,7 +98,7 @@ class PluginModel : public tlp::TulipModel {
           groupItem = catItem->addChild(group);
 
         // sort in case insensitive alphabetic order
-        qSort(pluginTree[cat][group].begin(), pluginTree[cat][group].end(), QStringCaseCmp);
+        std::sort(pluginTree[cat][group].begin(), pluginTree[cat][group].end(), QStringCaseCmp);
 
         for (const QString &alg : pluginTree[cat][group]) {
           const Plugin &plugin = PluginLister::pluginInformation(tlp::QStringToTlpString(alg));

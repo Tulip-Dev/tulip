@@ -140,7 +140,7 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
       return pi->getTypename().c_str();
     else if (index.column() == 2)
       return (_graph->existLocalProperty(pi->getName())
-                  ? trUtf8("Local")
+                  ? tr("Local")
                   : tr("Inherited from graph ") + QString::number(pi->getGraph()->getId()) + " (" +
                         tlpStringToQString(pi->getGraph()->getName()) + ')');
   }
@@ -191,11 +191,11 @@ QVariant tlp::GraphPropertiesModel<PROPTYPE>::headerData(int section, Qt::Orient
   if (orientation == Qt::Horizontal) {
     if (role == Qt::DisplayRole) {
       if (section == 0)
-        return trUtf8("Name");
+        return tr("Name");
       else if (section == 1)
-        return trUtf8("Type");
+        return tr("Type");
       else if (section == 2)
-        return trUtf8("Scope");
+        return tr("Scope");
     }
   }
 

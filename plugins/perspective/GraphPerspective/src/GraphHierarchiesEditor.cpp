@@ -91,9 +91,10 @@ void CustomTreeView::setModel(QAbstractItemModel *m) {
 }
 
 void CustomTreeView::setAllHierarchyVisible(const QModelIndex &index, bool visible) {
-  int childCount = index.model()->rowCount(index);
+  auto iModel = index.model();
+  int childCount = iModel->rowCount(index);
   for (int i = 0; i < childCount; i++) {
-    const QModelIndex &child = index.child(i, 0);
+    auto child = iModel->index(i, 0, index);
     // Recursively call the function for each child node.
     setAllHierarchyVisible(child, visible);
   }

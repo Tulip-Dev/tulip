@@ -35,8 +35,23 @@
 #include <QMimeData>
 #include <QDesktopWidget>
 #include <QFileInfo>
+#include <QScreen>
 
 #include "ui_FindReplaceDialog.h"
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 11, 0))
+#define FONT_METRICS_WIDTH(ch) fontMetrics().width(QLatin1Char(ch))
+#else
+#define FONT_METRICS_WIDTH(ch) fontMetrics().horizontalAdvance(QLatin1Char(ch))
+#endif
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
+#define TAB_STOP_WIDTH tabStopWidth()
+#define SET_TAB_STOP_WIDTH(w) setTabStopWidth(w)
+#else
+#define TAB_STOP_WIDTH tabStopDistance()
+#define SET_TAB_STOP_WIDTH(w) setTabStopDistance(w)
+#endif
 
 using namespace std;
 using namespace tlp;
@@ -550,7 +565,7 @@ int PythonCodeEditor::lineNumberAreaWidth() const {
     ++digits;
   }
 
-  int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
+  int space = 3 + FONT_METRICS_WIDTH('9') * digits;
   return space;
 }
 
@@ -604,7 +619,7 @@ static float clamp(float f, float minV, float maxV) {
 }
 
 void PythonCodeEditor::updateTabStopWidth() {
-  setTabStopWidth(2 * fontMetrics().width(QLatin1Char(' ')));
+  SET_TAB_STOP_WIDTH(2 * FONT_METRICS_WIDTH(' '));
 }
 
 void PythonCodeEditor::zoomIn() {
@@ -653,9 +668,9 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
 
     for (int i = 0; i < _toolTipPos.y(); ++i) {
       if (blockText[i] == '\t') {
-        left += tabStopWidth();
+        left += TAB_STOP_WIDTH;
       } else {
-        left += fontMetrics().width(QLatin1Char(blockText[i].toLatin1()));
+        left += FONT_METRICS_WIDTH(blockText[i].toLatin1());
       }
     }
 
@@ -667,7 +682,7 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
       int w = 0;
 
       for (int j = 0; j < toolTipLines[i].length(); ++j) {
-        w += fontMetrics().width(QLatin1Char(toolTipLines[i][j].toLatin1()));
+        w += FONT_METRICS_WIDTH(toolTipLines[i][j].toLatin1()) ;
       }
 
       width = std::max(w, width);
@@ -678,7 +693,7 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
     QRect tooltipRect(tPos, tPos + QPoint(width, height));
 #else
     QRect tooltipRect(tPos,
-                      tPos + QPoint(width + 2 * fontMetrics().width(QLatin1Char(' ')), height));
+                      tPos + QPoint(width + 2 * FONT_METRICS_WIDTH(' '), height));
 #endif
     painter.drawRect(tooltipRect);
     painter.fillRect(tooltipRect, QColor(249, 251, 100, 200));
@@ -711,19 +726,19 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
 
       for (int i = 0; i < text.length(); ++i) {
         if (text[i] == ' ')
-          indentVal += fontMetrics().width(QLatin1Char(' '));
+          indentVal += FONT_METRICS_WIDTH(' ');
         else if (text[i] == '\t')
-          indentVal += tabStopWidth();
+          indentVal += TAB_STOP_WIDTH;
         else
           break;
       }
 
       int i = 1;
 
-      while (indentVal > tabStopWidth()) {
-        painter.drawLine(contentOffset().x() + i * tabStopWidth() + 4, top,
-                         contentOffset().x() + i * tabStopWidth() + 4, bottom);
-        indentVal -= tabStopWidth();
+      while (indentVal > TAB_STOP_WIDTH) {
+        painter.drawLine(contentOffset().x() + i * TAB_STOP_WIDTH + 4, top,
+                         contentOffset().x() + i * TAB_STOP_WIDTH + 4, bottom);
+        indentVal -= TAB_STOP_WIDTH;
         ++i;
       }
     }
@@ -1243,14 +1258,19 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
 
   for (int i = 0; i < stop; ++i) {
     if (textBeforeCursor[i] == '\t') {
-      pos += tabStopWidth();
+      pos += TAB_STOP_WIDTH;
     } else {
-      pos += fontMetrics().width(QLatin1Char(textBeforeCursor[i].toLatin1()));
+      pos += FONT_METRICS_WIDTH(textBeforeCursor[i].toLatin1());
     }
   }
 
   if (mapToGlobal(QPoint(0, bottom + _autoCompletionList->height())).y() >
-      QApplication::desktop()->screenGeometry().height())
+#if (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
+      QApplication::desktop()->screenGeometry().height()
+#else
+      QApplication::primaryScreen()->geometry().height()
+#endif
+      )
     _autoCompletionList->move(mapToGlobal(QPoint(pos, top - _autoCompletionList->height())));
   else
     _autoCompletionList->move(mapToGlobal(QPoint(pos, bottom)));

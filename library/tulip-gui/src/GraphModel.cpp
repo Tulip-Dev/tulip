@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <algorithm>
 
 #include "tulip/GraphModel.h"
 
@@ -745,7 +746,7 @@ void NodesGraphModel::setGraph(Graph *g) {
     _elements[i++] = n.id;
   // we ensure the ids are ascendingly sorted
   // to ease the display of nodes/edges
-  qSort(_elements);
+  std::sort(_elements.begin(), _elements.end());
   // reset();
 }
 
@@ -878,7 +879,7 @@ void GraphModel::addRemoveRowsSequence(QVector<unsigned int> &rowsSequence, bool
   if (add) {
     beginInsertRows(QModelIndex(), _elements.size(), _elements.size() + rowsSequence.size() - 1);
 
-    qSort(rowsSequence);
+    std::sort(rowsSequence.begin(), rowsSequence.end());
     for (auto id : rowsSequence)
       _elements.push_back(id);
 
@@ -943,7 +944,10 @@ void GraphModel::treatEvents(const std::vector<tlp::Event> &) {
       }
     } else {
       // get model index of the element to remove
-      unsigned int index = qBinaryFind(_elements.begin(), _elements.end(), id) - _elements.begin();
+      // as _elements vector is always sorted in ascending order,
+      // for performance improvement with large graphs,
+      // we perform a binary search instead of using QVector::indexOf method
+      unsigned int index = std::lower_bound(_elements.begin(), _elements.end(), id) - _elements.begin();
 
       // if the index to remove is not contiguous with the last one stored in the current sequence
       // of indices to remove,
@@ -952,7 +956,8 @@ void GraphModel::treatEvents(const std::vector<tlp::Event> &) {
         addRemoveRowsSequence(rowsSequence, add);
         rowsSequence.clear();
         // get updated index of the element to remove
-        index = qBinaryFind(_elements.begin(), _elements.end(), id) - _elements.begin();
+	index = std::lower_bound(_elements.begin(), _elements.end(), id) - _elements.begin();
+
       }
 
       // add the index to remove to the sequence

@@ -109,6 +109,8 @@ public:
 
   void switchToEsriGrayCanvas();
 
+  void switchToCustomTileLayer(const QString &customTileLayerUrl);
+
   void setProgressWidget(ProgressWidgetGraphicsProxy *progressWidget) {
     this->progressWidget = progressWidget;
   }

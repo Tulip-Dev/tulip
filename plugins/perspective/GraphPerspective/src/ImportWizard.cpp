@@ -80,7 +80,7 @@ void ImportWizard::algorithmSelected(const QModelIndex &index) {
   _ui->parametersFrame->setVisible(!alg.isEmpty());
   QAbstractItemModel *oldModel = _ui->parametersList->model();
   QAbstractItemModel *newModel = nullptr;
-  bool isGroup = index.child(0, index.column()).isValid();
+  bool isGroup = index.model()->index(0, index.column(), index).isValid();
 
   QString categoryText("<b>Category</b>");
   QString parametersText("<b>Parameters</b>");

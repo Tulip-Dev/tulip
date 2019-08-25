@@ -903,7 +903,7 @@ QString GraphEditorCreator::displayText(const QVariant &var) const {
   Graph *g = var.value<Graph *>();
 
   if (g == nullptr)
-    return QString::null;
+    return QString();
 
   std::string name;
   g->getAttribute<std::string>("name", name);

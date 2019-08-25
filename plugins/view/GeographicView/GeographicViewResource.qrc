@@ -1,10 +1,13 @@
 <RCC>
-    <qresource prefix="/">
+    <qresource prefix="/tulip/geoview">
         <file>MAPAGR4.txt</file>
         <file>planisphere.jpg</file>
         <file>help-contents.png</file>
         <file>geographic_view.png</file>
         <file>zoom+.png</file>
         <file>zoom-.png</file>
+        <file>leaflet/leaflet.js</file>
+        <file>leaflet/leaflet.css</file>
+        <file>leaflet/no-tile.png</file>
     </qresource>
 </RCC>
