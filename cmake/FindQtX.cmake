@@ -98,9 +98,17 @@ ELSEIF(APPLE)
   SET(QT_FRAMEWORKS_DIR ${QT_FRAMEWORKS_DIR}/..)
   SET(QT_BINARY_DIR ${QT_FRAMEWORKS_DIR}/../bin)
 ELSE()
-  SET(QT_BINARY_DIR "${_qt5Gui_install_prefix}/bin")
+  IF(EXISTS /usr/lib/x86_64-linux-gnu/qt5/bin)
+    SET(QT_BINARY_DIR /usr/lib/x86_64-linux-gnu/qt5/bin)
+  ELSEIF(EXISTS /usr/lib/i386-linux-gnu/qt5/bin)
+    SET(QT_BINARY_DIR /usr/lib/i386-linux-gnu/qt5/bin)
+  ELSE()
+    SET(QT_BINARY_DIR "${_qt5Gui_install_prefix}/bin")
+  ENDIF()
   IF(EXISTS ${QT_BINARY_DIR}/qmake)
     SET(QT_QMAKE_EXECUTABLE ${QT_BINARY_DIR}/qmake)
+  ELSEIF(EXISTS ${QT_BINARY_DIR}/qmake-qt5)
+    SET(QT_QMAKE_EXECUTABLE ${QT_BINARY_DIR}/qmake-qt5)
   ENDIF()
   # Standard Qt5 installation
   IF(EXISTS ${QT_BINARY_DIR}/../plugins)
@@ -200,7 +208,7 @@ MACRO(QTX_ADD_RESOURCES outfiles)
   QT5_ADD_RESOURCES(${outfiles} ${ARGN})
 ENDMACRO()
 
-# With MinGW, remove the -fPIC compiler option as it is not needed and
+# With MinGW, remove the -fPIC compiler option as it is not needed ansd
 # generates a lot of warnings
 IF(MINGW)
   STRING(REPLACE "-fPIC" "" Qt5Widgets_EXECUTABLE_COMPILE_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
