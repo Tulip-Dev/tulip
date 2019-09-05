@@ -22,6 +22,8 @@
 #include <QOpenGLFramebufferObject>
 #include <QGLFormat>
 #include <QWindow>
+
+#include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
 #include <tulip/Graph.h>
 #include <tulip/GlTools.h>
@@ -229,7 +231,7 @@ void GlMainWidget::render(RenderingOptions options, bool checkVisibility) {
 
   if ((isVisible() || !checkVisibility) && !inRendering) {
 
-    assert(contentsRect().width() != 0 && contentsRect().height() != 0);
+  //  assert(contentsRect().width() != 0 && contentsRect().height() != 0);
     // Begin rendering process
     inRendering = true;
     makeCurrent();
@@ -507,7 +509,7 @@ QOpenGLFramebufferObject *GlMainWidget::createTexture(const std::string &texture
 //=====================================================
 void GlMainWidget::createPicture(const std::string &pictureName, int width, int height,
                                  bool center) {
-  createPicture(width, height, center).save(pictureName.c_str());
+  createPicture(width, height, center).save(tlp::tlpStringToQString(pictureName));
 }
 
 //=====================================================
