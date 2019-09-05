@@ -231,7 +231,7 @@ void GlMainWidget::render(RenderingOptions options, bool checkVisibility) {
 
   if ((isVisible() || !checkVisibility) && !inRendering) {
 
-  //  assert(contentsRect().width() != 0 && contentsRect().height() != 0);
+    //  assert(contentsRect().width() != 0 && contentsRect().height() != 0);
     // Begin rendering process
     inRendering = true;
     makeCurrent();

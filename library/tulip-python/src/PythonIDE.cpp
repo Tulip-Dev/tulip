@@ -90,10 +90,10 @@ static QString cleanPropertyName(const QString &propertyName) {
   QString ret(propertyName);
   ret.replace(' ', '_');
 
-  //check if the name is only numbers and prefix it by prop_ if necessary
-  QRegExp re("\\d*");  // a digit (\d), zero or more times (*)
+  // check if the name is only numbers and prefix it by prop_ if necessary
+  QRegExp re("\\d*"); // a digit (\d), zero or more times (*)
   if (re.exactMatch(ret)) {
-      ret.insert(0, "prop_");
+    ret.insert(0, "prop_");
   }
   int i = 0;
 
