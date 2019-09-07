@@ -30,6 +30,7 @@
 #include <QMainWindow>
 #include <QCryptographicHash>
 #include <QByteArray>
+#include <QRegExp>
 
 #include <tulip/Graph.h>
 #include <tulip/DoubleProperty.h>
@@ -88,6 +89,12 @@ static const QString runGraphScriptFunc = "import tuliputils\n"
 static QString cleanPropertyName(const QString &propertyName) {
   QString ret(propertyName);
   ret.replace(' ', '_');
+
+  // check if the name is only numbers and prefix it by prop_ if necessary
+  QRegExp re("\\d*"); // a digit (\d), zero or more times (*)
+  if (re.exactMatch(ret)) {
+    ret.insert(0, "prop_");
+  }
   int i = 0;
 
   while (PythonInterpreter::pythonReservedCharacters[i]) {
@@ -137,15 +144,15 @@ static QString getDefaultScriptCode(const QString &pythonVersion, Graph *graph) 
   oss << "# To cancel the modifications performed by the script" << endl;
   oss << "# on the current graph, click on the undo button." << endl << endl;
 
-  oss << "# Some useful keyboards shortcuts : " << endl;
-  oss << "#   * Ctrl + D : comment selected lines." << endl;
-  oss << "#   * Ctrl + Shift + D  : uncomment selected lines." << endl;
-  oss << "#   * Ctrl + I : indent selected lines." << endl;
-  oss << "#   * Ctrl + Shift + I  : unindent selected lines." << endl;
-  oss << "#   * Ctrl + Return  : run script." << endl;
-  oss << "#   * Ctrl + F  : find selected text." << endl;
-  oss << "#   * Ctrl + R  : replace selected text." << endl;
-  oss << "#   * Ctrl + Space  : show auto-completion dialog." << endl << endl;
+  oss << "# Some useful keyboard shortcuts: " << endl;
+  oss << "#   * Ctrl + D: comment selected lines." << endl;
+  oss << "#   * Ctrl + Shift + D: uncomment selected lines." << endl;
+  oss << "#   * Ctrl + I: indent selected lines." << endl;
+  oss << "#   * Ctrl + Shift + I: unindent selected lines." << endl;
+  oss << "#   * Ctrl + Return: run script." << endl;
+  oss << "#   * Ctrl + F: find selected text." << endl;
+  oss << "#   * Ctrl + R: replace selected text." << endl;
+  oss << "#   * Ctrl + Space: show auto-completion dialog." << endl << endl;
 
   oss << "from tulip import tlp" << endl << endl;
   ;

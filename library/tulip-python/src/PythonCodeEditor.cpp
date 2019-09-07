@@ -682,7 +682,7 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
       int w = 0;
 
       for (int j = 0; j < toolTipLines[i].length(); ++j) {
-        w += FONT_METRICS_WIDTH(toolTipLines[i][j].toLatin1()) ;
+        w += FONT_METRICS_WIDTH(toolTipLines[i][j].toLatin1());
       }
 
       width = std::max(w, width);
@@ -692,8 +692,7 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
 #ifndef __APPLE__
     QRect tooltipRect(tPos, tPos + QPoint(width, height));
 #else
-    QRect tooltipRect(tPos,
-                      tPos + QPoint(width + 2 * FONT_METRICS_WIDTH(' '), height));
+    QRect tooltipRect(tPos, tPos + QPoint(width + 2 * FONT_METRICS_WIDTH(' '), height));
 #endif
     painter.drawRect(tooltipRect);
     painter.fillRect(tooltipRect, QColor(249, 251, 100, 200));
@@ -1270,7 +1269,7 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
 #else
       QApplication::primaryScreen()->geometry().height()
 #endif
-      )
+  )
     _autoCompletionList->move(mapToGlobal(QPoint(pos, top - _autoCompletionList->height())));
   else
     _autoCompletionList->move(mapToGlobal(QPoint(pos, bottom)));
