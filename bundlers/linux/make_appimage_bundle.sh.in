@@ -72,7 +72,10 @@ echo "fi" >> $APPRUN_FILE
 echo "if [ -d /usr/lib/i386-linux-gnu/gtk-2.0 ]; then" >> $APPRUN_FILE
 echo "  export GTK_PATH=/usr/lib/i386-linux-gnu/gtk-2.0" >> $APPRUN_FILE
 echo "fi" >> $APPRUN_FILE
-echo "export QT_STYLE_OVERRIDE=gtk2" >> $APPRUN_FILE
+echo "ls \${BUNDLE_DIR}/usr/lib/libgtk*.so.0 > /dev/null 2>&1" >> $APPRUN_FILE
+echo "if [ \"\$?\" != \"0\" ]; then" >> $APPRUN_FILE
+echo "  export QT_STYLE_OVERRIDE=gtk2" >> $APPRUN_FILE
+echo "fi" >> $APPRUN_FILE
 echo "export PYTHONHOME=\${BUNDLE_DIR}/usr" >> $APPRUN_FILE
 echo "export TLP_DIR=\${BUNDLE_DIR}/usr/lib" >> $APPRUN_FILE
 echo "if [ \"\$1\" = \"-no-output-filtering\" ]; then" >> $APPRUN_FILE
@@ -128,8 +131,8 @@ if [ -e @QT_PLUGINS_DIR@/xcbglintegrations ]; then
 fi
 
 # add gtk-2.0 plugins directory (needed for qt5 gtk2 platformthemes plugin)
-if [ -e /usr/@CMAKE_INSTALL_LIBDIR@/gtk-2.0 ]; then
-  cp -v -Rp /usr/@CMAKE_INSTALL_LIBDIR@/gtk-2.0 $BUNDLE_LIB_DIR
+if [ -e /usr/lib/@CMAKE_LIBRARY_ARCHITECTURE@/gtk-2.0 ]; then
+  cp -v -Rp /usr/lib/@CMAKE_LIBRARY_ARCHITECTURE@/gtk-2.0 $BUNDLE_LIB_DIR
 fi
 
 # set up LD_LIBRARY_PATH with the installation path of the Qt libs used
@@ -198,7 +201,7 @@ looking_for_plugin_dependencies $PYTHON_PACKAGE_BUNDLE_DIR/lib-dynload
 
 pushd $BUNDLE_LIB_DIR > /dev/null 2>&1
 # remove unneeded libs
-LIBS=$(ls libc.* libdbus*.* libdl.* libdrm.* libexpat.* libfontconfig.* libfreetype.* libgio-*.* libglib-*.* libgobject-*.* libgcc_s.* libGL.* libm.* libnsl.* libpthread.* libresolv.* librt.* libstdc++.* libutil.*  libuuid.* libxcb*.* libX*.* libz.* 2> /dev/null)
+LIBS=$(ls libc.* libdbus*.* libdl.* libdrm.* libelf.* libexpat.* libfontconfig.* libfreetype.* libgio-*.* libglib-*.* libgobject-*.* libgcc_s.* libGL.* libm.* libnsl.* libpthread.* libresolv.* librt.* libstdc++.* libutil.*  libuuid.* libxcb*.* libX*.* libz.* 2> /dev/null)
 if [ "$LIBS" != "" ]; then
   rm $LIBS
 fi
@@ -208,13 +211,23 @@ ls libffi.so* > /dev/null 2>&1
 if [ ! $? -eq 0 ]; then
   cp -v --preserve=mode $(/sbin/ldconfig -p | grep libffi.so | cut -d ">" -f 2 | xargs) .
 fi
+for LIB in icccm image keysyms render-util
+do
+  /sbin/ldconfig -p | grep libxcb-$LIB > /dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    cp -v --preserve=mode $(/sbin/ldconfig -p | grep libxcb-$LIB | cut -d ">" -f 2 | xargs) .
+  fi
+done
+
 popd > /dev/null 2>&1
 
 pushd $BUNDLE_USR_DIR > /dev/null 2>&1
 
 # create a symbolic link lib64 pointing to lib in $BUNDLE_DIR/usr
 # in order for Python to find its standard library on a x86_64 AppImage
-ln -s lib @CMAKE_INSTALL_LIBDIR@ 2>/dev/null
+if [ ! -e @CMAKE_INSTALL_LIBDIR@ ]; then
+  ln -s lib @CMAKE_INSTALL_LIBDIR@ 2>/dev/null
+fi
 
 popd > /dev/null 2>&1
 
