@@ -146,7 +146,12 @@ popd > /dev/null 2>&1
 
 # extend LD_LIBRARY_PATH to ensure PYTHON_LIBRARY can be found
 # even if a non standard installation is in use
-export LD_LIBRARY_PATH=$(dirname @PYTHON_LIBRARY@):$LD_LIBRARY_PATH
+ls $(dirname @PYTHON_LIBRARY@)/libQt5*.so > /dev/null 2>&1
+if [ "$?" != "0" ]; then
+  export LD_LIBRARY_PATH=$(dirname @PYTHON_LIBRARY@):$LD_LIBRARY_PATH
+else
+  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(dirname @PYTHON_LIBRARY@)
+fi
 
 # add Python environment
 PYTHON_LIB=$(ldd $(ls $BUNDLE_LIB_DIR/libtulip-python*) | grep libpython | awk '{print $3}')
