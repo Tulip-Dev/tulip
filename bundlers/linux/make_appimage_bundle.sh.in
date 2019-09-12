@@ -76,8 +76,12 @@ echo "ls \${BUNDLE_DIR}/usr/lib/libgtk*.so.0 > /dev/null 2>&1" >> $APPRUN_FILE
 echo "if [ \"\$?\" != \"0\" ]; then" >> $APPRUN_FILE
 echo "  export QT_STYLE_OVERRIDE=gtk2" >> $APPRUN_FILE
 echo "fi" >> $APPRUN_FILE
+# setup embedded python env
 echo "export PYTHONHOME=\${BUNDLE_DIR}/usr" >> $APPRUN_FILE
+# setup embedded tulip env
 echo "export TLP_DIR=\${BUNDLE_DIR}/usr/lib" >> $APPRUN_FILE
+# fix for Geographic View crash on Fedora 29-30...
+echo "export OPENSSL_CONF=" >> $APPRUN_FILE
 echo "if [ \"\$1\" = \"-no-output-filtering\" ]; then" >> $APPRUN_FILE
 # for debugging purpose, allow to run without filtering of console output
 echo "  \${BUNDLE_DIR}/usr/bin/tulip_perspective -p Tulip" >> $APPRUN_FILE
