@@ -375,7 +375,7 @@ Graph *ImportExportTest::createSimpleGraph() const {
   return original;
 }
 
-void ImportExportTest::updateIdProperty(Graph * graph) const {
+void ImportExportTest::updateIdProperty(Graph *graph) const {
   IntegerProperty *id = graph->getProperty<IntegerProperty>("id");
   for (auto n : graph->nodes()) {
     id->setNodeValue(n, n.id);
@@ -417,10 +417,10 @@ void ImportExportTest::testMetaGraphImportExport() {
   Graph *groups = graph->addCloneSubGraph("groups");
   unsigned int groupsSize = 20;
   unsigned int nbNodes = graph->numberOfNodes();
-  for (uint i = 0 ; i < nbNodes ; i += groupsSize) {
+  for (uint i = 0; i < nbNodes; i += groupsSize) {
     vector<node> group;
     group.reserve(groupsSize);
-    for (uint j = i ; j < i + groupsSize ; ++j) {
+    for (uint j = i; j < i + groupsSize; ++j) {
       group.push_back(node(j));
     }
     groups->createMetaNode(group, false);

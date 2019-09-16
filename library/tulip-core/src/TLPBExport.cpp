@@ -382,14 +382,14 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
         // loop on nodes
         unsigned int nbValues = 0;
-	// when exporting the GraphProperty, if the exported graph
-	// is not the root graph we will have to check if the node pointed
-	// subgraph is a descendant graph of this graph
-	bool checkForDescendantGraph = propGraphId &&
-	  (prop->getTypename() == GraphProperty::propertyTypename);
+        // when exporting the GraphProperty, if the exported graph
+        // is not the root graph we will have to check if the node pointed
+        // subgraph is a descendant graph of this graph
+        bool checkForDescendantGraph =
+            propGraphId && (prop->getTypename() == GraphProperty::propertyTypename);
         for (auto n : prop->getNonDefaultValuatedNodes(propGraphId ? nullptr : graph)) {
           // write current node reindexed id
-	  size = getNode(n).id;
+          size = getNode(n).id;
           s.write(reinterpret_cast<const char *>(&size), sizeof(size));
 
           if (pnViewProp && !TulipBitmapDir.empty()) { // viewFont || viewTexture
@@ -401,14 +401,14 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
             StringType::writeb(s, sVal);
           } else if (checkForDescendantGraph) {
-              string tmp = prop->getNodeStringValue(n);
-              unsigned int id = strtoul(tmp.c_str(), nullptr, 10);
+            string tmp = prop->getNodeStringValue(n);
+            unsigned int id = strtoul(tmp.c_str(), nullptr, 10);
 
-	      // record a null value if the node pointed subgraph
-	      // is not a descendant of the currently exported graph
-	      UnsignedIntegerType::writeb(s, graph->getDescendantGraph(id) ? id : 0);
-	  } else
-	    prop->writeNodeValue(s, n);
+            // record a null value if the node pointed subgraph
+            // is not a descendant of the currently exported graph
+            UnsignedIntegerType::writeb(s, graph->getDescendantGraph(id) ? id : 0);
+          } else
+            prop->writeNodeValue(s, n);
 
           ++nbValues;
 
@@ -488,16 +488,15 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
           if (isGraphProperty) {
             // reindex embedded edges
-            const set<edge> &eEdges =
-	      static_cast<GraphProperty *>(prop)->getEdgeValue(e);
+            const set<edge> &eEdges = static_cast<GraphProperty *>(prop)->getEdgeValue(e);
             set<edge> rEdges;
 
             for (auto eEdge : eEdges) {
-	      // reindex only embedded edges belonging to the exported graph
-	      if (!graph->isElement(eEdge))
-		continue;
-	      edge rEdge = getEdge(eEdge);
-	      rEdges.insert(rEdge);
+              // reindex only embedded edges belonging to the exported graph
+              if (!graph->isElement(eEdge))
+                continue;
+              edge rEdge = getEdge(eEdge);
+              rEdges.insert(rEdge);
             }
 
             // finally save set

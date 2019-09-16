@@ -247,11 +247,11 @@ public:
       if (property->hasNonDefaultValuatedNodes()) {
         _writer.writeString(NodesValuesToken);
         _writer.writeMapOpen();
-	// when exporting the GraphProperty, if the exported graph
-	// is not the root graph we will have to check if the node pointed
-	// subgraph is a descendant graph of this graph
-	bool checkForDescendantGraph = (g->getId() != 0) &&
-	  (property->getTypename() == GraphProperty::propertyTypename);
+        // when exporting the GraphProperty, if the exported graph
+        // is not the root graph we will have to check if the node pointed
+        // subgraph is a descendant graph of this graph
+        bool checkForDescendantGraph =
+            (g->getId() != 0) && (property->getTypename() == GraphProperty::propertyTypename);
         for (auto n : property->getNonDefaultValuatedNodes(g)) {
 
           string sValue = property->getNodeStringValue(n);
@@ -260,8 +260,8 @@ public:
             unsigned int id = strtoul(sValue.c_str(), nullptr, 10);
 
             // no need to record the current node value if
-	    // the pointed subgraph is not a descendant
-	    // of the currently exported graph
+            // the pointed subgraph is not a descendant
+            // of the currently exported graph
             if (!graph->getDescendantGraph(id))
               continue;
           }
@@ -269,7 +269,6 @@ public:
           stringstream temp;
           temp << graph->nodePos(n);
           _writer.writeString(temp.str());
-
 
           if (writingPathViewProperty && !TulipBitmapDir.empty()) {
             size_t pos = sValue.find(TulipBitmapDir);
@@ -294,14 +293,14 @@ public:
             const set<edge> &eEdges = static_cast<GraphProperty *>(property)->getEdgeValue(e);
             set<edge> rEdges;
             for (auto eEdge : eEdges) {
-	      if (graph->isElement(eEdge))
-		rEdges.insert(edge(graph->edgePos(eEdge)));
+              if (graph->isElement(eEdge))
+                rEdges.insert(edge(graph->edgePos(eEdge)));
             }
 
-	    if (rEdges.empty())
-	      continue;
+            if (rEdges.empty())
+              continue;
 
-	    sValue = EdgeSetType::toString(rEdges);
+            sValue = EdgeSetType::toString(rEdges);
           } else {
             sValue = property->getEdgeStringValue(e);
 

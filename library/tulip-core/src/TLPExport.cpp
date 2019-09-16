@@ -320,8 +320,8 @@ public:
       // when exporting the GraphProperty, if the exported graph
       // is not the root graph we will have to check if the node pointed
       // subgraph is a descendant graph of this graph
-      bool checkForDescendantGraph = (g->getId() != 0) &&
-	(prop->getTypename() == GraphProperty::propertyTypename);
+      bool checkForDescendantGraph =
+          (g->getId() != 0) && (prop->getTypename() == GraphProperty::propertyTypename);
       while (itN->hasNext()) {
         auto itn = itN->next();
         if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
@@ -339,9 +339,9 @@ public:
         } else if (checkForDescendantGraph) {
           unsigned int id = strtoul(tmp.c_str(), nullptr, 10);
 
-	  // no need to record the current node value if
-	  // the pointed subgraph is not a descendant
-	  // of the currently exported graph
+          // no need to record the current node value if
+          // the pointed subgraph is not a descendant
+          // of the currently exported graph
           if (!graph->getDescendantGraph(id))
             continue;
         }
@@ -365,20 +365,19 @@ public:
           ++progress;
 
           // reindex embedded edges
-          const set<edge> &eEdges =
-	    static_cast<GraphProperty *>(prop)->getEdgeValue(ite);
+          const set<edge> &eEdges = static_cast<GraphProperty *>(prop)->getEdgeValue(ite);
           set<edge> rEdges;
 
-	  for (auto eEdge : eEdges) {
-	    // reindex only embedded edges belonging to the exported graph
-	    if (graph->isElement(eEdge)) {
-	      edge rEdge = getEdge(eEdge);
-	      rEdges.insert(rEdge);
-	    }
-	  }
+          for (auto eEdge : eEdges) {
+            // reindex only embedded edges belonging to the exported graph
+            if (graph->isElement(eEdge)) {
+              edge rEdge = getEdge(eEdge);
+              rEdges.insert(rEdge);
+            }
+          }
 
-	  if (rEdges.empty())
-	    continue;
+          if (rEdges.empty())
+            continue;
 
           // finally save the vector
           os << "(edge " << getEdge(ite).id << " \"";
