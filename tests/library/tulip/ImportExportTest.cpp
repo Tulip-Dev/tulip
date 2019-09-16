@@ -26,6 +26,7 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
+#include <tulip/GraphProperty.h>
 
 #include <tulip/ImportModule.h>
 #include <tulip/ExportModule.h>
@@ -164,20 +165,20 @@ void ImportExportTest::testSubGraphsImportExport() {
   int sub1higherBound = 25;
   std::vector<node> sub2nodes;
   int sub2lowerBound = 50;
-  int sub2higherBound = 150;
+  int sub2higherBound = 100;
   std::vector<node> subsubnodes;
   int subsublowerBound = 75;
-  int subsubhigherBound = 125;
+  int subsubhigherBound = 100;
   int i = 0;
   for (auto n : original->nodes()) {
-    if (i >= sub1lowerBound && i <= sub1higherBound) {
+    if (i >= sub1lowerBound && i < sub1higherBound) {
       sub1nodes.push_back(n);
     }
 
-    if (i >= sub2lowerBound && i <= sub2higherBound) {
+    if (i >= sub2lowerBound && i < sub2higherBound) {
       sub2nodes.push_back(n);
 
-      if (i >= subsublowerBound && i <= subsubhigherBound) {
+      if (i >= subsublowerBound && i < subsubhigherBound) {
         subsubnodes.push_back(n);
       }
     }
@@ -262,13 +263,7 @@ Graph *ImportExportTest::createSimpleGraph() const {
     }
   }
 
-  IntegerProperty *id = original->getProperty<IntegerProperty>("id");
-  for (auto n : original->nodes()) {
-    id->setNodeValue(n, n.id);
-  }
-  for (auto e : original->edges()) {
-    id->setEdgeValue(e, e.id);
-  }
+  updateIdProperty(original);
 
   // create and populate any supported graph properties types in Tulip
   // to check that their serialization/deserialization is correct
@@ -380,6 +375,16 @@ Graph *ImportExportTest::createSimpleGraph() const {
   return original;
 }
 
+void ImportExportTest::updateIdProperty(Graph * graph) const {
+  IntegerProperty *id = graph->getProperty<IntegerProperty>("id");
+  for (auto n : graph->nodes()) {
+    id->setNodeValue(n, n.id);
+  }
+  for (auto e : graph->edges()) {
+    id->setEdgeValue(e, e.id);
+  }
+}
+
 void ImportExportTest::testNanInfValuesImportExport() {
   Graph *original = createSimpleGraph();
   DoubleProperty *doubleProp = original->getProperty<DoubleProperty>("doubleProp");
@@ -404,6 +409,33 @@ void ImportExportTest::testNanInfValuesImportExport() {
   delete original;
 }
 
+void ImportExportTest::testMetaGraphImportExport() {
+  Graph *graph = createSimpleGraph();
+
+  // Add a groups subgraph and create a bunch of meta-nodes
+  // and meta-edges
+  Graph *groups = graph->addCloneSubGraph("groups");
+  unsigned int groupsSize = 20;
+  unsigned int nbNodes = graph->numberOfNodes();
+  for (uint i = 0 ; i < nbNodes ; i += groupsSize) {
+    vector<node> group;
+    group.reserve(groupsSize);
+    for (uint j = i ; j < i + groupsSize ; ++j) {
+      group.push_back(node(j));
+    }
+    groups->createMetaNode(group, false);
+  }
+  updateIdProperty(graph);
+
+  // test the root graph and its meta information are correctly
+  // exported then imported
+  importExportGraph(graph);
+  // test the groups subgraph without meta information is correctly
+  // exported then imported
+  importExportGraph(groups);
+  delete graph;
+}
+
 void ImportExportTest::importExportGraph(tlp::Graph *original) {
 
   const string exportFilename = "graph_export";
@@ -411,6 +443,19 @@ void ImportExportTest::importExportGraph(tlp::Graph *original) {
   exportGraph(original, exportAlgorithm, exportFilename);
 
   Graph *imported = importGraph(importAlgorithm, exportFilename);
+
+  // When exporting a leaf subgraph in the hierarchy containing meta-nodes,
+  // it should be exported as a graph without meta-nodes and meta-edges
+  // as the nodes and edges contained in those are not elements of the
+  // exported graph.
+  // So we remove meta information in the exported graph in order to successfully
+  // tests its equality with the imported graph.
+  if (original != original->getSuperGraph() && original->numberOfSubGraphs() == 0 &&
+      original->existProperty("viewMetaGraph")) {
+    GraphProperty *viewMetaGraph = original->getProperty<GraphProperty>("viewMetaGraph");
+    viewMetaGraph->setValueToGraphNodes(nullptr, original);
+    viewMetaGraph->setValueToGraphEdges(set<edge>(), original);
+  }
 
   testGraphsAreEqual(original, imported);
 

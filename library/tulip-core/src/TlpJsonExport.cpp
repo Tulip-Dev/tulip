@@ -31,6 +31,7 @@
 #include <tulip/TlpTools.h>
 #include <tulip/YajlFacade.h>
 #include <tulip/JsonTokens.h>
+#include <tulip/GraphProperty.h>
 
 using namespace std;
 using namespace tlp;
@@ -246,11 +247,29 @@ public:
       if (property->hasNonDefaultValuatedNodes()) {
         _writer.writeString(NodesValuesToken);
         _writer.writeMapOpen();
+	// when exporting the GraphProperty, if the exported graph
+	// is not the root graph we will have to check if the node pointed
+	// subgraph is a descendant graph of this graph
+	bool checkForDescendantGraph = (g->getId() != 0) &&
+	  (property->getTypename() == GraphProperty::propertyTypename);
         for (auto n : property->getNonDefaultValuatedNodes(g)) {
+
+          string sValue = property->getNodeStringValue(n);
+
+          if (checkForDescendantGraph) {
+            unsigned int id = strtoul(sValue.c_str(), nullptr, 10);
+
+            // no need to record the current node value if
+	    // the pointed subgraph is not a descendant
+	    // of the currently exported graph
+            if (!graph->getDescendantGraph(id))
+              continue;
+          }
+
           stringstream temp;
           temp << graph->nodePos(n);
           _writer.writeString(temp.str());
-          string sValue = property->getNodeStringValue(n);
+
 
           if (writingPathViewProperty && !TulipBitmapDir.empty()) {
             size_t pos = sValue.find(TulipBitmapDir);
@@ -268,17 +287,35 @@ public:
         _writer.writeString(EdgesValuesToken);
         _writer.writeMapOpen();
         for (auto e : property->getNonDefaultValuatedEdges(g)) {
+          string sValue;
+
+          if (property->getTypename() == GraphProperty::propertyTypename) {
+            // reindex embedded edges
+            const set<edge> &eEdges = static_cast<GraphProperty *>(property)->getEdgeValue(e);
+            set<edge> rEdges;
+            for (auto eEdge : eEdges) {
+	      if (graph->isElement(eEdge))
+		rEdges.insert(edge(graph->edgePos(eEdge)));
+            }
+
+	    if (rEdges.empty())
+	      continue;
+
+	    sValue = EdgeSetType::toString(rEdges);
+          } else {
+            sValue = property->getEdgeStringValue(e);
+
+            if (writingPathViewProperty && !TulipBitmapDir.empty()) {
+              size_t pos = sValue.find(TulipBitmapDir);
+
+              if (pos != string::npos)
+                sValue.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+            }
+          }
+
           stringstream temp;
           temp << graph->edgePos(e);
           _writer.writeString(temp.str());
-          string sValue = property->getEdgeStringValue(e);
-
-          if (writingPathViewProperty && !TulipBitmapDir.empty()) {
-            size_t pos = sValue.find(TulipBitmapDir);
-
-            if (pos != string::npos)
-              sValue.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
-          }
 
           _writer.writeString(sValue);
         }
