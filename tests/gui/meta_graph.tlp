@@ -73,8 +73,8 @@
 (default "" "()")
 (node 4 "2")
 (node 5 "3")
-(edge 3 "(1 )")
-(edge 4 "(3 )")
+(edge 3 "(1)")
+(edge 4 "(3)")
 )
 (property  0 double "viewMetric"
 (default "0" "0")
