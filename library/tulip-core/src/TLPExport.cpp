@@ -317,6 +317,11 @@ public:
         // sort nodes to ensure a predictable ordering of the ouput
         itN = new StableIterator<node>(itN, 0, true, true);
 
+      // when exporting the GraphProperty, if the exported graph
+      // is not the root graph we will have to check if the node pointed
+      // subgraph is a descendant graph of this graph
+      bool checkForDescendantGraph =
+          (g->getId() != 0) && (prop->getTypename() == GraphProperty::propertyTypename);
       while (itN->hasNext()) {
         auto itn = itN->next();
         if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
@@ -331,12 +336,12 @@ public:
 
           if (pos != string::npos)
             tmp.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
-        } else if (g->getId() != 0 && // if it is not the real root graph
-                   prop->getTypename() == GraphProperty::propertyTypename) {
+        } else if (checkForDescendantGraph) {
           unsigned int id = strtoul(tmp.c_str(), nullptr, 10);
 
-          // we must check if the pointed subgraph
-          // is a descendant of the currently export graph
+          // no need to record the current node value if
+          // the pointed subgraph is not a descendant
+          // of the currently exported graph
           if (!graph->getDescendantGraph(id))
             continue;
         }
@@ -359,15 +364,20 @@ public:
 
           ++progress;
 
-          // for GraphProperty we must ensure the reindexing
-          // of embedded edges
-          const set<edge> &edges = static_cast<GraphProperty *>(prop)->getEdgeValue(ite);
+          // reindex embedded edges
+          const set<edge> &eEdges = static_cast<GraphProperty *>(prop)->getEdgeValue(ite);
           set<edge> rEdges;
-          set<edge>::const_iterator its;
 
-          for (its = edges.begin(); its != edges.end(); ++its) {
-            rEdges.insert(getEdge(*its));
+          for (auto eEdge : eEdges) {
+            // reindex only embedded edges belonging to the exported graph
+            if (graph->isElement(eEdge)) {
+              edge rEdge = getEdge(eEdge);
+              rEdges.insert(rEdge);
+            }
           }
+
+          if (rEdges.empty())
+            continue;
 
           // finally save the vector
           os << "(edge " << getEdge(ite).id << " \"";

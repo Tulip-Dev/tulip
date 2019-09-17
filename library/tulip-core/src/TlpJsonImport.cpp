@@ -390,6 +390,12 @@ public:
               _currentProperty->setEdgeStringValue(e, eValue);
             } else
               _currentProperty->setEdgeStringValue(e, value);
+          } else if (_currentProperty->getTypename() == GraphProperty::propertyTypename) {
+            // setEdgeStringValue does nothing with GraphProperty
+            // (see GraphProperty.cpp), so use setEdgeValue instead
+            set<edge> eEdges;
+            EdgeSetType::fromString(eEdges, value);
+            static_cast<GraphProperty *>(_currentProperty)->setEdgeValue(e, eEdges);
           } else
             _currentProperty->setEdgeStringValue(e, value);
         }

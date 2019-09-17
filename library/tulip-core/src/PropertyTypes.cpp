@@ -71,8 +71,11 @@ void EdgeSetType::write(ostream &os, const RealType &v) {
   os << '(';
   set<edge>::const_iterator it;
 
-  for (it = v.begin(); it != v.end(); ++it)
-    os << (*it).id << ' ';
+  for (it = v.begin(); it != v.end(); ++it) {
+    if (it != v.begin())
+      os << ' ';
+    os << (*it).id ;
+  }
 
   os << ')';
 }

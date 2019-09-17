@@ -382,7 +382,13 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
         // loop on nodes
         unsigned int nbValues = 0;
+        // when exporting the GraphProperty, if the exported graph
+        // is not the root graph we will have to check if the node pointed
+        // subgraph is a descendant graph of this graph
+        bool checkForDescendantGraph =
+            propGraphId && (prop->getTypename() == GraphProperty::propertyTypename);
         for (auto n : prop->getNonDefaultValuatedNodes(propGraphId ? nullptr : graph)) {
+          // write current node reindexed id
           size = getNode(n).id;
           s.write(reinterpret_cast<const char *>(&size), sizeof(size));
 
@@ -394,21 +400,15 @@ bool TLPBExport::exportGraph(std::ostream &os) {
               sVal.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
 
             StringType::writeb(s, sVal);
-          } else {
-            if (propGraphId && // if it is not the real root graph
-                prop->getTypename() == GraphProperty::propertyTypename) {
-              string tmp = prop->getNodeStringValue(n);
-              unsigned int id = strtoul(tmp.c_str(), nullptr, 10);
+          } else if (checkForDescendantGraph) {
+            string tmp = prop->getNodeStringValue(n);
+            unsigned int id = strtoul(tmp.c_str(), nullptr, 10);
 
-              // we must check if the pointed subgraph
-              // is a descendant of the currently export graph
-              if (!graph->getDescendantGraph(id)) {
-                unsigned int id = 0;
-                UnsignedIntegerType::writeb(s, id);
-              }
-            } else
-              prop->writeNodeValue(s, n);
-          }
+            // record a null value if the node pointed subgraph
+            // is not a descendant of the currently exported graph
+            UnsignedIntegerType::writeb(s, graph->getDescendantGraph(id) ? id : 0);
+          } else
+            prop->writeNodeValue(s, n);
 
           ++nbValues;
 
@@ -487,13 +487,16 @@ bool TLPBExport::exportGraph(std::ostream &os) {
           s.write(reinterpret_cast<const char *>(&size), sizeof(size));
 
           if (isGraphProperty) {
-            // re-index embedded edges
-            const set<edge> &edges = static_cast<GraphProperty *>(prop)->getEdgeValue(e);
+            // reindex embedded edges
+            const set<edge> &eEdges = static_cast<GraphProperty *>(prop)->getEdgeValue(e);
             set<edge> rEdges;
-            set<edge>::const_iterator its;
 
-            for (its = edges.begin(); its != edges.end(); ++its) {
-              rEdges.insert(getEdge(*its));
+            for (auto eEdge : eEdges) {
+              // reindex only embedded edges belonging to the exported graph
+              if (!graph->isElement(eEdge))
+                continue;
+              edge rEdge = getEdge(eEdge);
+              rEdges.insert(rEdge);
             }
 
             // finally save set

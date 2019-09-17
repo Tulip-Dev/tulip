@@ -34,8 +34,10 @@ public:
   void testSubGraphsImportExport();
   void testAttributes();
   void testNanInfValuesImportExport();
+  void testMetaGraphImportExport();
 
 protected:
+  void updateIdProperty(tlp::Graph *graph) const;
   tlp::Graph *createSimpleGraph() const;
   void importExportGraph(tlp::Graph *original);
   void exportGraph(tlp::Graph *graph, const std::string &exportPluginName,
@@ -56,6 +58,7 @@ class TlpImportExportTest : public ImportExportTest {
   CPPUNIT_TEST(testAttributes);
   CPPUNIT_TEST(testSubGraphsImportExport);
   CPPUNIT_TEST(testNanInfValuesImportExport);
+  CPPUNIT_TEST(testMetaGraphImportExport);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -68,6 +71,7 @@ class TlpBImportExportTest : public ImportExportTest {
   CPPUNIT_TEST(testAttributes);
   CPPUNIT_TEST(testSubGraphsImportExport);
   CPPUNIT_TEST(testNanInfValuesImportExport);
+  CPPUNIT_TEST(testMetaGraphImportExport);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -80,6 +84,7 @@ class JsonImportExportTest : public ImportExportTest {
   CPPUNIT_TEST(testAttributes);
   CPPUNIT_TEST(testSubGraphsImportExport);
   CPPUNIT_TEST(testNanInfValuesImportExport);
+  CPPUNIT_TEST(testMetaGraphImportExport);
   CPPUNIT_TEST_SUITE_END();
 
 public:
