@@ -34,7 +34,7 @@ using namespace tlp;
 class NominatimResultsParser : public YajlParseFacade {
 
 public:
-  void parseString(const string &value) override {
+  void parseString(string &value) override {
     if (_currentKey == "display_name") {
       adresses.push_back(value);
     } else if (_currentKey == "lat") {
@@ -45,7 +45,7 @@ public:
     }
   }
 
-  void parseMapKey(const string &value) override {
+  void parseMapKey(string &value) override {
     _currentKey = value;
   }
 

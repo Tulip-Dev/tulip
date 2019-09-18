@@ -118,11 +118,11 @@ public:
     return _result;
   }
 
-  void parseString(const std::string &value) override {
+  void parseString(std::string &value) override {
     _currentMap[_currentKey] = tlpStringToQString(value);
   }
 
-  void parseMapKey(const std::string &value) override {
+  void parseMapKey(std::string &value) override {
     _currentKey = value.c_str();
   }
 
