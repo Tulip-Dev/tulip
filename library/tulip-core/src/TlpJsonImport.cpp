@@ -126,7 +126,7 @@ public:
     }
   }
 
-  void parseMapKey(const std::string &value) override {
+  void parseMapKey(std::string &value) override {
     if (_parsingProperties && !_parsingPropertyNodeValues && !_parsingPropertyEdgeValues &&
         !_parsingPropertyDefaultEdgeValue && !_parsingPropertyDefaultNodeValue &&
         _propertyName.empty()) {
@@ -289,7 +289,7 @@ public:
     }
   }
 
-  void parseString(const std::string &value) override {
+  void parseString(std::string &value) override {
     if (_parsingProperties) {
       if (_parsingPropertyType && !_propertyName.empty()) {
         _parsingPropertyType = false;
@@ -319,14 +319,10 @@ public:
             // if needed replace symbolic path by real path
             size_t pos = value.find("TulipBitmapDir/");
 
-            if (pos != std::string::npos) {
-              string dValue(value);
-              dValue.replace(pos, 15, TulipBitmapDir);
-              _currentProperty->setAllNodeStringValue(dValue);
-            } else
-              _currentProperty->setAllNodeStringValue(value);
-          } else
-            _currentProperty->setAllNodeStringValue(value);
+            if (pos != std::string::npos)
+              value.replace(pos, 15, TulipBitmapDir);
+          }
+	  _currentProperty->setAllNodeStringValue(value);
 
           _parsingPropertyDefaultNodeValue = false;
         }
@@ -336,14 +332,10 @@ public:
             // if needed replace symbolic path by real path
             size_t pos = value.find("TulipBitmapDir/");
 
-            if (pos != std::string::npos) {
-              string dValue(value);
-              dValue.replace(pos, 15, TulipBitmapDir);
-              _currentProperty->setAllEdgeStringValue(dValue);
-            } else
-              _currentProperty->setAllEdgeStringValue(value);
-          } else
-            _currentProperty->setAllEdgeStringValue(value);
+            if (pos != std::string::npos)
+              value.replace(pos, 15, TulipBitmapDir);
+	  }
+	  _currentProperty->setAllEdgeStringValue(value);
 
           _parsingPropertyDefaultEdgeValue = false;
         }
@@ -365,14 +357,10 @@ public:
             // if needed replace symbolic path by real path
             size_t pos = value.find("TulipBitmapDir/");
 
-            if (pos != std::string::npos) {
-              string nValue(value);
-              nValue.replace(pos, 15, TulipBitmapDir);
-              _currentProperty->setNodeStringValue(n, nValue);
-            } else
-              _currentProperty->setNodeStringValue(n, value);
-          } else
-            _currentProperty->setNodeStringValue(n, value);
+            if (pos != std::string::npos)
+              value.replace(pos, 15, TulipBitmapDir);
+          }
+	  _currentProperty->setNodeStringValue(n, value);
         }
 
         if (_parsingPropertyEdgeValues) {
@@ -384,12 +372,10 @@ public:
             // if needed replace symbolic path by real path
             size_t pos = value.find("TulipBitmapDir/");
 
-            if (pos != std::string::npos) {
-              string eValue(value);
-              eValue.replace(pos, 15, TulipBitmapDir);
-              _currentProperty->setEdgeStringValue(e, eValue);
-            } else
-              _currentProperty->setEdgeStringValue(e, value);
+            if (pos != std::string::npos)
+              value.replace(pos, 15, TulipBitmapDir);
+
+	    _currentProperty->setEdgeStringValue(e, value);
           } else if (_currentProperty->getTypename() == GraphProperty::propertyTypename) {
             // setEdgeStringValue does nothing with GraphProperty
             // (see GraphProperty.cpp), so use setEdgeValue instead
@@ -490,7 +476,7 @@ public:
   void parseInteger(long long integerVal) override {
     _proxy->parseInteger(integerVal);
   }
-  void parseMapKey(const std::string &value) override {
+  void parseMapKey(std::string &value) override {
     _proxy->parseMapKey(value);
   }
   void parseNull() override {
@@ -505,7 +491,7 @@ public:
   void parseStartMap() override {
     _proxy->parseStartMap();
   }
-  void parseString(const std::string &value) override {
+  void parseString(std::string &value) override {
     _proxy->parseString(value);
   }
 
@@ -561,7 +547,7 @@ public:
     return _parsingSucceeded;
   }
 
-  void parseMapKey(const std::string &value) override {
+  void parseMapKey(std::string &value) override {
     if (value == GraphToken) {
       delete _proxy;
       _proxy = new TlpJsonGraphParser(graph, _progress);

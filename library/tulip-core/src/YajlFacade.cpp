@@ -176,7 +176,7 @@ void YajlParseFacade::parseEndMap() {}
 
 void YajlParseFacade::parseInteger(long long) {}
 
-void YajlParseFacade::parseMapKey(const std::string &) {}
+void YajlParseFacade::parseMapKey(std::string &) {}
 
 void YajlParseFacade::parseNull() {}
 
@@ -186,7 +186,7 @@ void YajlParseFacade::parseStartArray() {}
 
 void YajlParseFacade::parseStartMap() {}
 
-void YajlParseFacade::parseString(const std::string &) {}
+void YajlParseFacade::parseString(std::string &) {}
 
 /** ============================================================= **/
 

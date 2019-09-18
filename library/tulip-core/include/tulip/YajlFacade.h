@@ -56,8 +56,8 @@ public:
   virtual void parseInteger(long long integerVal);
   virtual void parseDouble(double doubleVal);
   virtual void parseNumber(const char *numberVal, size_t numberLen);
-  virtual void parseString(const std::string &value);
-  virtual void parseMapKey(const std::string &value);
+  virtual void parseString(std::string &value);
+  virtual void parseMapKey(std::string &value);
   virtual void parseStartMap();
   virtual void parseEndMap();
   virtual void parseStartArray();
