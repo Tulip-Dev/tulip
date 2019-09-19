@@ -322,7 +322,7 @@ public:
             if (pos != std::string::npos)
               value.replace(pos, 15, TulipBitmapDir);
           }
-	  _currentProperty->setAllNodeStringValue(value);
+          _currentProperty->setAllNodeStringValue(value);
 
           _parsingPropertyDefaultNodeValue = false;
         }
@@ -334,8 +334,8 @@ public:
 
             if (pos != std::string::npos)
               value.replace(pos, 15, TulipBitmapDir);
-	  }
-	  _currentProperty->setAllEdgeStringValue(value);
+          }
+          _currentProperty->setAllEdgeStringValue(value);
 
           _parsingPropertyDefaultEdgeValue = false;
         }
@@ -360,7 +360,7 @@ public:
             if (pos != std::string::npos)
               value.replace(pos, 15, TulipBitmapDir);
           }
-	  _currentProperty->setNodeStringValue(n, value);
+          _currentProperty->setNodeStringValue(n, value);
         }
 
         if (_parsingPropertyEdgeValues) {
@@ -375,7 +375,7 @@ public:
             if (pos != std::string::npos)
               value.replace(pos, 15, TulipBitmapDir);
 
-	    _currentProperty->setEdgeStringValue(e, value);
+            _currentProperty->setEdgeStringValue(e, value);
           } else if (_currentProperty->getTypename() == GraphProperty::propertyTypename) {
             // setEdgeStringValue does nothing with GraphProperty
             // (see GraphProperty.cpp), so use setEdgeValue instead
