@@ -83,6 +83,9 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, const std::string &f
 
   // restore original pluginPath value
   _pluginPath = currentPluginPath;
+
+  // register our exit handler after the plugins load
+  tlp::registerTulipExitHandler();
 }
 
 void PluginLibraryLoader::loadPluginsFromDir(const std::string &rootPath, PluginLoader *loader,
@@ -112,6 +115,9 @@ void PluginLibraryLoader::loadPluginsFromDir(const std::string &rootPath, Plugin
 
   // restore original pluginPath value
   _pluginPath = currentPluginPath;
+
+  // register our exit handler after the plugins load
+  tlp::registerTulipExitHandler();
 }
 
 #ifdef _WIN32

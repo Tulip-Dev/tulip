@@ -190,9 +190,9 @@ public:
 #ifdef __APPLE__
 
 // In order to workaround an odd phenomenon on some MacOS runtimes when an application
-// shutdows, use OpenMP C API to declare critical sections instead of directives.
+// shutdowns, use OpenMP C API to declare critical sections instead of directives.
 // https://www.imagemagick.org/discourse-server/viewtopic.php?f=3&t=29031&start=15#p129707
-// gives more detail about the issue
+// gives more details about the issue
 
 class OpenMPLock {
 public:
@@ -200,12 +200,9 @@ public:
   ~OpenMPLock();
   void lock();
   void unlock();
-  static void exitHandler();
-  static void registerExitHandler();
 
 private:
   omp_lock_t *_lock;
-  static bool _canUseLock;
 };
 
 #define TLP_LOCK_SECTION(mtx)                                                                      \
