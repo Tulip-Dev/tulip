@@ -73,14 +73,11 @@ jobs:
         apt:
           # install Tulip build dependencies
           packages:
-            - g++-9
             - cmake
             - ccache
             - ninja-build
             - libqhull-dev
             - libyajl-dev
-            - python3.7
-            - libpython3.7-dev
             - libcppunit-dev
             - binutils-dev
       before_install:
@@ -89,7 +86,9 @@ jobs:
         # needed to get the latest Python 3.7.x
         - sudo add-apt-repository ppa:deadsnakes/ppa -y
         - sudo apt-get update -q
-        # force the use of GCC 9
+        # get GCC 9.x and Python 3.7.x
+        - sudo apt-get -y g++-9 python3.7 libpython3.7-dev
+	# force the use of GCC 9
         - eval "${MATRIX_EVAL}"
       env:
         # use Python 3.7
@@ -174,14 +173,11 @@ jobs:
               key_url: 'http://archive.neon.kde.org/public.key'
           # install Tulip build dependencies
           packages:
-            - g++-9
             - cmake
             - ccache
             - ninja-build
             - libqhull-dev
             - libyajl-dev
-            - python3.7
-            - libpython3.7-dev
             - libcppunit-dev
             - binutils-dev
             - qt5-default
@@ -198,6 +194,8 @@ jobs:
         # needed to get the latest Python 3.7.x
         - sudo add-apt-repository ppa:deadsnakes/ppa -y
         - sudo apt-get update -q
+        # get GCC 9.x and Python 3.7.x
+        - sudo apt-get -y g++-9 python3.7 libpython3.7-dev
         # force the use of GCC 9
         - eval "${MATRIX_EVAL}"
       env:
