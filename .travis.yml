@@ -66,7 +66,7 @@ jobs:
     # modern Tulip core build on Linux
     -
       os: linux
-      dist: xenial
+      dist: bionic
       compiler: gcc
       cache: ccache
       addons:
@@ -93,7 +93,7 @@ jobs:
       env:
         # use Python 3.7
         - PYTHON_EXECUTABLE=/usr/bin/python3.7
-        # use GCC 7
+        # use GCC 8
         - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
       script:
         # create build directory
@@ -160,7 +160,7 @@ jobs:
     # modern Tulip complete build on Linux
     -
       os: linux
-      dist: xenial
+      dist: bionic
       compiler: gcc
       cache: ccache
       services:
@@ -171,7 +171,7 @@ jobs:
           sources:
             - ubuntu-toolchain-r-test
             - deadsnakes
-            - sourceline: 'deb http://archive.neon.kde.org/user/ xenial main'
+            - sourceline: 'deb http://archive.neon.kde.org/user/ bionic main'
               key_url: 'http://archive.neon.kde.org/public.key'
           # install Tulip build dependencies
           packages:
@@ -199,7 +199,7 @@ jobs:
       env:
         # use Python 3.7
         - PYTHON_EXECUTABLE=/usr/bin/python3.7
-        # use GCC 7
+        # use GCC 8
         - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
       script:
         # create build directoty
