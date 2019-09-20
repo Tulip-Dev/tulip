@@ -325,6 +325,7 @@ void BasicPluginsTest::testInducedSubGraphSelection() {
   bool result = computeProperty<BooleanProperty>("Induced SubGraph");
   CPPUNIT_ASSERT(result);
   // check with old name
+  tlp::debug() << "Testing deprecated 'Induced Sub-Graph'..." << std::endl;
   result = computeProperty<BooleanProperty>("Induced Sub-Graph");
   CPPUNIT_ASSERT(result);
 }
@@ -352,6 +353,7 @@ void BasicPluginsTest::testReachableSubGraphSelection() {
   bool result = computeProperty<BooleanProperty>("Reachable SubGraph");
   CPPUNIT_ASSERT(result);
   // check with old name
+  tlp::debug() << "Testing deprecated 'Reachable Sub-Graph'..." << std::endl;
   result = computeProperty<BooleanProperty>("Reachable Sub-Graph");
   CPPUNIT_ASSERT(result);
 }
