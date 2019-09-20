@@ -5,8 +5,8 @@
 #     * Qt 5.5 on Linux, Qt 5.9 on MacOS
 #     * Python 2.7
 #  - a "modern" Tulip build using:
-#     * recent compiler (GCC 8.1 on Linux, clang 7.0 from MacPorts or Homebrew on Mac OS)
-#     * Qt 5.11 on Linux, Qt 5.12 on MacOS
+#     * recent compiler (GCC 9.x on Linux, clang 8.x from MacPorts or Homebrew on Mac OS)
+#     * Qt 5.12 on Linux, Qt 5.12 on MacOS
 #     * Python 3.7 on Linux, Python 2.7 on MacOS
 # As TravisCI limits build job times to 45 minutes, Tulip is built in two successive stages
 # to avoid timeouts (which happened often with MacOs builds):
@@ -71,13 +71,9 @@ jobs:
       cache: ccache
       addons:
         apt:
-          # we get GCC 8.x and Python 3.7 from external ppas
-          sources:
-            - ubuntu-toolchain-r-test
-            - deadsnakes
           # install Tulip build dependencies
           packages:
-            - g++-8
+            - g++-9
             - cmake
             - ccache
             - ninja-build
@@ -88,13 +84,18 @@ jobs:
             - libcppunit-dev
             - binutils-dev
       before_install:
-        # force the use of GCC 8
+        # needed to get GCC 9.x
+        - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+        # needed to get the latest Python 3.7.x
+        - sudo add-apt-repository ppa:deadsnakes/ppa -y
+        - sudo apt-get update -q
+	# force the use of GCC 9
         - eval "${MATRIX_EVAL}"
       env:
         # use Python 3.7
         - PYTHON_EXECUTABLE=/usr/bin/python3.7
-        # use GCC 8
-        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
+        # use GCC 9
+        - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
       script:
         # create build directory
         - mkdir build && cd build
@@ -167,15 +168,13 @@ jobs:
         - xvfb
       addons:
         apt:
-          # we get GCC 8.x, Python 3.7 and Qt 5.11 from external ppas
+          # we get Qt 5.12 from external ppa
           sources:
-            - ubuntu-toolchain-r-test
-            - deadsnakes
             - sourceline: 'deb http://archive.neon.kde.org/user/ bionic main'
               key_url: 'http://archive.neon.kde.org/public.key'
           # install Tulip build dependencies
           packages:
-            - g++-8
+            - g++-9
             - cmake
             - ccache
             - ninja-build
@@ -194,13 +193,18 @@ jobs:
             - libjpeg-dev
             - libfreetype6-dev
       before_install:
-        # force the use of GCC 8
+        # needed to get GCC 9.x
+        - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+        # needed to get the latest Python 3.7.x
+        - sudo add-apt-repository ppa:deadsnakes/ppa -y
+        - sudo apt-get update -q
+        # force the use of GCC 9
         - eval "${MATRIX_EVAL}"
       env:
         # use Python 3.7
         - PYTHON_EXECUTABLE=/usr/bin/python3.7
-        # use GCC 8
-        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
+        # use GCC 9
+        - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
       script:
         # create build directoty
         - mkdir build && cd build

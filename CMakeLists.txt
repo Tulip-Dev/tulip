@@ -21,6 +21,11 @@ IF(POLICY CMP0068)
   CMAKE_POLICY(SET CMP0068 OLD)
 ENDIF(POLICY CMP0068)
 
+# Force the use of the legacy libGL.so for CMake >= 3.11
+IF(POLICY CMP0072)
+  CMAKE_POLICY(SET CMP0072 OLD)
+ENDIF(POLICY CMP0072)
+
 # enable the use of ccache for Tulip developers to speed up the build process
 IF(NOT MSVC)
   SET(TULIP_USE_CCACHE OFF CACHE BOOL "Do you want to use ccache to speed up the build process during Tulip development ? [OFF|ON]")
