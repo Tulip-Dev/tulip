@@ -88,7 +88,7 @@ jobs:
         - sudo apt-get update -q
         # get GCC 9.x and Python 3.7.x
         - sudo apt-get -y g++-9 python3.7 libpython3.7-dev
-	# force the use of GCC 9
+        # force the use of GCC 9
         - eval "${MATRIX_EVAL}"
       env:
         # use Python 3.7
