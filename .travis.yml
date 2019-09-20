@@ -89,7 +89,7 @@ jobs:
         # needed to get the latest Python 3.7.x
         - sudo add-apt-repository ppa:deadsnakes/ppa -y
         - sudo apt-get update -q
-	# force the use of GCC 9
+        # force the use of GCC 9
         - eval "${MATRIX_EVAL}"
       env:
         # use Python 3.7
