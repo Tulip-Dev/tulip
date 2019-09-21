@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <cstdlib>
 #include <cstring>
 #include <ctime>
 #include <string>
@@ -52,9 +53,6 @@
 #include <tulip/PluginLoader.h>
 #include <tulip/PropertyTypes.h>
 #include <tulip/TulipRelease.h>
-#if defined(_OPENMP) && defined(__APPLE__)
-#include <tulip/ParallelTools.h>
-#endif
 
 using namespace std;
 using namespace tlp;
@@ -71,6 +69,22 @@ string tlp::TulipLibDir;
 string tlp::TulipPluginsPath;
 string tlp::TulipBitmapDir;
 string tlp::TulipShareDir;
+// indicates that the end of the program has been reached
+bool tlp::TulipProgramExiting = false;
+
+// must be called at exit to ensure a clean exit
+static void atExit() {
+  tlp::TulipProgramExiting = true;
+}
+
+// as the exit handlers are called in reverse order
+// of their registration our own has to be registered after
+// this shared lib has been loaded (see initTulipLib) and
+// after the plugins are loaded (see PluginLibraryLoader::loadPlugins...)
+void tlp::registerTulipExitHandler() {
+  atexit(atExit);
+}
+
 #ifdef _WIN32
 const char tlp::PATH_DELIMITER = ';';
 #else
@@ -244,12 +258,8 @@ void tlp::initTulipLib(const char *appDirPath) {
   }
 #endif
 
-#if defined(_OPENMP) && defined(__APPLE__)
-  // Register an exit handler to prevent using OpenMP locks
-  // when application shutdowns as some crashes have been observed
-  // on some MacOS runtimes (10.12 for instance)
-  OpenMPLock::registerExitHandler();
-#endif
+  // register our exit handler enabling exit detection
+  registerTulipExitHandler();
 
   // check that TulipShareDir exists
   checkDirectory(TulipShareDir = curDir, tlpDirSet, throwExOnCheck);

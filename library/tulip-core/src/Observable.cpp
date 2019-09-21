@@ -32,6 +32,7 @@
 #include <tulip/ConversionIterator.h>
 #include <tulip/FilterIterator.h>
 #include <tulip/ParallelTools.h>
+#include <tulip/TlpTools.h>
 #include <tulip/TulipException.h>
 #include <tulip/vectorgraph.h>
 
@@ -58,7 +59,6 @@ static tlp::EdgeProperty<unsigned char> _oType;
 class ObservationGraph : public VectorGraph {
 public:
   static ObservationGraph _oGraph;
-  static bool _oGraphDestroyed;
 
   ObservationGraph() {
     _oGraph.alloc(_oPointer);
@@ -68,7 +68,6 @@ public:
   }
 
   ~ObservationGraph() {
-    _oGraphDestroyed = true;
     _oGraph.free(_oPointer);
     _oGraph.free(_oAlive);
     _oGraph.free(_oEventsToTreat);
@@ -77,7 +76,6 @@ public:
 };
 // _oGraph the graph used to store all observers and connection between them.
 ObservationGraph ObservationGraph::_oGraph;
-bool ObservationGraph::_oGraphDestroyed = false;
 
 //_oDelayedDelNode store deleted nodes, to remove them at the end of the notify
 static std::vector<tlp::node> _oDelayedDelNode;
@@ -221,7 +219,7 @@ Observable &Observable::operator=(const Observable &) {
 }
 //----------------------------------
 Observable::~Observable() {
-  if (ObservationGraph::_oGraphDestroyed || _n.isValid() == false)
+  if (TulipProgramExiting || _n.isValid() == false)
     return;
 
   if (!deleteMsgSent)

@@ -59,6 +59,7 @@ extern TLP_SCOPE std::string TulipLibDir;
 extern TLP_SCOPE std::string TulipPluginsPath;
 extern TLP_SCOPE std::string TulipBitmapDir;
 extern TLP_SCOPE std::string TulipShareDir;
+extern TLP_SCOPE bool TulipProgramExiting;
 
 /**
  * @ingroup Plugins
@@ -186,8 +187,9 @@ TLP_SCOPE std::ostream *getOutputFileStream(const std::string &filename,
 ///@cond DOXYGEN_HIDDEN
 // Gui test mode
 TLP_SCOPE bool inGuiTestingMode();
-
 TLP_SCOPE void setGuiTestingMode(bool);
+// exit handler registration
+TLP_SCOPE void registerTulipExitHandler();
 ///@endcond
 } // namespace tlp
 #endif

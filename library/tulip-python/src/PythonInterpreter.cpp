@@ -404,7 +404,10 @@ PythonInterpreter::~PythonInterpreter() {
     PyEval_RestoreThread(mainThreadState);
 
     holdGIL();
-    Py_Finalize();
+    // avoid display of invalid read/use of uninitialised value
+    // when debugging with valgrind
+    if (!TulipProgramExiting)
+      Py_Finalize();
   }
 
   delete consoleOuputEmitter;

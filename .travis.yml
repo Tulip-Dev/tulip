@@ -5,8 +5,8 @@
 #     * Qt 5.5 on Linux, Qt 5.9 on MacOS
 #     * Python 2.7
 #  - a "modern" Tulip build using:
-#     * recent compiler (GCC 8.1 on Linux, clang 7.0 from MacPorts or Homebrew on Mac OS)
-#     * Qt 5.11 on Linux, Qt 5.12 on MacOS
+#     * recent compiler (GCC 9.x on Linux, clang 8.x from MacPorts or Homebrew on Mac OS)
+#     * Qt 5.12 on Linux, Qt 5.12 on MacOS
 #     * Python 3.7 on Linux, Python 2.7 on MacOS
 # As TravisCI limits build job times to 45 minutes, Tulip is built in two successive stages
 # to avoid timeouts (which happened often with MacOs builds):
@@ -66,35 +66,35 @@ jobs:
     # modern Tulip core build on Linux
     -
       os: linux
-      dist: xenial
+      dist: bionic
       compiler: gcc
       cache: ccache
       addons:
         apt:
-          # we get GCC 8.x and Python 3.7 from external ppas
-          sources:
-            - ubuntu-toolchain-r-test
-            - deadsnakes
           # install Tulip build dependencies
           packages:
-            - g++-8
             - cmake
             - ccache
             - ninja-build
             - libqhull-dev
             - libyajl-dev
-            - python3.7
-            - libpython3.7-dev
             - libcppunit-dev
             - binutils-dev
       before_install:
-        # force the use of GCC 8
+        # needed to get GCC 9.x
+        - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+        # needed to get the latest Python 3.7.x
+        - sudo add-apt-repository ppa:deadsnakes/ppa -y
+        - sudo apt-get update -q
+        # get GCC 9.x and Python 3.7.x
+        - sudo apt-get -y install g++-9 python3.7 libpython3.7-dev
+        # force the use of GCC 9
         - eval "${MATRIX_EVAL}"
       env:
         # use Python 3.7
         - PYTHON_EXECUTABLE=/usr/bin/python3.7
-        # use GCC 7
-        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
+        # use GCC 9
+        - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
       script:
         # create build directory
         - mkdir build && cd build
@@ -160,29 +160,24 @@ jobs:
     # modern Tulip complete build on Linux
     -
       os: linux
-      dist: xenial
+      dist: bionic
       compiler: gcc
       cache: ccache
       services:
         - xvfb
       addons:
         apt:
-          # we get GCC 8.x, Python 3.7 and Qt 5.11 from external ppas
+          # we get Qt 5.12 from external ppa
           sources:
-            - ubuntu-toolchain-r-test
-            - deadsnakes
-            - sourceline: 'deb http://archive.neon.kde.org/user/ xenial main'
+            - sourceline: 'deb http://archive.neon.kde.org/user/ bionic main'
               key_url: 'http://archive.neon.kde.org/public.key'
           # install Tulip build dependencies
           packages:
-            - g++-8
             - cmake
             - ccache
             - ninja-build
             - libqhull-dev
             - libyajl-dev
-            - python3.7
-            - libpython3.7-dev
             - libcppunit-dev
             - binutils-dev
             - qt5-default
@@ -194,13 +189,20 @@ jobs:
             - libjpeg-dev
             - libfreetype6-dev
       before_install:
-        # force the use of GCC 8
+        # needed to get GCC 9.x
+        - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+        # needed to get the latest Python 3.7.x
+        - sudo add-apt-repository ppa:deadsnakes/ppa -y
+        - sudo apt-get update -q
+        # get GCC 9.x and Python 3.7.x
+        - sudo apt-get -y install g++-9 python3.7 libpython3.7-dev
+        # force the use of GCC 9
         - eval "${MATRIX_EVAL}"
       env:
         # use Python 3.7
         - PYTHON_EXECUTABLE=/usr/bin/python3.7
-        # use GCC 7
-        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
+        # use GCC 9
+        - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
       script:
         # create build directoty
         - mkdir build && cd build
@@ -287,8 +289,8 @@ jobs:
     # modern Tulip core build on Mac OS (MacPorts)
     -
       os: osx
-      # use xcode10.2 travis image to get a recent clang compiler
-      osx_image: xcode10.2
+      # use the most recent Xcode version
+      osx_image: xcode10.3
       compiler: clang
       cache: ccache
       install:
@@ -361,8 +363,8 @@ jobs:
     # modern Tulip core build on Mac OS (Homebrew)
     -
       os: osx
-      # use xcode10.2 travis image to get a recent clang compiler
-      osx_image: xcode10.2
+      # use the most recent Xcode version
+      osx_image: xcode10.3
       compiler: clang
       cache: ccache
       addons:
@@ -449,8 +451,8 @@ jobs:
     # modern Tulip complete build on Mac OS (MacPorts)
     -
       os: osx
-      # use xcode10.2 travis image to get a recent clang compiler and qt5 package
-      osx_image: xcode10.2
+      # use the most recent Xcode version
+      osx_image: xcode10.3
       compiler: clang
       cache: ccache
       install:
@@ -549,8 +551,8 @@ jobs:
     # modern Tulip complete build on Mac OS (Homebrew)
     -
       os: osx
-      # use xcode10.2 travis image to get a recent qt5 package
-      osx_image: xcode10.2
+      # use the most recent Xcode version
+      osx_image: xcode10.3
       compiler: clang
       cache: ccache
       addons:
