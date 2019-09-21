@@ -41,7 +41,8 @@
           "value": "OFF",
           "type": "BOOL"
         }
-      ]
+      ],
+      "cmakeExecutable": "D:/porgydev/cmake/bin/cmake.exe"
     },
     {
       "environments": [
@@ -94,7 +95,8 @@
           "value": "OFF",
           "type": "BOOL"
         }
-      ]
+      ],
+      "cmakeExecutable": "D:/porgydev/cmake/bin/cmake.exe"
     },
     {
       "name": "x64-Debug",
