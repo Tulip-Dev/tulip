@@ -1,62 +1,6 @@
 ﻿{
   "configurations": [
     {
-      "name": "Linux-Debug",
-      "generator": "Unix Makefiles",
-      "remoteMachineName": "1149469176;127.0.0.1 (username=jvarga, port=2222, authentication=Password)",
-      "configurationType": "Debug",
-      "remoteCMakeListsRoot": "/mnt/d/porgydev/msys/home/Janos/dev/tulip",
-      "cmakeExecutable": "/usr/bin/cmake",
-      "buildRoot": "D:\\porgydev\\build-linux-debug",
-      "installRoot": "D:\\porgydev\\porgy-linux-install-debug",
-      "remoteBuildRoot": "/mnt/d/porgydev/build-linux-debug",
-      "remoteInstallRoot": "/mnt/d/porgydev/porgy-linux-install-debug",
-      "remoteCopySources": false,
-      "remoteCopySourcesOutputVerbosity": "Normal",
-      "remoteCopySourcesConcurrentCopies": "10",
-      "remoteCopySourcesMethod": "rsync",
-      "remoteCopySourcesExclusionList": [ ".vs", ".git" ],
-      "rsyncCommandArgs": "-t --delete --delete-excluded",
-      "remoteCopyBuildOutput": false,
-      "cmakeCommandArgs": "",
-      "buildCommandArgs": "-j 8",
-      "ctestCommandArgs": "",
-      "inheritEnvironments": [ "linux_x64" ],
-      "variables": [
-        {
-          "name": "PORGY_RULE_DEBUG_MESSAGES",
-          "value": "ON",
-          "type": "STRING"
-        },
-        {
-          "name": "PORGY_STRATEGY_DEBUG_MESSAGES",
-          "value": "ON",
-          "type": "STRING"
-        },
-        {
-          "name": "TULIP_USE_CCACHE",
-          "value": "OFF",
-          "type": "STRING"
-        },
-        {
-          "name": "CMAKE_INSTALL_PREFIX",
-          "value": "/mnt/d/porgydev/porgy-linux-install-debug",
-          "type": "STRING"
-        },
-        {
-          "name": "CMAKE_CXX_FLAGS_DEBUG",
-          "value": "-O1 -g",
-          "type": "STRING"
-        },
-        {
-          "name": "OpenGL_GL_PREFERENCE",
-          "value": "GLVND",
-          "type": "STRING"
-        }
-      ],
-      "intelliSenseMode": "linux-gcc-x64"
-    },
-    {
       "environments": [
         {
           "MINGW64_ROOT": "D:\\porgydev\\msys\\mingw64",
@@ -151,6 +95,66 @@
           "type": "BOOL"
         }
       ]
+    },
+    {
+      "name": "x64-Debug",
+      "generator": "Visual Studio 16 2019 Win64",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}\\..\\msbuild\\${name}",
+      "installRoot": "${projectDir}\\..\\porgy-install-msbuild\\${name}",
+      "cmakeExecutable": "D:/porgydev/cmake/bin/cmake.exe",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "/m",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "intelliSenseMode": "windows-msvc-x64",
+      "variables": [
+        {
+          "name": "TULIP_USE_THIRDPARTY_QUAZIP",
+          "value": "True",
+          "type": "BOOL"
+        },
+        {
+          "name": "TULIP_USE_THIRDPARTY_QHULL",
+          "value": "True",
+          "type": "BOOL"
+        },
+        {
+          "name": "TULIP_BUILD_DOC",
+          "value": "False",
+          "type": "BOOL"
+        }
+      ]
+    },
+    {
+      "name": "x64-Release",
+      "generator": "Visual Studio 16 2019 Win64",
+      "configurationType": "RelWithDebInfo",
+      "buildRoot": "${projectDir}\\..\\msbuild\\${name}",
+      "installRoot": "${projectDir}\\..\\porgy-install-msbuild\\${name}",
+      "cmakeExecutable": "D:/porgydev/cmake/bin/cmake.exe",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "/m",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "variables": [
+        {
+          "name": "TULIP_USE_THIRDPARTY_QUAZIP",
+          "value": "True",
+          "type": "BOOL"
+        },
+        {
+          "name": "TULIP_USE_THIRDPARTY_QHULL",
+          "value": "True",
+          "type": "BOOL"
+        },
+        {
+          "name": "TULIP_BUILD_DOC",
+          "value": "False",
+          "type": "BOOL"
+        }
+      ],
+      "intelliSenseMode": "windows-msvc-x64"
     }
   ]
 }
