@@ -142,7 +142,6 @@ void MatrixView::showNodeLabels(bool show) {
   emit drawNeeded();
 }
 
-
 void MatrixView::enableEdgeColorInterpolation(bool flag) {
   getGlMainWidget()
       ->getScene()
@@ -199,10 +198,10 @@ DataSet MatrixView::state() const {
                            ->getRenderingParametersPointer()
                            ->isDisplayEdges());
   ds.set("show Node Labels", getGlMainWidget()
-                           ->getScene()
-                           ->getGlGraphComposite()
-                           ->getRenderingParametersPointer()
-                           ->isViewNodeLabel());
+                                 ->getScene()
+                                 ->getGlGraphComposite()
+                                 ->getRenderingParametersPointer()
+                                 ->isViewNodeLabel());
   ds.set("edge color interpolation", getGlMainWidget()
                                          ->getScene()
                                          ->getGlGraphComposite()

@@ -71,11 +71,11 @@ bool MatrixViewConfigurationWidget::displayGraphEdges() const {
 }
 
 void MatrixViewConfigurationWidget::setDisplayNodeLabels(const bool state) {
-    _ui->node_labels->setChecked(state);
-    emit nodeLabels(state);
+  _ui->node_labels->setChecked(state);
+  emit nodeLabels(state);
 }
 bool MatrixViewConfigurationWidget::displayNodeLabels() const {
-    return _ui->node_labels->isChecked();
+  return _ui->node_labels->isChecked();
 }
 
 void MatrixViewConfigurationWidget::setEdgeColorInterpolation(const bool state) {

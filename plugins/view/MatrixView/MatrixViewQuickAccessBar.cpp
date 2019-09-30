@@ -47,7 +47,7 @@ void MatrixViewQuickAccessBar::setEdgesVisible(bool visible) {
 void MatrixViewQuickAccessBar::setLabelsVisible(bool visible) {
   _optionsWidget->setDisplayNodeLabels(visible);
   showLabelsButton()->setIcon((visible ? QIcon(":/tulip/gui/icons/20/labels_enabled.png")
-                                      : QIcon(":/tulip/gui/icons/20/labels_disabled.png")));
+                                       : QIcon(":/tulip/gui/icons/20/labels_disabled.png")));
   emit settingsChanged();
 }
 
