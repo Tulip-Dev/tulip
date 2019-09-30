@@ -113,6 +113,7 @@ private slots:
   void setGridDisplayMode();
   void applySettings() override;
   void showEdges(bool);
+  void showNodeLabels(bool);
   void enableEdgeColorInterpolation(bool);
   void setOriented(bool);
 

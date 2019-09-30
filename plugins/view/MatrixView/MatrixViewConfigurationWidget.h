@@ -49,6 +49,8 @@ public:
   Color getBackgroundColor() const;
   void setDisplayEdges(const bool state);
   bool displayGraphEdges() const;
+  void setDisplayNodeLabels(const bool state);
+  bool displayNodeLabels() const;
   void setEdgeColorInterpolation(const bool state);
   bool isEdgeColorInterpolation() const;
   int orderingProperty() const;
@@ -66,6 +68,7 @@ signals:
   void changeBackgroundColor(QColor);
   void setGridDisplayMode();
   void showEdges(bool);
+  void nodeLabels(bool);
   void enableEdgeColorInterpolation(bool);
   void updateOriented(bool);
 

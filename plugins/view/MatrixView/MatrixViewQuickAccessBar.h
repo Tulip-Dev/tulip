@@ -35,6 +35,7 @@ public:
 public slots:
   void reset() override;
   void setEdgesVisible(bool) override;
+  void setLabelsVisible(bool) override;
   void setBackgroundColor(const QColor &) override;
   void setColorInterpolation(bool) override;
 };

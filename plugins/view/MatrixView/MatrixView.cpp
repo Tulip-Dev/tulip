@@ -70,6 +70,7 @@ void MatrixView::setState(const DataSet &ds) {
             SLOT(setOrderingMetric(std::string)));
     connect(_configurationWidget, SIGNAL(setGridDisplayMode()), this, SLOT(setGridDisplayMode()));
     connect(_configurationWidget, SIGNAL(showEdges(bool)), this, SLOT(showEdges(bool)));
+    connect(_configurationWidget, SIGNAL(nodeLabels(bool)), this, SLOT(showNodeLabels(bool)));
     connect(_configurationWidget, SIGNAL(enableEdgeColorInterpolation(bool)), this,
             SLOT(enableEdgeColorInterpolation(bool)));
     connect(_configurationWidget, SIGNAL(updateOriented(bool)), this, SLOT(setOriented(bool)));
@@ -84,6 +85,10 @@ void MatrixView::setState(const DataSet &ds) {
   ds.get("show Edges", status);
   showEdges(status);
   _configurationWidget->setDisplayEdges(status);
+
+  ds.get("show Node Labels", status);
+  showNodeLabels(status);
+  _configurationWidget->setDisplayNodeLabels(status);
 
   ds.get("ascending order", status);
   _configurationWidget->setAscendingOrder(status);
@@ -127,6 +132,16 @@ void MatrixView::showEdges(bool show) {
       ->setDisplayEdges(show);
   emit drawNeeded();
 }
+
+void MatrixView::showNodeLabels(bool show) {
+  getGlMainWidget()
+      ->getScene()
+      ->getGlGraphComposite()
+      ->getRenderingParametersPointer()
+      ->setViewNodeLabel(show);
+  emit drawNeeded();
+}
+
 
 void MatrixView::enableEdgeColorInterpolation(bool flag) {
   getGlMainWidget()
@@ -183,6 +198,11 @@ DataSet MatrixView::state() const {
                            ->getGlGraphComposite()
                            ->getRenderingParametersPointer()
                            ->isDisplayEdges());
+  ds.set("show Node Labels", getGlMainWidget()
+                           ->getScene()
+                           ->getGlGraphComposite()
+                           ->getRenderingParametersPointer()
+                           ->isViewNodeLabel());
   ds.set("edge color interpolation", getGlMainWidget()
                                          ->getScene()
                                          ->getGlGraphComposite()

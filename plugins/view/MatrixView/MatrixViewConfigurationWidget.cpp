@@ -39,6 +39,7 @@ MatrixViewConfigurationWidget::MatrixViewConfigurationWidget(QWidget *parent)
   connect(_ui->gridDisplayCombo, SIGNAL(currentIndexChanged(int)), this,
           SIGNAL(setGridDisplayMode()));
   connect(_ui->showedgesbox, SIGNAL(clicked(bool)), this, SIGNAL(showEdges(bool)));
+  connect(_ui->node_labels, SIGNAL(clicked(bool)), this, SIGNAL(nodeLabels(bool)));
   connect(_ui->enableColorInterpolationCBox, SIGNAL(clicked(bool)), this,
           SIGNAL(enableEdgeColorInterpolation(bool)));
   connect(_ui->orientedCBox, SIGNAL(clicked(bool)), this, SIGNAL(updateOriented(bool)));
@@ -67,6 +68,14 @@ void MatrixViewConfigurationWidget::setDisplayEdges(const bool state) {
 
 bool MatrixViewConfigurationWidget::displayGraphEdges() const {
   return _ui->showedgesbox->isChecked();
+}
+
+void MatrixViewConfigurationWidget::setDisplayNodeLabels(const bool state) {
+    _ui->node_labels->setChecked(state);
+    emit nodeLabels(state);
+}
+bool MatrixViewConfigurationWidget::displayNodeLabels() const {
+    return _ui->node_labels->isChecked();
 }
 
 void MatrixViewConfigurationWidget::setEdgeColorInterpolation(const bool state) {
