@@ -171,6 +171,8 @@ jobs:
             - cmake
             - ccache
             - ninja-build
+            - doxygen
+            - graphviz
             - libqhull-dev
             - libyajl-dev
             - libcppunit-dev
