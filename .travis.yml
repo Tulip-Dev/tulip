@@ -195,6 +195,8 @@ jobs:
         # force the use of GCC 9
         - eval "${MATRIX_EVAL}"
         # install latest sphinx version for generating the documentation
+        - curl -O https://bootstrap.pypa.io/get-pip.py
+        - sudo ${PYTHON_EXECUTABLE} get-pip.py
         - sudo ${PYTHON_EXECUTABLE} -m pip install sphinx
       env:
         # use Python 3.7
