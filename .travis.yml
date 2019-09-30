@@ -123,12 +123,12 @@ jobs:
             - cmake
             - ccache
             - ninja-build
-            - python-pip
             - doxygen
             - graphviz
             - libqhull-dev
             - libyajl-dev
             - libpython2.7-dev
+            - python-sphinx
             - libcppunit-dev
             - binutils-dev
             - qt5-default
@@ -139,9 +139,6 @@ jobs:
             - libpng-dev
             - libjpeg-dev
             - libfreetype6-dev
-      install:
-        # install latest sphinx version for generating the documentation
-        - sudo pip install sphinx
       env:
         # use Python 2.7
         - PYTHON_EXECUTABLE=/usr/bin/python2.7
