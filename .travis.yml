@@ -41,8 +41,6 @@ jobs:
             - cmake
             - ccache
             - ninja-build
-            - doxygen
-            - graphviz
             - libqhull-dev
             - libyajl-dev
             - libpython2.7-dev
@@ -55,7 +53,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build with cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
@@ -99,7 +97,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build with cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4  || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
@@ -146,7 +144,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip complete build with cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=ON -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_DOC=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
@@ -191,10 +189,13 @@ jobs:
         # needed to get the latest Python 3.7.x
         - sudo add-apt-repository ppa:deadsnakes/ppa -y
         - sudo apt-get update -q
+      install:
         # get GCC 9.x and Python 3.7.x
         - sudo apt-get -y install g++-9 python3.7 libpython3.7-dev
         # force the use of GCC 9
         - eval "${MATRIX_EVAL}"
+        # install latest sphinx version for generating the documentation
+        - sudo ${PYTHON_EXECUTABLE} -m pip install sphinx
       env:
         # use Python 3.7
         - PYTHON_EXECUTABLE=/usr/bin/python3.7
@@ -204,7 +205,7 @@ jobs:
         # create build directoty
         - mkdir build && cd build
         # configure Tulip complete build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=OFF -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_DOC=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4  || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
@@ -275,7 +276,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
@@ -314,7 +315,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/opt/local/bin/clang-mp-8.0 -DCMAKE_CXX_COMPILER=/opt/local/bin/clang++-mp-8.0 -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/opt/local/bin/clang-mp-8.0 -DCMAKE_CXX_COMPILER=/opt/local/bin/clang++-mp-8.0 -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
@@ -349,7 +350,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
@@ -386,7 +387,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
