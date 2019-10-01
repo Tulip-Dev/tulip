@@ -218,7 +218,7 @@ void PathFinder::configureHighlighterButtonPressed() {
   for (auto hName : getActiveHighlighters()) {
     for (auto h : highlighters) {
       if (h->getName() == hName) {
-	ahler.push_back(h);
+        ahler.push_back(h);
       }
     }
   }
@@ -254,7 +254,7 @@ void PathFinder::configureHighlighterButtonPressed() {
       delete dialog;
     } else
       QMessageBox::warning(nullptr, tlpStringToQString(hler->getName()),
-			   "No configuration available for this highlighter");
+                           "No configuration available for this highlighter");
   }
 }
 
