@@ -213,56 +213,49 @@ void PathFinder::configureHighlighterButtonPressed() {
    * We build a QDialog and integrate this widget into it to display highlighter-specific
    * configuration to the user.
    */
-  QListWidget *listWidget =
-      static_cast<QListWidget *>(highlightersListWidget->findChild<QListWidget *>("listWidget"));
-
-  QList<QListWidgetItem *> lst = listWidget->selectedItems();
-  string text("");
-
-  for (QList<QListWidgetItem *>::iterator it = lst.begin(); it != lst.end(); ++it)
-    text = QStringToTlpString((*it)->text());
-
   QSet<PathHighlighter *> highlighters(getPathFinderComponent()->getHighlighters());
-  PathHighlighter *hler = nullptr;
-
-  for (auto h : highlighters) {
-    if (h->getName() == text) {
-      hler = h;
-      break;
+  vector<PathHighlighter *> ahler;
+  for (auto hName : getActiveHighlighters()) {
+    for (auto h : highlighters) {
+      if (h->getName() == hName) {
+	ahler.push_back(h);
+      }
     }
   }
 
-  if (hler == nullptr) {
+  if (ahler.empty()) {
     QMessageBox::warning(nullptr, "Nothing selected", "No highlighter selected");
     return;
   }
 
-  if (hler->isConfigurable()) {
-    QDialog *dialog = new QDialog;
-    QVBoxLayout *verticalLayout = new QVBoxLayout(dialog);
-    verticalLayout->setObjectName("verticalLayout");
-    QVBoxLayout *mainLayout = new QVBoxLayout();
-    mainLayout->setObjectName("mainLayout");
+  for (auto hler : ahler) {
+    if (hler->isConfigurable()) {
+      QDialog *dialog = new QDialog;
+      QVBoxLayout *verticalLayout = new QVBoxLayout(dialog);
+      verticalLayout->setObjectName("verticalLayout");
+      QVBoxLayout *mainLayout = new QVBoxLayout();
+      mainLayout->setObjectName("mainLayout");
 
-    verticalLayout->addLayout(mainLayout);
+      verticalLayout->addLayout(mainLayout);
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(dialog);
-    buttonBox->setObjectName("buttonBox");
-    buttonBox->setOrientation(Qt::Horizontal);
-    buttonBox->setStandardButtons(QDialogButtonBox::Ok);
+      QDialogButtonBox *buttonBox = new QDialogButtonBox(dialog);
+      buttonBox->setObjectName("buttonBox");
+      buttonBox->setOrientation(Qt::Horizontal);
+      buttonBox->setStandardButtons(QDialogButtonBox::Ok);
 
-    verticalLayout->addWidget(buttonBox);
+      verticalLayout->addWidget(buttonBox);
 
-    connect(buttonBox, SIGNAL(accepted()), dialog, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), dialog, SLOT(reject()));
+      connect(buttonBox, SIGNAL(accepted()), dialog, SLOT(accept()));
+      connect(buttonBox, SIGNAL(rejected()), dialog, SLOT(reject()));
 
-    mainLayout->addWidget(hler->getConfigurationWidget());
-    dialog->setWindowTitle(tlpStringToQString(hler->getName()));
-    dialog->exec();
-    delete dialog;
-  } else
-    QMessageBox::warning(nullptr, tlpStringToQString(hler->getName()),
-                         "No configuration available for this highlighter");
+      mainLayout->addWidget(hler->getConfigurationWidget());
+      dialog->setWindowTitle(tlpStringToQString(hler->getName()));
+      dialog->exec();
+      delete dialog;
+    } else
+      QMessageBox::warning(nullptr, tlpStringToQString(hler->getName()),
+			   "No configuration available for this highlighter");
+  }
 }
 
 PathFinderComponent *PathFinder::getPathFinderComponent() {
