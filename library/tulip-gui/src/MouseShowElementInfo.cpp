@@ -212,14 +212,27 @@ void MouseShowElementInfo::viewChanged(View *view) {
   _view->graphicsView()->scene()->addItem(_informationWidgetItem);
 }
 
+void MouseShowElementInfo::setVisibleProperties(const std::vector<std::string> &props) {
+  _visibleProps = props;
+}
+
 QAbstractItemModel *MouseShowElementInfo::buildModel(ElementType elementType,
                                                      unsigned int elementId,
                                                      QObject *parent) const {
-  if (elementType == NODE) {
-    return new GraphNodeElementModel(view()->graph(), elementId, parent);
+  GraphElementModel *eModel =  (elementType == NODE)
+    ? static_cast<GraphElementModel*>(new GraphNodeElementModel(view()->graph(), elementId, parent))
+    : static_cast<GraphElementModel*>(new GraphEdgeElementModel(view()->graph(), elementId, parent));
+  eModel->setVisibleProperties(_visibleProps);
+  // display visual prop button only if not all properties are visible
+  // an empty vector indicates that all the properties are visible
+  if (_visibleProps.empty()) {
+    _ui->line->show();
+    _ui->displayTulipProp->show();
   } else {
-    return new GraphEdgeElementModel(view()->graph(), elementId, parent);
+    _ui->line->hide();
+    _ui->displayTulipProp->hide();
   }
+  return eModel;
 }
 
 QString MouseShowElementInfo::elementName(ElementType elementType, unsigned int elementId) const {

@@ -21,6 +21,9 @@
 #ifndef _Tulip_MOUSESHOWELEMENTINFO_H
 #define _Tulip_MOUSESHOWELEMENTINFO_H
 
+#include <string>
+#include <vector>
+
 #include <tulip/InteractorComposite.h>
 #include <tulip/Graph.h>
 
@@ -61,6 +64,8 @@ public:
 
   virtual bool pick(int x, int y, SelectedEntity &selectedEntity);
 
+  void setVisibleProperties(const std::vector<std::string> &props);
+
 protected:
   ViewWidget *_view;
   QWidget *_informationWidget;
@@ -70,6 +75,7 @@ protected:
   QSortFilterProxyModel *_model;
 
   QTableView *tableView() const;
+  std::vector<std::string> _visibleProps;
 
   /**
    * @brief buildModel creates and returns the model to visualize edit element parameters.

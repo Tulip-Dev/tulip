@@ -94,8 +94,13 @@ Qt::ItemFlags GraphElementModel::flags(const QModelIndex &index) const {
 QVector<PropertyInterface *> GraphElementModel::getGraphProperties() const {
   QVector<PropertyInterface *> properties;
   for (PropertyInterface *prop : _graph->getObjectProperties()) {
+    auto propName = prop->getName();
+    // an empty set indicates that all the properties are visible
+    if (!_visibleProps.empty() &&
+	(_visibleProps.find(propName) == _visibleProps.end()))
+      continue;
 #ifdef NDEBUG
-    if (prop->getName() == "viewMetaGraph")
+    if (propName == "viewMetaGraph")
       continue;
 #endif
     properties.append(prop);
