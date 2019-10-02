@@ -96,8 +96,7 @@ QVector<PropertyInterface *> GraphElementModel::getGraphProperties() const {
   for (PropertyInterface *prop : _graph->getObjectProperties()) {
     auto propName = prop->getName();
     // an empty set indicates that all the properties are visible
-    if (!_visibleProps.empty() &&
-	(_visibleProps.find(propName) == _visibleProps.end()))
+    if (!_visibleProps.empty() && (_visibleProps.find(propName) == _visibleProps.end()))
       continue;
 #ifdef NDEBUG
     if (propName == "viewMetaGraph")

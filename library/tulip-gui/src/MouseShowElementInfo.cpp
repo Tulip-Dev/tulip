@@ -219,9 +219,11 @@ void MouseShowElementInfo::setVisibleProperties(const std::vector<std::string> &
 QAbstractItemModel *MouseShowElementInfo::buildModel(ElementType elementType,
                                                      unsigned int elementId,
                                                      QObject *parent) const {
-  GraphElementModel *eModel =  (elementType == NODE)
-    ? static_cast<GraphElementModel*>(new GraphNodeElementModel(view()->graph(), elementId, parent))
-    : static_cast<GraphElementModel*>(new GraphEdgeElementModel(view()->graph(), elementId, parent));
+  GraphElementModel *eModel =
+      (elementType == NODE) ? static_cast<GraphElementModel *>(
+                                  new GraphNodeElementModel(view()->graph(), elementId, parent))
+                            : static_cast<GraphElementModel *>(
+                                  new GraphEdgeElementModel(view()->graph(), elementId, parent));
   eModel->setVisibleProperties(_visibleProps);
   // display visual prop button only if not all properties are visible
   // an empty vector indicates that all the properties are visible
