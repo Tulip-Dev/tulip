@@ -69,12 +69,11 @@ public:
   void construct() override {
     setConfigurationWidgetText(
         QString("<h3>Display node or edge properties</h3>") +
-        "<b>Mouse left click</b> on an element to display its "
-        "properties.<br/>then <b>Mouse left click</b> on a row to edit the "
-        "corresponding value.<br/>The visible properties can be filtered using the list of "
-        "properties displayed in the <b>Options</b> tab.<br/>If none are filtered, the display of "
-        "the visual rendering properties can be dynamically toggled when the element properties "
-        "panel is displayed.");
+        "<b>Mouse left click</b> on an element (the mouse cursor must be as <img src=\":/tulip/gui/icons/i_select.png\">),<br/>"
+	"to display a panel showing its properties.<br/>"
+	"As the panel is displayed, <b>Mouse left click</b> in a property row to edit the corresponding value.<br/>"
+	"The visible properties can be filtered using the list of properties displayed in the <b>Options</b> tab.<br/>"
+	"If none is filtered, when the element properties panel is displayed, the display of the visual rendering properties can be then toggled using a dedicated check box.");
     push_back(new MousePanNZoomNavigator);
     push_back(_elementInfo = new MouseShowElementInfo);
     // build configuration widget
