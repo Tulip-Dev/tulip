@@ -69,11 +69,15 @@ public:
   void construct() override {
     setConfigurationWidgetText(
         QString("<h3>Display node or edge properties</h3>") +
-        "<b>Mouse left click</b> on an element (the mouse cursor must be as <img src=\":/tulip/gui/icons/i_select.png\">),<br/>"
-	"to display a panel showing its properties.<br/>"
-	"As the panel is displayed, <b>Mouse left click</b> in a property row to edit the corresponding value.<br/>"
-	"The visible properties can be filtered using the list of properties displayed in the <b>Options</b> tab.<br/>"
-	"If none is filtered, when the element properties panel is displayed, the display of the visual rendering properties can be then toggled using a dedicated check box.");
+        "<b>Mouse left click</b> on an element (the mouse cursor must be as <img "
+        "src=\":/tulip/gui/icons/i_select.png\">),<br/>"
+        "to display a panel showing its properties.<br/>"
+        "As the panel is displayed, <b>Mouse left click</b> in a property row to edit the "
+        "corresponding value.<br/>"
+        "The visible properties can be filtered using the list of properties displayed in the "
+        "<b>Options</b> tab.<br/>"
+        "If none is filtered, when the element properties panel is displayed, the display of the "
+        "visual rendering properties can be then toggled using a dedicated check box.");
     push_back(new MousePanNZoomNavigator);
     push_back(_elementInfo = new MouseShowElementInfo);
     // build configuration widget
@@ -81,8 +85,8 @@ public:
     QVBoxLayout *verticalLayout = new QVBoxLayout(_configWidget);
     QLabel *label = new QLabel("Visible properties");
     verticalLayout->addWidget(label);
-    _propsList =
-        new StringsListSelectionWidget(_configWidget, StringsListSelectionWidget::NON_ORDERABLE_LIST, 0);
+    _propsList = new StringsListSelectionWidget(_configWidget,
+                                                StringsListSelectionWidget::NON_ORDERABLE_LIST, 0);
     verticalLayout->addWidget(_propsList);
 
     auto graph = view()->graph();

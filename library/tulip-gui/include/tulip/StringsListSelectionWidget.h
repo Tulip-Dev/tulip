@@ -47,7 +47,7 @@ class TLP_QT_SCOPE StringsListSelectionWidget : public QWidget,
                                                 public StringsListSelectionWidgetInterface {
 
 public:
-						  enum ListType { SIMPLE_LIST, DOUBLE_LIST, NON_ORDERABLE_LIST };
+  enum ListType { SIMPLE_LIST, DOUBLE_LIST, NON_ORDERABLE_LIST };
 
   /**
    * Default constructor (for qt designer)
