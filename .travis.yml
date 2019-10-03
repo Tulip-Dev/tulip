@@ -527,8 +527,6 @@ jobs:
             - libpng
             - qt5
             - quazip
-          # disable update as it currenly hangs when installing gcc
-          # update: true
 
       install:
         # set columns in terminal, required for curl to work correctly:
