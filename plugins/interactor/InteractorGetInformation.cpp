@@ -82,7 +82,7 @@ public:
     QLabel *label = new QLabel("Visible properties");
     verticalLayout->addWidget(label);
     _propsList =
-        new StringsListSelectionWidget(_configWidget, StringsListSelectionWidget::SIMPLE_LIST, 0);
+        new StringsListSelectionWidget(_configWidget, StringsListSelectionWidget::NON_ORDERABLE_LIST, 0);
     verticalLayout->addWidget(_propsList);
 
     auto graph = view()->graph();
