@@ -330,8 +330,8 @@ jobs:
     # legacy Tulip core build on Mac OS (Homebrew)
     -
       os: osx
-      # use xcode8.3 travis image to get the Homebrew older supported env
-      osx_image: xcode8.3
+      # use xcode9.2 travis image to get the Homebrew older supported env
+      osx_image: xcode9.2
       compiler: clang
       cache: ccache
       addons:
@@ -505,8 +505,8 @@ jobs:
     # legacy Tulip complete build on Mac OS (Homebrew)
     -
       os: osx
-      # use xcode8.3 travis image to get the Homebrew older supported env
-      osx_image: xcode8.3
+      # use xcode9.2 travis image to get the Homebrew older supported env
+      osx_image: xcode9.2
       compiler: clang
       cache: ccache
       addons:
