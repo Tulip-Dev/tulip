@@ -383,10 +383,6 @@ jobs:
             - pkg-config
           update: true
 
-      before_install:
-        # when updating brew avoid upgrading packages with numerous dependencies
-        - brew pin cmake
-
       env:
         - ENV="MacOS 10.14, LLVM Clang, Homebrew"
       script:
@@ -531,8 +527,12 @@ jobs:
 
       install:
         # install brew needed packages for gui build without addons
-        - pkgs="glew freetype jpeg libpng qt5 quazip"
-        - for pkg in $pkgs; do brew list | grep -q pkg || brew install $pkg
+        - brew list glew  | grep -q glew || brew install glew
+        - brew list freetype  | grep -q freetype || brew install freetype
+        - brew list jpeg  | grep -q jpeg || brew install jpeg
+        - brew list libpng  | grep -q libpng || brew install libpng
+        - brew list qt5  | grep -q qt5 || brew install qt5
+        - brew list quazip  | grep -q quazip || brew install quazip
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
         - curl -O https://bootstrap.pypa.io/get-pip.py
