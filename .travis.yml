@@ -511,9 +511,7 @@ jobs:
       cache: ccache
       addons:
         homebrew:
-          # install Tulip core build dependencies only because we experimented
-          # that the use of some packages through addons hangs on xcode9.x
-          # see https://travis-ci.community/t/xcode-8-3-homebrew-outdated-error
+          # install Tulip complete build dependencies
           packages:
             - ccache
             - cmake
@@ -523,11 +521,20 @@ jobs:
             - yajl
             - cppunit
             - pkg-config
+            - glew
+            - freetype
+            - jpeg
+            - libpng
+            - qt5
+            - quazip
           update: true
 
+      before_install:
+        # when updating brew avoid upgrading packages with numerous dependencies
+        - brew pin gdal
+        - brew pin postgis
+
       install:
-        # install brew needed packages for gui build without addons
-        - brew install glew freetype jpeg libpng qt5 quazip
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
         - curl -O https://bootstrap.pypa.io/get-pip.py
