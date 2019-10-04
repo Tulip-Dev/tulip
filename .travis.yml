@@ -383,6 +383,10 @@ jobs:
             - pkg-config
           update: true
 
+      before_install:
+        # when updating brew avoid upgrading packages with numerous dependencies
+        - brew pin cmake
+
       env:
         - ENV="MacOS 10.14, LLVM Clang, Homebrew"
       script:
@@ -511,7 +515,9 @@ jobs:
       cache: ccache
       addons:
         homebrew:
-          # install Tulip complete build dependencies
+          # install Tulip core build dependencies only because we experimented
+          # that the install of some packages through addons hangs on xcode9.x
+          # see https://travis-ci.community/t/xcode-8-3-homebrew-outdated-error
           packages:
             - ccache
             - cmake
@@ -521,20 +527,12 @@ jobs:
             - yajl
             - cppunit
             - pkg-config
-            - glew
-            - freetype
-            - jpeg
-            - libpng
-            - qt5
-            - quazip
           update: true
 
-      before_install:
-        # when updating brew avoid upgrading packages with numerous dependencies
-        - brew pin gdal
-        - brew pin postgis
-
       install:
+        # install brew needed packages for gui build without addons
+        - pkgs="glew freetype jpeg libpng qt5 quazip"
+        - for pkg in $pkgs; do brew list | grep -q pkg || brew install $pkg
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
         - curl -O https://bootstrap.pypa.io/get-pip.py
