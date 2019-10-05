@@ -527,17 +527,14 @@ jobs:
 
       install:
         # install brew needed packages for gui build without addons
-        - brew list glew  | grep -q glew || brew install glew
-        - brew list freetype  | grep -q freetype || brew install freetype
-        - brew list jpeg  | grep -q jpeg || brew install jpeg
-        - brew list libpng  | grep -q libpng || brew install libpng
-        - brew list qt5  | grep -q qt5 || brew install qt5
-        - brew list quazip  | grep -q quazip || brew install quazip
+        - brew install glew freetype jpeg libpng qt5 || true
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
         - curl -O https://bootstrap.pypa.io/get-pip.py
         - sudo python get-pip.py
         - pip install --user sphinx==1.7.9
+        # add missing sdk if needed
+        - ls /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk || sudo ln -s /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk
       env:
         - ENV="MacOS 10.12, LLVM Clang, Homebrew"
 
