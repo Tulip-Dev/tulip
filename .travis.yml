@@ -334,8 +334,8 @@ jobs:
       osx_image: xcode9.2
       compiler: clang
       cache: ccache
-      directories:
-        - $HOME/Library/Caches/Homebrew
+        directories:
+          - $HOME/Library/Caches/Homebrew
       addons:
         homebrew:
           # install Tulip core build dependencies
@@ -371,8 +371,8 @@ jobs:
       osx_image: xcode10.3
       compiler: clang
       cache: ccache
-      directories:
-        - $HOME/Library/Caches/Homebrew
+        directories:
+          - $HOME/Library/Caches/Homebrew
       addons:
         homebrew:
           # install Tulip core build dependencies
@@ -513,8 +513,8 @@ jobs:
       osx_image: xcode9.2
       compiler: clang
       cache: ccache
-      directories:
-        - $HOME/Library/Caches/Homebrew
+        directories:
+          - $HOME/Library/Caches/Homebrew
       addons:
         homebrew:
           # install Tulip core build dependencies only because we experimented
@@ -563,8 +563,8 @@ jobs:
       osx_image: xcode10.3
       compiler: clang
       cache: ccache
-      directories:
-        - $HOME/Library/Caches/Homebrew
+        directories:
+          - $HOME/Library/Caches/Homebrew
       addons:
         homebrew:
           # install Tulip complete build dependencies
