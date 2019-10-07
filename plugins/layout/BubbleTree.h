@@ -50,7 +50,7 @@ public:
                     "Implement the bubble tree drawing algorithm first published as:<br/>"
                     "<b>Bubble Tree Drawing Algorithm</b>, S. Grivet and D. Auber and J-P Domenger "
                     "and Guy Melancon, ICCVG, pages 633-641 (2004)."
-		    "The layout produced can be used for visual detection of similarities.",
+                    "The layout produced can be used for visual detection of similarities.",
                     "1.1", "Tree")
   BubbleTree(const tlp::PluginContext *context);
   ~BubbleTree() override;

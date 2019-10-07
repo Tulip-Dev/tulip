@@ -148,7 +148,7 @@ int tracefunc(PyObject *, PyFrameObject *, int what, PyObject *) {
 
     while (scriptPaused) {
       if (processQtEvents)
-	// will immediately return if there is no pending events
+        // will immediately return if there is no pending events
         QApplication::processEvents();
 
       ss.sleep(30);
