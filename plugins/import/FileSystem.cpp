@@ -257,7 +257,11 @@ private:
     tlp::node n = g->addNode();
     _absolutePaths->setNodeValue(n, tlp::QStringToTlpString(info.absoluteFilePath()));
     _baseNames->setNodeValue(n, tlp::QStringToTlpString(info.baseName()));
+#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
     _createdDates->setNodeValue(n, tlp::QStringToTlpString(info.created().toString()));
+#else
+    _createdDates->setNodeValue(n, tlp::QStringToTlpString(info.birthTime().toString()));
+#endif
     _fileNames->setNodeValue(n, tlp::QStringToTlpString(info.fileName()));
     _isDir->setNodeValue(n, info.isDir());
     _isExecutable->setNodeValue(n, info.isExecutable());
