@@ -370,7 +370,8 @@ jobs:
       # use the most recent Xcode version
       osx_image: xcode10.3
       compiler: clang
-      cache: ccache
+      cache:
+        - ccache
         directories:
           - $HOME/Library/Caches/Homebrew
       addons:
@@ -512,7 +513,8 @@ jobs:
       # use xcode9.2 travis image to get the Homebrew older supported env
       osx_image: xcode9.2
       compiler: clang
-      cache: ccache
+      cache:
+        - ccache
         directories:
           - $HOME/Library/Caches/Homebrew
       addons:
@@ -562,7 +564,8 @@ jobs:
       # use the most recent Xcode version
       osx_image: xcode10.3
       compiler: clang
-      cache: ccache
+      cache:
+        - ccache
         directories:
           - $HOME/Library/Caches/Homebrew
       addons:
