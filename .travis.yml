@@ -334,7 +334,7 @@ jobs:
       osx_image: xcode9.2
       compiler: clang
       cache:
-        - ccache
+        ccache: true
         directories:
           - $HOME/Library/Caches/Homebrew
       addons:
@@ -372,7 +372,7 @@ jobs:
       osx_image: xcode10.3
       compiler: clang
       cache:
-        - ccache
+        ccache: true
         directories:
           - $HOME/Library/Caches/Homebrew
       addons:
@@ -515,7 +515,7 @@ jobs:
       osx_image: xcode9.2
       compiler: clang
       cache:
-        - ccache
+        ccache: true
         directories:
           - $HOME/Library/Caches/Homebrew
       addons:
@@ -566,7 +566,7 @@ jobs:
       osx_image: xcode10.3
       compiler: clang
       cache:
-        - ccache
+        ccache: true
         directories:
           - $HOME/Library/Caches/Homebrew
       addons:
