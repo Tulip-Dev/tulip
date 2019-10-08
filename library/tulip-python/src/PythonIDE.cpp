@@ -181,7 +181,7 @@ static QString getDefaultScriptCode(const QString &pythonVersion, Graph *graph) 
     for (PropertyInterface *prop : graph->getObjectProperties()) {
 #ifdef NDEBUG
       if (prop->getName() == "viewMetaGraph")
-	continue;
+        continue;
 #endif
       QString cleanPropName(tlp::tlpStringToQString(prop->getName()));
 
@@ -216,7 +216,7 @@ static QString getDefaultScriptCode(const QString &pythonVersion, Graph *graph) 
       }
 
       else if (dynamic_cast<GraphProperty *>(prop)) {
-	oss << " = graph.getGraphProperty(\"" << cleanPropName << "\")" << endl;
+        oss << " = graph.getGraphProperty(\"" << cleanPropName << "\")" << endl;
       }
 
       else if (dynamic_cast<DoubleVectorProperty *>(prop)) {
@@ -1259,14 +1259,12 @@ void PythonIDE::createTulipProjectPythonPaths() {
 }
 
 bool PythonIDE::projectNeedsPythonIDE(tlp::TulipProject *project) {
-  if (project->exists(PYTHON_MODULES_FILES) ||
-      project->exists(PYTHON_PLUGINS_FILES) ||
+  if (project->exists(PYTHON_MODULES_FILES) || project->exists(PYTHON_PLUGINS_FILES) ||
       project->exists(PYTHON_SCRIPTS_FILES))
     return true;
   // for backward compatibility with Tulip < 5.0, load scripts and modules saved in old Python
   // Script view configurations
-  QStringList entries =
-    project->entryList("views", QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
+  QStringList entries = project->entryList("views", QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
 
   for (const QString &entry : entries) {
     QIODevice *xmlFile = project->fileStream("views/" + entry + "/view.xml");
@@ -1275,13 +1273,13 @@ bool PythonIDE::projectNeedsPythonIDE(tlp::TulipProject *project) {
     if (doc.readNextStartElement()) {
       bool needPython = false;
       if (!doc.hasError()) {
-	QString viewName = doc.attributes().value("name").toString();
-	needPython = (viewName == "Python Script view");
+        QString viewName = doc.attributes().value("name").toString();
+        needPython = (viewName == "Python Script view");
       }
       xmlFile->close();
       delete xmlFile;
       if (needPython)
-	return true;
+        return true;
     }
   }
   return false;

@@ -1119,7 +1119,7 @@ void GraphPerspective::openProjectFile(const QString &path) {
       _ui->workspace->readProject(_project, rootIds, prg);
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
       if (_pythonIDE || PythonIDE::projectNeedsPythonIDE(_project))
-	QTimer::singleShot(100, this, SLOT(initPythonIDE()));
+        QTimer::singleShot(100, this, SLOT(initPythonIDE()));
 #endif
     } else {
       QMessageBox::critical(_mainWindow,
