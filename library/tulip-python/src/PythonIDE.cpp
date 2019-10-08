@@ -1258,6 +1258,35 @@ void PythonIDE::createTulipProjectPythonPaths() {
   }
 }
 
+bool PythonIDE::projectNeedsPythonIDE(tlp::TulipProject *project) {
+  if (project->exists(PYTHON_MODULES_FILES) ||
+      project->exists(PYTHON_PLUGINS_FILES) ||
+      project->exists(PYTHON_SCRIPTS_FILES))
+    return true;
+  // for backward compatibility with Tulip < 5.0, load scripts and modules saved in old Python
+  // Script view configurations
+  QStringList entries =
+    project->entryList("views", QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
+
+  for (const QString &entry : entries) {
+    QIODevice *xmlFile = project->fileStream("views/" + entry + "/view.xml");
+    QXmlStreamReader doc(xmlFile);
+
+    if (doc.readNextStartElement()) {
+      bool needPython = false;
+      if (!doc.hasError()) {
+	QString viewName = doc.attributes().value("name").toString();
+	needPython = (viewName == "Python Script view");
+      }
+      xmlFile->close();
+      delete xmlFile;
+      if (needPython)
+	return true;
+    }
+  }
+  return false;
+}
+
 void PythonIDE::setProject(tlp::TulipProject *project) {
 
   _project = project;

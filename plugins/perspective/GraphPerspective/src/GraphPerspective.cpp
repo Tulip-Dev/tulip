@@ -125,6 +125,7 @@ GraphPerspective::GraphPerspective(const tlp::PluginContext *c)
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   _pythonIDE = nullptr;
   _pythonIDEDialog = nullptr;
+  _pythonPanel = nullptr;
 #endif
 }
 
@@ -295,8 +296,10 @@ void GraphPerspective::destroyWorkspace() {
 bool GraphPerspective::terminated() {
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  _pythonIDE->savePythonFilesAndWriteToProject(true);
-  _pythonIDEDialog->hide();
+  if (_pythonIDE) {
+    _pythonIDE->savePythonFilesAndWriteToProject(true);
+    _pythonIDEDialog->hide();
+  }
 #endif
 
   if (_graphs->needsSaving() || mainWindow()->isWindowModified()) {
@@ -416,27 +419,29 @@ protected:
 
 #define SET_TOOLTIP(a, tt) a->setToolTip(QString(tt))
 
+void GraphPerspective::buildPythonIDE() {
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
+  if (_pythonIDE == nullptr) {
+    _pythonIDE = new PythonIDE();
+    _pythonIDE->setGraphsModel(_graphs);
+    QVBoxLayout *dialogLayout = new QVBoxLayout();
+    dialogLayout->addWidget(_pythonIDE);
+    dialogLayout->setContentsMargins(0, 0, 0, 0);
+    _pythonIDEDialog = new PythonIDEDialog(nullptr, Qt::Window);
+    _pythonIDEDialog->setStyleSheet(_mainWindow->styleSheet());
+    _pythonIDEDialog->setWindowIcon(_mainWindow->windowIcon());
+    _pythonIDEDialog->setLayout(dialogLayout);
+    _pythonIDEDialog->resize(800, 600);
+    _pythonIDEDialog->setWindowTitle("Tulip Python IDE");
+  }
+#endif
+}
+
 void GraphPerspective::start(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  _pythonPanel = new PythonPanel();
-  QVBoxLayout *layout = new QVBoxLayout();
-  layout->addWidget(_pythonPanel);
-  layout->setContentsMargins(0, 0, 0, 0);
-  _ui->pythonPanel->setLayout(layout);
-  _pythonIDE = new PythonIDE();
-  QVBoxLayout *dialogLayout = new QVBoxLayout();
-  dialogLayout->addWidget(_pythonIDE);
-  dialogLayout->setContentsMargins(0, 0, 0, 0);
-  _pythonIDEDialog = new PythonIDEDialog(nullptr, Qt::Window);
-  _pythonIDEDialog->setStyleSheet(_mainWindow->styleSheet());
-  _pythonIDEDialog->setWindowIcon(_mainWindow->windowIcon());
-  _pythonIDEDialog->setLayout(dialogLayout);
-  _pythonIDEDialog->resize(800, 600);
-  _pythonIDEDialog->setWindowTitle("Tulip Python IDE");
-#else
+#ifndef TULIP_BUILD_PYTHON_COMPONENTS
   _ui->pythonButton->setVisible(false);
   _ui->developButton->setVisible(false);
   _ui->actionPython_IDE->setVisible(false);
@@ -737,10 +742,9 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   connect(_ui->pythonButton, SIGNAL(clicked(bool)), this, SLOT(setPythonPanel(bool)));
   connect(_ui->developButton, SIGNAL(clicked()), this, SLOT(showPythonIDE()));
-  _pythonPanel->setModel(_graphs);
-  _pythonIDE->setGraphsModel(_graphs);
   tlp::PluginLister::instance()->addListener(this);
-  QTimer::singleShot(100, this, SLOT(initPythonIDE()));
+  if (_pythonIDE || PythonIDE::projectNeedsPythonIDE(_project))
+    QTimer::singleShot(100, this, SLOT(initPythonIDE()));
 #endif
 
   if (!_externalFile.isEmpty() && QFileInfo(_externalFile).exists()) {
@@ -1028,7 +1032,8 @@ bool GraphPerspective::saveAs(const QString &path) {
   QMap<Graph *, QString> rootIds = _graphs->writeProject(_project, &progress);
   _ui->workspace->writeProject(_project, rootIds, &progress);
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  _pythonIDE->savePythonFilesAndWriteToProject();
+  if (_pythonIDE)
+    _pythonIDE->savePythonFilesAndWriteToProject();
 #endif
   bool ret = _project->write(path, &progress);
 
@@ -1113,7 +1118,8 @@ void GraphPerspective::openProjectFile(const QString &path) {
       QMap<QString, tlp::Graph *> rootIds = _graphs->readProject(_project, prg);
       _ui->workspace->readProject(_project, rootIds, prg);
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-      QTimer::singleShot(100, this, SLOT(initPythonIDE()));
+      if (_pythonIDE || PythonIDE::projectNeedsPythonIDE(_project))
+	QTimer::singleShot(100, this, SLOT(initPythonIDE()));
 #endif
     } else {
       QMessageBox::critical(_mainWindow,
@@ -1129,6 +1135,7 @@ void GraphPerspective::openProjectFile(const QString &path) {
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 void GraphPerspective::initPythonIDE() {
+  buildPythonIDE();
   _pythonIDE->setProject(_project);
 }
 #endif
@@ -1453,8 +1460,10 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 
   if (_graphs->empty()) {
-    _pythonIDE->clearPythonCodeEditors();
-    _pythonIDEDialog->hide();
+    if (_pythonIDE) {
+      _pythonIDE->clearPythonCodeEditors();
+      _pythonIDEDialog->hide();
+    }
     _ui->developButton->setEnabled(false);
     _ui->actionPython_IDE->setEnabled(false);
   } else {
@@ -1639,6 +1648,14 @@ void GraphPerspective::setSearchOutput(bool f) {
 
 void GraphPerspective::setPythonPanel(bool f) {
   if (f) {
+    if (_pythonPanel == nullptr) {
+      _pythonPanel = new PythonPanel();
+      _pythonPanel->setModel(_graphs);
+      QVBoxLayout *layout = new QVBoxLayout();
+      layout->addWidget(_pythonPanel);
+      layout->setContentsMargins(0, 0, 0, 0);
+      _ui->pythonPanel->setLayout(layout);
+    }
     _ui->outputFrame->setCurrentWidget(_ui->pythonPanel);
     _ui->searchButton->setChecked(false);
   }
@@ -1701,6 +1718,7 @@ void GraphPerspective::treatEvent(const tlp::Event &ev) {
 
 void GraphPerspective::showPythonIDE() {
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
+  buildPythonIDE();
   _pythonIDEDialog->show();
   _pythonIDEDialog->raise();
 #endif

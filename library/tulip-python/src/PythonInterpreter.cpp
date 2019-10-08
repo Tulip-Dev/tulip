@@ -180,7 +180,7 @@ const char *PythonInterpreter::pythonKeywords[] = {
     "break",   "continue", "as",    "lambda", "del",  "try",   "except", "raise",
     "finally", "yield",    "async", "await",  nullptr};
 
-PythonInterpreter PythonInterpreter::_instance;
+static PythonInterpreter *_instance = nullptr;
 
 #ifdef _MSC_VER
 extern "C" {
@@ -417,7 +417,7 @@ PythonInterpreter::~PythonInterpreter() {
 }
 
 PythonInterpreter *PythonInterpreter::getInstance() {
-  return &_instance;
+  return _instance ? _instance : (_instance = new PythonInterpreter());
 }
 
 void PythonInterpreter::initConsoleOutput() {
