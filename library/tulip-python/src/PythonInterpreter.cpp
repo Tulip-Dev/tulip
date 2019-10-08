@@ -139,9 +139,8 @@ int tracefunc(PyObject *, PyFrameObject *, int what, PyObject *) {
 
   if (what == PyTrace_LINE) {
     if (processQtEvents && !scriptPaused && timer.elapsed() >= 50) {
-      if (QApplication::hasPendingEvents()) {
-        QApplication::processEvents();
-      }
+      // will immediately return if there is no pending events
+      QApplication::processEvents();
 
       timer.start();
     }
