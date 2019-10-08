@@ -164,8 +164,8 @@ const QString PythonInterpreter::pythonPluginsPathHome(QDir::homePath() + "/.Tul
                                                        TULIP_MM_VERSION + "/plugins/python");
 
 const char PythonInterpreter::pythonReservedCharacters[] = {
-    '#', '%',  '/',  '+', '-', '&', '*', '<', '>', '|', '~', '^', '=',
-    '!', '\'', '\"', '{', '}', '(', ')', '[', ']', '.', ':', '@', 0};
+    '#', '%',  '/',  '+', '-', '&', '*', '<', '>', '|', '~', '^', '=', ',',
+    '$', '!', '\'', '`', '\"', '{', '}', '(', ')', '[', ']', '.', ':', '@', 0};
 
 const std::vector<QString> PythonInterpreter::pythonAccentuatedCharacters = {"é", "è", "ù", "à",
                                                                              "ç"};

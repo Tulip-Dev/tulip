@@ -179,86 +179,72 @@ static QString getDefaultScriptCode(const QString &pythonVersion, Graph *graph) 
   if (graph) {
 
     for (PropertyInterface *prop : graph->getObjectProperties()) {
-      QString cleanPropName(tlp::tlpStringToQString(prop->getName()));
-      cleanPropName.replace("\"", "\\\"");
-
-      if (dynamic_cast<DoubleProperty *>(prop)) {
-        oss << "  " << cleanPropertyName(tlp::tlpStringToQString(prop->getName()))
-            << " = graph.getDoubleProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      if (dynamic_cast<LayoutProperty *>(prop)) {
-        oss << "  " << cleanPropertyName(tlp::tlpStringToQString(prop->getName()))
-            << " = graph.getLayoutProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      if (dynamic_cast<IntegerProperty *>(prop)) {
-        oss << "  " << cleanPropertyName(tlp::tlpStringToQString(prop->getName()))
-            << " = graph.getIntegerProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      if (dynamic_cast<StringProperty *>(prop)) {
-        oss << "  " << cleanPropertyName(tlp::tlpStringToQString(prop->getName()))
-            << " = graph.getStringProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      if (dynamic_cast<SizeProperty *>(prop)) {
-        oss << "  " << cleanPropertyName(tlp::tlpStringToQString(prop->getName()))
-            << " = graph.getSizeProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      if (dynamic_cast<BooleanProperty *>(prop)) {
-        oss << "  " << cleanPropertyName(tlp::tlpStringToQString(prop->getName()))
-            << " = graph.getBooleanProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      if (dynamic_cast<ColorProperty *>(prop)) {
-        oss << "  " << cleanPropertyName(tlp::tlpStringToQString(prop->getName()))
-            << " = graph.getColorProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      if (dynamic_cast<GraphProperty *>(prop)) {
 #ifdef NDEBUG
-
-        if (cleanPropName != "viewMetaGraph")
+      if (prop->getName() == "viewMetaGraph")
+	continue;
 #endif
-          oss << "  " << cleanPropertyName(tlp::tlpStringToQString(prop->getName()))
-              << " = graph.getGraphProperty(\"" << cleanPropName << "\")" << endl;
+      QString cleanPropName(tlp::tlpStringToQString(prop->getName()));
+
+      cleanPropName.replace("\"", "\\\"");
+      oss << "  " << cleanPropertyName(tlp::tlpStringToQString(prop->getName()));
+      if (dynamic_cast<DoubleProperty *>(prop)) {
+        oss << " = graph.getDoubleProperty(\"" << cleanPropName << "\")" << endl;
       }
 
-      if (dynamic_cast<DoubleVectorProperty *>(prop)) {
-        oss << "  " << cleanPropertyName(tlp::tlpStringToQString(prop->getName()))
-            << " = graph.getDoubleVectorProperty(\"" << cleanPropName << "\")" << endl;
+      else if (dynamic_cast<LayoutProperty *>(prop)) {
+        oss << " = graph.getLayoutProperty(\"" << cleanPropName << "\")" << endl;
       }
 
-      if (dynamic_cast<CoordVectorProperty *>(prop)) {
-        oss << "  " << cleanPropertyName(tlp::tlpStringToQString(prop->getName()))
-            << " = graph.getCoordVectorProperty(\"" << cleanPropName << "\")" << endl;
+      else if (dynamic_cast<IntegerProperty *>(prop)) {
+        oss << " = graph.getIntegerProperty(\"" << cleanPropName << "\")" << endl;
       }
 
-      if (dynamic_cast<IntegerVectorProperty *>(prop)) {
-        oss << "  " << cleanPropertyName(tlp::tlpStringToQString(prop->getName()))
-            << " = graph.getIntegerVectorProperty(\"" << cleanPropName << "\")" << endl;
+      else if (dynamic_cast<StringProperty *>(prop)) {
+        oss << " = graph.getStringProperty(\"" << cleanPropName << "\")" << endl;
       }
 
-      if (dynamic_cast<SizeVectorProperty *>(prop)) {
-        oss << "  " << cleanPropertyName(tlp::tlpStringToQString(prop->getName()))
-            << " = graph.getSizeVectorProperty(\"" << cleanPropName << "\")" << endl;
+      else if (dynamic_cast<SizeProperty *>(prop)) {
+        oss << " = graph.getSizeProperty(\"" << cleanPropName << "\")" << endl;
       }
 
-      if (dynamic_cast<BooleanVectorProperty *>(prop)) {
-        oss << "  " << cleanPropertyName(tlp::tlpStringToQString(prop->getName()))
-            << " = graph.getBooleanVectorProperty(\"" << cleanPropName << "\")" << endl;
+      else if (dynamic_cast<BooleanProperty *>(prop)) {
+        oss << " = graph.getBooleanProperty(\"" << cleanPropName << "\")" << endl;
       }
 
-      if (dynamic_cast<ColorVectorProperty *>(prop)) {
-        oss << "  " << cleanPropertyName(tlp::tlpStringToQString(prop->getName()))
-            << " = graph.getColorVectorProperty(\"" << cleanPropName << "\")" << endl;
+      else if (dynamic_cast<ColorProperty *>(prop)) {
+        oss << " = graph.getColorProperty(\"" << cleanPropName << "\")" << endl;
       }
 
-      if (dynamic_cast<StringVectorProperty *>(prop)) {
-        oss << "  " << cleanPropertyName(tlp::tlpStringToQString(prop->getName()))
-            << " = graph.getStringVectorProperty(\"" << cleanPropName << "\")" << endl;
+      else if (dynamic_cast<GraphProperty *>(prop)) {
+	oss << " = graph.getGraphProperty(\"" << cleanPropName << "\")" << endl;
+      }
+
+      else if (dynamic_cast<DoubleVectorProperty *>(prop)) {
+        oss << " = graph.getDoubleVectorProperty(\"" << cleanPropName << "\")" << endl;
+      }
+
+      else if (dynamic_cast<CoordVectorProperty *>(prop)) {
+        oss << " = graph.getCoordVectorProperty(\"" << cleanPropName << "\")" << endl;
+      }
+
+      else if (dynamic_cast<IntegerVectorProperty *>(prop)) {
+        oss << " = graph.getIntegerVectorProperty(\"" << cleanPropName << "\")" << endl;
+      }
+
+      else if (dynamic_cast<SizeVectorProperty *>(prop)) {
+        oss << " = graph.getSizeVectorProperty(\"" << cleanPropName << "\")" << endl;
+      }
+
+      else if (dynamic_cast<BooleanVectorProperty *>(prop)) {
+        oss << " = graph.getBooleanVectorProperty(\"" << cleanPropName << "\")" << endl;
+      }
+
+      else if (dynamic_cast<ColorVectorProperty *>(prop)) {
+        oss << " = graph.getColorVectorProperty(\"" << cleanPropName << "\")" << endl;
+      }
+
+      else if (dynamic_cast<StringVectorProperty *>(prop)) {
+        oss << " = graph.getStringVectorProperty(\"" << cleanPropName << "\")" << endl;
       }
     }
   }
