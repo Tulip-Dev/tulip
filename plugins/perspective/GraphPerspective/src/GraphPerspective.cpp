@@ -1648,6 +1648,7 @@ void GraphPerspective::setSearchOutput(bool f) {
 
 void GraphPerspective::setPythonPanel(bool f) {
   if (f) {
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
     if (_pythonPanel == nullptr) {
       _pythonPanel = new PythonPanel();
       _pythonPanel->setModel(_graphs);
@@ -1656,6 +1657,7 @@ void GraphPerspective::setPythonPanel(bool f) {
       layout->setContentsMargins(0, 0, 0, 0);
       _ui->pythonPanel->setLayout(layout);
     }
+#endif
     _ui->outputFrame->setCurrentWidget(_ui->pythonPanel);
     _ui->searchButton->setChecked(false);
   }
