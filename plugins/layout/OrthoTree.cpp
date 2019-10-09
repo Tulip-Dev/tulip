@@ -36,7 +36,8 @@ class OrthoTree : public tlp::LayoutAlgorithm {
   void computeLayout(const tlp::node n, tlp::NodeStaticProperty<double> &verticalSize);
 
 public:
-  PLUGININFORMATION("OrthoTree", "Romain Bourqui", "20/02/2012", "Orthogonal Tree layout", "1.0", "Tree")
+  PLUGININFORMATION("OrthoTree", "Romain Bourqui", "20/02/2012", "Orthogonal Tree layout", "1.0",
+                    "Tree")
 
   OrthoTree(const tlp::PluginContext *context);
 
@@ -87,7 +88,7 @@ void OrthoTree::computeLayout(const node n, NodeStaticProperty<double> &vertical
     prev += verticalSize[u] + nodeSpacing;
     result->setNodeValue(u, c);
 
-    vector<Coord> bends {Coord(cn[0], c[1], 0)};
+    vector<Coord> bends{Coord(cn[0], c[1], 0)};
     result->setEdgeValue(e, bends);
     computeLayout(u, verticalSize);
   }
