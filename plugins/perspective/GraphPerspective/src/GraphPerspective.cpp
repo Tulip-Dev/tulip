@@ -441,7 +441,12 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
-#ifndef TULIP_BUILD_PYTHON_COMPONENTS
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
+  // ensure the loading of python plugins
+  // before instantiating PythonIDE
+  PythonInterpreter::getInstance();
+  pluginsListChanged();
+#else
   _ui->pythonButton->setVisible(false);
   _ui->developButton->setVisible(false);
   _ui->actionPython_IDE->setVisible(false);
