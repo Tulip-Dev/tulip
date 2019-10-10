@@ -78,8 +78,7 @@ void TulipFontIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mod
   // set the font
   painter->setFont(font);
 
-  painter->drawText(rect, iconQString,
-                    QTextOption(Qt::AlignCenter | Qt::AlignVCenter));
+  painter->drawText(rect, iconQString, QTextOption(Qt::AlignCenter | Qt::AlignVCenter));
 
   painter->restore();
 }
