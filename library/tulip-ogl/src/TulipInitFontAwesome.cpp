@@ -510,7 +510,7 @@ static void initIconCodePoints() {
   addIconCodePoint("fa-font-awesome-alt", 0xf35c);
   addIconCodePoint("fa-font-awesome-flag", 0xf425);
   // fa-font-awesome-logo-full cannot be found
-  //addIconCodePoint("fa-font-awesome-logo-full", 0xf4e6);
+  // addIconCodePoint("fa-font-awesome-logo-full", 0xf4e6);
   addIconCodePoint("fa-fonticons", 0xf280);
   addIconCodePoint("fa-fonticons-fi", 0xf3a2);
   addIconCodePoint("fa-football-ball", 0xf44e);

@@ -163,7 +163,8 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
     const std::string &propName = _contextProperty->getName();
 
     action = menu.addAction("Copy");
-    action->setToolTip(QString("Display a dialog box allowing to copy the values of <b>") + propName.c_str() + "</b> into a new or existing property of the same type");
+    action->setToolTip(QString("Display a dialog box allowing to copy the values of <b>") +
+                       propName.c_str() + "</b> into a new or existing property of the same type");
     connect(action, SIGNAL(triggered()), this, SLOT(copyProperty()));
 
     bool enabled = true;
