@@ -26,10 +26,10 @@ MDI_VERSION=$(grep mdi-version ${MDI_VARIABLES_FILE} | awk -F '"' '{print $2}')
  echo "static void initIconCodePoints() {";
  grep '":' ${MDI_VARIABLES_FILE} | awk -F ',' '{print $1}' | awk -F '"' '{print $2 $3}' | awk '{print $1 $2}' | awk -F ':' '{printf "  addIconCodePoint(\"md-%s\", 0x%s);\n", $1, $2}';
  echo;
- echo "  auto it = iconCodePoint.begin();";
+ echo "  iconsNames.reserve(iconCodePoint.size());";
  echo;
- echo "  for (; it != iconCodePoint.end(); ++it) {";
- echo "    iconsNames.push_back(std::string(it->first));";
+ echo "  for (const auto &it : iconCodePoint) {";
+ echo "    iconsNames.emplace_back(it.first);";
  echo "  }";
  echo "}") > ${CPP_FILE}
 
