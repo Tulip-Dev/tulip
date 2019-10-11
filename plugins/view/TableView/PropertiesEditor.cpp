@@ -157,12 +157,16 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
     menu.addSeparator();
 
     action = menu.addAction(QIcon(":/tulip/gui/icons/64/list-add.png"), "Add new property");
-    action->setToolTip("Display a dialog to create a new property belonging to the current graph");
+    action->setToolTip("Display a dialog box to create a new local property of the current graph");
     connect(action, SIGNAL(triggered()), this, SLOT(newProperty()));
-    connect(menu.addAction("Copy"), SIGNAL(triggered()), this, SLOT(copyProperty()));
+
+    const std::string &propName = _contextProperty->getName();
+
+    action = menu.addAction("Copy");
+    action->setToolTip(QString("Display a dialog box allowing to copy the values of <b>") + propName.c_str() + "</b> into a new or existing property of the same type");
+    connect(action, SIGNAL(triggered()), this, SLOT(copyProperty()));
 
     bool enabled = true;
-    const std::string &propName = _contextProperty->getName();
 
     if (Perspective::instance()->isReservedPropertyName(propName.c_str())) {
       // Enable deletion of reserved properties when on a subgraph and that properties are local
@@ -172,7 +176,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
 
     if (enabled) {
       action = menu.addAction("Delete");
-      action->setToolTip(QString("Delete the property \"") + propName.c_str() + '"');
+      action->setToolTip(QString("Delete the property <b>") + propName.c_str() + "</b>");
       connect(action, SIGNAL(triggered()), this, SLOT(delProperty()));
     }
 
@@ -180,7 +184,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
 
     if (!Perspective::instance()->isReservedPropertyName(propName.c_str())) {
       rename = menu.addAction("Rename");
-      rename->setToolTip(QString("Rename the property \"") + propName.c_str() + '"');
+      rename->setToolTip(QString("Rename the property <b>") + propName.c_str() + "</b>");
     }
 
     menu.addSeparator();
