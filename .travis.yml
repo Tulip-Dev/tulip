@@ -1,7 +1,7 @@
 # Tulip continuous integration on Linux and Mac OS platforms through TravisCI.
 # Two type of builds are performed by os:
 #  - a "legacy" Tulip build using :
-#     * default system compiler (GCC 5.4 on Linux, clang from Xcode7.3 on Mac OS)
+#     * default system compiler (GCC 5.4 on Linux, clang from Xcode8.3 on Mac OS)
 #     * Qt 5.5 on Linux, Qt 5.9 on MacOS
 #     * Python 2.7
 #  - a "modern" Tulip build using:
@@ -29,6 +29,9 @@ jobs:
   #==============================================================================================================================================================
     # Tulip core build stage on Linux
     - stage: Tulip core build (Linux)
+      # nothing to build if a non-linux platform is specified
+      # at the end of the commit message
+      if: commit_message !~ /\[(macos|macports|homebrew|windows)-only\]$/
     # legacy Tulip core build on Linux
       os: linux
       dist: xenial
@@ -63,6 +66,9 @@ jobs:
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip core build on Linux
     -
+      # nothing to build if a non-linux platform is specified
+      # at the end of the commit message
+      if: commit_message !~ /\[(macos|macports|homebrew|windows)-only\]$/
       os: linux
       dist: bionic
       compiler: gcc
@@ -107,7 +113,11 @@ jobs:
   #==============================================================================================================================================================
     # Tulip complete build stage on Linux
     - stage: Tulip complete build (Linux)
-      # legacy Tulip complete build on Linux, we also build the documentation in this one
+      # nothing to build if a non-linux platform is specified
+      # at the end of the commit message
+      if: commit_message !~ /\[(macos|macports|homebrew|windows)-only\]$/
+      # legacy Tulip complete build on Linux
+      # we also build the documentation in this one
       os: linux
       dist: xenial
       compiler: gcc
@@ -154,6 +164,9 @@ jobs:
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip complete build on Linux
     -
+      # nothing to build if a non-linux platform is specified
+      # at the end of the commit message
+      if: commit_message !~ /\[(macos|macports|homebrew|windows)-only\]$/
       os: linux
       dist: bionic
       compiler: gcc
@@ -219,6 +232,9 @@ jobs:
   #==============================================================================================================================================================
     # Tulip AppImage build on CentOS
     - stage: Tulip AppImage build (CentOS)
+      # nothing to build if a non-linux platform is specified
+      # at the end of the commit message
+      if: commit_message !~ /\[(macos|macports|homebrew|windows)-only\]$/
       # Tulip x86_64 AppImage build on CentOS 6
       os: linux
       dist: trusty
@@ -252,9 +268,12 @@ jobs:
   #==============================================================================================================================================================
     # Tulip core build stage on Mac OS
     - stage: Tulip core build (Mac OS)
+      # nothing to build if a non-macports platform is specified
+      # at the end of the commit message
+      if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
     # legacy Tulip core build on Mac OS (MacPorts)
       os: osx
-      osx_image: xcode7.3
+      osx_image: xcode8.3
       compiler: clang
       cache: ccache
       install:
@@ -290,6 +309,9 @@ jobs:
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip core build on Mac OS (MacPorts)
     -
+      # nothing to build if a non-macports platform is specified
+      # at the end of the commit message
+      if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
       os: osx
       # use the most recent Xcode version
       osx_image: xcode10.3
@@ -329,6 +351,9 @@ jobs:
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # legacy Tulip core build on Mac OS (Homebrew)
     -
+      # nothing to build if a non-homebrew platform is specified
+      # at the end of the commit message
+      if: commit_message !~ /\[(linux|macports|windows)-only\]$/
       os: osx
       # use xcode9.2 travis image to get the Homebrew older supported env
       osx_image: xcode9.2
@@ -367,6 +392,9 @@ jobs:
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip core build on Mac OS (Homebrew)
     -
+      # nothing to build if a non-homebrew platform is specified
+      # at the end of the commit message
+      if: commit_message !~ /\[(linux|macports|windows)-only\]$/
       os: osx
       # use the most recent Xcode version
       osx_image: xcode10.3
@@ -407,9 +435,12 @@ jobs:
   #==============================================================================================================================================================
     # Tulip complete build stage on Mac OS
     - stage: Tulip complete build (Mac OS)
+      # nothing to build if a non-macports platform is specified
+      # at the end of the commit message
+      if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
     # legacy Tulip complete build on Mac OS (MacPorts)
       os: osx
-      osx_image: xcode7.3
+      osx_image: xcode8.3
       compiler: clang
       cache: ccache
       install:
@@ -458,6 +489,9 @@ jobs:
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip complete build on Mac OS (MacPorts)
     -
+      # nothing to build if a non-macports platform is specified
+      # at the end of the commit message
+      if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
       os: osx
       # use the most recent Xcode version
       osx_image: xcode10.3
@@ -510,6 +544,9 @@ jobs:
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # legacy Tulip complete build on Mac OS (Homebrew)
     -
+      # nothing to build if a non-homebrew platform is specified
+      # at the end of the commit message
+      if: commit_message !~ /\[(linux|macports|windows)-only\]$/
       os: osx
       # use xcode9.2 travis image to get the Homebrew older supported env
       osx_image: xcode9.2
@@ -551,6 +588,9 @@ jobs:
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip complete build on Mac OS (Homebrew)
     -
+      # nothing to build if a non-homebrew platform is specified
+      # at the end of the commit message
+      if: commit_message !~ /\[(linux|macports|windows)-only\]$/
       os: osx
       # use the most recent Xcode version
       osx_image: xcode10.3

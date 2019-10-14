@@ -22,6 +22,12 @@ init:
 # define build jobs
 environment:
   matrix:
+
+  # nothing to build if a non-windows platform
+  # is specified at the end of the commit message
+  skip_commits:
+    message: /\[(linux|macos|macports|homebrew)-only\]$/
+
     # 64 bits GCC core build
     - MSYS2_ARCH: x86_64
       MSYSTEM: MINGW64
