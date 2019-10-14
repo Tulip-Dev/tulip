@@ -23,11 +23,6 @@ init:
 environment:
   matrix:
 
-  # nothing to build if a non-windows platform
-  # is specified at the end of the commit message
-  skip_commits:
-    message: /\[(linux|macos|macports|homebrew)-only\]$/
-
     # 64 bits GCC core build
     - MSYS2_ARCH: x86_64
       MSYSTEM: MINGW64
@@ -79,6 +74,11 @@ environment:
       #MSVC_PLATFORM_TOOLSET: "v140"
       #QT5_DIR: "C:/Qt/5.9/msvc2015"
       #PYTHON_EXECUTABLE: "C:/Python37/python.exe"
+
+# nothing to build if a non-windows platform
+# is specified at the end of the commit message
+skip_commits:
+  message: /\[(linux|macos|macports|homebrew)-only\]$/
 
 # build script that simply call the right batch script depending on the compiler used
 build_script:
