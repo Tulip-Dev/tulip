@@ -5,8 +5,8 @@
 #     * Qt 5.5 on Linux, Qt 5.9 on MacOS
 #     * Python 2.7
 #  - a "modern" Tulip build using:
-#     * recent compiler (GCC 9.x on Linux, clang 8.x from MacPorts or Homebrew on Mac OS)
-#     * Qt 5.12 on Linux, Qt 5.12 on MacOS
+#     * recent compiler (GCC 9.x on Linux, clang 9.x from MacPorts or Homebrew on MacOS)
+#     * Qt 5.13 on Linux, Qt 5.12 on MacOS/MacPorts, Qt 5.13 on MacOS/Homebrew
 #     * Python 3.7 on Linux, Python 2.7 on MacOS
 # As TravisCI limits build job times to 45 minutes, Tulip is built in two successive stages
 # to avoid timeouts (which happened often with MacOs builds):
@@ -275,7 +275,10 @@ jobs:
       os: osx
       osx_image: xcode8.3
       compiler: clang
-      cache: ccache
+      cache:
+        ccache: true
+        directories:
+          - /opt/local
       install:
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
@@ -316,7 +319,10 @@ jobs:
       # use the most recent Xcode version
       osx_image: xcode10.3
       compiler: clang
-      cache: ccache
+      cache:
+        ccache: true
+        directories:
+          - /opt/local
       install:
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
@@ -442,14 +448,17 @@ jobs:
       os: osx
       osx_image: xcode8.3
       compiler: clang
-      cache: ccache
+      cache:
+        ccache: true
+        directories:
+          - /opt/local
       install:
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
         # install MacPorts in order to easily retrieve Tulip build dependencies
-        - wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
-        - chmod +x ./macports-ci
-        - travis_wait ./macports-ci install
+        # wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
+        # chmod +x ./macports-ci
+        # travis_wait ./macports-ci install
         - export PATH=/opt/local/bin:$PATH
         # install Tulip complete build dependencies
         - sudo port -N install cmake
@@ -469,7 +478,7 @@ jobs:
         - sudo port -N install cppunit
         - curl -O https://bootstrap.pypa.io/get-pip.py
         - sudo python get-pip.py
-        - sudo pip install sphinx==1.7.9
+        - pip install --user sphinx==1.7.9
 
       env:
         - ENV="MacOS 10.12, AppleClang, MacPorts"
@@ -496,14 +505,17 @@ jobs:
       # use the most recent Xcode version
       osx_image: xcode10.3
       compiler: clang
-      cache: ccache
+      cache:
+        ccache: true
+        directories:
+          - /opt/local
       install:
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
         # install MacPorts in order to easily retrieve Tulip dependencies
-        - wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
-        - chmod +x ./macports-ci
-        - travis_wait ./macports-ci install
+        # wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
+        # chmod +x ./macports-ci
+        # travis_wait ./macports-ci install
         - export PATH=/opt/local/bin:$PATH
         # install Tulip complete build dependencies
         - sudo port -N install cmake
@@ -524,7 +536,7 @@ jobs:
         - sudo port -N install cppunit
         - curl -O https://bootstrap.pypa.io/get-pip.py
         - sudo python get-pip.py
-        - sudo pip install sphinx==1.7.9 --ignore-installed six
+        - pip install --user sphinx==1.7.9
       env:
         - ENV="MacOS 10.14, LLVM Clang, MacPorts"
 
