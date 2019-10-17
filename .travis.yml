@@ -278,7 +278,7 @@ jobs:
       cache:
         ccache: true
         directories:
-          - /opt/local
+          - /opt
       install:
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
@@ -322,7 +322,7 @@ jobs:
       cache:
         ccache: true
         directories:
-          - /opt/local
+          - /opt
       install:
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
@@ -451,7 +451,7 @@ jobs:
       cache:
         ccache: true
         directories:
-          - /opt/local
+          - /opt
       install:
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
@@ -508,7 +508,7 @@ jobs:
       cache:
         ccache: true
         directories:
-          - /opt/local
+          - /opt
       install:
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
