@@ -275,10 +275,7 @@ jobs:
       os: osx
       osx_image: xcode8.3
       compiler: clang
-      cache:
-        ccache: true
-        directories:
-          - /opt
+      cache: ccache
       install:
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
@@ -319,10 +316,7 @@ jobs:
       # use the most recent Xcode version
       osx_image: xcode10.3
       compiler: clang
-      cache:
-        ccache: true
-        directories:
-          - /opt
+      cache: ccache
       install:
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
@@ -448,10 +442,7 @@ jobs:
       os: osx
       osx_image: xcode8.3
       compiler: clang
-      cache:
-        ccache: true
-        directories:
-          - /opt
+      cache: ccache
       install:
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
@@ -505,10 +496,7 @@ jobs:
       # use the most recent Xcode version
       osx_image: xcode10.3
       compiler: clang
-      cache:
-        ccache: true
-        directories:
-          - /opt
+      cache: ccache
       install:
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
