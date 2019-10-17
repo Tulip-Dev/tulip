@@ -447,9 +447,9 @@ jobs:
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
         # install MacPorts in order to easily retrieve Tulip build dependencies
-        # wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
-        # chmod +x ./macports-ci
-        # travis_wait ./macports-ci install
+        - wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
+        - chmod +x ./macports-ci
+        - travis_wait ./macports-ci install
         - export PATH=/opt/local/bin:$PATH
         # install Tulip complete build dependencies
         - sudo port -N install cmake
@@ -501,9 +501,9 @@ jobs:
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
         # install MacPorts in order to easily retrieve Tulip dependencies
-        # wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
-        # chmod +x ./macports-ci
-        # travis_wait ./macports-ci install
+        - wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
+        - chmod +x ./macports-ci
+        - travis_wait ./macports-ci install
         - export PATH=/opt/local/bin:$PATH
         # install Tulip complete build dependencies
         - sudo port -N install cmake
