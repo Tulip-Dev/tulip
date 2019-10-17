@@ -48,7 +48,7 @@ cd "${DEST_DIR}/application"
 mkdir -p Tulip.app/Contents/{MacOS,Resources,Frameworks}
 cd Tulip.app/Contents
 cp "${SRC_DIR}/tulip.icns" Resources/
-sed -e s"/TLP_VERSION/@TulipVersion@/g" "${SRC_DIR}/Info.plist" Info.plist
+sed -e s"/TLP_VERSION/@TulipVersion@/g" "${SRC_DIR}/Info.plist" > Info.plist
 
 echo 'Copying binaries & libraries'
 cd "${DEST_DIR}/application/Tulip.app/Contents/"
