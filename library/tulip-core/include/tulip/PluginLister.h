@@ -70,6 +70,13 @@ private:
     Plugin *info;
 
     PluginDescription() : factory(nullptr), info(nullptr) {}
+
+    ~PluginDescription() {
+      if (info &&
+	  // avoid double-free with python kludge
+	  !info->name().empty())
+	delete info;
+    }
   };
 
 public:

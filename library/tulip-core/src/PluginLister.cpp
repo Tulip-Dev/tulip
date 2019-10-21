@@ -134,6 +134,7 @@ void PluginLister::registerPlugin(FactoryInterface *objectFactory) {
 
   tlp::Plugin *information = objectFactory->createPluginObject(nullptr);
   std::string pluginName = information->name();
+  assert(!pluginName.empty());
 
   if (plugins.find(pluginName) == plugins.end()) {
     PluginDescription &description = plugins[pluginName];
@@ -150,8 +151,10 @@ void PluginLister::registerPlugin(FactoryInterface *objectFactory) {
     // register under a deprecated name if needed
     std::string oldName = information->deprecatedName();
     if (!oldName.empty()) {
-      if (!pluginExists(oldName))
+      if (!pluginExists(oldName)) {
         plugins[oldName] = plugins[pluginName];
+	plugins[oldName].info = objectFactory->createPluginObject(nullptr);
+      }
       else if (currentLoader != nullptr) {
         std::string tmpStr;
         tmpStr += "'" + oldName + "' cannot be a deprecated name of plugin '" + pluginName + "'";
