@@ -153,9 +153,8 @@ void PluginLister::registerPlugin(FactoryInterface *objectFactory) {
     if (!oldName.empty()) {
       if (!pluginExists(oldName)) {
         plugins[oldName] = plugins[pluginName];
-	plugins[oldName].info = objectFactory->createPluginObject(nullptr);
-      }
-      else if (currentLoader != nullptr) {
+        plugins[oldName].info = objectFactory->createPluginObject(nullptr);
+      } else if (currentLoader != nullptr) {
         std::string tmpStr;
         tmpStr += "'" + oldName + "' cannot be a deprecated name of plugin '" + pluginName + "'";
         currentLoader->aborted(tmpStr, "multiple definitions found; check your plugin librairies.");

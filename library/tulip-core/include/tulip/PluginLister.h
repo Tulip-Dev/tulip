@@ -73,9 +73,9 @@ private:
 
     ~PluginDescription() {
       if (info &&
-	  // avoid double-free with python kludge
-	  !info->name().empty())
-	delete info;
+          // avoid double-free with python kludge
+          !info->name().empty())
+        delete info;
     }
   };
 
