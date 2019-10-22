@@ -68,13 +68,14 @@ private:
     FactoryInterface *factory;
     std::string library;
     Plugin *info;
+    bool pyPlugin;
 
-    PluginDescription() : factory(nullptr), info(nullptr) {}
+  PluginDescription() : factory(nullptr), info(nullptr), pyPlugin(false) {}
 
     ~PluginDescription() {
-      if (info &&
-          // avoid double-free with python kludge
-          !info->name().empty())
+      // avoid double-free for python plugins
+      // as they are allocated from the python side
+      if (!pyPlugin)
         delete info;
     }
   };

@@ -141,6 +141,7 @@ void PluginLister::registerPlugin(FactoryInterface *objectFactory) {
     description.factory = objectFactory;
     description.library = PluginLibraryLoader::getCurrentPluginFileName();
     description.info = information;
+    description.pyPlugin = information->programmingLanguage() == "Python";
 
     if (currentLoader != nullptr) {
       currentLoader->loaded(information, information->dependencies());
