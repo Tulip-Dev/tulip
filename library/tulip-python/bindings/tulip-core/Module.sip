@@ -137,8 +137,8 @@ inline const std::vector<tlp::Vec3f>& getValue(const std::vector<tlp::Vec3f> *va
 template <typename T>
 bool pluginExists(std::string pluginName) {
   if (typeid(T).name() == typeid(tlp::Algorithm).name()) {
-    std::list<std::string> algoList = tlp::PluginLister::instance()->availablePlugins<tlp::Algorithm>();
-    std::list<std::string> propAlgoList = tlp::PluginLister::instance()->availablePlugins<tlp::PropertyAlgorithm>();
+    std::list<std::string> algoList = tlp::PluginLister::availablePlugins<tlp::Algorithm>();
+    std::list<std::string> propAlgoList = tlp::PluginLister::availablePlugins<tlp::PropertyAlgorithm>();
     std::list<std::string> realAlgoList;
     for (std::list<std::string>::iterator it = algoList.begin() ; it != algoList.end() ; ++it) {
       if (std::find(propAlgoList.begin(), propAlgoList.end(), *it) == propAlgoList.end()) {
@@ -147,7 +147,7 @@ bool pluginExists(std::string pluginName) {
     }
     return std::find(realAlgoList.begin(), realAlgoList.end(), pluginName) != realAlgoList.end();
   } else {
-    return tlp::PluginLister::instance()->pluginExists<T>(pluginName);
+    return tlp::PluginLister::pluginExists<T>(pluginName);
   }
 }
 

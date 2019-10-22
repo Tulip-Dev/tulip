@@ -24,29 +24,56 @@
 using namespace tlp;
 using namespace std;
 
+struct PluginDescription {
+  tlp::FactoryInterface *factory;
+  std::string library;
+  Plugin *info;
+  bool pyPlugin;
+
+  PluginDescription() : factory(nullptr), info(nullptr), pyPlugin(false) {}
+
+  ~PluginDescription() {
+    // avoid double-free for python plugins
+    // as they are allocated from the python side
+    if (!pyPlugin)
+      delete info;
+  }
+};
+
+// used to initialize the _plugins map
+// it is first called by registerPlugin at the library loading time
+// while _plugins is only 'zero' initialized
+std::map<std::string, PluginDescription> &getPluginsMap() {
+  static std::map<std::string, PluginDescription> plugins;
+  return plugins;
+}
+
+// the _plugins map
+std::map<std::string, PluginDescription> &_plugins = getPluginsMap();
+
 PluginLoader *PluginLister::currentLoader = nullptr;
 
-struct PluginListerInstance : public PluginLister {
+struct PluginEventSender : public tlp::Observable {
   // there is only one instance of this class
   // It is first used by PluginLister::registerPlugin
   // at the tulip-core library loading time while
   // it is only 'zero' initialized
   bool created;
-  PluginListerInstance() : created(true) {}
+  PluginEventSender() : created(true) {}
   inline void sendPluginAddedEvent(const std::string &pluginName) {
     if (created)
-      sendEvent(PluginEvent(PluginEvent::TLP_ADD_PLUGIN, pluginName));
+      sendEvent(PluginEvent(*this, PluginEvent::TLP_ADD_PLUGIN, pluginName));
   }
   inline void sendPluginRemovedEvent(const std::string &pluginName) {
     if (created)
-      sendEvent(PluginEvent(PluginEvent::TLP_REMOVE_PLUGIN, pluginName));
+      sendEvent(PluginEvent(*this, PluginEvent::TLP_REMOVE_PLUGIN, pluginName));
   }
 };
 
-PluginListerInstance _instance;
+static PluginEventSender _pluginEventSender;
 
-PluginLister *PluginLister::instance() {
-  return &_instance;
+void PluginEvent::addListener(Observable *obs) {
+  _pluginEventSender.addListener(obs);
 }
 
 void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader *loader) {
@@ -98,6 +125,40 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader *loader) {
   } while (depsNeedCheck);
 }
 
+Plugin *PluginLister::registeredPluginObject(const std::string &name) {
+  auto it = _plugins.find(name);
+  if (it != _plugins.end())
+    return it->second.info;
+  return nullptr;
+}
+
+class PluginIterator :public Iterator<Plugin *> {
+  std::map<std::string, PluginDescription>::iterator it;
+
+public:
+  PluginIterator() : it(_plugins.begin()) {}
+
+  bool hasNext() {
+    return it != _plugins.end();
+  }
+
+  Plugin *next() {
+    Plugin *plugin = nullptr;
+    // deprecated names are not listed
+    while((it != _plugins.end()) && (it->first != it->second.info->name()))
+      ++it;
+    if (it != _plugins.end()) {
+      plugin = it->second.info;
+      ++it;
+    }
+    return plugin;
+  }
+};
+
+Iterator<Plugin *> *PluginLister::registeredPluginObjects() {
+  return new PluginIterator;
+}
+
 std::list<std::string> PluginLister::availablePlugins() {
   std::list<std::string> keys;
 
@@ -114,23 +175,11 @@ const Plugin &PluginLister::pluginInformation(const std::string &name) {
   return *(_plugins.find(name)->second.info);
 }
 
-// used to initialize the _plugins map
-// it is first called by registerPlugin at the library loading time
-// while _plugins is only 'zero' initialized
-std::map<std::string, PluginLister::PluginDescription> &PluginLister::getPluginsMap() {
-  static std::map<std::string, PluginDescription> plugins;
-  return plugins;
-}
-
-// the _plugins map
-std::map<std::string, PluginLister::PluginDescription> &PluginLister::_plugins =
-    PluginLister::getPluginsMap();
-
 void PluginLister::registerPlugin(FactoryInterface *objectFactory) {
   // because the tulip-core library contains some import/export plugins
   // we must ensure plugins map initialization at the library loading time
   // while _plugins is only 'zero' initialized
-  std::map<std::string, PluginLister::PluginDescription> &plugins = getPluginsMap();
+  std::map<std::string, PluginDescription> &plugins = getPluginsMap();
 
   tlp::Plugin *information = objectFactory->createPluginObject(nullptr);
   std::string pluginName = information->name();
@@ -147,7 +196,7 @@ void PluginLister::registerPlugin(FactoryInterface *objectFactory) {
       currentLoader->loaded(information, information->dependencies());
     }
 
-    _instance.sendPluginAddedEvent(pluginName);
+    _pluginEventSender.sendPluginAddedEvent(pluginName);
 
     // register under a deprecated name if needed
     std::string oldName = information->deprecatedName();
@@ -174,7 +223,7 @@ void PluginLister::registerPlugin(FactoryInterface *objectFactory) {
 
 void tlp::PluginLister::removePlugin(const std::string &name) {
   _plugins.erase(name);
-  _instance.sendPluginRemovedEvent(name);
+  _pluginEventSender.sendPluginRemovedEvent(name);
 }
 
 tlp::Plugin *PluginLister::getPluginObject(const std::string &name, PluginContext *context) {

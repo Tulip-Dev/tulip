@@ -747,7 +747,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   connect(_ui->pythonButton, SIGNAL(clicked(bool)), this, SLOT(setPythonPanel(bool)));
   connect(_ui->developButton, SIGNAL(clicked()), this, SLOT(showPythonIDE()));
-  tlp::PluginLister::instance()->addListener(this);
+  tlp::PluginEvent::addListener(this);
   if (_pythonIDE || PythonIDE::projectNeedsPythonIDE(_project))
     QTimer::singleShot(100, this, SLOT(initPythonIDE()));
 #endif
