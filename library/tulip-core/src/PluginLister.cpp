@@ -132,7 +132,7 @@ Plugin *PluginLister::registeredPluginObject(const std::string &name) {
   return nullptr;
 }
 
-class PluginIterator :public Iterator<Plugin *> {
+class PluginIterator : public Iterator<Plugin *> {
   std::map<std::string, PluginDescription>::iterator it;
 
 public:
@@ -145,7 +145,7 @@ public:
   Plugin *next() {
     Plugin *plugin = nullptr;
     // deprecated names are not listed
-    while((it != _plugins.end()) && (it->first != it->second.info->name()))
+    while ((it != _plugins.end()) && (it->first != it->second.info->name()))
       ++it;
     if (it != _plugins.end()) {
       plugin = it->second.info;

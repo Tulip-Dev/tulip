@@ -138,7 +138,7 @@ public:
 
     for (auto plugin : registeredPluginObjects()) {
       if (dynamic_cast<PluginType *>(plugin))
-	keys.push_back(plugin->name());
+        keys.push_back(plugin->name());
     }
 
     return keys;
@@ -204,7 +204,6 @@ public:
 
   ///@cond DOXYGEN_HIDDEN
 protected:
-
   /**
    * @brief Gets the release number of the given plug-in.
    *
@@ -222,9 +221,9 @@ public:
   enum PluginEventType { TLP_ADD_PLUGIN = 0, TLP_REMOVE_PLUGIN = 1 };
 
   // constructor for node/edge events
-  PluginEvent(const Observable &sender, PluginEventType pluginEvtType, const std::string &pluginName)
-      : Event(sender, Event::TLP_MODIFICATION), evtType(pluginEvtType),
-        pluginName(pluginName) {}
+  PluginEvent(const Observable &sender, PluginEventType pluginEvtType,
+              const std::string &pluginName)
+      : Event(sender, Event::TLP_MODIFICATION), evtType(pluginEvtType), pluginName(pluginName) {}
 
   PluginEventType getType() const {
     return evtType;
