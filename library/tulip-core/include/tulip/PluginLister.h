@@ -55,7 +55,6 @@ private:
   static Iterator<Plugin *> *registeredPluginObjects();
 
 public:
-
   /**
    * @brief Checks if all registered plug-ins have their dependencies met.
    *

@@ -205,14 +205,16 @@ void PluginLister::registerPlugin(PluginFactory *factory) {
       } else if (PluginLoader::current != nullptr) {
         std::string tmpStr;
         tmpStr += "'" + oldName + "' cannot be a deprecated name of plugin '" + pluginName + "'";
-        PluginLoader::current->aborted(tmpStr, "multiple definitions found; check your plugin librairies.");
+        PluginLoader::current->aborted(tmpStr,
+                                       "multiple definitions found; check your plugin librairies.");
       }
     }
   } else {
     if (PluginLoader::current != nullptr) {
       std::string tmpStr;
       tmpStr += "'" + pluginName + "' plugin";
-      PluginLoader::current->aborted(tmpStr, "multiple definitions found; check your plugin librairies.");
+      PluginLoader::current->aborted(tmpStr,
+                                     "multiple definitions found; check your plugin librairies.");
     }
 
     delete information;
