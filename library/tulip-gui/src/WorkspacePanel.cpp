@@ -41,6 +41,7 @@
 #include <tulip/View.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphHierarchiesModel.h>
+#include <tulip/PluginLister.h>
 #include <tulip/TulipMimes.h>
 #include <tulip/TlpQtTools.h>
 

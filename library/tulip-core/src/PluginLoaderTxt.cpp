@@ -23,6 +23,9 @@
 
 using namespace std;
 using namespace tlp;
+
+PluginLoader *PluginLoader::current = nullptr;
+
 void PluginLoaderTxt::start(const string &path) {
   std::cout << "Start loading plug-ins in " << path << std::endl;
 }

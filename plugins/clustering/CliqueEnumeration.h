@@ -24,6 +24,7 @@
 #include <vector>
 
 #include <tulip/Algorithm.h>
+#include <tulip/Node.h>
 
 /** \addtogroup algorithm */
 /*@{*/

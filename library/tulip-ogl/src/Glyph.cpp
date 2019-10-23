@@ -17,6 +17,7 @@
  *
  */
 #include <tulip/BoundingBox.h>
+#include <tulip/Node.h>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Glyph.h>

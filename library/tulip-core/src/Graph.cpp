@@ -44,6 +44,7 @@
 #include <tulip/DrawingTools.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/vectorgraph.h>
+#include <tulip/PluginLister.h>
 
 using namespace std;
 using namespace tlp;

@@ -30,10 +30,10 @@ FA_VERSION=$(grep fa-version ${FA_VARIABLES_FILE} | awk -F '"' '{print $2}')
  echo;
  echo "  clearFtFaces();";
  echo;
- echo "  auto it = iconCodePoint.begin();";
+ echo "  iconsNames.reserve(iconCodePoint.size());";
  echo;
- echo "  for (; it != iconCodePoint.end(); ++it) {";
- echo "    iconsNames.push_back(std::string(it->first));";
+ echo "  for (const auto &it : iconCodePoint) {";
+ echo "    iconsNames.emplace_back(it.first);";
  echo "  }";
  echo "}") > ${CPP_FILE}
 

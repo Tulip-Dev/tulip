@@ -535,16 +535,16 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
 
     QMenu *updateMenu = menu->addMenu("Edit");
     action = updateMenu->addAction("Color", this, SLOT(editColor()));
-    action->setToolTip(QString("Display a dialog to update the color of the ") +
+    action->setToolTip(QString("Display a dialog box to update the color of the ") +
                        (isNode ? "node #" : "edge #") + sId);
     action = updateMenu->addAction("Label", this, SLOT(editLabel()));
-    action->setToolTip(QString("Display a dialog to update the label of the ") +
+    action->setToolTip(QString("Display a dialog box to update the label of the ") +
                        (isNode ? "node #" : "edge #") + sId);
     action = updateMenu->addAction("Shape", this, SLOT(editShape()));
-    action->setToolTip(QString("Display a dialog to update the shape of the ") +
+    action->setToolTip(QString("Display a dialog box to update the shape of the ") +
                        (isNode ? "node #" : "edge #") + sId);
     action = updateMenu->addAction("Size", this, SLOT(editSize()));
-    action->setToolTip(QString("Display a dialog to update the size of the ") +
+    action->setToolTip(QString("Display a dialog box to update the size of the ") +
                        (isNode ? "node #" : "edge #") + sId);
 
     if (isNode) {

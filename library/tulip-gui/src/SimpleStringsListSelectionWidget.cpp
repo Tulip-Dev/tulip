@@ -30,7 +30,7 @@ using namespace std;
 namespace tlp {
 
 SimpleStringsListSelectionWidget::SimpleStringsListSelectionWidget(
-    QWidget *parent, const unsigned int maxSelectedStringsListSize)
+    QWidget *parent, const unsigned int maxSelectedStringsListSize, bool orderable)
     : QWidget(parent), _ui(new Ui::SimpleStringsListSelectionData()),
       maxSelectedStringsListSize(maxSelectedStringsListSize) {
 
@@ -42,20 +42,19 @@ SimpleStringsListSelectionWidget::SimpleStringsListSelectionWidget(
     _ui->selectButton->setEnabled(true);
   }
 
-  qtWidgetsConnection();
+  connect(_ui->listWidget, SIGNAL(itemClicked(QListWidgetItem *)), this,
+          SLOT(listItemClicked(QListWidgetItem *)));
+  if (orderable) {
+    connect(_ui->upButton, SIGNAL(clicked()), this, SLOT(pressButtonUp()));
+    connect(_ui->downButton, SIGNAL(clicked()), this, SLOT(pressButtonDown()));
+  } else
+    delete _ui->upDownLayout;
+  connect(_ui->selectButton, SIGNAL(clicked()), this, SLOT(pressButtonSelectAll()));
+  connect(_ui->unselectButton, SIGNAL(clicked()), this, SLOT(pressButtonUnselectAll()));
 }
 
 SimpleStringsListSelectionWidget::~SimpleStringsListSelectionWidget() {
   delete _ui;
-}
-
-void SimpleStringsListSelectionWidget::qtWidgetsConnection() {
-  connect(_ui->listWidget, SIGNAL(itemClicked(QListWidgetItem *)), this,
-          SLOT(listItemClicked(QListWidgetItem *)));
-  connect(_ui->upButton, SIGNAL(clicked()), this, SLOT(pressButtonUp()));
-  connect(_ui->downButton, SIGNAL(clicked()), this, SLOT(pressButtonDown()));
-  connect(_ui->selectButton, SIGNAL(clicked()), this, SLOT(pressButtonSelectAll()));
-  connect(_ui->unselectButton, SIGNAL(clicked()), this, SLOT(pressButtonUnselectAll()));
 }
 
 void SimpleStringsListSelectionWidget::setUnselectedStringsList(

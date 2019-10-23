@@ -81,6 +81,8 @@ struct TLP_SCOPE PluginLoader {
    * @param msg An additional human-readable message about the load state
    */
   virtual void finished(bool state, const std::string &msg) = 0;
+
+  static PluginLoader *current;
 };
 } // namespace tlp
 #endif

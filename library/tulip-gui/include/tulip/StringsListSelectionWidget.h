@@ -31,7 +31,7 @@ namespace tlp {
 
 /** \brief A widget for selecting a set of strings
  *
- * This widget allow to select a subset of strings from an initial input strings list.
+ * This widget allow to select and reorder a subset of strings from an initial input strings list.
  * The look of the widget can be set via the ListType parameter :
  *    -> SIMPLE_LIST : the widget contains only one strings list, the selection of strings is done
  * via the checkboxes located on the left of the items list
@@ -41,12 +41,13 @@ namespace tlp {
  * left to the list on the right (resp. from the list on the right to
  *                     the list on the left) via the buttons located between the two lists or by
  * drag'n drop.
+ *    -> NON_ORDERABLE_LIST : same as SIMPLE_LIST but strings cannot be reodered
  */
 class TLP_QT_SCOPE StringsListSelectionWidget : public QWidget,
                                                 public StringsListSelectionWidgetInterface {
 
 public:
-  enum ListType { SIMPLE_LIST, DOUBLE_LIST };
+  enum ListType { SIMPLE_LIST, DOUBLE_LIST, NON_ORDERABLE_LIST };
 
   /**
    * Default constructor (for qt designer)

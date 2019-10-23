@@ -32,8 +32,8 @@ std::unordered_map<std::string, QFont> qFonts;
 QFont nullFont;
 
 QFont &TulipFontIconEngine::init(const std::string &iconName) {
-  // first set code point
-  codePoint = TulipIconicFont::getIconCodePoint(iconName);
+  // first get iconQString
+  iconQString = QString(TulipIconicFont::getIconUtf8String(iconName).c_str());
   // then get font
   auto &&fontFile = TulipIconicFont::getTTFLocation(iconName);
   if (qFonts.find(fontFile) == qFonts.end()) {
@@ -78,8 +78,7 @@ void TulipFontIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mod
   // set the font
   painter->setFont(font);
 
-  painter->drawText(rect, QString(QChar(static_cast<int>(codePoint))),
-                    QTextOption(Qt::AlignCenter | Qt::AlignVCenter));
+  painter->drawText(rect, iconQString, QTextOption(Qt::AlignCenter | Qt::AlignVCenter));
 
   painter->restore();
 }

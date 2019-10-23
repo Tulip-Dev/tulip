@@ -65,6 +65,8 @@ class GraphPerspective : public tlp::Perspective, tlp::Observable {
   void showStartPanels(tlp::Graph *);
   void applyRandomLayout(tlp::Graph *);
 
+  void buildPythonIDE();
+
 public:
   GraphPerspectiveLogger *_logger;
 

@@ -29,6 +29,7 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
 #include <tulip/PluginLibraryLoader.h>
+#include <tulip/PluginLister.h>
 #include <tulip/PluginLoaderTxt.h>
 
 using namespace std;

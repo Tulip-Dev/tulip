@@ -52,8 +52,6 @@ class TLP_PYTHON_SCOPE PythonInterpreter : public QObject {
   void setDefaultConsoleWidget(QAbstractScrollArea *consoleWidget);
   void setConsoleWidget(QAbstractScrollArea *consoleWidget);
 
-  static PythonInterpreter _instance;
-
   bool _wasInit;
   bool _runningScript;
   QSet<QString> _currentImportPaths;

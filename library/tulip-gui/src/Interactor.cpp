@@ -19,6 +19,7 @@
 #include <algorithm>
 
 #include <tulip/Interactor.h>
+#include <tulip/PluginLister.h>
 #include <tulip/View.h>
 
 using namespace std;

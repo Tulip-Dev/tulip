@@ -848,24 +848,24 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
   contextMenu.addSeparator();
   QAction *addProp =
       contextMenu.addAction(QIcon(":/tulip/gui/icons/64/list-add.png"), "Add new property");
-  addProp->setToolTip("Display a dialog to create a new property belonging to the current graph");
+  addProp->setToolTip("Display a dialog box to create a new local property of the current graph");
   QAction *copyProp = contextMenu.addAction("Copy");
-  copyProp->setToolTip(QString("Copy the values of \"") + action->text() +
-                       "\" in a property of the same type");
+  copyProp->setToolTip(QString("Display a dialog box to copy the values of <b>") + action->text() +
+                       "</b> into a new or existing property of the same type");
   QAction *deleteProp = nullptr;
 
   if (!Perspective::instance()->isReservedPropertyName(propName.c_str()) ||
       // Enable deletion of reserved properties when on a subgraph and that properties are local
       (graph() != graph()->getRoot() && graph()->existLocalProperty(propName))) {
     deleteProp = contextMenu.addAction("Delete");
-    deleteProp->setToolTip(QString("Delete the property \"") + action->text() + '"');
+    deleteProp->setToolTip(QString("Delete the property <b>") + action->text() + "</b>");
   }
 
   QAction *renameProp = nullptr;
 
   if (!Perspective::instance()->isReservedPropertyName(propName.c_str())) {
     renameProp = contextMenu.addAction("Rename");
-    renameProp->setToolTip(QString("Rename the property \"") + action->text() + '"');
+    renameProp->setToolTip(QString("Rename the property <b>") + action->text() + "</b>");
   }
 
   contextMenu.addSeparator();

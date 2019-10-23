@@ -88,6 +88,7 @@ public:
   explicit PythonIDE(QWidget *parent = nullptr);
   ~PythonIDE() override;
 
+  static bool projectNeedsPythonIDE(tlp::TulipProject *project);
   void setProject(tlp::TulipProject *project);
   void savePythonFilesAndWriteToProject(bool notifyProjectModified = false);
   void setGraphsModel(tlp::GraphHierarchiesModel *model);

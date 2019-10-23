@@ -27,7 +27,7 @@
 #include <tulip/tulipconf.h>
 
 class TLP_QT_SCOPE TulipFontIconEngine : public QIconEngine {
-  unsigned int codePoint;
+  QString iconQString;
   QFont &font;
 
   QFont &init(const std::string &iconName);
@@ -36,7 +36,7 @@ public:
   TulipFontIconEngine(const std::string &iconName);
   TulipFontIconEngine(const QString &iconName);
   TulipFontIconEngine(const TulipFontIconEngine &engine)
-      : QIconEngine(), codePoint(engine.codePoint), font(engine.font) {}
+      : QIconEngine(), iconQString(engine.iconQString), font(engine.font) {}
 
   TulipFontIconEngine *clone() const override {
     return new TulipFontIconEngine(*this);

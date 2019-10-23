@@ -28,7 +28,7 @@
   <string>tlps</string>
 
   <key>CFBundleShortVersionString</key>
-  <string>4.0</string>
+  <string>TLP_VERSION</string>
 
   <key>NOTE</key>
   <string>Created by LaBRI Visualization Team</string>

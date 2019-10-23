@@ -42,6 +42,7 @@
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/ColorScalesManager.h>
 #include <tulip/StableIterator.h>
+#include <tulip/PluginLister.h>
 
 using namespace tlp;
 

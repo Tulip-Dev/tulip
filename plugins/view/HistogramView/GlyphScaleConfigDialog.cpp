@@ -20,6 +20,7 @@
 #include <tulip/Glyph.h>
 #include <tulip/Iterator.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/PluginLister.h>
 
 #include <QComboBox>
 #include <QPushButton>

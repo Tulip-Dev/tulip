@@ -56,7 +56,8 @@ void StringsListSelectionWidget::setListType(const ListType listType) {
   if (listType == DOUBLE_LIST) {
     stringsListSelectionWidget = new DoubleStringsListSelectionWidget();
   } else {
-    stringsListSelectionWidget = new SimpleStringsListSelectionWidget();
+    stringsListSelectionWidget =
+        new SimpleStringsListSelectionWidget(nullptr, 0, listType == SIMPLE_LIST);
   }
 
   QVBoxLayout *newLayout = new QVBoxLayout;

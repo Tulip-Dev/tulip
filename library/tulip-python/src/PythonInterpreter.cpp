@@ -139,15 +139,15 @@ int tracefunc(PyObject *, PyFrameObject *, int what, PyObject *) {
 
   if (what == PyTrace_LINE) {
     if (processQtEvents && !scriptPaused && timer.elapsed() >= 50) {
-      if (QApplication::hasPendingEvents()) {
-        QApplication::processEvents();
-      }
+      // will immediately return if there is no pending events
+      QApplication::processEvents();
 
       timer.start();
     }
 
     while (scriptPaused) {
-      if (processQtEvents && QApplication::hasPendingEvents())
+      if (processQtEvents)
+        // will immediately return if there is no pending events
         QApplication::processEvents();
 
       ss.sleep(30);
@@ -164,8 +164,8 @@ const QString PythonInterpreter::pythonPluginsPathHome(QDir::homePath() + "/.Tul
                                                        TULIP_MM_VERSION + "/plugins/python");
 
 const char PythonInterpreter::pythonReservedCharacters[] = {
-    '#', '%',  '/',  '+', '-', '&', '*', '<', '>', '|', '~', '^', '=',
-    '!', '\'', '\"', '{', '}', '(', ')', '[', ']', '.', ':', '@', 0};
+    '#', '%',  '/', '+',  '-', '&', '*', '<', '>', '|', '~', '^', '=', ',', '$',
+    '!', '\'', '`', '\"', '{', '}', '(', ')', '[', ']', '.', ':', '@', 0};
 
 const std::vector<QString> PythonInterpreter::pythonAccentuatedCharacters = {"é", "è", "ù", "à",
                                                                              "ç"};
@@ -180,7 +180,7 @@ const char *PythonInterpreter::pythonKeywords[] = {
     "break",   "continue", "as",    "lambda", "del",  "try",   "except", "raise",
     "finally", "yield",    "async", "await",  nullptr};
 
-PythonInterpreter PythonInterpreter::_instance;
+static PythonInterpreter *_instance = nullptr;
 
 #ifdef _MSC_VER
 extern "C" {
@@ -417,7 +417,7 @@ PythonInterpreter::~PythonInterpreter() {
 }
 
 PythonInterpreter *PythonInterpreter::getInstance() {
-  return &_instance;
+  return _instance ? _instance : (_instance = new PythonInterpreter());
 }
 
 void PythonInterpreter::initConsoleOutput() {

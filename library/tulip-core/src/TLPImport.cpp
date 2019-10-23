@@ -1035,9 +1035,6 @@ public:
       tlp::warning() << pluginProgress->getError() << std::endl;
     }
 
-    if (tmpss)
-      delete tmpss;
-
     delete input;
     return result;
   }

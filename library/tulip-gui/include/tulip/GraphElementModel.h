@@ -21,6 +21,10 @@
 #ifndef GRAPHELEMENTMODEL_H
 #define GRAPHELEMENTMODEL_H
 
+#include <set>
+#include <string>
+#include <vector>
+
 #include <tulip/TulipModel.h>
 #include <tulip/GraphModel.h>
 
@@ -48,11 +52,18 @@ public:
 
   const static int PropertyNameRole = 33;
 
+  void setVisibleProperties(const std::vector<std::string> &props) {
+    _visibleProps.clear();
+    for (auto prop : props)
+      _visibleProps.insert(prop);
+  }
+
 protected:
   QVector<PropertyInterface *> getGraphProperties() const;
 
   Graph *_graph;
   unsigned int _id;
+  std::set<std::string> _visibleProps;
 };
 
 class TLP_QT_SCOPE GraphNodeElementModel : public GraphElementModel {

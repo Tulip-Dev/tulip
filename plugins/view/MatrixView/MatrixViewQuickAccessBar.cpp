@@ -44,6 +44,13 @@ void MatrixViewQuickAccessBar::setEdgesVisible(bool visible) {
   emit settingsChanged();
 }
 
+void MatrixViewQuickAccessBar::setLabelsVisible(bool visible) {
+  _optionsWidget->setDisplayNodeLabels(visible);
+  showLabelsButton()->setIcon((visible ? QIcon(":/tulip/gui/icons/20/labels_enabled.png")
+                                       : QIcon(":/tulip/gui/icons/20/labels_disabled.png")));
+  emit settingsChanged();
+}
+
 void MatrixViewQuickAccessBar::reset() {
   QuickAccessBarImpl::reset();
   showEdgesButton()->setChecked(_optionsWidget->displayGraphEdges());

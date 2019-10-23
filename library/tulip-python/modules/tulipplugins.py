@@ -75,8 +75,8 @@ def removePlugin(pluginName):
 
 
 def initFactory(self):
-    tlp.FactoryInterface.__init__(self)
-    self.registerPlugin()
+    tlp.PluginFactory.__init__(self)
+    self.registerFactory()
 
 
 def runPlugin(plugin):
@@ -190,7 +190,7 @@ def registerPluginOfGroup(pluginClassName, pluginName, author, date, info,
             return
         pluginModules[pluginName] = pluginModule
         pluginFactory[pluginName] = type(
-            '%sFactory' % pluginClassName, (tlp.FactoryInterface,),
+            '%sFactory' % pluginClassName, (tlp.PluginFactory,),
             {
                 '__init__': (lambda self: initFactory(self)),
                 'createPluginObject': (lambda self, context: createPlugin(

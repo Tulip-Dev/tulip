@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
   // Next: we load additional plugins from external project and ZIP data into output directory
   PluginInformationCollector collector;
   QDir pluginServerDir(argv[1]);
-  PluginLister::currentLoader = &collector;
+  PluginLoader::current = &collector;
 
   for (const QFileInfo &component :
        pluginServerDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {

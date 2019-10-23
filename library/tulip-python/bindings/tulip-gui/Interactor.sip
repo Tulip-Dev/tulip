@@ -45,8 +45,8 @@ associated to a view.
 %End
 
 %MethodCode
-    if (tlp::PluginLister::instance()->pluginExists<tlp::Interactor>(*a0)) {
-        sipRes = tlp::PluginLister::instance()->getPluginObject<tlp::Interactor>(*a0, NULL);
+    if (tlp::PluginLister::pluginExists<tlp::Interactor>(*a0)) {
+        sipRes = tlp::PluginLister::getPluginObject<tlp::Interactor>(*a0, NULL);
     } else {
         sipIsErr = 1;
         std::ostringstream oss;
@@ -70,7 +70,7 @@ Returns a list of interactors names compatible with a specific view.
 %End
 
 %MethodCode
-    if (tlp::PluginLister::instance()->pluginExists<tlp::View>(*a0)) {
+    if (tlp::PluginLister::pluginExists<tlp::View>(*a0)) {
         QList<std::string> ret = tlp::InteractorLister::compatibleInteractors(*a0);
         sipRes = new std::list<std::string>(ret.toStdList());
     } else {
@@ -110,7 +110,7 @@ Returns if the interactor is compatible with a specific view.
 %End
 
 %MethodCode
-    if (tlp::PluginLister::instance()->pluginExists<tlp::View>(*a0)) {
+    if (tlp::PluginLister::pluginExists<tlp::View>(*a0)) {
         QList<std::string> ret = tlp::InteractorLister::compatibleInteractors(*a0);
         sipRes = sipCpp->isCompatible(*a0);
     } else {
