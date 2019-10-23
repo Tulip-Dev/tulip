@@ -17,6 +17,7 @@
  *
  */
 #include <tulip/Plugin.h>
+#include <tulip/PluginLister.h>
 #include <tulip/TlpTools.h>
 
 using namespace tlp;
@@ -103,4 +104,8 @@ void Plugin::declareDeprecatedName(const std::string &previousName) {
     tlp::warning() << "Warning: '" << previousName
                    << "' cannot be declared as deprecated name of Plugin '" << name()
                    << "' because '" << oldName << "' already is." << std::endl;
+}
+
+void PluginFactory::registerFactory(PluginFactory *factory) {
+  PluginLister::registerPlugin(factory);
 }

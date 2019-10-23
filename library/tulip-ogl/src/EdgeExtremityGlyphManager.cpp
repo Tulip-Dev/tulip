@@ -21,6 +21,7 @@
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/Glyph.h>
+#include <tulip/PluginLister.h>
 #include <tulip/TulipViewSettings.h>
 
 using namespace std;

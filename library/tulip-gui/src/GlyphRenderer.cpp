@@ -28,6 +28,7 @@
 #include <tulip/TulipViewSettings.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/Camera.h>
+#include <tulip/PluginLister.h>
 
 using namespace tlp;
 using namespace std;

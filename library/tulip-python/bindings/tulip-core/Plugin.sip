@@ -136,7 +136,7 @@ Returns the icon file path associated to the plugin.
 
 };
 
-class FactoryInterface {
+class PluginFactory {
 %TypeHeaderCode
 #include <tulip/Plugin.h>
 %End
@@ -145,9 +145,9 @@ public:
 
   virtual tlp::Plugin* createPluginObject(tlp::PluginContext* context) = 0 /Factory/;
 
-  void registerPlugin();
+  void registerFactory();
 %MethodCode
-  tlp::PluginLister::registerPlugin(sipCpp);
+  tlp::PluginFactory::registerFactory(sipCpp);
 %End
 
 };

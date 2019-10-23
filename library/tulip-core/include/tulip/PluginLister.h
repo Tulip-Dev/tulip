@@ -32,21 +32,6 @@
 namespace tlp {
 class PluginContext;
 
-///@cond DOXYGEN_HIDDEN
-/**
- * @ingroup Plugins
- * @brief The base class for plugin factories.
- *
- * A plugin factory handles the creation process of a tlp::Plugin subclass. This class should never
- *be used directly. See the PLUGIN macro for additional information.
- * @see PLUGIN
- **/
-class FactoryInterface {
-public:
-  virtual tlp::Plugin *createPluginObject(tlp::PluginContext *context) = 0;
-};
-///@endcond
-
 /**
  * @ingroup Plugins
  *
@@ -70,7 +55,6 @@ private:
   static Iterator<Plugin *> *registeredPluginObjects();
 
 public:
-  static PluginLoader *currentLoader;
 
   /**
    * @brief Checks if all registered plug-ins have their dependencies met.
@@ -197,10 +181,10 @@ public:
   /**
    * @brief Registers a plugin into Tulip
    *
-   * @warning This method should only be called by tlp::FactoryInterface subclasses
+   * @warning This method should only be called by tlp::PluginFactory subclasses
    * @see PLUGIN
    */
-  static void registerPlugin(FactoryInterface *objectFactory);
+  static void registerPlugin(PluginFactory *objectFactory);
 
   ///@cond DOXYGEN_HIDDEN
 protected:

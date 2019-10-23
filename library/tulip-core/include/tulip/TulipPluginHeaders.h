@@ -44,6 +44,7 @@
 #include <tulip/StringCollection.h>
 #include <tulip/TlpTools.h>
 #include <tulip/StaticProperty.h>
+#include <tulip/PluginLister.h>
 
 #endif // TULIP_PLUGIN_HEADERS_H
 

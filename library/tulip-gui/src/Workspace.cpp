@@ -27,6 +27,7 @@
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
 
+#include <tulip/PluginLister.h>
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/View.h>
 #include <tulip/WorkspacePanel.h>

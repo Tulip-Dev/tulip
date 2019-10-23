@@ -27,13 +27,7 @@
 #include <QTcpSocket>
 
 #include <tulip/TulipRelease.h>
-#include <tulip/PluginLister.h>
-#include <tulip/PluginLibraryLoader.h>
-#include <tulip/TlpTools.h>
-#include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
-#include <tulip/PluginManager.h>
-#include <tulip/QuaZIPFacade.h>
 #include <tulip/TlpQtTools.h>
 
 #include <CrashHandling.h>

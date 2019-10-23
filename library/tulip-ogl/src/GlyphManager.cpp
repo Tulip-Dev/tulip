@@ -21,6 +21,7 @@
 
 #include <tulip/GlyphManager.h>
 #include <tulip/Glyph.h>
+#include <tulip/PluginLister.h>
 
 //====================================================
 using namespace std;

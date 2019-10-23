@@ -30,6 +30,7 @@
 
 #include <tulip/ImportModule.h>
 #include <tulip/ExportModule.h>
+#include <tulip/PluginLister.h>
 #include <tulip/PluginLoaderTxt.h>
 #include <tulip/StringCollection.h>
 #include <tulip/TlpTools.h>

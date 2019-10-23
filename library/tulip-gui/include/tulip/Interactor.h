@@ -21,6 +21,7 @@
 #define _INTERACTOR_H
 
 #include <tulip/Plugin.h>
+#include <tulip/PluginLister.h>
 
 #include <QObject>
 #include <QCursor>

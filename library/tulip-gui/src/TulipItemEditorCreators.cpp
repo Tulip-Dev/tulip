@@ -39,6 +39,7 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/GraphPropertiesModel.h>
 #include <tulip/Perspective.h>
+#include <tulip/PluginLister.h>
 #include <tulip/TulipItemEditorCreators.h>
 #include <tulip/TulipFontAwesome.h>
 #include <tulip/TextureFileDialog.h>

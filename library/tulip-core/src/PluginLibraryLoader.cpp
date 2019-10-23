@@ -19,7 +19,7 @@
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/tulipconf.h>
-#include <tulip/PluginLister.h>
+#include <tulip/PluginLoader.h>
 #include <tulip/TlpTools.h>
 
 #include <cstring>
@@ -61,7 +61,7 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, const std::string &f
   for (std::vector<std::string>::const_iterator it = paths.begin(); it != paths.end(); ++it) {
     std::string dir = (*it) + "/" + folder;
 
-    PluginLister::currentLoader = loader;
+    PluginLoader::current = loader;
     _pluginPath = dir;
 
     // ensure message is empty before plugins directory loading
@@ -78,7 +78,7 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, const std::string &f
 
 #endif
 
-    PluginLister::currentLoader = nullptr;
+    PluginLoader::current = nullptr;
   }
 
   // restore original pluginPath value
@@ -94,7 +94,7 @@ void PluginLibraryLoader::loadPluginsFromDir(const std::string &rootPath, Plugin
   // while loading a plugin that loads plugins
   std::string currentPluginPath = _pluginPath;
 
-  PluginLister::currentLoader = loader;
+  PluginLoader::current = loader;
   _pluginPath = rootPath;
 
   // ensure message is empty before plugins directory loading
@@ -111,7 +111,7 @@ void PluginLibraryLoader::loadPluginsFromDir(const std::string &rootPath, Plugin
 
 #endif
 
-  PluginLister::currentLoader = nullptr;
+  PluginLoader::current = nullptr;
 
   // restore original pluginPath value
   _pluginPath = currentPluginPath;

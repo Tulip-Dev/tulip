@@ -22,6 +22,7 @@
 #define EDGEEXTREMITYGLYPH_H_
 
 #include <tulip/Edge.h>
+#include <tulip/Node.h>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Matrix.h>

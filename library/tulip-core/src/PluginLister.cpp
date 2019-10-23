@@ -25,7 +25,7 @@ using namespace tlp;
 using namespace std;
 
 struct PluginDescription {
-  tlp::FactoryInterface *factory;
+  tlp::PluginFactory *factory;
   std::string library;
   Plugin *info;
   bool pyPlugin;
@@ -50,8 +50,6 @@ std::map<std::string, PluginDescription> &getPluginsMap() {
 
 // the _plugins map
 std::map<std::string, PluginDescription> &_plugins = getPluginsMap();
-
-PluginLoader *PluginLister::currentLoader = nullptr;
 
 struct PluginEventSender : public tlp::Observable {
   // there is only one instance of this class
@@ -175,25 +173,25 @@ const Plugin &PluginLister::pluginInformation(const std::string &name) {
   return *(_plugins.find(name)->second.info);
 }
 
-void PluginLister::registerPlugin(FactoryInterface *objectFactory) {
+void PluginLister::registerPlugin(PluginFactory *factory) {
   // because the tulip-core library contains some import/export plugins
   // we must ensure plugins map initialization at the library loading time
   // while _plugins is only 'zero' initialized
   std::map<std::string, PluginDescription> &plugins = getPluginsMap();
 
-  tlp::Plugin *information = objectFactory->createPluginObject(nullptr);
+  tlp::Plugin *information = factory->createPluginObject(nullptr);
   std::string pluginName = information->name();
   assert(!pluginName.empty());
 
   if (plugins.find(pluginName) == plugins.end()) {
     PluginDescription &description = plugins[pluginName];
-    description.factory = objectFactory;
+    description.factory = factory;
     description.library = PluginLibraryLoader::getCurrentPluginFileName();
     description.info = information;
     description.pyPlugin = information->programmingLanguage() == "Python";
 
-    if (currentLoader != nullptr) {
-      currentLoader->loaded(information, information->dependencies());
+    if (PluginLoader::current != nullptr) {
+      PluginLoader::current->loaded(information, information->dependencies());
     }
 
     _pluginEventSender.sendPluginAddedEvent(pluginName);
@@ -203,18 +201,18 @@ void PluginLister::registerPlugin(FactoryInterface *objectFactory) {
     if (!oldName.empty()) {
       if (!pluginExists(oldName)) {
         plugins[oldName] = plugins[pluginName];
-        plugins[oldName].info = objectFactory->createPluginObject(nullptr);
-      } else if (currentLoader != nullptr) {
+        plugins[oldName].info = factory->createPluginObject(nullptr);
+      } else if (PluginLoader::current != nullptr) {
         std::string tmpStr;
         tmpStr += "'" + oldName + "' cannot be a deprecated name of plugin '" + pluginName + "'";
-        currentLoader->aborted(tmpStr, "multiple definitions found; check your plugin librairies.");
+        PluginLoader::current->aborted(tmpStr, "multiple definitions found; check your plugin librairies.");
       }
     }
   } else {
-    if (currentLoader != nullptr) {
+    if (PluginLoader::current != nullptr) {
       std::string tmpStr;
       tmpStr += "'" + pluginName + "' plugin";
-      currentLoader->aborted(tmpStr, "multiple definitions found; check your plugin librairies.");
+      PluginLoader::current->aborted(tmpStr, "multiple definitions found; check your plugin librairies.");
     }
 
     delete information;

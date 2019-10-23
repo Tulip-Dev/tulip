@@ -252,12 +252,23 @@ protected:
   std::string group() const override {                                                             \
     return GROUP;                                                                                  \
   }
-} // namespace tlp
 
-// This include is here because the PluginLister needs to know the Plugin type, and the PLUGIN macro
-// needs to know the PluginLister.
-#include <tulip/PluginLister.h>
-namespace tlp {
+///@cond DOXYGEN_HIDDEN
+/**
+ * @ingroup Plugins
+ * @brief The base class for plugin factories.
+ *
+ * A plugin factory handles the creation process of a tlp::Plugin subclass. This class should never
+ *be used directly. See the PLUGIN macro for additional information.
+ * @see PLUGIN
+ **/
+class TLP_SCOPE PluginFactory {
+public:
+  virtual tlp::Plugin *createPluginObject(tlp::PluginContext *context) = 0;
+  static void registerFactory(PluginFactory *);
+};
+///@endcond
+
 /**
  * @ingroup Plugins
  * @def PLUGIN(C)
@@ -283,10 +294,10 @@ PLUGIN(MyPlugin) // Register MyPlugin into Tulip
  * @see PLUGININFORMATION
  */
 #define PLUGIN(C)                                                                                  \
-  class C##Factory : public tlp::FactoryInterface {                                                \
+  class C##Factory : public tlp::PluginFactory {                                                \
   public:                                                                                          \
     C##Factory() {                                                                                 \
-      tlp::PluginLister::registerPlugin(this);                                                     \
+      registerFactory(this);                                                                 \
     }                                                                                              \
     ~C##Factory() {}                                                                               \
     tlp::Plugin *createPluginObject(tlp::PluginContext *context) {                                 \
