@@ -355,8 +355,8 @@ jobs:
       # at the end of the commit message
       if: commit_message !~ /\[(linux|macports|windows)-only\]$/
       os: osx
-      # use xcode9.2 travis image to get the Homebrew older supported env
-      osx_image: xcode9.2
+      # use xcode9.3 travis image to get the Homebrew older supported env
+      osx_image: xcode9.3
       compiler: clang
       cache:
         ccache: true
@@ -377,7 +377,7 @@ jobs:
           update: true
 
       env:
-        - ENV="MacOS 10.12, LLVM Clang, Homebrew"
+        - ENV="MacOS 10.13, LLVM Clang, Homebrew"
       script:
         # create build directory
         - mkdir build && cd build
@@ -548,8 +548,8 @@ jobs:
       # at the end of the commit message
       if: commit_message !~ /\[(linux|macports|windows)-only\]$/
       os: osx
-      # use xcode9.2 travis image to get the Homebrew older supported env
-      osx_image: xcode9.2
+      # use xcode9.3 travis image to get the Homebrew older supported env
+      osx_image: xcode9.3
       compiler: clang
       cache:
         ccache: true
@@ -570,9 +570,9 @@ jobs:
         - sudo python get-pip.py
         - pip install --user sphinx==1.7.9
         # add missing sdk if needed
-        - ls /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk || sudo ln -s /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk
+        - ls /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk || sudo ln -s /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk
       env:
-        - ENV="MacOS 10.12, LLVM Clang, Homebrew"
+        - ENV="MacOS 10.13, LLVM Clang, Homebrew"
 
       script:
         # create build directory
