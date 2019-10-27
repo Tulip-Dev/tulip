@@ -294,10 +294,10 @@ PLUGIN(MyPlugin) // Register MyPlugin into Tulip
  * @see PLUGININFORMATION
  */
 #define PLUGIN(C)                                                                                  \
-  class C##Factory : public tlp::PluginFactory {                                                \
+  class C##Factory : public tlp::PluginFactory {                                                   \
   public:                                                                                          \
     C##Factory() {                                                                                 \
-      registerFactory(this);                                                                 \
+      registerFactory(this);                                                                       \
     }                                                                                              \
     ~C##Factory() {}                                                                               \
     tlp::Plugin *createPluginObject(tlp::PluginContext *context) {                                 \

@@ -273,7 +273,7 @@ jobs:
       if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
     # legacy Tulip core build on Mac OS (MacPorts)
       os: osx
-      osx_image: xcode8.3
+      osx_image: xcode9.2
       compiler: clang
       cache: ccache
       install:
@@ -355,8 +355,8 @@ jobs:
       # at the end of the commit message
       if: commit_message !~ /\[(linux|macports|windows)-only\]$/
       os: osx
-      # use xcode9.2 travis image to get the Homebrew older supported env
-      osx_image: xcode9.2
+      # use xcode9.3 travis image to get the Homebrew older supported env
+      osx_image: xcode9.3
       compiler: clang
       cache:
         ccache: true
@@ -377,7 +377,7 @@ jobs:
           update: true
 
       env:
-        - ENV="MacOS 10.12, LLVM Clang, Homebrew"
+        - ENV="MacOS 10.13, LLVM Clang, Homebrew"
       script:
         # create build directory
         - mkdir build && cd build
@@ -421,7 +421,7 @@ jobs:
         - ENV="MacOS 10.14, LLVM Clang, Homebrew"
       script:
         # install missing headers
-        - sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
+        - ls /usr/include || sudo ln -s $(xcrun -sdk macosx --show-sdk-path) /usr/include
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
@@ -440,7 +440,7 @@ jobs:
       if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
     # legacy Tulip complete build on Mac OS (MacPorts)
       os: osx
-      osx_image: xcode8.3
+      osx_image: xcode9.3
       compiler: clang
       cache: ccache
       install:
@@ -455,9 +455,9 @@ jobs:
         - sudo port -N install cmake
         - sudo port -N install ccache
         - sudo port -N install ninja
-        - sudo port -N install qt59-qtbase
-        - sudo port -N install qt59-qttools
-        - sudo port -N install qt59-qtwebkit
+        - sudo port -N install qt5-qtbase
+        - sudo port -N install qt5-qttools
+        - sudo port -N install qt5-qtwebkit
         - sudo port -N install quazip
         - sudo port -N install freetype
         - sudo port -N install glew
@@ -483,8 +483,6 @@ jobs:
         - ninja -j4 install || travis_terminate 1
         # run Tulip unit tests
         - ninja runTests || travis_terminate 1
-        # build Tulip bundle
-        - ninja bundle
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip complete build on Mac OS (MacPorts)
@@ -538,8 +536,6 @@ jobs:
         - ninja -j4 install
         # run Tulip unit tests
         - ninja runTests
-        # build Tulip bundle
-        - ninja bundle
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # legacy Tulip complete build on Mac OS (Homebrew)
@@ -548,8 +544,8 @@ jobs:
       # at the end of the commit message
       if: commit_message !~ /\[(linux|macports|windows)-only\]$/
       os: osx
-      # use xcode9.2 travis image to get the Homebrew older supported env
-      osx_image: xcode9.2
+      # use xcode9.3 travis image to get the Homebrew older supported env
+      osx_image: xcode9.3
       compiler: clang
       cache:
         ccache: true
@@ -570,9 +566,9 @@ jobs:
         - sudo python get-pip.py
         - pip install --user sphinx==1.7.9
         # add missing sdk if needed
-        - ls /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk || sudo ln -s /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk
+        - ls /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk || sudo ln -s /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk
       env:
-        - ENV="MacOS 10.12, LLVM Clang, Homebrew"
+        - ENV="MacOS 10.13, LLVM Clang, Homebrew"
 
       script:
         # create build directory
@@ -630,7 +626,7 @@ jobs:
 
       script:
         # install missing headers
-        - sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
+        - ls /usr/include || sudo ln -s $(xcrun -sdk macosx --show-sdk-path) /usr/include
         # workaround for reference to unknown /Applications/Xcode-beta.app
         # in bogus FindGLEW.cmake since cmake 3.15
         - sudo ln -s /Applications/Xcode.app /Applications/Xcode-beta.app
