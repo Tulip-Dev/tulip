@@ -230,7 +230,7 @@ bool FishEyeInteractorComponent::draw(GlMainWidget *glWidget) {
     glWidget->getScene()->draw();
     glWidget->getScene()->setClearBufferAtDraw(clearBufferAtDraw);
 
-    fisheyeShader->desactivate();
+    fisheyeShader->deactivate();
 
     return true;
   }

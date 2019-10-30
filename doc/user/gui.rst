@@ -31,7 +31,7 @@ Here are the components of Tulip Perspective's main window:
 
 |l_gre| Status bar
 
-From this point and even if it is no fully correct, we will refer to the Tulip perspective by simply using the term Tulip. Differenciating one (Tulip perspective) from the other (Tulip agent) should not be too complex as the perspective window proposes the visualization actions and the Tulip agent window only offers you to manage your plugins and to choose your project.
+From this point and even if it is no fully correct, we will refer to the Tulip perspective by simply using the term Tulip. Differentiating one (Tulip perspective) from the other (Tulip agent) is quite simple as the perspective window proposes the visualization actions and the Tulip agent window only offers you to manage your plugins and to choose your project.
 
 
 .. _menu:
@@ -158,7 +158,7 @@ The left button allows to expand/contract the contents of this panel:
 
 Clicking on right button allows to specify the synchronization policy of the Graphs panel with the workspace active panel:
 
-* |icon_link|: When this icon is displayed, it indicates that the selection of the active graph in the Graphs panel is synchronized with the selection of the graph in the workspace active panel. This means that when selecting a graph to display for this panel, it also becomes the active graph in the Graphs list and then the graph on which algoritms will applied.
+* |icon_link|: When this icon is displayed, it indicates that the selection of the active graph in the Graphs panel is synchronized with the selection of the graph in the workspace active panel. This means that when selecting a graph to display for this panel, it also becomes the active graph in the Graphs list and then the graph on which algorithms will applied.
 
 * |icon_unlink|: When this icon is displayed, it indicates that the selection of the active graph in the Graphs panel is not synchronized with the selection of the graph in the workspace active panel. 
 
@@ -206,7 +206,7 @@ You may find more information in the `Tulip Python IDE <../../tulip-python/html/
 Preferences
 ===========
 
-Tulip can be configured in several ways. The simpliest way is to display the settings dialog through the *Preferences* item of *Edit* menu.
+Tulip can be configured in several ways. The simplest way is to display the settings dialog through the *Preferences* item of *Edit* menu.
 
 .. image:: _images/i_settings.png
 

@@ -31,7 +31,7 @@
  * @brief GlComposite used to visualize a SOM.
  * GlComposite used to visualize a SOM. This object take a SOM and the the ColorProperty defining
  * the color of each node of the map and print them.
- * If the SOM is hexagonal kind print hexagonal glyph else print sqaure.
+ * If the SOM is hexagonal kind print hexagonal glyph else print square.
  */
 namespace tlp {
 

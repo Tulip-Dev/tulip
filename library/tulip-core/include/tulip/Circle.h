@@ -67,7 +67,7 @@ struct Circle : public Vector<Obj, 2, OTYPE> {
 };
 
 /**
- * Give the instersction of two circles, return false if no intersection exist else put the two
+ * Give the instersection of two circles, return false if no intersection exist else put the two
  * points in p1 & p2,
  * if there is only one solution p1 == p2;
  */
@@ -118,7 +118,7 @@ template <typename Obj, typename OTYPE>
 tlp::Circle<Obj, OTYPE> enclosingCircle(const std::vector<tlp::Circle<Obj, OTYPE>> &circles);
 /**
  * Compute an enclosing circle of a set of circles,
- * this algorithm is an aproximation of the smallest
+ * this algorithm is an approximation of the smallest
  * enclosing circle.
  */
 template <typename Obj, typename OTYPE>

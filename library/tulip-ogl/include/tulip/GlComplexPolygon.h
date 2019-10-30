@@ -207,9 +207,9 @@ public:
                           const float texCoordFactor = 1.f, const int polygonId = 0);
 
   /**
-   * @brief Desactivate the textured quad border
+   * @brief Deactivate the textured quad border
    */
-  void desactivateQuadBorder(const int polygonId = 0);
+  void deactivateQuadBorder(const int polygonId = 0);
 
   /**
    * @brief Translate entity

@@ -363,7 +363,7 @@ void GlAbstractPolygon::draw(float lod, Camera *) {
     glDisableClientState(GL_COLOR_ARRAY);
 
     if (!textureName.empty()) {
-      GlTextureManager::desactivateTexture();
+      GlTextureManager::deactivateTexture();
       glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     }
   }

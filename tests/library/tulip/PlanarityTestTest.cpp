@@ -110,7 +110,7 @@ void PlanarityTestTest::planarGraphsEmbedding() {
   graph = tlp_loadGraph(GRAPHPATH + "planar/unconnected.tlp");
   graph->setAttribute("name", string("unconnected"));
   // no planar connected map computed
-  // beacause is not connected
+  // because is not connected
   graphMap = computePlanarConMap(graph);
   CPPUNIT_ASSERT(graphMap == nullptr);
   delete graph;

@@ -41,7 +41,7 @@ const QString ALGORITHM_NAME_MIME_TYPE =
 const QString DATASET_MIME_TYPE = QString("application/x-tulip-mime;value=\"dataset\"");
 
 /**
- * @brief The GraphMimeType class allows to tranfer a graph pointer trought a QMimeData
+ * @brief The GraphMimeType class allows to transfer a graph pointer through a QMimeData
  */
 class TLP_QT_SCOPE GraphMimeType : public QMimeData {
 public:

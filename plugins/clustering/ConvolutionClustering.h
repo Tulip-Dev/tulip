@@ -26,7 +26,7 @@
 /** This plugin allow the discretization and the filtering of the distribution of
  * a node metric using convolution.
  *
- * A detailled usage of this procedure is detailled in :
+ * A detailed usage of this procedure is detailed in :
  *
  * D. Auber, M. Delest and Y. Chiricota \n
  * "Strahler based graph clustering using convolution",\n

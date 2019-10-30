@@ -37,7 +37,7 @@ class ImprovedWalkerIterator;
  *  Improving Walker's Algorithm to Run in Linear Time
  *  citeseer.ist.psu.edu/buchheim02improving.html
  *
- *  \note This algorith works on tree.
+ *  \note This algorithm works on tree.
  *  Let n be the number of nodes, the algorithm complexity is in O(n).
  *
  *  \author Julien Testut, Antony Durand, Pascal Ollier, Yashvin Nababsing, \n

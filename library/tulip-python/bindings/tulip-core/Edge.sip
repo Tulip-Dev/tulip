@@ -36,7 +36,7 @@ class edge {
 An instance of this class represent an edge in a Tulip graph. It encapsulates an integer identifier.
 Use specific methods in the :class:`tlp.Graph` class to get references on such objects (
 for instance :meth:`tlp.Graph.addEdge`, :meth:`tlp.Graph.getEdges`, :meth:`tlp.Graph.getInEdges`, ...).
-Edge objects can be used as keys in a Python dictionnary.
+Edge objects can be used as keys in a Python dictionary.
 
 The edge identifier can be accessed through the **id** class member.
 %End

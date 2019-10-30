@@ -86,8 +86,8 @@ public:
    * @brief Set stencil number of the entity
    *
    * Stencil is an OpenGl system to ensure that other entity can't be displayed above this entity;
-   * it's a "guaranted visibility" system.
-   * A small number causes a guaranted visibility
+   * it's a "guaranteed visibility" system.
+   * A small number causes a guaranteed visibility
    * Default value in Tulip is 0xFFFF (greater integer)
    * And when we have stencil on entity value is 0x2
    */
@@ -153,7 +153,7 @@ public:
   void removeParent(GlComposite *composite);
 
   /**
-   * virtual fucntion : Translate entity of vector translation
+   * virtual function : Translate entity of vector translation
    */
   virtual void translate(const Coord &) {}
 

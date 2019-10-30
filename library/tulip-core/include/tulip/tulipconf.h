@@ -32,7 +32,7 @@
 #define STRINGIFY(PARAM) STRINGIFY_INTERNAL(PARAM)
 #define STRINGIFY_INTERNAL(PARAM) #PARAM
 
-// some usefull typedefs
+// some useful typedefs
 typedef unsigned int uint;
 typedef unsigned char uchar;
 
@@ -70,7 +70,7 @@ inline double fabs(int i) {
 // Visual Studio 2013 improved C99 support, no need to redefine some cmath functions
 #if _MSC_VER < 1800
 
-// MSVC needs explicit casting of ints ot double, float or long double.
+// MSVC needs explicit casting of ints to double, float or long double.
 // Let's just pretend he does not.
 #include <cstdlib>
 

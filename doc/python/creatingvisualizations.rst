@@ -12,7 +12,7 @@ The main features offered by that module are :
 
     * creation of interactive Tulip visualizations
     * the ability to change the data source on opened visualizations
-    * the possibilty to modify the rendering parameters for node link diagram visualizations
+    * the possibility to modify the rendering parameters for node link diagram visualizations
     * the ability to save visualization snapshots to image files on disk
 
 Using the module from the main Tulip GUI
@@ -163,7 +163,7 @@ The second script aims to generate a snapshot of a file system directory visuali
 It begins by calling the "File System Directory" import plugin, then it sets some
 visual attributes on graph elements and finally it creates a node link diagram view
 (that will not be displayed) with particular rendering parameters for taking the snapshot.
-:ref:`Figure 2<fig2a>` introduces the resulting snaphot.::
+:ref:`Figure 2<fig2a>` introduces the resulting snapshot.::
 
     from tulip import tlp
     from tulipgui import tlpgui
@@ -198,7 +198,7 @@ visual attributes on graph elements and finally it creates a node link diagram v
     renderingOrderingProp = graph.getDoubleProperty("rendering ordering")
 
     for n in graph.getNodes():
-      # the "File System Directory" import plugin adds a "File name" property containg the file name
+      # the "File System Directory" import plugin adds a "File name" property containing the file name
       viewLabel[n] = graph["File name"][n]
       # if the node represents a directory, ensure that its label will be visible (as we will activate the "no labels overlaps" mode)
       # also change its label color to blue

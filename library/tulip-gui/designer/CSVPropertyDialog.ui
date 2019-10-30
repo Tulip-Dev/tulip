@@ -343,7 +343,7 @@
            <item>
             <widget class="QLabel" name="exceptionsCommentsLabel">
              <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:9pt; font-style:italic;&quot;&gt;Exception values allow to ignore the value assignement&lt;br/&gt;or to abort the normal processing of the current row.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:9pt; font-style:italic;&quot;&gt;Exception values allow to ignore the value assignment&lt;br/&gt;or to abort the normal processing of the current row.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
             </widget>
            </item>

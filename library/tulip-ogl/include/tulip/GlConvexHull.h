@@ -67,7 +67,7 @@ public:
   }
 
   /**
-   * Retrun the name of this convex hull
+   * Return the name of this convex hull
    */
   std::string getName() {
     return _name;

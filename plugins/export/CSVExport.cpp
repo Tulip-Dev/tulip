@@ -129,7 +129,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
   StringCollection decimalMarks(DECIMAL_MARKS);
   decimalMarks.setCurrent(0);
 
-  // get choosen values of plugin parameters
+  // get chosen values of plugin parameters
   if (dataSet != nullptr) {
     if (dataSet->get(ELT_TYPE, eltTypes))
       eltType = eltTypes.getCurrent();

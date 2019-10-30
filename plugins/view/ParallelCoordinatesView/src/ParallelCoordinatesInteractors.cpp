@@ -264,7 +264,7 @@ void InteractorAxisSpacer::construct() {
       "to modify its position. The axis can not be moved further that its neighbors.</p>" +
       "<p>By double clicking anywhere in the view, the axis positions will be reset to the default "
       "ones and the axis will we equally spaced.</p>" +
-      "<p>The axis postions will also be reset to default when the number of selected dimensions "
+      "<p>The axis positions will also be reset to default when the number of selected dimensions "
       "changes.</p>" +
       "</body>" + "</html>");
   push_back(new MousePanNZoomNavigator);

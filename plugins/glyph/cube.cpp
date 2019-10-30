@@ -16,16 +16,13 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/StringProperty.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/Size.h>
+#include <tulip/Color.h>
 #include <tulip/Coord.h>
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/Graph.h>
 #include <tulip/GlBox.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/TulipViewSettings.h>
 
 using namespace std;

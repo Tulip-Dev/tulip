@@ -30,7 +30,7 @@ ViewActionsManager::ViewActionsManager(View *view, GlMainWidget *widget, bool ke
     : _view(view), _glMainWidget(widget), _keepSizeRatio(keepRatio),
       _advAntiAliasingAction(nullptr) {
   // create actions and add them to _view->graphicsView()
-  // to enable thier keyboard shortcut
+  // to enable their keyboard shortcut
   _forceRedrawAction = new QAction("Force redraw", widget);
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_forceRedrawAction, "Redraw the current view", "Shift+R");
   connect(_forceRedrawAction, SIGNAL(triggered()), this, SLOT(redraw()));

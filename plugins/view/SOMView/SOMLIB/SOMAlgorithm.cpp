@@ -147,7 +147,7 @@ node SOMAlgorithm::findBMU(SOMMap *map, const DynamicVector<double> &input, doub
 
   for (auto n : map->nodes()) {
 
-    // take the first to init the comparaison
+    // take the first to init the comparison
     if (matchList.empty()) {
       matchList.push_back(n);
       bestDist = input.dist(map->getWeight(n));

@@ -54,7 +54,7 @@ PLUGIN(SOMView)
 SOMView::SOMView(PluginContext *)
     : GlMainView(true), graphComposite(nullptr), graphLayoutProperty(nullptr),
       graphSizeProperty(nullptr), mask(nullptr), somMask(nullptr), mapCompositeElements(nullptr),
-      som(nullptr), previewWidget(nullptr), mapWidget(nullptr), isDetailledMode(false),
+      som(nullptr), previewWidget(nullptr), mapWidget(nullptr), isDetailedMode(false),
       mappingIsVisible(false), hideMappingAction(nullptr), showMappingAction(nullptr),
       computeMappingAction(nullptr), updateNodesColorAction(nullptr),
       addSelectionToMaskAction(nullptr), clearMaskAction(nullptr), invertMaskAction(nullptr),
@@ -118,7 +118,7 @@ void SOMView::construct(QWidget *) {
   initGlMainViews();
   mapWidget->installEventFilter(this);
 
-  isDetailledMode = false;
+  isDetailedMode = false;
 
   // Interactors update
   previewWidget->installEventFilter(&navigator);
@@ -204,7 +204,7 @@ void SOMView::setState(const DataSet &dataSet) {
   if (!isConstruct)
     construct(nullptr);
 
-  isDetailledMode = false;
+  isDetailedMode = false;
   assignNewGlMainWidget(previewWidget, false);
 
   GlMainWidget::getFirstQGLWidget()->makeCurrent();
@@ -323,7 +323,7 @@ void SOMView::createPicture(const std::string &pictureName, int width, int heigh
 }
 
 bool SOMView::createPicture(const std::string &pictureName, int width, int height, bool center) {
-  if (isDetailledMode) {
+  if (isDetailedMode) {
     if (width == 0 && height == 0)
       mapWidget->createPicture(pictureName, mapWidget->width(), mapWidget->height(), center);
     else
@@ -613,7 +613,7 @@ void SOMView::computeSOMMap() {
   inputSample.setPropertiesToListen(propertiesSelected);
 
   if (propertiesSelected.empty()) {
-    if (isDetailledMode)
+    if (isDetailedMode)
       internalSwitchToPreviewMode(false);
     else
       previewWidget->draw();
@@ -728,7 +728,7 @@ void SOMView::addPropertyToSelection(const string &propertyName) {
 
     auto it = propertyToPreviews.find(propertyName);
     assert(it != propertyToPreviews.end() && it->second);
-    switchToDetailledMode(it->second);
+    switchToDetailedMode(it->second);
     draw();
   }
 }
@@ -1072,9 +1072,9 @@ void SOMView::applySettings() {
   gridStructurePropertiesUpdated();
 }
 
-void SOMView::switchToDetailledMode(SOMPreviewComposite *preview) {
+void SOMView::switchToDetailedMode(SOMPreviewComposite *preview) {
   assert(preview);
-  internalSwitchToDetailledMode(preview, properties->useAnimation());
+  internalSwitchToDetailedMode(preview, properties->useAnimation());
   // hide configuration widgets
   properties->configurationWidgets()[0]->parentWidget()->parentWidget()->setVisible(false);
 }
@@ -1090,8 +1090,8 @@ void SOMView::copyToGlMainWidget(GlMainWidget *widget) {
   assignNewGlMainWidget(widget, false);
 }
 
-void SOMView::internalSwitchToDetailledMode(SOMPreviewComposite *preview, bool animation) {
-  if (isDetailledMode)
+void SOMView::internalSwitchToDetailedMode(SOMPreviewComposite *preview, bool animation) {
+  if (isDetailedMode)
     return;
 
   assert(preview);
@@ -1105,12 +1105,12 @@ void SOMView::internalSwitchToDetailledMode(SOMPreviewComposite *preview, bool a
   }
 
   copyToGlMainWidget(mapWidget);
-  isDetailledMode = true;
+  isDetailedMode = true;
   toggleInteractors(true);
 }
 
 void SOMView::internalSwitchToPreviewMode(bool animation) {
-  if (!isDetailledMode)
+  if (!isDetailedMode)
     return;
 
   copyToGlMainWidget(previewWidget);
@@ -1129,7 +1129,7 @@ void SOMView::internalSwitchToPreviewMode(bool animation) {
 
   // Clear selection
   selection = "";
-  isDetailledMode = false;
+  isDetailedMode = false;
   toggleInteractors(false);
 }
 

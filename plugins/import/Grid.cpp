@@ -17,7 +17,6 @@
  *
  */
 #include <tulip/TulipPluginHeaders.h>
-#include <tulip/StringCollection.h>
 
 #include <cmath>
 

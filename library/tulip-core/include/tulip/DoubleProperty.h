@@ -109,11 +109,6 @@ public:
     return newProp;
   }
 
-  _DEPRECATED void setAllEdgeValue(tlp::StoredType<double>::ReturnedConstValue v,
-                                   const Graph *graph) override;
-  _DEPRECATED void setAllNodeValue(tlp::StoredType<double>::ReturnedConstValue v,
-                                   const Graph *graph) override;
-
 private:
   // override Observable::treatEvent
   void treatEvent(const Event &) override;

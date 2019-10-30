@@ -154,20 +154,20 @@ void CSVParserConfigurationWidget::setFileToOpen(const QString &fileToOpen) {
       if (!firstLine.isEmpty()) {
         QString line(firstLine);
         // Search for the best matching separator in the default list
-        QVector<int> separatorOccurence(ui->separatorComboBox->count());
+        QVector<int> separatorOccurrence(ui->separatorComboBox->count());
 
         for (int i = 0; i < ui->separatorComboBox->count(); ++i) {
           QString separator = getSeparator(i);
-          // Count the number of occurence for this separator
-          separatorOccurence[i] = line.count(separator);
+          // Count the number of occurrence for this separator
+          separatorOccurrence[i] = line.count(separator);
         }
 
-        int currentMaxOccurence = -1;
+        int currentMaxOccurrence = -1;
 
         for (int i = 0; i < ui->separatorComboBox->count(); ++i) {
-          if (separatorOccurence[i] > currentMaxOccurence) {
-            currentMaxOccurence = separatorOccurence[i];
-            // Set as separator the one with the greatest occurence number.
+          if (separatorOccurrence[i] > currentMaxOccurrence) {
+            currentMaxOccurrence = separatorOccurrence[i];
+            // Set as separator the one with the greatest occurrence number.
             ui->separatorComboBox->setCurrentIndex(i);
           }
         }

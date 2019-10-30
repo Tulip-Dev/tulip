@@ -32,9 +32,6 @@
 #include <tulip/GlSelectSceneVisitor.h>
 #include <tulip/Camera.h>
 #include <tulip/GlSimpleEntity.h>
-#include <tulip/GlFeedBackRecorder.h>
-#include <tulip/GlSVGFeedBackBuilder.h>
-#include <tulip/GlEPSFeedBackBuilder.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlSceneObserver.h>
 
@@ -131,7 +128,7 @@ void GlScene::initGlParameters() {
   if (OpenGlConfigManager::antiAliasing()) {
     OpenGlConfigManager::activateAntiAliasing();
   } else {
-    OpenGlConfigManager::desactivateAntiAliasing();
+    OpenGlConfigManager::deactivateAntiAliasing();
   }
 
   if (clearBufferAtDraw) {
@@ -242,7 +239,7 @@ void GlScene::draw() {
 
   inDraw = false;
 
-  OpenGlConfigManager::desactivateAntiAliasing();
+  OpenGlConfigManager::deactivateAntiAliasing();
 }
 
 /******************************************************************************
@@ -877,103 +874,6 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int w, in
 
   glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
   return (!selectedEntities.empty());
-}
-//====================================================
-void GlScene::outputSVG(unsigned int size, const string &filename) {
-  if (!glGraphComposite)
-    return;
-
-  GLint returned;
-  GLfloat clearColor[4];
-  GLfloat lineWidth;
-  GLfloat pointSize;
-  GLfloat *buffer = static_cast<GLfloat *>(calloc(size, sizeof(GLfloat)));
-  glFeedbackBuffer(size, GL_3D_COLOR, buffer);
-  glRenderMode(GL_FEEDBACK);
-  glGraphComposite->getInputData()->parameters->setFeedbackRender(true);
-  draw();
-  glGraphComposite->getInputData()->parameters->setFeedbackRender(false);
-  glGetFloatv(GL_COLOR_CLEAR_VALUE, clearColor);
-  glGetFloatv(GL_LINE_WIDTH, &lineWidth);
-  glGetFloatv(GL_POINT_SIZE, &pointSize);
-
-  glFlush();
-  glFinish();
-  returned = glRenderMode(GL_RENDER);
-  GlSVGFeedBackBuilder builder;
-  GlFeedBackRecorder recorder(&builder);
-  builder.begin(viewport, clearColor, pointSize, lineWidth);
-  recorder.record(false, returned, buffer, layersList[0].second->getCamera().getViewport());
-  string str;
-  builder.getResult(&str);
-
-  if (!filename.empty()) {
-    /* subgraphs drawing disabled
-       initMapsSVG(_renderingParameters.getGraph(), &ge); */
-    FILE *file;
-#ifndef _MSC_VER
-    file = fopen(filename.c_str(), "w");
-#else
-    fopen_s(&file, filename.c_str(), "w");
-#endif
-
-    if (file) {
-      fprintf(file, "%s", str.c_str());
-      fclose(file);
-    } else {
-      perror(filename.c_str());
-    }
-  }
-
-  free(buffer);
-}
-//====================================================
-void GlScene::outputEPS(unsigned int size, const string &filename) {
-  if (!glGraphComposite)
-    return;
-
-  GLint returned;
-  GLfloat clearColor[4];
-  GLfloat lineWidth;
-  GLfloat pointSize;
-  GLfloat *buffer = static_cast<GLfloat *>(calloc(size, sizeof(GLfloat)));
-  glFeedbackBuffer(size, GL_3D_COLOR, buffer);
-  glRenderMode(GL_FEEDBACK);
-  glGraphComposite->getInputData()->parameters->setFeedbackRender(true);
-  draw();
-  glGraphComposite->getInputData()->parameters->setFeedbackRender(false);
-
-  glGetFloatv(GL_COLOR_CLEAR_VALUE, clearColor);
-  glGetFloatv(GL_LINE_WIDTH, &lineWidth);
-  glGetFloatv(GL_POINT_SIZE, &pointSize);
-
-  glFlush();
-  glFinish();
-  returned = glRenderMode(GL_RENDER);
-  GlEPSFeedBackBuilder builder;
-  GlFeedBackRecorder recorder(&builder);
-  builder.begin(viewport, clearColor, pointSize, lineWidth);
-  recorder.record(false, returned, buffer, layersList[0].second->getCamera().getViewport());
-  string str;
-  builder.getResult(&str);
-
-  if (!filename.empty()) {
-    FILE *file;
-#ifndef _MSC_VER
-    file = fopen(filename.c_str(), "w");
-#else
-    fopen_s(&file, filename.c_str(), "w");
-#endif
-
-    if (file) {
-      fprintf(file, "%s", str.c_str());
-      fclose(file);
-    } else {
-      perror(filename.c_str());
-    }
-  }
-
-  free(buffer);
 }
 //====================================================
 unsigned char *GlScene::getImage() {

@@ -588,7 +588,7 @@ bool GlTextureManager::activateTexture(const string &filename, unsigned int fram
   return true;
 }
 //====================================================================
-void GlTextureManager::desactivateTexture() {
+void GlTextureManager::deactivateTexture() {
   glDisable(GL_TEXTURE_2D);
 }
 } // namespace tlp

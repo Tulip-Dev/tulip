@@ -49,7 +49,3 @@ QLabel *NodeLinkDiagramComponentInteractor::configurationDocWidget() const {
 unsigned int NodeLinkDiagramComponentInteractor::priority() const {
   return _priority;
 }
-
-void NodeLinkDiagramComponentInteractor::setPriority(const unsigned int p) {
-  _priority = p;
-}

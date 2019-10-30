@@ -37,7 +37,7 @@ public:
   /**
    * @brief Return properties names for this entity
    * These properties names are used to dynamically configure the embedded entity
-   * for example these function can be used by Mouse information interactor
+   * for example this function can be used by Mouse information interactor
    * If you create a class that inherits of GlSimpleEntityItemEditor : you can reimplement this
    * function to return your properties names
    * for example : return QStringList() << "fillColor" << "outlineColor";
@@ -46,9 +46,9 @@ public:
   virtual QStringList propertiesNames() const;
 
   /**
-   * @brief Return properties (in  QVariant format) for this entity
+   * @brief Return properties (in QVariant format) for this entity
    * These properties QVariant are used to dynamically configure the entity
-   * for example these function can be used by Mouse information interactor
+   * for example this function can be used by Mouse information interactor
    * If you create a class that inherits of GlSimpleEntity : you can reimplement this function to
    * return your properties
    * for example : return QVariantList() << QVariant::fromValue<Color>(getFillColor()) <<
@@ -60,8 +60,8 @@ public:
   /**
    * @brief Set value for a property previously returned by propertiesNames() and properties()
    * functions
-   * This function is call when we want to set value of a property
-   * this parameter is returned in list by propertiesNames() and properties funtions
+   * This function is called  to set the value of a property
+   * this parameter is returned in list by propertiesNames() and properties functions
    * If you create a class that inherits of GlSimpleEntityItemEditor : you can reimplement this
    * function to set your properties
    * For example :

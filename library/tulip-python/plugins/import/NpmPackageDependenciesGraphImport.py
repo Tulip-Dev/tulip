@@ -38,7 +38,7 @@ def parsePackageJsonForDependenciesGraph(npmPackageDir, graph,
         # no package name provided as parameter, it is the root package
         packageJsonFilePath = '%s/package.json' % npmPackageDir
     else:
-        # depedency package from the node_modules directory
+        # dependency package from the node_modules directory
         packageJsonFilePath = '%s/node_modules/%s/package.json' % (
             npmPackageDir, packageName)
 
@@ -69,7 +69,7 @@ def parsePackageJsonForDependenciesGraph(npmPackageDir, graph,
                 if dep not in packageNode:
                     packageNode[dep] = graph.addNode()
                     graph['viewLabel'][packageNode[dep]] = dep
-                    # parse depedency package dependencies
+                    # parse dependency package dependencies
                     parsePackageJsonForDependenciesGraph(
                         npmPackageDir, graph, dep)
                     parsePackageJsonForDependenciesGraph(
@@ -104,7 +104,7 @@ class NpmPackageDependenciesGraphImport(tlp.ImportModule):
                      'npm package.') % npmPackageDir)
             return False
 
-        # parse package depedencies graph
+        # parse package dependencies graph
         parsePackageJsonForDependenciesGraph(npmPackageDir, self.graph)
 
         # apply a force directed algorithm to draw the graph

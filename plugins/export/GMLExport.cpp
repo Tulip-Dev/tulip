@@ -19,9 +19,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include <tulip/ExportModule.h>
 #include <tulip/TulipPluginHeaders.h>
-#include <tulip/AbstractProperty.h>
 
 using namespace std;
 using namespace tlp;

@@ -23,7 +23,7 @@
 #include <QLabel>
 
 /**
-  @brief This widget provides with maintenance actions related to a plugin load errror.
+  @brief This widget provides with maintenance actions related to a plugin load error.
   When a plugin crash at load time, the user shall have the following choices:
   @list
   @li Uninstall the plugin (removes the file permanantly)

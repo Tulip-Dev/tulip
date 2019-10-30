@@ -17,15 +17,12 @@ def safeprint(s, file=None):
     try:
         print(s, file=file)
     except UnicodeEncodeError:
-        if sys.version_info >= (3,):
-            print(s.encode('utf8').decode(sys.stdout.encoding), file=file)
-        else:
-            print(s.encode('utf8'), file=file)
+        print(s.encode('utf8'), file=file)
 
 
 def utf8len(s):
     if sys.version_info >= (3,):
-        return len(s.encode('utf8').decode(sys.stdout.encoding))
+        return len(s)
     else:
         return len(s.encode('utf8'))
 
@@ -45,7 +42,10 @@ tlp.loadTulipPluginsFromDir('%s/plugins/test' % tulip_build_dir)
 tlp.loadTulipPluginsFromDir(os.environ['TULIP_PYTHON_PLUGINS_DIR'])
 tlp.loadTulipPluginsFromDir(os.environ['TULIPGUI_PYTHON_PLUGINS_DIR'])
 
-f = open('tulippluginsdocumentation.rst', 'w')
+if sys.version_info >= (3,):
+    f = open('tulippluginsdocumentation.rst', 'w', encoding='utf-8')
+else:
+    f = open('tulippluginsdocumentation.rst', 'w')
 
 safeprint("""
 .. |br| raw:: html
@@ -336,7 +336,7 @@ for cat in sorted(plugins.keys()):
         writeSection('Calling the plugin from Python', '"')
         safeprint(('To call that plugin from Python, use the following '
                    'code snippet::\n'), file=f)
-        safeprint(('  # get a dictionnary filled with the default plugin '
+        safeprint(('  # get a dictionary filled with the default plugin '
                    'parameters values'), file=f)
         if p.category() != 'Import':
             safeprint(('  # graph is an instance of the tlp.Graph class\n'
@@ -434,6 +434,6 @@ for cat in sorted(plugins.keys()):
             safeprint(('  success = graph.applyAlgorithm(\'%s\', '
                        'params)\n') % p.name(), file=f)
         safeprint(('  # if the plugin declare any output parameter, its value'
-                   ' can now be retrieved in the \'params\' dictionnary\n'),
+                   ' can now be retrieved in the \'params\' dictionary\n'),
                   file=f)
 f.close()

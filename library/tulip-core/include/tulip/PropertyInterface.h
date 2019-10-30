@@ -249,28 +249,6 @@ public:
    * Only the nodes from that graph will have their value modified in the property
    * and the default node value will not be modified.
    *
-   * @since Tulip 4.10
-   *
-   * @deprecated Since Tulip 5.0 this method signature is deprecated use method
-   * setStringValueToGraphNodes instead
-   *
-   * @param value A string representing the new value to set on all the nodes.
-   * @param graph A graph that defines the set of nodes.
-   *
-   * @warning If the provided graph is not a descendant of the one associated to that property
-   * (including itself), no node value will be modified in it.
-   *
-   * @return Whether the given string was a correct representation for this property's type. If not,
-   * the values are not set.
-   */
-  _DEPRECATED virtual bool setAllNodeStringValue(const std::string &value, const Graph *graph) = 0;
-
-  /**
-   * @brief Sets all the nodes value to the value represented by the string for a graph. For some
-   * types, some parsing will be necessary (e.g. LayoutProperty).
-   * Only the nodes from that graph will have their value modified in the property
-   * and the default node value will not be modified.
-   *
    * @since Tulip 5.0
    *
    * @param value A string representing the new value to set on all the nodes.
@@ -309,28 +287,6 @@ public:
    * the values are not set.
    */
   virtual bool setAllEdgeStringValue(const std::string &value) = 0;
-
-  /**
-   * @brief Sets all the edges value to the value represented by the string for a graph. For some
-   * types, some parsing will be necessary (e.g. LayoutProperty).
-   * Only the edges from that graph will have their value modified in the property
-   * and the default edge value will not be modified.
-   *
-   * @since Tulip 4.10
-   *
-   * @deprecated Since Tulip 5.0 this method signature is deprecated use method
-   * setStringValueToGraphEdges instead
-   *
-   * @param value A string representing the new value to set on all the edges.
-   * @param graph A graph that defines the set of edges.
-   *
-   * @warning If the provided graph is not a descendant of the one associated to that property
-   * (including itself), no edge value will be modified in it.
-   *
-   * @return Whether the given string was a correct representation for this property's type. If not,
-   * the values are not set.
-   */
-  _DEPRECATED virtual bool setAllEdgeStringValue(const std::string &value, const Graph *graph) = 0;
 
   /**
    * @brief Sets all the edges value to the value represented by the string for a graph. For some

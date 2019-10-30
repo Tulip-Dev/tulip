@@ -62,7 +62,7 @@ public:
   void setNeedEntities(bool) override;
 
   /**
-   * This function is call by GlLODSceneVisitor when a simple entitie is found
+   * This function is call by GlLODSceneVisitor when a simple entity is found
    */
   void addSimpleEntityBoundingBox(GlSimpleEntity *entity, const BoundingBox &bb) override;
   /**

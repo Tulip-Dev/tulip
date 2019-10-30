@@ -65,7 +65,7 @@ public:
    *error.
    *
    * This function don't hold observers during the copy process. It's up to user to call
-   *Observable::holdObserver and Observable::unholdObserver before and after calling this funtion.
+   *Observable::holdObserver and Observable::unholdObserver before and after calling this function.
    **/
   tlp::PropertyInterface *copyProperty(QString &errorMsg);
 

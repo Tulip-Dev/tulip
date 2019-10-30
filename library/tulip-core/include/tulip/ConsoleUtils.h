@@ -286,7 +286,7 @@ static void escapeAnsiCode(std::ostream &os, const std::string &ansiCode,
 
 /*
   This set of stream manipulation operators allow to produce
-  a colored console ouput. Except for windows console application (based on cmd.exe),
+  a colored console output. Except for windows console application (based on cmd.exe),
   the colors are activated through ANSI escape sequences. The writing of these sequences
   can be disabled by setting the STDOUT_N0_ANSI_ESCAPES and STDERR_N0_ANSI_ESCAPES
   environment variables (for instance, when working with a terminal who does not understand

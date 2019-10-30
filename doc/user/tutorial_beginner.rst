@@ -84,7 +84,7 @@ As a visualization tool, Tulip offers several algorithms to adapt your graph lay
 .. image:: _images/tutorial_beginner-graph_tangled.png
      :width: 600
 
-Since node positions are choosen randomly upon generation, the layout is tangled and not really clear.
+Since node positions are chosen randomly upon generation, the layout is tangled and not really clear.
 
 * To improve it, we can apply a *Layout algorithm*. In the Algorithm window, select *Layout → Force directed → GEM (Frick)*. A new position for each node will be computed in order to get a better layout:
 

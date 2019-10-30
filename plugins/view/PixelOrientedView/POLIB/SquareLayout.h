@@ -25,7 +25,7 @@
 namespace pocore {
 class SquareLayout : public LayoutFunction {
 public:
-  SquareLayout(unsigned int widht);
+  SquareLayout(unsigned int width);
   Vec2i project(const unsigned int id) const override;
   unsigned int unproject(const Vec2i &) const override;
 

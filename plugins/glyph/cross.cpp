@@ -18,17 +18,14 @@
  */
 #include <vector>
 
+#include <tulip/Color.h>
 #include <tulip/Coord.h>
 #include <tulip/Size.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/SizeProperty.h>
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/GlComplexPolygon.h>
-#include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/Graph.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/TulipViewSettings.h>
 
 using namespace std;

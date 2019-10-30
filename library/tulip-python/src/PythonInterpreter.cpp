@@ -284,8 +284,8 @@ PythonInterpreter::PythonInterpreter()
   _pythonVersion = QString(PyString_AsString(pVersion));
 #endif
 
-  // checking if a QApplication is instanced before instancing any QWidget
-  // allow to avoid segfaults when trying to instantiate the plugin outside the Tulip GUI (for
+  // checking if a QApplication is instantiated before creating any QWidget
+  // allow to avoid segfaults when trying to instantiate a plugin outside the Tulip GUI (for
   // instance, with tulip_check_pl)
   if (QApplication::instance() && !_wasInit) {
 
@@ -343,8 +343,8 @@ PythonInterpreter::PythonInterpreter()
       addModuleSearchPath(tlpStringToQString(tlp::TulipLibDir) + "/tulip/python", true);
 #endif
 
-      // Try to import site package manually otherwise Py_InitializeEx can crash if Py_NoSiteFlag is
-      // not set
+      // Try to import site package manually
+      // otherwise Py_InitializeEx can crash if Py_NoSiteFlag is not set
       // and if the site module is not present on the host system
       // Disable output while trying to import the module to not confuse the user
       runString("import site");
@@ -657,7 +657,7 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
   if (PyCallable_Check(pFunc)) {
 
     if (sipAPI() == nullptr) {
-      QMessageBox::critical(nullptr, "Failed to initalize Python",
+      QMessageBox::critical(nullptr, "Failed to initialize Python",
                             "SIP could not be initialized (sipApi is null)");
       return false;
     }

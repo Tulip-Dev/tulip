@@ -115,7 +115,7 @@ public:
   /**
     @brief Destructor
     View's GUI components (graphics view, configuration widgets) responsibility belongs to the
-    overleying system. Thus, the View is not in charge of deleting its graphcis view.
+    overleying system. Thus, the View is not in charge of deleting its graphics view.
     View's interactors are already deleted in the top class.
     */
   ~View() override;
@@ -148,7 +148,7 @@ public:
 
   /**
     @return The currently active interactor.
-    The active interactor is the one that currently recieve user inputs.
+    The active interactor is the one that currently receive user inputs.
     @see setCurrentInteractor();
     @warning This method may return a nullptr pointer if no interactor is currently active.
     */
@@ -164,7 +164,7 @@ public:
 
   /**
     @return a list of widgets that can be used to set up the view.
-    Since several widgets can be retrived, user will be able to select them from a combo box where
+    Since several widgets can be retrieved, user will be able to select them from a combo box where
     each widget will be identified by its windowsTitle.
     @see View::applySettings()
     @warning This method must not instantiate configuration widgets on the fly.

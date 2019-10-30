@@ -19,15 +19,14 @@
 
 #include <GL/glew.h>
 
-#include <tulip/StringProperty.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/GlTextureManager.h>
-#include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/Graph.h>
+#include <tulip/Color.h>
+#include <tulip/Coord.h>
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/GlTextureManager.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/OpenGlConfigManager.h>
@@ -156,7 +155,7 @@ void Cone::draw(node n, float) {
 
   drawCone();
 
-  GlTextureManager::desactivateTexture();
+  GlTextureManager::deactivateTexture();
 }
 Coord Cone::getAnchor(const Coord &vector) const {
   Coord anchor = vector;
@@ -212,7 +211,7 @@ public:
     }
 
     drawCone();
-    GlTextureManager::desactivateTexture();
+    GlTextureManager::deactivateTexture();
   }
 };
 

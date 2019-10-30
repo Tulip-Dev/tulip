@@ -4,5 +4,4 @@ INSTALL(FILES logo.bmp welcomelogo.bmp
 
 INSTALL(DIRECTORY samplePictures colorscales
         DESTINATION ${TulipBitmapInstallDir}
-        COMPONENT tulip_app
-        PATTERN ".svn" EXCLUDE)
+        COMPONENT tulip_app)

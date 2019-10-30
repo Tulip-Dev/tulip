@@ -72,7 +72,7 @@ void GeolocalisationConfigWidget::setGraph(Graph *graph) {
   for (size_t i = 0; i < stringProperties.size(); ++i) {
     _ui->addressPropCB->addItem(tlpStringToQString(stringProperties[i]));
 
-    // set viewLabel as the default adress property
+    // set viewLabel as the default address property
     if (stringProperties[i] == "viewLabel")
       _ui->addressPropCB->setCurrentIndex(i);
   }

@@ -143,9 +143,9 @@ class Tree(object):
         children. The radius is calculated recursively from the leaf nodes,
         with a unit hemisphere size, tracing back to the root. The area
         calculation is an approximation from a disc of the bottom of a child
-        hemisphere to a spherical cap. The recusion requires tracing the tree
+        hemisphere to a spherical cap. The recursion requires tracing the tree
         from the last generation to root so that all the nodes radii have been
-        calculated before their parent's radius is calcualted. As the
+        calculated before their parent's radius is calculated. As the
         hemisphere sizes are tightly calculated but placing them loosely to
         the parent hemisphere, the space reservation is 7.2 times of the actual
         size of a child hemisphere.
@@ -245,7 +245,7 @@ class Tree(object):
         Sort the nodes in decreasing order in the same depth by their number
         of nodes in subtree, in place sort is used. This is an alternative
         option to sort the tree before placing the nodes on the hemisphere.
-        The original H3 algorithem set leaf node radius as math:: N / alpha
+        The original H3 algorithm set leaf node radius as math:: N / alpha
         so the nodes with many sibilings can have a larger radius and nodes
         with a lot of children.
         """

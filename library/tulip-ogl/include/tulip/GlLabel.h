@@ -58,7 +58,7 @@ public:
   GlLabel();
 
   /**
-   * @brief Contructor
+   * @brief Constructor
    * @param centerPosition position of the label
    * @param size size of the label
    * @param fontColor color of the label
@@ -126,7 +126,7 @@ public:
   /**
    * @brief Set the alignment of the label : LabelPosition::Center, LabelPosition::Top,
    * LabelPosition::Bottom, LabelPosition::Left, LabelPosition::Right
-   * This function is usefull when you have an entity : you spesify the size of the position of this
+   * This function is useful when you have an entity : you specify the size of the position of this
    * entity and you tell that you want a label outside this entity
    * @see LabelPosition
    * @see setSizeOfOutAlign

@@ -160,29 +160,6 @@ public:
    * Only the nodes from that graph will have their value modified in the property
    * and the default node value will not be modified.
    *
-   * @since Tulip 4.10
-   *
-   * @deprecated Since Tulip 5.0 this method signature is deprecated, use method
-   *setValueToGraphNodes instead
-   *
-   * @param v The value to set to all nodes.
-   * @param graph A graph that defines the set of nodes
-   *
-   *
-   * @warning If the provided graph is not a descendant of the one associated to that property
-   *(including itself),
-   * no node value will be modified.
-   *
-   **/
-  _DEPRECATED virtual void
-  setAllNodeValue(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v,
-                  const Graph *graph);
-
-  /**
-   * @brief Sets the value of all nodes in a graph and notify the observers.
-   * Only the nodes from that graph will have their value modified in the property
-   * and the default node value will not be modified.
-   *
    * @since Tulip 5.0
    *
    * @param v The value to set to all nodes.
@@ -221,29 +198,6 @@ public:
    **/
   virtual void
   setAllEdgeValue(typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue v);
-
-  /**
-   * @brief Sets the value of all edges in a graph and notify the observers.
-   * Only the edges from that graph will have their value modified in the property
-   * and the default edge value will not be modified.
-   *
-   * @since Tulip 4.10
-   *
-   * @deprecated Since Tulip 5.0 this method signature is deprecated, use method
-   *setValueToGraphEdges instead
-   *
-   * @param v The value to set to all edges.
-   * @param graph A graph that defines the set of edges
-   *
-   *
-   * @warning If the provided graph is not a descendant of the one associated to that property
-   *(including itself),
-   * no edge value will be modified.
-   *
-   **/
-  _DEPRECATED virtual void
-  setAllEdgeValue(typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue v,
-                  const Graph *graph);
 
   /**
    * @brief Sets the value of all edges in a graph and notify the observers.
@@ -388,9 +342,6 @@ public:
     setAllNodeValue(v);
     return true;
   }
-  _DEPRECATED bool setAllNodeStringValue(const std::string &inV, const Graph *graph) override {
-    return setStringValueToGraphNodes(inV, graph);
-  }
   bool setStringValueToGraphNodes(const std::string &inV, const Graph *graph) override {
     typename Tnode::RealType v;
 
@@ -417,9 +368,6 @@ public:
 
     setAllEdgeValue(v);
     return true;
-  }
-  _DEPRECATED bool setAllEdgeStringValue(const std::string &inV, const Graph *graph) override {
-    return setStringValueToGraphEdges(inV, graph);
   }
   bool setStringValueToGraphEdges(const std::string &inV, const Graph *graph) override {
     typename Tedge::RealType v;

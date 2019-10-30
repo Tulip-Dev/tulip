@@ -23,7 +23,6 @@
 #include <vector>
 
 #include <tulip/TulipPluginHeaders.h>
-#include <tulip/TlpTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -109,7 +108,6 @@ Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E an
     addInParameter<string>("file::filename", paramHelp[0], "");
   }
   ~AdjacencyMatrixImport() override {}
-  vector<node> nodes;
 
   std::string icon() const override {
     return ":/tulip/graphperspective/icons/32/import_adj_mat.png";
@@ -145,6 +143,7 @@ Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E an
     StringProperty *stringP = graph->getProperty<StringProperty>("viewLabel");
 
     std::string line;
+    const vector<node> &nodes = graph->nodes();
 
     while (!in->eof() && std::getline(*in, line)) {
       stringstream lines(line);
@@ -192,7 +191,7 @@ Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E an
           }
 
           if (curNode >= nodes.size() || curLine >= nodes.size()) {
-            nodes.push_back(graph->addNode());
+            graph->addNode();
           }
 
           if (curNode == curLine) {

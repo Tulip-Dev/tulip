@@ -301,11 +301,6 @@ void DoubleProperty::setAllNodeValue(tlp::StoredType<double>::ReturnedConstValue
   DoubleMinMaxProperty::setAllNodeValue(v);
 }
 //=================================================================================
-void DoubleProperty::setAllNodeValue(tlp::StoredType<double>::ReturnedConstValue v,
-                                     const Graph *graph) {
-  setValueToGraphNodes(v, graph);
-}
-//=================================================================================
 void DoubleProperty::setValueToGraphNodes(tlp::StoredType<double>::ReturnedConstValue v,
                                           const Graph *graph) {
   DoubleMinMaxProperty::updateAllNodesValues(v);
@@ -315,11 +310,6 @@ void DoubleProperty::setValueToGraphNodes(tlp::StoredType<double>::ReturnedConst
 void DoubleProperty::setAllEdgeValue(tlp::StoredType<double>::ReturnedConstValue v) {
   DoubleMinMaxProperty::updateAllEdgesValues(v);
   DoubleMinMaxProperty::setAllEdgeValue(v);
-}
-//=================================================================================
-void DoubleProperty::setAllEdgeValue(tlp::StoredType<double>::ReturnedConstValue v,
-                                     const Graph *graph) {
-  setValueToGraphEdges(v, graph);
 }
 //=================================================================================
 void DoubleProperty::setValueToGraphEdges(tlp::StoredType<double>::ReturnedConstValue v,

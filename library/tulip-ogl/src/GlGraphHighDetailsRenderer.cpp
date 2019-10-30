@@ -176,7 +176,7 @@ GlGraphHighDetailsRenderer::~GlGraphHighDetailsRenderer() {
 void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
 
   if (!inputData->renderingParameters()->isAntialiased()) {
-    OpenGlConfigManager::desactivateAntiAliasing();
+    OpenGlConfigManager::deactivateAntiAliasing();
   }
 
   Graph *graph = inputData->getGraph();

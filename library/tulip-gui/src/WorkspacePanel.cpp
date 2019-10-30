@@ -545,7 +545,7 @@ void WorkspacePanel::setOverlayMode(bool m) {
 }
 
 void WorkspacePanel::setHighlightMode(bool hm) {
-  // when highlighted the backgroud color
+  // when highlighted the background color
   // is set to a light green
   // which made appear a 2 pixel height line
   // on top of this panel

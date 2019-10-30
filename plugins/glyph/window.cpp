@@ -19,16 +19,13 @@
 #ifndef WINDOWGLYPH_H
 #define WINDOWGLYPH_H
 
+#include <tulip/Color.h>
 #include <tulip/Glyph.h>
-#include <tulip/GlRect.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlPolyQuad.h>
 #include <tulip/GlQuad.h>
-#include <tulip/GlTextureManager.h>
-#include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/ColorProperty.h>
 #include <tulip/GlGraphInputData.h>
-#include <tulip/TlpTools.h>
+#include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/TulipViewSettings.h>
 
 using namespace tlp;

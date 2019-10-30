@@ -660,7 +660,7 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
     }
   }
 
-  // reenable user input
+  // re-enable user input
   tlp::enableQtUserInput();
 
   mainLayer->deleteGlEntity(progressBar);

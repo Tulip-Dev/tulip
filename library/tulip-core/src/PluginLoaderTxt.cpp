@@ -39,7 +39,7 @@ void PluginLoaderTxt::loaded(const Plugin *info, const std::list<Dependency> &de
             << ", Date: " << info->date() << ", Release: " << info->release()
             << ", Tulip Version: " << info->tulipRelease() << endl;
 
-  // ouput dependencies if any
+  // output dependencies if any
   if (deps.size()) {
     unsigned int i = deps.size();
     std::cout << "depending on ";

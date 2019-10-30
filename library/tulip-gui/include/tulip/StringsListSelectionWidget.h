@@ -35,9 +35,9 @@ namespace tlp {
  * The look of the widget can be set via the ListType parameter :
  *    -> SIMPLE_LIST : the widget contains only one strings list, the selection of strings is done
  * via the checkboxes located on the left of the items list
- *    -> DOUBLE_LIST : the widget contains two lists, the left one contains the unselected string
+ *    -> DOUBLE_LIST : the widget contains two lists, the left one contains the non selected strings
  * list and the right one the selected strings list. To select
- *                     a string (resp. unselect a string), it has to be moved from the list on the
+ *                     a string (resp. deselect a string), it has to be moved from the list on the
  * left to the list on the right (resp. from the list on the right to
  *                     the list on the left) via the buttons located between the two lists or by
  * drag'n drop.
@@ -137,7 +137,7 @@ public:
   void selectAllStrings() override;
 
   /**
-   * Method which unselect all strings
+   * Method which deselect all strings
    */
   void unselectAllStrings() override;
 

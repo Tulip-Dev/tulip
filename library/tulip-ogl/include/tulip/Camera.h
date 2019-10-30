@@ -35,7 +35,7 @@ class GlScene;
  *
  * This camera can be a 2D or 3D camera
  * After setup you can do some basic operation :
- *  - Move, rotate, strafeLeftRight and strafeUpDown to modify poitn of view
+ *  - Move, rotate, strafeLeftRight and strafeUpDown to modify point of view
  *  - You can directly modify camera parameters with setSceneRadius, setZoomFactor, setEyes,
  * setCenter and setUp
  *  - You can transform viewport coordinates to 3D world coordinates with viewportTo3DWorld()
@@ -278,7 +278,7 @@ public:
   void initLight();
 
   /**
-   * @brief Init projection with the gived viewport. Load identity matrix if reset is set as true
+   * @brief Init projection with the given viewport. Load identity matrix if reset is set as true
    */
   void initProjection(const Vector<int, 4> &viewport, bool reset = true);
 

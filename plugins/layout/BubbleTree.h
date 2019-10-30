@@ -31,7 +31,6 @@
  *  In International Conference on Computer Vision and Graphics, pages 633-641, september 2004.
  *
  *
- *  \note  This algorithm only works on trees.
  *  Let n be the number of nodes, the algorithm complexity is in O(n) or O(nlog(n)),
  *  By default O(nlog(n)) algorithm is used, but one can choose the complexity by using
  *  the argument (bool)"complexity" (true means  O(nlog(n), false  O(n)).

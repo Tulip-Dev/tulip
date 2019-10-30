@@ -133,7 +133,7 @@ public:
   void addGlEntity(GlSimpleEntity *entity, const std::string &name);
 
   /**
-   * @brief A Convienience function that adds a graph to the layer
+   * @brief A convenient function that adds a graph to the layer
    *
    * This method will automatically create a GlGraphComposite entity and add it to the layer.
    */
@@ -214,13 +214,13 @@ public:
   ///@cond DOXYGEN_HIDDEN
 
   /**
-   * This function is automaticaly call when a GlGraphComposite is added in this layer
+   * This function is automatically called when a GlGraphComposite is added in this layer
    * You don't have to call this function
    */
   void glGraphCompositeAdded(GlGraphComposite *composite);
 
   /**
-   * This function is automaticaly call when a GlGraphComposite is removed in this layer
+   * This function is automatically called when a GlGraphComposite is removed in this layer
    * You don't have to call this function
    */
   void glGraphCompositeRemoved(GlGraphComposite *composite);

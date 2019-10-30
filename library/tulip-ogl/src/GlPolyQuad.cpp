@@ -201,7 +201,7 @@ void GlPolyQuad::draw(float, Camera *) {
   glDisableClientState(GL_COLOR_ARRAY);
 
   if (!textureName.empty()) {
-    GlTextureManager::desactivateTexture();
+    GlTextureManager::deactivateTexture();
   }
 
   if (outlined) {

@@ -566,7 +566,7 @@ void polyQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2, f
   glDrawArrays(GL_QUAD_STRIP, 0, quadVertices.size());
 
   if (!textureName.empty()) {
-    GlTextureManager::desactivateTexture();
+    GlTextureManager::deactivateTexture();
   }
 
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -718,7 +718,7 @@ void simpleQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2,
 
   if (!textureName.empty()) {
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    GlTextureManager::desactivateTexture();
+    GlTextureManager::deactivateTexture();
   }
 
   if (outlineWidth > 0) {

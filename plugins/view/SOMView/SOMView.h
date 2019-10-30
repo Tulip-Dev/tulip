@@ -175,9 +175,9 @@ public:
 public slots:
 
   /**
-   * Display the detailled mode
+   * Display the detailed mode
    */
-  void switchToDetailledMode(SOMPreviewComposite *preview);
+  void switchToDetailedMode(SOMPreviewComposite *preview);
 
   /**
    * Display the preview mode
@@ -320,7 +320,7 @@ private:
   void computeColor(SOMMap *som, tlp::NumericProperty *property, tlp::ColorScale &colorScale,
                     tlp::ColorProperty *result);
 
-  void internalSwitchToDetailledMode(SOMPreviewComposite *preview, bool animation);
+  void internalSwitchToDetailedMode(SOMPreviewComposite *preview, bool animation);
 
   void internalSwitchToPreviewMode(bool animation);
 
@@ -354,7 +354,7 @@ private:
   GlMainWidget *previewWidget;
   GlMainWidget *mapWidget;
 
-  bool isDetailledMode;
+  bool isDetailedMode;
 
   bool mappingIsVisible;
 

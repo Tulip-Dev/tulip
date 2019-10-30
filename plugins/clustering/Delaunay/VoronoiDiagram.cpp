@@ -17,10 +17,8 @@
  *
  */
 
-#include <tulip/Algorithm.h>
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/Delaunay.h>
-#include <tulip/LayoutProperty.h>
 
 using namespace std;
 

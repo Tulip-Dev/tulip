@@ -316,7 +316,7 @@ from the graph while iterating on its nodes/edges/subgraphs.
 
 .. _graph-class.information:
 
-Information about the graph stucture
+Information about the graph structure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automethod:: tulip::tlp.Graph.nodes

@@ -77,7 +77,7 @@ void GlCurve::draw(float, Camera *) {
   tlp::splineQuad(newPoints, _beginFillColor, _endFillColor, _beginSize, _endSize,
                   newPoints[0] - Coord(1., 0.0, 0.), newPoints[3] + Coord(1., 0.0, 0.));
 
-  GlTextureManager::desactivateTexture();
+  GlTextureManager::deactivateTexture();
   glEnable(GL_LIGHTING);
   glEnable(GL_CULL_FACE);
 }

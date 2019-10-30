@@ -202,7 +202,7 @@ This part of the panel shows the graph. From here, the user can exploit two elem
 
   * |icon_wsm_label_font_set|: Change the default label font.
 
-  When clicked on, some of these icons will change to adapt to the current situation, by either alterning between two versions for the toogle buttons, or by indicating the color or the chosen font.
+  When clicked on, some of these icons will change to adapt to the current situation, by either alterning between two versions for the toggle buttons, or by indicating the color or the chosen font.
 
 * The second element is the contextual menu displayed on a right click.
 
@@ -230,7 +230,7 @@ By default, the options are divided in two parts: *View* et *Augmented display*.
 
   * *Show quick access bar*: display/hide the quick access bar.
 
-  * *Tooltips*: enable/disable the display of essential informations about the node/edge under the mouse pointer.
+  * *Tooltips*: enable/disable the display of essential information about the node/edge under the mouse pointer.
 
   * *Url property*: display a sub menu allowing to choose a property giving the url of the web page associated with a graph element. When moving the mouse pointer over a node or edge, the url of the associated web page is displayed; this web page can then be shown in your default web browser in typing on the space bar.
 
@@ -406,7 +406,7 @@ The Node-Link Diagram being one of the mostly used view, it is also the one we a
 
   Just like the color and the arrows issues, the program will not use the size value given for each edge if the size interpolation is enabled. To resolve your issue, click on the size interpolation icon (|icon_wsm_edge_size_interpol_en|) in the quick access menu (see :ref:`workspace_diagram_main`) or check/uncheck the *Enable size interpolation* option in the Scene Rendering Settings (see :ref:`workspace_diagram_scene`).
 
-**Color/Transparancy**
+**Color/Transparency**
 
 * *I can not see the edges/nodes. Changing their color is not helping, what happened?*
 
@@ -553,7 +553,7 @@ Geographic view
 Map modes
 ---------
 
-The geographic view provides six differents map modes. You can switch between them by clicking on the button in the top left corner. Test them in order to customize the visualization background to your need.
+The geographic view provides six different map modes. You can switch between them by clicking on the button in the top left corner. Test them in order to customize the visualization background to your need.
 
 * Open Stree Map:
 
@@ -615,7 +615,7 @@ Geolocation
 
 .. image:: _images/i_geographic_geoloc.png
 
-A geolocation tool has been embedded in the view, exploiting the `Nominatim <https://nominatim.openstreetmap.org/>`_ geocoding service. It can appropriatly place the nodes on the map.
+A geolocation tool has been embedded in the view, exploiting the `Nominatim <https://nominatim.openstreetmap.org/>`_ geocoding service. It can appropriately place the nodes on the map.
 
 You can choose among two methods to place the elements, either by providing a valid address for each node, stored in a property you will select, or by using the already computed latitude and longitude values, each contained in their respective properties.
 
@@ -812,7 +812,7 @@ Toolbar
 .. |icon_par_modify_space_axis| image:: ../../plugins/view/ParallelCoordinatesView/resources/i_axis_spacer.png
     :width: 20
 
-The parallel coordinates view provides a few exclusive tools which can be used to manipulate the axis and to highlight the correspondance between the properties:
+The parallel coordinates view provides a few exclusive tools which can be used to manipulate the axis and to highlight the correspondence between the properties:
 
 * |icon_par_axis_box_plot|: axis boxplot
 * |icon_par_axis_sliders|: axis sliders
@@ -905,7 +905,7 @@ The nodes disposition will be arranged to match the chosen representation.
 Scatter plot 2D view
 ====================
 
-The pixel oriented and the parallel coordinates views both aim to underline the correlation between two properties, the first one by displaying a tendency noticable with a coloration, and the second one by showing the relation between two properties for the same element.
+The pixel oriented and the parallel coordinates views both aim to underline the correlation between two properties, the first one by displaying a tendency noticeable with a coloration, and the second one by showing the relation between two properties for the same element.
 
 The scatterplot view can be used in a similar way. As a list of properties is selected, a plot for each couple of distinct properties will be created.
 

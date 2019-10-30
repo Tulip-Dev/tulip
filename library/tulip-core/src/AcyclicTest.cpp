@@ -94,7 +94,7 @@ void AcyclicTest::makeAcyclic(Graph *graph, vector<edge> &reversed,
   std::vector<edge> edgesToDel;
   // replace self loops by three edges and two nodes.
   // do a loop on the already existing edges
-  auto edges = graph->edges();
+  const vector<edge> &edges = graph->edges();
   // newly added edges during the loop
   // will not be taken into account
   unsigned int nbEdges = edges.size();

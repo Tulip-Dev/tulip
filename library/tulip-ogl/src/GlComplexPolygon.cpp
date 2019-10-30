@@ -360,7 +360,7 @@ void GlComplexPolygon::beginNewHole() {
 void GlComplexPolygon::runTesselation() {
   verticesData.clear();
   verticesIndices.clear();
-  // instantiate the tesselator from libtess2
+  // instantiate the tessellator from libtess2
   TESStesselator *tess = tessNewTess(nullptr);
 
   // add contours
@@ -368,17 +368,17 @@ void GlComplexPolygon::runTesselation() {
     tessAddContour(tess, 3, &points[i][0], sizeof(float) * 3, points[i].size());
   }
 
-  // the tesselation will generate a set of polygons with maximum nvp vertices
+  // the tessellation will generate a set of polygons with maximum nvp vertices
   const int nvp = 6;
 
-  // run tesselation with the same default winding rule as in the GLU tesselator
+  // run tessellation with the same default winding rule as in the GLU tessellator
   if (tessTesselate(tess, TESS_WINDING_ODD, TESS_POLYGONS, nvp, 3, nullptr)) {
     const float *verts = tessGetVertices(tess);
     const int *elems = tessGetElements(tess);
     const int nelems = tessGetElementCount(tess);
     std::unordered_map<Coord, unsigned int> vidx;
 
-    // iterate over polygons computed by tesselation
+    // iterate over polygons computed by tessellation
     for (int i = 0; i < nelems; ++i) {
       std::vector<tlp::Coord> verticesTmp;
       const int *p = &elems[i * nvp];
@@ -414,7 +414,7 @@ void GlComplexPolygon::runTesselation() {
     }
   }
 
-  // free memory allocated by the tesselator from libtess2
+  // free memory allocated by the tessellator from libtess2
   tessDeleteTess(tess);
 }
 //=====================================================
@@ -431,7 +431,7 @@ void GlComplexPolygon::activateQuadBorder(const float borderWidth, const Color &
   }
 }
 //=====================================================
-void GlComplexPolygon::desactivateQuadBorder(const int polygonId) {
+void GlComplexPolygon::deactivateQuadBorder(const int polygonId) {
   if (static_cast<size_t>(polygonId) < quadBorderActivated.size()) {
     quadBorderActivated[polygonId] = false;
   }
@@ -468,7 +468,7 @@ void GlComplexPolygon::draw(float, Camera *) {
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
   if (!textureName.empty()) {
-    GlTextureManager::desactivateTexture();
+    GlTextureManager::deactivateTexture();
   }
 
   if (outlined) {
@@ -534,10 +534,10 @@ void GlComplexPolygon::draw(float, Camera *) {
           glDrawArrays(GL_LINE_STRIP_ADJACENCY_EXT, 0, points[v].size());
 
           if (!(quadBorderTexture[v]).empty()) {
-            GlTextureManager::desactivateTexture();
+            GlTextureManager::deactivateTexture();
           }
 
-          outlineExtrusionShader->desactivate();
+          outlineExtrusionShader->deactivate();
         }
       }
     }

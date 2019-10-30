@@ -23,7 +23,6 @@
 #include <tulip/TulipPluginHeaders.h>
 /** \addtogroup layout */
 
-/// ConeTreeExtended.h - An implementation of the cone tree layout.
 /** This plugin is an extension of the Cone tree layout
  *  algorithm first published as:
  *
@@ -38,11 +37,6 @@
  *  D.Auber, PhD Thesis, "Outils de visualisation de larges structures de donnees",
  *  University Bordeaux, december 2002.
  *
- *  <b> HISTORY</b>
- *
- *  - 01/04/99 Verson 0.0.1: Initial release
- *
- *  \note This algorithm only works on trees.
  *  Let n be the number of nodes, the algorithm complexity is in O(n).
  *
  *  \author David Auber University Bordeaux I France: Email:auber@labri.fr
@@ -50,7 +44,7 @@
 class ConeTreeExtended : public tlp::LayoutAlgorithm {
 public:
   PLUGININFORMATION(
-      "Cone Tree", "David Auber", "01/04/2001",
+      "Cone Tree", "David Auber", "01/04/1999",
       "Implements an extension of the Cone tree layout algorithm first published as:<br/>"
       "<b>Interacting with Huge Hierarchies: Beyond Cone Trees </b>, A. FJ. Carriere and R. "
       "Kazman, InfoViz'95, IEEE Symposium on Information Visualization pages 74--78 (1995).",

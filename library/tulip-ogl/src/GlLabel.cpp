@@ -38,7 +38,6 @@
 #include <tulip/GlTools.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/OcclusionTest.h>
-#include <tulip/GlTLPFeedBackBuilder.h>
 #include <tulip/OcclusionTest.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlXMLTools.h>
@@ -465,7 +464,7 @@ void GlLabel::draw(float, Camera *camera) {
                translationAfterRotation[2]);
 
   if (!billboarded) {
-    // Alignement translation
+    // Alignment translation
     switch (alignment) {
     case LabelPosition::Center:
 
@@ -666,7 +665,7 @@ void GlLabel::draw(float, Camera *camera) {
       break;
     }
 
-    // Label shift when we have an alignement
+    // Label shift when we have an alignment
     float xShiftFactor = 0.;
     float yShiftFactor = 0.;
 
@@ -714,7 +713,7 @@ void GlLabel::draw(float, Camera *camera) {
       font->Render((*it).c_str(), -1, shift);
 
       if (!textureName.empty())
-        GlTextureManager::desactivateTexture();
+        GlTextureManager::deactivateTexture();
 
       if (outlineSize > 0) {
         if (!useLOD || viewportH > 25) {

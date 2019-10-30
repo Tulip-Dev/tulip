@@ -16,7 +16,7 @@
  *
  * Released under GNU LGPL, read the file 'COPYING' for more information
  *
- * 2005 modification hereby placed in public domain.  Probably supercedes the 2004 copyright
+ * 2005 modification hereby placed in public domain.  Probably supersedes the 2004 copyright
  * for the code itself.
  */
 

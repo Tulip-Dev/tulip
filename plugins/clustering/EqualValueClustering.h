@@ -20,7 +20,6 @@
 #define _EqualValueClustering_H
 
 #include <tulip/TulipPluginHeaders.h>
-#include <tulip/NumericProperty.h>
 
 class EqualValueClustering : public tlp::Algorithm {
 public:

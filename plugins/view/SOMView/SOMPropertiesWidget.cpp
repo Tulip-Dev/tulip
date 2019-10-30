@@ -278,7 +278,7 @@ void SOMPropertiesWidget::setData(const DataSet &data) {
   data.get("diffusionRate", doubleValue);
   _ui->baseDiffusionRateSpinBox->setValue(doubleValue);
 
-  // Representaion properties
+  // Representation properties
   data.get("performMapping", boolValue);
   _ui->autoMappingCheckBox->setChecked(boolValue);
   data.get("linkColors", boolValue);

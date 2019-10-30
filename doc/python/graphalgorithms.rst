@@ -49,7 +49,7 @@ is bound to a "graph" variable and this graph contains a double property called 
   # get the input property from which to generate the partition
   myMetric = graph.getDoubleProperty("myMetric")
 
-  # get a dictionnary filled with default parameters for the algorithm
+  # get a dictionary filled with default parameters for the algorithm
   params = tlp.getDefaultPluginParameters("Equal Value", graph)
 
   # set the input property

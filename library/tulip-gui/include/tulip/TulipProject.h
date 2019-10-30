@@ -198,7 +198,7 @@ public:
     @brief Checks if the given path is a directory.
 
     @param path The path to check. @see TulipProject
-    @return true/false wether the path is a directory.
+    @return true/false whether the path is a directory.
     */
   bool isDir(const QString &path);
 
@@ -246,7 +246,7 @@ public:
     This method is similar to the UNIX's touch shell command. Except it won't renew the file's
     creation date if the file already exists.
     @param file the file to create
-    @return true if file creation was sucessful.
+    @return true if file creation was successful.
     */
   bool touch(const QString &path);
 
@@ -297,7 +297,7 @@ public:
     */
   QString absoluteRootPath() const;
 
-  // Developer note: Every field in the TulipProject tagged as a Q_PROPERTY will automaticaly be
+  // Developer note: Every field in the TulipProject tagged as a Q_PROPERTY will automatically be
   // serialized in the project.xml file
   /**
     @brief the name of the project

@@ -48,7 +48,7 @@ extern TLP_SCOPE int getNumIterators();
  *
  * // shortest syntax using C++11 for range based loops
  * for (auto n : graph->getNodes()) {
- *   // do someting with n
+ *   // do something with n
  * }
  *
  * // legacy syntax using Tulip forEach macro
@@ -58,7 +58,7 @@ extern TLP_SCOPE int getNumIterators();
  *   // do something with n
  * }
  *
- * // no syntactic sugar syntax (needs to explicitely delete the iterator
+ * // no syntactic sugar syntax (needs to explicitly delete the iterator
  * // after its use)
  * tlp::Iterator<tl::node> *nodesIt = graph->getNodes();
  * while (nodesIt->hasNext()) {
@@ -183,7 +183,7 @@ inline unsigned int iteratorCount(Iterator<T> *it) {
 }
 
 /**
- * @brief Checks a mimimum amount of iterated elements
+ * @brief Checks a minimum amount of iterated elements
  * @ingroup Iterators
  *
  * @since Tulip 5.2

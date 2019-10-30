@@ -22,8 +22,6 @@
 #include <unordered_map>
 
 #include <tulip/TulipPluginHeaders.h>
-#include <tulip/AbstractProperty.h>
-#include <tulip/TlpTools.h>
 
 #include "GMLParser.h"
 
@@ -58,9 +56,7 @@ struct GMLGraphBuilder : public GMLTrue {
   Graph *_graph;
   unordered_map<int, node> nodeIndex;
   ~GMLGraphBuilder() override {}
-  GMLGraphBuilder(Graph *graph) : _graph(graph) {
-    // cer << "buil GraphBuilder" << endl;
-  }
+  GMLGraphBuilder(Graph *graph) : _graph(graph) {}
   bool addNode(int id) {
     if (nodeIndex.find(id) == nodeIndex.end()) {
       nodeIndex[id] = _graph->addNode();

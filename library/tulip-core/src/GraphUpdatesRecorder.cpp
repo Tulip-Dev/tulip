@@ -1006,7 +1006,7 @@ void GraphUpdatesRecorder::addEdges(Graph *g, unsigned int nbAdded) {
   }
 
   unordered_set<edge> &ge = itge->second;
-  auto gEdges = g->edges();
+  const vector<edge> &gEdges = g->edges();
 
   for (unsigned int i = gEdges.size() - nbAdded; i < gEdges.size(); ++i) {
     edge e = gEdges[i];
@@ -1367,11 +1367,11 @@ void GraphUpdatesRecorder::propertyRenamed(PropertyInterface *prop) {
 }
 
 void GraphUpdatesRecorder::beforeSetNodeValue(PropertyInterface *p, node n) {
-  // dont record the old value if the default one has been changed
+  // do not record the old value if the default one has been changed
   if (oldNodeDefaultValues.find(p) != oldNodeDefaultValues.end())
     return;
 
-  // don't record old values for newly added nodes
+  // do not record old values for newly added nodes
   if (addedNodes.find(n) != addedNodes.end()) {
     if (!restartAllowed)
       return;
@@ -1421,11 +1421,11 @@ void GraphUpdatesRecorder::beforeSetAllNodeValue(PropertyInterface *p) {
 }
 
 void GraphUpdatesRecorder::beforeSetEdgeValue(PropertyInterface *p, edge e) {
-  // dont record the old value if the default one has been changed
+  // do not record the old value if the default one has been changed
   if (oldEdgeDefaultValues.find(p) != oldEdgeDefaultValues.end())
     return;
 
-  // dont record old value for newly added edge
+  // do not record the old value for a newly added edge
   if (addedEdgesEnds.find(e) != addedEdgesEnds.end()) {
     if (!restartAllowed)
       return;

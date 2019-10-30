@@ -384,7 +384,7 @@ bool HierarchicalGraph::run() {
   graph->pop();
 
   // post processing
-  // Prevent edge node overlaping
+  // Prevent edge node overlapping
   unsigned int nbGrids = grid.size();
   std::vector<float> levelMaxSize(nbGrids);
   MutableContainer<unsigned int> nodeLevel;

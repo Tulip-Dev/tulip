@@ -41,7 +41,7 @@
  * region of a graph.
  *
  * To apply this edge bundling technique, all nodes must have different positions.
- * If you encounter some crashs, try to apply the "Fast Overlap Removal" plugin before
+ * If you encounter some crashes, try to apply the "Fast Overlap Removal" plugin before
  * executing this edge bundling plugin.
  *
  *  \author David Auber, Romain Bourqui, Antoine Lambert, LaBRI University Bordeaux I France:

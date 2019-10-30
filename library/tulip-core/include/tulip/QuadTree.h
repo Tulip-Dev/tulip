@@ -43,7 +43,7 @@ public:
    * of all elements inserted in that QuadTree
    */
   /**
-   * Contructor, you have to put the global bounding box of the quadtree
+   * Constructor, you have to put the global bounding box of the quadtree
    */
   QuadTreeNode(const tlp::Rectangle<float> &box) : _box(box) {
     assert(_box.isValid());
@@ -127,7 +127,7 @@ public:
 
   /**
    * same as getElements, however if the size of the elements are to small compare
-   * to the size of the box (equivalent to have severeal item at the same position on the screen)
+   * to the size of the box (equivalent to have several items at the same position on the screen)
    * only one elements is returned for the small cells.
    * The ratio should fixed according to the number of pixels displayed.
    * If we have a 1000*800 screen we can merge items of box into a single item if
@@ -154,7 +154,7 @@ public:
             children[i]->getElementsWithRatio(box, result, ratio);
         }
       }
-      // elements are too small return only one elements (we must seach it)
+      // elements are too small return only one elements (we must search it)
       else {
         bool find = false;
 

@@ -253,7 +253,7 @@ void GlBox::draw(float lod, Camera *) {
     glDisableClientState(GL_NORMAL_ARRAY);
 
     if (!textureName.empty()) {
-      GlTextureManager::desactivateTexture();
+      GlTextureManager::deactivateTexture();
       glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     }
   }

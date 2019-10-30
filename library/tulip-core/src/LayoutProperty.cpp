@@ -576,11 +576,6 @@ void LayoutProperty::setAllNodeValue(tlp::StoredType<Coord>::ReturnedConstValue 
   LayoutMinMaxProperty::setAllNodeValue(v);
 }
 //=================================================================================
-void LayoutProperty::setAllNodeValue(tlp::StoredType<Coord>::ReturnedConstValue v,
-                                     const Graph *graph) {
-  setValueToGraphNodes(v, graph);
-}
-//=================================================================================
 void LayoutProperty::setValueToGraphNodes(tlp::StoredType<Coord>::ReturnedConstValue v,
                                           const Graph *graph) {
   resetBoundingBox();
@@ -590,11 +585,6 @@ void LayoutProperty::setValueToGraphNodes(tlp::StoredType<Coord>::ReturnedConstV
 void LayoutProperty::setAllEdgeValue(tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v) {
   resetBoundingBox();
   LayoutMinMaxProperty::setAllEdgeValue(v);
-}
-//=================================================================================
-void LayoutProperty::setAllEdgeValue(tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v,
-                                     const Graph *graph) {
-  setValueToGraphEdges(v, graph);
 }
 //=================================================================================
 void LayoutProperty::setValueToGraphEdges(tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v,

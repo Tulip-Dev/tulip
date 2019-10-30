@@ -85,7 +85,7 @@ public:
    */
   virtual void setLineWidth(float width);
   /**
-   * Set the style of the line (documentation can be found in OpenGL manuel of fuction
+   * Set the style of the line (documentation can be found in OpenGL manuel of function
    * glLineStipple)
    */
   virtual void setLineStipple(unsigned char factor, unsigned int pattern);

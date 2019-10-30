@@ -36,7 +36,7 @@ class NominatimResultsParser : public YajlParseFacade {
 public:
   void parseString(string &value) override {
     if (_currentKey == "display_name") {
-      adresses.push_back(value);
+      addresses.push_back(value);
     } else if (_currentKey == "lat") {
       _lat = stod(value);
     } else if (_currentKey == "lon") {
@@ -49,7 +49,7 @@ public:
     _currentKey = value;
   }
 
-  vector<string> adresses;
+  vector<string> addresses;
   vector<pair<double, double>> latLngs;
 
 private:
@@ -87,13 +87,13 @@ vector<NominatimGeocoderResult> NominatimGeocoder::getLatLngForAddress(const str
   nominatimParser.parse(reinterpret_cast<const unsigned char *>(jsonData.constData()),
                         jsonData.size());
 
-  unsigned int nbResults = nominatimParser.adresses.size();
+  unsigned int nbResults = nominatimParser.addresses.size();
 
   vector<NominatimGeocoderResult> ret;
 
   for (unsigned int i = 0; i < nbResults; ++i) {
     NominatimGeocoderResult result;
-    result.address = nominatimParser.adresses[i];
+    result.address = nominatimParser.addresses[i];
     result.latLng = nominatimParser.latLngs[i];
     ret.push_back(result);
   }

@@ -38,7 +38,7 @@ namespace tlp {
 
 BoundingBox computeNewBoundingBox(const BoundingBox &box, const Coord &centerScene, double aX,
                                   double aY) {
-  // compute a new bouding box : this bounding box is the rotation of the old bounding box
+  // compute a new bounding box : this bounding box is the rotation of the old bounding box
   Coord size((box[1] - box[0]) / 2.f);
   Coord center(box[0] + size);
   // size = Coord(size.norm(),size.norm(),size.norm());
@@ -78,7 +78,7 @@ GlQuadTreeLODCalculator::~GlQuadTreeLODCalculator() {
 }
 
 void GlQuadTreeLODCalculator::setScene(GlScene &scene) {
-  // If we change scene, whe have to remove observer on the graph and the scene
+  // If we change scene, we have to remove observer on the graph and the scene
   // in the next rendering, we have to compute quadtree
   setHaveToCompute();
   GlLODCalculator::setScene(scene);

@@ -76,7 +76,7 @@ public:
    */
   inline MATRIX &operator+=(const MATRIX &mat);
   /**
-   * substract another matrix from the current and return "&(*this)"
+   * subtract another matrix from the current and return "&(*this)"
    */
   inline MATRIX &operator-=(const MATRIX &mat);
   /**

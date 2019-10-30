@@ -35,7 +35,6 @@
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/GlLines.h>
 #include <tulip/OcclusionTest.h>
-#include <tulip/GlTLPFeedBackBuilder.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/Camera.h>
 #include <tulip/GlBezierCurve.h>
@@ -180,8 +179,7 @@ void GlEdge::draw(float lod, const GlGraphInputData *data, Camera *camera) {
   const std::string &edgeTexture = data->getElementTexture()->getEdgeValue(e);
   bool vertexArrayRendering = false;
 
-  if (data->getGlVertexArrayManager()->renderingIsBegin() &&
-      !data->parameters->getFeedbackRender()) {
+  if (data->getGlVertexArrayManager()->renderingIsBegin()) {
     if (lodSize > -5 && lodSize < 5) {
       vertexArrayRendering = true;
       data->getGlVertexArrayManager()->activateLineEdgeDisplay(this, selected);
@@ -201,27 +199,6 @@ void GlEdge::draw(float lod, const GlGraphInputData *data, Camera *camera) {
   }
 
   glEnable(GL_COLOR_MATERIAL);
-
-  if (data->parameters->getFeedbackRender()) {
-    const Color fillColor = data->getElementColor()->getEdgeValue(e);
-    const Color textColor = data->getElementLabelColor()->getEdgeValue(e);
-    glPassThrough(TLP_FB_COLOR_INFO);
-    glPassThrough(fillColor[0]);
-    glPassThrough(fillColor[1]);
-    glPassThrough(fillColor[2]);
-    glPassThrough(fillColor[3]);
-    glPassThrough(strokeColor[0]);
-    glPassThrough(strokeColor[1]);
-    glPassThrough(strokeColor[2]);
-    glPassThrough(strokeColor[3]);
-    glPassThrough(textColor[0]);
-    glPassThrough(textColor[1]);
-    glPassThrough(textColor[2]);
-    glPassThrough(textColor[3]);
-
-    glPassThrough(TLP_FB_BEGIN_EDGE);
-    glPassThrough(float(id)); // id of the node for the feed back mode
-  }
 
   const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
   bool hasBends(!bends.empty());
@@ -298,10 +275,6 @@ void GlEdge::draw(float lod, const GlGraphInputData *data, Camera *camera) {
            strokeColor, edgeSize, data->getElementShape()->getEdgeValue(e),
            data->parameters->isEdge3D(), lodSize, edgeTexture, borderWidth);
   GlTextureManager::setAnimationFrame(0);
-
-  if (data->parameters->getFeedbackRender()) {
-    glPassThrough(TLP_FB_END_EDGE);
-  }
 
   glEnable(GL_LIGHTING);
 }

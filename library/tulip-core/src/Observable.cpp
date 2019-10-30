@@ -147,7 +147,7 @@ Observable *Observable::getObject(node n) {
   assert(_oAlive[n]);
 
   if (!_oAlive[n])
-    throw ObservableException("That object has been deleted it is no more accessbile");
+    throw ObservableException("That object has been deleted it is no more accessible");
 
   return _oPointer[n];
 }

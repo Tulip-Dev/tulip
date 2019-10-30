@@ -354,7 +354,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         // write nb of non default values
         size = prop->numberOfNonDefaultValuatedNodes(propGraphId ? nullptr : graph);
         os.write(reinterpret_cast<const char *>(&size), sizeof(size));
-        // prepare ouput stream
+        // prepare output stream
         stringstream vs;
 
         // std::basic_streambuf::pubsetbuf is a no-op in libcxx (LLVM implementation of STL)
@@ -450,7 +450,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         // write nb of non default values
         size = prop->numberOfNonDefaultValuatedEdges(propGraphId ? nullptr : graph);
         os.write(reinterpret_cast<const char *>(&size), sizeof(size));
-        // prepare ouput stream
+        // prepare output stream
         stringstream vs;
 
         // std::basic_streambuf::pubsetbuf is a no-op in libcxx (LLVM implementation of STL)

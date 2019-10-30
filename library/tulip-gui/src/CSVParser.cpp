@@ -80,7 +80,7 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
 
     if (codec == nullptr) {
       qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__
-                 << " Cannot found the convertion codec to convert from " << _fileEncoding
+                 << " Cannot found the conversion codec to convert from " << _fileEncoding
                  << " string will be treated as utf8.";
       codec = QTextCodec::codecForName("UTF-8");
     }
@@ -258,7 +258,7 @@ void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const 
 string CSVSimpleParser::treatToken(const string &token, int, int) {
   string currentToken = token;
   // erase space chars at the beginning/end of the value
-  // and replace multiple occurences of space chars by a blank
+  // and replace multiple occurrences of space chars by a blank
   string::size_type beginPos = currentToken.find_first_of(spaceChars);
 
   while (beginPos != string::npos) {

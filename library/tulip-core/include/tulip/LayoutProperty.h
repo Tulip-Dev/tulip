@@ -301,11 +301,6 @@ public:
   void setValueToGraphEdges(tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v,
                             const Graph *graph) override;
 
-  _DEPRECATED void setAllNodeValue(tlp::StoredType<Coord>::ReturnedConstValue v,
-                                   const Graph *graph) override;
-  _DEPRECATED void setAllEdgeValue(tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v,
-                                   const Graph *graph) override;
-
 protected:
   void clone_handler(AbstractProperty<tlp::PointType, tlp::LineType> &) override;
 

@@ -214,7 +214,7 @@ DECL_STORED_STRUCT(tlp::StringType::RealType)
 DECL_STORED_STRUCT(tlp::StringVectorType::RealType)
 DECL_STORED_STRUCT(tlp::ColorVectorType::RealType)
 
-// template class to automatize definition of serializers
+// template class to automate definition of serializers
 template <typename T>
 struct KnownTypeSerializer : public TypedDataSerializer<typename T::RealType> {
   KnownTypeSerializer(const std::string &otn) : TypedDataSerializer<typename T::RealType>(otn) {}

@@ -226,7 +226,7 @@ Sets each component of the vector.
 
 :param x: the first component value
 :type x: float
-:param y: the second componant value
+:param y: the second component value
 :type y: float
 :param z: the third component value
 :type z: float

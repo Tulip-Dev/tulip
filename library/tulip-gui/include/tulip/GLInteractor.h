@@ -50,7 +50,7 @@ public slots:
   /**
    * @brief Draws an OpenGL visual feedback for the interactor into a given GlMainWidget.
    * This method is called after the scene was rendered.
-   * @return true if the rendering completed sucessfully
+   * @return true if the rendering completed successfully
    */
   virtual bool draw(tlp::GlMainWidget *) {
     return false;

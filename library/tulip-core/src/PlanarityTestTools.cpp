@@ -310,7 +310,7 @@ void PlanarityTestImpl::addOldCNodeRBCToNewRBC(node oldCNode, node, node n, node
 
   RBC[oldCNode].delItem(RBC[oldCNode].firstItem());
 
-  // endpoint to correctly concatentates with RBC[new_cnode];
+  // endpoint to correctly concatenates with RBC[new_cnode];
   node first = n1;
 
   if (!n1.isValid()) {

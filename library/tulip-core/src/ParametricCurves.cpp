@@ -118,55 +118,34 @@ static void computeCubicBezierPoints(const Coord &p0, const Coord &p1, const Coo
   curvePoints[nbCurvePoints - 1] = p3;
 }
 
-void buildPascalTriangle(unsigned int n, vector<vector<double>> &pascalTriangle) {
-  size_t curSize = pascalTriangle.size();
-
-  if (curSize >= n)
-    return;
-
-  pascalTriangle.resize(n);
-
-  for (unsigned int i = curSize; i < n; ++i) {
-    pascalTriangle[i].resize(i + 1);
-  }
-
-  for (unsigned int i = curSize; i < n; ++i) {
-    pascalTriangle[i][0] = 1;
-    pascalTriangle[i][i] = 1;
-
-    for (unsigned int j = 1; j < i; ++j) {
-      pascalTriangle[i][j] = pascalTriangle[i - 1][j - 1] + pascalTriangle[i - 1][j];
-    }
-  }
-}
-
 static map<double, vector<double>> tCoeffs;
 static map<double, vector<double>> sCoeffs;
-static map<unsigned int, unsigned int> computedCoefficients;
 
 static void computeCoefficients(double t, unsigned int nbControlPoints) {
   double s = (1.0 - t);
   TLP_LOCK_SECTION(computeCoefficients) {
     if (tCoeffs.find(t) == tCoeffs.end()) {
-      vector<double> tCoeff, sCoeff;
+      vector<double> tCoeff(nbControlPoints), sCoeff(nbControlPoints);
 
       for (size_t i = 0; i < nbControlPoints; ++i) {
-        tCoeff.push_back(pow(t, double(i)));
-        sCoeff.push_back(pow(s, double(i)));
+        tCoeff[i] = pow(t, double(i));
+        sCoeff[i] = pow(s, double(i));
       }
 
       tCoeffs[t] = tCoeff;
       sCoeffs[t] = sCoeff;
     } else {
       vector<double> &tCoeff = tCoeffs[t];
-      vector<double> &sCoeff = sCoeffs[t];
 
       if (tCoeff.size() < nbControlPoints) {
         size_t oldSize = tCoeff.size();
+	tCoeff.resize(nbControlPoints);
+	vector<double> &sCoeff = sCoeffs[t];
+	sCoeff.resize(nbControlPoints);
 
         for (size_t i = oldSize; i < nbControlPoints; ++i) {
-          tCoeff.push_back(pow(t, double(i)));
-          sCoeff.push_back(pow(s, double(i)));
+          tCoeff[i] = pow(t, double(i));
+          sCoeff[i] = pow(s, double(i));
         }
       }
     }

@@ -19,15 +19,14 @@
 
 #include <GL/glew.h>
 
-#include <tulip/StringProperty.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/GlTextureManager.h>
-#include <tulip/Graph.h>
+#include <tulip/Color.h>
+#include <tulip/Coord.h>
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/GlTools.h>
-#include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/GlTextureManager.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/OpenGlConfigManager.h>
@@ -197,7 +196,7 @@ void Cylinder::draw(node n, float) {
 
   drawCylinder();
 
-  GlTextureManager::desactivateTexture();
+  GlTextureManager::deactivateTexture();
 }
 
 Coord Cylinder::getAnchor(const Coord &vector) const {
@@ -269,7 +268,7 @@ void HalfCylinder::draw(node n, float) {
 
   drawCylinder(0.5, 0.25);
 
-  GlTextureManager::desactivateTexture();
+  GlTextureManager::deactivateTexture();
 }
 //=================================================================================================
 Coord HalfCylinder::getAnchor(const Coord &vector) const {
@@ -305,7 +304,7 @@ public:
 
     drawCylinder();
 
-    GlTextureManager::desactivateTexture();
+    GlTextureManager::deactivateTexture();
   }
 };
 

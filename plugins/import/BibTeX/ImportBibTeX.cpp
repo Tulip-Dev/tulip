@@ -25,7 +25,6 @@
 #include <cctype>
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/TulipViewSettings.h>
-#include <tulip/StringCollection.h>
 
 #include <xdkbibtex/file.h>
 #include <xdkbibtex/formatter.h>

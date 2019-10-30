@@ -60,7 +60,7 @@ struct TLP_SCOPE PluginLoader {
   virtual void loading(const std::string &filename) = 0;
 
   /**
-   * @brief Indicates that a plugin has been loaded sucessfully
+   * @brief Indicates that a plugin has been loaded successfully
    * @param info The Plugin object that has just been loaded
    * @param dependencies The plugin dependencies
    *
@@ -70,14 +70,14 @@ struct TLP_SCOPE PluginLoader {
 
   /**
    * @brief Indicates that an error occurred when trying to load a file.
-   * @param filename The absolute path of where the error occured.
+   * @param filename The absolute path of where the error occurred.
    * @param errormsg A human-readable error message.
    */
   virtual void aborted(const std::string &filename, const std::string &errormsg) = 0;
 
   /**
    * @brief Indicates that a file has finished being loaded
-   * @param state true if the file was loaded sucessfully
+   * @param state true if the load was successful
    * @param msg An additional human-readable message about the load state
    */
   virtual void finished(bool state, const std::string &msg) = 0;

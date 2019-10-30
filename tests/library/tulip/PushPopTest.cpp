@@ -921,7 +921,7 @@ static void createSubgraphs(Graph *graph, int m, int n) {
 
 void PushPopTest::testDelAllSgPopUnpop() {
   // create a hierarchy of subgraphs
-  // the hierachy has 3 levels with 4 subgraph per level
+  // the hierarchy has 3 levels with 4 subgraphs per level
   createSubgraphs(graph, 4, 3);
 
   // We should have 4 subgraphs for the root graph

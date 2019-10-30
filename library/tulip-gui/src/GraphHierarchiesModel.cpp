@@ -201,7 +201,7 @@ static void restoreTextureFilesFromProjectIfNeeded(tlp::Graph *g, tlp::TulipProj
   }
 
   // Iterate once again on non default valuated nodes
-  // Get a stable iterator on non default valuated nodes as their value can be reseted to the
+  // Get a stable iterator on non default valuated nodes as their value can be reset to the
   // default one by the possible call to setAllNodeValue
   for (auto n : stableIterator(viewTexture->getNonDefaultValuatedNodes())) {
     // Get the node texture file previously backuped

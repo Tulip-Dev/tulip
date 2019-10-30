@@ -225,7 +225,7 @@ void searchForIndex(QComboBox *combo, const QString &s) {
 
 void SearchWidget::setGraph(Graph *g) {
   if (g != nullptr) {
-    // Force creation of viewSelection to ensure we have at least one boolean property exising in
+    // Force creation of viewSelection to ensure we have at least one boolean property existing in
     // the graph
     g->getProperty<BooleanProperty>("viewSelection");
   }

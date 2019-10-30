@@ -58,7 +58,7 @@ Returns the clustering coefficient of a graph
 as the average of the local clustering coefficients
 (see :func:`tlp.clusteringCoefficient`) of all the nodes.
 
-:param graph: the graph on wich to compute the average clustering coefficient
+:param graph: the graph on which to compute the average clustering coefficient
 :type graph: :class:`tlp.Graph`
 :rtype: float
 %End

@@ -49,7 +49,7 @@ public:
    * @param cell The size of a single cell of the grid.
    * @param color The color of the lines of the grid.
    * @param displays The dimensions of the grid to display.
-   * @param hollowGrid Indicates if the grid chould be hollowed.
+   * @param hollowGrid Indicates if the grid should be hollowed.
    */
   GlGrid(const Coord &frontTopLeft, const Coord &backBottomRight, const Size &cell,
          const Color &color, bool displays[3]);

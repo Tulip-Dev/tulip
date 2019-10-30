@@ -424,7 +424,7 @@ void GraphImpl::push(bool unpopAllowed, std::vector<PropertyInterface *> *propsT
 
   // if we have a current recorder with no updates
   // there is no need to push a new one, so go on with the same
-  // (except if a temporary non redoable state is explicitely requested)
+  // (except if a temporary non redoable state is explicitly requested)
   if (unpopAllowed && hasRecorders && !recorders.front()->hasUpdates()) {
     return;
   }

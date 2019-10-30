@@ -88,7 +88,7 @@ Registers a color scale in the persistent database for further reuse.
 :param colorScaleName: the name of the color scale to register
 :type colorScaleName: string
 :param colorScale: the color scale to set
-:type colorScale: a :class:`tlp.ColorScale` instance, a list of :class:`tlp.Color` or a dictionnary with float keys (between 0.0 and 1.0) and :class:`tlp.Color` values
+:type colorScale: a :class:`tlp.ColorScale` instance, a list of :class:`tlp.Color` or a dictionary with float keys (between 0.0 and 1.0) and :class:`tlp.Color` values
 %End
 
 //==========================================================================================

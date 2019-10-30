@@ -60,7 +60,7 @@ A general algorithm must implement the :class:`tlp.Algorithm` interface as illus
       # The graph on which the algorithm is applied can be accessed through
       # the "graph" class attribute (see documentation of class tlp.Graph).
 
-      # The parameters provided by the user are stored in a dictionnary
+      # The parameters provided by the user are stored in a dictionary
       # that can be accessed through the "dataSet" class attribute.
 
       # The method must return a boolean indicating if the algorithm
@@ -102,7 +102,7 @@ A selection algorithm must implement the :class:`tlp.BooleanAlgorithm` interface
       # The graph on which the algorithm is applied can be accessed through
       # the "graph" class attribute (see documentation of class tlp.Graph).
 
-      # The parameters provided by the user are stored in a dictionnary
+      # The parameters provided by the user are stored in a dictionary
       # that can be accessed through the "dataSet" class attribute.
 
       # The result of this selection algorithm must be stored in the
@@ -148,7 +148,7 @@ A color algorithm must implement the :class:`tlp.ColorAlgorithm` interface as il
       # The graph on which the algorithm is applied can be accessed through
       # the "graph" class attribute (see documentation of class tlp.Graph).
 
-      # The parameters provided by the user are stored in a dictionnary
+      # The parameters provided by the user are stored in a dictionary
       # that can be accessed through the "dataSet" class attribute.
 
       # The result of this color algorithm must be stored in the
@@ -194,7 +194,7 @@ A measure algorithm must implement the :class:`tlp.DoubleAlgorithm` interface as
       # The graph on which the algorithm is applied can be accessed through
       # the "graph" class attribute (see documentation of class tlp.Graph).
 
-      # The parameters provided by the user are stored in a dictionnary
+      # The parameters provided by the user are stored in a dictionary
       # that can be accessed through the "dataSet" class attribute.
 
       # The result of this measure algorithm must be stored in the
@@ -240,7 +240,7 @@ An integer algorithm must implement the :class:`tlp.IntegerAlgorithm` interface 
       # The graph on which the algorithm is applied can be accessed through
       # the "graph" class attribute (see documentation of class tlp.Graph).
 
-      # The parameters provided by the user are stored in a dictionnary
+      # The parameters provided by the user are stored in a dictionary
       # that can be accessed through the "dataSet" class attribute.
 
       # The result of this integer algorithm must be stored in the
@@ -286,7 +286,7 @@ A layout algorithm must implement the :class:`tlp.LayoutAlgorithm` interface as 
       # The graph on which the algorithm is applied can be accessed through
       # the "graph" class attribute (see documentation of class tlp.Graph).
 
-      # The parameters provided by the user are stored in a dictionnary
+      # The parameters provided by the user are stored in a dictionary
       # that can be accessed through the "dataSet" class attribute.
 
       # The result of this layout algorithm must be stored in the
@@ -332,7 +332,7 @@ A size algorithm must implement the :class:`tlp.SizeAlgorithm` interface as illu
       # The graph on which the algorithm is applied can be accessed through
       # the "graph" class attribute (see documentation of class tlp.Graph).
 
-      # The parameters provided by the user are stored in a dictionnary
+      # The parameters provided by the user are stored in a dictionary
       # that can be accessed through the "dataSet" class attribute.
 
       # The result of this size algorithm must be stored in the
@@ -367,7 +367,7 @@ An export module must implement the :class:`tlp.ExportModule` interface as illus
       # The graph to export is accessible through the "graph" class attribute
       # (see documentation of class tlp.Graph).
 
-      # The parameters provided by the user are stored in a dictionnary
+      # The parameters provided by the user are stored in a dictionary
       # that can be accessed through the "dataSet" class attribute.
 
       # The os parameter is an output file stream (initialized by the Tulip GUI
@@ -406,7 +406,7 @@ An import module must implement the :class:`tlp.ImportModule` interface as illus
       # An empty graph to populate is accessible through the "graph" class attribute
       # (see documentation of class tlp.Graph).
 
-      # The parameters provided by the user are stored in a dictionnary
+      # The parameters provided by the user are stored in a dictionary
       # that can be accessed through the "dataSet" class attribute
 
       # The method must return a boolean indicating if the

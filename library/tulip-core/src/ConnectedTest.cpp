@@ -152,24 +152,6 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
     }
   });
 }
-//======================================================================
-void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
-                                               vector<set<node>> &components) {
-  std::vector<std::vector<node>> vComponents;
-  computeConnectedComponents(graph, vComponents);
-  unsigned int nbComp = vComponents.size();
-  components.resize(nbComp);
-
-  for (unsigned int i = 0; i < nbComp; ++i) {
-    const std::vector<node> &vNodes = vComponents[i];
-    std::set<node> &sNodes = components[i];
-    sNodes.clear();
-    unsigned int nbNodes = vNodes.size();
-
-    for (unsigned int j = 0; j < nbNodes; ++j)
-      sNodes.insert(vNodes[j]);
-  }
-}
 //=================================================================
 void ConnectedTest::connect(const tlp::Graph *const graph, vector<node> &toLink) {
   auto it = instance.resultsBuffer.find(graph);

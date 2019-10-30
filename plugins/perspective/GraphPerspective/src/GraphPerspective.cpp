@@ -212,9 +212,8 @@ static void logMsgToStdErr(const QString &msg) {
   }
 }
 
-#define SET_TIPS(a, tt)                                                                            \
-  a->setToolTip(QString(tt));                                                                      \
-  a->setStatusTip(a->toolTip())
+#define SET_TIPS(a, tt) a->setToolTip(tt); a->setStatusTip(a->toolTip())
+
 void GraphPerspective::updateLogIconsAndCounters() {
   GraphPerspectiveLogger::LogType logType = _logger->getLastLogType();
   QFrame *logIconCounterFrame = nullptr;
@@ -473,7 +472,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExit, "Exit from Tulip perspective", "Q");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionUndo, "Undo the latest update of the current graph",
                                  "Z");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionRedo, "Redo the latest update of the current graph",
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionRedo, "Redo the latest undone update of the current graph",
                                  "Y");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionCut,
                                  "Move the selected elements of the current graph into the "
@@ -517,8 +516,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
                                  "Alt+H");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionNew_graph, "Create a new empty graph", "N");
   // set portable tooltips
-  SET_TIPS(_ui->undoButton, "Undo the latest update of the current graph");
-  SET_TIPS(_ui->redoButton, "Redo the latest undone update of the current graph");
+  SET_TIPS(_ui->undoButton, _ui->actionUndo->toolTip());
+  SET_TIPS(_ui->redoButton, _ui->actionRedo->toolTip());
   _ui->workspaceButton->setToolTip(QString("Display the existing graph views"));
   SET_TIPS(_ui->developButton, "Display the Tulip Python IDE for developing scripts and plugins to "
                                "execute on the loaded graphs");

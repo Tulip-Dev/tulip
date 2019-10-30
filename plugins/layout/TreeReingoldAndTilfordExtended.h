@@ -42,7 +42,7 @@ struct LR {
  *  \note This algorithm only works on trees; so if the graph is not a tree
  *  it will be applied on a spanning tree.\n
  *  Let n be the number of nodes, the algorithm complexity is in O(n).\n
- *  It extends the original Reingold and Tilford by providing managment
+ *  It extends the original Reingold and Tilford by providing management
  *  of different node size and different edge length. \n \n
  *  The algorithm use the (Size)"viewSize" property for element size and the
  *  (int)"treeEdgeLength" for the edge length.

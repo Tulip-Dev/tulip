@@ -187,6 +187,8 @@ void Blocks::cleanup() {
  */
 void Blocks::split(Block *b, Block *&l, Block *&r, Constraint *c) {
   b->split(l, r, c);
+  insert(l);
+  insert(r);
 #ifdef RECTANGLE_OVERLAP_LOGGING
   ofstream f(LOGFILE, ios::app);
   f << "Split left: " << *l << endl;
@@ -201,9 +203,6 @@ void Blocks::split(Block *b, Block *&l, Block *&r, Constraint *c) {
   r->posn = r->wposn / r->weight;
   mergeRight(r);
   removeBlock(b);
-
-  insert(l);
-  insert(r);
 }
 /**
  * returns the cost total squared distance of variables from their desired

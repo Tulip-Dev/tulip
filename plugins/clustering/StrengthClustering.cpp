@@ -147,8 +147,7 @@ void StrengthClustering::computeNodePartition(double threshold,
     if (resultIndex.find(val) != resultIndex.end())
       result[resultIndex[val]].insert(n);
     else {
-      unordered_set<node> tmp;
-      result.push_back(tmp);
+      result.emplace_back(unordered_set<node>());
       resultIndex[val] = index;
       result[index].insert(n);
       ++index;
@@ -192,7 +191,6 @@ static const char *paramHelp[] = {
     // metric
     "Metric used in order to multiply strength metric computed values."
     "If one is given, the complexity is O(n log(n)), O(n) neither."
-    // do you mean "else it will be O(n)" instead of "O(n) neither"?
 };
 
 //================================================================================
@@ -204,9 +202,9 @@ StrengthClustering::StrengthClustering(PluginContext *context) : DoubleAlgorithm
 //==============================================================================
 bool StrengthClustering::run() {
   string errMsg;
-  values = new DoubleProperty(graph);
+  DoubleProperty values(graph);
 
-  if (!graph->applyPropertyAlgorithm("Strength", values, errMsg, nullptr, pluginProgress))
+  if (!graph->applyPropertyAlgorithm("Strength", &values, errMsg, nullptr, pluginProgress))
     return false;
 
   NumericProperty *metric = nullptr;
@@ -228,7 +226,7 @@ bool StrengthClustering::run() {
       maxSteps = 10;
 
     for (auto e : graph->edges()) {
-      values->setEdgeValue(e, values->getEdgeValue(e) * (mult->getEdgeDoubleValue(e) + 1));
+      values.setEdgeValue(e, values.getEdgeValue(e) * (mult->getEdgeDoubleValue(e) + 1));
 
       if (pluginProgress && ((++steps % (maxSteps / 10) == 0))) {
         pluginProgress->progress(steps, maxSteps);
@@ -264,7 +262,6 @@ bool StrengthClustering::run() {
     }
   }
 
-  delete values;
   return true;
 }
 //================================================================================

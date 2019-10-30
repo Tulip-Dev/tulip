@@ -213,7 +213,7 @@ public:
    * If there is no value associated with the given key, the input value is left untouched.
    *
    * @param key The key with which the data we want to retrieve is associated.
-   * @param value A variable wich will be overwritten with the value to retrieve.
+   * @param value A variable which will be overwritten with the value to retrieve.
    * @return bool Whether there is a value associated with given key or not.
    **/
   template <typename T>
@@ -224,7 +224,7 @@ public:
    * If no value is found, nothing is deleted.
    *
    * @param key The key with which the data we want to retrieve is associated.
-   * @param value A variable wich will be overwritten with the value to retrieve.
+   * @param value A variable which will be overwritten with the value to retrieve.
    * @return bool Whether there is a value associated with given key or not.
    **/
   template <typename T>
@@ -292,13 +292,6 @@ public:
    * @return the mangled name of the type if str exists into the DataSet. An empty string if not.
    */
   std::string getTypeName(const std::string &str) const;
-
-  /**
-   * @brief for compatibility only
-   */
-  _DEPRECATED bool exist(const std::string &str) const {
-    return exists(str);
-  }
 
   /**
    * @brief Removes an element from the DataSet

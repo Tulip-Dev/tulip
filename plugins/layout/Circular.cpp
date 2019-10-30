@@ -144,9 +144,9 @@ bool Circular::run() {
     } // end if
   }
 
-  // with two nodes, lay them on a line max rad appart
+  // with two nodes, lay them on a line max rad apart
   if (graph->numberOfNodes() <= 2) {
-    // set the (max 2) nodes maxRad appart
+    // set the (max 2) nodes maxRad apart
     double xcoord = maxRad / 2.0;
     for (auto n : graph->nodes()) {
       result->setNodeValue(n, Coord(xcoord, 0, 0));
@@ -156,7 +156,7 @@ bool Circular::run() {
   else {
     // this is the current angle
     double gamma = 0;
-    // if the ratio of maxRad/sumOfRad > .5, we need to ajust angles
+    // if the ratio of maxRad/sumOfRad > .5, we need to adjust angles
     bool angleAdjust = false;
 
     if (maxRad / sumOfRad > 0.5) {
@@ -192,7 +192,7 @@ bool Circular::run() {
       double rayon = nodeRad / sin(halfAngle);
 
       // if this node was the node that took up more than half the circle,
-      // we complet the adjustment to make sure that it does not.
+      // we complete the adjustment to make sure that it does not.
       if (angleAdjust && (maxRadNode == n)) {
         halfAngle = M_PI / 2.0;
         rayon = nodeRad;

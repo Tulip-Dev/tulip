@@ -74,7 +74,7 @@ ViewWidget::ViewWidget()
 
 ViewWidget::~ViewWidget() {
   // ensure to uninstall event filter of current interactor to
-  // avoid possible crashs when closing the view
+  // avoid possible crashes when closing the view
   if (currentInteractor()) {
     currentInteractor()->uninstall();
   }

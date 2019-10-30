@@ -17,6 +17,8 @@
  *
  */
 
+#include <tulip/ConnectedTest.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/StringCollection.h>
 

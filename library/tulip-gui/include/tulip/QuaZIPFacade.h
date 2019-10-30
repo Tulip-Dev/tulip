@@ -45,7 +45,7 @@ public:
     @param archivePath The absolute file path of the ZIP file to create.
     @param progress A progress handler
     @warning If an archive already exists with that name, it will be overwritten.
-    @return true if compression process went sucessfuly
+    @return true if compression process went sucessfully
     */
   static bool zipDir(const QString &rootPath, const QString &archivePath,
                      tlp::PluginProgress *progress = nullptr);
@@ -58,7 +58,7 @@ public:
     @param archivePath The absolute file path of the ZIP file to uncompress.
     @param progress A progress handler
     @warning If some files already exist in the target directory, they will be overwritten.
-    @return true if uncompression process went sucessfuly
+    @return true if uncompression process went sucessfully
     */
   static bool unzip(const QString &rootPath, const QString &archivePath,
                     tlp::PluginProgress *progress = nullptr);

@@ -105,40 +105,6 @@ void GlMainWidget::clearFirstQGLWidget() {
   }
 }
 
-bool GlMainWidget::doSelect(const int x, const int y, ElementType &type, node &n, edge &e,
-                            GlLayer *layer) {
-  SelectedEntity entity;
-  bool foundEntity = pickNodesEdges(x, y, entity, layer);
-
-  if (!foundEntity)
-    return false;
-
-  if (entity.getEntityType() == SelectedEntity::NODE_SELECTED) {
-    n = node(entity.getComplexEntityId());
-    type = NODE;
-  } else {
-    e = edge(entity.getComplexEntityId());
-    type = EDGE;
-  }
-
-  return true;
-}
-
-void GlMainWidget::doSelect(const int x, const int y, const int width, const int height,
-                            vector<node> &sNode, vector<edge> &sEdge, GlLayer *layer) {
-  std::vector<SelectedEntity> nodes;
-  std::vector<SelectedEntity> edges;
-  pickNodesEdges(x, y, width, height, nodes, edges, layer);
-
-  for (std::vector<SelectedEntity>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
-    sNode.push_back(node((*it).getComplexEntityId()));
-  }
-
-  for (std::vector<SelectedEntity>::iterator it = edges.begin(); it != edges.end(); ++it) {
-    sEdge.push_back(edge((*it).getComplexEntityId()));
-  }
-}
-
 //==================================================
 GlMainWidget::GlMainWidget(QWidget *parent, View *view)
     : QGLWidget(GlInit(), parent, getFirstQGLWidget()), scene(new GlQuadTreeLODCalculator),
@@ -431,18 +397,6 @@ bool GlMainWidget::pickNodesEdges(const int x, const int y, SelectedEntity &sele
   }
 
   return false;
-}
-//=====================================================
-bool GlMainWidget::outputEPS(int size, int, const char *filename) {
-  makeCurrent();
-  scene.outputEPS(size, filename);
-  return true;
-}
-//=====================================================
-bool GlMainWidget::outputSVG(int size, const char *filename) {
-  makeCurrent();
-  scene.outputSVG(size, filename);
-  return true;
 }
 //=====================================================
 void GlMainWidget::getTextureRealSize(int width, int height, int &textureRealWidth,
