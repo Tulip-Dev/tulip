@@ -78,8 +78,8 @@ TLP_SCOPE Graph *loadGraph(const std::string &filename, tlp::PluginProgress *pro
 
 /**
  * @ingroup Graph
- * @brief Saves the corresponding graph to a file (extension can be any of the Tulip supported output
- *graph file format)..
+ * @brief Saves the corresponding graph to a file (extension can be any of the Tulip supported
+ *output graph file format)..
  *
  * This function serializes the corresponding graph and all its subgraphs (depending on the format)
  *to a file
@@ -333,7 +333,6 @@ public:
    */
   Graph *inducedSubGraph(const std::vector<node> &nodes, Graph *parentSubGraph = nullptr,
                          const std::string &name = "unnamed");
-
 
   /**
    * @brief Creates and returns a new subgraph of the graph induced by a selection of nodes and

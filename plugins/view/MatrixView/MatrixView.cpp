@@ -246,8 +246,7 @@ void MatrixView::fillContextMenu(QMenu *menu, const QPointF &point) {
 
     menu->addSeparator();
 
-    QAction *action =
-        menu->addAction("Toggle selection", this, SLOT(addRemoveItemToSelection()));
+    QAction *action = menu->addAction("Toggle selection", this, SLOT(addRemoveItemToSelection()));
     action->setToolTip(QString("Invert the selection of the ") + (isNode ? "node #" : "edge #") +
                        sId);
     action = menu->addAction("Select", this, SLOT(selectItem()));

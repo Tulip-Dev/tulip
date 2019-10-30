@@ -457,8 +457,8 @@ private:
   /**
    * @brief getOutObjects Retrieves Outbound objects (observing objects; i.e. Listeners and
    * Observers).
-   * @return an iterator on out objects (Listener/Observer), the iterator guarantees that all objects
-   * are alive (not deleted during hold or notify).
+   * @return an iterator on out objects (Listener/Observer), the iterator guarantees that all
+   * objects are alive (not deleted during hold or notify).
    */
   tlp::Iterator<tlp::node> *getOutObjects() const;
 

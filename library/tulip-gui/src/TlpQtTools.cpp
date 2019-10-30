@@ -212,7 +212,8 @@ public:
         bool imageLoaded = image.loadFromData(imageData);
 
         if (!imageLoaded) {
-          tlp::error() << "Error when downloading texture from url " << filename.c_str() << std::endl;
+          tlp::error() << "Error when downloading texture from url " << filename.c_str()
+                       << std::endl;
           return false;
         }
       }

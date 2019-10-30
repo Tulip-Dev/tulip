@@ -212,7 +212,9 @@ static void logMsgToStdErr(const QString &msg) {
   }
 }
 
-#define SET_TIPS(a, tt) a->setToolTip(tt); a->setStatusTip(a->toolTip())
+#define SET_TIPS(a, tt)                                                                            \
+  a->setToolTip(tt);                                                                               \
+  a->setStatusTip(a->toolTip())
 
 void GraphPerspective::updateLogIconsAndCounters() {
   GraphPerspectiveLogger::LogType logType = _logger->getLastLogType();
@@ -472,8 +474,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExit, "Exit from Tulip perspective", "Q");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionUndo, "Undo the latest update of the current graph",
                                  "Z");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionRedo, "Redo the latest undone update of the current graph",
-                                 "Y");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionRedo,
+                                 "Redo the latest undone update of the current graph", "Y");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionCut,
                                  "Move the selected elements of the current graph into the "
                                  "clipboard (the selected edges ends are selected too)",

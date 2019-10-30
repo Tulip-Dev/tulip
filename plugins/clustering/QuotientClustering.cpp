@@ -284,48 +284,48 @@ public:
 
           if (edgeFn != DoubleProperty::NO_CALC) {
             for (auto property : graph->getObjectProperties()) {
-	      DoubleProperty *metric = dynamic_cast<DoubleProperty *>(property);
-	      if (metric) {
-		auto pName = property->getName();
-		// try to avoid view... properties
-		if (pName.compare(0, 4, "view") != 0 || pName == "viewMetric") {
-		  double value = metric->getEdgeValue(mE);
-		  double opValue = metric->getEdgeValue(op);
+              DoubleProperty *metric = dynamic_cast<DoubleProperty *>(property);
+              if (metric) {
+                auto pName = property->getName();
+                // try to avoid view... properties
+                if (pName.compare(0, 4, "view") != 0 || pName == "viewMetric") {
+                  double value = metric->getEdgeValue(mE);
+                  double opValue = metric->getEdgeValue(op);
 
-		  switch (edgeFn) {
-		  case DoubleProperty::AVG_CALC:
-		    value = (value + opValue) / 2;
-		    break;
+                  switch (edgeFn) {
+                  case DoubleProperty::AVG_CALC:
+                    value = (value + opValue) / 2;
+                    break;
 
-		  case DoubleProperty::SUM_CALC:
-		    value += opValue;
-		    break;
+                  case DoubleProperty::SUM_CALC:
+                    value += opValue;
+                    break;
 
-		  case DoubleProperty::MAX_CALC:
+                  case DoubleProperty::MAX_CALC:
 
-		    if (value < opValue)
-		      value = opValue;
+                    if (value < opValue)
+                      value = opValue;
 
-		    break;
+                    break;
 
-		  case DoubleProperty::MIN_CALC:
+                  case DoubleProperty::MIN_CALC:
 
-		    if (value > opValue)
-		      value = opValue;
+                    if (value > opValue)
+                      value = opValue;
 
-		    break;
+                    break;
 
-		  case DoubleProperty::NO_CALC:
-		    break;
-		  }
+                  case DoubleProperty::NO_CALC:
+                    break;
+                  }
 
-		  if (opOK)
-		    metric->setEdgeValue(op, value);
-		  else
-		    metric->setEdgeValue(mE, value);
-		}
-	      }
-	    }
+                  if (opOK)
+                    metric->setEdgeValue(op, value);
+                  else
+                    metric->setEdgeValue(mE, value);
+                }
+              }
+            }
           }
 
           // compute cardinaly if needed

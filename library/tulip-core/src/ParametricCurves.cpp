@@ -139,9 +139,9 @@ static void computeCoefficients(double t, unsigned int nbControlPoints) {
 
       if (tCoeff.size() < nbControlPoints) {
         size_t oldSize = tCoeff.size();
-	tCoeff.resize(nbControlPoints);
-	vector<double> &sCoeff = sCoeffs[t];
-	sCoeff.resize(nbControlPoints);
+        tCoeff.resize(nbControlPoints);
+        vector<double> &sCoeff = sCoeffs[t];
+        sCoeff.resize(nbControlPoints);
 
         for (size_t i = oldSize; i < nbControlPoints; ++i) {
           tCoeff[i] = pow(t, double(i));

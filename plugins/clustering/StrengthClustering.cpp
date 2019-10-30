@@ -101,8 +101,8 @@ double StrengthClustering::computeMQValue(const vector<unordered_set<node>> &par
 }
 
 //==============================================================================
-void StrengthClustering::computeNodePartition(double threshold,
-                                              vector<unordered_set<node>> &result, tlp::DoubleProperty &values) {
+void StrengthClustering::computeNodePartition(double threshold, vector<unordered_set<node>> &result,
+                                              tlp::DoubleProperty &values) {
   Graph *tmpGraph = graph->addCloneSubGraph();
 
   for (auto e : graph->edges()) {
@@ -157,7 +157,8 @@ void StrengthClustering::computeNodePartition(double threshold,
   graph->delAllSubGraphs(tmpGraph);
 }
 //==============================================================================
-double StrengthClustering::findBestThreshold(int numberOfSteps, bool &stopped, tlp::DoubleProperty &values) {
+double StrengthClustering::findBestThreshold(int numberOfSteps, bool &stopped,
+                                             tlp::DoubleProperty &values) {
   double maxMQ = -2;
   double threshold = values.getEdgeMin(graph);
   double deltaThreshold =
@@ -190,8 +191,7 @@ double StrengthClustering::findBestThreshold(int numberOfSteps, bool &stopped, t
 static const char *paramHelp[] = {
     // metric
     "Metric used in order to multiply strength metric computed values."
-    "If one is given, the complexity is O(n log(n)), O(n) neither."
-};
+    "If one is given, the complexity is O(n log(n)), O(n) neither."};
 
 //================================================================================
 StrengthClustering::StrengthClustering(PluginContext *context) : DoubleAlgorithm(context) {
@@ -246,7 +246,7 @@ bool StrengthClustering::run() {
     pluginProgress->progress(0, NB_TEST + 1);
   }
 
-  double threshold = findBestThreshold(NB_TEST, stopped,values );
+  double threshold = findBestThreshold(NB_TEST, stopped, values);
 
   if (stopped)
     return pluginProgress->state() != TLP_CANCEL;

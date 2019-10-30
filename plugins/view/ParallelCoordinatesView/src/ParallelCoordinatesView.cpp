@@ -562,15 +562,15 @@ void ParallelCoordinatesView::buildContextMenu() {
   viewSetupMenu = new QMenu("View setup");
   viewSetupMenu->addAction("Layout type")->setEnabled(false);
   QActionGroup *layoutActionGroup = new QActionGroup(this);
-  classicLayout =
-      viewSetupMenu->addAction("Classic layout", this, SLOT(centerSetupAndDrawView()));
+  classicLayout = viewSetupMenu->addAction("Classic layout", this, SLOT(centerSetupAndDrawView()));
   classicLayout->setToolTip("Use parallel axis layout");
   classicLayout->setCheckable(true);
   classicLayout->setChecked(true);
   layoutActionGroup->addAction(classicLayout);
   circularLayout =
       viewSetupMenu->addAction("Circular layout", this, SLOT(centerSetupAndDrawView()));
-  circularLayout->setToolTip("In the circular layout, the axis are laid regularly as the radius of a circle");
+  circularLayout->setToolTip(
+      "In the circular layout, the axis are laid regularly as the radius of a circle");
   circularLayout->setCheckable(true);
   layoutActionGroup->addAction(circularLayout);
   viewSetupMenu->addSeparator();
@@ -578,18 +578,21 @@ void ParallelCoordinatesView::buildContextMenu() {
   viewSetupMenu->addAction("Lines type")->setEnabled(false);
   QActionGroup *lineTypeActionGroup = new QActionGroup(this);
   straightLinesType = viewSetupMenu->addAction("Polyline", this, SLOT(setupAndDrawView()));
-  straightLinesType->setToolTip("Draw a polyline joining the consecutive coordinates belonging to the same graph element");
+  straightLinesType->setToolTip(
+      "Draw a polyline joining the consecutive coordinates belonging to the same graph element");
   straightLinesType->setCheckable(true);
   straightLinesType->setChecked(true);
   lineTypeActionGroup->addAction(straightLinesType);
   catmullRomSplineLinesType =
       viewSetupMenu->addAction("Catmull-Rom spline", this, SLOT(setupAndDrawView()));
-  catmullRomSplineLinesType->setToolTip("Draw a Catmull-Rom spline joining the consecutive coordinates belonging to the same graph element");
+  catmullRomSplineLinesType->setToolTip("Draw a Catmull-Rom spline joining the consecutive "
+                                        "coordinates belonging to the same graph element");
   catmullRomSplineLinesType->setCheckable(true);
   lineTypeActionGroup->addAction(catmullRomSplineLinesType);
   cubicBSplineInterpolationLinesType =
       viewSetupMenu->addAction("Cubic B-spline interpolation", this, SLOT(setupAndDrawView()));
-  cubicBSplineInterpolationLinesType->setToolTip("Draw a cubic B-spline joining the consecutive coordinates belonging to the same graph element");
+  cubicBSplineInterpolationLinesType->setToolTip("Draw a cubic B-spline joining the consecutive "
+                                                 "coordinates belonging to the same graph element");
   cubicBSplineInterpolationLinesType->setCheckable(true);
   lineTypeActionGroup->addAction(catmullRomSplineLinesType);
   viewSetupMenu->addSeparator();
@@ -602,7 +605,8 @@ void ParallelCoordinatesView::buildContextMenu() {
   thickLines->setChecked(true);
   lineActionGroup->addAction(thickLines);
   thinLines = viewSetupMenu->addAction("Thin lines", this, SLOT(setupAndDrawView()));
-  thinLines->setToolTip("The thickness is thin and the same for all the  curves representing the graph elements");
+  thinLines->setToolTip(
+      "The thickness is thin and the same for all the  curves representing the graph elements");
   thinLines->setCheckable(true);
   lineActionGroup->addAction(thinLines);
 
@@ -615,16 +619,20 @@ void ParallelCoordinatesView::buildContextMenu() {
   highlightMenuSeparator = new QAction(nullptr);
   highlightMenuSeparator->setSeparator(true);
   selectHighlightedElements = new QAction("Select highlighted elements", nullptr);
-  selectHighlightedElements->setToolTip("Select the graph elements corresponding to the currently highlighted curves");
+  selectHighlightedElements->setToolTip(
+      "Select the graph elements corresponding to the currently highlighted curves");
   connect(selectHighlightedElements, SIGNAL(triggered()), this,
           SLOT(selectHighlightedElementsSlot()));
   addSelectHighlightedElements = new QAction("Add highlighted elements to selection", nullptr);
-  addSelectHighlightedElements->setToolTip("Add the graph elements corresponding to the currently highlighted curves to the current selection");
+  addSelectHighlightedElements->setToolTip("Add the graph elements corresponding to the currently "
+                                           "highlighted curves to the current selection");
   connect(addSelectHighlightedElements, SIGNAL(triggered()), this,
           SLOT(addSelectHighlightedElementsSlot()));
   removeSelectHighlightedElements =
       new QAction("Remove highlighted elements to selection", nullptr);
-  removeSelectHighlightedElements->setToolTip("Remove the graph elements corresponding to the currently highlighted curves from the current selection");
+  removeSelectHighlightedElements->setToolTip(
+      "Remove the graph elements corresponding to the currently highlighted curves from the "
+      "current selection");
   connect(removeSelectHighlightedElements, SIGNAL(triggered()), this,
           SLOT(removeSelectHighlightedElementsSlot()));
   resetHightlightedElements = new QAction("Reset highlighting of elements", nullptr);
