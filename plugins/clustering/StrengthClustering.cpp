@@ -102,11 +102,11 @@ double StrengthClustering::computeMQValue(const vector<unordered_set<node>> &par
 
 //==============================================================================
 void StrengthClustering::computeNodePartition(double threshold,
-                                              vector<unordered_set<node>> &result) {
+                                              vector<unordered_set<node>> &result, tlp::DoubleProperty &values) {
   Graph *tmpGraph = graph->addCloneSubGraph();
 
   for (auto e : graph->edges()) {
-    if (values->getEdgeValue(e) < threshold) {
+    if (values.getEdgeValue(e) < threshold) {
       auto eEnds = graph->ends(e);
 
       if (graph->deg(eEnds.first) > 1 && graph->deg(eEnds.second) > 1)
@@ -157,16 +157,16 @@ void StrengthClustering::computeNodePartition(double threshold,
   graph->delAllSubGraphs(tmpGraph);
 }
 //==============================================================================
-double StrengthClustering::findBestThreshold(int numberOfSteps, bool &stopped) {
+double StrengthClustering::findBestThreshold(int numberOfSteps, bool &stopped, tlp::DoubleProperty &values) {
   double maxMQ = -2;
-  double threshold = values->getEdgeMin(graph);
+  double threshold = values.getEdgeMin(graph);
   double deltaThreshold =
-      (values->getEdgeMax(graph) - values->getEdgeMin(graph)) / double(numberOfSteps);
+      (values.getEdgeMax(graph) - values.getEdgeMin(graph)) / double(numberOfSteps);
   int steps = 0;
 
-  for (double i = values->getEdgeMin(graph); i < values->getEdgeMax(graph); i += deltaThreshold) {
+  for (double i = values.getEdgeMin(graph); i < values.getEdgeMax(graph); i += deltaThreshold) {
     vector<unordered_set<node>> tmp;
-    computeNodePartition(i, tmp);
+    computeNodePartition(i, tmp, values);
 
     if (pluginProgress && ((++steps % (numberOfSteps / 10)) == 0)) {
       pluginProgress->progress(steps, numberOfSteps);
@@ -246,13 +246,13 @@ bool StrengthClustering::run() {
     pluginProgress->progress(0, NB_TEST + 1);
   }
 
-  double threshold = findBestThreshold(NB_TEST, stopped);
+  double threshold = findBestThreshold(NB_TEST, stopped,values );
 
   if (stopped)
     return pluginProgress->state() != TLP_CANCEL;
 
   vector<unordered_set<node>> tmp;
-  computeNodePartition(threshold, tmp);
+  computeNodePartition(threshold, tmp, values);
 
   for (unsigned int i = 0; i < tmp.size(); ++i) {
     unordered_set<node>::const_iterator it;

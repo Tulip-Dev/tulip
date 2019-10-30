@@ -54,10 +54,9 @@ public:
   bool check(std::string &) override;
 
 private:
-  void computeNodePartition(double threshold, std::vector<std::unordered_set<tlp::node>> &);
+  void computeNodePartition(double threshold, std::vector<std::unordered_set<tlp::node>> &, tlp::DoubleProperty &);
   double computeMQValue(const std::vector<std::unordered_set<tlp::node>> &partition, tlp::Graph *);
-  double findBestThreshold(int numberOfSteps, bool &stopped);
-  tlp::DoubleProperty *values;
+  double findBestThreshold(int numberOfSteps, bool &stopped, tlp::DoubleProperty &values);
 };
 
 #endif
