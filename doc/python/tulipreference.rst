@@ -236,8 +236,6 @@ Creation and Modification of the subgraph hierarchy
 
 .. automethod:: tulip::tlp.Graph.inducedSubGraph
 
-.. automethod:: tulip::tlp.Graph.inducedSubGraph
-
 .. automethod:: tulip::tlp.Graph.delSubGraph
 
 .. automethod:: tulip::tlp.Graph.delAllSubGraphs
@@ -346,8 +344,6 @@ Information about the graph structure
 .. automethod:: tulip::tlp.Graph.removeAttribute
 
 .. automethod:: tulip::tlp.Graph.existAttribute
-
-.. automethod:: tulip::tlp.Graph.attributeExist
 
 .. automethod:: tulip::tlp.Graph.isEmpty
 
@@ -533,8 +529,6 @@ Meta-nodes management
 
 .. automethod:: tulip::tlp.Graph.createMetaNode
 
-.. automethod:: tulip::tlp.Graph.createMetaNode
-
 .. automethod:: tulip::tlp.Graph.createMetaNodes
 
 .. automethod:: tulip::tlp.Graph.openMetaNode
@@ -703,7 +697,7 @@ tlp.DoubleProperty
 .. autoclass:: tulip::tlp.DoubleProperty
         :members: copy, copy, copy, getNodesEqualTo, getEdgesEqualTo, getNodeMin, getNodeMax, getEdgeMin, getEdgeMax,
 	          getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue,
-            setAllEdgeValue, setAllEdgeValue, setAllNodeValue, setAllNodeValue,
+            setAllEdgeValue, setAllNodeValue,
             setValueToGraphNodes, setValueToGraphEdges, setEdgeValue, setNodeValue, setNodeDefaultValue, setEdgeDefaultValue
 
 tlp.IntegerProperty
@@ -712,7 +706,7 @@ tlp.IntegerProperty
 .. autoclass:: tulip::tlp.IntegerProperty
         :members: copy, copy, copy, getNodesEqualTo, getEdgesEqualTo, getNodeMin, getNodeMax, getEdgeMin, getEdgeMax,
                   getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue,
-                  setAllEdgeValue, setAllEdgeValue, setAllNodeValue, setAllNodeValue,
+                  setAllEdgeValue, setAllNodeValue,
                   setValueToGraphNodes, setValueToGraphEdges, setEdgeValue, setNodeValue, setNodeDefaultValue, setEdgeDefaultValue
 
 tlp.LayoutProperty
@@ -724,7 +718,7 @@ tlp.LayoutProperty
             getNodesEqualTo, getEdgesEqualTo, edgeLength, getMin, getMax, normalize, perfectAspectRatio,
             rotateX, rotateX, rotateY, rotateY, rotateZ, rotateZ, scale, scale, translate, translate,
             getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue,
-            setAllEdgeValue, setAllEdgeValue, setAllNodeValue, setAllNodeValue,
+            setAllEdgeValue, setAllNodeValue,
             setValueToGraphNodes, setValueToGraphEdges, setEdgeValue, setNodeValue, setNodeDefaultValue, setEdgeDefaultValue
 
 tlp.SizeProperty
@@ -733,7 +727,7 @@ tlp.SizeProperty
 .. autoclass:: tulip::tlp.SizeProperty
         :members: copy, copy, copy, getNodesEqualTo, getEdgesEqualTo, getMin, getMax, scale, scale,
                   getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue,
-                  setAllEdgeValue, setAllEdgeValue, setAllNodeValue, setAllNodeValue,
+                  setAllEdgeValue, setAllNodeValue,
                   setValueToGraphNodes, setValueToGraphEdges, setEdgeValue, setNodeValue, setNodeDefaultValue, setEdgeDefaultValue
 
 tlp.StringProperty
@@ -741,7 +735,7 @@ tlp.StringProperty
 
 .. autoclass:: tulip::tlp.StringProperty
         :members: copy, copy, copy, getNodesEqualTo, getEdgesEqualTo, getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue,
-                  setAllEdgeValue, setAllEdgeValue, setAllNodeValue, setAllNodeValue,
+                  setAllEdgeValue, setAllNodeValue,
                   setValueToGraphNodes, setValueToGraphEdges, setEdgeValue, setNodeValue, setNodeDefaultValue, setEdgeDefaultValue
 
 tlp.BooleanVectorProperty
@@ -749,7 +743,7 @@ tlp.BooleanVectorProperty
 
 .. autoclass:: tulip::tlp.BooleanVectorProperty
         :members: copy, copy, copy, getNodesEqualTo, getEdgesEqualTo, getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue,
-            setAllEdgeValue, setAllEdgeValue, setAllNodeValue, setAllNodeValue,
+            setAllEdgeValue, setAllNodeValue,
             setValueToGraphNodes, setValueToGraphEdges, setEdgeValue, setNodeValue, setNodeDefaultValue, setEdgeDefaultValue,
 	          getNodeEltValue, setNodeEltValue, pushBackNodeEltValue, popBackNodeEltValue,
 	          resizeNodeValue, resizeNodeValue, getEdgeEltValue, setEdgeEltValue,
@@ -760,7 +754,7 @@ tlp.CoordVectorProperty
 
 .. autoclass:: tulip::tlp.CoordVectorProperty
         :members: copy, copy, copy, getNodesEqualTo, getEdgesEqualTo, getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue,
-            setAllEdgeValue, setAllEdgeValue, setAllNodeValue, setAllNodeValue,
+            setAllEdgeValue, setAllNodeValue,
             setValueToGraphNodes, setValueToGraphEdges, setEdgeValue, setNodeValue, setNodeDefaultValue, setEdgeDefaultValue,
 	          getNodeEltValue, setNodeEltValue, pushBackNodeEltValue, popBackNodeEltValue,
 	          resizeNodeValue, resizeNodeValue, getEdgeEltValue, setEdgeEltValue,
@@ -771,7 +765,7 @@ tlp.ColorVectorProperty
 
 .. autoclass:: tulip::tlp.ColorVectorProperty
         :members: copy, copy, copy, getNodesEqualTo, getEdgesEqualTo, getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue,
-            setAllEdgeValue, setAllEdgeValue, setAllNodeValue, setAllNodeValue,
+            setAllEdgeValue, setAllNodeValue,
             setValueToGraphNodes, setValueToGraphEdges, setEdgeValue, setNodeValue, setNodeDefaultValue, setEdgeDefaultValue,
 	          getNodeEltValue, setNodeEltValue, pushBackNodeEltValue, popBackNodeEltValue,
 	          resizeNodeValue, resizeNodeValue, getEdgeEltValue, setEdgeEltValue,
@@ -782,7 +776,7 @@ tlp.DoubleVectorProperty
 
 .. autoclass:: tulip::tlp.DoubleVectorProperty
         :members: copy, copy, copy, getNodesEqualTo, getEdgesEqualTo, getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue,
-            setAllEdgeValue, setAllEdgeValue, setAllNodeValue, setAllNodeValue,
+            setAllEdgeValue, setAllNodeValue,
             setValueToGraphNodes, setValueToGraphEdges, setEdgeValue, setNodeValue, setNodeDefaultValue, setEdgeDefaultValue,
 	          getNodeEltValue, setNodeEltValue, pushBackNodeEltValue, popBackNodeEltValue,
 	          resizeNodeValue, resizeNodeValue, getEdgeEltValue, setEdgeEltValue,
@@ -804,7 +798,7 @@ tlp.SizeVectorProperty
 
 .. autoclass:: tulip::tlp.SizeVectorProperty
         :members: copy, copy, copy, getNodesEqualTo, getEdgesEqualTo, getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue,
-            setAllEdgeValue, setAllEdgeValue, setAllNodeValue, setAllNodeValue,
+            setAllEdgeValue, setAllNodeValue,
             setValueToGraphNodes, setValueToGraphEdges, setEdgeValue, setNodeValue, setNodeDefaultValue, setEdgeDefaultValue,
 	          getNodeEltValue, setNodeEltValue, pushBackNodeEltValue, popBackNodeEltValue,
 	          resizeNodeValue, resizeNodeValue, getEdgeEltValue, setEdgeEltValue,
@@ -815,7 +809,7 @@ tlp.StringVectorProperty
 
 .. autoclass:: tulip::tlp.StringVectorProperty
         :members: copy, copy, copy, getNodesEqualTo, getEdgesEqualTo, getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue,
-            setAllEdgeValue, setAllEdgeValue, setAllNodeValue, setAllNodeValue,
+            setAllEdgeValue, setAllNodeValue,
             setValueToGraphNodes, setValueToGraphEdges, setEdgeValue, setNodeValue, setNodeDefaultValue, setEdgeDefaultValue,
 	          getNodeEltValue, setNodeEltValue, pushBackNodeEltValue, popBackNodeEltValue,
 	          resizeNodeValue, resizeNodeValue, getEdgeEltValue, setEdgeEltValue,
