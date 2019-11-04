@@ -291,11 +291,11 @@ bool PlanarityTestImpl::findObstruction(Graph *sG, node n, list<node> &terminalN
   case 2: {
     node t1, t2;
     unsigned int i = 0;
-    for(auto it = terminalNodes.begin(); i < 2; ++it, ++i) {
+    for (auto it = terminalNodes.begin(); i < 2; ++it, ++i) {
       if (i == 0)
-	t1 = *it;
+        t1 = *it;
       else
-	t2 = *it;
+        t2 = *it;
     }
     node m = lcaBetweenTermNodes(t1, t2);
     node t12 = lastPNode(t1, m), t22 = lastPNode(t2, m);
@@ -428,13 +428,13 @@ bool PlanarityTestImpl::findObstruction(Graph *sG, node n, list<node> &terminalN
     if (embed) {
       node t1, t2, t3;
       unsigned int i = 0;
-      for(auto it = terminalNodes.begin(); i < 3; ++it, ++i) {
-	if (i == 0)
-	  t1 = *it;
-	else if (i == 1)
-	  t2 = *it;
-	else
-	  t3 = *it;
+      for (auto it = terminalNodes.begin(); i < 3; ++it, ++i) {
+        if (i == 0)
+          t1 = *it;
+        else if (i == 1)
+          t2 = *it;
+        else
+          t3 = *it;
       }
       node cNode, q;
       int countMin, countF;

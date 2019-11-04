@@ -261,12 +261,12 @@ static void computeBezierSegmentControlPoints(const Coord &pBefore, const Coord 
   float d32alpha = pow(d3, 2 * alpha);
   bezierSegmentControlPoints.emplace_back(
       (d12alpha * pEnd - d22alpha * pBefore +
-             (2 * d12alpha + 3 * d1alpha * d2alpha + d22alpha) * pStart) /
-            (3 * d1alpha * (d1alpha + d2alpha)));
+       (2 * d12alpha + 3 * d1alpha * d2alpha + d22alpha) * pStart) /
+      (3 * d1alpha * (d1alpha + d2alpha)));
   bezierSegmentControlPoints.emplace_back(
       (d32alpha * pStart - d22alpha * pAfter +
-             (2 * d32alpha + 3 * d3alpha * d2alpha + d22alpha) * pEnd) /
-            (3 * d3alpha * (d3alpha + d2alpha)));
+       (2 * d32alpha + 3 * d3alpha * d2alpha + d22alpha) * pEnd) /
+      (3 * d3alpha * (d3alpha + d2alpha)));
   bezierSegmentControlPoints.emplace_back(pEnd);
 }
 

@@ -105,9 +105,8 @@ void AcyclicTest::makeAcyclic(Graph *graph, vector<edge> &reversed,
     if (eEnds.first == eEnds.second) {
       node n1 = graph->addNode();
       node n2 = graph->addNode();
-      selfLoops.emplace_back(n1, n2, graph->addEdge(eEnds.first, n1),
-			     graph->addEdge(n1, n2), graph->addEdge(eEnds.first, n2),
-			     e);
+      selfLoops.emplace_back(n1, n2, graph->addEdge(eEnds.first, n1), graph->addEdge(n1, n2),
+                             graph->addEdge(eEnds.first, n2), e);
       edgesToDel.push_back(e);
     }
   }

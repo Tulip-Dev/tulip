@@ -664,8 +664,7 @@ void LayoutProperty::computeEmbedding(const node n, Graph *sg) {
   const Coord &center = getNodeValue(n);
   forward_list<pCE>::iterator it, bit;
 
-  for (bit = adjCoord.before_begin(), it = adjCoord.begin();
-       it != adjCoord.end(); ++it) {
+  for (bit = adjCoord.before_begin(), it = adjCoord.begin(); it != adjCoord.end(); ++it) {
     it->first -= center;
     float norm = it->first.norm();
 
@@ -727,8 +726,7 @@ vector<double> LayoutProperty::angularResolutions(const node n, const Graph *sg)
   const Coord &center = getNodeValue(n);
   forward_list<Coord>::iterator it, bit;
 
-  for (bit = adjCoord.before_begin(), it = adjCoord.begin();
-       it != adjCoord.end(); ++it) {
+  for (bit = adjCoord.before_begin(), it = adjCoord.begin(); it != adjCoord.end(); ++it) {
     (*it) -= center;
     float norm = (*it).norm();
 
