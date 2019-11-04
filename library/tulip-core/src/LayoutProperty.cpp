@@ -18,6 +18,7 @@
  */
 #include <cmath>
 #include <cfloat>
+#include <forward_list>
 #include <unordered_map>
 
 #include <tulip/LayoutProperty.h>
@@ -643,36 +644,44 @@ void LayoutProperty::computeEmbedding(const node n, Graph *sg) {
   //===========
   typedef pair<Coord, edge> pCE;
 
-  list<pCE> adjCoord;
+  forward_list<pCE> adjCoord;
+  unsigned int adjSize = 0;
   // Extract all adjacent edges, the bends are taken
   // into account.
-  for (auto ite : sg->getInOutEdges(n)) {
-    if (!getEdgeValue(ite).empty()) {
-      if (sg->source(ite) == n)
-        adjCoord.push_back(pCE(getEdgeValue(ite).front(), ite));
+  for (auto e : sg->getInOutEdges(n)) {
+    if (getEdgeValue(e).empty())
+      adjCoord.emplace_front(getNodeValue(sg->opposite(e, n)), e);
+    else {
+      const auto &bends = getEdgeValue(e);
+      if (sg->source(e) == n)
+        adjCoord.emplace_front(bends.front(), e);
       else
-        adjCoord.push_back(pCE(getEdgeValue(ite).back(), ite));
-    } else {
-      adjCoord.push_back(pCE(getNodeValue(sg->opposite(ite, n)), ite));
+        adjCoord.emplace_front(bends.back(), e);
     }
+    ++adjSize;
   }
 
   const Coord &center = getNodeValue(n);
-  list<pCE>::iterator it;
+  forward_list<pCE>::iterator it, bit;
 
-  for (it = adjCoord.begin(); it != adjCoord.end();) {
+  for (bit = adjCoord.before_begin(), it = adjCoord.begin();
+       it != adjCoord.end(); ++it) {
     it->first -= center;
     float norm = it->first.norm();
 
     if (norm < 1E-5) {
-      it = adjCoord.erase(it);
+      adjCoord.erase_after(bit);
+      it = bit;
       cerr << "[ERROR]:" << __PRETTY_FUNCTION__ << " :: norms are too small for node:" << n << endl;
-    } else
-      ++it;
+      --adjSize;
+    }
+    bit = it;
   }
 
   adjCoord.sort(AngularOrder());
+
   vector<edge> tmpOrder;
+  tmpOrder.reserve(adjSize);
 
   for (it = adjCoord.begin(); it != adjCoord.end(); ++it) {
     tmpOrder.push_back(it->second);
@@ -700,50 +709,52 @@ vector<double> LayoutProperty::angularResolutions(const node n, const Graph *sg)
   }
 
   //===========
-  list<Coord> adjCoord;
+  forward_list<Coord> adjCoord;
   // Extract all adjacent edges, the bends are taken
   // into account.
-  for (auto ite : sg->getInOutEdges(n)) {
-    if (!getEdgeValue(ite).empty()) {
-      if (sg->source(ite) == n)
-        adjCoord.push_back(getEdgeValue(ite).front());
+  for (auto e : sg->getInOutEdges(n)) {
+    if (getEdgeValue(e).empty())
+      adjCoord.emplace_front(sg->opposite(e, n));
+    else {
+      if (sg->source(e) == n)
+        adjCoord.emplace_front(getEdgeValue(e).front());
       else
-        adjCoord.push_back(getEdgeValue(ite).back());
-    } else {
-      adjCoord.push_back(getNodeValue(sg->opposite(ite, n)));
+        adjCoord.emplace_front(getEdgeValue(e).back());
     }
   }
 
   // Compute normalized vectors associated to incident edges.
   const Coord &center = getNodeValue(n);
-  list<Coord>::iterator it;
+  forward_list<Coord>::iterator it, bit;
 
-  for (it = adjCoord.begin(); it != adjCoord.end();) {
+  for (bit = adjCoord.before_begin(), it = adjCoord.begin();
+       it != adjCoord.end(); ++it) {
     (*it) -= center;
     float norm = (*it).norm();
 
-    if (norm) {
+    if (norm)
       (*it) /= norm;
-      ++it;
-    } else // remove null vector
-      it = adjCoord.erase(it);
+    else {
+      // remove null vector
+      adjCoord.erase_after(bit);
+      it = bit;
+    }
   }
 
   // Sort the vector to compute angles between two edges
   // Correctly.
   adjCoord.sort(AngularOrder());
+
   // Compute the angles
-  it = adjCoord.begin();
-  Coord first = (*it);
-  Coord current = first;
-  ++it;
+  Coord *first = &(adjCoord.front());
+  Coord *current = first;
 
   int stop = 2;
 
-  for (; stop > 0;) {
-    Coord next = *it;
-    double cosTheta = current.dotProduct(next); // current * next;
-    double sinTheta = (current ^ next)[2];
+  for (it = std::next(adjCoord.begin()); stop > 0; ++it) {
+    Coord &next = *it;
+    double cosTheta = current->dotProduct(next); // current * next;
+    double sinTheta = (*current ^ next)[2];
 
     if (cosTheta + 0.0001 > 1)
       cosTheta -= 0.0001;
@@ -763,8 +774,7 @@ vector<double> LayoutProperty::angularResolutions(const node n, const Graph *sg)
       result.push_back(2.0 * M_PI / degree - (2.0 * M_PI - acos(cosTheta)));
     }
 
-    current = next;
-    ++it;
+    current = &next;
 
     if (stop < 2)
       stop = 0;
@@ -779,15 +789,14 @@ vector<double> LayoutProperty::angularResolutions(const node n, const Graph *sg)
 }
 //=================================================================================
 double LayoutProperty::averageAngularResolution(const node n, const Graph *sg) const {
-  vector<double> tmp(angularResolutions(n, sg));
+  vector<double> &&tmp = angularResolutions(n, sg);
 
   if (tmp.empty())
     return 0.;
 
   double sum = 0.;
-  vector<double>::const_iterator it = tmp.begin();
 
-  for (; it != tmp.end(); ++it)
+  for (auto it = tmp.cbegin(); it != tmp.cend(); ++it)
     sum += *it;
 
   return sum / double(tmp.size());

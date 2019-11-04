@@ -98,7 +98,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       std::pair<node, node> ends = graph->ends(e);
       ends.first = getNode(ends.first);
       ends.second = getNode(ends.second);
-      vEdges[edgesToWrite] = ends;
+      vEdges[edgesToWrite] = std::move(ends);
 
       if (++edgesToWrite == MAX_EDGES_TO_WRITE) {
         // write already buffered edges
@@ -153,8 +153,8 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
         // use a vector as buffer
         std::vector<std::vector<std::pair<node, node>>> vRangesVec;
-        vRangesVec.push_back(std::vector<std::pair<node, node>>(MAX_RANGES_TO_WRITE));
-        std::vector<std::pair<node, node>> &vRanges = vRangesVec.back();
+        vRangesVec.emplace_back(MAX_RANGES_TO_WRITE);
+        auto &vRanges = vRangesVec.back();
 
         unsigned int rangesToWrite = 0;
         unsigned int numRanges = 0;
@@ -172,12 +172,12 @@ bool TLPBExport::exportGraph(std::ostream &os) {
             if (current.id == lastNode.id + 1)
               lastNode = current;
             else {
-              vRanges[rangesToWrite++] = std::pair<node, node>(beginNode, lastNode);
+              vRanges[rangesToWrite++] = std::move(std::pair<node, node>(beginNode, lastNode));
               ++numRanges;
               beginNode = lastNode = current;
 
               if (rangesToWrite == MAX_RANGES_TO_WRITE) {
-                vRangesVec.push_back(std::vector<std::pair<node, node>>(MAX_RANGES_TO_WRITE));
+                vRangesVec.emplace_back(MAX_RANGES_TO_WRITE);
                 vRanges = vRangesVec.back();
                 rangesToWrite = 0;
                 pendingWrite = false;
@@ -188,7 +188,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
         if (pendingWrite) {
           // insert last range in buffer
-          vRanges[rangesToWrite++] = std::pair<node, node>(beginNode, lastNode);
+          vRanges[rangesToWrite++] = std::move(std::pair<node, node>(beginNode, lastNode));
           ++numRanges;
         }
 
@@ -220,8 +220,8 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
         // use a vector as buffer
         std::vector<std::vector<std::pair<edge, edge>>> vRangesVec;
-        vRangesVec.push_back(std::vector<std::pair<edge, edge>>(MAX_RANGES_TO_WRITE));
-        std::vector<std::pair<edge, edge>> &vRanges = vRangesVec.back();
+        vRangesVec.emplace_back(MAX_RANGES_TO_WRITE);
+        auto &vRanges = vRangesVec.back();
 
         unsigned int rangesToWrite = 0;
         unsigned int numRanges = 0;
@@ -239,12 +239,12 @@ bool TLPBExport::exportGraph(std::ostream &os) {
             if (current.id == lastEdge.id + 1)
               lastEdge = current;
             else {
-              vRanges[rangesToWrite++] = std::pair<edge, edge>(beginEdge, lastEdge);
+              vRanges[rangesToWrite++] = std::move(std::pair<edge, edge>(beginEdge, lastEdge));
               ++numRanges;
               beginEdge = lastEdge = current;
 
               if (rangesToWrite == MAX_RANGES_TO_WRITE) {
-                vRangesVec.push_back(std::vector<std::pair<edge, edge>>(MAX_RANGES_TO_WRITE));
+                vRangesVec.emplace_back(MAX_RANGES_TO_WRITE);
                 vRanges = vRangesVec.back();
                 rangesToWrite = 0;
                 pendingWrite = false;
@@ -255,7 +255,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
         if (pendingWrite) {
           // insert last range in buffer
-          vRanges[rangesToWrite++] = std::pair<edge, edge>(beginEdge, lastEdge);
+          vRanges[rangesToWrite++] = std::move(std::pair<edge, edge>(beginEdge, lastEdge));
           ++numRanges;
         }
 

@@ -122,7 +122,7 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
     // check if curNode has been already visited
     if (!visited[i]) {
       // add a new component
-      components.push_back(std::vector<node>());
+      components.emplace_back();
       std::vector<node> &component = components.back();
       // and initialize it with current node
       component.push_back(n);

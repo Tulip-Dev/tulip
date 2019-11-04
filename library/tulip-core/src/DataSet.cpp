@@ -65,9 +65,8 @@ DataSet &DataSet::operator=(const DataSet &set) {
   if (this != &set) {
     data.clear();
 
-    for (std::list<std::pair<std::string, tlp::DataType *>>::const_iterator it = set.data.begin();
-         it != set.data.end(); ++it) {
-      data.push_back(std::pair<std::string, tlp::DataType *>((*it).first, (*it).second->clone()));
+    for (auto it = set.data.cbegin(); it != set.data.cend(); ++it) {
+      data.emplace_back(it->first, it->second->clone());
     }
   }
 
@@ -75,17 +74,15 @@ DataSet &DataSet::operator=(const DataSet &set) {
 }
 
 DataSet::~DataSet() {
-  for (std::list<std::pair<std::string, tlp::DataType *>>::iterator it = data.begin();
-       it != data.end(); ++it) {
+  for (auto it = data.begin(); it != data.end(); ++it) {
     if (it->second)
       delete it->second;
   }
 }
 
 bool DataSet::exists(const string &str) const {
-  for (std::list<std::pair<std::string, tlp::DataType *>>::const_iterator it = data.begin();
-       it != data.end(); ++it) {
-    if ((*it).first == str)
+  for (auto it = data.cbegin(); it != data.cend(); ++it) {
+    if (it->first == str)
       return true;
   }
 
@@ -93,8 +90,7 @@ bool DataSet::exists(const string &str) const {
 }
 
 std::string DataSet::getTypeName(const string &str) const {
-  for (std::list<std::pair<std::string, tlp::DataType *>>::const_iterator it = data.begin();
-       it != data.end(); ++it) {
+  for (auto it = data.cbegin(); it != data.cend(); ++it) {
     if (it->first == str)
       return it->second->getTypeName();
   }
@@ -103,9 +99,8 @@ std::string DataSet::getTypeName(const string &str) const {
 }
 
 void DataSet::remove(const string &str) {
-  for (std::list<std::pair<std::string, tlp::DataType *>>::iterator it = data.begin();
-       it != data.end(); ++it) {
-    if ((*it).first == str) {
+  for (auto it = data.begin(); it != data.end(); ++it) {
+    if (it->first == str) {
       if (it->second)
         delete it->second;
 
@@ -116,9 +111,8 @@ void DataSet::remove(const string &str) {
 }
 
 DataType *DataSet::getData(const string &str) const {
-  for (std::list<std::pair<std::string, tlp::DataType *>>::const_iterator it = data.begin();
-       it != data.end(); ++it) {
-    if ((*it).first == str)
+  for (auto it = data.cbegin(); it != data.cend(); ++it) {
+    if (it->first == str)
       return it->second ? it->second->clone() : nullptr;
   }
 
@@ -128,8 +122,7 @@ DataType *DataSet::getData(const string &str) const {
 void DataSet::setData(const std::string &str, const DataType *value) {
   DataType *val = value ? value->clone() : nullptr;
 
-  for (std::list<std::pair<std::string, tlp::DataType *>>::iterator it = data.begin();
-       it != data.end(); ++it) {
+  for (auto it = data.begin(); it != data.end(); ++it) {
     std::pair<std::string, tlp::DataType *> &p = *it;
 
     if (p.first == str) {
@@ -141,7 +134,7 @@ void DataSet::setData(const std::string &str, const DataType *value) {
     }
   }
 
-  data.push_back(std::pair<std::string, tlp::DataType *>(str, val));
+  data.emplace_back(str, val);
 }
 
 unsigned int DataSet::size() const {
@@ -217,8 +210,7 @@ void DataSet::write(std::ostream &os, const DataSet &ds) {
 // data read
 bool DataSet::readData(std::istream &is, const std::string &prop,
                        const std::string &outputTypeName) {
-  std::unordered_map<std::string, DataTypeSerializer *>::iterator it =
-      serializerContainer.otnTodts.find(outputTypeName);
+  auto it = serializerContainer.otnTodts.find(outputTypeName);
 
   if (it == serializerContainer.otnTodts.end()) {
     tlp::warning() << "Read error: No data type serializer found for read type " << outputTypeName
@@ -231,8 +223,7 @@ bool DataSet::readData(std::istream &is, const std::string &prop,
 
   if (dt) {
     // replace any preexisting value associated to prop
-    for (std::list<std::pair<std::string, tlp::DataType *>>::iterator it = data.begin();
-         it != data.end(); ++it) {
+    for (auto it = data.begin(); it != data.end(); ++it) {
       std::pair<std::string, tlp::DataType *> &p = *it;
 
       if (p.first == prop) {
@@ -245,7 +236,7 @@ bool DataSet::readData(std::istream &is, const std::string &prop,
     }
 
     // no preexisting value
-    data.push_back(std::pair<std::string, tlp::DataType *>(prop, dt));
+    data.emplace_back(prop, dt);
     return true;
   }
 

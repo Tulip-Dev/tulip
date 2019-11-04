@@ -307,7 +307,7 @@ template <typename T>
 inline std::list<T> iteratorList(Iterator<T> *it) {
   std::list<T> ret;
   while (it->hasNext()) {
-    ret.push_back(std::move(it->next()));
+    ret.emplace_back(std::move(it->next()));
   }
   delete it;
   return ret;
@@ -330,7 +330,7 @@ template <typename T>
 inline std::vector<T> iteratorVector(Iterator<T> *it) {
   std::vector<T> ret;
   while (it->hasNext()) {
-    ret.push_back(std::move(it->next()));
+    ret.emplace_back(std::move(it->next()));
   }
   delete it;
   return ret;
@@ -353,7 +353,7 @@ template <typename T>
 inline std::set<T> iteratorSet(Iterator<T> *it) {
   std::set<T> ret;
   while (it->hasNext()) {
-    ret.insert(std::move(it->next()));
+    ret.emplace(std::move(it->next()));
   }
   delete it;
   return ret;

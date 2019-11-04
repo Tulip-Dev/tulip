@@ -299,15 +299,13 @@ void Observable::unholdObservers() {
           sender->queuedEvent = false;
           if (_oAlive[be.second]) {
             _oEventsToTreat[be.second] += 1;
-            preparedEvents[be.second].push_back(Event(*sender, Event::TLP_MODIFICATION));
+            preparedEvents[be.second].emplace_back(*sender, Event::TLP_MODIFICATION);
           }
         }
       }
 
       {
-        map<node, vector<Event>>::const_iterator it;
-
-        for (it = preparedEvents.begin(); it != preparedEvents.end(); ++it) {
+        for (auto it = preparedEvents.begin(); it != preparedEvents.end(); ++it) {
           // treat scheduled events
           _oEventsToTreat[it->first] -= it->second.size();
 
@@ -454,11 +452,11 @@ void Observable::sendEvent(const Event &message) {
           // schedule event
           _oEventsToTreat[backn] += 1;
           _oEventsToTreat[src] += 1;
-          observerTonotify.push_back(make_pair(obs, src));
+          observerTonotify.emplace_back(obs, src);
         } else if (!queuedEvent) {
           delayedEventAdded = true;
           TLP_GLOBALLY_LOCK_SECTION(ObservableGraphUpdate) {
-            _oDelayedEvents.insert(make_pair(_n, src));
+            _oDelayedEvents.emplace(_n, src);
           }
           TLP_GLOBALLY_UNLOCK_SECTION(ObservableGraphUpdate);
         }
@@ -468,7 +466,7 @@ void Observable::sendEvent(const Event &message) {
         // schedule event
         _oEventsToTreat[backn] += 1;
         _oEventsToTreat[src] += 1;
-        listenerTonotify.push_back(make_pair(obs, src));
+        listenerTonotify.emplace_back(obs, src);
       }
     }
   }

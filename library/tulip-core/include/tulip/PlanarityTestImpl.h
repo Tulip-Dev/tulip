@@ -35,8 +35,8 @@
 namespace tlp {
 class Graph;
 enum { NOT_VISITED, VISITED, TERMINAL, VISITED_IN_RBC };
-static const node NULL_NODE = node();
-static const edge NULL_EDGE = edge();
+#define NULL_NODE node()
+#define NULL_EDGE edge()
 
 class TLP_SCOPE PlanarityTestImpl {
 

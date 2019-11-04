@@ -140,20 +140,18 @@ list<edge> PlanarityTest::getObstructionsEdges(Graph *graph) {
   BiconnectedTest::makeBiconnected(graph, addedEdges);
   PlanarityTestImpl planarTest(graph);
   planarTest.isPlanar(true);
-  list<edge> tmpList = planarTest.getObstructions();
-  {
-    vector<edge>::const_iterator it = addedEdges.begin();
-
-    for (; it != addedEdges.end(); ++it)
-      graph->delEdge(*it, true);
+  list<edge> &&result = planarTest.getObstructions();
+  set<edge> tmpAdded;
+  for (auto e : addedEdges) {
+    graph->delEdge(e, true);
+    tmpAdded.insert(e);
   }
   Observable::unholdObservers();
-  set<edge> tmpAdded(addedEdges.begin(), addedEdges.end());
-  list<edge> result;
-
-  for (list<edge>::iterator it = tmpList.begin(); it != tmpList.end(); ++it) {
-    if (tmpAdded.find(*it) == tmpAdded.end())
-      result.push_back(*it);
+  for (auto ite = result.begin(); ite != result.end();) {
+    if (tmpAdded.find(*ite) != tmpAdded.end())
+      ite = result.erase(ite);
+    else
+      ++ite;
   }
 
   return result;

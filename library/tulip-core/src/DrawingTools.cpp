@@ -62,7 +62,7 @@ static void computeGraphPoints(const std::vector<node> &nodes, const std::vector
         if (rot)
           rotate(points[i], rot);
 
-        gPoints.push_back(points[i] + point);
+        gPoints.emplace_back(points[i] + point);
       }
     }
   }
@@ -71,7 +71,7 @@ static void computeGraphPoints(const std::vector<node> &nodes, const std::vector
     for (auto e : edges) {
       if ((selection == nullptr) || selection->getEdgeValue(e)) {
         for (const Coord &coord : layout->getEdgeValue(e))
-          gPoints.push_back(coord);
+          gPoints.emplace_back(coord);
       }
     }
   }
@@ -213,10 +213,10 @@ Coord tlp::computePolygonCentroid(const vector<Coord> &points) {
   pointsCp.reserve(points.size() + 1);
 
   for (size_t i = 0; i < points.size(); ++i) {
-    pointsCp.push_back(Vec3d(points[i][0], points[i][1], 0.0));
+    pointsCp.emplace_back(points[i][0], points[i][1], 0.0);
   }
 
-  pointsCp.push_back(Vec3d(points[0][0], points[0][1], 0.0));
+  pointsCp.emplace_back(points[0][0], points[0][1], 0.0);
   double A = 0.0;
   double Cx = 0.0;
   double Cy = 0.0;
@@ -310,7 +310,7 @@ std::vector<tlp::Coord> tlp::computeRegularPolygon(unsigned int numberOfSides,
   for (unsigned int i = 0; i < numberOfSides; ++i) {
     float deltaX = cos(i * delta + startAngle);
     float deltaY = sin(i * delta + startAngle);
-    points.push_back(Coord(deltaX, deltaY, center[2]));
+    points.emplace_back(deltaX, deltaY, center[2]);
     box.expand(points.back());
   }
 

@@ -163,7 +163,7 @@ std::list<std::string> PluginLister::availablePlugins() {
   for (auto it = _plugins.begin(); it != _plugins.end(); ++it) {
     // deprecated names are not listed
     if (it->first == it->second.info->name())
-      keys.push_back(it->first);
+      keys.emplace_back(it->first);
   }
 
   return keys;

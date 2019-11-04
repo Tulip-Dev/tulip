@@ -56,9 +56,7 @@ bool PlanarityTestImpl::isPlanar(bool embedsg) {
     // finds all terminal nodes and their respective components in T[V_G \ L];
     findTerminalNodes(sg, n1, listOfComponents, terminalNodes);
 
-    for (list<node>::iterator it = listOfComponents.begin(); it != listOfComponents.end(); ++it) {
-      node comp = *it;
-
+    for (auto comp : listOfComponents) {
       if (terminalNodes[comp].size() > 0) {
         // creates a new c-node to represent current component;
         //  tlp::warning() << "  *terminal nodes for w = " << dfsPosNum.get(n1.id) << ":\n";
@@ -257,25 +255,22 @@ void PlanarityTestImpl::findTerminalNodes(Graph *sG, node n, list<node> &listOfC
 
   // groups all back-edges in T_w by their respective 2-connected component;
   // forall(e, listEdges)
-  for (list<edge>::iterator it = listEdges.begin(); it != listEdges.end(); ++it)
-    listBackEdges[componentOf[sG->source(*it)]].push_back(*it);
+  for (auto e : listEdges)
+    listBackEdges[componentOf[sG->source(e)]].push_back(e);
 
   // restores state[target] for all traversed nodes target;
   // node target;
   // forall (target, traversed_nodes)
-  for (list<node>::iterator it = traversedNodes.begin(); it != traversedNodes.end(); ++it)
-    state.set((*it).id, NOT_VISITED);
+  for (auto n : traversedNodes)
+    state.set(n.id, NOT_VISITED);
 }
 //=================================================================
 bool PlanarityTestImpl::findObstruction(Graph *sG, node n, list<node> &terminalNodes) {
   cNodeOfPossibleK33Obstruction = NULL_NODE; // reset global variable;
 
-  list<node> listTerminal = terminalNodes;
-
   switch (terminalNodes.size()) {
   case 1: {
-    node t1 = listTerminal.front();
-    listTerminal.pop_front();
+    node t1 = terminalNodes.front();
 
     if (testObstructionFromTerminalNode(sG, n, t1, n)) {
       return true;
@@ -294,10 +289,14 @@ bool PlanarityTestImpl::findObstruction(Graph *sG, node n, list<node> &terminalN
   } break;
 
   case 2: {
-    node t1 = listTerminal.front();
-    listTerminal.pop_front();
-    node t2 = listTerminal.front();
-    listTerminal.pop_front();
+    node t1, t2;
+    unsigned int i = 0;
+    for(auto it = terminalNodes.begin(); i < 2; ++it, ++i) {
+      if (i == 0)
+	t1 = *it;
+      else
+	t2 = *it;
+    }
     node m = lcaBetweenTermNodes(t1, t2);
     node t12 = lastPNode(t1, m), t22 = lastPNode(t2, m);
 
@@ -427,12 +426,16 @@ bool PlanarityTestImpl::findObstruction(Graph *sG, node n, list<node> &terminalN
   default: {
     // if 3 or more terminal nodes, G has an obstruction;
     if (embed) {
-      node t1 = listTerminal.front();
-      listTerminal.pop_front();
-      node t2 = listTerminal.front();
-      listTerminal.pop_front();
-      node t3 = listTerminal.front();
-      listTerminal.pop_front();
+      node t1, t2, t3;
+      unsigned int i = 0;
+      for(auto it = terminalNodes.begin(); i < 3; ++it, ++i) {
+	if (i == 0)
+	  t1 = *it;
+	else if (i == 1)
+	  t2 = *it;
+	else
+	  t3 = *it;
+      }
       node cNode, q;
       int countMin, countF;
       calcInfo3Terminals(t1, t2, t3, countMin, countF, cNode, q);
