@@ -172,7 +172,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
             if (current.id == lastNode.id + 1)
               lastNode = current;
             else {
-              vRanges[rangesToWrite++] = std::move(std::pair<node, node>(beginNode, lastNode));
+              vRanges[rangesToWrite++] = std::pair<node, node>(beginNode, lastNode);
               ++numRanges;
               beginNode = lastNode = current;
 
@@ -188,7 +188,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
         if (pendingWrite) {
           // insert last range in buffer
-          vRanges[rangesToWrite++] = std::move(std::pair<node, node>(beginNode, lastNode));
+          vRanges[rangesToWrite++] = std::pair<node, node>(beginNode, lastNode);
           ++numRanges;
         }
 
@@ -239,7 +239,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
             if (current.id == lastEdge.id + 1)
               lastEdge = current;
             else {
-              vRanges[rangesToWrite++] = std::move(std::pair<edge, edge>(beginEdge, lastEdge));
+              vRanges[rangesToWrite++] = std::pair<edge, edge>(beginEdge, lastEdge);
               ++numRanges;
               beginEdge = lastEdge = current;
 
@@ -255,7 +255,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
         if (pendingWrite) {
           // insert last range in buffer
-          vRanges[rangesToWrite++] = std::move(std::pair<edge, edge>(beginEdge, lastEdge));
+          vRanges[rangesToWrite++] = std::pair<edge, edge>(beginEdge, lastEdge);
           ++numRanges;
         }
 

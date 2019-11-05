@@ -154,5 +154,5 @@ list<edge> PlanarityTest::getObstructionsEdges(Graph *graph) {
       ++ite;
   }
 
-  return result;
+  return std::move(result);
 }
