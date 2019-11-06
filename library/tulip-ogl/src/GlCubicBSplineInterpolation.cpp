@@ -27,8 +27,8 @@ GlCubicBSplineInterpolation::GlCubicBSplineInterpolation(const vector<Coord> &po
                                                          const Color &endColor,
                                                          const float startSize, const float endSize,
                                                          const unsigned int nbCurvePoints)
-  : GlOpenUniformCubicBSpline(vector<Coord>(), startColor,
-			      endColor, startSize, endSize, nbCurvePoints) {
+    : GlOpenUniformCubicBSpline(vector<Coord>(), startColor, endColor, startSize, endSize,
+                                nbCurvePoints) {
   constructInterpolatingCubicBSpline(pointsToInterpolate);
   for (size_t i = 0; i < controlPoints.size(); ++i) {
     boundingBox.expand(controlPoints[i]);
@@ -67,7 +67,7 @@ void GlCubicBSplineInterpolation::constructInterpolatingCubicBSpline(
   }
 
   controlPoints.emplace_back(pointsToInterpolate[pointsToInterpolate.size() - 1] -
-                                 di[pointsToInterpolate.size() - 1]);
+                             di[pointsToInterpolate.size() - 1]);
   controlPoints.emplace_back(pointsToInterpolate[pointsToInterpolate.size() - 1]);
 }
 } // namespace tlp

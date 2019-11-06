@@ -166,7 +166,7 @@ void GlScene::draw() {
    * If LOD Calculator need entities to compute LOD, we use visitor system
    */
   if (lodCalculator->needEntities()) {
-    for (auto & it : layersList) {
+    for (auto &it : layersList) {
       it.second->acceptVisitor(lodCalculator);
     }
   }
@@ -218,7 +218,7 @@ void GlScene::draw() {
         entitiesSet.emplace(dist, &it);
       }
 
-      for (auto &it  : entitiesSet) {
+      for (auto &it : entitiesSet) {
         // Simple entities
         GlSimpleEntity *entity = static_cast<SimpleEntityLODUnit *>(it.entity)->entity;
         glStencilFunc(GL_LEQUAL, entity->getStencil(), 0xFFFF);
@@ -289,8 +289,7 @@ GlLayer *GlScene::createLayerAfter(const std::string &layerName,
   GlLayer *newLayer = nullptr;
   GlLayer *oldLayer = getLayer(layerName);
 
-  for (auto it = layersList.begin(); it != layersList.end();
-       ++it) {
+  for (auto it = layersList.begin(); it != layersList.end(); ++it) {
     if (it->first == afterLayerWithName) {
       ++it;
       newLayer = new GlLayer(layerName);
@@ -720,7 +719,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int w, in
   // Collect entities if needed
   if (layerInScene) {
     if (selectLODCalculator->needEntities()) {
-      for (auto &it: layersList) {
+      for (auto &it : layersList) {
         it.second->acceptVisitor(selectLODCalculator);
       }
     }
@@ -825,7 +824,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int w, in
 
     delete[] selectBuf;
 
-    for (auto it: compositesToRender) {
+    for (auto it : compositesToRender) {
       it->selectEntities(camera, type, x, y, w, h, selectedEntities);
     }
 

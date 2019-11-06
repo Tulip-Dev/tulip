@@ -28,11 +28,11 @@ using namespace std;
 
 namespace tlp {
 
-GlConvexHull::GlConvexHull(vector<Coord> &points, vector<Color> &fcolors,
-                           vector<Color> &ocolors, const bool filled, const bool outlined,
-                           const string &name, const bool computeHull)
-    : _points(), _fillColors(), _outlineColors(), _filled(filled),
-      _outlined(outlined), _name(name) {
+GlConvexHull::GlConvexHull(vector<Coord> &points, vector<Color> &fcolors, vector<Color> &ocolors,
+                           const bool filled, const bool outlined, const string &name,
+                           const bool computeHull)
+    : _points(), _fillColors(), _outlineColors(), _filled(filled), _outlined(outlined),
+      _name(name) {
   assert(points.size() >= 3);
 
   _points.swap(points);

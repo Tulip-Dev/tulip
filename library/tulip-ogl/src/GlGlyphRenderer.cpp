@@ -113,7 +113,8 @@ void GlGlyphRenderer::addEdgeExtremityGlyphRendering(EdgeExtremityGlyph *glyph, 
                                                      Color glyphColor, Color glyphBorderColor,
                                                      float lod, Coord beginAnchor, Coord srcAnchor,
                                                      Size size, bool selected) {
-  _edgeExtremityGlyphsToRender.emplace_back(glyph, e, source, glyphColor, glyphBorderColor, lod, beginAnchor, srcAnchor, size, selected);
+  _edgeExtremityGlyphsToRender.emplace_back(glyph, e, source, glyphColor, glyphBorderColor, lod,
+                                            beginAnchor, srcAnchor, size, selected);
 }
 
 void GlGlyphRenderer::endRendering() {
