@@ -46,8 +46,7 @@ public:
                               const float endSize, const unsigned int nbCurvePoints = 100);
 
 private:
-  std::vector<Coord>
-  constructInterpolatingCubicBSpline(const std::vector<Coord> &pointsToInterpolate);
+  void constructInterpolatingCubicBSpline(const std::vector<Coord> &pointsToInterpolate);
 };
 } // namespace tlp
 ///@endcond

@@ -28,15 +28,16 @@ using namespace std;
 
 namespace tlp {
 
-GlConvexHull::GlConvexHull(const vector<Coord> &points, const vector<Color> &fcolors,
-                           const vector<Color> &ocolors, const bool filled, const bool outlined,
+GlConvexHull::GlConvexHull(vector<Coord> &points, vector<Color> &fcolors,
+                           vector<Color> &ocolors, const bool filled, const bool outlined,
                            const string &name, const bool computeHull)
-    :
-
-      _points(points), _fillColors(fcolors), _outlineColors(ocolors), _filled(filled),
+    : _points(), _fillColors(), _outlineColors(), _filled(filled),
       _outlined(outlined), _name(name) {
-
   assert(points.size() >= 3);
+
+  _points.swap(points);
+  _fillColors.swap(fcolors);
+  _outlineColors.swap(ocolors);
 
   if (computeHull) {
     vector<unsigned int> convexHullIdxs;
@@ -45,14 +46,13 @@ GlConvexHull::GlConvexHull(const vector<Coord> &points, const vector<Color> &fco
     // build new points
     vector<Coord> points;
 
-    for (vector<unsigned int>::const_iterator it = convexHullIdxs.begin();
-         it != convexHullIdxs.end(); ++it) {
-      unsigned i = *it;
-      points.push_back(_points[i]);
+    points.reserve(convexHullIdxs.size());
+    for (auto i : convexHullIdxs) {
+      points.emplace_back(_points[i]);
       boundingBox.expand(_points[i]);
     }
 
-    _points = points;
+    _points.swap(points);
   }
 }
 
@@ -134,19 +134,20 @@ ConvexHullItem *GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
   if (root == nullptr)
     root = graph;
 
-  if (fColors.size() == 0) {
+  if (fColors.empty()) {
+    fColors.reserve(5);
     // use default colors
-    fColors.push_back(Color(255, 148, 169, 200));
-    fColors.push_back(Color(153, 250, 255, 200));
-    fColors.push_back(Color(255, 152, 248, 200));
-    fColors.push_back(Color(157, 152, 255, 200));
-    fColors.push_back(Color(255, 220, 0, 200));
-    fColors.push_back(Color(252, 255, 158, 200));
+    fColors.emplace_back(255, 148, 169, 200);
+    fColors.emplace_back(153, 250, 255, 200);
+    fColors.emplace_back(255, 152, 248, 200);
+    fColors.emplace_back(157, 152, 255, 200);
+    fColors.emplace_back(255, 220, 0, 200);
+    fColors.emplace_back(252, 255, 158, 200);
   }
 
-  if (oColors.size() == 0) {
+  if (oColors.empty()) {
     // use default color
-    oColors.push_back(Color(100, 100, 100, 120));
+    oColors.emplace_back(100, 100, 100, 120);
   }
 
   // build convex hulls from subgraphs
@@ -194,8 +195,8 @@ ConvexHullItem *GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
   // vectors of Color
   vector<Color> filledColors;
   vector<Color> outColors;
-  filledColors.push_back(fColor);
-  outColors.push_back(oColor);
+  filledColors.push_back(std::move(fColor));
+  outColors.push_back(std::move(oColor));
 
   if (depth) {
     // compute this graph convex hull
@@ -248,6 +249,7 @@ ConvexHullItem *GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
       // the variable below will be used to compute
       // the box around the bends of edges
       float bendsl = FLT_MAX;
+      gConvexHull.reserve(4 * graph->numberOfNodes());
       for (auto n : graph->nodes()) {
         // get node coordinates
         const Coord &point = layout->getNodeValue(n);
@@ -295,21 +297,15 @@ ConvexHullItem *GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
       // add bends of edges
       for (auto e : graph->edges()) {
         // get bends of the edge
-        std::vector<Coord> bends = layout->getEdgeValue(e);
+        const std::vector<Coord> &bends = layout->getEdgeValue(e);
         unsigned int nbBends = bends.size();
 
         for (unsigned int i = 0; i < nbBends; i++) {
-          Coord point(bends[i]);
-          double x = point.getX(), y = point.getY();
-          point.setX(x - bendsl);
-          point.setY(y - bendsl);
-          gConvexHull.push_back(point);
-          point.setY(y + bendsl);
-          gConvexHull.push_back(point);
-          point.setX(x + bendsl);
-          gConvexHull.push_back(point);
-          point.setY(y - bendsl);
-          gConvexHull.push_back(point);
+          double x = bends[i].getX(), y = bends[i].getY();
+          gConvexHull.emplace_back(x - bendsl, y - bendsl, bends[i].getZ());
+          gConvexHull.emplace_back(x - bendsl, y + bendsl, bends[i].getZ());
+          gConvexHull.emplace_back(x + bendsl, y + bendsl, bends[i].getZ());
+          gConvexHull.emplace_back(x + bendsl, y - bendsl, bends[i].getZ());
         }
       }
       // add a GlConvexHull for this graph in front of convexHulls
@@ -329,8 +325,8 @@ ConvexHullItem *GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 void GlConvexHull::translate(const Coord &mouvement) {
   boundingBox.translate(mouvement);
 
-  for (vector<Coord>::iterator it = _points.begin(); it != _points.end(); ++it) {
-    (*it) += mouvement;
+  for (auto &coord : _points) {
+    coord += mouvement;
   }
 }
 //====================================================

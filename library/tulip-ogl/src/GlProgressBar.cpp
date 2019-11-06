@@ -47,16 +47,18 @@ GlProgressBar::GlProgressBar(const Coord &centerPosition, const unsigned int wid
       Coord(centerPosition.getX() - (width / 2.), centerPosition.getY() - (height / 2.));
 
   vector<Coord> globalFrameCoords;
-  globalFrameCoords.push_back(globalFrameVertice1);
-  globalFrameCoords.push_back(globalFrameVertice2);
-  globalFrameCoords.push_back(globalFrameVertice3);
-  globalFrameCoords.push_back(globalFrameVertice4);
+  globalFrameCoords.reserve(4);
+  globalFrameCoords.push_back(std::move(globalFrameVertice1));
+  globalFrameCoords.push_back(std::move(globalFrameVertice2));
+  globalFrameCoords.push_back(std::move(globalFrameVertice3));
+  globalFrameCoords.push_back(std::move(globalFrameVertice4));
 
   vector<Color> globalFrameColors;
-  globalFrameColors.push_back(commentColor);
-  globalFrameColors.push_back(commentColor);
-  globalFrameColors.push_back(commentColor);
-  globalFrameColors.push_back(commentColor);
+  globalFrameColors.reserve(4);
+  globalFrameColors.emplace_back(commentColor);
+  globalFrameColors.emplace_back(commentColor);
+  globalFrameColors.emplace_back(commentColor);
+  globalFrameColors.emplace_back(commentColor);
 
   addGlEntity(new GlPolygon(globalFrameCoords, globalFrameColors, globalFrameColors, false, true),
               "global frame");
@@ -77,16 +79,18 @@ GlProgressBar::GlProgressBar(const Coord &centerPosition, const unsigned int wid
       progressBarFrameVertice3 + Coord(-(progressBarMaxWidth + 2), 0, 0);
 
   vector<Coord> progressBarFrameCoords;
-  progressBarFrameCoords.push_back(progressBarFrameVertice1);
-  progressBarFrameCoords.push_back(progressBarFrameVertice2);
-  progressBarFrameCoords.push_back(progressBarFrameVertice3);
-  progressBarFrameCoords.push_back(progressBarFrameVertice4);
+  progressBarFrameCoords.reserve(4);
+  progressBarFrameCoords.push_back(std::move(progressBarFrameVertice1));
+  progressBarFrameCoords.push_back(std::move(progressBarFrameVertice2));
+  progressBarFrameCoords.push_back(std::move(progressBarFrameVertice3));
+  progressBarFrameCoords.push_back(std::move(progressBarFrameVertice4));
 
   vector<Color> progressBarFrameColors;
-  progressBarFrameColors.push_back(commentColor);
-  progressBarFrameColors.push_back(commentColor);
-  progressBarFrameColors.push_back(commentColor);
-  progressBarFrameColors.push_back(commentColor);
+  progressBarFrameColors.reserve(4);
+  progressBarFrameColors.emplace_back(commentColor);
+  progressBarFrameColors.emplace_back(commentColor);
+  progressBarFrameColors.emplace_back(commentColor);
+  progressBarFrameColors.emplace_back(commentColor);
 
   addGlEntity(new GlPolygon(progressBarFrameCoords, progressBarFrameColors, progressBarFrameColors,
                             false, true),

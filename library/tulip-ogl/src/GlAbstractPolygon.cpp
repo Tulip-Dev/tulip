@@ -102,7 +102,7 @@ void GlAbstractPolygon::setFillColor(unsigned int i, const Color &color) {
 //=====================================================
 void GlAbstractPolygon::setFillColor(const Color &color) {
   fillColors.clear();
-  fillColors.push_back(color);
+  fillColors.emplace_back(color);
 }
 //=====================================================
 Color GlAbstractPolygon::getOutlineColor(unsigned int i) {
@@ -122,7 +122,7 @@ void GlAbstractPolygon::setOutlineColor(unsigned int i, const Color &color) {
 //=====================================================
 void GlAbstractPolygon::setOutlineColor(const Color &color) {
   outlineColors.clear();
-  outlineColors.push_back(color);
+  outlineColors.emplace_back(color);
 }
 //=====================================================
 float GlAbstractPolygon::getHideOutlineLod() {
@@ -161,7 +161,7 @@ void GlAbstractPolygon::draw(float lod, Camera *) {
     if (filled) {
       // Normal compute
       vector<Coord> normalPoints;
-      normalPoints.push_back(points[0]);
+      normalPoints.emplace_back(points[0]);
 
       for (size_t i = 1; i < points.size() && normalPoints.size() < 3; ++i) {
         bool find = false;
@@ -174,7 +174,7 @@ void GlAbstractPolygon::draw(float lod, Camera *) {
         }
 
         if (!find)
-          normalPoints.push_back(points[i]);
+          normalPoints.emplace_back(points[i]);
       }
 
       assert(normalPoints.size() == 3);
@@ -188,7 +188,7 @@ void GlAbstractPolygon::draw(float lod, Camera *) {
       normal /= normal.norm();
 
       if (normal[2] < 0)
-        normal = Coord(-normal[0], -normal[1], -normal[2]);
+        normal *= -1;
     }
 
     size_t size = points.size();
@@ -427,8 +427,8 @@ void GlAbstractPolygon::draw(float lod, Camera *) {
 void GlAbstractPolygon::translate(const Coord &vec) {
   boundingBox.translate(vec);
 
-  for (vector<Coord>::iterator it = points.begin(); it != points.end(); ++it) {
-    (*it) += vec;
+  for (auto &coord : points) {
+    coord += vec;
   }
 
   clearGenerated();
@@ -437,8 +437,8 @@ void GlAbstractPolygon::translate(const Coord &vec) {
 void GlAbstractPolygon::scale(const Size &factor) {
   boundingBox.scale(factor);
 
-  for (vector<Coord>::iterator it = points.begin(); it != points.end(); ++it) {
-    (*it) *= factor;
+  for (auto &coord : points) {
+    coord *= factor;
   }
 
   clearGenerated();
@@ -475,8 +475,8 @@ void GlAbstractPolygon::setWithXML(const string &inString, unsigned int &current
   GlXMLTools::setWithXML(inString, currentPosition, "textureName", textureName);
   GlXMLTools::setWithXML(inString, currentPosition, "outlineSize", outlineSize);
 
-  for (vector<Coord>::iterator it = points.begin(); it != points.end(); ++it) {
-    boundingBox.expand(*it);
+  for (auto &coord : points) {
+    boundingBox.expand(coord);
   }
 }
 //============================================================
@@ -523,8 +523,8 @@ void GlAbstractPolygon::clearGenerated() {
 void GlAbstractPolygon::recomputeBoundingBox() {
   boundingBox = BoundingBox();
 
-  for (vector<Coord>::iterator it = points.begin(); it != points.end(); ++it) {
-    boundingBox.expand(*it);
+  for (auto &coord : points) {
+    boundingBox.expand(coord);
   }
 }
 } // namespace tlp

@@ -27,10 +27,15 @@ GlCubicBSplineInterpolation::GlCubicBSplineInterpolation(const vector<Coord> &po
                                                          const Color &endColor,
                                                          const float startSize, const float endSize,
                                                          const unsigned int nbCurvePoints)
-    : GlOpenUniformCubicBSpline(constructInterpolatingCubicBSpline(pointsToInterpolate), startColor,
-                                endColor, startSize, endSize, nbCurvePoints) {}
+  : GlOpenUniformCubicBSpline(vector<Coord>(), startColor,
+			      endColor, startSize, endSize, nbCurvePoints) {
+  constructInterpolatingCubicBSpline(pointsToInterpolate);
+  for (size_t i = 0; i < controlPoints.size(); ++i) {
+    boundingBox.expand(controlPoints[i]);
+  }
+}
 
-vector<Coord> GlCubicBSplineInterpolation::constructInterpolatingCubicBSpline(
+void GlCubicBSplineInterpolation::constructInterpolatingCubicBSpline(
     const vector<Coord> &pointsToInterpolate) {
   vector<Coord> Ai(pointsToInterpolate.size());
   vector<float> Bi(pointsToInterpolate.size());
@@ -51,19 +56,18 @@ vector<Coord> GlCubicBSplineInterpolation::constructInterpolatingCubicBSpline(
     di[i] = Ai[i] + di[i + 1] * Bi[i];
   }
 
-  vector<Coord> bSplineControlPoints;
-  bSplineControlPoints.push_back(pointsToInterpolate[0]);
-  bSplineControlPoints.push_back(pointsToInterpolate[0] + di[0]);
+  controlPoints.reserve(3 * pointsToInterpolate.size() - 2);
+  controlPoints.emplace_back(pointsToInterpolate[0]);
+  controlPoints.emplace_back(pointsToInterpolate[0] + di[0]);
 
   for (size_t i = 1; i < pointsToInterpolate.size() - 1; ++i) {
-    bSplineControlPoints.push_back(pointsToInterpolate[i] - di[i]);
-    bSplineControlPoints.push_back(pointsToInterpolate[i]);
-    bSplineControlPoints.push_back(pointsToInterpolate[i] + di[i]);
+    controlPoints.emplace_back(pointsToInterpolate[i] - di[i]);
+    controlPoints.emplace_back(pointsToInterpolate[i]);
+    controlPoints.emplace_back(pointsToInterpolate[i] + di[i]);
   }
 
-  bSplineControlPoints.push_back(pointsToInterpolate[pointsToInterpolate.size() - 1] -
+  controlPoints.emplace_back(pointsToInterpolate[pointsToInterpolate.size() - 1] -
                                  di[pointsToInterpolate.size() - 1]);
-  bSplineControlPoints.push_back(pointsToInterpolate[pointsToInterpolate.size() - 1]);
-  return bSplineControlPoints;
+  controlPoints.emplace_back(pointsToInterpolate[pointsToInterpolate.size() - 1]);
 }
 } // namespace tlp

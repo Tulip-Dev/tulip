@@ -67,14 +67,14 @@ GlQuadTreeLODCalculator::~GlQuadTreeLODCalculator() {
   setHaveToCompute();
   clearCamerasObservers();
 
-  for (auto it = nodesQuadTree.begin(); it != nodesQuadTree.end(); ++it)
-    delete (*it);
+  for (auto it : nodesQuadTree)
+    delete it;
 
-  for (auto it = edgesQuadTree.begin(); it != edgesQuadTree.end(); ++it)
-    delete (*it);
+  for (auto it : edgesQuadTree)
+    delete it;
 
-  for (auto it = entitiesQuadTree.begin(); it != entitiesQuadTree.end(); ++it)
-    delete (*it);
+  for (auto it : entitiesQuadTree)
+    delete it;
 }
 
 void GlQuadTreeLODCalculator::setScene(GlScene &scene) {
@@ -202,33 +202,34 @@ void GlQuadTreeLODCalculator::compute(const Vector<int, 4> &globalViewport,
     layerToCamera.clear();
     simpleEntities.clear();
 
-    for (auto it = nodesQuadTree.begin(); it != nodesQuadTree.end(); ++it)
-      delete (*it);
+    for (auto it : nodesQuadTree)
+      delete it;
 
     nodesQuadTree.clear();
 
-    for (auto it = edgesQuadTree.begin(); it != edgesQuadTree.end(); ++it)
-      delete (*it);
+    for (auto it : edgesQuadTree)
+      delete it;
 
     edgesQuadTree.clear();
 
-    for (auto it = entitiesQuadTree.begin(); it != entitiesQuadTree.end(); ++it)
-      delete (*it);
+    for (auto it : entitiesQuadTree)
+      delete it;
 
     entitiesQuadTree.clear();
 
     quadTreesVectorPosition = 0;
     const vector<pair<std::string, GlLayer *>> &layersVector = glScene->getLayersList();
 
-    for (auto it = layersLODVector.begin(); it != layersLODVector.end(); ++it) {
-      Camera *camera = ((*it).camera);
+    cameras.reserve(layersLODVector.size());
+
+    for (auto &it : layersLODVector) {
+      Camera *camera = it.camera;
 
       GlLayer *currentLayer = nullptr;
 
-      for (vector<pair<std::string, GlLayer *>>::const_iterator itL = layersVector.begin();
-           itL != layersVector.end(); ++itL) {
-        if (&(*itL).second->getCamera() == camera) {
-          currentLayer = (*itL).second;
+      for (auto &itL : layersVector) {
+        if (&itL.second->getCamera() == camera) {
+          currentLayer = itL.second;
           break;
         }
       }
@@ -236,7 +237,7 @@ void GlQuadTreeLODCalculator::compute(const Vector<int, 4> &globalViewport,
       cameras.push_back(camera);
 
       if (currentLayer != nullptr) {
-        layerToCamera.insert(pair<GlLayer *, Camera>(currentLayer, *camera));
+        layerToCamera.emplace(currentLayer, *camera);
       }
 
       Matrix<float, 4> transformMatrix;
@@ -248,11 +249,11 @@ void GlQuadTreeLODCalculator::compute(const Vector<int, 4> &globalViewport,
         currentCamera = camera;
         eye = camera->getEyes() +
               (camera->getEyes() - camera->getCenter()) / float(camera->getZoomFactor());
-        computeFor3DCamera(&(*it), eye, transformMatrix, globalViewport, currentViewport);
+        computeFor3DCamera(&it, eye, transformMatrix, globalViewport, currentViewport);
         quadTreesVectorPosition++;
       } else {
-        simpleEntities.push_back((*it).simpleEntitiesLODVector);
-        computeFor2DCamera(&(*it), globalViewport, currentViewport);
+        simpleEntities.emplace_back(it.simpleEntitiesLODVector);
+        computeFor2DCamera(&it, globalViewport, currentViewport);
       }
 
       glMatrixMode(GL_MODELVIEW);
@@ -270,10 +271,8 @@ void GlQuadTreeLODCalculator::compute(const Vector<int, 4> &globalViewport,
     quadTreesVectorPosition = 0;
     simpleEntitiesVectorPosition = 0;
 
-    for (auto it = cameras.begin(); it != cameras.end(); ++it) {
-
-      Camera *camera = *it;
-      layersLODVector.push_back(LayerLODUnit());
+    for (auto camera : cameras) {
+      layersLODVector.emplace_back();
       LayerLODUnit *layerLODUnit = &(layersLODVector.back());
       layerLODUnit->camera = camera;
 

@@ -29,10 +29,11 @@ GlRect::GlRect(const Coord &topLeftPos, const Coord &bottomRightPos, const Color
   invertYTexture = false;
 
   vector<Coord> coords;
-  coords.push_back(topLeftPos);
-  coords.push_back(topLeftPos);
-  coords.push_back(bottomRightPos);
-  coords.push_back(bottomRightPos);
+  coords.reserve(4);
+  coords.emplace_back(topLeftPos);
+  coords.emplace_back(topLeftPos);
+  coords.emplace_back(bottomRightPos);
+  coords.emplace_back(bottomRightPos);
   coords[1][0] = bottomRightPos[0];
   coords[3][0] = topLeftPos[0];
 
@@ -51,6 +52,7 @@ GlRect::GlRect(const Coord &center, const float width, const float height, const
   invertYTexture = false;
 
   vector<Coord> coords;
+  coords.reserve(4);
   coords.push_back(center + Coord(width / 2., height / 2., 0));
   coords.push_back(center + Coord(width / 2., -height / 2., 0));
   coords.push_back(center + Coord(-width / 2., -height / 2., 0));

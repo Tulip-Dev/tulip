@@ -153,10 +153,10 @@ GlBox::GlBox(const Coord &position, const Size &size, const Color &fillColor,
     : position(position), size(size), filled(filled), outlined(outlined), textureName(textureName),
       outlineSize(outlineSize), newCubeCoordArrays(nullptr), generated(false) {
   if (filled)
-    fillColors.push_back(fillColor);
+    fillColors.emplace_back(fillColor);
 
   if (outlined)
-    outlineColors.push_back(outlineColor);
+    outlineColors.emplace_back(outlineColor);
 
   boundingBox.expand(position - size / 2.f);
   boundingBox.expand(position + size / 2.f);
@@ -315,7 +315,7 @@ Color GlBox::getFillColor() const {
 //===========================================================
 void GlBox::setFillColor(const Color &color) {
   fillColors.clear();
-  fillColors.push_back(color);
+  fillColors.emplace_back(color);
 }
 //===========================================================
 Color GlBox::getOutlineColor() const {
@@ -324,7 +324,7 @@ Color GlBox::getOutlineColor() const {
 //===========================================================
 void GlBox::setOutlineColor(const Color &color) {
   outlineColors.clear();
-  outlineColors.push_back(color);
+  outlineColors.emplace_back(color);
 }
 //===========================================================
 float GlBox::getOutlineSize() const {

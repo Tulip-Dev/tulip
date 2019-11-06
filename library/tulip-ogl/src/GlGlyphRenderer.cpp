@@ -106,15 +106,14 @@ bool GlGlyphRenderer::renderingHasStarted() {
 
 void GlGlyphRenderer::addNodeGlyphRendering(Glyph *glyph, node n, float lod, const Coord &nodePos,
                                             const Size &nodeSize, float nodeRot, bool selected) {
-  _nodeGlyphsToRender.push_back(NodeGlyphData(glyph, n, lod, nodePos, nodeSize, nodeRot, selected));
+  _nodeGlyphsToRender.emplace_back(glyph, n, lod, nodePos, nodeSize, nodeRot, selected);
 }
 
 void GlGlyphRenderer::addEdgeExtremityGlyphRendering(EdgeExtremityGlyph *glyph, edge e, node source,
                                                      Color glyphColor, Color glyphBorderColor,
                                                      float lod, Coord beginAnchor, Coord srcAnchor,
                                                      Size size, bool selected) {
-  _edgeExtremityGlyphsToRender.push_back(EdgeExtremityGlyphData(
-      glyph, e, source, glyphColor, glyphBorderColor, lod, beginAnchor, srcAnchor, size, selected));
+  _edgeExtremityGlyphsToRender.emplace_back(glyph, e, source, glyphColor, glyphBorderColor, lod, beginAnchor, srcAnchor, size, selected);
 }
 
 void GlGlyphRenderer::endRendering() {

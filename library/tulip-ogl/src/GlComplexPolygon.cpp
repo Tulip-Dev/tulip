@@ -303,11 +303,12 @@ void GlComplexPolygon::createPolygon(const vector<Coord> &coords, int polygonEdg
 
     for (size_t i = 0; i + 3 < coords.size(); i += 3) {
       vector<Coord> controlPoints;
+      controlPoints.reserve(4);
       vector<Coord> curvePoints;
-      controlPoints.push_back(coords[i]);
-      controlPoints.push_back(coords[i + 1]);
-      controlPoints.push_back(coords[i + 2]);
-      controlPoints.push_back(coords[i + 3]);
+      controlPoints.emplace_back(coords[i]);
+      controlPoints.emplace_back(coords[i + 1]);
+      controlPoints.emplace_back(coords[i + 2]);
+      controlPoints.emplace_back(coords[i + 3]);
       computeBezierPoints(controlPoints, curvePoints, nbCurvePoints);
 
       for (size_t j = 0; j < curvePoints.size(); ++j) {
@@ -317,8 +318,8 @@ void GlComplexPolygon::createPolygon(const vector<Coord> &coords, int polygonEdg
 
     addPoint(coords[coords.size() - 1]);
   } else {
-    for (vector<Coord>::const_iterator it = coords.begin(); it != coords.end(); ++it) {
-      addPoint(*it);
+    for (auto &coord : coords) {
+      addPoint(coord);
     }
   }
 }
@@ -341,17 +342,17 @@ void GlComplexPolygon::setTextureName(const string &name) {
 //=====================================================
 void GlComplexPolygon::addPoint(const Coord &point) {
   pointsIdx[currentVector].push_back(points[currentVector].size());
-  points[currentVector].push_back(point);
+  points[currentVector].emplace_back(point);
   boundingBox.expand(point);
 }
 //=====================================================
 void GlComplexPolygon::beginNewHole() {
   ++currentVector;
-  points.push_back(vector<Coord>());
-  pointsIdx.push_back(vector<GLfloat>());
+  points.emplace_back();
+  pointsIdx.emplace_back();
   quadBorderActivated.push_back(false);
-  quadBorderColor.push_back(Color(255, 255, 255));
-  quadBorderTexture.push_back("");
+  quadBorderColor.emplace_back(255, 255, 255);
+  quadBorderTexture.emplace_back("");
   quadBorderWidth.push_back(0);
   quadBorderPosition.push_back(1);
   quadBorderTexFactor.push_back(1.f);
@@ -388,7 +389,7 @@ void GlComplexPolygon::runTesselation() {
         int idxy = p[j] * 3 + 1;
         int idxz = p[j] * 3 + 2;
         Coord p(verts[idxx], verts[idxy], verts[idxz]);
-        verticesTmp.push_back(p);
+        verticesTmp.emplace_back(p);
 
         // if we did not encounter the vertex so far, add it in the verticesData vector
         if (vidx.find(p) == vidx.end()) {
@@ -597,7 +598,7 @@ void GlComplexPolygon::setWithXML(const string &inString, unsigned int &currentP
   for (int i = 0; i < numberOfVector; ++i) {
     stringstream str;
     str << i;
-    points.push_back(vector<Coord>());
+    points.emplace_back();
     GlXMLTools::setWithXML(inString, currentPosition, "points" + str.str(), points[i]);
   }
 
@@ -607,9 +608,9 @@ void GlComplexPolygon::setWithXML(const string &inString, unsigned int &currentP
   GlXMLTools::setWithXML(inString, currentPosition, "outlineSize", outlineSize);
   GlXMLTools::setWithXML(inString, currentPosition, "textureName", textureName);
 
-  for (vector<vector<Coord>>::iterator it = points.begin(); it != points.end(); ++it) {
-    for (vector<Coord>::iterator it2 = (*it).begin(); it2 != (*it).end(); ++it2) {
-      boundingBox.expand(*it2);
+  for (auto &it : points) {
+    for (auto &coord : it) {
+      boundingBox.expand(coord);
     }
   }
 }

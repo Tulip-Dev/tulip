@@ -540,8 +540,9 @@ void GlGraphHighDetailsRenderer::selectEntities(Camera *camera, RenderingEntitie
   glFlush();
   GLint hits = glRenderMode(GL_RENDER);
 
+  selectedEntities.reserve(selectedEntities.size() + hits);
   while (hits > 0) {
-    selectedEntities.push_back(idToEntity[selectBuf[--hits][3]]);
+    selectedEntities.emplace_back(idToEntity[selectBuf[--hits][3]]);
   }
 }
 //===================================================================
