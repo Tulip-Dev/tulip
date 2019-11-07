@@ -374,6 +374,7 @@ jobs:
             - yajl
             - cppunit
             - pkg-config
+          update: true
 
       env:
         - ENV="MacOS 10.13, LLVM Clang, Homebrew"
