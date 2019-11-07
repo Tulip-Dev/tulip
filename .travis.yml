@@ -1,7 +1,7 @@
 # Tulip continuous integration on Linux and Mac OS platforms through TravisCI.
 # Two type of builds are performed by os:
 #  - a "legacy" Tulip build using :
-#     * default system compiler (GCC 5.4 on Linux, clang from Xcode8.3 on Mac OS)
+#     * default system compiler (GCC 5.4 on Linux, clang from Xcode9.x on Mac OS)
 #     * Qt 5.5 on Linux, Qt 5.9 on MacOS
 #     * Python 2.7
 #  - a "modern" Tulip build using:
@@ -355,8 +355,8 @@ jobs:
       # at the end of the commit message
       if: commit_message !~ /\[(linux|macports|windows)-only\]$/
       os: osx
-      # use xcode9.3 travis image to get the Homebrew older supported env
-      osx_image: xcode9.3
+      # use default osx image
+      #osx_image: xcode9.3
       compiler: clang
       cache:
         ccache: true
@@ -537,8 +537,8 @@ jobs:
       # at the end of the commit message
       if: commit_message !~ /\[(linux|macports|windows)-only\]$/
       os: osx
-      # use xcode9.3 travis image to get the Homebrew older supported env
-      osx_image: xcode9.3
+      # use default osx image
+      #osx_image: xcode9.3
       compiler: clang
       cache:
         ccache: true
