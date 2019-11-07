@@ -510,7 +510,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionShowPythonDocumentation,
                                  "Display the Tulip python documentation in a navigator", "P");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionMessages_log, "Show the message log", "M");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionPython_IDE, "Show the Python IDE", "Alt+P");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionPython_IDE,  "Display the Tulip Python IDE for developing scripts and plugins to execute on the loaded graphs", "Alt+P");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExport, "Show the Graph exporting wizard", "E");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionOpen_Project, "Open a graph file", "O");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionFind_plugins,
@@ -520,9 +520,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   // set portable tooltips
   SET_TIPS(_ui->undoButton, _ui->actionUndo->toolTip());
   SET_TIPS(_ui->redoButton, _ui->actionRedo->toolTip());
-  _ui->workspaceButton->setToolTip(QString("Display the existing graph views"));
-  SET_TIPS(_ui->developButton, "Display the Tulip Python IDE for developing scripts and plugins to "
-                               "execute on the loaded graphs");
+  _ui->workspaceButton->setToolTip(QString("Display the existing visualization panels"));
+  SET_TIPS(_ui->developButton, _ui->actionPython_IDE->toolTip());
   _ui->loggerMessageInfo->setToolTip(QString("Show/Hide the Messages log panel"));
   _ui->loggerMessagePython->setToolTip(_ui->loggerMessageInfo->toolTip());
   _ui->loggerMessageWarning->setToolTip(_ui->loggerMessageInfo->toolTip());
@@ -780,12 +779,13 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
   showTrayMessage("GraphPerspective started");
 
-  // for 5.3 show message to ask old user
-  // if he wants to use tlpb as default graph file format
-  unsigned int mm_version = TULIP_INT_MM_VERSION;
-
-  if ((mm_version == 503) && TulipSettings::instance().isFirstTulipMMRun() &&
-      !TulipSettings::instance().isFirstRun() && !TulipSettings::instance().isUseTlpbFileFormat()) {
+  // for former user who has never launched Tulip 5.3
+  // we show a message to ask him if he wants to use
+  // tlpb as default graph file format
+  if (TulipSettings::instance().isFirstTulipMMRun() &&
+      !TulipSettings::instance().userHasLaunchedTulipMM("5.3") &&
+      !TulipSettings::instance().isFirstRun() &&
+      !TulipSettings::instance().isUseTlpbFileFormat()) {
     QTimer::singleShot(500, this, SLOT(showStartMessage()));
   }
 

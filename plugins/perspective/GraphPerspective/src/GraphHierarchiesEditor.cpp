@@ -176,6 +176,7 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint &p) {
     menu.addAction(_ui->actionRename);
     menu.addSeparator();
     auto subMenu = menu.addMenu("Create");
+    subMenu->setToolTipsVisible(true);
     subMenu->addAction(_ui->actionAdd_sub_graph);
     subMenu->addAction(_ui->actionCreate_induced_sub_graph);
     subMenu->addAction(_ui->actionClone_subgraph);
@@ -185,6 +186,7 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint &p) {
       subMenu->addAction(_ui->actionClone_sibling_with_properties);
     }
     subMenu = menu.addMenu("Delete");
+    subMenu->setToolTipsVisible(true);
     if (_contextGraph->getRoot() != _contextGraph) {
       subMenu->addAction(_ui->actionDelete_graph);
     }

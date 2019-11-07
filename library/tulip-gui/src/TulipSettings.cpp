@@ -344,6 +344,10 @@ bool TulipSettings::isFirstTulipMMRun() const {
   return contains(TS_FirstRunMM) == false;
 }
 
+bool TulipSettings::userHasLaunchedTulipMM(const std::string& mmVersion) {
+  return contains(QString("app/") + mmVersion.c_str() + "/firstRun");
+}
+
 void TulipSettings::setFirstTulipMMRun(bool f) {
   setValue(TS_FirstRunMM, f);
 }
