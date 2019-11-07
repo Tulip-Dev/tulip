@@ -73,7 +73,7 @@ public:
   // constructor
   OctTree(tlp::node node, Coord position, Coord minPos, Coord maxPos,
           tlp::DoubleProperty *_linLogWeight, bool _fistNode);
-  // desctructor
+  // destructor
   ~OctTree();
 
   // Adds a graph node to the octtree

@@ -1,7 +1,7 @@
 # Tulip continuous integration on Linux and Mac OS platforms through TravisCI.
 # Two type of builds are performed by os:
 #  - a "legacy" Tulip build using :
-#     * default system compiler (GCC 5.4 on Linux, clang from Xcode8.3 on Mac OS)
+#     * default system compiler (GCC 5.4 on Linux, clang from Xcode9.x on Mac OS)
 #     * Qt 5.5 on Linux, Qt 5.9 on MacOS
 #     * Python 2.7
 #  - a "modern" Tulip build using:
@@ -355,8 +355,8 @@ jobs:
       # at the end of the commit message
       if: commit_message !~ /\[(linux|macports|windows)-only\]$/
       os: osx
-      # use xcode9.3 travis image to get the Homebrew older supported env
-      osx_image: xcode9.3
+      # use default osx image
+      #osx_image: xcode9.3
       compiler: clang
       cache:
         ccache: true
@@ -420,8 +420,6 @@ jobs:
       env:
         - ENV="MacOS 10.14, LLVM Clang, Homebrew"
       script:
-        # install missing headers
-        - ls /usr/include || sudo ln -s $(xcrun -sdk macosx --show-sdk-path) /usr/include
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
@@ -440,7 +438,7 @@ jobs:
       if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
     # legacy Tulip complete build on Mac OS (MacPorts)
       os: osx
-      osx_image: xcode9.3
+      osx_image: xcode9.2
       compiler: clang
       cache: ccache
       install:
@@ -544,22 +542,34 @@ jobs:
       # at the end of the commit message
       if: commit_message !~ /\[(linux|macports|windows)-only\]$/
       os: osx
-      # use xcode9.3 travis image to get the Homebrew older supported env
-      osx_image: xcode9.3
+      # use default osx image
+      #osx_image: xcode9.3
       compiler: clang
       cache:
         ccache: true
         directories:
           - $HOME/Library/Caches/Homebrew
+      addons:
+        homebrew:
+          # install Tulip complete build dependencies
+          packages:
+            - ccache
+            - cmake
+            - ninja
+            - llvm
+            - qhull
+            - yajl
+            - cppunit
+            - pkg-config
+            - glew
+            - freetype
+            - jpeg
+            - libpng
+            - qt5
+            - quazip
+          update: true
 
       install:
-        # install brew needed packages without addons because we experimented
-        # that the install of some packages through addons hangs on xcode9.x
-        # see https://travis-ci.community/t/xcode-8-3-homebrew-outdated-error
-        - HOMEBREW_NO_AUTO_UPDATE=1
-        - brew cleanup
-        - brew install ccache cmake ninja llvm qhull yajl cppunit pkg-config || true
-        - brew install glew freetype jpeg libpng qt5 || true
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
         - curl -O https://bootstrap.pypa.io/get-pip.py
@@ -625,8 +635,6 @@ jobs:
         - ENV="MacOS 10.14, LLVM Clang, Homebrew"
 
       script:
-        # install missing headers
-        - ls /usr/include || sudo ln -s $(xcrun -sdk macosx --show-sdk-path) /usr/include
         # workaround for reference to unknown /Applications/Xcode-beta.app
         # in bogus FindGLEW.cmake since cmake 3.15
         - sudo ln -s /Applications/Xcode.app /Applications/Xcode-beta.app

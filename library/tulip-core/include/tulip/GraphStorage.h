@@ -299,16 +299,16 @@ public:
   //=======================================================
   /**
    * @brief Reconnect the edge e to have the new given ends
-   * @warning That operation modify the array of neighboors of extrmities of edges, thus
-   * it devalidates iterators on adjacency for the nodes at the extremities of the modified edges
+   * @warning That operation modifies the array of neighboors of extrmities of edges, thus
+   * it invalidates iterators on adjacency for the nodes at the extremities of the modified edges
    * and nodes.
    */
   void setEnds(const edge e, const node newSrc, const node newTgt);
   //=======================================================
   /**
    * @brief change the source of an edge
-   * @warning That operation modify the array of neighboors of extrmities of edges, thus
-   * it devalidates iterators on adjacency for the nodes at the extremities of the modified edges
+   * @warning That operation modifies the array of neighboors of extrmities of edges, thus
+   * it invalidates iterators on adjacency for the nodes at the extremities of the modified edges
    * and nodes.
    * \see setEnds
    */
@@ -318,8 +318,8 @@ public:
   //=======================================================
   /**
    * @brief change the target of an edge
-   * @warning That operation modify the array of neighboors of extrmities of edges, thus
-   * it devalidates iterators on adjacency for the nodes at the extremities of the modified edges
+   * @warning That operation modifies the array of neighboors of extremities of edges, thus
+   * it invalidates iterators on adjacency for the nodes at the extremities of the modified edges
    * and nodes.
    * \see setEnds
    */
@@ -328,7 +328,7 @@ public:
   }
   //=======================================================
   /**
-   * @brief Reverse an edge e, source become target and target become soure
+   * @brief Reverse an edge e, source becomes target and target becomes source
    */
   void reverse(const edge e);
   //=======================================================
@@ -338,23 +338,23 @@ public:
   void setEdgeOrder(const node n, const std::vector<edge> &v);
   //=======================================================
   /**
-   * \brief swap to edge in the ordered adjacency vector
+   * \brief swap two edges in the ordered adjacency vector
    * \warning the two edges must be element of star(v)
    */
   void swapEdgeOrder(const node n, const edge e1, const edge e2);
   //=======================================================
   /**
    * @brief Add the given node in the structure and return it
-   * @warning: That operation modify the array of nodes
-   * and thus devalidate all iterators on it.
+   * @warning: That operation modifies the array of nodes
+   * and thus invalidates all iterators on it.
    * @complexity: o(1)
    */
   void restoreNode(const node n);
   //=======================================================
   /**
    * @brief Add a new node in the structure and return it
-   * @warning: That operation modify the array of nodes
-   * and thus devalidate all iterators on it.
+   * @warning: That operation modifies the array of nodes
+   * and thus invalidates all iterators on it.
    * @complexity: o(1)
    */
   node addNode();
@@ -362,8 +362,8 @@ public:
   /**
    * @brief Add nb new nodes in the structure and returns them
    * in the addedNodes vector
-   * @warning: That operation modify the array of nodes
-   * and thus devalidate all iterators on it. The addedNodes vector
+   * @warning: That operation modifies the array of nodes
+   * and thus invalidates all iterators on it. The addedNodes vector
    * is cleared before adding nodes
    * @complexity: o(1)
    */
@@ -371,18 +371,18 @@ public:
   //=======================================================
   /**
    * @brief remove a node from the nodes structure only
-   * @warning That operation modify the array of nodes
-   * and thus devalidate all iterators on it.
+   * @warning That operation modifies the array of nodes
+   * and thus invalidates all iterators on it.
    * @complexity: o(1)
    */
   void removeFromNodes(const node n);
   //=======================================================
   /**
    * @brief Delete a node and all its adjacent edges in the graph
-   * @warning That operation modify the array of nodes and the array of edges
-   * and thus devalidate all iterators on it.
-   * @warning That operation modify the array of neighboors of extrmities of edges, thus
-   * it devalidates iterators on adjacency for the nodes at the extremities od the deleted edges.
+   * @warning That operation modifies the array of nodes and the array of edges
+   * and thus invalidates all iterators on it.
+   * @warning That operation modifies the array of neighboors of extrmities of edges, thus
+   * it invalidates iterators on adjacency for the nodes at the extremities od the deleted edges.
    * @warning Orders of edges in the extremities of the deleted edges are affected
    * @complexity: o(1)
    */
@@ -392,58 +392,58 @@ public:
    * @brief restore the given edge between src and tgt and return it
    * the last argument indicates if the edge has to be added
    * in the adjacency edges of its two ends
-   * @warning That operation modify the array of edges and
+   * @warning That operation modifies the array of edges and
    * the adjacency edges of its ends thus any iterators existing for
-   * these structures will be devalidated.
+   * these structures will be invalidated.
    */
   void restoreEdge(const node src, const node tgt, const edge e);
   //=======================================================
   /**
    * @brief Add a new edge between src and tgt and return it
-   * @warning That operation modify the array of edges and
+   * @warning That operation modifies the array of edges and
    * the adjacency edges of its ends thus any iterators existing for
-   * these structures will be devalidated.
+   * these structures will be invalidated.
    */
   edge addEdge(const node src, const node tgt);
   //=======================================================
   /**
    * @brief Add edges in the structure and returns them
    * in the addedEdges vector
-   * @warning: That operation modify the array of edges and
+   * @warning: That operation modifies the array of edges and
    * the adjacency edges of its ends thus any iterators existing for
-   * these structures will be devalidated.
+   * these structures will be invalidated.
    */
   void addEdges(const std::vector<std::pair<node, node>> &edges,
                 std::vector<edge> *addedEdges = nullptr);
   //=======================================================
   /**
    * @brief Delete an edge in the graph
-   * @warning: That operation modify the array of edges
-   * and thus devalidate all iterators on it.
-   * @warning That operation modify the array of neighboors of extremities of the edge e, thus
-   * it devalidates iterators on adjacency for the nodes at the extremities od the deleted edge.
+   * @warning: That operation modifies the array of edges
+   * and thus invalidates all iterators on it.
+   * @warning That operation modifies the array of neighboors of extremities of the edge e, thus
+   * it invalidates iterators on adjacency for the nodes at the extremities od the deleted edge.
    * @warning Orders of edges in the extremities of the deleted edge are affected
    */
   void delEdge(const edge e);
   //=======================================================
   /**
    * @brief Delete all edges in the graph
-   * @warning: That operation modify the array of edges and all arrays of nodes
-   * and thus devalidate all iterators, only graph nodes iterators are not affected.
+   * @warning: That operation modifies the array of edges and all arrays of nodes
+   * and thus invalidates all iterators, only graph nodes iterators are not affected.
    */
   void delAllEdges();
   //=======================================================
   /**
    * @brief Delete all nodes in the graph
-   * @warning: That operation modify the array of edges and all arrays of nodes
-   * and thus devalidate all iterators.
+   * @warning: That operation modifies the array of edges and all arrays of nodes
+   * and thus invalidates all iterators.
    */
   void delAllNodes();
   //=======================================================
   /**
    * @brief sort the graph elements in ascending order
-   * @warning: That operation modify the vector of nodes and the vector of edges
-   * and thus devalidate all iterators.
+   * @warning: That operation modifies the vector of nodes and the vector of edges
+   * and thus invalidates all iterators.
    */
   inline void sortElts() {
     nodeIds.sort();
@@ -470,8 +470,8 @@ private:
   //=======================================================
   /**
    * @brief remove an edge from an NodeData
-   * @warning That operation modify the NodeData
-   * and thus devalidate all iterators on it.
+   * @warning That operation modifies the NodeData
+   * and thus invalidates all iterators on it.
    */
   static void removeFromNodeData(NodeData &c, const edge e);
   //=======================================================
@@ -479,8 +479,8 @@ private:
    * @brief remove an edge from the edges structure
    * and from the NodeData of its ends
    * except for the end node in argument if it is valid
-   * @warning That operation modify the array of edges
-   * and thus devalidate all iterators on it.
+   * @warning That operation modifies the array of edges
+   * and thus invalidates all iterators on it.
    */
   void removeFromEdges(const edge e, node end = node());
 };

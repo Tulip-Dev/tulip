@@ -420,7 +420,7 @@ struct TLPParser {
         currentToken = tokenParser->nextToken(currentValue, curPos);
 
         if (currentToken != STRINGTOKEN)
-          return formatError(currentValue.str); // we can throw an exeption
+          return formatError(currentValue.str); // we can throw an exception
 
         TLPBuilder *newBuilder;
 

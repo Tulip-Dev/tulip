@@ -97,11 +97,6 @@ public:
     return newProp;
   }
 
-  _DEPRECATED void setAllNodeValue(tlp::StoredType<int>::ReturnedConstValue v,
-                                   const Graph *graph) override;
-  _DEPRECATED void setAllEdgeValue(tlp::StoredType<int>::ReturnedConstValue v,
-                                   const Graph *graph) override;
-
 protected:
   void clone_handler(
       AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::NumericProperty> &) override;

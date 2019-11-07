@@ -20,7 +20,7 @@ the file can be .tlp or .tlp.gz (compressed version).
 Loading a graph from a TLP file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To load a graph saved in TLP into a Python oject, the :func:`tlp.loadGraph` function has to be used. It loads 
+To load a graph saved in TLP into a Python object, the :func:`tlp.loadGraph` function has to be used. It loads
 the graph described in the file and its associated data and returns an instance of the :class:`tlp.Graph`.
 For instance, the sample code below imports the graph saved to the file /home/foo/savedgraph.tlp::
 	

@@ -274,36 +274,6 @@ Returns :const:`True` if the given string representation has been successfully c
 
 //===========================================================================================
 
-  virtual bool setAllNodeStringValue( const std::string & strVal , const tlp::Graph *graph ) = 0;
-%Docstring
-tlp.PropertyInterface.setAllNodeStringValue(str, graph)
-
-.. versionadded:: 4.10
-
-.. deprecated:: 5.0
-
-Sets the same value for all nodes in a graph in converting the given string representation of a value.
-Only the nodes from that graph will have their value modified in the property
-and the default node value will not be modified.
-That method signature is now deprecated, use :meth:`tlp.PropertyInterface.setStringValueToGraphNodes` instead.
-
-.. warning:: If the provided graph is not a descendant of the one associated to that property, no node value will be modified in it.
-
-Returns :const:`True` if the given string representation has been successfully converted to a value, :const:`False` otherwise.
-
-:param str: a string representation of a value
-:type str: string
-:param graph: a graph that defines a set of nodes
-:type graph: :class:`tlp.Graph`
-:rtype: boolean
-%End
-
-%MethodCode
- sipRes = sipCpp->setStringValueToGraphNodes(*a0, a1);
-%End
-
-//===========================================================================================
-
  virtual bool setStringValueToGraphNodes( const std::string & strVal , const tlp::Graph *graph ) = 0;
 %Docstring
 tlp.PropertyInterface.setStringValueToGraphNodes(str, graph)
@@ -356,36 +326,6 @@ Returns :const:`True` if the given string representation has been successfully c
 :param str: a string representation of a value
 :type str: string
 :rtype: boolean
-%End
-
-//===========================================================================================
-
- virtual bool setAllEdgeStringValue( const std::string & strVal , const tlp::Graph *graph ) = 0;
-%Docstring
-tlp.PropertyInterface.setAllEdgeStringValue(str, graph)
-
-.. versionadded:: 4.10
-
-.. deprecated:: 5.0
-
-Sets the same value for all edges in a graph in converting the given string representation of a value.
-Only the edges from that graph will have their value modified in the property
-and the default edge value will not be modified.
-That method signature is now deprecated, use :meth:`tlp.PropertyInterface.setStringValueToGraphEdges` instead.
-
-.. warning:: If the provided graph is not a descendant of the one associated to that property, no edge value will be modified in it.
-
-Returns :const:`True` if the given string representation has been successfully converted to a value, :const:`False` otherwise.
-
-:param str: a string representation of a value
-:type str: string
-:param graph: a graph that defines a set of edges
-:type graph: :class:`tlp.Graph`
-:rtype: boolean
-%End
-
-%MethodCode
-  sipRes = sipCpp->setStringValueToGraphEdges(*a0, a1);
 %End
 
 //===========================================================================================

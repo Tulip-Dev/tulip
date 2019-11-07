@@ -60,8 +60,8 @@ GlPolyQuad::GlPolyQuad(const std::vector<Coord> &polyQuadEdges, const Color &pol
 }
 
 void GlPolyQuad::addQuadEdge(const Coord &startEdge, const Coord &endEdge, const Color &edgeColor) {
-  polyQuadEdges.push_back(startEdge);
-  polyQuadEdges.push_back(endEdge);
+  polyQuadEdges.emplace_back(startEdge);
+  polyQuadEdges.emplace_back(endEdge);
   boundingBox.expand(startEdge);
   boundingBox.expand(endEdge);
   polyQuadEdgesColors.push_back(edgeColor);
@@ -113,8 +113,8 @@ void GlPolyQuad::draw(float, Camera *) {
       texCoordsArray.push_back(0.0f);
       texCoordsArray.push_back(GLfloat(i));
       texCoordsArray.push_back(1.0f);
-      colorsArray.push_back(startColor);
-      colorsArray.push_back(startColor);
+      colorsArray.emplace_back(startColor);
+      colorsArray.emplace_back(startColor);
 
       quadIndices.push_back(2 * i);
       quadIndices.push_back(2 * i + 1);
@@ -133,8 +133,8 @@ void GlPolyQuad::draw(float, Camera *) {
         Coord v2 = polyQuadEdges[2 * i + 1] +
                    (j / float(nbSubdivisionsPerSegment - 1)) *
                        (polyQuadEdges[2 * (i + 1) + 1] - polyQuadEdges[2 * i + 1]);
-        vertexArray.push_back(v1);
-        vertexArray.push_back(v2);
+        vertexArray.push_back(std::move(v1));
+        vertexArray.push_back(std::move(v2));
 
         float texCoordFactor = ((polyQuadEdges[2 * i].dist(polyQuadEdges[2 * i + 2])) /
                                 (nbSubdivisionsPerSegment - 1)) /
@@ -146,8 +146,8 @@ void GlPolyQuad::draw(float, Camera *) {
 
         Vector<float, 4> color =
             startColor + (j / float(nbSubdivisionsPerSegment - 1)) * (endColor - startColor);
-        colorsArray.push_back(color);
-        colorsArray.push_back(color);
+        colorsArray.emplace_back(color);
+        colorsArray.push_back(std::move(color));
 
         quadIndices.push_back(2 * n);
         quadIndices.push_back(2 * n + 1);
@@ -167,8 +167,8 @@ void GlPolyQuad::draw(float, Camera *) {
       texCoordsArray.push_back(0.0f);
       texCoordsArray.push_back(GLfloat(i + 1));
       texCoordsArray.push_back(1.0f);
-      colorsArray.push_back(endColor);
-      colorsArray.push_back(endColor);
+      colorsArray.emplace_back(endColor);
+      colorsArray.emplace_back(endColor);
     }
   }
 
@@ -201,7 +201,7 @@ void GlPolyQuad::draw(float, Camera *) {
   glDisableClientState(GL_COLOR_ARRAY);
 
   if (!textureName.empty()) {
-    GlTextureManager::desactivateTexture();
+    GlTextureManager::deactivateTexture();
   }
 
   if (outlined) {
@@ -254,10 +254,8 @@ void GlPolyQuad::setWithXML(const string &inString, unsigned int &currentPositio
   GlXMLTools::setWithXML(inString, currentPosition, "polyQuadEdgesColors", polyQuadEdgesColors);
   GlXMLTools::setWithXML(inString, currentPosition, "textureName", textureName);
 
-  vector<Coord>::iterator it;
-
-  for (it = polyQuadEdges.begin(); it != polyQuadEdges.end(); ++it) {
-    boundingBox.expand(*it);
+  for (const Coord &coord : polyQuadEdges) {
+    boundingBox.expand(coord);
   }
 }
 } // namespace tlp

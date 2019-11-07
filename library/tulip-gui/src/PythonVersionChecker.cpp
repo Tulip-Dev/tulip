@@ -74,7 +74,7 @@ static bool validPythonHome(const QString &pythonHome) {
 // The path to the Python home directory is retrieved from the windows registry.
 // On windows, Python can be installed for all users or for the current user only. That function
 // handles both cases.
-// The current user installation will be prefered over the all users one.
+// The current user installation will be preferred over the all users one.
 static QString pythonHome(const QString &pythonVersion) {
 
 // special case when using Python provided by MSYS2

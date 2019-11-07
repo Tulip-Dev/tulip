@@ -19,7 +19,7 @@
  * the minimum scale factor to ensure that no two pairs of nodes
  * overlap in the graph.
  * Let n be the number of nodes, the algorithm complexity is in O(n).
- * If two nodes start out at the same postion the algorithm cannot
+ * If two nodes start out at the same position the algorithm cannot
  * succeed.  It will return failure.
  *
  * <b>HISTORY</b>
@@ -36,8 +36,7 @@
  *
  */
 
-#include <tulip/TulipPluginHeaders.h>
-#include <tulip/MutableContainer.h>
+#include <tulip/LayoutProperty.h>
 
 class FastOverlapRemoval : public tlp::LayoutAlgorithm {
 public:

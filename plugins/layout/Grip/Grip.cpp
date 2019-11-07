@@ -21,8 +21,6 @@
 #include "Distances.h"
 
 #include <tulip/TulipPluginHeaders.h>
-#include <tulip/TreeTest.h>
-#include <tulip/Graph.h>
 
 using namespace std;
 using namespace tlp;
@@ -43,7 +41,7 @@ Grip::~Grip() {}
 void Grip::computeCurrentGraphLayout() {
   if (currentGraph->numberOfNodes() <= 3) {
     unsigned int nb_nodes = currentGraph->numberOfNodes();
-    auto nodes = currentGraph->nodes();
+    const vector<node> &nodes = currentGraph->nodes();
 
     if (nb_nodes == 1) {
       node n = currentGraph->getOneNode();
@@ -64,12 +62,12 @@ void Grip::computeCurrentGraphLayout() {
         result->setNodeValue(n2, Coord(1, 0, 0));
         result->setNodeValue(n3, Coord(0.5, sqrt(0.5), 0));
       } else {
-        auto edges = currentGraph->edges();
+        const vector<edge> &edges = currentGraph->edges();
         edge e1 = edges[0];
         edge e2 = edges[1];
 
-        const std::pair<node, node> ends1 = currentGraph->ends(e1);
-        const std::pair<node, node> ends2 = currentGraph->ends(e2);
+        auto ends1 = currentGraph->ends(e1);
+        auto ends2 = currentGraph->ends(e2);
         node n1 = ends1.first;
         node n2 = ends1.second;
         node n3;

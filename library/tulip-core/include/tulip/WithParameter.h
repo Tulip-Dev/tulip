@@ -361,26 +361,6 @@ struct TLP_SCOPE WithParameter {
   }
 
   /**
-   * @brief Adds an IN parameter to the plug-in (deprecated)
-   *
-   * @see addInParameter()
-   * @see addOutParameter()
-   *
-   * @param name The name of the parameter to add.
-   * @param help A description of the parameter, that will de displayed to the user. Defaults to 0.
-   * @param defaultValue The default value the parameter should take, to be the initial value in the
-   *GUI. Defaults to 0.
-   * @param isMandatory Whether this parameter requires a value or not. Defaults to true.
-   * @return void
-   **/
-  template <typename T>
-  _DEPRECATED void addParameter(const std::string &name, const std::string &help = std::string(),
-                                const std::string &defaultValue = std::string(),
-                                bool isMandatory = true) {
-    addInParameter<T>(name, help, defaultValue, isMandatory);
-  }
-
-  /**
    * @brief indicates whether the embedded parameters require some user input
    *
    * @return true if an input parameter or a property output parameter exists

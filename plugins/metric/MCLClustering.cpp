@@ -20,14 +20,10 @@
 #include <sstream>
 #include <string>
 #include <queue>
-#include <tulip/MutableContainer.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
 #include <tulip/GraphMeasure.h>
-#include <tulip/StableIterator.h>
-#include <tulip/SimpleTest.h>
-#include <tulip/TulipPluginHeaders.h>
-#include <tulip/StableIterator.h>
 #include <tulip/vectorgraph.h>
 
 using namespace tlp;

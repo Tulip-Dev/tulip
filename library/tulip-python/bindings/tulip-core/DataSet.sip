@@ -182,7 +182,7 @@ struct DataSet /TypeHint="Dict[str, Any]", TypeHintValue="{}"/ {
 %Docstring
 
 .. deprecated:: 4.8
-   The direct use of that class is now deprecated as it is now mapped to a Python dictionnary
+   The direct use of that class is now deprecated as it is now mapped to a Python dictionary
    for commodity of use (see :ref:`Deprecation of direct use of the tlp.DataSet class <deprecatedDataSet>`).
 
 This class is used to store a set of parameters to transmit to a Tulip algorithm.
@@ -232,17 +232,6 @@ When reading a data set value, a reference is returned not a copy.
   DataSet();
   
   DataSet(const tlp::DataSet &set);
-
-  bool exist(const std::string &str) const;
-%Docstring
-tlp.DataSet.exist(key)
-
-Checks if the data set contains a value associated to a particular key.
-
-:param key: the key to check
-:type key: string
-:rtype: boolean
-%End
 
   void remove(const std::string &str);
 %Docstring
@@ -309,9 +298,9 @@ Returns the list of keys associated to the values stored in the data set.
 %Docstring
 tlp.DataSet.toDict()
 
-Converts that data set to a Python dictionnary.
+Converts that data set to a Python dictionary.
 
-:rtype: a dictionnary reflecting the data set content
+:rtype: a dictionary reflecting the data set content
 %End
 %MethodCode
   sipRes = convertTlpDataSetToPyDict(*sipCpp);

@@ -79,13 +79,6 @@ public:
   static void computeConnectedComponents(const Graph *graph,
                                          std::vector<std::vector<node>> &components);
 
-  /**
-   * @brief This function is defined for compatibility purpose only.
-   * @warning This function is deprecated, use the one above.
-   **/
-  static _DEPRECATED void computeConnectedComponents(const Graph *graph,
-                                                     std::vector<std::set<node>> &components);
-
 private:
   /**
    * @brief Makes the graph connected.

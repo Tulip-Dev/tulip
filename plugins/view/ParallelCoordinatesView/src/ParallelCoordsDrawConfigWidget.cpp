@@ -55,8 +55,8 @@ ParallelCoordsDrawConfigWidget::~ParallelCoordsDrawConfigWidget() {
 }
 
 void ParallelCoordsDrawConfigWidget::pressButtonBrowse() {
-  QString fileName(QFileDialog::getOpenFileName(this, tr("Open Texture File"), "./",
-                                                tr("Image Files (*.png *.jpg *.bmp)")));
+  QString fileName(QFileDialog::getOpenFileName(this, "Open Texture File", "./",
+                                                "Image Files (*.png *.jpg *.bmp)"));
   _ui->userTextureFile->setText(fileName);
 }
 

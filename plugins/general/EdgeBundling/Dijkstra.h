@@ -34,7 +34,7 @@
 using namespace std;
 
 // we need a lock to protect the allocation/free
-// of neede VectorGraph properties
+// of needed VectorGraph properties
 TLP_DECLARE_GLOBAL_LOCK(DijkstraProps);
 
 class Dijkstra {

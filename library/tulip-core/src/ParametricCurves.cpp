@@ -118,55 +118,34 @@ static void computeCubicBezierPoints(const Coord &p0, const Coord &p1, const Coo
   curvePoints[nbCurvePoints - 1] = p3;
 }
 
-void buildPascalTriangle(unsigned int n, vector<vector<double>> &pascalTriangle) {
-  size_t curSize = pascalTriangle.size();
-
-  if (curSize >= n)
-    return;
-
-  pascalTriangle.resize(n);
-
-  for (unsigned int i = curSize; i < n; ++i) {
-    pascalTriangle[i].resize(i + 1);
-  }
-
-  for (unsigned int i = curSize; i < n; ++i) {
-    pascalTriangle[i][0] = 1;
-    pascalTriangle[i][i] = 1;
-
-    for (unsigned int j = 1; j < i; ++j) {
-      pascalTriangle[i][j] = pascalTriangle[i - 1][j - 1] + pascalTriangle[i - 1][j];
-    }
-  }
-}
-
 static map<double, vector<double>> tCoeffs;
 static map<double, vector<double>> sCoeffs;
-static map<unsigned int, unsigned int> computedCoefficients;
 
 static void computeCoefficients(double t, unsigned int nbControlPoints) {
   double s = (1.0 - t);
   TLP_LOCK_SECTION(computeCoefficients) {
     if (tCoeffs.find(t) == tCoeffs.end()) {
-      vector<double> tCoeff, sCoeff;
+      vector<double> tCoeff(nbControlPoints), sCoeff(nbControlPoints);
 
       for (size_t i = 0; i < nbControlPoints; ++i) {
-        tCoeff.push_back(pow(t, double(i)));
-        sCoeff.push_back(pow(s, double(i)));
+        tCoeff[i] = pow(t, double(i));
+        sCoeff[i] = pow(s, double(i));
       }
 
       tCoeffs[t] = tCoeff;
       sCoeffs[t] = sCoeff;
     } else {
       vector<double> &tCoeff = tCoeffs[t];
-      vector<double> &sCoeff = sCoeffs[t];
 
       if (tCoeff.size() < nbControlPoints) {
         size_t oldSize = tCoeff.size();
+        tCoeff.resize(nbControlPoints);
+        vector<double> &sCoeff = sCoeffs[t];
+        sCoeff.resize(nbControlPoints);
 
         for (size_t i = oldSize; i < nbControlPoints; ++i) {
-          tCoeff.push_back(pow(t, double(i)));
-          sCoeff.push_back(pow(s, double(i)));
+          tCoeff[i] = pow(t, double(i));
+          sCoeff[i] = pow(s, double(i));
         }
       }
     }
@@ -270,7 +249,7 @@ static void computeBezierSegmentControlPoints(const Coord &pBefore, const Coord 
                                               const Coord &pEnd, const Coord &pAfter,
                                               vector<Coord> &bezierSegmentControlPoints,
                                               const float alpha) {
-  bezierSegmentControlPoints.push_back(pStart);
+  bezierSegmentControlPoints.emplace_back(pStart);
   float d1 = pBefore.dist(pStart);
   float d2 = pStart.dist(pEnd);
   float d3 = pEnd.dist(pAfter);
@@ -280,15 +259,15 @@ static void computeBezierSegmentControlPoints(const Coord &pBefore, const Coord 
   float d22alpha = pow(d2, 2 * alpha);
   float d3alpha = pow(d3, alpha);
   float d32alpha = pow(d3, 2 * alpha);
-  bezierSegmentControlPoints.push_back(
-      Coord((d12alpha * pEnd - d22alpha * pBefore +
-             (2 * d12alpha + 3 * d1alpha * d2alpha + d22alpha) * pStart) /
-            (3 * d1alpha * (d1alpha + d2alpha))));
-  bezierSegmentControlPoints.push_back(
-      Coord((d32alpha * pStart - d22alpha * pAfter +
-             (2 * d32alpha + 3 * d3alpha * d2alpha + d22alpha) * pEnd) /
-            (3 * d3alpha * (d3alpha + d2alpha))));
-  bezierSegmentControlPoints.push_back(pEnd);
+  bezierSegmentControlPoints.emplace_back(
+      (d12alpha * pEnd - d22alpha * pBefore +
+       (2 * d12alpha + 3 * d1alpha * d2alpha + d22alpha) * pStart) /
+      (3 * d1alpha * (d1alpha + d2alpha)));
+  bezierSegmentControlPoints.emplace_back(
+      (d32alpha * pStart - d22alpha * pAfter +
+       (2 * d32alpha + 3 * d3alpha * d2alpha + d22alpha) * pEnd) /
+      (3 * d3alpha * (d3alpha + d2alpha)));
+  bezierSegmentControlPoints.emplace_back(pEnd);
 }
 
 static Coord computeCatmullRomPointImpl(const vector<Coord> &controlPoints, const float t,
@@ -343,7 +322,7 @@ Coord computeCatmullRomPoint(const vector<Coord> &controlPoints, const float t,
   vector<Coord> controlPointsCp(controlPoints);
 
   if (closedCurve) {
-    controlPointsCp.push_back(controlPoints[0]);
+    controlPointsCp.emplace_back(controlPoints[0]);
   }
 
   computeCatmullRomGlobalParameter(controlPointsCp, globalParameter, alpha);
@@ -361,7 +340,7 @@ void computeCatmullRomPoints(const vector<Coord> &controlPoints, vector<Coord> &
   vector<Coord> controlPointsCp(controlPoints);
 
   if (closedCurve) {
-    controlPointsCp.push_back(controlPoints[0]);
+    controlPointsCp.emplace_back(controlPoints[0]);
   }
 
   computeCatmullRomGlobalParameter(controlPointsCp, globalParameter, alpha);

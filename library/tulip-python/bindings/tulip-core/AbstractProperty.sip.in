@@ -69,33 +69,6 @@ All previous values are lost and the given value is assigned as the default one 
 
 //===========================================================================================
 
-  void setAllNodeValue(const @PROPERTY_NODE_TYPE@ &val /TypeHint="@PYTHON_NODE_TYPEHINT@"/, const tlp::Graph * );
-%Docstring
-tlp.@PROPERTY_TYPE@Property.setAllNodeValue(val, graph)
-
-.. versionadded:: 4.10
-
-.. deprecated:: 5.0
-
-Sets the same value for all nodes in a graph.
-Only the nodes from that graph will have their value modified in the property
-and the default node value will not be modified.
-The signature of that method is now deprecated, use :meth:`tlp.@PROPERTY_TYPE@Property.setValueToGraphNodes` instead.
-
-.. warning:: If the provided graph is not a descendant of the one associated to that property (including itself), no node value will be modified in it.
-
-:param val: the value to set on the nodes.
-:type val: @PYTHON_NODE_TYPE@
-:param graph: a graph that defines a set of nodes
-:type graph: :class:`tlp.Graph`
-%End
-
-%MethodCode
-  sipCpp->setValueToGraphNodes(getValue(a0), a1);
-%End
-
-//===========================================================================================
-
   void setValueToGraphNodes(const @PROPERTY_NODE_TYPE@ &val /TypeHint="@PYTHON_NODE_TYPEHINT@"/, const tlp::Graph * );
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setValueToGraphNodes(val, graph)
@@ -139,33 +112,6 @@ All previous values are lost and the given value is assigned as the default one 
 
 :param val: the value to set on the edges.
 :type val: @PYTHON_EDGE_TYPE@
-%End
-
-//===========================================================================================
-
-  void setAllEdgeValue(const @PROPERTY_EDGE_TYPE@ &val /TypeHint="@PYTHON_EDGE_TYPEHINT@"/, const tlp::Graph * );
-%Docstring
-tlp.@PROPERTY_TYPE@Property.setAllEdgeValue(val, graph)
-
-.. versionadded:: 4.10
-
-.. deprecated:: 5.0
-
-Sets the same value for all edges in a graph.
-Only the edges from that graph will have their value modified in the property
-and the default edge value will not be modified.
-The signature of that method is now deprecated, use :meth:`tlp.@PROPERTY_TYPE@Property.setValueToGraphEdges` instead.
-
-.. warning:: If the provided graph is not a descendant of the one associated to that property (including itself), no node value will be modified in it.
-
-:param val: the value to set on the edges.
-:type val: @PYTHON_NODE_TYPE@
-:param graph: a graph that defines a set if edges
-:type graph: :class:`tlp.Graph`
-%End
-
-%MethodCode
-  sipCpp->setValueToGraphEdges(getValue(a0), a1);
 %End
 
 //===========================================================================================
@@ -401,8 +347,6 @@ Sets the value of a particular edge.
 
   virtual bool setAllNodeStringValue(const std::string & strVal);
 
-  virtual bool setAllNodeStringValue(const std::string & strVal, const tlp::Graph *);
-
 //===========================================================================================
 
   virtual bool setStringValueToGraphNodes(const std::string & strVal, const tlp::Graph *);
@@ -414,8 +358,6 @@ Sets the value of a particular edge.
 //===========================================================================================
 
   virtual bool setAllEdgeStringValue(const std::string & strVal);
-
-  virtual bool setAllEdgeStringValue(const std::string & strVal, const tlp::Graph *);
 
 //===========================================================================================
 
@@ -710,31 +652,6 @@ Sets the value assigned as the default one to the future added nodes.
 :param val: the new value to set on future added nodes.
 :type val: list of @PYTHON_TYPE@
 %End
-//==========================================================================================
-  void setAllNodeValue(const std::vector<@CPP_TYPE@> &val /TypeHint="List[@PYTHON_NODE_TYPEHINT@]"/, const tlp::Graph *graph );
-%Docstring
-tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllNodeValue(val, graph)
-
-.. versionadded:: 4.10
-
-.. deprecated:: 5.0
-
-Sets the same list of values for all nodes in a graph.
-Only the nodes from that graph will have their value modified in the property
-and the default node value will not be modified.
-The signature of that method is now deprecated, use :meth:`tlp.@VEC_PROPERTY_TYPE@Property.setValueToGraphNodes` instead.
-
-.. warning:: If the provided graph is not a descendant of the one associated to that property, no node value will be modified in it.
-
-:param val: the list of values to set on the nodes
-:type val: list of @PYTHON_TYPE@
-:param graph: a graph that defines a set of nodes
-:type graph: :class:`tlp.Graph`
-%End
-
-%MethodCode
-  sipCpp->setValueToGraphNodes(*a0, a1);
-%End
 
 //==========================================================================================
  void setValueToGraphNodes(const std::vector<@CPP_TYPE@> &val /TypeHint="List[@PYTHON_NODE_TYPEHINT@]"/, const tlp::Graph *graph );
@@ -780,32 +697,6 @@ All previous values are lost and the given value is assigned as the default one 
 
 :param val: the list of values to set on the edges
 :type val: list of @PYTHON_TYPE@
-%End
-
-//==========================================================================================
-  void setAllEdgeValue(const std::vector<@CPP_TYPE@> &val /TypeHint="List[@PYTHON_NODE_TYPEHINT@]"/, const tlp::Graph *graph );
-%Docstring
-tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllEdgeValue(val, graph)
-
-.. versionadded:: 4.10
-
-.. deprecated:: 5.0
-
-Sets the same list of values for all edges in a graph.
-Only the edges from that graph will have their value modified in the property
-and the default edge value will not be modified.
-The signature of that method is now deprecated, use :meth:`tlp.@VEC_PROPERTY_TYPE@Property.setValueToGraphEdges` instead.
-
-.. warning:: If the provided graph is not a descendant of the one associated to that property, no edge value will be modified in it.
-
-:param val: the list of values to set on the edges
-:type val: list of @PYTHON_TYPE@
-:param graph: a graph that defines a set of edges
-:type graph: :class:`tlp.Graph`
-%End
-
-%MethodCode
- sipCpp->setValueToGraphNodes(*a0, a1);
 %End
 
 //==========================================================================================
@@ -966,7 +857,7 @@ Resizes the list attached to a particular node. A default value will be assigned
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.resizeNodeValue(node, size, val)
 
-Resizes the list attached to a particular node. The value given in paramater will be assigned to new elements (if any).
+Resizes the list attached to a particular node. The value given in parameter will be assigned to new elements (if any).
 
 :param node: an existing node
 :type node: :class:`tlp.node`
@@ -1123,7 +1014,7 @@ Resizes the list attached to a particular edge. A default value will be assigned
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.resizeEdgeValue(edge, size, val)
 
-Resizes the list attached to a particular edge. The value given in paramater will be assigned to new elements (if any).
+Resizes the list attached to a particular edge. The value given in parameter will be assigned to new elements (if any).
 
 :param edge: an existing edge
 :type edge: :class:`tlp.edge`
@@ -1237,11 +1128,11 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 
 //===========================================================================================
 
-  virtual bool setAllNodeStringValue(const std::string & val, const tlp::Graph *graph );
+  virtual bool setAllNodeStringValue(const std::string & val);
 
 //===========================================================================================
 
-  virtual bool setAllEdgeStringValue(const std::string & val, const tlp::Graph *graph );
+  virtual bool setAllEdgeStringValue(const std::string & val);
 
 //===========================================================================================
 

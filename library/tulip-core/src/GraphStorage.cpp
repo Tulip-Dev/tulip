@@ -256,7 +256,7 @@ bool GraphStorage::getEdges(const node src, const node tgt, bool directed,
 
     // loops appear twice
     // be aware that we assume that the second instance of the loop
-    // immediatly appears after the first one
+    // immediately appears after the first one
     if (e != previous) {
       const std::pair<node, node> &eEnds = edgeEnds[e.id];
 
@@ -335,7 +335,7 @@ void GraphStorage::setEnds(const edge e, const node newSrc, const node newTgt) {
 }
 //=======================================================
 /**
- * @brief Reverse an edge e, source become target and target become soure
+ * @brief Reverse an edge e, source becomes target and target becomes source
  */
 void GraphStorage::reverse(const edge e) {
   assert(isElement(e));
@@ -418,8 +418,8 @@ void GraphStorage::restoreNode(const node n) {
 //=======================================================
 /**
  * @brief Add a new node in the structure and return it
- * @warning: That operation modify the array of nodes
- * and thus devalidate all iterators on it.
+ * @warning: That operation modifies the array of nodes
+ * and thus invalidates all iterators on it.
  * @complexity: o(1)
  */
 node GraphStorage::addNode() {
@@ -507,9 +507,9 @@ void GraphStorage::delNode(const node n) {
 //=======================================================
 /**
  * @brief Add a new edge between src and tgt and return it
- * @warning That operation modify the array of edges and
+ * @warning That operation modifies the array of edges and
  * the adjacency edges of its ends thus any iterators existing for
- * these structures will be devalidated.
+ * these structures will be invalidated.
  */
 void GraphStorage::restoreEdge(const node src, const node tgt, const edge e) {
   std::pair<node, node> &ends = edgeEnds[e.id];
@@ -520,9 +520,9 @@ void GraphStorage::restoreEdge(const node src, const node tgt, const edge e) {
 //=======================================================
 /**
  * @brief Add a new edge between src and tgt and return it
- * @warning That operation modify the array of edges and
+ * @warning That operation modifies the array of edges and
  * the adjacency edges of its ends thus any iterators existing for
- * these structures will be devalidated.
+ * these structures will be invalidated.
  */
 edge GraphStorage::addEdge(const node src, const node tgt) {
   edge e(edgeIds.get());

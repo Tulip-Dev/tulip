@@ -242,13 +242,13 @@ SIP_PYOBJECT getDefaultPluginParameters(const std::string &pluginName, tlp::Grap
 %Docstring
 tlp.getDefaultPluginParameters(pluginName, graph=None)
 
-Returns a Python dictionnary with string keys filled with default parameters (if any) for a given plugin (algorithm, import, property algorithm, ...).
+Returns a Python dictionary with string keys filled with default parameters (if any) for a given plugin (algorithm, import, property algorithm, ...).
 
 :param pluginName: the name of the plugin on which to retrieve its default parameters
 :type pluginName: string
 :param graph: if provided, property parameters will be retrieved from the graph if they exist
 :type graph: :class:`tlp.Graph`
-:rtype: dictionnary with string keys (parameters names) and parameters values
+:rtype: dictionary with string keys (parameters names) and parameters values
 %End
 
 %MethodCode

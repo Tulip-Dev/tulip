@@ -913,7 +913,7 @@ void GraphModel::treatEvents(const std::vector<tlp::Event> &) {
 
     if (add) {
 
-      // id of element to add is greather than the last one currently stored in the model,
+      // id of element to add is greater than the last one currently stored in the model,
       // meaning its index in the model will be contiguous with the one of the last added element.
       // So add it to the current rows sequence that will be further added in the model
       if (_elements.empty() || id > uint(_elements.back())) {

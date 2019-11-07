@@ -28,91 +28,14 @@ bool PythonInterpreter::evalSingleStatementAndGetValue(const QString &pythonStat
   bool ok = false;
 
   if (ret) {
-    PyObjectToCppObjectConvertor<T> convertor;
-    ok = convertor.convert(ret, value);
+    PyObjectToCppObjectConverter<T> converter;
+    ok = converter.convert(ret, value);
     decrefPyObject(ret);
   }
 
   releaseGIL();
 
   return ok;
-}
-
-// deprecated
-template <typename PARAM_TYPE>
-bool PythonInterpreter::callFunctionOneParam(const QString &module, const QString &function,
-                                             const PARAM_TYPE &parameter) {
-  return callFunctionWithParams(module, function, parameter);
-}
-
-// deprecated
-template <typename PARAM1_TYPE, typename PARAM2_TYPE>
-bool PythonInterpreter::callFunctionTwoParams(const QString &module, const QString &function,
-                                              const PARAM1_TYPE &parameter1,
-                                              const PARAM2_TYPE &parameter2) {
-  return callFunctionWithParams(module, function, parameter1, parameter2);
-}
-
-// deprecated
-template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE>
-bool PythonInterpreter::callFunctionThreeParams(const QString &module, const QString &function,
-                                                const PARAM1_TYPE &parameter1,
-                                                const PARAM2_TYPE &parameter2,
-                                                const PARAM3_TYPE &parameter3) {
-  return callFunctionWithParams(module, function, parameter1, parameter2, parameter3);
-}
-
-// deprecated
-template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE, typename PARAM4_TYPE>
-bool PythonInterpreter::callFunctionFourParams(const QString &module, const QString &function,
-                                               const PARAM1_TYPE &parameter1,
-                                               const PARAM2_TYPE &parameter2,
-                                               const PARAM3_TYPE &parameter3,
-                                               const PARAM4_TYPE &parameter4) {
-  return callFunctionWithParams(module, function, parameter1, parameter2, parameter3, parameter4);
-}
-
-// deprecated
-template <typename PARAM_TYPE, typename RETURN_TYPE>
-bool PythonInterpreter::callFunctionOneParamAndGetReturnValue(const QString &module,
-                                                              const QString &function,
-                                                              const PARAM_TYPE &parameter,
-                                                              RETURN_TYPE &returnValue) {
-  return callFunctionWithParamsAndGetReturnValue(module, function, returnValue, parameter);
-}
-
-// deprecated
-template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename RETURN_TYPE>
-bool PythonInterpreter::callFunctionTwoParamsAndGetReturnValue(const QString &module,
-                                                               const QString &function,
-                                                               const PARAM1_TYPE &parameter1,
-                                                               const PARAM2_TYPE &parameter2,
-                                                               RETURN_TYPE &returnValue) {
-
-  return callFunctionWithParamsAndGetReturnValue(module, function, returnValue, parameter1,
-                                                 parameter2);
-}
-
-// deprecated
-template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE, typename RETURN_TYPE>
-bool PythonInterpreter::callFunctionThreeParamsAndGetReturnValue(
-    const QString &module, const QString &function, const PARAM1_TYPE &parameter1,
-    const PARAM2_TYPE &parameter2, const PARAM3_TYPE &parameter3, RETURN_TYPE &returnValue) {
-
-  return callFunctionWithParamsAndGetReturnValue(module, function, returnValue, parameter1,
-                                                 parameter2, parameter3);
-}
-
-// deprecated
-template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE, typename PARAM4_TYPE,
-          typename RETURN_TYPE>
-bool PythonInterpreter::callFunctionFourParamsAndGetReturnValue(
-    const QString &module, const QString &function, const PARAM1_TYPE &parameter1,
-    const PARAM2_TYPE &parameter2, const PARAM3_TYPE &parameter3, const PARAM4_TYPE &parameter4,
-    RETURN_TYPE &returnValue) {
-
-  return callFunctionWithParamsAndGetReturnValue(module, function, returnValue, parameter1,
-                                                 parameter2, parameter3, parameter4);
 }
 
 // use c++11 variadic template for more convenience
@@ -160,9 +83,9 @@ bool PythonInterpreter::callFunctionAndGetReturnValue(const QString &module,
   holdGIL();
   bool ok = false;
   PyObject *ret = callPythonFunction(module, function, parameters);
-  PyObjectToCppObjectConvertor<RETURN_TYPE> retConvertor;
+  PyObjectToCppObjectConverter<RETURN_TYPE> retConverter;
 
-  if (ret && retConvertor.convert(ret, returnValue)) {
+  if (ret && retConverter.convert(ret, returnValue)) {
     ok = true;
   }
 

@@ -31,7 +31,7 @@ namespace tlp {
 
 /**
  * @ingroup OpenGL
- * \brief GlSimpleEntity used to agregate other GlEntity
+ * \brief GlSimpleEntity used to aggregate other GlEntity
  *
  * This class provide basic container to manage other GlEntity
  * @see GlSimpleEntity

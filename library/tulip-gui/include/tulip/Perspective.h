@@ -114,7 +114,7 @@ protected:
    * @brief The main window on which the perspective should build the GUI.
    *
    * It is not the Perspective's responsibility to destroy the main window when the application gets
-   * closed. Generally speaking, destorying the _mainWindow pointer could lead to undefined
+   * closed. Generally speaking, destroying the _mainWindow pointer could lead to undefined
    * behavior.
    */
   QMainWindow *_mainWindow;
@@ -185,7 +185,7 @@ public:
 
   /**
    * @brief Build the main window GUI and starts the workflow.
-   * When this method is called, it means that the Perspective is reponsible of the application
+   * When this method is called, it means that the Perspective is responsible of the application
    * workflow until the application is closed by the user.
    * @param progress A progress handler
    */
@@ -281,7 +281,7 @@ protected slots:
   void showPluginsCenter();
 
   /**
-   * @brief Call this slot to swith to full screen or windowed mode
+   * @brief Call this slot to switch to full screen or windowed mode
    * @param f is true, switch to full screen mode. If false, switch to windowed mode
    */
   void showFullScreen(bool f);

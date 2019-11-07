@@ -544,7 +544,7 @@ void ParallelCoordinatesDrawing::update(GlMainWidget *glWidget, bool updateWitho
   if (progressBar != nullptr) {
     deleteGlEntity(progressBar);
     delete progressBar;
-    // reenable user input
+    // re-enable user input
     tlp::enableQtUserInput();
   }
 

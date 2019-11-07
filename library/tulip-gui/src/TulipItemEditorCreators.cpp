@@ -77,7 +77,7 @@ QSize TulipItemEditorCreator::sizeHint(const QStyleOptionViewItem &option,
 class TulipColorDialog : public QColorDialog {
 public:
   TulipColorDialog(QWidget *w) : QColorDialog(w), previousColor(), ok(QDialog::Rejected) {
-    // we dont use native dialog to ensure alpha channel can be set
+    // do not use native dialog to ensure alpha channel can be set
     // it may not be shown when using gnome
     setOptions(QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);
   }

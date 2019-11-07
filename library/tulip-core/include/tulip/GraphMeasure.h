@@ -33,7 +33,7 @@ namespace tlp {
 class Graph;
 class PluginProgress;
 /**
- * returns the average path lengh of a graph, that is the sum
+ * returns the average path length of a graph, that is the sum
  * of the shortest distances for all pair of distinct nodes in that graph
  * divided by the number of those pairs. For a pair of non connected nodes,
  * the shorted distance is set to 0.

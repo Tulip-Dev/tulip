@@ -143,12 +143,6 @@ TLP_SCOPE void bfs(const Graph *graph, node root, std::vector<node> &nodes);
 TLP_SCOPE void bfs(const Graph *graph, std::vector<node> &nodes);
 
 /**
- * @brief deprecated function,
- * use bfs(const Graph*, node, std::vector<node>&) instead
- */
-TLP_SCOPE _DEPRECATED std::vector<node> bfs(const Graph *graph, node root = node());
-
-/**
  * @brief Performs a depth-first search on a graph.
  * @param graph The graph to traverse with a DFS.
  * @param nodes a vector to fill with the nodes of the graph in the order they have been visited by
@@ -168,12 +162,6 @@ TLP_SCOPE void dfs(const Graph *graph, node root, std::vector<node> &nodes);
  * the DFS.
  */
 TLP_SCOPE void dfs(const Graph *graph, std::vector<node> &nodes);
-
-/**
- * @brief deprecated function,
- * use dfs(const Graph*, node, std::vector<node>&) instead
- */
-TLP_SCOPE _DEPRECATED std::vector<node> dfs(const Graph *graph, node root = node());
 
 /*
  * builds a uniform quantification with the NumericProperty associated values
@@ -218,7 +206,7 @@ enum ShortestPathType {
  * @param graph The graph to compute on.
  * @param src The source node of the paths
  * @param tgt The target node of the paths
- * @param pathType The type of path to consider (choosen among tlp::ShortestPathType enumation
+ * @param pathType The type of path to consider (chosen among tlp::ShortestPathType enumation
  * values)
  * @param weights A Double property giving the edges weight if weighted paths have to be considered.
  * Can be set to null to select unweighted paths.

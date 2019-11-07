@@ -193,7 +193,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   isInVe2.set(e.id, true);
 
   // initialize and update the list of faces and the two new faces adajcent edges
-  facesEdges.insert(faceMapEntry(new_face, v_edges1));
+  facesEdges.emplace(new_face, v_edges1);
   facesEdges[f] = v_edges2;
   faces.push_back(new_face);
   vector<Face> v_faces;
@@ -201,7 +201,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   v_faces.push_back(f);
 
   // initialize the list of faces adjacent to all edges of the new face
-  edgesFaces.insert(edgeMapEntry(e, v_faces));
+  edgesFaces.emplace(e, v_faces);
 
   for (i = 0; i < v_edges1.size() - 1; ++i) {
     e_tmp = v_edges1[i];
@@ -531,24 +531,24 @@ void PlanarConMap::computeFaces() {
 
     // Compute the list of adjacent faces of each edge
     for (auto e : edges()) {
-      edgesFaces.insert(edgeMapEntry(e, v_faces));
+      edgesFaces.emplace(e, v_faces);
       faceMap::iterator itf = facesEdges.find(f);
 
       if (itf == facesEdges.end()) {
         vector<edge> v_tmp;
         v_tmp.push_back(e);
-        facesEdges.insert(faceMapEntry(f, v_tmp));
+        facesEdges.emplace(f, std::move(v_tmp));
       } else
         facesEdges[f].push_back(e);
     }
 
     // Compute the list of adjacent faces of each node
     for (auto n : nodes())
-      nodesFaces.insert(nodeMapEntry(n, v_faces));
+      nodesFaces.emplace(n, v_faces);
 
     if (facesEdges.size() == 0) {
       vector<edge> v;
-      facesEdges.insert(faceMapEntry(f, v));
+      facesEdges.emplace(f, std::move(v));
     }
   }
 
@@ -592,7 +592,7 @@ void PlanarConMap::computeFaces() {
             if (it_n == nodesFaces.end()) {
               vector<Face> v_tmp;
               v_tmp.push_back(lf);
-              nodesFaces.insert(nodeMapEntry(n, v_tmp));
+              nodesFaces.emplace(n, std::move(v_tmp));
             } else
               nodesFaces[n].push_back(lf);
 
@@ -601,7 +601,7 @@ void PlanarConMap::computeFaces() {
             if (ite == edgesFaces.end()) {
               vector<Face> v_tmp;
               v_tmp.push_back(lf);
-              edgesFaces.insert(edgeMapEntry(e1, v_tmp));
+              edgesFaces.emplace(e1, std::move(v_tmp));
             } else
               edgesFaces[e1].push_back(lf);
 
@@ -611,7 +611,7 @@ void PlanarConMap::computeFaces() {
             ++i;
           } while ((e1 != e) || (n_tmp != n));
 
-          facesEdges.insert(faceMapEntry(lf, edges));
+          facesEdges.emplace(lf, edges);
         }
       }
     }

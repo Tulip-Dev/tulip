@@ -54,7 +54,7 @@ struct Iterator;
  * correctly elements when necessary.
  *
  * @warning the class is not thread safe
- * @warning modification of the graph structure devalidate iterations.
+ * @warning modifications of the graph structure invalidate iterations.
  *
  * @warning Use that class only if you need performance.
  * @todo split the file in .h .cpp
@@ -282,8 +282,8 @@ public:
   //=======================================================
   /**
    * @brief Add a new node in the graph and return it
-   * @warning: That operation modify the array of nodes
-   * and thus devalidate all iterators on it.
+   * @warning: That operation modifies the array of nodes
+   * and thus invalidates all iterators on it.
    * @remark: o(1)
    */
   node addNode();
@@ -291,8 +291,8 @@ public:
   /**
    * @brief Add nb new nodes in the structure and returns them
    * in the addedNodes vector
-   * @warning: That operation modify the array of nodes
-   * and thus devalidate all iterators on it. The addedNodes vector
+   * @warning: That operation modifies the array of nodes
+   * and thus invalidates all iterators on it. The addedNodes vector
    * is cleared before adding nodes
    * @complexity: o(1)
    */
@@ -300,10 +300,10 @@ public:
   //=======================================================
   /**
    * @brief Delete a node and all its adjacent edges in the graph
-   * @warning That operation modify the array of nodes and the array of edges
-   * and thus devalidate all iterators on it.
-   * @warning That operation modify the array of neighboors of extrmities of edges, thus
-   * it devalidates iterators on adjacency for the nodes at the extremities od the deleted
+   * @warning That operation modifies the array of nodes and the array of edges
+   * and thus invalidates all iterators on it.
+   * @warning That operation modifies the array of neighboors of extrmities of edges, thus
+   * it invalidates iterators on adjacency for the nodes at the extremities od the deleted
    * edges.
    * @warning Orders of edges in the extremities of the deleted edges are affected
    * @remark: o(1)
@@ -312,8 +312,8 @@ public:
   //=======================================================
   /**
    * @brief Add a new edge between src and tgt and return it
-   * @warning That operation modify the array of neighboors of extrmities of edges, thus
-   * it devalidates iterators on adjacency for the nodes at the extremities od the deleted
+   * @warning That operation modifies the array of neighboors of extrmities of edges, thus
+   * it invalidates iterators on adjacency for the nodes at the extremities od the deleted
    * edges.
    * @remark o(1)
    */
@@ -322,19 +322,19 @@ public:
   /**
    * @brief Add edges in the structure and returns them
    * in the addedEdges vector
-   * @warning: That operation modify the array of edges and
+   * @warning: That operation modifies the array of edges and
    * the adjacency edges of its ends thus any iterators existing for
-   * these structures will be devalidated.
+   * these structures will be invalidated.
    */
   void addEdges(const std::vector<std::pair<node, node>> &edges,
                 std::vector<edge> *addedEdges = nullptr);
   //=======================================================
   /**
    * @brief Delete an edge in the graph
-   * @warning: That operation modify the array of edges
-   * and thus devalidate all iterators on it.
-   * @warning That operation modify the array of neighboors of extremities of the edge e, thus
-   * it devalidates iterators on adjacency for the nodes at the extremities od the deleted
+   * @warning: That operation modifies the array of edges
+   * and thus invalidates all iterators on it.
+   * @warning That operation modifies the array of neighboors of extremities of the edge e, thus
+   * it invalidates iterators on adjacency for the nodes at the extremities od the deleted
    * edge.
    * @warning Orders of edges in the extremities of the deleted edge are affected
    * @remark o(1)
@@ -343,10 +343,10 @@ public:
   //=======================================================
   /**
    * @brief Delete all adjacent edges (in/out) of a node
-   * @warning: That operation modify the array of edges
-   * and thus devalidate all iterators on it.
-   * @warning That operation modify the array of neighboors of extremities of the edge e, thus
-   * it devalidates iterators on adjacency for the nodes at the extremities od the deleted
+   * @warning: That operation modifies the array of edges
+   * and thus invalidates all iterators on it.
+   * @warning That operation modifies the array of neighboors of extremities of the edge e, thus
+   * it invalidates iterators on adjacency for the nodes at the extremities od the deleted
    * edge.
    * @warning Orders of edges in the extremities of the deleted edge are affected
    * @remark o(deg(V))
@@ -356,16 +356,16 @@ public:
   //=======================================================
   /**
    * @brief Delete all edges in the graph
-   * @warning: That operation modify the array of edges and all arrays of nodes
-   * and thus devalidate all iterators, only graph nodes iterators are not affected.
+   * @warning: That operation modifies the array of edges and all arrays of nodes
+   * and thus invalidates all iterators, only graph nodes iterators are not affected.
    * @remark o(E + V)
    */
   void delAllEdges();
   //=======================================================
   /**
    * @brief Delete all nodes in the graph
-   * @warning: That operation modify the array of edges and all arrays of nodes
-   * and thus devalidate all iterators.
+   * @warning: That operation modifies the array of edges and all arrays of nodes
+   * and thus invalidates all iterators.
    * @remark o(E + V)
    */
   void delAllNodes();
@@ -403,8 +403,8 @@ public:
   //=======================================================
   /**
    * @brief change the source of an edge
-   * @warning That operation modify the array of neighboors of extrmities of edges, thus
-   * it devalidates iterators on adjacency for the nodes at the extremities of the modified
+   * @warning That operation modifies the array of neighboors of extrmities of edges, thus
+   * it invalidates iterators on adjacency for the nodes at the extremities of the modified
    * edges and nodes.
    * @remark o(1)
    * \see setEnds
@@ -417,8 +417,8 @@ public:
   //=======================================================
   /**
    * @brief change the target of an edge
-   * @warning That operation modify the array of neighboors of extrmities of edges, thus
-   * it devalidates iterators on adjacency for the nodes at the extremities of the modified
+   * @warning That operation modifies the array of neighboors of extrmities of edges, thus
+   * it invalidates iterators on adjacency for the nodes at the extremities of the modified
    * edges and nodes.
    * @remark o(1)
    * \see setEnds
@@ -440,8 +440,8 @@ public:
   //=======================================================
   /**
    * @brief Reconnect the edeg e to have the new given extremities
-   * @warning That operation modify the array of neighboors of extrmities of edges, thus
-   * it devalidates iterators on adjacency for the nodes at the extremities of the modified
+   * @warning That operation modifies the array of neighboors of extrmities of edges, thus
+   * it invalidates iterators on adjacency for the nodes at the extremities of the modified
    * edges and nodes.
    * @remark o(1)
    */
@@ -449,13 +449,13 @@ public:
   //=======================================================
   /**
    * @brief Shuffle the array of graph nodes
-   * @remark dependant of stl::random_shuffle algorithm (should be o(N))
+   * @remark dependent of stl::random_shuffle algorithm (should be o(N))
    */
   void shuffleNodes();
   //=======================================================
   /**
    * @brief Shuffle the array of graph edges
-   * @remark dependant of stl::random_shuffle algorithm (should be o(E))
+   * @remark dependent of stl::random_shuffle algorithm (should be o(E))
    */
   void shuffleEdges();
   //=======================================================
@@ -463,7 +463,7 @@ public:
    * @brief Sort all edges according to comparison functor given in parameter
    * if stable is true a stable sort algorithm is applied
    * Comparison should be an instance of a class wihch implements operator():
-   * @remark dependant of stl::sort and stl::stable_sort algorithm (should be o(E log (E)))
+   * @remark dependent of stl::sort and stl::stable_sort algorithm (should be o(E log (E)))
    * @code
    *  class Compare {
    *  //return true if a < b
@@ -493,7 +493,7 @@ public:
    *  bool operator()(const node a, const node b);
    *  };
    * @endcode
-   * @remark dependant of stl::sort and stl::stable_sort algorithm (should be o(N log (N)))
+   * @remark dependent of stl::sort and stl::stable_sort algorithm (should be o(N log (N)))
    * \warning that function is not compatible with the Tulip Graph API
    */
   template <typename Compare>

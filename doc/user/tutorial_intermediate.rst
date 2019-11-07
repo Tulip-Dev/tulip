@@ -300,7 +300,7 @@ After clicking on the *Search* button, the 59 nodes for which the **SUV** proper
 .. note:: It is important to cancel the selection after the coloring operation is finished, since selected nodes are also assigned a dark blue color by default. Click on *Edit* → *Cancel selection*, or press *Ctrl+Shift+A* to cancel selection.
 
 
-Here, we can recognize the color of a particular class of vehicule based on the scatter plots. In this case, the sports cars are of course in red (see **HP**), the SUVs are in dark blue (see **Weight**), etc. However, when we focus on the main group, that is apart from the extremes, it is hard to differentiate between types of vehicles. 
+Here, we can recognize the color of a particular class of vehicle based on the scatter plots. In this case, the sports cars are of course in red (see **HP**), the SUVs are in dark blue (see **Weight**), etc. However, when we focus on the main group, that is apart from the extremes, it is hard to differentiate between types of vehicles.
 
 What this tells us is that there is a lot of overlap, and that apart from the extremes, it is not easy to distinguish the types of vehicles based on the chosen properties. We could try generating a similar view for each class of vehicle.
 

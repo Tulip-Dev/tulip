@@ -176,7 +176,7 @@ public:
   void compileFromSourceFile(const std::string &shaderSrcFilename);
 
   /**
-   * Return true if the shader compilation was successfull, false otherwise
+   * Return true if the shader compilation was successful, false otherwise
    */
   bool isCompiled() const {
     return shaderCompiled;
@@ -227,7 +227,7 @@ public:
   /**
    * GlShaderProgram constructor
    *
-   * \param name An optionnal name can be provided to identify the shader program
+   * \param name An optional name can be provided to identify the shader program
    */
   GlShaderProgram(const std::string &name = "");
 
@@ -401,7 +401,7 @@ public:
   /**
    * Deactivate the shader program.
    */
-  void desactivate();
+  void deactivate();
 
   void setUniformFloat(const std::string &variateName, const float f);
   void setUniformVec2Float(const std::string &variableName, const Vector<float, 2> &vec2f);

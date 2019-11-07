@@ -106,7 +106,7 @@ public:
   /**
    * Disable texture with given name
    */
-  static void desactivateTexture();
+  static void deactivateTexture();
   /**
    * Set animationStep for next textures (for next activateTexture)
    */

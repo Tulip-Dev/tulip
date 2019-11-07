@@ -42,7 +42,7 @@ public:
    * @param colorProperty The property containing colors for each element in the grid.
    * @param map The SOM grid.
    * @param colorScale The color scale to use in the preview.
-   * @param minValue The minium value label.
+   * @param minValue The minimum value label.
    * @param maxValue The maximum value label.
    **/
   SOMPreviewComposite(tlp::Coord position, tlp::Size size, const std::string &propertyName,

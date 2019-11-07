@@ -530,7 +530,7 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
     break;
 
   case NodeShape::Cross: {
-    // polygone 1
+    // polygon 1
     float xr = x - (w * 0.25);
     float yr = y + h;
     float xs = x + (w * 0.25);
@@ -540,7 +540,7 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
     float xl = x - (w * 0.25);
     float yl = y - h;
 
-    // polygone 2
+    // polygon 2
     float xg = x - w;
     float yg = y + (h * 0.25);
     float xi = x + w;

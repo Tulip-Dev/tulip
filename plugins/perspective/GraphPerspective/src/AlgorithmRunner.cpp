@@ -194,8 +194,8 @@ AlgorithmRunner::AlgorithmRunner(QWidget *parent)
   _storeResultAsLocalButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/hierarchy_add.png"));
   _storeResultAsLocalButton->setIconSize(QSize(22, 22));
   _storeResultAsLocalButton->setToolTip(
-      "Choose the storage policy for the result of property algorithms\nWhen they are "
-      "applied to a subgraph, this result can be stored either\n- in a local subgraph "
+      "Choose the storage policy for the result of property algorithms\n(Coloring/Labeling/Layout/Measure/Resizing/Selection).\nWhen those are "
+      "applied to a subgraph, their result can be stored either\n- in a local subgraph "
       "property (created on the fly if needed),\nor\n- in a property already existing in "
       "the ascendant hierarchy (inherited or local).");
   _ui->header->mainFrame()->layout()->addWidget(_storeResultAsLocalButton);

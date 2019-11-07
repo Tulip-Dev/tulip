@@ -238,8 +238,8 @@ public:
 
     IntegerProperty *viewShape = graph->getProperty<IntegerProperty>("viewShape");
 
-    for (size_t i = 0; i < mNodes.size(); ++i) {
-      viewShape->setNodeValue(mNodes[i], NodeShape::Square);
+    for (auto mn : mNodes) {
+      viewShape->setNodeValue(mn, NodeShape::Square);
     }
 
     // restore previous calculators
@@ -262,7 +262,7 @@ public:
       // for each edge
       // store opposite edge in opProp
       for (auto mE : quotientGraph->edges()) {
-        const std::pair<node, node> &eEnds = quotientGraph->ends(mE);
+        auto eEnds = quotientGraph->ends(mE);
         edge op = quotientGraph->existEdge(eEnds.second, eEnds.first);
 
         if (op.isValid()) {
@@ -276,53 +276,54 @@ public:
       for (auto mE : quotientGraph->edges()) {
         edge op(opProp->getEdgeValue(mE));
 
-        if (op.isValid() && edgesToDel.find(mE) == edgesToDel.end() &&
-            edgesToDel.find(op) == edgesToDel.end()) {
+        if (op.isValid() && (edgesToDel.find(mE) == edgesToDel.end()) &&
+            (edgesToDel.find(op) == edgesToDel.end())) {
           // if the opposite edge viewMetric associated value is greater
           // than the mE associated value than we will keep it instead of mE
           bool opOK = viewMetric->getEdgeValue(mE) < viewMetric->getEdgeValue(op);
 
           if (edgeFn != DoubleProperty::NO_CALC) {
-            for (const string &pName : graph->getProperties()) {
-              PropertyInterface *property = graph->getProperty(pName);
+            for (auto property : graph->getObjectProperties()) {
+              DoubleProperty *metric = dynamic_cast<DoubleProperty *>(property);
+              if (metric) {
+                auto pName = property->getName();
+                // try to avoid view... properties
+                if (pName.compare(0, 4, "view") != 0 || pName == "viewMetric") {
+                  double value = metric->getEdgeValue(mE);
+                  double opValue = metric->getEdgeValue(op);
 
-              if (dynamic_cast<DoubleProperty *>(property) &&
-                  // try to avoid view... properties
-                  (pName.compare(0, 4, "view") != 0 || pName == "viewMetric")) {
-                DoubleProperty *metric = graph->getProperty<DoubleProperty>(pName);
-                double value = metric->getEdgeValue(mE);
+                  switch (edgeFn) {
+                  case DoubleProperty::AVG_CALC:
+                    value = (value + opValue) / 2;
+                    break;
 
-                switch (edgeFn) {
-                case DoubleProperty::AVG_CALC:
-                  value = (value + metric->getEdgeValue(op)) / 2;
-                  break;
+                  case DoubleProperty::SUM_CALC:
+                    value += opValue;
+                    break;
 
-                case DoubleProperty::SUM_CALC:
-                  value += metric->getEdgeValue(op);
-                  break;
+                  case DoubleProperty::MAX_CALC:
 
-                case DoubleProperty::MAX_CALC:
+                    if (value < opValue)
+                      value = opValue;
 
-                  if (value < metric->getEdgeValue(op))
-                    value = metric->getEdgeValue(op);
+                    break;
 
-                  break;
+                  case DoubleProperty::MIN_CALC:
 
-                case DoubleProperty::MIN_CALC:
+                    if (value > opValue)
+                      value = opValue;
 
-                  if (value > metric->getEdgeValue(op))
-                    value = metric->getEdgeValue(op);
+                    break;
 
-                  break;
+                  case DoubleProperty::NO_CALC:
+                    break;
+                  }
 
-                case DoubleProperty::NO_CALC:
-                  break;
+                  if (opOK)
+                    metric->setEdgeValue(op, value);
+                  else
+                    metric->setEdgeValue(mE, value);
                 }
-
-                if (opOK)
-                  metric->setEdgeValue(op, value);
-                else
-                  metric->setEdgeValue(mE, value);
               }
             }
           }
@@ -347,19 +348,16 @@ public:
           edgesToDel.insert(meToDel);
           set<edge> se = metaInfo->getEdgeValue(meToKeep);
           const set<edge> &nse = metaInfo->getEdgeValue(meToDel);
-          set<edge>::const_iterator itnse;
 
-          for (itnse = nse.begin(); itnse != nse.end(); ++itnse)
-            se.insert(*itnse);
+          for (auto e : nse)
+            se.insert(e);
 
           metaInfo->setEdgeValue(meToKeep, se);
         }
       }
 
-      set<edge>::const_iterator it;
-
-      for (it = edgesToDel.begin(); it != edgesToDel.end(); ++it)
-        quotientGraph->delEdge(*it);
+      for (auto e : edgesToDel)
+        quotientGraph->delEdge(e);
     }
 
     delete opProp;
@@ -396,10 +394,8 @@ public:
       dSet.set("meta-node label", metaLabel);
       dSet.set("use name of subgraph", useSubGraphName);
       dSet.set("layout quotient graph(s)", quotientLayout);
-      vector<node>::iterator itn = mNodes.begin();
 
-      while (itn != mNodes.end()) {
-        node mn = *itn;
+      for (node mn : mNodes) {
         Graph *sg = quotientGraph->getNodeMetaInfo(mn);
         string eMsg;
         sg->applyAlgorithm("Quotient Clustering", eMsg, &dSet, pluginProgress);
@@ -408,8 +404,6 @@ public:
         // update metaInfo of current meta node
         if (dSet.getAndFree("quotientGraph", sg))
           metaInfo->setNodeValue(mn, sg);
-
-        ++itn;
       }
     }
 

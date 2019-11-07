@@ -94,7 +94,7 @@ void AcyclicTest::makeAcyclic(Graph *graph, vector<edge> &reversed,
   std::vector<edge> edgesToDel;
   // replace self loops by three edges and two nodes.
   // do a loop on the already existing edges
-  auto edges = graph->edges();
+  const vector<edge> &edges = graph->edges();
   // newly added edges during the loop
   // will not be taken into account
   unsigned int nbEdges = edges.size();
@@ -105,9 +105,8 @@ void AcyclicTest::makeAcyclic(Graph *graph, vector<edge> &reversed,
     if (eEnds.first == eEnds.second) {
       node n1 = graph->addNode();
       node n2 = graph->addNode();
-      selfLoops.push_back(tlp::SelfLoops(n1, n2, graph->addEdge(eEnds.first, n1),
-                                         graph->addEdge(n1, n2), graph->addEdge(eEnds.first, n2),
-                                         e));
+      selfLoops.emplace_back(n1, n2, graph->addEdge(eEnds.first, n1), graph->addEdge(n1, n2),
+                             graph->addEdge(eEnds.first, n2), e);
       edgesToDel.push_back(e);
     }
   }

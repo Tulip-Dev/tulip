@@ -122,7 +122,7 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
     // check if curNode has been already visited
     if (!visited[i]) {
       // add a new component
-      components.push_back(std::vector<node>());
+      components.emplace_back();
       std::vector<node> &component = components.back();
       // and initialize it with current node
       component.push_back(n);
@@ -151,24 +151,6 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
       }
     }
   });
-}
-//======================================================================
-void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
-                                               vector<set<node>> &components) {
-  std::vector<std::vector<node>> vComponents;
-  computeConnectedComponents(graph, vComponents);
-  unsigned int nbComp = vComponents.size();
-  components.resize(nbComp);
-
-  for (unsigned int i = 0; i < nbComp; ++i) {
-    const std::vector<node> &vNodes = vComponents[i];
-    std::set<node> &sNodes = components[i];
-    sNodes.clear();
-    unsigned int nbNodes = vNodes.size();
-
-    for (unsigned int j = 0; j < nbNodes; ++j)
-      sNodes.insert(vNodes[j]);
-  }
 }
 //=================================================================
 void ConnectedTest::connect(const tlp::Graph *const graph, vector<node> &toLink) {

@@ -127,7 +127,7 @@ void GlQuantitativeAxis::buildAxisGraduations() {
     minStr = " " + minStr;
   }
 
-  axisLabels.push_back(minStr);
+  axisLabels.push_back(std::move(minStr));
 
   for (double i = minV + increment; i < maxV; i += increment) {
 
@@ -152,7 +152,7 @@ void GlQuantitativeAxis::buildAxisGraduations() {
       gradLabel = " " + gradLabel;
     }
 
-    axisLabels.push_back(gradLabel);
+    axisLabels.push_back(std::move(gradLabel));
   }
 
   string maxStr = getStringFromNumber(max);
@@ -161,7 +161,7 @@ void GlQuantitativeAxis::buildAxisGraduations() {
     maxStr = " " + maxStr;
   }
 
-  axisLabels.push_back(maxStr);
+  axisLabels.push_back(std::move(maxStr));
 
   if (!ascendingOrder && (min + max) > 0) {
     reverse(axisLabels.begin(), axisLabels.end());

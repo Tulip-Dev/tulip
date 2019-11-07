@@ -34,7 +34,7 @@ namespace tlp {
  * @class MemoryPool
  * \brief That class enables to easily create a memory pool for an a class
  *
- * It allocates chunk of BUFFOBJ size of continous memory to allocate
+ * It allocates chunk of BUFFOBJ size of contiguous memory to allocate
  * instance of the class. After a delete the memory is not free, and
  * will be reused at the next new of the class.
  *

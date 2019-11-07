@@ -66,11 +66,6 @@ void IntegerProperty::setAllNodeValue(tlp::StoredType<int>::ReturnedConstValue v
   IntegerMinMaxProperty::setAllNodeValue(v);
 }
 //=================================================================================
-void IntegerProperty::setAllNodeValue(tlp::StoredType<int>::ReturnedConstValue v,
-                                      const Graph *graph) {
-  setValueToGraphNodes(v, graph);
-}
-//=================================================================================
 void IntegerProperty::setValueToGraphNodes(tlp::StoredType<int>::ReturnedConstValue v,
                                            const Graph *graph) {
   IntegerMinMaxProperty::updateAllNodesValues(v);
@@ -80,11 +75,6 @@ void IntegerProperty::setValueToGraphNodes(tlp::StoredType<int>::ReturnedConstVa
 void IntegerProperty::setAllEdgeValue(tlp::StoredType<int>::ReturnedConstValue v) {
   IntegerMinMaxProperty::updateAllEdgesValues(v);
   IntegerMinMaxProperty::setAllEdgeValue(v);
-}
-//=================================================================================
-void IntegerProperty::setAllEdgeValue(tlp::StoredType<int>::ReturnedConstValue v,
-                                      const Graph *graph) {
-  setValueToGraphEdges(v, graph);
 }
 //=================================================================================
 void IntegerProperty::setValueToGraphEdges(tlp::StoredType<int>::ReturnedConstValue v,

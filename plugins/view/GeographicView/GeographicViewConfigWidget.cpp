@@ -41,12 +41,12 @@ GeographicViewConfigWidget::~GeographicViewConfigWidget() {
 
 void GeographicViewConfigWidget::openCsvFileBrowser() {
   _ui->csvFile->setText(
-      QFileDialog::getOpenFileName(nullptr, tr("Open csv file"), "./", tr("cvs file (*.*)")));
+      QFileDialog::getOpenFileName(nullptr, "Open csv file", "./", "cvs file (*.*)"));
 }
 
 void GeographicViewConfigWidget::openPolyFileBrowser() {
   _ui->polyFile->setText(
-      QFileDialog::getOpenFileName(nullptr, tr("Open .poly file"), "./", tr("Poly file (*.poly)")));
+      QFileDialog::getOpenFileName(nullptr, "Open .poly file", "./", "Poly file (*.poly)"));
 }
 
 void GeographicViewConfigWidget::openCsvHelp() {
@@ -58,7 +58,7 @@ void GeographicViewConfigWidget::openCsvHelp() {
 void GeographicViewConfigWidget::openPolyHelp() {
   QMessageBox::about(nullptr, "Map poly files",
                      ".poly files format are an open street map "
-                     "format.\nYou can donwload .poly file on "
+                     "format.\nYou can download .poly file on "
                      ":\nhttp://downloads.cloudmade.com/");
 }
 

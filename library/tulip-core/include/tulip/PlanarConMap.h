@@ -123,7 +123,7 @@ public:
   Iterator<edge> *getFaceEdges(const Face);
 
   //================================================================================
-  // Graph, nodes and edges information about the graph stucture
+  // Graph, nodes and edges information about the graph structure
   //================================================================================
   /// Return the edge which is the succcessor of an edge in the cycle of a node.
   edge succCycleEdge(const edge, const node) const;
@@ -160,7 +160,7 @@ private:
   /**
    * Delete the edge in the map. The new face can be put into a specified face,
    * otherwise, one of the two adjacent faces will be updated.
-   * Warning, the edge must not be an isthm of the map, otherwize the map will be deconnected
+   * Warning, the edge must not be an isthm of the map, otherwise the map will be deconnected
    * and so won't be valid any more.
    */
   void delEdgeMap(edge, Face = Face());

@@ -163,7 +163,7 @@ std::list<std::string> PluginLister::availablePlugins() {
   for (auto it = _plugins.begin(); it != _plugins.end(); ++it) {
     // deprecated names are not listed
     if (it->first == it->second.info->name())
-      keys.push_back(it->first);
+      keys.emplace_back(it->first);
   }
 
   return keys;
@@ -206,7 +206,7 @@ void PluginLister::registerPlugin(PluginFactory *factory) {
         std::string tmpStr;
         tmpStr += "'" + oldName + "' cannot be a deprecated name of plugin '" + pluginName + "'";
         PluginLoader::current->aborted(tmpStr,
-                                       "multiple definitions found; check your plugin librairies.");
+                                       "multiple definitions found; check your plugin libraries.");
       }
     }
   } else {
@@ -214,7 +214,7 @@ void PluginLister::registerPlugin(PluginFactory *factory) {
       std::string tmpStr;
       tmpStr += "'" + pluginName + "' plugin";
       PluginLoader::current->aborted(tmpStr,
-                                     "multiple definitions found; check your plugin librairies.");
+                                     "multiple definitions found; check your plugin libraries.");
     }
 
     delete information;

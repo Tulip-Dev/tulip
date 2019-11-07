@@ -144,7 +144,7 @@ void DoubleStringsListRelationDialog::interpolateCheckBoxChange(int state) {
       QColor color = _ui->secondListWidget->item(i)->background().color();
       lastNonInterpolateValues.push_back(QColorToColor(color));
     }
-    // replace the color colums with interpolated values
+    // replace the color columns with interpolated values
     ColorScale tempCS = ColorScale(lastNonInterpolateValues);
     float nbOfValues = static_cast<float>(_ui->firstListWidget->count());
     _ui->secondListWidget->clear();

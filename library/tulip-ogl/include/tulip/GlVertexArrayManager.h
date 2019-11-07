@@ -100,22 +100,22 @@ public:
    */
   void setHaveToComputeAll(bool compute);
   /**
-   * Call this function if this GlVertexArrayManager have to compute layout propertie
+   * Call this function if this GlVertexArrayManager have to compute layout property
    */
   void setHaveToComputeLayout(bool compute);
   /**
-   * Call this function if this GlVertexArrayManager have to compute colors propertie
+   * Call this function if this GlVertexArrayManager have to compute colors property
    */
   void setHaveToComputeColor(bool compute);
 
   /**
-   * Call this function at the begining of the rendering
+   * Call this function at the beginning of the rendering
    * This function clear entities to render
    */
   void beginRendering();
   /**
-   * Call this funtion at the end of rendering
-   * This function draw needed entities
+   * Call this function at the end of rendering
+   * This function draws needed entities
    */
   void endRendering();
 

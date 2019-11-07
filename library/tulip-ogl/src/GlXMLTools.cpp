@@ -175,7 +175,7 @@ GlSimpleEntity *GlXMLTools::createEntity(const string &name) {
   } else if (name == "GlSphere") {
     return new GlSphere();
   } else {
-    tlp::debug() << "Unknow entity type : " << name << ". Can't create it !" << endl;
+    tlp::debug() << "Unknown entity type : " << name << ". Can't create it !" << endl;
   }
 
   return nullptr;

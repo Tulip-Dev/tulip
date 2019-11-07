@@ -32,7 +32,7 @@ class Point4d(object):
         self.w = w
 
     """
-    Transform coodinate from spherical space to cartesian space
+    Transform coordinate from spherical space to cartesian space
 
     :param float theta: the theta coordinate for a node in spherical space,
         polar angle

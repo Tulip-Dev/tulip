@@ -584,7 +584,7 @@ bool LineType::read(istream &is, RealType &v, char openChar, char sepChar, char 
       if (!PointType::read(is, val))
         return false;
 
-      v.push_back(val);
+      v.push_back(std::move(val));
     } else {
       // , is not required between coords
       is.unget();
@@ -593,7 +593,7 @@ bool LineType::read(istream &is, RealType &v, char openChar, char sepChar, char 
       if (!PointType::read(is, val))
         return false;
 
-      v.push_back(val);
+      v.push_back(std::move(val));
       firstVal = false;
     }
   }
@@ -910,7 +910,7 @@ bool StringVectorType::read(istream &is, RealType &v, char openChar, char sepCha
         if (!(openChar ? StringType::read(is, str) : StringType::read(is, str, '\0', sepChar)))
           return false;
 
-        v.push_back(str);
+        v.push_back(std::move(str));
 
         if (!openChar)
           // last read char was sepChar
@@ -1174,12 +1174,12 @@ struct StringCollectionSerializer : public TypedDataSerializer<StringCollection>
         return false;
 
       if (c == '"') {
-        sc.push_back(str);
+        sc.push_back(std::move(str));
         return true;
       }
 
       if (c == ';') {
-        sc.push_back(str);
+        sc.push_back(std::move(str));
         str.clear();
       } else
         str.push_back(c);

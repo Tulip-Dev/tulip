@@ -49,7 +49,7 @@ StringCollection::StringCollection(const std::string &param) : current(0) {
     // check string separator
     if (*itChar == ';') {
       escapeChar = false;
-      _data.push_back(temp);
+      _data.emplace_back(temp);
       temp.clear();
       ++itChar;
       continue;
@@ -65,7 +65,7 @@ StringCollection::StringCollection(const std::string &param) : current(0) {
   }
 
   if (!temp.empty())
-    _data.push_back(temp);
+    _data.emplace_back(temp);
 }
 
 StringCollection::StringCollection(const std::vector<string> &vectorParam, const int currentParam)

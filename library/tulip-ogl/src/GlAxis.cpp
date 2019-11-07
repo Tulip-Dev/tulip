@@ -78,7 +78,7 @@ void GlAxis::setAxisGraduations(const std::vector<std::string> &axisGradsLabels,
     graduationLabel->setText(axisGradsLabels[i]);
     graduationLabel->setColor(axisColor);
 
-    BoundingBox textBoundingBox = graduationLabel->getTextBoundingBox();
+    const BoundingBox &textBoundingBox = graduationLabel->getTextBoundingBox();
     labelHeight = spaceBetweenAxisGrads / 2.;
 
     if (labelHeight > 50)
@@ -247,7 +247,7 @@ void GlAxis::addAxisCaption(const Coord &captionLabelCenter, const bool frame) {
 
   if (frame) {
     captionLabel->setSize(Size(captionWidth, baseCaptionHeight));
-    BoundingBox labelBB = captionLabel->getBoundingBox();
+    BoundingBox &&labelBB = captionLabel->getBoundingBox();
     GlRect *captionLabelInnerFrame =
         new GlRect(Coord(labelBB[0][0] - 1, labelBB[0][1] + baseCaptionHeight + 1),
                    Coord(labelBB[0][0] + captionWidth + 1, labelBB[0][1] - 1), axisColor, axisColor,
@@ -275,7 +275,7 @@ void GlAxis::addAxisCaption(const Coord &captionLabelCenter, const bool frame) {
 void GlAxis::computeCaptionSize(float height) {
   GlLabel captionLabel;
   captionLabel.setText(captionText);
-  BoundingBox boundingBox = captionLabel.getTextBoundingBox();
+  const BoundingBox &boundingBox = captionLabel.getTextBoundingBox();
   captionHeight = height;
   captionWidth =
       height / (boundingBox[1][1] - boundingBox[0][1]) * (boundingBox[1][0] - boundingBox[0][0]);
@@ -328,26 +328,25 @@ void GlAxis::setGradsLabelsHeight(float height) {
 
   unsigned int i = 0;
 
-  for (vector<GlLabel *>::iterator it = gradsLabelsVector.begin(); it != gradsLabelsVector.end();
-       ++it) {
-    BoundingBox textBoundingBox = (*it)->getTextBoundingBox();
+  for (auto label : gradsLabelsVector) {
+    const BoundingBox &textBoundingBox = label->getTextBoundingBox();
     float labelWidth = (labelHeight / (textBoundingBox[1][1] - textBoundingBox[0][1])) *
                        (textBoundingBox[1][0] - textBoundingBox[0][0]);
-    (*it)->setSize(Size(labelWidth, labelHeight));
+    label->setSize(Size(labelWidth, labelHeight));
 
     if (axisOrientation == HORIZONTAL_AXIS) {
       if (axisGradsPosition == LEFT_OR_BELOW)
-        (*it)->setPosition(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads,
+        label->setPosition(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads,
                                  axisBaseCoord.getY() - axisGradsWidth / 2 - labelWidth / 2 - 2));
       else if (axisGradsPosition == RIGHT_OR_ABOVE)
-        (*it)->setPosition(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads,
+        label->setPosition(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads,
                                  axisBaseCoord.getY() + axisGradsWidth / 2 + labelWidth / 2 + 2));
     } else if (axisOrientation == VERTICAL_AXIS) {
       if (axisGradsPosition == LEFT_OR_BELOW)
-        (*it)->setPosition(Coord(axisBaseCoord.getX() - axisGradsWidth / 2. - labelWidth / 2. - 2,
+        label->setPosition(Coord(axisBaseCoord.getX() - axisGradsWidth / 2. - labelWidth / 2. - 2,
                                  axisBaseCoord.getY() + i * spaceBetweenAxisGrads));
       else if (axisGradsPosition == RIGHT_OR_ABOVE)
-        (*it)->setPosition(Coord(axisBaseCoord.getX() + axisGradsWidth / 2. + labelWidth / 2. + 2,
+        label->setPosition(Coord(axisBaseCoord.getX() + axisGradsWidth / 2. + labelWidth / 2. + 2,
                                  axisBaseCoord.getY() + i * spaceBetweenAxisGrads));
     }
 

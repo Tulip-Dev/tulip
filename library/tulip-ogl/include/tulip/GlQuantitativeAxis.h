@@ -66,8 +66,8 @@ public:
    * \param axisGradsLabelsPosition the relative position of the axis graduations label. Two
    * possible values : LEFT_OR_BELOW (if the axis is vertical, labels will be on the left of the
    * axis, otherwise below) or RIGHT_OR_ABOVE
-   * \param drawFirstLabel If false, the first graduation label will not be drawn (usefull when some
-   * axis have the same base coord to avoid labels overlapping)
+   * \param drawFirstLabel If false, the first graduation label will not be drawn (useful when some
+   * axes have the same base coord to avoid labels overlapping)
    */
   void setAxisParameters(const double min, const double max, const unsigned int nbGraduations,
                          const LabelPosition &axisGradsLabelsPosition = LEFT_OR_BELOW,

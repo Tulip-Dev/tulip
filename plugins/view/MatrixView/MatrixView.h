@@ -122,7 +122,7 @@ private:
 
   tlp::Graph *_matrixGraph;
 
-  // Correspondance maps
+  // Correspondence maps
   tlp::IntegerVectorProperty *_graphEntitiesToDisplayedNodes;
   tlp::IntegerProperty *_displayedNodesToGraphEntities;
   tlp::IntegerProperty *_displayedEdgesToGraphEdges;

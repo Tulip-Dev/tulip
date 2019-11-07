@@ -94,7 +94,7 @@ public:
   bool importGraph() override {
     string filename;
     bool curvedEdges = false;
-    // get the filename choosed by the user
+    // get the filename chosen by the user
     dataSet->get<string>("file::filename", filename);
     dataSet->get<bool>("Curved edges", curvedEdges);
 

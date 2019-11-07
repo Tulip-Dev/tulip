@@ -18,7 +18,6 @@
  */
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/StringCollection.h>
-#include <tulip/NumericProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StaticProperty.h>
@@ -117,7 +116,7 @@ public:
                                      "Area Proportional <br/> Quadratic/Cubic");
 
     // result needs to be an inout parameter
-    // in order to preserve the original values of non targetted elements
+    // in order to preserve the original values of non targeted elements
     // i.e if "target" = "nodes", the values of edges must be preserved
     // and if "target" = "edges", the values of nodes must be preserved
     parameters.setDirection("result", INOUT_PARAM);

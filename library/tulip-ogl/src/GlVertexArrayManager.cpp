@@ -528,8 +528,8 @@ void GlVertexArrayManager::endRendering() {
       }
     }
 
-    for (map<float, vector<GLuint>>::const_iterator it = quadsOutlineRenderingIndicesArray.begin();
-         it != quadsOutlineRenderingIndicesArray.end(); ++it) {
+    for (auto it = quadsOutlineRenderingIndicesArray.cbegin();
+         it != quadsOutlineRenderingIndicesArray.cend(); ++it) {
       glLineWidth(it->first);
       glDrawElements(GL_LINES, it->second.size(), GL_UNSIGNED_INT, VECTOR_DATA(it->second));
     }
@@ -628,8 +628,7 @@ void GlVertexArrayManager::endRendering() {
     glDrawElements(GL_TRIANGLES, quadsSelectedRenderingIndicesArray.size(), GL_UNSIGNED_INT,
                    VECTOR_DATA(quadsSelectedRenderingIndicesArray));
 
-    for (map<float, vector<GLuint>>::iterator it =
-             quadsSelectedOutlineRenderingIndicesArray.begin();
+    for (auto it = quadsSelectedOutlineRenderingIndicesArray.begin();
          it != quadsSelectedOutlineRenderingIndicesArray.end(); ++it) {
       glLineWidth(it->first);
       glDrawElements(GL_LINES, it->second.size(), GL_UNSIGNED_INT, VECTOR_DATA(it->second));
@@ -807,6 +806,7 @@ void GlVertexArrayManager::activateQuadEdgeDisplay(GlEdge *glEdge, bool selected
   auto &renderingIndicesArray =
       selected ? quadsSelectedRenderingIndicesArray : quadsRenderingIndicesArray;
 
+  renderingIndicesArray.reserve(renderingIndicesArray.size() + 6 * ((endIndex - beginIndex) / 2));
   for (unsigned int i = beginIndex; i < endIndex; i += 2) {
     renderingIndicesArray.push_back(i);
     renderingIndicesArray.push_back(i + 1);
@@ -828,6 +828,7 @@ void GlVertexArrayManager::activateQuadEdgeDisplay(GlEdge *glEdge, bool selected
     }
 
     auto &outlineRenderingIndices = outlineRenderingIndicesArray[borderWidth];
+    outlineRenderingIndices.reserve(outlineRenderingIndices.size() + 4 * ((nbQuads / 2) - 1));
     for (unsigned int i = 0; i < (nbQuads / 2) - 1; ++i) {
       outlineRenderingIndices.push_back(beginIndex + 2 * i);
       outlineRenderingIndices.push_back(beginIndex + 2 * (i + 1));

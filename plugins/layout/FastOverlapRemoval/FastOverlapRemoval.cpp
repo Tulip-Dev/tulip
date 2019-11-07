@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <tulip/DoubleProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringCollection.h>
 #include <tulip/GraphParallelTools.h>

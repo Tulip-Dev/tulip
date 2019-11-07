@@ -18,19 +18,15 @@
  */
 #include <GL/glew.h>
 
-#include <tulip/OpenGlConfigManager.h>
-
 #include <iostream>
 
-#include <tulip/StringProperty.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/GlTextureManager.h>
-#include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/Graph.h>
+#include <tulip/Color.h>
+#include <tulip/Coord.h>
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/GlSphere.h>
 

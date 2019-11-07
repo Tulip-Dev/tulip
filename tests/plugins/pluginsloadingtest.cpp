@@ -52,7 +52,7 @@ public:
 // Simple test that will try to load all compiled plugins from the Tulip trunk
 // in order to detect possible issues.
 // The test will then try to create and destroy an instance of each plugin.
-// This can be helpfull to catch possible segfaults or memory leaks.
+// This can be helpful to catch possible segfaults or memory leaks.
 int main(int argc, char **argv) {
 
 #ifndef TULIP_BUILD_CORE_ONLY
@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
     delete plugin;
   }
 
-  // test is successfull if there was no plugin loading issue
+  // test is successful if there was no plugin loading issue
   if (pLoader.allPluginsLoaded) {
     return EXIT_SUCCESS;
   } else {

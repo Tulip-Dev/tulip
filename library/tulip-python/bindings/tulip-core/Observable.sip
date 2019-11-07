@@ -351,7 +351,7 @@ This function is called when events are sent to Observers, and Observers only.
 
 It is passed a list of all the events that happened since the last call.
 If events were on hold, this vector can be pretty large, and if events were not on hold it is likely it only contains a single element.
-It is important to note that custom events can not be catched with that method. Only instances
+It is important to note that custom events can not be caught with that method. Only instances
 of base :class:`tlp.Event` type are stored in the list.
 Moreover when unholding events through a call to :meth:`tlp.Observable.unholdObservers`, if several
 events were sent from the same object, only one instance of :class:`tlp.Event` will be stored in the list

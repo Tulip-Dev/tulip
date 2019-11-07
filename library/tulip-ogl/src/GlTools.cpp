@@ -106,7 +106,7 @@ static const struct glErrorStruct glErrorStructs[] = {
     {GL_INVALID_FRAMEBUFFER_OPERATION_EXT, "invalid framebuffer operation"},
 #endif
     {GL_TABLE_TOO_LARGE, "table too large"},
-    {UINT_MAX, "unknow error"} /* end of list indicator */
+    {UINT_MAX, "unknown error"} /* end of list indicator */
 };
 
 // the function to retrieve

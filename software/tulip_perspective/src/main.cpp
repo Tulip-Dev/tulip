@@ -29,23 +29,15 @@
 
 #include <tulip/TulipException.h>
 #include <tulip/TulipRelease.h>
-#include <tulip/PluginLibraryLoader.h>
-#include <tulip/PluginLister.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipProject.h>
 #include <tulip/SimplePluginProgressWidget.h>
 #include <tulip/PluginLister.h>
 #include <tulip/Perspective.h>
-#include <tulip/Interactor.h>
-#include <tulip/GlyphManager.h>
-#include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/QGlBufferManager.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
-#include <tulip/WorkspacePanel.h>
-#include <tulip/View.h>
-#include <tulip/GlMainView.h>
 #include <tulip/GlMainWidget.h>
 
 #include "TulipPerspectiveMainWindow.h"

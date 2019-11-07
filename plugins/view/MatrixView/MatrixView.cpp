@@ -166,7 +166,7 @@ void MatrixView::setOriented(bool flag) {
       }
     } else {
       for (auto e : graph()->edges()) {
-        // must add the symetric node
+        // must add the symmetric node
         vector<int> edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
         edgeNodes.push_back(_matrixGraph->addNode().id);
         _graphEntitiesToDisplayedNodes->setEdgeValue(e, edgeNodes);
@@ -246,13 +246,12 @@ void MatrixView::fillContextMenu(QMenu *menu, const QPointF &point) {
 
     menu->addSeparator();
 
-    QAction *action =
-        menu->addAction(tr("Toggle selection"), this, SLOT(addRemoveItemToSelection()));
+    QAction *action = menu->addAction("Toggle selection", this, SLOT(addRemoveItemToSelection()));
     action->setToolTip(QString("Invert the selection of the ") + (isNode ? "node #" : "edge #") +
                        sId);
-    action = menu->addAction(tr("Select"), this, SLOT(selectItem()));
+    action = menu->addAction("Select", this, SLOT(selectItem()));
     action->setToolTip(QString("Select the ") + (isNode ? "node #" : "edge #") + sId);
-    action = menu->addAction(tr("Delete"), this, SLOT(deleteItem()));
+    action = menu->addAction("Delete", this, SLOT(deleteItem()));
     action->setToolTip(QString("Delete the ") + (isNode ? "node #" : "edge #") + sId);
   }
 }

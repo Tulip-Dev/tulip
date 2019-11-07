@@ -160,12 +160,6 @@ void tlp::AbstractProperty<Tnode, Tedge, Tprop>::setNodeDefaultValue(
 }
 //=============================================================
 template <class Tnode, class Tedge, class Tprop>
-void tlp::AbstractProperty<Tnode, Tedge, Tprop>::setAllNodeValue(
-    typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v, const Graph *graph) {
-  setValueToGraphNodes(v, graph);
-}
-//=============================================================
-template <class Tnode, class Tedge, class Tprop>
 void tlp::AbstractProperty<Tnode, Tedge, Tprop>::setValueToGraphNodes(
     typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v, const Graph *graph) {
   if (this->getGraph() == graph || this->getGraph()->isDescendantGraph(graph)) {
@@ -223,12 +217,6 @@ void tlp::AbstractProperty<Tnode, Tedge, Tprop>::setAllEdgeValue(
   edgeDefaultValue = v;
   edgeProperties.setAll(v);
   Tprop::notifyAfterSetAllEdgeValue();
-}
-//============================================================
-template <class Tnode, class Tedge, class Tprop>
-void tlp::AbstractProperty<Tnode, Tedge, Tprop>::setAllEdgeValue(
-    typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue v, const Graph *graph) {
-  setValueToGraphEdges(v, graph);
 }
 //============================================================
 template <class Tnode, class Tedge, class Tprop>

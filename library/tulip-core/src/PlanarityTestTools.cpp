@@ -59,7 +59,6 @@ list<edge> posDFS(Graph *sG, MutableContainer<int> &dfsPos) {
     if (dfsPre.get(n.id) == 0)
       dfsAux(sG, n, dfsPre, dfsPos, dfsEdges, preCount, postCount);
   }
-
   return dfsEdges;
 }
 //=================================================================
@@ -167,10 +166,10 @@ void PlanarityTestImpl::sortNodesIncreasingOrder(Graph *g, MutableContainer<int>
  */
 void PlanarityTestImpl::preProcessing(Graph *g) {
   int numberOfNodes = g->numberOfNodes();
-  list<edge> edgeInT0; // list of edges in T_0;
-  edgeInT0 = posDFS(g, dfsPosNum);
+  // list of edges in T_0;
+  list<edge> &&edgeInT0 = posDFS(g, dfsPosNum);
 
-  for (list<edge>::iterator it = edgeInT0.begin(); it != edgeInT0.end(); ++it) {
+  for (auto it = edgeInT0.begin(); it != edgeInT0.end(); ++it) {
     edge e = *it;
     auto ends = g->ends(e);
     node n = ends.first;
@@ -181,7 +180,7 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
 
 #ifndef NDEBUG
 
-  for (list<edge>::iterator it = edgeInT0.begin(); it != edgeInT0.end(); ++it) {
+  for (auto it = edgeInT0.begin(); it != edgeInT0.end(); ++it) {
     edge e = *it;
     assert(!(isBackEdge(g, e) || isBackEdge(g, edgeReversal(e))));
   }
@@ -310,7 +309,7 @@ void PlanarityTestImpl::addOldCNodeRBCToNewRBC(node oldCNode, node, node n, node
 
   RBC[oldCNode].delItem(RBC[oldCNode].firstItem());
 
-  // endpoint to correctly concatentates with RBC[new_cnode];
+  // endpoint to correctly concatenates with RBC[new_cnode];
   node first = n1;
 
   if (!n1.isValid()) {
@@ -643,19 +642,19 @@ node PlanarityTestImpl::findNodeWithLabelBGreaterThanDfsN(bool saveLastNodeTrave
 
   // restores parent;
   // forall(v, nl)
-  for (list<node>::iterator it1 = nl.begin(); it1 != nl.end(); ++it1)
-    parent.set((*it1).id, p[*it1]);
+  for (auto itn : nl)
+    parent.set(itn.id, p[itn]);
 
   if (result.isValid())
     return result;
 
   // restores info if result is nil;
   // forall(v, nl2) {
-  for (list<node>::iterator it2 = nl2.begin(); it2 != nl2.end(); ++it2) {
-    labelB.set((*it2).id, b[*it2]);
+  for (auto itn : nl2) {
+    labelB.set(itn.id, b[itn]);
 
     if (embed) // needed to calculate obstruction edges;
-      nodeLabelB.set((*it2).id, nb[*it2]);
+      nodeLabelB.set(itn.id, nb[itn]);
   }
 
   // to update label_b of n correctly in future iteration
@@ -883,15 +882,14 @@ node PlanarityTestImpl::findActiveCNode(node u, node w, list<node> &nl) {
 
   // path compression;
   // forall(v, traversedNodesInRBC)
-  for (list<node>::iterator it = traversedNodesInRBC.begin(); it != traversedNodesInRBC.end();
-       ++it) {
-    if (*it != first) {
-      if (*it != u)
+  for (auto itn : traversedNodesInRBC) {
+    if (itn != first) {
+      if (itn != u)
         nl.push_back(v);
 
-      parent.set((*it).id, cNode);
+      parent.set(itn.id, cNode);
     } else
-      state.set((*it).id, NOT_VISITED);
+      state.set(itn.id, NOT_VISITED);
   }
 
   return cNode;

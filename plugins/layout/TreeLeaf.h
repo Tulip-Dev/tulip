@@ -33,11 +33,6 @@
  * tree. The other nodes are placed at the center of their children
  * (x-coordinates), and the y-coordinate is their depth in the tree.
  *
- * <b>HISTORY</b>
- *
- * - 01/12/99 Verson 0.0.1: Initial release
- *
- *
  * \note Let n be the number of nodes, the algorithm complexity is in O(n).
  *
  *
@@ -49,7 +44,12 @@ class OrientableSizeProxy;
 class TreeLeaf : public tlp::LayoutAlgorithm {
 public:
   PLUGININFORMATION("Tree Leaf", "David Auber", "01/12/1999",
-                    "Implements a simple level-based tree layout.", "1.1", "Tree")
+                    "Implements a simple level-based tree layout.<br/>"
+                    "All leaves are placed at a distance one (x-coordinates) and the order"
+                    " is the one of a suffix ordering. The y coordinates is the depth in the"
+                    " tree. The other nodes are placed at the center of their children"
+                    " (x-coordinates), and the y-coordinate is their depth in the tree.",
+                    "1.1", "Tree")
   TreeLeaf(const tlp::PluginContext *context);
   ~TreeLeaf() override;
   bool run() override;

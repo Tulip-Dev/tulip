@@ -35,10 +35,10 @@ GlGraphRenderingParameters::GlGraphRenderingParameters()
       _metaNodesLabelStencil(0xFFFF), _edgesLabelStencil(0xFFFF), _labelScaled(false),
       _labelFixedFontSize(false), _labelMinSize(4), _labelMaxSize(30), _labelsDensity(0),
       _labelsAreBillboarded(false), _fontsPath(tlp::TulipBitmapDir), _texturePath(""),
-      _edgesMaxSizeToNodesSize(true), _feedbackRender(false),
+      _edgesMaxSizeToNodesSize(true),
       _selectionColor(GlDefaultSelectionColorManager::getDefaultSelectionColor()),
       _displayFilteringProperty(nullptr), _elementOrderingProperty(nullptr) {}
-// This function should rewriten completly
+// This function should rewritten completly
 DataSet GlGraphRenderingParameters::getParameters() const {
   DataSet data;
   // bool
@@ -84,7 +84,7 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   return data;
 }
 
-// This function should rewriten completly
+// This function should rewritten completly
 void GlGraphRenderingParameters::setParameters(const DataSet &data) {
   bool b = false;
   Color c;
@@ -419,13 +419,6 @@ bool GlGraphRenderingParameters::getEdgesMaxSizeToNodesSize() const {
 }
 void GlGraphRenderingParameters::setEdgesMaxSizeToNodesSize(const bool b) {
   _edgesMaxSizeToNodesSize = b;
-}
-//====================================================
-void GlGraphRenderingParameters::setFeedbackRender(bool feedback) {
-  _feedbackRender = feedback;
-}
-bool GlGraphRenderingParameters::getFeedbackRender() const {
-  return _feedbackRender;
 }
 //====================================================
 void GlGraphRenderingParameters::setSelectionColor(const Color &color) {

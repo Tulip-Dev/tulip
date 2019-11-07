@@ -56,12 +56,12 @@
  * prop_name = length + utf8 text
  * graph_id = uint32
  * type = length + utf8 text
- * default_node_val = type dependant (method readb)
- * default_edge_val = type dependant (method readb)
+ * default_node_val = type dependent (method readb)
+ * default_edge_val = type dependent (method readb)
  * nb_nodes_val = uint32
- * nodes_val = nb_nodes_val * <node, node_val> (uint32 + type dependant)
+ * nodes_val = nb_nodes_val * <node, node_val> (uint32 + type dependent)
  * nb_edges_val = uint32
- * edges_val = nb_edges_val * <edge, edge_val> (uint32 + type dependant)
+ * edges_val = nb_edges_val * <edge, edge_val> (uint32 + type dependent)
  * graph_attributes = (nb_subgraphs + 1) * <graph_id, graph_attributes_list>*
  */
 

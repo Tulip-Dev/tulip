@@ -125,7 +125,7 @@ If you change the position of a node (*viewLayout* property) within a subgraph (
 
 If you use a measure algorithm on a subgraph, new local properties are created. Those properties are not applied to the root graph (if properties are not defined on the subgraph, they are inherited).
 
-You can also note that, because of the hierachy, some actions (delete, rename...) done in the root graph or in one of the non-final subgraph will obviously pass on to every subgraph. Identically, the creation of a node in a subgraph will add it in each of the graphs above.
+You can also note that, because of the hierarchy, some actions (delete, rename...) done in the root graph or in one of the non-final subgraph will obviously pass on to every subgraph. Identically, the creation of a node in a subgraph will add it in each of the graphs above.
 
 
 .. _csv:
@@ -141,7 +141,7 @@ Tulip proposes an import wizard for CSV files. Comma-separated values files are 
 Example files
 -------------
 
-In this part, we will present the functionnality with an example. To this end, the two following files have been used :
+In this part, we will present the functionality with an example. To this end, the two following files have been used :
 
 :download:`nodes.csv <./_documents/nodes.csv>`::
 

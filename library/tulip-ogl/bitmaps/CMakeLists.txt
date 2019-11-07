@@ -20,5 +20,4 @@ INSTALL(FILES fontb.ttf
 
 INSTALL(DIRECTORY fonts
         COMPONENT tulip_ogl
-        DESTINATION ${TulipBitmapInstallDir}
-        PATTERN ".svn" EXCLUDE)
+        DESTINATION ${TulipBitmapInstallDir})

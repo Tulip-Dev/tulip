@@ -51,14 +51,14 @@ TLP_GL_SCOPE void setColor(GLfloat *);
 TLP_GL_SCOPE void setMaterial(const Color &c);
 TLP_GL_SCOPE bool cameraIs3D();
 /*
- * Project point on screnn according to the transformation matrix (modelview * projection)
- * and the viewport (x, y, width, height) given in parmaeter.
+ * Project point on screen according to the transformation matrix (modelview * projection)
+ * and the viewport (x, y, width, height) given in parameter.
  */
 TLP_GL_SCOPE Coord projectPoint(const Coord &obj, const MatrixGL &, const Vector<int, 4> &viewport);
 /*
  * UnProject point from screen to 3D world according to the inverse transformation matrix (modelview
  * * projection)^-1
- * and the viewport (x, y, width, height) given in parmaeter.
+ * and the viewport (x, y, width, height) given in parameter.
  */
 TLP_GL_SCOPE Coord unprojectPoint(const Coord &obj, const MatrixGL &,
                                   const tlp::Vector<int, 4> &viewport);

@@ -125,7 +125,7 @@ tlp::DataSet *prepareAlgorithmParameters(const std::string &algoName, tlp::Graph
         tlp::stableIterator(params->getValues())) {
       for (size_t i = 0 ; i < filesPrefixes.size() ; ++i) {
         std::string fileParamTlpName = filesPrefixes[i] + entry.first;
-        if (algoParams.exist(fileParamTlpName)) {
+        if (algoParams.exists(fileParamTlpName)) {
           std::string fileParamTlp;
           std::string fileParam;
           params->get(fileParamTlpName, fileParamTlp);
@@ -313,10 +313,10 @@ Applies an algorithm plugin, identified by its name.
 Algorithm plugins are objects implementing the tlp::Algorithm interface
 in C++ or the :class:`tlp.Algorithm` interface in Python.
 
-Parameters can be transmit to the algorithm using a Python dictionnary
+Parameters can be transmit to the algorithm using a Python dictionary
 filled with parameters values where keys are of type string (parameters names) .
 In some cases, algorithms
-can also use this dictionnary in order to return some external information.
+can also use this dictionary in order to return some external information.
 To determine a plugin's parameters, you can either:
 
   * refer to its :ref:`documentation <algorithmpluginsdoc>`
@@ -329,7 +329,7 @@ which can contain an error message.
 :param algoName: The name of the algorithm to apply.
 :type algoName: string
 :param params: The parameters to the algorithm.
-:type params: a dictionnary with string keys (parameters names) and parameters values
+:type params: a dictionary with string keys (parameters names) and parameters values
 :rtype: (boolean, string)
 %End
 
@@ -421,27 +421,6 @@ Creates and returns a subgraph of this graph (or the parent of this graph) that 
 :type addSibling: bool
 :param addSiblingProperties: if true all the local properties of this graph will be copied into its clone sibling. Defaults to false
 :type addSiblingProperties: bool
-:rtype: :class:`tlp.Graph`
-%End
-
-//===========================================================================================
-
-  tlp::Graph *inducedSubGraph(const std::set<tlp::node>& nodeSet, tlp::Graph *parentSubGraph = NULL, const std::string &name = "unnamed");
-%Docstring
-tlp.Graph.inducedSubGraph(nodeSet, parentSubGraph=None, name="unnamed")
-
-.. deprecated:: 5.0
-
-Creates and returns a new subgraph of the graph induced by a set of nodes.
-The subgraph contains all the nodes from the set and all the existing edges
-between two nodes in the set including self-loops.
-
-:param nodeSet: the set of nodes from which to build the induced subgraph
-:type nodeSet: set of :class:`tlp.node`
-:param parentSubGraph: If provided, is used as parent graph for the newly created subgraph instead of the graph this method is called on.
-:type parentSubGraph: :class:`tlp.Graph`
-:param name: The name of the newly created subgraph
-:type name: string
 :rtype: :class:`tlp.Graph`
 %End
 
@@ -768,10 +747,10 @@ tlp.Graph.addNode(propertiesValues=None)
 Adds a new node in the graph and returns it. This node is also added in all
 the graph's ancestors to maintain the subgraph relation between graphs.
 Since Tulip 5.0, it is also possible to set graph properties values for the newly added node
-through the use of a dictionnary (see :meth:`tlp.Graph.setNodePropertiesValues` for more details).
+through the use of a dictionary (see :meth:`tlp.Graph.setNodePropertiesValues` for more details).
 
-:param propertiesValues: an optionnal dictionnary containing graph properties values for the newly added node
-:type propertiesValues: a dictionnary
+:param propertiesValues: an optional dictionary containing graph properties values for the newly added node
+:type propertiesValues: a dictionary
 :rtype: :class:`tlp.node`
 %End
 
@@ -1003,14 +982,14 @@ tlp.Graph.addEdge(src, tgt, propertiesValues=None)
 Adds a new edge in the graph and returns it. This edge is also added in all
 the graph's ancestors to maintain the subgraph relation between graphs.
 Since Tulip 5.0, it is also possible to set graph properties values for the newly added edge
-through the use of a dictionnary (see :meth:`tlp.Graph.setEdgePropertiesValues` for more details).
+through the use of a dictionary (see :meth:`tlp.Graph.setEdgePropertiesValues` for more details).
 
 :param src: the source node of the new edge
 :param tgt: the target node of the new edge
 :type src: :class:`tlp.node`
 :type tgt: :class:`tlp.node`
-:param propertiesValues: an optionnal dictionnary containing graph properties values for the newly added edge
-:type propertiesValues: a dictionnary
+:param propertiesValues: an optional dictionary containing graph properties values for the newly added edge
+:type propertiesValues: a dictionary
 :rtype: :class:`tlp.edge`
 :throws: an exception if the provided source or target node does not belong to the graph
 %End
@@ -3230,10 +3209,10 @@ The list of currently loaded integer algorithm plugins can be
 retrieved through the :func:`tlp.getIntegerAlgorithmPluginsList` function.
 The computed values will be stored in result.
 
-Parameters can be transmit to the algorithm using a Python dictionnary
+Parameters can be transmit to the algorithm using a Python dictionary
 filled with parameters values where keys are of type string (parameters names) .
 In some cases, algorithms
-can also use this dictionnary in order to return some external information
+can also use this dictionary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
 
@@ -3249,7 +3228,7 @@ which can contain an error message.
 :param result: an integer property in which result of the algorithm will be stored
 :type result: :class:`tlp.IntegerProperty`
 :param params: The parameters to the algorithm.
-:type params: a dictionnary with string keys (parameters names) and parameters values
+:type params: a dictionary with string keys (parameters names) and parameters values
 :rtype: (boolean, string)
 :throws: an exception if the requested integer algorithm plugin is not registered in the plugins database.
 
@@ -3278,10 +3257,10 @@ The list of currently loaded double algorithm plugins can be
 retrieved through the :func:`tlp.getDoubleAlgorithmPluginsList` function.
 The computed values will be stored in result.
 
-Parameters can be transmit to the algorithm using a Python dictionnary
+Parameters can be transmit to the algorithm using a Python dictionary
 filled with parameters values where keys are of type string (parameters names) .
 In some cases, algorithms
-can also use this dictionnary in order to return some external information
+can also use this dictionary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
 
@@ -3297,7 +3276,7 @@ which can contain an error message.
 :param result: a double property in which result of the algorithm will be stored
 :type result: :class:`tlp.DoubleProperty`
 :param params: The parameters to the algorithm.
-:type params: a dictionnary with string keys (parameters names) and parameters values
+:type params: a dictionary with string keys (parameters names) and parameters values
 :rtype: (boolean, string)
 :throws: an exception if the requested double algorithm plugin is not registered in the plugins database.
 
@@ -3346,10 +3325,10 @@ The list of currently loaded layout algorithm plugins can be
 retrieved through the :func:`tlp.getLayoutAlgorithmPluginsList` function.
 The computed values will be stored in result.
 
-Parameters can be transmit to the algorithm using a Python dictionnary
+Parameters can be transmit to the algorithm using a Python dictionary
 filled with parameters values where keys are of type string (parameters names) .
 In some cases, algorithms
-can also use this dictionnary in order to return some external information
+can also use this dictionary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
 
@@ -3365,7 +3344,7 @@ which can contain an error message.
 :param result: a layout property in which result of the algorithm will be stored
 :type result: :class:`tlp.LayoutProperty`
 :param params: The parameters to the algorithm.
-:type params: a dictionnary with string keys (parameters names) and parameters values
+:type params: a dictionary with string keys (parameters names) and parameters values
 :rtype: (boolean, string)
 :throws: an exception if the requested layout algorithm plugin is not registered in the plugins database.
 
@@ -3414,10 +3393,10 @@ The list of currently loaded boolean algorithm plugins can be
 retrieved through the :func:`tlp.getBooleanAlgorithmPluginsList` function.
 The computed values will be stored in result.
 
-Parameters can be transmit to the algorithm using a Python dictionnary
+Parameters can be transmit to the algorithm using a Python dictionary
 filled with parameters values where keys are of type string (parameters names) .
 In some cases, algorithms
-can also use this dictionnary in order to return some external information
+can also use this dictionary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
 
@@ -3433,7 +3412,7 @@ which can contain an error message.
 :param result: a boolean property in which result of the algorithm will be stored
 :type result: :class:`tlp.BooleanProperty`
 :param params: The parameters to the algorithm.
-:type params: a dictionnary with string keys (parameters names) and parameters values
+:type params: a dictionary with string keys (parameters names) and parameters values
 :rtype: (boolean, string)
 :throws: an exception if the requested boolean algorithm plugin is not registered in the plugins database.
 
@@ -3482,10 +3461,10 @@ The list of currently loaded size algorithm plugins can be
 retrieved through the :func:`tlp.getSizeAlgorithmPluginsList` function.
 The computed values will be stored in result.
 
-Parameters can be transmit to the algorithm using a Python dictionnary
+Parameters can be transmit to the algorithm using a Python dictionary
 filled with parameters values where keys are of type string (parameters names) .
 In some cases, algorithms
-can also use this dictionnary in order to return some external information
+can also use this dictionary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
 
@@ -3501,7 +3480,7 @@ which can contain an error message.
 :param result: a size property in which result of the algorithm will be stored
 :type result: :class:`tlp.SizeProperty`
 :param params: The parameters to the algorithm.
-:type params: a dictionnary with string keys (parameters names) and parameters values
+:type params: a dictionary with string keys (parameters names) and parameters values
 :rtype: (boolean, string)
 :throws: an exception if the requested size algorithm plugin is not registered in the plugins database.
 
@@ -3550,10 +3529,10 @@ The list of currently loaded color algorithm plugins can be
 retrieved through the :func:`tlp.getColorAlgorithmPluginsList` function.
 The computed values will be stored in result.
 
-Parameters can be transmit to the algorithm using a Python dictionnary
+Parameters can be transmit to the algorithm using a Python dictionary
 filled with parameters values where keys are of type string (parameters names) .
 In some cases, algorithms
-can also use this dictionnary in order to return some external information
+can also use this dictionary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
 
@@ -3569,7 +3548,7 @@ which can contain an error message.
 :param result: a color property in which result of the algorithm will be stored
 :type result: :class:`tlp.ColorProperty`
 :param params: The parameters to the algorithm.
-:type params: a dictionnary with string keys (parameters names) and parameters values
+:type params: a dictionary with string keys (parameters names) and parameters values
 :rtype: (boolean, string)
 :throws: an exception if the requested color algorithm plugin is not registered in the plugins database.
 
@@ -3617,10 +3596,10 @@ the :class:`tlp.StringAlgorithm` interface in Python.
 The list of currently loaded string algorithm plugins can be
 retrieved through the :func:`tlp.getStringAlgorithmPluginsList` function.
 The computed values will be stored in result.
-Parameters can be transmit to the algorithm using a Python dictionnary
+Parameters can be transmit to the algorithm using a Python dictionary
 filled with parameters values where keys are of type string (parameters names) .
 In some cases, algorithms
-can also use this dictionnary in order to return some external information
+can also use this dictionary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
 
@@ -3636,7 +3615,7 @@ which can contain an error message.
 :param result: a string property in which result of the algorithm will be stored
 :type result: :class:`tlp.StringProperty`
 :param params: The parameters to the algorithm.
-:type params: a dictionnary with string keys (parameters names) and parameters values
+:type params: a dictionary with string keys (parameters names) and parameters values
 :rtype: (boolean, string)
 :throws: an exception if the requested string algorithm plugin is not registered in the plugins database.
 
@@ -3749,44 +3728,6 @@ tlp.Graph.popIfNoUpdates()
 Remove last pushed state if no updates have been recorded.
 
 :rtype: boolean
-%End
-
-//===========================================================================================
-
-  tlp::node createMetaNode(const std::set<tlp::node> &nodeSet, bool multiEdges = true, bool delAllEdge = true);
-%Docstring
-tlp.Graph.createMetaNode(nodeSet, multiEdges=True, delAllEdge=True)
-
-.. deprecated:: 5.0
-
-Closes a set of existing nodes into a metanode and returns it.
-Edges from nodes in the set to other nodes are replaced with
-edges from the metanode to the other nodes.
-
-:param nodeSet: a set of existing nodes
-:type nodeSet: set of :class:`tlp.node`
-:param multiEdges: indicates if a meta edge will be created for each underlying edge
-:type multiEdges: boolean
-:param delAllEdge: indicates if the underlying edges will be removed from the entire hierarchy
-:type delAllEdge: boolean
-:rtype: :class:`tlp.node`
-:throws: an exception if one of the provided nodes does not belong to the graph.
-
- .. warning:: This method will fail when called on the root graph.
-
-%End
-
-%MethodCode
-  std::set<tlp::node>::const_iterator it = a0->begin();
-  for (; it != a0->end() ; ++it) {
-    if (!sipCpp->isElement(*it)) {
-      sipIsErr = throwInvalidNodeException(sipCpp, *it);
-      break;
-    }
-  }
-  if (sipIsErr != -1) {
-    sipRes = new tlp::node(sipCpp->createMetaNode(*a0, a1, a2));
-  }
 %End
 
 //===========================================================================================
@@ -4062,24 +4003,6 @@ Removes an attribute of the graph.
 
 //===========================================================================================
 
-  bool attributeExist(const std::string &name);
-%Docstring
-tlp.Graph.attributeExist(name)
-
-.. versionadded:: 4.4
-
-.. deprecated:: 4.10
-
-Checks if an attribute with a specific name exists in the graph.
-That method is now deprecated, use :meth:`tlp.Graph.existAttribute` instead.
-
-:param name: the name of the attribute to test existence.
-:type name: string
-:rtype: boolean
-%End
-
-//===========================================================================================
-
   bool existAttribute(const std::string &name);
 %Docstring
 tlp.Graph.existAttribute(name)
@@ -4103,7 +4026,7 @@ tlp.Graph.getAttributes()
 
 Returns all the attributes of the graph.
 
-:rtype: a dictionnary with string keys filled with graph attributes values
+:rtype: a dictionary with string keys filled with graph attributes values
 %End
 
 //===========================================================================================
@@ -4114,14 +4037,14 @@ tlp.Graph.getNodePropertiesValues(node)
 
 .. versionadded:: 4.8.1
 
-Returns a dictionnary containing the attached graph properties values for a given node.
-The keys of that dictionnary are of string type and corresponds to the graph properties names
+Returns a dictionary containing the attached graph properties values for a given node.
+The keys of that dictionary are of string type and corresponds to the graph properties names
 while the values are typed according to those of the properties (bool, int, float, str, :class:`tlp.Color`,
 :class:`tlp.Coord`, :class:`tlp.Size`, list of those types).
 
 :param node: a node of the graph
 :type node: :class:`tlp.node`
-:rtype: a dictionnary filled with the node properties values
+:rtype: a dictionary filled with the node properties values
 :throws: an exception if the provided node does not belong to the graph
 %End
 
@@ -4141,14 +4064,14 @@ tlp.Graph.getEdgePropertiesValues(edge)
 
 .. versionadded:: 4.8.1
 
-Returns a dictionnary containing the attached graph properties values for a given edge.
-The keys of that dictionnary are of string type and corresponds to the graph properties names
+Returns a dictionary containing the attached graph properties values for a given edge.
+The keys of that dictionary are of string type and corresponds to the graph properties names
 while the values are typed according to those of the properties (bool, int, float, str, :class:`tlp.Color`,
 :class:`tlp.Coord`, :class:`tlp.Size`, list of those types).
 
 :param edge: an edge of the graph
 :type edge: :class:`tlp.edge`
-:rtype: a dictionnary filled with the edge properties values
+:rtype: a dictionary filled with the edge properties values
  :throws: an exception if the provided node does not belong to the graph
 %End
 
@@ -4168,16 +4091,16 @@ tlp.Graph.setNodePropertiesValues(node, propertiesValues)
 
 .. versionadded:: 4.8.1
 
-Sets the values of multiple graph properties for a given node through the use of a dictionnary.
-The keys of that dictionnary must be of string type and correspond to graph properties names (possibly not created yet)
+Sets the values of multiple graph properties for a given node through the use of a dictionary.
+The keys of that dictionary must be of string type and correspond to graph properties names (possibly not created yet)
 while the values must be typed according to those of the available Tulip properties (bool, int, float, str, :class:`tlp.Color`,
 :class:`tlp.Coord`, :class:`tlp.Size`, list of those types).
 
 :param node: a node of the graph
 :type node: :class:`tlp.node`
 :param propertiesValues: the properties values for the node
-:type propertiesValues: a dictionnary
-:throws: an exception if the provided node does not belong to the graph, if one of the string key of the dictionnary does not correspond to an existing property name of if there is a type error for a property value
+:type propertiesValues: a dictionary
+:throws: an exception if the provided node does not belong to the graph, if one of the string key of the dictionary does not correspond to an existing property name of if there is a type error for a property value
 %End
 
 %MethodCode
@@ -4196,16 +4119,16 @@ tlp.Graph.setEdgePropertiesValues(edge, propertiesValues)
 
 .. versionadded:: 4.8.1
 
-Sets the values of multiple graph properties for a given edge through the use of a dictionnary.
-The keys of that dictionnary must be of string type and correspond to graph properties names (possibly not created yet)
+Sets the values of multiple graph properties for a given edge through the use of a dictionary.
+The keys of that dictionary must be of string type and correspond to graph properties names (possibly not created yet)
 while the values must be typed according to those of the available Tulip properties (bool, int, float, str, :class:`tlp.Color`,
 :class:`tlp.Coord`, :class:`tlp.Size`, list of those types).
 
 :param edge: an edge of the graph
 :type edge: :class:`tlp.edge`
 :param propertiesValues: the properties values for the edge
-:type propertiesValues: a dictionnary
-:throws: an exception if the provided edge does not belong to the graph, if one of the string key of the dictionnary does not correspond to an existing property name of if there is a type error for a property value
+:type propertiesValues: a dictionary
+:throws: an exception if the provided edge does not belong to the graph, if one of the string key of the dictionary does not correspond to an existing property name of if there is a type error for a property value
 %End
 
 %MethodCode
@@ -4382,7 +4305,7 @@ Returns a new graph or None if the import fails.
 :param importPluginName: the name of the Tulip import plugin
 :type importPluginName: string
 :param params: The parameters to the algorithm.
-:type params: a dictionnary with string keys (parameters names) and parameters values
+:type params: a dictionary with string keys (parameters names) and parameters values
 :param newGraph: if provided, add imported graph elements in that graph
 :type newGraph: :class:`tlp.Graph`
 :rtype: :class:`tlp.Graph`
@@ -4424,7 +4347,7 @@ Returns a new graph or None if the import fails.
 :param importPluginName: the name of the Tulip import plugin
 :type importPluginName: string
 :param params: The parameters to the algorithm.
-:type params: a dictionnary with string keys (parameters names) and parameters values
+:type params: a dictionary with string keys (parameters names) and parameters values
 :param newGraph: if provided, add imported graph elements in that graph
 :type newGraph: :class:`tlp.Graph`
 :rtype: :class:`tlp.Graph`
@@ -4466,7 +4389,7 @@ Exports a graph to a file using a Tulip :ref:`export plugin <exportpluginsdoc>`.
 :param exportPluginName: the name of the Tulip export plugin to execute
 :type exportPluginName: string
 :param params: The parameters to the algorithm.
-:type params: a dictionnary with string keys (parameters names) and parameters values
+:type params: a dictionary with string keys (parameters names) and parameters values
 :rtype: boolean
 :throws: an exception if the requested export plugin is not registered in the plugins database.
 

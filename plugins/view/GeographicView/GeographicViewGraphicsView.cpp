@@ -434,7 +434,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
     QApplication::processEvents();
   }
 
-  // reenable user input
+  // re-enable user input
   tlp::enableQtUserInput();
 
   scene()->addItem(glWidgetItem);

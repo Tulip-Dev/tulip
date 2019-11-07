@@ -367,7 +367,7 @@ inline TYPE dist(const VECTOR &a, const VECTOR &b) {
 }
 
 /**
- * Return the minimun of each dimension of the two vectors
+ * Return the minimum of each dimension of the two vectors
  * for instance for a 2 vectors of dim 2 :
  * min(V1, V2) = (min(V1[0], v2[0]), min(V1[1], v2[1))
  */

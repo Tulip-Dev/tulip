@@ -56,8 +56,8 @@ bool InducedSubGraphSelection::run() {
 
   // as the input selection property and the result property can be the same one,
   // if needed, use a stable iterator to keep a copy of the input selected nodes as all values
-  // of the result property are reseted to false below
-  // delete done by the for loop
+  // of the result property are reset to false below
+  // deletion is done by the for loop
   Iterator<node> *itN = (result == entrySelection)
                             ? stableIterator(entrySelection->getNodesEqualTo(true))
                             : entrySelection->getNodesEqualTo(true);

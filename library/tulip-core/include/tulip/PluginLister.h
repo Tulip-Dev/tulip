@@ -170,7 +170,7 @@ public:
 
   /**
    * @brief Removes a plug-in from this factory.
-   * This is usefull when a plug-in has unmet dependencies, or appears more than once.
+   * This is useful when a plug-in has unmet dependencies, or appears more than once.
    *
    * @param name The name of the plug-in to remove.
    * @return void
@@ -191,7 +191,7 @@ protected:
    * @brief Gets the release number of the given plug-in.
    *
    * @param name The name of the plug-in to retrieve the version number of.
-   * @return :string The version number, ussually formatted as X[.Y], where X is the major, and Y
+   * @return :string The version number, usually formatted as X[.Y], where X is the major, and Y
    *the minor.
    **/
   static std::string getPluginRelease(const std::string &name);

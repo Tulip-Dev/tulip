@@ -48,7 +48,7 @@ if it is decomposed in multiple phases (e.g. layouting the graph, coloring it, .
 
 .. py:attribute:: dataSet
 
-   A dictionnary containing input parameters for this algorithm, if any. It can also be used to write
+   A dictionary containing input parameters for this algorithm, if any. It can also be used to write
    output parameters computed by the algorithm that will remain available after its execution.
 
 .. py:attribute:: pluginProgress
@@ -104,7 +104,7 @@ and the second one can be used to provide an error message
     for (size_t i = 0 ; i < filesPrefixes.size() ; ++i) {
       if (entry.first.length() > filesPrefixes[i].length() && entry.first.substr(0, filesPrefixes[i].length()) == filesPrefixes[i]) {
         std::string paramName = entry.first.substr(filesPrefixes[i].length());
-        if (!sipCpp->dataSet->exist(paramName)) {
+        if (!sipCpp->dataSet->exists(paramName)) {
           sipCpp->dataSet->set(paramName, *(static_cast<std::string*>(entry.second->value)));
         }
       }

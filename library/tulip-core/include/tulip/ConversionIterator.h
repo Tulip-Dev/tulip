@@ -32,7 +32,7 @@ namespace tlp {
  * @param it the iterator that should be converted
  * @param convFunctor the functor or lamnda function that enables to convert TYPEIN to TYPEOUT
  *
- * The functor function shouls have the following form:
+ * The functor function should have the following form:
  * @code
  * class AConversionFunc {
  *  TYPEOUT operator()(TYPEIN a) {

@@ -373,7 +373,7 @@ void OctTree::removeNode(tlp::node oldNode, Coord oldPos, unsigned int depth) {
       }
 
       if (childIndex == MAX_CHILDREN) {
-        std::cerr << "assert: removing a non existant node in the tree\n";
+        std::cerr << "assert: removing a non existent node in the tree\n";
         return;
       }
 

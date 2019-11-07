@@ -494,7 +494,7 @@ char *yytext;
 //    o main graph entities are extracted (node/edges)
 //    o subgraphes are not already supported
 //    o several attributes (node & edge) are supported
-//    o based on a modified grammar file available with the graphviz' softwares
+//    o based on a modified grammar file available with the graphviz' software
 //    o this parser can be largely optimised ...
 */
 #line 18 "dotImportLexer.l"

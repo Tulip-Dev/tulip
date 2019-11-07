@@ -155,7 +155,7 @@ protected:
  * NodeProperty can be copied in another EdgeProperty, however the to NodeProperty will
  * share the same content. You can consider that EdgeProperty is just a pointer on a stl:vector.
  * to free memory used by a EdgeProperty connected to a graph you must use the free function.
- * @warning After the call to free all The copy of the orignal EdgeProperty are no more valid
+ * @warning After the call to free all The copy of the original EdgeProperty are no more valid
  *
  * Using EdgeProperty you can store and access to values with the same efficiency as if
  * you created manually a vector. EdgeProperty manage for you the resize, etc... when the
@@ -172,7 +172,7 @@ protected:
  *   weight[n] = g.deg(g.target(e)) + g.deg(g.source(e));
  * }
  * EdgeProperty<double> weight2 = weight; //weight2 and weight are pointing on the same memory
- * addres
+ * address
  * weight2[g[0]] = 3;
  * tlp::debug() << weight[g[0]]; //output 3
  * g.free(weight2); //free the memory, weight and weight2 are no more valid.
@@ -206,7 +206,7 @@ private:
  * NodeProperty can be copied in another NodeProperty, however the to NodeProperty will
  * share the same content. You can consider that NodeProperty is just a pointer on a stl:vector.
  * to free memory used by a NodeProperty connected to a graph you must use the free function.
- * @warning After the call to free all The copy of the orignal NodeProperty are no more valid
+ * @warning After the call to free all The copy of the original NodeProperty are no more valid
  *
  * Using NodeProperty you can store and access to values with the same efficiency as if
  * you created manually a vector. NodeProperty manage for you the resize, etc... when the
@@ -223,7 +223,7 @@ private:
  *   weight[n] = g.deg(n);
  * }
  * NodeProperty<double> weight2 = weight; //weight2 and weight are pointing on the same memory
- * addres
+ * address
  * weight2[g[0]] = 3;
  * tlp::debug() << weight[g[0]]; //output 3
  * g.free(weight2); //free the memory, weight and weight2 are no more valid.

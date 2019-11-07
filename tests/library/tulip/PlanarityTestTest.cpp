@@ -50,12 +50,18 @@ void PlanarityTestTest::tearDown() {
 void PlanarityTestTest::planarGraphs() {
   graph = tlp_loadGraph(GRAPHPATH + "planar/grid1010.tlp");
   CPPUNIT_ASSERT(PlanarityTest::isPlanar(graph));
+  auto oe = PlanarityTest::getObstructionsEdges(graph);
+  CPPUNIT_ASSERT(oe.empty());
   delete graph;
   graph = tlp_loadGraph(GRAPHPATH + "planar/unconnected.tlp");
   CPPUNIT_ASSERT(PlanarityTest::isPlanar(graph));
+  oe = PlanarityTest::getObstructionsEdges(graph);
+  CPPUNIT_ASSERT(oe.empty());
   delete graph;
   graph = tlp_loadGraph(GRAPHPATH + "planar/unbiconnected.tlp");
   CPPUNIT_ASSERT(PlanarityTest::isPlanar(graph));
+  oe = PlanarityTest::getObstructionsEdges(graph);
+  CPPUNIT_ASSERT(oe.empty());
   delete graph;
 }
 //==========================================================
@@ -84,12 +90,18 @@ void PlanarityTestTest::planarEmbeddingFromLayoutGraphs() {
 void PlanarityTestTest::notPlanarGraphs() {
   graph = tlp_loadGraph(GRAPHPATH + "notplanar/k33lostInGrip.tlp.gz");
   CPPUNIT_ASSERT(!PlanarityTest::isPlanar(graph));
+  auto oe = PlanarityTest::getObstructionsEdges(graph);
+  CPPUNIT_ASSERT(!oe.empty());
   delete graph;
   graph = tlp_loadGraph(GRAPHPATH + "notplanar/k33k55.tlp.gz");
   CPPUNIT_ASSERT(!PlanarityTest::isPlanar(graph));
+  oe = PlanarityTest::getObstructionsEdges(graph);
+  CPPUNIT_ASSERT(!oe.empty());
   delete graph;
   graph = tlp_loadGraph(GRAPHPATH + "notplanar/k5lostingrid5050.tlp.gz");
   CPPUNIT_ASSERT(!PlanarityTest::isPlanar(graph));
+  oe = PlanarityTest::getObstructionsEdges(graph);
+  CPPUNIT_ASSERT(!oe.empty());
   delete graph;
 }
 //==========================================================
@@ -110,7 +122,7 @@ void PlanarityTestTest::planarGraphsEmbedding() {
   graph = tlp_loadGraph(GRAPHPATH + "planar/unconnected.tlp");
   graph->setAttribute("name", string("unconnected"));
   // no planar connected map computed
-  // beacause is not connected
+  // because it is not connected
   graphMap = computePlanarConMap(graph);
   CPPUNIT_ASSERT(graphMap == nullptr);
   delete graph;

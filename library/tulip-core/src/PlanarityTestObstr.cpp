@@ -100,12 +100,11 @@ void PlanarityTestImpl::obstrEdgesTerminal(Graph *G, node w, node t, node u) {
 void PlanarityTestImpl::addPartOfBc(Graph *sG, node cNode, node n1, node n2, node n3) {
   list<edge> bc, el1, el2;
   extractBoundaryCycle(sG, cNode, bc);
-  edge e;
   bool flag = false;
   int side = 0;
 
-  for (list<edge>::const_iterator it = bc.begin(); it != bc.end(); ++it) {
-    node source = sG->source(*it);
+  for (auto e : bc) {
+    node source = sG->source(e);
 
     if (source == n1) {
       if (flag)

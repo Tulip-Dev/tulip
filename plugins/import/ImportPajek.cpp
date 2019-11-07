@@ -23,7 +23,6 @@
 #include <cctype>
 #include <cstdlib>
 #include <tulip/TulipPluginHeaders.h>
-#include <tulip/DoubleProperty.h>
 
 /** \file
  *  \brief - Import Pajek format graph file.

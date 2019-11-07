@@ -20,10 +20,8 @@
 #include <limits>
 
 #include <tulip/TulipPluginHeaders.h>
-#include <tulip/Color.h>
 #include <tulip/Vector.h>
 #include <tulip/ColorScale.h>
-#include <tulip/StringCollection.h>
 
 #ifndef TULIP_BUILD_CORE_ONLY
 #include "DoubleStringsListRelationDialog.h"
@@ -120,7 +118,7 @@ public:
     addInParameter<double>("maximum value", paramHelp[7], "", false);
 
     // result needs to be an inout parameter
-    // in order to preserve the original values of non targetted elements
+    // in order to preserve the original values of non targeted elements
     // i.e if "target" = "nodes", the values of edges must be preserved
     // and if "target" = "edges", the values of nodes must be preserved
     parameters.setDirection("result", INOUT_PARAM);
@@ -158,7 +156,7 @@ public:
       dataSet->get("override maximum value", overrideMaxInput);
       dataSet->get("maximum value", maxInput);
 
-      /// Dont allow NaN input
+      /// Do not allow NaN input
       if (overrideMaxInput &&
 #if defined(_MSC_VER) && (_MSC_VER < 1800)
           isnan(minInput)

@@ -75,7 +75,7 @@ public:
    * @brief Construct a csv simple file parser.
    * @param filename The path to the file to import.
    * @param separator The separator to use.
-   * @param textDelimiter If a token is sourrounded by this charater we ignore all the separators
+   * @param textDelimiter If a token is sourrounded by this character we ignore all the separators
    *found in this token. Useful if a token contains the separator.
    * @param firstLine The number of the first line to read. The first line is 0.
    * @param lastLine The number of the last line to read.

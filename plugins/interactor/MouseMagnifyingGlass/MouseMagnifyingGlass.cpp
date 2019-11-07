@@ -238,7 +238,7 @@ void MouseMagnifyingGlassInteractorComponent::generateMagnifyingGlassTexture(
 
   glPopAttrib();
 
-  // need to call this explicitely otherwise we have to redraw the scene
+  // need to call this explicitly otherwise we have to redraw the scene
   glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
 }
 

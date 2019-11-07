@@ -370,10 +370,10 @@ void RoundedBox::draw(node n, float lod) {
     roundedBoxShader->setUniformBool("textureActivated", textureOK);
     roundedBoxShader->setUniformTextureSampler("texture", 0);
     glDrawArrays(GL_QUADS, 0, 8);
-    roundedBoxShader->desactivate();
+    roundedBoxShader->deactivate();
 
     if (textureOK) {
-      GlTextureManager::desactivateTexture();
+      GlTextureManager::deactivateTexture();
     }
 
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -393,7 +393,7 @@ void RoundedBox::draw(node n, float lod) {
     roundedBoxOutlineShader->setUniformFloat("boxWidth", size[0]);
     roundedBoxOutlineShader->setUniformFloat("boxHeight", size[1]);
     glDrawArrays(GL_LINE_STRIP_ADJACENCY_EXT, 0, 4);
-    roundedBoxOutlineShader->desactivate();
+    roundedBoxOutlineShader->deactivate();
 
     glDisableClientState(GL_VERTEX_ARRAY);
   }

@@ -42,7 +42,7 @@ class ColorScale {
     } else if (PyDict_Check(sipPy)) {
       while (PyDict_Next(sipPy, &pos, &key, &val)) {
         if (!PyNumber_Check(key)) {
-          printErrorMessage("Error : when defining a Tulip color scale through a dictionnary, its keys must have a number type.");
+          printErrorMessage("Error : when defining a Tulip color scale through a dictionary, its keys must have a number type.");
           return 0;
         }
         double step = PyFloat_AsDouble(key);
@@ -51,7 +51,7 @@ class ColorScale {
           return 0;
         }
         if (!sipCanConvertToType(val, sipFindType("tlp::Color"), SIP_NOT_NONE)) {
-          printErrorMessage("Error : when defining a Tulip color scale through a dictionnary, its values must have the tlp.Color type.");
+          printErrorMessage("Error : when defining a Tulip color scale through a dictionary, its values must have the tlp.Color type.");
           return 0;
         }
       }
@@ -142,7 +142,7 @@ The sample code below illustrates how to create and manipulate a color scale::
   color = colorScale.getColorAtPos(0.7)
 
 Since Tulip 4.10, color scales can also be defined in a more Pythonic way through
-the use of a list or a dictionnary. (see :ref:`No need to use the tlp.ColorScale class directly as plugin parameter anymore <colorScalesNewSyntax>`).
+the use of a list or a dictionary. (see :ref:`No need to use the tlp.ColorScale class directly as plugin parameter anymore <colorScalesNewSyntax>`).
 
 %End
 
@@ -282,7 +282,7 @@ Sets the map of stop points and colors used to perform color mapping.
 .. warning:: The keys of the map must be between 0.0 and 1.0, other values will be ignored.
 
 :param colorMap: the color map that defines the color scale
-:type colorMap: a dictionnary with float keys and :class:`tlp.Color` values
+:type colorMap: a dictionary with float keys and :class:`tlp.Color` values
 
 %End
 

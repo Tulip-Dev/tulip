@@ -24,7 +24,7 @@
 // OGDF/src/energybased/multilevelmixer/MMEExampleNiceLayout.cpp
 /** \addtogroup layout */
 
-/// useable example of the Modular Multilevel Mixer
+/// usable example of the Modular Multilevel Mixer
 /**
  * This example is tuned for nice drawings for most types of graphs.
  * EdgeCoverMerger and BarycenterPlacer are used as merging and placement

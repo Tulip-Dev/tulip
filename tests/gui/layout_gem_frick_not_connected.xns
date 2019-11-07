@@ -582,18 +582,18 @@ NEW-WINDOW:650,328:62914805,62914805,19040108,0,0,0:0x0+500+65:0,0:GEM (Frick)
 7,6,302,701,0,0,0,24987299,15,'PixArt Dell MS116 USB Optical Mouse'
 7,6,302,703,0,0,0,24987307,15,'PixArt Dell MS116 USB Optical Mouse'
 7,6,302,704,0,0,0,24987339,15,'PixArt Dell MS116 USB Optical Mouse'
-7,4,0,0,3,0,0,24987939,15,PixArt Dell MS116 USB Optical Mouse
-6,4,0,0,3,0,0,24987939,2,Virtual core pointer
-7,5,0,0,3,0,0,24988147,15,PixArt Dell MS116 USB Optical Mouse
-6,5,0,0,3,0,0,24988147,2,Virtual core pointer
-7,2,0,0,0,116,0,24989650,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,116,0,24989650,3,Virtual core keyboard
-7,3,0,0,0,116,0,24989778,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,116,0,24989778,3,Virtual core keyboard
-7,2,0,0,0,116,0,24989986,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,116,0,24989986,3,Virtual core keyboard
-7,3,0,0,0,116,0,24990098,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,116,0,24990098,3,Virtual core keyboard
+7,4,0,0,3,0,0,24990500,15,PixArt Dell MS116 USB Optical Mouse
+6,4,0,0,3,0,0,24990550,2,Virtual core pointer
+7,5,0,0,3,0,0,24990600,15,PixArt Dell MS116 USB Optical Mouse
+6,5,0,0,3,0,0,24990650,2,Virtual core pointer
+7,2,0,0,0,116,0,24990700,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,116,0,24999750,3,Virtual core keyboard
+7,3,0,0,0,116,0,24990800,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,116,0,24990850,3,Virtual core keyboard
+7,2,0,0,0,116,0,24990900,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,116,0,24990950,3,Virtual core keyboard
+7,3,0,0,0,116,0,24991000,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,116,0,24991050,3,Virtual core keyboard
 7,2,0,0,0,36,0,24991426,13,Dell KB216 Wired Keyboard
 6,2,0,0,0,36,0,24991426,3,Virtual core keyboard
 0,21,0,0,0,0,0,24991458

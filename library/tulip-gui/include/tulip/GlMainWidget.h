@@ -56,8 +56,8 @@ class GlCompositeHierarchyManager;
  *
  *
  * After scene construction you can perform some operation on GlMainWidget :
- * - Selection with doSelect() and selectGlEntities()
- * - Image output with getImage(), createPicture(), outputSVG() and outputEPS()
+ * - Selection with pickNodesEdges() and pickGlEntities()
+ * - Image output with getImage(), createPicture()
  * - Texture output with createTexture()
  * - others operation on GlScene and QGlWidget
  */
@@ -128,19 +128,6 @@ public:
                       tlp::GlLayer *layer = nullptr, bool pickNodes = true, bool pickEdges = true);
 
   /**
-   * @deprecated this function should not be used anymore, use pickNodesEdges()
-   */
-  _DEPRECATED void doSelect(const int x, const int y, const int width, const int height,
-                            std::vector<tlp::node> &sNode, std::vector<tlp::edge> &sEdge,
-                            tlp::GlLayer *layer = nullptr);
-
-  /**
-   * @deprecated this function should not be used anymore, use pickNodesEdges()
-   */
-  _DEPRECATED bool doSelect(const int x, const int y, tlp::ElementType &type, tlp::node &n,
-                            tlp::edge &e, tlp::GlLayer *layer = nullptr);
-
-  /**
    * @brief convert a screen measure into a viewport measure
    * @param a measure in screen coordinates specified as an integer
    * @return the converted measure in viewport coordinates as an integer
@@ -188,15 +175,6 @@ public:
   }
 
   /**
-   * @brief EPS output of the GlMainWidget
-   */
-  bool outputEPS(int size, int doSort, const char *filename);
-  /**
-   * @brief SVG output of the GlMainWidget
-   */
-  bool outputSVG(int size, const char *filename);
-
-  /**
    * @brief Compute texture size in power of two with given height and width
    * For example if you set width to 94 and height to 256, this function set textureRealWidth to 128
    * and textureRealHeight to 256
@@ -216,7 +194,7 @@ public:
    * @brief Take a snapshot of the Widget and put it in a picture
    * @param width size
    * @param height size
-   * @param center if true this function call a centerScene() before picture output
+   * @param center if true this function calls a centerScene() before picture output
    */
   void createPicture(const std::string &pictureName, int width, int height, bool center = true);
 
@@ -224,7 +202,7 @@ public:
    * Take a snapshot of the Widget and return it
    * @param width size
    * @param height size
-   * @param center if true this function call a centerScene() before picture output
+   * @param center if true this function calls a centerScene() before picture output
    * @param format indicates the format of the created image
    */
   QImage createPicture(int width, int height, bool center = true,
@@ -254,46 +232,6 @@ public:
                       tlp::GlLayer *layer = nullptr);
 
   /**
-   * @deprecated this function should not be used anymore, please use pickGlEntities() instead.
-   */
-  _DEPRECATED bool selectGlEntities(const int x, const int y, const int width, const int height,
-                                    std::vector<GlSimpleEntity *> &pickedEntities,
-                                    tlp::GlLayer *layer = nullptr) {
-    std::vector<SelectedEntity> entities;
-    pickGlEntities(x, y, width, height, entities, layer);
-    bool foundEntity = false;
-
-    for (std::vector<SelectedEntity>::iterator it = entities.begin(); it != entities.end(); ++it) {
-      if ((*it).getEntityType() == SelectedEntity::SIMPLE_ENTITY_SELECTED) {
-        pickedEntities.push_back((*it).getSimpleEntity());
-        foundEntity = true;
-      }
-    }
-
-    return foundEntity;
-  }
-
-  /**
-   * @deprecated this function should not be used anymore, please use pickGlEntities() instead.
-   */
-  _DEPRECATED bool selectGlEntities(const int x, const int y,
-                                    std::vector<GlSimpleEntity *> &pickedEntities,
-                                    tlp::GlLayer *layer = nullptr) {
-    std::vector<SelectedEntity> entities;
-    pickGlEntities(x, y, entities, layer);
-    bool foundEntity = false;
-
-    for (std::vector<SelectedEntity>::iterator it = entities.begin(); it != entities.end(); ++it) {
-      if ((*it).getEntityType() == SelectedEntity::SIMPLE_ENTITY_SELECTED) {
-        pickedEntities.push_back((*it).getSimpleEntity());
-        foundEntity = true;
-      }
-    }
-
-    return foundEntity;
-  }
-
-  /**
    * Extend makeCurrent function of QGLWidget to inform TextureManager and DisplayListManager of
    * context changement
    */
@@ -321,8 +259,8 @@ public:
    * @param options Configure the rendering process, see the RenderingOption documentation for more
    *information on each rendering option effect.
    * @see RenderingOption
-   * @param checkVisibility If check visibility is set as true : the engine check if GlMainWidget
-   *QWidget is visible. If set at false : the engine render the scene in all cases
+   * @param checkVisibility If check visibility is true : the engine check if GlMainWidget
+   *QWidget is visible. If false: the engine renders the scene in all cases
    **/
   void render(RenderingOptions options = RenderingOptions(RenderScene | SwapBuffers),
               bool checkVisibility = true);
@@ -344,7 +282,7 @@ public:
    * That option allows to obtain a better scene antialiasing through the use of offscreen rendering
    * and sampling.
    * The result rendering will look better while the performance will be slightly altered.
-   * That option is desactivated by default. Use it with caution as it could cause crashes with some
+   * That option is deactivated by default. Use it with caution as it could cause crashes with some
    * buggy OpenGL drivers.
    */
   void setAdvancedAntiAliasing(bool advancedAntiAliasing) {
@@ -382,19 +320,19 @@ public slots:
    */
   void draw(bool graphChanged = true);
   /**
-   * This function is given for optimisation purpose only. If the hardware enable it,
+   * This function is given for optimisation purpose only. If the hardware allows it,
    * it enables to redraw only the Augmented display and the interactors and not the graph
-   * it is really usefull for interactors such as zoom box etc..
-   * Warning, if you change the graph or the porperties of element (Colors, size, etc...)
-   * applying that fonction will not display the change, in that case, use the draw function.
+   * it is really useful for interactors such as zoom box etc..
+   * Warning, if you change the graph or the properties of element (Colors, size, etc...)
+   * applying that function will not display the change, in that case, use the draw function.
    */
   void redraw();
 
   void closeEvent(QCloseEvent *e) override;
 
   /**
-   * @brief Convenience function that call center function on the current scene, apply a zoom (if
-   *needed) and draw the view.
+   * @brief Convenience function that calls center function on the current scene, applies a zoom (if
+   *needed) and draws the view.
    * Same thing than
    * @code
    * getScene()->centerScene();
@@ -411,16 +349,16 @@ protected slots:
 
 signals:
   /**
-   * This signal is emit when the GlMainWidget will be deleted
+   * This signal is emitted when the GlMainWidget will be deleted
    */
   void closing(GlMainWidget *, QCloseEvent *);
 
   /**
-   * This signal is emit when GlMainWidget::redraw() is call
+   * This signal is emitted when GlMainWidget::redraw() is call
    */
   void viewRedrawn(GlMainWidget *glWidget);
   /**
-   * This signal is emit when GlMainWidget::draw() is call
+   * This signal is emitted when GlMainWidget::draw() is call
    */
   void viewDrawn(GlMainWidget *glWidget, bool graphChanged);
 
@@ -430,8 +368,8 @@ signals:
 
 public:
   /**
-   * This function return the first QGLWidget created
-   * This function is use to share OpenGL context
+   * This function returns the first QGLWidget created
+   * This function is used to share OpenGL context
    */
   static QGLWidget *getFirstQGLWidget();
 

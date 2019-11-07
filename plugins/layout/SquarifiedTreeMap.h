@@ -44,7 +44,7 @@ typedef std::vector<PairNodeF> PairVector;
  *  ACM Transactions on Graphics, vol. 11, 1 (Jan. 1992) 92-99.
  *  HCIL-91-03, CS-TR-2645, CAR-TR-548
  *
- *  \note This algorith only works on tree.
+ *  \note This algorithm only works on tree.
  *
  *  @version 1.0.0 complete rewrite, merge treemap and squarified in the same algorithm
  *  simplify implementation. The algorithm can be tune to go 2 or 3 time faster however, since the
@@ -84,9 +84,9 @@ private:
   bool shneidermanTreeMap;
   double aspectRatio;
   /**
-   * return a measure quality of row in which one wants ot add n
+   * return a measure quality of row in which one wants to add n
    * width is the width of the rectangle in which we create the row
-   * length is the height of the rectangle in wich on creates the row
+   * length is the height of the rectangle in which one creates the row
    * surface is sum of size of elements what belongs to the rectangle
    */
   double evaluateRow(const std::vector<tlp::node> &row, tlp::node n, double width, double length,
@@ -94,7 +94,7 @@ private:
   void layoutRow(const std::vector<tlp::node> &row, const int depth, const tlp::Rectd &rectArea);
   void squarify(const std::vector<tlp::node> &toTreat, const tlp::Rectd &rectArea, const int depth);
   // change the rectangle to take into account space reserved for the drawing of borders and headers
-  // the function currently fix adjust the size for the 2D windwows glyph.
+  // the function currently fix adjust the size for the 2D windows glyph.
   tlp::Rectd adjustRectangle(const tlp::Rectd &r) const;
   // return a vector containing children of n ordered in decreasing order of their size.
   std::vector<tlp::node> orderedChildren(const tlp::node n) const;

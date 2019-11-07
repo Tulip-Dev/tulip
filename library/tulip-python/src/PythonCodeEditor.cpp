@@ -492,7 +492,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent)
 
     // Hack to get a pointer on the main window
     // in order for the autocompletion dialog to catch
-    // window activate/desactivate events
+    // window activate/deactivate events
     if (Perspective::instance()) {
       _mainWindow = Perspective::instance()->mainWindow();
     } else {

@@ -7,7 +7,6 @@ SET(tulip-ogl_LIB_SRCS
   edgeExtremityArrow.cpp
   EdgeExtremityGlyph.cpp
   EdgeExtremityGlyphManager.cpp
-  EpsFunction.cpp
   Gl2DRect.cpp
   GlAbstractPolygon.cpp
   GlAxis.cpp
@@ -25,8 +24,6 @@ SET(tulip-ogl_LIB_SRCS
   GlCubicBSplineInterpolation.cpp
   GlCurve.cpp
   GlEdge.cpp
-  GlEPSFeedBackBuilder.cpp
-  GlFeedBackRecorder.cpp
   GlGlyphRenderer.cpp
   GlGraphComposite.cpp
   GlGraphRenderer.cpp
@@ -62,9 +59,7 @@ SET(tulip-ogl_LIB_SRCS
   GlSimpleEntity.cpp
   GlSphere.cpp
   GlStar.cpp
-  GlSVGFeedBackBuilder.cpp
   GlTextureManager.cpp
-  GlTLPFeedBackBuilder.cpp
   GlTools.cpp
   GlTriangle.cpp
   GlVertexArrayManager.cpp

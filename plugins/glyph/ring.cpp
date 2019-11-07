@@ -21,18 +21,15 @@
 
 #include <string>
 
-#include <tulip/StringProperty.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/Size.h>
+#include <tulip/Color.h>
 #include <tulip/Coord.h>
+#include <tulip/Size.h>
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/GlTextureManager.h>
-#include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/Graph.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/OpenGlConfigManager.h>
@@ -152,7 +149,7 @@ static void drawGlyph(const Color &glyphColor, const string &texture, const stri
 
   drawRing();
 
-  GlTextureManager::desactivateTexture();
+  GlTextureManager::deactivateTexture();
 
   if (lod > 20 && borderWidth > 0) {
     glLineWidth(borderWidth);

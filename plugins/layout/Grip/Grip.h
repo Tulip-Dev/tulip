@@ -19,7 +19,7 @@
 #ifndef GRIP_H
 #define GRIP_H
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/LayoutProperty.h>
 #include <unordered_map>
 #include "MISFiltering.h"
 

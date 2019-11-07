@@ -24,7 +24,7 @@
 // OGDF/src/energybased/multilevelmixer/MMEExampleFastLayout.cpp
 /** \addtogroup layout */
 
-///  useable example of the Modular Multilevel Mixer
+///  usable example of the Modular Multilevel Mixer
 /**
  * An example Layout using the Modular Mutlievel Mixer.
  *

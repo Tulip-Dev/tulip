@@ -559,88 +559,84 @@ bool ParallelCoordinatesView::getNodeOrEdgeAtViewportPos(int x, int y, node &n, 
 
 void ParallelCoordinatesView::buildContextMenu() {
 
-  viewSetupMenu = new QMenu(tr("View setup"));
-  viewSetupMenu->addAction(tr("Layout type"))->setEnabled(false);
+  viewSetupMenu = new QMenu("View setup");
+  viewSetupMenu->addAction("Layout type")->setEnabled(false);
   QActionGroup *layoutActionGroup = new QActionGroup(this);
-  classicLayout =
-      viewSetupMenu->addAction(tr("Classic layout"), this, SLOT(centerSetupAndDrawView()));
-  classicLayout->setToolTip(QString("Use parallel axis layout"));
+  classicLayout = viewSetupMenu->addAction("Classic layout", this, SLOT(centerSetupAndDrawView()));
+  classicLayout->setToolTip("Use parallel axis layout");
   classicLayout->setCheckable(true);
   classicLayout->setChecked(true);
   layoutActionGroup->addAction(classicLayout);
   circularLayout =
-      viewSetupMenu->addAction(tr("Circular layout"), this, SLOT(centerSetupAndDrawView()));
+      viewSetupMenu->addAction("Circular layout", this, SLOT(centerSetupAndDrawView()));
   circularLayout->setToolTip(
-      QString("In the circular layout, the axis are laid regularly as the radius of a circle"));
+      "In the circular layout, the axis are laid regularly as the radius of a circle");
   circularLayout->setCheckable(true);
   layoutActionGroup->addAction(circularLayout);
   viewSetupMenu->addSeparator();
 
-  viewSetupMenu->addAction(tr("Lines type"))->setEnabled(false);
+  viewSetupMenu->addAction("Lines type")->setEnabled(false);
   QActionGroup *lineTypeActionGroup = new QActionGroup(this);
-  straightLinesType = viewSetupMenu->addAction(tr("Polyline"), this, SLOT(setupAndDrawView()));
-  straightLinesType->setToolTip(QString(
-      "Draw a polyline joining the consecutive coordinates belonging to the same graph element"));
+  straightLinesType = viewSetupMenu->addAction("Polyline", this, SLOT(setupAndDrawView()));
+  straightLinesType->setToolTip(
+      "Draw a polyline joining the consecutive coordinates belonging to the same graph element");
   straightLinesType->setCheckable(true);
   straightLinesType->setChecked(true);
   lineTypeActionGroup->addAction(straightLinesType);
   catmullRomSplineLinesType =
-      viewSetupMenu->addAction(tr("Catmull-Rom spline"), this, SLOT(setupAndDrawView()));
-  catmullRomSplineLinesType->setToolTip(QString("Draw a Catmull-Rom spline joining the consecutive "
-                                                "coordinates belonging to the same graph element"));
+      viewSetupMenu->addAction("Catmull-Rom spline", this, SLOT(setupAndDrawView()));
+  catmullRomSplineLinesType->setToolTip("Draw a Catmull-Rom spline joining the consecutive "
+                                        "coordinates belonging to the same graph element");
   catmullRomSplineLinesType->setCheckable(true);
   lineTypeActionGroup->addAction(catmullRomSplineLinesType);
   cubicBSplineInterpolationLinesType =
-      viewSetupMenu->addAction(tr("Cubic B-spline interpolation"), this, SLOT(setupAndDrawView()));
-  cubicBSplineInterpolationLinesType->setToolTip(
-      QString("Draw a cubic B-spline joining the consecutive coordinates belonging to the same "
-              "graph element"));
+      viewSetupMenu->addAction("Cubic B-spline interpolation", this, SLOT(setupAndDrawView()));
+  cubicBSplineInterpolationLinesType->setToolTip("Draw a cubic B-spline joining the consecutive "
+                                                 "coordinates belonging to the same graph element");
   cubicBSplineInterpolationLinesType->setCheckable(true);
   lineTypeActionGroup->addAction(catmullRomSplineLinesType);
   viewSetupMenu->addSeparator();
 
-  viewSetupMenu->addAction(tr("Lines thickness"))->setEnabled(false);
+  viewSetupMenu->addAction("Lines thickness")->setEnabled(false);
   QActionGroup *lineActionGroup = new QActionGroup(this);
-  thickLines = viewSetupMenu->addAction(tr("Map to viewSize"), this, SLOT(setupAndDrawView()));
-  thickLines->setToolTip(
-      QString("The lines thickness is computed according the viewSize property values"));
+  thickLines = viewSetupMenu->addAction("Map to viewSize", this, SLOT(setupAndDrawView()));
+  thickLines->setToolTip("The lines thickness is computed according the viewSize property values");
   thickLines->setCheckable(true);
   thickLines->setChecked(true);
   lineActionGroup->addAction(thickLines);
-  thinLines = viewSetupMenu->addAction(tr("Thin lines"), this, SLOT(setupAndDrawView()));
-  thinLines->setToolTip(QString(
-      "The thickness is thin and the same for all the  curves representing the graph elements"));
+  thinLines = viewSetupMenu->addAction("Thin lines", this, SLOT(setupAndDrawView()));
+  thinLines->setToolTip(
+      "The thickness is thin and the same for all the  curves representing the graph elements");
   thinLines->setCheckable(true);
   lineActionGroup->addAction(thinLines);
 
   axisMenuSeparator = new QAction(nullptr);
   axisMenuSeparator->setSeparator(true);
-  axisConfiguration = new QAction(tr("Axis configuration"), nullptr);
+  axisConfiguration = new QAction("Axis configuration", nullptr);
   connect(axisConfiguration, SIGNAL(triggered()), this, SLOT(axisConfigurationSlot()));
-  removeAxisAction = new QAction(tr("Remove axis"), nullptr);
+  removeAxisAction = new QAction("Remove axis", nullptr);
   connect(removeAxisAction, SIGNAL(triggered()), this, SLOT(removeAxisSlot()));
   highlightMenuSeparator = new QAction(nullptr);
   highlightMenuSeparator->setSeparator(true);
-  selectHighlightedElements = new QAction(tr("Select highlighted elements"), nullptr);
+  selectHighlightedElements = new QAction("Select highlighted elements", nullptr);
   selectHighlightedElements->setToolTip(
-      QString("Select the graph elements corresponding to the currently highlighted curves"));
+      "Select the graph elements corresponding to the currently highlighted curves");
   connect(selectHighlightedElements, SIGNAL(triggered()), this,
           SLOT(selectHighlightedElementsSlot()));
-  addSelectHighlightedElements = new QAction(tr("Add highlighted elements to selection"), nullptr);
-  addSelectHighlightedElements->setToolTip(
-      QString("Add the graph elements corresponding to the currently highlighted curves to the "
-              "current selection"));
+  addSelectHighlightedElements = new QAction("Add highlighted elements to selection", nullptr);
+  addSelectHighlightedElements->setToolTip("Add the graph elements corresponding to the currently "
+                                           "highlighted curves to the current selection");
   connect(addSelectHighlightedElements, SIGNAL(triggered()), this,
           SLOT(addSelectHighlightedElementsSlot()));
   removeSelectHighlightedElements =
-      new QAction(tr("Remove highlighted elements to selection"), nullptr);
+      new QAction("Remove highlighted elements to selection", nullptr);
   removeSelectHighlightedElements->setToolTip(
-      QString("Remove the graph elements corresponding to the currently highlighted curves from "
-              "the current selection"));
+      "Remove the graph elements corresponding to the currently highlighted curves from the "
+      "current selection");
   connect(removeSelectHighlightedElements, SIGNAL(triggered()), this,
           SLOT(removeSelectHighlightedElementsSlot()));
-  resetHightlightedElements = new QAction(tr("Reset highlighting of elements"), nullptr);
-  resetHightlightedElements->setToolTip(QString("Unhighlight all the elements"));
+  resetHightlightedElements = new QAction("Reset highlighting of elements", nullptr);
+  resetHightlightedElements->setToolTip("Unhighlight all the elements");
   connect(resetHightlightedElements, SIGNAL(triggered()), this,
           SLOT(resetHightlightedElementsSlot()));
 }

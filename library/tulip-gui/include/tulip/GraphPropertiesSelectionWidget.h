@@ -35,7 +35,7 @@ class TLP_QT_SCOPE GraphPropertiesSelectionWidget : public StringsListSelectionW
 
 public:
   /**
-   * Default Constructor (usefull for qt designer)
+   * Default Constructor (useful for qt designer)
    */
   GraphPropertiesSelectionWidget(QWidget *parent = nullptr,
                                  const StringsListSelectionWidget::ListType &listType =

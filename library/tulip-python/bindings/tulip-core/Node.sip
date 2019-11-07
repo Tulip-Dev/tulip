@@ -33,7 +33,7 @@ class node {
 An instance of this class represent a node in a Tulip graph. It encapsulates an integer identifier.
 Use specific methods in the :class:`tlp.Graph` class to get references on such objects (
 for instance :meth:`tlp.Graph.addNode`, :meth:`tlp.Graph.getNodes`, :meth:`tlp.Graph.getOutNodes`, ...).
-Node objects can be used as keys in a Python dictionnary.
+Node objects can be used as keys in a Python dictionary.
 
 The node identifier can be accessed through the **id** class member.
 %End

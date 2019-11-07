@@ -106,13 +106,13 @@ public:
    * input vector. If there is one or more node with the smallest distance choose one randomly.
    * @param map The SOM.
    * @param input The input vector.
-   * @param dist The euclidian distance between input vector and selcted node weight.
+   * @param dist The euclidian distance between input vector and selected node weight.
    * @return
    */
   node findBMU(SOMMap *map, const DynamicVector<double> &input, double &dist);
 
   /**
-   * Propagate modification on the SOM. Compute the learning coefficent in function of the current
+   * Propagate modification on the SOM. Compute the learning coefficient in function of the current
    * iteration and the distance between the first updated node and the modified one.
    * Propagate modification while learning rate is not null.
    * @param map The SOM.

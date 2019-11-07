@@ -162,7 +162,7 @@ public:
   void push_back(InteractorComponent *component);
 
   /**
-    @brief Pushs an InteractorComponent at the beggining of the list
+    @brief Push an InteractorComponent at the beginning of the list
     */
   void push_front(InteractorComponent *component);
 

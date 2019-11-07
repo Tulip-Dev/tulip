@@ -98,7 +98,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       std::pair<node, node> ends = graph->ends(e);
       ends.first = getNode(ends.first);
       ends.second = getNode(ends.second);
-      vEdges[edgesToWrite] = ends;
+      vEdges[edgesToWrite] = std::move(ends);
 
       if (++edgesToWrite == MAX_EDGES_TO_WRITE) {
         // write already buffered edges
@@ -153,8 +153,8 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
         // use a vector as buffer
         std::vector<std::vector<std::pair<node, node>>> vRangesVec;
-        vRangesVec.push_back(std::vector<std::pair<node, node>>(MAX_RANGES_TO_WRITE));
-        std::vector<std::pair<node, node>> &vRanges = vRangesVec.back();
+        vRangesVec.emplace_back(MAX_RANGES_TO_WRITE);
+        auto &vRanges = vRangesVec.back();
 
         unsigned int rangesToWrite = 0;
         unsigned int numRanges = 0;
@@ -177,7 +177,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
               beginNode = lastNode = current;
 
               if (rangesToWrite == MAX_RANGES_TO_WRITE) {
-                vRangesVec.push_back(std::vector<std::pair<node, node>>(MAX_RANGES_TO_WRITE));
+                vRangesVec.emplace_back(MAX_RANGES_TO_WRITE);
                 vRanges = vRangesVec.back();
                 rangesToWrite = 0;
                 pendingWrite = false;
@@ -220,8 +220,8 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
         // use a vector as buffer
         std::vector<std::vector<std::pair<edge, edge>>> vRangesVec;
-        vRangesVec.push_back(std::vector<std::pair<edge, edge>>(MAX_RANGES_TO_WRITE));
-        std::vector<std::pair<edge, edge>> &vRanges = vRangesVec.back();
+        vRangesVec.emplace_back(MAX_RANGES_TO_WRITE);
+        auto &vRanges = vRangesVec.back();
 
         unsigned int rangesToWrite = 0;
         unsigned int numRanges = 0;
@@ -244,7 +244,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
               beginEdge = lastEdge = current;
 
               if (rangesToWrite == MAX_RANGES_TO_WRITE) {
-                vRangesVec.push_back(std::vector<std::pair<edge, edge>>(MAX_RANGES_TO_WRITE));
+                vRangesVec.emplace_back(MAX_RANGES_TO_WRITE);
                 vRanges = vRangesVec.back();
                 rangesToWrite = 0;
                 pendingWrite = false;
@@ -354,7 +354,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         // write nb of non default values
         size = prop->numberOfNonDefaultValuatedNodes(propGraphId ? nullptr : graph);
         os.write(reinterpret_cast<const char *>(&size), sizeof(size));
-        // prepare ouput stream
+        // prepare output stream
         stringstream vs;
 
         // std::basic_streambuf::pubsetbuf is a no-op in libcxx (LLVM implementation of STL)
@@ -450,7 +450,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         // write nb of non default values
         size = prop->numberOfNonDefaultValuatedEdges(propGraphId ? nullptr : graph);
         os.write(reinterpret_cast<const char *>(&size), sizeof(size));
-        // prepare ouput stream
+        // prepare output stream
         stringstream vs;
 
         // std::basic_streambuf::pubsetbuf is a no-op in libcxx (LLVM implementation of STL)

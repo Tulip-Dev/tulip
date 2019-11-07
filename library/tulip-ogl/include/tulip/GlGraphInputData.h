@@ -422,23 +422,6 @@ public:
   }
 
   /**
-   * Return a pointer on the property used to elementFontAwesomeIcon
-   *
-   * @deprecated use getElementIcon() instead
-   */
-  _DEPRECATED StringProperty *getElementFontAwesomeIcon() const {
-    return getProperty<StringProperty>(VIEW_FONTAWESOMEICON);
-  }
-  /**
-   * Set the pointer on the property used to elementFontAwesomeIcon
-   *
-   * @deprecated use setElementIcon(StringProperty *property) instead
-   */
-  _DEPRECATED void setElementFontAwesomeIcon(StringProperty *property) {
-    setProperty(VIEW_FONTAWESOMEICON, property);
-  }
-
-  /**
    * Return a pointer on the property used to elementIcon
    *
    * @since Tulip 5.0

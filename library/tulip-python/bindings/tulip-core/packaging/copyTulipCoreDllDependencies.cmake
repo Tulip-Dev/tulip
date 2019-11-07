@@ -41,7 +41,7 @@ ENDFOREACH()
 FUNCTION(gp_resolve_item_override context item exepath dirs resolved_item_var resolved)
 ENDFUNCTION()
 
-# Get recusively prerequisites of top level prerequisites and append them to the TULIP_NATIVE_PYTHON_MODULE_DEPS list
+# Get recursively prerequisites of top level prerequisites and append them to the TULIP_NATIVE_PYTHON_MODULE_DEPS list
 FOREACH(DLL_DEP $ENV{TULIP_NATIVE_PYTHON_MODULE_DEPS})
   GET_PREREQUISITES(${DLL_DEP} DLL_DEP_DEPS 1 1 "" ${DIRS})
   FOREACH(DLL_DEP_DEP ${DLL_DEP_DEPS})

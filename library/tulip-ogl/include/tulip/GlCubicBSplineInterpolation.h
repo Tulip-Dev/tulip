@@ -26,7 +26,7 @@ namespace tlp {
  * A class to draw a curve interpolating a set of points with C^2 continuity
  *
  * This class allows to draw a cubic B-spline interpolating a set of points. The resulting curve
- * is C^2 continous, so there is no discontinuities in curvature.
+ * is C^2 continuous, so there is no discontinuities in curvature.
  */
 class TLP_GL_SCOPE GlCubicBSplineInterpolation : public GlOpenUniformCubicBSpline {
 
@@ -46,8 +46,7 @@ public:
                               const float endSize, const unsigned int nbCurvePoints = 100);
 
 private:
-  std::vector<Coord>
-  constructInterpolatingCubicBSpline(const std::vector<Coord> &pointsToInterpolate);
+  void constructInterpolatingCubicBSpline(const std::vector<Coord> &pointsToInterpolate);
 };
 } // namespace tlp
 ///@endcond

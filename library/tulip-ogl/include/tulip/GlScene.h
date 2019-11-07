@@ -288,16 +288,6 @@ public:
                       std::vector<SelectedEntity> &selectedEntities);
 
   /**
-   * @brief Output the scene in SVG
-   */
-  void outputSVG(unsigned int size, const std::string &filename);
-
-  /**
-   * @brief Output the scene in EPS
-   */
-  void outputEPS(unsigned int size, const std::string &filename);
-
-  /**
    * @brief Return the RGB image of GlScene
    */
   unsigned char *getImage();
@@ -414,7 +404,7 @@ public:
 
   /**
    * @brief Remove the layer with name
-   * This GlLayer is automaticaly delete
+   * This GlLayer is automatically deleted
    * If you want to keep this GlLayer you can put false to deleteLayer parameters
    * but after that you have the ownership of the GlLayer
    */
@@ -422,7 +412,7 @@ public:
 
   /**
    * @brief Remove the layer with name
-   * This GlLayer is automaticaly delete
+   * This GlLayer is automatically deleted
    * If you want to keep this GlLayer you can put false to deleteLayer parameters
    * but after that you have the ownership of the GlLayer
    */
@@ -478,9 +468,9 @@ public:
   }
 
   /**
-   * @brief Return the bouding box of the scene (in 3D coordinates)
-   * \warning This bounding box is compute in rendering, so if you add an entity in a layer the
-   * bounding box include this entity if a draw is call
+   * @brief Return the bounding box of the scene (in 3D coordinates)
+   * \warning This bounding box is computed in rendering, so if you add an entity in a layer the
+   * bounding box includes this entity if a draw is called
    */
   BoundingBox getBoundingBox();
 
@@ -581,14 +571,14 @@ public:
 
   /**
    * @brief You don't have to call this function
-   * This function is automaticaly call when a GlGraphComposite is added in a layer in the scene
+   * This function is automatically called when a GlGraphComposite is added in a layer in the scene
    * You don't have to call this function
    */
   void glGraphCompositeAdded(GlLayer *layer, GlGraphComposite *composite);
 
   /**
    * @brief You don't have to call this function
-   * This function is automaticaly call when a GlGraphComposite is added in a layer in the scene
+   * This function is automatically called when a GlGraphComposite is added in a layer in the scene
    * You don't have to call this function
    */
   void glGraphCompositeRemoved(GlLayer *layer, GlGraphComposite *composite);

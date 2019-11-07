@@ -258,7 +258,7 @@ bool EdgeBundling::run() {
       OctreeBundle::compute(graph, splitRatio, layout, size);
       // delete edges in reverse order to avoid
       // the use of a stable iterator
-      auto edges = graph->edges();
+      const vector<edge> &edges = graph->edges();
       unsigned int sz = edges.size();
       while (sz) {
         auto e = edges[--sz];
@@ -344,7 +344,7 @@ bool EdgeBundling::run() {
   if (sphereLayout) {
     // delete nodes in reverse order to avoid
     // the use of a stable iterator
-    auto nodes = graph->nodes();
+    const vector<node> &nodes = graph->nodes();
     unsigned int sz = nodes.size();
     while (sz) {
       auto n = nodes[--sz];
@@ -673,7 +673,7 @@ bool EdgeBundling::run() {
   if (!keepGrid) {
     // delete nodes in reverse order to avoid
     // the use of a stable iterator
-    auto nodes = graph->nodes();
+    const vector<node> &nodes = graph->nodes();
     unsigned int sz = nodes.size();
     while (sz) {
       auto n = nodes[--sz];

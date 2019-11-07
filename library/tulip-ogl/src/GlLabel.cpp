@@ -38,7 +38,6 @@
 #include <tulip/GlTools.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/OcclusionTest.h>
-#include <tulip/GlTLPFeedBackBuilder.h>
 #include <tulip/OcclusionTest.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlXMLTools.h>
@@ -146,13 +145,13 @@ void GlLabel::setText(const string &text) {
 
   while (pos != string::npos) {
     string s = this->text.substr(lastPos, pos - lastPos);
-    textVector.push_back(s);
+    textVector.push_back(std::move(s));
     lastPos = pos + 1;
     pos = this->text.find_first_of("\n", pos + 1);
   }
 
   string s = this->text.substr(lastPos) + " ";
-  textVector.push_back(s);
+  textVector.push_back(std::move(s));
 
   // Text bounding box computation
   textBoundingBox = BoundingBox();
@@ -160,15 +159,15 @@ void GlLabel::setText(const string &text) {
   float x1, y1, z1, x2, y2, z2;
 
   // After we compute width of text
-  for (vector<string>::iterator it = textVector.begin(); it != textVector.end(); ++it) {
-    font->BBox((*it).c_str(), x1, y1, z1, x2, y2, z2);
+  for (const string &s : textVector) {
+    font->BBox(s.c_str(), x1, y1, z1, x2, y2, z2);
     textWidthVector.push_back(x2 - x1);
 
-    if (it == textVector.begin()) {
+    if (s == textVector[0]) {
       textBoundingBox.expand(Coord(0, y1, z1));
       textBoundingBox.expand(Coord(x2 - x1, y2, z2));
     } else {
-      font->BBox((*it).c_str(), x1, y1, z1, x2, y2, z2);
+      font->BBox(s.c_str(), x1, y1, z1, x2, y2, z2);
 
       if (x2 - x1 > textBoundingBox[1][0])
         textBoundingBox[1][0] = (x2 - x1);
@@ -465,7 +464,7 @@ void GlLabel::draw(float, Camera *camera) {
                translationAfterRotation[2]);
 
   if (!billboarded) {
-    // Alignement translation
+    // Alignment translation
     switch (alignment) {
     case LabelPosition::Center:
 
@@ -666,7 +665,7 @@ void GlLabel::draw(float, Camera *camera) {
       break;
     }
 
-    // Label shift when we have an alignement
+    // Label shift when we have an alignment
     float xShiftFactor = 0.;
     float yShiftFactor = 0.;
 
@@ -697,8 +696,8 @@ void GlLabel::draw(float, Camera *camera) {
     float x1, y1, z1, x2, y2, z2;
     vector<float>::iterator itW = textWidthVector.begin();
 
-    for (vector<string>::iterator it = textVector.begin(); it != textVector.end(); ++it) {
-      font->BBox((*it).c_str(), x1, y1, z1, x2, y2, z2);
+    for (const string &s : textVector) {
+      font->BBox(s.c_str(), x1, y1, z1, x2, y2, z2);
 
       FTPoint shift(-(textBoundingBox[1][0] - textBoundingBox[0][0]) / 2. - x1 +
                         ((textBoundingBox[1][0] - textBoundingBox[0][0]) - (*itW)) * xAlignFactor +
@@ -711,10 +710,10 @@ void GlLabel::draw(float, Camera *camera) {
 
       setMaterial(color);
 
-      font->Render((*it).c_str(), -1, shift);
+      font->Render(s.c_str(), -1, shift);
 
       if (!textureName.empty())
-        GlTextureManager::desactivateTexture();
+        GlTextureManager::deactivateTexture();
 
       if (outlineSize > 0) {
         if (!useLOD || viewportH > 25) {
@@ -725,7 +724,7 @@ void GlLabel::draw(float, Camera *camera) {
 
         setMaterial(outlineColor);
 
-        borderFont->Render((*it).c_str(), -1, shift);
+        borderFont->Render(s.c_str(), -1, shift);
       }
 
       yShift -= fontSize + 5;

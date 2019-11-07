@@ -259,24 +259,24 @@ PyObject *convertDoubleToPyObject(double cppObject) {
 template <typename T>
 PyObject *getPyObjectFromCppObject(const T &cppObject) {
   PyObject *pyObj = nullptr;
-  CppObjectToPyObjectConvertor<T> convertor;
-  convertor.convert(cppObject, pyObj);
+  CppObjectToPyObjectConverter<T> converter;
+  converter.convert(cppObject, pyObj);
   return pyObj;
 }
 
 template <typename T>
 T getCppObjectFromPyObject(PyObject *pyObj) {
   T v{};
-  PyObjectToCppObjectConvertor<T> convertor;
-  convertor.convert(pyObj, v);
+  PyObjectToCppObjectConverter<T> converter;
+  converter.convert(pyObj, v);
   return v;
 }
 
 template <typename T>
 T *getCppPointerFromPyObject(PyObject *pyObj) {
   T *v = nullptr;
-  PyObjectToCppObjectConvertor<T *> convertor;
-  convertor.convert(pyObj, v);
+  PyObjectToCppObjectConverter<T *> converter;
+  converter.convert(pyObj, v);
   return v;
 }
 

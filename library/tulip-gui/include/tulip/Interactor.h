@@ -89,7 +89,7 @@ public:
     @warning This method MUST ALWAYS return the same pointer. Doing otherwise may lead to memory
     leaks.
     @note The configuration widget has to be instantiated from the construct method.
-    @note It is up to the interactor developper to delete the configuration widget
+    @note It is up to the interactor developer to delete the configuration widget
     */
   virtual QWidget *configurationWidget() const {
     return nullptr;

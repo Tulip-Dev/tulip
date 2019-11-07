@@ -142,6 +142,7 @@ public:
   void setFirstRun(bool);
 
   bool isFirstTulipMMRun() const;
+  bool userHasLaunchedTulipMM(const std::string &mmVersion);
   void setFirstTulipMMRun(bool);
 
   bool displayDefaultViews() const;

@@ -50,7 +50,7 @@ Its interface is composed of three tabs:
       and is used as the script entry point. The graph currently selected through the combobox located in the upper
       part of the tab is wrapped as a :class:`tlp.Graph` object and provided as parameter of the "main" function.
       The currently edited script can be launched through the control panel located in the lower part of the tab interface.
-      Once started, the script execution can be stopped or paused (trigerring update of Tulip visualizations) at any time.
+      Once started, the script execution can be stopped or paused (triggering update of Tulip visualizations) at any time.
       All modifications performed by a script on a graph can be cancelled / replayed through the Tulip undo / redo feature.
 
 .. _fig2:
@@ -111,7 +111,7 @@ of Python objects. The list is filled by fetching the contents of a database acc
 That database contains the API of all standard Python modules but also the tulip ones.
 That database is also updated dynamically by performing a static analysis on the source code (in particular,
 that analysis tries to associate a typename to each variable in the source code).
-The autocompletion will also popup immediatly when hitting a dot character. If the variable before the dot
+The autocompletion will also popup immediately when hitting a dot character. If the variable before the dot
 has an associated typename in the database, only the contents of its dictionary will be inserted in the list.
 :ref:`Figure 5<fig5>` shows an
 example of the contents of the autocompletion list when requesting it on the "graph" variable (of type :class:`tlp.Graph`)
@@ -142,7 +142,7 @@ features have been included to ease the use of the Tulip Python API:
 
    Figure 6: Using the autocompletion list to get the algorithm names.
 
-    * **Autocompletion for algorithm parameters** Parameters can be passed to Tulip algorithms through a dictionnary. The parameters are
+    * **Autocompletion for algorithm parameters** Parameters can be passed to Tulip algorithms through a dictionnry. The parameters are
       identified by their names. The autocompletion list can be used to get the names of these parameters.
       :ref:`Figure 7<fig7>` shows an example of the autocompletion list contents when requesting the parameters
       of the layout algorithm : "FM^3 (OGDF)".
@@ -155,7 +155,7 @@ features have been included to ease the use of the Tulip Python API:
 
     * **Autocompletion for string collection parameters** Some algorithms parameters are internally
       based on a :class:`tlp.StringCollection` instance. It allows to select a string from a defined set.
-      The direct use of that class is now deprecated but the autocompletion list can be helpfull to get the names of the
+      The direct use of that class is now deprecated but the autocompletion list can be helpful to get the names of the
       available values that can be transmitted to the algorithm.
       :ref:`Figure 8<fig8>` shows an example of the autocompletion list contents when requesting the string collection values
       for the "Allowed Positions" parameter of the layout algorithm : "FM^3 (OGDF)".

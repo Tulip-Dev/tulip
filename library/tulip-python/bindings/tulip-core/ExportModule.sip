@@ -49,7 +49,7 @@ This abstract class describes an export plugin.
 
 .. py:attribute:: dataSet
 
-  A dictionnary containing parameters for this export plugin, if any
+  A dictionary containing parameters for this export plugin, if any
 
 .. py:attribute:: pluginProgress
 
@@ -141,7 +141,7 @@ to indicate if the export was successful.
     for (size_t i = 0 ; i < filesPrefixes.size() ; ++i) {
       if (entry.first.length() > filesPrefixes[i].length() && entry.first.substr(0, filesPrefixes[i].length()) == filesPrefixes[i]) {
         std::string paramName = entry.first.substr(filesPrefixes[i].length());
-        if (!sipCpp->dataSet->exist(paramName)) {
+        if (!sipCpp->dataSet->exists(paramName)) {
           sipCpp->dataSet->set(paramName, *(static_cast<std::string*>(entry.second->value)));
         }
       }

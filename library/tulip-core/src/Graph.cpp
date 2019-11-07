@@ -616,7 +616,7 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
   // loop on edges
   for (auto eIn : edgeIt) {
     const pair<node, node> &eEnds = inG->ends(eIn);
-    // add outG correponding edge
+    // add outG corresponding edge
     edge eOut = outG->addEdge(nodeTrl.get(eEnds.first.id), nodeTrl.get(eEnds.second.id));
 
     // select added edge
@@ -1217,17 +1217,6 @@ Graph *Graph::inducedSubGraph(const std::vector<node> &nodes, Graph *parentSubGr
   return result;
 }
 //=========================================================
-Graph *Graph::inducedSubGraph(const std::set<node> &nodeSet, Graph *parentSubGraph,
-                              const string &name) {
-  std::vector<node> nodes(nodeSet.size());
-  unsigned int i = 0;
-
-  for (std::set<node>::iterator itn = nodeSet.begin(); itn != nodeSet.end(); ++itn, ++i)
-    nodes[i] = *itn;
-
-  return inducedSubGraph(nodes, parentSubGraph, name);
-}
-//=========================================================
 Graph *Graph::inducedSubGraph(BooleanProperty *selection, Graph *parentSubGraph,
                               const string &name) {
   vector<node> nodes;
@@ -1271,16 +1260,6 @@ node Graph::createMetaNode(const std::vector<node> &nodes, bool multiEdges, bool
   st << "grp_" << setfill('0') << setw(5) << subGraph->getId();
   subGraph->setAttribute("name", st.str());
   return createMetaNode(subGraph, multiEdges, delAllEdge);
-}
-//====================================================================================
-node Graph::createMetaNode(const std::set<node> &nodeSet, bool multiEdges, bool delAllEdge) {
-  std::vector<node> nodes(nodeSet.size());
-  unsigned int i = 0;
-
-  for (std::set<node>::iterator itn = nodeSet.begin(); itn != nodeSet.end(); ++itn, ++i)
-    nodes[i] = *itn;
-
-  return createMetaNode(nodes, multiEdges, delAllEdge);
 }
 //====================================================================================
 #define NEED_TODEL 2
@@ -1443,7 +1422,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
   mappingM.setAll(node());
   // add node from meta to graph
   {
-    auto nodes = metaGraph->nodes();
+    const vector<node> &nodes = metaGraph->nodes();
     unsigned int nbNodes = nodes.size();
     // stable in case of fractal graph
     for (unsigned int i = 0; i < nbNodes; ++i) {

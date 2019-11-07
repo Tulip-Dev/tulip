@@ -32,13 +32,12 @@
 #include <tulip/BoundingBox.h>
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/TlpTools.h>
 #include <tulip/GlGraphInputData.h>
-#include <tulip/TulipIconicFont.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlTools.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlTextureManager.h>
+#include <tulip/TulipIconicFont.h>
 #include <tulip/TulipViewSettings.h>
 
 #define ushort_cast(x) static_cast<unsigned short>((x))
@@ -282,7 +281,7 @@ static void drawIcon(FontIcon &fontIcon, const Color &color, const Color &outlin
 
   fontIcon.render(color, outlineColor, outlineSize);
 
-  GlTextureManager::desactivateTexture();
+  GlTextureManager::deactivateTexture();
 }
 
 class FontIconGlyph : public Glyph {

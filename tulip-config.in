@@ -24,9 +24,13 @@ WINDOWS=$(test ${libextension} = dll; echo $?)
 MACOSX=$(test ${libextension} = dylib; echo $?)
 LINUX=$(test ${libextension} = so; echo $?)
 
-# check for MacOS or Windows installation
+# check for MacOS installation
 if [ $MACOSX -eq 0 ] ; then
   pluginldflags="-bundle -Wl,-bind_at_load -flat_namespace"
+  # add sysroot if needed
+  if [ -n "@CMAKE_OSX_SYSROOT@" ] ; then
+    osx_sysroot="-isysroot @CMAKE_OSX_SYSROOT@"
+  fi
   if [ -e ${upthisdir}/Frameworks/QtCore ] ; then
 # MacOS bundle
     includedir=${upthisdir}/include
@@ -34,6 +38,7 @@ if [ $MACOSX -eq 0 ] ; then
     pluginpath=${upthisdir}/lib/tulip
   fi
 fi
+# check for Windows installation
 if [ $WINDOWS -eq 0 ] ; then
   libversion=@WIN_VERSION@
   plugincxxflags=-DPIC
@@ -98,7 +103,7 @@ while test $# -gt 0; do
       OUTPUT=`echo ${OUTPUT} @VERSION@`
       ;;
     --cxxflags)
-      OUTPUT=`echo ${OUTPUT} @CMAKE_CXX_FLAGS@ @OPENMP_CXX_FLAGS@ ${ndebugflag} -I${includedir} @QT_CPPFLAGS@`
+      OUTPUT=`echo ${OUTPUT} @CMAKE_CXX_FLAGS@ @OPENMP_CXX_FLAGS@ ${ndebugflag} ${osx_sysroot} -I${includedir}`
       ;;
     --glincludes)
       OUTPUT=`echo ${OUTPUT} @GL_INCLUDES@`

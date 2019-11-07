@@ -37,18 +37,18 @@ class Graph;
  * of the graph
  */
 class TLP_GL_SCOPE GlConvexHull : public GlComposite {
+  /**
+   * Build a Polygon with the convex hull of points
+   */
+  GlConvexHull(std::vector<Coord> &points, std::vector<Color> &fillColors,
+               std::vector<Color> &outlineColors, const bool filled, const bool outlined,
+               const std::string &name, bool computeHull = true);
+
 public:
   /**
    * Default constructor
    */
   GlConvexHull() {}
-
-  /**
-   * Build a Polygon with the convex hull of points
-   */
-  GlConvexHull(const std::vector<Coord> &points, const std::vector<Color> &fillColors,
-               const std::vector<Color> &outlineColors, const bool filled, const bool outlined,
-               const std::string &name, bool computeHull = true);
 
   ~GlConvexHull() override {}
 
@@ -67,7 +67,7 @@ public:
   }
 
   /**
-   * Retrun the name of this convex hull
+   * Return the name of this convex hull
    */
   std::string getName() {
     return _name;

@@ -41,7 +41,7 @@ associated to a view.
 :param interactorName: the name of the interactor to create
 :type interactorName: string
 :rtype: :class:`tlpgui.Interactor`
-:throws: an execption if the interactor name does not exist
+:throws: an exception if the interactor name does not exist
 %End
 
 %MethodCode
