@@ -362,14 +362,18 @@ jobs:
         ccache: true
         directories:
           - $HOME/Library/Caches/Homebrew
-
-      install:
-        # install brew needed packages without addons because we experimented
-        # that the install of some packages through addons hangs on xcode9.x
-        # see https://travis-ci.community/t/xcode-8-3-homebrew-outdated-error
-        - HOMEBREW_NO_AUTO_UPDATE=1
-        - brew cleanup
-        - brew install ccache cmake ninja llvm qhull yajl cppunit pkg-config || true
+      addons:
+        homebrew:
+          # install Tulip core build dependencies
+          packages:
+            - ccache
+            - cmake
+            - ninja
+            - llvm
+            - qhull
+            - yajl
+            - cppunit
+            - pkg-config
 
       env:
         - ENV="MacOS 10.13, LLVM Clang, Homebrew"
@@ -544,15 +548,27 @@ jobs:
         ccache: true
         directories:
           - $HOME/Library/Caches/Homebrew
+      addons:
+        homebrew:
+          # install Tulip complete build dependencies
+          packages:
+            - ccache
+            - cmake
+            - ninja
+            - llvm
+            - qhull
+            - yajl
+            - cppunit
+            - pkg-config
+            - glew
+            - freetype
+            - jpeg
+            - libpng
+            - qt5
+            - quazip
+          update: true
 
       install:
-        # install brew needed packages without addons because we experimented
-        # that the install of some packages through addons hangs on xcode9.x
-        # see https://travis-ci.community/t/xcode-8-3-homebrew-outdated-error
-        - HOMEBREW_NO_AUTO_UPDATE=1
-        - brew cleanup
-        - brew install ccache cmake ninja llvm qhull yajl cppunit pkg-config || true
-        - brew install glew freetype jpeg libpng qt5 || true
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
         - curl -O https://bootstrap.pypa.io/get-pip.py
