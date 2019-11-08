@@ -135,7 +135,8 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   void expand(const tlp::Vec3f &coord);
 
   /**
-   * @brief Expands the bounding box to one containing all the point of the vector passed as parameter.
+   * @brief Expands the bounding box to one containing all the point of the vector passed as
+   *parameter.
    *
    * @param coords A vector of point in the 3D space we want the bounding box to encompass.
    * @return void

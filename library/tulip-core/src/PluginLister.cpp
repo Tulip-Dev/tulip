@@ -85,8 +85,7 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader *loader) {
     std::list<std::string> &&plugins = PluginLister::availablePlugins();
 
     for (const string &pluginName : plugins) {
-      const std::list<Dependency> &dependencies =
-	PluginLister::getPluginDependencies(pluginName);
+      const std::list<Dependency> &dependencies = PluginLister::getPluginDependencies(pluginName);
 
       // loop over dependencies
       for (const Dependency &dep : dependencies) {
@@ -103,8 +102,7 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader *loader) {
           break;
         }
 
-        const std::string &release =
-	  PluginLister::getPluginRelease(pluginDepName);
+        const std::string &release = PluginLister::getPluginRelease(pluginDepName);
         const std::string &releaseDep = dep.pluginRelease;
 
         if (tlp::getMajor(release) != tlp::getMajor(releaseDep) ||
