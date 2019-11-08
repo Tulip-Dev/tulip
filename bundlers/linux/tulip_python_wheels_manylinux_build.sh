@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# This script is only intended to be run in a pypa/manylinux1
-# docker image (based on Centos 5.11)
+# This script is only intended to be run using
+# a pypa/manylinux1 docker image (based on Centos 5.11)
+# or a pypa/manylinux2010 docker image (based on Centos 6.10)
 TULIP_PYTHON_TEST_WHEEL_SUFFIX=$1
 
 # install tulip-core wheel deps
@@ -37,6 +38,16 @@ then
 else
   mkdir /tmp/tulip_build; cd /tmp/tulip_build
 fi
+
+# looking for python lib
+ls /usr/lib64/libpython*.so
+
+# add link if needed
+if [ $? -ne 0 ]; then
+  PYLIB=$(ls /usr/lib64/libpython*.so* | cut --delimiter=. --fields=1,2,3)
+  ln -s $(ls $PYLIB.*) $PYLIB
+fi
+
 # iterate on available Python versions
 for CPYBIN in /opt/python/cp*/bin
 do
@@ -53,7 +64,7 @@ do
   ${CPYBIN}/pip install $(ls *${TULIP_PYTHON_TEST_WHEEL_SUFFIX}*.whl -t | head -1)
   ${CPYBIN}/python -c "import tulip
 from platform import python_version
-str = 'tulip successfully imported in Python ' + python_version()
+str = '===> tulip successfully imported in Python ' + python_version()
 print(str)"
   if [ $? -ne 0 ]
   then
