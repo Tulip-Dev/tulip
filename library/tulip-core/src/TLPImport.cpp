@@ -998,11 +998,11 @@ public:
 
       size = infoEntry.st_size;
 
-      std::list<std::string> gext(gzipFileExtensions());
+      std::list<std::string> &&gexts = gzipFileExtensions();
       bool gzip(false);
 
-      for (std::list<std::string>::const_iterator it = gext.begin(); it != gext.end(); ++it) {
-        if (filename.rfind(*it) == (filename.length() - (*it).length())) {
+      for (const std::string& ext : gexts) {
+        if (filename.rfind(ext) == (filename.length() - ext.length())) {
           size = getUncompressedSizeOfGzipFile(filename);
           input = tlp::getIgzstream(filename);
           gzip = true;

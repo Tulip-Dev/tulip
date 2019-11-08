@@ -27,8 +27,7 @@ namespace tlp {
 GlLine::GlLine(const vector<Coord> &points, const vector<Color> &colors)
     : _points(points), _colors(colors), width(1.0), factor(1), pattern(0) {
 
-  for (auto &coord : _points)
-    boundingBox.expand(coord);
+  boundingBox.expand(points);
 }
 //=====================================================
 GlLine::~GlLine() {}
@@ -127,7 +126,6 @@ void GlLine::setWithXML(const string &inString, unsigned int &currentPosition) {
   GlXMLTools::setWithXML(inString, currentPosition, "factor", factor);
   GlXMLTools::setWithXML(inString, currentPosition, "pattern", pattern);
 
-  for (auto &coord : _points)
-    boundingBox.expand(coord);
+  boundingBox.expand(_points);
 }
 } // namespace tlp

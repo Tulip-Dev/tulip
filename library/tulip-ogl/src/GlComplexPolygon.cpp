@@ -552,9 +552,9 @@ void GlComplexPolygon::draw(float, Camera *) {
 void GlComplexPolygon::translate(const Coord &vec) {
   boundingBox.translate(vec);
 
-  for (vector<vector<Coord>>::iterator it = points.begin(); it != points.end(); ++it) {
-    for (vector<Coord>::iterator it2 = (*it).begin(); it2 != (*it).end(); ++it2) {
-      (*it2) += vec;
+  for (auto &coords : points) {
+    for (auto &coord : coords) {
+      coord += vec;
     }
   }
 
@@ -609,9 +609,7 @@ void GlComplexPolygon::setWithXML(const string &inString, unsigned int &currentP
   GlXMLTools::setWithXML(inString, currentPosition, "textureName", textureName);
 
   for (auto &it : points) {
-    for (auto &coord : it) {
-      boundingBox.expand(coord);
-    }
+    boundingBox.expand(it);
   }
 }
 } // namespace tlp

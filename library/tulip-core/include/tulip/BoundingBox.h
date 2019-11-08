@@ -21,6 +21,7 @@
 #define Tulip_BOUNDINGBOX_H
 
 #include <cassert>
+#include <vector>
 #include <tulip/Vector.h>
 #include <tulip/tulipconf.h>
 
@@ -125,13 +126,24 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   }
 
   /**
-   * @brief Expands the bounding box to one containing the vector passed as parameter.
+   * @brief Expands the bounding box to one containing the point passed as parameter.
    * If the parameter is inside the bounding box, it remains unchanged.
    *
    * @param coord A point in the 3D space we want the bounding box to encompass.
    * @return void
    **/
   void expand(const tlp::Vec3f &coord);
+
+  /**
+   * @brief Expands the bounding box to one containing all the point of the vector passed as parameter.
+   *
+   * @param coords A vector of point in the 3D space we want the bounding box to encompass.
+   * @return void
+   **/
+  inline void expand(const std::vector<tlp::Vec3f> &coords) {
+    for (auto &coord : coords)
+      expand(coord);
+  }
 
   /**
    * @brief Expands the bounding box to one containing the bounding box passed as parameter.

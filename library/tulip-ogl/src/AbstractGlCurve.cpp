@@ -512,9 +512,7 @@ AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName,
   canUseGeometryShader = GlShaderProgram::geometryShaderSupported();
   initShader(shaderProgramName, curveSpecificShaderCode);
 
-  for (size_t i = 0; i < controlPoints.size(); ++i) {
-    boundingBox.expand(controlPoints[i]);
-  }
+  boundingBox.expand(controlPoints);
 }
 
 AbstractGlCurve::~AbstractGlCurve() {}
