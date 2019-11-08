@@ -510,7 +510,10 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionShowPythonDocumentation,
                                  "Display the Tulip python documentation in a navigator", "P");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionMessages_log, "Show the message log", "M");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionPython_IDE,  "Display the Tulip Python IDE for developing scripts and plugins to execute on the loaded graphs", "Alt+P");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionPython_IDE,
+                                 "Display the Tulip Python IDE for developing scripts and plugins "
+                                 "to execute on the loaded graphs",
+                                 "Alt+P");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExport, "Show the Graph exporting wizard", "E");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionOpen_Project, "Open a graph file", "O");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionFind_plugins,
@@ -784,8 +787,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   // tlpb as default graph file format
   if (TulipSettings::instance().isFirstTulipMMRun() &&
       !TulipSettings::instance().userHasLaunchedTulipMM("5.3") &&
-      !TulipSettings::instance().isFirstRun() &&
-      !TulipSettings::instance().isUseTlpbFileFormat()) {
+      !TulipSettings::instance().isFirstRun() && !TulipSettings::instance().isUseTlpbFileFormat()) {
     QTimer::singleShot(500, this, SLOT(showStartMessage()));
   }
 

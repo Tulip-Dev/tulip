@@ -475,9 +475,7 @@ void GlAbstractPolygon::setWithXML(const string &inString, unsigned int &current
   GlXMLTools::setWithXML(inString, currentPosition, "textureName", textureName);
   GlXMLTools::setWithXML(inString, currentPosition, "outlineSize", outlineSize);
 
-  for (auto &coord : points) {
-    boundingBox.expand(coord);
-  }
+  boundingBox.expand(points);
 }
 //============================================================
 void GlAbstractPolygon::setPoints(const vector<Coord> &points) {
@@ -523,8 +521,6 @@ void GlAbstractPolygon::clearGenerated() {
 void GlAbstractPolygon::recomputeBoundingBox() {
   boundingBox = BoundingBox();
 
-  for (auto &coord : points) {
-    boundingBox.expand(coord);
-  }
+  boundingBox.expand(points);
 }
 } // namespace tlp

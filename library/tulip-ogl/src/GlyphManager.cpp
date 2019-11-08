@@ -59,10 +59,10 @@ int GlyphManager::glyphId(const string &name, bool warnIfNotFound) {
 void GlyphManager::loadGlyphPlugins() {
   glyphList = PluginLister::availablePlugins<Glyph>();
 
-  for (std::string pluginName : glyphList) {
+  for (const std::string &pluginName : glyphList) {
     int pluginId = PluginLister::pluginInformation(pluginName).id();
-    glyphIdToName.emplace(std::make_pair(pluginId, pluginName));
-    nameToGlyphId.emplace(std::make_pair(pluginName, pluginId));
+    glyphIdToName.emplace(pluginId, pluginName);
+    nameToGlyphId.emplace(pluginName, pluginId);
   }
 }
 

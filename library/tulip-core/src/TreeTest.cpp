@@ -379,8 +379,8 @@ void TreeTest::cleanComputedTree(tlp::Graph *graph, tlp::Graph *tree) {
   if (sg->getAttribute<vector<edge> *>(REVERSED_EDGES, reversedEdges)) {
     sg->removeAttribute(REVERSED_EDGES);
 
-    for (vector<edge>::iterator ite = reversedEdges->begin(); ite != reversedEdges->end(); ++ite) {
-      rg->reverse(*ite);
+    for (auto e : *reversedEdges) {
+      rg->reverse(e);
     }
 
     delete reversedEdges;

@@ -279,7 +279,7 @@ Graph *tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
   DataSet dataSet;
   std::string importPluginName = "TLP Import";
 
-  list<string> importPlugins = PluginLister::availablePlugins<ImportModule>();
+  list<string> &&importPlugins = PluginLister::availablePlugins<ImportModule>();
 
   for (const string &pluginName : importPlugins) {
     const ImportModule &importPlugin =
@@ -312,7 +312,7 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *p
   bool gzip = false;
 
   string exportPluginName;
-  list<string> exportPlugins = PluginLister::availablePlugins<ExportModule>();
+  list<string> &&exportPlugins = PluginLister::availablePlugins<ExportModule>();
 
   for (const string &pluginName : exportPlugins) {
     ExportModule *exportPlugin = PluginLister::getPluginObject<ExportModule>(pluginName);
@@ -398,15 +398,15 @@ Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgr
   } else
     tmpProgress = progress;
 
-  AlgorithmContext *tmp = new AlgorithmContext(graph, &dataSet, tmpProgress);
-  ImportModule *newImportModule = PluginLister::getPluginObject<ImportModule>(format, tmp);
-  assert(newImportModule != nullptr);
+  AlgorithmContext context(graph, &dataSet, tmpProgress);
+  ImportModule *importModule = PluginLister::getPluginObject<ImportModule>(format, &context);
+  assert(importModule != nullptr);
 
   // ensure that the parsing of float or double does not depend on locale
   setlocale(LC_NUMERIC, "C");
 
   // If the import failed and we created the graph then delete the graph
-  if (!newImportModule->importGraph()) {
+  if (!importModule->importGraph()) {
     if (newGraphP)
       delete graph;
 
@@ -424,9 +424,8 @@ Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgr
   if (deletePluginProgress)
     delete tmpProgress;
 
-  delete newImportModule;
-  dataSet = *tmp->dataSet;
-  delete tmp;
+  delete importModule;
+  dataSet = *context.dataSet;
 
   return graph;
 }
@@ -449,22 +448,21 @@ bool tlp::exportGraph(Graph *graph, std::ostream &outputStream, const std::strin
   } else
     tmpProgress = progress;
 
-  AlgorithmContext *context = new AlgorithmContext(graph, &dataSet, tmpProgress);
-  ExportModule *newExportModule = PluginLister::getPluginObject<ExportModule>(format, context);
-  assert(newExportModule != nullptr);
+  AlgorithmContext context(graph, &dataSet, tmpProgress);
+  ExportModule *exportModule = PluginLister::getPluginObject<ExportModule>(format, &context);
+  assert(exportModule != nullptr);
   std::string filename;
 
   if (dataSet.get("file", filename)) {
     graph->setAttribute("file", filename);
   }
 
-  result = newExportModule->exportGraph(outputStream);
+  result = exportModule->exportGraph(outputStream);
 
   if (deletePluginProgress)
     delete tmpProgress;
 
-  delete newExportModule;
-  delete context;
+  delete exportModule;
   return result;
 }
 //=========================================================
@@ -576,7 +574,7 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
       const std::string &pName = src->getName();
       PropertyInterface *dst =
           outG->existProperty(pName) ? outG->getProperty(pName) : src->clonePrototype(outG, pName);
-      properties.push_back(std::make_pair(src, dst));
+      properties.emplace_back(src, dst);
     }
   }
   unsigned int nbProperties = properties.size();
@@ -691,18 +689,17 @@ bool Graph::applyAlgorithm(const std::string &algorithm, std::string &errorMessa
   } else
     tmpProgress = progress;
 
-  AlgorithmContext *context = new AlgorithmContext(this, parameters, tmpProgress);
-  Algorithm *newAlgo = PluginLister::getPluginObject<Algorithm>(algorithm, context);
+  AlgorithmContext context(this, parameters, tmpProgress);
+  Algorithm *algo = PluginLister::getPluginObject<Algorithm>(algorithm, &context);
 
-  if ((result = newAlgo->check(errorMessage))) {
-    result = newAlgo->run();
+  if ((result = algo->check(errorMessage))) {
+    result = algo->run();
 
     if (!result)
       errorMessage = tmpProgress->getError();
   }
 
-  delete newAlgo;
-  delete context;
+  delete algo;
 
   if (deletePluginProgress)
     delete tmpProgress;
@@ -715,7 +712,6 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm, PropertyIn
                                         std::string &errorMessage, tlp::DataSet *parameters,
                                         tlp::PluginProgress *progress) {
   bool result;
-  tlp::AlgorithmContext context;
 
   // check if this is a subgraph of prop->graph
   if (getRoot() != prop->getGraph()) {
@@ -737,10 +733,9 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm, PropertyIn
     }
   }
 
-  std::unordered_map<std::string, PropertyInterface *>::const_iterator it =
-      circularCalls.find(algorithm);
+  const auto it = circularCalls.find(algorithm);
 
-  if (it != circularCalls.end() && (*it).second == prop) {
+  if (it != circularCalls.end() && it->second == prop) {
     errorMessage = std::string("Circular call of ") + __PRETTY_FUNCTION__;
 #ifndef NDEBUG
     tlp::error() << errorMessage << std::endl;
@@ -769,25 +764,23 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm, PropertyIn
   // add prop as result in dataset
   parameters->set("result", prop);
 
-  context.pluginProgress = tmpProgress;
-  context.graph = this;
-  context.dataSet = parameters;
+  tlp::AlgorithmContext context(this, parameters, tmpProgress);
 
   tlp::Observable::holdObservers();
   circularCalls[algorithm] = prop;
-  Algorithm *tmpAlgo = tlp::PluginLister::getPluginObject<PropertyAlgorithm>(algorithm, &context);
+  Algorithm *algo = tlp::PluginLister::getPluginObject<PropertyAlgorithm>(algorithm, &context);
 
-  if (tmpAlgo != nullptr) {
-    result = tmpAlgo->check(errorMessage);
+  if (algo != nullptr) {
+    result = algo->check(errorMessage);
 
     if (result) {
-      result = tmpAlgo->run();
+      result = algo->run();
 
       if (!result)
         errorMessage = tmpProgress->getError();
     }
 
-    delete tmpAlgo;
+    delete algo;
   } else {
     errorMessage = algorithm + " - No algorithm available with this name";
 #ifndef NDEBUG
@@ -1224,7 +1217,7 @@ Graph *Graph::inducedSubGraph(BooleanProperty *selection, Graph *parentSubGraph,
     nodes.push_back(n);
   }
   for (auto e : selection->getEdgesEqualTo(true, parentSubGraph)) {
-    const pair<node, node> ext = ends(e);
+    auto ext = ends(e);
     nodes.push_back(ext.first);
     nodes.push_back(ext.second);
   }
@@ -1373,9 +1366,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   }
 
   // update metaInfo of new meta edges
-  std::unordered_map<edge, set<edge>>::const_iterator it;
-
-  for (it = subEdges.begin(); it != subEdges.end(); ++it) {
+  for (auto it = subEdges.begin(); it != subEdges.end(); ++it) {
     edge mE = it->first;
     metaInfo->setEdgeValue(mE, it->second);
     // compute meta edge values
@@ -1511,13 +1502,12 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
       }
 
       // iterate on newMetaEdges
-      std::unordered_map<node, std::unordered_map<node, set<edge>>>::iterator itme =
-          newMetaEdges.begin();
+      auto itme = newMetaEdges.begin();
 
       while (itme != newMetaEdges.end()) {
         node src = itme->first;
-        std::unordered_map<node, set<edge>>::iterator itnme = itme->second.begin();
-        std::unordered_map<node, set<edge>>::iterator itnmeEnd = itme->second.end();
+        auto itnme = itme->second.begin();
+        auto itnmeEnd = itme->second.end();
 
         while (itnme != itnmeEnd) {
           Graph *graph = this;
@@ -1677,7 +1667,7 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
             if (mSource != mTarget) {
               MetaEdge tmp;
               tmp.source = mSource.id, tmp.target = mTarget.id;
-              set<MetaEdge>::const_iterator itm = myQuotientGraph.find(tmp);
+              const auto itm = myQuotientGraph.find(tmp);
 
               if (itm == myQuotientGraph.end()) {
                 edge mE = quotientGraph->addEdge(mSource, mTarget);
@@ -1695,7 +1685,7 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
     }
   }
   // set viewMetaGraph for added meta edges
-  unordered_map<edge, set<edge>>::const_iterator itm = eMapping.begin();
+  auto itm = eMapping.begin();
 
   while (itm != eMapping.end()) {
     edge mE = itm->first;

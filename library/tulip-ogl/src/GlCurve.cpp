@@ -32,8 +32,7 @@ GlCurve::GlCurve(const vector<Coord> &points, const Color &beginFColor, const Co
 
   assert(points.size() >= 3);
 
-  for (vector<Coord>::iterator it = _points.begin(); it != _points.end(); ++it)
-    boundingBox.expand(*it);
+  boundingBox.expand(points);
 }
 //=====================================================
 GlCurve::GlCurve(const unsigned int nbPoints) : _points(nbPoints), texture("") {}
@@ -89,8 +88,8 @@ void GlCurve::setTexture(const std::string &texture) {
 void GlCurve::translate(const Coord &mouvement) {
   boundingBox.translate(mouvement);
 
-  for (vector<Coord>::iterator it = _points.begin(); it != _points.end(); ++it) {
-    (*it) += mouvement;
+  for (auto &coord : _points) {
+    coord += mouvement;
   }
 }
 //=====================================================
@@ -113,7 +112,6 @@ void GlCurve::setWithXML(const string &inString, unsigned int &currentPosition) 
   GlXMLTools::setWithXML(inString, currentPosition, "beginSize", _beginSize);
   GlXMLTools::setWithXML(inString, currentPosition, "endSize", _endSize);
 
-  for (vector<Coord>::iterator it = _points.begin(); it != _points.end(); ++it)
-    boundingBox.expand(*it);
+  boundingBox.expand(_points);
 }
 } // namespace tlp
