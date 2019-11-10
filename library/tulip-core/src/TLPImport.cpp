@@ -1001,7 +1001,7 @@ public:
       std::list<std::string> &&gexts = gzipFileExtensions();
       bool gzip(false);
 
-      for (const std::string& ext : gexts) {
+      for (const std::string &ext : gexts) {
         if (filename.rfind(ext) == (filename.length() - ext.length())) {
           size = getUncompressedSizeOfGzipFile(filename);
           input = tlp::getIgzstream(filename);
