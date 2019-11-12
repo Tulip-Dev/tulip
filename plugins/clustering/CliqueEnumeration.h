@@ -70,9 +70,9 @@ public:
   PLUGININFORMATION(
       "Maximal Cliques Enumeration", "Francois Queyroi", "24/10/2013",
       "Compute all maximal cliques (or maximal cliques whose size is above a given threshold)"
-      " according to the Eppstein algorithm. See"
+      " according to algorithm. published as:<br/>"
+      "<b>Listing All Maximal Cliques in Sparse Graphs in Near-optimal Time</b>, "
       " Eppstein, Loffler and Strash, "
-      "Listing All Maximal Cliques in Sparse Graphs in Near-optimal Time, "
       "Experimental Algorithms, Springer, "
       "2011",
       "1.0", "Clustering")
