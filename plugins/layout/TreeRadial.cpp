@@ -37,7 +37,8 @@ public:
   PLUGININFORMATION("Tree Radial", "Patrick Mary", "14/05/2007",
                     "Implements the radial tree layout algorithm first published as:<br/>"
                     "<b>MoireGraphs: Radial Focus+Context "
-                    "Visualization and Interaction for Graphs with Visual Nodes</b> T. J. Jankun-Kelly, Kwan-Liu Ma. Proc. IEEE "
+                    "Visualization and Interaction for Graphs with Visual Nodes</b> T. J. "
+                    "Jankun-Kelly, Kwan-Liu Ma. Proc. IEEE "
                     "Symposium on Information Visualization, INFOVIS pages 59--66 (2003).",
                     "1.0", "Tree")
   Graph *tree;

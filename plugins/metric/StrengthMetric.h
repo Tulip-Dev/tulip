@@ -33,11 +33,12 @@
  */
 class StrengthMetric : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Strength", "David Auber", "26/02/2003",
-                    "Computes the Strength metric as described in<br/><b>Software component capture "
-                    "using graph clustering</b>, Y. Chiricota. F.Jourdan, an G.Melancon, IWPC "
-                    "(2002).",
-                    "1.0", "Graph")
+  PLUGININFORMATION(
+      "Strength", "David Auber", "26/02/2003",
+      "Computes the Strength metric as described in<br/><b>Software component capture "
+      "using graph clustering</b>, Y. Chiricota. F.Jourdan, an G.Melancon, IWPC "
+      "(2002).",
+      "1.0", "Graph")
   StrengthMetric(const tlp::PluginContext *context);
   ~StrengthMetric() override;
   double getNodeValue(const tlp::node n);
