@@ -64,21 +64,20 @@ void GlColorScale::updateDrawing() {
   map<float, Color> colorMap = colorScale->getColorMap();
   Coord currentMin, currentMax;
 
-  for (map<float, Color>::iterator colorMapIt = colorMap.begin(); colorMapIt != colorMap.end();
-       ++colorMapIt) {
+  for (const auto & colorMapIt : colorScale->getColorMap()) {
     if (orientation == Vertical) {
       currentMin.set(baseCoord.getX() - thickness / 2,
-                     baseCoord.getY() + colorMapIt->first * length);
+                     baseCoord.getY() + colorMapIt.first * length);
       currentMax.set(baseCoord.getX() + thickness / 2,
-                     baseCoord.getY() + colorMapIt->first * length);
+                     baseCoord.getY() + colorMapIt.first * length);
     } else {
-      currentMin.set(baseCoord.getX() + colorMapIt->first * length,
+      currentMin.set(baseCoord.getX() + colorMapIt.first * length,
                      baseCoord.getY() - thickness / 2, 0);
-      currentMax.set(baseCoord.getX() + colorMapIt->first * length,
+      currentMax.set(baseCoord.getX() + colorMapIt.first * length,
                      baseCoord.getY() + thickness / 2, 0);
     }
 
-    colorScalePolyQuad->addQuadEdge(currentMin, currentMax, colorMapIt->second);
+    colorScalePolyQuad->addQuadEdge(currentMin, currentMax, colorMapIt.second);
   }
 
   boundingBox = colorScalePolyQuad->getBoundingBox();

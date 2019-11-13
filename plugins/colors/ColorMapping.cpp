@@ -343,13 +343,11 @@ public:
         enumeratedValues.push_back(it->first);
       }
 
-      std::map<float, Color> colorMap = colorScale.getColorMap();
-
       std::vector<Color> enumeratedColors;
 
-      for (std::map<float, Color>::iterator it = colorMap.begin(); it != colorMap.end(); ++it) {
-        if (enumeratedColors.empty() || it->second != enumeratedColors.back())
-          enumeratedColors.push_back(it->second);
+      for (const auto &it : colorScale.getColorMap()) {
+        if (enumeratedColors.empty() || it.second != enumeratedColors.back())
+          enumeratedColors.push_back(it.second);
       }
 
       // if metric is a NumericProperty, sort enumeratedValues

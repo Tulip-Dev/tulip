@@ -203,10 +203,9 @@ void ColorScalesManager::registerColorScale(const string &colorScaleName,
       TulipSettings::instance().endGroup();
     } else {
       QVariantMap colorsMap;
-      map<float, Color> colorsMapTlp = colorScale.getColorMap();
 
-      for (map<float, Color>::iterator it = colorsMapTlp.begin(); it != colorsMapTlp.end(); ++it) {
-        colorsMap[QString::number(it->first)] = colorToQColor(it->second);
+      for (const auto &it : colorScale.getColorMap()) {
+        colorsMap[QString::number(it.first)] = colorToQColor(it.second);
       }
 
       TulipSettings::instance().beginGroup("ColorScalesNoRegular");
@@ -243,14 +242,11 @@ void ColorScalesManager::setLatestColorScale(ColorScale &cs) {
   QList<QVariant> colors;
   QList<QVariant> stops;
 
-  map<float, Color> cm = cs.getColorMap();
-  map<float, Color>::iterator it = cm.begin();
-
-  for (; it != cm.end(); ++it) {
-    Color &c = it->second;
+  for (const auto &it : cs.getColorMap()) {
+    const Color &c = it.second;
     QColor qc(c.getR(), c.getG(), c.getB(), c.getA());
     colors.push_back(QVariant(qc));
-    stops.push_back(QVariant(it->first));
+    stops.push_back(QVariant(it.first));
   }
 
   TulipSettings::instance().beginGroup("viewLatestColorScale");
