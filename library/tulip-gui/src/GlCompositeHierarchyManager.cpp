@@ -78,7 +78,8 @@ void GlCompositeHierarchyManager::buildComposite(Graph *current, GlComposite *co
   GlConvexGraphHull *hull = new GlConvexGraphHull(composite, naming.str(), getColor(), current,
                                                   _layout, _size, _rotation);
 
-  _graphsComposites.emplace(current, std::pair<GlComposite *, GlConvexGraphHull *>(composite, hull));
+  _graphsComposites.emplace(current,
+                            std::pair<GlComposite *, GlConvexGraphHull *>(composite, hull));
 
   if (!current->subGraphs().empty()) {
     GlComposite *newComposite = new GlComposite();

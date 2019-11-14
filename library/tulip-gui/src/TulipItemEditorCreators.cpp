@@ -733,12 +733,13 @@ QWidget *EdgeExtremityShapeEditorCreator::createWidget(QWidget *parent) const {
 
   for (const auto &glyphName : PluginLister::availablePlugins<EdgeExtremityGlyph>()) {
     QString shapeName = tlpStringToQString(glyphName);
-    QPixmap pixmap = EdgeExtremityGlyphRenderer::render(EdgeExtremityGlyphManager::glyphId(glyphName));
+    QPixmap pixmap =
+        EdgeExtremityGlyphRenderer::render(EdgeExtremityGlyphManager::glyphId(glyphName));
     shapes.emplace_back(shapeName, pixmap);
   }
 
   ShapeDialog *shapeDialog = new ShapeDialog(
-					     std::move(shapes), Perspective::instance() ? Perspective::instance()->mainWindow() : parent);
+      std::move(shapes), Perspective::instance() ? Perspective::instance()->mainWindow() : parent);
   shapeDialog->setWindowTitle("Select an edge extremity shape");
   return shapeDialog;
 }

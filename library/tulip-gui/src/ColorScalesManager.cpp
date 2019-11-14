@@ -95,14 +95,14 @@ static ColorScale getColorScaleFromImageFile(const QString &imageFilePath) {
 
   for (unsigned int i = 0; i < imageHeight; i += step) {
     QRgb pixelValue = gradientImage.pixel(0, i);
-    colors.emplace_back(qRed(pixelValue), qGreen(pixelValue),
-			qBlue(pixelValue), qAlpha(pixelValue));
+    colors.emplace_back(qRed(pixelValue), qGreen(pixelValue), qBlue(pixelValue),
+                        qAlpha(pixelValue));
   }
 
   if (imageHeight % step != 0) {
     QRgb pixelValue = gradientImage.pixel(0, imageHeight - 1);
-    colors.emplace_back(qRed(pixelValue), qGreen(pixelValue),
-			qBlue(pixelValue), qAlpha(pixelValue));
+    colors.emplace_back(qRed(pixelValue), qGreen(pixelValue), qBlue(pixelValue),
+                        qAlpha(pixelValue));
   }
 
   reverse(colors.begin(), colors.end());
@@ -121,7 +121,8 @@ string ColorScalesManager::findColorScaleFile(const string &rootDir, const strin
       QFileInfo fileInfo = list.at(i);
 
       if (fileInfo.isDir()) {
-        string &&ret = findColorScaleFile(QStringToTlpString(fileInfo.absoluteFilePath()), colorScaleName);
+        string &&ret =
+            findColorScaleFile(QStringToTlpString(fileInfo.absoluteFilePath()), colorScaleName);
 
         if (!ret.empty()) {
           return std::move(ret);

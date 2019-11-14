@@ -103,12 +103,12 @@ void ColorScaleConfigDialog::accept() {
         gradient = TulipSettings::instance().value(gradientScaleId).toBool();
         TulipSettings::instance().endGroup();
 
-	colors.reserve(colorsVector.size());
+        colors.reserve(colorsVector.size());
         for (int i = 0; i < colorsVector.size(); ++i) {
           colors.emplace_back(colorsVector.at(i).value<QColor>().red(),
-			      colorsVector.at(i).value<QColor>().green(),
-			      colorsVector.at(i).value<QColor>().blue(),
-			      colorsVector.at(i).value<QColor>().alpha());
+                              colorsVector.at(i).value<QColor>().green(),
+                              colorsVector.at(i).value<QColor>().blue(),
+                              colorsVector.at(i).value<QColor>().alpha());
         }
 
         std::reverse(colors.begin(), colors.end());
@@ -118,8 +118,7 @@ void ColorScaleConfigDialog::accept() {
     colors.reserve(_ui->colorsTable->rowCount());
     for (int i = 0; i < _ui->colorsTable->rowCount(); ++i) {
       QColor itemColor = _ui->colorsTable->item(i, 0)->background().color();
-      colors.emplace_back(itemColor.red(), itemColor.green(),
-			  itemColor.blue(), itemColor.alpha());
+      colors.emplace_back(itemColor.red(), itemColor.green(), itemColor.blue(), itemColor.alpha());
     }
 
     std::reverse(colors.begin(), colors.end());
@@ -145,17 +144,17 @@ vector<Color> ColorScaleConfigDialog::getColorScaleFromImageFile(const QString &
     step = 10;
 
   vector<Color> colors;
-  colors.reserve(imageHeight % step ? imageHeight/step : imageHeight/step + 1);
+  colors.reserve(imageHeight % step ? imageHeight / step : imageHeight / step + 1);
   for (unsigned int i = 0; i < imageHeight; i += step) {
     QRgb pixelValue = gradientImage.pixel(0, i);
-    colors.emplace_back(qRed(pixelValue), qGreen(pixelValue),
-			qBlue(pixelValue), qAlpha(pixelValue));
+    colors.emplace_back(qRed(pixelValue), qGreen(pixelValue), qBlue(pixelValue),
+                        qAlpha(pixelValue));
   }
 
   if (imageHeight % step != 0) {
     QRgb pixelValue = gradientImage.pixel(0, imageHeight - 1);
-    colors.emplace_back(qRed(pixelValue), qGreen(pixelValue),
-			qBlue(pixelValue), qAlpha(pixelValue));
+    colors.emplace_back(qRed(pixelValue), qGreen(pixelValue), qBlue(pixelValue),
+                        qAlpha(pixelValue));
   }
 
   std::reverse(colors.begin(), colors.end());
