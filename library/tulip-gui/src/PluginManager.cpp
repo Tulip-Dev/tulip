@@ -135,16 +135,14 @@ public:
     info.name = _currentMap["name"];
     info.category = _currentMap["category"];
 
-    PluginVersionInformation versionInfo;
+    PluginVersionInformation &versionInfo = info.availableVersion;
     versionInfo.description = _currentMap["desc"];
     versionInfo.libraryLocation = _location;
     versionInfo.version = _currentMap["release"];
     versionInfo.author = _currentMap["author"];
     versionInfo.date = _currentMap["date"];
     versionInfo.isValid = true;
-    // TODO fill icon
-    info.availableVersion = versionInfo;
-    _result.push_back(info);
+    _result.push_back(std::move(info));
   }
 };
 
@@ -168,11 +166,10 @@ PluginManager::PluginInformationList PluginManager::listPlugins(PluginLocations 
   QMap<QString, PluginInformation> nameToInfo;
 
   if (locations.testFlag(Local)) {
-    std::list<std::string> localResults = PluginLister::availablePlugins();
+    std::list<std::string> &&localResults = PluginLister::availablePlugins();
 
-    for (std::list<std::string>::iterator it = localResults.begin(); it != localResults.end();
-         ++it) {
-      const Plugin &info = PluginLister::pluginInformation(*it);
+    for (auto &pluginName : localResults) {
+      const Plugin &info = PluginLister::pluginInformation(pluginName);
 
       if (QString(info.category().c_str()).contains(categoryFilter) &&
           QString(info.name().c_str()).contains(nameFilter, Qt::CaseInsensitive)) {
@@ -251,11 +248,10 @@ void PluginInformation::fillLocalInfo(const Plugin &info) {
   installedVersion.author = tlp::tlpStringToQString(info.author());
   installedVersion.libraryLocation =
       tlp::tlpStringToQString(PluginLister::getPluginLibrary(info.name()));
-  std::list<tlp::Dependency> dependencies = PluginLister::getPluginDependencies(info.name());
+  auto &dependencies = PluginLister::getPluginDependencies(info.name());
 
-  for (std::list<tlp::Dependency>::iterator it = dependencies.begin(); it != dependencies.end();
-       ++it) {
-    installedVersion.dependencies.push_back(it->pluginName.c_str());
+  for (auto &dependency : dependencies) {
+    installedVersion.dependencies.push_back(dependency.pluginName.c_str());
   }
 
   installedVersion.isValid = true;

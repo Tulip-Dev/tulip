@@ -91,9 +91,10 @@ AbstractCSVToGraphDataMapping::AbstractCSVToGraphDataMapping(Graph *graph, Eleme
     : graph(graph), type(type), columnIds(colIds) {
   assert(graph != nullptr);
 
-  for (unsigned int i = 0; i < propertyNames.size(); ++i) {
-    assert(graph->existProperty(propertyNames[i]));
-    keyProperties.push_back(graph->getProperty(propertyNames[i]));
+  keyProperties.reserve(propertyNames.size());
+  for (const string &pName : propertyNames) {
+    assert(graph->existProperty(pName));
+    keyProperties.push_back(graph->getProperty(pName));
   }
 }
 
@@ -106,26 +107,26 @@ void AbstractCSVToGraphDataMapping::init(unsigned int) {
     for (auto n : graph->nodes()) {
       string key;
 
-      for (unsigned int i = 0; i < keyProperties.size(); ++i)
-        key.append(keyProperties[i]->getNodeStringValue(n));
+      for (auto prop : keyProperties)
+        key.append(prop->getNodeStringValue(n));
 
-      valueToId[key] = n.id;
+      valueToId.emplace(std::move(key), n.id);
     }
   } else {
     for (auto e : graph->edges()) {
       string key;
 
-      for (unsigned int i = 0; i < keyProperties.size(); ++i)
-        key.append(keyProperties[i]->getEdgeStringValue(e));
+      for (auto prop : keyProperties)
+        key.append(prop->getEdgeStringValue(e));
 
-      valueToId[key] = e.id;
+      valueToId.emplace(std::move(key), e.id);
     }
   }
 }
 
 pair<ElementType, vector<unsigned int>>
 AbstractCSVToGraphDataMapping::getElementsForRow(const vector<vector<string>> &tokens) {
-  vector<unsigned int> results(1);
+  unsigned int result;
 
   bool idsOK = true;
 
@@ -155,17 +156,17 @@ AbstractCSVToGraphDataMapping::getElementsForRow(const vector<vector<string>> &t
       // If the token was correctly generated.
       if (id != UINT_MAX) {
         // Store the id corresponding to the token.
-        valueToId[key] = id;
+        valueToId.emplace(std::move(key), id);
       }
 
-      results[0] = id;
+      result = id;
     } else
       // Use the last found id.
-      results[0] = valueToId[key];
+      result = valueToId[key];
   } else
-    results[0] = UINT_MAX;
+    result = UINT_MAX;
 
-  return pair<ElementType, vector<unsigned int>>(type, results);
+  return pair<ElementType, vector<unsigned int>>(type, {result});
 }
 
 CSVToNewNodeIdMapping::CSVToNewNodeIdMapping(Graph *graph) : graph(graph) {}
@@ -177,9 +178,7 @@ void CSVToNewNodeIdMapping::init(unsigned int rowNumber) {
 
 pair<ElementType, vector<unsigned int>>
 CSVToNewNodeIdMapping::getElementsForRow(const vector<vector<string>> &) {
-  vector<unsigned int> result(1);
-  result[0] = graph->addNode().id;
-  return make_pair(NODE, result);
+  return pair<ElementType, vector<unsigned int>>(NODE, {graph->addNode().id});
 }
 
 CSVToGraphNodeIdMapping::CSVToGraphNodeIdMapping(Graph *graph, const vector<unsigned int> &colIds,
@@ -225,9 +224,9 @@ CSVToGraphEdgeSrcTgtMapping::CSVToGraphEdgeSrcTgtMapping(
       buildMissingElements(createMissinNodes) {
   assert(graph != nullptr);
 
-  for (unsigned int i = 0; i < srcPropNames.size(); ++i) {
-    assert(graph->existProperty(srcPropNames[i]));
-    srcProperties.push_back(graph->getProperty(srcPropNames[i]));
+  for (const string &pName : srcPropNames) {
+    assert(graph->existProperty(pName));
+    srcProperties.push_back(graph->getProperty(pName));
   }
 
   for (unsigned int i = 0; i < tgtPropNames.size(); ++i) {
@@ -239,21 +238,23 @@ CSVToGraphEdgeSrcTgtMapping::CSVToGraphEdgeSrcTgtMapping(
 
 void CSVToGraphEdgeSrcTgtMapping::init(unsigned int rowNumber) {
   srcValueToId.clear();
+  tgtValueToId.clear();
   for (auto n : graph->nodes()) {
     string key;
 
     for (unsigned int i = 0; i < srcProperties.size(); ++i)
       key.append(srcProperties[i]->getNodeStringValue(n));
 
-    srcValueToId[key] = n.id;
-
-    if (!sameSrcTgtProperties) {
+    if (sameSrcTgtProperties)
+      srcValueToId.emplace(std::move(key), n.id);
+    else {
+      srcValueToId.emplace(key, n.id);
       key.clear();
 
       for (unsigned int i = 0; i < tgtProperties.size(); ++i)
         key.append(tgtProperties[i]->getNodeStringValue(n));
 
-      tgtValueToId[key] = n.id;
+      tgtValueToId.emplace(std::move(key), n.id);
     }
   }
 
@@ -269,9 +270,6 @@ void CSVToGraphEdgeSrcTgtMapping::init(unsigned int rowNumber) {
 
 pair<ElementType, vector<unsigned int>>
 CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<vector<string>> &tokens) {
-
-  vector<unsigned int> results;
-
   vector<node> srcs;
   vector<node> tgts;
 
@@ -323,7 +321,7 @@ CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<vector<string>> &tok
 
       // token exists in the map
       if (it != srcValueToId.end()) {
-        srcs.push_back(node(it->second));
+        srcs.emplace_back(it->second);
       } else if (buildMissingElements && srcProperties.size() == keyTokens[i].size()) {
         node src = graph->addNode();
         srcs.push_back(src);
@@ -331,7 +329,7 @@ CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<vector<string>> &tok
         for (unsigned int j = 0; j < keyTokens[i].size(); ++j)
           srcProperties[j]->setNodeStringValue(src, keyTokens[i][j]);
 
-        srcValueToId[key] = src.id;
+        srcValueToId.emplace(std::move(key), src.id);
       }
     }
   }
@@ -385,7 +383,7 @@ CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<vector<string>> &tok
 
       // token exists in the map
       if (it != valueToId.end()) {
-        tgts.push_back(node(it->second));
+        tgts.emplace_back(it->second);
       } else if (buildMissingElements && tgtProperties.size() == keyTokens[i].size()) {
         node tgt = graph->addNode();
         tgts.push_back(tgt);
@@ -393,22 +391,24 @@ CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<vector<string>> &tok
         for (unsigned int j = 0; j < keyTokens[i].size(); ++j)
           tgtProperties[j]->setNodeStringValue(tgt, keyTokens[i][j]);
 
-        valueToId[key] = tgt.id;
+        valueToId.emplace(std::move(key), tgt.id);
       }
     }
   }
 
   // we create as much edges as we can build
   // of valid source-target entities couple
-  for (unsigned int i = 0; i < srcs.size(); ++i) {
-    for (unsigned int j = 0; j < tgts.size(); ++j) {
-      if (srcs[i].isValid() && tgts[j].isValid()) {
-        results.push_back(graph->addEdge(srcs[i], tgts[j]).id);
+  vector<unsigned int> results;
+  results.reserve(srcs.size() * tgts.size());
+  for (auto src : srcs) {
+    for (auto tgt : tgts) {
+      if (src.isValid() && tgt.isValid()) {
+        results.push_back(graph->addEdge(src, tgt).id);
       }
     }
   }
 
-  return make_pair(EDGE, results);
+  return pair<ElementType, vector<unsigned int>>(EDGE, std::move(results));
 }
 
 CSVImportColumnToGraphPropertyMappingProxy::CSVImportColumnToGraphPropertyMappingProxy(
@@ -595,7 +595,7 @@ bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
   }
 
   // Compute the element id associated to the line
-  pair<ElementType, vector<unsigned int>> elements = mapping->getElementsForRow(tokens);
+  pair<ElementType, vector<unsigned int>> &&elements = mapping->getElementsForRow(tokens);
 
   for (size_t column = 0; column < lineTokens.size(); ++column) {
     PropertyInterface *property = props[column];

@@ -58,12 +58,12 @@ QPixmap GlyphRenderer::render(int glyphId) {
       renderer->getScene()->centerScene();
       renderer->getScene()->getGraphCamera().setZoomFactor(0.9);
       // init previews
-      for (const std::string &glyphName : PluginLister::availablePlugins<Glyph>()) {
+      for (const auto &glyphName : PluginLister::availablePlugins<Glyph>()) {
         auto glId = GlyphManager::glyphId(glyphName);
         // Create the glyph preview
         graph->getProperty<IntegerProperty>("viewShape")->setNodeValue(node, glId);
         renderer->renderScene(false, true);
-        previews.emplace(std::make_pair(glId, QPixmap::fromImage(renderer->getImage())));
+        previews.emplace(glId, QPixmap::fromImage(renderer->getImage()));
       }
       renderer->clearScene(true);
     }
@@ -102,7 +102,7 @@ QPixmap EdgeExtremityGlyphRenderer::render(int glyphId) {
       inputData.getElementLayout()->setNodeValue(n1, Coord(0, 0, 0));
       inputData.getElementLayout()->setNodeValue(n2, Coord(0.3f, 0, 0));
       vector<Coord> bends;
-      bends.push_back(Coord(0.01f, 0, 0));
+      bends.emplace_back(0.01f, 0, 0);
       inputData.getElementLayout()->setAllEdgeValue(bends);
 
       inputData.getElementSrcAnchorShape()->setAllEdgeValue(EdgeExtremityShape::None);
@@ -119,13 +119,13 @@ QPixmap EdgeExtremityGlyphRenderer::render(int glyphId) {
       renderingParamerters.setViewArrow(true);
       renderer->getScene()->getGlGraphComposite()->setRenderingParameters(renderingParamerters);
       // init previews
-      for (std::string glyphName : PluginLister::availablePlugins<EdgeExtremityGlyph>()) {
+      for (const auto &glyphName : PluginLister::availablePlugins<EdgeExtremityGlyph>()) {
         const tlp::Plugin &info = PluginLister::pluginInformation(glyphName);
         int glId = info.id();
         // Create the glyph preview
         graph->getProperty<IntegerProperty>("viewTgtAnchorShape")->setEdgeValue(e, glId);
         renderer->renderScene(true);
-        previews.emplace(std::make_pair(glId, QPixmap::fromImage(renderer->getImage())));
+        previews.emplace(glId, QPixmap::fromImage(renderer->getImage()));
       }
       renderer->clearScene(true);
     }

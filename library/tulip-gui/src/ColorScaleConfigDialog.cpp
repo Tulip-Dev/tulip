@@ -103,21 +103,23 @@ void ColorScaleConfigDialog::accept() {
         gradient = TulipSettings::instance().value(gradientScaleId).toBool();
         TulipSettings::instance().endGroup();
 
+	colors.reserve(colorsVector.size());
         for (int i = 0; i < colorsVector.size(); ++i) {
-          colors.push_back(Color(colorsVector.at(i).value<QColor>().red(),
-                                 colorsVector.at(i).value<QColor>().green(),
-                                 colorsVector.at(i).value<QColor>().blue(),
-                                 colorsVector.at(i).value<QColor>().alpha()));
+          colors.emplace_back(colorsVector.at(i).value<QColor>().red(),
+			      colorsVector.at(i).value<QColor>().green(),
+			      colorsVector.at(i).value<QColor>().blue(),
+			      colorsVector.at(i).value<QColor>().alpha());
         }
 
         std::reverse(colors.begin(), colors.end());
       }
     }
   } else {
+    colors.reserve(_ui->colorsTable->rowCount());
     for (int i = 0; i < _ui->colorsTable->rowCount(); ++i) {
       QColor itemColor = _ui->colorsTable->item(i, 0)->background().color();
-      colors.push_back(
-          Color(itemColor.red(), itemColor.green(), itemColor.blue(), itemColor.alpha()));
+      colors.emplace_back(itemColor.red(), itemColor.green(),
+			  itemColor.blue(), itemColor.alpha());
     }
 
     std::reverse(colors.begin(), colors.end());
@@ -143,17 +145,17 @@ vector<Color> ColorScaleConfigDialog::getColorScaleFromImageFile(const QString &
     step = 10;
 
   vector<Color> colors;
-
+  colors.reserve(imageHeight % step ? imageHeight/step : imageHeight/step + 1);
   for (unsigned int i = 0; i < imageHeight; i += step) {
     QRgb pixelValue = gradientImage.pixel(0, i);
-    colors.push_back(
-        Color(qRed(pixelValue), qGreen(pixelValue), qBlue(pixelValue), qAlpha(pixelValue)));
+    colors.emplace_back(qRed(pixelValue), qGreen(pixelValue),
+			qBlue(pixelValue), qAlpha(pixelValue));
   }
 
   if (imageHeight % step != 0) {
     QRgb pixelValue = gradientImage.pixel(0, imageHeight - 1);
-    colors.push_back(
-        Color(qRed(pixelValue), qGreen(pixelValue), qBlue(pixelValue), qAlpha(pixelValue)));
+    colors.emplace_back(qRed(pixelValue), qGreen(pixelValue),
+			qBlue(pixelValue), qAlpha(pixelValue));
   }
 
   std::reverse(colors.begin(), colors.end());
@@ -197,7 +199,7 @@ void ColorScaleConfigDialog::importColorScaleFromFile(const QString &currentDir)
   if (imageFilePath.isEmpty())
     return;
 
-  vector<Color> colorsList = getColorScaleFromImageFile(imageFilePath);
+  vector<Color> &&colorsList = getColorScaleFromImageFile(imageFilePath);
 
   if (!colorsList.empty()) {
     ColorScale scaleTmp(colorsList, true);
@@ -445,9 +447,10 @@ void ColorScaleConfigDialog::reeditSaveColorScale(QListWidgetItem *savedColorSca
     gradient = TulipSettings::instance().value(gradientScaleId).toBool();
     TulipSettings::instance().endGroup();
 
+    colorsList.reserve(colorsListv.size());
     for (int i = 0; i < colorsListv.size(); ++i) {
       QColor color = colorsListv.at(i).value<QColor>();
-      colorsList.push_back(Color(color.red(), color.green(), color.blue(), color.alpha()));
+      colorsList.emplace_back(color.red(), color.green(), color.blue(), color.alpha());
     }
 
     reverse(colorsList.begin(), colorsList.end());

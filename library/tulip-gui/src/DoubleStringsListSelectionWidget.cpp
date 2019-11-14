@@ -87,6 +87,7 @@ void DoubleStringsListSelectionWidget::setMaxSelectedStringsListSize(
 vector<string> DoubleStringsListSelectionWidget::getSelectedStringsList() const {
   vector<string> outputStringList;
 
+  outputStringList.reserve(_ui->outputList->count());
   for (int i = 0; i < _ui->outputList->count(); ++i) {
     outputStringList.push_back(tlp::QStringToTlpString(_ui->outputList->item(i)->text()));
   }
@@ -97,6 +98,7 @@ vector<string> DoubleStringsListSelectionWidget::getSelectedStringsList() const 
 vector<string> DoubleStringsListSelectionWidget::getUnselectedStringsList() const {
   vector<string> inputStringList;
 
+  inputStringList.reserve(_ui->inputList->count());
   for (int i = 0; i < _ui->inputList->count(); ++i) {
     inputStringList.push_back(tlp::QStringToTlpString(_ui->inputList->item(i)->text()));
   }
