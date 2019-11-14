@@ -161,7 +161,7 @@ public:
    * is comprised between 0 and 1.
    *
    */
-  std::map<float, Color> getColorMap() const {
+  const std::map<float, Color> &getColorMap() const {
     return colorMap;
   }
 

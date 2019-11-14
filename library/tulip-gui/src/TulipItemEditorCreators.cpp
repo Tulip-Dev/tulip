@@ -659,15 +659,14 @@ QWidget *NodeShapeEditorCreator::createWidget(QWidget *parent) const {
   // making the scrollbars unreachable ...), we use a native
   // dialog with a QListWidget inside
   std::list<std::pair<QString, QPixmap>> shapes;
-  std::list<std::string> glyphs(PluginLister::availablePlugins<Glyph>());
 
-  for (std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
-    QString shapeName = tlpStringToQString(*it);
-    QPixmap pixmap = GlyphRenderer::render(GlyphManager::glyphId(*it));
-    shapes.push_back(std::make_pair(shapeName, pixmap));
+  for (const auto &glyphName : PluginLister::availablePlugins<Glyph>()) {
+    QString shapeName = tlpStringToQString(glyphName);
+    QPixmap pixmap = GlyphRenderer::render(GlyphManager::glyphId(glyphName));
+    shapes.emplace_back(shapeName, pixmap);
   }
 
-  return new ShapeDialog(shapes,
+  return new ShapeDialog(std::move(shapes),
                          Perspective::instance() ? Perspective::instance()->mainWindow() : parent);
 }
 
@@ -730,16 +729,16 @@ QWidget *EdgeExtremityShapeEditorCreator::createWidget(QWidget *parent) const {
   std::list<std::pair<QString, QPixmap>> shapes;
   shapes.push_back(std::make_pair(QString("NONE"), QPixmap()));
 
-  std::list<std::string> glyphs(PluginLister::availablePlugins<EdgeExtremityGlyph>());
+  std::list<std::string> glyphs();
 
-  for (std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
-    QString shapeName = tlpStringToQString(*it);
-    QPixmap pixmap = EdgeExtremityGlyphRenderer::render(EdgeExtremityGlyphManager::glyphId(*it));
-    shapes.push_back(std::make_pair(shapeName, pixmap));
+  for (const auto &glyphName : PluginLister::availablePlugins<EdgeExtremityGlyph>()) {
+    QString shapeName = tlpStringToQString(glyphName);
+    QPixmap pixmap = EdgeExtremityGlyphRenderer::render(EdgeExtremityGlyphManager::glyphId(glyphName));
+    shapes.emplace_back(shapeName, pixmap);
   }
 
   ShapeDialog *shapeDialog = new ShapeDialog(
-      shapes, Perspective::instance() ? Perspective::instance()->mainWindow() : parent);
+					     std::move(shapes), Perspective::instance() ? Perspective::instance()->mainWindow() : parent);
   shapeDialog->setWindowTitle("Select an edge extremity shape");
   return shapeDialog;
 }

@@ -234,7 +234,7 @@ Specify whether the color scale must be considered as a gradient.
 
 //==========================================================================================
 
-  std::map<float, tlp::Color> getColorMap() const;
+  const std::map<float, tlp::Color>& getColorMap() const /NoCopy/;
 %Docstring
 tlp.ColorScale.getColorMap()
 

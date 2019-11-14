@@ -488,10 +488,9 @@ QImage GlMainWidget::createPicture(int width, int height, bool center, QImage::F
     const vector<pair<string, GlLayer *>> &layersList = scene.getLayersList();
 
     if (center) {
-      for (vector<pair<string, GlLayer *>>::const_iterator it = layersList.begin();
-           it != layersList.end(); ++it) {
-        if (!(*it).second->useSharedCamera())
-          oldCameras.push_back((*it).second->getCamera());
+      for (auto &itl : layersList) {
+        if (!itl.second->useSharedCamera())
+          oldCameras.push_back(itl.second->getCamera());
       }
     }
 
@@ -515,10 +514,9 @@ QImage GlMainWidget::createPicture(int width, int height, bool center, QImage::F
     if (center) {
       int i = 0;
 
-      for (vector<pair<string, GlLayer *>>::const_iterator it = layersList.begin();
-           it != layersList.end(); ++it) {
-        if (!(*it).second->useSharedCamera()) {
-          Camera &camera = (*it).second->getCamera();
+      for (auto &itl : layersList) {
+        if (!itl.second->useSharedCamera()) {
+          Camera &camera = itl.second->getCamera();
           camera.setCenter(oldCameras[i].getCenter());
           camera.setEyes(oldCameras[i].getEyes());
           camera.setSceneRadius(oldCameras[i].getSceneRadius());

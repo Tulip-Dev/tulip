@@ -63,23 +63,21 @@ void TulipFontIconDialog::updateIconList() {
 
   std::vector<std::string> iconNames = TulipFontAwesome::getSupportedIcons();
 
-  for (std::vector<std::string>::const_iterator it = iconNames.begin(); it != iconNames.end();
-       ++it) {
-    QString iconName = tlpStringToQString(*it);
+  for (auto &it : iconNames) {
+    QString iconName = tlpStringToQString(it);
 
     if (regexp.indexIn(iconName) != -1) {
-      _ui->iconListWidget->addItem(new QListWidgetItem(TulipFontIconEngine::icon(*it), iconName));
+      _ui->iconListWidget->addItem(new QListWidgetItem(TulipFontIconEngine::icon(it), iconName));
     }
   }
 
   iconNames = TulipMaterialDesignIcons::getSupportedIcons();
 
-  for (std::vector<std::string>::const_iterator it = iconNames.begin(); it != iconNames.end();
-       ++it) {
-    QString iconName = tlpStringToQString(*it);
+  for (auto &it : iconNames) {
+    QString iconName = tlpStringToQString(it);
 
     if (regexp.indexIn(iconName) != -1) {
-      _ui->iconListWidget->addItem(new QListWidgetItem(TulipFontIconEngine::icon(*it), iconName));
+      _ui->iconListWidget->addItem(new QListWidgetItem(TulipFontIconEngine::icon(it), iconName));
     }
   }
 

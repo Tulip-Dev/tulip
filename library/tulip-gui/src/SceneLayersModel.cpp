@@ -72,32 +72,25 @@ QModelIndex SceneLayersModel::index(int row, int column, const QModelIndex &pare
     return createIndex(row, column, GRAPH_COMPOSITE_IDS[row]);
 
   int i = 0;
-  std::map<std::string, GlSimpleEntity *> entities = composite->getGlEntities();
 
-  for (std::map<std::string, GlSimpleEntity *>::iterator it = entities.begin();
-       it != entities.end(); ++it) {
+  for (auto &it : composite->getGlEntities()) {
     if (i++ == row)
-      return createIndex(row, column, it->second);
+      return createIndex(row, column, it.second);
   }
 
   return QModelIndex();
 }
 
 QModelIndex SceneLayersModel::graphCompositeIndex() const {
-  std::vector<std::pair<std::string, GlLayer *>> layers = _scene->getLayersList();
-
-  for (std::vector<std::pair<std::string, GlLayer *>>::iterator it = layers.begin();
-       it != layers.end(); ++it) {
-    GlComposite *composite = it->second->getComposite();
+  for (const auto &itl : _scene->getLayersList()) {
+    GlComposite *composite = itl.second->getComposite();
     int row = 0;
-    std::map<std::string, GlSimpleEntity *> entities = composite->getGlEntities();
 
-    for (std::map<std::string, GlSimpleEntity *>::iterator it = entities.begin();
-         it != entities.end(); ++it) {
-      if (it->second == _scene->getGlGraphComposite())
+    for (auto &it : composite->getGlEntities()) {
+      if (it.second == _scene->getGlGraphComposite())
         return createIndex(row, 0, _scene->getGlGraphComposite());
 
-      row++;
+      ++row;
     }
   }
 
@@ -111,11 +104,10 @@ QModelIndex SceneLayersModel::parent(const QModelIndex &child) const {
   if (GRAPH_COMPOSITE_IDS.contains(child.internalId()))
     return graphCompositeIndex();
 
-  std::vector<std::pair<std::string, GlLayer *>> layers = _scene->getLayersList();
+  const auto &layers = _scene->getLayersList();
 
-  for (std::vector<std::pair<std::string, GlLayer *>>::iterator it = layers.begin();
-       it != layers.end(); ++it) {
-    if (it->second == child.internalPointer())
+  for (const auto &itl : layers) {
+    if (itl.second == child.internalPointer())
       return QModelIndex(); // Item was a layer, aka. a top level item.
   }
 
@@ -130,24 +122,20 @@ QModelIndex SceneLayersModel::parent(const QModelIndex &child) const {
   if (ancestor == nullptr) { // Parent is a layer composite
     int row = 0;
 
-    for (std::vector<std::pair<std::string, GlLayer *>>::iterator it = layers.begin();
-         it != layers.end(); ++it) {
-      if (it->second->getComposite() == parent)
-        return createIndex(row, 0, it->second); // Item was a layer, aka. a top level item.
+    for (const auto &itl : layers) {
+      if (itl.second->getComposite() == parent)
+        return createIndex(row, 0, itl.second); // Item was a layer, aka. a top level item.
 
       row++;
     }
   }
 
   int row = 0;
-  std::map<std::string, GlSimpleEntity *> entities = ancestor->getGlEntities();
-
-  for (std::map<std::string, GlSimpleEntity *>::iterator it = entities.begin();
-       it != entities.end(); ++it) {
-    if (it->second == parent)
+  for (auto &it : ancestor->getGlEntities()) {
+    if (it.second == parent)
       return createIndex(row, 0, parent);
 
-    row++;
+    ++row;
   }
 
   return QModelIndex();
@@ -171,8 +159,9 @@ int SceneLayersModel::rowCount(const QModelIndex &parent) const {
   if (_scene->getGlGraphComposite() == entity)
     return GRAPH_COMPOSITE_IDS.size();
 
-  if (dynamic_cast<GlComposite *>(entity) != nullptr)
-    return static_cast<GlComposite *>(entity)->getGlEntities().size();
+  GlComposite *composite = dynamic_cast<GlComposite *>(entity);
+  if (composite != nullptr)
+    return composite->getGlEntities().size();
 
   return 0;
 }
@@ -258,12 +247,9 @@ QVariant SceneLayersModel::data(const QModelIndex &index, int role) const {
     if (layer != nullptr)
       return layer->getName().c_str();
 
-    std::map<std::string, GlSimpleEntity *> siblings = parent->getGlEntities();
-
-    for (std::map<std::string, GlSimpleEntity *>::iterator it = siblings.begin();
-         it != siblings.end(); ++it) {
-      if (it->second == entity)
-        return it->first.c_str();
+    for (auto &it : parent->getGlEntities()) {
+      if (it.second == entity)
+        return it.first.c_str();
     }
   }
 

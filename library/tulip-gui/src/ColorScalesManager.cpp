@@ -95,14 +95,14 @@ static ColorScale getColorScaleFromImageFile(const QString &imageFilePath) {
 
   for (unsigned int i = 0; i < imageHeight; i += step) {
     QRgb pixelValue = gradientImage.pixel(0, i);
-    colors.push_back(
-        Color(qRed(pixelValue), qGreen(pixelValue), qBlue(pixelValue), qAlpha(pixelValue)));
+    colors.emplace_back(qRed(pixelValue), qGreen(pixelValue),
+			qBlue(pixelValue), qAlpha(pixelValue));
   }
 
   if (imageHeight % step != 0) {
     QRgb pixelValue = gradientImage.pixel(0, imageHeight - 1);
-    colors.push_back(
-        Color(qRed(pixelValue), qGreen(pixelValue), qBlue(pixelValue), qAlpha(pixelValue)));
+    colors.emplace_back(qRed(pixelValue), qGreen(pixelValue),
+			qBlue(pixelValue), qAlpha(pixelValue));
   }
 
   reverse(colors.begin(), colors.end());
@@ -111,8 +111,6 @@ static ColorScale getColorScaleFromImageFile(const QString &imageFilePath) {
 
 string ColorScalesManager::findColorScaleFile(const string &rootDir, const string &colorScaleName) {
   QFileInfo colorscaleDirectory(tlpStringToQString(rootDir));
-
-  string ret;
 
   if (colorscaleDirectory.exists() && colorscaleDirectory.isDir()) {
     QDir dir(colorscaleDirectory.absoluteFilePath());
@@ -123,10 +121,10 @@ string ColorScalesManager::findColorScaleFile(const string &rootDir, const strin
       QFileInfo fileInfo = list.at(i);
 
       if (fileInfo.isDir()) {
-        ret = findColorScaleFile(QStringToTlpString(fileInfo.absoluteFilePath()), colorScaleName);
+        string &&ret = findColorScaleFile(QStringToTlpString(fileInfo.absoluteFilePath()), colorScaleName);
 
         if (!ret.empty()) {
-          return ret;
+          return std::move(ret);
         }
       } else if (fileInfo.suffix() == "png" &&
                  QStringToTlpString(fileInfo.baseName()) == colorScaleName) {
@@ -135,11 +133,11 @@ string ColorScalesManager::findColorScaleFile(const string &rootDir, const strin
     }
   }
 
-  return ret;
+  return string();
 }
 
 ColorScale ColorScalesManager::getColorScale(const string &colorScaleName) {
-  string colorScaleFile = findColorScaleFile(TulipBitmapDir + "colorscales", colorScaleName);
+  string &&colorScaleFile = findColorScaleFile(TulipBitmapDir + "colorscales", colorScaleName);
 
   if (!colorScaleFile.empty()) {
     return getColorScaleFromImageFile(tlpStringToQString(colorScaleFile));
@@ -192,10 +190,9 @@ void ColorScalesManager::registerColorScale(const string &colorScaleName,
       for (unsigned int i = 0; i < const_cast<ColorScale &>(colorScale).getStopsCount(); ++i) {
         float stop = i / float(const_cast<ColorScale &>(colorScale).getStopsCount() - 1);
         Color color = colorScale.getColorAtPos(stop);
-        colorsVector.push_back(QVariant(colorToQColor(color)));
+        colorsVector.push_front(QVariant(colorToQColor(color)));
       }
 
-      std::reverse(colorsVector.begin(), colorsVector.end());
       TulipSettings::instance().beginGroup("ColorScales");
       TulipSettings::instance().setValue(tlpStringToQString(colorScaleName), colorsVector);
       QString gradientId = tlpStringToQString(colorScaleName) + "_gradient?";
@@ -203,10 +200,9 @@ void ColorScalesManager::registerColorScale(const string &colorScaleName,
       TulipSettings::instance().endGroup();
     } else {
       QVariantMap colorsMap;
-      map<float, Color> colorsMapTlp = colorScale.getColorMap();
 
-      for (map<float, Color>::iterator it = colorsMapTlp.begin(); it != colorsMapTlp.end(); ++it) {
-        colorsMap[QString::number(it->first)] = colorToQColor(it->second);
+      for (const auto &it : colorScale.getColorMap()) {
+        colorsMap[QString::number(it.first)] = colorToQColor(it.second);
       }
 
       TulipSettings::instance().beginGroup("ColorScalesNoRegular");
@@ -243,14 +239,11 @@ void ColorScalesManager::setLatestColorScale(ColorScale &cs) {
   QList<QVariant> colors;
   QList<QVariant> stops;
 
-  map<float, Color> cm = cs.getColorMap();
-  map<float, Color>::iterator it = cm.begin();
-
-  for (; it != cm.end(); ++it) {
-    Color &c = it->second;
+  for (const auto &it : cs.getColorMap()) {
+    const Color &c = it.second;
     QColor qc(c.getR(), c.getG(), c.getB(), c.getA());
     colors.push_back(QVariant(qc));
-    stops.push_back(QVariant(it->first));
+    stops.push_back(QVariant(it.first));
   }
 
   TulipSettings::instance().beginGroup("viewLatestColorScale");

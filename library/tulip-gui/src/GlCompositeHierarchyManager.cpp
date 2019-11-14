@@ -51,12 +51,13 @@ GlCompositeHierarchyManager::GlCompositeHierarchyManager(Graph *graph, GlLayer *
   _size->addObserver(this);
   _rotation->addObserver(this);
 
-  _fillColors.push_back(Color(255, 148, 169, 100));
-  _fillColors.push_back(Color(153, 250, 255, 100));
-  _fillColors.push_back(Color(255, 152, 248, 100));
-  _fillColors.push_back(Color(157, 152, 255, 100));
-  _fillColors.push_back(Color(255, 220, 0, 100));
-  _fillColors.push_back(Color(252, 255, 158, 100));
+  _fillColors.reserve(6);
+  _fillColors.emplace_back(255, 148, 169, 100);
+  _fillColors.emplace_back(153, 250, 255, 100);
+  _fillColors.emplace_back(255, 152, 248, 100);
+  _fillColors.emplace_back(157, 152, 255, 100);
+  _fillColors.emplace_back(255, 220, 0, 100);
+  _fillColors.emplace_back(252, 255, 158, 100);
 
   if (_isVisible) {
     createComposite();
@@ -77,8 +78,7 @@ void GlCompositeHierarchyManager::buildComposite(Graph *current, GlComposite *co
   GlConvexGraphHull *hull = new GlConvexGraphHull(composite, naming.str(), getColor(), current,
                                                   _layout, _size, _rotation);
 
-  _graphsComposites.insert(std::pair<Graph *, std::pair<GlComposite *, GlConvexGraphHull *>>(
-      current, std::pair<GlComposite *, GlConvexGraphHull *>(composite, hull)));
+  _graphsComposites.emplace(current, std::pair<GlComposite *, GlConvexGraphHull *>(composite, hull));
 
   if (!current->subGraphs().empty()) {
     GlComposite *newComposite = new GlComposite();
@@ -158,8 +158,7 @@ void GlCompositeHierarchyManager::treatEvent(const Event &evt) {
         auto propertyName = gEvt->getPropertyName();
         _layout = graph->getProperty<LayoutProperty>(propertyName);
         _layout->addObserver(this);
-        std::vector<Event> v;
-        treatEvents(v);
+        treatEvents(vector<Event>());
       }
       break;
     }
@@ -172,24 +171,21 @@ void GlCompositeHierarchyManager::treatEvent(const Event &evt) {
         _layout = graph->getProperty<LayoutProperty>(propertyName);
         _layout->addObserver(this);
         if (_layout->hasNonDefaultValuatedNodes(graph)) {
-          std::vector<Event> v;
-          treatEvents(v);
+          treatEvents(vector<Event>());
         }
       } else if (propertyName == _size->getName()) {
         _size->removeObserver(this);
         _size = graph->getProperty<SizeProperty>(propertyName);
         _size->addObserver(this);
         if (_size->hasNonDefaultValuatedNodes(graph)) {
-          std::vector<Event> v;
-          treatEvents(v);
+          treatEvents(vector<Event>());
         }
       } else if (propertyName == _rotation->getName()) {
         _rotation->removeObserver(this);
         _rotation = graph->getProperty<DoubleProperty>(propertyName);
         _rotation->addObserver(this);
         if (_rotation->hasNonDefaultValuatedNodes(graph)) {
-          std::vector<Event> v;
-          treatEvents(v);
+          treatEvents(vector<Event>());
         }
       }
     }
@@ -211,11 +207,11 @@ void GlCompositeHierarchyManager::treatEvent(const Event &evt) {
 }
 
 void GlCompositeHierarchyManager::treatEvents(const std::vector<Event> &) {
-  for (auto it = _graphsComposites.begin(); it != _graphsComposites.end(); ++it) {
-    if (!it->first->isEmpty()) {
-      it->second.second->updateHull(_layout, _size, _rotation);
+  for (auto &it : _graphsComposites) {
+    if (!it.first->isEmpty()) {
+      it.second.second->updateHull(_layout, _size, _rotation);
     } else {
-      it->second.second->setVisible(false);
+      it.second.second->setVisible(false);
     }
   }
 }
@@ -273,10 +269,10 @@ bool GlCompositeHierarchyManager::isVisible() const {
 DataSet GlCompositeHierarchyManager::getData() {
   DataSet set;
 
-  for (auto it = _graphsComposites.begin(); it != _graphsComposites.end(); ++it) {
-    unsigned int graphId = it->first->getId();
+  for (const auto &it : _graphsComposites) {
+    unsigned int graphId = it.first->getId();
     unsigned int visibility =
-        uint(it->second.first->isVisible()) * 2 + uint(it->second.second->isVisible());
+        uint(it.second.first->isVisible()) * 2 + uint(it.second.second->isVisible());
     stringstream graph;
     graph << graphId;
     set.set(graph.str(), visibility);
@@ -286,17 +282,17 @@ DataSet GlCompositeHierarchyManager::getData() {
 }
 
 void GlCompositeHierarchyManager::setData(const DataSet &dataSet) {
-  for (auto it = _graphsComposites.begin(); it != _graphsComposites.end(); ++it) {
+  for (auto &it : _graphsComposites) {
     stringstream graph;
-    graph << it->first->getId();
+    graph << it.first->getId();
 
     if (dataSet.exists(graph.str())) {
       unsigned int visibility = 0;
       dataSet.get(graph.str(), visibility);
       bool firstVisibility = visibility - 1 > 0;
-      it->second.first->setVisible(firstVisibility);
+      it.second.first->setVisible(firstVisibility);
       bool secondVisibility = visibility % 2 > 0;
-      it->second.second->setVisible(secondVisibility);
+      it.second.second->setVisible(secondVisibility);
     }
   }
 }

@@ -262,9 +262,8 @@ bool MouseEdgeBendEditor::compute(GlMainWidget *glMainWidget) {
     const vector<pair<std::string, GlLayer *>> &layersList =
         glMainWidget->getScene()->getLayersList();
 
-    for (vector<pair<std::string, GlLayer *>>::const_iterator it = layersList.begin();
-         it != layersList.end(); ++it) {
-      if ((*it).second == layer) {
+    for (auto &it : layersList) {
+      if (it.second == layer) {
         layerInScene = true;
         break;
       }
@@ -503,14 +502,14 @@ void MouseEdgeBendEditor::computeSrcTgtEntities(GlMainWidget *glMainWidget) {
   if (selectedEntity != "targetTriangle") {
     Coord tmp(glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(end));
     targetTriangle =
-        GlTriangle(tmp, Size(7, 7, 0), Color(255, 102, 255, 200), Color(128, 20, 20, 200));
+      GlTriangle(std::move(tmp), Size(7, 7, 0), Color(255, 102, 255, 200), Color(128, 20, 20, 200));
     targetTriangle.setStartAngle(M_PI + endAngle);
     targetTriangle.setStencil(0);
   }
 
   if (selectedEntity != "sourceCircle") {
     Coord tmp(glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(start));
-    sourceCircle = GlCircle(tmp, 6, Color(128, 20, 20, 200), Color(255, 102, 255, 200), true, true);
+    sourceCircle = GlCircle(std::move(tmp), 6, Color(128, 20, 20, 200), Color(255, 102, 255, 200), true, true);
     sourceCircle.setStencil(0);
   }
 }
@@ -518,7 +517,6 @@ void MouseEdgeBendEditor::computeSrcTgtEntities(GlMainWidget *glMainWidget) {
 bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
   initProxies(glMainWidget);
 
-  Coord tmp;
   coordinates.clear();
   circles.clear();
   select.clear();
@@ -545,14 +543,10 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
     circleString->addGlEntity(&sourceCircle, "sourceCircle");
 
     // Bends circles
-    vector<Coord>::iterator CoordIt = coordinates.begin();
-
-    while (CoordIt != coordinates.end()) {
-      tmp = Coord(CoordIt->getX(), CoordIt->getY(), CoordIt->getZ());
-      tmp = glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(tmp);
+    for (const Coord &coord : coordinates) {
+      Coord &&tmp = glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(coord);
       basicCircle.set(tmp, 5, 0.);
       circles.push_back(basicCircle);
-      ++CoordIt;
     }
 
     if (!edgeEntity)
@@ -590,9 +584,8 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
         double rotation = _rotation->getNodeValue(mNode) * M_PI / 180;
 
         for (auto coord : baseCoordinates) {
-          Coord tmp(
-              Coord(((coord[0] - min[0]) / (max[0] - min[0])) * nodeSize[0] - nodeSize[0] / 2.,
-                    ((coord[1] - min[1]) / (max[1] - min[1])) * nodeSize[1] - nodeSize[1] / 2., 0));
+          Coord tmp(((coord[0] - min[0]) / (max[0] - min[0])) * nodeSize[0] - nodeSize[0] / 2.,
+                    ((coord[1] - min[1]) / (max[1] - min[1])) * nodeSize[1] - nodeSize[1] / 2., 0);
           coordinatesWithRotation.push_back(_layout->getNodeValue(mNode) +
                                             Coord(tmp[0] * cos(rotation) - tmp[1] * sin(rotation),
                                                   tmp[0] * sin(rotation) + tmp[1] * cos(rotation),
@@ -600,14 +593,10 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
           coordinates.push_back(_layout->getNodeValue(mNode) + tmp);
         }
 
-        vector<Coord>::iterator coordIt = coordinatesWithRotation.begin();
-
-        while (coordIt != coordinatesWithRotation.end()) {
-          Coord tmp(
-              glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(*coordIt));
+        for (Coord &coord : coordinatesWithRotation) {
+          Coord &&tmp = glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(coord);
           basicCircle.set(tmp, 5, 0.);
           circles.push_back(basicCircle);
-          ++coordIt;
         }
       }
     }

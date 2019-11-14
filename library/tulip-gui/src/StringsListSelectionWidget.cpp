@@ -113,7 +113,7 @@ vector<string> StringsListSelectionWidget::getUnselectedStringsList() const {
 
 std::vector<std::string> StringsListSelectionWidget::getCompleteStringsList() const {
   vector<string> completeList = stringsListSelectionWidget->getSelectedStringsList();
-  vector<string> unselected = stringsListSelectionWidget->getUnselectedStringsList();
+  vector<string> &&unselected = stringsListSelectionWidget->getUnselectedStringsList();
   completeList.insert(completeList.end(), unselected.begin(), unselected.end());
   return completeList;
 }

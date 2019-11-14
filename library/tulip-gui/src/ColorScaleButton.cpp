@@ -36,10 +36,9 @@ void ColorScaleButton::paintScale(QPainter *painter, const QRect &baseRect,
   rect.setHeight(rect.height() - 4);
 
   QLinearGradient grad(QPointF(rect.x(), rect.y()), QPointF(rect.x() + rect.width(), rect.y()));
-  std::map<float, Color> stops = colorScale.getColorMap();
 
-  for (std::map<float, Color>::iterator it = stops.begin(); it != stops.end(); ++it)
-    grad.setColorAt(it->first, colorToQColor(it->second));
+  for (const auto &it : colorScale.getColorMap())
+    grad.setColorAt(it.first, colorToQColor(it.second));
 
   painter->setBrush(QBrush(grad));
 

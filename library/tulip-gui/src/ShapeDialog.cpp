@@ -22,8 +22,8 @@
 
 using namespace tlp;
 
-ShapeDialog::ShapeDialog(std::list<std::pair<QString, QPixmap>> &nodeShapes, QWidget *parent)
-    : QDialog(parent), _ui(new Ui::ShapeDialog), shapes(nodeShapes) {
+ShapeDialog::ShapeDialog(std::list<std::pair<QString, QPixmap>> &&nodeShapes, QWidget *parent)
+  : QDialog(parent), _ui(new Ui::ShapeDialog), shapes(std::move(nodeShapes)) {
 
   _ui->setupUi(this);
 

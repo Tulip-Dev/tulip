@@ -90,9 +90,9 @@ node-link diagrams in 3D hyperbolic space. That algorithm can lay out much
 larger structures than can be handled using traditional techniques
 for drawing general graphs because it assumes a hierarchical nature
 of the data.
-It was first published as: <b> H3: Laying out Large Directed Graphs
-in 3D Hyperbolic Space </b>. Tamara Munzner. Proceedings of the 1997 IEEE
-Symposium on Information Visualization, Phoenix, AZ, pp 2-10, 1997.
+It was first published as:<br/><b> H3: Laying out Large Directed Graphs
+in 3D Hyperbolic Space</b>, Tamara Munzner, Proceedings of the 1997 IEEE
+Symposium on Information Visualization, Phoenix, AZ, pp 2-10, 1997.<br/>
 The implementation in Python (MIT License) has been written by
 BuzzFeed engineers (https://github.com/buzzfeed/pyh3).
 """
