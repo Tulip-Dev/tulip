@@ -101,7 +101,8 @@ public:
    * \param noCheck when true the bounding box validity is not checked
    *
    */
-  void addQuadEdge(const Coord &edgeStart, const Coord &edgeEnd, const Color &edgeColor, bool noCheck = false);
+  void addQuadEdge(const Coord &edgeStart, const Coord &edgeEnd, const Color &edgeColor,
+                   bool noCheck = false);
 
   /**
    * Virtual function used to draw the polyquad.

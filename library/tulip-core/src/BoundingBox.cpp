@@ -105,8 +105,8 @@ bool BoundingBox::contains(const tlp::Vec3f &coord, bool noCheck) const {
 }
 
 bool BoundingBox::contains(const tlp::BoundingBox &boundingBox) const {
-  return isValid() && boundingBox.isValid() &&
-    contains(boundingBox[0], true) && contains(boundingBox[1], true);
+  return isValid() && boundingBox.isValid() && contains(boundingBox[0], true) &&
+         contains(boundingBox[1], true);
 }
 
 bool BoundingBox::intersect(const tlp::BoundingBox &boundingBox) const {

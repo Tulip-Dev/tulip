@@ -59,7 +59,8 @@ GlPolyQuad::GlPolyQuad(const std::vector<Coord> &polyQuadEdges, const Color &pol
   }
 }
 
-void GlPolyQuad::addQuadEdge(const Coord &startEdge, const Coord &endEdge, const Color &edgeColor, bool noCheck) {
+void GlPolyQuad::addQuadEdge(const Coord &startEdge, const Coord &endEdge, const Color &edgeColor,
+                             bool noCheck) {
   polyQuadEdges.emplace_back(startEdge);
   polyQuadEdges.emplace_back(endEdge);
   boundingBox.expand(startEdge, noCheck);

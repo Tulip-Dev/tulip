@@ -387,7 +387,7 @@ void GlLabel::draw(float, Camera *camera) {
       float size1Cos = occlusionSize[1] * cos(angle);
       float size1Sin = occlusionSize[1] * sin(angle);
       BoundingBox tmpBB(Coord(size0Cos - size1Sin, size0Sin + size1Cos, 0),
-			Coord(size0Cos + size1Sin, size0Sin - size1Cos, 0), true);
+                        Coord(size0Cos + size1Sin, size0Sin - size1Cos, 0), true);
       tmpBB.expand(Coord(-size0Cos + size1Sin, -size0Sin - size1Cos, 0), true);
       tmpBB.expand(Coord(-size0Cos - size1Sin, -size0Sin + size1Cos, 0), true);
 
@@ -413,25 +413,32 @@ void GlLabel::draw(float, Camera *camera) {
     glGetFloatv(GL_MODELVIEW_MATRIX, reinterpret_cast<GLfloat *>(&transformMatrix));
     glPopMatrix();
 
-    BoundingBox bbTmp(Coord(baseCoord[0] + occlusionSize[0], baseCoord[1] + occlusionSize[1], baseCoord[2]),
-		      Coord(baseCoord[0] + occlusionSize[0], baseCoord[1] - occlusionSize[1], baseCoord[2]), true);
-    bbTmp.expand(
-		 Coord(baseCoord[0] - occlusionSize[0], baseCoord[1] - occlusionSize[1], baseCoord[2]), true);
-    bbTmp.expand(
-        Coord(baseCoord[0] - occlusionSize[0], baseCoord[1] + occlusionSize[1], baseCoord[2]), true);
-
-    BoundingBox labelBoundingBox(projectPoint(
+    BoundingBox bbTmp(
         Coord(baseCoord[0] + occlusionSize[0], baseCoord[1] + occlusionSize[1], baseCoord[2]),
-        transformMatrix, camera->getViewport()),
-				 projectPoint(
         Coord(baseCoord[0] + occlusionSize[0], baseCoord[1] - occlusionSize[1], baseCoord[2]),
-        transformMatrix, camera->getViewport()), true);
-    labelBoundingBox.expand(projectPoint(
+        true);
+    bbTmp.expand(
         Coord(baseCoord[0] - occlusionSize[0], baseCoord[1] - occlusionSize[1], baseCoord[2]),
-        transformMatrix, camera->getViewport()), true);
-    labelBoundingBox.expand(projectPoint(
+        true);
+    bbTmp.expand(
         Coord(baseCoord[0] - occlusionSize[0], baseCoord[1] + occlusionSize[1], baseCoord[2]),
-        transformMatrix, camera->getViewport()), true);
+        true);
+
+    BoundingBox labelBoundingBox(projectPoint(Coord(baseCoord[0] + occlusionSize[0],
+                                                    baseCoord[1] + occlusionSize[1], baseCoord[2]),
+                                              transformMatrix, camera->getViewport()),
+                                 projectPoint(Coord(baseCoord[0] + occlusionSize[0],
+                                                    baseCoord[1] - occlusionSize[1], baseCoord[2]),
+                                              transformMatrix, camera->getViewport()),
+                                 true);
+    labelBoundingBox.expand(projectPoint(Coord(baseCoord[0] - occlusionSize[0],
+                                               baseCoord[1] - occlusionSize[1], baseCoord[2]),
+                                         transformMatrix, camera->getViewport()),
+                            true);
+    labelBoundingBox.expand(projectPoint(Coord(baseCoord[0] - occlusionSize[0],
+                                               baseCoord[1] + occlusionSize[1], baseCoord[2]),
+                                         transformMatrix, camera->getViewport()),
+                            true);
 
     if (!occlusionTester->addRectangle(
             RectangleInt2D(labelBoundingBox[0][0], labelBoundingBox[0][1], labelBoundingBox[1][0],
@@ -509,33 +516,40 @@ void GlLabel::draw(float, Camera *camera) {
         projectPoint(centerPosition + Coord(sizeForOutAlign[0] / 2., sizeForOutAlign[1] / 2.,
                                             sizeForOutAlign[2] / 2.),
                      transformMatrix, camera->getViewport()),
-	projectPoint(centerPosition + Coord(-sizeForOutAlign[0] / 2., sizeForOutAlign[1] / 2.,
+        projectPoint(centerPosition + Coord(-sizeForOutAlign[0] / 2., sizeForOutAlign[1] / 2.,
                                             sizeForOutAlign[2] / 2.),
-                     transformMatrix, camera->getViewport()), true);
+                     transformMatrix, camera->getViewport()),
+        true);
     billboardedBB.expand(
         projectPoint(centerPosition + Coord(sizeForOutAlign[0] / 2., -sizeForOutAlign[1] / 2.,
                                             sizeForOutAlign[2] / 2.),
-                     transformMatrix, camera->getViewport()), true);
+                     transformMatrix, camera->getViewport()),
+        true);
     billboardedBB.expand(
         projectPoint(centerPosition + Coord(-sizeForOutAlign[0] / 2., -sizeForOutAlign[1] / 2.,
                                             sizeForOutAlign[2] / 2.),
-                     transformMatrix, camera->getViewport()), true);
+                     transformMatrix, camera->getViewport()),
+        true);
     billboardedBB.expand(
         projectPoint(centerPosition + Coord(sizeForOutAlign[0] / 2., sizeForOutAlign[1] / 2.,
                                             -sizeForOutAlign[2] / 2.),
-                     transformMatrix, camera->getViewport()), true);
+                     transformMatrix, camera->getViewport()),
+        true);
     billboardedBB.expand(
         projectPoint(centerPosition + Coord(-sizeForOutAlign[0] / 2., sizeForOutAlign[1] / 2.,
                                             -sizeForOutAlign[2] / 2.),
-                     transformMatrix, camera->getViewport()), true);
+                     transformMatrix, camera->getViewport()),
+        true);
     billboardedBB.expand(
         projectPoint(centerPosition + Coord(sizeForOutAlign[0] / 2., -sizeForOutAlign[1] / 2.,
                                             -sizeForOutAlign[2] / 2.),
-                     transformMatrix, camera->getViewport()), true);
+                     transformMatrix, camera->getViewport()),
+        true);
     billboardedBB.expand(
         projectPoint(centerPosition + Coord(-sizeForOutAlign[0] / 2., -sizeForOutAlign[1] / 2.,
                                             -sizeForOutAlign[2] / 2.),
-                     transformMatrix, camera->getViewport()), true);
+                     transformMatrix, camera->getViewport()),
+        true);
 
     Coord billboardedTranlation(0, 0, 0);
 
