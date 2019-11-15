@@ -85,6 +85,19 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   BoundingBox(const tlp::Vec3f &min, const tlp::Vec3f &max, bool checkMinMax = false);
 
   /**
+   * @brief restore an invalid state.
+   **/
+  void clear();
+
+  /**
+   * @brief init the bounding box with the point passed as parameter.
+   * @param coord A point in the 3D space
+   **/
+  inline void init(const tlp::Vec3f &coord) {
+    (*this)[0] = (*this)[1] = coord;
+  }
+
+  /**
    * @brief Returns the geometrical center of the bounding box.
    * An assertion is raised in debug mode if the BoundingBox is not valid.
    *
@@ -130,9 +143,10 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
    * If the parameter is inside the bounding box, it remains unchanged.
    *
    * @param coord A point in the 3D space we want the bounding box to encompass.
+   * @param noCheck if true current bounding box validity is not checked
    * @return void
    **/
-  void expand(const tlp::Vec3f &coord);
+  void expand(const tlp::Vec3f &coord, bool noCheck = false);
 
   /**
    * @brief Expands the bounding box to one containing all the point of the vector passed as
@@ -142,8 +156,10 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
    * @return void
    **/
   inline void expand(const std::vector<tlp::Vec3f> &coords) {
-    for (auto &coord : coords)
-      expand(coord);
+    auto it = coords.begin();
+    expand(*it);
+    for (++it; it < coords.end(); ++it)
+      expand(*it, true);
   }
 
   /**
@@ -151,6 +167,7 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
    * If the parameter is inside the bounding box, it remains unchanged.
    *
    * @param bb A bounding box.
+   * @param noCheck if true current bounding box validity is not checked
    * @return void
    **/
   void expand(const tlp::BoundingBox &bb, bool noCheck = false);
@@ -184,9 +201,10 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
    * @brief Checks if the given vector is inside the current bounding box. If the bounding box is
    *invalid the result is always false.
    * @param coord A point in the 3D space.
+   * @param noCheck if true current bounding box validity is not checked
    * @return bool Whether coord is in the bounding box.
    **/
-  bool contains(const tlp::Vec3f &coord) const;
+  bool contains(const tlp::Vec3f &coord, bool noCheck = false) const;
 
   /**
    * @brief Checks if the given bounding box is inside the current bounding box. If one of the

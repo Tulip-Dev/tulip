@@ -519,8 +519,7 @@ void GlAbstractPolygon::clearGenerated() {
 }
 //============================================================
 void GlAbstractPolygon::recomputeBoundingBox() {
-  boundingBox = BoundingBox();
-
+  boundingBox.clear();
   boundingBox.expand(points);
 }
 } // namespace tlp

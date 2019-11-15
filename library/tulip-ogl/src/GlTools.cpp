@@ -233,9 +233,7 @@ Coord unprojectPoint(const Coord &obj, const MatrixGL &invtransform,
 //====================================================
 GLfloat projectSize(const Coord &position, const Size &size, const MatrixGL &projectionMatrix,
                     const MatrixGL &modelviewMatrix, const Vector<int, 4> &viewport) {
-  BoundingBox box;
-  box.expand(position - size / 2.f);
-  box.expand(position + size / 2.f);
+  BoundingBox box(Coord(position - size / 2.f), Coord(position + size / 2.f), true);
   return projectSize(box, projectionMatrix, modelviewMatrix, viewport);
 }
 //====================================================
@@ -321,18 +319,21 @@ float calculateAABBSize(const BoundingBox &bb, const Coord &eye,
                         const Matrix<float, 4> &transformMatrix,
                         const Vector<int, 4> &globalViewport,
                         const Vector<int, 4> &currentViewport) {
-  BoundingBox bbTmp(bb);
+  BoundingBox bbTmp;
   Coord src[8];
   Coord dst[8];
   int pos;
   int num;
 
   for (int i = 0; i < 3; i++) {
-    if (bbTmp[0][i] > bbTmp[1][i]) {
-      float tmp = bbTmp[0][i];
-      bbTmp[0][i] = bbTmp[1][i];
-      bbTmp[1][i] = tmp;
+    if (bb[0][i] > bb[1][i]) {
+      bbTmp[0][i] = bb[1][i];
+      bbTmp[1][i] = bb[0][i];
+    } else {
+      bbTmp[0][i] = bb[0][i];
+      bbTmp[1][i] = bb[1][i];
     }
+    bbTmp[2][i] = bb[2][i];
   }
 
   bbTmp.getCompleteBB(src);

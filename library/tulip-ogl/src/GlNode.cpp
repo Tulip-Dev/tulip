@@ -84,8 +84,8 @@ BoundingBox GlNode::getBoundingBox(const GlGraphInputData *data) {
              tmp4[2]);
 
     BoundingBox bb(coord + tmp1, coord + tmp2, true);
-    bb.expand(coord + tmp3);
-    bb.expand(coord + tmp4);
+    bb.expand(coord + tmp3, true);
+    bb.expand(coord + tmp4, true);
     return bb;
   }
 }

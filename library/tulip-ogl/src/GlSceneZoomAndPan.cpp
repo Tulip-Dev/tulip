@@ -37,12 +37,10 @@ GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundi
 
   camCenterEnd[2] = camCenterStart[2];
 
-  Coord blScene(camera.viewportTo3DWorld(Coord(0, 0, 0)));
-  Coord trScene(camera.viewportTo3DWorld(Coord(viewport[2], viewport[3], 0)));
+  Coord &&blScene = camera.viewportTo3DWorld(Coord(0, 0, 0));
+  Coord &&trScene = camera.viewportTo3DWorld(Coord(viewport[2], viewport[3], 0));
 
-  BoundingBox sceneBB;
-  sceneBB.expand(blScene);
-  sceneBB.expand(trScene);
+  BoundingBox sceneBB(blScene, trScene);
 
   zoomAreaWidth = boundingBox[1][0] - boundingBox[0][0];
   zoomAreaHeight = boundingBox[1][1] - boundingBox[0][1];

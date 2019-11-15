@@ -44,8 +44,6 @@ unsigned int GlStar::getNumberOfStarPoints() {
 }
 //=====================================================
 void GlStar::computeStar() {
-  boundingBox = BoundingBox();
-
   BoundingBox box;
   vector<Coord> points;
   float delta = float(2.0 * M_PI / numberOfStarPoints);
@@ -53,25 +51,25 @@ void GlStar::computeStar() {
   for (unsigned int i = 0; i < numberOfStarPoints; ++i) {
     float deltaX = cos(i * delta + startAngle);
     float deltaY = sin(i * delta + startAngle);
-    points.push_back(Coord(deltaX, deltaY, 0));
-    box.expand(points.back());
+    points.emplace_back(deltaX, deltaY, 0);
+    box.expand(points.back(), i != 0);
     deltaX = 0.5f * cos(i * delta + delta / 2.0f + startAngle);
     deltaY = 0.5f * sin(i * delta + delta / 2.0f + startAngle);
-    points.push_back(Coord(deltaX, deltaY, 0));
-    box.expand(points.back());
+    points.emplace_back(deltaX, deltaY, 0);
+    box.expand(points.back(), true);
   }
 
-  for (vector<Coord>::iterator it = points.begin(); it != points.end(); ++it) {
-    (*it)[0] =
+  for (auto &coord : points) {
+    coord[0] =
         position[0] +
-        (((*it)[0] - ((box[1][0] + box[0][0]) / 2.)) / ((box[1][0] - box[0][0]) / 2.)) * size[0];
-    (*it)[1] =
+        ((coord[0] - ((box[1][0] + box[0][0]) / 2.)) / ((box[1][0] - box[0][0]) / 2.)) * size[0];
+    coord[1] =
         position[1] +
-        (((*it)[1] - ((box[1][1] + box[0][1]) / 2.)) / ((box[1][1] - box[0][1]) / 2.)) * size[1];
+        ((coord[1] - ((box[1][1] + box[0][1]) / 2.)) / ((box[1][1] - box[0][1]) / 2.)) * size[1];
   }
 
-  boundingBox.expand(position + size / 2.f);
-  boundingBox.expand(position - size / 2.f);
+  boundingBox.init(position + size / 2.f);
+  boundingBox.expand(position - size / 2.f, true);
 
   createPolygon(points, 0);
   runTesselation();

@@ -30,8 +30,8 @@ GlGrid::GlGrid(const Coord &frontTopLeft, const Coord &backBottomRight, const Si
   for (unsigned int i = 0; i < 3; ++i)
     this->displayDim[i] = displayDim[i];
 
-  boundingBox.expand(frontTopLeft);
-  boundingBox.expand(backBottomRight);
+  boundingBox.init(frontTopLeft);
+  boundingBox.expand(backBottomRight, true);
 }
 //============================================================
 void GlGrid::draw(float, Camera *) {

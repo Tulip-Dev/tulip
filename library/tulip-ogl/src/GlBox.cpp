@@ -158,8 +158,8 @@ GlBox::GlBox(const Coord &position, const Size &size, const Color &fillColor,
   if (outlined)
     outlineColors.emplace_back(outlineColor);
 
-  boundingBox.expand(position - size / 2.f);
-  boundingBox.expand(position + size / 2.f);
+  boundingBox.init(position - size / 2.f);
+  boundingBox.expand(position + size / 2.f, true);
 }
 //===========================================================
 GlBox::~GlBox() {
@@ -288,9 +288,8 @@ void GlBox::draw(float lod, Camera *) {
 void GlBox::setSize(const Size &size) {
   this->size = size;
 
-  boundingBox = BoundingBox();
-  boundingBox.expand(position - size / 2.f);
-  boundingBox.expand(position + size / 2.f);
+  boundingBox.init(position - size / 2.f);
+  boundingBox.expand(position + size / 2.f, true);
 
   clearGenerated();
 }
@@ -298,9 +297,8 @@ void GlBox::setSize(const Size &size) {
 void GlBox::setPosition(const Coord &position) {
   this->position = position;
 
-  boundingBox = BoundingBox();
-  boundingBox.expand(position - size / 2.f);
-  boundingBox.expand(position + size / 2.f);
+  boundingBox.init(position - size / 2.f);
+  boundingBox.expand(position + size / 2.f, true);
 
   clearGenerated();
 }
@@ -378,9 +376,8 @@ void GlBox::setWithXML(const string &inString, unsigned int &currentPosition) {
   GlXMLTools::setWithXML(inString, currentPosition, "textureName", textureName);
   GlXMLTools::setWithXML(inString, currentPosition, "outlineSize", outlineSize);
 
-  boundingBox = BoundingBox();
-  boundingBox.expand(position - size / 2.f);
-  boundingBox.expand(position + size / 2.f);
+  boundingBox.init(position - size / 2.f);
+  boundingBox.expand(position + size / 2.f, true);
 }
 //============================================================
 void GlBox::clearGenerated() {

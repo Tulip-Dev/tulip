@@ -36,9 +36,17 @@ static bool getIntersection(float fDst1, float fDst2, const tlp::Vec3f &p1, cons
 
 namespace tlp {
 
+static std::array<std::array<float, 3>, 2> _invalidBB = {1, 1, 1, -1, -1, -1};
+
 BoundingBox::BoundingBox() {
-  (*this)[0].fill(1);
-  (*this)[1].fill(-1);
+  // set as invalid
+  memcpy(this, &_invalidBB, sizeof(_invalidBB));
+  assert(!isValid());
+}
+
+void BoundingBox::clear() {
+  // restore an invalid state
+  memcpy(this, &_invalidBB, sizeof(_invalidBB));
   assert(!isValid());
 }
 
@@ -52,13 +60,13 @@ BoundingBox::BoundingBox(const tlp::Vec3f &min, const tlp::Vec3f &max, bool comp
   assert(isValid());
 }
 
-void BoundingBox::expand(const tlp::Vec3f &coord) {
-  if (!isValid()) {
-    (*this)[0] = coord;
-    (*this)[1] = coord;
-  } else {
+void BoundingBox::expand(const tlp::Vec3f &coord, bool noCheck) {
+  if (noCheck || isValid()) {
     (*this)[0] = tlp::minVector((*this)[0], coord);
     (*this)[1] = tlp::maxVector((*this)[1], coord);
+  } else {
+    (*this)[0] = coord;
+    (*this)[1] = coord;
   }
 }
 
@@ -87,8 +95,8 @@ bool BoundingBox::isValid() const {
          (*this)[0][2] <= (*this)[1][2];
 }
 
-bool BoundingBox::contains(const tlp::Vec3f &coord) const {
-  if (isValid()) {
+bool BoundingBox::contains(const tlp::Vec3f &coord, bool noCheck) const {
+  if (noCheck || isValid()) {
     return (coord[0] >= (*this)[0][0] && coord[1] >= (*this)[0][1] && coord[2] >= (*this)[0][2]) &&
            (coord[0] <= (*this)[1][0] && coord[1] <= (*this)[1][1] && coord[2] <= (*this)[1][2]);
   } else {
@@ -97,11 +105,8 @@ bool BoundingBox::contains(const tlp::Vec3f &coord) const {
 }
 
 bool BoundingBox::contains(const tlp::BoundingBox &boundingBox) const {
-  if (isValid() && boundingBox.isValid()) {
-    return contains(boundingBox[0]) && contains(boundingBox[1]);
-  } else {
-    return false;
-  }
+  return isValid() && boundingBox.isValid() &&
+    contains(boundingBox[0], true) && contains(boundingBox[1], true);
 }
 
 bool BoundingBox::intersect(const tlp::BoundingBox &boundingBox) const {
@@ -159,22 +164,22 @@ bool BoundingBox::intersect(const Vec3f &segStart, const Vec3f &segEnd) const {
 
   if ((getIntersection(segStart[0] - (*this)[0][0], segEnd[0] - (*this)[0][0], segStart, segEnd,
                        hit) &&
-       contains(hit)) ||
+       contains(hit, true)) ||
       (getIntersection(segStart[1] - (*this)[0][1], segEnd[1] - (*this)[0][1], segStart, segEnd,
                        hit) &&
-       contains(hit)) ||
+       contains(hit, true)) ||
       (getIntersection(segStart[2] - (*this)[0][2], segEnd[2] - (*this)[0][2], segStart, segEnd,
                        hit) &&
-       contains(hit)) ||
+       contains(hit, true)) ||
       (getIntersection(segStart[0] - (*this)[1][0], segEnd[0] - (*this)[1][0], segStart, segEnd,
                        hit) &&
-       contains(hit)) ||
+       contains(hit, true)) ||
       (getIntersection(segStart[1] - (*this)[1][1], segEnd[1] - (*this)[1][1], segStart, segEnd,
                        hit) &&
-       contains(hit)) ||
+       contains(hit, true)) ||
       (getIntersection(segStart[2] - (*this)[1][2], segEnd[2] - (*this)[1][2], segStart, segEnd,
                        hit) &&
-       contains(hit)))
+       contains(hit, true)))
     return true;
 
   return false;

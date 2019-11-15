@@ -42,7 +42,7 @@ GlPolyQuad::GlPolyQuad(const vector<Coord> &polyQuadEdges, const vector<Color> &
          polyQuadEdgesColors.size() == (polyQuadEdges.size() / 2));
 
   for (size_t i = 0; i < (polyQuadEdges.size() / 2); ++i) {
-    addQuadEdge(polyQuadEdges[2 * i], polyQuadEdges[2 * i + 1], polyQuadEdgesColors[i]);
+    addQuadEdge(polyQuadEdges[2 * i], polyQuadEdges[2 * i + 1], polyQuadEdgesColors[i], i != 0);
   }
 }
 
@@ -55,15 +55,15 @@ GlPolyQuad::GlPolyQuad(const std::vector<Coord> &polyQuadEdges, const Color &pol
   assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdges.size() > 2);
 
   for (size_t i = 0; i < (polyQuadEdges.size() / 2); ++i) {
-    addQuadEdge(polyQuadEdges[2 * i], polyQuadEdges[2 * i + 1], polyQuadColor);
+    addQuadEdge(polyQuadEdges[2 * i], polyQuadEdges[2 * i + 1], polyQuadColor, i != 0);
   }
 }
 
-void GlPolyQuad::addQuadEdge(const Coord &startEdge, const Coord &endEdge, const Color &edgeColor) {
+void GlPolyQuad::addQuadEdge(const Coord &startEdge, const Coord &endEdge, const Color &edgeColor, bool noCheck) {
   polyQuadEdges.emplace_back(startEdge);
   polyQuadEdges.emplace_back(endEdge);
-  boundingBox.expand(startEdge);
-  boundingBox.expand(endEdge);
+  boundingBox.expand(startEdge, noCheck);
+  boundingBox.expand(endEdge, true);
   polyQuadEdgesColors.push_back(edgeColor);
 }
 

@@ -61,9 +61,8 @@ void GlRegularPolygon::resizePoints(const unsigned int number) {
 }
 //=====================================================
 void GlRegularPolygon::computePolygon() {
-  boundingBox = BoundingBox();
-  boundingBox.expand(position + size / 2.f);
-  boundingBox.expand(position - size / 2.f);
+  boundingBox.init(position + size / 2.f);
+  boundingBox.expand(position - size / 2.f, true);
 
   setPoints(computeRegularPolygon(numberOfSides, position, size, startAngle));
 

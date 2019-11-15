@@ -59,10 +59,9 @@ void Camera::setScene(GlScene *scene) {
 }
 //===================================================
 BoundingBox Camera::getBoundingBox() const {
-  BoundingBox bb;
-  bb.expand(viewportTo3DWorld(Coord(scene->getViewport()[0], scene->getViewport()[1], 0)));
-  bb.expand(viewportTo3DWorld(Coord(scene->getViewport()[0] + scene->getViewport()[2],
-                                    scene->getViewport()[1] + scene->getViewport()[3], 0)));
+  BoundingBox bb(viewportTo3DWorld(Coord(scene->getViewport()[0], scene->getViewport()[1], 0)),
+		 viewportTo3DWorld(Coord(scene->getViewport()[0] + scene->getViewport()[2],
+					 scene->getViewport()[1] + scene->getViewport()[3], 0)), true);
   return bb;
 }
 //====================================================
@@ -213,7 +212,7 @@ void Camera::initProjection(const Vector<int, 4> &viewport, bool reset) {
   Vec3f v2 = sceneBoundingBox[1];
 
   if (valid && v1 != v2) {
-    sceneBoundingBox.expand(eyes);
+    sceneBoundingBox.expand(eyes, valid);
     Coord diagCoord(sceneBoundingBox[1] - sceneBoundingBox[0]);
     double diag = 2 * sqrt(diagCoord[0] * diagCoord[0] + diagCoord[1] * diagCoord[1] +
                            diagCoord[2] * diagCoord[2]);

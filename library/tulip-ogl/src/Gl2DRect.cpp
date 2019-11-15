@@ -52,11 +52,11 @@ BoundingBox Gl2DRect::getBoundingBox() {
   BoundingBox bb;
 
   if (!inPercent) {
-    bb.expand(Coord(left, bottom, 0));
-    bb.expand(Coord(right, top, 0));
+    bb.init(Coord(left, bottom, 0));
+    bb.expand(Coord(right, top, 0), true);
   } else {
-    bb.expand(Coord(numeric_limits<float>::min(), numeric_limits<float>::min(), 0));
-    bb.expand(Coord(numeric_limits<float>::max(), numeric_limits<float>::max(), 0));
+    bb.init(Coord(numeric_limits<float>::min(), numeric_limits<float>::min(), 0));
+    bb.expand(Coord(numeric_limits<float>::max(), numeric_limits<float>::max(), 0), true);
   }
 
   return bb;
