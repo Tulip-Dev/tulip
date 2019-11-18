@@ -333,7 +333,6 @@ float calculateAABBSize(const BoundingBox &bb, const Coord &eye,
       bbTmp[0][i] = bb[0][i];
       bbTmp[1][i] = bb[1][i];
     }
-    bbTmp[2][i] = bb[2][i];
   }
 
   bbTmp.getCompleteBB(src);
