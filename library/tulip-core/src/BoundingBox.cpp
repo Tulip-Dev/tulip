@@ -22,6 +22,9 @@
 
 #include <tulip/BoundingBox.h>
 
+#define THIS_INITED (memcmp(this, &_invalidBB, sizeof(_invalidBB)) != 0)
+#define BB_INITED(bb) (memcmp(&bb, &_invalidBB, sizeof(_invalidBB)) != 0)
+
 static bool getIntersection(float fDst1, float fDst2, const tlp::Vec3f &p1, const tlp::Vec3f &p2,
                             tlp::Vec3f &hit) {
   if ((fDst1 * fDst2) >= 0.0f)
@@ -36,17 +39,17 @@ static bool getIntersection(float fDst1, float fDst2, const tlp::Vec3f &p1, cons
 
 namespace tlp {
 
-static std::array<std::array<float, 3>, 2> _invalidBB = {1, 1, 1, -1, -1, -1};
+static std::array<std::array<float, 3>, 2> _invalidBB {{{1, 1, 1}, {-1, -1, -1}}};
 
 BoundingBox::BoundingBox() {
   // set as invalid
-  memcpy(this, &_invalidBB, sizeof(_invalidBB));
+  memcpy(static_cast<void *>(this), &_invalidBB, sizeof(_invalidBB));
   assert(!isValid());
 }
 
 void BoundingBox::clear() {
   // restore an invalid state
-  memcpy(this, &_invalidBB, sizeof(_invalidBB));
+  memcpy(static_cast<void *>(this), &_invalidBB, sizeof(_invalidBB));
   assert(!isValid());
 }
 
@@ -61,33 +64,35 @@ BoundingBox::BoundingBox(const tlp::Vec3f &min, const tlp::Vec3f &max, bool comp
 }
 
 void BoundingBox::expand(const tlp::Vec3f &coord, bool noCheck) {
-  if (noCheck || isValid()) {
+  if (noCheck || THIS_INITED) {
     (*this)[0] = tlp::minVector((*this)[0], coord);
     (*this)[1] = tlp::maxVector((*this)[1], coord);
   } else {
     (*this)[0] = coord;
     (*this)[1] = coord;
   }
+  assert(isValid());
 }
 
 void BoundingBox::expand(const tlp::BoundingBox &bb, bool noCheck) {
-  if (noCheck || isValid()) {
+  if (noCheck || THIS_INITED) {
     (*this)[0] = tlp::minVector((*this)[0], bb[0]);
     (*this)[1] = tlp::maxVector((*this)[1], bb[1]);
   } else
     *this = bb;
+  assert(isValid());
 }
 
 void BoundingBox::translate(const tlp::Vec3f &vec) {
   (*this)[0] += vec;
   (*this)[1] += vec;
+  assert(isValid());
 }
 
 void BoundingBox::scale(const tlp::Vec3f &vec) {
-  if (isValid()) {
-    (*this)[0] *= vec;
-    (*this)[1] *= vec;
-  }
+  (*this)[0] *= vec;
+  (*this)[1] *= vec;
+  assert(isValid());
 }
 
 bool BoundingBox::isValid() const {
@@ -96,23 +101,24 @@ bool BoundingBox::isValid() const {
 }
 
 bool BoundingBox::contains(const tlp::Vec3f &coord, bool noCheck) const {
-  if (noCheck || isValid()) {
+  if (noCheck || THIS_INITED) {
+    assert(isValid());
     return (coord[0] >= (*this)[0][0] && coord[1] >= (*this)[0][1] && coord[2] >= (*this)[0][2]) &&
            (coord[0] <= (*this)[1][0] && coord[1] <= (*this)[1][1] && coord[2] <= (*this)[1][2]);
-  } else {
-    return false;
   }
+  return false;
 }
 
 bool BoundingBox::contains(const tlp::BoundingBox &boundingBox) const {
-  return isValid() && boundingBox.isValid() && contains(boundingBox[0], true) &&
+  return THIS_INITED && BB_INITED(boundingBox) && contains(boundingBox[0], true) &&
          contains(boundingBox[1], true);
 }
 
 bool BoundingBox::intersect(const tlp::BoundingBox &boundingBox) const {
-  if (!isValid() || !boundingBox.isValid())
+  if (!THIS_INITED || !BB_INITED(boundingBox))
     return false;
 
+  assert(isValid() && boundingBox.isValid());
   if ((*this)[1][0] < boundingBox[0][0])
     return false;
 
@@ -135,9 +141,10 @@ bool BoundingBox::intersect(const tlp::BoundingBox &boundingBox) const {
 }
 
 bool BoundingBox::intersect(const Vec3f &segStart, const Vec3f &segEnd) const {
-  if (!isValid())
+  if (!THIS_INITED)
     return false;
 
+  assert(isValid());
   if (segEnd[0] < (*this)[0][0] && segStart[0] < (*this)[0][0])
     return false;
 
