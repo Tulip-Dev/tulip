@@ -106,7 +106,7 @@ QuickAccessBar *ParallelCoordinatesView::getQuickAccessBarImpl() {
 }
 
 void ParallelCoordinatesView::interactorsInstalled(const QList<tlp::Interactor *> &) {
-  toggleInteractors(false);
+  toggleInteractors(graphProxy && graphProxy->getNumberOfSelectedProperties());
 }
 
 void ParallelCoordinatesView::toggleInteractors(bool activate) {
