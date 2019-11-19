@@ -334,7 +334,7 @@ bool ParallelCoordsAxisBoxPlot::compute(GlMainWidget *) {
 }
 
 void ParallelCoordsAxisBoxPlot::initOrUpdateBoxPlots() {
-  vector<ParallelAxis *> allAxis = parallelView->getAllAxis();
+  vector<ParallelAxis *> &&allAxis = parallelView->getAllAxis();
 
   if (axisBoxPlotMap.empty()) {
     buildGlAxisPlot(allAxis);
@@ -355,11 +355,11 @@ void ParallelCoordsAxisBoxPlot::initOrUpdateBoxPlots() {
   currentGraph = parallelView->getGraphProxy()->getGraph();
 }
 
-void ParallelCoordsAxisBoxPlot::buildGlAxisPlot(vector<ParallelAxis *> currentAxis) {
-  for (unsigned int i = 0; i < currentAxis.size(); ++i) {
-    if (dynamic_cast<QuantitativeParallelAxis *>(currentAxis[i])) {
+void ParallelCoordsAxisBoxPlot::buildGlAxisPlot(const vector<ParallelAxis *> &currentAxis) {
+  for (auto pa : currentAxis) {
+    if (dynamic_cast<QuantitativeParallelAxis *>(pa)) {
       QuantitativeParallelAxis *quantitativeAxis =
-          static_cast<QuantitativeParallelAxis *>(currentAxis[i]);
+          static_cast<QuantitativeParallelAxis *>(pa);
 
       if (quantitativeAxis->getMedianStringValue() != "KO")
         axisBoxPlotMap[quantitativeAxis] = new GlAxisBoxPlot(quantitativeAxis, lightBlue, darkBlue);
@@ -370,8 +370,8 @@ void ParallelCoordsAxisBoxPlot::buildGlAxisPlot(vector<ParallelAxis *> currentAx
 void ParallelCoordsAxisBoxPlot::deleteGlAxisPlot() {
   map<QuantitativeParallelAxis *, GlAxisBoxPlot *>::iterator it;
 
-  for (it = axisBoxPlotMap.begin(); it != axisBoxPlotMap.end(); ++it) {
-    delete (it->second);
+  for (auto &it : axisBoxPlotMap) {
+    delete it.second;
   }
 
   axisBoxPlotMap.clear();

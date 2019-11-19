@@ -96,7 +96,7 @@ private:
   void initOrUpdateSliders();
   AxisSlider *getSliderUnderPointer(GlMainWidget *glWidget, ParallelAxis *axis, int x, int y);
   void updateOtherAxisSliders();
-  void buildGlSliders(std::vector<ParallelAxis *> axis);
+  void buildGlSliders(const std::vector<ParallelAxis *> &axis);
   void deleteGlSliders();
   void setSlidersColor(const Color &color);
   void updateSlidersYBoundaries();

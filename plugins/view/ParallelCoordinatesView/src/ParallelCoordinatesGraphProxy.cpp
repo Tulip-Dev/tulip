@@ -57,18 +57,17 @@ bool ParallelCoordinatesGraphProxy::selectedPropertiesisEmpty() const {
   return selectedProperties.empty();
 }
 
-vector<string> ParallelCoordinatesGraphProxy::getSelectedProperties() {
+const vector<string> &ParallelCoordinatesGraphProxy::getSelectedProperties() {
   vector<string> selectedPropertiesTmp;
-  vector<string>::iterator it;
 
   // check if one of the selected properties has not been deleted by an undo operation
-  for (it = selectedProperties.begin(); it != selectedProperties.end(); ++it) {
-    if (existProperty(*it)) {
-      selectedPropertiesTmp.push_back(*it);
+  for (auto &prop : selectedProperties) {
+    if (existProperty(prop)) {
+      selectedPropertiesTmp.push_back(prop);
     }
   }
 
-  selectedProperties = selectedPropertiesTmp;
+  selectedProperties.swap(selectedPropertiesTmp);
   return selectedProperties;
 }
 
