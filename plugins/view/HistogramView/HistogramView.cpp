@@ -391,12 +391,9 @@ DataSet HistogramView::state() const {
     histogramParameters.set("nb histogram bins", histo->getNbHistogramBins());
     histogramParameters.set("x axis nb graduations", histo->getNbXGraduations());
     histogramParameters.set("y axis increment step", histo->getYAxisIncrementStep());
-    histogramParameters.set(
-        "cumulative frequencies histogram",
-        histo->cumulativeFrequenciesHistogram());
-    histogramParameters.set(
-        "uniform quantification",
-        histo->uniformQuantificationHistogram());
+    histogramParameters.set("cumulative frequencies histogram",
+                            histo->cumulativeFrequenciesHistogram());
+    histogramParameters.set("uniform quantification", histo->uniformQuantificationHistogram());
     histogramParameters.set("x axis logscale", histo->xAxisLogScaleSet());
     histogramParameters.set("y axis logscale", histo->yAxisLogScaleSet());
     bool customScale = histo->getXAxisScaleDefined();

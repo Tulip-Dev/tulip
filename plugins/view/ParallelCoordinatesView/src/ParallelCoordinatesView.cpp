@@ -811,7 +811,7 @@ void ParallelCoordinatesView::setDataUnderPointerSelectFlag(const int x, const i
   set<unsigned int> dataUnderPointer;
   mapGlEntitiesInRegionToData(dataUnderPointer, x, y);
 
-  for (auto index: dataUnderPointer) {
+  for (auto index : dataUnderPointer) {
     if (!graphProxy->highlightedEltsSet() || graphProxy->isDataHighlighted(index))
       graphProxy->setDataSelected(index, selectFlag);
   }
@@ -824,7 +824,7 @@ void ParallelCoordinatesView::setDataInRegionSelectFlag(const int x, const int y
   set<unsigned int> dataUnderPointer;
   mapGlEntitiesInRegionToData(dataUnderPointer, x, y, width, height);
 
-  for (auto index: dataUnderPointer) {
+  for (auto index : dataUnderPointer) {
     if (!graphProxy->highlightedEltsSet() || graphProxy->isDataHighlighted(index))
       graphProxy->setDataSelected(index, selectFlag);
   }
@@ -838,7 +838,7 @@ void ParallelCoordinatesView::deleteDataUnderPointer(const int x, const int y) {
   set<unsigned int> dataUnderPointer;
   mapGlEntitiesInRegionToData(dataUnderPointer, x, y);
 
-  for (auto index: dataUnderPointer) {
+  for (auto index : dataUnderPointer) {
     if (!graphProxy->highlightedEltsSet() || graphProxy->isDataHighlighted(index))
       graphProxy->deleteData(index);
   }
@@ -889,7 +889,7 @@ void ParallelCoordinatesView::highlightDataUnderPointer(const int x, const int y
   set<unsigned int> dataUnderPointer;
   mapGlEntitiesInRegionToData(dataUnderPointer, x, y);
 
-  for (auto index: dataUnderPointer) {
+  for (auto index : dataUnderPointer) {
     graphProxy->addOrRemoveEltToHighlight(index);
   }
 
@@ -906,7 +906,7 @@ void ParallelCoordinatesView::highlightDataInRegion(const int x, const int y, co
   set<unsigned int> dataUnderPointer;
   mapGlEntitiesInRegionToData(dataUnderPointer, x, y, width, height);
 
-  for (auto index: dataUnderPointer) {
+  for (auto index : dataUnderPointer) {
     graphProxy->addOrRemoveEltToHighlight(index);
   }
 

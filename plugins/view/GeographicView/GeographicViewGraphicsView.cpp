@@ -187,7 +187,8 @@ GlComposite *readCsvFile(QString fileName) {
     if (strList[1].toDouble() < 0)
       mercatorLatitude = 0. - mercatorLatitude;
 
-    currentVector.emplace_back(strList[2].toDouble() * 360. / M_PI, mercatorLatitude * 360. / M_PI, 0);
+    currentVector.emplace_back(strList[2].toDouble() * 360. / M_PI, mercatorLatitude * 360. / M_PI,
+                               0);
   }
 
   if (datas.empty())
@@ -822,8 +823,7 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
             addressSelectionDialog->setBaseAddress(tlpStringToQString(addr));
 
             for (auto &result : geocodingResults) {
-              addressSelectionDialog->addResultToList(
-                  tlpStringToQString(result.address));
+              addressSelectionDialog->addResultToList(tlpStringToQString(result.address));
             }
 
             addressSelectionProxy->setPos(

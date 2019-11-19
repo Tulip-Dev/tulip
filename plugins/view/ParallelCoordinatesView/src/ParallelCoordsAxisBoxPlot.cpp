@@ -358,8 +358,7 @@ void ParallelCoordsAxisBoxPlot::initOrUpdateBoxPlots() {
 void ParallelCoordsAxisBoxPlot::buildGlAxisPlot(const vector<ParallelAxis *> &currentAxis) {
   for (auto pa : currentAxis) {
     if (dynamic_cast<QuantitativeParallelAxis *>(pa)) {
-      QuantitativeParallelAxis *quantitativeAxis =
-          static_cast<QuantitativeParallelAxis *>(pa);
+      QuantitativeParallelAxis *quantitativeAxis = static_cast<QuantitativeParallelAxis *>(pa);
 
       if (quantitativeAxis->getMedianStringValue() != "KO")
         axisBoxPlotMap[quantitativeAxis] = new GlAxisBoxPlot(quantitativeAxis, lightBlue, darkBlue);

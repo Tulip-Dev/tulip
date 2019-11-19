@@ -534,17 +534,17 @@ bool ParallelCoordsAxisSliders::draw(GlMainWidget *glMainWidget) {
 
   if (selectedAxis != nullptr && pointerBetweenSliders) {
     Coord p1(axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getX() -
-	     1.5f * selectedAxis->getAxisGradsWidth(),
-	     axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getY());
+                 1.5f * selectedAxis->getAxisGradsWidth(),
+             axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getY());
     Coord p2(axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getX() +
-	     1.5f * selectedAxis->getAxisGradsWidth(),
-	     axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getY());
+                 1.5f * selectedAxis->getAxisGradsWidth(),
+             axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getY());
     Coord p3(axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getX() +
-	     1.5f * selectedAxis->getAxisGradsWidth(),
-	     axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getY());
+                 1.5f * selectedAxis->getAxisGradsWidth(),
+             axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getY());
     Coord p4(axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getX() -
-	     1.5f * selectedAxis->getAxisGradsWidth(),
-                     axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getY());
+                 1.5f * selectedAxis->getAxisGradsWidth(),
+             axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getY());
     GlQuad quad(p1, p2, p3, p4,
                 axisSlidersMap[selectedAxis][TOP_SLIDER]->getColor() + Color(0, 0, 0, 100));
     float rotAngle = selectedAxis->getRotationAngle();

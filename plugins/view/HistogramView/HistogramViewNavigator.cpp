@@ -60,9 +60,8 @@ bool HistogramViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     int x = glWidget->width() - me->x();
     int y = me->y();
     Coord screenCoords(x, y, 0);
-    Coord &&sceneCoords =
-      glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
-	glWidget->screenToViewport(Coord(x, y, 0)));
+    Coord &&sceneCoords = glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
+        glWidget->screenToViewport(Coord(x, y, 0)));
     selectedHistoOverview = getOverviewUnderPointer(sceneCoords);
     return true;
   } else if (e->type() == QEvent::MouseButtonDblClick) {
@@ -89,7 +88,7 @@ Histogram *HistogramViewNavigator::getOverviewUnderPointer(const Coord &sceneCoo
   for (auto histo : histoView->getHistograms()) {
     BoundingBox &&overviewBB = histo->getBoundingBox();
     if (sceneCoords.getX() >= overviewBB[0][0] && sceneCoords.getX() <= overviewBB[1][0] &&
-	sceneCoords.getY() >= overviewBB[0][1] && sceneCoords.getY() <= overviewBB[1][1])
+        sceneCoords.getY() >= overviewBB[0][1] && sceneCoords.getY() <= overviewBB[1][1])
       return histo;
   }
 

@@ -92,10 +92,10 @@ bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 ScatterPlot2D *ScatterPlot2DViewNavigator::getOverviewUnderPointer(const Coord &sceneCoords) {
   vector<ScatterPlot2D *> &&overviews = scatterPlot2dView->getSelectedScatterPlots();
 
-  for (auto ov  : overviews) {
+  for (auto ov : overviews) {
     BoundingBox &&overviewBB = ov->getBoundingBox();
     if (sceneCoords.getX() >= overviewBB[0][0] && sceneCoords.getX() <= overviewBB[1][0] &&
-	sceneCoords.getY() >= overviewBB[0][1] && sceneCoords.getY() <= overviewBB[1][1])
+        sceneCoords.getY() >= overviewBB[0][1] && sceneCoords.getY() <= overviewBB[1][1])
       return ov;
   }
 

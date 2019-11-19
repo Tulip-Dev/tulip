@@ -66,16 +66,16 @@ bool EditColorScaleInteractor::eventFilter(QObject *obj, QEvent *event) {
 
     for (auto &it : entities) {
       if (it.getSimpleEntity() == colorScale->getGlColorScale()) {
-	ColorScaleConfigDialog dialog(*colorScale->getGlColorScale()->getColorScale(),
-				      glMainWidget);
-	foundGlColorScale = true;
+        ColorScaleConfigDialog dialog(*colorScale->getGlColorScale()->getColorScale(),
+                                      glMainWidget);
+        foundGlColorScale = true;
 
-	if (dialog.exec()) {
-	  SOMView *somView = static_cast<SOMView *>(view());
-	  // update shared color scale
-	  somView->getColorScale()->setColorMap(dialog.getColorScale().getColorMap());
-	  somView->updateDefaultColorProperty();
-	}
+        if (dialog.exec()) {
+          SOMView *somView = static_cast<SOMView *>(view());
+          // update shared color scale
+          somView->getColorScale()->setColorMap(dialog.getColorScale().getColorMap());
+          somView->updateDefaultColorProperty();
+        }
       }
     }
 

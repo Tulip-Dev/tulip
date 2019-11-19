@@ -100,7 +100,7 @@ PixelOrientedOverview *PixelOrientedViewNavigator::getOverviewUnderPointer(Coord
   for (auto ov : pixelView->getOverviews()) {
     BoundingBox &&overviewBB = ov->getBoundingBox();
     if (sceneCoords.getX() >= overviewBB[0][0] && sceneCoords.getX() <= overviewBB[1][0] &&
-	sceneCoords.getY() >= overviewBB[0][1] && sceneCoords.getY() <= overviewBB[1][1])
+        sceneCoords.getY() >= overviewBB[0][1] && sceneCoords.getY() <= overviewBB[1][1])
       return ov;
   }
 
