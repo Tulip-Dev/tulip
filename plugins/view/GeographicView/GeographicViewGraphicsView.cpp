@@ -72,7 +72,7 @@ GlComposite *readPolyFile(QString fileName) {
       if (!currentVector.empty())
         datas.push_back(currentVector);
 
-      currentVector = vector<Coord>();
+      currentVector.clear();
       continue;
     }
 
@@ -133,7 +133,7 @@ GlComposite *readPolyFile(QString fileName) {
     if (mercatorLatitude * 360. / M_PI < -360)
       mercatorLatitude = -M_PI;
 
-    currentVector.push_back(Coord(lng * 2., mercatorLatitude * 360. / M_PI, 0));
+    currentVector.emplace_back(lng * 2., mercatorLatitude * 360. / M_PI, 0);
   }
 
   if (!polygonName.empty()) {
@@ -187,8 +187,7 @@ GlComposite *readCsvFile(QString fileName) {
     if (strList[1].toDouble() < 0)
       mercatorLatitude = 0. - mercatorLatitude;
 
-    currentVector.push_back(
-        Coord((strList[2].toDouble()) * 360. / M_PI, mercatorLatitude * 360. / M_PI, 0));
+    currentVector.emplace_back(strList[2].toDouble() * 360. / M_PI, mercatorLatitude * 360. / M_PI, 0);
   }
 
   if (datas.empty())
@@ -281,14 +280,14 @@ void simplifyPolyFile(QString fileName, float definition) {
     if (lat < 0)
       mercatorLatitude = 0. - mercatorLatitude;
 
-    currentVector.push_back(Coord(lng, lat, 0));
+    currentVector.emplace_back(lng, lat, 0);
   }
 
   if (!polygonName.empty()) {
     if (!currentVector.empty())
       datas.push_back(currentVector);
 
-    clearPolygons[polygonName] = datas;
+    clearPolygons.emplace(polygonName, std::move(datas));
   }
 
   unordered_map<Coord, Coord> simplifiedCoord;
@@ -305,30 +304,30 @@ void simplifyPolyFile(QString fileName, float definition) {
 
   Coord *lastCoord = nullptr;
 
-  for (auto it1 = clearPolygons.begin(); it1 != clearPolygons.end(); ++it1) {
-    out << (*it1).first.c_str();
+  for (auto &poly : clearPolygons) {
+    out << poly.first.c_str();
 
     unsigned int i = 1;
 
-    for (auto it2 = (*it1).second.begin(); it2 != (*it1).second.end(); ++it2) {
+    for (auto &vcoord : poly.second) {
       out << i << "\n";
 
-      for (auto it3 = (*it2).begin(); it3 != (*it2).end(); ++it3) {
+      for (auto &coord : vcoord) {
         if (lastCoord == nullptr) {
-          out << (*it3)[0] << " " << (*it3)[1] << "\n";
-          lastCoord = &(*it3);
+          out << coord[0] << " " << coord[1] << "\n";
+          lastCoord = &coord;
         } else {
-          if ((*lastCoord).dist(*it3) > definition) {
-            if (simplifiedCoord.count(*it3) == 0) {
-              out << (*it3)[0] << " " << (*it3)[1] << "\n";
-              lastCoord = &(*it3);
+          if (lastCoord->dist(coord) > definition) {
+            if (simplifiedCoord.count(coord) == 0) {
+              out << coord[0] << " " << coord[1] << "\n";
+              lastCoord = &coord;
             } else {
-              lastCoord = &simplifiedCoord[*it3];
+              lastCoord = &simplifiedCoord[coord];
               out << (*lastCoord)[0] << " " << (*lastCoord)[1] << "\n";
             }
           } else {
-            if (simplifiedCoord.count(*it3) == 0)
-              simplifiedCoord[*it3] = *lastCoord;
+            if (simplifiedCoord.count(coord) == 0)
+              simplifiedCoord[coord] = *lastCoord;
           }
         }
       }
@@ -676,20 +675,19 @@ void GeographicViewGraphicsView::mapToPolygon() {
   if (!composite)
     return;
 
-  const map<string, GlSimpleEntity *> entities = composite->getGlEntities();
+  const map<string, GlSimpleEntity *> &entities = composite->getGlEntities();
 
   for (auto n : graph->nodes()) {
 
     Coord nodePos = geoLayout->getNodeValue(n);
 
-    for (auto it = entities.begin(); it != entities.end(); ++it) {
-      if ((*it).second->getBoundingBox().contains(nodePos)) {
-        GlComplexPolygon *polygon = static_cast<GlComplexPolygon *>((*it).second);
+    for (auto it : entities) {
+      if (it.second->getBoundingBox().contains(nodePos)) {
+        GlComplexPolygon *polygon = static_cast<GlComplexPolygon *>(it.second);
 
-        const vector<vector<Coord>> polygonSides = polygon->getPolygonSides();
+        const vector<vector<Coord>> &polygonSides = polygon->getPolygonSides();
 
-        for (auto it2 = polygonSides.begin(); it2 != polygonSides.end(); ++it2) {
-          vector<Coord> polygonSide = (*it2);
+        for (auto &polygonSide : polygonSides) {
           bool oddNodes = false;
           Coord lastCoord = polygonSide[0];
 
@@ -809,7 +807,7 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
           }
 
           unsigned int idx = 0;
-          vector<NominatimGeocoderResult> geocodingResults =
+          vector<NominatimGeocoderResult> &&geocodingResults =
               nominatimGeocoder.getLatLngForAddress(addr);
 
           if (geocodingResults.size() > 1) {
@@ -823,9 +821,9 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
             addressSelectionDialog->clearList();
             addressSelectionDialog->setBaseAddress(tlpStringToQString(addr));
 
-            for (unsigned int i = 0; i < geocodingResults.size(); ++i) {
+            for (auto &result : geocodingResults) {
               addressSelectionDialog->addResultToList(
-                  tlpStringToQString(geocodingResults[i].address));
+                  tlpStringToQString(result.address));
             }
 
             addressSelectionProxy->setPos(

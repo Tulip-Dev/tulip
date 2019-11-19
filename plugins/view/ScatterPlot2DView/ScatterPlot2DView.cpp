@@ -1032,7 +1032,7 @@ std::vector<ScatterPlot2D *> ScatterPlot2DView::getSelectedScatterPlots() const 
 }
 
 void ScatterPlot2DView::interactorsInstalled(const QList<tlp::Interactor *> &) {
-  toggleInteractors(false);
+  toggleInteractors(detailedScatterPlot != nullptr);
 }
 
 void ScatterPlot2DView::registerTriggers() {

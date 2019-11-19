@@ -159,23 +159,21 @@ void MatrixView::setOriented(bool flag) {
     if (_isOriented) {
       for (auto e : graph()->edges()) {
         // delete the second node mapping the current edge
-        vector<int> edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
+        const vector<int> &edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
         _matrixGraph->delNode(node(edgeNodes[1]));
-        edgeNodes.resize(1);
-        _graphEntitiesToDisplayedNodes->setEdgeValue(e, edgeNodes);
+        _graphEntitiesToDisplayedNodes->popBackEdgeEltValue(e);
       }
     } else {
       for (auto e : graph()->edges()) {
         // must add the symmetric node
-        vector<int> edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
-        edgeNodes.push_back(_matrixGraph->addNode().id);
-        _graphEntitiesToDisplayedNodes->setEdgeValue(e, edgeNodes);
-
+	node sym = _matrixGraph->addNode();
+        _graphEntitiesToDisplayedNodes->pushBackEdgeEltValue(e, sym.id);
+	const vector<int> &edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
         // layout and shape will be updated in updateLayout method
         // but other view properties must be set now
         for (const string &strProp : _sourceToTargetProperties) {
           PropertyInterface *prop = _matrixGraph->getProperty(strProp);
-          prop->setNodeStringValue(node(edgeNodes[1]),
+          prop->setNodeStringValue(sym,
                                    prop->getNodeStringValue(node(edgeNodes[0])));
         }
       }

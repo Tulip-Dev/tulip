@@ -217,14 +217,14 @@ DataSet SOMPropertiesWidget::getData() const {
   data.set("animationDuration", getAnimationDuration());
 
   // Save current properties.
-  vector<string> properties = dimensionConfigurationWidget->getSelectedProperties();
+  vector<string> &&properties = dimensionConfigurationWidget->getSelectedProperties();
 
   if (!properties.empty()) {
     // Use QStringList class to store a list in a string
     QStringList stringlist;
 
-    for (vector<string>::iterator it = properties.begin(); it != properties.end(); ++it) {
-      stringlist.push_back(tlpStringToQString(*it));
+    for (auto &prop : properties) {
+      stringlist.push_back(tlpStringToQString(prop));
     }
 
     data.set("properties", QStringToTlpString(stringlist.join(";")));

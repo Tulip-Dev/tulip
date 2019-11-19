@@ -43,13 +43,8 @@ using namespace tlp;
 using namespace std;
 
 void drawComposite(GlComposite *composite, float lod, Camera *camera) {
-
-  map<string, GlSimpleEntity *> glEntities = composite->getGlEntities();
-
-  map<string, GlSimpleEntity *>::iterator it2;
-
-  for (it2 = glEntities.begin(); it2 != glEntities.end(); ++it2) {
-    it2->second->draw(lod, camera);
+  for (auto &it2 : composite->getGlEntities()) {
+    it2.second->draw(lod, camera);
   }
 }
 
@@ -278,9 +273,8 @@ void SliderBar::draw(float lod, tlp::Camera *camera) {
     rect.draw(lod, camera);
   }
 
-  boundingBox = BoundingBox();
-  boundingBox.expand(topLeft);
-  boundingBox.expand(bottomRight);
+  boundingBox.init(topLeft);
+  boundingBox.expand(bottomRight, true);
 
   glDisable(GL_BLEND);
 }
@@ -345,13 +339,11 @@ bool ThresholdInteractor::eventFilter(QObject *widget, QEvent *event) {
 
       map<string, GlSimpleEntity *> displays = layer->getGlEntities();
 
-      for (vector<SelectedEntity>::iterator itPE = selectedEntities.begin();
-           itPE != selectedEntities.end(); ++itPE) {
-        for (map<string, GlSimpleEntity *>::iterator itDisplay = displays.begin();
-             itDisplay != displays.end(); ++itDisplay) {
-          GlComposite *composite = dynamic_cast<GlComposite *>(itDisplay->second);
+      for (auto &itPE : selectedEntities) {
+        for (auto &itDisplay : displays) {
+          GlComposite *composite = dynamic_cast<GlComposite *>(itDisplay.second);
 
-          if (composite && !composite->findKey(itPE->getSimpleEntity()).empty()) {
+          if (composite && !composite->findKey(itPE.getSimpleEntity()).empty()) {
 
             Slider *slider = dynamic_cast<Slider *>(composite);
 
@@ -362,8 +354,8 @@ bool ThresholdInteractor::eventFilter(QObject *widget, QEvent *event) {
 
             break;
           } else {
-            if (itDisplay->second == (itPE->getSimpleEntity())) {
-              Slider *slider = dynamic_cast<Slider *>(itDisplay->second);
+            if (itDisplay.second == (itPE.getSimpleEntity())) {
+              Slider *slider = dynamic_cast<Slider *>(itDisplay.second);
 
               if (slider) {
                 // finalSelectedEntities.insert(slider);
@@ -464,9 +456,10 @@ void ThresholdInteractor::performSelection(SOMView *view, tlp::Iterator<node> *i
     double nodeValue = currentProperty->getNodeDoubleValue(n);
 
     if (nodeValue <= rightSliderRealValue && nodeValue >= leftSliderRealValue) {
-      if (mappingTab.find(n) != mappingTab.end()) {
-        for (set<node>::iterator it = mappingTab[n].begin(); it != mappingTab[n].end(); ++it) {
-          selection->setNodeValue(*it, true);
+      auto it = mappingTab.find(n);
+      if (it != mappingTab.end()) {
+        for (auto n2 : it->second) {
+          selection->setNodeValue(n2, true);
         }
       }
 

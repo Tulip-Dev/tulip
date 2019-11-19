@@ -291,21 +291,16 @@ DataSet PixelOrientedView::state() const {
   DataSet dataSet = GlMainView::state();
   DataSet selectedGraphPropertiesDataSet;
 
-  for (size_t i = 0; i < selectedGraphProperties.size(); ++i) {
+  unsigned int i = 0;
+  for (auto &prop : selectedGraphProperties) {
     ostringstream oss;
-    oss << i;
-    selectedGraphPropertiesDataSet.set(oss.str(), selectedGraphProperties[i]);
+    oss << i++;
+    selectedGraphPropertiesDataSet.set(oss.str(), prop);
+    dataSet.set(prop, overviewGenMap.find(prop)->second);
   }
 
   dataSet.set("selected graph properties", selectedGraphPropertiesDataSet);
   dataSet.set("layout", optionsWidget->getLayoutType());
-
-  map<string, bool> tmpOverviewGenMap = overviewGenMap;
-
-  for (size_t i = 0; i < selectedGraphProperties.size(); ++i) {
-    dataSet.set(selectedGraphProperties[i], tmpOverviewGenMap[selectedGraphProperties[i]]);
-  }
-
   dataSet.set("lastViewWindowWidth", getGlMainWidget()->width());
   dataSet.set("lastViewWindowHeight", getGlMainWidget()->height());
   dataSet.set("detail overview  name", detailOverviewPropertyName);
@@ -685,11 +680,10 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
 vector<PixelOrientedOverview *> PixelOrientedView::getOverviews() {
   vector<PixelOrientedOverview *> ret;
 
-  for (map<string, PixelOrientedOverview *>::const_iterator it = overviewsMap.begin();
-       it != overviewsMap.end(); ++it) {
-    if (std::find(selectedGraphProperties.begin(), selectedGraphProperties.end(), it->first) !=
+  for (auto &it : overviewsMap) {
+    if (std::find(selectedGraphProperties.begin(), selectedGraphProperties.end(), it.first) !=
         selectedGraphProperties.end()) {
-      ret.push_back(it->second);
+      ret.push_back(it.second);
     }
   }
 
@@ -774,7 +768,7 @@ BoundingBox PixelOrientedView::getSmallMultiplesViewBoundingBox() {
 }
 
 void PixelOrientedView::interactorsInstalled(const QList<tlp::Interactor *> &) {
-  toggleInteractors(false);
+  toggleInteractors(detailOverview != nullptr);
 }
 
 void PixelOrientedView::toggleInteractors(const bool activate) {

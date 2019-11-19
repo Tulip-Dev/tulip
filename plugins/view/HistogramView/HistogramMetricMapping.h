@@ -65,35 +65,35 @@ public:
   void getXML(std::string &) override {}
   void setWithXML(const std::string &, unsigned int &) override {}
 
-  Coord getMinPoint() const {
+  const Coord &getMinPoint() const {
     return minPoint;
   }
-  Coord getMaxPoint() const {
+  const Coord &getMaxPoint() const {
     return maxPoint;
   }
 
-  Coord getFirstCurvePoint() const {
+  const Coord &getFirstCurvePoint() const {
     return startPoint;
   }
   void setCurveStartPoint(const Coord &startPoint) {
     this->startPoint = startPoint;
   }
 
-  Coord getLastCurvePoint() const {
+  const Coord &getLastCurvePoint() const {
     return endPoint;
   }
   void setLastCurvePoint(const Coord &endPoint) {
     this->endPoint = endPoint;
   }
 
-  std::vector<Coord> getCurvePoints() const {
+  const std::vector<Coord> &getCurvePoints() const {
     return curvePoints;
   }
   void setCurvePoints(const std::vector<Coord> &curvePoints) {
     this->curvePoints = curvePoints;
   }
 
-  Color getCurveColor() const {
+  const Color &getCurveColor() const {
     return curveColor;
   }
   void setCurveColor(const Color &color) {
