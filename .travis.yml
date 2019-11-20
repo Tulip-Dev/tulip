@@ -7,7 +7,7 @@
 #  - a "modern" Tulip build using:
 #     * recent compiler (GCC 9.x on Linux, clang 9.x from MacPorts or Homebrew on MacOS)
 #     * Qt 5.13 on Linux, Qt 5.12 on MacOS/MacPorts, Qt 5.13 on MacOS/Homebrew
-#     * Python 3.7 on Linux, Python 2.7 on MacOS
+#     * Python 3.8 on Linux, Python 2.7 on MacOS
 # As TravisCI limits build job times to 45 minutes, Tulip is built in two successive stages
 # to avoid timeouts (which happened often with MacOs builds):
 #  - a core build with no Tulip OpenGL and Qt components
@@ -175,7 +175,7 @@ jobs:
         - xvfb
       addons:
         apt:
-          # we get Qt 5.12 from external ppa
+          # we get Qt 5.13 from external ppa
           sources:
             - sourceline: 'deb http://archive.neon.kde.org/user/ bionic main'
               key_url: 'http://archive.neon.kde.org/public.key'
@@ -201,12 +201,13 @@ jobs:
       before_install:
         # needed to get GCC 9.x
         - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-        # needed to get the latest Python 3.7.x
+        # needed to get the latest Python 3.8.x
         - sudo add-apt-repository ppa:deadsnakes/ppa -y
         - sudo apt-get update -q
       install:
-        # get GCC 9.x and Python 3.7.x
-        - sudo apt-get -y install g++-9 python3.7 libpython3.7-dev
+        # get GCC 9.x and Python 3.8.x
+        # python3.8-distutils is needed because of a packaging bug
+        - sudo apt-get -y install g++-9 python3.8 python3.8-distutils libpython3.8-dev
         # force the use of GCC 9
         - eval "${MATRIX_EVAL}"
         # install latest sphinx version for generating the documentation
@@ -214,8 +215,8 @@ jobs:
         - sudo ${PYTHON_EXECUTABLE} get-pip.py
         - sudo ${PYTHON_EXECUTABLE} -m pip install sphinx
       env:
-        # use Python 3.7
-        - PYTHON_EXECUTABLE=/usr/bin/python3.7
+        # use Python 3.8
+        - PYTHON_EXECUTABLE=/usr/bin/python3.8
         # use GCC 9
         - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
       script:
