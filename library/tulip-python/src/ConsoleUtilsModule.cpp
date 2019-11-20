@@ -74,7 +74,7 @@ static PyObject *consoleutils_ConsoleOutput_write(PyObject *self, PyObject *o) {
   char *buf;
 
   if (!PyArg_ParseTuple(o, "s", &buf))
-    return nullptr;
+    return NULL;
 
   QString output(QString::fromUtf8(buf));
 
@@ -93,7 +93,7 @@ static PyObject *consoleutils_ConsoleOutput_write(PyObject *self, PyObject *o) {
   if ((PythonInterpreter::getInstance()->outputEnabled() && !stdErr) ||
       (PythonInterpreter::getInstance()->errorOutputEnabled() && stdErr)) {
 
-    if (buf != nullptr && reinterpret_cast<consoleutils_ConsoleOutput *>(self)->writeToConsole) {
+    if (buf != NULL && reinterpret_cast<consoleutils_ConsoleOutput *>(self)->writeToConsole) {
 
       currentConcatOutput += output;
 
@@ -114,7 +114,7 @@ static PyObject *consoleutils_ConsoleOutput_enableConsoleOutput(PyObject *self, 
   int i;
 
   if (!PyArg_ParseTuple(o, "i", &i))
-    return nullptr;
+    return NULL;
 
   reinterpret_cast<consoleutils_ConsoleOutput *>(self)->writeToConsole = i > 0;
 
@@ -143,7 +143,7 @@ static PyMemberDef consoleutils_ConsoleOutput_members[] = {
     {const_cast<char *>("writeToConsole"), T_BOOL,
      offsetof(consoleutils_ConsoleOutput, writeToConsole), 0,
      const_cast<char *>("flag for enabling/disabling console output")},
-    {nullptr, 0, 0, 0, nullptr} /* Sentinel */
+    {NULL, 0, 0, 0, NULL} /* Sentinel */
 };
 
 static PyMethodDef consoleutils_ConsoleOutput_methods[] = {
@@ -153,60 +153,60 @@ static PyMethodDef consoleutils_ConsoleOutput_methods[] = {
      static_cast<PyCFunction>(consoleutils_ConsoleOutput_enableConsoleOutput), METH_VARARGS,
      "enable / disable console output"},
     {"flush", static_cast<PyCFunction>(consoleutils_ConsoleOutput_flush), METH_VARARGS, ""},
-    {nullptr, nullptr, 0, nullptr} /* Sentinel */
+    {NULL, NULL, 0, NULL} /* Sentinel */
 };
 
 static PyTypeObject consoleutils_ConsoleOutputType = {
 #if PY_MAJOR_VERSION >= 3
-    PyVarObject_HEAD_INIT(nullptr, 0)
+    PyVarObject_HEAD_INIT(NULL, 0)
 #else
-    PyObject_HEAD_INIT(nullptr) 0, /*ob_size*/
+    PyObject_HEAD_INIT(NULL) 0, /*ob_size*/
 #endif
         "consoleutils.ConsoleOutput",                                 /*tp_name*/
     sizeof(consoleutils_ConsoleOutput),                               /*tp_basicsize*/
     0,                                                                /*tp_itemsize*/
     reinterpret_cast<destructor>(consoleutils_ConsoleOutput_dealloc), /*tp_dealloc*/
-    nullptr,                                                          /*tp_print*/
-    nullptr,                                                          /*tp_getattr*/
-    nullptr,                                                          /*tp_setattr*/
-    nullptr,                                                          /*tp_compare*/
-    nullptr,                                                          /*tp_repr*/
-    nullptr,                                                          /*tp_as_number*/
-    nullptr,                                                          /*tp_as_sequence*/
-    nullptr,                                                          /*tp_as_mapping*/
-    nullptr,                                                          /*tp_hash */
-    nullptr,                                                          /*tp_call*/
-    nullptr,                                                          /*tp_str*/
-    nullptr,                                                          /*tp_getattro*/
-    nullptr,                                                          /*tp_setattro*/
-    nullptr,                                                          /*tp_as_buffer*/
+    NULL,                                                             /*tp_print*/
+    NULL,                                                             /*tp_getattr*/
+    NULL,                                                             /*tp_setattr*/
+    NULL,                                                             /*tp_compare*/
+    NULL,                                                             /*tp_repr*/
+    NULL,                                                             /*tp_as_number*/
+    NULL,                                                             /*tp_as_sequence*/
+    NULL,                                                             /*tp_as_mapping*/
+    NULL,                                                             /*tp_hash */
+    NULL,                                                             /*tp_call*/
+    NULL,                                                             /*tp_str*/
+    NULL,                                                             /*tp_getattro*/
+    NULL,                                                             /*tp_setattro*/
+    NULL,                                                             /*tp_as_buffer*/
     Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,                         /*tp_flags*/
     "",                                                               /* tp_doc */
-    nullptr,                                                          /* tp_traverse */
-    nullptr,                                                          /* tp_clear */
-    nullptr,                                                          /* tp_richcompare */
+    NULL,                                                             /* tp_traverse */
+    NULL,                                                             /* tp_clear */
+    NULL,                                                             /* tp_richcompare */
     0,                                                                /* tp_weaklistoffset */
-    nullptr,                                                          /* tp_iter */
-    nullptr,                                                          /* tp_iternext */
+    NULL,                                                             /* tp_iter */
+    NULL,                                                             /* tp_iternext */
     consoleutils_ConsoleOutput_methods,                               /* tp_methods */
     consoleutils_ConsoleOutput_members,                               /* tp_members */
-    nullptr,                                                          /* tp_getset */
-    nullptr,                                                          /* tp_base */
-    nullptr,                                                          /* tp_dict */
-    nullptr,                                                          /* tp_descr_get */
-    nullptr,                                                          /* tp_descr_set */
+    NULL,                                                             /* tp_getset */
+    NULL,                                                             /* tp_base */
+    NULL,                                                             /* tp_dict */
+    NULL,                                                             /* tp_descr_get */
+    NULL,                                                             /* tp_descr_set */
     0,                                                                /* tp_dictoffset */
     reinterpret_cast<initproc>(consoleutils_ConsoleOutput_init),      /* tp_init */
-    nullptr,                                                          /* tp_alloc */
+    NULL,                                                             /* tp_alloc */
     consoleutils_ConsoleOutput_new,                                   /* tp_new */
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
     0
 #if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 4
     ,
@@ -246,66 +246,66 @@ static PyObject *consoleutils_ConsoleInput_readline(PyObject *, PyObject *) {
 }
 
 static PyMemberDef consoleutils_ConsoleInput_members[] = {
-    {nullptr, 0, 0, 0, nullptr} /* Sentinel */
+    {NULL, 0, 0, 0, NULL} /* Sentinel */
 };
 
 static PyMethodDef consoleutils_ConsoleInput_methods[] = {
     {"readline", static_cast<PyCFunction>(consoleutils_ConsoleInput_readline), METH_VARARGS,
      "read an input line from the console"},
-    {nullptr, nullptr, 0, nullptr} /* Sentinel */
+    {NULL, NULL, 0, NULL} /* Sentinel */
 };
 
 static PyTypeObject consoleutils_ConsoleInputType = {
 #if PY_MAJOR_VERSION >= 3
-    PyVarObject_HEAD_INIT(nullptr, 0)
+    PyVarObject_HEAD_INIT(NULL, 0)
 #else
-    PyObject_HEAD_INIT(nullptr) 0, /*ob_size*/
+    PyObject_HEAD_INIT(NULL) 0, /*ob_size*/
 #endif
         "consoleutils.ConsoleInput",                                 /*tp_name*/
     sizeof(consoleutils_ConsoleInput),                               /*tp_basicsize*/
     0,                                                               /*tp_itemsize*/
     reinterpret_cast<destructor>(consoleutils_ConsoleInput_dealloc), /*tp_dealloc*/
-    nullptr,                                                         /*tp_print*/
-    nullptr,                                                         /*tp_getattr*/
-    nullptr,                                                         /*tp_setattr*/
-    nullptr,                                                         /*tp_compare*/
-    nullptr,                                                         /*tp_repr*/
-    nullptr,                                                         /*tp_as_number*/
-    nullptr,                                                         /*tp_as_sequence*/
-    nullptr,                                                         /*tp_as_mapping*/
-    nullptr,                                                         /*tp_hash */
-    nullptr,                                                         /*tp_call*/
-    nullptr,                                                         /*tp_str*/
-    nullptr,                                                         /*tp_getattro*/
-    nullptr,                                                         /*tp_setattro*/
-    nullptr,                                                         /*tp_as_buffer*/
+    NULL,                                                            /*tp_print*/
+    NULL,                                                            /*tp_getattr*/
+    NULL,                                                            /*tp_setattr*/
+    NULL,                                                            /*tp_compare*/
+    NULL,                                                            /*tp_repr*/
+    NULL,                                                            /*tp_as_number*/
+    NULL,                                                            /*tp_as_sequence*/
+    NULL,                                                            /*tp_as_mapping*/
+    NULL,                                                            /*tp_hash */
+    NULL,                                                            /*tp_call*/
+    NULL,                                                            /*tp_str*/
+    NULL,                                                            /*tp_getattro*/
+    NULL,                                                            /*tp_setattro*/
+    NULL,                                                            /*tp_as_buffer*/
     Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,                        /*tp_flags*/
     "",                                                              /* tp_doc */
-    nullptr,                                                         /* tp_traverse */
-    nullptr,                                                         /* tp_clear */
-    nullptr,                                                         /* tp_richcompare */
+    NULL,                                                            /* tp_traverse */
+    NULL,                                                            /* tp_clear */
+    NULL,                                                            /* tp_richcompare */
     0,                                                               /* tp_weaklistoffset */
-    nullptr,                                                         /* tp_iter */
-    nullptr,                                                         /* tp_iternext */
+    NULL,                                                            /* tp_iter */
+    NULL,                                                            /* tp_iternext */
     consoleutils_ConsoleInput_methods,                               /* tp_methods */
     consoleutils_ConsoleInput_members,                               /* tp_members */
-    nullptr,                                                         /* tp_getset */
-    nullptr,                                                         /* tp_base */
-    nullptr,                                                         /* tp_dict */
-    nullptr,                                                         /* tp_descr_get */
-    nullptr,                                                         /* tp_descr_set */
+    NULL,                                                            /* tp_getset */
+    NULL,                                                            /* tp_base */
+    NULL,                                                            /* tp_dict */
+    NULL,                                                            /* tp_descr_get */
+    NULL,                                                            /* tp_descr_set */
     0,                                                               /* tp_dictoffset */
     reinterpret_cast<initproc>(consoleutils_ConsoleInput_init),      /* tp_init */
-    nullptr,                                                         /* tp_alloc */
+    NULL,                                                            /* tp_alloc */
     consoleutils_ConsoleInput_new,                                   /* tp_new */
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
     0
 #if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 4
     ,
@@ -319,11 +319,11 @@ static struct PyModuleDef consoleutilsModuleDef = {
     "consoleutils", /* m_name */
     "",             /* m_doc */
     -1,             /* m_size */
-    nullptr,        /* m_methods */
-    nullptr,        /* m_reload */
-    nullptr,        /* m_traverse */
-    nullptr,        /* m_clear */
-    nullptr,        /* m_free */
+    NULL,           /* m_methods */
+    NULL,           /* m_reload */
+    NULL,           /* m_traverse */
+    NULL,           /* m_clear */
+    NULL,           /* m_free */
 };
 #endif
 
@@ -342,7 +342,7 @@ PyMODINIT_FUNC initconsoleutils(void) {
 #if PY_MAJOR_VERSION >= 3
   m = PyModule_Create(&consoleutilsModuleDef);
 #else
-  m = Py_InitModule("consoleutils", nullptr);
+  m = Py_InitModule("consoleutils", NULL);
 #endif
   PyObject *cot = reinterpret_cast<PyObject *>(&consoleutils_ConsoleOutputType);
   Py_INCREF(cot);
