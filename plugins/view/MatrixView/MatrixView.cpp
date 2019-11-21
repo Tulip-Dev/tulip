@@ -574,10 +574,10 @@ void MatrixView::updateLayout() {
                       &edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
 
     // 0 => horizontal line, 1 => vertical line
-    Coord src0 = layout->getNodeValue(node(srcNodes[0])),
-          tgt0 = layout->getNodeValue(node(tgtNodes[0])),
-          src1 = layout->getNodeValue(node(srcNodes[1])),
-          tgt1 = layout->getNodeValue(node(tgtNodes[1]));
+    const Coord &src0 = layout->getNodeValue(node(srcNodes[0])),
+          &tgt0 = layout->getNodeValue(node(tgtNodes[0])),
+          &src1 = layout->getNodeValue(node(srcNodes[1])),
+          &tgt1 = layout->getNodeValue(node(tgtNodes[1]));
 
     layout->setNodeValue(node(edgeNodes[0]), Coord(tgt0[0], src1[1], 0));
     shapes->setNodeValue(node(edgeNodes[0]), shape);
@@ -591,8 +591,8 @@ void MatrixView::updateLayout() {
   for (auto e : _matrixGraph->edges()) {
     auto eEnds = _matrixGraph->ends(e);
 
-    auto srcPos = layout->getNodeValue(eEnds.first);
-    auto tgtPos = layout->getNodeValue(eEnds.second);
+    auto &srcPos = layout->getNodeValue(eEnds.first);
+    auto &tgtPos = layout->getNodeValue(eEnds.second);
     float xMax = max(srcPos[0], tgtPos[0]);
     float xMin = min(srcPos[0], tgtPos[0]);
     float dist = (xMax - xMin);

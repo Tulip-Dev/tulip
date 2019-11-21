@@ -654,8 +654,8 @@ void SOMView::computeMapping() {
 
   SizeProperty *realGraphSizeProperty = graph()->getProperty<SizeProperty>("viewSize");
 
-  Size graphMaxSize = realGraphSizeProperty->getMax(graph());
-  Size graphMinSize = realGraphSizeProperty->getMin(graph());
+  Size &&graphMaxSize = realGraphSizeProperty->getMax(graph());
+  Size &&graphMinSize = realGraphSizeProperty->getMin(graph());
   Size graphDiffSize(
       graphMinSize.getW() == graphMaxSize.getW() ? 1. : (graphMaxSize.getW() - graphMinSize.getW()),
       graphMinSize.getH() == graphMaxSize.getH() ? 1. : (graphMaxSize.getH() - graphMinSize.getH()),
@@ -664,11 +664,11 @@ void SOMView::computeMapping() {
   assert(graphMinSize[0] <= graphMaxSize[0] && graphMinSize[1] <= graphMaxSize[1] &&
          graphMinSize[2] <= graphMaxSize[2]);
   // Compute node displaying area
-  Size nodeDisplayAreaSize = mapCompositeElements->getNodeAreaSize();
+  Size &&nodeDisplayAreaSize = mapCompositeElements->getNodeAreaSize();
 
   Coord marginShift(nodeDisplayAreaSize.getW() * marginCoef,
                     -(nodeDisplayAreaSize.getH() * marginCoef));
-  Size realAreaSize = nodeDisplayAreaSize * (1 - marginCoef * 2);
+  Size &&realAreaSize = nodeDisplayAreaSize * (1 - marginCoef * 2);
   // Compute elements size
   int colNumber = int(ceil(sqrt(maxSize)));
 
@@ -701,7 +701,7 @@ void SOMView::computeMapping() {
         nodeSize.set((1 - spacingCoef) * maxElementWidth, (1 - spacingCoef) * maxElementHeight, 0);
       } else if (mt == SOMPropertiesWidget::RealNodeSizeMapping) {
         // Compute size mapping coef
-        Size realSize = realGraphSizeProperty->getNodeValue(n);
+        const Size &realSize = realGraphSizeProperty->getNodeValue(n);
         nodeSize.set(
             minElementWidth + ((realSize.getW() - graphMinSize.getW()) / (graphDiffSize.getW())) *
                                   (maxElementWidth - minElementWidth),
@@ -815,7 +815,7 @@ bool SOMView::eventFilter(QObject *obj, QEvent *event) {
       if (me->button() == Qt::LeftButton) {
         vector<SOMPreviewComposite *> properties;
         Coord screenCoords(me->x(), me->y(), 0.0f);
-        Coord viewportCoords = getGlMainWidget()->screenToViewport(screenCoords);
+        Coord &&viewportCoords = getGlMainWidget()->screenToViewport(screenCoords);
         getPreviewsAtViewportCoord(viewportCoords.x(), viewportCoords.y(), properties);
 
         if (!properties.empty()) {
@@ -830,7 +830,7 @@ bool SOMView::eventFilter(QObject *obj, QEvent *event) {
       QHelpEvent *he = static_cast<QHelpEvent *>(event);
       vector<SOMPreviewComposite *> properties;
       Coord screenCoords(he->x(), he->y(), 0.0f);
-      Coord viewportCoords = getGlMainWidget()->screenToViewport(screenCoords);
+      Coord &&viewportCoords = getGlMainWidget()->screenToViewport(screenCoords);
       getPreviewsAtViewportCoord(viewportCoords.x(), viewportCoords.y(), properties);
 
       if (!properties.empty()) {

@@ -962,21 +962,17 @@ void GeographicViewGraphicsView::refreshMap() {
     currentMapCenter = mapCenter;
     currentMapZoom = mapZoom;
 
-    BoundingBox bb;
-    Coord rightCoord = leafletMaps->getPixelPosOnScreenForLatLng(180, 180);
-    Coord leftCoord = leafletMaps->getPixelPosOnScreenForLatLng(0, 0);
+    float xRight = leafletMaps->getPixelPosOnScreenForLatLng(180, 180)[0];
+    float xLeft = leafletMaps->getPixelPosOnScreenForLatLng(0, 0)[0];
 
-    if (rightCoord[0] - leftCoord[0]) {
-      float mapWidth = (width() / (rightCoord - leftCoord)[0]) * 180.;
+    if (xRight - xLeft) {
+      float mapWidth = (width() / (xRight - xLeft)) * 180.;
       float middleLng =
           leafletMaps->getLatLngForPixelPosOnScreen(width() / 2., height() / 2.).second * 2.;
-      bb.expand(
-          Coord(middleLng - mapWidth / 2.,
-                latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(0, 0).first * 2.), 0));
-      bb.expand(Coord(middleLng + mapWidth / 2.,
-                      latitudeToMercator(
-                          leafletMaps->getLatLngForPixelPosOnScreen(width(), height()).first * 2.),
-                      0));
+      BoundingBox bb(Coord(middleLng - mapWidth / 2.,
+			   latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(0, 0).first * 2.), 0),
+		     Coord(middleLng + mapWidth / 2.,
+			   latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(width(), height()).first * 2.), 0), true);
       GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(), bb, "Main", 1);
       sceneZoomAndPan.zoomAndPanAnimationStep(1);
     }
@@ -1229,7 +1225,7 @@ void GeographicViewGraphicsView::switchViewType() {
       }
 
       for (auto e : graph->edges()) {
-        const std::pair<node, node> &eEnds = graph->ends(e);
+        auto eEnds = graph->ends(e);
         node src = eEnds.first;
         node tgt = eEnds.second;
         Coord srcC(nodeLatLng[src].first * 2. / 360. * M_PI,
@@ -1241,7 +1237,7 @@ void GeographicViewGraphicsView::switchViewType() {
         vector<Coord> bends;
 
         for (unsigned int i = 0; i < bendsNumber; ++i) {
-          Coord tmp = srcC + ((tgtC - srcC) / (bendsNumber + 1.f)) * (i + 1.f);
+          Coord &&tmp = srcC + ((tgtC - srcC) / (bendsNumber + 1.f)) * (i + 1.f);
           float lambda = tmp[1];
           float theta;
 
@@ -1252,9 +1248,7 @@ void GeographicViewGraphicsView::switchViewType() {
 
           float phi = M_PI / 2.0 - tmp[0];
 
-          Coord tmp1(75. * sin(phi) * cos(theta), 75. * sin(phi) * sin(theta), 75. * cos(phi));
-
-          bends.push_back(tmp1);
+          bends.emplace_back(75. * sin(phi) * cos(theta), 75. * sin(phi) * sin(theta), 75. * cos(phi));
         }
 
         geoLayout->setEdgeValue(e, bends);

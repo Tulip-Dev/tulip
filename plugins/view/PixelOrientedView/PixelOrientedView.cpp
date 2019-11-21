@@ -368,40 +368,43 @@ void PixelOrientedView::initPixelView() {
       uint(squareRoot) + (fmod(float(selectedGraphProperties.size()), squareRoot) == 0.f ? 0u : 1u);
 
   for (size_t i = 0; i < selectedGraphProperties.size(); ++i) {
+    const string &prop = selectedGraphProperties[i];
 
-    if (dataMap.find(selectedGraphProperties[i]) == dataMap.end()) {
-      dataMap[selectedGraphProperties[i]] =
-          new TulipGraphDimension(pixelOrientedGraph, selectedGraphProperties[i]);
-    } else {
-      dataMap[selectedGraphProperties[i]]->updateNodesRank();
-    }
+    auto itd = dataMap.find(prop);
+    if (itd == dataMap.end())
+      dataMap.emplace(prop, new TulipGraphDimension(pixelOrientedGraph, prop));
+    else
+      itd->second->updateNodesRank();
 
     unsigned int row = i / N;
     unsigned int col = i % N;
 
-    Coord overviewBLCorner =
-        Coord(col * (overviewWidth + spaceBetweenOverviews),
-              -(labelHeight + row * (labelHeight + overviewHeight + spaceBetweenOverviews)), 0);
+    Coord overviewBLCorner(col * (overviewWidth + spaceBetweenOverviews),
+			   -(labelHeight + row * (labelHeight + overviewHeight + spaceBetweenOverviews)), 0);
     ostringstream oss;
-    oss << "pixel oriented overview for dimension " << selectedGraphProperties[i];
+    oss << "pixel oriented overview for dimension " << prop;
 
-    if (overviewsMap.find(selectedGraphProperties[i]) == overviewsMap.end()) {
-      PixelOrientedOverview *pixelOrientedOverview = new PixelOrientedOverview(
-          dataMap[selectedGraphProperties[i]], pixelOrientedMediator, overviewBLCorner,
-          selectedGraphProperties[i], backgroundColor, textColor);
+    PixelOrientedOverview *pixelOrientedOverview;
+    auto ito = overviewsMap.find(prop);
+    if (ito == overviewsMap.end()) {
+      pixelOrientedOverview = new PixelOrientedOverview(
+          dataMap[prop], pixelOrientedMediator, overviewBLCorner,
+          prop, backgroundColor, textColor);
       pixelOrientedOverview->computePixelView();
-      overviewsMap[selectedGraphProperties[i]] = pixelOrientedOverview;
+      overviewsMap.emplace(prop, pixelOrientedOverview);
 
-      if (overviewGenMap.find(selectedGraphProperties[i]) == overviewGenMap.end()) {
-        overviewGenMap[selectedGraphProperties[i]] = false;
+      auto itog = overviewGenMap.find(prop);
+      if (itog == overviewGenMap.end()) {
+        overviewGenMap.emplace(prop, false);
       }
     } else {
-      overviewsMap[selectedGraphProperties[i]]->setBLCorner(overviewBLCorner);
-      overviewsMap[selectedGraphProperties[i]]->setBackgroundColor(backgroundColor);
-      overviewsMap[selectedGraphProperties[i]]->setTextColor(textColor);
+      pixelOrientedOverview = ito->second;
+      pixelOrientedOverview->setBLCorner(overviewBLCorner);
+      pixelOrientedOverview->setBackgroundColor(backgroundColor);
+      pixelOrientedOverview->setTextColor(textColor);
     }
 
-    overviewsComposite->addGlEntity(overviewsMap[selectedGraphProperties[i]], oss.str());
+    overviewsComposite->addGlEntity(pixelOrientedOverview, oss.str());
   }
 
   if (!detailOverviewPropertyName.empty()) {
@@ -414,32 +417,31 @@ void PixelOrientedView::initPixelView() {
 void PixelOrientedView::destroyOverviewsIfNeeded() {
   vector<string> propertiesToRemove;
 
-  for (size_t i = 0; i < selectedGraphProperties.size(); ++i) {
-    if (!pixelOrientedGraph->existProperty(selectedGraphProperties[i])) {
-      if (overviewsMap[selectedGraphProperties[i]] == detailOverview) {
+  for (auto &prop : selectedGraphProperties) {
+    if (!pixelOrientedGraph->existProperty(prop)) {
+      if (overviewsMap[prop] == detailOverview) {
         detailOverview = nullptr;
         detailOverviewPropertyName = "";
       }
 
-      delete overviewsMap[selectedGraphProperties[i]];
-      overviewsMap.erase(selectedGraphProperties[i]);
-      delete dataMap[selectedGraphProperties[i]];
-      dataMap.erase(selectedGraphProperties[i]);
-      propertiesToRemove.push_back(selectedGraphProperties[i]);
+      delete overviewsMap[prop];
+      overviewsMap.erase(prop);
+      delete dataMap[prop];
+      dataMap.erase(prop);
+      propertiesToRemove.push_back(prop);
     }
   }
 
-  for (size_t i = 0; i < propertiesToRemove.size(); ++i) {
+  for (auto &prop : propertiesToRemove) {
     selectedGraphProperties.erase(remove(selectedGraphProperties.begin(),
-                                         selectedGraphProperties.end(), propertiesToRemove[i]),
+                                         selectedGraphProperties.end(), prop),
                                   selectedGraphProperties.end());
   }
 }
 
 void PixelOrientedView::destroyData() {
-  for (map<string, TulipGraphDimension *>::iterator it = dataMap.begin(); it != dataMap.end();
-       ++it) {
-    delete it->second;
+  for (auto &it : dataMap) {
+    delete it.second;
   }
 
   dataMap.clear();
@@ -619,9 +621,9 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
   Camera &cam = getGlMainWidget()->getScene()->getGraphCamera();
   double sceneRadiusBak = cam.getSceneRadius();
   double zoomFactorBak = cam.getZoomFactor();
-  Coord eyesBak = cam.getEyes();
-  Coord centerBak = cam.getCenter();
-  Coord upBak = cam.getUp();
+  Coord &&eyesBak = cam.getEyes();
+  Coord &&centerBak = cam.getCenter();
+  Coord &&upBak = cam.getUp();
   float width = cam.getBoundingBox().width();
 
   GlProgressBar *progressBar =
@@ -639,13 +641,12 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
   // before allowing the progressBar display
   QApplication::processEvents();
 
-  for (map<string, PixelOrientedOverview *>::iterator it = overviewsMap.begin();
-       it != overviewsMap.end(); ++it) {
-    if (std::find(selectedGraphProperties.begin(), selectedGraphProperties.end(), it->first) !=
+  for (auto &it : overviewsMap) {
+    if (std::find(selectedGraphProperties.begin(), selectedGraphProperties.end(), it.first) !=
         selectedGraphProperties.end()) {
-      if (updateAll || overviewGenMap[it->first]) {
-        (it->second)->computePixelView();
-        overviewGenMap[it->first] = true;
+      if (updateAll || overviewGenMap[it.first]) {
+        (it.second)->computePixelView();
+        overviewGenMap[it.first] = true;
       }
 
       progressBar->progress(++currentStep, nbOverviews);

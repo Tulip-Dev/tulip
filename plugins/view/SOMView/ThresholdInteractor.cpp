@@ -68,7 +68,7 @@ ColorScaleSlider::~ColorScaleSlider() {
 
 void ColorScaleSlider::buildComposite(const std::string &textureName) {
   ostringstream oss;
-  Coord colorScaleCoord = linkedScale->getGlColorScale()->getBaseCoord();
+  const Coord &colorScaleCoord = linkedScale->getGlColorScale()->getBaseCoord();
   float Ypos = colorScaleCoord.getY() - linkedScale->getGlColorScale()->getThickness() * .5;
 
   if (way == ToLeft) {
@@ -93,8 +93,8 @@ void ColorScaleSlider::buildComposite(const std::string &textureName) {
   points.push_back(Coord(position.getX() - (size.getW() * 0.5), position.getY() - arrowLen));
   points.push_back(Coord(position.getX() + (size.getW() * 0.5), position.getY() - arrowLen));
 
-  Coord p1 = Coord(points[2].getX(), position.getY() - size.getH(), 0);
-  Coord p2 = Coord(points[1].getX(), position.getY() - size.getH(), 0);
+  Coord p1(points[2].getX(), position.getY() - size.getH(), 0);
+  Coord p2(points[1].getX(), position.getY() - size.getH(), 0);
 
   rect = new GlQuad(p1, p2, points[1], points[2], Color(255, 255, 255));
   Coord labelPosition(position.getX(), p1.getY() + (points[1].getY() - p1.getY()) * 0.5);
@@ -251,10 +251,10 @@ void SliderBar::draw(float lod, tlp::Camera *camera) {
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  Coord lPos = left->getBasePosition();
-  Size lSize = left->getSize();
-  Coord rPos = right->getBasePosition();
-  Size rSize = right->getSize();
+  const Coord &lPos = left->getBasePosition();
+  const Size &lSize = left->getSize();
+  const Coord &rPos = right->getBasePosition();
+  const Size &rSize = right->getSize();
 
   Coord topLeft(lPos.getX() + lSize.getW() * 0.5, lPos.getY() - lSize.getH(), lPos.getZ());
   Coord bottomRight(rPos.getX() - rSize.getW() * .5, rPos.getY() - rSize.getH() * .25, rPos.getZ());

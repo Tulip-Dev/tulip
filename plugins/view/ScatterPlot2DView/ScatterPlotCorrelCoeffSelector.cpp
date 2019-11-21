@@ -103,23 +103,19 @@ bool GlEditableComplexPolygon::pointInsidePolygon(const Coord &point) {
 Coord *
 GlEditableComplexPolygon::getPolygonVertexUnderPointerIfAny(const Coord &pointerViewportCoord,
                                                             Camera *camera) {
-  Coord *ret = nullptr;
-  vector<Coord>::iterator it;
   camera->initGl();
 
-  for (it = polygonPoints.begin(); it != polygonPoints.end(); ++it) {
-    Coord pointCenter = camera->worldTo2DViewport(*it);
+  for (auto &coord : polygonPoints) {
+    Coord &&pointCenter = camera->worldTo2DViewport(coord);
 
     if (pointerViewportCoord.getX() > (pointCenter.getX() - POINT_RADIUS) &&
         pointerViewportCoord.getX() < (pointCenter.getX() + POINT_RADIUS) &&
         pointerViewportCoord.getY() > (pointCenter.getY() - POINT_RADIUS) &&
-        pointerViewportCoord.getY() < (pointCenter.getY() + POINT_RADIUS)) {
-      ret = new Coord(*it);
-      break;
-    }
+        pointerViewportCoord.getY() < (pointCenter.getY() + POINT_RADIUS))
+      return new Coord(coord);
   }
 
-  return ret;
+  return nullptr;
 }
 
 std::pair<Coord, Coord> *
@@ -181,7 +177,7 @@ void GlEditableComplexPolygon::draw(float lod, Camera *camera) {
 
     for (size_t i = 0; i < polygonPoints.size(); ++i) {
       camera->initGl();
-      Coord tmp = camera->worldTo2DViewport(polygonPoints[i]);
+      Coord &&tmp = camera->worldTo2DViewport(polygonPoints[i]);
       camera2D.initGl();
       basicCircle.set(tmp, POINT_RADIUS, 0.);
       basicCircle.draw(lod, camera);
@@ -229,8 +225,8 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
     QMouseEvent *me = static_cast<QMouseEvent *>(e);
     x = glWidget->screenToViewport(glWidget->width() - me->x());
     y = glWidget->screenToViewport(me->y());
-    Coord newPointerSceneCoords = camera.viewportTo3DWorld(Coord(x, y, 0));
-    Coord translationVectorScene = newPointerSceneCoords - currentPointerSceneCoords;
+    Coord &&newPointerSceneCoords = camera.viewportTo3DWorld(Coord(x, y, 0));
+    Coord &&translationVectorScene = newPointerSceneCoords - currentPointerSceneCoords;
     currentPointerSceneCoords = newPointerSceneCoords;
 
     if (polygonEdit.empty()) {
@@ -259,9 +255,8 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
         }
       }
     } else if (polygonEdit.size() > 2) {
-      Coord startPolygonPointScr = camera.worldTo2DViewport(polygonEdit[0]);
-      Coord pointerGlViewportCoord =
-          Coord(glWidget->screenToViewport(me->x()),
+      Coord &&startPolygonPointScr = camera.worldTo2DViewport(polygonEdit[0]);
+      Coord pointerGlViewportCoord(glWidget->screenToViewport(me->x()),
                 glWidget->screenToViewport(glWidget->height() - me->y()));
       bool underFirstPoint =
           (pointerGlViewportCoord.getX() > (startPolygonPointScr.getX() - POINT_RADIUS) &&
@@ -290,9 +285,8 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
       } else if (polygonEdit.size() < 2) {
         polygonEdit.push_back(currentPointerSceneCoords);
       } else {
-        Coord startPolygonPointScr = camera.worldTo2DViewport(polygonEdit[0]);
-        Coord pointerGlViewportCoord =
-            Coord(glWidget->screenToViewport(me->x()),
+        Coord &&startPolygonPointScr = camera.worldTo2DViewport(polygonEdit[0]);
+        Coord pointerGlViewportCoord(glWidget->screenToViewport(me->x()),
                   glWidget->screenToViewport(glWidget->height() - me->y()));
         bool underFirstPoint =
             (pointerGlViewportCoord.getX() > (startPolygonPointScr.getX() - POINT_RADIUS) &&
@@ -403,8 +397,8 @@ bool ScatterPlotCorrelCoeffSelector::draw(GlMainWidget *glMainWidget) {
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  for (size_t i = 0; i < polygons.size(); ++i) {
-    polygons[i]->draw(0, &camera);
+  for (auto poly : polygons) {
+    poly->draw(0, &camera);
   }
 
   camera.initGl();
@@ -439,16 +433,16 @@ bool ScatterPlotCorrelCoeffSelector::draw(GlMainWidget *glMainWidget) {
   if (!polygonEdit.empty()) {
     for (size_t i = 0; i < polygonEdit.size() - 1; ++i) {
       camera.initGl();
-      Coord lineStart(camera.worldTo2DViewport(polygonEdit[i]));
-      Coord lineEnd(camera.worldTo2DViewport(polygonEdit[i + 1]));
+      Coord &&lineStart = camera.worldTo2DViewport(polygonEdit[i]);
+      Coord &&lineEnd = camera.worldTo2DViewport(polygonEdit[i + 1]);
       camera2D.initGl();
       GlLines::glDrawLine(lineStart, lineEnd, 1.0f, GlLines::TLP_DASHED, foregroundColor,
                           foregroundColor);
     }
 
     camera.initGl();
-    Coord lineStart(camera.worldTo2DViewport(polygonEdit[polygonEdit.size() - 1]));
-    Coord lineEnd(camera.worldTo2DViewport(currentPointerSceneCoords));
+    Coord &&lineStart = camera.worldTo2DViewport(polygonEdit[polygonEdit.size() - 1]);
+    Coord &&lineEnd = camera.worldTo2DViewport(currentPointerSceneCoords);
     camera2D.initGl();
     GlLines::glDrawLine(lineStart, lineEnd, 1.0f, GlLines::TLP_DASHED, foregroundColor,
                         foregroundColor);
@@ -456,7 +450,7 @@ bool ScatterPlotCorrelCoeffSelector::draw(GlMainWidget *glMainWidget) {
 
   for (size_t i = 0; i < polygonEdit.size(); ++i) {
     camera.initGl();
-    Coord pointCoord(camera.worldTo2DViewport(polygonEdit[i]));
+    Coord &&pointCoord = camera.worldTo2DViewport(polygonEdit[i]);
     camera2D.initGl();
     basicCircle.set(pointCoord, POINT_RADIUS, 0.);
     basicCircle.draw(0, nullptr);
@@ -478,33 +472,29 @@ void ScatterPlotCorrelCoeffSelector::getPolygonAndPointUnderPointerIfAny(
   selectedPolygon = nullptr;
   delete selectedPolygonPoint;
   selectedPolygonPoint = nullptr;
-  Coord pointerViewportCoord(camera->worldTo2DViewport(pointerSceneCoord));
+  Coord &&pointerViewportCoord = camera->worldTo2DViewport(pointerSceneCoord);
 
-  for (size_t i = 0; i < polygons.size(); ++i) {
+  for (auto poly : polygons) {
     selectedPolygonPoint =
-        polygons[i]->getPolygonVertexUnderPointerIfAny(pointerViewportCoord, camera);
+        poly->getPolygonVertexUnderPointerIfAny(pointerViewportCoord, camera);
 
     if (selectedPolygonPoint != nullptr) {
-      selectedPolygon = polygons[i];
+      selectedPolygon = poly;
       break;
     }
   }
 
   if (selectedPolygon == nullptr) {
-    for (size_t i = 0; i < polygons.size(); ++i) {
-      if (polygons[i]->pointInsidePolygon(pointerSceneCoord)) {
-        selectedPolygon = polygons[i];
+    for (auto poly : polygons) {
+      if (poly->pointInsidePolygon(pointerSceneCoord)) {
+        selectedPolygon = poly;
         break;
       }
     }
   }
 
-  for (size_t i = 0; i < polygons.size(); ++i) {
-    if (polygons[i] == selectedPolygon) {
-      polygons[i]->setSelected(true);
-    } else {
-      polygons[i]->setSelected(false);
-    }
+  for (auto poly : polygons) {
+    poly->setSelected(poly == selectedPolygon);
   }
 }
 
@@ -514,15 +504,15 @@ void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(
   Graph *graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   Camera &camera = glWidget->getScene()->getLayer("Main")->getCamera();
 
-  BoundingBox polygonSceneBB(polygon->getBoundingBox());
-  BoundingBox polygonScrBB;
-  polygonScrBB.expand(camera.worldTo2DViewport(Coord(polygonSceneBB[0])));
-  polygonScrBB.expand(camera.worldTo2DViewport(Coord(polygonSceneBB[1])));
+  BoundingBox &&polygonSceneBB = polygon->getBoundingBox();
+  BoundingBox polygonScrBB(camera.worldTo2DViewport(polygonSceneBB[0]),
+			   camera.worldTo2DViewport(polygonSceneBB[1]), true);
   vector<Coord> polygonScr;
   const vector<Coord> &polygonVertices = polygon->getPolygonVertices();
+  polygonScr.reserve(polygonVertices.size() + 1);
 
-  for (size_t i = 0; i < polygonVertices.size(); ++i) {
-    polygonScr.push_back(camera.worldTo2DViewport(polygonVertices[i]));
+  for (auto &coord : polygonVertices) {
+    polygonScr.push_back(camera.worldTo2DViewport(coord));
   }
 
   polygonScr.push_back(camera.worldTo2DViewport(polygonVertices[0]));
@@ -544,8 +534,8 @@ void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(
 
     for (size_t i = 0; i < tmpNodes.size(); ++i) {
       glNode.id = tmpNodes[i].getComplexEntityId();
-      BoundingBox nodeBB(
-          glNode.getBoundingBox(glWidget->getScene()->getGlGraphComposite()->getInputData()));
+      BoundingBox &&nodeBB =
+          glNode.getBoundingBox(glWidget->getScene()->getGlGraphComposite()->getInputData());
       float dx = nodeBB[1][0] - nodeBB[0][0];
       float dy = nodeBB[1][1] - nodeBB[0][1];
       float dz = nodeBB[1][2] - nodeBB[0][2];
@@ -558,39 +548,36 @@ void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(
       nodeBB[1][2] = nodeBB[1][2] - f * dz;
       vector<float> xVec;
       vector<float> yVec;
-      Coord nodeBBBLBScr(camera.worldTo2DViewport(Coord(nodeBB[0])));
+      Coord &&nodeBBBLBScr = camera.worldTo2DViewport(nodeBB[0]);
       xVec.push_back(nodeBBBLBScr.getX());
       yVec.push_back(nodeBBBLBScr.getY());
-      Coord nodeBBTLBScr(camera.worldTo2DViewport(Coord(nodeBB[0][0], nodeBB[1][1], nodeBB[0][2])));
+      Coord &&nodeBBTLBScr = camera.worldTo2DViewport(Coord(nodeBB[0][0], nodeBB[1][1], nodeBB[0][2]));
       xVec.push_back(nodeBBTLBScr.getX());
       yVec.push_back(nodeBBTLBScr.getY());
-      Coord nodeBBTRBScr(camera.worldTo2DViewport(Coord(nodeBB[1][0], nodeBB[1][1], nodeBB[0][2])));
+      Coord &&nodeBBTRBScr = camera.worldTo2DViewport(Coord(nodeBB[1][0], nodeBB[1][1], nodeBB[0][2]));
       xVec.push_back(nodeBBTRBScr.getX());
       yVec.push_back(nodeBBTRBScr.getY());
-      Coord nodeBBBRBScr(camera.worldTo2DViewport(Coord(nodeBB[1][0], nodeBB[0][1], nodeBB[0][2])));
+      Coord &&nodeBBBRBScr = camera.worldTo2DViewport(Coord(nodeBB[1][0], nodeBB[0][1], nodeBB[0][2]));
       xVec.push_back(nodeBBBRBScr.getX());
       yVec.push_back(nodeBBBRBScr.getY());
-      Coord nodeBBBLFScr(camera.worldTo2DViewport(Coord(nodeBB[0][0], nodeBB[0][1], nodeBB[1][2])));
+      Coord nodeBBBLFScr= camera.worldTo2DViewport(Coord(nodeBB[0][0], nodeBB[0][1], nodeBB[1][2]));
       xVec.push_back(nodeBBBLFScr.getX());
       yVec.push_back(nodeBBBLFScr.getY());
-      Coord nodeBBTLFScr(camera.worldTo2DViewport(Coord(nodeBB[0][0], nodeBB[1][1], nodeBB[1][2])));
+      Coord &&nodeBBTLFScr = camera.worldTo2DViewport(Coord(nodeBB[0][0], nodeBB[1][1], nodeBB[1][2]));
       xVec.push_back(nodeBBTLFScr.getX());
       yVec.push_back(nodeBBTLFScr.getY());
-      Coord nodeBBTRFScr(camera.worldTo2DViewport(Coord(nodeBB[1])));
+      Coord &&nodeBBTRFScr = camera.worldTo2DViewport(nodeBB[1]);
       xVec.push_back(nodeBBTRFScr.getX());
       yVec.push_back(nodeBBTRFScr.getY());
-      Coord nodeBBBRFScr(camera.worldTo2DViewport(Coord(nodeBB[1][0], nodeBB[0][1], nodeBB[1][2])));
+      Coord &&nodeBBBRFScr = camera.worldTo2DViewport(Coord(nodeBB[1][0], nodeBB[0][1], nodeBB[1][2]));
       xVec.push_back(nodeBBBRFScr.getX());
       yVec.push_back(nodeBBBRFScr.getY());
       vector<Coord> quad;
-      quad.push_back(
-          Coord(*min_element(xVec.begin(), xVec.end()), *min_element(yVec.begin(), yVec.end())));
-      quad.push_back(
-          Coord(*min_element(xVec.begin(), xVec.end()), *max_element(yVec.begin(), yVec.end())));
-      quad.push_back(
-          Coord(*max_element(xVec.begin(), xVec.end()), *max_element(yVec.begin(), yVec.end())));
-      quad.push_back(
-          Coord(*max_element(xVec.begin(), xVec.end()), *min_element(yVec.begin(), yVec.end())));
+      quad.reserve(5);
+      quad.emplace_back(*min_element(xVec.begin(), xVec.end()), *min_element(yVec.begin(), yVec.end()));
+      quad.emplace_back(*min_element(xVec.begin(), xVec.end()), *max_element(yVec.begin(), yVec.end()));
+      quad.emplace_back(*max_element(xVec.begin(), xVec.end()), *max_element(yVec.begin(), yVec.end()));
+      quad.emplace_back(*max_element(xVec.begin(), xVec.end()), *min_element(yVec.begin(), yVec.end()));
       quad.push_back(quad[0]);
 
       if (isPolygonAincludesInB(quad, polygonScr)) {
