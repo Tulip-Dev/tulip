@@ -575,9 +575,9 @@ void MatrixView::updateLayout() {
 
     // 0 => horizontal line, 1 => vertical line
     const Coord &src0 = layout->getNodeValue(node(srcNodes[0])),
-          &tgt0 = layout->getNodeValue(node(tgtNodes[0])),
-          &src1 = layout->getNodeValue(node(srcNodes[1])),
-          &tgt1 = layout->getNodeValue(node(tgtNodes[1]));
+                &tgt0 = layout->getNodeValue(node(tgtNodes[0])),
+                &src1 = layout->getNodeValue(node(srcNodes[1])),
+                &tgt1 = layout->getNodeValue(node(tgtNodes[1]));
 
     layout->setNodeValue(node(edgeNodes[0]), Coord(tgt0[0], src1[1], 0));
     shapes->setNodeValue(node(edgeNodes[0]), shape);

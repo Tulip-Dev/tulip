@@ -379,8 +379,9 @@ void PixelOrientedView::initPixelView() {
     unsigned int row = i / N;
     unsigned int col = i % N;
 
-    Coord overviewBLCorner(col * (overviewWidth + spaceBetweenOverviews),
-			   -(labelHeight + row * (labelHeight + overviewHeight + spaceBetweenOverviews)), 0);
+    Coord overviewBLCorner(
+        col * (overviewWidth + spaceBetweenOverviews),
+        -(labelHeight + row * (labelHeight + overviewHeight + spaceBetweenOverviews)), 0);
     ostringstream oss;
     oss << "pixel oriented overview for dimension " << prop;
 
@@ -388,8 +389,7 @@ void PixelOrientedView::initPixelView() {
     auto ito = overviewsMap.find(prop);
     if (ito == overviewsMap.end()) {
       pixelOrientedOverview = new PixelOrientedOverview(
-          dataMap[prop], pixelOrientedMediator, overviewBLCorner,
-          prop, backgroundColor, textColor);
+          dataMap[prop], pixelOrientedMediator, overviewBLCorner, prop, backgroundColor, textColor);
       pixelOrientedOverview->computePixelView();
       overviewsMap.emplace(prop, pixelOrientedOverview);
 
@@ -433,9 +433,9 @@ void PixelOrientedView::destroyOverviewsIfNeeded() {
   }
 
   for (auto &prop : propertiesToRemove) {
-    selectedGraphProperties.erase(remove(selectedGraphProperties.begin(),
-                                         selectedGraphProperties.end(), prop),
-                                  selectedGraphProperties.end());
+    selectedGraphProperties.erase(
+        remove(selectedGraphProperties.begin(), selectedGraphProperties.end(), prop),
+        selectedGraphProperties.end());
   }
 }
 

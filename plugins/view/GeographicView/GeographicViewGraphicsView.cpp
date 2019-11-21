@@ -969,10 +969,14 @@ void GeographicViewGraphicsView::refreshMap() {
       float mapWidth = (width() / (xRight - xLeft)) * 180.;
       float middleLng =
           leafletMaps->getLatLngForPixelPosOnScreen(width() / 2., height() / 2.).second * 2.;
-      BoundingBox bb(Coord(middleLng - mapWidth / 2.,
-			   latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(0, 0).first * 2.), 0),
-		     Coord(middleLng + mapWidth / 2.,
-			   latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(width(), height()).first * 2.), 0), true);
+      BoundingBox bb(
+          Coord(middleLng - mapWidth / 2.,
+                latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(0, 0).first * 2.), 0),
+          Coord(middleLng + mapWidth / 2.,
+                latitudeToMercator(
+                    leafletMaps->getLatLngForPixelPosOnScreen(width(), height()).first * 2.),
+                0),
+          true);
       GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(), bb, "Main", 1);
       sceneZoomAndPan.zoomAndPanAnimationStep(1);
     }
@@ -1248,7 +1252,8 @@ void GeographicViewGraphicsView::switchViewType() {
 
           float phi = M_PI / 2.0 - tmp[0];
 
-          bends.emplace_back(75. * sin(phi) * cos(theta), 75. * sin(phi) * sin(theta), 75. * cos(phi));
+          bends.emplace_back(75. * sin(phi) * cos(theta), 75. * sin(phi) * sin(theta),
+                             75. * cos(phi));
         }
 
         geoLayout->setEdgeValue(e, bends);
