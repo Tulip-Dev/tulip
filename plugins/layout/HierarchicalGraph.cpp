@@ -80,10 +80,7 @@ inline unsigned int HierarchicalGraph::degree(tlp::Graph *sg, tlp::node n, bool 
 }
 //================================================================================
 void HierarchicalGraph::twoLayerCrossReduction(tlp::Graph *sg, unsigned int freeLayer) {
-  vector<node>::const_iterator it;
-
-  for (it = grid[freeLayer].begin(); it != grid[freeLayer].end(); ++it) {
-    node n = *it;
+  for (auto n : grid[freeLayer]) {
     double sum = embedding->getNodeValue(n);
     unsigned int deg = 1;
     for (auto itn : sg->getInOutNodes(n)) {
@@ -191,10 +188,9 @@ void HierarchicalGraph::computeEdgeBends(
   for (auto e : reversedEdges)
     isReversed.set(e.id, true);
 
-  for (std::unordered_map<edge, edge>::const_iterator it = replacedEdges.begin();
-       it != replacedEdges.end(); ++it) {
-    edge toUpdate = (*it).first;
-    edge start = (*it).second;
+  for (auto &it : replacedEdges) {
+    edge toUpdate = it.first;
+    edge start = it.second;
     edge end = start;
     node tgt;
 
@@ -242,24 +238,17 @@ void HierarchicalGraph::computeSelfLoops(tlp::Graph *mySGraph, tlp::LayoutProper
   while (!listSelfLoops.empty()) {
     tlp::SelfLoops tmp = listSelfLoops.back();
     listSelfLoops.pop_back();
-    LineType::RealType tmpLCoord;
     const LineType::RealType &edge1 = tmpLayout.getEdgeValue(tmp.e1);
     const LineType::RealType &edge2 = tmpLayout.getEdgeValue(tmp.e2);
     const LineType::RealType &edge3 = tmpLayout.getEdgeValue(tmp.e3);
-    LineType::RealType::const_iterator it;
+    LineType::RealType tmpLCoord;
+    tmpLCoord.reserve(edge1.size() + edge2.size() + edge3.size() + 2);
 
-    for (it = edge1.begin(); it != edge1.end(); ++it)
-      tmpLCoord.push_back(*it);
-
+    tmpLCoord.insert(tmpLCoord.end(), edge1.begin(), edge1.end());
     tmpLCoord.push_back(tmpLayout.getNodeValue(tmp.n1));
-
-    for (it = edge2.begin(); it != edge2.end(); ++it)
-      tmpLCoord.push_back(*it);
-
+    tmpLCoord.insert(tmpLCoord.end(), edge2.begin(), edge2.end());
     tmpLCoord.push_back(tmpLayout.getNodeValue(tmp.n2));
-
-    for (it = edge3.begin(); it != edge3.end(); ++it)
-      tmpLCoord.push_back(*it);
+    tmpLCoord.insert(tmpLCoord.end(), edge3.begin(), edge3.end());
 
     result->setEdgeValue(tmp.old, tmpLCoord);
     mySGraph->delNode(tmp.n1, true);

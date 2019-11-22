@@ -1509,7 +1509,7 @@ public:
           publi = publis[i];
 
         // set extracted properties
-        std::string key = fe.key();
+        const std::string &key = fe.key();
 
         // first check if publi does not already exist
         if (publisMap.find(key) != publisMap.end()) {
@@ -1534,16 +1534,14 @@ public:
         }
 
         // loop of entry fields
-        std::map<std::string, xdkbib::Field>::const_iterator fit = fe.fields().begin();
-
-        for (; fit != fe.fields().end(); ++fit) {
-          string pName = fit->first;
+        for (auto &fit : fe.fields()) {
+          const string &pName = fit.first;
 
           // year is already set
           if (pName == "year")
             continue;
 
-          const xdkbib::Field &field = fit->second;
+          const xdkbib::Field &field = fit.second;
           bool isNumber =
               !field.valueParts().empty() && (field.valueParts()[0].type() == xdkbib::Number);
           bool isAuthor = (pName == "author");
@@ -1562,7 +1560,7 @@ public:
             }
           }
 
-          string value = fe.field(pName).value();
+          string &&value = fe.field(pName).value();
 
           if (createPubliNodes) {
             if (!isAuthor) {
@@ -1630,12 +1628,12 @@ public:
               }
 
               xdkbib::Author &auth = authors[j];
-              vector<std::string> firstNames = auth.first();
+              const vector<std::string> &firstNames = auth.first();
               string aName;
               string aKey;
 
               for (unsigned int k = 0; k < firstNames.size(); ++k) {
-                string &firstName = firstNames[k];
+                const string &firstName = firstNames[k];
 
                 if (k) {
                   aName += " ";
@@ -1647,12 +1645,14 @@ public:
                 aName += firstName;
 
                 if (k == 0 || labriAuthor == false) {
+		  string fn(firstName);
                   // keep only the first letter and a dot for the key
-                  firstName.resize(2);
-                  firstName.replace(1, 1, ".");
+                  fn.resize(2);
+                  fn.replace(1, 1, ".");
+		  aKey += fn;
                 }
-
-                aKey += firstName;
+		else
+		  aKey += firstName;
               }
 
               aName += " " + auth.lastJoin();

@@ -37,7 +37,7 @@ void QuadTreeBundle::compute(Graph *g, double splitRatio, tlp::LayoutProperty *l
 node QuadTreeBundle::splitEdge(node a, node b) {
   const Coord &cA = layout->getNodeValue(a);
   const Coord &cB = layout->getNodeValue(b);
-  Coord center = (cA + cB) / 2.0f;
+  Coord &&center = (cA + cB) / 2.0f;
   center[2] = 0;
   Vec2D tmp;
   tmp[0] = center[0];
@@ -80,15 +80,14 @@ void QuadTreeBundle::elmentSplitting(const Coord &a, const Coord &b, const vecto
 
   in.clear();
   out.clear();
-  vector<node>::const_iterator it = input.begin();
 
-  for (; it != input.end(); ++it) {
-    const Coord &tmp = layout->getNodeValue(*it);
+  for (auto n : input) {
+    const Coord &tmp = layout->getNodeValue(n);
 
     if (isIn(tmp, a, b))
-      in.push_back(*it);
+      in.push_back(n);
     else
-      out.push_back(*it);
+      out.push_back(n);
   }
 }
 //=====================================
@@ -147,7 +146,7 @@ void QuadTreeBundle::recQuad(const node a, const node b, const node c, const nod
    */
   node e = graph->addNode();
   resultNode.push_back(e);
-  Coord cE = (cI + cG) / 2.0f;
+  Coord &&cE = (cI + cG) / 2.0f;
   cE[2] = 0;
   layout->setNodeValue(e, cE);
 

@@ -28,13 +28,13 @@ BendsTools::BendsTools() {}
 //============================================
 double BendsTools::cosAlpha(LayoutProperty *layout, const node a, const node b, const node c) {
   Vector<double, 2> point[3];
-  Coord aC = layout->getNodeValue(a);
+  const Coord &aC = layout->getNodeValue(a);
   point[0][0] = aC[0];
   point[0][1] = aC[1];
-  Coord bC = layout->getNodeValue(b);
+  const Coord &bC = layout->getNodeValue(b);
   point[1][0] = bC[0];
   point[1][1] = bC[1];
-  Coord cC = layout->getNodeValue(c);
+  const Coord &cC = layout->getNodeValue(c);
   point[2][0] = cC[0];
   point[2][1] = cC[1];
 
@@ -48,13 +48,13 @@ double BendsTools::cosAlpha(LayoutProperty *layout, const node a, const node b, 
 //============================================
 bool BendsTools::straightLine(LayoutProperty *layout, const node a, const node b, const node c) {
   Vector<double, 2> point[3];
-  Coord aC = layout->getNodeValue(a);
+  const Coord &aC = layout->getNodeValue(a);
   point[0][0] = aC[0];
   point[0][1] = aC[1];
-  Coord bC = layout->getNodeValue(b);
+  const Coord &bC = layout->getNodeValue(b);
   point[1][0] = bC[0];
   point[1][1] = bC[1];
-  Coord cC = layout->getNodeValue(c);
+  const Coord &cC = layout->getNodeValue(c);
   point[2][0] = cC[0];
   point[2][1] = cC[1];
 
@@ -62,10 +62,7 @@ bool BendsTools::straightLine(LayoutProperty *layout, const node a, const node b
   Vector<double, 2> bc = point[2] - point[1];
   Vector<double, 2> ac = point[2] - point[0];
 
-  if (fabs(ba.norm() + bc.norm() - ac.norm()) < 1E-9) {
-    return true;
-  } else
-    return false;
+  return (fabs(ba.norm() + bc.norm() - ac.norm()) < 1E-9);
 }
 //============================================
 vector<node> BendsTools::bendsSimplification(vector<node> &bends, LayoutProperty *layout) {

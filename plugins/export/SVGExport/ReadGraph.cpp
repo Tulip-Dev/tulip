@@ -148,7 +148,7 @@ static bool treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface &e
     }
 
     if (edge_labels) {
-      Coord c = edgeVertices[edgeVertices.size() / 2] + edgeVertices[edgeVertices.size() / 2 - 1];
+      Coord &&c = edgeVertices[edgeVertices.size() / 2] + edgeVertices[edgeVertices.size() / 2 - 1];
       ret = exportint.addLabel("edge", label->getEdgeValue(e), labelcolor->getEdgeValue(e), c /= 2,
                                fontsize->getEdgeValue(e), sizes->getEdgeValue(e));
 
@@ -253,7 +253,7 @@ static bool treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface &e
     if (graph->isMetaNode(n))
       metanodeVertices.push_back(n);
 
-    Coord c = layout->getNodeValue(n);
+    const Coord &c = layout->getNodeValue(n);
     Size s = sizes->getNodeValue(n);
 
     if ((++i % 100) == 0)
@@ -442,13 +442,11 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *p
     unsigned sizeFirstVertice = 2 * metanodeVertices.size();
     vector<tlp::node> subMetanodeVertices;
 
-    for (vector<node>::const_iterator it = metanodeVertices.begin(); it != metanodeVertices.end();
-         ++it) {
-      node metanode = *it;
+    for (auto metanode : metanodeVertices) {
       Graph *metagraph = graph->getNodeMetaInfo(metanode);
       BoundingBox metagraphbb = tlp::computeBoundingBox(metagraph, layout, sizes, rotation);
-      Coord coord_meta_node = layout->getNodeValue(metanode);
-      Size size_meta_node = sizes->getNodeValue(metanode);
+      const Coord &coord_meta_node = layout->getNodeValue(metanode);
+      const Size &size_meta_node = sizes->getNodeValue(metanode);
 
       // We compute the scale
       float scale = min(size_meta_node.width() / (metagraphbb.width() * 1.4),

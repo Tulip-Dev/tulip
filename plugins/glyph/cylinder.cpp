@@ -187,10 +187,10 @@ void Cylinder::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
 void Cylinder::draw(node n, float) {
 
   setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
-  string texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
+  const string &texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
 
   if (!texFile.empty()) {
-    string texturePath = glGraphInputData->parameters->getTexturePath();
+    const string &texturePath = glGraphInputData->parameters->getTexturePath();
     GlTextureManager::activateTexture(texturePath + texFile);
   }
 
@@ -259,10 +259,10 @@ void HalfCylinder::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
 void HalfCylinder::draw(node n, float) {
 
   setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
-  string texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
+  const string &texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
 
   if (!texFile.empty()) {
-    string texturePath = glGraphInputData->parameters->getTexturePath();
+    const string &texturePath = glGraphInputData->parameters->getTexturePath();
     GlTextureManager::activateTexture(texturePath + texFile);
   }
 
@@ -295,10 +295,10 @@ public:
     glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
 
     setMaterial(glyphColor);
-    string texFile = edgeExtGlGraphInputData->getElementTexture()->getNodeValue(n);
+    const string &texFile = edgeExtGlGraphInputData->getElementTexture()->getNodeValue(n);
 
     if (!texFile.empty()) {
-      string texturePath = edgeExtGlGraphInputData->parameters->getTexturePath();
+      const string &texturePath = edgeExtGlGraphInputData->parameters->getTexturePath();
       GlTextureManager::activateTexture(texturePath + texFile);
     }
 

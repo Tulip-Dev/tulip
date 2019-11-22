@@ -144,19 +144,17 @@ bool MixedModel::run() {
         edge e = graph->existEdge(n, n3, false);
 
         if (e.isValid()) {
-          vector<Coord> bends(2);
-          bends.clear();
+          vector<Coord> bends;
+          bends.reserve(2);
           unsigned int max = uint(c[1] > c2[1] ? c[1] / 2 : c2[1] / 2);
           max += uint(edgeNodeSpacing);
 
           if (graph->source(e) == n) {
-            bends.push_back(Coord(0, float(max), 0));
-            bends.push_back(
-                Coord(2.f * spacing + c.getX() / 2.f + c2.getX() + c3.getX() / 2.f, float(max), 0));
+            bends.emplace_back(0, float(max), 0);
+            bends.emplace_back(2.f * spacing + c.getX() / 2.f + c2.getX() + c3.getX() / 2.f, float(max), 0);
           } else {
-            bends.push_back(
-                Coord(2.f * spacing + c.getX() / 2.f + c2.getX() + c3.getX() / 2.f, float(max), 0));
-            bends.push_back(Coord(0, float(max), 0));
+            bends.emplace_back(2.f * spacing + c.getX() / 2.f + c2.getX() + c3.getX() / 2.f, float(max), 0);
+            bends.emplace_back(0, float(max), 0);
           }
 
           result->setEdgeValue(e, bends);
@@ -261,16 +259,11 @@ bool MixedModel::run() {
 
     placeNodesEdges();
 
-    vector<edge>::const_iterator ite = dummy.begin();
+    for (auto e : dummy)
+      currentGraph->delEdge(e, true);
 
-    for (; ite != dummy.end(); ++ite)
-      currentGraph->delEdge(*ite, true);
-
-    ite = added_edges.begin();
     const vector<Coord> &dv = result->getEdgeDefaultValue();
-
-    for (; ite != added_edges.end(); ++ite) {
-      edge e = *ite;
+    for (auto e : added_edges) {
       currentGraph->delEdge(e, true);
       result->setEdgeValue(e, dv);
     }
@@ -291,17 +284,18 @@ bool MixedModel::run() {
   // rotate layout and size
   if (orientation == "horizontal") {
     for (auto n : graph->nodes()) {
-      Size size(sizeResult->getNodeValue(n));
+      const Size &size = sizeResult->getNodeValue(n);
       sizeResult->setNodeValue(n, Size(size[1], size[0], size[2]));
-      Coord coord = result->getNodeValue(n);
+      const Coord &coord = result->getNodeValue(n);
       result->setNodeValue(n, Coord(-coord[1], coord[0], coord[2]));
     }
     for (auto e : graph->edges()) {
       const auto &tmp = result->getEdgeValue(e);
       LineType::RealType tmp2;
 
-      for (auto coord : tmp) {
-        tmp2.push_back(Coord(-coord[1], coord[0], coord[2]));
+      tmp2.reserve(tmp.size());
+      for (auto &coord : tmp) {
+        tmp2.emplace_back(-coord[1], coord[0], coord[2]);
       }
 
       result->setEdgeValue(e, tmp2);
@@ -413,8 +407,8 @@ void MixedModel::placeNodesEdges() {
       auto c_n = NodeCoords[n];
       auto c_v = NodeCoords[v];
       vector<Coord> bends;
-      bends.push_back(Coord(-maxX + (c_n.getX() + c_v.getX()) / 2.f,
-                            -maxY + (c_n.getY() + c_v.getY()) / 2.f, -z_size));
+      bends.emplace_back(-maxX + (c_n.getX() + c_v.getX()) / 2.f,
+			 -maxY + (c_n.getY() + c_v.getY()) / 2.f, -z_size);
       result->setEdgeValue(e, bends);
       graph->getProperty<IntegerProperty>("viewShape")->setEdgeValue(e, EdgeShape::BezierCurve);
       graph->getProperty<ColorProperty>("viewColor")->setEdgeValue(e, Color(218, 218, 218));
@@ -451,7 +445,7 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
     unsigned int p = V[k].size();
 
     vector<node>::iterator il, ir;
-    node nl = node(), nr = node();
+    node nl, nr;
 
     if (k != 0) {
       // ordonne les arcs "in"
@@ -491,8 +485,6 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
       // build in-edge vector and out-edge vector in the good order
       vector<edge> tmp;
       char pred = 'p';
-
-      tmp.clear();
 
       for (auto e : carte->getInOutEdges(v)) {
         auto eEnds = carte->ends(e);
@@ -729,9 +721,8 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
       }
 
       if (k != 0) {
-        for (unsigned int ui = 0; ui < listOfEdgesIN.size(); ++ui) {
-          edge e_tmp = listOfEdgesIN[ui];
-          const pair<node, node> &eEnds = carte->ends(e_tmp);
+        for (auto e_tmp : listOfEdgesIN) {
+          auto eEnds = carte->ends(e_tmp);
           node n_tmp = (eEnds.first == v) ? eEnds.second : eEnds.first;
 
           if (rank[n_tmp] < k) {
@@ -829,35 +820,33 @@ void MixedModel::computeCoords() {
 
   nodeSize.setAll(Coord()); // permet de conserver une taille relative pout les sommets
 
-  for (const node &n : carte->nodes()) {
+  for (auto n : carte->nodes()) {
     Coord c(sizeResult->getNodeValue(n));
     c[0] += edgeNodeSpacing;
     nodeSize.set(n.id, c);
   }
 
   unordered_map<node, node> father; // permet de connaître le noeud de référence
-  father.clear();
   assert(!V.empty());
 
   vector<node> C; // chemin courant
   double out_r_moins1 = 0.0;
 
   //-------------  initialisation --------------------------
-  for (unsigned int i = 0; i < V[0].size(); ++i) {
-    node v = V[0][i];
-
+  bool first = true;
+  for (auto v : V[0]) {
     double out_l = outl[v], out_r = outr[v];
-    Coord c = nodeSize.get((V[0][i]).id);
-    float x;
+    float cx = nodeSize.get(v.id).getX();
+    float x = (out_l < double(cx / 2.f)) ? (cx / 2.f) : float(out_l);
 
-    if (i == 0)
-      x = (out_l < double(c.getX() / 2.f)) ? (c.getX() / 2.f) : float(out_l);
+
+    if (first)
+      first = false;
     else
-      x = float(out_r_moins1) +
-          ((out_l < double(c.getX() / 2.f)) ? (c.getX() / 2.f) : float(out_l)) + spacing;
+      x += float(out_r_moins1) + spacing;
 
     NodeCoords[v] = Coord(x, 0, 0); // y(vi) = 0
-    out_r_moins1 = (out_r < (c.getX() / 2.) ? (c.getX() / 2.) : out_r);
+    out_r_moins1 = (out_r < (cx / 2.) ? (cx / 2.) : out_r);
   }
 
   C = V[0]; // initiation du contour C0
@@ -874,13 +863,13 @@ void MixedModel::computeCoords() {
     assert(il != C.end());
     vector<node>::iterator ir = find(il, C.end(), cr); // par définition, il<ir
     assert(ir != C.end());
-    Coord co = nodeSize.get((*il).id);
-    float max_y = NodeCoords[(*il)].getY() + co.getY() / 2.f;
+    float co = nodeSize.get((*il).id).getY();
+    float max_y = NodeCoords[(*il)].getY() + co / 2.f;
     float somme = 0; // relative to cl
 
     for (vector<node>::iterator i = il + 1; i != ir + 1; ++i) {
-      Coord co2 = nodeSize.get((*i).id);
-      float y = NodeCoords[(*i)].getY() + co2.getY() / 2.f; // recherche max des y(ci) dans
+      float co2y = nodeSize.get((*i).id).getY();
+      float y = NodeCoords[(*i)].getY() + co2y / 2.f; // recherche max des y(ci) dans
                                                             // [cl...cr]
 
       if (max_y < y)
@@ -892,12 +881,12 @@ void MixedModel::computeCoords() {
     }
 
     node Z0 = V[k][0];
-    co = nodeSize.get(Z0.id);
-    int max_y_taille = int((inr[Z0] < co.getY() / 2.) ? co.getY() / 2. : inr[Z0]);
+    co = nodeSize.get(Z0.id).getY();
+    int max_y_taille = int((inr[Z0] < co / 2.) ? co / 2. : inr[Z0]);
 
     for (unsigned int i = 0; i < p; ++i) {
-      co = nodeSize.get((V[k][i]).id);
-      int taille_tmp = int((inr[V[k][i]] < co.getY() / 2.) ? co.getY() / 2. : inr[V[k][i]]);
+      co = nodeSize.get((V[k][i]).id).getY();
+      int taille_tmp = int((inr[V[k][i]] < co / 2.) ? co / 2. : inr[V[k][i]]);
 
       if (taille_tmp > max_y_taille)
         max_y_taille = taille_tmp;
@@ -975,23 +964,23 @@ void MixedModel::computeCoords() {
       for (unsigned int i = 0; i < p; ++i) {
         int out_l = outl[V[k][i]];
         out_r = outr[V[k][i]];
-        Coord co2 = nodeSize.get((V[k][i]).id);
+        float co2x = nodeSize.get((V[k][i]).id).getX();
         double x;
 
         if (i == 0)
-          x = ((out_l < co2.getX() / 2.) ? co2.getX() / 2. : out_l) + dxl;
+          x = ((out_l < co2x / 2.) ? co2x / 2. : out_l) + dxl;
         else
-          x = out_r_moins1 + ((out_l < co2.getX() / 2.) ? co2.getX() / 2. : out_l) + 1;
+          x = out_r_moins1 + ((out_l < co2x / 2.) ? co2x / 2. : out_l) + 1;
 
         NodeCoords[V[k][i]].setX(float(x));
         somme += float(x);
 
-        out_r_moins1 = int((out_r < co2.getX() / 2.) ? co2.getX() / 2. : out_r);
+        out_r_moins1 = int((out_r < co2x / 2.) ? co2x / 2. : out_r);
       }
 
       // assign x(cr)
-      co = nodeSize.get((V[k][p - 1]).id);
-      float tmp = ((out_r < co.getX() / 2.f) ? co.getX() / 2.f : out_r) - dxr;
+      co = nodeSize.get((V[k][p - 1]).id).getX();
+      float tmp = ((out_r < co / 2.f) ? co / 2.f : out_r) - dxr;
 
       float xtmp = NodeCoords[cr].getX();
       double x;

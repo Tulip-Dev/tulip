@@ -31,21 +31,16 @@ bool ConnectedComponent::run() {
   ConnectedTest::computeConnectedComponents(graph, components);
 
   // assign the index of each component as value for its nodes
-  for (unsigned curComponent = 0; curComponent < components.size(); ++curComponent) {
-    std::vector<node> &component = components[curComponent];
-
-    for (std::vector<node>::const_iterator itNode = component.begin(); itNode != component.end();
-         ++itNode) {
-      result->setNodeValue(*itNode, curComponent);
+  unsigned int i = 0;
+  for (auto &component : components) {
+    for (auto n : component) {
+      result->setNodeValue(n, i);
     }
+    ++i;
   }
 
   // propagate nodes computed value to edges
-  const std::vector<edge> &edges = graph->edges();
-  unsigned int nbEdges = edges.size();
-
-  for (unsigned int i = 0; i < nbEdges; ++i) {
-    edge e = edges[i];
+  for (auto e : graph->edges()) {
     result->setEdgeValue(e, result->getNodeValue(graph->source(e)));
   }
 
