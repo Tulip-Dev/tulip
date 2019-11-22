@@ -151,9 +151,11 @@ bool MixedModel::run() {
 
           if (graph->source(e) == n) {
             bends.emplace_back(0, float(max), 0);
-            bends.emplace_back(2.f * spacing + c.getX() / 2.f + c2.getX() + c3.getX() / 2.f, float(max), 0);
+            bends.emplace_back(2.f * spacing + c.getX() / 2.f + c2.getX() + c3.getX() / 2.f,
+                               float(max), 0);
           } else {
-            bends.emplace_back(2.f * spacing + c.getX() / 2.f + c2.getX() + c3.getX() / 2.f, float(max), 0);
+            bends.emplace_back(2.f * spacing + c.getX() / 2.f + c2.getX() + c3.getX() / 2.f,
+                               float(max), 0);
             bends.emplace_back(0, float(max), 0);
           }
 
@@ -408,7 +410,7 @@ void MixedModel::placeNodesEdges() {
       auto c_v = NodeCoords[v];
       vector<Coord> bends;
       bends.emplace_back(-maxX + (c_n.getX() + c_v.getX()) / 2.f,
-			 -maxY + (c_n.getY() + c_v.getY()) / 2.f, -z_size);
+                         -maxY + (c_n.getY() + c_v.getY()) / 2.f, -z_size);
       result->setEdgeValue(e, bends);
       graph->getProperty<IntegerProperty>("viewShape")->setEdgeValue(e, EdgeShape::BezierCurve);
       graph->getProperty<ColorProperty>("viewColor")->setEdgeValue(e, Color(218, 218, 218));
@@ -839,7 +841,6 @@ void MixedModel::computeCoords() {
     float cx = nodeSize.get(v.id).getX();
     float x = (out_l < double(cx / 2.f)) ? (cx / 2.f) : float(out_l);
 
-
     if (first)
       first = false;
     else
@@ -870,7 +871,7 @@ void MixedModel::computeCoords() {
     for (vector<node>::iterator i = il + 1; i != ir + 1; ++i) {
       float co2y = nodeSize.get((*i).id).getY();
       float y = NodeCoords[(*i)].getY() + co2y / 2.f; // recherche max des y(ci) dans
-                                                            // [cl...cr]
+                                                      // [cl...cr]
 
       if (max_y < y)
         max_y = y;

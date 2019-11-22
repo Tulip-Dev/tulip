@@ -550,7 +550,7 @@ public:
       p2 += normal;
 
       // Set the second and third Cubic Bézier curve control points as edge bends
-      viewLayout->setEdgeValue(e, vector<Coord> {{p1, p2}});
+      viewLayout->setEdgeValue(e, vector<Coord>{{p1, p2}});
     }
   }
 

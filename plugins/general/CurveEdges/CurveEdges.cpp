@@ -299,8 +299,8 @@ public:
     }
 
     if (x != FLT_MAX && y != FLT_MAX)
-      return std::vector<tlp::Coord> {{tlp::Coord(x, y)}};
-    return std::vector<tlp::Coord> {{(srcCoord + tgtCoord) / 2.f}};
+      return std::vector<tlp::Coord>{{tlp::Coord(x, y)}};
+    return std::vector<tlp::Coord>{{(srcCoord + tgtCoord) / 2.f}};
   }
 
   bool run() override {

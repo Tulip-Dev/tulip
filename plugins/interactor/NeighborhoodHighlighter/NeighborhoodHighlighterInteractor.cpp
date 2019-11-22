@@ -597,7 +597,8 @@ void NeighborhoodHighlighter::computeNeighborhoodGraphCircleLayout() {
 
     const vector<Coord> &edgesBends = neighborhoodGraphLayout->getEdgeValue(e);
 
-    neighborhoodGraphCircleLayout->setEdgeValue(e, vector<Coord>(edgesBends.size(), finalBendsCoord));
+    neighborhoodGraphCircleLayout->setEdgeValue(e,
+                                                vector<Coord>(edgesBends.size(), finalBendsCoord));
   }
 }
 
@@ -625,10 +626,12 @@ float NeighborhoodHighlighter::computeNeighborhoodGraphRadius(
     LayoutProperty *neighborhoodGraphLayoutProp) {
   float radius = 0;
   node n;
-  const Coord &centralNodeCoord = neighborhoodGraphLayoutProp->getNodeValue(neighborhoodGraphCentralNode);
+  const Coord &centralNodeCoord =
+      neighborhoodGraphLayoutProp->getNodeValue(neighborhoodGraphCentralNode);
   for (auto n : neighborhoodGraph->nodes()) {
     const Coord &nodeCoord = neighborhoodGraphLayoutProp->getNodeValue(n);
-    const Size &nodeSize = originalGlGraphComposite->getInputData()->getElementSize()->getNodeValue(n);
+    const Size &nodeSize =
+        originalGlGraphComposite->getInputData()->getElementSize()->getNodeValue(n);
     float dist = centralNodeCoord.dist(nodeCoord) + nodeSize.getW();
 
     if (dist > radius) {

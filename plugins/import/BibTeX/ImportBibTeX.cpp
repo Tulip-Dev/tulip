@@ -1645,14 +1645,13 @@ public:
                 aName += firstName;
 
                 if (k == 0 || labriAuthor == false) {
-		  string fn(firstName);
+                  string fn(firstName);
                   // keep only the first letter and a dot for the key
                   fn.resize(2);
                   fn.replace(1, 1, ".");
-		  aKey += fn;
-                }
-		else
-		  aKey += firstName;
+                  aKey += fn;
+                } else
+                  aKey += firstName;
               }
 
               aName += " " + auth.lastJoin();

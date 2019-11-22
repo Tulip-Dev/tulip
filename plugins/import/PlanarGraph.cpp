@@ -88,7 +88,7 @@ public:
       Triangle f = faces[i];
       node n = graph->addNode();
       Coord &&tmp = newLayout->getNodeValue(f.a) + newLayout->getNodeValue(f.b) +
-                  newLayout->getNodeValue(f.c);
+                    newLayout->getNodeValue(f.c);
       tmp /= 3.0;
       newLayout->setNodeValue(n, tmp);
 
