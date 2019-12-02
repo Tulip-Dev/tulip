@@ -39,8 +39,8 @@ namespace tlp {
 BoundingBox computeNewBoundingBox(const BoundingBox &box, const Coord &centerScene, double aX,
                                   double aY) {
   // compute a new bounding box : this bounding box is the rotation of the old bounding box
-  Coord size((box[1] - box[0]) / 2.f);
-  Coord center(box[0] + size);
+  Coord &&size = (box[1] - box[0]) / 2.f;
+  Coord &&center = box[0] + size;
   // size = Coord(size.norm(),size.norm(),size.norm());
   size.fill(size.norm());
   center[0] = centerScene[0] + (cos(aY) * (center[0] - centerScene[0]));
@@ -123,14 +123,14 @@ bool GlQuadTreeLODCalculator::needEntities() {
   }
 
   // Check if a camera have changed (diff between old backup camera and current camera)
-  for (auto it = layerToCamera.begin(); it != layerToCamera.end(); ++it) {
-    if (((*it).first->getCamera()).is3D()) {
-      Camera camera = (*it).first->getCamera();
-      Camera oldCamera = (*it).second;
-      Coord unitCamera = camera.getEyes() - camera.getCenter();
-      unitCamera = unitCamera / unitCamera.norm();
-      Coord unitOldCamera = oldCamera.getEyes() - oldCamera.getCenter();
-      unitOldCamera = unitOldCamera / unitOldCamera.norm();
+  for (auto &it : layerToCamera) {
+    if (it.first->getCamera().is3D()) {
+      Camera &camera = it.first->getCamera();
+      Camera &oldCamera = it.second;
+      Coord &&unitCamera = camera.getEyes() - camera.getCenter();
+      unitCamera /= unitCamera.norm();
+      Coord &&unitOldCamera = oldCamera.getEyes() - oldCamera.getCenter();
+      unitOldCamera /= unitOldCamera.norm();
 
       if (unitCamera != unitOldCamera) {
         haveToCompute = true;
@@ -395,7 +395,7 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
 
   MatrixGL invTransformMatrix(transformMatrix);
   invTransformMatrix.inverse();
-  Coord pSrc = projectPoint(Coord(0, 0, 0), transformMatrix, globalViewport);
+  Coord &&pSrc = projectPoint(Coord(0, 0, 0), transformMatrix, globalViewport);
 
   Vector<int, 4> transformedViewport = currentViewport;
   transformedViewport[1] = globalViewport[3] - (currentViewport[1] + currentViewport[3]);

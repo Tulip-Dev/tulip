@@ -228,7 +228,7 @@ void GlAxis::addCaption(const CaptionLabelPosition &captionPos, const float capt
   }
 
   computeCaptionSize(captionHeight);
-  Coord captionCenter = computeCaptionCenter(captionFrame);
+  Coord &&captionCenter = computeCaptionCenter(captionFrame);
   addAxisCaption(captionCenter, captionFrame);
 }
 
@@ -290,7 +290,7 @@ void GlAxis::computeCaptionSize(float height) {
 
 void GlAxis::setCaptionHeight(float height, bool frame) {
   computeCaptionSize(height);
-  Coord captionCenter = computeCaptionCenter(frame);
+  Coord &&captionCenter = computeCaptionCenter(frame);
   captionLabel->setSize(Size(captionWidth, captionHeight));
   captionLabel->setPosition(captionCenter);
 }

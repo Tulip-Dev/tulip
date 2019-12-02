@@ -161,8 +161,8 @@ GLfloat *buildCurvePoints(const vector<Coord> &vertices, const vector<float> &si
 
     bi_xu_xv /= bi_xu_xv.norm();
     float newSize = sizes[i];
-    Coord u(vertices[i - 1] - vertices[i]);
-    Coord v(vertices[i + 1] - vertices[i]);
+    Coord &&u = vertices[i - 1] - vertices[i];
+    Coord &&v = vertices[i + 1] - vertices[i];
     float angle =
         float(M_PI - acos((u[0] * v[0] + u[1] * v[1] + u[2] * v[2]) / (u.norm() * v.norm())));
 
@@ -239,8 +239,8 @@ static float computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const
                               float sz, float inversion, vector<Coord> &result,
                               bool lastPoint = false, bool twoPointsCurve = false) {
 
-  Coord u = pBefore - pCurrent;
-  Coord v = pAfter - pCurrent;
+  Coord &&u = pBefore - pCurrent;
+  Coord &&v = pAfter - pCurrent;
 
   if (fabs(u[2]) < 1e-3)
     u[2] = 0;
@@ -258,7 +258,7 @@ static float computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const
   if (v.norm() != 0)
     xv /= v.norm();
 
-  Coord bi_xu_xv = xu + xv;
+  Coord &&bi_xu_xv = xu + xv;
   auto norm = bi_xu_xv.norm();
 
   if (!result.empty() && !lastPoint && norm < 1e-3) {
@@ -369,8 +369,8 @@ vector<Coord> splineCurve(const vector<Coord> &vertices) {
   curve.emplace_back(vertices[0]);
 
   for (unsigned int i = 1; i < vertices.size() - 1; ++i) {
-    Coord xu(vertices[i - 1] - vertices[i]);
-    Coord xv(vertices[i + 1] - vertices[i]);
+    Coord &&xu = vertices[i - 1] - vertices[i];
+    Coord &&xv = vertices[i + 1] - vertices[i];
 
     if ((xu ^ xv).norm() < 1E-3)
       continue;
@@ -379,15 +379,15 @@ vector<Coord> splineCurve(const vector<Coord> &vertices) {
     float n_xv = xv.norm();
     xu /= n_xu;
     xv /= n_xv;
-    Coord bi_xu_xv(xu + xv);
+    Coord &&bi_xu_xv = xu + xv;
     bi_xu_xv /= bi_xu_xv.norm();
-    Coord tgt_xu_xv(xu ^ xv);
+    Coord &&tgt_xu_xv = xu ^ xv;
     tgt_xu_xv /= tgt_xu_xv.norm();
-    Coord dir(tgt_xu_xv ^ bi_xu_xv);
+    Coord &&dir = tgt_xu_xv ^ bi_xu_xv;
     dir /= dir.norm();
-    curve.emplace_back(vertices[i] - (dir * (n_xu / 5.0f)));
+    curve.push_back(vertices[i] - (dir * (n_xu / 5.0f)));
     curve.emplace_back(vertices[i]);
-    curve.emplace_back(vertices[i] + (dir * (n_xv / 5.0f)));
+    curve.push_back(vertices[i] + (dir * (n_xv / 5.0f)));
   }
 
   curve.emplace_back(vertices.back());
@@ -401,23 +401,23 @@ void computeCleanVertices(const vector<Coord> &bends, const Coord &startPoint,
   if (!bends.empty()) {
     result.reserve(bends.size() + 2);
     result.emplace_back(startPoint);
-    Coord lastPoint(bends[0]);
+    const Coord *lastPoint = &bends[0];
 
-    if ((startPoint - lastPoint).norm() > 1E-4)
-      result.emplace_back(lastPoint);
+    if ((startPoint - *lastPoint).norm() > 1E-4)
+      result.emplace_back(*lastPoint);
 
     for (unsigned int i = 1; i < bends.size(); ++i) {
-      Coord currentPoint(bends[i]);
+      const Coord &currentPoint = bends[i];
 
-      if ((currentPoint - lastPoint).norm() > 1E-4) {
+      if ((currentPoint - *lastPoint).norm() > 1E-4) {
         result.emplace_back(currentPoint);
       }
 
-      lastPoint = currentPoint;
+      lastPoint = &currentPoint;
     }
 
-    if ((endPoint - lastPoint).norm() > 1E-4) {
-      lastPoint = endPoint;
+    if ((endPoint - *lastPoint).norm() > 1E-4) {
+      lastPoint = &endPoint;
       result.emplace_back(endPoint);
     }
 
@@ -433,9 +433,9 @@ void computeCleanVertices(const vector<Coord> &bends, const Coord &startPoint,
         startN = startPoint - (result[1] - startPoint);
       }
 
-      norm = (endN - lastPoint).norm();
+      norm = (endN - *lastPoint).norm();
       if (norm && (norm < 1E-4)) {
-        endN = lastPoint + lastPoint - result[result.size() - 2];
+        endN = *lastPoint + *lastPoint - result[result.size() - 2];
       }
     }
   } else {
@@ -603,9 +603,9 @@ void simpleQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2,
 
   CurvePoints result(sz);
   // start point
-  Coord xu(startN - vertices[0]);
+  Coord &&xu = startN - vertices[0];
   xu /= xu.norm();
-  Coord dir(xu ^ lookDir);
+  Coord &&dir = xu ^ lookDir;
 
   if (fabs(dir.norm()) > 1e-3)
     dir /= dir.norm();
@@ -614,7 +614,7 @@ void simpleQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2,
   result(0, 1) = vertices[0] + dir * s1;
 
   //============
-  Coord v(vertices[1] - vertices[0]);
+  Coord &&v = vertices[1] - vertices[0];
   for (unsigned int i = 1; i < sz - 1; ++i) {
     float newSize = sizes[i];
     Coord u(-v);
@@ -627,10 +627,8 @@ void simpleQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2,
 
     newSize /= float(cos(angle / 2.));
 
-    Coord xu(u);
-    Coord xv(v);
-    xu = xu ^ lookDir;
-    xv = xv ^ (-lookDir);
+    Coord &&xu = u ^ lookDir;
+    Coord &&xv = v ^ (-lookDir);
 
     float nrm = xu.norm();
 
@@ -644,7 +642,7 @@ void simpleQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2,
       xv /= nrm;
     }
 
-    Coord xu_xv(xu + xv);
+    Coord &&xu_xv = xu + xv;
 
     nrm = xu_xv.norm();
 
@@ -771,7 +769,7 @@ void bezierQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2,
     for (unsigned int i = 0; i < MAX_BENDS; ++i)
       points[i] = vertices[i];
 
-    Coord dir(vertices[MAX_BENDS - 1] - vertices[(MAX_BENDS - 2)]);
+    Coord &&dir = vertices[MAX_BENDS - 1] - vertices[(MAX_BENDS - 2)];
     dir /= dir.norm();
     dir *= ((vertices[MAX_BENDS - 1] - vertices[MAX_BENDS]).norm() / 5.f);
     bezierQuad(points, c1, colors[MAX_BENDS - 1], s1, sizes[MAX_BENDS - 1], startN,
@@ -861,7 +859,7 @@ void bezierLine(const vector<Coord> &vertices, const Color &c1, const Color &c2)
 
     bezierLine(points, c1, colors[MAX_BENDS - 1]);
 
-    Coord dir = vertices[MAX_BENDS - 1] - vertices[(MAX_BENDS - 2)];
+    Coord &&dir = vertices[MAX_BENDS - 1] - vertices[(MAX_BENDS - 2)];
     dir /= dir.norm();
     dir *= ((vertices[MAX_BENDS - 1] - vertices[MAX_BENDS]).norm() / 5.f);
 

@@ -135,8 +135,8 @@ void GlSceneZoomAndPan::zoomAndPanAnimationStep(int animationStep) {
     camera.setEyes(camera.getEyes() + camera.getCenter());
     camera.setUp(Coord(0, 1., 0));
 
-    Coord bbViewportFirst = camera.worldTo2DViewport(camera.getCenter() - Coord(w / 2, w / 2, 0));
-    Coord bbViewportSecond = camera.worldTo2DViewport(camera.getCenter() + Coord(w / 2, w / 2, 0));
+    Coord &&bbViewportFirst = camera.worldTo2DViewport(camera.getCenter() - Coord(w / 2, w / 2, 0));
+    Coord &&bbViewportSecond = camera.worldTo2DViewport(camera.getCenter() + Coord(w / 2, w / 2, 0));
     float bbWidthViewport = abs(bbViewportSecond.getX() - bbViewportFirst.getX());
     float bbHeightViewport = abs(bbViewportSecond.getY() - bbViewportFirst.getY());
     double newZoomFactor = 0.0;

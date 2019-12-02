@@ -834,9 +834,9 @@ void ScatterPlot2DView::generateScatterPlots() {
 
   double sceneRadiusBak = getGlMainWidget()->getScene()->getGraphCamera().getSceneRadius();
   double zoomFactorBak = getGlMainWidget()->getScene()->getGraphCamera().getZoomFactor();
-  Coord &&eyesBak = getGlMainWidget()->getScene()->getGraphCamera().getEyes();
-  Coord &&centerBak = getGlMainWidget()->getScene()->getGraphCamera().getCenter();
-  Coord &&upBak = getGlMainWidget()->getScene()->getGraphCamera().getUp();
+  Coord eyesBak = getGlMainWidget()->getScene()->getGraphCamera().getEyes();
+  Coord centerBak = getGlMainWidget()->getScene()->getGraphCamera().getCenter();
+  Coord upBak = getGlMainWidget()->getScene()->getGraphCamera().getUp();
 
   GlProgressBar *progressBar = new GlProgressBar(Coord(0.0f, 0.0f, 0.0f), 600.0f, 100.0f,
                                                  // use same green color as the highlighting one

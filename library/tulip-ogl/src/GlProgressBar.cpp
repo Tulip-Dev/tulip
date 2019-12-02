@@ -37,14 +37,10 @@ GlProgressBar::GlProgressBar(const Coord &centerPosition, const unsigned int wid
                              const unsigned int height, const Color &pbColor,
                              const Color &commColor)
     : progressBarColor(pbColor), commentColor(commColor) {
-  Coord globalFrameVertice1 =
-      Coord(centerPosition.getX() - (width / 2.), centerPosition.getY() + (height / 2.));
-  Coord globalFrameVertice2 =
-      Coord(centerPosition.getX() + (width / 2.), centerPosition.getY() + (height / 2.));
-  Coord globalFrameVertice3 =
-      Coord(centerPosition.getX() + (width / 2.), centerPosition.getY() - (height / 2.));
-  Coord globalFrameVertice4 =
-      Coord(centerPosition.getX() - (width / 2.), centerPosition.getY() - (height / 2.));
+  Coord globalFrameVertice1(centerPosition.getX() - (width / 2.), centerPosition.getY() + (height / 2.));
+  Coord globalFrameVertice2(centerPosition.getX() + (width / 2.), centerPosition.getY() + (height / 2.));
+  Coord globalFrameVertice3(centerPosition.getX() + (width / 2.), centerPosition.getY() - (height / 2.));
+  Coord globalFrameVertice4(centerPosition.getX() - (width / 2.), centerPosition.getY() - (height / 2.));
 
   vector<Coord> globalFrameCoords;
   globalFrameCoords.reserve(4);
@@ -72,10 +68,10 @@ GlProgressBar::GlProgressBar(const Coord &centerPosition, const unsigned int wid
                               centerPosition.getY() - ((1. / 10.) * (height / 2.)), 0);
   commentLabelCenter = Coord(centerPosition.getX(), centerPosition.getY() + (height / 4.), 0);
 
-  Coord progressBarFrameVertice1 = progressBarTLCorner + Coord(-2, 2, 0);
-  Coord progressBarFrameVertice2 = progressBarFrameVertice1 + Coord(progressBarMaxWidth + 2, 0, 0);
-  Coord progressBarFrameVertice3 = progressBarFrameVertice2 + Coord(0, -(progressBarHeight + 2), 0);
-  Coord progressBarFrameVertice4 =
+  Coord &&progressBarFrameVertice1 = progressBarTLCorner + Coord(-2, 2, 0);
+  Coord &&progressBarFrameVertice2 = progressBarFrameVertice1 + Coord(progressBarMaxWidth + 2, 0, 0);
+  Coord &&progressBarFrameVertice3 = progressBarFrameVertice2 + Coord(0, -(progressBarHeight + 2), 0);
+  Coord &&progressBarFrameVertice4 =
       progressBarFrameVertice3 + Coord(-(progressBarMaxWidth + 2), 0, 0);
 
   vector<Coord> progressBarFrameCoords;

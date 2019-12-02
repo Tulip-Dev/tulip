@@ -621,9 +621,9 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
   Camera &cam = getGlMainWidget()->getScene()->getGraphCamera();
   double sceneRadiusBak = cam.getSceneRadius();
   double zoomFactorBak = cam.getZoomFactor();
-  Coord &&eyesBak = cam.getEyes();
-  Coord &&centerBak = cam.getCenter();
-  Coord &&upBak = cam.getUp();
+  Coord eyesBak = cam.getEyes();
+  Coord centerBak = cam.getCenter();
+  Coord upBak = cam.getUp();
   float width = cam.getBoundingBox().width();
 
   GlProgressBar *progressBar =

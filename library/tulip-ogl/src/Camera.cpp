@@ -59,15 +59,16 @@ void Camera::setScene(GlScene *scene) {
 }
 //===================================================
 BoundingBox Camera::getBoundingBox() const {
-  BoundingBox bb(viewportTo3DWorld(Coord(scene->getViewport()[0], scene->getViewport()[1], 0)),
-                 viewportTo3DWorld(Coord(scene->getViewport()[0] + scene->getViewport()[2],
-                                         scene->getViewport()[1] + scene->getViewport()[3], 0)),
+  const Vector<int, 4> &viewport = scene->getViewport();
+  BoundingBox bb(viewportTo3DWorld(Coord(viewport[0], viewport[1], 0)),
+                 viewportTo3DWorld(Coord(viewport[0] + viewport[2],
+                                         viewport[1] + viewport[3], 0)),
                  true);
   return bb;
 }
 //====================================================
 void Camera::move(float speed) {
-  Coord move = eyes - center;
+  Coord &&move = eyes - center;
   move *= speed / move.norm();
   eyes += move;
   center += move;
@@ -82,7 +83,7 @@ void Camera::rotate(float angle, float x, float y, float z) {
   Coord vNewUp;
 
   // Get the eyes vector (The direction we are facing)
-  Coord vEyes = eyes - center;
+  Coord &&vEyes = eyes - center;
 
   // Calculate the sine and cosine of the angle once
   float cosTheta = float(cos(angle));
@@ -129,7 +130,7 @@ void Camera::rotate(float angle, float x, float y, float z) {
 }
 //====================================================
 void Camera::strafeLeftRight(float speed) {
-  Coord strafeVector = ((eyes - center) ^ up);
+  Coord &&strafeVector = ((eyes - center) ^ up);
   strafeVector *= speed / strafeVector.norm();
   center += strafeVector;
   eyes += strafeVector;
@@ -214,7 +215,7 @@ void Camera::initProjection(const Vector<int, 4> &viewport, bool reset) {
 
   if (valid && v1 != v2) {
     sceneBoundingBox.expand(eyes, valid);
-    Coord diagCoord(sceneBoundingBox[1] - sceneBoundingBox[0]);
+    Coord &&diagCoord = sceneBoundingBox[1] - sceneBoundingBox[0];
     double diag = 2 * sqrt(diagCoord[0] * diagCoord[0] + diagCoord[1] * diagCoord[1] +
                            diagCoord[2] * diagCoord[2]);
     _near = -diag;
@@ -254,7 +255,7 @@ void Camera::initProjection(const Vector<int, 4> &viewport, bool reset) {
 }
 //====================================================
 void Camera::initProjection(bool reset) {
-  Vector<int, 4> viewport = scene->getViewport();
+  const Vector<int, 4> &viewport = scene->getViewport();
   assert(viewport[2] != 0 && viewport[3] != 0);
   initProjection(viewport, reset);
 }
@@ -403,10 +404,10 @@ Coord Camera::viewportTo3DWorld(const Coord &point) const {
   const_cast<Camera *>(this)->initProjection();
   const_cast<Camera *>(this)->initModelView();
 
-  Vector<int, 4> viewport = getViewport();
+  const Vector<int, 4> &viewport = scene->getViewport();
 
   // Try to find a good z-coordinate for reverse projection
-  Coord pScr = projectPoint(Coord(0, 0, 0), transformMatrix, viewport);
+  Coord &&pScr = projectPoint(Coord(0, 0, 0), transformMatrix, viewport);
 
   pScr[0] = viewport[0] + viewport[2] - point[0];
   pScr[1] = viewport[1] + viewport[3] - point[1];
@@ -421,11 +422,11 @@ Coord Camera::worldTo2DViewport(const Coord &obj) const {
   const_cast<Camera *>(this)->initProjection();
   const_cast<Camera *>(this)->initModelView();
 
-  Vector<int, 4> viewport = getViewport();
+  const Vector<int, 4> &viewport = scene->getViewport();
   return projectPoint(obj, transformMatrix, viewport) - Coord(viewport[0], viewport[1]);
 }
 //====================================================
-Vector<int, 4> Camera::getViewport() const {
+const Vector<int, 4> &Camera::getViewport() const {
   return scene->getViewport();
 }
 //====================================================

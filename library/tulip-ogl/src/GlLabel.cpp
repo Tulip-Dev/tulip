@@ -93,7 +93,7 @@ static const int SpaceBetweenLine = 5;
 GlLabel::GlLabel() : leftAlign(false), oldCamera(nullptr) {
   init();
 }
-GlLabel::GlLabel(Coord centerPosition, Size size, Color fontColor, bool leftAlign)
+GlLabel::GlLabel(const Coord &centerPosition, const Size &size, Color fontColor, bool leftAlign)
     : centerPosition(centerPosition), size(size), color(fontColor), leftAlign(leftAlign),
       oldCamera(nullptr) {
   init();
@@ -266,7 +266,7 @@ void GlLabel::draw(float, Camera *camera) {
     glPushMatrix();
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
-    Coord test =
+    Coord &&test =
         camera->viewportTo3DWorld(Coord(1, 1, 1)) - camera->viewportTo3DWorld(Coord(0, 0, 0));
     test /= test.norm();
     lod = (camera->worldTo2DViewport(test) - camera->worldTo2DViewport(Coord(0, 0, 0))).norm();
@@ -509,7 +509,7 @@ void GlLabel::draw(float, Camera *camera) {
     MatrixGL invTransformMatrix(transformMatrix);
     invTransformMatrix.inverse();
 
-    Coord baseCenter = projectPoint(centerPosition, transformMatrix, camera->getViewport());
+    Coord &&baseCenter = projectPoint(centerPosition, transformMatrix, camera->getViewport());
     baseCenter = unprojectPoint(baseCenter, invTransformMatrix, camera->getViewport());
 
     BoundingBox billboardedBB(

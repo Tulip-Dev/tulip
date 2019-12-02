@@ -405,7 +405,7 @@ void GlComplexPolygon::runTesselation() {
       }
 
       // transform the polygon to a list of triangles
-      Coord centerPoint = verticesTmp[0];
+      const Coord &centerPoint = verticesTmp[0];
 
       for (size_t j = 1; j < verticesTmp.size() - 1; ++j) {
         verticesIndices.push_back(vidx[centerPoint]);

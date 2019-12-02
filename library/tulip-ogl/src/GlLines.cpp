@@ -164,17 +164,17 @@ void GlLines::glDrawSplineCurve(const Coord &startPoint, const vector<Coord> &be
     else
       p4 = endPoint;
 
-    Coord v03 = p3 - p0;
-    Coord v34 = p4 - p3;
+    Coord &&v03 = p3 - p0;
+    Coord &&v34 = p4 - p3;
     v03 = v03 / v03.norm();
     v34 = v34 / v34.norm();
     p1 = v03 + p0;
     double scalaireTmp = v03.dotProduct(v34) / (v03.norm() * v34.norm());
 
     if ((scalaireTmp < 0.99999) && (scalaireTmp > -0.9999999)) {
-      Coord vP2 = (((v03 ^ v34) ^ (v34 - v03)));
+      Coord &&vP2 = (v03 ^ v34) ^ (v34 - v03);
       vP2 = vP2 / vP2.norm();
-      Coord vP1 = (((v03 ^ v34) ^ (v03 - v34)));
+      Coord &&vP1 = (v03 ^ v34) ^ (v03 - v34);
       vP1 = vP1 / vP1.norm();
       p2 = vP2 + p3;
       p1next = vP1 + p3;
@@ -212,8 +212,8 @@ void GlLines::glDrawSplineCurve(const Coord &startPoint, const vector<Coord> &be
     else
       p4 = endPoint;
 
-    Coord v03 = p3 - p0;
-    Coord v34 = p4 - p3;
+    Coord &&v03 = p3 - p0;
+    Coord &&v34 = p4 - p3;
     double scalaireTmp = v03.dotProduct(v34) / (v03.norm() * v34.norm());
 
     if ((scalaireTmp < 0.99999) && (scalaireTmp > -0.9999999)) {
@@ -302,17 +302,17 @@ void GlLines::glDrawSpline2Curve(const Coord &startPoint, const vector<Coord> &b
     else
       p4 = endPoint;
 
-    Coord v03 = p3 - p0;
-    Coord v34 = p4 - p3;
+    Coord &&v03 = p3 - p0;
+    Coord &&v34 = p4 - p3;
     double scalaireTmp = v03.dotProduct(v34) / (v03.norm() * v34.norm());
 
     if ((scalaireTmp < 0.99999) && (scalaireTmp > -0.9999999)) {
       v03 = v03 / v03.norm();
       v34 = v34 / v34.norm();
       p1 = v03 + p0;
-      Coord vP2 = (((v03 ^ v34) ^ (v34 - v03)));
+      Coord &&vP2 = (v03 ^ v34) ^ (v34 - v03);
       vP2 = vP2 / vP2.norm();
-      Coord vP1 = (((v03 ^ v34) ^ (v03 - v34)));
+      Coord &&vP1 = (v03 ^ v34) ^ (v03 - v34);
       vP1 = vP1 / vP1.norm();
       p2 = vP2 + p3;
       p1next = vP1 + p3;
@@ -336,16 +336,16 @@ void GlLines::glDrawSpline2Curve(const Coord &startPoint, const vector<Coord> &b
     else
       p4 = endPoint;
 
-    Coord v03 = p3 - p0;
-    Coord v34 = p4 - p3;
+    Coord &&v03 = p3 - p0;
+    Coord &&v34 = p4 - p3;
     double scalaireTmp = v03.dotProduct(v34) / (v03.norm() * v34.norm());
 
     if ((scalaireTmp < 0.99999) && (scalaireTmp > -0.9999999)) {
       v03 = v03 / v03.norm();
       v34 = v34 / v34.norm();
-      Coord vP2 = (((v03 ^ v34) ^ (v34 - v03)));
+      Coord &&vP2 = (v03 ^ v34) ^ (v34 - v03);
       vP2 = vP2 / vP2.norm();
-      Coord vP1 = (((v03 ^ v34) ^ (v03 - v34)));
+      Coord &&vP1 = (v03 ^ v34) ^ (v03 - v34);
       vP1 = vP1 / vP1.norm();
       p2 = vP2 + p3;
       p1next = vP1 + p3;

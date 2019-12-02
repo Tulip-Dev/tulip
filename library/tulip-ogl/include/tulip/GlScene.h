@@ -315,7 +315,7 @@ public:
    * @brief Get the viewport of the scene
    * The viewport will be in many case the size of the widget containing the scene
    */
-  Vector<int, 4> getViewport() const {
+  const Vector<int, 4> &getViewport() const {
     return viewport;
   }
 
@@ -430,9 +430,8 @@ public:
    * Layers will not be deleted in this function
    */
   void clearLayersList() {
-    for (std::vector<std::pair<std::string, GlLayer *>>::iterator it = layersList.begin();
-         it != layersList.end(); ++it)
-      delete it->second;
+    for (auto &it : layersList)
+      delete it.second;
 
     layersList.clear();
   }

@@ -64,7 +64,7 @@ public:
    * @param fontColor color of the label
    * @param leftAlign true if you want a left align label
    */
-  GlLabel(Coord centerPosition, Size size, Color fontColor, bool leftAlign = false);
+  GlLabel(const Coord &centerPosition, const Size &size, Color fontColor, bool leftAlign = false);
 
   /**
    * @brief Destructor
