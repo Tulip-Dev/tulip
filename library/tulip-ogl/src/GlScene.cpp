@@ -655,7 +655,8 @@ void GlScene::glGraphCompositeRemoved(GlLayer *layer, GlGraphComposite *glGraphC
 }
 
 // original gluPickMatrix code from Mesa
-static void pickMatrix(GLdouble x, GLdouble y, GLdouble width, GLdouble height, const Vector<int, 4> &viewport) {
+static void pickMatrix(GLdouble x, GLdouble y, GLdouble width, GLdouble height,
+                       const Vector<int, 4> &viewport) {
   GLfloat m[16];
   GLfloat sx, sy;
   GLfloat tx, ty;

@@ -61,8 +61,7 @@ void Camera::setScene(GlScene *scene) {
 BoundingBox Camera::getBoundingBox() const {
   const Vector<int, 4> &viewport = scene->getViewport();
   BoundingBox bb(viewportTo3DWorld(Coord(viewport[0], viewport[1], 0)),
-                 viewportTo3DWorld(Coord(viewport[0] + viewport[2],
-                                         viewport[1] + viewport[3], 0)),
+                 viewportTo3DWorld(Coord(viewport[0] + viewport[2], viewport[1] + viewport[3], 0)),
                  true);
   return bb;
 }

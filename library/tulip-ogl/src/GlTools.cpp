@@ -418,7 +418,8 @@ std::vector<Coord> computeNormals(const std::vector<Coord> &vertices,
   normals.resize(vertices.size(), Coord(0, 0, 0));
 
   for (size_t i = 0; i < facesIndices.size(); i += 3) {
-    const Coord &v1 = vertices[facesIndices[i]], &v2 = vertices[facesIndices[i + 1]], &v3 = vertices[facesIndices[i + 2]];
+    const Coord &v1 = vertices[facesIndices[i]], &v2 = vertices[facesIndices[i + 1]],
+                &v3 = vertices[facesIndices[i + 2]];
     Coord &&normal = (v2 - v1) ^ (v3 - v1);
 
     if (normal.norm() != 0) {
