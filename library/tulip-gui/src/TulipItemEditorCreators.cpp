@@ -729,8 +729,6 @@ QWidget *EdgeExtremityShapeEditorCreator::createWidget(QWidget *parent) const {
   std::list<std::pair<QString, QPixmap>> shapes;
   shapes.push_back(std::make_pair(QString("NONE"), QPixmap()));
 
-  std::list<std::string> glyphs();
-
   for (const auto &glyphName : PluginLister::availablePlugins<EdgeExtremityGlyph>()) {
     QString shapeName = tlpStringToQString(glyphName);
     QPixmap pixmap =

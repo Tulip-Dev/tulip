@@ -39,7 +39,7 @@ static bool getIntersection(float fDst1, float fDst2, const tlp::Vec3f &p1, cons
 
 namespace tlp {
 
-static std::array<std::array<float, 3>, 2> _invalidBB{{{1, 1, 1}, {-1, -1, -1}}};
+  static std::array<std::array<float, 3>, 2> _invalidBB{{{{1, 1, 1}}, {{-1, -1, -1}}}};
 
 BoundingBox::BoundingBox() {
   // set as invalid
