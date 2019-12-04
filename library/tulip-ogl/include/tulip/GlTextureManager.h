@@ -56,7 +56,7 @@ public:
 #ifdef TULIP_BUILD_GL_TEX_LOADER
   virtual bool loadTexture(const std::string &filename, GlTexture &texture);
 #else
-  virtual bool loadTexture(const std::string &filename, GlTexture &texture)=0;
+  virtual bool loadTexture(const std::string &filename, GlTexture &texture) = 0;
 #endif
   virtual ~GlTextureLoader() {}
 };
