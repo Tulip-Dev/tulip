@@ -57,7 +57,6 @@ if "%TULIP_BUILD_CORE_ONLY%" == "0" (
 :install_complete_tulip_build_dependencies
 bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-freetype"
 bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-glew"
-bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-libpng"
 bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-qt5"
 bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-quazip"
 bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-qtwebkit"

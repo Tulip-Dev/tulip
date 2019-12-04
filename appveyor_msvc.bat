@@ -53,18 +53,6 @@ if "%TULIP_BUILD_CORE_ONLY%" == "0" (
 
 
 :install_complete_tulip_build_dependencies
-rem get, compile and install libpng
-cd C:/tulip_dependencies
-curl -LO https://sourceforge.mirrorservice.org/l/li/libpng/libpng16/1.6.35/libpng-1.6.35.tar.gz
-if %errorlevel% neq 0 exit /b %errorlevel%
-7z x libpng-1.6.35.tar.gz -so | 7z x -aoa -si -ttar
-cd libpng-1.6.35
-md build && cd build
-cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INCLUDE_PATH="C:/tulip_dependencies/include" -DCMAKE_LIBRARY_PATH="C:/tulip_dependencies/lib" -DCMAKE_INSTALL_PREFIX="C:/tulip_dependencies" ..
-if %errorlevel% neq 0 exit /b %errorlevel%
-msbuild INSTALL.vcxproj /clp:ErrorsOnly /p:Configuration=Release %CLCACHE_MSBUILD_CONF%
-if %errorlevel% neq 0 exit /b %errorlevel%
-
 rem get, compile and install freetype
 cd C:/tulip_dependencies
 curl -LO http://download.savannah.gnu.org/releases/freetype/freetype-2.8.tar.gz
@@ -84,18 +72,6 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 7z x glew-2.1.0.zip
 cd glew-2.1.0/build/cmake
 cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INSTALL_PREFIX="C:/tulip_dependencies" .
-if %errorlevel% neq 0 exit /b %errorlevel%
-msbuild INSTALL.vcxproj /m /clp:ErrorsOnly /p:Configuration=Release %CLCACHE_MSBUILD_CONF%
-if %errorlevel% neq 0 exit /b %errorlevel%
-
-rem get, compile and install libjpeg
-cd C:/tulip_dependencies
-curl -LO https://sourceforge.mirrorservice.org/l/li/libjpeg-turbo/1.5.2/libjpeg-turbo-1.5.2.tar.gz
-if %errorlevel% neq 0 exit /b %errorlevel%
-7z x libjpeg-turbo-1.5.2.tar.gz -so | 7z x -aoa -si -ttar
-cd libjpeg-turbo-1.5.2
-md build && cd build
-cmake -G "%CMAKE_VS_GENERATOR%" -DWITH_SIMD=OFF -DCMAKE_INSTALL_PREFIX="C:/tulip_dependencies" ..
 if %errorlevel% neq 0 exit /b %errorlevel%
 msbuild INSTALL.vcxproj /m /clp:ErrorsOnly /p:Configuration=Release %CLCACHE_MSBUILD_CONF%
 if %errorlevel% neq 0 exit /b %errorlevel%
