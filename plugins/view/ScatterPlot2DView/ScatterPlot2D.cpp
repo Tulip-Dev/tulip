@@ -345,11 +345,11 @@ void ScatterPlot2D::computeScatterPlotLayout(GlMainWidget *glWidget,
     sumxiyi += (xValue * yValue);
 
     if (reverseLayout == nullptr || dataLocation != NODE) {
-      Coord xValueAxisCoord = xAxis->getAxisPointCoordForValue(xValue);
-      Coord yValueAxisCoord = yAxis->getAxisPointCoordForValue(yValue);
+      Coord &&xValueAxisCoord = xAxis->getAxisPointCoordForValue(xValue);
+      Coord &&yValueAxisCoord = yAxis->getAxisPointCoordForValue(yValue);
       nodeCoord = Coord(xValueAxisCoord.getX(), yValueAxisCoord.getY(), 0.0f);
     } else {
-      Coord nodeCoordReverse = reverseLayout->getNodeValue(n);
+      const Coord &nodeCoordReverse = reverseLayout->getNodeValue(n);
       nodeCoord = Coord(nodeCoordReverse.getY(), nodeCoordReverse.getX(), 0.0f);
     }
 

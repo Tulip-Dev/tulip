@@ -501,15 +501,16 @@ void MouseEdgeBendEditor::computeSrcTgtEntities(GlMainWidget *glMainWidget) {
 
   if (selectedEntity != "targetTriangle") {
     Coord tmp(glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(end));
-    targetTriangle =
-      GlTriangle(std::move(tmp), Size(7, 7, 0), Color(255, 102, 255, 200), Color(128, 20, 20, 200));
+    targetTriangle = GlTriangle(std::move(tmp), Size(7, 7, 0), Color(255, 102, 255, 200),
+                                Color(128, 20, 20, 200));
     targetTriangle.setStartAngle(M_PI + endAngle);
     targetTriangle.setStencil(0);
   }
 
   if (selectedEntity != "sourceCircle") {
     Coord tmp(glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(start));
-    sourceCircle = GlCircle(std::move(tmp), 6, Color(128, 20, 20, 200), Color(255, 102, 255, 200), true, true);
+    sourceCircle =
+        GlCircle(std::move(tmp), 6, Color(128, 20, 20, 200), Color(255, 102, 255, 200), true, true);
     sourceCircle.setStencil(0);
   }
 }
@@ -544,7 +545,8 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
 
     // Bends circles
     for (const Coord &coord : coordinates) {
-      Coord &&tmp = glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(coord);
+      Coord &&tmp =
+          glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(coord);
       basicCircle.set(tmp, 5, 0.);
       circles.push_back(basicCircle);
     }
@@ -594,7 +596,8 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
         }
 
         for (Coord &coord : coordinatesWithRotation) {
-          Coord &&tmp = glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(coord);
+          Coord &&tmp =
+              glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(coord);
           basicCircle.set(tmp, 5, 0.);
           circles.push_back(basicCircle);
         }

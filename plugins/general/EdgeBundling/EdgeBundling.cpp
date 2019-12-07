@@ -187,7 +187,7 @@ void EdgeBundling::computeDistances() {
 //==========================================================================
 void EdgeBundling::computeDistance(node n, unsigned int i) {
   double maxDist = 0;
-  Coord nPos = layout->getNodeValue(n);
+  const Coord &nPos = layout->getNodeValue(n);
   for (auto n2 : vertexCoverGraph->getInOutNodes(n)) {
     double dist = (nPos - layout->getNodeValue(n2)).norm();
     maxDist += dist;
@@ -481,11 +481,8 @@ bool EdgeBundling::run() {
       vector<node> toTreatByThreads;
       set<node> blockNodes;
       vector<node> toDelete;
-      auto it = orderedNodes.begin();
 
-      for (; it != orderedNodes.end(); ++it) {
-        node n = *it;
-
+      for (auto n : orderedNodes) {
         if ((blockNodes.find(n) == blockNodes.end() || optimizationLevel < 3) &&
             (vertexCoverGraph->deg(n) > 0 || optimizationLevel < 2)) {
           bool addOk = true;
@@ -520,9 +517,9 @@ bool EdgeBundling::run() {
       }
 
       if (optimizationLevel > 1)
-        for (unsigned int i = 0; i < toDelete.size(); i++) {
-          orderedNodes.erase(toDelete[i]);
-          vertexCoverGraph->delNode(toDelete[i]);
+        for (auto n : toDelete) {
+          orderedNodes.erase(n);
+          vertexCoverGraph->delNode(n);
         }
 
       forceEdgeTest = false;
@@ -603,19 +600,18 @@ bool EdgeBundling::run() {
         });
       }
 
-      for (size_t j = 0; j < toTreatByThreads.size(); ++j) {
-        node n = toTreatByThreads[j];
-        vector<node> neigbors;
+      for (auto n : toTreatByThreads) {
+        vector<node> neighbors;
         for (auto n2 : vertexCoverGraph->getInOutNodes(n)) {
-          neigbors.push_back(n2);
+          neighbors.push_back(n2);
           orderedNodes.erase(n2);
         }
         orderedNodes.erase(n);
         vertexCoverGraph->delNode(n);
 
-        for (unsigned int i = 0; i < neigbors.size(); ++i) {
-          computeDistance(neigbors[i]);
-          orderedNodes.insert(neigbors[i]);
+        for (auto n2 : neighbors) {
+          computeDistance(n2);
+          orderedNodes.insert(n2);
         }
       }
     }
@@ -643,24 +639,24 @@ bool EdgeBundling::run() {
   }
 
   // Reinsert multiple edges if any and update their layout
-  for (size_t i = 0; i < removedEdges.size(); ++i) {
-    auto eEnds = graph->ends(removedEdges[i]);
+  for (auto re : removedEdges) {
+    auto eEnds = graph->ends(re);
 
     if (eEnds.first == eEnds.second)
-      oriGraph->addEdge(removedEdges[i]);
+      oriGraph->addEdge(re);
     else {
       tlp::edge origEdge = oriGraph->existEdge(eEnds.first, eEnds.second);
 
       if (origEdge.isValid()) {
-        oriGraph->addEdge(removedEdges[i]);
-        layout->setEdgeValue(removedEdges[i], layout->getEdgeValue(origEdge));
+        oriGraph->addEdge(re);
+        layout->setEdgeValue(re, layout->getEdgeValue(origEdge));
       } else {
         origEdge = oriGraph->existEdge(eEnds.second, eEnds.first);
         assert(origEdge.isValid());
-        oriGraph->addEdge(removedEdges[i]);
+        oriGraph->addEdge(re);
         std::vector<tlp::Coord> bends = layout->getEdgeValue(origEdge);
         std::reverse(bends.begin(), bends.end());
-        layout->setEdgeValue(removedEdges[i], bends);
+        layout->setEdgeValue(re, bends);
       }
     }
   }

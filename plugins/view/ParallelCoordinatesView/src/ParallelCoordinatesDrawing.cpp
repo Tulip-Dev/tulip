@@ -103,10 +103,9 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget, GlProgressBa
 
   if (layoutType == PARALLEL) {
     lastAxisCoord.clear();
-    vector<ParallelAxis *> lastAxisOrder(getAllAxis());
 
-    for (size_t i = 0; i < lastAxisOrder.size(); ++i) {
-      lastAxisCoord.push_back(lastAxisOrder[i]->getBaseCoord());
+    for (auto axis : getAllAxis()) {
+      lastAxisCoord.push_back(axis->getBaseCoord());
     }
   }
 
@@ -114,15 +113,14 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget, GlProgressBa
 
   if (layoutType == CIRCULAR) {
     lastAxisRotAngle.clear();
-    vector<ParallelAxis *> lastAxisOrder(getAllAxis());
 
-    for (size_t i = 0; i < lastAxisOrder.size(); ++i) {
-      lastAxisRotAngle.push_back(lastAxisOrder[i]->getRotationAngle());
+    for (auto axis : getAllAxis()) {
+      lastAxisRotAngle.push_back(axis->getRotationAngle());
     }
   }
 
-  for (auto it2 = parallelAxis.begin(); it2 != parallelAxis.end(); ++it2) {
-    (it2->second)->setHidden(true);
+  for (auto &it2 : parallelAxis) {
+    it2.second->setHidden(true);
   }
 
   nbAxis = graphProxy->getNumberOfSelectedProperties();
@@ -302,12 +300,12 @@ void ParallelCoordinatesDrawing::plotData(const unsigned int dataId, const Color
   vector<Coord> polylineCoords;
   vector<Coord> splineCurvePassPoints;
 
-  for (size_t j = 0; j < axisOrder.size(); j++) {
-
-    Coord pointCoord(parallelAxis[axisOrder[j]]->getPointCoordOnAxisForData(dataId));
-    float axisRotAngle = parallelAxis[axisOrder[j]]->getRotationAngle();
+  for (const auto &ao : axisOrder) {
+    ParallelAxis *pa = parallelAxis[ao];
+    const Coord &pointCoord = pa->getPointCoordOnAxisForData(dataId);
+    float axisRotAngle = pa->getRotationAngle();
     ostringstream oss;
-    oss << "data " << dataId << " var " << axisOrder[j];
+    oss << "data " << dataId << " var " << ao;
 
     if (drawPointsOnAxis) {
 
@@ -465,18 +463,17 @@ void ParallelCoordinatesDrawing::swapAxis(ParallelAxis *axis1, ParallelAxis *axi
 
   if (layoutType == PARALLEL) {
 
-    Coord ci(parallelAxis[axis1->getAxisName()]->getBaseCoord());
-    Coord cj(parallelAxis[axis2->getAxisName()]->getBaseCoord());
+    Coord ci = axis1->getBaseCoord();
+    Coord cj = axis2->getBaseCoord();
 
-    parallelAxis[axis1->getAxisName()]->translate(cj - ci);
-    parallelAxis[axis2->getAxisName()]->translate(ci - cj);
+    axis1->translate(cj - ci);
+    axis2->translate(ci - cj);
 
   } else {
 
-    float axis1RotAngle = parallelAxis[axis1->getAxisName()]->getRotationAngle();
-    parallelAxis[axis1->getAxisName()]->setRotationAngle(
-        parallelAxis[axis2->getAxisName()]->getRotationAngle());
-    parallelAxis[axis2->getAxisName()]->setRotationAngle(axis1RotAngle);
+    float axis1RotAngle = axis1->getRotationAngle();
+    axis1->setRotationAngle(axis2->getRotationAngle());
+    axis2->setRotationAngle(axis1RotAngle);
   }
 
   graphProxy->setSelectedProperties(axisOrder);
@@ -671,10 +668,8 @@ void ParallelCoordinatesDrawing::updateWithAxisSlidersRange(
 }
 
 void ParallelCoordinatesDrawing::resetAxisSlidersPosition() {
-  vector<ParallelAxis *> axis = getAllAxis();
-
-  for (auto it = axis.begin(); it != axis.end(); ++it) {
-    (*it)->resetSlidersPosition();
+  for (auto pa : getAllAxis()) {
+    pa->resetSlidersPosition();
   }
 }
 

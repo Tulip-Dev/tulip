@@ -67,31 +67,31 @@ GeolocalisationConfigWidget::~GeolocalisationConfigWidget() {
 
 void GeolocalisationConfigWidget::setGraph(Graph *graph) {
   _ui->addressPropCB->clear();
-  vector<string> stringProperties = getGraphPropertiesListAccordingToType(graph, "string");
+  vector<string> &&stringProperties = getGraphPropertiesListAccordingToType(graph, "string");
 
-  for (size_t i = 0; i < stringProperties.size(); ++i) {
-    _ui->addressPropCB->addItem(tlpStringToQString(stringProperties[i]));
+  for (auto &sp : stringProperties) {
+    _ui->addressPropCB->addItem(tlpStringToQString(sp));
 
     // set viewLabel as the default address property
-    if (stringProperties[i] == "viewLabel")
-      _ui->addressPropCB->setCurrentIndex(i);
+    if (sp == "viewLabel")
+      _ui->addressPropCB->setCurrentIndex(_ui->addressPropCB->count() - 1);
   }
 
   _ui->latPropCB->clear();
   _ui->lngPropCB->clear();
-  vector<string> doubleProperties = getGraphPropertiesListAccordingToType(graph, "double");
+  vector<string> &&doubleProperties = getGraphPropertiesListAccordingToType(graph, "double");
 
-  for (unsigned int i = 0; i < doubleProperties.size(); ++i) {
-    _ui->latPropCB->addItem(tlpStringToQString(doubleProperties[i]));
-    _ui->lngPropCB->addItem(tlpStringToQString(doubleProperties[i]));
+  for (auto &dp : doubleProperties) {
+    _ui->latPropCB->addItem(tlpStringToQString(dp));
+    _ui->lngPropCB->addItem(tlpStringToQString(dp));
   }
 
   _ui->edgesPathsPropertyCB->clear();
-  vector<string> doubleVectorProperties =
+  vector<string> &&doubleVectorProperties =
       getGraphPropertiesListAccordingToType(graph, "vector<double>");
 
-  for (size_t i = 0; i < doubleVectorProperties.size(); ++i) {
-    _ui->edgesPathsPropertyCB->addItem(tlpStringToQString(doubleVectorProperties[i]));
+  for (auto &dvp : doubleVectorProperties) {
+    _ui->edgesPathsPropertyCB->addItem(tlpStringToQString(dvp));
   }
 }
 

@@ -378,49 +378,38 @@ void HistogramView::setState(const DataSet &dataSet) {
 }
 
 DataSet HistogramView::state() const {
-  vector<string> selectedPropertiesTmp = vector<string>(selectedProperties);
-  map<string, Histogram *> histogramsMapTmp = map<string, Histogram *>(histogramsMap);
-
   DataSet dataSet = GlMainView::state();
   dataSet.set("Nodes/Edges", static_cast<unsigned>(dataLocation));
 
-  for (size_t i = 0; i < selectedPropertiesTmp.size(); ++i) {
+  unsigned int i = 0;
+  for (auto &prop : selectedProperties) {
     std::stringstream ss;
-    ss << i;
+    ss << i++;
     DataSet histogramParameters;
-    histogramParameters.set("property name", selectedPropertiesTmp[i]);
-    histogramParameters.set("nb histogram bins",
-                            histogramsMapTmp[selectedPropertiesTmp[i]]->getNbHistogramBins());
-    histogramParameters.set("x axis nb graduations",
-                            histogramsMapTmp[selectedPropertiesTmp[i]]->getNbXGraduations());
-    histogramParameters.set("y axis increment step",
-                            histogramsMapTmp[selectedPropertiesTmp[i]]->getYAxisIncrementStep());
-    histogramParameters.set(
-        "cumulative frequencies histogram",
-        histogramsMapTmp[selectedPropertiesTmp[i]]->cumulativeFrequenciesHistogram());
-    histogramParameters.set(
-        "uniform quantification",
-        histogramsMapTmp[selectedPropertiesTmp[i]]->uniformQuantificationHistogram());
-    histogramParameters.set("x axis logscale",
-                            histogramsMapTmp[selectedPropertiesTmp[i]]->xAxisLogScaleSet());
-    histogramParameters.set("y axis logscale",
-                            histogramsMapTmp[selectedPropertiesTmp[i]]->yAxisLogScaleSet());
-    bool customScale = histogramsMapTmp[selectedPropertiesTmp[i]]->getXAxisScaleDefined();
+    auto histo = histogramsMap.find(prop)->second;
+    histogramParameters.set("property name", prop);
+    histogramParameters.set("nb histogram bins", histo->getNbHistogramBins());
+    histogramParameters.set("x axis nb graduations", histo->getNbXGraduations());
+    histogramParameters.set("y axis increment step", histo->getYAxisIncrementStep());
+    histogramParameters.set("cumulative frequencies histogram",
+                            histo->cumulativeFrequenciesHistogram());
+    histogramParameters.set("uniform quantification", histo->uniformQuantificationHistogram());
+    histogramParameters.set("x axis logscale", histo->xAxisLogScaleSet());
+    histogramParameters.set("y axis logscale", histo->yAxisLogScaleSet());
+    bool customScale = histo->getXAxisScaleDefined();
     histogramParameters.set("x axis custom scale", customScale);
 
     if (customScale) {
-      const std::pair<double, double> &scale =
-          histogramsMapTmp[selectedPropertiesTmp[i]]->getXAxisScale();
+      const std::pair<double, double> &scale = histo->getXAxisScale();
       histogramParameters.set("x axis scale min", scale.first);
       histogramParameters.set("x axis scale max", scale.second);
     }
 
-    customScale = histogramsMapTmp[selectedPropertiesTmp[i]]->getYAxisScaleDefined();
+    customScale = histo->getYAxisScaleDefined();
     histogramParameters.set("y axis custom scale", customScale);
 
     if (customScale) {
-      const std::pair<double, double> &scale =
-          histogramsMapTmp[selectedPropertiesTmp[i]]->getYAxisScale();
+      const std::pair<double, double> &scale = histo->getYAxisScale();
       histogramParameters.set("y axis scale min", scale.first);
       histogramParameters.set("y axis scale max", scale.second);
     }
@@ -949,7 +938,7 @@ void HistogramView::registerTriggers() {
 }
 
 void HistogramView::interactorsInstalled(const QList<tlp::Interactor *> &) {
-  toggleInteractors(false);
+  toggleInteractors(detailedHistogram != nullptr);
 }
 
 void HistogramView::applySettings() {

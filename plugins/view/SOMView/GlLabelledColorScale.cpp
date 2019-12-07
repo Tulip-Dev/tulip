@@ -106,7 +106,7 @@ BoundingBox GlLabelledColorScale::getColorScaleBoundingBox() {
 
 void GlLabelledColorScale::setPosition(tlp::Coord nPosition) {
 
-  Coord mouvement = nPosition - position;
+  Coord &&mouvement = nPosition - position;
 
   glColorScale->translate(mouvement);
   minLabel->translate(mouvement);
@@ -115,7 +115,7 @@ void GlLabelledColorScale::setPosition(tlp::Coord nPosition) {
   position = nPosition;
 }
 
-void GlLabelledColorScale::setSize(tlp::Size nSize) {
+void GlLabelledColorScale::setSize(const tlp::Size &nSize) {
 
   ColorScale *cs = glColorScale->getColorScale();
   size = nSize;

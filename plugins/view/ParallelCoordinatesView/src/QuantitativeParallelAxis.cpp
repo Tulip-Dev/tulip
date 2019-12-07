@@ -160,10 +160,9 @@ void QuantitativeParallelAxis::computeBoxPlotCoords() {
     double lowBorder = (firstQuartile - (1.5 * (thirdQuartile - firstQuartile)));
     double bottomOutlier = 0.0;
 
-    for (vector<double>::const_iterator it = propertyValuesVector.begin();
-         it != propertyValuesVector.end(); ++it) {
-      if (*it > lowBorder) {
-        bottomOutlier = *it;
+    for (auto val : propertyValuesVector) {
+      if (val > lowBorder) {
+        bottomOutlier = val;
         break;
       }
     }

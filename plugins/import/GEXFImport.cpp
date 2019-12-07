@@ -532,11 +532,11 @@ public:
       auto eEnds = graph->ends(e);
       const Coord &srcCoord = viewLayout->getNodeValue(eEnds.first);
       const Coord &tgtCoord = viewLayout->getNodeValue(eEnds.second);
-      Coord dir = tgtCoord - srcCoord;
+      Coord &&dir = tgtCoord - srcCoord;
       dir /= dir.norm();
       float length = srcCoord.dist(tgtCoord);
       float factor = 0.2f * length;
-      Coord normal = Coord(dir[1], -dir[0]);
+      Coord &&normal = Coord(dir[1], -dir[0]);
       normal *= factor;
 
       Coord p1 = dir;
@@ -544,17 +544,13 @@ public:
       p1 += srcCoord;
       p1 += normal;
 
-      Coord p2 = dir;
+      Coord p2 = std::move(dir);
       p2 *= -factor;
       p2 += tgtCoord;
       p2 += normal;
 
       // Set the second and third Cubic Bézier curve control points as edge bends
-      vector<Coord> bends;
-      bends.emplace_back(p1);
-      bends.emplace_back(p2);
-
-      viewLayout->setEdgeValue(e, bends);
+      viewLayout->setEdgeValue(e, vector<Coord>{{p1, p2}});
     }
   }
 

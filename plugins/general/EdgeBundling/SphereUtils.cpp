@@ -32,7 +32,7 @@ float centerOnOriginAndScale(Graph *graph, LayoutProperty *layout, float dist) {
       tlp::computeBoundingBox(graph, graph->getProperty<LayoutProperty>("viewLayout"),
                               graph->getProperty<SizeProperty>("viewSize"),
                               graph->getProperty<DoubleProperty>("viewRotation"), nullptr);
-  Coord move_coord = Coord((bb[0] + bb[1])) / (-2.f);
+  Coord &&move_coord = (bb[0] + bb[1]) / (-2.f);
   layout->translate(move_coord, graph);
   float ray = (move_coord - bb[1]).norm();
   float scaleFactor = dist / ray;
@@ -47,11 +47,10 @@ void moveBendsToSphere(Graph *graph, float ray, LayoutProperty *layout) {
     bends = layout->getEdgeValue(e);
 
     for (size_t i = 0; i < bends.size(); ++i) {
-      Coord c = bends[i];
+      Coord &c = bends[i];
       double dist = c.norm();
       c /= dist;
       c *= ray;
-      bends[i] = c;
     }
 
     layout->setEdgeValue(e, bends);
@@ -83,19 +82,13 @@ void addSphereGraph(Graph *graph, double radius) {
     double teta = 5;
 
     while (teta < 180) {
-      node n = graph->addNode();
-      Coord c = getCoordFromPolar(radius, rho, teta);
-      layout->setNodeValue(n, c);
+      layout->setNodeValue(graph->addNode(), getCoordFromPolar(radius, rho, teta));
       teta += 5.;
     }
 
     rho += 5.;
   }
 
-  node n = graph->addNode();
-  Coord c = getCoordFromPolar(radius, 0, 0);
-  layout->setNodeValue(n, c);
-  n = graph->addNode();
-  c = getCoordFromPolar(radius, 0, 180);
-  layout->setNodeValue(n, c);
+  layout->setNodeValue(graph->addNode(), getCoordFromPolar(radius, 0, 0));
+  layout->setNodeValue(graph->addNode(), getCoordFromPolar(radius, 0, 180));
 }

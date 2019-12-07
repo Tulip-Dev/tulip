@@ -42,7 +42,7 @@ GlPolyQuad::GlPolyQuad(const vector<Coord> &polyQuadEdges, const vector<Color> &
          polyQuadEdgesColors.size() == (polyQuadEdges.size() / 2));
 
   for (size_t i = 0; i < (polyQuadEdges.size() / 2); ++i) {
-    addQuadEdge(polyQuadEdges[2 * i], polyQuadEdges[2 * i + 1], polyQuadEdgesColors[i]);
+    addQuadEdge(polyQuadEdges[2 * i], polyQuadEdges[2 * i + 1], polyQuadEdgesColors[i], i != 0);
   }
 }
 
@@ -55,15 +55,16 @@ GlPolyQuad::GlPolyQuad(const std::vector<Coord> &polyQuadEdges, const Color &pol
   assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdges.size() > 2);
 
   for (size_t i = 0; i < (polyQuadEdges.size() / 2); ++i) {
-    addQuadEdge(polyQuadEdges[2 * i], polyQuadEdges[2 * i + 1], polyQuadColor);
+    addQuadEdge(polyQuadEdges[2 * i], polyQuadEdges[2 * i + 1], polyQuadColor, i != 0);
   }
 }
 
-void GlPolyQuad::addQuadEdge(const Coord &startEdge, const Coord &endEdge, const Color &edgeColor) {
+void GlPolyQuad::addQuadEdge(const Coord &startEdge, const Coord &endEdge, const Color &edgeColor,
+                             bool noCheck) {
   polyQuadEdges.emplace_back(startEdge);
   polyQuadEdges.emplace_back(endEdge);
-  boundingBox.expand(startEdge);
-  boundingBox.expand(endEdge);
+  boundingBox.expand(startEdge, noCheck);
+  boundingBox.expand(endEdge, true);
   polyQuadEdgesColors.push_back(edgeColor);
 }
 
@@ -114,7 +115,7 @@ void GlPolyQuad::draw(float, Camera *) {
       texCoordsArray.push_back(GLfloat(i));
       texCoordsArray.push_back(1.0f);
       colorsArray.emplace_back(startColor);
-      colorsArray.emplace_back(startColor);
+      colorsArray.push_back(std::move(startColor));
 
       quadIndices.push_back(2 * i);
       quadIndices.push_back(2 * i + 1);
@@ -128,11 +129,11 @@ void GlPolyQuad::draw(float, Camera *) {
 
         unsigned int n = i * nbSubdivisionsPerSegment + j;
 
-        Coord v1 = polyQuadEdges[2 * i] + (j / float(nbSubdivisionsPerSegment - 1)) *
-                                              (polyQuadEdges[2 * (i + 1)] - polyQuadEdges[2 * i]);
-        Coord v2 = polyQuadEdges[2 * i + 1] +
-                   (j / float(nbSubdivisionsPerSegment - 1)) *
-                       (polyQuadEdges[2 * (i + 1) + 1] - polyQuadEdges[2 * i + 1]);
+        Coord &&v1 = polyQuadEdges[2 * i] + (j / float(nbSubdivisionsPerSegment - 1)) *
+                                                (polyQuadEdges[2 * (i + 1)] - polyQuadEdges[2 * i]);
+        Coord &&v2 = polyQuadEdges[2 * i + 1] +
+                     (j / float(nbSubdivisionsPerSegment - 1)) *
+                         (polyQuadEdges[2 * (i + 1) + 1] - polyQuadEdges[2 * i + 1]);
         vertexArray.push_back(std::move(v1));
         vertexArray.push_back(std::move(v2));
 
@@ -144,7 +145,7 @@ void GlPolyQuad::draw(float, Camera *) {
         texCoordsArray.push_back(GLfloat(i) + GLfloat(j) * texCoordFactor);
         texCoordsArray.push_back(1.0f);
 
-        Vector<float, 4> color =
+        Vector<float, 4> &&color =
             startColor + (j / float(nbSubdivisionsPerSegment - 1)) * (endColor - startColor);
         colorsArray.emplace_back(color);
         colorsArray.push_back(std::move(color));
@@ -168,7 +169,7 @@ void GlPolyQuad::draw(float, Camera *) {
       texCoordsArray.push_back(GLfloat(i + 1));
       texCoordsArray.push_back(1.0f);
       colorsArray.emplace_back(endColor);
-      colorsArray.emplace_back(endColor);
+      colorsArray.push_back(std::move(endColor));
     }
   }
 
@@ -254,8 +255,6 @@ void GlPolyQuad::setWithXML(const string &inString, unsigned int &currentPositio
   GlXMLTools::setWithXML(inString, currentPosition, "polyQuadEdgesColors", polyQuadEdgesColors);
   GlXMLTools::setWithXML(inString, currentPosition, "textureName", textureName);
 
-  for (const Coord &coord : polyQuadEdges) {
-    boundingBox.expand(coord);
-  }
+  boundingBox.expand(polyQuadEdges);
 }
 } // namespace tlp

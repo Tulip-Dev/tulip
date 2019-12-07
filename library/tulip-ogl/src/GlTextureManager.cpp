@@ -19,6 +19,8 @@
 
 #include <cstdio>
 #include <cstring>
+
+#ifdef TULIP_BUILD_GL_TEX_LOADER
 #if defined(_MSC_VER)
 // need to include that header with Visual Studio to fix a typedef conflict
 // with latest version of jpeg lib (9a)
@@ -26,6 +28,8 @@
 #endif
 #include <jpeglib.h>
 #include <png.h>
+#endif
+
 #include <GL/glew.h>
 
 #include <tulip/GlTextureManager.h>
@@ -42,6 +46,7 @@ using namespace std;
 
 namespace tlp {
 
+#ifdef TULIP_BUILD_GL_TEX_LOADER
 struct TextureInfo {
   bool hasAlpha;
   unsigned int width;
@@ -488,6 +493,8 @@ bool GlTextureLoader::loadTexture(const string &filename, GlTexture &texture) {
 
   return result;
 }
+#endif
+
 //====================================================================
 void GlTextureManager::changeContext(uintptr_t context) {
   currentContext = context;

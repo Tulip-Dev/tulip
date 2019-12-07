@@ -90,23 +90,15 @@ bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 }
 
 ScatterPlot2D *ScatterPlot2DViewNavigator::getOverviewUnderPointer(const Coord &sceneCoords) {
-  ScatterPlot2D *ret = nullptr;
-  vector<ScatterPlot2D *> overviews = scatterPlot2dView->getSelectedScatterPlots();
-  vector<ScatterPlot2D *>::iterator it;
+  vector<ScatterPlot2D *> &&overviews = scatterPlot2dView->getSelectedScatterPlots();
 
-  for (it = overviews.begin(); it != overviews.end(); ++it) {
-    if (!(*it))
-      continue;
-
-    BoundingBox overviewBB = (*it)->getBoundingBox();
-
+  for (auto ov : overviews) {
+    BoundingBox &&overviewBB = ov->getBoundingBox();
     if (sceneCoords.getX() >= overviewBB[0][0] && sceneCoords.getX() <= overviewBB[1][0] &&
-        sceneCoords.getY() >= overviewBB[0][1] && sceneCoords.getY() <= overviewBB[1][1]) {
-      ret = *it;
-      break;
-    }
+        sceneCoords.getY() >= overviewBB[0][1] && sceneCoords.getY() <= overviewBB[1][1])
+      return ov;
   }
 
-  return ret;
+  return nullptr;
 }
 } // namespace tlp

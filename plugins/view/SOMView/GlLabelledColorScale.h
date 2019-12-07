@@ -42,10 +42,10 @@ public:
     return maxValue;
   }
 
-  tlp::Coord getPosition() {
+  const tlp::Coord &getPosition() const {
     return position;
   }
-  tlp::Size getSize() {
+  const tlp::Size &getSize() const {
     return size;
   }
 
@@ -59,7 +59,7 @@ public:
 
   void setPosition(tlp::Coord nPosition);
 
-  void setSize(tlp::Size nSize);
+  void setSize(const tlp::Size &nSize);
 
   void addLayerParent(tlp::GlLayer *layer) override;
 

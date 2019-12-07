@@ -68,7 +68,7 @@ ParallelAxis::~ParallelAxis() {
 void ParallelAxis::setAxisHeight(const float height) {
   float resizeFactor = height / getAxisHeight();
   glAxis->setAxisLength(height);
-  Coord baseCoord(glAxis->getAxisBaseCoord());
+  const Coord &baseCoord = glAxis->getAxisBaseCoord();
   bottomSliderCoord =
       baseCoord + Coord(0.0f, (bottomSliderCoord.getY() - baseCoord.getY()) * resizeFactor);
   topSliderCoord =
@@ -129,7 +129,7 @@ void ParallelAxis::redraw() {
 }
 
 void ParallelAxis::resetSlidersPosition() {
-  Coord baseCoord(glAxis->getAxisBaseCoord());
+  const Coord &baseCoord = glAxis->getAxisBaseCoord();
   bottomSliderCoord = baseCoord;
   topSliderCoord = baseCoord + Coord(0.0f, getAxisHeight());
 }
@@ -143,7 +143,7 @@ void ParallelAxis::disableTrickForSelection() {
 }
 
 BoundingBox ParallelAxis::getBoundingBox() {
-  BoundingBox glAxisBB(glAxis->getBoundingBox());
+  BoundingBox &&glAxisBB = glAxis->getBoundingBox();
 
   if (rotationAngle != 0.0f) {
     Coord bbBL(glAxisBB[0]);
@@ -154,19 +154,18 @@ BoundingBox ParallelAxis::getBoundingBox() {
     rotateVector(bbTR, rotationAngle, Z_ROT);
     rotateVector(bbBR, rotationAngle, Z_ROT);
     rotateVector(bbTL, rotationAngle, Z_ROT);
-    glAxisBB = BoundingBox();
-    glAxisBB.expand(bbBL);
-    glAxisBB.expand(bbTR);
-    glAxisBB.expand(bbBR);
-    glAxisBB.expand(bbTL);
+    glAxisBB.init(bbBL);
+    glAxisBB.expand(bbTR, true);
+    glAxisBB.expand(bbBR, true);
+    glAxisBB.expand(bbTL, true);
   }
 
-  return glAxisBB;
+  return std::move(glAxisBB);
 }
 
 Array<Coord, 4> ParallelAxis::getBoundingPolygonCoords() const {
   Array<Coord, 4> ret;
-  BoundingBox glAxisBB(glAxis->getBoundingBox());
+  BoundingBox &&glAxisBB = glAxis->getBoundingBox();
   Coord bbBL(glAxisBB[0]);
   Coord bbTR(glAxisBB[1]);
   Coord bbBR(glAxisBB[1][0], glAxisBB[0][1]);
@@ -186,7 +185,7 @@ Array<Coord, 4> ParallelAxis::getBoundingPolygonCoords() const {
   return ret;
 }
 
-Coord ParallelAxis::getBaseCoord() const {
+const Coord &ParallelAxis::getBaseCoord() const {
   return glAxis->getAxisBaseCoord();
 }
 

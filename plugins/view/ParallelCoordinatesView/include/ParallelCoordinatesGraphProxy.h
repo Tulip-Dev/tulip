@@ -39,8 +39,7 @@ public:
 
   unsigned int getNumberOfSelectedProperties() const;
   bool selectedPropertiesisEmpty() const;
-  std::vector<std::string> getAllProperties();
-  std::vector<std::string> getSelectedProperties();
+  const std::vector<std::string> &getSelectedProperties();
   void setSelectedProperties(const std::vector<std::string> &properties);
   void removePropertyFromSelection(const std::string &propertyName);
 

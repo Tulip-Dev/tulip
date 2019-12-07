@@ -106,7 +106,7 @@ QuickAccessBar *ParallelCoordinatesView::getQuickAccessBarImpl() {
 }
 
 void ParallelCoordinatesView::interactorsInstalled(const QList<tlp::Interactor *> &) {
-  toggleInteractors(false);
+  toggleInteractors(graphProxy && graphProxy->getNumberOfSelectedProperties());
 }
 
 void ParallelCoordinatesView::toggleInteractors(bool activate) {
@@ -356,15 +356,14 @@ DataSet ParallelCoordinatesView::state() const {
   getGlMainWidget()->getScene()->getXMLOnlyForCameras(sceneOut);
   dataSet.set("scene", sceneOut);
 
-  vector<string> selectedProperties = graphProxy->getSelectedProperties();
+  const vector<string> &selectedProperties = graphProxy->getSelectedProperties();
   DataSet selectedPropertiesData;
   int i = 0;
 
-  for (vector<string>::const_iterator it = selectedProperties.begin();
-       it != selectedProperties.end(); ++it) {
+  for (const auto &prop : selectedProperties) {
     std::stringstream s;
     s << i;
-    selectedPropertiesData.set(s.str(), *it);
+    selectedPropertiesData.set(s.str(), prop);
     i++;
   }
 
@@ -773,18 +772,15 @@ bool ParallelCoordinatesView::mapGlEntitiesInRegionToData(std::set<unsigned int>
                                                           const unsigned int width,
                                                           const unsigned int height) const {
 
-  vector<SelectedEntity> selectedEntities;
-  vector<SelectedEntity> selectedAxisPoints;
-  vector<SelectedEntity> dummy;
-
   mappedData.clear();
+
+  vector<SelectedEntity> selectedEntities;
 
   bool result = getGlMainWidget()->pickGlEntities(x, y, width, height, selectedEntities, mainLayer);
 
   if (result) {
-    for (vector<SelectedEntity>::const_iterator it = selectedEntities.begin();
-         it != selectedEntities.end(); ++it) {
-      GlEntity *entity = (*it).getSimpleEntity();
+    for (auto &it : selectedEntities) {
+      GlEntity *entity = it.getSimpleEntity();
       unsigned int selectedEltId;
 
       if (parallelCoordsDrawing->getDataIdFromGlEntity(entity, selectedEltId)) {
@@ -793,11 +789,13 @@ bool ParallelCoordinatesView::mapGlEntitiesInRegionToData(std::set<unsigned int>
     }
   }
 
+  vector<SelectedEntity> selectedAxisPoints;
+  vector<SelectedEntity> dummy;
+
   getGlMainWidget()->pickNodesEdges(x, y, width, height, selectedAxisPoints, dummy, mainLayer);
 
-  for (vector<SelectedEntity>::const_iterator it = selectedAxisPoints.begin();
-       it != selectedAxisPoints.end(); ++it) {
-    node n((*it).getComplexEntityId());
+  for (auto &it : selectedAxisPoints) {
+    node n(it.getComplexEntityId());
     unsigned int selectedEltId;
 
     if (parallelCoordsDrawing->getDataIdFromAxisPoint(n, selectedEltId)) {
@@ -813,10 +811,9 @@ void ParallelCoordinatesView::setDataUnderPointerSelectFlag(const int x, const i
   set<unsigned int> dataUnderPointer;
   mapGlEntitiesInRegionToData(dataUnderPointer, x, y);
 
-  for (set<unsigned int>::const_iterator it = dataUnderPointer.begin();
-       it != dataUnderPointer.end(); ++it) {
-    if (!graphProxy->highlightedEltsSet() || graphProxy->isDataHighlighted(*it))
-      graphProxy->setDataSelected(*it, selectFlag);
+  for (auto index : dataUnderPointer) {
+    if (!graphProxy->highlightedEltsSet() || graphProxy->isDataHighlighted(index))
+      graphProxy->setDataSelected(index, selectFlag);
   }
 }
 
@@ -827,10 +824,9 @@ void ParallelCoordinatesView::setDataInRegionSelectFlag(const int x, const int y
   set<unsigned int> dataUnderPointer;
   mapGlEntitiesInRegionToData(dataUnderPointer, x, y, width, height);
 
-  for (set<unsigned int>::const_iterator it = dataUnderPointer.begin();
-       it != dataUnderPointer.end(); ++it) {
-    if (!graphProxy->highlightedEltsSet() || graphProxy->isDataHighlighted(*it))
-      graphProxy->setDataSelected(*it, selectFlag);
+  for (auto index : dataUnderPointer) {
+    if (!graphProxy->highlightedEltsSet() || graphProxy->isDataHighlighted(index))
+      graphProxy->setDataSelected(index, selectFlag);
   }
 }
 
@@ -842,10 +838,9 @@ void ParallelCoordinatesView::deleteDataUnderPointer(const int x, const int y) {
   set<unsigned int> dataUnderPointer;
   mapGlEntitiesInRegionToData(dataUnderPointer, x, y);
 
-  for (set<unsigned int>::const_iterator it = dataUnderPointer.begin();
-       it != dataUnderPointer.end(); ++it) {
-    if (!graphProxy->highlightedEltsSet() || graphProxy->isDataHighlighted(*it))
-      graphProxy->deleteData(*it);
+  for (auto index : dataUnderPointer) {
+    if (!graphProxy->highlightedEltsSet() || graphProxy->isDataHighlighted(index))
+      graphProxy->deleteData(index);
   }
 }
 
@@ -894,9 +889,8 @@ void ParallelCoordinatesView::highlightDataUnderPointer(const int x, const int y
   set<unsigned int> dataUnderPointer;
   mapGlEntitiesInRegionToData(dataUnderPointer, x, y);
 
-  for (set<unsigned int>::const_iterator it = dataUnderPointer.begin();
-       it != dataUnderPointer.end(); ++it) {
-    graphProxy->addOrRemoveEltToHighlight(*it);
+  for (auto index : dataUnderPointer) {
+    graphProxy->addOrRemoveEltToHighlight(index);
   }
 
   graphProxy->colorDataAccordingToHighlightedElts();
@@ -912,9 +906,8 @@ void ParallelCoordinatesView::highlightDataInRegion(const int x, const int y, co
   set<unsigned int> dataUnderPointer;
   mapGlEntitiesInRegionToData(dataUnderPointer, x, y, width, height);
 
-  for (set<unsigned int>::const_iterator it = dataUnderPointer.begin();
-       it != dataUnderPointer.end(); ++it) {
-    graphProxy->addOrRemoveEltToHighlight(*it);
+  for (auto index : dataUnderPointer) {
+    graphProxy->addOrRemoveEltToHighlight(index);
   }
 
   graphProxy->colorDataAccordingToHighlightedElts();
@@ -926,13 +919,12 @@ void ParallelCoordinatesView::resetHighlightedElements() {
 }
 
 ParallelAxis *ParallelCoordinatesView::getAxisUnderPointer(const int x, const int y) const {
-  vector<ParallelAxis *> allAxis(parallelCoordsDrawing->getAllAxis());
   axisSelectionLayer->setSharedCamera(
       &getGlMainWidget()->getScene()->getLayer("Main")->getCamera());
   axisSelectionLayer->getComposite()->reset(false);
 
-  for (size_t i = 0; i < allAxis.size(); ++i) {
-    axisSelectionLayer->addGlEntity(allAxis[i], getStringFromNumber(allAxis[i]));
+  for (auto pa : parallelCoordsDrawing->getAllAxis()) {
+    axisSelectionLayer->addGlEntity(pa, getStringFromNumber(pa));
   }
 
   vector<SelectedEntity> pickedEntities;
@@ -967,11 +959,9 @@ void ParallelCoordinatesView::updateAxisSlidersPosition() {
     parallelCoordsDrawing->resetAxisSlidersPosition();
   } else {
     const set<unsigned int> &highlightedElts(graphProxy->getHighlightedElts());
-    vector<ParallelAxis *> axis(getAllAxis());
-    vector<ParallelAxis *>::iterator it;
 
-    for (it = axis.begin(); it != axis.end(); ++it) {
-      (*it)->updateSlidersWithDataSubset(highlightedElts);
+    for (auto pa : getAllAxis()) {
+      pa->updateSlidersWithDataSubset(highlightedElts);
     }
   }
 }

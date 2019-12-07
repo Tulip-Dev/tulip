@@ -135,18 +135,16 @@ public:
    */
   void acceptVisitor(GlSceneVisitor *visitor) override {
     // visitor->visit(this);
-    for (std::list<GlSimpleEntity *>::iterator it = _sortedElements.begin();
-         it != _sortedElements.end(); ++it) {
-      if ((*it)->isVisible()) {
+    for (auto entity : _sortedElements) {
+      if (entity->isVisible()) {
 
 #ifndef NDEBUG
-        GlComposite *composite = dynamic_cast<GlComposite *>(*it);
+        GlComposite *composite = dynamic_cast<GlComposite *>(entity);
 
-        if (!composite && !(*it)->getBoundingBox().isValid()) {
-          for (std::map<std::string, GlSimpleEntity *>::iterator itE = elements.begin();
-               itE != elements.end(); ++itE) {
-            if (itE->second == (*it)) {
-              tlp::warning() << "Invalid bounding box for entity: " << itE->first << std::endl;
+        if (!composite && !entity->getBoundingBox().isValid()) {
+          for (auto &itE : elements) {
+            if (itE.second == entity) {
+              tlp::warning() << "Invalid bounding box for entity: " << itE.first << std::endl;
               assert(false);
             }
           }
@@ -154,18 +152,18 @@ public:
 
 #endif
 
-        (*it)->acceptVisitor(visitor);
+        entity->acceptVisitor(visitor);
       }
     }
   }
 
   /**
-   * Add a layer parent to this entity
+   * Add a layer parent from this entity
    */
   virtual void addLayerParent(GlLayer *layer);
 
   /**
-   * Remove a layer parent to this entity
+   * Remove a layer parent from this entity
    */
   virtual void removeLayerParent(GlLayer *layer);
 
@@ -175,8 +173,8 @@ public:
   void notifyModified(GlSimpleEntity *entity);
 
   /**
-   * \attention This function do nothing, GlComposite is a GlSimpleEntity so draw function must be
-   * define
+   * \warning This function does nothing, GlComposite is a GlSimpleEntity
+   * so the draw member function must be defined
    */
   void draw(float, Camera *) override {}
 

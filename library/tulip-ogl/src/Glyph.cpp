@@ -49,7 +49,7 @@ void Glyph::getTextBoundingBox(BoundingBox &boundingBox, node n) {
 //=============================================
 Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from, const Size &scale,
                        const double zRotation) const {
-  Coord anchor = from - nodeCenter;
+  Coord &&anchor = from - nodeCenter;
 
   if (anchor.getX() == 0.0f && anchor.getY() == 0.0f)
     return nodeCenter;
@@ -93,7 +93,7 @@ Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from, const Size &s
 }
 //=================================================================
 Coord Glyph::getAnchor(const Coord &vector) const {
-  Coord anchor = vector;
+  Coord anchor(vector);
   /* anchor must be on the surface of a sphere centered on nodecenter, radius is 0.5 */
   anchor *= 0.5f / anchor.norm();
   return anchor;

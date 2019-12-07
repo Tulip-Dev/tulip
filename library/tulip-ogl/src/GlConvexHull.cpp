@@ -45,11 +45,13 @@ GlConvexHull::GlConvexHull(vector<Coord> &points, vector<Color> &fcolors, vector
     convexHull(_points, convexHullIdxs);
     // build new points
     vector<Coord> points;
+    bool noCheck = false;
 
     points.reserve(convexHullIdxs.size());
     for (auto i : convexHullIdxs) {
       points.emplace_back(_points[i]);
-      boundingBox.expand(_points[i]);
+      boundingBox.expand(_points[i], noCheck);
+      noCheck = true;
     }
 
     _points.swap(points);

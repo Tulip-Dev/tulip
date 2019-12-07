@@ -164,13 +164,13 @@ void GlGlyphRenderer::endRendering() {
       glStencilFunc(GL_LEQUAL, _inputData->parameters->getEdgesStencil(), 0xFFFF);
     }
 
-    Coord dir = glyphData.srcAnchor - glyphData.beginAnchor;
+    Coord &&dir = glyphData.srcAnchor - glyphData.beginAnchor;
 
     if (dir.norm() > 0) {
       dir /= dir.norm();
     }
 
-    Coord cross = dir ^ Coord(1, 0, 0);
+    Coord &&cross = dir ^ Coord(1, 0, 0);
 
     if (cross.norm() > 0) {
       cross /= cross.norm();

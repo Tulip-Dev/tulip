@@ -428,13 +428,13 @@ void ScatterPlot2DView::computeNodeSizes() {
 
   SizeProperty *viewSize = scatterPlotGraph->getProperty<SizeProperty>("viewSize");
 
-  Size eltMinSize(viewSize->getMin());
-  Size eltMaxSize(viewSize->getMax());
-  Size pointMinSize(optionsWidget->getMinSizeMapping());
-  Size pointMaxSize(optionsWidget->getMaxSizeMapping());
+  Size &&eltMinSize = viewSize->getMin();
+  Size &&eltMaxSize = viewSize->getMax();
+  Size &&pointMinSize = optionsWidget->getMinSizeMapping();
+  Size &&pointMaxSize = optionsWidget->getMaxSizeMapping();
 
   Size resizeFactor;
-  Size deltaSize(eltMaxSize - eltMinSize);
+  Size &&deltaSize = eltMaxSize - eltMinSize;
 
   for (unsigned int i = 0; i < 3; ++i) {
     if (deltaSize[i] != 0) {
@@ -446,7 +446,7 @@ void ScatterPlot2DView::computeNodeSizes() {
 
   for (auto n : scatterPlotGraph->nodes()) {
     const Size &nodeSize = viewSize->getNodeValue(n);
-    Size adjustedNodeSize(pointMinSize + resizeFactor * (nodeSize + Size(-1.0f, -1.0f, -1.0f)));
+    Size &&adjustedNodeSize = pointMinSize + resizeFactor * (nodeSize + Size(-1.0f, -1.0f, -1.0f));
     scatterPlotSize->setNodeValue(n, adjustedNodeSize);
   }
 
@@ -798,10 +798,9 @@ void ScatterPlot2DView::destroyOverviewsIfNeeded() {
 }
 
 void ScatterPlot2DView::destroyOverviews() {
-  for (map<pair<string, string>, ScatterPlot2D *>::iterator it = scatterPlotsMap.begin();
-       it != scatterPlotsMap.end(); ++it) {
-    matrixComposite->deleteGlEntity(it->second);
-    delete it->second;
+  for (auto &it : scatterPlotsMap) {
+    matrixComposite->deleteGlEntity(it.second);
+    delete it.second;
   }
 
   scatterPlotsMap.clear();
@@ -1032,7 +1031,7 @@ std::vector<ScatterPlot2D *> ScatterPlot2DView::getSelectedScatterPlots() const 
 }
 
 void ScatterPlot2DView::interactorsInstalled(const QList<tlp::Interactor *> &) {
-  toggleInteractors(false);
+  toggleInteractors(detailedScatterPlot != nullptr);
 }
 
 void ScatterPlot2DView::registerTriggers() {

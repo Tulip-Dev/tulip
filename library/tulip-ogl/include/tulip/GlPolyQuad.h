@@ -98,9 +98,11 @@ public:
    * \param edgeStart The first end of the edge
    * \param edgeEnd The other end of the edge
    * \param edgeColor The edge's color
+   * \param noCheck when true the bounding box validity is not checked
    *
    */
-  void addQuadEdge(const Coord &edgeStart, const Coord &edgeEnd, const Color &edgeColor);
+  void addQuadEdge(const Coord &edgeStart, const Coord &edgeEnd, const Color &edgeColor,
+                   bool noCheck = false);
 
   /**
    * Virtual function used to draw the polyquad.

@@ -35,10 +35,10 @@ void zoomOnScreenRegion(GlMainWidget *glWidget, const BoundingBox &boundingBox,
 
 void zoomOnScreenRegionWithoutAnimation(GlMainWidget *glWidget, const BoundingBox &boundingBox) {
   Camera &camera = glWidget->getScene()->getGraphCamera();
-  Coord bbScreenFirst = camera.worldTo2DViewport(Coord(boundingBox[0]));
-  Coord bbScreenSecond = camera.worldTo2DViewport(Coord(boundingBox[1]));
-  float bbWidthScreen = bbScreenSecond.getX() - bbScreenFirst.getX();
-  float bbHeightScreen = bbScreenSecond.getY() - bbScreenFirst.getY();
+  Coord &&bbScreenFirst = camera.worldTo2DViewport(boundingBox[0]);
+  Coord &&bbScreenSecond = camera.worldTo2DViewport(boundingBox[1]);
+  float &&bbWidthScreen = bbScreenSecond.getX() - bbScreenFirst.getX();
+  float &&bbHeightScreen = bbScreenSecond.getY() - bbScreenFirst.getY();
 
   bbWidthScreen += bbWidthScreen * .1;
   bbHeightScreen += bbHeightScreen * .1;
@@ -59,7 +59,7 @@ void zoomOnScreenRegionWithoutAnimation(GlMainWidget *glWidget, const BoundingBo
   double zoomEnd = zoomStart * zoomFactor;
   bool withZoom = zoomFactor < 0.99 || zoomFactor > 1.01;
 
-  Coord newCamCenter = Coord(boundingBox[0]) + Coord(boundingBox[1]) / 2.0f;
+  Coord &&newCamCenter = boundingBox[0] + boundingBox[1] / 2.0f;
   newCamCenter.setZ(boundingBox[0][2]);
 
   camera.setCenter(newCamCenter);

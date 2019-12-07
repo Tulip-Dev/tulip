@@ -144,11 +144,7 @@ public:
       p2 += normal;
     }
 
-    std::vector<tlp::Coord> controlPoints;
-    controlPoints.push_back(p1);
-    controlPoints.push_back(p2);
-
-    return controlPoints;
+    return std::vector<tlp::Coord>{{p1, p2}};
   }
 
   std::vector<tlp::Coord> computeQuadraticBezierControlPoints(tlp::edge e) {
@@ -302,15 +298,9 @@ public:
       }
     }
 
-    std::vector<tlp::Coord> controlPoints;
-
-    if (x != FLT_MAX && y != FLT_MAX) {
-      controlPoints.emplace_back(x, y);
-    } else {
-      controlPoints.emplace_back((srcCoord + tgtCoord) / 2.f);
-    }
-
-    return controlPoints;
+    if (x != FLT_MAX && y != FLT_MAX)
+      return std::vector<tlp::Coord>{{tlp::Coord(x, y)}};
+    return std::vector<tlp::Coord>{{(srcCoord + tgtCoord) / 2.f}};
   }
 
   bool run() override {

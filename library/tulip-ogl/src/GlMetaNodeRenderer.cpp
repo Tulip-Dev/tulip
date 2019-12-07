@@ -108,7 +108,7 @@ void GlMetaNodeRenderer::render(node n, float, Camera *camera) {
                                         (bbTmp.height() / 2.f) * (includeBB[1][1] * 2.f),
                                         (bbTmp.depth() / 2.f) * (includeBB[1][2] * 2.f)));
 
-  Coord eyeDirection = camera->getEyes() - camera->getCenter();
+  Coord &&eyeDirection = camera->getEyes() - camera->getCenter();
   eyeDirection = eyeDirection / eyeDirection.norm();
 
   Camera newCamera2(*camera);
@@ -116,7 +116,7 @@ void GlMetaNodeRenderer::render(node n, float, Camera *camera) {
                      Coord(0, 0, 1) * (newCamera2.getEyes() - newCamera2.getCenter()).norm());
   newCamera2.setUp(Coord(0, 1, 0));
 
-  Coord center = camera->worldTo2DViewport((bb[0] + bb[1]) / 2.f);
+  Coord &&center = camera->worldTo2DViewport((bb[0] + bb[1]) / 2.f);
   Coord &&first = newCamera2.worldTo2DViewport(bb[0]);
   Coord &&second = newCamera2.worldTo2DViewport(bb[1]);
 

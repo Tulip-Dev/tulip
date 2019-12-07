@@ -50,7 +50,7 @@ public:
   virtual void showConfigDialog() = 0;
 
   void setBaseCoord(const Coord &baseCoord);
-  Coord getBaseCoord() const;
+  const Coord &getBaseCoord() const;
   Coord getTopCoord() const;
   std::string getAxisName() const {
     return glAxis->getAxisName();

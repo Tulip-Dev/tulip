@@ -126,7 +126,7 @@ public:
   /**
    * @brief Return the viewport of the attached scene
    */
-  Vector<int, 4> getViewport() const;
+  const Vector<int, 4> &getViewport() const;
 
   /**
    * @brief Return the scene radius
@@ -161,7 +161,7 @@ public:
    *
    * 3D position of the camera
    */
-  Coord getEyes() const {
+  const Coord &getEyes() const {
     return eyes;
   }
 
@@ -176,7 +176,7 @@ public:
    *
    * 3D coordinates of point visualized by the camera
    */
-  Coord getCenter() const {
+  const Coord &getCenter() const {
     return center;
   }
 
@@ -191,7 +191,7 @@ public:
    *
    * normalized up 3D coordinates of the camera
    */
-  Coord getUp() const {
+  const Coord &getUp() const {
     return up;
   }
 

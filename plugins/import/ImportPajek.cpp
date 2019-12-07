@@ -314,11 +314,9 @@ public:
       parts[tokens[0]].push_back(nodes[curNodeId++]);
 
       if (curNodeId == graph->numberOfNodes()) {
-        map<string, vector<node>>::iterator it = parts.begin();
-
-        for (; it != parts.end(); ++it) {
-          Graph *part = partition->inducedSubGraph(it->second);
-          part->setName(it->first);
+        for (auto &it : parts) {
+          Graph *part = partition->inducedSubGraph(it.second);
+          part->setName(it.first);
         }
       }
 

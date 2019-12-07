@@ -73,7 +73,7 @@ public:
   void viewChanged(View *view) override;
 
 private:
-  void buildGlAxisPlot(std::vector<ParallelAxis *> currentAxis);
+  void buildGlAxisPlot(const std::vector<ParallelAxis *> &currentAxis);
   void deleteGlAxisPlot();
 
   void initOrUpdateBoxPlots();

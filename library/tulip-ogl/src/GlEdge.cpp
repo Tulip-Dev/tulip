@@ -117,7 +117,7 @@ BoundingBox GlEdge::getBoundingBox(const GlGraphInputData *data, const edge e, c
     buildCurvePoints(tmp, edgeSizes, srcCoord, tgtCoord, quadVertices);
 
     for (size_t i = 0; i < quadVertices.size(); ++i) {
-      bb.expand(quadVertices[i]);
+      bb.expand(quadVertices[i], true);
     }
   }
 
@@ -500,7 +500,7 @@ void GlEdge::drawLabel(OcclusionTest *test, const GlGraphInputData *data, float 
       float firstAngle = atan(firstVector[1] / firstVector[0]) * float(180. / M_PI);
       float secondAngle = atan(secondVector[1] / secondVector[0]) * float(180. / M_PI);
 
-      Coord textDirection = firstVector + secondVector;
+      Coord &&textDirection = firstVector + secondVector;
 
       if (textDirection[1] < 0)
         label->setTranslationAfterRotation(Coord(0, -label->getTranslationAfterRotation()[1], 0));

@@ -70,6 +70,7 @@ public:
       const vector<Coord> &srcBends = srcLayout->getEdgeValue(e);
       const vector<Coord> &destBends = destLayout->getEdgeValue(e);
       vector<Coord> newBends;
+      newBends.reserve(destBends.size());
 
       for (size_t i = 0; i < destBends.size(); ++i) {
         newBends.push_back(
@@ -594,13 +595,10 @@ void NeighborhoodHighlighter::computeNeighborhoodGraphCircleLayout() {
       finalBendsCoord = circleCenter + (tgtNodeCoord - circleCenter) / 2.f;
     }
 
-    vector<Coord> edgesBends = neighborhoodGraphLayout->getEdgeValue(e);
+    const vector<Coord> &edgesBends = neighborhoodGraphLayout->getEdgeValue(e);
 
-    for (size_t i = 0; i < edgesBends.size(); ++i) {
-      edgesBends[i] = finalBendsCoord;
-    }
-
-    neighborhoodGraphCircleLayout->setEdgeValue(e, edgesBends);
+    neighborhoodGraphCircleLayout->setEdgeValue(e,
+                                                vector<Coord>(edgesBends.size(), finalBendsCoord));
   }
 }
 
@@ -628,10 +626,12 @@ float NeighborhoodHighlighter::computeNeighborhoodGraphRadius(
     LayoutProperty *neighborhoodGraphLayoutProp) {
   float radius = 0;
   node n;
-  Coord centralNodeCoord = neighborhoodGraphLayoutProp->getNodeValue(neighborhoodGraphCentralNode);
+  const Coord &centralNodeCoord =
+      neighborhoodGraphLayoutProp->getNodeValue(neighborhoodGraphCentralNode);
   for (auto n : neighborhoodGraph->nodes()) {
-    Coord nodeCoord = neighborhoodGraphLayoutProp->getNodeValue(n);
-    Size nodeSize = originalGlGraphComposite->getInputData()->getElementSize()->getNodeValue(n);
+    const Coord &nodeCoord = neighborhoodGraphLayoutProp->getNodeValue(n);
+    const Size &nodeSize =
+        originalGlGraphComposite->getInputData()->getElementSize()->getNodeValue(n);
     float dist = centralNodeCoord.dist(nodeCoord) + nodeSize.getW();
 
     if (dist > radius) {
@@ -658,8 +658,8 @@ bool NeighborhoodHighlighter::draw(GlMainWidget *glMainWidget) {
 
   if (neighborhoodGraphCentralNode.isValid() && glNeighborhoodGraph != nullptr) {
 
-    Camera *camera = &(glMainWidget->getScene()->getLayer("Main")->getCamera());
-    camera->initGl();
+    Camera &camera = glMainWidget->getScene()->getLayer("Main")->getCamera();
+    camera.initGl();
 
     glLineWidth(1.0);
     glPointSize(1.0);
@@ -689,7 +689,7 @@ bool NeighborhoodHighlighter::draw(GlMainWidget *glMainWidget) {
     renderingParameters.setNodesLabelStencil(1);
     renderingParameters.setDisplayEdges(configWidget->isdisplayEdgesCBChecked());
     glNeighborhoodGraph->setRenderingParameters(renderingParameters);
-    glNeighborhoodGraph->draw(10, camera);
+    glNeighborhoodGraph->draw(10, &camera);
   }
 
   return true;

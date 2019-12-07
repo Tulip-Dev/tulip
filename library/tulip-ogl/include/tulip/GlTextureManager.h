@@ -22,7 +22,9 @@
 #define Tulip_GLTEXTUREMANAGER_H
 
 #include <tulip/tulipconf.h>
-
+#ifndef TULIP_BUILD_GL_TEX_LOADER
+#include <tulip/TulipException.h>
+#endif
 #include <tulip/OpenGlIncludes.h>
 
 #include <set>
@@ -51,8 +53,11 @@ public:
    * can be loaded.
    * Return false if an error occurs
    */
+#ifdef TULIP_BUILD_GL_TEX_LOADER
   virtual bool loadTexture(const std::string &filename, GlTexture &texture);
-
+#else
+  virtual bool loadTexture(const std::string &filename, GlTexture &texture) = 0;
+#endif
   virtual ~GlTextureLoader() {}
 };
 
@@ -141,7 +146,13 @@ public:
    * Get Texture loader
    */
   static inline GlTextureLoader *getTextureLoader() {
+#ifdef TULIP_BUILD_GL_TEX_LOADER
     return loader ? loader : (loader = new GlTextureLoader());
+#else
+    if (!loader)
+      throw TulipException("GlTextureLoader Error: no texture loader found");
+    return loader;
+#endif
   }
 
   /**

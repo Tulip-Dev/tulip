@@ -60,8 +60,8 @@ bool HistogramViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     int x = glWidget->width() - me->x();
     int y = me->y();
     Coord screenCoords(x, y, 0);
-    Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
-        glWidget->screenToViewport(screenCoords)));
+    Coord &&sceneCoords = glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
+        glWidget->screenToViewport(Coord(x, y, 0)));
     selectedHistoOverview = getOverviewUnderPointer(sceneCoords);
     return true;
   } else if (e->type() == QEvent::MouseButtonDblClick) {
@@ -85,19 +85,13 @@ bool HistogramViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 }
 
 Histogram *HistogramViewNavigator::getOverviewUnderPointer(const Coord &sceneCoords) const {
-  Histogram *ret = nullptr;
-  vector<Histogram *> overviews = histoView->getHistograms();
-
-  for (vector<Histogram *>::const_iterator it = overviews.begin(); it != overviews.end(); ++it) {
-    BoundingBox overviewBB((*it)->getBoundingBox());
-
+  for (auto histo : histoView->getHistograms()) {
+    BoundingBox &&overviewBB = histo->getBoundingBox();
     if (sceneCoords.getX() >= overviewBB[0][0] && sceneCoords.getX() <= overviewBB[1][0] &&
-        sceneCoords.getY() >= overviewBB[0][1] && sceneCoords.getY() <= overviewBB[1][1]) {
-      ret = *it;
-      break;
-    }
+        sceneCoords.getY() >= overviewBB[0][1] && sceneCoords.getY() <= overviewBB[1][1])
+      return histo;
   }
 
-  return ret;
+  return nullptr;
 }
 } // namespace tlp

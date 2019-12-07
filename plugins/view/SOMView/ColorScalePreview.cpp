@@ -40,10 +40,10 @@ void ColorScalePreview::fillLabel() {
     QPalette p = this->palette();
     QLinearGradient grad(0, height() * 0.5, width(), height() * 0.5);
 
-    for (std::map<float, tlp::Color>::iterator it = colorMap.begin(); it != colorMap.end(); ++it) {
-      tlp::Color col = it->second;
+    for (auto &it : colorMap) {
+      tlp::Color col = it.second;
       QColor c(col.getR(), col.getG(), col.getB(), col.getA());
-      grad.setColorAt(it->first, c);
+      grad.setColorAt(it.first, c);
     }
 
     p.setBrush(QPalette::Window, QBrush(grad));

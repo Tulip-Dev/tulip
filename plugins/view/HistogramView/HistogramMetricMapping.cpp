@@ -906,7 +906,7 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
         if (mappingType != oldMappingType) {
           vector<Coord> oldCurvePoints;
           oldCurvePoints.push_back(curve->getFirstCurvePoint());
-          vector<Coord> intermediateCurvePoints = curve->getCurvePoints();
+          const vector<Coord> &intermediateCurvePoints = curve->getCurvePoints();
           oldCurvePoints.insert(oldCurvePoints.end(), intermediateCurvePoints.begin(),
                                 intermediateCurvePoints.end());
           oldCurvePoints.push_back(curve->getLastCurvePoint());

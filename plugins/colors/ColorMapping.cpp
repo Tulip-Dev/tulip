@@ -316,20 +316,20 @@ public:
       if (targetType.getCurrent() == NODES_TARGET) {
 
         for (auto n : graph->nodes()) {
-          std::string tmp = metric->getNodeStringValue(n);
+          std::string &&tmp = metric->getNodeStringValue(n);
 
-          if (mapMetricElements.count(tmp) == 0)
-            mapMetricElements[tmp] = std::vector<unsigned int>();
+          if (mapMetricElements.find(tmp) == mapMetricElements.end())
+            mapMetricElements.emplace(tmp, std::vector<unsigned int>());
 
           mapMetricElements[tmp].push_back(n.id);
         }
       } else {
 
         for (auto e : graph->edges()) {
-          std::string tmp = metric->getEdgeStringValue(e);
+          std::string &&tmp = metric->getEdgeStringValue(e);
 
-          if (mapMetricElements.count(tmp) == 0)
-            mapMetricElements[tmp] = std::vector<unsigned int>();
+          if (mapMetricElements.find(tmp) == mapMetricElements.end())
+            mapMetricElements.emplace(tmp, std::vector<unsigned int>());
 
           mapMetricElements[tmp].push_back(e.id);
         }
@@ -337,10 +337,8 @@ public:
 
       std::vector<std::string> enumeratedValues;
 
-      for (std::map<std::string, std::vector<unsigned int>>::iterator it =
-               mapMetricElements.begin();
-           it != mapMetricElements.end(); ++it) {
-        enumeratedValues.push_back(it->first);
+      for (auto &it : mapMetricElements) {
+        enumeratedValues.push_back(it.first);
       }
 
       std::vector<Color> enumeratedColors;

@@ -64,20 +64,17 @@ bool EditColorScaleInteractor::eventFilter(QObject *obj, QEvent *event) {
                                              2, 2, selectionLayer, entities);
     bool foundGlColorScale = false;
 
-    if (!entities.empty()) {
-      for (vector<SelectedEntity>::iterator entityIterator = entities.begin();
-           entityIterator != entities.end(); ++entityIterator) {
-        if ((*entityIterator).getSimpleEntity() == colorScale->getGlColorScale()) {
-          ColorScaleConfigDialog dialog(*colorScale->getGlColorScale()->getColorScale(),
-                                        glMainWidget);
-          foundGlColorScale = true;
+    for (auto &it : entities) {
+      if (it.getSimpleEntity() == colorScale->getGlColorScale()) {
+        ColorScaleConfigDialog dialog(*colorScale->getGlColorScale()->getColorScale(),
+                                      glMainWidget);
+        foundGlColorScale = true;
 
-          if (dialog.exec()) {
-            SOMView *somView = static_cast<SOMView *>(view());
-            // update shared color scale
-            somView->getColorScale()->setColorMap(dialog.getColorScale().getColorMap());
-            somView->updateDefaultColorProperty();
-          }
+        if (dialog.exec()) {
+          SOMView *somView = static_cast<SOMView *>(view());
+          // update shared color scale
+          somView->getColorScale()->setColorMap(dialog.getColorScale().getColorMap());
+          somView->updateDefaultColorProperty();
         }
       }
     }
@@ -128,15 +125,12 @@ bool EditColorScaleInteractor::draw(GlMainWidget *glMainWidget) {
 
     if (colorScale->isVisible()) {
       glMainWidget->getScene()->getGraphCamera().initGl();
-      Camera camera2D = Camera(glMainWidget->getScene(), false);
+      Camera camera2D(glMainWidget->getScene(), false);
       camera2D.setScene(glMainWidget->getScene());
       camera2D.initGl();
 
-      map<string, GlSimpleEntity *> displays = colorScale->getGlEntities();
-
-      for (map<string, GlSimpleEntity *>::iterator it = displays.begin(); it != displays.end();
-           ++it) {
-        it->second->draw(0, &camera2D);
+      for (auto &it : colorScale->getGlEntities()) {
+        it.second->draw(0, &camera2D);
       }
     }
   }

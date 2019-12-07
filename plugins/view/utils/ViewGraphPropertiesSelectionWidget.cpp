@@ -58,7 +58,7 @@ void ViewGraphPropertiesSelectionWidget::setWidgetParameters(
 
   this->graphPropertiesTypesFilter = graphPropertiesTypesFilter;
 
-  vector<string> lastSelectedProperties = getSelectedGraphProperties();
+  vector<string> &&lastSelectedProperties = getSelectedGraphProperties();
 
   _ui->graphPropertiesSelectionWidget->clearLists();
   _ui->graphPropertiesSelectionWidget->setWidgetParameters(graph, graphPropertiesTypesFilter);
@@ -66,10 +66,7 @@ void ViewGraphPropertiesSelectionWidget::setWidgetParameters(
   if (!lastSelectedProperties.empty() && graph) {
     vector<string> stringList;
 
-    for (vector<string>::const_iterator it = lastSelectedProperties.begin();
-         it != lastSelectedProperties.end(); ++it) {
-      string prop(*it);
-
+    for (auto &prop : lastSelectedProperties) {
       if (graph->existProperty(prop)) {
         stringList.push_back(prop);
       }
@@ -104,14 +101,14 @@ void ViewGraphPropertiesSelectionWidget::setSelectedProperties(vector<string> se
   if (!graph)
     return;
 
-  vector<string> stringList = iteratorVector(graph->getProperties());
   vector<string> finalStringList;
   _ui->graphPropertiesSelectionWidget->clearLists();
 
   vector<string> selectedPropertiesCopy(selectedProperties);
 
-  for (unsigned int i = 0; i < stringList.size(); ++i) {
-    if (std::find(selectedProperties.begin(), selectedProperties.end(), stringList[i]) !=
+  for (auto prop : graph->getObjectProperties()) {
+    const auto &pName = prop->getName();
+    if (std::find(selectedProperties.begin(), selectedProperties.end(), pName) !=
         selectedProperties.end()) {
       finalStringList.push_back(selectedPropertiesCopy.front());
       selectedPropertiesCopy.erase(remove(selectedPropertiesCopy.begin(),
@@ -119,7 +116,7 @@ void ViewGraphPropertiesSelectionWidget::setSelectedProperties(vector<string> se
                                           selectedPropertiesCopy.front()),
                                    selectedPropertiesCopy.end());
     } else {
-      finalStringList.push_back(stringList[i]);
+      finalStringList.push_back(pName);
     }
   }
 
@@ -174,19 +171,18 @@ bool ViewGraphPropertiesSelectionWidget::configurationChanged() {
     return true;
   }
 
-  vector<string> selectedProperties = getSelectedGraphProperties();
+  vector<string> &&selectedProperties = getSelectedGraphProperties();
 
   if (selectedProperties.size() != lastSelectedProperties.size()) {
-    lastSelectedProperties = selectedProperties;
+    lastSelectedProperties.swap(selectedProperties);
     return true;
   }
 
   bool sameSelectedProperties = true;
   vector<string>::const_iterator itLast = lastSelectedProperties.begin();
 
-  for (vector<string>::const_iterator it = selectedProperties.begin();
-       it != selectedProperties.end(); ++it) {
-    if ((*it) != (*itLast)) {
+  for (auto &it : selectedProperties) {
+    if (it != (*itLast)) {
       sameSelectedProperties = false;
       break;
     }
@@ -195,7 +191,7 @@ bool ViewGraphPropertiesSelectionWidget::configurationChanged() {
   }
 
   if (!sameSelectedProperties) {
-    lastSelectedProperties = selectedProperties;
+    lastSelectedProperties.swap(selectedProperties);
     return true;
   }
 

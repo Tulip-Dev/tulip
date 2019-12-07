@@ -39,7 +39,7 @@ static PyObject *tuliputils_updateVisualization(PyObject *, PyObject *args) {
 
   bool centerViews = i > 0;
 
-  if (persp != nullptr) {
+  if (persp != NULL) {
     persp->redrawPanels(centerViews);
   }
 
@@ -52,8 +52,8 @@ static PyObject *tuliputils_pauseRunningScript(PyObject *, PyObject *) {
 }
 
 static PyObject *tuliputils_runGraphScript(PyObject *, PyObject *args) {
-  char *s = nullptr;
-  PyObject *o = nullptr;
+  char *s = NULL;
+  PyObject *o = NULL;
 
   if (PyArg_ParseTuple(args, "sO", &s, &o)) {
     QString scriptName(s);
@@ -71,31 +71,31 @@ static PyObject *tuliputils_runGraphScript(PyObject *, PyObject *args) {
 
         // Unwrapping C++ instance
         tlp::Graph *graph = static_cast<tlp::Graph *>(
-            sipConvertToType(o, kpTypeDef, nullptr, SIP_NOT_NONE, &state, &err));
+            sipConvertToType(o, kpTypeDef, NULL, SIP_NOT_NONE, &state, &err));
 
         if (!PythonInterpreter::getInstance()->runGraphScript(scriptName, "main", graph)) {
           PyErr_SetString(PyExc_Exception,
                           (std::string("An exception occurred when executing the ") +
                            std::string(s) + " script")
                               .c_str());
-          return nullptr;
+          return NULL;
         }
 
       } else {
         PyErr_SetString(
             PyExc_TypeError,
             "Second parameter of the runGraphScript function must be of type tlp.Graph");
-        return nullptr;
+        return NULL;
       }
     } else {
       PyErr_SetString(PyExc_Exception,
                       (std::string("The script ") + std::string(s) + " does not exist").c_str());
-      return nullptr;
+      return NULL;
     }
   } else {
     PyErr_SetString(PyExc_TypeError,
                     "Parameters provided to the runGraphScript function have invalid types");
-    return nullptr;
+    return NULL;
   }
 
   Py_RETURN_NONE;
@@ -119,7 +119,7 @@ static PyObject *tuliputils_setProcessQtEvents(PyObject *, PyObject *o) {
   int i;
 
   if (!PyArg_ParseTuple(o, "i", &i))
-    return nullptr;
+    return NULL;
 
   PythonInterpreter::getInstance()->setProcessQtEventsDuringScriptExecution(i > 0);
 
@@ -135,7 +135,7 @@ static PyMethodDef tulipUtilsMethods[] = {
     {"runGraphScript", tuliputils_runGraphScript, METH_VARARGS,
      "Allow to execute a script from a script."},
     {"setProcessQtEvents", tuliputils_setProcessQtEvents, METH_VARARGS, ""},
-    {nullptr, nullptr, 0, nullptr} /* Sentinel */
+    {NULL, NULL, 0, NULL} /* Sentinel */
 };
 
 #if PY_MAJOR_VERSION >= 3
@@ -145,10 +145,10 @@ static struct PyModuleDef tulipUtilsModuleDef = {
     "",                /* m_doc */
     -1,                /* m_size */
     tulipUtilsMethods, /* m_methods */
-    nullptr,           /* m_reload */
-    nullptr,           /* m_traverse */
-    nullptr,           /* m_clear */
-    nullptr,           /* m_free */
+    NULL,              /* m_reload */
+    NULL,              /* m_traverse */
+    NULL,              /* m_clear */
+    NULL,              /* m_free */
 };
 #endif
 

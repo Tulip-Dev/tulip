@@ -70,7 +70,7 @@ public:
   /**
    * @brief Method which returns the base coordinates of the axis
    */
-  Coord getAxisBaseCoord() const {
+  const Coord &getAxisBaseCoord() const {
     return axisBaseCoord;
   }
   /**
@@ -82,7 +82,7 @@ public:
   /**
    * @brief Method which returns the name of the axis
    */
-  std::string getAxisName() const {
+  const std::string &getAxisName() const {
     return axisName;
   }
   /**

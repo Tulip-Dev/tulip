@@ -233,15 +233,13 @@ Coord unprojectPoint(const Coord &obj, const MatrixGL &invtransform,
 //====================================================
 GLfloat projectSize(const Coord &position, const Size &size, const MatrixGL &projectionMatrix,
                     const MatrixGL &modelviewMatrix, const Vector<int, 4> &viewport) {
-  BoundingBox box;
-  box.expand(position - size / 2.f);
-  box.expand(position + size / 2.f);
+  BoundingBox box(Coord(position - size / 2.f), Coord(position + size / 2.f), true);
   return projectSize(box, projectionMatrix, modelviewMatrix, viewport);
 }
 //====================================================
 GLfloat projectSize(const BoundingBox &bb, const MatrixGL &projectionMatrix,
                     const MatrixGL &modelviewMatrix, const Vector<int, 4> &viewport) {
-  Coord bbSize(bb[1] - bb[0]);
+  Coord &&bbSize = bb[1] - bb[0];
   float nSize = bbSize.norm(); // Enclosing bounding box
 
   MatrixGL translate;
@@ -321,17 +319,19 @@ float calculateAABBSize(const BoundingBox &bb, const Coord &eye,
                         const Matrix<float, 4> &transformMatrix,
                         const Vector<int, 4> &globalViewport,
                         const Vector<int, 4> &currentViewport) {
-  BoundingBox bbTmp(bb);
+  BoundingBox bbTmp;
   Coord src[8];
   Coord dst[8];
   int pos;
   int num;
 
   for (int i = 0; i < 3; i++) {
-    if (bbTmp[0][i] > bbTmp[1][i]) {
-      float tmp = bbTmp[0][i];
-      bbTmp[0][i] = bbTmp[1][i];
-      bbTmp[1][i] = tmp;
+    if (bb[0][i] > bb[1][i]) {
+      bbTmp[0][i] = bb[1][i];
+      bbTmp[1][i] = bb[0][i];
+    } else {
+      bbTmp[0][i] = bb[0][i];
+      bbTmp[1][i] = bb[1][i];
     }
   }
 
@@ -418,9 +418,9 @@ std::vector<Coord> computeNormals(const std::vector<Coord> &vertices,
   normals.resize(vertices.size(), Coord(0, 0, 0));
 
   for (size_t i = 0; i < facesIndices.size(); i += 3) {
-    Coord v1 = vertices[facesIndices[i]], v2 = vertices[facesIndices[i + 1]],
-          v3 = vertices[facesIndices[i + 2]];
-    Coord normal = (v2 - v1) ^ (v3 - v1);
+    const Coord &v1 = vertices[facesIndices[i]], &v2 = vertices[facesIndices[i + 1]],
+                &v3 = vertices[facesIndices[i + 2]];
+    Coord &&normal = (v2 - v1) ^ (v3 - v1);
 
     if (normal.norm() != 0) {
       normal /= normal.norm();
@@ -431,9 +431,9 @@ std::vector<Coord> computeNormals(const std::vector<Coord> &vertices,
     normals[facesIndices[i + 2]] += normal;
   }
 
-  for (size_t i = 0; i < normals.size(); ++i) {
-    if (normals[i].norm() != 0) {
-      normals[i] /= normals[i].norm();
+  for (auto &coord : normals) {
+    if (coord.norm() != 0) {
+      coord /= coord.norm();
     }
   }
 

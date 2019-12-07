@@ -159,24 +159,21 @@ void MatrixView::setOriented(bool flag) {
     if (_isOriented) {
       for (auto e : graph()->edges()) {
         // delete the second node mapping the current edge
-        vector<int> edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
+        const vector<int> &edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
         _matrixGraph->delNode(node(edgeNodes[1]));
-        edgeNodes.resize(1);
-        _graphEntitiesToDisplayedNodes->setEdgeValue(e, edgeNodes);
+        _graphEntitiesToDisplayedNodes->popBackEdgeEltValue(e);
       }
     } else {
       for (auto e : graph()->edges()) {
         // must add the symmetric node
-        vector<int> edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
-        edgeNodes.push_back(_matrixGraph->addNode().id);
-        _graphEntitiesToDisplayedNodes->setEdgeValue(e, edgeNodes);
-
+        node sym = _matrixGraph->addNode();
+        _graphEntitiesToDisplayedNodes->pushBackEdgeEltValue(e, sym.id);
+        const vector<int> &edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
         // layout and shape will be updated in updateLayout method
         // but other view properties must be set now
         for (const string &strProp : _sourceToTargetProperties) {
           PropertyInterface *prop = _matrixGraph->getProperty(strProp);
-          prop->setNodeStringValue(node(edgeNodes[1]),
-                                   prop->getNodeStringValue(node(edgeNodes[0])));
+          prop->setNodeStringValue(sym, prop->getNodeStringValue(node(edgeNodes[0])));
         }
       }
     }
@@ -577,10 +574,10 @@ void MatrixView::updateLayout() {
                       &edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
 
     // 0 => horizontal line, 1 => vertical line
-    Coord src0 = layout->getNodeValue(node(srcNodes[0])),
-          tgt0 = layout->getNodeValue(node(tgtNodes[0])),
-          src1 = layout->getNodeValue(node(srcNodes[1])),
-          tgt1 = layout->getNodeValue(node(tgtNodes[1]));
+    const Coord &src0 = layout->getNodeValue(node(srcNodes[0])),
+                &tgt0 = layout->getNodeValue(node(tgtNodes[0])),
+                &src1 = layout->getNodeValue(node(srcNodes[1])),
+                &tgt1 = layout->getNodeValue(node(tgtNodes[1]));
 
     layout->setNodeValue(node(edgeNodes[0]), Coord(tgt0[0], src1[1], 0));
     shapes->setNodeValue(node(edgeNodes[0]), shape);
@@ -594,8 +591,8 @@ void MatrixView::updateLayout() {
   for (auto e : _matrixGraph->edges()) {
     auto eEnds = _matrixGraph->ends(e);
 
-    auto srcPos = layout->getNodeValue(eEnds.first);
-    auto tgtPos = layout->getNodeValue(eEnds.second);
+    auto &srcPos = layout->getNodeValue(eEnds.first);
+    auto &tgtPos = layout->getNodeValue(eEnds.second);
     float xMax = max(srcPos[0], tgtPos[0]);
     float xMin = min(srcPos[0], tgtPos[0]);
     float dist = (xMax - xMin);

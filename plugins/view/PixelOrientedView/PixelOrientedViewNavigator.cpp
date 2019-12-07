@@ -64,7 +64,7 @@ bool PixelOrientedViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     int x = glWidget->width() - me->x();
     int y = me->y();
     Coord screenCoords(x, y, 0);
-    Coord sceneCoords = glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
+    Coord &&sceneCoords = glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
         glWidget->screenToViewport(screenCoords));
     PixelOrientedOverview *overviewUnderPointer = getOverviewUnderPointer(sceneCoords);
 
@@ -97,20 +97,13 @@ bool PixelOrientedViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 }
 
 PixelOrientedOverview *PixelOrientedViewNavigator::getOverviewUnderPointer(Coord &sceneCoords) {
-  PixelOrientedOverview *ret = nullptr;
-  vector<PixelOrientedOverview *> overviews = pixelView->getOverviews();
-
-  for (vector<PixelOrientedOverview *>::const_iterator it = overviews.begin();
-       it != overviews.end(); ++it) {
-    BoundingBox overviewBB = (*it)->getBoundingBox();
-
+  for (auto ov : pixelView->getOverviews()) {
+    BoundingBox &&overviewBB = ov->getBoundingBox();
     if (sceneCoords.getX() >= overviewBB[0][0] && sceneCoords.getX() <= overviewBB[1][0] &&
-        sceneCoords.getY() >= overviewBB[0][1] && sceneCoords.getY() <= overviewBB[1][1]) {
-      ret = *it;
-      break;
-    }
+        sceneCoords.getY() >= overviewBB[0][1] && sceneCoords.getY() <= overviewBB[1][1])
+      return ov;
   }
 
-  return ret;
+  return nullptr;
 }
 } // namespace tlp
