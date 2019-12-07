@@ -166,7 +166,7 @@ static PyTypeObject consoleutils_ConsoleOutputType = {
     sizeof(consoleutils_ConsoleOutput),                               /*tp_basicsize*/
     0,                                                                /*tp_itemsize*/
     reinterpret_cast<destructor>(consoleutils_ConsoleOutput_dealloc), /*tp_dealloc*/
-    0,                                                                /*tp_vectorcall_offset*/
+    nullptr,                                                          /*tp_print*/
     nullptr,                                                          /*tp_getattr*/
     nullptr,                                                          /*tp_setattr*/
     nullptr,                                                          /*tp_compare*/
@@ -265,7 +265,7 @@ static PyTypeObject consoleutils_ConsoleInputType = {
     sizeof(consoleutils_ConsoleInput),                               /*tp_basicsize*/
     0,                                                               /*tp_itemsize*/
     reinterpret_cast<destructor>(consoleutils_ConsoleInput_dealloc), /*tp_dealloc*/
-    0,                                                               /*tp_vectorcall_offset*/
+    nullptr,                                                         /*tp_print*/
     nullptr,                                                         /*tp_getattr*/
     nullptr,                                                         /*tp_setattr*/
     nullptr,                                                         /*tp_compare*/
