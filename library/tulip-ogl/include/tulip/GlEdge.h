@@ -25,7 +25,7 @@
 
 #include <tulip/PropertyTypes.h>
 #include <tulip/Size.h>
-#include <tulip/GlComplexeEntity.h>
+#include <tulip/GlEntity.h>
 #include <tulip/Matrix.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlSceneVisitor.h>
@@ -34,11 +34,14 @@ namespace tlp {
 
 struct OcclusionTest;
 class EdgeExtremityGlyph;
+class TextRenderer;
+class GlGraphInputData;
+class Camera;
 
 /**
  * Class to represent an edge of a graph
  */
-class TLP_GL_SCOPE GlEdge final : public GlComplexeEntity {
+class TLP_GL_SCOPE GlEdge final : public GlEntity {
 
 public:
   /**
@@ -47,8 +50,6 @@ public:
    */
   GlEdge(unsigned int eId = UINT_MAX, unsigned int ePos = UINT_MAX, bool sel = false)
       : id(eId), pos(ePos), selectionDraw(sel) {
-    if (!label)
-      label = new GlLabel();
   }
 
   /**
@@ -61,7 +62,7 @@ public:
   /**
    * Return the edge bounding box
    */
-  BoundingBox getBoundingBox(const GlGraphInputData *data) override;
+  BoundingBox getBoundingBox(const GlGraphInputData *data);
 
   /**
    * Return the edge bounding box
@@ -74,24 +75,13 @@ public:
   /**
    * Draw the edge with level of detail : lod and Camera : camera
    */
-  void draw(float lod, const GlGraphInputData *data, Camera *camera) override;
-
-  /**
-   * Draw the label of the edge if drawEdgesLabel is true and if label selection is equal to
-   * drawSelect
-   */
-  void drawLabel(bool drawSelect, OcclusionTest *test, const GlGraphInputData *data, float lod);
-
-  /**
-   * Draw the label of the edge if drawEdgesLabel is true
-   */
-  void drawLabel(OcclusionTest *test, const GlGraphInputData *data) override;
+  void draw(float lod, const GlGraphInputData *data, Camera *camera);
 
   /**
    * Draw the label of the edge if drawEdgesLabel is true
    * Use TextRenderer : renderer to draw the label
    */
-  void drawLabel(OcclusionTest *test, const GlGraphInputData *data, float lod,
+  void drawLabel(GlLabel &label, OcclusionTest *test, const GlGraphInputData *data, float lod,
                  Camera *camera = nullptr);
 
   /**
@@ -130,7 +120,6 @@ public:
 
 private:
   bool selectionDraw;
-  static GlLabel *label;
 
   /**
    * Draw the Edge : this function is used by draw function

@@ -48,8 +48,6 @@
 #include <tulip/GlGlyphRenderer.h>
 #include <tulip/TulipViewSettings.h>
 
-tlp::GlLabel *tlp::GlEdge::label = nullptr;
-
 using namespace std;
 
 namespace tlp {
@@ -397,22 +395,7 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
   glDepthFunc(GL_LEQUAL);
 }
 
-void GlEdge::drawLabel(bool drawSelect, OcclusionTest *test, const GlGraphInputData *data,
-                       float lod) {
-  edge e = edge(id);
-  bool select = data->getElementSelected()->getEdgeValue(e);
-
-  if (select != drawSelect)
-    return;
-
-  drawLabel(test, data, lod);
-}
-
-void GlEdge::drawLabel(OcclusionTest *test, const GlGraphInputData *data) {
-  drawLabel(test, data, 0.);
-}
-
-void GlEdge::drawLabel(OcclusionTest *test, const GlGraphInputData *data, float lod,
+void GlEdge::drawLabel(GlLabel &label, OcclusionTest *test, const GlGraphInputData *data, float lod,
                        Camera *camera) {
 
   edge e(id);
@@ -444,14 +427,14 @@ void GlEdge::drawLabel(OcclusionTest *test, const GlGraphInputData *data, float 
     fontSize += 2;
 
   if (select)
-    label->setStencil(data->parameters->getSelectedEdgesStencil());
+    label.setStencil(data->parameters->getSelectedEdgesStencil());
   else
-    label->setStencil(data->parameters->getEdgesLabelStencil());
+    label.setStencil(data->parameters->getEdgesLabelStencil());
 
-  label->setFontNameSizeAndColor(data->getElementFont()->getEdgeValue(e), fontSize, fontColor);
-  label->setText(tmp);
-  label->setOutlineColor(outlineColor);
-  label->setOutlineSize(outlineWidth);
+  label.setFontNameSizeAndColor(data->getElementFont()->getEdgeValue(e), fontSize, fontColor);
+  label.setText(tmp);
+  label.setOutlineColor(outlineColor);
+  label.setOutlineSize(outlineWidth);
 
   auto ends = data->graph->ends(e);
   const node src = ends.first;
@@ -467,7 +450,7 @@ void GlEdge::drawLabel(OcclusionTest *test, const GlGraphInputData *data, float 
 
   getEdgeSize(data, e, srcSize, tgtSize, maxSrcSize, maxTgtSize, edgeSize);
 
-  label->setTranslationAfterRotation(Coord());
+  label.setTranslationAfterRotation(Coord());
 
   const Coord &srcCoord = data->getElementLayout()->getNodeValue(src);
   const Coord &tgtCoord = data->getElementLayout()->getNodeValue(tgt);
@@ -503,7 +486,7 @@ void GlEdge::drawLabel(OcclusionTest *test, const GlGraphInputData *data, float 
       Coord &&textDirection = firstVector + secondVector;
 
       if (textDirection[1] < 0)
-        label->setTranslationAfterRotation(Coord(0, -label->getTranslationAfterRotation()[1], 0));
+        label.setTranslationAfterRotation(Coord(0, -label.getTranslationAfterRotation()[1], 0));
 
       angle = (firstAngle + secondAngle) / 2.f;
 
@@ -517,33 +500,33 @@ void GlEdge::drawLabel(OcclusionTest *test, const GlGraphInputData *data, float 
 
   int labelPos = data->getElementLabelPosition()->getEdgeValue(e);
 
-  label->setSize(Size());
-  label->rotate(0, 0, angle);
-  label->setAlignment(labelPos);
-  label->setScaleToSize(false);
-  label->setLabelsDensity(data->parameters->getLabelsDensity());
+  label.setSize(Size());
+  label.rotate(0, 0, angle);
+  label.setAlignment(labelPos);
+  label.setScaleToSize(false);
+  label.setLabelsDensity(data->parameters->getLabelsDensity());
 
   if (!(data->parameters->getLabelsDensity() == 100)) // labels overlap
-    label->setOcclusionTester(test);
+    label.setOcclusionTester(test);
   else
-    label->setOcclusionTester(nullptr);
+    label.setOcclusionTester(nullptr);
 
-  label->setPosition(position);
+  label.setPosition(position);
 
   if (edgeSize[0] > edgeSize[1]) {
-    label->setTranslationAfterRotation(Coord(0, -edgeSize[0] / 2));
+    label.setTranslationAfterRotation(Coord(0, -edgeSize[0] / 2));
   } else {
-    label->setTranslationAfterRotation(Coord(0, -edgeSize[1] / 2));
+    label.setTranslationAfterRotation(Coord(0, -edgeSize[1] / 2));
   }
 
   BoundingBox &&bb = getBoundingBox(data, e, src, tgt, srcCoord, tgtCoord, srcSize, tgtSize, bends);
-  label->setUseLODOptimisation(true, bb);
-  label->setUseMinMaxSize(!data->parameters->isLabelFixedFontSize());
-  label->setMinSize(data->parameters->getMinSizeOfLabel());
-  label->setMaxSize(data->parameters->getMaxSizeOfLabel());
-  label->setBillboarded(data->parameters->getLabelsAreBillboarded());
+  label.setUseLODOptimisation(true, bb);
+  label.setUseMinMaxSize(!data->parameters->isLabelFixedFontSize());
+  label.setMinSize(data->parameters->getMinSizeOfLabel());
+  label.setMaxSize(data->parameters->getMaxSizeOfLabel());
+  label.setBillboarded(data->parameters->getLabelsAreBillboarded());
 
-  label->drawWithStencil(lod, camera);
+  label.drawWithStencil(lod, camera);
 }
 
 size_t GlEdge::getVertices(const GlGraphInputData *data, const edge e, const node src,

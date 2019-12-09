@@ -28,7 +28,7 @@
 #include <tulip/Coord.h>
 #include <tulip/Size.h>
 #include <tulip/GlBox.h>
-#include <tulip/GlComplexeEntity.h>
+#include <tulip/GlEntity.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlSceneVisitor.h>
 #include <tulip/GlGraphInputData.h>
@@ -38,11 +38,14 @@
 namespace tlp {
 
 struct OcclusionTest;
+class TextRenderer;
+class GlGraphInputData;
+class Camera;
 
 /**
  * Class to represent a node of a graph
  */
-class TLP_GL_SCOPE GlNode final : public GlComplexeEntity {
+class TLP_GL_SCOPE GlNode final : public GlEntity {
 
 public:
   /**
@@ -64,28 +67,17 @@ public:
   /**
    * Return the node bounding box
    */
-  BoundingBox getBoundingBox(const GlGraphInputData *data) override;
+  BoundingBox getBoundingBox(const GlGraphInputData *data);
 
   /**
    * Draw the node with level of detail : lod and Camera : camera
    */
-  void draw(float lod, const GlGraphInputData *data, Camera *camera) override;
-
-  /**
-   * Draw the label of the node if drawNodesLabel is true and if label selection is equal to
-   * drawSelect
-   */
-  void drawLabel(bool drawSelect, OcclusionTest *test, const GlGraphInputData *data, float lod);
+  void draw(float lod, const GlGraphInputData *data, Camera *camera);
 
   /**
    * Draw the label of the node if drawEdgesLabel is true
    */
-  void drawLabel(OcclusionTest *test, const GlGraphInputData *data) override;
-
-  /**
-   * Draw the label of the node if drawEdgesLabel is true
-   */
-  void drawLabel(OcclusionTest *test, const GlGraphInputData *data, float lod,
+  void drawLabel(GlLabel &label, OcclusionTest *test, const GlGraphInputData *data, float lod,
                  Camera *camera = nullptr);
 
   // node id and node position in graph->nodes()
@@ -113,7 +105,6 @@ public:
 protected:
   unsigned int oldId;
   GlBox selectionBox;
-  GlLabel label;
 
   // initialize the data member below
   void init(const GlGraphInputData *data);

@@ -10,7 +10,6 @@ INSTALL(FILES
   tulip/GlCatmullRomCurve.h
   tulip/GlCircle.h
   tulip/GlColorScale.h
-  tulip/GlComplexeEntity.h
   tulip/GlComplexPolygon.h
   tulip/GlComposite.h
   tulip/GlCPULODCalculator.h

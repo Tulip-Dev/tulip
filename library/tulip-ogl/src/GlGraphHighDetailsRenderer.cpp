@@ -574,6 +574,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
        inputData->getElementLabel()->hasNonDefaultValuatedNodes())) {
 
     vector<pair<node, float>> nodesMetricOrdered;
+    GlLabel label;
     for (auto &it : layerLODUnit.nodesLODVector) {
       float lod = it.lod;
 
@@ -593,7 +594,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
       if (selectionProperty->getNodeValue(n) == drawSelected) {
         if (!metric) {
           GlNode glNode(n.id, it.pos);
-          glNode.drawLabel(occlusionTest, inputData, lod, layerLODUnit.camera);
+          glNode.drawLabel(label, occlusionTest, inputData, lod, layerLODUnit.camera);
         } else {
           // Metric ordered
           nodesMetricOrdered.emplace_back(n, lod);
@@ -611,7 +612,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
 
       for (auto it : nodesMetricOrdered) {
         GlNode glNode(it.first.id, graph->nodePos(node(it.first.id)));
-        glNode.drawLabel(occlusionTest, inputData, it.second, layerLODUnit.camera);
+        glNode.drawLabel(label, occlusionTest, inputData, it.second, layerLODUnit.camera);
       }
     }
   }
@@ -622,6 +623,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
        inputData->getElementLabel()->hasNonDefaultValuatedEdges())) {
 
     vector<pair<edge, float>> edgesMetricOrdered;
+    GlLabel label;
     for (auto &it : layerLODUnit.edgesLODVector) {
       if (it.lod < 5)
         continue;
@@ -636,7 +638,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
         if (!metric) {
           // Not metric ordered
           GlEdge glEdge(e.id, it.pos);
-          glEdge.drawLabel(occlusionTest, inputData, it.lod, layerLODUnit.camera);
+          glEdge.drawLabel(label, occlusionTest, inputData, it.lod, layerLODUnit.camera);
         } else {
           // Metric ordered
           edgesMetricOrdered.emplace_back(e, it.lod);
@@ -654,7 +656,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
 
       for (auto &it : edgesMetricOrdered) {
         GlEdge glEdge(it.first.id, graph->edgePos(edge(it.first.id)));
-        glEdge.drawLabel(occlusionTest, inputData, it.second, layerLODUnit.camera);
+        glEdge.drawLabel(label, occlusionTest, inputData, it.second, layerLODUnit.camera);
       }
     }
   }
