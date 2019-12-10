@@ -1380,10 +1380,17 @@ void GraphPerspective::make_graph() {
 Graph *GraphPerspective::createSubGraph(Graph *graph) {
   if (graph == nullptr)
     return nullptr;
-
+  BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
+  if(!selection->hasNonDefaultValuatedEdges()&&!selection->hasNonDefaultValuatedNodes()) {
+      if(QMessageBox::question(_mainWindow, "Empty selection",
+                               "No nodes/edges selected.<br/> The new subgraph will be empty.<br/> \
+                               Do you want to continue?",
+                               QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
+          return nullptr;
+      }
+  }
   graph->push();
   Observable::holdObservers();
-  BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
   makeSelectionGraph(graph, selection);
   Graph *result = graph->addSubGraph(selection, "selection subgraph");
   Observable::unholdObservers();
@@ -1391,7 +1398,7 @@ Graph *GraphPerspective::createSubGraph(Graph *graph) {
 }
 
 void GraphPerspective::createSubGraph() {
-  createSubGraph(_graphs->currentGraph());
+            createSubGraph(_graphs->currentGraph());
 }
 
 void GraphPerspective::cloneSubGraph() {
