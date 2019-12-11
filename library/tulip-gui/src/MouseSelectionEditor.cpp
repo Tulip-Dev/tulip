@@ -198,7 +198,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
 
       if (!hasSelection || !layer ||
           !glMainWidget->pickGlEntities(int(editPosition[0]) - 3, int(editPosition[1]) - 3, 6, 6,
-                                         select, layer)) {
+                                        select, layer)) {
         // event occurs outside the selection rectangle
         // so from now we delegate the job to a MouseSelector object
         // which should intercept the event
@@ -215,8 +215,8 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       bool inRect = false;
 
       for (unsigned int i = 0; (i < select.size()) && (shapeId == -1); ++i) {
-	if (!inRect)
-	  inRect = select[i].getSimpleEntity() == &centerRect;
+        if (!inRect)
+          inRect = select[i].getSimpleEntity() == &centerRect;
         for (int j = 0; j < 8; ++j) {
           if (select[i].getSimpleEntity() == &_controls[j]) {
             shapeId = i;
@@ -272,8 +272,8 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
           operation = ROTATE_XY;
           glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
         } else {
-	  if (!inRect)
-	    return false;
+          if (!inRect)
+            return false;
           operation = TRANSLATE;
           glMainWidget->setCursor(QCursor(Qt::SizeAllCursor));
         }

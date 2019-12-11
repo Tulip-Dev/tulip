@@ -116,14 +116,14 @@ void AlgorithmRunner::insertItem(QWidget *w, const QString &name) {
       int index = 0;
 
       while (index < categoryLayout->count()) {
-	ExpandableGroupBox *gb =
-          dynamic_cast<ExpandableGroupBox *>(categoryLayout->itemAt(index)->widget());
+        ExpandableGroupBox *gb =
+            dynamic_cast<ExpandableGroupBox *>(categoryLayout->itemAt(index)->widget());
 
-	if (gb && group < gb->title()) {
-	  break;
-	}
+        if (gb && group < gb->title()) {
+          break;
+        }
 
-	++index;
+        ++index;
       }
 
       categoryLayout->insertWidget(index, groupBox);
