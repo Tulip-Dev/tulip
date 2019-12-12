@@ -24,21 +24,27 @@ using namespace tlp;
 
 PLUGIN(HierarchicalClustering)
 
+static const char *paramHelp[] = {
+    // metric
+    "An existing node metric property."};
+
 //================================================================================
-HierarchicalClustering::HierarchicalClustering(PluginContext *context) : Algorithm(context) {}
+HierarchicalClustering::HierarchicalClustering(PluginContext *context) : Algorithm(context) {
+  addInParameter<NumericProperty *>("metric", paramHelp[0], "viewMetric");
+}
 //================================================================================
 HierarchicalClustering::~HierarchicalClustering() {}
 //================================================================================
 
 class LessThan {
 public:
-  DoubleProperty *metric;
+  NumericProperty *metric;
   bool operator()(node n1, node n2) {
-    return (metric->getNodeValue(n1) < metric->getNodeValue(n2));
+    return (metric->getNodeDoubleValue(n1) < metric->getNodeDoubleValue(n2));
   }
 };
 
-bool HierarchicalClustering::split(DoubleProperty *metric, list<node> &orderedNode) {
+bool HierarchicalClustering::split(NumericProperty *metric, list<node> &orderedNode) {
 
   for (auto n : graph->nodes())
     orderedNode.push_back(n);
@@ -58,13 +64,13 @@ bool HierarchicalClustering::split(DoubleProperty *metric, list<node> &orderedNo
     return (true);
 
   itListNode = orderedNode.begin();
-  tmpDbl = metric->getNodeValue(*itListNode);
+  tmpDbl = metric->getNodeDoubleValue(*itListNode);
   ++itListNode;
   --nbElement;
 
   while ((itListNode != orderedNode.end()) &&
-         ((nbElement > 0) || (tmpDbl == metric->getNodeValue(*itListNode)))) {
-    tmpDbl = metric->getNodeValue(*itListNode);
+         ((nbElement > 0) || (tmpDbl == metric->getNodeDoubleValue(*itListNode)))) {
+    tmpDbl = metric->getNodeDoubleValue(*itListNode);
     ++itListNode;
     --nbElement;
   }
@@ -76,10 +82,16 @@ bool HierarchicalClustering::split(DoubleProperty *metric, list<node> &orderedNo
 bool HierarchicalClustering::run() {
 
   string tmp1, tmp2;
-  DoubleProperty *metric = graph->getProperty<DoubleProperty>("viewMetric");
   tmp1 = "Hierar Sup";
   tmp2 = "Hierar Inf";
   bool result = false;
+
+  NumericProperty *metric = nullptr;
+  if (dataSet != nullptr)
+    dataSet->get("metric", metric);
+
+  if (metric == nullptr)
+    metric = graph->getProperty<DoubleProperty>("viewMetric");
 
   while (!result) {
     list<node> badNodeList;
