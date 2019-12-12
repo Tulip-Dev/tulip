@@ -172,21 +172,7 @@ void GlNode::draw(float lod, const GlGraphInputData *data, Camera *camera) {
   GlTextureManager::setAnimationFrame(0);
 }
 
-void GlNode::drawLabel(bool drawSelect, OcclusionTest *test, const GlGraphInputData *data,
-                       float lod) {
-  init(data);
-
-  if (drawSelect != selected)
-    return;
-
-  drawLabel(test, data, lod);
-}
-
-void GlNode::drawLabel(OcclusionTest *test, const GlGraphInputData *data) {
-  GlNode::drawLabel(test, data, 1000.);
-}
-
-void GlNode::drawLabel(OcclusionTest *test, const GlGraphInputData *data, float lod,
+void GlNode::drawLabel(GlLabel &label, OcclusionTest *test, const GlGraphInputData *data, float lod,
                        Camera *camera) {
   init(data);
   node n(id);
@@ -229,8 +215,8 @@ void GlNode::drawLabel(OcclusionTest *test, const GlGraphInputData *data, float 
 
   BoundingBox includeBB;
   data->glyphs.get(glyph)->getTextBoundingBox(includeBB, n);
-  Coord centerBB(includeBB.center());
-  Vec3f sizeBB = includeBB[1] - includeBB[0];
+  Coord &&centerBB = includeBB.center();
+  Vec3f &&sizeBB = includeBB[1] - includeBB[0];
 
   label.setFontNameSizeAndColor(data->getElementFont()->getNodeValue(n), fontSize, fontColor);
   label.setOutlineColor(fontBorderColor);

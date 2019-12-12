@@ -17,31 +17,30 @@
  *
  */
 #include "StrongComponent.h"
-#include <tulip/DoubleProperty.h>
 
 PLUGIN(StrongComponent)
 
 using namespace std;
 using namespace tlp;
 
-int StrongComponent::attachNumerotation(tlp::node n, std::unordered_map<tlp::node, bool> &visited,
+unsigned StrongComponent::attachNumerotation(tlp::node n, std::unordered_map<tlp::node, bool> &visited,
                                         std::unordered_map<tlp::node, bool> &finished,
-                                        std::unordered_map<tlp::node, int> &minAttach, int &id,
-                                        std::stack<tlp::node> &renum, int &curComponent) {
+                                        std::unordered_map<tlp::node, unsigned> &minAttach, unsigned &id,
+                                        std::stack<tlp::node> &renum, unsigned &curComponent) {
   if (visited[n])
     return minAttach[n];
 
   visited[n] = true;
-  int myId = id;
+  unsigned myId = id;
   id++;
   minAttach[n] = myId;
   renum.push(n);
-  int res = myId;
+  unsigned res = myId;
 
   for (auto tmpN : graph->getOutNodes(n)) {
 
     if (!finished[tmpN]) {
-      int tmp = attachNumerotation(tmpN, visited, finished, minAttach, id, renum, curComponent);
+      unsigned tmp = attachNumerotation(tmpN, visited, finished, minAttach, id, renum, curComponent);
 
       if (res > tmp)
         res = tmp;
@@ -68,7 +67,9 @@ int StrongComponent::attachNumerotation(tlp::node n, std::unordered_map<tlp::nod
   return res;
 }
 
-StrongComponent::StrongComponent(const tlp::PluginContext *context) : DoubleAlgorithm(context) {}
+StrongComponent::StrongComponent(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
+    addOutParameter<unsigned>("#strongly connected components", "Number of strongly components found");
+}
 
 StrongComponent::~StrongComponent() {}
 
@@ -76,9 +77,9 @@ bool StrongComponent::run() {
   std::unordered_map<node, bool> visited(graph->numberOfNodes());
   std::unordered_map<node, bool> finished(graph->numberOfNodes());
   stack<node> renum;
-  std::unordered_map<node, int> cachedValues(graph->numberOfNodes());
-  int id = 1;
-  int curComponent = 0;
+  std::unordered_map<node, unsigned> cachedValues(graph->numberOfNodes());
+  unsigned id = 1;
+  unsigned curComponent = 0;
 
   for (auto itn : graph->nodes()) {
     if (!visited[itn]) {
@@ -94,6 +95,10 @@ bool StrongComponent::run() {
     else
       result->setEdgeValue(ite, curComponent);
   }
+
+  if (dataSet != nullptr)
+    dataSet->set<unsigned>("#strongly connected components", curComponent);
+
 
   return true;
 }

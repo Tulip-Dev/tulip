@@ -24,7 +24,10 @@ PLUGIN(ConnectedComponent)
 using namespace tlp;
 
 ConnectedComponent::ConnectedComponent(const tlp::PluginContext *context)
-    : DoubleAlgorithm(context) {}
+    : DoubleAlgorithm(context) {
+
+   addOutParameter<unsigned>("#connected components", "Number of components found");
+}
 //======================================================
 bool ConnectedComponent::run() {
   std::vector<std::vector<node>> components;

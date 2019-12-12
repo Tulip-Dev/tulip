@@ -17,16 +17,12 @@
  *
  */
 
-#ifndef _StrongComponent_H
-#define _StrongComponent_H
+#ifndef _STRONGCOMPONENT_H
+#define _STRONGCOMPONENT_H
+
 #include <stack>
 #include <unordered_map>
-#include <tulip/TulipPluginHeaders.h>
-struct NodeInfo {
-  NodeInfo(int stra = 0, int sta = 0) : prefixOrder(stra), minAttach(sta) {}
-  int prefixOrder;
-  int minAttach;
-};
+#include <tulip/DoubleProperty.h>
 
 /** This plugin is an implementation of a strongly connected components decomposition.
  *
@@ -45,10 +41,10 @@ public:
   bool run() override;
 
 private:
-  int attachNumerotation(tlp::node, std::unordered_map<tlp::node, bool> &,
+  unsigned attachNumerotation(tlp::node, std::unordered_map<tlp::node, bool> &,
                          std::unordered_map<tlp::node, bool> &,
-                         std::unordered_map<tlp::node, int> &, int &, std::stack<tlp::node> &,
-                         int &);
+                         std::unordered_map<tlp::node, unsigned> &, unsigned &, std::stack<tlp::node> &,
+                         unsigned &);
 };
 
 #endif

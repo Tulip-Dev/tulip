@@ -197,8 +197,8 @@ void PythonShellWidget::keyPressEvent(QKeyEvent *e) {
         insert(ps1);
       }
     }
-  } else if (txt.length() > 0 && txt >= " " && e->modifiers() == Qt::NoModifier &&
-             e->text() != "(" && e->text() != ")") {
+  } else if (key != Qt::Key_Delete && txt.length() > 0 && txt >= " " &&
+             e->modifiers() == Qt::NoModifier && e->text() != "(" && e->text() != ")") {
     if (isCursorOnLastLine()) {
       insert(txt);
     } else {

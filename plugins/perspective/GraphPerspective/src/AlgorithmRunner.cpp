@@ -107,25 +107,27 @@ void AlgorithmRunner::insertItem(QWidget *w, const QString &name) {
     }
   }
 
-  if (!group.isEmpty() && groupBox == nullptr) {
-    groupBox = createGroupBox(group);
-    QVBoxLayout *categoryLayout = static_cast<QVBoxLayout *>(categoryBox->widget()->layout());
-    int index = 0;
+  if (groupBox == nullptr) {
+    if (group.isEmpty())
+      groupBox = categoryBox;
+    else {
+      groupBox = createGroupBox(group);
+      QVBoxLayout *categoryLayout = static_cast<QVBoxLayout *>(categoryBox->widget()->layout());
+      int index = 0;
 
-    while (index < categoryLayout->count()) {
-      ExpandableGroupBox *gb =
-          dynamic_cast<ExpandableGroupBox *>(categoryLayout->itemAt(index)->widget());
+      while (index < categoryLayout->count()) {
+        ExpandableGroupBox *gb =
+            dynamic_cast<ExpandableGroupBox *>(categoryLayout->itemAt(index)->widget());
 
-      if (gb && group < gb->title()) {
-        break;
+        if (gb && group < gb->title()) {
+          break;
+        }
+
+        ++index;
       }
 
-      ++index;
+      categoryLayout->insertWidget(index, groupBox);
     }
-
-    categoryLayout->insertWidget(index, groupBox);
-  } else {
-    groupBox = categoryBox;
   }
 
   AlgorithmRunnerItem *item = new AlgorithmRunnerItem(name);

@@ -379,6 +379,7 @@ struct TLPParser {
       : inputStream(inputStream), pluginProgress(pluginProgress), fileSize(size), curPos(0),
         displayComment(dispComment) {
     builderStack.push_front(builder);
+    builder->parser = this;
   }
 
   ~TLPParser() {
