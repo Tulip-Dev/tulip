@@ -245,7 +245,7 @@ QToolButton:pressed {
         <widget class="QToolButton" name="undoButton">
          <property name="minimumSize">
           <size>
-           <width>75</width>
+           <width>50</width>
            <height>75</height>
           </size>
          </property>
@@ -277,7 +277,7 @@ QToolButton:pressed {
         <widget class="QToolButton" name="redoButton">
          <property name="minimumSize">
           <size>
-           <width>75</width>
+           <width>50</width>
            <height>75</height>
           </size>
          </property>
@@ -329,7 +329,7 @@ QToolButton:pressed {
         <widget class="QToolButton" name="workspaceButton">
          <property name="minimumSize">
           <size>
-           <width>75</width>
+           <width>50</width>
            <height>75</height>
           </size>
          </property>
@@ -340,7 +340,7 @@ QToolButton:pressed {
           </size>
          </property>
          <property name="text">
-          <string>Workspace</string>
+          <string>Panels</string>
          </property>
          <property name="icon">
           <iconset>
@@ -370,7 +370,7 @@ QToolButton:pressed {
          </property>
          <property name="minimumSize">
           <size>
-           <width>75</width>
+           <width>50</width>
            <height>75</height>
           </size>
          </property>
@@ -381,7 +381,7 @@ QToolButton:pressed {
           </size>
          </property>
          <property name="text">
-          <string>Python IDE</string>
+          <string>Python</string>
          </property>
          <property name="icon">
           <iconset>
@@ -666,7 +666,7 @@ color: white;
          </property>
          <property name="minimumSize">
           <size>
-           <width>75</width>
+           <width>50</width>
            <height>75</height>
           </size>
          </property>
@@ -698,7 +698,7 @@ color: white;
         <widget class="QToolButton" name="csvImportButton">
          <property name="minimumSize">
           <size>
-           <width>75</width>
+           <width>50</width>
            <height>75</height>
           </size>
          </property>
@@ -730,7 +730,7 @@ color: white;
         <widget class="QToolButton" name="importButton">
          <property name="minimumSize">
           <size>
-           <width>75</width>
+           <width>50</width>
            <height>75</height>
           </size>
          </property>
@@ -762,7 +762,7 @@ color: white;
         <widget class="QToolButton" name="pluginsButton">
          <property name="minimumSize">
           <size>
-           <width>75</width>
+           <width>50</width>
            <height>75</height>
           </size>
          </property>

@@ -63,13 +63,11 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent)
     _ui->playButton->setText(pluginName);
 
   _ui->playButton->setStyleSheet("text-align: left");
-  QString tooltip(QString("Apply '") + pluginName + "'");
+  QString tooltip(QString("<b>%1</b> <small>(%2 plugin)</small>")
+		  .arg(pluginName)
+		  .arg(plugin.programmingLanguage().c_str()));
   // initialize parameters only if needed
   _ui->parameters->setVisible(false);
-
-  if (plugin.inputRequired()) {
-    tooltip += " with current settings";
-  }
 
   if (!plugin.getParameters().empty()) {
     _ui->parameters->setItemDelegate(new TulipItemDelegate(_ui->parameters));
@@ -77,29 +75,17 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent)
     _ui->settingsButton->setVisible(false);
   }
 
-  std::string info = plugin.info();
+  std::string &&info = plugin.info();
 
   // show info in tooltip only if it contains more than one word
   if (info.find(' ') != std::string::npos)
-    _ui->playButton->setToolTip(
-        QString("<table><tr><td>%1:</td></tr><tr><td><i>%2</i></td></tr></table>")
+    _ui->playButton->setToolTip(QString("%1:<br/><i>%2</i>")
             .arg(tooltip)
             .arg(tlp::tlpStringToQString(info)));
   else
     _ui->playButton->setToolTip(tooltip);
 
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
-
-  static QPixmap cppPix(":/tulip/graphperspective/icons/16/cpp.png");
-  static QPixmap pythonPix(":/tulip/graphperspective/icons/16/python.png");
-
-  if (plugin.programmingLanguage() == "Python") {
-    _ui->languageLabel->setPixmap(pythonPix);
-    _ui->languageLabel->setToolTip("Plugin written in Python");
-  } else {
-    _ui->languageLabel->setPixmap(cppPix);
-    _ui->languageLabel->setToolTip("Plugin written in C++");
-  }
 
   connect(_ui->favoriteCheck, SIGNAL(stateChanged(int)), this, SLOT(favoriteChanged(int)));
 }
@@ -172,6 +158,7 @@ static void copyToLocal(DataSet &data, Graph *g) {
 
   DataType *d = data.getData("result");
   QVariant var = TulipMetaTypes::dataTypeToQvariant(d, "");
+  delete d;
   asLocal<DoubleProperty>(var, data, g);
   asLocal<IntegerProperty>(var, data, g);
   asLocal<LayoutProperty>(var, data, g);
@@ -189,6 +176,10 @@ struct OutPropertyParam {
   PropertyInterface *tmp;  // the temporary property
 
   OutPropertyParam(const std::string &pName) : name(pName), dest(nullptr), tmp(nullptr) {}
+
+  ~OutPropertyParam() {
+    delete tmp;
+  }
 };
 
 class AlgorithmPreviewHandler : public ProgressPreviewHandler {
@@ -204,13 +195,11 @@ public:
   ~AlgorithmPreviewHandler() override {
     if (!outPropsMap.empty()) {
       // build outPropsMap with initial properties
-      std::vector<OutPropertyParam>::const_iterator it = outPropParams.begin();
+      for (auto &outPropParam : outPropParams) {
+        const std::string &outPropName = outPropParam.dest->getName();
 
-      for (; it != outPropParams.end(); ++it) {
-        const std::string &outPropName = it->dest->getName();
-
-        if (it->tmp && !outPropName.empty())
-          outPropsMap[outPropName] = it->dest;
+        if (outPropParam.tmp && !outPropName.empty())
+          outPropsMap[outPropName] = outPropParam.dest;
       }
 
       // restore initial properties
@@ -222,13 +211,11 @@ public:
   void progressStateChanged(int, int) override {
     if (!inited) {
       // build outPropsMap with temporary properties
-      std::vector<OutPropertyParam>::const_iterator it = outPropParams.begin();
+      for (auto &outPropParam : outPropParams) {
+        const std::string &outPropName = outPropParam.dest->getName();
 
-      for (; it != outPropParams.end(); ++it) {
-        const std::string &outPropName = it->dest->getName();
-
-        if (it->tmp && !outPropName.empty())
-          outPropsMap[outPropName] = it->tmp;
+        if (outPropParam.tmp && !outPropName.empty())
+          outPropsMap[outPropName] = outPropParam.tmp;
       }
 
       inited = true;
@@ -360,11 +347,17 @@ void AlgorithmRunnerItem::run(Graph *g) {
       outPropertyParams.push_back(outPropParam);
 
       if (desc.getDirection() == OUT_PARAM) {
-        outPropParam.tmp->setAllNodeDataMemValue(outPropParam.dest->getNodeDefaultDataMemValue());
-        outPropParam.tmp->setAllEdgeDataMemValue(outPropParam.dest->getEdgeDefaultDataMemValue());
+	DataMem *defaultData = outPropParam.dest->getNodeDefaultDataMemValue();
+        outPropParam.tmp->setAllNodeDataMemValue(defaultData);
+	delete defaultData;
+	defaultData = outPropParam.dest->getEdgeDefaultDataMemValue();
+        outPropParam.tmp->setAllEdgeDataMemValue(defaultData);
+	delete defaultData;
       } else
         // inout property
         outPropParam.tmp->copy(outPropParam.dest);
+      // avoid double free
+      outPropParam.tmp = nullptr;
     }
   }
 
@@ -411,7 +404,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
   if (result) {
     progress->setComment("Applying graph changes...");
     // copy or cleanup out properties
-    for (const OutPropertyParam &opp : outPropertyParams) {
+    for (auto &opp : outPropertyParams) {
       // copy computed property in the original output property
       opp.dest->copy(opp.tmp);
       // restore it in the dataset
@@ -425,8 +418,6 @@ void AlgorithmRunnerItem::run(Graph *g) {
             opp.dest->clonePrototype(opp.dest->getGraph(), storedResultName);
         storedResultProp->copy(opp.tmp);
       }
-
-      delete opp.tmp;
     }
 
     // display spentTime if needed
@@ -449,9 +440,10 @@ void AlgorithmRunnerItem::run(Graph *g) {
     // because they may have been created on the fly
     // (local properties see copyToLocal function above)
     // and thus they may be deleted further in case of undo
-    for (unsigned int i = 0; i < outNonPropertyParams.size(); ++i) {
-      tlp::DataType *dataType = dataSet.getData(outNonPropertyParams[i]);
-      originalDataSet.setData(outNonPropertyParams[i], dataType);
+    for (auto &paramName : outNonPropertyParams) {
+      tlp::DataType *dataType = dataSet.getData(paramName);
+      originalDataSet.setData(paramName, dataType);
+      delete dataType;
     }
 
     ParameterListModel *model = static_cast<ParameterListModel *>(_ui->parameters->model());
