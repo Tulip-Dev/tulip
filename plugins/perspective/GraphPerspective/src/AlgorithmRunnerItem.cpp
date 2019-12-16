@@ -64,8 +64,8 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent)
 
   _ui->playButton->setStyleSheet("text-align: left");
   QString tooltip(QString("<b>%1</b> <small>(%2 plugin)</small>")
-		  .arg(pluginName)
-		  .arg(plugin.programmingLanguage().c_str()));
+                      .arg(pluginName)
+                      .arg(plugin.programmingLanguage().c_str()));
   // initialize parameters only if needed
   _ui->parameters->setVisible(false);
 
@@ -79,9 +79,8 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent)
 
   // show info in tooltip only if it contains more than one word
   if (info.find(' ') != std::string::npos)
-    _ui->playButton->setToolTip(QString("%1:<br/><i>%2</i>")
-            .arg(tooltip)
-            .arg(tlp::tlpStringToQString(info)));
+    _ui->playButton->setToolTip(
+        QString("%1:<br/><i>%2</i>").arg(tooltip).arg(tlp::tlpStringToQString(info)));
   else
     _ui->playButton->setToolTip(tooltip);
 
@@ -347,12 +346,12 @@ void AlgorithmRunnerItem::run(Graph *g) {
       outPropertyParams.push_back(outPropParam);
 
       if (desc.getDirection() == OUT_PARAM) {
-	DataMem *defaultData = outPropParam.dest->getNodeDefaultDataMemValue();
+        DataMem *defaultData = outPropParam.dest->getNodeDefaultDataMemValue();
         outPropParam.tmp->setAllNodeDataMemValue(defaultData);
-	delete defaultData;
-	defaultData = outPropParam.dest->getEdgeDefaultDataMemValue();
+        delete defaultData;
+        defaultData = outPropParam.dest->getEdgeDefaultDataMemValue();
         outPropParam.tmp->setAllEdgeDataMemValue(defaultData);
-	delete defaultData;
+        delete defaultData;
       } else
         // inout property
         outPropParam.tmp->copy(outPropParam.dest);
