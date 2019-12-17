@@ -509,12 +509,15 @@ QVariant GraphHierarchiesModel::data(const QModelIndex &index, int role) const {
   }
 
   else if (role == Qt::ToolTipRole) {
-    return QString("<table><tr><td>%1</td></tr><tr><td>Id = %2, Nodes = %3, Edges= "
-                   "%4</tr></td></table>")
+    auto selection = graph->getProperty<BooleanProperty>("viewSelection");
+    return QString("<table><tr><td><b>%1</b></td></tr><tr><td>Id = %2, Nodes = %3, Edges = "
+                   "%4, selected = %5 nodes , %6 edges</tr></td></table>")
         .arg(generateName(graph))
         .arg(graph->getId())
         .arg(graph->numberOfNodes())
-        .arg(graph->numberOfEdges());
+        .arg(graph->numberOfEdges())
+        .arg(selection->numberOfNonDefaultValuatedNodes(graph))
+        .arg(selection->numberOfNonDefaultValuatedEdges(graph));
   }
 
   else if (role == GraphRole) {
