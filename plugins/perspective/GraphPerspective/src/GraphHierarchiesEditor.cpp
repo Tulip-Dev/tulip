@@ -155,7 +155,8 @@ void GraphHierarchiesEditor::setModel(tlp::GraphHierarchiesModel *model) {
   connect(_ui->hierarchiesTree->selectionModel(),
           SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), this,
           SLOT(currentChanged(const QModelIndex &, const QModelIndex &)));
-  connect(model, SIGNAL(currentGraphChanged(tlp::Graph *)), this, SLOT(currentGraphChanged(tlp::Graph *)));
+  connect(model, SIGNAL(currentGraphChanged(tlp::Graph *)), this,
+          SLOT(currentGraphChanged(tlp::Graph *)));
 }
 
 GraphHierarchiesEditor::~GraphHierarchiesEditor() {
@@ -255,18 +256,18 @@ void GraphHierarchiesEditor::updateSelectionInfos() {
     if (numNodes || numEdges) {
       QString text(" current graph selection: ");
       if (numNodes) {
-	if (numNodes == 1)
-	  text += "one node";
-	else
-	  text += QString::number(numNodes) + " nodes";
+        if (numNodes == 1)
+          text += "one node";
+        else
+          text += QString::number(numNodes) + " nodes";
       }
       if (numEdges) {
-	if (numNodes)
-	  text += ", ";
-	if (numEdges == 1)
-	  text += "one edge";
-	else
-	  text += QString::number(numEdges) + " edges";
+        if (numNodes)
+          text += ", ";
+        if (numEdges == 1)
+          text += "one edge";
+        else
+          text += QString::number(numEdges) + " edges";
       }
       _ui->selectionLabel->setText(text);
       return;
