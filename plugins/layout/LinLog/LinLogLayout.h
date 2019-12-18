@@ -58,19 +58,19 @@ private:
   double gravFactor;
 
   /** Position of the barycenter of the nodes. */
-  Coord baryCenter;
+  tlp::Coord baryCenter;
 
-  double getGravitationEnergy(node u);
-  double getAttractionEnergy(node u);
-  double getRepulsionEnergy(node u);
-  double getEnergy(node u);
-  double getDist(const Coord &pos1, const Coord &pos2);
-  double getDistForComparison(const Coord &pos1, const Coord &pos2);
+  double getGravitationEnergy(tlp::node u);
+  double getAttractionEnergy(tlp::node u);
+  double getRepulsionEnergy(tlp::node u);
+  double getEnergy(tlp::node u);
+  double getDist(const tlp::Coord &pos1, const tlp::Coord &pos2);
+  double getDistForComparison(const tlp::Coord &pos1, const tlp::Coord &pos2);
 
-  double addRepulsionDir(node u, double *dir);
-  double addAttractionDir(node u, double *dir);
-  double addGravitationDir(node u, double *dir);
-  void getDirection(node u, double *dir);
+  double addRepulsionDir(tlp::node u, double *dir);
+  double addAttractionDir(tlp::node u, double *dir);
+  double addGravitationDir(tlp::node u, double *dir);
+  void getDirection(tlp::node u, double *dir);
 
   bool minimizeEnergyNoTree(int nrIterations);
 
@@ -83,9 +83,9 @@ private:
 
   OctTree *buildOctTree();
   bool minimizeEnergy(int nrIterations);
-  double addRepulsionDir(node u, double *dir, OctTree *tree);
-  double getRepulsionEnergy(node u, OctTree *tree);
-  double getEnergy(node u, OctTree *tree);
-  void getDirection(node u, double *dir, OctTree *tree);
+  double addRepulsionDir(tlp::node u, double *dir, OctTree *tree);
+  double getRepulsionEnergy(tlp::node u, OctTree *tree);
+  double getEnergy(tlp::node u, OctTree *tree);
+  void getDirection(tlp::node u, double *dir, OctTree *tree);
 };
 #endif

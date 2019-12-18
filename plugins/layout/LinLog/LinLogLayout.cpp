@@ -114,11 +114,11 @@ void LinLogLayout::initEnergyFactors() {
  * @param node  u
  * @return total energy of the specified node
  */
-double LinLogLayout::getEnergy(node u) {
+double LinLogLayout::getEnergy(tlp::node u) {
   return getRepulsionEnergy(u) + getAttractionEnergy(u) + getGravitationEnergy(u);
 }
 
-double LinLogLayout::getEnergy(node u, OctTree *tree) {
+double LinLogLayout::getEnergy(tlp::node u, OctTree *tree) {
   return getRepulsionEnergy(u, tree) + getAttractionEnergy(u) + getGravitationEnergy(u);
 }
 
@@ -127,13 +127,13 @@ double LinLogLayout::getEnergy(node u, OctTree *tree) {
  * @param node  repulsing node
  * @return repulsion energy of the specified node
  */
-double LinLogLayout::getRepulsionEnergy(node u) {
+double LinLogLayout::getRepulsionEnergy(tlp::node u) {
   double u_weight = linLogWeight.getNodeValue(u);
 
   if (u_weight == 0.0)
     return 0.0;
 
-  const Coord &u_layout = layoutResult->getNodeValue(u);
+  const tlp::Coord &u_layout = layoutResult->getNodeValue(u);
   double energy = 0.0;
 
   for (auto v : graph->nodes()) {
@@ -154,11 +154,11 @@ double LinLogLayout::getRepulsionEnergy(node u) {
   return energy;
 }
 
-double LinLogLayout::getRepulsionEnergy(node u, OctTree *tree) {
+double LinLogLayout::getRepulsionEnergy(tlp::node u, OctTree *tree) {
   if (tree == nullptr)
     return 0.0;
 
-  node treeNode = tree->getNode();
+  tlp::node treeNode = tree->getNode();
 
   if (treeNode == u)
     return 0.0;
@@ -194,11 +194,11 @@ double LinLogLayout::getRepulsionEnergy(node u, OctTree *tree) {
  * @param node  attracting node
  * @return attraction energy of the specified node
  */
-double LinLogLayout::getAttractionEnergy(node u) {
+double LinLogLayout::getAttractionEnergy(tlp::node u) {
   double energy = 0.0;
-  const Coord &u_layout = layoutResult->getNodeValue(u);
+  const tlp::Coord &u_layout = layoutResult->getNodeValue(u);
   for (auto e : graph->getInOutEdges(u)) {
-    node v = graph->opposite(e, u);
+    tlp::node v = graph->opposite(e, u);
     double dist = getDist(u_layout, layoutResult->getNodeValue(v));
     double edgeweight = linLogWeight.getEdgeValue(e);
 
@@ -216,7 +216,7 @@ double LinLogLayout::getAttractionEnergy(node u) {
  * @param node  gravitating node
  * @return gravitation energy of the specified node
  */
-double LinLogLayout::getGravitationEnergy(node u) {
+double LinLogLayout::getGravitationEnergy(tlp::node u) {
   double u_weight = linLogWeight.getNodeValue(u);
 
   double dist = getDist(layoutResult->getNodeValue(u), baryCenter);
@@ -231,7 +231,7 @@ double LinLogLayout::getGravitationEnergy(node u) {
  * Returns the Euclidean distance between the positions pos1 and pos2.
  * @return Euclidean distance between the positions pos1 and pos2
  */
-double LinLogLayout::getDist(const Coord &pos1, const Coord &pos2) {
+double LinLogLayout::getDist(const tlp::Coord &pos1, const tlp::Coord &pos2) {
   double dist = 0.0;
 
   for (unsigned int d = 0; d < _dim; ++d) {
@@ -242,7 +242,7 @@ double LinLogLayout::getDist(const Coord &pos1, const Coord &pos2) {
   return sqrt(dist);
 }
 
-double LinLogLayout::getDistForComparison(const Coord &pos1, const Coord &pos2) {
+double LinLogLayout::getDistForComparison(const tlp::Coord &pos1, const tlp::Coord &pos2) {
   double dist = 0.0;
 
   for (unsigned int d = 0; d < _dim; ++d) {
@@ -260,13 +260,13 @@ double LinLogLayout::getDistForComparison(const Coord &pos1, const Coord &pos2) 
  *         is added to this variable (output parameter)
  * @return approximate second derivation of the repulsion energy
  */
-double LinLogLayout::addRepulsionDir(node u, double *dir) {
+double LinLogLayout::addRepulsionDir(tlp::node u, double *dir) {
   double u_weight = linLogWeight.getNodeValue(u);
 
   if (u_weight == 0.0)
     return 0.0;
 
-  const Coord &position = layoutResult->getNodeValue(u);
+  const tlp::Coord &position = layoutResult->getNodeValue(u);
 
   double dir2 = 0.0;
 
@@ -276,7 +276,7 @@ double LinLogLayout::addRepulsionDir(node u, double *dir) {
     if (v == u || v_weight == 0.0)
       continue;
 
-    const Coord &position2 = layoutResult->getNodeValue(v);
+    const tlp::Coord &position2 = layoutResult->getNodeValue(v);
 
     double dist = getDist(position, position2);
 
@@ -293,7 +293,7 @@ double LinLogLayout::addRepulsionDir(node u, double *dir) {
   return dir2;
 }
 
-double LinLogLayout::addRepulsionDir(node u, double *dir, OctTree *tree) {
+double LinLogLayout::addRepulsionDir(tlp::node u, double *dir, OctTree *tree) {
   if (tree == nullptr || u == (tree->node))
     return 0.0;
 
@@ -302,7 +302,7 @@ double LinLogLayout::addRepulsionDir(node u, double *dir, OctTree *tree) {
   if (u_weight == 0.0)
     return 0.0;
 
-  const Coord &position = layoutResult->getNodeValue(u);
+  const tlp::Coord &position = layoutResult->getNodeValue(u);
 
   double dist = getDist(position, tree->position);
 
@@ -334,14 +334,14 @@ double LinLogLayout::addRepulsionDir(node u, double *dir, OctTree *tree) {
  *         is added to this variable (output parameter)
  * @return approximate second derivation of the attraction energy
  */
-double LinLogLayout::addAttractionDir(node u, double *dir) {
+double LinLogLayout::addAttractionDir(tlp::node u, double *dir) {
   double dir2 = 0.0;
 
-  const Coord &position = layoutResult->getNodeValue(u);
+  const tlp::Coord &position = layoutResult->getNodeValue(u);
 
   for (auto e : graph->getInOutEdges(u)) {
-    node v = graph->opposite(e, u);
-    const Coord &position2 = layoutResult->getNodeValue(v);
+    tlp::node v = graph->opposite(e, u);
+    const tlp::Coord &position2 = layoutResult->getNodeValue(v);
     double dist = getDist(position, position2);
 
     if (dist == 0.0)
@@ -366,8 +366,8 @@ double LinLogLayout::addAttractionDir(node u, double *dir) {
  *         is added to this variable (output parameter)
  * @return approximate second derivation of the gravitation energy
  */
-double LinLogLayout::addGravitationDir(node u, double *dir) {
-  const Coord &position = layoutResult->getNodeValue(u);
+double LinLogLayout::addGravitationDir(tlp::node u, double *dir) {
+  const tlp::Coord &position = layoutResult->getNodeValue(u);
 
   double dist = getDist(position, baryCenter);
 
@@ -388,7 +388,7 @@ double LinLogLayout::addGravitationDir(node u, double *dir) {
  * @param  dir   direction of the total force acting on the node
  *               (output parameter)
  */
-void LinLogLayout::getDirection(node u, double *dir) {
+void LinLogLayout::getDirection(tlp::node u, double *dir) {
 
   for (unsigned int d = 0; d < _dim; ++d)
     dir[d] = 0.0;
@@ -397,12 +397,12 @@ void LinLogLayout::getDirection(node u, double *dir) {
   dir2 += addAttractionDir(u, dir);
   dir2 += addGravitationDir(u, dir);
 
-  const Coord &position = layoutResult->getNodeValue(u);
+  const tlp::Coord &position = layoutResult->getNodeValue(u);
 
   // compute average Euclidean distance to other nodes
   double avgDist = 0.0;
   for (auto v : graph->nodes()) {
-    const Coord &position2 = layoutResult->getNodeValue(v);
+    const tlp::Coord &position2 = layoutResult->getNodeValue(v);
 
     avgDist += getDist(position, position2);
   }
@@ -430,7 +430,7 @@ void LinLogLayout::getDirection(node u, double *dir) {
   }
 }
 
-void LinLogLayout::getDirection(node u, double *dir, OctTree *tree) {
+void LinLogLayout::getDirection(tlp::node u, double *dir, OctTree *tree) {
   for (unsigned int d = 0; d < _dim; ++d)
     dir[d] = 0.0;
 
@@ -527,7 +527,7 @@ bool LinLogLayout::minimizeEnergyNoTree(int nrIterations) {
       getDirection(u, bestDir);
 
       // line search: compute length of the move
-      Coord pos = layoutResult->getNodeValue(u);
+      tlp::Coord pos = layoutResult->getNodeValue(u);
 
       for (unsigned int d = 0; d < _dim; ++d)
         oldPos[d] = pos[d];
@@ -582,8 +582,8 @@ bool LinLogLayout::minimizeEnergyNoTree(int nrIterations) {
     }
 
     if ((step * 100 / nrIterations) % 10 == 0 &&
-        pluginProgress->progress(step, nrIterations) != TLP_CONTINUE)
-      return pluginProgress->state() != TLP_CANCEL;
+        pluginProgress->progress(step, nrIterations) != tlp::TLP_CONTINUE)
+      return pluginProgress->state() != tlp::TLP_CANCEL;
   }
 
   return true;
@@ -641,7 +641,7 @@ bool LinLogLayout::minimizeEnergy(int nrIterations) {
       getDirection(u, bestDir, octTree);
 
       // line search: compute length of the move
-      Coord pos = layoutResult->getNodeValue(u);
+      tlp::Coord pos = layoutResult->getNodeValue(u);
 
       for (unsigned int d = 0; d < _dim; ++d)
         oldPos[d] = pos[d];
@@ -701,8 +701,8 @@ bool LinLogLayout::minimizeEnergy(int nrIterations) {
     }
 
     if ((step * 100 / nrIterations) % 10 == 0 &&
-        pluginProgress->progress(step, nrIterations) != TLP_CONTINUE)
-      return pluginProgress->state() != TLP_CANCEL;
+        pluginProgress->progress(step, nrIterations) != tlp::TLP_CONTINUE)
+      return pluginProgress->state() != tlp::TLP_CANCEL;
   }
 
   return true;
@@ -720,7 +720,7 @@ void LinLogLayout::computeBaryCenter() {
   for (auto u : graph->nodes()) {
     double u_weight = linLogWeight.getNodeValue(u);
     weightSum += u_weight;
-    const Coord &position = layoutResult->getNodeValue(u);
+    const tlp::Coord &position = layoutResult->getNodeValue(u);
 
     for (unsigned int d = 0; d < _dim; ++d)
       baryCenter[d] += u_weight * position[d];
@@ -735,14 +735,14 @@ void LinLogLayout::computeBaryCenter() {
 void LinLogLayout::initWeights() {
   linLogWeight.setAllNodeValue(0.0);
 
-  node u;
+  tlp::node u;
 
   if (edgeWeight == nullptr) {
     linLogWeight.setAllEdgeValue(1.0);
     for (auto e : graph->edges()) {
       auto eEnds = graph->ends(e);
-      node u = eEnds.first;
-      node v = eEnds.second;
+      tlp::node u = eEnds.first;
+      tlp::node v = eEnds.second;
       double wu = linLogWeight.getNodeValue(u);
       double wv = linLogWeight.getNodeValue(v);
 
@@ -768,13 +768,13 @@ void LinLogLayout::initWeights() {
 
 OctTree *LinLogLayout::buildOctTree() {
   // compute mimima and maxima of positions in each dimension
-  Coord minPos(100000, 100000, 100000);
-  Coord maxPos(-100000, -100000, -100000);
-  Coord zero(0, 0, 0);
+  tlp::Coord minPos(100000, 100000, 100000);
+  tlp::Coord maxPos(-100000, -100000, -100000);
+  tlp::Coord zero(0, 0, 0);
 
-  node n;
+  tlp::node n;
   for (auto u : linLogWeight.getNonDefaultValuatedNodes()) {
-    const Coord &position = layoutResult->getNodeValue(u);
+    const tlp::Coord &position = layoutResult->getNodeValue(u);
 
     for (unsigned int d = 0; d < _dim; ++d) {
       minPos[d] = std::min(position[d], minPos[d]);
@@ -791,7 +791,7 @@ OctTree *LinLogLayout::buildOctTree() {
   }
 
   // add nodes with non-zero weight to the octtree
-  OctTree *result = new OctTree(n, zero, minPos, maxPos, &linLogWeight, true);
+  auto *result = new OctTree(n, zero, minPos, maxPos, &linLogWeight, true);
 
   for (auto u : linLogWeight.getNonDefaultValuatedNodes()) {
     result->addNode(u, layoutResult->getNodeValue(u), 0);

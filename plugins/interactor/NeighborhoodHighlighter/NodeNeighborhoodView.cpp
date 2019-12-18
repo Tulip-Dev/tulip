@@ -27,13 +27,11 @@
 
 #include "../../utils/PluginNames.h"
 
-using namespace std;
-
 template <typename T>
-class StlVectorIterator : public Iterator<T> {
+class StlVectorIterator : public tlp::Iterator<T> {
 
 public:
-  StlVectorIterator(const vector<T> &stlVector) : stlVector(stlVector), curIdx(0) {}
+  explicit StlVectorIterator(const std::vector<T> &stlVector) : stlVector(stlVector), curIdx(0) {}
 
   T next() override {
     return stlVector[curIdx++];
@@ -44,11 +42,11 @@ public:
   }
 
 private:
-  vector<T> stlVector;
+  std::vector<T> stlVector;
   unsigned int curIdx;
 };
 
-NodeNeighborhoodView::NodeNeighborhoodView(Graph *graph, node n,
+NodeNeighborhoodView::NodeNeighborhoodView(Graph *graph, tlp::node n,
                                            NeighborNodesType neighborsNodesType,
                                            unsigned int neighborhoodDist,
                                            bool computeReachableSubGraph,
@@ -57,7 +55,7 @@ NodeNeighborhoodView::NodeNeighborhoodView(Graph *graph, node n,
       currentDist(neighborhoodDist), computeReachableSubGraph(computeReachableSubGraph),
       nbNodes(nbNodes), property(nullptr) {
   if (!propertyName.empty()) {
-    property = graph->getProperty<DoubleProperty>(propertyName);
+    property = graph->getProperty<tlp::DoubleProperty>(propertyName);
   }
 
   graphViewNodes.push_back(n);
@@ -65,7 +63,7 @@ NodeNeighborhoodView::NodeNeighborhoodView(Graph *graph, node n,
   getNeighbors(n, currentDist);
 }
 
-void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecursion) {
+void NodeNeighborhoodView::getNeighbors(tlp::node n, unsigned int dist, bool noRecursion) {
 
   if (!computeReachableSubGraph) {
 
@@ -82,7 +80,7 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
       if (property == nullptr) {
         graphViewNodes.erase(graphViewNodes.begin() + nbNodes + 1, graphViewNodes.end());
       } else {
-        unordered_map<double, vector<node>> nodesTokeep;
+        std::unordered_map<double, std::vector<tlp::node>> nodesTokeep;
         nodesAtDist[currentDist].clear();
 
         for (auto n : graphViewNodes) {
@@ -105,8 +103,8 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
       }
 
       // removing the edges that are connected to filtered nodes
-      for (vector<edge>::iterator it = graphViewEdges.begin(); it != graphViewEdges.end();) {
-        const std::pair<node, node> &eEnds = graph_component->ends(*it);
+      for (std::vector<tlp::edge>::iterator it = graphViewEdges.begin(); it != graphViewEdges.end();) {
+        const std::pair<tlp::node, tlp::node> &eEnds = graph_component->ends(*it);
 
         if (find(graphViewNodes.begin(), graphViewNodes.end(), eEnds.first) ==
                 graphViewNodes.end() ||
@@ -118,17 +116,17 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
       }
     }
   } else {
-    BooleanProperty nodesSelection(graph_component);
+    tlp::BooleanProperty nodesSelection(graph_component);
     nodesSelection.setAllNodeValue(false);
     nodesSelection.setNodeValue(centralNode, true);
 
-    DataSet dataSet;
+    tlp::DataSet dataSet;
     dataSet.set("distance", dist);
     dataSet.set("direction", 2);
     dataSet.set("startingnodes", &nodesSelection);
 
-    BooleanProperty result(graph_component);
-    string errorMsg;
+    tlp::BooleanProperty result(graph_component);
+    std::string errorMsg;
     graph_component->applyPropertyAlgorithm(tlp::SelectionAlgorithm::ReachableSubGraphSelection,
                                             &result, errorMsg, &dataSet);
 
@@ -149,7 +147,7 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
   }
 }
 
-void NodeNeighborhoodView::getInNeighbors(node n, unsigned int dist, bool noRecursion) {
+void NodeNeighborhoodView::getInNeighbors(tlp::node n, unsigned int dist, bool noRecursion) {
 
   for (auto inNode : graph_component->getInNodes(n)) {
     if (find(graphViewNodes.begin(), graphViewNodes.end(), inNode) == graphViewNodes.end()) {
@@ -157,7 +155,7 @@ void NodeNeighborhoodView::getInNeighbors(node n, unsigned int dist, bool noRecu
       nodesAtDist[dist].push_back(inNode);
     }
 
-    edge e = graph_component->existEdge(inNode, n);
+    tlp::edge e = graph_component->existEdge(inNode, n);
 
     if (find(graphViewEdges.begin(), graphViewEdges.end(), e) == graphViewEdges.end()) {
       graphViewEdges.push_back(e);
@@ -172,7 +170,7 @@ void NodeNeighborhoodView::getInNeighbors(node n, unsigned int dist, bool noRecu
   }
 }
 
-void NodeNeighborhoodView::getOutNeighbors(node n, unsigned int dist, bool noRecursion) {
+void NodeNeighborhoodView::getOutNeighbors(tlp::node n, unsigned int dist, bool noRecursion) {
 
   for (auto outNode : graph_component->getOutNodes(n)) {
     if (find(graphViewNodes.begin(), graphViewNodes.end(), outNode) == graphViewNodes.end()) {
@@ -180,7 +178,7 @@ void NodeNeighborhoodView::getOutNeighbors(node n, unsigned int dist, bool noRec
       nodesAtDist[dist].push_back(outNode);
     }
 
-    edge e = graph_component->existEdge(n, outNode);
+    tlp::edge e = graph_component->existEdge(n, outNode);
 
     if (find(graphViewEdges.begin(), graphViewEdges.end(), e) == graphViewEdges.end()) {
       graphViewEdges.push_back(e);
@@ -228,11 +226,11 @@ void NodeNeighborhoodView::updateWithDistance(const unsigned int dist) {
   currentDist = dist;
 }
 
-bool NodeNeighborhoodView::isElement(const node n) const {
+bool NodeNeighborhoodView::isElement(const tlp::node n) const {
   return find(graphViewNodes.begin(), graphViewNodes.end(), n) != graphViewNodes.end();
 }
 
-unsigned int NodeNeighborhoodView::nodePos(const node n) const {
+unsigned int NodeNeighborhoodView::nodePos(const tlp::node n) const {
   auto nbNodes = graphViewNodes.size();
 
   for (unsigned int i = 0; i < nbNodes; ++i)
@@ -242,11 +240,11 @@ unsigned int NodeNeighborhoodView::nodePos(const node n) const {
   return UINT_MAX;
 }
 
-bool NodeNeighborhoodView::isElement(const edge e) const {
+bool NodeNeighborhoodView::isElement(const tlp::edge e) const {
   return find(graphViewEdges.begin(), graphViewEdges.end(), e) != graphViewEdges.end();
 }
 
-unsigned int NodeNeighborhoodView::edgePos(const edge e) const {
+unsigned int NodeNeighborhoodView::edgePos(const tlp::edge e) const {
   auto nbEdges = graphViewEdges.size();
 
   for (unsigned int i = 0; i < nbEdges; ++i)
@@ -256,12 +254,12 @@ unsigned int NodeNeighborhoodView::edgePos(const edge e) const {
   return UINT_MAX;
 }
 
-Iterator<node> *NodeNeighborhoodView::getNodes() const {
-  return new StlVectorIterator<node>(graphViewNodes);
+tlp::Iterator<tlp::node> *NodeNeighborhoodView::getNodes() const {
+  return new StlVectorIterator<tlp::node>(graphViewNodes);
 }
 
-Iterator<node> *NodeNeighborhoodView::getInNodes(const node n) const {
-  vector<node> inNodes;
+tlp::Iterator<tlp::node> *NodeNeighborhoodView::getInNodes(const tlp::node n) const {
+  std::vector<tlp::node> inNodes;
 
   for (unsigned int i = 0; i < graphViewEdges.size(); ++i) {
     if (target(graphViewEdges[i]) == n) {
@@ -269,11 +267,11 @@ Iterator<node> *NodeNeighborhoodView::getInNodes(const node n) const {
     }
   }
 
-  return new StlVectorIterator<node>(inNodes);
+  return new StlVectorIterator<tlp::node>(inNodes);
 }
 
-Iterator<node> *NodeNeighborhoodView::getOutNodes(const node n) const {
-  vector<node> outNodes;
+tlp::Iterator<tlp::node> *NodeNeighborhoodView::getOutNodes(const tlp::node n) const {
+  std::vector<tlp::node> outNodes;
 
   for (unsigned int i = 0; i < graphViewEdges.size(); ++i) {
     if (source(graphViewEdges[i]) == n) {
@@ -281,11 +279,11 @@ Iterator<node> *NodeNeighborhoodView::getOutNodes(const node n) const {
     }
   }
 
-  return new StlVectorIterator<node>(outNodes);
+  return new StlVectorIterator<tlp::node>(outNodes);
 }
 
-Iterator<node> *NodeNeighborhoodView::getInOutNodes(const node n) const {
-  vector<node> inNodes;
+tlp::Iterator<tlp::node> *NodeNeighborhoodView::getInOutNodes(const tlp::node n) const {
+  std::vector<tlp::node> inNodes;
 
   for (unsigned int i = 0; i < graphViewEdges.size(); ++i) {
     if (target(graphViewEdges[i]) == n) {
@@ -293,7 +291,7 @@ Iterator<node> *NodeNeighborhoodView::getInOutNodes(const node n) const {
     }
   }
 
-  vector<node> outNodes;
+  std::vector<tlp::node> outNodes;
 
   for (unsigned int i = 0; i < graphViewEdges.size(); ++i) {
     if (source(graphViewEdges[i]) == n) {
@@ -302,15 +300,15 @@ Iterator<node> *NodeNeighborhoodView::getInOutNodes(const node n) const {
   }
 
   inNodes.insert(inNodes.end(), outNodes.begin(), outNodes.end());
-  return new StlVectorIterator<node>(inNodes);
+  return new StlVectorIterator<tlp::node>(inNodes);
 }
 
-Iterator<edge> *NodeNeighborhoodView::getEdges() const {
-  return new StlVectorIterator<edge>(graphViewEdges);
+tlp::Iterator<tlp::edge> *NodeNeighborhoodView::getEdges() const {
+  return new StlVectorIterator<tlp::edge>(graphViewEdges);
 }
 
-Iterator<edge> *NodeNeighborhoodView::getOutEdges(const node n) const {
-  vector<edge> outEdges;
+tlp::Iterator<tlp::edge> *NodeNeighborhoodView::getOutEdges(const tlp::node n) const {
+  std::vector<tlp::edge> outEdges;
 
   for (unsigned int i = 0; i < graphViewEdges.size(); ++i) {
     if (source(graphViewEdges[i]) == n) {
@@ -318,11 +316,11 @@ Iterator<edge> *NodeNeighborhoodView::getOutEdges(const node n) const {
     }
   }
 
-  return new StlVectorIterator<edge>(outEdges);
+  return new StlVectorIterator<tlp::edge>(outEdges);
 }
 
-Iterator<edge> *NodeNeighborhoodView::getInOutEdges(const node n) const {
-  vector<edge> inEdges;
+tlp::Iterator<tlp::edge> *NodeNeighborhoodView::getInOutEdges(const tlp::node n) const {
+  std::vector<tlp::edge> inEdges;
 
   for (unsigned int i = 0; i < graphViewEdges.size(); ++i) {
     if (target(graphViewEdges[i]) == n) {
@@ -330,7 +328,7 @@ Iterator<edge> *NodeNeighborhoodView::getInOutEdges(const node n) const {
     }
   }
 
-  vector<edge> outEdges;
+  std::vector<tlp::edge> outEdges;
 
   for (unsigned int i = 0; i < graphViewEdges.size(); ++i) {
     if (source(graphViewEdges[i]) == n) {
@@ -339,11 +337,11 @@ Iterator<edge> *NodeNeighborhoodView::getInOutEdges(const node n) const {
   }
 
   inEdges.insert(inEdges.end(), outEdges.begin(), outEdges.end());
-  return new StlVectorIterator<edge>(inEdges);
+  return new StlVectorIterator<tlp::edge>(inEdges);
 }
 
-Iterator<edge> *NodeNeighborhoodView::getInEdges(const node n) const {
-  vector<edge> inEdges;
+tlp::Iterator<tlp::edge> *NodeNeighborhoodView::getInEdges(const tlp::node n) const {
+  std::vector<tlp::edge> inEdges;
 
   for (unsigned int i = 0; i < graphViewEdges.size(); ++i) {
     if (target(graphViewEdges[i]) == n) {
@@ -351,5 +349,5 @@ Iterator<edge> *NodeNeighborhoodView::getInEdges(const node n) const {
     }
   }
 
-  return new StlVectorIterator<edge>(inEdges);
+  return new StlVectorIterator<tlp::edge>(inEdges);
 }

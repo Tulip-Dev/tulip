@@ -27,8 +27,6 @@
 
 #include <vector>
 
-using namespace std;
-
 TulipToOGDF::TulipToOGDF(tlp::Graph *g, bool importEdgeBends)
     : tulipGraph(g), ogdfNodes(g), ogdfEdges(g) {
 
@@ -47,8 +45,8 @@ TulipToOGDF::TulipToOGDF(tlp::Graph *g, bool importEdgeBends)
 
   ogdfAttributes = ogdf::GraphAttributes(ogdfGraph, attributes);
 
-  tlp::SizeProperty *sizeProp = tulipGraph->getProperty<tlp::SizeProperty>("viewSize");
-  tlp::LayoutProperty *layoutProp = tulipGraph->getProperty<tlp::LayoutProperty>("viewLayout");
+  auto *sizeProp = tulipGraph->getProperty<tlp::SizeProperty>("viewSize");
+  auto *layoutProp = tulipGraph->getProperty<tlp::LayoutProperty>("viewLayout");
 
   const std::vector<tlp::node> &nodes = tulipGraph->nodes();
   unsigned int nbElts = nodes.size();
@@ -77,10 +75,10 @@ TulipToOGDF::TulipToOGDF(tlp::Graph *g, bool importEdgeBends)
 
     if (importEdgeBends) {
 
-      const vector<tlp::Coord> &v = layoutProp->getEdgeValue(eTlp);
+      const std::vector<tlp::Coord> &v = layoutProp->getEdgeValue(eTlp);
       ogdf::DPolyline bends;
 
-      for (const Coord &coord : v) {
+      for (const tlp::Coord &coord : v) {
         bends.pushBack(ogdf::DPoint(coord.getX(), coord.getY()));
       }
 
@@ -92,7 +90,7 @@ TulipToOGDF::TulipToOGDF(tlp::Graph *g, bool importEdgeBends)
 }
 
 void TulipToOGDF::saveToGML(const char *fileName) {
-  GraphIO::writeGML(ogdfAttributes, fileName);
+  ogdf::GraphIO::writeGML(ogdfAttributes, fileName);
 }
 
 tlp::Graph &TulipToOGDF::getTlp() {
@@ -125,10 +123,10 @@ tlp::Coord TulipToOGDF::getNodeCoordFromOGDFGraphAttr(unsigned int nodeIndex) {
   return tlp::Coord(x, y, z);
 }
 
-vector<tlp::Coord> TulipToOGDF::getEdgeCoordFromOGDFGraphAttr(unsigned int edgeIndex) {
+std::vector<tlp::Coord> TulipToOGDF::getEdgeCoordFromOGDFGraphAttr(unsigned int edgeIndex) {
   ogdf::edge e = ogdfEdges[edgeIndex];
   ogdf::DPolyline line = ogdfAttributes.bends(e);
-  vector<tlp::Coord> v;
+  std::vector<tlp::Coord> v;
 
   for (ogdf::ListIterator<ogdf::DPoint> p = line.begin(); p.valid(); ++p) {
     v.push_back(tlp::Coord((*p).m_x, (*p).m_y, 0.));

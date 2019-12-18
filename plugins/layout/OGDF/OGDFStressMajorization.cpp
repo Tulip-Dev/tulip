@@ -110,7 +110,7 @@ public:
                     "2.0", "Force Directed")
   OGDFStressMajorization(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, new ogdf::StressMinimization()) {
-    addInParameter<StringCollection>("terminationCriterion", paramHelp[0],
+    addInParameter<tlp::StringCollection>("terminationCriterion", paramHelp[0],
                                      "None;PositionDifference;Stress", true,
                                      "None <br> PositionDifference <br> Stress");
     addInParameter<bool>("fixXCoordinates", paramHelp[1], "false");
@@ -126,13 +126,13 @@ public:
   ~OGDFStressMajorization() override {}
 
   void beforeCall() override {
-    ogdf::StressMinimization *stressm = static_cast<ogdf::StressMinimization *>(ogdfLayoutAlgo);
+    auto *stressm = static_cast<ogdf::StressMinimization *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {
       double dval = 0;
       int ival = 0;
       bool bval = false;
-      StringCollection sc;
+      tlp::StringCollection sc;
       tlp::NumericProperty *edgeCosts = graph->getProperty<tlp::DoubleProperty>("viewMetric");
 
       if (dataSet->get("terminationCriterion", sc)) {

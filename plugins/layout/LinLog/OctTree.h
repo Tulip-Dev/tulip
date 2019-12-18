@@ -24,7 +24,6 @@
 #include <tulip/DoubleProperty.h>
 #include <vector>
 
-using namespace tlp;
 
 /**
  * Octtree for graph nodes with positions in 3D space.
@@ -55,35 +54,35 @@ protected:
   // unsigned int childrenSize;
 
   // Barycenter of the contained graph nodes.
-  Coord position;
+  tlp::Coord position;
 
   // Total weight of the contained graph nodes.
   double weight;
 
   // Minimum coordinates of the cuboid in each of the 3 dimensions.
-  Coord minPos;
+  tlp::Coord minPos;
 
   // Maximum coordinates of the cuboid in each of the 3 dimensions.
-  Coord maxPos;
+  tlp::Coord maxPos;
 
   // The weight metric
   tlp::DoubleProperty *linLogWeight;
 
 public:
   // constructor
-  OctTree(tlp::node node, Coord position, Coord minPos, Coord maxPos,
+  OctTree(tlp::node node, tlp::Coord position, tlp::Coord minPos, tlp::Coord maxPos,
           tlp::DoubleProperty *_linLogWeight, bool _fistNode);
   // destructor
   ~OctTree();
 
   // Adds a graph node to the octtree
-  void addNode(tlp::node newNode, Coord newPos, unsigned int depth);
+  void addNode(tlp::node newNode, tlp::Coord newPos, unsigned int depth);
 
   // Adds a graph node to the OctTree, without changing the position and weight of the root
-  void addNode2(tlp::node newNode, Coord newPos, unsigned int depth);
+  void addNode2(tlp::node newNode, tlp::Coord newPos, unsigned int depth);
 
   // Removes a graph node from the octtree
-  void removeNode(tlp::node oldNode, Coord oldPos, unsigned int depth);
+  void removeNode(tlp::node oldNode, tlp::Coord oldPos, unsigned int depth);
   // Returns the maximum extension of the octtree
   double width();
 

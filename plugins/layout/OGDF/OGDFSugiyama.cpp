@@ -205,11 +205,11 @@ public:
     addInParameter<double>("pageRatio", paramHelp[8], "1.0");
     addInParameter<bool>("alignBaseClasses", paramHelp[9], "false");
     addInParameter<bool>("alignSiblings", paramHelp[10], "false");
-    addInParameter<StringCollection>(ELT_RANKING, paramHelp[11], ELT_RANKINGLIST, true,
+    addInParameter<tlp::StringCollection>(ELT_RANKING, paramHelp[11], ELT_RANKINGLIST, true,
                                      eltRankingValuesDescription);
-    addInParameter<StringCollection>(ELT_TWOLAYERCROSS, paramHelp[12], ELT_TWOLAYERCROSSLIST, true,
+    addInParameter<tlp::StringCollection>(ELT_TWOLAYERCROSS, paramHelp[12], ELT_TWOLAYERCROSSLIST, true,
                                      twoLayerCrossValuesDescription);
-    addInParameter<StringCollection>(ELT_HIERARCHYLAYOUT, paramHelp[13], ELT_HIERARCHYLAYOUTLIST,
+    addInParameter<tlp::StringCollection>(ELT_HIERARCHYLAYOUT, paramHelp[13], ELT_HIERARCHYLAYOUTLIST,
                                      true, hierarchyLayoutValuesDescription);
     addInParameter<bool>("transpose vertically", paramHelp[14], "true");
   }
@@ -222,13 +222,13 @@ public:
                     "1.7", "Hierarchical")
 
   void beforeCall() override {
-    ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout *>(ogdfLayoutAlgo);
+    auto *sugiyama = static_cast<ogdf::SugiyamaLayout *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {
       int ival = 0;
       double dval = 0;
       bool bval = false;
-      StringCollection sc;
+      tlp::StringCollection sc;
 
       if (dataSet->get("fails", ival))
         sugiyama->fails(ival);
@@ -292,18 +292,18 @@ public:
         dataSet->get("fixed layer distance", fixedLayerDistance);
 
         if (sc.getCurrent() == ELT_FASTHIERARCHY) {
-          ogdf::FastHierarchyLayout *fhl = new FastHierarchyLayout();
+          auto *fhl = new ogdf::FastHierarchyLayout();
           fhl->nodeDistance(nodeDistance);
           fhl->layerDistance(layerDistance);
           fhl->fixedLayerDistance(fixedLayerDistance);
           sugiyama->setLayout(fhl);
         } else if (sc.getCurrent() == ELT_FASTSIMPLEHIERARCHY) {
-          ogdf::FastSimpleHierarchyLayout *fshl = new ogdf::FastSimpleHierarchyLayout();
+          auto *fshl = new ogdf::FastSimpleHierarchyLayout();
           fshl->nodeDistance(nodeDistance);
           fshl->layerDistance(layerDistance);
           sugiyama->setLayout(fshl);
         } else {
-          ogdf::OptimalHierarchyLayout *ohl = new ogdf::OptimalHierarchyLayout();
+          auto *ohl = new ogdf::OptimalHierarchyLayout();
           ohl->nodeDistance(nodeDistance);
           ohl->layerDistance(layerDistance);
           sugiyama->setLayout(ohl);
@@ -313,7 +313,7 @@ public:
   }
 
   void callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) override {
-    ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout *>(ogdfLayoutAlgo);
+    auto *sugiyama = static_cast<ogdf::SugiyamaLayout *>(ogdfLayoutAlgo);
 
     if (sugiyama->alignBaseClasses() || sugiyama->alignSiblings())
       sugiyama->callUML(gAttributes);

@@ -115,16 +115,16 @@ public:
                     "1.3", "Force Directed")
   OGDFDavidsonHarel(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, new ogdf::DavidsonHarelLayout()) {
-    addInParameter<StringCollection>(ELT_SETTINGS, paramHelp[0], ELT_SETTINGSLIST, true,
+    addInParameter<tlp::StringCollection>(ELT_SETTINGS, paramHelp[0], ELT_SETTINGSLIST, true,
                                      "Standard <br> Repulse <br> Planar");
-    addInParameter<StringCollection>(ELT_SPEED, paramHelp[1], ELT_SPEEDLIST, true,
+    addInParameter<tlp::StringCollection>(ELT_SPEED, paramHelp[1], ELT_SPEEDLIST, true,
                                      "Fast <br> Medium <br> HQ");
     addInParameter<double>("preferredEdgeLength", paramHelp[2], "0.0");
     addInParameter<double>("preferredEdgeLengthMultiplier", paramHelp[3], "2.0");
   }
 
   void beforeCall() override {
-    ogdf::DavidsonHarelLayout *davidson = static_cast<ogdf::DavidsonHarelLayout *>(ogdfLayoutAlgo);
+    auto *davidson = static_cast<ogdf::DavidsonHarelLayout *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {
       settings.setCurrent(0);

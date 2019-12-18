@@ -33,7 +33,7 @@
 
 class TLP_OGDF_SCOPE OGDFLayoutPluginBase : public tlp::LayoutAlgorithm {
 public:
-  OGDFLayoutPluginBase(const tlp::PluginContext *context, LayoutModule *ogdfLayoutAlgo);
+  OGDFLayoutPluginBase(const tlp::PluginContext *context, ogdf::LayoutModule *ogdfLayoutAlgo);
   ~OGDFLayoutPluginBase() override;
 
   bool run() override;

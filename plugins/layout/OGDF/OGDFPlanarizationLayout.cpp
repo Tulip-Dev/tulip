@@ -108,21 +108,21 @@ class OGDFPlanarizationLayout : public OGDFLayoutPluginBase {
 public:
   PLUGININFORMATION("Planarization Layout (OGDF)", "Carsten Gutwenger", "12/11/2007",
                     "The planarization approach for drawing graphs.", "1.0", "Planar")
-  OGDFPlanarizationLayout(const tlp::PluginContext *context)
+  explicit OGDFPlanarizationLayout(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, new ogdf::PlanarizationLayout()) {
     addInParameter<double>("page ratio", paramHelp[0], "1.1");
-    addInParameter<StringCollection>(ELT_EMBEDDER, paramHelp[1], ELT_EMBEDDER_LIST, true,
+    addInParameter<tlp::StringCollection>(ELT_EMBEDDER, paramHelp[1], ELT_EMBEDDER_LIST, true,
                                      embedderValuesDescription);
   }
 
   ~OGDFPlanarizationLayout() override {}
 
   void beforeCall() override {
-    ogdf::PlanarizationLayout *pl = static_cast<ogdf::PlanarizationLayout *>(ogdfLayoutAlgo);
+    auto *pl = static_cast<ogdf::PlanarizationLayout *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {
       double dval = 0;
-      StringCollection sc;
+      tlp::StringCollection sc;
 
       if (dataSet->get("page ratio", dval))
         pl->pageRatio(dval);

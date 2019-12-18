@@ -19,9 +19,6 @@
 #include "LinLogAlgorithm.h"
 #include "LinLogLayout.h"
 
-using namespace std;
-using namespace tlp;
-
 static const char *paramHelp[] = {
     // 3D
     "If true the layout is in 3D else it is computed in 2D",
@@ -55,13 +52,13 @@ static const char *paramHelp[] = {
 LinLogAlgorithm::LinLogAlgorithm(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
   addInParameter<bool>("3D layout", paramHelp[0], "false");
   addInParameter<bool>("octtree", paramHelp[1], "true");
-  addInParameter<NumericProperty *>("edge weight", paramHelp[2], "", false);
+  addInParameter<tlp::NumericProperty *>("edge weight", paramHelp[2], "", false);
   addInParameter<unsigned int>("max iterations", paramHelp[3], "100");
   addInParameter<float>("repulsion exponent", paramHelp[4], "0.0");
   addInParameter<float>("attraction exponent", paramHelp[5], "1.0");
   addInParameter<float>("gravitation factor", paramHelp[6], "0.05");
-  addInParameter<BooleanProperty>("skip nodes", paramHelp[7], "", false);
-  addInParameter<LayoutProperty>("initial layout", paramHelp[8], "", false);
+  addInParameter<tlp::BooleanProperty>("skip nodes", paramHelp[7], "", false);
+  addInParameter<tlp::LayoutProperty>("initial layout", paramHelp[8], "", false);
 }
 
 LinLogAlgorithm::~LinLogAlgorithm() {}
@@ -76,7 +73,7 @@ bool LinLogAlgorithm::run() {
   float aExp = 1.0;
   float rExp = 0.0;
   float gFac = 0.9f;
-  LayoutProperty *layout = nullptr;
+  tlp::LayoutProperty *layout = nullptr;
 
   if (dataSet != nullptr) {
     dataSet->get("3D layout", is3D);
@@ -97,7 +94,7 @@ bool LinLogAlgorithm::run() {
   else {
     std::string err;
 
-    if (graph->applyPropertyAlgorithm("Random layout", result, err) == false) {
+    if (!graph->applyPropertyAlgorithm("Random layout", result, err)) {
       pluginProgress->setError(err);
       return false;
     }

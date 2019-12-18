@@ -20,9 +20,6 @@
 
 #include <tulip/Glyph.h>
 
-using namespace std;
-using namespace tlp;
-
 namespace tlp {
 
 struct BoundingBox;
@@ -34,18 +31,18 @@ struct BoundingBox;
  * This glyph draws a sphere using the "viewColor" node property value.
  * and apply a texture around it
  */
-class TLP_GL_SCOPE AroundTexturedSphere : public NoShaderGlyph {
+class TLP_GL_SCOPE AroundTexturedSphere : public tlp::NoShaderGlyph {
   const std::string textureFile;
   const unsigned char alpha;
 
 public:
   AroundTexturedSphere(const tlp::PluginContext *context = nullptr,
                        const std::string &aroundTextureFile = "", unsigned char alphaVal = 255)
-      : NoShaderGlyph(context), textureFile(aroundTextureFile), alpha(alphaVal) {}
-  void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
+      : tlp::NoShaderGlyph(context), textureFile(aroundTextureFile), alpha(alphaVal) {}
+  void getIncludeBoundingBox(tlp::BoundingBox &boundingBox, node) override;
   void draw(node n, float) override;
-  static void drawGlyph(const Color &glyphColor, const Size &glyphSize, const string &texture,
-                        const string &texturePath, const string &aroundTextureFile,
+  static void drawGlyph(const tlp::Color &glyphColor, const tlp::Size &glyphSize, const std::string &texture,
+                        const std::string &texturePath, const std::string &aroundTextureFile,
                         unsigned char alpha = 255);
 };
 } // end of namespace tlp

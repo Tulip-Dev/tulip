@@ -130,21 +130,21 @@ public:
     addInParameter<double>("levels distance", paramHelp[2], "50");
     addInParameter<double>("trees distance", paramHelp[3], "50");
     addInParameter<bool>("orthogonal layout", paramHelp[4], "false");
-    addInParameter<StringCollection>(ELT_ORIENTATION, paramHelp[5], ELT_ORIENTATIONLIST, true,
+    addInParameter<tlp::StringCollection>(ELT_ORIENTATION, paramHelp[5], ELT_ORIENTATIONLIST, true,
                                      orientationValuesDescription);
-    addInParameter<StringCollection>(ELT_ROOTSELECTION, paramHelp[6], ELT_ROOTSELECTIONLIST, true,
+    addInParameter<tlp::StringCollection>(ELT_ROOTSELECTION, paramHelp[6], ELT_ROOTSELECTIONLIST, true,
                                      rootSelectionValuesDescription);
   }
 
   ~OGDFTree() override {}
 
   void beforeCall() override {
-    ogdf::TreeLayout *tree = static_cast<ogdf::TreeLayout *>(ogdfLayoutAlgo);
+    auto *tree = static_cast<ogdf::TreeLayout *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {
       double dval = 0;
       bool bval = false;
-      StringCollection sc;
+      tlp::StringCollection sc;
 
       if (dataSet->get("siblings distance", dval))
         tree->siblingDistance(dval);

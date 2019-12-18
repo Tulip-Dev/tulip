@@ -111,7 +111,7 @@ public:
                     "M. J., Reingold, Edward M., Software – Practice & Experience (Wiley) Volume "
                     "21, Issue 11, pages 1129–1164, (1991)",
                     "1.1", "Force Directed")
-  OGDFFrutchermanReingold(const tlp::PluginContext *context);
+  explicit OGDFFrutchermanReingold(const tlp::PluginContext *context);
   ~OGDFFrutchermanReingold() override;
 
   void beforeCall() override;
@@ -126,8 +126,8 @@ OGDFFrutchermanReingold::OGDFFrutchermanReingold(const tlp::PluginContext *conte
   addInParameter<int>("iterations", paramHelp[0], "1000");
   addInParameter<bool>("noise", paramHelp[1], "true");
   addInParameter<bool>("use node weights", paramHelp[2], "false");
-  addInParameter<NumericProperty *>("node weights", paramHelp[3], "viewMetric");
-  addInParameter<StringCollection>(ELT_COOLING, paramHelp[4], ELT_COOLINGLIST, true,
+  addInParameter<tlp::NumericProperty *>("node weights", paramHelp[3], "viewMetric");
+  addInParameter<tlp::StringCollection>(ELT_COOLING, paramHelp[4], ELT_COOLINGLIST, true,
                                    "Factor<br> Logarithmic");
   addInParameter<double>("ideal edge length", paramHelp[5], "10.0");
   addInParameter<double>("minDistCC", paramHelp[6], "20.0");
@@ -139,13 +139,13 @@ OGDFFrutchermanReingold::OGDFFrutchermanReingold(const tlp::PluginContext *conte
 OGDFFrutchermanReingold::~OGDFFrutchermanReingold() {}
 
 void OGDFFrutchermanReingold::beforeCall() {
-  ogdf::SpringEmbedderFRExact *sefr = static_cast<ogdf::SpringEmbedderFRExact *>(ogdfLayoutAlgo);
+  auto *sefr = static_cast<ogdf::SpringEmbedderFRExact *>(ogdfLayoutAlgo);
 
   if (dataSet != nullptr) {
     int ival = 0;
     double dval = 0;
     bool bval = false;
-    StringCollection sc;
+    tlp::StringCollection sc;
 
     if (dataSet->get("iterations", ival))
       sefr->iterations(ival);
@@ -170,7 +170,7 @@ void OGDFFrutchermanReingold::beforeCall() {
     if (dataSet->get("use node weights", bval)) {
       sefr->nodeWeights(bval);
 
-      NumericProperty *metric = nullptr;
+      tlp::NumericProperty *metric = nullptr;
 
       if (bval && dataSet->get("node weights", metric)) {
         tlpToOGDF->copyTlpNumericPropertyToOGDFNodeWeight(metric);

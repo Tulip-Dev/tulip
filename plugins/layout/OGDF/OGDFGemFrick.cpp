@@ -138,7 +138,7 @@ OGDFGemFrick::OGDFGemFrick(const tlp::PluginContext *context)
   addInParameter<double>("oscillation angle", paramHelp[7], "1.57079633");
   addInParameter<double>("rotation sensitivity", paramHelp[8], "0.01");
   addInParameter<double>("oscillation sensitivity", paramHelp[9], "0.3");
-  addInParameter<StringCollection>(ELT_ATTRACTIONFORMULA, paramHelp[10], ELT_ATTRACTIONFORMULALIST,
+  addInParameter<tlp::StringCollection>(ELT_ATTRACTIONFORMULA, paramHelp[10], ELT_ATTRACTIONFORMULALIST,
                                    true, "Fruchterman/Reingold <br> GEM");
   addInParameter<double>("minDistCC", paramHelp[11], "20");
   addInParameter<double>("pageRatio", paramHelp[12], "1.0");
@@ -147,12 +147,12 @@ OGDFGemFrick::OGDFGemFrick(const tlp::PluginContext *context)
 OGDFGemFrick::~OGDFGemFrick() {}
 
 void OGDFGemFrick::beforeCall() {
-  ogdf::GEMLayout *gem = static_cast<ogdf::GEMLayout *>(ogdfLayoutAlgo);
+  auto *gem = static_cast<ogdf::GEMLayout *>(ogdfLayoutAlgo);
 
   if (dataSet != nullptr) {
     int ival = 0;
     double dval = 0;
-    StringCollection sc;
+    tlp::StringCollection sc;
 
     if (dataSet->get("number of rounds", ival)) {
       gem->numberOfRounds(ival);

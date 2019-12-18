@@ -21,8 +21,6 @@
 #include <vector>
 #include <tulip/DrawingTools.h>
 
-using namespace std;
-
 OGDFLayoutPluginBase::OGDFLayoutPluginBase(const tlp::PluginContext *context,
                                            ogdf::LayoutModule *ogdfLayoutAlgo)
     : tlp::LayoutAlgorithm(context), tlpToOGDF(nullptr), ogdfLayoutAlgo(ogdfLayoutAlgo) {
@@ -50,59 +48,59 @@ bool OGDFLayoutPluginBase::run() {
   try {
     // run the algorithm on the OGDF Graph with attributes
     callOGDFLayoutAlgorithm(gAttributes);
-  } catch (PreconditionViolatedException &pvce) {
+  } catch (ogdf::PreconditionViolatedException &pvce) {
     std::string msg;
 
     switch (pvce.exceptionCode()) {
-    case pvcSelfLoop:
+    case ogdf::pvcSelfLoop:
       msg = "graph contains a self-loop";
       break;
 
-    case pvcTreeHierarchies:
+    case ogdf::pvcTreeHierarchies:
       msg = "hierarchies are not only trees";
       break;
 
-    case pvcAcyclicHierarchies:
+    case ogdf::pvcAcyclicHierarchies:
       msg = "hierarchies are not acyclic";
       break;
 
-    case pvcSingleSource:
+    case ogdf::pvcSingleSource:
       msg = "graph has not a single source";
       break;
 
-    case pvcUpwardPlanar:
+    case ogdf::pvcUpwardPlanar:
       msg = "graph is not upward planar";
       break;
 
-    case pvcTree:
+    case ogdf::pvcTree:
       msg = "graph is not a rooted tree";
       break;
 
-    case pvcForest:
+    case ogdf::pvcForest:
       msg = "graph is not a rooted forest";
       break;
 
-    case pvcOrthogonal:
+    case ogdf::pvcOrthogonal:
       msg = "layout is not orthogonal";
       break;
 
-    case pvcPlanar:
+    case ogdf::pvcPlanar:
       msg = "graph is not planar";
       break;
 
-    case pvcClusterPlanar:
+    case ogdf::pvcClusterPlanar:
       msg = "graph is not c-planar";
       break;
 
-    case pvcNoCopy:
+    case ogdf::pvcNoCopy:
       msg = "graph is not a copy of the corresponding graph";
       break;
 
-    case pvcConnected:
+    case ogdf::pvcConnected:
       msg = "graph is not connected";
       break;
 
-    case pvcBiconnected:
+    case ogdf::pvcBiconnected:
       msg = "graph is not twoconnected";
       break;
 
@@ -112,39 +110,39 @@ bool OGDFLayoutPluginBase::run() {
 
     pluginProgress->setError(std::string("Error\n") + msg);
     return false;
-  } catch (AlgorithmFailureException &afce) {
+  } catch (ogdf::AlgorithmFailureException &afce) {
     std::string msg;
 
     switch (afce.exceptionCode()) {
-    case afcIllegalParameter:
+    case ogdf::afcIllegalParameter:
       msg = "function parameter is illegal";
       break;
 
-    case afcNoFlow:
+    case ogdf::afcNoFlow:
       msg = "min-cost flow could not find a legal flow";
       break;
 
-    case afcSort:
+    case ogdf::afcSort:
       msg = "sequence not sorted";
       break;
 
-    case afcLabel:
+    case ogdf::afcLabel:
       msg = "labelling failed";
       break;
 
-    case afcExternalFace:
+    case ogdf::afcExternalFace:
       msg = "external face not correct";
       break;
 
-    case afcForbiddenCrossing:
+    case ogdf::afcForbiddenCrossing:
       msg = "crossing forbidden but necessary";
       break;
 
-    case afcTimelimitExceeded:
+    case ogdf::afcTimelimitExceeded:
       msg = "it took too long";
       break;
 
-    case afcNoSolutionFound:
+    case ogdf::afcNoSolutionFound:
       msg = "couldn't solve the problem";
       break;
 
@@ -171,7 +169,7 @@ bool OGDFLayoutPluginBase::run() {
   nbElts = edges.size();
 
   for (unsigned int i = 0; i < nbElts; ++i) {
-    vector<tlp::Coord> edgeCoord = tlpToOGDF->getEdgeCoordFromOGDFGraphAttr(i);
+    std::vector<tlp::Coord> edgeCoord = tlpToOGDF->getEdgeCoordFromOGDFGraphAttr(i);
     result->setEdgeValue(edges[i], edgeCoord);
   }
 
@@ -186,12 +184,12 @@ void OGDFLayoutPluginBase::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttri
 
 void OGDFLayoutPluginBase::transposeLayoutVertically() {
 
-  const vector<tlp::node> &nodes = graph->nodes();
-  const vector<tlp::edge> &edges = graph->edges();
+  const std::vector<tlp::node> &nodes = graph->nodes();
+  const std::vector<tlp::edge> &edges = graph->edges();
 
   tlp::BoundingBox graphBB =
-      tlp::computeBoundingBox(nodes, edges, result, graph->getProperty<SizeProperty>("viewSize"),
-                              graph->getProperty<DoubleProperty>("viewRotation"));
+      tlp::computeBoundingBox(nodes, edges, result, graph->getProperty<tlp::SizeProperty>("viewSize"),
+                              graph->getProperty<tlp::DoubleProperty>("viewRotation"));
   float midY = (graphBB[0][1] + graphBB[1][1]) / 2.f;
 
   for (auto n : nodes) {

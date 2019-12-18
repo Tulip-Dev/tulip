@@ -29,20 +29,18 @@
 #include "../../utils/StandardInteractorPriority.h"
 #include "../../utils/PluginNames.h"
 
-using namespace std;
-
 GeographicViewInteractor::GeographicViewInteractor(const QString &iconPath, const QString &text)
     : GLInteractorComposite(QIcon(iconPath), text) {}
 
 bool GeographicViewInteractor::isCompatible(const std::string &viewName) const {
-  return (viewName == ViewName::GeographicViewName);
+  return (viewName == tlp::ViewName::GeographicViewName);
 }
 
-GeographicViewInteractorNavigation::GeographicViewInteractorNavigation(const PluginContext *)
+GeographicViewInteractorNavigation::GeographicViewInteractorNavigation(const tlp::PluginContext *)
     : GeographicViewInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view") {}
 
 unsigned int GeographicViewInteractorNavigation::priority() const {
-  return StandardInteractorPriority::Navigation;
+  return tlp::StandardInteractorPriority::Navigation;
 }
 
 void GeographicViewInteractorNavigation::construct() {
@@ -53,12 +51,12 @@ QWidget *GeographicViewInteractorNavigation::configurationWidget() const {
   return nullptr;
 }
 
-GeographicViewInteractorSelection::GeographicViewInteractorSelection(const PluginContext *)
+GeographicViewInteractorSelection::GeographicViewInteractorSelection(const tlp::PluginContext *)
     : GeographicViewInteractor(":/tulip/gui/icons/i_selection.png", "selection in view") {}
 
 void GeographicViewInteractorSelection::construct() {
   push_back(new GeographicViewNavigator);
-  push_back(new MouseSelector);
+  push_back(new tlp::MouseSelector);
 }
 
 QWidget *GeographicViewInteractorSelection::configurationWidget() const {
@@ -70,19 +68,19 @@ QCursor GeographicViewInteractorSelection::cursor() const {
 }
 
 unsigned int GeographicViewInteractorSelection::priority() const {
-  return StandardInteractorPriority::RectangleSelection;
+  return tlp::StandardInteractorPriority::RectangleSelection;
 }
 
 PLUGIN(GeographicViewInteractorSelection)
 
 GeographicViewInteractorSelectionEditor::GeographicViewInteractorSelectionEditor(
-    const PluginContext *)
+    const tlp::PluginContext *)
     : GeographicViewInteractor(":/tulip/gui/icons/i_move.png", "selection edition in view") {}
 
 void GeographicViewInteractorSelectionEditor::construct() {
   push_back(new GeographicViewNavigator);
-  push_back(new MouseSelector);
-  push_back(new MouseSelectionEditor);
+  push_back(new tlp::MouseSelector);
+  push_back(new tlp::MouseSelectionEditor);
 }
 
 QWidget *GeographicViewInteractorSelectionEditor::configurationWidget() const {
@@ -94,7 +92,7 @@ QCursor GeographicViewInteractorSelectionEditor::cursor() const {
 }
 
 unsigned int GeographicViewInteractorSelectionEditor::priority() const {
-  return StandardInteractorPriority::RectangleSelectionModifier;
+  return tlp::StandardInteractorPriority::RectangleSelectionModifier;
 }
 
 PLUGIN(GeographicViewInteractorSelectionEditor)
@@ -103,9 +101,9 @@ GeographicViewNavigator::GeographicViewNavigator() : x(0), y(0), inRotation(fals
 
 GeographicViewNavigator::~GeographicViewNavigator() {}
 
-void GeographicViewNavigator::viewChanged(View *) {}
+void GeographicViewNavigator::viewChanged(tlp::View *) {}
 
-void trans(Coord &c1, Coord &c2, float angle1, float angle2) {
+void trans(tlp::Coord &c1, tlp::Coord &c2, float angle1, float angle2) {
   float rho1 = sqrt(c1[0] * c1[0] + c1[1] * c1[1] + c1[2] * c1[2]);
   float theta1 = acos(c1[2] / rho1);
   float phi1 = acos(c1[0] / sqrt(c1[0] * c1[0] + c1[1] * c1[1]));
@@ -151,18 +149,18 @@ void trans(Coord &c1, Coord &c2, float angle1, float angle2) {
 }
 
 bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
-  GeographicView *geoView = static_cast<GeographicView *>(view());
-  GlMainWidget *g = static_cast<GlMainWidget *>(widget);
+  auto *geoView = static_cast<tlp::GeographicView *>(view());
+  auto *g = static_cast<tlp::GlMainWidget *>(widget);
   QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
   QWheelEvent *qWheelEv = dynamic_cast<QWheelEvent *>(e);
 
-  if (geoView->viewType() == GeographicView::OpenStreetMap ||
-      geoView->viewType() == GeographicView::EsriSatellite ||
-      geoView->viewType() == GeographicView::EsriTerrain ||
-      geoView->viewType() == GeographicView::EsriGrayCanvas ||
-      geoView->viewType() == GeographicView::LeafletCustomTileLayer) {
+  if (geoView->viewType() == tlp::GeographicView::OpenStreetMap ||
+      geoView->viewType() == tlp::GeographicView::EsriSatellite ||
+      geoView->viewType() == tlp::GeographicView::EsriTerrain ||
+      geoView->viewType() == tlp::GeographicView::EsriGrayCanvas ||
+      geoView->viewType() == tlp::GeographicView::LeafletCustomTileLayer) {
     return false;
-  } else if (geoView->viewType() == GeographicView::Globe) {
+  } else if (geoView->viewType() == tlp::GeographicView::Globe) {
     if (e->type() == QEvent::Wheel && qWheelEv->orientation() == Qt::Vertical) {
 #define WHEEL_DELTA 120
       g->getScene()->zoomXY(qWheelEv->delta() / WHEEL_DELTA, g->width() / 2., g->height() / 2.);
@@ -188,11 +186,11 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 
     if (e->type() == QEvent::MouseMove && inRotation) {
 
-      Camera &camera = g->getScene()->getGraphCamera();
-      Coord &&c1 = camera.getEyes() - camera.getCenter();
-      Coord &&c2 = c1 + camera.getUp();
+      tlp::Camera &camera = g->getScene()->getGraphCamera();
+      tlp::Coord &&c1 = camera.getEyes() - camera.getCenter();
+      tlp::Coord &&c2 = c1 + camera.getUp();
       trans(c1, c2, -0.005 * (qMouseEv->y() - y), -0.005 * (qMouseEv->x() - x));
-      camera.setCenter(Coord(0, 0, 0));
+      camera.setCenter(tlp::Coord(0, 0, 0));
       camera.setEyes(c1);
       camera.setUp(c2 - camera.getEyes());
 
@@ -226,11 +224,11 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
         break;
       }
 
-      Camera &camera = g->getScene()->getGraphCamera();
-      Coord &&c1 = camera.getEyes() - camera.getCenter();
-      Coord &&c2 = c1 + camera.getUp();
+      tlp::Camera &camera = g->getScene()->getGraphCamera();
+      tlp::Coord &&c1 = camera.getEyes() - camera.getCenter();
+      tlp::Coord &&c2 = c1 + camera.getUp();
       trans(c1, c2, angle1, angle2);
-      camera.setCenter(Coord(0, 0, 0));
+      camera.setCenter(tlp::Coord(0, 0, 0));
       camera.setEyes(c1);
       camera.setUp(c2 - camera.getEyes());
 
@@ -247,9 +245,9 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 
 PLUGIN(GeographicViewInteractorNavigation)
 
-GeographicViewInteractorAddEdges::GeographicViewInteractorAddEdges(const PluginContext *)
+GeographicViewInteractorAddEdges::GeographicViewInteractorAddEdges(const tlp::PluginContext *)
     : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_addedge.png", "Add nodes/edges",
-                                         StandardInteractorPriority::AddNodesOrEdges) {}
+                                         tlp::StandardInteractorPriority::AddNodesOrEdges) {}
 
 void GeographicViewInteractorAddEdges::construct() {
   setConfigurationWidgetText("<h3>Add nodes/edges</h3>To add a node: <b>Mouse left</b> click "
@@ -259,8 +257,8 @@ void GeographicViewInteractorAddEdges::construct() {
                              "click on the target node will add an edge bend,<br/><b>Mouse "
                              "middle</b> click will cancel the current edge construction.");
   push_back(new GeographicViewNavigator);
-  push_back(new MouseNodeBuilder);
-  push_back(new MouseEdgeBuilder);
+  push_back(new tlp::MouseNodeBuilder);
+  push_back(new tlp::MouseEdgeBuilder);
 }
 
 QCursor GeographicViewInteractorAddEdges::cursor() const {
@@ -268,23 +266,23 @@ QCursor GeographicViewInteractorAddEdges::cursor() const {
 }
 
 bool GeographicViewInteractorAddEdges::isCompatible(const std::string &viewName) const {
-  return (viewName == ViewName::GeographicViewName);
+  return (viewName == tlp::ViewName::GeographicViewName);
 }
 
 PLUGIN(GeographicViewInteractorAddEdges)
 
-GeographicViewInteractorEditEdgeBends::GeographicViewInteractorEditEdgeBends(const PluginContext *)
+GeographicViewInteractorEditEdgeBends::GeographicViewInteractorEditEdgeBends(const tlp::PluginContext *)
     : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_bends", "Edit edge bends",
-                                         StandardInteractorPriority::EditEdgeBends) {}
+                                         tlp::StandardInteractorPriority::EditEdgeBends) {}
 
 void GeographicViewInteractorEditEdgeBends::construct() {
   push_back(new GeographicViewNavigator);
-  push_back(new MouseSelector);
-  push_back(new MouseEdgeBendEditor);
+  push_back(new tlp::MouseSelector);
+  push_back(new tlp::MouseEdgeBendEditor);
 }
 
 bool GeographicViewInteractorEditEdgeBends::isCompatible(const std::string &viewName) const {
-  return (viewName == ViewName::GeographicViewName);
+  return (viewName == tlp::ViewName::GeographicViewName);
 }
 
 PLUGIN(GeographicViewInteractorEditEdgeBends)

@@ -22,8 +22,6 @@
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 #include <ogdf/energybased/FMMMLayout.h>
 
-using namespace std;
-
 // comments below have been extracted from OGDF/src/energybased/FMMMLayout.cpp
 /** \addtogroup layout */
 
@@ -277,43 +275,43 @@ PLUGIN(OGDFFm3)
 
 OGDFFm3::OGDFFm3(const tlp::PluginContext *context)
     : OGDFLayoutPluginBase(context, new ogdf::FMMMLayout()) {
-  addInParameter<NumericProperty *>("Edge Length Property", paramHelp[0], "viewMetric", false);
-  addInParameter<SizeProperty>("Node Size", paramHelp[1], "viewSize", false);
+  addInParameter<tlp::NumericProperty *>("Edge Length Property", paramHelp[0], "viewMetric", false);
+  addInParameter<tlp::SizeProperty>("Node Size", paramHelp[1], "viewSize", false);
   addInParameter<double>("Unit edge length", paramHelp[2], "10.0", false);
   addInParameter<bool>("New initial placement", paramHelp[3], "true");
   addInParameter<int>("Fixed iterations", paramHelp[4], "30");
   addInParameter<double>("Threshold", paramHelp[5], "0.01");
-  addInParameter<StringCollection>(ELT_PAGEFORMAT, paramHelp[6], ELT_PAGEFORMATLIST, true,
+  addInParameter<tlp::StringCollection>(ELT_PAGEFORMAT, paramHelp[6], ELT_PAGEFORMATLIST, true,
                                    pageFormatValuesDescription);
-  addInParameter<StringCollection>(ELT_QUALITYVSSPEED, paramHelp[7], ELT_QUALITYVSSPEEDLIST, true,
+  addInParameter<tlp::StringCollection>(ELT_QUALITYVSSPEED, paramHelp[7], ELT_QUALITYVSSPEEDLIST, true,
                                    qualityVsSpeedValuesDescription);
-  addInParameter<StringCollection>(ELT_EDGELENGTHMEASUREMENT, paramHelp[8],
+  addInParameter<tlp::StringCollection>(ELT_EDGELENGTHMEASUREMENT, paramHelp[8],
                                    ELT_EDGELENGTHMEASUREMENTLIST, true,
                                    edgeLengthMeasurementValuesDescription);
-  addInParameter<StringCollection>(ELT_ALLOWEDPOSITIONS, paramHelp[9], ELT_ALLOWEDPOSITIONSLIST,
+  addInParameter<tlp::StringCollection>(ELT_ALLOWEDPOSITIONS, paramHelp[9], ELT_ALLOWEDPOSITIONSLIST,
                                    true, "All<br> Integer <br> Exponent");
-  addInParameter<StringCollection>(ELT_TIPOVER, paramHelp[10], ELT_TIPOVERLIST, true,
+  addInParameter<tlp::StringCollection>(ELT_TIPOVER, paramHelp[10], ELT_TIPOVERLIST, true,
                                    "None<br> NoGrowingRow<br> Always");
-  addInParameter<StringCollection>(ELT_PRESORT, paramHelp[11], ELT_PRESORTLIST, true,
+  addInParameter<tlp::StringCollection>(ELT_PRESORT, paramHelp[11], ELT_PRESORTLIST, true,
                                    presortValuesDescription);
-  addInParameter<StringCollection>(ELT_GALAXYCHOICE, paramHelp[12], ELT_GALAXYCHOICELIST, true,
+  addInParameter<tlp::StringCollection>(ELT_GALAXYCHOICE, paramHelp[12], ELT_GALAXYCHOICELIST, true,
                                    galaxyChoiceValuesDescription);
-  addInParameter<StringCollection>(ELT_MAXITERCHANGE, paramHelp[13], ELT_MAXITERCHANGELIST, true,
+  addInParameter<tlp::StringCollection>(ELT_MAXITERCHANGE, paramHelp[13], ELT_MAXITERCHANGELIST, true,
                                    maxIterChangeValuesDescription);
-  addInParameter<StringCollection>(ELT_INITIALPLACEMENTMULT, paramHelp[14],
+  addInParameter<tlp::StringCollection>(ELT_INITIALPLACEMENTMULT, paramHelp[14],
                                    ELT_INITIALPLACEMENTMULTLIST, true, "Simple <br> Advanced");
-  addInParameter<StringCollection>(ELT_FORCEMODEL, paramHelp[15], ELT_FORCEMODELLIST, true,
+  addInParameter<tlp::StringCollection>(ELT_FORCEMODEL, paramHelp[15], ELT_FORCEMODELLIST, true,
                                    forceModelValuesDescription);
-  addInParameter<StringCollection>(ELT_REPULSIVEFORCEMETHOD, paramHelp[16],
+  addInParameter<tlp::StringCollection>(ELT_REPULSIVEFORCEMETHOD, paramHelp[16],
                                    ELT_REPULSIVEFORCEMETHODLIST, true,
                                    repulsiveForceValuesDescription);
-  addInParameter<StringCollection>(ELT_INITIALPLACEMENTFORCES, paramHelp[17],
+  addInParameter<tlp::StringCollection>(ELT_INITIALPLACEMENTFORCES, paramHelp[17],
                                    ELT_INITIALPLACEMENTFORCESLIST, true,
                                    initialPlacementValuesDescription);
-  addInParameter<StringCollection>(ELT_REDUCEDTREECONSTRCUCTION, paramHelp[18],
+  addInParameter<tlp::StringCollection>(ELT_REDUCEDTREECONSTRCUCTION, paramHelp[18],
                                    ELT_REDUCEDTREECONSTRCUCTIONLIST, true,
                                    "PathByPath <br> SubtreeBySubtree");
-  addInParameter<StringCollection>(ELT_SMALLESTCELLFINDING, paramHelp[19],
+  addInParameter<tlp::StringCollection>(ELT_SMALLESTCELLFINDING, paramHelp[19],
                                    ELT_SMALLESTCELLFINDINGLIST, true,
                                    smallestCellFindingValuesDescription);
 }
@@ -321,11 +319,11 @@ OGDFFm3::OGDFFm3(const tlp::PluginContext *context)
 OGDFFm3::~OGDFFm3() {}
 
 void OGDFFm3::beforeCall() {
-  ogdf::FMMMLayout *fmmm = static_cast<ogdf::FMMMLayout *>(ogdfLayoutAlgo);
+  auto *fmmm = static_cast<ogdf::FMMMLayout *>(ogdfLayoutAlgo);
 
   if (dataSet != nullptr) {
     fmmm->useHighLevelOptions(true);
-    SizeProperty *size = nullptr;
+    tlp::SizeProperty *size = nullptr;
 
     if (dataSet->get("Node Size", size))
       tlpToOGDF->copyTlpNodeSizeToOGDF(size);
@@ -493,10 +491,10 @@ void OGDFFm3::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) {
 
   ogdf::FMMMLayout *fmmm = static_cast<ogdf::FMMMLayout *>(ogdfLayoutAlgo);
 
-  NumericProperty *length = nullptr;
+  tlp::NumericProperty *length = nullptr;
 
   if (dataSet->get("Edge Length Property", length) && length) {
-    EdgeArray<double> edgeLength(tlpToOGDF->getOGDFGraph());
+    ogdf::EdgeArray<double> edgeLength(tlpToOGDF->getOGDFGraph());
 
     const std::vector<tlp::edge> &edges = graph->edges();
     unsigned int nbEdges = edges.size();
