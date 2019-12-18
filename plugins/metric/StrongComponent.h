@@ -42,9 +42,9 @@ public:
 
 private:
   unsigned attachNumerotation(tlp::node, std::unordered_map<tlp::node, bool> &,
-                         std::unordered_map<tlp::node, bool> &,
-                         std::unordered_map<tlp::node, unsigned> &, unsigned &, std::stack<tlp::node> &,
-                         unsigned &);
+                              std::unordered_map<tlp::node, bool> &,
+                              std::unordered_map<tlp::node, unsigned> &, unsigned &,
+                              std::stack<tlp::node> &, unsigned &);
 };
 
 #endif

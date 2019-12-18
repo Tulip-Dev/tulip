@@ -23,12 +23,14 @@
 
 #include <QWidget>
 #include <QModelIndex>
+#include <tulip/Observable.h>
 
 class QAbstractButton;
 
 namespace tlp {
 class GraphHierarchiesModel;
 class Graph;
+class BooleanProperty;
 } // namespace tlp
 
 namespace Ui {
@@ -54,19 +56,22 @@ protected:
   void scrollContentsBy(int dx, int dy) override;
 };
 
-class GraphHierarchiesEditor : public QWidget {
+class GraphHierarchiesEditor : public QWidget, tlp::Observable {
   Q_OBJECT
   Ui::GraphHierarchiesEditorData *_ui;
   tlp::Graph *_contextGraph;
   QModelIndex _contextIndex;
   QAbstractButton *_linkButton;
   tlp::GraphHierarchiesModel *_model;
+  tlp::BooleanProperty *_currentSelection;
 
 public:
   explicit GraphHierarchiesEditor(QWidget *parent = nullptr);
   ~GraphHierarchiesEditor() override;
   void setModel(tlp::GraphHierarchiesModel *model);
   bool synchronized() const;
+  void treatEvents(const std::vector<tlp::Event> &) override;
+  void updateSelectionInfos();
 
 signals:
   void changeSynchronization(bool);
@@ -79,6 +84,7 @@ protected slots:
   void doubleClicked(const QModelIndex &);
   void clicked(const QModelIndex &);
   void currentChanged(const QModelIndex &, const QModelIndex &);
+  void currentGraphChanged(tlp::Graph *);
 
   void addSubGraph();
   void cloneSubGraph();

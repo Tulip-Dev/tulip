@@ -114,7 +114,7 @@ void CustomTreeView::resizeFirstColumnToContent() {
 
 GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent)
     : QWidget(parent), _ui(new Ui::GraphHierarchiesEditorData), _contextGraph(nullptr),
-      _model(nullptr) {
+      _model(nullptr), _currentSelection(nullptr) {
   _ui->setupUi(this);
   _ui->hierarchiesTree->addAction(_ui->actionDelete_All);
   _ui->actionDelete_All->setShortcutContext(Qt::WidgetWithChildrenShortcut);
@@ -155,6 +155,7 @@ void GraphHierarchiesEditor::setModel(tlp::GraphHierarchiesModel *model) {
   connect(_ui->hierarchiesTree->selectionModel(),
           SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), this,
           SLOT(currentChanged(const QModelIndex &, const QModelIndex &)));
+  connect(model, SIGNAL(currentGraphChanged(tlp::Graph *)), this, SLOT(currentGraphChanged(tlp::Graph *)));
 }
 
 GraphHierarchiesEditor::~GraphHierarchiesEditor() {
@@ -243,6 +244,59 @@ void GraphHierarchiesEditor::currentChanged(const QModelIndex &index, const QMod
             SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), this,
             SLOT(currentChanged(const QModelIndex &, const QModelIndex &)));
     _contextGraph = nullptr;
+  }
+}
+
+void GraphHierarchiesEditor::updateSelectionInfos() {
+  if (_currentSelection) {
+    Graph *graph = _model->currentGraph();
+    auto numNodes = _currentSelection->numberOfNonDefaultValuatedNodes(graph);
+    auto numEdges = _currentSelection->numberOfNonDefaultValuatedEdges(graph);
+    if (numNodes || numEdges) {
+      QString text(" current graph selection: ");
+      if (numNodes) {
+	if (numNodes == 1)
+	  text += "one node";
+	else
+	  text += QString::number(numNodes) + " nodes";
+      }
+      if (numEdges) {
+	if (numNodes)
+	  text += ", ";
+	if (numEdges == 1)
+	  text += "one edge";
+	else
+	  text += QString::number(numEdges) + " edges";
+      }
+      _ui->selectionLabel->setText(text);
+      return;
+    }
+  }
+  _ui->selectionLabel->setText("");
+}
+
+void GraphHierarchiesEditor::currentGraphChanged(Graph *graph) {
+  tlp::BooleanProperty *selection = nullptr;
+  if (graph)
+    selection = graph->getProperty<BooleanProperty>("viewSelection");
+  if (selection != _currentSelection) {
+    if (_currentSelection)
+      _currentSelection->removeObserver(this);
+    if (selection)
+      selection->addObserver(this);
+    _currentSelection = selection;
+    updateSelectionInfos();
+  }
+}
+
+void GraphHierarchiesEditor::treatEvents(const std::vector<tlp::Event> &evts) {
+  assert(_currentSelection != nullptr);
+  for (auto &ev : evts) {
+    if (ev.type() == Event::TLP_DELETE) {
+      _currentSelection = nullptr;
+      break;
+    }
+    updateSelectionInfos();
   }
 }
 

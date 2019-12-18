@@ -605,8 +605,19 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _mainWindow->setAcceptDrops(true);
   _mainWindow->statusBar();
 
-  if (tlp::inGuiTestingMode() || !TulipSettings::instance().showStatusBar())
+  if (!TulipSettings::instance().showStatusBar())
     _mainWindow->statusBar()->hide();
+
+  if (tlp::inGuiTestingMode()) {
+    _mainWindow->statusBar()->hide();
+    _ui->undoButton->setMinimumSize(75, 75);
+    _ui->redoButton->setMinimumSize(75, 75);
+    _ui->workspaceButton->setMinimumSize(75, 75);
+    _ui->developButton->setMinimumSize(75, 75);
+    _ui->csvImportButton->setMinimumSize(75, 75);
+    _ui->importButton->setMinimumSize(75, 75);
+    _ui->pluginsButton->setMinimumSize(75, 75);
+  }
 
   connect(_logger, SIGNAL(cleared()), this, SLOT(logCleared()));
   connect(_logger, SIGNAL(resetLoggerPosition()), this, SLOT(resetLoggerDialogPosition()));
@@ -719,7 +730,10 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   }
 
   // Setting initial sizes for splitters
-  _ui->mainSplitter->setSizes(QList<int>() << 350 << 850);
+  if (tlp::inGuiTestingMode())
+    _ui->mainSplitter->setSizes(QList<int>() << 350 << 850);
+  else
+    _ui->mainSplitter->setSizes(QList<int>() << 300 << 900);
   _ui->mainSplitter->setStretchFactor(0, 0);
   _ui->mainSplitter->setStretchFactor(1, 1);
   _ui->mainSplitter->setCollapsible(1, false);

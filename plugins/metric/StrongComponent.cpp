@@ -23,10 +23,12 @@ PLUGIN(StrongComponent)
 using namespace std;
 using namespace tlp;
 
-unsigned StrongComponent::attachNumerotation(tlp::node n, std::unordered_map<tlp::node, bool> &visited,
-                                        std::unordered_map<tlp::node, bool> &finished,
-                                        std::unordered_map<tlp::node, unsigned> &minAttach, unsigned &id,
-                                        std::stack<tlp::node> &renum, unsigned &curComponent) {
+unsigned StrongComponent::attachNumerotation(tlp::node n,
+                                             std::unordered_map<tlp::node, bool> &visited,
+                                             std::unordered_map<tlp::node, bool> &finished,
+                                             std::unordered_map<tlp::node, unsigned> &minAttach,
+                                             unsigned &id, std::stack<tlp::node> &renum,
+                                             unsigned &curComponent) {
   if (visited[n])
     return minAttach[n];
 
@@ -40,7 +42,8 @@ unsigned StrongComponent::attachNumerotation(tlp::node n, std::unordered_map<tlp
   for (auto tmpN : graph->getOutNodes(n)) {
 
     if (!finished[tmpN]) {
-      unsigned tmp = attachNumerotation(tmpN, visited, finished, minAttach, id, renum, curComponent);
+      unsigned tmp =
+          attachNumerotation(tmpN, visited, finished, minAttach, id, renum, curComponent);
 
       if (res > tmp)
         res = tmp;
@@ -68,7 +71,8 @@ unsigned StrongComponent::attachNumerotation(tlp::node n, std::unordered_map<tlp
 }
 
 StrongComponent::StrongComponent(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
-    addOutParameter<unsigned>("#strongly connected components", "Number of strongly components found");
+  addOutParameter<unsigned>("#strongly connected components",
+                            "Number of strongly components found");
 }
 
 StrongComponent::~StrongComponent() {}
@@ -98,7 +102,6 @@ bool StrongComponent::run() {
 
   if (dataSet != nullptr)
     dataSet->set<unsigned>("#strongly connected components", curComponent);
-
 
   return true;
 }

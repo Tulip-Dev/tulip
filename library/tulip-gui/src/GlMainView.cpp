@@ -343,7 +343,7 @@ void GlMainView::sceneRectChanged(const QRectF &rect) {
     Gl2DRect *labriLogo = static_cast<Gl2DRect *>(fgLayer->findGlEntity("labrilogo"));
 
     if (labriLogo) {
-      labriLogo->setCoordinates((_quickAccessBar != nullptr) ? 35. : 0., 5., 50., 50.);
+      labriLogo->setCoordinates((_quickAccessBar != nullptr) ? 35. : 0., 5., 49., 80.);
       draw();
     }
   }
