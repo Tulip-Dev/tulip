@@ -174,12 +174,17 @@ struct OutPropertyParam {
   PropertyInterface *dest; // the destination property
   PropertyInterface *tmp;  // the temporary property
 
+  static bool inUse;
+
   OutPropertyParam(const std::string &pName) : name(pName), dest(nullptr), tmp(nullptr) {}
 
   ~OutPropertyParam() {
-    delete tmp;
+    if (!inUse)
+      delete tmp;
   }
 };
+
+bool OutPropertyParam::inUse = false;
 
 class AlgorithmPreviewHandler : public ProgressPreviewHandler {
   Graph *graph;
@@ -285,6 +290,9 @@ void AlgorithmRunnerItem::run(Graph *g) {
   // use temporary output properties
   // to ease the undo in case of failure
   std::vector<OutPropertyParam> outPropertyParams;
+  // ensure OutPropertyParam.tmp is no deleted
+  // during outPropertyParams resizing
+  OutPropertyParam::inUse = true;
   for (const ParameterDescription &desc : paramList.getParameters()) {
     std::string typeName(desc.getTypeName());
 
@@ -355,8 +363,6 @@ void AlgorithmRunnerItem::run(Graph *g) {
       } else
         // inout property
         outPropParam.tmp->copy(outPropParam.dest);
-      // avoid double free
-      outPropParam.tmp = nullptr;
     }
   }
 
@@ -453,6 +459,9 @@ void AlgorithmRunnerItem::run(Graph *g) {
     Observable::unholdObservers();
 
   g->popIfNoUpdates();
+
+  // OutputPropParam.tmp can now be deleted
+  OutPropertyParam::inUse = false;
 
   // keep progress alive until the end
   // to give feedback to user
