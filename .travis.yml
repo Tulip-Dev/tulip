@@ -91,8 +91,7 @@ jobs:
         - sudo add-apt-repository ppa:deadsnakes/ppa -y
         - sudo apt-get update -q
         # get GCC 9.x and Python 3.8.x
-        # python3.8-distutils is needed because of a packaging bug
-        - sudo apt-get -y install g++-9 python3.8 python3.8-distutils libpython3.8-dev
+        - sudo apt-get -y install g++-9 python3.8 libpython3.8-dev
         # force the use of GCC 9
         - eval "${MATRIX_EVAL}"
       env:
@@ -207,8 +206,7 @@ jobs:
         - sudo apt-get update -q
       install:
         # get GCC 9.x and Python 3.8.x
-        # python3.8-distutils is needed because of a packaging bug
-        - sudo apt-get -y install g++-9 python3.8 python3.8-distutils libpython3.8-dev
+        - sudo apt-get -y install g++-9 python3.8 libpython3.8-dev
         # force the use of GCC 9
         - eval "${MATRIX_EVAL}"
         # install latest sphinx version for generating the documentation
