@@ -75,8 +75,14 @@ jobs:
       cache: ccache
       addons:
         apt:
+          # we need GCC 9.x from ppa:ubuntu-toolchain-r/test
+          # Python 3.8.x from ppa:deadsnakes/ppa
+          sources:
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
+            - sourceline: "ppa:deadsnakes/ppa"
           # install Tulip build dependencies
           packages:
+            - g++-9
             - cmake
             - ccache
             - ninja-build
@@ -84,14 +90,9 @@ jobs:
             - libyajl-dev
             - libcppunit-dev
             - binutils-dev
+            - python3.8
+            - libpython3.8-dev
       before_install:
-        # needed to get GCC 9.x
-        - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-        # needed to get the latest Python 3.8.x
-        - sudo add-apt-repository ppa:deadsnakes/ppa -y
-        - sudo apt-get update -q
-        # get GCC 9.x and Python 3.8.x
-        - sudo apt-get -y install g++-9 python3.8 libpython3.8-dev
         # force the use of GCC 9
         - eval "${MATRIX_EVAL}"
       env:
@@ -175,12 +176,17 @@ jobs:
         - xvfb
       addons:
         apt:
-          # we get Qt 5.13 from external ppa
+          # we need GCC 9.x from ppa:ubuntu-toolchain-r/test
+          # Python 3.8.x from ppa:deadsnakes/ppa
+          # and Qt 5.13 from http://archive.neon.kde.org/user/
           sources:
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
+            - sourceline: "ppa:deadsnakes/ppa"
             - sourceline: 'deb http://archive.neon.kde.org/user/ bionic main'
               key_url: 'http://archive.neon.kde.org/public.key'
           # install Tulip build dependencies
           packages:
+            - g++-9
             - cmake
             - ccache
             - ninja-build
@@ -190,6 +196,8 @@ jobs:
             - libyajl-dev
             - libcppunit-dev
             - binutils-dev
+            - python3.8
+            - libpython3.8-dev
             - qt5-default
             - libqt5opengl5-dev
             - libqt5webkit5-dev
@@ -198,15 +206,7 @@ jobs:
             - libpng-dev
             - libjpeg-dev
             - libfreetype6-dev
-      before_install:
-        # needed to get GCC 9.x
-        - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-        # needed to get the latest Python 3.8.x
-        - sudo add-apt-repository ppa:deadsnakes/ppa -y
-        - sudo apt-get update -q
       install:
-        # get GCC 9.x and Python 3.8.x
-        - sudo apt-get -y install g++-9 python3.8 libpython3.8-dev
         # force the use of GCC 9
         - eval "${MATRIX_EVAL}"
         # install latest sphinx version for generating the documentation
