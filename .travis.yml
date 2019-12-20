@@ -7,7 +7,7 @@
 #  - a "modern" Tulip build using:
 #     * recent compiler (GCC 9.x on Linux, clang 9.x from MacPorts or Homebrew on MacOS)
 #     * Qt 5.13 on Linux, Qt 5.12 on MacOS/MacPorts, Qt 5.13 on MacOS/Homebrew
-#     * Python 3.9 on Linux, Python 2.7 on MacOS
+#     * Python 3.8 on Linux, Python 2.7 on MacOS
 # As TravisCI limits build job times to 45 minutes, Tulip is built in two successive stages
 # to avoid timeouts (which happened often with MacOs builds):
 #  - a core build with no Tulip OpenGL and Qt components
@@ -76,7 +76,7 @@ jobs:
       addons:
         apt:
           # we need GCC 9.x from ppa:ubuntu-toolchain-r/test
-          # Python 3.9.x from ppa:deadsnakes/ppa
+          # Python 3.8.x from ppa:deadsnakes/ppa
           sources:
             - sourceline: "ppa:ubuntu-toolchain-r/test"
             - sourceline: "ppa:deadsnakes/ppa"
@@ -90,14 +90,14 @@ jobs:
             - libyajl-dev
             - libcppunit-dev
             - binutils-dev
-            - python3.9
-            - libpython3.9-dev
+            - python3.8
+            - libpython3.8-dev
       before_install:
         # force the use of GCC 9
         - eval "${MATRIX_EVAL}"
       env:
-        # use Python 3.9
-        - PYTHON_EXECUTABLE=/usr/bin/python3.9
+        # use Python 3.8
+        - PYTHON_EXECUTABLE=/usr/bin/python3.8
         # use GCC 9
         - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
       script:
@@ -177,7 +177,7 @@ jobs:
       addons:
         apt:
           # we need GCC 9.x from ppa:ubuntu-toolchain-r/test
-          # Python 3.9.x from ppa:deadsnakes/ppa
+          # Python 3.8.x from ppa:deadsnakes/ppa
           # and Qt 5.13 from http://archive.neon.kde.org/user/
           sources:
             - sourceline: "ppa:ubuntu-toolchain-r/test"
@@ -196,8 +196,8 @@ jobs:
             - libyajl-dev
             - libcppunit-dev
             - binutils-dev
-            - python3.9
-            - libpython3.9-dev
+            - python3.8
+            - libpython3.8-dev
             - qt5-default
             - libqt5opengl5-dev
             - libqt5webkit5-dev
@@ -212,8 +212,8 @@ jobs:
         # install latest sphinx version for generating the documentation
         - sudo ${PYTHON_EXECUTABLE} -m pip install sphinx
       env:
-        # use Python 3.9
-        - PYTHON_EXECUTABLE=/usr/bin/python3.9
+        # use Python 3.8
+        - PYTHON_EXECUTABLE=/usr/bin/python3.8
         # use GCC 9
         - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
       script:
