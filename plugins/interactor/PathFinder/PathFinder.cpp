@@ -70,7 +70,7 @@ void PathFinder::construct() {
   if (view() == nullptr)
     return;
 
-  push_back(new MousePanNZoomNavigator);
+  push_back(new MouseNKeysNavigator(false));
   PathFinderComponent *component = new PathFinderComponent(this);
   // installing path highlighters on the component
   component->addHighlighter(new EnclosingCircleHighlighter);

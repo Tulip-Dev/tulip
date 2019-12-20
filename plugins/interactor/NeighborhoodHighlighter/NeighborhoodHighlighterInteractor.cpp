@@ -143,7 +143,7 @@ bool NeighborhoodHighlighterInteractor::isCompatible(const std::string &viewName
 void NeighborhoodHighlighterInteractor::construct() {
   configWidget = new NeighborhoodHighlighterConfigWidget();
 
-  push_back(new MousePanNZoomNavigator());
+  push_back(new MouseNKeysNavigator(false));
   NeighborhoodHighlighter *neighborhoodHighlighter = new NeighborhoodHighlighter();
   neighborhoodHighlighter->setConfigWidget(configWidget);
   push_back(neighborhoodHighlighter);

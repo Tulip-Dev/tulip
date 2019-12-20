@@ -47,13 +47,23 @@ public:
    * Construct chain of responsibility
    */
   void construct() override {
-    setConfigurationWidgetText("<h3>Add nodes/edges</h3>To add a node: <b>Mouse left</b> click "
-                               "outside any node.<br/>To add an edge: <b>Mouse left</b> click on "
+    setConfigurationWidgetText("<h3>Add nodes/edges</h3>Add a node: <ul><li><b>Mouse left</b> click "
+                               "outside any node</li></ul>Add an edge: <ul><li><b>Mouse left</b> click on "
                                "the source node,<br/>then <b>Mouse left</b> click on the target "
                                "node.<br/>Any <b>Mouse left</b> click outside a node before the "
                                "click on the target node will add an edge bend,<br/><b>Mouse "
-                               "middle</b> click will cancel the current edge construction.");
-    push_back(new MousePanNZoomNavigator);
+                               "middle</b> click will cancel the current edge construction.</li></ul>"
+			       "<u>Navigation in the graph</u><br/><br/>"
+			       "Translation: <ul><li><b>Arrow</b> keys</li></ul>"
+#if !defined(__APPLE__)
+			       "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Pg up/Pg "
+			       "down</b> keys</li></ul>"
+#else
+			       "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>Pg up/Pg "
+			       "down</b> keys</li></ul>"
+#endif
+			       );
+    push_back(new MouseNKeysNavigator(false));
     push_back(new MouseNodeBuilder);
     push_back(new MouseEdgeBuilder);
   }

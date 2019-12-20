@@ -379,6 +379,9 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
 
   if (e->type() == QEvent::MouseButtonDblClick && qMouseEv->button() == Qt::LeftButton) {
+    if (mouseNavigationDisabled)
+      return false;
+
     Graph *graph = glmainwidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
 
     if (qMouseEv->modifiers() != Qt::ControlModifier) {
@@ -452,7 +455,8 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if (e->type() == QEvent::MouseButtonPress) {
-    QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
+    if (mouseNavigationDisabled)
+      return false;
 
     if (qMouseEv->buttons() == Qt::LeftButton) {
       oldCursor = glmainwidget->cursor();
@@ -479,7 +483,6 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
 
       currentSpecInteractorComponent = currentMouse;
 
-      // currentMouseID = abstractView->pushInteractor(currentMouse);
       return result;
     }
 
@@ -487,6 +490,9 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if (e->type() == QEvent::MouseButtonRelease) {
+    if (mouseNavigationDisabled)
+      return false;
+
     glmainwidget->setCursor(oldCursor);
     delete currentSpecInteractorComponent;
     currentSpecInteractorComponent = nullptr;

@@ -45,8 +45,18 @@ public:
   void construct() override {
     setConfigurationWidgetText(QString("<h3>Delete nodes or edges</h3>") +
                                "<b>Mouse left</b> click on an element to delete it.<br/>No "
-                               "deletion confirmation will be asked.");
-    push_back(new MousePanNZoomNavigator);
+                               "deletion confirmation will be asked.<br/><br/>" +
+			       "<u>Navigation in the graph</u><br/><br/>" +
+			       "Translation: <ul><li><b>Arrow</b> keys</li></ul>" +
+#if !defined(__APPLE__)
+			       "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Pg up/Pg "
+			       "down</b> keys</li></ul>"
+#else
+			       "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>Pg up/Pg "
+			       "down</b> keys</li></ul>"
+#endif
+			       );
+    push_back(new MouseNKeysNavigator(false));
     push_back(new MouseElementDeleter);
   }
 

@@ -323,6 +323,7 @@ void WorkspacePanel::setCurrentInteractor(tlp::Interactor *i) {
       QString(_view->currentInteractor()->configurationWidget()
                   ? "</b><br/><i>click to show/hide its configuration panel.</i>"
                   : "</b>"));
+  _view->graphicsView()->setFocus();
 }
 
 void WorkspacePanel::setCurrentInteractorConfigurationVisible(bool) {

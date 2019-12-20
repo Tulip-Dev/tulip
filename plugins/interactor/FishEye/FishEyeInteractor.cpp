@@ -80,7 +80,7 @@ FishEyeInteractor::FishEyeInteractor(const PluginContext *)
 
 void FishEyeInteractor::construct() {
   fisheyeConfigWidget = new FishEyeConfigWidget();
-  push_back(new MousePanNZoomNavigator());
+  push_back(new MouseNKeysNavigator(false));
   FishEyeInteractorComponent *fisheyeInteractorComponent =
       new FishEyeInteractorComponent(fisheyeConfigWidget);
   push_back(fisheyeInteractorComponent);
