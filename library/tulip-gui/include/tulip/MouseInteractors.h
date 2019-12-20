@@ -66,7 +66,9 @@ private:
   QCursor oldCursor;
 
 public:
- MouseNKeysNavigator(bool enableMouseNavigation = true) : currentSpecInteractorComponent(nullptr), nldc(nullptr), mouseNavigationDisabled(!enableMouseNavigation) {}
+  MouseNKeysNavigator(bool enableMouseNavigation = true)
+      : currentSpecInteractorComponent(nullptr), nldc(nullptr),
+        mouseNavigationDisabled(!enableMouseNavigation) {}
   ~MouseNKeysNavigator() override {}
   bool eventFilter(QObject *, QEvent *) override;
   void clear() override;

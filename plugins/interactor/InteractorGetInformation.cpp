@@ -77,20 +77,24 @@ public:
         "The visible properties can be filtered using the list of properties displayed in the "
         "<b>Options</b> tab.<br/>"
         "If none is filtered, when the element properties panel is displayed, the display of the "
-        "visual rendering properties can be then toggled using a dedicated check box.<br/><br/>"  + "<u>3D Navigation in the graph</u><br/><br/>" +
-        "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys </li></ul>" +
+        "visual rendering properties can be then toggled using a dedicated check box.<br/><br/>" +
+        "<u>3D Navigation in the graph</u><br/><br/>" +
+        "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys "
+        "</li></ul>" +
         "X or Y rotation: <ul><li><b>Shift + Mouse left</b> down + up/down or left/right "
         "moves</li></ul>" +
 #if !defined(__APPLE__)
         "Z rotation: <ul><li><b>Ctrl + Mouse left</b> down + left/right moves</li><li> or "
         "<b>Insert</b> key</li></ul>" +
-        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Ctrl + Mouse left</b> down + up/down moves</li><li> or <b>Pg "
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Ctrl + Mouse left</b> down "
+        "+ up/down moves</li><li> or <b>Pg "
         "up/Pg down</b> keys</li></ul>"
 #else
         "Z rotation: <ul><li><b>Alt + Mouse left</b> down + left/right moves</li><li> or "
         "<b>Insert</b> key</li></ul>" +
         "Translation: <ul><li><b>Arrow</b> keys</li></ul>" +
-        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>Alt + Mouse left</b> down + up/down moves</li><li> or <b>Pg up/Pg "
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>Alt + Mouse left</b> down "
+        "+ up/down moves</li><li> or <b>Pg up/Pg "
         "down</b> keys</li></ul>"
 #endif
         +

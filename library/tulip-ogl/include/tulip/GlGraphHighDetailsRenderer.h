@@ -43,7 +43,7 @@ struct OcclusionTest;
 class TLP_GL_SCOPE GlGraphHighDetailsRenderer : public GlGraphRenderer {
 
 public:
-  GlGraphHighDetailsRenderer(const GlGraphInputData *inputData, GlScene *scene=nullptr);
+  GlGraphHighDetailsRenderer(const GlGraphInputData *inputData, GlScene *scene = nullptr);
 
   ~GlGraphHighDetailsRenderer() override;
 

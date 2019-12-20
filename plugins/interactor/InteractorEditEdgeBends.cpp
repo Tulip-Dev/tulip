@@ -48,7 +48,7 @@ public:
    */
   void construct() override {
     setConfigurationWidgetText(
-			       QString("<h3>Edit edge bends</h3>") + "<>Modify edge bends</u><br/><br/>" +
+        QString("<h3>Edit edge bends</h3>") + "<>Modify edge bends</u><br/><br/>" +
         "Select edge: <ul><li>use rectangle selection</li></ul>" +
         "Translate bend: <ul><li><b>Mouse left</b> down on a selected bend + moves</li></ul>" +
         "Change source node: <ul><li><b>Drag and drop circle on source node</li></ul>" +
@@ -60,7 +60,7 @@ public:
 #else
         "Delete bend: <ul><li><b>Alt + Mouse left</b> click on a selected bend</li></ul>"
 #endif
-	+ "<u>Navigation in the graph</u><br/><br/>" +
+        + "<u>Navigation in the graph</u><br/><br/>" +
         "Translation: <ul><li><b>Arrow</b> keys</li></ul>" +
 #if !defined(__APPLE__)
         "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Pg up/Pg "
