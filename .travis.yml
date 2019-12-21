@@ -209,8 +209,6 @@ jobs:
       install:
         # force the use of GCC 9
         - eval "${MATRIX_EVAL}"
-        # install latest sphinx version for generating the documentation
-        - sudo ${PYTHON_EXECUTABLE} -m pip install sphinx
       env:
         # use Python 3.8
         - PYTHON_EXECUTABLE=/usr/bin/python3.8
