@@ -46,7 +46,7 @@ QFont &TulipFontIconEngine::init(const std::string &iconName) {
 
     QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
     if (!fontFamilies.empty()) {
-      qFonts.emplace(std::make_pair(fontFile, QFont(fontFamilies.at(0))));
+      qFonts.emplace(fontFile, fontFamilies.at(0));
     } else {
       qDebug() << "No data found when loading file" << tlpStringToQString(fontFile);
       return nullFont;

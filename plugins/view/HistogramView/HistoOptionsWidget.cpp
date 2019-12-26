@@ -147,7 +147,7 @@ void HistoOptionsWidget::setInitYAxisScale(const std::pair<double, double> &valu
 }
 
 void HistoOptionsWidget::resetAxisScale() {
-  std::pair<double, double> tmp_pair = make_pair(0, 0);
+  std::pair<double, double> tmp_pair(0, 0);
   setXAxisScale(tmp_pair);
   setYAxisScale(tmp_pair);
   useCustomXAxisScale(false);

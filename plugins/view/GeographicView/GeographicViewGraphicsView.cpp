@@ -896,7 +896,7 @@ void GeographicViewGraphicsView::createLayoutWithLatLngs(const std::string &lati
       std::vector<std::pair<double, double>> latLngs;
 
       for (size_t i = 0; i < edgePath.size(); i += 2) {
-        latLngs.push_back(make_pair(edgePath[i], edgePath[i + 1]));
+        latLngs.emplace_back(edgePath[i], edgePath[i + 1]);
       }
 
       edgeBendsLatLng[e] = latLngs;
