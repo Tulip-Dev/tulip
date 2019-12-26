@@ -125,7 +125,7 @@ std::pair<const char *, unsigned int> extractFileAndLine(const std::string &atos
       }
 
       return std::make_pair(atosOutput.substr(pos + 1, pos2 - pos - 1).c_str(),
-			    atoi(atosOutput.substr(pos2 + 1, pos3 - pos2 - 1).c_str()));
+                            atoi(atosOutput.substr(pos2 + 1, pos3 - pos2 - 1).c_str()));
     }
   }
 
