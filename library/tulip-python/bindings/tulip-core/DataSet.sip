@@ -42,6 +42,7 @@ PyObject* convertTlpDataSetToPyDict(const tlp::DataSet &dataSet, PyObject *dict)
       val = getPyObjectFromDataType(entry.second);
     }
     PyDict_SetItem(dict, key, val);
+    Py_XDECREF(val);
   }
   return dict;
 }
@@ -57,17 +58,19 @@ extern tlp::DataSet* convertPyDictToTlpDataSet(PyObject *dict, tlp::DataSet *ref
   }
   enableErrorMessages(false);
   while (PyDict_Next(dict, &pos, &key, &val)) {
-    std::string *keyStr = static_cast<std::string*>(sipConvertToType(key, sipFindType("std::string"), Py_None, SIP_NOT_NONE, &state, &err));
+    const sipTypeDef *sipType = sipFindType("std::string");
+    std::string *keyStr = static_cast<std::string*>(sipConvertToType(key, sipType, NULL, SIP_NOT_NONE, &state, &err));
     tlp::DataType *dataType = NULL;
     if (refDataSet) {
       dataType = refDataSet->getData(*keyStr);
     }
     if (!setDataSetEntryFromPyObject(ret, *keyStr, val, dataType, algoName)) {
+      sipReleaseType(keyStr, sipType, state);
       delete ret;
       ret = NULL;
       break;
     }
-    delete keyStr;
+    sipReleaseType(keyStr, sipType, state);
   }
   enableErrorMessages(true);
   return ret;
@@ -168,7 +171,10 @@ struct DataSet /TypeHint="Dict[str, Any]", TypeHintValue="{}"/ {
   if (PyDict_Check(sipPy)) {
     *sipCppPtr = convertPyDictToTlpDataSet(sipPy);
   } else {
-    *sipCppPtr = new tlp::DataSet(*static_cast<tlp::DataSet*>(sipConvertToType(sipPy, sipFindType("tlp::DataSet"), sipTransferObj, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err)));
+    const sipTypeDef *sipType  = sipFindType("tlp::DataSet");
+    tlp::DataSet *ds = static_cast<tlp::DataSet*>(sipConvertToType(sipPy, sipType, NULL, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err));
+    *sipCppPtr = new tlp::DataSet(*ds);
+    sipReleaseType(ds, sipType, state);
   }
 
   if (!*sipCppPtr) {

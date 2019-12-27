@@ -92,11 +92,17 @@ class PySize : tlp::Vec3f /PyName=Size, TypeHint="tlp.Size"/ {
   int state=0, err=0;
 
   if (sipCanConvertToType(sipPy, sipFindType("tlp::PySize"), SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
-    *sipCppPtr = new tlp::PySize(*static_cast<tlp::PySize*>(sipConvertToType(sipPy, sipFindType("tlp::PySize"), Py_None, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err)));
+    const sipTypeDef *sipType = sipFindType("tlp::PySize");
+    tlp::PySize *ps = static_cast<tlp::PySize*>(sipConvertToType(sipPy, sipType, NULL, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err));
+    *sipCppPtr = new tlp::PySize(*ps);
+    sipReleaseType(ps, sipType, state);
   } else if (PyList_Check(sipPy) || PyTuple_Check(sipPy)) {
     *sipCppPtr = convertToVec3fType<tlp::PySize>(sipPy, 1);
   } else {
-    *sipCppPtr = new tlp::PySize(*static_cast<tlp::Vec3f*>(sipConvertToType(sipPy, sipFindType("tlp::Vec3f"), Py_None, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err)));
+    const sipTypeDef *sipType = sipFindType("tlp::Vec3f");
+    tlp::Vec3f *v = static_cast<tlp::Vec3f*>(sipConvertToType(sipPy, sipType, NULL, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err));
+    *sipCppPtr = new tlp::PySize(*v);
+    sipReleaseType(v, sipType, state);
   }
 
   return sipGetState(sipTransferObj);

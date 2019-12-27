@@ -75,21 +75,28 @@ class ColorScale {
     std::map<float, tlp::Color> colorMap;
     while (PyDict_Next(sipPy, &pos, &key, &val)) {
       double step = PyFloat_AsDouble(key);
-      tlp::Color *color = static_cast<tlp::Color*>(sipConvertToType(val, sipFindType("tlp::Color"), Py_None, SIP_NOT_NONE, &state, &err));
+      const sipTypeDef *sipType  = sipFindType("tlp::Color");
+      tlp::Color *color = static_cast<tlp::Color*>(sipConvertToType(val, sipType, NULL, SIP_NOT_NONE, &state, &err));
       colorMap[step] = *color;
+      sipReleaseType(color, sipType, state);
     }
     *sipCppPtr = new tlp::ColorScale();
     (*sipCppPtr)->setColorMap(colorMap);
   } else if (PyList_Check(sipPy)) {
     std::vector<tlp::Color> colors;
     for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+      const sipTypeDef *sipType  = sipFindType("tlp::Color");
       PyObject *item = PyList_GET_ITEM(sipPy, i);
-      tlp::Color *color = static_cast<tlp::Color*>(sipConvertToType(item, sipFindType("tlp::Color"), Py_None, SIP_NOT_NONE, &state, &err));
+      tlp::Color *color = static_cast<tlp::Color*>(sipConvertToType(item, sipType, NULL, SIP_NOT_NONE, &state, &err));
       colors.push_back(*color);
+      sipReleaseType(color, sipType, state);
     }
     *sipCppPtr = new tlp::ColorScale(colors);
   } else {
-    *sipCppPtr = new tlp::ColorScale(*static_cast<tlp::ColorScale*>(sipConvertToType(sipPy, sipFindType("tlp::ColorScale"), sipTransferObj, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err)));
+    const sipTypeDef *sipType  = sipFindType("tlp::ColorScale");
+    tlp::ColorScale *cs = static_cast<tlp::ColorScale*>(sipConvertToType(sipPy, sipType, NULL, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err));
+    *sipCppPtr = new tlp::ColorScale(*cs);
+    sipReleaseType(cs, sipType, state);
   }
 
   if (!*sipCppPtr) {
