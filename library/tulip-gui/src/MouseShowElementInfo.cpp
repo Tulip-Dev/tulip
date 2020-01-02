@@ -132,7 +132,7 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
       }
 
       return false;
-    } else if (e->type() == QEvent::MouseButtonRelease && qMouseEv->button() == Qt::LeftButton) {
+    } else if (e->type() == QEvent::MouseButtonPress && qMouseEv->button() == Qt::LeftButton) {
       if (_informationWidgetItem->isVisible()) {
         // Hide widget if we click outside it
         _informationWidgetItem->setVisible(false);
