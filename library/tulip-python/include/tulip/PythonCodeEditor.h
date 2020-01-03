@@ -111,6 +111,12 @@ public:
 
   int lineNumberAreaWidth() const;
 
+  qreal tabWidth() const;
+  void setTabWidth(qreal width);
+
+  int charWidth(char c) const;
+  int textWidth(const QString &text) const;
+
   void indicateScriptCurrentError(int lineNumber);
   void clearErrorIndicator();
 
@@ -253,7 +259,8 @@ protected:
   virtual void updateAutoCompletionListPosition();
 
   void createParenSelection(int pos);
-  void updateTabStopWidth();
+  void updateTabWidth();
+  void findIndentPattern(const QString &pythonCode);
 
   QString getEditedFunctionName() const;
 

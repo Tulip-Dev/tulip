@@ -39,20 +39,6 @@
 
 #include "ui_FindReplaceDialog.h"
 
-#if (QT_VERSION < QT_VERSION_CHECK(5, 11, 0))
-#define FONT_METRICS_WIDTH(ch) fontMetrics().width(QLatin1Char(ch))
-#else
-#define FONT_METRICS_WIDTH(ch) fontMetrics().horizontalAdvance(QLatin1Char(ch))
-#endif
-
-#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
-#define TAB_STOP_WIDTH tabStopWidth()
-#define SET_TAB_STOP_WIDTH(w) setTabStopWidth(w)
-#else
-#define TAB_STOP_WIDTH tabStopDistance()
-#define SET_TAB_STOP_WIDTH(w) setTabStopDistance(w)
-#endif
-
 using namespace std;
 using namespace tlp;
 
@@ -449,7 +435,7 @@ AutoCompletionList *PythonCodeEditor::_autoCompletionList = nullptr;
 AutoCompletionDataBase *PythonCodeEditor::_autoCompletionDb = nullptr;
 
 PythonCodeEditor::PythonCodeEditor(QWidget *parent)
-    : QPlainTextEdit(parent), _highlighter(nullptr), _tooltipActive(false), _indentPattern("  ") {
+    : QPlainTextEdit(parent), _highlighter(nullptr), _tooltipActive(false), _indentPattern(4, ' ') {
   installEventFilter(&keyboardFocusEventFilter);
   setAutoIndentation(true);
   setIndentationGuides(true);
@@ -479,7 +465,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent)
 
   _lineNumberArea = new LineNumberArea(this);
 
-  updateTabStopWidth();
+  updateTabWidth();
 
   updateLineNumberAreaWidth();
 
@@ -565,7 +551,7 @@ int PythonCodeEditor::lineNumberAreaWidth() const {
     ++digits;
   }
 
-  int space = 3 + FONT_METRICS_WIDTH('9') * digits;
+  int space = 3 + charWidth('9') * digits;
   return space;
 }
 
@@ -618,8 +604,8 @@ static float clamp(float f, float minV, float maxV) {
   return std::min(std::max(f, minV), maxV);
 }
 
-void PythonCodeEditor::updateTabStopWidth() {
-  SET_TAB_STOP_WIDTH(2 * FONT_METRICS_WIDTH(' '));
+void PythonCodeEditor::updateTabWidth() {
+  setTabWidth(textWidth(_indentPattern));
 }
 
 void PythonCodeEditor::zoomIn() {
@@ -630,7 +616,7 @@ void PythonCodeEditor::zoomIn() {
   format.setFont(_currentFont);
   setCurrentCharFormat(format);
   setTextCursor(cursor);
-  updateTabStopWidth();
+  updateTabWidth();
 }
 
 void PythonCodeEditor::zoomOut() {
@@ -641,7 +627,7 @@ void PythonCodeEditor::zoomOut() {
   format.setFont(_currentFont);
   setCurrentCharFormat(format);
   setTextCursor(cursor);
-  updateTabStopWidth();
+  updateTabWidth();
 }
 
 void PythonCodeEditor::showEvent(QShowEvent *event) {
@@ -668,9 +654,9 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
 
     for (int i = 0; i < _toolTipPos.y(); ++i) {
       if (blockText[i] == '\t') {
-        left += TAB_STOP_WIDTH;
+        left += tabWidth();
       } else {
-        left += FONT_METRICS_WIDTH(blockText[i].toLatin1());
+        left += charWidth(blockText[i].toLatin1());
       }
     }
 
@@ -682,7 +668,7 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
       int w = 0;
 
       for (int j = 0; j < toolTipLines[i].length(); ++j) {
-        w += FONT_METRICS_WIDTH(toolTipLines[i][j].toLatin1());
+        w += charWidth(toolTipLines[i][j].toLatin1());
       }
 
       width = std::max(w, width);
@@ -692,7 +678,7 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
 #ifndef __APPLE__
     QRect tooltipRect(tPos, tPos + QPoint(width, height));
 #else
-    QRect tooltipRect(tPos, tPos + QPoint(width + 2 * FONT_METRICS_WIDTH(' '), height));
+    QRect tooltipRect(tPos, tPos + QPoint(width + 2 * charWidth(' '), height));
 #endif
     painter.drawRect(tooltipRect);
     painter.fillRect(tooltipRect, QColor(249, 251, 100, 200));
@@ -715,30 +701,31 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
   int bottom = top + int(blockBoundingRect(block).height());
 
   QPen pen;
-  pen.setStyle(Qt::DotLine);
+  pen.setBrush(Qt::gray);
   painter.setPen(pen);
 
   while (block.isValid() && top <= event->rect().bottom()) {
     if (block.isVisible() && bottom >= event->rect().top()) {
       QString text = block.text();
-      int indentVal = 0;
 
-      for (int i = 0; i < text.length(); ++i) {
-        if (text[i] == ' ')
-          indentVal += FONT_METRICS_WIDTH(' ');
-        else if (text[i] == '\t')
-          indentVal += TAB_STOP_WIDTH;
-        else
+      int i = 0;
+      int nbLines = 0;
+      QString s;
+      for (; i < text.length(); ++i) {
+        if (text[i] != ' ' && text[i] != '\t') {
           break;
+        }
+        s += text[i];
+        if (s == _indentPattern) {
+          ++nbLines;
+          s = "";
+        }
       }
-
-      int i = 1;
-
-      while (indentVal > TAB_STOP_WIDTH) {
-        painter.drawLine(contentOffset().x() + i * TAB_STOP_WIDTH + 4, top,
-                         contentOffset().x() + i * TAB_STOP_WIDTH + 4, bottom);
-        indentVal -= TAB_STOP_WIDTH;
-        ++i;
+      s = _indentPattern;
+      for (i = 0; i < nbLines - 1; ++i) {
+        int x = contentOffset().x() + textWidth(s) + 4;
+        painter.drawLine(x, top, x, bottom);
+        s += _indentPattern;
       }
     }
 
@@ -1257,9 +1244,9 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
 
   for (int i = 0; i < stop; ++i) {
     if (textBeforeCursor[i] == '\t') {
-      pos += TAB_STOP_WIDTH;
+      pos += tabWidth();
     } else {
-      pos += FONT_METRICS_WIDTH(textBeforeCursor[i].toLatin1());
+      pos += charWidth(textBeforeCursor[i].toLatin1());
     }
   }
 
@@ -1622,6 +1609,34 @@ void PythonCodeEditor::insertFromMimeData(const QMimeData *source) {
   textCursor().insertText(source->text());
 }
 
+void PythonCodeEditor::findIndentPattern(const QString &pythonCode) {
+  QStringList lines = pythonCode.split("\n");
+  // four spaces for indentation by default
+  _indentPattern = QString(4, ' ');
+
+  // really naive way to detect indentation pattern
+  // but this should work in most cases
+  for (auto line : lines) {
+    if (line.startsWith("\t")) {
+      _indentPattern = "\t";
+      break;
+    } else {
+      QString spaces;
+      for (int i = 0; i < line.length(); ++i) {
+        if (line[i] == ' ') {
+          spaces += ' ';
+        } else {
+          break;
+        }
+      }
+      if (spaces.length() > 0 && spaces.length() <= 4) {
+        _indentPattern = spaces;
+        break;
+      }
+    }
+  }
+}
+
 bool PythonCodeEditor::loadCodeFromFile(const QString &filePath) {
   QFile file(filePath);
 
@@ -1631,24 +1646,7 @@ bool PythonCodeEditor::loadCodeFromFile(const QString &filePath) {
   file.open(QIODevice::ReadOnly | QIODevice::Text);
   QFileInfo fileInfo(file);
 
-  QString scriptCode;
-
-  // two spaces for indentation by default
-  _indentPattern = "  ";
-  bool tabIndent = false;
-
-  while (!file.atEnd()) {
-    QString line = QString::fromUtf8(file.readLine().data());
-
-    // for backward compatibility in case of tab characters are used for indentation
-    if (!tabIndent && line.startsWith("\t")) {
-      _indentPattern = "\t";
-      tabIndent = true;
-    }
-
-    scriptCode += line;
-  }
-
+  QString scriptCode = QString::fromUtf8(file.readAll().data());
   file.close();
 
   _lastSavedTime = fileInfo.lastModified();
@@ -1697,6 +1695,7 @@ void PythonCodeEditor::scrollToLine(int line) {
 }
 
 void PythonCodeEditor::setPlainText(const QString &text) {
+  findIndentPattern(text);
   QPlainTextEdit::setPlainText(text);
   QTextCursor cursor = textCursor();
   selectAll();
@@ -1704,5 +1703,40 @@ void PythonCodeEditor::setPlainText(const QString &text) {
   format.setFont(_currentFont);
   setCurrentCharFormat(format);
   setTextCursor(cursor);
-  updateTabStopWidth();
+  updateTabWidth();
+}
+
+inline qreal PythonCodeEditor::tabWidth() const {
+#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
+  return tabStopWidth();
+#else
+  return tabStopDistance();
+#endif
+}
+
+inline void PythonCodeEditor::setTabWidth(qreal width) {
+#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
+  setTabStopWidth(width);
+#else
+  setTabStopDistance(width);
+#endif
+}
+
+inline int PythonCodeEditor::charWidth(char c) const {
+  if (c == '\t') {
+    return textWidth("    ");
+  }
+#if (QT_VERSION < QT_VERSION_CHECK(5, 11, 0))
+  return fontMetrics().width(QLatin1Char(c));
+#else
+  return fontMetrics().horizontalAdvance(QLatin1Char(c));
+#endif
+}
+
+inline int PythonCodeEditor::textWidth(const QString &text) const {
+#if (QT_VERSION < QT_VERSION_CHECK(5, 11, 0))
+  return fontMetrics().width(QString(text).replace('\t', "    "));
+#else
+  return fontMetrics().horizontalAdvance(QString(text).replace('\t', "    "));
+#endif
 }

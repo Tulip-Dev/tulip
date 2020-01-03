@@ -65,38 +65,31 @@ static PyThreadState *mainThreadState;
 
 static PyGILState_STATE gilState;
 
-static const QString printObjectDictFunction =
-    "def printObjectDict(obj):\n"
-    "  if hasattr(obj, \"__dict__\"):\n"
-    "    for k in obj.__dict__.keys():\n"
-#if PY_MAJOR_VERSION >= 3
-    "      print(k)\n"
-#else
-    "      print k\n"
-#endif
-    "  if hasattr(obj, \"__bases__\"):\n"
-    "    for k in obj.__bases__:\n"
-    "      printObjectDict(k)\n"
-    "  if hasattr(obj, \"__class__\") and obj.__class__ != type(type):\n"
-    "    printObjectDict(obj.__class__)\n"
-    "";
+static const QString printObjectDictFunction = R"(
+def printObjectDict(obj):
+    if hasattr(obj, '__dict__'):
+        for k in obj.__dict__.keys():
+            print(k)
+    if hasattr(obj, '__bases__'):
+        for k in obj.__bases__:
+            printObjectDict(k)
+    if hasattr(obj, '__class__') and obj.__class__ != type(type):
+        printObjectDict(obj.__class__)
+)";
 
-static const QString printObjectClassFunction = "def printObjectClass(obj):\n"
-                                                "  type = \"\"\n"
-                                                "  if obj and hasattr(obj, \"__class__\"):\n"
-                                                "    if hasattr(obj.__class__, \"__module__\"):\n"
-                                                "      mod = obj.__class__.__module__\n"
-                                                "      if mod == \"_tulip\":"
-                                                "        mod = \"tlp\"\n"
-                                                "      type = mod + \".\"\n"
-                                                "    if hasattr(obj.__class__, \"__name__\"):\n"
-                                                "      type = type + obj.__class__.__name__\n"
-#if PY_MAJOR_VERSION >= 3
-                                                "    print(type)\n"
-#else
-                                                "    print type\n"
-#endif
-                                                "";
+static const QString printObjectClassFunction = R"(
+def printObjectClass(obj):
+    type = ''
+    if obj and hasattr(obj, '__class__'):
+        if hasattr(obj.__class__, '__module__'):
+            mod = obj.__class__.__module__
+            if mod == '_tulip':
+                mod = 'tlp'
+            type = mod + '.'
+        if hasattr(obj.__class__, '__name__'):
+            type = type + obj.__class__.__name__
+        print(type)
+)";
 
 #if PY_MAJOR_VERSION >= 3
 static QString convertPythonUnicodeObjectToQString(PyObject *pyUnicodeObj) {
