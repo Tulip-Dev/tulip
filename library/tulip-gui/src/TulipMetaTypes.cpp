@@ -88,7 +88,7 @@ tlp::DataType *TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   if (v.userType() == qMetaTypeId<QVector<bool>>()) {
     auto &&qvb = v.value<QVector<bool>>();
     return new TypedData<tlp::BooleanVectorType::RealType>(
-							   new tlp::BooleanVectorType::RealType(std::vector<bool>(qvb.begin(), qvb.end())));
+        new tlp::BooleanVectorType::RealType(std::vector<bool>(qvb.begin(), qvb.end())));
   }
   CHECK_QVARIANT(tlp::PointType::RealType);
   CHECK_QVARIANT(tlp::SizeType::RealType);

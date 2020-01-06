@@ -316,8 +316,7 @@ QVariant GraphModel::nodeValue(unsigned int id, PropertyInterface *prop) {
     return QVariant::fromValue<QString>(
         tlpStringToQString(static_cast<StringProperty *>(prop)->getNodeValue(n)));
   } else if (dynamic_cast<BooleanVectorProperty *>(prop) != nullptr) {
-    const auto &vb =
-      static_cast<BooleanVectorProperty *>(prop)->getNodeValue(n);
+    const auto &vb = static_cast<BooleanVectorProperty *>(prop)->getNodeValue(n);
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
     return QVariant::fromValue<QVector<bool>>(QVector<bool>::fromStdVector(vb));
 #else
@@ -360,8 +359,7 @@ QVariant GraphModel::nodeDefaultValue(PropertyInterface *prop) {
     return QVariant::fromValue<QString>(
         tlpStringToQString(static_cast<StringProperty *>(prop)->getNodeDefaultValue()));
   } else if (dynamic_cast<BooleanVectorProperty *>(prop) != nullptr) {
-    const auto &vb =
-      static_cast<BooleanVectorProperty *>(prop)->getNodeDefaultValue();
+    const auto &vb = static_cast<BooleanVectorProperty *>(prop)->getNodeDefaultValue();
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
     return QVariant::fromValue<QVector<bool>>(QVector<bool>::fromStdVector(vb));
 #else
@@ -412,8 +410,8 @@ bool GraphModel::setAllNodeValue(PropertyInterface *prop, QVariant v, Graph *gra
       setValueToGraphNodes<StringProperty>(prop, QStringToTlpString(v.value<QString>()), graph);
   } else if (dynamic_cast<BooleanVectorProperty *>(prop) != nullptr) {
     auto qvb = v.value<QVector<bool>>();
-    setValueToGraphNodes<BooleanVectorProperty>(
-	prop, std::vector<bool>(qvb.begin(), qvb.end()), graph);
+    setValueToGraphNodes<BooleanVectorProperty>(prop, std::vector<bool>(qvb.begin(), qvb.end()),
+                                                graph);
   }
 
   STANDARD_NODE_CHECKS(SET_ALL_NODE_VALUE)
@@ -451,7 +449,7 @@ bool GraphModel::setNodeValue(unsigned int id, PropertyInterface *prop, QVariant
   } else if (dynamic_cast<BooleanVectorProperty *>(prop) != nullptr) {
     auto qvb = v.value<QVector<bool>>();
     static_cast<BooleanVectorProperty *>(prop)->setNodeValue(
-	n, std::vector<bool>(qvb.begin(), qvb.end()));
+        n, std::vector<bool>(qvb.begin(), qvb.end()));
   }
 
   STANDARD_NODE_CHECKS(SET_NODE_VALUE)
@@ -489,7 +487,7 @@ bool GraphModel::setNodeDefaultValue(PropertyInterface *prop, QVariant v) {
   } else if (dynamic_cast<BooleanVectorProperty *>(prop) != nullptr) {
     auto qvb = v.value<QVector<bool>>();
     static_cast<BooleanVectorProperty *>(prop)->setNodeDefaultValue(
-	std::vector<bool>(qvb.begin(), qvb.end()));
+        std::vector<bool>(qvb.begin(), qvb.end()));
   }
   STANDARD_NODE_CHECKS(SET_NODE_DEFAULT_VALUE)
   else return false;
@@ -540,8 +538,7 @@ QVariant GraphModel::edgeValue(unsigned int id, PropertyInterface *prop) {
     return QVariant::fromValue<QString>(
         tlpStringToQString(static_cast<StringProperty *>(prop)->getEdgeValue(e)));
   } else if (dynamic_cast<BooleanVectorProperty *>(prop) != nullptr) {
-    const auto &vb =
-      static_cast<BooleanVectorProperty *>(prop)->getEdgeValue(e);
+    const auto &vb = static_cast<BooleanVectorProperty *>(prop)->getEdgeValue(e);
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
     return QVariant::fromValue<QVector<bool>>(QVector<bool>::fromStdVector(vb));
 #else
@@ -594,8 +591,7 @@ QVariant GraphModel::edgeDefaultValue(PropertyInterface *prop) {
     return QVariant::fromValue<QString>(
         tlpStringToQString(static_cast<StringProperty *>(prop)->getEdgeDefaultValue()));
   } else if (dynamic_cast<BooleanVectorProperty *>(prop) != nullptr) {
-    const auto &vb =
-      static_cast<BooleanVectorProperty *>(prop)->getEdgeDefaultValue();
+    const auto &vb = static_cast<BooleanVectorProperty *>(prop)->getEdgeDefaultValue();
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
     return QVariant::fromValue<QVector<bool>>(QVector<bool>::fromStdVector(vb));
 #else
@@ -646,7 +642,7 @@ bool GraphModel::setEdgeValue(unsigned int id, PropertyInterface *prop, QVariant
   } else if (dynamic_cast<BooleanVectorProperty *>(prop) != nullptr) {
     auto qvb = v.value<QVector<bool>>();
     static_cast<BooleanVectorProperty *>(prop)->setEdgeValue(
-	e, std::vector<bool>(qvb.begin(), qvb.end()));
+        e, std::vector<bool>(qvb.begin(), qvb.end()));
   }
 
   STANDARD_EDGE_CHECKS(SET_EDGE_VALUE)
@@ -751,8 +747,8 @@ bool GraphModel::setAllEdgeValue(PropertyInterface *prop, QVariant v, Graph *gra
       setValueToGraphEdges<StringProperty>(prop, QStringToTlpString(v.value<QString>()), graph);
   } else if (dynamic_cast<BooleanVectorProperty *>(prop) != nullptr) {
     auto qvb = v.value<QVector<bool>>();
-    setValueToGraphEdges<BooleanVectorProperty>(
-	prop, std::vector<bool>(qvb.begin(), qvb.end()), graph);
+    setValueToGraphEdges<BooleanVectorProperty>(prop, std::vector<bool>(qvb.begin(), qvb.end()),
+                                                graph);
   }
 
   STANDARD_EDGE_CHECKS(SET_ALL_EDGE_VALUE)
