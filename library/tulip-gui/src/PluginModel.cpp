@@ -22,8 +22,11 @@
 using namespace tlp;
 using namespace std;
 
-SimplePluginListModel::SimplePluginListModel(const QList<std::string> &plugins, QObject *parent)
-    : TulipModel(parent), _list(plugins) {}
+SimplePluginListModel::SimplePluginListModel(const std::list<std::string> &plugins, QObject *parent)
+    : TulipModel(parent) {
+  for (auto &s : plugins)
+    _list.append(s);
+}
 
 SimplePluginListModel::~SimplePluginListModel() {}
 

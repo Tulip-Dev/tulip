@@ -31,7 +31,7 @@
 #include <QMessageBox>
 #include <QApplication>
 #include <QLibrary>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QTextStream>
 #include <QMutex>
 #include <QWaitCondition>
@@ -103,7 +103,7 @@ static QString convertPythonUnicodeObjectToQString(PyObject *pyUnicodeObj) {
 static bool scriptPaused = false;
 static bool processQtEvents = false;
 
-QTime timer;
+QElapsedTimer timer;
 
 class SleepSimulator {
   QMutex localMutex;
