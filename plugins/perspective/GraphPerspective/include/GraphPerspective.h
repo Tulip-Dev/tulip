@@ -165,7 +165,6 @@ protected slots:
   void openExternalFile();
   void showHideSideBar();
   void showHideStatusBar();
-  void workspaceButtonClicked();
   void showStartMessage();
   void resetLoggerDialogPosition();
   void showHideLogger();

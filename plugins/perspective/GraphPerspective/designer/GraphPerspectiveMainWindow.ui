@@ -149,7 +149,7 @@ background-color: white;
      <number>0</number>
     </property>
     <item>
-     <widget class="QFrame" name="modeSwitcherPanel">
+     <widget class="QFrame" name="sideBarPanel">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -157,7 +157,7 @@ background-color: white;
        </sizepolicy>
       </property>
       <property name="styleSheet">
-       <string notr="true">#modeSwitcherPanel {
+       <string notr="true">#sideBarPanel {
 	border-top: black;
 	border-bottom: black;
 	border-right: black;
@@ -229,7 +229,7 @@ QToolButton:pressed {
         <number>0</number>
        </property>
        <item>
-        <widget class="HeaderFrame" name="modeSwitcherHeader" native="true">
+        <widget class="HeaderFrame" name="sideBarHeader" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
            <horstretch>0</horstretch>
@@ -326,7 +326,7 @@ QToolButton:pressed {
         </spacer>
        </item>
        <item>
-        <widget class="QToolButton" name="workspaceButton">
+        <widget class="QToolButton" name="exposePanelsButton">
          <property name="minimumSize">
           <size>
            <width>50</width>
@@ -1046,31 +1046,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                 </widget>
                </item>
                <item>
-                <widget class="OutputPanelButton" name="exposeModeButton">
-                 <property name="minimumSize">
-                  <size>
-                   <width>85</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                 <property name="shortcut">
-                  <string>Ctrl+E</string>
-                 </property>
-                 <property name="checkable">
-                  <bool>true</bool>
-                 </property>
-                 <property name="autoExclusive">
-                  <bool>false</bool>
-                 </property>
-                 <property name="title" stdset="0">
-                  <string>Expose</string>
-                 </property>
-                 <property name="number" stdset="0">
-                  <number>1</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
                 <widget class="OutputPanelButton" name="searchButton">
                  <property name="minimumSize">
                   <size>
@@ -1088,7 +1063,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   <bool>false</bool>
                  </property>
                  <property name="number" stdset="0">
-                  <number>2</number>
+                  <number>1</number>
                  </property>
                  <property name="title" stdset="0">
                   <string>Search</string>
@@ -1113,7 +1088,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   <bool>false</bool>
                  </property>
                  <property name="number" stdset="0">
-                  <number>3</number>
+                  <number>2</number>
                  </property>
                  <property name="title" stdset="0">
                   <string>Python REPL</string>
@@ -1444,6 +1419,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <addaction name="action_Close_All"/>
     <addaction name="actionMessages_log"/>
     <addaction name="actionPython_IDE"/>
+    <addaction name="actionExposePanels"/>
     <addaction name="actionFind_plugins"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -1957,6 +1933,30 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>Ctrl+Alt+P</string>
    </property>
   </action>
+  <action name="actionExposePanels">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/48/desktop.png</normaloff>:/tulip/graphperspective/icons/48/desktop.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Expose all panels</string>
+   </property>
+   <property name="iconText">
+    <string>Expose all panels</string>
+   </property>
+   <property name="toolTip">
+    <string>Toggle the 'Expose' all panels mode [Ctrl+E]</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+  </action>
   <action name="actionShowAPIDocumentation">
    <property name="icon">
     <iconset>
@@ -2261,10 +2261,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </hints>
   </connection>
   <connection>
-   <sender>exposeModeButton</sender>
+   <sender>exposePanelsButton</sender>
    <signal>clicked(bool)</signal>
-   <receiver>workspace</receiver>
-   <slot>expose(bool)</slot>
+   <receiver>actionExposePanels</receiver>
+   <slot>setChecked(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>144</x>
@@ -2305,6 +2305,22 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <hint type="destinationlabel">
      <x>639</x>
      <y>336</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExposePanels</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>workspace</receiver>
+   <slot>expose(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>628</x>
+     <y>343</y>
     </hint>
    </hints>
   </connection>

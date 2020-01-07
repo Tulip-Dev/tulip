@@ -454,7 +454,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 #endif
   currentGraphChanged(nullptr);
   // set win/Mac dependent tooltips with ctrl shortcut
-  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->exposeModeButton, "Toggle the Expose mode", "E");
   SET_TIPS_WITH_CTRL_SHORTCUT(_ui->searchButton, "Show/hide the graph's elements search panel",
                               "F");
   SET_TIPS_WITH_CTRL_SHORTCUT(_ui->pythonButton,
@@ -523,7 +522,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   // set portable tooltips
   SET_TIPS(_ui->undoButton, _ui->actionUndo->toolTip());
   SET_TIPS(_ui->redoButton, _ui->actionRedo->toolTip());
-  _ui->workspaceButton->setToolTip(QString("Display the existing visualization panels"));
+  SET_TIPS(_ui->exposePanelsButton, _ui->actionExposePanels->toolTip());
   SET_TIPS(_ui->developButton, _ui->actionPython_IDE->toolTip());
   _ui->loggerMessageInfo->setToolTip(QString("Show/Hide the Messages log panel"));
   _ui->loggerMessagePython->setToolTip(_ui->loggerMessageInfo->toolTip());
@@ -597,7 +596,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->sixModeButton->hide();
   _ui->workspace->setSixModeSwitch(_ui->sixModeButton);
   _ui->workspace->setPageCountLabel(_ui->pageCountLabel);
-  _ui->workspace->setExposeModeSwitch(_ui->exposeModeButton);
+  _ui->workspace->setExposeModeSwitch(_ui->exposePanelsButton);
   _ui->outputFrame->hide();
   _logger = new GraphPerspectiveLogger(_mainWindow);
   _ui->loggerFrame->installEventFilter(this);
@@ -612,7 +611,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     _mainWindow->statusBar()->hide();
     _ui->undoButton->setMinimumSize(75, 75);
     _ui->redoButton->setMinimumSize(75, 75);
-    _ui->workspaceButton->setMinimumSize(75, 75);
+    _ui->exposePanelsButton->setMinimumSize(75, 75);
     _ui->developButton->setMinimumSize(75, 75);
     _ui->csvImportButton->setMinimumSize(75, 75);
     _ui->importButton->setMinimumSize(75, 75);
@@ -640,7 +639,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
   qInstallMessageHandler(graphPerspectiveLogger);
 
-  connect(_ui->workspaceButton, SIGNAL(clicked()), this, SLOT(workspaceButtonClicked()));
   connect(_ui->workspace, SIGNAL(addPanelRequest(tlp::Graph *)), this,
           SLOT(createPanel(tlp::Graph *)));
   connect(_ui->workspace, SIGNAL(focusedPanelSynchronized()), this,
@@ -1464,7 +1462,7 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->split33ModeButton->setEnabled(enabled);
   _ui->gridModeButton->setEnabled(enabled);
   _ui->sixModeButton->setEnabled(enabled);
-  _ui->exposeModeButton->setEnabled(enabled);
+  _ui->exposePanelsButton->setEnabled(enabled);
   _ui->searchButton->setEnabled(enabled);
   _ui->pythonButton->setEnabled(enabled);
   _ui->exportButton->setEnabled(enabled);
@@ -1476,7 +1474,7 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
 
   if (graph == nullptr) {
     _ui->workspace->switchToStartupMode();
-    _ui->exposeModeButton->setChecked(false);
+    _ui->exposePanelsButton->setChecked(false);
     _ui->searchButton->setChecked(false);
     _ui->pythonButton->setChecked(false);
     setSearchOutput(false);
@@ -1485,6 +1483,8 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   } else {
     _ui->workspace->setGraphForFocusedPanel(graph);
   }
+
+  _ui->actionExposePanels->setEnabled(!_ui->workspace->empty());
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 
@@ -1850,10 +1850,6 @@ void GraphPerspective::showAboutTulipPage() {
     aboutDialog.resize(800, 600);
     aboutDialog.exec();
   }
-}
-
-void GraphPerspective::workspaceButtonClicked() {
-  _ui->workspaceButton->setChecked(true);
 }
 
 void GraphPerspective::resetLoggerDialogPosition() {

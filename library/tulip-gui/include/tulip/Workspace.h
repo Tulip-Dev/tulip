@@ -33,7 +33,7 @@ namespace Ui {
 class Workspace;
 }
 
-class QPushButton;
+class QAbstractButton;
 class QLabel;
 class QMimeData;
 
@@ -60,6 +60,7 @@ class TLP_QT_SCOPE Workspace : public QWidget {
   QMap<QWidget *, QVector<PlaceHolderWidget *>> _modeToSlots;
   QMap<QWidget *, QWidget *> _modeSwitches;
   GraphHierarchiesModel *_model;
+  QAbstractButton *_exposeButton;
 
   QString panelTitle(WorkspacePanel *) const;
 
@@ -70,6 +71,9 @@ public:
   ~Workspace() override;
 
   int addPanel(tlp::View *);
+  inline bool empty() const {
+    return _panels.empty();
+  }
   QList<tlp::View *> panels() const;
 
   bool isBottomFrameVisible() const;
@@ -96,7 +100,7 @@ public slots:
 
   void nextPage();
   void previousPage();
-  void setExposeModeSwitch(QPushButton *);
+  void setExposeModeSwitch(QAbstractButton *);
   void expose(bool);
   void showExposeMode();
   void hideExposeMode();
