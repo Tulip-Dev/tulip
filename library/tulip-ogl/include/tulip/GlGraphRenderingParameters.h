@@ -505,7 +505,7 @@ public:
   }
 
   /**
-   * @brief Get the boolean property use to filtering displaying of nodes/edges
+   * @brief Get the Boolean property use to filter the rendering of nodes/edges
    */
   BooleanProperty *getDisplayFilteringProperty() const {
     return _displayFilteringProperty;

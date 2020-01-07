@@ -200,15 +200,15 @@ QToolButton:checked, QToolButton:checked:pressed, QToolButton:pressed {
     background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
     stop:0 rgba(198, 198, 198, 255), 
     stop:1 rgba(255, 255, 255, 255));
-	border-top: 1px solid rgba(70,70,70);
-	border-bottom: 1px solid rgba(70,70,70);
+	border-top: 1px solid rgba(70,70,70,255);
+	border-bottom: 1px solid rgba(70,70,70,255);
 }
 
 QPushButton::pressed {
 	border-image:none;
 	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(53, 53, 53, 255), stop:1 rgba(120, 120, 120, 255));
-	border-top: 1px solid rgba(70,70,70);
-	border-bottom: 1px solid rgba(70,70,70);
+	border-top: 1px solid rgba(70,70,70,255);
+	border-bottom: 1px solid rgba(70,70,70,255);
 }
 
 QToolButton:pressed {
