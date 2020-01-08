@@ -92,19 +92,22 @@ static const char *paramHelp[] = {
  */
 class BetweennessCentrality : public DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Betweenness Centrality", "David Auber", "03/01/2005",
-		    "Computes the betweeness centrality as described for<ul>"
-		    "<li>nodes in <b>A Faster Algorithm for Betweenness Centrality</b>, U. Brandes, Journal of Mathematical Sociology volume 25, pages 163-177 (2001)</li>"
-		    "<li>edges in <b>Finding and evaluating community structure in networks</b>, M. E. J. Newman and M. Girvan, Physics Reviews E, volume 69 (2004).</li></ul>"
-		    "The average path length is alo computed.",
-                    "1.4", "Graph")
+  PLUGININFORMATION(
+      "Betweenness Centrality", "David Auber", "03/01/2005",
+      "Computes the betweeness centrality as described for<ul>"
+      "<li>nodes in <b>A Faster Algorithm for Betweenness Centrality</b>, U. Brandes, Journal of "
+      "Mathematical Sociology volume 25, pages 163-177 (2001)</li>"
+      "<li>edges in <b>Finding and evaluating community structure in networks</b>, M. E. J. Newman "
+      "and M. Girvan, Physics Reviews E, volume 69 (2004).</li></ul>"
+      "The average path length is alo computed.",
+      "1.4", "Graph")
   BetweennessCentrality(const PluginContext *context) : DoubleAlgorithm(context) {
     addInParameter<bool>("directed", paramHelp[0], "false");
     addInParameter<bool>("norm", paramHelp[1], "false", false);
     addInParameter<NumericProperty *>("weight", paramHelp[2], "", false);
     addOutParameter<double>("average path length", paramHelp[3], "");
     addInParameter<StringCollection>(TARGET_TYPE, paramHelp[4], TARGET_TYPES, true,
-                                   "both <br> nodes <br> edges");
+                                     "both <br> nodes <br> edges");
     // result needs to be an inout parameter
     // in order to preserve the original values of non targeted elements
     // i.e if "target" = "nodes", the values of edges must be preserved
@@ -126,14 +129,14 @@ public:
       dataSet->get(TARGET_TYPE, targetType);
 
       if (targetType.getCurrent() == NODES_TARGET) {
-	edges = false;
-	nodes = true;
+        edges = false;
+        nodes = true;
       } else if (targetType.getCurrent() == EDGES_TARGET) {
-	edges = true;
-	nodes = false;
+        edges = true;
+        nodes = false;
       } else {
-	edges = true;
-	nodes = true;
+        edges = true;
+        nodes = true;
       }
     }
     if (nodes)
@@ -186,7 +189,7 @@ public:
 
           if (e.isValid()) {
             if (edges)
-	      result->setEdgeValue(e, result->getEdgeValue(e) + vd);
+              result->setEdgeValue(e, result->getEdgeValue(e) + vd);
             if (weight)
               avg_path_length += vd * weight->getEdgeDoubleValue(e);
             else
@@ -208,28 +211,28 @@ public:
       const double nNormFactor = 1.0 / ((n - 1) * (n - 2));
 
       if (nodes) {
-	for (auto s : graph->nodes()) {
+        for (auto s : graph->nodes()) {
 
-	  // In the undirected case, the metric must be divided by two, then
-	  if (norm)
-	    result->setNodeValue(s, result->getNodeValue(s) * nNormFactor);
+          // In the undirected case, the metric must be divided by two, then
+          if (norm)
+            result->setNodeValue(s, result->getNodeValue(s) * nNormFactor);
 
-	  if (!directed)
-	    result->setNodeValue(s, result->getNodeValue(s) * 0.5);
-	}
+          if (!directed)
+            result->setNodeValue(s, result->getNodeValue(s) * 0.5);
+        }
       }
 
       if (edges) {
-	const double eNormFactor = 4.0 / (n * n);
+        const double eNormFactor = 4.0 / (n * n);
 
-	for (auto e : graph->edges()) {
+        for (auto e : graph->edges()) {
 
-	  if (norm)
-	    result->setEdgeValue(e, result->getEdgeValue(e) * eNormFactor);
+          if (norm)
+            result->setEdgeValue(e, result->getEdgeValue(e) * eNormFactor);
 
-	  if (!directed)
-	    result->setEdgeValue(e, result->getEdgeValue(e) * 0.5);
-	}
+          if (!directed)
+            result->setEdgeValue(e, result->getEdgeValue(e) * 0.5);
+        }
       }
     }
     avg_path_length /= (nbNodes * (nbNodes - 1.));
