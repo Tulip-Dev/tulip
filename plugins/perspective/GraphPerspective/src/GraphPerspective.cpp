@@ -68,6 +68,7 @@
 #include <tulip/AboutTulipPage.h>
 #include <tulip/ColorScalesManager.h>
 #include <tulip/StableIterator.h>
+#include <tulip/TreeTest.h>
 
 #include "ui_GraphPerspectiveMainWindow.h"
 
@@ -967,7 +968,7 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
     // to ensure a correct loading of the associated texture files if any
     QDir::setCurrent(QFileInfo(tlpStringToQString(fileName)).absolutePath());
 
-  applyRandomLayout(g);
+  applyDefaultLayout(g);
   showStartPanels(g);
 }
 
@@ -1551,7 +1552,7 @@ void GraphPerspective::CSVImport() {
   } else {
     unsigned int nbLogsAfter = _logger->countByType(GraphPerspectiveLogger::Error);
     nbLogsAfter += _logger->countByType(GraphPerspectiveLogger::Warning);
-    applyRandomLayout(g);
+    applyDefaultLayout(g);
     bool openPanels = true;
 
     for (auto v : _ui->workspace->panels()) {
@@ -1611,13 +1612,16 @@ void GraphPerspective::showStartPanels(Graph *g) {
   _ui->workspace->switchToSplitMode();
 }
 
-void GraphPerspective::applyRandomLayout(Graph *g) {
+void GraphPerspective::applyDefaultLayout(Graph *g) {
   Observable::holdObservers();
   LayoutProperty *viewLayout = g->getProperty<LayoutProperty>("viewLayout");
 
   if (!viewLayout->hasNonDefaultValuatedNodes(g)) {
     std::string str;
-    g->applyPropertyAlgorithm("Random layout", viewLayout, str);
+    if (TreeTest::isTree(g))
+      g->applyPropertyAlgorithm("Tree Radial", viewLayout, str);
+    else
+      g->applyPropertyAlgorithm("FM^3 (OGDF)", viewLayout, str);
   }
 
   Observable::unholdObservers();

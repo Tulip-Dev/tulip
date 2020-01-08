@@ -63,7 +63,7 @@ class GraphPerspective : public tlp::Perspective, tlp::Observable {
   void addRecentDocument(const QString &path);
 
   void showStartPanels(tlp::Graph *);
-  void applyRandomLayout(tlp::Graph *);
+  void applyDefaultLayout(tlp::Graph *);
 
   void buildPythonIDE();
 
