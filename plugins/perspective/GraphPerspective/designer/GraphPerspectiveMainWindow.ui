@@ -1950,9 +1950,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="iconText">
     <string>Expose all panels</string>
    </property>
-   <property name="toolTip">
-    <string>Toggle the 'Expose' all panels mode [Ctrl+E]</string>
-   </property>
    <property name="shortcut">
     <string>Ctrl+E</string>
    </property>

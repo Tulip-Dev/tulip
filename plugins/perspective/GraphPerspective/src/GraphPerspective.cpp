@@ -519,6 +519,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
                                  "Allow to find algorithms in typing text in a search field",
                                  "Alt+H");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionNew_graph, "Create a new empty graph", "N");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExposePanels, "Toggle the 'Expose' all panels mode", "E");
+
   // set portable tooltips
   SET_TIPS(_ui->undoButton, _ui->actionUndo->toolTip());
   SET_TIPS(_ui->redoButton, _ui->actionRedo->toolTip());
