@@ -210,21 +210,21 @@ public:
       auto n = graph->numberOfNodes();
       double factor = norm ? (1.0 / ((n - 1) * (n - 2))) : 1.0;
       if (!directed)
-	// In the undirected case, the metric must be divided by two, then
-	factor *= 0.5;
+        // In the undirected case, the metric must be divided by two, then
+        factor *= 0.5;
 
       if (nodes) {
         for (auto n : graph->nodes())
-	  result->setNodeValue(n, result->getNodeValue(n) * factor);
+          result->setNodeValue(n, result->getNodeValue(n) * factor);
       }
       if (edges) {
-	factor = norm ? (4.0 / (n * n)) : 1.0;
-	if (!directed)
-	  // In the undirected case, the metric must be divided by two, then
-	  factor *= 0.5;
+        factor = norm ? (4.0 / (n * n)) : 1.0;
+        if (!directed)
+          // In the undirected case, the metric must be divided by two, then
+          factor *= 0.5;
 
         for (auto e : graph->edges())
-	  result->setEdgeValue(e, result->getEdgeValue(e) * factor);
+          result->setEdgeValue(e, result->getEdgeValue(e) * factor);
       }
     }
     avg_path_length /= (nbNodes * (nbNodes - 1.));
