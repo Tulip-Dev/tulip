@@ -1416,11 +1416,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <string>&amp;Window</string>
     </property>
     <addaction name="actionFull_screen"/>
-    <addaction name="action_Close_All"/>
+    <addaction name="actionExposePanels"/>
+    <addaction name="action_Remove_All"/>
     <addaction name="actionMessages_log"/>
     <addaction name="actionPython_IDE"/>
-    <addaction name="actionExposePanels"/>
-    <addaction name="actionFind_plugins"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -1709,7 +1708,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/16/full-screen.png</normaloff>:/tulip/graphperspective/icons/16/full-screen.png</iconset>
    </property>
    <property name="text">
-    <string>Full &amp;Screen</string>
+    <string>&amp;Full screen</string>
    </property>
    <property name="shortcut">
     <string>F11</string>
@@ -1813,18 +1812,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="actionFind_plugins">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/32/magnifying-glass.png</normaloff>:/tulip/graphperspective/icons/32/magnifying-glass.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Find algorithms</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Alt+H</string>
-   </property>
-  </action>
   <action name="actionSave_graph_to_file">
    <property name="icon">
     <iconset>
@@ -1860,13 +1847,13 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>Ctrl+N</string>
    </property>
   </action>
-  <action name="action_Close_All">
+  <action name="action_Remove_All">
    <property name="icon">
     <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
      <normaloff>:/tulip/gui/icons/i_del.png</normaloff>:/tulip/gui/icons/i_del.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Close all views</string>
+    <string>&amp;Remove all panels</string>
    </property>
   </action>
   <action name="actionColor_scales_management">

@@ -335,10 +335,6 @@ void GraphPerspective::logCleared() {
   _ui->loggerFramePython->setVisible(false);
 }
 
-void GraphPerspective::findPlugins() {
-  _ui->algorithmRunner->findPlugins();
-}
-
 bool GraphPerspective::eventFilter(QObject *obj, QEvent *ev) {
   if (ev->type() == QEvent::DragEnter) {
     QDragEnterEvent *dragEvent = static_cast<QDragEnterEvent *>(ev);
@@ -516,11 +512,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
                                  "Alt+P");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExport, "Show the Graph exporting wizard", "E");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionOpen_Project, "Open a graph file", "O");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionFind_plugins,
-                                 "Allow to find algorithms in typing text in a search field",
-                                 "Alt+H");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionNew_graph, "Create a new empty graph", "N");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExposePanels, "Toggle the 'Expose' all panels mode",
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExposePanels, "Toggle the 'Expose' all visualisation panels mode",
                                  "E");
 
   // set portable tooltips
@@ -561,7 +554,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TOOLTIP(_ui->actionCreate_empty_sub_graph, "Create an empty subgraph of the current graph");
   SET_TOOLTIP(_ui->actionClone_sub_graph,
               "Create a subgraph containing the same elements as the current graph");
-  SET_TOOLTIP(_ui->action_Close_All, "Close all opened workspace views");
+  SET_TOOLTIP(_ui->action_Remove_All, "Remove all visualisation panels");
   SET_TOOLTIP(_ui->actionColor_scales_management, "Manage Tulip color scales");
   SET_TOOLTIP(_ui->actionMake_selection_a_graph,
               "Add the non selected ends of the selected edges to the current graph selection");
@@ -688,13 +681,12 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionClone_sub_graph, SIGNAL(triggered()), this, SLOT(cloneSubGraph()));
   connect(_ui->actionCreate_empty_sub_graph, SIGNAL(triggered()), this, SLOT(addEmptySubGraph()));
   connect(_ui->actionImport_CSV, SIGNAL(triggered()), this, SLOT(CSVImport()));
-  connect(_ui->actionFind_plugins, SIGNAL(triggered()), this, SLOT(findPlugins()));
   connect(_ui->actionNew_graph, SIGNAL(triggered()), this, SLOT(addNewGraph()));
   connect(_ui->actionNewProject, SIGNAL(triggered()), this, SLOT(newProject()));
   connect(_ui->actionPreferences, SIGNAL(triggered()), this, SLOT(openPreferences()));
   connect(_ui->searchButton, SIGNAL(clicked(bool)), this, SLOT(setSearchOutput(bool)));
   connect(_ui->workspace, SIGNAL(importGraphRequest()), this, SLOT(importGraph()));
-  connect(_ui->action_Close_All, SIGNAL(triggered()), _ui->workspace, SLOT(closeAll()));
+  connect(_ui->action_Remove_All, SIGNAL(triggered()), _ui->workspace, SLOT(closeAll()));
   connect(_ui->addPanelButton, SIGNAL(clicked()), this, SLOT(createPanel()));
   connect(_ui->actionColor_scales_management, SIGNAL(triggered()), this,
           SLOT(displayColorScalesDialog()));

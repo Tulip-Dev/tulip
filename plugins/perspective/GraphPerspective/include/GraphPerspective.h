@@ -157,7 +157,6 @@ protected slots:
   void addEmptySubGraph();
   void CSVImport();
   void logCleared();
-  void findPlugins();
   void addNewGraph();
   void newProject();
   void openRecentFile();
