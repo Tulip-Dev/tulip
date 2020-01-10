@@ -513,8 +513,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExport, "Show the Graph exporting wizard", "E");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionOpen_Project, "Open a graph file", "O");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionNew_graph, "Create a new empty graph", "N");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExposePanels, "Toggle the 'Expose' all visualisation panels mode",
-                                 "E");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExposePanels,
+                                 "Toggle the 'Expose' all visualisation panels mode", "E");
 
   // set portable tooltips
   SET_TIPS(_ui->undoButton, _ui->actionUndo->toolTip());
