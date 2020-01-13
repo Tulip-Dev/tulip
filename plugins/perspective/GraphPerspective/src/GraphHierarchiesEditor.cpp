@@ -170,9 +170,9 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint &p) {
     _contextGraph = _contextIndex.data(tlp::GraphHierarchiesModel::GraphRole).value<tlp::Graph *>();
     QMenu menu;
     tlp::Perspective::redirectStatusTipOfMenu(&menu);
-    menu.addAction(_ui->actionCreate_panel);
+    menu.addAction(tlp::Perspective::typedInstance<GraphPerspective>()->createPanelAction());
     menu.addSeparator();
-    menu.addAction(_ui->actionExport);
+    menu.addAction(tlp::Perspective::typedInstance<GraphPerspective>()->exportAction());
     menu.addAction(_ui->actionSave_to_file);
     menu.addSeparator();
     menu.addAction(_ui->actionRename);
@@ -227,7 +227,7 @@ void GraphHierarchiesEditor::doubleClicked(const QModelIndex &index) {
 
   _contextGraph = index.data(tlp::TulipModel::GraphRole).value<tlp::Graph *>();
   _model->setCurrentGraph(_contextGraph);
-  createPanel();
+  tlp::Perspective::typedInstance<GraphPerspective>()->createPanelAction()->triggered();
   _contextGraph = nullptr;
 }
 
@@ -457,23 +457,6 @@ void GraphHierarchiesEditor::delSelection(bool fromRoot) {
 
 void GraphHierarchiesEditor::delSelectionFromRoot() {
   delSelection(true);
-}
-
-void GraphHierarchiesEditor::createPanel() {
-  tlp::Graph *g = _contextGraph;
-
-  if (g == nullptr) {
-    g = _model->currentGraph();
-
-    if (g == nullptr)
-      return;
-  }
-
-  tlp::Perspective::typedInstance<GraphPerspective>()->createPanel(g);
-}
-
-void GraphHierarchiesEditor::exportGraph() {
-  tlp::Perspective::typedInstance<GraphPerspective>()->exportGraph(_contextGraph);
 }
 
 void GraphHierarchiesEditor::renameGraph() {

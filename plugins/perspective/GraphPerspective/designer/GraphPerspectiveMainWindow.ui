@@ -179,8 +179,8 @@ QToolButton {
 
 QToolButton:hover {
 	border-image:none;
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
-    stop:0 rgba(93, 93, 93, 255), 
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0,
+    stop:0 rgba(93, 93, 93, 255),
     stop:1 rgba(150, 150, 150, 255));
 	border-top: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
 	stop: 0.0 rgba(0,0,0,0),
@@ -676,13 +676,6 @@ color: white;
            <height>75</height>
           </size>
          </property>
-         <property name="text">
-          <string>Export</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
-           <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
-         </property>
          <property name="iconSize">
           <size>
            <width>32</width>
@@ -928,6 +921,34 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_pressed.png) 2 2 2 19
 }
 OutputPanelButton:hover{
 border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
+}
+QToolButton {
+	border-image:none;
+	border-top: 1px solid rgba(0,0,0,0);
+	border-bottom: 1px solid rgba(0,0,0,0);
+	border-left: 0px solid rgba(0,0,0,0);
+	border-right: 0px solid rgba(0,0,0,0);
+	color: white;
+	font: bold 10px;
+	height:20px;
+    background-color: rgba(0,0,0,0);
+}
+
+QToolButton:hover {
+	border-image:none;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0,
+    stop:0 rgba(93, 93, 93, 255),
+    stop:1 rgba(150, 150, 150, 255));
+	border-top: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+	stop: 0.0 rgba(0,0,0,0),
+	stop: 0.4 rgba(170,170,170,255),
+	stop: 0.5 rgba(170,170,170,255),
+	stop: 1.0 rgba(0,0,0,0));
+	border-bottom: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+	stop: 0.0 rgba(0,0,0,0),
+	stop: 0.4 rgba(170,170,170,255),
+	stop: 0.5 rgba(170,170,170,255),
+	stop: 1.0 rgba(0,0,0,0));
 }</string>
               </property>
               <property name="bottomFrame" stdset="0">
@@ -1035,14 +1056,13 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                 </layout>
                </item>
                <item>
-                <widget class="QPushButton" name="addPanelButton">
-                 <property name="text">
-                  <string>Add panel</string>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
-                   <normaloff>:/tulip/gui/icons/16/list-add.png</normaloff>:/tulip/gui/icons/16/list-add.png</iconset>
-                 </property>
+                <widget class="QToolButton" name="addPanelButton">
+		  <property name="checkable">
+		    <bool>false</bool>
+		  </property>
+		  <property name="toolButtonStyle">
+		    <enum>Qt::ToolButtonTextBesideIcon</enum>
+		  </property>
                 </widget>
                </item>
                <item>
@@ -1788,6 +1808,18 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>Ctrl+M</string>
    </property>
   </action>
+  <action name="actionCreate_panel">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/gui/icons/16/list-add.png</normaloff>:/tulip/gui/icons/16/list-add.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add panel</string>
+   </property>
+   <property name="toolTip">
+    <string>Open a new visualization panel on the current graph</string>
+   </property>
+  </action>
   <action name="actionExport">
    <property name="icon">
     <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
@@ -1796,8 +1828,8 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>Export</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+E</string>
+   <property name="toolTip">
+    <string>Show the Graph exporting wizard for the current graph</string>
    </property>
   </action>
   <action name="actionOpen_Project">

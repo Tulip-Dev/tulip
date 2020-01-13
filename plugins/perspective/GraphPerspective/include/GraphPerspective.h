@@ -84,6 +84,8 @@ public:
   tlp::GraphHierarchiesModel *model() const;
   void copy(tlp::Graph *, bool deleteAfter = false);
   tlp::Graph *createSubGraph(tlp::Graph *);
+  QAction *createPanelAction();
+  QAction *exportAction();
 
   void treatEvent(const tlp::Event &) override;
 

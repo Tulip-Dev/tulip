@@ -97,10 +97,8 @@ protected slots:
   void delAllEdges();
   void delSelection(bool fromRoot = false);
   void delSelectionFromRoot();
-  void createPanel();
   void collapseGraphHierarchy();
   void expandGraphHierarchy();
-  void exportGraph();
   void renameGraph();
   void saveGraphHierarchyInTlpFile();
   void toggleSynchronization(bool);

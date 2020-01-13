@@ -458,7 +458,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
                               "Shift+P");
   SET_TIPS_WITH_CTRL_SHORTCUT(_ui->previousPageButton, "Show previous panel", "Shift+Left");
   SET_TIPS_WITH_CTRL_SHORTCUT(_ui->nextPageButton, "Show next panel", "Shift+Right");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionNewProject, "Open a new  empty Tulip perspective",
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionNewProject, "Open a new empty Tulip perspective",
                                  "Shift+N");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(
       _ui->actionSave_Project,
@@ -510,7 +510,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
                                  "Display the Tulip Python IDE for developing scripts and plugins "
                                  "to execute on the loaded graphs",
                                  "Alt+P");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExport, "Show the Graph exporting wizard", "E");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionOpen_Project, "Open a graph file", "O");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionNew_graph, "Create a new empty graph", "N");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExposePanels,
@@ -525,14 +524,12 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->loggerMessagePython->setToolTip(_ui->loggerMessageInfo->toolTip());
   _ui->loggerMessageWarning->setToolTip(_ui->loggerMessageInfo->toolTip());
   _ui->loggerMessageError->setToolTip(_ui->loggerMessageInfo->toolTip());
-  SET_TIPS(_ui->exportButton, "Display the Graph exporting wizard");
   SET_TIPS(_ui->csvImportButton, "Import data in the current graph using a csv formatted file");
   SET_TIPS(_ui->importButton, "Display the Graph importing wizard");
   SET_TIPS(_ui->pluginsButton, "Display the Plugin center");
   SET_TIPS(_ui->sidebarButton, "Hide Sidebar");
   SET_TIPS(_ui->menubarButton, "Hide Menubar");
   SET_TIPS(_ui->statusbarButton, "Hide Statusbar");
-  SET_TIPS(_ui->addPanelButton, "Open a new visualization panel on the current graph");
   SET_TIPS(_ui->singleModeButton, "Switch to 1 panel mode");
   SET_TIPS(_ui->splitModeButton, "Switch to 2 panels mode");
   SET_TIPS(_ui->splitHorizontalModeButton, "Switch to 2 panels mode");
@@ -653,6 +650,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionFull_screen, SIGNAL(triggered(bool)), this, SLOT(showFullScreen(bool)));
   connect(_ui->actionImport, SIGNAL(triggered()), this, SLOT(importGraph()));
   connect(_ui->actionExport, SIGNAL(triggered()), this, SLOT(exportGraph()));
+  connect(_ui->actionCreate_panel, SIGNAL(triggered()), this, SLOT(createPanel()));
   connect(_ui->actionSave_graph_to_file, SIGNAL(triggered()), this,
           SLOT(saveGraphHierarchyInTlpFile()));
   connect(_ui->workspace, SIGNAL(panelFocused(tlp::View *)), this, SLOT(panelFocused(tlp::View *)));
@@ -687,10 +685,10 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->searchButton, SIGNAL(clicked(bool)), this, SLOT(setSearchOutput(bool)));
   connect(_ui->workspace, SIGNAL(importGraphRequest()), this, SLOT(importGraph()));
   connect(_ui->action_Remove_All, SIGNAL(triggered()), _ui->workspace, SLOT(closeAll()));
-  connect(_ui->addPanelButton, SIGNAL(clicked()), this, SLOT(createPanel()));
+  _ui->addPanelButton->setDefaultAction(_ui->actionCreate_panel);
   connect(_ui->actionColor_scales_management, SIGNAL(triggered()), this,
           SLOT(displayColorScalesDialog()));
-  connect(_ui->exportButton, SIGNAL(clicked()), this, SLOT(exportGraph()));
+  _ui->exportButton->setDefaultAction(_ui->actionExport);
 
   // Agent actions
   connect(_ui->actionPlugins_Center, SIGNAL(triggered()), this, SLOT(showPluginsCenter()));
@@ -887,6 +885,10 @@ void GraphPerspective::exportGraph(Graph *g) {
   delete prg;
 }
 
+QAction *GraphPerspective::exportAction() {
+  return _ui->actionExport;
+}
+
 void GraphPerspective::saveGraphHierarchyInTlpFile(Graph *g) {
   if (g == nullptr)
     g = _graphs->currentGraph();
@@ -995,6 +997,10 @@ void GraphPerspective::createPanel(tlp::Graph *g) {
     _ui->workspace->setActivePanel(wizard.panel());
     wizard.panel()->applySettings();
   }
+}
+
+QAction *GraphPerspective::createPanelAction() {
+  return _ui->actionCreate_panel;
 }
 
 void GraphPerspective::panelFocused(tlp::View *view) {
@@ -1461,7 +1467,6 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->exposePanelsButton->setEnabled(enabled);
   _ui->searchButton->setEnabled(enabled);
   _ui->pythonButton->setEnabled(enabled);
-  _ui->exportButton->setEnabled(enabled);
   _ui->previousPageButton->setVisible(enabled);
   _ui->pageCountLabel->setVisible(enabled);
   _ui->nextPageButton->setVisible(enabled);
