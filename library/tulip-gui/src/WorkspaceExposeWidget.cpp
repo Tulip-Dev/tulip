@@ -128,6 +128,7 @@ WorkspaceExposeWidget::WorkspaceExposeWidget(QWidget *parent)
     : QGraphicsView(parent), _positionAnimation(nullptr), _selectedItem(nullptr),
       _placeholderItem(nullptr), _switchToSingleMode(false) {
   setScene(new QGraphicsScene);
+  scene()->setBackgroundBrush(QBrush(QColor(72, 136, 186)));
   setSceneRect(0, 0, width(), height());
   setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 }
@@ -159,7 +160,9 @@ void WorkspaceExposeWidget::setData(const QVector<WorkspacePanel *> &panels,
   _items.clear();
 
   for (auto p : panels) {
-    QPixmap pixmap = p->view()->snapshot(previewSize());
+    QPixmap pixmap = p->view()
+      ->snapshot(previewSize() * 3)
+      .scaled(previewSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     PreviewItem *item = new PreviewItem(pixmap, p);
     scene()->addItem(item);
     _items << item;

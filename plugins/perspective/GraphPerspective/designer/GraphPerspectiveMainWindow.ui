@@ -2278,7 +2278,7 @@ QToolButton:hover {
   </connection>
   <connection>
    <sender>exposePanelsButton</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>actionExposePanels</receiver>
    <slot>setChecked(bool)</slot>
    <hints>
