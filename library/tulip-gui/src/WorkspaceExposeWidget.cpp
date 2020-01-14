@@ -161,8 +161,8 @@ void WorkspaceExposeWidget::setData(const QVector<WorkspacePanel *> &panels,
 
   for (auto p : panels) {
     QPixmap pixmap = p->view()
-      ->snapshot(previewSize() * 3)
-      .scaled(previewSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+                         ->snapshot(previewSize() * 3)
+                         .scaled(previewSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     PreviewItem *item = new PreviewItem(pixmap, p);
     scene()->addItem(item);
     _items << item;
