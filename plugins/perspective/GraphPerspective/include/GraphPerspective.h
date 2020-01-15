@@ -118,7 +118,7 @@ public slots:
   bool
   setGlMainViewPropertiesForGraph(tlp::Graph *g,
                                   const std::map<std::string, tlp::PropertyInterface *> &propsMap);
-  void setSearchOutput(bool);
+  void showSearchDialog(bool = true);
   void setPythonPanel(bool);
   void openPreferences();
 
@@ -180,6 +180,7 @@ protected:
   void updateLogIconsAndCounters();
   void destroyWorkspace();
 
+  QDialog *_searchDialog;
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   PythonPanel *_pythonPanel;
   tlp::PythonIDE *_pythonIDE;

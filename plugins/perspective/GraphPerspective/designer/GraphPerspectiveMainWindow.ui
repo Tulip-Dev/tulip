@@ -402,6 +402,44 @@ QToolButton:pressed {
         </widget>
        </item>
        <item>
+        <widget class="QToolButton" name="searchButton">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Search</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/tulip/graphperspective/icons/48/search.png</normaloff>:/tulip/graphperspective/icons/48/search.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -872,7 +910,6 @@ border: 0px;
                   <property name="currentIndex">
                    <number>1</number>
                   </property>
-                  <widget class="SearchWidget" name="searchPanel"/>
                   <widget class="QWidget" name="pythonPanel"/>
                  </widget>
                 </widget>
@@ -1066,31 +1103,6 @@ QToolButton:hover {
                 </widget>
                </item>
                <item>
-                <widget class="OutputPanelButton" name="searchButton">
-                 <property name="minimumSize">
-                  <size>
-                   <width>85</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                 <property name="shortcut">
-                  <string>Ctrl+F</string>
-                 </property>
-                 <property name="checkable">
-                  <bool>true</bool>
-                 </property>
-                 <property name="autoExclusive">
-                  <bool>false</bool>
-                 </property>
-                 <property name="number" stdset="0">
-                  <number>1</number>
-                 </property>
-                 <property name="title" stdset="0">
-                  <string>Search</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
                 <widget class="OutputPanelButton" name="pythonButton">
                  <property name="minimumSize">
                   <size>
@@ -1108,7 +1120,7 @@ QToolButton:hover {
                   <bool>false</bool>
                  </property>
                  <property name="number" stdset="0">
-                  <number>2</number>
+                  <number>1</number>
                  </property>
                  <property name="title" stdset="0">
                   <string>Python REPL</string>
@@ -1440,6 +1452,7 @@ QToolButton:hover {
     <addaction name="action_Remove_All"/>
     <addaction name="actionMessages_log"/>
     <addaction name="actionPython_IDE"/>
+    <addaction name="actionSearch"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -1973,6 +1986,24 @@ QToolButton:hover {
     <string>Ctrl+E</string>
    </property>
   </action>
+  <action name="actionSearch">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/48/search.png</normaloff>:/tulip/graphperspective/icons/48/search.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Search dialog</string>
+   </property>
+   <property name="iconText">
+    <string>Display Search dialog</string>
+   </property>
+   <property name="toolTip">
+    <string>Display the graph's elements search dialog [Ctrl+F]</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
   <action name="actionShowAPIDocumentation">
    <property name="icon">
     <iconset>
@@ -2281,6 +2312,22 @@ QToolButton:hover {
    <signal>toggled(bool)</signal>
    <receiver>actionExposePanels</receiver>
    <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>144</x>
+     <y>695</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>575</x>
+     <y>343</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>searchButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionSearch</receiver>
+   <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>144</x>

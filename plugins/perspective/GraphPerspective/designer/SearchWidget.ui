@@ -11,13 +11,10 @@
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
-  </property>
-  <property name="acceptDrops">
-   <bool>true</bool>
   </property>
   <property name="styleSheet">
    <string notr="true">.QWidget, QScrollArea, .QFrame {
@@ -31,16 +28,6 @@ background-color: white;
    <property name="margin">
     <number>0</number>
    </property>
-   <item>
-    <widget class="HeaderFrame" name="headerFrame" native="true">
-     <property name="expandable" stdset="0">
-      <bool>false</bool>
-     </property>
-     <property name="title" stdset="0">
-      <string>Search</string>
-     </property>
-    </widget>
-   </item>
    <item>
     <widget class="QScrollArea" name="scrollArea">
      <property name="frameShape">
@@ -82,7 +69,7 @@ font: bold;
        <item>
         <widget class="QFrame" name="searchFrame">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -548,7 +535,7 @@ font: bold;
           </sizepolicy>
          </property>
          <property name="styleSheet">
-          <string notr="true">font: normal;</string>
+          <string notr="true">font: bold 10px;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading</set>

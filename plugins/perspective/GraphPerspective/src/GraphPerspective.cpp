@@ -112,7 +112,8 @@ static bool tulipCanOpenFile(const QString &path) {
 
 GraphPerspective::GraphPerspective(const tlp::PluginContext *c)
     : Perspective(c), _ui(nullptr), _graphs(new GraphHierarchiesModel(this)),
-      _recentDocumentsSettingsKey("perspective/recent_files"), _logger(nullptr) {
+      _recentDocumentsSettingsKey("perspective/recent_files"), _logger(nullptr),
+      _searchDialog(nullptr) {
   Q_INIT_RESOURCE(GraphPerspective);
 
   if (c && static_cast<const PerspectiveContext *>(c)->parameters.contains("gui_testing")) {
@@ -276,6 +277,7 @@ GraphPerspective::~GraphPerspective() {
   }
 #endif
 
+  delete _searchDialog;
   delete _ui;
 }
 
@@ -451,8 +453,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 #endif
   currentGraphChanged(nullptr);
   // set win/Mac dependent tooltips with ctrl shortcut
-  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->searchButton, "Show/hide the graph's elements search panel",
-                              "F");
   SET_TIPS_WITH_CTRL_SHORTCUT(_ui->pythonButton,
                               "Show/hide the Python interpreter (Read Eval Print Loop) panel",
                               "Shift+P");
@@ -514,11 +514,14 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionNew_graph, "Create a new empty graph", "N");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExposePanels,
                                  "Toggle the 'Expose' all visualisation panels mode", "E");
+  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->actionSearch, "Display the graph's elements search dialog",
+                              "F");
 
   // set portable tooltips
   SET_TIPS(_ui->undoButton, _ui->actionUndo->toolTip());
   SET_TIPS(_ui->redoButton, _ui->actionRedo->toolTip());
   SET_TIPS(_ui->exposePanelsButton, _ui->actionExposePanels->toolTip());
+  SET_TIPS(_ui->searchButton, _ui->actionSearch->toolTip());
   SET_TIPS(_ui->developButton, _ui->actionPython_IDE->toolTip());
   _ui->loggerMessageInfo->setToolTip(QString("Show/Hide the Messages log panel"));
   _ui->loggerMessagePython->setToolTip(_ui->loggerMessageInfo->toolTip());
@@ -682,7 +685,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionNew_graph, SIGNAL(triggered()), this, SLOT(addNewGraph()));
   connect(_ui->actionNewProject, SIGNAL(triggered()), this, SLOT(newProject()));
   connect(_ui->actionPreferences, SIGNAL(triggered()), this, SLOT(openPreferences()));
-  connect(_ui->searchButton, SIGNAL(clicked(bool)), this, SLOT(setSearchOutput(bool)));
+  connect(_ui->actionSearch, SIGNAL(triggered()), this, SLOT(showSearchDialog()));
   connect(_ui->workspace, SIGNAL(importGraphRequest()), this, SLOT(importGraph()));
   connect(_ui->action_Remove_All, SIGNAL(triggered()), _ui->workspace, SLOT(closeAll()));
   _ui->addPanelButton->setDefaultAction(_ui->actionCreate_panel);
@@ -750,8 +753,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
   if (!rootIds.empty())
     _ui->workspace->readProject(_project, rootIds, progress);
-
-  _ui->searchPanel->setModel(_graphs);
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   connect(_ui->pythonButton, SIGNAL(clicked(bool)), this, SLOT(setPythonPanel(bool)));
@@ -1472,13 +1473,13 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->nextPageButton->setVisible(enabled);
   _ui->actionSave_Project->setEnabled(enabled);
   _ui->actionSave_Project_as->setEnabled(enabled);
+  _ui->actionSearch->setEnabled(enabled);
 
   if (graph == nullptr) {
     _ui->workspace->switchToStartupMode();
     _ui->exposePanelsButton->setChecked(false);
-    _ui->searchButton->setChecked(false);
     _ui->pythonButton->setChecked(false);
-    setSearchOutput(false);
+    showSearchDialog(false);
     _ui->actionSave_Project->setEnabled(false);
     _ui->actionSave_Project_as->setEnabled(false);
   } else {
@@ -1670,13 +1671,24 @@ bool GraphPerspective::setGlMainViewPropertiesForGraph(
   return result;
 }
 
-void GraphPerspective::setSearchOutput(bool f) {
+void GraphPerspective::showSearchDialog(bool f) {
   if (f) {
-    _ui->outputFrame->setCurrentWidget(_ui->searchPanel);
-    _ui->pythonButton->setChecked(false);
+    if (_searchDialog == nullptr) {
+      _searchDialog = new QDialog(mainWindow(), Qt::Window);
+      _searchDialog->setWindowTitle("Search for graph's elements");
+      auto searchPanel = new SearchWidget(_searchDialog);
+      searchPanel->setModel(_graphs);
+      QVBoxLayout *layout = new QVBoxLayout;
+      _searchDialog->setMinimumWidth(250);
+      layout->addWidget(searchPanel);
+      layout->setContentsMargins(0, 0, 0, 0);
+      _searchDialog->setLayout(layout);
+      _searchDialog->setModal(false);
+    }
+    _searchDialog->exec();
   }
-
-  _ui->outputFrame->setVisible(f);
+  if (_searchDialog)
+    _searchDialog->hide();
 }
 
 void GraphPerspective::setPythonPanel(bool f) {
@@ -1692,7 +1704,7 @@ void GraphPerspective::setPythonPanel(bool f) {
     }
 #endif
     _ui->outputFrame->setCurrentWidget(_ui->pythonPanel);
-    _ui->searchButton->setChecked(false);
+    //_ui->searchButton->setChecked(false);
   }
 
   _ui->outputFrame->setVisible(f);
