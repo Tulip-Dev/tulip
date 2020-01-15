@@ -514,8 +514,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionNew_graph, "Create a new empty graph", "N");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExposePanels,
                                  "Toggle the 'Expose' all visualisation panels mode", "E");
-  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->actionSearch, "Display the graph's elements search dialog",
-                              "F");
+  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->actionSearch, "Display the graph's elements search dialog", "F");
 
   // set portable tooltips
   SET_TIPS(_ui->undoButton, _ui->actionUndo->toolTip());
