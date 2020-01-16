@@ -33,6 +33,8 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
 
+using namespace tlp;
+
 GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget *parent)
     : QDialog(parent), _logType(QtDebugMsg), _ui(new Ui::GraphPerspectiveLogger),
       _pythonOutput(false) {
