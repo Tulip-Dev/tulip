@@ -73,6 +73,8 @@ public slots:
 private slots:
   void copy();
   void showContextMenu(const QPoint &pos);
+  void decreaseFontSize();
+  void increaseFontSize();
 
 private:
   void logImpl(QtMsgType, const QString &);

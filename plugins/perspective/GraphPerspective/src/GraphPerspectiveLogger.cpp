@@ -56,6 +56,8 @@ GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget *parent)
   connect(resetb, SIGNAL(clicked()), this, SLOT(hide()));
   connect(_ui->anchoredCB, SIGNAL(toggled(bool)), this, SLOT(setAnchored(bool)));
   _ui->anchoredCB->setChecked(tlp::TulipSettings::instance().loggerAnchored());
+  connect(_ui->decreaseFontSizeButton, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
+  connect(_ui->increaseFontSizeButton, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
 }
 
 GraphPerspectiveLogger::~GraphPerspectiveLogger() {
@@ -250,4 +252,14 @@ void GraphPerspectiveLogger::setAnchored(bool anchored) {
   if (visible) {
     show();
   }
+}
+
+void GraphPerspectiveLogger::decreaseFontSize() {
+  int fs = _ui->listWidget->font().pointSize();
+  _ui->listWidget->setStyleSheet(QString("QListView { font-size: %1pt; }").arg(fs - 1));
+}
+
+void GraphPerspectiveLogger::increaseFontSize() {
+  int fs = _ui->listWidget->font().pointSize() + 1;
+  _ui->listWidget->setStyleSheet(QString("QListView { font-size: %1pt; }").arg(fs + 1));
 }

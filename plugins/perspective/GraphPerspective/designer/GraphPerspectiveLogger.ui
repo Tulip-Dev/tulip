@@ -23,16 +23,7 @@
    <bool>false</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
@@ -46,16 +37,7 @@
 }</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
+      <property name="margin">
        <number>0</number>
       </property>
       <item>
@@ -99,7 +81,69 @@
       </widget>
      </item>
      <item>
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="fontSizeLabel">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Font size</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="decreaseFontSizeButton">
+       <property name="maximumSize">
+        <size>
+         <width>20</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string> - </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="increaseFontSizeButton">
+       <property name="maximumSize">
+        <size>
+         <width>20</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string> + </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="standardButtons">
         <set>QDialogButtonBox::Close|QDialogButtonBox::Reset</set>
        </property>
