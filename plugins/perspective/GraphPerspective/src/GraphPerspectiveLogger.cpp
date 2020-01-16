@@ -28,6 +28,7 @@
 #include <QPushButton>
 #include <QShowEvent>
 #include <QHideEvent>
+#include <QShortcut>
 
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
@@ -58,6 +59,12 @@ GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget *parent)
   _ui->anchoredCB->setChecked(tlp::TulipSettings::instance().loggerAnchored());
   connect(_ui->decreaseFontSizeButton, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
   connect(_ui->increaseFontSizeButton, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
+  auto shortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Minus), this);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(decreaseFontSize()));
+  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton, "decrease font size", "-");
+  shortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus), this);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(increaseFontSize()));
+  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton, "increase font size", "-");
 }
 
 GraphPerspectiveLogger::~GraphPerspectiveLogger() {
