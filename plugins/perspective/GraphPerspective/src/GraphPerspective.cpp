@@ -393,13 +393,12 @@ void GraphPerspective::redrawPanels(bool center) {
   _ui->workspace->redrawPanels(center);
 }
 
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-class PythonIDEDialog : public QDialog {
+class GraphPerspectiveDialog : public QDialog {
 
   QByteArray _windowGeometry;
 
 public:
-  PythonIDEDialog(QWidget *parent, Qt::WindowFlags flags) : QDialog(parent, flags) {}
+  GraphPerspectiveDialog(QWidget *parent, Qt::WindowFlags flags) : QDialog(parent, flags) {}
 
 protected:
   void showEvent(QShowEvent *e) override {
@@ -415,7 +414,6 @@ protected:
     QDialog::closeEvent(e);
   }
 };
-#endif
 
 #define SET_TOOLTIP(a, tt) a->setToolTip(QString(tt))
 
@@ -427,7 +425,7 @@ void GraphPerspective::buildPythonIDE() {
     QVBoxLayout *dialogLayout = new QVBoxLayout();
     dialogLayout->addWidget(_pythonIDE);
     dialogLayout->setContentsMargins(0, 0, 0, 0);
-    _pythonIDEDialog = new PythonIDEDialog(nullptr, Qt::Window);
+    _pythonIDEDialog = new GraphPerspectiveDialog(nullptr, Qt::Window);
     _pythonIDEDialog->setStyleSheet(_mainWindow->styleSheet());
     _pythonIDEDialog->setWindowIcon(_mainWindow->windowIcon());
     _pythonIDEDialog->setLayout(dialogLayout);
@@ -1673,12 +1671,13 @@ bool GraphPerspective::setGlMainViewPropertiesForGraph(
 void GraphPerspective::showSearchDialog(bool f) {
   if (f) {
     if (_searchDialog == nullptr) {
-      _searchDialog = new QDialog(mainWindow(), Qt::Window);
+      _searchDialog = new GraphPerspectiveDialog(_mainWindow, Qt::Window);
       _searchDialog->setWindowTitle("Search for graph's elements");
       auto searchPanel = new SearchWidget(_searchDialog);
       searchPanel->setModel(_graphs);
       QVBoxLayout *layout = new QVBoxLayout;
-      _searchDialog->setMinimumWidth(250);
+      _searchDialog->setMinimumWidth(600);
+      _searchDialog->setMinimumHeight(250);
       layout->addWidget(searchPanel);
       layout->setContentsMargins(0, 0, 0, 0);
       _searchDialog->setLayout(layout);

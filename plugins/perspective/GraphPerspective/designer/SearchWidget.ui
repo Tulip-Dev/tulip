@@ -16,11 +16,6 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <property name="styleSheet">
-   <string notr="true">.QWidget, QScrollArea, .QFrame {
-background-color: white;
-}</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -98,13 +93,10 @@ font: bold;
             <item row="0" column="0">
              <widget class="QLabel" name="graphLabel">
               <property name="toolTip">
-               <string>Choose the graph on which the search will be performed</string>
-              </property>
-              <property name="statusTip">
-               <string>Choose the graph on which the search will be performed</string>
+               <string>The graph on which the search will be performed</string>
               </property>
               <property name="text">
-               <string>Graph:</string>
+               <string>graph:</string>
               </property>
              </widget>
             </item>
@@ -117,9 +109,6 @@ font: bold;
                </size>
               </property>
               <property name="toolTip">
-               <string>Choose the graph on which the search will be performed</string>
-              </property>
-              <property name="statusTip">
                <string>Choose the graph on which the search will be performed</string>
               </property>
               <property name="sizeAdjustPolicy">
@@ -136,13 +125,10 @@ font: bold;
                </sizepolicy>
               </property>
               <property name="toolTip">
-               <string>Choose the element type on which the search will be performed</string>
-              </property>
-              <property name="statusTip">
-               <string>Choose the element type on which the search will be performed</string>
+               <string>The element type on which the search will be performed</string>
               </property>
               <property name="text">
-               <string>Scope:</string>
+               <string>scope:</string>
               </property>
              </widget>
             </item>
@@ -155,9 +141,6 @@ font: bold;
                </size>
               </property>
               <property name="toolTip">
-               <string>Choose the element type on which the search will be performed</string>
-              </property>
-              <property name="statusTip">
                <string>Choose the element type on which the search will be performed</string>
               </property>
               <property name="sizeAdjustPolicy">
@@ -189,13 +172,10 @@ font: bold;
                </sizepolicy>
               </property>
               <property name="toolTip">
-               <string>Choose graph property into which the found elements will be added</string>
-              </property>
-              <property name="statusTip">
-               <string>Choose graph property into which the found elements will be added</string>
+               <string>The graph property whose values associated with the found elements will be modified</string>
               </property>
               <property name="text">
-               <string>Store results in:</string>
+               <string>store results in:</string>
               </property>
              </widget>
             </item>
@@ -208,12 +188,9 @@ font: bold;
                </size>
               </property>
               <property name="toolTip">
-               <string>Choose the graph property into which the found elements will be added</string>
+               <string>Choose the graph property whose values associated with the found elements will be modified</string>
               </property>
-              <property name="statusTip">
-               <string>Choose the graph property into which the found elements will be added</string>
-              </property>
-              <property name="sizeAdjustPolicy">
+             <property name="sizeAdjustPolicy">
                <enum>QComboBox::AdjustToContents</enum>
               </property>
              </widget>
@@ -227,7 +204,7 @@ font: bold;
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Search for:</string>
+               <string>search for:</string>
               </property>
              </widget>
             </item>
@@ -250,9 +227,6 @@ font: bold;
                 <property name="toolTip">
                  <string>Choose the property for which the search will performed</string>
                 </property>
-                <property name="statusTip">
-                 <string>Choose the property for which the search will performed</string>
-                </property>
                </widget>
               </item>
               <item>
@@ -270,9 +244,6 @@ font: bold;
                  </size>
                 </property>
                 <property name="toolTip">
-                 <string>Choose the comparion operator of the search</string>
-                </property>
-                <property name="statusTip">
                  <string>Choose the comparion operator of the search</string>
                 </property>
                 <item>
@@ -342,9 +313,6 @@ font: bold;
                  </size>
                 </property>
                 <property name="toolTip">
-                 <string>Choose the value involved in the search comparison</string>
-                </property>
-                <property name="statusTip">
                  <string>Choose the value involved in the search comparison</string>
                 </property>
                </widget>
@@ -420,7 +388,10 @@ font: 12px;
             <item row="2" column="0">
              <widget class="QLabel" name="label">
               <property name="text">
-               <string>Selection mode:</string>
+               <string>selection mode:</string>
+              </property>
+              <property name="toolTip">
+               <string>Choose 'Do not modify selection' to only count the number of nodes/edges found</string>
               </property>
              </widget>
             </item>
@@ -433,7 +404,7 @@ font: 12px;
                </size>
               </property>
               <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose &amp;quot;Do not modify selection&amp;quot; to only count the number of nodes/edges found.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>Choose 'Do not modify selection' to only count the number of nodes/edges found</string>
               </property>
               <property name="sizeAdjustPolicy">
                <enum>QComboBox::AdjustToContents</enum>
@@ -455,7 +426,7 @@ font: 12px;
               </item>
               <item>
                <property name="text">
-                <string extracomment="ffsfdfdf">Do not modify selection</string>
+                <string>Do not modify selection</string>
                </property>
               </item>
              </widget>
