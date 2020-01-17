@@ -355,9 +355,6 @@ QToolButton:pressed {
          <property name="checkable">
           <bool>true</bool>
          </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
          <property name="toolButtonStyle">
           <enum>Qt::ToolButtonTextUnderIcon</enum>
          </property>
@@ -429,9 +426,9 @@ QToolButton:pressed {
           </size>
          </property>
          <property name="checkable">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
-         <property name="enabled">
+         <property name="checked">
           <bool>true</bool>
          </property>
          <property name="toolButtonStyle">
@@ -1987,6 +1984,12 @@ QToolButton:hover {
    </property>
   </action>
   <action name="actionSearch">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset>
      <normaloff>:/tulip/graphperspective/icons/48/search.png</normaloff>:/tulip/graphperspective/icons/48/search.png</iconset>

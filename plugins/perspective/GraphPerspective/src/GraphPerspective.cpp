@@ -1671,8 +1671,7 @@ bool GraphPerspective::setGlMainViewPropertiesForGraph(
 void GraphPerspective::showSearchDialog(bool f) {
   if (f) {
     if (_searchDialog == nullptr) {
-      _searchDialog = new GraphPerspectiveDialog(_mainWindow, Qt::Window);
-      _searchDialog->setWindowTitle("Search for graph's elements");
+      _searchDialog = new GraphPerspectiveDialog(_mainWindow, Qt::Widget);
       auto searchPanel = new SearchWidget(_searchDialog);
       searchPanel->setModel(_graphs);
       QVBoxLayout *layout = new QVBoxLayout;
@@ -1681,12 +1680,15 @@ void GraphPerspective::showSearchDialog(bool f) {
       layout->addWidget(searchPanel);
       layout->setContentsMargins(0, 0, 0, 0);
       _searchDialog->setLayout(layout);
-      _searchDialog->setModal(false);
     }
+    _ui->searchButton->setChecked(true);
     _searchDialog->exec();
   }
-  if (_searchDialog)
+  if (_searchDialog) {
     _searchDialog->hide();
+    _ui->searchButton->setChecked(false);
+    _ui->actionSearch->setChecked(false);
+  }
 }
 
 void GraphPerspective::setPythonPanel(bool f) {

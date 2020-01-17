@@ -16,6 +16,9 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="windowTitle">
+   <string>Search for graph's elements</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -333,7 +336,6 @@ font: bold;
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QTableView {
-background-color: #F9F9F9;
 border: 1px solid #C9C9C9;
 color: black;
 font: 12px;
