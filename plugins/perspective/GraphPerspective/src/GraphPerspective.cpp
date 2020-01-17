@@ -1691,8 +1691,7 @@ void GraphPerspective::showSearchDialog(bool f) {
     _searchDialog->show();
     _searchDialog->raise();
     _searchDialog->activateWindow();
-  }
-  else if (_searchDialog) {
+  } else if (_searchDialog) {
     _searchDialog->hide();
     _ui->searchButton->setChecked(false);
     _ui->actionSearch->setChecked(false);
