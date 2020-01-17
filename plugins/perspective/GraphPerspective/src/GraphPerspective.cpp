@@ -398,7 +398,15 @@ class GraphPerspectiveDialog : public QDialog {
   QByteArray _windowGeometry;
 
 public:
-  GraphPerspectiveDialog(QWidget *parent, Qt::WindowFlags flags) : QDialog(parent, flags) {}
+  GraphPerspectiveDialog(QString title) : QDialog(nullptr, Qt::Window) {
+    auto _mainWindow = Perspective::instance()->mainWindow();
+    setStyleSheet(_mainWindow->styleSheet());
+    setWindowIcon(_mainWindow->windowIcon());
+    auto mwt = _mainWindow->windowTitle();
+    auto pos = mwt.indexOf(' ', mwt.indexOf(' ') + 1);
+    mwt.remove(pos, mwt.size() - pos);
+    setWindowTitle(mwt.append(" - %1").arg(title));
+  }
 
 protected:
   void showEvent(QShowEvent *e) override {
@@ -425,12 +433,9 @@ void GraphPerspective::buildPythonIDE() {
     QVBoxLayout *dialogLayout = new QVBoxLayout();
     dialogLayout->addWidget(_pythonIDE);
     dialogLayout->setContentsMargins(0, 0, 0, 0);
-    _pythonIDEDialog = new GraphPerspectiveDialog(nullptr, Qt::Window);
-    _pythonIDEDialog->setStyleSheet(_mainWindow->styleSheet());
-    _pythonIDEDialog->setWindowIcon(_mainWindow->windowIcon());
+    _pythonIDEDialog = new GraphPerspectiveDialog("Python IDE");
     _pythonIDEDialog->setLayout(dialogLayout);
     _pythonIDEDialog->resize(800, 600);
-    _pythonIDEDialog->setWindowTitle("Tulip Python IDE");
   }
 #endif
 }
@@ -1671,7 +1676,7 @@ bool GraphPerspective::setGlMainViewPropertiesForGraph(
 void GraphPerspective::showSearchDialog(bool f) {
   if (f) {
     if (_searchDialog == nullptr) {
-      _searchDialog = new GraphPerspectiveDialog(_mainWindow, Qt::Widget);
+      _searchDialog = new GraphPerspectiveDialog("Search graph elements");
       auto searchPanel = new SearchWidget(_searchDialog);
       searchPanel->setModel(_graphs);
       QVBoxLayout *layout = new QVBoxLayout;
@@ -1681,10 +1686,13 @@ void GraphPerspective::showSearchDialog(bool f) {
       layout->setContentsMargins(0, 0, 0, 0);
       _searchDialog->setLayout(layout);
     }
+    _searchDialog->hide();
     _ui->searchButton->setChecked(true);
-    _searchDialog->exec();
+    _searchDialog->show();
+    _searchDialog->raise();
+    _searchDialog->activateWindow();
   }
-  if (_searchDialog) {
+  else if (_searchDialog) {
     _searchDialog->hide();
     _ui->searchButton->setChecked(false);
     _ui->actionSearch->setChecked(false);
