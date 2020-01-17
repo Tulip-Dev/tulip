@@ -428,7 +428,7 @@ QToolButton:pressed {
          <property name="checkable">
           <bool>true</bool>
          </property>
-         <property name="checked">
+         <property name="enabled">
           <bool>true</bool>
          </property>
          <property name="toolButtonStyle">
