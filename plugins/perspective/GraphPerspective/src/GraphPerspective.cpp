@@ -242,7 +242,7 @@ void GraphPerspective::updateLogIconsAndCounters() {
     logCounterLabel = _ui->loggerMessagePython;
   }
 
-  logIconCounterFrame->setVisible(true);
+  logIconCounterFrame->setVisible(_logger->countByType(logType) != 0);
   logIconLabel->setPixmap(_logger->icon(logType));
   SET_TIPS(logIconLabel, "Click here to show/hide the message log window");
   logCounterLabel->setText(QString::number(_logger->countByType(logType)));
@@ -618,6 +618,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   }
 
   connect(_logger, SIGNAL(cleared()), this, SLOT(logCleared()));
+  connect(_logger, SIGNAL(itemRemoved()), this, SLOT(updateLogIconsAndCounters()));
   connect(_logger, SIGNAL(resetLoggerPosition()), this, SLOT(resetLoggerDialogPosition()));
 
   _colorScalesDialog =

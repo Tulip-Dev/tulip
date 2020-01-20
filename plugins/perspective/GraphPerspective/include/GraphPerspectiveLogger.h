@@ -72,6 +72,7 @@ public slots:
 
 private slots:
   void copy();
+  void remove();
   void showContextMenu(const QPoint &pos);
   void decreaseFontSize();
   void increaseFontSize();
@@ -81,6 +82,7 @@ private:
 
 signals:
   void cleared();
+  void itemRemoved();
   void resetLoggerPosition();
 };
 

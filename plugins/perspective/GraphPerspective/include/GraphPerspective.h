@@ -170,6 +170,7 @@ protected slots:
   void resetLoggerDialogPosition();
   void showHideLogger();
   void showHideMenuBar();
+  void updateLogIconsAndCounters();
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   void initPythonIDE();
 #endif
@@ -177,7 +178,6 @@ protected slots:
 protected:
   bool eventFilter(QObject *, QEvent *) override;
   void importGraph(const std::string &module, tlp::DataSet &data);
-  void updateLogIconsAndCounters();
   void destroyWorkspace();
 
   QDialog *_searchDialog;
