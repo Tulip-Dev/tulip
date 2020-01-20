@@ -395,23 +395,43 @@ void GraphPerspective::redrawPanels(bool center) {
 
 class GraphPerspectiveDialog : public QDialog {
 
+  QMainWindow *_mainWindow;
   QByteArray _windowGeometry;
+  bool _mainWindowHidden;
 
 public:
-  GraphPerspectiveDialog(QString title) : QDialog(nullptr, Qt::Window) {
-    auto _mainWindow = Perspective::instance()->mainWindow();
+  GraphPerspectiveDialog(QString title) : QDialog(nullptr, Qt::Tool | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint), _mainWindow(Perspective::instance()->mainWindow()), _mainWindowHidden(false) {
     setStyleSheet(_mainWindow->styleSheet());
     setWindowIcon(_mainWindow->windowIcon());
-    auto mwt = _mainWindow->windowTitle();
-    auto pos = mwt.indexOf(' ', mwt.indexOf(' ') + 1);
-    mwt.remove(pos, mwt.size() - pos);
-    setWindowTitle(mwt.append(" - %1").arg(title));
+    QString tlpTitle("Tulip ");
+
+    // show patch number only if needed
+    if (TULIP_INT_VERSION % 10)
+      tlpTitle += TULIP_VERSION;
+    else
+      tlpTitle += TULIP_MM_VERSION;
+
+    setWindowTitle(tlpTitle.append(" - %1").arg(title));
+    _mainWindow->installEventFilter(this);
+  }
+
+  bool eventFilter(QObject *, QEvent *event) override {
+    if (event->type() == QEvent::Hide) {
+      if (_mainWindow->isMinimized() && !isHidden()) {
+	_mainWindowHidden = true;
+	_windowGeometry = saveGeometry();
+	hide();
+      } else if (_mainWindowHidden) {
+	_mainWindowHidden = false;
+	show();
+      }
+    }
+    return false;
   }
 
 protected:
   void showEvent(QShowEvent *e) override {
     QDialog::showEvent(e);
-
     if (!_windowGeometry.isEmpty()) {
       restoreGeometry(_windowGeometry);
     }
