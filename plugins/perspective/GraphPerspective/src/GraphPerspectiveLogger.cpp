@@ -49,13 +49,14 @@ GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget *parent)
   button->setToolTip("Remove all messages");
   connect(button, SIGNAL(clicked()), this, SLOT(clear()));
   _ui->buttonBox->addButton(button, QDialogButtonBox::ActionRole);
-  button =
-      new QPushButton(QIcon(":/tulip/gui/icons/16/clipboard.png"), "Copy selection", this);
-  button->setToolTip(QString("Copy the selected messages into the clipboard [%1]").arg(QKeySequence(QKeySequence::Copy).toString()));
+  button = new QPushButton(QIcon(":/tulip/gui/icons/16/clipboard.png"), "Copy selection", this);
+  button->setToolTip(QString("Copy the selected messages into the clipboard [%1]")
+                         .arg(QKeySequence(QKeySequence::Copy).toString()));
   connect(button, SIGNAL(clicked()), this, SLOT(copy()));
   _ui->buttonBox->addButton(button, QDialogButtonBox::ActionRole);
   button = new QPushButton("Remove selection", this);
-  button->setToolTip(QString("Remove the selected messages [%1]").arg(QKeySequence(QKeySequence::Cut).toString()));
+  button->setToolTip(
+      QString("Remove the selected messages [%1]").arg(QKeySequence(QKeySequence::Cut).toString()));
   connect(button, SIGNAL(clicked()), this, SLOT(remove()));
   _ui->buttonBox->addButton(button, QDialogButtonBox::ActionRole);
   connect(_ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)), this,
@@ -208,9 +209,9 @@ void GraphPerspectiveLogger::showContextMenu(const QPoint &pos) {
   QMenu m;
   if (_ui->listWidget->count() > 0) {
     m.addAction("Clear", this, SLOT(clear()));
-     m.addAction("Copy selection", this, SLOT(copy()), QKeySequence::Copy);
-     m.addAction("Remove selection", this, SLOT(remove()), QKeySequence::Cut);
-     m.addSeparator();
+    m.addAction("Copy selection", this, SLOT(copy()), QKeySequence::Copy);
+    m.addAction("Remove selection", this, SLOT(remove()), QKeySequence::Cut);
+    m.addSeparator();
   }
   m.addAction("Close", this, SLOT(close()));
   m.exec(_ui->listWidget->mapToGlobal(pos));

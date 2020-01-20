@@ -400,7 +400,10 @@ class GraphPerspectiveDialog : public QDialog {
   bool _mainWindowHidden;
 
 public:
-  GraphPerspectiveDialog(QString title) : QDialog(nullptr, Qt::Tool | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint), _mainWindow(Perspective::instance()->mainWindow()), _mainWindowHidden(false) {
+  GraphPerspectiveDialog(QString title)
+      : QDialog(nullptr, Qt::Tool | Qt::CustomizeWindowHint | Qt::WindowTitleHint |
+                             Qt::WindowCloseButtonHint),
+        _mainWindow(Perspective::instance()->mainWindow()), _mainWindowHidden(false) {
     setStyleSheet(_mainWindow->styleSheet());
     setWindowIcon(_mainWindow->windowIcon());
     QString tlpTitle("Tulip ");
@@ -418,12 +421,12 @@ public:
   bool eventFilter(QObject *, QEvent *event) override {
     if (event->type() == QEvent::Hide) {
       if (_mainWindow->isMinimized() && !isHidden()) {
-	_mainWindowHidden = true;
-	_windowGeometry = saveGeometry();
-	hide();
+        _mainWindowHidden = true;
+        _windowGeometry = saveGeometry();
+        hide();
       } else if (_mainWindowHidden) {
-	_mainWindowHidden = false;
-	show();
+        _mainWindowHidden = false;
+        show();
       }
     }
     return false;

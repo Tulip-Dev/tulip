@@ -246,7 +246,10 @@ bool AutoCompletionList::eventFilter(QObject *obj, QEvent *event) {
 }
 
 FindReplaceDialog::FindReplaceDialog(QPlainTextEdit *editor, QWidget *parent)
-  : QDialog(parent, static_cast<Qt::WindowFlags>(Qt::Tool | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)), _ui(new Ui::FindReplaceDialogData), _editor(editor) {
+    : QDialog(parent,
+              static_cast<Qt::WindowFlags>(Qt::Tool | Qt::CustomizeWindowHint |
+                                           Qt::WindowTitleHint | Qt::WindowCloseButtonHint)),
+      _ui(new Ui::FindReplaceDialogData), _editor(editor) {
   _ui->setupUi(this);
   connect(_ui->findButton, SIGNAL(clicked()), this, SLOT(doFind()));
   connect(_ui->replaceButton, SIGNAL(clicked()), this, SLOT(doReplace()));
@@ -501,7 +504,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent)
 
   QWidget *top = window();
   while (top->parentWidget() != nullptr)
-    top = top->parentWidget() ;
+    top = top->parentWidget();
 
   _findReplaceDialog = new FindReplaceDialog(this, top);
 
