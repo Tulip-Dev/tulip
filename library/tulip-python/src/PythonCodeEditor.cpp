@@ -246,7 +246,7 @@ bool AutoCompletionList::eventFilter(QObject *obj, QEvent *event) {
 }
 
 FindReplaceDialog::FindReplaceDialog(QPlainTextEdit *editor, QWidget *parent)
-    : QDialog(parent), _ui(new Ui::FindReplaceDialogData), _editor(editor) {
+  : QDialog(parent, static_cast<Qt::WindowFlags>(Qt::Tool | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint)), _ui(new Ui::FindReplaceDialogData), _editor(editor) {
   _ui->setupUi(this);
   connect(_ui->findButton, SIGNAL(clicked()), this, SLOT(doFind()));
   connect(_ui->replaceButton, SIGNAL(clicked()), this, SLOT(doReplace()));
@@ -499,7 +499,11 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent)
     }
   }
 
-  _findReplaceDialog = new FindReplaceDialog(this);
+  QWidget *top = window();
+  while (top->parentWidget() != nullptr)
+    top = top->parentWidget() ;
+
+  _findReplaceDialog = new FindReplaceDialog(this, top);
 
   connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth()));
   connect(this, SIGNAL(updateRequest(const QRect &, int)), this,
@@ -1704,39 +1708,4 @@ void PythonCodeEditor::setPlainText(const QString &text) {
   setCurrentCharFormat(format);
   setTextCursor(cursor);
   updateTabWidth();
-}
-
-inline qreal PythonCodeEditor::tabWidth() const {
-#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
-  return tabStopWidth();
-#else
-  return tabStopDistance();
-#endif
-}
-
-inline void PythonCodeEditor::setTabWidth(qreal width) {
-#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
-  setTabStopWidth(width);
-#else
-  setTabStopDistance(width);
-#endif
-}
-
-inline int PythonCodeEditor::charWidth(char c) const {
-  if (c == '\t') {
-    return textWidth("    ");
-  }
-#if (QT_VERSION < QT_VERSION_CHECK(5, 11, 0))
-  return fontMetrics().width(QLatin1Char(c));
-#else
-  return fontMetrics().horizontalAdvance(QLatin1Char(c));
-#endif
-}
-
-inline int PythonCodeEditor::textWidth(const QString &text) const {
-#if (QT_VERSION < QT_VERSION_CHECK(5, 11, 0))
-  return fontMetrics().width(QString(text).replace('\t', "    "));
-#else
-  return fontMetrics().horizontalAdvance(QString(text).replace('\t', "    "));
-#endif
 }

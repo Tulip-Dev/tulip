@@ -111,12 +111,40 @@ public:
 
   int lineNumberAreaWidth() const;
 
-  qreal tabWidth() const;
-  void setTabWidth(qreal width);
+  inline qreal tabWidth() const {
+#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
+    return tabStopWidth();
+#else
+    return tabStopDistance();
+#endif
+  }
 
-  int charWidth(char c) const;
-  int textWidth(const QString &text) const;
+  inline void setTabWidth(qreal width) {
+#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
+    setTabStopWidth(width);
+#else
+    setTabStopDistance(width);
+#endif
+  }
 
+  inline int charWidth(char c) const {
+    if (c == '\t') {
+      return textWidth("    ");
+    }
+#if (QT_VERSION < QT_VERSION_CHECK(5, 11, 0))
+    return fontMetrics().width(QLatin1Char(c));
+#else
+    return fontMetrics().horizontalAdvance(QLatin1Char(c));
+#endif
+  }
+
+  inline int textWidth(const QString &text) const {
+#if (QT_VERSION < QT_VERSION_CHECK(5, 11, 0))
+    return fontMetrics().width(QString(text).replace('\t', "    "));
+#else
+    return fontMetrics().horizontalAdvance(QString(text).replace('\t', "    "));
+#endif
+  }
   void indicateScriptCurrentError(int lineNumber);
   void clearErrorIndicator();
 

@@ -29,7 +29,7 @@
 using namespace tlp;
 
 PythonPluginCreationDialog::PythonPluginCreationDialog(QWidget *parent)
-    : QDialog(parent), _ui(new Ui::PythonPluginCreationDialog) {
+  : QDialog(parent, Qt::Tool | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint), _ui(new Ui::PythonPluginCreationDialog) {
   _ui->setupUi(this);
 
   connect(_ui->browseButton, SIGNAL(clicked()), this, SLOT(selectPluginSourceFile()));
