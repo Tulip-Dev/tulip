@@ -26,6 +26,7 @@
 #include "PythonPanel.h"
 #endif
 
+#include <list>
 #include "GraphPerspective.h"
 
 #include <QMessageBox>
@@ -398,6 +399,7 @@ class GraphPerspectiveDialog : public QDialog {
   QMainWindow *_mainWindow;
   QByteArray _windowGeometry;
   bool _mainWindowHidden;
+  std::list<QDialog *> childrenToShow;
 
 public:
   GraphPerspectiveDialog(QString title)
@@ -419,15 +421,32 @@ public:
   }
 
   bool eventFilter(QObject *, QEvent *event) override {
-    if (event->type() == QEvent::Hide) {
-      if (_mainWindow->isMinimized() && !isHidden()) {
-        _mainWindowHidden = true;
-        _windowGeometry = saveGeometry();
-        hide();
-      } else if (_mainWindowHidden) {
-        _mainWindowHidden = false;
-        show();
+    if (event->type() == QEvent::Hide && !isHidden()
+	&& _mainWindow->isMinimized()) {
+      _mainWindowHidden = true;
+      _windowGeometry = saveGeometry();
+      // ensure visible children dialogs
+      // will be hidden
+      childrenToShow.clear();
+      for (auto child : findChildren<QDialog *>()) {
+	if (!child->isHidden()) {
+	  // only non modal will be re-displayed
+	  if (!child->isModal())
+	    childrenToShow.push_back(child);
+	  child->reject();
+	}
       }
+      // hide current dialog
+      hide();
+      return true;
+    } else if (event->type() == QEvent::Show && _mainWindowHidden) {
+      _mainWindowHidden = false;
+      // show current dialog
+      show();
+      // re-display non modal children
+      for (auto child : childrenToShow)
+	child->show();
+      return true;
     }
     return false;
   }
