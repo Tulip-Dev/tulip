@@ -421,20 +421,19 @@ public:
   }
 
   bool eventFilter(QObject *, QEvent *event) override {
-    if (event->type() == QEvent::Hide && !isHidden()
-	&& _mainWindow->isMinimized()) {
+    if (event->type() == QEvent::Hide && !isHidden() && _mainWindow->isMinimized()) {
       _mainWindowHidden = true;
       _windowGeometry = saveGeometry();
       // ensure visible children dialogs
       // will be hidden
       childrenToShow.clear();
       for (auto child : findChildren<QDialog *>()) {
-	if (!child->isHidden()) {
-	  // only non modal will be re-displayed
-	  if (!child->isModal())
-	    childrenToShow.push_back(child);
-	  child->reject();
-	}
+        if (!child->isHidden()) {
+          // only non modal will be re-displayed
+          if (!child->isModal())
+            childrenToShow.push_back(child);
+          child->reject();
+        }
       }
       // hide current dialog
       hide();
@@ -445,7 +444,7 @@ public:
       show();
       // re-display non modal children
       for (auto child : childrenToShow)
-	child->show();
+        child->show();
       return true;
     }
     return false;
