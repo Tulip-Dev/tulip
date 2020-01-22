@@ -420,6 +420,16 @@ public:
     _mainWindow->installEventFilter(this);
   }
 
+  void hideEvent(QHideEvent *) {
+    if (!_mainWindowHidden) {
+      for (auto child : findChildren<QDialog *>()) {
+	if (!child->isHidden()) {
+	  child->reject();
+	}
+      }
+    }
+  }
+
   bool eventFilter(QObject *, QEvent *event) override {
     if (event->type() == QEvent::Hide && !isHidden() && _mainWindow->isMinimized()) {
       _mainWindowHidden = true;
