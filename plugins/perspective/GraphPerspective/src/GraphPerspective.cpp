@@ -423,9 +423,9 @@ public:
   void hideEvent(QHideEvent *) {
     if (!_mainWindowHidden) {
       for (auto child : findChildren<QDialog *>()) {
-	if (!child->isHidden()) {
-	  child->reject();
-	}
+        if (!child->isHidden()) {
+          child->reject();
+        }
       }
     }
   }
