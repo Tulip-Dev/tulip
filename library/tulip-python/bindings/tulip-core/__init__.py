@@ -21,13 +21,14 @@ import sys
 import traceback
 import platform
 
-_tulipNativeLibsPath = os.path.dirname(__file__) + '/native/'
+_tulipNativeLibsPath = os.path.join(os.path.dirname(__file__), 'native')
 sys.path.append(_tulipNativeLibsPath)
 
 if platform.system() == 'Windows':
-    os.environ['PATH'] = '%s;%s../../../;%s' % (_tulipNativeLibsPath,
-                                                _tulipNativeLibsPath,
-                                                os.environ['PATH'])
+    os.environ['PATH'] = '%s;%s;%s' % (
+        _tulipNativeLibsPath,
+        os.path.join(_tulipNativeLibsPath, '../../..'),
+        os.environ['PATH'])
 
 import _tulip # noqa
 
@@ -66,8 +67,9 @@ class tlp(with_metaclass(tlpType, _tulip.tlp)):
 
     @staticmethod
     def loadTulipPythonPlugin(pluginFilePath):
-        if (not os.path.isfile(pluginFilePath) or
-                not pluginFilePath.endswith('.py')):
+        if not os.path.isfile(pluginFilePath):
+            print('[tulip] Error: Path %s is not a valid file' %
+                  pluginFilePath)
             return False
 
         try:
@@ -108,12 +110,12 @@ class tlp(with_metaclass(tlpType, _tulip.tlp)):
         files = os.listdir(pluginsDirPath)
 
         for file in files:
-            filePath = pluginsDirPath+'/'+file
-            if not os.path.isdir(filePath):
+            filePath = os.path.join(pluginsDirPath, file)
+            if not os.path.isdir(filePath) and filePath.endswith('.py'):
                 tlp.loadTulipPythonPlugin(filePath)
 
         for file in files:
-            filePath = pluginsDirPath+'/'+file
+            filePath = os.path.join(pluginsDirPath, file)
             if os.path.isdir(filePath):
                 tlp.loadTulipPluginsFromDir(filePath, loadCppPlugin,
                                             pluginLoader)
@@ -124,9 +126,10 @@ class tlp(with_metaclass(tlpType, _tulip.tlp)):
 tulipVersion = tlp.getTulipRelease()
 tulipVersion = tulipVersion[:tulipVersion.rfind('.')]
 
-startupScriptsPath = '%s/tulip/python/startup' % tlp.TulipLibDir
-startupScriptsHomePath = '%s/.Tulip-%s/python/startup' % (
-    os.path.expanduser('~'), tulipVersion)
+startupScriptsPath = os.path.join(
+    tlp.TulipLibDir, 'tulip/python/startup')
+startupScriptsHomePath = os.path.join(
+    os.path.expanduser('~'), '.Tulip-%s/python/startup' % tulipVersion)
 
 
 def runStartupScripts(scriptsPath):
@@ -136,7 +139,7 @@ def runStartupScripts(scriptsPath):
     files = os.listdir(scriptsPath)
 
     for file in files:
-        filePath = scriptsPath+'/'+file
+        filePath = os.path.join(scriptsPath, file)
         if os.path.isfile(filePath) and filePath.endswith('.py'):
             exec(compile(open(filePath).read(), filePath, 'exec'),
                  globals(), locals())
@@ -145,14 +148,15 @@ def runStartupScripts(scriptsPath):
 runStartupScripts(startupScriptsPath)
 runStartupScripts(startupScriptsHomePath)
 
-tlpPythonPluginsPath = '%s/tulip/python/tulip/plugins' % tlp.TulipLibDir
-tlpPythonPluginsHomePath = '%s/.Tulip-%s/plugins/python' % (
-    os.path.expanduser('~'), tulipVersion)
+tlpPythonPluginsPath = os.path.join(
+    tlp.TulipLibDir, 'tulip/python/tulip/plugins')
+tlpPythonPluginsHomePath = os.path.join(
+    os.path.expanduser('~'), '.Tulip-%s/plugins/python' % tulipVersion)
 
 tlp.loadTulipPluginsFromDir(tlpPythonPluginsPath, False)
 tlp.loadTulipPluginsFromDir(tlpPythonPluginsHomePath, False)
 
-_tulipNativePluginsPath = _tulipNativeLibsPath + 'plugins'
+_tulipNativePluginsPath = os.path.join(_tulipNativeLibsPath, 'plugins')
 
 # fix loading of Tulip plugins when the tulip module has been
 # installed with the pip tool
@@ -170,7 +174,8 @@ tlp.loadTulipPluginsFromDir(_tulipNativePluginsPath)
 # load bundled Tulip Python plugins when the tulip module has been
 # installed with the pip tool
 if not sys.argv[0] == 'tulip':
-    tlp.loadTulipPluginsFromDir('%s/plugins/' % os.path.dirname(__file__))
+    tlp.loadTulipPluginsFromDir(
+        os.path.join(os.path.dirname(__file__), 'plugins'))
 
 if platform.system() == 'Linux' and os.path.exists(_tulipNativePluginsPath):
     sys.setdlopenflags(dlOpenFlagsBackup)
