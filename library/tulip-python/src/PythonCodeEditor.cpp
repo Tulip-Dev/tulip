@@ -50,8 +50,8 @@ public:
       // do not override decrease/increase font size shortcuts
       QKeyEvent *ke = static_cast<QKeyEvent *>(event);
       if ((ke->modifiers() & Qt::ControlModifier) &&
-	  (ke->key() == Qt::Key_Minus || ke->key() == Qt::Key_Plus))
-	return false;
+          (ke->key() == Qt::Key_Minus || ke->key() == Qt::Key_Plus))
+        return false;
       event->accept();
       return true;
     }
@@ -260,16 +260,13 @@ FindReplaceDialog::FindReplaceDialog(QPlainTextEdit *editor, QWidget *parent)
   _findButton = _ui->buttonBox->button(QDialogButtonBox::Reset);
   _findButton->setText("Find");
   connect(_findButton, SIGNAL(clicked()), this, SLOT(doFind()));
-  _replaceFindButton =
-    _ui->buttonBox->button(QDialogButtonBox::RestoreDefaults);
+  _replaceFindButton = _ui->buttonBox->button(QDialogButtonBox::RestoreDefaults);
   _replaceFindButton->setText("Replace/Find");
   connect(_replaceFindButton, SIGNAL(clicked()), this, SLOT(doReplaceFind()));
-  _replaceButton =
-    _ui->buttonBox->button(QDialogButtonBox::Ignore);
+  _replaceButton = _ui->buttonBox->button(QDialogButtonBox::Ignore);
   connect(_replaceButton, SIGNAL(clicked()), this, SLOT(doReplace()));
   _replaceButton->setText("Replace");
-  _replaceAllButton =
-    _ui->buttonBox->button(QDialogButtonBox::Retry);
+  _replaceAllButton = _ui->buttonBox->button(QDialogButtonBox::Retry);
   connect(_replaceAllButton, SIGNAL(clicked()), this, SLOT(doReplaceAll()));
   _replaceAllButton->setText("Replace All");
   connect(_ui->backwardCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));

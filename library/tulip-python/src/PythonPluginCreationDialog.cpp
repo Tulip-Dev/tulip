@@ -78,15 +78,16 @@ void PythonPluginCreationDialog::accept() {
     QChar ch = *nameIt;
     if (nameIt == className.begin()) {
       if (ch.isLetter() || ch == '_') {
-	++nameIt;
-	continue;
+        ++nameIt;
+        continue;
       }
     } else if (ch.isLetterOrNumber() || ch == '_') {
       ++nameIt;
       continue;
     }
     QMessageBox::critical(this, "Invalid plugin class name",
-                          "A plugin class name must start with a letter or _ and\ncan only contain A-z, 0-9, or _ characters.");
+                          "A plugin class name must start with a letter or _ and\ncan only contain "
+                          "A-z, 0-9, or _ characters.");
     return;
   }
 
@@ -145,9 +146,8 @@ QString PythonPluginCreationDialog::getPluginGroup() const {
 bool PythonPluginCreationDialog::eventFilter(QObject *, QEvent *ev) {
   if (ev->type() == QEvent::KeyRelease) {
     auto okButton = _ui->buttonBox->button(QDialogButtonBox::Ok);
-    okButton->setEnabled(!getPluginFileName().isEmpty() &&
-			 !getPluginClassName().isEmpty() &&
-			 !getPluginName().isEmpty());
+    okButton->setEnabled(!getPluginFileName().isEmpty() && !getPluginClassName().isEmpty() &&
+                         !getPluginName().isEmpty());
   }
   return false;
 }
