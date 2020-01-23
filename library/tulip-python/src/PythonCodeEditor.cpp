@@ -43,10 +43,15 @@
 using namespace std;
 using namespace tlp;
 
-class GragKeyboardFocusEventFilter : public QObject {
+class GrabKeyboardFocusEventFilter : public QObject {
 public:
   bool eventFilter(QObject *, QEvent *event) override {
     if (event->type() == QEvent::ShortcutOverride) {
+      // do not override decrease/increase font size shortcuts
+      QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+      if ((ke->modifiers() & Qt::ControlModifier) &&
+	  (ke->key() == Qt::Key_Minus || ke->key() == Qt::Key_Plus))
+	return false;
       event->accept();
       return true;
     }
@@ -55,7 +60,7 @@ public:
   }
 };
 
-static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
+static GrabKeyboardFocusEventFilter keyboardFocusEventFilter;
 
 static char sepChar[] = {' ', '\t', '=', '(', '[', '{', ',', '*', '+', '/', '^', '-', 0};
 
