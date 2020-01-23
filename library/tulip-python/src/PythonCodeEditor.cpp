@@ -36,6 +36,7 @@
 #include <QDesktopWidget>
 #include <QFileInfo>
 #include <QScreen>
+#include <QPushButton>
 
 #include "ui_FindReplaceDialog.h"
 
@@ -251,13 +252,22 @@ FindReplaceDialog::FindReplaceDialog(QPlainTextEdit *editor, QWidget *parent)
                                            Qt::WindowTitleHint | Qt::WindowCloseButtonHint)),
       _ui(new Ui::FindReplaceDialogData), _editor(editor) {
   _ui->setupUi(this);
-  connect(_ui->findButton, SIGNAL(clicked()), this, SLOT(doFind()));
-  connect(_ui->replaceButton, SIGNAL(clicked()), this, SLOT(doReplace()));
-  connect(_ui->replaceFindButton, SIGNAL(clicked()), this, SLOT(doReplaceFind()));
-  connect(_ui->replaceAllButton, SIGNAL(clicked()), this, SLOT(doReplaceAll()));
-  connect(_ui->closeButton, SIGNAL(clicked()), this, SLOT(hide()));
-  connect(_ui->forwardRB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
-  connect(_ui->backwardRB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
+  _findButton = _ui->buttonBox->button(QDialogButtonBox::Reset);
+  _findButton->setText("Find");
+  connect(_findButton, SIGNAL(clicked()), this, SLOT(doFind()));
+  _replaceFindButton =
+    _ui->buttonBox->button(QDialogButtonBox::RestoreDefaults);
+  _replaceFindButton->setText("Replace/Find");
+  connect(_replaceFindButton, SIGNAL(clicked()), this, SLOT(doReplaceFind()));
+  _replaceButton =
+    _ui->buttonBox->button(QDialogButtonBox::Ignore);
+  connect(_replaceButton, SIGNAL(clicked()), this, SLOT(doReplace()));
+  _replaceButton->setText("Replace");
+  _replaceAllButton =
+    _ui->buttonBox->button(QDialogButtonBox::Retry);
+  connect(_replaceAllButton, SIGNAL(clicked()), this, SLOT(doReplaceAll()));
+  _replaceAllButton->setText("Replace All");
+  connect(_ui->backwardCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
   connect(_ui->regexpCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
   connect(_ui->regexpCB, SIGNAL(toggled(bool)), this, SLOT(regexpToggled(bool)));
   connect(_ui->wholeWordCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
@@ -275,16 +285,16 @@ void FindReplaceDialog::setTextToFind(const QString &text) {
 }
 
 void FindReplaceDialog::textToFindChanged() {
-  _ui->replaceButton->setEnabled(false);
-  _ui->replaceFindButton->setEnabled(false);
+  _replaceButton->setEnabled(false);
+  _replaceFindButton->setEnabled(false);
   QString text = _ui->textToFind->text();
 
   if (text.isEmpty()) {
-    _ui->findButton->setEnabled(false);
-    _ui->replaceAllButton->setEnabled(false);
+    _findButton->setEnabled(false);
+    _replaceAllButton->setEnabled(false);
   } else {
-    _ui->findButton->setEnabled(true);
-    _ui->replaceAllButton->setEnabled(true);
+    _findButton->setEnabled(true);
+    _replaceAllButton->setEnabled(true);
   }
 }
 
@@ -301,8 +311,8 @@ void FindReplaceDialog::setFindMode(const bool findMode) {
 }
 
 void FindReplaceDialog::setSearchResult(const bool result) {
-  _ui->replaceButton->setEnabled(result);
-  _ui->replaceFindButton->setEnabled(result);
+  _replaceButton->setEnabled(result);
+  _replaceFindButton->setEnabled(result);
 
   if (!result) {
     _ui->searchStatusLabel->setText("String Not Found");
@@ -319,7 +329,7 @@ bool FindReplaceDialog::doFind() {
 
   QTextDocument::FindFlags findFlags;
 
-  if (!_ui->forwardRB->isChecked()) {
+  if (_ui->backwardCB->isChecked()) {
     findFlags |= QTextDocument::FindBackward;
   }
 
@@ -346,10 +356,10 @@ bool FindReplaceDialog::doFind() {
   } else if (_ui->wrapSearchCB->isChecked()) {
     QTextCursor cursor = _editor->textCursor();
 
-    if (!_ui->backwardRB->isChecked()) {
-      cursor.movePosition(QTextCursor::Start);
-    } else {
+    if (_ui->backwardCB->isChecked()) {
       cursor.movePosition(QTextCursor::End);
+    } else {
+      cursor.movePosition(QTextCursor::Start);
     }
 
     if (!_ui->regexpCB->isChecked()) {
@@ -430,10 +440,6 @@ void FindReplaceDialog::doReplaceAll() {
   }
 }
 
-void FindReplaceDialog::hideEvent(QHideEvent *) {
-  _editor->setFocus();
-}
-
 AutoCompletionList *PythonCodeEditor::_autoCompletionList = nullptr;
 AutoCompletionDataBase *PythonCodeEditor::_autoCompletionDb = nullptr;
 
@@ -502,11 +508,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent)
     }
   }
 
-  QWidget *top = window();
-  while (top->parentWidget() != nullptr)
-    top = top->parentWidget();
-
-  _findReplaceDialog = new FindReplaceDialog(this, top);
+  _findReplaceDialog = nullptr;
 
   connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth()));
   connect(this, SIGNAL(updateRequest(const QRect &, int)), this,
@@ -956,6 +958,23 @@ void PythonCodeEditor::highlightErrors() {
 
   setExtraSelections(selections);
 }
+void PythonCodeEditor::showFindDialog(QString selection, bool findMode) {
+  if (!_findReplaceDialog) {
+    QWidget *top = window();
+    while (top->parentWidget() != nullptr)
+      top = top->parentWidget();
+
+    _findReplaceDialog = new FindReplaceDialog(this, top);
+  }
+
+  if (!selection.isEmpty())
+    _findReplaceDialog->setTextToFind(selection);
+
+  _findReplaceDialog->show();
+  _findReplaceDialog->raise();
+  _findReplaceDialog->activateWindow();
+  _findReplaceDialog->setFindMode(findMode);
+}
 
 void PythonCodeEditor::keyPressEvent(QKeyEvent *e) {
 
@@ -990,25 +1009,9 @@ void PythonCodeEditor::keyPressEvent(QKeyEvent *e) {
               e->key() == Qt::Key_Backtab)) {
     unindentSelectedCode();
   } else if (findReplaceActivated() && e->modifiers() == modifier && e->key() == Qt::Key_F) {
-    QString selection = textCursor().selectedText();
-
-    if (!selection.isEmpty())
-      _findReplaceDialog->setTextToFind(selection);
-
-    _findReplaceDialog->show();
-    _findReplaceDialog->raise();
-    _findReplaceDialog->activateWindow();
-    _findReplaceDialog->setFindMode(true);
+    showFindDialog(textCursor().selectedText(), true);
   } else if (findReplaceActivated() && e->modifiers() == modifier && e->key() == Qt::Key_R) {
-    QString selection = textCursor().selectedText();
-
-    if (!selection.isEmpty())
-      _findReplaceDialog->setTextToFind(selection);
-
-    _findReplaceDialog->show();
-    _findReplaceDialog->raise();
-    _findReplaceDialog->activateWindow();
-    _findReplaceDialog->setFindMode(false);
+    showFindDialog(textCursor().selectedText(), false);
   } else if ((e->key() == Qt::Key_Space && e->modifiers() == modifier) || e->text() == ".") {
     if (e->text() == ".")
       QPlainTextEdit::keyPressEvent(e);

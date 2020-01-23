@@ -67,6 +67,8 @@ class TLP_PYTHON_SCOPE FindReplaceDialog : public QDialog {
 
   Ui::FindReplaceDialogData *_ui;
   QPlainTextEdit *_editor;
+  QPushButton *_findButton, *_replaceButton, *_replaceFindButton;
+  QPushButton *_replaceAllButton;
   QString _lastSearch;
   bool _resetSearch;
 
@@ -91,9 +93,6 @@ public slots:
     _resetSearch = true;
   }
   void regexpToggled(bool toggled);
-
-protected:
-  void hideEvent(QHideEvent *event) override;
 };
 
 class TLP_PYTHON_SCOPE PythonCodeEditor : public QPlainTextEdit {
@@ -297,6 +296,7 @@ protected:
   bool isTooltipActive() const;
 
   QFontMetrics fontMetrics() const;
+  void showFindDialog(QString selection, bool findMode);
 
   QWidget *_lineNumberArea;
   PythonCodeHighlighter *_highlighter;
