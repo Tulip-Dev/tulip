@@ -1733,7 +1733,7 @@ void GraphPerspective::showSearchDialog(bool f) {
       searchPanel->setModel(_graphs);
       QVBoxLayout *layout = new QVBoxLayout;
       _searchDialog->setMinimumWidth(600);
-      _searchDialog->setMinimumHeight(250);
+      _searchDialog->setMinimumHeight(150);
       layout->addWidget(searchPanel);
       layout->setContentsMargins(0, 0, 0, 0);
       _searchDialog->setLayout(layout);
