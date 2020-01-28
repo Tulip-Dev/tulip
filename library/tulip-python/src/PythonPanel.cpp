@@ -19,7 +19,7 @@
 
 #include <tulip/PythonInterpreter.h>
 
-#include "PythonPanel.h"
+#include "tulip/PythonPanel.h"
 #include "ui_PythonPanel.h"
 
 #include <tulip/GraphHierarchiesModel.h>
@@ -47,6 +47,14 @@ PythonPanel::~PythonPanel() {
 
 void PythonPanel::setModel(tlp::GraphHierarchiesModel *model) {
   _ui->graphCombo->setModel(model);
+}
+
+void PythonPanel::decreaseFontSize() {
+  _ui->pythonShellWidget->zoomOut();
+}
+
+void PythonPanel::increaseFontSize() {
+  _ui->pythonShellWidget->zoomIn();
 }
 
 void PythonPanel::graphComboIndexChanged() {

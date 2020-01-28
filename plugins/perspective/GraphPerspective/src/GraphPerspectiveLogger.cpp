@@ -155,7 +155,7 @@ QPixmap GraphPerspectiveLogger::icon(LogType logType) const {
 
   switch (logType) {
   case Python:
-    return QPixmap(":/tulip/graphperspective/icons/16/python.png");
+    return QPixmap(":/tulip/gui/icons/16/python.png");
 
   case Info:
     pxUrl += "info";

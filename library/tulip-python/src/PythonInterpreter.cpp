@@ -1019,6 +1019,14 @@ double PythonInterpreter::getPythonVersion() const {
   return atof(QStringToTlpString(_pythonVersion).c_str());
 }
 
+QString PythonInterpreter::getPythonFullVersionStr() const {
+  std::string version(Py_GetVersion());
+  auto pos = version.find(' ');
+  if (pos != std::string::npos)
+    return QString(version.substr(0, pos).data());
+  return QString(version.data());
+}
+
 void PythonInterpreter::sendOutputToConsole(const QString &output, bool stdErr) {
   bool textOutput = false;
 

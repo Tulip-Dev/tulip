@@ -58,7 +58,7 @@ Toolbar
 .. |icon_undo| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/undo.png 
 .. |icon_redo| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/redo.png 
 .. |icon_workspace| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/desktop.png
-.. |icon_develop| image:: ../../plugins/perspective/GraphPerspective/resources/icons/48/python.png
+.. |icon_develop| image:: ../../library/tulip-gui/resources/icons/python.png
     :width: 32
 .. |icon_export| image:: ../../library/tulip-gui/resources/icons/64/document-export.png
     :width: 32

@@ -119,7 +119,6 @@ public slots:
   setGlMainViewPropertiesForGraph(tlp::Graph *g,
                                   const std::map<std::string, tlp::PropertyInterface *> &propsMap);
   void showSearchDialog(bool = true);
-  void setPythonPanel(bool);
   void openPreferences();
 
   void setAutoCenterPanelsOnDraw(bool f);

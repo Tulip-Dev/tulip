@@ -31,6 +31,7 @@
 #include <QCryptographicHash>
 #include <QByteArray>
 #include <QRegExp>
+#include <QShortcut>
 
 #include <tulip/Graph.h>
 #include <tulip/DoubleProperty.h>
@@ -55,6 +56,7 @@
 #include <tulip/Perspective.h>
 
 #include <tulip/PythonIDE.h>
+#include <tulip/PythonPanel.h>
 #include <tulip/PythonPluginCreationDialog.h>
 #include <tulip/PythonEditorsTabWidget.h>
 
@@ -354,16 +356,21 @@ tulipplugins.registerPluginOfGroup(pluginClassName='%1',
 }
 
 PythonIDE::PythonIDE(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::PythonIDE), _pythonInterpreter(PythonInterpreter::getInstance()),
-      _dontTreatFocusIn(false), _project(nullptr), _graphsModel(nullptr), _scriptStopped(false),
-      _saveFilesToProject(true), _notifyProjectModified(false) {
+    : QWidget(parent), _ui(new Ui::PythonIDE),
+      _pythonInterpreter(PythonInterpreter::getInstance()),
+      _pythonPanel(new PythonPanel()),
+      _dontTreatFocusIn(false), _project(nullptr), _graphsModel(nullptr),
+      _scriptStopped(false), _saveFilesToProject(true),
+      _notifyProjectModified(false) {
   _ui->setupUi(this);
-  _ui->tabWidget->setDrawTabBarBgGradient(true);
-  _ui->tabWidget->setTextColor(QColor(200, 200, 200));
 
   _ui->mainScriptsTabWidget->clear();
   _ui->modulesTabWidget->clear();
   _ui->pluginsTabWidget->clear();
+  QVBoxLayout *layout = new QVBoxLayout();
+  layout->addWidget(_pythonPanel);
+  layout->setContentsMargins(0,0,0,0);
+  _ui->interpreterTab->setLayout(layout);
 
   QList<int> sizes;
   sizes.push_back(550);
@@ -401,6 +408,16 @@ PythonIDE::PythonIDE(QWidget *parent)
   connect(_ui->increaseFontSizeButton_2, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
   connect(_ui->decreaseFontSizeButton_3, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
   connect(_ui->increaseFontSizeButton_3, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
+  auto shortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Minus), _ui->tabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(decreaseFontSize()));
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton, "decrease font size", "-");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton_2, "decrease font size", "-");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton_3, "decrease font size", "-");
+  shortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus), _ui->tabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(increaseFontSize()));
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton, "increase font size", "-");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton_2, "increase font size", "-");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton_3, "increase font size", "-");
 
   connect(_ui->mainScriptsTabWidget, SIGNAL(fileSaved(int)), this, SLOT(scriptSaved(int)));
   connect(_ui->modulesTabWidget, SIGNAL(fileSaved(int)), this, SLOT(moduleSaved(int)));
@@ -721,7 +738,7 @@ static bool checkAndGetPluginInfoFromSrcCode(const QString &pluginCode, QString 
       pos = rx.indexIn(pluginCode, pos + rx.matchedLength());
     }
 
-    rx.setPattern("^.*register.*Plugin.*\\(.*,.*\"([^,]+)\",.*$");
+    rx.setPattern("^.*registerPlugin.*\\(.*,.*\"([^,]+)\",.*$");
 
     if (rx.indexIn(pluginCode) != -1) {
       pluginName = rx.cap(1);
@@ -1119,12 +1136,16 @@ void PythonIDE::decreaseFontSize() {
   _ui->mainScriptsTabWidget->decreaseFontSize();
   _ui->pluginsTabWidget->decreaseFontSize();
   _ui->modulesTabWidget->decreaseFontSize();
+  _pythonPanel->decreaseFontSize();
+  _ui->consoleWidget->zoomOut();
 }
 
 void PythonIDE::increaseFontSize() {
   _ui->mainScriptsTabWidget->increaseFontSize();
   _ui->pluginsTabWidget->increaseFontSize();
   _ui->modulesTabWidget->increaseFontSize();
+  _pythonPanel->increaseFontSize();
+  _ui->consoleWidget->zoomIn();
 }
 
 QString PythonIDE::readProjectFile(const QString &filePath) {
@@ -1736,6 +1757,7 @@ void PythonIDE::saveAllScripts() {
 void PythonIDE::setGraphsModel(tlp::GraphHierarchiesModel *model) {
   _graphsModel = model;
   _ui->graphComboBox->setModel(model);
+  _pythonPanel->setModel(model);
 }
 
 void PythonIDE::dragEnterEvent(QDragEnterEvent *dragEv) {

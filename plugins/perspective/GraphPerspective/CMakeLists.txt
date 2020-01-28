@@ -58,19 +58,6 @@ IF(TULIP_BUILD_PYTHON_COMPONENTS)
 
 INCLUDE_DIRECTORIES(${TulipPythonInclude})
 
-SET(LIB_SRCS
-${LIB_SRCS}
-src/PythonPanel.cpp
-)
-
-QTX_WRAP_UI(UI_SRCS
-designer/PythonPanel.ui
-)
-
-QTX_WRAP_CPP(MOC_SRCS
-include/PythonPanel.h
-)
-
 ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 
 ADD_LIBRARY(GraphPerspective-${TulipVersion} SHARED ${LIB_SRCS} ${RCC_SRCS} ${UI_SRCS} ${MOC_SRCS})

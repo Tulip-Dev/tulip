@@ -23,7 +23,6 @@
 #include <tulip/APIDataBase.h>
 #include <tulip/PythonIDE.h>
 #include <tulip/PythonCodeEditor.h>
-#include "PythonPanel.h"
 #endif
 
 #include <list>
@@ -501,15 +500,11 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   PythonInterpreter::getInstance();
   pluginsListChanged();
 #else
-  _ui->pythonButton->setVisible(false);
   _ui->developButton->setVisible(false);
   _ui->actionPython_IDE->setVisible(false);
 #endif
   currentGraphChanged(nullptr);
   // set win/Mac dependent tooltips with ctrl shortcut
-  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->pythonButton,
-                              "Show/hide the Python interpreter (Read Eval Print Loop) panel",
-                              "Shift+P");
   SET_TIPS_WITH_CTRL_SHORTCUT(_ui->previousPageButton, "Show previous panel", "Shift+Left");
   SET_TIPS_WITH_CTRL_SHORTCUT(_ui->nextPageButton, "Show next panel", "Shift+Right");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionNewProject, "Open a new empty Tulip perspective",
@@ -647,7 +642,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->workspace->setSixModeSwitch(_ui->sixModeButton);
   _ui->workspace->setPageCountLabel(_ui->pageCountLabel);
   _ui->workspace->setExposeModeSwitch(_ui->exposePanelsButton);
-  _ui->outputFrame->hide();
   _logger = new GraphPerspectiveLogger(_mainWindow);
   _ui->loggerFrame->installEventFilter(this);
   _mainWindow->installEventFilter(this);
@@ -809,7 +803,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     _ui->workspace->readProject(_project, rootIds, progress);
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  connect(_ui->pythonButton, SIGNAL(clicked(bool)), this, SLOT(setPythonPanel(bool)));
   connect(_ui->developButton, SIGNAL(clicked()), this, SLOT(showPythonIDE()));
   tlp::PluginEvent::addListener(this);
   if (_pythonIDE || PythonIDE::projectNeedsPythonIDE(_project))
@@ -1521,7 +1514,6 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->sixModeButton->setEnabled(enabled);
   _ui->exposePanelsButton->setEnabled(enabled);
   _ui->searchButton->setEnabled(enabled);
-  _ui->pythonButton->setEnabled(enabled);
   _ui->previousPageButton->setVisible(enabled);
   _ui->pageCountLabel->setVisible(enabled);
   _ui->nextPageButton->setVisible(enabled);
@@ -1532,7 +1524,6 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   if (graph == nullptr) {
     _ui->workspace->switchToStartupMode();
     _ui->exposePanelsButton->setChecked(false);
-    _ui->pythonButton->setChecked(false);
     showSearchDialog(false);
     _ui->actionSave_Project->setEnabled(false);
     _ui->actionSave_Project_as->setEnabled(false);
@@ -1748,25 +1739,6 @@ void GraphPerspective::showSearchDialog(bool f) {
     _ui->searchButton->setChecked(false);
     _ui->actionSearch->setChecked(false);
   }
-}
-
-void GraphPerspective::setPythonPanel(bool f) {
-  if (f) {
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-    if (_pythonPanel == nullptr) {
-      _pythonPanel = new PythonPanel();
-      _pythonPanel->setModel(_graphs);
-      QVBoxLayout *layout = new QVBoxLayout();
-      layout->addWidget(_pythonPanel);
-      layout->setContentsMargins(0, 0, 0, 0);
-      _ui->pythonPanel->setLayout(layout);
-    }
-#endif
-    _ui->outputFrame->setCurrentWidget(_ui->pythonPanel);
-    //_ui->searchButton->setChecked(false);
-  }
-
-  _ui->outputFrame->setVisible(f);
 }
 
 void GraphPerspective::openPreferences() {

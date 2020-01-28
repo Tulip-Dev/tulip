@@ -39,6 +39,8 @@ public:
   explicit PythonPanel(QWidget *parent = nullptr);
   ~PythonPanel() override;
   void setModel(tlp::GraphHierarchiesModel *model);
+  void decreaseFontSize();
+  void increaseFontSize();
 
 protected:
   void dragEnterEvent(QDragEnterEvent *) override;

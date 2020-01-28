@@ -8,6 +8,7 @@ INSTALL(FILES
   tulip/PythonEditorsTabWidget.h
   tulip/PythonCppTypesConverter.h
   tulip/PythonIDE.h
+  tulip/PythonPanel.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_python
 )

@@ -381,8 +381,8 @@ QToolButton:pressed {
           <string>Python</string>
          </property>
          <property name="icon">
-          <iconset>
-           <normaloff>:/tulip/graphperspective/icons/48/python.png</normaloff>:/tulip/graphperspective/icons/48/python.png</iconset>
+	   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+	   <normaloff>:/tulip/gui/icons/python.png</normaloff>:/tulip/gui/icons/python.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -897,12 +897,6 @@ border: 0px;
                    <bool>false</bool>
                   </property>
                  </widget>
-                 <widget class="QStackedWidget" name="outputFrame">
-                  <property name="currentIndex">
-                   <number>1</number>
-                  </property>
-                  <widget class="QWidget" name="pythonPanel"/>
-                 </widget>
                 </widget>
                </item>
               </layout>
@@ -1091,31 +1085,6 @@ QToolButton:hover {
 		  <property name="toolButtonStyle">
 		    <enum>Qt::ToolButtonTextBesideIcon</enum>
 		  </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="OutputPanelButton" name="pythonButton">
-                 <property name="minimumSize">
-                  <size>
-                   <width>105</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                 <property name="shortcut">
-                  <string>Ctrl+Shift+P</string>
-                 </property>
-                 <property name="checkable">
-                  <bool>true</bool>
-                 </property>
-                 <property name="autoExclusive">
-                  <bool>false</bool>
-                 </property>
-                 <property name="number" stdset="0">
-                  <number>1</number>
-                 </property>
-                 <property name="title" stdset="0">
-                  <string>Python REPL</string>
-                 </property>
                 </widget>
                </item>
                <item>
@@ -1764,8 +1733,8 @@ QToolButton:hover {
   </action>
   <action name="actionShowPythonDocumentation">
    <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/16/python.png</normaloff>:/tulip/graphperspective/icons/16/python.png</iconset>
+     <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+     <normaloff>:/tulip/gui/icons/16/python.png</normaloff>:/tulip/gui/icons/16/python.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Python Documentation</string>
@@ -1946,8 +1915,8 @@ QToolButton:hover {
   </action>
   <action name="actionPython_IDE">
    <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/48/python.png</normaloff>:/tulip/graphperspective/icons/48/python.png</iconset>
+     <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+     <normaloff>:/tulip/gui/icons/python.png</normaloff>:/tulip/gui/icons/python.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Python IDE</string>
@@ -2379,8 +2348,4 @@ QToolButton:hover {
    </hints>
   </connection>
  </connections>
- <slots>
-  <slot>setPythonOutput(bool)</slot>
-  <slot>setSearchOutput(bool)</slot>
- </slots>
 </ui>

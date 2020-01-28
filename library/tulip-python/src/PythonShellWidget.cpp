@@ -56,14 +56,15 @@ static QString ltrim(const QString &s) {
   return s.mid(firstNonSpaceIdx);
 }
 
-PythonShellWidget::PythonShellWidget(QWidget *parent) : PythonCodeEditor(parent) {
+PythonShellWidget::PythonShellWidget(QWidget *parent, bool showBanner) : PythonCodeEditor(parent) {
   setAutoIndentation(false);
   setIndentationGuides(false);
   setHighlightEditedLine(false);
   setFindReplaceActivated(false);
   setCommentShortcutsActivated(false);
   setIndentShortcutsActivated(false);
-  insert(PythonInterpreter::getInstance()->getPythonShellBanner() + "\n");
+  if (showBanner)
+    insert(PythonInterpreter::getInstance()->getPythonShellBanner() + "\n");
   insert("# Use Ctrl + Space to show dynamic auto-completion dialog\n");
   insert(ps1);
   _currentPs = ps1;

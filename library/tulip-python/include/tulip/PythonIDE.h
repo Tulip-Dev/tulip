@@ -33,6 +33,8 @@ namespace Ui {
 class PythonIDE;
 }
 
+class PythonPanel;
+
 namespace tlp {
 
 class Graph;
@@ -48,6 +50,7 @@ class TLP_PYTHON_SCOPE PythonIDE : public QWidget {
   Q_OBJECT
   Ui::PythonIDE *_ui;
   tlp::PythonInterpreter *_pythonInterpreter;
+  PythonPanel *_pythonPanel;
   bool _dontTreatFocusIn;
   tlp::TulipProject *_project;
   tlp::GraphHierarchiesModel *_graphsModel;

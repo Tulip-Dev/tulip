@@ -31,8 +31,8 @@ PythonTabWidget::PythonTabWidget(QWidget *parent)
 
 void PythonTabWidget::paintEvent(QPaintEvent *event) {
   QTabWidget::paintEvent(event);
-  static QImage pythonLogoImg(":/tulip/python/icons/python.png");
-  static QString pythonVersion(PythonInterpreter::getInstance()->getPythonVersionStr());
+  static QImage pythonLogoImg(":/tulip/gui/icons/python.png");
+  static QString pythonVersion(PythonInterpreter::getInstance()->getPythonFullVersionStr());
   QPainter painter(this);
   painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing |
                          QPainter::SmoothPixmapTransform);
