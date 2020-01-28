@@ -420,7 +420,7 @@ public:
     _mainWindow->installEventFilter(this);
   }
 
-  void hideEvent(QHideEvent *) {
+  void hideEvent(QHideEvent *) override {
     if (!_mainWindowHidden) {
       for (auto child : findChildren<QDialog *>()) {
         if (!child->isHidden()) {
