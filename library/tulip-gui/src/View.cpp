@@ -118,18 +118,13 @@ void View::fillContextMenu(QMenu *menu, edge e) {
 void View::showContextMenu(const QPoint &point, const QPointF &scenePoint) {
   if (_displayContextMenu) {
     QMenu menu;
-    Perspective::redirectStatusTipOfMenu(&menu);
     menu.setStyleSheet("QMenu::item:disabled {color: white; background-color: "
                        "qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), "
                        "stop:1 rgb(60, 60, 60))}");
     fillContextMenu(&menu, scenePoint);
 
     if (!menu.actions().empty()) {
-      // clean up status bar when menu is hidden
-      if (Perspective::instance()) {
-        connect(&menu, SIGNAL(aboutToHide()), Perspective::instance()->mainWindow()->statusBar(),
-                SLOT(clearMessage()));
-      }
+      Perspective::redirectStatusTipOfMenu(&menu);
       menu.move(point);
       menu.exec();
     }
