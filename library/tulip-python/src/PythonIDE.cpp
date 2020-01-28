@@ -356,11 +356,9 @@ tulipplugins.registerPluginOfGroup(pluginClassName='%1',
 }
 
 PythonIDE::PythonIDE(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::PythonIDE),
-      _pythonInterpreter(PythonInterpreter::getInstance()),
-      _pythonPanel(new PythonPanel()),
-      _dontTreatFocusIn(false), _project(nullptr), _graphsModel(nullptr),
-      _scriptStopped(false), _saveFilesToProject(true),
+    : QWidget(parent), _ui(new Ui::PythonIDE), _pythonInterpreter(PythonInterpreter::getInstance()),
+      _pythonPanel(new PythonPanel()), _dontTreatFocusIn(false), _project(nullptr),
+      _graphsModel(nullptr), _scriptStopped(false), _saveFilesToProject(true),
       _notifyProjectModified(false) {
   _ui->setupUi(this);
 
@@ -369,7 +367,7 @@ PythonIDE::PythonIDE(QWidget *parent)
   _ui->pluginsTabWidget->clear();
   QVBoxLayout *layout = new QVBoxLayout();
   layout->addWidget(_pythonPanel);
-  layout->setContentsMargins(0,0,0,0);
+  layout->setContentsMargins(0, 0, 0, 0);
   _ui->interpreterTab->setLayout(layout);
 
   QList<int> sizes;
