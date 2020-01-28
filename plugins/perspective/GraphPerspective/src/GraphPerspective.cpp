@@ -78,6 +78,7 @@
 #include "PanelSelectionWizard.h"
 #include "GraphHierarchiesEditor.h"
 #include "PreferencesDialog.h"
+#include "SearchWidget.h"
 
 #include <QDebug>
 
