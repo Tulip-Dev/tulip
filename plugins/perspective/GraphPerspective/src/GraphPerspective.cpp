@@ -1442,8 +1442,7 @@ void GraphPerspective::make_graph() {
       msg << "one node added";
     else
       msg << added << " nodes added";
-  }
-  else
+  } else
     msg << "no nodes added.";
   Perspective::showStatusMessage(msg.str());
 }
