@@ -424,6 +424,8 @@ PythonIDE::PythonIDE(QWidget *parent)
   connect(_ui->runScriptButton, SIGNAL(clicked()), this, SLOT(executeCurrentScript()));
   connect(_ui->pauseScriptButton, SIGNAL(clicked()), this, SLOT(pauseCurrentScript()));
   connect(_ui->stopScriptButton, SIGNAL(clicked()), this, SLOT(stopCurrentScript()));
+  _ui->progressBar->hide();
+
   connect(_ui->newMainScriptButton, SIGNAL(clicked()), this, SLOT(newScript()));
   connect(_ui->loadMainScriptButton, SIGNAL(clicked()), this, SLOT(loadScript()));
   connect(_ui->saveMainScriptButton, SIGNAL(clicked()), this, SLOT(saveScript()));
@@ -1838,6 +1840,8 @@ void PythonIDE::executeCurrentScript() {
   _ui->runScriptButton->setEnabled(false);
   _ui->stopScriptButton->setEnabled(true);
   _ui->pauseScriptButton->setEnabled(true);
+  _ui->progressBar->show();
+  _ui->useUndoCB->setEnabled(false);
 
   QApplication::processEvents();
 
@@ -1881,12 +1885,16 @@ void PythonIDE::executeCurrentScript() {
   // console
   _pythonInterpreter->setDefaultSIGINTHandler();
 
+  _ui->useUndoCB->setEnabled(true);
+  _ui->progressBar->hide();
   _scriptStopped = false;
 }
 
 void PythonIDE::stopCurrentScript() {
   _scriptStopped = true;
   _pythonInterpreter->stopCurrentScript();
+  _ui->useUndoCB->setEnabled(true);
+  _ui->progressBar->hide();
 }
 
 bool PythonIDE::closeEditorTabRequested(PythonEditorsTabWidget *tabWidget, int idx,

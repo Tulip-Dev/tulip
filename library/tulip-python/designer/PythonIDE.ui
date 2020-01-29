@@ -144,8 +144,8 @@ background-color: #A0A0A0;
               <string>New</string>
              </property>
              <property name="icon">
-              <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
-	       <normaloff>:/tulip/gui/icons/64/document-add.png</normaloff>:/tulip/gui/icons/64/document-add.png</iconset>
+              <iconset>
+               <normaloff>:/tulip/gui/icons/64/document-add.png</normaloff>:/tulip/gui/icons/64/document-add.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -182,8 +182,8 @@ background-color: #A0A0A0;
               <string>Load</string>
              </property>
              <property name="icon">
-	       <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
-	       <normaloff>:/tulip/gui/icons/64/document-import.png</normaloff>:/tulip/gui/icons/64/document-import.png</iconset>
+              <iconset>
+               <normaloff>:/tulip/gui/icons/64/document-import.png</normaloff>:/tulip/gui/icons/64/document-import.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -220,8 +220,8 @@ background-color: #A0A0A0;
               <string>Save</string>
              </property>
              <property name="icon">
-	       <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
-	       <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
+              <iconset>
+               <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -396,8 +396,8 @@ background-color: #A0A0A0;
               <string>New</string>
              </property>
              <property name="icon">
-	       <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
-	       <normaloff>:/tulip/gui/icons/64/document-add.png</normaloff>:/tulip/gui/icons/64/document-add.png</iconset>
+              <iconset>
+               <normaloff>:/tulip/gui/icons/64/document-add.png</normaloff>:/tulip/gui/icons/64/document-add.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -431,8 +431,8 @@ background-color: #A0A0A0;
               <string>Load</string>
              </property>
              <property name="icon">
-	       <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
-	       <normaloff>:/tulip/gui/icons/64/document-import.png</normaloff>:/tulip/gui/icons/64/document-import.png</iconset>
+              <iconset>
+               <normaloff>:/tulip/gui/icons/64/document-import.png</normaloff>:/tulip/gui/icons/64/document-import.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -466,8 +466,8 @@ background-color: #A0A0A0;
               <string>Save</string>
              </property>
              <property name="icon">
-	       <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
-	       <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
+              <iconset>
+               <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -614,8 +614,8 @@ background-color: #A0A0A0;
               <string>New</string>
              </property>
              <property name="icon">
-	       <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
-	       <normaloff>:/tulip/gui/icons/64/document-plus.png</normaloff>:/tulip/gui/icons/64/document-plus.png</iconset>
+              <iconset>
+               <normaloff>:/tulip/gui/icons/64/document-plus.png</normaloff>:/tulip/gui/icons/64/document-plus.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -649,8 +649,8 @@ background-color: #A0A0A0;
               <string>New</string>
              </property>
              <property name="icon">
-	       <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
-	       <normaloff>:/tulip/gui/icons/64/document-add.png</normaloff>:/tulip/gui/icons/64/document-add.png</iconset>
+              <iconset>
+               <normaloff>:/tulip/gui/icons/64/document-add.png</normaloff>:/tulip/gui/icons/64/document-add.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -684,8 +684,8 @@ background-color: #A0A0A0;
               <string>Load</string>
              </property>
              <property name="icon">
-	       <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
-	       <normaloff>:/tulip/gui/icons/64/document-import.png</normaloff>:/tulip/gui/icons/64/document-import.png</iconset>
+              <iconset>
+               <normaloff>:/tulip/gui/icons/64/document-import.png</normaloff>:/tulip/gui/icons/64/document-import.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -719,8 +719,8 @@ background-color: #A0A0A0;
               <string>Save</string>
              </property>
              <property name="icon">
-	       <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
-	       <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
+              <iconset>
+               <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -796,51 +796,50 @@ font:normal;
        </property>
        <item>
         <widget class="QTabWidget" name="consoleTab">
+         <property name="styleSheet">
+          <string notr="true">QTabWidget::pane { /* The tab widget frame */
+    border-top: none;
+ }</string>
+         </property>
          <property name="currentIndex">
           <number>0</number>
          </property>
-          <property name="styleSheet">
-           <string notr="true">QTabWidget::pane { /* The tab widget frame */
-    border-top: none;
- }</string>
-          </property>
          <widget class="QWidget" name="outputTab">
           <attribute name="title">
            <string>Python output</string>
           </attribute>
-	  <layout class="QVBoxLayout" name="vlayout_output">
-	    <property name="spacing">
-              <number>0</number>
-	    </property>
-	    <property name="margin">
-              <number>0</number>
-	    </property>
-	    <item>
-              <widget class="QTextBrowser" name="consoleWidget">
-		<property name="sizePolicy">
-		  <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-		    <horstretch>0</horstretch>
-		    <verstretch>0</verstretch>
-		  </sizepolicy>
-		</property>
-		<property name="minimumSize">
-		  <size>
-		    <width>0</width>
-		    <height>50</height>
-		  </size>
-		</property>
-		<property name="openLinks">
-		  <bool>false</bool>
-		</property>
-              </widget>
-	    </item>
-	  </layout>
+          <layout class="QVBoxLayout" name="vlayout_output">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="margin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QTextBrowser" name="consoleWidget">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>50</height>
+              </size>
+             </property>
+             <property name="openLinks">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
          <widget class="QWidget" name="interpreterTab">
           <attribute name="title">
            <string>Python interpreter</string>
           </attribute>
-          <zorder>consoleWidget</zorder>
          </widget>
         </widget>
        </item>
@@ -930,7 +929,7 @@ font:normal;
              <string>...</string>
             </property>
             <property name="icon">
-              <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
+             <iconset>
               <normaloff>:/tulip/gui/icons/22/start.png</normaloff>:/tulip/gui/icons/22/start.png</iconset>
             </property>
             <property name="iconSize">
@@ -959,7 +958,7 @@ font:normal;
              <string>...</string>
             </property>
             <property name="icon">
-              <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
+             <iconset>
               <normaloff>:/tulip/gui/icons/22/pause.png</normaloff>:/tulip/gui/icons/22/pause.png</iconset>
             </property>
             <property name="iconSize">
@@ -988,7 +987,7 @@ font:normal;
              <string>...</string>
             </property>
             <property name="icon">
-             <iconset resource="../../tulip-gui/resources/TulipGUIResource.qrc">
+             <iconset>
               <normaloff>:/tulip/gui/icons/22/stop.png</normaloff>:/tulip/gui/icons/22/stop.png</iconset>
             </property>
             <property name="iconSize">
@@ -1000,12 +999,31 @@ font:normal;
            </widget>
           </item>
           <item>
+           <spacer name="horizontalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
            <widget class="QProgressBar" name="progressBar">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>0</height>
+             </size>
             </property>
             <property name="maximum">
              <number>100</number>
@@ -1017,6 +1035,19 @@ font:normal;
              <bool>false</bool>
             </property>
            </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
           <item>
            <widget class="QCheckBox" name="useUndoCB">
@@ -1037,11 +1068,11 @@ can not be undone but performance of the script execution will be better
            </widget>
           </item>
           <item>
-            <widget class="Line" name="line_2">
-              <property name="orientation">
-		<enum>Qt::Vertical</enum>
-              </property>
-            </widget>
+           <widget class="Line" name="line_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QLabel" name="label_4">
@@ -1303,5 +1334,6 @@ can not be undone but performance of the script execution will be better
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <resources/>
  <connections/>
 </ui>
