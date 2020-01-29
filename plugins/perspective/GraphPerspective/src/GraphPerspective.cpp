@@ -1436,7 +1436,15 @@ void GraphPerspective::make_graph() {
   unsigned int added = makeSelectionGraph(_graphs->currentGraph(),
                                           graph->getProperty<BooleanProperty>("viewSelection"));
   stringstream msg;
-  msg << "Make selection a graph: " << added << " elements added to the selection.";
+  msg << "Make selection a graph: ";
+  if (added) {
+    if (added == 1)
+      msg << "one node added";
+    else
+      msg << added << " nodes added";
+  }
+  else
+    msg << "no nodes added.";
   Perspective::showStatusMessage(msg.str());
 }
 
