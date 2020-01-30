@@ -164,7 +164,6 @@ protected slots:
   void changeSynchronization(bool);
   void openExternalFile();
   void showHideSideBar();
-  void showHideStatusBar();
   void showStartMessage();
   void resetLoggerDialogPosition();
   void showHideLogger();
@@ -173,6 +172,8 @@ protected slots:
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   void initPythonIDE();
 #endif
+  void displayStatusMessage(const QString &s) override;
+  void clearStatusMessage() override;
 
 protected:
   bool eventFilter(QObject *, QEvent *) override;

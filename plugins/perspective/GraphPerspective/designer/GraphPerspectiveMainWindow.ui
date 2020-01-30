@@ -381,8 +381,8 @@ QToolButton:pressed {
           <string>Python</string>
          </property>
          <property name="icon">
-	   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
-	   <normaloff>:/tulip/gui/icons/python.png</normaloff>:/tulip/gui/icons/python.png</iconset>
+          <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+           <normaloff>:/tulip/gui/icons/python.png</normaloff>:/tulip/gui/icons/python.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -1024,32 +1024,6 @@ QToolButton:hover {
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="statusbarButton">
-                   <property name="minimumSize">
-                    <size>
-                     <width>21</width>
-                     <height>21</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>21</width>
-                     <height>21</height>
-                    </size>
-                   </property>
-                   <property name="text">
-                    <string/>
-                   </property>
-                   <property name="icon">
-                    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
-                     <normaloff>:/tulip/gui/ui/statusbar.png</normaloff>:/tulip/gui/ui/statusbar.png</iconset>
-                   </property>
-                   <property name="flat">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
                   <widget class="QPushButton" name="menubarButton">
                    <property name="minimumSize">
                     <size>
@@ -1079,12 +1053,44 @@ QToolButton:hover {
                </item>
                <item>
                 <widget class="QToolButton" name="addPanelButton">
-		  <property name="checkable">
-		    <bool>false</bool>
-		  </property>
-		  <property name="toolButtonStyle">
-		    <enum>Qt::ToolButtonTextBesideIcon</enum>
-		  </property>
+                 <property name="checkable">
+                  <bool>false</bool>
+                 </property>
+                 <property name="toolButtonStyle">
+                  <enum>Qt::ToolButtonTextBesideIcon</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="Line" name="line_2">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="statusLabel">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+		   font: 12px;
+		   color: white;
+		   }</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -1733,7 +1739,7 @@ QToolButton:hover {
   </action>
   <action name="actionShowPythonDocumentation">
    <property name="icon">
-     <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+    <iconset>
      <normaloff>:/tulip/gui/icons/16/python.png</normaloff>:/tulip/gui/icons/16/python.png</iconset>
    </property>
    <property name="text">
@@ -1783,7 +1789,7 @@ QToolButton:hover {
   </action>
   <action name="actionCreate_panel">
    <property name="icon">
-    <iconset>
+    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
      <normaloff>:/tulip/gui/icons/16/list-add.png</normaloff>:/tulip/gui/icons/16/list-add.png</iconset>
    </property>
    <property name="text">
@@ -1915,7 +1921,7 @@ QToolButton:hover {
   </action>
   <action name="actionPython_IDE">
    <property name="icon">
-     <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
      <normaloff>:/tulip/gui/icons/python.png</normaloff>:/tulip/gui/icons/python.png</iconset>
    </property>
    <property name="text">
@@ -2026,17 +2032,6 @@ QToolButton:hover {
     <slot>switchToSixMode()</slot>
     <slot>switchToSplitHorizontalMode()</slot>
    </slots>
-  </customwidget>
-  <customwidget>
-   <class>SearchWidget</class>
-   <extends>QWidget</extends>
-   <header>SearchWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>OutputPanelButton</class>
-   <extends>QPushButton</extends>
-   <header>OutputPanelButton.h</header>
   </customwidget>
  </customwidgets>
  <resources>
@@ -2278,8 +2273,8 @@ QToolButton:hover {
      <y>695</y>
     </hint>
     <hint type="destinationlabel">
-     <x>575</x>
-     <y>343</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
    </hints>
   </connection>
@@ -2294,8 +2289,8 @@ QToolButton:hover {
      <y>695</y>
     </hint>
     <hint type="destinationlabel">
-     <x>575</x>
-     <y>343</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
    </hints>
   </connection>

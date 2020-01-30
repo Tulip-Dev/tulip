@@ -40,7 +40,6 @@
 #include <QVBoxLayout>
 #include <QDialog>
 #include <QByteArray>
-#include <QStatusBar>
 #include <QMainWindow>
 #include <QApplication>
 #include <QDesktopWidget>
@@ -581,7 +580,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TIPS(_ui->pluginsButton, "Display the Plugin center");
   SET_TIPS(_ui->sidebarButton, "Hide Sidebar");
   SET_TIPS(_ui->menubarButton, "Hide Menubar");
-  SET_TIPS(_ui->statusbarButton, "Hide Statusbar");
   SET_TIPS(_ui->singleModeButton, "Switch to 1 panel mode");
   SET_TIPS(_ui->splitModeButton, "Switch to 2 panels mode");
   SET_TIPS(_ui->splitHorizontalModeButton, "Switch to 2 panels mode");
@@ -647,13 +645,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->loggerFrame->installEventFilter(this);
   _mainWindow->installEventFilter(this);
   _mainWindow->setAcceptDrops(true);
-  _mainWindow->statusBar();
-
-  if (!TulipSettings::instance().showStatusBar())
-    _mainWindow->statusBar()->hide();
 
   if (tlp::inGuiTestingMode()) {
-    _mainWindow->statusBar()->hide();
     _ui->undoButton->setMinimumSize(75, 75);
     _ui->redoButton->setMinimumSize(75, 75);
     _ui->exposePanelsButton->setMinimumSize(75, 75);
@@ -820,7 +813,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
   connect(_ui->sidebarButton, SIGNAL(clicked()), this, SLOT(showHideSideBar()));
   connect(_ui->menubarButton, SIGNAL(clicked()), this, SLOT(showHideMenuBar()));
-  connect(_ui->statusbarButton, SIGNAL(clicked()), this, SLOT(showHideStatusBar()));
 
 #if !defined(__APPLE__) && !defined(_WIN32)
   // Hide plugins center when not on MacOS or Windows
@@ -1875,20 +1867,6 @@ void GraphPerspective::showHideMenuBar() {
   }
 }
 
-void GraphPerspective::showHideStatusBar() {
-  QStatusBar *stsBar = _mainWindow->statusBar();
-
-  if (stsBar->isVisible()) {
-    stsBar->setVisible(false);
-    SET_TIPS(_ui->statusbarButton, "Show Statusbar");
-  } else {
-    stsBar->setVisible(true);
-    SET_TIPS(_ui->statusbarButton, "Hide Statusbar");
-  }
-
-  TulipSettings::instance().setShowStatusBar(stsBar->isVisible());
-}
-
 void GraphPerspective::displayColorScalesDialog() {
   _colorScalesDialog->show();
 }
@@ -1918,8 +1896,16 @@ void GraphPerspective::resetLoggerDialogPosition() {
   // extend the logger frame width until reaching the right side of the main window
   _logger->setGeometry(
       pos.x(), pos.y(), _mainWindow->width() - _ui->loggerFrame->width(),
-      _mainWindow->mapToGlobal(QPoint(0, 0)).y() + _mainWindow->height() - pos.y() - 2 -
-          (_mainWindow->statusBar()->isVisible() ? _mainWindow->statusBar()->height() : 0));
+      _mainWindow->mapToGlobal(QPoint(0, 0)).y() + _mainWindow->height() - pos.y() - 2);
 }
+
+void GraphPerspective::displayStatusMessage(const QString &msg) {
+  _ui->statusLabel->setText(msg);
+}
+
+void GraphPerspective::clearStatusMessage() {
+  _ui->statusLabel->setText("");
+}
+
 
 PLUGIN(GraphPerspective)
