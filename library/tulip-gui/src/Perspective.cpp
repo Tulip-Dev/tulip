@@ -179,8 +179,7 @@ void Perspective::redirectStatusTipOfMenu(QMenu *menu) {
   if (Perspective::instance()) {
     menu->setToolTipsVisible(true);
     connect(menu, SIGNAL(hovered(QAction *)), instance(), SLOT(showStatusTipOf(QAction *)));
-    connect(menu, SIGNAL(aboutToHide()), instance(),
-            SLOT(clearStatusMessage()));
+    connect(menu, SIGNAL(aboutToHide()), instance(), SLOT(clearStatusMessage()));
   }
 }
 

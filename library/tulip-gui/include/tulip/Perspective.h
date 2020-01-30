@@ -245,7 +245,7 @@ public:
    * @brief a static function to ease the display of status messages
    */
   static void showStatusMessage(const QString &msg) {
-      instance()->displayStatusMessage(msg);
+    instance()->displayStatusMessage(msg);
   }
 
   /**
@@ -338,7 +338,6 @@ protected slots:
    * @brief a virtual function to clear the last status message
    */
   virtual void clearStatusMessage();
-
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Perspective::ProgressOptions)
 } // namespace tlp

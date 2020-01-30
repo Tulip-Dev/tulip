@@ -1894,9 +1894,9 @@ void GraphPerspective::resetLoggerDialogPosition() {
   }
 
   // extend the logger frame width until reaching the right side of the main window
-  _logger->setGeometry(
-      pos.x(), pos.y(), _mainWindow->width() - _ui->loggerFrame->width(),
-      _mainWindow->mapToGlobal(QPoint(0, 0)).y() + _mainWindow->height() - pos.y() - 2);
+  _logger->setGeometry(pos.x(), pos.y(), _mainWindow->width() - _ui->loggerFrame->width(),
+                       _mainWindow->mapToGlobal(QPoint(0, 0)).y() + _mainWindow->height() -
+                           pos.y() - 2);
 }
 
 void GraphPerspective::displayStatusMessage(const QString &msg) {
@@ -1906,6 +1906,5 @@ void GraphPerspective::displayStatusMessage(const QString &msg) {
 void GraphPerspective::clearStatusMessage() {
   _ui->statusLabel->setText("");
 }
-
 
 PLUGIN(GraphPerspective)
