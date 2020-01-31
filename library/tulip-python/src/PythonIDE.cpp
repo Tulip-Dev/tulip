@@ -330,23 +330,12 @@ class %2(%3):
   if (pluginGroup.isEmpty()) {
     pluginSkeleton +=
         QString(R"(
-tulipplugins.registerPlugin(pluginClassName='%1',
-                              pluginName='%2',
-                              author='%3',
-                              date='%4',
-                              info='%5',
-                              release='%6')
+tulipplugins.registerPlugin('%1', '%2', '%3', '%4', '%5', '%6')
 )")
             .arg(pluginClassName, pluginName, pluginAuthor, pluginDate, pluginInfo, pluginRelease);
   } else {
     pluginSkeleton += QString(R"(
-tulipplugins.registerPluginOfGroup(pluginClassName='%1',
-                                     pluginName='%2',
-                                     author='%3',
-                                     date='%4',
-                                     info='%5',
-                                     release='%6',
-                                     group='%7')
+tulipplugins.registerPluginOfGroup('%1', '%2', '%3', '%4', '%5', '%6', '%7')
 )")
                           .arg(pluginClassName, pluginName, pluginAuthor, pluginDate, pluginInfo,
                                pluginRelease, pluginGroup);
@@ -738,10 +727,10 @@ static bool checkAndGetPluginInfoFromSrcCode(const QString &pluginCode, QString 
       pos = rx.indexIn(pluginCode, pos + rx.matchedLength());
     }
 
-    rx.setPattern("^.*registerPlugin.*\\(.*,.*\"([^,]+)\",.*$");
+    rx.setPattern("^.*registerPlugin.*\\(.*['\"]([^,]+)['\"],.*['\"]([^,]+)['\"],.*$");
 
     if (rx.indexIn(pluginCode) != -1) {
-      pluginName = rx.cap(1);
+      pluginName = rx.cap(2);
       return true;
     }
   }
@@ -1019,9 +1008,9 @@ void PythonIDE::removePythonPlugin() {
 
   if (tlp::PluginLister::pluginExists(QStringToTlpString(pluginName))) {
     tlp::PluginLister::removePlugin(QStringToTlpString(pluginName));
-    _ui->pluginStatusLabel->setText("Plugin has been successfully removed.");
+    _ui->pluginStatusLabel->setText("Plugin has been successfully unregistered.");
   } else {
-    _ui->pluginStatusLabel->setText("Plugin is not registered in the plugin database.");
+    _ui->pluginStatusLabel->setText("Plugin is not registered in the plugins list");
   }
 }
 

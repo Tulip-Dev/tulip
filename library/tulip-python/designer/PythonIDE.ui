@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>554</width>
+    <width>580</width>
     <height>444</height>
    </rect>
   </property>
@@ -868,7 +868,7 @@ font:normal;
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -1167,11 +1167,11 @@ can not be undone but performance of the script execution will be better
             <property name="enabled">
              <bool>false</bool>
             </property>
-            <property name="styleSheet">
-             <string notr="true">font: bold;</string>
+            <property name="toolTip">
+             <string>Add the current plugin the Tulip GUI registered plugins list</string>
             </property>
             <property name="text">
-             <string>Register Plugin</string>
+             <string>Register plugin</string>
             </property>
            </widget>
           </item>
@@ -1180,11 +1180,11 @@ can not be undone but performance of the script execution will be better
             <property name="enabled">
              <bool>false</bool>
             </property>
-            <property name="styleSheet">
-             <string notr="true">font: bold;</string>
+            <property name="toolTip">
+             <string>Remove the current plugin for the Tulip GUI registered plugins list</string>
             </property>
             <property name="text">
-             <string>Remove Plugin</string>
+             <string>Unregister plugin</string>
             </property>
            </widget>
           </item>
@@ -1198,6 +1198,9 @@ can not be undone but performance of the script execution will be better
             </property>
             <property name="text">
              <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
