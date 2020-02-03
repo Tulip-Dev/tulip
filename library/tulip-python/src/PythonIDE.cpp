@@ -345,7 +345,7 @@ tulipplugins.registerPluginOfGroup('%1', '%2', '%3', '%4', '%5', '%6', '%7')
 }
 
 PythonIDE::PythonIDE(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::PythonIDE), _pythonInterpreter(PythonInterpreter::getInstance()),
+    : QFrame(parent), _ui(new Ui::PythonIDE), _pythonInterpreter(PythonInterpreter::getInstance()),
       _pythonPanel(new PythonPanel()), _dontTreatFocusIn(false), _project(nullptr),
       _graphsModel(nullptr), _scriptStopped(false), _saveFilesToProject(true),
       _notifyProjectModified(false) {

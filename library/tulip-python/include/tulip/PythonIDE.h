@@ -20,7 +20,7 @@
 #ifndef PYTHONPLUGINSIDE_H
 #define PYTHONPLUGINSIDE_H
 
-#include <QWidget>
+#include <QFrame>
 #include <QDateTime>
 #include <QMap>
 #include <QUrl>
@@ -45,7 +45,7 @@ class PythonInterpreter;
 class PythonEditorsTabWidget;
 class DataSet;
 
-class TLP_PYTHON_SCOPE PythonIDE : public QWidget {
+class TLP_PYTHON_SCOPE PythonIDE : public QFrame {
 
   Q_OBJECT
   Ui::PythonIDE *_ui;

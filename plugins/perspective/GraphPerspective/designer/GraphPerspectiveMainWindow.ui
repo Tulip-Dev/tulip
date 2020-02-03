@@ -98,14 +98,6 @@ stop:0 rgb(75,75,75),
 stop:1 rgb(60, 60, 60));
 }
 
-QStatusBar {
-color: white;
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
-stop:0 rgb(85,85,85),
-stop:1 rgb(70, 70, 70));
-font-size: 12px;
-}
-
 QFrame[ bottomFrame = &quot;true&quot; ] QPushButton, QFrame[ bottomFrame = &quot;true&quot; ] QLabel {
 color: white;
 }
@@ -132,7 +124,10 @@ stop:1 rgb(90, 90, 90));
 }
 QAbstractItemView {
 background-color: white;
-}</string>
+}
+QDialog { background-color: white; }
+QMessageBox { background-color: white; }
+   </string>
   </property>
   <property name="dockNestingEnabled">
    <bool>true</bool>

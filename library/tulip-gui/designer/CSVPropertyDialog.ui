@@ -16,11 +16,18 @@
   <property name="modal">
    <bool>true</bool>
   </property>
+  <property name="styleSheet">
+    <string notr="true">
+      QDialog { background-color: white; }
+      #columnLabel { font: bold; }
+      QGroupBox { font-weight: bold; }
+    </string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="columnLabel">
        <property name="layoutDirection">
         <enum>Qt::LeftToRight</enum>
        </property>

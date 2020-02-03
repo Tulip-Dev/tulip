@@ -149,7 +149,7 @@ NUM_CMP(LesserOperator, <)
 NUM_CMP(LesserEqualOperator, <=)
 
 SearchWidget::SearchWidget(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::SearchWidget), _graph(nullptr) {
+    : QFrame(parent), _ui(new Ui::SearchWidget), _graph(nullptr) {
   _ui->setupUi(this);
   _ui->tableWidget->hide();
   _ui->tableWidget->setItemDelegate(new TulipItemDelegate(_ui->tableWidget));

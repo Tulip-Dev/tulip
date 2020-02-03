@@ -20,7 +20,7 @@
 #ifndef SEARCHWIDGET_H
 #define SEARCHWIDGET_H
 
-#include <QWidget>
+#include <QFrame>
 
 namespace Ui {
 class SearchWidget;
@@ -35,7 +35,7 @@ class Graph;
 class PropertyInterface;
 } // namespace tlp
 
-class SearchWidget : public QWidget {
+class SearchWidget : public QFrame {
   Q_OBJECT
 
   QVector<SearchOperator *> NUMERIC_OPERATORS;

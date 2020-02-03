@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>SearchWidget</class>
- <widget class="QWidget" name="SearchWidget">
+ <widget class="QFrame" name="SearchWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -17,8 +17,10 @@
    </sizepolicy>
   </property>
   <property name="styleSheet">
-   <string notr="true">QLabel { font: bold;
-}</string>
+    <string notr="true">
+      QFrame { background-color: white; }
+      QLabel { font: bold; }
+    </string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="spacing">

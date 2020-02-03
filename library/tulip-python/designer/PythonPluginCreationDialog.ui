@@ -67,6 +67,7 @@ font: bold;
 QGroupBox {
 font: italic;
 }
+QDialog { background-color: white; }
 </string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
