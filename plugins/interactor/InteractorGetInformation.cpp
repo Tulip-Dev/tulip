@@ -41,7 +41,11 @@ class InteractorGetInformation : public NodeLinkDiagramComponentInteractor {
     InteractorGetInformation *_interactor;
 
   public:
-    ConfigWidget(InteractorGetInformation *interactor) : _interactor(interactor) {}
+    ConfigWidget(InteractorGetInformation *interactor) :
+      _interactor(interactor) {
+      setObjectName("configWidget");
+      setStyleSheet("#configWidget { background-color: white; } #label { font: bold; }");
+    }
 
     void hideEvent(QHideEvent *) override {
       _interactor->setVisibleProperties();
@@ -106,6 +110,7 @@ public:
     _configWidget = new ConfigWidget(this);
     QVBoxLayout *verticalLayout = new QVBoxLayout(_configWidget);
     QLabel *label = new QLabel("Visible properties");
+    label->setObjectName("label");
     verticalLayout->addWidget(label);
     _propsList = new StringsListSelectionWidget(_configWidget,
                                                 StringsListSelectionWidget::NON_ORDERABLE_LIST, 0);
