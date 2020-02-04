@@ -41,8 +41,7 @@ class InteractorGetInformation : public NodeLinkDiagramComponentInteractor {
     InteractorGetInformation *_interactor;
 
   public:
-    ConfigWidget(InteractorGetInformation *interactor) :
-      _interactor(interactor) {
+    ConfigWidget(InteractorGetInformation *interactor) : _interactor(interactor) {
       setObjectName("configWidget");
       setStyleSheet("#configWidget { background-color: white; } #label { font: bold; }");
     }
