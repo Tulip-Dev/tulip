@@ -1036,38 +1036,6 @@ If you do not see the labels, verify the parameters in the tab *Scene* or that t
 * From here, you can redo a *Color Mapping*. By selecting *viewMetric* or *viewLabel* as the source, you will obtained a coloration following the Id of the nodes.
 
 
-Do not hesitate to try different combinations of algorithm to further discover the application.
-
-
-.. _workspace_complements:
-
-Complements about the workspace
-===============================
-
-We have said a few words about the toolbar located at the bottom of the workspace in:ref:`workspace_panel` but we have not yet explained the use of the buttons 2 and 3: *Search* and *Python*.
-
-
-.. _workspace_complements_search:
-
-Search
-------
-
-.. image:: _images/i_workspace_search.png
-
-The tool **Search** can be used in parallel of any panel. It provides a way of selecting graph's elements according to specific criteria. 
-
-First start by selecting the graph and the elements targeted and by choosing the selection mode. The result (respecting the criteria or not) is stored in a boolean property, *viewSelection* by default. Then choose the values to compare and hit the button *Search* to launch the tool.
-
-If the *viewSelection* has been selected as the result property, the selected elements are automatically enhanced in the node link diagram view.
-
-
-.. _workspace_complements_python:
-
-Python REPL
------------
-			
-.. image:: _images/i_workspace_python.png
-
-The **Python REPL** console provides an interactive mean to inspect/manage your data. Consult the Python documentation for more information.
+Do not hesitate to try different combinations of algorithms to further discover the application.
 
 

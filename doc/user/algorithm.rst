@@ -18,19 +18,19 @@ Algorithm
 
 You will find in this group algorithms managing the graph structure.
 
-* Clustering:
+* **Clustering**:
 
   These operations give you the ability to partition your graph and to group the elements by similarity, creating clusters.
 
-* Topological test:
+* **Topological test**:
 
   It exists several categories of graph topologies, most allowing certain properties or algorithms to be computed easier. The basic tests can be found in this sub group.
 
-* Topology update:
+* **Topology update**:
 
   If your graph does not comply to the exigences of a distinctive topology, you will find here some functions to transform and adapt it.
 
-* Triangulation:
+* **Triangulation**:
 
   The algorithms of this group allow to generate high-quality triangular meshes of your graph. This kind of mesh can be useful in order to prepare the computation of a new graph layout ensuring some geometric properties ("mental map" preservation).
 
@@ -58,33 +58,33 @@ Layout
 
 Tulip allows the visualization of information, and thus, provides several layout algorithms to display information and data in a neat fashion.
 
-* Basic:
+* **Basic**:
 
   The standard functions can be found in this sub group such as the *Circular* display or the *Random layout*.
 
-* Force Directed:
+* **Force Directed**:
 
   These layouts will try to place nodes so that the distance in the graph (specific metric on the edges) should be the closest to the distance on the drawing. Known such algorithm are the FM^3, the GEM Frick and the Kamada Kawai.
 
-* Hierarchical:
+* **Hierarchical**:
 
   Those representations, in accord to their name, are perfect for presenting hierarchical structures or graph showing precedence relationships. The Balloon and the Sugiyama algorithms are good examples of such layout.
 
-* Misc:
+* **Misc**:
 
   This sub group contains miscellaneous algorithms, notably the packing and overlap removal algorithms.
 
-* Multilevel:
+* **Multilevel**:
 
   Multilevel layout is computed by including gradually the initial nodes into a layout, thus iteratively improving the node placement. The MMM and the fast multipole layout follow these steps. The iterativity allows to gradually enhance the representation.
 
-* Planar:
+* **Planar**:
 
   These algorithms are specialized in generating aesthetic planar layouts. With minimized edge crossings, those representations offer understandable 2D visualizations.
 
-* Tree:
+* **Tree**:
 
-  According to the sub group name, these layouts are particularly adapted to represent trees or hierarchical data. 
+  As indicated by the sub group name, these layouts are particularly suited to trees or hierarchical data. They can be applied to any graph because if a graph is not tree it is internally applied to a spanning tree of each of its connected components.
 
 
 .. _algo_measure:
@@ -94,23 +94,23 @@ Measure
 
 Measure algorithms are used to compute different metrics (on edges or nodes). The computed values are assigned by default to the *viewMetric* property.
 
-* Clustering
+* **Clustering**
 
   One can use those tools to compute useful information to identify clusters and linked elements.
  
-* Component
+* **Component**
 
   The algorithms here are just what you need if you want to find and decompose your graph in connected components.
 
-* Graph
+* **Graph**
 
   The measures computed in this subsection concern the graph structure. Among the functions available you may find: the betweenness centrality, the degree, the eccentricity or even the K-Cores computation often used in social network analysis.
 
-* Hierarchical
+* **Hierarchical**
 
   Those algorithms are specific for tree and hierarchical representations. You will find algorithms allowing to compute the depth, the induced number of nodes or leaves, the dag level...
 
-* Misc
+* **Misc**
 
   This subsection gathers all the miscallaneous computations such as an identity mapping, putting the *id* of the nodes and edges into another property, or a random metric generation, affecting random values to each element choose property.
 
