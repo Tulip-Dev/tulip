@@ -269,7 +269,8 @@ jobs:
       if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
     # legacy Tulip core build on Mac OS (MacPorts)
       os: osx
-      osx_image: xcode9.2
+      # use default osx image
+      #osx_image: xcode9.2
       compiler: clang
       cache: ccache
       install:
@@ -434,7 +435,8 @@ jobs:
       if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
     # legacy Tulip complete build on Mac OS (MacPorts)
       os: osx
-      osx_image: xcode9.2
+      # use default osx image
+      #osx_image: xcode9.2
       compiler: clang
       cache: ccache
       install:
