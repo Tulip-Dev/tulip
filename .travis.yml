@@ -290,7 +290,7 @@ jobs:
         - sudo port -N install pkgconfig
         - sudo port -N install cppunit
       env:
-        - ENV="MacOS 10.12, AppleClang, MacPorts"
+        - ENV="MacOS default, AppleClang, MacPorts"
 
       script:
         # create build directory
@@ -374,7 +374,7 @@ jobs:
           update: true
 
       env:
-        - ENV="MacOS 10.13, LLVM Clang, Homebrew"
+        - ENV="MacOS default, LLVM Clang, Homebrew"
       script:
         # create build directory
         - mkdir build && cd build
@@ -466,7 +466,7 @@ jobs:
         - pip install --user sphinx==1.7.9
 
       env:
-        - ENV="MacOS 10.12, AppleClang, MacPorts"
+        - ENV="MacOS default, AppleClang, MacPorts"
       script:
         # create build directory
         - mkdir build && cd build
@@ -570,7 +570,7 @@ jobs:
         # add missing sdk if needed
         - ls /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk || sudo ln -s /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk
       env:
-        - ENV="MacOS 10.13, LLVM Clang, Homebrew"
+        - ENV="MacOS default, LLVM Clang, Homebrew"
 
       script:
         # create build directory
