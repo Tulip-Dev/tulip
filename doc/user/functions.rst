@@ -189,7 +189,7 @@ Import the nodes
 
 .. |icon_csv| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/spreadsheet.png
 
-Click on the |icon_csv| **CSV** icon to open the CSV Import Wizard (also available through the menu *Edit →	Import CSV*).
+Click on the |icon_csv| **CSV** button to open the CSV Import Wizard (also available through the menu *Edit →	Import CSV*).
 
 The import data process in Tulip is composed of three dialog panels with configuration options.
 
@@ -208,15 +208,19 @@ The purpose of each labeled component is explained below:
 
 2. The file encoding selection menu: this drop down menu provides a list of encoding schemes for the characters in the text file. We use a standard UTF-8 in this example as the files does not contain any special character.
 
-3. The data orientation: this check-box allows the user to invert rows and columns i.e to treat rows as columns and columns as rows in next steps.
+3. The data orientation: this check box allows the user to invert rows and columns i.e to treat rows as columns and columns as rows in next steps.
 
-4. The separator selector: this field allows the user to define the characters used to separate data value fields within each row. Select a separator in the list or input a custom separator. For the nodes file, the separator is ";". If a duplication of the separators is possible, you can check the "merge consecutive separators" box.
+4. If checked, a check box allows the user to specify the number of lines to be ignored at the beginning of the file.
 
-5. The text delimiter selector: this field allows the user to define the characters used as start and end delimiter for data value fields. Select a delimiter in the list or input a custom one and press the [Enter] key to validate your input. Separated value files often additionally define a character used to indicate the start and end of a data element which should be considered as a single text entry. This strategy allows the inclusion of text entries which include the value separator. 
+5. The separator selector: this field allows the user to define the characters used to separate data value fields within each row. Select a separator in the list or input a custom separator. For the nodes file, the separator is ";". If a duplication of the separators is possible, you can check the "merge consecutive separators" box.
+
+6. The text delimiter selector: this field allows the user to define the characters used as start and end delimiter for data value fields. Select a delimiter in the list or input a custom one and press the [Enter] key to validate your input. Separated value files often additionally define a character used to indicate the start and end of a data element which should be considered as a single text entry. This strategy allows the inclusion of text entries which include the value separator. 
 
   For example, a file, which is structured as a comma separated value file, could use the double quotation mark to delimit text values and would then be able to include text values such as: 	'Zoe, Mark, Sally'.
 
-6. The preview area : this area displays a preview of the file as it will be interpreted with the current settings.
+7. The character used as decimal mark when specifying decimal numbers: '.' or ','.
+
+8. The preview area : this area displays a preview of the file as it will be interpreted with the current settings.
 
 
 You can click on "Next" to access to the following panel.
