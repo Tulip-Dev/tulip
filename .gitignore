@@ -53,14 +53,15 @@ __pycache__/
 # KDE desktop stuffs
 .directory
 
+# Prevent committing generated HTML Documentation
+/doc/html
+
 # CLion settings folder
 .idea/
 
+# Doxygen temp files and localDB need not be source-controlled
 *.tmp
 doxygen_sqlite3.db
 
 # Visual Studio settings folder
 .vs/
-
-# Prevent committing generated HTML Documentation
-/doc/html
