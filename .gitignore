@@ -54,7 +54,7 @@ __pycache__/
 .directory
 
 # Prevent committing generated HTML Documentation
-/doc/html
+doc/html
 
 # CLion settings folder
 .idea/
