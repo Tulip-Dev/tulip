@@ -23,9 +23,9 @@
 #include <tulip/APIDataBase.h>
 #include <tulip/PythonIDE.h>
 #include <tulip/PythonCodeEditor.h>
-#include "PythonPanel.h"
 #endif
 
+#include <list>
 #include "GraphPerspective.h"
 
 #include <QMessageBox>
@@ -40,7 +40,6 @@
 #include <QVBoxLayout>
 #include <QDialog>
 #include <QByteArray>
-#include <QStatusBar>
 #include <QMainWindow>
 #include <QApplication>
 #include <QDesktopWidget>
@@ -68,6 +67,7 @@
 #include <tulip/AboutTulipPage.h>
 #include <tulip/ColorScalesManager.h>
 #include <tulip/StableIterator.h>
+#include <tulip/TreeTest.h>
 
 #include "ui_GraphPerspectiveMainWindow.h"
 
@@ -77,6 +77,7 @@
 #include "PanelSelectionWizard.h"
 #include "GraphHierarchiesEditor.h"
 #include "PreferencesDialog.h"
+#include "SearchWidget.h"
 
 #include <QDebug>
 
@@ -111,7 +112,8 @@ static bool tulipCanOpenFile(const QString &path) {
 
 GraphPerspective::GraphPerspective(const tlp::PluginContext *c)
     : Perspective(c), _ui(nullptr), _graphs(new GraphHierarchiesModel(this)),
-      _recentDocumentsSettingsKey("perspective/recent_files"), _logger(nullptr) {
+      _recentDocumentsSettingsKey("perspective/recent_files"), _logger(nullptr),
+      _searchDialog(nullptr) {
   Q_INIT_RESOURCE(GraphPerspective);
 
   if (c && static_cast<const PerspectiveContext *>(c)->parameters.contains("gui_testing")) {
@@ -240,7 +242,7 @@ void GraphPerspective::updateLogIconsAndCounters() {
     logCounterLabel = _ui->loggerMessagePython;
   }
 
-  logIconCounterFrame->setVisible(true);
+  logIconCounterFrame->setVisible(_logger->countByType(logType) != 0);
   logIconLabel->setPixmap(_logger->icon(logType));
   SET_TIPS(logIconLabel, "Click here to show/hide the message log window");
   logCounterLabel->setText(QString::number(_logger->countByType(logType)));
@@ -275,6 +277,7 @@ GraphPerspective::~GraphPerspective() {
   }
 #endif
 
+  delete _searchDialog;
   delete _ui;
 }
 
@@ -334,10 +337,6 @@ void GraphPerspective::logCleared() {
   _ui->loggerFramePython->setVisible(false);
 }
 
-void GraphPerspective::findPlugins() {
-  _ui->algorithmRunner->findPlugins();
-}
-
 bool GraphPerspective::eventFilter(QObject *obj, QEvent *ev) {
   if (ev->type() == QEvent::DragEnter) {
     QDragEnterEvent *dragEvent = static_cast<QDragEnterEvent *>(ev);
@@ -394,18 +393,75 @@ void GraphPerspective::redrawPanels(bool center) {
   _ui->workspace->redrawPanels(center);
 }
 
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-class PythonIDEDialog : public QDialog {
+class GraphPerspectiveDialog : public QDialog {
 
+  QMainWindow *_mainWindow;
   QByteArray _windowGeometry;
+  bool _mainWindowHidden;
+  std::list<QDialog *> childrenToShow;
 
 public:
-  PythonIDEDialog(QWidget *parent, Qt::WindowFlags flags) : QDialog(parent, flags) {}
+  GraphPerspectiveDialog(QString title)
+      : QDialog(nullptr, Qt::Tool | Qt::CustomizeWindowHint | Qt::WindowTitleHint |
+                             Qt::WindowCloseButtonHint),
+        _mainWindow(Perspective::instance()->mainWindow()), _mainWindowHidden(false) {
+    setStyleSheet(_mainWindow->styleSheet());
+    setWindowIcon(_mainWindow->windowIcon());
+    QString tlpTitle("Tulip ");
+
+    // show patch number only if needed
+    if (TULIP_INT_VERSION % 10)
+      tlpTitle += TULIP_VERSION;
+    else
+      tlpTitle += TULIP_MM_VERSION;
+
+    setWindowTitle(tlpTitle.append(" - %1").arg(title));
+    _mainWindow->installEventFilter(this);
+  }
+
+  void hideEvent(QHideEvent *) override {
+    if (!_mainWindowHidden) {
+      for (auto child : findChildren<QDialog *>()) {
+        if (!child->isHidden()) {
+          child->reject();
+        }
+      }
+    }
+  }
+
+  bool eventFilter(QObject *, QEvent *event) override {
+    if (event->type() == QEvent::Hide && !isHidden() && _mainWindow->isMinimized()) {
+      _mainWindowHidden = true;
+      _windowGeometry = saveGeometry();
+      // ensure visible children dialogs
+      // will be hidden
+      childrenToShow.clear();
+      for (auto child : findChildren<QDialog *>()) {
+        if (!child->isHidden()) {
+          // only non modal will be re-displayed
+          if (!child->isModal())
+            childrenToShow.push_back(child);
+          child->reject();
+        }
+      }
+      // hide current dialog
+      hide();
+      return true;
+    } else if (event->type() == QEvent::Show && _mainWindowHidden) {
+      _mainWindowHidden = false;
+      // show current dialog
+      show();
+      // re-display non modal children
+      for (auto child : childrenToShow)
+        child->show();
+      return true;
+    }
+    return false;
+  }
 
 protected:
   void showEvent(QShowEvent *e) override {
     QDialog::showEvent(e);
-
     if (!_windowGeometry.isEmpty()) {
       restoreGeometry(_windowGeometry);
     }
@@ -416,7 +472,6 @@ protected:
     QDialog::closeEvent(e);
   }
 };
-#endif
 
 #define SET_TOOLTIP(a, tt) a->setToolTip(QString(tt))
 
@@ -428,12 +483,9 @@ void GraphPerspective::buildPythonIDE() {
     QVBoxLayout *dialogLayout = new QVBoxLayout();
     dialogLayout->addWidget(_pythonIDE);
     dialogLayout->setContentsMargins(0, 0, 0, 0);
-    _pythonIDEDialog = new PythonIDEDialog(nullptr, Qt::Window);
-    _pythonIDEDialog->setStyleSheet(_mainWindow->styleSheet());
-    _pythonIDEDialog->setWindowIcon(_mainWindow->windowIcon());
+    _pythonIDEDialog = new GraphPerspectiveDialog("Python IDE");
     _pythonIDEDialog->setLayout(dialogLayout);
     _pythonIDEDialog->resize(800, 600);
-    _pythonIDEDialog->setWindowTitle("Tulip Python IDE");
   }
 #endif
 }
@@ -448,21 +500,14 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   PythonInterpreter::getInstance();
   pluginsListChanged();
 #else
-  _ui->pythonButton->setVisible(false);
   _ui->developButton->setVisible(false);
   _ui->actionPython_IDE->setVisible(false);
 #endif
   currentGraphChanged(nullptr);
   // set win/Mac dependent tooltips with ctrl shortcut
-  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->exposeModeButton, "Toggle the Expose mode", "E");
-  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->searchButton, "Show/hide the graph's elements search panel",
-                              "F");
-  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->pythonButton,
-                              "Show/hide the Python interpreter (Read Eval Print Loop) panel",
-                              "Shift+P");
   SET_TIPS_WITH_CTRL_SHORTCUT(_ui->previousPageButton, "Show previous panel", "Shift+Left");
   SET_TIPS_WITH_CTRL_SHORTCUT(_ui->nextPageButton, "Show next panel", "Shift+Right");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionNewProject, "Open a new  empty Tulip perspective",
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionNewProject, "Open a new empty Tulip perspective",
                                  "Shift+N");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(
       _ui->actionSave_Project,
@@ -514,29 +559,27 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
                                  "Display the Tulip Python IDE for developing scripts and plugins "
                                  "to execute on the loaded graphs",
                                  "Alt+P");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExport, "Show the Graph exporting wizard", "E");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionOpen_Project, "Open a graph file", "O");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionFind_plugins,
-                                 "Allow to find algorithms in typing text in a search field",
-                                 "Alt+H");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionNew_graph, "Create a new empty graph", "N");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExposePanels,
+                                 "Toggle the 'Expose' all visualisation panels mode", "E");
+  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->actionSearch, "Display the graph's elements search dialog", "F");
+
   // set portable tooltips
   SET_TIPS(_ui->undoButton, _ui->actionUndo->toolTip());
   SET_TIPS(_ui->redoButton, _ui->actionRedo->toolTip());
-  _ui->workspaceButton->setToolTip(QString("Display the existing visualization panels"));
+  SET_TIPS(_ui->exposePanelsButton, _ui->actionExposePanels->toolTip());
+  SET_TIPS(_ui->searchButton, _ui->actionSearch->toolTip());
   SET_TIPS(_ui->developButton, _ui->actionPython_IDE->toolTip());
   _ui->loggerMessageInfo->setToolTip(QString("Show/Hide the Messages log panel"));
   _ui->loggerMessagePython->setToolTip(_ui->loggerMessageInfo->toolTip());
   _ui->loggerMessageWarning->setToolTip(_ui->loggerMessageInfo->toolTip());
   _ui->loggerMessageError->setToolTip(_ui->loggerMessageInfo->toolTip());
-  SET_TIPS(_ui->exportButton, "Display the Graph exporting wizard");
   SET_TIPS(_ui->csvImportButton, "Import data in the current graph using a csv formatted file");
   SET_TIPS(_ui->importButton, "Display the Graph importing wizard");
   SET_TIPS(_ui->pluginsButton, "Display the Plugin center");
   SET_TIPS(_ui->sidebarButton, "Hide Sidebar");
   SET_TIPS(_ui->menubarButton, "Hide Menubar");
-  SET_TIPS(_ui->statusbarButton, "Hide Statusbar");
-  SET_TIPS(_ui->addPanelButton, "Open a new visualization panel on the current graph");
   SET_TIPS(_ui->singleModeButton, "Switch to 1 panel mode");
   SET_TIPS(_ui->splitModeButton, "Switch to 2 panels mode");
   SET_TIPS(_ui->splitHorizontalModeButton, "Switch to 2 panels mode");
@@ -558,7 +601,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TOOLTIP(_ui->actionCreate_empty_sub_graph, "Create an empty subgraph of the current graph");
   SET_TOOLTIP(_ui->actionClone_sub_graph,
               "Create a subgraph containing the same elements as the current graph");
-  SET_TOOLTIP(_ui->action_Close_All, "Close all opened workspace views");
+  SET_TOOLTIP(_ui->action_Remove_All, "Remove all visualisation panels");
   SET_TOOLTIP(_ui->actionColor_scales_management, "Manage Tulip color scales");
   SET_TOOLTIP(_ui->actionMake_selection_a_graph,
               "Add the non selected ends of the selected edges to the current graph selection");
@@ -597,22 +640,16 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->sixModeButton->hide();
   _ui->workspace->setSixModeSwitch(_ui->sixModeButton);
   _ui->workspace->setPageCountLabel(_ui->pageCountLabel);
-  _ui->workspace->setExposeModeSwitch(_ui->exposeModeButton);
-  _ui->outputFrame->hide();
+  _ui->workspace->setExposeModeSwitch(_ui->exposePanelsButton);
   _logger = new GraphPerspectiveLogger(_mainWindow);
   _ui->loggerFrame->installEventFilter(this);
   _mainWindow->installEventFilter(this);
   _mainWindow->setAcceptDrops(true);
-  _mainWindow->statusBar();
-
-  if (!TulipSettings::instance().showStatusBar())
-    _mainWindow->statusBar()->hide();
 
   if (tlp::inGuiTestingMode()) {
-    _mainWindow->statusBar()->hide();
     _ui->undoButton->setMinimumSize(75, 75);
     _ui->redoButton->setMinimumSize(75, 75);
-    _ui->workspaceButton->setMinimumSize(75, 75);
+    _ui->exposePanelsButton->setMinimumSize(75, 75);
     _ui->developButton->setMinimumSize(75, 75);
     _ui->csvImportButton->setMinimumSize(75, 75);
     _ui->importButton->setMinimumSize(75, 75);
@@ -620,6 +657,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   }
 
   connect(_logger, SIGNAL(cleared()), this, SLOT(logCleared()));
+  connect(_logger, SIGNAL(itemRemoved()), this, SLOT(updateLogIconsAndCounters()));
   connect(_logger, SIGNAL(resetLoggerPosition()), this, SLOT(resetLoggerDialogPosition()));
 
   _colorScalesDialog =
@@ -640,7 +678,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
   qInstallMessageHandler(graphPerspectiveLogger);
 
-  connect(_ui->workspaceButton, SIGNAL(clicked()), this, SLOT(workspaceButtonClicked()));
   connect(_ui->workspace, SIGNAL(addPanelRequest(tlp::Graph *)), this,
           SLOT(createPanel(tlp::Graph *)));
   connect(_ui->workspace, SIGNAL(focusedPanelSynchronized()), this,
@@ -658,6 +695,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionFull_screen, SIGNAL(triggered(bool)), this, SLOT(showFullScreen(bool)));
   connect(_ui->actionImport, SIGNAL(triggered()), this, SLOT(importGraph()));
   connect(_ui->actionExport, SIGNAL(triggered()), this, SLOT(exportGraph()));
+  connect(_ui->actionCreate_panel, SIGNAL(triggered()), this, SLOT(createPanel()));
   connect(_ui->actionSave_graph_to_file, SIGNAL(triggered()), this,
           SLOT(saveGraphHierarchyInTlpFile()));
   connect(_ui->workspace, SIGNAL(panelFocused(tlp::View *)), this, SLOT(panelFocused(tlp::View *)));
@@ -686,17 +724,16 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionClone_sub_graph, SIGNAL(triggered()), this, SLOT(cloneSubGraph()));
   connect(_ui->actionCreate_empty_sub_graph, SIGNAL(triggered()), this, SLOT(addEmptySubGraph()));
   connect(_ui->actionImport_CSV, SIGNAL(triggered()), this, SLOT(CSVImport()));
-  connect(_ui->actionFind_plugins, SIGNAL(triggered()), this, SLOT(findPlugins()));
   connect(_ui->actionNew_graph, SIGNAL(triggered()), this, SLOT(addNewGraph()));
   connect(_ui->actionNewProject, SIGNAL(triggered()), this, SLOT(newProject()));
   connect(_ui->actionPreferences, SIGNAL(triggered()), this, SLOT(openPreferences()));
-  connect(_ui->searchButton, SIGNAL(clicked(bool)), this, SLOT(setSearchOutput(bool)));
+  connect(_ui->actionSearch, SIGNAL(triggered()), this, SLOT(showSearchDialog()));
   connect(_ui->workspace, SIGNAL(importGraphRequest()), this, SLOT(importGraph()));
-  connect(_ui->action_Close_All, SIGNAL(triggered()), _ui->workspace, SLOT(closeAll()));
-  connect(_ui->addPanelButton, SIGNAL(clicked()), this, SLOT(createPanel()));
+  connect(_ui->action_Remove_All, SIGNAL(triggered()), _ui->workspace, SLOT(closeAll()));
+  _ui->addPanelButton->setDefaultAction(_ui->actionCreate_panel);
   connect(_ui->actionColor_scales_management, SIGNAL(triggered()), this,
           SLOT(displayColorScalesDialog()));
-  connect(_ui->exportButton, SIGNAL(clicked()), this, SLOT(exportGraph()));
+  _ui->exportButton->setDefaultAction(_ui->actionExport);
 
   // Agent actions
   connect(_ui->actionPlugins_Center, SIGNAL(triggered()), this, SLOT(showPluginsCenter()));
@@ -759,10 +796,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   if (!rootIds.empty())
     _ui->workspace->readProject(_project, rootIds, progress);
 
-  _ui->searchPanel->setModel(_graphs);
-
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  connect(_ui->pythonButton, SIGNAL(clicked(bool)), this, SLOT(setPythonPanel(bool)));
   connect(_ui->developButton, SIGNAL(clicked()), this, SLOT(showPythonIDE()));
   tlp::PluginEvent::addListener(this);
   if (_pythonIDE || PythonIDE::projectNeedsPythonIDE(_project))
@@ -779,7 +813,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
   connect(_ui->sidebarButton, SIGNAL(clicked()), this, SLOT(showHideSideBar()));
   connect(_ui->menubarButton, SIGNAL(clicked()), this, SLOT(showHideMenuBar()));
-  connect(_ui->statusbarButton, SIGNAL(clicked()), this, SLOT(showHideStatusBar()));
 
 #if !defined(__APPLE__) && !defined(_WIN32)
   // Hide plugins center when not on MacOS or Windows
@@ -893,6 +926,10 @@ void GraphPerspective::exportGraph(Graph *g) {
   delete prg;
 }
 
+QAction *GraphPerspective::exportAction() {
+  return _ui->actionExport;
+}
+
 void GraphPerspective::saveGraphHierarchyInTlpFile(Graph *g) {
   if (g == nullptr)
     g = _graphs->currentGraph();
@@ -967,7 +1004,7 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
     // to ensure a correct loading of the associated texture files if any
     QDir::setCurrent(QFileInfo(tlpStringToQString(fileName)).absolutePath());
 
-  applyRandomLayout(g);
+  applyDefaultLayout(g);
   showStartPanels(g);
 }
 
@@ -1001,6 +1038,10 @@ void GraphPerspective::createPanel(tlp::Graph *g) {
     _ui->workspace->setActivePanel(wizard.panel());
     wizard.panel()->applySettings();
   }
+}
+
+QAction *GraphPerspective::createPanelAction() {
+  return _ui->actionCreate_panel;
 }
 
 void GraphPerspective::panelFocused(tlp::View *view) {
@@ -1387,7 +1428,14 @@ void GraphPerspective::make_graph() {
   unsigned int added = makeSelectionGraph(_graphs->currentGraph(),
                                           graph->getProperty<BooleanProperty>("viewSelection"));
   stringstream msg;
-  msg << "Make selection a graph: " << added << " elements added to the selection.";
+  msg << "Make selection a graph: ";
+  if (added) {
+    if (added == 1)
+      msg << "one node added";
+    else
+      msg << added << " nodes added";
+  } else
+    msg << "no nodes added.";
   Perspective::showStatusMessage(msg.str());
 }
 
@@ -1464,27 +1512,26 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->split33ModeButton->setEnabled(enabled);
   _ui->gridModeButton->setEnabled(enabled);
   _ui->sixModeButton->setEnabled(enabled);
-  _ui->exposeModeButton->setEnabled(enabled);
+  _ui->exposePanelsButton->setEnabled(enabled);
   _ui->searchButton->setEnabled(enabled);
-  _ui->pythonButton->setEnabled(enabled);
-  _ui->exportButton->setEnabled(enabled);
   _ui->previousPageButton->setVisible(enabled);
   _ui->pageCountLabel->setVisible(enabled);
   _ui->nextPageButton->setVisible(enabled);
   _ui->actionSave_Project->setEnabled(enabled);
   _ui->actionSave_Project_as->setEnabled(enabled);
+  _ui->actionSearch->setEnabled(enabled);
 
   if (graph == nullptr) {
     _ui->workspace->switchToStartupMode();
-    _ui->exposeModeButton->setChecked(false);
-    _ui->searchButton->setChecked(false);
-    _ui->pythonButton->setChecked(false);
-    setSearchOutput(false);
+    _ui->exposePanelsButton->setChecked(false);
+    showSearchDialog(false);
     _ui->actionSave_Project->setEnabled(false);
     _ui->actionSave_Project_as->setEnabled(false);
   } else {
     _ui->workspace->setGraphForFocusedPanel(graph);
   }
+
+  _ui->actionExposePanels->setEnabled(!_ui->workspace->empty());
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 
@@ -1549,7 +1596,7 @@ void GraphPerspective::CSVImport() {
   } else {
     unsigned int nbLogsAfter = _logger->countByType(GraphPerspectiveLogger::Error);
     nbLogsAfter += _logger->countByType(GraphPerspectiveLogger::Warning);
-    applyRandomLayout(g);
+    applyDefaultLayout(g);
     bool openPanels = true;
 
     for (auto v : _ui->workspace->panels()) {
@@ -1609,13 +1656,16 @@ void GraphPerspective::showStartPanels(Graph *g) {
   _ui->workspace->switchToSplitMode();
 }
 
-void GraphPerspective::applyRandomLayout(Graph *g) {
+void GraphPerspective::applyDefaultLayout(Graph *g) {
   Observable::holdObservers();
   LayoutProperty *viewLayout = g->getProperty<LayoutProperty>("viewLayout");
 
   if (!viewLayout->hasNonDefaultValuatedNodes(g)) {
     std::string str;
-    g->applyPropertyAlgorithm("Random layout", viewLayout, str);
+    if (TreeTest::isTree(g))
+      g->applyPropertyAlgorithm("Tree Radial", viewLayout, str);
+    else
+      g->applyPropertyAlgorithm("FM^3 (OGDF)", viewLayout, str);
   }
 
   Observable::unholdObservers();
@@ -1666,32 +1716,29 @@ bool GraphPerspective::setGlMainViewPropertiesForGraph(
   return result;
 }
 
-void GraphPerspective::setSearchOutput(bool f) {
+void GraphPerspective::showSearchDialog(bool f) {
   if (f) {
-    _ui->outputFrame->setCurrentWidget(_ui->searchPanel);
-    _ui->pythonButton->setChecked(false);
-  }
-
-  _ui->outputFrame->setVisible(f);
-}
-
-void GraphPerspective::setPythonPanel(bool f) {
-  if (f) {
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-    if (_pythonPanel == nullptr) {
-      _pythonPanel = new PythonPanel();
-      _pythonPanel->setModel(_graphs);
-      QVBoxLayout *layout = new QVBoxLayout();
-      layout->addWidget(_pythonPanel);
+    if (_searchDialog == nullptr) {
+      _searchDialog = new GraphPerspectiveDialog("Search graph elements");
+      auto searchPanel = new SearchWidget(_searchDialog);
+      searchPanel->setModel(_graphs);
+      QVBoxLayout *layout = new QVBoxLayout;
+      _searchDialog->setMinimumWidth(600);
+      _searchDialog->setMinimumHeight(150);
+      layout->addWidget(searchPanel);
       layout->setContentsMargins(0, 0, 0, 0);
-      _ui->pythonPanel->setLayout(layout);
+      _searchDialog->setLayout(layout);
     }
-#endif
-    _ui->outputFrame->setCurrentWidget(_ui->pythonPanel);
+    _searchDialog->hide();
+    _ui->searchButton->setChecked(true);
+    _searchDialog->show();
+    _searchDialog->raise();
+    _searchDialog->activateWindow();
+  } else if (_searchDialog) {
+    _searchDialog->hide();
     _ui->searchButton->setChecked(false);
+    _ui->actionSearch->setChecked(false);
   }
-
-  _ui->outputFrame->setVisible(f);
 }
 
 void GraphPerspective::openPreferences() {
@@ -1820,20 +1867,6 @@ void GraphPerspective::showHideMenuBar() {
   }
 }
 
-void GraphPerspective::showHideStatusBar() {
-  QStatusBar *stsBar = _mainWindow->statusBar();
-
-  if (stsBar->isVisible()) {
-    stsBar->setVisible(false);
-    SET_TIPS(_ui->statusbarButton, "Show Statusbar");
-  } else {
-    stsBar->setVisible(true);
-    SET_TIPS(_ui->statusbarButton, "Hide Statusbar");
-  }
-
-  TulipSettings::instance().setShowStatusBar(stsBar->isVisible());
-}
-
 void GraphPerspective::displayColorScalesDialog() {
   _colorScalesDialog->show();
 }
@@ -1852,10 +1885,6 @@ void GraphPerspective::showAboutTulipPage() {
   }
 }
 
-void GraphPerspective::workspaceButtonClicked() {
-  _ui->workspaceButton->setChecked(true);
-}
-
 void GraphPerspective::resetLoggerDialogPosition() {
   QPoint pos = _mainWindow->mapToGlobal(_ui->exportButton->pos());
   pos.setX(pos.x() + _ui->loggerFrame->width());
@@ -1865,10 +1894,17 @@ void GraphPerspective::resetLoggerDialogPosition() {
   }
 
   // extend the logger frame width until reaching the right side of the main window
-  _logger->setGeometry(
-      pos.x(), pos.y(), _mainWindow->width() - _ui->loggerFrame->width(),
-      _mainWindow->mapToGlobal(QPoint(0, 0)).y() + _mainWindow->height() - pos.y() - 2 -
-          (_mainWindow->statusBar()->isVisible() ? _mainWindow->statusBar()->height() : 0));
+  _logger->setGeometry(pos.x(), pos.y(), _mainWindow->width() - _ui->loggerFrame->width(),
+                       _mainWindow->mapToGlobal(QPoint(0, 0)).y() + _mainWindow->height() -
+                           pos.y() - 2);
+}
+
+void GraphPerspective::displayStatusMessage(const QString &msg) {
+  _ui->statusLabel->setText(msg);
+}
+
+void GraphPerspective::clearStatusMessage() {
+  _ui->statusLabel->setText("");
 }
 
 PLUGIN(GraphPerspective)

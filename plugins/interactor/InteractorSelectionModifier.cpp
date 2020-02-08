@@ -50,7 +50,7 @@ public:
    */
   void construct() override {
     setConfigurationWidgetText(
-        QString("<h3>Move/Reshape rectangle selection</h3>") + "Modify selection<br/><br/>" +
+        QString("<h3>Move/Reshape rectangle selection</h3>") + "<u>Modify selection</u><br/><br/>" +
         "Resize : <ul><li><b>Mouse left</b> down on triangle + moves</li></ul>" +
         "<ul><li><b>Mouse left</b> down on square + moves</li></ul>" +
         "Only change node size : <ul><li><b>Ctrl + Mouse left</b> down on triangle + "
@@ -61,12 +61,23 @@ public:
         "Only rotate nodes : <ul><li><b>Ctrl + Mouse left</b> down on circle + moves</li></ul>" +
         "Only rotate selection : <ul><li><b>Shift + Mouse left</b> down on circle + "
         "moves</li></ul>" +
-        "Translate : <ul><li><b>Mouse left</b> down inside rectangle + moves</li></ul>" +
+        "Translate : <ul><li><b>Mouse left</b> down inside rectangle + moves</li>"
+        "<li> or <b>Arrow</b> keys</li></ul>" +
         "Align vertically/horizontally : <ul><li><b>Mouse left</b> click on two arrows icon in top "
         "right zone</li></ul>" +
         "Align left/right/top/bottom : <ul><li><b>Mouse left</b> click on simple arrow icon in top "
-        "right zone</li></ul>");
-    push_back(new MousePanNZoomNavigator);
+        "right zone</li></ul>" +
+        "<u>Navigation in the graph</u><br/><br/>" +
+        "Translation (if no selection): <ul><li><b>Arrow</b> keys</li></ul>" +
+#if !defined(__APPLE__)
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Pg up/Pg "
+        "down</b> keys</li></ul>"
+#else
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>Pg up/Pg "
+        "down</b> keys</li></ul>"
+#endif
+    );
+    push_back(new MouseNKeysNavigator(false));
     push_back(new MouseSelector);
     push_back(new MouseSelectionEditor);
   }

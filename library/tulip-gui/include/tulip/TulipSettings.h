@@ -177,8 +177,9 @@ public:
   bool warnUserAboutGraphicsCard() const;
   void setWarnUserAboutGraphicsCard(bool);
 
-  bool showStatusBar() const;
-  void setShowStatusBar(bool);
+  // no longer used
+  _DEPRECATED bool showStatusBar() const;
+  _DEPRECATED void setShowStatusBar(bool);
 
   bool loggerAnchored() const;
   void setLoggerAnchored(bool);

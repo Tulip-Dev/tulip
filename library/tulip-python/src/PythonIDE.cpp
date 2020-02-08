@@ -31,6 +31,7 @@
 #include <QCryptographicHash>
 #include <QByteArray>
 #include <QRegExp>
+#include <QShortcut>
 
 #include <tulip/Graph.h>
 #include <tulip/DoubleProperty.h>
@@ -55,6 +56,7 @@
 #include <tulip/Perspective.h>
 
 #include <tulip/PythonIDE.h>
+#include <tulip/PythonPanel.h>
 #include <tulip/PythonPluginCreationDialog.h>
 #include <tulip/PythonEditorsTabWidget.h>
 
@@ -65,26 +67,18 @@ using namespace tlp;
 
 static QCryptographicHash hasher(QCryptographicHash::Md5);
 
-static const QString updateVisualizationFunc = "import tuliputils\n"
-                                               "\n"
-                                               "def updateVisualization(centerViews = True):\n"
-                                               "  tuliputils.updateVisualization(centerViews)\n"
-                                               "\n"
-                                               "\n";
+static const QString utilityFunctions = R"(
+import tuliputils
 
-static const QString pauseScriptFunc = "import tuliputils\n"
-                                       "\n"
-                                       "def pauseScript():\n"
-                                       "  tuliputils.pauseRunningScript()\n"
-                                       "\n"
-                                       "\n";
+def updateVisualization(centerViews = True):
+    tuliputils.updateVisualization(centerViews)
 
-static const QString runGraphScriptFunc = "import tuliputils\n"
-                                          "\n"
-                                          "def runGraphScript(scriptFile, graph):\n"
-                                          "  tuliputils.runGraphScript(scriptFile, graph)\n"
-                                          "\n"
-                                          "\n";
+def pauseScript():
+    tuliputils.pauseRunningScript()
+
+def runGraphScript(scriptFile, graph):
+    tuliputils.runGraphScript(scriptFile, graph)
+)";
 
 static QString cleanPropertyName(const QString &propertyName) {
   QString ret(propertyName);
@@ -137,126 +131,54 @@ static QString cleanPropertyName(const QString &propertyName) {
 
 static QString getDefaultScriptCode(const QString &pythonVersion, Graph *graph) {
 
-  QString scriptCode;
+  QString scriptCode = R"(# Powered by Python %1
+# To cancel the modifications performed by the script
+# on the current graph, click on the undo button.
+# Some useful keyboard shortcuts:
+#   * Ctrl + D: comment selected lines.
+#   * Ctrl + Shift + D: uncomment selected lines.
+#   * Ctrl + I: indent selected lines.
+#   * Ctrl + Shift + I: unindent selected lines.
+#   * Ctrl + Return: run script.
+#   * Ctrl + F: find selected text.
+#   * Ctrl + R: replace selected text.
+#   * Ctrl + Space: show auto-completion dialog.
+from tulip import tlp
+# The updateVisualization(centerViews = True) function can be called
+# during script execution to update the opened views
+# The pauseScript() function can be called to pause the script execution.
+# To resume the script execution, you will have to click on the
+# "Run script " button.
+# The runGraphScript(scriptFile, graph) function can be called to launch
+# another edited script on a tlp.Graph object.
+# The scriptFile parameter defines the script name to call
+# (in the form [a-zA-Z0-9_]+.py)
+# The main(graph) function must be defined
+# to run the script on the current graph
+def main(graph):
+)";
   QTextStream oss(&scriptCode);
-
-  oss << "# Powered by Python " << pythonVersion << endl << endl;
-  oss << "# To cancel the modifications performed by the script" << endl;
-  oss << "# on the current graph, click on the undo button." << endl << endl;
-
-  oss << "# Some useful keyboard shortcuts: " << endl;
-  oss << "#   * Ctrl + D: comment selected lines." << endl;
-  oss << "#   * Ctrl + Shift + D: uncomment selected lines." << endl;
-  oss << "#   * Ctrl + I: indent selected lines." << endl;
-  oss << "#   * Ctrl + Shift + I: unindent selected lines." << endl;
-  oss << "#   * Ctrl + Return: run script." << endl;
-  oss << "#   * Ctrl + F: find selected text." << endl;
-  oss << "#   * Ctrl + R: replace selected text." << endl;
-  oss << "#   * Ctrl + Space: show auto-completion dialog." << endl << endl;
-
-  oss << "from tulip import tlp" << endl << endl;
-  ;
-
-  oss << "# The updateVisualization(centerViews = True) function can be called" << endl;
-  oss << "# during script execution to update the opened views" << endl << endl;
-
-  oss << "# The pauseScript() function can be called to pause the script execution." << endl;
-  oss << "# To resume the script execution, you will have to click on the \"Run script \" button."
-      << endl
-      << endl;
-
-  oss << "# The runGraphScript(scriptFile, graph) function can be called to launch" << endl;
-  oss << "# another edited script on a tlp.Graph object." << endl;
-  oss << "# The scriptFile parameter defines the script name to call (in the form [a-zA-Z0-9_]+.py)"
-      << endl
-      << endl;
-
-  oss << "# The main(graph) function must be defined " << endl;
-  oss << "# to run the script on the current graph" << endl << endl;
-
-  oss << "def main(graph): " << endl;
 
   if (graph) {
 
     for (PropertyInterface *prop : graph->getObjectProperties()) {
-#ifdef NDEBUG
-      if (prop->getName() == "viewMetaGraph")
-        continue;
-#endif
       QString cleanPropName(tlp::tlpStringToQString(prop->getName()));
-
       cleanPropName.replace("\"", "\\\"");
-      oss << "  " << cleanPropertyName(tlp::tlpStringToQString(prop->getName()));
-      if (dynamic_cast<DoubleProperty *>(prop)) {
-        oss << " = graph.getDoubleProperty(\"" << cleanPropName << "\")" << endl;
-      }
 
-      else if (dynamic_cast<LayoutProperty *>(prop)) {
-        oss << " = graph.getLayoutProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      else if (dynamic_cast<IntegerProperty *>(prop)) {
-        oss << " = graph.getIntegerProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      else if (dynamic_cast<StringProperty *>(prop)) {
-        oss << " = graph.getStringProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      else if (dynamic_cast<SizeProperty *>(prop)) {
-        oss << " = graph.getSizeProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      else if (dynamic_cast<BooleanProperty *>(prop)) {
-        oss << " = graph.getBooleanProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      else if (dynamic_cast<ColorProperty *>(prop)) {
-        oss << " = graph.getColorProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      else if (dynamic_cast<GraphProperty *>(prop)) {
-        oss << " = graph.getGraphProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      else if (dynamic_cast<DoubleVectorProperty *>(prop)) {
-        oss << " = graph.getDoubleVectorProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      else if (dynamic_cast<CoordVectorProperty *>(prop)) {
-        oss << " = graph.getCoordVectorProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      else if (dynamic_cast<IntegerVectorProperty *>(prop)) {
-        oss << " = graph.getIntegerVectorProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      else if (dynamic_cast<SizeVectorProperty *>(prop)) {
-        oss << " = graph.getSizeVectorProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      else if (dynamic_cast<BooleanVectorProperty *>(prop)) {
-        oss << " = graph.getBooleanVectorProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      else if (dynamic_cast<ColorVectorProperty *>(prop)) {
-        oss << " = graph.getColorVectorProperty(\"" << cleanPropName << "\")" << endl;
-      }
-
-      else if (dynamic_cast<StringVectorProperty *>(prop)) {
-        oss << " = graph.getStringVectorProperty(\"" << cleanPropName << "\")" << endl;
-      }
+#ifdef NDEBUG
+      if (cleanPropName != "viewMetaGraph")
+#endif
+        oss << "    " << cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph['"
+            << cleanPropName << "']" << endl;
     }
   }
 
-  oss << "\n  for n in graph.getNodes():" << endl;
+  scriptCode += R"(
+    for n in graph.getNodes():
+        print(n)
+  )";
 
-  if (PythonInterpreter::getInstance()->getPythonVersion() >= 3.0)
-    oss << "    print(n)" << endl;
-  else
-    oss << "    print n" << endl;
-
-  return scriptCode;
+  return scriptCode.arg(pythonVersion);
 }
 
 static QString PYTHON_PATH("/python");
@@ -294,167 +216,148 @@ static QString getTulipPythonPluginSkeleton(const QString &pluginClassName,
   }
 
   QString pluginSkeleton;
-  QTextStream textStream(&pluginSkeleton);
 
-  textStream
-      << "# When the plugin development is finished, you can copy the associated Python file "
-      << endl;
-  textStream << "# to " << PythonInterpreter::pythonPluginsPathHome << endl;
-
+  QString pluginPaths = PythonInterpreter::pythonPluginsPathHome;
 #if defined(__APPLE__)
-
   if (!PythonInterpreter::pythonPluginsPath.contains(".app/Contents/"))
 #elif defined(_LINUX)
   if (!PythonInterpreter::pythonPluginsPath.startsWith("/tmp/.mount"))
 #endif
-    textStream << "# or " << PythonInterpreter::pythonPluginsPath << endl;
+    pluginPaths += "\n# or " + PythonInterpreter::pythonPluginsPath;
 
-  textStream << "# and it will be automatically loaded at Tulip startup" << endl << endl;
+  pluginSkeleton = QString(R"(
+# When the plugin development is finished, you can copy the associated
+# Python file to %1
+# and it will be automatically loaded at Tulip startup
 
-  textStream << "from tulip import tlp" << endl;
-  textStream << "import tulipplugins" << endl << endl;
+from tulip import tlp
+import tulipplugins
 
-  textStream << "class " << pluginClassName << "(" << pluginClass << "):" << endl;
-  textStream << "  def __init__(self, context):" << endl;
-  textStream << "    " << pluginClass << ".__init__(self, context)" << endl;
-  textStream << "    # You can add parameters to the plugin here through the following syntax:"
-             << endl;
-  textStream
-      << "    # self.add<Type>Parameter(\"<paramName>\", \"<paramDoc>\", \"<paramDefaultValue>\")"
-      << endl;
-  textStream << "    # (see the documentation of class tlp.WithParameter to see what parameter "
-                "types are supported)."
-             << endl
-             << endl;
+
+class %2(%3):
+    def __init__(self, context):
+        %3.__init__(self, context)
+        # You can add parameters to the plugin here through the
+        # following syntax:
+        # self.add<Type>Parameter('<paramName>', '<paramDoc>',
+        #                         '<paramDefaultValue>')
+        # (see the documentation of class tlp.WithParameter to see what
+        #  parameter types are supported).
+    )")
+                       .arg(pluginPaths, pluginClassName, pluginClass);
 
   if (pluginType != "Import" && pluginType != "Export") {
 
-    textStream << "  def check(self):" << endl;
-    textStream << "    # This method is called before applying the algorithm on the input graph."
-               << endl;
-    textStream << "    # You can perform some precondition checks here." << endl;
-    textStream
-        << "    # See comments in the run method to know how to have access to the input graph."
-        << endl
-        << endl;
-    textStream << "    # Must return a tuple (Boolean, string). First member indicates if the "
-                  "algorithm can be applied"
-               << endl;
-    textStream << "    # and the second one can be used to provide an error message." << endl;
-    textStream << "    return (True, \"\")" << endl << endl;
-    textStream << "  def run(self):" << endl;
-    textStream << "    # This method is the entry point of the algorithm when it is called" << endl;
-    textStream << "    # and must contain its implementation." << endl << endl;
-    textStream << "    # The graph on which the algorithm is applied can be accessed through"
-               << endl;
-    textStream << "    # the \"graph\" class attribute (see documentation of class tlp.Graph)."
-               << endl
-               << endl;
-    textStream << "    # The parameters provided by the user are stored in a dictionary" << endl;
-    textStream << "    # that can be accessed through the \"dataSet\" class attribute." << endl
-               << endl;
+    pluginSkeleton += R"(
+    def check(self):
+        # This method is called before applying the algorithm on the
+        # input graph. You can perform some precondition checks here.
+        # See comments in the run method to know how to have access to
+        # the input graph.
+        #
+        # Must return a tuple (Boolean, string). First member indicates if the
+        # algorithm can be applied and the second one can be used to provide
+        # an error message.
+        return (True, '')
 
+    def run(self):
+        # This method is the entry point of the algorithm when it is called
+        # and must contain its implementation.
+        #
+        # The graph on which the algorithm is applied can be accessed through
+        # the 'graph' class attribute (see documentation of class tlp.Graph).
+        #
+        # The parameters provided by the user are stored in a dictionary
+        # that can be accessed through the 'dataSet' class attribute.)";
+
+    QString propertyType;
     if (pluginType == "Layout") {
-      textStream << "    # The result of this layout algorithm must be stored in the" << endl;
-      textStream << "    # layout property accessible through the \"result\" class attribute"
-                 << endl;
-      textStream << "    # (see documentation to know how to work with graph properties)." << endl
-                 << endl;
+      propertyType = "layout";
     } else if (pluginType == "Size") {
-      textStream << "    # The result of this size algorithm must be stored in the" << endl;
-      textStream << "    # size property accessible through the \"result\" class attribute" << endl;
-      textStream << "    # (see documentation to know how to work with graph properties)." << endl
-                 << endl;
+      propertyType = "size";
     } else if (pluginType == "Measure") {
-      textStream << "    # The result of this measure algorithm must be stored in the" << endl;
-      textStream << "    # double property accessible through the \"result\" class attribute"
-                 << endl;
-      textStream << "    # (see documentation to know how to work with graph properties)." << endl
-                 << endl;
+      propertyType = "double";
     } else if (pluginType == "Color") {
-      textStream << "    # The result of this color algorithm must be stored in the" << endl;
-      textStream << "    # color property accessible through the \"result\" class attribute"
-                 << endl;
-      textStream << "    # (see documentation to know how to work with graph properties)." << endl
-                 << endl;
+      propertyType = "color";
     } else if (pluginType == "Selection") {
-      textStream << "    # The result of this selection algorithm must be stored in the" << endl;
-      textStream << "    # boolean property accessible through the \"result\" class attribute"
-                 << endl;
-      textStream << "    # (see documentation to know how to work with graph properties)." << endl
-                 << endl;
+      propertyType = "boolean";
     }
-
-    textStream << "    # The method must return a boolean indicating if the algorithm" << endl;
-    textStream << "    # has been successfully applied on the input graph." << endl;
-    textStream << "    return True" << endl << endl;
-
+    if (!propertyType.isEmpty()) {
+      QString resultProperty = R"(
+        #
+        # The result of this %1 algorithm must be stored in the
+        # %1 property accessible through the 'result' class attribute
+        # (see documentation to know how to work with graph properties).)";
+      pluginSkeleton += resultProperty.arg(propertyType);
+    }
   } else if (pluginType == "Import") {
-    textStream << "  def importGraph(self):" << endl;
-    textStream << "    # This method is called to import a new graph." << endl;
-    textStream
-        << "    # An empty graph to populate is accessible through the \"graph\" class attribute"
-        << endl;
-    textStream << "    # (see documentation of class tlp.Graph)." << endl << endl;
-    textStream << "    # The parameters provided by the user are stored in a dictionary" << endl;
-    textStream << "    # that can be accessed through the \"dataSet\" class attribute." << endl
-               << endl;
-
-    textStream << "    # The method must return a Boolean indicating if the" << endl;
-    textStream << "    # graph has been successfully imported." << endl;
-    textStream << "    return True" << endl << endl;
+    pluginSkeleton += R"(
+    def importGraph(self):
+        # This method is called to import a new graph.
+        # An empty graph to populate is accessible through the 'graph'
+        # class attribute (see documentation of class tlp.Graph).
+        #
+        # The parameters provided by the user are stored in a dictionary
+        # that can be accessed through the 'dataSet' class attribute.)";
   } else if (pluginType == "Export") {
-    textStream << "  def exportGraph(self, os):" << endl;
-    textStream << "    # This method is called to export a graph." << endl;
-    textStream << "    # The graph to export is accessible through the \"graph\" class attribute"
-               << endl;
-    textStream << "    # (see documentation of class tlp.Graph)." << endl << endl;
-    textStream << "    # The parameters provided by the user are stored in dictionary" << endl;
-    textStream << "    # that can be accessed through the \"dataSet\" class attribute." << endl
-               << endl;
-
-    textStream << "    # The os parameter is an output file stream (initialized by the Tulip GUI"
-               << endl;
-    textStream << "    # or by the tlp.exportGraph function.)." << endl;
-    textStream << "    # To write data to the file, you have to use the following syntax:" << endl
-               << endl;
-    textStream << "    # write the number of nodes and edges to the file" << endl;
-    textStream << "    # os << self.graph.numberOfNodes() << \"\\n\"" << endl;
-    textStream << "    # os << self.graph.numberOfEdges() << \"\\n\"" << endl << endl;
-    textStream << "    # The method must return a Boolean indicating if the" << endl;
-    textStream << "    # graph has been successfully exported." << endl;
-    textStream << "    return True" << endl << endl;
+    pluginSkeleton += R"(
+    def exportGraph(self, os):
+        # This method is called to export a graph.
+        # The graph to export is accessible through the 'graph' class attribute
+        # (see documentation of class tlp.Graph).
+        #
+        # The parameters provided by the user are stored in dictionary
+        # that can be accessed through the 'dataSet' class attribute.
+        #
+        # The os parameter is an output file stream (initialized by the
+        # Tulip GUI or by the tlp.exportGraph function).
+        # To write data to the file, you have to use the following syntax:
+        #
+        # write the number of nodes and edges to the file
+        # os << self.graph.numberOfNodes() << '\n'
+        # os << self.graph.numberOfEdges() << '\n')";
   }
 
-  textStream << "# The line below does the magic to register the plugin into the plugin database"
-             << endl;
-  textStream << "# and updates the GUI to make it accessible through the menus." << endl;
+  pluginSkeleton += R"(
+        #
+        # The method must return a Boolean indicating if the algorithm
+        # has been successfully applied on the input graph.
+        return True
+
+# The line below does the magic to register the plugin into the plugin database
+# and updates the GUI to make it accessible through the menus.)";
 
   if (pluginGroup.isEmpty()) {
-    textStream << "tulipplugins.registerPlugin(\"" << pluginClassName << "\", \"" << pluginName
-               << "\", \"" << pluginAuthor << "\", \"" << pluginDate << "\", \"" << pluginInfo
-               << "\", \"" << pluginRelease << "\")" << endl;
+    pluginSkeleton +=
+        QString(R"(
+tulipplugins.registerPlugin('%1', '%2', '%3', '%4', '%5', '%6')
+)")
+            .arg(pluginClassName, pluginName, pluginAuthor, pluginDate, pluginInfo, pluginRelease);
   } else {
-    textStream << "tulipplugins.registerPluginOfGroup(\"" << pluginClassName << "\", \""
-               << pluginName << "\", \"" << pluginAuthor << "\", \"" << pluginDate << "\", \""
-               << pluginInfo << "\", \"" << pluginRelease << "\", \"" << pluginGroup << "\")"
-               << endl;
+    pluginSkeleton += QString(R"(
+tulipplugins.registerPluginOfGroup('%1', '%2', '%3', '%4', '%5', '%6', '%7')
+)")
+                          .arg(pluginClassName, pluginName, pluginAuthor, pluginDate, pluginInfo,
+                               pluginRelease, pluginGroup);
   }
 
-  return pluginSkeleton;
+  return pluginSkeleton.mid(1);
 }
 
 PythonIDE::PythonIDE(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::PythonIDE), _pythonInterpreter(PythonInterpreter::getInstance()),
-      _dontTreatFocusIn(false), _project(nullptr), _graphsModel(nullptr), _scriptStopped(false),
-      _saveFilesToProject(true), _notifyProjectModified(false) {
+    : QFrame(parent), _ui(new Ui::PythonIDE), _pythonInterpreter(PythonInterpreter::getInstance()),
+      _pythonPanel(new PythonPanel()), _dontTreatFocusIn(false), _project(nullptr),
+      _graphsModel(nullptr), _scriptStopped(false), _saveFilesToProject(true),
+      _notifyProjectModified(false) {
   _ui->setupUi(this);
-  _ui->tabWidget->setDrawTabBarBgGradient(true);
-  _ui->tabWidget->setTextColor(QColor(200, 200, 200));
 
   _ui->mainScriptsTabWidget->clear();
   _ui->modulesTabWidget->clear();
   _ui->pluginsTabWidget->clear();
+  QVBoxLayout *layout = new QVBoxLayout();
+  layout->addWidget(_pythonPanel);
+  layout->setContentsMargins(0, 0, 0, 0);
+  _ui->interpreterTab->setLayout(layout);
 
   QList<int> sizes;
   sizes.push_back(550);
@@ -471,9 +374,7 @@ PythonIDE::PythonIDE(QWidget *parent)
   _moduleControlWidget = _ui->stackedWidget->widget(2);
 
   connect(_pythonInterpreter, SIGNAL(scriptExecutionPaused()), this, SLOT(currentScriptPaused()));
-  _pythonInterpreter->runString(updateVisualizationFunc);
-  _pythonInterpreter->runString(pauseScriptFunc);
-  _pythonInterpreter->runString(runGraphScriptFunc);
+  _pythonInterpreter->runString(utilityFunctions);
 
   connect(_ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
 
@@ -494,6 +395,16 @@ PythonIDE::PythonIDE(QWidget *parent)
   connect(_ui->increaseFontSizeButton_2, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
   connect(_ui->decreaseFontSizeButton_3, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
   connect(_ui->increaseFontSizeButton_3, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
+  auto shortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Minus), _ui->tabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(decreaseFontSize()));
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton, "decrease font size", "-");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton_2, "decrease font size", "-");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton_3, "decrease font size", "-");
+  shortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus), _ui->tabWidget);
+  connect(shortCut, SIGNAL(activated()), this, SLOT(increaseFontSize()));
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton, "increase font size", "-");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton_2, "increase font size", "-");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton_3, "increase font size", "-");
 
   connect(_ui->mainScriptsTabWidget, SIGNAL(fileSaved(int)), this, SLOT(scriptSaved(int)));
   connect(_ui->modulesTabWidget, SIGNAL(fileSaved(int)), this, SLOT(moduleSaved(int)));
@@ -502,6 +413,8 @@ PythonIDE::PythonIDE(QWidget *parent)
   connect(_ui->runScriptButton, SIGNAL(clicked()), this, SLOT(executeCurrentScript()));
   connect(_ui->pauseScriptButton, SIGNAL(clicked()), this, SLOT(pauseCurrentScript()));
   connect(_ui->stopScriptButton, SIGNAL(clicked()), this, SLOT(stopCurrentScript()));
+  _ui->progressBar->hide();
+
   connect(_ui->newMainScriptButton, SIGNAL(clicked()), this, SLOT(newScript()));
   connect(_ui->loadMainScriptButton, SIGNAL(clicked()), this, SLOT(loadScript()));
   connect(_ui->saveMainScriptButton, SIGNAL(clicked()), this, SLOT(saveScript()));
@@ -814,10 +727,10 @@ static bool checkAndGetPluginInfoFromSrcCode(const QString &pluginCode, QString 
       pos = rx.indexIn(pluginCode, pos + rx.matchedLength());
     }
 
-    rx.setPattern("^.*register.*Plugin.*\\(.*,.*\"([^,]+)\",.*$");
+    rx.setPattern("^.*registerPlugin.*\\(.*['\"]([^,]+)['\"],.*['\"]([^,]+)['\"],.*$");
 
     if (rx.indexIn(pluginCode) != -1) {
-      pluginName = rx.cap(1);
+      pluginName = rx.cap(2);
       return true;
     }
   }
@@ -1095,9 +1008,9 @@ void PythonIDE::removePythonPlugin() {
 
   if (tlp::PluginLister::pluginExists(QStringToTlpString(pluginName))) {
     tlp::PluginLister::removePlugin(QStringToTlpString(pluginName));
-    _ui->pluginStatusLabel->setText("Plugin has been successfully removed.");
+    _ui->pluginStatusLabel->setText("Plugin has been successfully unregistered.");
   } else {
-    _ui->pluginStatusLabel->setText("Plugin is not registered in the plugin database.");
+    _ui->pluginStatusLabel->setText("Plugin is not registered in the plugins list");
   }
 }
 
@@ -1212,12 +1125,16 @@ void PythonIDE::decreaseFontSize() {
   _ui->mainScriptsTabWidget->decreaseFontSize();
   _ui->pluginsTabWidget->decreaseFontSize();
   _ui->modulesTabWidget->decreaseFontSize();
+  _pythonPanel->decreaseFontSize();
+  _ui->consoleWidget->zoomOut();
 }
 
 void PythonIDE::increaseFontSize() {
   _ui->mainScriptsTabWidget->increaseFontSize();
   _ui->pluginsTabWidget->increaseFontSize();
   _ui->modulesTabWidget->increaseFontSize();
+  _pythonPanel->increaseFontSize();
+  _ui->consoleWidget->zoomIn();
 }
 
 QString PythonIDE::readProjectFile(const QString &filePath) {
@@ -1829,6 +1746,7 @@ void PythonIDE::saveAllScripts() {
 void PythonIDE::setGraphsModel(tlp::GraphHierarchiesModel *model) {
   _graphsModel = model;
   _ui->graphComboBox->setModel(model);
+  _pythonPanel->setModel(model);
 }
 
 void PythonIDE::dragEnterEvent(QDragEnterEvent *dragEv) {
@@ -1911,6 +1829,8 @@ void PythonIDE::executeCurrentScript() {
   _ui->runScriptButton->setEnabled(false);
   _ui->stopScriptButton->setEnabled(true);
   _ui->pauseScriptButton->setEnabled(true);
+  _ui->progressBar->show();
+  _ui->useUndoCB->setEnabled(false);
 
   QApplication::processEvents();
 
@@ -1954,12 +1874,16 @@ void PythonIDE::executeCurrentScript() {
   // console
   _pythonInterpreter->setDefaultSIGINTHandler();
 
+  _ui->useUndoCB->setEnabled(true);
+  _ui->progressBar->hide();
   _scriptStopped = false;
 }
 
 void PythonIDE::stopCurrentScript() {
   _scriptStopped = true;
   _pythonInterpreter->stopCurrentScript();
+  _ui->useUndoCB->setEnabled(true);
+  _ui->progressBar->hide();
 }
 
 bool PythonIDE::closeEditorTabRequested(PythonEditorsTabWidget *tabWidget, int idx,

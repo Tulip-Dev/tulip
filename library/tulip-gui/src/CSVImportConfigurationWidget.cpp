@@ -125,7 +125,7 @@ void PropertyConfigurationWidget::showPropertyCreationDialog() {
   QDialog dialog(this);
   ui = new Ui_CSVPropertyDialog();
   ui->setupUi(&dialog);
-  ui->label->setText(QString("Column #%1").arg(propertyNumber + 1));
+  ui->columnLabel->setText(QString("Column #%1").arg(propertyNumber + 1));
   propertyNameValidator->setCurrentIndex(propertyNumber);
   ui->nameCB->setValidator(propertyNameValidator);
   ui->typeCB->clear();

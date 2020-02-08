@@ -41,7 +41,7 @@ public:
       _lat = stod(value);
     } else if (_currentKey == "lon") {
       _lng = stod(value);
-      latLngs.push_back(make_pair(_lat, _lng));
+      latLngs.emplace_back(_lat, _lng);
     }
   }
 

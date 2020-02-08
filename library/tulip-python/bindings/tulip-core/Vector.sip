@@ -33,16 +33,19 @@ class Vec3f  {
 
 // Convert Python list or tuple of numbers to a tlp::Vec3f
 %ConvertToTypeCode
+  const sipTypeDef *sipType = sipFindType("tlp::Vec3f");
   // Check if type is compatible
   if (sipIsErr == NULL) {
-    if (sipCanConvertToType(sipPy, sipFindType("tlp::Vec3f"), SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
+    if (sipCanConvertToType(sipPy, sipType, SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
       return 1;
     }
     return isTupleAndCanConvertToVec3fType(sipPy);
   }
-  if (sipCanConvertToType(sipPy, sipFindType("tlp::Vec3f"), SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
+  if (sipCanConvertToType(sipPy, sipType, SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
     int state=0, err=0;
-    *sipCppPtr = new tlp::Vec3f(*static_cast<tlp::Vec3f*>(sipConvertToType(sipPy, sipFindType("tlp::Vec3f"), sipTransferObj, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err)));
+    tlp::Vec3f *v = static_cast<tlp::Vec3f*>(sipConvertToType(sipPy, sipType, sipTransferObj, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err));
+    *sipCppPtr = new tlp::Vec3f(*v);
+    sipReleaseType(v, sipType, state);
   } else {
     *sipCppPtr = convertToVec3fType<tlp::Vec3f>(sipPy);
   }

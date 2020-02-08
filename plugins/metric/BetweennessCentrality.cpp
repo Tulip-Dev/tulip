@@ -24,6 +24,7 @@
 #include <tulip/StaticProperty.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/GraphTools.h>
+#include <tulip/StringCollection.h>
 
 using namespace std;
 using namespace tlp;
@@ -44,7 +45,15 @@ static const char *paramHelp[] = {
     "An existing edge weight metric property.",
 
     // Average path length
-    "The computed average path length (-1 if not computed)"};
+    "The computed average path length",
+    // target
+    "Indicates whether the metric is computed only for nodes, edges, or both."};
+
+#define TARGET_TYPE "target"
+#define TARGET_TYPES "both;nodes;edges"
+#define NODES_TARGET 1
+#define EDGES_TARGET 2
+#define BOTH_TARGET 0
 
 /** \addtogroup metric */
 
@@ -83,26 +92,57 @@ static const char *paramHelp[] = {
  */
 class BetweennessCentrality : public DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Betweenness Centrality", "David Auber", "03/01/2005",
-                    "Computes the betweenness centrality.", "1.3", "Graph")
+  PLUGININFORMATION(
+      "Betweenness Centrality", "David Auber", "03/01/2005",
+      "Computes the betweeness centrality as described for<ul>"
+      "<li>nodes in <b>A Faster Algorithm for Betweenness Centrality</b>, U. Brandes, Journal of "
+      "Mathematical Sociology volume 25, pages 163-177 (2001)</li>"
+      "<li>edges in <b>Finding and evaluating community structure in networks</b>, M. E. J. Newman "
+      "and M. Girvan, Physics Reviews E, volume 69 (2004).</li></ul>"
+      "The average path length is alo computed.",
+      "1.4", "Graph")
   BetweennessCentrality(const PluginContext *context) : DoubleAlgorithm(context) {
     addInParameter<bool>("directed", paramHelp[0], "false");
     addInParameter<bool>("norm", paramHelp[1], "false", false);
     addInParameter<NumericProperty *>("weight", paramHelp[2], "", false);
-    addOutParameter<double>("average path length", paramHelp[3], "-1");
+    addOutParameter<double>("average path length", paramHelp[3], "");
+    addInParameter<StringCollection>(TARGET_TYPE, paramHelp[4], TARGET_TYPES, true,
+                                     "both <br> nodes <br> edges");
+    // result needs to be an inout parameter
+    // in order to preserve the original values of non targeted elements
+    // i.e if "target" = "nodes", the values of edges must be preserved
+    // and if "target" = "edges", the values of nodes must be preserved
+    parameters.setDirection("result", INOUT_PARAM);
   }
+
   bool run() override {
-    result->setAllNodeValue(0.0);
-    result->setAllEdgeValue(0.0);
     bool directed = false;
     bool norm = false;
     NumericProperty *weight = nullptr;
+    bool nodes(true), edges(true);
 
     if (dataSet != nullptr) {
       dataSet->get("directed", directed);
       dataSet->get("norm", norm);
       dataSet->get("weight", weight);
+      StringCollection targetType;
+      dataSet->get(TARGET_TYPE, targetType);
+
+      if (targetType.getCurrent() == NODES_TARGET) {
+        edges = false;
+        nodes = true;
+      } else if (targetType.getCurrent() == EDGES_TARGET) {
+        edges = true;
+        nodes = false;
+      } else {
+        edges = true;
+        nodes = true;
+      }
     }
+    if (nodes)
+      result->setAllNodeValue(0.0);
+    if (edges)
+      result->setAllEdgeValue(0.0);
 
     // Metric is 0 in this case
     if (graph->numberOfNodes() <= 2)
@@ -148,7 +188,8 @@ public:
           edge e = graph->existEdge(v, w, directed);
 
           if (e.isValid()) {
-            result->setEdgeValue(e, result->getEdgeValue(e) + vd);
+            if (edges)
+              result->setEdgeValue(e, result->getEdgeValue(e) + vd);
             if (weight)
               avg_path_length += vd * weight->getEdgeDoubleValue(e);
             else
@@ -156,7 +197,7 @@ public:
           }
         }
 
-        if (w != s)
+        if (nodes && w != s)
           result->setNodeValue(w, result->getNodeValue(w) + wD);
       }
     }
@@ -166,28 +207,24 @@ public:
 
     // Normalization
     if (norm || !directed) {
-      double n = graph->numberOfNodes();
-      const double nNormFactor = 1.0 / ((n - 1) * (n - 2));
-
-      for (auto s : graph->nodes()) {
-
+      auto n = graph->numberOfNodes();
+      double factor = norm ? (1.0 / ((n - 1) * (n - 2))) : 1.0;
+      if (!directed)
         // In the undirected case, the metric must be divided by two, then
-        if (norm)
-          result->setNodeValue(s, result->getNodeValue(s) * nNormFactor);
+        factor *= 0.5;
 
-        if (!directed)
-          result->setNodeValue(s, result->getNodeValue(s) * 0.5);
+      if (nodes) {
+        for (auto n : graph->nodes())
+          result->setNodeValue(n, result->getNodeValue(n) * factor);
       }
-
-      const double eNormFactor = 4.0 / (n * n);
-
-      for (auto e : graph->edges()) {
-
-        if (norm)
-          result->setEdgeValue(e, result->getEdgeValue(e) * eNormFactor);
-
+      if (edges) {
+        factor = norm ? (4.0 / (n * n)) : 1.0;
         if (!directed)
-          result->setEdgeValue(e, result->getEdgeValue(e) * 0.5);
+          // In the undirected case, the metric must be divided by two, then
+          factor *= 0.5;
+
+        for (auto e : graph->edges())
+          result->setEdgeValue(e, result->getEdgeValue(e) * factor);
       }
     }
     avg_path_length /= (nbNodes * (nbNodes - 1.));

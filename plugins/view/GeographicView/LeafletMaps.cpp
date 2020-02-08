@@ -349,8 +349,8 @@ void LeafletMaps::setMapBounds(Graph *graph,
 
   if (!nodesLatLngs.empty()) {
 
-    pair<double, double> minLatLng = make_pair(90, 180);
-    pair<double, double> maxLatLng = make_pair(-90, -180);
+    pair<double, double> minLatLng(90, 180);
+    pair<double, double> maxLatLng(-90, -180);
 
     unordered_map<node, pair<double, double>>::const_iterator it;
 

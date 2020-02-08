@@ -41,7 +41,10 @@ class InteractorGetInformation : public NodeLinkDiagramComponentInteractor {
     InteractorGetInformation *_interactor;
 
   public:
-    ConfigWidget(InteractorGetInformation *interactor) : _interactor(interactor) {}
+    ConfigWidget(InteractorGetInformation *interactor) : _interactor(interactor) {
+      setObjectName("configWidget");
+      setStyleSheet("#configWidget { background-color: white; } #label { font: bold; }");
+    }
 
     void hideEvent(QHideEvent *) override {
       _interactor->setVisibleProperties();
@@ -77,13 +80,36 @@ public:
         "The visible properties can be filtered using the list of properties displayed in the "
         "<b>Options</b> tab.<br/>"
         "If none is filtered, when the element properties panel is displayed, the display of the "
-        "visual rendering properties can be then toggled using a dedicated check box.");
-    push_back(new MousePanNZoomNavigator);
+        "visual rendering properties can be then toggled using a dedicated check box.<br/><br/>" +
+        "<u>3D Navigation in the graph</u><br/><br/>" +
+        "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys "
+        "</li></ul>" +
+        "X or Y rotation: <ul><li><b>Shift + Mouse left</b> down + up/down or left/right "
+        "moves</li></ul>" +
+#if !defined(__APPLE__)
+        "Z rotation: <ul><li><b>Ctrl + Mouse left</b> down + left/right moves</li><li> or "
+        "<b>Insert</b> key</li></ul>" +
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Ctrl + Mouse left</b> down "
+        "+ up/down moves</li><li> or <b>Pg "
+        "up/Pg down</b> keys</li></ul>"
+#else
+        "Z rotation: <ul><li><b>Alt + Mouse left</b> down + left/right moves</li><li> or "
+        "<b>Insert</b> key</li></ul>" +
+        "Translation: <ul><li><b>Arrow</b> keys</li></ul>" +
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>Alt + Mouse left</b> down "
+        "+ up/down moves</li><li> or <b>Pg up/Pg "
+        "down</b> keys</li></ul>"
+#endif
+        +
+        "Meta node navigation: <ul><li><b>double Mouse left click</b> go inside the metanode</li>" +
+        "<li><b>Ctrl + double Mouse left click</b> go outside the metanode</li></ul>");
+    push_back(new MouseNKeysNavigator);
     push_back(_elementInfo = new MouseShowElementInfo);
     // build configuration widget
     _configWidget = new ConfigWidget(this);
     QVBoxLayout *verticalLayout = new QVBoxLayout(_configWidget);
     QLabel *label = new QLabel("Visible properties");
+    label->setObjectName("label");
     verticalLayout->addWidget(label);
     _propsList = new StringsListSelectionWidget(_configWidget,
                                                 StringsListSelectionWidget::NON_ORDERABLE_LIST, 0);

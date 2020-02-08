@@ -46,7 +46,7 @@ MouseMagnifyingGlassInteractor::MouseMagnifyingGlassInteractor(const tlp::Plugin
     : GLInteractorComposite(QIcon(":/i_magnifying_glass.png"), "Magnifying glass") {}
 
 void MouseMagnifyingGlassInteractor::construct() {
-  push_back(new MousePanNZoomNavigator());
+  push_back(new MouseNKeysNavigator(false));
   push_back(new MouseMagnifyingGlassInteractorComponent());
 }
 

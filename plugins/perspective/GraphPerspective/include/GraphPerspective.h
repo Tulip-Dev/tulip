@@ -63,7 +63,7 @@ class GraphPerspective : public tlp::Perspective, tlp::Observable {
   void addRecentDocument(const QString &path);
 
   void showStartPanels(tlp::Graph *);
-  void applyRandomLayout(tlp::Graph *);
+  void applyDefaultLayout(tlp::Graph *);
 
   void buildPythonIDE();
 
@@ -84,6 +84,8 @@ public:
   tlp::GraphHierarchiesModel *model() const;
   void copy(tlp::Graph *, bool deleteAfter = false);
   tlp::Graph *createSubGraph(tlp::Graph *);
+  QAction *createPanelAction();
+  QAction *exportAction();
 
   void treatEvent(const tlp::Event &) override;
 
@@ -116,8 +118,7 @@ public slots:
   bool
   setGlMainViewPropertiesForGraph(tlp::Graph *g,
                                   const std::map<std::string, tlp::PropertyInterface *> &propsMap);
-  void setSearchOutput(bool);
-  void setPythonPanel(bool);
+  void showSearchDialog(bool = true);
   void openPreferences();
 
   void setAutoCenterPanelsOnDraw(bool f);
@@ -157,29 +158,29 @@ protected slots:
   void addEmptySubGraph();
   void CSVImport();
   void logCleared();
-  void findPlugins();
   void addNewGraph();
   void newProject();
   void openRecentFile();
   void changeSynchronization(bool);
   void openExternalFile();
   void showHideSideBar();
-  void showHideStatusBar();
-  void workspaceButtonClicked();
   void showStartMessage();
   void resetLoggerDialogPosition();
   void showHideLogger();
   void showHideMenuBar();
+  void updateLogIconsAndCounters();
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   void initPythonIDE();
 #endif
+  void displayStatusMessage(const QString &s) override;
+  void clearStatusMessage() override;
 
 protected:
   bool eventFilter(QObject *, QEvent *) override;
   void importGraph(const std::string &module, tlp::DataSet &data);
-  void updateLogIconsAndCounters();
   void destroyWorkspace();
 
+  QDialog *_searchDialog;
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   PythonPanel *_pythonPanel;
   tlp::PythonIDE *_pythonIDE;

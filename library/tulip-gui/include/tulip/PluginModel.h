@@ -41,7 +41,7 @@ private:
   QList<std::string> _list;
 
 public:
-  SimplePluginListModel(const QList<std::string> &plugins, QObject *parent = nullptr);
+  SimplePluginListModel(const std::list<std::string> &plugins, QObject *parent = nullptr);
   ~SimplePluginListModel() override;
   int columnCount(const QModelIndex & = QModelIndex()) const override;
   int rowCount(const QModelIndex &parent = QModelIndex()) const override;

@@ -57,7 +57,7 @@ private:
 };
 
 /** An interactor class to translate/rotate using keys or mouse movements,
-    or to zoom and pan using the mouse wheel or
+    or to zoom and pan using the mouse wheel
  */
 class TLP_QT_SCOPE MouseNKeysNavigator : public MousePanNZoomNavigator {
 private:
@@ -66,7 +66,9 @@ private:
   QCursor oldCursor;
 
 public:
-  MouseNKeysNavigator() : currentSpecInteractorComponent(nullptr), nldc(nullptr) {}
+  MouseNKeysNavigator(bool enableMouseNavigation = true)
+      : currentSpecInteractorComponent(nullptr), nldc(nullptr),
+        mouseNavigationDisabled(!enableMouseNavigation) {}
   ~MouseNKeysNavigator() override {}
   bool eventFilter(QObject *, QEvent *) override;
   void clear() override;
@@ -79,6 +81,7 @@ private:
   std::vector<tlp::Camera> cameraHierarchy;
   std::vector<tlp::node> nodeHierarchy;
   std::vector<float> alphaHierarchy;
+  bool mouseNavigationDisabled;
 };
 } // namespace tlp
 #endif

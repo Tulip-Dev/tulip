@@ -200,30 +200,6 @@
     <string>Shift+Del</string>
    </property>
   </action>
-  <action name="actionCreate_panel">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/16/list-add.png</normaloff>:/tulip/graphperspective/icons/16/list-add.png</iconset>
-   </property>
-   <property name="text">
-    <string>Add panel</string>
-   </property>
-   <property name="toolTip">
-    <string>Open a new visualization panel on the highlighted graph</string>
-   </property>
-  </action>
-  <action name="actionExport">
-   <property name="icon">
-    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
-     <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
-   </property>
-   <property name="text">
-    <string>Export</string>
-   </property>
-   <property name="toolTip">
-    <string>Export the highlighted graph</string>
-   </property>
-  </action>
   <action name="actionRename">
    <property name="icon">
     <iconset resource="../resources/GraphPerspective.qrc">
@@ -446,22 +422,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionCreate_panel</sender>
-   <signal>triggered()</signal>
-   <receiver>GraphHierarchiesEditorData</receiver>
-   <slot>createPanel()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>117</x>
-     <y>208</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>actionExpand_hierarchy</sender>
    <signal>triggered()</signal>
    <receiver>GraphHierarchiesEditorData</receiver>
@@ -489,22 +449,6 @@
     </hint>
     <hint type="destinationlabel">
      <x>298</x>
-     <y>208</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionExport</sender>
-   <signal>triggered()</signal>
-   <receiver>GraphHierarchiesEditorData</receiver>
-   <slot>exportGraph()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>117</x>
      <y>208</y>
     </hint>
    </hints>
@@ -653,7 +597,6 @@
   <slot>createPanel()</slot>
   <slot>collapseGraphHierarchy()</slot>
   <slot>expandGraphHierarchy()</slot>
-  <slot>exportGraph()</slot>
   <slot>renameGraph()</slot>
   <slot>doubleClicked(QModelIndex)</slot>
   <slot>saveGraphToFile()</slot>

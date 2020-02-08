@@ -49,7 +49,8 @@ public:
   void construct() override {
     setConfigurationWidgetText(
         QString("<h3>Selection nodes/edges in a rectangle</h3>") +
-        "Draw selection rectangle.<br/><b>Mouse left</b> down indicates the first corner, <b>Mouse "
+        "<u>Draw selection rectangle</u><br/><b>Mouse left</b> down indicates the first corner, "
+        "<b>Mouse "
         "left</b> up indicates the opposite corner,<br/>all graph elements instersecting the "
         "rectangle are selected<br/><br/>" +
 #if !defined(__APPLE__)
@@ -57,8 +58,18 @@ public:
 #else
         "Add/Remove from selection: <ul><li><b>Alt + Mouse left</b> click</li></ul>" +
 #endif
-        "Remove from selection: <ul><li><b>Shift + Mouse</b> click</li></ul>");
-    push_back(new MousePanNZoomNavigator);
+        "Remove from selection: <ul><li><b>Shift + Mouse</b> click</li></ul>" +
+        "<u>Navigation in the graph</u><br/><br/>" +
+        "Translation: <ul><li><b>Arrow</b> keys</li></ul>" +
+#if !defined(__APPLE__)
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Pg up/Pg "
+        "down</b> keys</li></ul>"
+#else
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>Pg up/Pg "
+        "down</b> keys</li></ul>"
+#endif
+    );
+    push_back(new MouseNKeysNavigator(false));
     push_back(new MouseSelector);
   }
 

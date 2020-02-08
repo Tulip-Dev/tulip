@@ -34,15 +34,15 @@ Generate a graph
 
 A graph with nodes and edges is now displayed. You can manipulate the camera with a few commands :
 
-* You can zoom in and out with the mouse wheel or with *Ctrl+LClick* and a forward or backward movement of the mouse.
+* You can zoom in and out with the mouse wheel or with **Ctrl+Left-Click** and a forward or backward movement of the mouse.
 
 * Left-click and drag to move the graph.
 
-* *Shift+LClick* rotates the graph around the X and Y axis, *Ctrl+LClick* and a translation of the mouse to the left or the right rotates around the Z axis.
+* **Shift+Left-Click** rotates the graph around the X and Y axis, **Ctrl+Left-Click** and a translation of the mouse to the left or the right rotates around the Z axis.
 
-* To reset the view, just right-click anywhere in the workspace and select *Center view* (*Ctrl+Shift+C*).
+* To reset the view, just right-click anywhere in the workspace and select *Center view* (**Ctrl+Shift+C**).
 
-**A few precisions towards the Mac users:** Tulip is multi-platform, however, significant changes can be spotted from one OS to another. In addition to the different fonts and window systems, the key combinations can also slightly vary. Most of the time in the mouse key combinations, the use of the *Ctrl* key is replaced by *Alt* and in the keyboard shortcuts it is replaced by *⌘*.
+**A few precisions towards the Mac users:** Tulip is multi-platform, however, significant changes can be spotted from one OS to another. In addition to the different fonts and window systems, the key combinations can also slightly vary. Most of the time in the mouse key combinations, the use of the **Ctrl** key is replaced by **Alt** and in the keyboard shortcuts it is replaced by **⌘**.
 
 
 .. _first_create:
@@ -54,7 +54,7 @@ Build a Graph
 
 * Select the *Add nodes/edges* tool (|icon_wst_add_nodes_edges|). Left click on a few different places in the workspace: each click adds a node. Now, you can add a few links: left click on the source node, then on the target node to create it (middle click aborts the current edge creation).
 
-* To delete an element, right click on the element to remove and select the *Delete* item in the contextual menu than displayed. You can also select the *Delete nodes or edges* tool (|icon_wst_delete_nodes_edges|) and click on the element you want to remove.
+* To delete an element, right click on the element and select the *Delete* item in the contextual menu then displayed. You can also select the *Delete nodes or edges* tool (|icon_wst_delete_nodes_edges|) and click on the element you want to remove.
 
 
 .. _first_save:
@@ -84,18 +84,21 @@ As a visualization tool, Tulip offers several algorithms to adapt your graph lay
 .. image:: _images/tutorial_beginner-graph_tangled.png
      :width: 600
 
-Since node positions are chosen randomly upon generation, the layout is tangled and not really clear.
+When the generation algorithm does not fix nodes positions, by default, if the generated graph is a tree, the *layout algorithm* "Tree Radial" is applied; if not the "FM^3 (OGDF)" layout algorithm is applied.
 
-* To improve it, we can apply a *Layout algorithm*. In the Algorithm window, select *Layout → Force directed → GEM (Frick)*. A new position for each node will be computed in order to get a better layout:
+* To try to improve it, we can apply another *layout algorithm*. In the **Algorithms** window, select *Layout → Force directed → GEM (Frick)*. A new position for each node will be computed in order to get another layout:
 
 .. image:: _images/tutorial_beginner-graph_untangled.png
      :width: 600
 
-Some *layout* algorithms can only be applied to graphs belonging to a specific graph class. For instance, the *Mixed Model* algorithm can only be applied to a simple graph. The *Tree layout* algorithms are dedicated to trees but most of them can be applied to graph of any type (using a spanning tree of the graph); so do not hesitate to experiment in order to find the perfect layout for your data.
+Some *layout* algorithms can only be applied to graphs belonging to a specific graph class. For instance, the *Mixed Model* algorithm can only be applied to a simple graph. The *Tree layout* algorithms are dedicated to trees but most of them can be applied to graph of any type (for non-tree graph, the algorithms are applied to a spanning tree of each connected component of the graph); so do not hesitate to experiment in order to find the perfect layout for your data.
 
 There are many algorithms for testing, coloring, resizing... more information on them can be found in :ref:`the Algorithm section <algo>`.
 
 .. |icon_import| image:: ../../library/tulip-gui/resources/icons/64/document-import.png
-     :width: 32
+     :width: 24
 .. |icon_wst_add_nodes_edges| image:: ../../library/tulip-gui/resources/icons/i_addedge.png
+     :width: 15
+
 .. |icon_wst_delete_nodes_edges| image:: ../../library/tulip-gui/resources/icons/i_del.png
+     :width: 15

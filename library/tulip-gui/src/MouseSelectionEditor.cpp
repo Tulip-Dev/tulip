@@ -349,6 +349,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
         break;
       }
     }
+    return hasSelection;
   }
 
   if (e->type() == QEvent::MouseMove && qMouseEv->buttons() & Qt::LeftButton && operation != NONE) {

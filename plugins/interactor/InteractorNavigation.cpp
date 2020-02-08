@@ -49,18 +49,21 @@ public:
     setConfigurationWidgetText(
         QString("<h3>Navigate in graph</h3>") + "3D Navigation in the graph<br/><br/>" +
         "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys "
-        "down</li></ul>" +
+        "</li></ul>" +
         "X or Y rotation: <ul><li><b>Shift + Mouse left</b> down + up/down or left/right "
         "moves</li></ul>" +
 #if !defined(__APPLE__)
         "Z rotation: <ul><li><b>Ctrl + Mouse left</b> down + left/right moves</li><li> or "
         "<b>Insert</b> key</li></ul>" +
-        "Zoom/Unzoom: <ul><li><b>Ctrl + Mouse left</b> down + up/down moves</li><li> or <b>Pg "
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Ctrl + Mouse left</b> down "
+        "+ up/down moves</li><li> or <b>Pg "
         "up/Pg down</b> keys</li></ul>"
 #else
         "Z rotation: <ul><li><b>Alt + Mouse left</b> down + left/right moves</li><li> or "
         "<b>Insert</b> key</li></ul>" +
-        "Zoom/Unzoom: <ul><li><b>Alt + Mouse left</b> down + up/down moves</li><li> or <b>Pg up/Pg "
+        "Translation: <ul><li><b>Arrow</b> keys</li></ul>" +
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>Alt + Mouse left</b> down "
+        "+ up/down moves</li><li> or <b>Pg up/Pg "
         "down</b> keys</li></ul>"
 #endif
         +

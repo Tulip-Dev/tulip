@@ -52,14 +52,13 @@ template<TYPE>
   }
 
   // Go through each element in the C++ instance and convert it to a
-  // wrapped P2d.
+  // SIP wrapper.
   for (size_t i = 0; i < sipCpp -> size(); ++i) {
     TYPE *cpp = new TYPE(sipCpp -> at(i));
     PyObject *pobj;
 
     // Get the Python wrapper for the Type instance, creating a new
     // one if necessary, and handle any ownership transfer.
-    //if ((pobj = sipConvertFromNewType(cpp, kpTypeDef, sipTransferObj)) == NULL) {
     if ((pobj = sipConvertFromNewType(cpp, kpTypeDef, sipTransferObj)) == NULL) {
       // There was an error so garbage collect the Python list.
       Py_XDECREF(l);
@@ -141,7 +140,7 @@ template<TYPE*>
   }
 
   // Go through each element in the C++ instance and convert it to a
-  // wrapped P2d.
+  // SIP wrapper.
   for (size_t i = 0; i < sipCpp -> size(); ++i) {
     PyObject *pobj;
 

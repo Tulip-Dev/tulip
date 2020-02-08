@@ -20,7 +20,7 @@
 #ifndef PYTHONPLUGINSIDE_H
 #define PYTHONPLUGINSIDE_H
 
-#include <QWidget>
+#include <QFrame>
 #include <QDateTime>
 #include <QMap>
 #include <QUrl>
@@ -33,6 +33,8 @@ namespace Ui {
 class PythonIDE;
 }
 
+class PythonPanel;
+
 namespace tlp {
 
 class Graph;
@@ -43,11 +45,12 @@ class PythonInterpreter;
 class PythonEditorsTabWidget;
 class DataSet;
 
-class TLP_PYTHON_SCOPE PythonIDE : public QWidget {
+class TLP_PYTHON_SCOPE PythonIDE : public QFrame {
 
   Q_OBJECT
   Ui::PythonIDE *_ui;
   tlp::PythonInterpreter *_pythonInterpreter;
+  PythonPanel *_pythonPanel;
   bool _dontTreatFocusIn;
   tlp::TulipProject *_project;
   tlp::GraphHierarchiesModel *_graphsModel;

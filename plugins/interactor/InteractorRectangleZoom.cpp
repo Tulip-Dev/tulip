@@ -46,11 +46,22 @@ public:
    * Construct chain of responsibility
    */
   void construct() override {
-    setConfigurationWidgetText(QString("<h3>Zoom on rectangle</h3>") +
-                               "Zoom on selected rectangle.<br><b>Mouse left</b> down indicates "
-                               "the first corner.<br> <b>Mouse left</b> up indicates the opposite "
-                               "corner.<br> <b>Mouse left Doucle click</b> to center the view.");
-    push_back(new MousePanNZoomNavigator);
+    setConfigurationWidgetText(
+        QString("<h3>Zoom on rectangle</h3>") +
+        "<u>Zoom on selected rectangle</u><br/><br/><b>Mouse left</b> down indicates "
+        "the first corner.<br/> <b>Mouse left</b> up indicates the opposite "
+        "corner.<br/> <b>Mouse left Doucle click</b> to center the view.<br/><br/>" +
+        "<u>Navigation in the graph</u><br/><br/>" +
+        "Translation: <ul><li><b>Arrow</b> keys</li></ul>" +
+#if !defined(__APPLE__)
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Pg up/Pg "
+        "down</b> keys</li></ul>"
+#else
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>Pg up/Pg "
+        "down</b> keys</li></ul>"
+#endif
+    );
+    push_back(new MouseNKeysNavigator(false));
     push_back(new MouseBoxZoomer);
   }
 

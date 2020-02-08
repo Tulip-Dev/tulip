@@ -61,7 +61,10 @@ class Color {
 
   if (sipCanConvertToType(sipPy, sipFindType("tlp::Color"), SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
     int state=0, err=0;
-    *sipCppPtr = new tlp::Color(*static_cast<tlp::Color*>(sipConvertToType(sipPy, sipFindType("tlp::Color"), sipTransferObj, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err)));
+    const sipTypeDef *sipType  = sipFindType("tlp::Color");
+    tlp::Color *c = static_cast<tlp::Color*>(sipConvertToType(sipPy, sipType, NULL, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err));
+    *sipCppPtr = new tlp::Color(*c);
+    sipReleaseType(c, sipType, state);
   } else {
     unsigned char r = 0;
     unsigned char g = 0;

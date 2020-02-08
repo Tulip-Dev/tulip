@@ -128,6 +128,8 @@ public:
     return _pythonVersion;
   }
 
+  QString getPythonFullVersionStr() const;
+
   double getPythonVersion() const;
 
   QString getPythonShellBanner();

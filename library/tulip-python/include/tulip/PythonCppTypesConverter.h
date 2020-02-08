@@ -92,10 +92,12 @@ public:
   bool convert(PyObject *pyObject, T &cppObject) {
     std::string className = tlp::demangleClassName(typeid(T).name());
 
-    void *cppObjPointer = convertSipWrapperToCppType(pyObject, className);
+    void *pointer = convertSipWrapperToCppType(pyObject, className);
 
-    if (cppObjPointer) {
-      cppObject = *static_cast<T *>(cppObjPointer);
+    if (pointer) {
+      T *cppObjectPointer = static_cast<T *>(pointer);
+      cppObject = *cppObjectPointer;
+      delete cppObjectPointer;
       return true;
     }
 

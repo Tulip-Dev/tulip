@@ -36,30 +36,22 @@
 #include <QDesktopWidget>
 #include <QFileInfo>
 #include <QScreen>
+#include <QPushButton>
 
 #include "ui_FindReplaceDialog.h"
-
-#if (QT_VERSION < QT_VERSION_CHECK(5, 11, 0))
-#define FONT_METRICS_WIDTH(ch) fontMetrics().width(QLatin1Char(ch))
-#else
-#define FONT_METRICS_WIDTH(ch) fontMetrics().horizontalAdvance(QLatin1Char(ch))
-#endif
-
-#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
-#define TAB_STOP_WIDTH tabStopWidth()
-#define SET_TAB_STOP_WIDTH(w) setTabStopWidth(w)
-#else
-#define TAB_STOP_WIDTH tabStopDistance()
-#define SET_TAB_STOP_WIDTH(w) setTabStopDistance(w)
-#endif
 
 using namespace std;
 using namespace tlp;
 
-class GragKeyboardFocusEventFilter : public QObject {
+class GrabKeyboardFocusEventFilter : public QObject {
 public:
   bool eventFilter(QObject *, QEvent *event) override {
     if (event->type() == QEvent::ShortcutOverride) {
+      // do not override decrease/increase font size shortcuts
+      QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+      if ((ke->modifiers() & Qt::ControlModifier) &&
+          (ke->key() == Qt::Key_Minus || ke->key() == Qt::Key_Plus))
+        return false;
       event->accept();
       return true;
     }
@@ -68,7 +60,7 @@ public:
   }
 };
 
-static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
+static GrabKeyboardFocusEventFilter keyboardFocusEventFilter;
 
 static char sepChar[] = {' ', '\t', '=', '(', '[', '{', ',', '*', '+', '/', '^', '-', 0};
 
@@ -260,15 +252,24 @@ bool AutoCompletionList::eventFilter(QObject *obj, QEvent *event) {
 }
 
 FindReplaceDialog::FindReplaceDialog(QPlainTextEdit *editor, QWidget *parent)
-    : QDialog(parent), _ui(new Ui::FindReplaceDialogData), _editor(editor) {
+    : QDialog(parent,
+              static_cast<Qt::WindowFlags>(Qt::Tool | Qt::CustomizeWindowHint |
+                                           Qt::WindowTitleHint | Qt::WindowCloseButtonHint)),
+      _ui(new Ui::FindReplaceDialogData), _editor(editor) {
   _ui->setupUi(this);
-  connect(_ui->findButton, SIGNAL(clicked()), this, SLOT(doFind()));
-  connect(_ui->replaceButton, SIGNAL(clicked()), this, SLOT(doReplace()));
-  connect(_ui->replaceFindButton, SIGNAL(clicked()), this, SLOT(doReplaceFind()));
-  connect(_ui->replaceAllButton, SIGNAL(clicked()), this, SLOT(doReplaceAll()));
-  connect(_ui->closeButton, SIGNAL(clicked()), this, SLOT(hide()));
-  connect(_ui->forwardRB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
-  connect(_ui->backwardRB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
+  _findButton = _ui->buttonBox->button(QDialogButtonBox::Reset);
+  _findButton->setText("Find");
+  connect(_findButton, SIGNAL(clicked()), this, SLOT(doFind()));
+  _replaceFindButton = _ui->buttonBox->button(QDialogButtonBox::RestoreDefaults);
+  _replaceFindButton->setText("Replace/Find");
+  connect(_replaceFindButton, SIGNAL(clicked()), this, SLOT(doReplaceFind()));
+  _replaceButton = _ui->buttonBox->button(QDialogButtonBox::Ignore);
+  connect(_replaceButton, SIGNAL(clicked()), this, SLOT(doReplace()));
+  _replaceButton->setText("Replace");
+  _replaceAllButton = _ui->buttonBox->button(QDialogButtonBox::Retry);
+  connect(_replaceAllButton, SIGNAL(clicked()), this, SLOT(doReplaceAll()));
+  _replaceAllButton->setText("Replace All");
+  connect(_ui->backwardCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
   connect(_ui->regexpCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
   connect(_ui->regexpCB, SIGNAL(toggled(bool)), this, SLOT(regexpToggled(bool)));
   connect(_ui->wholeWordCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
@@ -286,16 +287,16 @@ void FindReplaceDialog::setTextToFind(const QString &text) {
 }
 
 void FindReplaceDialog::textToFindChanged() {
-  _ui->replaceButton->setEnabled(false);
-  _ui->replaceFindButton->setEnabled(false);
+  _replaceButton->setEnabled(false);
+  _replaceFindButton->setEnabled(false);
   QString text = _ui->textToFind->text();
 
   if (text.isEmpty()) {
-    _ui->findButton->setEnabled(false);
-    _ui->replaceAllButton->setEnabled(false);
+    _findButton->setEnabled(false);
+    _replaceAllButton->setEnabled(false);
   } else {
-    _ui->findButton->setEnabled(true);
-    _ui->replaceAllButton->setEnabled(true);
+    _findButton->setEnabled(true);
+    _replaceAllButton->setEnabled(true);
   }
 }
 
@@ -312,8 +313,8 @@ void FindReplaceDialog::setFindMode(const bool findMode) {
 }
 
 void FindReplaceDialog::setSearchResult(const bool result) {
-  _ui->replaceButton->setEnabled(result);
-  _ui->replaceFindButton->setEnabled(result);
+  _replaceButton->setEnabled(result);
+  _replaceFindButton->setEnabled(result);
 
   if (!result) {
     _ui->searchStatusLabel->setText("String Not Found");
@@ -330,7 +331,7 @@ bool FindReplaceDialog::doFind() {
 
   QTextDocument::FindFlags findFlags;
 
-  if (!_ui->forwardRB->isChecked()) {
+  if (_ui->backwardCB->isChecked()) {
     findFlags |= QTextDocument::FindBackward;
   }
 
@@ -357,10 +358,10 @@ bool FindReplaceDialog::doFind() {
   } else if (_ui->wrapSearchCB->isChecked()) {
     QTextCursor cursor = _editor->textCursor();
 
-    if (!_ui->backwardRB->isChecked()) {
-      cursor.movePosition(QTextCursor::Start);
-    } else {
+    if (_ui->backwardCB->isChecked()) {
       cursor.movePosition(QTextCursor::End);
+    } else {
+      cursor.movePosition(QTextCursor::Start);
     }
 
     if (!_ui->regexpCB->isChecked()) {
@@ -441,15 +442,11 @@ void FindReplaceDialog::doReplaceAll() {
   }
 }
 
-void FindReplaceDialog::hideEvent(QHideEvent *) {
-  _editor->setFocus();
-}
-
 AutoCompletionList *PythonCodeEditor::_autoCompletionList = nullptr;
 AutoCompletionDataBase *PythonCodeEditor::_autoCompletionDb = nullptr;
 
 PythonCodeEditor::PythonCodeEditor(QWidget *parent)
-    : QPlainTextEdit(parent), _highlighter(nullptr), _tooltipActive(false), _indentPattern("  ") {
+    : QPlainTextEdit(parent), _highlighter(nullptr), _tooltipActive(false), _indentPattern(4, ' ') {
   installEventFilter(&keyboardFocusEventFilter);
   setAutoIndentation(true);
   setIndentationGuides(true);
@@ -479,7 +476,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent)
 
   _lineNumberArea = new LineNumberArea(this);
 
-  updateTabStopWidth();
+  updateTabWidth();
 
   updateLineNumberAreaWidth();
 
@@ -513,7 +510,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent)
     }
   }
 
-  _findReplaceDialog = new FindReplaceDialog(this);
+  _findReplaceDialog = nullptr;
 
   connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth()));
   connect(this, SIGNAL(updateRequest(const QRect &, int)), this,
@@ -565,7 +562,7 @@ int PythonCodeEditor::lineNumberAreaWidth() const {
     ++digits;
   }
 
-  int space = 3 + FONT_METRICS_WIDTH('9') * digits;
+  int space = 3 + charWidth('9') * digits;
   return space;
 }
 
@@ -618,8 +615,8 @@ static float clamp(float f, float minV, float maxV) {
   return std::min(std::max(f, minV), maxV);
 }
 
-void PythonCodeEditor::updateTabStopWidth() {
-  SET_TAB_STOP_WIDTH(2 * FONT_METRICS_WIDTH(' '));
+void PythonCodeEditor::updateTabWidth() {
+  setTabWidth(textWidth(_indentPattern));
 }
 
 void PythonCodeEditor::zoomIn() {
@@ -630,7 +627,7 @@ void PythonCodeEditor::zoomIn() {
   format.setFont(_currentFont);
   setCurrentCharFormat(format);
   setTextCursor(cursor);
-  updateTabStopWidth();
+  updateTabWidth();
 }
 
 void PythonCodeEditor::zoomOut() {
@@ -641,7 +638,7 @@ void PythonCodeEditor::zoomOut() {
   format.setFont(_currentFont);
   setCurrentCharFormat(format);
   setTextCursor(cursor);
-  updateTabStopWidth();
+  updateTabWidth();
 }
 
 void PythonCodeEditor::showEvent(QShowEvent *event) {
@@ -668,9 +665,9 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
 
     for (int i = 0; i < _toolTipPos.y(); ++i) {
       if (blockText[i] == '\t') {
-        left += TAB_STOP_WIDTH;
+        left += tabWidth();
       } else {
-        left += FONT_METRICS_WIDTH(blockText[i].toLatin1());
+        left += charWidth(blockText[i].toLatin1());
       }
     }
 
@@ -682,7 +679,7 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
       int w = 0;
 
       for (int j = 0; j < toolTipLines[i].length(); ++j) {
-        w += FONT_METRICS_WIDTH(toolTipLines[i][j].toLatin1());
+        w += charWidth(toolTipLines[i][j].toLatin1());
       }
 
       width = std::max(w, width);
@@ -692,7 +689,7 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
 #ifndef __APPLE__
     QRect tooltipRect(tPos, tPos + QPoint(width, height));
 #else
-    QRect tooltipRect(tPos, tPos + QPoint(width + 2 * FONT_METRICS_WIDTH(' '), height));
+    QRect tooltipRect(tPos, tPos + QPoint(width + 2 * charWidth(' '), height));
 #endif
     painter.drawRect(tooltipRect);
     painter.fillRect(tooltipRect, QColor(249, 251, 100, 200));
@@ -715,30 +712,31 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
   int bottom = top + int(blockBoundingRect(block).height());
 
   QPen pen;
-  pen.setStyle(Qt::DotLine);
+  pen.setBrush(Qt::gray);
   painter.setPen(pen);
 
   while (block.isValid() && top <= event->rect().bottom()) {
     if (block.isVisible() && bottom >= event->rect().top()) {
       QString text = block.text();
-      int indentVal = 0;
 
-      for (int i = 0; i < text.length(); ++i) {
-        if (text[i] == ' ')
-          indentVal += FONT_METRICS_WIDTH(' ');
-        else if (text[i] == '\t')
-          indentVal += TAB_STOP_WIDTH;
-        else
+      int i = 0;
+      int nbLines = 0;
+      QString s;
+      for (; i < text.length(); ++i) {
+        if (text[i] != ' ' && text[i] != '\t') {
           break;
+        }
+        s += text[i];
+        if (s == _indentPattern) {
+          ++nbLines;
+          s = "";
+        }
       }
-
-      int i = 1;
-
-      while (indentVal > TAB_STOP_WIDTH) {
-        painter.drawLine(contentOffset().x() + i * TAB_STOP_WIDTH + 4, top,
-                         contentOffset().x() + i * TAB_STOP_WIDTH + 4, bottom);
-        indentVal -= TAB_STOP_WIDTH;
-        ++i;
+      s = _indentPattern;
+      for (i = 0; i < nbLines - 1; ++i) {
+        int x = contentOffset().x() + textWidth(s) + 4;
+        painter.drawLine(x, top, x, bottom);
+        s += _indentPattern;
       }
     }
 
@@ -962,6 +960,23 @@ void PythonCodeEditor::highlightErrors() {
 
   setExtraSelections(selections);
 }
+void PythonCodeEditor::showFindDialog(QString selection, bool findMode) {
+  if (!_findReplaceDialog) {
+    QWidget *top = window();
+    while (top->parentWidget() != nullptr)
+      top = top->parentWidget();
+
+    _findReplaceDialog = new FindReplaceDialog(this, top);
+  }
+
+  if (!selection.isEmpty())
+    _findReplaceDialog->setTextToFind(selection);
+
+  _findReplaceDialog->show();
+  _findReplaceDialog->raise();
+  _findReplaceDialog->activateWindow();
+  _findReplaceDialog->setFindMode(findMode);
+}
 
 void PythonCodeEditor::keyPressEvent(QKeyEvent *e) {
 
@@ -996,25 +1011,9 @@ void PythonCodeEditor::keyPressEvent(QKeyEvent *e) {
               e->key() == Qt::Key_Backtab)) {
     unindentSelectedCode();
   } else if (findReplaceActivated() && e->modifiers() == modifier && e->key() == Qt::Key_F) {
-    QString selection = textCursor().selectedText();
-
-    if (!selection.isEmpty())
-      _findReplaceDialog->setTextToFind(selection);
-
-    _findReplaceDialog->show();
-    _findReplaceDialog->raise();
-    _findReplaceDialog->activateWindow();
-    _findReplaceDialog->setFindMode(true);
+    showFindDialog(textCursor().selectedText(), true);
   } else if (findReplaceActivated() && e->modifiers() == modifier && e->key() == Qt::Key_R) {
-    QString selection = textCursor().selectedText();
-
-    if (!selection.isEmpty())
-      _findReplaceDialog->setTextToFind(selection);
-
-    _findReplaceDialog->show();
-    _findReplaceDialog->raise();
-    _findReplaceDialog->activateWindow();
-    _findReplaceDialog->setFindMode(false);
+    showFindDialog(textCursor().selectedText(), false);
   } else if ((e->key() == Qt::Key_Space && e->modifiers() == modifier) || e->text() == ".") {
     if (e->text() == ".")
       QPlainTextEdit::keyPressEvent(e);
@@ -1257,9 +1256,9 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
 
   for (int i = 0; i < stop; ++i) {
     if (textBeforeCursor[i] == '\t') {
-      pos += TAB_STOP_WIDTH;
+      pos += tabWidth();
     } else {
-      pos += FONT_METRICS_WIDTH(textBeforeCursor[i].toLatin1());
+      pos += charWidth(textBeforeCursor[i].toLatin1());
     }
   }
 
@@ -1622,6 +1621,34 @@ void PythonCodeEditor::insertFromMimeData(const QMimeData *source) {
   textCursor().insertText(source->text());
 }
 
+void PythonCodeEditor::findIndentPattern(const QString &pythonCode) {
+  QStringList lines = pythonCode.split("\n");
+  // four spaces for indentation by default
+  _indentPattern = QString(4, ' ');
+
+  // really naive way to detect indentation pattern
+  // but this should work in most cases
+  for (auto line : lines) {
+    if (line.startsWith("\t")) {
+      _indentPattern = "\t";
+      break;
+    } else {
+      QString spaces;
+      for (int i = 0; i < line.length(); ++i) {
+        if (line[i] == ' ') {
+          spaces += ' ';
+        } else {
+          break;
+        }
+      }
+      if (spaces.length() > 0 && spaces.length() <= 4) {
+        _indentPattern = spaces;
+        break;
+      }
+    }
+  }
+}
+
 bool PythonCodeEditor::loadCodeFromFile(const QString &filePath) {
   QFile file(filePath);
 
@@ -1631,24 +1658,7 @@ bool PythonCodeEditor::loadCodeFromFile(const QString &filePath) {
   file.open(QIODevice::ReadOnly | QIODevice::Text);
   QFileInfo fileInfo(file);
 
-  QString scriptCode;
-
-  // two spaces for indentation by default
-  _indentPattern = "  ";
-  bool tabIndent = false;
-
-  while (!file.atEnd()) {
-    QString line = QString::fromUtf8(file.readLine().data());
-
-    // for backward compatibility in case of tab characters are used for indentation
-    if (!tabIndent && line.startsWith("\t")) {
-      _indentPattern = "\t";
-      tabIndent = true;
-    }
-
-    scriptCode += line;
-  }
-
+  QString scriptCode = QString::fromUtf8(file.readAll().data());
   file.close();
 
   _lastSavedTime = fileInfo.lastModified();
@@ -1697,6 +1707,7 @@ void PythonCodeEditor::scrollToLine(int line) {
 }
 
 void PythonCodeEditor::setPlainText(const QString &text) {
+  findIndentPattern(text);
   QPlainTextEdit::setPlainText(text);
   QTextCursor cursor = textCursor();
   selectAll();
@@ -1704,5 +1715,5 @@ void PythonCodeEditor::setPlainText(const QString &text) {
   format.setFont(_currentFont);
   setCurrentCharFormat(format);
   setTextCursor(cursor);
-  updateTabStopWidth();
+  updateTabWidth();
 }

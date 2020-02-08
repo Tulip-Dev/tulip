@@ -17,8 +17,6 @@ Here are the components of Tulip Perspective's main window:
     :width: 32
 .. |l_blu| image:: _images/legend_blue.png
     :width: 32
-.. |l_gre| image:: _images/legend_dark_grey.png
-    :width: 32
 
 
 |l_red| Menus and toolbar
@@ -28,8 +26,6 @@ Here are the components of Tulip Perspective's main window:
 |l_pur| Graphs panel
 
 |l_blu| Workspace view
-
-|l_gre| Status bar
 
 From this point and even if it is no fully correct, we will refer to the Tulip perspective by simply using the term Tulip. Differentiating one (Tulip perspective) from the other (Tulip agent) is quite simple as the perspective window proposes the visualization actions and the Tulip agent window only offers you to manage your plugins and to choose your project.
 
@@ -58,7 +54,7 @@ Toolbar
 .. |icon_undo| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/undo.png 
 .. |icon_redo| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/redo.png 
 .. |icon_workspace| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/desktop.png
-.. |icon_develop| image:: ../../plugins/perspective/GraphPerspective/resources/icons/48/python.png
+.. |icon_develop| image:: ../../library/tulip-gui/resources/icons/python.png
     :width: 32
 .. |icon_export| image:: ../../library/tulip-gui/resources/icons/64/document-export.png
     :width: 32
@@ -66,16 +62,20 @@ Toolbar
 .. |icon_import| image:: ../../library/tulip-gui/resources/icons/64/document-import.png
     :width: 32
 .. |icon_plugin| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/system-software-install.png
+.. |icon_search| image:: ../../plugins/perspective/GraphPerspective/resources/icons/48/search.png
+    :width: 32
 
 The vertical toolbar, on the left of the main window, contains 8 buttons: 
 
 * |icon_undo| **Undo** and |icon_redo| **Redo**: allows the user to navigate through the operations performed on the graph.
 
-* |icon_workspace| **Workspace**: displays the workspace view (more information in :ref:`workspace_view`).
+* |icon_workspace| **Panels**: toggle between the display of the overviews of all created panels and the display of the workspace (more information in :ref:`workspace_view`).
 
-.. image:: _images/i_workspace.png
+.. image:: _images/i_panels.png
 
-* |icon_develop| **Python IDE**: displays the Tulip python IDE (find more in :ref:`developer_view`).
+* |icon_develop| **Python**: displays the Tulip python IDE (find more in :ref:`developer_view`).
+
+* |icon_search| **Search**: displays the Search dialog (find more in :ref:`search_dialog`).
 
 * |icon_export| **Export**: opens the graph exporting wizard (more in :ref:`first_save`).
 
@@ -182,11 +182,11 @@ The workspace is where the visualization takes place. In this space, the user ca
 
 .. image:: _images/i_workspace.png
 
-To create a new panel at least one graph must exist. Then click on the icon |icon_addpanel| at the bottom-right of the graph list or right-click on its name and select *Add panel* (both of them mentioned in :ref:`graph_list`). Otherwise, when no panel is open, you can click on the icon |icon_add| in the middle of the workspace. Each of those steps open the following window :
+To create a new panel at least one graph must exist. Then click on the icon |icon_addpanel| at the bottom left of the workspace or right-click on its name and select *Add panel* (both of them mentioned in :ref:`graph_list`). Otherwise, when no panel is open, you can click on the icon |icon_add| in the middle of the workspace. Each of those steps open the following window :
 
 .. image:: _images/i_graphs_panel.png
 
-About ten panel types are available in Tulip, each of those is presented in this documentation. More information on the workspace can be found in :ref:`the appropriate section<workspace>`.
+About ten panel types are available in Tulip, each of those is presented in this documentation. More information on the workspace can be found in :ref:`the workspace section<workspace>`.
 
 
 .. _developer_view:
@@ -199,6 +199,19 @@ Even with more than a hundred algorithms at your disposition, you may have speci
 .. image:: ../python/tulipPythonScript.png
 
 You may find more information in the `Tulip Python IDE <../../tulip-python/html/gettingstarted.html#tulip-python-ide>`_ section of the Tulip Python documentation.
+
+.. _search_dialog:
+
+Search
+======
+
+.. image:: _images/i_workspace_search.png
+
+The tool **Search** can be used in parallel of any panel. It provides a way of selecting graph's elements according to specific criteria. 
+
+First start by selecting the graph and the elements targeted and by choosing the selection mode. The result (respecting the criteria or not) is stored in a boolean property, *viewSelection* by default. Then choose the values to compare and hit the button *Search* to launch the tool.
+
+If the *viewSelection* has been selected as the result property, the selected elements are automatically enhanced in any workspace views.
 
 
 .. _preferences:

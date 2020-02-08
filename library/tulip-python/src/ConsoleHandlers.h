@@ -24,7 +24,7 @@
 #include <QTextBrowser>
 #include <QTextBlock>
 #include <QApplication>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QScrollBar>
 #include <QDebug>
 
@@ -112,7 +112,7 @@ public slots:
   }
 
 private:
-  QTime timer;
+  QElapsedTimer timer;
 };
 
 class ConsoleOutputEmitter : public QObject {

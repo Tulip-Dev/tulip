@@ -237,7 +237,8 @@ bool setPropertiesValuesFromDataSet(tlp::Graph *graph, const tlp::DataSet *dataS
 
     PyObject *propProxy = PyObject_CallMethodObjArgs(graphWrapper, pGetItem, pPropName, NULL);
 
-    PyObject *ret = PyObject_CallMethodObjArgs(propProxy, pSetItem, pElement, getPyObjectFromDataType(entry.second), NULL);
+    PyObject *pValue = getPyObjectFromDataType(entry.second);
+    PyObject *ret = PyObject_CallMethodObjArgs(propProxy, pSetItem, pElement, pValue, NULL);
 
     if (!ret) {
       ok = false;
@@ -246,6 +247,7 @@ bool setPropertiesValuesFromDataSet(tlp::Graph *graph, const tlp::DataSet *dataS
     Py_XDECREF(pPropName);
     Py_XDECREF(pElement);
     Py_XDECREF(propProxy);
+    Py_XDECREF(pValue);
     Py_XDECREF(ret);
 
     if (!ok) {
@@ -4286,6 +4288,7 @@ tlp::Graph *importGraph(const std::string &importPluginName) /TransferBack/;
   if (pluginExists<tlp::ImportModule>(*a0)) {
     tlp::DataSet *params = prepareAlgorithmParameters(*a0);
     sipRes = tlp::importGraph(*a0, *params, NULL);
+    delete params;
   } else {
     sipIsErr = -1;
     std::string msg = "No Tulip import plugin named  ";

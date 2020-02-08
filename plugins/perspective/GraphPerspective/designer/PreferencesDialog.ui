@@ -78,6 +78,7 @@ border-bottom-right-radius: 1px;
 background-color: white;
 border: 0px;
 }
+QFrame { background-color: white; }
 QFrame[ section=&quot;true&quot; ] {
 border-top: 1px solid #D9D9D9;
 padding-top: 20px;

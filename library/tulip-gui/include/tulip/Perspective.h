@@ -242,22 +242,22 @@ public:
   }
 
   /**
-   * @brief a static function to ease the display of messages
-   * on mainWindow()->statusBar()
+   * @brief a static function to ease the display of status messages
    */
-  static void showStatusMessage(const QString &);
+  static void showStatusMessage(const QString &msg) {
+    instance()->displayStatusMessage(msg);
+  }
 
   /**
-   * @brief a static function to ease the display of messages
-   * on mainWindow()->statusBar()
+   * @brief a static function to ease the display of status messages
    */
   static void showStatusMessage(const std::string &msg) {
     showStatusMessage(tlp::tlpStringToQString(msg));
   }
 
   /**
-   * @brief a static function to enable the redirection of the statusTip or toolTip of menu actions
-   * on mainWindow->statusBar()
+   * @brief a static function to enable the redirection of the statusTip
+   * or toolTip of menu actions
    */
   static void redirectStatusTipOfMenu(QMenu *menu);
 
@@ -319,15 +319,25 @@ protected slots:
 
   /**
    * @brief Send a message to the Tulip agent to make him open a new Perspective without a project.
-   * @param name The name of the PErspective to create.
+   * @param name The name of the Perspective to create.
    */
   void createPerspective(const QString &name);
 
   /**
-   * @brief Show the statusTip (or the toolTip) of an action on mainWindow()->statusBar()
+   * @brief Show the statusTip (or the toolTip) of an action
    * @param action a QAction
    */
   void showStatusTipOf(QAction *action);
+
+  /**
+   * @brief a virtual function to display a status message
+   */
+  virtual void displayStatusMessage(const QString &s);
+
+  /**
+   * @brief a virtual function to clear the last status message
+   */
+  virtual void clearStatusMessage();
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Perspective::ProgressOptions)
 } // namespace tlp

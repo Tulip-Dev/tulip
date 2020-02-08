@@ -155,7 +155,8 @@ void GraphHierarchiesEditor::setModel(tlp::GraphHierarchiesModel *model) {
   connect(_ui->hierarchiesTree->selectionModel(),
           SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), this,
           SLOT(currentChanged(const QModelIndex &, const QModelIndex &)));
-  connect(model, SIGNAL(currentGraphChanged(tlp::Graph *)), this, SLOT(currentGraphChanged(tlp::Graph *)));
+  connect(model, SIGNAL(currentGraphChanged(tlp::Graph *)), this,
+          SLOT(currentGraphChanged(tlp::Graph *)));
 }
 
 GraphHierarchiesEditor::~GraphHierarchiesEditor() {
@@ -169,9 +170,9 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint &p) {
     _contextGraph = _contextIndex.data(tlp::GraphHierarchiesModel::GraphRole).value<tlp::Graph *>();
     QMenu menu;
     tlp::Perspective::redirectStatusTipOfMenu(&menu);
-    menu.addAction(_ui->actionCreate_panel);
+    menu.addAction(tlp::Perspective::typedInstance<GraphPerspective>()->createPanelAction());
     menu.addSeparator();
-    menu.addAction(_ui->actionExport);
+    menu.addAction(tlp::Perspective::typedInstance<GraphPerspective>()->exportAction());
     menu.addAction(_ui->actionSave_to_file);
     menu.addSeparator();
     menu.addAction(_ui->actionRename);
@@ -226,7 +227,7 @@ void GraphHierarchiesEditor::doubleClicked(const QModelIndex &index) {
 
   _contextGraph = index.data(tlp::TulipModel::GraphRole).value<tlp::Graph *>();
   _model->setCurrentGraph(_contextGraph);
-  createPanel();
+  tlp::Perspective::typedInstance<GraphPerspective>()->createPanelAction()->triggered();
   _contextGraph = nullptr;
 }
 
@@ -255,18 +256,18 @@ void GraphHierarchiesEditor::updateSelectionInfos() {
     if (numNodes || numEdges) {
       QString text(" current graph selection: ");
       if (numNodes) {
-	if (numNodes == 1)
-	  text += "one node";
-	else
-	  text += QString::number(numNodes) + " nodes";
+        if (numNodes == 1)
+          text += "one node";
+        else
+          text += QString::number(numNodes) + " nodes";
       }
       if (numEdges) {
-	if (numNodes)
-	  text += ", ";
-	if (numEdges == 1)
-	  text += "one edge";
-	else
-	  text += QString::number(numEdges) + " edges";
+        if (numNodes)
+          text += ", ";
+        if (numEdges == 1)
+          text += "one edge";
+        else
+          text += QString::number(numEdges) + " edges";
       }
       _ui->selectionLabel->setText(text);
       return;
@@ -456,23 +457,6 @@ void GraphHierarchiesEditor::delSelection(bool fromRoot) {
 
 void GraphHierarchiesEditor::delSelectionFromRoot() {
   delSelection(true);
-}
-
-void GraphHierarchiesEditor::createPanel() {
-  tlp::Graph *g = _contextGraph;
-
-  if (g == nullptr) {
-    g = _model->currentGraph();
-
-    if (g == nullptr)
-      return;
-  }
-
-  tlp::Perspective::typedInstance<GraphPerspective>()->createPanel(g);
-}
-
-void GraphHierarchiesEditor::exportGraph() {
-  tlp::Perspective::typedInstance<GraphPerspective>()->exportGraph(_contextGraph);
 }
 
 void GraphHierarchiesEditor::renameGraph() {

@@ -185,9 +185,9 @@ void GlEditableCurve::draw(float lod, Camera *camera) {
 
   auto fn = [&](const Coord &anchor) {
     camera->initGl();
-    camera2D.initGl();
     Coord tmp(camera->worldTo2DViewport(anchor));
     tmp[2] = 0;
+    camera2D.initGl();
     basicCircle.set(tmp, CIRCLE_RADIUS, 0.);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     basicCircle.draw(lod, camera);
@@ -204,7 +204,7 @@ void GlEditableCurve::draw(float lod, Camera *camera) {
       GlLabel label(Coord(tmp.getX(), tmp.getY() + factor * CIRCLE_RADIUS, 0),
                     Size((2 * factor) * CIRCLE_RADIUS, (2 * factor) * CIRCLE_RADIUS), curveColor);
       label.setText(labelText);
-      label.draw(lod, camera);
+      label.draw(lod, &camera2D);
     }
   };
 

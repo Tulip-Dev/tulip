@@ -38,8 +38,8 @@ PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel *model, QWidget
   _ui->graphCombo->setModel(_model);
   _ui->graphCombo->selectIndex(_model->indexOf(_model->currentGraph()));
 
-  _ui->panelList->setModel(new SimplePluginListModel(
-      QList<string>::fromStdList(PluginLister::availablePlugins<tlp::View>()), _ui->panelList));
+  _ui->panelList->setModel(
+      new SimplePluginListModel(PluginLister::availablePlugins<tlp::View>(), _ui->panelList));
   connect(_ui->panelList->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), this,
           SLOT(panelSelected(QModelIndex)));
   connect(_ui->panelList, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton),

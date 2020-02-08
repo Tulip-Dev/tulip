@@ -420,7 +420,7 @@ public:
 
       // Store edge extremities information to add them to the graph once nodes will be parsed
     } else {
-      edgesTmp.push_back(make_pair(srcId, tgtId));
+      edgesTmp.emplace_back(srcId, tgtId);
     }
   }
 

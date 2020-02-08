@@ -242,7 +242,7 @@ BfdWrapper::~BfdWrapper() {
 pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const char *mangledSymbol,
                                                                       const int64_t runtimeAddr,
                                                                       const int64_t runtimeOffset) {
-  pair<const char *, unsigned int> ret = make_pair("", 0);
+  pair<const char *, unsigned int> ret("", 0);
 
   if (!abfd || !isMini || symbolSize == 0)
     return ret;
@@ -319,11 +319,8 @@ pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const char
 #else
 
 pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const int64_t runtimeAddr) {
-
-  pair<const char *, unsigned int> ret = make_pair("", 0);
-
   if (!abfd)
-    return ret;
+    return make_pair("", 0);
 
   const char *funcName = "";
   const char *fileName = "";
@@ -344,8 +341,7 @@ pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const int6
                           &lineno);
   }
 
-  ret = make_pair(fileName, lineno);
-  return ret;
+  return make_pair(fileName, lineno);
 }
 
 const char *BfdWrapper::getFunctionForAddress(const int64_t runtimeAddr) {

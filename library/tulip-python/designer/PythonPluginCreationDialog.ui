@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>574</width>
-    <height>599</height>
+    <width>533</width>
+    <height>398</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -61,19 +61,14 @@ border-left-style: none;
 border-top-right-radius: 1px;
 border-bottom-right-radius: 1px;
 }
-#PreferencesDialog {
-background-color: white;
-border: 0px;
+QLabel {
+font: bold;
 }
-QFrame[ section=&quot;true&quot; ] {
-border-top: 1px solid #D9D9D9;
-padding-top: 20px;
+QGroupBox {
+font: italic;
 }
-QFrame[ subsection = &quot;true&quot; ] {
-border-top: 1px solid #D9D9D9;
-padding-top: 5px;
-background-color: #F4F4F4;
-}</string>
+QDialog { background-color: white; }
+</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -85,34 +80,44 @@ background-color: #F4F4F4;
       </size>
      </property>
      <property name="text">
-      <string>Please provide the required fields in order to generate the source code
-skeleton of the Tulip Python plugin to create.</string>
+      <string>&lt;b&gt;&lt;i&gt;Please give the necessary information to generate the source code skeleton&lt;br/&gt; of the Tulip Python plugin to be created&lt;/i&gt;&lt;/b&gt;</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Required fields</string>
+      <string>Mandatory</string>
      </property>
      <layout class="QFormLayout" name="formLayout_2">
       <property name="fieldGrowthPolicy">
        <enum>QFormLayout::ExpandingFieldsGrow</enum>
       </property>
+      <property name="verticalSpacing">
+       <number>3</number>
+      </property>
+      <property name="margin">
+       <number>0</number>
+      </property>
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="toolTip">
-         <string>the path to the file where the plugin source code will be saved</string>
+         <string notr="true">the path of the file where the plugin source code will be saved</string>
         </property>
         <property name="text">
-         <string>Plugin file: </string>
+         <string>File: </string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QLineEdit" name="pluginFileName"/>
+         <widget class="QLineEdit" name="pluginFileName">
+          <property name="toolTip">
+           <string>Enter the path of the file where the plugin source code will be saved
+</string>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QPushButton" name="browseButton">
@@ -135,15 +140,18 @@ background-color: white;
       <item row="1" column="0">
        <widget class="QLabel" name="label_3">
         <property name="toolTip">
-         <string>The type of plugin to create</string>
+         <string notr="true">The type of plugin to create</string>
         </property>
         <property name="text">
-         <string>Plugin type: </string>
+         <string>Type: </string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
        <widget class="QComboBox" name="pluginType">
+        <property name="toolTip">
+         <string notr="true">Choose the type of plugin to create</string>
+        </property>
         <item>
          <property name="text">
           <string>General</string>
@@ -189,28 +197,44 @@ background-color: white;
       <item row="2" column="0">
        <widget class="QLabel" name="label_2">
         <property name="toolTip">
-         <string>The name of the Python plugin class</string>
+         <string>&lt;html&gt;&lt;body&gt;The name of the Python plugin class:&lt;ul&gt;
+&lt;li&gt;must start with a letter or the underscore character,&lt;/li&gt;
+&lt;li&gt;cannot start with a number,&lt;/li&gt;
+&lt;li&gt;can only contain A-z, 0-9, or _ characters.&lt;/li&gt;
+&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
-         <string>Plugin class name:</string>
+         <string>Class name:</string>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QLineEdit" name="pluginClassName"/>
+       <widget class="QLineEdit" name="pluginClassName">
+        <property name="toolTip">
+         <string notr="true">&lt;html&gt;&lt;body&gt;Enter the name of the Python plugin class:&lt;ul&gt;
+&lt;li&gt;must start with a letter or the underscore character,&lt;/li&gt;
+&lt;li&gt;cannot start with a number,&lt;/li&gt;
+&lt;li&gt;can only contain A-z, 0-9, or _ characters.&lt;/li&gt;
+&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_4">
         <property name="toolTip">
-         <string>The name of the plugin as it will appear in the interface</string>
+         <string notr="true">The name of the plugin as it will be displayed in the GUI</string>
         </property>
         <property name="text">
-         <string>Plugin name:</string>
+         <string>Name:</string>
         </property>
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QLineEdit" name="pluginName"/>
+       <widget class="QLineEdit" name="pluginName">
+        <property name="toolTip">
+         <string notr="true">Enter the displayed name of the plugin</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -218,13 +242,19 @@ background-color: white;
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Optional fields</string>
+      <string>Optional</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
+      <property name="verticalSpacing">
+       <number>3</number>
+      </property>
+      <property name="margin">
+       <number>0</number>
+      </property>
       <item row="0" column="0">
        <widget class="QLabel" name="label_5">
         <property name="toolTip">
-         <string>The name of the plugin's author</string>
+         <string notr="true">The name of the plugin's author</string>
         </property>
         <property name="text">
          <string>Author:</string>
@@ -232,12 +262,16 @@ background-color: white;
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLineEdit" name="author"/>
+       <widget class="QLineEdit" name="author">
+        <property name="toolTip">
+         <string>Enter the author's name</string>
+        </property>
+       </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_6">
         <property name="toolTip">
-         <string>The creation date of the plugin</string>
+         <string notr="true">The creation date of the plugin</string>
         </property>
         <property name="text">
          <string>Date:</string>
@@ -245,20 +279,28 @@ background-color: white;
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="date"/>
+       <widget class="QLineEdit" name="date">
+        <property name="toolTip">
+         <string notr="true">Enter the plugin's creation date</string>
+        </property>
+       </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_7">
         <property name="toolTip">
-         <string>Some information about the plugin</string>
+         <string>Some information about the plugin that will be displayed in the GUI to facilitate user choice</string>
         </property>
         <property name="text">
-         <string>Information:</string>
+         <string>Description:</string>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QLineEdit" name="info"/>
+       <widget class="QLineEdit" name="info">
+        <property name="toolTip">
+         <string>Enter the plugin's description</string>
+        </property>
+       </widget>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_8">
@@ -266,12 +308,15 @@ background-color: white;
          <string>The version number of the plugin</string>
         </property>
         <property name="text">
-         <string>Release:</string>
+         <string>Version:</string>
         </property>
        </widget>
       </item>
       <item row="3" column="1">
        <widget class="QLineEdit" name="release">
+        <property name="toolTip">
+         <string>Enter the plugin's version number</string>
+        </property>
         <property name="text">
          <string>1.0</string>
         </property>
@@ -280,7 +325,7 @@ background-color: white;
       <item row="4" column="0">
        <widget class="QLabel" name="label_9">
         <property name="toolTip">
-         <string>The plugin can be added to a group (will appear in a sub-menu in the interface)</string>
+         <string>The group (a kind of sub-menu) in which the plugin will be added in the list of plugins displayed in the GUI</string>
         </property>
         <property name="text">
          <string>Group: </string>
@@ -288,7 +333,11 @@ background-color: white;
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="QLineEdit" name="group"/>
+       <widget class="QLineEdit" name="group">
+        <property name="toolTip">
+         <string>Enter the name of the sub-list of plugins in which the plugin will be added in the GUI</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

@@ -112,7 +112,6 @@ std::string pOpen(const std::string &cmd) {
 
 std::pair<const char *, unsigned int> extractFileAndLine(const std::string &atosOutput) {
   std::string ext[5] = {".cpp", ".cc", ".c", ".hpp", ".h"};
-  std::pair<const char *, unsigned int> ret = std::make_pair("", 0);
 
   for (size_t i = 0; i < 5; ++i) {
     size_t pos = atosOutput.find(ext[i]);
@@ -125,13 +124,12 @@ std::pair<const char *, unsigned int> extractFileAndLine(const std::string &atos
         --pos;
       }
 
-      ret = std::make_pair(atosOutput.substr(pos + 1, pos2 - pos - 1).c_str(),
-                           atoi(atosOutput.substr(pos2 + 1, pos3 - pos2 - 1).c_str()));
-      break;
+      return std::make_pair(atosOutput.substr(pos + 1, pos2 - pos - 1).c_str(),
+                            atoi(atosOutput.substr(pos2 + 1, pos3 - pos2 - 1).c_str()));
     }
   }
 
-  return ret;
+  return std::make_pair("", 0);
 }
 
 int file_exist(const std::string &filename) {
@@ -262,7 +260,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
       if (runtimeAddr == 1 && i == (size - 1))
         break;
 
-      std::pair<const char *, unsigned int> info = std::make_pair("", 0);
+      std::pair<const char *, unsigned int> info("", 0);
 
 #ifdef HAVE_BFD
 
@@ -448,7 +446,7 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
     std::pair<const char *, unsigned int> info =
         bfdMap[moduleNameStr]->getFileAndLineForAddress(frame.AddrPC.Offset);
 #else
-    std::pair<const char *, unsigned int> info = std::make_pair("", 0);
+    std::pair<const char *, unsigned int> info("", 0);
 #endif
 
     if (info.first == nullptr || info.second == 0) {

@@ -67,6 +67,8 @@ class TLP_PYTHON_SCOPE FindReplaceDialog : public QDialog {
 
   Ui::FindReplaceDialogData *_ui;
   QPlainTextEdit *_editor;
+  QPushButton *_findButton, *_replaceButton, *_replaceFindButton;
+  QPushButton *_replaceAllButton;
   QString _lastSearch;
   bool _resetSearch;
 
@@ -91,9 +93,6 @@ public slots:
     _resetSearch = true;
   }
   void regexpToggled(bool toggled);
-
-protected:
-  void hideEvent(QHideEvent *event) override;
 };
 
 class TLP_PYTHON_SCOPE PythonCodeEditor : public QPlainTextEdit {
@@ -111,6 +110,40 @@ public:
 
   int lineNumberAreaWidth() const;
 
+  inline qreal tabWidth() const {
+#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
+    return tabStopWidth();
+#else
+    return tabStopDistance();
+#endif
+  }
+
+  inline void setTabWidth(qreal width) {
+#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
+    setTabStopWidth(width);
+#else
+    setTabStopDistance(width);
+#endif
+  }
+
+  inline int charWidth(char c) const {
+    if (c == '\t') {
+      return textWidth("    ");
+    }
+#if (QT_VERSION < QT_VERSION_CHECK(5, 11, 0))
+    return fontMetrics().width(QLatin1Char(c));
+#else
+    return fontMetrics().horizontalAdvance(QLatin1Char(c));
+#endif
+  }
+
+  inline int textWidth(const QString &text) const {
+#if (QT_VERSION < QT_VERSION_CHECK(5, 11, 0))
+    return fontMetrics().width(QString(text).replace('\t', "    "));
+#else
+    return fontMetrics().horizontalAdvance(QString(text).replace('\t', "    "));
+#endif
+  }
   void indicateScriptCurrentError(int lineNumber);
   void clearErrorIndicator();
 
@@ -253,7 +286,8 @@ protected:
   virtual void updateAutoCompletionListPosition();
 
   void createParenSelection(int pos);
-  void updateTabStopWidth();
+  void updateTabWidth();
+  void findIndentPattern(const QString &pythonCode);
 
   QString getEditedFunctionName() const;
 
@@ -262,6 +296,7 @@ protected:
   bool isTooltipActive() const;
 
   QFontMetrics fontMetrics() const;
+  void showFindDialog(QString selection, bool findMode);
 
   QWidget *_lineNumberArea;
   PythonCodeHighlighter *_highlighter;

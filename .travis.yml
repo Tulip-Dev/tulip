@@ -75,8 +75,14 @@ jobs:
       cache: ccache
       addons:
         apt:
+          # we need GCC 9.x from ppa:ubuntu-toolchain-r/test
+          # Python 3.8.x from ppa:deadsnakes/ppa
+          sources:
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
+            - sourceline: "ppa:deadsnakes/ppa"
           # install Tulip build dependencies
           packages:
+            - g++-9
             - cmake
             - ccache
             - ninja-build
@@ -84,15 +90,9 @@ jobs:
             - libyajl-dev
             - libcppunit-dev
             - binutils-dev
+            - python3.8
+            - libpython3.8-dev
       before_install:
-        # needed to get GCC 9.x
-        - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-        # needed to get the latest Python 3.8.x
-        - sudo add-apt-repository ppa:deadsnakes/ppa -y
-        - sudo apt-get update -q
-        # get GCC 9.x and Python 3.8.x
-        # python3.8-distutils is needed because of a packaging bug
-        - sudo apt-get -y install g++-9 python3.8 python3.8-distutils libpython3.8-dev
         # force the use of GCC 9
         - eval "${MATRIX_EVAL}"
       env:
@@ -176,12 +176,17 @@ jobs:
         - xvfb
       addons:
         apt:
-          # we get Qt 5.13 from external ppa
+          # we need GCC 9.x from ppa:ubuntu-toolchain-r/test
+          # Python 3.8.x from ppa:deadsnakes/ppa
+          # and Qt 5.13 from http://archive.neon.kde.org/user/
           sources:
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
+            - sourceline: "ppa:deadsnakes/ppa"
             - sourceline: 'deb http://archive.neon.kde.org/user/ bionic main'
               key_url: 'http://archive.neon.kde.org/public.key'
           # install Tulip build dependencies
           packages:
+            - g++-9
             - cmake
             - ccache
             - ninja-build
@@ -191,6 +196,8 @@ jobs:
             - libyajl-dev
             - libcppunit-dev
             - binutils-dev
+            - python3.8
+            - libpython3.8-dev
             - qt5-default
             - libqt5opengl5-dev
             - libqt5webkit5-dev
@@ -199,22 +206,9 @@ jobs:
             - libpng-dev
             - libjpeg-dev
             - libfreetype6-dev
-      before_install:
-        # needed to get GCC 9.x
-        - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-        # needed to get the latest Python 3.8.x
-        - sudo add-apt-repository ppa:deadsnakes/ppa -y
-        - sudo apt-get update -q
       install:
-        # get GCC 9.x and Python 3.8.x
-        # python3.8-distutils is needed because of a packaging bug
-        - sudo apt-get -y install g++-9 python3.8 python3.8-distutils libpython3.8-dev
         # force the use of GCC 9
         - eval "${MATRIX_EVAL}"
-        # install latest sphinx version for generating the documentation
-        - curl -O https://bootstrap.pypa.io/get-pip.py
-        - sudo ${PYTHON_EXECUTABLE} get-pip.py
-        - sudo ${PYTHON_EXECUTABLE} -m pip install sphinx
       env:
         # use Python 3.8
         - PYTHON_EXECUTABLE=/usr/bin/python3.8
@@ -275,7 +269,8 @@ jobs:
       if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
     # legacy Tulip core build on Mac OS (MacPorts)
       os: osx
-      osx_image: xcode9.2
+      # use default osx image
+      #osx_image: xcode9.2
       compiler: clang
       cache: ccache
       install:
@@ -295,7 +290,7 @@ jobs:
         - sudo port -N install pkgconfig
         - sudo port -N install cppunit
       env:
-        - ENV="MacOS 10.12, AppleClang, MacPorts"
+        - ENV="MacOS default, AppleClang, MacPorts"
 
       script:
         # create build directory
@@ -379,7 +374,7 @@ jobs:
           update: true
 
       env:
-        - ENV="MacOS 10.13, LLVM Clang, Homebrew"
+        - ENV="MacOS default, LLVM Clang, Homebrew"
       script:
         # create build directory
         - mkdir build && cd build
@@ -440,7 +435,8 @@ jobs:
       if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
     # legacy Tulip complete build on Mac OS (MacPorts)
       os: osx
-      osx_image: xcode9.2
+      # use default osx image
+      #osx_image: xcode9.2
       compiler: clang
       cache: ccache
       install:
@@ -470,7 +466,7 @@ jobs:
         - pip install --user sphinx==1.7.9
 
       env:
-        - ENV="MacOS 10.12, AppleClang, MacPorts"
+        - ENV="MacOS default, AppleClang, MacPorts"
       script:
         # create build directory
         - mkdir build && cd build
@@ -574,7 +570,7 @@ jobs:
         # add missing sdk if needed
         - ls /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk || sudo ln -s /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk
       env:
-        - ENV="MacOS 10.13, LLVM Clang, Homebrew"
+        - ENV="MacOS default, LLVM Clang, Homebrew"
 
       script:
         # create build directory

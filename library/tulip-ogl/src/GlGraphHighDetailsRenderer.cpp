@@ -147,17 +147,6 @@ public:
 };
 
 //===================================================================
-//
-// GlGraphHighDetailsRenderer functions implementation
-//
-//===================================================================
-
-GlGraphHighDetailsRenderer::GlGraphHighDetailsRenderer(const GlGraphInputData *inputData)
-    : GlGraphRenderer(inputData), lodCalculator(nullptr), baseScene(nullptr),
-      fakeScene(new GlScene) {
-  fakeScene->createLayer("fakeLayer");
-}
-//===================================================================
 GlGraphHighDetailsRenderer::GlGraphHighDetailsRenderer(const GlGraphInputData *inputData,
                                                        GlScene *scene)
     : GlGraphRenderer(inputData), lodCalculator(nullptr), baseScene(scene), fakeScene(new GlScene) {

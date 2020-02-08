@@ -49,6 +49,7 @@ Workspace::Workspace(QWidget *parent)
       _focusedPanel(nullptr), _focusedPanelHighlighting(false), _model(nullptr),
       _autoCenterViews(false) {
   _ui->setupUi(this);
+  setExposeModeSwitch(_ui->exposeButton);
   _ui->startupMainFrame->hide();
   _ui->workspaceContents->setCurrentWidget(_ui->startupPage);
   connect(_ui->startupButton, SIGNAL(clicked()), this, SIGNAL(addPanelRequest()));
@@ -349,7 +350,7 @@ void Workspace::updateAvailableModes() {
   bool enableNavigation = !_panels.empty();
   _ui->nextPageButton->setEnabled(enableNavigation);
   _ui->previousPageButton->setEnabled(enableNavigation);
-  _ui->exposeButton->setEnabled(enableNavigation);
+  _exposeButton->setEnabled(enableNavigation);
 }
 
 void Workspace::updatePanels() {
@@ -432,8 +433,8 @@ void Workspace::previousPage() {
   }
 }
 
-void Workspace::setExposeModeSwitch(QPushButton *b) {
-  _ui->exposeButton = b;
+void Workspace::setExposeModeSwitch(QAbstractButton *b) {
+  _exposeButton = b;
 }
 
 void Workspace::setActivePanel(tlp::View *view) {
@@ -538,17 +539,18 @@ void Workspace::showExposeMode() {
 
   _ui->exposeMode->setData(panels, _currentPanelIndex);
   _ui->workspaceContents->setCurrentWidget(_ui->exposePage);
+  _exposeButton->setChecked(true);
 }
 
 void Workspace::uncheckExposeButton() {
-  _ui->exposeButton->setChecked(false);
+  _exposeButton->setChecked(false);
 }
 
 void Workspace::hideExposeMode() {
   if (currentModeWidget() != _ui->exposePage)
     return;
 
-  _ui->exposeButton->setChecked(false);
+  _exposeButton->setChecked(false);
   QVector<WorkspacePanel *> newPanels = _ui->exposeMode->panels();
   _panels.clear();
 

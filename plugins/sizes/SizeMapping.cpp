@@ -111,7 +111,7 @@ public:
                                      "linear <br/> uniform");
     addInParameter<StringCollection>(TARGET_TYPE, paramHelp[8], TARGET_TYPES, true,
                                      "nodes <br/> edges");
-    addInParameter<StringCollection>("area proportional", paramHelp[7],
+    addInParameter<StringCollection>("area proportional", paramHelp[9],
                                      "Area Proportional;Quadratic/Cubic", true,
                                      "Area Proportional <br/> Quadratic/Cubic");
 

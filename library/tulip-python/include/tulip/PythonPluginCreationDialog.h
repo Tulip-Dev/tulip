@@ -56,6 +56,8 @@ public:
 
   QString getPluginGroup() const;
 
+  bool eventFilter(QObject *, QEvent *) override;
+
 protected slots:
 
   void accept() override;
