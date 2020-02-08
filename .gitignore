@@ -1,6 +1,5 @@
 # Build folders
 build*/
-cmake-build*/
 
 # Prerequisites
 *.d
@@ -54,7 +53,7 @@ __pycache__/
 # KDE desktop stuffs
 .directory
 
-git-commands.txt
+# CLion settings folder
 .idea/
 
 *.tmp
@@ -63,5 +62,5 @@ doxygen_sqlite3.db
 # Visual Studio settings folder
 .vs/
 
-# HTML Documentation (generated)
+# Prevent committing generated HTML Documentation
 /doc/html
