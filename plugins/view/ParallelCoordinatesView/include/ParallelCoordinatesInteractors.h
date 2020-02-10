@@ -22,7 +22,7 @@
 
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 
-#include <QWidget>
+#include <QFrame>
 
 namespace Ui {
 class AxisSlidersOptions;
@@ -108,7 +108,7 @@ public:
  *
  */
 
-class AxisSliderOptions : public QWidget {
+class AxisSliderOptions : public QFrame {
 
   Q_OBJECT
 

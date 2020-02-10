@@ -24,6 +24,7 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/Perspective.h>
 
 #include <QGridLayout>
 #include <QVBoxLayout>
@@ -35,13 +36,18 @@
 #include <QPushButton>
 #include <QCheckBox>
 #include <QLabel>
+#include <QMainWindow>
 
 using namespace std;
 
 namespace tlp {
 
+static QWidget *getMainWindow() {
+  return Perspective::instance() ? Perspective::instance()->mainWindow() : nullptr;
+}
+
 QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelAxis *axis)
-    : QDialog(), axis(axis) {
+    : QDialog(getMainWindow()), axis(axis) {
   setWindowTitle("Quantitative Axis Configuration");
 
   QVBoxLayout *dialogLayout = new QVBoxLayout();
@@ -137,7 +143,7 @@ void QuantitativeAxisConfigDialog::closeEvent(QCloseEvent *) {
 }
 
 NominalAxisConfigDialog::NominalAxisConfigDialog(NominalParallelAxis *axis)
-    : QDialog(), axis(axis) {
+    : QDialog(getMainWindow()), axis(axis) {
 
   setWindowTitle("Nominal Axis Configuration");
 

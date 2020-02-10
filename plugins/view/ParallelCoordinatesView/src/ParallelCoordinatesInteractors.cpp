@@ -142,7 +142,7 @@ void InteractorAxisSwapper::construct() {
 }
 
 AxisSliderOptions::AxisSliderOptions(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::AxisSlidersOptions) {
+    : QFrame(parent), _ui(new Ui::AxisSlidersOptions) {
   _ui->setupUi(this);
   connect(_ui->resetButton, SIGNAL(clicked()), this, SIGNAL(resetSliders()));
 }

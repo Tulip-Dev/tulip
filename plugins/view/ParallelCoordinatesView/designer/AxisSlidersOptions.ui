@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>AxisSlidersOptions</class>
- <widget class="QWidget" name="AxisSlidersOptions">
+ <widget class="QFrame" name="AxisSlidersOptions">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -12,6 +12,11 @@
   </property>
   <property name="windowTitle">
    <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+      QFrame { background-color: white; }
+    </string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
