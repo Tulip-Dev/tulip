@@ -1662,10 +1662,13 @@ void GraphPerspective::applyDefaultLayout(Graph *g) {
 
   if (!viewLayout->hasNonDefaultValuatedNodes(g)) {
     std::string str;
-    if (TreeTest::isTree(g))
-      g->applyPropertyAlgorithm("Tree Radial", viewLayout, str);
-    else
-      g->applyPropertyAlgorithm("FM^3 (OGDF)", viewLayout, str);
+    if (g->numberOfEdges() > 0) {
+      if (TreeTest::isTree(g))
+	g->applyPropertyAlgorithm("Tree Radial", viewLayout, str);
+      else
+	g->applyPropertyAlgorithm("FM^3 (OGDF)", viewLayout, str);
+    } else
+      g->applyPropertyAlgorithm("Random layout", viewLayout, str);
   }
 
   Observable::unholdObservers();
