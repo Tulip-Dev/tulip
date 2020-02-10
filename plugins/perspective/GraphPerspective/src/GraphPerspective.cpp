@@ -1664,9 +1664,9 @@ void GraphPerspective::applyDefaultLayout(Graph *g) {
     std::string str;
     if (g->numberOfEdges() > 0) {
       if (TreeTest::isTree(g))
-	g->applyPropertyAlgorithm("Tree Radial", viewLayout, str);
+        g->applyPropertyAlgorithm("Tree Radial", viewLayout, str);
       else
-	g->applyPropertyAlgorithm("FM^3 (OGDF)", viewLayout, str);
+        g->applyPropertyAlgorithm("FM^3 (OGDF)", viewLayout, str);
     } else
       g->applyPropertyAlgorithm("Random layout", viewLayout, str);
   }
