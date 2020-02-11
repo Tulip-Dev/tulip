@@ -45,6 +45,7 @@
 
 #include <QApplication>
 #include <QGraphicsView>
+#include <QTimer>
 
 using namespace std;
 using namespace pocore;
@@ -737,7 +738,11 @@ void PixelOrientedView::switchFromSmallMultiplesToDetailView(PixelOrientedOvervi
     propertiesSelectionWidget->setEnabled(false);
   }
 
-  centerView();
+  if (tlp::inGuiTestingMode())
+    // sometimes we must wait a bit to ensure an effective centerView
+    QTimer::singleShot(200, this, SLOT(centerView()));
+  else
+    centerView();
 }
 
 void PixelOrientedView::switchFromDetailViewToSmallMultiples() {
