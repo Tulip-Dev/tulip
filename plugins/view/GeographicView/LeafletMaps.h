@@ -31,7 +31,6 @@
 #include <tulip/Graph.h>
 
 #include "ProgressWidgetGraphicsProxy.h"
-#include "AddressSelectionDialog.h"
 
 namespace tlp {
 
@@ -115,12 +114,6 @@ public:
     this->progressWidget = progressWidget;
   }
 
-  void setAdresseSelectionDialog(AddressSelectionDialog *addressSelectionDialog,
-                                 QGraphicsProxyWidget *addresseSelectionProxy) {
-    this->addressSelectionDialog = addressSelectionDialog;
-    this->addressSelectionProxy = addresseSelectionProxy;
-  }
-
 signals:
 
   void currentZoomChanged();
@@ -141,8 +134,6 @@ private:
 #endif
   int x, y;
 
-  AddressSelectionDialog *addressSelectionDialog;
-  QGraphicsProxyWidget *addressSelectionProxy;
   ProgressWidgetGraphicsProxy *progressWidget;
 
 #ifdef QT_HAS_WEBENGINE

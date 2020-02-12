@@ -22,6 +22,7 @@
 
 #include <unordered_map>
 
+#include "AddressSelectionDialog.h"
 #include "LeafletMaps.h"
 
 #include <tulip/GlGraphComposite.h>
@@ -185,7 +186,6 @@ private:
   GlSimpleEntity *planisphereEntity;
 
   AddressSelectionDialog *addressSelectionDialog;
-  QGraphicsProxyWidget *addressSelectionProxy;
   ProgressWidgetGraphicsProxy *progressWidget;
   QGraphicsProxyWidget *noLayoutMsgBox;
 

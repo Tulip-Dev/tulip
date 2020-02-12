@@ -30,6 +30,7 @@
 #include <tulip/GlTextureManager.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/Perspective.h>
 
 #include <QPushButton>
 #include <QTextStream>
@@ -40,6 +41,7 @@
 #include <QPainter>
 #include <QTimer>
 #include <QMessageBox>
+#include <QMainWindow>
 
 using namespace std;
 
@@ -387,19 +389,10 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   progressWidget = new ProgressWidgetGraphicsProxy();
   progressWidget->hide();
   progressWidget->setZValue(2);
-  addressSelectionDialog = new AddressSelectionDialog(leafletMaps);
-// workaround to get rid of Qt5 warnings : QMacCGContext:: Unsupported painter devtype type 1
-// see https://bugreports.qt.io/browse/QTBUG-32639
-#if defined(__APPLE__)
-  addressSelectionDialog->setWindowOpacity(0.99);
-#endif
+  addressSelectionDialog = new AddressSelectionDialog(Perspective::instance()->mainWindow());
   scene()->addItem(progressWidget);
-  addressSelectionProxy = scene()->addWidget(addressSelectionDialog, Qt::Dialog);
-  addressSelectionProxy->hide();
-  addressSelectionProxy->setZValue(3);
 
   leafletMaps->setProgressWidget(progressWidget);
-  leafletMaps->setAdresseSelectionDialog(addressSelectionDialog, addressSelectionProxy);
 
   connect(leafletMaps, SIGNAL(currentZoomChanged()), _geoView, SLOT(currentZoomChanged()));
 #ifdef QT_HAS_WEBENGINE
@@ -826,23 +819,16 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
               addressSelectionDialog->addResultToList(tlpStringToQString(result.address));
             }
 
-            addressSelectionProxy->setPos(
-                width() / 2 - addressSelectionProxy->sceneBoundingRect().width() / 2,
-                height() / 2 - addressSelectionProxy->sceneBoundingRect().height() / 2);
-
-            addressSelectionDialog->show();
-
-            addressSelectionDialog->show();
             addressSelectionDialog->exec();
             idx = addressSelectionDialog->getPickedResultIdx();
-            addressSelectionDialog->hide();
 
             if (showProgressWidget) {
               progressWidget->show();
             }
           } else if (geocodingResults.empty()) {
             progressWidget->hide();
-            QMessageBox::warning(nullptr, "Geolocation failed",
+            QMessageBox::warning(Perspective::instance()->mainWindow(),
+				 "Geolocation failed",
                                  "No results were found for address : \n" +
                                      tlpStringToQString(addr));
             progressWidget->show();
@@ -918,12 +904,6 @@ void GeographicViewGraphicsView::resizeEvent(QResizeEvent *event) {
   if (noLayoutMsgBox && noLayoutMsgBox->isVisible()) {
     noLayoutMsgBox->setPos(width() / 2 - noLayoutMsgBox->sceneBoundingRect().width() / 2,
                            height() / 2 - noLayoutMsgBox->sceneBoundingRect().height() / 2);
-  }
-
-  if (addressSelectionProxy->isVisible()) {
-    addressSelectionProxy->setPos(
-        width() / 2 - addressSelectionProxy->sceneBoundingRect().width() / 2,
-        height() / 2 - addressSelectionProxy->sceneBoundingRect().height() / 2);
   }
 
   if (scene()) {
