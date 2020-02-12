@@ -265,7 +265,8 @@ public:
    * @brief a static function to log a message
    * see qInstallMessageHandler
    */
-  static void showLogMessage(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
+  static void showLogMessage(QtMsgType type, const QMessageLogContext &context,
+                             const QString &msg) {
     instance()->logMessage(type, context, msg);
   }
 
@@ -362,9 +363,7 @@ protected slots:
   /**
    * @brief a virtual function to log a message
    */
-  virtual void logMessage(QtMsgType, const QMessageLogContext &,
-			  const QString &) {}
-
+  virtual void logMessage(QtMsgType, const QMessageLogContext &, const QString &) {}
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Perspective::ProgressOptions)
 } // namespace tlp

@@ -46,7 +46,7 @@ std::ostream &tlp::warning() {
 #else
     nullstr.open("/dev/null", std::ofstream::out | std::ofstream::app);
 #endif
-    return nullstr;
+  return nullstr;
 }
 void tlp::setWarningOutput(std::ostream &os) {
   warningStream = &os;

@@ -484,7 +484,7 @@ class QWarningOStream : public std::ostream {
     string buf;
     int_type overflow(int c) override {
       if (!tlp::isWarningOutputEnabled())
-	return 0;
+        return 0;
 
       if (c == '\n') {
         qWarning() << buf.c_str();
@@ -497,7 +497,7 @@ class QWarningOStream : public std::ostream {
 
     std::streamsize xsputn(const char *p, std::streamsize n) override {
       if (!tlp::isWarningOutputEnabled())
-	return 0;
+        return 0;
 
       if (p[n - 1] == '\n') {
         buf += std::string(p, n - 1);

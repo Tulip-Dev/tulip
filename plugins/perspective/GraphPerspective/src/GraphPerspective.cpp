@@ -234,7 +234,8 @@ void GraphPerspective::updateLogIconsAndCounters() {
   SET_TIPS(logCounterLabel, "Click here to show/hide the message log window");
 }
 
-void GraphPerspective::logMessage(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
+void GraphPerspective::logMessage(QtMsgType type, const QMessageLogContext &context,
+                                  const QString &msg) {
   if (type == QtFatalMsg) {
     std::cerr << tlp::QStringToTlpString(msg) << std::endl;
     abort();

@@ -827,8 +827,7 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
             }
           } else if (geocodingResults.empty()) {
             progressWidget->hide();
-            QMessageBox::warning(Perspective::instance()->mainWindow(),
-				 "Geolocation failed",
+            QMessageBox::warning(Perspective::instance()->mainWindow(), "Geolocation failed",
                                  "No results were found for address : \n" +
                                      tlpStringToQString(addr));
             progressWidget->show();

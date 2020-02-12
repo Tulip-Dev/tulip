@@ -113,14 +113,13 @@ int GraphPerspectiveLogger::countByType(LogType logType) const {
   return _logCounts[logType];
 }
 
-void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &,
-				 const QString &msg, bool pyOutput) {
+void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, const QString &msg,
+                                 bool pyOutput) {
   _logType = type;
   _pythonOutput = pyOutput;
 
   LogType lastLogType = getLastLogType();
-  auto item =
-    new QListWidgetItem(QIcon(icon(lastLogType)), msg, nullptr, _logType);
+  auto item = new QListWidgetItem(QIcon(icon(lastLogType)), msg, nullptr, _logType);
   _ui->listWidget->addItem(item);
   _ui->listWidget->scrollToItem(item);
   _logCounts[lastLogType] += 1;
