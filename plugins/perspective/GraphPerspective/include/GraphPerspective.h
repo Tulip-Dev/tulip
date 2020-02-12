@@ -89,7 +89,7 @@ public:
 
   void treatEvent(const tlp::Event &) override;
 
-  void log(QtMsgType, const QMessageLogContext &, const QString &);
+  void logMessage(QtMsgType, const QMessageLogContext &, const QString &);
 
   bool terminated() override;
 
@@ -103,7 +103,7 @@ public slots:
   void open(QString fileName = "");
   void openProjectFile(const QString &path) override;
 
-  void showLogger();
+  void displayLogMessages() override;
   void showAPIDocumentation();
   void showUserDocumentation();
   void showDevelDocumentation();

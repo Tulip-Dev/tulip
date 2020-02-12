@@ -52,7 +52,7 @@ public:
   int count() const;
   int countByType(LogType logType) const;
   GraphPerspectiveLogger::LogType getLastLogType() const;
-  void log(QtMsgType, const QMessageLogContext &, const QString &);
+  void log(QtMsgType, const QMessageLogContext &, const QString &, bool);
 
   bool eventFilter(QObject *, QEvent *) override;
 
@@ -76,9 +76,6 @@ private slots:
   void showContextMenu(const QPoint &pos);
   void decreaseFontSize();
   void increaseFontSize();
-
-private:
-  void logImpl(QtMsgType, const QString &);
 
 signals:
   void cleared();

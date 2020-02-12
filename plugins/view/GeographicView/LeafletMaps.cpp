@@ -178,7 +178,11 @@ LeafletMaps::LeafletMaps(QWidget *parent) : QWebEngineView(parent), init(false) 
 #endif
   QString content(htmlMap.c_str());
 #ifdef QT_HAS_WEBKIT
+  // disable output of "libpng warning: iCCP: known incorrect sRGB profile"
+  // due to QtWebKit ill-formed png files
+  enableWarningOutput(false);
   frame = page()->mainFrame();
+  enableWarningOutput(true);
   frame->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
   frame->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
 #else

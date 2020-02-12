@@ -261,6 +261,21 @@ public:
    */
   static void redirectStatusTipOfMenu(QMenu *menu);
 
+  /**
+   * @brief a static function to log a message
+   * see qInstallMessageHandler
+   */
+  static void showLogMessage(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
+    instance()->logMessage(type, context, msg);
+  }
+
+  /**
+   * @brief a static function to display the log messages
+   */
+  static void showLogMessages() {
+    instance()->displayLogMessages();
+  }
+
 public slots:
   /**
    * @brief Called when the user wants to close the application.
@@ -338,6 +353,18 @@ protected slots:
    * @brief a virtual function to clear the last status message
    */
   virtual void clearStatusMessage();
+
+  /**
+   * @brief a virtual function to display the whole logs
+   */
+  virtual void displayLogMessages() {}
+
+  /**
+   * @brief a virtual function to log a message
+   */
+  virtual void logMessage(QtMsgType, const QMessageLogContext &,
+			  const QString &) {}
+
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Perspective::ProgressOptions)
 } // namespace tlp

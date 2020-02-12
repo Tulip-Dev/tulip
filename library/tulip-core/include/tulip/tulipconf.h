@@ -216,6 +216,16 @@ extern TLP_SCOPE std::ostream &warning();
 extern TLP_SCOPE void setWarningOutput(std::ostream &os);
 /**
  *
+ * @brief allow to enable/disable the output of warning messages
+ */
+extern TLP_SCOPE void enableWarningOutput(bool);
+/**
+ *
+ * @brief indicate if the output of warning messages is enabled
+ */
+extern TLP_SCOPE bool isWarningOutputEnabled();
+/**
+ *
  * @brief return the ostream used for the output of error messages
  */
 extern TLP_SCOPE std::ostream &error();

@@ -21,10 +21,13 @@
 #include <tulip/TulipRelease.h>
 
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
 static std::ostream *debugStream = nullptr;
+static bool warningAllowed = true;
+
 std::ostream &tlp::debug() {
   return debugStream ? *debugStream : std::cout;
 }
@@ -34,10 +37,26 @@ void tlp::setDebugOutput(std::ostream &os) {
 
 static std::ostream *warningStream = nullptr;
 std::ostream &tlp::warning() {
-  return warningStream ? *warningStream : std::cerr;
+  if (warningAllowed)
+    return warningStream ? *warningStream : std::cerr;
+  static std::ofstream nullstr;
+  if (!nullstr.is_open())
+#if defined(WIN32)
+    nullstr.open("NULL", std::ofstream::out | std::ofstream::app);
+#else
+    nullstr.open("/dev/null", std::ofstream::out | std::ofstream::app);
+#endif
+    return nullstr;
 }
 void tlp::setWarningOutput(std::ostream &os) {
   warningStream = &os;
+  warningAllowed = true;
+}
+void tlp::enableWarningOutput(bool flag) {
+  warningAllowed = flag;
+}
+bool tlp::isWarningOutputEnabled() {
+  return warningAllowed;
 }
 
 static std::ostream *errorStream = nullptr;
