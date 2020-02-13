@@ -803,7 +803,7 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
 
           unsigned int idx = 0;
           vector<NominatimGeocoderResult> &&geocodingResults =
-	    nominatimGeocoder.getLatLngForAddress(addr);
+              nominatimGeocoder.getLatLngForAddress(addr);
 
           if (geocodingResults.size() > 1) {
             bool showProgressWidget = false;
@@ -827,8 +827,8 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
               progressWidget->show();
             }
           } else if (geocodingResults.empty()) {
-	    qWarning() << "No geolocation found for" << tlpStringToQString(addr);
-	    failures++;
+            qWarning() << "No geolocation found for" << tlpStringToQString(addr);
+            failures++;
           }
 
           if (geocodingResults.size() > 0) {
@@ -850,17 +850,15 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
     delete nodesIt;
     progressWidget->hide();
     if (failures) {
-      QString msg =
-	QString("%1 %2 have not been geolocated.\nDo you want to see %3 ?")
-	.arg(failures > 1 ? QString::number(failures) : QString("One"))
-	.arg(failures > 1 ? "addresses" : "address")
-	.arg(failures > 1 ? "them" : "it");
+      QString msg = QString("%1 %2 have not been geolocated.\nDo you want to see %3 ?")
+                        .arg(failures > 1 ? QString::number(failures) : QString("One"))
+                        .arg(failures > 1 ? "addresses" : "address")
+                        .arg(failures > 1 ? "them" : "it");
 
-      if (QMessageBox::warning(Perspective::instance()->mainWindow(),
-			       "Geolocation failed", msg,
-			       QMessageBox::Yes | QMessageBox::No,
-			       QMessageBox::Yes) == QMessageBox::Yes)
-	Perspective::showLogMessages();
+      if (QMessageBox::warning(Perspective::instance()->mainWindow(), "Geolocation failed", msg,
+                               QMessageBox::Yes | QMessageBox::No,
+                               QMessageBox::Yes) == QMessageBox::Yes)
+        Perspective::showLogMessages();
     }
   }
 
