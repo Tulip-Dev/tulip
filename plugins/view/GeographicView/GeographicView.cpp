@@ -262,7 +262,7 @@ void GeographicView::computeGeoLayout() {
         geolocalisationConfigWidget->getAddressGraphPropertyName(),
         geolocalisationConfigWidget->createLatAndLngProperties(),
         geolocalisationConfigWidget->resetLatAndLngValues(),
-	geolocalisationConfigWidget->automaticChoice());
+        geolocalisationConfigWidget->automaticChoice());
 
     if (geolocalisationConfigWidget->createLatAndLngProperties()) {
       geolocalisationConfigWidget->setGraph(graph());

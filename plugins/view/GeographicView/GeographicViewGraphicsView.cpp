@@ -595,52 +595,91 @@ void GeographicViewGraphicsView::setGraph(Graph *graph) {
 }
 
 static unsigned char utf8ToLower(unsigned char c1, unsigned char c2) {
-  // C3 80 C3 81 C3 82 C3 83 C3 84 C3 85 C3 A0 C3 A1 C3 A2 C3 A3 C3 A4 C3 A5 C2 AA // two-byte codes for "a"
-  // C3 88 C3 89 C3 8A C3 8B C3 A8 C3 A9 C3 AA C3 AB // two-byte codes for "e"
-  // C3 8C C3 8D C3 8E C3 8F C3 AC C3 AD C3 AE C3 AF // two-byte codes for "i"
-  // C3 92 C3 93 C3 94 C3 95 C3 96 C3 B2 C3 B3 C3 B4 C3 B5 C3 B6 C2 BA // two-byte codes for "o"
-  // C3 99 C3 9A C3 9B C3 9C C3 B9 C3 BA C3 BB C3 BC // two-byte codes for "u"
-  // C2 A9 C3 87 C3 A7 // two-byte codes for "c"
-  // C3 91 C3 B1 // two-byte codes for "n"
-  // C2 AE // two-byte codes for "r"
-  // C3 9F // two-byte codes for "s"
-  // C5 BD C5 BE // two-byte codes for "z"
-  // C5 B8 C3 9D C3 BD C3 BF // two-byte codes for "y"
+  // C3 80 C3 81 C3 82 C3 83 C3 84 C3 85 C3 A0 C3 A1 C3 A2 C3 A3 C3 A4 C3 A5 C2 AA // two-byte codes
+  // for "a" C3 88 C3 89 C3 8A C3 8B C3 A8 C3 A9 C3 AA C3 AB // two-byte codes for "e" C3 8C C3 8D
+  // C3 8E C3 8F C3 AC C3 AD C3 AE C3 AF // two-byte codes for "i" C3 92 C3 93 C3 94 C3 95 C3 96 C3
+  // B2 C3 B3 C3 B4 C3 B5 C3 B6 C2 BA // two-byte codes for "o" C3 99 C3 9A C3 9B C3 9C C3 B9 C3 BA
+  // C3 BB C3 BC // two-byte codes for "u" C2 A9 C3 87 C3 A7 // two-byte codes for "c" C3 91 C3 B1
+  // // two-byte codes for "n" C2 AE // two-byte codes for "r" C3 9F // two-byte codes for "s" C5 BD
+  // C5 BE // two-byte codes for "z" C5 B8 C3 9D C3 BD C3 BF // two-byte codes for "y"
 
-  if (c1 == 0xC2)
-    {
-      if (c2 == 0xAA) { return 'a'; }
-      if (c2 == 0xBA) { return 'o'; }
-      if (c2 == 0xA9) { return 'c'; }
-      if (c2 == 0xAE) { return 'r'; }
+  if (c1 == 0xC2) {
+    if (c2 == 0xAA) {
+      return 'a';
     }
+    if (c2 == 0xBA) {
+      return 'o';
+    }
+    if (c2 == 0xA9) {
+      return 'c';
+    }
+    if (c2 == 0xAE) {
+      return 'r';
+    }
+  }
 
-  if (c1 == 0xC3)
-    {
-      if (c2 >= 0x80 && c2 <= 0x85) { return 'a'; }
-      if (c2 >= 0xA0 && c2 <= 0xA5) { return 'a'; }
-      if (c2 >= 0x88 && c2 <= 0x8B) { return 'e'; }
-      if (c2 >= 0xA8 && c2 <= 0xAB) { return 'e'; }
-      if (c2 >= 0x8C && c2 <= 0x8F) { return 'i'; }
-      if (c2 >= 0xAC && c2 <= 0xAF) { return 'i'; }
-      if (c2 >= 0x92 && c2 <= 0x96) { return 'o'; }
-      if (c2 >= 0xB2 && c2 <= 0xB6) { return 'o'; }
-      if (c2 >= 0x99 && c2 <= 0x9C) { return 'u'; }
-      if (c2 >= 0xB9 && c2 <= 0xBC) { return 'u'; }
-      if (c2 == 0x87) { return 'c'; }
-      if (c2 == 0xA7) { return 'c'; }
-      if (c2 == 0x91) { return 'n'; }
-      if (c2 == 0xB1) { return 'n'; }
-      if (c2 == 0x9F) { return 's'; }
-      if (c2 == 0x9D) { return 'y'; }
-      if (c2 == 0xBD || c2 == 0xBF) { return 'y'; }
+  if (c1 == 0xC3) {
+    if (c2 >= 0x80 && c2 <= 0x85) {
+      return 'a';
     }
+    if (c2 >= 0xA0 && c2 <= 0xA5) {
+      return 'a';
+    }
+    if (c2 >= 0x88 && c2 <= 0x8B) {
+      return 'e';
+    }
+    if (c2 >= 0xA8 && c2 <= 0xAB) {
+      return 'e';
+    }
+    if (c2 >= 0x8C && c2 <= 0x8F) {
+      return 'i';
+    }
+    if (c2 >= 0xAC && c2 <= 0xAF) {
+      return 'i';
+    }
+    if (c2 >= 0x92 && c2 <= 0x96) {
+      return 'o';
+    }
+    if (c2 >= 0xB2 && c2 <= 0xB6) {
+      return 'o';
+    }
+    if (c2 >= 0x99 && c2 <= 0x9C) {
+      return 'u';
+    }
+    if (c2 >= 0xB9 && c2 <= 0xBC) {
+      return 'u';
+    }
+    if (c2 == 0x87) {
+      return 'c';
+    }
+    if (c2 == 0xA7) {
+      return 'c';
+    }
+    if (c2 == 0x91) {
+      return 'n';
+    }
+    if (c2 == 0xB1) {
+      return 'n';
+    }
+    if (c2 == 0x9F) {
+      return 's';
+    }
+    if (c2 == 0x9D) {
+      return 'y';
+    }
+    if (c2 == 0xBD || c2 == 0xBF) {
+      return 'y';
+    }
+  }
 
-  if (c1 == 0xC5)
-    {
-      if (c2 == 0xBD || c2 == 0xBE) { return 'z'; }
-      if (c2 == 0xB8) { return 'y'; }
+  if (c1 == 0xC5) {
+    if (c2 == 0xBD || c2 == 0xBE) {
+      return 'z';
     }
+    if (c2 == 0xB8) {
+      return 'y';
+    }
+  }
 
   return c1;
 }
@@ -658,67 +697,57 @@ static unsigned char utf8ToLower(unsigned char c) {
   // 8E 9E // one-byte codes for "z"
   // 9F DD FD FF // one-byte codes for "y"
 
-  if ((c >= 0xC0 && c <= 0xC5) || (c >= 0xE1 && c <= 0xE5) || c == 0xAA)
-    {
-      return 'a';
-    }
+  if ((c >= 0xC0 && c <= 0xC5) || (c >= 0xE1 && c <= 0xE5) || c == 0xAA) {
+    return 'a';
+  }
 
-  if ((c >= 0xC8 && c <= 0xCB) || (c >= 0xE8 && c <= 0xEB))
-    {
-      return 'e';
-    }
+  if ((c >= 0xC8 && c <= 0xCB) || (c >= 0xE8 && c <= 0xEB)) {
+    return 'e';
+  }
 
-  if ((c >= 0xCC && c <= 0xCF) || (c >= 0xEC && c <= 0xEF))
-    {
-      return 'i';
-    }
+  if ((c >= 0xCC && c <= 0xCF) || (c >= 0xEC && c <= 0xEF)) {
+    return 'i';
+  }
 
-  if ((c >= 0xD2 && c <= 0xD6) || (c >= 0xF2 && c <= 0xF6) || c == 0xBA)
-    {
-      return 'o';
-    }
+  if ((c >= 0xD2 && c <= 0xD6) || (c >= 0xF2 && c <= 0xF6) || c == 0xBA) {
+    return 'o';
+  }
 
-  if ((c >= 0xD9 && c <= 0xDC) || (c >= 0xF9 && c <= 0xFC))
-    {
-      return 'u';
-    }
+  if ((c >= 0xD9 && c <= 0xDC) || (c >= 0xF9 && c <= 0xFC)) {
+    return 'u';
+  }
 
-  if (c == 0xA9 || c == 0xC7 || c == 0xE7)
-    {
-      return 'c';
-    }
+  if (c == 0xA9 || c == 0xC7 || c == 0xE7) {
+    return 'c';
+  }
 
-  if (c == 0xD1 || c == 0xF1)
-    {
-      return 'n';
-    }
+  if (c == 0xD1 || c == 0xF1) {
+    return 'n';
+  }
 
-  if (c == 0xAE)
-    {
-      return 'r';
-    }
+  if (c == 0xAE) {
+    return 'r';
+  }
 
-  if (c == 0xDF)
-    {
-      return 's';
-    }
+  if (c == 0xDF) {
+    return 's';
+  }
 
-  if (c == 0x8E || c == 0x9E)
-    {
-      return 'z';
-    }
+  if (c == 0x8E || c == 0x9E) {
+    return 'z';
+  }
 
-  if (c == 0x9F || c == 0xDD || c == 0xFD || c == 0xFF)
-    {
-      return 'y';
-    }
+  if (c == 0x9F || c == 0xDD || c == 0xFD || c == 0xFF) {
+    return 'y';
+  }
 
   return c;
 }
 
 static void utf8ToLower(string &s) {
   // C0 C1 C2 C3 C4 C5 E0 E1 E2 E3 E4 E5 AA // one-byte codes for "a"
-  // C3 80 C3 81 C3 82 C3 83 C3 84 C3 85 C3 A0 C3 A1 C3 A2 C3 A3 C3 A4 C3 A5 C2 AA // two-byte codes for "a"
+  // C3 80 C3 81 C3 82 C3 83 C3 84 C3 85 C3 A0 C3 A1 C3 A2 C3 A3 C3 A4 C3 A5 C2 AA // two-byte codes
+  // for "a"
 
   // C8 C9 CA CB E8 E9 EA EB // one-byte codes for "e"
   // C3 88 C3 89 C3 8A C3 8B C3 A8 C3 A9 C3 AA C3 AB // two-byte codes for "e"
@@ -752,49 +781,42 @@ static void utf8ToLower(string &s) {
 
   int n = s.size();
   int pos = 0;
-  for (int i = 0 ; i < n ; ++i, ++pos) {
+  for (int i = 0; i < n; ++i, ++pos) {
     unsigned char c = static_cast<unsigned char>(s[i]);
     if (c >= 0x80) {
       if (i < (n - 1) && static_cast<unsigned char>(s[i + 1]) >= 0x80) {
-	unsigned char c2 = utf8ToLower(c, static_cast<unsigned char>(s[i + 1]));
-	if (c2 < 0x80) {
-	  s[pos] = c2;
-	  i++;
-	}
-	else {
-	  // s.at(pos) = utf8ToLower(c);
-	  // if it's a double code we don't recognize, skip both characters;
-	  // this does mean that we lose the chance to handle back-to-back extended ascii characters
-	  // but we'll assume that is less likely than a unicode "combining character" or other
-	  // unrecognized unicode character for data
-	  i++;
-	}
+        unsigned char c2 = utf8ToLower(c, static_cast<unsigned char>(s[i + 1]));
+        if (c2 < 0x80) {
+          s[pos] = c2;
+          i++;
+        } else {
+          // s.at(pos) = utf8ToLower(c);
+          // if it's a double code we don't recognize, skip both characters;
+          // this does mean that we lose the chance to handle back-to-back extended ascii characters
+          // but we'll assume that is less likely than a unicode "combining character" or other
+          // unrecognized unicode character for data
+          i++;
+        }
       } else {
-	unsigned char c2 = utf8ToLower(c);
-	if (c2 < 0x80) {
-	  s[pos] = c2;
-	} else {
-	  // skip unrecognized single-byte codes
-	  pos--;
-	}
+        unsigned char c2 = utf8ToLower(c);
+        if (c2 < 0x80) {
+          s[pos] = c2;
+        } else {
+          // skip unrecognized single-byte codes
+          pos--;
+        }
+      }
+    } else {
+      if (c >= 'A' && c <= 'Z') {
+        s[pos] = c + ('a' - 'A');
+      } else {
+        s[pos] = c;
       }
     }
-    else
-      {
-	if (c >= 'A' && c <= 'Z')
-	  {
-	    s[pos] = c + ('a' - 'A');
-	  }
-	else
-	  {
-	    s[pos] = c;
-	  }
-      }
   }
-  if (pos < n)
-    {
-      s.resize(pos);
-    }
+  if (pos < n) {
+    s.resize(pos);
+  }
 }
 
 static string cleanupAddress(const string &addr) {
@@ -808,12 +830,12 @@ static string cleanupAddress(const string &addr) {
   if (bpos != string::npos) {
     auto epos = s.find(')', bpos + 1);
     if (epos != string::npos)
-      s.erase(s.begin() + bpos, s.begin()  + epos + 1);
+      s.erase(s.begin() + bpos, s.begin() + epos + 1);
     else
       s.erase(s.begin() + bpos, s.end());
   }
   // right trim
-  s.erase(s.find_last_not_of(" \n\r\t")+1);
+  s.erase(s.find_last_not_of(" \n\r\t") + 1);
 
   return s;
 }
@@ -956,7 +978,7 @@ GlGraphComposite *GeographicViewGraphicsView::getGlGraphComposite() const {
 void GeographicViewGraphicsView::createLayoutWithAddresses(const string &addressPropertyName,
                                                            bool createLatAndLngProps,
                                                            bool resetLatAndLngValues,
-							   bool automaticChoice) {
+                                                           bool automaticChoice) {
   geocodingActive = true;
   nodeLatLng.clear();
   Observable::holdObservers();
@@ -991,7 +1013,7 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
 
     for (auto n : graph->nodes()) {
       if (progressWidget->cancelRequested() || cancelGeocoding)
-	break;
+        break;
       progressWidget->setProgress(++nbNodesProcessed, nbNodes);
 
       string addrValue = addressProperty->getNodeValue(n);
@@ -1003,7 +1025,7 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
                                  tlpStringToQString(addrValue));
 
       if (nodeLatLng.find(n) == nodeLatLng.end()) {
-	auto addr = cleanupAddress(addrValue);
+        auto addr = cleanupAddress(addrValue);
         if (addressesLatLngMap.find(addr) != addressesLatLngMap.end()) {
           latLng = nodeLatLng[n] = addressesLatLngMap[addr];
 
@@ -1024,65 +1046,66 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
 
           unsigned int idx = 0;
           vector<NominatimGeocoderResult> &&geocodingResults =
-	    nominatimGeocoder.getLatLngForAddress(addr);
+              nominatimGeocoder.getLatLngForAddress(addr);
 
           if (geocodingResults.size() > 1) {
-	    if (automaticChoice) {
-	      // choose the returned address for whom the input address
-	      // is found the closest to its beginning
-	      // we use lower case conversion to improve matching
-	      utf8ToLower(addr);
-	      size_t bpos = string::npos;
-	      unsigned i = 0;
-	      idx = geocodingResults.size();
+            if (automaticChoice) {
+              // choose the returned address for whom the input address
+              // is found the closest to its beginning
+              // we use lower case conversion to improve matching
+              utf8ToLower(addr);
+              size_t bpos = string::npos;
+              unsigned i = 0;
+              idx = geocodingResults.size();
 
-	      for (auto &result : geocodingResults) {
-		auto &address = result.address;
-		// lower case conversion
-		utf8ToLower(address);
+              for (auto &result : geocodingResults) {
+                auto &address = result.address;
+                // lower case conversion
+                utf8ToLower(address);
 
-		auto pos = address.find(addr);
-		if (pos == 0) {
-		  idx = i;
-		  break;
-		}
-		if (pos < bpos) {
-		  bpos = pos;
-		  idx = i;
-		}
-		++i;
-	      }
-	      if (idx == geocodingResults.size()) {
-		// no exact match has been found
-		qInfo() << "No geolocation with exact match found for" << tlpStringToQString(addrValue);
-		// we assume the first one is the best
-		idx = 0;
-	      }
-	    } else {
-	      addressSelectionDialog->clearList();
-	      addressSelectionDialog->setBaseAddress(tlpStringToQString(addr));
+                auto pos = address.find(addr);
+                if (pos == 0) {
+                  idx = i;
+                  break;
+                }
+                if (pos < bpos) {
+                  bpos = pos;
+                  idx = i;
+                }
+                ++i;
+              }
+              if (idx == geocodingResults.size()) {
+                // no exact match has been found
+                qInfo() << "No geolocation with exact match found for"
+                        << tlpStringToQString(addrValue);
+                // we assume the first one is the best
+                idx = 0;
+              }
+            } else {
+              addressSelectionDialog->clearList();
+              addressSelectionDialog->setBaseAddress(tlpStringToQString(addr));
 
-	      for (auto &result : geocodingResults) {
-		addressSelectionDialog->addResultToList(tlpStringToQString(result.address));
-	      }
+              for (auto &result : geocodingResults) {
+                addressSelectionDialog->addResultToList(tlpStringToQString(result.address));
+              }
 
-	      addressSelectionDialog->exec();
-	      idx = addressSelectionDialog->getPickedResultIdx();
-	    }
+              addressSelectionDialog->exec();
+              idx = addressSelectionDialog->getPickedResultIdx();
+            }
           } else if (geocodingResults.empty()) {
-	    qWarning() << "No geolocation found for" << tlpStringToQString(addrValue);
-	    failures++;
-	    continue;
+            qWarning() << "No geolocation found for" << tlpStringToQString(addrValue);
+            failures++;
+            continue;
           }
 
-	  const pair<double, double> &latLng = geocodingResults[idx].latLng;
-	  nodeLatLng[n] = addressesLatLngMap[addr] = latLng;
+          const pair<double, double> &latLng = geocodingResults[idx].latLng;
+          nodeLatLng[n] = addressesLatLngMap[addr] = latLng;
 
-	  if (createLatAndLngProps) {
-	    latitudeProperty->setNodeValue(n, latLng.first);
-	    longitudeProperty->setNodeValue(n, latLng.second);
-	  }
-	}
+          if (createLatAndLngProps) {
+            latitudeProperty->setNodeValue(n, latLng.first);
+            longitudeProperty->setNodeValue(n, latLng.second);
+          }
+        }
       }
 
       QApplication::processEvents();
@@ -1091,17 +1114,15 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
     progressWidget->hide();
     QApplication::processEvents();
     if (failures) {
-      QString msg =
-	QString("%1 %2 have not been geolocated.\nDo you want to see %3 ?")
-	.arg(failures > 1 ? QString::number(failures) : QString("One"))
-	.arg(failures > 1 ? "addresses" : "address")
-	.arg(failures > 1 ? "them" : "it");
+      QString msg = QString("%1 %2 have not been geolocated.\nDo you want to see %3 ?")
+                        .arg(failures > 1 ? QString::number(failures) : QString("One"))
+                        .arg(failures > 1 ? "addresses" : "address")
+                        .arg(failures > 1 ? "them" : "it");
 
-      if (QMessageBox::warning(Perspective::instance()->mainWindow(),
-			       "Geolocation failed", msg,
-			       QMessageBox::Yes | QMessageBox::No,
-			       QMessageBox::Yes) == QMessageBox::Yes)
-	Perspective::showLogMessages();
+      if (QMessageBox::warning(Perspective::instance()->mainWindow(), "Geolocation failed", msg,
+                               QMessageBox::Yes | QMessageBox::No,
+                               QMessageBox::Yes) == QMessageBox::Yes)
+        Perspective::showLogMessages();
     }
   }
 

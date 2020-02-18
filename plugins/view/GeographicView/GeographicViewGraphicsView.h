@@ -47,10 +47,8 @@ public:
   ~GeographicViewGraphicsView() override;
 
   void setGraph(Graph *graph);
-  void createLayoutWithAddresses(const std::string &addressPropertyName,
-				 bool createLatAndLngProps,
-                                 bool resetLatAndLngValues,
-				 bool automaticChoice);
+  void createLayoutWithAddresses(const std::string &addressPropertyName, bool createLatAndLngProps,
+                                 bool resetLatAndLngValues, bool automaticChoice);
   void createLayoutWithLatLngs(const std::string &latitudePropertyName,
                                const std::string &longitudePropertyName,
                                const std::string &edgesPathsPropertyName);
