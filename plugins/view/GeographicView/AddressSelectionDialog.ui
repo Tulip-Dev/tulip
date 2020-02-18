@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Address Selection Dialog</string>
+   <string>Geographic view: Address Selection</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Multiples results found for address :</string>
+      <string>Multiples results found for address:</string>
      </property>
     </widget>
    </item>
@@ -34,7 +34,7 @@
    <item>
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Pick one of them in the list below and press Ok</string>
+      <string>Select one in the list below and press Ok</string>
      </property>
     </widget>
    </item>

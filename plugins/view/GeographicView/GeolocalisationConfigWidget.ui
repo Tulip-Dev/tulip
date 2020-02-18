@@ -42,7 +42,7 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Use the &lt;a href=&quot;https://nominatim.openstreetmap.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Nominatim&lt;/span&gt;&lt;/a&gt; geocoding service to get the locations corresponding to the values stored in the&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Use the &lt;a href=&quot;https://nominatim.openstreetmap.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Nominatim&lt;/span&gt;&lt;/a&gt; geocoding service to get the nodes locations corresponding to the values stored in the&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -74,9 +74,22 @@ p, li { white-space: pre-wrap; }
     </layout>
    </item>
    <item>
+    <widget class="QCheckBox" name="automaticChoiceCB">
+     <property name="toolTip">
+      <string>&lt;p&gt;If checked, when multiple locations are retrieved the one whose the returned address gives the best match with the input address (i.e the one for whom the input address is found closest to its beginning) is choosen.&lt;br/&gt;If there is no possible match (the input address is not found in any of returned addresses) the first location is choosen.&lt;br/&gt;If not checked, a dialog is then displayed to allow the user to choose among the list of found locations.&lt;br/&gt;In any case, if only one location is retrieved, it is choosen.&lt;/p&gt;</string>
+     </property>
+     <property name="text">
+      <string>Automatic choice</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QCheckBox" name="createLatLngPropsCB">
      <property name="toolTip">
-      <string>If checked, a &quot;latitude&quot; and &quot;longitude&quot; properties are created to store the values retrieved from the geocoding service</string>
+      <string>If checked, a &quot;latitude&quot; and &quot;longitude&quot; properties are created to store the locations retrieved from the geocoding service</string>
      </property>
      <property name="text">
       <string>Store locations in latitude/longitude properties</string>
@@ -89,10 +102,10 @@ p, li { white-space: pre-wrap; }
    <item>
     <widget class="QCheckBox" name="resetLatLngValuesCB">
      <property name="toolTip">
-      <string>If not checked, if already set latitude/longitude values are not retrieved from geocoding service.</string>
+      <string>If not checked, when latitude/longitude values are already set  they are not retrieved from geocoding service.</string>
      </property>
      <property name="text">
-      <string>Recompute latitude/longitude values</string>
+      <string>Recompute all latitude/longitude values</string>
      </property>
      <property name="checked">
       <bool>true</bool>
@@ -116,7 +129,7 @@ p, li { white-space: pre-wrap; }
    <item>
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Use the locations stored in latitude/longitude properties:</string>
+      <string>Use the nodes locations stored in latitude/longitude properties:</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -134,7 +147,7 @@ p, li { white-space: pre-wrap; }
         <string notr="true">QLabel { font: bold; }</string>
        </property>
        <property name="text">
-        <string>latitude    </string>
+        <string>latitude property    </string>
        </property>
       </widget>
      </item>
@@ -161,7 +174,7 @@ p, li { white-space: pre-wrap; }
         <string notr="true">QLabel { font: bold; }</string>
        </property>
        <property name="text">
-        <string>longitude</string>
+        <string>longitude property</string>
        </property>
       </widget>
      </item>
