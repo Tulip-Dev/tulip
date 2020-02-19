@@ -179,10 +179,7 @@ each subdirectory will be visited to search for plugins to load.
 %End
 
 %MethodCode
-  std::string oldTlpPluginsPath = tlp::TulipPluginsPath;
-  tlp::TulipPluginsPath = *a0;
-  tlp::PluginLibraryLoader::loadPlugins(a1);
-  tlp::TulipPluginsPath = oldTlpPluginsPath;
+  tlp::PluginLibraryLoader::loadPluginsFromDir(*a0, a1);
   if (a2) {
     // TODO : wrap the plugin loader C++ instance and pass it over to Python
     std::string importPythonPlugins = "tulip.tlp.loadTulipPluginsFromDir(\"";
