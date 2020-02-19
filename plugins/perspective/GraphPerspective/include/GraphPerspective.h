@@ -89,7 +89,7 @@ public:
 
   void treatEvent(const tlp::Event &) override;
 
-  void logMessage(QtMsgType, const QMessageLogContext &, const QString &);
+  void logMessage(QtMsgType, const QMessageLogContext &, const QString &) override;
 
   bool terminated() override;
 

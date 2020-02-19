@@ -76,11 +76,15 @@ struct OpenMPDefaultOptions {
 #else
     bool nested = false;
 #endif
+#if _OPENMP < 201811
+    // deprecated since OpenMP 5.0
     auto nested_ptr = getenv("OMP_NESTED");
     if (nested_ptr)
       // use env variable value (TRUE or FALSE)
       nested = (nested_ptr[0] == 'T');
     omp_set_nested(nested);
+#endif
+    omp_set_max_active_levels(2);
 
     bool dynamic = false;
     auto dynamic_ptr = getenv("OMP_DYNAMIC");
