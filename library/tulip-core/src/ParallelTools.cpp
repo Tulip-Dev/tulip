@@ -84,7 +84,10 @@ struct OpenMPDefaultOptions {
       nested = (nested_ptr[0] == 'T');
     omp_set_nested(nested);
 #endif
+#if _OPENMP > 200805
+    // supported since OpenMP 3.0
     omp_set_max_active_levels(2);
+#endif
 
     bool dynamic = false;
     auto dynamic_ptr = getenv("OMP_DYNAMIC");
