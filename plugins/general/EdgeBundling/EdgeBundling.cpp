@@ -54,28 +54,28 @@ static const char *paramHelp[] = {
     "If true, a subgraph corresponding to the grid used for routing edges will be added.",
 
     // 3D_layout
-    "If true, it is assumed that the input layout is in 3D and 3D edge bundling will be performed.",
+    "If true, a 3D input layout is assumed and 3D edge bundling "
+    "will be performed. Warning: the generated grid graph will be much bigger "
+    "and the algorithm execution time will be slower compared to the 2D case.",
 
     // sphere_layout
-    "If true, it is assumed that nodes have originally been laid out on a sphere surface."
-    "Edges will be routed along the sphere surface. The 3D_layout parameter needs also to be set "
-    "to true"
-    " for that feature to work.",
+    "If true, a spherical layout of the nodes is assumed. "
+    "Edges will be then routed along the sphere surface.",
 
     // long_edges
-    "This parameter defines how long edges will be routed. A value less than 1.0 "
+    "indicates how long edges will be routed. A value less than 1.0 "
     "will promote paths outside dense regions of the input graph drawing.",
 
     // split_ratio
-    "This parameter defines the granularity of the grid that will be generated for routing edges. "
-    "The higher its value, the more precise the grid is.",
+    "indicates the granularity of the grid that will be generated for "
+    "routing edges. The higher its value, the more precise the grid is.",
 
     // iterations
-    "This parameter defines the number of iterations of the edge bundling process. "
+    "gives the number of iterations of the edge bundling process. "
     "The higher its value, the more edges will be bundled.",
 
     // max_thread
-    "This parameter defines the number of threads to use for speeding up the edge bundling "
+    "gives the number of threads to use for speeding up the edge bundling "
     "process. "
     "A value of 0 will use as much threads as processors on the host machine.",
 
@@ -233,12 +233,23 @@ bool EdgeBundling::run() {
     dataSet->get("size", size);
   }
 
+  if (sphereLayout) {
+    layout3D = true;
+  }
+
   if (!layout3D) {
-    // avoid potential crash
-    // when the layout is in 3D
-    auto lMin = layout->getMin();
-    auto lMax = layout->getMax();
-    layout3D = (lMin.z() != lMax.z()) && (lMin.y() != lMax.y()) && (lMin.x() != lMax.x());
+    // forbid edge bundling execution if the input layout is in 3D
+    // and it has not been explicitely asked to use the 3D version
+    // of the algorithm.
+    auto lMin = layout->getMin(graph);
+    auto lMax = layout->getMax(graph);
+    if (lMin.z() != lMax.z()) {
+      pluginProgress->setError("A 3D input layout has been detected while the default behavior "
+                               "is to consider a 2D input layout. "
+                               "You must set the \"3D_layout\" parameter to "
+                               "\"true\" to explicitely use 3D edge bundling.");
+      return false;
+    }
   }
 
   string err;
