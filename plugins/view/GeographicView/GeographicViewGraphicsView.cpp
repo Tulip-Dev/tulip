@@ -1101,11 +1101,7 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
 	    }
 	  }
 	}
-
-	QApplication::processEvents();
       }
-
-      QApplication::processEvents();
     }
     if (failures) {
       QString msg = QString("%1 %2 have not been geolocated.\nDo you want to see %3 ?")
