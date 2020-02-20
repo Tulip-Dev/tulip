@@ -30,8 +30,6 @@
 #include <tulip/Coord.h>
 #include <tulip/Graph.h>
 
-#include "ProgressWidgetGraphicsProxy.h"
-
 namespace tlp {
 
 #ifdef QT_HAS_WEBENGINE
@@ -110,10 +108,6 @@ public:
 
   void switchToCustomTileLayer(const QString &customTileLayerUrl);
 
-  void setProgressWidget(ProgressWidgetGraphicsProxy *progressWidget) {
-    this->progressWidget = progressWidget;
-  }
-
 signals:
 
   void currentZoomChanged();
@@ -133,8 +127,6 @@ private:
   QWebEnginePage *frame;
 #endif
   int x, y;
-
-  ProgressWidgetGraphicsProxy *progressWidget;
 
 #ifdef QT_HAS_WEBENGINE
   MapRefresher *mapRefresher;

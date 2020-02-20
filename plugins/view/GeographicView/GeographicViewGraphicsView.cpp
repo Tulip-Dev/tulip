@@ -44,6 +44,7 @@
 #include <QTimer>
 #include <QMessageBox>
 #include <QMainWindow>
+#include <QProgressDialog>
 
 using namespace std;
 
@@ -388,19 +389,13 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
 #endif
   leafletMaps->setMouseTracking(false);
   leafletMaps->resize(512, 512);
-  progressWidget = new ProgressWidgetGraphicsProxy();
-  progressWidget->hide();
-  progressWidget->setZValue(2);
-  addressSelectionDialog = new AddressSelectionDialog(Perspective::instance()->mainWindow());
-  scene()->addItem(progressWidget);
-
-  leafletMaps->setProgressWidget(progressWidget);
-
   connect(leafletMaps, SIGNAL(currentZoomChanged()), _geoView, SLOT(currentZoomChanged()));
   _placeholderItem = new QGraphicsRectItem(0, 0, 1, 1);
   _placeholderItem->setBrush(Qt::transparent);
   _placeholderItem->setPen(QPen(Qt::transparent));
   scene()->addItem(_placeholderItem);
+
+  addressSelectionDialog = new AddressSelectionDialog(Perspective::instance()->mainWindow());
 
   QGraphicsProxyWidget *proxyGM = scene()->addWidget(leafletMaps);
   proxyGM->setPos(0, 0);
@@ -995,11 +990,6 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
 
     int nbNodes = graph->numberOfNodes();
     int nbNodesProcessed = 0;
-    progressWidget->setFrameColor(Qt::green);
-    progressWidget->setProgress(nbNodesProcessed, nbNodes);
-    progressWidget->setPos(width() / 2 - progressWidget->sceneBoundingRect().width() / 2,
-                           height() / 2 - progressWidget->sceneBoundingRect().height() / 2);
-    progressWidget->show();
 
     pair<double, double> latLng;
     unordered_map<string, pair<double, double>> addressesLatLngMap;
@@ -1010,109 +1000,113 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
 
     // hide msg
     noLayoutMsgBox->setVisible(false);
+    {
+      QProgressDialog progress("Retrieving latitude/longitude for address: ", "Cancel", 0, nbNodes, Perspective::instance()->mainWindow());
+      progress.setWindowTitle("Retrieving latitude/longitude for address: ");
+      progress.setMinimumWidth(400);
+      progress.setWindowModality(Qt::WindowModal);
 
-    for (auto n : graph->nodes()) {
-      if (progressWidget->cancelRequested() || cancelGeocoding)
-        break;
-      progressWidget->setProgress(++nbNodesProcessed, nbNodes);
+      for (auto n : graph->nodes()) {
+	progress.setValue(++nbNodesProcessed);
+	if (progress.wasCanceled() || cancelGeocoding)
+	  break;
 
-      string addrValue = addressProperty->getNodeValue(n);
+	string addrValue = addressProperty->getNodeValue(n);
 
-      if (addrValue.empty())
-        continue;
+	if (addrValue.empty())
+	  continue;
 
-      progressWidget->setComment("Retrieving latitude and longitude for address : \n" +
-                                 tlpStringToQString(addrValue));
+	progress.setLabelText(tlpStringToQString(addrValue));
 
-      if (nodeLatLng.find(n) == nodeLatLng.end()) {
-        auto addr = cleanupAddress(addrValue);
-        if (addressesLatLngMap.find(addr) != addressesLatLngMap.end()) {
-          latLng = nodeLatLng[n] = addressesLatLngMap[addr];
+	if (nodeLatLng.find(n) == nodeLatLng.end()) {
+	  auto addr = cleanupAddress(addrValue);
+	  if (addressesLatLngMap.find(addr) != addressesLatLngMap.end()) {
+	    latLng = nodeLatLng[n] = addressesLatLngMap[addr];
 
-          if (createLatAndLngProps) {
-            latitudeProperty->setNodeValue(n, latLng.first);
-            longitudeProperty->setNodeValue(n, latLng.second);
-          }
-        } else {
-          if (!resetLatAndLngValues) {
-            // check if latitude/longitude are already set
-            latLng.first = latitudeProperty->getNodeValue(n);
-            latLng.second = longitudeProperty->getNodeValue(n);
-            if (latLng.first != 0 || latLng.second != 0) {
-              nodeLatLng[n] = addressesLatLngMap[addr] = latLng;
-              continue;
-            }
-          }
+	    if (createLatAndLngProps) {
+	      latitudeProperty->setNodeValue(n, latLng.first);
+	      longitudeProperty->setNodeValue(n, latLng.second);
+	    }
+	  } else {
+	    if (!resetLatAndLngValues) {
+	      // check if latitude/longitude are already set
+	      latLng.first = latitudeProperty->getNodeValue(n);
+	      latLng.second = longitudeProperty->getNodeValue(n);
+	      if (latLng.first != 0 || latLng.second != 0) {
+		nodeLatLng[n] = addressesLatLngMap[addr] = latLng;
+		continue;
+	      }
+	    }
 
-          unsigned int idx = 0;
-          vector<NominatimGeocoderResult> &&geocodingResults =
+	    unsigned int idx = 0;
+	    vector<NominatimGeocoderResult> &&geocodingResults =
               nominatimGeocoder.getLatLngForAddress(addr);
 
-          if (geocodingResults.size() > 1) {
-            if (automaticChoice) {
-              // choose the returned address for whom the input address
-              // is found the closest to its beginning
-              // we use lower case conversion to improve matching
-              utf8ToLower(addr);
-              size_t bpos = string::npos;
-              unsigned i = 0;
-              idx = geocodingResults.size();
+	    if (geocodingResults.size() > 1) {
+	      if (automaticChoice) {
+		// choose the returned address for whom the input address
+		// is found the closest to its beginning
+		// we use lower case conversion to improve matching
+		utf8ToLower(addr);
+		size_t bpos = string::npos;
+		unsigned i = 0;
+		idx = geocodingResults.size();
 
-              for (auto &result : geocodingResults) {
-                auto &address = result.address;
-                // lower case conversion
-                utf8ToLower(address);
+		for (auto &result : geocodingResults) {
+		  auto &address = result.address;
+		  // lower case conversion
+		  utf8ToLower(address);
 
-                auto pos = address.find(addr);
-                if (pos == 0) {
-                  idx = i;
-                  break;
-                }
-                if (pos < bpos) {
-                  bpos = pos;
-                  idx = i;
-                }
-                ++i;
-              }
-              if (idx == geocodingResults.size()) {
-                // no exact match has been found
-                qInfo() << "No geolocation with exact match found for"
-                        << tlpStringToQString(addrValue);
-                // we assume the first one is the best
-                idx = 0;
-              }
-            } else {
-              addressSelectionDialog->clearList();
-              addressSelectionDialog->setBaseAddress(tlpStringToQString(addr));
+		  auto pos = address.find(addr);
+		  if (pos == 0) {
+		    idx = i;
+		    break;
+		  }
+		  if (pos < bpos) {
+		    bpos = pos;
+		    idx = i;
+		  }
+		  ++i;
+		}
+		if (idx == geocodingResults.size()) {
+		  // no exact match has been found
+		  qInfo() << "No geolocation with exact match found for"
+			  << tlpStringToQString(addrValue);
+		  // we assume the first one is the best
+		  idx = 0;
+		}
+	      } else {
+		addressSelectionDialog->clearList();
+		addressSelectionDialog->setBaseAddress(tlpStringToQString(addr));
 
-              for (auto &result : geocodingResults) {
-                addressSelectionDialog->addResultToList(tlpStringToQString(result.address));
-              }
+		for (auto &result : geocodingResults) {
+		  addressSelectionDialog->addResultToList(tlpStringToQString(result.address));
+		}
 
-              addressSelectionDialog->exec();
-              idx = addressSelectionDialog->getPickedResultIdx();
-            }
-          } else if (geocodingResults.empty()) {
-            qWarning() << "No geolocation found for" << tlpStringToQString(addrValue);
-            failures++;
-            continue;
-          }
+		addressSelectionDialog->exec();
+		idx = addressSelectionDialog->getPickedResultIdx();
+	      }
+	    } else if (geocodingResults.empty()) {
+	      qWarning() << "No geolocation found for" << tlpStringToQString(addrValue);
+	      failures++;
+	      continue;
+	    }
 
-          const pair<double, double> &latLng = geocodingResults[idx].latLng;
-          nodeLatLng[n] = addressesLatLngMap[addr] = latLng;
+	    const pair<double, double> &latLng = geocodingResults[idx].latLng;
+	    nodeLatLng[n] = addressesLatLngMap[addr] = latLng;
 
-          if (createLatAndLngProps) {
-            latitudeProperty->setNodeValue(n, latLng.first);
-            longitudeProperty->setNodeValue(n, latLng.second);
-          }
-        }
+	    if (createLatAndLngProps) {
+	      latitudeProperty->setNodeValue(n, latLng.first);
+	      longitudeProperty->setNodeValue(n, latLng.second);
+	    }
+	  }
+	}
+
+	QApplication::processEvents();
       }
 
       QApplication::processEvents();
     }
-
-    progressWidget->hide();
-    QApplication::processEvents();
     if (failures) {
       QString msg = QString("%1 %2 have not been geolocated.\nDo you want to see %3 ?")
                         .arg(failures > 1 ? QString::number(failures) : QString("One"))
@@ -1167,11 +1161,6 @@ void GeographicViewGraphicsView::resizeEvent(QResizeEvent *event) {
   scene()->setSceneRect(QRect(QPoint(0, 0), size()));
   leafletMaps->resize(width(), height());
   glWidgetItem->resize(width(), height());
-
-  if (progressWidget->isVisible()) {
-    progressWidget->setPos(width() / 2 - progressWidget->sceneBoundingRect().width() / 2,
-                           height() / 2 - progressWidget->sceneBoundingRect().height() / 2);
-  }
 
   if (noLayoutMsgBox && noLayoutMsgBox->isVisible()) {
     noLayoutMsgBox->setPos(width() / 2 - noLayoutMsgBox->sceneBoundingRect().width() / 2,

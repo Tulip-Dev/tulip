@@ -8,7 +8,6 @@ SET(LIB_SRCS
     GeographicView.cpp
     GeographicViewConfigWidget.cpp
     GeolocalisationConfigWidget.cpp
-    ProgressWidgetGraphicsProxy.cpp
     GeographicViewInteractors.cpp
     AddressSelectionDialog.cpp
     LeafletMaps.cpp
@@ -19,7 +18,6 @@ SET(LIB_SRCS
 QTX_WRAP_UI(LIB_UI_HEADERS
             GeolocalisationConfigWidget.ui
             GeographicViewConfigWidget.ui
-            ProgressWidget.ui
             AddressSelectionDialog.ui)
 
 QTX_ADD_RESOURCES(LIB_RCC_SRCS
@@ -29,7 +27,6 @@ QTX_ADD_RESOURCES(LIB_RCC_SRCS
 QTX_WRAP_CPP(LIB_MOC_SRCS
              GeographicView.h
              GeographicViewGraphicsView.h
-             ProgressWidgetGraphicsProxy.h
              GeographicViewConfigWidget.h
              GeographicViewShowElementInfo.h
              GeolocalisationConfigWidget.h

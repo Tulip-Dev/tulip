@@ -31,6 +31,7 @@
 #include <tulip/Camera.h>
 
 #include <QGraphicsView>
+#include <QGraphicsProxyWidget>
 #include <QComboBox>
 
 namespace tlp {
@@ -186,7 +187,6 @@ private:
   GlSimpleEntity *planisphereEntity;
 
   AddressSelectionDialog *addressSelectionDialog;
-  ProgressWidgetGraphicsProxy *progressWidget;
   QGraphicsProxyWidget *noLayoutMsgBox;
 
   bool firstGlobeSwitch;
