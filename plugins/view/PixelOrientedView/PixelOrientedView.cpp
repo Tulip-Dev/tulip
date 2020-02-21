@@ -26,7 +26,6 @@
 #include <tulip/GlRect.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlLayer.h>
-#include <tulip/GlProgressBar.h>
 #include <tulip/GlLabel.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/StringProperty.h>
@@ -36,6 +35,7 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/tulipconf.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/Perspective.h>
 
 #include "PixelOrientedInteractors.h"
 #include "PixelOrientedView.h"
@@ -45,6 +45,8 @@
 
 #include <QApplication>
 #include <QGraphicsView>
+#include <QMainWindow>
+#include <QProgressDialog>
 #include <QTimer>
 
 using namespace std;
@@ -484,9 +486,8 @@ void PixelOrientedView::removeEmptyViewLabel() {
   }
 }
 
-void PixelOrientedView::generatePixelOverview(PixelOrientedOverview *pixelOverview,
-                                              GlMainWidget *glWidget) {
-  pixelOverview->computePixelView(glWidget);
+void PixelOrientedView::generatePixelOverview(PixelOrientedOverview *pixelOverview) {
+  pixelOverview->computePixelView();
   overviewGenMap[pixelOverview->getDimensionName()] = true;
 }
 
@@ -625,43 +626,28 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
   Coord eyesBak = cam.getEyes();
   Coord centerBak = cam.getCenter();
   Coord upBak = cam.getUp();
-  float width = cam.getBoundingBox().width();
 
-  GlProgressBar *progressBar =
-      new GlProgressBar(centerBak + Coord(0, width / 70, 0), width - width / 10, width / 12,
-                        // use same green color as the highlighting one
-                        // in workspace panel
-                        Color(0xCB, 0xDE, 0x5D));
-  progressBar->setComment("Updating pixel oriented view...");
-  progressBar->progress(currentStep, nbOverviews);
-  mainLayer->addGlEntity(progressBar, "progress bar");
-  getGlMainWidget()->draw();
+  if (nbOverviews)  {
+    QProgressDialog progress(Perspective::instance()->mainWindow());
+    progress.setCancelButton(nullptr);
+    progress.setWindowTitle("Computing pixel oriented view for: ");
+    progress.setRange(0, nbOverviews);
+    progress.setMinimumWidth(400);
+    progress.setWindowModality(Qt::WindowModal);
+    progress.setValue(0);
 
-  // disable user input
-  tlp::disableQtUserInput();
-  // before allowing the progressBar display
-  QApplication::processEvents();
-
-  for (auto &it : overviewsMap) {
-    if (std::find(selectedGraphProperties.begin(), selectedGraphProperties.end(), it.first) !=
-        selectedGraphProperties.end()) {
-      if (updateAll || overviewGenMap[it.first]) {
-        (it.second)->computePixelView();
-        overviewGenMap[it.first] = true;
+    for (auto &it : overviewsMap) {
+      if (std::find(selectedGraphProperties.begin(), selectedGraphProperties.end(), it.first) !=
+	  selectedGraphProperties.end()) {
+	if (updateAll || overviewGenMap[it.first]) {
+	  (it.second)->computePixelView();
+	  overviewGenMap[it.first] = true;
+	}
+	progress.setLabelText((it.second)->getDimensionName().c_str());
+	progress.setValue(++currentStep);
       }
-
-      progressBar->progress(++currentStep, nbOverviews);
-      getGlMainWidget()->draw();
-      // needed to display progressBar
-      QApplication::processEvents();
     }
   }
-
-  // re-enable user input
-  tlp::enableQtUserInput();
-
-  mainLayer->deleteGlEntity(progressBar);
-  delete progressBar;
 
   if (smallMultiplesView) {
     mainLayer->addGlEntity(overviewsComposite, "overviews composite");

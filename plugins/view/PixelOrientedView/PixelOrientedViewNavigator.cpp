@@ -75,7 +75,7 @@ bool PixelOrientedViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     return true;
   } else if (e->type() == QEvent::MouseButtonDblClick) {
     if (selectedOverview != nullptr && !selectedOverview->overviewGenerated()) {
-      pixelView->generatePixelOverview(selectedOverview, glWidget);
+      pixelView->generatePixelOverview(selectedOverview);
       glWidget->draw();
     } else if (selectedOverview != nullptr && pixelView->smallMultiplesViewSet()) {
       QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, selectedOverview->getBoundingBox());

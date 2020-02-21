@@ -33,7 +33,6 @@ class GlQuantitativeAxis;
 class GlGraphComposite;
 class GlRect;
 class GlLabel;
-class GlProgressBar;
 class Graph;
 
 class ScatterPlot2D : public GlComposite {
@@ -55,7 +54,7 @@ public:
     return backgroundColor;
   }
 
-  void generateOverview(GlMainWidget *glWidget = nullptr, LayoutProperty *reverseLayout = nullptr);
+  void generateOverview(LayoutProperty *reverseLayout = nullptr);
   bool overviewGenerated() const {
     return overviewGen;
   }
@@ -147,7 +146,7 @@ private:
   }
 
   void createAxis();
-  void computeScatterPlotLayout(GlMainWidget *glWidget, LayoutProperty *reverseLayout);
+  void computeScatterPlotLayout(LayoutProperty *reverseLayout);
   void clean();
 
   std::string xDim, yDim;
@@ -159,10 +158,6 @@ private:
   LayoutProperty *scatterLayout, *scatterEdgeLayout;
   GlQuantitativeAxis *xAxis, *yAxis;
   std::string textureName;
-  GlProgressBar *glProgressBar;
-  int currentStep;
-  int maxStep;
-  int drawStep;
   bool overviewGen;
   Color backgroundColor, foregroundColor;
   GlLabel *clickLabel;

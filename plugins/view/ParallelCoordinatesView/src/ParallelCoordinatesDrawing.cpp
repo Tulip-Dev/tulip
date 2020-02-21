@@ -18,6 +18,8 @@
  */
 
 #include <QApplication>
+#include <QMainWindow>
+#include <QProgressDialog>
 
 #include <tulip/BooleanProperty.h>
 #include <tulip/IntegerProperty.h>
@@ -32,13 +34,13 @@
 #include <tulip/GlCatmullRomCurve.h>
 #include <tulip/GlCubicBSplineInterpolation.h>
 #include <tulip/GlLine.h>
-#include <tulip/GlProgressBar.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/Perspective.h>
 
 #include "ParallelCoordinatesDrawing.h"
 #include "NominalParallelAxis.h"
@@ -74,7 +76,7 @@ ParallelCoordinatesDrawing::ParallelCoordinatesDrawing(ParallelCoordinatesGraphP
 
 ParallelCoordinatesDrawing::~ParallelCoordinatesDrawing() {}
 
-void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget, GlProgressBar *progressBar) {
+void ParallelCoordinatesDrawing::createAxis(GlMainWidget *, QProgressDialog *progress) {
 
   GlMainWidget::getFirstQGLWidget()->makeCurrent();
 
@@ -90,15 +92,10 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget, GlProgressBa
 
   static vector<Coord> lastAxisCoord;
 
-  if (progressBar) {
-    progressBar->setComment("Creating parallel axes ...");
-    progressBar->progress(0, selectedProperties.size());
-    glWidget->getScene()->centerScene();
-    float glWidth = glWidget->getScene()->getBoundingBox().width();
-    glWidget->getScene()->zoomFactor((glWidth - 50) / glWidth);
-    glWidget->draw();
-    // needed to display progressBar
-    QApplication::processEvents();
+  if (progress) {
+    progress->setWindowTitle("Creating parallel axes ...");
+    progress->setRange(0, selectedProperties.size());
+    progress->setValue(0);
   }
 
   if (layoutType == PARALLEL) {
@@ -223,12 +220,8 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget, GlProgressBa
       ++pos;
     }
 
-    if (progressBar) {
-      progressBar->progress(pos, selectedProperties.size());
-      glWidget->draw();
-      // needed to display progressBar
-      QApplication::processEvents();
-    }
+    if (progress)
+      progress->setValue(pos);
   }
 
   resetAxisLayout = false;
@@ -244,7 +237,7 @@ void ParallelCoordinatesDrawing::destroyAxisIfNeeded() {
   }
 }
 
-void ParallelCoordinatesDrawing::plotAllData(GlMainWidget *glWidget, GlProgressBar *progressBar) {
+void ParallelCoordinatesDrawing::plotAllData(GlMainWidget *glWidget, QProgressDialog *progress) {
   Color color;
   computeResizeFactor();
 
@@ -252,12 +245,10 @@ void ParallelCoordinatesDrawing::plotAllData(GlMainWidget *glWidget, GlProgressB
   int maxStep = graphProxy->getDataCount();
   int drawStep = maxStep / 100;
 
-  if (progressBar) {
-    progressBar->setComment("Updating parallel coordinates ...");
-    progressBar->progress(0, maxStep);
-    glWidget->draw();
-    // needed to display progressBar
-    QApplication::processEvents();
+  if (progress) {
+    progress->setWindowTitle("Updating parallel coordinates ...");
+    progress->setRange(0, maxStep);
+    progress->setValue(0);
   }
 
   for (unsigned int dataId : graphProxy->getDataIterator()) {
@@ -277,12 +268,8 @@ void ParallelCoordinatesDrawing::plotAllData(GlMainWidget *glWidget, GlProgressB
 
     plotData(dataId, color);
 
-    if (progressBar && (++currentStep % drawStep == 0)) {
-      progressBar->progress(currentStep, maxStep);
-      glWidget->draw();
-      // needed to display progressBar
-      QApplication::processEvents();
-    }
+    if (progress && (++currentStep % drawStep == 0))
+      progress->setValue(currentStep);
   }
 
   lastHighlightedElements = graphProxy->getHighlightedElts();
@@ -503,7 +490,7 @@ bool ParallelCoordinatesDrawing::getDataIdFromAxisPoint(node axisPoint, unsigned
   return dataMatch;
 }
 
-void ParallelCoordinatesDrawing::update(GlMainWidget *glWidget, bool updateWithoutProgressBar) {
+void ParallelCoordinatesDrawing::update(GlMainWidget *glWidget, bool progressBar) {
 
   deleteGlEntity(axisPlotComposite);
   deleteGlEntity(dataPlotComposite);
@@ -511,39 +498,28 @@ void ParallelCoordinatesDrawing::update(GlMainWidget *glWidget, bool updateWitho
   destroyAxisIfNeeded();
 
   // needed to have some feedback
-  GlProgressBar *progressBar = nullptr;
+  QProgressDialog *progress = nullptr;
 
-  if (!updateWithoutProgressBar) {
-    // disable user input
-    // before allowing progressBar display
-    tlp::disableQtUserInput();
-
-    progressBar = new GlProgressBar(Coord(0.0f, 0.0f, 0.0f), 600, 100,
-                                    // use same green color as the highlighting one
-                                    // in workspace panel
-                                    Color(0xCB, 0xDE, 0x5D));
-    progressBar->setComment("Updating parallel coordinates ...");
-    progressBar->progress(0, graphProxy->numberOfNodes());
-    addGlEntity(progressBar, "progress bar");
-    glWidget->draw();
-    // needed to display progressBar
-    QApplication::processEvents();
+  if (progressBar) {
+    progress = new QProgressDialog(Perspective::instance()->mainWindow());
+    progress->setCancelButton(nullptr);
+    progress->setWindowTitle("Updating parallel coordinates ...");
+    progress->setRange(0, graphProxy->numberOfNodes());
+    progress->setValue(0);
+    progress->setMinimumWidth(400);
+    progress->setWindowModality(Qt::WindowModal);
   }
 
   if (createAxisFlag) {
     axisPlotComposite->reset(false);
-    createAxis(glWidget, progressBar);
+    createAxis(glWidget, progress);
   }
 
   eraseDataPlot();
-  plotAllData(glWidget, progressBar);
+  plotAllData(glWidget, progress);
 
-  if (progressBar != nullptr) {
-    deleteGlEntity(progressBar);
-    delete progressBar;
-    // re-enable user input
-    tlp::enableQtUserInput();
-  }
+  if (progressBar)
+    delete progress;
 
   createAxisFlag = true;
 

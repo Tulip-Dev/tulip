@@ -28,10 +28,11 @@
 #include <tulip/Color.h>
 #include <tulip/Graph.h>
 
+class QProgressDialog;
+
 namespace tlp {
 
 class GlMainWidget;
-class GlProgressBar;
 class ParallelCoordinatesGraphProxy;
 class ParallelAxis;
 class LayoutProperty;
@@ -103,7 +104,7 @@ public:
   void resetAxisLayoutNextUpdate() {
     resetAxisLayout = true;
   }
-  void update(GlMainWidget *glWidget, bool updateWithoutProgressBar = false);
+  void update(GlMainWidget *glWidget, bool progressBar);
   void updateWithAxisSlidersRange(ParallelAxis *axis,
                                   HighlightedEltsSetOp highlightedEltsSetOp = NONE);
 
@@ -115,9 +116,9 @@ public:
 
 private:
   void computeResizeFactor();
-  void createAxis(GlMainWidget *glWidget, GlProgressBar *progressBar);
+  void createAxis(GlMainWidget *glWidget, QProgressDialog* progress);
   void destroyAxisIfNeeded();
-  void plotAllData(GlMainWidget *glWidget, GlProgressBar *progressBar);
+  void plotAllData(GlMainWidget *glWidget, QProgressDialog* progress);
   void plotData(const unsigned int dataIdx, const Color &color);
 
   void erase();

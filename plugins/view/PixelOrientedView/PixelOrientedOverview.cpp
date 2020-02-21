@@ -20,7 +20,6 @@
 #include <tulip/GlTextureManager.h>
 #include <tulip/Gl2DRect.h>
 #include <tulip/GlLabel.h>
-#include <tulip/GlProgressBar.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlOffscreenRenderer.h>
 #include <tulip/GlGraphComposite.h>
@@ -129,7 +128,7 @@ struct NodeCoordYOrdering : public binary_function<pair<node, Coord>, pair<node,
   }
 };
 
-void PixelOrientedOverview::computePixelView(GlMainWidget *glWidget) {
+void PixelOrientedOverview::computePixelView() {
 
   reset(false);
 
@@ -158,20 +157,6 @@ void PixelOrientedOverview::computePixelView(GlMainWidget *glWidget) {
   unsigned int width = pixelOrientedMediator->getImageWidth();
   unsigned int height = pixelOrientedMediator->getImageHeight();
 
-  GlProgressBar *glProgressBar = nullptr;
-
-  if (glWidget != nullptr) {
-    glProgressBar =
-        new GlProgressBar(Coord(blCornerPos.getX() + width / 2, blCornerPos.getY() + height / 2),
-                          width, height, Color(0, 0, 255));
-    glProgressBar->setComment("Generating overview ...");
-    addGlEntity(glProgressBar, "progress bar");
-  }
-
-  unsigned int currentStep = 0;
-  unsigned int maxStep = graph->numberOfNodes();
-  unsigned int drawStep = maxStep / 10;
-
   set<int> xCoordSet;
 
   for (unsigned int i = 0; i < graph->numberOfNodes(); ++i) {
@@ -180,12 +165,6 @@ void PixelOrientedOverview::computePixelView(GlMainWidget *glWidget) {
     Coord nodeCoord = Coord(pos[0], pos[1], 0);
     xCoordSet.insert(pos[0]);
     pixelLayout->setNodeValue(n, nodeCoord);
-    ++currentStep;
-
-    if (glWidget != nullptr && currentStep % drawStep == 0) {
-      glProgressBar->progress(currentStep, maxStep);
-      glWidget->draw();
-    }
   }
 
   if (xCoordSet.size() < 2)
@@ -207,14 +186,6 @@ void PixelOrientedOverview::computePixelView(GlMainWidget *glWidget) {
   glOffscreenRenderer->setSceneBackgroundColor(backgroundColor);
   glOffscreenRenderer->addGraphCompositeToScene(graphComposite);
   glOffscreenRenderer->renderScene(true);
-
-  if (glWidget != nullptr) {
-    glProgressBar->progress(maxStep, maxStep);
-    glWidget->draw();
-
-    deleteGlEntity(glProgressBar);
-    delete glProgressBar;
-  }
 
   GLuint textureId = glOffscreenRenderer->getGLTexture(true);
   GlTextureManager::deleteTexture(textureName);

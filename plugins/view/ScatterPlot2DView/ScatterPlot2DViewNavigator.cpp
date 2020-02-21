@@ -67,7 +67,7 @@ bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     } else if (e->type() == QEvent::MouseButtonDblClick) {
       if (selectedScatterPlotOverview != nullptr &&
           !selectedScatterPlotOverview->overviewGenerated()) {
-        scatterPlot2dView->generateScatterPlot(selectedScatterPlotOverview, glWidget);
+        scatterPlot2dView->generateScatterPlot(selectedScatterPlotOverview);
         glWidget->draw();
       } else if (selectedScatterPlotOverview != nullptr && scatterPlot2dView->matrixViewSet()) {
         QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(

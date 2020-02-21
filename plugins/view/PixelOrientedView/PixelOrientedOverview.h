@@ -23,11 +23,10 @@
 #include "POLIB/TulipGraphDimension.h"
 #include "POLIB/PixelOrientedMediator.h"
 
-#include <tulip/GlSimpleEntity.h>
+#include <tulip/GlGraphComposite.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/Graph.h>
 #include <tulip/GlRect.h>
-#include <tulip/GlMainWidget.h>
 #include <tulip/GlLabel.h>
 
 #include <string>
@@ -62,7 +61,7 @@ public:
 
   void setBLCorner(const Coord &blCorner);
 
-  void computePixelView(GlMainWidget *glWidget = nullptr);
+  void computePixelView();
 
   bool overviewGenerated() const {
     return overviewGen;

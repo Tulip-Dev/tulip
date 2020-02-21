@@ -34,7 +34,6 @@
 
 #include <tulip/GlTools.h>
 #include <tulip/GlLabel.h>
-#include <tulip/GlProgressBar.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/Interactor.h>
 #include <tulip/GlTextureManager.h>
@@ -401,7 +400,7 @@ void ParallelCoordinatesView::graphChanged(tlp::Graph *) {
 
 void ParallelCoordinatesView::updateWithoutProgressBar() {
   if (parallelCoordsDrawing) {
-    parallelCoordsDrawing->update(getGlMainWidget(), true);
+    parallelCoordsDrawing->update(getGlMainWidget(), false);
   }
 }
 
@@ -409,7 +408,7 @@ void ParallelCoordinatesView::updateWithProgressBar() {
   if (parallelCoordsDrawing) {
     setOverviewVisible(false);
     toggleGraphView(glGraphComposite, false);
-    parallelCoordsDrawing->update(getGlMainWidget());
+    parallelCoordsDrawing->update(getGlMainWidget(), true);
     toggleGraphView(glGraphComposite, true);
     centerView();
     getGlMainWidget()->draw();

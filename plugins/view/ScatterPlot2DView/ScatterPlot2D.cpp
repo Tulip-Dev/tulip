@@ -24,7 +24,6 @@
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlLabel.h>
-#include <tulip/GlProgressBar.h>
 #include <tulip/GlQuantitativeAxis.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlTextureManager.h>
@@ -142,17 +141,12 @@ void ScatterPlot2D::setDataLocation(const ElementType &dataLocation) {
   this->dataLocation = dataLocation;
 }
 
-void ScatterPlot2D::generateOverview(GlMainWidget *glWidget, LayoutProperty *reverseLayout) {
+void ScatterPlot2D::generateOverview(LayoutProperty *reverseLayout) {
   clean();
   clickLabel = nullptr;
   backgroundRect = nullptr;
   createAxis();
-  glProgressBar =
-      new GlProgressBar(Coord(blCorner.getX() + size / 2.0f, blCorner.getY() + size / 2.0f), size,
-                        size, Color(0, 0, 255));
-  glProgressBar->setComment("Generating overview ...");
-  addGlEntity(glProgressBar, "progress bar");
-  computeScatterPlotLayout(glWidget, reverseLayout);
+  computeScatterPlotLayout(reverseLayout);
 
   if (mapBackgroundColorToCoeff) {
     Color startColor = zeroColor, endColor;
@@ -204,8 +198,6 @@ void ScatterPlot2D::generateOverview(GlMainWidget *glWidget, LayoutProperty *rev
 
   glOffscreenRenderer->clearScene();
 
-  deleteGlEntity(glProgressBar);
-  delete glProgressBar;
   Gl2DRect *rectTextured = new Gl2DRect(blCorner.getY() + size, blCorner.getY(), blCorner.getX(),
                                         blCorner.getX() + size, textureName);
   addGlEntity(rectTextured, textureName + " overview");
@@ -307,18 +299,10 @@ void ScatterPlot2D::createAxis() {
     yAxis->setCaptionHeight(xAxis->getCaptionHeight(), false);
 }
 
-void ScatterPlot2D::computeScatterPlotLayout(GlMainWidget *glWidget,
-                                             LayoutProperty *reverseLayout) {
+void ScatterPlot2D::computeScatterPlotLayout(LayoutProperty *reverseLayout) {
   Graph *_graph = glGraphComposite->getGraph();
   double sumxiyi = 0.0, sumxi = 0.0, sumyi = 0.0, sumxi2 = 0.0, sumyi2 = 0.0;
   unsigned int nbGraphNodes = _graph->numberOfNodes();
-
-  currentStep = 0;
-  maxStep = nbGraphNodes;
-  drawStep = maxStep / 20;
-
-  if (!drawStep)
-    drawStep = 1;
 
   assert(dynamic_cast<NumericProperty *>(graph->getProperty(xDim)));
   assert(dynamic_cast<NumericProperty *>(graph->getProperty(yDim)));
@@ -357,13 +341,6 @@ void ScatterPlot2D::computeScatterPlotLayout(GlMainWidget *glWidget,
       scatterLayout->setNodeValue(n, nodeCoord);
     } else {
       scatterEdgeLayout->setNodeValue(n, nodeCoord);
-    }
-
-    ++currentStep;
-
-    if (glWidget != nullptr && currentStep % drawStep == 0) {
-      glProgressBar->progress(currentStep, maxStep);
-      glWidget->draw();
     }
   }
 

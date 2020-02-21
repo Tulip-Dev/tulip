@@ -23,14 +23,15 @@
 #include <tulip/GlQuantitativeAxis.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlLine.h>
-#include <tulip/GlProgressBar.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/GraphProperty.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/Perspective.h>
 
-#include <QTime>
 #include <QGraphicsView>
 #include <QApplication>
+#include <QMainWindow>
+#include <QProgressDialog>
 
 #include "ScatterPlot2DView.h"
 #include "ScatterPlot2DOptionsWidget.h"
@@ -838,45 +839,31 @@ void ScatterPlot2DView::generateScatterPlots() {
   Coord centerBak = getGlMainWidget()->getScene()->getGraphCamera().getCenter();
   Coord upBak = getGlMainWidget()->getScene()->getGraphCamera().getUp();
 
-  GlProgressBar *progressBar = new GlProgressBar(Coord(0.0f, 0.0f, 0.0f), 600.0f, 100.0f,
-                                                 // use same green color as the highlighting one
-                                                 // in workspace panel
-                                                 Color(0xCB, 0xDE, 0x5D));
-  progressBar->setComment("Updating scatter plot matrix...");
-  progressBar->progress(currentStep, nbOverviews);
-  mainLayer->addGlEntity(progressBar, "progress bar");
-  centerView();
-  getGlMainWidget()->draw();
+  {
+    QProgressDialog progress(Perspective::instance()->mainWindow());
+    progress.setWindowTitle("Computing scatter plot overview for: ");
+    progress.setCancelButton(nullptr);
+    progress.setRange(0, nbOverviews);
+    progress.setMinimumWidth(400);
+    progress.setWindowModality(Qt::WindowModal);
+    progress.setValue(0);
 
-  // disable user input
-  tlp::disableQtUserInput();
-
-  for (size_t i = 0; i < selectedGraphProperties.size() - 1; ++i) {
-    for (size_t j = 0; j < selectedGraphProperties.size(); ++j) {
-      ScatterPlot2D *overview =
+    for (size_t i = 0; i < selectedGraphProperties.size() - 1; ++i) {
+      for (size_t j = 0; j < selectedGraphProperties.size(); ++j) {
+	ScatterPlot2D *overview =
           scatterPlotsMap[make_pair(selectedGraphProperties[i], selectedGraphProperties[j])];
 
-      if (!overview)
-        continue;
+	if (overview) {
+	  progress.setLabelText(QString("%1 - %2").arg(selectedGraphProperties[i].c_str()).arg(selectedGraphProperties[j].c_str()));
 
-      overview->generateOverview();
-      scatterPlotsGenMap[make_pair(selectedGraphProperties[i], selectedGraphProperties[j])] = true;
+	  overview->generateOverview();
+	  scatterPlotsGenMap[make_pair(selectedGraphProperties[i], selectedGraphProperties[j])] = true;
 
-      currentStep += 1;
-      progressBar->progress(currentStep, nbOverviews);
-
-      // needed to display progressBar
-      if ((i + 1) * (j + 1) % 10 == 0)
-        getGlMainWidget()->draw();
-
-      QApplication::processEvents();
+	  progress.setValue(++currentStep);
+	}
+      }
     }
   }
-
-  tlp::enableQtUserInput();
-
-  mainLayer->deleteGlEntity(progressBar);
-  delete progressBar;
 
   if (matrixView) {
     mainLayer->addGlEntity(matrixComposite, "matrix composite");
@@ -899,8 +886,8 @@ void ScatterPlot2DView::generateScatterPlots() {
   getGlMainWidget()->draw();
 }
 
-void ScatterPlot2DView::generateScatterPlot(ScatterPlot2D *scatterPlot, GlMainWidget *glWidget) {
-  scatterPlot->generateOverview(glWidget);
+void ScatterPlot2DView::generateScatterPlot(ScatterPlot2D *scatterPlot) {
+  scatterPlot->generateOverview();
   scatterPlotsGenMap[make_pair(scatterPlot->getXDim(), scatterPlot->getYDim())] = true;
 }
 
