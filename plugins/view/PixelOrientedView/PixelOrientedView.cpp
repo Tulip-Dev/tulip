@@ -627,7 +627,7 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
   Coord centerBak = cam.getCenter();
   Coord upBak = cam.getUp();
 
-  if (nbOverviews)  {
+  if (nbOverviews) {
     QProgressDialog progress(Perspective::instance()->mainWindow());
     progress.setCancelButton(nullptr);
     progress.setWindowTitle("Computing pixel oriented view for: ");
@@ -638,13 +638,13 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
 
     for (auto &it : overviewsMap) {
       if (std::find(selectedGraphProperties.begin(), selectedGraphProperties.end(), it.first) !=
-	  selectedGraphProperties.end()) {
-	if (updateAll || overviewGenMap[it.first]) {
-	  (it.second)->computePixelView();
-	  overviewGenMap[it.first] = true;
-	}
-	progress.setLabelText((it.second)->getDimensionName().c_str());
-	progress.setValue(++currentStep);
+          selectedGraphProperties.end()) {
+        if (updateAll || overviewGenMap[it.first]) {
+          (it.second)->computePixelView();
+          overviewGenMap[it.first] = true;
+        }
+        progress.setLabelText((it.second)->getDimensionName().c_str());
+        progress.setValue(++currentStep);
       }
     }
   }

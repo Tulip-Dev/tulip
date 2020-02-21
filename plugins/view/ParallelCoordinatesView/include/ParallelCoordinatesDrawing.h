@@ -116,9 +116,9 @@ public:
 
 private:
   void computeResizeFactor();
-  void createAxis(GlMainWidget *glWidget, QProgressDialog* progress);
+  void createAxis(GlMainWidget *glWidget, QProgressDialog *progress);
   void destroyAxisIfNeeded();
-  void plotAllData(GlMainWidget *glWidget, QProgressDialog* progress);
+  void plotAllData(GlMainWidget *glWidget, QProgressDialog *progress);
   void plotData(const unsigned int dataIdx, const Color &color);
 
   void erase();
