@@ -241,10 +241,6 @@ private:
   bool isConstruct;
   bool dontCenterViewAfterConfLoaded;
   bool needDraw;
-
-  static GLuint linesTextureId;
-  static GLuint slidersTextureId;
-  static unsigned int parallelViewInstancesCount;
 };
 } // namespace tlp
 

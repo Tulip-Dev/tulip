@@ -23,6 +23,7 @@
 #include <tulip/TulipRelease.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/PythonVersionChecker.h>
+#include <tulip/GlOffscreenRenderer.h>
 
 #include "ui_AboutTulipPage.h"
 
@@ -31,6 +32,7 @@
 #include <QTextStream>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QOpenGLContext>
 
 namespace tlp {
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
@@ -68,10 +70,10 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       "  </body>"
       "</html>");
 
-  bool openGL_OK = GlMainWidget::getFirstQGLWidget()->isValid();
+  bool openGL_OK = GlOffscreenRenderer::getInstance()->getOpenGLContext()->isValid();
 
   if (openGL_OK)
-    GlMainWidget::getFirstQGLWidget()->makeCurrent();
+    GlOffscreenRenderer::getInstance()->makeOpenGLContextCurrent();
 
   QString tulipDependenciesInfo =
       "<p style=\"font-size:12pt\">"
@@ -103,7 +105,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       "</p>";
 
   if (openGL_OK)
-    GlMainWidget::getFirstQGLWidget()->doneCurrent();
+    GlOffscreenRenderer::getInstance()->doneOpenGLContextCurrent();
+
 
   _ui->dependenciesInfo->setText(tulipDependenciesInfo);
   connect(_ui->aboutQt, SIGNAL(clicked()), qApp, SLOT(aboutQt()));

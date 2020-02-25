@@ -25,8 +25,7 @@
 
 using namespace tlp;
 
-ViewActionsManager::ViewActionsManager(View *view, GlMainWidget *widget, bool keepRatio,
-                                       bool showAAA)
+ViewActionsManager::ViewActionsManager(View *view, GlMainWidget *widget, bool keepRatio)
     : _view(view), _glMainWidget(widget), _keepSizeRatio(keepRatio),
       _advAntiAliasingAction(nullptr) {
   // create actions and add them to _view->graphicsView()
@@ -53,17 +52,6 @@ ViewActionsManager::ViewActionsManager(View *view, GlMainWidget *widget, bool ke
   _snapshotAction->setShortcut(tr("Ctrl+Shift+P"));
   _snapshotAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   _view->graphicsView()->addAction(_snapshotAction);
-
-  if (showAAA) {
-    _advAntiAliasingAction = new QAction("Advanced anti-aliasing", widget);
-    _advAntiAliasingAction->setToolTip(
-        QString("Enable to use a better but more expensive technique "
-                "of anti-aliasing (needs off screen rendering)"));
-    _advAntiAliasingAction->setCheckable(true);
-    _advAntiAliasingAction->setChecked(_glMainWidget->advancedAntiAliasingActivated());
-    connect(_advAntiAliasingAction, SIGNAL(triggered(bool)), this,
-            SLOT(setAdvancedAntiAliasing(bool)));
-  }
 }
 
 void ViewActionsManager::centerView() {
@@ -92,11 +80,6 @@ void ViewActionsManager::setAntiAliasing(bool aa) {
     _view->draw();
 }
 
-void ViewActionsManager::setAdvancedAntiAliasing(bool aaa) {
-  _glMainWidget->setAdvancedAntiAliasing(aaa);
-  _view->draw();
-}
-
 void ViewActionsManager::fillContextMenu(QMenu *menu) {
   menu->addAction("View")->setEnabled(false);
   menu->addSeparator();
@@ -104,7 +87,7 @@ void ViewActionsManager::fillContextMenu(QMenu *menu) {
   menu->addAction(_centerViewAction);
 
   QAction *action = menu->addAction("Anti-aliasing");
-  action->setToolTip(QString("Improve line rendering quality"));
+  action->setToolTip(QString("Improve rendering quality"));
   action->setCheckable(true);
   action->setChecked(OpenGlConfigManager::antiAliasing());
   connect(action, SIGNAL(triggered(bool)), this, SLOT(setAntiAliasing(bool)));

@@ -20,6 +20,8 @@
 #include <fstream>
 #include <cmath>
 
+#include <QTimer>
+
 #include <tulip/TlpTools.h>
 #include <tulip/Graph.h>
 #include <tulip/GlMainWidget.h>

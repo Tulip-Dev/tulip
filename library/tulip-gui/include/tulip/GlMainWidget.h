@@ -20,8 +20,7 @@
 #ifndef Tulip_GLMAINWIDGET_H
 #define Tulip_GLMAINWIDGET_H
 
-#include <QGLWidget>
-#include <QWindow>
+#include <QOpenGLWidget>
 
 #include <tulip/tulipconf.h>
 #include <tulip/GlScene.h>
@@ -61,7 +60,7 @@ class GlCompositeHierarchyManager;
  * - Texture output with createTexture()
  * - others operation on GlScene and QGlWidget
  */
-class TLP_QT_SCOPE GlMainWidget : public QGLWidget {
+class TLP_QT_SCOPE GlMainWidget : public QOpenGLWidget {
   Q_OBJECT
 
 public:
@@ -132,8 +131,8 @@ public:
    * @param a measure in screen coordinates specified as an integer
    * @return the converted measure in viewport coordinates as an integer
    */
-  int screenToViewport(int l) {
-    return l * windowHandle()->devicePixelRatio();
+  inline int screenToViewport(int l) const {
+    return l * devicePixelRatio();
   }
 
   /**
@@ -141,8 +140,8 @@ public:
    * @param a measure in screen coordinates specified as a double
    * @return the converted measure in viewport coordinates as a double
    */
-  double screenToViewport(double l) {
-    return l * windowHandle()->devicePixelRatio();
+  inline double screenToViewport(double l) const {
+    return l * devicePixelRatio();
   }
 
   /**
@@ -150,8 +149,8 @@ public:
    * @param a point in screen coordinates
    * @return the converted point in viewport coordinates
    */
-  Coord screenToViewport(const Coord &point) {
-    qreal dpr = windowHandle()->devicePixelRatio();
+  inline Coord screenToViewport(const Coord &point) const {
+    qreal dpr = devicePixelRatio();
     return Coord(point.x() * dpr, point.y() * dpr);
   }
 
@@ -160,8 +159,8 @@ public:
    * @param a measure in viewport coordinates specified as a double
    * @return the converted measure in screen coordinates as a double
    */
-  double viewportToScreen(double l) {
-    return l / windowHandle()->devicePixelRatio();
+  inline double viewportToScreen(double l) const {
+    return l / devicePixelRatio();
   }
 
   /**
@@ -169,8 +168,8 @@ public:
    * @param a point in viewport coordinates
    * @return the converted point in screen coordinates
    */
-  Coord viewportToScreen(const Coord &point) {
-    qreal dpr = windowHandle()->devicePixelRatio();
+  inline Coord viewportToScreen(const Coord &point) const {
+    qreal dpr = devicePixelRatio();
     return Coord(point.x() / dpr, point.y() / dpr);
   }
 
@@ -182,14 +181,6 @@ public:
   static void getTextureRealSize(int width, int height, int &textureRealWidth,
                                  int &textureRealHeight);
 
-  /**
-   * @brief Take a snapshot of the Widget and put it in an OpenGl texture
-   * @param width power of two number (for example 256)
-   * @param height power of two number (for example 256)
-   * You can use this texture with Tulip texture system
-   * @see GlTextureManager
-   */
-  QOpenGLFramebufferObject *createTexture(const std::string &textureName, int width, int height);
   /**
    * @brief Take a snapshot of the Widget and put it in a picture
    * @param width size
@@ -232,10 +223,11 @@ public:
                       tlp::GlLayer *layer = nullptr);
 
   /**
-   * Extend makeCurrent function of QGLWidget to inform TextureManager and DisplayListManager of
-   * context changement
+   * Override default makeCurrent/doneCurrent behavior to activate deactivate
+   * adequate OpenGL context based on the QOpenGLWidget visibility
    */
-  virtual void makeCurrent();
+  void makeCurrent();
+  void doneCurrent();
 
   /**
    * Resize openGL view
@@ -276,43 +268,20 @@ public:
    */
   bool keepScenePointOfViewOnSubgraphChanging() const;
 
-  /**
-   * @brief Specify if an advanced technique for better scene anti-aliasing has to be activated
-   *
-   * That option allows to obtain a better scene antialiasing through the use of offscreen rendering
-   * and sampling.
-   * The result rendering will look better while the performance will be slightly altered.
-   * That option is deactivated by default. Use it with caution as it could cause crashes with some
-   * buggy OpenGL drivers.
-   */
-  void setAdvancedAntiAliasing(bool advancedAntiAliasing) {
-    this->advancedAntiAliasing = advancedAntiAliasing;
-  }
-
-  /**
-   * Returns the advanced anti-aliasing technique state
-   */
-  bool advancedAntiAliasingActivated() const {
-    return advancedAntiAliasing;
-  }
-
 private:
-  void setupOpenGlContext();
-  void createRenderingStore(int width, int height);
-  void deleteRenderingStore();
+  void createFramebuffers(int width, int height);
+  void deleteFramebuffers();
 
   tlp::GlScene scene;
   QRegion _visibleArea;
   View *view;
   int widthStored;
   int heightStored;
-  unsigned char *renderingStore;
   bool frameBufferStored;
-  bool useFramebufferObject;
   QOpenGLFramebufferObject *glFrameBuf, *glFrameBuf2;
   static bool inRendering;
   bool keepPointOfViewOnSubgraphChanging;
-  bool advancedAntiAliasing;
+  std::string sceneTextureId;
 
 public slots:
   /**
@@ -365,18 +334,6 @@ signals:
   void glResized(int w, int h);
 
   void graphChanged();
-
-public:
-  /**
-   * This function returns the first QGLWidget created
-   * This function is used to share OpenGL context
-   */
-  static QGLWidget *getFirstQGLWidget();
-
-  static void clearFirstQGLWidget();
-
-private:
-  static QGLWidget *firstQGLWidget;
 };
 } // namespace tlp
 

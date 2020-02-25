@@ -31,8 +31,6 @@
 #include <unordered_map>
 #include <string>
 
-#include <cstdint>
-
 namespace tlp {
 
 struct GlTexture {
@@ -66,19 +64,9 @@ public:
  */
 class TLP_GL_SCOPE GlTextureManager {
 
-  typedef std::unordered_map<std::string, GlTexture> TextureUnit;
-  typedef std::unordered_map<uintptr_t, TextureUnit> ContextAndTextureMap;
+  typedef std::unordered_map<std::string, GlTexture> TextureMap;
 
 public:
-  /**
-   * Change the current OpenGl context (each OpenGl window have a different OpenGl context)
-   */
-  static void changeContext(uintptr_t context);
-  /**
-   * Remove all textures of an OpenGl context and remove this context
-   */
-  static void removeContext(uintptr_t context);
-
   /**
    * Return texture info (id, width and height) for the given name
    */
@@ -165,12 +153,12 @@ public:
     loader = texLoader;
   }
 
+  static void deleteAllTextures();
+
 private:
   static GlTextureLoader *loader;
 
-  static uintptr_t currentContext;
-
-  static ContextAndTextureMap texturesMap;
+  static TextureMap texturesMap;
   static std::set<std::string> texturesWithError;
 
   static unsigned int animationFrame;

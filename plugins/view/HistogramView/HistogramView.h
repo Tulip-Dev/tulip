@@ -195,9 +195,6 @@ private:
   GlRect *emptyRect;
   GlRect *emptyRect2;
 
-  static GLuint binTextureId;
-  static unsigned int histoViewInstancesCount;
-
   bool isConstruct;
   unsigned int lastNbHistograms;
 

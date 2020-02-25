@@ -88,7 +88,7 @@ public:
   ~GeographicView() override;
 
   std::string icon() const override {
-    return ":/tulip/geoview/geographic_view.png";
+    return ":/tulip/view/geographic/geographic_view.png";
   }
 
   void setupUi() override;
@@ -177,8 +177,6 @@ protected slots:
   void fillContextMenu(QMenu *, const QPointF &) override;
 
   void initMap();
-
-  void firstLayoutRefresh();
 
 private:
   void updatePoly(bool force = false);

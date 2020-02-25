@@ -35,10 +35,11 @@
 #include <tulip/SimplePluginProgressWidget.h>
 #include <tulip/PluginLister.h>
 #include <tulip/Perspective.h>
-#include <tulip/QGlBufferManager.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/GlOffscreenRenderer.h>
+#include <tulip/GlTextureManager.h>
 
 #include "TulipPerspectiveMainWindow.h"
 
@@ -347,9 +348,10 @@ int main(int argc, char **argv) {
   delete perspective;
   delete mainWindow;
 
-  // We need to clear allocated Qt buffers and QGlWidget to remove a segfault when we close tulip
-  QGlBufferManager::clearBuffers();
-  GlMainWidget::clearFirstQGLWidget();
+  // We need to clear allocated OpenGL resources
+  // to remove a segfault when we close tulip
+  GlTextureManager::deleteAllTextures();
+  delete GlOffscreenRenderer::getInstance();
 
   return result;
 }

@@ -57,9 +57,6 @@ namespace tlp {
 
 PLUGIN(HistogramView)
 
-GLuint HistogramView::binTextureId(0);
-unsigned int HistogramView::histoViewInstancesCount(0);
-
 HistogramView::HistogramView(const PluginContext *)
     : GlMainView(true), propertiesSelectionWidget(nullptr), histoOptionsWidget(nullptr),
       xAxisDetail(nullptr), yAxisDetail(nullptr), _histoGraph(nullptr), emptyGraph(nullptr),
@@ -68,25 +65,17 @@ HistogramView::HistogramView(const PluginContext *)
       detailedHistogram(nullptr), sceneRadiusBak(0), zoomFactorBak(0), noDimsLabel(nullptr),
       noDimsLabel1(nullptr), noDimsLabel2(nullptr), emptyRect(nullptr), emptyRect2(nullptr),
       isConstruct(false), lastNbHistograms(0), dataLocation(NODE), needUpdateHistogram(false),
-      edgeAsNodeGraph(nullptr) {
-  ++histoViewInstancesCount;
-}
+      edgeAsNodeGraph(nullptr) {}
 
 HistogramView::~HistogramView() {
   if (isConstruct) {
     if (currentInteractor() != nullptr)
       currentInteractor()->uninstall();
 
-    --histoViewInstancesCount;
-
-    if (histoViewInstancesCount == 0) {
-      GlTextureManager::deleteTexture(BIN_RECT_TEXTURE);
-      binTextureId = 0;
-    }
-
     delete propertiesSelectionWidget;
     delete histoOptionsWidget;
     delete emptyGlGraphComposite;
+    delete histogramsComposite;
     delete labelsComposite;
     delete emptyGraph;
     delete axisComposite;
@@ -175,13 +164,6 @@ void HistogramView::setState(const DataSet &dataSet) {
     histoOptionsWidget = new HistoOptionsWidget();
     propertiesSelectionWidget->setWidgetEnabled(true);
     histoOptionsWidget->setWidgetEnabled(false);
-  }
-
-  if (binTextureId == 0) {
-    gl->getFirstQGLWidget()->makeCurrent();
-    binTextureId = gl->getFirstQGLWidget()->bindTexture(
-        QImage(":/histo_texture.png").transformed(QTransform().rotate(90)), GL_TEXTURE_2D);
-    GlTextureManager::registerExternalTexture(BIN_RECT_TEXTURE, binTextureId);
   }
 
   GlMainView::setState(dataSet);
@@ -621,7 +603,7 @@ void HistogramView::graphChanged(Graph *) {
 
 void HistogramView::buildHistograms() {
 
-  GlMainWidget::getFirstQGLWidget()->makeCurrent();
+  getGlMainWidget()->makeCurrent();
 
   histogramsComposite->reset(false);
   labelsComposite->reset(true);
@@ -798,6 +780,7 @@ void HistogramView::switchFromSmallMultiplesToDetailedView(Histogram *histogramT
   Coord brCoord(detailedHistogram->getYAxis()->getAxisBaseCoord() - Coord(offset, 0, 0));
   Coord tlCoord(detailedHistogram->getYAxis()->getAxisBaseCoord() - Coord(offset + 65, 0, 0) +
                 Coord(0, detailedHistogram->getYAxis()->getAxisLength()));
+  delete emptyRect;
   emptyRect = new GlRect(tlCoord, brCoord, Color(0, 0, 0, 0), Color(0, 0, 0, 0));
 
   float offset2 = (detailedHistogram->getXAxis()->getAxisGradsWidth() / 2.) +
@@ -806,6 +789,7 @@ void HistogramView::switchFromSmallMultiplesToDetailedView(Histogram *histogramT
   Coord brCoord2(detailedHistogram->getXAxis()->getAxisBaseCoord() +
                  Coord(detailedHistogram->getXAxis()->getAxisLength(), 0, 0) -
                  Coord(0, offset2 + 60, 0));
+  delete emptyRect2;
   emptyRect2 = new GlRect(tlCoord2, brCoord2, Color(0, 0, 0, 0), Color(0, 0, 0, 0));
 
   mainLayer->addGlEntity(emptyRect, "emptyRect");
@@ -859,6 +843,7 @@ void HistogramView::switchFromDetailedViewToSmallMultiples() {
   mainLayer->deleteGlEntity(emptyRect2);
   delete emptyRect;
   delete emptyRect2;
+  emptyRect = emptyRect2 = nullptr;
 
   if (detailedHistogram != nullptr) {
     mainLayer->deleteGlEntity(detailedHistogram->getBinsComposite());

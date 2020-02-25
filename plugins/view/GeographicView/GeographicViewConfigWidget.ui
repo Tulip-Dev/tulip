@@ -119,7 +119,7 @@
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>:/tulip/geoview/help-contents.png</normaloff>:/tulip/geoview/help-contents.png</iconset>
+         <normaloff>:/tulip/view/geographic/help-contents.png</normaloff>:/tulip/view/geographic/help-contents.png</iconset>
        </property>
       </widget>
      </item>
@@ -186,7 +186,7 @@
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>:/tulip/geoview/help-contents.png</normaloff>:/tulip/geoview/help-contents.png</iconset>
+         <normaloff>:/tulip/view/geographic/help-contents.png</normaloff>:/tulip/view/geographic/help-contents.png</iconset>
        </property>
       </widget>
      </item>

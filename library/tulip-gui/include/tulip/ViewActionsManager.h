@@ -41,8 +41,7 @@ class TLP_QT_SCOPE ViewActionsManager : public QObject {
   QAction *_snapshotAction;
 
 public:
-  ViewActionsManager(View *view, GlMainWidget *widget, bool keepRatio,
-                     bool showAdvancedAntiAliasing = true);
+  ViewActionsManager(View *view, GlMainWidget *widget, bool keepRatio);
 
   // the function below must be called by the associated view
   // when overloading the View class corresponding method
@@ -53,7 +52,6 @@ protected slots:
   void redraw();
   void openSnapshotDialog();
   void setAntiAliasing(bool);
-  void setAdvancedAntiAliasing(bool);
 };
 } // namespace tlp
 

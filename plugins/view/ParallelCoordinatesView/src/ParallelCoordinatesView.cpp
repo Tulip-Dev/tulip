@@ -50,10 +50,6 @@ const vector<string> propertiesTypesFilter(propertiesTypes, propertiesTypes + nb
 
 namespace tlp {
 
-GLuint ParallelCoordinatesView::linesTextureId(0);
-GLuint ParallelCoordinatesView::slidersTextureId(0);
-unsigned int ParallelCoordinatesView::parallelViewInstancesCount(0);
-
 static void toggleGraphView(GlGraphComposite *glGraph, bool displayNodes) {
   GlGraphRenderingParameters param = glGraph->getRenderingParameters();
   param.setAntialiasing(true);
@@ -73,22 +69,11 @@ ParallelCoordinatesView::ParallelCoordinatesView(const PluginContext *)
       axisPointsGraph(nullptr), graphProxy(nullptr), parallelCoordsDrawing(nullptr),
       dataConfigWidget(nullptr), drawConfigWidget(nullptr), firstSet(true),
       lastNbSelectedProperties(0), center(false), lastViewWindowWidth(0), lastViewWindowHeight(0),
-      isConstruct(false), dontCenterViewAfterConfLoaded(false), needDraw(false) {
-  ++parallelViewInstancesCount;
-}
+      isConstruct(false), dontCenterViewAfterConfLoaded(false), needDraw(false) {}
 
 ParallelCoordinatesView::~ParallelCoordinatesView() {
   for (auto obs : triggers()) {
     removeRedrawTrigger(obs);
-  }
-
-  --parallelViewInstancesCount;
-
-  if (parallelViewInstancesCount == 0) {
-    GlTextureManager::deleteTexture(DEFAULT_TEXTURE_FILE);
-    GlTextureManager::deleteTexture(SLIDER_TEXTURE_NAME);
-    linesTextureId = 0;
-    slidersTextureId = 0;
   }
 
   delete axisPointsGraph;
@@ -151,18 +136,6 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
 
     dataConfigWidget = new ViewGraphPropertiesSelectionWidget();
     drawConfigWidget = new ParallelCoordsDrawConfigWidget();
-
-    if (linesTextureId == 0) {
-      GlMainWidget::getFirstQGLWidget()->makeCurrent();
-      linesTextureId = GlMainWidget::getFirstQGLWidget()->bindTexture(
-          QPixmap(":/parallel_texture.png"), GL_TEXTURE_2D, GL_RGBA,
-          QGLContext::LinearFilteringBindOption);
-      slidersTextureId = GlMainWidget::getFirstQGLWidget()->bindTexture(
-          QPixmap(":/parallel_sliders_texture.png"), GL_TEXTURE_2D, GL_RGBA,
-          QGLContext::LinearFilteringBindOption);
-      GlTextureManager::registerExternalTexture(DEFAULT_TEXTURE_FILE, linesTextureId);
-      GlTextureManager::registerExternalTexture(SLIDER_TEXTURE_NAME, slidersTextureId);
-    }
 
     isConstruct = true;
   }

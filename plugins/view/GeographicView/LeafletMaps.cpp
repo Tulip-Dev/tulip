@@ -36,8 +36,8 @@ const string htmlMap =
 #ifdef QT_HAS_WEBENGINE
     "<script type=\"text/javascript\" src=\"qrc:///qtwebchannel/qwebchannel.js\"></script>"
 #endif
-    "<link rel=\"stylesheet\" href=\"qrc:///tulip/geoview/leaflet/leaflet.css\" />"
-    "<script src=\"qrc:///tulip/geoview/leaflet/leaflet.js\"></script>"
+    "<link rel=\"stylesheet\" href=\"qrc:///tulip/view/geographic/leaflet/leaflet.css\" />"
+    "<script src=\"qrc:///tulip/view/geographic/leaflet/leaflet.js\"></script>"
     "<script type=\"text/javascript\">"
     "var map;"
     "var mapBounds;"
@@ -139,7 +139,7 @@ const string htmlMap =
     "  map.removeLayer(currentLayer);"
     "  var customTileLayer = L.tileLayer(customTileLayerUrl, {"
     "      attribution: customTileLayerUrl,"
-    "      errorTileUrl: 'qrc:///tulip/geoview/leaflet/no-tile.png'"
+    "      errorTileUrl: 'qrc:///tulip/view/geographic/leaflet/no-tile.png'"
     "  });"
     "  addEventHandlersToLayer(customTileLayer);"
     "  map.addLayer(customTileLayer);"

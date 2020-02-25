@@ -180,7 +180,7 @@ void ScatterPlot2D::generateOverview(LayoutProperty *reverseLayout) {
 
   if (mapBackgroundColorToCoeff) {
     GlLayer *backgroundLayer = scene->getLayer("Background");
-    Gl2DRect *background = new Gl2DRect(1.0f, 0.0f, 0.0f, 1.0f, "gaussian_tex_back", true);
+    Gl2DRect *background = new Gl2DRect(1.0f, 0.0f, 0.0f, 1.0f, backgroundTextureId, true);
     backgroundLayer->addGlEntity(background, "background");
   }
 

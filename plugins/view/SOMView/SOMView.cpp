@@ -42,6 +42,7 @@
 #include <tulip/GlGraphComposite.h>
 
 #include <QMenu>
+#include <QTimer>
 #include <QToolTip>
 #include <QMessageBox>
 #include <QMouseEvent>
@@ -207,7 +208,7 @@ void SOMView::setState(const DataSet &dataSet) {
   isDetailedMode = false;
   assignNewGlMainWidget(previewWidget, false);
 
-  GlMainWidget::getFirstQGLWidget()->makeCurrent();
+  previewWidget->makeCurrent();
 
   //  clearObservers();
   cleanSOMMap();
@@ -1087,6 +1088,11 @@ void SOMView::switchToPreviewMode() {
 void SOMView::copyToGlMainWidget(GlMainWidget *widget) {
   widget->getScene()->centerScene();
   assignNewGlMainWidget(widget, false);
+  // centering hack after switch from Qt OpenGL module
+  // to OpenGL classes in Gui module
+  QTimer::singleShot(200, [=]() {
+      this->centerView();
+    });
 }
 
 void SOMView::internalSwitchToDetailedMode(SOMPreviewComposite *preview, bool animation) {

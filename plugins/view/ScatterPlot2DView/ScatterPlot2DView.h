@@ -195,9 +195,6 @@ private:
 
   bool initialized;
 
-  static GLuint backgroundTextureId;
-  static unsigned int scatterplotViewInstancesCount;
-
   ElementType dataLocation;
   Graph *edgeAsNodeGraph;
   std::unordered_map<edge, node> edgeToNode;

@@ -18,12 +18,19 @@
  */
 
 #if defined(_MSC_VER)
-#include <Windows.h>
+#include <windows.h>
 #endif
 
 #include <GL/glew.h>
 
+// remove warnings about qt5/glew incompatibility
+// as we do not rely on QOpenGLFunctions for rendering
+#undef __GLEW_H__
+#include <QOpenGLContext>
 #include <QOpenGLFramebufferObject>
+#define __GLEW_H__
+
+#include <QOffscreenSurface>
 
 #include <tulip/Camera.h>
 #include <tulip/GlOffscreenRenderer.h>
@@ -39,12 +46,12 @@ using namespace std;
 
 namespace tlp {
 
-GlOffscreenRenderer *GlOffscreenRenderer::instance = new GlOffscreenRenderer();
+GlOffscreenRenderer *GlOffscreenRenderer::instance(new GlOffscreenRenderer);
 
 GlOffscreenRenderer::GlOffscreenRenderer()
-    : vPWidth(512), vPHeight(512), glFrameBuf(nullptr), glFrameBuf2(nullptr),
-      mainLayer(new GlLayer("Main")), entitiesCpt(0), zoomFactor(DBL_MAX),
-      cameraCenter(FLT_MAX, FLT_MAX, FLT_MAX) {
+    : glContext(nullptr), offscreenSurface(nullptr), vPWidth(512), vPHeight(512),
+      glFrameBuf(nullptr), glFrameBuf2(nullptr), mainLayer(new GlLayer("Main")), entitiesCpt(0),
+      zoomFactor(DBL_MAX), cameraCenter(FLT_MAX, FLT_MAX, FLT_MAX) {
   GlLayer *backgroundLayer = new GlLayer("Background");
   backgroundLayer->setVisible(true);
   GlLayer *foregroundLayer = new GlLayer("Foreground");
@@ -60,6 +67,8 @@ GlOffscreenRenderer::GlOffscreenRenderer()
 GlOffscreenRenderer::~GlOffscreenRenderer() {
   delete glFrameBuf;
   delete glFrameBuf2;
+  delete offscreenSurface;
+  delete glContext;
 }
 
 void GlOffscreenRenderer::setViewPortSize(const unsigned int viewPortWidth,
@@ -147,30 +156,13 @@ void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
 
 void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antialiased) {
 
-  // If no OpenGL context, activate the default one in order to avoid segfault when trying to render
-  // an OpenGL scene
-  if (!QGLContext::currentContext()) {
-    QGLWidget *firstWidget = GlMainWidget::getFirstQGLWidget();
-    firstWidget->makeCurrent();
-  }
+  makeOpenGLContextCurrent();
 
   initFrameBuffers(antialiased);
 
   scene.setViewport(0, 0, vPWidth, vPHeight);
 
-  glPushAttrib(GL_ALL_ATTRIB_BITS);
-
-  glMatrixMode(GL_PROJECTION);
-  glPushMatrix();
-
-  glMatrixMode(GL_MODELVIEW);
-  glPushMatrix();
-
-  GL_TEST_ERROR();
   glFrameBuf->bind();
-  // the line above can produce an invalid op error, forget it
-  glGetError();
-  GL_TEST_ERROR();
 
   if (centerScene) {
     scene.centerScene();
@@ -196,41 +188,17 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
     QOpenGLFramebufferObject::blitFramebuffer(
         glFrameBuf2, QRect(0, 0, glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf,
         QRect(0, 0, glFrameBuf->width(), glFrameBuf->height()));
-
-  glMatrixMode(GL_MODELVIEW);
-  glPopMatrix();
-
-  glMatrixMode(GL_PROJECTION);
-  glPopMatrix();
-
-  GL_TEST_ERROR();
-  glPopAttrib();
-  // the line above can produce an invalid op error, forget it
-  glGetError();
-  GL_TEST_ERROR();
 }
 
 void GlOffscreenRenderer::renderExternalScene(GlScene *scene, const bool antialiased) {
-  // If no OpenGL context, activate the default one in order to avoid segfault when trying to render
-  // an OpenGL scene
-  if (!QGLContext::currentContext()) {
-    QGLWidget *firstWidget = GlMainWidget::getFirstQGLWidget();
-    firstWidget->makeCurrent();
-  }
+
+  makeOpenGLContextCurrent();
 
   initFrameBuffers(antialiased);
 
   Vector<int, 4> backupViewport = scene->getViewport();
 
   scene->setViewport(0, 0, vPWidth, vPHeight);
-
-  glPushAttrib(GL_ALL_ATTRIB_BITS);
-
-  glMatrixMode(GL_PROJECTION);
-  glPushMatrix();
-
-  glMatrixMode(GL_MODELVIEW);
-  glPushMatrix();
 
   glFrameBuf->bind();
   scene->draw();
@@ -241,18 +209,6 @@ void GlOffscreenRenderer::renderExternalScene(GlScene *scene, const bool antiali
         glFrameBuf2, QRect(0, 0, glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf,
         QRect(0, 0, glFrameBuf->width(), glFrameBuf->height()));
 
-  glMatrixMode(GL_MODELVIEW);
-  glPopMatrix();
-
-  glMatrixMode(GL_PROJECTION);
-  glPopMatrix();
-
-  GL_TEST_ERROR();
-  glPopAttrib();
-  // the line above can produce an invalid op error, forget it
-  glGetError();
-  GL_TEST_ERROR();
-
   scene->setViewport(backupViewport);
 }
 
@@ -260,12 +216,13 @@ bool GlOffscreenRenderer::frameBufferOk() const {
   return glFrameBuf->isValid();
 }
 
-static QImage convertImage(const QImage &image) {
-  return QImage(image.bits(), image.width(), image.height(), QImage::Format_ARGB32)
+static inline QImage convertImage(const QImage &image) {
+  return QImage(image.constBits(), image.width(), image.height(), QImage::Format_ARGB32)
       .convertToFormat(QImage::Format_RGB32);
 }
 
 QImage GlOffscreenRenderer::getImage() {
+  makeOpenGLContextCurrent();
   if (!antialiasedFbo)
     return convertImage(glFrameBuf->toImage());
   else
@@ -273,6 +230,8 @@ QImage GlOffscreenRenderer::getImage() {
 }
 
 GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
+
+  makeOpenGLContextCurrent();
 
   bool canUseMipmaps = OpenGlConfigManager::isExtensionSupported("GL_ARB_framebuffer_object") ||
                        OpenGlConfigManager::isExtensionSupported("GL_EXT_framebuffer_object");
@@ -293,11 +252,8 @@ GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-  GL_TEST_ERROR();
   QImage image = getImage().mirrored();
-  // the line above can produce an invalid op error, forget it
-  glGetError();
-  GL_TEST_ERROR();
+
   unsigned char *buff = image.bits();
 
   glBindTexture(GL_TEXTURE_2D, textureId);
@@ -314,4 +270,38 @@ GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
 
   return textureId;
 }
+
+QOpenGLContext *GlOffscreenRenderer::getOpenGLContext() {
+  if (!glContext) {
+    glContext = new QOpenGLContext();
+    offscreenSurface = new QOffscreenSurface();
+    glContext->create();
+    offscreenSurface->create();
+    assert(glContext->isValid());
+  }
+  return glContext;
+}
+
+void GlOffscreenRenderer::makeOpenGLContextCurrent() {
+  getOpenGLContext()->makeCurrent(offscreenSurface);
+}
+
+void GlOffscreenRenderer::doneOpenGLContextCurrent() {
+  getOpenGLContext()->doneCurrent();
+}
+
+void GlOffscreenRenderer::renderGlMainWidget(GlMainWidget *glWidget, bool redrawNeeded) {
+  makeOpenGLContextCurrent();
+  initFrameBuffers(true);
+  glFrameBuf2->bind();
+  glPushAttrib(GL_ALL_ATTRIB_BITS);
+  if (redrawNeeded) {
+    glWidget->render(GlMainWidget::RenderingOptions(GlMainWidget::RenderScene), false);
+  } else {
+    glWidget->render(GlMainWidget::RenderingOptions(), false);
+  }
+  glPopAttrib();
+  glFrameBuf2->release();
+}
+
 } // namespace tlp

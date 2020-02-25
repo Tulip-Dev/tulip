@@ -29,7 +29,7 @@
 
 namespace tlp {
 
-const std::string BIN_RECT_TEXTURE = "histo_texture";
+const std::string BIN_RECT_TEXTURE = ":/histo_texture.png";
 
 class Histogram : public GlComposite {
 

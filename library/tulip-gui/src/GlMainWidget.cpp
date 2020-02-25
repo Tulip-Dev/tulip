@@ -17,11 +17,19 @@
  *
  */
 
+#include <GL/glew.h>
+
 #include <tulip/GlMainWidget.h>
 
+// remove warnings about qt5/glew incompatibility
+// as we do not rely on QOpenGLFunctions for rendering
+#undef __GLEW_H__
+#include <QOpenGLContext>
 #include <QOpenGLFramebufferObject>
-#include <QGLFormat>
-#include <QWindow>
+#define __GLEW_H__
+
+#include <QSurfaceFormat>
+#include <QOffscreenSurface>
 
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
@@ -32,99 +40,45 @@
 #include <tulip/GlQuadTreeLODCalculator.h>
 #include <tulip/GLInteractor.h>
 #include <tulip/GlGraphComposite.h>
-#include <tulip/QGlBufferManager.h>
 #include <tulip/Interactor.h>
 #include <tulip/GlCompositeHierarchyManager.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/View.h>
 #include <tulip/Camera.h>
 #include <tulip/OpenGlConfigManager.h>
-
+#include <tulip/GlOffscreenRenderer.h>
+#include <tulip/GlTextureManager.h>
 using namespace std;
 
 namespace tlp {
 
-QGLWidget *GlMainWidget::firstQGLWidget = nullptr;
 bool GlMainWidget::inRendering = false;
 
-//==================================================
-static void setRasterPosition(unsigned int x, unsigned int y) {
-  GL_THROW_ON_ERROR();
-  float val[4];
-  unsigned char tmp[10];
-  glGetFloatv(GL_CURRENT_RASTER_POSITION, val);
-  glBitmap(0, 0, 0, 0, -val[0] + x, -val[1] + y, tmp);
-  glGetFloatv(GL_CURRENT_RASTER_POSITION, val);
-  GL_THROW_ON_ERROR();
-}
-//==================================================
-static QGLFormat GlInit() {
-  QGLFormat tmpFormat = QGLFormat::defaultFormat();
-  tmpFormat.setDirectRendering(true);
-  tmpFormat.setDoubleBuffer(true);
-  tmpFormat.setAccum(false);
-  tmpFormat.setStencil(true);
-  tmpFormat.setOverlay(false);
-  tmpFormat.setDepth(true);
-  tmpFormat.setRgba(true);
-  tmpFormat.setAlpha(true);
-  tmpFormat.setOverlay(false);
-  tmpFormat.setStereo(false);
-  tmpFormat.setSampleBuffers(true);
-
-  static int maxSamples = -1;
-
-  if (maxSamples < 0) {
-    maxSamples = 0;
-    GlMainWidget::getFirstQGLWidget()->makeCurrent();
-    maxSamples = OpenGlConfigManager::maxNumberOfSamples();
-    GlMainWidget::getFirstQGLWidget()->doneCurrent();
-  }
-
-  tmpFormat.setSamples(maxSamples);
-
-  return tmpFormat;
-}
-
-QGLWidget *GlMainWidget::getFirstQGLWidget() {
-  if (!GlMainWidget::firstQGLWidget) {
-    QGLWidget *glWidget = new QGLWidget(GlInit());
-    // a first QGLWidget will be created as a side effect of calling GlInit() in order to query
-    // the maximum number of samples available, so we must delete it to avoid a memory leak
-    delete GlMainWidget::firstQGLWidget;
-    GlMainWidget::firstQGLWidget = glWidget;
-    assert(GlMainWidget::firstQGLWidget->isValid());
-  }
-
-  return GlMainWidget::firstQGLWidget;
-}
-
-void GlMainWidget::clearFirstQGLWidget() {
-  if (GlMainWidget::firstQGLWidget) {
-    delete GlMainWidget::firstQGLWidget;
-  }
-}
 
 //==================================================
 GlMainWidget::GlMainWidget(QWidget *parent, View *view)
-    : QGLWidget(GlInit(), parent, getFirstQGLWidget()), scene(new GlQuadTreeLODCalculator),
-      view(view), widthStored(0), heightStored(0), useFramebufferObject(false), glFrameBuf(nullptr),
-      glFrameBuf2(nullptr), keepPointOfViewOnSubgraphChanging(false), advancedAntiAliasing(false) {
-  assert(this->isValid());
+    : QOpenGLWidget(parent), scene(new GlQuadTreeLODCalculator), view(view), widthStored(0),
+      heightStored(0), glFrameBuf(nullptr), glFrameBuf2(nullptr),
+      keepPointOfViewOnSubgraphChanging(false),
+      sceneTextureId("scene" + to_string(reinterpret_cast<uintptr_t>(this))) {
   setFocusPolicy(Qt::StrongFocus);
   setMouseTracking(true);
   grabGesture(Qt::PinchGesture);
   grabGesture(Qt::PanGesture);
   grabGesture(Qt::SwipeGesture);
-  renderingStore = nullptr;
+  makeCurrent();
+  QSurfaceFormat format;
+  format.setSamples(OpenGlConfigManager::maxNumberOfSamples());
+  format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
+  setFormat(format);
   getScene()->setViewOrtho(TulipSettings::instance().isViewOrtho());
   OpenGlConfigManager::initExtensions();
+  doneCurrent();
 }
 //==================================================
 GlMainWidget::~GlMainWidget() {
   delete glFrameBuf;
   delete glFrameBuf2;
-  delete[] renderingStore;
 }
 //==================================================
 void GlMainWidget::paintEvent(QPaintEvent *) {
@@ -147,49 +101,27 @@ void GlMainWidget::closeEvent(QCloseEvent *e) {
   emit closing(this, e);
 }
 //==================================================
-void GlMainWidget::setupOpenGlContext() {
-  assert(context()->isValid());
-  makeCurrent();
-}
-//==================================================
-void GlMainWidget::createRenderingStore(int width, int height) {
+void GlMainWidget::createFramebuffers(int width, int height) {
 
-  useFramebufferObject =
-      advancedAntiAliasing && QOpenGLFramebufferObject::hasOpenGLFramebufferBlit();
-
-  if (useFramebufferObject && (!glFrameBuf || glFrameBuf->size().width() != width ||
-                               glFrameBuf->size().height() != height)) {
+  if (!glFrameBuf || glFrameBuf->size().width() != width || glFrameBuf->size().height() != height) {
     makeCurrent();
-    deleteRenderingStore();
+    deleteFramebuffers();
     QOpenGLFramebufferObjectFormat fboFormat;
     fboFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
     fboFormat.setSamples(OpenGlConfigManager::maxNumberOfSamples());
     glFrameBuf = new QOpenGLFramebufferObject(width, height, fboFormat);
     glFrameBuf2 = new QOpenGLFramebufferObject(width, height);
-    useFramebufferObject = glFrameBuf->isValid();
+    GlTextureManager::registerExternalTexture(sceneTextureId, glFrameBuf2->texture());
     widthStored = width;
     heightStored = height;
   }
-
-  if (!useFramebufferObject) {
-    int size = width * height;
-
-    if (renderingStore == nullptr || (size > (widthStored * heightStored))) {
-      deleteRenderingStore();
-      renderingStore = new unsigned char[width * height * 4];
-      widthStored = width;
-      heightStored = height;
-    }
-  }
 }
 //==================================================
-void GlMainWidget::deleteRenderingStore() {
+void GlMainWidget::deleteFramebuffers() {
   delete glFrameBuf;
   glFrameBuf = nullptr;
   delete glFrameBuf2;
   glFrameBuf2 = nullptr;
-  delete[] renderingStore;
-  renderingStore = nullptr;
 }
 
 //==================================================
@@ -197,37 +129,41 @@ void GlMainWidget::render(RenderingOptions options, bool checkVisibility) {
 
   if ((isVisible() || !checkVisibility) && !inRendering) {
 
-    //  assert(contentsRect().width() != 0 && contentsRect().height() != 0);
-    // Begin rendering process
+    // begin rendering process
     inRendering = true;
     makeCurrent();
 
-    // Get the content width and height
+    // backup internal QOpenGLWidget bound framebuffer id
+    int drawFboId = 0;
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &drawFboId);
+
+    // get the content width and height
     int width = screenToViewport(contentsRect().width());
     int height = screenToViewport(contentsRect().height());
 
-    // If the rendering store is not valid need to regenerate new one force the RenderGraph flag.
+    // if the framebuffers have invalid size, new ones need to be created
+    // so force the RenderScene flag.
     if (widthStored != width || heightStored != height) {
       options |= RenderScene;
     }
 
     computeInteractors();
 
-    if (options.testFlag(RenderScene) || renderingStore == nullptr) {
-      createRenderingStore(width, height);
+    if (options.testFlag(RenderScene)) {
+      createFramebuffers(width, height);
 
-      if (useFramebufferObject) {
-        glFrameBuf->bind();
-      }
-
-      // Render the graph in the frame buffer.
+      // render the graph in the antialiased framebuffer.
+      glFrameBuf->bind();
       scene.draw();
+      glFrameBuf->release();
 
-      if (useFramebufferObject) {
-        glFrameBuf->release();
-        QRect fbRect(0, 0, width, height);
-        QOpenGLFramebufferObject::blitFramebuffer(glFrameBuf2, fbRect, glFrameBuf, fbRect);
-      }
+      // copy rendered scene in a texture/QImage compatible framebuffer
+      QRect fbRect(0, 0, width, height);
+      QOpenGLFramebufferObject::blitFramebuffer(glFrameBuf2, fbRect, glFrameBuf, fbRect);
+
+      // restore internal QOpenGLWidget framebuffer binding
+      makeCurrent();
+      glBindFramebuffer(GL_FRAMEBUFFER, drawFboId);
     } else {
       scene.initGlParameters();
     }
@@ -238,38 +174,26 @@ void GlMainWidget::render(RenderingOptions options, bool checkVisibility) {
     glDisable(GL_BLEND);
     glDisable(GL_LIGHTING);
 
-    if (useFramebufferObject) {
-      QRect fbRect(0, 0, width, height);
-      QOpenGLFramebufferObject::blitFramebuffer(nullptr, fbRect, glFrameBuf2, fbRect);
-    } else {
-      if (options.testFlag(RenderScene)) {
-        // Copy the back buffer (containing the graph render) in the rendering store to reuse it
-        // later.
-        glReadBuffer(GL_BACK);
-        glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, renderingStore);
-        glFlush();
-      } else {
-        // Copy the rendering store into the back buffer : restore the last graph render.
-        glDrawBuffer(GL_BACK);
-        setRasterPosition(0, 0);
-
-        if (renderingStore != nullptr)
-          glDrawPixels(width, height, GL_RGBA, GL_UNSIGNED_BYTE, renderingStore);
-      }
-    }
+    // draw rendered scene from texture
+    Camera camera2D(scene.getGraphCamera().getScene(), false);
+    camera2D.setScene(scene.getGraphCamera().getScene());
+    camera2D.initGl();
+    Gl2DRect rect(height, 0, 0, width, sceneTextureId);
+    rect.draw(0, &camera2D);
+    scene.getGraphCamera().initGl();
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glEnable(GL_LIGHTING);
 
-    // Draw interactors and foreground entities.
+    // draw interactors and foreground entities.
     drawInteractors();
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_STENCIL_TEST);
 
     if (options.testFlag(SwapBuffers)) {
-      swapBuffers();
+      update();
     }
 
     inRendering = false;
@@ -323,7 +247,7 @@ void GlMainWidget::resizeGL(int w, int h) {
   int width = contentsRect().width();
   int height = contentsRect().height();
 
-  deleteRenderingStore();
+  deleteFramebuffers();
 
   scene.setViewport(0, 0, screenToViewport(width), screenToViewport(height));
 
@@ -332,11 +256,20 @@ void GlMainWidget::resizeGL(int w, int h) {
 //==================================================
 void GlMainWidget::makeCurrent() {
   if (isVisible()) {
-    QGLWidget::makeCurrent();
-    GlTextureManager::changeContext(reinterpret_cast<uintptr_t>(GlMainWidget::firstQGLWidget));
+    QOpenGLWidget::makeCurrent();
     int width = contentsRect().width();
     int height = contentsRect().height();
     scene.setViewport(0, 0, screenToViewport(width), screenToViewport(height));
+  } else {
+    GlOffscreenRenderer::getInstance()->makeOpenGLContextCurrent();
+  }
+}
+//==================================================
+void GlMainWidget::doneCurrent() {
+  if (isVisible()) {
+    QOpenGLWidget::doneCurrent();
+  } else {
+    GlOffscreenRenderer::getInstance()->doneOpenGLContextCurrent();
   }
 }
 //==================================================
@@ -421,57 +354,16 @@ void GlMainWidget::getTextureRealSize(int width, int height, int &textureRealWid
   }
 }
 //=====================================================
-QOpenGLFramebufferObject *GlMainWidget::createTexture(const std::string &textureName, int width,
-                                                      int height) {
-
-  makeCurrent();
-  scene.setViewport(0, 0, width, height);
-  scene.adjustSceneToSize(width, height);
-
-  QOpenGLFramebufferObject *glFrameBuf = QGlBufferManager::getFramebufferObject(width, height);
-  assert(glFrameBuf->size() == QSize(width, height));
-
-  glFrameBuf->bind();
-
-  scene.draw();
-  glFrameBuf->release();
-
-  GLuint textureId = 0;
-  glGenTextures(1, &textureId);
-  glBindTexture(GL_TEXTURE_2D, textureId);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
-  unsigned char *buff = new unsigned char[width * height * 4];
-  glBindTexture(GL_TEXTURE_2D, glFrameBuf->texture());
-  glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
-
-  glBindTexture(GL_TEXTURE_2D, textureId);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
-
-  delete[] buff;
-
-  glFrameBuf->release();
-
-  GlTextureManager::registerExternalTexture(textureName, textureId);
-
-  return nullptr;
-}
-
-//=====================================================
 void GlMainWidget::createPicture(const std::string &pictureName, int width, int height,
                                  bool center) {
   createPicture(width, height, center).save(tlp::tlpStringToQString(pictureName));
 }
-
 //=====================================================
 QImage GlMainWidget::createPicture(int width, int height, bool center, QImage::Format format) {
 
   QImage resultImage;
 
-  GlMainWidget::getFirstQGLWidget()->makeCurrent();
+  makeCurrent();
 
   QOpenGLFramebufferObjectFormat fboFormat;
   fboFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
@@ -543,6 +435,7 @@ QImage GlMainWidget::createPicture(int width, int height, bool center, QImage::F
 }
 
 void GlMainWidget::centerScene(bool graphChanged, float zf) {
+  makeCurrent();
   scene.centerScene();
 
   if (zf != 1)

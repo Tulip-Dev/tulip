@@ -24,11 +24,13 @@
 #include <QGraphicsProxyWidget>
 #include <QContextMenuEvent>
 #include <QGraphicsScene>
+#include <QPainter>
 
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlQuad.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/GlOffscreenRenderer.h>
 
 using namespace std;
 using namespace tlp;
@@ -105,22 +107,16 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
     emit widgetPainted(_graphChanged);
   }
 
-  painter->beginNativePainting();
-
-  glPushAttrib(GL_ALL_ATTRIB_BITS);
+  GlOffscreenRenderer::getInstance()->setViewPortSize(width, height);
 
   if (_redrawNeeded) {
-    glMainWidget->render(GlMainWidget::RenderingOptions(GlMainWidget::RenderScene), false);
+    GlOffscreenRenderer::getInstance()->renderGlMainWidget(glMainWidget);
     _redrawNeeded = false;
   } else {
-    glMainWidget->render(GlMainWidget::RenderingOptions(), false);
+    GlOffscreenRenderer::getInstance()->renderGlMainWidget(glMainWidget, false);
   }
 
-  glFlush();
-
-  glPopAttrib();
-
-  painter->endNativePainting();
+  painter->drawImage(QRect(0, 0, width, height), GlOffscreenRenderer::getInstance()->getImage());
 }
 
 void GlMainWidgetGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {

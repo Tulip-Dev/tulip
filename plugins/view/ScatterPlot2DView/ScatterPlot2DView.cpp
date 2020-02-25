@@ -48,9 +48,6 @@ const float OFFSET_BETWEEN_PREVIEWS = 16;
 
 namespace tlp {
 
-GLuint ScatterPlot2DView::backgroundTextureId(0);
-unsigned int ScatterPlot2DView::scatterplotViewInstancesCount(0);
-
 PLUGIN(ScatterPlot2DView)
 
 class map_pair_string_key_contains
@@ -84,15 +81,6 @@ ScatterPlot2DView::ScatterPlot2DView(const PluginContext *)
       edgeAsNodeGraph(nullptr) {}
 
 ScatterPlot2DView::~ScatterPlot2DView() {
-
-  if (initialized)
-    --scatterplotViewInstancesCount;
-
-  if (scatterplotViewInstancesCount == 0) {
-    GlTextureManager::deleteTexture("gaussian_text_back");
-    backgroundTextureId = 0;
-  }
-
   delete propertiesSelectionWidget;
   delete optionsWidget;
   delete glGraphComposite;
@@ -165,17 +153,9 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     propertiesSelectionWidget = new ViewGraphPropertiesSelectionWidget();
     optionsWidget = new ScatterPlot2DOptionsWidget();
     optionsWidget->setWidgetEnabled(false);
-    ++scatterplotViewInstancesCount;
     initialized = true;
     setOverviewVisible(true);
     needQuickAccessBar = true;
-  }
-
-  if (backgroundTextureId == 0) {
-    getGlMainWidget()->getFirstQGLWidget()->makeCurrent();
-    backgroundTextureId = getGlMainWidget()->getFirstQGLWidget()->bindTexture(
-        QPixmap(":/background_texture.png").transformed(QTransform().rotate(90)), GL_TEXTURE_2D);
-    GlTextureManager::registerExternalTexture("gaussian_tex_back", backgroundTextureId);
   }
 
   Graph *lastGraph = scatterPlotGraph;

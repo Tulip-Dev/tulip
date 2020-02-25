@@ -89,7 +89,7 @@ void ParallelCoordsDrawConfigWidget::setLinesTextureFilename(
   if (!linesTextureFileName.empty()) {
     _ui->gBoxLineTexture->setChecked(true);
 
-    if (linesTextureFileName == string(TulipBitmapDir + DEFAULT_TEXTURE_FILE)) {
+    if (linesTextureFileName == DEFAULT_TEXTURE_FILE) {
       _ui->defaultTexture->setChecked(true);
     } else {
       _ui->userTexture->setChecked(true);

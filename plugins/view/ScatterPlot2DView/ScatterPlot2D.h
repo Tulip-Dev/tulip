@@ -35,6 +35,8 @@ class GlRect;
 class GlLabel;
 class Graph;
 
+const std::string backgroundTextureId = ":/background_texture.png";
+
 class ScatterPlot2D : public GlComposite {
 
 public:

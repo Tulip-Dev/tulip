@@ -28,9 +28,9 @@
 
 namespace tlp {
 
-const std::string DEFAULT_TEXTURE_FILE = "parallel_texture";
+const std::string DEFAULT_TEXTURE_FILE = ":/parallel_texture.png";
 
-const std::string SLIDER_TEXTURE_NAME = "parallel_sliders_texture";
+const std::string SLIDER_TEXTURE_NAME = ":/parallel_sliders_texture.png";
 
 // data count threshold from which a progress bar is displayed on screen
 // when creating or refreshing the view

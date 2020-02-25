@@ -28,14 +28,13 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/GlOffscreenRenderer.h>
 
 #include <QMenu>
 #include <QThread>
 #include <QComboBox>
 #include <QTimeLine>
 #include <QApplication>
-#include <QOpenGLFramebufferObject>
-#include <QOpenGLPaintDevice>
 #include <QMessageBox>
 #include <QTimer>
 
@@ -90,8 +89,7 @@ void GeographicView::setupUi() {
   connect(centerViewAction, SIGNAL(triggered()), this, SLOT(centerView()));
 
   activateTooltipAndUrlManager(geoViewGraphicsView->getGlMainWidget());
-  _viewActionsManager =
-      new ViewActionsManager(this, geoViewGraphicsView->getGlMainWidget(), true, false);
+  _viewActionsManager = new ViewActionsManager(this, geoViewGraphicsView->getGlMainWidget(), true);
 }
 
 void GeographicView::viewTypeChanged(QString viewTypeName) {
@@ -256,7 +254,6 @@ void GeographicView::refresh() {
 }
 
 void GeographicView::computeGeoLayout() {
-  static bool firstComputation = true;
   if (geolocalisationConfigWidget->geolocateByAddress()) {
     geoViewGraphicsView->createLayoutWithAddresses(
         geolocalisationConfigWidget->getAddressGraphPropertyName(),
@@ -289,23 +286,6 @@ void GeographicView::computeGeoLayout() {
   geoViewGraphicsView->setGeoLayoutComputed();
   // compute view layout
   geoViewGraphicsView->switchViewType();
-  // try to display a clean map with no grey or fuzzy tiles
-  if (firstComputation) {
-    firstComputation = false;
-    connect(geoViewGraphicsView->getLeafletMapsPage(), SIGNAL(refreshMap()), this,
-            SLOT(firstLayoutRefresh()));
-  }
-}
-
-void GeographicView::firstLayoutRefresh() {
-  static int cnt = 1;
-  --cnt;
-  if (cnt == 0) {
-    disconnect(geoViewGraphicsView->getLeafletMapsPage(), SIGNAL(refreshMap()), this,
-               SLOT(firstLayoutRefresh()));
-    // ensure a clean display of the centered view
-    QTimer::singleShot(1500, this, SLOT(centerView()));
-  }
 }
 
 void GeographicView::centerView() {
@@ -472,33 +452,15 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
   int width = geoViewGraphicsView->width();
   int height = geoViewGraphicsView->height();
 
-  QOpenGLFramebufferObjectFormat fboFormat;
-  fboFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
-  fboFormat.setSamples(OpenGlConfigManager::maxNumberOfSamples());
-
-  QOpenGLFramebufferObject fbo(width, height, fboFormat);
-  QOpenGLFramebufferObject fbo2(width, height);
-
-  fbo.bind();
-  QOpenGLPaintDevice device(QSize(width, height));
-  QPainter fboPainter(&device);
-  fboPainter.setRenderHint(QPainter::Antialiasing);
-  fboPainter.setRenderHint(QPainter::HighQualityAntialiasing);
-  geoViewGraphicsView->scene()->render(&fboPainter);
-  QRect fboRect(0, 0, width, height);
-  fbo.release();
+  QImage snapshotImage(width, height, QImage::Format_RGB32);
+  QPainter painter(&snapshotImage);
+  geoViewGraphicsView->scene()->render(&painter);
+  painter.end();
 
   // restore the graphics widgets previously hidden
   for (int i = 0; i < gWidgetsToRestore.size(); ++i) {
     gWidgetsToRestore.at(i)->show();
   }
-
-  QOpenGLFramebufferObject::blitFramebuffer(&fbo2, fboRect, &fbo, fboRect);
-
-  QImage snapshotImage = fbo2.toImage();
-  snapshotImage = QImage(snapshotImage.bits(), snapshotImage.width(), snapshotImage.height(),
-                         QImage::Format_ARGB32)
-                      .convertToFormat(QImage::Format_RGB32);
 
   return QPixmap::fromImage(snapshotImage)
       .scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);

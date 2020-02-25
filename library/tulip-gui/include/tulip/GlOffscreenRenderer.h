@@ -29,12 +29,15 @@
 
 #include <QImage>
 
+class QOpenGLContext;
+class QOffscreenSurface;
 class QOpenGLFramebufferObject;
 
 namespace tlp {
 
 class GlSimpleEntity;
 class GlGraphComposite;
+class GlMainWidget;
 
 /**
  * @brief Render a scene in an image or in a texture.
@@ -114,6 +117,8 @@ public:
 
   void renderExternalScene(GlScene *scene, const bool antialiased = false);
 
+  void renderGlMainWidget(GlMainWidget *glWidget, bool redrawNeeded = true);
+
   /**
    * @brief Generate a QImage from the scene. You need to call the renderScene function before this
    *function.
@@ -125,12 +130,19 @@ public:
    **/
   GLuint getGLTexture(const bool generateMipMaps = false);
 
+  QOpenGLContext *getOpenGLContext();
+  void makeOpenGLContextCurrent();
+  void doneOpenGLContextCurrent();
+
 private:
   GlOffscreenRenderer();
 
   void initFrameBuffers(const bool antialiased);
 
   static GlOffscreenRenderer *instance;
+
+  QOpenGLContext *glContext;
+  QOffscreenSurface *offscreenSurface;
 
   unsigned int vPWidth, vPHeight;
   QOpenGLFramebufferObject *glFrameBuf, *glFrameBuf2;

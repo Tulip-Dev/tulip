@@ -30,8 +30,6 @@
 
 using namespace std;
 
-const string BIN_RECT_TEXTURE = tlp::TulipBitmapDir + "histo_texture.png";
-
 const float DEFAULT_AXIS_LENGTH = 1000.;
 
 const std::string XAXIS_ID = "x axis";
@@ -106,6 +104,8 @@ Histogram::~Histogram() {
   delete histogramSize;
   delete histoBinsComposite;
   delete graphComposite;
+  delete xAxis;
+  delete yAxis;
 }
 
 void Histogram::setDataLocation(const ElementType &dataLocation) {
@@ -603,6 +603,7 @@ void Histogram::update() {
       ->setAllNodeValue(Size(refSize, refSize, refSize));
   ColorProperty *viewColor = graph->getProperty<ColorProperty>("viewColor");
 
+  reset(true);
   histoBinsComposite->reset(true);
 
   unsigned int cumulativeSize = 0;

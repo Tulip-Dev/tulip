@@ -203,11 +203,6 @@ void WorkspacePanel::setView(tlp::View *view) {
     viewConfigurationTabs->setTabPosition(QTabWidget::West);
     viewConfigurationTabs->setStyleSheet(_view->configurationWidgetsStyleSheet());
     viewConfigurationTabs->findChild<QTabBar *>()->installEventFilter(this);
-// workaround to get rid of Qt5 warnings : QMacCGContext:: Unsupported painter devtype type 1
-// see https://bugreports.qt.io/browse/QTBUG-32639
-#if defined(__APPLE__)
-    viewConfigurationTabs->setWindowOpacity(0.99);
-#endif
 
     for (auto w : _view->configurationWidgets()) {
       w->installEventFilter(this);

@@ -76,9 +76,9 @@ ParallelCoordinatesDrawing::ParallelCoordinatesDrawing(ParallelCoordinatesGraphP
 
 ParallelCoordinatesDrawing::~ParallelCoordinatesDrawing() {}
 
-void ParallelCoordinatesDrawing::createAxis(GlMainWidget *, QProgressDialog *progress) {
+void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget, QProgressDialog *progress) {
 
-  GlMainWidget::getFirstQGLWidget()->makeCurrent();
+  glWidget->makeCurrent();
 
   unsigned int pos = 0;
   vector<string> selectedProperties(graphProxy->getSelectedProperties());

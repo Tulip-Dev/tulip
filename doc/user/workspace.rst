@@ -219,8 +219,6 @@ By default, the options are divided in two parts: *View* et *Augmented display*.
 
   * *Anti-aliasing*: enable/disable the anti-aliasing (smooth stairstep-like lines).
 
-  * *Advanced anti-aliasing*: enable/disable a better but more expensive technique of anti-aliasing (needs off screen rendering).
-
   * *Take snapshot*: take a screenshot.
 
   * *Use orthogonal projection*: allow to switch between the orthogonal or classic perspective projection.
