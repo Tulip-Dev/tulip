@@ -50,7 +50,6 @@
 #include <QOpenGLFramebufferObject>
 #include <QOpenGLPaintDevice>
 
-
 using namespace std;
 
 namespace tlp {
@@ -373,8 +372,8 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
                                                        QGraphicsScene *graphicsScene,
                                                        QWidget *parent)
     : QGraphicsView(graphicsScene, parent), _geoView(geoView), graph(nullptr), leafletMaps(nullptr),
-      globeCameraBackup(nullptr, true), mapCameraBackup(nullptr, true),
-      geoLayout(nullptr), geoViewSize(nullptr), geoViewShape(nullptr), geoLayoutBackup(nullptr),
+      globeCameraBackup(nullptr, true), mapCameraBackup(nullptr, true), geoLayout(nullptr),
+      geoViewSize(nullptr), geoViewShape(nullptr), geoLayoutBackup(nullptr),
       mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false),
       polygonEntity(nullptr), planisphereEntity(nullptr), noLayoutMsgBox(nullptr),
       firstGlobeSwitch(true), geoLayoutComputed(false), renderFbo(nullptr) {
@@ -1378,12 +1377,11 @@ void GeographicViewGraphicsView::switchViewType() {
 
     if (!edgeBendsLatLng.empty()) {
       for (auto e : graph->edges()) {
-	auto &eb = edgeBendsLatLng[e];
+        auto &eb = edgeBendsLatLng[e];
         vector<Coord> edgeBendsCoords;
-	edgeBendsCoords.reserve(eb.size());
+        edgeBendsCoords.reserve(eb.size());
         for (unsigned int i = 0; i < eb.size(); ++i) {
-          edgeBendsCoords.emplace_back(eb[i].second * 2.,
-				       latitudeToMercator(eb[i].first * 2.), 0);
+          edgeBendsCoords.emplace_back(eb[i].second * 2., latitudeToMercator(eb[i].first * 2.), 0);
         }
 
         geoLayout->setEdgeValue(e, edgeBendsCoords);

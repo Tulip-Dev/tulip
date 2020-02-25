@@ -107,7 +107,6 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
   if (openGL_OK)
     GlOffscreenRenderer::getInstance()->doneOpenGLContextCurrent();
 
-
   _ui->dependenciesInfo->setText(tulipDependenciesInfo);
   connect(_ui->aboutQt, SIGNAL(clicked()), qApp, SLOT(aboutQt()));
   connect(_ui->dependenciesInfo, SIGNAL(linkActivated(const QString &)), this,

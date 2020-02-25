@@ -1090,9 +1090,7 @@ void SOMView::copyToGlMainWidget(GlMainWidget *widget) {
   assignNewGlMainWidget(widget, false);
   // centering hack after switch from Qt OpenGL module
   // to OpenGL classes in Gui module
-  QTimer::singleShot(200, [=]() {
-      this->centerView();
-    });
+  QTimer::singleShot(200, [=]() { this->centerView(); });
 }
 
 void SOMView::internalSwitchToDetailedMode(SOMPreviewComposite *preview, bool animation) {

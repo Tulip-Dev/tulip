@@ -54,7 +54,6 @@ namespace tlp {
 
 bool GlMainWidget::inRendering = false;
 
-
 //==================================================
 GlMainWidget::GlMainWidget(QWidget *parent, View *view)
     : QOpenGLWidget(parent), scene(new GlQuadTreeLODCalculator), view(view), widthStored(0),
