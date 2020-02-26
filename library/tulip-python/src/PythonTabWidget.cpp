@@ -54,7 +54,7 @@ void PythonTabWidget::paintEvent(QPaintEvent *event) {
   painter.setFont(QFont("Arial", int(12 * tabBar()->height() / 27.0)));
 #endif
   int imageWidth = int(25 * tabBar()->height() / 27.0);
-  int labelWidth = int(80 * tabBar()->height() / 27.0);
+  int labelWidth = int(100 * tabBar()->height() / 27.0);
   int offset = tabBar()->height() - imageWidth;
   QRectF rect(width() - (imageWidth + labelWidth), tabBar()->pos().y() + offset / 2, imageWidth,
               imageWidth);
