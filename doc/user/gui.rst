@@ -93,7 +93,7 @@ Algorithms panel
 
 .. |icon_algorithm_fav| image:: ../../plugins/perspective/GraphPerspective/resources/icons/16/favorite.png
 .. |icon_algorithm_unfav| image:: ../../plugins/perspective/GraphPerspective/resources/icons/16/favorite-empty.png
-.. |icon_algorithm_properties| image:: ../../plugins/perspective/GraphPerspective/resources/icons/16/preferences-other.png
+.. |icon_algorithm_properties| image:: ../../library/tulip-gui/resources/icons/16/settings.png
 .. |icon_algorithm_launch| image:: ../../library/tulip-gui/resources/icons/22/start.png
     :width: 16
 .. |icon_link| image:: _images/i_link.png

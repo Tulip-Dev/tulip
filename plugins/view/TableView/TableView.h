@@ -91,6 +91,7 @@ protected slots:
   void showHorizontalHeaderCustomContextMenu(const QPoint &pos);
   void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
   void setZoomLevel(int);
+  void showHideTableSettings();
 };
 
 #endif // TABLEVIEW_H

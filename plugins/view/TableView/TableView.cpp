@@ -132,6 +132,14 @@ void TableView::setZoomLevel(int level) {
           .arg(fs - 1));
 }
 
+void TableView::showHideTableSettings() {
+  bool expand = _ui->tableSettingsFrame->isVisible();
+  if (expand)
+    _ui->tableSettingsFrame->hide();
+  else
+    _ui->tableSettingsFrame->show();
+}
+
 void TableView::setupWidget() {
   // install this as event filter
   // for automatic resizing of the viewport
@@ -178,6 +186,7 @@ void TableView::setupWidget() {
   connect(_ui->columnsfiltercase, SIGNAL(stateChanged(int)), this, SLOT(setColumnsFilterCase()));
   connect(propertiesEditor->getPropertiesFilterEdit(), SIGNAL(textChanged(QString)), this,
           SLOT(setPropertiesFilter(QString)));
+  connect(_ui->tableSettingsButton, SIGNAL(clicked()), this, SLOT(showHideTableSettings()));
 }
 
 QList<QWidget *> TableView::configurationWidgets() const {
@@ -248,10 +257,13 @@ void TableView::readSettings() {
 
     delete _model;
 
-    if (_ui->eltTypeCombo->currentIndex() == 0)
+    if (_ui->eltTypeCombo->currentIndex() == 0) {
+      _ui->label->setText("Nodes");
       _model = new NodesGraphModel(_ui->table);
-    else
+    } else {
+      _ui->label->setText("Edges");
       _model = new EdgesGraphModel(_ui->table);
+    }
 
     _model->setGraph(graph());
     GraphSortFilterProxyModel *sortModel = new GraphSortFilterProxyModel(_ui->table);
