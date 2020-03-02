@@ -444,16 +444,28 @@ void TableView::filterChanged() {
   QVector<PropertyInterface *> props;
 
   Graph *g = graph();
+  auto matchProperty = QStringToTlpString(_ui->matchPropertyButton->text());
 
-  if (_ui->matchPropertyButton->text() == "Any") {
+  if (matchProperty != "Any") {
+    // a visible column
+    // check if it exists
+    if (g->existProperty(matchProperty))
+      props += g->getProperty(matchProperty);
+    else {
+      // property does not exist
+      // reset filtering
+      _ui->matchPropertyButton->setText("Any");
+      _ui->filterEdit->setText("");
+      filter.clear();
+    }
+  }
+  if (props.empty()) {
     for (int i = 0; i < _model->columnCount(); ++i) {
       if (!_ui->table->horizontalHeader()->isSectionHidden(i))
         props += _model->headerData(i, Qt::Horizontal, TulipModel::PropertyRole)
                      .value<PropertyInterface *>();
     }
-  } else
-    // a visible column
-    props += g->getProperty(QStringToTlpString(_ui->matchPropertyButton->text()));
+  }
 
   sortModel->setProperties(props);
   sortModel->setFilterRegExp(
