@@ -32,6 +32,21 @@
 
 #define INRANGE(foo, bar, baz) (foo(bar)) && ((bar)baz)
 
+#ifdef bfd_get_section_flags
+// binutils < 2.34
+#define BFD_SECTION_FLAGS(bfd, section) bfd_get_section_flags(bfd, section)
+#else
+#define BFD_SECTION_FLAGS(bfd, section) bfd_section_flags(section)
+#endif
+
+#ifdef bfd_section_size
+// binutils < 2.34
+#define BFD_SECTION_SIZE(bfd, section) bfd_section_size(bfd, section)
+#else
+#define BFD_SECTION_SIZE(bfd, section) bfd_section_size(section)
+#endif
+
+
 #ifdef __FreeBSD__
 extern "C" int filename_ncmp(const char *s1, const char *s2, size_t n) {
   return strncmp(s1, s2, n);
@@ -209,7 +224,7 @@ BfdWrapper::BfdWrapper(const char *dsoName)
   isDynamic = false;
   symbolTable = slurp_symtab(abfd, isMini, &nSymbols, &symbolSize, &isDynamic);
 
-  if ((bfd_get_section_flags(abfd, textSection) & SEC_ALLOC) == 0) {
+  if ((BFD_SECTION_FLAGS(abfd, textSection) & SEC_ALLOC) == 0) {
     cerr << "SEC_ALLOC flag not set on .text section (whatever that means) in "
          << bfd_get_filename(abfd) << endl;
     free(symbolTable);
@@ -283,7 +298,7 @@ pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const char
         unsigned int lineno = 0;
 
         bfd_vma textSection_vma = bfd_get_section_vma(abfd, textSection);
-        bfd_size_type textSection_size = bfd_section_size(abfd, textSection);
+        bfd_size_type textSection_size = BFD_SECTION_SIZE(abfd, textSection);
 
         if (!INRANGE(static_cast<int64_t>(textSection_vma) <=, unrelocatedAddr,
                      <= static_cast<int64_t>(textSection_vma + textSection_size))) {
@@ -327,7 +342,7 @@ pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const int6
   unsigned int lineno = 0;
 
   int64_t symbolOffset = runtimeAddr - GetModuleBase(runtimeAddr) - 0x1000 - 1;
-  bfd_size_type textSection_size = bfd_section_size(abfd, textSection);
+  bfd_size_type textSection_size = BFD_SECTION_SIZE(abfd, textSection);
 
   if (!INRANGE(static_cast<int64_t>(0) <=, symbolOffset,
                <= static_cast<int64_t>(textSection_size))) {
@@ -354,7 +369,7 @@ const char *BfdWrapper::getFunctionForAddress(const int64_t runtimeAddr) {
     return funcName;
 
   int64_t symbolOffset = runtimeAddr - GetModuleBase(runtimeAddr) - 0x1000 - 1;
-  bfd_size_type textSection_size = bfd_section_size(abfd, textSection);
+  bfd_size_type textSection_size = BFD_SECTION_SIZE(abfd, textSection);
 
   if (!INRANGE(static_cast<int64_t>(0) <=, symbolOffset,
                <= static_cast<int64_t>(textSection_size))) {
