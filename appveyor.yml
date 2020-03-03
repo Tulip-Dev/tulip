@@ -4,8 +4,8 @@
 #   - Microsoft Visual Studio 2015 compiler
 # C++11 standard, Qt >= 5.9 and Python 3.7 will be used to build Tulip with both compilers.
 
-# use Visual Studio 2015 appveyor image for the builds
-os: Visual Studio 2015
+# use Visual Studio 2017 appveyor image for the builds
+os: Visual Studio 2017
 
 # Use build caches that will be saved and restored between build jobs.
 # Those caches will hold ccache content for gcc builds and clcache content for msvc builds
@@ -27,27 +27,27 @@ environment:
     - MSYS2_ARCH: x86_64
       MSYSTEM: MINGW64
       PYTHON2_HOME: "C:/Python27-x64"
-      PYTHON3_HOME: "C:/Python38-x64"
+      PYTHON3_HOME: "C:/Python37-x64"
 
     # 64 bits GCC complete build
     - MSYS2_ARCH: x86_64
       MSYSTEM: MINGW64
       PYTHON2_HOME: "C:/Python27-x64"
-      PYTHON3_HOME: "C:/Python38-x64"
+      PYTHON3_HOME: "C:/Python37-x64"
 
     # 64 bits MSVC core build
     - CMAKE_VS_GENERATOR: "Visual Studio 15 2017 Win64"
       MSVC_PLATFORM: "x64"
       MSVC_PLATFORM_TOOLSET: "v141"
       QT5_DIR: "C:/Qt/5.14/msvc2017_64"
-      PYTHON_EXECUTABLE: "C:/Python38-x64/python.exe"
+      PYTHON_EXECUTABLE: "C:/Python37-x64/python.exe"
 
     # 64 bits MSVC complete build
     - CMAKE_VS_GENERATOR: "Visual Studio 15 2017 Win64"
       MSVC_PLATFORM: "x64"
       MSVC_PLATFORM_TOOLSET: "v141"
       QT5_DIR: "C:/Qt/5.14/msvc2017_64"
-      PYTHON_EXECUTABLE: "C:/Python38-x64/python.exe"
+      PYTHON_EXECUTABLE: "C:/Python37-x64/python.exe"
 
     ## 32 bits GCC core build
     #- MSYS2_ARCH: i686
