@@ -46,7 +46,6 @@
 #define BFD_SECTION_SIZE(bfd, section) bfd_section_size(section)
 #endif
 
-
 #ifdef __FreeBSD__
 extern "C" int filename_ncmp(const char *s1, const char *s2, size_t n) {
   return strncmp(s1, s2, n);
