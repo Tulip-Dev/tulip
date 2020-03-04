@@ -30,7 +30,6 @@ class TLP_QT_SCOPE TreeViewComboBox : public QComboBox {
 
   Q_OBJECT
   QTreeView *_treeView;
-  bool _skipNextHide;
   bool _popupVisible;
   QModelIndex _lastIndex;
 
@@ -43,8 +42,6 @@ public:
   void hidePopup() override;
 
   QModelIndex selectedIndex() const;
-
-  bool eventFilter(QObject *, QEvent *) override;
 
 public slots:
 

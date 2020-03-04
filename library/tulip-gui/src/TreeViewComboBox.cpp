@@ -38,7 +38,7 @@ public:
 };
 
 TreeViewComboBox::TreeViewComboBox(QWidget *parent)
-    : QComboBox(parent), _treeView(nullptr), _skipNextHide(false), _popupVisible(false) {
+    : QComboBox(parent), _treeView(nullptr), _popupVisible(false) {
   _treeView = new QTreeView(this);
   _treeView->setEditTriggers(QTreeView::NoEditTriggers);
   _treeView->setAlternatingRowColors(true);
@@ -77,16 +77,13 @@ void TreeViewComboBox::showPopup() {
 }
 
 void TreeViewComboBox::hidePopup() {
-  if (!_popupVisible)
-    return;
+  auto mousePos = QWidget::mapFromGlobal(QCursor::pos());
+  QComboBox::hidePopup();
+  _popupVisible = false;
 
-  if (_skipNextHide)
-    _skipNextHide = false;
-  else {
-    QComboBox::hidePopup();
-    _popupVisible = false;
+  QModelIndex index = view()->indexAt(mousePos);
+  if (view()->visualRect(index).contains(mousePos))
     selectIndex(view()->currentIndex());
-  }
 }
 
 void TreeViewComboBox::selectIndex(const QModelIndex &index) {
@@ -100,18 +97,6 @@ void TreeViewComboBox::selectIndex(const QModelIndex &index) {
 
 QModelIndex TreeViewComboBox::selectedIndex() const {
   return model()->index(currentIndex(), 0, rootModelIndex());
-}
-
-bool TreeViewComboBox::eventFilter(QObject *object, QEvent *event) {
-  if (event->type() == QEvent::MouseButtonPress && object == view()->viewport()) {
-    QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-    QModelIndex index = view()->indexAt(mouseEvent->pos());
-
-    if (!view()->visualRect(index).contains(mouseEvent->pos()))
-      _skipNextHide = true;
-  }
-
-  return false;
 }
 
 void TreeViewComboBox::rowsRemoved(const QModelIndex &parent, int, int) {
