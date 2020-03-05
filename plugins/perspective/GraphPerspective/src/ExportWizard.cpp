@@ -160,8 +160,10 @@ void ExportWizard::browseButtonClicked() {
     filter += tlpStringToQString(p->name()) + " (";
 
     for (list<string>::const_iterator it = extension.begin(); it != extension.end(); ++it) {
-      filter += (*it).c_str() + QString(" ");
-      all += (*it).c_str() + QString(" ");
+      QString format("*.");
+      format += QString("%1 ").arg((*it).c_str());
+      filter += format;
+      all += format;
     }
 
     filter.resize(filter.length() - 1);

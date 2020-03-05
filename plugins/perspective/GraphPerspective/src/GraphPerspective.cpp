@@ -1615,16 +1615,9 @@ void GraphPerspective::CSVImport() {
     unsigned int nbLogsAfter = _logger->countByType(GraphPerspectiveLogger::Error);
     nbLogsAfter += _logger->countByType(GraphPerspectiveLogger::Warning);
     applyDefaultLayout(g);
-    bool openPanels = true;
 
-    for (auto v : _ui->workspace->panels()) {
-      if (v->graph() == g) {
-        openPanels = false;
-        break;
-      }
-    }
-
-    if (openPanels)
+    // create start panels only for a newly created graph
+    if (mustDeleteGraph)
       showStartPanels(g);
     else
       centerPanelsForGraph(g);
