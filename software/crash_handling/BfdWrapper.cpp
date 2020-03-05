@@ -39,6 +39,13 @@
 #define BFD_SECTION_FLAGS(bfd, section) bfd_section_flags(section)
 #endif
 
+#ifdef bfd_get_section_vma
+// binutils < 2.34
+#define BFD_SECTION_VMA(bfd, section) bfd_get_section_vma(bfd, section)
+#else
+#define BFD_SECTION_VMA(bfd, section) bfd_section_vma(section)
+#endif
+
 #ifdef bfd_section_size
 // binutils < 2.34
 #define BFD_SECTION_SIZE(bfd, section) bfd_section_size(bfd, section)
@@ -296,7 +303,7 @@ pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const char
         const char *fileName = nullptr;
         unsigned int lineno = 0;
 
-        bfd_vma textSection_vma = bfd_get_section_vma(abfd, textSection);
+        bfd_vma textSection_vma = BFD_SECTION_VMA(abfd, textSection);
         bfd_size_type textSection_size = BFD_SECTION_SIZE(abfd, textSection);
 
         if (!INRANGE(static_cast<int64_t>(textSection_vma) <=, unrelocatedAddr,
