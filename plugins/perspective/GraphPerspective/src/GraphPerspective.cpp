@@ -557,7 +557,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
                                  "selected and select if not selected",
                                  "I");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionCancel_selection,
-                                 "Deselect all selected elements of the current grap", "Shift+A");
+                                 "Deselect all selected elements of the current graph", "Shift+A");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionGroup_elements,
                                  "Create a meta-node representing a newly created subgraph "
                                  "containing all selected elements of the current graph",
