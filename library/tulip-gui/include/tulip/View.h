@@ -132,10 +132,18 @@ public:
     @note This method MUST ALWAYS return the same instance of a QGraphicsView.
     */
   virtual QGraphicsView *graphicsView() const = 0;
-  // Following commit #10531 (see void WorkspacePanel::showEvent(QShowEvent *event);)
+  // Following commit #10531
+  // (see void WorkspacePanel::showEvent(QShowEvent *event);)
   // this method is called when creating a new QGraphicsScene
   // to restore any specific behaviour in user made graph views
   virtual void resetGraphicsScene() {}
+
+  // this method indicates if the view needs a rebuild of the scene
+  // when it is shown (see void WorkspacePanel::showEvent(QShowEvent *event);
+  // defaut is no rebuild
+  virtual bool rebuildSceneOnShowEvent() {
+    return false;
+  }
 
   /**
     @return The list of interactors installed on this view.

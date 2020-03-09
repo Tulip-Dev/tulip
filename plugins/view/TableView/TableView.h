@@ -61,6 +61,12 @@ public:
   QList<QWidget *> configurationWidgets() const override;
   bool getNodeOrEdgeAtViewportPos(int x, int y, tlp::node &n, tlp::edge &e) const override;
 
+  // Qt bug workaround
+  // see void WorkspacePanel::showEvent(QShowEvent *event);
+  bool rebuildSceneOnShowEvent() override {
+    return true;
+  }
+
 public slots:
   void readSettings();
   void setPropertyVisible(tlp::PropertyInterface *, bool);

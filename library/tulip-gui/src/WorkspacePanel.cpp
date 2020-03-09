@@ -231,7 +231,8 @@ void WorkspacePanel::setView(tlp::View *view) {
 void WorkspacePanel::showEvent(QShowEvent *event) {
   QFrame::showEvent(event);
 
-  if (_view && _view->graphicsView() && _view->graphicsView()->scene()) {
+  if (_view && _view->graphicsView() && _view->graphicsView()->scene() &&
+      _view->rebuildSceneOnShowEvent()) {
     // first remove central item of the scene and its children
     _view->graphicsView()->scene()->removeItem(_view->centralItem());
     // get remaining items (if any) that were not descendant of the central item
