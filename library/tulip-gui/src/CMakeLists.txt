@@ -45,6 +45,7 @@ SET(SRCS
   TulipProject.cpp
   TulipSettings.cpp
   ParameterListModel.cpp
+  TulipComboBox.cpp
   TulipItemDelegate.cpp
   TulipMetaTypes.cpp
   TulipItemEditorCreators.cpp

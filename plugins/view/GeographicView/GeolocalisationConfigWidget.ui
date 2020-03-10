@@ -60,7 +60,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="addressPropCB">
+      <widget class="tlp::TulipComboBox" name="addressPropCB">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -143,7 +143,7 @@
    <item>
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="3">
-      <widget class="QComboBox" name="latPropCB">
+      <widget class="tlp::TulipComboBox" name="latPropCB">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -179,7 +179,7 @@
       </widget>
      </item>
      <item row="1" column="3">
-      <widget class="QComboBox" name="lngPropCB">
+      <widget class="tlp::TulipComboBox" name="lngPropCB">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -289,4 +289,12 @@
  </widget>
  <resources/>
  <connections/>
+ <customwidgets>
+   <customwidget>
+     <class>tlp::TulipComboBox</class>
+     <extends>QComboBox</extends>
+     <header>tulip/TulipComboBox.h</header>
+     <container>1</container>
+   </customwidget>
+ </customwidgets>
 </ui>

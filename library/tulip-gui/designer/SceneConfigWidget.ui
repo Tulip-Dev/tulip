@@ -547,7 +547,7 @@ background-color: rgb(160, 160, 160);</string>
              </spacer>
             </item>
             <item>
-             <widget class="QComboBox" name="labelsOrderingCombo">
+             <widget class="tlp::TulipComboBox" name="labelsOrderingCombo">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1069,6 +1069,12 @@ background-color: rgb(160, 160, 160);</string>
    <slots>
     <signal>colorChanged(QColor)</signal>
    </slots>
+  </customwidget>
+  <customwidget>
+    <class>tlp::TulipComboBox</class>
+    <extends>QComboBox</extends>
+    <header>tulip/TulipComboBox.h</header>
+    <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
