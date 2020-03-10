@@ -29,13 +29,13 @@ namespace tlp {
 // There is a Qt bug when displaying a QComboBox popup with many items
 // in a QGraphicsView; this class implements a simple workaround using a QMenu
 class TLP_QT_SCOPE TulipComboBox : public QComboBox {
- public:
+public:
   explicit TulipComboBox(QWidget *parent = nullptr) : QComboBox(parent) {}
 
   void showPopup() override;
 };
 
-}
+} // namespace tlp
 
 #endif // TULIPCOMBOBOX_H
 ///@endcond

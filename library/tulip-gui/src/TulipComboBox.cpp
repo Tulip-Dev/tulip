@@ -55,10 +55,9 @@ void TulipComboBox::showPopup() {
   QGraphicsView *pGraphicsView = static_cast<QGraphicsView *>(pView);
   QGraphicsItem *pGraphicsItem =
       pGraphicsView->items(pViewport->mapFromGlobal(QCursor::pos())).first();
-  QPoint popupPos = pGraphicsView->mapToGlobal(pGraphicsView->mapFromScene(
-      pGraphicsItem->mapToScene(static_cast<QGraphicsProxyWidget *>(pGraphicsItem)
-                                    ->subWidgetRect(this)
-                                    .bottomLeft())));
+  QPoint popupPos =
+      pGraphicsView->mapToGlobal(pGraphicsView->mapFromScene(pGraphicsItem->mapToScene(
+          static_cast<QGraphicsProxyWidget *>(pGraphicsItem)->subWidgetRect(this).bottomLeft())));
 
   action = menu.exec(popupPos);
 
