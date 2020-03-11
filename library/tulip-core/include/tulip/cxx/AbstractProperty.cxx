@@ -170,7 +170,7 @@ void tlp::AbstractProperty<Tnode, Tedge, Tprop>::setValueToGraphNodes(
     else if (graph->isDescendantGraph(g)) {
       auto it = getNonDefaultValuatedNodes(g);
       while (it->hasNext()) {
-	setNodeValue(it->next(), v);
+        setNodeValue(it->next(), v);
       }
       delete it;
     }
@@ -242,7 +242,7 @@ void tlp::AbstractProperty<Tnode, Tedge, Tprop>::setValueToGraphEdges(
     else if (graph->isDescendantGraph(g)) {
       auto it = getNonDefaultValuatedEdges(g);
       while (it->hasNext()) {
-	setEdgeValue(it->next(), v);
+        setEdgeValue(it->next(), v);
       }
       delete it;
     }
