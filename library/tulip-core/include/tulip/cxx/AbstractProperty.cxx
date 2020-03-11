@@ -161,9 +161,21 @@ void tlp::AbstractProperty<Tnode, Tedge, Tprop>::setNodeDefaultValue(
 //=============================================================
 template <class Tnode, class Tedge, class Tprop>
 void tlp::AbstractProperty<Tnode, Tedge, Tprop>::setValueToGraphNodes(
-    typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v, const Graph *graph) {
-  if (this->getGraph() == graph || this->getGraph()->isDescendantGraph(graph)) {
-    for (auto n : graph->nodes()) {
+    typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v, const Graph *g) {
+  auto graph = this->getGraph();
+  if (v == nodeDefaultValue) {
+    // speedup update if v is the default value
+    if (graph == g)
+      setAllNodeValue(v);
+    else if (graph->isDescendantGraph(g)) {
+      auto it = getNonDefaultValuatedNodes(g);
+      while (it->hasNext()) {
+	setNodeValue(it->next(), v);
+      }
+      delete it;
+    }
+  } else if (graph == g || graph->isDescendantGraph(g)) {
+    for (auto n : g->nodes()) {
       setNodeValue(n, v);
     }
   }
@@ -221,9 +233,21 @@ void tlp::AbstractProperty<Tnode, Tedge, Tprop>::setAllEdgeValue(
 //============================================================
 template <class Tnode, class Tedge, class Tprop>
 void tlp::AbstractProperty<Tnode, Tedge, Tprop>::setValueToGraphEdges(
-    typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue v, const Graph *graph) {
-  if (this->getGraph() == graph || this->getGraph()->isDescendantGraph(graph)) {
-    for (auto e : graph->edges()) {
+    typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue v, const Graph *g) {
+  auto graph = this->getGraph();
+  if (v == edgeDefaultValue) {
+    // speedup update if v is the default value
+    if (graph == g)
+      setAllEdgeValue(v);
+    else if (graph->isDescendantGraph(g)) {
+      auto it = getNonDefaultValuatedEdges(g);
+      while (it->hasNext()) {
+	setEdgeValue(it->next(), v);
+      }
+      delete it;
+    }
+  } else if (graph == g || graph->isDescendantGraph(g)) {
+    for (auto e : g->edges()) {
       setEdgeValue(e, v);
     }
   }
