@@ -133,14 +133,16 @@ void PropertiesEditor::setMatchProperty() {
       _ui->propertiesFilterEdit->setText("");
       QString tooltip;
       if (_ui->propMatchButton->text() == "like") {
-	tooltip = QString("Only show the properties whose name\nis like the given pattern (sql like pattern).");
-	_ui->propertiesFilterEdit->setPlaceholderText("a sql like pattern");
+        tooltip = QString(
+            "Only show the properties whose name\nis like the given pattern (sql like pattern).");
+        _ui->propertiesFilterEdit->setPlaceholderText("a sql like pattern");
       } else {
-	tooltip = QString("Only show the properties whose name\nmatches the given regular expression.");
-	_ui->propertiesFilterEdit->setPlaceholderText("a regular expression");
+        tooltip =
+            QString("Only show the properties whose name\nmatches the given regular expression.");
+        _ui->propertiesFilterEdit->setPlaceholderText("a regular expression");
       }
       _ui->propMatchLabel->setToolTip(tooltip);
-      //tooltip += "\nPress 'Return' to validate.";
+      // tooltip += "\nPress 'Return' to validate.";
       _ui->propertiesFilterEdit->setToolTip(tooltip);
     }
   }
@@ -156,8 +158,8 @@ void PropertiesEditor::convertLikeFilter(QString &filter) {
     if (metaChars.indexOf(filter[pos]) != -1)
       // no escape for \ if it is followed by a like meta chars (% _)
       if ((filter[pos] != '\\') || (pos == filter.length()) ||
-	  (filter[pos + 1] != '%' && filter[pos + 1] != '_'))
-	filter.insert(pos++, "\\");
+          (filter[pos + 1] != '%' && filter[pos + 1] != '_'))
+        filter.insert(pos++, "\\");
     ++pos;
   }
 

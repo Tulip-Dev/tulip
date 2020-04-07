@@ -191,8 +191,7 @@ void TableView::setupWidget() {
   connect(_ui->matchPropertyButton, SIGNAL(pressed()), this, SLOT(setMatchProperty()));
   // columns/properties filtering
   filteringColumns = false;
-  connect(_ui->columnsFilterEdit, SIGNAL(returnPressed()), this,
-          SLOT(setColumnsFilter()));
+  connect(_ui->columnsFilterEdit, SIGNAL(returnPressed()), this, SLOT(setColumnsFilter()));
   connect(_ui->columnsfiltercase, SIGNAL(stateChanged(int)), this, SLOT(setColumnsFilterCase()));
   connect(propertiesEditor->getPropertiesFilterEdit(), SIGNAL(textChanged(QString)), this,
           SLOT(setPropertiesFilter(QString)));
@@ -434,7 +433,8 @@ void TableView::setColumnsFilter() {
     return;
 
   filteringColumns = true;
-  propertiesEditor->getPropertiesMatchButton()->setText(_ui->columnMatchCombo->currentIndex() ? "like" : "matching");
+  propertiesEditor->getPropertiesMatchButton()->setText(
+      _ui->columnMatchCombo->currentIndex() ? "like" : "matching");
   propertiesEditor->getPropertiesFilterEdit()->setText(_ui->columnsFilterEdit->text());
   filteringColumns = false;
 }
@@ -444,7 +444,8 @@ void TableView::setPropertiesFilter(const QString &text) {
     return;
 
   filteringColumns = true;
-  _ui->columnMatchCombo->setCurrentIndex(propertiesEditor->getPropertiesMatchButton()->text() == "matching" ? 0 : 1);
+  _ui->columnMatchCombo->setCurrentIndex(
+      propertiesEditor->getPropertiesMatchButton()->text() == "matching" ? 0 : 1);
   _ui->columnsFilterEdit->setText(text);
   filteringColumns = false;
 }
@@ -453,10 +454,12 @@ void TableView::clearColumnMatchFilter() {
   _ui->columnsFilterEdit->setText("");
   QString tooltip;
   if (_ui->columnMatchCombo->currentIndex()) {
-    tooltip = QString("Only show the columns (properties) whose name\nis like the given pattern (sql like pattern).");
+    tooltip = QString("Only show the columns (properties) whose name\nis like the given pattern "
+                      "(sql like pattern).");
     _ui->columnsFilterEdit->setPlaceholderText("a sql like pattern");
   } else {
-    tooltip = QString("Only show the columns (properties) whose name\nmatches the given regular expression.");
+    tooltip = QString(
+        "Only show the columns (properties) whose name\nmatches the given regular expression.");
     _ui->columnsFilterEdit->setPlaceholderText("a regular expression");
   }
   _ui->labelColumnMatch->setToolTip(tooltip);
@@ -468,10 +471,12 @@ void TableView::clearValueMatchFilter() {
   _ui->filterEdit->setText("");
   QString tooltip;
   if (_ui->valueMatchCombo->currentIndex()) {
-    tooltip = QString("Only show the rows (nodes or edges) whose\nthe chosen column value is like the given pattern (sql like pattern).");
+    tooltip = QString("Only show the rows (nodes or edges) whose\nthe chosen column value is like "
+                      "the given pattern (sql like pattern).");
     _ui->filterEdit->setPlaceholderText("a sql like pattern");
   } else {
-    tooltip = QString("Only show the rows (nodes or edges) whose\nthe chosen column value matches the given regular expression.");
+    tooltip = QString("Only show the rows (nodes or edges) whose\nthe chosen column value matches "
+                      "the given regular expression.");
     _ui->filterEdit->setPlaceholderText("a regular expression");
   }
   _ui->matchPropertyButton->setToolTip(tooltip);
