@@ -224,7 +224,7 @@ color: #595959;</string>
          <number>0</number>
         </property>
         <item>
-         <widget class="QLabel" name="label_2">
+         <widget class="QLabel" name="propMatchLabel">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -233,10 +233,17 @@ color: #595959;</string>
           </property>
           <property name="toolTip">
            <string>Only show the properties whose name
-contains the given pattern</string>
+matches the given regular expression.</string>
           </property>
           <property name="text">
-           <string>Show properties matching </string>
+           <string>Show properties </string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="propMatchButton">
+          <property name="text">
+           <string>matching</string>
           </property>
          </widget>
         </item>
@@ -256,16 +263,10 @@ contains the given pattern</string>
           </property>
           <property name="toolTip">
            <string>Only show the properties whose name
-contains the given pattern</string>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background-color: white;
-border: 0px;
-color: black;
-border-bottom: 1px solid #C9C9C9;</string>
+matches the given regular expression.</string>
           </property>
           <property name="placeholderText">
-           <string>give a pattern</string>
+           <string>a regular expression</string>
           </property>
          </widget>
         </item>

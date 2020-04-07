@@ -23,6 +23,7 @@
 #include <QWidget>
 #include <QModelIndex>
 #include <QLineEdit>
+#include <QPushButton>
 
 #include <tulip/GraphPropertiesModel.h>
 #include <tulip/PropertyInterface.h>
@@ -66,6 +67,8 @@ public:
   void setPropertyChecked(const QString &pName, bool state);
   void setCaseSensitive(Qt::CaseSensitivity cs);
   QLineEdit *getPropertiesFilterEdit();
+  QPushButton *getPropertiesMatchButton();
+  void convertLikeFilter(QString &filter);
   void toLabels(tlp::PropertyInterface *prop, bool nodes, bool edges, bool selectedOnly = false);
   bool setAllValues(tlp::PropertyInterface *prop, bool nodes, bool selectedOnly,
                     bool graphOnly = false);
@@ -99,6 +102,7 @@ protected slots:
   void displayedPropertiesInserted(const QModelIndex &parent, int start, int end);
   void displayedPropertiesRemoved(const QModelIndex &parent, int start, int end);
   void setPropertiesFilter(QString filter);
+  void setMatchProperty();
 };
 
 #endif // PROPERTIESEDITOR_H

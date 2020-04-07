@@ -176,13 +176,23 @@ void TableView::setupWidget() {
   connect(_ui->eltTypeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(readSettings()));
   connect(_ui->filteringPropertyCombo, SIGNAL(currentIndexChanged(int)), this,
           SLOT(readSettings()));
+  _ui->valueMatchCombo->addItem("matching");
+  _ui->valueMatchCombo->addItem("like");
+  _ui->valueMatchCombo->setCurrentIndex(0);
+  connect(_ui->valueMatchCombo, SIGNAL(currentIndexChanged(int)), this,
+          SLOT(clearValueMatchFilter()));
+  _ui->columnMatchCombo->addItem("matching");
+  _ui->columnMatchCombo->addItem("like");
+  _ui->columnMatchCombo->setCurrentIndex(0);
+  connect(_ui->columnMatchCombo, SIGNAL(currentIndexChanged(int)), this,
+          SLOT(clearColumnMatchFilter()));
   // use a push button instead of a combobox (see matchPropertyCombo)
   // waiting for a fix for combobox in QGraphicsItem
   connect(_ui->matchPropertyButton, SIGNAL(pressed()), this, SLOT(setMatchProperty()));
   // columns/properties filtering
   filteringColumns = false;
-  connect(_ui->columnsFilterEdit, SIGNAL(textChanged(QString)), this,
-          SLOT(setColumnsFilter(QString)));
+  connect(_ui->columnsFilterEdit, SIGNAL(returnPressed()), this,
+          SLOT(setColumnsFilter()));
   connect(_ui->columnsfiltercase, SIGNAL(stateChanged(int)), this, SLOT(setColumnsFilterCase()));
   connect(propertiesEditor->getPropertiesFilterEdit(), SIGNAL(textChanged(QString)), this,
           SLOT(setPropertiesFilter(QString)));
@@ -419,12 +429,13 @@ void TableView::setColumnsFilterCase() {
   filteringColumns = false;
 }
 
-void TableView::setColumnsFilter(const QString &text) {
+void TableView::setColumnsFilter() {
   if (filteringColumns)
     return;
 
   filteringColumns = true;
-  propertiesEditor->getPropertiesFilterEdit()->setText(text);
+  propertiesEditor->getPropertiesMatchButton()->setText(_ui->columnMatchCombo->currentIndex() ? "like" : "matching");
+  propertiesEditor->getPropertiesFilterEdit()->setText(_ui->columnsFilterEdit->text());
   filteringColumns = false;
 }
 
@@ -433,12 +444,48 @@ void TableView::setPropertiesFilter(const QString &text) {
     return;
 
   filteringColumns = true;
+  _ui->columnMatchCombo->setCurrentIndex(propertiesEditor->getPropertiesMatchButton()->text() == "matching" ? 0 : 1);
   _ui->columnsFilterEdit->setText(text);
   filteringColumns = false;
 }
 
+void TableView::clearColumnMatchFilter() {
+  _ui->columnsFilterEdit->setText("");
+  QString tooltip;
+  if (_ui->columnMatchCombo->currentIndex()) {
+    tooltip = QString("Only show the columns (properties) whose name\nis like the given pattern (sql like pattern).");
+    _ui->columnsFilterEdit->setPlaceholderText("a sql like pattern");
+  } else {
+    tooltip = QString("Only show the columns (properties) whose name\nmatches the given regular expression.");
+    _ui->columnsFilterEdit->setPlaceholderText("a regular expression");
+  }
+  _ui->labelColumnMatch->setToolTip(tooltip);
+  tooltip += "\nPress 'Return' to validate.";
+  _ui->columnsFilterEdit->setToolTip(tooltip);
+}
+
+void TableView::clearValueMatchFilter() {
+  _ui->filterEdit->setText("");
+  QString tooltip;
+  if (_ui->valueMatchCombo->currentIndex()) {
+    tooltip = QString("Only show the rows (nodes or edges) whose\nthe chosen column value is like the given pattern (sql like pattern).");
+    _ui->filterEdit->setPlaceholderText("a sql like pattern");
+  } else {
+    tooltip = QString("Only show the rows (nodes or edges) whose\nthe chosen column value matches the given regular expression.");
+    _ui->filterEdit->setPlaceholderText("a regular expression");
+  }
+  _ui->matchPropertyButton->setToolTip(tooltip);
+  _ui->valueMatchCombo->setToolTip(tooltip);
+  tooltip += "\nPress 'Return' to validate.";
+  _ui->filterEdit->setToolTip(tooltip);
+}
+
 void TableView::filterChanged() {
   QString filter = _ui->filterEdit->text();
+  if (_ui->valueMatchCombo->currentIndex() == 1)
+    // convert the sql like filter
+    propertiesEditor->convertLikeFilter(filter);
+
   GraphSortFilterProxyModel *sortModel =
       static_cast<GraphSortFilterProxyModel *>(_ui->table->model());
   QVector<PropertyInterface *> props;

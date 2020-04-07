@@ -28,6 +28,10 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QTimer>
+#include <QGraphicsView>
+#include <QMainWindow>
+#include <QGraphicsItem>
+#include <QGraphicsProxyWidget>
 
 #include <tulip/Perspective.h>
 #include <tulip/GraphModel.h>
@@ -50,6 +54,9 @@ PropertiesEditor::PropertiesEditor(QWidget *parent)
       editorParent(parent), _caseSensitiveSearch(Qt::CaseSensitive) {
   _ui->setupUi(this);
   connect(_ui->newButton, SIGNAL(clicked()), this, SLOT(newProperty()));
+  // use a push button instead of a combobox
+  // waiting for a fix for combobox in QGraphicsItem
+  connect(_ui->propMatchButton, SIGNAL(pressed()), this, SLOT(setMatchProperty()));
 }
 
 PropertiesEditor::~PropertiesEditor() {
@@ -86,8 +93,99 @@ void PropertiesEditor::setGraph(tlp::Graph *g) {
   _ui->visualPropertiesCheck->setChecked(true);
 }
 
+void PropertiesEditor::setMatchProperty() {
+  QMenu menu;
+  QAction *action = menu.addAction("matching");
+  if (_ui->propMatchButton->text() == "matching")
+    menu.setActiveAction(action);
+  action = menu.addAction("like");
+  if (_ui->propMatchButton->text() == "like")
+    menu.setActiveAction(action);
+
+  QPalette palette = QComboBox().palette();
+
+  // set a combo like stylesheet
+  menu.setStyleSheet(QString("QMenu::item {border-image: none; border-width: 4; padding: 0px 6px; "
+                             "font-size: 12px; color: %1; background-color: %2;} "
+                             "QMenu::item:selected {color: %3; background-color: %4}")
+                         .arg(palette.color(QPalette::Active, QPalette::Text).name())
+                         .arg(palette.color(QPalette::Active, QPalette::Base).name())
+                         .arg(palette.color(QPalette::Active, QPalette::HighlightedText).name())
+                         .arg(palette.color(QPalette::Active, QPalette::Highlight).name()));
+
+  // compute a combo like position
+  // to popup the menu
+  QWidget *pViewport = QApplication::widgetAt(QCursor::pos());
+  QWidget *pView = pViewport->parentWidget();
+  QGraphicsView *pGraphicsView = static_cast<QGraphicsView *>(pView);
+  QGraphicsItem *pGraphicsItem =
+      pGraphicsView->items(pViewport->mapFromGlobal(QCursor::pos())).first();
+  QPoint popupPos = pGraphicsView->mapToGlobal(pGraphicsView->mapFromScene(
+      pGraphicsItem->mapToScene(static_cast<QGraphicsProxyWidget *>(pGraphicsItem)
+                                    ->subWidgetRect(_ui->propMatchButton)
+                                    .bottomLeft())));
+
+  action = menu.exec(popupPos);
+
+  if (action) {
+    if (action->text() != _ui->propMatchButton->text()) {
+      _ui->propMatchButton->setText(action->text());
+      _ui->propertiesFilterEdit->setText("");
+      QString tooltip;
+      if (_ui->propMatchButton->text() == "like") {
+	tooltip = QString("Only show the properties whose name\nis like the given pattern (sql like pattern).");
+	_ui->propertiesFilterEdit->setPlaceholderText("a sql like pattern");
+      } else {
+	tooltip = QString("Only show the properties whose name\nmatches the given regular expression.");
+	_ui->propertiesFilterEdit->setPlaceholderText("a regular expression");
+      }
+      _ui->propMatchLabel->setToolTip(tooltip);
+      //tooltip += "\nPress 'Return' to validate.";
+      _ui->propertiesFilterEdit->setToolTip(tooltip);
+    }
+  }
+}
+
+void PropertiesEditor::convertLikeFilter(QString &filter) {
+  // filter is a sql like filter we must convert in regexp filter
+  // first escape all regexp meta chars in filter
+  // except '[]^' which are also like meta chars
+  QString metaChars = "$()*+.?\\{|}";
+  int pos = 0;
+  while (pos < filter.length()) {
+    if (metaChars.indexOf(filter[pos]) != -1)
+      // no escape for \ if it is followed by a like meta chars (% _)
+      if ((filter[pos] != '\\') || (pos == filter.length()) ||
+	  (filter[pos + 1] != '%' && filter[pos + 1] != '_'))
+	filter.insert(pos++, "\\");
+    ++pos;
+  }
+
+  pos = 0;
+  // replace all non escaped occurence of % by regexp .*
+  while ((pos = filter.indexOf('%', pos)) >= 0) {
+    if (pos == 0 || filter.at(pos - 1) != '\\')
+      filter.replace(pos, 1, ".*");
+    else
+      filter.replace(pos - 1, 1, "");
+  }
+  pos = 0;
+  // replace all non escaped occurence of _ by regexp .
+  while ((pos = filter.indexOf('_', pos)) >= 0) {
+    if (pos == 0 || filter.at(pos - 1) != '\\')
+      filter.replace(pos, 1, ".");
+    else
+      filter.replace(pos - 1, 1, "");
+  }
+}
+
 void PropertiesEditor::setPropertiesFilter(QString filter) {
   filteringProperties = true;
+
+  if (_ui->propMatchButton->text() == "like")
+    // convert the sql like filter
+    convertLikeFilter(filter);
+
   static_cast<QSortFilterProxyModel *>(_ui->tableView->model())
       ->setFilterRegExp(QRegExp(filter, _caseSensitiveSearch));
   filteringProperties = false;
@@ -95,6 +193,10 @@ void PropertiesEditor::setPropertiesFilter(QString filter) {
 
 QLineEdit *PropertiesEditor::getPropertiesFilterEdit() {
   return _ui->propertiesFilterEdit;
+}
+
+QPushButton *PropertiesEditor::getPropertiesMatchButton() {
+  return _ui->propMatchButton;
 }
 
 void PropertiesEditor::showCustomContextMenu(const QPoint &p) {

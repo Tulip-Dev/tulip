@@ -392,13 +392,24 @@ the chosen selection property value is 'true'</string>
             <number>0</number>
            </property>
            <item>
-            <widget class="QLabel" name="label_3">
-             <property name="toolTip">
-              <string>Only show the rows (nodes or edges) whose
-the chosen column value contains the given pattern</string>
-             </property>
+            <widget class="QLabel" name="valueColmunMatch">
              <property name="text">
-              <string>matching</string>
+              <string>with value</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="valueMatchCombo">
+             <property name="toolTip">
+              <string notr="true">Indicates the type of filtering:
+- 'matching' for a regular expression
+- 'like' for a sql like pattern.</string>
+             </property>
+             <property name="sizeAdjustPolicy">
+              <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+             </property>
+             <property name="minimumContentsLength">
+              <number>8</number>
              </property>
             </widget>
            </item>
@@ -412,24 +423,17 @@ the chosen column value contains the given pattern</string>
              </property>
              <property name="minimumSize">
               <size>
-               <width>120</width>
+               <width>170</width>
                <height>24</height>
               </size>
              </property>
              <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Only show rows (nodes or edges) whose the chosen column&lt;br/&gt;value contains the given pattern (regular expression). &lt;br/&gt;Press &amp;quot;Return&amp;quot; to validate.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: white;
-border: 0px;
-color: black;
-border-bottom: 1px solid #C9C9C9;
-border-top: 1px solid #C9C9C9;
-border-left: 1px solid #C9C9C9;
-border-right: 1px solid #C9C9C9;</string>
+              <string>Only show rows (nodes or edges) whose
+the chosen column value matches the given regular expression.
+Press 'Return' to validate.</string>
              </property>
              <property name="placeholderText">
-              <string>give a pattern (regular expression)</string>
+              <string>a regular expression</string>
              </property>
             </widget>
            </item>
@@ -444,7 +448,7 @@ border-right: 1px solid #C9C9C9;</string>
             <widget class="QPushButton" name="matchPropertyButton">
              <property name="toolTip">
               <string>Only show the rows (nodes or edges) whose
-the chosen column value contains the given pattern</string>
+the chosen column value matches the given regular expression</string>
              </property>
              <property name="layoutDirection">
               <enum>Qt::RightToLeft</enum>
@@ -518,20 +522,32 @@ sensitive</string>
             <number>0</number>
            </property>
            <item>
-            <widget class="QLabel" name="label_6">
+            <widget class="QLabel" name="labelColumnMatch">
              <property name="toolTip">
               <string>Only show the columns (properties) whose name
-contains the given pattern</string>
+matches the given regular expression.</string>
              </property>
              <property name="text">
-              <string>Show columns matching</string>
+              <string>Show columns with name</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="columnMatchCombo">
+             <property name="toolTip">
+              <string notr="true">Indicates the type of filtering
+- 'matching' for a regular expressio
+- 'like' for a sql like pattern.</string>
+             </property>
+             <property name="minimumContentsLength">
+              <number>8</number>
              </property>
             </widget>
            </item>
            <item>
             <widget class="ClearableLineEdit" name="columnsFilterEdit">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -543,19 +559,12 @@ contains the given pattern</string>
               </size>
              </property>
              <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Only show rows (nodes or edges) whose the chosen column&lt;br/&gt;value contains the given pattern (regular expression). &lt;br/&gt;Press &amp;quot;Return&amp;quot; to validate.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: white;
-border: 0px;
-color: black;
-border-bottom: 1px solid #C9C9C9;
-border-top: 1px solid #C9C9C9;
-border-left: 1px solid #C9C9C9;
-border-right: 1px solid #C9C9C9;</string>
+              <string>Only show the columns (properties) whose name
+matches the given regular expression.
+Press 'Return' to validate.</string>
              </property>
              <property name="placeholderText">
-              <string>give a pattern (regular expression)</string>
+              <string>a regular expression</string>
              </property>
             </widget>
            </item>
