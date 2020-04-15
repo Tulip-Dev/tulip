@@ -174,16 +174,16 @@ public:
   }
 
   /**
-   * @brief Gets a string representation of the node default value.
+   * @brief Gets a string representation of the node value.
    * @param n The node to get the value of.
-   * @return A string representation of the node default value.
+   * @return A string representation of the node value.
    */
   virtual std::string getNodeStringValue(const node n) const = 0;
 
   /**
-   * @brief Gets a string representation of the edge default value.
+   * @brief Gets a string representation of the edge value.
    * @param e The edge to get the value of.
-   * @return A string representation of the edge default value.
+   * @return A string representation of the edge value.
    */
   virtual std::string getEdgeStringValue(const edge e) const = 0;
 
