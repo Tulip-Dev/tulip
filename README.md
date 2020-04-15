@@ -102,15 +102,13 @@ The following dependencies are required to build Tulip:
   [Microsoft Visual Studio](https://www.visualstudio.com/) >= 2013
   * [FreeType](https://www.freetype.org) 
   * [zlib](http://zlib.net)
-  * [libjpeg](https://libjpeg-turbo.org/)
-  * [libpng](http://www.libpng.org/pub/png/libpng.html)
   * [Qt](https://www.qt.io) >= 5.5.0
   * [OpenGL](https://www.opengl.org) >= 2.0
   * [GLEW](http://glew.sourceforge.net/) >= 1.4
 
 In order to build the Python components, the following dependencies are needed:
 
-  * [Python](https://www.python.org) >= 2.6
+  * [Python](https://www.python.org) >= 2.7
   * [SIP](https://www.riverbankcomputing.com/software/sip/intro) >= 4.19.14
   (if SIP can not be found or its version does not match the required one, 
   it will be compiled using a copy of its source code in the Tulip tree)
