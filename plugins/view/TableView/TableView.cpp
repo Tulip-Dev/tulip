@@ -489,7 +489,7 @@ void TableView::filterChanged() {
   QString filter = _ui->filterEdit->text();
   if (_ui->valueMatchCombo->currentIndex() == 1)
     // convert the sql like filter
-    propertiesEditor->convertLikeFilter(filter);
+    convertLikeFilter(filter);
 
   GraphSortFilterProxyModel *sortModel =
       static_cast<GraphSortFilterProxyModel *>(_ui->table->model());

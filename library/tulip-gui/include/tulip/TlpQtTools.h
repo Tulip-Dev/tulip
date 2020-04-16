@@ -131,6 +131,11 @@ TLP_QT_SCOPE void redirectErrorOutputToQCritical();
 TLP_QT_SCOPE void disableQtUserInput();
 
 TLP_QT_SCOPE void enableQtUserInput();
+
+/**
+ * @brief convert sql like filter into an acceptable regexp
+ */
+TLP_QT_SCOPE void convertLikeFilter(QString &filter);
 } // namespace tlp
 
 // QDebug extension

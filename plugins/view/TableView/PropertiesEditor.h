@@ -68,7 +68,6 @@ public:
   void setCaseSensitive(Qt::CaseSensitivity cs);
   QLineEdit *getPropertiesFilterEdit();
   QPushButton *getPropertiesMatchButton();
-  void convertLikeFilter(QString &filter);
   void toLabels(tlp::PropertyInterface *prop, bool nodes, bool edges, bool selectedOnly = false);
   bool setAllValues(tlp::PropertyInterface *prop, bool nodes, bool selectedOnly,
                     bool graphOnly = false);

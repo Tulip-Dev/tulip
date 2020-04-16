@@ -134,6 +134,26 @@ public:
   }
 };
 
+class IsLikeOperator : public StringSearchOperator {
+public:
+  bool compareStrings(const QString &a, const QString &b) override {
+    QString filter(b);
+    convertLikeFilter(filter);
+    QRegExp regexp(filter);
+    return regexp.exactMatch(a);
+  }
+};
+
+class NoCaseIsLikeOperator : public StringSearchOperator {
+public:
+  bool compareStrings(const QString &a, const QString &b) override {
+    QString filter(b);
+    convertLikeFilter(filter);
+    QRegExp regexp(filter, Qt::CaseInsensitive);
+    return regexp.exactMatch(a);
+  }
+};
+
 #define NUM_CMP(NAME, CMP)                                                                         \
   class NAME : public NumericSearchOperator {                                                      \
   public:                                                                                          \
@@ -157,16 +177,16 @@ SearchWidget::SearchWidget(QWidget *parent)
   NUMERIC_OPERATORS << new DoubleEqualsOperator << new DoubleDifferentOperator
                     << new GreaterOperator << new GreaterEqualOperator << new LesserOperator
                     << new LesserEqualOperator << new StartsWithOperator << new EndsWithOperator
-                    << new ContainsOperator << new MatchesOperator;
+                    << new ContainsOperator << new MatchesOperator << new IsLikeOperator;
 
   STRING_OPERATORS << new StringEqualsOperator << new StringDifferentOperator << nullptr << nullptr
                    << nullptr << nullptr << new StartsWithOperator << new EndsWithOperator
-                   << new ContainsOperator << new MatchesOperator;
+                   << new ContainsOperator << new MatchesOperator << new IsLikeOperator;
 
   NOCASE_STRING_OPERATORS << new NoCaseStringEqualsOperator << new NoCaseStringDifferentOperator
                           << nullptr << nullptr << nullptr << nullptr
                           << new NoCaseStartsWithOperator << new NoCaseEndsWithOperator
-                          << new NoCaseContainsOperator << new NoCaseMatchesOperator;
+                          << new NoCaseContainsOperator << new NoCaseMatchesOperator << new NoCaseIsLikeOperator;
 
   _ui->resultsStorageCombo->setModel(
       new GraphPropertiesModel<BooleanProperty>(nullptr, false, _ui->resultsStorageCombo));
@@ -355,58 +375,51 @@ void SearchWidget::search() {
                                            .value<PropertyInterface *>();
   BooleanProperty *output = static_cast<BooleanProperty *>(outputInterface);
 
-  node n;
-  edge e;
-
   QString searchOpDescription;
-  unsigned int resultsCountNodes = 0, resultsCountEdges = 0;
+  unsigned int resultsCountNodes = result->numberOfNonDefaultValuatedNodes(),
+    resultsCountEdges = result->numberOfNonDefaultValuatedEdges();
 
   if (_ui->selectionModeCombo->currentIndex() == 0) { // replace current selection
     output->copy(result);
     searchOpDescription = "found";
-    resultsCountNodes = iteratorCount(result->getNodesEqualTo(true));
-    resultsCountEdges = iteratorCount(result->getEdgesEqualTo(true));
   } else if (_ui->selectionModeCombo->currentIndex() == 1) { // add to current selection
     if (onNodes) {
-      for (auto n : result->getNodesEqualTo(true)) {
-        output->setNodeValue(n, true);
-        resultsCountNodes++;
+      auto it = result->getNonDefaultValuatedNodes();
+      while (it->hasNext()) {
+	output->setNodeValue(it->next(), true);
       }
+      delete it;
     }
 
     if (onEdges) {
-      for (auto e : result->getEdgesEqualTo(true)) {
-        output->setEdgeValue(e, true);
-        resultsCountEdges++;
+      auto it = result->getNonDefaultValuatedEdges();
+      while (it->hasNext()) {
+	output->setEdgeValue(it->next(), true);
       }
+      delete it;
     }
 
     searchOpDescription = "added to selection";
   } else if (_ui->selectionModeCombo->currentIndex() == 2) { // remove from current selection
     if (onNodes) {
-      for (auto n : output->getNodesEqualTo(true)) {
-        if (result->getNodeValue(n)) {
-          output->setNodeValue(n, false);
-          resultsCountNodes++;
-        }
+      auto it = result->getNonDefaultValuatedNodes();
+      while (it->hasNext()) {
+	output->setNodeValue(it->next(), false);
       }
+      delete it;
     }
 
     if (onEdges) {
-      for (auto e : output->getEdgesEqualTo(true)) {
-        if (result->getEdgeValue(e)) {
-          output->setEdgeValue(e, false);
-          resultsCountEdges++;
-        }
+      auto it = result->getNonDefaultValuatedEdges();
+      while (it->hasNext()) {
+	output->setEdgeValue(it->next(), false);
       }
+      delete it;
     }
 
     searchOpDescription = "removed from selection";
   } else if (_ui->selectionModeCombo->currentIndex() == 3) { // no modification
-    output = result;
     searchOpDescription = "found but not added to selection";
-    resultsCountNodes = iteratorCount(result->getNodesEqualTo(true));
-    resultsCountEdges = iteratorCount(result->getEdgesEqualTo(true));
   }
 
   Observable::unholdObservers();
@@ -503,7 +516,7 @@ void SearchWidget::updateEditorWidget() {
 
   // workaround for sf bug #716
   // I suspect that because 0 == false (when updating termA from viewMetric
-  // from viewSelection) the table item was not properly refreshed.
+  // to viewSelection) the table item was not properly refreshed.
   // So force the refresh of the table item with defaultValue
   // in first displaying a 'blank' value
   _ui->tableWidget->item(0, 0)->setData(Qt::DisplayRole, QVariant(QString()));

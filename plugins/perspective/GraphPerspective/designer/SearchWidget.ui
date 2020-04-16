@@ -289,7 +289,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>Choose the comparion operator of the search</string>
+            <string>Choose the search comparison operator</string>
            </property>
            <item>
             <property name="text">
@@ -323,22 +323,27 @@
            </item>
            <item>
             <property name="text">
-             <string>starts with</string>
+             <string>starting with</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>ends with</string>
+             <string>ending with</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>contains</string>
+             <string>containing</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>matches (RegExp)</string>
+             <string>matching (reg. exp.)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string> like (sql like filter)</string>
             </property>
            </item>
           </widget>
@@ -473,7 +478,7 @@ font: 12px;
         <string>Indicate if strings comparison will be case sensitive</string>
        </property>
        <property name="text">
-        <string>Case sensitive</string>
+        <string>case sensitive</string>
        </property>
       </widget>
      </item>

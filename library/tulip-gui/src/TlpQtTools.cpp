@@ -611,4 +611,38 @@ void enableQtUserInput() {
   QApplication::restoreOverrideCursor();
 }
 
+void convertLikeFilter(QString &filter) {
+  // filter is a sql like filter we must convert into a
+  // a regexp filter
+  // first escape all regexp meta chars in filter
+  // except '[]^' which are also like meta chars
+  QString metaChars = "$()*+.?\\{|}";
+  int pos = 0;
+  while (pos < filter.length()) {
+    if (metaChars.indexOf(filter[pos]) != -1)
+      // no escape for \ if it is followed by a like meta chars (% _)
+      if ((filter[pos] != '\\') || (pos == filter.length()) ||
+          (filter[pos + 1] != '%' && filter[pos + 1] != '_'))
+        filter.insert(pos++, "\\");
+    ++pos;
+  }
+
+  pos = 0;
+  // replace all non escaped occurence of % by regexp .*
+  while ((pos = filter.indexOf('%', pos)) >= 0) {
+    if (pos == 0 || filter.at(pos - 1) != '\\')
+      filter.replace(pos, 1, ".*");
+    else
+      filter.replace(pos - 1, 1, "");
+  }
+  pos = 0;
+  // replace all non escaped occurence of _ by regexp .
+  while ((pos = filter.indexOf('_', pos)) >= 0) {
+    if (pos == 0 || filter.at(pos - 1) != '\\')
+      filter.replace(pos, 1, ".");
+    else
+      filter.replace(pos - 1, 1, "");
+  }
+}
+
 } // namespace tlp
