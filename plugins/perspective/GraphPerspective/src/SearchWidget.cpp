@@ -186,7 +186,8 @@ SearchWidget::SearchWidget(QWidget *parent)
   NOCASE_STRING_OPERATORS << new NoCaseStringEqualsOperator << new NoCaseStringDifferentOperator
                           << nullptr << nullptr << nullptr << nullptr
                           << new NoCaseStartsWithOperator << new NoCaseEndsWithOperator
-                          << new NoCaseContainsOperator << new NoCaseMatchesOperator << new NoCaseIsLikeOperator;
+                          << new NoCaseContainsOperator << new NoCaseMatchesOperator
+                          << new NoCaseIsLikeOperator;
 
   _ui->resultsStorageCombo->setModel(
       new GraphPropertiesModel<BooleanProperty>(nullptr, false, _ui->resultsStorageCombo));
@@ -377,7 +378,7 @@ void SearchWidget::search() {
 
   QString searchOpDescription;
   unsigned int resultsCountNodes = result->numberOfNonDefaultValuatedNodes(),
-    resultsCountEdges = result->numberOfNonDefaultValuatedEdges();
+               resultsCountEdges = result->numberOfNonDefaultValuatedEdges();
 
   if (_ui->selectionModeCombo->currentIndex() == 0) { // replace current selection
     output->copy(result);
@@ -386,7 +387,7 @@ void SearchWidget::search() {
     if (onNodes) {
       auto it = result->getNonDefaultValuatedNodes();
       while (it->hasNext()) {
-	output->setNodeValue(it->next(), true);
+        output->setNodeValue(it->next(), true);
       }
       delete it;
     }
@@ -394,7 +395,7 @@ void SearchWidget::search() {
     if (onEdges) {
       auto it = result->getNonDefaultValuatedEdges();
       while (it->hasNext()) {
-	output->setEdgeValue(it->next(), true);
+        output->setEdgeValue(it->next(), true);
       }
       delete it;
     }
@@ -404,7 +405,7 @@ void SearchWidget::search() {
     if (onNodes) {
       auto it = result->getNonDefaultValuatedNodes();
       while (it->hasNext()) {
-	output->setNodeValue(it->next(), false);
+        output->setNodeValue(it->next(), false);
       }
       delete it;
     }
@@ -412,7 +413,7 @@ void SearchWidget::search() {
     if (onEdges) {
       auto it = result->getNonDefaultValuatedEdges();
       while (it->hasNext()) {
-	output->setEdgeValue(it->next(), false);
+        output->setEdgeValue(it->next(), false);
       }
       delete it;
     }
