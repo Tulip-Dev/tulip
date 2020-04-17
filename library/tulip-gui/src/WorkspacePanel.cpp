@@ -233,6 +233,8 @@ void WorkspacePanel::showEvent(QShowEvent *event) {
 
   if (_view && _view->graphicsView() && _view->graphicsView()->scene() &&
       _view->rebuildSceneOnShowEvent()) {
+    // disable warnings output about QGraphicScene update
+    enableWarningOutput(false);
     // first remove central item of the scene and its children
     _view->graphicsView()->scene()->removeItem(_view->centralItem());
     // get remaining items (if any) that were not descendant of the central item
@@ -264,6 +266,8 @@ void WorkspacePanel::showEvent(QShowEvent *event) {
 
     // delete old scene
     delete oldScene;
+    // re-enable warnings output
+    enableWarningOutput(true);
   }
 }
 
