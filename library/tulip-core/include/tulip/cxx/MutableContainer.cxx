@@ -353,7 +353,7 @@ template <typename TYPE>
 typename tlp::StoredType<TYPE>::ReturnedConstValue
 tlp::MutableContainer<TYPE>::get(const unsigned int i) const {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (maxIndex == UINT_MAX)
+  if (!elementInserted)
     return StoredType<TYPE>::get(defaultValue);
 
   switch (state) {
@@ -433,7 +433,7 @@ typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::getDe
 //===================================================================
 template <typename TYPE>
 bool tlp::MutableContainer<TYPE>::hasNonDefaultValue(const unsigned int i) const {
-  if (maxIndex == UINT_MAX)
+  if (!elementInserted)
     return false;
 
   switch (state) {
@@ -453,7 +453,7 @@ bool tlp::MutableContainer<TYPE>::hasNonDefaultValue(const unsigned int i) const
 template <typename TYPE>
 typename tlp::StoredType<TYPE>::ReturnedValue
 tlp::MutableContainer<TYPE>::get(const unsigned int i, bool &notDefault) const {
-  if (maxIndex == UINT_MAX) {
+  if (!elementInserted) {
     notDefault = false;
     return StoredType<TYPE>::get(defaultValue);
   }
