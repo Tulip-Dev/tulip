@@ -72,20 +72,18 @@ public:
   }
 };
 
-#define STRING_CMP(NAME, CMP)                                                  \
-  class NAME : public SearchOperator {                                         \
-  public:                                                                      \
-  bool compare(node n) override {                                              \
-    QString a(_a->getNodeStringValue(n).c_str()),                              \
-            b(_b->getNodeStringValue(n).c_str());                              \
-    return CMP;                                                                \
-  }                                                                            \
-  bool compare(edge e) override {                                              \
-    QString a(_a->getEdgeStringValue(e).c_str()),                              \
-            b(_b->getEdgeStringValue(e).c_str());                              \
-    return CMP;                                                                \
-  }                                                                            \
-};
+#define STRING_CMP(NAME, CMP)                                                                      \
+  class NAME : public SearchOperator {                                                             \
+  public:                                                                                          \
+    bool compare(node n) override {                                                                \
+      QString a(_a->getNodeStringValue(n).c_str()), b(_b->getNodeStringValue(n).c_str());          \
+      return CMP;                                                                                  \
+    }                                                                                              \
+    bool compare(edge e) override {                                                                \
+      QString a(_a->getEdgeStringValue(e).c_str()), b(_b->getEdgeStringValue(e).c_str());          \
+      return CMP;                                                                                  \
+    }                                                                                              \
+  };
 
 STRING_CMP(StringEqualsOperator, a == b)
 STRING_CMP(StringDifferentOperator, a != b)
@@ -179,16 +177,16 @@ public:
   }
 };
 
-#define NUM_CMP(NAME, CMP)                                                     \
-  class NAME : public NumericSearchOperator {                                  \
-  public:                                                                      \
-  bool compare(node n) override {                                              \
-    return _numericA->getNodeDoubleValue(n) CMP _numericB->getNodeDoubleValue(n);                                                                              \
-  }                                                                            \
-  bool compare(edge e) override {                                              \
-    return _numericA->getEdgeDoubleValue(e) CMP _numericB->getEdgeDoubleValue(e);                                                                               \
-  }                                                                            \
-};
+#define NUM_CMP(NAME, CMP)                                                                         \
+  class NAME : public NumericSearchOperator {                                                      \
+  public:                                                                                          \
+    bool compare(node n) override {                                                                \
+      return _numericA->getNodeDoubleValue(n) CMP _numericB->getNodeDoubleValue(n);                \
+    }                                                                                              \
+    bool compare(edge e) override {                                                                \
+      return _numericA->getEdgeDoubleValue(e) CMP _numericB->getEdgeDoubleValue(e);                \
+    }                                                                                              \
+  };
 
 NUM_CMP(DoubleEqualsOperator, ==)
 NUM_CMP(DoubleDifferentOperator, !=)
@@ -197,8 +195,9 @@ NUM_CMP(GreaterEqualOperator, >=)
 NUM_CMP(LesserOperator, <)
 NUM_CMP(LesserEqualOperator, <=)
 
-class ConstStringProperty :public StringProperty {
+class ConstStringProperty : public StringProperty {
   std::string _val;
+
 public:
   ConstStringProperty(Graph *g) : StringProperty(g) {}
 
@@ -215,8 +214,9 @@ public:
   }
 };
 
-class ConstDoubleProperty :public DoubleProperty {
+class ConstDoubleProperty : public DoubleProperty {
   double _val;
+
 public:
   ConstDoubleProperty(Graph *g) : DoubleProperty(g) {}
 
