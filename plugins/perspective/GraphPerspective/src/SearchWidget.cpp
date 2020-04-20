@@ -71,42 +71,22 @@ public:
     return prop;
   }
 };
-class StringSearchOperator : public SearchOperator {
-public:
-  virtual bool compareStrings(const QString &a, const QString &b) = 0;
-  bool compare(tlp::node n) override {
-    return compareStrings(_a->getNodeStringValue(n).c_str(), _b->getNodeStringValue(n).c_str());
-  }
-  bool compare(tlp::edge e) override {
-    return compareStrings(_a->getEdgeStringValue(e).c_str(), _b->getEdgeStringValue(e).c_str());
-  }
-};
-class NumericSearchOperator : public SearchOperator {
-  tlp::NumericProperty *_numericA;
-  tlp::NumericProperty *_numericB;
 
-public:
-  void setProperties(PropertyInterface *a, PropertyInterface *b) override {
-    SearchOperator::setProperties(a, b);
-    _numericA = static_cast<NumericProperty *>(_a);
-    _numericB = static_cast<NumericProperty *>(_b);
-  }
-  virtual bool compareDoubles(double a, double b) = 0;
-  bool compare(tlp::node n) override {
-    return compareDoubles(_numericA->getNodeDoubleValue(n), _numericB->getNodeDoubleValue(n));
-  }
-  bool compare(tlp::edge e) override {
-    return compareDoubles(_numericA->getEdgeDoubleValue(e), _numericB->getEdgeDoubleValue(e));
-  }
+#define STRING_CMP(NAME, CMP)                                                  \
+  class NAME : public SearchOperator {                                         \
+  public:                                                                      \
+  bool compare(node n) override {                                              \
+    QString a(_a->getNodeStringValue(n).c_str()),                              \
+            b(_b->getNodeStringValue(n).c_str());                              \
+    return CMP;                                                                \
+  }                                                                            \
+  bool compare(edge e) override {                                              \
+    QString a(_a->getEdgeStringValue(e).c_str()),                              \
+            b(_b->getEdgeStringValue(e).c_str());                              \
+    return CMP;                                                                \
+  }                                                                            \
 };
 
-#define STRING_CMP(NAME, CMP)                                                                      \
-  class NAME : public StringSearchOperator {                                                       \
-  public:                                                                                          \
-    bool compareStrings(const QString &a, const QString &b) {                                      \
-      return CMP;                                                                                  \
-    }                                                                                              \
-  };
 STRING_CMP(StringEqualsOperator, a == b)
 STRING_CMP(StringDifferentOperator, a != b)
 STRING_CMP(StartsWithOperator, a.startsWith(b))
@@ -118,55 +98,140 @@ STRING_CMP(NoCaseStartsWithOperator, a.startsWith(b, Qt::CaseInsensitive))
 STRING_CMP(NoCaseEndsWithOperator, a.endsWith(b, Qt::CaseInsensitive))
 STRING_CMP(NoCaseContainsOperator, a.contains(b, Qt::CaseInsensitive))
 
-class MatchesOperator : public StringSearchOperator {
+class MatchesOperator : public SearchOperator {
 public:
-  bool compareStrings(const QString &a, const QString &b) override {
+  bool compare(node n) override {
+    QString a(_a->getNodeStringValue(n).c_str());
+    QString b(_b->getNodeStringValue(n).c_str());
+    QRegExp regexp(b);
+    return regexp.exactMatch(a);
+  }
+  bool compare(edge e) override {
+    QString a(_a->getEdgeStringValue(e).c_str());
+    QString b(_b->getEdgeStringValue(e).c_str());
     QRegExp regexp(b);
     return regexp.exactMatch(a);
   }
 };
 
-class NoCaseMatchesOperator : public StringSearchOperator {
+class NoCaseMatchesOperator : public SearchOperator {
 public:
-  bool compareStrings(const QString &a, const QString &b) override {
+  bool compare(node n) override {
+    QString a(_a->getNodeStringValue(n).c_str());
+    QString b(_b->getNodeStringValue(n).c_str());
+    QRegExp regexp(b, Qt::CaseInsensitive);
+    return regexp.exactMatch(a);
+  }
+  bool compare(edge e) override {
+    QString a(_a->getEdgeStringValue(e).c_str());
+    QString b(_b->getEdgeStringValue(e).c_str());
     QRegExp regexp(b, Qt::CaseInsensitive);
     return regexp.exactMatch(a);
   }
 };
 
-class IsLikeOperator : public StringSearchOperator {
+class IsLikeOperator : public SearchOperator {
 public:
-  bool compareStrings(const QString &a, const QString &b) override {
-    QString filter(b);
-    convertLikeFilter(filter);
-    QRegExp regexp(filter);
+  bool compare(node n) override {
+    QString a(_a->getNodeStringValue(n).c_str());
+    QString b(_b->getNodeStringValue(n).c_str());
+    convertLikeFilter(b);
+    QRegExp regexp(b);
+    return regexp.exactMatch(a);
+  }
+  bool compare(edge e) override {
+    QString a(_a->getEdgeStringValue(e).c_str());
+    QString b(_b->getEdgeStringValue(e).c_str());
+    convertLikeFilter(b);
+    QRegExp regexp(b);
     return regexp.exactMatch(a);
   }
 };
 
-class NoCaseIsLikeOperator : public StringSearchOperator {
+class NoCaseIsLikeOperator : public SearchOperator {
 public:
-  bool compareStrings(const QString &a, const QString &b) override {
-    QString filter(b);
-    convertLikeFilter(filter);
-    QRegExp regexp(filter, Qt::CaseInsensitive);
+  bool compare(node n) override {
+    QString a(_a->getNodeStringValue(n).c_str());
+    QString b(_b->getNodeStringValue(n).c_str());
+    convertLikeFilter(b);
+    QRegExp regexp(b, Qt::CaseInsensitive);
+    return regexp.exactMatch(a);
+  }
+  bool compare(edge e) override {
+    QString a(_a->getEdgeStringValue(e).c_str());
+    QString b(_b->getEdgeStringValue(e).c_str());
+    convertLikeFilter(b);
+    QRegExp regexp(b, Qt::CaseInsensitive);
     return regexp.exactMatch(a);
   }
 };
 
-#define NUM_CMP(NAME, CMP)                                                                         \
-  class NAME : public NumericSearchOperator {                                                      \
-  public:                                                                                          \
-    bool compareDoubles(double a, double b) {                                                      \
-      return a CMP b;                                                                              \
-    }                                                                                              \
-  };
+class NumericSearchOperator : public SearchOperator {
+protected:
+  tlp::NumericProperty *_numericA;
+  tlp::NumericProperty *_numericB;
+
+public:
+  void setProperties(PropertyInterface *a, PropertyInterface *b) override {
+    SearchOperator::setProperties(a, b);
+    _numericA = static_cast<NumericProperty *>(_a);
+    _numericB = static_cast<NumericProperty *>(_b);
+  }
+};
+
+#define NUM_CMP(NAME, CMP)                                                     \
+  class NAME : public NumericSearchOperator {                                  \
+  public:                                                                      \
+  bool compare(node n) override {                                              \
+    return _numericA->getNodeDoubleValue(n) CMP _numericB->getNodeDoubleValue(n);                                                                              \
+  }                                                                            \
+  bool compare(edge e) override {                                              \
+    return _numericA->getEdgeDoubleValue(e) CMP _numericB->getEdgeDoubleValue(e);                                                                               \
+  }                                                                            \
+};
+
 NUM_CMP(DoubleEqualsOperator, ==)
 NUM_CMP(DoubleDifferentOperator, !=)
 NUM_CMP(GreaterOperator, >)
 NUM_CMP(GreaterEqualOperator, >=)
 NUM_CMP(LesserOperator, <)
 NUM_CMP(LesserEqualOperator, <=)
+
+class ConstStringProperty :public StringProperty {
+  std::string _val;
+public:
+  ConstStringProperty(Graph *g) : StringProperty(g) {}
+
+  void setConstValue(const std::string val) {
+    _val = val;
+  }
+
+  std::string getNodeStringValue(const node) const override {
+    return _val;
+  }
+
+  std::string getEdgeStringValue(const edge) const override {
+    return _val;
+  }
+};
+
+class ConstDoubleProperty :public DoubleProperty {
+  double _val;
+public:
+  ConstDoubleProperty(Graph *g) : DoubleProperty(g) {}
+
+  void setConstValue(double val) {
+    _val = val;
+  }
+
+  double getNodeDoubleValue(const node) const override {
+    return _val;
+  }
+
+  double getEdgeDoubleValue(const edge) const override {
+    return _val;
+  }
+};
 
 SearchWidget::SearchWidget(QWidget *parent)
     : QFrame(parent), _ui(new Ui::SearchWidget), _graph(nullptr) {
@@ -316,12 +381,11 @@ void SearchWidget::search() {
     deleteTermB = true;
 
     if (isNumericComparison()) {
-      DoubleProperty *doubleProp = new DoubleProperty(_graph);
-      doubleProp->setAllNodeValue(_ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toDouble());
-      doubleProp->setAllEdgeValue(_ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toDouble());
+      ConstDoubleProperty *doubleProp = new ConstDoubleProperty(_graph);
+      doubleProp->setConstValue(_ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toDouble());
       b = doubleProp;
     } else {
-      StringProperty *stringProp = new StringProperty(_graph);
+      ConstStringProperty *stringProp = new ConstStringProperty(_graph);
       DataType *tulipData =
           TulipMetaTypes::qVariantToDataType(_ui->tableWidget->item(0, 0)->data(Qt::DisplayRole));
 
@@ -355,8 +419,7 @@ void SearchWidget::search() {
         serializedValue = serializedValue.mid(1, serializedValue.length() - 2);
       }
 
-      stringProp->setAllNodeValue(QStringToTlpString(serializedValue));
-      stringProp->setAllEdgeValue(QStringToTlpString(serializedValue));
+      stringProp->setConstValue(QStringToTlpString(serializedValue));
       b = stringProp;
     }
   } else {
