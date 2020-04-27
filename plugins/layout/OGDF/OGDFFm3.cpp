@@ -147,6 +147,9 @@ using namespace std;
 #define ELT_ITERATIVELY 0
 #define ELT_ALURU 1
 
+using namespace tlp;
+using namespace ogdf;
+
 static const char *paramHelp[] = {
 
     // Edge Length Property

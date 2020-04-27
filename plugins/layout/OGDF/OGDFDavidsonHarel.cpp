@@ -86,6 +86,9 @@
 #define MEDIUM_ELT 1
 #define HQ_ELT 2
 
+using namespace tlp;
+using namespace ogdf;
+
 static const char *paramHelp[] = {
     // Settings
     "Easy way to set fixed costs.",

@@ -27,7 +27,7 @@ namespace tlp {
 class DoubleProperty;
 }
 
-using namespace tlp;
+namespace tlp {
 
 class NodeNeighborhoodView : public GraphDecorator {
 
@@ -94,5 +94,5 @@ private:
   int nbNodes;
   tlp::DoubleProperty *property;
 };
-
+}
 #endif /* REACHABLESUBGRAPHVIEW_H_ */

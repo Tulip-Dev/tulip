@@ -71,6 +71,9 @@
 #define ELT_FACTOR 0
 #define ELT_LOGARITHMIC 1
 
+using namespace tlp;
+using namespace ogdf;
+
 static const char *paramHelp[] = {
     // iterations
     "The number of iterations.",

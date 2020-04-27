@@ -26,7 +26,7 @@
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <QCursor>
 
-using namespace tlp;
+namespace tlp {
 
 class GeographicViewInteractor : public GLInteractorComposite {
 
@@ -132,5 +132,6 @@ public:
 
   bool isCompatible(const std::string &viewName) const override;
 };
+}
 
 #endif // GEOGRAPHIC_VIEW_INTERACTORS_H

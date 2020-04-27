@@ -30,6 +30,7 @@
 #include "../../utils/PluginNames.h"
 
 using namespace std;
+using namespace tlp;
 
 GeographicViewInteractor::GeographicViewInteractor(const QString &iconPath, const QString &text)
     : GLInteractorComposite(QIcon(iconPath), text) {}

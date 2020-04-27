@@ -66,6 +66,8 @@
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
+using namespace tlp;
+
 static const char *paramHelp[] = {
     // minimum grid distance
     "The minimum grid distance.",

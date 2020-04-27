@@ -23,8 +23,6 @@
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include "../../utils/PluginNames.h"
 
-using namespace std;
-
 namespace tlp {
 
 class HistogramStatistics;

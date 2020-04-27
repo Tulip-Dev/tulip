@@ -22,6 +22,8 @@
 #include <tulip/TulipPluginHeaders.h>
 #include "OctTree.h"
 
+namespace tlp {
+
 class LinLogLayout {
 
 public:
@@ -88,4 +90,5 @@ private:
   double getEnergy(node u, OctTree *tree);
   void getDirection(node u, double *dir, OctTree *tree);
 };
+}
 #endif

@@ -61,6 +61,9 @@
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
+using namespace tlp;
+using namespace ogdf;
+
 static const char *paramHelp[] = {
     // number of pivots
     "Sets the number of pivots. If the new value is smaller or equal 0 the default value (250) is "

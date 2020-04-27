@@ -28,6 +28,8 @@
 #include <vector>
 
 using namespace std;
+using namespace tlp;
+using namespace ogdf;
 
 TulipToOGDF::TulipToOGDF(tlp::Graph *g, bool importEdgeBends)
     : tulipGraph(g), ogdfNodes(g), ogdfEdges(g) {

@@ -80,6 +80,9 @@
 #define ELT_EMBEDDER_MINDEPTHPITA 6
 #define ELT_EMBEDDER_OPTIMALFLEXDRAW 7
 
+using namespace tlp;
+using namespace ogdf;
+
 static const char *embedderValuesDescription =
     "SimpleEmbedder <i>(Planar graph embedding from the algorithm of Boyer and Myrvold)</i><br>"
     "EmbedderMaxFace <i>(Planar graph embedding with maximum external face)</i><br>"

@@ -68,6 +68,9 @@
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
+using namespace tlp;
+using namespace ogdf;
+
 static const char *paramHelp[] = {
     // terminationCriterion
     "Tells which TERMINATION_CRITERIA should be used.",

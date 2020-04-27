@@ -111,6 +111,8 @@ static const char *paramHelp[] = {
     // pageRatio
     "The page ratio used for packing connected components."};
 
+using namespace tlp;
+
 class OGDFGemFrick : public OGDFLayoutPluginBase {
 
 public:

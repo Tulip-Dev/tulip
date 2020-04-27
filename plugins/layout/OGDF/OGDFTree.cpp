@@ -82,6 +82,9 @@
 #define ELT_ROOTSINK 1
 #define ELT_ROOTCOORD 2
 
+using namespace tlp;
+using namespace ogdf;
+
 static const char *paramHelp[] = {
     // siblings distance
     "The minimal required horizontal distance between siblings.",

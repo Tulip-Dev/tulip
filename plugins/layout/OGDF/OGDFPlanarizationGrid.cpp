@@ -82,6 +82,9 @@
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
+using namespace tlp;
+using namespace ogdf;
+
 static const char *paramHelp[] = {
     // page ratio
     "Sets the option pageRatio."};

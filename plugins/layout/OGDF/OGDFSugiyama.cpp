@@ -110,6 +110,9 @@
 #define ELT_FASTSIMPLEHIERARCHY 1
 #define ELT_OPTIMALHIERARCHY 2
 
+using namespace tlp;
+using namespace ogdf;
+
 static const char *paramHelp[] = {
     // fails
     "The number of times that the number of crossings may not decrease after a complete top-down "

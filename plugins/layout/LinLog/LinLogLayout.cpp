@@ -18,6 +18,8 @@
  */
 #include "LinLogLayout.h"
 
+using namespace tlp;
+
 LinLogLayout::LinLogLayout(tlp::Graph *_graph, tlp::PluginProgress *_pluginProgress)
     : edgeWeight(nullptr), layoutResult(nullptr), linLogWeight(_graph), skipNodes(nullptr),
       graph(_graph), pluginProgress(_pluginProgress), _dim(2), _nbNodes(0) {

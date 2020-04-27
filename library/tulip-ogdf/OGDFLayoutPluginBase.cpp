@@ -22,6 +22,8 @@
 #include <tulip/DrawingTools.h>
 
 using namespace std;
+using namespace tlp;
+using namespace ogdf;
 
 OGDFLayoutPluginBase::OGDFLayoutPluginBase(const tlp::PluginContext *context,
                                            ogdf::LayoutModule *ogdfLayoutAlgo)

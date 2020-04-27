@@ -28,6 +28,7 @@
 #include "../../utils/PluginNames.h"
 
 using namespace std;
+using namespace tlp;
 
 template <typename T>
 class StlVectorIterator : public Iterator<T> {

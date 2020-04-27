@@ -20,9 +20,6 @@
 
 #include <tulip/Glyph.h>
 
-using namespace std;
-using namespace tlp;
-
 namespace tlp {
 
 struct BoundingBox;
@@ -44,8 +41,8 @@ public:
       : NoShaderGlyph(context), textureFile(aroundTextureFile), alpha(alphaVal) {}
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
   void draw(node n, float) override;
-  static void drawGlyph(const Color &glyphColor, const Size &glyphSize, const string &texture,
-                        const string &texturePath, const string &aroundTextureFile,
+  static void drawGlyph(const Color &glyphColor, const Size &glyphSize, const std::string &texture,
+                        const std::string &texturePath, const std::string &aroundTextureFile,
                         unsigned char alpha = 255);
 };
 } // end of namespace tlp

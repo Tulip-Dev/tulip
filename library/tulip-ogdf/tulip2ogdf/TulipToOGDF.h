@@ -36,14 +36,11 @@
 #include <iostream>
 #include <vector>
 
-using namespace tlp;
-using namespace ogdf;
-using namespace std;
 
 namespace tlp {
 class DoubleProperty;
 class SizeProperty;
-} // namespace tlp
+ // namespace tlp
 
 class TLP_OGDF_SCOPE TulipToOGDF {
 public:
@@ -64,7 +61,7 @@ public:
   void copyTlpNumericPropertyToOGDFNodeWeight(tlp::NumericProperty *);
   void copyTlpNodeSizeToOGDF(tlp::SizeProperty *);
 
-  vector<tlp::Coord> getEdgeCoordFromOGDFGraphAttr(unsigned int edgeIndex);
+  std::vector<tlp::Coord> getEdgeCoordFromOGDFGraphAttr(unsigned int edgeIndex);
 
 private:
   tlp::Graph *tulipGraph;
@@ -73,6 +70,6 @@ private:
   ogdf::Graph ogdfGraph;
   ogdf::GraphAttributes ogdfAttributes;
 };
-
+}
 #endif /* !TULIPTOOGDF_H_ */
 ///@endcond

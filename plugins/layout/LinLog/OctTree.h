@@ -24,7 +24,7 @@
 #include <tulip/DoubleProperty.h>
 #include <vector>
 
-using namespace tlp;
+namespace tlp {
 
 /**
  * Octtree for graph nodes with positions in 3D space.
@@ -99,5 +99,5 @@ public:
   // Prints the tree on a console output
   void printTree(unsigned int);
 };
-
+}
 #endif // __OCTTREE_H__

@@ -68,6 +68,8 @@
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
+using namespace tlp;
+
 static const char *paramHelp[] = {
     // Even angles
     "Subtrees may be assigned even angles or angles depending on their size."};

@@ -55,6 +55,9 @@
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
+using namespace tlp;
+using namespace ogdf;
+
 class SameLayout : public ogdf::LayoutModule {
 
 public:

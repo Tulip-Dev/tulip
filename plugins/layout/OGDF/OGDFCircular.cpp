@@ -65,6 +65,9 @@
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
+using namespace tlp;
+using namespace ogdf;
+
 static const char *paramHelp[] = {
     // minDistCircle
     "The minimal distance between nodes on a circle.",

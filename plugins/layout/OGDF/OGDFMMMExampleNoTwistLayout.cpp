@@ -72,6 +72,8 @@
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
+using namespace tlp;
+
 class OGDFMMMExampleNoTwistLayout : public OGDFLayoutPluginBase {
 
 public:

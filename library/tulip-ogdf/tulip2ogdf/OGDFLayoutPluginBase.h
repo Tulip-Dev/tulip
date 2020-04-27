@@ -31,9 +31,11 @@
 
 #include "TulipToOGDF.h"
 
+namespace tlp{
+
 class TLP_OGDF_SCOPE OGDFLayoutPluginBase : public tlp::LayoutAlgorithm {
 public:
-  OGDFLayoutPluginBase(const tlp::PluginContext *context, LayoutModule *ogdfLayoutAlgo);
+  OGDFLayoutPluginBase(const tlp::PluginContext *context, ogdf::LayoutModule *ogdfLayoutAlgo);
   ~OGDFLayoutPluginBase() override;
 
   bool run() override;
@@ -48,6 +50,6 @@ protected:
   TulipToOGDF *tlpToOGDF;
   ogdf::LayoutModule *ogdfLayoutAlgo;
 };
-
+}
 #endif // OGDF_LAYOUT_PLUGIN_BASE
        ///@endcond
