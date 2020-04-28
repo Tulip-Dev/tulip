@@ -70,7 +70,24 @@ public:
   /**
    * sets the strings list and the already selected strings
    */
-  void setStringsList(const std::vector<std::string> &strList, std::vector<std::string> &selList);
+  void setStringsList(const std::vector<std::string> &strList, const std::vector<std::string> &selList);
+
+  /**
+   * gets the selected strings list
+   */
+  std::vector<std::string> getSelectedStringsList() const;
+
+  /**
+   * Method which sets the label text value of the unselected strings list
+   * (this method does nothing if listType = SIMPLE_LIST)
+   */
+  void setUnselectedStringsListLabel(const std::string &unselectedStringsListLabel);
+
+  /**
+   * Method which sets the label text value of the selected strings list
+   * (this method does nothing if listType = SIMPLE_LIST)
+   */
+  void setSelectedStringsListLabel(const std::string &selectedStringsListLabel);
 
   /**
    * @brief Constructs a strings list selection dialog with the given parent.

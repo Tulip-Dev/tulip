@@ -73,6 +73,8 @@
         <file>icons/16/list-del.png</file>
         <file>icons/16/go-down.png</file>
         <file>icons/16/go-up.png</file>
+        <file>icons/16/go-left.png</file>
+        <file>icons/16/go-right.png</file>
         <file>icons/22/pause.png</file>
         <file>icons/22/start.png</file>
         <file>icons/22/stop.png</file>

@@ -48,8 +48,8 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="TulipQtResource.qrc" >
-         <normaloff>:/right.png</normaloff>:/right.png</iconset>
+         <iconset resource="../resources/TulipGUIResource.qrc">
+          <normaloff>:/tulip/gui/icons/16/go-right.png</normaloff>:/tulip/gui/icons/16/go-down.png</iconset>
        </property>
       </widget>
      </item>
@@ -59,8 +59,8 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="TulipQtResource.qrc" >
-         <normaloff>:/left.png</normaloff>:/left.png</iconset>
+         <iconset resource="../resources/TulipGUIResource.qrc">
+          <normaloff>:/tulip/gui/icons/16/go-left.png</normaloff>:/tulip/gui/icons/16/go-down.png</iconset>
        </property>
       </widget>
      </item>
@@ -93,26 +93,26 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_5" >
      <item>
-      <widget class="QPushButton" name="upButton" >
-       <property name="text" >
-        <string/>
-       </property>
-       <property name="icon" >
-        <iconset resource="TulipQtResource.qrc" >
-         <normaloff>:/up.png</normaloff>:/up.png</iconset>
-       </property>
-      </widget>
+       <widget class="QPushButton" name="upButton">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../resources/TulipGUIResource.qrc">
+          <normaloff>:/tulip/gui/icons/16/go-up.png</normaloff>:/tulip/gui/icons/16/go-up.png</iconset>
+        </property>
+       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="downButton" >
-       <property name="text" >
-        <string/>
-       </property>
-       <property name="icon" >
-        <iconset resource="TulipQtResource.qrc" >
-         <normaloff>:/down.png</normaloff>:/down.png</iconset>
-       </property>
-      </widget>
+       <widget class="QPushButton" name="downButton">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../resources/TulipGUIResource.qrc">
+          <normaloff>:/tulip/gui/icons/16/go-down.png</normaloff>:/tulip/gui/icons/16/go-down.png</iconset>
+        </property>
+       </widget>
      </item>
     </layout>
    </item>
@@ -126,7 +126,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="TulipQtResource.qrc" />
+  <include location="../resources/TulipGUIResource.qrc"/>
  </resources>
  <connections/>
 </ui>

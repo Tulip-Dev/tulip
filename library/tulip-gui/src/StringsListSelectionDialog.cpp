@@ -46,7 +46,7 @@ void StringsListSelectionDialog::setMaxSelectedStringsListSize(const unsigned in
  * sets the strings list and the already selected strings
  */
 void StringsListSelectionDialog::setStringsList(const std::vector<std::string> &strList,
-                                                std::vector<std::string> &selList) {
+                                                const std::vector<std::string> &selList) {
   ui->stringsListSelectionWidget->setUnselectedStringsList(strList);
   ui->stringsListSelectionWidget->setSelectedStringsList(selList);
 }
@@ -55,8 +55,7 @@ void StringsListSelectionDialog::setStringsList(const std::vector<std::string> &
  * @brief Constructs a strings list selection dialog with the given parent.
  * \param parent the widget's parent
  * \param listType this parameter defines the widget's look (see class description)
- * \param maxSelectedStringsListSize the maximum number of strings that can be selected (if 0, no
- *size restriction)
+ * \param maxSelectedStringsListSize the maximum number of strings that can be selected (if 0, nosize restriction)
  **/
 StringsListSelectionDialog::StringsListSelectionDialog(
     QString title, QWidget *parent, const StringsListSelectionWidget::ListType listType,
@@ -71,6 +70,20 @@ StringsListSelectionDialog::StringsListSelectionDialog(
 StringsListSelectionDialog::~StringsListSelectionDialog() {
   if (ui)
     delete ui;
+}
+
+std::vector<std::string> StringsListSelectionDialog::getSelectedStringsList() const {
+  if (ui)
+    return ui->stringsListSelectionWidget->getSelectedStringsList();
+  return std::vector<std::string>();
+}
+
+void StringsListSelectionDialog::setUnselectedStringsListLabel(const std::string &label) {
+  ui->stringsListSelectionWidget->setUnselectedStringsListLabel(label);
+}
+
+void StringsListSelectionDialog::setSelectedStringsListLabel(const std::string &label) {
+  ui->stringsListSelectionWidget->setSelectedStringsListLabel(label);
 }
 
 /**
