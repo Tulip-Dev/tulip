@@ -132,6 +132,6 @@ public:
 
   bool isCompatible(const std::string &viewName) const override;
 };
-}
+} // namespace tlp
 
 #endif // GEOGRAPHIC_VIEW_INTERACTORS_H

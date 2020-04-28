@@ -90,5 +90,5 @@ private:
   double getEnergy(node u, OctTree *tree);
   void getDirection(node u, double *dir, OctTree *tree);
 };
-}
+} // namespace tlp
 #endif

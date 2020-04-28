@@ -99,5 +99,5 @@ public:
   // Prints the tree on a console output
   void printTree(unsigned int);
 };
-}
+} // namespace tlp
 #endif // __OCTTREE_H__

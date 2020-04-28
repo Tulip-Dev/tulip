@@ -70,7 +70,8 @@ public:
   /**
    * sets the strings list and the already selected strings
    */
-  void setStringsList(const std::vector<std::string> &strList, const std::vector<std::string> &selList);
+  void setStringsList(const std::vector<std::string> &strList,
+                      const std::vector<std::string> &selList);
 
   /**
    * gets the selected strings list

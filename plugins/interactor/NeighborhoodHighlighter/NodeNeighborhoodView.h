@@ -94,5 +94,5 @@ private:
   int nbNodes;
   tlp::DoubleProperty *property;
 };
-}
+} // namespace tlp
 #endif /* REACHABLESUBGRAPHVIEW_H_ */

@@ -36,11 +36,10 @@
 #include <iostream>
 #include <vector>
 
-
 namespace tlp {
 class DoubleProperty;
 class SizeProperty;
- // namespace tlp
+// namespace tlp
 
 class TLP_OGDF_SCOPE TulipToOGDF {
 public:
@@ -70,6 +69,6 @@ private:
   ogdf::Graph ogdfGraph;
   ogdf::GraphAttributes ogdfAttributes;
 };
-}
+} // namespace tlp
 #endif /* !TULIPTOOGDF_H_ */
 ///@endcond
