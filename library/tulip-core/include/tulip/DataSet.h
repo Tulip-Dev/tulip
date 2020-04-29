@@ -114,8 +114,12 @@ class DataSet;
 struct DataTypeSerializer {
   // the readable type name the serializer is designed for
   std::string outputTypeName;
-  DataTypeSerializer(const std::string &otn) : outputTypeName(otn) {}
+  // the current graph
+  Graph *graph;
+  DataTypeSerializer(const std::string &otn) : outputTypeName(otn), graph(nullptr) {}
   virtual ~DataTypeSerializer() {}
+  // set the current graph if needed
+  void setGraph(Graph *g) { graph = g; }
   // return a copy of this
   virtual DataTypeSerializer *clone() const = 0;
   // write the DataType embedded value into the output stream

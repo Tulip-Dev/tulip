@@ -66,7 +66,7 @@ public:
   PLUGININFORMATION("CSV Export", "David Auber, Patrick Mary", "18/01/2011",
                     "<p>Supported extensions: csv</p><p>Exports the values of tulip graph "
                     "properties associated to graph elements in a CSV file.</p>",
-                    "1.0", "File")
+                    "1.1", "File")
 
   std::string icon() const override {
     return ":/tulip/graphperspective/icons/32/spreadsheet.png";

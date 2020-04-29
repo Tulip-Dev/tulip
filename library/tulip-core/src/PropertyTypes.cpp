@@ -19,7 +19,9 @@
 
 #include <tulip/PropertyTypes.h>
 #include <tulip/Graph.h>
+#include <tulip/PropertiesCollection.h>
 #include <tulip/StringCollection.h>
+#include <tulip/TulipException.h>
 
 #include <cstdint>
 #include <limits>
@@ -1136,6 +1138,43 @@ struct EdgeVectorTypeSerializer : public TypedDataSerializer<vector<edge>> {
   }
 };
 
+struct PropertiesCollectionSerializer : public TypedDataSerializer<PropertiesCollection> {
+  PropertiesCollectionSerializer() : TypedDataSerializer<PropertiesCollection>("PropertiesCollection") {}
+
+  DataTypeSerializer *clone() const override {
+    return new PropertiesCollectionSerializer();
+  }
+
+  // called when writing a tlp file, which should never happen
+  void write(ostream &os, const PropertiesCollection &) override {
+    throw TulipException("PropertiesCollectionSerializer::write is not implemented");
+  }
+
+  // called when reading a tlp file, which should never happen
+  bool read(istream &is, PropertiesCollection &) override {
+    throw TulipException("PropertiesCollectionSerializer::read is not implemented");
+  }
+
+  std::string toString(const DataType *data) override {
+    auto &selected = static_cast<PropertiesCollection *>(data->value)->getSelected();
+    ostringstream oss;
+    oss << '"';
+    for (size_t i = 0; i < selected.size(); ++i) {
+      if (i)
+	oss << ", ";
+      oss << selected[i];
+    }
+    oss << '"';
+    return oss.str();
+  }
+
+  bool setData(tlp::DataSet &dts, const string &prop, const string &) override {
+    PropertiesCollection col(graph);
+    dts.set(prop, col);
+    return true;
+  }
+};
+
 struct StringCollectionSerializer : public TypedDataSerializer<StringCollection> {
   StringCollectionSerializer() : TypedDataSerializer<StringCollection>("StringCollection") {}
 
@@ -1255,4 +1294,6 @@ void tlp::initTypeSerializers() {
   DataSet::registerDataTypeSerializer<vector<edge>>(EdgeVectorTypeSerializer());
 
   DataSet::registerDataTypeSerializer<StringCollection>(StringCollectionSerializer());
+
+  DataSet::registerDataTypeSerializer<PropertiesCollection>(PropertiesCollectionSerializer());
 }

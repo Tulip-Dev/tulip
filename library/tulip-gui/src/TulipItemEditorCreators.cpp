@@ -46,6 +46,7 @@
 #include <tulip/TulipFontIconDialog.h>
 #include <tulip/TulipFontIconEngine.h>
 #include <tulip/ShapeDialog.h>
+#include <tulip/StringsListSelectionDialog.h>
 
 using namespace tlp;
 
@@ -318,6 +319,76 @@ QVariant StringCollectionEditorCreator::editorData(QWidget *widget, tlp::Graph *
 QString StringCollectionEditorCreator::displayText(const QVariant &var) const {
   StringCollection col = var.value<StringCollection>();
   return tlpStringToQString(col[col.getCurrent()]);
+}
+
+// this class is defined to properly catch the return status
+// of a StringsListSelectionDialog. calling QDialog::result()
+// instead does not work
+class PropertiesCollectionDialog : public StringsListSelectionDialog {
+
+public:
+  PropertiesCollectionDialog(QWidget *parent) :
+    StringsListSelectionDialog("Select properties", parent, StringsListSelectionWidget::DOUBLE_LIST), ok(QDialog::Rejected) {
+    setSelectedStringsListLabel("Selected properties");
+    setModal(true);
+    setMinimumSize(500, 400);
+  }
+  ~PropertiesCollectionDialog() override {}
+  int ok;
+  std::vector<std::string> previouslySelected;
+
+  void done(int res) override {
+    ok = res;
+    QDialog::done(res);
+  }
+
+  void showEvent(QShowEvent *ev) override {
+    QDialog::showEvent(ev);
+
+    if (parentWidget())
+      move(parentWidget()->window()->frameGeometry().topLeft() +
+           parentWidget()->window()->rect().center() - rect().center());
+  }
+};
+
+/*
+  PropertiesCollectionEditorCreator
+*/
+QWidget *PropertiesCollectionEditorCreator::createWidget(QWidget *parent) const {
+  return new PropertiesCollectionDialog(parent);
+}
+
+void PropertiesCollectionEditorCreator::setEditorData(QWidget *widget,
+						    const QVariant &var, bool,
+						    tlp::Graph *) {
+  PropertiesCollection col = var.value<PropertiesCollection>();
+  PropertiesCollectionDialog *dialog =
+    static_cast<PropertiesCollectionDialog *>(widget);
+  dialog->previouslySelected = col.getSelected();
+  dialog->setStringsList(col.getUnselected(), col.getSelected());
+}
+
+QVariant PropertiesCollectionEditorCreator::editorData(QWidget *widget, tlp::Graph *g) {
+  PropertiesCollection col(g);
+  PropertiesCollectionDialog *dialog =
+    static_cast<PropertiesCollectionDialog *>(widget);
+  col.setSelected(dialog->ok == QDialog::Rejected
+		  ? dialog->previouslySelected
+		  : dialog->getSelectedStringsList());
+  return QVariant::fromValue<PropertiesCollection>(col);
+}
+
+QString PropertiesCollectionEditorCreator::displayText(const QVariant &var) const {
+  PropertiesCollection col = var.value<PropertiesCollection>();
+  QString text;
+  auto &selected = col.getSelected();
+  for (unsigned int i = 0; i < selected.size(); ++i) {
+    if (i)
+      text.append(", ");
+    text.append(selected[i].c_str());
+  }
+
+  return text;
 }
 
 // this class is defined to properly catch the return status

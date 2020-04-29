@@ -121,6 +121,7 @@ tlp::DataType *TulipMetaTypes::qVariantToDataType(const QVariant &v) {
 
   CHECK_QVARIANT(ColorScale);
 
+  CHECK_QVARIANT(PropertiesCollection);
   CHECK_QVARIANT(StringCollection);
 
   CHECK_QVARIANT(QStringType::RealType);
@@ -216,6 +217,7 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string
 
   CHECK_DATATYPE(tlp::ColorScale);
 
+  CHECK_DATATYPE(tlp::PropertiesCollection);
   CHECK_DATATYPE(tlp::StringCollection);
 
   // Qt built-in types

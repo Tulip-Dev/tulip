@@ -42,6 +42,7 @@
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/GlLabel.h>
 #include <tulip/TulipFont.h>
+#include <tulip/PropertiesCollection.h>
 #include <tulip/StringCollection.h>
 #include <tulip/TulipViewSettings.h>
 
@@ -130,6 +131,7 @@ Q_DECLARE_METATYPE(tlp::PropertyInterface *)
 Q_DECLARE_METATYPE(tlp::ColorScale)
 
 Q_DECLARE_METATYPE(tlp::StringCollection)
+Q_DECLARE_METATYPE(tlp::PropertiesCollection)
 
 Q_DECLARE_METATYPE(TextureFile)
 Q_DECLARE_METATYPE(TulipFileDescriptor)

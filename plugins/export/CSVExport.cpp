@@ -19,6 +19,7 @@
 #include "CSVExport.h"
 
 #include <tulip/StringCollection.h>
+#include <tulip/PropertiesCollection.h>
 #include <tulip/Graph.h>
 #include <tulip/StringProperty.h>
 #include <tulip/BooleanProperty.h>
@@ -37,8 +38,8 @@ static const char *paramHelp[] = {
     "This parameters enables to choose the property used for the selection",
     // export id of graph elements
     "This parameter indicates if the id of graph elements has to be exported",
-    // export visual properties selection
-    "This parameter indicates if the visual properties of Tulip will be exported",
+    // exported properties
+    "This parameter indicates the properties to be exported. Default indicates only the user defined properties",
     // the field separator
     "This parameter indicates the field separator (sequence of one or more characters used to "
     "specify the boundary between two consecutive fields).",
@@ -63,7 +64,7 @@ static const char *paramHelp[] = {
 
 #define EXPORT_ID "Export id"
 
-#define EXPORT_VISUAL_PROPERTIES "Export visual properties"
+#define EXPORTED_PROPERTIES "Exported properties"
 
 #define FIELD_SEPARATOR "Field separator"
 #define FIELD_SEPARATORS " \\; ; , ;Tab;Space;Custom"
@@ -88,7 +89,7 @@ CsvExport::CsvExport(const PluginContext *context) : ExportModule(context) {
   addInParameter<bool>(EXPORT_SELECTION, paramHelp[1], "false");
   addInParameter<BooleanProperty>("Export selection property", paramHelp[2], "viewSelection");
   addInParameter<bool>(EXPORT_ID, paramHelp[3], "false");
-  addInParameter<bool>(EXPORT_VISUAL_PROPERTIES, paramHelp[4], "false");
+  addInParameter<PropertiesCollection>(EXPORTED_PROPERTIES, paramHelp[4], "the user defined properties");
   addInParameter<StringCollection>(FIELD_SEPARATOR, paramHelp[5], FIELD_SEPARATORS);
   addInParameter<string>(FIELD_SEPARATOR_CUSTOM, paramHelp[6], CUSTOM_MARK);
   addInParameter<StringCollection>(STRING_DELIMITER, paramHelp[7], STRING_DELIMITERS);
@@ -115,8 +116,8 @@ bool CsvExport::exportGraph(std::ostream &os) {
   bool exportSelection = false;
   // ids are not exported
   bool exportId = false;
-  // export visual properties
-  bool exportVisualProperties = false;
+  // export properties
+  PropertiesCollection propsCollection(graph);
   // field separator is Custom
   StringCollection fieldSeparators(FIELD_SEPARATORS);
   fieldSeparators.setCurrent(0);
@@ -136,7 +137,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
 
     dataSet->get(EXPORT_SELECTION, exportSelection);
     dataSet->get(EXPORT_ID, exportId);
-    dataSet->get(EXPORT_VISUAL_PROPERTIES, exportVisualProperties);
+    dataSet->get(EXPORTED_PROPERTIES, propsCollection);
     dataSet->get(FIELD_SEPARATOR_CUSTOM, fieldSeparatorCustom);
 
     if (dataSet->get(FIELD_SEPARATOR, fieldSeparators)) {
@@ -189,29 +190,27 @@ bool CsvExport::exportGraph(std::ostream &os) {
     first = false;
   }
 
-  // export non tulip defined properties
+  // exported properties
   // use vectors for further access to exported properties
   vector<PropertyInterface *> props;
+  props.reserve(propsCollection.getSelected().size());
+
   vector<bool> propIsString;
   unsigned int nbProps = 0;
 
-  for (PropertyInterface *prop : graph->getObjectProperties()) {
-    const string &propName = prop->getName();
+  for (auto &propName : propsCollection.getSelected()) {
+    auto prop = graph->getProperty(propName);
+     ++nbProps;
+    props.push_back(prop);
+    propIsString.push_back(dynamic_cast<tlp::StringProperty *>(prop));
 
-    if (propName.compare(0, 4, "view") != 0 || exportVisualProperties) {
-      ++nbProps;
-      props.push_back(prop);
-      propIsString.push_back(dynamic_cast<tlp::StringProperty *>(prop));
+    if (!first)
+      os << fieldSeparator;
+    else
+      first = false;
 
-      if (!first)
-        os << fieldSeparator;
-      else
-        first = false;
-
-      exportString(os, propName);
-    }
+    exportString(os, propName);
   }
-
   os << endl;
 
   // export nodes

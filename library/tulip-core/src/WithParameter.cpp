@@ -185,6 +185,7 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
     DataTypeSerializer *dts = DataSet::typenameToSerializer(type);
 
     if (dts) {
+      dts->setGraph(g);
       bool result = dts->setData(dataSet, name, defaultValue);
 
       if (!result)

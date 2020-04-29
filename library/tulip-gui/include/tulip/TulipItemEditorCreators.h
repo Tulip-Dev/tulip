@@ -161,6 +161,14 @@ public:
   QString displayText(const QVariant &) const override;
 };
 
+class TLP_QT_SCOPE PropertiesCollectionEditorCreator : public tlp::TulipItemEditorCreator {
+public:
+  QWidget *createWidget(QWidget *) const override;
+  void setEditorData(QWidget *, const QVariant &, bool, tlp::Graph *) override;
+  QVariant editorData(QWidget *, tlp::Graph *) override;
+  QString displayText(const QVariant &) const override;
+};
+
 class TLP_QT_SCOPE TulipFileDescriptorEditorCreator : public tlp::TulipItemEditorCreator {
 public:
   QWidget *createWidget(QWidget *) const override;

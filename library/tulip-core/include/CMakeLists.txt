@@ -52,6 +52,7 @@ INSTALL(FILES
   tulip/PluginProgress.h
   tulip/TemplateAlgorithm.h
   tulip/PropertyAlgorithm.h
+  tulip/PropertiesCollection.h
   tulip/PropertyInterface.h
   tulip/PropertyTypes.h
   tulip/Rectangle.h
