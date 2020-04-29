@@ -1,11 +1,3 @@
-/*
- * $Revision: 2524 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-03 09:54:22 +0200 (Tue, 03 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of dominance layout algorithm.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,37 +25,25 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 //***
 // Dominance Drawing Method. see "Graph Drawing" by Di Battista et al.
 //***
 
-
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_DOMINANCE_LAYOUT_H
-#define OGDF_DOMINANCE_LAYOUT_H
-
 
 #include <ogdf/basic/GraphAttributes.h>
-#include <ogdf/basic/ModuleOption.h>
+#include <memory>
 #include <ogdf/basic/Math.h>
-#include <ogdf/module/LayoutModule.h>
-#include <ogdf/module/UpwardPlanarizerModule.h>
+#include <ogdf/basic/LayoutModule.h>
+#include <ogdf/upward/UpwardPlanarizerModule.h>
 #include <ogdf/upward/UpwardPlanRep.h>
 #include <ogdf/upward/SubgraphUpwardPlanarizer.h>
 
 namespace ogdf {
-
 
 class OGDF_EXPORT DominanceLayout : public LayoutModule
 {
@@ -72,18 +52,18 @@ public:
 	DominanceLayout() {
 		m_grid_dist = 1;
 		// set default module
-		m_upPlanarizer.set(new SubgraphUpwardPlanarizer());
+		m_upPlanarizer.reset(new SubgraphUpwardPlanarizer());
 
-		m_angle = 45.0 / 180.0 * Math::pi;
+		m_angle = Math::degreesToRadians(45.0);
 
 	}
 
-	virtual void call(GraphAttributes &GA);
+	virtual void call(GraphAttributes &GA) override;
 
 	void layout(GraphAttributes &GA, const UpwardPlanRep &UPROrig);
 
 	void setUpwardPlanarizer(UpwardPlanarizerModule *upPlanarizer) {
-		m_upPlanarizer.set(upPlanarizer);
+		m_upPlanarizer.reset(upPlanarizer);
 	}
 
 	void setMinGridDistance(int dist) {m_grid_dist = dist;}
@@ -92,7 +72,7 @@ public:
 
 private:
 
-	double m_angle; //rotate angle to obtain an upward drawing; default is 45°
+	double m_angle; //rotate angle to obtain an upward drawing; default is 45Â°
 
 	NodeArray<edge> firstout;
 	NodeArray<edge> lastout;
@@ -118,7 +98,7 @@ private:
 	//min grid distance
 	int m_grid_dist;
 
-	ModuleOption<UpwardPlanarizerModule> m_upPlanarizer; // upward planarizer
+	std::unique_ptr<UpwardPlanarizerModule> m_upPlanarizer; // upward planarizer
 
 	void labelX(const UpwardPlanRep &UPR, node v, int &count);
 
@@ -127,10 +107,6 @@ private:
 	void compact(const UpwardPlanRep &UPR, GraphAttributes &GA);
 
 	void findTransitiveEdges(const UpwardPlanRep &UPR, List<edge> &edges);
-
 };
 
-
-}//namespace
-
-#endif
+}

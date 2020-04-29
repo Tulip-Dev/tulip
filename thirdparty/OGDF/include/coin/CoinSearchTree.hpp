@@ -95,7 +95,7 @@ public:
     inline double       getQuality()       const { return quality_; }
     inline double       getTrueLB()        const { return true_lower_bound_; }
     inline BitVector128 getPreferred()     const { return preferred_; }
-    
+
     inline void setDepth(int d)              { depth_ = d; }
     inline void setFractionality(int f)      { fractionality_ = f; }
     inline void setQuality(double q)         { quality_ = q; }
@@ -151,8 +151,8 @@ struct CoinSearchTreeComparePreferred {
   static inline const char* name() { return "CoinSearchTreeComparePreferred"; }
   inline bool operator()(const CoinTreeSiblings* x,
 			 const CoinTreeSiblings* y) const {
-    register const CoinTreeNode* xNode = x->currentNode();
-    register const CoinTreeNode* yNode = y->currentNode();
+    const CoinTreeNode* xNode = x->currentNode();
+    const CoinTreeNode* yNode = y->currentNode();
     const BitVector128 xPref = xNode->getPreferred();
     const BitVector128 yPref = yNode->getPreferred();
     bool retval = true;
@@ -242,7 +242,7 @@ public:
     inline int numInserted() const { return numInserted_; }
     inline CoinTreeNode* top() const {
       if (size_ == 0)
-	return NULL;
+	return nullptr;
 #ifdef DEBUG_PRINT
       char output[44];
       output[43] = 0;
@@ -332,13 +332,13 @@ private:
     Comp comp_;
 
 protected:
-    virtual void realpop() {
+    virtual void realpop() override {
 	candidateList_[0] = candidateList_.back();
 	candidateList_.pop_back();
 	fixTop();
     }
     /** After changing data in the top node, fix the heap */
-    virtual void fixTop() {
+    virtual void fixTop() override {
 	const size_t size = candidateList_.size();
 	if (size > 1) {
 	    CoinTreeSiblings** candidates = &candidateList_[0];
@@ -362,7 +362,7 @@ protected:
 	    candidates[pos] = s;
 	}
     }
-    virtual void realpush(CoinTreeSiblings* s) {
+    virtual void realpush(CoinTreeSiblings* s) override {
 	candidateList_.push_back(s);
 	CoinTreeSiblings** candidates = &candidateList_[0];
 	--candidates;
@@ -375,7 +375,7 @@ protected:
 	}
 	candidates[pos] = s;
     }
-  
+
 public:
     CoinSearchTree() : CoinSearchTreeBase(), comp_() {}
     CoinSearchTree(const CoinSearchTreeBase& t) :
@@ -386,7 +386,7 @@ public:
 	size_ = t.size();
     }
     ~CoinSearchTree() {}
-    const char* compName() const { return Comp::name(); }
+    const char* compName() const override { return Comp::name(); }
 };
 
 #endif
@@ -413,17 +413,17 @@ private:
 
     /** variable used to test whether we need to reevaluate search strategy */
     bool recentlyReevaluatedSearchStrategy_;
-    
+
 public:
     CoinSearchTreeManager() :
-	candidates_(NULL),
+	candidates_(nullptr),
 	numSolution(0),
 	recentlyReevaluatedSearchStrategy_(true)
     {}
     virtual ~CoinSearchTreeManager() {
 	delete candidates_;
     }
-    
+
     inline void setTree(CoinSearchTreeBase* t) {
 	delete candidates_;
 	candidates_ = t;

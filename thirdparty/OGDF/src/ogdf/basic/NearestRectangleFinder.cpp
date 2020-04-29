@@ -1,11 +1,3 @@
-/*
- * $Revision: 2816 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-10-15 09:07:22 +0200 (Mon, 15 Oct 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Implements class NearestRectangleFinder
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,29 +25,15 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
-
-
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/basic/NearestRectangleFinder.h>
-#include <float.h>
-#include <ogdf/basic/List.h>
-#include <ogdf/basic/BoundedStack.h>
-
 
 namespace ogdf {
 
-
-//---------------------------------------------------------
-// PairCoordId
-// represents a pair of a coordinate (x or y) and the index
-// of a rectangle
-//---------------------------------------------------------
+//! Represents a pair of a coordinate (x or y) and the index of a rectangle
 struct OGDF_EXPORT NearestRectangleFinder::PairCoordId
 {
 	PairCoordId(double coord, int index) {
@@ -63,9 +41,9 @@ struct OGDF_EXPORT NearestRectangleFinder::PairCoordId
 		m_index = index;
 	}
 
-	PairCoordId() { }
+	PairCoordId() = default;
 
-	friend ostream &operator<<(ostream &os, const PairCoordId &p) {
+	friend std::ostream &operator<<(std::ostream &os, const PairCoordId &p) {
 		os << "(" << p.m_coord << "," << p.m_index << ")";
 		return os;
 	}
@@ -73,59 +51,6 @@ struct OGDF_EXPORT NearestRectangleFinder::PairCoordId
 	double m_coord;
 	int m_index;
 };
-
-
-//---------------------------------------------------------
-// CoordComparer
-// comparer class for sorting PairCoordId according to
-// decreasing coordinate
-//---------------------------------------------------------
-class NearestRectangleFinder::CoordComparer
-{
-public:
-	bool less (const PairCoordId &x, const PairCoordId &y) const {
-		return x.m_coord > y.m_coord;
-	}
-	bool leq  (const PairCoordId &x, const PairCoordId &y) const {
-		return x.m_coord >= y.m_coord;
-	}
-	bool equal(const PairCoordId &x, const PairCoordId &y) const {
-		return x.m_coord == y.m_coord;
-	}
-};
-
-
-//---------------------------------------------------------
-// YCoordComparer
-// comparer class for sorting points (given by index) by
-// decreasing y-coordinate
-//---------------------------------------------------------
-class NearestRectangleFinder::YCoordComparer
-{
-public:
-	YCoordComparer(const Array<DPoint> &point) {
-		m_point = &point;
-	}
-
-	bool less (int x, int y) const {
-		return (*m_point)[x].m_y > (*m_point)[y].m_y;
-	}
-	bool leq  (int x, int y) const {
-		return (*m_point)[x].m_y >= (*m_point)[y].m_y;
-	}
-	bool equal(int x, int y) const {
-		return (*m_point)[x].m_y == (*m_point)[y].m_y;
-	}
-
-private:
-	const Array<DPoint> *m_point;
-};
-
-
-
-//---------------------------------------------------------
-// NearestRectangleFinder
-//---------------------------------------------------------
 
 void NearestRectangleFinder::find(
 	const Array<RectRegion> &region,
@@ -147,7 +72,7 @@ void NearestRectangleFinder::find(
 	}
 
 	// ... and sort them by decreasing coordinates
-	CoordComparer comparer;
+	GenericComparer<PairCoordId, double> comparer([&](const PairCoordId& x) { return -x.m_coord; });
 	listTop   .quicksort(comparer);
 	listBottom.quicksort(comparer);
 
@@ -157,12 +82,10 @@ void NearestRectangleFinder::find(
 		sortedPoints[i] = i;
 
 	// ... and sort them by decreasing y-coordinate
-	YCoordComparer yCoordComparer(point);
-	sortedPoints.quicksort(yCoordComparer);
+	sortedPoints.quicksort(GenericComparer<int, double>([&](int x) { return -point[x].m_y; }));
 
 
-	ListPure<int> active;	// list of rectangles such that y-coord. of current
-							// point is contained y-projection of rectangle
+	ListPure<int> active; // list of rectangles such that y-coord. of current point is contained y-projection of rectangle
 
 	// We traverse the lists listTop and listBottom from start to end such that
 	// the coord. of the current entry in listTop is the first entry below p.y
@@ -175,7 +98,7 @@ void NearestRectangleFinder::find(
 	// position of a rectangle in active
 	Array<ListIterator<int> > posInActive(n);
 	// list of rectangles visited for current point
-	BoundedStack<int> visitedRectangles(n);
+	ArrayBuffer<int> visitedRectangles(n);
 	// distance of rectangle to current point (if contained in visitedRectangles)
 	Array<double> distance(n);
 
@@ -207,10 +130,9 @@ void NearestRectangleFinder::find(
 
 		// look for rectangles with minimal distance in active rectangles
 		// here the distance ist the distance in x-direction
-		ListIterator<int> itActive;
-		for(itActive = active.begin(); itActive.valid(); ++itActive)
+		for(int j : active)
 		{
-			const RectRegion &rect = region[*itActive];
+			const RectRegion &rect = region[j];
 			double left  = rect.m_x - rect.m_width/2.0;
 			double right = rect.m_x + rect.m_width/2.0;
 
@@ -224,8 +146,8 @@ void NearestRectangleFinder::find(
 				minDist = xDist;
 			}
 
-			visitedRectangles.push(*itActive);
-			distance[*itActive] = xDist;
+			visitedRectangles.push(j);
+			distance[j] = xDist;
 		}
 
 		// starting at p.y, we iterate simultaniously upward and downward.
@@ -233,8 +155,8 @@ void NearestRectangleFinder::find(
 		// above p, and downward in listTop since these rectangles lie
 		// completely below p
 		ListIterator<PairCoordId> itTop    = nextTop;
-		ListIterator<PairCoordId> itBottom =
-			(nextBottom.valid()) ? nextBottom.pred() : listBottom.rbegin();
+		ListIterator<PairCoordId> itBottom = nextBottom.valid() ?
+			nextBottom.pred() : ListIterator<PairCoordId>(listBottom.rbegin());
 
 		while(itTop.valid() || itBottom.valid())
 		{
@@ -312,7 +234,7 @@ void NearestRectangleFinder::find(
 			double max = minDist + m_toleranceDistance;
 			while(!visitedRectangles.empty())
 			{
-				int index = visitedRectangles.pop();
+				int index = visitedRectangles.popRet();
 				if(distance[index] <= max)
 					nearest[nextPoint].pushBack(PairRectDist(index,distance[index]));
 			}
@@ -335,7 +257,7 @@ void NearestRectangleFinder::findSimple(
 	for(int i = 0; i < m; ++i)
 	{
 		const DPoint &p = point[i];
-		double minDist = numeric_limits<double>::max();
+		double minDist = std::numeric_limits<double>::max();
 		int minDistIndex = -1;
 
 		for(int j = 0; j < n; ++j)
@@ -370,14 +292,12 @@ void NearestRectangleFinder::findSimple(
 			}
 		}
 
-		//const RectRegion &rect = region[minDistIndex];
+#if 0
+		const RectRegion &rect = region[minDistIndex];
+#endif
 		if(minDist <= m_maxAllowedDistance)
 			nearest[i].pushBack(PairRectDist(minDistIndex,minDist));
 	}
 }
 
-
-
-
-} // end namespace ogdf
-
+}

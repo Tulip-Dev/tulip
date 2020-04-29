@@ -1,22 +1,14 @@
-/*
- * $Revision: 3833 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 11:23:15 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class SiftingHeuristic
  *
- * \author Till Sch&auml;fer
+ * \author Till Schäfer
  *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,64 +25,59 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_SIFTING_HEURISTIC_H
-#define OGDF_SIFTING_HEURISTIC_H
-
-
-#include <ogdf/module/LayerByLayerSweep.h>
+#include <ogdf/layered/LayerByLayerSweep.h>
 #include <ogdf/layered/CrossingsMatrix.h>
 
-
-namespace ogdf
-{
-
+namespace ogdf {
 
 //! The sifting heuristic for 2-layer crossing minimization.
+/**
+ * @ingroup gd-layered-crossmin
+ */
 class OGDF_EXPORT SiftingHeuristic : public LayerByLayerSweep
 {
 public:
 	//! Creates a new instance of the sifting heuristic with default option settings.
 	SiftingHeuristic();
 
-	//! Creates a new instance of the sifting heuristic with the same option settings as \a crossMin.
+	//! Creates a new instance of the sifting heuristic with the same option settings as \p crossMin.
 	SiftingHeuristic(const SiftingHeuristic &crossMin);
 
+	~SiftingHeuristic();
+
 	//! Returns a new instance of the sifting heuristic with the same option settings.
-	LayerByLayerSweep *clone() const { return new SiftingHeuristic(*this); }
+	virtual LayerByLayerSweep *clone() const override
+	{
+		return new SiftingHeuristic(*this);
+	}
 
 	//! Enumerates the different sifting strategies
-	enum Strategy { left_to_right, desc_degree, random };
+	enum class Strategy { LeftToRight, DescDegree, Random };
 
 	//! Initializes crossing minimization for hierarchy \a H.
-	void init (const HierarchyLevels &levels);
+	virtual void init (const HierarchyLevels &levels) override;
 
-	//! Calls the sifting heuristic for level \a L.
-	void call (Level &L);
+	//! Calls the sifting heuristic for level \p L.
+	virtual void call (Level &L) override;
 
 	//! Does some clean-up after calls.
-	void cleanup ();
+	virtual void cleanup () override;
 
-	//! Get for \a Strategy.
+	//! Get for Strategy.
 	Strategy strategy() const {
 		return m_strategy;
 	}
 
 	/**
-	 * \brief Set for \a Strategy.
+	 * \brief Set for Strategy.
 	 *
-	 * @param strategy is the \a Strategy to be set
+	 * @param strategy is the Strategy to be set
 	 */
 	void strategy (Strategy strategy) {
 		m_strategy = strategy;
@@ -101,7 +88,4 @@ private:
 	Strategy m_strategy;
 };
 
-
-} // end namespace ogdf
-
-#endif
+}

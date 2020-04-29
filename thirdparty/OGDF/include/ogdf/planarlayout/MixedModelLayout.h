@@ -1,11 +1,3 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of Mixed-Model layout algorithm.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,32 +25,20 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_MIXED_MODEL_LAYOUT_H
-#define OGDF_MIXED_MODEL_LAYOUT_H
-
-
-#include <ogdf/module/GridLayoutModule.h>
-#include <ogdf/basic/ModuleOption.h>
-#include <ogdf/module/EmbedderModule.h>
-#include <ogdf/module/AugmentationModule.h>
-#include <ogdf/module/ShellingOrderModule.h>
-#include <ogdf/module/MixedModelCrossingsBeautifierModule.h>
-
+#include <ogdf/planarlayout/GridLayoutModule.h>
+#include <memory>
+#include <ogdf/planarity/EmbedderModule.h>
+#include <ogdf/augmentation/AugmentationModule.h>
+#include <ogdf/planarlayout/ShellingOrderModule.h>
+#include <ogdf/planarlayout/MixedModelCrossingsBeautifierModule.h>
 
 namespace ogdf {
-
 
 /**
  * \brief Implementation of the Mixed-Model layout algorithm.
@@ -149,44 +129,40 @@ public:
 	 * connectivity required for calling the shelling order module.
 	 */
 	void setAugmenter(AugmentationModule *pAugmenter) {
-		m_augmenter.set(pAugmenter);
+		m_augmenter.reset(pAugmenter);
 	}
 
 	//! Sets the shelling order module.
 	void setShellingOrder(ShellingOrderModule *pOrder) {
-		m_compOrder.set(pOrder);
+		m_compOrder.reset(pOrder);
 	}
 
 	//! Sets the crossings beautifier module.
 	void setCrossingsBeautifier(MixedModelCrossingsBeautifierModule *pBeautifier) {
-		m_crossingsBeautifier.set(pBeautifier);
+		m_crossingsBeautifier.reset(pBeautifier);
 	}
 
 	//! Sets the module option for the graph embedding algorithm.
 	void setEmbedder(EmbedderModule *pEmbedder) {
-		m_embedder.set(pEmbedder);
+		m_embedder.reset(pEmbedder);
 	}
 
 	//! @}
 
 protected:
 	//! Implements the algorithm call.
-	void doCall(
+	virtual void doCall(
 		PlanRep &PG,
 		adjEntry adjExternal,
 		GridLayout &gridLayout,
 		IPoint &boundingBox,
-		bool fixEmbedding);
+		bool fixEmbedding) override;
 
 private:
-	ModuleOption<EmbedderModule>      m_embedder;  //!< The planar embedder module.
-	ModuleOption<AugmentationModule>  m_augmenter; //!< The augmentation module.
-	ModuleOption<ShellingOrderModule> m_compOrder; //!< The shelling order module.
-	ModuleOption<MixedModelCrossingsBeautifierModule> m_crossingsBeautifier; //!< The crossings beautifier module.
+	std::unique_ptr<EmbedderModule>      m_embedder;  //!< The planar embedder module.
+	std::unique_ptr<AugmentationModule>  m_augmenter; //!< The augmentation module.
+	std::unique_ptr<ShellingOrderModule> m_compOrder; //!< The shelling order module.
+	std::unique_ptr<MixedModelCrossingsBeautifierModule> m_crossingsBeautifier; //!< The crossings beautifier module.
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

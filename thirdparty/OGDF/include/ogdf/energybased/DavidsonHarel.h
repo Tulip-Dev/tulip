@@ -1,11 +1,3 @@
-/*
- * $Revision: 2641 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-19 15:21:36 +0200 (Thu, 19 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declares class DavidsonHarel which implements the
  * Davidson-Harel approach for drawing graphs.
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,30 +26,20 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_DAVIDSON_HAREL_H
-#define OGDF_DAVIDSON_HAREL_H
-
-
-#include <ogdf/internal/energybased/EnergyFunction.h>
-
+#include <ogdf/energybased/davidson_harel/EnergyFunction.h>
 
 namespace ogdf {
-
 
 //! The Davidson-Harel approach for drawing graphs.
 class OGDF_EXPORT DavidsonHarel
 {
+	using EnergyFunction = davidson_harel::EnergyFunction;
 public:
 
 	//! Creates an instance of Davidsen-Harel base class.
@@ -65,13 +47,13 @@ public:
 
 	~DavidsonHarel() { }
 
-	//! Sets the start temperature to \a startTemp.
+	//! Sets the start temperature to \p startTemp.
 	void setStartTemperature(int startTemp);
 
-	//! Sets the number of iterations for each temperature step to \a steps.
+	//! Sets the number of iterations for each temperature step to \p steps.
 	void setNumberOfIterations(int steps);
 
-	//! Adds an energy function \a F with a certain weight.
+	//! Adds an energy function \p F with a certain weight.
 	void addEnergyFunction(EnergyFunction *F, double weight);
 
 	//! Returns a list of the names of the energy functions.
@@ -80,7 +62,7 @@ public:
 	//! Returns a list of the weights of the energy functions.
 	List<double> returnEnergyFunctionWeights();
 
-	//! Calls the Davidson-Harel method for graph \a GA.
+	//! Calls the Davidson-Harel method for graph \p GA.
 	void call(GraphAttributes &GA);
 
 private:
@@ -121,7 +103,7 @@ private:
 	//! Computes the first disk radius as the half the diamter of the enclosing rectangle.
 	void computeFirstRadius(const GraphAttributes &AG);
 
-	//! Computes the energy of the initial layout and stores it in \a m_energy.
+	//! Computes the energy of the initial layout and stores it in #m_energy.
 	void computeInitialEnergy();
 
 	//! Computes positions for the vertices of degree zero.
@@ -133,5 +115,4 @@ private:
 	DavidsonHarel(const DavidsonHarel &) { }
 };
 
-} //end namespace
-#endif
+}

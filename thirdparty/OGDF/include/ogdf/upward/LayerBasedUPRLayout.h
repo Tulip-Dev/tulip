@@ -1,11 +1,3 @@
-/*
- * $Revision: 3832 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 11:16:27 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of upward planarization layout algorithm.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,27 +25,17 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_LAYER_BASED_UPR_LAYOUT_H
-#define OGDF_LAYER_BASED_UPR_LAYOUT_H
-
-
-
-#include <ogdf/basic/ModuleOption.h>
+#include <memory>
 #include <ogdf/upward/UpwardPlanRep.h>
-#include <ogdf/module/RankingModule.h>
-#include <ogdf/module/UPRLayoutModule.h>
-#include <ogdf/module/HierarchyLayoutModule.h>
+#include <ogdf/layered/RankingModule.h>
+#include <ogdf/upward/UPRLayoutModule.h>
+#include <ogdf/layered/HierarchyLayoutModule.h>
 #include <ogdf/layered/OptimalHierarchyLayout.h>
 #include <ogdf/layered/FastHierarchyLayout.h>
 #include <ogdf/layered/OptimalRanking.h>
@@ -66,43 +48,60 @@ class OrderComparer
 public:
 	OrderComparer(const UpwardPlanRep &_UPR, Hierarchy &_H);
 
-	// if vH1 and vH2 are placed on the same layer and node vH1 has to drawn on the lefthand side of vH2 (according to UPR) then return true;
-	bool less(node vH1, node vH2) const ;
+	/**
+	 * Returns true iff \p vH1 and \p vH2 are placed on the same layer and
+	 * node \p vH1 has to drawn on the left-hand side of \p vH2 (according
+	 * to #m_UPR)
+	 */
+	bool less(node vH1, node vH2) const;
 
 private:
-	const UpwardPlanRep &UPR;
+	const UpwardPlanRep &m_UPR;
 	Hierarchy &H;
-	NodeArray<int> dfsNum;
-	//EdgeArray<int> outEdgeOrder;
+	NodeArray<int> m_dfsNum;
+#if 0
+	EdgeArray<int> outEdgeOrder;
+#endif
 	mutable NodeArray<bool> crossed;
 
-	//traverse with dfs using edge order from left to right and compute the dfs number.
-	void dfs_LR( edge e,
-				 NodeArray<bool> &visited,
-				 NodeArray<int> &dfsNum,
-				 int &num);
+	//! Traverses with dfs using edge order from left to right and compute the dfs number.
+	void dfs_LR(edge e,
+	            NodeArray<bool> &visited,
+	            NodeArray<int> &dfsNum,
+	            int &num);
 
-	//return true if vUPR1 is on the lefthand side of vUPR2 according to UPR.
-	bool left(node vUPR1,
-			List<edge> chain1, //if vUPR1 is associated with a long edge dummy vH1, then chain1 contain vH1
-			node vUPR2 ,
-			List<edge> chain2 // if vUPR2 is associated with a long edge dummy vH2, then chain2 contain vH2
-			) const;
+	//! Returns true if \p vUPR1 is on the left-hand side of \p vUPR2 according to #m_UPR.
+	bool left(node vUPR1, //!< the node that is tested to be on the left-hand side
+	          const List<edge> &chain1, //!< if \p vUPR1 is associated with a long edge dummy vH1, then \p chain1 contain vH1
+	          node vUPR2, //!< the other node
+	          const List<edge> &chain2 //!< if \p vUPR2 is associated with a long edge dummy vH2, then \p chain2 contain vH2
+	          ) const;
 
-	//return true if vUPR1 is on the lefthand side of vUPR2 according to UPR.
-	// pred.: source or target of both edge muss identical
+	/**
+	 * Returns true iff \p vUPR1 is on the left-hand side of \p vUPR2
+	 * according to #m_UPR.
+	 *
+	 * @pre source or target of both edges must be identical
+	 */
 	bool left(edge e1UPR, edge e2UPR) const;
 
-	//return true if vUPR1 is on the lefthand side of vUPR2 according to UPR.
-	// use only by method less for the case when both node vH1 and vH2 are long-edge dummies.
-	// level: the current level of the long-edge dummies
+	/**
+	 * Returns true iff \p vUPR1 is on the left-hand side of \p vUPR2
+	 * according to #m_UPR.
+	 * Used only by method #less for the case when both node \a vH1 and
+	 * \a vH2 are long-edge dummies, where \p level is the current level
+	 * of the long-edge dummies
+	 */
 	bool left(List<edge> &chain1, List<edge> &chain2, int level) const;
 
-	//return true if there is a node above vUPR with rank level or lower
+	//! Returns true iff there is a node above \p vUPR with rank \p level or lower
 	bool checkUp(node vUPR, int level) const;
 };
 
 
+/**
+ @ingroup gd-layered
+ */
 class OGDF_EXPORT LayerBasedUPRLayout : public UPRLayoutModule
 {
 public:
@@ -115,10 +114,10 @@ public:
 		fhl->nodeDistance(40.0);
 		fhl->layerDistance(40.0);
 		fhl->fixedLayerDistance(true);
-		m_layout.set(fhl);
+		m_layout.reset(fhl);
 		OptimalRanking *opRank = new OptimalRanking();
 		opRank->separateMultiEdges(false);
-		m_ranking.set(opRank);
+		m_ranking.reset(opRank);
 		m_numLevels = 0;
 		m_maxLevelSize = 0;
 	}
@@ -132,12 +131,12 @@ public:
 
 	// module option for the computation of the final layout
 	void setLayout(HierarchyLayoutModule *pLayout) {
-		m_layout.set(pLayout);
+		m_layout.reset(pLayout);
 	}
 
 
 	void setRanking(RankingModule *pRanking) {
-		m_ranking.set(pRanking);
+		m_ranking.reset(pRanking);
 	}
 
 	//! Use only the 3. phase of Sugiyama' framework for layout.
@@ -155,22 +154,13 @@ protected :
 	 * @param UPR is the upward planarized representation of the input graph.
 	 * @param AG has to be assigned the hierarchy layout.
 	 */
-	virtual void doCall(const UpwardPlanRep &UPR, GraphAttributes &AG);
+	virtual void doCall(const UpwardPlanRep &UPR, GraphAttributes &AG) override;
 
 	int m_crossings;
 
-	ModuleOption<RankingModule> m_ranking;
+	std::unique_ptr<RankingModule> m_ranking;
 
-	ModuleOption<HierarchyLayoutModule> m_layout;
-
-
-	struct RankComparer {
-		const Hierarchy *H;
-		bool less(node v1, node v2) const {
-			return (H->rank(v1) < H->rank(v2));
-		}
-	};
-
+	std::unique_ptr<HierarchyLayoutModule> m_layout;
 
 private:
 
@@ -184,9 +174,9 @@ private:
 
 
 	//! reduce the long edge dummies (LED)
-	void postProcessing_reduceLED(Hierarchy &H, HierarchyLevels &levels, List<node> &sources) {
-		forall_listiterators(node, it, sources)
-			postProcessing_reduceLED(H, levels, *it);
+	void postProcessing_reduceLED(Hierarchy &H, HierarchyLevels &levels, const List<node> &sources) {
+		for(node s : sources)
+			postProcessing_reduceLED(H, levels, s);
 	}
 
 	void postProcessing_reduceLED(Hierarchy &H, HierarchyLevels &levels, node vH);
@@ -208,10 +198,12 @@ private:
 
 	int m_numLevels;
 	int m_maxLevelSize;
+	ArrayBuffer<node> m_dummies;
 
 
+	//! \name UPRLayoutSimple methods
+	//! @{
 
-	//------------------------ UPRLayoutSimple methods --------------------------------------------
 	void callSimple(GraphAttributes &AG, adjEntry adj //left most edge of the source
 					);
 
@@ -224,9 +216,7 @@ private:
 	// needed for UPRLayoutSimple
 	void longestPathRanking(const Graph &G, NodeArray<int> &rank);
 
-
+	//! @}
 };
 
 }
-
-#endif

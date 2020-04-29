@@ -1,11 +1,3 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of optimal ranking algorithm for Sugiyama
  *        algorithm.
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,33 +26,23 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_OPTIMAL_RANKING_H
-#define OGDF_OPTIMAL_RANKING_H
-
-
-
-#include <ogdf/module/RankingModule.h>
-#include <ogdf/module/AcyclicSubgraphModule.h>
-#include <ogdf/basic/ModuleOption.h>
+#include <ogdf/layered/RankingModule.h>
+#include <ogdf/layered/AcyclicSubgraphModule.h>
+#include <memory>
 #include <ogdf/basic/NodeArray.h>
-
 
 namespace ogdf {
 
 //! The optimal ranking algorithm.
 /**
+ * @ingroup gd-ranking
+ *
  * The class OptimalRanking implements the LP-based algorithm for computing
  * a node ranking with minimal edge lengths, which can be used as first phase
  * in SugiyamaLayout.
@@ -91,7 +73,7 @@ namespace ogdf {
  */
 class OGDF_EXPORT OptimalRanking : public RankingModule {
 
-	ModuleOption<AcyclicSubgraphModule> m_subgraph; // option for acyclic sugraph
+	std::unique_ptr<AcyclicSubgraphModule> m_subgraph; // option for acyclic sugraph
 	bool m_separateMultiEdges;
 
 public:
@@ -104,10 +86,10 @@ public:
 	 *  @{
 	 */
 
-	//! Computes a node ranking of \a G in \a rank.
-	void call(const Graph &G, NodeArray<int> &rank);
+	//! Computes a node ranking of \p G in \p rank.
+	virtual void call(const Graph &G, NodeArray<int> &rank) override;
 
-	//! Computes a node ranking of \a G with given minimal edge length in \a rank.
+	//! Computes a node ranking of \p G with given minimal edge length in \p rank.
 	/**
 	 * @param G is the input graph.
 	 * @param length specifies the minimal length of each edge.
@@ -115,18 +97,18 @@ public:
 	 */
 	void call(const Graph &G, const EdgeArray<int> &length, NodeArray<int> &rank);
 
-	//! Computes a cost-minimal node ranking of \a G for given edge costs and minimal edge lengths in \a rank.
+	//! Computes a cost-minimal node ranking of \p G for given edge costs and minimal edge lengths in \p rank.
 	/**
 	 * @param G is the input graph.
 	 * @param length specifies the minimal length of each edge.
 	 * @param cost specifies the cost of each edge.
 	 * @param rank is assigned the rank (layer) of each node.
 	 */
-	void call(
+	virtual void call(
 		const Graph &G,
 		const EdgeArray<int> &length,
 		const EdgeArray<int> &cost,
-		NodeArray<int> &rank);
+		NodeArray<int> &rank) override;
 
 
 	/** @}
@@ -142,7 +124,7 @@ public:
 	 */
 	bool separateMultiEdges() const { return m_separateMultiEdges; }
 
-	//! Sets the option separateMultiEdges to \a b.
+	//! Sets the option separateMultiEdges to \p b.
 	void separateMultiEdges(bool b) { m_separateMultiEdges = b; }
 
 
@@ -153,7 +135,7 @@ public:
 
 	//! Sets the module for the computation of the acyclic subgraph.
 	void setSubgraph(AcyclicSubgraphModule *pSubgraph) {
-		m_subgraph.set(pSubgraph);
+		m_subgraph.reset(pSubgraph);
 	}
 
 	//! @}
@@ -167,8 +149,4 @@ private:
 		const EdgeArray<int> &cost);
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

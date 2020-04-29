@@ -1,13 +1,5 @@
-/*
- * $Revision: 3811 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2013-10-29 14:14:13 +0100 (Tue, 29 Oct 2013) $
- ***************************************************************/
-
 /** \file
- * \brief A class that allows to enumerate k-subsets of lists.
+ * \brief A class that allows to enumerate k-subsets.
  *
  * \author Stephan Beyer
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,19 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_SUBSET_ENUMERATOR_H
-#define OGDF_SUBSET_ENUMERATOR_H
 
 #include <ogdf/basic/List.h>
 
@@ -61,7 +45,7 @@ namespace ogdf {
  *
  *     do_something_eg_fill_edges();
  *
- *     SubsetEnumerator<edge> edgeSubset(edges);
+ *     SubsetEnumerator<edge> subset(edges);
  *
  *     for (subset.begin(3); subset.valid(); subset.next()) {
  *       do_something_with(subset[0], subset[1], subset[2]);
@@ -70,7 +54,7 @@ namespace ogdf {
  *   </li>
  *   <li> Enumerate all subsets of edges:
  *    \code
- *     SubsetEnumerator<edge> edgeSubset(edges);
+ *     SubsetEnumerator<edge> subset(edges);
  *
  *     for (subset.begin(); subset.valid(); subset.next()) {
  *       for (int i = 0; i < subset.size(); ++i) {
@@ -80,9 +64,9 @@ namespace ogdf {
  *     }
  *    \endcode
  *   </li>
- *   <li> Do something with element lists and complement lists of all 2-, 3-, and 4-element subsets
+ *   <li> Do something with member lists and complement lists of all 2-, 3-, and 4-element subsets
  *    \code
- *     SubsetEnumerator<edge> edgeSubset(edges);
+ *     SubsetEnumerator<edge> subset(edges);
  *
  *     for (subset.begin(2, 4); subset.valid(); subset.next()) {
  *       List<edge> list1, list2;
@@ -103,10 +87,9 @@ namespace ogdf {
 template<typename T>
 class SubsetEnumerator {
 protected:
-	const List<T> &m_set;
 	bool m_valid;
 	int m_maxCard;
-	Array<T> m_subset;
+	ArrayBuffer<T> m_subset;
 	Array<int> m_index;
 
 	void initSubset(int card)
@@ -121,69 +104,86 @@ protected:
 	}
 
 public:
-	//! \brief Constructor.
-	//! @param set The list of elements we want to enumerate subsets for.
-	SubsetEnumerator(const List<T> &set)
-	  : m_set(set)
-	  , m_valid(false)
+	/**
+	 * Constructor.
+	 *
+	 * @param set The container of elements we want to enumerate subsets for.
+	 */
+	template<typename ContainerType>
+	explicit SubsetEnumerator(const ContainerType &set)
+	  : m_valid(false)
+	  , m_maxCard(-1)
 	  , m_subset(set.size())
 	{
-		int i = 0;
-		forall_listiterators(T, it, m_set) {
-			m_subset[i++] = *it;
+		for (auto x : set) {
+			m_subset.push(x);
 		}
 	}
 
-	//! Initialize the SubsetEnumerator to enumerate subsets of cardinalities from low to high.
+	//! Initializes the SubsetEnumerator to enumerate subsets of cardinalities from low to high.
 	void begin(int low, int high)
 	{
-		m_maxCard = high;
-		initSubset(low);
+		if (high >= low) {
+			m_maxCard = high;
+			m_maxCard = min(m_maxCard, m_subset.size());
+			initSubset(low);
+		} else {
+			m_valid = false;
+		}
 	}
 
-	//! Initialize the SubsetEnumerator to enumerate subsets of given cardinality.
+	//! Initializes the SubsetEnumerator to enumerate subsets of given cardinality.
 	void begin(int card)
 	{
 		begin(card, card);
 	}
 
-	//! Initialize the SubsetEnumerator to enumerate all subsets.
+	//! Initializes the SubsetEnumerator to enumerate all subsets.
 	void begin()
 	{
-		begin(0, m_set.size());
+		begin(0, m_subset.size());
 	}
 
-	//! Return the cardinality of the subset.
+	//! Returns the cardinality of the subset.
 	int size() const
 	{
 		return m_index.size();
 	}
 
-	//! Is the current subset valid? If not, all subsets have already been enumerated.
+	//! Returns the cardinality of the (super-)set.
+	//! This is the maximum size that can be used for a subset.
+	int numberOfMembersAndNonmembers() const
+	{
+		return m_subset.size();
+	}
+
+	//! Checks if the current subset is valid.
+	//! If not, the subset is either not initialized or all subsets have already been enumerated.
 	bool valid() const
 	{
 		return m_valid;
 	}
 
-	//! Check in O(subset cardinality) whether the argument is a member of the subset.
+	//! Checks in O(subset cardinality) whether \p element is a member of the subset.
 	bool hasMember(const T &element) const
 	{
-		for (int i = 0; i < m_index.size(); ++i) {
-			if (element == m_subset[m_index[i]]) {
+		for (int index : m_index) {
+			if (element == m_subset[index]) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	//! Get element of subset by index (starting from 0).
+	//! Gets a member of subset by index (starting from 0).
 	T operator[](int i) const
 	{
-		OGDF_ASSERT(i >= 0 && i < m_index.size());
+		OGDF_ASSERT(i >= 0);
+		OGDF_ASSERT(i < m_index.size());
 		return m_subset[m_index[i]];
 	}
 
-	//! Obtain the next subset if possible. The result should be checked using the valid() method.
+	//! Obtains the next subset if possible. The result should be checked using the #valid() method.
 	void next()
 	{
 		if (m_valid) {
@@ -214,50 +214,95 @@ public:
 		}
 	}
 
-	//! Obtain (append) a list of the elements in the subset.
-	void list(List<T> &list) const
+	//! Calls \p func for each member in the subset.
+	void forEachMember(std::function<void(const T &)> func) const
 	{
-		for (int i = 0; i < m_index.size(); ++i) {
-			list.pushBack(m_subset[m_index[i]]);
+		for (int index : m_index) {
+			func(m_subset[index]);
 		}
 	}
 
-	//! Obtain (append) a list of the elements in the subset and a list of the other elements of the set.
-	void list(List<T> &list, List<T> &complement) const
+	//! Obtains (appends) a list of the subset members.
+	void list(List<T> &subset) const
 	{
-		int j = 0;
-		for (int i = 0; i < m_subset.size(); ++i) {
+		forEachMember([&](const T &member) {
+			subset.pushBack(member);
+		});
+	}
+
+	//! Obtains an array of the subset members.
+	void array(Array<T> &array) const
+	{
+		array.init(m_index.size());
+		for (int i = 0; i < m_index.size(); ++i) {
+			array[i] = m_subset[m_index[i]];
+		}
+	}
+
+	//! Calls \p funcIn for each subset member and \p funcNotIn for each other element of the set.
+	void forEachMemberAndNonmember(std::function<void(const T &)> funcIn, std::function<void(const T &)> funcNotIn) const
+	{
+		for (int i = 0, j = 0; i < m_subset.size(); ++i) {
 			if (j < m_index.size() && m_index[j] == i) {
-				list.pushBack(m_subset[i]);
+				funcIn(m_subset[i]);
 				++j;
 			} else {
-				complement.pushBack(m_subset[i]);
+				funcNotIn(m_subset[i]);
 			}
+		}
+	}
+
+	//! Obtains a container of the subset members and a container of the other elements of the set.
+	template<typename ContainerType>
+	void getSubsetAndComplement(ContainerType &subset, ContainerType &complement, std::function<void(ContainerType &, T)> func) const
+	{
+		forEachMemberAndNonmember([&](const T &member) {
+			func(subset, member);
+		}, [&](const T &nonmember) {
+			func(complement, nonmember);
+		});
+	}
+
+	//! Obtains (appends) a list of the subset members and a list of the other elements of the set.
+	void list(List<T> &subset, List<T> &complement) const
+	{
+		getSubsetAndComplement<List<T>>(subset, complement, [](List<T> &lc, T element) {
+			lc.pushBack(element);
+		});
+	}
+
+	//! Tests \p predicate for all subset members.
+	bool testForAll(std::function<bool(const T&)> predicate) const
+	{
+		for (int index : m_index) {
+			if (!predicate(m_subset[index])) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	//! Prints subset to output stream \p os using delimiter \p delim
+	void print(std::ostream &os, string delim = " ") const
+	{
+		if (valid()) {
+			if (size() > 0) {
+				os << m_subset[m_index[0]];
+				for (int i = 1; i < size(); ++i) {
+					os << delim << m_subset[m_index[i]];
+				}
+			}
+		} else {
+			os << "<<invalid subset>>";
 		}
 	}
 };
 
-
-// prints subset to output stream os using delimiter delim
 template<class T>
-void print(ostream &os, const SubsetEnumerator<T> &subset, string delim = " ")
+std::ostream &operator<<(std::ostream &os, const SubsetEnumerator<T> &subset)
 {
-	OGDF_ASSERT(subset.valid());
-	if (subset.size() > 0) {
-		os << subset[0];
-	}
-	for (int i = 1; i < subset.size(); ++i) {
-		os << delim << subset[i];
-	}
-}
-
-// prints subset to output stream os
-template<class T>
-ostream &operator<<(ostream &os, const SubsetEnumerator<T> &subset)
-{
-	print(os, subset);
+	subset.print(os);
 	return os;
 }
 
 }
-#endif // OGDF_SUBSET_ENUMERATOR_H

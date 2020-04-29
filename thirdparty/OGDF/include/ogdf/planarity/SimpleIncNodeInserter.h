@@ -1,11 +1,3 @@
-/*
- * $Revision: 3188 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-01-10 09:53:32 +0100 (Thu, 10 Jan 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class SimpleIncNodeInserter.
  *
@@ -22,7 +14,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -39,49 +31,31 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_SIMPLE_INC_NODE_INSERTER_H
-#define OGDF_SIMPLE_INC_NODE_INSERTER_H
-
 
 #include <ogdf/planarity/PlanRepInc.h>
 #include <ogdf/uml/UMLGraph.h>
 #include <ogdf/basic/GraphAttributes.h>
 #include <ogdf/basic/GraphObserver.h>
 #include <ogdf/basic/IncNodeInserter.h>
+#include <ogdf/basic/FaceArray.h>
 
 namespace ogdf {
-
-
-//===============================================
-//main function(s):
-//
-
-//===============================================
-
 
 class OGDF_EXPORT SimpleIncNodeInserter : public IncNodeInserter
 {
 public:
 	//creates inserter on PG
-	SimpleIncNodeInserter(PlanRepInc &PG);
+	explicit SimpleIncNodeInserter(PlanRepInc &PG);
 	virtual ~SimpleIncNodeInserter();
 
 	//insert copy in m_planRep for original node v
 	void insertCopyNode(node v, CombinatorialEmbedding &E,
-		Graph::NodeType vTyp);
+		Graph::NodeType vTyp) override;
 
 	//insert copy without respecting embedding
 	void insertCopyNode(node v, Graph::NodeType vTyp);
@@ -90,7 +64,7 @@ protected:
 	//insertAfterAdj will be filled with adjEntries for the
 	//(new) edges around the copy of v to be inserted after.
 	//sorted in the order of the edge around v
-	face getInsertionFace(node v, CombinatorialEmbedding &E);
+	face getInsertionFace(node v, CombinatorialEmbedding &E) override;
 
 	//constructs a dual graph on the copy PlanRep,
 	//vCopy is the node to be inserted
@@ -106,20 +80,20 @@ protected:
 		const SList<adjEntry> &crossed, bool forbidCrossingGens);
 
 private:
+	//! Set new number or delete treeConnnection edge
+	inline void updateComponentNumber(node vCopy, node wCopy, CombinatorialEmbedding &E, adjEntry adExternal);
+
 	//dual graph for the edge insertion
 	Graph m_dual;
-	FaceArray<node> m_nodeOf;	// node in dual corresponding to to face in primal
-	NodeArray<bool> m_insertFaceNode; //node lies at border of insertionface
-	NodeArray<bool> m_vAdjNodes; //node is adjacent to insertion node
-	NodeArray< List<edge>* > m_incidentEdges; //original edges(insertionnode) incident to original(node)
-	EdgeArray<adjEntry> m_primalAdj; //copy adj for edges in dual graph
-	EdgeArray<bool>     m_primalIsGen; // true iff corresponding primal edge is a generalization
-	bool m_forbidCrossings; //should generalization crossings be avoided
-	node m_vS; //source and sink in the dual graph for edge insertion
-	node m_vT;
+	FaceArray<node> m_nodeOf; //!< node in dual corresponding to to face in primal
+	NodeArray<bool> m_insertFaceNode; //!< node lies at border of insertionface
+	NodeArray<bool> m_vAdjNodes; //!< node is adjacent to insertion node
+	NodeArray< List<edge>* > m_incidentEdges; //!< original edges(insertionnode) incident to original(node)
+	EdgeArray<adjEntry> m_primalAdj; //!< copy adj for edges in dual graph
+	EdgeArray<bool>     m_primalIsGen; //!< true iff corresponding primal edge is a generalization
+	bool m_forbidCrossings; //!< should generalization crossings be avoided
+	node m_vS; //!< source in the dual graph for edge insertion
+	node m_vT; //!< sink in the dual graph for edge insertion
+};
 
-}; //simpleincnodeinserter
-
-} //end namespace ogdf
-
-#endif
+}

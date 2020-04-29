@@ -1,11 +1,3 @@
-/*
- * $Revision: 3340 $
- *
- * last checkin:
- *   $Author: klein $
- *   $Date: 2013-03-09 03:03:04 +0100 (Sat, 09 Mar 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declares ClusterGraphCopyAttributes, which manages access
  *  on copy of an attributed clustered graph.
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,22 +26,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_A_CLUSTER_GRAPH_COPY_H
-#define OGDF_A_CLUSTER_GRAPH_COPY_H
-
-
 
 #include <ogdf/layered/ExtendedNestingGraph.h>
 #include <ogdf/cluster/ClusterGraphAttributes.h>
@@ -59,6 +40,8 @@ namespace ogdf {
 
 /**
  * \brief Manages access on copy of an attributed clustered graph.
+ *
+ * @ingroup gd-helper
  */
 class OGDF_EXPORT ClusterGraphCopyAttributes {
 
@@ -81,13 +64,13 @@ public:
 	//! Returns width of node v.
 	double getWidth(node v) const {
 		node vOrig = m_pH->origNode(v);
-		return (vOrig == 0) ? 0.0 : m_pACG->width(vOrig);
+		return (vOrig == nullptr) ? 0.0 : m_pACG->width(vOrig);
 	}
 
 	//! Returns height of node v.
 	double getHeight(node v) const {
 		node vOrig = m_pH->origNode(v);
-		return (vOrig == 0) ? 0.0 : m_pACG->height(vOrig);
+		return (vOrig == nullptr) ? 0.0 : m_pACG->height(vOrig);
 	}
 
 	//! Returns reference to x-coord. of node v.
@@ -110,16 +93,16 @@ public:
 		return m_y[v];
 	}
 
-	//! Returns coordinate of upper cluster boundary of original cluster \a cOrig.
+	//! Returns coordinate of upper cluster boundary of original cluster \p cOrig.
 	double top(cluster cOrig) const {
 		return m_pACG->y(cOrig);
 	}
-	//! Returns coordinate of lower cluster boundary of original cluster \a cOrig.
+	//! Returns coordinate of lower cluster boundary of original cluster \p cOrig.
 	double bottom(cluster cOrig) const {
 		return m_pACG->y(cOrig) + m_pACG->height(cOrig);
 	}
 
-	//! Sets the position of the cluster rectangle for original cluster \a cOrig.
+	//! Sets the position of the cluster rectangle for original cluster \p cOrig.
 	void setClusterRect(
 		cluster cOrig,
 		double left,
@@ -155,8 +138,4 @@ public:
 	void transform();
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

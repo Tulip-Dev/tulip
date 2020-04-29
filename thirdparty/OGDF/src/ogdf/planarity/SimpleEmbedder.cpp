@@ -1,11 +1,3 @@
-/*
- * $Revision: 3188 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-01-10 09:53:32 +0100 (Thu, 10 Jan 2013) $
- ***************************************************************/
-
 /** \file
  * \brief A simple embedder algorithm.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,100 +25,90 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/planarity/SimpleEmbedder.h>
+#include <ogdf/basic/FaceArray.h>
 
 namespace ogdf {
 
-	void SimpleEmbedder::call(Graph& G, adjEntry& adjExternal)
+void SimpleEmbedder::doCall(Graph& G, adjEntry& adjExternal)
+{
+	// determine embedding of G
+
+	// We currently compute any embedding and choose the maximal face
+	// as external face
+
+	// if we use FixedEmbeddingInserterOld, we have to re-use the computed
+	// embedding, otherwise crossing nodes can turn into "touching points"
+	// of edges (alternatively, we could compute a new embedding and
+	// finally "remove" such unnecessary crossings).
+	adjExternal = nullptr;
+	if(!G.representsCombEmbedding())
+		planarEmbed(G);
+
+	CombinatorialEmbedding CE(G);
+	PlanRep PR(G);
+	//face fExternal = E.maximalFace();
+	face fExternal = findBestExternalFace(PR, CE);
+	adjExternal = fExternal->firstAdj();
+}
+
+
+face SimpleEmbedder::findBestExternalFace(
+	const PlanRep& PG,
+	const CombinatorialEmbedding& E)
+{
+	FaceArray<int> weight(E);
+
+	for(face f : E.faces)
+		weight[f] = f->size();
+
+	for(node v : PG.nodes)
 	{
-		OGDF_ASSERT(isPlanar(G));
+		if(PG.typeOf(v) != Graph::NodeType::generalizationMerger)
+			continue;
 
-		//----------------------------------------------------------
-		//
-		// determine embedding of G
-		//
-
-		// We currently compute any embedding and choose the maximal face
-		// as external face
-
-		// if we use FixedEmbeddingInserterOld, we have to re-use the computed
-		// embedding, otherwise crossing nodes can turn into "touching points"
-		// of edges (alternatively, we could compute a new embedding and
-		// finally "remove" such unnecessary crossings).
-		adjExternal = 0;
-		if(!G.representsCombEmbedding())
-			planarEmbed(G);
-
-		if (G.numberOfEdges() > 0)
-		{
-			CombinatorialEmbedding E(G);
-			//face fExternal = E.maximalFace();
-			face fExternal = findBestExternalFace(G, E);
-			adjExternal = fExternal->firstAdj();
-		}
-	}
-
-
-	face SimpleEmbedder::findBestExternalFace(
-		const PlanRep& PG,
-		const CombinatorialEmbedding& E)
-	{
-		FaceArray<int> weight(E);
-
-		face f;
-		forall_faces(f,E)
-			weight[f] = f->size();
-
-		node v;
-		forall_nodes(v,PG)
-		{
-			if(PG.typeOf(v) != Graph::generalizationMerger)
-				continue;
-
-			adjEntry adj;
-			forall_adj(adj,v) {
-				if(adj->theEdge()->source() == v)
-					break;
+		adjEntry adjFound = nullptr;
+		for(adjEntry adj : v->adjEntries) {
+			if (adj->theEdge()->source() == v) {
+				adjFound = adj;
+				break;
 			}
-
-			OGDF_ASSERT(adj->theEdge()->source() == v);
-
-			node w = adj->theEdge()->target();
-			bool isBase = true;
-
-			adjEntry adj2;
-			forall_adj(adj2, w) {
-				edge e = adj2->theEdge();
-				if(e->target() != w && PG.typeOf(e) == Graph::generalization) {
-					isBase = false;
-					break;
-				}
-			}
-
-			if(isBase == false)
-				continue;
-
-			face f1 = E.leftFace(adj);
-			face f2 = E.rightFace(adj);
-
-			weight[f1] += v->indeg();
-			if(f2 != f1)
-				weight[f2] += v->indeg();
 		}
 
-		face fBest = E.firstFace();
-		forall_faces(f,E)
-			if(weight[f] > weight[fBest])
-				fBest = f;
+		OGDF_ASSERT(adjFound->theEdge()->source() == v);
 
-		return fBest;
+		node w = adjFound->theEdge()->target();
+		bool isBase = true;
+
+		for(adjEntry adj : w->adjEntries) {
+			edge e = adj->theEdge();
+			if(e->target() != w && PG.typeOf(e) == Graph::EdgeType::generalization) {
+				isBase = false;
+				break;
+			}
+		}
+
+		if(!isBase)
+			continue;
+
+		face f1 = E.leftFace(adjFound);
+		face f2 = E.rightFace(adjFound);
+
+		weight[f1] += v->indeg();
+		if(f2 != f1)
+			weight[f2] += v->indeg();
 	}
 
-} // end namespace ogdf
+	face fBest = E.firstFace();
+	for(face f : E.faces)
+		if(weight[f] > weight[fBest])
+			fBest = f;
+
+	return fBest;
+}
+
+}

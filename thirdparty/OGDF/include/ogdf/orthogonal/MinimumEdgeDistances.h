@@ -1,15 +1,7 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class MinimumEdgeDistances which maintains
  *        minimum distances between attached edges at a vertex
- *       (delta's and epsilon's)
+ *       (deltas and epsilons)
  *
  * \author Carsten Gutwenger
  *
@@ -18,7 +10,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -35,22 +27,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_MINIMUM_EDGE_DISTANCE_H
-#define OGDF_MINIMUM_EDGE_DISTANCE_H
-
 
 #include <ogdf/orthogonal/OrthoRep.h>
 
@@ -58,11 +39,7 @@
 namespace ogdf {
 
 
-//---------------------------------------------------------
-// MinimumEdgeDistances
-// maintains input sizes for improvement compaction (delta's
-// and epsilon's)
-//---------------------------------------------------------
+//! Maintains input sizes for improvement compaction (deltas and epsilons)
 template <class ATYPE>
 class MinimumEdgeDistances {
 public:
@@ -74,24 +51,36 @@ public:
 
 	// returns delta_s(v)^i (with i = 0 => l, i = 1 => r)
 	const ATYPE &delta(node v, OrthoDir s, int i) const {
-		OGDF_ASSERT(0 <= int(s) && int(s) <= 3 && 0 <= i && i <= 1);
-		return m_delta[v].info[s][i];
+		OGDF_ASSERT(0 <= int(s));
+		OGDF_ASSERT(int(s) <= 3);
+		OGDF_ASSERT(0 <= i);
+		OGDF_ASSERT(i <= 1);
+		return m_delta[v].info[static_cast<int>(s)][i];
 	}
 
 	ATYPE &delta(node v, OrthoDir s, int i) {
-		OGDF_ASSERT(0 <= int(s) && int(s) <= 3 && 0 <= i && i <= 1);
-		return m_delta[v].info[s][i];
+		OGDF_ASSERT(0 <= int(s));
+		OGDF_ASSERT(int(s) <= 3);
+		OGDF_ASSERT(0 <= i);
+		OGDF_ASSERT(i <= 1);
+		return m_delta[v].info[static_cast<int>(s)][i];
 	}
 
 	// returns epsilon_s(v)^i (with i = 0 => l, i = 1 => r)
 	const ATYPE &epsilon(node v, OrthoDir s, int i) const {
-		OGDF_ASSERT(0 <= int(s) && int(s) <= 3 && 0 <= i && i <= 1);
-		return m_epsilon[v].info[s][i];
+		OGDF_ASSERT(0 <= int(s));
+		OGDF_ASSERT(int(s) <= 3);
+		OGDF_ASSERT(0 <= i);
+		OGDF_ASSERT(i <= 1);
+		return m_epsilon[v].info[static_cast<int>(s)][i];
 	}
 
 	ATYPE &epsilon(node v, OrthoDir s, int i) {
-		OGDF_ASSERT(0 <= int(s) && int(s) <= 3 && 0 <= i && i <= 1);
-		return m_epsilon[v].info[s][i];
+		OGDF_ASSERT(0 <= int(s));
+		OGDF_ASSERT(int(s) <= 3);
+		OGDF_ASSERT(0 <= i);
+		OGDF_ASSERT(i <= 1);
+		return m_epsilon[v].info[static_cast<int>(s)][i];
 	}
 
 	ATYPE separation() const {
@@ -111,8 +100,4 @@ private:
 	ATYPE m_sep;
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

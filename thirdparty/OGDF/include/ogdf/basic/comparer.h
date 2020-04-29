@@ -1,11 +1,3 @@
-/*
- * $Revision: 3851 $
- *
- * last checkin:
- *   $Author: klein $
- *   $Date: 2013-11-20 07:26:56 +0100 (Wed, 20 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declarations for Comparer objects.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,38 +25,22 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_COMPARER_H
-#define OGDF_COMPARER_H
+#include <functional>
 
-#include <ogdf/basic/basic.h>
+#include <ogdf/basic/exceptions.h>
 
 namespace ogdf {
 
-//--------------------------------------------------------------------
-// A comparer interface has to define
-// bool less (const E &x, const E &y);
-// bool leq  (const E &x, const E &y);
-// bool equal(const E &x, const E &y);
-// bool geq (const E &x, const E &y);
-// bool greater  (const E &x, const E &y);
-//
-// "const E &" can be replaced by "E"
-//--------------------------------------------------------------------
-
 //! Standard comparer (valid as a static comparer).
 /**
+ * @ingroup comparer
+ *
  * Standard comparers are used by some sorting and searching methods.
  * The implementation of the generic class only provides dummies that
  * always throw a NoStdComparerException.
@@ -89,7 +65,10 @@ public:
 	static bool equal(const E &x, const E &y) { OGDF_THROW(NoStdComparerException); }
 };
 
-//! Generates a specialization of the standard static comparer for \a type based on compare operators.
+//! Generates a specialization of the standard static comparer for \p type based on compare operators.
+/**
+ * @ingroup comparer
+ */
 #define OGDF_STD_COMPARER(type) \
 	template<> class StdComparer<type> \
 	{ \
@@ -119,11 +98,13 @@ public:
 
 //! A static comparer which compares the target of pointers ("content"), instead of the pointer's adresses.
 /**
+ * @ingroup comparer
+ *
  * For the comparison of the contents, you may give your own static comparer
  */
 template<class CONTENTTYPE, class STATICCONTENTCOMPARER = StdComparer<CONTENTTYPE> >
 class TargetComparer {
-	typedef CONTENTTYPE* CONTENTPOINTER;
+	using CONTENTPOINTER = CONTENTTYPE*;
 public:
 	static bool less   (const CONTENTPOINTER &x, const CONTENTPOINTER &y) { return STATICCONTENTCOMPARER::less   (*x,*y); }
 	static bool leq    (const CONTENTPOINTER &x, const CONTENTPOINTER &y) { return STATICCONTENTCOMPARER::leq    (*x,*y); }
@@ -135,6 +116,8 @@ public:
 
 //! Add this macro to your class to turn it into a full comparer.
 /**
+ * @ingroup comparer
+ *
  * It is assumed that your class has a method "compare(const type &x, const type &y)", which
  * returns 0 if the two elements are equal, a negative value if \a x is smaller, and a positive
  * value if \a x is greater.
@@ -181,6 +164,8 @@ public:
 
 //! Add this macro to your class to turn it into a full static comparer.
 /**
+ * @ingroup comparer
+ *
  * It is assumed that your class has a *static* method "compare(const type &x, const type &y)", which
  * returns 0 if the two elements are equal, a negative value if \a x is smaller, and a positive
  * value if \a x is greater.
@@ -226,7 +211,9 @@ public:
 
 //! Abstract base class for comparer classes.
 /**
- * The parameterized class \a VComparer<E> is an abstract base class for
+ * @ingroup comparer
+ *
+ * The parameterized class VComparer is an abstract base class for
  * encapsulating compare functions for type \a E. Implementations derive
  * from this class and implement at least the compare() method.
  *
@@ -249,7 +236,7 @@ public:
 
 	virtual ~VComparer() { }
 
-	//! Compares \a x and \a y and returns the result as an integer.
+	//! Compares \p x and \p y and returns the result as an integer.
 	/** The returns value is
 	 *  - < 0 iff x < y,
 	 *  - = 0 iff x = y,
@@ -257,84 +244,85 @@ public:
 	 */
 	virtual int compare(const E &x, const E &y) const = 0;
 
-	//! Returns true iff \a x < \a y
+	//! Returns true iff \p x < \p y
 	virtual bool less(const E &x, const E &y) const {
 		return compare(x,y) < 0;
 	}
 
-	//! Returns true iff \a x <= \a y
+	//! Returns true iff \p x <= \p y
 	virtual bool leq(const E &x, const E &y) const {
 		return compare(x,y) <= 0;
 	}
 
-	//! Returns true iff \a x > \a y
+	//! Returns true iff \p x > \p y
 	virtual bool greater(const E &x, const E &y) const {
 		return compare(x,y) > 0;
 	}
 
-	//! Returns true iff \a x >= \a y
+	//! Returns true iff \p x >= \p y
 	virtual bool geq(const E &x, const E &y) const {
 		return compare(x,y) >= 0;
 	}
 
-	//! Returns true iff \a x = \a y
+	//! Returns true iff \p x = \p y
 	virtual bool equal(const E &x, const E &y) const {
 		return compare(x,y) == 0;
 	}
-}; // class VComparer
-
+};
 
 //! Augments any data elements of type \a X with keys of type \a Priority. This class is also its own Comparer
 /**
  * Also defines comparator function using the keys.
  * This class is intended as a helpful convenience class for using with BinaryHeapSimple, Top10Heap,..
  */
- template<class X, class Priority=double>
- class Prioritized {
+template<class X, class Priority=double>
+class Prioritized {
+	X x;
+	Priority p;
 
-	 X x;
-	 Priority p;
+public:
+	//! Constructor of empty element. Be careful!
+	Prioritized() : x(0), p(0) { }
 
- public:
-	 //! Constructor of empty element. Be careful!
-	 Prioritized() : x(0), p(0) { }
+	//! Constructor using a key/value pair
+	Prioritized(X xt, Priority pt) : x(xt),p(pt) { }
 
-	 //! Constructor using a key/value pair
-	 Prioritized(X xt, Priority pt) : x(xt),p(pt) { }
+	//! Copy-constructor
+	Prioritized(const Prioritized& P) = default;
 
-	 //! Copy-constructor
-	 Prioritized(const Prioritized& P) : x(P.x),p(P.p) { }
+	//! Returns the key of the element
+	Priority priority() const { return p; }
 
-	 //! Returns the key of the element
-	 Priority priority() const { return p; }
+	//! Returns the data of the element
+	X item() const { return x;}
 
-	 //! Returns the data of the element
-	 X item() const { return x;}
+	//! Sets priority
+	void setPriority(Priority pp) { p = pp; }
 
-	 //! Sets priority
-	 void setPriority(Priority pp) { p = pp; }
+	//! Sets value x
+	void setItem(X item) { x=item; }
 
-	 //! Sets value x
-	 void setItem(X item) { x=item; }
+	//! Copy assignment operator
+	Prioritized& operator=(const Prioritized<X,Priority>& P) = default;
 
-	 //! Comparison oprator based on the compare-operator for the key type (\a Priority)
-	 bool operator<(const Prioritized<X,Priority>& P) const { return p<P.p; }
+	//! Comparison oprator based on the compare-operator for the key type (\a Priority)
+	bool operator<(const Prioritized<X,Priority>& P) const { return p<P.p; }
 
-	 //! Comparison oprator based on the compare-operator for the key type (\a Priority)
-	 bool operator<=(const Prioritized<X,Priority>& P) const { return p<=P.p; }
+	//! Comparison oprator based on the compare-operator for the key type (\a Priority)
+	bool operator<=(const Prioritized<X,Priority>& P) const { return p<=P.p; }
 
-	 //! Comparison oprator based on the compare-operator for the key type (\a Priority)
-	 bool operator>(const Prioritized<X,Priority>& P) const { return p>P.p; }
+	//! Comparison oprator based on the compare-operator for the key type (\a Priority)
+	bool operator>(const Prioritized<X,Priority>& P) const { return p>P.p; }
 
-	 //! Comparison oprator based on the compare-operator for the key type (\a Priority)
-	 bool operator>=(const Prioritized<X,Priority>& P) const { return p>=P.p; }
+	//! Comparison oprator based on the compare-operator for the key type (\a Priority)
+	bool operator>=(const Prioritized<X,Priority>& P) const { return p>=P.p; }
 
-	 //! Comparison oprator based on the compare-operator for the key type (\a Priority)
-	 bool operator==(const Prioritized<X,Priority>& P) const { return p==P.p; }
+	//! Comparison oprator based on the compare-operator for the key type (\a Priority)
+	bool operator==(const Prioritized<X,Priority>& P) const { return p==P.p; }
 
-	 //! Comparison oprator based on the compare-operator for the key type (\a Priority)
-	 bool operator!=(const Prioritized<X,Priority>& P) const { return p!=P.p; }
- };
+	//! Comparison oprator based on the compare-operator for the key type (\a Priority)
+	bool operator!=(const Prioritized<X,Priority>& P) const { return p!=P.p; }
+};
 
 template<class X, class Priority> class StdComparer< Prioritized<X,Priority> >
 {
@@ -346,7 +334,85 @@ public:
 	static bool equal  (const Prioritized<X,Priority> &x, const Prioritized<X,Priority> &y) { return x == y; }
 };
 
+/**
+ * Template for converting any StdComparer into a STL compatible compare functor.
+ * Utilizes the comparators less method.
+ *
+ * @ingroup comparer
+ */
+template<typename TYPE, class COMPARER = StdComparer<TYPE>>
+class StlLess {
+public:
+	bool operator()(const TYPE &x, const TYPE &y) const {
+		return COMPARER::less(x, y);
+	}
+};
 
-} //namespace
 
-#endif /*OGF_COMPARER_H*/
+/**
+ * Template for converting any StdComparer into a STL compatible compare functor.
+ * Utilizes the comparators greater method.
+ *
+ * @ingroup comparer
+ */
+template<typename TYPE, class COMPARER = StdComparer<TYPE>>
+class StlGreater {
+public:
+	bool operator()(const TYPE &x, const TYPE &y) const {
+		return COMPARER::greater(x, y);
+	}
+};
+
+/**
+ * Compare elements based on a single comparable attribute.
+ *
+ * @ingroup comparer
+ *
+ * Defines a non-static OGDF comparer (see macro \c OGDF_AUGMENT_COMPARER) that
+ * compares values of type \c NUM to compare elements of type \c ELEM.
+ *
+ * One must provide a function that maps each element to its value.
+ */
+template<typename ELEM, typename NUM, bool ascending = true>
+struct GenericComparer {
+	using OrderFunction = std::function<NUM(const ELEM&)>;
+
+	//! Construct a comparer with mapping \p mapToValue.
+	GenericComparer(const OrderFunction& mapToValue) : m_mapToValue(mapToValue) {}
+
+	//! See \c OGDF_AUGMENT_COMPARER
+	int compare(const ELEM& x, const ELEM& y) const {
+		NUM a = m_mapToValue(x);
+		NUM b = m_mapToValue(y);
+
+		return a == b ? 0 : ((a < b) == ascending ? -1 : 1);
+	}
+
+	OGDF_AUGMENT_COMPARER(ELEM)
+
+private:
+	const OrderFunction m_mapToValue;
+};
+
+/**
+ * Declares a class \p NAME that extends from ogdf::GenericComparer.
+ *
+ * @ingroup comparer
+ *
+ * The type of compared elements is \c TYPE, the returned scalar is of type \c NUMBER.
+ * \c GET_X_ATTR contains the actual element to scalar conversion for any element (denoted by \a x).
+ *
+ * Example use to sort edges by index:
+ * \code
+ * List<edge> edges;
+ * ...
+ * OGDF_DECLARE_COMPARER(EdgeIndexCmp, edge, int, x->index());
+ * edges.quicksort(EdgeIndexCmp());
+ * \endcode
+ */
+#define OGDF_DECLARE_COMPARER(NAME, TYPE, NUMBER, GET_X_ATTR) \
+struct NAME : public GenericComparer<TYPE, NUMBER> { \
+	NAME() : GenericComparer([&](const TYPE& x) { return GET_X_ATTR; }) {} \
+}
+
+}

@@ -26,51 +26,14 @@
 #include <ogdf/planarity/EmbedderOptimalFlexDraw.h>
 #include <ogdf/planarity/SimpleEmbedder.h>
 
-#include "tulip2ogdf/OGDFLayoutPluginBase.h"
+#include <tulip2ogdf/OGDFLayoutPluginBase.h>
 
 #include <tulip/StringCollection.h>
-
-// comments below have been extracted from OGDF/src/planarity/PlanarizationLayout.cpp
-/** \addtogroup layout */
-
-/**
- * Declaration of class PlanarizationLayout.
- *
- * \author Carsten Gutwenger
- *
- * \par License:
- * This file is part of the Open Graph Drawing Framework (OGDF).
- *
- * \par
- * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
- *
- * \par
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation;
- * see the file LICENSE.txt included in the packaging of this file
- * for details.
- *
- * \par
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * \par
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
 
 #define ELT_EMBEDDER "Embedder"
 #define ELT_EMBEDDER_LIST                                                                          \
   "SimpleEmbedder;EmbedderMaxFace;EmbedderMaxFaceLayers;EmbedderMinDepth;EmbedderMinDepthMaxFace;" \
-  "EmbedderMinDepthMaxFaceLayers;EmbedderMinDepthPiTa" //;EmbedderOptimalFlexDraw"
+  "EmbedderMinDepthMaxFaceLayers;EmbedderMinDepthPiTa;EmbedderOptimalFlexDraw"
 #define ELT_EMBEDDER_SIMPLE 0
 #define ELT_EMBEDDER_MAXFACE 1
 #define ELT_EMBEDDER_MAXFACELAYERS 2
@@ -95,40 +58,52 @@ static const char *embedderValuesDescription =
     "maximum external face, plus layers approach)</i><br>"
     "EmbedderMinDepthPiTa <i>(Planar graph embedding with minimum block-nesting depth for given "
     "embedded blocks)</i>"
-    //"EmbedderOptimalFlexDraw <i>(Planar graph embedding with minimum cost)</i>"
+    "EmbedderOptimalFlexDraw <i>(Planar graph embedding with minimum cost)</i>"
     ;
 
 static const char *paramHelp[] = {
     // page ratio
     "Sets the option page ratio.",
 
+    //minCliqueSize
+    "If preprocessing of cliques is considered, this option determines the minimal size of cliques to search for",
+
     // Embedder
     "The result of the crossing minimization step is a planar graph, in which crossings are "
-    "replaced by dummy nodes. The embedder then computes a planar embedding of this planar graph."};
+    "replaced by dummy nodes. The embedder then computes a planar embedding of this planar graph.",
+
+    //crossings
+    "Returns the number of crossings in the computed layout."
+};
 
 class OGDFPlanarizationLayout : public OGDFLayoutPluginBase {
+
+    ogdf::PlanarizationLayout *pl;
 
 public:
   PLUGININFORMATION("Planarization Layout (OGDF)", "Carsten Gutwenger", "12/11/2007",
                     "The planarization approach for drawing graphs.", "1.0", "Planar")
   OGDFPlanarizationLayout(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, new ogdf::PlanarizationLayout()) {
+      : OGDFLayoutPluginBase(context, new ogdf::PlanarizationLayout()),pl(static_cast<ogdf::PlanarizationLayout *>(ogdfLayoutAlgo)) {
     addInParameter<double>("page ratio", paramHelp[0], "1.1");
-    addInParameter<StringCollection>(ELT_EMBEDDER, paramHelp[1], ELT_EMBEDDER_LIST, true,
-                                     embedderValuesDescription);
+    addInParameter<int>("minimal clique size", paramHelp[1], "3");
+    addInParameter<StringCollection>(ELT_EMBEDDER, paramHelp[2], ELT_EMBEDDER_LIST, true, embedderValuesDescription);
+    addOutParameter<int>("number of crossings", paramHelp[3]);
   }
 
   ~OGDFPlanarizationLayout() override {}
 
   void beforeCall() override {
-    ogdf::PlanarizationLayout *pl = static_cast<ogdf::PlanarizationLayout *>(ogdfLayoutAlgo);
-
     if (dataSet != nullptr) {
       double dval = 0;
+      int clique_size=3;
       StringCollection sc;
 
       if (dataSet->get("page ratio", dval))
         pl->pageRatio(dval);
+
+      if (dataSet->get("minimal clique size", clique_size))
+        pl->minCliqueSize(clique_size);
 
       if (dataSet->get(ELT_EMBEDDER, sc)) {
         if (sc.getCurrent() == ELT_EMBEDDER_MAXFACE) {
@@ -143,15 +118,17 @@ public:
           pl->setEmbedder(new ogdf::EmbedderMinDepthMaxFaceLayers());
         } else if (sc.getCurrent() == ELT_EMBEDDER_MINDEPTHPITA) {
           pl->setEmbedder(new ogdf::EmbedderMinDepthPiTa());
-          // EmbedderOptimalFlexDraw embedder segfaults every time, so disable it for the moment
-          //        } else if (sc.getCurrent() == ELT_EMBEDDER_OPTIMALFLEXDRAW) {
-          //          pl->setEmbedder(new ogdf::EmbedderOptimalFlexDraw());
-
+        } else if (sc.getCurrent() == ELT_EMBEDDER_OPTIMALFLEXDRAW) {
+          pl->setEmbedder(new ogdf::EmbedderOptimalFlexDraw());
         } else {
           pl->setEmbedder(new ogdf::SimpleEmbedder());
         }
       }
     }
+  }
+
+  void afterCall() override {
+      dataSet->set("number of crossings", pl->numberOfCrossings());
   }
 };
 

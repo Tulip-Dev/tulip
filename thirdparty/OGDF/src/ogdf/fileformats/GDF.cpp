@@ -1,11 +1,3 @@
-/*
- * $Revision: 3837 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 15:19:30 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief String conversions and Hashing for GDF fileformat
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,12 +25,9 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/fileformats/GDF.h>
 #include <ogdf/fileformats/Utils.h>
@@ -52,19 +41,23 @@ namespace gdf {
 std::string toString(const NodeAttribute &attr)
 {
 	switch(attr) {
-	case na_name: return "name";
-	case na_x: return "x";
-	case na_y: return "y";
-	case na_z: return "z";
-	case na_fillColor: return "color";
-	case na_strokeColor: return "strokecolor";
-	case na_shape: return "style";
-	case na_width: return "width";
-	case na_height: return "height";
-	case na_label: return "label";
-	case na_template: return "template";
-	case na_weight: return "weight";
-	case na_unknown: return "unknown";
+	case NodeAttribute::Name: return "name";
+	case NodeAttribute::X: return "x";
+	case NodeAttribute::Y: return "y";
+	case NodeAttribute::Z: return "z";
+	case NodeAttribute::FillColor: return "color";
+	case NodeAttribute::FillBgColor: return "fillbg";
+	case NodeAttribute::FillPattern: return "fillpattern";
+	case NodeAttribute::StrokeColor: return "strokecolor";
+	case NodeAttribute::StrokeType: return "stroketype";
+	case NodeAttribute::StrokeWidth: return "strokewidth";
+	case NodeAttribute::Shape: return "style";
+	case NodeAttribute::Width: return "width";
+	case NodeAttribute::Height: return "height";
+	case NodeAttribute::Label: return "label";
+	case NodeAttribute::Template: return "template";
+	case NodeAttribute::Weight: return "weight";
+	case NodeAttribute::Unknown: return "unknown";
 	}
 
 	return "";
@@ -74,14 +67,14 @@ std::string toString(const NodeAttribute &attr)
 std::string toString(const EdgeAttribute &attr)
 {
 	switch(attr) {
-	case ea_label: return "label";
-	case ea_source: return "node1";
-	case ea_target: return "node2";
-	case ea_weight: return "weight";
-	case ea_directed: return "directed";
-	case ea_color: return "color";
-	case ea_bends: return "bends";
-	case ea_unknown: return "unknown";
+	case EdgeAttribute::Label: return "label";
+	case EdgeAttribute::Source: return "node1";
+	case EdgeAttribute::Target: return "node2";
+	case EdgeAttribute::Weight: return "weight";
+	case EdgeAttribute::Directed: return "directed";
+	case EdgeAttribute::Color: return "color";
+	case EdgeAttribute::Bends: return "bends";
+	case EdgeAttribute::Unknown: return "unknown";
 	}
 
 	return "";
@@ -95,47 +88,36 @@ std::string toString(const Shape &shape)
 	 * http://guess.wikispot.org/The_GUESS_.gdf_format
 	 */
 	switch(shape) {
-	case shRect: return "1";
-	case shEllipse: return "2";
-	case shRoundedRect: return "3";
-	case shImage: return "7";
+	case Shape::Rect: return "1";
+	case Shape::Ellipse: return "2";
+	case Shape::RoundedRect: return "3";
+	case Shape::Image: return "7";
 	default: return "1";
 	}
 }
 
 
-static Hashing<std::string, NodeAttribute> *nodeAttrMap = NULL;
-
 NodeAttribute toNodeAttribute(const std::string &str)
 {
 	return toEnum(
-		str, nodeAttrMap, toString,
-		static_cast<NodeAttribute>(0), na_unknown, na_unknown);
+		str, toString,
+		static_cast<NodeAttribute>(0), NodeAttribute::Unknown, NodeAttribute::Unknown);
 }
-
-
-static Hashing<std::string, EdgeAttribute> *edgeAttrMap = NULL;
 
 EdgeAttribute toEdgeAttribute(const std::string &str)
 {
 	return toEnum(
-		str, edgeAttrMap, toString,
-		static_cast<EdgeAttribute>(0), ea_unknown, ea_unknown);
+		str, toString,
+		static_cast<EdgeAttribute>(0), EdgeAttribute::Unknown, EdgeAttribute::Unknown);
 }
-
-
-static Hashing<std::string, Shape> *shapeMap = NULL;
 
 Shape toShape(const std::string &str)
 {
 	return toEnum(
-		str, shapeMap, toString,
-		shRect, shImage, shRect);
+		str, toString,
+		Shape::Rect, Shape::Image, Shape::Rect);
 }
 
+}
 
-
-} // end namespace gdf
-
-} // end namespace ogdf
-
+}

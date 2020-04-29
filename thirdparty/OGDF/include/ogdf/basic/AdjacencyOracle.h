@@ -1,22 +1,14 @@
-/*
- * $Revision: 3931 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2014-02-20 14:56:42 +0100 (Thu, 20 Feb 2014) $
- ***************************************************************/
-
 /** \file
- * \brief Declares class AdjacencyOracle.
+ * \brief Declaration of ogdf::AdjacencyOracle class
  *
- * \author Rene Weiskircher
+ * \author Rene Weiskircher, Stephan Beyer
  *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,43 +25,45 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_ADJACENCY_ORACLE_H
-#define OGDF_ADJACENCY_ORACLE_H
 
 #include <ogdf/basic/NodeArray.h>
-#include <ogdf/basic/Array2D.h>
 
 namespace ogdf {
 
 //! Tells you in constant time if two nodes are adjacent
 /**
- * AdjacencyOracle is initialized with a Graph and returns for
- * any pair of nodes in constant time if they are adajcent.
+ * @ingroup graphs
+ *
+ * AdjacencyOracle is initialized with a graph and returns for
+ * any pair of nodes in constant time if they are adjacent.
  */
-class AdjacencyOracle {
+class OGDF_EXPORT AdjacencyOracle {
 public:
-	//! The constructor for the class, needs time O(n + m)
-	AdjacencyOracle(const Graph &G);
+	/**
+	 * The constructor for the class, needs time O(n^2 + m) ∩ Ω(n).
+	 *
+	 * Builds the bottom-left part of an adjacency matrix for the subset of nodes
+	 * with degree above \p degreeThreshold.
+	 */
+	explicit AdjacencyOracle(const Graph &G, int degreeThreshold = 32);
+
 	//! The destructor
 	~AdjacencyOracle() { }
-	//! This returns true if the two nodes are adjacent in G, false otherwise
-	bool adjacent(const node, const node) const;
+
+	//! Returns true iff vertices \p v and \p w are adjacent.
+	bool adjacent(node v, node w) const;
+
 private:
+	//! Returns an index for #m_adjacencies that corresponds to the entry of nodes \p v and \p w
+	int index(node v, node w) const;
+
 	NodeArray<int> m_nodeNum; //!< The internal number given to each node
-	Array2D<bool> m_adjacencyMatrix; //!< A 2D-array where the entry is true if the nodes with the corresponding number are adjacent
+	std::vector<bool> m_adjacencies; //!< An entry is true iff the corresponding nodes are adjacent
 };
 
 }
-#endif

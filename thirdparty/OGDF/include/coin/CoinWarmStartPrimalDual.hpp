@@ -76,7 +76,7 @@ public:
   }
 
   /** `Virtual constructor' */
-  virtual CoinWarmStart *clone() const {
+  virtual CoinWarmStart *clone() const override {
     return new CoinWarmStartPrimalDual(*this);
   }
 
@@ -93,7 +93,7 @@ public:
   */
 
   virtual CoinWarmStartDiff*
-  generateDiff (const CoinWarmStart *const oldCWS) const ;
+  generateDiff (const CoinWarmStart *const oldCWS) const override ;
 
   /*! \brief Apply \p diff to this warm start.
 
@@ -101,7 +101,7 @@ public:
   allocated capacity of the warm start is sufficiently large.
   */
 
-  virtual void applyDiff (const CoinWarmStartDiff *const cwsdDiff) ;
+  virtual void applyDiff (const CoinWarmStartDiff *const cwsdDiff) override ;
 
   //@}
 
@@ -136,7 +136,7 @@ private:
   CoinWarmStartPrimalDual::applyDiff().
 
   The actual data structure is a pair of vectors, #diffNdxs_ and #diffVals_.
-    
+
 */
 
 class CoinWarmStartPrimalDualDiff : public virtual CoinWarmStartDiff
@@ -150,7 +150,7 @@ public:
 
   /*! \brief `Virtual constructor'. To be used when retaining polymorphism is
     important */
-  virtual CoinWarmStartDiff *clone() const
+  virtual CoinWarmStartDiff *clone() const override
   {
     return new CoinWarmStartPrimalDualDiff(*this);
   }
@@ -161,7 +161,7 @@ public:
 protected:
 
   /*! \brief Default constructor
-  
+
   This is protected (rather than private) so that derived classes can
   see it when they make <i>their</i> default constructor protected or
   private.
@@ -169,7 +169,7 @@ protected:
   CoinWarmStartPrimalDualDiff () : primalDiff_(), dualDiff_() {}
 
   /*! \brief Copy constructor
-  
+
   For convenience when copying objects containing
   CoinWarmStartPrimalDualDiff objects. But consider whether you should be
   using #clone() to retain polymorphism.

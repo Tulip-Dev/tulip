@@ -1,11 +1,3 @@
-/*
- * $Revision: 2663 $
- *
- * last checkin:
- *   $Author:klein $
- *   $Date:2007-10-18 17:23:28 +0200 (Thu, 18 Oct 2007) $
- ***************************************************************/
-
 /** \file
  * \brief Cluster Planarity tests and Cluster Planar embedding
  * for C-connected Cluster Graphs
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,34 +26,28 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_CCONNECT_CLUSTER_PLANAR_H
-#define OGDF_CCONNECT_CLUSTER_PLANAR_H
-
-
-#include <ogdf/internal/planarity/PlanarPQTree.h>
+#include <ogdf/planarity/booth_lueker/PlanarPQTree.h>
 #include <ogdf/cluster/ClusterArray.h>
 #include <ogdf/basic/EdgeArray.h>
 
 namespace ogdf {
 
+//! C-planarity test by Cohen, Feng and Eades.
+/**
+ * @ingroup ga-cplanarity
+ */
 class OGDF_EXPORT CconnectClusterPlanar
 {
 public:
 
 	//aus CCCPE oder CCCP wieder entfernen
-	enum ccErrorCode {
+	enum class ErrorCode {
 		none = 0,
 		nonConnected = 1,
 		nonCConnected = 2,
@@ -69,7 +55,7 @@ public:
 		nonCPlanar = 4
 	};
 
-	ccErrorCode errCode() { return m_errorCode; }
+	ErrorCode errCode() { return m_errorCode; }
 
 
 	//! Constructor.
@@ -82,21 +68,22 @@ public:
 	virtual bool call(const ClusterGraph &C);
 
 private:
+	using PlanarPQTree = booth_lueker::PlanarPQTree;
 
-	//! Recursive planarity test for clustered graph induced by \a act.
-	bool planarityTest(ClusterGraph &C, cluster &act, Graph &G);
+	//! Recursive planarity test for clustered graph induced by \p act.
+	bool planarityTest(ClusterGraph &C, const cluster act, Graph &G);
 
 	//! Preprocessing that initializes data structures, used in call.
 	bool preProcess(ClusterGraph &C,Graph &G);
 
 	//! Prepares the planarity test for one cluster.
-	bool preparation(Graph  &G,cluster &C,node superSink);
+	bool preparation(Graph &G, const cluster C, node superSink);
 
 	//! Performs a planarity test on a biconnected component.
 	bool doTest(
 		Graph &G,
 		NodeArray<int> &numbering,
-		cluster &cl,
+		const cluster cl,
 		node superSink,
 		EdgeArray<edge> &edgeTable);
 
@@ -117,10 +104,7 @@ private:
 	ClusterArray<PlanarPQTree*> m_clusterPQTree;
 	int	m_parallelCount;
 
-	ccErrorCode m_errorCode;
+	ErrorCode m_errorCode;
 };
 
-} // end namespace ogdf
-
-
-#endif
+}

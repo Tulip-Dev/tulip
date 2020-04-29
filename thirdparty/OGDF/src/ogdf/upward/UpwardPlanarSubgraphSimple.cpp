@@ -1,11 +1,3 @@
-/*
- * $Revision: 3261 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-01-25 14:48:05 +0100 (Fri, 25 Jan 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implements class UpwardPlanarSubgraphSimple which computes
  * an upward planar subgraph of a single-source acyclic digraph
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,12 +26,9 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 
 #include <ogdf/upward/UpwardPlanarSubgraphSimple.h>
@@ -60,8 +49,7 @@ void UpwardPlanarSubgraphSimple::call(const Graph &G, List<edge> &delEdges)
 	Graph H;
 	NodeArray<node> mapToH(G);
 
-	node v;
-	forall_nodes(v,G)
+	for(node v : G.nodes)
 		mapToH[v] = H.newNode();
 
 
@@ -69,7 +57,7 @@ void UpwardPlanarSubgraphSimple::call(const Graph &G, List<edge> &delEdges)
 	node s;
 	hasSingleSource(G,s);
 
-	OGDF_ASSERT(s != 0);
+	OGDF_ASSERT(s != nullptr);
 	OGDF_ASSERT(isAcyclic(G));
 
 	// We start with a spanning tree of G rooted at the single source.
@@ -93,15 +81,14 @@ void UpwardPlanarSubgraphSimple::call(const Graph &G, List<edge> &delEdges)
 	// graph is still upward planar. If not, remove the edge again from H
 	// and add it to delEdges.
 
-	edge eG;
-	forall_edges(eG,G)
+	for(edge eG : G.edges)
 	{
-		if(visitedEdge[eG] == true)
+		if(visitedEdge[eG])
 			continue;
 
 		edge eH = H.newEdge(mapToH[eG->source()],mapToH[eG->target()]);
 
-		if (UpwardPlanarity::isUpwardPlanar_singleSource(H) == false) {
+		if (!UpwardPlanarity::isUpwardPlanar_singleSource(H)) {
 			H.delEdge(eH);
 			delEdges.pushBack(eG);
 		}
@@ -117,9 +104,8 @@ void UpwardPlanarSubgraphSimple::dfsBuildSpanningTree(
 {
 	visited[v] = true;
 
-	edge e;
-	forall_adj_edges(e,v)
-	{
+	for(adjEntry adj : v->adjEntries) {
+		edge e = adj->theEdge();
 		node w = e->target();
 		if(w == v) continue;
 
@@ -140,11 +126,10 @@ void UpwardPlanarSubgraphSimple::call(GraphCopy &GC, List<edge> &delEdges)
 	// We construct an auxiliary graph H which represents the current upward
 	// planar subgraph.
 	Graph H;
-	NodeArray<node> mapToH(G,0);
-	NodeArray<node> mapToG(H,0);
+	NodeArray<node> mapToH(G,nullptr);
+	NodeArray<node> mapToG(H,nullptr);
 
-	node v;
-	forall_nodes(v,G)
+	for(node v : G.nodes)
 		mapToG[ mapToH[v] = H.newNode() ] = v;
 
 
@@ -152,7 +137,7 @@ void UpwardPlanarSubgraphSimple::call(GraphCopy &GC, List<edge> &delEdges)
 	node s;
 	hasSingleSource(G,s);
 
-	OGDF_ASSERT(s != 0);
+	OGDF_ASSERT(s != nullptr);
 	OGDF_ASSERT(isAcyclic(G));
 
 	// We start with a spanning tree of G rooted at the single source.
@@ -179,11 +164,10 @@ void UpwardPlanarSubgraphSimple::call(GraphCopy &GC, List<edge> &delEdges)
 	SList<Tuple2<node,node> > augmented;
 	GraphCopySimple graphAcyclicTest(G);
 
-	edge eG;
-	forall_edges(eG,G)
+	for(edge eG : G.edges)
 	{
 		// already treated ?
-		if(visitedEdge[eG] == true)
+		if(visitedEdge[eG])
 			continue;
 
 		// insert edge into H
@@ -191,7 +175,7 @@ void UpwardPlanarSubgraphSimple::call(GraphCopy &GC, List<edge> &delEdges)
 
 		node superSink;
 		SList<edge> augmentedEdges;
-		if (UpwardPlanarity::upwardPlanarAugment_singleSource(H,superSink,augmentedEdges) == false) {
+		if (!UpwardPlanarity::upwardPlanarAugment_singleSource(H,superSink,augmentedEdges)) {
 			// if H is no longer upward planar, remove eG from subgraph
 			H.delEdge(eH);
 			delEdges.pushBack(eG);
@@ -200,21 +184,19 @@ void UpwardPlanarSubgraphSimple::call(GraphCopy &GC, List<edge> &delEdges)
 			// add augmented edges as node-pair to tmpAugmented and remove
 			// all augmented edges from H again
 			SList<Tuple2<node,node> > tmpAugmented;
-			SListConstIterator<edge> it;
-			for(it = augmentedEdges.begin(); it.valid(); ++it) {
-				node v = mapToG[(*it)->source()];
-				node w = mapToG[(*it)->target()];
+			for(edge e : augmentedEdges) {
+				node v = mapToG[e->source()];
+				node w = mapToG[e->target()];
 
 				if (v && w)
 					tmpAugmented.pushBack(Tuple2<node,node>(v,w));
 
-				H.delEdge(*it);
+				H.delEdge(e);
 			}
 
-			if (mapToG[superSink] == 0)
+			if (mapToG[superSink] == nullptr)
 				H.delNode(superSink);
 
-			//****************************************************************
 			// The following is a simple workaround to assure the following
 			// property of the upward planar subgraph:
 			//   The st-augmented upward planar subgraph plus the edges not
@@ -226,10 +208,9 @@ void UpwardPlanarSubgraphSimple::call(GraphCopy &GC, List<edge> &delEdges)
 			// embedding would do.
 			// The better solution would be to incorporate the acyclicity
 			// property into the upward-planarity test, but this is compicated.
-			//****************************************************************
 
 			// test if original graph plus augmented edges is still acyclic
-			if(checkAcyclic(graphAcyclicTest,tmpAugmented) == true) {
+			if(checkAcyclic(graphAcyclicTest,tmpAugmented)) {
 				augmented = tmpAugmented;
 
 			} else {
@@ -256,9 +237,9 @@ void UpwardPlanarSubgraphSimple::call(GraphCopy &GC, List<edge> &delEdges)
 	}
 
 	// add super sink to GC
-	node sGC = 0;
+	node sGC = nullptr;
 	SList<node> sinks;
-	forall_nodes(v,GC) {
+	for(node v : GC.nodes) {
 		if(v->indeg() == 0)
 			sGC = v;
 		if(v->outdeg() == 0)
@@ -301,6 +282,4 @@ bool UpwardPlanarSubgraphSimple::checkAcyclic(
 	return acyclic;
 }
 
-
-} // end namespace ogdf
-
+}

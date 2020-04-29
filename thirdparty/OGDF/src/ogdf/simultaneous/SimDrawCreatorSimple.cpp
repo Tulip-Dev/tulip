@@ -1,11 +1,3 @@
-/*
- * $Revision: 2554 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-06 11:39:38 +0200 (Fri, 06 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Offers variety of possible SimDraw creations.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,19 +25,15 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/simultaneous/SimDrawCreatorSimple.h>
 #include <ogdf/basic/Array2D.h>
 
 namespace ogdf {
 
-//*************************************************************
 // creates simultaneous graph given by two trees with n^2+n+1 nodes
 // see Geyer,Kaufmann,Vrto (GD'05) for description of graph
 void SimDrawCreatorSimple::createTrees_GKV05(int n)
@@ -79,11 +67,8 @@ void SimDrawCreatorSimple::createTrees_GKV05(int n)
 				m_GA->addSubGraph(e,1);
 			}
 	}
+}
 
-} // end createGKV
-
-
-//*************************************************************
 // creates simultaneous graph given by a path and a planar graph
 // see Erten, Kobourov (GD'04) for description of instance
 void SimDrawCreatorSimple::createPathPlanar_EK04()
@@ -168,11 +153,8 @@ void SimDrawCreatorSimple::createPathPlanar_EK04()
 	e = m_G->newEdge(v[8],v[9]);
 	m_GA->addSubGraph(e,0);
 	m_GA->addSubGraph(e,1);
+}
 
-}//end createPathPlanar_EK04
-
-
-//*************************************************************
 // creates simultaneous graph given by a colored K5
 // see Erten, Kobourov (GD'04) for description of instance
 void SimDrawCreatorSimple::createK5_EK04()
@@ -195,11 +177,8 @@ void SimDrawCreatorSimple::createK5_EK04()
 				m_GA->addSubGraph(e,1);
 		}
 	}
+}
 
-}//end createK5_EK04
-
-
-//*************************************************************
 // creates simultaneous graph given by a colored K5
 // see Gassner, Juenger, Percan, Schaefer, Schulz (WG'06) for description of instance
 void SimDrawCreatorSimple::createK5_GJPSS06()
@@ -232,11 +211,8 @@ void SimDrawCreatorSimple::createK5_GJPSS06()
 				m_GA->addSubGraph(e,1);
 		}
 	}
+}
 
-}//end createK5_GJPSS06
-
-
-//*************************************************************
 // creates simultaneous graph given by two outerplanar graphs
 // see Brass et al. (WADS '03) for description of instance
 void SimDrawCreatorSimple::createOuterplanar_BCDEEIKLM03()
@@ -273,17 +249,15 @@ void SimDrawCreatorSimple::createOuterplanar_BCDEEIKLM03()
 	e = m_G->newEdge(v[1],v[4]);
 	m_GA->addSubGraph(e,0);
 	m_GA->addSubGraph(e,1);
+}
 
-}// end createOuterplanar_BCDEEIKLM03
-
-
-//*************************************************************
 // creates simultaneous graph with crossing number 0 but
 // with multicrossings of adjacent edges in mincross drawing
 // see Kratochvil (GD '98) for description of instance
 void SimDrawCreatorSimple::createKrat98(int N, int nodeNumber)
 {
-	OGDF_ASSERT( N>=1 && nodeNumber>=1 );
+	OGDF_ASSERT(N>=1);
+	OGDF_ASSERT(nodeNumber>=1);
 
 	Array<node> p(nodeNumber);
 	Array<node> q(nodeNumber);
@@ -440,16 +414,14 @@ void SimDrawCreatorSimple::createKrat98(int N, int nodeNumber)
 	m_GA->addSubGraph(e,0);
 	m_GA->addSubGraph(e,1);
 	m_GA->addSubGraph(e,2);
+}
 
-}// end createKrat
-
-
-//*************************************************************
 // creates Graph with numberofBasic*2 outer, numberOfParallels*numberOfBasic
 // inner Nodes and one Root.
 void SimDrawCreatorSimple::createWheel(int numberOfParallels, int numberOfBasic )
 {
-	OGDF_ASSERT(numberOfBasic > 0 && numberOfParallels >= 0);
+	OGDF_ASSERT(numberOfBasic > 0);
+	OGDF_ASSERT(numberOfParallels >= 0);
 
 	node root = m_G->newNode();
 	Array<node> v(numberOfBasic*2);
@@ -490,17 +462,13 @@ void SimDrawCreatorSimple::createWheel(int numberOfParallels, int numberOfBasic 
 			}
 		}
 	}
+}
 
-}//end createWheel
-
-
-//*************************************************************
 // creates simultaneously planar simulatenous graph with n+1 basic graphs.
-//
 void SimDrawCreatorSimple::createExpo(int n)
 {
-
-	OGDF_ASSERT(n>0 && n<31);
+	OGDF_ASSERT(n>0);
+	OGDF_ASSERT(n<31);
 
 	Array<node> u(n+1);
 	Array<node> v(n+1);
@@ -610,7 +578,6 @@ void SimDrawCreatorSimple::createExpo(int n)
 	for(int j = 0; j < 4; j++)
 		if(j != 1)
 			m_GA->addSubGraph(e,j);
+}
 
-}//end createExpo
-
-} // end namespace ogdf
+}

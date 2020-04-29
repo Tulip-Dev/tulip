@@ -1,11 +1,3 @@
-/*
- * $Revision: 3837 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 15:19:30 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief TLP format parser utility declaration.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,21 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_TLP_PARSER_H
-#define OGDF_TLP_PARSER_H
-
 
 #include <ogdf/basic/Graph.h>
 #include <ogdf/basic/GraphAttributes.h>
@@ -69,7 +51,7 @@ namespace tlp {
 
 class Parser {
 private:
-	typedef std::vector<Token>::const_iterator Iterator;
+	using Iterator = std::vector<Token>::const_iterator;
 	std::map<int, node> m_idNode;
 	std::map<int, edge> m_idEdge;
 
@@ -99,18 +81,18 @@ private:
 	inline void tokenError(const std::string &str, bool got = true);
 
 public:
-	Parser(std::istream &is);
+	explicit Parser(std::istream &is);
 
 	bool read(Graph &G) {
-		return readGraph(G, NULL, NULL);
+		return readGraph(G, nullptr, nullptr);
 	}
 
 	bool read(Graph &G, GraphAttributes &GA) {
-		return readGraph(G, &GA, NULL);
+		return readGraph(G, &GA, nullptr);
 	}
 
 	bool read(Graph &G, ClusterGraph &C) {
-		return readGraph(G, NULL, &C);
+		return readGraph(G, nullptr, &C);
 	}
 
 	bool read(Graph &G, ClusterGraph &C, ClusterGraphAttributes &CA) {
@@ -118,10 +100,5 @@ public:
 	}
 };
 
-
-} // end namespace tlp
-
-} // end namespace ogdf
-
-
-#endif
+}
+}

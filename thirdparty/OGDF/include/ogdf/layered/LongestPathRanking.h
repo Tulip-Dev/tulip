@@ -1,11 +1,3 @@
-/*
- * $Revision: 3433 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-04-22 13:44:53 +0200 (Mon, 22 Apr 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of hierachrical ranking algorithm
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,39 +25,27 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_LONGEST_PATH_RANKING_H
-#define OGDF_LONGEST_PATH_RANKING_H
-
-
-
-#include <ogdf/module/RankingModule.h>
-#include <ogdf/module/AcyclicSubgraphModule.h>
-#include <ogdf/basic/ModuleOption.h>
+#include <ogdf/layered/RankingModule.h>
+#include <ogdf/layered/AcyclicSubgraphModule.h>
+#include <memory>
 #include <ogdf/basic/SList.h>
 #include <ogdf/basic/tuples.h>
 #include <ogdf/basic/NodeArray.h>
-
+#include <ogdf/basic/GraphCopy.h>
+#include <ogdf/basic/GraphAttributes.h>
 
 namespace ogdf {
 
-	class GraphCopySimple;
-	class GraphAttributes;
-
-
 //! The longest-path ranking algorithm.
 /**
+ * @ingroup gd-ranking
+ *
  * The class LongestPathRanking implements the well-known longest-path
  * ranking algorithm, which can be used as first phase in SugiyamaLayout.
  * The implementation contains a special optimization for reducing
@@ -115,7 +95,7 @@ namespace ogdf {
  */
 class OGDF_EXPORT LongestPathRanking : public RankingModule {
 
-	ModuleOption<AcyclicSubgraphModule> m_subgraph; //!< The acyclic sugraph module.
+	std::unique_ptr<AcyclicSubgraphModule> m_subgraph; //!< The acyclic sugraph module.
 	bool m_sepDeg0; //!< Put isolated nodes on a separate layer?
 	bool m_separateMultiEdges; //!< Separate multi-edges?
 	bool m_optimizeEdgeLength; //!< Optimize for short edges.
@@ -138,10 +118,10 @@ public:
 	 *  @{
 	 */
 
-	//! Computes a node ranking of \a G in \a rank.
-	void call(const Graph &G, NodeArray<int> &rank);
+	//! Computes a node ranking of \p G in \p rank.
+	virtual void call(const Graph &G, NodeArray<int> &rank) override;
 
-	//! Computes a node ranking of \a G with given minimal edge length in \a rank.
+	//! Computes a node ranking of \p G with given minimal edge length in \p rank.
 	/**
 	 * @param G is the input graph.
 	 * @param length specifies the minimal length of each edge.
@@ -149,16 +129,21 @@ public:
 	 */
 	void call(const Graph &G, const EdgeArray<int> &length, NodeArray<int> &rank);
 
-	//! Computes a node ranking of \a G with given minimal edge length in \a rank.
+	//! Computes a node ranking of \p G with given minimal edge length in \p rank.
 	/**
-	 * Parameter \a cost is just ignored by the implementation.
+	 * Parameter \p cost is just ignored by the implementation.
 	 *
 	 * @param G is the input graph.
 	 * @param length specifies the minimal length of each edge.
 	 * @param cost specifies the edge costs (ignored)
 	 * @param rank is assigned the rank (layer) of each node.
 	 */
-	void call(const Graph &G, const EdgeArray<int> & length, const EdgeArray<int> & cost, NodeArray<int> &rank) {
+	virtual void call(
+		const Graph &G,
+		const EdgeArray<int> & length,
+		const EdgeArray<int> & cost,
+		NodeArray<int> &rank) override
+	{
 		call(G, length, rank);
 	}
 
@@ -177,7 +162,7 @@ public:
 	 */
 	bool separateDeg0Layer() const { return m_sepDeg0; }
 
-	//! Sets the option separateDeg0Layer to \a sdl.
+	//! Sets the option separateDeg0Layer to \p sdl.
 	void separateDeg0Layer (bool sdl) { m_sepDeg0 = sdl; }
 
 	//! Returns the current setting of option separateMultiEdges.
@@ -188,7 +173,7 @@ public:
 	 */
 	bool separateMultiEdges() const { return m_separateMultiEdges; }
 
-	//! Sets the option separateMultiEdges to \a b.
+	//! Sets the option separateMultiEdges to \p b.
 	void separateMultiEdges(bool b) { m_separateMultiEdges = b; }
 
 	//! Returns the current setting of option optimizeEdgeLength.
@@ -200,19 +185,19 @@ public:
 	 */
 	bool optimizeEdgeLength() const { return m_optimizeEdgeLength; }
 
-	//! Sets the option optimizeEdgeLength to \a b.
+	//! Sets the option optimizeEdgeLength to \p b.
 	void optimizeEdgeLength(bool b) { m_optimizeEdgeLength = b; }
 
 	//! Returns the current setting of alignment of base classes (callUML only).
 	bool alignBaseClasses() const { return m_alignBaseClasses; }
 
-	//! Sets the option for alignment of base classes to \a b.
+	//! Sets the option for alignment of base classes to \p b.
 	void alignBaseClasses(bool b) { m_alignBaseClasses = b; }
 
 	//! Returns the current setting of option for alignment of siblings.
 	bool alignSiblings() const { return m_alignSiblings; }
 
-	//! Sets the option for alignment of siblings to \a b.
+	//! Sets the option for alignment of siblings to \p b.
 	void alignSiblings(bool b) { m_alignSiblings = b; }
 
 
@@ -223,7 +208,7 @@ public:
 
 	//! Sets the module for the computation of the acyclic subgraph.
 	void setSubgraph(AcyclicSubgraphModule *pSubgraph) {
-		m_subgraph.set(pSubgraph);
+		m_subgraph.reset(pSubgraph);
 	}
 
 	//! @}
@@ -246,8 +231,4 @@ private:
 	void dfsAdd(node v, NodeArray<int> &rank);
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

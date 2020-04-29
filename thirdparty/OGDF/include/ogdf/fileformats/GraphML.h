@@ -1,11 +1,3 @@
-/*
- * $Revision: 3837 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 15:19:30 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief GraphML related enums and string conversion functions.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,76 +25,71 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_GRAPHML_H
-#define OGDF_GRAPHML_H
-
 
 #include <ogdf/basic/Graph.h>
 #include <ogdf/basic/GraphAttributes.h>
 #include <ogdf/basic/HashArray.h>
 #include <string>
 
-
 namespace ogdf {
-
 namespace graphml {
 
-	enum Attribute {
-		a_nodeLabel = 0,
-		a_edgeLabel,
+enum class Attribute {
+	NodeLabel = 0,
+	EdgeLabel,
 
-		a_x, a_y, a_z,
-		a_width, a_height,
-		a_size, // Gephi compatibility (size = max(width, height)).
-		a_shape,
+	X, Y, Z,
+	Width, Height,
+	Size, // Gephi compatibility (size = max(width, height)).
+	Shape,
 
-		a_nodeStroke,
-		a_edgeStroke,
-		a_clusterStroke,
-		a_nodeFill,
-		a_r, a_g, a_b, // Gephi compatibility (fill compounds).
+	NodeLabelX,
+	NodeLabelY,
+	NodeLabelZ,
 
-		a_nodeWeight,
-		a_edgeWeight,
+	NodeStrokeColor,
+	NodeStrokeType,
+	NodeStrokeWidth,
+	EdgeStrokeColor,
+	EdgeStrokeType,
+	EdgeStrokeWidth,
+	ClusterStroke,
+	NodeFillPattern,
+	NodeFillBackground,
+	R, G, B, // Gephi compatibility (fill compounds).
 
-		a_nodeType,
-		a_edgeType,
+	NodeWeight,
+	EdgeWeight,
 
-		a_template,
+	NodeType,
+	EdgeType,
 
-		a_edgeArrow,
-		a_edgeSubGraph,
-		a_edgeBends,
+	NodeId,
+	Template,
 
-		a_unknown // Has to be the last one!
-	};
+	EdgeArrow,
+	EdgeSubGraph,
+	EdgeBends,
 
-	std::string toString(const Attribute &attr);
-	std::string toString(const Shape &shape);
-	std::string toString(const EdgeArrow &arrow);
-	std::string toString(const Graph::NodeType &type);
-	std::string toString(const Graph::EdgeType &type);
+	Unknown // Has to be the last one!
+};
 
-	Attribute toAttribute(const std::string &str);
-	Shape toShape(const std::string &str);
-	EdgeArrow toArrow(const std::string &str);
-	Graph::NodeType toNodeType(const std::string &str);
-	Graph::EdgeType toEdgeType(const std::string &str);
+std::string toString(const Attribute &attr);
+std::string toString(const Shape &shape);
+std::string toString(const EdgeArrow &arrow);
+std::string toString(const Graph::NodeType &type);
+std::string toString(const Graph::EdgeType &type);
+
+Attribute toAttribute(const std::string &str);
+Shape toShape(const std::string &str);
+EdgeArrow toArrow(const std::string &str);
+Graph::NodeType toNodeType(const std::string &str);
+Graph::EdgeType toEdgeType(const std::string &str);
+
 }
-
-} // end namespace ogdf
-
-
-#endif
+}

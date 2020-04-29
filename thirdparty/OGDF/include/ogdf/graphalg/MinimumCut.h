@@ -1,11 +1,3 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declares & implements a minimum-cut algorithm according
  * to an approach of Stoer and Wagner 1997. However, no Priority Queues
@@ -19,7 +11,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -36,19 +28,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_MINIMUM_CUT_H
-#define OGDF_MINIMUM_CUT_H
 
 #include <ogdf/basic/EdgeArray.h>
 #include <ogdf/basic/NodeArray.h>
@@ -58,6 +42,10 @@
 namespace ogdf {
 
 
+//! Computes a minimum cut in a graph.
+/**
+ * @ingroup graph-alg
+ */
 class OGDF_EXPORT MinCut {
 
 public:
@@ -70,10 +58,10 @@ public:
 	// minimumCutPhase() in each iteration. Returns the mincut value.
 	double minimumCut();
 
-	// returns the edges defining the computed mincut in list \a edges.
+	// returns the edges defining the computed mincut in list \p edges.
 	void cutEdges(List<edge> &edges, Graph &G);
 
-	// returns list of nodes belonging to one side of the bipartition in list \a nodes.
+	// returns list of nodes belonging to one side of the bipartition in list \p nodes.
 	void partition(List<node> &nodes);
 
 	double minCutValue() const {return m_minCut;}
@@ -100,20 +88,17 @@ private:
 	List<edge> m_cutEdges;
 
 	// each node has a list containing the nodes with which it has been contracted.
-	// Because the GraphCopy \a m_GC is destroyed during the algorithm, this is
+	// Because the GraphCopy #m_GC is destroyed during the algorithm, this is
 	// necessary to be able to determine the original nodes in the end.
 	NodeArray<List<node> > m_contractedNodes;
 
 	// computes and returns the value of the minimum cut of the current phase (itertion).
 	double minimumCutPhase();
 
-	// Contracts the nodes \a s and \a t, i.e \a s is collapsed to \a t.
-	// The edge (if existing) between \a s and \t s is deleted. Edges incident to \a s are redirected to \t.
+	// Contracts the nodes \p s and \p t, i.e \p s is collapsed to \p t.
+	// The edge (if existing) between \p s and \t s is deleted. Edges incident to \p s are redirected to \t.
 	// If parallel edges occur, one of them is deleted and its weight is added to the other one.
 	void contraction(node t, node s);
-
 };
 
-}// end namespace
-
-#endif
+}

@@ -1,11 +1,3 @@
-/*
- * $Revision: 3188 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-01-10 09:53:32 +0100 (Thu, 10 Jan 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of orthogonal representation of planar graphs.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,70 +25,58 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_ORTHO_REP_H
-#define OGDF_ORTHO_REP_H
-
 
 #include <ogdf/basic/GraphCopy.h>
 #include <ogdf/basic/FaceArray.h>
 #include <ogdf/basic/tuples.h>
-#include <ogdf/basic/Stack.h>
 
 
 namespace ogdf {
 
-	class OGDF_EXPORT PlanRep;
-	class OGDF_EXPORT PlanRepUML;
+class OGDF_EXPORT PlanRep;
+class OGDF_EXPORT PlanRepUML;
 
 
 // type for bends (convex or reflex)
-enum BendType { convexBend = '0', reflexBend = '1' };
+enum class OrthoBendType : char { convexBend = '0', reflexBend = '1' };
 
 // type of (orthogonal) directions
-// horizontal: odEast or odWest
-// vertical:   odNorth or odSouth
-enum OrthoDir {
-	odNorth     = 0,
-	odEast      = 1,
-	odSouth     = 2,
-	odWest      = 3,
-	odUndefined = 4
+// horizontal: East or West
+// vertical:   North or South
+enum class OrthoDir {
+	North     = 0,
+	East      = 1,
+	South     = 2,
+	West      = 3,
+	Undefined = 4
 };
 
 // Option bits for orthogonal layouts, UML alignment, compaction scaling, progressive shape computation
-enum UMLOpt {umlOpAlign = 0x0001, umlOpScale = 0x0002, umlOpProg = 0x0004};
+enum class UMLOpt {OpAlign = 0x0001, OpScale = 0x0002, OpProg = 0x0004};
 
+inline int operator | (int lhs, UMLOpt rhs) { return lhs | static_cast<int>(rhs); }
+inline int operator ~ (UMLOpt rhs) { return ~static_cast<int>(rhs); }
+inline int operator & (int lhs, UMLOpt rhs) { return lhs & static_cast<int>(rhs); }
+inline int operator += (int &lhs, UMLOpt rhs) { lhs += static_cast<int>(rhs); return lhs; }
 
-//---------------------------------------------------------
-// BendString
-// represents the bends on an edge e consisting of vertical
-// and horizontal segments
-//---------------------------------------------------------
+//! Represents the bends on an edge e consisting of vertical and horizontal segments
 class OGDF_EXPORT BendString
 {
 public:
 	// constructs empty bend string
 	BendString() {
-		m_pBend = 0;
+		m_pBend = nullptr;
 		m_len = 0;
 	}
 
 	// constructs bend string as given by str
 	// Precond.: str is a 0 terminated C++ string consisting of '0's and '1's
-	BendString(const char *str) {
+	explicit BendString(const char *str) {
 		init(str);
 	}
 
@@ -111,10 +91,16 @@ public:
 		init(bs);
 	}
 
+	// copy constructor (move semantics)
+	BendString(BendString &&bs) : m_pBend(bs.m_pBend), m_len(bs.m_len) {
+		bs.m_pBend = nullptr;
+		bs.m_len = 0;
+	}
+
 
 	// destructor
 	~BendString() {
-		delete [] m_pBend;
+		delete[] m_pBend;
 	}
 
 
@@ -145,31 +131,51 @@ public:
 	// sets bend string to the string given by str
 	// Precond.: str is a 0 terminated C++ string consisting of '0's and '1's
 	void set(const char *str) {
-		delete [] m_pBend;
+		delete[] m_pBend;
 		init(str);
 	}
 
 	// sets bend string to the string consisting of n c's
 	// Precond.: c is '0' or '1'
 	void set(char c, size_t n) {
-		delete [] m_pBend;
+		delete[] m_pBend;
 		init(c,n);
+	}
+	void set(OrthoBendType obt, size_t n) {
+		delete[] m_pBend;
+		init(static_cast<int>(obt),n);
 	}
 
 
 	// sets bend string to the empty bend string
 	void set() {
-		delete [] m_pBend;
-		m_pBend = 0;
+		delete[] m_pBend;
+		m_pBend = nullptr;
 		m_len = 0;
 	}
 
 
 	// assignment operator
 	BendString &operator=(const BendString &bs) {
-		delete [] m_pBend;
+		delete[] m_pBend;
 		init(bs);
 		return *this;
+	}
+
+	// assignment operator (move semantics)
+	BendString &operator=(BendString &&bs) {
+		if (&bs != this) {
+			delete[] m_pBend;
+			m_pBend = bs.m_pBend;
+			m_len = bs.m_len;
+			bs.m_pBend = nullptr;
+			bs.m_len = 0;
+		}
+		return *this;
+	}
+
+	BendString &operator+=(const char *str) {
+		return this->operator+=(BendString(str));
 	}
 
 	BendString &operator+=(const BendString &bs) {
@@ -184,7 +190,7 @@ public:
 		else
 		{
 			char *p = temp;
-			if (m_pBend != 0)
+			if (m_pBend != nullptr)
 			{
 				const char *str = m_pBend;
 				while ((*p++ = *str++) != 0) ;
@@ -206,7 +212,7 @@ public:
 
 	// output operator
 	// example output: "001101001" or ""
-	friend ostream &operator<<(ostream &os, const BendString &bs) {
+	friend std::ostream &operator<<(std::ostream &os, const BendString &bs) {
 		if (bs.size() == 0)
 			os << "\"\"";
 		else
@@ -226,19 +232,11 @@ private:
 	size_t m_len;
 };
 
-
-
-//---------------------------------------------------------
-// OrthoRep
-// orthogonal representation of an embedded graph
-//---------------------------------------------------------
+//! Orthogonal representation of an embedded graph
 class OGDF_EXPORT OrthoRep
 {
 public:
-
-	//---------------------------------------------------------
-	// information about a side of a vertex in UML diagrams
-	//---------------------------------------------------------
+	//! Information about a side of a vertex in UML diagrams
 	struct SideInfoUML {
 		// adjacency entry of generalization attached at the side
 		// (or 0 if none)
@@ -251,19 +249,19 @@ public:
 
 		// constructor
 		SideInfoUML() {
-			m_adjGen = 0;
+			m_adjGen = nullptr;
 			m_nAttached[0] = m_nAttached[1] = 0;
 		}
 
 		// returns the total number of edges attached at this side
 		int totalAttached() const {
-			int nGen = (m_adjGen == 0) ? 0 : 1;
+			int nGen = (m_adjGen == nullptr) ? 0 : 1;
 			return nGen + m_nAttached[0] + m_nAttached[1];
 		}
 
 
 		// output operator for debugging
-		friend ostream &operator<<(ostream &os, const SideInfoUML &si)
+		friend std::ostream &operator<<(std::ostream &os, const SideInfoUML &si)
 		{
 			os << "{ " << si.m_nAttached[0] <<
 				", " << si.m_adjGen <<
@@ -276,12 +274,9 @@ public:
 	adjEntry externalAdjEntry() const {return m_adjExternal;}
 	adjEntry alignAdjEntry() const {return m_adjAlign;}
 
-
-	//---------------------------------------------------------
-	// further information about the cages of vertices in UML diagrams
-	//---------------------------------------------------------
+	//! Further information about the cages of vertices in UML diagrams
 	struct VertexInfoUML {
-		// side information (odNorth, odEast, odSouth, odWest corresponds to
+		// side information (North, East, South, West corresponds to
 		// left, top, right, bottom)
 		SideInfoUML m_side[4];
 		// m_corner[dir] is adjacency entry in direction dir starting at
@@ -291,7 +286,7 @@ public:
 		// constructor
 		VertexInfoUML() {
 #ifdef OGDF_DEBUG
-			m_corner[0] = m_corner[1] = m_corner[2] = m_corner[3] = 0;
+			m_corner[0] = m_corner[1] = m_corner[2] = m_corner[3] = nullptr;
 #endif
 		}
 		OGDF_NEW_DELETE
@@ -301,9 +296,9 @@ public:
 	// construction
 
 	// dummy
-	OrthoRep() { m_pE = 0; }
+	OrthoRep() { m_pE = nullptr; }
 	// associates orthogonal representation with embedding E
-	OrthoRep(CombinatorialEmbedding &E);
+	explicit OrthoRep(CombinatorialEmbedding &E);
 
 	// destruction
 	~OrthoRep() {
@@ -384,7 +379,7 @@ public:
 	// Precond.: The orth. repr. is normalized and contains no 0-degree angles
 	void dissect();
 	// same as dissect, attempting to save artificial nodes and allow preprocessing
-	void dissect2(PlanRep* PG = 0);
+	void dissect2(PlanRep* PG = nullptr);
 	// variant for use with simple PlanRep
 	void gridDissect(PlanRep* PG);
 	// undoes a previous dissect() by removing dissection edges and unsplitting
@@ -423,7 +418,7 @@ public:
 	// is an orthogonal embedding realizing this shape (if 0-degree angles are
 	// present, the condition is necessary but not sufficient).
 	// If false is returned, error contains a description of the reason.
-	bool check(string &error);
+	bool check(string &error) const;
 
 
 	//
@@ -435,22 +430,24 @@ public:
 		return (c == '0') ? '1' : '0';
 	}
 
+	//! Returns the opposite OrthoDir
 	static OrthoDir oppDir(OrthoDir d) {
-		return OrthoDir((d + 2) & 3);
+		return static_cast<OrthoDir>((static_cast<int>(d) + 2) & 3);
 	}
 
+	//! Returns the next OrthoDir (in a clockwise manner)
 	static OrthoDir nextDir(OrthoDir d) {
-		return OrthoDir((d + 1) & 3);
+		return static_cast<OrthoDir>((static_cast<int>(d) + 1) & 3);
 	}
 
+	//! Returns the previous OrthoDir (in a clockwise manner)
 	static OrthoDir prevDir(OrthoDir d) {
-		return OrthoDir((d + 3) & 3);
+		return static_cast<OrthoDir>((static_cast<int>(d) + 3) & 3);
 	}
 
-	friend ostream &operator<<(ostream &os, const OrthoRep &op) {
-		edge e;
+	friend std::ostream &operator<<(std::ostream &os, const OrthoRep &op) {
 		const Graph& E = op;
-		forall_edges(e, E)
+		for(edge e : E.edges)
 		{
 			os << e <<": src angle "<<op.angle(e->adjSource())<<" bend "<<op.bend(e->adjSource())
 				<<"\n"<<" tgt angle "<<op.angle(e->adjTarget())<<" bend "<<op.bend(e->adjTarget())
@@ -486,7 +483,7 @@ private:
 	EdgeArray<bool> m_alignmentEdge; // = true iff alignment edge
 	// contains all nodes created by splitting non-dissection edges while
 	// dissect()
-	StackPure<node> m_splitNodes;
+	ArrayBuffer<node> m_splitNodes;
 	// stores adjacency entry on external face for restoring in undissect()
 	adjEntry m_adjExternal;
 	// stores adjacency entry on preliminary external face in alignment case
@@ -497,8 +494,4 @@ private:
 	bool m_pattern2;
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

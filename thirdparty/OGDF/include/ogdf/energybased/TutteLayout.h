@@ -1,24 +1,5 @@
-/*
- * $Revision: 3432 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-04-22 12:20:23 +0200 (Mon, 22 Apr 2013) $
- ***************************************************************/
-
 /** \file
- * \brief Declaration of Tutte's algorithm
- *
- * The class TutteLayout represents the layout algorithm by
- * Tutte.
- *
- * \par
- * This algorithm draws a planar graph \a G straight-line
- * without crossings. It can also draw non-planar graphs.
- *
- * \par
- * The idea of the algorithm is to place every vertex into the
- * center of gravity by its neighbours.
+ * \brief Declaration of ogdf::TutteLayout.
  *
  * \author David Alberts and Andrea Wagner
  *
@@ -27,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -44,47 +25,38 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-
-#ifndef OGDF_TUTTE_LAYOUT_H
-#define OGDF_TUTTE_LAYOUT_H
-
-#include <ogdf/module/LayoutModule.h>
+#include <ogdf/basic/LayoutModule.h>
 #include <ogdf/basic/geometry.h>
 #include <ogdf/external/coin.h>
 
-#ifdef USE_COIN
 #include <coin/CoinPackedMatrix.hpp>
-#endif
 
 namespace ogdf {
 
+//! Tutte's layout algorithm.
+/**
+ * @ingroup gd-energy
+ *
+ * This algorithm draws a planar graph straight-line
+ * without crossings.
+ *
+ * The idea of the algorithm is to place every vertex into the
+ * center of gravity by its neighbours.
+ *
+ * See "How to draw a graph" by W. T. Tutte (1962) for details.
+ *
+ * \pre Input graphs need to be triconnected.
+ */
 class OGDF_EXPORT TutteLayout : public LayoutModule
 {
-#ifndef USE_COIN
 public:
-
-	void call(GraphAttributes &AG) { THROW_NO_COIN_EXCEPTION; }
-	void call(GraphAttributes &AG, const List<node>& givenNodes) { THROW_NO_COIN_EXCEPTION; }
-
-};
-
-#else // USE_COIN
-public:
-
 	TutteLayout();
-	~TutteLayout() { }
 
 	DRect bbox () const {
 		return m_bbox;
@@ -94,12 +66,10 @@ public:
 		m_bbox = bb;
 	}
 
-	void call(GraphAttributes &AG);
+	virtual void call(GraphAttributes &AG) override;
 	void call(GraphAttributes &AG, const List<node> &givenNodes);
-	void call(GraphAttributes &GA, GraphConstraints & GC) { call(GA); }
 
 private:
-
 	static bool solveLP(
 		int cols,
 		const CoinPackedMatrix &Matrix,
@@ -108,16 +78,14 @@ private:
 
 	void setFixedNodes(const Graph &G, List<node> &nodes,
 		List<DPoint> &pos, double radius = 1.0);
+
 	/*! sets the positions of the nodes in a largest face of $G$ in the
 	*  form of a regular $k$-gon with the prescribed radius. The
 	*  corresponding nodes and their positions are stored in nodes
 	*  and pos, respectively. $G$ does not have to be planar!
 	*/
-
 	void setFixedNodes(const Graph &G, List<node> &nodes, const List<node> &givenNodes,
 		List<DPoint> &pos, double radius = 1.0);
-	/*! the method is overloaded for a given set of nodes.
-	*/
 
 	bool doCall(GraphAttributes &AG,
 		const List<node> &fixedNodes,
@@ -126,8 +94,4 @@ private:
 	DRect m_bbox;
 };
 
-#endif // USE_COIN
-
-} // end namespace ogdf
-
-#endif // OGDF_TUTTE_LAYOUT_H
+}

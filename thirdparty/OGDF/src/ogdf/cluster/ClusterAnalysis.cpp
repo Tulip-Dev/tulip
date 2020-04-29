@@ -1,10 +1,41 @@
+/** \file
+ * \brief Implementation of class ClusterAnalysis that calculates
+ * the bag and inner/outer activity structures for a clustered graph
+ * as described in Chimani, Klein:Shrinking the Search Space for Clustered
+ * Planarity. GD 2012.
+ *
+ * \author Karsten Klein
+ *
+ * \par License:
+ * This file is part of the Open Graph Drawing Framework (OGDF).
+ *
+ * \par
+ * Copyright (C)<br>
+ * See README.md in the OGDF root directory for details.
+ *
+ * \par
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
+ *
+ * \par
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * \par
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
+
 #include <ogdf/cluster/ClusterAnalysis.h>
 #include <ogdf/cluster/ClusterArray.h>
 #include <ogdf/basic/Queue.h>
 #include <ogdf/basic/DisjointSets.h>
-#include <ogdf/basic/exceptions.h>
-
-#include <ogdf/basic/Logger.h>
 
 // Comment on use of ClusterArrays:
 // We would like to save some space by only reserving one slot
@@ -25,12 +56,12 @@ namespace ogdf {
 
 //Needs to be the largest int allowed, as it is used as default,
 //and an update is done for smaller values
-const int ClusterAnalysis::IsNotActiveBound = numeric_limits<int>::max();
+const int ClusterAnalysis::IsNotActiveBound = std::numeric_limits<int>::max();
 const int ClusterAnalysis::DefaultIndex = -1;
 
 //Constructor
-ClusterAnalysis::ClusterAnalysis(const ClusterGraph& C, bool oalists, bool indyBags) : m_C(&C), m_oanum(0), m_ianum(0),
-		m_bags(0), m_storeoalists(oalists), m_lcaEdges(0), m_indyBags(indyBags), m_numIndyBags(-1), m_indyBagRoots(0)
+ClusterAnalysis::ClusterAnalysis(const ClusterGraph& C, bool oalists, bool indyBags) : m_C(&C), m_oanum(nullptr), m_ianum(nullptr),
+		m_bags(nullptr), m_storeoalists(oalists), m_lcaEdges(nullptr), m_indyBags(indyBags), m_numIndyBags(-1), m_indyBagRoots(nullptr)
 {
 	init();
 	computeBags();
@@ -39,8 +70,8 @@ ClusterAnalysis::ClusterAnalysis(const ClusterGraph& C, bool oalists, bool indyB
 		computeIndyBags();
 	}
 }
-ClusterAnalysis::ClusterAnalysis(const ClusterGraph& C, bool indyBags): m_C(&C), m_oanum(0), m_ianum(0),
-			m_bags(0), m_storeoalists(true), m_lcaEdges(0), m_indyBags(indyBags),m_numIndyBags(-1), m_indyBagRoots(0)
+ClusterAnalysis::ClusterAnalysis(const ClusterGraph& C, bool indyBags): m_C(&C), m_oanum(nullptr), m_ianum(nullptr),
+			m_bags(nullptr), m_storeoalists(true), m_lcaEdges(nullptr), m_indyBags(indyBags),m_numIndyBags(-1), m_indyBagRoots(nullptr)
 {
 	init();
 	computeBags();
@@ -64,32 +95,31 @@ ClusterAnalysis::~ClusterAnalysis()
 
 void ClusterAnalysis::cleanUp()
 {
-	if (m_oanum != 0) delete m_oanum;
-	if (m_ianum != 0) delete m_ianum;
-	if (m_bags != 0) delete m_bags;
-	if (m_lcaEdges != 0) delete m_lcaEdges;
+	delete m_oanum;
+	delete m_ianum;
+	delete m_bags;
+	delete m_lcaEdges;
 	if (m_storeoalists) delete m_oalists;
-	node v;
-	forall_nodes(v,m_C->constGraph())
+	for(node v : m_C->constGraph().nodes)
 	{
 		delete m_bagindex[v];
 	}
 	if (m_indyBags) delete m_indyBagRoots;
 }
 
-int ClusterAnalysis::outerActive(cluster c) {return (*m_oanum)[c];}
-int ClusterAnalysis::innerActive(cluster c) {return (*m_ianum)[c];}
-int ClusterAnalysis::numberOfBags(cluster c) {return (*m_bags)[c];}
+int ClusterAnalysis::outerActive(cluster c) const {return (*m_oanum)[c];}
+int ClusterAnalysis::innerActive(cluster c) const {return (*m_ianum)[c];}
+int ClusterAnalysis::numberOfBags(cluster c) const {return (*m_bags)[c];}
 List<node>& ClusterAnalysis::oaNodes(cluster c) {
 	OGDF_ASSERT(m_storeoalists);
 	return (*m_oalists)[c];
 }
 
-bool ClusterAnalysis::isOuterActive(node v, cluster c)
+bool ClusterAnalysis::isOuterActive(node v, cluster c) const
 {
 	return (*m_oactive[v])[c] > 0;
 }
-bool ClusterAnalysis::isInnerActive(node v, cluster c)
+bool ClusterAnalysis::isInnerActive(node v, cluster c) const
 {
 	return (*m_iactive[v])[c] > 0;
 }
@@ -97,12 +127,12 @@ List<edge>& ClusterAnalysis::lcaEdges(cluster c)
 {
 	return (*m_lcaEdges)[c];
 }
-int ClusterAnalysis::bagIndex(node v, cluster c) {return ((*m_bagindex[v])[c]);}
+int ClusterAnalysis::bagIndex(node v, cluster c) {return (*m_bagindex[v])[c];}
 
 int ClusterAnalysis::indyBagIndex(node v) {
 	if (!m_indyBags)
 	{
-		OGDF_THROW_PARAM(AlgorithmFailureException,afcIllegalParameter);
+		OGDF_THROW_PARAM(AlgorithmFailureException,AlgorithmFailureCode::IllegalParameter);
 	}
 	return m_indyBagNumber[v];
 
@@ -111,7 +141,7 @@ int ClusterAnalysis::indyBagIndex(node v) {
 cluster ClusterAnalysis::indyBagRoot(int i) {
 	if (!m_indyBags)
 	{
-		OGDF_THROW_PARAM(AlgorithmFailureException,afcIllegalParameter);
+		OGDF_THROW_PARAM(AlgorithmFailureException,AlgorithmFailureCode::IllegalParameter);
 	}
 	return m_indyBagRoots[i];
 }
@@ -129,9 +159,9 @@ void ClusterAnalysis::init() {
 	m_ialevel.init(G, IsNotActiveBound);
 	m_oalevel.init(G, IsNotActiveBound);
 
-	if (m_oanum != 0) delete m_oanum;
-	if (m_ianum != 0) delete m_ianum;
-	if (m_bags != 0) delete m_bags;
+	delete m_oanum;
+	delete m_ianum;
+	delete m_bags;
 	m_oanum = new ClusterArray<int>(*m_C, 0);
 	m_ianum = new ClusterArray<int>(*m_C, 0);
 	m_bags = new ClusterArray<int>(*m_C, 0);
@@ -143,44 +173,35 @@ void ClusterAnalysis::init() {
 	//therefore we just compute the values here
 	//top-down run through the cluster tree, depth 0 for the root
 	ClusterArray<int> cdepth(*m_C);
-	cluster c = m_C->rootCluster();
-	cdepth[c] = 0;
+	cdepth[m_C->rootCluster()] = 0;
 	Queue<cluster> cq;
-	ListConstIterator<cluster> it = c->cBegin();
-	while (it.valid())
-	{
-		cq.append(*it);
-		it++;
+	for (cluster ci : m_C->rootCluster()->children) {
+		cq.append(ci);
 	}
 
 	while (!cq.empty())
 	{
 		cluster cc = cq.pop();
 		cdepth[cc] = cdepth[cc->parent()]+1;
-		it = cc->cBegin();
-		while (it.valid())
-		{
-			cq.append(*it);
-			it++;
+		for(cluster ci : cc->children) {
+			cq.append(ci);
 		}
 	}
-
-	node v;
-	edge e;
 
 	//store that we already visited e, as we don't have a static lookup
 	//for the paths, running the search from both directions is slower.
 	EdgeArray<bool> visited(G, false);
-	forall_nodes(v, G)
+	for(node v : G.nodes)
 	{
 		// See comment on use of ClusterArrays above
 		m_iactive[v] = new ClusterArray<int>(*m_C,0,m_C->maxClusterIndex()+1);
 		m_oactive[v] = new ClusterArray<int>(*m_C,0,m_C->maxClusterIndex()+1);
 	}
-	forall_nodes(v, G)
+	for(node v : G.nodes)
 	{
-		forall_adj_edges(e,v)
-		{
+		for(adjEntry adj : v->adjEntries) {
+			edge e = adj->theEdge();
+
 			if (!visited[e])
 			{
 				node w = e->opposite(v);
@@ -188,7 +209,7 @@ void ClusterAnalysis::init() {
 				cluster c1,c2;   // ancestors of lca(v,w) on path, we don't really need them here
 
 				cluster lca = m_C->commonClusterAncestorsPath(v, w, c1, c2, el);
-				OGDF_ASSERT(el.size() > 0)
+				OGDF_ASSERT(el.size() > 0);
 				ListIterator<cluster> ctit =  el.begin();//m_C->clusterOf(v);
 
 				//run over the path, set activity status (vertices are
@@ -198,22 +219,22 @@ void ClusterAnalysis::init() {
 				//clusters behind lca are entered, i.e. v is inner active
 				while (ctit.valid() && (*ctit) != lca)
 				{
-					(*m_oactive[v])[(*ctit)]++;
-					(*m_iactive[w])[(*ctit)]++;
+					(*m_oactive[v])[*ctit]++;
+					(*m_iactive[w])[*ctit]++;
 
 					//only count vertices a single time
-					if ((*m_oactive[v])[(*ctit)] == 1) (*m_oanum)[(*ctit)]++;
-					if ((*m_iactive[w])[(*ctit)] == 1) (*m_ianum)[(*ctit)]++;
+					if ((*m_oactive[v])[*ctit] == 1) (*m_oanum)[*ctit]++;
+					if ((*m_iactive[w])[*ctit] == 1) (*m_ianum)[*ctit]++;
 
 					//update the activity levels
 					//could do this just for the last in the line...
-					int clevel = cdepth[(*ctit)];
+					int clevel = cdepth[*ctit];
 					if (m_ialevel[w] > clevel)
 						m_ialevel[w] = clevel;
 					if (m_oalevel[v] > clevel)
 						m_oalevel[v] = clevel;
 
-					ctit++;
+					++ctit;
 				}
 
 				OGDF_ASSERT((*ctit) == lca);
@@ -221,71 +242,64 @@ void ClusterAnalysis::init() {
 				//we store however the corresponding edges
 				//for later use in bag detection
 				(*m_lcaEdges)[lca].pushBack(e);
-				ctit++;
+				++ctit;
 
 				while (ctit.valid())
 				{
-					(*m_iactive[v])[(*ctit)]++;
-					(*m_oactive[w])[(*ctit)]++;
+					(*m_iactive[v])[*ctit]++;
+					(*m_oactive[w])[*ctit]++;
 
-					if ((*m_iactive[v])[(*ctit)] == 1) (*m_ianum)[(*ctit)]++;
-					if ((*m_oactive[w])[(*ctit)] == 1) (*m_oanum)[(*ctit)]++;
+					if ((*m_iactive[v])[*ctit] == 1) (*m_ianum)[*ctit]++;
+					if ((*m_oactive[w])[*ctit] == 1) (*m_oanum)[*ctit]++;
 
 					//update the activity levels
-					int clevel = cdepth[(*ctit)];
+					int clevel = cdepth[*ctit];
 					//could do this just for the last in the line...
 					if (m_ialevel[v] > clevel)
 						m_ialevel[v] = clevel;
 					if (m_oalevel[w] > clevel)
 						m_oalevel[w] = clevel;
 
-					ctit++;
+					++ctit;
 				}
 
 				visited[e] = true;
 
 #ifdef OGDF_DEBUG
-				cout << "Edge "<< v << " " << w <<"\n";
+				std::cout << "Edge "<< v << " " << w <<"\n";
 #endif
 			}
 		}
 
 	}
 #ifdef OGDF_DEBUG
-	forall_nodes(v, G)
+	for(node v : G.nodes)
 	{
-		cout << "Knoten "<<v<<" ist";
+		std::cout << "Knoten "<<v<<" ist";
 		List<cluster> ol;
 		List<cluster> il;
-		cluster c;
-		forall_clusters(c, *m_C)
+		for(cluster c : m_C->clusters)
 		{
 			if ((*m_iactive[v])[c]>0) il.pushBack(c);
 			if ((*m_oactive[v])[c]>0) ol.pushBack(c);
 		}
-		cout << " inneractive for ";
-		ListIterator<cluster> it = il.begin();
-		while (it.valid())
-		{
-			cout << (*it) << ", ";
-			it++;
+		std::cout << " inneractive for ";
+		for (cluster ci : il) {
+			std::cout << ci << ", ";
 		}
-		cout << "\n";
-		cout << " outeractive for ";
-		it = ol.begin();
-		while (it.valid())
-		{
-			cout << (*it) << ", ";
-			it++;
+		std::cout << "\n";
+		std::cout << " outeractive for ";
+		for (cluster ci : ol) {
+			std::cout << ci << ", ";
 		}
-		cout << "\n";
+		std::cout << "\n";
 	}
 
 #endif
 }
 
-// Runs through a list of vertices (starting with \a the one nodeIT points to)
-// which is expected to be a full list of cluster vertices in \a c. Depending on
+// Runs through a list of vertices (starting with the one \p nodeIT points to)
+// which is expected to be a full list of cluster vertices in \p c. Depending on
 // outer activity and bag index number of the vertices, independent bags
 // are detected and a corresponding index is assigned accordingly for each vertex.
 void ClusterAnalysis::partitionCluster(ListConstIterator<node> & nodeIt, cluster c,
@@ -319,40 +333,42 @@ void ClusterAnalysis::partitionCluster(ListConstIterator<node> & nodeIt, cluster
 			OGDF_ASSERT(!isOuterActive(v,c));
 #endif
 
-		nodeIt++;
+		++nodeIt;
 	}
 	// Now we have all indexes of bags that don't solely contain oactive vertices.
 	// For each index we check if the bag still has independency status,
 	// in this case we have found an independent bag and can remove all its
 	// vertices (mark them).
 
-	//cout << "Checking skiplist\n";
+#if 0
+	std::cout << "Checking skiplist\n";
+#endif
 	SkiplistIterator<int*> its = indexNumbers.begin();
 	while (its.valid())
 	{
 		int bind = *(*its);
-		//cout << "Found index "<< bind <<"\n";
+#if 0
+		std::cout << "Found index "<< bind <<"\n";
+#endif
 		if (indyBag[bind])
 		{
 #ifdef OGDF_DEBUG
 			Logger::slout()  << "Found independent bag with "<< bagNodes[bind].size() << "vertices\n";
 #endif
 
-			ListConstIterator<node> itn = bagNodes[bind].begin();
-			while (itn.valid())
-			{
+			for (node v : bagNodes[bind]) {
 				// Assign the final index number
-				m_indyBagNumber[*itn] = m_numIndyBags;
-				itn++;
+				m_indyBagNumber[v] = m_numIndyBags;
 			}
 			bagRoots[m_numIndyBags] = c;
 			m_numIndyBags++;
 		}
 
-		delete (*its);
-		its++;
+		delete *its;
+		++its;
 	}
-}//partitionCluster
+}
+
 // For each cluster we check if we can identify an independent
 // bag, which might be useful for clustered planarity testing.
 // compute independent bag affiliation for all vertices,
@@ -366,10 +382,10 @@ void ClusterAnalysis::computeIndyBags() {
 	const Graph &G = m_C->constGraph();
 
 	// Store the root cluster of each indyBag
-	if (m_indyBagRoots) delete m_indyBagRoots;
+	delete m_indyBagRoots;
 	// Intermediate storage during computation, maximum of #vertices possible
 #ifdef OGDF_DEBUG
-	Array<cluster> bagRoots(0,G.numberOfNodes(),0);
+	Array<cluster> bagRoots(0,G.numberOfNodes(),nullptr);
 #else
 	Array<cluster> bagRoots(G.numberOfNodes());
 #endif
@@ -383,15 +399,16 @@ void ClusterAnalysis::computeIndyBags() {
 	// For each vertex, we use the outer activity and bag index information.
 	// In case we find a bag without outeractive vertices it is a IndyBag.
 	// Already processed vertices are simply marked by an indyBag index entry different to -1.
-	//NodeArray<bool> processed(G, false); //mark vertices when IndyBag detected
+#if 0
+	NodeArray<bool> processed(G, false); //mark vertices when IndyBag detected
+#endif
 
 	// We do not have the sets of vertices for all bags, as only the bag index
 	// has been stored for a cluster.
 	// Detect the current leaf clusters for bottom up traversal.
 	List<cluster> ccleafs;
 	ClusterArray<int> unprocessedChildren(*m_C); //processing below: compute bags
-	cluster c;
-	forall_clusters(c, *m_C)
+	for(cluster c : m_C->clusters)
 	{
 		if (c->cCount() == 0) ccleafs.pushBack(c);
 		unprocessedChildren[c] = c->cCount();
@@ -409,8 +426,7 @@ void ClusterAnalysis::computeIndyBags() {
 		// (Bag which is not outeractive will not become outeractive, but
 		// may get a part of an outeractive bag with the same id, and an
 		// outeractive bag might become enclosed).
-		HashArray<int, bool> indyBag(true); //true if bag with index i does
-											//not have outeractive vertices
+		HashArray<int, bool> indyBag(true); // true if bag with index i does not have outeractive vertices
 		// We want to store all vertices for each index that may be a
 		// potential indyBag index. We could add these in the entry stored
 		// in our index Skiplist, but then we need a comparison of the
@@ -441,7 +457,9 @@ void ClusterAnalysis::computeIndyBags() {
 
 			c->getClusterNodes(nodes);
 
-			//cout <<"Processing cluster with "<<nodes.size()<<"\n";
+#if 0
+			std::cout <<"Processing cluster with "<<nodes.size()<<"\n";
+#endif
 
 			it = nodes.begin();
 		}
@@ -452,46 +470,42 @@ void ClusterAnalysis::computeIndyBags() {
 		// the process queue.
 		if (c != m_C->rootCluster())
 		{
-			OGDF_ASSERT(unprocessedChildren[c->parent()] > 0)
+			OGDF_ASSERT(unprocessedChildren[c->parent()] > 0);
 			unprocessedChildren[c->parent()]--;
 			if (unprocessedChildren[c->parent()] == 0) ccleafs.pushBack(c->parent());
 		}
-	}//while clusters
+	}
 	// Copying into smaller array is a bit slower than just reserving the whole #v array,
 	// but we do it anyway.
 	m_indyBagRoots = new cluster[m_numIndyBags];
 	for (int k = 0; k < m_numIndyBags; k++)
 	{
-		OGDF_ASSERT(bagRoots[k] != 0);
+		OGDF_ASSERT(bagRoots[k] != nullptr);
 		m_indyBagRoots[k] = bagRoots[k];
 	}
 #ifdef OGDF_DEBUG
-/*
+#if 0
 	List<node> rnodes;
 	m_C->rootCluster()->getClusterNodes(rnodes);
 
-	ListConstIterator<node> rit = rnodes.begin();
-
-	while (rit.valid())
-	{
-		cout << "Root bag index: "<<bagIndex(*rit, m_C->rootCluster())<<"\n";
-		cout << "Indy bag index: "<<m_indyBagNumber[*rit]<<"\n";
-		rit++;
+	for(node v : rnodes) {
+		std::cout << "Root bag index: "<<bagIndex(v, m_C->rootCluster())<<"\n";
+		std::cout << "Indy bag index: "<<m_indyBagNumber[v]<<"\n";
 	}
-*/
+#endif
 
 	Skiplist<int*> ibind;
-	node v;
-	forall_nodes(v, G)
+	for(node v : G.nodes)
 	{
 		int i = m_indyBagNumber[v];
 		if (!ibind.isElement(&i))
 		{
 			ibind.add(new int(i));
 		}
-		cout << "numIndyBags: "<<m_numIndyBags<<" i: "<<i<<"\n";
+		std::cout << "numIndyBags: "<<m_numIndyBags<<" i: "<<i<<"\n";
 		OGDF_ASSERT(i != DefaultIndex);
-		OGDF_ASSERT((i >= 0) && (i < m_numIndyBags));
+		OGDF_ASSERT(i >= 0);
+		OGDF_ASSERT(i < m_numIndyBags);
 
 	}
 	int storedBags = 0;
@@ -499,8 +513,8 @@ void ClusterAnalysis::computeIndyBags() {
 	while (its.valid())
 	{
 		storedBags++;
-		delete (*its);
-		its++;
+		delete *its;
+		++its;
 	}
 	Logger::slout() << m_numIndyBags<< " independent bags detected, "<<storedBags<<" stored\n";
 	OGDF_ASSERT(m_numIndyBags==storedBags);
@@ -517,21 +531,20 @@ void ClusterAnalysis::computeBags() {
 	// We use Union-Find for chunks and bags
 	DisjointSets<> uf;
 	NodeArray<int> setid(G); // Index mapping for union-find
-	//node* nn = new node[G.numberOfNodes()]; // dito
-
-	node v;
+#if 0
+	node* nn = new node[G.numberOfNodes()]; // dito
+#endif
 
 	// Every cluster gets its index
 	ClusterArray<int> cind(*m_C);
 	// We store the lists of cluster vertices
 	List<node>* clists = new List<node>[m_C->numberOfClusters()];
-	cluster c;
 	int i = 0;
 
 	// Store index and detect the current leaf clusters
 	List<cluster> ccleafs;
 	ClusterArray<int> unprocessedChildren(*m_C); //processing below: compute bags
-	forall_clusters(c, *m_C)
+	for(cluster c : m_C->clusters)
 	{
 		cind[c] = i++;
 		if (c->cCount() == 0) ccleafs.pushBack(c);
@@ -541,7 +554,7 @@ void ClusterAnalysis::computeBags() {
 
 	// Now we run through all vertices, storing them in the parent lists,
 	// at the same time, we initialize m_bagindex
-	forall_nodes(v, G)
+	for(node v : G.nodes)
 	{
 		// setid is constant in the following
 		setid[v] = uf.makeSet();
@@ -572,8 +585,24 @@ void ClusterAnalysis::computeBags() {
 	OGDF_ASSERT(!ccleafs.empty());
 
 	while (!ccleafs.empty()){
-		cluster c = ccleafs.popFrontRet();
-		Skiplist<int* > cbags; //Stores bag indexes ocurring in c
+		const cluster c = ccleafs.popFrontRet();
+		Skiplist<int*> cbags; //Stores bag indexes ocurring in c
+
+		auto storeResult = [&] {
+			for (node v : clists[cind[c]]) {
+				int theid = uf.find(setid[v]);
+				(*m_bagindex[v])[c] = theid;
+				if (!cbags.isElement(&theid)) {
+					cbags.add(new int(theid));
+				}
+				// push into list of outer active vertices
+				if (m_storeoalists && isOuterActive(v, c)) {
+					(*m_oalists)[c].pushBack(v);
+				}
+			}
+			(*m_bags)[c] = cbags.size(); // store number of bags of c
+		};
+
 		if (m_storeoalists){
 			//no outeractive vertices detected so far
 			(*m_oalists)[c].clear();
@@ -584,41 +613,20 @@ void ClusterAnalysis::computeBags() {
 
 
 			//Todo could use lcaEdges list here too, see below
-			ListConstIterator<node> it = c->nBegin();
-			while (it.valid())
+			for (node u : c->nodes)
 			{
-				edge e;
-				forall_adj_edges(e,*it)
-				{
-					node w = e->opposite(*it);
+				for(adjEntry adj : u->adjEntries) {
+					node w = adj->twinNode();
 					if (m_C->clusterOf(w) == c)
 					{
-						uf.link(uf.find(setid[*it]),uf.find(setid[w]));
+						uf.link(uf.find(setid[u]),uf.find(setid[w]));
 					}
 				}
-
-				it++;
 			}
 			// Now all chunks in the leaf cluster are computed
 			// update for parent is done in the else case
-			// We store the result:
-			ListConstIterator<node> itv = clists[cind[c]].begin();
-			while (itv.valid())
-			{
-				int theid = uf.find(setid[*itv]);
-				(*m_bagindex[*itv])[c] = theid;
-				if (!cbags.isElement(&theid))
-				{
-					cbags.add(new int(theid));
-				}
-				//push into list of outer active vertices
-				if (m_storeoalists){
-					if (isOuterActive(*itv, c)) ((*m_oalists)[c]).pushBack(*itv);
-				}
-				itv++;
-			}
-			//getNumberOfSets would be all sets, we only need the ones in the cluster
-			(*m_bags)[c] = cbags.size();
+
+			storeResult();
 		}
 		else {
 			// ?We construct the vertex list by concatenating
@@ -628,68 +636,47 @@ void ClusterAnalysis::computeBags() {
 			// Bags are either links of chunks by edges with lca==c
 			// or links of chunk by child clusters.
 			// Edge links
-			ListConstIterator<edge> ite = (*m_lcaEdges)[c].begin();
-			while (ite.valid())
-			{
-				uf.link(uf.find(setid[(*ite)->source()]),uf.find(setid[(*ite)->target()]));
-				ite++;
+			for(edge e : (*m_lcaEdges)[c]) {
+				uf.link(uf.find(setid[e->source()]),uf.find(setid[e->target()]));
 			}
-			// Cluster links
-			ListConstIterator<cluster> itcc = c->cBegin();
 
-			while (itcc.valid())
+			// Cluster links
+			for(cluster cc : c->children)
 			{
 				//Initial id per child cluster cc: Use value of first
 				//vertex, each time we encounter a different value in cc,
 				//we link the chunks
 
 				//add (*itcc)'s vertices to c's list
-				ListConstIterator<node> itvc = clists[cind[(*itcc)]].begin();
+				ListConstIterator<node> itvc = clists[cind[cc]].begin();
 				int inid;
-				if (itvc.valid()) inid = uf.find(setid[(*itvc)]);
+				if (itvc.valid()) inid = uf.find(setid[*itvc]);
 				while (itvc.valid())
 				{
-					int theid = uf.find(setid[(*itvc)]);
+					int theid = uf.find(setid[*itvc]);
 
 					if (theid != inid)
 						uf.link(inid,theid);
 					clists[cind[c]].pushBack(*itvc);
-					itvc++;
+					++itvc;
 				}
-				itcc++;
+			}
 
-			}
-			// We store the result:
-			ListConstIterator<node> itv = clists[cind[c]].begin();
-			while (itv.valid())
-			{
-				int theid = uf.find(setid[*itv]);
-				(*m_bagindex[*itv])[c] = theid;
-				if (!cbags.isElement(&theid))
-				{
-					cbags.add(new int(theid));
-				}
-				//push into list of outer active vertices
-				if (m_storeoalists){
-					if (isOuterActive(*itv, c)) ((*m_oalists)[c]).pushBack(*itv);
-				}
-				itv++;
-			}
-			(*m_bags)[c] = cbags.size(); //store number of bags of c
+			storeResult();
 		}
 		// Now we update the status of the parent cluster and,
 		// in case all its children are processed, add it to
 		// the process queue.
 		if (c != m_C->rootCluster())
 		{
-			OGDF_ASSERT(unprocessedChildren[c->parent()] > 0)
+			OGDF_ASSERT(unprocessedChildren[c->parent()] > 0);
 			unprocessedChildren[c->parent()]--;
 			if (unprocessedChildren[c->parent()] == 0) ccleafs.pushBack(c->parent());
 		}
-	}//while cluster
+	}
 
 	// clean up
-	delete [] clists;
+	delete[] clists;
 }
 
 

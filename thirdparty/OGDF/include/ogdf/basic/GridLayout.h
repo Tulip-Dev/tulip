@@ -1,11 +1,3 @@
-/*
- * $Revision: 2576 $
- *
- * last checkin:
- *   $Author: klein $
- *   $Date: 2012-07-11 07:50:24 +0200 (Wed, 11 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class GridLayout.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,34 +25,23 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_GRID_LAYOUT_H
-#define OGDF_GRID_LAYOUT_H
-
 
 #include <ogdf/basic/NodeArray.h>
+#include <ogdf/basic/EdgeArray.h>
+#include <ogdf/basic/Layout.h>
 #include <ogdf/basic/geometry.h>
-
 
 namespace ogdf {
 
-	class Layout;
-
-
-
 /**
  * \brief Representation of a graph's grid layout
+ *
+ * @ingroup graph-drawing
  */
 class OGDF_EXPORT GridLayout
 {
@@ -68,10 +49,10 @@ public:
 	//! Creates an instance of a grid layout (associated with no graph).
 	GridLayout() { }
 
-	//! Creates an instance of a grid layout associated with \a G.
-	GridLayout(const Graph &G) : m_x(G,0), m_y(G,0), m_bends(G) { }
+	//! Creates an instance of a grid layout associated with \p G.
+	explicit GridLayout(const Graph &G) : m_x(G,0), m_y(G,0), m_bends(G) { }
 
-	// destruction
+	//! Destruction
 	virtual ~GridLayout() { }
 
 
@@ -91,27 +72,27 @@ public:
 	EdgeArray<IPolyline> &bends() { return m_bends; }
 
 
-	//! Returns a reference to the x-coordinate of node \a v.
+	//! Returns a reference to the x-coordinate of node \p v.
 	const int &x(node v) const { return m_x[v]; }
-	//! Returns a reference to the x-coordinate of node \a v.
+	//! Returns a reference to the x-coordinate of node \p v.
 	int &x(node v) { return m_x[v]; }
 
-	//! Returns a reference to the y-coordinate of node \a v.
+	//! Returns a reference to the y-coordinate of node \p v.
 	const int &y(node v) const { return m_y[v]; }
-	//! Returns a reference to the y-coordinate of node \a v.
+	//! Returns a reference to the y-coordinate of node \p v.
 	int &y(node v) { return m_y[v]; }
 
 
-	//! Returns a reference to the bend point list of edge \a e.
+	//! Returns a reference to the bend point list of edge \p e.
 	const IPolyline &bends(edge e) const { return m_bends[e]; }
-	//! Returns a reference to the bend point list of edge \a e.
+	//! Returns a reference to the bend point list of edge \p e.
 	IPolyline &bends(edge e) { return m_bends[e]; }
 
-	//! Returns the polyline of edge \a e (including start and end point!).
+	//! Returns the polyline of edge \p e (including start and end point!).
 	IPolyline polyline(edge e) const;
 
 
-	//! Initializes the grid layout for graph \a G.
+	//! Initializes the grid layout for graph \p G.
 	void init(const Graph &G) {
 		m_x.init(G,0);
 		m_y.init(G,0);
@@ -125,7 +106,7 @@ public:
 		m_bends.init();
 	}
 
-	//! Returns the bend point list of edge \a e without unnecessary bends.
+	//! Returns the bend point list of edge \p e without unnecessary bends.
 	IPolyline getCompactBends(edge e) const;
 
 	//! Removes all unnecessary bends.
@@ -168,7 +149,7 @@ public:
 	/**
 	 * \brief Transforms the grid layout to a layout.
 	 *
-	 * This implementation only copies the grid coordinates to \a drawing; the
+	 * This implementation only copies the grid coordinates to \p drawing; the
 	 * derived class GridLayoutMapped performs the actual transformation of coordinates.
 	 */
 	virtual void remap(Layout &drawing);
@@ -185,11 +166,7 @@ private:
 	static bool isRedundant(IPoint &p1, IPoint &p2, IPoint &p3);
 	static void compact(IPolyline &ip);
 
-
 	OGDF_MALLOC_NEW_DELETE
-}; // class GridLayout
+};
 
-
-} // end namespace ogdf
-
-#endif
+}

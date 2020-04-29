@@ -1,11 +1,3 @@
-/*
- * $Revision: 3837 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 15:19:30 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implementation of TLP string conversion functions.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,12 +25,9 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/fileformats/Tlp.h>
 
@@ -51,11 +40,16 @@ namespace tlp {
 std::string toString(const Attribute &attr)
 {
 	switch(attr) {
-	case a_label: return "viewLabel";
-	case a_color: return "viewColor";
-	case a_position: return "viewLayout";
-	case a_size: return "viewSize";
-	case a_shape: return "viewShape";
+	case Attribute::label: return "viewLabel";
+	case Attribute::color: return "viewColor";
+	case Attribute::strokeColor: return "viewStrokeColor";
+	case Attribute::strokeType: return "viewStrokeType";
+	case Attribute::strokeWidth: return "viewStrokeWidth";
+	case Attribute::fillPattern: return "viewFillPattern";
+	case Attribute::fillBackground: return "viewFillBackgroundColor";
+	case Attribute::position: return "viewLayout";
+	case Attribute::size: return "viewSize";
+	case Attribute::shape: return "viewShape";
 	default: return "unknown";
 	}
 }
@@ -64,25 +58,37 @@ std::string toString(const Attribute &attr)
 Attribute toAttribute(const std::string &str)
 {
 	if(str == "viewLabel") {
-		return a_label;
+		return Attribute::label;
 	}
-	if(str == "viewColor") {
-		return a_color;
+	else if(str == "viewColor") {
+		return Attribute::color;
 	}
-	if(str == "viewLayout") {
-		return a_position;
+	else if(str == "viewStrokeColor") {
+		return Attribute::strokeColor;
 	}
-	if(str == "viewSize") {
-		return a_size;
+	else if(str == "viewStrokeType") {
+		return Attribute::strokeType;
 	}
-	if(str == "viewShape") {
-		return a_shape;
+	else if(str == "viewFillPattern") {
+		return Attribute::fillPattern;
 	}
-	return a_unknown;
+	else if(str == "viewFillBackgroundColor") {
+		return Attribute::fillBackground;
+	}
+	else if(str == "viewLayout") {
+		return Attribute::position;
+	}
+	else if(str == "viewSize") {
+		return Attribute::size;
+	}
+	else if(str == "viewShape") {
+		return Attribute::shape;
+	}
+	else if(str == "viewStrokeWidth") {
+		return Attribute::strokeWidth;
+	}
+	return Attribute::unknown;
 }
 
-
-} // end namespace tlp
-
-} // end namespace ogdf
-
+}
+}

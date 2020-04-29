@@ -1,11 +1,3 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class GridLayoutMapped which extends GridLayout
  *        by a grid mapping mechanism.
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,41 +26,27 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_GRID_LAYOUT_MAPPED_H
-#define OGDF_GRID_LAYOUT_MAPPED_H
-
 
 #include <ogdf/basic/GridLayout.h>
-
+#include <ogdf/planarity/PlanRep.h>
+#include <ogdf/orthogonal/OrthoRep.h>
 
 namespace ogdf {
 
-	class PlanRep;
-	class PlanRepUML;
-	class OrthoRep;
-
-
-//---------------------------------------------------------
-// GridLayoutMapped
-// extends GridLayout by a grid mapping mechanism
-//---------------------------------------------------------
+/**
+ * \brief Extends GridLayout by a grid mapping mechanism.
+ *
+ * @ingroup gd-helper
+ */
 class OGDF_EXPORT GridLayoutMapped : public GridLayout
 {
-	//scaling to allow correct edge anchors
-	enum { cGridScale = 2 };
+	//! scaling to allow correct edge anchors
+	static const int cGridScale;
 
 public:
 
@@ -81,7 +59,7 @@ public:
 
 
 	// writes grid layout to layout using re-mapping
-	void remap(Layout &drawing);
+	void remap(Layout &drawing) override;
 
 	// transforms real coordinates to grid coordinates
 	int toGrid(double x) const {
@@ -119,8 +97,4 @@ private:
 	double m_fMapping;           // mapping factor
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

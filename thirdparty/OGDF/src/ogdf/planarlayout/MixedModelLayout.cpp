@@ -1,11 +1,3 @@
-/*
- * $Revision: 2554 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-06 11:39:38 +0200 (Fri, 06 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Implementation of Mixed-Model layout algorithm.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,22 +25,18 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 
 #include <ogdf/planarlayout/MixedModelLayout.h>
 #include <ogdf/augmentation/PlanarAugmentation.h>
 #include <ogdf/augmentation/PlanarAugmentationFix.h>
 #include <ogdf/planarlayout/BiconnectedShellingOrder.h>
-#include <ogdf/module/MixedModelCrossingsBeautifierModule.h>
 #include <ogdf/planarity/SimpleEmbedder.h>
 
-#include "MixedModelBase.h"
+#include <ogdf/planarlayout/mixed_model_layout/MixedModelBase.h>
 
 
 namespace ogdf {
@@ -67,10 +55,10 @@ void MMOrder::init(
 
 MixedModelLayout::MixedModelLayout()
 {
-	m_augmenter.set(new PlanarAugmentation);
-	m_compOrder.set(new BiconnectedShellingOrder);
-	m_crossingsBeautifier.set(new MMDummyCrossingsBeautifier);
-	m_embedder.set(new SimpleEmbedder);
+	m_augmenter.reset(new PlanarAugmentation);
+	m_compOrder.reset(new BiconnectedShellingOrder);
+	m_crossingsBeautifier.reset(new MMDummyCrossingsBeautifier);
+	m_embedder.reset(new SimpleEmbedder);
 }
 
 
@@ -81,36 +69,14 @@ void MixedModelLayout::doCall(
 	IPoint &boundingBox,
 	bool fixEmbedding)
 {
-	// handle graphs with less than 3 nodes
-	node v1, v2;
-	switch (PG.numberOfNodes()) {
-	case 0:
-		boundingBox = IPoint(0,0);
-		return;
-
-	case 1:
-		v1 = PG.firstNode();
-		gridLayout.x(v1) = gridLayout.y(v1) = 0;
-		boundingBox = IPoint(0,0);
-		return;
-
-	case 2:
-		v1 = PG.firstNode();
-		v2 = v1->succ();
-		gridLayout.x(v1) = gridLayout.y(v1) = gridLayout.y(v2) = 0;
-		gridLayout.x(v2) = 1;
-		boundingBox = IPoint(1,0);
-		return;
-	}
-
 	MixedModelBase mm(PG,gridLayout);
 
 	if(fixEmbedding) {
 		OGDF_ASSERT(PG.representsCombEmbedding());
 		PlanarAugmentationFix fixAugmenter;
-		mm.computeOrder(fixAugmenter, 0, adjExternal, m_compOrder.get());
+		mm.computeOrder(fixAugmenter, nullptr, adjExternal, *m_compOrder);
 	} else
-		mm.computeOrder(m_augmenter.get(),&m_embedder.get(),0,m_compOrder.get());
+		mm.computeOrder(*m_augmenter,m_embedder.get(),nullptr,*m_compOrder);
 
 	mm.assignIopCoords();
 	mm.placeNodes();
@@ -118,11 +84,10 @@ void MixedModelLayout::doCall(
 	mm.setBends();
 	mm.postprocessing2();
 
-	m_crossingsBeautifier.get().call(PG,gridLayout);
+	m_crossingsBeautifier->call(PG,gridLayout);
 
 	int xmin, ymin;
 	gridLayout.computeBoundingBox(xmin,boundingBox.m_x,ymin,boundingBox.m_y);
 }
 
-
-} // end namespace ogdf
+}

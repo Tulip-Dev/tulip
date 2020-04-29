@@ -1,11 +1,3 @@
-/*
- * $Revision: 3837 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 15:19:30 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declares stuff related to DOT format lexical analysis.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,20 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_DOT_LEXER_H
-#define OGDF_DOT_LEXER_H
-
 
 #include <iostream>
 #include <sstream>
@@ -71,7 +54,7 @@ namespace dot {
  */
 struct Token {
 
-	enum Type {
+	enum class Type {
 		// Operators
 		assignment, colon, semicolon, comma, edgeOpDirected, edgeOpUndirected,
 		// Brackets
@@ -88,12 +71,12 @@ struct Token {
 	Type type;
 	//! Indicates a token row (line).
 	size_t row;
-	//! Indicated a token column;
+	//! Indicated a token column.
 	size_t column;
-	//! Identifier content (NULL for non-id tokens).
+	//! Identifier content (nullptr for non-id tokens).
 	std::string *value;
 
-	Token(size_t row, size_t column, std::string *value = NULL);
+	Token(size_t tokenRow, size_t tokenColumn, std::string *identifierContent = nullptr);
 
 	//! Returns string representation of given token type.
 	static std::string toString(const Type &type);
@@ -124,15 +107,19 @@ private:
 	//! Checks if \a head matches given token. Advances \a head on success.
 	/**
 	 * @param type A type of token being matched.
+	 * @param word True if token is part of a word, false otherwise.
 	 * @return True if matches, false otherwise.
 	 */
-	bool match(const Token::Type &type);
+	bool match(const Token::Type &type, bool word = false);
+
 	//! Checks if \a head matches given string. Advances \a head on success.
 	/**
 	 * @param str A string being matched.
+	 * @param word True if token is part of a word, false otherwise.
 	 * @return True if matches, false otherwise.
 	 */
-	bool match(const std::string &str);
+	bool match(const std::string &str, bool word = false);
+
 	//! Checks whether \a head is an identifier.
 	/**
 	 * @param token Function fills it with identifier value and col/row info.
@@ -140,9 +127,16 @@ private:
 	 */
 	bool identifier(Token &token);
 
+	//! Checks if character is allowed in an identifier by DOT standard
+	/**
+	 * @param c A character
+	 * @return True if c is one of alphabetic ([a-zA-Z\200-\377]) characters, underscores ('_') or digits ([0-9])
+	 */
+	bool isDotAlnum(signed char c);
+
 public:
 	//! Initializes lexer with given input (but does nothing to it).
-	Lexer(std::istream &input);
+	explicit Lexer(std::istream &input);
 	~Lexer();
 
 	//! Scans input and turns it into token list.
@@ -154,10 +148,5 @@ public:
 	const std::vector<Token> &tokens() const;
 };
 
-
-} // end namespace dot
-
-} // end namespace ogdf
-
-
-#endif
+}
+}

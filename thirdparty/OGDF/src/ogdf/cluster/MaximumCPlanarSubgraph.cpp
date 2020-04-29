@@ -1,11 +1,3 @@
- /*
- * $Revision: 3830 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 09:55:21 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implementation of class MaximumCPlanarSubgraph
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,42 +25,35 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/basic/basic.h>
-
-#ifdef USE_ABACUS
 
 #include <ogdf/cluster/MaximumCPlanarSubgraph.h>
 #include <ogdf/cluster/CconnectClusterPlanar.h>
 #include <ogdf/basic/simple_graph_alg.h>
-#include <ogdf/fileformats/GraphIO.h>
-#include <sstream>
 
-//#define writefeasiblegraphs
+#ifdef OGDF_CPLANAR_DEBUG_OUTPUT
+#include <ogdf/fileformats/GraphIO.h>
+#endif
 using namespace abacus;
 
 namespace ogdf {
 
-struct connStruct {
-	bool connected;
-	node v1, v2;
-	edge e;
-};
+using namespace cluster_planarity;
 
 Module::ReturnType MaximumCPlanarSubgraph::doCall(const ClusterGraph &G,
-												  List<edge> &delEdges,
-												  List<nodePair> &addedEdges)
+                                                  const EdgeArray<double> *pCost,
+                                                  List<edge> &delEdges,
+                                                  List<NodePair> &addedEdges)
 {
 #ifdef OGDF_DEBUG
-	cout << "Creating new Masterproblem for clustergraph with "<<G.constGraph().numberOfNodes()<<" nodes\n";
+	std::cout << "Creating new Masterproblem for clustergraph with " << G.constGraph().numberOfNodes() << " nodes\n";
 #endif
-	MaxCPlanarMaster* cplanMaster = new MaxCPlanarMaster(G,m_heuristicLevel,
+	MaxCPlanarMaster* cplanMaster = new MaxCPlanarMaster(G, pCost,
+		m_heuristicLevel,
 		m_heuristicRuns,
 		m_heuristicOEdgeBound,
 		m_heuristicNPermLists,
@@ -89,7 +74,7 @@ Module::ReturnType MaximumCPlanarSubgraph::doCall(const ClusterGraph &G,
 	cplanMaster->setPortaFile(m_portaOutput);
 	cplanMaster->useDefaultCutPool() = m_defaultCutPool;
 #ifdef OGDF_DEBUG
-	cout << "Starting Optimization\n";
+	std::cout << "Starting Optimization\n";
 #endif
 	Master::STATUS status;
 	try {
@@ -98,7 +83,7 @@ Module::ReturnType MaximumCPlanarSubgraph::doCall(const ClusterGraph &G,
 	catch (...)
 	{
 #ifdef OGDF_DEBUG
-		cout << "ABACUS Optimization failed...\n";
+		std::cout << "ABACUS Optimization failed...\n";
 #endif
 	}
 	m_totalTime    = getDoubleTime(*cplanMaster->totalTime());
@@ -119,10 +104,10 @@ Module::ReturnType MaximumCPlanarSubgraph::doCall(const ClusterGraph &G,
 #ifdef OGDF_DEBUG
 	if(cplanMaster->pricing())
 		Logger::slout() << "Pricing was ON\n";
-	Logger::slout()<<"ABACUS returned with status '"<< Master::STATUS_[status] <<"'\n"<<flush;
+	Logger::slout() << "ABACUS returned with status '" << Master::STATUS_[status] << "'" << std::endl;
 #endif
 
-	List<nodePair> allEdges;
+	NodePairs allEdges;
 	cplanMaster->getDeletedEdges(delEdges);
 	cplanMaster->getConnectionOptimalSolutionEdges(addedEdges);
 	cplanMaster->getAllOptimalSolutionEdges(allEdges);
@@ -131,8 +116,7 @@ Module::ReturnType MaximumCPlanarSubgraph::doCall(const ClusterGraph &G,
 	int delE = delEdges.size();
 	int addE = addedEdges.size();
 
-	cout<<delE<< " Number of deleted edges, "<<addE<<" Number of added edges "<<
-	allEdges.size()<<" gesamt"<<"\n";
+	std::cout << delE << " Number of deleted edges, " << addE << " Number of added edges " << allEdges.size() << " gesamt" << std::endl;
 #endif
 
 	if (m_portaOutput)
@@ -142,23 +126,19 @@ Module::ReturnType MaximumCPlanarSubgraph::doCall(const ClusterGraph &G,
 
 	delete cplanMaster;
 	switch (status) {
-	case Master::Optimal: return Module::retOptimal; break;
-	case Master::Error: return Module::retError; break;
+	case Master::Optimal: return Module::ReturnType::Optimal; break;
+	case Master::Error: return Module::ReturnType::Error; break;
 	default: break;
-	}//switch
+	}
 
-	return Module::retError;
-}//docall for clustergraph
-
+	return Module::ReturnType::Error;
+}
 
 //returns list of all clusters in subtree at c in bottom up order
 void MaximumCPlanarSubgraph::getBottomUpClusterList(const cluster c, List< cluster > & theList)
 {
-	ListConstIterator<cluster> it = c->cBegin();
-	while (it.valid())
-	{
-		getBottomUpClusterList((*it), theList);
-		it++;
+	for(cluster cc : c->children) {
+		getBottomUpClusterList(cc, theList);
 	}
 	theList.pushBack(c);
 }
@@ -170,12 +150,11 @@ void MaximumCPlanarSubgraph::writeFeasible(const char *filename,
 {
 	const ClusterGraph& CG = *(master.getClusterGraph());
 	const Graph& G = CG.constGraph();
-	node v;
 	//first compute the nodepairs that are potential candidates to connect
 	//chunks in a cluster
 	//potential connection edges
 	NodeArray< NodeArray<bool> > potConn(G);
-	forall_nodes(v, G)
+	for(node v : G.nodes)
 	{
 		potConn[v].init(G, false);
 	}
@@ -184,7 +163,7 @@ void MaximumCPlanarSubgraph::writeFeasible(const char *filename,
 	getBottomUpClusterList(CG.rootCluster(), clist);
 	//could use postordertraversal instead
 
-	List< nodePair > connPairs; //holds all connection node pairs
+	NodePairs connPairs; //holds all connection node pairs
 	//counts the number of potential connectivity edges
 	//int potCount = 0; //equal to number of true values in potConn
 
@@ -193,10 +172,8 @@ void MaximumCPlanarSubgraph::writeFeasible(const char *filename,
 	//even if they may be connected by edges in a child cluster
 	//(to get the set of all feasible solutions)
 
-	ListConstIterator< cluster > it = clist.begin();
-	while (it.valid())
+	for (cluster c : clist)
 	{
-		cluster c = (*it);
 		//we compute the subgraph induced by vertices in c
 		GraphCopy gcopy;
 		gcopy.createEmpty(G);
@@ -206,11 +183,8 @@ void MaximumCPlanarSubgraph::writeFeasible(const char *filename,
 		c->getClusterNodes(clusterNodes);
 		NodeArray<bool> activeNodes(G, false); //true for all cluster nodes
 		EdgeArray<edge> copyEdge(G); //holds the edge copy
-		ListConstIterator<node> itn = clusterNodes.begin();
-		while (itn.valid())
-		{
-			activeNodes[(*itn)] = true;
-			itn++;
+		for (node v : clusterNodes) {
+			activeNodes[v] = true;
 		}
 		gcopy.initByActiveNodes(clusterNodes, activeNodes, copyEdge);
 		//gcopy now represents the cluster induced subgraph
@@ -222,20 +196,21 @@ void MaximumCPlanarSubgraph::writeFeasible(const char *filename,
 		//now we run over all vertices and compare the component
 		//number of adjacent vertices. If they differ, we found a
 		//potential connection edge. We do not care if we find them twice.
-		forall_nodes(v, gcopy)
+		for(node v : gcopy.nodes)
 		{
-			node w;
-			forall_nodes(w, gcopy)
+			for(node w : gcopy.nodes)
 			{
 				if (component[v] != component[w])
 				{
-					cout <<"Indizes: "<<v->index()<<":"<<w->index()<<"\n";
+					std::cout << "Indizes: " << v->index() << ":" << w->index() << "\n";
 					node vg = gcopy.original(v);
 					node wg = gcopy.original(w);
 					bool newConn = !((vg->index() < wg->index()) ? potConn[vg][wg] : potConn[wg][vg]);
 					if (newConn)
 					{
-						nodePair np; np.v1 = vg; np.v2 = wg;
+						NodePair np;
+						np.source = vg;
+						np.target = wg;
 						connPairs.pushBack(np);
 						if (vg->index() < wg->index())
 							potConn[vg][wg] = true;
@@ -243,33 +218,34 @@ void MaximumCPlanarSubgraph::writeFeasible(const char *filename,
 							potConn[wg][vg] = true;
 					}
 				}
-			}//nodes
-		}//nodes
+			}
+		}
+	}
 
-		it++;
-	}//while
-
-	cout << "Potentielle Verbindungskanten: "<< connPairs.size()<<"\n";
+	std::cout << "Potentielle Verbindungskanten: "<< connPairs.size()<<"\n";
 
 	//we run through our candidates and save them in an array
 	//that can be used for dynamic graph updates
 	int i = 0;
+
+	struct connStruct {
+		bool connected;
+		node v1, v2;
+		edge e;
+	};
 	connStruct *cons = new connStruct[connPairs.size()];
-	ListConstIterator< nodePair > itnp = connPairs.begin();
-	while (itnp.valid())
+	for(const NodePair &np : connPairs)
 	{
 		connStruct cs;
 		cs.connected = false;
-		cs.v1 = (*itnp).v1;
-		cs.v2 = (*itnp).v2;
-		cs.e  = 0;
+		cs.v1 = np.source;
+		cs.v2 = np.target;
+		cs.e  = nullptr;
 
 		cons[i] = cs;
 		i++;
-		itnp++;
-	}//while
+	}
 
-	//-------------------------------------------------------------------------
 	// WARNING: this is extremely slow for graphs with a large number of cluster
 	// chunks now we test all possible connection edge combinations for c-planarity
 	Graph G2;
@@ -279,7 +255,7 @@ void MaximumCPlanarSubgraph::writeFeasible(const char *filename,
 	EdgeArray<edge> origEdges(CG.constGraph());
 	ClusterGraph testCopy(CG, G2, origCluster, origNodes, origEdges);
 
-	ofstream os(filename);
+	std::ofstream os(filename);
 
 	// Output dimension of the LP (number of variables)
 	os << "DIM = " << connPairs.size() << "\n";
@@ -301,8 +277,8 @@ void MaximumCPlanarSubgraph::writeFeasible(const char *filename,
 
 	os << "CONV_SECTION\n";
 
-#ifdef writefeasiblegraphs
-	int j = 0; //debug
+#ifdef OGDF_CPLANAR_DEBUG_OUTPUT
+	int writeCount = 0; //debug
 #endif
 
 	if (connPairs.size() > 0)
@@ -311,16 +287,18 @@ void MaximumCPlanarSubgraph::writeFeasible(const char *filename,
 		//we create the next test configuration by incrementing the edge selection array
 		//we create the corresponding graph dynamically on the fly
 		i = 0;
-		while ( (i < connPairs.size()) && (cons[i].connected == true) )
+		while (i < connPairs.size() && cons[i].connected)
 		{
 			cons[i].connected = false;
-			OGDF_ASSERT(cons[i].e != 0);
+			OGDF_ASSERT(cons[i].e != nullptr);
 			G2.delEdge(cons[i].e);
 			i++;
-		}//while
+		}
 		if (i >= connPairs.size()) break;
-		//cout<<"v1graph: "<<&(*(cons[i].v1->graphOf()))<<"\n";
-		//cout<<"origNodesgraph: "<<&(*(origNodes.graphOf()))<<"\n";
+#if 0
+		std::cout<<"v1graph: "<<&(*(cons[i].v1->graphOf()))<<"\n";
+		std::cout<<"origNodesgraph: "<<&(*(origNodes.graphOf()))<<"\n";
+#endif
 		cons[i].connected = true; //i.e., (false) will never be a feasible solution
 		cons[i].e = G2.newEdge(origNodes[cons[i].v1], origNodes[cons[i].v2]);
 
@@ -332,29 +310,31 @@ void MaximumCPlanarSubgraph::writeFeasible(const char *filename,
 		//c-planar graphs define a feasible solution
 		if (cplanar)
 		{
-			cout << "Feasible solution found\n";
+			std::cout << "Feasible solution found\n";
 			for (int j = 0; j < connPairs.size(); j++)
 			{
 				char ch = (cons[j].connected ? '1' : '0');
-				cout << ch;
+				std::cout << ch;
 				os << ch << " ";
 			}
-			cout << "\n";
+			std::cout << "\n";
 			os << "\n";
-#ifdef writefeasiblegraphs
-			string fn = "cGraph";
-			fn += to_string(j++) + ".gml";
-			GraphIO::writeGML(testCopy, fn);
+#ifdef OGDF_CPLANAR_DEBUG_OUTPUT
+			string fn = "cGraph" + to_string(writeCount++) + ".gml";
+			std::ofstream out(fn);
+			GraphIO::writeGML(testCopy, out);
 #endif
 		}
-	}//while counting
+	}
 
 	delete[] cons;
 
 	os << "\nEND" <<"\n";
 	os.close();
 
-	//return;
+#if 0
+	return;
+#endif
 
 	os.open(getIeqFileName());
 	os << "DIM = " << m_numVars << "\n";
@@ -386,10 +366,10 @@ void MaximumCPlanarSubgraph::writeFeasible(const char *filename,
 	os << "\nINEQUALITIES_SECTION\n";
 	//we first read the standard constraint that are written
 	//into a text file by the optimization master
-	ifstream isf(master.getStdConstraintsFileName());
+	std::ifstream isf(master.getStdConstraintsFileName());
 	if (!isf)
 	{
-		cerr << "Could not open optimization master's standard constraint file\n";
+		std::cerr << "Could not open optimization master's standard constraint file\n";
 		os << "#No standard constraints read\n";
 	}
 	else
@@ -418,75 +398,78 @@ void MaximumCPlanarSubgraph::writeFeasible(const char *filename,
 					}
 					count++;
 				}
-			}//while chars
+			}
 			os <<"\n";
 		}
 		delete[] fileLine;
-	}//ifstream
+	}
 	//now we read the cut pools from the master
 	if (master.useDefaultCutPool())
 	{
 		os << "#No cut constraints read from master\n";
-		//StandardPool<Constraint, Variable> *connCon = master.cutPool();
+#if 0
+		StandardPool<Constraint, Variable> *connCon = master.cutPool();
+#endif
 	}
 	else
 	{
 		StandardPool<Constraint, Variable> *connCon = master.getCutConnPool();
 		StandardPool<Constraint, Variable> *kuraCon = master.getCutKuraPool();
 		StandardPool<Variable, Constraint> *stdVar = master.varPool();
-		OGDF_ASSERT(connCon != 0);
-		OGDF_ASSERT(kuraCon != 0);
-		cout << connCon->number() << " Constraints im MasterConnpool \n";
-		cout << kuraCon->number() << " Constraints im MasterKurapool \n";
-		cout << connCon->size() << " Größe ConnPool"<<"\n";
+		OGDF_ASSERT(connCon != nullptr);
+		OGDF_ASSERT(kuraCon != nullptr);
+		std::cout << connCon->number() << " Constraints im MasterConnpool \n";
+		std::cout << kuraCon->number() << " Constraints im MasterKurapool \n";
+		std::cout << connCon->size() << " Größe ConnPool"<<"\n";
 		outputCons(os, connCon, stdVar);
 		outputCons(os, kuraCon, stdVar);
-	}//else
+	}
 	os << "\nEND" <<"\n";
 	os.close();
-	cout << "Cutting is set: "<<master.cutting()<<"\n";
-	//cout <<"Bounds for the variables:\n";
-	//Sub &theSub = *(master.firstSub());
-	//for ( i = 0; i < theSub.nVar(); i++)
-	//{
-	//	cout << i << ": " << theSub.lBound(i) << " - " << theSub.uBound(i) << "\n";
-	//}
-	/*// OLD CRAP
-	cout << "Constraints: \n";
+	std::cout << "Cutting is set: "<<master.cutting()<<"\n";
+#if 0
+	std::cout <<"Bounds for the variables:\n";
+	Sub &theSub = *(master.firstSub());
+	for ( i = 0; i < theSub.nVar(); i++)
+	{
+		std::cout << i << ": " << theSub.lBound(i) << " - " << theSub.uBound(i) << "\n";
+	}
+#endif
+#if 0
+	// OLD CRAP
+	std::cout << "Constraints: \n";
 	StandardPool< Constraint, Variable > *spool = master.conPool();
 	StandardPool< Constraint, Variable > *cpool = master.cutPool();
 
-	cout << spool->size() << " Constraints im Masterpool \n";
-	cout << cpool->size() << " Constraints im Mastercutpool \n";
+	std::cout << spool->size() << " Constraints im Masterpool \n";
+	std::cout << cpool->size() << " Constraints im Mastercutpool \n";
 
-	cout << "ConPool Constraints \n";
+	std::cout << "ConPool Constraints \n";
 	for ( i = 0; i < spool->size(); i++)
 	{
 		PoolSlot< Constraint, Variable > * sloty = spool->slot(i);
 		Constraint *mycon = sloty->conVar();
 		switch (mycon->sense()->sense())
 		{
-			case CSense::Less: cout << "<" << "\n"; break;
-			case CSense::Greater: cout << ">" << "\n"; break;
-			case CSense::Equal: cout << "=" << "\n"; break;
-			default: cout << "Inequality sense doesn't make any sense \n"; break;
-		}//switch
+			case CSense::Less: std::cout << "<" << "\n"; break;
+			case CSense::Greater: std::cout << ">" << "\n"; break;
+			case CSense::Equal: std::cout << "=" << "\n"; break;
+			default: std::cout << "Inequality sense doesn't make any sense \n"; break;
+		}
 	}
-	cout << "CutPool Constraints \n";
+	std::cout << "CutPool Constraints \n";
 	for ( i = 0; i < cpool->size(); i++)
 	{
 		PoolSlot< Constraint, Variable > * sloty = cpool->slot(i);
 		Constraint *mycon = sloty->conVar();
 		switch (mycon->sense()->sense())
 		{
-			case CSense::Less: cout << "<" << "\n"; break;
-			case CSense::Greater: cout << ">" << "\n"; break;
-			case CSense::Equal: cout << "=" << "\n"; break;
-			default: cout << "Inequality sense doesn't make any sense \n"; break;
-		}//switch
+			case CSense::Less: std::cout << "<" << "\n"; break;
+			case CSense::Greater: std::cout << ">" << "\n"; break;
+			case CSense::Equal: std::cout << "=" << "\n"; break;
+			default: std::cout << "Inequality sense doesn't make any sense \n"; break;
+		}
 	}
-	*/
-	/*
 	for ( i = 0; i < theSub.nCon(); i++)
 	{
 		Constraint &theCon = *(theSub.constraint(i));
@@ -495,26 +478,27 @@ void MaximumCPlanarSubgraph::writeFeasible(const char *filename,
 		{
 			double c = theCon.coeff(theSub.variable(i));
 			if (c != 0)
-				cout << c;
-			else cout << "  ";
+				std::cout << c;
+			else std::cout << "  ";
 		}
 		switch (theCon.sense()->sense())
 		{
-			case CSense::Less: cout << "<" << "\n"; break;
-			case CSense::Greater: cout << ">" << "\n"; break;
-			case CSense::Equal: cout << "=" << "\n"; break;
-			default: cout << "doesn't make any sense \n"; break;
-		}//switch
+			case CSense::Less: std::cout << "<" << "\n"; break;
+			case CSense::Greater: std::cout << ">" << "\n"; break;
+			case CSense::Equal: std::cout << "=" << "\n"; break;
+			default: std::cout << "doesn't make any sense \n"; break;
+		}
 		float fl;
 		while(!(std::cin >> fl))
 		{
 			std::cin.clear();
-			std::cin.ignore(numeric_limits<streamsize>::max(),'\n');
+			std::cin.ignore(std::numeric_limits<streamsize>::max(),'\n');
 		}
-	}*/
-}//writeportaieq
+	}
+#endif
+}
 
-void MaximumCPlanarSubgraph::outputCons(ofstream &os,
+void MaximumCPlanarSubgraph::outputCons(std::ofstream &os,
 	StandardPool<Constraint, Variable> *connCon,
 	StandardPool<Variable, Constraint> *stdVar)
 {
@@ -523,7 +507,7 @@ void MaximumCPlanarSubgraph::outputCons(ofstream &os,
 		{
 			PoolSlot< Constraint, Variable > * sloty = connCon->slot(i);
 			Constraint *mycon = sloty->conVar();
-			OGDF_ASSERT(mycon != 0);
+			OGDF_ASSERT(mycon != nullptr);
 			int count;
 			for (count = 0; count < stdVar->size(); count++)
 			{
@@ -534,21 +518,20 @@ void MaximumCPlanarSubgraph::outputCons(ofstream &os,
 				{
 					os <<"+"<< d <<"x"<<count+1;
 				}
-			}//for
+			}
 			switch (mycon->sense()->sense())
 			{
 				case CSense::Less: os << " <= "; break;
 				case CSense::Greater: os << " >= "; break;
 				case CSense::Equal: os << " = "; break;
-				default: os << "Inequality sense doesn't make any sense \n";
-						 cerr << "Inequality sense unknown \n";
-						break;
-			}//switch
+				default:
+					os << "Inequality sense doesn't make any sense \n";
+					std::cerr << "Inequality sense unknown \n";
+					break;
+			}
 			os << mycon->rhs();
 			os << "\n";
 		}
 }
 
-} //end namespace ogdf
-
-#endif //USE_ABACUS
+}

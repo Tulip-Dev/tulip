@@ -1,11 +1,3 @@
-/*
- * $Revision: 3261 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-01-25 14:48:05 +0100 (Fri, 25 Jan 2013) $
- ***************************************************************/
-
 /** \file
  * \brief declaration of class FixedEmbeddingInserterOld
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,32 +25,17 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_FIXED_EMBEDDING_UPWARD_EDGE_INSERTER_H
-#define OGDF_FIXED_EMBEDDING_UPWARD_EDGE_INSERTER_H
-
-
-
-#include <ogdf/module/UpwardEdgeInserterModule.h>
 #include <ogdf/basic/CombinatorialEmbedding.h>
+#include <ogdf/upward/UpwardEdgeInserterModule.h>
 #include <ogdf/upward/UpwardPlanarity.h>
 
-
-
-
 namespace ogdf {
-
-
 
 //! Edge insertion module that inserts each edge optimally into a fixed embedding.
 class OGDF_EXPORT FixedEmbeddingUpwardEdgeInserter : public UpwardEdgeInserterModule
@@ -72,7 +49,7 @@ public:
 
 private:
 
-	bool isUpwardPlanar(Graph &G)
+	bool isUpwardPlanar(Graph &G) const
 	{
 		return UpwardPlanarity::isUpwardPlanar_singleSource(G);
 	}
@@ -80,17 +57,17 @@ private:
 	/**
 	 * @param UPR is the input upward planarized representation of a FUPS and will also receive the result.
 	 * @param origEdges is the list of original edges (edges in the original graph
-	 *        of \a UPR) that have to be inserted.
+	 *        of \p UPR) that have to be inserted.
 	 * @param costOrig points to an edge array containing the costs of original edges; edges in
-	 *        \a UPR without an original edge have zero costs.
+	 *        \p UPR without an original edge have zero costs.
 	 * @param forbiddenEdgeOrig points to an edge array indicating if an original edge is
 	 *        forbidden to be crossed.
 	 */
 	virtual ReturnType doCall(UpwardPlanRep &UPR,
 		const List<edge> &origEdges,
-		const EdgeArray<int>  *costOrig = 0,
-		const EdgeArray<bool> *forbiddenEdgeOrig = 0
-		);
+		const EdgeArray<int>  *costOrig = nullptr,
+		const EdgeArray<bool> *forbiddenEdgeOrig = nullptr
+		) override;
 
 
 	ReturnType insertAll(UpwardPlanRep &UPR,
@@ -161,10 +138,6 @@ private:
 							List<edge> &origEdges,
 							edge e_orig,
 							SList<adjEntry> &path);
-
-
 };
 
-} // end namespace ogdf
-
-#endif
+}

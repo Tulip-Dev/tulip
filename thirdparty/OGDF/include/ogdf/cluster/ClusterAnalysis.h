@@ -1,11 +1,3 @@
-/*
- * $Revision: 3954 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2014-03-07 09:33:18 +0100 (Fri, 07 Mar 2014) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of the ClusterAnalysis class for the Branch&Cut algorithm
  * for c-planarity testing via an extension to complete connectivity.
@@ -24,7 +16,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -41,17 +33,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifndef OGDF_CLUSTER_ANALYSIS
-#define OGDF_CLUSTER_ANALYSIS
-
-
+#pragma once
 
 #include <ogdf/cluster/ClusterGraph.h>
 #include <ogdf/basic/Skiplist.h>
@@ -60,6 +46,8 @@
 namespace ogdf {
 
 /***
+ * @ingroup ga-cplanarity
+ *
  * Although most parts of the code are written with efficiency in mind,
  * this class is meant to be used in a static one-time analysis way,
  * not for dynamic checks over and over again.
@@ -73,7 +61,7 @@ public:
 	//! Constructor. Performs all analyses and in case indyBags is
 	//! set to true, also computes a partition into independently
 	//! solvable subproblems for cluster planarization (if applicable).
-	ClusterAnalysis(const ClusterGraph &C, bool indyBags = false);
+	explicit ClusterAnalysis(const ClusterGraph &C, bool indyBags = false);
 	//! Additionally allows to forbid storing lists of outer active vertices.
 	ClusterAnalysis(const ClusterGraph &C, bool oalists, bool indyBags);
 	~ClusterAnalysis();
@@ -81,11 +69,11 @@ public:
 	// Quantitative
 	//! Returns number of outeractive vertices of cluster c.
 	// @param c is the cluster for which the active vertices are counted
-	int outerActive(cluster c);
+	int outerActive(cluster c) const;
 
 	//! Returns number of inneractive vertices of cluster c.
 	// @param c is the cluster for which the active vertices are counted
-	int innerActive(cluster c);
+	int innerActive(cluster c) const;
 
 	//! Returns the highest (smallest) level depth for which a vertex
 	//! is inner or outer active.
@@ -104,31 +92,33 @@ public:
 	}
 
 	// Qualitative
-	//! Returns outer activity status for vertex \a v wrt cluster \a c.
+	//! Returns outer activity status for vertex \p v wrt cluster \p c.
 	/**
 	*  @param c is the cluster for which vertex v's activity status is stored.
 	*  @param v is the vertex for which the activity status is returned.
 	*/
-	bool isOuterActive(node v, cluster c);
-	bool isInnerActive(node v, cluster c);
+	bool isOuterActive(node v, cluster c) const;
+	bool isInnerActive(node v, cluster c) const;
 
 	//! Returns list of edges for cluster c with lca c.
 	List<edge>& lcaEdges(cluster c);
 
-	//! Returns list of outeractive vertices for cluster \a c. The result
+	//! Returns list of outeractive vertices for cluster \p c. The result
 	//! is only valid if lists are stored, i.e. m_storeoalists is true.
 	List<node>& oaNodes(cluster c);
 
-	//! Returns bag index number for a vertex \a v in cluster \a c.
+	//! Returns bag index number for a vertex \p v in cluster \p c.
 	int bagIndex(node v, cluster c);
 
-	//! Returns number of bags for cluster \a c.
-	int numberOfBags(cluster c);
+	//! Returns number of bags for cluster \p c.
+	int numberOfBags(cluster c) const;
 
+#if 0
 	//TODO
-	//void reInit(const ClusterGraph &C);
+	void reInit(const ClusterGraph &C);
+#endif
 
-	//! Returns independent bag index number for a vertex \a v.
+	//! Returns independent bag index number for a vertex \p v.
 	//! @pre indyBags parameter in constructor was set to true, i.e. indyBags were computed.
 	int indyBagIndex(node v);
 
@@ -142,13 +132,17 @@ public:
 	cluster indyBagRoot(int i);
 
 protected:
-	void computeBags(); //!< Compute bags per cluster and store result as vertex-bag
-						//!< index in m_bagIndex.
-	void computeIndyBags(); //!< Compute independent bags per cluster and store result
-							//!< as vertex-indyBag index in m_indyBagNumber.
+	//! Compute bags per cluster and store result as vertex-bag
+	//! index in m_bagIndex.
+	void computeBags();
+
+	//! Compute independent bags per cluster and store result
+	//! as vertex-indyBag index in m_indyBagNumber.
+	void computeIndyBags();
+
 private:
-	//! Runs through a list of vertices (starting with \a the one nodeIT points to)
-	//! which is expected to be a full list of cluster vertices in \a c. Depending on
+	//! Runs through a list of vertices (starting with the one \p nodeIT points to)
+	//! which is expected to be a full list of cluster vertices in \p c. Depending on
 	//! outer activity and bag index number of the vertices, independent bags
 	//! are detected and a corresponding index is assigned accordingly for each vertex.
 	//! If omitChildBags is set to true, already processed vertices are skipped.
@@ -158,9 +152,9 @@ private:
 	void init(); //!< Initialize the structures, performs analyses.
 	void cleanUp(); //!< Deletes dynamically allocated structures.
 	const ClusterGraph* m_C;
-	//we keep data structures to save inner/outer activity status
-	//instead of computing them on the fly when needed
-	//keep number of activity defining adjacent edges
+	// we keep data structures to save inner/outer activity status
+	// instead of computing them on the fly when needed
+	// keep number of activity defining adjacent edges
 	NodeArray< ClusterArray<int> *> m_iactive;
 	NodeArray< ClusterArray<int> *> m_oactive;
 
@@ -174,19 +168,19 @@ private:
 	ClusterArray<int>* m_oanum; //!< Number of outer active vertices
 	ClusterArray<int>* m_ianum; //!< Number of inner active vertices
 	ClusterArray<int>* m_bags;  //!< Number of bags per cluster (stored even if vertex list is not stored)
-	ClusterArray<List<node> >* m_oalists;  //!< For each cluster we store the outeractive vertices.
-								//!< In case you want to save space, set m_storeoalists to false.
+
+	//! For each cluster we store the outeractive vertices.
+	//! In case you want to save space, set m_storeoalists to false.
+	ClusterArray<List<node> >* m_oalists;
 	const bool m_storeoalists; //!< If set to true (default) lists of outeractive vertices are stored.
 
 	ClusterArray<List<edge> >* m_lcaEdges; //!< For each cluster c we store the edges with lca c.
 
-	const bool m_indyBags; //!< If true, a node partition into independent bags is computed which can
-					 //!< be used for dividing the input instance into smaller problems wrt cluster planarization.
+	//! If true, a node partition into independent bags is computed which can
+	//! be used for dividing the input instance into smaller problems wrt cluster planarization.
+	const bool m_indyBags;
 	NodeArray<int> m_indyBagNumber;  //!< Each independent bag has a different number.
 	int m_numIndyBags; //<! Number of independent bags in clustergraph
 	cluster* m_indyBagRoots; //<! Root clusters of independent bags (only when computed).
-
 };
 }
-
-#endif

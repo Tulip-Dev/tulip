@@ -1,11 +1,3 @@
-/*
- * $Revision: 3880 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2014-01-16 15:27:36 +0100 (Thu, 16 Jan 2014) $
- ***************************************************************/
-
 /** \file
  * \brief Implementation of GML parser (class GmlParser)
  * (used for parsing and reading GML files)
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,39 +26,25 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-// disable VC++ warnings when using strcpy
-#define _CRT_SECURE_NO_WARNINGS
+#include <unordered_map>
+#include <memory>
 
 #include <ogdf/fileformats/GmlParser.h>
-#include <ogdf/basic/HashArray.h>
+#include <ogdf/fileformats/Utils.h>
 
 
 namespace ogdf {
 
-GmlParser::GmlParser(const char *fileName, bool doCheck)
+namespace gml {
+
+
+Parser::Parser(std::istream &is, bool doCheck)
 {
-	ifstream is(fileName, ios::in);  // open file
-	doInit(is,doCheck);
-}
-
-
-GmlParser::GmlParser(istream &is, bool doCheck)
-{
-	doInit(is,doCheck);
-}
-
-
-void GmlParser::doInit(istream &is, bool doCheck)
-{
-	m_objectTree = 0;
+	m_objectTree = nullptr;
 
 	if (!is) {
 		setError("Cannot open file.");
@@ -78,16 +56,15 @@ void GmlParser::doInit(istream &is, bool doCheck)
 	int minId, maxId;
 	m_graphObject = getNodeIdRange(minId, maxId);
 	if (!m_graphObject) {
-		setError("Cannot open file.");
+		setError("Cannot obtain min and max node id.");
 		return;
 	}
-	m_mapToNode.init(minId,maxId,0);
+	m_mapToNode.init(minId,maxId,nullptr);
 }
 
 
-void GmlParser::createObjectTree(istream &is, bool doCheck)
+void Parser::createObjectTree(std::istream &is, bool doCheck)
 {
-	initPredefinedKeys();
 	m_error = false;
 
 	m_is = &is;
@@ -96,7 +73,7 @@ void GmlParser::createObjectTree(istream &is, bool doCheck)
 	// initialize line buffer (note: GML specifies a maximal line length
 	// of 254 characters!)
 	m_rLineBuffer = new char[256];
-	if (m_rLineBuffer == 0) OGDF_THROW(InsufficientMemoryException);
+	if (m_rLineBuffer == nullptr) OGDF_THROW(InsufficientMemoryException);
 
 	*m_rLineBuffer = '\n';
 	m_lineBuffer = m_rLineBuffer+1;
@@ -105,152 +82,113 @@ void GmlParser::createObjectTree(istream &is, bool doCheck)
 	m_cStore = 0; // forces getNextSymbol() to read first line
 
 	// create object tree
-	m_objectTree = parseList(gmlEOF,gmlListEnd);
+	m_objectTree = parseList(ObjectType::Eof);
 
 	delete[] m_rLineBuffer;
 }
 
-// we use predefined id constants for all relevant keys
-// this allows us to use efficient switch() statements in read() methods
-void GmlParser::initPredefinedKeys()
+
+Object *Parser::parseList(ObjectType closingKey)
 {
-	m_hashTable.fastInsert("id",       idPredefKey);
-	m_hashTable.fastInsert("label",    labelPredefKey);
-	m_hashTable.fastInsert("Creator",  CreatorPredefKey);
-	m_hashTable.fastInsert("name",     namePredefKey);
-	m_hashTable.fastInsert("graph",    graphPredefKey);
-	m_hashTable.fastInsert("version",  versionPredefKey);
-	m_hashTable.fastInsert("directed", directedPredefKey);
-	m_hashTable.fastInsert("node",     nodePredefKey);
-	m_hashTable.fastInsert("edge",     edgePredefKey);
-	m_hashTable.fastInsert("graphics", graphicsPredefKey);
-	m_hashTable.fastInsert("x",        xPredefKey);
-	m_hashTable.fastInsert("y",        yPredefKey);
-	m_hashTable.fastInsert("w",        wPredefKey);
-	m_hashTable.fastInsert("h",        hPredefKey);
-	m_hashTable.fastInsert("type",     typePredefKey);
-	m_hashTable.fastInsert("width",    widthPredefKey);
-	m_hashTable.fastInsert("source",   sourcePredefKey);
-	m_hashTable.fastInsert("target",   targetPredefKey);
-	m_hashTable.fastInsert("arrow",    arrowPredefKey);
-	m_hashTable.fastInsert("Line",     LinePredefKey);
-	m_hashTable.fastInsert("line",     linePredefKey);
-	m_hashTable.fastInsert("point",    pointPredefKey);
-	m_hashTable.fastInsert("generalization", generalizationPredefKey);
-	m_hashTable.fastInsert("subgraph", subGraphPredefKey);
-	m_hashTable.fastInsert("fill",     fillPredefKey);
-	m_hashTable.fastInsert("cluster",     clusterPredefKey);
-	m_hashTable.fastInsert("rootcluster", rootClusterPredefKey);
-	m_hashTable.fastInsert("vertex",    vertexPredefKey);
-	m_hashTable.fastInsert("color",		colorPredefKey);
-	m_hashTable.fastInsert("height",		heightPredefKey);
-	m_hashTable.fastInsert("stipple",   stipplePredefKey);  //linestyle
-	m_hashTable.fastInsert("pattern",    patternPredefKey); //brush pattern
-	m_hashTable.fastInsert("lineWidth", lineWidthPredefKey);//line width
-	m_hashTable.fastInsert("template", templatePredefKey);//line width
-	m_hashTable.fastInsert("weight", edgeWeightPredefKey);
-
-	// further keys get id's starting with NEXTPREDEFKEY
-	m_num = NEXTPREDEFKEY;
-}
-
-
-GmlObject *GmlParser::parseList(GmlObjectType closingKey,
-	GmlObjectType /* errorKey */)
-{
-	GmlObject *firstSon = 0;
-	GmlObject **pPrev = &firstSon;
+	Object *firstSon = nullptr;
+	Object **pPrev = &firstSon;
 
 	for( ; ; ) {
-		GmlObjectType symbol = getNextSymbol();
+		ObjectType symbol = getNextSymbol();
 
-		if (symbol == closingKey || symbol == gmlError)
+		if (symbol == closingKey || symbol == ObjectType::Error)
 			return firstSon;
 
-		if (symbol != gmlKey) {
+		if (symbol != ObjectType::Key) {
 			setError("key expected");
 			return firstSon;
 		}
 
-		GmlKey key = m_keySymbol;
+		Key key = m_keySymbol;
 
 		symbol = getNextSymbol();
-		GmlObject *object = 0;
+		Object *object = nullptr;
 
 		switch (symbol) {
-		case gmlIntValue:
-			object = OGDF_NEW GmlObject(key,m_intSymbol);
+		case ObjectType::IntValue:
+			object = new Object(key,m_intSymbol);
 			break;
 
-		case gmlDoubleValue:
-			object = OGDF_NEW GmlObject(key,m_doubleSymbol);
+		case ObjectType::DoubleValue:
+			object = new Object(key,m_doubleSymbol);
 			break;
 
-		case gmlStringValue: {
+		case ObjectType::StringValue: {
 			size_t len = strlen(m_stringSymbol)+1;
 			char *pChar = new char[len];
-			if (pChar == 0) OGDF_THROW(InsufficientMemoryException);
+			if (pChar == nullptr) OGDF_THROW(InsufficientMemoryException);
 
-			strcpy(pChar,m_stringSymbol);
-			object = OGDF_NEW GmlObject(key,pChar); }
+#ifdef _MSC_VER
+			strcpy_s(pChar, len, m_stringSymbol);
+#else
+			strcpy(pChar, m_stringSymbol);
+#endif
+			object = new Object(key,pChar); }
 			break;
 
-		case gmlListBegin:
-			object = OGDF_NEW GmlObject(key);
-			object->m_pFirstSon = parseList(gmlListEnd,gmlEOF);
+		case ObjectType::ListBegin:
+			object = new Object(key);
+			object->pFirstSon = parseList(ObjectType::ListEnd);
 			break;
 
-		case gmlListEnd:
+		case ObjectType::ListEnd:
 			setError("unexpected end of list");
 			return firstSon;
 
-		case gmlKey:
+		case ObjectType::Key:
 			setError("unexpected key");
 			return firstSon;
 
-		case gmlEOF:
+		case ObjectType::Eof:
 			setError("missing value");
 			return firstSon;
 
-		case gmlError:
+		case ObjectType::Error:
 			return firstSon;
 
-		OGDF_NODEFAULT // one of the cases above has to occur
+		// one of the cases above has to occur
+		default:
+			OGDF_ASSERT(false);
 		}
 
 		*pPrev = object;
-		pPrev = &object->m_pBrother;
+		pPrev = &object->pBrother;
 	}
 
 	return firstSon;
 }
 
 
-void GmlParser::destroyObjectList(GmlObject *object)
+void Parser::destroyObjectList(Object *object)
 {
-	GmlObject *nextObject;
+	Object *nextObject;
 	for(; object; object = nextObject) {
-		nextObject = object->m_pBrother;
+		nextObject = object->pBrother;
 
-		if (object->m_valueType == gmlStringValue)
-			delete[] const_cast<char *>(object->m_stringValue);
+		if (object->valueType == ObjectType::StringValue)
+			delete[] const_cast<char *>(object->stringValue);
 
-		else if (object->m_valueType == gmlListBegin)
-			destroyObjectList(object->m_pFirstSon);
+		else if (object->valueType == ObjectType::ListBegin)
+			destroyObjectList(object->pFirstSon);
 
 		delete object;
 	}
 }
 
 
-GmlParser::~GmlParser()
+Parser::~Parser()
 {
 	// we have to delete all objects and allocated char arrays in string values
 	destroyObjectList(m_objectTree);
 }
 
 
-bool GmlParser::getLine()
+bool Parser::getLine()
 {
 	do {
 		if (m_is->eof()) return false;
@@ -266,7 +204,7 @@ bool GmlParser::getLine()
 }
 
 
-GmlObjectType GmlParser::getNextSymbol()
+ObjectType Parser::getNextSymbol()
 {
 	*m_pStore = m_cStore;
 
@@ -274,8 +212,8 @@ GmlObjectType GmlParser::getNextSymbol()
 	for(; *m_pCurrent && isspace((int)*m_pCurrent); ++m_pCurrent) ;
 
 	// get new line if required
-	if (*m_pCurrent == 0) {
-		if (!getLine()) return gmlEOF;
+	if (*m_pCurrent == 0 && !getLine()) {
+		return ObjectType::Eof;
 	}
 
 	// identify start of current symbol
@@ -286,32 +224,32 @@ GmlObjectType GmlParser::getNextSymbol()
 	{ // string
 		m_stringSymbol = ++m_pCurrent;
 		char *pWrite = m_pCurrent;
-		while(*m_pCurrent != 0 && *m_pCurrent != '\"')
-		{
-			if (*m_pCurrent == '\\')
-			{
-				// note: this block is repeated below
-				switch(*(m_pCurrent+1)) {
-				case 0:
-					*m_pCurrent = 0;
-					break;
-				case '\\':
-					*pWrite++ = '\\';
-					m_pCurrent += 2;
-					break;
-				case '\"':
-					*pWrite++ = '\"';
-					m_pCurrent += 2;
-					break;
-				default:
-					// just copy the escape sequence as is
-					*pWrite++ = *m_pCurrent++;
+		auto update = [&] {
+			while(*m_pCurrent != 0 && *m_pCurrent != '\"') {
+				if (*m_pCurrent == '\\') {
+					switch(*(m_pCurrent+1)) {
+					case 0:
+						*m_pCurrent = 0;
+						break;
+					case '\\':
+						*pWrite++ = '\\';
+						m_pCurrent += 2;
+						break;
+					case '\"':
+						*pWrite++ = '\"';
+						m_pCurrent += 2;
+						break;
+					default:
+						// just copy the escape sequence as is
+						*pWrite++ = *m_pCurrent++;
+						*pWrite++ = *m_pCurrent++;
+					}
+				} else {
 					*pWrite++ = *m_pCurrent++;
 				}
-
-			} else
-				*pWrite++ = *m_pCurrent++;
-		}
+			}
+		};
+		update();
 
 		if (*m_pCurrent == 0)
 		{
@@ -320,32 +258,7 @@ GmlObjectType GmlParser::getNextSymbol()
 			while(getLine())
 			{
 				m_pCurrent = pWrite = m_lineBuffer;
-				while(*m_pCurrent != 0 && *m_pCurrent != '\"')
-				{
-					if (*m_pCurrent == '\\')
-					{
-						// (block repeated from above)
-						switch(*(m_pCurrent+1)) {
-						case 0:
-							*m_pCurrent = 0;
-							break;
-						case '\\':
-							*pWrite++ = '\\';
-							m_pCurrent += 2;
-							break;
-						case '\"':
-							*pWrite++ = '\"';
-							m_pCurrent += 2;
-							break;
-						default:
-							// just copy the escape sequence as is
-							*pWrite++ = *m_pCurrent++;
-							*pWrite++ = *m_pCurrent++;
-						}
-
-					} else
-						*pWrite++ = *m_pCurrent++;
-				}
+				update();
 
 				if (*m_pCurrent == 0) {
 					*pWrite = 0;
@@ -367,7 +280,7 @@ GmlObjectType GmlParser::getNextSymbol()
 			*pWrite = 0;
 		}
 
-		return gmlStringValue;
+		return ObjectType::StringValue;
 	}
 
 	// identify end of current symbol
@@ -383,18 +296,18 @@ GmlObjectType GmlParser::getNextSymbol()
 			for (char *p = pStart+1; *p; ++p)
 				if (!(isalpha((int)*p) || isdigit((int)*p))) {
 					setError("malformed key");
-					return gmlError;
+					return ObjectType::Error;
 				}
 		}
 
-		m_keySymbol = hashString(pStart);
-		return gmlKey;
+		m_keySymbol = toKey(pStart);
+		return ObjectType::Key;
 
 	} else if (*pStart == '[') {
-		return gmlListBegin;
+		return ObjectType::ListBegin;
 
 	} else if (*pStart == ']') {
-		return gmlListEnd;
+		return ObjectType::ListEnd;
 
 	} else if (*pStart == '-' || isdigit((int)*pStart)) { // int or double
 		char *p = pStart+1;
@@ -404,64 +317,47 @@ GmlObjectType GmlParser::getNextSymbol()
 			// check to be done
 
 			m_doubleSymbol = atof(pStart);
-			return gmlDoubleValue;
+			return ObjectType::DoubleValue;
 
 		} else { // int
 			if (*p != 0) {
 				setError("malformed number");
-				return gmlError;
+				return ObjectType::Error;
 			}
 
 			m_intSymbol = atoi(pStart);
-			return gmlIntValue;
+			return ObjectType::IntValue;
 		}
 	}
 
 	setError("unknown symbol");
 
-	return gmlError;
+	return ObjectType::Error;
 }
 
 
-GmlKey GmlParser::hashString(const string &str)
+Object *Parser::getNodeIdRange(int &minId,int &maxId)
 {
-	GmlKey key = m_hashTable.insertByNeed(str,-1);
-	if(key->info() == -1) key->info() = m_num++;
+	maxId = 0;
+	minId = std::numeric_limits<int>::max();
 
-	return key;
-}
+	Object *graphObject = m_objectTree;
+	for(; graphObject; graphObject = graphObject->pBrother)
+		if (graphObject->key == Key::Graph) break;
 
-
-GmlObject *GmlParser::getNodeIdRange(int &minId,int &maxId)
-{
-	minId = maxId = 0;
-
-	GmlObject *graphObject = m_objectTree;
-	for(; graphObject; graphObject = graphObject->m_pBrother)
-		if (id(graphObject) == graphPredefKey) break;
-
-	if (!graphObject || graphObject->m_valueType != gmlListBegin) {
-		return NULL;
+	if (!graphObject || graphObject->valueType != ObjectType::ListBegin) {
+		return nullptr;
 	}
 
-	bool first = true;
-	GmlObject *son = graphObject->m_pFirstSon;
-	for(; son; son = son->m_pBrother) {
-		if (id(son) == nodePredefKey && son->m_valueType == gmlListBegin) {
-
-			GmlObject *nodeSon = son->m_pFirstSon;
-			for(; nodeSon; nodeSon = nodeSon->m_pBrother) {
-				if (id(nodeSon) == idPredefKey ||
-					nodeSon->m_valueType == gmlIntValue)
-				{
-					int nodeSonId = nodeSon->m_intValue;
-					if (first) {
-						minId = maxId = nodeSonId;
-						first = false;
-					} else {
-						if (nodeSonId < minId) minId = nodeSonId;
-						if (nodeSonId > maxId) maxId = nodeSonId;
-					}
+	Object *son = graphObject->pFirstSon;
+	for(; son; son = son->pBrother) {
+		if (son->key == Key::Node && son->valueType == ObjectType::ListBegin) {
+			Object *nodeSon = son->pFirstSon;
+			for(; nodeSon; nodeSon = nodeSon->pBrother) {
+				if (nodeSon->key == Key::Id &&
+					nodeSon->valueType == ObjectType::IntValue) {
+					Math::updateMin(minId, nodeSon->intValue);
+					Math::updateMax(maxId, nodeSon->intValue);
 				}
 			}
 		}
@@ -471,812 +367,513 @@ GmlObject *GmlParser::getNodeIdRange(int &minId,int &maxId)
 }
 
 
-bool GmlParser::read(Graph &G)
-{
-	G.clear();
-
-	int minId = m_mapToNode.low();
-	int maxId = m_mapToNode.high();
-	int notDefined = minId-1; //indicates not defined id key
-
-	GmlObject *son = m_graphObject->m_pFirstSon;
-	for(; son; son = son->m_pBrother)
-	{
-		switch(id(son))
-		{
-		case nodePredefKey: {
-			if (son->m_valueType != gmlListBegin) break;
-
-			// set attributes to default values
-			int vId = notDefined;
-
-			// read all relevant attributes
-			GmlObject *nodeSon = son->m_pFirstSon;
-			for(; nodeSon; nodeSon = nodeSon->m_pBrother) {
-				if (id(nodeSon) == idPredefKey &&
-					nodeSon->m_valueType == gmlIntValue)
-				{
-					vId = nodeSon->m_intValue;
-				}
-			}
-
-			// check if everything required is defined correctly
-			if (vId == notDefined) {
-				setError("node id not defined");
-				return false;
-			}
-
-			// create new node if necessary
-			if (m_mapToNode[vId] == 0) m_mapToNode[vId] = G.newNode(); }
-			break;
-
-		case edgePredefKey: {
-			if (son->m_valueType != gmlListBegin) break;
-
-			// set attributes to default values
-			int sourceId = notDefined, targetId = notDefined;
-
-			// read all relevant attributes
-			GmlObject *edgeSon = son->m_pFirstSon;
-			for(; edgeSon; edgeSon = edgeSon->m_pBrother) {
-
-				switch(id(edgeSon)) {
-				case sourcePredefKey:
-					if (edgeSon->m_valueType != gmlIntValue) break;
-					sourceId = edgeSon->m_intValue;
-					break;
-
-				case targetPredefKey:
-					if (edgeSon->m_valueType != gmlIntValue) break;
-					targetId = edgeSon->m_intValue;
-					break;
-				}
-			}
-
-			// check if everything required is defined correctly
-			if (sourceId == notDefined || targetId == notDefined) {
-				setError("source or target id not defined");
-				return false;
-
-			} else if (sourceId < minId || maxId < sourceId ||
-				targetId < minId || maxId < targetId) {
-				setError("source or target id out of range");
-				return false;
-			}
-
-			// create adjacent nodes if necessary and new edge
-			if (m_mapToNode[sourceId] == 0) m_mapToNode[sourceId] = G.newNode();
-			if (m_mapToNode[targetId] == 0) m_mapToNode[targetId] = G.newNode();
-
-			G.newEdge(m_mapToNode[sourceId],m_mapToNode[targetId]);
-			}//case edge
-			break;
-		}//switch
-	}//for sons
-
-	return true;
+string toString(ObjectType type) {
+	switch (type) {
+	case ObjectType::StringValue:
+		return "string";
+	case ObjectType::IntValue:
+		return "integer";
+	case ObjectType::DoubleValue:
+		return "real";
+	case ObjectType::ListBegin:
+		return "list";
+	default:
+		return "unknown";
+	}
 }
 
+// Map {int,double,string} to their internal GML representation
+template<typename T>
+struct GmlType {
+	static ObjectType type;
+	static T get_attr(Object*);
+};
+template<>
+ObjectType GmlType<int>::type = ObjectType::IntValue;
+template<>
+int GmlType<int>::get_attr(Object *obj) { return obj->intValue; };
+template<>
+ObjectType GmlType<double>::type = ObjectType::DoubleValue;
+template<>
+double GmlType<double>::get_attr(Object *obj) { return obj->doubleValue; };
+template<>
+ObjectType GmlType<string>::type = ObjectType::StringValue;
+template<>
+string GmlType<string>::get_attr(Object *obj) { return obj->stringValue; };
 
-bool GmlParser::read(Graph &G, GraphAttributes &AG)
-{
-	OGDF_ASSERT(&G == &(AG.constGraph()))
+// Interface for handlers, so we can abstract away the difference between simple and list handlers
+struct IHandler {
+	virtual void handle(Object *obj) = 0;
+	virtual ~IHandler() = default;
+};
 
-	G.clear();
+// A handler for non-list data
+class BasicHandler : public IHandler {
+public:
+	BasicHandler(GraphAttributes* GA = nullptr) : m_requiredGAs(0), m_GA(GA) { }
+	virtual ~BasicHandler() = default;
 
-	int minId = m_mapToNode.low();
-	int maxId = m_mapToNode.high();
-	int notDefined = minId-1; //indicates not defined id key
+	BasicHandler& eachInt(std::function<bool(const int&)> handler) { m_handleInt = handler; return *this; }
+	BasicHandler& eachDouble(std::function<bool(const double&)> handler) { m_handleDouble = handler; return *this; }
+	BasicHandler& eachString(std::function<bool(const string&)> handler) { m_handleString = handler; return *this; }
+	BasicHandler& each(std::function<bool(Object*)> handler) { m_handleObject = handler; return *this; }
 
-	HashArray<string,Shape> strToShape(shRect);
-	strToShape["rectangle"]        = shRect;
-	strToShape["rect"]             = shRect;
-	strToShape["roundedRect"]      = shRoundedRect;
-	strToShape["oval"]             = shEllipse;
-	strToShape["ellipse"]          = shEllipse;
-	strToShape["triangle"]         = shTriangle;
-	strToShape["pentagon"]         = shPentagon;
-	strToShape["hexagon"]          = shHexagon;
-	strToShape["octagon"]          = shOctagon;
-	strToShape["rhomb"]            = shRhomb;
-	strToShape["trapeze"]          = shTrapeze;
-	strToShape["parallelogram"]    = shParallelogram;
-	strToShape["invTriangle"]      = shInvTriangle;
-	strToShape["invTrapeze"]       = shInvTrapeze;
-	strToShape["invParallelogram"] = shInvParallelogram;
-	strToShape["image"]            = shImage;
+	BasicHandler& storeInt(long gattr, std::function<void(const int&)> save) { m_requiredGAs = gattr; m_saveInt = save; return *this; }
+	BasicHandler& storeDouble(long gattr, std::function<void(const double&)> save) { m_requiredGAs = gattr; m_saveDouble = save; return *this; }
+	BasicHandler& storeString(long gattr, std::function<void(const string&)> save) { m_requiredGAs = gattr; m_saveString = save; return *this; }
+	BasicHandler& store(long gattr, std::function<void(Object*)> save) { m_requiredGAs = gattr; m_saveObject = save; return *this; }
 
-	DPolyline bends;
-
-	GmlObject *son = m_graphObject->m_pFirstSon;
-	for(; son; son = son->m_pBrother) {
-
-		switch(id(son)) {
-		case nodePredefKey: {
-			if (son->m_valueType != gmlListBegin) break;
-
-			// set attributes to default values
-			int vId = notDefined;
-			double x = 0, y = 0, w = 0, h = 0;
-			string label;
-			string templ;
-			string fill;  // the fill color attribute
-			string line;  // the line color attribute
-			string shape; //the shape type
-			float lineWidth = 1.0f; //node line width
-			int pattern = 1; //node brush pattern
-			int stipple = 1; //line style pattern
-			int weight = 0; // node weight
-
-			// read all relevant attributes
-			GmlObject *nodeSon = son->m_pFirstSon;
-			for(; nodeSon; nodeSon = nodeSon->m_pBrother) {
-				switch(id(nodeSon)) {
-				case idPredefKey:
-					if(nodeSon->m_valueType != gmlIntValue) break;
-					vId = nodeSon->m_intValue;
-					break;
-
-				case graphicsPredefKey: {
-					if (nodeSon->m_valueType != gmlListBegin) break;
-
-					GmlObject *graphicsObject = nodeSon->m_pFirstSon;
-					for(; graphicsObject;
-						graphicsObject = graphicsObject->m_pBrother)
-					{
-						switch(id(graphicsObject)) {
-						case xPredefKey:
-							if(graphicsObject->m_valueType != gmlDoubleValue) break;
-							x = graphicsObject->m_doubleValue;
-							break;
-
-						case yPredefKey:
-							if(graphicsObject->m_valueType != gmlDoubleValue) break;
-							y = graphicsObject->m_doubleValue;
-							break;
-
-						case wPredefKey:
-							if(graphicsObject->m_valueType != gmlDoubleValue) break;
-							w = graphicsObject->m_doubleValue;
-							break;
-
-						case hPredefKey:
-							if(graphicsObject->m_valueType != gmlDoubleValue) break;
-							h = graphicsObject->m_doubleValue;
-							break;
-
-						case fillPredefKey:
-							if(graphicsObject->m_valueType != gmlStringValue) break;
-							fill = graphicsObject->m_stringValue;
-							break;
-
-						case linePredefKey:
-							if(graphicsObject->m_valueType != gmlStringValue) break;
-							line = graphicsObject->m_stringValue;
-							break;
-
-						case lineWidthPredefKey:
-							if(graphicsObject->m_valueType != gmlDoubleValue) break;
-							lineWidth = (float)graphicsObject->m_doubleValue;
-							break;
-
-						case typePredefKey:
-							if(graphicsObject->m_valueType != gmlStringValue) break;
-							shape = graphicsObject->m_stringValue;
-							break;
-						case patternPredefKey: //fill style
-							if(graphicsObject->m_valueType != gmlIntValue) break;
-							pattern = graphicsObject->m_intValue;
-						case stipplePredefKey: //line style
-							if(graphicsObject->m_valueType != gmlIntValue) break;
-							stipple = graphicsObject->m_intValue;
-						}
-					}
-					break; }
-
-				case templatePredefKey:
-					if (nodeSon->m_valueType != gmlStringValue) break;
-					templ = nodeSon->m_stringValue;
-					break;
-
-				case labelPredefKey:
-					if (nodeSon->m_valueType != gmlStringValue) break;
-					label = nodeSon->m_stringValue;
-					break;
-
-				case edgeWeightPredefKey: //sic!
-					if (nodeSon->m_valueType != gmlIntValue) break;
-					weight = nodeSon->m_intValue;
-					break;
+	void handle(Object *obj) override {
+		bool handled = false;
+		bool saved = false;
+		// Make sure the parsed data is of the expected type
+		if (m_handleInt) {
+			if (obj->valueType == ObjectType::IntValue) {
+				handled = m_handleInt(obj->intValue);
+			}
+			if (!handled && !m_handleDouble && obj->valueType == ObjectType::DoubleValue) {
+				handled = m_handleInt(obj->doubleValue);
+				if (handled) {
+					Logger::slout(Logger::Level::Minor) << "Expected integer attribute for " << toString(obj->key) << ", found float. Read may have lost precision!";
 				}
 			}
-
-			// check if everything required is defined correctly
-			if (vId == notDefined) {
-				setError("node id not defined");
-				return false;
+		}
+		if (!handled && m_handleDouble) {
+			if (obj->valueType == ObjectType::DoubleValue) {
+				handled = m_handleDouble(obj->doubleValue);
 			}
-
-			// create new node if necessary and assign attributes
-			if (m_mapToNode[vId] == 0) m_mapToNode[vId] = G.newNode();
-			node v = m_mapToNode[vId];
-			if (AG.attributes() & GraphAttributes::nodeGraphics)
-			{
-				AG.x(v) = x;
-				AG.y(v) = y;
-				AG.width (v) = w;
-				AG.height(v) = h;
-				AG.shape(v) = strToShape[shape];
+			if (!handled && obj->valueType == ObjectType::IntValue) {
+				handled = m_handleDouble(obj->intValue);
 			}
-			if (AG.attributes() & GraphAttributes::nodeLabel)
-				AG.label(m_mapToNode[vId]) = label;
-			if (AG.attributes() & GraphAttributes::nodeTemplate)
-				AG.templateNode(m_mapToNode[vId]) = templ;
-			if (AG.attributes() & GraphAttributes::nodeId)
-				AG.idNode(m_mapToNode[vId]) = vId;
-			if (AG.attributes() & GraphAttributes::nodeWeight)
-				AG.weight(m_mapToNode[vId]) = weight;
-			if (AG.attributes() & GraphAttributes::nodeStyle)
-			{
-				AG.fillColor(m_mapToNode[vId]) = fill;
-				AG.strokeColor(m_mapToNode[vId]) = line;
-				AG.setFillPattern(m_mapToNode[vId], intToFillPattern(pattern));
-				AG.setStrokeType(m_mapToNode[vId], intToStrokeType(stipple));
-				AG.strokeWidth(m_mapToNode[vId]) = lineWidth;
+		}
+		if (!handled && m_handleString) {
+			if (obj->valueType == ObjectType::StringValue) {
+				handled = m_handleString(obj->stringValue);
 			}
-							}//node
-							//Todo: line style set stipple value
-							break;
-
-		case edgePredefKey: {
-			string arrow; // the arrow type attribute
-			string fill;  //the color fill attribute
-			int stipple = 1;  //the line style
-			float lineWidth = 1.0f;
-			double edgeWeight = 1.0;
-			int subGraph = 0; //edgeSubGraphs attribute
-			string label; // label attribute
-
-			if (son->m_valueType != gmlListBegin) break;
-
-			// set attributes to default values
-			int sourceId = notDefined, targetId = notDefined;
-			Graph::EdgeType umlType = Graph::association;
-
-			// read all relevant attributes
-			GmlObject *edgeSon = son->m_pFirstSon;
-			for(; edgeSon; edgeSon = edgeSon->m_pBrother) {
-
-				switch(id(edgeSon)) {
-				case sourcePredefKey:
-					if (edgeSon->m_valueType != gmlIntValue) break;
-					sourceId = edgeSon->m_intValue;
-					break;
-
-				case targetPredefKey:
-					if (edgeSon->m_valueType != gmlIntValue) break;
-					targetId = edgeSon->m_intValue;
-					break;
-
-				case subGraphPredefKey:
-					if (edgeSon->m_valueType != gmlIntValue) break;
-					subGraph = edgeSon->m_intValue;
-					break;
-
-				case labelPredefKey:
-					if (edgeSon->m_valueType != gmlStringValue) break;
-					label = edgeSon->m_stringValue;
-					break;
-
-				case graphicsPredefKey: {
-					if (edgeSon->m_valueType != gmlListBegin) break;
-
-					GmlObject *graphicsObject = edgeSon->m_pFirstSon;
-					for(; graphicsObject;
-						graphicsObject = graphicsObject->m_pBrother)
-					{
-						if(id(graphicsObject) == LinePredefKey &&
-							graphicsObject->m_valueType == gmlListBegin)
-						{
-							readLineAttribute(graphicsObject->m_pFirstSon,bends);
-						}
-						if(id(graphicsObject) == arrowPredefKey &&
-							graphicsObject->m_valueType == gmlStringValue)
-							arrow = graphicsObject->m_stringValue;
-						if(id(graphicsObject) == fillPredefKey &&
-							graphicsObject->m_valueType == gmlStringValue)
-							fill = graphicsObject->m_stringValue;
-						if (id(graphicsObject) == stipplePredefKey && //line style
-							graphicsObject->m_valueType == gmlIntValue)
-							stipple = graphicsObject->m_intValue;
-						if (id(graphicsObject) == lineWidthPredefKey && //line width
-							graphicsObject->m_valueType == gmlDoubleValue)
-							lineWidth = (float)graphicsObject->m_doubleValue;
-						if (id(graphicsObject) == edgeWeightPredefKey &&
-							graphicsObject->m_valueType == gmlDoubleValue)
-							edgeWeight = graphicsObject->m_doubleValue;
-					}//for graphics
-										}
-
-				case generalizationPredefKey:
-					if (edgeSon->m_valueType != gmlIntValue) break;
-					umlType = (edgeSon->m_intValue == 0) ?
-						Graph::association : Graph::generalization;
-					break;
-
+			if (!handled && obj->valueType == ObjectType::IntValue) {
+				handled = m_handleString(to_string(obj->intValue));
+			}
+			if (!handled && obj->valueType == ObjectType::DoubleValue) {
+				handled = m_handleString(to_string(obj->doubleValue));
+			}
+		}
+		if (!handled && m_handleObject) {
+			handled = m_handleObject(obj);
+		}
+		if (m_requiredGAs > 0 && m_GA != nullptr && m_GA->has(m_requiredGAs)) {
+			if (m_saveInt) {
+				if (obj->valueType == ObjectType::IntValue) {
+					m_saveInt(obj->intValue);
+					saved = true;
+				}
+				if (!saved && !m_saveDouble && obj->valueType == ObjectType::DoubleValue) {
+					m_saveInt(obj->doubleValue);
+					Logger::slout(Logger::Level::Minor) << "Expected integer attribute for " << toString(obj->key) << ", found float. Read may have lost precision!";
+					saved = true;
 				}
 			}
-
-			// check if everything required is defined correctly
-			if (sourceId == notDefined || targetId == notDefined) {
-				setError("source or target id not defined");
-				return false;
-
-			} else if (sourceId < minId || maxId < sourceId ||
-				targetId < minId || maxId < targetId) {
-					setError("source or target id out of range");
-					return false;
+			if (!saved && m_saveDouble) {
+				if (obj->valueType == ObjectType::DoubleValue) {
+					m_saveDouble(obj->doubleValue);
+					saved = true;
+				}
+				if (!saved && obj->valueType == ObjectType::IntValue) {
+					m_saveDouble(obj->intValue);
+					saved = true;
+				}
 			}
-
-			// create adjacent nodes if necessary and new edge
-			if (m_mapToNode[sourceId] == 0) m_mapToNode[sourceId] = G.newNode();
-			if (m_mapToNode[targetId] == 0) m_mapToNode[targetId] = G.newNode();
-
-			edge e = G.newEdge(m_mapToNode[sourceId],m_mapToNode[targetId]);
-			if (AG.attributes() & GraphAttributes::edgeGraphics)
-				AG.bends(e).conc(bends);
-			if (AG.attributes() & GraphAttributes::edgeType)
-				AG.type(e) = umlType;
-			if(AG.attributes() & GraphAttributes::edgeSubGraphs)
-				AG.subGraphBits(e) = subGraph;
-			if (AG.attributes() & GraphAttributes::edgeLabel)
-				AG.label(e) = label;
-
-			if (AG.attributes() & GraphAttributes::edgeArrow) {
-				if (arrow == "none")
-					AG.arrowType(e) = eaNone;
-				else if (arrow == "last")
-					AG.arrowType(e) = eaLast;
-				else if (arrow == "first")
-					AG.arrowType(e) = eaFirst;
-				else if (arrow == "both")
-					AG.arrowType(e) = eaBoth;
-				else
-					AG.arrowType(e) = eaUndefined;
+			if (!saved && m_saveString) {
+				if (obj->valueType == ObjectType::StringValue) {
+					m_saveString(obj->stringValue);
+					saved = true;
+				}
+				if (!saved && obj->valueType == ObjectType::IntValue) {
+					m_saveString(to_string(obj->intValue));
+					saved = true;
+				}
+				if (!saved && obj->valueType == ObjectType::DoubleValue) {
+					m_saveString(to_string(obj->doubleValue));
+					saved = true;
+				}
 			}
-
-			if (AG.attributes() & GraphAttributes::edgeStyle)
-			{
-				AG.strokeColor(e) = fill;
-				AG.setStrokeType(e, intToStrokeType(stipple));
-				AG.strokeWidth(e) = lineWidth;
+			if (!saved && m_saveObject) {
+				m_saveObject(obj);
+				saved = true;
 			}
+		}
 
-			if (AG.attributes() & GraphAttributes::edgeDoubleWeight)
-				AG.doubleWeight(e) = edgeWeight;
-
-
-			break; }
-		case directedPredefKey: {
-			if(son->m_valueType != gmlIntValue) break;
-			AG.setDirected(son->m_intValue > 0);
-			break; }
+		// If we had no callbacks registered, applicable, or our general callback returned false,
+		// we are simply discarding the read attribute. Inform the user of this.
+		if (!handled && !saved) {
+			Logger::slout(Logger::Level::Minor) << "Ignoring unused attribute " << toString(obj->key) << "!";
 		}
 	}
 
-	return true;
-}//read
+private:
+	long m_requiredGAs;
+	GraphAttributes* m_GA;
+	std::function<bool(const int&)> m_handleInt;
+	std::function<bool(const double&)> m_handleDouble;
+	std::function<bool(const string&)> m_handleString;
+	std::function<bool(Object*)> m_handleObject;
+	std::function<void(const int&)> m_saveInt;
+	std::function<void(const double&)> m_saveDouble;
+	std::function<void(const string&)> m_saveString;
+	std::function<void(Object*)> m_saveObject;
+
+};
 
 
-//to be called AFTER calling read(G, AG)
-bool GmlParser::readAttributedCluster(
-	Graph &G,
-	ClusterGraph& CG,
-	ClusterGraphAttributes& ACG)
-{
-	OGDF_ASSERT(&CG.constGraph() == &G)
+// Handle attributes in a user-defined way
+class CustomHandler : public IHandler {
+public:
+	CustomHandler() { }
 
+	void each(std::function<void(Object*)> handler) { m_handle = handler; }
 
-	//now we need the cluster object
-	GmlObject *rootObject = m_objectTree;
-	for(; rootObject; rootObject = rootObject->m_pBrother)
-		if (id(rootObject) == rootClusterPredefKey) break;
-
-	if(rootObject == 0)
-		return true;
-
-	if (id(rootObject) != rootClusterPredefKey)
-	{
-		setError("missing rootcluster key");
-		return false;
+	void handle(Object *obj) override {
+		m_handle(obj);
 	}
 
-	if (rootObject->m_valueType != gmlListBegin) return false;
+private:
+	std::function<void(Object*)> m_handle;
+};
 
-	attributedClusterRead(rootObject, CG, ACG);
+// Handle GML list attributes. Can use other list handlers recursively.
+class ListHandler : public IHandler {
+public:
+	ListHandler(GraphAttributes* GA = nullptr) : m_GA(GA) { }
 
-	return true;
-}//readAttributedCluster
+	virtual ~ListHandler() {
+		for (auto p : m_handlers) {
+			delete p.second;
+		}
+	}
+
+	BasicHandler& attribute(Key key) {
+		BasicHandler* handler = new BasicHandler(m_GA);
+		m_handlers[key] = handler;
+		return *handler;
+	}
+
+	ListHandler& listAttribute(Key key) {
+		ListHandler* handler = new ListHandler(m_GA);
+		m_handlers[key] = handler;
+		return *handler;
+	}
+
+	CustomHandler& customAttribute(Key key) {
+		CustomHandler* handler = new CustomHandler();
+		m_handlers[key] = handler;
+		return *handler;
+	}
+
+	ListHandler& beforeEach(std::function<void()> init) {
+		m_beforeEach = init;
+		return *this;
+	}
+	ListHandler& afterEach(std::function<bool()> check) {
+		m_afterEach = check;
+		return *this;
+	}
+
+	void handle(Object *obj) override {
+		if (m_beforeEach) m_beforeEach();
+
+		if (obj->valueType == ObjectType::ListBegin) {
+			Object *son = obj->pFirstSon;
+			for(; son; son = son->pBrother) {
+				if (m_handlers.find(son->key) != m_handlers.end()) {
+					m_handlers[son->key]->handle(son);
+				} else {
+					Logger::slout(Logger::Level::Minor) << "Ignoring unused attribute " << toString(son->key) << "!\n";
+				}
+			}
+
+		} else {
+			Logger::slout(Logger::Level::Default) << "Unexpected type for attribute " << toString(obj->key) << ": Found "
+				<< toString(obj->valueType) << ", expected " << toString(ObjectType::ListBegin) << ".\n";
+		}
+
+		if (m_afterEach && !m_afterEach()) return;
+	}
+
+private:
+	GraphAttributes* m_GA;
+	std::unordered_map<Key, IHandler*> m_handlers;
+	std::function<void()> m_beforeEach;
+	std::function<bool()> m_afterEach;
+};
+
+
+bool Parser::read(Graph &G)
+{
+	GraphAttributes GA(G, 0l);
+	return read(G, GA);
+}
+
+bool Parser::read(Graph &G, GraphAttributes &GA)
+{
+	// Abort if setup failed.
+	if (m_error) return false;
+
+	OGDF_ASSERT(&G == &(GA.constGraph()));
+
+	G.clear();
+
+	int minId = m_mapToNode.low();
+	int maxId = m_mapToNode.high();
+
+	DPolyline bends;
+
+	/*
+	 * Use the AST parsed from the GML file to read concrete values.
+	 * For this, we make use of the IHandler implementations above in order to share common error handling code.
+	 * Every attribute gets registered as its own key in its parent attribute's handler. In the end, this structure
+	 * gets passed the root `graph` list attribute of our GML tree.
+	 * The `.each()` methods are called on every attribute with the given identifying key (which may be a total number
+	 * of zero times!). The `.store()` methods call the given lambda to save a graph attribute for the same entries,
+	 * if all the necessary graph attributes (as supplied by a bitmask) are enabled.
+	 * Passing closure lambdas to these objects, capturing exterior (local) variables, is used to keep track of
+	 * information on the currently handled node and edge.
+	 */
+	ListHandler lh(&GA);
+
+	lh.attribute(Key::Directed).eachInt([&](const int& i) {
+		GA.directed() = i > 0;
+		return true;
+	});
+
+	// These two variables are reset for every read node, read and written by the closures passed to the handler.
+	bool nodeIdDef{false};
+	node v{nullptr};
+	ListHandler &nh = lh.listAttribute(Key::Node).beforeEach([&] {
+		nodeIdDef = false;
+		v = G.newNode();
+	}).afterEach([&] {
+		// check if everything required is defined correctly
+		if (!nodeIdDef) {
+			setError("node id not defined");
+			return false;
+		}
+		return true;
+	});
+
+	nh.attribute(Key::Id).eachInt([&](const int& i) {
+		m_mapToNode[i] = v;
+		nodeIdDef = true;
+		return true;
+	}).storeInt(GraphAttributes::nodeId, [&](const int& i) { GA.idNode(v) = i; });
+	nh.attribute(Key::Template).storeString(GraphAttributes::nodeTemplate, [&](const string& s) { GA.templateNode(v) = s; });
+	nh.attribute(Key::Label).storeString(GraphAttributes::nodeLabel, [&](const string& s) { GA.label(v) = s; });
+	nh.attribute(Key::Weight).storeInt(GraphAttributes::nodeWeight, [&](const int& i) { GA.weight(v) = i; });
+	nh.attribute(Key::Type) \
+	  .storeString(GraphAttributes::nodeType, [&](const string& s) { GA.type(v) = toNodeType(s); }) \
+	  .storeInt(GraphAttributes::nodeType, [&](const int& i) { GA.type(v) = Graph::NodeType(i); });
+	ListHandler &ngh = nh.listAttribute(Key::Graphics);
+	ngh.attribute(Key::X).storeDouble(GraphAttributes::nodeGraphics, [&](const double& d) { GA.x(v) = d; });
+	ngh.attribute(Key::Y).storeDouble(GraphAttributes::nodeGraphics, [&](const double& d) { GA.y(v) = d; });
+	ngh.attribute(Key::Z).storeDouble(GraphAttributes::nodeGraphics | GraphAttributes::threeD, [&](const double& d) { GA.z(v) = d; });
+	ngh.attribute(Key::W).storeDouble(GraphAttributes::nodeGraphics, [&](const double& d) { GA.width(v) = d; });
+	ngh.attribute(Key::H).storeDouble(GraphAttributes::nodeGraphics, [&](const double& d) { GA.height(v) = d; });
+	ngh.attribute(Key::Fill).storeString(GraphAttributes::nodeStyle, [&](const string& s) { GA.fillColor(v) = s; });
+	ngh.attribute(Key::FillBg).storeString(GraphAttributes::nodeStyle, [&](const string& s) { GA.fillBgColor(v) = s; });
+	ngh.attribute(Key::Outline).storeString(GraphAttributes::nodeStyle, [&](const string& s) { GA.strokeColor(v) = s; });
+	ngh.attribute(Key::LineWidth).storeDouble(GraphAttributes::nodeStyle, [&](const double& d) { GA.strokeWidth(v) = d; });
+	ngh.attribute(Key::Type).storeString(GraphAttributes::nodeGraphics, [&](const string& s) { GA.shape(v) = fromString<Shape>(s); });
+	ngh.attribute(Key::Pattern).storeString(GraphAttributes::nodeStyle, [&](const string& s) { GA.fillPattern(v) = fromString<FillPattern>(s); });
+	ngh.attribute(Key::Stipple).storeString(GraphAttributes::nodeStyle, [&](const string& s) { GA.strokeType(v) = fromString<StrokeType>(s); });
+	ListHandler &nglh = ngh.listAttribute(Key::Label);
+	nglh.attribute(Key::X).storeDouble(GraphAttributes::nodeLabelPosition, [&] (const double& d) { GA.xLabel(v) = d; });
+	nglh.attribute(Key::Y).storeDouble(GraphAttributes::nodeLabelPosition, [&] (const double& d) { GA.yLabel(v) = d; });
+	nglh.attribute(Key::Z).storeDouble(GraphAttributes::nodeLabelPosition | GraphAttributes::threeD, [&] (const double& d) { GA.zLabel(v) = d; });
+
+
+	edge e{nullptr};
+	bool sourceIdDef{false}, targetIdDef{false};
+	ListHandler &eh = lh.listAttribute(Key::Edge).beforeEach([&] {
+		// Start off by making our edge a selfloop on the first node.
+		// During reading, we update its source and target to what the file defines.
+		e = G.newEdge(G.firstNode(), G.firstNode());
+		sourceIdDef = targetIdDef = false;
+	}).afterEach([&] {
+		// check if everything required is defined correctly
+		if (!sourceIdDef) {
+			setError("edge source id not defined");
+			return false;
+		}
+		if (!targetIdDef) {
+			setError("edge target id not defined");
+			return false;
+		}
+		return true;
+	});
+
+	eh.attribute(Key::Source).eachInt([&](const int& i) {
+		if (sourceIdDef) {
+			setError("two sources for one edge");
+			return false;
+		}
+		if (i < minId || maxId < i) {
+			setError("source id out of range");
+			return false;
+		}
+		OGDF_ASSERT(m_mapToNode[i] != nullptr);
+		G.moveSource(e, m_mapToNode[i]);
+		sourceIdDef = true;
+		return true;
+	});
+	eh.attribute(Key::Target).eachInt([&](const int& i) {
+		if(targetIdDef) {
+			setError("two targets for one edge");
+			return false;
+		}
+		if (i < minId || maxId < i) {
+			setError("target id out of range");
+			return false;
+		}
+		OGDF_ASSERT(m_mapToNode[i] != nullptr);
+		G.moveTarget(e, m_mapToNode[i]);
+		targetIdDef = true;
+		return true;
+	});
+	eh.attribute(Key::SubGraph).storeInt(GraphAttributes::edgeSubGraphs, [&](const int& i) { GA.addSubGraph(e, i); });
+	eh.attribute(Key::Label).storeString(GraphAttributes::edgeLabel, [&](const string& s) { GA.label(e) = s; });
+	eh.attribute(Key::Weight).storeDouble(GraphAttributes::edgeDoubleWeight, [&](const double& d) { GA.doubleWeight(e) = d; });
+	eh.attribute(Key::EdgeIntWeight).storeInt(GraphAttributes::edgeIntWeight, [&](const int& i) { GA.intWeight(e) = i; });
+	ListHandler &egh = eh.listAttribute(Key::Graphics);
+	// Use a custom parser for the bend list, as a list-based one would require more intermediary variables.
+	egh.attribute(Key::Bends).store(GraphAttributes::edgeGraphics, [&](const Object *list) {
+		readLineAttribute(list->pFirstSon, bends);
+		EpsilonTest eps;
+		DPoint src(GA.x(e->source()), GA.y(e->source()));
+		while (eps.equal(bends.front().distance(src), 0.0)) {
+			bends.popFront();
+		}
+		DPoint tgt(GA.x(e->target()), GA.y(e->target()));
+		while (eps.equal(bends.back().distance(tgt), 0.0)) {
+			bends.popBack();
+		}
+		GA.bends(e) = bends;
+		return true;
+	});
+	egh.attribute(Key::Arrow).storeString(GraphAttributes::edgeArrow, [&](const string& s) { GA.arrowType(e) = toArrow(s); });
+	egh.attribute(Key::Fill).storeString(GraphAttributes::edgeStyle, [&](const string& s) { GA.strokeColor(e) = s; });
+	egh.attribute(Key::Stipple).storeString(GraphAttributes::edgeStyle, [&](const string& s) { GA.strokeType(e) = fromString<StrokeType>(s); });
+	egh.attribute(Key::LineWidth).storeDouble(GraphAttributes::edgeStyle, [&](const double& d) { GA.strokeWidth(e) = d; });
+	eh.attribute(Key::Generalization).storeInt(GraphAttributes::edgeType, [&](const int& i) { GA.type(e) = Graph::EdgeType(i); });
+
+	// Run the handler on the `graph` key.
+	lh.handle(m_graphObject);
+
+	return !m_error;
+}
 
 
 //the clustergraph has to be initialized on G!!,
 //no clusters other then root cluster may exist, which holds all nodes
-bool GmlParser::readCluster(Graph &G, ClusterGraph& CG)
+bool Parser::readCluster(Graph &G, ClusterGraph &CG, ClusterGraphAttributes *ACG)
 {
-	OGDF_ASSERT(&CG.constGraph() == &G)
+	if (m_error) return false;
 
-	//now we need the cluster object
-	GmlObject *rootObject = m_objectTree;
-	for(; rootObject; rootObject = rootObject->m_pBrother)
-		if (id(rootObject) == rootClusterPredefKey) break;
+	OGDF_ASSERT(&CG.constGraph() == &G);
 
-	//we have to check if the file does really contain clusters
-	//otherwise, rootcluster will suffice
-	if (rootObject == 0) return true;
-	if (id(rootObject) != rootClusterPredefKey)
-	{
+	// now we need the cluster object
+	Object *rootObject;
+	for(rootObject = m_objectTree;
+	    rootObject && rootObject->key != Key::Root;
+	    rootObject = rootObject->pBrother);
+
+	// we have to check if the file does really contain clusters
+	// otherwise, rootcluster will suffice
+	if (rootObject == nullptr) {
+		return true;
+	}
+	if (rootObject->key != Key::Root) {
 		setError("missing rootcluster key");
 		return false;
 	}
 
-	if (rootObject->m_valueType != gmlListBegin) return false;
+	return rootObject->valueType == ObjectType::ListBegin && recursiveClusterRead(rootObject, CG, CG.rootCluster(), ACG);
+}
 
-	clusterRead(rootObject, CG);
-
-	return true;
-}//read clustergraph
-
-
-//read all cluster tree information
-bool GmlParser::clusterRead(
-	GmlObject* rootCluster,
-	ClusterGraph& CG)
-{
-
-	//the root cluster is only allowed to hold child clusters and
-	//nodes in a list
-
-	if (rootCluster->m_valueType != gmlListBegin) return false;
-
-	// read all clusters and nodes
-	GmlObject *rootClusterSon = rootCluster->m_pFirstSon;
-
-	for(; rootClusterSon; rootClusterSon = rootClusterSon->m_pBrother)
-	{
-		switch(id(rootClusterSon))
-		{
-		case clusterPredefKey:
-			{
-				//we could delete this, but we aviod the call
-				if (rootClusterSon->m_valueType != gmlListBegin) return false;
-				// set attributes to default values
-				//we currently do not set any values
-				cluster c = CG.newCluster(CG.rootCluster());
-
-				//recursively read cluster
-				recursiveClusterRead(rootClusterSon, CG, c);
-
-			} //case cluster
-			break;
-		case vertexPredefKey: //direct root vertices
-			{
-				if (rootClusterSon->m_valueType != gmlStringValue) return false;
-				string vIDString = rootClusterSon->m_stringValue;
-
-				//we only allow a vertex id as string identification
-				if ((vIDString[0] != 'v') &&
-					(!isdigit((int)vIDString[0])))return false; //do not allow labels
-				//if old style entry "v"i
-				if (!isdigit((int)vIDString[0])) //should check prefix?
-					vIDString[0] = '0'; //leading zero to allow conversion
-				int vID = stoi(vIDString);
-
-				OGDF_ASSERT(m_mapToNode[vID] != 0)
-
-					//we assume that no node is already assigned ! Changed:
-					//all new nodes are assigned to root
-					//CG.reassignNode(mapToNode[vID], CG.rootCluster());
-					//it seems that this may be unnessecary, TODO check
-					CG.reassignNode(m_mapToNode[vID], CG.rootCluster());
-				//char* vIDChar = new char[vIDString.length()+1];
-				//for (int ind = 1; ind < vIDString.length(); ind++)
-				//	vIDChar
-
-			}//case vertex
-		}//switch
-	}//for all rootcluster sons
-
-	return true;
-
-}//clusterread
-
-
-//the same for attributed graphs
-//read all cluster tree information
-//make changes to this as well as the recursive function
-bool GmlParser::attributedClusterRead(
-	GmlObject* rootCluster,
-	ClusterGraph& CG,
-	ClusterGraphAttributes& ACG)
-{
-
-	//the root cluster is only allowed to hold child clusters and
-	//nodes in a list
-
-	if (rootCluster->m_valueType != gmlListBegin) return false;
-
-	// read all clusters and nodes
-	GmlObject *rootClusterSon = rootCluster->m_pFirstSon;
-
-	for(; rootClusterSon; rootClusterSon = rootClusterSon->m_pBrother)
-	{
-		switch(id(rootClusterSon))
-		{
-		case clusterPredefKey:
-			{
-				//we could delete this, but we avoid the call
-				if (rootClusterSon->m_valueType != gmlListBegin) return false;
-				// set attributes to default values
-				//we currently do not set any values
-				cluster c = CG.newCluster(CG.rootCluster());
-
-				//recursively read cluster
-				recursiveAttributedClusterRead(rootClusterSon, CG, ACG, c);
-
-			} //case cluster
-			break;
-
-		case vertexPredefKey: //direct root vertices
-			{
-				if (rootClusterSon->m_valueType != gmlStringValue) return false;
-				string vIDString = rootClusterSon->m_stringValue;
-
-				//we only allow a vertex id as string identification
-				if ((vIDString[0] != 'v') &&
-					(!isdigit((int)vIDString[0])))return false; //do not allow labels
-				//if old style entry "v"i
-				if (!isdigit((int)vIDString[0])) //should check prefix?
-					vIDString[0] = '0'; //leading zero to allow conversion
-				int vID = stoi(vIDString);
-
-				OGDF_ASSERT(m_mapToNode[vID] != 0)
-
-					//we assume that no node is already assigned
-					//CG.reassignNode(mapToNode[vID], CG.rootCluster());
-					//changed: all nodes are already assigned to root
-					//this code seems to be obsolete, todo: check
-					CG.reassignNode(m_mapToNode[vID], CG.rootCluster());
-				//char* vIDChar = new char[vIDString.length()+1];
-				//for (int ind = 1; ind < vIDString.length(); ind++)
-				//	vIDChar
-
-			}//case vertex
-		}//switch
-	}//for all rootcluster sons
-
-	return true;
-
-}//attributedclusterread
-
-
-bool GmlParser::readClusterAttributes(
-	GmlObject* cGraphics,
-	cluster c,
-	ClusterGraphAttributes& ACG)
-{
-	string label;
-	string fill;  // the fill color attribute
-	string line;  // the line color attribute
-	float lineWidth = 1.0f; //node line width
-	int    pattern = 1; //node brush pattern
-	int    stipple = 1; //line style pattern
-
-	// read all relevant attributes
-	GmlObject *graphicsObject = cGraphics->m_pFirstSon;
-	for(; graphicsObject; graphicsObject = graphicsObject->m_pBrother)
-	{
-		switch(id(graphicsObject))
-		{
-		case xPredefKey:
-			if(graphicsObject->m_valueType != gmlDoubleValue) return false;
-			ACG.x(c) = graphicsObject->m_doubleValue;
-			break;
-
-		case yPredefKey:
-			if(graphicsObject->m_valueType != gmlDoubleValue) return false;
-			ACG.y(c) = graphicsObject->m_doubleValue;
-			break;
-
-		case widthPredefKey:
-			if(graphicsObject->m_valueType != gmlDoubleValue) return false;
-			ACG.width(c) = graphicsObject->m_doubleValue;
-			break;
-
-		case heightPredefKey:
-			if(graphicsObject->m_valueType != gmlDoubleValue) return false;
-			ACG.height(c) = graphicsObject->m_doubleValue;
-			break;
-		case fillPredefKey:
-			if(graphicsObject->m_valueType != gmlStringValue) return false;
-			ACG.fillColor(c) = graphicsObject->m_stringValue;
-			break;
-		case patternPredefKey:
-			if(graphicsObject->m_valueType != gmlIntValue) return false;
-			pattern = graphicsObject->m_intValue;
-			break;
-			//line style
-		case colorPredefKey: // line color
-			if(graphicsObject->m_valueType != gmlStringValue) return false;
-			ACG.strokeColor(c) = graphicsObject->m_stringValue;
-			break;
-
-		case stipplePredefKey:
-			if(graphicsObject->m_valueType != gmlIntValue) return false;
-			stipple = graphicsObject->m_intValue;
-			break;
-		case lineWidthPredefKey:
-			if(graphicsObject->m_valueType != gmlDoubleValue) return false;
-			lineWidth =	(float)graphicsObject->m_doubleValue;
-			break;
-			//TODO: backgroundcolor
-			//case stylePredefKey:
-			//case boderwidthPredefKey:
-		}//switch
-	}//for
-
-	//Hier eigentlich erst abfragen, ob clusterattributes setzbar in ACG,
-	//dann setzen
-	ACG.setStrokeType(c, intToStrokeType(stipple)); //defaulting 1
-	ACG.strokeWidth(c) = lineWidth;
-	ACG.setFillPattern(c, intToFillPattern(pattern));
-
-	return true;
-}//readclusterattributes
 
 //recursively read cluster subtree information
-bool GmlParser::recursiveClusterRead(GmlObject* clusterObject,
+bool Parser::recursiveClusterRead(Object* clusterObject,
 								ClusterGraph& CG,
-								cluster c)
+								cluster c,
+								ClusterGraphAttributes* ACG)
 {
 
-	//for direct root cluster sons, this is checked twice...
-	if (clusterObject->m_valueType != gmlListBegin) return false;
+	ListHandler lh(ACG);
+	bool clusterIdDef{false};
 
-	GmlObject *clusterSon = clusterObject->m_pFirstSon;
+	lh.customAttribute(Key::Cluster).each([&](Object* subClusterObject) {
+		cluster subCluster = CG.newCluster(c);
+		recursiveClusterRead(subClusterObject, CG, subCluster, ACG);
+	});
+	lh.attribute(Key::Id).eachInt([&](const int&) {
+		clusterIdDef = true;
+		return true;
+	});
+	lh.attribute(Key::Vertex).eachString([&](const string& s) {
+		string vIDString = s;
+		//we only allow a vertex id as string identification
+		if ((vIDString[0] != 'v') &&
+			(!isdigit((int)vIDString[0])))return false; //do not allow labels
+		if (!isdigit((int)vIDString[0])) //should check prefix?
+			vIDString[0] = '0'; //leading zero to allow conversion
+		int vID = std::stoi(vIDString);
 
-	for(; clusterSon; clusterSon = clusterSon->m_pBrother)
-	{
-		//we dont read the attributes, therefore look only for
-		//id and sons
-		switch(id(clusterSon))
-		{
-			case clusterPredefKey:
-				{
-					if (clusterSon->m_valueType != gmlListBegin) return false;
+		OGDF_ASSERT(m_mapToNode[vID] != nullptr);
 
-					cluster cson = CG.newCluster(c);
-					//recursively read child cluster
-					recursiveClusterRead(clusterSon, CG, cson);
-				}
-				break;
-			case vertexPredefKey: //direct cluster vertex entries
-				{
-					if (clusterSon->m_valueType != gmlStringValue) return false;
-					string vIDString = clusterSon->m_stringValue;
+		// all nodes are already assigned to root
+		CG.reassignNode(m_mapToNode[vID], c);
+		return true;
+	});
 
-					//if old style entry "v"i
-					if ((vIDString[0] != 'v') &&
-						(!isdigit((int)vIDString[0])))return false; //do not allow labels
-					//if old style entry "v"i
-					if (!isdigit((int)vIDString[0])) //should check prefix?
-						vIDString[0] = '0'; //leading zero to allow conversion
-					int vID = stoi(vIDString);
+	lh.attribute(Key::Label).storeString(ClusterGraphAttributes::clusterLabel, [&](const string& s) { ACG->label(c) = s; });
+	lh.attribute(Key::Template).storeString(ClusterGraphAttributes::clusterTemplate, [&](const string& s) { ACG->templateCluster(c) = s; });
 
-					OGDF_ASSERT(m_mapToNode[vID] != 0)
+	ListHandler &gh = lh.listAttribute(Key::Graphics);
+	gh.attribute(Key::X).storeDouble(ClusterGraphAttributes::clusterGraphics, [&](const double& d) { ACG->x(c) = d; });
+	gh.attribute(Key::Y).storeDouble(ClusterGraphAttributes::clusterGraphics, [&](const double& d) { ACG->y(c) = d; });
+	gh.attribute(Key::Width).storeDouble(ClusterGraphAttributes::clusterGraphics, [&](const double& d) { ACG->width(c) = d; });
+	gh.attribute(Key::Height).storeDouble(ClusterGraphAttributes::clusterGraphics, [&](const double& d) { ACG->height(c) = d; });
+	gh.attribute(Key::Fill).storeString(ClusterGraphAttributes::clusterStyle, [&](const string& s) { ACG->fillColor(c) = s; });
+	gh.attribute(Key::Pattern).storeString(ClusterGraphAttributes::clusterStyle, [&](const string& s) { ACG->fillPattern(c) = fromString<FillPattern>(s); });
+	gh.attribute(Key::Color).storeString(ClusterGraphAttributes::clusterStyle, [&](const string& s) { ACG->strokeColor(c) = s; });
+	gh.attribute(Key::LineWidth).storeDouble(ClusterGraphAttributes::clusterStyle, [&](const double& d) { ACG->strokeWidth(c) = d; });
+	gh.attribute(Key::Stipple).storeString(ClusterGraphAttributes::clusterStyle, [&](const string& s) { ACG->strokeType(c) = fromString<StrokeType>(s); });
+	gh.attribute(Key::FillBg).storeString(ClusterGraphAttributes::clusterStyle, [&](const string& s) { ACG->fillBgColor(c) = s; });
 
-					//we assume that no node is already assigned
-					//CG.reassignNode(mapToNode[vID], c);
-					//changed: all nodes are already assigned to root
-					CG.reassignNode(m_mapToNode[vID], c);
-					//char* vIDChar = new char[vIDString.length()+1];
-					//for (int ind = 1; ind < vIDString.length(); ind++)
-					//	vIDChar
+	lh.handle(clusterObject);
 
-				}//case vertex
-		}//switch
-	}//for clustersons
+	if (!clusterIdDef && c != CG.rootCluster()) {
+		setError("cluster id not defined");
+		return false;
+	}
 
-	return true;
-
-}//recursiveclusterread
-
-//recursively read cluster subtree information
-bool GmlParser::recursiveAttributedClusterRead(GmlObject* clusterObject,
-								ClusterGraph& CG,
-								ClusterGraphAttributes& ACG,
-								cluster c)
-{
-
-	//for direct root cluster sons, this is checked twice...
-	if (clusterObject->m_valueType != gmlListBegin) return false;
-
-	GmlObject *clusterSon = clusterObject->m_pFirstSon;
-
-	for(; clusterSon; clusterSon = clusterSon->m_pBrother)
-	{
-		//we dont read the attributes, therefore look only for
-		//id and sons
-		switch(id(clusterSon))
-		{
-			case clusterPredefKey:
-				{
-					if (clusterSon->m_valueType != gmlListBegin) return false;
-
-					cluster cson = CG.newCluster(c);
-					//recursively read child cluster
-					recursiveAttributedClusterRead(clusterSon, CG, ACG, cson);
-				}
-				break;
-			case labelPredefKey:
-				{
-					if (clusterSon->m_valueType != gmlStringValue) return false;
-					ACG.label(c) = clusterSon->m_stringValue;
-				}
-				break;
-			case templatePredefKey:
-				{
-					if (clusterSon->m_valueType != gmlStringValue) return false;
-					ACG.templateCluster(c) = clusterSon->m_stringValue;
-					break;
-				}
-			case graphicsPredefKey: //read the info for cluster c
-				{
-					if (clusterSon->m_valueType != gmlListBegin) return false;
-
-					readClusterAttributes(clusterSon, c , ACG);
-				}//graphics
-				break;
-			case vertexPredefKey: //direct cluster vertex entries
-				{
-					if (clusterSon->m_valueType != gmlStringValue) return false;
-					string vIDString = clusterSon->m_stringValue;
-
-					if ((vIDString[0] != 'v') &&
-						(!isdigit((int)vIDString[0])))return false; //do not allow labels
-					//if old style entry "v"i
-					if (!isdigit((int)vIDString[0])) //should check prefix?
-						vIDString[0] = '0'; //leading zero to allow conversion
-					int vID = stoi(vIDString);
-
-					OGDF_ASSERT(m_mapToNode[vID] != 0)
-
-					//we assume that no node is already assigned
-					//changed: all nodes are already assigned to root
-					CG.reassignNode(m_mapToNode[vID], c);
-
-				}//case vertex
-		}//switch
-	}//for clustersons
 
 	return true;
-}//recursiveAttributedClusterRead
+}
 
-void GmlParser::readLineAttribute(GmlObject *object, DPolyline &dpl)
+void Parser::readLineAttribute(Object *object, DPolyline &dpl)
 {
 	dpl.clear();
-	for(; object; object = object->m_pBrother) {
-		if (id(object) == pointPredefKey &&
-			object->m_valueType == gmlListBegin)
+	for(; object; object = object->pBrother) {
+		if (object->key == Key::Point &&
+			object->valueType == ObjectType::ListBegin)
 		{
 			DPoint dp;
 
-			GmlObject *pointObject = object->m_pFirstSon;
-			for (; pointObject; pointObject = pointObject->m_pBrother) {
-				if (pointObject->m_valueType != gmlDoubleValue) continue;
-				if (id(pointObject) == xPredefKey)
-					dp.m_x = pointObject->m_doubleValue;
-				else if (id(pointObject) == yPredefKey)
-					dp.m_y = pointObject->m_doubleValue;
+			Object *pointObject = object->pFirstSon;
+			for (; pointObject; pointObject = pointObject->pBrother) {
+				if (pointObject->valueType != ObjectType::DoubleValue) continue;
+				if (pointObject->key == Key::X)
+					dp.m_x = pointObject->doubleValue;
+				else if (pointObject->key == Key::Y)
+					dp.m_y = pointObject->doubleValue;
 			}
 
 			dpl.pushBack(dp);
@@ -1285,52 +882,12 @@ void GmlParser::readLineAttribute(GmlObject *object, DPolyline &dpl)
 }
 
 
-void GmlParser::setError(const char *errorString)
+void Parser::setError(const char *errorString, Logger::Level level)
 {
+	Logger::slout(level) << errorString;
 	m_error = true;
-	m_errorString = errorString;
 }
 
-
-void GmlParser::indent(ostream &os, int d)
-{
-	for(int i = 1; i <= d; ++i)
-		os << " ";
 }
 
-void GmlParser::output(ostream &os, GmlObject *object, int d)
-{
-	for(; object; object = object->m_pBrother) {
-		indent(os,d); os << object->m_key->key();
-
-		switch(object->m_valueType) {
-		case gmlIntValue:
-			os << " " << object->m_intValue << "\n";
-			break;
-
-		case gmlDoubleValue:
-			os << " " << object->m_doubleValue << "\n";
-			break;
-
-		case gmlStringValue:
-			os << " \"" << object->m_stringValue << "\"\n";
-			break;
-
-		case gmlListBegin:
-			os << "\n";
-			output(os, object->m_pFirstSon, d+2);
-			break;
-		case gmlListEnd:
-			break;
-		case gmlKey:
-			break;
-		case gmlEOF:
-			break;
-		case gmlError:
-			break;
-		}
-	}
 }
-
-
-} // end namespace ogdf

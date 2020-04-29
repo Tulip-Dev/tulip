@@ -1,11 +1,3 @@
-/*
- * $Revision: 3556 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2013-06-07 19:36:11 +0200 (Fri, 07 Jun 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration and implementation of bounded queue class.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,35 +25,20 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_B_QUEUE_H
-#define OGDF_B_QUEUE_H
-
-
-#include <ogdf/basic/basic.h>
-
+#include <ogdf/basic/exceptions.h>
 
 namespace ogdf {
 
-template<class E, class INDEX> class BoundedQueue;
-
-// output
-template<class E, class INDEX>
-void print(ostream &os, const BoundedQueue<E,INDEX> &S, char delim = ' ');
-
-
-//! The parameterized class \a BoundedQueue<E,INDEX> implements queues with bounded size.
+//! The parameterized class BoundedQueue implements queues with bounded size.
 /**
+ * @ingroup containers
+ *
  * @tparam E     is the element type.
  * @tparam INDEX is the index type. The default index type is \c int, other possible types
  *               are \c short and <code>long long</code> (on 64-bit systems).
@@ -76,65 +53,78 @@ template<class E, class INDEX = int> class BoundedQueue {
 public:
 	//! Creates a non-valid bounded queue. Needs to be reinitialized first.
 	BoundedQueue() {
-		m_pStart = m_pEnd = m_pFirst = m_pStop = 0;
+		m_pStart = m_pEnd = m_pFirst = m_pStop = nullptr;
 	}
 
-	//! Constructs an empty bounded queue for at most \a n elements.
+	//! Constructs an empty bounded queue for at most \p n elements.
 	explicit BoundedQueue(INDEX n) {
-		OGDF_ASSERT(n >= 1)
+		OGDF_ASSERT(n >= 1);
 		m_pStart = m_pEnd = m_pFirst = new E[n+1];
-		if (m_pFirst == 0) OGDF_THROW(InsufficientMemoryException);
+		if (m_pFirst == nullptr) OGDF_THROW(InsufficientMemoryException);
 
 		m_pStop = m_pFirst+n+1;
 	}
 
-	//! Constructs a bounded queue that is a copy of \a Q.
+	//! Constructs a bounded queue that is a copy of \p Q.
 	BoundedQueue(const BoundedQueue<E> &Q) {
 		copy(Q);
 	}
 
-	// destruction
-	~BoundedQueue() { delete [] m_pFirst; }
+	//! Constructs a bounded queue containing the elements of \p Q (move semantics).
+	/**
+	 * The queue \p Q is non valid afterwards, i.e., its capacity is zero.
+	 * It has to be reinitialized if new elements shall be appended.
+	 */
+	BoundedQueue(BoundedQueue<E> &&Q) {
+		m_pStart = Q.m_pStart;
+		m_pEnd   = Q.m_pEnd;
+		m_pStop  = Q.m_pStop;
+		m_pFirst = Q.m_pFirst;
+		Q.m_pStart = Q.m_pEnd = Q.m_pFirst = Q.m_pStop = nullptr;
+	}
+
+	//! Destruction
+	~BoundedQueue() { delete[] m_pFirst; }
 
 	//! Reinitializes the bounded queue to a non-valid bounded queue.
 	void init() {
-		delete [] m_pFirst;
-		m_pStart = m_pEnd = m_pFirst = m_pStop = 0;
+		delete[] m_pFirst;
+		m_pStart = m_pEnd = m_pFirst = m_pStop = nullptr;
 	}
 
-	//! Reinitializes the bounded queue to a bounded queue for at most \a n elements.
+	//! Reinitializes the bounded queue to a bounded queue for at most \p n elements.
 	void init(INDEX n) {
-		delete [] m_pFirst;
+		delete[] m_pFirst;
 
-		OGDF_ASSERT(n >= 1)
+		OGDF_ASSERT(n >= 1);
 		m_pStart = m_pEnd = m_pFirst = new E[n+1];
-		if (m_pFirst == 0) OGDF_THROW(InsufficientMemoryException);
+		if (m_pFirst == nullptr) OGDF_THROW(InsufficientMemoryException);
 
 		m_pStop = m_pFirst+n+1;
 	}
 
 	//! Returns front element.
 	const E &top() const {
-		OGDF_ASSERT(m_pStart != m_pEnd)
+		OGDF_ASSERT(m_pStart != m_pEnd);
 		return *m_pStart;
 	}
 
 	//! Returns front element.
 	E &top() {
-		OGDF_ASSERT(m_pStart != m_pEnd)
+		OGDF_ASSERT(m_pStart != m_pEnd);
 		return *m_pStart;
 	}
 
 	//! Returns back element.
 	const E &bottom() const {
-		OGDF_ASSERT(m_pStart != m_pEnd)
+		OGDF_ASSERT(m_pStart != m_pEnd);
 		if (m_pEnd == m_pFirst) return *(m_pStop-1);
 		else return *(m_pEnd-1);
 	}
 
 	//! Returns back element.
 	E &bottom() {
-		OGDF_ASSERT(m_pStart != m_pEnd)
+		OGDF_ASSERT(m_pStart != m_pEnd);
 		if (m_pEnd == m_pFirst) return *(m_pStop-1);
 		else return *(m_pEnd-1);
 	}
@@ -155,28 +145,44 @@ public:
 	//! Returns true iff the queue is full.
 	bool full() {
 		INDEX h = m_pEnd-m_pStart;
-		return ( h >= 0 ) ?
-			(h == m_pStop-m_pFirst-1) :
-			(h == -1);
+		return h >= 0 ? h == m_pStop - m_pFirst - 1 : h == -1;
 	}
 
 	//! Assignment operator.
 	BoundedQueue<E> &operator=(const BoundedQueue<E> &Q) {
-		delete [] m_pFirst;
+		delete[] m_pFirst;
 		copy(Q);
 		return *this;
 	}
 
-	//! Adds \a x at the end of queue.
+	//! Assignment operator (move semantics).
+	/**
+	 * The queue \p Q is non valid afterwards, i.e., its capacity is zero.
+	 * It has to be reinitialized if new elements shall be appended.
+	 */
+	BoundedQueue<E> &operator=(BoundedQueue<E> &&Q) {
+		delete[] m_pFirst;
+
+		m_pStart = Q.m_pStart;
+		m_pEnd   = Q.m_pEnd;
+		m_pStop  = Q.m_pStop;
+		m_pFirst = Q.m_pFirst;
+		Q.m_pStart = Q.m_pEnd = Q.m_pFirst = Q.m_pStop = nullptr;
+
+		return *this;
+	}
+
+
+	//! Adds \p x at the end of queue.
 	void append(const E &x) {
 		*m_pEnd++ = x;
 		if (m_pEnd == m_pStop) m_pEnd = m_pFirst;
-		OGDF_ASSERT(m_pStart != m_pEnd)
+		OGDF_ASSERT(m_pStart != m_pEnd);
 	}
 
 	//! Removes front element and returns it.
 	E pop() {
-		OGDF_ASSERT(m_pStart != m_pEnd)
+		OGDF_ASSERT(m_pStart != m_pEnd);
 		E x = *m_pStart++;
 		if (m_pStart == m_pStop) m_pStart = m_pFirst;
 		return x;
@@ -185,8 +191,8 @@ public:
 	//! Makes the queue empty.
 	void clear() { m_pStart = m_pEnd = m_pFirst; }
 
-	//! Prints the queue to output stream \a os.
-	void print(ostream &os, char delim = ' ') const
+	//! Prints the queue to output stream \p os with the seperator \p delim.
+	void print(std::ostream &os, char delim = ' ') const
 	{
 		for (const E *pX = m_pStart; pX != m_pEnd; ) {
 			if (pX != m_pStart) os << delim;
@@ -199,7 +205,7 @@ private:
 	void copy(const BoundedQueue<E> &Q) {
 		int n = Q.size()+1;
 		m_pEnd = m_pStart = m_pFirst = new E[n];
-		if (m_pFirst == 0) OGDF_THROW(InsufficientMemoryException);
+		if (m_pFirst == nullptr) OGDF_THROW(InsufficientMemoryException);
 
 		m_pStop = m_pStart + n;
 		for (E *pX = Q.m_pStart; pX != Q.m_pEnd; ) {
@@ -207,19 +213,14 @@ private:
 			if (pX == Q.m_pStop) pX = Q.m_pFirst;
 		}
 	}
-}; // class BoundedQueue
+};
 
-
-
-// output operator
+//! Prints BoundedQueue \p Q to output stream \p os.
 template<class E, class INDEX>
-ostream &operator<<(ostream &os, const BoundedQueue<E,INDEX> &Q)
+std::ostream &operator<<(std::ostream &os, const BoundedQueue<E,INDEX> &Q)
 {
 	Q.print(os);
 	return os;
 }
 
-} // end namespace ogdf
-
-
-#endif
+}

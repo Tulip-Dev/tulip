@@ -1,11 +1,3 @@
-/*
- * $Revision: 2583 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-12 01:02:21 +0200 (Thu, 12 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief declaration of class MMFixedEmbeddingInserter
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,38 +25,26 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_MM_FIXED_EMBEDDING_INSERTER_H
-#define OGDF_MM_FIXED_EMBEDDING_INSERTER_H
-
-
-
-#include <ogdf/module/MMEdgeInsertionModule.h>
+#include <ogdf/planarity/MMEdgeInsertionModule.h>
+#include <ogdf/planarity/RemoveReinsertType.h>
 #include <ogdf/basic/CombinatorialEmbedding.h>
 #include <ogdf/basic/FaceArray.h>
+#include <ogdf/basic/FaceSet.h>
+#include <ogdf/basic/NodeSet.h>
 #include <ogdf/basic/tuples.h>
-
-
 
 namespace ogdf {
 
-
-class OGDF_EXPORT FaceSetSimple;
-class OGDF_EXPORT NodeSetPure;
-class OGDF_EXPORT NodeSet;
-
-
 //! Minor-monotone edge insertion with fixed embedding.
+/**
+ * @ingroup ga-insert
+ */
 class OGDF_EXPORT MMFixedEmbeddingInserter : public MMEdgeInsertionModule
 {
 public:
@@ -75,8 +55,13 @@ public:
 	virtual ~MMFixedEmbeddingInserter() { }
 
 
-	//! Sets the remove-reinsert option for postprocessing.
+	/**
+	 * Sets the remove-reinsert option for postprocessing.
+	 *
+	 * Note that RemoveReinsertType::IncInserted is not implemented.
+	 */
 	void removeReinsert(RemoveReinsertType rrOption) {
+		OGDF_ASSERT(rrOption != RemoveReinsertType::IncInserted);
 		m_rrOption = rrOption;
 	}
 
@@ -108,14 +93,14 @@ private:
 	 *
 	 * @param PG is the input planarized expansion and will also receive the result.
 	 * @param origEdges is the list of original edges (edges in the original graph
-	 *        of \a PG) that have to be inserted.
+	 *        of \p PG) that have to be inserted.
 	 * @param forbiddenEdgeOrig points to an edge array indicating if an original edge is
 	 *        forbidden to be crossed.
 	 */
-	ReturnType doCall(
+	virtual ReturnType doCall(
 		PlanRepExpansion &PG,
 		const List<edge> &origEdges,
-		const EdgeArray<bool> *forbiddenEdgeOrig);
+		const EdgeArray<bool> *forbiddenEdgeOrig) override;
 
 	//! Constructs the search network (extended dual graph).
 	/**
@@ -134,8 +119,8 @@ private:
 	 * @param targets is the list of nodes in PG where the path may end.
 	 * @param crossed is assigned the insertion path. For each crossed edge or
 	 *        node, we have a pair (\a adj1,\a adj2) in the list; in case of a
-	 *        crossed edge, \a adj1 corresponds to the crossed edge and adj2
-	 *        is 0; in case of a crossed node, adj1 (adj2) is the first adjacency
+	 *        crossed edge, \a adj1 corresponds to the crossed edge and \a adj2
+	 *        is 0; in case of a crossed node, \a adj1 (\a adj2) is the first adjacency
 	 *        entry assigned to the left (right) node after the split. Additionally,
 	 *        the first and last element in the list specify, where the path
 	 *        leaves the source and enters the target node.
@@ -167,9 +152,9 @@ private:
 	/**
 	 * \brief Inserts an edge according to a given insertion path and updates the search network.
 	 *
-	 * If an orignal edge \a eOrig is inserted, \a srcOrig and \a tgtOrig are \a eOrig's source
-	 * and target node, and \a nodeSplit is 0. If a node split is inserted, then \a eOrig is 0,
-	 * and \a srcOrig and \a tgtOrig refer to the same node (which corresponds to the \a nodeSplit).
+	 * If an orignal edge \p eOrig is inserted, \p srcOrig and \p tgtOrig are \p eOrig's source
+	 * and target node, and \p nodeSplit is 0. If a node split is inserted, then \p eOrig is 0,
+	 * and \p srcOrig and \p tgtOrig refer to the same node (which corresponds to the \p nodeSplit).
 	 *
 	 * @param PG is the planarized expansion.
 	 * @param E is the corresponding embeddding.
@@ -209,16 +194,16 @@ private:
 		node &oldTgt);
 
 	/**
-	 * \brief Inserts dual edges between vertex node \a vDual and left face of \a adj.
+	 * \brief Inserts dual edges between vertex node \p vDual and left face of \p adj.
 	 *
-	 * @param vDual is the dual node of \a adj's node.
+	 * @param vDual is the dual node of \p adj's node.
 	 * @param adj is an adjacency entry in the planarized expansion.
 	 * @param E is the corresponding embeddding.
 	 */
 	void insertDualEdge(node vDual, adjEntry adj, const CombinatorialEmbedding &E);
 
 	/**
-	 * \brief Inserts all dual edges incident to \a v's dual node.
+	 * \brief Inserts all dual edges incident to \p v's dual node.
 	 *
 	 * @param v is a node in the planarized expansion.
 	 * @param E is the corresponding embeddding.
@@ -238,9 +223,9 @@ private:
 		PlanRepExpansion::NodeSplit *nodeSplit);
 
 	/**
-	 * \brief Reduces the insertion path of a node split at node \a u if required.
+	 * \brief Reduces the insertion path of a node split at node \p u if required.
 	 *
-	 * The insertion path is reduced by unsplitting \a u if \a u has degree 2.
+	 * The insertion path is reduced by unsplitting \p u if \p u has degree 2.
 	 * @param PG is the planarized expansion.
 	 * @param E is the corresponding embeddding.
 	 * @param u is a node in the planarized expansion.
@@ -250,7 +235,7 @@ private:
 		PlanRepExpansion &PG,
 		CombinatorialEmbedding &E,
 		node u,
-		const PlanRepExpansion::nodeSplit nsCurrent = 0);
+		const PlanRepExpansion::nodeSplit nsCurrent = nullptr);
 
 	/**
 	 * \brief Converts a dummy node to a copy of an original node.
@@ -273,12 +258,12 @@ private:
 	 */
 	void collectAnchorNodes(
 		node v,
-		NodeSet &nodes,
+		NodeSet<> &nodes,
 		const PlanRepExpansion::NodeSplit *nsParent,
 		const PlanRepExpansion &PG) const;
 
 	/**
-	 * \brief Returns all anchor nodes of \a vOrig in n\a nodes.
+	 * \brief Returns all anchor nodes of \p vOrig in n \p nodes.
 	 *
 	 * @param vOrig is a node in the original graph.
 	 * @param nodes ia assigned the set of anchor nodes.
@@ -286,63 +271,64 @@ private:
 	 */
 	void anchorNodes(
 		node vOrig,
-		NodeSet &nodes,
+		NodeSet<> &nodes,
 		const PlanRepExpansion &PG) const;
 
 	/**
-	 * \brief Finds the set of anchor nodes of \a src and \a tgt.
+	 * \brief Finds the set of anchor nodes of \p src and \p tgt.
 	 *
-	 * @param src is a node in \a PG representing an original node.
-	 * @param tgt is a node in \a PG representing an original node.
-	 * @param sources ia assigned the set of anchor nodes of \a src's original node.
-	 * @param targets ia assigned the set of anchor nodes of \a tgt's original node.
+	 * @param src is a node in \p PG representing an original node.
+	 * @param tgt is a node in \p PG representing an original node.
+	 * @param sources ia assigned the set of anchor nodes of \p src's original node.
+	 * @param targets ia assigned the set of anchor nodes of \p tgt's original node.
 	 * @param PG is the planarized expansion.
 	 */
 	void findSourcesAndTargets(
 		node src, node tgt,
-		NodeSet &sources,
-		NodeSet &targets,
+		NodeSet<> &sources,
+		NodeSet<> &targets,
 		const PlanRepExpansion &PG) const;
 
 	/**
-	 * \brief Returns a common dummy node in \a sources and \a targets, or 0 of no such node exists.
+	 * \brief Returns a common dummy node in \p sources and \p targets, or 0 of no such node exists.
 	 *
 	 * @param sources is a set of anchor nodes.
 	 * @param targets is a set of anchor nodes.
 	 */
 	node commonDummy(
-		NodeSet &sources,
-		NodeSet &targets);
+		NodeSet<> &sources,
+		NodeSet<> &targets);
 
 	//! Performs several consistency checks on the seach network.
 	bool checkDualGraph(PlanRepExpansion &PG, const CombinatorialEmbedding &E) const;
 
-	bool checkSplitDeg(
-		PlanRepExpansion &PG);
+	bool checkSplitDeg(PlanRepExpansion &PG) const;
 
 	bool origOfDualForbidden(
 		edge e,
 		const PlanRepExpansion &PG,
 		const EdgeArray<bool> *forbiddenEdgeOrig) const
 	{
-		if(forbiddenEdgeOrig == 0)
+		if(forbiddenEdgeOrig == nullptr)
 			return false;
 
 		if(e->source() == m_vS || e->target() == m_vT)
 			return false;
 
-		if(m_primalNode[e->source()] != 0)
+		if(m_primalNode[e->source()] != nullptr)
 			return false;
-		if(m_primalNode[e->target()] != 0)
+		if(m_primalNode[e->target()] != nullptr)
 			return false;
 
 		adjEntry adj = m_primalAdj[e];
-		if(adj == 0) return false;
+		if(adj == nullptr) return false;
 
 		edge eOrig = PG.originalEdge(adj->theEdge());
-		if(eOrig != 0) {
-			//if((*forbiddenEdgeOrig)[eOrig] == true)
-			//	cout << "forbidden: " << eOrig << ", dual: " << e << endl;
+		if(eOrig != nullptr) {
+#if 0
+			if((*forbiddenEdgeOrig)[eOrig])
+				std::cout << "forbidden: " << eOrig << ", dual: " << e << std::endl;
+#endif
 			return (*forbiddenEdgeOrig)[eOrig];
 		} else return false;
 	}
@@ -366,11 +352,9 @@ private:
 	node m_vT; //!< Represents the end node for the path search.
 	int m_maxCost; //!< The maximal cost of an edge in the search network + 1.
 
-	FaceSetSimple      *m_delFaces;
-	FaceSetPure        *m_newFaces;
-	NodeSetPure        *m_mergedNodes;
+	FaceSet<false> *m_delFaces;
+	FaceSet<false> *m_newFaces;
+	NodeSet<false> *m_mergedNodes;
 };
 
-} // end namespace ogdf
-
-#endif
+}

@@ -1,11 +1,3 @@
-/*
- * $Revision: 3188 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-01-10 09:53:32 +0100 (Thu, 10 Jan 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of planarization with grid layout.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,35 +25,23 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_PLANARIZATION_GRID_LAYOUT_H
-#define OGDF_PLANARIZATION_GRID_LAYOUT_H
-
-
-
-#include <ogdf/module/GridLayoutModule.h>
-#include <ogdf/basic/ModuleOption.h>
-#include <ogdf/module/CrossingMinimizationModule.h>
-#include <ogdf/module/GridLayoutModule.h>
-#include <ogdf/module/CCLayoutPackModule.h>
-
+#include <ogdf/planarlayout/GridLayoutModule.h>
+#include <memory>
+#include <ogdf/planarity/CrossingMinimizationModule.h>
+#include <ogdf/packing/CCLayoutPackModule.h>
 
 namespace ogdf {
 
-
 /**
  * \brief The planarization grid layout algorithm.
+ *
+ * @ingroup gd-planlayout
  *
  * The class PlanarizationGridLayout represents a customizable implementation
  * of the planarization approach for drawing graphs. The class uses a
@@ -135,7 +115,7 @@ public:
 		return m_pageRatio;
 	}
 
-	//! Sets the option pageRatio to \a ratio.
+	//! Sets the option pageRatio to \p ratio.
 	void pageRatio(double ratio) {
 		m_pageRatio = ratio;
 	}
@@ -147,7 +127,7 @@ public:
 
 	//! Sets the module option for crossing minimization.
 	void setCrossMin(CrossingMinimizationModule *pCrossMin) {
-		m_crossMin.set(pCrossMin);
+		m_crossMin.reset(pCrossMin);
 	}
 
 
@@ -162,7 +142,7 @@ public:
 	 * layout algorithm produces an orthogonal drawing.
 	 */
 	void setPlanarLayouter(GridLayoutPlanRepModule *pPlanarLayouter) {
-		m_planarLayouter.set(pPlanarLayouter);
+		m_planarLayouter.reset(pPlanarLayouter);
 	}
 
 	/**
@@ -173,7 +153,7 @@ public:
 	 * using a packing algorithm.
 	 */
 	void setPacker(CCLayoutPackModule *pPacker) {
-		m_packer.set(pPacker);
+		m_packer.reset(pPacker);
 	}
 
 
@@ -190,26 +170,22 @@ public:
 	//! @}
 
 protected:
-	void doCall(const Graph &G, GridLayout &gridLayout, IPoint &boundingBox);
+	virtual void doCall(const Graph &G, GridLayout &gridLayout, IPoint &boundingBox) override;
 
 
 private:
 	//! The module for computing a planar subgraph.
-	ModuleOption<CrossingMinimizationModule> m_crossMin;
+	std::unique_ptr<CrossingMinimizationModule> m_crossMin;
 
 	//! The module for computing a planar grid layout.
-	ModuleOption<GridLayoutPlanRepModule> m_planarLayouter;
+	std::unique_ptr<GridLayoutPlanRepModule> m_planarLayouter;
 
 	//! The module for arranging connected components.
-	ModuleOption<CCLayoutPackModule>      m_packer;
+	std::unique_ptr<CCLayoutPackModule>      m_packer;
 
 	double m_pageRatio; //!< The desired page ratio.
 
 	int m_nCrossings; //!< The number of crossings in the computed layout.
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

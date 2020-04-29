@@ -1,11 +1,3 @@
-/*
- * $Revision: 3837 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 15:19:30 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of UCINET DL format parser class.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,20 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_DL_PARSER_H
-#define OGDF_DL_PARSER_H
-
 
 #include <ogdf/basic/Graph.h>
 #include <ogdf/basic/GraphAttributes.h>
@@ -68,7 +51,7 @@ private:
 	bool m_initialized;
 
 	int m_nodes;
-	enum { fullmatrix, edgelist, nodelist } m_format;
+	enum class Format { FullMatrix, EdgeList, NodeList } m_format;
 	bool m_embedded;
 
 	std::vector<node> m_nodeId; // For constant-time index to node mapping.
@@ -95,7 +78,7 @@ private:
 
 	bool readMatrix(Graph &G, GraphAttributes *GA);
 	bool readEdgeList(Graph &G, GraphAttributes *GA);
-	bool readNodeList(Graph &G, GraphAttributes *GA);
+	bool readNodeList(Graph &G);
 	bool readEmbeddedMatrix(Graph &G, GraphAttributes *GA);
 	bool readEmbeddedEdgeList(Graph &G, GraphAttributes *GA);
 	bool readEmbeddedNodeList(Graph &G, GraphAttributes *GA);
@@ -110,10 +93,10 @@ private:
 	bool readGraph(Graph &G, GraphAttributes *GA);
 
 public:
-	DLParser(std::istream &is);
+	explicit DLParser(std::istream &is);
 
 	bool read(Graph &G) {
-		return readGraph(G, NULL);
+		return readGraph(G, nullptr);
 	}
 
 	bool read(Graph &G, GraphAttributes &GA) {
@@ -121,8 +104,4 @@ public:
 	}
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

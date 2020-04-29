@@ -1,11 +1,3 @@
-/*
- * $Revision: 3188 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-01-10 09:53:32 +0100 (Thu, 10 Jan 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Provide an interface for edge label information
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,18 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
-#ifdef _MSC_VER
-#pragma once
-#endif
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifndef OGDF_E_LABEL_INTERFACE_H
-#define OGDF_E_LABEL_INTERFACE_H
+#pragma once
 
 #include <ogdf/basic/GridLayout.h>
 #include <ogdf/basic/GridLayoutMapped.h>
@@ -53,46 +38,44 @@
 
 namespace ogdf {
 
-//********************************************************
 // the available labels
 // the five basic labels are not allowed to be changed,
 // cause they have a special meaning/position, insert
 // other labels between mult1/End2
 
-enum eLabelType {
-	elEnd1 = 0,
-	elMult1,
-	elName,
-	elEnd2,
-	elMult2,
-	elNumLabels  //!< the number of available labels at an edge
+enum class LabelType {
+	End1 = 0,
+	Mult1,
+	Name,
+	End2,
+	Mult2,
+	NumLabels  //!< the number of available labels at an edge
 };
 
-enum eUsedLabels {
-	lEnd1  = (1 << elEnd1),         //  1
-	lMult1 = (1 << elMult1),        //  2
-	lName  = (1 << elName),         //  4
-	lEnd2  = (1 << elEnd2),         //  8
-	lMult2 = (1 << elMult2),        // 16
-	lAll   = (1 << elNumLabels) -1 // 31
+enum class UsedLabels {
+	End1  = (1 << static_cast<int>(LabelType::End1)),         //  1
+	Mult1 = (1 << static_cast<int>(LabelType::Mult1)),        //  2
+	Name  = (1 << static_cast<int>(LabelType::Name)),         //  4
+	End2  = (1 << static_cast<int>(LabelType::End2)),         //  8
+	Mult2 = (1 << static_cast<int>(LabelType::Mult2)),        // 16
+	lAll   = (1 << static_cast<int>(LabelType::NumLabels)) -1, // 31
 };
 
-
-//*************************************
 // the basic single label defining class
 // holds info about all labels for one edge
 template <class coordType>
 class OGDF_EXPORT EdgeLabel
 {
 public:
+	static const int numberUsedLabels = static_cast<int>(UsedLabels::lAll);
 
 	//construction and destruction
 	EdgeLabel() { m_edge = 0; m_usedLabels = 0; }
 
 	//bit pattern 2^labelenumpos bitwise
-	EdgeLabel(edge e, int usedLabels = lAll) : m_usedLabels(usedLabels), m_edge(e)
+	explicit EdgeLabel(edge e, int usedLabels = numberUsedLabels) : m_usedLabels(usedLabels), m_edge(e)
 	{
-		for(int i = 0; i < elNumLabels; i++)
+		for(int i = 0; i < m_numberLabelTypes; i++)
 		{
 			//zu testzwecken randoms
 			m_xSize[i] = double(randomNumber(5,13))/50.0; //1
@@ -104,9 +87,9 @@ public:
 	}
 
 	// Construction with specification of label sizes in arrays of length labelnum
-	EdgeLabel(edge e, coordType w[], coordType h[], int usedLabels = lAll) : m_usedLabels(usedLabels), m_edge(e)
+	EdgeLabel(edge e, coordType w[], coordType h[], int usedLabels = numberUsedLabels) : m_usedLabels(usedLabels), m_edge(e)
 	{
-		for(int i = 0; i < elNumLabels; i++)
+		for(int i = 0; i < m_numberLabelTypes; i++)
 		{
 			m_xSize[i] = w[i];
 			m_ySize[i] = h[i];
@@ -117,7 +100,7 @@ public:
 
 	EdgeLabel(edge e, coordType w, coordType h, int usedLabels) : m_usedLabels(usedLabels), m_edge(e)
 	{
-		for (int i = 0; i < elNumLabels; i++)
+		for (int i = 0; i < m_numberLabelTypes; i++)
 			if (m_usedLabels & (1 << i)) {
 				m_xPos[i] = 0.0;
 				m_yPos[i] = 0.0;
@@ -129,14 +112,14 @@ public:
 	//copy constructor
 	EdgeLabel(const EdgeLabel& rhs) : m_usedLabels(rhs.m_usedLabels), m_edge(rhs.m_edge)
 	{
-		for(int i = 0; i < elNumLabels; i++)
+		for(int i = 0; i < m_numberLabelTypes; i++)
 		{
 			m_xPos[i] = rhs.m_xPos[i];
 			m_yPos[i] = rhs.m_yPos[i];
 			m_xSize[i] = rhs.m_xSize[i];
 			m_ySize[i] = rhs.m_ySize[i];
 		}
-	}//copy con
+	}
 
 	~EdgeLabel() { }
 
@@ -148,7 +131,7 @@ public:
 			m_usedLabels = rhs.m_usedLabels;
 			m_edge = rhs.m_edge;
 			int i;
-			for(i = 0; i < elNumLabels; i++)
+			for(i = 0; i < m_numberLabelTypes; i++)
 			{
 				m_xPos[i] = rhs.m_xPos[i];
 				m_yPos[i] = rhs.m_yPos[i];
@@ -157,7 +140,7 @@ public:
 			}
 		}
 		return *this;
-	}//assignment
+	}
 
 	EdgeLabel& operator|=(const EdgeLabel& rhs)
 	{
@@ -169,7 +152,7 @@ public:
 		if (this != &rhs)
 		{
 			m_usedLabels |= rhs.m_usedLabels;
-			for (int i = 0; i < elNumLabels; i++)
+			for (int i = 0; i < m_numberLabelTypes; i++)
 				if (rhs.m_usedLabels & (1 << i)) {
 					m_xPos[i] = rhs.m_xPos[i];
 					m_yPos[i] = rhs.m_yPos[i];
@@ -182,22 +165,22 @@ public:
 
 
 	//set
-	void setX(eLabelType elt, coordType x) { m_xPos[elt] = x; }
-	void setY(eLabelType elt, coordType y) { m_yPos[elt] = y; }
-	void setHeight(eLabelType elt, coordType h) { m_ySize[elt] = h; }
-	void setWidth(eLabelType elt, coordType w) { m_xSize[elt] = w; }
+	void setX(LabelType elt, coordType x) { m_xPos[static_cast<int>(elt)] = x; }
+	void setY(LabelType elt, coordType y) { m_yPos[static_cast<int>(elt)] = y; }
+	void setHeight(LabelType elt, coordType h) { m_ySize[static_cast<int>(elt)] = h; }
+	void setWidth(LabelType elt, coordType w) { m_xSize[static_cast<int>(elt)] = w; }
 	void setEdge(edge e) { m_edge = e; }
-	void addType(eLabelType elt) { m_usedLabels |= (1<<elt); }
+	void addType(LabelType elt) { m_usedLabels |= (1<< static_cast<int>(elt)); }
 
 	//get
-	coordType getX(eLabelType elt) const { return m_xPos[elt]; }
-	coordType getY(eLabelType elt) const { return m_yPos[elt]; }
-	coordType getWidth(eLabelType elt) const { return m_xSize[elt]; }
-	coordType getHeight(eLabelType elt) const { return m_ySize[elt]; }
+	coordType getX(LabelType elt) const { return m_xPos[static_cast<int>(elt)]; }
+	coordType getY(LabelType elt) const { return m_yPos[static_cast<int>(elt)]; }
+	coordType getWidth(LabelType elt) const { return m_xSize[static_cast<int>(elt)]; }
+	coordType getHeight(LabelType elt) const { return m_ySize[static_cast<int>(elt)]; }
 	edge theEdge() const { return m_edge; }
 
-	bool usedLabel(eLabelType elt) const {
-		return ( ( m_usedLabels & (1 << elt) ) > 0 );
+	bool usedLabel(LabelType elt) const {
+		return ( m_usedLabels & (1 << static_cast<int>(elt)) ) > 0;
 	}
 
 	int &usedLabel() { return m_usedLabels; }
@@ -205,13 +188,15 @@ public:
 
 private:
 
+	static const int m_numberLabelTypes = static_cast<int>(LabelType::NumLabels);
+
 	//the positions of the labels
-	coordType m_xPos[elNumLabels];
-	coordType m_yPos[elNumLabels];
+	coordType m_xPos[m_numberLabelTypes];
+	coordType m_yPos[m_numberLabelTypes];
 
 	//the input label sizes
-	coordType m_xSize[elNumLabels];
-	coordType m_ySize[elNumLabels];
+	coordType m_xSize[m_numberLabelTypes];
+	coordType m_ySize[m_numberLabelTypes];
 
 	//which labels have to be placed bit pattern 2^labelenumpos bitwise
 	int m_usedLabels; //1 = only name, 5 = name and end2, ...
@@ -220,20 +205,18 @@ private:
 	edge m_edge;
 
 	//the label text
-	//string m_string;
+#if 0
+	string m_string;
+#endif
+};
 
-
-};//edgelabel
-
-
-//*********************
 //Interface to algorithm
 template <class coordType>
 class ELabelInterface
 {
 public:
 	//constructor
-	ELabelInterface(PlanRepUML& pru)
+	explicit ELabelInterface(PlanRepUML& pru)
 	{
 		//the PRU should not work with real world data but with
 		//normalized integer values
@@ -242,14 +225,12 @@ public:
 		m_labels.init(pru.original());
 		m_ug = 0;
 
-		//temporary
-		edge e;
-		forall_edges(e, pru.original())
+		for(edge e : pru.original().edges)
 			setLabel(e, EdgeLabel<coordType>(e, 0));
 	}
 
 	//constructor on GraphAttributes
-	ELabelInterface(GraphAttributes& uml) : m_ug(&uml)
+	explicit ELabelInterface(GraphAttributes& uml) : m_ug(&uml)
 	{
 		//the GraphAttributes should work on real world data,
 		//which can be floats or ints
@@ -257,9 +238,7 @@ public:
 		m_minFeatDist = 0.003;
 		m_labels.init(uml.constGraph());
 
-		//temporary
-		edge e;
-		forall_edges(e, uml.constGraph())
+		for(edge e : uml.constGraph().edges)
 			setLabel(e, EdgeLabel<coordType>(e, 0));
 	}
 
@@ -277,10 +256,10 @@ public:
 	//get info about current EdgeLabel
 	EdgeLabel<coordType>& getLabel(edge e) { return m_labels[e]; }
 
-	coordType getWidth(edge e, eLabelType elt) {
+	coordType getWidth(edge e, LabelType elt) {
 		return m_labels[e].getWidth(elt);
 	}
-	coordType getHeight(edge e, eLabelType elt) {
+	coordType getHeight(edge e, LabelType elt) {
 		return m_labels[e].getHeight(elt);
 	}
 
@@ -296,9 +275,6 @@ private:
 
 	coordType m_distDefault; //default distance label/edge for positioner
 	coordType m_minFeatDist; //min Distance label/feature in candidate posit.
-};//ELabelInterface
+};
 
-
-}//end namespace
-
-#endif
+}

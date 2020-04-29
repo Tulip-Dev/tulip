@@ -1,11 +1,3 @@
-/*
- * $Revision: 2565 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-07 17:14:54 +0200 (Sat, 07 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Implements class PlanarDrawLayout
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,21 +25,15 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 
 #include <ogdf/planarlayout/PlanarDrawLayout.h>
-#include <ogdf/basic/GraphCopy.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/augmentation/PlanarAugmentation.h>
 #include <ogdf/augmentation/PlanarAugmentationFix.h>
-#include <ogdf/module/ShellingOrderModule.h>
-#include <ogdf/basic/BoundedStack.h>
 #include <ogdf/planarlayout/BiconnectedShellingOrder.h>
 #include <ogdf/planarity/SimpleEmbedder.h>
 
@@ -60,9 +46,9 @@ PlanarDrawLayout::PlanarDrawLayout()
 	m_sideOptimization = false;
 	m_baseRatio        = 0.33;
 
-	m_augmenter.set(new PlanarAugmentation);
-	m_computeOrder.set(new BiconnectedShellingOrder);
-	m_embedder.set(new SimpleEmbedder);
+	m_augmenter.reset(new PlanarAugmentation);
+	m_computeOrder.reset(new BiconnectedShellingOrder);
+	m_embedder.reset(new SimpleEmbedder);
 }
 
 
@@ -75,32 +61,10 @@ void PlanarDrawLayout::doCall(
 {
 	// require to have a planar graph without multi-edges and self-loops;
 	// planarity is checked below
-	OGDF_ASSERT(isSimple(G) && isLoopFree(G));
+	OGDF_ASSERT(isSimple(G));
 
-	// handle special case of graphs with less than 3 nodes
-	if(G.numberOfNodes() < 3)
-	{
-		node v1, v2;
-		switch(G.numberOfNodes())
-		{
-		case 0:
-			boundingBox = IPoint(0,0);
-			return;
-
-		case 1:
-			v1 = G.firstNode();
-			gridLayout.x(v1) = gridLayout.y(v1) = 0;
-			boundingBox = IPoint(0,0);
-			return;
-
-		case 2:
-			v1 = G.firstNode();
-			v2 = G.lastNode ();
-			gridLayout.x(v1) = gridLayout.y(v1) = gridLayout.y(v2) = 0;
-			gridLayout.x(v2) = 1;
-			boundingBox = IPoint(1,0);
-			return;
-		}
+	if (G.numberOfNodes() < 2) {
+		return;
 	}
 
 	// we make a copy of G since we use planar biconnected augmentation
@@ -112,17 +76,17 @@ void PlanarDrawLayout::doCall(
 
 	} else {
 		// augment graph planar biconnected
-		m_augmenter.get().call(GC);
+		m_augmenter->call(GC);
 
 		// embed augmented graph
-		m_embedder.get().call(GC,adjExternal);
+		m_embedder->call(GC,adjExternal);
 	}
 
 	// compute shelling order
-	m_computeOrder.get().baseRatio(m_baseRatio);
+	m_computeOrder->baseRatio(m_baseRatio);
 
 	ShellingOrder order;
-	m_computeOrder.get().call(GC,order,adjExternal);
+	m_computeOrder->call(GC,order,adjExternal);
 
 	// compute grid coordinates for GC
 	NodeArray<int> x(GC), y(GC);
@@ -130,12 +94,11 @@ void PlanarDrawLayout::doCall(
 
 	boundingBox.m_x = x[order(1,order.len(1))];
 	boundingBox.m_y = 0;
-	node v;
-	forall_nodes(v,GC)
+	for(node v : GC.nodes)
 		if(y[v] > boundingBox.m_y) boundingBox.m_y = y[v];
 
 	// copy coordinates from GC to G
-	forall_nodes(v,G) {
+	for(node v : G.nodes) {
 		node vCopy = GC.copy(v);
 		gridLayout.x(v) = x[vCopy];
 		gridLayout.y(v) = y[vCopy];
@@ -153,18 +116,16 @@ void PlanarDrawLayout::computeCoordinates(const Graph &G,
 
 	// upper[v] = w means x-coord. of v is relative to w
 	// (abs. x-coord. of v = x[v] + abs. x-coord of w)
-	NodeArray<node>	upper(G,0);
+	NodeArray<node>	upper(G,nullptr);
 
 	// maximal rank of a neighbour
 	NodeArray<int> maxNeighbour(G,0);
 	// internal nodes (nodes not on contour)
-	BoundedStack<node> internals(G.numberOfNodes());
+	ArrayBuffer<node> internals(G.numberOfNodes());
 
-	node v;
-	forall_nodes(v,G)
+	for(node v : G.nodes)
 	{
-		adjEntry adj;
-		forall_adj(adj,v) {
+		for(adjEntry adj : v->adjEntries) {
 			int r = order.rank(adj->twinNode());
 			if (r > maxNeighbour[v])
 				maxNeighbour[v] = r;
@@ -187,14 +148,14 @@ void PlanarDrawLayout::computeCoordinates(const Graph &G,
 		if (i > 1)
 			prev[V1[i]] = V1[i-1];
 	}
-	prev[v1] = next[v2] = 0;
+	prev[v1] = next[v2] = nullptr;
 
 	// process shelling order from bottom to top
 	for (int k = 2; k <= order.length(); k++)
 	{
 		// Referenz auf aktuelle Menge Vk (als Abk?rzung)
 		const ShellingOrderSet &Vk = order[k]; // Vk = { z_1,...,z_l }
-		int l = Vk.len();
+		int len = Vk.len();
 
 		node z1 = Vk[1];
 		node cl = Vk.left();  // left vertex
@@ -204,13 +165,13 @@ void PlanarDrawLayout::computeCoordinates(const Graph &G,
 		if (m_sideOptimization && cr == rightSide && maxNeighbour[cr] <= k)
 		{
 			isOuter   = true;
-			rightSide = Vk[l];
+			rightSide = Vk[len];
 		} else
 			isOuter = false;
 
-		// compute relative x-distance from c_i to cl for i = l+1, ..., r
+		// compute relative x-distance from c_i to cl for i = len+1, ..., r
 		int sum = 0;
-		for (v = next[cl]; v != cr; v = next[v]) {
+		for (node v = next[cl]; v != cr; v = next[v]) {
 			sum += x[v];
 			x[v] = sum;
 		}
@@ -226,14 +187,14 @@ void PlanarDrawLayout::computeCoordinates(const Graph &G,
 			{
 				yMax = max(y[cl]+1-eps,
 					y[cr] + ((x[cr] == 1 && eps == 1) ? 1 : 0));
-				for (v = next[cl]; v != cr; v = next[v]) {
+				for (node v = next[cl]; v != cr; v = next[v]) {
 					if (x[v] < x[cr]) {
 						int y1 = (y[cr]-y[v])*(eps-x[cr])/(x[cr]-x[v])+y[cr];
 						if (y1 >= yMax)
 							yMax = 1+y1;
 					}
 				}
-				for (v = cr; v != cl; v = prev[v]) {
+				for (node v = cr; v != cl; v = prev[v]) {
 					if (y[prev[v]] > y[v] && maxNeighbour[v] >= k) {
 						if (yMax <= y[v] + x[v] - eps) {
 							eps  = 1;
@@ -242,19 +203,19 @@ void PlanarDrawLayout::computeCoordinates(const Graph &G,
 						break;
 					}
 				}
-				x_cr = max(x[cr]-eps-l+1, (y[cr] == yMax) ? 1 : 0);
+				x_cr = max(x[cr]-eps-len+1, (y[cr] == yMax) ? 1 : 0);
 				y_z  = yMax;
 
 			} else {
-				// yMax = max { y[c_i] | l <= i <= r }
+				// yMax = max { y[c_i] | len <= i <= r }
 				yMax = y[cl] - eps;
-				for (v = cr; v != cl; v = prev[v]) {
+				for (node v = cr; v != cl; v = prev[v]) {
 					if (y[v] > yMax)
 						yMax = y[v];
 				}
-				int offset = max (yMax-x[cr]+l+eps-y[cr],
+				int offset = max (yMax-x[cr]+len+eps-y[cr],
 					(y[prev[cr]] > y[cr]) ? 1 : 0);
-				y_z  = y[cr] + x[cr] + offset - l + 1 - eps;
+				y_z  = y[cr] + x[cr] + offset - len + 1 - eps;
 				x_cr = y_z - y[cr];
 			}
 
@@ -264,7 +225,7 @@ void PlanarDrawLayout::computeCoordinates(const Graph &G,
 		}
 
 		node alpha = cl;
-		for (v = next[cl];
+		for (node v = next[cl];
 			maxNeighbour[v] <= k-1 && order.rank(v) <= order.rank(prev[v]);
 			v = next[v])
 		{
@@ -275,7 +236,7 @@ void PlanarDrawLayout::computeCoordinates(const Graph &G,
 		}
 
 		node beta = prev[cr];
-		for (v = prev[cr];
+		for (node v = prev[cr];
 			maxNeighbour[v] <= k-1 && order.rank(v) <= order.rank(next[v]);
 			v = prev[v])
 		{
@@ -285,22 +246,22 @@ void PlanarDrawLayout::computeCoordinates(const Graph &G,
 				break;
 		}
 
-		for (i = 1; i <= l; ++i) {
+		for (i = 1; i <= len; ++i) {
 			x[Vk[i]] = 1;
 			y[Vk[i]] = y_z;
 		}
 		x[z1] = eps;
 
-		for (v = alpha; v != cl; v = prev [v]) {
+		for (node v = alpha; v != cl; v = prev [v]) {
 			upper[v] = cl;
 			internals.push (v);
 		}
-		for (v = next [beta]; v != cr; v = next [v]) {
+		for (node v = next [beta]; v != cr; v = next [v]) {
 			upper[v]  = cr;
 			x [v]    -= x[cr];
 			internals.push (v);
 		}
-		for (v = beta; v != alpha; v = prev[v]) {
+		for (node v = beta; v != alpha; v = prev[v]) {
 			upper[v]  = z1;
 			x [v]    -= x[z1];
 			internals.push (v);
@@ -309,29 +270,28 @@ void PlanarDrawLayout::computeCoordinates(const Graph &G,
 		x[cr] = x_cr;
 
 		// update contour after insertion of z_1,...,z_l
-		for (i = 1; i <= l; i++) {
-			if (i < l)
+		for (i = 1; i <= len; i++) {
+			if (i < len)
 				next[Vk[i]] = Vk[i+1];
 			if (i > 1)
 				prev[Vk[i]] = Vk[i-1];
 		}
-		next [cl]    = z1;
-		next [Vk[l]] = cr;
-		prev [cr]    = Vk[l];
-		prev [z1]    = cl;
+		next [cl] = z1;
+		next [Vk[len]] = cr;
+		prev [cr] = Vk[len];
+		prev [z1] = cl;
 	}
 
 	// compute final x-coordinates for the nodes on the (final) contour
 	int sum = 0;
-	for (v = v1; v != 0; v = next[v])
+	for (node v = v1; v != nullptr; v = next[v])
 		x [v] = (sum += x[v]);
 
 	// compute final x-coordinates for the internal nodes
 	while (!internals.empty()) {
-		v     = internals.pop();
+		node v = internals.popRet();
 		x[v] += x[upper[v]];
 	}
 }
 
-
-} // end namespace ogdf
+}

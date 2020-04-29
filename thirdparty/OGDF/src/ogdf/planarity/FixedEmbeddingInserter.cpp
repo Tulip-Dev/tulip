@@ -1,11 +1,3 @@
-/*
- * $Revision: 3368 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-04-04 20:07:31 +0200 (Thu, 04 Apr 2013) $
- ***************************************************************/
-
 /** \file
  * \brief implementation of FixedEmbeddingInserter class
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,74 +25,63 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
-
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/planarity/FixedEmbeddingInserter.h>
-#include <ogdf/internal/planarity/FixEdgeInserterCore.h>
-
+#include <ogdf/planarity/embedding_inserter/FixEdgeInserterCore.h>
 
 namespace ogdf {
 
-	//---------------------------------------------------------
-	// constructor
-	// sets default values for options
-	//
-	FixedEmbeddingInserter::FixedEmbeddingInserter()
-	{
-		m_rrOption = rrNone;
-		m_percentMostCrossed = 25;
-		m_keepEmbedding = false;
-	}
+// constructor
+// sets default values for options
+FixedEmbeddingInserter::FixedEmbeddingInserter()
+{
+	m_rrOption = RemoveReinsertType::None;
+	m_percentMostCrossed = 25;
+	m_keepEmbedding = false;
+}
 
+// copy constructor
+FixedEmbeddingInserter::FixedEmbeddingInserter(const FixedEmbeddingInserter &inserter)
+	: EdgeInsertionModule(inserter)
+{
+	m_rrOption = inserter.m_rrOption;
+	m_percentMostCrossed = inserter.m_percentMostCrossed;
+	m_keepEmbedding = inserter.m_keepEmbedding;
+}
 
-	// copy constructor
-	FixedEmbeddingInserter::FixedEmbeddingInserter(const FixedEmbeddingInserter &inserter)
-		: EdgeInsertionModule(inserter)
-	{
-		m_rrOption = inserter.m_rrOption;
-		m_percentMostCrossed = inserter.m_percentMostCrossed;
-		m_keepEmbedding = inserter.m_keepEmbedding;
-	}
+// clone method
+EdgeInsertionModule *FixedEmbeddingInserter::clone() const
+{
+	return new FixedEmbeddingInserter(*this);
+}
 
+// assignment operator
+FixedEmbeddingInserter &FixedEmbeddingInserter::operator=(const FixedEmbeddingInserter &inserter)
+{
+	m_timeLimit = inserter.m_timeLimit;
+	m_rrOption = inserter.m_rrOption;
+	m_percentMostCrossed = inserter.m_percentMostCrossed;
+	m_keepEmbedding = inserter.m_keepEmbedding;
+	return *this;
+}
 
-	// clone method
-	EdgeInsertionModule *FixedEmbeddingInserter::clone() const
-	{
-		return new FixedEmbeddingInserter(*this);
-	}
+// actual call method
+Module::ReturnType FixedEmbeddingInserter::doCall(
+	PlanRepLight &pr,
+	const Array<edge> &origEdges,
+	const EdgeArray<int> *pCostOrig,
+	const EdgeArray<bool> *pForbiddenOrig,
+	const EdgeArray<uint32_t> *pEdgeSubgraphs)
+{
+	FixEdgeInserterCore core(pr, pCostOrig, pForbiddenOrig, pEdgeSubgraphs);
+	core.timeLimit(timeLimit());
 
-
-	// assignment operator
-	FixedEmbeddingInserter &FixedEmbeddingInserter::operator=(const FixedEmbeddingInserter &inserter)
-	{
-		m_timeLimit = inserter.m_timeLimit;
-		m_rrOption = inserter.m_rrOption;
-		m_percentMostCrossed = inserter.m_percentMostCrossed;
-		m_keepEmbedding = inserter.m_keepEmbedding;
-		return *this;
-	}
-
-
-	// actual call method
-	Module::ReturnType FixedEmbeddingInserter::doCall(
-		PlanRepLight &pr,
-		const Array<edge> &origEdges,
-		const EdgeArray<int> *pCostOrig,
-		const EdgeArray<bool> *pForbiddenOrig,
-		const EdgeArray<__uint32> *pEdgeSubgraphs)
-	{
-		FixEdgeInserterCore core(pr, pCostOrig, pForbiddenOrig, pEdgeSubgraphs);
-		core.timeLimit(timeLimit());
-
-		ReturnType retVal = core.call(origEdges, m_keepEmbedding, m_rrOption, m_percentMostCrossed);
-		m_runsPostprocessing = core.runsPostprocessing();
-		return retVal;
-	}
+	ReturnType retVal = core.call(origEdges, m_keepEmbedding, m_rrOption, m_percentMostCrossed);
+	m_runsPostprocessing = core.runsPostprocessing();
+	return retVal;
+}
 
 }

@@ -1,11 +1,3 @@
-/*
- * $Revision: 2963 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-11-05 14:17:50 +0100 (Mon, 05 Nov 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class PlanRepExpansion representing a
  *        planarized representation of the expansion of a graph.
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,37 +26,27 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_PLAN_REP_EXPANSION_H
-#define OGDF_PLAN_REP_EXPANSION_H
-
 
 #include <ogdf/basic/Graph.h>
 #include <ogdf/basic/tuples.h>
 #include <ogdf/basic/SList.h>
 
+#include <ogdf/basic/CombinatorialEmbedding.h>
+#include <ogdf/basic/FaceSet.h>
+#include <ogdf/basic/NodeSet.h>
+
 
 namespace ogdf {
 
-
-class OGDF_EXPORT CombinatorialEmbedding;
-class OGDF_EXPORT FaceSetPure;
-class OGDF_EXPORT NodeSetPure;
-
-
 /**
  * \brief Planarized representations (of a connected component) of a graph.
+ *
+ * @ingroup plan-rep
  *
  * Maintains types of edges (generalization, association) and nodes,
  * and the connected components of the graph.
@@ -73,14 +55,14 @@ class OGDF_EXPORT PlanRepExpansion : public Graph
 {
 public:
 	struct Crossing {
-		Crossing() { m_adj = 0; }
-		Crossing(adjEntry adj) { m_adj = adj; }
+		Crossing() { m_adj = nullptr; }
+		explicit Crossing(adjEntry adj) { m_adj = adj; }
 
 		adjEntry m_adj;
 		SList<adjEntry> m_partitionLeft;
 		SList<adjEntry> m_partitionRight;
 
-		friend ostream &operator<<(ostream &os, const Crossing &c) {
+		friend std::ostream &operator<<(std::ostream &os, const Crossing &c) {
 			os << "(" << c.m_adj << ")";
 			return os;
 		}
@@ -104,7 +86,7 @@ public:
 		/**
 		 * \brief Creates a node split and sets its iterator in the list of all node splits.
 		 */
-		NodeSplit(ListIterator<NodeSplit> it) : m_nsIterator(it) { }
+		explicit NodeSplit(ListIterator<NodeSplit> it) : m_nsIterator(it) { }
 
 		/**
 		 * \brief Returns the first node on the node split's insertion path.
@@ -121,22 +103,22 @@ public:
 	};
 
 	//! Pointer to a node split.
-	typedef PlanRepExpansion::NodeSplit *nodeSplit;
+	using nodeSplit = PlanRepExpansion::NodeSplit*;
 
 
 	/**
-	 * \brief Creates a planarized expansion of graph \a G.
+	 * \brief Creates a planarized expansion of graph \p G.
 	 *
 	 * All nodes are allowed to be split.
 	 */
 	PlanRepExpansion(const Graph& G);
 
 	/**
-	 * \brief Creates a planarized expansion of graph \a G with given splittable nodes.
+	 * \brief Creates a planarized expansion of graph \p G with given splittable nodes.
 	 *
-	 * Only the node in \a splittableNodes are allowed to be split.
+	 * Only the node in \p splittableNodes are allowed to be split.
 	 * @param G is the original graph of this planarized expansion.
-	 * @param splittableNodes contains all the nodes in \a G that are splittable.
+	 * @param splittableNodes contains all the nodes in \p G that are splittable.
 	 */
 	PlanRepExpansion(const Graph& G, const List<node> &splittableNodes);
 
@@ -151,31 +133,31 @@ public:
 	//! Returns a reference to the original graph.
 	const Graph &original() const { return *m_pGraph; }
 
-	//! Returns the original node of \a v, or 0 if \a v is a dummy.
+	//! Returns the original node of \p v, or 0 if \p v is a dummy.
 	node original(node v) const { return m_vOrig[v]; }
 
-	//! Returns the list of copy nodes of \a vOrig.
+	//! Returns the list of copy nodes of \p vOrig.
 	const List<node> &expansion(node vOrig) const { return m_vCopy[vOrig]; }
 
-	//! Returns the first copy node of \a vOrig.
+	//! Returns the first copy node of \p vOrig.
 	node copy(node vOrig) const { return m_vCopy[vOrig].front(); }
 
-	//! Returns the original edge of \ e, or 0 if \a e has none (e.g., \a e belongs to a node split).
+	//! Returns the original edge of \p e, or 0 if \p e has none (e.g., \p e belongs to a node split).
 	edge originalEdge(edge e) const { return m_eOrig[e]; }
 
-	//! Returns the insertion path of edge \a eOrig.
+	//! Returns the insertion path of edge \p eOrig.
 	const List<edge> &chain(edge eOrig) const { return m_eCopy[eOrig]; }
 
-	//! Returns the first edge in \a eOrig's insertion path.
+	//! Returns the first edge in \p eOrig's insertion path.
 	edge copy(edge eOrig) const { return m_eCopy[eOrig].front(); }
 
-	//! Returns true iff \a v is splittable.
+	//! Returns true iff \p v is splittable.
 	bool splittable(node v) const { return m_splittable[v]; }
 
-	//! Returns true iff \a vOrig is splittable.
+	//! Returns true iff \p vOrig is splittable.
 	bool splittableOrig(node vOrig) const { return m_splittableOrig[vOrig]; }
 
-	//! Returns the node split associated with \a e, or 0 if none (e.g., \a e belongs to an original edge).
+	//! Returns the node split associated with \p e, or 0 if none (e.g., \p e belongs to an original edge).
 	NodeSplit *nodeSplitOf(edge e) const { return m_eNodeSplit[e]; }
 
 	//! Returns the number of node splits.
@@ -186,13 +168,13 @@ public:
 	List<NodeSplit> &nodeSplits() { return m_nodeSplits; }
 
 	/**
-	 * \brief Sets the original edge and corresponding node split of \a e and returns the corresponding insertion path.
+	 * \brief Sets the original edge and corresponding node split of \p e and returns the corresponding insertion path.
 	 *
 	 * @param e is an edge in the planarized expansion.
-	 * @param eOrig is assigned the original edge of \a e (or 0 if none).
-	 * @param ns is assigned the node split corresponding to \a e (or 0 if none).
-	 * @return a reference to the insertion path containing \a e; this is either the insertion
-	 *         path of \a eOrig (if this is not 0), or of \a ns.
+	 * @param eOrig is assigned the original edge of \p e (or 0 if none).
+	 * @param ns is assigned the node split corresponding to \p e (or 0 if none).
+	 * @return a reference to the insertion path containing \p e; this is either the insertion
+	 *         path of \p eOrig (if this is not 0), or of \p ns.
 	 */
 	List<edge> &setOrigs(edge e, edge &eOrig, nodeSplit &ns);
 
@@ -225,7 +207,7 @@ public:
 	}
 
 	/**
-	 * \brief Returns the list of (original) nodes in connected component \a i.
+	 * \brief Returns the list of (original) nodes in connected component \p i.
 	 *
 	 * Note that connected components are numbered 0,1,...
 	 */
@@ -241,7 +223,7 @@ public:
 	}
 
 	/**
-	 * \brief Initializes the planarized representation for connected component \a i.
+	 * \brief Initializes the planarized representation for connected component \p i.
 	 *
 	 * This initialization is always required. After performing this initialization,
 	 * the planarized representation represents a copy of the <i>i</i>-th connected
@@ -257,12 +239,12 @@ public:
 	 */
 	//@{
 
-	edge split(edge e);
+	edge split(edge e) override;
 
-	void unsplit(edge eIn, edge eOut);
+	void unsplit(edge eIn, edge eOut) override;
 
-	//! Removes edge \a e from the planarized expansion.
-	virtual void delEdge(edge e);
+	//! Removes edge \p e from the planarized expansion.
+	virtual void delEdge(edge e) override;
 
 	//! Embeds the planarized expansion; returns true iff it is planar.
 	bool embed();
@@ -277,16 +259,16 @@ public:
 		edge eTgt);
 
 	/**
-	 * \brief Inserts an edge or a node split according to insertion path \a crossedEdges.
+	 * \brief Inserts an edge or a node split according to insertion path \p crossedEdges.
 	 *
-	 * If \a eOrig is not 0, a new insertion path for \a eOrig is inserted; otherwise,
-	 * a new insertion path for node split \a ns is inserted.
+	 * If \p eOrig is not 0, a new insertion path for \p eOrig is inserted; otherwise,
+	 * a new insertion path for node split \p ns is inserted.
 	 * @param eOrig is an original edge in the graph (or 0).
 	 * @param ns is a node split in the planarized expansion.
 	 * @param E is an embedding of the planarized expansion.
 	 * @param crossedEdges defines the insertion path.
-	 * \pre Not both \a eOrig and \a ns may be 0.
-	 * \see GraphCopy::insertEdgePathEmbedded() for a specification of \a crossedEdges.
+	 * \pre Not both \p eOrig and \p ns may be 0.
+	 * \see GraphCopy::insertEdgePathEmbedded() for a specification of \p crossedEdges.
 	 */
 	void insertEdgePathEmbedded(
 		edge eOrig,
@@ -295,7 +277,7 @@ public:
 		const List<Tuple2<adjEntry,adjEntry> > &crossedEdges);
 
 	/**
-	 * \brief Removes the insertion path of \a eOrig or \a ns.
+	 * \brief Removes the insertion path of \p eOrig or \p ns.
 	 *
 	 * @param E is an embedding of the planarized expansion.
 	 * @param eOrig is an original edge in the graph (or 0).
@@ -305,25 +287,25 @@ public:
 	 *        from merging (splittable) nodes.
 	 * @param oldSrc is assigned the source node of the removed insertion path.
 	 * @param oldTgt is assigned the target node of the removed insertion path.
-	 * \pre Not both \a eOrig and \a ns may be 0.
+	 * \pre Not both \p eOrig and \p ns may be 0.
 	 */
 	void removeEdgePathEmbedded(
 		CombinatorialEmbedding &E,
 		edge eOrig,
 		nodeSplit ns,
-		FaceSetPure &newFaces,
-		NodeSetPure &mergedNodes,
+		FaceSet<false> &newFaces,
+		NodeSet<false> &mergedNodes,
 		node &oldSrc,
 		node &oldTgt);
 
 	/**
-	 * \brief Removes the insertion path of \a eOrig or \a ns.
+	 * \brief Removes the insertion path of \p eOrig or \p ns.
 	 *
 	 * @param eOrig is an original edge in the graph (or 0).
 	 * @param ns is a node split in the planarized expansion.
 	 * @param oldSrc is assigned the source node of the removed insertion path.
 	 * @param oldTgt is assigned the target node of the removed insertion path.
-	 * \pre Not both \a eOrig and \a ns may be 0.
+	 * \pre Not both \p eOrig and \p ns may be 0.
 	 */
 	void removeEdgePath(
 		edge eOrig,
@@ -354,9 +336,9 @@ public:
 	 * \brief Unsplits a superfluous expansion node of degree 2.
 	 * @param u is a node in the planarized expansion which has degree 2 and is part of the
 	 *        expansion of an original node.
-	 * @param eContract is the edge incident to \a u which is part of a node split; this edge
+	 * @param eContract is the edge incident to \p u which is part of a node split; this edge
 	 *        gets contracted.
-	 * @param eExpand is the edge incident to \a u which belongs to the insertion path
+	 * @param eExpand is the edge incident to \p u which belongs to the insertion path
 	 *        that gets enlarged.
 	 * @param E is an embedding of the planarized expansion.
 	 */
@@ -370,9 +352,9 @@ public:
 	 * \brief Unsplits a superfluous expansion node of degree 2.
 	 * @param u is a node in the planarized expansion which has degree 2 and is part of the
 	 *        expansion of an original node.
-	 * @param eContract is the edge incident to \a u which is part of a node split; this edge
+	 * @param eContract is the edge incident to \p u which is part of a node split; this edge
 	 *        gets contracted.
-	 * @param eExpand is the edge incident to \a u which belongs to the insertion path
+	 * @param eExpand is the edge incident to \p u which belongs to the insertion path
 	 *        that gets enlarged.
 	 */
 	edge unsplitExpandNode(
@@ -381,26 +363,26 @@ public:
 		edge eExpand);
 
 	/**
-	 * \brief Splits edge \a e and introduces a new node split starting at \a v.
+	 * \brief Splits edge \p e and introduces a new node split starting at \p v.
 	 *
-	 * @param v is a node in the planarized expansion; the expansion of \a v's original
+	 * @param v is a node in the planarized expansion; the expansion of \p v's original
 	 *        node is enlarged.
-	 * @param e is the edge to be split; the insertion path of \a e's original edge
-	 *        must start or end at \a v.
+	 * @param e is the edge to be split; the insertion path of \p e's original edge
+	 *        must start or end at \p v.
 	 * @param E is an embedding of the planarized expansion.
-	 * @return the newly created edge; the node resulting from splitting \a e is the
+	 * @return the newly created edge; the node resulting from splitting \p e is the
 	 *         target node of this edge.
 	 */
 	edge enlargeSplit(node v, edge e, CombinatorialEmbedding &E);
 
 	/**
-	 * \brief Splits edge \a e and introduces a new node split starting at \a v.
+	 * \brief Splits edge \p e and introduces a new node split starting at \p v.
 	 *
-	 * @param v is a node in the planarized expansion; the expansion of \a v's original
+	 * @param v is a node in the planarized expansion; the expansion of \p v's original
 	 *        node is enlarged.
-	 * @param e is the edge to be split; the insertion path of \a e's original edge
-	 *        must start or end at \a v.
-	 * @return the newly created edge; the node resulting from splitting \a e is the
+	 * @param e is the edge to be split; the insertion path of \p e's original edge
+	 *        must start or end at \p v.
+	 * @return the newly created edge; the node resulting from splitting \p e is the
 	 *         target node of this edge.
 	 */
 	edge enlargeSplit(node v, edge e);
@@ -408,10 +390,10 @@ public:
 	/**
 	 * \brief Introduces a new node split by splitting an exisiting node split.
 	 *
-	 * @param e is the edge to be split; the node split corresponding to \a e is split
+	 * @param e is the edge to be split; the node split corresponding to \p e is split
 	 *        into two node splits.
 	 * @param E is an embedding of the planarized expansion.
-	 * @return the newly created edge;  the node resulting from splitting \a e is the
+	 * @return the newly created edge;  the node resulting from splitting \p e is the
 	 *         target node of this edge.
 	 */
 	edge splitNodeSplit(edge e, CombinatorialEmbedding &E);
@@ -419,18 +401,18 @@ public:
 	/**
 	 * \brief Introduces a new node split by splitting an exisiting node split.
 	 *
-	 * @param e is the edge to be split; the node split corresponding to \a e is split
+	 * @param e is the edge to be split; the node split corresponding to \p e is split
 	 *        into two node splits.
-	 * @return the newly created edge;  the node resulting from splitting \a e is the
+	 * @return the newly created edge;  the node resulting from splitting \p e is the
 	 *         target node of this edge.
 	 */
 	edge splitNodeSplit(edge e);
 
 	/**
-	 * \brief Removes a self-loop \a e = (\a u,\a u).
+	 * \brief Removes a self-loop \p e = (\a u,\a u).
 	 *
-	 * \a u must be a dummy node; hence, \a u has degree 2 node after removing \ e, and
-	 * \a u is unsplit afterwards.
+	 * \a u must be a dummy node; hence, \a u has degree 2 node after removing
+	 * \p e, and \a u is unsplit afterwards.
 	 * @param e must be a self loop in the planarized expansion.
 	 * @param E is an embedding of the planarized expansion.
 	 */
@@ -439,15 +421,15 @@ public:
 	void removeSelfLoop(edge e);
 
 	/**
-	 * \brief Converts a dummy node \a u to a copy of an original node \a vOrig.
+	 * \brief Converts a dummy node \p u to a copy of an original node \p vOrig.
 	 *
-	 * This method is used if two copy nodes \a x and \a y of the same original node \a vOrig
-	 * can be connected by converting a dummy node \a u into a copy node of \a vOrig, since an
+	 * This method is used if two copy nodes \a x and \a y of the same original node \p vOrig
+	 * can be connected by converting a dummy node \p u into a copy node of \p vOrig, since an
 	 * insertion path starting (or ending) at \a x crosses an insertion path starting (or
 	 * ending) at \a y.
 	 * @param u is a dummy node in the planarized expansion.
 	 * @param vOrig is an original node.
-	 * @param ns is a node split that can be reused for connecting \a x with \a u.
+	 * @param ns is a node split that can be reused for connecting \a x with \p u.
 	 */
 	PlanRepExpansion::nodeSplit convertDummy(
 		node u,
@@ -468,10 +450,9 @@ public:
 	 */
 	//@{
 
-	/**
-	 * \brief Performs various consistency checks on the data structure.
-	 */
-	bool consistencyCheck() const;
+#ifdef OGDF_DEBUG
+	void consistencyCheck() const;
+#endif
 
 	//@}
 
@@ -502,8 +483,4 @@ private:
 	EdgeArray<edge>     m_eAuxCopy; // auxiliary
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

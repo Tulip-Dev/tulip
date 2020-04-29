@@ -1,11 +1,3 @@
-/*
- * $Revision: 3837 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 15:19:30 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief DOT related enums and string conversion functions.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,21 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_DOT_H
-#define OGDF_DOT_H
-
 
 #include <ogdf/basic/Graph.h>
 #include <ogdf/basic/GraphAttributes.h>
@@ -59,32 +41,39 @@ namespace ogdf {
 
 namespace dot {
 
-	enum Attribute {
-		a_id = 0,
-		a_label,
-		a_template,
-		a_stroke,
-		a_fill,
-		a_width,
-		a_height,
-		a_shape,
-		a_weight,
-		a_position,
-		a_arrow,
-		a_unknown
-	};
+enum class Attribute {
+	Id = 0,
+	Label,
+	Template,
+	Stroke,
+	Fill,
+	StrokeType,
+	Width,
+	Height,
+	Shape,
+	Weight,
+	DoubleWeight,
+	Position,
+	LabelPosition,
+	Arrow,
+	StrokeWidth,
+	FillPattern,
+	FillBackground,
+	Type,
+	Dir,
+	SubGraphs,
+	Unknown
+};
 
-	std::string toString(const Attribute &attr);
-	std::string toString(const Shape &shape);
-	std::string toString(const EdgeArrow &arrow);
+std::string toString(const Attribute &attr);
+std::string toString(const Shape &shape);
+std::string toString(const EdgeArrow &arrow);
+std::string toString(const Graph::EdgeType &type);
 
-	Attribute toAttribute(const std::string &str);
-	Shape toShape(const std::string &str);
-	EdgeArrow toArrow(const std::string &str);
+Attribute toAttribute(const std::string &str);
+Shape toShape(const std::string &str);
+EdgeArrow toArrow(const std::string &str);
+Graph::EdgeType toEdgeType(const std::string &str);
 
-} // end namespace dot
-
-} // end namespace ogdf
-
-
-#endif
+}
+}

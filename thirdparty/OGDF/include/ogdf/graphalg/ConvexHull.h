@@ -1,11 +1,3 @@
-/*
- * $Revision: 3388 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-04-10 14:56:08 +0200 (Wed, 10 Apr 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of doubly linked lists and iterators
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,28 +25,25 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_CONVEX_HULL_H
-#define OGDF_CONVEX_HULL_H
 
 #include <ogdf/basic/GraphAttributes.h>
 #include <ogdf/basic/geometry.h>
-#include <ogdf/internal/energybased/MultilevelGraph.h>
+#include <ogdf/energybased/multilevel_mixer/MultilevelGraph.h>
 #include <vector>
 
 namespace ogdf {
 
-// all returned Polygons are clockwise (cw)
+//! Computes the convex hull of a set of points or a layout.
+/**
+ * @ingroup graph-algs
+ *
+ * All returned polygons are clockwise (cw).
+ */
 class OGDF_EXPORT ConvexHull {
 private:
 	bool sameDirection(const DPoint &start, const DPoint &end, const DPoint &s, const DPoint &e) const;
@@ -77,9 +66,6 @@ public:
 	DPolygon call(std::vector<DPoint> points) const;
 	DPolygon call(GraphAttributes &GA) const;
 	DPolygon call(MultilevelGraph &MLG) const;
-
 };
 
-} // namespace ogdf
-
-#endif
+}

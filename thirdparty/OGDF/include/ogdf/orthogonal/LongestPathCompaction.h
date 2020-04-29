@@ -1,11 +1,3 @@
-/*
- * $Revision: 3188 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-01-10 09:53:32 +0100 (Thu, 10 Jan 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Contains constructive and improvement compaction by
  *        applying computation of longest paths in constraint graphs
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,35 +26,21 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_LONGEST_PATH_COMPACTION_H
-#define OGDF_LONGEST_PATH_COMPACTION_H
-
 
 #include <ogdf/orthogonal/OrthoRep.h>
 #include <ogdf/planarity/PlanRep.h>
-#include <ogdf/internal/orthogonal/RoutingChannel.h>
+#include <ogdf/orthogonal/internal/RoutingChannel.h>
 #include <ogdf/basic/tuples.h>
 #include <ogdf/basic/GridLayoutMapped.h>
 
-
 namespace ogdf {
 
-	template<class ATYPE> class CompactionConstraintGraph;
-	class Layout;
-
+template<class ATYPE> class CompactionConstraintGraph;
 
 /**
  * \brief Compaction algorithm using longest paths in the constraint graph.
@@ -85,7 +63,7 @@ class OGDF_EXPORT LongestPathCompaction
 {
 public:
 	//! Creates an instance of the longest path compaction algorithm.
-	LongestPathCompaction(bool tighten = true,
+	explicit LongestPathCompaction(bool tighten = true,
 		int maxImprovementSteps = 0);
 
 	//! Constructive heurisitic for orthogonal representations.
@@ -106,7 +84,7 @@ public:
 	//
 	// options
 
-	//! Sets option <i>tighten</i> to \a select.
+	//! Sets option <i>tighten</i> to \p select.
 	void tighten(bool select) {
 		m_tighten = select;
 	}
@@ -148,8 +126,4 @@ private:
 	NodeArray<int> m_component;     //!< The pseudo component of a node.
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

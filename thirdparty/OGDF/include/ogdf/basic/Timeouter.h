@@ -1,11 +1,3 @@
-/*
- * $Revision: 3188 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-01-10 09:53:32 +0100 (Thu, 10 Jan 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declares base class for modules with timeout functionality.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,21 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_TIMEOUTER_H
-#define OGDF_TIMEOUTER_H
-
 
 #include <ogdf/basic/basic.h>
 
@@ -56,7 +38,9 @@ namespace ogdf {
 
 //! class for timeout funtionality.
 /**
- *Holds a double value of the timeout time (in seconds).
+ * @ingroup date-time
+ *
+ * Holds a double value of the timeout time (in seconds).
  * Set the value to some negative value (e.g. -1) to turn the timeout
  * off. Note that 0 seconds is a perfectly feasible timeout value!
  */
@@ -67,10 +51,10 @@ public:
 	Timeouter() : m_timeLimit(-1) { }
 
 	//! timeout is set to the given value (seconds)
-	Timeouter(double t) : m_timeLimit(t) { }
+	explicit Timeouter(double t) : m_timeLimit(t) { }
 
 	//! timeout is turned off (false) or on (true) (with 0 second)
-	Timeouter(bool t) : m_timeLimit(t ? 0 : -1) { }
+	explicit Timeouter(bool t) : m_timeLimit(t ? 0 : -1) { }
 
 	Timeouter(const Timeouter &t) : m_timeLimit(t.m_timeLimit) { }
 
@@ -105,8 +89,4 @@ protected:
 	double m_timeLimit; //!< Time limit for module calls (< 0 means no limit).
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

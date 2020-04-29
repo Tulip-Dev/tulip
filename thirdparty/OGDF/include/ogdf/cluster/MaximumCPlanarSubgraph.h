@@ -1,11 +1,3 @@
- /*
- * $Revision: 3388 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-04-10 14:56:08 +0200 (Wed, 10 Apr 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of an exact c-planar subgraph algorithm, i.e.,
  * a maximum c-planar subgraph is computed using a branch and cut approach.
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,91 +26,73 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_MAXIMUM_CPLANAR_SUBGRAPH_H
-#define OGDF_MAXIMUM_CPLANAR_SUBGRAPH_H
 
 #include <ogdf/basic/Module.h>
 #include <ogdf/basic/Timeouter.h>
 
-#include <ogdf/module/CPlanarSubgraphModule.h>
+#include <ogdf/cluster/CPlanarSubgraphModule.h>
 #include <ogdf/cluster/ClusterGraph.h>
-#include <ogdf/internal/cluster/MaxCPlanar_Master.h>
+#include <ogdf/cluster/internal/MaxCPlanarMaster.h>
 
 #include <ogdf/external/abacus.h>
 
+#include <chrono>
+#include <sstream>
+
 namespace ogdf {
 
+//! Exact computation of a maximum c-planar subgraph.
 /**
- * MaximumCPlanarSubgraph
- * \brief Exact computation of a maximum c-planar subgraph.
+ * @ingroup ga-cplanarity
  */
 class OGDF_EXPORT MaximumCPlanarSubgraph : public CPlanarSubgraphModule
 {
-
-#ifndef USE_ABACUS
-protected:
-	ReturnType doCall(
-		const ClusterGraph &G,
-		List<edge> &delEdges,
-		List<edge> &addedEdges)
-	{
-		THROW_NO_ABACUS_EXCEPTION;
-		return retError;
-	}
-
-	virtual ReturnType doCall(
-		const ClusterGraph &G,
-		List<edge> &delEdges)
-	{
-		THROW_NO_ABACUS_EXCEPTION;
-		return retError;
-	}
-};
-#else // USE_ABACUS
-
 public:
+	using NodePairs = List<NodePair>;
+	using MaxCPlanarMaster = cluster_planarity::MaxCPlanarMaster;
+
 	//! Construction
-	MaximumCPlanarSubgraph() : m_heuristicLevel(1),
-							   m_heuristicRuns(1),
-							   m_heuristicOEdgeBound(0.4),
-							   m_heuristicNPermLists(5),
-							   m_kuratowskiIterations(10),
-							   m_subdivisions(10),
-							   m_kSupportGraphs(10),
-							   m_kuratowskiHigh(0.8),
-							   m_kuratowskiLow(0.8),
-							   m_perturbation(false),
-							   m_branchingGap(0.4),
-							   m_time("00:20:00"),
-							   m_pricing(true),
-							   m_checkCPlanar(false),
-							   m_numAddVariables(15),
-							   m_strongConstraintViolation(0.3),
-							   m_strongVariableViolation(0.3),
-							   m_totalTime(-1.0),
-							   m_heurTime(-1.0),
-							   m_lpTime(-1.0),
-							   m_lpSolverTime(-1.0),
-							   m_sepTime(-1.0),
-							   m_totalWTime(-1.0),
-							   m_numCCons(-1),
-							   m_numKCons(-1),
-							   m_numLPs(-1),
-							   m_numBCs(-1),
-							   m_numSubSelected(-1),
-							   m_portaOutput(false) {}
+	MaximumCPlanarSubgraph()
+	: m_heuristicLevel(1)
+	, m_heuristicRuns(1)
+	, m_heuristicOEdgeBound(0.4)
+	, m_heuristicNPermLists(5)
+	, m_kuratowskiIterations(10)
+	, m_subdivisions(10)
+	, m_kSupportGraphs(10)
+	, m_kuratowskiHigh(0.8)
+	, m_kuratowskiLow(0.8)
+	, m_perturbation(false)
+	, m_branchingGap(0.4)
+	, m_time("00:20:00")
+	, m_pricing(false)
+	, m_checkCPlanar(false)
+	, m_numAddVariables(15)
+	, m_strongConstraintViolation(0.3)
+	, m_strongVariableViolation(0.3)
+	, m_totalTime(-1.0)
+	, m_heurTime(-1.0)
+	, m_lpTime(-1.0)
+	, m_lpSolverTime(-1.0)
+	, m_sepTime(-1.0)
+	, m_totalWTime(-1.0)
+	, m_numCCons(-1)
+	, m_numKCons(-1)
+	, m_numLPs(-1)
+	, m_numBCs(-1)
+	, m_numSubSelected(-1)
+	, m_numVars(-1)
+	, m_portaOutput(false)
+	, m_defaultCutPool(true)
+#ifdef OGDF_DEBUG
+	, m_solByHeuristic(false)
+#endif
+	{ }
 	//destruction
 	~MaximumCPlanarSubgraph() {}
 
@@ -130,9 +104,18 @@ public:
 	//! up by setting setCheckCPlanar(2). Then, in case G is not c-planar,
 	//! the list of deleted edges does not need to correspond
 	//! to a valid solution, it just indicates the result.
-	ReturnType call(const ClusterGraph &G, List<edge> &delEdges,
-		List<nodePair> &addedEdges) {
-			return doCall(G, delEdges, addedEdges);
+	/*
+	 * @param ClusterGraph the graph that we want to compute a subgraph of
+	 * @param pCost the cost of each edge or \c nullptr if edges should have uniform cost
+	 * @param delEdges contains all deleted edges after the call
+	 * @param addedEdges the set of edges that makes the subgraph connected
+	 */
+	ReturnType callAndConnect(
+			const ClusterGraph &G,
+			const EdgeArray<double> *pCost,
+			List<edge> &delEdges,
+			NodePairs &addedEdges) {
+		return doCall(G, pCost, delEdges, addedEdges);
 	}
 	//setter methods for the  module parameters
 	void setHeuristicLevel(int i) {m_heuristicLevel = i;}
@@ -147,6 +130,20 @@ public:
 	void setPerturbation(bool b) {m_perturbation = b;}
 	void setBranchingGap(double d) {m_branchingGap = d;}
 	void setTimeLimit(string s) {m_time = s.c_str();}
+	void setTimeLimit(std::chrono::milliseconds milliSec) {
+		// format string only supports seconds
+		OGDF_ASSERT( milliSec.count() >= 1000 );
+		// transform to format string
+		std::chrono::milliseconds remaining(milliSec);
+		auto h = std::chrono::duration_cast<std::chrono::hours>(remaining);
+		remaining -= h;
+		auto m = std::chrono::duration_cast<std::chrono::minutes>(remaining);
+		remaining -= m;
+		auto s = std::chrono::duration_cast<std::chrono::seconds>(remaining);
+		std::stringstream ss;
+		ss << h.count() << ":" << m.count() << ":" << s.count();
+		setTimeLimit(ss.str());
+	}
 	void setPortaOutput(bool b) {m_portaOutput = b;}
 	void setPricing(bool b) { m_pricing = b;}
 	void setCheckCPlanar(bool b) {m_checkCPlanar = b;}
@@ -190,25 +187,29 @@ protected:
 	//! set of edges that have to be deleted in delEdges
 	//! if delEdges is empty on return, the clustered
 	//! graph G is c-planar
-	virtual ReturnType doCall(const ClusterGraph &G,
-		List<edge> &delEdges)
+	virtual ReturnType doCall(
+		const ClusterGraph &G,
+		const EdgeArray<double> *pCost,
+		List<edge> &delEdges) override
 	{
-		List<nodePair> addEdges;
-		return doCall(G, delEdges, addEdges);
+		NodePairs addEdges;
+		return doCall(G, pCost, delEdges, addEdges);
 	}
 
 	//as above, also returns the set of edges that were
 	//added to construct a completely connected planar
 	//graph that contains the computed c-planar subgraph
-	virtual ReturnType doCall(const ClusterGraph &G,
-		List<edge> &delEdges,
-		List<nodePair> &addedEdges);
+	virtual ReturnType doCall(
+			const ClusterGraph &G,
+			const EdgeArray<double> *pCost,
+			List<edge> &delEdges,
+			NodePairs &addedEdges);
 
 	double getDoubleTime(const Stopwatch &act)
 	{
-		__int64 tempo = act.centiSeconds()+100*act.seconds()+6000*act.minutes()+360000*act.hours();
+		int64_t tempo = act.centiSeconds()+100*act.seconds()+6000*act.minutes()+360000*act.hours();
 		return  ((double) tempo)/ 100.0;
-	}//getdoubletime
+	}
 
 	//! Stores clusters in subtree at c in bottom up order in theList
 	void getBottomUpClusterList(const cluster c, List< cluster > & theList);
@@ -241,7 +242,7 @@ private:
 	{
 		return 1024;
 	}
-	void outputCons(ofstream &os,
+	void outputCons(std::ofstream &os,
 			abacus::StandardPool<abacus::Constraint, abacus::Variable> *connCon,
 			abacus::StandardPool<abacus::Variable, abacus::Constraint> *stdVar);
 
@@ -263,12 +264,6 @@ private:
 #ifdef OGDF_DEBUG
 	bool m_solByHeuristic;
 #endif
-
 };
 
-#endif // USE_ABACUS
-
-} //end namespace ogdf
-
-
-#endif // OGDF_MAXIMUM_CPLANAR_SUBGRAPH_H
+}

@@ -1,11 +1,3 @@
-/*
- * $Revision: 3556 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2013-06-07 19:36:11 +0200 (Fri, 07 Jun 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class PertinentGraph.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,35 +25,22 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_PERTINENT_GRAPH_H
-#define OGDF_PERTINENT_GRAPH_H
 
 #include <ogdf/basic/Graph.h>
 
 namespace ogdf {
 
-	class OGDF_EXPORT SPQRTree;
+class OGDF_EXPORT SPQRTree;
 
-
-//---------------------------------------------------------
-// PertinentGraph
-// pertinent graph of a node in an SPQR-tree
-//---------------------------------------------------------
 //! Pertinent graphs of nodes in an SPQR-tree.
 /**
+ * @ingroup dc-helper
+ *
  * The class PertinentGraph represents the pertinent graph \a G(\a vT)
  * of a node \a vT in an SPQR-tree \a T with original graph \a G.
  *
@@ -77,7 +56,6 @@ namespace ogdf {
  * represents the combinatorial embedding which is implied by the embeddings
  * of the skeletons of \a T.
  */
-
 class OGDF_EXPORT PertinentGraph
 {
 	friend class OGDF_EXPORT SPQRTree;
@@ -93,15 +71,15 @@ public:
 	 * \remarks Pertinent graphs are created by the pertinentGraph()
 	 *          function of SPQRTree.
 	 */
-	PertinentGraph() : m_vT(0) { }
+	PertinentGraph() : m_vT(nullptr) { }
 
-	//! Initialization of a pertinent graph of tree node \a vT.
+	//! Initialization of a pertinent graph of tree node \p vT.
 	void init(node vT) {
 		m_P = Graph();
 		m_vT = vT;
-		m_vEdge = m_skRefEdge = 0;
-		m_origV.init(m_P,0);
-		m_origE.init(m_P,0);
+		m_vEdge = m_skRefEdge = nullptr;
+		m_origV.init(m_P,nullptr);
+		m_origE.init(m_P,nullptr);
 	}
 
 
@@ -137,18 +115,18 @@ public:
 		return m_skRefEdge;
 	}
 
-	//! Returns the vertex in \a G that corresponds to \a v.
+	//! Returns the vertex in \a G that corresponds to \p v.
 	/**
-	 * \pre \a v is a node in \a G(\a vT)
+	 * \pre \p v is a node in \a G(\a vT)
 	 */
 	node original(node v) const {
 		return m_origV[v];
 	}
 
-	//! Returns the edge in \a G that corresponds to \a e.
+	//! Returns the edge in \a G that corresponds to \p e.
 	/**
-	 * If \a e is the reference edge, then 0 is returned.
-	 * \pre \a e is an edge in \a G(\a vT)
+	 * If \p e is the reference edge, then 0 is returned.
+	 * \pre \p e is an edge in \a G(\a vT)
 	 */
 	edge original(edge e) const {
 		return m_origE[e];
@@ -157,16 +135,11 @@ public:
 protected:
 	node  m_vT;  //!< corresponding tree node
 	Graph m_P;   //!< actual graph
-	edge  m_vEdge; //!< reference edge (in \a m_P)
-	edge  m_skRefEdge; //!< reference edge (in skeleton(\a m_vT))
+	edge  m_vEdge; //!< reference edge (in #m_P)
+	edge  m_skRefEdge; //!< reference edge (in skeleton(#m_vT))
 
 	NodeArray<node> m_origV; //!< corresp. original node
 	EdgeArray<edge> m_origE; //!< corresp. original edge
 };
 
-
-
-} // end namespace ogdf
-
-
-#endif
+}

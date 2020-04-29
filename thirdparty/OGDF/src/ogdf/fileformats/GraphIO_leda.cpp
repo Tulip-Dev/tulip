@@ -1,11 +1,3 @@
-/*
- * $Revision: 3366 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-04-04 16:13:53 +0200 (Thu, 04 Apr 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implements read and write functionality for LEDA format.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,23 +25,19 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/basic/Logger.h>
 #include <ogdf/fileformats/GraphIO.h>
-#include <sstream>
 
 using std::istringstream;
 
 
 namespace ogdf {
 
-static bool read_next_line(istream &is, string &buffer)
+static bool read_next_line(std::istream &is, string &buffer)
 {
 	while(std::getline(is,buffer)) {
 		if(!buffer.empty() && buffer[0] != '#')
@@ -69,7 +57,7 @@ static bool buffer_equal(const string &buffer, const char *str)
 }
 
 
-bool GraphIO::readLEDA(Graph &G, istream &is)
+bool GraphIO::readLEDA(Graph &G, std::istream &is)
 {
 	G.clear();
 
@@ -92,17 +80,17 @@ bool GraphIO::readLEDA(Graph &G, istream &is)
 		if(!read_next_line(is,buffer))
 			return false;
 
-		int n = stoi(buffer);
+		int n = std::stoi(buffer);
 		if(n < 0) {
 			if(!read_next_line(is,buffer))
 				return false;
-			n = stoi(buffer);
+			n = std::stoi(buffer);
 		}
 		if(n < 0) return false; // makes no sense
 
 		Array<node> nodes(1,n);
 		for(int i = 1; i <= n; ++i) {
-			if (read_next_line(is,buffer) == false)
+			if (!read_next_line(is, buffer))
 				return false;
 			nodes[i] = G.newNode();
 		}
@@ -112,11 +100,11 @@ bool GraphIO::readLEDA(Graph &G, istream &is)
 		if(!read_next_line(is,buffer))
 			return false;
 
-		int m = stoi(buffer);
+		int m = std::stoi(buffer);
 		if(m < 0) return false; // makes no sense
 
 		for(int i = 1; i <= m; ++i) {
-			if (read_next_line(is,buffer) == false)
+			if (!read_next_line(is, buffer))
 				return false;
 			istringstream iss(buffer);
 
@@ -139,34 +127,37 @@ bool GraphIO::readLEDA(Graph &G, istream &is)
 }
 
 
-bool GraphIO::writeLEDA(const Graph &G, ostream &os)
+bool GraphIO::writeLEDA(const Graph &G, std::ostream &os)
 {
-	// write header
-	os << "LEDA.GRAPH\n";	// format specification
-	os << "void\n";			// no node type
-	os << "void\n";			// no edge type
-	os << "-1\n";			// directed graph
+	bool result = os.good();
 
-	// write nodes and assign indices 1, 2, ..., n
-	os << G.numberOfNodes() << "\n";
+	if(result) {
+		// write header
+		os << "LEDA.GRAPH\n";    // format specification
+		os << "void\n";            // no node type
+		os << "void\n";            // no edge type
+		os << "-1\n";            // directed graph
 
-	NodeArray<int> index(G);
-	int nextIndex = 1;
-	node v;
-	forall_nodes(v,G) {
-		os << "|{}|\n";
-		index[v] = nextIndex++;
+		// write nodes and assign indices 1, 2, ..., n
+		os << G.numberOfNodes() << "\n";
+
+		NodeArray<int> index(G);
+		int nextIndex = 1;
+		for (node v : G.nodes) {
+			os << "|{}|\n";
+			index[v] = nextIndex++;
+		}
+
+		// write edges
+		os << G.numberOfEdges() << "\n";
+
+		for (edge e : G.edges) {
+			os << index[e->source()] << " " << index[e->target()] << " 0 |{}|\n";
+		}
+
 	}
 
-	// write edges
-	os << G.numberOfEdges() << "\n";
-
-	edge e;
-	forall_edges(e,G) {
-		os << index[e->source()] << " " << index[e->target()] << " 0 |{}|\n";
-	}
-
-	return true;
+	return result;
 }
 
 }

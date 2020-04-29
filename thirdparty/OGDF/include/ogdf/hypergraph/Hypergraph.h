@@ -1,11 +1,3 @@
-/*
- * $Revision: 3505 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2013-05-16 14:49:47 +0200 (Thu, 16 May 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration and a partial implementation of a Hypergraph class
  *        partly based on the original classes for handling hypergraphs
@@ -18,7 +10,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -35,36 +27,28 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_HYPERGRAPH_H
-#define OGDF_HYPERGRAPH_H
 
 #include <ogdf/basic/List.h>
 #include <ogdf/basic/GraphList.h>
 
-//! Iteration over all adjacency list entries \a adj of a graph element \a ge.
+//! Iteration over all adjacency list entries \p adj of a graph element \p ge.
 #define forall_adj_elements(adj,ge) for((adj)=(v)->firstAdj();(adj);(adj)=(adj)->succ())
 
-//! Iteration over all hypernodes \a v of hypergraph \a H.
+//! Iteration over all hypernodes \p v of hypergraph \p H.
 #define forall_hypernodes(v,H) for((v)=(H).firstHypernode(); (v); (v)=(v)->succ())
 
-//! Iteration over all hypernodes \a v of hypergraph \a H in reverse order.
+//! Iteration over all hypernodes \p v of hypergraph \p H in reverse order.
 #define forall_rev_hypernodes(v,H) for((v)=(H).lastHypernode(); (v); (v)=(v)->pred())
 
-//! Iteration over all hyperedges \a e of hypergraph \a H.
+//! Iteration over all hyperedges \p e of hypergraph \p H.
 #define forall_hyperedges(e,H) for((e)=(H).firstHyperedge(); (e); (e)=(e)->succ())
 
-//! Iteration over all hyperedges \a e of hypergraph \a G in reverse order.
+//! Iteration over all hyperedges \p e of hypergraph \p H in reverse order.
 #define forall_rev_hyperedges(e,H) for((e)=(H).lastHyperedge(); (e); (e)=(e)->pred())
 
 namespace ogdf {
@@ -74,32 +58,32 @@ class OGDF_EXPORT HypernodeElement;
 class OGDF_EXPORT HyperedgeElement;
 class OGDF_EXPORT AdjHypergraphElement;
 
-//!< The type of hypernodes.
-typedef HypernodeElement *hypernode;
+//! The type of hypernodes.
+using hypernode = HypernodeElement*;
 
-//!< The type of hyperedges.
-typedef HyperedgeElement *hyperedge;
+//! The type of hyperedges.
+using hyperedge = HyperedgeElement*;
 
-//!< The type of adjacency entries.
-typedef AdjHypergraphElement *adjHypergraphEntry;
+//! The type of adjacency entries.
+using adjHypergraphEntry = AdjHypergraphElement*;
 
 //! Class for adjacency list elements.
 /**
  * Adjacency list elements represent the occurrence of hypernodes of a
  * hyperedge or hyperedges of a hypernode adjacency lists.
  */
-class OGDF_EXPORT AdjHypergraphElement : private GraphElement
+class OGDF_EXPORT AdjHypergraphElement : private internal::GraphElement
 {
 	friend class Hypergraph;
 	friend class GraphListBase;
-	friend class GraphList<AdjHypergraphElement>;
+	friend class internal::GraphList<AdjHypergraphElement>;
 
 private:
 
-	//!< The associated hyperedge or hypernode.
+	//! The associated hyperedge or hypernode.
 	GraphElement *m_element;
 
-	//!< The corresponding adjacency entry.
+	//! The corresponding adjacency entry.
 	/**
 	 * Note: For instance, if this AdjHypergraphElement is associated with
 	 * a hypernode v, its element is an hyperedge e (incident with v) then
@@ -108,11 +92,11 @@ private:
 	 */
 	adjHypergraphEntry m_twin;
 
-	//!< The (unique) index of the adjacency entry.
+	//! The (unique) index of the adjacency entry.
 	int m_index;
 
 	//! Constructs an adjacency element for a given hyper{node,edge}.
-	AdjHypergraphElement(GraphElement *pElement)
+	explicit AdjHypergraphElement(GraphElement *pElement)
 	  : m_element(pElement)
 	{ }
 
@@ -149,13 +133,13 @@ public:
 	//! Returns the successor in the adjacency list.
 	adjHypergraphEntry succ() const
 	{
-		return (adjHypergraphEntry) m_next;
+		return static_cast<adjHypergraphEntry>(m_next);
 	}
 
 	//! Returns the predecessor in the adjacency list.
 	adjHypergraphEntry pred() const
 	{
-		return (adjHypergraphEntry) m_prev;
+		return static_cast<adjHypergraphEntry>(m_prev);
 	}
 
 	//! Returns the cyclic successor in the adjacency list.
@@ -165,36 +149,25 @@ public:
 	adjHypergraphEntry cyclicPred() const;
 
 	OGDF_NEW_DELETE;
-
-}; // class AdjHypegraphElement
+};
 
 //! Class for the representation of hyperedges.
-class OGDF_EXPORT HyperedgeElement : private GraphElement
+class OGDF_EXPORT HyperedgeElement : private internal::GraphElement
 {
 	friend class Hypergraph;
 	friend class GraphListBase;
-	friend class GraphList<HyperedgeElement>;
-
-public:
-
-	//! The type of hyperedges (for not there is only a single type).
-	enum Type {
-		normal = 0x100001
-	};
+	friend class internal::GraphList<HyperedgeElement>;
 
 private:
 
-	//!< The adjacency list of the hyperedge.
-	GraphList<AdjHypergraphElement> m_adjHypernodes;
+	//! The adjacency list of the hyperedge.
+	internal::GraphList<AdjHypergraphElement> m_adjHypernodes;
 
 	//! The (unique) index of the hyperedge.
 	int m_index;
 
 	//! The number of incidend hypernodes.
 	int m_cardinality;
-
-	//! The type of the hyperedge.
-	Type m_type;
 
 	//! The hypergraph containing the hyperedge (if any).
 	Hypergraph *m_hypergraph;
@@ -203,16 +176,8 @@ private:
 	/**
 	 * @param pIndex is the index of the hyperedge.
 	 */
-	HyperedgeElement(int pIndex)
-	  : m_index(pIndex), m_cardinality(0), m_type(HyperedgeElement::normal), m_hypergraph(0) { }
-
-	//! Constructs an hyperedge element between hypernodes.
-	/**
-	 * @param pIndex is the index of the hyperedge.
-	 * @param pType is the type of the hyperedge.
-	 */
-	HyperedgeElement(int pIndex, Type pType)
-	  : m_index(pIndex), m_cardinality(0), m_type(pType), m_hypergraph(0) { }
+	explicit HyperedgeElement(int pIndex)
+	  : m_index(pIndex), m_cardinality(0), m_hypergraph(nullptr) { }
 
 public:
 
@@ -228,12 +193,6 @@ public:
 		return m_cardinality;
 	}
 
-	//! Returns the type of the hyperedge.
-	Type type() const
-	{
-		return m_type;
-	}
-
 	//! Returns the hypergraph containing the hyperedge.
 	Hypergraph * hypergraph() const
 	{
@@ -243,17 +202,17 @@ public:
 	//! Returns the first entry in the adjaceny list.
 	adjHypergraphEntry firstAdj() const
 	{
-		return m_adjHypernodes.begin();
+		return m_adjHypernodes.head();
 	}
 
 	//! Returns the last entry in the adjacency list.
 	adjHypergraphEntry lastAdj () const
 	{
-		return m_adjHypernodes.rbegin();
+		return m_adjHypernodes.tail();
 	}
 
 	//! Returns the incident hypernodes of the hyperedge.
-	GraphList<AdjHypergraphElement> incidentHypernodes() const
+	internal::GraphList<AdjHypergraphElement> incidentHypernodes() const
 	{
 		return m_adjHypernodes;
 	}
@@ -263,28 +222,30 @@ public:
 	{
 		hypernodes.clear();
 		for (adjHypergraphEntry adj = firstAdj(); adj; adj = adj->succ())
-			hypernodes.pushBack((hypernode) adj->element());
+			hypernodes.pushBack(reinterpret_cast<hypernode>(adj->element()));
 	}
 
-	//! Returns true iff \a v is incident to the hyperedge.
+	//! Returns true iff \p v is incident to the hyperedge.
 	bool incident(hypernode v) const
 	{
-		for (adjHypergraphEntry adj = firstAdj(); adj; adj = adj->succ())
-			if (((hypernode) adj->element()) == v)
+		for (adjHypergraphEntry adj = firstAdj(); adj; adj = adj->succ()) {
+			if (reinterpret_cast<hypernode>(adj->element()) == v) {
 				return true;
+			}
+		}
 		return false;
 	}
 
 	//! Returns the successor in the list of all hyperedges.
 	hyperedge succ() const
 	{
-		return (hyperedge) m_next;
+		return static_cast<hyperedge>(m_next);
 	}
 
 	//! Returns the predecessor in the list of all hyperedges.
 	hyperedge pred() const
 	{
-		return (hyperedge) m_prev;
+		return static_cast<hyperedge>(m_prev);
 	}
 
 	//! Equality operator.
@@ -293,23 +254,22 @@ public:
 		return e->index() == m_index && e->hypergraph() == m_hypergraph;
 	}
 
-	friend ostream & operator<<(ostream &os, ogdf::hyperedge e);
+	friend std::ostream & operator<<(std::ostream &os, ogdf::hyperedge e);
 
 	OGDF_NEW_DELETE;
-
-}; // class EdgeElement
+};
 
 //! Class for the representation of hypernodes.
-class OGDF_EXPORT HypernodeElement : private GraphElement
+class OGDF_EXPORT HypernodeElement : private internal::GraphElement
 {
 	friend class Hypergraph;
 	friend class GraphListBase;
-	friend class GraphList<HypernodeElement>;
+	friend class internal::GraphList<HypernodeElement>;
 
 public:
 
 	//! The type of hypernodes.
-	enum Type {
+	enum class Type {
 		normal = 0x0000001, //! Default type.
 		dummy  = 0x0000002, //! Temporary hypernode.
 		OR     = 0x0000003, //! Electric circuit: OR gate.
@@ -326,30 +286,30 @@ public:
 
 private:
 
-	//!< The adjacency list of the hypernode.
-	GraphList<AdjHypergraphElement> m_adjHyperedges;
+	//! The adjacency list of the hypernode.
+	internal::GraphList<AdjHypergraphElement> m_adjHyperedges;
 
-	//!< The (unique) index of the hypernode.
+	//! The (unique) index of the hypernode.
 	int m_index;
 
-	//!< The number of incident hyperedges.
+	//! The number of incident hyperedges.
 	int m_degree;
 
-	//!< The type of the hypernode.
+	//! The type of the hypernode.
 	Type m_type;
 
-	//!< The hypergraph containing the hypernode (if any).
+	//! The hypergraph containing the hypernode (if any).
 	Hypergraph * m_hypergraph;
 
-	//!< Constructor.
-	HypernodeElement(int pIndex)
-	  : m_index(pIndex), m_degree(0), m_type(normal), m_hypergraph(0)
+	//! Constructor.
+	explicit HypernodeElement(int pIndex)
+	: m_index(pIndex), m_degree(0), m_type(Type::normal), m_hypergraph(nullptr)
 	{
 	}
 
-	//!< Constructor.
+	//! Constructor.
 	HypernodeElement(int pIndex, Type pType)
-	  : m_index(pIndex), m_degree(0), m_type(pType), m_hypergraph(0)
+	  : m_index(pIndex), m_degree(0), m_type(pType), m_hypergraph(nullptr)
 	{
 	}
 
@@ -388,13 +348,13 @@ public:
 	//! Returns the first entry in the adjaceny list.
 	adjHypergraphEntry firstAdj() const
 	{
-		return m_adjHyperedges.begin();
+		return m_adjHyperedges.head();
 	}
 
 	//! Returns the last entry in the adjacency list.
 	adjHypergraphEntry lastAdj() const
 	{
-		return m_adjHyperedges.rbegin();
+		return m_adjHyperedges.tail();
 	}
 
 	//! Returns a list with all incident hyperedges of the hypernode.
@@ -402,28 +362,30 @@ public:
 	{
 		hyperedges.clear();
 		for (adjHypergraphEntry adj = firstAdj(); adj; adj = adj->succ())
-			hyperedges.pushBack((hyperedge) adj->element());
+			hyperedges.pushBack(reinterpret_cast<hyperedge>(adj->element()));
 	}
 
-	//! Returns true iff \a v is adjacent to the hypernode.
+	//! Returns true iff \p v is adjacent to the hypernode.
 	bool adjacent(hypernode v) const
 	{
-		for (adjHypergraphEntry adj = firstAdj(); adj; adj = adj->succ())
-			if (((hyperedge) adj->element())->incident(v))
+		for (adjHypergraphEntry adj = firstAdj(); adj; adj = adj->succ()) {
+			if (reinterpret_cast<hyperedge>(adj->element())->incident(v)) {
 				return true;
+			}
+		}
 		return false;
 	}
 
 	//! Returns the successor in the list of all hypernodes.
 	hypernode succ() const
 	{
-		return (hypernode) m_next;
+		return static_cast<hypernode>(m_next);
 	}
 
 	//! Returns the predecessor in the list of all hypernodes.
 	hypernode pred() const
 	{
-		return (hypernode) m_prev;
+		return static_cast<hypernode>(m_prev);
 	}
 
 	//! Equality operator.
@@ -433,8 +395,7 @@ public:
 	}
 
 	OGDF_NEW_DELETE;
-
-}; // class HypernodeElement
+};
 
 class HypergraphArrayBase;
 template<class T> class HypernodeArray;
@@ -443,31 +404,31 @@ class OGDF_EXPORT HypergraphObserver;
 
 class OGDF_EXPORT Hypergraph
 {
-	//!< The list of all hypernodes.
-	GraphList<HypernodeElement> m_hypernodes;
+	//! The list of all hypernodes.
+	internal::GraphList<HypernodeElement> m_hypernodes;
 
-	//!< The list of all hyperedges.
-	GraphList<HyperedgeElement> m_hyperedges;
+	//! The list of all hyperedges.
+	internal::GraphList<HyperedgeElement> m_hyperedges;
 
-	//!< The number of hypernodes in the hypergraph.
+	//! The number of hypernodes in the hypergraph.
 	int m_nHypernodes;
 
-	//!< The number of hyperedges in the hypergraph.
+	//! The number of hyperedges in the hypergraph.
 	int m_nHyperedges;
 
-	//!< The Index that will be assigned to the next created hypernode.
+	//! The Index that will be assigned to the next created hypernode.
 	int m_hypernodeIdCount;
 
-	//!< The Index that will be assigned to the next created hyperedge.
+	//! The Index that will be assigned to the next created hyperedge.
 	int m_hyperedgeIdCount;
 
-	//!< The current table size of hypernode arrays within the hypergraph.
+	//! The current table size of hypernode arrays within the hypergraph.
 	int m_hypernodeArrayTableSize;
 
-	//!< The current table size of hyperedge arrays within the hypergraph.
+	//! The current table size of hyperedge arrays within the hypergraph.
 	int m_hyperedgeArrayTableSize;
 
-	//!< The registered hypergraph arrays & observers.
+	//! The registered hypergraph arrays & observers.
 	mutable ListPure<HypergraphArrayBase *> m_hypernodeArrays;
 	mutable ListPure<HypergraphArrayBase *> m_hyperedgeArrays;
 	mutable ListPure<HypergraphObserver *> m_observers;
@@ -477,7 +438,7 @@ public:
 	//! Constructs an empty hypergraph.
 	Hypergraph();
 
-	//! Constructs a hypergraph that is a copy of \a H.
+	//! Constructs a hypergraph that is a copy of \p H.
 	Hypergraph(const Hypergraph &H);
 
 	//! Destructor.
@@ -490,13 +451,13 @@ public:
 	}
 
 	//! Returns the list of all hypernodes.
-	GraphList<HypernodeElement> hypernodes() const
+	internal::GraphList<HypernodeElement> hypernodes() const
 	{
 		return m_hypernodes;
 	}
 
 	//! Returns the list of all hyperedges.
-	GraphList<HyperedgeElement> hyperedges() const
+	internal::GraphList<HyperedgeElement> hyperedges() const
 	{
 		return m_hyperedges;
 	}
@@ -528,25 +489,25 @@ public:
 	//! Returns the first hypernode in the list of all hypernodes.
 	hypernode firstHypernode() const
 	{
-		return m_hypernodes.begin ();
+		return m_hypernodes.head();
 	}
 
 	//! Returns the last hypernode in the list of all hypernodes.
 	hypernode lastHypernode () const
 	{
-		return m_hypernodes.rbegin();
+		return m_hypernodes.tail();
 	}
 
 	//! Returns the first hyperedge in the list of all hyperedges.
 	hyperedge firstHyperedge() const
 	{
-		return m_hyperedges.begin ();
+		return m_hyperedges.head();
 	}
 
 	//! Returns the last hyperedge in the list of all hyperedges.
 	hyperedge lastHyperEdge () const
 	{
-		return m_hyperedges.rbegin();
+		return m_hyperedges.tail();
 	}
 
 	//! Returns the table size of hypernode arrays with the hypergraph.
@@ -564,23 +525,23 @@ public:
 	//! Creates a new hypernode and returns it.
 	hypernode newHypernode();
 
-	//! Creates a new hypernode with given \a index and returns it.
+	//! Creates a new hypernode with given \p pIndex and returns it.
 	hypernode newHypernode(int pIndex);
 
-	//! Creates a new hypernode with given \a type and returns it.
+	//! Creates a new hypernode with given \p pType and returns it.
 	hypernode newHypernode(HypernodeElement::Type pType);
 
-	//! Creates a new hypernode with given \a indexn and \a type and returns it.
+	//! Creates a new hypernode with given \p pIndex and \p pType and returns it.
 	hypernode newHypernode(int pIndex, HypernodeElement::Type pType);
 
-	//! Creates a new hyperedge btween \a hypernodes and returns it.
+	//! Creates a new hyperedge btween \p hypernodes and returns it.
 	/**
 	 * @param hypernodes are the hypernodes of the newly created hyperedge.
 	 * @return the newly created hyperedge.
 	 */
 	hyperedge newHyperedge(List<hypernode> &hypernodes);
 
-	//! Creates a new hyperedge between \a hypernodes and returns it.
+	//! Creates a new hyperedge between \p hypernodes and returns it.
 	/**
 	 * @param pIndex is the unique index of the newly created hyperedge.
 	 * @param hypernodes are the hypernodes of the newly created hyperedge.
@@ -588,13 +549,13 @@ public:
 	 */
 	hyperedge newHyperedge(int pIndex, List<hypernode> &hypernodes);
 
-	//! Removes hypernode \a v and all incident hyperedges from the hypergraph.
+	//! Removes hypernode \p v and all incident hyperedges from the hypergraph.
 	/**
 	 * @param v is the hypernode that will be deleted.
 	 */
 	void delHypernode(hypernode v);
 
-	//! Removes hyperedge \a e from the hypergraph.
+	//! Removes hyperedge \p e from the hypergraph.
 	/**
 	 * @param e is the hyperegde that will be deleted.
 	 */
@@ -610,29 +571,29 @@ public:
 	hyperedge randomHyperedge() const;
 
 	//! Returns a list with all hypernodes of the hypergraph.
-	template<class LIST> void allHypernodes(LIST &hypernodes) const
+	template<class LIST> void allHypernodes(LIST &hypernodeList) const
 	{
-		hypernodes.clear();
-		for (hypernode v = m_hypernodes.begin(); v; v = v->succ())
-			hypernodes.pushBack(v);
+		hypernodeList.clear();
+		for (hypernode v = m_hypernodes.head(); v; v = v->succ())
+			hypernodeList.pushBack(v);
 	}
 
 	//! Returns a list with all hyperedges of the hypergraph.
-	template<class LIST> void allHyperedges(LIST &hyperedges) const
+	template<class LIST> void allHyperedges(LIST &hyperedgeList) const
 	{
-		hyperedges.clear();
-		for (hyperedge e = m_hyperedges.begin(); e; e = e->succ())
-			hyperedges.pushBack(e);
+		hyperedgeList.clear();
+		for (hyperedge e = m_hyperedges.head(); e; e = e->succ())
+			hyperedgeList.pushBack(e);
 	}
 
 	//! Reads hypergraph in bench format from the input stream.
-	void readBenchHypergraph(istream &is);
+	void readBenchHypergraph(std::istream &is);
 
 	//! Reads hypergraph in bench format from the file.
 	void readBenchHypergraph(const char *filename);
 
 	//! Reads hypergraph in pla format from the input stream.
-	void readPlaHypergraph(istream &is);
+	void readPlaHypergraph(std::istream &is);
 
 	//! Reads hypergraph in pla format from the file.
 	void loadPlaHypergraph(const char *fileName);
@@ -662,9 +623,9 @@ public:
 
 	Hypergraph &operator=(const Hypergraph &H);
 
-	friend ostream & operator<<(ostream &os, ogdf::Hypergraph &H);
+	friend std::ostream & operator<<(std::ostream &os, ogdf::Hypergraph &H);
 
-	friend istream & operator>>(istream &is, ogdf::Hypergraph &H);
+	friend std::istream & operator>>(std::istream &is, ogdf::Hypergraph &H);
 
 	OGDF_MALLOC_NEW_DELETE;
 
@@ -677,9 +638,6 @@ private:
 	int nextEntry(char *buffer, int from, string stop);
 
 	HypernodeElement::Type gateType(string gate);
+};
 
-}; // class Hypergraph
-
-} // end of namespace ogdf
-
-#endif /* HYPERGRAPH_H_ */
+}

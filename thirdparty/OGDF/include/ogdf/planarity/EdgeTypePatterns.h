@@ -1,11 +1,3 @@
-/*
- * $Revision: 2566 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-07 23:10:08 +0200 (Sat, 07 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Edge types and patterns for planar representations
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,12 +25,9 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 //edge type patterns:
 	//FOUR TYPE LEVELS:
@@ -46,52 +35,82 @@
 	//secondary about merger edges,...
 	//user edge types can be set locally
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_EDGE_TYPE_PATTERNS_H
-#define OGDF_EDGE_TYPE_PATTERNS_H
 
 namespace ogdf {
 
-	typedef long edgeType;
+using edgeType = long long;
 
-	enum UMLEdgeTypePatterns {
-		etpPrimary   = 0x0000000f,
-		etpSecondary = 0x000000f0,
-		etpTertiary  = 0x00000f00,
-		etpFourth    = 0x0000f000,
-		etpUser      = 0xff000000,
-		etpAll       = 0xffffffff
-	}; //!!!attention sign, 7fffffff
+enum class UMLEdgeTypePatterns : edgeType {
+	Primary   = 0x0000000f,
+	Secondary = 0x000000f0,
+	Tertiary  = 0x00000f00,
+	Fourth    = 0x0000f000,
+	User      = 0xff000000,
+	All       = 0xffffffff
+}; // attention sign, 7fffffff
 
-	enum UMLEdgeTypeConstants {
-		//primary types (should be disjoint bits)
-		etcPrimAssociation = 0x1, etcPrimGeneralization = 0x2, etcPrimDependency = 0x4,
-		//secondary types: reason of insertion (should be disjoint types, but not bits,
-		//but may not completely cover others that are allowed to be set together)
-		//preliminary: setsecondarytype deletes old type
-		//edge in Expansion, dissection edge, face splitter, cluster boundary
-		etcSecExpansion = 0x1, etcSecDissect = 0x2, etcSecFaceSplitter = 0x3,
-		etcSecCluster = 0x4, etcSecClique, //the boundaries
-		//tertiary types: special types
-		//merger edge, vertical in hierarchy, alignment, association class connnection
-		etcMerger = 0x1, etcVertical = 0x2, etcAlign = 0x3, etcAssClass = 0x8,
-		//fourth types: relation of nodes
-		//direct neighbours in hierarchy = brother, neighbour = halfbrother
-		//same level = cousin, to merger = ToMerger, from Merger = FromMerger
-		etcBrother = 0x1, etcHalfBrother = 0x2, etcCousin = 0x3,
-		//fifth level types
-		etcFifthToMerger = 0x1, etcFifthFromMerger = 0x2
-		//user type hint: what you have done with the edge, e.g. brother edge
-		//that is embedded crossing free and should be drawn bend free
-	};
-	enum UMLEdgeTypeOffsets {
-		etoPrimary = 0, etoSecondary = 4, etoTertiary = 8, etoFourth = 12, etoFifth = 16,
-		etoUser = 24
-	};
+inline edgeType operator & (edgeType lhs, UMLEdgeTypePatterns rhs) {
+	return lhs & static_cast<edgeType>(rhs);
+}
 
-} //end namespace ogdf
+inline edgeType operator & (UMLEdgeTypePatterns lhs, edgeType rhs) {
+	return static_cast<edgeType>(lhs) & rhs;
+}
 
-#endif
+inline edgeType operator << (edgeType lhs, UMLEdgeTypePatterns rhs) {
+	return lhs << static_cast<edgeType>(rhs);
+}
+
+enum class UMLEdgeTypeConstants {
+	//primary types (should be disjoint bits)
+	PrimAssociation = 0x1, PrimGeneralization = 0x2, PrimDependency = 0x4,
+	//secondary types: reason of insertion (should be disjoint types, but not bits,
+	//but may not completely cover others that are allowed to be set together)
+	//preliminary: setsecondarytype deletes old type
+	//edge in Expansion, dissection edge, face splitter, cluster boundary
+	SecExpansion = 0x1, SecDissect = 0x2, SecFaceSplitter = 0x3,
+	SecCluster = 0x4, SecClique, //the boundaries
+	//tertiary types: special types
+	//merger edge, vertical in hierarchy, alignment, association class connnection
+	Merger = 0x1, Vertical = 0x2, Align = 0x3, AssClass = 0x8,
+	//fourth types: relation of nodes
+	//direct neighbours in hierarchy = brother, neighbour = halfbrother
+	//same level = cousin, to merger = ToMerger, from Merger = FromMerger
+	Brother = 0x1, HalfBrother = 0x2, Cousin= 0x3,
+	//fifth level types
+	FifthToMerger = 0x1, FifthFromMerger = 0x2
+	//user type hint: what you have done with the edge, e.g. brother edge
+	//that is embedded crossing free and should be drawn bend free
+};
+
+inline edgeType operator & (edgeType lhs, UMLEdgeTypeConstants rhs) {
+	return lhs & static_cast<edgeType>(rhs);
+}
+
+inline bool operator == (edgeType lhs, UMLEdgeTypeConstants rhs) {
+	return lhs == static_cast<edgeType>(rhs);
+}
+
+enum class UMLEdgeTypeOffsets {
+	Primary = 0,
+	Secondary = 4,
+	Tertiary = 8,
+	Fourth = 12,
+	Fifth = 16,
+	User = 24
+};
+
+inline edgeType operator >> (edgeType lhs, UMLEdgeTypeOffsets rhs) {
+	return lhs >> static_cast<edgeType>(rhs);
+}
+
+inline edgeType operator << (edgeType lhs, UMLEdgeTypeOffsets rhs) {
+	return lhs << static_cast<edgeType>(rhs);
+}
+
+inline edgeType operator << (UMLEdgeTypeConstants lhs, UMLEdgeTypeOffsets rhs) {
+	return static_cast<edgeType>(lhs) << static_cast<edgeType>(rhs);
+}
+
+}

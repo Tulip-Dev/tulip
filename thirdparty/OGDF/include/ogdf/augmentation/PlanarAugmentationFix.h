@@ -1,14 +1,5 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
- * \brief planar biconnected augmentation algorithm with fixed
- * 		  combinatorial embedding.
+ * \brief Declaration of ogdf::PlanarAugmentation
  *
  * \author Bernd Zey
  *
@@ -17,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,33 +25,23 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_PLANAR_AUGMENTATION_FIX_H
-#define OGDF_PLANAR_AUGMENTATION_FIX_H
-
-#include <ogdf/module/AugmentationModule.h>
+#include <ogdf/augmentation/AugmentationModule.h>
 #include <ogdf/basic/GraphCopy.h>
-#include <ogdf/internal/augmentation/PALabel.h>
-
+#include <ogdf/augmentation/planar/PALabel.h>
+#include <ogdf/decomposition/DynamicBCTree.h>
 
 namespace ogdf {
 
-	class DynamicBCTree;
-
-
 /**
- * \brief The algorithm for biconnectivity augmentation with fixed combinatorial embedding.
+ * The algorithm for biconnectivity augmentation with fixed combinatorial embedding.
  *
+ * @ingroup ga-augment
  */
 class OGDF_EXPORT PlanarAugmentationFix : public AugmentationModule {
 
@@ -68,158 +49,99 @@ public:
 	//! Creates an instance of planar augmentation with fixed embedding.
 	PlanarAugmentationFix() { }
 
+	//! Destruction
 	~PlanarAugmentationFix() { }
-
 
 protected:
 	/**
-	 * \brief The implementation of the algorithm call.
+	 * The implementation of the algorithm call.
 	 *
 	 * \param g is the working graph.
-	 * \param L is the list of all new edges.
+	 * \param list is the list of all new edges.
 	 */
-	void doCall(Graph& g, List<edge>& L);
+	virtual void doCall(Graph& g, List<edge>& list) override;
 
 private:
-	/**
-	 * \brief The embedding of g.
-	 */
-	CombinatorialEmbedding* m_pEmbedding;
+	//! The embedding of #m_pGraph.
+	CombinatorialEmbedding* m_pEmbedding = nullptr;
 
-	/**
-	 * \brief The embedding of the actual partial graph.
-	 */
-	CombinatorialEmbedding* m_pActEmbedding;
+	//! The embedding of #m_graphCopy.
+	CombinatorialEmbedding* m_pActEmbedding = nullptr;
 
-	/**
-	 * \brief The working graph.
-	 */
-	Graph* m_pGraph;
+	//! The working graph.
+	Graph* m_pGraph = nullptr;
 
-	/**
-	 * \brief The inserted edges by the algorithm.
-	 */
-	List<edge>* m_pResult;
+	//! The inserted edges by the algorithm.
+	List<edge>* m_pResult = nullptr;
 
-	/**
-	 * \brief The actual dynamic bc-tree.
-	 */
-	DynamicBCTree* m_pBCTree;
+	//! The actual dynamic bc-tree.
+	DynamicBCTree* m_pBCTree = nullptr;
 
-	/**
-	 * \brief The actual partial graph.
-	 */
+	//! The actual partial graph.
 	GraphCopy m_graphCopy;
 
-	/**
-	 * \brief Edge-array required for construction of the graph copy.
-	 */
+	//! Edge-array required for construction of the graph copy.
 	EdgeArray<edge> m_eCopy;
 
-	/**
-	 * \brief The list of all labels.
-	 */
+	//! The list of all labels.
 	List<pa_label> m_labels;
 
-	/**
-	 * \brief Array that contains iterators to the list of labels
-	 * 		 if a node is a parent of a label.
-	 */
-	NodeArray< ListIterator<pa_label> > m_isLabel;
+	//! Array that contains iterators to the list of labels if a node is a parent of a label.
+	NodeArray<ListIterator<pa_label>> m_isLabel;
 
-	/**
-	 * \brief Array that contains the label a node belongs to.
-	 */
+	//! Array that contains the label a node belongs to.
 	NodeArray<pa_label> m_belongsTo;
 
-	/**
-	 * \brief Array that contains the iterator of the label a node belongs to.
-	 */
-	NodeArray< ListIterator<node> > m_belongsToIt;
+	//! Array that contains the iterator of the label a node belongs to.
+	NodeArray<ListIterator<node>> m_belongsToIt;
 
-	/**
-	 * \brief The actual root of the bc-tree.
-	 */
+	//! The actual root of the bc-tree.
 	node m_actBCRoot;
 
-	/**
-	 * \brief The main function for planar augmentation.
-	 */
+	//! The main function for planar augmentation.
 	void augment(adjEntry adjOuterFace);
 
-	/**
-	 * \brief Modifies the root of the bc-tree.
-	 */
+	//! Modifies the root of the bc-tree.
 	void modifyBCRoot(node oldRoot, node newRoot);
 
-	/**
-	 * \brief Exchanges oldRoot by newRoot and updates data structurs in the bc-tree.
-	 */
+	//! Exchanges \p oldRoot by \p newRoot and updates data structurs in the bc-tree.
 	void changeBCRoot(node oldRoot, node newRoot);
 
-	/**
-	 * \brief Adds the pendant to a label or creates one (uses followPath()).
-	 */
+	//! Adds \p pendant to a label or creates one.
 	void reduceChain(node pendant);
 
-	/**
-	 * \brief Traverses upwards in the bc-tree, starting at the pendant node.
-	 */
-	paStopCause followPath(node v, node& last);
+	//! Traverses upwards in the bc-tree, starting at the pendant node \p v.
+	PALabel::StopCause followPath(node v, node& last);
 
-	/**
-	 * \brief Finds the next matching pendants.
-	 */
+	//! Finds the next matching pendants.
 	bool findMatching(node& pendant1, node& pendant2, adjEntry& v1, adjEntry& v2);
 
-	/**
-	 * \brief Called by findMatching, if a dominating tree was detected.
-	 */
+	//! Called by findMatching, if a dominating tree was detected.
 	void findMatchingRev(node& pendant1, node& pendant2, adjEntry& v1, adjEntry& v2);
 
-	/**
-	 * \brief Creates a new label.
-	 */
-	pa_label newLabel(node cutvertex, node parent, node pendant, paStopCause whyStop);
+	//! Creates a new label.
+	pa_label newLabel(node cutvertex, node parent, node pendant, PALabel::StopCause whyStop);
 
-	/**
-	 * \brief Adds pendant \a p to label \a l.
-	 */
-	void addPendant(node p, pa_label& l);
+	//! Adds \p pendant to \p label.
+	void addPendant(node pendant, pa_label& label);
 
-	/**
-	 * \brief Inserts the label into the list of labels maintaining decreasing order.
-	 */
-	ListIterator<pa_label> insertLabel(pa_label l);
+	//! Inserts \p label into the list of labels maintaining decreasing order.
+	ListIterator<pa_label> insertLabel(pa_label label);
 
-	/**
-	 * \brief Connect the two pendants.
-	 */
+	//! Connects the two pendants.
 	void connectPendants(node pendant1, node pendant2, adjEntry adjV1, adjEntry adjV2);
 
-	/**
-	 * \brief Connects the remaining label.
-	 */
+	//! Connects the remaining label.
 	void connectSingleLabel();
 
-	/**
-	 * \brief Deletes the pendant.
-	 */
+	//! Deletes the given pendant.
 	void deletePendant(node pendant);
 
-	/**
-	 * \brief Deletes the label.
-	 */
-	void deleteLabel(pa_label& l, bool removePendants = true);
+	//! Deletes the given label.
+	void deleteLabel(pa_label& label);
 
-	/**
-	 * \brief Removes the label from the list of labels.
-	 */
-	void removeLabel(pa_label& l);
+	//! Removes the given label from the list of labels.
+	void removeLabel(pa_label& label);
+};
 
-};	// class PlanarAugmentationFix
-
-
-} // namespace ogdf
-
-#endif
+}

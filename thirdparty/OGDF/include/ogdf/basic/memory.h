@@ -1,11 +1,3 @@
-/*
- * $Revision: 2963 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-11-05 14:17:50 +0100 (Mon, 05 Nov 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of memory manager for allocating small
  *        pieces of memory
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,32 +26,29 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_MEMORY_H
-#define OGDF_MEMORY_H
-
-
-#include <stdlib.h>
 #include <new>
 
-
-#include <ogdf/internal/basic/PoolMemoryAllocator.h>
-#include <ogdf/internal/basic/MallocMemoryAllocator.h>
-
+#include <ogdf/basic/memory/PoolMemoryAllocator.h>
+#include <ogdf/basic/memory/MallocMemoryAllocator.h>
 
 namespace ogdf {
 
+//! @name Managing memory
+//! @{
+
+/**
+ * Creates new and delete operators in a class using the given memory allocator.
+ *
+ * In other words, adding this macro in a class declaration makes that class
+ * managed by the respective memory manager.
+ * Throws an ogdf::InsufficientMemoryException if no more memory is available.
+ */
 #define OGDF_MM(Alloc) \
 public: \
 static void *operator new(size_t nBytes) { \
@@ -80,22 +69,27 @@ static void operator delete(void *p, size_t nBytes) { \
 static void *operator new(size_t, void *p) { return p; } \
 static void operator delete(void *, void *) { }
 
-
-#define OGDF_NEW new
-
 #ifdef OGDF_MEMORY_MALLOC_TS
 #define OGDF_ALLOCATOR ogdf::MallocMemoryAllocator
 #else
+//! The used memory manager
 #define OGDF_ALLOCATOR ogdf::PoolMemoryAllocator
 #endif
 
-//! Creates new and delete operators in a class using ogdf's memory allocator.
+/**
+ * Makes the class use OGDF's memory allocator.
+ * @copydoc OGDF_MM
+ * @ingroup macros
+ */
 #define OGDF_NEW_DELETE OGDF_MM(OGDF_ALLOCATOR)
 
-//! Creates new and delete operators in a class using the malloc memory allocator.
+/**
+ * Makes the class use malloc for memory allocation.
+ * @copydoc OGDF_MM
+ * @ingroup macros
+ */
 #define OGDF_MALLOC_NEW_DELETE OGDF_MM(ogdf::MallocMemoryAllocator)
 
-} // namespace ogdf
+//! @}
 
-
-#endif
+}

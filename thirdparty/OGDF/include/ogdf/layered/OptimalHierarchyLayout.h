@@ -1,11 +1,3 @@
-/*
- * $Revision: 3832 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 11:16:27 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration and implementation of the optimal third
  *        phase of the Sugiyama algorithm.
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,31 +26,21 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_OPTIMAL_HIERARCHY_LAYOUT_H
-#define OGDF_OPTIMAL_HIERARCHY_LAYOUT_H
-
-
-
-#include <ogdf/module/HierarchyLayoutModule.h>
-
+#include <ogdf/layered/HierarchyLayoutModule.h>
 
 namespace ogdf {
 
 
 //! The LP-based hierarchy layout algorithm.
 /**
+ * @ingroup gd-hlm
+ *
  * OptimalHierarchyLayout implements a hierarchy layout algorithm that is based
  * on an LP-formulation. It is only available if OGDF is compiled with LP-solver
  * support (e.g., Coin).
@@ -93,14 +75,6 @@ namespace ogdf {
  */
 class OGDF_EXPORT OptimalHierarchyLayout : public HierarchyLayoutModule
 {
-#ifndef OGDF_LP_SOLVER
-protected:
-	void doCall(const HierarchyLevelsBase& /*levels*/, GraphCopyAttributes & /*AGC*/) {
-		OGDF_THROW_PARAM(LibraryNotSupportedException, lnscCoin);
-	}
-
-#else
-
 public:
 	//! Creates an instance of optimal hierarchy layout.
 	OptimalHierarchyLayout();
@@ -126,7 +100,7 @@ public:
 		return m_nodeDistance;
 	}
 
-	//! Sets the minimal allowed x-distance between nodes on a layer to \a x.
+	//! Sets the minimal allowed x-distance between nodes on a layer to \p x.
 	void nodeDistance(double x) {
 		if(x >= 0)
 			m_nodeDistance = x;
@@ -137,7 +111,7 @@ public:
 		return m_layerDistance;
 	}
 
-	//! Sets the minimal allowed y-distance between layers to \a x.
+	//! Sets the minimal allowed y-distance between layers to \p x.
 	void layerDistance(double x) {
 		if(x >= 0)
 			m_layerDistance = x;
@@ -152,7 +126,7 @@ public:
 		return m_fixedLayerDistance;
 	}
 
-	//! Sets the option <i>fixedLayerDistance</i> to \a b.
+	//! Sets the option <i>fixedLayerDistance</i> to \p b.
 	void fixedLayerDistance(bool b) {
 		m_fixedLayerDistance = b;
 	}
@@ -162,7 +136,7 @@ public:
 		return m_weightSegments;
 	}
 
-	//! Sets the weight of edge segments connecting to vertical segments to \a w.
+	//! Sets the weight of edge segments connecting to vertical segments to \p w.
 	void weightSegments(double w) {
 		if(w > 0.0 && w <= 100.0)
 			m_weightSegments = w;
@@ -173,7 +147,7 @@ public:
 		return m_weightBalancing;
 	}
 
-	//! Sets the weight for balancing successors below a node to \a w; 0.0 means no balancing.
+	//! Sets the weight for balancing successors below a node to \p w; 0.0 means no balancing.
 	void weightBalancing(double w) {
 		if(w >= 0.0 && w <= 100.0)
 			m_weightBalancing = w;
@@ -183,15 +157,15 @@ public:
 
 protected:
 	//! Implements the algorithm call.
-	void doCall(const HierarchyLevelsBase &levels,GraphCopyAttributes &AGC);
+	virtual void doCall(const HierarchyLevelsBase &levels,GraphAttributes &AGC) override;
 
 private:
 	void computeXCoordinates(
 		const HierarchyLevelsBase &levels,
-		GraphCopyAttributes &AGC);
+		GraphAttributes &AGC);
 	void computeYCoordinates(
 		const HierarchyLevelsBase &levels,
-		GraphCopyAttributes &AGC);
+		GraphAttributes &AGC);
 
 	// options
 	double m_nodeDistance;  //!< The minimal distance between nodes.
@@ -200,11 +174,6 @@ private:
 
 	double m_weightSegments;  //!< The weight of edge segments.
 	double m_weightBalancing; //!< The weight for balancing.
-
-#endif
 };
 
 }
-
-
-#endif

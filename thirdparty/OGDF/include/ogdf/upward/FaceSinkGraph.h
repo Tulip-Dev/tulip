@@ -1,11 +1,3 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class FaceSinkGraph
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,20 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_FACE_SINK_GRAPH_H
-#define OGDF_FACE_SINK_GRAPH_H
-
 
 #include <ogdf/basic/CombinatorialEmbedding.h>
 #include <ogdf/basic/NodeArray.h>
@@ -64,7 +47,7 @@ public:
 	FaceSinkGraph(const ConstCombinatorialEmbedding &E, node s);
 
 	//! default constructor (dummy)
-	FaceSinkGraph() : m_pE(0) { }
+	FaceSinkGraph() : m_pE(nullptr) { }
 
 
 	void init(const ConstCombinatorialEmbedding &E, node s);
@@ -98,28 +81,25 @@ public:
 		return m_containsSource[v];
 	}
 
-
-
-
 	//! returns the list of faces f in E such that there exists an upward-planar
 	//! drawing realizing E with f as external face
 	//! a node v_T in tree T is returned as representative. v_T is 0 if no possible external face exists.
 	node possibleExternalFaces(SList<face> &externalFaces) {
 		node v_T = checkForest();
-		if (v_T != 0)
-			gatherExternalFaces(m_T,0,externalFaces);
+		if (v_T != nullptr)
+			gatherExternalFaces(m_T,nullptr,externalFaces);
 		return v_T;
 	}
 
 
 	node faceNodeOf(edge e) {
-		return dfsFaceNodeOf(m_T,0,
+		return dfsFaceNodeOf(m_T,nullptr,
 			m_pE->rightFace(e->adjSource()),m_pE->rightFace(e->adjTarget()));
 	}
 
 
 	node faceNodeOf(face f) {
-		return dfsFaceNodeOf(m_T,0,f,0);
+		return dfsFaceNodeOf(m_T,nullptr,f,nullptr);
 	}
 
 
@@ -144,8 +124,6 @@ public:
 	//! compute the sink switches of all faces.
 	// the ext. face muss be set
 	void sinkSwitches(FaceArray< List<adjEntry> > &faceSwitches);
-
-
 
 private:
 	//! constructs face-sink graph
@@ -193,29 +171,19 @@ private:
 	NodeArray<face> m_originalFace;   //!< original face in E
 	NodeArray<bool> m_containsSource; //!< contains face node the source ?
 
-	/*
+#if 0
 	//! traverse the face sink tree and compute the sink witches of each internal faces
 	void dfsFST(node v, //current node
 		node parent, //parent of v
 		FaceArray< List<adjEntry> > &faceSwitches,
 		NodeArray<bool> &visited);
-		*/
+#endif
 
 	//! checks if the face-sink graph is a forest with
 	//!  1) there is exactly one tree T containing no internal vertex of G
 	//!  2) all other trees contain exactly one internal vertex of G
 	//! a node in tree T is returned as representative
 	node checkForest();
+};
 
-
-	//! return a adjEntry of node v which right face is f. Be Carefully! The adjEntry is not always unique.
-	adjEntry getAdjEntry(node v, face f);
-
-
-}; // class FaceSinkGraph
-
-
-} // end namespace ogdf
-
-
-#endif
+}

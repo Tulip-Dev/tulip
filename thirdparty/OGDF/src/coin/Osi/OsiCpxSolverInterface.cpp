@@ -503,8 +503,9 @@ void OsiCpxSolverInterface::branchAndBound()
   	int* ind = new int[ncols];
 
   	CoinIotaN(ind, ncols, 0);
-  	term = CPXcopymipstart(env_, getLpPtr( OsiCpxSolverInterface::KEEPCACHED_ALL ), ncols, ind, colsol_);
-  	checkCPXerror(term, "CPXcopymipstart", "branchAndBound");
+	int zero = 0;
+	term = CPXaddmipstarts(env_, getLpPtr( OsiCpxSolverInterface::KEEPCACHED_ALL ), 1, ncols, &zero, ind, colsol_, NULL, NULL);
+	checkCPXerror(term, "CPXaddmipstarts", "branchAndBound");
 
   	delete[] ind;
 
@@ -1792,7 +1793,7 @@ void OsiCpxSolverInterface::setColSetBounds(const int* indexFirst,
    char* c = new char[2*cnt];
    int* ind = new int[2*cnt];
    for (int i = 0; i < cnt; ++i) {
-      register const int j = 2 * i;
+      const int j = 2 * i;
       c[j] = 'L';
       c[j+1] = 'U';
       const int colind = indexFirst[i];

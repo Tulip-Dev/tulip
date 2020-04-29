@@ -1,14 +1,5 @@
-/*
- * $Revision: 3533 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2013-06-03 18:22:41 +0200 (Mon, 03 Jun 2013) $
- ***************************************************************/
-
 /** \file
- * \brief Implementation of Spring-Embedder (Fruchterman,Reingold)
- *        algorithm with exact force computations.
+ * \brief Implementation of ogdf::SpringEmbedderFRExact.
  *
  * \author Carsten Gutwenger
  *
@@ -17,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,26 +25,19 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/energybased/SpringEmbedderFRExact.h>
 #include <ogdf/packing/TileToRowsCCPacker.h>
-#include <ogdf/basic/GraphCopyAttributes.h>
 #include <ogdf/basic/simple_graph_alg.h>
 
 #ifdef _OPENMP
 #include <omp.h>
 #endif
 
-#ifdef OGDF_SSE3_EXTENSIONS
-#include <ogdf/internal/basic/intrinsics.h>
-#endif
-
+#include <ogdf/basic/internal/intrinsics.h>
 
 namespace ogdf {
 
@@ -62,10 +46,10 @@ SpringEmbedderFRExact::ArrayGraph::ArrayGraph(GraphAttributes &ga) : m_ga(&ga), 
 	const Graph &G = ga.constGraph();
 	m_numNodes = m_numEdges = 0;
 
-	m_orig = 0;
-	m_src = m_tgt = 0;
-	m_x = m_y = 0;
-	m_nodeWeight = 0;
+	m_orig = nullptr;
+	m_src = m_tgt = nullptr;
+	m_x = m_y = nullptr;
+	m_nodeWeight = nullptr;
 	m_useNodeWeight = false;
 
 	// compute connected components of G
@@ -74,8 +58,7 @@ SpringEmbedderFRExact::ArrayGraph::ArrayGraph(GraphAttributes &ga) : m_ga(&ga), 
 
 	m_nodesInCC.init(m_numCC);
 
-	node v;
-	forall_nodes(v,G)
+	for(node v : G.nodes)
 		m_nodesInCC[component[v]].pushBack(v);
 }
 
@@ -109,10 +92,7 @@ void SpringEmbedderFRExact::ArrayGraph::initCC(int i)
 	m_nodeWeight = (double *) System::alignedMemoryAlloc16(m_numNodes*sizeof(double));
 
 	int j = 0;
-	SListConstIterator<node> it;
-	for(it = m_nodesInCC[i].begin(); it.valid(); ++it, ++j) {
-		node v = *it;
-
+	for(node v : m_nodesInCC[i]) {
 		m_orig[j] = v;
 		m_mapNode[v] = j;
 
@@ -120,25 +100,22 @@ void SpringEmbedderFRExact::ArrayGraph::initCC(int i)
 		m_y[j] = m_ga->y(v);
 
 		if (m_useNodeWeight)
-			m_nodeWeight[j] = (m_ga->attributes() & GraphAttributes::nodeWeight) ? m_ga->weight(v) : 1.0;
+			m_nodeWeight[j] = m_ga->has(GraphAttributes::nodeWeight) ? m_ga->weight(v) : 1.0;
 		else
 			m_nodeWeight[j] = 1.0;
-		adjEntry adj;
-		forall_adj(adj,v)
+		for(adjEntry adj : v->adjEntries)
 			if(v->index() < adj->twinNode()->index())
 				++m_numEdges;
+		++j;
 	}
 
 	m_src = (int *) System::alignedMemoryAlloc16(m_numEdges*sizeof(int));
 	m_tgt = (int *) System::alignedMemoryAlloc16(m_numEdges*sizeof(int));
 
 	j = 0;
-	int srcId;
-	for(it = m_nodesInCC[i].begin(), srcId = 0; it.valid(); ++it, ++srcId) {
-		node v = *it;
-
-		adjEntry adj;
-		forall_adj(adj,v) {
+	int srcId = 0;
+	for(node v : m_nodesInCC[i]) {
+		for(adjEntry adj : v->adjEntries) {
 			node w = adj->twinNode();
 			if(v->index() < w->index()) {
 				m_src[j] = srcId;
@@ -146,6 +123,7 @@ void SpringEmbedderFRExact::ArrayGraph::initCC(int i)
 				++j;
 			}
 		}
+		++srcId;
 	}
 }
 
@@ -155,7 +133,7 @@ SpringEmbedderFRExact::SpringEmbedderFRExact()
 	// default parameters
 	m_iterations = 1000;
 	m_noise      = true;
-	m_coolingFunction = cfFactor;
+	m_coolingFunction = CoolingFunction::Factor;
 
 	m_coolFactor_x = 0.9;
 	m_coolFactor_y = 0.9;
@@ -188,6 +166,7 @@ void SpringEmbedderFRExact::call(GraphAttributes &AG)
 	Array<DPoint> boundingBox(component.numberOfCCs());
 
 	int i;
+	const bool haveSSE3 = System::cpuSupports(CPUFeature::SSE3);
 	for(i = 0; i < component.numberOfCCs(); ++i)
 	{
 		component.initCC(i);
@@ -196,11 +175,9 @@ void SpringEmbedderFRExact::call(GraphAttributes &AG)
 		{
 			initialize(component);
 
-#ifdef OGDF_SSE3_EXTENSIONS
-			if(System::cpuSupports(cpufSSE3))
+			if (haveSSE3)
 				mainStep_sse3(component);
 			else
-#endif
 				mainStep(component);
 		}
 
@@ -247,11 +224,8 @@ void SpringEmbedderFRExact::call(GraphAttributes &AG)
 		const double dy = offset[i].m_y;
 
 		// iterate over all nodes in ith CC
-		SListConstIterator<node> it;
-		for(it = nodes.begin(); it.valid(); ++it)
+		for(node v : nodes)
 		{
-			node v = *it;
-
 			AG.x(v) += dx;
 			AG.y(v) += dy;
 		}
@@ -268,10 +242,10 @@ void SpringEmbedderFRExact::initialize(ArrayGraph &component)
 
 	for(int v = 0; v < component.numberOfNodes(); ++v)
 	{
-		xmin = min(xmin, component.m_x[v]);
-		xmax = max(xmax, component.m_x[v]);
-		ymin = min(ymin, component.m_y[v]);
-		ymax = max(ymax, component.m_y[v]);
+		Math::updateMin(xmin, component.m_x[v]);
+		Math::updateMax(xmax, component.m_x[v]);
+		Math::updateMin(ymin, component.m_y[v]);
+		Math::updateMax(ymax, component.m_y[v]);
 	}
 
 	double w = xmax-xmin+m_idealEdgeLength;
@@ -304,12 +278,12 @@ void SpringEmbedderFRExact::initialize(ArrayGraph &component)
 void SpringEmbedderFRExact::cool(double &tx, double &ty, int &cF)
 {
 	switch(m_coolingFunction) {
-		case cfFactor:
+		case CoolingFunction::Factor:
 			tx *= m_coolFactor_x;
 			ty *= m_coolFactor_y;
 			break;
 
-		case cfLogarithmic:
+		case CoolingFunction::Logarithmic:
 			tx = m_txNull / mylog2(cF);
 			ty = m_tyNull / mylog2(cF);
 			cF++;
@@ -328,8 +302,8 @@ void SpringEmbedderFRExact::mainStep(ArrayGraph &C)
 	const double minDist       = 10e-6;//100*DBL_EPSILON;
 	const double minDistSquare = minDist*minDist;
 
-	double *disp_x = (double*) System::alignedMemoryAlloc16(n*sizeof(double)); //new double[n];
-	double *disp_y = (double*) System::alignedMemoryAlloc16(n*sizeof(double)); //new double[n];
+	double *disp_x = (double*) System::alignedMemoryAlloc16(n*sizeof(double));
+	double *disp_y = (double*) System::alignedMemoryAlloc16(n*sizeof(double));
 
 	double tx = m_txNull;
 	double ty = m_tyNull;
@@ -404,21 +378,18 @@ void SpringEmbedderFRExact::mainStep(ArrayGraph &C)
 		}
 
 		cool(tx,ty,cF);
-	//}//if
+	//}
 		itCount++;
 		converged = (itCount > m_iterations || converged);
-	}//while not converged
+	}
 
 	System::alignedMemoryFree(disp_x);
 	System::alignedMemoryFree(disp_y);
-}//mainstep
-
+}
 
 void SpringEmbedderFRExact::mainStep_sse3(ArrayGraph &C)
 {
-//#if (defined(OGDF_ARCH_X86) || defined(OGDF_ARCH_X64)) && !(defined(__GNUC__) && !defined(__SSE3__))
 #ifdef OGDF_SSE3_EXTENSIONS
-
 	const int n            = C.numberOfNodes();
 
 #ifdef _OPENMP
@@ -437,7 +408,9 @@ void SpringEmbedderFRExact::mainStep_sse3(ArrayGraph &C)
 	double *disp_x = (double*) System::alignedMemoryAlloc16(n*sizeof(double));
 	double *disp_y = (double*) System::alignedMemoryAlloc16(n*sizeof(double));
 
+#ifdef OGDF_SPRINGEMBEDDERFREXACT_USE_KSQUARE
 	__m128d mm_kSquare       = _mm_set1_pd(kSquare);
+#endif
 	__m128d mm_minDist       = _mm_set1_pd(minDist);
 	__m128d mm_minDistSquare = _mm_set1_pd(minDistSquare);
 	__m128d mm_c_rep         = _mm_set1_pd(c_rep);
@@ -461,67 +434,58 @@ void SpringEmbedderFRExact::mainStep_sse3(ArrayGraph &C)
 				__m128d mm_xv = _mm_set1_pd(C.m_x[v]);
 				__m128d mm_yv = _mm_set1_pd(C.m_y[v]);
 
-				int u;
-				for(u = 0; u+1 < v; u += 2)
-				{
+				auto compute_pd = [&](int u) {
 					__m128d mm_delta_x = _mm_sub_pd(mm_xv, _mm_load_pd(&C.m_x[u]));
 					__m128d mm_delta_y = _mm_sub_pd(mm_yv, _mm_load_pd(&C.m_y[u]));
 
-					__m128d mm_distSquare = _mm_max_pd(mm_minDistSquare,
-						_mm_add_pd(_mm_mul_pd(mm_delta_x,mm_delta_x),_mm_mul_pd(mm_delta_y,mm_delta_y))
-					);
+					__m128d mm_xSquare = _mm_mul_pd(mm_delta_x, mm_delta_x);
+					__m128d mm_ySquare = _mm_mul_pd(mm_delta_y, mm_delta_y);
+					__m128d mm_distSquare = _mm_max_pd(mm_minDistSquare, _mm_add_pd(mm_xSquare , mm_ySquare));
 
-					__m128d mm_t = _mm_div_pd(_mm_load_pd(&C.m_nodeWeight[u]), mm_distSquare);
+					__m128d mm_t =
+#ifndef OGDF_SPRINGEMBEDDERFREXACT_USE_KSQUARE
+					  _mm_div_pd(_mm_load_pd(&C.m_nodeWeight[u]), mm_distSquare);
+#else
+					  _mm_div_pd(mm_kSquare, mm_distSquare);
+#endif
 					mm_disp_xv = _mm_add_pd(mm_disp_xv, _mm_mul_pd(mm_delta_x, mm_t));
 					mm_disp_yv = _mm_add_pd(mm_disp_yv, _mm_mul_pd(mm_delta_y, mm_t));
-					//mm_disp_xv = _mm_add_pd(mm_disp_xv, _mm_mul_pd(mm_delta_x, _mm_div_pd(mm_kSquare,mm_distSquare)));
-					//mm_disp_yv = _mm_add_pd(mm_disp_yv, _mm_mul_pd(mm_delta_y, _mm_div_pd(mm_kSquare,mm_distSquare)));
+				};
+				auto compute_sd = [&](int u) {
+					__m128d mm_delta_x = _mm_sub_sd(mm_xv, _mm_load_sd(&C.m_x[u]));
+					__m128d mm_delta_y = _mm_sub_sd(mm_yv, _mm_load_sd(&C.m_y[u]));
+
+					__m128d mm_xSquare = _mm_mul_sd(mm_delta_x, mm_delta_x);
+					__m128d mm_ySquare = _mm_mul_sd(mm_delta_y, mm_delta_y);
+					__m128d mm_distSquare = _mm_max_sd(mm_minDistSquare, _mm_add_sd(mm_xSquare, mm_ySquare));
+
+					__m128d mm_t =
+#ifndef OGDF_SPRINGEMBEDDERFREXACT_USE_KSQUARE
+					  _mm_div_sd(_mm_load_sd(&C.m_nodeWeight[u]), mm_distSquare);
+#else
+					  _mm_div_sd(mm_kSquare, mm_distSquare);
+#endif
+					mm_disp_xv = _mm_add_sd(mm_disp_xv, _mm_mul_sd(mm_delta_x, mm_t));
+					mm_disp_yv = _mm_add_sd(mm_disp_yv, _mm_mul_sd(mm_delta_y, mm_t));
+				};
+
+				int u;
+				for (u = 0; u + 1 < v; u += 2) {
+					compute_pd(u);
 				}
 				int uStart = u+2;
-				if(u == v) ++u;
-				if(u < n) {
-					__m128d mm_delta_x = _mm_sub_sd(mm_xv, _mm_load_sd(&C.m_x[u]));
-					__m128d mm_delta_y = _mm_sub_sd(mm_yv, _mm_load_sd(&C.m_y[u]));
-
-					__m128d mm_distSquare = _mm_max_sd(mm_minDistSquare,
-						_mm_add_sd(_mm_mul_sd(mm_delta_x,mm_delta_x),_mm_mul_sd(mm_delta_y,mm_delta_y))
-					);
-
-					__m128d mm_t = _mm_div_sd(_mm_load_sd(&C.m_nodeWeight[u]), mm_distSquare);
-					mm_disp_xv = _mm_add_sd(mm_disp_xv, _mm_mul_sd(mm_delta_x, mm_t));
-					mm_disp_yv = _mm_add_sd(mm_disp_yv, _mm_mul_sd(mm_delta_y, mm_t));
-					//mm_disp_xv = _mm_add_sd(mm_disp_xv, _mm_mul_sd(mm_delta_x, _mm_div_sd(mm_kSquare,mm_distSquare)));
-					//mm_disp_yv = _mm_add_sd(mm_disp_yv, _mm_mul_sd(mm_delta_y, _mm_div_sd(mm_kSquare,mm_distSquare)));
+				if (u == v) ++u;
+				if (u < n) {
+					compute_sd(u);
 				}
 
-				for(u = uStart; u < n; u += 2)
-				{
-					__m128d mm_delta_x = _mm_sub_pd(mm_xv, _mm_load_pd(&C.m_x[u]));
-					__m128d mm_delta_y = _mm_sub_pd(mm_yv, _mm_load_pd(&C.m_y[u]));
-
-					__m128d mm_distSquare = _mm_max_pd(mm_minDistSquare,
-						_mm_add_pd(_mm_mul_pd(mm_delta_x,mm_delta_x),_mm_mul_pd(mm_delta_y,mm_delta_y))
-					);
-
-					__m128d mm_t = _mm_div_pd(_mm_load_pd(&C.m_nodeWeight[u]), mm_distSquare);
-					mm_disp_xv = _mm_add_pd(mm_disp_xv, _mm_mul_pd(mm_delta_x, mm_t));
-					mm_disp_yv = _mm_add_pd(mm_disp_yv, _mm_mul_pd(mm_delta_y, mm_t));
-					//mm_disp_xv = _mm_add_pd(mm_disp_xv, _mm_mul_pd(mm_delta_x, _mm_div_pd(mm_kSquare,mm_distSquare)));
-					//mm_disp_yv = _mm_add_pd(mm_disp_yv, _mm_mul_pd(mm_delta_y, _mm_div_pd(mm_kSquare,mm_distSquare)));
+				// TODO do we need u+1 here?
+				//      GCC's leak sanitizer reports a heap buffer overflow when using just u.
+				for (u = uStart; u + 1 < n; u += 2) {
+					compute_pd(u);
 				}
-				if(u < n) {
-					__m128d mm_delta_x = _mm_sub_sd(mm_xv, _mm_load_sd(&C.m_x[u]));
-					__m128d mm_delta_y = _mm_sub_sd(mm_yv, _mm_load_sd(&C.m_y[u]));
-
-					__m128d mm_distSquare = _mm_max_sd(mm_minDistSquare,
-						_mm_add_sd(_mm_mul_sd(mm_delta_x,mm_delta_x),_mm_mul_sd(mm_delta_y,mm_delta_y))
-					);
-
-					__m128d mm_t = _mm_div_sd(_mm_load_sd(&C.m_nodeWeight[u]), mm_distSquare);
-					mm_disp_xv = _mm_add_sd(mm_disp_xv, _mm_mul_sd(mm_delta_x, mm_t));
-					mm_disp_yv = _mm_add_sd(mm_disp_yv, _mm_mul_sd(mm_delta_y, mm_t));
-					//mm_disp_xv = _mm_add_sd(mm_disp_xv, _mm_mul_sd(mm_delta_x, _mm_div_sd(mm_kSquare,mm_distSquare)));
-					//mm_disp_yv = _mm_add_sd(mm_disp_yv, _mm_mul_sd(mm_delta_y, _mm_div_sd(mm_kSquare,mm_distSquare)));
+				if (u < n) {
+					compute_sd(u);
 				}
 
 				mm_disp_xv = _mm_hadd_pd(mm_disp_xv,mm_disp_xv);
@@ -598,5 +562,4 @@ void SpringEmbedderFRExact::mainStep_sse3(ArrayGraph &C)
 #endif
 }
 
-
-} // end namespace ogdf
+}

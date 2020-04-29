@@ -1,11 +1,3 @@
-/*
- * $Revision: 3157 $
- *
- * last checkin:
- *   $Author: chimani $
- *   $Date: 2012-12-12 16:49:59 +0100 (Wed, 12 Dec 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Contains logging functionality
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,26 +25,21 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
+#pragma once
 
-#ifndef OGDF_LOGGER_H
-#define OGDF_LOGGER_H
-
-//#include <ogdf/basic/basic.h>
-#include <ogdf/internal/basic/config.h>
+#include <ogdf/basic/internal/config.h>
+#include <algorithm>
 
 namespace ogdf {
 
-//! Centralized global and local logging facility working on streams like cout.
+//! Centralized global and local logging facility working on streams like \c std::cout.
 /**
  * The Logger class is a centralized logging environment with 2x2 different use-cases working together.
- * All generated output is sent into the \a world-stream, i.e., \a cout, if not set otherwise.
+ * All generated output is sent into the \a world-stream, i.e., \c std::cout, if not set otherwise.
  *
  * \b Logging \b vs. \b Statistic:
  * The Logger differentiates between \a logging and \a statistic mode.
@@ -82,16 +69,12 @@ namespace ogdf {
  *
  * \b Local \b Settings:
  * A Logger-object has its own set of settings, i.e., its own localLogLevel and an own localLogMode,
- * which can be any of the following:
- *   - \a LM_LOG: the object is in logging mode, using its own localLogLevel
- *   - \a LM_STATISTIC: the object is in statistic mode
- *   - \a LM_GLOBAL: the object is in the same mode as the static Logger-class (i.e., global settings)
- *   - \a LM_GLOBALLOG: the object is in logging mode, but uses the globalLogLevel
+ * which can be any of the enumerators in Logger::LogMode.
  *
  * \b Typical \b Usage:<br>
  * The simplest but restricted and verbose usage is to write <br>
  * <code><br>
- *    Logger::slout() << "1+2=" << (1+2) << endl;
+ *    Logger::slout() << "1+2=" << (1+2) << std::endl;
  * </code>
  *
  * The conceptually easiest and cleanest approach is to augment your algorithm class with a Logger.
@@ -102,7 +85,7 @@ namespace ogdf {
  *    }<br>
  *    <br>
  *    MyAlgorithm::myMethod() {<br>
- *    &nbsp;&nbsp;lout() << "1+2=" << (1+2) << endl;<br>
+ *    &nbsp;&nbsp;lout() << "1+2=" << (1+2) << std::endl;<br>
  *    }<br>
  * </code>
  *
@@ -113,74 +96,98 @@ namespace ogdf {
  *  turned off whenever the (global/static) Logger is in statistics-mode.
  */
 
-class OGDF_EXPORT Logger {
+class Logger {
 
 public:
 	//! supported log-levels from lowest to highest importance
-	enum Level { LL_MINOR, LL_MEDIUM, LL_DEFAULT, LL_HIGH, LL_ALARM, LL_FORCE };
-	//! (local) log-modes (see class description)
-	enum LogMode { LM_GLOBAL, LM_GLOBALLOG, LM_LOG, LM_STATISTIC };
+	enum class Level {
+		Minor,
+		Medium,
+		Default,
+		High,
+		Alarm,
+		Force
+	};
+	//! Local log-modes
+	enum class LogMode {
+		//! the object is in the same mode as the static Logger-class (i.e., global settings)
+		Global,
+		//! the object is in logging mode, but uses the globalLogLevel
+		GlobalLog,
+		//! the object is in logging mode, using its own localLogLevel
+		Log,
+		//! the object is in statistic mode
+		Statistic
+	};
 
-	// CONSTRUCTORS //////////////////////////////////////
-	//! creates a new Logger-object with LM_GLOBAL and local log-level equal globalLogLevel
-	Logger() :
-		m_loglevel(m_globalloglevel), m_logmode(LM_GLOBAL) {}
+	//! creates a new Logger-object with LogMode::Global and local log-level equal globalLogLevel
+	Logger() : Logger(LogMode::Global, m_globalloglevel) {}
 	//! creates a new Logger-object with given log-mode and local log-level equal globalLogLevel
-	Logger(LogMode m) :
-		m_loglevel(m_globalloglevel), m_logmode(m) {}
-	//! creates a new Logger-object with LM_GLOBAL and given local log-level
-	Logger(Level l) :
-		m_loglevel(l), m_logmode(LM_GLOBAL) {}
+	explicit Logger(LogMode m) : Logger(m, m_globalloglevel) {}
+	//! creates a new Logger-object with LogMode::Global and given local log-level
+	explicit Logger(Level level) : Logger(LogMode::Global, level) {}
 	//! creates a new Logger-object with given log-mode and given local log-level
-	Logger(LogMode m, Level l) :
-		m_loglevel(l), m_logmode(m) {}
+	Logger(LogMode m, Level level) :
+		m_loglevel(level), m_logmode(m) {}
 
-	// USAGE //////////////////////////////////////
+	//! \name Usage
+	//! @{
+
 	//! returns true if such an lout command will result in text being printed
-	bool is_lout(Level l = LL_DEFAULT) const {
-		return ((!m_globalstatisticmode && m_logmode==LM_GLOBAL) || m_logmode==LM_GLOBALLOG)
-						? ( (l >= m_globalloglevel) ? true : false )
-						: ( (m_logmode==LM_LOG && l >= m_loglevel && l >= m_minimumloglevel) ? true : false );
+	bool is_lout(Level level = Level::Default) const {
+		bool globalNotStatistic = !m_globalstatisticmode && m_logmode == LogMode::Global;
+		if (globalNotStatistic || m_logmode==LogMode::GlobalLog) {
+			return level >= m_globalloglevel;
+		} else {
+			return m_logmode==LogMode::Log
+			    && level >= std::max(m_loglevel, m_minimumloglevel);
+		}
 	}
 	//! stream for logging-output (local)
-	std::ostream& lout(Level l = LL_DEFAULT) const {
-		return (is_lout(l)) ? *world : nirvana;
+	std::ostream& lout(Level level = Level::Default) const {
+		return is_lout(level) ? *world : nirvana;
 	}
 	//! stream for statistic-output (local)
 	std::ostream& sout() const {
-		return ((m_globalstatisticmode && m_logmode==LM_GLOBAL) || (m_logmode == LM_STATISTIC)) ? *world : nirvana;
+		return (m_globalstatisticmode && m_logmode == LogMode::Global) || m_logmode == LogMode::Statistic ? *world : nirvana;
 	}
 	//! stream for forced output (local)
 	std::ostream& fout() const {
 		return sfout();
 	}
 
-	// STATIC USAGE ///////////////////////////////
+	//! @}
+	//! \name Static usage
+	//! @{
+
 	//! returns true if such an slout command will result in text being printed
-	static bool is_slout(Level l = LL_DEFAULT) {
-		return ((!m_globalstatisticmode) && l >= m_globalloglevel) ? true : false;
+	static bool is_slout(Level level = Level::Default) {
+		return !m_globalstatisticmode && level >= m_globalloglevel;
 	}
 	//! stream for logging-output (global)
-	static std::ostream& slout(Level l = LL_DEFAULT) {
-		return (is_slout(l)) ? *world : nirvana;
+	static std::ostream& slout(Level level = Level::Default) {
+		return is_slout(level) ? *world : nirvana;
 	}
 	//! stream for statistic-output (global)
 	static std::ostream& ssout() {
-		return (m_globalstatisticmode) ? *world : nirvana;
+		return m_globalstatisticmode ? *world : nirvana;
 	}
 	//! stream for forced output (global)
 	static std::ostream& sfout() {
 		return *world;
 	}
 
-	// STATIC INTERNAL_LIBRARY_USAGE ///////////////////////////////
+	//! @}
+	//! \name Static internal library usage
+	//! @{
+
 	//! stream for logging-output (global; used by internal libraries, e.g. Abacus)
 	//! returns true if such an ilout command will result in text being printed
-	static bool is_ilout(Level l = LL_DEFAULT) {
-		return ((!m_globalstatisticmode) && l >= m_globallibraryloglevel) ? true : false;
+	static bool is_ilout(Level level = Level::Default) {
+		return !m_globalstatisticmode && level >= m_globallibraryloglevel;
 	}
-	static std::ostream& ilout(Level l = LL_DEFAULT) {
-		return (is_ilout(l)) ? *world : nirvana;
+	static std::ostream& ilout(Level level = Level::Default) {
+		return is_ilout(level) ? *world : nirvana;
 	}
 
 	//! stream for forced output (global; used by internal libraries, e.g. Abacus)
@@ -188,14 +195,17 @@ public:
 		return *world;
 	}
 
-	// LOCAL //////////////////////////////////////
+	//! @}
+	//! \name Local
+	//! @{
+
 	//! gives the local log-level
 	Level localLogLevel() const {
 		return m_loglevel;
 	}
 	//! sets the local log-level
-	void localLogLevel(Level l) {
-		m_loglevel = l;
+	void localLogLevel(Level level) {
+		m_loglevel = level;
 	}
 	//! gives the local log-mode
 	LogMode localLogMode() const {
@@ -206,12 +216,15 @@ public:
 		m_logmode = m;
 	}
 
-	// GLOBAL //////////////////////////////////////
+	//! @}
+	//! \name Global
+	//! @{
+
 	//! gives the global log-level
 	static Level globalLogLevel() { return m_globalloglevel; }
 	//! sets the global log-level
-	static void globalLogLevel(Level l) {
-		m_globalloglevel = l;
+	static void globalLogLevel(Level level) {
+		m_globalloglevel = level;
 		if( m_globalloglevel < m_minimumloglevel )
 			m_minimumloglevel = m_globalloglevel;
 	}
@@ -219,13 +232,13 @@ public:
 	//! gives the internal-library log-level
 	static Level globalInternalLibraryLogLevel() { return m_globallibraryloglevel; }
 	//! sets the internal-library log-level
-	static void globalInternalLibraryLogLevel(Level l) { m_globallibraryloglevel = l; }
+	static void globalInternalLibraryLogLevel(Level level) { m_globallibraryloglevel = level; }
 
 	//! gives the globally minimally required log-level
 	static Level globalMinimumLogLevel() { return m_minimumloglevel; }
 	//! sets the globally minimally required log-level
-	static void globalMinimumLogLevel(Level l) {
-		m_minimumloglevel = l;
+	static void globalMinimumLogLevel(Level level) {
+		m_minimumloglevel = level;
 		if( m_globalloglevel < m_minimumloglevel )
 			m_globalloglevel = m_minimumloglevel;
 	}
@@ -235,13 +248,16 @@ public:
 	//! sets whether we are globally in statistic mode
 	static void globalStatisticMode(bool s) { m_globalstatisticmode = s; }
 
-	//! change the stream to which allowed output is written (by default: cout)
+	//! change the stream to which allowed output is written (by default: \c std::cout)
 	static void setWorldStream(std::ostream& o) { world = &o; }
 
-	// EFFECTIVE //////////////////////////////////////
+	//! @}
+	//! \name Effective
+	//! @{
+
 	//! obtain the effective log-level for the Logger-object (i.e., resolve the dependencies on the global settings)
 	Level effectiveLogLevel() const {
-		if(m_logmode==LM_GLOBAL || m_logmode==LM_GLOBALLOG)
+		if(m_logmode==LogMode::Global || m_logmode==LogMode::GlobalLog)
 			return m_globalloglevel;
 		else
 			return (m_loglevel > m_minimumloglevel) ? m_loglevel : m_minimumloglevel;
@@ -249,24 +265,46 @@ public:
 
 	//! returns true if the Logger-object is effectively in statistic-mode (as this might be depending on the global settings)
 	bool effectiveStatisticMode() const {
-		return m_logmode==LM_STATISTIC || (m_logmode==LM_GLOBAL && m_globalstatisticmode);
+		return m_logmode==LogMode::Statistic || (m_logmode==LogMode::Global && m_globalstatisticmode);
 	}
 
+	//! @}
 
 private:
-	static std::ostream nirvana;
-	static std::ostream* world;
+	static OGDF_EXPORT std::ostream nirvana;
+	static OGDF_EXPORT std::ostream* world;
 
-	static Level m_globalloglevel;
-	static Level m_globallibraryloglevel;
-	static Level m_minimumloglevel;
-	static bool m_globalstatisticmode;
+	static OGDF_EXPORT Level m_globalloglevel;
+	static OGDF_EXPORT Level m_globallibraryloglevel;
+	static OGDF_EXPORT Level m_minimumloglevel;
+	static OGDF_EXPORT bool m_globalstatisticmode;
 
 	Level m_loglevel;
 	LogMode m_logmode;
 };
 
+inline std::ostream &operator<<(std::ostream &os, Logger::Level level) {
+	switch (level) {
+	case Logger::Level::Minor:
+		os << "Minor";
+		break;
+	case Logger::Level::Medium:
+		os << "Medium";
+		break;
+	case Logger::Level::Default:
+		os << "Default";
+		break;
+	case Logger::Level::High:
+		os << "High";
+		break;
+	case Logger::Level::Alarm:
+		os << "Alarm";
+		break;
+	case Logger::Level::Force:
+		os << "Force";
+		break;
+	}
+	return os;
 }
 
-#endif // OGDF_LOGGER_H
-
+}

@@ -1,11 +1,3 @@
-/*
- * $Revision: 2524 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-03 09:54:22 +0200 (Tue, 03 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of upward planarization layout algorithm.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,75 +25,52 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_UPWARD_PLANARIZATION_LAYOUT_H
-#define OGDF_UPWARD_PLANARIZATION_LAYOUT_H
-
-
-
-#include <ogdf/module/LayoutModule.h>
-#include <ogdf/module/HierarchyLayoutModule.h>
-#include <ogdf/module/UpwardPlanarizerModule.h>
-#include <ogdf/module/UPRLayoutModule.h>
-#include <ogdf/basic/ModuleOption.h>
+#include <ogdf/basic/LayoutModule.h>
 #include <ogdf/upward/UpwardPlanRep.h>
 #include <ogdf/upward/LayerBasedUPRLayout.h>
 #include <ogdf/upward/SubgraphUpwardPlanarizer.h>
 
-
-
 namespace ogdf {
-
-
 
 class UpwardPlanarizationLayout : public LayoutModule
 {
 public:
-
 	// constructor: sets options to default values
 	UpwardPlanarizationLayout()
 	{
 		m_cr_nr = 0;
 		// set default module
-		m_layout.set(new LayerBasedUPRLayout());
-		m_UpwardPlanarizer.set(new SubgraphUpwardPlanarizer());
+		m_layout.reset(new LayerBasedUPRLayout());
+		m_UpwardPlanarizer.reset(new SubgraphUpwardPlanarizer());
 	}
 
-	// destructor
-	~UpwardPlanarizationLayout() { }
-
-
-	// calls the algorithm for attributed graph AG
-	// returns layout information in AG
-	void call(GraphAttributes &AG)
+	// calls the algorithm for attributed graph GA
+	// returns layout information in GA
+	virtual void call(GraphAttributes &GA) override
 	{
-		UpwardPlanRep UPR;
-		UPR.createEmpty(AG.constGraph());
-		m_UpwardPlanarizer.get().call(UPR);
-		m_layout.get().call(UPR, AG);
-		m_cr_nr = UPR.numberOfCrossings();
-		m_numLevels = m_layout.get().numberOfLevels;
+		if(GA.constGraph().numberOfNodes() > 2) {
+			UpwardPlanRep UPR;
+			UPR.createEmpty(GA.constGraph());
+			m_UpwardPlanarizer->call(UPR);
+			m_layout->call(UPR, GA);
+			m_cr_nr = UPR.numberOfCrossings();
+			m_numLevels = m_layout->numberOfLevels;
+		}
 	}
-
 
 	// module option for the computation of the final layout
 	void setUPRLayout(UPRLayoutModule *pLayout) {
-		m_layout.set(pLayout);
+		m_layout.reset(pLayout);
 	}
 
-
 	void setUpwardPlanarizer(UpwardPlanarizerModule *pUpwardPlanarizer) {
-		m_UpwardPlanarizer.set(pUpwardPlanarizer);
+		m_UpwardPlanarizer.reset(pUpwardPlanarizer);
 	}
 
 	// returns the number of crossings in the layout after the algorithm
@@ -111,17 +80,10 @@ public:
 	int numberOfLevels() const { return m_numLevels; }
 
 protected:
-
 	int m_cr_nr;
-
 	int m_numLevels;
-
-	ModuleOption<UpwardPlanarizerModule> m_UpwardPlanarizer;
-
-	ModuleOption<UPRLayoutModule> m_layout;
+	std::unique_ptr<UpwardPlanarizerModule> m_UpwardPlanarizer;
+	std::unique_ptr<UPRLayoutModule> m_layout;
 };
 
-
 }
-
-#endif

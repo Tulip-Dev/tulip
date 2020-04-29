@@ -19,53 +19,10 @@
 
 #include <tulip/StringCollection.h>
 
-#include "tulip2ogdf/OGDFLayoutPluginBase.h"
+#include <tulip2ogdf/OGDFLayoutPluginBase.h>
 #include <ogdf/energybased/FMMMLayout.h>
 
 using namespace std;
-
-// comments below have been extracted from OGDF/src/energybased/FMMMLayout.cpp
-/** \addtogroup layout */
-
-/**
- * This is an implementation of Fast Multipole Multilevel Method (FM^3).
- * \author Stefan Hachul
- *
- * \par License:
- * This is part of the Open Graph Drawing Framework (OGDF).
- * Copyright (C) 2005-2007
- *
- * \par
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
- *
- * \par
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * \par
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
 
 #define ELT_PAGEFORMAT "Page Format"
 #define ELT_PAGEFORMATLIST "Square;Portrait;Landscape"
@@ -358,135 +315,135 @@ void OGDFFm3::beforeCall() {
 
     if (dataSet->get(ELT_PAGEFORMAT, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_PORTRAIT) {
-        fmmm->pageFormat(ogdf::FMMMLayout::pfPortrait);
+        fmmm->pageFormat(FMMMOptions::PageFormatType::Portrait);
       } else if (stringCollection.getCurrent() == ELT_LANDSCAPE) {
-        fmmm->pageFormat(ogdf::FMMMLayout::pfLandscape);
+        fmmm->pageFormat(FMMMOptions::PageFormatType::Landscape);
       } else {
-        fmmm->pageFormat(ogdf::FMMMLayout::pfSquare);
+        fmmm->pageFormat(FMMMOptions::PageFormatType::Square);
       }
     }
 
     if (dataSet->get(ELT_QUALITYVSSPEED, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_NICEANDINCREDIBLESPEED) {
-        fmmm->qualityVersusSpeed(ogdf::FMMMLayout::qvsNiceAndIncredibleSpeed);
+        fmmm->qualityVersusSpeed(FMMMOptions::QualityVsSpeed::NiceAndIncredibleSpeed);
       } else if (stringCollection.getCurrent() == ELT_GORGEOUSANDEFFICIENT) {
-        fmmm->qualityVersusSpeed(ogdf::FMMMLayout::qvsGorgeousAndEfficient);
+        fmmm->qualityVersusSpeed(FMMMOptions::QualityVsSpeed::GorgeousAndEfficient);
       } else {
-        fmmm->qualityVersusSpeed(ogdf::FMMMLayout::qvsBeautifulAndFast);
+        fmmm->qualityVersusSpeed(FMMMOptions::QualityVsSpeed::BeautifulAndFast);
       }
     }
 
     if (dataSet->get(ELT_EDGELENGTHMEASUREMENT, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_BOUNDINGCIRCLE) {
-        fmmm->edgeLengthMeasurement(ogdf::FMMMLayout::elmBoundingCircle);
+        fmmm->edgeLengthMeasurement(FMMMOptions::EdgeLengthMeasurement::BoundingCircle);
       } else {
-        fmmm->edgeLengthMeasurement(ogdf::FMMMLayout::elmMidpoint);
+        fmmm->edgeLengthMeasurement(FMMMOptions::EdgeLengthMeasurement::Midpoint);
       }
     }
 
     if (dataSet->get(ELT_ALLOWEDPOSITIONS, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_INTEGER) {
-        fmmm->allowedPositions(ogdf::FMMMLayout::apInteger);
+        fmmm->allowedPositions(FMMMOptions::AllowedPositions::Integer);
       } else if (stringCollection.getCurrent() == ELT_EXPONENT) {
-        fmmm->allowedPositions(ogdf::FMMMLayout::apExponent);
+        fmmm->allowedPositions(FMMMOptions::AllowedPositions::Exponent);
       } else {
-        fmmm->allowedPositions(ogdf::FMMMLayout::apAll);
+        fmmm->allowedPositions(FMMMOptions::AllowedPositions::All);
       }
     }
 
     if (dataSet->get(ELT_TIPOVER, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_NONE) {
-        fmmm->tipOverCCs(ogdf::FMMMLayout::toNone);
+        fmmm->tipOverCCs(FMMMOptions::TipOver::None);
       } else if (stringCollection.getCurrent() == ELT_NOGROWINGROW) {
-        fmmm->tipOverCCs(ogdf::FMMMLayout::toNoGrowingRow);
+        fmmm->tipOverCCs(FMMMOptions::TipOver::NoGrowingRow);
       } else {
-        fmmm->tipOverCCs(ogdf::FMMMLayout::toAlways);
+        fmmm->tipOverCCs(FMMMOptions::TipOver::Always);
       }
     }
 
     if (dataSet->get(ELT_PRESORT, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_NONE) {
-        fmmm->presortCCs(ogdf::FMMMLayout::psNone);
+        fmmm->presortCCs(FMMMOptions::PreSort::None);
       } else if (stringCollection.getCurrent() == ELT_DECREASINGHEIGHT) {
-        fmmm->presortCCs(ogdf::FMMMLayout::psDecreasingHeight);
+        fmmm->presortCCs(FMMMOptions::PreSort::DecreasingHeight);
       } else {
-        fmmm->presortCCs(ogdf::FMMMLayout::psDecreasingWidth);
+        fmmm->presortCCs(FMMMOptions::PreSort::DecreasingWidth);
       }
     }
 
     if (dataSet->get(ELT_GALAXYCHOICE, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_UNIFORMPROB) {
-        fmmm->galaxyChoice(ogdf::FMMMLayout::gcUniformProb);
+        fmmm->galaxyChoice(FMMMOptions::GalaxyChoice::UniformProb);
       } else if (stringCollection.getCurrent() == ELT_NONUNIFORMPROBLOWERMASS) {
-        fmmm->galaxyChoice(ogdf::FMMMLayout::gcNonUniformProbLowerMass);
+        fmmm->galaxyChoice(FMMMOptions::GalaxyChoice::NonUniformProbLowerMass);
       } else {
-        fmmm->galaxyChoice(ogdf::FMMMLayout::gcNonUniformProbHigherMass);
+        fmmm->galaxyChoice(FMMMOptions::GalaxyChoice::NonUniformProbHigherMass);
       }
     }
 
     if (dataSet->get(ELT_MAXITERCHANGE, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_CONSTANT) {
-        fmmm->maxIterChange(ogdf::FMMMLayout::micConstant);
+        fmmm->maxIterChange(FMMMOptions::MaxIterChange::Constant);
       } else if (stringCollection.getCurrent() == ELT_LINEARLYDECREASING) {
-        fmmm->maxIterChange(ogdf::FMMMLayout::micLinearlyDecreasing);
+        fmmm->maxIterChange(FMMMOptions::MaxIterChange::LinearlyDecreasing);
       } else {
-        fmmm->maxIterChange(ogdf::FMMMLayout::micRapidlyDecreasing);
+        fmmm->maxIterChange(FMMMOptions::MaxIterChange::RapidlyDecreasing);
       }
     }
 
     if (dataSet->get(ELT_INITIALPLACEMENTMULT, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_ADVANCED) {
-        fmmm->initialPlacementMult(ogdf::FMMMLayout::ipmAdvanced);
+        fmmm->initialPlacementMult(FMMMOptions::InitialPlacementMult::Advanced);
       } else {
-        fmmm->initialPlacementMult(ogdf::FMMMLayout::ipmSimple);
+        fmmm->initialPlacementMult(FMMMOptions::InitialPlacementMult::Simple);
       }
     }
 
     if (dataSet->get(ELT_FORCEMODEL, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_FRUCHTERMANNREINGOLD) {
-        fmmm->forceModel(ogdf::FMMMLayout::fmFruchtermanReingold);
+        fmmm->forceModel(FMMMOptions::ForceModel::FruchtermanReingold);
       } else if (stringCollection.getCurrent() == ELT_EADES) {
-        fmmm->forceModel(ogdf::FMMMLayout::fmEades);
+        fmmm->forceModel(FMMMOptions::ForceModel::Eades);
       } else {
-        fmmm->forceModel(ogdf::FMMMLayout::fmNew);
+        fmmm->forceModel(FMMMOptions::ForceModel::New);
       }
     }
 
     if (dataSet->get(ELT_REPULSIVEFORCEMETHOD, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_EXACT) {
-        fmmm->repulsiveForcesCalculation(ogdf::FMMMLayout::rfcExact);
+        fmmm->repulsiveForcesCalculation(FMMMOptions::RepulsiveForcesMethod::Exact);
       } else if (stringCollection.getCurrent() == ELT_GRIDAPPROXIMATION) {
-        fmmm->repulsiveForcesCalculation(ogdf::FMMMLayout::rfcGridApproximation);
+        fmmm->repulsiveForcesCalculation(FMMMOptions::RepulsiveForcesMethod::GridApproximation);
       } else {
-        fmmm->repulsiveForcesCalculation(ogdf::FMMMLayout::rfcNMM);
+        fmmm->repulsiveForcesCalculation(FMMMOptions::RepulsiveForcesMethod::NMM);
       }
     }
 
     if (dataSet->get(ELT_INITIALPLACEMENTFORCES, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_UNIFORMGRID) {
-        fmmm->initialPlacementForces(ogdf::FMMMLayout::ipfUniformGrid);
+        fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::UniformGrid);
       } else if (stringCollection.getCurrent() == ELT_RANDOMTIME) {
-        fmmm->initialPlacementForces(ogdf::FMMMLayout::ipfRandomTime);
+        fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::RandomTime);
       } else if (stringCollection.getCurrent() == ELT_RANDOMRANDITERNR) {
-        fmmm->initialPlacementForces(ogdf::FMMMLayout::ipfRandomRandIterNr);
+        fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::RandomRandIterNr);
       } else {
-        fmmm->initialPlacementForces(ogdf::FMMMLayout::ipfKeepPositions);
+        fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::KeepPositions);
       }
     }
 
     if (dataSet->get(ELT_REDUCEDTREECONSTRCUCTION, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_SUBTREEBYSUBTREE) {
-        fmmm->nmTreeConstruction(ogdf::FMMMLayout::rtcSubtreeBySubtree);
+        fmmm->nmTreeConstruction(FMMMOptions::ReducedTreeConstruction::SubtreeBySubtree);
       } else {
-        fmmm->nmTreeConstruction(ogdf::FMMMLayout::rtcPathByPath);
+        fmmm->nmTreeConstruction(FMMMOptions::ReducedTreeConstruction::PathByPath);
       }
     }
 
     if (dataSet->get(ELT_SMALLESTCELLFINDING, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_ITERATIVELY) {
-        fmmm->nmSmallCell(ogdf::FMMMLayout::scfIteratively);
+        fmmm->nmSmallCell(FMMMOptions::SmallestCellFinding::Iteratively);
       } else {
-        fmmm->nmSmallCell(ogdf::FMMMLayout::scfAluru);
+        fmmm->nmSmallCell(FMMMOptions::SmallestCellFinding::Aluru);
       }
     }
   }
@@ -494,7 +451,7 @@ void OGDFFm3::beforeCall() {
 
 void OGDFFm3::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) {
 
-  ogdf::FMMMLayout *fmmm = static_cast<ogdf::FMMMLayout *>(ogdfLayoutAlgo);
+  FMMMLayout *fmmm = static_cast<ogdf::FMMMLayout *>(ogdfLayoutAlgo);
 
   NumericProperty *length = nullptr;
 

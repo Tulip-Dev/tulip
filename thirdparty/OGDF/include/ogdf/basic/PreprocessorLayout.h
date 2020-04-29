@@ -1,11 +1,3 @@
-/*
- * $Revision: 3432 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-04-22 12:20:23 +0200 (Mon, 22 Apr 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Preprocessor Layout simplifies Graphs for use in other Algorithms
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,30 +25,20 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_PREPROCESSOR_LAYOUT_H
-#define OGDF_PREPROCESSOR_LAYOUT_H
-
-
-#include <ogdf/basic/ModuleOption.h>
-#include <ogdf/module/MultilevelLayoutModule.h>
-
+#include <memory>
+#include <ogdf/energybased/multilevel_mixer/MultilevelLayoutModule.h>
 
 namespace ogdf {
 
-
 /** \brief The PreprocessorLayout removes multi-edges and self-loops.
+ *
+ * @ingroup graph-drawing
  *
  * To draw a graph using the ModularMultilevelMixer or other layouts the
  * graph must be simple, i.e., contain neither multi-edges nor self-loops.
@@ -75,8 +57,8 @@ private:
 	 */
 	struct EdgeData
 	{
-		EdgeData(int edgeIndex, int sourceIndex, int targetIndex, double weight)
-			:edgeIndex(edgeIndex), sourceIndex(sourceIndex), targetIndex(targetIndex), weight(weight)
+		EdgeData(int edgeInd, int sourceInd, int targetInd, double edgeWeight)
+			:edgeIndex(edgeInd), sourceIndex(sourceInd), targetIndex(targetInd), weight(edgeWeight)
 		{ }
 
 		int edgeIndex;
@@ -85,7 +67,7 @@ private:
 		double weight;
 	};
 
-	ModuleOption<LayoutModule> m_secondaryLayout;
+	std::unique_ptr<LayoutModule> m_secondaryLayout;
 	std::vector<EdgeData> m_deletedEdges;
 	bool m_randomize;
 
@@ -100,17 +82,17 @@ public:
 	~PreprocessorLayout() { }
 
 
-	//! Calculates a drawing for the Graph \a MLG.
-	void call(MultilevelGraph &MLG);
+	using MultilevelLayoutModule::call;
 
-	//! Calculates a drawing for the Graph \a GA.
-	void call(GraphAttributes &GA);
+	//! Calculates a drawing for the Graph \p MLG.
+	virtual void call(MultilevelGraph &MLG) override;
 
-	void call(GraphAttributes &GA, GraphConstraints & GC) { call(GA); }
+	//! Calculates a drawing for the Graph \p GA.
+	virtual void call(GraphAttributes &GA) override;
 
 	//! Sets the secondary layout.
 	void setLayoutModule(LayoutModule *layout) {
-		m_secondaryLayout.set(layout);
+		m_secondaryLayout.reset(layout);
 	}
 
 	//! Defines whether the positions of the node are randomized before the secondary layout call.
@@ -119,7 +101,4 @@ public:
 	}
 };
 
-
-} // namespace ogdf
-
-#endif
+}

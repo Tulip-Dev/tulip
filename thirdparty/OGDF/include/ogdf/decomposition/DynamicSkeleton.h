@@ -1,22 +1,14 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class DynamicSkeleton.
  *
- * \author Jan Papenfu&szlig;
+ * \author Jan Papenfuß
  *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,33 +25,24 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_DYNAMIC_SKELETON_H
-#define OGDF_DYNAMIC_SKELETON_H
-
 
 #include <ogdf/decomposition/Skeleton.h>
 
 
 namespace ogdf {
 
-	class DynamicSPQRTree;
+class DynamicSPQRTree;
 
 
 //! %Skeleton graphs of nodes in a dynamic SPQR-tree.
 /**
+ * @ingroup dc-helper
+ *
  * The class DynamicSkeleton maintains the skeleton \a S of a node \a vT in a dynamic SPQR-tree
  * \a T. We call \a T the owner tree of \a S and \a vT the corresponding tree node. Let
  * \a G be the original graph of \a T.
@@ -82,9 +65,9 @@ public:
 
 	// constructor
 
-	//! Creates a skeleton \a S with owner tree \a T and corresponding node \a vT.
+	//! Creates a skeleton \a S with owner tree \p T and corresponding node \p vT.
 	/**
-	 * \pre \a vT is a node in \a T
+	 * \pre \p vT is a node in \p T
 	 *
 	 * \remarks Skeletons are created by the constructor of DynamicSPQRTree
 	 *          and can be accessed with the skeleton() function of DynamicSPQRTree.
@@ -97,42 +80,42 @@ public:
 
 
 	//! Returns the owner tree \a T.
-	const SPQRTree &owner() const;
+	const SPQRTree &owner() const override;
 
-	//! Returns the vertex in the original graph \a G that corresponds to \a v.
+	//! Returns the vertex in the original graph \a G that corresponds to \p v.
 	/**
-	 * \pre \a v is a node in \a M.
+	 * \pre \p v is a node in \a M.
 	 */
-	node original (node v) const;
+	node original (node v) const override;
 
-	//! Returns the real edge that corresponds to skeleton edge \a e
+	//! Returns the real edge that corresponds to skeleton edge \p e
 	/**
-	 * If \a e is virtual edge, then 0 is returned.
-	 * \pre \a e is an edge in \a M
+	 * If \p e is virtual edge, then 0 is returned.
+	 * \pre \p e is an edge in \a M
 	 */
-	edge realEdge (edge e) const;
+	edge realEdge (edge e) const override;
 
-	//! Returns true iff \a e is a virtual edge.
+	//! Returns true iff \p e is a virtual edge.
 	/**
-	 * \pre \a e is an edge in \a M
+	 * \pre \p e is an edge in \a M
 	 */
-	bool isVirtual (edge e) const {
+	bool isVirtual (edge e) const override {
 		return !realEdge(e);
 	}
 
-	//! Returns the twin edge of skeleton edge \a e.
+	//! Returns the twin edge of skeleton edge \p e.
 	/**
-	 * If \a e is not a virtual edge, then 0 is returned.
-	 * \pre \a e is an edge in \a M
+	 * If \p e is not a virtual edge, then 0 is returned.
+	 * \pre \p e is an edge in \a M
 	 */
-	edge twinEdge (edge e) const;
+	edge twinEdge (edge e) const override;
 
-	//! Returns the tree node in T containing the twin edge of skeleton edge \a e.
+	//! Returns the tree node in T containing the twin edge of skeleton edge \p e.
 	/**
-	 * If \a e is not a virtual edge, then 0 is returned.
-	 * \pre \a e is an edge in \a M
+	 * If \p e is not a virtual edge, then 0 is returned.
+	 * \pre \p e is an edge in \a M
 	 */
-	node twinTreeNode (edge e) const;
+	node twinTreeNode (edge e) const override;
 
 	OGDF_NEW_DELETE
 
@@ -142,8 +125,4 @@ protected:
 	EdgeArray<edge>        m_origEdge;  //!< corresp. original edge
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

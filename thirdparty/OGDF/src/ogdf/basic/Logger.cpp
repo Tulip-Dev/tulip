@@ -1,11 +1,3 @@
-/*
- * $Revision: 3096 $
- *
- * last checkin:
- *   $Author: chimani $
- *   $Date: 2012-11-30 15:40:41 +0100 (Fri, 30 Nov 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Logging functionality
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,12 +25,9 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 
 #include <ogdf/basic/Logger.h>
@@ -47,19 +36,18 @@ namespace ogdf {
 
 // initializers
 #ifdef OGDF_DEBUG
-Logger::Level Logger::m_globalloglevel = Logger::LL_DEFAULT;
-Logger::Level Logger::m_minimumloglevel = Logger::LL_MINOR;
-Logger::Level Logger::m_globallibraryloglevel = Logger::LL_DEFAULT;
+Logger::Level Logger::m_globalloglevel = Logger::Level::Default;
+Logger::Level Logger::m_minimumloglevel = Logger::Level::Minor;
+Logger::Level Logger::m_globallibraryloglevel = Logger::Level::Default;
 #else // RELEASE
-Logger::Level Logger::m_globalloglevel = Logger::LL_ALARM; // forbid anything except alarms and forced writes -> logging is off
-Logger::Level Logger::m_globallibraryloglevel = Logger::LL_ALARM;
-Logger::Level Logger::m_minimumloglevel = Logger::LL_MEDIUM;
+Logger::Level Logger::m_globalloglevel = Logger::Level::Alarm; // forbid anything except alarms and forced writes -> logging is off
+Logger::Level Logger::m_globallibraryloglevel = Logger::Level::Alarm;
+Logger::Level Logger::m_minimumloglevel = Logger::Level::Medium;
 #endif
 
 std::ostream* Logger::world = &std::cout;
-std::ostream Logger::nirvana(NULL);
+std::ostream Logger::nirvana(nullptr);
 
 bool Logger::m_globalstatisticmode = false;
 
 }
-

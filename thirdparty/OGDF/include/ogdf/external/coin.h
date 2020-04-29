@@ -1,32 +1,14 @@
-/*
- * $Revision: 3142 $
- *
- * last checkin:
- *   $Author: chimani $
- *   $Date: 2012-12-11 13:56:12 +0100 (Tue, 11 Dec 2012) $
- ***************************************************************/
-
 /** \file
- * \brief Handles connection to the COIN library, by offering
- * helper classes.
+ * \brief Definition of ogdf::CoinManager
  *
- * If you use Coin, you need to include this file. Please follow
- * the example of CoinOptimalCrossingMinimizer for the correct use
- * of the USE_COIN precompiler flag.
- *
- * \todo Currently, there is only a single implementation of the
- * CoinCallback-class declared herein (necc. for userdefined cuts).
- * This implementation is CPLEX specific.
- * -- with current coin, it might not even work anymore!
- *
- * \author Markus Chimani
+ * \author Markus Chimani, Stephan Beyer
  *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -43,71 +25,42 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifndef OGDF_COINY_H
-#define OGDF_COINY_H
+#pragma once
 
-#include <ogdf/basic/basic.h>
+#include <ogdf/basic/Logger.h>
+#include <ogdf/lib/abacus/osiinclude.h>
 
+#include <coin/CoinPackedVector.hpp> // not used here but always necessary when using COIN
 
-#ifndef USE_COIN
+namespace ogdf {
 
-	#define THROW_NO_COIN_EXCEPTION OGDF_THROW_PARAM(LibraryNotSupportedException, lnscCoin)
-
-	namespace ogdf {
-		class CoinCallbacks {};
+//! If you use COIN-OR, you should use this class
+class OGDF_EXPORT CoinManager {
+public:
+	//! Get a new solver
+	static OsiSolverInterface* createCorrectOsiSolverInterface() {
+#ifdef COIN_OSI_CPX
+		OsiCpxSolverInterface *ret = new OsiCpxSolverInterface(); // CPLEX
+#elif defined(COIN_OSI_GRB)
+		OsiGrbSolverInterface *ret = new OsiGrbSolverInterface(); // Gurobi
+#elif defined(COIN_OSI_SYM)
+		OsiSymSolverInterface *ret = new OsiSymSolverInterface(); // Symphony
+		ret->setSymParam(OsiSymVerbosity, -2);
+#else // COIN_OSI_CLP
+		OsiClpSolverInterface *ret = new OsiClpSolverInterface(); // Coin-OR LP
+#endif
+		logging(ret, !Logger::globalStatisticMode() && Logger::globalLogLevel() <= Logger::Level::Minor);
+		return ret;
 	}
 
-#else // USE_COIN
-
-	#define OGDF_THROW_NO_CALLBACK_EXCEPTION
-
-	#include <coin/OsiSolverInterface.hpp>
-	#include <coin/CoinPackedVector.hpp>
-
-	namespace ogdf {
-
-		class OGDF_EXPORT CoinCallbacks {
-			friend class OGDF_EXPORT CoinManager;
-		public:
-			enum CallbackType { CT_Cut = 1, CT_Heuristic = 2, CT_Incumbent = 4, CT_Branch  = 8 };
-			enum CutReturn { CR_Error, CR_SolutionValid, CR_AddCuts, CR_DontAddCuts, CR_NoCutsFound };
-			enum HeuristicReturn { HR_Error, HR_Ignore, HR_Update };
-			enum IncumbentReturn { IR_Error, IR_Ignore, IR_Update };
-//			enum BranchReturn { BR_Error, ... };
-			virtual CutReturn cutCallback(const double /* objValue */, const double* /* fracSolution */, OsiCuts* /* addThese */) { OGDF_THROW_NO_CALLBACK_EXCEPTION; return CR_Error; }
-			virtual HeuristicReturn heuristicCallback(double& /* objValue */, double* /* solution */) { OGDF_THROW_NO_CALLBACK_EXCEPTION; return HR_Error; }
-			virtual IncumbentReturn incumbentCallback(const double /* objValue */, const double* /* solution */) { OGDF_THROW_NO_CALLBACK_EXCEPTION; return IR_Error; }
-//			virtual BranchReturn branchCallback() { OGDF_THROW_NO_CALLBACK_EXCEPTION; return BR_Error; };
-
-			virtual ~CoinCallbacks() {}
-		private:
-			bool registerCallbacks(OsiSolverInterface* _posi, int callbackTypes);
-		};
-
-		class OGDF_EXPORT CoinManager {
-		public:
-			static OsiSolverInterface* createCorrectOsiSolverInterface();
-			static OsiSolverInterface* createCorrectOsiSolverInterface(CoinCallbacks* ccc, int callbackTypes) {
-				OsiSolverInterface* posi = createCorrectOsiSolverInterface();
-				if(ccc->registerCallbacks(posi, callbackTypes))
-					return posi;
-				delete posi;
-				return NULL;
-			}
-			static void logging(OsiSolverInterface* osi, bool logMe);
-		};
-
+	//! Enable or disable logging for the given solver interface
+	static void logging(OsiSolverInterface* osi, bool logMe) {
+		osi->messageHandler()->setLogLevel(logMe ? 1 : 0);
 	}
+};
 
-
-#endif // USE_COIN
-
-#endif // OGDF_COINY_H
-
+}

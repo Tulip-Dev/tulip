@@ -1,11 +1,3 @@
-/*
- * $Revision: 2564 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-07 00:03:48 +0200 (Sat, 07 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declares class CircularLayout
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,28 +25,17 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-
-#ifndef OGDF_CIRCULAR_LAYOUT_H
-#define OGDF_CIRCULAR_LAYOUT_H
-
-
-#include <ogdf/module/LayoutModule.h>
-
+#include <ogdf/basic/LayoutModule.h>
+#include <ogdf/basic/GraphAttributes.h>
 
 namespace ogdf {
 
-class OGDF_EXPORT GraphCopyAttributes;
 struct ClusterStructure;
 
 //! The circular layout algorithm.
@@ -62,7 +43,7 @@ struct ClusterStructure;
  * The implementation used in CircularLayout is based on
  * the following publication:
  *
- * Ugur Dogrus&ouml;z, Brendan Madden, Patrick Madden: <i>Circular %Layout in the
+ * Ugur Dogrusöz, Brendan Madden, Patrick Madden: <i>Circular %Layout in the
  * %Graph %Layout Toolkit</i>. Proc. %Graph Drawing 1996, LNCS 1190, pp. 92-100, 1997.
  *
  * <H3>Optional parameters</H3>
@@ -104,8 +85,8 @@ public:
 	 *  @{
 	 */
 
-	//! Computes a circular layout for graph attributes \a GA.
-	void call(GraphAttributes &GA);
+	//! Computes a circular layout for graph attributes \p GA.
+	virtual void call(GraphAttributes &GA) override;
 
 
 	/** @}
@@ -116,31 +97,31 @@ public:
 	//! Returns the option <i>minDistCircle</i>.
 	double minDistCircle() const { return m_minDistCircle; }
 
-	//! Sets the option <i>minDistCircle</i> to \a x.
+	//! Sets the option <i>minDistCircle</i> to \p x.
 	void minDistCircle(double x) { m_minDistCircle = x; }
 
 	//! Returns the option <i>minDistLevel</i>.
 	double minDistLevel() const { return m_minDistLevel; }
 
-	//! Sets the option <i>minDistLevel</i> to \a x.
+	//! Sets the option <i>minDistLevel</i> to \p x.
 	void minDistLevel(double x) { m_minDistLevel = x; }
 
 	//! Returns the option <i>minDistSibling</i>.
 	double minDistSibling() const { return m_minDistSibling; }
 
-	//! Sets the option <i>minDistSibling</i> to \a x.
+	//! Sets the option <i>minDistSibling</i> to \p x.
 	void minDistSibling(double x) { m_minDistSibling = x; }
 
 	//! Returns the option <i>minDistCC</i>.
 	double minDistCC() const { return m_minDistCC; }
 
-	//! Sets the option <i>minDistCC</i> to \a x.
+	//! Sets the option <i>minDistCC</i> to \p x.
 	void minDistCC(double x) { m_minDistCC = x; }
 
 	//! Returns the option <i>pageRatio</i>.
 	double pageRatio() const { return m_pageRatio; }
 
-	//! Sets the option <i>pageRatio</i> to \a x.
+	//! Sets the option <i>pageRatio</i> to \p x.
 	void pageRatio(double x) { m_pageRatio = x; }
 
 	//! @}
@@ -152,7 +133,7 @@ private:
 	double m_minDistCC;      //!< The minimal distance between connected components.
 	double m_pageRatio;      //!< The page ratio used for packing connected components.
 
-	void doCall(GraphCopyAttributes &AG, ClusterStructure &C);
+	void doCall(GraphAttributes &AG, ClusterStructure &C);
 
 	void assignClustersByBiconnectedComponents(ClusterStructure &C);
 
@@ -167,13 +148,7 @@ private:
 		const Array<double> &outerRadius,
 		Array<double> &preferedAngle,
 		int c,
-		int l,
 		double r1);
-
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

@@ -1,11 +1,3 @@
-/*
- * $Revision: 3188 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-01-10 09:53:32 +0100 (Thu, 10 Jan 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of ClusterPlanRep class, allowing cluster
  * boundary insertion and shortest path edge insertion
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,21 +26,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_CLUSTER_PLAN_REP_H
-#define OGDF_CLUSTER_PLAN_REP_H
-
-
 
 #include <ogdf/planarity/PlanRep.h>
 #include <ogdf/cluster/ClusterGraphAttributes.h>
@@ -60,12 +42,13 @@
 
 namespace ogdf {
 
-
+//! Planarized representations for clustered graphs.
+/**
+ * @ingroup plan-rep gd-helper
+ */
 class OGDF_EXPORT ClusterPlanRep : public PlanRep
 {
-
 public:
-
 	ClusterPlanRep(
 		const ClusterGraphAttributes &acGraph,
 		const ClusterGraph &clusterGraph);
@@ -79,7 +62,7 @@ public:
 		setEdgeTypeOf(e, edgeTypeOf(e) | clusterPattern());
 	}
 	bool isClusterBoundary(edge e) {
-		return ((edgeTypeOf(e) & clusterPattern()) == clusterPattern());
+		return (edgeTypeOf(e) & clusterPattern()) == clusterPattern();
 	}
 	const ClusterGraph &getClusterGraph() const {
 		return *m_pClusterGraph;
@@ -105,16 +88,15 @@ public:
 	adjEntry externalAdj() { return m_rootAdj; }
 
 
-	//*************************************************************************
 	//structural alterations
 
-	// Expands nodes with degree > 4 and merge nodes for generalizations
-	virtual void expand(bool lowDegreeExpand = false);
+	//! Expands nodes with degree > 4 and merge nodes for generalizations
+	virtual void expand(bool lowDegreeExpand = false) override;
 
 	virtual void expandLowDegreeVertices(OrthoRep &OR);
 
-	//splits edge e, updates clustercage lists if necessary and returns new edge
-	virtual edge split(edge e)
+	//! Splits edge e, updates clustercage lists if necessary and returns new edge
+	virtual edge split(edge e) override
 	{
 		edge eNew = PlanRep::split(e);
 
@@ -123,88 +105,78 @@ public:
 		m_nodeClusterID[eNew->source()] = m_edgeClusterID[e];
 
 		return eNew;
-	}//split
+	}
 
-
-	//returns cluster of edge e
-	//edges only have unique numbers if clusters are already modelled
-	//we derive the edge cluster from the endnode cluster information
+	/**
+	 * Returns cluster of edge \p e
+	 *
+	 * Edges only have unique numbers if clusters are already modelled.
+	 * We derive the edge cluster from the endnode cluster information.
+	 */
 	cluster clusterOfEdge(edge e)
 	{
+		const auto sourceId = ClusterID(e->source());
+		const auto targetId = ClusterID(e->target());
+		cluster targetCluster = clusterOfIndex(targetId);
 
-		OGDF_ASSERT(m_clusterOfIndex.isDefined(ClusterID(e->source())))
-		OGDF_ASSERT(m_clusterOfIndex.isDefined(ClusterID(e->target())))
+		if (sourceId == targetId)
+			return targetCluster;
 
-		OGDF_ASSERT(
-			(ClusterID(e->source()) == ClusterID(e->target())) ||
-			(clusterOfIndex(ClusterID(e->source())) ==
-			clusterOfIndex(ClusterID(e->target()))->parent()) ||
-			(clusterOfIndex(ClusterID(e->target())) ==
-			clusterOfIndex(ClusterID(e->source()))->parent()) ||
-			(clusterOfIndex(ClusterID(e->target()))->parent() ==
-			clusterOfIndex(ClusterID(e->source()))->parent())
-		)
+		cluster sourceCluster = clusterOfIndex(sourceId);
 
-		if (ClusterID(e->source()) == ClusterID(e->target()))
-			return clusterOfIndex(ClusterID(e->target()));
-		if (clusterOfIndex(ClusterID(e->source())) ==
-			clusterOfIndex(ClusterID(e->target()))->parent())
-			return clusterOfIndex(ClusterID(e->source()));
-		if (clusterOfIndex(ClusterID(e->target())) ==
-			clusterOfIndex(ClusterID(e->source()))->parent())
-			return clusterOfIndex(ClusterID(e->target()));
-		if (clusterOfIndex(ClusterID(e->target()))->parent() ==
-			clusterOfIndex(ClusterID(e->source()))->parent())
-			return clusterOfIndex(ClusterID(e->source()))->parent();
+		if (sourceCluster == targetCluster->parent())
+			return sourceCluster;
+		if (targetCluster == sourceCluster->parent())
+			return targetCluster;
+		if (targetCluster->parent() == sourceCluster->parent())
+			return sourceCluster->parent();
 
+		OGDF_ASSERT(false);
 		OGDF_THROW(AlgorithmFailureException);
-		//return 0;
-	}//clusterOfEdge
+	}
 
 	inline int ClusterID(node v) const {return m_nodeClusterID[v];}
 	inline int ClusterID(edge e) const {return m_edgeClusterID[e];}
-	cluster clusterOfIndex(int i) {return m_clusterOfIndex[i];}
+	cluster clusterOfIndex(int i) {
+		OGDF_ASSERT(m_clusterOfIndex.isDefined(i));
+		return m_clusterOfIndex[i];
+	}
 
 	inline cluster clusterOfDummy(node v)
 		{
-			OGDF_ASSERT(!original(v))
-			OGDF_ASSERT(ClusterID(v) != -1)
+			OGDF_ASSERT(!original(v));
+			OGDF_ASSERT(ClusterID(v) != -1);
 			return clusterOfIndex(ClusterID(v));
 		}
 
 	//output functions
 	void writeGML(const char *fileName, const Layout &drawing);
 	void writeGML(const char *fileName);
-	void writeGML(ostream &os, const Layout &drawing);
-
+	void writeGML(std::ostream &os, const Layout &drawing);
 
 protected:
-
-	//insert boundaries for all given clusters
+	//! Insert boundaries for all given clusters
 	void convertClusterGraph(cluster act,
-							 AdjEntryArray<edge>& currentEdge,
-							 AdjEntryArray<int>& outEdge);
+	                         AdjEntryArray<edge>& currentEdge,
+	                         AdjEntryArray<int>& outEdge);
 
-	//insert edges to represent the cluster boundary
+	//! Insert edges to represent the cluster boundary
 	void insertBoundary(cluster C,
-						AdjEntryArray<edge>& currentEdge,
-						AdjEntryArray<int>& outEdge,
-						bool clusterIsLeaf);
+	                    AdjEntryArray<edge>& currentEdge,
+	                    AdjEntryArray<int>& outEdge,
+	                    bool clusterIsLeaf);
 
-	//reinsert edges to planarize the graph after convertClusterGraph
+	//! Reinserts edges to planarize the graph after convertClusterGraph
 	void reinsertEdge(edge e);
 
 private:
-
 	const ClusterGraph *m_pClusterGraph;
 
-	edgeType clusterPattern() { return etcSecCluster << etoSecondary; }
+	edgeType clusterPattern() { return UMLEdgeTypeConstants::SecCluster << UMLEdgeTypeOffsets::Secondary; }
 
-	adjEntry m_rootAdj; //connects cluster on highest level with non cluster or
-						//same level
+	//! Connects cluster on highest level with non cluster or same level
+	adjEntry m_rootAdj;
 
-
-	//******************
 	EdgeArray<int> m_edgeClusterID;
 	NodeArray<int> m_nodeClusterID;
 	//we maintain an array of index to cluster mappings (CG is const)
@@ -212,7 +184,4 @@ private:
 	HashArray<int, cluster> m_clusterOfIndex;
 };
 
-
-}//namespace
-
-#endif
+}

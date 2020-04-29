@@ -1,22 +1,14 @@
-/*
- * $Revision: 2552 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-05 16:45:20 +0200 (Thu, 05 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Definition of coffman graham ranking algorithm for Sugiyama
  *
- * \author Till Sch&auml;fer
+ * \author Till Schäfer
  *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,15 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/layered/CoffmanGrahamRanking.h>
-#include <ogdf/basic/ModuleOption.h>
 #include <ogdf/layered/DfsAcyclicSubgraph.h>
 #include <ogdf/basic/GraphCopy.h>
 
@@ -49,7 +37,7 @@ namespace ogdf {
 
 CoffmanGrahamRanking::CoffmanGrahamRanking() : m_w(3)
 {
-	m_subgraph.set(new DfsAcyclicSubgraph());
+	m_subgraph.reset(new DfsAcyclicSubgraph());
 }
 
 
@@ -58,7 +46,7 @@ void CoffmanGrahamRanking::call (const Graph& G, NodeArray<int>& rank)
 	rank.init(G);
 	GraphCopy gc(G);
 
-	m_subgraph.get().callAndReverse(gc);
+	m_subgraph->callAndReverse(gc);
 	removeTransitiveEdges(gc);
 
 	List<Tuple2<node, int> > ready_nodes;
@@ -66,12 +54,11 @@ void CoffmanGrahamRanking::call (const Graph& G, NodeArray<int>& rank)
 	NodeArray<int> pi(gc);
 	m_s.init(gc);
 
-	node v;
 	List<edge> edges;
 
-	forall_nodes(v,gc) {
+	for(node v : gc.nodes) {
 		edges.clear();
-		gc.inEdges(v, edges);
+		v->inEdges(edges);
 		deg[v] = edges.size();
 		if (deg[v] == 0) {
 			ready_nodes.pushBack(Tuple2<node,int>(v,0));
@@ -81,11 +68,10 @@ void CoffmanGrahamRanking::call (const Graph& G, NodeArray<int>& rank)
 
 	int i = 1;
 	while(!ready_nodes.empty()) {
-		v = ready_nodes.popFrontRet().x1();
+		node v = ready_nodes.popFrontRet().x1();
 		pi[v] = i++;
 
-		adjEntry adj;
-		forall_adj(adj,v) {
+		for(adjEntry adj : v->adjEntries) {
 			if ((adj->theEdge()->source()) == v) {
 				node u = adj->twinNode();
 				m_s[u].insert(pi[v]);
@@ -99,9 +85,9 @@ void CoffmanGrahamRanking::call (const Graph& G, NodeArray<int>& rank)
 
 	List<node> ready, waiting;
 
-	forall_nodes(v,gc) {
+	for(node v : gc.nodes) {
 		edges.clear();
-		gc.outEdges(v, edges);
+		v->outEdges(edges);
 		deg[v] = edges.size();
 		if (deg[v] == 0) {
 			insert(v,ready,pi);  // ready.append(v);
@@ -116,10 +102,10 @@ void CoffmanGrahamRanking::call (const Graph& G, NodeArray<int>& rank)
 			node u = ready.popFrontRet();
 			rank[gc.original(u)] = k;
 
-			gc.inEdges<List<edge> >(u, edges);
-			for (ListIterator<edge> it = edges.begin(); it.valid() ; ++it){
-				if (--deg[(*it)->source()] == 0){
-					waiting.pushBack((*it)->source());
+			u->inEdges<List<edge>>(edges);
+			for (edge e : edges) {
+				if (--deg[e->source()] == 0){
+					waiting.pushBack(e->source());
 				}
 			}
 		}
@@ -130,7 +116,7 @@ void CoffmanGrahamRanking::call (const Graph& G, NodeArray<int>& rank)
 	}
 
 	k--;
-	forall_nodes(v,G){
+	for(node v : G.nodes) {
 		rank[v] = k - rank[v];
 	}
 
@@ -142,7 +128,7 @@ void CoffmanGrahamRanking::insert (node u, List<Tuple2<node,int> > &ready_nodes)
 {
 	int j = 0;
 
-	for( ListIterator<Tuple2<node,int> > it = ready_nodes.rbegin(); it.valid(); --it) {
+	for( ListReverseIterator<Tuple2<node,int> > it = ready_nodes.rbegin(); it.valid(); ++it) {
 		node v     = (*it).x1();
 		int  sigma = (*it).x2();
 
@@ -181,7 +167,7 @@ void CoffmanGrahamRanking::insert (node u, List<Tuple2<node,int> > &ready_nodes)
 
 void CoffmanGrahamRanking::insert (node v, List<node> &ready, const NodeArray<int> &pi)
 {
-	for( ListIterator<node> it = ready.rbegin(); it.valid(); --it) {
+	for( ListReverseIterator<node> it = ready.rbegin(); it.valid(); ++it) {
 		if (pi[v] <= pi[*it]) {
 			ready.insertAfter(v, it);
 			return;
@@ -194,71 +180,70 @@ void CoffmanGrahamRanking::insert (node v, List<node> &ready, const NodeArray<in
 
 void CoffmanGrahamRanking::dfs(node v)
 {
-	visited->push(v);
-	mark[v] |= 1;
+	ArrayBuffer<node> stack;
+	stack.push(v);
 
-	node w;
-	adjEntry adj;
-	forall_adj(adj,v) {
-		if ((adj->theEdge()->source()) == v) {
-			w = adj->twinNode();
-			if (mark[w] & 2) {
-				mark[w] |= 4;
-			}
+	while (!stack.empty()) {
+		node w = stack.popRet();
+		m_mark[w] |= 1; // Mark w as visited.
 
-			if ((mark[w] & 1) == 0) {
-				dfs(w);
+		// Set 4-bit for every successor u of w with set 2-bit.
+		for (adjEntry adj : w->adjEntries) {
+			if (adj->isSource()) {
+				node u = adj->twinNode();
+				if (m_mark[u] & 2) {
+					m_mark[u] |= 4;
+				}
+
+				// If u is unvisited, push it to the stack.
+				if ((m_mark[u] & 1) == 0) {
+					stack.push(u);
+				}
 			}
 		}
 	}
 }
 
-void CoffmanGrahamRanking::removeTransitiveEdges (Graph& G)
+
+void CoffmanGrahamRanking::removeTransitiveEdges(Graph& G)
 {
-	node v, w;
 	List<edge> vout;
 
-	mark.init(G,0);
-	visited = new StackPure<node>();
+	m_mark.init(G,0);
+	ArrayBuffer<node> visited;
 
-	forall_nodes(v,G) {
-		G.outEdges<List<edge> >(v, vout);
-		/* alternative: iterate over all adjELements (only out Edges)
-		 *
-		 * forall_adj(adj,v) {
-		 * if ((adj->theEdge()->source()) == v) ...
-		 *
-		 * In this solution a List is generated, because we iterate three times
-		 * over this subset of adjElements
-		 */
-		for (ListIterator<edge> it = vout.begin(); it.valid() ; ++it){
-			w = (*it)-> target();
-			mark[w] = 2;
+	for (node v : G.nodes) {
+		v->outEdges<List<edge>>(vout);
+
+		// Mark all successors of v with the 2-bit.
+		for (edge e : vout) {
+			node w = e->target();
+			m_mark[w] = 2;
 		}
 
-		// forall out edges
-		for (ListIterator<edge> it = vout.begin(); it.valid() ; ++it){
-			w = (*it)-> target();
-
-			// if (w != 1)
-			if ((mark[w] & 1) == 0) {
+		// Call dfs for all unvisited successors of v.
+		for (edge e : vout) {
+			node w = e->target();
+			if ((m_mark[w] & 1) == 0) {
 				dfs(w);
 			}
 		}
 
-		// forall out edges
-		for (ListIterator<edge> it = vout.begin(); it.valid() ; ++it){
-			node u = (*it)->target();
-			if (mark[u] & 4) {
-				G.delEdge(*it);
+		// Delete all edges from v to nodes with set 4-bit.
+		for (edge e : vout) {
+			node w = e->target();
+			if (m_mark[w] & 4) {
+				G.delEdge(e);
 			}
 		}
-		while (!visited->empty())
-			mark[visited->pop()] = 0;
+
+		// Reset mark-bits for all visited nodes.
+		while (!visited.empty()) {
+			m_mark[visited.popRet()] = 0;
+		}
 	}
 
-	mark.init();
-	delete visited;
+	m_mark.init();
 }
 
-} //namespace ogdf
+}

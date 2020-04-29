@@ -27,7 +27,7 @@
 
 #include <ogdf/basic/Graph_d.h>
 #include <ogdf/basic/GraphAttributes.h>
-#include <ogdf/module/LayoutModule.h>
+#include <ogdf/basic/LayoutModule.h>
 
 #include "TulipToOGDF.h"
 

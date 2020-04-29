@@ -1,11 +1,3 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class GeedyCycleRemoval.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,29 +25,16 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_GREEDY_CYCLE_REMOVAL_H
-#define OGDF_GREEDY_CYCLE_REMOVAL_H
-
-
-
-#include <ogdf/module/AcyclicSubgraphModule.h>
+#include <ogdf/layered/AcyclicSubgraphModule.h>
 #include <ogdf/basic/NodeArray.h>
 
-
 namespace ogdf {
-
 
 //! Greedy algorithm for computing a maximal acyclic subgraph.
 /**
@@ -64,8 +43,10 @@ namespace ogdf {
  */
 class OGDF_EXPORT GreedyCycleRemoval : public AcyclicSubgraphModule {
 public:
-	//! Computes the set of edges \a arcSet, which have to be deleted in the acyclic subgraph.
-	void call (const Graph &G, List<edge> &arcSet);
+	GreedyCycleRemoval() { }
+
+	//! Computes the set of edges \p arcSet, which have to be deleted in the acyclic subgraph.
+	virtual void call (const Graph &G, List<edge> &arcSet) override;
 
 private:
 	void dfs (node v, const Graph &G);
@@ -78,8 +59,4 @@ private:
 	NodeArray<bool> m_visited;
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

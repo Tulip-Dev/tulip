@@ -1,11 +1,3 @@
-/*
- * $Revision: 2963 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-11-05 14:17:50 +0100 (Mon, 05 Nov 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Implements class MMSubgraphPlanarizer.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,15 +25,12 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/planarity/MMSubgraphPlanarizer.h>
-#include <ogdf/planarity/FastPlanarSubgraph.h>
+#include <ogdf/planarity/PlanarSubgraphFast.h>
 #include <ogdf/planarity/MMFixedEmbeddingInserter.h>
 
 
@@ -50,13 +39,13 @@ namespace ogdf {
 
 MMSubgraphPlanarizer::MMSubgraphPlanarizer()
 {
-	FastPlanarSubgraph *s = new FastPlanarSubgraph();
+	auto *s = new PlanarSubgraphFast<int>();
 	s->runs(100);
-	m_subgraph.set(s);
+	m_subgraph.reset(s);
 
 	MMFixedEmbeddingInserter *pInserter = new MMFixedEmbeddingInserter();
-	pInserter->removeReinsert(MMEdgeInsertionModule::rrAll);
-	m_inserter.set(pInserter);
+	pInserter->removeReinsert(RemoveReinsertType::All);
+	m_inserter.reset(pInserter);
 
 	m_permutations = 1;
 }
@@ -76,22 +65,21 @@ Module::ReturnType MMSubgraphPlanarizer::doCall(PlanRepExpansion &PG,
 
 	ReturnType retValue ;
 
-	if(forbid != 0) {
+	if(forbid != nullptr) {
 		List<edge> preferedEdges;
-		edge e;
-		forall_edges(e, PG) {
+		for(edge e : PG.edges) {
 			edge eOrig = PG.originalEdge(e);
 			if(eOrig && (*forbid)[eOrig])
 				preferedEdges.pushBack(e);
 		}
 
-		retValue = m_subgraph.get().call(PG, preferedEdges, deletedEdges, true);
+		retValue = m_subgraph->call(PG, preferedEdges, deletedEdges, true);
 
 	} else {
-		retValue = m_subgraph.get().call(PG, deletedEdges);
+		retValue = m_subgraph->call(PG, deletedEdges);
 	}
 
-	if(isSolution(retValue) == false)
+	if(!isSolution(retValue))
 		return retValue;
 
 	for(ListIterator<edge> it = deletedEdges.begin(); it.valid(); ++it)
@@ -106,10 +94,10 @@ Module::ReturnType MMSubgraphPlanarizer::doCall(PlanRepExpansion &PG,
 
 		deletedEdges.permute();
 
-		if(forbid != 0)
-			m_inserter.get().call(PG, deletedEdges, *forbid);
+		if(forbid != nullptr)
+			m_inserter->call(PG, deletedEdges, *forbid);
 		else
-			m_inserter.get().call(PG, deletedEdges);
+			m_inserter->call(PG, deletedEdges);
 
 		crossingNumber = PG.computeNumberOfCrossings();
 
@@ -124,8 +112,7 @@ Module::ReturnType MMSubgraphPlanarizer::doCall(PlanRepExpansion &PG,
 
 	crossingNumber = bestcr;
 
-	return retFeasible;
+	return ReturnType::Feasible;
 }
 
-
-} // namspace ogdf
+}

@@ -1,14 +1,5 @@
-/*
- * $Revision: 3830 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 09:55:21 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
- * \brief Implementation of basic functionality (incl. file and
- * directory handling)
+ * \brief Implementation of basic functionality
  *
  * \author Carsten Gutwenger
  *
@@ -17,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,150 +25,148 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
+#include <random>
 
-#include <ogdf/basic/Thread.h>
-#include <ogdf/basic/List.h>
-#include <time.h>
+#include <ogdf/basic/basic.h>
+#include <ogdf/basic/memory.h>
 
-// Windows includes
 #ifdef OGDF_SYSTEM_WINDOWS
-#include <direct.h>
-#if defined(_MSC_VER) && defined(UNICODE)
-#undef GetFileAttributes
-#undef FindFirstFile
-#undef FindNextFile
-#define GetFileAttributes  GetFileAttributesA
-#define FindFirstFile  FindFirstFileA
-#define WIN32_FIND_DATA WIN32_FIND_DATAA
-#define FindNextFile  FindNextFileA
+# define WIN32_EXTRA_LEAN
+# define WIN32_LEAN_AND_MEAN
+# undef NOMINMAX
+# define NOMINMAX
+# include <windows.h>
 #endif
-#endif
-
-#ifdef __BORLANDC__
-#define _chdir chdir
-#endif
-
-// Unix includes
 #ifdef OGDF_SYSTEM_UNIX
-#include <cstring>
-#include <unistd.h>
-#include <dirent.h>
-#include <sys/types.h>
-#include <sys/times.h>
-#include <sys/stat.h>
-#include <fnmatch.h>
+# include <unistd.h>
+# include <sys/times.h>
 #endif
 
+// When OGDF_DLL is not set, we use the static initializer object
+// that is instantiated in basic.h. Because it is instantiated in
+// the header file, it becomes instantiated (a lot) more than once.
+// We cannot simply instantiate it in the source file because
+// this does not guarantee that it is instantiated at all (depends
+// on the linker and different other things).
+// Defining it in basic.h, which is always one of the first used
+// header files, assures that the initializer instantiation takes
+// place before any other static object is instantiated.
+//
+// The following counter is necessary to make sure that init is
+// called when the constructor is called the first time, and that
+// deinit is called when the destructor is called the *last* time.
+//
+// The latter is important. Otherwise, it could happen that static
+// objects' destructors deallocate memory in the pool manager after
+// the pool manager is already deinitialized.
+static int initializerCount = 0;
 
-#ifdef OGDF_DLL
-
-#ifdef OGDF_SYSTEM_WINDOWS
-
-#ifdef __MINGW32__
-extern "C"
-#endif
-BOOL APIENTRY DllMain(HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
+static void initializeOGDF()
 {
-	switch (ul_reason_for_call)
-	{
-	case DLL_PROCESS_ATTACH:
-		ogdf::PoolMemoryAllocator::init();
+	if (initializerCount++ == 0) {
 		ogdf::System::init();
-		break;
-
-	case DLL_THREAD_ATTACH:
-	case DLL_THREAD_DETACH:
-		break;
-
-	case DLL_PROCESS_DETACH:
-		ogdf::PoolMemoryAllocator::cleanup();
-		break;
 	}
-	return TRUE;
 }
 
-#else
-
-void __attribute__ ((constructor)) my_load(void)
+static void deinitializeOGDF()
 {
-	ogdf::PoolMemoryAllocator::init();
-	ogdf::System::init();
+	if (--initializerCount == 0) {
+		ogdf::PoolMemoryAllocator::cleanup();
+	}
 }
-
-void __attribute__ ((destructor)) my_unload(void)
-{
-	ogdf::PoolMemoryAllocator::cleanup();
-}
-
-#endif
-
-#else
 
 namespace ogdf {
 
-//static int variables are automatically initialized with 0
-int Initialization::s_count;
+#ifdef OGDF_DEBUG
+bool debugMode = true;
+#else
+bool debugMode = false;
+#endif
 
 Initialization::Initialization()
 {
-	if (s_count++ == 0) {
-		ogdf::PoolMemoryAllocator::init();
-		ogdf::System::init();
-#ifdef OGDF_USE_THREAD_POOL
-		ogdf::Thread::initPool();
-#endif
-	}
+	initializeOGDF();
 }
 
 Initialization::~Initialization()
 {
-	if (--s_count == 0) {
-#ifdef OGDF_USE_THREAD_POOL
-		ogdf::Thread::cleanupPool();
-#endif
-		ogdf::PoolMemoryAllocator::cleanup();
-	}
+	deinitializeOGDF();
 }
-
-} // namespace ogdf
-
-#endif
-
-
-namespace ogdf {
 
 inline bool charCompareIgnoreCase(char a, char b)
 {
-	return (toupper(a) == toupper(b));
+	return toupper(a) == toupper(b);
 }
 
+void removeTrailingWhitespace(std::string &str)
+{
+	std::size_t found = str.find_last_not_of(" \t\v\f\n\r");
+	if (found != std::string::npos) {
+		str.erase(found+1);
+	} else { // string consists only of whitespacae
+		str.clear();
+	}
+}
 
 bool equalIgnoreCase(const string &str1, const string &str2)
 {
-	return (str1.size() == str2.size() &&
-		std::equal(str1.begin(), str1.end(), str2.begin(), charCompareIgnoreCase));
+	return str1.size() == str2.size()
+	    && std::equal(str1.begin(), str1.end(), str2.begin(), charCompareIgnoreCase);
 }
 
 bool prefixIgnoreCase(const string &prefix, const string &str)
 {
 	string::size_type len = prefix.length();
-	return (str.size() >= len &&
-		std::equal(prefix.begin(), prefix.end(), str.begin(), charCompareIgnoreCase));
+	return str.size() >= len
+	    && std::equal(prefix.begin(), prefix.end(), str.begin(), charCompareIgnoreCase);
 }
 
+static std::mt19937 s_random;
 
-	// debug level (in debug build only)
-#ifdef OGDF_DEBUG
-	DebugLevel debugLevel;
+#ifndef OGDF_MEMORY_POOL_NTS
+static std::mutex s_randomMutex;
 #endif
 
+long unsigned int randomSeed()
+{
+#ifndef OGDF_MEMORY_POOL_NTS
+	std::lock_guard<std::mutex> guard(s_randomMutex);
+#endif
+	return 7*s_random()+3;  // do not directly return seed, add a bit of variation
+}
+
+void setSeed(int val)
+{
+	s_random.seed(val);
+}
+
+int randomNumber(int low, int high)
+{
+	OGDF_ASSERT(low <= high);
+
+	std::uniform_int_distribution<> dist(low,high);
+
+#ifndef OGDF_MEMORY_POOL_NTS
+	std::lock_guard<std::mutex> guard(s_randomMutex);
+#endif
+	return dist(s_random);
+}
+
+double randomDouble(double low, double high)
+{
+	OGDF_ASSERT(low <= high);
+
+	std::uniform_real_distribution<> dist(low,high);
+
+#ifndef OGDF_MEMORY_POOL_NTS
+	std::lock_guard<std::mutex> guard(s_randomMutex);
+#endif
+	return dist(s_random);
+}
 
 double usedTime(double& T)
 {
@@ -189,7 +178,7 @@ double usedTime(double& T)
 	FILETIME kernelTime;
 	FILETIME userTime;
 
-	BOOL res = GetProcessTimes(GetCurrentProcess(), &creationTime, &exitTime, &kernelTime, &userTime);
+	GetProcessTimes(GetCurrentProcess(), &creationTime, &exitTime, &kernelTime, &userTime);
 	ULARGE_INTEGER user;
 	user.LowPart = userTime.dwLowDateTime;
 	user.HighPart = userTime.dwHighDateTime;
@@ -204,308 +193,4 @@ double usedTime(double& T)
 	return T - t;
 }
 
-
-#ifdef OGDF_SYSTEM_WINDOWS
-
-bool isFile(const char *fileName)
-{
-	DWORD att = GetFileAttributes(fileName);
-
-	if (att == 0xffffffff) return false;
-	return (att & FILE_ATTRIBUTE_DIRECTORY) == 0;
 }
-
-
-bool isDirectory(const char *fileName)
-{
-	DWORD att = GetFileAttributes(fileName);
-
-	if (att == 0xffffffff) return false;
-	return (att & FILE_ATTRIBUTE_DIRECTORY) != 0;
-}
-
-
-bool changeDir(const char *dirName)
-{
-	return (_chdir(dirName) == 0);
-}
-
-
-void getEntriesAppend(const char *dirName,
-		FileType t,
-		List<string> &entries,
-		const char *pattern)
-{
-	OGDF_ASSERT(isDirectory(dirName));
-
-	string filePattern = string(dirName) + "\\" + pattern;
-
-	WIN32_FIND_DATA findData;
-	HANDLE handle = FindFirstFile(filePattern.c_str(), &findData);
-
-	if (handle != INVALID_HANDLE_VALUE)
-	{
-		do {
-			DWORD isDir = (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
-			if(isDir && (
-				strcmp(findData.cFileName,".") == 0 ||
-				strcmp(findData.cFileName,"..") == 0)
-			)
-				continue;
-
-			if (t == ftEntry || (t == ftFile && !isDir) ||
-				(t == ftDirectory && isDir))
-			{
-				entries.pushBack(findData.cFileName);
-			}
-		} while(FindNextFile(handle, &findData));
-
-		FindClose(handle);
-	}
-}
-#endif
-
-#ifdef OGDF_SYSTEM_UNIX
-
-bool isDirectory(const char *fname)
-{
-	struct stat stat_buf;
-
-	if (stat(fname,&stat_buf) != 0)
-		return false;
-	return (stat_buf.st_mode & S_IFMT) == S_IFDIR;
-}
-
-bool isFile(const char *fname)
-{
-	struct stat stat_buf;
-
-	if (stat(fname,&stat_buf) != 0)
-		return false;
-	return (stat_buf.st_mode & S_IFMT) == S_IFREG;
-}
-
-bool changeDir(const char *dirName)
-{
-	return (chdir(dirName) == 0);
-}
-
-void getEntriesAppend(const char *dirName,
-	FileType t,
-	List<string> &entries,
-	const char *pattern)
-{
-	OGDF_ASSERT(isDirectory(dirName));
-
-	DIR* dir_p = opendir(dirName);
-
-	dirent* dir_e;
-	while ( (dir_e = readdir(dir_p)) != NULL )
-	{
-		const char *fname = dir_e->d_name;
-		if (pattern != 0 && fnmatch(pattern,fname,0)) continue;
-
-		string fullName = string(dirName) + "/" + fname;
-
-		bool isDir = isDirectory(fullName.c_str());
-		if(isDir && (
-			strcmp(fname,".") == 0 ||
-			strcmp(fname,"..") == 0)
-			)
-			continue;
-
-		if (t == ftEntry || (t == ftFile && !isDir) ||
-			(t == ftDirectory && isDir))
-		{
-			entries.pushBack(fname);
-		}
-	}
-
-	closedir(dir_p);
-}
-#endif
-
-
-void getEntries(const char *dirName,
-		FileType t,
-		List<string> &entries,
-		const char *pattern)
-{
-	entries.clear();
-	getEntriesAppend(dirName, t, entries, pattern);
-}
-
-
-void getFiles(const char *dirName,
-	List<string> &files,
-	const char *pattern)
-{
-	getEntries(dirName, ftFile, files, pattern);
-}
-
-
-void getSubdirs(const char *dirName,
-	List<string> &subdirs,
-	const char *pattern)
-{
-	getEntries(dirName, ftDirectory, subdirs, pattern);
-}
-
-
-void getEntries(const char *dirName,
-	List<string> &entries,
-	const char *pattern)
-{
-	getEntries(dirName, ftEntry, entries, pattern);
-}
-
-
-void getFilesAppend(const char *dirName,
-	List<string> &files,
-	const char *pattern)
-{
-	getEntriesAppend(dirName, ftFile, files, pattern);
-}
-
-
-void getSubdirsAppend(const char *dirName,
-	List<string> &subdirs,
-	const char *pattern)
-{
-	getEntriesAppend(dirName, ftDirectory, subdirs, pattern);
-}
-
-
-void getEntriesAppend(const char *dirName,
-	List<string> &entries,
-	const char *pattern)
-{
-	getEntriesAppend(dirName, ftEntry, entries, pattern);
-}
-
-
-} // end namespace ogdf
-
-
-//---------------------------------------------------------
-// additional C++11 functions
-//---------------------------------------------------------
-
-#ifndef OGDF_HAVE_CPP11
-
-#include <iomanip>
-#include <sstream>
-
-
-int stoi(
-	const string& _Str,
-	size_t *_Idx,
-	int _Base)
-{
-	std::istringstream sstr(_Str);
-	int val;
-	sstr >> std::setbase(_Base) >> val;
-	if(_Idx) *_Idx = sstr.tellg();
-	return val;
-}
-
-
-long long stoll(
-	const string& _Str,
-	size_t *_Idx,
-	int _Base)
-{
-	std::istringstream sstr(_Str);
-	long long val;
-	sstr >> std::setbase(_Base) >> val;
-	if(_Idx) *_Idx = sstr.tellg();
-	return val;
-}
-
-
-unsigned long stoul(
-	const string& _Str,
-	size_t *_Idx,
-	int _Base)
-{
-	std::istringstream sstr(_Str);
-	unsigned long val;
-	sstr >> std::setbase(_Base) >> val;
-	if(_Idx) *_Idx = sstr.tellg();
-	return val;
-}
-
-
-unsigned long long stoull(
-	const string& _Str,
-	size_t *_Idx,
-	int _Base)
-{
-	std::istringstream sstr(_Str);
-	unsigned long long val;
-	sstr >> std::setbase(_Base) >> val;
-	if(_Idx) *_Idx = sstr.tellg();
-	return val;
-}
-
-
-float stof(
-	const string& _Str,
-	size_t *_Idx)
-{
-	std::istringstream sstr(_Str);
-	float val;
-	sstr >> val;
-	if(_Idx) *_Idx = sstr.tellg();
-	return val;
-}
-
-
-double stod(
-	const string& _Str,
-	size_t *_Idx)
-{
-	std::istringstream sstr(_Str);
-	double val;
-	sstr >> val;
-	if(_Idx) *_Idx = sstr.tellg();
-	return val;
-}
-
-
-long double stold(
-	const string& _Str,
-	size_t *_Idx)
-{
-	std::istringstream sstr(_Str);
-	long double val;
-	sstr >> val;
-	if(_Idx) *_Idx = sstr.tellg();
-	return val;
-}
-
-
-string to_string(long long _Val)
-{
-	std::ostringstream sstr;
-	sstr << _Val;
-	return sstr.str();
-}
-
-
-string to_string(unsigned long long _Val)
-{
-	std::ostringstream sstr;
-	sstr << _Val;
-	return sstr.str();
-}
-
-
-string to_string(long double _Val)
-{
-	std::ostringstream sstr;
-	sstr << _Val;
-	return sstr.str();
-}
-
-#endif

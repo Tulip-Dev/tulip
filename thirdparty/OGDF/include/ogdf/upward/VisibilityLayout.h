@@ -1,11 +1,3 @@
-/*
- * $Revision: 2524 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-03 09:54:22 +0200 (Tue, 03 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of visibility layout algorithm.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,35 +25,25 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 //***
 // Visibility Layout Method. see "Graph Drawing" by Di Battista et al.
 //***
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_VISIBILITY_LAYOUT_H
-#define OGDF_VISIBILITY_LAYOUT_H
-
-#include <ogdf/module/UpwardPlanarizerModule.h>
-#include <ogdf/module/LayoutModule.h>
-#include <ogdf/basic/ModuleOption.h>
+#include <ogdf/upward/UpwardPlanarizerModule.h>
+#include <ogdf/basic/LayoutModule.h>
+#include <memory>
 #include <ogdf/basic/GraphAttributes.h>
 #include <ogdf/basic/FaceArray.h>
 #include <ogdf/upward/UpwardPlanRep.h>
 #include <ogdf/upward/SubgraphUpwardPlanarizer.h>
 
 namespace ogdf {
-
 
 class OGDF_EXPORT VisibilityLayout : public LayoutModule
 {
@@ -70,15 +52,15 @@ public:
 	VisibilityLayout() {
 		m_grid_dist = 1;
 		// set default module
-		m_upPlanarizer.set(new SubgraphUpwardPlanarizer());
+		m_upPlanarizer.reset(new SubgraphUpwardPlanarizer());
 	}
 
-	virtual void call(GraphAttributes &GA);
+	virtual void call(GraphAttributes &GA) override;
 
 	void layout(GraphAttributes &GA, const UpwardPlanRep &UPROrig);
 
 	void setUpwardPlanarizer(UpwardPlanarizerModule *upPlanarizer) {
-		m_upPlanarizer.set(upPlanarizer);
+		m_upPlanarizer.reset(upPlanarizer);
 	}
 
 	void setMinGridDistance(int dist) {m_grid_dist = dist;}
@@ -89,10 +71,6 @@ private:
 
 	//min grid distance
 	int m_grid_dist;
-
-	Graph D; // the dual graph of the UPR
-	node s_D; // super source of D
-	node t_D; // super sink f D
 
 	//node segment of the visibility representation
 	struct NodeSegment {
@@ -114,22 +92,20 @@ private:
 	//mapping edge to edge segment of visibility presentation
 	EdgeArray<EdgeSegment> edgeToVis;
 
-	FaceArray<node> faceToNode;
-	NodeArray<face> leftFace_node;
-	NodeArray<face> rightFace_node;
-	EdgeArray<face> leftFace_edge;
-	EdgeArray<face> rightFace_edge;
+	std::unique_ptr<UpwardPlanarizerModule> m_upPlanarizer; // upward planarizer
 
-	ModuleOption<UpwardPlanarizerModule> m_upPlanarizer; // upward planarizer
+	void constructDualGraph(
+			const UpwardPlanRep& UPR,
+			Graph& D,
+			node& s_D,
+			node& t_D,
+			FaceArray<node>& faceToNode,
+			NodeArray<face>& leftFace_node,
+			NodeArray<face>& rightFace_node,
+			EdgeArray<face>& leftFace_edge,
+			EdgeArray<face>& rightFace_edge);
 
-	void constructDualGraph(UpwardPlanRep &UPR);
-
-	void constructVisibilityRepresentation(UpwardPlanRep &UPR);
-
-
+	void constructVisibilityRepresentation(const UpwardPlanRep& UPR);
 };
 
-
-}//namespace
-
-#endif
+}

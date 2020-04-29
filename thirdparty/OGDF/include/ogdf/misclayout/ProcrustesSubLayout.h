@@ -1,5 +1,5 @@
 /** \file
- * \brief Declares class ProcrustesSubLayout
+ * \brief Declares ogdf::ProcrustesSubLayout.
  *
  * \author Martin Gronemann
  *
@@ -8,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -25,173 +25,158 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-
-#ifndef OGDF_PROCRUSTES_SUB_LAYOUT_H
-#define OGDF_PROCRUSTES_SUB_LAYOUT_H
-
-
-#include <ogdf/module/LayoutModule.h>
-
+#include <ogdf/basic/LayoutModule.h>
 
 namespace ogdf {
 
-	class ProcrustesPointSet
+class ProcrustesPointSet
+{
+public:
+	//! Constructor for allocating memory for \p numPoints points
+	explicit ProcrustesPointSet(int numPoints);
+
+	//! Destructor
+	~ProcrustesPointSet();
+
+	//! Translates and scales the set such that the average center is 0, 0 and the average size is 1.0.
+	void normalize(bool flip = false);
+
+	//! Rotates the point set so it fits somehow on \p other.
+	void rotateTo(const ProcrustesPointSet& other);
+
+	//! Calculates a value how good the two point sets match.
+	double compare(const ProcrustesPointSet& other) const;
+
+	//! Sets \p i'th coordinate.
+	void set(int i, double x, double y)
 	{
-	public:
-		//! Constructor for allocating mem for numPoints points
-		ProcrustesPointSet(int numPoints);
+		m_x[i] = x;
+		m_y[i] = y;
+	}
 
-		//! Destructor which frees mem
-		~ProcrustesPointSet();
-
-		//! translates and scales the set such that the avg center is 0, 0 and the avg size is 1.0
-		void normalize(bool flip = false);
-
-		//! rotates the point set so it fits somehow on other
-		void rotateTo(const ProcrustesPointSet& other);
-
-		//! calculates a value how good the two point sets match
-		double compare(const ProcrustesPointSet& other) const;
-
-		//! sets ith coordinate
-		void set(int i, double x, double y)
-		{
-			m_x[i] = x;
-			m_y[i] = y;
-		}
-
-		//! returns ith x-coordinate
-		double getX(int i) const
-		{
-			return m_x[i];
-		}
-
-		//! returns ith y-coordinate
-		double getY(int i) const
-		{
-			return m_y[i];
-		}
-
-		//! returns the origins x
-		double originX() const
-		{
-			return m_originX;
-		}
-
-		//! returns the origins y
-		double originY() const
-		{
-			return m_originY;
-		}
-
-		//! returns the scale factor
-		double scale() const
-		{
-			return m_scale;
-		}
-
-		//! returns the rotation angle
-		double angle() const
-		{
-			return m_angle;
-		}
-
-		//! returns true if the point set is flipped by y coord
-		bool isFlipped() const
-		{
-			return m_flipped;
-		}
-
-	private:
-		//! The number of points
-		int m_numPoints;
-
-		//! x coordinates
-		double* m_x;
-
-		//! y coordinates
-		double* m_y;
-
-		//! the original avg center's x when normalized
-		double m_originX;
-
-		//! the original avg center's y when normalized
-		double m_originY;
-
-		//! the scale factor
-		double m_scale;
-
-		//! if rotated, the angle
-		double m_angle;
-
-		//! if flipped then this is true
-		bool m_flipped;
-	};
-
-	//! A simple procrustes analysis implementation
-	/*!
-	 */
-	class OGDF_EXPORT ProcrustesSubLayout : public LayoutModule
+	//! Returns \p i'th x-coordinate.
+	double getX(int i) const
 	{
-	public:
-		//! Creates an instance of circular layout.
-		ProcrustesSubLayout(LayoutModule* pSubLayout);
+		return m_x[i];
+	}
 
-		// destructor
-		~ProcrustesSubLayout() { }
+	//! Returns \p i'th y-coordinate.
+	double getY(int i) const
+	{
+		return m_y[i];
+	}
 
-		//! Computes a circular layout for graph attributes \a GA.
-		void call(GraphAttributes &GA);
+	//! Returns the origin's x.
+	double originX() const
+	{
+		return m_originX;
+	}
 
-		//! Should the new layout scale be used or the initial scale? Default: inital
-		void setScaleToInitialLayout(bool flag)
-		{
-			m_scaleToInitialLayout = flag;
-		}
+	//! Returns the origin's y.
+	double originY() const
+	{
+		return m_originY;
+	}
 
-		//! Should the new layout scale be used or the initial scale?
-		bool scaleToInitialLayout() const
-		{
-			return m_scaleToInitialLayout;
-		}
+	//! Returns the scale factor.
+	double scale() const
+	{
+		return m_scale;
+	}
 
-	private:
-		//! Does a reverse transform of graph attributes by using the origin, scale and angle in pointset
-		void reverseTransform(GraphAttributes& graphAttributes, const ProcrustesPointSet& pointSet);
+	//! Returns the rotation angle.
+	double angle() const
+	{
+		return m_angle;
+	}
 
-		//! Moves all coords in graphAttributes by dx, dy
-		void translate(GraphAttributes& graphAttributes, double dx, double dy);
+	//! Returns true if the point set is flipped by y coord.
+	bool isFlipped() const
+	{
+		return m_flipped;
+	}
 
-		//! Rotates all coords in graphAttributes by angle
-		void rotate(GraphAttributes& graphAttributes, double angle);
+private:
+	//! Number of points.
+	int m_numPoints;
 
-		//! Scales all coords in graphAttributes by scale
-		void scale(GraphAttributes& graphAttributes, double scale);
+	//! X coordinates.
+	double* m_x;
 
-		//! Flips all y coordinates
-		void flipY(GraphAttributes& graphAttributes);
+	//! Y coordinates.
+	double* m_y;
 
-		//! copysthe coords in graph attributes to the point set
-		void copyFromGraphAttributes(const GraphAttributes& graphAttributes, ProcrustesPointSet& pointSet);
+	//! Original average center's x when normalized.
+	double m_originX;
 
-		//! The layout module to call for a new layout
-		LayoutModule* m_pSubLayout;
+	//! Original average center's y when normalized.
+	double m_originY;
 
-		//! option for enabling/disabling scaling to initial layout scale
-		bool m_scaleToInitialLayout;
-	};
+	//! Scale factor.
+	double m_scale;
 
-} // end of namespace ogdf
+	//! If rotated, the angle.
+	double m_angle;
 
-#endif
+	bool m_flipped;
+};
+
+//! Simple procrustes analysis.
+class OGDF_EXPORT ProcrustesSubLayout : public LayoutModule
+{
+public:
+	//! Constructor.
+	explicit ProcrustesSubLayout(LayoutModule* pSubLayout);
+
+	//! Destructor.
+	virtual ~ProcrustesSubLayout() {
+		delete m_pSubLayout;
+	}
+
+	virtual void call(GraphAttributes &GA) override;
+
+	//! Should the new layout scale be used or the initial scale? Defaults to \c true.
+	void setScaleToInitialLayout(bool flag)
+	{
+		m_scaleToInitialLayout = flag;
+	}
+
+	//! @copydoc #setScaleToInitialLayout
+	bool scaleToInitialLayout() const
+	{
+		return m_scaleToInitialLayout;
+	}
+
+private:
+	//! Does a reverse transform of graph attributes by using the origin, scale and angle in pointset.
+	void reverseTransform(GraphAttributes& graphAttributes, const ProcrustesPointSet& pointSet);
+
+	//! Moves all coords in graphAttributes by \p dx, \p dy.
+	void translate(GraphAttributes& graphAttributes, double dx, double dy);
+
+	//! Rotates all coords in graphAttributes by \p angle.
+	void rotate(GraphAttributes& graphAttributes, double angle);
+
+	//! Scales all coords in graphAttributes by \p scale.
+	void scale(GraphAttributes& graphAttributes, double scale);
+
+	//! Flips all y coordinates.
+	void flipY(GraphAttributes& graphAttributes);
+
+	//! Copies the coords in graph attributes to the point set.
+	void copyFromGraphAttributes(const GraphAttributes& graphAttributes, ProcrustesPointSet& pointSet);
+
+	//! Layout module to call for a new layout.
+	LayoutModule* m_pSubLayout;
+
+	//! Option for enabling/disabling scaling to initial layout scale.
+	bool m_scaleToInitialLayout;
+};
+
+}

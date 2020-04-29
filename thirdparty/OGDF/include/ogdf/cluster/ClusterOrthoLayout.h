@@ -1,11 +1,3 @@
-/*
- * $Revision: 2564 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-07 00:03:48 +0200 (Sat, 07 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declares ClusterOrthoLayout which represents an orthogonal
  * planar drawing algorithm for c-planar c-connected Clustergraphs.
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,38 +26,23 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-
-#ifndef OGDF_CLUSTER_ORTHO_LAYOUT_H
-#define OGDF_CLUSTER_ORTHO_LAYOUT_H
-
-
-#include <ogdf/module/LayoutClusterPlanRepModule.h>
+#include <ogdf/cluster/LayoutClusterPlanRepModule.h>
 #include <ogdf/orthogonal/OrthoRep.h>
 #include <ogdf/cluster/ClusterPlanRep.h>
 #include <ogdf/cluster/CPlanarEdgeInserter.h>
 
-
 namespace ogdf {
 
-	enum OrthoDir;
-
-
-//---------------------------------------------------------
-// ClusterOrthoLayout
-// represents planar orthogonal drawing algorithm for
-// c-planar c-connected Clustergraphs
-//---------------------------------------------------------
+//! Represents a planar orthogonal drawing algorithm for c-planar, c-connected clustered graphs.
+/**
+ * @ingroup gd-cluster
+ */
 class OGDF_EXPORT ClusterOrthoLayout : public LayoutClusterPlanRepModule
 {
 public:
@@ -75,31 +52,30 @@ public:
 
 	/** \brief Calls planar UML layout algorithm.
 	 *
-	 * Input is a planarized representation \a PG of a connected component
+	 * Input is a planarized representation \p PG of a connected component
 	 * of the graph, output is a layout of the (modified) planarized
-	 * representation in \a drawing.
+	 * representation in \p drawing.
 	 */
 	void call(ClusterPlanRep &PG, adjEntry adjExternal, Layout &drawing);
+
 	//! Call method for non c-planar graphs
-	void call(
+	virtual void call(
 		ClusterPlanRep &PG,
 		adjEntry adjExternal,
 		Layout &drawing,
-		List<NodePair>& npEdges,
-		List<edge>& newEdges,
-		Graph& originalGraph);
+		List<edge>& origEdges,
+		Graph& originalGraph) override;
 
-	//void call(PlanRepUML & /* PG */, adjEntry /* adjExternal */, Layout & /* drawing */) {}
 
 	//
 	// options
 
 	//! Returns the minimum distance between edges and vertices.
-	double separation() const {
+	virtual double separation() const override {
 		return m_separation;
 	}
 	//! Sets the minimum distance between edges and vertices.
-	void separation(double sep) {
+	virtual void separation(double sep) override {
 		m_separation = sep;
 	}
 
@@ -166,14 +142,11 @@ public:
 	//bit 1 = scaling
 	//bit 2 = progressive/traditional
 	//=> 0 is standard
-	virtual void setOptions(int optionField)
-	{
-		if (optionField & 1) m_align = true;
-		else m_align = false;
-		if (optionField & 2) m_useScalingCompaction = true;
-		else m_useScalingCompaction = false;
-		if (optionField & 4) m_orthoStyle = 1;
-		else m_orthoStyle = 0; //traditional
+	virtual void setOptions(int optionField) override {
+		m_align =                (optionField & 1) != 0;
+		m_useScalingCompaction = (optionField & 2) != 0;
+		m_orthoStyle =           (optionField & 4) != 0;
+		// m_orthoStyle = 0 is traditional
 	}
 
 
@@ -186,7 +159,7 @@ private:
 	// options
 	double m_separation;//!< Minimum distance between edges and vertices.
 	double m_cOverhang; //!< Factor for minimum distance between vertex corner an adjacent edges.
-	double m_margin;	//!< Distance between bounding box and drawing boundary.
+	double m_margin; //!< Distance between bounding box and drawing boundary.
 	OrthoDir m_preferedDir; //!< Preferred direction of generalizations (obsolete).
 	int m_optionProfile;
 	int m_costAssoc;    //!< Compaction cost of association type edges.
@@ -199,8 +172,4 @@ private:
 	int m_orthoStyle;   //!< Type of style (traditional/progressive) used for shape step.
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

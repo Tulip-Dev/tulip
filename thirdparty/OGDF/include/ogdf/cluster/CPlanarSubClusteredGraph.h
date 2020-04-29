@@ -1,11 +1,3 @@
-/*
- * $Revision: 2566 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-07 23:10:08 +0200 (Sat, 07 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of CPlanarSubClusteredGraph class.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,33 +25,24 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_CPLANAR_SUBCLUSTERED_GRAPH_H
-#define OGDF_CPLANAR_SUBCLUSTERED_GRAPH_H
-
 
 #include <ogdf/cluster/ClusterPlanRep.h>
-#include <ogdf/internal/cluster/CPlanarSubClusteredST.h>
+#include <ogdf/cluster/internal/CPlanarSubClusteredST.h>
 
 namespace ogdf {
 
-//! Constructs a c-planar subclustered graph of the input on base of a spanning tree
+//! Constructs a c-planar subclustered graph of the input based on a spanning tree.
+/**
+ * @ingroup ga-cplanarity
+ */
 class OGDF_EXPORT CPlanarSubClusteredGraph
 {
-
 public:
-
 	CPlanarSubClusteredGraph() { }
 
 	virtual void call(const ClusterGraph& CG, EdgeArray<bool>& inSub);
@@ -69,7 +52,7 @@ public:
 		EdgeArray<bool>& inSub,
 		List<edge>& leftOver);
 
-	//! Uses \a edgeWeight to compute clustered planar subgraph
+	//! Uses \p edgeWeight to compute clustered planar subgraph
 	virtual void call(
 		const ClusterGraph& CGO,
 		EdgeArray<bool>& inSub,
@@ -77,17 +60,10 @@ public:
 		EdgeArray<double>& edgeWeight);
 
 private:
-
-	//****************************************************
-	//data fields
-
-	//store status of original edge: in subclustered graph?
-	//also used to check spanning tree
+	//! Store status of original edge: in subclustered graph?
+	//! Also used to check spanning tree
 	EdgeArray<int> m_edgeStatus;
 
-};//cplanarsubclusteredgraph
+};
 
-} // end namespace ogdf
-
-
-#endif
+}

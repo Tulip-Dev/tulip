@@ -1,11 +1,3 @@
-/*
- * $Revision: 3837 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 15:19:30 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implementation of GDF format parsing utilities
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,22 +25,19 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/fileformats/GdfParser.h>
 #include <ogdf/fileformats/Utils.h>
+#include <ogdf/fileformats/GraphIO.h>
 
 namespace ogdf {
 
 namespace gdf {
 
-
-Parser::Parser(std::istream &is) : m_istream(is), m_nodeId(NULL)
+Parser::Parser(std::istream &is) : m_istream(is), m_nodeId(nullptr)
 {
 }
 
@@ -63,7 +52,7 @@ static inline bool readDef(
 	Attr toAttribute(const std::string &str), Attr a_unknown,
 	std::vector<Attr> &attrs)
 {
-	std::istringstream ss(str);
+	std::istringstream is(str);
 	std::string attr;
 
 	/*
@@ -71,17 +60,16 @@ static inline bool readDef(
 	 * Therefore we chop this stream by commas, and then we read first
 	 * non-whitespace string out of it.
 	 */
-	while(std::getline(ss, attr, ',')) {
+	while(std::getline(is, attr, ',')) {
 		std::istringstream attrss(attr);
 		std::string name;
 		attrss >> name;
 
-		Attr attr = toAttribute(name);
-		if(attr == a_unknown) {
-			std::cerr << "WARNING: attribute \"" << name << "\""
-			          << " not supported. Ignoring.\n";
+		Attr attrib = toAttribute(name);
+		if(attrib == a_unknown) {
+			GraphIO::logger.lout(Logger::Level::Minor) << "attribute \"" << name << "\"" << " not supported. Ignoring." << std::endl;
 		}
-		attrs.push_back(attr);
+		attrs.push_back(attrib);
 	}
 
 	return true;
@@ -91,28 +79,28 @@ static inline bool readDef(
 
 bool Parser::readNodeDef(const std::string &str)
 {
-	return readDef(str, toNodeAttribute, na_unknown, m_nodeAttrs);
+	return readDef(str, toNodeAttribute, NodeAttribute::Unknown, m_nodeAttrs);
 }
 
 
 bool Parser::readEdgeDef(const std::string &str)
 {
-	return readDef(str, toEdgeAttribute, ea_unknown, m_edgeAttrs);
+	return readDef(str, toEdgeAttribute, EdgeAttribute::Unknown, m_edgeAttrs);
 }
 
 
-static bool scanQuoted(
+static size_t scanQuoted(
 	const std::string &str, size_t pos,
 	std::string &buff)
 {
 	for(size_t j = 1; pos + j < str.length(); j++) {
 		if(str[pos] == str[pos + j] && str[pos + j - 1] != '\\') {
-			return true; // was j before, but j is always >= 1
+			return j; // was j before, but j is always >= 1
 		}
 		buff += str[pos + j];
 	}
 
-	return false;
+	return 0;
 }
 
 
@@ -125,12 +113,12 @@ static bool split(
 
 	const size_t len = str.length();
 	for(size_t i = 0; i < len; i++) {
-		if(str[i] == '"' || str[i] == '\'') {
+		if(str[i] == '\"' || str[i] == '\'') {
 			size_t quoted = scanQuoted(str, i, buff);
 			if(quoted) {
 				i += quoted;
 			} else {
-				std::cerr << "ERROR: Unescaped quote.\n";
+				GraphIO::logger.lout() << "Unescaped quote." << std::endl;
 				return false;
 			}
 		} else if(str[i] == ',') {
@@ -156,23 +144,19 @@ bool Parser::readNodeStmt(
 	split(str, values);
 
 	if(values.size() != m_nodeAttrs.size()) {
-		std::cerr << "ERROR: node definition does not match the header "
-		          << "(line " << line << ").\n";
+		GraphIO::logger.lout() << "node definition does not match the header "
+		          << "(line " << line << ")." << std::endl;
 		return false;
 	}
 
 	node v = G.newNode();
 	for(size_t i = 0; i < values.size(); i++) {
-		if(m_nodeAttrs[i] == na_name) {
+		if(m_nodeAttrs[i] == NodeAttribute::Name) {
 			m_nodeId[values[i]] = v;
 		}
 	}
 
-	if(GA && !readAttributes(*GA, v, values)) {
-		return false;
-	}
-
-	return true;
+	return GA == nullptr || readAttributes(*GA, v, values);
 }
 
 
@@ -184,30 +168,30 @@ bool Parser::readEdgeStmt(
 	split(str, values);
 
 	if(values.size() != m_edgeAttrs.size()) {
-		std::cerr << "ERROR: edge definition does not match the header "
-		          << "(line " << line << ").\n";
+		GraphIO::logger.lout() << "edge definition does not match the header "
+		          << "(line " << line << ")." << std::endl;
 		return false;
 	}
 
 	// First, we scan a list for source, target and edge direction.
 	bool directed = false;
-	node source = NULL, target = NULL;
+	node source = nullptr, target = nullptr;
 	for(size_t i = 0; i < values.size(); i++) {
 		switch(m_edgeAttrs[i]) {
-		case ea_directed:
+		case EdgeAttribute::Directed:
 			if(values[i] == "true") {
 				directed = true;
 			} else if(values[i] == "false") {
 				directed = false;
 			} else {
-				std::cerr << "ERROR: edge direction must be a boolean "
-				          << "(line " << line << ").\n";
+				GraphIO::logger.lout() << "edge direction must be a boolean "
+				          << "(line " << line << ")." << std::endl;
 			}
 			break;
-		case ea_source:
+		case EdgeAttribute::Source:
 			source = m_nodeId[values[i]];
 			break;
-		case ea_target:
+		case EdgeAttribute::Target:
 			target = m_nodeId[values[i]];
 			break;
 		default:
@@ -217,20 +201,19 @@ bool Parser::readEdgeStmt(
 
 	// Then, we can create edge(s) and read attributes (if needed).
 	if(!source || !target) {
-		std::cerr << "ERROR: source or target for edge not found "
-		          << "(line " << line << ").\n";
+		GraphIO::logger.lout() << "source or target for edge not found "
+		          << "(line " << line << ")." << std::endl;
 		return false;
 	}
 
 	edge st = G.newEdge(source, target);
-	edge ts = directed ? NULL : G.newEdge(target, source);
+	OGDF_ASSERT(st);
 
-	if(GA && st && !readAttributes(*GA, st, values)) {
-		return false;
-	}
-
-	if(GA && ts && !readAttributes(*GA, ts, values)) {
-		return false;
+	if (GA) {
+		GA->directed() = directed;
+		if (!readAttributes(*GA, st, values)) {
+			return false;
+		}
 	}
 
 	return true;
@@ -241,7 +224,7 @@ static inline Color toColor(const std::string &str)
 {
 	std::istringstream is(str);
 	int r, g, b;
-	is >> r >> ',' >> g >> ',' >> b;
+	is >> r >> TokenIgnorer(',') >> g >> TokenIgnorer(',') >> b;
 
 	return Color(r, g, b);
 }
@@ -253,68 +236,89 @@ static bool inline readAttribute(
 {
 	const long attrs = GA.attributes();
 	switch(attr) {
-	case na_name:
+	case NodeAttribute::Name:
 		// Not really an attribute, handled elsewhere.
 		break;
-	case na_label:
+	case NodeAttribute::Label:
 		if(attrs & GraphAttributes::nodeLabel) {
 			GA.label(v) = value;
 		}
 		break;
-	case na_x:
+	case NodeAttribute::X:
 		if(attrs & GraphAttributes::nodeGraphics) {
 			std::istringstream is(value);
 			is >> GA.x(v);
 		}
 		break;
-	case na_y:
+	case NodeAttribute::Y:
 		if(attrs & GraphAttributes::nodeGraphics) {
 			std::istringstream is(value);
 			is >> GA.y(v);
 		}
 		break;
-	case na_z:
+	case NodeAttribute::Z:
 		if(attrs & GraphAttributes::threeD) {
 			std::istringstream is(value);
 			is >> GA.z(v);
 		}
 		break;
-	case na_fillColor:
+	case NodeAttribute::FillPattern:
+		if(attrs & GraphAttributes::nodeStyle) {
+			GA.fillPattern(v) = fromString<FillPattern>(value);
+		}
+		break;
+	case NodeAttribute::FillColor:
 		if(attrs & GraphAttributes::nodeStyle) {
 			GA.fillColor(v) = toColor(value);
 		}
 		break;
-	case na_strokeColor:
+	case NodeAttribute::FillBgColor:
+		if(attrs & GraphAttributes::nodeStyle) {
+			GA.fillBgColor(v) = toColor(value);
+		}
+		break;
+	case NodeAttribute::StrokeWidth:
+		if(attrs & GraphAttributes::nodeStyle) {
+			std::istringstream is(value);
+			is >> GA.strokeWidth(v);
+		}
+		break;
+	case NodeAttribute::StrokeType:
+		if(attrs & GraphAttributes::nodeStyle) {
+			GA.strokeType(v) = fromString<StrokeType>(value);
+		}
+		break;
+	case NodeAttribute::StrokeColor:
 		if(attrs & GraphAttributes::nodeStyle) {
 			GA.strokeColor(v) = toColor(value);
 		}
 		break;
-	case na_shape:
+	case NodeAttribute::Shape:
 		if(attrs & GraphAttributes::nodeGraphics) {
 			GA.shape(v) = toShape(value);
 		}
 		break;
-	case na_width:
+	case NodeAttribute::Width:
 		if(attrs & GraphAttributes::nodeGraphics) {
-			std::istringstream ss(value);
-			ss >> GA.width(v);
+			std::istringstream is(value);
+			is >> GA.width(v);
 		}
 		break;
-	case na_height:
+	case NodeAttribute::Height:
 		if(attrs & GraphAttributes::nodeGraphics) {
-			std::istringstream ss(value);
-			ss >> GA.height(v);
+			std::istringstream is(value);
+			is >> GA.height(v);
 		}
 		break;
-	case na_template:
+	case NodeAttribute::Template:
 		if(attrs & GraphAttributes::nodeTemplate) {
 			GA.templateNode(v) = value;
 		}
 		break;
-	case na_weight:
+	case NodeAttribute::Weight:
 		if(attrs & GraphAttributes::nodeWeight) {
-			std::istringstream ss(value);
-			ss >> GA.weight(v);
+			std::istringstream is(value);
+			is >> GA.weight(v);
 		}
 		break;
 	default:
@@ -331,42 +335,42 @@ static bool inline readAttribute(
 	const long attrs = GA.attributes();
 
 	switch(attr) {
-	case ea_label:
+	case EdgeAttribute::Label:
 		if(attrs & GraphAttributes::edgeLabel) {
 			GA.label(e) = value;
 		}
 		break;
-	case ea_source:
+	case EdgeAttribute::Source:
 		// Handled elsewhere.
 		break;
-	case ea_target:
+	case EdgeAttribute::Target:
 		// Handled elsewhere.
 		break;
-	case ea_directed:
+	case EdgeAttribute::Directed:
 		// Handled elsewhere.
 		break;
-	case ea_weight:
+	case EdgeAttribute::Weight:
 		if(attrs & GraphAttributes::edgeDoubleWeight) {
-			std::istringstream ss(value);
-			ss >> GA.doubleWeight(e);
-		} else if(attrs & GraphAttributes::edgeIntWeight) {
-			std::istringstream ss(value);
-			ss >> GA.intWeight(e);
+			std::istringstream is(value);
+			is >> GA.doubleWeight(e);
+		} else if (attrs & GraphAttributes::edgeIntWeight) {
+			std::istringstream is(value);
+			is >> GA.intWeight(e);
 		}
 		break;
-	case ea_color:
+	case EdgeAttribute::Color:
 		if(attrs & GraphAttributes::edgeStyle) {
 			GA.strokeColor(e) = toColor(value);
 		}
 		break;
-	case ea_bends:
+	case EdgeAttribute::Bends:
 		if(attrs & GraphAttributes::edgeGraphics) {
-			std::istringstream ss(value);
+			std::istringstream is(value);
 			std::string x, y;
 
 			DPolyline &line = GA.bends(e);
 			line.clear();
-			while(std::getline(ss, x, ',') && std::getline(ss, y, ',')) {
+			while(std::getline(is, x, ',') && std::getline(is, y, ',')) {
 				std::istringstream conv;
 				double dx, dy;
 
@@ -429,7 +433,7 @@ bool Parser::readAttributes(
  * Just checks wheter beginning of the string is equal to the pattern.
  * Returns number of matched letters (length of the pattern).
  */
-size_t match(const std::string &text, const std::string pattern) {
+size_t match(const std::string &text, const std::string &pattern) {
 	const size_t len = pattern.length();
 	if(len > text.length()) {
 		return 0;
@@ -448,7 +452,9 @@ size_t match(const std::string &text, const std::string pattern) {
 bool gdf::Parser::readGraph(
 	Graph &G, GraphAttributes *GA)
 {
-	enum { m_none, m_node, m_edge } mode = m_none;
+	G.clear();
+
+	enum class Mode { None, Node, Edge } mode = Mode::None;
 
 	size_t line = 0;
 	std::string str;
@@ -469,23 +475,23 @@ bool gdf::Parser::readGraph(
 			if(!readNodeDef(str.substr(matched))) {
 				return false;
 			}
-			mode = m_node;
+			mode = Mode::Node;
 		} else if((matched = match(str, "edgedef>"))) {
 			if(!readEdgeDef(str.substr(matched))) {
 				return false;
 			}
-			mode = m_edge;
-		} else if(mode == m_node) {
+			mode = Mode::Edge;
+		} else if(mode == Mode::Node) {
 			if(!readNodeStmt(G, GA, str, line)) {
 				return false;
 			}
-		} else if(mode == m_edge) {
+		} else if(mode == Mode::Edge) {
 			if(!readEdgeStmt(G, GA, str, line)) {
 				return false;
 			}
 		} else {
-			std::cerr << "ERROR: Expected node or edge definition header "
-			          << "(line " << line << ").\n";
+			GraphIO::logger.lout() << "Expected node or edge definition header "
+			          << "(line " << line << ")." << std::endl;
 			return false;
 		}
 	}
@@ -493,8 +499,5 @@ bool gdf::Parser::readGraph(
 	return true;
 }
 
-
-} // end namespace gdf
-
-} // end namespace ogdf
-
+}
+}

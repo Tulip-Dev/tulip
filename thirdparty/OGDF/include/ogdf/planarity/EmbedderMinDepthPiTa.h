@@ -1,14 +1,5 @@
-/*
- * $Revision: 3949 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2014-03-03 01:25:50 +0100 (Mon, 03 Mar 2014) $
- ***************************************************************/
-
 /** \file
- * \brief The algorithm computes a planar embedding with minimum
- * depth if the embedding for all blocks of the graph is given.
+ * \brief Declares ogdf::EmbedderMinDepthPiTa.
  *
  * \author Thorsten Kerkhof
  *
@@ -17,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,47 +25,51 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_EMBEDDER_MIN_DEPTH_PITA_H
-#define OGDF_EMBEDDER_MIN_DEPTH_PITA_H
-
-
-#include <ogdf/module/EmbedderModule.h>
-#include <ogdf/decomposition/BCTree.h>
+#include <ogdf/planarity/embedder/EmbedderBCTreeBase.h>
+#include <ogdf/planarity/embedder/EmbedderMaxFaceBiconnectedGraphs.h>
 
 
 namespace ogdf {
 
-//! Planar graph embedding with minimum block-nesting depth for given embedded blocks.
+//! Embedder that minimizes block-nesting depth for given embedded blocks.
 /**
+ * @ingroup ga-planembed
+ *
  * For details see the paper "Minimum Depth Graph Drawing" by M. Pizzonia and R. Tamassia.
  */
-class OGDF_EXPORT EmbedderMinDepthPiTa : public EmbedderModule
+class OGDF_EXPORT EmbedderMinDepthPiTa : public embedder::EmbedderBCTreeBase<false>
 {
 public:
 	//constructor
-	EmbedderMinDepthPiTa() : m_useExtendedDepthDefinition(true) { }
+	EmbedderMinDepthPiTa()
+		: m_useExtendedDepthDefinition(true), pm_blockCutfaceTree(nullptr) {}
 
 	/**
-	 * \brief Computes an embedding of \a G.
+	 * \brief Computes an embedding of \p G.
 	 *
 	 * \param G is the original graph.
 	 * \param adjExternal is assigned an adjacency entry on the external face.
 	 */
-	void call(Graph& G, adjEntry& adjExternal);
+	virtual void doCall(Graph& G, adjEntry& adjExternal) override;
 
 	bool useExtendedDepthDefinition() const { return m_useExtendedDepthDefinition; }
 	void useExtendedDepthDefinition(bool b) { m_useExtendedDepthDefinition = b; }
+
+protected:
+	adjEntry trivialInit(Graph &G) override {
+		planarEmbed(G);
+		CombinatorialEmbedding CE(G);
+		adjEntry result = CE.chooseFace()->firstAdj();
+		deleteDummyNodes(G, result);
+
+		return result;
+	}
 
 private:
 	bool m_useExtendedDepthDefinition;
@@ -120,8 +115,8 @@ private:
 	void computeTdiam(const node& n);
 
 	/**
-	 * \brief Directs all edges to \a n and recursively all edges of its children -
-	 * except the edge to \a n - to the child.
+	 * \brief Directs all edges to \p n and recursively all edges of its children -
+	 * except the edge to \p n - to the child.
 	 *
 	 * \param G is the tree with the inverted edges.
 	 * \param n is a node in the original tree.
@@ -186,9 +181,6 @@ private:
 	void deleteDummyNodes(Graph& G, adjEntry& adjExternal);
 
 private:
-	/** the BC-tree of G */
-	BCTree* pBCTree;
-
 	/** the tree of pBCTree rooted at a cutface. */
 	Graph bcTreePG;
 
@@ -197,9 +189,6 @@ private:
 
 	/** a mapping of nodes in pBCTree->bcTree() to nodes in bcTreePG */
 	NodeArray<node> npBCTree_to_nBCTree;
-
-	/** an adjacency entry on the external face */
-	adjEntry* pAdjExternal;
 
 	/** all blocks */
 	NodeArray<Graph> blockG;
@@ -223,8 +212,8 @@ private:
 	EdgeArray<int> m_cB;
 
 	/**
-	 * \f$M_B = {cH \in B | m_B(cH) = m_B}\f$ with \f$m_B = \max_{c \in B} m_B(c)\f$
-	 *  and \f$m_B(c) = \max {0} \cup {m_{c, B'} | c \in B', B' \neq B}\f$.
+	 * M_B = {cH in B | m_B(cH) = m_B} with \a m_B = max{m_B(c) : c in B}
+	 *  and m_B(c) = max( {0} cup {m_{c, B'} | c in B', B' != B}).
 	 */
 	NodeArray< List<node> > M_B;
 
@@ -322,6 +311,4 @@ private:
 	NodeArray<adjEntry> Gamma_adjExt_nT;
 };
 
-} // end namespace ogdf
-
-#endif
+}

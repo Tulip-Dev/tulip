@@ -1,11 +1,3 @@
-/*
- * $Revision: 2552 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-05 16:45:20 +0200 (Thu, 05 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Implements simple labeling algorithm
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,12 +25,9 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 
 #include <ogdf/labeling/ELabelPosSimple.h>
@@ -60,38 +49,37 @@ ELabelPosSimple::~ELabelPosSimple()
 
 // returns the segment of the polyline containing the point
 // that is fraction*bends.length() away from the start
-static DLine segment(DPolyline &bends, double fraction)
+static DSegment segment(DPolyline &bends, double fraction)
 {
 	double targetpos = bends.length()*fraction;
 	double pos = 0.0;
 
 	ListConstIterator<DPoint> iter, next;
-	for (iter = next = bends.begin(), next++; next.valid(); iter++, next++) {
+	for (iter = next = bends.begin(), ++next; next.valid(); ++iter, ++next) {
 		pos += (*iter).distance(*next);
 		if (pos >= targetpos)
-			return DLine(*iter, *next);
+			return DSegment(*iter, *next);
 	}
 
-	return DLine(*--iter, bends.back());
+	return DSegment(*--iter, bends.back());
 }
 
 
 // liefert den Punkt neben dem Segment (links oder rechts, siehe 'left'), der orthogonal von
 // 'p' die Entfernung 'newLen' von diesem Segment hat.
-static DPoint leftOfSegment(const DLine &segment, const DPoint &p, double newLen, bool left = true)
+static DPoint leftOfSegment(const DSegment &segment, const DPoint &p, double newLen, bool left = true)
 {
-	DVector v;
+	DPoint v;
 	if (p == segment.start())
 		v = segment.end() - p;
 	else
 		v = p - segment.start();
 
-	DVector newPos;
-	if (left) newPos = ++v;
-	else      newPos = --v;
+	DPoint newPos(v.orthogonal());
+	if (!left) newPos *= -1;
 
-	// newPos hat immer L?nge != 0
-	newPos = (newPos * newLen) / newPos.length();
+	// newPos has nonzero length
+	newPos = (newPos * newLen) / newPos.norm();
 
 	return p + newPos;
 }
@@ -100,15 +88,14 @@ static DPoint leftOfSegment(const DLine &segment, const DPoint &p, double newLen
 void ELabelPosSimple::call(GraphAttributes &ug, ELabelInterface<double> &eli)
 {
 	//ug.addNodeCenter2Bends();
-	edge e;
-	forall_edges(e, ug.constGraph()) {
+	for(edge e : ug.constGraph().edges) {
 		EdgeLabel<double> &el = eli.getLabel(e);
 		DPolyline       bends = ug.bends(e);
 
 		bends.normalize();
 
 		if (bends.size() < 2)
-			OGDF_THROW_PARAM(AlgorithmFailureException, afcLabel);
+			OGDF_THROW_PARAM(AlgorithmFailureException, AlgorithmFailureCode::Label);
 
 		double frac;
 
@@ -137,39 +124,39 @@ void ELabelPosSimple::call(GraphAttributes &ug, ELabelInterface<double> &eli)
 		DPoint endPoint   = bends.position(endFrac);
 
 		// hole die beteiligten Segmente
-		DLine midLine   = segment(bends, midFrac);
-		DLine startLine = segment(bends, startFrac);
-		DLine endLine   = segment(bends, endFrac);
+		DSegment midLine   = segment(bends, midFrac);
+		DSegment startLine = segment(bends, startFrac);
+		DSegment endLine   = segment(bends, endFrac);
 
 		// berechne die Labelpositionen
-		if (el.usedLabel(elEnd1)) {
+		if (el.usedLabel(LabelType::End1)) {
 			DPoint np = leftOfSegment(startLine, startPoint, m_edgeDistance, true);
-			el.setX(elEnd1, np.m_x);
-			el.setY(elEnd1, np.m_y);
+			el.setX(LabelType::End1, np.m_x);
+			el.setY(LabelType::End1, np.m_y);
 		}
 
-		if (el.usedLabel(elMult1)) {
+		if (el.usedLabel(LabelType::Mult1)) {
 			DPoint np = leftOfSegment(startLine, startPoint, m_edgeDistance, false);
-			el.setX(elMult1, np.m_x);
-			el.setY(elMult1, np.m_y);
+			el.setX(LabelType::Mult1, np.m_x);
+			el.setY(LabelType::Mult1, np.m_y);
 		}
 
-		if (el.usedLabel(elName)) {
+		if (el.usedLabel(LabelType::Name)) {
 			DPoint np = m_midOnEdge ? midPoint : leftOfSegment(midLine, midPoint, m_edgeDistance, true);
-			el.setX(elName, np.m_x);
-			el.setY(elName, np.m_y);
+			el.setX(LabelType::Name, np.m_x);
+			el.setY(LabelType::Name, np.m_y);
 		}
 
-		if (el.usedLabel(elEnd2)) {
+		if (el.usedLabel(LabelType::End2)) {
 			DPoint np = leftOfSegment(endLine, endPoint, m_edgeDistance, true);
-			el.setX(elEnd2, np.m_x);
-			el.setY(elEnd2, np.m_y);
+			el.setX(LabelType::End2, np.m_x);
+			el.setY(LabelType::End2, np.m_y);
 		}
 
-		if (el.usedLabel(elMult2)) {
+		if (el.usedLabel(LabelType::Mult2)) {
 			DPoint np = leftOfSegment(endLine, endPoint, m_edgeDistance, false);
-			el.setX(elMult2, np.m_x);
-			el.setY(elMult2, np.m_y);
+			el.setX(LabelType::Mult2, np.m_x);
+			el.setY(LabelType::Mult2, np.m_y);
 		}
 	}
 }

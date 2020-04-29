@@ -25,22 +25,22 @@ typedef struct cpxenv* CPXENVptr;
 
 class OsiCpxSolverInterface : virtual public OsiSolverInterface {
   friend void OsiCpxSolverInterfaceUnitTest(const std::string & mpsDir, const std::string & netlibDir);
-  
+
 public:
-  
+
   //---------------------------------------------------------------------------
   /**@name Solve methods */
   //@{
-  /// Solve initial LP relaxation 
-  virtual void initialSolve();
-  
+  /// Solve initial LP relaxation
+  virtual void initialSolve() override;
+
   /// Resolve an LP relaxation after problem modification
-  virtual void resolve();
-  
+  virtual void resolve() override;
+
   /// Invoke solver's built-in enumeration algorithm
-  virtual void branchAndBound();
+  virtual void branchAndBound() override;
   //@}
-  
+
   //---------------------------------------------------------------------------
   /**@name Parameter set/get methods
 
@@ -58,17 +58,17 @@ public:
   */
   //@{
     // Set an integer parameter
-    bool setIntParam(OsiIntParam key, int value);
+    bool setIntParam(OsiIntParam key, int value) override;
     // Set an double parameter
-    bool setDblParam(OsiDblParam key, double value);
+    bool setDblParam(OsiDblParam key, double value) override;
     // Set a string parameter
-    bool setStrParam(OsiStrParam key, const std::string & value);
+    bool setStrParam(OsiStrParam key, const std::string & value) override;
     // Get an integer parameter
-    bool getIntParam(OsiIntParam key, int& value) const;
+    bool getIntParam(OsiIntParam key, int& value) const override;
     // Get an double parameter
-    bool getDblParam(OsiDblParam key, double& value) const;
+    bool getDblParam(OsiDblParam key, double& value) const override;
     // Get a string parameter
-    bool getStrParam(OsiStrParam key, std::string& value) const;
+    bool getStrParam(OsiStrParam key, std::string& value) const override;
     // Set mipstart option (pass column solution to CPLEX before MIP start)
     void setMipStart(bool value) { domipstart = value; }
     // Get mipstart option value
@@ -79,19 +79,19 @@ public:
   ///@name Methods returning info on how the solution process terminated
   //@{
     /// Are there a numerical difficulties?
-    virtual bool isAbandoned() const;
+    virtual bool isAbandoned() const override;
     /// Is optimality proven?
-    virtual bool isProvenOptimal() const;
+    virtual bool isProvenOptimal() const override;
     /// Is primal infeasiblity proven?
-    virtual bool isProvenPrimalInfeasible() const;
+    virtual bool isProvenPrimalInfeasible() const override;
     /// Is dual infeasiblity proven?
-    virtual bool isProvenDualInfeasible() const;
+    virtual bool isProvenDualInfeasible() const override;
     /// Is the given primal objective limit reached?
-    virtual bool isPrimalObjectiveLimitReached() const;
+    virtual bool isPrimalObjectiveLimitReached() const override;
     /// Is the given dual objective limit reached?
-    virtual bool isDualObjectiveLimitReached() const;
+    virtual bool isDualObjectiveLimitReached() const override;
     /// Iteration limit reached?
-    virtual bool isIterationLimitReached() const;
+    virtual bool isIterationLimitReached() const override;
   //@}
 
   //---------------------------------------------------------------------------
@@ -99,18 +99,18 @@ public:
   //@{
 
   /*! \brief Get an empty warm start object
-    
+
     This routine returns an empty CoinWarmStartBasis object. Its purpose is
     to provide a way to give a client a warm start basis object of the
     appropriate type, which can resized and modified as desired.
   */
-  CoinWarmStart *getEmptyWarmStart () const;
+  CoinWarmStart *getEmptyWarmStart () const override;
 
     /// Get warmstarting information
-    virtual CoinWarmStart* getWarmStart() const;
+    virtual CoinWarmStart* getWarmStart() const override;
     /** Set warmstarting information. Return true/false depending on whether
 	the warmstart information was accepted or not. */
-    virtual bool setWarmStart(const CoinWarmStart* warmstart);
+    virtual bool setWarmStart(const CoinWarmStart* warmstart) override;
   //@}
 
   //---------------------------------------------------------------------------
@@ -121,22 +121,22 @@ public:
      bound changes are allowed. */
   //@{
     /// Create a hotstart point of the optimization process
-    virtual void markHotStart();
+    virtual void markHotStart() override;
     /// Optimize starting from the hotstart
-    virtual void solveFromHotStart();
+    virtual void solveFromHotStart() override;
     /// Delete the snapshot
-    virtual void unmarkHotStart();
+    virtual void unmarkHotStart() override;
   //@}
 
   //---------------------------------------------------------------------------
-  /**@name Problem information methods 
-     
+  /**@name Problem information methods
+
      These methods call the solver's query routines to return
      information about the problem referred to by the current object.
      Querying a problem that has no data associated with it result in
      zeros for the number of rows and columns, and NULL pointers from
      the methods that return vectors.
-     
+
      Const pointers returned from any data-query method are valid as
      long as the data is unchanged and the solver is not called.
   */
@@ -144,20 +144,20 @@ public:
     /**@name Methods related to querying the input data */
     //@{
       /// Get number of columns
-      virtual int getNumCols() const;
-  
+      virtual int getNumCols() const override;
+
       /// Get number of rows
-      virtual int getNumRows() const;
-  
+      virtual int getNumRows() const override;
+
       /// Get number of nonzero elements
-      virtual int getNumElements() const;
-  
+      virtual int getNumElements() const override;
+
       /// Get pointer to array[getNumCols()] of column lower bounds
-      virtual const double * getColLower() const;
-  
+      virtual const double * getColLower() const override;
+
       /// Get pointer to array[getNumCols()] of column upper bounds
-      virtual const double * getColUpper() const;
-  
+      virtual const double * getColUpper() const override;
+
       /** Get pointer to array[getNumRows()] of row constraint senses.
   	<ul>
   	<li>'L': <= constraint
@@ -167,8 +167,8 @@ public:
   	<li>'N': free constraint
   	</ul>
       */
-      virtual const char * getRowSense() const;
-  
+      virtual const char * getRowSense() const override;
+
       /** Get pointer to array[getNumRows()] of rows right-hand sides
   	<ul>
   	  <li> if rowsense()[i] == 'L' then rhs()[i] == rowupper()[i]
@@ -177,8 +177,8 @@ public:
   	  <li> if rowsense()[i] == 'N' then rhs()[i] == 0.0
   	</ul>
       */
-      virtual const double * getRightHandSide() const;
-  
+      virtual const double * getRightHandSide() const override;
+
       /** Get pointer to array[getNumRows()] of row ranges.
   	<ul>
             <li> if rowsense()[i] == 'R' then
@@ -187,72 +187,72 @@ public:
                     rowrange()[i] is 0.0
           </ul>
       */
-      virtual const double * getRowRange() const;
-  
+      virtual const double * getRowRange() const override;
+
       /// Get pointer to array[getNumRows()] of row lower bounds
-      virtual const double * getRowLower() const;
-  
+      virtual const double * getRowLower() const override;
+
       /// Get pointer to array[getNumRows()] of row upper bounds
-      virtual const double * getRowUpper() const;
-  
+      virtual const double * getRowUpper() const override;
+
       /// Get pointer to array[getNumCols()] of objective function coefficients
-      virtual const double * getObjCoefficients() const;
-  
+      virtual const double * getObjCoefficients() const override;
+
       /// Get objective function sense (1 for min (default), -1 for max)
-      virtual double getObjSense() const;
+      virtual double getObjSense() const override;
 
       /// Return true if column is continuous
-      virtual bool isContinuous(int colNumber) const;
+      virtual bool isContinuous(int colNumber) const override;
 
 #if 0
       /// Return true if column is binary
       virtual bool isBinary(int columnNumber) const;
-  
+
       /** Return true if column is integer.
           Note: This function returns true if the the column
           is binary or a general integer.
       */
       virtual bool isInteger(int columnNumber) const;
-  
+
       /// Return true if column is general integer
       virtual bool isIntegerNonBinary(int columnNumber) const;
-  
+
       /// Return true if column is binary and not fixed at either bound
       virtual bool isFreeBinary(int columnNumber) const;
 #endif
-  
+
       /// Get pointer to row-wise copy of matrix
-      virtual const CoinPackedMatrix * getMatrixByRow() const;
-  
+      virtual const CoinPackedMatrix * getMatrixByRow() const override;
+
       /// Get pointer to column-wise copy of matrix
-      virtual const CoinPackedMatrix * getMatrixByCol() const;
-  
+      virtual const CoinPackedMatrix * getMatrixByCol() const override;
+
       /// Get solver's value for infinity
-      virtual double getInfinity() const;
+      virtual double getInfinity() const override;
     //@}
-    
+
     /**@name Methods related to querying the solution */
     //@{
       /// Get pointer to array[getNumCols()] of primal solution vector
-      virtual const double * getColSolution() const;
-  
+      virtual const double * getColSolution() const override;
+
       /// Get pointer to array[getNumRows()] of dual prices
-      virtual const double * getRowPrice() const;
-  
+      virtual const double * getRowPrice() const override;
+
       /// Get a pointer to array[getNumCols()] of reduced costs
-      virtual const double * getReducedCost() const;
-  
+      virtual const double * getReducedCost() const override;
+
       /** Get pointer to array[getNumRows()] of row activity levels (constraint
   	matrix times the solution vector */
-      virtual const double * getRowActivity() const;
-  
+      virtual const double * getRowActivity() const override;
+
       /// Get objective function value
-      virtual double getObjValue() const;
-  
+      virtual double getObjValue() const override;
+
       /** Get how many iterations it took to solve the problem (whatever
 	  "iteration" mean to the solver. */
-      virtual int getIterationCount() const;
-  
+      virtual int getIterationCount() const override;
+
       /** Get as many dual rays as the solver can provide. (In case of proven
           primal infeasibility there should be at least one.)
 
@@ -265,35 +265,35 @@ public:
           <strong>NOTE for implementers of solver interfaces:</strong> <br>
           The double pointers in the vector should point to arrays of length
           getNumRows() and they should be allocated via new[]. <br>
-     
+
           <strong>NOTE for users of solver interfaces:</strong> <br>
           It is the user's responsibility to free the double pointers in the
           vector using delete[].
       */
       virtual std::vector<double*> getDualRays(int maxNumRays,
-					       bool fullRay = false) const;
+					       bool fullRay = false) const override;
       /** Get as many primal rays as the solver can provide. (In case of proven
           dual infeasibility there should be at least one.)
-     
+
           <strong>NOTE for implementers of solver interfaces:</strong> <br>
           The double pointers in the vector should point to arrays of length
           getNumCols() and they should be allocated via new[]. <br>
-     
+
           <strong>NOTE for users of solver interfaces:</strong> <br>
           It is the user's responsibility to free the double pointers in the
           vector using delete[].
       */
-      virtual std::vector<double*> getPrimalRays(int maxNumRays) const;
-  
+      virtual std::vector<double*> getPrimalRays(int maxNumRays) const override;
+
 #if 0
-      /** Get vector of indices of solution which are integer variables 
+      /** Get vector of indices of solution which are integer variables
   	presently at fractional values */
       virtual OsiVectorInt getFractionalIndices(const double etol=1.e-05)
 	const;
 #endif
     //@}
   //@}
-  
+
   //---------------------------------------------------------------------------
 
   /**@name Problem modifying methods */
@@ -302,29 +302,29 @@ public:
     /**@name Changing bounds on variables and constraints */
     //@{
       /** Set an objective function coefficient */
-      virtual void setObjCoeff( int elementIndex, double elementValue );
+      virtual void setObjCoeff( int elementIndex, double elementValue ) override;
 
       /** Set a a set of objective function coefficients */
       virtual void setObjCoeffSet(const int* indexFirst,
 				  const int* indexLast,
-				  const double* coeffList);
+				  const double* coeffList) override;
 
       using OsiSolverInterface::setColLower ;
       /** Set a single column lower bound<br>
     	  Use -COIN_DBL_MAX for -infinity. */
-      virtual void setColLower( int elementIndex, double elementValue );
-      
+      virtual void setColLower( int elementIndex, double elementValue ) override;
+
       using OsiSolverInterface::setColUpper ;
       /** Set a single column upper bound<br>
     	  Use COIN_DBL_MAX for infinity. */
-      virtual void setColUpper( int elementIndex, double elementValue );
-      
+      virtual void setColUpper( int elementIndex, double elementValue ) override;
+
       /** Set a single column lower and upper bound<br>
     	  The default implementation just invokes <code>setColLower()</code> and
     	  <code>setColUpper()</code> */
       virtual void setColBounds( int elementIndex,
-    				 double lower, double upper );
-    
+				 double lower, double upper ) override;
+
       /** Set the bounds on a number of columns simultaneously<br>
     	  The default implementation just invokes <code>setCollower()</code> and
     	  <code>setColupper()</code> over and over again.
@@ -334,26 +334,26 @@ public:
       */
       virtual void setColSetBounds(const int* indexFirst,
 				   const int* indexLast,
-				   const double* boundList);
-      
+				   const double* boundList) override;
+
       /** Set a single row lower bound<br>
     	  Use -COIN_DBL_MAX for -infinity. */
-      virtual void setRowLower( int elementIndex, double elementValue );
-      
+      virtual void setRowLower( int elementIndex, double elementValue ) override;
+
       /** Set a single row upper bound<br>
     	  Use COIN_DBL_MAX for infinity. */
-      virtual void setRowUpper( int elementIndex, double elementValue );
-    
+      virtual void setRowUpper( int elementIndex, double elementValue ) override;
+
       /** Set a single row lower and upper bound<br>
     	  The default implementation just invokes <code>setRowLower()</code> and
     	  <code>setRowUpper()</code> */
       virtual void setRowBounds( int elementIndex,
-    				 double lower, double upper );
-    
+				 double lower, double upper ) override;
+
       /** Set the type of a single row<br> */
       virtual void setRowType(int index, char sense, double rightHandSide,
-    			      double range);
-    
+			      double range) override;
+
       /** Set the bounds on a number of rows simultaneously<br>
     	  The default implementation just invokes <code>setRowLower()</code> and
     	  <code>setRowUpper()</code> over and over again.
@@ -363,8 +363,8 @@ public:
       */
       virtual void setRowSetBounds(const int* indexFirst,
     				   const int* indexLast,
-    				   const double* boundList);
-    
+				   const double* boundList) override;
+
       /** Set the type of a number of rows simultaneously<br>
     	  The default implementation just invokes <code>setRowType()</code> and
     	  over and over again.
@@ -378,52 +378,52 @@ public:
 				  const int* indexLast,
 				  const char* senseList,
 				  const double* rhsList,
-				  const double* rangeList);
+				  const double* rangeList) override;
     //@}
-    
+
     //-------------------------------------------------------------------------
     /**@name Integrality related changing methods */
     //@{
       /** Set the index-th variable to be a continuous variable */
-      virtual void setContinuous(int index);
+      virtual void setContinuous(int index) override;
       /** Set the index-th variable to be an integer variable */
-      virtual void setInteger(int index);
+      virtual void setInteger(int index) override;
       /** Set the variables listed in indices (which is of length len) to be
 	  continuous variables */
-      virtual void setContinuous(const int* indices, int len);
+      virtual void setContinuous(const int* indices, int len) override;
       /** Set the variables listed in indices (which is of length len) to be
 	  integer variables */
-      virtual void setInteger(const int* indices, int len);
+      virtual void setInteger(const int* indices, int len) override;
     //@}
-    
+
     //-------------------------------------------------------------------------
     /// Set objective function sense (1 for min (default), -1 for max,)
-    virtual void setObjSense(double s);
-    
+    virtual void setObjSense(double s) override;
+
     /** Set the primal solution column values
-    
+
     	colsol[numcols()] is an array of values of the problem column
     	variables. These values are copied to memory owned by the
     	solver object or the solver.  They will be returned as the
     	result of colsol() until changed by another call to
     	setColsol() or by a call to any solver routine.  Whether the
     	solver makes use of the solution in any way is
-    	solver-dependent. 
+    	solver-dependent.
     */
-    virtual void setColSolution(const double * colsol);
-    
+    virtual void setColSolution(const double * colsol) override;
+
     /** Set dual solution vector
-    
+
     	rowprice[numrows()] is an array of values of the problem row
     	dual variables. These values are copied to memory owned by the
     	solver object or the solver.  They will be returned as the
     	result of rowprice() until changed by another call to
     	setRowprice() or by a call to any solver routine.  Whether the
     	solver makes use of the solution in any way is
-    	solver-dependent. 
+    	solver-dependent.
     */
-    virtual void setRowPrice(const double * rowprice);
-    
+    virtual void setRowPrice(const double * rowprice) override;
+
     //-------------------------------------------------------------------------
     /**@name Methods to expand a problem.<br>
        Note that if a column is added then by default it will correspond to a
@@ -432,40 +432,40 @@ public:
       using OsiSolverInterface::addCol ;
       /** */
       virtual void addCol(const CoinPackedVectorBase& vec,
-			  const double collb, const double colub,   
-			  const double obj);
+			  const double collb, const double colub,
+			  const double obj) override;
 
       using OsiSolverInterface::addCols ;
       /** */
       virtual void addCols(const int numcols,
 			   const CoinPackedVectorBase * const * cols,
-			   const double* collb, const double* colub,   
-			   const double* obj);
+			   const double* collb, const double* colub,
+			   const double* obj) override;
       /** */
-      virtual void deleteCols(const int num, const int * colIndices);
-    
+      virtual void deleteCols(const int num, const int * colIndices) override;
+
       using OsiSolverInterface::addRow ;
       /** */
       virtual void addRow(const CoinPackedVectorBase& vec,
-    			  const double rowlb, const double rowub);
+			  const double rowlb, const double rowub) override;
       /** */
       virtual void addRow(const CoinPackedVectorBase& vec,
-    			  const char rowsen, const double rowrhs,   
-    			  const double rowrng);
+    			  const char rowsen, const double rowrhs,
+			  const double rowrng) override;
 
       using OsiSolverInterface::addRows ;
       /** */
       virtual void addRows(const int numrows,
 			   const CoinPackedVectorBase * const * rows,
-			   const double* rowlb, const double* rowub);
+			   const double* rowlb, const double* rowub) override;
       /** */
       virtual void addRows(const int numrows,
 			   const CoinPackedVectorBase * const * rows,
-    			   const char* rowsen, const double* rowrhs,   
-    			   const double* rowrng);
+    			   const char* rowsen, const double* rowrhs,
+			   const double* rowrng) override;
       /** */
-      virtual void deleteRows(const int num, const int * rowIndices);
-    
+      virtual void deleteRows(const int num, const int * rowIndices) override;
+
 #if 0
   // ??? implemented in OsiSolverInterface
       //-----------------------------------------------------------------------
@@ -505,34 +505,34 @@ public:
         following values are the default:
         <ul>
           <li> <code>colub</code>: all columns have upper bound infinity
-          <li> <code>collb</code>: all columns have lower bound 0 
+          <li> <code>collb</code>: all columns have lower bound 0
           <li> <code>rowub</code>: all rows have upper bound infinity
           <li> <code>rowlb</code>: all rows have lower bound -infinity
 	  <li> <code>obj</code>: all variables have 0 objective coefficient
         </ul>
     */
     virtual void loadProblem(const CoinPackedMatrix& matrix,
-			     const double* collb, const double* colub,   
+			     const double* collb, const double* colub,
 			     const double* obj,
-			     const double* rowlb, const double* rowub);
-			    
+			     const double* rowlb, const double* rowub) override;
+
     /** Load in an problem by assuming ownership of the arguments (the
         constraints on the rows are given by lower and upper bounds). For
         default values see the previous method. <br>
 	<strong>WARNING</strong>: The arguments passed to this method will be
 	freed using the C++ <code>delete</code> and <code>delete[]</code>
-	functions. 
+	functions.
     */
     virtual void assignProblem(CoinPackedMatrix*& matrix,
 			       double*& collb, double*& colub, double*& obj,
-			       double*& rowlb, double*& rowub);
+			       double*& rowlb, double*& rowub) override;
 
     /** Load in an problem by copying the arguments (the constraints on the
 	rows are given by sense/rhs/range triplets). If a pointer is 0 then the
 	following values are the default:
 	<ul>
           <li> <code>colub</code>: all columns have upper bound infinity
-          <li> <code>collb</code>: all columns have lower bound 0 
+          <li> <code>collb</code>: all columns have lower bound 0
 	  <li> <code>obj</code>: all variables have 0 objective coefficient
           <li> <code>rowsen</code>: all rows are >=
           <li> <code>rowrhs</code>: all right hand sides are 0
@@ -542,44 +542,44 @@ public:
     virtual void loadProblem(const CoinPackedMatrix& matrix,
 			     const double* collb, const double* colub,
 			     const double* obj,
-			     const char* rowsen, const double* rowrhs,   
-			     const double* rowrng);
+			     const char* rowsen, const double* rowrhs,
+			     const double* rowrng) override;
 
     /** Load in an problem by assuming ownership of the arguments (the
         constraints on the rows are given by sense/rhs/range triplets). For
         default values see the previous method. <br>
 	<strong>WARNING</strong>: The arguments passed to this method will be
 	freed using the C++ <code>delete</code> and <code>delete[]</code>
-	functions. 
+	functions.
     */
     virtual void assignProblem(CoinPackedMatrix*& matrix,
 			       double*& collb, double*& colub, double*& obj,
 			       char*& rowsen, double*& rowrhs,
-			       double*& rowrng);
+			       double*& rowrng) override;
 
     /** Just like the other loadProblem() methods except that the matrix is
 	given in a standard column major ordered format (without gaps). */
     virtual void loadProblem(const int numcols, const int numrows,
 			     const int* start, const int* index,
 			     const double* value,
-			     const double* collb, const double* colub,   
+			     const double* collb, const double* colub,
 			     const double* obj,
-			     const double* rowlb, const double* rowub);
+			     const double* rowlb, const double* rowub) override;
 
     /** Just like the other loadProblem() methods except that the matrix is
 	given in a standard column major ordered format (without gaps). */
     virtual void loadProblem(const int numcols, const int numrows,
 			     const int* start, const int* index,
 			     const double* value,
-			     const double* collb, const double* colub,   
+			     const double* collb, const double* colub,
 			     const double* obj,
-			     const char* rowsen, const double* rowrhs,   
-			     const double* rowrng);
+			     const char* rowsen, const double* rowrhs,
+			     const double* rowrng) override;
 
     using OsiSolverInterface::readMps ;
     /** Read an mps file from the given filename */
     virtual int readMps(const char *filename,
-			 const char *extension = "mps");
+			 const char *extension = "mps") override;
 
     /** Write the problem into an mps file of the given filename.
 	If objSense is non zero then -1.0 forces the code to write a
@@ -587,18 +587,18 @@ public:
 	If 0.0 then solver can do what it wants */
     virtual void writeMps(const char *filename,
 			  const char *extension = "mps",
-                          double objSense=0.0) const;
+                          double objSense=0.0) const override;
 
   //@}
-    
+
     /**@name Message handling */
     //@{
     /** Pass in a message handler
         It is the client's responsibility to destroy a message handler installed
         by this routine; it will not be destroyed when the solver interface is
-        destroyed. 
+        destroyed.
      */
-    void passInMessageHandler(CoinMessageHandler * handler);
+    void passInMessageHandler(CoinMessageHandler * handler) override;
     //@}
 
   //---------------------------------------------------------------------------
@@ -634,49 +634,49 @@ public:
     FREECACHED_RESULTS = KEEPCACHED_ALL & ~KEEPCACHED_RESULTS
   };
   CPXLPptr getLpPtr( int keepCached = KEEPCACHED_NONE );
-  
+
   //@{
   /// Method to access CPLEX environment pointer
   CPXENVptr getEnvironmentPtr();
-  //@}  
+  //@}
 
   /// return a vector of variable types (continous, binary, integer)
   const char* getCtype() const;
-  
+
   /**@name Constructors and destructor */
   //@{
   /// Default Constructor
-  OsiCpxSolverInterface(); 
-  
+  OsiCpxSolverInterface();
+
   /// Clone
-  virtual OsiSolverInterface * clone(bool copyData = true) const;
-  
-  /// Copy constructor 
+  virtual OsiSolverInterface * clone(bool copyData = true) const override;
+
+  /// Copy constructor
   OsiCpxSolverInterface( const OsiCpxSolverInterface& );
-  
-  /// Assignment operator 
+
+  /// Assignment operator
   OsiCpxSolverInterface& operator=( const OsiCpxSolverInterface& rhs );
-  
-  /// Destructor 
+
+  /// Destructor
   virtual ~OsiCpxSolverInterface();
 
   /// Resets as if default constructor
-  virtual void reset();
+  virtual void reset() override;
   //@}
-  
+
 /***************************************************************************/
-  /**@name OsiSimplexInterface methods 
-    Cplex adds a slack with coeff +1 in "<=" and "=" constraints, 
-    with coeff -1 in ">=", 
-    slack being non negative. We switch in order to get a "Clp tableau" 
+  /**@name OsiSimplexInterface methods
+    Cplex adds a slack with coeff +1 in "<=" and "=" constraints,
+    with coeff -1 in ">=",
+    slack being non negative. We switch in order to get a "Clp tableau"
     where all the slacks have coefficient +1 in the original tableau.
 
-    If a slack for ">=" is non basic, invB is not changed; 
+    If a slack for ">=" is non basic, invB is not changed;
     column of the slack in the optimal tableau is flipped.
 
-    If a slack for ">=" is basic, corresp. row of invB is flipped; 
-    whole row of the optimal tableau is flipped; 
-    then whole column for the slack in opt tableau is flipped. 
+    If a slack for ">=" is basic, corresp. row of invB is flipped;
+    whole row of the optimal tableau is flipped;
+    then whole column for the slack in opt tableau is flipped.
 
     Ranged rows are not supported. It might work, but no garantee is given.
 
@@ -688,55 +688,55 @@ public:
   /** Returns 1 if can just do getBInv etc
       2 if has all OsiSimplex methods
       and 0 if it has none */
-  virtual int canDoSimplexInterface() const;
+  virtual int canDoSimplexInterface() const override;
 
   using OsiSolverInterface::enableSimplexInterface ;
-  /** Useless function, defined only for compatibility with 
+  /** Useless function, defined only for compatibility with
      OsiSimplexInterface
   */
   virtual void enableSimplexInterface(int doingPrimal) {};
 
-  /** Useless function, defined only for compatibility with 
+  /** Useless function, defined only for compatibility with
      OsiSimplexInterface
   */
-  virtual void disableSimplexInterface() {};
+  virtual void disableSimplexInterface() override {};
 
-  /** Useless function, defined only for compatibility with 
+  /** Useless function, defined only for compatibility with
      OsiSimplexInterface
   */
-  virtual void enableFactorization() const {};
+  virtual void enableFactorization() const override {};
 
-  /** Useless function, defined only for compatibility with 
+  /** Useless function, defined only for compatibility with
      OsiSimplexInterface
   */
-  virtual void disableFactorization() const {};
+  virtual void disableFactorization() const override {};
 
   ///Returns true if a basis is available
-  virtual bool basisIsAvailable() const;
+  virtual bool basisIsAvailable() const override;
 
-  /** Returns a basis status of the structural/artificial variables 
+  /** Returns a basis status of the structural/artificial variables
      At present as warm start i.e 0: free, 1: basic, 2: upper, 3: lower
   */
-   virtual void getBasisStatus(int* cstat, int* rstat) const;
+   virtual void getBasisStatus(int* cstat, int* rstat) const override;
 
   ///Get a row of the tableau (slack part in slack if not NULL)
-  virtual void getBInvARow(int row, double* z, double * slack=NULL) const;
+  virtual void getBInvARow(int row, double* z, double * slack=nullptr) const override;
 
   ///Get a row of the basis inverse
-  virtual void getBInvRow(int row, double* z) const;
+  virtual void getBInvRow(int row, double* z) const override;
 
   ///Get a column of the tableau
-  virtual void getBInvACol(int col, double* vec) const;
+  virtual void getBInvACol(int col, double* vec) const override;
 
   ///Get a column of the basis inverse
-  virtual void getBInvCol(int col, double* vec) const;
+  virtual void getBInvCol(int col, double* vec) const override;
 
   /**  Get indices of the pivot variable in each row
       (order of indices corresponds to the
       order of elements in a vector retured by getBInvACol() and
       getBInvCol()).
   */
-  virtual void getBasics(int* index) const;
+  virtual void getBasics(int* index) const override;
   /// switches CPLEX to prob type LP
   void switchToLP();
 
@@ -747,18 +747,18 @@ public:
 /***************************************************************************/
 
 protected:
-  
+
   /**@name Protected methods */
   //@{
   /// Apply a row cut. Return true if cut was applied.
-  virtual void applyRowCut( const OsiRowCut & rc );
-  
-  /** Apply a column cut (bound adjustment). 
+  virtual void applyRowCut( const OsiRowCut & rc ) override;
+
+  /** Apply a column cut (bound adjustment).
       Return true if cut was applied.
   */
-  virtual void applyColCut( const OsiColCut & cc );
+  virtual void applyColCut( const OsiColCut & cc ) override;
   //@}
-  
+
 private:
   /**@name Private static class functions  */
   //@{
@@ -769,19 +769,19 @@ private:
   void freeColType();
   //@}
 
-  
+
   /**@name Private methods */
   //@{
-  
+
   /// Get LP Pointer for const methods
   CPXLPptr getMutableLpPtr() const;
-  
+
   /// The real work of a copy constructor (used by copy and assignment)
   void gutsOfCopy( const OsiCpxSolverInterface & source );
-  
+
   /// The real work of the constructor
   void gutsOfConstructor();
-  
+
   /// The real work of the destructor
   void gutsOfDestructor();
 
@@ -793,7 +793,7 @@ private:
 
   /// free cached result vectors
   void freeCachedResults();
-  
+
   /// free cached matrices
   void freeCachedMatrix();
 
@@ -802,10 +802,10 @@ private:
 
   /// free all allocated memory
   void freeAllMemory();
-  
+
   //@}
-  
-  
+
+
   /**@name Private member data */
   //@{
   /// CPLEX environment used in this class instance
@@ -824,31 +824,31 @@ private:
   //@{
   /// Pointer to objective vector
   mutable double  *obj_;
-  
+
   /// Pointer to dense vector of variable lower bounds
   mutable double  *collower_;
-  
+
   /// Pointer to dense vector of variable lower bounds
   mutable double  *colupper_;
-  
+
   /// Pointer to dense vector of row sense indicators
   mutable char    *rowsense_;
-  
+
   /// Pointer to dense vector of row right-hand side values
   mutable double  *rhs_;
-  
+
   /// Pointer to dense vector of slack upper bounds for range constraints (undefined for non-range rows)
   mutable double  *rowrange_;
-  
+
   /// Pointer to dense vector of row lower bounds
   mutable double  *rowlower_;
-  
+
   /// Pointer to dense vector of row upper bounds
   mutable double  *rowupper_;
-  
+
   /// Pointer to primal solution vector
   mutable double  *colsol_;
-  
+
   /// Pointer to dual solution vector
   mutable double  *rowsol_;
 
@@ -859,10 +859,10 @@ private:
   mutable double  *rowact_;
 
   /// Pointer to row-wise copy of problem matrix coefficients.
-  mutable CoinPackedMatrix *matrixByRow_;  
-  
+  mutable CoinPackedMatrix *matrixByRow_;
+
   /// Pointer to row-wise copy of problem matrix coefficients.
-  mutable CoinPackedMatrix *matrixByCol_;  
+  mutable CoinPackedMatrix *matrixByCol_;
   //@}
 
   /**@name Additional information needed for storing MIP problems */
@@ -872,7 +872,7 @@ private:
 
   /// Size of allocated memory for coltype_
   int             coltypesize_;
-  
+
   /// Stores whether CPLEX' prob type is currently set to MIP
   mutable bool    probtypemip_;
 

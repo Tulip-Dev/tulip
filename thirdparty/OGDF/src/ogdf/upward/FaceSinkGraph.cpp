@@ -1,11 +1,3 @@
-/*
- * $Revision: 3388 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-04-10 14:56:08 +0200 (Wed, 10 Apr 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implements class FaceSinkGraph
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,12 +25,9 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 
 #include <ogdf/upward/FaceSinkGraph.h>
@@ -53,10 +42,10 @@ FaceSinkGraph::FaceSinkGraph(
 	node s) :                             // single source
 	m_pE            (&E),
 	m_source        (s),
-	m_T             (0)
+	m_T             (nullptr)
 {
-	m_originalNode  .init(*this, 0);
-	m_originalFace  .init(*this, 0);
+	m_originalNode  .init(*this, nullptr);
+	m_originalFace  .init(*this, nullptr);
 	m_containsSource.init(*this, false);
 	doInit();
 }
@@ -68,9 +57,9 @@ void FaceSinkGraph::init(
 {
 	m_pE     = &E;
 	m_source = s;
-	m_T      = 0;
-	m_originalNode  .init(*this,0);
-	m_originalFace  .init(*this,0);
+	m_T      = nullptr;
+	m_originalNode  .init(*this,nullptr);
+	m_originalFace  .init(*this,nullptr);
 	m_containsSource.init(*this,false);
 
 	doInit();
@@ -81,13 +70,12 @@ void FaceSinkGraph::doInit()
 {
 	const ConstCombinatorialEmbedding &E = *m_pE;
 
-	NodeArray<node> sinkSwitch(E,0); // corresponding node in F (if any)
+	NodeArray<node> sinkSwitch(E,nullptr); // corresponding node in F (if any)
 	NodeArray<bool> isSinkSwitch(E,true);
 
-	face f;
 	NodeArray<int> visited(E,-1);
 	int faceNo = -1;
-	forall_faces(f,E)
+	for(face f : E.faces)
 	{
 		faceNo++;
 		node faceNode = newNode();
@@ -117,7 +105,7 @@ void FaceSinkGraph::doInit()
 		{
 			node v = *it;
 			if(isSinkSwitch[v])	{
-				if (sinkSwitch[v] == 0) {
+				if (sinkSwitch[v] == nullptr) {
 					node vF = newNode();
 					m_originalNode[vF] = v;
 					sinkSwitch[v] = vF;
@@ -133,17 +121,14 @@ void FaceSinkGraph::doInit()
 }
 
 
-
-
-/* original:
+#if 0
 void FaceSinkGraph::doInit()
 {
 	const ConstCombinatorialEmbedding &E = *m_pE;
 
 	NodeArray<node> sinkSwitch(E,0); // corresponding node in F (if any)
 
-	face f;
-	forall_faces(f,E)
+	for(face f : E.faces)
 	{
 		node faceNode = newNode();
 		m_originalFace[faceNode] = f;
@@ -174,7 +159,8 @@ void FaceSinkGraph::doInit()
 			adj = adjPred->cyclicPred();
 		} while (adj != adj1);
 	}
-}*/
+}
+#endif
 
 
 // checks if F is a forest with
@@ -184,32 +170,31 @@ void FaceSinkGraph::doInit()
 node FaceSinkGraph::checkForest()
 {
 	// representative of tree T (0 indicates none found yet)
-	m_T = 0;
+	m_T = nullptr;
 
 	// we perform a dfs traversal on F and check if there are backwards edges
 	// (then F is not a forest)
 	NodeArray<bool> visited(*this,false);
 
-	node v;
-	forall_nodes(v,*this)
+	for(node v : nodes)
 	{
 		if (visited[v]) continue;
 
 		// number of internal vertices in current tree
 		int nInternalVertices = 0;
-		if (dfsCheckForest(v,0,visited,nInternalVertices) == 0)
-			return 0;
+		if (dfsCheckForest(v,nullptr,visited,nInternalVertices) == 0)
+			return nullptr;
 
 		// either we have a unique tree with no internal vertices
 		if(nInternalVertices == 0) {
 			if(m_T)
-				return 0;
+				return nullptr;
 			else
 				m_T = v;
 
 		// or we have exactly one internal vertex
 		} else if (nInternalVertices != 1)
-			return 0;
+			return nullptr;
 	}
 
 	return m_T;
@@ -231,15 +216,14 @@ bool FaceSinkGraph::dfsCheckForest(
 		++nInternalVertices;
 
 	// iterate over all adjacent nodes of v different from parent
-	adjEntry adj;
-	forall_adj(adj,v)
+	for(adjEntry adj : v->adjEntries)
 	{
 		node w = adj->twinNode();
 
 		if (w == parent) continue;
 		if(visited[w]) return false;
 
-		if(dfsCheckForest(w,v,visited,nInternalVertices) == false)
+		if(!dfsCheckForest(w,v,visited,nInternalVertices))
 			return false;
 	}
 
@@ -259,8 +243,7 @@ void FaceSinkGraph::gatherExternalFaces(
 		externalFaces.pushBack(m_originalFace[v]);
 
 	// since we already know that T is a tree we can omit the visited array
-	adjEntry adj;
-	forall_adj(adj,v)
+	for(adjEntry adj : v->adjEntries)
 	{
 		node w = adj->twinNode();
 
@@ -277,19 +260,18 @@ node FaceSinkGraph::dfsFaceNodeOf(node v, node parent, face f1, face f2)
 		return v;
 
 	// since we already know that T is a tree we can omit the visited array
-	adjEntry adj;
-	forall_adj(adj,v)
+	for(adjEntry adj : v->adjEntries)
 	{
 		node w = adj->twinNode();
 
 		if (w != parent) {
 			node found = dfsFaceNodeOf(w,v,f1,f2);
-			if (found != 0)
+			if (found != nullptr)
 				return found;
 		}
 	}
 
-	return 0;
+	return nullptr;
 }
 
 
@@ -302,18 +284,17 @@ void FaceSinkGraph::stAugmentation(
 	SList<edge> &augmentedEdges)  // list of augmented edges
 {
 	SListPure<node> roots;
-	node v;
-	forall_nodes(v,*this) {
+	for(node v : nodes) {
 		node vOrig = m_originalNode[v];
-		if (vOrig != 0 && vOrig->indeg() > 0 && vOrig->outdeg() > 0)
+		if (vOrig != nullptr && vOrig->indeg() > 0 && vOrig->outdeg() > 0)
 			roots.pushBack(v);
 	}
 
-	node vh = dfsStAugmentation(h,0,G,augmentedNodes,augmentedEdges);
+	node vh = dfsStAugmentation(h,nullptr,G,augmentedNodes,augmentedEdges);
 
 	SListConstIterator<node> it;
 	for(it = roots.begin(); it.valid(); ++it)
-		dfsStAugmentation(*it,0,G,augmentedNodes,augmentedEdges);
+		dfsStAugmentation(*it,nullptr,G,augmentedNodes,augmentedEdges);
 
 	augmentedEdges.pushBack(G.newEdge(m_source,vh));
 
@@ -327,19 +308,18 @@ node FaceSinkGraph::dfsStAugmentation(
 	SList<node> &augmentedNodes, // list of augmented nodes
 	SList<edge> &augmentedEdges) // list of augmented edges
 {
-	bool isFace = (m_originalFace[v] != 0);
-	node vf = 0;
+	bool isFace = (m_originalFace[v] != nullptr);
+	node vf = nullptr;
 
 	// since we already know that T is a tree we can omit the visited array
-	adjEntry adj;
-	forall_adj(adj,v)
+	for(adjEntry adj : v->adjEntries)
 	{
 		node w = adj->twinNode();
 
 		if (w == parent) continue;
 
 		if (isFace) {
-			if (vf == 0) {
+			if (vf == nullptr) {
 				vf = G.newNode();
 				augmentedNodes.pushBack(vf);
 				if (parent) {
@@ -368,19 +348,18 @@ void FaceSinkGraph::stAugmentation(
 	SList<edge> &augmentedEdges)  // list of augmented edges
 {
 	SListPure<node> roots;
-	node v;
-	forall_nodes(v,*this) {
+	for (node v : nodes) {
 		node vOrig = m_originalNode[v];
-		if (vOrig != 0 && vOrig->indeg() > 0 && vOrig->outdeg() > 0)
+		if (vOrig != nullptr && vOrig->indeg() > 0 && vOrig->outdeg() > 0)
 			roots.pushBack(v);
 	}
 
 
-	superSink = dfsStAugmentation(h,0,G,augmentedEdges);
+	superSink = dfsStAugmentation(h,nullptr,G,augmentedEdges);
 
 	SListConstIterator<node> it;
 	for(it = roots.begin(); it.valid(); ++it)
-		dfsStAugmentation(*it,0,G,augmentedEdges);
+		dfsStAugmentation(*it,nullptr,G,augmentedEdges);
 
 	augmentedEdges.pushBack(G.newEdge(m_source,superSink));
 
@@ -393,19 +372,18 @@ node FaceSinkGraph::dfsStAugmentation(
 	Graph &G,                    // original graph (not const)
 	SList<edge> &augmentedEdges) // list of augmented edges
 {
-	bool isFace = (m_originalFace[v] != 0);
-	node vf = (parent != 0) ? m_originalNode[parent] : 0;
+	bool isFace = (m_originalFace[v] != nullptr);
+	node vf = (parent != nullptr) ? m_originalNode[parent] : nullptr;
 
 	// since we already know that T is a tree we can omit the visited array
-	adjEntry adj;
-	forall_adj(adj,v)
+	for(adjEntry adj : v->adjEntries)
 	{
 		node w = adj->twinNode();
 
 		if (w == parent) continue;
 
 		if (isFace) {
-			if (vf == 0) {
+			if (vf == nullptr) {
 				vf = G.newNode();
 			}
 
@@ -422,7 +400,7 @@ node FaceSinkGraph::dfsStAugmentation(
 
 
 void FaceSinkGraph::sinkSwitches(FaceArray< List<adjEntry> > &faceSwitches) {
-	OGDF_ASSERT(m_pE->externalFace() != 0);
+	OGDF_ASSERT(m_pE->externalFace() != nullptr);
 
 	List<adjEntry> dummyList;
 	faceSwitches.init(*m_pE, dummyList);
@@ -431,22 +409,22 @@ void FaceSinkGraph::sinkSwitches(FaceArray< List<adjEntry> > &faceSwitches) {
 	List<face> toDo;
 	FaceArray<bool> faceDone(*m_pE, false);
 
-	//debug
-	//m_pE->getGraph().writeGML("c:/temp/debug.gml");
+#if 0
+	m_pE->getGraph().writeGML("c:/temp/debug.gml");
+#endif
 
 	//compute sink-switches for the ext. face
-	adjEntry adj;
-	forall_face_adj(adj, m_pE->externalFace()) {
+	for(adjEntry adj : m_pE->externalFace()->entries)
+	{
 		node u = adj->theNode();
 		if (u->outdeg() == 0 && !visited[u])
 			faceSwitches[m_pE->externalFace()].pushBack(adj);
 
 		if (u->indeg() > 1 && !visited[u]) {
 			List<edge> outEdges;
-			m_pE->getGraph().outEdges(u, outEdges);
+			u->outEdges(outEdges);
 			if (outEdges.empty()) {
-				adjEntry run;
-				forall_adj(run, u) {
+				for(adjEntry run : u->adjEntries) {
 					if (m_pE->rightFace(run) != m_pE->externalFace())
 						toDo.pushBack(m_pE->rightFace(run));
 				}
@@ -474,7 +452,7 @@ void FaceSinkGraph::sinkSwitches(FaceArray< List<adjEntry> > &faceSwitches) {
 		if (faceDone[f])
 			continue;
 
-		forall_face_adj(adj, f) {
+		for(adjEntry adj : f->entries) {
 			node u = adj->theNode();
 			if (visited[u] && adj->theEdge()->target() == adj->faceCyclePred()->theEdge()->target()
 					&& m_pE->rightFace(adj) != m_pE->leftFace(adj))
@@ -488,10 +466,9 @@ void FaceSinkGraph::sinkSwitches(FaceArray< List<adjEntry> > &faceSwitches) {
 
 			if (u->indeg() > 1) {
 				List<edge> outEdges;
-				m_pE->getGraph().outEdges(u, outEdges);
+				u->outEdges(outEdges);
 				if (outEdges.empty()) {
-					adjEntry run;
-					forall_adj(run, u) {
+					for(adjEntry run : u->adjEntries) {
 						if (m_pE->rightFace(run) != f)
 							toDo.pushBack(m_pE->rightFace(run));
 					}
@@ -515,39 +492,18 @@ void FaceSinkGraph::sinkSwitches(FaceArray< List<adjEntry> > &faceSwitches) {
 		OGDF_ASSERT(!faceSwitches[f].empty());
 	}
 
-
-
-	/*
-	//-------------------------------------debug
-	cout << endl;
-	cout << "switche (FaceSinkGraph::sinkSwitches) : " << endl;
-	face f;
-	forall_faces(f, *m_pE) {
-		cout << "face : " << f->index() << endl;
-		List<adjEntry> adjList = faceSwitches[f];
-		forall_listiterators(adjEntry, it, adjList) {
-			cout << (*it)->theNode() << ";   ";
+#if 0
+	std::cout << std::endl;
+	std::cout << "switche (FaceSinkGraph::sinkSwitches) : " << std::endl;
+	for(face f : m_pE->faces) {
+		std::cout << "face : " << f->index() << std::endl;
+		const List<adjEntry> &adjList = faceSwitches[f];
+		for(adjEntry adj : adjList) {
+			std::cout << adj->theNode() << ";   ";
 		}
-		cout << endl;
+		std::cout << std::endl;
 	}
-	// --------------------------------end debug
-
-	*/
+#endif
 }
 
-
-
-adjEntry FaceSinkGraph::getAdjEntry(node v, face f) {
-	adjEntry adj = 0;
-	forall_adj(adj, v) {
-		if (m_pE->rightFace(adj) == f)
-			break;
-	}
-
-	OGDF_ASSERT(m_pE->rightFace(adj) == f);
-
-	return adj;
- }
-
-} // end namespace ogdf
-
+}

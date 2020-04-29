@@ -1,11 +1,3 @@
-/*
- * $Revision: 3210 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-01-15 11:58:53 +0100 (Tue, 15 Jan 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implementation of split heuristic.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,54 +25,49 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 
 #include <ogdf/layered/SplitHeuristic.h>
-#include <ogdf/layered/CrossingsMatrix.h>
 
 namespace ogdf
 {
-//-------------------------------------------------------------------
-//                          SplitHeuristic
-//-------------------------------------------------------------------
 
 void SplitHeuristic::init (const HierarchyLevels &levels)
 {
+	cleanup();
 	m_cm = new CrossingsMatrix(levels);
 }
 
 void SplitHeuristic::cleanup()
 {
 	delete m_cm;
+	m_cm = nullptr;
 }
 
 // ordinary call
 void SplitHeuristic::call(Level &L)
 {
 	m_cm->init(L);
-	buffer = Array<node>(L.size());
+	m_buffer = Array<node>(L.size());
 
 	recCall(L, 0, L.size() - 1);
 
-	buffer = Array<node>(-1);
+	m_buffer = Array<node>(-1);
 }
 
 // SimDraw call
-void SplitHeuristic::call(Level &L, const EdgeArray<__uint32> *edgeSubGraphs)
+void SplitHeuristic::call(Level &L, const EdgeArray<uint32_t> *edgeSubGraphs)
 {
 	// only difference to call is the different calculation of the crossingsmatrix
 	m_cm->init(L, edgeSubGraphs);
-	buffer = Array<node>(L.size());
+	m_buffer = Array<node>(L.size());
 
 	recCall(L, 0, L.size() - 1);
 
-	buffer = Array<node>(-1);
+	m_buffer = Array<node>(-1);
 }
 
 void SplitHeuristic::recCall(Level &L, int low, int high)
@@ -96,21 +83,21 @@ void SplitHeuristic::recCall(Level &L, int low, int high)
 	for (i = low+1; i <= high; i++)
 	{
 		if (crossings(i,low) < crossings(low,i))
-			buffer[down++] = L[i];
+			m_buffer[down++] = L[i];
 	}
 
 	// use two for-loops in order to keep the number of swaps low
 	for (i = high; i >= low+1; i--)
 	{
 		if (crossings(i,low) >= crossings(low,i))
-			buffer[up--] = L[i];
+			m_buffer[up--] = L[i];
 	}
 
-	buffer[down] = L[low];
+	m_buffer[down] = L[low];
 
 	for (i = low; i < high; i++)
 	{
-		int j = levels.pos(buffer[i]);
+		int j = levels.pos(m_buffer[i]);
 		if (i != j)
 		{
 			L.swap(i,j);
@@ -122,4 +109,4 @@ void SplitHeuristic::recCall(Level &L, int low, int high)
 	recCall(L,up+1,high);
 }
 
-} // end namespace ogdf
+}

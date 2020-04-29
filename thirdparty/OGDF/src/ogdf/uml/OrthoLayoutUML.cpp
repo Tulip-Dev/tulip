@@ -1,11 +1,3 @@
-/*
- * $Revision: 3503 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2013-05-16 14:48:58 +0200 (Thu, 16 May 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implements planar orthogonal drawing algorithm for
  * mixed-upward embedded graphs
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,20 +26,15 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 
 #include <ogdf/uml/OrthoLayoutUML.h>
 #include <ogdf/orthogonal/LongestPathCompaction.h>
 #include <ogdf/orthogonal/FlowCompaction.h>
 #include <ogdf/orthogonal/EdgeRouter.h>
-#include <ogdf/internal/orthogonal/RoutingChannel.h>
-#include <ogdf/orthogonal/MinimumEdgeDistances.h>
 #include <ogdf/orthogonal/OrthoShaper.h>
 
 
@@ -61,8 +48,8 @@ OrthoLayoutUML::OrthoLayoutUML()
 	m_cOverhang  = 0.2;
 	m_margin     = 40.0;
 	//preferred hierarchy direction
-	// SHOULD ACTUALLY BE odNorth, but we use odSouth since gml's are flipped!
-	m_preferedDir = odSouth;
+	// SHOULD ACTUALLY BE North, but we use South since gml's are flipped!
+	m_preferedDir = OrthoDir::South;
 	m_optionProfile = 0;
 	//edge costs
 	m_costAssoc   = 1;//should be set by profile
@@ -96,12 +83,11 @@ void OrthoLayoutUML::call(PlanRepUML &PG,
 		return;
 	}
 
-
 	//classify brother-to-brother hierarchy edges to allow alignment
 	if (m_align)
 	{
 		classifyEdges(PG, adjExternal);
-	}//if align
+	}
 	//compaction with scaling: help node cages to pass by each other
 	double l_orsep = m_separation;
 	if (m_useScalingCompaction)
@@ -109,10 +95,8 @@ void OrthoLayoutUML::call(PlanRepUML &PG,
 		m_scalingSteps = 6;
 		double scaleFactor = double(int(1 << m_scalingSteps));
 		m_separation = scaleFactor*m_separation; //reduce this step by step in compaction
-	}//if scaling
+	}
 
-
-	//***********************************
 	// PHASE 1: determine orthogonal shape
 
 	// expand high-degree vertices and generalization mergers
@@ -133,7 +117,7 @@ void OrthoLayoutUML::call(PlanRepUML &PG,
 
 	//set some options
 	OFG.align(m_align);    //align brother objects on hierarchy levels
-	OFG.traditional(m_orthoStyle > 0 ? false : true); //prefer 90/270 degree angles over 180/180
+	OFG.traditional(m_orthoStyle <= 0); //prefer 90/270 degree angles over 180/180
 
 	// New Call
 	OFG.setBendBound(m_bendBound);
@@ -151,7 +135,6 @@ void OrthoLayoutUML::call(PlanRepUML &PG,
 		}
 	}
 
-	//******************************************************************
 	// PHASE 2: construction of a feasible drawing of the expanded graph
 
 	// expand low degree vertices
@@ -186,9 +169,8 @@ void OrthoLayoutUML::call(PlanRepUML &PG,
 	rcGrid.computeRoutingChannels(OR, m_align);
 
 
-	node v;
 	const OrthoRep::VertexInfoUML *pInfoExp;
-	forall_nodes(v, PG) {
+	for(node v : PG.nodes) {
 		pInfoExp = OR.cageInfo(v);
 
 		if (pInfoExp) break;
@@ -224,11 +206,10 @@ void OrthoLayoutUML::call(PlanRepUML &PG,
 
 
 	string msg;
-	OGDF_ASSERT(OR.check(msg) == true);
+	OGDF_ASSERT(OR.check(msg));
 
-	OR.orientate(pInfoExp->m_corner[odNorth], odNorth);
+	OR.orientate(pInfoExp->m_corner[static_cast<int>(OrthoDir::North)], OrthoDir::North);
 
-	//*************************************************
 	// PHASE 4: apply improvement compaction heuristics
 
 	// call flow compaction on grid
@@ -246,13 +227,8 @@ void OrthoLayoutUML::call(PlanRepUML &PG,
 	computeBoundingBox(PG,drawing);
 
 	m_separation = l_orsep;
-}//call
+}
 
-
-
-//-----------------------------------------------------------------------------
-//Helpers
-//-----------------------------------------------------------------------------
 void OrthoLayoutUML::classifyEdges(PlanRepUML &PG, adjEntry &adjExternal)
 {
 	//classify brother-to-brother hierarchy edges to allow alignment
@@ -265,13 +241,13 @@ void OrthoLayoutUML::classifyEdges(PlanRepUML &PG, adjEntry &adjExternal)
 	for(e = PG.firstEdge(); e; e = eSucc)
 	{
 		eSucc = e->succ();
-		if (PG.typeOf(e) != Graph::generalization)
+		if (PG.typeOf(e) != Graph::EdgeType::generalization)
 		{
 			adjEntry as = e->adjSource();
 			node v = e->source();
 			if ( (PG.alignUpward(as))
-				&& (PG.typeOf(e->target()) != Graph::dummy)//TODO: crossings ?
-				&& (PG.typeOf(v) != Graph::dummy)
+				&& (PG.typeOf(e->target()) != Graph::NodeType::dummy)//TODO: crossings ?
+				&& (PG.typeOf(v) != Graph::NodeType::dummy)
 				)
 			{
 				edge gen1, gen2;
@@ -279,7 +255,7 @@ void OrthoLayoutUML::classifyEdges(PlanRepUML &PG, adjEntry &adjExternal)
 				adjEntry runAE = as->cyclicSucc();
 				edge run = runAE->theEdge();
 				while ( (stop < v->degree()) &&  //only once
-					((PG.typeOf(run) != Graph::generalization) || //search generalization
+					((PG.typeOf(run) != Graph::EdgeType::generalization) || //search generalization
 					(run->source() != v) //outgoing gen
 					)
 					)
@@ -287,7 +263,7 @@ void OrthoLayoutUML::classifyEdges(PlanRepUML &PG, adjEntry &adjExternal)
 					stop++;
 					runAE = runAE->cyclicSucc();
 					run = runAE->theEdge();
-				}//while
+				}
 				OGDF_ASSERT(stop <= v->degree());
 
 				//now we have the outgoing generalization (to the merger) at v
@@ -300,7 +276,7 @@ void OrthoLayoutUML::classifyEdges(PlanRepUML &PG, adjEntry &adjExternal)
 				runAE = asTwin->cyclicSucc();
 				run = runAE->theEdge();
 				while ( (stop < w->degree()) &&
-					((PG.typeOf(run) != Graph::generalization) ||
+					((PG.typeOf(run) != Graph::EdgeType::generalization) ||
 					(run->source() != w)
 					)
 					)
@@ -308,7 +284,7 @@ void OrthoLayoutUML::classifyEdges(PlanRepUML &PG, adjEntry &adjExternal)
 					stop++;
 					runAE = runAE->cyclicSucc();
 					run = runAE->theEdge();
-				}//while
+				}
 				OGDF_ASSERT(stop <= w->degree());
 
 				//now we have the outgoing generalization (to the merger) at w
@@ -327,50 +303,47 @@ void OrthoLayoutUML::classifyEdges(PlanRepUML &PG, adjEntry &adjExternal)
 					if (ltr)
 					{
 						//there are edges between e and gen2 at target
-						if (!(e->adjTarget()->faceCyclePred() == gen2->adjTarget()))
+						if (e->adjTarget()->faceCyclePred() != gen2->adjTarget())
 						{
 							OGDF_ASSERT(v != e->target());
-							PG.moveAdj(e->adjTarget(), before, gen2->adjTarget()->twin());
+							PG.moveAdj(e->adjTarget(), Direction::before, gen2->adjTarget()->twin());
 						}
 						//there are edges between e and gen1 at source
-						if (!(e->adjTarget()->faceCycleSucc() == gen1->adjSource()))
+						if (e->adjTarget()->faceCycleSucc() != gen1->adjSource())
 						{
 							//test if we discard the outer face entry
 							if (adjExternal == e->adjSource())
 							{
 								adjExternal = e->adjSource()->faceCyclePred();
 							}
-							PG.moveAdj(e->adjSource(), after, gen1->adjSource());
+							PG.moveAdj(e->adjSource(), Direction::after, gen1->adjSource());
 						}
-					}//if gen 1 left of gen 2
+					}
 					if (rtl)
 					{
 						//there are edges between e and gen2 at target
-						if (!(e->adjSource()->faceCycleSucc() == gen2->adjSource()))
+						if (e->adjSource()->faceCycleSucc() != gen2->adjSource())
 						{
 							//test if we discard the outer face entry
 							if (adjExternal == e->adjTarget())
 							{
 								adjExternal = e->adjTarget()->faceCycleSucc();
 							}
-							PG.moveAdj(e->adjTarget(), after, gen2->adjSource());
+							PG.moveAdj(e->adjTarget(), Direction::after, gen2->adjSource());
 						}
 						//there are edges between e and gen1 at source
-						if (!(e->adjSource()->faceCyclePred() == gen1->adjTarget()))
+						if (e->adjSource()->faceCyclePred() != gen1->adjTarget())
 						{
-							PG.moveAdj(e->adjSource(), before, gen1->adjSource());
+							PG.moveAdj(e->adjSource(), Direction::before, gen1->adjSource());
 						}
-
-					}//if gen 2 left of gen 1
-				}//if
-				else PG.setHalfBrother(e);
-
-			}//if upward edge
-		}//if not generalization
-	}//for
-}//classifyedges
-
-
+					}
+				} else {
+					PG.setHalfBrother(e);
+				}
+			}
+		}
+	}
+}
 
 // compute bounding box and move final drawing such that it is 0 aligned
 // respecting margins
@@ -383,8 +356,7 @@ void OrthoLayoutUML::computeBoundingBox(
 	minX = maxX = drawing.x(PG.firstNode());
 	minY = maxY = drawing.y(PG.firstNode());
 
-	node v;
-	forall_nodes(v,PG)
+	for(node v : PG.nodes)
 	{
 		double x = drawing.x(v);
 		if (x < minX) minX = x;
@@ -398,7 +370,7 @@ void OrthoLayoutUML::computeBoundingBox(
 	double deltaX = m_margin - minX;
 	double deltaY = m_margin - minY;
 
-	forall_nodes(v,PG)
+	for(node v : PG.nodes)
 	{
 		drawing.x(v) += deltaX;
 		drawing.y(v) += deltaY;
@@ -407,6 +379,4 @@ void OrthoLayoutUML::computeBoundingBox(
 	m_boundingBox = DPoint(maxX+deltaX+m_margin, maxY+deltaY+m_margin);
 }
 
-
-} // end namespace ogdf
-
+}

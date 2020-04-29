@@ -22,7 +22,6 @@
 #define TULIPTOOGDF_H_
 
 #include <ogdf/basic/GraphAttributes.h>
-#include <ogdf/fileformats/GmlParser.h>
 
 #include <tulip/tulipconf.h>
 #include <tulip/Graph.h>
@@ -45,7 +44,7 @@ class TLP_OGDF_SCOPE TulipToOGDF {
 public:
   TulipToOGDF(tlp::Graph *g, bool importEdgeBends = true);
 
-  void saveToGML(const char *fileName);
+  //void saveToGML(const char *fileName);
 
   tlp::Graph &getTlp();
   ogdf::GraphAttributes &getOGDFGraphAttr();

@@ -1,11 +1,3 @@
-/*
- * $Revision: 2771 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-09-26 15:53:39 +0200 (Wed, 26 Sep 2012) $
- ***************************************************************/
-
 /** \file
  * \brief implementation of MMFixedEmbeddingInserter class
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,57 +25,28 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
+#include <ogdf/planarity/embedding_inserter/CrossingsBucket.h>
 #include <ogdf/planarity/MMFixedEmbeddingInserter.h>
-#include <ogdf/basic/FaceArray.h>
-#include <ogdf/basic/Queue.h>
-#include <ogdf/basic/FaceSet.h>
-#include <ogdf/basic/NodeSet.h>
 #include <ogdf/planarlayout/PlanarStraightLayout.h>
 #include <ogdf/fileformats/GraphIO.h>
 
-
 namespace ogdf {
 
-	static int globalCounter = 0;
+static int globalCounter = 0;
 
-//---------------------------------------------------------
 // constructor
 // sets default values for options
-//
 MMFixedEmbeddingInserter::MMFixedEmbeddingInserter()
 {
-	m_rrOption = rrNone;
+	m_rrOption = RemoveReinsertType::None;
 	m_percentMostCrossed = 25;
 }
 
-
-//---------------------------------------------------------
-// FEICrossingsBucket
-// bucket function for sorting edges by decreasing number
-// of crossings
-class FEICrossingsBucket : public BucketFunc<edge>
-{
-	const PlanRepExpansion *m_pPG;
-
-public:
-	FEICrossingsBucket(const PlanRepExpansion *pPG) :
-		m_pPG(pPG) { }
-
-	int getBucket(const edge &e) {
-		return -m_pPG->chain(e).size();
-	}
-};
-
-
-/*
+#if 0
 static void draw(
 	const PlanRepExpansion &PG,
 	const EdgeArray<bool> *forbiddenEdgeOrig)
@@ -91,10 +54,9 @@ static void draw(
 	static int num = 1;
 
 	GraphAttributes GA(PG,
-		GraphAttributes::nodeGraphics | GraphAttributes::edgeGraphics | GraphAttributes::nodeLabel | GraphAttributes::edgeColor | GraphAttributes::nodeColor);
+		GraphAttributes::nodeGraphics | GraphAttributes::edgeGraphics | GraphAttributes::nodeLabel | GraphAttributes::edgeStyle | GraphAttributes::nodeStyle);
 
-	node v;
-	forall_nodes(v, PG) {
+	for(node v : PG.nodes) {
 		node vOrig = PG.original(v);
 		if(vOrig != 0) {
 			GA.label(v) = to_string(v->index()) + " | " + to_string(vOrig->index());
@@ -108,10 +70,9 @@ static void draw(
 	}
 
 	if(forbiddenEdgeOrig) {
-		edge e;
-		forall_edges(e, PG) {
+		for(edge e : PG.edges) {
 			edge eOrig = PG.originalEdge(e);
-			if (eOrig && (*forbiddenEdgeOrig)[eOrig] == true)
+			if (eOrig && (*forbiddenEdgeOrig)[eOrig])
 				GA.strokeColor(e) = "#ff0000";
 		}
 	}
@@ -123,7 +84,7 @@ static void draw(
 	string fileName = string("layout-") + to_string(num++) + ".gml";
 	GraphIO::writeGML(GA, fileName);
 }
-*/
+#endif
 
 void MMFixedEmbeddingInserter::drawDual(
 	const PlanRepExpansion &PG,
@@ -132,11 +93,10 @@ void MMFixedEmbeddingInserter::drawDual(
 	GraphAttributes GA(m_dual,
 		GraphAttributes::nodeGraphics | GraphAttributes::edgeGraphics | GraphAttributes::nodeLabel | GraphAttributes::edgeStyle | GraphAttributes::nodeStyle);
 
-	node v;
-	forall_nodes(v, m_dual) {
+	for(node v : m_dual.nodes) {
 		if(m_primalNode[v]) {
 			GA.label(v) = string("v") + to_string(m_primalNode[v]->index()) + ": " + to_string(v->index());
-			GA.fillColor(v) = Color::White;
+			GA.fillColor(v) = Color::Name::White;
 		} else {
 			GA.label(v) = string("f: ") + to_string(v->index());
 			GA.fillColor(v) = Color(0x22,0xff,0x22);
@@ -145,97 +105,94 @@ void MMFixedEmbeddingInserter::drawDual(
 		GA.height(v) = 20;
 	}
 
-	edge e;
-	forall_edges(e, m_dual) {
-		if(origOfDualForbidden(e, PG, forbiddenEdgeOrig) == true)
-			GA.strokeColor(e) = Color::Red;
+	for(edge e : m_dual.edges) {
+		if(origOfDualForbidden(e, PG, forbiddenEdgeOrig))
+			GA.strokeColor(e) = Color::Name::Red;
 		else
-			GA.strokeColor(e) = Color::Black;
+			GA.strokeColor(e) = Color::Name::Black;
 	}
 
-	GraphIO::writeGML(GA, "dual.gml");
+	GraphIO::write(GA, "dual.gml", GraphIO::writeGML);
 }
 
 
-//---------------------------------------------------------
 // actual call (called by all variations of call)
 //   crossing of generalizations is forbidden if forbidCrossingGens = true
 //   edge costs are obeyed if costOrig != 0
-//
 Module::ReturnType MMFixedEmbeddingInserter::doCall(
 	PlanRepExpansion &PG,
 	const List<edge> &origEdges,
 	const EdgeArray<bool> *forbiddenEdgeOrig)
 {
-	ReturnType retValue = retFeasible;
+	ReturnType retValue = ReturnType::Feasible;
 
-	//cout << "orig edges: ";
-	//ListConstIterator<edge> itE;
-	//for(itE = origEdges.begin(); itE.valid(); ++itE)
-	//	cout << *itE << " ";
-	//cout << endl;
+#if 0
+	std::cout << "orig edges: ";
+	ListConstIterator<edge> itE;
+	for(itE = origEdges.begin(); itE.valid(); ++itE)
+		std::cout << *itE << " ";
+	std::cout << std::endl;
+#endif
 
 	PG.embed();
-	OGDF_ASSERT(PG.representsCombEmbedding() == true);
+	OGDF_ASSERT(PG.representsCombEmbedding());
 
 	if (origEdges.size() == 0)
-		return retOptimal;  // nothing to do
+		return ReturnType::Optimal;  // nothing to do
 
 	// initialization
 	CombinatorialEmbedding E(PG);  // embedding of PG
 
 	// construct dual graph
 	m_primalAdj.init(m_dual);
-	m_dualEdge.init(PG,0);
+	m_dualEdge.init(PG,nullptr);
 	m_dualOfFace.init(E);
-	m_dualOfNode.init(PG,0);
-	m_primalNode.init(m_dual,0);
+	m_dualOfNode.init(PG,nullptr);
+	m_primalNode.init(m_dual,nullptr);
 	m_dualCost.init(m_dual,0);
 
 	constructDual(PG,E);
 	OGDF_ASSERT(checkDualGraph(PG,E));
 
-	//draw(PG, forbiddenEdgeOrig);
+#if 0
+	draw(PG, forbiddenEdgeOrig);
 
-	//if(forbiddenEdgeOrig) {
-	//	cout << "forbidden edges: ";
-	//	edge e;;
-	//	forall_edges(e, PG.original())
-	//		if((*forbiddenEdgeOrig)[e]) cout << e << " ";
-	//	cout << endl;
-	//}
+	if(forbiddenEdgeOrig) {
+		std::cout << "forbidden edges: ";
+		for(edge e : PG.original().edges)
+			if((*forbiddenEdgeOrig)[e]) std::cout << e << " ";
+		std::cout << std::endl;
+	}
+#endif
 
-	m_delFaces = new FaceSetSimple(E);
+	m_delFaces = new FaceSet<false>(E);
 
 	// m_newFaces and m_mergedNodes are used by removeEdge()
-	m_newFaces = 0;
-	m_mergedNodes = 0;
-	if (removeReinsert() != rrNone) {
-		m_newFaces    = new FaceSetPure(E);
-		m_mergedNodes = new NodeSetPure(PG);
+	m_newFaces = nullptr;
+	m_mergedNodes = nullptr;
+	if (removeReinsert() != RemoveReinsertType::None) {
+		m_newFaces    = new FaceSet<false>(E);
+		m_mergedNodes = new NodeSet<false>(PG);
 	}
 
 	SListPure<edge> currentOrigEdges;
-	if(removeReinsert() == rrIncremental) {
-		edge e;
-		forall_edges(e,PG)
+	if(removeReinsert() == RemoveReinsertType::Incremental) {
+		for(edge e : PG.edges)
 			currentOrigEdges.pushBack(PG.originalEdge(e));
 	}
 
-	NodeSet sources(PG), targets(PG);
+	NodeSet<> sources(PG), targets(PG);
 
 	// insertion of edges
-	ListConstIterator<edge> it;
-	for(it = origEdges.begin(); it.valid(); ++it)
+	for(edge eOrig: origEdges)
 	{
-		edge eOrig = *it;
 		node srcOrig = eOrig->source();
 		node tgtOrig = eOrig->target();
 
 		node oldSrc = (PG.splittableOrig(srcOrig) && PG.expansion(srcOrig).size() == 1) ?
-			PG.expansion(srcOrig).front() : 0;
+			PG.expansion(srcOrig).front() : nullptr;
 		node oldTgt = (PG.splittableOrig(tgtOrig) && PG.expansion(tgtOrig).size() == 1) ?
-			PG.expansion(tgtOrig).front() : 0;
+			PG.expansion(tgtOrig).front() : nullptr;
 
 		anchorNodes(eOrig->source(), sources, PG);
 		anchorNodes(eOrig->target(), targets, PG);
@@ -244,17 +201,17 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 		findShortestPath(PG, E, sources.nodes(), targets.nodes(), crossed, forbiddenEdgeOrig);
 		sources.clear(); targets.clear();
 
-		insertEdge(PG,E,eOrig,eOrig->source(),eOrig->target(),0,crossed);
+		insertEdge(PG,E,eOrig,eOrig->source(),eOrig->target(),nullptr,crossed);
 
-		if(oldSrc != 0 && PG.expansion(srcOrig).size() > 1)
+		if(oldSrc != nullptr && PG.expansion(srcOrig).size() > 1)
 			contractSplitIfReq(PG,E,oldSrc);
-		if(oldTgt != 0 && PG.expansion(tgtOrig).size() > 1)
+		if(oldTgt != nullptr && PG.expansion(tgtOrig).size() > 1)
 			contractSplitIfReq(PG,E,oldTgt);
 
 		//draw(PG, forbiddenEdgeOrig);
 
 		// THIS OPTION IS NOT YET IMPLEMENTED!
-		if(removeReinsert() == rrIncremental)
+		if(removeReinsert() == RemoveReinsertType::Incremental)
 		{
 			currentOrigEdges.pushBack(eOrig);
 
@@ -270,17 +227,17 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 					int pathLength = PG.chain(eOrigRR).size() - 1;
 					if (pathLength == 0) continue; // cannot improve
 
-					node oldSrc, oldTgt;
-					removeEdge(PG,E,eOrigRR,0,oldSrc,oldTgt);
+					node oldSource, oldTarget;
+					removeEdge(PG,E,eOrigRR,nullptr,oldSource,oldTarget);
 
 					// try to find a better insertion path
-					List<Tuple2<adjEntry,adjEntry> > crossed;
+					List<Tuple2<adjEntry,adjEntry> > crossedTuple;
 					findShortestPath(PG, E,
 						PG.expansion(eOrigRR->source()), PG.expansion(eOrigRR->target()),
-						crossed, forbiddenEdgeOrig);
+						crossedTuple, forbiddenEdgeOrig);
 
 					// re-insert edge (insertion path cannot be longer)
-					insertEdge(PG,E,eOrigRR,eOrigRR->source(),eOrigRR->target(),0,crossed);
+					insertEdge(PG,E,eOrigRR,eOrigRR->source(),eOrigRR->target(),nullptr,crossedTuple);
 
 					int newPathLength = PG.chain(eOrigRR).size() - 1;
 					OGDF_ASSERT(newPathLength <= pathLength);
@@ -293,27 +250,29 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 		OGDF_ASSERT(checkSplitDeg(PG));
 	}
 
-	OGDF_ASSERT(E.consistencyCheck());
-	OGDF_ASSERT(PG.consistencyCheck());
+#ifdef OGDF_DEBUG
+	E.consistencyCheck();
+	PG.consistencyCheck();
+#endif
 	OGDF_ASSERT(checkDualGraph(PG,E));
 	OGDF_ASSERT(checkSplitDeg(PG));
 
 	const Graph &G = PG.original();
-	if(removeReinsert() != rrIncremental) {
+	if(removeReinsert() != RemoveReinsertType::Incremental) {
 		// postprocessing (remove-reinsert heuristc)
 		SListPure<edge> rrEdges;
 
 		switch(removeReinsert())
 		{
-		case rrAll:
-		case rrMostCrossed: {
+		case RemoveReinsertType::All:
+		case RemoveReinsertType::MostCrossed:
+			{
 				const List<node> &origInCC = PG.nodesInCC();
 				ListConstIterator<node> itV;
 
 				for(itV = origInCC.begin(); itV.valid(); ++itV) {
 					node vG = *itV;
-					adjEntry adj;
-					forall_adj(adj,vG) {
+					for(adjEntry adj : vG->adjEntries) {
 						if ((adj->index() & 1) == 0) continue;
 						edge eG = adj->theEdge();
 						rrEdges.pushBack(eG);
@@ -322,13 +281,17 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 			}
 			break;
 
-		case rrInserted:
-			for(ListConstIterator<edge> it = origEdges.begin(); it.valid(); ++it)
-				rrEdges.pushBack(*it);
+		case RemoveReinsertType::Inserted:
+			for(edge e: origEdges) {
+				rrEdges.pushBack(e);
+			}
 			break;
 
-		case rrNone:
-		case rrIncremental:
+		case RemoveReinsertType::None:
+		case RemoveReinsertType::Incremental:
+			break;
+		case RemoveReinsertType::IncInserted:
+			OGDF_ASSERT(false);
 			break;
 		}
 
@@ -340,17 +303,16 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 		do {
 			improved = false;
 
-			if(removeReinsert() == rrMostCrossed)
+			if(removeReinsert() == RemoveReinsertType::MostCrossed)
 			{
-				FEICrossingsBucket bucket(&PG);
+				embedding_inserter::CrossingsBucket<PlanRepExpansion> bucket(&PG);
 				rrEdges.bucketSort(bucket);
 
 				const int num = int(0.01 * percentMostCrossed() * G.numberOfEdges());
 				itStop = rrEdges.get(num);
 			}
 
-			SListConstIterator<edge> it;
-			for(it = rrEdges.begin(); it != itStop; ++it)
+			for(SListConstIterator<edge> it = rrEdges.begin(); it != itStop; ++it)
 			{
 				edge eOrig = *it;
 
@@ -358,8 +320,8 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 				pathLength = PG.chain(eOrig).size() - 1;
 				if (pathLength == 0) continue; // cannot improve
 
-				node oldSrc = 0, oldTgt = 0;
-				removeEdge(PG,E,eOrig,0,oldSrc,oldTgt);
+				node oldSrc = nullptr, oldTgt = nullptr;
+				removeEdge(PG,E,eOrig,nullptr,oldSrc,oldTgt);
 				//draw(PG, forbiddenEdgeOrig);
 
 				// try to find a better insertion path
@@ -371,7 +333,7 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 				sources.clear(); targets.clear();
 
 				// re-insert edge (insertion path cannot be longer)
-				insertEdge(PG,E,eOrig,eOrig->source(),eOrig->target(),0,crossed);
+				insertEdge(PG,E,eOrig,eOrig->source(),eOrig->target(),nullptr,crossed);
 
 				if(PG.splittable(oldSrc))
 					contractSplitIfReq(PG,E,oldSrc);
@@ -386,7 +348,7 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 					improved = true;
 			}
 
-			if(removeReinsert() == rrAll)
+			if(removeReinsert() == RemoveReinsertType::All)
 			{
 				// process all node splits
 				int nsCount = PG.nodeSplits().size();
@@ -402,8 +364,8 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 
 					node vOrig = PG.original(ns->source());
 
-					node oldSrc = 0, oldTgt = 0;
-					removeEdge(PG,E,0,ns,oldSrc,oldTgt);
+					node oldSrc = nullptr, oldTgt = nullptr;
+					removeEdge(PG,E,nullptr,ns,oldSrc,oldTgt);
 
 					// try to find a better insertion path
 					findSourcesAndTargets(oldSrc,oldTgt,sources,targets,PG);
@@ -414,10 +376,10 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 					node vCommon = commonDummy(sources,targets);
 					sources.clear(); targets.clear();
 
-					if(vCommon == 0)
+					if(vCommon == nullptr)
 					{
 						// re-insert edge (insertion path cannot be longer)
-						insertEdge(PG,E,0,vOrig,vOrig,ns,crossed);
+						insertEdge(PG,E,nullptr,vOrig,vOrig,ns,crossed);
 
 						if(PG.splittable(oldSrc))
 							contractSplitIfReq(PG,E,oldSrc,ns);
@@ -445,8 +407,10 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 				}
 			}
 
-			OGDF_ASSERT(PG.consistencyCheck());
-			OGDF_ASSERT(E.consistencyCheck());
+#ifdef OGDF_DEBUG
+			PG.consistencyCheck();
+			E.consistencyCheck();
+#endif
 			OGDF_ASSERT(checkDualGraph(PG,E));
 			OGDF_ASSERT(checkSplitDeg(PG));
 
@@ -471,56 +435,51 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 }
 
 
-//---------------------------------------------------------
 // construct dual graph
-//
 void MMFixedEmbeddingInserter::constructDual(
 	const PlanRepExpansion &PG,
 	const CombinatorialEmbedding &E)
 {
 	// insert a node in the dual graph for each face in E
-	face f;
-	forall_faces(f,E) {
+	for(face f : E.faces) {
 		m_dualOfFace[f] = m_dual.newNode();
-		//cout << "dual of face " << f->index() << ": " << m_dualOfFace[f] << endl;
+		//std::cout << "dual of face " << f->index() << ": " << m_dualOfFace[f] << std::endl;
 	}
 
 	// insert a node in the dual graph for each splittable node in PG
-	node v;
-	forall_nodes(v,PG) {
+	for(node v : PG.nodes) {
 		if(PG.splittable(v) && v->degree() >= 4) {
 			m_primalNode[m_dualOfNode[v] = m_dual.newNode()] = v;
-			//cout << "dual of node " << v << " :" << m_dualOfNode[v] << endl;
+			//std::cout << "dual of node " << v << " :" << m_dualOfNode[v] << std::endl;
 		}
 	}
 
 	// Insert an edge into the dual graph for each adjacency entry in E.
 	// The edges are directed from the left face to the right face.
-	forall_nodes(v,PG)
+	for(node v : PG.nodes)
 	{
 		node vDual = m_dualOfNode[v];
 
-		adjEntry adj;
-		forall_adj(adj,v)
+		for(adjEntry adj : v->adjEntries)
 		{
 			node vLeft  = m_dualOfFace[E.leftFace (adj)];
 			node vRight = m_dualOfFace[E.rightFace(adj)];
 
 			if(vLeft != vRight) {
 				edge e = m_dual.newEdge(vLeft,vRight);
-				//cout << "dual edge " << e << endl;
+				//std::cout << "dual edge " << e << std::endl;
 				m_dualEdge[m_primalAdj[e] = adj] = e;
 				m_dualCost[e] = 1;
 			}
 
 			if(vDual) {
 				edge eOut = m_dual.newEdge(vDual,vLeft);
-				//cout << "dual edge " << eOut << endl;
+				//std::cout << "dual edge " << eOut << std::endl;
 				m_primalAdj[eOut] = adj;
 				m_dualCost[eOut]  = 0;
 
 				edge eIn = m_dual.newEdge(vLeft,vDual);
-				//cout << "dual edge " << eIn << endl;
+				//std::cout << "dual edge " << eIn << std::endl;
 				m_primalAdj[eIn] = adj;
 				m_dualCost[eIn]  = 1;
 			}
@@ -537,7 +496,6 @@ void MMFixedEmbeddingInserter::constructDual(
 }
 
 
-//---------------------------------------------------------
 // finds a weighted shortest path in the dual graph augmented by s and t
 // (represented by m_vS and m_vT) using edges weights given by costOrig;
 // returns list of crossed adjacency entries (corresponding
@@ -546,7 +504,6 @@ void MMFixedEmbeddingInserter::constructDual(
 // running time: O(|dual| + L + C),
 //   where L ist the weighted length of the insertion path and C the
 //   maximum cost of an edge
-//
 void MMFixedEmbeddingInserter::findShortestPath(
 	const PlanRepExpansion &PG,
 	const CombinatorialEmbedding &E,
@@ -555,37 +512,35 @@ void MMFixedEmbeddingInserter::findShortestPath(
 	List<Tuple2<adjEntry,adjEntry> > &crossed,
 	const EdgeArray<bool> *forbiddenEdgeOrig)
 {
-	//static int count = 1;
-	//cout << "==> " << count++ << endl;
-	//cout << "Insert:" << endl;
-	//cout << "  sources: ";
-	//ListConstIterator<node> itV;
-	//for(itV = sources.begin(); itV.valid(); ++itV)
-	//	cout << *itV << " ";
-	//cout << "\n  targets: ";
-	//for(itV = targets.begin(); itV.valid(); ++itV)
-	//	cout << *itV << " ";
-	//cout << endl;
-	//drawDual(PG, forbiddenEdgeOrig);
+#if 0
+	static int count = 1;
+	std::cout << "==> " << count++ << std::endl;
+	std::cout << "Insert:" << std::endl;
+	std::cout << "  sources: ";
+	ListConstIterator<node> itV;
+	for(itV = sources.begin(); itV.valid(); ++itV)
+		std::cout << *itV << " ";
+	std::cout << "\n  targets: ";
+	for(itV = targets.begin(); itV.valid(); ++itV)
+		std::cout << *itV << " ";
+	std::cout << std::endl;
+	drawDual(PG, forbiddenEdgeOrig);
 
-	//cout << "forbidden dual edges: ";
-	//edge ed;
-	//forall_edges(ed,m_dual) {
-	//	if(origOfDualForbidden(ed,PG,forbiddenEdgeOrig) == true)
-	//		cout << ed << " ";
-	//}
-	//cout << endl;
+	std::cout << "forbidden dual edges: ";
+	for(edge ed : m_dual.edges) {
+		if(origOfDualForbidden(ed,PG,forbiddenEdgeOrig))
+			std::cout << ed << " ";
+	}
+	std::cout << std::endl;
+#endif
 	Array<SListPure<edge> > nodesAtDist(m_maxCost);
-	NodeArray<edge> spPred(m_dual,0);
+	NodeArray<edge> spPred(m_dual,nullptr);
 
 	int oldIdCount = m_dual.maxEdgeIndex();
 
-	adjEntry adj;
-	ListConstIterator<node> itV;
-
 	// augment dual by edges from m_vS to all adjacent faces of sources ...
-	for(itV = sources.begin(); itV.valid(); ++itV) {
-		forall_adj(adj,*itV) {
+	for(node v : sources) {
+		for(adjEntry adj : v->adjEntries) {
 			// starting edges of bfs-search are all edges leaving s
 			edge eDual = m_dual.newEdge(m_vS, m_dualOfFace[E.rightFace(adj)]);
 			m_primalAdj[eDual] = adj;
@@ -594,20 +549,13 @@ void MMFixedEmbeddingInserter::findShortestPath(
 	}
 
 	// ... and from all adjacent faces of targets to m_vT
-	for(itV = targets.begin(); itV.valid(); ++itV) {
-		forall_adj(adj,*itV) {
+	for(node v : targets) {
+		for(adjEntry adj : v->adjEntries) {
 			edge eDual = m_dual.newEdge(m_dualOfFace[E.rightFace(adj)], m_vT);
 			m_primalAdj[eDual] = adj;
 		}
 	}
 
-	//cout << "start nodes: ";
-	//forall_adj(adj, m_vS)
-	//	cout << adj->twinNode() << " ";
-	//cout << "\ntarget nodes: ";
-	//forall_adj(adj, m_vT)
-	//	cout << adj->twinNode() << " ";
-	//cout << endl;
 
 	// actual search (using extended bfs on directed dual)
 	int currentDist = 0;
@@ -622,7 +570,7 @@ void MMFixedEmbeddingInserter::findShortestPath(
 		node v = eCand->target();
 
 		// leads to an unvisited node?
-		if (spPred[v] == 0)
+		if (spPred[v] == nullptr)
 		{
 			// yes, then we set v's predecessor in search tree
 			spPred[v] = eCand;
@@ -639,9 +587,9 @@ void MMFixedEmbeddingInserter::findShortestPath(
 					edge eDual = spPred[v];
 					node w = eDual->source();
 
-					if(m_primalNode[w] == 0)
+					if(m_primalNode[w] == nullptr)
 						// w is a face node
-						crossed.pushFront(Tuple2<adjEntry,adjEntry>(m_primalAdj[eDual],0));
+						crossed.pushFront(Tuple2<adjEntry,adjEntry>(m_primalAdj[eDual],nullptr));
 					else {
 						edge eDual2 = spPred[w];
 						w = eDual2->source();
@@ -656,8 +604,8 @@ void MMFixedEmbeddingInserter::findShortestPath(
 
 			// append next candidate edges to queue
 			// (all edges leaving v)
-			edge e;
-			forall_adj_edges(e,v) {
+			for(adjEntry adj : v->adjEntries) {
+				edge e = adj->theEdge();
 				if (v != e->source()) continue;
 				if(origOfDualForbidden(e, PG, forbiddenEdgeOrig)) continue;
 
@@ -668,10 +616,11 @@ void MMFixedEmbeddingInserter::findShortestPath(
 	}
 
 	// remove augmented edges again
-	while ((adj = m_vS->firstAdj()) != 0)
+	adjEntry adj;
+	while ((adj = m_vS->firstAdj()) != nullptr)
 		m_dual.delEdge(adj->theEdge());
 
-	while ((adj = m_vT->firstAdj()) != 0)
+	while ((adj = m_vT->firstAdj()) != nullptr)
 		m_dual.delEdge(adj->theEdge());
 
 	m_dual.resetEdgeIdCount(oldIdCount);
@@ -711,7 +660,7 @@ void MMFixedEmbeddingInserter::prepareAnchorNode(
 
 	} else {
 		edge eNew, e = adj->theEdge();
-		if(nsStraight == 0) {
+		if(nsStraight == nullptr) {
 			// We split a chain of an original edge
 			eNew = PG.enlargeSplit(vStraight, e, E);
 
@@ -752,20 +701,18 @@ void MMFixedEmbeddingInserter::preprocessInsertionPath(
 
 	// Warning: Potential multi-edges are not considered here!!!
 
-	if(PG.original(adjStart->theNode()) == 0) {
+	if(PG.original(adjStart->theNode()) == nullptr) {
 		prepareAnchorNode(PG, E, adjStart, srcOrig);
 	}
 
-	if(PG.original(adjEnd->theNode()) == 0) {
+	if(PG.original(adjEnd->theNode()) == nullptr) {
 		prepareAnchorNode(PG, E, adjEnd, tgtOrig);
 	}
 }
 
 
-//---------------------------------------------------------
 // inserts edge e according to insertion path crossed.
 // updates embeding and dual graph
-//
 void MMFixedEmbeddingInserter::insertEdge(
 	PlanRepExpansion &PG,
 	CombinatorialEmbedding &E,
@@ -779,10 +726,10 @@ void MMFixedEmbeddingInserter::insertEdge(
 
 	// remove dual nodes of faces on insertion path
 	ListConstIterator<Tuple2<adjEntry,adjEntry> > it;
-	for(it = crossed.begin(); it != crossed.rbegin(); ++it) {
+	for(it = crossed.begin(); it.valid() && it.succ().valid(); ++it) {
 		adjEntry adj1 = (*it).x1();
 		adjEntry adj2 = (*it).x2();
-		if(adj2 == 0) {
+		if(adj2 == nullptr) {
 			m_dual.delNode(m_dualOfFace[E.rightFace(adj1)]);
 		} else {
 			OGDF_ASSERT(adj1->theNode() == adj2->theNode());
@@ -795,18 +742,18 @@ void MMFixedEmbeddingInserter::insertEdge(
 
 	// remove edges at vertices (to be split) on insertion path
 	// and insert a new vertex in dual for each split node
-	for(it = crossed.begin(); it != crossed.rbegin(); ++it) {
+	for(it = crossed.begin(); it.succ().valid(); ++it) {
 		adjEntry adj1 = (*it).x1();
 		adjEntry adj2 = (*it).x2();
-		if(adj2 != 0) {
+		if(adj2 != nullptr) {
 			node v = adj1->theNode();
 			node vDual = m_dualOfNode[v];
 			if(v->degree() >= 4) {
-				while(vDual->firstAdj() != 0)
+				while(vDual->firstAdj() != nullptr)
 					m_dual.delEdge(vDual->firstAdj()->theEdge());
 			} else {
 				m_dual.delNode(vDual);
-				m_dualOfNode[v] = 0;
+				m_dualOfNode[v] = nullptr;
 			}
 
 			node w = adj2->theNode();
@@ -816,6 +763,7 @@ void MMFixedEmbeddingInserter::insertEdge(
 	}
 
 	// insert new face nodes into dual
+	OGDF_ASSERT( eOrig != nullptr || nodeSplit != nullptr ); // otherwise the path below is not well defined
 	const List<edge> &path = (eOrig) ? PG.chain(eOrig) : nodeSplit->m_path;
 	ListConstIterator<edge> itEdge;
 	for(itEdge = path.begin(); itEdge.valid(); ++itEdge)
@@ -850,10 +798,10 @@ void MMFixedEmbeddingInserter::insertEdge(
 				m_dualCost [eRL] = 1;
 
 			} else if(f == fAdj)
-				m_dualEdge[adj] = m_dualEdge[adj->twin()] = 0;
+				m_dualEdge[adj] = m_dualEdge[adj->twin()] = nullptr;
 
 			node vDual = m_dualOfNode[adj->theNode()];
-			if(vDual != 0) {
+			if(vDual != nullptr) {
 				adjEntry adjSucc = adj->cyclicSucc();
 				edge eOut = m_dual.newEdge(vDual,vRight);
 				m_primalAdj[eOut] = adjSucc;
@@ -888,10 +836,10 @@ void MMFixedEmbeddingInserter::insertEdge(
 				m_dualCost [eRL] = 1;
 
 			} else if(f == fAdj)
-				m_dualEdge[adj] = m_dualEdge[adj->twin()] = 0;
+				m_dualEdge[adj] = m_dualEdge[adj->twin()] = nullptr;
 
 			node vDual = m_dualOfNode[adj->theNode()];
-			if(vDual != 0) {
+			if(vDual != nullptr) {
 				adjEntry adjSucc = adj->cyclicSucc();
 				edge eOut = m_dual.newEdge(vDual,vRight);
 				m_primalAdj[eOut] = adjSucc;
@@ -905,44 +853,42 @@ void MMFixedEmbeddingInserter::insertEdge(
 			adjEntry adjS1 = (*it).x1();
 			adjEntry adjS2 = (*it).x2();
 
-			if(adjS2 != 0) {
+			if(adjS2 != nullptr) {
 				node v = adjS1->theNode();
-				node vDual = m_dualOfNode[v];
-				if(vDual) {
+				node dualV = m_dualOfNode[v];
+				if(dualV) {
 					face f1 = E.leftFace(adjS1);
 					face f2 = E.leftFace(adjS1->cyclicPred());
 
-					adjEntry adjE;
-					forall_adj(adjE,v) {
+					for(adjEntry adjE : v->adjEntries) {
 						face fL = E.leftFace(adjE);
 						if(fL == f1 || fL == f2) continue;
 
 						node vL  = m_dualOfFace[fL];
-						edge eOut = m_dual.newEdge(vDual,vL);
+						edge eOut = m_dual.newEdge(dualV,vL);
 						m_primalAdj[eOut] = adjE;
 						m_dualCost[eOut]  = 0;
-						edge eIn = m_dual.newEdge(vL,vDual);
+						edge eIn = m_dual.newEdge(vL,dualV);
 						m_primalAdj[eIn] = adjE;
 						m_dualCost[eIn]  = 1;
 					}
 				}
 
 				v = adjS2->theNode();
-				vDual = m_dualOfNode[v];
-				if(vDual) {
+				dualV = m_dualOfNode[v];
+				if(dualV) {
 					face f1 = E.leftFace(adjS2);
 					face f2 = E.leftFace(adjS2->cyclicPred());
 
-					adjEntry adjE;
-					forall_adj(adjE,v) {
+					for(adjEntry adjE : v->adjEntries) {
 						face fL = E.leftFace(adjE);
 						if(fL == f1 || fL == f2) continue;
 
 						node vL  = m_dualOfFace[fL];
-						edge eOut = m_dual.newEdge(vDual,vL);
+						edge eOut = m_dual.newEdge(dualV,vL);
 						m_primalAdj[eOut] = adjE;
 						m_dualCost[eOut]  = 0;
-						edge eIn = m_dual.newEdge(vL,vDual);
+						edge eIn = m_dual.newEdge(vL,dualV);
 						m_primalAdj[eIn] = adjE;
 						m_dualCost[eIn]  = 1;
 					}
@@ -985,17 +931,14 @@ void MMFixedEmbeddingInserter::insertDualEdge(node vDual, adjEntry adj, const Co
 void MMFixedEmbeddingInserter::insertDualEdges(node v, const CombinatorialEmbedding &E)
 {
 	node vDual = m_dualOfNode[v];
-	if(vDual) {
-		adjEntry adj;
-		forall_adj(adj,v)
-			insertDualEdge(vDual,adj,E);
+	if (vDual) {
+		for (adjEntry adj : v->adjEntries)
+			insertDualEdge(vDual, adj, E);
 	}
 }
 
 
-//---------------------------------------------------------
 // removes edge eOrig; updates embedding and dual graph
-//
 void MMFixedEmbeddingInserter::removeEdge(
 	PlanRepExpansion &PG,
 	CombinatorialEmbedding &E,
@@ -1003,6 +946,7 @@ void MMFixedEmbeddingInserter::removeEdge(
 	PlanRepExpansion::NodeSplit *nodeSplit,
 	node &oldSrc, node &oldTgt)
 {
+	OGDF_ASSERT( eOrig != nullptr || nodeSplit != nullptr ); // otherwise the path below is not well defined
 	const List<edge> &path = (eOrig) ? PG.chain(eOrig) : nodeSplit->m_path;
 
 	ListConstIterator<edge> itEdge;
@@ -1021,27 +965,27 @@ void MMFixedEmbeddingInserter::removeEdge(
 			node xrDual = m_dualOfNode[xr];
 			node xrOrig = PG.original(xr);
 
-			if(xlOrig != 0 && xlOrig == xrOrig) {
+			if(xlOrig != nullptr && xlOrig == xrOrig) {
 				if(xlDual) m_dual.delNode(xlDual);
 				if(xrDual) m_dual.delNode(xrDual);
-				m_dualOfNode[xl] = m_dualOfNode[xr] = 0;
+				m_dualOfNode[xl] = m_dualOfNode[xr] = nullptr;
 			}
 		}
 	}
 
 	node vSrc = path.front()->source();
-	if(m_dualOfNode[vSrc] != 0 && vSrc->degree() == 4) {
+	if(m_dualOfNode[vSrc] != nullptr && vSrc->degree() == 4) {
 		m_dual.delNode(m_dualOfNode[vSrc]);
-		m_dualOfNode[vSrc] = 0;
+		m_dualOfNode[vSrc] = nullptr;
 	}
 	node vTgt = path.back()->target();
-	if(m_dualOfNode[vTgt] != 0 && vTgt->degree() == 4) {
+	if(m_dualOfNode[vTgt] != nullptr && vTgt->degree() == 4) {
 		m_dual.delNode(m_dualOfNode[vTgt]);
-		m_dualOfNode[vTgt] = 0;
+		m_dualOfNode[vTgt] = nullptr;
 	}
 
 	// delete all corresponding nodes in dual
-	SListConstIterator<face> itsF;
+	ListConstIterator<face> itsF;
 	for(itsF = m_delFaces->faces().begin(); itsF.valid(); ++itsF)
 		m_dual.delNode(m_dualOfFace[*itsF]);
 
@@ -1058,8 +1002,7 @@ void MMFixedEmbeddingInserter::removeEdge(
 			node vDual = m_dualOfNode[v] = m_dual.newNode();
 			m_primalNode[vDual] = v;
 
-			adjEntry adj;
-			forall_adj(adj,v) {
+			for(adjEntry adj : v->adjEntries) {
 				if(!m_newFaces->isMember(E.leftFace(adj))) // other edges are inserted below!
 					insertDualEdge(vDual,adj,E);
 			}
@@ -1083,7 +1026,7 @@ void MMFixedEmbeddingInserter::removeEdge(
 		do {
 			face fAdj = E.leftFace(adj);
 
-			if(m_newFaces->isMember(fAdj) == false || f->index() < fAdj->index())
+			if(!m_newFaces->isMember(fAdj) || f->index() < fAdj->index())
 			{
 				node vLeft = m_dualOfFace[E.leftFace(adj)];
 
@@ -1096,10 +1039,10 @@ void MMFixedEmbeddingInserter::removeEdge(
 				m_dualCost [eRL] = 1;
 
 			} else if(f == fAdj)
-				m_dualEdge[adj] = m_dualEdge[adj->twin()] = 0;
+				m_dualEdge[adj] = m_dualEdge[adj->twin()] = nullptr;
 
 			node vDual = m_dualOfNode[adj->theNode()];
-			if(vDual != 0) {
+			if(vDual != nullptr) {
 				adjEntry adjSucc = adj->cyclicSucc();
 				edge eOut = m_dual.newEdge(vDual,vRight);
 				m_primalAdj[eOut] = adjSucc;
@@ -1134,7 +1077,7 @@ void MMFixedEmbeddingInserter::contractSplit(
 	// with dual node of right face of e
 	node vl = m_dualOfFace[E.leftFace(e->adjSource())];
 	adjEntry adj, adjNext;
-	for(adj = vl->firstAdj(); adj != 0; adj = adjNext) {
+	for(adj = vl->firstAdj(); adj != nullptr; adj = adjNext) {
 		adjNext = adj->succ();
 
 		adjEntry padj = m_primalAdj[adj->theEdge()];
@@ -1158,10 +1101,10 @@ void MMFixedEmbeddingInserter::contractSplitIfReq(
 {
 	edge eContract = u->firstAdj()->theEdge();
 	edge eExpand   = u->lastAdj ()->theEdge();
-	if(PG.nodeSplitOf(eContract) == 0)
-		swap(eContract,eExpand);
+	if(PG.nodeSplitOf(eContract) == nullptr)
+		std::swap(eContract, eExpand);
 
-	if(u->degree() == 2 && PG.nodeSplitOf(eContract) != 0 && PG.nodeSplitOf(eContract) != nsCurrent) {
+	if(u->degree() == 2 && PG.nodeSplitOf(eContract) != nullptr && PG.nodeSplitOf(eContract) != nsCurrent) {
 		edge eDCS = m_dualEdge[eContract->adjSource()];
 		if(eDCS) m_dual.delEdge(eDCS);
 		edge eDCT = m_dualEdge[eContract->adjTarget()];
@@ -1174,9 +1117,7 @@ void MMFixedEmbeddingInserter::contractSplitIfReq(
 		edge e = PG.unsplitExpandNode(u,eContract,eExpand,E);
 
 		if(e->isSelfLoop()) {
-			node u = e->source();
-			adjEntry adj;
-			forall_adj(adj,u) {
+			for(adjEntry adj : e->source()->adjEntries) {
 				if(e == adj->theEdge()) continue;
 				edge eDual = m_dualEdge[adj];
 				if(eDual) m_dual.delEdge(eDual);
@@ -1206,18 +1147,17 @@ void MMFixedEmbeddingInserter::contractSplitIfReq(
 
 void MMFixedEmbeddingInserter::collectAnchorNodes(
 	node v,
-	NodeSet &nodes,
+	NodeSet<> &nodes,
 	const PlanRepExpansion::NodeSplit *nsParent,
 	const PlanRepExpansion &PG) const
 {
-	if(PG.original(v) != 0)
+	if(PG.original(v) != nullptr)
 		nodes.insert(v);
 
-	adjEntry adj;
-	forall_adj(adj,v) {
+	for(adjEntry adj : v->adjEntries) {
 		edge e = adj->theEdge();
 		const PlanRepExpansion::NodeSplit *ns = PG.nodeSplitOf(e);
-		if(ns == 0) {
+		if(ns == nullptr) {
 			// add dummy nodes of non-node-split edge
 			ListConstIterator<edge> it = PG.chain(PG.originalEdge(e)).begin();
 			for(++it; it.valid(); ++it)
@@ -1238,37 +1178,37 @@ void MMFixedEmbeddingInserter::collectAnchorNodes(
 
 void MMFixedEmbeddingInserter::findSourcesAndTargets(
 	node src, node tgt,
-	NodeSet &sources,
-	NodeSet &targets,
+	NodeSet<> &sources,
+	NodeSet<> &targets,
 	const PlanRepExpansion &PG) const
 {
-	collectAnchorNodes(src, sources, 0, PG);
-	collectAnchorNodes(tgt, targets, 0, PG);
+	collectAnchorNodes(src, sources, nullptr, PG);
+	collectAnchorNodes(tgt, targets, nullptr, PG);
 }
 
 void MMFixedEmbeddingInserter::anchorNodes(
 	node vOrig,
-	NodeSet &nodes,
+	NodeSet<> &nodes,
 	const PlanRepExpansion &PG) const
 {
 	node vFirst = PG.expansion(vOrig).front();
-	if(PG.splittableOrig(vOrig) == true)
-		collectAnchorNodes(vFirst, nodes, 0, PG);
+	if(PG.splittableOrig(vOrig))
+		collectAnchorNodes(vFirst, nodes, nullptr, PG);
 	else
 		nodes.insert(vFirst);
 }
 
 
 node MMFixedEmbeddingInserter::commonDummy(
-	NodeSet &sources,
-	NodeSet &targets)
+	NodeSet<> &sources,
+	NodeSet<> &targets)
 {
 	ListConstIterator<node> it;
 	for(it = sources.nodes().begin(); it.valid(); ++it)
 		if(targets.isMember(*it))
 			return *it;
 
-	return 0;
+	return nullptr;
 }
 
 
@@ -1292,7 +1232,7 @@ void MMFixedEmbeddingInserter::convertDummy(
 
 
 bool MMFixedEmbeddingInserter::checkSplitDeg(
-	PlanRepExpansion &PG)
+	PlanRepExpansion &PG) const
 {
 	ListConstIterator<PlanRepExpansion::NodeSplit> it;
 	for(it = PG.nodeSplits().begin(); it.valid(); ++it) {
@@ -1312,38 +1252,35 @@ bool MMFixedEmbeddingInserter::checkDualGraph(
 	PlanRepExpansion &PG,
 	const CombinatorialEmbedding &E) const
 {
-	NodeArray<face> af(m_dual,0);
-	NodeArray<node> av(m_dual,0);
+	NodeArray<face> af(m_dual,nullptr);
+	NodeArray<node> av(m_dual,nullptr);
 
-	face f;
-	forall_faces(f,E) {
+	for(face f : E.faces) {
 		node u = m_dualOfFace[f];
-		if(u == 0)
+		if(u == nullptr)
 			return false;
-		if(af[u] != 0 || av[u] != 0)
+		if(af[u] != nullptr || av[u] != nullptr)
 			return false;
 		af[u] = f;
 	}
 
-	node v;
-	forall_nodes(v,PG) {
+	for(node v : PG.nodes) {
 		if(PG.splittable(v) && v->degree() >= 4) {
 			node u = m_dualOfNode[v];
-			if(u == 0)
+			if(u == nullptr)
 				return false;
-			if(af[u] != 0 || av[u] != 0)
+			if(af[u] != nullptr || av[u] != nullptr)
 				return false;
 			av[u] = v;
 		} else {
-			if(m_dualOfNode[v] != 0)
+			if(m_dualOfNode[v] != nullptr)
 				return false;
 		}
 	}
 
 	Array<bool> exists(0,m_dual.maxEdgeIndex(),false);
 
-	edge e;
-	forall_edges(e,m_dual)
+	for(edge e : m_dual.edges)
 	{
 		exists[e->index()] = true;
 
@@ -1351,7 +1288,7 @@ bool MMFixedEmbeddingInserter::checkDualGraph(
 		node w = e->target();
 		adjEntry adj = m_primalAdj[e];
 
-		if(af[v] != 0 && af[w] != 0) {
+		if(af[v] != nullptr && af[w] != nullptr) {
 			if(af[v] != E.leftFace(adj))
 				return false;
 			if(af[w] != E.rightFace(adj))
@@ -1359,13 +1296,13 @@ bool MMFixedEmbeddingInserter::checkDualGraph(
 			if(m_dualEdge[adj] != e)
 				return false;
 
-		} else if(af[v] != 0) {
+		} else if(af[v] != nullptr) {
 			if(adj->theNode() != av[w])
 				return false;
 			if(af[v] != E.leftFace(adj))
 				return false;
 
-		} else if(af[w] != 0) {
+		} else if(af[w] != nullptr) {
 			if(adj->theNode() != av[v])
 				return false;
 			if(af[w] != E.leftFace(adj))
@@ -1374,12 +1311,12 @@ bool MMFixedEmbeddingInserter::checkDualGraph(
 			return false;
 	}
 
-	forall_edges(e,PG)
+	for(edge e : PG.edges)
 	{
 		if(E.leftFace(e->adjSource()) == E.rightFace(e->adjSource())) {
-			if(m_dualEdge[e->adjSource()] != 0)
+			if(m_dualEdge[e->adjSource()] != nullptr)
 				return false;
-			if(m_dualEdge[e->adjTarget()] != 0)
+			if(m_dualEdge[e->adjTarget()] != nullptr)
 				return false;
 			continue;
 		}
@@ -1388,9 +1325,9 @@ bool MMFixedEmbeddingInserter::checkDualGraph(
 		node srcDual = eDual->source();
 		node tgtDual = eDual->target();
 
-		if(af[srcDual] == 0)
+		if(af[srcDual] == nullptr)
 			return false;
-		if(af[tgtDual] == 0)
+		if(af[tgtDual] == nullptr)
 			return false;
 
 		if(E.leftFace(e->adjSource()) != af[srcDual])
@@ -1398,7 +1335,7 @@ bool MMFixedEmbeddingInserter::checkDualGraph(
 		if(E.rightFace(e->adjSource()) != af[tgtDual])
 			return false;
 
-		if(exists[eDual->index()] == false)
+		if(!exists[eDual->index()])
 			return false;
 #ifdef OGDF_DEBUG
 		if(eDual->graphOf() != &m_dual)
@@ -1413,5 +1350,4 @@ bool MMFixedEmbeddingInserter::checkDualGraph(
 	return true;
 }
 
-
-} // end namespace ogdf
+}

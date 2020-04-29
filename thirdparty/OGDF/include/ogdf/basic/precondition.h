@@ -1,11 +1,3 @@
-/*
- * $Revision: 3556 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2013-06-07 19:36:11 +0200 (Fri, 07 Jun 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of functions for drawing module precondition
  *        handling.
@@ -20,7 +12,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -37,21 +29,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_PRECONDITION_H
-#define OGDF_PRECONDITION_H
 
 #include <ogdf/orthogonal/EdgeRouter.h>
 #include <ogdf/uml/UMLGraph.h>
@@ -75,10 +57,10 @@ bool dfsGenTreeRec(
 
 	bool returnValue = true;
 
-	edge e;
-	forall_adj_edges(e,v) {
+	for(adjEntry adj : v->adjEntries) {
+		edge e = adj->theEdge();
 		if (e->source() == v) continue;
-		if (!(UG.type(e) == Graph::generalization)) continue;
+		if (!(UG.type(e) == Graph::EdgeType::generalization)) continue;
 		if (used[e]) continue; //error ??
 		used[e] = true;
 
@@ -86,10 +68,14 @@ bool dfsGenTreeRec(
 
 		if (hierNumber[w]) {
 			//temporarily fake trees
-			//if (hierNumber[w] == hierNum) //forward search edge
+#if 0
+			if (hierNumber[w] == hierNum) //forward search edge
+#endif
 			if (fakeTree)
 			{
-				//UG.type(e) = Graph::association;
+#if 0
+				UG.type(e) = Graph::association;
+#endif
 				fakedGens.pushBack(e);
 				continue;
 			}
@@ -106,37 +92,39 @@ bool dfsGenTreeRec(
 
 edge firstOutGen(UMLGraph& UG, node v, EdgeArray<bool>& /* used */)
 {
-	edge e;
-	forall_adj_edges(e, v)
-	{
+	for(adjEntry adj : v->adjEntries) {
+		edge e = adj->theEdge();
 		if (e->target() == v) continue;
-		if (UG.type(e) == Graph::generalization)
+		if (UG.type(e) == Graph::EdgeType::generalization)
 		{
-			//OGDF_ASSERT(!used[e]);
+#if 0
+			OGDF_ASSERT(!used[e]);
+#endif
 			return e;
 		}
 		else continue;
-	}//forall
-	return 0;
-}//firstOutGen
+	}
+	return nullptr;
+}
 
 bool dfsGenTree(
 	UMLGraph& UG,
 	List<edge>& fakedGens,
 	bool fakeTree)
 {
-	edge e;
 	EdgeArray<bool> used(UG.constGraph(), false);
-	//NodeArray<bool> visited(UG,false);
+#if 0
+	NodeArray<bool> visited(UG,false);
+#endif
 	NodeArray<int>  hierNumber(UG.constGraph(), 0);
 
 	int hierNum = 0; //number of hierarchy tree
 
 	const Graph& G = UG.constGraph();
-	forall_edges(e, G)
+	for(edge e : G.edges)
 	{
 		//descent in the hierarchy containing e
-		if ((!used[e]) && (UG.type(e) == Graph::generalization))
+		if (!used[e] && UG.type(e) == Graph::EdgeType::generalization)
 		{
 			hierNum++; //current hierarchy tree
 			//first we search for the sink
@@ -151,10 +139,10 @@ bool dfsGenTree(
 				//if there is no sink, convert Generalizations to Associations and draw
 				if (cycleCounter > G.numberOfEdges())
 				{
-					UG.type(sinkPath) = Graph::association;
+					UG.type(sinkPath) = Graph::EdgeType::association;
 					fakedGens.pushBack(sinkPath);
 					sink = sinkPath->source();
-					sinkPath = 0;
+					sinkPath = nullptr;
 				}
 			}
 
@@ -165,11 +153,9 @@ bool dfsGenTree(
 			if (!isTree) return false;
 		}
 
-	}//forall_edges
+	}
 
 	return true;
 }
 
-}//end namespace ogdf
-
-#endif
+}

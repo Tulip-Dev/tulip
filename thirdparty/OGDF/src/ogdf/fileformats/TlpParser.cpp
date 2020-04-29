@@ -1,11 +1,3 @@
-/*
- * $Revision: 3837 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 15:19:30 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief TLP format parser utility implementation.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,16 +25,13 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/fileformats/TlpParser.h>
-#include <ogdf/fileformats/Tlp.h>
 #include <ogdf/fileformats/Utils.h>
+#include <ogdf/fileformats/GraphIO.h>
 
 
 namespace ogdf {
@@ -52,16 +41,17 @@ namespace tlp {
 
 inline void Parser::tokenError(const char *str, bool got)
 {
+#ifdef OGDF_DEBUG
 	if(m_begin == m_end) {
-		std::cerr << "ERROR: " << str << ".\n";
+		GraphIO::logger.lout() << str << "." << std::endl;
 	} else {
-		std::cerr << "ERROR: " << str << " at "
-				  << m_begin->line << ", " << m_begin->column;
-		if(got) {
-			std::cerr << " (got " << *m_begin << ")";
+		if (got) {
+			GraphIO::logger.lout() << str << " at " << m_begin->line << ", " << m_begin->column << " (got " << *m_begin << ")." << std::endl;
+		} else {
+			GraphIO::logger.lout() << str << " at " << m_begin->line << ", " << m_begin->column << "." << std::endl;
 		}
-		std::cerr << ".\n";
 	}
+#endif
 }
 
 
@@ -84,21 +74,21 @@ bool Parser::readEdge(Graph &G)
 		return false;
 	}
 	ss << *(m_begin->value) << " ";
-	m_begin++;
+	++m_begin;
 
 	if(m_begin == m_end || !m_begin->identifier()) {
 		tokenError("expected source id of edge");
 		return false;
 	}
 	ss << *(m_begin->value) << " ";
-	m_begin++;
+	++m_begin;
 
 	if(m_begin == m_end || !m_begin->identifier()) {
 		tokenError("expected target id of edge");
 		return false;
 	}
 	ss << *(m_begin->value);
-	m_begin++;
+	++m_begin;
 
 	int id, sid, tid;
 	if(!(ss >> id >> sid >> tid)) {
@@ -110,9 +100,12 @@ bool Parser::readEdge(Graph &G)
 
 	node source = m_idNode[sid], target = m_idNode[tid];
 	if(!source || !target) {
-		std::cerr << "ERROR: Node with id "
-				  << sid << " or " << tid
-				  << " is not declared.\n";
+		GraphIO::logger.lout() << "Node with id " << sid << " or " << tid << " is not declared." << std::endl;
+		return false;
+	}
+
+	if (m_idEdge[id] != nullptr) {
+		GraphIO::logger.lout() << "Encountered duplicate edge id: " + to_string(id) << std::endl;
 		return false;
 	}
 
@@ -122,7 +115,7 @@ bool Parser::readEdge(Graph &G)
 		tokenError("expected \")\" for edge statement");
 		return false;
 	}
-	m_begin++;
+	++m_begin;
 
 	return true;
 }
@@ -141,7 +134,7 @@ inline bool Parser::applyNodes(
 	int a = 0, b = 0;
 
 	std::string::const_iterator it = str.begin();
-	for(; it != str.end() && isdigit(*it); it++) {
+	for(; it != str.end() && isdigit(*it); ++it) {
 		a = 10 * a + (*it) - '0';
 	}
 
@@ -149,7 +142,7 @@ inline bool Parser::applyNodes(
 		b = a;
 	} else if((it + 1) != str.end() && *it == '.' && *(it + 1) == '.') {
 		it += 2;
-		for(; it != str.end() && isdigit(*it); it++) {
+		for(; it != str.end() && isdigit(*it); ++it) {
 			b = 10 * b + (*it) - '0';
 		}
 
@@ -190,7 +183,6 @@ inline bool Parser::applyNodes(
 
 bool Parser::readNodes(Graph &G, ClusterGraph *C, cluster c)
 {
-	std::istringstream is;
 	while(m_begin != m_end && !m_begin->rightParen()) {
 		if(!m_begin->identifier()) {
 			tokenError("expected node id for \"nodes\" statement");
@@ -200,14 +192,14 @@ bool Parser::readNodes(Graph &G, ClusterGraph *C, cluster c)
 		if(!applyNodes(G, C, c, *(m_begin->value))) {
 			return false;
 		}
-		m_begin++;
+		++m_begin;
 	}
 
 	if(m_begin == m_end || !m_begin->rightParen()) {
 		tokenError("expected \")\" for \"nodes\" statement");
 		return false;
 	}
-	m_begin++;
+	++m_begin;
 
 	return true;
 }
@@ -220,11 +212,16 @@ bool Parser::readCluster(Graph &G, ClusterGraph *C, cluster root)
 		return false;
 	}
 	const std::string &cid = *(m_begin->value);
-	m_begin++;
+	++m_begin;
 
 	while(m_begin != m_end && m_begin->leftParen()) {
-		m_begin++;
+		++m_begin;
 		if(!readClusterStatement(G, C, root)) {
+			if (!G.empty()) {
+				GraphIO::logger.lout() << "Encountered duplicate node section" << std::endl;
+				return false;
+			}
+
 			return false;
 		}
 	}
@@ -233,7 +230,7 @@ bool Parser::readCluster(Graph &G, ClusterGraph *C, cluster root)
 		tokenError("expected \")\" for cluster " + cid + ".\n");
 		return false;
 	}
-	m_begin++;
+	++m_begin;
 
 	return true;
 }
@@ -246,24 +243,32 @@ static inline bool setAttribute(
 	const long attrs = GA.attributes();
 
 	switch(attr) {
-	case a_label:
+	case Attribute::label:
 		if(attrs & GraphAttributes::nodeLabel) {
 			GA.label(v) = value;
 		}
 		break;
-	case a_color:
+	case Attribute::strokeColor:
 		if(attrs & GraphAttributes::nodeStyle) {
 			std::istringstream is(value);
 			int r, g, b, a;
-			is >> '(' >> r >> ',' >> g >> ',' >> b >> ',' >> a >> ')';
+			is >> TokenIgnorer('(') >> r >> TokenIgnorer(',') >> g >> TokenIgnorer(',') >> b >> TokenIgnorer(',') >> a >> TokenIgnorer(')');
+			GA.strokeColor(v) = Color(r, g, b, a);
+		}
+		break;
+	case Attribute::color:
+		if(attrs & GraphAttributes::nodeStyle) {
+			std::istringstream is(value);
+			int r, g, b, a;
+			is >> TokenIgnorer('(') >> r >> TokenIgnorer(',') >> g >> TokenIgnorer(',') >> b >> TokenIgnorer(',') >> a >> TokenIgnorer(')');
 			GA.fillColor(v) = Color(r, g, b, a);
 		}
 		break;
-	case a_position:
+	case Attribute::position:
 		if(attrs & GraphAttributes::nodeGraphics) {
 			std::istringstream is(value);
 			double x, y, z;
-			is >> '(' >> x >> ',' >> y >> ',' >> z >> ')';
+			is >> TokenIgnorer('(') >> x >> TokenIgnorer(',') >> y >> TokenIgnorer(',') >> z >> TokenIgnorer(')');
 			GA.x(v) = x;
 			GA.y(v) = y;
 			if(attrs & GraphAttributes::threeD) {
@@ -271,18 +276,42 @@ static inline bool setAttribute(
 			}
 		}
 		break;
-	case a_size:
+	case Attribute::size:
 		if(attrs & GraphAttributes::nodeGraphics) {
 			std::istringstream is(value);
 			double width, height;
-			is >> '(' >> width >> ',' >> height >> ')';
+			is >> TokenIgnorer('(') >> width >> TokenIgnorer(',') >> height >> TokenIgnorer(')');
 			GA.width(v) = width;
 			GA.height(v) = height;
 		}
 		break;
-	case a_shape:
+	case Attribute::strokeWidth:
 		if(attrs & GraphAttributes::nodeStyle) {
-
+			std::istringstream is(value);
+			is >> GA.strokeWidth(v);
+		}
+		break;
+	case Attribute::strokeType:
+		if(attrs & GraphAttributes::nodeStyle) {
+			GA.strokeType(v) = fromString<StrokeType>(value);
+		}
+		break;
+	case Attribute::fillPattern:
+		if(attrs & GraphAttributes::nodeStyle) {
+			GA.fillPattern(v) = fromString<FillPattern>(value);
+		}
+		break;
+	case Attribute::fillBackground:
+		if(attrs & GraphAttributes::nodeStyle) {
+			std::istringstream is(value);
+			int r, g, b, a;
+			is >> TokenIgnorer('(') >> r >> TokenIgnorer(',') >> g >> TokenIgnorer(',') >> b >> TokenIgnorer(',') >> a >> TokenIgnorer(')');
+			GA.fillBgColor(v) = Color(r, g, b, a);
+		}
+		break;
+	case Attribute::shape:
+		if(attrs & GraphAttributes::nodeStyle) {
+			GA.shape(v) = fromString<Shape>(value);
 		}
 		break;
 	default:
@@ -300,16 +329,16 @@ static inline bool setAttribute(
 	const long attrs = GA.attributes();
 
 	switch(attr) {
-	case a_label:
+	case Attribute::label:
 		if(attrs & GraphAttributes::edgeLabel) {
 			GA.label(e) = value;
 		}
 		break;
-	case a_color:
+	case Attribute::color:
 		if(attrs & GraphAttributes::edgeStyle) {
 			std::istringstream is(value);
 			int r, g, b, a;
-			is >> '(' >> r >> ',' >> g >> ',' >> b >> ',' >> a >> ')';
+			is >> TokenIgnorer('(') >> r >> TokenIgnorer(',') >> g >> TokenIgnorer(',') >> b >> TokenIgnorer(',') >> a >> TokenIgnorer(')');
 			GA.strokeColor(e) = Color(r, g, b, a);
 		}
 		break;
@@ -327,20 +356,20 @@ bool Parser::readProperty(Graph &G, GraphAttributes *GA)
 		tokenError("expected cluster id for property");
 		return false;
 	}
-	m_begin++; // I don't really know what that id is for so move along...
+	++m_begin; // I don't really know what that id is for so move along...
 
 	if(m_begin == m_end && !m_begin->identifier()) {
 		tokenError("expected property type");
 		return false;
 	}
-	m_begin++;// ... and the type value is completely useless for us as well.
+	++m_begin;// ... and the type value is completely useless for us as well.
 
 	if(m_begin == m_end && !m_begin->string()) {
 		tokenError("expected property name string");
 		return false;
 	}
 	const std::string &pname = *(m_begin->value);
-	m_begin++;
+	++m_begin;
 
 	const Attribute attr = toAttribute(pname);
 
@@ -350,7 +379,7 @@ bool Parser::readProperty(Graph &G, GraphAttributes *GA)
 
 	// So now we read and set all the properties.
 	while(m_begin != m_end && m_begin->leftParen()) {
-		m_begin++;
+		++m_begin;
 		if(!readPropertyStatement(
 			GA, attr,
 			doneNode, nodeDefault,
@@ -364,20 +393,19 @@ bool Parser::readProperty(Graph &G, GraphAttributes *GA)
 		tokenError("expected \")\" for \"" + pname + "\" property definition");
 		return false;
 	}
-	m_begin++;
+	++m_begin;
 
 	/*
 	 * And now we can apply defaults to those which were not set before if
 	 * GraphAttributes is given, attribute is known and these defaults are
 	 * set. Otherwise our job is done here.
 	 */
-	if(!GA || attr == a_unknown) {
+	if(!GA || attr == Attribute::unknown) {
 		return true;
 	}
 
 	if(!nodeDefault.empty()) {
-		node v;
-		forall_nodes(v, G) {
+		for(node v : G.nodes) {
 			if(!doneNode[v] && !setAttribute(*GA, v, attr, nodeDefault)) {
 				return false;
 			}
@@ -385,8 +413,7 @@ bool Parser::readProperty(Graph &G, GraphAttributes *GA)
 	}
 
 	if(!edgeDefault.empty()) {
-		edge e;
-		forall_edges(e, G) {
+		for(edge e : G.edges) {
 			if(!doneEdge[e] && !setAttribute(*GA, e, attr, edgeDefault)) {
 				return false;
 			}
@@ -408,7 +435,7 @@ bool Parser::readPropertyStatement(
 	}
 
 	const std::string &head = *(m_begin->value);
-	m_begin++;
+	++m_begin;
 
 	if(head == "node") {
 		if(m_begin == m_end || !m_begin->identifier()) {
@@ -416,7 +443,7 @@ bool Parser::readPropertyStatement(
 			return false;
 		}
 		std::istringstream is(*(m_begin->value));
-		m_begin++;
+		++m_begin;
 
 		int nid;
 		node v;
@@ -431,7 +458,7 @@ bool Parser::readPropertyStatement(
 		}
 
 		const std::string &value = *(m_begin->value);
-		m_begin++;
+		++m_begin;
 
 		if(GA && !setAttribute(*GA, v, attr, value)) {
 			return false;
@@ -443,7 +470,7 @@ bool Parser::readPropertyStatement(
 			return false;
 		}
 		std::istringstream is(*(m_begin->value));
-		m_begin++;
+		++m_begin;
 
 		int eid;
 		edge e;
@@ -457,7 +484,7 @@ bool Parser::readPropertyStatement(
 		}
 
 		const std::string &value = *(m_begin->value);
-		m_begin++;
+		++m_begin;
 
 		if(GA && !setAttribute(*GA, e, attr, value)) {
 			return false;
@@ -469,7 +496,7 @@ bool Parser::readPropertyStatement(
 			return false;
 		}
 		nodeDefault = *(m_begin->value);
-		m_begin++;
+		++m_begin;
 
 		if(m_begin == m_end || !m_begin->string()) {
 			tokenError("expected edge default property value");
@@ -477,7 +504,7 @@ bool Parser::readPropertyStatement(
 		}
 
 		edgeDefault = *(m_begin->value);
-		m_begin++;
+		++m_begin;
 	} else {
 		tokenError("unknown property statement \"" + head + "\"", false);
 		return false;
@@ -487,7 +514,7 @@ bool Parser::readPropertyStatement(
 		tokenError("expected \")\" for \"" + head + "\" property statement");
 		return false;
 	}
-	m_begin++;
+	++m_begin;
 
 	return true;
 }
@@ -500,7 +527,7 @@ bool Parser::readClusterStatement(Graph &G, ClusterGraph *C, cluster c)
 		return false;
 	}
 	const std::string &head = *(m_begin->value);
-	m_begin++;
+	++m_begin;
 
 	if(head == "edge") {
 		return readEdge(G);
@@ -511,7 +538,7 @@ bool Parser::readClusterStatement(Graph &G, ClusterGraph *C, cluster c)
 	}
 
 	if(head == "cluster") {
-		return readCluster(G, C, C ? C->newCluster(c) : NULL);
+		return readCluster(G, C, C ? C->newCluster(c) : nullptr);
 	}
 
 	tokenError("unknown cluster statement \"" + head + "\"", false);
@@ -527,18 +554,23 @@ bool Parser::readStatement(Graph &G, GraphAttributes *GA, ClusterGraph *C)
 	}
 
 	const std::string &head = *(m_begin->value);
-	m_begin++;
+	++m_begin;
 
 	if(head == "edge") {
 		return readEdge(G);
 	}
 
 	if(head == "nodes") {
-		return readNodes(G, C, C ? C->rootCluster() : NULL);
+		if (!G.empty()) {
+			GraphIO::logger.lout() << "Encountered duplicate node section" << std::endl;
+			return false;
+		}
+
+		return readNodes(G, C, C ? C->rootCluster() : nullptr);
 	}
 
 	if(head == "cluster") {
-		return readCluster(G, C, C ? C->rootCluster() : NULL);
+		return readCluster(G, C, C ? C->rootCluster() : nullptr);
 	}
 
 	if(head == "property") {
@@ -551,34 +583,33 @@ bool Parser::readStatement(Graph &G, GraphAttributes *GA, ClusterGraph *C)
 			tokenError("expected date string");
 			return false;
 		}
-		m_begin++;
+		++m_begin;
 	} else if(head == "author" ) {
 		if(m_begin == m_end || !m_begin->string()) {
 			tokenError("expected author string");
 			return false;
 		}
-		m_begin++;
+		++m_begin;
 	} else if(head == "comments") {
 		if(m_begin == m_end || !m_begin->string()) {
 			tokenError("expected comments string");
 			return false;
 		}
-		m_begin++;
+		++m_begin;
 	} else if(head == "nb_nodes") {
 		if(m_begin == m_end || !m_begin->identifier()) {
 			tokenError("expected node count");
 			return false;
 		}
-		m_begin++;
+		++m_begin;
 	} else if(head == "nb_edges") {
 		if(m_begin == m_end || !m_begin->identifier()) {
 			tokenError("expected edge count");
 			return false;
 		}
-		m_begin++;
+		++m_begin;
 	} else {
-		std::cerr << "WARNING: unknown statement \""
-				  << head << "\", ignoring.\n";
+		GraphIO::logger.lout(Logger::Level::Minor) << "Unknown statement \"" << head << "\", ignoring.\n" << std::endl;
 		// We got unknown statement, so we ignore until ending paren.
 		int opened = 1;
 		while(m_begin != m_end && opened != 0) {
@@ -587,7 +618,7 @@ bool Parser::readStatement(Graph &G, GraphAttributes *GA, ClusterGraph *C)
 			} else if(m_begin->rightParen()) {
 				opened--;
 			}
-			m_begin++;
+			++m_begin;
 		}
 
 		if(opened != 0) {
@@ -604,7 +635,7 @@ bool Parser::readStatement(Graph &G, GraphAttributes *GA, ClusterGraph *C)
 		tokenError("expected \")\" for \"" + head + "\" statement");
 		return false;
 	}
-	m_begin++;
+	++m_begin;
 
 	return true;
 }
@@ -612,35 +643,39 @@ bool Parser::readStatement(Graph &G, GraphAttributes *GA, ClusterGraph *C)
 
 bool Parser::readGraph(Graph &G, GraphAttributes *GA, ClusterGraph *C)
 {
+	G.clear();
+
 	Lexer lexer(m_istream);
 
 	if(!lexer.tokenize()) {
-		std::cerr << "ERROR: Lexical analysis failed.\n";
+		GraphIO::logger.lout() << "Lexical analysis failed." << std::endl;
 		return false;
 	}
 	m_begin = lexer.tokens().begin();
 	m_end = lexer.tokens().end();
 
 	if(m_begin == m_end || !m_begin->leftParen()) {
-		std::cerr << "ERROR: Expected \"(\".\n";
+		GraphIO::logger.lout() << "Expected \"(\"." << std::endl;
 		return false;
 	}
-	m_begin++;
+	++m_begin;
 
 	if(m_begin == m_end || !m_begin->identifier("tlp")) {
 		tokenError("expected \"tlp\" statement");
 		return false;
 	}
-	m_begin++;
+	++m_begin;
 
 	if(m_begin == m_end || !m_begin->string()) {
 		tokenError("expected version string");
 		return false;
 	}
-	m_begin++;
+	++m_begin;
+
+	m_idEdge.clear();
 
 	while(m_begin != m_end && m_begin->leftParen()) {
-		m_begin++;
+		++m_begin;
 		if(!readStatement(G, GA, C)) {
 			return false;
 		}
@@ -650,7 +685,7 @@ bool Parser::readGraph(Graph &G, GraphAttributes *GA, ClusterGraph *C)
 		tokenError("expected \")\" for \"tlp\" statement");
 		return false;
 	}
-	m_begin++;
+	++m_begin;
 
 	if(m_begin != m_end) {
 		tokenError("expected end of file");
@@ -660,7 +695,5 @@ bool Parser::readGraph(Graph &G, GraphAttributes *GA, ClusterGraph *C)
 	return true;
 }
 
-
-} // end namespace tlp
-
-} // end namespace ogdf
+}
+}

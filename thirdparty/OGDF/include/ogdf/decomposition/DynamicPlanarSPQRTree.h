@@ -1,22 +1,14 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class DynamicPlanarSPQRTree.
  *
- * \author Jan Papenfu&szlig;
+ * \author Jan Papenfuß
  *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,22 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_DYNAMIC_PLANAR_SPQR_TREE_H
-#define OGDF_DYNAMIC_PLANAR_SPQR_TREE_H
-
 
 #include <ogdf/decomposition/DynamicSPQRTree.h>
 #include <ogdf/decomposition/PlanarSPQRTree.h>
@@ -56,18 +37,10 @@
 
 namespace ogdf {
 
-
-template<class T, class I> class Array;
-template<class A, class B> class Tuple2;
-
-
-//---------------------------------------------------------
-// DynamicPlanarSPQRTree
-// extension of class DynamicSPQRTree for support of embedded graphs
-//---------------------------------------------------------
-
 //! SPQR-trees of planar graphs.
 /**
+ * @ingroup decomp
+ *
  * The class DynamicPlanarSPQRTree maintains the triconnected components of a
  * planar biconnected graph G and represents all possible embeddings
  * of G. Each skeleton graph is embedded.
@@ -78,34 +51,32 @@ template<class A, class B> class Tuple2;
  * around its poles, and swap(v,e_1,e_2), which exchanges the
  * positions of the edges e_1 and e_2 in the skeleton of a P-node v.
  */
-
 class OGDF_EXPORT DynamicPlanarSPQRTree : public DynamicSPQRTree, public PlanarSPQRTree
 {
 public:
-
 	// constructors
 
-	//! Creates an SPQR tree \a T for planar graph \a G rooted at the first edge of \a G.
+	//! Creates an SPQR tree for planar graph \p G rooted at the first edge of \p G.
 	/**
-	 * If \a isEmbedded is set to true, \a G must represent a combinatorial
+	 * If \p isEmbedded is set to true, \p G must represent a combinatorial
 	 * embedding, i.e., the counter-clockwise order of the adjacency entries
 	 * around each vertex defines an embedding.
-	 * \pre \a G is planar and biconnected and contains at least 3 nodes,
-	 *      or \a G has exactly 2 nodes and at least 3  edges.
+	 * \pre \p G is planar and biconnected and contains at least 3 nodes,
+	 *      or \p G has exactly 2 nodes and at least 3 edges.
 	 */
-	DynamicPlanarSPQRTree(Graph &G, bool isEmbedded = false) :
+	explicit DynamicPlanarSPQRTree(Graph &G, bool isEmbedded = false) :
 		DynamicSPQRTree(G)
 	{
 		PlanarSPQRTree::init(isEmbedded);
 	}
 
-	//! Creates an SPQR tree \a T for planar graph \a G rooted at edge \a e.
+	//! Creates an SPQR tree for planar graph \p G rooted at edge \p e.
 	/**
-	 * If \a isEmbedded is set to true, \a G must represent a combinatorial
+	 * If \p isEmbedded is set to true, \p G must represent a combinatorial
 	 * embedding, i.e., the counter-clockwise order of the adjacency entries
 	 * around each vertex defines an embedding.
-	 * \pre \a e is an edge in \a G, and \a G is planar and biconnected and
-	 * contains at least 3 nodes, or \a G has exactly 2 nodes and at least 3
+	 * \pre \p e is an edge in \p G, and \p G is planar and biconnected and
+	 * contains at least 3 nodes, or \p G has exactly 2 nodes and at least 3
 	 * edges.
 	 */
 	DynamicPlanarSPQRTree(Graph &G, edge e, bool isEmbedded = false) :
@@ -115,8 +86,4 @@ public:
 	}
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

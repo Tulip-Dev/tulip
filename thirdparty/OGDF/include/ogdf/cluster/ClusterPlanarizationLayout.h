@@ -1,11 +1,3 @@
-/*
- * $Revision: 2584 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-12 02:38:07 +0200 (Thu, 12 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class ClusterPlanarizationLayout
  * Planarization approach for cluster graphs
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,31 +26,22 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_CLUSTER_PLANARIZATION_LAYOUT_H
-#define OGDF_CLUSTER_PLANARIZATION_LAYOUT_H
-
-
-#include <ogdf/module/LayoutClusterPlanRepModule.h>
-#include <ogdf/module/CCLayoutPackModule.h>
-#include <ogdf/basic/ModuleOption.h>
-
+#include <ogdf/cluster/LayoutClusterPlanRepModule.h>
+#include <ogdf/packing/CCLayoutPackModule.h>
+#include <memory>
 
 namespace ogdf {
 
-
 //! The cluster planarization layout algorithm.
 /**
+ * @ingroup gd-cluser
+ *
  * The class ClusterPlanarizationLayout implements the planarization
  * approach for drawing clustered graphs. Its implementation is based
  * on the following publication:
@@ -100,12 +83,12 @@ public:
 	//! Creates an instance of cluster planarization layout.
 	ClusterPlanarizationLayout();
 
-	// Destruction
+	//! Destruction
 	virtual ~ClusterPlanarizationLayout() { }
 
 
 
-	//! Calls cluster planarization layout with cluster-graph attributes \a acGraph.
+	//! Calls cluster planarization layout with cluster-graph attributes \p acGraph.
 	/**
 	 * @param G is the input graph.
 	 * @param acGraph is assigned the computed layout.
@@ -117,7 +100,7 @@ public:
 		ClusterGraphAttributes& acGraph,
 		ClusterGraph& cGraph,
 		bool simpleCConnect = true);
-	//! Calls cluster planarization layout with cluster-graph attributes \a acGraph.
+	//! Calls cluster planarization layout with cluster-graph attributes \p acGraph.
 	/**
 	 * @param G is the input graph.
 	 * @param acGraph is assigned the computed layout.
@@ -138,25 +121,27 @@ public:
 		return m_pageRatio;
 	}
 
-	//! Sets the page ratio to \a ratio.
+	//! Sets the page ratio to \p ratio.
 	void pageRatio(double ratio) {
 		m_pageRatio = ratio;
 	}
 
-	//! Sets the module option for the planar layout algorithm to \a pPlanarLayouter.
+	//! Sets the module option for the planar layout algorithm to \p pPlanarLayouter.
 	void setPlanarLayouter(LayoutClusterPlanRepModule *pPlanarLayouter) {
-		m_planarLayouter.set(pPlanarLayouter);
+		m_planarLayouter.reset(pPlanarLayouter);
 	}
 
-	//! Sets the module option for the arrangement of connected components to \a pPacker.
+	//! Sets the module option for the arrangement of connected components to \p pPacker.
 	void setPacker(CCLayoutPackModule *pPacker) {
-		m_packer.set(pPacker);
+		m_packer.reset(pPacker);
 	}
 
-	////! Returns the number of crossings in the layout produced in last call.
-	//int numberOfCrossings() const {
-	//	return m_nCrossings;
-	//}
+#if 0
+	//! Returns the number of crossings in the layout produced in last call.
+	int numberOfCrossings() const {
+		return m_nCrossings;
+	}
+#endif
 
 
 protected:
@@ -172,16 +157,12 @@ protected:
 
 
 private:
-	ModuleOption<LayoutClusterPlanRepModule> m_planarLayouter; //!< The planar layouter.
-	ModuleOption<CCLayoutPackModule>         m_packer; //!< The packing algorithm.
+	std::unique_ptr<LayoutClusterPlanRepModule> m_planarLayouter; //!< The planar layouter.
+	std::unique_ptr<CCLayoutPackModule>         m_packer; //!< The packing algorithm.
 
 	double m_pageRatio; //!< The page ratio.
 
 	int m_nCrossings;//!< The number of crossings (not yet used!).
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

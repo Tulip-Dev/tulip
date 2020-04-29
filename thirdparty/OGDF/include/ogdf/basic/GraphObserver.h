@@ -1,11 +1,3 @@
-/*
- * $Revision: 2615 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-16 14:23:36 +0200 (Mon, 16 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Abstract base class for structures on graphs, that need
  *        to be informed about graph changes (e.g. cluster graphs).
@@ -21,7 +13,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -38,21 +30,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_GRAPH_STRUCTURE_H
-#define OGDF_GRAPH_STRUCTURE_H
-
 
 #include <ogdf/basic/List.h>
 #include <ogdf/basic/Graph.h>
@@ -64,46 +46,41 @@ namespace ogdf {
 //
 
 
-//----------------------------------------------------------
-// GraphObserver
-//----------------------------------------------------------
+//! Abstract Base class for graph observers.
 /**
- * \brief Abstract Base class for classes that need to keep track
- * of changes in the graph like addition/deletion of nodes
- * or edges.
- * derived classes have to overload nodeDeleted, nodeAdded
- * edgeDeleted, edgeAdded
- * these functions should be called by Graph before (delete)
+ * @ingroup graphs
  *
+ * If a class needs to keep track of changes in a graph like addition or deletion
+ * of nodes or edges, you can derive it from GraphObserver and override the
+ * notification methods nodeDeleted, nodeAdded, edgeDeleted, edgeAdded.
  */
-
 class OGDF_EXPORT GraphObserver {
 	friend class Graph;
 
 public:
 	//! Constructs instance of GraphObserver class
-	GraphObserver() : m_pGraph(0) { }
+	GraphObserver() : m_pGraph(nullptr) { }
 
 	/**
 	 *\brief Constructs instance of GraphObserver class
 	 * \param G is the graph to be watched
 	 */
-	GraphObserver(const Graph* G) : m_pGraph(G)
+	explicit GraphObserver(const Graph* G) : m_pGraph(G)
 	{
 		m_itGList = G->registerStructure(this);
-	}//constructor
+	}
 
 	//! Destroys the instance, unregisters it from watched graph
 	virtual ~GraphObserver()
 	{
 		if (m_pGraph) m_pGraph->unregisterStructure(m_itGList);
-	}//destructor
+	}
 
-	//! Associates observer instance with graph \a G
+	//! Associates observer instance with graph \p G
 	void reregister(const Graph *pG) {
 		//small speedup: check if == m_pGraph
 		if (m_pGraph) m_pGraph->unregisterStructure(m_itGList);
-		if ((m_pGraph = pG) != 0) m_itGList = pG->registerStructure(this);
+		if ((m_pGraph = pG) != nullptr) m_itGList = pG->registerStructure(this);
 	}
 
 	//! Called by watched graph when a node is deleted
@@ -135,10 +112,6 @@ public:
 protected:
 	const Graph* m_pGraph; //! watched graph
 	ListIterator<GraphObserver*> m_itGList; //! List entry in graphs list of all registered graphobservers
-
-
 };
 
-} //end namespace ogdf
-
-#endif
+}

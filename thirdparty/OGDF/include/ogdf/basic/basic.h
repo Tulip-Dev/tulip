@@ -1,11 +1,3 @@
-/*
- * $Revision: 4617 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2015-05-28 19:43:44 +0200 (Thu, 28 May 2015) $
- ***************************************************************/
-
 /** \file
  * \brief Basic declarations, included by all source files.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,408 +25,202 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
-
-
-#ifdef _MSC_VER
-#pragma once
-#endif
-
-#ifndef OGDF_BASIC_H
-#define OGDF_BASIC_H
-
-
-/**
- * \mainpage The Open Graph Drawing Framework
- *
- * \section sec_intro Introduction
- * The Open Graph Drawing Framework (OGDF) is a C++ library containing
- * implementations of various graph drawing algorithms. The library is self
- * contained; optionally, additional packages like LP-solvers are required
- * for some implementations.
- *
- * Here, you find the library's code documentation. For more general information
- * on OGDF see http://www.ogdf.net. There, you can also find further explanations,
- * how-tos, and example code.
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
  */
 
+#pragma once
 
-#include <ogdf/internal/basic/config.h>
+#include <ogdf/basic/internal/config.h>
 
+//! @name Assertions (only active in debug builds)
+//! @{
 
-// include windows.h on Windows systems
-#if defined(OGDF_SYSTEM_WINDOWS) || defined(__CYGWIN__)
-#define WIN32_EXTRA_LEAN
-#define WIN32_LEAN_AND_MEAN
-#undef NOMINMAX
-#define NOMINMAX
-#include <windows.h>
-#endif
-
-
-//---------------------------------------------------------
-// assertions
-//---------------------------------------------------------
-
-#ifdef OGDF_DEBUG
-#include <assert.h>
-#define OGDF_ASSERT(expr) assert(expr);
-#define OGDF_ASSERT_IF(minLevel,expr) \
-	if (int(ogdf::debugLevel) >= int(minLevel)) { assert(expr); } else { }
-#define OGDF_SET_DEBUG_LEVEL(level) ogdf::debugLevel = level;
-
-#else
+//! Assert condition \p expr. See doc/build.md for more information.
+//! @ingroup macros
 #define OGDF_ASSERT(expr)
-#define OGDF_ASSERT_IF(minLevel,expr)
-#define OGDF_SET_DEBUG_LEVEL(level)
-#endif
-
-
-//---------------------------------------------------------
-// macros for optimization
-//---------------------------------------------------------
-
-// Visual C++ compiler
-#ifdef _MSC_VER
-
-#define OGDF_LIKELY(x)    (x)
-#define OGDF_UNLIKELY(x)  (x)
+//! Assert condition \p expr when using heavy debugging. See OGDF_ASSERT.
+//! @ingroup macros
+#define OGDF_HEAVY_ASSERT(expr)
 
 #ifdef OGDF_DEBUG
-#define OGDF_NODEFAULT    default: assert(0);
-#else
-#define OGDF_NODEFAULT    default: __assume(0);
+# ifdef OGDF_HEAVY_DEBUG
+#  undef OGDF_HEAVY_ASSERT
+#  define OGDF_HEAVY_ASSERT(expr) OGDF_ASSERT(expr)
+# endif
+# undef OGDF_ASSERT
+# ifndef OGDF_USE_ASSERT_EXCEPTIONS
+#  include <cassert>
+#  define OGDF_ASSERT(expr) assert(expr)
+# else
+#  include <stdexcept>
+#  include <sstream>
+
+namespace ogdf {
+/**
+ * A trivial exception for failed assertions.
+ * Only available if the macro OGDF_USE_ASSERT_EXCEPTIONS is defined.
+ */
+class AssertionFailed : public std::runtime_error {
+	using std::runtime_error::runtime_error;
+};
+}
+
+#  define OGDF_ASSERT(expr) do { \
+	if (!(expr)) { \
+		std::stringstream ogdf_assert_ss; \
+		ogdf_assert_ss \
+		 << "OGDF assertion `" #expr "' failed at " __FILE__ ":" \
+		 << __LINE__ \
+		 << "(" << OGDF_FUNCTION_NAME << ")"; \
+		ogdf::get_stacktrace(ogdf_assert_ss); \
+		throw ogdf::AssertionFailed(ogdf_assert_ss.str()); \
+	} } while (false)
+# endif
 #endif
 
-#define OGDF_DECL_ALIGN(b) __declspec(align(b))
-#define OGDF_DECL_THREAD __declspec(thread)
+//! @}
 
-
-// GNU gcc compiler (also Intel compiler)
-#elif defined(__GNUC__)
-//// make sure that SIZE_MAX gets defined
-//#define __STDC_LIMIT_MACROS
-//#include <stdint.h>
-
-#define OGDF_LIKELY(x)    __builtin_expect((x),1)
-#define OGDF_UNLIKELY(x)  __builtin_expect((x),0)
-#define OGDF_NODEFAULT    default: ;
-
-#define OGDF_DECL_ALIGN(b) __attribute__ ((aligned(b)))
-#define OGDF_DECL_THREAD __thread
-
-
-// other compiler
-#else
-#define OGDF_LIKELY(x)    (x)
-#define OGDF_UNLIKELY(x)  (x)
-#define OGDF_NODEFAULT
-
-#define OGDF_DECL_ALIGN(b)
-#endif
-
-#ifndef __SIZEOF_POINTER__
-#ifdef _M_X64
-#define __SIZEOF_POINTER__ 8
-#else
-#define __SIZEOF_POINTER__ 4
-#endif
-#endif
-
-
-//---------------------------------------------------------
-// common includes
-//---------------------------------------------------------
-
-// stdlib
+#include <cstdint>
 #include <cmath>
 #include <ctime>
 #include <fstream>
 #include <algorithm>
 #include <limits>
 
-using std::ifstream;		// from <fstream>
-using std::ofstream;		// from <fstream>
-using std::min;				// from <algorithm>
-using std::max;				// from <algorithm>
-using std::numeric_limits;	// from <limits>
-
-#if defined(__GNUC__) && __GNUC__ >= 7
-#include <cstring>
-using std::memcpy;
-#endif
-
-#ifdef OGDF_SYSTEM_UNIX
-#include <stdint.h>
-#endif
-// make sure that SIZE_MAX gets defined
-#ifndef SIZE_MAX
-#define SIZE_MAX ((size_t)-1)
-#endif
-
-//---------------------------------------------------------
-// define data types with known size
-//---------------------------------------------------------
-
-#if defined(_MSC_VER)
-
-typedef unsigned __int8  __uint8;
-typedef unsigned __int16 __uint16;
-typedef unsigned __int32 __uint32;
-typedef unsigned __int64 __uint64;
-
-#else
-
-#undef __int8
-#undef __int16
-#undef __int32
-#undef __int64
-
-typedef signed char        __int8;
-typedef short              __int16;
-typedef int                __int32;
-typedef long long          __int64;
-typedef unsigned char      __uint8;
-typedef unsigned short     __uint16;
-typedef unsigned int       __uint32;
-typedef unsigned long long __uint64;
-#endif
-
-// ogdf
-#include <ogdf/basic/Logger.h>
-#include <ogdf/basic/exceptions.h>
-#include <ogdf/basic/System.h>
-#include <ogdf/basic/memory.h>
-#include <ogdf/basic/comparer.h>
-
-
-
 //! The namespace for all OGDF objects.
 namespace ogdf {
 
-#ifndef OGDF_DLL
+//! Set to true iff debug mode is used during compilation of the OGDF
+OGDF_EXPORT extern bool debugMode;
+
+// generally used <algorithm> members
+using std::min;
+using std::max;
 
 /**
  *  The class Initialization is used for initializing global variables.
  *  You should never create instances of it!
 */
-class Initialization {
-	static int s_count;
-
+class OGDF_EXPORT Initialization {
 public:
 	Initialization();
 	~Initialization();
 };
 
+// OGDF_INSTALL is defined only when compiling a dynamic library.
+// Whenever this library is used we can safely assume that this header
+// file is included beforehand.
+// Thus, there will be a static initialization object in the program that uses the library.
+#ifndef OGDF_INSTALL
+// This has to be in the header file. Being in the cpp file does not
+// guarantee that it is constructed (with all linkers).
 static Initialization s_ogdfInitializer;
-
 #endif
 
-
-	/**
-	 * @name Global basic functions
-	 */
-	//@{
-
-	// forward declarations
-	template<class E> class List;
-
-
-	enum Direction { before, after };
-
-	//! Returns random integer between low and high (including).
-	inline int randomNumber(int low, int high) {
-#if RAND_MAX == 32767
-		// We get only 15 random bits on some systems (Windows, Solaris)!
-		int r1 = (rand() & ((1 << 16) - 1));
-		int r2 = (rand() & ((1 << 16) - 1));
-		int r = (r1 << 15) | r2;
-#else
-		int r = rand();
-#endif
-		return low + (r % (high-low+1));
-	}
-
-	//! Returns random double value between low and high.
-	inline double randomDouble(double low, double high) {
-		double val = low +(rand()*(high-low))/RAND_MAX;
-		OGDF_ASSERT(val >= low && val <= high);
-		return val;
-	}
-
-	//! Returns a random double value from the normal distribution
-	//! with mean m and standard deviation sd
-	inline double randomDoubleNormal(double m, double sd)
-	{
-		double x1, y1, w;
-
-		do {
-			double rndVal = randomDouble(0,1);
-			x1 = 2.0 * rndVal - 1.0;
-			rndVal = randomDouble(0,1);
-			double x2 = 2.0 * rndVal - 1.0;
-			w = x1*x1 + x2*x2;
-		} while (w >= 1.0);
-
-		w = sqrt((-2.0 * log(w))/w) ;
-		y1 = x1*w;
-
-		return(m + y1*sd);
-	}
-
-
-
-	//! Returns used CPU time from T to current time and assigns
-	//! current time to T.
-	OGDF_EXPORT double usedTime(double& T);
-
-	//! \a doDestruction() returns false if a data type does not require to
-	//! call its destructor (e.g. build-in data types).
-	template<class E>inline bool doDestruction(const E *) { return true; }
-
-	// specializations
-	template<>inline bool doDestruction(const char *) { return false; }
-	template<>inline bool doDestruction<int>(const int *) { return false; }
-	template<>inline bool doDestruction<double>(const double *) { return false; }
-
-
-	//! Compares the two strings \a str1 and \a str2, ignoring the case of characters.
-	OGDF_EXPORT bool equalIgnoreCase(const string &str1, const string &str2);
-
-	//! Tests if \a prefix is a prefix of \a str, ignoring the case of characters.
-	OGDF_EXPORT bool prefixIgnoreCase(const string &prefix, const string &str);
-
-	//@}
-
-
-	/**
-	 * @name Files and directories
-	 */
-	//@{
-
-	//! The type of an entry in a directory.
-	enum FileType {
-		ftEntry,     /**< file or directory */
-		ftFile,      /**< file */
-		ftDirectory  /**< directory */
-	};
-
-	//! Returns true iff \a fileName is a regular file (not a directory).
-	OGDF_EXPORT bool isFile(const char *fileName);
-
-	//! Returns true iff \a fileName is a directory.
-	OGDF_EXPORT bool isDirectory(const char *fileName);
-
-	//! Changes current directory to \a dirName; returns true if successful.
-	OGDF_EXPORT bool changeDir(const char *dirName);
-
-	//! Returns in \a files the list of files in directory \a dirName.
-	/** The optional argument \a pattern can be used to filter files.
-	 *
-	 *  \pre \a dirName is a directory
-	 */
-	OGDF_EXPORT void getFiles(const char *dirName,
-		List<string> &files,
-		const char *pattern = "*");
-
-	//! Appends to \a files the list of files in directory \a dirName.
-	/** The optional argument \a pattern can be used to filter files.
-	 *
-	 *  \pre \a dirName is a directory
-	 */
-	OGDF_EXPORT void getFilesAppend(const char *dirName,
-		List<string> &files,
-		const char *pattern = "*");
-
-
-	//! Returns in \a subdirs the list of directories contained in directory \a dirName.
-	/** The optional argument \a pattern can be used to filter files.
-	 *
-	 *  \pre \a dirName is a directory
-	 */
-	OGDF_EXPORT void getSubdirs(const char *dirName,
-		List<string> &subdirs,
-		const char *pattern = "*");
-
-	//! Appends to \a subdirs the list of directories contained in directory \a dirName.
-	/** The optional argument \a pattern can be used to filter files.
-	 *
-	 *  \pre \a dirName is a directory
-	 */
-	OGDF_EXPORT void getSubdirsAppend(const char *dirName,
-		List<string> &subdirs,
-		const char *pattern = "*");
-
-
-	//! Returns in \a entries the list of all entries contained in directory \a dirName.
-	/** Entries may be files or directories. The optional argument \a pattern
-	 *  can be used to filter files.
-	 *
-	 *  \pre \a dirName is a directory
-	 */
-	OGDF_EXPORT void getEntries(const char *dirName,
-		List<string> &entries,
-		const char *pattern = "*");
-
-	//! Appends to \a entries the list of all entries contained in directory \a dirName.
-	/** Entries may be files or directories. The optional argument \a pattern
-	 *  can be used to filter files.
-	 *
-	 *  \pre \a dirName is a directory
-	 */
-	OGDF_EXPORT void getEntriesAppend(const char *dirName,
-		List<string> &entries,
-		const char *pattern = "*");
-
-
-	//! Returns in \a entries the list of all entries of type \a t contained in directory \a dirName.
-	/** The optional argument \a pattern can be used to filter files.
-	 *
-	 *  \pre \a dirName is a directory
-	 */
-	OGDF_EXPORT void getEntries(const char *dirName,
-		FileType t,
-		List<string> &entries,
-		const char *pattern = "*");
-
-	//! Appends to \a entries the list of all entries of type \a t contained in directory \a dirName.
-	/** The optional argument \a pattern can be used to filter files.
-	 *
-	 *  \pre \a dirName is a directory
-	 */
-	OGDF_EXPORT void getEntriesAppend(const char *dirName,
-		FileType t,
-		List<string> &entries,
-		const char *pattern = "*");
-
-	//@}
-
-
-#ifdef OGDF_DEBUG
-	/** We maintain a debug level in debug versions indicating how many
-	 *  internal checks (usually assertions) are done.
-	 *  Usage: Set the variable ogdf::debugLevel using the macro
-	 *   OGDF_SET_DEBUG_LEVEL(level) to the desired level
-	 *   in the calling code (e.g. main()). The debugLevel can be set
-	 *   to a higher level for critical parts (e.g., where you assume a bug)
-	 *   ensuring that other parts are not too slow.
-	 */
-	enum DebugLevel {
-		dlMinimal, dlExtendedChecking, dlConsistencyChecks, dlHeavyChecks
-	};
-	extern DebugLevel debugLevel;
+#ifdef OGDF_USE_ASSERT_EXCEPTIONS
+//! Output a mangled stack backtrace of the caller function to stream
+extern void get_stacktrace(std::ostream &);
 #endif
 
+enum class Direction { before, after };
+
+//! @addtogroup random
+//! @{
+
+//! Returns a random value suitable as initial seed for a random number engine.
+/**
+ * <H3>Thread Safety</H3>
+ * This functions is thread-safe.
+ */
+OGDF_EXPORT long unsigned int randomSeed();
+
+//! Sets the seed for functions like randomSeed(), randomNumber(), randomDouble().
+OGDF_EXPORT void setSeed(int val);
+
+//! Returns random integer between low and high (including).
+/**
+ * <H3>Thread Safety</H3>
+ * This functions is thread-safe.
+ */
+OGDF_EXPORT int randomNumber(int low, int high);
+
+//! Returns a random double value from the interval [\p low, \p high).
+/**
+ * <H3>Thread Safety</H3>
+ * This functions is thread-safe.
+ */
+OGDF_EXPORT double randomDouble(double low, double high);
+
+//! Returns a random double value from the normal distribution
+//! with mean m and standard deviation sd
+inline double randomDoubleNormal(double m, double sd)
+{
+	double x1, y1, w;
+
+	do {
+		double rndVal = randomDouble(0,1);
+		x1 = 2.0 * rndVal - 1.0;
+		rndVal = randomDouble(0,1);
+		double x2 = 2.0 * rndVal - 1.0;
+		w = x1*x1 + x2*x2;
+	} while (w >= 1.0);
+
+	w = sqrt((-2.0 * log(w))/w) ;
+	y1 = x1*w;
+
+	return m + y1 * sd;
+}
+
+//! @}
+
+//! Returns used CPU time from T to current time and assigns current time to T.
+/**
+ * @ingroup date-time
+ */
+OGDF_EXPORT double usedTime(double& T);
+
+//! Removes trailing space, horizontal and vertical tab, feed, newline, and carriage return  from \p str.
+OGDF_EXPORT void removeTrailingWhitespace(string &str);
+
+//! Compares the two strings \p str1 and \p str2, ignoring the case of characters.
+OGDF_EXPORT bool equalIgnoreCase(const string &str1, const string &str2);
+
+//! Tests if \p prefix is a prefix of \p str, ignoring the case of characters.
+OGDF_EXPORT bool prefixIgnoreCase(const string &prefix, const string &str);
+
+//! @addtogroup container-functions
+//! @{
+
+//! Searches for the position of \p x in container \p C; returns -1 if not found.
+/**
+ * Positions are number 0, 1, 2, ... The function uses the equality operator for comparing elements.
+ *
+ * \param C is a container.
+ * \param x is the element to search for.
+ * \tparam T is the type of the elements in \p C.
+ * \return the position of the first occurrence of \p x in \p C (positions start with 0), or -1 if
+ *         \p x is not in \p C.
+ */
+template< typename CONTAINER, typename T>
+int searchPos(const CONTAINER &C, const T &x)
+{
+	int pos = 0;
+	for (const T &y : C) {
+		if (x == y)
+			return pos;
+		++pos;
+	}
+
+	return -1;
+}
+
+//! @}
 
 //! Abstract base class for bucket functions.
 /**
- * The parameterized class \a BucketFunc<E> is an abstract base class
- * for bucket functions. Derived classes have to implement \a getBucket().
+ * The parameterized class BucketFunc<E> is an abstract base class
+ * for bucket functions. Derived classes have to implement #getBucket().
  * Bucket functions are used by bucket sort functions for container types.
  */
 template<class E> class BucketFunc
@@ -442,245 +228,8 @@ template<class E> class BucketFunc
 public:
 	virtual ~BucketFunc() { }
 
-	//! Returns the bucket of \a x.
+	//! Returns the bucket of \p x.
 	virtual int getBucket(const E &x) = 0;
 };
 
-
-
-/**
- * @name Atomic operations
- */
-//@{
-
-#ifdef OGDF_SYSTEM_WINDOWS
-
-#define OGDF_MEMORY_BARRIER MemoryBarrier()
-
-//! Atomically decrements (decreases by one) the variable to which \a pX points.
-/**
- * @param pX points to the variable to be decremented.
- * @return The resulting decremented value.
- */
-inline __int32 atomicDec(__int32 volatile *pX) {
-	return (__int32)InterlockedDecrement((LONG volatile *)pX);
 }
-
-//! Atomically decrements (decreases by one) the variable to which \a pX points.
-/**
- * @param pX points to the variable to be decremented.
- * @return The resulting decremented value.
- */
-inline __int64 atomicDec(__int64 volatile *pX) {
-	return InterlockedDecrement64(pX);
-}
-
-//! Atomically increments (increases by one) the variable to which \a pX points.
-/**
- * @param pX points to the variable to be incremented.
- * @return The resulting incremented value.
- */
-inline __int32 atomicInc(__int32 volatile *pX) {
-	return (__int32)InterlockedIncrement((LONG volatile *)pX);
-}
-
-//! Atomically increments (increases by one) the variable to which \a pX points.
-/**
- * @param pX points to the variable to be incremented.
- * @return The resulting incremented value.
- */
-inline __int64 atomicInc(__int64 volatile *pX) {
-	return InterlockedIncrement64(pX);
-}
-
-
-//! Atomically sets the variable pointed to by \a pX to \a value and returns its previous value.
-/**
- * @param pX    points to the variable to be modified.
- * @param value is the value to which the variable is set.
- * @return The previous value of the modified variable.
- */
-inline __int32 atomicExchange(__int32 volatile *pX, __int32 value) {
-	return InterlockedExchange((LONG volatile *)pX, (LONG)value);
-}
-
-//! Atomically sets the variable pointed to by \a pX to \a value and returns its previous value.
-/**
- * @param pX    points to the variable to be modified.
- * @param value is the value to which the variable is set.
- * @return The previous value of the modified variable.
- */
-inline __int64 atomicExchange(__int64 volatile *pX, __int64 value) {
-	return InterlockedExchange64(pX, value);
-}
-
-//! Atomically sets the variable pointed to by \a pX to \a value and returns its previous value.
-/**
- * @param pX    points to the variable to be modified.
- * @param value is the value to which the variable is set.
- * @return The previous value of the modified variable.
- */
-template<typename T>
-inline T *atomicExchange(T * volatile *pX, T *value) {
-	return (T *)InterlockedExchangePointer((PVOID volatile *)pX, value);
-}
-
-
-#if defined(_M_AMD64)
-//! Atomically subtracts \a value from the variable to which \a pX points.
-/**
- * @param pX    points to the variable to be modified.
- * @param value is the value to be subtracted form the variable.
- * @return The resulting value of the modified variable.
- */
-inline __int32 atomicSub(__int32 volatile *pX, __int32 value) {
-	return (__int32)InterlockedAdd((LONG volatile *)pX, -value);
-}
-
-//! Atomically subtracts \a value from the variable to which \a pX points.
-/**
- * @param pX    points to the variable to be modified.
- * @param value is the value to be subtracted form the variable.
- * @return The resulting value of the modified variable.
- */
-inline __int64 atomicSub(__int64 volatile *pX, __int64 value) {
-	return InterlockedAdd64(pX, -value);
-}
-
-//! Atomically adds \a value to the variable to which \a pX points.
-/**
- * @param pX    points to the variable to be modified.
- * @param value is the value to be added to the variable.
- * @return The resulting value of the modified variable.
- */
-inline __int32 atomicAdd(__int32 volatile *pX, __int32 value) {
-	return (__int32)InterlockedAdd((LONG volatile *)pX, value);
-}
-
-//! Atomically adds \a value to the variable to which \a pX points.
-/**
- * @param pX    points to the variable to be modified.
- * @param value is the value to be added to the variable.
- * @return The resulting value of the modified variable.
- */
-inline __int64 atomicAdd(__int64 volatile *pX, __int64 value) {
-	return InterlockedAdd64(pX, value);
-}
-
-#endif
-
-
-#else
-
-#define OGDF_MEMORY_BARRIER __sync_synchronize()
-
-inline __int32 atomicDec(__int32 volatile *pX) {
-	return  __sync_sub_and_fetch(pX, 1);
-}
-
-inline __int64 atomicDec(__int64 volatile *pX) {
-	return  __sync_sub_and_fetch(pX, 1);
-}
-
-inline __int32 atomicInc(__int32 volatile *pX) {
-	return  __sync_add_and_fetch(pX, 1);
-}
-
-inline __int64 atomicInc(__int64 volatile *pX) {
-	return  __sync_add_and_fetch(pX, 1);
-}
-
-inline __int32 atomicSub(__int32 volatile *pX, __int32 value) {
-	return __sync_sub_and_fetch(pX, value);
-}
-
-inline __int64 atomicSub(__int64 volatile *pX, __int64 value) {
-	return __sync_sub_and_fetch(pX, value);
-}
-
-inline __int32 atomicAdd(__int32 volatile *pX, __int32 value) {
-	return __sync_add_and_fetch(pX, value);
-}
-
-inline __int64 atomicAdd(__int64 volatile *pX, __int64 value) {
-	return __sync_add_and_fetch(pX, value);
-}
-
-inline __int32 atomicExchange(__int32 volatile *pX, __int32 value) {
-	return __sync_lock_test_and_set(pX, value);
-}
-
-inline __int64 atomicExchange(__int64 volatile *pX, __int64 value) {
-	return __sync_lock_test_and_set(pX, value);
-}
-
-template<typename T>
-inline T *atomicExchange(T * volatile *pX, T *value) {
-	return __sync_lock_test_and_set(pX, value);
-}
-
-#endif
-//@}
-
-} // end namespace ogdf
-
-
-/**
- * @name C++11 support
- * OGDF uses some new functions defined in the C++11 standard; if these functions are not
- * supported by the compiler, they are be defined by OGDF.
- */
-//@{
-
-#ifndef OGDF_HAVE_CPP11
-
-int                stoi  (const string& _Str, size_t *_Idx = 0, int _Base = 10);
-long long          stoll (const string& _Str, size_t *_Idx = 0, int _Base = 10);
-unsigned long      stoul (const string& _Str, size_t *_Idx = 0, int _Base = 10);
-unsigned long long stoull(const string& _Str, size_t *_Idx = 0, int _Base = 10);
-
-float       stof (const string& _Str, size_t *_Idx = 0);
-double      stod (const string& _Str, size_t *_Idx = 0);
-long double stold(const string& _Str, size_t *_Idx = 0);
-
-string to_string(long long _Val);
-string to_string(unsigned long long _Val);
-string to_string(long double _Val);
-
-#else
-
-using std::stoi;
-using std::stoll;
-using std::stoul;
-using std::stoull;
-
-using std::stof;
-using std::stod;
-using std::stold;
-
-using std::to_string;
-
-#endif
-
-
-#if !defined(OGDF_HAVE_CPP11) || (defined(_MSC_VER) && (_MSC_VER < 1700))
-
-inline string to_string(int           value) { return to_string( (long long)          value); }
-inline string to_string(long          value) { return to_string( (long long)          value); }
-inline string to_string(unsigned int  value) { return to_string( (unsigned long long) value); }
-inline string to_string(unsigned long value) { return to_string( (unsigned long long) value); }
-inline string to_string(float         value) { return to_string( (long double)        value); }
-inline string to_string(double        value) { return to_string( (long double)        value); }
-
-#endif
-
-// in C++11 we can directly pass a string as filename
-#ifdef OGDF_HAVE_CPP11
-#define OGDF_STRING_OPEN(filename) (filename)
-#else
-#define OGDF_STRING_OPEN(filename) (filename).c_str()
-#endif
-//@}
-
-
-#endif

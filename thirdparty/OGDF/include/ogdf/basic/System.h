@@ -1,11 +1,3 @@
-/*
- * $Revision: 3979 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2014-03-25 15:50:44 +0100 (Tue, 25 Mar 2014) $
- ***************************************************************/
-
 /** \file
  * \brief Decalration of System class which provides unified
  *        access to system information.
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,26 +26,15 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-// must be included first here
+#pragma once
+
 #include <ogdf/basic/basic.h>
 
-
-#ifdef _MSC_VER
-#pragma once
-#endif
-
-#ifndef OGDF_SYSTEM_H
-#define OGDF_SYSTEM_H
-
-
-#if defined(OGDF_SYSTEM_OSX) || defined(OGDF_SYSTEM_FREEBSD)
+#if defined(OGDF_SYSTEM_OSX)
 #include <stdlib.h>
 #elif defined(OGDF_SYSTEM_UNIX) || defined(__MINGW32__)
 #include <malloc.h>
@@ -82,84 +63,57 @@
 #define OGDF_ARCH_SPARC_V9
 #endif
 
-// use SSE2 always if x64-platform or compiler option is set
-#ifndef OGDF_USE_SSE2
-#if defined(OGDF_ARCH_X64)
-#define OGDF_USE_SSE2
-#elif defined(_MSC_VER)
-#if _M_IX86_FP >= 2
-#define OGDF_USE_SSE2
-#endif
-#endif
-#endif
-
-// macros to check for using special cpu features
-//
-// OGDF_CHECK_SSE2   returns true if SSE2 can be used
-
-#ifdef OGDF_USE_SSE2
-#define OGDF_CHECK_SSE2 true
-#elif defined(OGDF_ARCH_X86)
-#define OGDF_CHECK_SSE2 ogdf::System::cpuSupports(ogdf::cpufSSE2)
-#else
-#define OGDF_USE_SSE2 false
-#endif
-
-// work-around for MinGW-w64
-#ifdef __MINGW64__
-#ifndef _aligned_free
-#define _aligned_free(a) __mingw_aligned_free(a)
-#endif
-#ifndef _aligned_malloc
-#define _aligned_malloc(a,b) __mingw_aligned_malloc(a,b)
-#endif
-#endif
-
-
 namespace ogdf {
 
 //! Special features supported by a x86/x64 CPU.
 /**
+ * @ingroup system
+ *
  * This enumeration is used to specify spcial additional features that
  * are supported by the CPU, in particular extended instruction sets
  * such as SSE.
  */
-enum CPUFeature {
-	cpufMMX,    //!< Intel MMX Technology
-	cpufSSE,    //!< Streaming SIMD Extensions (SSE)
-	cpufSSE2,   //!< Streaming SIMD Extensions 2 (SSE2)
-	cpufSSE3,   //!< Streaming SIMD Extensions 3 (SSE3)
-	cpufSSSE3,  //!< Supplemental Streaming SIMD Extensions 3 (SSSE3)
-	cpufSSE4_1, //!< Streaming SIMD Extensions 4.1 (SSE4.1)
-	cpufSSE4_2, //!< Streaming SIMD Extensions 4.2 (SSE4.2)
-	cpufVMX,    //!< Virtual Machine Extensions
-	cpufSMX,    //!< Safer Mode Extensions
-	cpufEST,    //!< Enhanced Intel SpeedStep Technology
-	cpufMONITOR //!< Processor supports MONITOR/MWAIT instructions
+enum class CPUFeature {
+	MMX,    //!< Intel MMX Technology
+	SSE,    //!< Streaming SIMD Extensions (SSE)
+	SSE2,   //!< Streaming SIMD Extensions 2 (SSE2)
+	SSE3,   //!< Streaming SIMD Extensions 3 (SSE3)
+	SSSE3,  //!< Supplemental Streaming SIMD Extensions 3 (SSSE3)
+	SSE4_1, //!< Streaming SIMD Extensions 4.1 (SSE4.1)
+	SSE4_2, //!< Streaming SIMD Extensions 4.2 (SSE4.2)
+	VMX,    //!< Virtual Machine Extensions
+	SMX,    //!< Safer Mode Extensions
+	EST,    //!< Enhanced Intel SpeedStep Technology
+	MONITOR //!< Processor supports MONITOR/MWAIT instructions
 };
 
 //! Bit mask for CPU features.
-enum CPUFeatureMask {
-	cpufmMMX     = 1 << cpufMMX,    //!< Intel MMX Technology
-	cpufmSSE     = 1 << cpufSSE,    //!< Streaming SIMD Extensions (SSE)
-	cpufmSSE2    = 1 << cpufSSE2,   //!< Streaming SIMD Extensions 2 (SSE2)
-	cpufmSSE3    = 1 << cpufSSE3,   //!< Streaming SIMD Extensions 3 (SSE3)
-	cpufmSSSE3   = 1 << cpufSSSE3,  //!< Supplemental Streaming SIMD Extensions 3 (SSSE3)
-	cpufmSSE4_1  = 1 << cpufSSE4_1, //!< Streaming SIMD Extensions 4.1 (SSE4.1)
-	cpufmSSE4_2  = 1 << cpufSSE4_2, //!< Streaming SIMD Extensions 4.2 (SSE4.2)
-	cpufmVMX     = 1 << cpufVMX,    //!< Virtual Machine Extensions
-	cpufmSMX     = 1 << cpufSMX,    //!< Safer Mode Extensions
-	cpufmEST     = 1 << cpufEST,    //!< Enhanced Intel SpeedStep Technology
-	cpufmMONITOR = 1 << cpufMONITOR //!< Processor supports MONITOR/MWAIT instructions
+/**
+ * @ingroup system
+ */
+enum class CPUFeatureMask : unsigned int {
+	MMX     = 1 << static_cast<int>(CPUFeature::MMX),    //!< Intel MMX Technology
+	SSE     = 1 << static_cast<int>(CPUFeature::SSE),    //!< Streaming SIMD Extensions (SSE)
+	SSE2    = 1 << static_cast<int>(CPUFeature::SSE2),   //!< Streaming SIMD Extensions 2 (SSE2)
+	SSE3    = 1 << static_cast<int>(CPUFeature::SSE3),   //!< Streaming SIMD Extensions 3 (SSE3)
+	SSSE3   = 1 << static_cast<int>(CPUFeature::SSSE3),  //!< Supplemental Streaming SIMD Extensions 3 (SSSE3)
+	SSE4_1  = 1 << static_cast<int>(CPUFeature::SSE4_1), //!< Streaming SIMD Extensions 4.1 (SSE4.1)
+	SSE4_2  = 1 << static_cast<int>(CPUFeature::SSE4_2), //!< Streaming SIMD Extensions 4.2 (SSE4.2)
+	VMX     = 1 << static_cast<int>(CPUFeature::VMX),    //!< Virtual Machine Extensions
+	SMX     = 1 << static_cast<int>(CPUFeature::SMX),    //!< Safer Mode Extensions
+	EST     = 1 << static_cast<int>(CPUFeature::EST),    //!< Enhanced Intel SpeedStep Technology
+	MONITOR = 1 << static_cast<int>(CPUFeature::MONITOR) //!< Processor supports MONITOR/MWAIT instructions
 };
 
+OGDF_EXPORT unsigned int operator|=(unsigned int &i, CPUFeatureMask fm);
 
 //! %System specific functionality.
 /**
+ * @ingroup system
+ *
  * The class System encapsulates system specific functions
  * providing unified access across different operating systems.
  * The provided functionality includes:
- *   - Access to file system functionality (listing directories etc.).
  *   - Query memory usage.
  *   - Access to high-perfomance counter under Windows and Cygwin.
  *   - Query CPU specific information.
@@ -175,8 +129,12 @@ public:
 
 	static void *alignedMemoryAlloc16(size_t size) {
 #ifdef OGDF_SYSTEM_WINDOWS
+# ifdef __MINGW64__
+		return __mingw_aligned_malloc(size, 16);
+# else
 		return _aligned_malloc(size, 16);
-#elif defined(OGDF_SYSTEM_OSX) || defined(OGDF_SYSTEM_FREEBSD)
+# endif
+#elif defined(OGDF_SYSTEM_OSX)
 		// malloc returns 16 byte aligned memory on OS X.
 		return malloc(size);
 #else
@@ -186,7 +144,11 @@ public:
 
 	static void alignedMemoryFree(void *p) {
 #ifdef OGDF_SYSTEM_WINDOWS
+# ifdef __MINGW64__
+		__mingw_aligned_free(p);
+# else
 		_aligned_free(p);
+# endif
 #else
 		free(p);
 #endif
@@ -252,30 +214,30 @@ public:
 	 */
 	//@{
 
-	//! Returns the current value of the high-performance counter in \a counter.
-	static void getHPCounter(LARGE_INTEGER &counter);
+	//! Returns the current value of the high-performance counter in \p counter.
+	static void getHPCounter(int64_t &counter);
 
-	//! Returns the elapsed time (in seconds) between \a startCounter and \a endCounter.
+	//! Returns the elapsed time (in seconds) between \p startCounter and \p endCounter.
 	static double elapsedSeconds(
-		const LARGE_INTEGER &startCounter,
-		const LARGE_INTEGER &endCounter);
+		const int64_t &startCounter,
+		const int64_t &endCounter);
 #endif
 
-	//! Returns the elapsed time (in milliseconds) between \a t and now.
+	//! Returns the elapsed time (in milliseconds) between \p t and now.
 	/**
-	 * The functions sets \a t to to the current time. Usually, you first call
-	 * usedRealTime(t) to query the start time \a t, and determine the elapsed time
+	 * The functions sets \p t to to the current time. Usually, you first call
+	 * usedRealTime(\p t) to query the start time \p t, and determine the elapsed time
 	 * after performing some computation by calling usedRealTime(t) again; this time
 	 * the return value gives you the elapsed time in milliseconds.
 	 */
-	static __int64 usedRealTime(__int64 &t);
+	static int64_t usedRealTime(int64_t &t);
 
 	//! Returns the current time point of the real time wall clock.
 	/**
 	 * The start point of time points is system specific. The differences of two time points
 	 * returned by this function represent elapsed real time in milliseconds.
 	 */
-	static __int64 realTime();
+	static int64_t realTime();
 
 
 	//@}
@@ -299,9 +261,9 @@ public:
 	//! Returns the bit vector describing the CPU features supported on current system.
 	static int cpuFeatures() { return s_cpuFeatures; }
 
-	//! Returns true if the CPU supports \a feature.
+	//! Returns true if the CPU supports \p feature.
 	static bool cpuSupports(CPUFeature feature) {
-		return (s_cpuFeatures & (1 << feature)) != 0;
+		return (s_cpuFeatures & (1 << static_cast<int>(feature))) != 0;
 	}
 
 	//! Returns the L2-cache size (in KBytes).
@@ -323,7 +285,7 @@ private:
 	static int          s_pageSize;    //!< The page size of virtual memory.
 
 #if defined(OGDF_SYSTEM_WINDOWS) || defined(__CYGWIN__)
-	static LARGE_INTEGER s_HPCounterFrequency; //!< Frequency of high-performance counter.
+	static int64_t s_HPCounterFrequency; //!< Frequency of high-performance counter.
 #endif
 
 public:
@@ -331,8 +293,4 @@ public:
 	static void init();
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

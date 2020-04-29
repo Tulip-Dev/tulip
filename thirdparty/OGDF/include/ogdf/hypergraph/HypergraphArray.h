@@ -1,11 +1,3 @@
-/*
- * $Revision: 3504 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2013-05-16 14:49:39 +0200 (Thu, 16 May 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration and implementation of hyperraph array classes
  *        based on Node/EdgeArray classes written by Carsten Gutwenger,
@@ -18,7 +10,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -35,19 +27,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_HYPERGRAPH_ARRAY_H
-#define OGDF_HYPERGRAPH_ARRAY_H
 
 #include <ogdf/hypergraph/Hypergraph.h>
 
@@ -64,17 +48,17 @@ public:
 	 */
 	ListIterator<HypergraphArrayBase *> m_it;
 
-	//!< The associated hypergraph.
+	//! The associated hypergraph.
 	const Hypergraph *m_hypergraph;
 
 	//! Initializes an array not associated with a hypergraph.
 	HypergraphArrayBase()
-		: m_hypergraph(0)
+		: m_hypergraph(nullptr)
 	{
 	}
 
-	//! Initializes an array associated with \a pH.
-	HypergraphArrayBase(const Hypergraph *pH)
+	//! Initializes an array associated with \p pH.
+	explicit HypergraphArrayBase(const Hypergraph *pH)
 	{
 	m_hypergraph = pH;
 	}
@@ -86,7 +70,7 @@ public:
 
 	//! Returns a pointer to the associated hypergraph.
 	const Hypergraph *hypergraphOf() const {
-	  return m_hypergraph;
+		return m_hypergraph;
 	}
 
 	//! Table re-initialization.
@@ -100,14 +84,16 @@ public:
 
 	//! Disconnetion from the hypergraph.
 	virtual void disconnect() = 0;
-
-}; // class HypergraphArrayBase
+};
 
 //! Dynamic arrays indexed with hypernodes.
+/**
+ * @warn_undef_behavior_array
+ */
 template<class T> class HypernodeArray :
 private Array<T>, protected HypergraphArrayBase {
 
-	//!< The default value for array elements.
+	//! The default value for array elements.
 	T m_x;
 
 public:
@@ -115,7 +101,7 @@ public:
 	//! Constructs an empty hypernode array associated with no hypergraph.
 HypernodeArray() : Array<T>(), HypergraphArrayBase() { }
 
-	//! Constructs a hypernode array associated with \a H.
+	//! Constructs a hypernode array associated with \p H.
 	HypernodeArray(const Hypergraph &H, const T &x)
 		: Array<T>(0,H.hypernodeArrayTableSize() - 1, x),
 		  HypergraphArrayBase(&H), m_x(x)
@@ -129,19 +115,19 @@ HypernodeArray() : Array<T>(), HypergraphArrayBase() { }
 			m_hypergraph->unregisterHypernodeArray(m_it);
 	}
 
-	//! Returns a reference to the element with index \a v.
+	//! Returns a reference to the element with index \p v.
 	T &operator[](hypernode v)
 	{
 		return Array<T>::operator [](v->index());
 	}
 
-	//! Returns a reference to the element with index \a index.
+	//! Returns a reference to the element with index \p index.
 	const T &operator[](int index) const
 	{
 		return Array<T>::operator [](index);
 	}
 
-	//! Returns a reference to the element with index \a index.
+	//! Returns a reference to the element with index \p index.
 	T &operator[](int index)
 	{
 		return Array<T>::operator [](index);
@@ -156,13 +142,13 @@ HypernodeArray() : Array<T>(), HypergraphArrayBase() { }
 		return *this;
 	}
 
-	//! Reinitializes the array. Associates the array with \a H.
+	//! Reinitializes the array. Associates the array with \p H.
 	void init(const Hypergraph &H)
 	{
 		Array<T>::init(H.hypernodeArrayTableSize()); reregister(&H);
 	}
 
-	//! Reinitializes the array. Associates the array with \a H.
+	//! Reinitializes the array. Associates the array with \p H.
 	void init(const Hypergraph &H, const T &x)
 	{
 		Array<T>::init(0, H.hypernodeArrayTableSize() - 1, m_x = 0);
@@ -174,7 +160,7 @@ HypernodeArray() : Array<T>(), HypergraphArrayBase() { }
 		if (m_hypergraph)
 			m_hypergraph->unregisterHypernodeArray(m_it);
 
-		if ((m_hypergraph = H) != 0)
+		if ((m_hypergraph = H) != nullptr)
 			m_it = H->registerHypernodeArray(this);
 	}
 
@@ -193,18 +179,20 @@ private:
 	virtual void disconnect()
 	{
 		Array<T>::init();
-		m_hypergraph = NULL;
+		m_hypergraph = nullptr;
 	}
 
 	OGDF_NEW_DELETE;
-
-}; // class HypernodeArray<T>
+};
 
 //! Dynamic arrays indexed with nodes.
+/**
+ * @warn_undef_behavior_array
+ */
 template<class T> class HyperedgeArray :
 private Array<T>, protected HypergraphArrayBase {
 
-	//!< The default value for array elements.
+	//! The default value for array elements.
 	T m_x;
 
 public:
@@ -215,7 +203,7 @@ public:
 	{
 	}
 
-	//! Constructs a hypernode array associated with \a G.
+	//! Constructs a hypernode array associated with \p H.
 	HyperedgeArray(const Hypergraph &H, const T &x)
 		: Array<T>(0, H.hyperedgeArrayTableSize() - 1, x),
 		  HypergraphArrayBase(&H), m_x(x)
@@ -223,7 +211,7 @@ public:
 		m_it = H.registerHyperedgeArray(this);
 	}
 
-	//! Desctructor.
+	//! Destructor.
 	virtual ~HyperedgeArray()
 	{
 		if (m_hypergraph)
@@ -233,22 +221,22 @@ public:
 	//! Returns true iff the array is associated with a hypergraph.
 	bool valid() const
 	{
-		return (Array<T>::low() <= Array<T>::high());
+		return Array<T>::low() <= Array<T>::high();
 	}
 
-	//! Returns a reference to the element with index \a v.
+	//! Returns a reference to the element with the index of \p e.
 	T &operator[](hyperedge e)
 	{
 		return Array<T>::operator [](e->index());
 	}
 
-	//! Returns a reference to the element with index \a index.
+	//! Returns a reference to the element with index \p index.
 	const T &operator[](int index) const
 	{
 		return Array<T>::operator [](index);
 	}
 
-	//! Returns a reference to the element with index \a index.
+	//! Returns a reference to the element with index \p index.
 	T &operator[](int index)
 	{
 		return Array<T>::operator [](index);
@@ -263,13 +251,13 @@ public:
 		return *this;
 	}
 
-	//! Reinitializes the array. Associates the array with \a H.
+	//! Reinitializes the array. Associates the array with \p H.
 	void init(const Hypergraph &H)
 	{
 		Array<T>::init(H.hyperedgeArrayTableSize()); reregister(&H);
 	}
 
-	//! Reinitializes the array. Associates the array with \a H.
+	//! Reinitializes the array. Associates the array with \p H.
 	void init(const Hypergraph &H, const T &x)
 	{
 		Array<T>::init(0, H.hyperedgeArrayTableSize() - 1, m_x = 0);
@@ -281,7 +269,7 @@ public:
 		if (m_hypergraph)
 			m_hypergraph->unregisterHyperedgeArray(m_it);
 
-		if ((m_hypergraph = H) != 0)
+		if ((m_hypergraph = H) != nullptr)
 			m_it = H->registerHyperedgeArray(this);
 	}
 
@@ -300,13 +288,10 @@ private:
 	virtual void disconnect()
 	{
 		Array<T>::init();
-		m_hypergraph = 0;
+		m_hypergraph = nullptr;
 	}
 
 	OGDF_NEW_DELETE;
+};
 
-}; // class HyperedgeArray<T>
-
-} // end namespace ogdf
-
-#endif
+}

@@ -1,11 +1,3 @@
-/*
- * $Revision: 2639 $
- *
- * last checkin:
- *   $Author: klein $
- *   $Date: 2012-07-19 06:52:18 +0200 (Thu, 19 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Contains constructive and improvement compaction by
  * applying computation of min-cost flow in the dual of the constraint
@@ -18,7 +10,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -35,41 +27,28 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_FLOW_COMPACTION_H
-#define OGDF_FLOW_COMPACTION_H
-
 
 #include <ogdf/orthogonal/OrthoRep.h>
 #include <ogdf/planarity/PlanRep.h>
-#include <ogdf/internal/orthogonal/RoutingChannel.h>
+#include <ogdf/orthogonal/internal/RoutingChannel.h>
 #include <ogdf/orthogonal/MinimumEdgeDistances.h>
 #include <ogdf/basic/GridLayoutMapped.h>
 
-
 namespace ogdf {
 
-	template<class ATYPE> class CompactionConstraintGraph;
-	class Layout;
-
+template<class ATYPE> class CompactionConstraintGraph;
 
 //! represents compaction algorithm using min-cost flow in the dual of the constraint graph
 class OGDF_EXPORT FlowCompaction
 {
 public:
 	//! construction
-	FlowCompaction(int maxImprovementSteps = 0,
+	explicit FlowCompaction(int maxImprovementSteps = 0,
 		int costGen = 1,
 		int costAssoc = 1);
 
@@ -92,7 +71,9 @@ public:
 	void improvementHeuristics(
 		PlanRep &PG,
 		OrthoRep &OR,
-		//const
+#if 0
+		const
+#endif
 		MinimumEdgeDistances<int> &minDist,
 		GridLayoutMapped &drawing,
 		int originalSeparation //the input value before multiplication test for compaction improvement
@@ -162,13 +143,8 @@ private:
 	int m_scalingSteps; //!< number of improvement steps with decreasing separation
 	bool m_align; //!< toggle if brother nodes in hierarchies should be aligned
 
-
 	EdgeArray<edge> m_dualEdge;
 	EdgeArray<int>  m_flow;
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

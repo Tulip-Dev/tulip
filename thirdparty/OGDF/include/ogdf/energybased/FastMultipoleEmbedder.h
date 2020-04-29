@@ -1,11 +1,3 @@
-/*
- * $Revision: 3472 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-04-29 15:52:12 +0200 (Mon, 29 Apr 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of Fast-Multipole-Embedder layout algorithm.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,36 +25,32 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_FAST_MULTIPOLE_EMBEDDER_H
-#define OGDF_FAST_MULTIPOLE_EMBEDDER_H
 
 #include <ogdf/basic/Graph.h>
-#include <ogdf/module/LayoutModule.h>
-#include <ogdf/internal/energybased/MultilevelGraph.h>
+#include <ogdf/basic/LayoutModule.h>
+#include <ogdf/energybased/fast_multipole_embedder/FMEThread.h>
+#include <ogdf/energybased/fast_multipole_embedder/FMEFunc.h>
+#include <ogdf/energybased/fast_multipole_embedder/GalaxyMultilevel.h>
 
 namespace ogdf {
 
-class ArrayGraph;
-class LinearQuadtree;
-class LinearQuadtreeExpansion;
-class FMEThreadPool;
-class FMEThread;
-struct FMEGlobalOptions;
-class GalaxyMultilevel;
-
+//! The fast multipole embedder approach for force-directed layout.
+/**
+ * @ingroup gd-energy
+ */
 class OGDF_EXPORT FastMultipoleEmbedder : public LayoutModule
 {
+	using ArrayGraph = fast_multipole_embedder::ArrayGraph;
+	using FMEGlobalOptions = fast_multipole_embedder::FMEGlobalOptions;
+	using FMEGlobalContext = fast_multipole_embedder::FMEGlobalContext;
+	using FMESingleKernel = fast_multipole_embedder::FMESingleKernel;
+	using FMEThreadPool = fast_multipole_embedder::FMEThreadPool;
+
 public:
 	//! constructor
 	FastMultipoleEmbedder();
@@ -70,11 +58,7 @@ public:
 	//! destructor
 	~FastMultipoleEmbedder();
 
-	//! Calls the algorithm for graph \a MLG.
-	//Does not do anything smart, can be safely removed
-	//void call(MultilevelGraph &MLG);
-
-	//! Calls the algorithm for graph \a G with the given edgelength and returns the layout information in \a nodeXPosition, nodeYPosition.
+	//! Calls the algorithm for graph \p G with the given edgelength and returns the layout information in \p nodeXPosition, \p nodeYPosition.
 	void call(
 		const Graph& G,
 		NodeArray<float>& nodeXPosition,
@@ -82,19 +66,17 @@ public:
 		const EdgeArray<float>& edgeLength,
 		const NodeArray<float>& nodeSize);
 
-	void call(GraphAttributes &GA, GraphConstraints & GC) { call(GA); }
-
-	//! Calls the algorithm for graph \a GA with the given edgelength and returns the layout information in \a GA.
+	//! Calls the algorithm for graph \p GA with the given \p edgeLength and returns the layout information in \p GA.
 	void call(GraphAttributes &GA, const EdgeArray<float>& edgeLength, const NodeArray<float>& nodeSize);
 
-	//! Calls the algorithm for graph \a GA and returns the layout information in \a GA.
-	void call(GraphAttributes &GA);
+	//! Calls the algorithm for graph \p GA and returns the layout information in \p GA.
+	virtual void call(GraphAttributes &GA) override;
 
 	//! sets the maximum number of iterations
-	void setNumIterations(__uint32 numIterations) { m_numIterations = numIterations; }
+	void setNumIterations(uint32_t numIterations) { m_numIterations = numIterations; }
 
 	//! sets the number of coefficients for the expansions. default = 4
-	void setMultipolePrec(__uint32 precision) { m_precisionParameter = precision; }
+	void setMultipolePrec(uint32_t precision) { m_precisionParameter = precision; }
 
 	//! if true, layout algorithm will randomize the layout in the beginning
 	void setRandomize(bool b) { m_randomize = b; }
@@ -106,42 +88,41 @@ public:
 	void setDefaultNodeSize(float nodeSize) { m_defaultNodeSize = nodeSize; }
 
 	//!
-	void setNumberOfThreads(__uint32 numThreads) {
+	void setNumberOfThreads(uint32_t numThreads) {
 #ifndef OGDF_MEMORY_POOL_NTS
 		m_maxNumberOfThreads = numThreads;
 #endif
 	}
 
-	//void setEnablePostProcessing(bool b) { m_doPostProcessing = b; }
+#if 0
+	void setEnablePostProcessing(bool b) { m_doPostProcessing = b; }
+#endif
+
 private:
 	void initOptions();
 
-#ifndef __EMSCRIPTEN__
 	void runMultipole();
-#endif
 
 	void runSingle();
 
 	//! runs the simulation with the given number of iterations
-	void run(__uint32 numIterations);
+	void run(uint32_t numIterations);
 
 	//! allocates the memory
-	void allocate(__uint32 numNodes, __uint32 numEdges);
+	void allocate(uint32_t numNodes, uint32_t numEdges);
 
 	//! frees the memory
 	void deallocate();
 
-	__uint32 m_numIterations;
+	uint32_t m_numIterations;
 
 	ArrayGraph* m_pGraph;
 
-#ifndef __EMSCRIPTEN__
 	FMEThreadPool* m_threadPool;
-#endif
 
 	FMEGlobalOptions* m_pOptions;
 
-	__uint32 m_precisionParameter;
+	uint32_t m_precisionParameter;
 
 	bool m_randomize;
 
@@ -149,19 +130,31 @@ private:
 
 	float m_defaultNodeSize;
 
-	__uint32 m_numberOfThreads;
+	uint32_t m_numberOfThreads;
 
-	__uint32 m_maxNumberOfThreads;
+	uint32_t m_maxNumberOfThreads;
 };
 
 
+//! The fast multipole multilevel embedder approach for force-directed multilevel layout.
+/**
+ * @ingroup gd-energy
+ */
 class OGDF_EXPORT FastMultipoleMultilevelEmbedder : public LayoutModule
 {
+	using GalaxyMultilevel = fast_multipole_embedder::GalaxyMultilevel;
+	using GalaxyMultilevelBuilder = fast_multipole_embedder::GalaxyMultilevelBuilder;
+
 public:
 	//! Constructor, just sets number of maximum threads
-	FastMultipoleMultilevelEmbedder() : m_iMaxNumThreads(1) {}
-	//! Calls the algorithm for graph \a GA and returns the layout information in \a GA.
-	void call(GraphAttributes &GA);
+	FastMultipoleMultilevelEmbedder()
+	: m_iMaxNumThreads(1)
+	, m_iNumLevels(0)
+	, m_multiLevelNumNodesBound(10)
+	, m_iCurrentLevelNr(-1)
+	{ }
+	//! Calls the algorithm for graph \p GA and returns the layout information in \p GA.
+	void call(GraphAttributes &GA) override;
 
 	//! sets the bound for the number of nodes for multilevel step
 	void multilevelUntilNumNodesAreLess(int nodesBound) { m_multiLevelNumNodesBound = nodesBound; }
@@ -202,29 +195,26 @@ private:
 	void dumpCurrentLevel(const char *filename);
 
 	//! computes the maximum number of iterations by level nr
-	__uint32 numberOfIterationsByLevelNr(__uint32 levelNr);
+	uint32_t numberOfIterationsByLevelNr(uint32_t levelNr);
 
 	int				  m_iMaxNumThreads;
 	int				  m_iNumLevels;
 	int				  m_multiLevelNumNodesBound;
 
-	GalaxyMultilevel* m_pCurrentLevel;
-	GalaxyMultilevel* m_pFinestLevel;
-	GalaxyMultilevel* m_pCoarsestLevel;
+	GalaxyMultilevel* m_pCurrentLevel = nullptr;
+	GalaxyMultilevel* m_pFinestLevel = nullptr;
+	GalaxyMultilevel* m_pCoarsestLevel = nullptr;
 
-	Graph*			  m_pCurrentGraph;
-	NodeArray<float>* m_pCurrentNodeXPos;
-	NodeArray<float>* m_pCurrentNodeYPos;
-	EdgeArray<float>* m_pCurrentEdgeLength;
-	NodeArray<float>* m_pCurrentNodeSize;
+	Graph*			  m_pCurrentGraph = nullptr;
+	NodeArray<float>* m_pCurrentNodeXPos = nullptr;
+	NodeArray<float>* m_pCurrentNodeYPos = nullptr;
+	EdgeArray<float>* m_pCurrentEdgeLength = nullptr;
+	NodeArray<float>* m_pCurrentNodeSize = nullptr;
 	NodeArray<float>  m_adjustedNodeSize;
 	int				  m_iCurrentLevelNr;
 
-	NodeArray<float>* m_pLastNodeXPos;
-	NodeArray<float>* m_pLastNodeYPos;
+	NodeArray<float>* m_pLastNodeXPos = nullptr;
+	NodeArray<float>* m_pLastNodeYPos = nullptr;
 };
 
-} // end of namespace ogdf
-
-#endif
-
+}

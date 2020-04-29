@@ -1,11 +1,3 @@
-/*
- * $Revision: 2559 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-06 15:04:28 +0200 (Fri, 06 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Implements class MMCrossingMinimizationModule.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,19 +25,14 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#include <ogdf/module/MMCrossingMinimizationModule.h>
+#include <ogdf/planarity/MMCrossingMinimizationModule.h>
 #include <ogdf/basic/simple_graph_alg.h>
 
-
 namespace ogdf {
-
 
 Module::ReturnType MMCrossingMinimizationModule::call(
 	const Graph &G,
@@ -64,12 +51,11 @@ Module::ReturnType MMCrossingMinimizationModule::call(
 	int c = biconnectedComponents(G, comp);
 
 	Array<List<edge> > edges(c);
-	edge e;
-	forall_edges(e,G) {
+	for(edge e : G.edges) {
 		edges[comp[e]].pushBack(e);
 	}
 
-	NodeArray<node> map(G,0);
+	NodeArray<node> map(G,nullptr);
 
 	for(int i = 0; i < c; ++i)
 	{
@@ -80,7 +66,7 @@ Module::ReturnType MMCrossingMinimizationModule::call(
 		List<node> nodes;
 		List<node> splittableNodesB;
 
-		EdgeArray<bool> *forbidB = 0;
+		EdgeArray<bool> *forbidB = nullptr;
 		if(forbid) forbidB = new EdgeArray<bool>(B, false);
 
 		ListConstIterator<edge> it;
@@ -89,13 +75,13 @@ Module::ReturnType MMCrossingMinimizationModule::call(
 			edge e = *it;
 			node v = e->source(), w = e->target();
 
-			if(map[v] == 0) {
+			if(map[v] == nullptr) {
 				map[v] = B.newNode();
 				nodes.pushBack(v);
 				if(splittable[v])
 					splittableNodesB.pushBack(map[v]);
 			}
-			if(map[w] == 0) {
+			if(map[w] == nullptr) {
 				map[w] = B.newNode();
 				nodes.pushBack(w);
 				if(splittable[w])
@@ -112,18 +98,18 @@ Module::ReturnType MMCrossingMinimizationModule::call(
 		int crcc, numNS = 0, numSN = 0;
 		ReturnType ret = doCall(PG,0,forbidB,crcc,numNS,numSN);
 		delete forbidB;
-		if(isSolution(ret) == false)
+		if(!isSolution(ret))
 			return ret;
 		cr += crcc;
 		m_nodeSplits    += numNS;
 		m_splittedNodes += numSN;
 
-		ListConstIterator<node> itV;
-		for(itV = nodes.begin(); itV.valid(); ++itV)
-			map[*itV] = 0;
+		for(node v: nodes) {
+			map[v] = nullptr;
+		}
 	}
 
-	return retFeasible;
+	return ReturnType::Feasible;
 }
 
 
@@ -138,12 +124,11 @@ Module::ReturnType MMCrossingMinimizationModule::call(
 	int c = biconnectedComponents(G, comp);
 
 	Array<List<edge> > edges(c);
-	edge e;
-	forall_edges(e,G) {
+	for(edge e : G.edges) {
 		edges[comp[e]].pushBack(e);
 	}
 
-	NodeArray<node> map(G,0);
+	NodeArray<node> map(G,nullptr);
 
 	for(int i = 0; i < c; ++i)
 	{
@@ -159,11 +144,11 @@ Module::ReturnType MMCrossingMinimizationModule::call(
 			edge e = *it;
 			node v = e->source(), w = e->target();
 
-			if(map[v] == 0) {
+			if(map[v] == nullptr) {
 				map[v] = B.newNode();
 				nodes.pushBack(v);
 			}
-			if(map[w] == 0) {
+			if(map[w] == nullptr) {
 				map[w] = B.newNode();
 				nodes.pushBack(w);
 			}
@@ -175,7 +160,7 @@ Module::ReturnType MMCrossingMinimizationModule::call(
 
 		int crcc, numNS = 0, numSN = 0;
 		ReturnType ret = doCall(PG,0,forbid,crcc,numNS,numSN);
-		if(isSolution(ret) == false)
+		if(!isSolution(ret))
 			return ret;
 		cr += crcc;
 		m_nodeSplits    += numNS;
@@ -183,12 +168,10 @@ Module::ReturnType MMCrossingMinimizationModule::call(
 
 		ListConstIterator<node> itV;
 		for(itV = nodes.begin(); itV.valid(); ++itV)
-			map[*itV] = 0;
+			map[*itV] = nullptr;
 	}
 
-	return retFeasible;
+	return ReturnType::Feasible;
 }
 
-
-} // namspace ogdf
-
+}

@@ -1,11 +1,3 @@
-/*
- * $Revision: 2641 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-19 15:21:36 +0200 (Thu, 19 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration and implementation of HashArray class.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,21 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_HASH_ARRAY_H
-#define OGDF_HASH_ARRAY_H
-
 
 #include <ogdf/basic/Hashing.h>
 
@@ -57,6 +39,8 @@ namespace ogdf {
 
 //! Indexed arrays using hashing for element access.
 /**
+ * @ingroup containers
+ *
  * @tparam I is the index type.
  * @tparam E is the element type.
  * @tparam H is the hash function type. Optional; its default uses the class DefHashFunc.
@@ -86,13 +70,13 @@ namespace ogdf {
  *   H["Katze"] = "cat";
  *   H["Maus"]  = "mouse";
  *
- *   cout << "Katze:   " << Hc["Katze"]   << endl;
- *   cout << "Hamster: " << Hc["Hamster"] << endl;
+ *   std::cout << "Katze:   " << Hc["Katze"]   << std::endl;
+ *   std::cout << "Hamster: " << Hc["Hamster"] << std::endl;
  *
- *   cout << "\nAll elements:" << endl;
+ *   std::cout << "\nAll elements:" << std::endl;
  *   HashConstIterator<string,string> it;
  *   for(it = Hc.begin(); it.valid(); ++it)
- *     cout << it.key() << " -> " << it.info() << endl;
+ *     std::cout << it.key() << " -> " << it.info() << std::endl;
  * \endcode
  *
  * The produced output is as follows:
@@ -113,13 +97,13 @@ class HashArray : private Hashing<I,E,H>
 
 public:
 	//! The type of const-iterators for hash arrays.
-	typedef HashConstIterator<I,E,H> const_iterator;
+	using const_iterator = HashConstIterator<I,E,H>;
 
 	//! Creates a hashing array; the default value is the default value of the element type.
 	HashArray() : Hashing<I,E,H>() { }
 
-	//! Creates a hashing array with default value \a defaultValue.
-	HashArray(const E &defaultValue, const H &hashFunc = H())
+	//! Creates a hashing array with default value \p defaultValue.
+	explicit HashArray(const E &defaultValue, const H &hashFunc = H())
 		: Hashing<I,E,H>(256, hashFunc), m_defaultValue(defaultValue) { }
 
 	//! Copy constructor.
@@ -135,26 +119,26 @@ public:
 	int empty() const { return Hashing<I,E,H>::empty(); }
 
 
-	//! Returns the element with index \a i.
+	//! Returns the element with index \p i.
 	const E &operator[](const I &i) const {
 		HashElement<I,E> *pElement = Hashing<I,E,H>::lookup(i);
 		if (pElement) return pElement->info();
 		else return m_defaultValue;
 	}
 
-	//! Returns a reference to the element with index \a i.
+	//! Returns a reference to the element with index \p i.
 	E &operator[](const I &i) {
 		HashElement<I,E> *pElement = Hashing<I,E,H>::lookup(i);
 		if (!pElement) pElement = Hashing<I,E,H>::fastInsert(i,m_defaultValue);
 		return pElement->info();
 	}
 
-	//! Returns true iff index \a i is defined.
+	//! Returns true iff index \p i is defined.
 	bool isDefined(const I &i) const {
 		return Hashing<I,E,H>::member(i);
 	}
 
-	//! Undefines index \a i.
+	//! Undefines index \p i.
 	void undefine(const I &i) {
 		Hashing<I,E,H>::del(i);
 	}
@@ -170,7 +154,4 @@ public:
 	void clear() { Hashing<I,E,H>::clear(); }
 };
 
-
-} // end namespace ogdf
-
-#endif
+}

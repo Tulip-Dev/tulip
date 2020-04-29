@@ -1,22 +1,14 @@
-/*
- * $Revision: 2963 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-11-05 14:17:50 +0100 (Mon, 05 Nov 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Definition of the Schnyder Layout Algorithm (SchnyderLayout)
  *
- * \author Till Sch&auml;fer
+ * \author Till Schäfer
  *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,23 +25,20 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/planarlayout/SchnyderLayout.h>
 #include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/simple_graph_alg.h>
-#include <ogdf/basic/GraphCopy.h>
-#include <ogdf/basic/List.h>
 
 namespace ogdf {
 
-SchnyderLayout::SchnyderLayout() : PlanarGridLayoutModule() {
-}
+SchnyderLayout::SchnyderLayout()
+	: PlanarGridLayoutModule()
+	, m_combinatorialObjects(CombinatorialObjects::VerticesMinusDepth)
+	{}
 
 
 void SchnyderLayout::doCall(
@@ -59,46 +48,47 @@ void SchnyderLayout::doCall(
 	IPoint &boundingBox,
 	bool fixEmbedding)
 {
+	if (G.numberOfNodes() < 3) {
+		if (G.numberOfNodes() == 2) {
+			gridLayout.x()[G.firstNode()] = 0;
+			gridLayout.y()[G.firstNode()] = 0;
+			gridLayout.x()[G.lastNode()] = 1;
+			gridLayout.y()[G.lastNode()] = 0;
+		}
+		return;
+	}
+
 	// check for double edges & self loops
 	OGDF_ASSERT(isSimple(G));
-
-	// handle special case of graphs with less than 3 nodes
-	if (G.numberOfNodes() < 3) {
-		node v1, v2;
-		switch (G.numberOfNodes()) {
-		case 0:
-			boundingBox = IPoint(0, 0);
-			return;
-
-		case 1:
-			v1 = G.firstNode();
-			gridLayout.x(v1) = gridLayout.y(v1) = 0;
-			boundingBox = IPoint(0, 0);
-			return;
-
-		case 2:
-			v1 = G.firstNode();
-			v2 = G.lastNode();
-			gridLayout.x(v1) = gridLayout.y(v1) = gridLayout.y(v2) = 0;
-			gridLayout.x(v2) = 1;
-			boundingBox = IPoint(1, 0);
-			return;
-		}
-	}
 
 	// make a copy for triangulation
 	GraphCopy GC(G);
 
 	// embed
-	if (!fixEmbedding) {
-		if (planarEmbed(GC) == false) {
-			OGDF_THROW_PARAM(PreconditionViolatedException, pvcPlanar);
-		}
-	}
+	bool isPlanar = planarEmbed(GC);
+	OGDF_ASSERT(fixEmbedding || isPlanar);
 
 	triangulate(GC);
 
 	schnyderEmbedding(GC, gridLayout, adjExternal);
+
+#ifdef OGDF_DEBUG
+	// Test for correct grid sizes.
+	int n = G.numberOfNodes();
+	int xmin = 0;
+	int xmax = 0;
+	int ymin = 0;
+	int ymax = 0;
+	gridLayout.computeBoundingBox(xmin, xmax, ymin, ymax);
+
+	if (m_combinatorialObjects == CombinatorialObjects::VerticesMinusDepth) {
+		OGDF_ASSERT(xmax - xmin == n - 2);
+		OGDF_ASSERT(ymax - ymin == n - 2);
+	} else if (m_combinatorialObjects == CombinatorialObjects::Faces) {
+		OGDF_ASSERT(xmax - xmin == 2*n - 5);
+		OGDF_ASSERT(ymax - ymin == 2*n - 5);
+	}
+#endif
 }
 
 
@@ -107,98 +97,94 @@ void SchnyderLayout::schnyderEmbedding(
 	GridLayout &gridLayout,
 	adjEntry adjExternal)
 {
-	NodeArray<int> &xcoord = gridLayout.x();
-	NodeArray<int> &ycoord = gridLayout.y();
-
-	node v;
-	List<node> L;						// (un)contraction order
-	GraphCopy T = GraphCopy(GC);		// the realizer tree (reverse direction of edges!!!)
-	EdgeArray<int> rValues(T);			// the realizer values
-
-	// choose outer face a,b,c
+	// Choose outer face a, b, c.
 	adjEntry adja;
-	if (adjExternal != 0) {
-		edge eG  = adjExternal->theEdge();
-		edge eGC = GC.copy(eG);
-		adja = (adjExternal == eG->adjSource()) ? eGC->adjSource() : eGC->adjTarget();
-	}
-	else {
+	if (adjExternal != nullptr) {
+		edge eGC = GC.copy(adjExternal->theEdge());
+		adja = adjExternal->isSource() ? eGC->adjSource() : eGC->adjTarget();
+	} else {
 		adja = GC.firstEdge()->adjSource();
 	}
 	adjEntry adjb = adja->faceCyclePred();
 	adjEntry adjc = adjb->faceCyclePred();
 
+	// Initialize the realizer graph (edge direction is reversed!) and the
+	// realizer value for each edge.
+	GraphCopy T = GraphCopy(GC);
+	EdgeArray<int> rValues(T);
+
+	// External nodes a, b and c.
 	node a = adja->theNode();
 	node b = adjb->theNode();
 	node c = adjc->theNode();
-
 	node a_in_T = T.copy(GC.original(a));
 	node b_in_T = T.copy(GC.original(b));
 	node c_in_T = T.copy(GC.original(c));
 
+	// Get the realizer, i.e. an edge labeling with values in {1,2,3}, by
+	// contracting nodes.
+	List<node> L;
 	contract(GC, a, b, c, L);
-
 	realizer(GC, L, a, b, c, rValues, T);
 
-	NodeArray<int>  t1(T);
-	NodeArray<int>  t2(T);
-	NodeArray<int>  val(T, 1);
+	// The following code, including variable names, is in line with Schnyder
+	// [Sch90], section 8, last paragraph!
 
-	NodeArray<int>  P1(T);
-	NodeArray<int>  P3(T);
-	NodeArray<int>  v1(T);
-	NodeArray<int>  v2(T);
-
+	// Get sizes of all subtrees of T1 and T2.
+	NodeArray<int> t1(T);
+	NodeArray<int> t2(T);
 	subtreeSizes(rValues, 1, a_in_T, t1);
 	subtreeSizes(rValues, 2, b_in_T, t2);
 
-	prefixSum(rValues, 1, a_in_T, val, P1);
-	prefixSum(rValues, 3, c_in_T, val, P3);
-	// now Pi  =  depth of all nodes in Tree T(i) (depth[root] = 1)
+	// Get depth for all nodes in trees T1, T2 and T3 (with depth of root = 1).
+	NodeArray<int> p1(T);
+	NodeArray<int> p2(T);
+	NodeArray<int> p3(T);
+	NodeArray<int> val(T, 1);
+	prefixSum(rValues, 1, a_in_T, val, p1);
+	prefixSum(rValues, 2, b_in_T, val, p2);
+	prefixSum(rValues, 3, c_in_T, val, p3);
 
-	prefixSum(rValues, 2, b_in_T, t1, v1);
-	// special treatment for a
-	v1[a_in_T] = t1[a_in_T];
+	// Initialize prefix-sums of subtree-sizes.
+	NodeArray<int> sum1(T);
+	NodeArray<int> sum2(T);
 
-	/*
-	 * v1[v] now is the sum of the
-	 * "count of nodes in t1" minus the "subtree size for node x"
-	 * for every node x on a path from b to v in t2
-	 */
+	// Calculate x-coordinates.
+	prefixSum(rValues, 2, b_in_T, t1, sum1);
+	sum1[a_in_T] = t1[a_in_T];
 
-	prefixSum(rValues, 3, c_in_T, t1, val);
-	// special treatment for a
-	val[a_in_T] = t1[a_in_T];
+	prefixSum(rValues, 3, c_in_T, t1, sum2);
+	sum2[a_in_T] = t1[a_in_T];
 
-	/*
-	 * val[v] now is the sum of the
-	 * "count of nodes in t1" minus the "subtree size for node x"
-	 * for every node x on a path from c to v in t3
-	 */
-
-	// r1[v]=v1[v]+val[v]-t1[v] is the number of nodes in region 1 from v
-	forall_nodes(v, T) {
-		// calc v1'
-		v1[v] += val[v] - t1[v] - P3[v];
+	for (node v : T.nodes) {
+		if (!T.isDummy(v)) {
+			// r1[v] = sum1[v] + sum2[v] - t1[v] is the number of nodes in region 1 of v.
+			sum1[v] += sum2[v] - t1[v];
+			if (m_combinatorialObjects == CombinatorialObjects::VerticesMinusDepth) {
+				gridLayout.x()[T.original(v)] = sum1[v] - p3[v];
+			} else if (m_combinatorialObjects == CombinatorialObjects::Faces) {
+				gridLayout.x()[T.original(v)] = 2*sum1[v] - p2[v] - p3[v] - 3;
+			}
+		}
 	}
 
-	prefixSum(rValues, 3, c_in_T, t2, v2);
-	// special treatment for b
-	v2[b_in_T] = t2[b_in_T];
+	// Calculate y-coordinates.
+	prefixSum(rValues, 3, c_in_T, t2, sum1);
+	sum1[b_in_T] = t2[b_in_T];
 
-	prefixSum(rValues, 1, a_in_T, t2, val);
-	// special treatment for b
-	val[b_in_T] = t2[b_in_T];
+	prefixSum(rValues, 1, a_in_T, t2, sum2);
+	sum2[b_in_T] = t2[b_in_T];
 
-	forall_nodes(v, T) {
-		// calc v2'
-		v2[v] += val[v] - t2[v] - P1[v];
-	}
-
-	// copy coordinates to the GridLayout
-	forall_nodes(v, GC) {
-		xcoord[GC.original(v)] = v1[T.copy(GC.original(v))];
-		ycoord[GC.original(v)] = v2[T.copy(GC.original(v))];
+	for (node v : T.nodes) {
+		if (!T.isDummy(v)) {
+			// r2[v] = sum1[v] + sum2[v] - t2[v] is the number of nodes in region 2 of v.
+			sum1[v] += sum2[v] - t2[v];
+			if (m_combinatorialObjects == CombinatorialObjects::VerticesMinusDepth) {
+				gridLayout.y()[T.original(v)] = sum1[v] - p1[v];
+			} else if (m_combinatorialObjects == CombinatorialObjects::Faces) {
+				gridLayout.y()[T.original(v)] = 2*sum1[v] - p1[v] - p3[v] - 3;
+			}
+		}
 	}
 }
 
@@ -209,27 +195,26 @@ void SchnyderLayout::schnyderEmbedding(
  */
 void SchnyderLayout::contract(Graph& G, node a, node b, node c, List<node>& L)
 {
-	adjEntry adj1, adj2;
 	List<node> candidates;
-	NodeArray<bool> marked(G, false);			// considered nodes
-	NodeArray<int> deg(G, 0);					// # virtual neighbours
+	NodeArray<bool> marked(G, false); // considered nodes
+	NodeArray<int> deg(G, 0); // # virtual neighbours
 
 	int N = G.numberOfEdges();
 
-	marked[a] = marked[b] = marked[c] = true;	// init outer face
+	marked[a] = marked[b] = marked[c] = true; // init outer face
 
 	deg[a] = deg[b] = deg[c] = N;
 
 	// mark neighbours of a and calc the degree of the second (virtual) neighbours
-	forall_adj(adj1, a) {
+	for(adjEntry adj1 : a->adjEntries) {
 		marked[adj1->twinNode()] = true;
-		forall_adj(adj2, adj1->twinNode()) {
+		for(adjEntry adj2 : adj1->twinNode()->adjEntries) {
 			deg[adj2->twinNode()]++;
 		}
 	}
 
 	// find first candidates
-	forall_adj(adj1, a) {
+	for(adjEntry adj1 : a->adjEntries) {
 		if (deg[adj1->twinNode()] <= 2) {
 			candidates.pushBack(adj1->twinNode());
 		}
@@ -240,18 +225,18 @@ void SchnyderLayout::contract(Graph& G, node a, node b, node c, List<node>& L)
 		if (deg[u] == 2) {
 			L.pushFront(u);
 			deg[u] = N;
-			forall_adj(adj1, u) {
+			for(adjEntry adj1 : u->adjEntries) {
 				node v = adj1->twinNode();
-				deg[v]--;										// u is virtualy deleted
-				if (!marked[v]) {								// v is new neighbour of a
+				deg[v]--; // u is virtualy deleted
+				if (!marked[v]) { // v is new neighbour of a
 					marked[v] = true;
-					forall_adj(adj2, v) {
-						deg[adj2->twinNode()]++;				// degree of virtaul neighbours increase
+					for(adjEntry adj2 : v->adjEntries) {
+						deg[adj2->twinNode()]++; // degree of virtaul neighbours increase
 					}
-					if (deg[v] <= 2) candidates.pushBack(v);	// next candidate v
+					if (deg[v] <= 2) candidates.pushBack(v); // next candidate v
 				}
 				else
-					if (deg[v] == 2) candidates.pushBack(v);	// next candidate v
+					if (deg[v] == 2) candidates.pushBack(v); // next candidate v
 			}
 		}
 	}
@@ -275,14 +260,13 @@ void SchnyderLayout::realizer(
 	int  i = 0;
 	edge e;
 	NodeArray<int> ord(G, 0);
-	adjEntry adj;
 
 	// ordering: b,c,L,a
 	ord[b] = i++;
 	ord[c] = i++;
 
-	forall_listiterators(node, it, L) {
-		ord[*it] = i++;				// enumerate V(G)
+	for(node v : L) {
+		ord[v] = i++; // enumerate V(G)
 	}
 	ord[a] = i++;
 
@@ -292,12 +276,13 @@ void SchnyderLayout::realizer(
 		T.delEdge(e);
 	}
 
-	forall_listiterators(node, it, L) {
-		node v = *it;
+	for(node v : L) {
 		node u = T.copy(G.original(v));   // u is copy of v in T
 
-		forall_adj(adj, v) {
-			if (ord[adj->twinNode()] > ord[v]) {
+		adjEntry adj = nullptr;
+		for(adjEntry adjRun : v->adjEntries) {
+			if (ord[adjRun->twinNode()] > ord[v]) {
+				adj = adjRun;
 				break;
 			}
 		}
@@ -328,7 +313,7 @@ void SchnyderLayout::realizer(
 	node c_in_T = T.copy(G.original(c));
 
 	// all edges to node a get realizer value 1
-	forall_adj(adj, a) {
+	for(adjEntry adj : a->adjEntries) {
 		e = T.newEdge(a_in_T, T.copy(G.original(adj->twinNode())));
 		rValues[e] = 1;
 	}
@@ -355,9 +340,8 @@ void SchnyderLayout::subtreeSizes(
 	node r,
 	NodeArray<int>& size)
 {
-	int  sum = 0;
-	adjEntry adj;
-	forall_adj(adj, r) {
+	int sum = 0;
+	for(adjEntry adj : r->adjEntries) {
 		if (adj->theEdge()->source() == r && rValues[adj->theEdge()] == i) {
 			node w = adj->twinNode();
 			subtreeSizes(rValues, i, w, size);
@@ -385,15 +369,14 @@ void SchnyderLayout::prefixSum(
 
 	while (!Q.empty()) {
 		node v = Q.popFrontRet();
-		adjEntry adj;
-		forall_adj(adj, v)
-		if (adj->theEdge()->source() == v && rValues[adj->theEdge()] == i) {
-			node w = adj->twinNode();
-			Q.pushBack(w);
-			sum[w] = val[w] + sum[v];
+		for (adjEntry adj : v->adjEntries) {
+			if (adj->theEdge()->source() == v && rValues[adj->theEdge()] == i) {
+				node w = adj->twinNode();
+				Q.pushBack(w);
+				sum[w] = val[w] + sum[v];
+			}
 		}
 	}
 }
 
-
-} //namespace ogdf
+}

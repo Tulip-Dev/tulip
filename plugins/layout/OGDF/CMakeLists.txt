@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${OGDFInclude} ${TulipOGDFInclude})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${OGDFInclude} ${TulipOGDFInclude} ${OGDFBuildInclude})
 
 SET(PLUGINS_SRCS
 OGDFFm3.cpp
@@ -11,22 +11,18 @@ OGDFKamadaKawai.cpp
 OGDFCircular.cpp
 OGDFBalloon.cpp
 OGDFDavidsonHarel.cpp
-OGDFMMMExampleNoTwistLayout.cpp
 OGDFTree.cpp
-OGDFMMMExampleFastLayout.cpp
 OGDFGemFrick.cpp
 OGDFStressMajorization.cpp
 OGDFSugiyama.cpp
 OGDFDominance.cpp
-OGDFMMMExampleNiceLayout.cpp
 OGDFPlanarizationGrid.cpp
 OGDFBertaultLayout.cpp
 OGDFPivotMDS.cpp
 OGDFTileToRowsPacking.cpp
 OGDFPlanarizationLayout.cpp
+OGDFNodeRespecter.cpp
 )
-
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DOGDF_DLL")
 
 DISABLE_COMPILER_WARNINGS()
 

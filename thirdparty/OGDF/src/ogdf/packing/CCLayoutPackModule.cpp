@@ -1,11 +1,3 @@
-/*
- * $Revision: 2554 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-06 11:39:38 +0200 (Fri, 06 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief implementation of class CCLayoutPackModule.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,15 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#include <ogdf/module/CCLayoutPackModule.h>
-
+#include <ogdf/packing/CCLayoutPackModule.h>
 
 namespace ogdf {
 
@@ -55,19 +43,20 @@ bool CCLayoutPackModule::checkOffsetsTP(
 
 	for (int i = 0; i < n; ++i)
 	{
-		typename POINT::numberType xl = offset[i].m_x;
-		typename POINT::numberType xr = xl + box[i].m_x;
-		typename POINT::numberType yb = offset[i].m_y;
-		typename POINT::numberType yt = yb + box[i].m_y;
+		auto xl = offset[i].m_x;
+		auto xr = xl + box[i].m_x;
+		auto yb = offset[i].m_y;
+		auto yt = yb + box[i].m_y;
 
-		OGDF_ASSERT(xl <= xr && yb <= yt);
+		OGDF_ASSERT(xl <= xr);
+		OGDF_ASSERT(yb <= yt);
 
 		for (int j = i+1; j < n; ++j)
 		{
-			typename POINT::numberType xl2 = offset[j].m_x;
-			typename POINT::numberType xr2 = xl2 + box[j].m_x;
-			typename POINT::numberType yb2 = offset[j].m_y;
-			typename POINT::numberType yt2 = yb2 + box[j].m_y;
+			auto xl2 = offset[j].m_x;
+			auto xr2 = xl2 + box[j].m_x;
+			auto yb2 = offset[j].m_y;
+			auto yt2 = yb2 + box[j].m_y;
 
 			if (xr2 > xl && xl2 < xr && yt2 > yb && yb2 < yt)
 				return false;
@@ -89,5 +78,4 @@ bool CCLayoutPackModule::checkOffsets(const Array<IPoint> &box,
 	return checkOffsetsTP(box,offset);
 }
 
-
-} // end namespace ogdf
+}

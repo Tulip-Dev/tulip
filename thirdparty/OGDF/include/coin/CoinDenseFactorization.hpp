@@ -4,9 +4,9 @@
 // This code is licensed under the terms of the Eclipse Public License (EPL).
 
 
-/* 
+/*
    Authors
-   
+
    John Forrest
 
  */
@@ -29,20 +29,20 @@ public:
   //@{
   /// Default constructor
   CoinOtherFactorization (  );
-  /// Copy constructor 
+  /// Copy constructor
   CoinOtherFactorization ( const CoinOtherFactorization &other);
-  
+
   /// Destructor
   virtual ~CoinOtherFactorization (  );
   /// = copy
   CoinOtherFactorization & operator = ( const CoinOtherFactorization & other );
- 
+
   /// Clone
   virtual CoinOtherFactorization * clone() const = 0;
   //@}
 
   /**@name general stuff such as status */
-  //@{ 
+  //@{
   /// Returns status
   inline int status (  ) const {
     return status_;
@@ -55,7 +55,7 @@ public:
     return numberPivots_;
   }
   /// Sets number of pivots since factorization
-  inline void setPivots (  int value ) 
+  inline void setPivots (  int value )
   { numberPivots_=value; }
   /// Set number of Rows after factorization
   inline void setNumberRows(int value)
@@ -103,7 +103,7 @@ public:
 #endif
   /// Returns array to put basis elements in
   virtual CoinFactorizationDouble * elements() const;
-  /// Returns pivot row 
+  /// Returns pivot row
   virtual int * pivotRow() const;
   /// Returns work area
   virtual CoinFactorizationDouble * workArea() const;
@@ -140,7 +140,7 @@ public:
   virtual void clearArrays() {}
   //@}
   /**@name virtual general stuff such as permutation */
-  //@{ 
+  //@{
   /// Returns array to put basis indices in
   virtual int * indices() const  = 0;
   /// Returns permute in
@@ -155,7 +155,7 @@ public:
 		  int numberColumns,
 		  CoinBigIndex maximumL,
 		  CoinBigIndex maximumU ) = 0;
-  
+
   /// PreProcesses column ordered copy of basis
   virtual void preProcess ( ) = 0;
   /** Does most of factorization returning status
@@ -187,7 +187,7 @@ public:
 			      double acceptablePivot=1.0e-8)=0;
   //@}
 
-  /**@name various uses of factorization (return code number elements) 
+  /**@name various uses of factorization (return code number elements)
    which user may want to know about */
   //@{
   /** Updates one column (FTRAN) from regionSparse2
@@ -210,7 +210,7 @@ public:
 			   CoinIndexedVector * regionSparse3,
 			   bool noPermute=false) = 0;
   /** Updates one column (BTRAN) from regionSparse2
-      regionSparse starts as zero and is zero at end 
+      regionSparse starts as zero and is zero at end
       Note - if regionSparse2 packed on input - will be packed on output
   */
   virtual int updateColumnTranspose ( CoinIndexedVector * regionSparse,
@@ -254,14 +254,14 @@ protected:
   int maximumRows_;
   /// Maximum length of iterating area
   CoinBigIndex maximumSpace_;
-  /// Pivot row 
+  /// Pivot row
   int * pivotRow_;
   /** Elements of factorization and updates
       length is maxR*maxR+maxSpace
-      will always be long enough so can have nR*nR ints in maxSpace 
+      will always be long enough so can have nR*nR ints in maxSpace
   */
   CoinFactorizationDouble * elements_;
-  /// Work area of numberRows_ 
+  /// Work area of numberRows_
   CoinFactorizationDouble * workArea_;
   /** Solve mode e.g. 0 C++ code, 1 Lapack, 2 choose
       If 4 set then values pass
@@ -288,15 +288,15 @@ public:
   //@{
   /// Default constructor
   CoinDenseFactorization (  );
-  /// Copy constructor 
+  /// Copy constructor
   CoinDenseFactorization ( const CoinDenseFactorization &other);
-  
+
   /// Destructor
   virtual ~CoinDenseFactorization (  );
   /// = copy
   CoinDenseFactorization & operator = ( const CoinDenseFactorization & other );
   /// Clone
-  virtual CoinOtherFactorization * clone() const ;
+  virtual CoinOtherFactorization * clone() const override ;
   //@}
 
   /**@name Do factorization - public */
@@ -305,26 +305,26 @@ public:
   virtual void getAreas ( int numberRows,
 		  int numberColumns,
 		  CoinBigIndex maximumL,
-		  CoinBigIndex maximumU );
-  
+		  CoinBigIndex maximumU ) override;
+
   /// PreProcesses column ordered copy of basis
-  virtual void preProcess ( );
+  virtual void preProcess ( ) override;
   /** Does most of factorization returning status
       0 - OK
       -99 - needs more memory
       -1 - singular - use numberGoodColumns and redo
   */
-  virtual int factor ( );
+  virtual int factor ( ) override;
   /// Does post processing on valid factorization - putting variables on correct rows
-  virtual void postProcess(const int * sequence, int * pivotVariable);
+  virtual void postProcess(const int * sequence, int * pivotVariable) override;
   /// Makes a non-singular basis by replacing variables
-  virtual void makeNonSingular(int * sequence, int numberColumns);
+  virtual void makeNonSingular(int * sequence, int numberColumns) override;
   //@}
 
   /**@name general stuff such as number of elements */
-  //@{ 
+  //@{
   /// Total number of elements in factorization
-  virtual inline int numberElements (  ) const {
+  virtual inline int numberElements (  ) const override {
     return numberRows_*(numberColumns_+numberPivots_);
   }
   /// Returns maximum absolute value in factorization
@@ -345,10 +345,10 @@ public:
 		      int pivotRow,
 		      double pivotCheck ,
 			      bool checkBeforeModifying=false,
-			      double acceptablePivot=1.0e-8);
+			      double acceptablePivot=1.0e-8) override;
   //@}
 
-  /**@name various uses of factorization (return code number elements) 
+  /**@name various uses of factorization (return code number elements)
    which user may want to know about */
   //@{
   /** Updates one column (FTRAN) from regionSparse2
@@ -359,24 +359,24 @@ public:
   */
   virtual inline int updateColumnFT ( CoinIndexedVector * regionSparse,
 				      CoinIndexedVector * regionSparse2,
-				      bool = false)
+				      bool = false) override
   { return updateColumn(regionSparse,regionSparse2);}
   /** This version has same effect as above with FTUpdate==false
       so number returned is always >=0 */
   virtual int updateColumn ( CoinIndexedVector * regionSparse,
 		     CoinIndexedVector * regionSparse2,
-		     bool noPermute=false) const;
+		     bool noPermute=false) const override;
     /// does FTRAN on two columns
     virtual int updateTwoColumnsFT(CoinIndexedVector * regionSparse1,
 			   CoinIndexedVector * regionSparse2,
 			   CoinIndexedVector * regionSparse3,
-			   bool noPermute=false);
+			   bool noPermute=false) override;
   /** Updates one column (BTRAN) from regionSparse2
-      regionSparse starts as zero and is zero at end 
+      regionSparse starts as zero and is zero at end
       Note - if regionSparse2 packed on input - will be packed on output
   */
   virtual int updateColumnTranspose ( CoinIndexedVector * regionSparse,
-			      CoinIndexedVector * regionSparse2) const;
+			      CoinIndexedVector * regionSparse2) const override;
   //@}
   /// *** Below this user may not want to know about
 
@@ -384,17 +384,17 @@ public:
    which user may not want to know about (left over from my LP code) */
   //@{
   /// Get rid of all memory
-  inline void clearArrays()
+  inline void clearArrays() override
   { gutsOfDestructor();}
   /// Returns array to put basis indices in
-  virtual inline int * indices() const
+  virtual inline int * indices() const override
   { return reinterpret_cast<int *> (elements_+numberRows_*numberRows_);}
   /// Returns permute in
-  virtual inline int * permute() const
-  { return NULL;/*pivotRow_*/;}
+  virtual inline int * permute() const override
+  { return nullptr;/*pivotRow_*/;}
   //@}
 
-  /// The real work of desstructor 
+  /// The real work of desstructor
   void gutsOfDestructor();
   /// The real work of constructor
   void gutsOfInitialize();

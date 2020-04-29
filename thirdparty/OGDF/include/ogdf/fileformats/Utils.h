@@ -1,11 +1,3 @@
-/*
- * $Revision: 3837 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 15:19:30 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of useful methods for processing various fileformats.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,23 +25,15 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_FILEFORMAT_UTILS_H
-#define OGDF_FILEFORMAT_UTILS_H
+#include <map>
 
-#include <ogdf/basic/Hashing.h>
-
-#include <string>
+#include <ogdf/basic/basic.h>
 
 namespace ogdf {
 
@@ -60,7 +44,7 @@ private:
 	char m_c;
 
 public:
-	TokenIgnorer(const char c): m_c(c) {};
+	explicit TokenIgnorer(const char c): m_c(c) {};
 
 	friend std::istream &operator >>(std::istream &is, TokenIgnorer c);
 };
@@ -71,26 +55,19 @@ std::istream &operator >>(std::istream &is, TokenIgnorer token);
 template <typename E>
 static inline E toEnum(
 	const std::string &str, // A string we want to convert.
-	Hashing<std::string, E> *&map, // A map to be lazily evaluated.
 	std::string toString(const E&),
 	const E first, const E last, const E def) // Enum informations.
 {
-	if(!map) {
-		map = new Hashing<std::string, E>();
-
+	static std::map<std::string, E> map; // A map to be lazily evaluated.
+	if(map.empty()) {
 		// Iterating over enums is potentially unsafe... (fixable in C++11).
-		for(int it = last; it >= first; it--) {
+		for(int it = static_cast<int>(last); it >= static_cast<int>(first); it--) {
 			const E e = static_cast<E>(it);
-			map->insert(toString(e), e);
+			map[toString(e)] = e;
 		}
 	}
 
-	HashElement<std::string, E> *elem = map->lookup(str);
-	return elem ? elem->info() : def;
+	return map.find(str) == map.end() ? def : map[str];
 }
 
-
-} // end namespace ogdf
-
-
-#endif
+}

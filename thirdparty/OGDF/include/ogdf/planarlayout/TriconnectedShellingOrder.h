@@ -1,11 +1,3 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declares the class TriconnectedShellingOrder...
  *
@@ -18,7 +10,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -35,30 +27,18 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_TRICONNECTED_SHELLING_ORDER_H
-#define OGDF_TRICONNECTED_SHELLING_ORDER_H
-
-
-#include <ogdf/module/ShellingOrderModule.h>
-
+#include <ogdf/planarlayout/ShellingOrderModule.h>
 
 namespace ogdf {
 
-//---------------------------------------------------------
-// Computation of a shelling order for a triconnected and
-// simple (no multi-edges, no self-loops) planar graph
-//---------------------------------------------------------
+//! Computation of a shelling order for a triconnected and
+//! simple (no multi-edges, no self-loops) planar graph
 class OGDF_EXPORT TriconnectedShellingOrder : public ShellingOrderModule
 {
 public:
@@ -69,14 +49,10 @@ public:
 protected:
 	// does the actual computation; must be overridden by derived classes
 	// the computed order is returned in partition
-	virtual void doCall(const Graph &G,
+	virtual void doCall(
+		const Graph &G,
 		adjEntry adj,
-		List<ShellingOrderSet> &partition);
-
+		List<ShellingOrderSet> &partition) override;
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

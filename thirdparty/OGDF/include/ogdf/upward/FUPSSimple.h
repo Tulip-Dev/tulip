@@ -1,11 +1,3 @@
-/*
- * $Revision: 3388 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-04-10 14:56:08 +0200 (Wed, 10 Apr 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of the FUPSSimple.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,24 +25,13 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-
-#ifndef OGDF_FUPS_SIMPLE_H
-#define OGDF_FUPS_SIMPLE_H
-
-
-#include <ogdf/module/FUPSModule.h>
-
+#include <ogdf/upward/FUPSModule.h>
 
 namespace ogdf {
 
@@ -67,7 +48,7 @@ public:
 
 	// options
 
-	//! Sets the number of randomized runs to \a nRuns.
+	//! Sets the number of randomized runs to \p nRuns.
 	void runs (int nRuns) {
 		m_nRuns = nRuns;
 	}
@@ -81,15 +62,17 @@ public:
 	//! return a adjEntry of node v which right face is f. Be Carefully! The adjEntry is not always unique.
 	adjEntry getAdjEntry(const CombinatorialEmbedding &Gamma, node v, face f)
 	{
-		adjEntry adj = 0;
-		forall_adj(adj, v) {
-			if (Gamma.rightFace(adj) == f)
+		adjEntry adjFound = nullptr;
+		for(adjEntry adj : v->adjEntries) {
+			if (Gamma.rightFace(adj) == f) {
+				adjFound = adj;
 				break;
+			}
 		}
 
-		OGDF_ASSERT(Gamma.rightFace(adj) == f);
+		OGDF_ASSERT(Gamma.rightFace(adjFound) == f);
 
-		return adj;
+		return adjFound;
 	}
 
 protected:
@@ -97,14 +80,14 @@ protected:
 	/**
 	 * \brief Computes a feasible upward planar subgraph of the input graph.
 	 *
-	 * @param UPR represents the feasible upward planar subgraph after the call. \a UPR has to be initialzed as a
+	 * @param UPR represents the feasible upward planar subgraph after the call. \p UPR has to be initialzed as a
 	 *        UpwardPlanRep of the input connected graph G and is modified to obtain the upward planar subgraph.
 	 *		  The subgraph is represented as an upward planar representation.
 	 * @param delEdges is the deleted edges in order to obtain the subgraph. The edges are edges of the original graph G.
 	 * \return the status of the result.
 	 */
 	virtual Module::ReturnType doCall(UpwardPlanRep &UPR,
-		List<edge> &delEdges);
+		List<edge> &delEdges) override;
 
 
 private:
@@ -136,4 +119,3 @@ private:
 };
 
 }
-#endif

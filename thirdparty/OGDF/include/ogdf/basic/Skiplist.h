@@ -1,11 +1,3 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class Skiplist.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,18 +25,14 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifndef OGDF_SKIPLIST_H
-#define OGDF_SKIPLIST_H
+#pragma once
 
 #include <ogdf/basic/basic.h>
+#include <ogdf/basic/memory.h>
 
 namespace ogdf {
 
@@ -87,44 +75,44 @@ template<class X> class Skiplist {
 public:
 
 	//! Construct an initially empty skiplist
-	Skiplist() : lSize(0) {
-		srand((unsigned int)time(NULL));
-		realheight = 5;
-		height = 1;
-		start = (Element**)malloc(realheight*sizeof(Element*));
-		start[0] = NULL;
+	Skiplist() : m_lSize(0) {
+		srand((unsigned int)time(nullptr));
+		m_realheight = 5;
+		m_height = 1;
+		m_start = (Element**)malloc(m_realheight*sizeof(Element*));
+		m_start[0] = nullptr;
 	}
 
 	~Skiplist() {
 		clear();
-		free(start);
+		free(m_start);
 	}
 
-	//! Returns true if the item \a item is contained in the skiplist [O'(log n)]
+	//! Returns true if the item \p item is contained in the skiplist [O'(log n)]
 	bool isElement(X item) const {
-		int h = height - 1;
-		Element** cur = start; // wheeha!
+		int h = m_height - 1;
+		Element** cur = m_start; // wheeha!
 		while(true)	{
-			if( cur[h] && *(cur[h]->entry) < *item ) //nxt != NULL
+			if( cur[h] && *(cur[h]->entry) < *item ) //nxt != nullptr
 				cur = cur[h]->next;
 			else if(--h < 0)
 				return cur[0] && *(cur[0]->entry) == *item;
 		}
 	}
 
-	//! Adds the item \a item into the skiplist [O'(log n)]
+	//! Adds the item \p item into the skiplist [O'(log n)]
 	void add(X item) {
-		lSize++;
+		m_lSize++;
 
 		int nh = random_height();
-		Element* n = OGDF_NEW Element(item, nh);
-		if(nh > height)
+		Element* n = new Element(item, nh);
+		if(nh > m_height)
 			grow(nh);
 
-		int h = height - 1;
-		Element** cur = start; // wheeha!
+		int h = m_height - 1;
+		Element** cur = m_start; // wheeha!
 		while(true)	 {
-			if( cur[h] && *(cur[h]->entry) < *item ) //nxt != NULL
+			if( cur[h] && *(cur[h]->entry) < *item ) //nxt != nullptr
 				cur = cur[h]->next;
 			else {
 				if(h < nh) { // add only if new element is high enough
@@ -138,39 +126,41 @@ public:
 	}
 
 	//! Returns the current size of the skiplist, i.e., the number of elements
-	int size() const { return lSize; }
+	int size() const { return m_lSize; }
 
 	//! Returns true if the skiplist contains no elements
-	int empty() const { return (lSize==0); }
+	bool empty() const { return m_lSize == 0; }
 
 	//! Clears the current skiplist
 	/**
-	* If \a killData is true, the items of the Skiplist (which are stored as
+	* If \p killData is true, the items of the Skiplist (which are stored as
 	* pointers) are automatically deleted.
 	*/
 	void clear(bool killData = false) {
-		Element* item = start[0];
-		Element* old;
+		Element* item = m_start[0];
 		while(item) {
-			old = item;
+			Element* old = item;
 			item = item->next[0];
 			if(killData)
 				delete old->entry;
 			delete old;
 		}
-		lSize = 0;
-		height = 1;
-		start[0] = 0;
+		m_lSize = 0;
+		m_height = 1;
+		m_start[0] = nullptr;
 	}
 
 	//! returns an (forward) iterator for the skiplist
-	const SkiplistIterator<X> begin() const { return start[0]; }
+	const SkiplistIterator<X> begin() const { return m_start[0]; }
+
+	//! returns an invalid iterator
+	const SkiplistIterator<X> end() const { return nullptr; }
 
 private:
-	int lSize;
-	Element** start;
-	int height;
-	int realheight;
+	int m_lSize;
+	Element** m_start;
+	int m_height;
+	int m_realheight;
 
 	int random_height() {
 		int h = 1;
@@ -179,14 +169,19 @@ private:
 	}
 
 	void grow(int newheight) {
-		if(newheight > realheight) {
-			realheight = newheight;
-			start = (Element**)realloc(start, realheight*sizeof(Element*));
+		if(newheight > m_realheight) {
+			m_realheight = newheight;
+			Element** newStart = static_cast<Element**>(realloc(m_start, m_realheight*sizeof(Element*)));
+			if (newStart == nullptr) {
+				free(m_start);
+			} else {
+				m_start = newStart;
+			}
 		}
-		for(int i = newheight; i-->height;) {
-			start[i] = NULL;
+		for(int i = newheight; i-- > m_height;) {
+			m_start[i] = nullptr;
 		}
-		height = newheight;
+		m_height = newheight;
 	}
 
 };
@@ -204,7 +199,7 @@ public:
 	//! Returns the item to which the iterator points
 	const X &operator*() const { return el->entry; }
 
-	bool valid() const { return (el != 0); }
+	bool valid() const { return el != nullptr; }
 
 	//! Move the iterator one item forward (prefix notation)
 	SkiplistIterator<X> &operator++() {
@@ -218,13 +213,13 @@ public:
 		return it;
 	}
 
-	//! Assignment operator
-	SkiplistIterator<X> &operator=(const SkiplistIterator<X> &it) {
-		el = it.el;
-		return *this;
+	bool operator==(const SkiplistIterator<X> other) const {
+		return el == other.el;
+	}
+
+	bool operator!=(const SkiplistIterator<X> other) const {
+		return !operator==(other);
 	}
 };
 
 }
-
-#endif /*OGDF_SKIPLIST_H*/

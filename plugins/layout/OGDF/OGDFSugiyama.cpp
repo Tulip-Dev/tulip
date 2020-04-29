@@ -35,54 +35,7 @@
 
 #include <tulip/StringCollection.h>
 
-#include "tulip2ogdf/OGDFLayoutPluginBase.h"
-
-// comments below have been extracted from OGDF/src/layered/sugiyama.cpp
-/** \addtogroup layout */
-
-/**
- * Implementation of Sugiyama algorithm (classes Hierarchy,
- * Level, SugiyamaLayout)
- *
- * \author Carsten Gutwenger
- *
- * \par License:
- * This is part of the Open Graph Drawing Framework (OGDF).
- *
- * Copyright (C). All rights reserved.
- * See README.txt in the root directory of the OGDF installation for details.
- *
- * \par
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
- *
- * \par
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * \par
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+#include <tulip2ogdf/OGDFLayoutPluginBase.h>
 
 #define ELT_RANKING "Ranking"
 #define ELT_RANKINGLIST "LongestPathRanking;OptimalRanking;CoffmanGrahamRanking"
@@ -164,7 +117,15 @@ static const char *paramHelp[] = {
     "The hierarchy layout module that computes the final layout.",
 
     // transpose vertically
-    "Transpose the layout vertically from top to bottom."};
+    "Transpose the layout vertically from top to bottom.",
+
+    //number of crossings
+    "Returns the number of crossings in the computed layout.",
+
+    //number of layers/levels
+    "Returns the number of layers/levels in the computed layout."
+
+};
 
 static const char *eltRankingValuesDescription =
     "CoffmanGrahamRanking <i>(The coffman graham ranking algorithm)</i><br>"
@@ -193,10 +154,10 @@ static const char *hierarchyLayoutValuesDescription =
     "OptimalHierarchyLayout <i>(The LP-based hierarchy layout algorithm)</i>";
 
 class OGDFSugiyama : public OGDFLayoutPluginBase {
-
+    ogdf::SugiyamaLayout *sugiyama;
 public:
   OGDFSugiyama(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, new ogdf::SugiyamaLayout()) {
+      : OGDFLayoutPluginBase(context, new ogdf::SugiyamaLayout()), sugiyama(static_cast<ogdf::SugiyamaLayout *>(ogdfLayoutAlgo)) {
     addInParameter<int>("fails", paramHelp[0], "4");
     addInParameter<int>("runs", paramHelp[1], "15");
     addInParameter<double>("node distance", paramHelp[2], "3");
@@ -215,6 +176,8 @@ public:
     addInParameter<StringCollection>(ELT_HIERARCHYLAYOUT, paramHelp[13], ELT_HIERARCHYLAYOUTLIST,
                                      true, hierarchyLayoutValuesDescription);
     addInParameter<bool>("transpose vertically", paramHelp[14], "true");
+    addOutParameter<int>("Number of crossings", paramHelp[15]);
+    addOutParameter<int>("Number of levels/layers", paramHelp[16]);
   }
 
   ~OGDFSugiyama() override {}
@@ -225,8 +188,6 @@ public:
                     "1.7", "Hierarchical")
 
   void beforeCall() override {
-    ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout *>(ogdfLayoutAlgo);
-
     if (dataSet != nullptr) {
       int ival = 0;
       double dval = 0;
@@ -333,8 +294,12 @@ public:
           transposeLayoutVertically();
         }
       }
+
+      dataSet->set("Number of crossings", sugiyama->numberOfCrossings());
+      dataSet->set("Number of levels/layers", sugiyama->numberOfLevels());
     }
   }
+
 };
 
 PLUGIN(OGDFSugiyama)

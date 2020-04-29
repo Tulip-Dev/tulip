@@ -1,11 +1,3 @@
-/*
- * $Revision: 3533 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2013-06-03 18:22:41 +0200 (Mon, 03 Jun 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of doubly linked lists and iterators
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,16 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/graphalg/ConvexHull.h>
-#include <float.h>
-#include <algorithm>
 
 namespace ogdf {
 
@@ -65,7 +52,7 @@ bool ConvexHull::sameDirection(const DPoint &start, const DPoint &end, const DPo
 	double len2_b = b.m_x * b.m_x + b.m_y * b.m_y;
 	double len2_c = c.m_x * c.m_x + c.m_y * c.m_y;
 
-	return (len2_c > max(len2_a, len2_b));
+	return len2_c > max(len2_a, len2_b);
 }
 
 
@@ -78,7 +65,7 @@ DPoint ConvexHull::calcNormal(const DPoint &start, const DPoint &end) const
 
 double ConvexHull::leftOfLine(const DPoint &normal, const DPoint &point, const DPoint &pointOnLine) const
 {
-	return ((point.m_x - pointOnLine.m_x) * normal.m_x + (point.m_y - pointOnLine.m_y) * normal.m_y);
+	return (point.m_x - pointOnLine.m_x) * normal.m_x + (point.m_y - pointOnLine.m_y) * normal.m_y;
 }
 
 
@@ -168,8 +155,8 @@ void ConvexHull::leftHull(std::vector<DPoint> points, DPoint &start, DPoint &end
 	}
 
 	if ((leftOfLine(calcNormal(q1, q2), start, q1) >= 0.0) && (leftOfLine(calcNormal(q1, q2), end, q1) >= 0.0)) {
-		swap(q1, q2);
-		swap(indexQ1, indexQ2);
+		std::swap(q1, q2);
+		std::swap(indexQ1, indexQ2);
 	}
 
 	double dist = 0.0;
@@ -178,8 +165,8 @@ void ConvexHull::leftHull(std::vector<DPoint> points, DPoint &start, DPoint &end
 	std::vector<double> qDistances;
 	for (unsigned int i = 0; i < points.size(); i++) {
 		double d = leftOfLine(normal, points[i], q1);
-		if (!DIsGreater(dist, d)) {
-			if (DIsGreater(d, dist)) {
+		if (!OGDF_GEOM_ET.greater(dist, d)) {
+			if (OGDF_GEOM_ET.greater(d, dist)) {
 				qCandidates.clear();
 				qDistances.clear();
 				dist = d;
@@ -192,7 +179,7 @@ void ConvexHull::leftHull(std::vector<DPoint> points, DPoint &start, DPoint &end
 		}
 	}
 	for (unsigned int i = 0; i < qCandidates.size();) {
-		if (DIsLess(qDistances[i], dist)) {
+		if (OGDF_GEOM_ET.less(qDistances[i], dist)) {
 			qCandidates[i] = qCandidates.back();
 			qCandidates.pop_back();
 			qDistances[i] = qDistances.back();
@@ -237,20 +224,20 @@ void ConvexHull::leftHull(std::vector<DPoint> points, DPoint &start, DPoint &end
 
 	if (indexQ1 != indexQ)
 	{
-		if (DIsGreater(leftOfLine(sqNormal, q1, q), 0.0)) {
+		if (OGDF_GEOM_ET.greater(leftOfLine(sqNormal, q1, q), 0.0)) {
 			lPoints.push_back(q1);
-			OGDF_ASSERT(!DIsGreater(leftOfLine(qeNormal, q1, q), 0.0));
-		} else if (DIsGreater(leftOfLine(qeNormal, q1, q), 0.0)) {
+			OGDF_ASSERT(!OGDF_GEOM_ET.greater(leftOfLine(qeNormal, q1, q), 0.0));
+		} else if (OGDF_GEOM_ET.greater(leftOfLine(qeNormal, q1, q), 0.0)) {
 			rPoints.push_back(q1);
 		}
 	}
 
 	if (indexQ2 != indexQ)
 	{
-		if (DIsGreater(leftOfLine(sqNormal, q2, q), 0.0)) {
+		if (OGDF_GEOM_ET.greater(leftOfLine(sqNormal, q2, q), 0.0)) {
 			lPoints.push_back(q2);
-			OGDF_ASSERT(!DIsGreater(leftOfLine(qeNormal, q2, q), 0.0));
-		} else if (DIsGreater(leftOfLine(qeNormal, q2, q), 0.0)) {
+			OGDF_ASSERT(!OGDF_GEOM_ET.greater(leftOfLine(qeNormal, q2, q), 0.0));
+		} else if (OGDF_GEOM_ET.greater(leftOfLine(qeNormal, q2, q), 0.0)) {
 			rPoints.push_back(q2);
 		}
 	}
@@ -280,7 +267,7 @@ void ConvexHull::leftHull(std::vector<DPoint> points, DPoint &start, DPoint &end
 				DPolygon inner2(inner);
 				DPolygon::iterator nearest = inner2.begin();
 				dist = p.distance(*nearest);
-				for (DPolygon::iterator ip = inner2.begin(); ip != inner2.end(); ip++) {
+				for (DPolygon::iterator ip = inner2.begin(); ip != inner2.end(); ++ip) {
 					double d = p.distance(*ip);
 					if (d > dist) {
 						dist = d;
@@ -317,10 +304,10 @@ void ConvexHull::leftHull(std::vector<DPoint> points, DPoint &start, DPoint &end
 				}
 			}
 
-			if (DIsGreater(leftOfLine(sqNormal, p, q), 0.0)) {
+			if (OGDF_GEOM_ET.greater(leftOfLine(sqNormal, p, q), 0.0)) {
 				lPoints.push_back(p);
-				OGDF_ASSERT(!DIsGreater(leftOfLine(qeNormal, p, q), 0.0));
-			} else if (DIsGreater(leftOfLine(qeNormal, p, q), 0.0)) {
+				OGDF_ASSERT(!OGDF_GEOM_ET.greater(leftOfLine(qeNormal, p, q), 0.0));
+			} else if (OGDF_GEOM_ET.greater(leftOfLine(qeNormal, p, q), 0.0)) {
 				rPoints.push_back(p);
 			}
 		}
@@ -407,19 +394,19 @@ DPolygon ConvexHull::call(std::vector<DPoint> points) const
 
 	// Subdivide into Pointlists
 	std::vector<DPoint> normals;
-	for (DPolygon::iterator i = poly.begin(); i != poly.end(); i++) {
+	for (DPolygon::iterator i = poly.begin(); i != poly.end(); ++i) {
 		DPolygon::iterator j = poly.cyclicSucc(i);
 		normals.push_back(calcNormal(*i, *j));
 	}
 	std::vector< std::vector<DPoint> > pointArray;
 	pointArray.resize(poly.size());
-	for (std::vector<DPoint>::iterator p = points.begin(); p != points.end(); p++) {
+	for (const DPoint &p : points) {
 		int component = 0;
 		DPolygon::iterator sp = poly.begin();
 		DPolygon::iterator spn = poly.cyclicSucc(sp);
-		for (std::vector<DPoint>::iterator n = normals.begin(); n != normals.end(); n++, sp++) {
-			if ((*sp != *p) && (*spn != *p) && DIsGreater(leftOfLine(*n, *p, *sp), 0.0)) {
-				pointArray[component].push_back(*p);
+		for (std::vector<DPoint>::iterator n = normals.begin(); n != normals.end(); ++n, ++sp) {
+			if ((*sp != p) && (*spn != p) && OGDF_GEOM_ET.greater(leftOfLine(*n, p, *sp), 0.0)) {
+				pointArray[component].push_back(p);
 				break;
 			}
 			component++;
@@ -427,7 +414,7 @@ DPolygon ConvexHull::call(std::vector<DPoint> points) const
 	}
 
 	int component = 0;
-	for (DPolygon::iterator i = poly.begin(); i != poly.end(); i++, component++) {
+	for (DPolygon::iterator i = poly.begin(); i != poly.end(); ++i, ++component) {
 		hullPoly.pushBack(*i);
 		DPolygon::iterator j = poly.cyclicSucc(i);
 		leftHull(pointArray[component], *i, *j, hullPoly);
@@ -441,8 +428,7 @@ DPolygon ConvexHull::call(MultilevelGraph &MLG) const
 {
 	std::vector<DPoint> points;
 
-	node v;
-	forall_nodes(v, MLG.getGraph()) {
+	for(node v : MLG.getGraph().nodes) {
 		points.push_back(DPoint(MLG.x(v), MLG.y(v)));
 	}
 
@@ -454,12 +440,11 @@ DPolygon ConvexHull::call(GraphAttributes &GA) const
 {
 	std::vector<DPoint> points;
 
-	node v;
-	forall_nodes(v, GA.constGraph()) {
-		points.push_back(DPoint(GA.x(v), GA.y(v)));
+	for(node v : GA.constGraph().nodes) {
+		points.push_back(GA.point(v));
 	}
 
 	return call(points);
 }
 
-} // namespace ogdf
+}

@@ -1,11 +1,3 @@
-/*
- * $Revision: 3554 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2013-06-07 19:36:05 +0200 (Fri, 07 Jun 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implementation of the stress minimization via majorization
  * algorithm.
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,12 +26,9 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/energybased/StressMinimization.h>
 
@@ -57,28 +46,22 @@ void StressMinimization::call(GraphAttributes& GA)
 	// if the graph has at most one node nothing to do
 	if (G.numberOfNodes() <= 1) {
 		// make it exception save
-		node v;
-		forall_nodes(v,G)
+		for(node v : G.nodes)
 		{
 			GA.x(v) = 0;
 			GA.y(v) = 0;
 		}
 		return;
 	}
-	if (m_componentLayout && !isConnected(G)) {
-		OGDF_THROW(PreconditionViolatedException);
-		return;
-	}
+	// Separate component layout cant be applied to a non-connected graph
+	OGDF_ASSERT(!m_componentLayout || isConnected(G));
 	NodeArray<NodeArray<double> > shortestPathMatrix(G);
 	NodeArray<NodeArray<double> > weightMatrix(G);
 	initMatrices(G, shortestPathMatrix, weightMatrix);
 	// if the edge costs are defined by the attribute copy it to an array and
 	// construct the proper shortest path matrix
 	if (m_hasEdgeCostsAttribute) {
-		if (!(GA.attributes() & GraphAttributes::edgeDoubleWeight)) {
-			OGDF_THROW(PreconditionViolatedException);
-			return;
-		}
+		OGDF_ASSERT(GA.has(GraphAttributes::edgeDoubleWeight));
 		m_avgEdgeCosts = dijkstra_SPAP(GA, shortestPathMatrix);
 		// compute shortest path all pairs
 	} else {
@@ -103,11 +86,11 @@ void StressMinimization::call(
 	// Note isConnected is only true during calls triggered by the
 	// ComponentSplitterLayout.
 	if (!m_componentLayout && !isConnected(G)) {
-		replaceInfinityDistances(G.numberOfNodes() - 1, shortestPathMatrix,
+		replaceInfinityDistances(shortestPathMatrix,
 				m_avgEdgeCosts * sqrt((double)(G.numberOfNodes())));
 	}
 	// calculate the weights
-	calcWeights(G, G.numberOfNodes() - 1, shortestPathMatrix, weightMatrix);
+	calcWeights(G, shortestPathMatrix, weightMatrix);
 	// minimize the stress
 	minimizeStress(GA, shortestPathMatrix, weightMatrix);
 }
@@ -134,15 +117,15 @@ void StressMinimization::computeInitialLayout(GraphAttributes& GA)
 
 
 void StressMinimization::replaceInfinityDistances(
-	const int dimension,
 	NodeArray<NodeArray<double> >& shortestPathMatrix,
 	double newVal)
 {
-	for (int i = 0; i < dimension; i++) {
-		for (int j = i + 1; j <= dimension; j++) {
-			if (isinf(shortestPathMatrix[i][j])) {
-				shortestPathMatrix[i][j] = newVal;
-				shortestPathMatrix[j][i] = newVal;
+	const Graph &G = *shortestPathMatrix.graphOf();
+
+	for(node v : G.nodes) {
+		for(node w : G.nodes) {
+			if (v != w && isinf(shortestPathMatrix[v][w])) {
+				shortestPathMatrix[v][w] = newVal;
 			}
 		}
 	}
@@ -151,29 +134,18 @@ void StressMinimization::replaceInfinityDistances(
 
 void StressMinimization::calcWeights(
 	const Graph& G,
-	const int dimension,
 	NodeArray<NodeArray<double> >& shortestPathMatrix,
 	NodeArray<NodeArray<double> >& weightMatrix)
 {
-	node v,w;
-	forall_nodes(v, G) {
-		forall_nodes(w, G) {
+	for (node v : G.nodes) {
+		for (node w : G.nodes) {
 			if (v != w) {
-			// w_ij = d_ij^-2
-			weightMatrix[v][w] = 1
+				// w_ij = d_ij^-2
+				weightMatrix[v][w] = 1
 					/ (shortestPathMatrix[v][w] * shortestPathMatrix[v][w]);
 			}
 		}
 	}
-
-	/*for (int i = 0; i < dimension; i++) {
-		for (int j = i + 1; j <= dimension; j++) {
-			// w_ij = d_ij^-2
-			weightMatrix[i][j] = 1
-					/ (shortestPathMatrix[i][j] * shortestPathMatrix[i][j]);
-			weightMatrix[j][i] = weightMatrix[i][j];
-		}
-	}*/
 }
 
 
@@ -183,21 +155,19 @@ double StressMinimization::calcStress(
 	NodeArray<NodeArray<double> >& weightMatrix)
 {
 	double stress = 0;
-	node v;
-	node w;
-	for (v = GA.constGraph().firstNode(); v != 0; v = v->succ()) {
-		for (w = v->succ(); w != 0; w = w->succ()) {
+	for (node v = GA.constGraph().firstNode(); v != nullptr; v = v->succ()) {
+		for (node w = v->succ(); w != nullptr; w = w->succ()) {
 			double xDiff = GA.x(v) - GA.x(w);
 			double yDiff = GA.y(v) - GA.y(w);
 			double zDiff = 0.0;
-			if (GA.attributes() & GraphAttributes::threeD)
+			if (GA.has(GraphAttributes::threeD))
 			{
 				zDiff = GA.z(v) - GA.z(w);
 			}
 			double dist = sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff);
 			if (dist != 0) {
 				stress += weightMatrix[v][w] * (shortestPathMatrix[v][w] - dist)
-						* (shortestPathMatrix[v][w] - dist);//
+					* (shortestPathMatrix[v][w] - dist);//
 			}
 		}
 	}
@@ -210,9 +180,8 @@ void StressMinimization::copyLayout(
 	NodeArray<double>& newX,
 	NodeArray<double>& newY)
 {
-	node v;
 	// copy the layout
-	forall_nodes(v, GA.constGraph())
+	for(node v : GA.constGraph().nodes)
 	{
 		newX[v] = GA.x(v);
 		newY[v] = GA.y(v);
@@ -226,9 +195,8 @@ void StressMinimization::copyLayout(
 	NodeArray<double>& newY,
 	NodeArray<double>& newZ)
 {
-	node v;
 	// copy the layout
-	forall_nodes(v, GA.constGraph())
+	for(node v : GA.constGraph().nodes)
 	{
 		newX[v] = GA.x(v);
 		newY[v] = GA.y(v);
@@ -245,10 +213,10 @@ void StressMinimization::minimizeStress(
 	const Graph& G = GA.constGraph();
 	int numberOfPerformedIterations = 0;
 
-	double prevStress = numeric_limits<double>::max();
-	double curStress = numeric_limits<double>::max();
+	double prevStress = std::numeric_limits<double>::max();
+	double curStress = std::numeric_limits<double>::max();
 
-	if (m_terminationCriterion == STRESS) {
+	if (m_terminationCriterion == TerminationCriterion::Stress) {
 		curStress = calcStress(GA, shortestPathMatrix, weightMatrix);
 	}
 
@@ -256,27 +224,27 @@ void StressMinimization::minimizeStress(
 	NodeArray<double> newY;
 	NodeArray<double> newZ;
 
-	if (m_terminationCriterion == POSITION_DIFFERENCE) {
+	if (m_terminationCriterion == TerminationCriterion::PositionDifference) {
 		newX.init(G);
 		newY.init(G);
-		if (GA.attributes() & GraphAttributes::threeD)
+		if (GA.has(GraphAttributes::threeD))
 			newZ.init(G);
 	}
 	do {
-		if (m_terminationCriterion == POSITION_DIFFERENCE) {
-			if (GA.attributes() & GraphAttributes::threeD)
+		if (m_terminationCriterion == TerminationCriterion::PositionDifference) {
+			if (GA.has(GraphAttributes::threeD))
 				copyLayout(GA, newX, newY, newZ);
 			else copyLayout(GA, newX, newY);
 		}
 		nextIteration(GA, shortestPathMatrix, weightMatrix);
-		if (m_terminationCriterion == STRESS) {
+		if (m_terminationCriterion == TerminationCriterion::Stress) {
 			prevStress = curStress;
 			curStress = calcStress(GA, shortestPathMatrix, weightMatrix);
 		}
 	} while (!finished(GA, ++numberOfPerformedIterations, newX, newY, prevStress, curStress));
 
 	Logger::slout() << "Iteration count:\t" << numberOfPerformedIterations
-		<< "\tStress:\t" << calcStress(GA, shortestPathMatrix, weightMatrix) << endl;
+		<< "\tStress:\t" << calcStress(GA, shortestPathMatrix, weightMatrix) << std::endl;
 }
 
 
@@ -285,53 +253,34 @@ void StressMinimization::nextIteration(
 	NodeArray<NodeArray<double> >& shortestPathMatrix,
 	NodeArray<NodeArray<double> >& weights)
 {
-	double newXCoord;
-	double newYCoord;
-	double newZCoord;
-	double totalWeight;
-
-	double desDistance;
-	double euclideanDist;
-	double weight;
-	double voteX;
-	double voteY;
-	double voteZ;
-	double xDiff;
-	double yDiff;
-	double zDiff;
-	node v;
-	node w;
 	const Graph& G = GA.constGraph();
 
-	forall_nodes(v,G)
+	for (node v : G.nodes)
 	{
-		newXCoord = 0.0;
-		newYCoord = 0.0;
-		newZCoord = 0.0;
+		double newXCoord = 0.0;
+		double newYCoord = 0.0;
+		double newZCoord = 0.0;
 		double& currXCoord = GA.x(v);
 		double& currYCoord = GA.y(v);
-		totalWeight = 0;
-		forall_nodes(w,G)
+		double totalWeight = 0;
+		for (node w : G.nodes)
 		{
 			if (v == w) {
 				continue;
 			}
 			// calculate euclidean distance between both points
-			xDiff = currXCoord - GA.x(w);
-			yDiff = currYCoord - GA.y(w);
-			if (GA.attributes() & GraphAttributes::threeD)
-				zDiff = GA.z(v) - GA.z(w);
-			else zDiff = 0.0;
-			euclideanDist = sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff);
+			double xDiff = currXCoord - GA.x(w);
+			double yDiff = currYCoord - GA.y(w);
+			double zDiff = (GA.has(GraphAttributes::threeD)) ? GA.z(v) - GA.z(w) : 0.0;
+			double euclideanDist = sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff);
 			// get the weight
-			weight = weights[v][w];
+			double weight = weights[v][w];
 			// get the desired distance
-			desDistance = shortestPathMatrix[v][w];
+			double desDistance = shortestPathMatrix[v][w];
 			// reset the voted x coordinate
-			voteX = 0.0;
 			// if x is not fixed
 			if (!m_fixXCoords) {
-				voteX = GA.x(w);
+				double voteX = GA.x(w);
 				if (euclideanDist != 0) {
 					// calc the vote
 					voteX += desDistance * (currXCoord - voteX) / euclideanDist;
@@ -340,29 +289,23 @@ void StressMinimization::nextIteration(
 				newXCoord += weight * voteX;
 			}
 			// reset the voted y coordinate
-			voteY = 0.0;
 			// y is not fixed
 			if (!m_fixYCoords) {
-				voteY = GA.y(w);
+				double voteY = GA.y(w);
 				if (euclideanDist != 0) {
 					// calc the vote
 					voteY += desDistance * (currYCoord - voteY) / euclideanDist;
 				}
 				newYCoord += weight * voteY;
 			}
-			if (GA.attributes() & GraphAttributes::threeD)
-			{
+			if (GA.has(GraphAttributes::threeD) && !m_fixZCoords) {
 				// reset the voted z coordinate
-				voteZ = 0.0;
-				// z is not fixed
-				if (!m_fixZCoords) {
-					voteZ = GA.z(w);
-					if (euclideanDist != 0) {
-						// calc the vote
-						voteZ += desDistance * (GA.z(v) - voteZ) / euclideanDist;
-					}
-					newZCoord += weight * voteZ;
+				double voteZ = GA.z(w);
+				if (euclideanDist != 0) {
+					// calc the vote
+					voteZ += desDistance * (GA.z(v) - voteZ) / euclideanDist;
 				}
+				newZCoord += weight * voteZ;
 			}
 			// sum up the weights
 			totalWeight += weight;
@@ -375,11 +318,8 @@ void StressMinimization::nextIteration(
 			if (!m_fixYCoords) {
 				currYCoord = newYCoord / totalWeight;
 			}
-			if (GA.attributes() & GraphAttributes::threeD)
-			{
-				if (!m_fixZCoords) {
-					GA.z(v) = newZCoord / totalWeight;
-				}
+			if (GA.has(GraphAttributes::threeD) && !m_fixZCoords) {
+				GA.z(v) = newZCoord / totalWeight;
 			}
 		}
 	}
@@ -400,25 +340,22 @@ bool StressMinimization::finished(
 
 	switch (m_terminationCriterion)
 	{
-	case POSITION_DIFFERENCE:
+	case TerminationCriterion::PositionDifference:
+	{
+		double eucNorm = 0;
+		double dividend = 0;
+		// compute the translation of all nodes between
+		// the consecutive layouts
+		for (node v : GA.constGraph().nodes)
 		{
-			node v;
-			double eucNorm = 0;
-			double dividend = 0;
-			double diffX;
-			double diffY;
-			// compute the translation of all nodes between
-			// the consecutive layouts
-			forall_nodes(v, GA.constGraph())
-			{
-				diffX = prevXCoords[v] - GA.x(v);
-				diffY = prevYCoords[v] - GA.y(v);
-				dividend += diffX * diffX + diffY * diffY;
-				eucNorm  += prevXCoords[v] * prevXCoords[v] + prevYCoords[v] * prevYCoords[v];
-			}
-			return sqrt(dividend) / sqrt(eucNorm) < EPSILON;
+			double diffX = prevXCoords[v] - GA.x(v);
+			double diffY = prevYCoords[v] - GA.y(v);
+			dividend += diffX * diffX + diffY * diffY;
+			eucNorm += prevXCoords[v] * prevXCoords[v] + prevYCoords[v] * prevYCoords[v];
 		}
-	case STRESS:
+		return sqrt(dividend) / sqrt(eucNorm) < EPSILON;
+	}
+	case TerminationCriterion::Stress:
 		return curStress == 0 || prevStress - curStress < prevStress * EPSILON;
 
 	default:
@@ -428,12 +365,11 @@ bool StressMinimization::finished(
 
 
 void StressMinimization::initMatrices(const Graph& G,
-		NodeArray<NodeArray<double> >& shortestPathMatrix,
-		NodeArray<NodeArray<double> >& weightMatrix)
+	NodeArray<NodeArray<double> >& shortestPathMatrix,
+	NodeArray<NodeArray<double> >& weightMatrix)
 {
-	node v;
 	// init shortest path matrix by infinity distances
-	forall_nodes(v, G)
+	for (node v : G.nodes)
 	{
 		shortestPathMatrix[v].init(G, std::numeric_limits<double>::infinity());
 		shortestPathMatrix[v][v] = 0;

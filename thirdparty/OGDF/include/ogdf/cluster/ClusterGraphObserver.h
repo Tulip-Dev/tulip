@@ -1,11 +1,3 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Abstract base class for structures on graphs, that need
  *        to be informed about cluster graph changes.
@@ -21,7 +13,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -38,63 +30,55 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_CLUSTER_GRAPH_OBSERVER_H
-#define OGDF_CLUSTER_GRAPH_OBSERVER_H
-
 
 #include <ogdf/basic/List.h>
 #include <ogdf/cluster/ClusterGraph.h>
 
 namespace ogdf {
 
-
-//----------------------------------------------------------
-// GraphObserver
-// abstract base class
-// derived classes have to overload nodeDeleted, nodeAdded
-// edgeDeleted, edgeAdded
-// these functions should be called by Graph before (delete)
-// and after (add) its structure
-//----------------------------------------------------------
+/**
+ * Abstract base class for cluster graph observers.
+ *
+ * @ingroup graphs
+ *
+ * If a class needs to keep track of changes in a clustered graph like addition or deletion
+ * of clusters, you can derive it from ClusterGraphObserver and override the
+ * notification methods clusterDeleted, clusterAdded.
+ */
 class OGDF_EXPORT ClusterGraphObserver {
 	friend class ClusterGraph;
 
 public:
-	ClusterGraphObserver() : m_pClusterGraph(0) {}
+	ClusterGraphObserver() : m_pClusterGraph(nullptr) {}
 
-	ClusterGraphObserver(const ClusterGraph* CG) : m_pClusterGraph(CG)
+	explicit ClusterGraphObserver(const ClusterGraph* CG) : m_pClusterGraph(CG)
 	{
 		m_itCGList = CG->registerObserver(this);
-	}//constructor
+	}
 
 	virtual ~ClusterGraphObserver()
 	{
 		if (m_pClusterGraph) m_pClusterGraph->unregisterObserver(m_itCGList);
-	}//destructor
+	}
 
 	// associates structure with different graph
 	void reregister(const ClusterGraph *pCG) {
 		//small speedup: check if == m_pGraph
 		if (m_pClusterGraph) m_pClusterGraph->unregisterObserver(m_itCGList);
-		if ((m_pClusterGraph = pCG) != 0) m_itCGList = pCG->registerObserver(this);
+		if ((m_pClusterGraph = pCG) != nullptr) m_itCGList = pCG->registerObserver(this);
 	}
 
 	virtual void clusterDeleted(cluster v) = 0;
 	virtual void clusterAdded(cluster v)   = 0;
-	//virtual void reInit()            	= 0;
-	//virtual void cleared()           	= 0;//Graph cleared
+#if 0
+	virtual void reInit()                  = 0;
+	virtual void cleared()                 = 0;//Graph cleared
+#endif
 
 	const ClusterGraph*  getGraph() const {	return m_pClusterGraph;}
 
@@ -105,6 +89,4 @@ protected:
 	ListIterator<ClusterGraphObserver*> m_itCGList;
 };
 
-} // end of namespace
-
-#endif
+}

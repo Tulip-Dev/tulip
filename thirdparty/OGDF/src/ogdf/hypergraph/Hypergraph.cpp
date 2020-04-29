@@ -1,11 +1,3 @@
-/*
- * $Revision: 3505 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2013-05-16 14:49:47 +0200 (Thu, 16 May 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implementation of Hypergraph class.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,12 +25,9 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/basic/List.h>
 #include <ogdf/basic/HashArray.h>
@@ -63,10 +52,10 @@ Hypergraph::~Hypergraph()
 	while (!m_hyperedgeArrays.empty())
 		(*(m_hyperedgeArrays.rbegin()))->disconnect();
 
-	for (hypernode v = m_hypernodes.begin(); v; v = v->succ())
+	for (hypernode v = m_hypernodes.head(); v; v = v->succ())
 		v->m_adjHyperedges.~GraphList<AdjHypergraphElement>();
 
-	for (hyperedge e = m_hyperedges.begin(); e; e = e->succ())
+	for (hyperedge e = m_hyperedges.head(); e; e = e->succ())
 		e->m_adjHypernodes.~GraphList<AdjHypergraphElement>();
 }
 
@@ -74,7 +63,7 @@ hypernode Hypergraph::newHypernode(int pIndex)
 {
 	++m_nHypernodes;
 
-	hypernode v = OGDF_NEW HypernodeElement(pIndex);
+	hypernode v = new HypernodeElement(pIndex);
 	if (m_hypernodeIdCount <= pIndex)
 		m_hypernodeIdCount = pIndex + 1;
 
@@ -129,7 +118,7 @@ hyperedge Hypergraph::newHyperedge(int pIndex, List<hypernode> &pHypernodes)
 				it.valid(); (*it)->enlargeTable(m_hyperedgeArrayTableSize), ++it);
 	}
 
-	hyperedge e = OGDF_NEW HyperedgeElement(pIndex);
+	hyperedge e = new HyperedgeElement(pIndex);
 	m_hyperedges.pushBack(e);
 
 	if (m_hyperedgeIdCount <= pIndex)
@@ -142,8 +131,8 @@ hyperedge Hypergraph::newHyperedge(int pIndex, List<hypernode> &pHypernodes)
 
 		hypernode v = *it;
 
-		adjHypergraphEntry adjHypergraphEntryE = OGDF_NEW AdjHypergraphElement(v);
-		adjHypergraphEntry adjHypergraphEntryV = OGDF_NEW AdjHypergraphElement(e);
+		adjHypergraphEntry adjHypergraphEntryE = new AdjHypergraphElement(v);
+		adjHypergraphEntry adjHypergraphEntryV = new AdjHypergraphElement(e);
 
 		adjHypergraphEntryE->m_twin = adjHypergraphEntryV;
 		adjHypergraphEntryV->m_twin = adjHypergraphEntryE;
@@ -165,16 +154,16 @@ hyperedge Hypergraph::newHyperedge(List<hypernode> &pHypernodes)
 
 void Hypergraph::delHypernode(hypernode v)
 {
-	OGDF_ASSERT(v != 0);
+	OGDF_ASSERT(v != nullptr);
 
 	for (ListIterator<HypergraphObserver *> it = m_observers.begin();
 			it.valid(); (*it)->hypernodeDeleted(v), ++it);
 
 	--m_nHypernodes;
 
-	for (adjHypergraphEntry adj = v->m_adjHyperedges.begin();
+	for (adjHypergraphEntry adj = v->m_adjHyperedges.head();
 			adj; adj = adj->succ()) {
-		hyperedge e = (hyperedge) adj->twin()->element();
+		hyperedge e = reinterpret_cast<hyperedge>(adj->twin()->element());
 
 		v->m_adjHyperedges.del(adj->twin());
 		e->m_adjHypernodes.del(adj);
@@ -192,19 +181,19 @@ void Hypergraph::delHypernode(hypernode v)
 
 void Hypergraph::delHyperedge(hyperedge e)
 {
-	OGDF_ASSERT(e != 0);
+	OGDF_ASSERT(e != nullptr);
 
 	for (ListIterator<HypergraphObserver *> it = m_observers.begin();
 			it.valid(); (*it)->hyperedgeDeleted(e), ++it)
 
 		--m_nHyperedges;
 
-	for (adjHypergraphEntry adj = e->m_adjHypernodes.begin(); adj;
+	for (adjHypergraphEntry adj = e->m_adjHypernodes.head(); adj;
 			adj = adj->succ()) {
 
-		((hypernode) adj->element())->m_degree--;
-		((hypernode) adj->element())->m_adjHyperedges.del(adj->twin());
-		((hyperedge) adj->twin()->element())->m_adjHypernodes.del(adj);
+		static_cast<hypernode>(adj->element())->m_degree--;
+		static_cast<hypernode>(adj->element())->m_adjHyperedges.del(adj->twin());
+		static_cast<hyperedge>(adj->twin()->element())->m_adjHypernodes.del(adj);
 
 		e->m_cardinality--;
 	}
@@ -219,10 +208,10 @@ void Hypergraph::clear()
 	for (ListIterator<HypergraphObserver *> it = m_observers.begin();
 			it.valid(); (*it)->cleared(), ++it);
 
-	for (hyperedge e = m_hyperedges.begin(); e; e = e->succ())
+	for (hyperedge e = m_hyperedges.head(); e; e = e->succ())
 		e->m_adjHypernodes.~GraphList<AdjHypergraphElement>();
 
-	for (hypernode v = m_hypernodes.begin(); v; v = v->succ()) {
+	for (hypernode v = m_hypernodes.head(); v; v = v->succ()) {
 		v->m_adjHyperedges.~GraphList<AdjHypergraphElement>();
 	}
 
@@ -241,7 +230,7 @@ void Hypergraph::clear()
 hypernode Hypergraph::randomHypernode() const
 {
 	if (m_nHypernodes == 0)
-		return 0;
+		return nullptr;
 
 	hypernode v = firstHypernode();
 	for (int i = ogdf::randomNumber(0, m_nHypernodes - 1); i; i--, v = v->succ());
@@ -252,7 +241,7 @@ hypernode Hypergraph::randomHypernode() const
 hyperedge Hypergraph::randomHyperedge() const
 {
 	if (m_nHyperedges == 0)
-		return 0;
+		return nullptr;
 
 	hyperedge e = firstHyperedge();
 	for (int i = ogdf::randomNumber(0, m_nHyperedges - 1); i; i--, e = e->succ());
@@ -319,7 +308,7 @@ bool Hypergraph::consistency() const
 	if (m_nHyperedges > m_hyperedgeIdCount)
 		return false;
 
-	for (hypernode v = m_hypernodes.begin(); v ; v = v->succ()) {
+	for (hypernode v = m_hypernodes.head(); v ; v = v->succ()) {
 
 		if (v->m_hypergraph != this)
 			return false;
@@ -327,13 +316,13 @@ bool Hypergraph::consistency() const
 		if (v->m_adjHyperedges.size() != v->m_degree)
 			return false;
 
-		for (adjHypergraphEntry adj = v->m_adjHyperedges.begin(); adj;
+		for (adjHypergraphEntry adj = v->m_adjHyperedges.head(); adj;
 				adj = adj->succ())
-			if (((hypernode) adj->twin()->element()) != v)
+			if (reinterpret_cast<hypernode>(adj->twin()->element()) != v)
 				return false;
 	}
 
-	for (hyperedge e = m_hyperedges.begin(); e ; e = e->succ()) {
+	for (hyperedge e = m_hyperedges.head(); e ; e = e->succ()) {
 
 		if (e->m_hypergraph != this)
 			return false;
@@ -341,9 +330,9 @@ bool Hypergraph::consistency() const
 		if (e->m_adjHypernodes.size() != e->m_cardinality)
 			return false;
 
-		for (adjHypergraphEntry adj = e->m_adjHypernodes.begin(); adj;
+		for (adjHypergraphEntry adj = e->m_adjHypernodes.head(); adj;
 				adj = adj->succ())
-			if (((hyperedge) adj->twin()->element()) != e)
+			if (reinterpret_cast<hyperedge>(adj->twin()->element()) != e)
 				return false;
 
 		if (e->m_cardinality < 2)
@@ -353,19 +342,19 @@ bool Hypergraph::consistency() const
 	return true;
 }
 
-ostream & operator<<(ostream &os, ogdf::hypernode v)
+std::ostream & operator<<(std::ostream &os, ogdf::hypernode v)
 {
 	if (v) os << v->index(); else os << "nil";
 	return os;
 }
 
-ostream & operator<<(ostream &os, ogdf::hyperedge e)
+std::ostream & operator<<(std::ostream &os, ogdf::hyperedge e)
 {
 	if (e) {
 		os << e->index() << " " << e->cardinality() << " ";
-		for (adjHypergraphEntry adj = e->m_adjHypernodes.begin();
+		for (adjHypergraphEntry adj = e->m_adjHypernodes.head();
 				adj; adj = adj->succ())
-			os << ((hypernode) adj->element())->index() << " ";
+			os << reinterpret_cast<hypernode>(adj->element())->index() << " ";
 	}
 	else
 		os << "nil";
@@ -373,25 +362,25 @@ ostream & operator<<(ostream &os, ogdf::hyperedge e)
 	return os;
 }
 
-ostream & operator<<(ostream &os, ogdf::Hypergraph &H)
+std::ostream & operator<<(std::ostream &os, ogdf::Hypergraph &H)
 {
-	os << H.m_nHypernodes << " " << H.m_hypernodeIdCount << endl;
+	os << H.m_nHypernodes << " " << H.m_hypernodeIdCount << std::endl;
 
 	hypernode v;
 	forall_hypernodes (v, H)
-		os << v << endl;
+		os << v << std::endl;
 
-	os << H.m_nHyperedges << " " << H.m_hyperedgeIdCount << endl;
+	os << H.m_nHyperedges << " " << H.m_hyperedgeIdCount << std::endl;
 
 	hyperedge e;
 	forall_hyperedges (e, H) {
-		os << e << endl;
+		os << e << std::endl;
 	}
 
 	return os;
 }
 
-istream & operator>>(istream &is, ogdf::Hypergraph &H)
+std::istream & operator>>(std::istream &is, ogdf::Hypergraph &H)
 {
 	int nHypernodes, nHyperedges, hypernodeIdCount, hyperedgeIdCount;
 
@@ -424,10 +413,10 @@ istream & operator>>(istream &is, ogdf::Hypergraph &H)
 	return is;
 }
 
-void Hypergraph::readBenchHypergraph(istream &is)
+void Hypergraph::readBenchHypergraph(std::istream &is)
 {
 	// The map from identifiers to hypernodes.
-	HashArray<string, hypernode> map(0);
+	HashArray<string, hypernode> map(nullptr);
 
 	while(!is.eof()) {
 
@@ -444,14 +433,14 @@ void Hypergraph::readBenchHypergraph(istream &is)
 
 			// INPUT
 			string s(buffer + 6, nextEntry(buffer, 6, ")\0"));
-			hypernode n = newHypernode(HypernodeElement::INPUT);
+			hypernode n = newHypernode(HypernodeElement::Type::INPUT);
 			map[s] = n;
 
 		} else if(!strncmp("OUTPUT(", buffer, 7)) {
 
 			// OUTPUT
 			string s(buffer + 7, nextEntry(buffer, 7, ")\0"));
-			hypernode n = newHypernode(HypernodeElement::OUTPUT);
+			hypernode n = newHypernode(HypernodeElement::Type::OUTPUT);
 			map[s] = n;
 
 		} else {
@@ -506,7 +495,7 @@ void Hypergraph::readBenchHypergraph(istream &is)
 
 void Hypergraph::readBenchHypergraph(const char *filename)
 {
-	ifstream is(filename);
+	std::ifstream is(filename);
 
 	if(!is.good())
 		return;
@@ -532,23 +521,23 @@ int Hypergraph::nextEntry(char *buffer, int from, string stop)
 HypernodeElement::Type Hypergraph::gateType(string gate)
 {
 	if (!gate.compare("or"))
-		return HypernodeElement::OR;
+		return HypernodeElement::Type::OR;
 	else if (!gate.compare("and") || !gate.compare("AND"))
-		return HypernodeElement::AND;
+		return HypernodeElement::Type::AND;
 	else if (!gate.compare("nor") || !gate.compare("NOR"))
-		return HypernodeElement::NOR;
+		return HypernodeElement::Type::NOR;
 	else if (!gate.compare("not") || !gate.compare("NOT"))
-		return HypernodeElement::NOT;
+		return HypernodeElement::Type::NOT;
 	else if (!gate.compare("xor") || !gate.compare("XOR"))
-		return HypernodeElement::XOR;
+		return HypernodeElement::Type::XOR;
 	else if (!gate.compare("buf") || !gate.compare("BUF"))
-		return HypernodeElement::BUF;
+		return HypernodeElement::Type::BUF;
 	else if (!gate.compare("nand") || !gate.compare("NAND"))
-		return HypernodeElement::NAND;
+		return HypernodeElement::Type::NAND;
 	else if (!gate.compare("dff") || !gate.compare("DFF"))
-		return HypernodeElement::DFF;
+		return HypernodeElement::Type::DFF;
 
-	return HypernodeElement::normal;
+	return HypernodeElement::Type::normal;
 }
 
-} // end namespace ogdf
+}

@@ -1,11 +1,3 @@
-/*
- * $Revision: 3445 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-04-24 11:08:43 +0200 (Wed, 24 Apr 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration and implementation of class Array2D which implements
  * dynamic two dimensional arrays.
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,31 +26,21 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_ARRAY2D_H
-#define OGDF_ARRAY2D_H
-
-
-#include <ogdf/basic/basic.h>
-#include <math.h>
-
+#include <ogdf/basic/exceptions.h>
 
 namespace ogdf {
 
 
-//! The parameterized class \a Array2D<E> implements dynamic two-dimensional arrays.
+//! The parameterized class Array2D implements dynamic two-dimensional arrays.
 /**
+ * @ingroup containers
+ *
  * @tparam E denotes the element type.
  */
 template<class E> class Array2D
@@ -69,24 +51,35 @@ public:
 	//! Creates a two-dimensional array with empty index set.
 	Array2D() { construct(0,-1,0,-1); }
 
-	//! Creates a two-dimensional array with index set [\a a..\a b]*[\a c..\a d].
+	//! Creates a two-dimensional array with index set [\p a, ..., \p b]*[\p c, ..., \p d].
 	Array2D(int a, int b, int c, int d) {
 		construct(a,b,c,d); initialize();
 	}
 
-	//! Creates a two-dimensional array with index set [\a a..\a b]*[\a c..\a d] and initailizes all elements with \a x.
+	//! Creates a two-dimensional array with index set [\p a, ..., \p b]*[\p c, ..., \p d] and initailizes all elements with \p x.
 	Array2D(int a, int b, int c, int d, const E &x) {
 		construct(a,b,c,d); initialize(x);
 	}
 
-	//! Creates a two-dimensional array that is a copy of \a A.
-	Array2D(const Array2D<E> &array2) {
-		copy(array2);
+	//! Creates a two-dimensional array that is a copy of \p A.
+	Array2D(const Array2D<E> &A) {
+		copy(A);
 	}
 
-	// destructor
-	 ~Array2D() {
-		 deconstruct();
+	//! Creates a two-dimensional array containing the elements of \p A (move semantics).
+	/**
+	 * The array \p A is empty afterwards.
+	 */
+	Array2D(Array2D<E> &&A)
+		: m_vpStart(A.m_vpStart), m_lenDim2(A.m_lenDim2), m_pStart(A.m_pStart), m_pStop(A.m_pStop),
+		  m_a(A.m_a), m_b(A.m_b), m_c(A.m_c), m_d(A.m_d)
+	{
+		A.construct(0,-1,0,-1);
+	}
+
+	//! Destructor
+	~Array2D() {
+		deconstruct();
 	}
 
 	//! Returns the minimal array index in dimension 1.
@@ -114,29 +107,35 @@ public:
 	/*! \note use only for square matrices and floating point values */
 	float det() const;
 
-	//! Returns a reference to the element with index (\a i,\a j).
+	//! Returns a reference to the element with index (\p i,\p j).
 	const E &operator()(int i, int j) const {
-		OGDF_ASSERT(m_a <= i && i <= m_b && m_c <= j && j <= m_d);
-		return m_vpStart[(i-m_a)*m_lenDim2+j];
+		OGDF_ASSERT(m_a <= i);
+		OGDF_ASSERT(i <= m_b);
+		OGDF_ASSERT(m_c <= j);
+		OGDF_ASSERT(j <= m_d);
+		return m_vpStart[size_t(i-m_a)*m_lenDim2+j];
 	}
 
-	//! Returns a reference to the element with index (\a i,\a j).
+	//! Returns a reference to the element with index (\p i,\p j).
 	E &operator()(int i, int j) {
-		OGDF_ASSERT(m_a <= i && i <= m_b && m_c <= j && j <= m_d);
-		return m_vpStart[(i-m_a)*m_lenDim2+j];
+		OGDF_ASSERT(m_a <= i);
+		OGDF_ASSERT(i <= m_b);
+		OGDF_ASSERT(m_c <= j);
+		OGDF_ASSERT(j <= m_d);
+		return m_vpStart[size_t(i-m_a)*m_lenDim2+j];
 	}
 
 	//! Reinitializes the array to an array with empty index set.
 	void init() { init(0,-1,0,-1); }
 
-	//! Reinitializes the array to an array with index set [\a a..\a b]*[\a c,\a d].
+	//! Reinitializes the array to an array with index set [\p a, ..., \p b]*[\p c, ..., \p d].
 	void init(int a, int b, int c, int d) {
 		deconstruct();
 		construct(a,b,c,d);
 		initialize();
 	}
 
-	//! Reinitializes the array to an array with index set [\a a..\a b]*[\a c,\a d] and initializes all entries with \a x.
+	//! Reinitializes the array to an array with index set [\p a, ..., \p b]*[\p c, ..., \p d] and initializes all entries with \p x.
 	void init(int a, int b, int c, int d, const E &x) {
 		deconstruct();
 		construct(a,b,c,d);
@@ -150,7 +149,27 @@ public:
 		return *this;
 	}
 
-	//! Sets all elements to \a x.
+	//! Assignment operator (move semantics).
+	/**
+	 * Array \p A is empty afterwards.
+	 */
+	Array2D<E> &operator=(Array2D<E> &&A) {
+		deconstruct();
+
+		m_vpStart = A.m_vpStart;
+		m_pStart  = A.m_pStart;
+		m_pStop   = A.m_pStop;
+		m_lenDim2 = A.m_lenDim2;
+		m_a       = A.m_a;
+		m_b       = A.m_b;
+		m_c       = A.m_c;
+		m_d       = A.m_d;
+
+		A.construct(0,-1,0,-1);
+		return *this;
+	}
+
+	//! Sets all elements to \p x.
 	void fill(const E &x) {
 		E *pDest = m_pStop;
 		while(pDest > m_pStart)
@@ -159,10 +178,11 @@ public:
 
 private:
 	E   *m_vpStart; //!< The virtual start of the array (address of A[0,0]).
-	int  m_a; //!< The lowest index in dimension 1.
 	int  m_lenDim2; //!< The  number of elements in dimension 2.
 	E   *m_pStart; //!< The real start of the array (address of A[low1,low2]).
 	E   *m_pStop; //!< Successor of last element (address of A[high1,high2+1]).
+
+	int  m_a; //!< The lowest index in dimension 1.
 	int  m_b; //!< The highest index in dimension 1.
 	int  m_c; //!< The lowest index in dimension 2.
 	int  m_d; //!< The highest index in dimension 2.
@@ -175,11 +195,10 @@ private:
 	void deconstruct();
 
 	void copy(const Array2D<E> &array2);
-
 };
 
 
-
+//! Constructs the array with index set [\p a, ..., \p b]*[\p c, ..., \p d].
 template<class E>
 void Array2D<E>::construct(int a, int b, int c, int d)
 {
@@ -188,16 +207,16 @@ void Array2D<E>::construct(int a, int b, int c, int d)
 	m_c = c;
 	m_d = d;
 
-	int lenDim1 = b-a+1;
+	size_t lenDim1 = b-a+1;
 	m_lenDim2   = d-c+1;
 
 	if (lenDim1 < 1 || m_lenDim2 < 1) {
-		m_pStart = m_vpStart = m_pStop = 0;
+		m_pStart = m_vpStart = m_pStop = nullptr;
 
 	} else {
-		int len = lenDim1*m_lenDim2;
-		m_pStart = (E *)malloc(len*sizeof(E));
-		if (m_pStart == 0)
+		size_t len = lenDim1*m_lenDim2;
+		m_pStart = static_cast<E *>( malloc(len*sizeof(E)) );
+		if (m_pStart == nullptr)
 			OGDF_THROW(InsufficientMemoryException);
 
 		m_vpStart = m_pStart - c;
@@ -206,6 +225,7 @@ void Array2D<E>::construct(int a, int b, int c, int d)
 }
 
 
+//! Initializes the array with default constructor of \a E.
 template<class E>
 void Array2D<E>::initialize()
 {
@@ -222,6 +242,7 @@ void Array2D<E>::initialize()
 }
 
 
+//! Initializes the array with \p x.
 template<class E>
 void Array2D<E>::initialize(const E &x)
 {
@@ -238,17 +259,18 @@ void Array2D<E>::initialize(const E &x)
 }
 
 
+//! Call destructor of all elements.
 template<class E>
 void Array2D<E>::deconstruct()
 {
-	if (doDestruction((E*)0)) {
+	if (!std::is_trivially_destructible<E>::value) {
 		for (E *pDest = m_pStart; pDest < m_pStop; pDest++)
 			pDest->~E();
 	}
 	free(m_pStart);
 }
 
-
+//! Copy \p array2.
 template<class E>
 void Array2D<E>::copy(const Array2D<E> &array2)
 {
@@ -263,7 +285,7 @@ void Array2D<E>::copy(const Array2D<E> &array2)
 }
 
 
-
+//! Computes the determinant via row expansion.
 template<class E>
 float Array2D<E>::det() const
 {
@@ -277,7 +299,7 @@ float Array2D<E>::det() const
 	int n = m_lenDim2;
 
 	int i, j;
-	int rem_i, rem_j, column;
+	int column;
 
 	float determinant = 0.0;
 
@@ -295,8 +317,8 @@ float Array2D<E>::det() const
 	default:
 		Array2D<E> remMatrix(0, n-2, 0, n-2);             // the remaining matrix
 		for(column = c; column <= d; column++) {
-			rem_i = 0;
-			rem_j = 0;
+			int rem_i = 0;
+			int rem_j = 0;
 			for(i = a; i <= b; i++) {
 				for(j = c; j <= d; j++) {
 					if(i != a && j != column) {
@@ -318,9 +340,4 @@ float Array2D<E>::det() const
 	return determinant;
 }
 
-
-
-} // end namespace ogdf
-
-
-#endif
+}

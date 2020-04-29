@@ -1,11 +1,3 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of base class for certain Mixed-Model
  * crossings beautifier.
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,24 +26,13 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_MMCB_BASE_H
-#define OGDF_MMCB_BASE_H
-
-
-
-#include <ogdf/module/MixedModelCrossingsBeautifierModule.h>
-
+#include <ogdf/planarlayout/MixedModelCrossingsBeautifierModule.h>
 
 namespace ogdf {
 
@@ -75,7 +56,4 @@ protected:
 	static int workOn(GridLayout &gl, node v);
 };
 
-
-} // end namespace ogdf
-
-#endif
+}

@@ -1,11 +1,3 @@
-/*
- * $Revision: 3261 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-01-25 14:48:05 +0100 (Fri, 25 Jan 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class UpwardPlanarSubgraphSimple which
  *        computes an upward planar subgraph by using upward planarity testing.
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,36 +26,18 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-
-#ifndef OGDF_UPWARD_PLANAR_SUBGRAPH_SIMPLE_H
-#define OGDF_UPWARD_PLANAR_SUBGRAPH_SIMPLE_H
-
-
-
-
-#include <ogdf/module/UpwardPlanarSubgraphModule.h>
+#include <ogdf/upward/UpwardPlanarSubgraphModule.h>
 #include <ogdf/basic/tuples.h>
-
 
 namespace ogdf {
 
-//---------------------------------------------------------
-// UpwardPlanarSubgraphSimple
-// implements a maximal planar subgraph algorithm using
-// planarity testing
-//---------------------------------------------------------
+//! A maximal planar subgraph algorithm using planarity testing
 class OGDF_EXPORT UpwardPlanarSubgraphSimple : public UpwardPlanarSubgraphModule
 {
 public:
@@ -75,7 +49,7 @@ public:
 	// computes set of edges delEdges, which have to be deleted
 	// in order to get a planar subgraph; edges in preferedEdges
 	// should be contained in planar subgraph
-	void call(const Graph &G, List<edge> &delEdges);
+	virtual void call(const Graph &G, List<edge> &delEdges) override;
 
 	void call(GraphCopy &GC, List<edge> &delEdges);
 
@@ -89,10 +63,6 @@ private:
 		node v,
 		SListPure<edge> &treeEdges,
 		NodeArray<bool> &visited);
-
 };
 
-
-} // end namespace ogdf
-
-#endif
+}

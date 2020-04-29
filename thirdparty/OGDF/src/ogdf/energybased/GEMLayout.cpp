@@ -1,11 +1,3 @@
-/*
- * $Revision: 3521 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-05-31 14:52:33 +0200 (Fri, 31 May 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implementations of class GEMLayout.
  *
@@ -18,7 +10,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -35,18 +27,13 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 
 #include <ogdf/energybased/GEMLayout.h>
-#include <ogdf/basic/geometry.h>
 #include <ogdf/basic/simple_graph_alg.h>
-#include <ogdf/basic/GraphCopyAttributes.h>
 #include <ogdf/packing/TileToRowsCCPacker.h>
 
 
@@ -65,7 +52,8 @@ GEMLayout::GEMLayout() :
 	m_oscillationSensitivity(0.3),
 	m_attractionFormula(1),
 	m_minDistCC(LayoutStandards::defaultCCSeparation()),
-	m_pageRatio(1.0)
+	m_pageRatio(1.0),
+	m_rng(randomSeed())
 { }
 
 GEMLayout::GEMLayout(const GEMLayout &fl) :
@@ -81,7 +69,8 @@ GEMLayout::GEMLayout(const GEMLayout &fl) :
 	m_oscillationSensitivity(fl.m_oscillationSensitivity),
 	m_attractionFormula(fl.m_attractionFormula),
 	m_minDistCC(fl.m_minDistCC),
-	m_pageRatio(fl.m_pageRatio)
+	m_pageRatio(fl.m_pageRatio),
+	m_rng(randomSeed())
 { }
 
 
@@ -101,6 +90,9 @@ GEMLayout &GEMLayout::operator=(const GEMLayout &fl)
 	m_rotationSensitivity = fl.m_rotationSensitivity;
 	m_oscillationSensitivity = fl.m_oscillationSensitivity;
 	m_attractionFormula = fl.m_attractionFormula;
+	m_minDistCC = fl.m_minDistCC;
+	m_pageRatio = fl.m_pageRatio;
+
 	return *this;
 }
 
@@ -124,8 +116,7 @@ void GEMLayout::call(GraphAttributes &AG)
 	// intialize the array of lists of nodes contained in a CC
 	Array<List<node> > nodesInCC(numCC);
 
-	node v;
-	forall_nodes(v,G)
+	for(node v : G.nodes)
 		nodesInCC[component[v]].pushBack(v);
 
 	EdgeArray<edge> auxCopy(G);
@@ -136,16 +127,14 @@ void GEMLayout::call(GraphAttributes &AG)
 	{
 		GC.initByNodes(nodesInCC[i],auxCopy);
 
-		GraphCopyAttributes AGC(GC,AG);
-		node vCopy;
-		forall_nodes(vCopy, GC) {
+		GraphAttributes AGC(GC);
+		for(node vCopy : GC.nodes) {
 			node vOrig = GC.original(vCopy);
 			AGC.x(vCopy) = AG.x(vOrig);
 			AGC.y(vCopy) = AG.y(vOrig);
 		}
 
 		SList<node> permutation;
-		node v;
 
 		// initialize node data
 		m_impulseX.init(GC,0);
@@ -157,7 +146,7 @@ void GEMLayout::call(GraphAttributes &AG)
 		m_globalTemperature = m_initialTemperature;
 		m_barycenterX = 0;
 		m_barycenterY = 0;
-		forall_nodes(v,GC) {
+		for(node v : GC.nodes) {
 			m_barycenterX += weight(v) * AGC.x(v);
 			m_barycenterY += weight(v) * AGC.y(v);
 		}
@@ -166,15 +155,15 @@ void GEMLayout::call(GraphAttributes &AG)
 
 		// main loop
 		int counter = m_numberOfRounds;
-		while(DIsGreater(m_globalTemperature,m_minimalTemperature) && counter--) {
+		while(OGDF_GEOM_ET.greater(m_globalTemperature,m_minimalTemperature) && counter-- > 0) {
 
 			// choose nodes by random permutations
 			if(permutation.empty()) {
-				forall_nodes(v,GC)
+				for(node v : GC.nodes)
 					permutation.pushBack(v);
-				permutation.permute();
+				permutation.permute(m_rng);
 			}
-			v = permutation.popFrontRet();
+			node v = permutation.popFrontRet();
 
 			// compute the impulse of node v
 			computeImpulse(GC,AGC,v);
@@ -188,21 +177,21 @@ void GEMLayout::call(GraphAttributes &AG)
 		double minX = AGC.x(vFirst), maxX = AGC.x(vFirst),
 			minY = AGC.y(vFirst), maxY = AGC.y(vFirst);
 
-		forall_nodes(vCopy,GC) {
+		for(node vCopy : GC.nodes) {
 			node v = GC.original(vCopy);
 			AG.x(v) = AGC.x(vCopy);
 			AG.y(v) = AGC.y(vCopy);
 
-			if(AG.x(v)-AG.width (v)/2 < minX) minX = AG.x(v)-AG.width(v) /2;
-			if(AG.x(v)+AG.width (v)/2 > maxX) maxX = AG.x(v)+AG.width(v) /2;
-			if(AG.y(v)-AG.height(v)/2 < minY) minY = AG.y(v)-AG.height(v)/2;
-			if(AG.y(v)+AG.height(v)/2 > maxY) maxY = AG.y(v)+AG.height(v)/2;
+			Math::updateMin(minX, AG.x(v) - AG.width(v)/2);
+			Math::updateMax(maxX, AG.x(v) + AG.width(v)/2);
+			Math::updateMin(minY, AG.y(v) - AG.height(v)/2);
+			Math::updateMax(maxY, AG.y(v) + AG.height(v)/2);
 		}
 
 		minX -= m_minDistCC;
 		minY -= m_minDistCC;
 
-		forall_nodes(vCopy,GC) {
+		for(node vCopy : GC.nodes) {
 			node v = GC.original(vCopy);
 			AG.x(v) -= minX;
 			AG.y(v) -= minY;
@@ -219,19 +208,11 @@ void GEMLayout::call(GraphAttributes &AG)
 	// system. We still have to shift each node and edge by the offset
 	// of its connected component.
 
-	for(i = 0; i < numCC; ++i)
-	{
-		const List<node> &nodes = nodesInCC[i];
-
+	for(i = 0; i < numCC; ++i) {
 		const double dx = offset[i].m_x;
 		const double dy = offset[i].m_y;
 
-		// iterate over all nodes in ith CC
-		ListConstIterator<node> it;
-		for(it = nodes.begin(); it.valid(); ++it)
-		{
-			node v = *it;
-
+		for(node v : nodesInCC[i]) {
 			AG.x(v) += dx;
 			AG.y(v) += dy;
 		}
@@ -245,17 +226,15 @@ void GEMLayout::call(GraphAttributes &AG)
 	m_localTemperature.init();
 }
 
-void GEMLayout::computeImpulse(GraphCopy &G, GraphCopyAttributes &AG,node v) {
-	//const Graph &G = AG.constGraph();
+
+void GEMLayout::computeImpulse(GraphCopy &G, GraphAttributes &AG,node v) {
 	int n = G.numberOfNodes();
 
-	node u;
-	edge e;
 	double deltaX,deltaY,delta,deltaSqu;
 	double desiredLength,desiredSqu;
 
 	// add double node radius to desired edge length
-	desiredLength = m_desiredLength + length(AG.getHeight(v),AG.getWidth(v));
+	desiredLength = m_desiredLength + length(AG.height(v),AG.width(v));
 	desiredSqu = desiredLength * desiredLength;
 
 	// compute attraction to center of gravity
@@ -264,18 +243,17 @@ void GEMLayout::computeImpulse(GraphCopy &G, GraphCopyAttributes &AG,node v) {
 
 	// disturb randomly
 	int maxIntDisturbance = (int)(m_maximalDisturbance * 10000);
-	m_newImpulseX +=
-		(double)(randomNumber(-maxIntDisturbance,maxIntDisturbance) / 10000);
-	m_newImpulseY +=
-		(double)(randomNumber(-maxIntDisturbance,maxIntDisturbance) / 10000);
+	std::uniform_int_distribution<> dist(-maxIntDisturbance,maxIntDisturbance);
+	m_newImpulseX += (dist(m_rng) / 10000.0);
+	m_newImpulseY += (dist(m_rng) / 10000.0);
 
 	// compute repulsive forces
-	forall_nodes(u,G)
+	for(node u : G.nodes)
 		if(u != v ) {
 			deltaX = AG.x(v) - AG.x(u);
 			deltaY = AG.y(v) - AG.y(u);
 			delta = length(deltaX,deltaY);
-			if(DIsGreater(delta,0)) {
+			if(OGDF_GEOM_ET.greater(delta,0.0)) {
 				deltaSqu = delta * delta;
 				m_newImpulseX += deltaX * desiredSqu / deltaSqu;
 				m_newImpulseY += deltaY * desiredSqu / deltaSqu;
@@ -283,8 +261,8 @@ void GEMLayout::computeImpulse(GraphCopy &G, GraphCopyAttributes &AG,node v) {
 	}
 
 	// compute attractive forces
-	forall_adj_edges(e,v) {
-		u = e->opposite(v);
+	for(adjEntry adj : v->adjEntries) {
+		node u = adj->twinNode();
 		deltaX = AG.x(v) - AG.x(u);
 		deltaY = AG.y(v) - AG.y(u);
 		delta = length(deltaX,deltaY);
@@ -301,13 +279,13 @@ void GEMLayout::computeImpulse(GraphCopy &G, GraphCopyAttributes &AG,node v) {
 
 }
 
-void GEMLayout::updateNode(GraphCopy &G, GraphCopyAttributes &AG,node v) {
-	//const Graph &G = AG.constGraph();
+
+void GEMLayout::updateNode(GraphCopy &G, GraphAttributes &AG,node v) {
 	int n = G.numberOfNodes();
 	double impulseLength;
 
 	impulseLength = length(m_newImpulseX,m_newImpulseY);
-	if(DIsGreater(impulseLength,0)) {
+	if(OGDF_GEOM_ET.greater(impulseLength,0.0)) {
 
 		// scale impulse by node temperature
 		m_newImpulseX *= m_localTemperature[v] / impulseLength;
@@ -323,7 +301,7 @@ void GEMLayout::updateNode(GraphCopy &G, GraphCopyAttributes &AG,node v) {
 
 		impulseLength = length(m_newImpulseX,m_newImpulseY)
 						* length(m_impulseX[v],m_impulseY[v]);
-		if(DIsGreater(impulseLength,0)) {
+		if(OGDF_GEOM_ET.greater(impulseLength,0.0)) {
 
 			m_globalTemperature -= m_localTemperature[v] / n;
 
@@ -337,17 +315,17 @@ void GEMLayout::updateNode(GraphCopy &G, GraphCopyAttributes &AG,node v) {
 					/ impulseLength;
 
 			// check for rotation
-			if(DIsGreater(sinBeta,m_sin))
+			if(OGDF_GEOM_ET.greater(sinBeta,m_sin))
 				m_skewGauge[v] += m_rotationSensitivity;
 
 			// check for oscillation
-			if(DIsGreater(length(cosBeta),m_cos))
+			if(OGDF_GEOM_ET.greater(length(cosBeta),m_cos))
 				m_localTemperature[v] *=
 					(1 + cosBeta * m_oscillationSensitivity);
 
 			// cool down according to skew gauge
 			m_localTemperature[v] *= (1.0 - length(m_skewGauge[v]));
-			if(DIsGreaterEqual(m_localTemperature[v],m_initialTemperature))
+			if(OGDF_GEOM_ET.geq(m_localTemperature[v],m_initialTemperature))
 				m_localTemperature[v] = m_initialTemperature;
 
 			// adjust global temperature
@@ -360,4 +338,4 @@ void GEMLayout::updateNode(GraphCopy &G, GraphCopyAttributes &AG,node v) {
 	}
 }
 
-} // end namespace ogdf
+}

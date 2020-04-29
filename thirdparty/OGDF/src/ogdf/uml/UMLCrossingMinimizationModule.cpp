@@ -1,11 +1,3 @@
-/*
- * $Revision: 3135 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-12-11 11:11:27 +0100 (Tue, 11 Dec 2012) $
- ***************************************************************/
-
 /** \file
  * \brief implementation of class EdgeInsertionModuleOld
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,40 +25,33 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#include <ogdf/module/UMLCrossingMinimizationModule.h>
-
+#include <ogdf/uml/UMLCrossingMinimizationModule.h>
 
 namespace ogdf {
 
 
 bool UMLCrossingMinimizationModule::checkCrossingGens(const PlanRepUML &prUML)
 {
-	edge e;
-	forall_edges(e,prUML) {
+	for(edge e : prUML.edges) {
 		Graph::EdgeType et = prUML.typeOf(e);
-		if (et != Graph::generalization && et != Graph::association)
+		if (et != Graph::EdgeType::generalization && et != Graph::EdgeType::association)
 			return false;
 	}
 
-	node v;
-	forall_nodes(v,prUML)
+	for(node v : prUML.nodes)
 	{
-		if (prUML.typeOf(v) == PlanRepUML::dummy && v->degree() == 4) {
+		if (prUML.typeOf(v) == PlanRepUML::NodeType::dummy && v->degree() == 4) {
 			adjEntry adj = v->firstAdj();
 
 			edge e1 = adj->theEdge();
 			edge e2 = adj->succ()->theEdge();
 
-			if (prUML.typeOf(e1) == Graph::generalization &&
-				prUML.typeOf(e2) == Graph::generalization)
+			if (prUML.typeOf(e1) == Graph::EdgeType::generalization &&
+				prUML.typeOf(e2) == Graph::EdgeType::generalization)
 				return false;
 		}
 	}
@@ -74,6 +59,4 @@ bool UMLCrossingMinimizationModule::checkCrossingGens(const PlanRepUML &prUML)
 	return true;
 }
 
-
-} // end namespace ogdf
-
+}

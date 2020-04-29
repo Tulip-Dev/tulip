@@ -1,27 +1,14 @@
-/*
- * $Revision: 3931 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2014-02-20 14:56:42 +0100 (Thu, 20 Feb 2014) $
- ***************************************************************/
-
 /** \file
- * \brief  Implementation of class AjacencyOracle
+ * \brief Implementation of ogdf::AdjacencyOracle
  *
- * This class is used to efficiently test if two vertices
- * are adjacent. It is basically a wrapper for a 2D-Matrix.
- * This file contains the code for the construction of the
- * matrix and the query function.
- *
- * \author Rene Weiskircher
+ * \author Stephan Beyer
  *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -38,55 +25,69 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
-
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/basic/AdjacencyOracle.h>
 
 namespace ogdf {
 
-	//! Builds a 2D-array indexed by the numbers of vertices.
-	/**
-	* It uses only the part
-	* of the matrix left of the diagonal (where the first index is smaller than the
-	* second. For each pair of vertices, the corresponding entry in the matrix is set true
-	* if and only if the two vertices are adjacent.
-	*/
-	AdjacencyOracle::AdjacencyOracle(const Graph &G)
-	  : m_nodeNum(G)
-	{
-		int i = 1;
-		node v;
-		forall_nodes(v,G) m_nodeNum[v] = i++;
-		int nodeNum = i-1;
-		m_adjacencyMatrix.init(1, i, 1, i);
-		for(i = 1; i < nodeNum; i++)
-			for(int j = i+1; j <= nodeNum; j++)
-				m_adjacencyMatrix(i, j) = false;
-		edge e;
-		forall_edges(e,G) {
-			int num1 = m_nodeNum[e->source()];
-			int num2 = m_nodeNum[e->target()];
-			m_adjacencyMatrix(min(num1, num2), max(num1, num2)) = true;
+//! Returns the base index of row \p j for an array containing a lower triangular matrix
+inline static int getRowIndex(int j) {
+	return (j + 1) * j / 2;
+}
+
+AdjacencyOracle::AdjacencyOracle(const Graph &G, int degreeThreshold)
+  : m_nodeNum{G, -1}
+{
+	int i{0};
+	for (node v : G.nodes) {
+		if (v->degree() > degreeThreshold) {
+			m_nodeNum[v] = i++;
 		}
 	}
 
+	m_adjacencies.resize(getRowIndex(i), false);
 
-	//! Returns true if two vertices are adjacent.
-	/**
-	* Note that only the entries in the 2D matrix where the first
-	* index is smaller than the second is used and so we have to
-	* pay attention that the first index is smaller than the second.
-	*/
-	bool AdjacencyOracle::adjacent(const node v, const node w) const
-	{
-		int num1 = m_nodeNum[v];
-		int num2 = m_nodeNum[w];
-		return m_adjacencyMatrix(min(num1, num2), max(num1, num2));
+	for (node v : G.nodes) {
+		if (m_nodeNum[v] >= 0) {
+			for (adjEntry adj : v->adjEntries) {
+				node w{adj->twinNode()};
+				if (m_nodeNum[w] >= 0) {
+					m_adjacencies[index(v, w)] = true;
+				}
+			}
+		}
 	}
+}
+
+bool AdjacencyOracle::adjacent(node v, node w) const {
+	if (m_nodeNum[v] >= 0 && m_nodeNum[w] >= 0) {
+		return m_adjacencies[index(v, w)];
+	}
+
+	if (w->degree() < v->degree()) {
+		std::swap(v, w);
+	}
+	OGDF_ASSERT(m_nodeNum[v] < 0);
+
+	for (adjEntry adj : v->adjEntries) {
+		if (adj->twinNode() == w) {
+			return true;
+		}
+	}
+	return false;
+}
+
+int AdjacencyOracle::index(node v, node w) const {
+	int i{m_nodeNum[v]};
+	int j{m_nodeNum[w]};
+	if (i > j) {
+		std::swap(i, j);
+	}
+
+	return getRowIndex(j) + i;
+}
+
 }

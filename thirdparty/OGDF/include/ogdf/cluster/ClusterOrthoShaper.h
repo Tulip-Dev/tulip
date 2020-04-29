@@ -1,11 +1,3 @@
-/*
- * $Revision: 3340 $
- *
- * last checkin:
- *   $Author: klein $
- *   $Date: 2013-03-09 03:03:04 +0100 (Sat, 09 Mar 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Computes the Orthogonal Representation of a Planar
  * Representation of a UML Graph using the simple flow
@@ -18,7 +10,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -35,21 +27,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_CLUSTER_ORTHO_SHAPER_H
-#define OGDF_CLUSTER_ORTHO_SHAPER_H
-
 
 #include <ogdf/orthogonal/OrthoRep.h>
 #include <ogdf/cluster/ClusterPlanRep.h>
@@ -58,14 +40,17 @@
 namespace ogdf {
 
 
+//! Computes the orthogonal representation of a clustered graph.
+/**
+ * @ingroup gd-cluster
+ */
 class OGDF_EXPORT ClusterOrthoShaper
 {
 
 public:
 
-	enum BendCost { defaultCost, topDownCost, bottomUpCost };
-	enum n_type { low, high, inner, outer };	//types of network nodes:
-												//nodes and faces
+	enum class BendCost { defaultCost, topDownCost, bottomUpCost };
+	enum class n_type { low, high, inner, outer }; // types of network nodes: nodes and faces
 
 	ClusterOrthoShaper() {
 		m_distributeEdges = true;  //!< try to distribute edges to all node sides
@@ -75,7 +60,7 @@ public:
 		m_traditional     = true;  //!< true;  //if set to true, prefer 3/1 flow at degree 2 (false: 2/2)
 		m_deg4free        = false; //!< if set to true, free angle assignment at degree four nodes allowed
 		m_align           = false; //!< if set to true, nodes are aligned on same hierarchy level
-		m_topToBottom     = defaultCost;     //bend costs depend on edges cluster depth
+		m_topToBottom     = BendCost::defaultCost;     //bend costs depend on edges cluster depth
 	};
 
 	~ClusterOrthoShaper() { }
@@ -132,18 +117,20 @@ public:
 		int cost = 1;
 		switch (m_topToBottom)
 		{
-			case topDownCost:
-						cost = pbc*(clDepth+1); //safeInt
-						break;
-			case bottomUpCost:
-						cost = pbc*(treeDepth - clDepth + 1); //safeInt
-						break;
-			default: //defaultCost
-						cost = pbc;
-						break;
+		case BendCost::topDownCost:
+			cost = pbc*(clDepth+1); //safeInt
+			break;
+		case BendCost::bottomUpCost:
+			cost = pbc*(treeDepth - clDepth + 1); //safeInt
+			break;
+		default: //defaultCost
+			cost = pbc;
+			break;
 		}
 
-//		cout<<"   Cost/pbc: "<<cost<<"/"<<pbc<<"\n";
+#if 0
+		std::cout << "   Cost/pbc: " << cost << "/" << pbc << "\n";
+#endif
 
 		return cost;
 	}
@@ -158,32 +145,27 @@ public:
 		int cost = 1;
 		switch (m_topToBottom)
 		{
-			case topDownCost:
-						cost = pbc*(clDepth+1); //safeInt
-						break;
-			case bottomUpCost:
-						cost = pbc*(treeDepth - clDepth + 1); //safeInt
-						break;
-			default: //defaultCost
-						cost = pbc;
-						break;
+		case BendCost::topDownCost:
+			cost = pbc*(clDepth+1); //safeInt
+			break;
+		case BendCost::bottomUpCost:
+			cost = pbc*(treeDepth - clDepth + 1); //safeInt
+			break;
+		default: //defaultCost
+			cost = pbc;
+			break;
 		}
 
 		return cost;
-	}//clusterTradBendCost
-
-
+	}
 
 private:
 	bool m_distributeEdges; // distribute edges among all sides if degree > 4
-	bool m_fourPlanar;      // should the input graph be four planar
-							// (no zero degree)
-	bool m_allowLowZero;    // allow low degree nodes zero degree
-							// (to low for zero...)
+	bool m_fourPlanar;      // should the input graph be four planar (no zero degree)
+	bool m_allowLowZero;    // allow low degree nodes zero degree (to low for zero...)
 	bool m_multiAlign;      // multi edges aligned on the same side
 	bool m_deg4free;        // allow degree four nodes free angle assignment
-	bool m_traditional;     // do not prefer 180 degree angles,
-							// traditional is not tamassia,
+	bool m_traditional;     // do not prefer 180 degree angles, traditional is not tamassia,
 	// traditional is a kandinsky - ILP - like network with node supply 4,
 	// not traditional interprets angle flow zero as 180 degree, "flow
 	// through the node"
@@ -201,102 +183,32 @@ private:
 		EdgeArray<edge>& aTwin,
 		bool maxBound = true)
 	{
-		//vorlaeufig
+		// preliminary
 		OGDF_ASSERT(!m_traditional);
-		if (m_traditional)
-		{
-			switch (angle)
-			{
-				case 0:
-				case 90:
-				case 180:
-						break;
-				OGDF_NODEFAULT
-			}//switch
-		}//trad
-		else
-		{
-			switch (angle)
-			{
-			case 0:
-				if (maxBound)
-				{
-					upB[netArc] = lowB[netArc] = 2;
-					edge e2 = aTwin[netArc];
-					if (e2)
-					{
-						upB[e2] = lowB[e2] = 0;
-					}
-				}
-				else
-				{
-					upB[netArc] = 2; lowB[netArc] = 0;
-					edge e2 = aTwin[netArc];
-					if (e2)
-					{
-						upB[e2] = 2;
-						lowB[e2] = 0;
-					}
 
-				}
-				break;
-			case 90:
-				if (maxBound)
-				{
-					lowB[netArc] = 1;
-					upB[netArc] = 2;
-					edge e2 = aTwin[netArc];
-					if (e2)
-					{
-						upB[e2] = lowB[e2] = 0;
-					}
-				}
-				else
-				{
-					upB[netArc] = 1;
-					lowB[netArc] = 0;
-					edge e2 = aTwin[netArc];
-					if (e2)
-					{
-						upB[e2] = 2;
-						lowB[e2] = 0;
-					}
+		const int angleId = angle / 90;
+		const edge e2 = aTwin[netArc];
 
-				}
-				break;
-			case 180:
-				if (maxBound)
-				{
-					lowB[netArc] = 0;
-					upB[netArc] = 2;
-					edge e2 = aTwin[netArc];
-					if (e2)
-					{
-						upB[e2] = lowB[e2] = 0;
-					}
-				}
-				else
-				{
-					upB[netArc] = 0;
-					lowB[netArc] = 0;
-					edge e2 = aTwin[netArc];
-					if (e2)
-					{
-						upB[e2] = 2;
-						lowB[e2] = 0;
-					}
+		OGDF_ASSERT(angleId >= 0);
+		OGDF_ASSERT(angleId <= 2);
 
-				}
-				break;
-				OGDF_NODEFAULT
-			}//switch
-		}//progressive
+		if (maxBound) {
+			lowB[netArc] = 2 - angleId;
+			upB[netArc] = 2;
 
-	}//setAngle
+			if (e2) {
+				upB[e2] = lowB[e2] = 0;
+			}
+		} else {
+			upB[netArc] = 2 - angleId;
+			lowB[netArc] = 0;
+
+			if (e2) {
+				upB[e2] = 2;
+				lowB[e2] = 0;
+			}
+		}
+	}
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

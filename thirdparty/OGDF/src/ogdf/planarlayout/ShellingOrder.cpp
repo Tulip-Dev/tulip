@@ -1,11 +1,3 @@
-/*
- * $Revision: 2554 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-06 11:39:38 +0200 (Fri, 06 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Implements class ShellingOrder.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,15 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/planarlayout/ShellingOrder.h>
-#include <ogdf/basic/BoundedStack.h>
 #include <ogdf/basic/SList.h>
 
 
@@ -55,14 +43,12 @@ void ShellingOrder::init(const Graph &G, const List<ShellingOrderSet> &partition
 	m_rank.init(G);
 
 	int i = 1;
-	ListConstIterator<ShellingOrderSet> it;
-	for(it = partition.begin(); it.valid(); ++it)
+	for (const ShellingOrderSet &S : partition)
 	{
-		const ShellingOrderSet &S = *it;
 		for(int j = 1; j <= S.len(); ++j)
 			m_rank[S[j]] = i;
 
-		m_V[i++] = *it;
+		m_V[i++] = S;
 	}
 }
 
@@ -76,15 +62,14 @@ void ShellingOrder::initLeftmost(
 	m_rank.init(G);
 
 	NodeArray<SListPure<const ShellingOrderSet *> > crSets(G);
-	BoundedStack<node> outerfaceStack(G.numberOfNodes());
+	ArrayBuffer<node> outerfaceStack(G.numberOfNodes());
 
 	int i, j;
 
-	ListConstIterator<ShellingOrderSet> it;
-	for(it = partition.begin(); it.valid(); ++it) {
-		node cr = (*it).right();
-		if (cr != 0)
-			crSets[cr].pushBack(&(*it));
+	for(const ShellingOrderSet &S : partition) {
+		node cr = S.right();
+		if (cr != nullptr)
+			crSets[cr].pushBack(&S);
 	}
 
 	const ShellingOrderSet &V1 = partition.front();
@@ -114,6 +99,4 @@ void ShellingOrder::initLeftmost(
 	}
 }
 
-
-} // end namespace ogdf
-
+}

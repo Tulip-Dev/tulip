@@ -1,11 +1,3 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class SPQRTree
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,22 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_SPQR_TREE_H
-#define OGDF_SPQR_TREE_H
-
 
 #include <ogdf/decomposition/Skeleton.h>
 #include <ogdf/decomposition/PertinentGraph.h>
@@ -57,13 +38,10 @@
 
 namespace ogdf {
 
-//---------------------------------------------------------
-// SPQRTree
-// SPQR-tree data structure
-//---------------------------------------------------------
-
 /**
  * \brief Linear-time implementation of static SPQR-trees.
+ *
+ * @ingroup decomp
  *
  * The class SPQRTree maintains the arrangement of the triconnected
  * components of a biconnected multi-graph \a G [Hopcroft, Tarjan 1973]
@@ -90,23 +68,18 @@ namespace ogdf {
  * reference edge of the skeleton \a S of a non-root node \a v is the virtual
  * edge in \a S that corresponds to the tree edge (parent(\a v),\a v).
  */
-
 class OGDF_EXPORT SPQRTree
 {
 public:
-
 	//! The type of a tree node in T.
-	enum NodeType { SNode, PNode, RNode };
-
+	enum class NodeType { SNode, PNode, RNode };
 
 	// destructor
 
 	virtual ~SPQRTree() { }
 
-
-	//
-	// a) Access operations
-	//
+	//! \name Access operations
+	//! @{
 
 	//! Returns a reference to the original graph \a G.
 	virtual const Graph &originalGraph() const=0;
@@ -130,39 +103,39 @@ public:
 	virtual int numberOfRNodes() const=0;
 
 	/**
-	 * \brief Returns the type of node \a v.
-	 * \pre \a v is a node in \a T
+	 * \brief Returns the type of node \p v.
+	 * \pre \p v is a node in \a T
 	 */
 	virtual NodeType typeOf(node v) const=0;
 
-	//! Returns the list of all nodes with type \a t.
+	//! Returns the list of all nodes with type \p t.
 	virtual List<node> nodesOfType(NodeType t) const=0;
 
 	/**
-	 * \brief Returns the skeleton of node \a v.
-	 * \pre \a v is a node in \a T
+	 * \brief Returns the skeleton of node \p v.
+	 * \pre \p v is a node in \a T
 	 */
 	virtual Skeleton &skeleton(node v) const=0;
 
 	/**
-	 * \brief Returns the skeleton that contains the real edge \a e.
-	 * \pre \a e is an edge in \a G
+	 * \brief Returns the skeleton that contains the real edge \p e.
+	 * \pre \p e is an edge in \a G
 	 */
 	virtual const Skeleton &skeletonOfReal(edge e) const=0;
 
 	/**
-	 * \brief Returns the skeleton edge that corresponds to the real edge \a e.
-	 * \pre \a e is an edge in \a G
+	 * \brief Returns the skeleton edge that corresponds to the real edge \p e.
+	 * \pre \p e is an edge in \a G
 	 */
 	virtual edge copyOfReal(edge e) const=0;
 
 	/**
-	 * \brief Returns the pertinent graph of tree node \a v in \a Gp.
-	 * \pre \a v is a node in \a T
+	 * \brief Returns the pertinent graph of tree node \p v in \p Gp.
+	 * \pre \p v is a node in \a T
 	 */
 	void pertinentGraph(node v, PertinentGraph &Gp) const
 	{
-		if (m_cpV == 0) m_cpV = OGDF_NEW NodeArray<node>(originalGraph(),0);
+		if (m_cpV == nullptr) m_cpV = new NodeArray<node>(originalGraph(),nullptr);
 		NodeArray<node> &cpV = *m_cpV;
 
 		Gp.init(v);
@@ -171,33 +144,33 @@ public:
 		const Skeleton &S = skeleton(v);
 
 		edge e = Gp.m_skRefEdge = S.referenceEdge();
-		if (e != 0) e = Gp.m_P.newEdge(cpV[S.original(e->source())],cpV[S.original(e->target())]);
+		if (e != nullptr) e = Gp.m_P.newEdge(cpV[S.original(e->source())],cpV[S.original(e->target())]);
 		Gp.m_vEdge = e;
 
-		while (!m_cpVAdded.empty()) cpV[m_cpVAdded.popFrontRet()] = 0;
+		while (!m_cpVAdded.empty()) cpV[m_cpVAdded.popFrontRet()] = nullptr;
 	}
 
-
-	//
-	// b) Update operations
-	//
+	//! @}
+	//! \name Update operations
+	//! @{
 
 	/**
-	 * \brief Roots \a T at edge \a e and returns the new root node of \a T.
-	 * \pre \a e is an edge in \a G
+	 * \brief Roots \a T at edge \p e and returns the new root node of \a T.
+	 * \pre \p e is an edge in \a G
 	 */
 	virtual node rootTreeAt(edge e) =0;
 
 	/**
-	 * \brief Roots \a T at node \a v and returns \a v.
-	 * \pre \a v is a node in \a T
+	 * \brief Roots \a T at node \p v and returns \p v.
+	 * \pre \p v is a node in \a T
 	 */
 	virtual node rootTreeAt(node v) =0;
 
 
 	void directSkEdge(node vT, edge e, node src)
 	{
-		OGDF_ASSERT(e != 0 && (src == e->source() || src == e->target()))
+		OGDF_ASSERT(e != nullptr);
+		OGDF_ASSERT(src == e->source() || src == e->target());
 
 		if(e->source() != src) skeleton(vT).getGraph().reverseEdge(e);
 	}
@@ -208,16 +181,17 @@ public:
 		M.reverseEdge(M.split(e));
 	}
 
+	// !@}
 
 protected:
 
 	/**
 	 * \brief Recursively performs the task of adding edges (and nodes)
-	 * to the pertinent graph \a Gp for each involved skeleton graph.
+	 * to the pertinent graph \p Gp for each involved skeleton graph.
 	 */
 	virtual void cpRec(node v, PertinentGraph &Gp) const=0;
 
-	//! Add an edge to \a Gp corresponding to \a eOrig.
+	//! Add an edge to \p Gp corresponding to \p eOrig.
 	edge cpAddEdge(edge eOrig, PertinentGraph &Gp) const
 	{
 		edge eP = Gp.m_P.newEdge(cpAddNode(eOrig->source(),Gp),cpAddNode(eOrig->target(),Gp));
@@ -225,26 +199,20 @@ protected:
 		return eP;
 	}
 
-	//! Add a node to \a Gp corresponding to \a vOrig if required.
+	//! Add a node to \p Gp corresponding to \p vOrig if required.
 	node cpAddNode(node vOrig, PertinentGraph &Gp) const
 	{
 		node &vP = (*m_cpV)[vOrig];
-		if (vP == 0) {
+		if (vP == nullptr) {
 			m_cpVAdded.pushBack(vOrig);
 			Gp.m_origV[vP = Gp.m_P.newNode()] = vOrig;
 		}
 		return vP;
 	}
 
-
 	// auxiliary members used for computing pertinent graphs
 	mutable NodeArray<node> *m_cpV;       //!< node in pertinent graph corresponding to an original node (auxiliary member)
 	mutable SList<node>      m_cpVAdded;  //!< list of added nodes (auxiliary member)
+};
 
-}; // class SPQRTree
-
-
-} // end namespace ogdf
-
-
-#endif
+}

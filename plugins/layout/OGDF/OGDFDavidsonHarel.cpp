@@ -20,59 +20,7 @@
 
 #include <tulip/StringCollection.h>
 
-#include "tulip2ogdf/OGDFLayoutPluginBase.h"
-
-/** \addtogroup layout */
-// comments below have been extracted from OGDF/src/energybased/DavidsonHarelLayout.cpp
-
-/// An implementation for DavidsonHarel layout
-/**
- *
- * This is the frontend for the DavidsonHarel optimization
- * function. It adds the energy functions to the problem and
- * sets their weights. It also contains functions for setting
- * and returning the parameters that influence the quality of
- * the solution and the speed of the optimization process.
- *
- * \author Rene Weiskircher
- *
- * \par License:
- * This is part of the Open Graph Drawing Framework (OGDF).
- *
- * Copyright (C). All rights reserved.
- * See README.txt in the root directory of the OGDF installation for details.
- *
- * \par
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
- *
- * \par
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * \par
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+#include <tulip2ogdf/OGDFLayoutPluginBase.h>
 
 #define ELT_SETTINGS "Settings"
 #define ELT_SETTINGSLIST "Standard;Repulse;Planar"
@@ -91,10 +39,10 @@ using namespace ogdf;
 
 static const char *paramHelp[] = {
     // Settings
-    "Easy way to set fixed costs.",
+    "Fixes the cost values to special configurations.",
 
     // Speed
-    "Easy way to set temperature and number of iterations.",
+    "More convenient way of setting the speed of the algorithm. Influences number of iterations per temperature step, starting temperature, and cooling factor.",
 
     // preferredEdgeLength
     "The preferred edge length.",
@@ -134,11 +82,11 @@ public:
 
       if (dataSet->get(ELT_SETTINGS, settings)) {
         if (settings.getCurrent() == STANDARD_ELT) {
-          davidson->fixSettings(ogdf::DavidsonHarelLayout::spStandard);
+          davidson->fixSettings(DavidsonHarelLayout::SettingsParameter::Standard);
         } else if (settings.getCurrent() == REPULSE_ELT) {
-          davidson->fixSettings(ogdf::DavidsonHarelLayout::spRepulse);
+          davidson->fixSettings(DavidsonHarelLayout::SettingsParameter::Repulse);
         } else {
-          davidson->fixSettings(ogdf::DavidsonHarelLayout::spPlanar);
+          davidson->fixSettings(DavidsonHarelLayout::SettingsParameter::Planar);
         }
       }
 
@@ -146,11 +94,11 @@ public:
 
       if (dataSet->get(ELT_SPEED, speed)) {
         if (speed.getCurrent() == FAST_ELT) {
-          davidson->setSpeed(ogdf::DavidsonHarelLayout::sppFast);
+          davidson->setSpeed(DavidsonHarelLayout::SpeedParameter::Fast);
         } else if (speed.getCurrent() == MEDIUM_ELT) {
-          davidson->setSpeed(ogdf::DavidsonHarelLayout::sppMedium);
+          davidson->setSpeed(DavidsonHarelLayout::SpeedParameter::Medium);
         } else {
-          davidson->setSpeed(ogdf::DavidsonHarelLayout::sppHQ);
+          davidson->setSpeed(DavidsonHarelLayout::SpeedParameter::HQ);
         }
       }
 

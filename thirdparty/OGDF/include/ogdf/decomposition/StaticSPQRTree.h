@@ -1,11 +1,3 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class StaticSPQRTree
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,38 +25,22 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_STATIC_SPQR_TREE_H
-#define OGDF_STATIC_SPQR_TREE_H
-
 
 #include <ogdf/decomposition/SPQRTree.h>
 #include <ogdf/decomposition/StaticSkeleton.h>
-
+#include <ogdf/graphalg/Triconnectivity.h>
 
 namespace ogdf {
 
-	class TricComp;
-
-//---------------------------------------------------------
-// StaticSPQRTree
-// SPQR-tree data structure (static environment)
-//---------------------------------------------------------
-
 /**
  * \brief Linear-time implementation of static SPQR-trees.
+ *
+ * @ingroup decomp
  *
  * The class StaticSPQRTree maintains the arrangement of the triconnected
  * components of a biconnected multi-graph \a G [Hopcroft, Tarjan 1973]
@@ -94,124 +70,117 @@ namespace ogdf {
  * reference edge of the skeleton \a S of a non-root node \a v is the virtual
  * edge in \a S that corresponds to the tree edge (parent(\a v),\a v).
  */
-
 class OGDF_EXPORT StaticSPQRTree : public virtual SPQRTree
 {
 public:
-
 	friend class StaticSkeleton;
-
 
 	// constructors
 
 	/**
-	 * \brief Creates an SPQR tree \a T for graph \a G rooted at the first edge of \a G.
-	 * \pre \a G is biconnected and contains at least 3 nodes,
-	 *      or \a G has exactly 2 nodes and at least 3 edges.
+	 * \brief Creates an SPQR tree \a T for graph \p G rooted at the first edge of \p G.
+	 * \pre \p G is biconnected and contains at least 3 nodes,
+	 *      or \p G has exactly 2 nodes and at least 3 edges.
 	 */
-	StaticSPQRTree(const Graph &G) : m_skOf(G), m_copyOf(G) { m_pGraph = &G; init(G.firstEdge()); }
+	explicit StaticSPQRTree(const Graph &G) : m_skOf(G), m_copyOf(G) { OGDF_ASSERT(G.numberOfEdges() > 0); m_pGraph = &G; init(G.firstEdge()); }
 
 	/**
-	 * \brief Creates an SPQR tree \a T for graph \a G rooted at the edge \a e.
-	 * \pre \a e is in \a G, \a G is biconnected and contains at least 3 nodes,
-	 *      or \a G has exactly 2 nodes and at least 3 edges.
+	 * \brief Creates an SPQR tree \a T for graph \p G rooted at the edge \p e.
+	 * \pre \p e is in \p G, \p G is biconnected and contains at least 3 nodes,
+	 *      or \p G has exactly 2 nodes and at least 3 edges.
 	 */
 	StaticSPQRTree(const Graph &G, edge e) : m_skOf(G), m_copyOf(G) { m_pGraph = &G; init(e); }
 
 	/**
-	 * \brief Creates an SPQR tree \a T for graph \a G rooted at the first edge of \a G.
-	 * \pre \a G is biconnected and contains at least 3 nodes,
-	 *      or \a G has exactly 2 nodes and at least 3 edges.
+	 * \brief Creates an SPQR tree \a T for graph \p G rooted at the first edge of \p G.
+	 * \pre \p G is biconnected and contains at least 3 nodes,
+	 *      or \p G has exactly 2 nodes and at least 3 edges.
 	 */
-	StaticSPQRTree(const Graph &G, TricComp &tricComp) : m_skOf(G), m_copyOf(G) { m_pGraph = &G; init(G.firstEdge(),tricComp); }
+	StaticSPQRTree(const Graph &G, Triconnectivity &tricComp) : m_skOf(G), m_copyOf(G) { m_pGraph = &G; init(G.firstEdge(),tricComp); }
 
-
-	// destructor
-
+	//! Destructor.
 	~StaticSPQRTree();
 
-
-	//
-	// a) Access operations
-	//
+	//! \name Access operations
+	//! @{
 
 	//! Returns a reference to the original graph \a G.
-	const Graph &originalGraph() const { return *m_pGraph; }
+	const Graph &originalGraph() const override { return *m_pGraph; }
 
 	//! Returns a reference to the tree \a T.
-	const Graph &tree() const { return m_tree; }
+	const Graph &tree() const override { return m_tree; }
 
 	//! Returns the edge of \a G at which \a T is rooted.
-	edge rootEdge() const { return m_rootEdge; }
+	edge rootEdge() const override { return m_rootEdge; }
 
 	//! Returns the root node of \a T.
-	node rootNode() const { return m_rootNode; }
+	node rootNode() const override { return m_rootNode; }
 
 	//! Returns the number of S-nodes in \a T.
-	int numberOfSNodes() const { return m_numS; }
+	int numberOfSNodes() const override { return m_numS; }
 
 	//! Returns the number of P-nodes in \a T.
-	int numberOfPNodes() const { return m_numP; }
+	int numberOfPNodes() const override { return m_numP; }
 
 	//! Returns the number of R-nodes in \a T.
-	int numberOfRNodes() const { return m_numR; }
+	int numberOfRNodes() const override { return m_numR; }
 
 	/**
-	 * \brief Returns the type of node \a v.
-	 * \pre \a v is a node in \a T
+	 * \brief Returns the type of node \p v.
+	 * \pre \p v is a node in \a T
 	 */
-	NodeType typeOf(node v) const { return m_type[v]; }
+	NodeType typeOf(node v) const override { return m_type[v]; }
 
-	//! Returns the list of all nodes with type \a t.
-	List<node> nodesOfType(NodeType t) const;
+	//! Returns the list of all nodes with type \p t.
+	List<node> nodesOfType(NodeType t) const override;
 
 	/**
-	 * \brief Returns the skeleton of node \a v.
-	 * \pre \a v is a node in \a T
+	 * \brief Returns the skeleton of node \p v.
+	 * \pre \p v is a node in \a T
 	 */
-	Skeleton &skeleton(node v) const { return *m_sk[v]; }
+	Skeleton &skeleton(node v) const override { return *m_sk[v]; }
 
 	/**
-	 * \brief Returns the edge in skeleton of source(\a e) that corresponds to tree edge \a e.
-	 * \pre \a e is an edge in \a T
+	 * \brief Returns the edge in skeleton of source(\p e) that corresponds to tree edge \p e.
+	 * \pre \p e is an edge in \a T
 	 */
 	edge skeletonEdgeSrc(edge e) const { return m_skEdgeSrc[e]; }
 
 	/**
-	 * \brief Returns the edge in skeleton of target(\a e) that corresponds to tree edge \a e.
-	 * \pre \a e is an edge in \a T
+	 * \brief Returns the edge in skeleton of target(\p e) that corresponds to tree edge \p e.
+	 * \pre \p e is an edge in \a T
 	 */
 	edge skeletonEdgeTgt(edge e) const { return m_skEdgeTgt[e]; }
 
 	/**
-	 * \brief Returns the skeleton that contains the real edge \a e.
-	 * \pre \a e is an edge in \a G
+	 * \brief Returns the skeleton that contains the real edge \p e.
+	 * \pre \p e is an edge in \a G
 	 */
-	const Skeleton &skeletonOfReal(edge e) const { return *m_skOf[e]; }
+	const Skeleton &skeletonOfReal(edge e) const override { return *m_skOf[e]; }
 
 	/**
-	 * \brief Returns the skeleton edge that corresponds to the real edge \a e.
-	 * \pre \a e is an edge in \a G
+	 * \brief Returns the skeleton edge that corresponds to the real edge \p e.
+	 * \pre \p e is an edge in \a G
 	 */
-	edge copyOfReal(edge e) const { return m_copyOf[e]; }
+	edge copyOfReal(edge e) const override { return m_copyOf[e]; }
 
-
-	//
-	// b) Update operations
-	//
+	//! @}
+	//! \name Update operations
+	//! @{
 
 	/**
-	 * \brief Roots \a T at edge \a e and returns the new root node of \a T.
-	 * \pre \a e is an edge in \a G
+	 * \brief Roots \a T at edge \p e and returns the new root node of \a T.
+	 * \pre \p e is an edge in \a G
 	 */
-	node rootTreeAt(edge e);
+	node rootTreeAt(edge e) override;
 
 	/**
-	 * \brief Roots \a T at node \a v and returns \a v.
-	 * \pre \a v is a node in \a T
+	 * \brief Roots \a T at node \p v and returns \p v.
+	 * \pre \p v is a node in \a T
 	 */
-	node rootTreeAt(node v);
+	node rootTreeAt(node v) override;
 
+	//! @}
 
 protected:
 
@@ -219,27 +188,26 @@ protected:
 	void init(edge e);
 
 	//! Initialization (called by constructor).
-	void init(edge eRef, TricComp &tricComp);
+	void init(edge eRef, Triconnectivity &tricComp);
 
 	//! Recursively performs rooting of tree.
 	void rootRec(node v, edge ef);
 
 	/**
 	 * \brief Recursively performs the task of adding edges (and nodes)
-	 * to the pertinent graph \a Gp for each involved skeleton graph.
+	 * to the pertinent graph \p Gp for each involved skeleton graph.
 	 */
-	void cpRec(node v, PertinentGraph &Gp) const
+	void cpRec(node v, PertinentGraph &Gp) const override
 	{
-		edge e;
 		const Skeleton &S = skeleton(v);
 
-		forall_edges(e,S.getGraph()) {
+		for(edge e : S.getGraph().edges) {
 			edge eOrig = S.realEdge(e);
-			if (eOrig != 0) cpAddEdge(eOrig,Gp);
+			if (eOrig != nullptr) cpAddEdge(eOrig,Gp);
 		}
 
-		forall_adj_edges(e,v) {
-			node w = e->target();
+		for(adjEntry adj : v->adjEntries) {
+			node w = adj->theEdge()->target();
 			if (w != v) cpRec(w,Gp);
 		}
 	}
@@ -263,11 +231,6 @@ protected:
 
 	EdgeArray<StaticSkeleton *> m_skOf;    //!< skeleton containing real edge \a e
 	EdgeArray<edge>             m_copyOf;  //!< skeleton edge corresponding to real edge \a e
+};
 
-}; // class StaticSPQRTree
-
-
-} // end namespace ogdf
-
-
-#endif
+}

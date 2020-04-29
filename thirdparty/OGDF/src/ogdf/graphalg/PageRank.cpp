@@ -1,11 +1,3 @@
-/*
- * $Revision: 2597 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-15 19:26:11 +0200 (Sun, 15 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Implementation of basic page rank.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,12 +25,9 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 
 #include <ogdf/graphalg/PageRank.h>
@@ -132,4 +121,4 @@ void BasicPageRank::call(
 	// result is now between 0 and 1
 }
 
-} // end of namespace ogdf
+}

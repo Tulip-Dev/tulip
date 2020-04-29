@@ -1,11 +1,3 @@
-/*
- * $Revision: 3472 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-04-29 15:52:12 +0200 (Mon, 29 Apr 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implements class SubgraphPlanarizerUML.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,32 +25,27 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/uml/SubgraphPlanarizerUML.h>
 #include <ogdf/uml/VariableEmbeddingInserterUML.h>
 #include <ogdf/planarity/MaximalPlanarSubgraphSimple.h>
-#include <ogdf/basic/CriticalSection.h>
-#include <ogdf/basic/Thread.h>
-#include <ogdf/basic/extended_graph_alg.h>
-#include <ogdf/internal/planarity/CrossingStructure.h>
+#include <ogdf/planarity/embedder/CrossingStructure.h>
 
+#include <atomic>
 
-#ifdef OGDF_HAVE_CPP11
+using std::atomic;
+using std::mutex;
+using std::lock_guard;
 using std::minstd_rand;
-#endif
 
+namespace ogdf {
 
-namespace ogdf
-{
+using embedder::CrossingStructure;
 
 class SubgraphPlanarizerUML::ThreadMaster {
-
 	CrossingStructure *m_pCS;
 	int                m_bestCR;
 
@@ -69,9 +56,9 @@ class SubgraphPlanarizerUML::ThreadMaster {
 	const List<edge>     &m_delEdges;
 
 	int m_seed;
-	__int32               m_perms;
-	__int64               m_stopTime;
-	CriticalSection       m_criticalSection;
+	atomic<int>      m_perms;
+	int64_t          m_stopTime;
+	mutex       m_mutex;
 
 public:
 	ThreadMaster(
@@ -81,7 +68,7 @@ public:
 		const List<edge> &delEdges,
 		int seed,
 		int perms,
-		__int64 stopTime);
+		int64_t stopTime);
 
 	~ThreadMaster() { delete m_pCS; }
 
@@ -101,17 +88,21 @@ public:
 };
 
 
-class SubgraphPlanarizerUML::Worker : public Thread {
+class SubgraphPlanarizerUML::Worker {
 
+	int                  m_id;
 	ThreadMaster *m_pMaster;
 	UMLEdgeInsertionModule *m_pInserter;
 
 public:
-	Worker(ThreadMaster *pMaster, UMLEdgeInsertionModule *pInserter) : m_pMaster(pMaster), m_pInserter(pInserter) { }
+	Worker(int id, ThreadMaster *pMaster, UMLEdgeInsertionModule *pInserter) : m_id(id), m_pMaster(pMaster), m_pInserter(pInserter) { }
 	~Worker() { delete m_pInserter; }
 
-protected:
-	virtual void doWork();
+	void operator()();
+
+private:
+	Worker(const Worker &other) = delete;
+	Worker &operator=(const Worker &other) = delete;
 };
 
 
@@ -122,9 +113,9 @@ SubgraphPlanarizerUML::ThreadMaster::ThreadMaster(
 	const List<edge> &delEdges,
 	int seed,
 	int perms,
-	__int64 stopTime)
+	int64_t stopTime)
 	:
-	m_pCS(0), m_bestCR(numeric_limits<int>::max()), m_pr(pr), m_cc(cc),
+	m_pCS(nullptr), m_bestCR(std::numeric_limits<int>::max()), m_pr(pr), m_cc(cc),
 	m_pCost(pCost),
 	m_delEdges(delEdges), m_seed(seed), m_perms(perms), m_stopTime(stopTime)
 { }
@@ -134,14 +125,12 @@ CrossingStructure *SubgraphPlanarizerUML::ThreadMaster::postNewResult(CrossingSt
 {
 	int newCR = pCS->numberOfCrossings();
 
-	m_criticalSection.enter();
+	lock_guard<mutex> guard(m_mutex);
 
 	if(newCR < m_bestCR) {
 		std::swap(pCS, m_pCS);
 		m_bestCR = newCR;
 	}
-
-	m_criticalSection.leave();
 
 	return pCS;
 }
@@ -151,7 +140,8 @@ bool SubgraphPlanarizerUML::ThreadMaster::getNextPerm()
 {
 	if(m_stopTime >= 0 && System::realTime() >= m_stopTime)
 		return false;
-	return atomicDec(&m_perms) >= 0;
+
+	return --m_perms >= 0;
 }
 
 
@@ -168,11 +158,8 @@ bool SubgraphPlanarizerUML::doSinglePermutation(
 	const EdgeArray<int>  *pCost,
 	Array<edge> &deletedEdges,
 	UMLEdgeInsertionModule &inserter,
-#ifdef OGDF_HAVE_CPP11
 	minstd_rand &rng,
-#endif
-	int &crossingNumber
-	)
+	int &crossingNumber)
 {
 	PG.initCC(cc);
 
@@ -182,29 +169,19 @@ bool SubgraphPlanarizerUML::doSinglePermutation(
 	for(int j = 0; j <= high; ++j)
 		PG.delEdge(PG.copy(deletedEdges[j]));
 
-	// permute
-#ifdef OGDF_HAVE_CPP11
-	std::uniform_int_distribution<int> dist(0,high);
+	deletedEdges.permute(rng);
 
-	for(int j = 0; j <= high; ++j)
-		deletedEdges.swap(j, dist(rng));
-#else
-	for(int j = 0; j <= high; ++j)
-		deletedEdges.swap(j, randomNumber(0,high));
-#endif
+	ReturnType ret = inserter.callEx(PG, deletedEdges, pCost, nullptr);
 
-	ReturnType ret = inserter.callEx(PG, deletedEdges, pCost, 0);
-
-	if(isSolution(ret) == false)
+	if(!isSolution(ret))
 		return false; // no solution found, that's bad...
 
-	if(pCost == 0)
+	if(pCost == nullptr)
 		crossingNumber = PG.numberOfNodes() - nG;
 	else {
 		crossingNumber = 0;
-		node n;
-		forall_nodes(n, PG) {
-			if(PG.original(n) == 0) { // dummy found -> calc cost
+		for(node n : PG.nodes) {
+			if(PG.original(n) == nullptr) { // dummy found -> calc cost
 				edge e1 = PG.original(n->firstAdj()->theEdge());
 				edge e2 = PG.original(n->lastAdj()->theEdge());
 				crossingNumber += (*pCost)[e1] * (*pCost)[e2];
@@ -215,11 +192,7 @@ bool SubgraphPlanarizerUML::doSinglePermutation(
 	return true;
 }
 
-void SubgraphPlanarizerUML::doWorkHelper(ThreadMaster &master, UMLEdgeInsertionModule &inserter
-#ifdef OGDF_HAVE_CPP11
-	, minstd_rand &rng
-#endif
-)
+void SubgraphPlanarizerUML::doWorkHelper(ThreadMaster &master, UMLEdgeInsertionModule &inserter, minstd_rand &rng)
 {
 	const List<edge> &delEdges = master.delEdges();
 
@@ -236,11 +209,7 @@ void SubgraphPlanarizerUML::doWorkHelper(ThreadMaster &master, UMLEdgeInsertionM
 
 	do {
 		int crossingNumber;
-		if(doSinglePermutation(PG, cc, pCost, deletedEdges, inserter,
-#ifdef OGDF_HAVE_CPP11
-			rng,
-#endif
-			crossingNumber)
+		if(doSinglePermutation(PG, cc, pCost, deletedEdges, inserter, rng, crossingNumber)
 			&& crossingNumber < master.queryBestKnown())
 		{
 			CrossingStructure *pCS = new CrossingStructure;
@@ -253,22 +222,18 @@ void SubgraphPlanarizerUML::doWorkHelper(ThreadMaster &master, UMLEdgeInsertionM
 }
 
 
-void SubgraphPlanarizerUML::Worker::doWork()
+void SubgraphPlanarizerUML::Worker::operator()()
 {
-#ifdef OGDF_HAVE_CPP11
-	minstd_rand rng(m_pMaster->rseed(threadID())); // different seeds per thread
+	minstd_rand rng(m_pMaster->rseed(11+7*m_id)); // different seeds per thread
 	doWorkHelper(*m_pMaster, *m_pInserter, rng);
-#else
-	doWorkHelper(*m_pMaster, *m_pInserter);
-#endif
 }
 
 
 // default constructor
 SubgraphPlanarizerUML::SubgraphPlanarizerUML()
 {
-	m_subgraph.set(new MaximalPlanarSubgraphSimple);
-	m_inserter.set(new VariableEmbeddingInserterUML);
+	m_subgraph.reset(new MaximalPlanarSubgraphSimple<int>);
+	m_inserter.reset(new VariableEmbeddingInserterUML);
 
 	m_permutations = 1;
 	m_setTimeout = true;
@@ -285,8 +250,8 @@ SubgraphPlanarizerUML::SubgraphPlanarizerUML()
 SubgraphPlanarizerUML::SubgraphPlanarizerUML(const SubgraphPlanarizerUML &planarizer)
 	: UMLCrossingMinimizationModule(planarizer), Logger()
 {
-	m_subgraph.set(planarizer.m_subgraph.get().clone());
-	m_inserter.set(planarizer.m_inserter.get().clone());
+	m_subgraph.reset(planarizer.m_subgraph->clone());
+	m_inserter.reset(planarizer.m_inserter->clone());
 
 	m_permutations = planarizer.m_permutations;
 	m_setTimeout   = planarizer.m_setTimeout;
@@ -304,8 +269,8 @@ UMLCrossingMinimizationModule *SubgraphPlanarizerUML::clone() const {
 SubgraphPlanarizerUML &SubgraphPlanarizerUML::operator=(const SubgraphPlanarizerUML &planarizer)
 {
 	m_timeLimit = planarizer.m_timeLimit;
-	m_subgraph.set(planarizer.m_subgraph.get().clone());
-	m_inserter.set(planarizer.m_inserter.get().clone());
+	m_subgraph.reset(planarizer.m_subgraph->clone());
+	m_inserter.reset(planarizer.m_inserter->clone());
 
 	m_permutations = planarizer.m_permutations;
 	m_setTimeout   = planarizer.m_setTimeout;
@@ -323,14 +288,14 @@ Module::ReturnType SubgraphPlanarizerUML::doCall(
 {
 	OGDF_ASSERT(m_permutations >= 1);
 
-	PlanarSubgraphModule   &subgraph = m_subgraph.get();
-	UMLEdgeInsertionModule &inserter = m_inserter.get();
+	PlanarSubgraphModule<int>   &subgraph = *m_subgraph;
+	UMLEdgeInsertionModule &inserter = *m_inserter;
 
-	int nThreads = min(m_maxThreads, m_permutations);
+	unsigned int nThreads = min(m_maxThreads, (unsigned int)m_permutations);
 
-	__int64 startTime;
+	int64_t startTime;
 	System::usedRealTime(startTime);
-	__int64 stopTime = (m_timeLimit >= 0) ? (startTime + __int64(1000.0*m_timeLimit)) : -1;
+	int64_t stopTime = m_timeLimit >= 0 ? startTime + int64_t(1000.0*m_timeLimit) : -1;
 
 	//
 	// Compute subgraph
@@ -342,9 +307,8 @@ Module::ReturnType SubgraphPlanarizerUML::doCall(
 
 	// gather generalization edges, which should all be in the planar subgraph
 	List<edge> preferedEdges;
-	edge e;
-	forall_edges(e,pr) {
-		if (pr.typeOf(e) == Graph::generalization)
+	for(edge e : pr.edges) {
+		if (pr.typeOf(e) == Graph::EdgeType::generalization)
 			preferedEdges.pushBack(e);
 	}
 
@@ -353,7 +317,7 @@ Module::ReturnType SubgraphPlanarizerUML::doCall(
 
 	if(pCostOrig) {
 		EdgeArray<int> costPG(pr);
-		forall_edges(e,pr)
+		for(edge e : pr.edges)
 			costPG[e] = (*pCostOrig)[pr.original(e)];
 
 		retValue = subgraph.call(pr, costPG, preferedEdges, delEdges);
@@ -361,7 +325,7 @@ Module::ReturnType SubgraphPlanarizerUML::doCall(
 	} else
 		retValue = subgraph.call(pr, preferedEdges, delEdges);
 
-	if(isSolution(retValue) == false)
+	if(!isSolution(retValue))
 		return retValue;
 
 	const int m = delEdges.size();
@@ -373,9 +337,7 @@ Module::ReturnType SubgraphPlanarizerUML::doCall(
 	//
 
 	int seed = rand();
-#ifdef OGDF_HAVE_CPP11
 	minstd_rand rng(seed);
-#endif
 
 	if(nThreads > 1) {
 		//
@@ -389,21 +351,18 @@ Module::ReturnType SubgraphPlanarizerUML::doCall(
 			m_permutations - nThreads,
 			stopTime);
 
-		Array<Worker *> thread(nThreads-1);
-		for(int i = 0; i < nThreads-1; ++i) {
-			thread[i] = new Worker(&master, inserter.clone());
-			thread[i]->start();
+		Array<Worker *> worker(nThreads-1);
+		Array<Thread> thread(nThreads-1);
+		for(unsigned int i = 0; i < nThreads-1; ++i) {
+			worker[i] = new Worker(i, &master, inserter.clone());
+			thread[i] = Thread(*worker[i]);
 		}
 
-#ifdef OGDF_HAVE_CPP11
 		doWorkHelper(master, inserter, rng);
-#else
-		doWorkHelper(master, inserter);
-#endif
 
-		for(int i = 0; i < nThreads-1; ++i) {
-			thread[i]->join();
-			delete thread[i];
+		for(unsigned int i = 0; i < nThreads-1; ++i) {
+			thread[i].join();
+			delete worker[i];
 		}
 
 		master.restore(pr, crossingNumber);
@@ -424,20 +383,16 @@ Module::ReturnType SubgraphPlanarizerUML::doCall(
 		for(int i = 1; i <= m_permutations; ++i)
 		{
 			int cr;
-			bool ok = doSinglePermutation(prl, cc, pCostOrig, deletedEdges, inserter,
-#ifdef OGDF_HAVE_CPP11
-				rng,
-#endif
-				cr);
+			bool ok = doSinglePermutation(prl, cc, pCostOrig, deletedEdges, inserter, rng, cr);
 
-			if(ok && (foundSolution == false || cr < cs.weightedCrossingNumber())) {
+			if(ok && (!foundSolution || cr < cs.weightedCrossingNumber())) {
 				foundSolution = true;
 				cs.init(prl, cr);
 			}
 
 			if(stopTime >= 0 && System::realTime() >= stopTime) {
-				if(foundSolution == false)
-					return retTimeoutInfeasible; // not able to find a solution...
+				if(!foundSolution)
+					return ReturnType::TimeoutInfeasible; // not able to find a solution...
 				break;
 			}
 		}
@@ -445,11 +400,10 @@ Module::ReturnType SubgraphPlanarizerUML::doCall(
 		cs.restore(pr,cc); // restore best solution in PG
 		crossingNumber = cs.weightedCrossingNumber();
 
-		OGDF_ASSERT(isPlanar(pr) == true);
+		OGDF_ASSERT(isPlanar(pr));
 	}
 
-	return retFeasible;
+	return ReturnType::Feasible;
 }
 
-
-} // namspace ogdf
+}

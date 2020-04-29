@@ -88,7 +88,7 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       (openGL_OK ? tlpStringToQString(OpenGlConfigManager::getOpenGLVendor())
                  : QString("unknown")) +
       "): <a href=\"https://www.opengl.org\">https://www.opengl.org</a> </li>"
-      "  <li> <b>OGDF</b> v2015.05 (Baobab) aka the Open Graph Drawing Framework : <a "
+      "  <li> <b>OGDF</b> v2020.02 (Catalpa) aka the Open Graph Drawing Framework : <a "
       "href=\"http://www.ogdf.net\">http://www.ogdf.net</a> </li>"
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 

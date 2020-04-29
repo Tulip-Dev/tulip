@@ -1,11 +1,3 @@
-/*
- * $Revision: 3366 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-04-04 16:13:53 +0200 (Thu, 04 Apr 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implements read and write functionality for hypergraphs.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,12 +25,9 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/basic/Logger.h>
 #include <ogdf/fileformats/GraphIO.h>
@@ -90,16 +79,16 @@ static string::size_type findOpen(const string &from, int line)
 }
 
 
-bool GraphIO::readBENCH(Graph &G, List<node>& hypernodes, List<edge>* shell, istream &is)
+bool GraphIO::readBENCH(Graph &G, List<node>& hypernodes, List<edge>* shell, std::istream &is)
 {
 	G.clear();
 	hypernodes.clear();
 	if(shell) shell->clear();
 
 	string buffer;
-	HashArray<string,node> hm(0);
+	HashArray<string,node> hm(nullptr);
 
-	node si = 0, so = 0;
+	node si = nullptr, so = nullptr;
 	if(shell) {
 		si = G.newNode();
 		so = G.newNode();
@@ -148,15 +137,15 @@ bool GraphIO::readBENCH(Graph &G, List<node>& hypernodes, List<edge>* shell, ist
 			do {
 				p = newStartPos(buffer, p+1, line);
 				string::size_type pp = extractIdentifierLength(buffer, p, line);
-				string s(buffer, p, pp);
+				string str(buffer, p, pp);
 				p += pp;
-				node mm = hm[s];
+				node mm = hm[str];
 				if(!mm) {
 					// new
 					node in = G.newNode();
 					node out = G.newNode();
-					hm[s + "%$@"] = in;
-					hm[s] = out;
+					hm[str + "%$@"] = in;
+					hm[str] = out;
 					hypernodes.pushBack(out);
 					G.newEdge(in,out);
 					mm = out;
@@ -170,7 +159,7 @@ bool GraphIO::readBENCH(Graph &G, List<node>& hypernodes, List<edge>* shell, ist
 }
 
 
-bool GraphIO::readPLA(Graph &G, List<node>& hypernodes, List<edge>* shell, istream &is)
+bool GraphIO::readPLA(Graph &G, List<node>& hypernodes, List<edge>* shell, std::istream &is)
 {
 	G.clear();
 	hypernodes.clear();
@@ -219,8 +208,7 @@ bool GraphIO::readPLA(Graph &G, List<node>& hypernodes, List<edge>* shell, istre
 		node so = G.newNode();
 		shell->pushBack( G.newEdge(si,so) );
 
-		node n;
-		forall_nodes(n,G) {
+		for(node n : G.nodes) {
 			if(n->degree() == 1) {
 				if(n->outdeg() == 1) { //input
 					shell->pushBack( G.newEdge( si, n ) );

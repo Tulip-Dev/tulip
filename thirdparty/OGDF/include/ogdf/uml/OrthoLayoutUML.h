@@ -1,11 +1,3 @@
-/*
- * $Revision: 3109 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-12-03 14:12:26 +0100 (Mon, 03 Dec 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class OrthoLayoutUML which represents an
  *        orthogonal planar drawing algorithm for mixed-upward
@@ -18,7 +10,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -35,39 +27,19 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-
-#ifndef OGDF_ORTHO_LAYOUT_UML_H
-#define OGDF_ORTHO_LAYOUT_UML_H
-
-
-#include <ogdf/module/LayoutPlanRepUMLModule.h>
+#include <ogdf/uml/LayoutPlanRepUMLModule.h>
 #include <ogdf/orthogonal/OrthoRep.h>
-
 
 namespace ogdf {
 
-	enum OptionProfile { standard, minBendsperEdge, fullService }; //just to think about it...
-
-	enum OrthoDir;
-
-
-//---------------------------------------------------------
-// OrthoLayoutUML
-// represents planar orthogonal drawing algorithm for
-// mixed-upward planar embedded graphs (UML-diagrams)
-//---------------------------------------------------------
+//! Represents planar orthogonal drawing algorithm for
+//! mixed-upward planar embedded graphs (UML-diagrams)
 class OGDF_EXPORT OrthoLayoutUML : public LayoutPlanRepUMLModule
 {
 public:
@@ -78,17 +50,17 @@ public:
 	// calls planar UML layout algorithm. Input is a planarized representation
 	// PG of a connected component of the graph, output is a layout of the
 	// (modified) planarized representation in drawing
-	void call(PlanRepUML &PG, adjEntry adjExternal, Layout &drawing);
+	virtual void call(PlanRepUML &PG, adjEntry adjExternal, Layout &drawing) override;
 
 	//
 	// options
 
 	// the minimum distance between edges and vertices
-	double separation() const {
+	virtual double separation() const override {
 		return m_separation;
 	}
 
-	void separation(double sep) {
+	virtual void separation(double sep) override {
 		m_separation = sep;
 	}
 
@@ -152,34 +124,31 @@ public:
 	//! Set bound on the number of bends
 	void setBendBound(int i) { OGDF_ASSERT(i >= 0); m_bendBound = i; }
 
-	//in planarlayout
-	//enum LayoutOptions {umloptAlignment = 1, optScaling = 2, optProgressive = 4}
 	//set generic options by setting field bits,
 	//necessary to allow setting over base class pointer
 	//bit 0 = alignment
 	//bit 1 = scaling
 	//bit 2 = progressive/traditional
 	//=> 0 is standard
-	virtual void setOptions(int optionField)
+	virtual void setOptions(int optionField) override
 	{
-		if (optionField & umlOpAlign) m_align = true;
+		if (optionField & UMLOpt::OpAlign) m_align = true;
 		else m_align = false;
-		if (optionField & umlOpScale) m_useScalingCompaction = true;
+		if (optionField & UMLOpt::OpScale) m_useScalingCompaction = true;
 		else m_useScalingCompaction = false;
-		if (optionField & umlOpProg) m_orthoStyle = 1;
+		if (optionField & UMLOpt::OpProg) m_orthoStyle = 1;
 		else m_orthoStyle = 0; //traditional
-	}//setOptions
+	}
 
-	virtual int getOptions()
+	virtual int getOptions() override
 	{
 		int result = 0;
-		if (m_align) result = umlOpAlign;
-		if (m_useScalingCompaction) result += umlOpScale;
-		if (m_orthoStyle == 1) result += umlOpProg;
+		if (m_align) result = static_cast<int>(UMLOpt::OpAlign);
+		if (m_useScalingCompaction) result += UMLOpt::OpScale;
+		if (m_orthoStyle == 1) result += UMLOpt::OpProg;
 
 		return result;
-	}//getOptions
-
+	}
 
 protected:
 	void classifyEdges(PlanRepUML &PG, adjEntry &adjExternal);
@@ -208,8 +177,4 @@ private:
 	int m_bendBound; //!< bounds number of bends per edge in ortho shaper
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

@@ -1,11 +1,3 @@
-/*
- * $Revision: 3837 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 15:19:30 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declares a TLP file format lexer class and related structures.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,21 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_TLP_LEXER_H
-#define OGDF_TLP_LEXER_H
-
 
 #include <iostream>
 #include <string>
@@ -61,9 +43,11 @@ namespace tlp {
 
 struct Token {
 
-	enum Type {
-		tok_leftParen, tok_rightParen,
-		tok_identifier, tok_string
+	enum class Type {
+		leftParen,
+		rightParen,
+		identifier,
+		string
 	} type;
 
 	std::string *value; // Optional token value (avaliable in id and string).
@@ -73,27 +57,27 @@ struct Token {
 	friend std::ostream &operator <<(std::istream &os, const Token &token);
 
 	bool inline leftParen() const {
-		return type == tok_leftParen;
+		return type == Type::leftParen;
 	}
 
 	bool inline rightParen() const {
-		return type == tok_rightParen;
+		return type == Type::rightParen;
 	}
 
 	bool inline identifier() const {
-		return type == tok_identifier;
+		return type == Type::identifier;
 	}
 
 	bool inline identifier(const char *str) const {
-		return type == tok_identifier && (*value) == str;
+		return type == Type::identifier && *value == str;
 	}
 
 	bool inline string() const {
-		return type == tok_string;
+		return type == Type::string;
 	}
 
 	bool inline string(const char *str) const {
-		return type == tok_string && (*value) == str;
+		return type == Type::string && *value == str;
 	}
 };
 
@@ -127,7 +111,7 @@ private:
 	static bool isIdentifier(char c);
 
 public:
-	Lexer(std::istream &is);
+	explicit Lexer(std::istream &is);
 	~Lexer();
 
 	bool tokenize();
@@ -136,10 +120,5 @@ public:
 	}
 };
 
-
-} // end namespace tlp
-
-} // end namespace ogdf
-
-
-#endif
+}
+}

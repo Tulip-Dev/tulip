@@ -1,11 +1,3 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declares base class for all module types.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,21 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_MODULE_H
-#define OGDF_MODULE_H
-
 
 #include <ogdf/basic/basic.h>
 
@@ -61,20 +43,18 @@ namespace ogdf {
  * There are various specific module types present in the OGDF, which all
  * inherit Module as a base class. These module types define the interface
  * implemented by the module.
- *
- * \sa ModuleOption
  */
 class OGDF_EXPORT Module
 {
 public:
 	//! The return type of a module.
-	enum ReturnType {
-		retFeasible, //!< The solution is feasible.
-		retOptimal, //!< The solution is optimal
-		retNoFeasibleSolution, //!< There exists no feasible solution.
-		retTimeoutFeasible, //!< The solution is feasible, but there was a timeout.
-		retTimeoutInfeasible, //!< The solution is not feasible due to a timeout.
-		retError //! Computation was aborted due to an error.
+	enum class ReturnType {
+		Feasible, //!< The solution is feasible.
+		Optimal, //!< The solution is optimal
+		NoFeasibleSolution, //!< There exists no feasible solution.
+		TimeoutFeasible, //!< The solution is feasible, but there was a timeout.
+		TimeoutInfeasible, //!< The solution is not feasible due to a timeout.
+		Error //!< Computation was aborted due to an error.
 	};
 
 	//! Initializes a module.
@@ -82,14 +62,12 @@ public:
 
 	virtual ~Module() { }
 
-	//! Returns true iff \a retVal indicates that the module returned a feasible solution.
+	//! Returns true iff \p ret indicates that the module returned a feasible solution.
 	static bool isSolution(ReturnType ret) {
-		return ret == retFeasible || ret == retOptimal || ret == retTimeoutFeasible;
+		return ret == ReturnType::Feasible || ret == ReturnType::Optimal || ret == ReturnType::TimeoutFeasible;
 	}
 };
 
+OGDF_EXPORT std::ostream & operator<<(std::ostream &os, const Module::ReturnType &r);
 
-} // end namespace ogdf
-
-
-#endif
+}

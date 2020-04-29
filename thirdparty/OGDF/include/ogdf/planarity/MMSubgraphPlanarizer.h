@@ -1,11 +1,3 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class MMSubgraphPlanarizer.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,29 +25,23 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
+#pragma once
 
-#ifndef OGDF_MM_SUBGRAPH_PLANARIZER_H
-#define OGDF_MM_SUBGRAPH_PLANARIZER_H
+#include <ogdf/planarity/MMCrossingMinimizationModule.h>
+#include <ogdf/planarity/PlanarSubgraphModule.h>
+#include <ogdf/planarity/MMEdgeInsertionModule.h>
+#include <memory>
 
-#include <ogdf/module/MMCrossingMinimizationModule.h>
-#include <ogdf/module/PlanarSubgraphModule.h>
-#include <ogdf/module/MMEdgeInsertionModule.h>
-#include <ogdf/basic/ModuleOption.h>
-
-
-namespace ogdf
-{
+namespace ogdf {
 
 /**
  * \brief Planarization approach for minor-monotone crossing minimization.
  *
+ * @ingroup ga-crossmin
  */
 class OGDF_EXPORT MMSubgraphPlanarizer : public MMCrossingMinimizationModule
 {
@@ -64,13 +50,13 @@ public:
 	MMSubgraphPlanarizer();
 
 	//! Sets the module option for the computation of the planar subgraph.
-	void setSubgraph(PlanarSubgraphModule *pSubgraph) {
-		m_subgraph.set(pSubgraph);
+	void setSubgraph(PlanarSubgraphModule<int> *pSubgraph) {
+		m_subgraph.reset(pSubgraph);
 	}
 
 	//! Sets the module option for minor-monotone edge insertion.
 	void setInserter(MMEdgeInsertionModule *pInserter) {
-		m_inserter.set(pInserter);
+		m_inserter.reset(pInserter);
 	}
 
 	//! Returns the number of performed permutations in the edge insertion step.
@@ -85,15 +71,13 @@ protected:
 		const EdgeArray<bool> *forbid,
 		int& crossingNumber,
 		int& numNS,
-		int& numSN);
+		int& numSN) override;
 
 private:
-	ModuleOption<PlanarSubgraphModule>  m_subgraph; //!< The planar subgraph module.
-	ModuleOption<MMEdgeInsertionModule> m_inserter; //!< The minor-monotone edge insertion module.
+	std::unique_ptr<PlanarSubgraphModule<int>> m_subgraph; //!< The planar subgraph module.
+	std::unique_ptr<MMEdgeInsertionModule> m_inserter; //!< The minor-monotone edge insertion module.
 
 	int m_permutations;	//!< The number of permutations.
 };
 
 }
-
-#endif

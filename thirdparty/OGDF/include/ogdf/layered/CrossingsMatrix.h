@@ -1,11 +1,3 @@
-/*
- * $Revision: 3832 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 11:16:27 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class CrossingsMatrix.
  *
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,19 +26,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_CROSSINGS_MATRIX_H
-#define OGDF_CROSSINGS_MATRIX_H
 
 #include <ogdf/basic/EdgeArray.h>
 #include <ogdf/basic/Array2D.h>
@@ -56,11 +40,8 @@
 namespace ogdf
 {
 
-//---------------------------------------------------------
-// CrossingsMatrix
-// implements crossings matrix which is used by some
-// TwoLayerCrossingMinimization heuristics (e.g. split)
-//---------------------------------------------------------
+//! Implements crossings matrix which is used by some
+//! TwoLayerCrossingMinimization heuristics (e.g. split)
 class OGDF_EXPORT CrossingsMatrix
 {
 public:
@@ -68,7 +49,7 @@ public:
 		m_bigM = 10000;
 	}
 
-	CrossingsMatrix(const HierarchyLevels &levels);
+	explicit CrossingsMatrix(const HierarchyLevels &levels);
 
 	~CrossingsMatrix() { }
 
@@ -86,7 +67,7 @@ public:
 	void init(Level &L);
 
 	//! SimDraw init
-	void init(Level &L, const EdgeArray<__uint32> *edgeSubGraphs);
+	void init(Level &L, const EdgeArray<uint32_t> *edgeSubGraphs);
 
 private:
 	Array<int> map;
@@ -95,6 +76,4 @@ private:
 	int m_bigM; // is set to some big number in both constructors
 };
 
-}// end namespace ogdf
-
-#endif
+}

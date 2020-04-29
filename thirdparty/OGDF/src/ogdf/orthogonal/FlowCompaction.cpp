@@ -1,11 +1,3 @@
-/*
- * $Revision: 3188 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-01-10 09:53:32 +0100 (Thu, 10 Jan 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implements constructive and improvement heurisitcs for
  * comapction applying computation of min-cost flow in the
@@ -18,7 +10,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -35,24 +27,22 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 
 #include <ogdf/orthogonal/FlowCompaction.h>
 #include <ogdf/orthogonal/CompactionConstraintGraph.h>
 #include <ogdf/graphalg/MinCostFlowReinelt.h>
-#include <ogdf/basic/simple_graph_alg.h>
-//#include <ogdf/planarity/PlanRepUML.h>
 
 
-//#define foutputRC
-//#define foutputMD
+//#define OGDF_FLOW_COMPACTION_OUTPUT_RC
+//#define OGDF_FLOW_COMPACTION_OUTPUT_MD
 
+#if defined(OGDF_FLOW_COMPACTION_OUTPUT_RC) || defined(OGDF_FLOW_COMPACTION_OUTPUT_MD)
+#include <ogdf/uml/PlanRepUML.h>
+#endif
 
 namespace ogdf {
 
@@ -72,11 +62,10 @@ void printCCGy(const char *filename,
 
 void writeGridDrawing(const char *name, PlanRep &PG, GridLayoutMapped &drawing)
 {
-	ofstream os(name);
+	std::ofstream os(name);
 
-	node v;
-	forall_nodes(v,PG) {
-		os << v->index() << ": " << drawing.x(v) << ", " << drawing.y(v) << endl;
+	for(node v : PG.nodes) {
+		os << v->index() << ": " << drawing.x(v) << ", " << drawing.y(v) << std::endl;
 	}
 }
 
@@ -107,7 +96,7 @@ void FlowCompaction::constructiveHeuristics(
 	OGDF_ASSERT(OR.isOrientated());
 
 	// x-coordinates of vertical segments
-	CompactionConstraintGraph<int> Dx(OR, PG, odEast, rc.separation(),
+	CompactionConstraintGraph<int> Dx(OR, PG, OrthoDir::East, rc.separation(),
 		m_costGen, m_costAssoc, m_align);
 	Dx.insertVertexSizeArcs(PG, drawing.width(), rc);
 
@@ -115,7 +104,7 @@ void FlowCompaction::constructiveHeuristics(
 	computeCoords(Dx, xDx);
 
 	// y-coordinates of horizontal segments
-	CompactionConstraintGraph<int> Dy(OR, PG, odNorth, rc.separation(),
+	CompactionConstraintGraph<int> Dy(OR, PG, OrthoDir::North, rc.separation(),
 		m_costGen, m_costAssoc, m_align);
 	Dy.insertVertexSizeArcs(PG, drawing.height(), rc);
 
@@ -123,8 +112,7 @@ void FlowCompaction::constructiveHeuristics(
 	computeCoords(Dy, yDy);
 
 	// final coordinates of vertices
-	node v;
-	forall_nodes(v,PG) {
+	for(node v : PG.nodes) {
 		drawing.x(v) = xDx[Dx.pathNodeOf(v)];
 		drawing.y(v) = yDy[Dy.pathNodeOf(v)];
 	}
@@ -140,9 +128,9 @@ void FlowCompaction::improvementHeuristics(
 {
 	OGDF_ASSERT(OR.isOrientated());
 
-	double costs = double(numeric_limits<int>::max()), lastCosts;
+	double costs = double(std::numeric_limits<int>::max()), lastCosts;
 	int steps = 0, maxSteps = m_maxImprovementSteps;
-	if (maxSteps == 0) maxSteps = numeric_limits<int>::max();
+	if (maxSteps == 0) maxSteps = std::numeric_limits<int>::max();
 
 	// OPTIMIZATION POTENTIAL:
 	// update constraint graphs "incrementally" by only re-inserting
@@ -151,8 +139,11 @@ void FlowCompaction::improvementHeuristics(
 		lastCosts = costs;
 		++steps;
 
+		// overflow detection and max number of steps
+		bool doComputeCoords = steps > 0 && steps < m_numGenSteps;
+
 		// x-coordinates of vertical segments
-		CompactionConstraintGraph<int> Dx(OR, PG, odEast, rc.separation(),
+		CompactionConstraintGraph<int> Dx(OR, PG, OrthoDir::East, rc.separation(),
 			m_costGen, m_costAssoc, m_align);
 
 		Dx.insertVertexSizeArcs(PG, drawing.width(), rc);
@@ -162,8 +153,7 @@ void FlowCompaction::improvementHeuristics(
 
 		// set position of segments in order to fix arcs of length 0 in
 		// computeCoords()
-		node w;
-		forall_nodes(w,Dx.getGraph())
+		for(node w : Dx.getGraph().nodes)
 		{
 			if (!Dx.extraNode(w))
 				xDx[w] = drawing.x(Dx.nodesIn(w).front());
@@ -172,32 +162,28 @@ void FlowCompaction::improvementHeuristics(
 		}
 
 
-#ifdef foutputRC
+#ifdef OGDF_FLOW_COMPACTION_OUTPUT_RC
 		string fileName = string("Dx_") + to_string(steps) + ".gml";
 		printCCGx(fileName.c_str(),Dx,drawing);
 #endif
 
 		//first steps: only vertical generalizations
-		if ((steps > 0) && (steps<m_numGenSteps)) //first compact cages
-			computeCoords(Dx, xDx, true, false, true, true);
-		else
-			computeCoords(Dx, xDx, true, false, true, false);
+		computeCoords(Dx, xDx, true, false, true, doComputeCoords);
 
 		// final x-coordinates of vertices
-		node v;
-		forall_nodes(v,PG) {
+		for(node v : PG.nodes) {
 			drawing.x(v) = xDx[Dx.pathNodeOf(v)];
 		}
 
 
-#ifdef foutputRC
+#ifdef OGDF_FLOW_COMPACTION_OUTPUT_RC
 		fileName = string("Gx_") + to_string(steps) + ".gml";
 		PlanRepUML &PGUml = (PlanRepUML&)PG;
 		PGUml.writeGML(fileName.c_str(),OR,drawing);
 #endif
 
 		// y-coordinates of horizontal segments
-		CompactionConstraintGraph<int> Dy(OR, PG, odNorth, rc.separation(),
+		CompactionConstraintGraph<int> Dy(OR, PG, OrthoDir::North, rc.separation(),
 			m_costGen, m_costAssoc, m_align);
 
 		Dy.insertVertexSizeArcs(PG, drawing.height(), rc);
@@ -208,7 +194,7 @@ void FlowCompaction::improvementHeuristics(
 
 		// set position of segments in order to fix arcs of length 0 in
 		// computeCoords()
-		forall_nodes(w,Dy.getGraph())
+		for(node w : Dy.getGraph().nodes)
 		{
 			if (!Dy.extraNode(w)) //maybe only nec in next impro
 				yDy[w] = drawing.y(Dy.nodesIn(w).front());
@@ -216,22 +202,19 @@ void FlowCompaction::improvementHeuristics(
 				yDy[w] = drawing.y(Dy.extraRep(w)) + Dy.extraOfs(w);
 		}
 
-#ifdef foutputRC
+#ifdef OGDF_FLOW_COMPACTION_OUTPUT_RC
 		fileName = string("Dy_") + to_string(steps) + ".gml";
 		printCCGy(fileName.c_str(),Dy,drawing);
 #endif
 
-		if ((steps > 0) && (steps<m_numGenSteps)) //first compact cages
-			computeCoords(Dy, yDy, true, false, true, true);
-		else
-			computeCoords(Dy, yDy, true, false, true, false);
+		computeCoords(Dy, yDy, true, false, true, doComputeCoords);
 
 		// final y-coordinates of vertices
-		forall_nodes(v,PG) {
+		for(node v : PG.nodes) {
 			drawing.y(v) = yDy[Dy.pathNodeOf(v)];
 		}
 
-#ifdef foutputRC
+#ifdef OGDF_FLOW_COMPACTION_OUTPUT_RC
 		fileName = string("Gy_") + to_string(steps) + ".gml";
 		PGUml.writeGML(fileName.c_str(),OR,drawing);
 #endif
@@ -246,7 +229,9 @@ void FlowCompaction::improvementHeuristics(
 void FlowCompaction::improvementHeuristics(
 	PlanRep &PG,
 	OrthoRep &OR,
-	//const
+#if 0
+	const
+#endif
 	MinimumEdgeDistances<int> &minDist,
 	GridLayoutMapped &drawing,
 	int originalSeparation //test for compaction improvement
@@ -254,9 +239,9 @@ void FlowCompaction::improvementHeuristics(
 {
 	OGDF_ASSERT(OR.isOrientated());
 
-	double costs = double(numeric_limits<int>::max()), lastCosts;
+	double costs = double(std::numeric_limits<int>::max()), lastCosts;
 	int steps = 0, maxSteps = m_maxImprovementSteps;
-	if (maxSteps == 0) maxSteps = numeric_limits<int>::max();
+	if (maxSteps == 0) maxSteps = std::numeric_limits<int>::max();
 
 	// OPTIMIZATION POTENTIAL:
 	// update constraint graphs "incrementally" by only re-inserting
@@ -265,15 +250,18 @@ void FlowCompaction::improvementHeuristics(
 		lastCosts = costs;
 		++steps;
 
+		// overflow detection and max number of steps
+		bool doComputeCoords = steps > 0 && steps < m_numGenSteps;
+
 		// x-coordinates of vertical segments
-		CompactionConstraintGraph<int> Dx(OR, PG, odEast, originalSeparation,
+		CompactionConstraintGraph<int> Dx(OR, PG, OrthoDir::East, originalSeparation,
 			//minDist.separation(),
 			m_costGen, m_costAssoc, m_align);
 
 		Dx.insertVertexSizeArcs(PG, drawing.width(), minDist);
 		Dx.insertVisibilityArcs(PG, drawing.x(), drawing.y(), minDist);
 
-#ifdef foutputMD
+#ifdef OGDF_FLOW_COMPACTION_OUTPUT_MD
 		string fileName = string("Dx_") + to_string(steps) + ".gml";
 		printCCGx(fileName.c_str(),Dx,drawing);
 #endif
@@ -282,28 +270,23 @@ void FlowCompaction::improvementHeuristics(
 
 		// set position of segments in order to fix arcs of length 0 in
 		// computeCoords()
-		node w;
-		forall_nodes(w,Dx.getGraph())
+		for(node w : Dx.getGraph().nodes)
 		{
 			if (!Dx.extraNode(w))
 				xDx[w] = drawing.x(Dx.nodesIn(w).front());
 			else xDx[w] = drawing.x(Dx.extraRep(w)) + Dx.extraOfs(w);
 		}
 
-		if ((steps > 0) && (steps<m_numGenSteps)) //first compact cages
-			computeCoords(Dx, xDx, true, true, true, true);
-		else
-			computeCoords(Dx, xDx, true, true, true, false);
+		computeCoords(Dx, xDx, true, true, true, doComputeCoords);
 
 		//computeCoords(Dx, xDx, true, true, true);
 
 		// final x-coordinates of vertices
-		node v;
-		forall_nodes(v,PG) {
+		for(node v : PG.nodes) {
 			drawing.x(v) = xDx[Dx.pathNodeOf(v)];
 		}
 
-#ifdef foutputMD
+#ifdef OGDF_FLOW_COMPACTION_OUTPUT_MD
 		fileName = string("Gx_") + to_string(steps) + ".txt";
 		writeGridDrawing(fileName.c_str(), PG, drawing);
 
@@ -313,7 +296,7 @@ void FlowCompaction::improvementHeuristics(
 #endif
 
 		// y-coordinates of horizontal segments
-		CompactionConstraintGraph<int> Dy(OR, PG, odNorth, originalSeparation,
+		CompactionConstraintGraph<int> Dy(OR, PG, OrthoDir::North, originalSeparation,
 			//minDist.separation(),
 			m_costGen, m_costAssoc, m_align);
 
@@ -324,7 +307,7 @@ void FlowCompaction::improvementHeuristics(
 
 		// set position of segments in order to fix arcs of length 0 in
 		// computeCoords()
-		forall_nodes(w,Dy.getGraph())
+		for(node w : Dy.getGraph().nodes)
 		{
 			if (!Dy.extraNode(w))
 				yDy[w] = drawing.y(Dy.nodesIn(w).front());
@@ -332,32 +315,28 @@ void FlowCompaction::improvementHeuristics(
 				yDy[w] = drawing.y(Dy.extraRep(w)) + Dy.extraOfs(w);
 		}
 
-#ifdef foutputMD
+#ifdef OGDF_FLOW_COMPACTION_OUTPUT_MD
 		fileName = string("Dy_") + to_string(steps) + ".gml";
 		printCCGy(fileName.c_str(),Dy,drawing);
 
 		fileName = string("c-edges y ") + to_string(steps) + ".txt";
-		ofstream os(fileName.c_str());
+		std::ofstream os(fileName.c_str());
 		const Graph &Gd = Dy.getGraph();
-		edge ee;
-		forall_edges(ee,Gd)
+		for(edge ee : Gd.edges)
 			os << (yDy[ee->target()] - yDy[ee->source()]) << "   " <<
-				ee->source()->index() << " -> " << ee->target()->index() << endl;
+				ee->source()->index() << " -> " << ee->target()->index() << std::endl;
 		os.close();
 #endif
 
 		//computeCoords(Dy, yDy, true, true, true);
-		if ((steps > 0) && (steps < m_numGenSteps)) //first compact cages
-			computeCoords(Dy, yDy, true, true, true, true);
-		else
-			computeCoords(Dy, yDy, true, true, true, false);
+		computeCoords(Dy, yDy, true, true, true, doComputeCoords);
 
 		// final y-coordinates of vertices
-		forall_nodes(v,PG) {
+		for(node v : PG.nodes) {
 			drawing.y(v) = yDy[Dy.pathNodeOf(v)];
 		}
 
-#ifdef foutputMD
+#ifdef OGDF_FLOW_COMPACTION_OUTPUT_MD
 		fileName = string("Gy_") + to_string(steps) + ".txt";
 		writeGridDrawing(fileName.c_str(), PG, drawing);
 
@@ -403,15 +382,13 @@ void FlowCompaction::computeCoords(
 	m_dualEdge.init(Gd);
 
 	// insert a node in the dual graph for each face in E
-	face f;
-	forall_faces(f,E) {
+	for(face f : E.faces) {
 		dualNode[f] = dual.newNode();
 	}
 
 	// Insert an edge into the dual graph for each edge in Gd
 	// The edges are directed from the left face to the right face.
-	edge e;
-	forall_edges(e,Gd)
+	for(edge e : Gd.edges)
 	{
 		node vLeft  = dualNode[E.rightFace(e->adjTarget())];
 		node vRight = dualNode[E.rightFace(e->adjSource())];
@@ -420,7 +397,7 @@ void FlowCompaction::computeCoords(
 	}
 
 
-	MinCostFlowReinelt mcf;
+	MinCostFlowReinelt<int> mcf;
 
 	const int infinity = mcf.infinity();
 
@@ -429,7 +406,7 @@ void FlowCompaction::computeCoords(
 	EdgeArray<int> cost(dual);
 	m_flow.init(dual);
 
-	forall_edges(e,Gd)
+	for(edge e : Gd.edges)
 	{
 		edge eDual = m_dualEdge[e];
 
@@ -441,7 +418,7 @@ void FlowCompaction::computeCoords(
 		// This has to be changed if we use special constructs for allowing
 		// left or right bends
 		int currentLength = pos[e->target()] - pos[e->source()];
-		if ((fixZeroLength && currentLength == 0) && (D.typeOf(e) == cetFixToZeroArc))
+		if ((fixZeroLength && currentLength == 0) && (D.typeOf(e) == ConstraintEdgeType::FixToZeroArc))
 			lowerBound[eDual] = upperBound[eDual] = 0;
 		else if (improvementHeuristics && currentLength < lowerBound[eDual])
 			lowerBound[eDual] = currentLength;
@@ -449,12 +426,12 @@ void FlowCompaction::computeCoords(
 		//fix length of alignment edges after some rounds
 		//(preliminary use onlyGen setting here)
 
-		if (m_align && improvementHeuristics)
-		{
-			if (D.alignmentArc(e) && !onlyGen) //use onlyGen instead of extra bool to test
-				upperBound[eDual] = currentLength;
-
-		}//if align
+		if (m_align
+		 && improvementHeuristics
+		 && D.alignmentArc(e)
+		 && !onlyGen) {
+			upperBound[eDual] = currentLength;
+		}
 
 
 		//fix cage boundary edge segments to values smaller than sep
@@ -469,31 +446,32 @@ void FlowCompaction::computeCoords(
 		//reducible arcs are currently out of play
 		//maybe they will be inserted later on for some special purpose,
 		//therefore we keep the code
-		OGDF_ASSERT(D.typeOf(e) != cetReducibleArc)
-		//     if (D.typeOf(e) == cetReducibleArc)
-		//         {
-		//OGDF_ASSERT(false);
-		//           lowerBound[eDual] = min(0, currentLength);
-		//           upperBound[eDual] = infinity;
-		//         }
+#if 1
+		OGDF_ASSERT(D.typeOf(e) != ConstraintEdgeType::ReducibleArc);
+#else
+		if (D.typeOf(e) == ConstraintEdgeType::ReducibleArc) {
+		{
+			lowerBound[eDual] = min(0, currentLength);
+			upperBound[eDual] = infinity;
+		}
+#endif
 		//should we reset median arcs here?
 
-		if (onlyGen)
-		{
-			//vertexsize sind aber nur innen, border muss noch geaendert werden
-			//also expansion!=generalization
-			if (!(D.verticalArc(e) || (D.typeOf(e) == cetVertexSizeArc)
-				|| D.onBorder(e)) ) {
-				lowerBound[eDual] = currentLength;
-				upperBound[eDual] = infinity;
-			}
+		if (onlyGen
+		 && !D.verticalArc(e)
+		 && D.typeOf(e) != ConstraintEdgeType::VertexSizeArc
+		 && !D.onBorder(e)) {
+			// vertexsize sind aber nur innen, border muss noch geaendert werden
+			// also expansion!=generalization
+			lowerBound[eDual] = currentLength;
+			upperBound[eDual] = infinity;
 		}
 
-	}//forall Gd edges
+	}
 
 	if (fixVertexSize) {
-		forall_edges(e,Gd) {
-			if (D.typeOf(e) == cetVertexSizeArc) {
+		for(edge e : Gd.edges) {
+			if (D.typeOf(e) == ConstraintEdgeType::VertexSizeArc) {
 				edge eDual = m_dualEdge[e];
 				upperBound[eDual] = lowerBound[eDual];
 			}
@@ -505,8 +483,7 @@ void FlowCompaction::computeCoords(
 	// apply min-cost flow
 	if (dual.numberOfNodes() == 1)
 	{
-		edge eDual;
-		forall_edges(eDual,dual)
+		for(edge eDual : dual.edges)
 			m_flow[eDual] = lowerBound[eDual];
 
 	} else {
@@ -542,8 +519,8 @@ void FlowCompaction::dfsAssignPos(
 	pos[v] = x;
 	visited[v] = true;
 
-	edge e;
-	forall_adj_edges(e,v) {
+	for(adjEntry adj : v->adjEntries) {
+		edge e = adj->theEdge();
 		node w = e->opposite(v);
 		if (visited[w]) continue;
 
@@ -562,21 +539,20 @@ void writeCcgGML(const CompactionConstraintGraph<int> &D,
 	const GraphAttributes &AG,
 	const char *filename)
 {
-	ofstream os(filename);
+	std::ofstream os(filename);
 	const Graph &G = D.getGraph();
 
 	NodeArray<int> id(G);
 	int nextId = 0;
 
-	os.setf(ios::showpoint);
+	os.setf(std::ios::showpoint);
 	os.precision(10);
 
 	os << "Creator \"ogdf::writeCcgGML\"\n";
 	os << "graph [\n";
 	os << "  directed 1\n";
 
-	node v;
-	forall_nodes(v,G) {
+	for(node v : G.nodes) {
 		os << "  node [\n";
 
 		os << "    id " << (id[v] = nextId++) << "\n";
@@ -593,8 +569,7 @@ void writeCcgGML(const CompactionConstraintGraph<int> &D,
 	}
 
 
-	edge e;
-	forall_edges(e,G) {
+	for(edge e : G.edges) {
 		os << "  edge [\n";
 
 		os << "    source " << id[e->source()] << "\n";
@@ -607,22 +582,22 @@ void writeCcgGML(const CompactionConstraintGraph<int> &D,
 
 		switch(D.typeOf(e))
 		{
-		case cetBasicArc: // red
+		case ConstraintEdgeType::BasicArc: // red
 			os << "      fill \"#FF0000\"\n";
 			break;
-		case cetVertexSizeArc: // blue
+		case ConstraintEdgeType::VertexSizeArc: // blue
 			os << "      fill \"#0000FF\"\n";
 			break;
-		case cetVisibilityArc: // green
+		case ConstraintEdgeType::VisibilityArc: // green
 			os << "      fill \"#00FF00\"\n";
 			break;
-		case cetReducibleArc: // pink
+		case ConstraintEdgeType::ReducibleArc: // pink
 			os << "      fill \"#FF00FF\"\n";
 			break;
-		case cetFixToZeroArc: // violet
+		case ConstraintEdgeType::FixToZeroArc: // violet
 			os << "      fill \"#AF00FF\"\n";
 			break;
-		case cetMedianArc: // black
+		case ConstraintEdgeType::MedianArc: // black
 			os << "      fill \"#0F000F\"\n";
 			break;
 		}
@@ -633,9 +608,8 @@ void writeCcgGML(const CompactionConstraintGraph<int> &D,
 			os << "        point [ x " << AG.x(e->source()) << " y " <<
 				AG.y(e->source()) << " ]\n";
 
-			ListConstIterator<DPoint> it;
-			for(it = dpl.begin(); it.valid(); ++it)
-				os << "        point [ x " << (*it).m_x << " y " << (*it).m_y << " ]\n";
+			for(const DPoint &dp : dpl)
+				os << "        point [ x " << dp.m_x << " y " << dp.m_y << " ]\n";
 
 			os << "        point [ x " << AG.x(e->target()) << " y " <<
 				AG.y(e->target()) << " ]\n";
@@ -658,12 +632,9 @@ void printCCGx(const char *filename,
 	const NodeArray<int> &x = drawing.x();
 	const NodeArray<int> &y = drawing.y();
 
-	node v;
-	edge e;
-
 	GraphAttributes AG(Gd,GraphAttributes::nodeLabel | GraphAttributes::nodeGraphics | GraphAttributes::edgeGraphics);
 
-	forall_nodes(v,Gd)
+	for(node v : Gd.nodes)
 	{
 		if (D.extraNode(v))
 		{
@@ -682,10 +653,9 @@ void printCCGx(const char *filename,
 		node v1 = L.front();
 		int minY = y[v1];
 		int maxY = y[v1];
-		SListConstIterator<node> it;
-		for(it = L.begin(); it.valid(); ++it) {
-			if (y[*it] < minY) minY = y[*it];
-			if (y[*it] > maxY) maxY = y[*it];
+		for(node w : L) {
+			if (y[w] < minY) minY = y[w];
+			if (y[w] > maxY) maxY = y[w];
 		}
 		AG.y(v) = 0.5*drawing.toDouble(minY + maxY);
 		AG.x(v) = drawing.toDouble(x[v1]);
@@ -694,9 +664,9 @@ void printCCGx(const char *filename,
 	}
 
 	const Graph &G = D.getOrthoRep();
-	forall_edges(e,G) {
+	for(edge e : G.edges) {
 		edge eD = D.basicArc(e);
-		if (eD == 0) continue;
+		if (eD == nullptr) continue;
 
 		AG.bends(eD).pushFront(DPoint(AG.x(eD->source()),drawing.toDouble(drawing.y(e->source()))));
 		AG.bends(eD).pushBack (DPoint(AG.x(eD->target()),drawing.toDouble(drawing.y(e->source()))));
@@ -713,12 +683,9 @@ void printCCGy(const char *filename,
 	const NodeArray<int> &x = drawing.x();
 	const NodeArray<int> &y = drawing.y();
 
-	node v;
-	edge e;
-
 	GraphAttributes AG(Gd,GraphAttributes::nodeLabel | GraphAttributes::nodeGraphics | GraphAttributes::edgeGraphics);
 
-	forall_nodes(v,Gd)
+	for(node v : Gd.nodes)
 	{
 		if (D.extraNode(v))
 		{
@@ -737,10 +704,9 @@ void printCCGy(const char *filename,
 		node v1 = L.front();
 		int minX = x[v1];
 		int maxX = x[v1];
-		SListConstIterator<node> it;
-		for(it = L.begin(); it.valid(); ++it) {
-			if (x[*it] < minX) minX = x[*it];
-			if (x[*it] > maxX) maxX = x[*it];
+		for(node w : L) {
+			if (x[w] < minX) minX = x[w];
+			if (x[w] > maxX) maxX = x[w];
 		}
 		AG.x(v) = 0.5*drawing.toDouble(minX + maxX);
 		AG.y(v) = drawing.toDouble(y[v1]);
@@ -749,9 +715,9 @@ void printCCGy(const char *filename,
 	}
 
 	const Graph &G = D.getOrthoRep();
-	forall_edges(e,G) {
+	for(edge e : G.edges) {
 		edge eD = D.basicArc(e);
-		if (eD == 0) continue;
+		if (eD == nullptr) continue;
 		AG.bends(eD).pushFront(DPoint(drawing.toDouble(drawing.x(e->source())),
 			AG.y(eD->source())));
 		AG.bends(eD).pushBack (DPoint(drawing.toDouble(drawing.x(e->source())),
@@ -761,7 +727,4 @@ void printCCGy(const char *filename,
 	writeCcgGML(D,AG,filename);
 }
 
-
-
-} // end namespace ogdf
-
+}

@@ -1,22 +1,14 @@
-/*
- * $Revision: 3521 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-05-31 14:52:33 +0200 (Fri, 31 May 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implement class ClusterGraphAttributes
  *
- * \author Karsten Klein, Carsten Gutwenger
+ * \author Karsten Klein, Carsten Gutwenger, Max Ilsen
  *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,12 +25,9 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 
 #include <ogdf/cluster/ClusterGraphAttributes.h>
@@ -46,29 +35,89 @@
 
 namespace ogdf {
 
+// Start enumerating our attributes as one larger than the regular GraphAttributes
+const long firstAttribute = GraphAttributes::all + 1;
+const long ClusterGraphAttributes::clusterGraphics = firstAttribute << 0;
+const long ClusterGraphAttributes::clusterStyle    = firstAttribute << 1;
+const long ClusterGraphAttributes::clusterLabel    = firstAttribute << 2;
+const long ClusterGraphAttributes::clusterTemplate = firstAttribute << 3;
+const long ClusterGraphAttributes::all             = (firstAttribute << 4) - 1; // bitmask that covers all other attributes
 
-ClusterGraphAttributes::ClusterGraphAttributes(ClusterGraph& cg, long initAttributes)
-	: GraphAttributes(cg.constGraph(), initAttributes | edgeType | nodeType | nodeGraphics | edgeGraphics),
-	m_pClusterGraph(&cg), m_clusterInfo(cg), m_clusterTemplate(cg)
+ClusterGraphAttributes::ClusterGraphAttributes(const ClusterGraph& cg, long initAttributes)
+	: GraphAttributes(cg.constGraph(), initAttributes | edgeType | nodeType | nodeGraphics | edgeGraphics)
+	, m_pClusterGraph(&cg)
 {
-	//should we always fill the cluster infos here?
-}//constructor
-
-
-//reinitialize graph
-void ClusterGraphAttributes::init(ClusterGraph &cg, long initAttributes)
-{
-	GraphAttributes::init(cg.constGraph(), initAttributes);
-
-	m_pClusterGraph = &cg;
-	m_clusterInfo.init(cg);
-	m_clusterTemplate.init(cg);
+	addAttributes(initAttributes);
 }
 
+void ClusterGraphAttributes::addClusterAttributes(long attr) {
+	if (attr & clusterGraphics) {
+		m_x.init(*m_pClusterGraph, 0.0);
+		m_y.init(*m_pClusterGraph, 0.0);
+		m_width.init(*m_pClusterGraph, 0.0);
+		m_height.init(*m_pClusterGraph, 0.0);
+	}
+	if (attr & clusterStyle) {
+		m_stroke.init(*m_pClusterGraph, LayoutStandards::defaultClusterStroke());
+		m_fill.init(*m_pClusterGraph, LayoutStandards::defaultClusterFill());
+	}
+	if (attr & clusterLabel) {
+		m_label.init(*m_pClusterGraph);
+	}
+	if (attr & clusterTemplate) {
+		m_clusterTemplate.init(*m_pClusterGraph);
+	}
+}
 
-//
+void ClusterGraphAttributes::destroyClusterAttributes(long attr) {
+	if (attr & clusterGraphics) {
+		m_x.init();
+		m_y.init();
+		m_width.init();
+		m_height.init();
+	}
+	if (attr & clusterStyle) {
+		m_stroke.init();
+		m_fill.init();
+	}
+	if (attr & clusterLabel) {
+		m_label.init();
+	}
+	if (attr & clusterTemplate) {
+		m_clusterTemplate.init();
+	}
+}
+
+void ClusterGraphAttributes::init(long attr)
+{
+	GraphAttributes::init(attr);
+	destroyClusterAttributes(m_attributes);
+	addClusterAttributes(attr);
+}
+
+void ClusterGraphAttributes::init(ClusterGraph &cg, long attr)
+{
+	GraphAttributes::init(cg.constGraph(), attr);
+	m_pClusterGraph = &cg;
+	destroyClusterAttributes(m_attributes);
+	addClusterAttributes(attr);
+}
+
+void ClusterGraphAttributes::addAttributes(long attr)
+{
+	OGDF_ASSERT(!(m_attributes & clusterStyle) || (m_attributes & clusterGraphics));
+	GraphAttributes::addAttributes(attr);
+	addClusterAttributes(attr);
+}
+
+void ClusterGraphAttributes::destroyAttributes(long attr)
+{
+	GraphAttributes::destroyAttributes(attr);
+	destroyClusterAttributes(attr);
+}
+
 // calculates the bounding box of the graph including clusters
-const DRect ClusterGraphAttributes::boundingBox() const
+DRect ClusterGraphAttributes::boundingBox() const
 {
 	DRect bb = GraphAttributes::boundingBox();
 	double minx = bb.p1().m_x;
@@ -76,21 +125,19 @@ const DRect ClusterGraphAttributes::boundingBox() const
 	double maxx = bb.p2().m_x;
 	double maxy = bb.p2().m_y;
 
-	cluster c;
-	forall_clusters(c,*m_pClusterGraph)
-	{
-		if(c == m_pClusterGraph->rootCluster())
-			continue;
+	if (has(ClusterGraphAttributes::clusterGraphics)) {
+		bool hasClusterStyle = has(ClusterGraphAttributes::clusterStyle);
 
-		double x1 = x(c);
-		double y1 = y(c);
-		double x2 = x1 + width(c);
-		double y2 = y1 + height(c);
+		for (cluster c : m_pClusterGraph->clusters) {
+			if (c != m_pClusterGraph->rootCluster()) {
+				double lw = hasClusterStyle ? 0.5*strokeWidth(c) : 0.0;
 
-		if (x1 < minx) minx = x1;
-		if (x2 > maxx) maxx = x2;
-		if (y1 < miny) miny = y1;
-		if (y2 > maxy) maxy = y2;
+				Math::updateMin(minx, x(c) - lw);
+				Math::updateMax(maxx, x(c) + width(c) + lw);
+				Math::updateMin(miny, y(c) - lw);
+				Math::updateMax(maxy, y(c) + height(c) + lw);
+			}
+		}
 	}
 
 	return DRect(minx, miny, maxx, maxy);
@@ -104,16 +151,16 @@ void ClusterGraphAttributes::updateClusterPositions(double boundaryDist)
 	//we use width, height temporarily to store max values
 	forall_postOrderClusters(c,*m_pClusterGraph)
 	{
-		ListIterator<node> nit = c->nBegin();
+		ListConstIterator<node> nit = c->nBegin();
 		ListConstIterator<ClusterElement*> cit = c->cBegin();
 		//Initialize with first element
 		if (nit.valid())
 		{
-			x(c) = m_x[*nit] - m_width[*nit]/2;
-			y(c) = m_y[*nit] - m_height[*nit]/2;
-			width(c) = m_x[*nit] + m_width[*nit]/2;
-			height(c) = m_y[*nit] + m_height[*nit]/2;
-			nit++;
+			x(c) = x(*nit) - width(*nit)/2;
+			y(c) = y(*nit) - height(*nit)/2;
+			width(c) = x(*nit) + width(*nit)/2;
+			height(c) = y(*nit) + height(*nit)/2;
+			++nit;
 		}
 		else
 		{
@@ -123,7 +170,7 @@ void ClusterGraphAttributes::updateClusterPositions(double boundaryDist)
 				y(c) = y(*cit);
 				width(c) = x(*cit) + width(*cit);
 				height(c) = y(*cit) + height(*cit);
-				cit++;
+				++cit;
 			}
 			else
 			{
@@ -136,15 +183,15 @@ void ClusterGraphAttributes::updateClusterPositions(double boundaryDist)
 		//run through elements and update
 		while (nit.valid())
 		{
-			if (x(c) > m_x[*nit] - m_width[*nit]/2)
-				x(c) = m_x[*nit] - m_width[*nit]/2;
-			if (y(c) > m_y[*nit] - m_height[*nit]/2)
-				y(c) = m_y[*nit] - m_height[*nit]/2;
-			if (width(c) < m_x[*nit] + m_width[*nit]/2)
-				width(c) = m_x[*nit] + m_width[*nit]/2;
-			if (height(c) < m_y[*nit] + m_height[*nit]/2)
-				height(c) = m_y[*nit] + m_height[*nit]/2;
-			nit++;
+			if (x(c) > x(*nit) - width(*nit)/2)
+				x(c) = x(*nit) - width(*nit)/2;
+			if (y(c) > y(*nit) - height(*nit)/2)
+				y(c) = y(*nit) - height(*nit)/2;
+			if (width(c) < x(*nit) + width(*nit)/2)
+				width(c) = x(*nit) + width(*nit)/2;
+			if (height(c) < y(*nit) + height(*nit)/2)
+				height(c) = y(*nit) + height(*nit)/2;
+			++nit;
 		}
 		while (cit.valid())
 		{
@@ -156,7 +203,7 @@ void ClusterGraphAttributes::updateClusterPositions(double boundaryDist)
 				width(c) = x(*cit) + width(*cit);
 			if (height(c) < y(*cit) + height(*cit))
 				height(c) = y(*cit) + height(*cit);
-			cit++;
+			++cit;
 		}
 		x(c) -= boundaryDist;
 		y(c) -= boundaryDist;
@@ -166,13 +213,50 @@ void ClusterGraphAttributes::updateClusterPositions(double boundaryDist)
 }
 
 
-
-ostream &operator<<(ostream &os, ogdf::cluster c)
+void ClusterGraphAttributes::scale(double sx, double sy, bool scaleNodes)
 {
-	if (c) os << c->index(); else os << "nil";
-	return os;
+	GraphAttributes::scale(sx, sy, scaleNodes);
+
+	double asx = fabs(sx), asy = fabs(sy);
+	for (cluster c : m_pClusterGraph->clusters) {
+		m_x[c] *= sx;
+		m_y[c] *= sy;
+		m_width[c] *= asx;
+		m_height[c] *= asy;
+	}
 }
 
 
-} // end namespace ogdf
+void ClusterGraphAttributes::translate(double dx, double dy)
+{
+	GraphAttributes::translate(dx, dy);
 
+	for (cluster c : m_pClusterGraph->clusters) {
+		x(c) += dx;
+		y(c) += dy;
+	}
+}
+
+
+void ClusterGraphAttributes::flipVertical(const DRect &box)
+{
+	GraphAttributes::flipVertical(box);
+
+	double dy = box.p1().m_y + box.p2().m_y;
+	for (cluster c : m_pClusterGraph->clusters) {
+		y(c) = dy - y(c);
+	}
+}
+
+
+void ClusterGraphAttributes::flipHorizontal(const DRect &box)
+{
+	GraphAttributes::flipHorizontal(box);
+
+	double dx = box.p1().m_x + box.p2().m_x;
+	for (cluster c : m_pClusterGraph->clusters) {
+		x(c) = dx - x(c);
+	}
+}
+
+}

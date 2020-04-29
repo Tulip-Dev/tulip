@@ -1,13 +1,5 @@
-/*
- * $Revision: 3271 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-01-29 09:42:21 +0100 (Tue, 29 Jan 2013) $
- ***************************************************************/
-
 /** \file
- * \brief Implementation of Tutte's Algorithm
+ * \brief Definition of ogdf::TutteLayout.
  *
  * \author David Alberts \and Andrea Wagner
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,20 +25,15 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/energybased/TutteLayout.h>
 
 
-#ifdef USE_COIN
-
-#include <ogdf/basic/Math.h>
-#include <ogdf/basic/GraphCopyAttributes.h>
+#include <ogdf/basic/GraphAttributes.h>
+#include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/basic/extended_graph_alg.h>
 
 
@@ -82,20 +69,14 @@ bool TutteLayout::solveLP(
 	const double *sol = osi->getColSolution();
 	for(i=0; i<cols; i++) x[i] = sol[i];
 
-	if(osi->isProvenOptimal()) {
-		delete osi;
-		return true;
-	}
-	else {
-		delete osi;
-		return false;
-	}
+	bool returnValue = osi->isProvenOptimal();
+	delete osi;
+	return returnValue;
 }
 
 
-TutteLayout::TutteLayout()
+TutteLayout::TutteLayout() : m_bbox(0.0, 0.0, 250.0, 250.0)
 {
-	m_bbox = DRect (0.0, 0.0, 250.0, 250.0);
 }
 
 
@@ -112,9 +93,9 @@ void TutteLayout::setFixedNodes(
 	// compute faces of a copy of G
 	GraphCopy GC(G);
 
-	// compute a planar embedding if \a G is planar
-	if(isPlanar(G)) planarEmbed(GC);
-	//FIXME this stuff above seems wrong!!
+	// compute a planar embedding if G is planar
+	OGDF_ASSERT(isPlanar(G));
+	planarEmbedPlanarGraph(GC);
 
 	CombinatorialEmbedding E(GC);
 	E.computeFaces();
@@ -128,24 +109,22 @@ void TutteLayout::setFixedNodes(
 
 	// set nodes and pos
 	NodeArray<bool> addMe(GC,true);
-	adjEntry adj;
 
 	List<node> maxNodes;
-	forall_face_adj(adj,maxFace) {
+	for(adjEntry adj : maxFace->entries) {
 		maxNodes.pushBack(adj->theNode());
 	}
 
-	forall_nonconst_listiterators(node, it, maxNodes) {
-		node &w = *it;
+	for(node w : maxNodes) {
 		if(addMe[w]) {
-			nodes.pushBack(w);
+			nodes.pushBack(GC.original(w));
 			addMe[w] = false;
 		}
 	}
 
 	double step  = 2.0 * Math::pi / (double)(nodes.size());
 	double alpha = 0.0;
-	forall_listiterators(node, it, nodes) {
+	for(int i = 0; i < nodes.size(); ++i) {
 		pos.pushBack(DPoint(radius * cos(alpha), radius * sin(alpha)));
 		alpha += step;
 	}
@@ -161,21 +140,15 @@ void TutteLayout::setFixedNodes(
 {
 	GraphCopy GC(G);
 
-	// delete possible old entries in nodes and pos
-	nodes.clear();
+	// delete possible old entries
 	pos.clear();
 
 	// set nodes and pos
-
-	forall_listiterators(node, it, givenNodes) {
-		node theOrig = *it;
-		node theCopy = GC.copy(theOrig);
-		nodes.pushBack(theCopy);
-	}
+	nodes = givenNodes;
 
 	double step  = 2.0 * Math::pi / (double)(nodes.size());
 	double alpha = 0.0;
-	forall_listiterators(node, it, nodes) {
+	for(int i = 0; i < nodes.size(); ++i) {
 		pos.pushBack(DPoint(radius * cos(alpha), radius * sin(alpha)));
 		alpha += step;
 	}
@@ -187,6 +160,7 @@ void TutteLayout::call(GraphAttributes &AG, const List<node> &givenNodes)
 
 	List<node> fixedNodes;
 	List<DPoint> positions;
+	DRect oldBBox = m_bbox;
 
 	double diam =
 	sqrt((m_bbox.width()) * (m_bbox.width())
@@ -212,7 +186,8 @@ void TutteLayout::call(GraphAttributes &AG, const List<node> &givenNodes)
 	node v = G.firstNode();
 
 	double r        = diam/2.8284271;
-	int    n        = G.numberOfNodes();
+	// Prevent division by zero that occurs for n=2 in later if-condition.
+	int n           = G.numberOfNodes() == 2 ? 3 : G.numberOfNodes();
 	double nodeDiam = 2.0*sqrt((AG.width(v)) * (AG.width(v))
 			 + (AG.height(v)) * (AG.height(v)));
 
@@ -224,6 +199,8 @@ void TutteLayout::call(GraphAttributes &AG, const List<node> &givenNodes)
 	setFixedNodes(G,fixedNodes,givenNodes,positions,r);
 
 	doCall(AG,fixedNodes,positions);
+
+	m_bbox = oldBBox;
 }
 
 void TutteLayout::call(GraphAttributes &AG)
@@ -232,6 +209,7 @@ void TutteLayout::call(GraphAttributes &AG)
 
 	List<node> fixedNodes;
 	List<DPoint> positions;
+	DRect oldBBox = m_bbox;
 
 	double diam =
 	sqrt((m_bbox.width()) * (m_bbox.width())
@@ -257,7 +235,8 @@ void TutteLayout::call(GraphAttributes &AG)
 	node v = G.firstNode();
 
 	double r        = diam/2.8284271;
-	int n           = G.numberOfNodes();
+	// Prevent division by zero that occurs for n=2 in later if-condition.
+	int n           = G.numberOfNodes() == 2 ? 3 : G.numberOfNodes();
 	double nodeDiam = 2.0*sqrt((AG.width(v)) * (AG.width(v))
 			 + (AG.height(v)) * (AG.height(v)));
 
@@ -269,6 +248,8 @@ void TutteLayout::call(GraphAttributes &AG)
 	setFixedNodes(G,fixedNodes,positions,r);
 
 	doCall(AG,fixedNodes,positions);
+
+	m_bbox = oldBBox;
 }
 
 
@@ -280,110 +261,114 @@ bool TutteLayout::doCall(
 	const List<node> &fixedNodes,
 	List<DPoint> &fixedPositions)
 {
-	node v, w;
-	edge e;
-
 	const Graph &G = AG.constGraph();
+
+	OGDF_ASSERT(isTriconnected(G));
+
 	GraphCopy GC(G);
-	GraphCopyAttributes AGC(GC, AG);
+	GraphAttributes AGC(GC);
 
 	// mark fixed nodes and set their positions in a
-	NodeArray<bool> fixed(GC,false);
-	forall_listiterators(node, it, fixedNodes) {
-		fixed[*it] = true;
+	NodeArray<bool> fixed(GC, false);
+	for (node w : fixedNodes) {
+		node v = GC.copy(w);
+		fixed[v] = true;
+
 		DPoint p = fixedPositions.popFrontRet();   // slightly dirty...
 		fixedPositions.pushBack(p);          // ...
 
-		AGC.x(*it) = p.m_x;
-		AGC.y(*it) = p.m_y;
+		AGC.x(v) = p.m_x;
+		AGC.y(v) = p.m_y;
 	}
 
-	if(fixedNodes.size() == G.numberOfNodes()) {
-		forall_nodes(v,GC) {
+	if (fixedNodes.size() == G.numberOfNodes()) {
+		for (node v : GC.nodes) {
 			AG.x(GC.original(v)) = AGC.x(v);
 			AG.y(GC.original(v)) = AGC.y(v);
 		}
 		return true;
-		}
-		// all nodes have fixed positions - nothing left to do
+	}
+	// all nodes have fixed positions - nothing left to do
 
-		// collect other nodes
-		List<node> otherNodes;
-		forall_nodes(v,GC) if(!fixed[v]) otherNodes.pushBack(v);
+	// collect other nodes
+	List<node> otherNodes;
+	for (node v : GC.nodes)
+	if (!fixed[v]) otherNodes.pushBack(v);
 
-		NodeArray<int> ind(GC);       // position of v in otherNodes and A
+	NodeArray<int> ind(GC);       // position of v in otherNodes and A
 
-		int i = 0;
+	int i = 0;
+	for (node v : otherNodes)
+		ind[v] = i++;
 
-		forall_listiterators(node, it, otherNodes) ind[*it] = i++;
+	int n = otherNodes.size();           // #other nodes
+	Array<double> coord(n);              // coordinates (first x then y)
+	Array<double> rhs(n);                // right hand side
+	double oneOverD = 0.0;
 
-		int n = otherNodes.size();           // #other nodes
-		Array<double> coord(n);              // coordinates (first x then y)
-		Array<double> rhs(n);                // right hand side
-		double oneOverD = 0.0;
+	CoinPackedMatrix A(false, 0, 0);       // equations
+	A.setDimensions(n, n);
 
-		CoinPackedMatrix A(false,0,0);       // equations
-		A.setDimensions(n,n);
+	// initialize non-zero entries in matrix A
+	for (node v : otherNodes) {
+		oneOverD = (double) (1.0 / (v->degree()));
 
-		// initialize non-zero entries in matrix A
-		forall_listiterators(node, it, otherNodes) {
-			oneOverD = (double)(1.0/((*it)->degree()));
-			forall_adj_edges(e,*it) {
-			// get second node of e
-			w = (*it == e->source()) ? e->target() : e->source();
-			if(!fixed[w]) {
-				A.modifyCoefficient(ind[*it],ind[w],oneOverD);
+		for(adjEntry adj : v->adjEntries) {
+			node w = adj->twinNode();
+			if (!fixed[w]) {
+				A.modifyCoefficient(ind[v], ind[w], oneOverD);
 			}
 		}
-		A.modifyCoefficient(ind[*it],ind[*it],-1);
+		A.modifyCoefficient(ind[v], ind[v], -1);
 	}
 
 	// compute right hand side for x coordinates
-	forall_listiterators(node, it, otherNodes) {
-		rhs[ind[*it]] = 0;
-		oneOverD = (double)(1.0/((*it)->degree()));
-		forall_adj_edges(e,*it) {
-			// get second node of e
-			w = (*it == e->source()) ? e->target() : e->source();
-			if(fixed[w]) rhs[ind[*it]] -= (oneOverD*AGC.x(w));
+	for (node v : otherNodes) {
+		rhs[ind[v]] = 0;
+		oneOverD = (double) (1.0 / (v->degree()));
+
+		for(adjEntry adj : v->adjEntries) {
+			node w = adj->twinNode();
+			if (fixed[w]) rhs[ind[v]] -= (oneOverD*AGC.x(w));
 		}
 	}
 
 	// compute x coordinates
-	if(!(solveLP(n, A, rhs, coord))) return false;
-	forall_listiterators(node, it, otherNodes) AGC.x(*it) = coord[ind[*it]];
+	if (!(solveLP(n, A, rhs, coord))) return false;
+	for (node v : otherNodes)
+		AGC.x(v) = coord[ind[v]];
 
 	// compute right hand side for y coordinates
-	forall_listiterators(node, it, otherNodes) {
-		rhs[ind[*it]] = 0;
-		oneOverD = (double)(1.0/((*it)->degree()));
-		forall_adj_edges(e,*it) {
-			// get second node of e
-			w = (*it == e->source()) ? e->target() : e->source();
-			if(fixed[w]) rhs[ind[*it]] -= (oneOverD*AGC.y(w));
+	for (node v : otherNodes) {
+		rhs[ind[v]] = 0;
+		oneOverD = (double) (1.0 / (v->degree()));
+
+		for(adjEntry adj : v->adjEntries) {
+			node w = adj->twinNode();
+			if (fixed[w]) rhs[ind[v]] -= (oneOverD*AGC.y(w));
 		}
 	}
 
 	// compute y coordinates
-	if(!(solveLP(n, A, rhs, coord))) return false;
-	forall_listiterators(node, it, otherNodes) AGC.y(*it) = coord[ind[*it]];
+	if (!(solveLP(n, A, rhs, coord))) return false;
+	for (node v : otherNodes)
+		AGC.y(v) = coord[ind[v]];
 
 	// translate coordinates, such that the center lies in
 	// the center of the bounding box
-	DPoint center(0.5 * m_bbox.width(),0.5 * m_bbox.height());
+	DPoint center(0.5 * m_bbox.width(), 0.5 * m_bbox.height());
 
-	forall_nodes (v, GC) {
+	for (node v : GC.nodes) {
 		AGC.x(v) += center.m_x;
 		AGC.y(v) += center.m_y;
 	}
 
-	forall_nodes(v,GC) {
+	for (node v : GC.nodes) {
 		AG.x(GC.original(v)) = AGC.x(v);
 		AG.y(GC.original(v)) = AGC.y(v);
 	}
 
 	return true;
 }
-} // end namespace ogdf
 
-#endif
+}

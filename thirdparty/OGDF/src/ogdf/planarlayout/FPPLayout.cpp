@@ -1,22 +1,14 @@
-/*
- * $Revision: 2599 $
- *
- * last checkin:
- *   $Author: chimani $
- *   $Date: 2012-07-15 22:39:24 +0200 (Sun, 15 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Definition of the Fraysseix, Pach, Pollack Algorithm (FPPLayout)
  *
- * \author Till Sch&auml;fer
+ * \author Till Schäfer
  *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,19 +25,13 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/planarlayout/FPPLayout.h>
 #include <ogdf/basic/extended_graph_alg.h>
-#include <ogdf/basic/GraphCopy.h>
 #include <ogdf/basic/simple_graph_alg.h>
-#include <ogdf/basic/exceptions.h>
-#include <ogdf/basic/List.h>
 
 namespace ogdf {
 
@@ -59,48 +45,25 @@ void FPPLayout::doCall(
 	IPoint &boundingBox,
 	bool fixEmbedding)
 {
+	if (G.numberOfNodes() < 2) {
+		return;
+	}
+
 	// check for double edges & self loops
 	OGDF_ASSERT(isSimple(G));
-
-	// handle special case of graphs with less than 3 nodes
-	if (G.numberOfNodes() < 3) {
-		node v1, v2;
-		switch (G.numberOfNodes()) {
-		case 0:
-			boundingBox = IPoint(0, 0);
-			return;
-
-		case 1:
-			v1 = G.firstNode();
-			gridLayout.x(v1) = gridLayout.y(v1) = 0;
-			boundingBox = IPoint(0, 0);
-			return;
-
-		case 2:
-			v1 = G.firstNode();
-			v2 = G.lastNode();
-			gridLayout.x(v1) = gridLayout.y(v1) = gridLayout.y(v2) = 0;
-			gridLayout.x(v2) = 1;
-			boundingBox = IPoint(1, 0);
-			return;
-		}
-	}
 
 	// make a copy for triangulation
 	GraphCopy GC(G);
 
 	// embed
-	if (!fixEmbedding) {
-		if (planarEmbed(GC) == false) {
-			OGDF_THROW_PARAM(PreconditionViolatedException, pvcPlanar);
-		}
-	}
+	bool isPlanar = planarEmbed(GC);
+	OGDF_ASSERT(fixEmbedding || isPlanar);
 
 	triangulate(GC);
 
 	// get edges for outer face (triangle)
 	adjEntry e_12;
-	if (adjExternal != 0) {
+	if (adjExternal != nullptr) {
 		edge eG  = adjExternal->theEdge();
 		edge eGC = GC.copy(eG);
 		e_12 = (adjExternal == eG->adjSource()) ? eGC->adjSource() : eGC->adjTarget();
@@ -112,8 +75,8 @@ void FPPLayout::doCall(
 
 	NodeArray<int>  num(GC);
 
-	NodeArray<adjEntry> e_wp(GC);					// List of predecessors on circle C_k
-	NodeArray<adjEntry> e_wq(GC);					// List of successors on circle  C_k
+	NodeArray<adjEntry> e_wp(GC); // List of predecessors on circle C_k
+	NodeArray<adjEntry> e_wq(GC); // List of successors on circle  C_k
 
 	computeOrder(GC, num , e_wp, e_wq, e_12, e_2n, e_2n->faceCycleSucc());
 	computeCoordinates(GC, boundingBox, gridLayout, num, e_wp, e_wq);
@@ -129,9 +92,9 @@ void FPPLayout::computeOrder(
 	adjEntry e_2n,
 	adjEntry e_n1)
 {
-	NodeArray<int> num_diag(G, 0);							// number of chords
+	NodeArray<int> num_diag(G, 0); // number of chords
 	// link[v] = Iterator in possible, that points to v (if diag[v] = 0 and outer[v] = TRUE)
-	NodeArray<ListIterator<node> > link(G, 0);
+	NodeArray<ListIterator<node> > link(G, nullptr);
 	// outer[v] = TRUE <=> v is a node of the actual outer face
 	NodeArray<bool> outer(G, false);
 	// List of all nodes v with outer[v] = TRUE and diag[v] = 0
@@ -141,7 +104,7 @@ void FPPLayout::computeOrder(
 	node v_1 = e_12->theNode();
 	node v_2 = e_2n->theNode();
 	node v_n = e_n1->theNode();
-	node v_k, wp, wq, u;
+	node u;
 	adjEntry e, e2;
 	int k;
 
@@ -164,13 +127,13 @@ void FPPLayout::computeOrder(
 
 	// select next v_k and delete it
 	for (k = G.numberOfNodes(); k >= 3; k--) {
-		v_k = possible.popFrontRet();	// select arbitrary node from possible as v_k
+		node v_k = possible.popFrontRet(); // select arbitrary node from possible as v_k
 
 		num[v_k] = k;
 
 		// predecessor wp and successor wq from vk in C_k (actual outer face)
-		wq = (e_wq [v_k])->twinNode();
-		wp = (e_wp [v_k])->twinNode();
+		node wq = (e_wq [v_k])->twinNode();
+		node wp = (e_wp [v_k])->twinNode();
 
 		// v_k not in C_k-1 anymore
 		outer[v_k] = false;
@@ -199,10 +162,13 @@ void FPPLayout::computeOrder(
 			// search for new chords
 			for (e2 = e_wp[u]->cyclicPred(); e2 != e_wq[u]; e2 = e2->cyclicPred()) {
 				node w = e2->twinNode();
-				if (outer[w] == true) {
+				if (outer[w]) {
 					++num_diag[u];
-					if (w != v_1 && w != v_2)
-						if (++num_diag[w] == 1) possible.del(link[w]);
+					if (w != v_1
+					 && w != v_2
+					 && ++num_diag[w] == 1) {
+						possible.del(link[w]);
+					}
 				}
 			}
 
@@ -224,11 +190,11 @@ void FPPLayout::computeCoordinates(const GraphCopy &G, IPoint &boundingBox, Grid
 	NodeArray<node> upper(G);
 	NodeArray<node> next(G);
 	Array<node, int> v(1, n);
-	node w, vk, wp, wq;
-	int k, xq, dx;
+	node vk, wp, wq;
+	int k;
 
-	forall_nodes(w, G) {
-		v[num[w]] = (node) w;
+	for(node w : G.nodes) {
+		v[num[w]] = w;
 	}
 
 	x_rel[v[1]] = 0;
@@ -237,15 +203,15 @@ void FPPLayout::computeCoordinates(const GraphCopy &G, IPoint &boundingBox, Grid
 	y[G.original(v[2])] = 0;
 
 	next[v[1]] = v[2];
-	next[v[2]] = 0;
+	next[v[2]] = nullptr;
 
 	for (k = 3; k <= n; k++) {
 		vk = v[k];
 		wp = e_wp [vk]->twinNode();
 		wq = e_wq [vk]->twinNode();
 
-		xq = 2;
-		w = wp;
+		int xq = 2;
+		node w = wp;
 		do {
 			w = next [w];
 			xq += x_rel[w];
@@ -256,7 +222,7 @@ void FPPLayout::computeCoordinates(const GraphCopy &G, IPoint &boundingBox, Grid
 		y[G.original(vk)] = (xq + y[G.original(wq)] + y[G.original(wp)]) / 2;
 		x_rel[wq] = xq - x_rel[vk];
 
-		dx = 1;
+		int dx = 1;
 		for (w = next[wp]; w != wq; w = next[w]) {
 			dx += x_rel[w];
 			x[G.original(w)] = dx - x_rel[vk];
@@ -294,5 +260,4 @@ void FPPLayout::computeCoordinates(const GraphCopy &G, IPoint &boundingBox, Grid
 	boundingBox = IPoint(xr, yt);
 }
 
-
-} //namespace ogdf
+}

@@ -1,11 +1,3 @@
-/*
- * $Revision: 3507 $
- *
- * last checkin:
- *   $Author: zeranski $
- *   $Date: 2013-05-21 14:13:26 +0200 (Tue, 21 May 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implementation of class PlanarSPQRTree
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,12 +25,9 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 
 #include <ogdf/decomposition/PlanarSPQRTree.h>
@@ -46,10 +35,6 @@
 
 
 namespace ogdf {
-
-//-------------------------------------------------------------------
-//                           PlanarSPQRTree
-//-------------------------------------------------------------------
 
 //
 // initialization: additionally embeds skeleton graphs or adpots embedding
@@ -62,8 +47,7 @@ void PlanarSPQRTree::init(bool isEmbedded)
 
 	} else {
 
-		node v;
-		forall_nodes(v,tree())
+		for (node v : tree().nodes)
 			planarEmbed(skeleton(v).getGraph());
 	}
 }
@@ -71,21 +55,19 @@ void PlanarSPQRTree::init(bool isEmbedded)
 
 void PlanarSPQRTree::adoptEmbedding()
 {
-	OGDF_ASSERT_IF(dlExtendedChecking, originalGraph().representsCombEmbedding());
+	OGDF_HEAVY_ASSERT(originalGraph().representsCombEmbedding());
 
 	// ordered list of adjacency entries (for one original node) in all
 	// skeletons (where this node occurs)
 	NodeArray<SListPure<adjEntry> > adjEdges(tree());
 	// copy in skeleton of current original node
-	NodeArray<node> currentCopy(tree(),0);
-	NodeArray<adjEntry> lastAdj(tree(),0);
+	NodeArray<node> currentCopy(tree(),nullptr);
+	NodeArray<adjEntry> lastAdj(tree(),nullptr);
 	SListPure<node> current; // currently processed nodes
 
-	node vOrig;
-	forall_nodes(vOrig,originalGraph())
+	for (node vOrig : originalGraph().nodes)
 	{
-		adjEntry adjOrig;
-		forall_adj(adjOrig,vOrig)
+		for(adjEntry adjOrig : vOrig->adjEntries)
 		{
 			edge            eOrig = adjOrig->theEdge();
 			const Skeleton &S     = skeletonOfReal(eOrig);
@@ -97,14 +79,11 @@ void PlanarSPQRTree::adoptEmbedding()
 			setPosInEmbedding(adjEdges,currentCopy,lastAdj,current,S,adjCopy);
 		}
 
-		SListConstIterator<node> it;
-		for(it = current.begin(); it.valid(); ++it) {
-			node vT = *it;
-
+		for(node vT : current) {
 			skeleton(vT).getGraph().sort(currentCopy[vT],adjEdges[vT]);
 
 			adjEdges[vT].clear();
-			currentCopy[vT] = 0;
+			currentCopy[vT] = nullptr;
 		}
 
 		current.clear();
@@ -127,14 +106,13 @@ void PlanarSPQRTree::setPosInEmbedding(
 	node vCopy = adj->theNode();
 	node vOrig = S.original(vCopy);
 
-	if(currentCopy[vT] == 0) {
+	if(currentCopy[vT] == nullptr) {
 		currentCopy[vT] = vCopy;
 		current.pushBack(vT);
 
-		adjEntry adjVirt;
-		forall_adj(adjVirt,vCopy) {
+		for (adjEntry adjVirt : vCopy->adjEntries) {
 			edge eCopy = S.twinEdge(adjVirt->theEdge());
-			if (eCopy == 0) continue;
+			if (eCopy == nullptr) continue;
 			if (adjVirt == adj) {
 				lastAdj[vT] = adj;
 				continue;
@@ -149,7 +127,7 @@ void PlanarSPQRTree::setPosInEmbedding(
 				STwin, adjCopy);
 		}
 
-	} else if (lastAdj[vT] != 0 && lastAdj[vT] != adj) {
+	} else if (lastAdj[vT] != nullptr && lastAdj[vT] != adj) {
 		adjEntry adjVirt = lastAdj[vT];
 		edge eCopy = S.twinEdge(adjVirt->theEdge());
 
@@ -161,7 +139,7 @@ void PlanarSPQRTree::setPosInEmbedding(
 		setPosInEmbedding(adjEdges,currentCopy,lastAdj,current,
 			STwin, adjCopy);
 
-		lastAdj[vT] = 0;
+		lastAdj[vT] = nullptr;
 	}
 
 }
@@ -179,18 +157,16 @@ void PlanarSPQRTree::embed(Graph &G)
 	const Skeleton &S = skeleton(rootNode());
 	const Graph &M = S.getGraph();
 
-	node v;
-	forall_nodes(v,M)
+	for (node v : M.nodes)
 	{
 		node vOrig = S.original(v);
 		SListPure<adjEntry> adjEdges;
 
-		adjEntry adj;
-		forall_adj(adj,v) {
+		for (adjEntry adj : v->adjEntries) {
 			edge e = adj->theEdge();
 			edge eOrig = S.realEdge(e);
 
-			if (eOrig != 0) {
+			if (eOrig != nullptr) {
 				adjEntry adjOrig = (vOrig == eOrig->source()) ?
 					eOrig->adjSource() : eOrig->adjTarget();
 				OGDF_ASSERT(adjOrig->theNode() == S.original(v));
@@ -209,9 +185,9 @@ void PlanarSPQRTree::embed(Graph &G)
 		G.sort(vOrig,adjEdges);
 	}
 
-	edge e;
-	forall_adj_edges(e,rootNode()) {
-		node wT = e->target();
+
+	for(adjEntry adj : rootNode()->adjEntries) {
+		node wT = adj->theEdge()->target();
 		if (wT != rootNode())
 			createInnerVerticesEmbed(G, wT);
 	}
@@ -233,7 +209,7 @@ void PlanarSPQRTree::expandVirtualEmbed(node vT,
 		edge e = adj->theEdge();
 		edge eOrig = S.realEdge(e);
 
-		if (eOrig != 0) {
+		if (eOrig != nullptr) {
 			adjEntry adjOrig = (vOrig == eOrig->source()) ?
 				eOrig->adjSource() : eOrig->adjTarget();
 			OGDF_ASSERT(adjOrig->theNode() == S.original(v));
@@ -259,20 +235,18 @@ void PlanarSPQRTree::createInnerVerticesEmbed(Graph &G, node vT)
 	node src = S.referenceEdge()->source();
 	node tgt = S.referenceEdge()->target();
 
-	node v;
-	forall_nodes(v,M)
+	for (node v : M.nodes)
 	{
 		if (v == src || v == tgt) continue;
 
 		node vOrig = S.original(v);
 		SListPure<adjEntry> adjEdges;
 
-		adjEntry adj;
-		forall_adj(adj,v) {
+		for (adjEntry adj : v->adjEntries) {
 			edge e = adj->theEdge();
 			edge eOrig = S.realEdge(e);
 
-			if (eOrig != 0) {
+			if (eOrig != nullptr) {
 				adjEntry adjOrig = (vOrig == eOrig->source()) ?
 					eOrig->adjSource() : eOrig->adjTarget();
 				OGDF_ASSERT(adjOrig->theNode() == S.original(v));
@@ -290,9 +264,8 @@ void PlanarSPQRTree::createInnerVerticesEmbed(Graph &G, node vT)
 		G.sort(vOrig,adjEdges);
 	}
 
-	edge e;
-	forall_adj_edges(e,vT) {
-		node wT = e->target();
+	for(adjEntry adj : vT->adjEntries) {
+		node wT = adj->theEdge()->target();
 		if (wT != vT)
 			createInnerVerticesEmbed(G, wT);
 	}
@@ -313,7 +286,7 @@ void PlanarSPQRTree::reverse(node vT)
 //   swapping two adjacency entries in the skeleton of a P-node
 void PlanarSPQRTree::swap(node vT, adjEntry adj1, adjEntry adj2)
 {
-	OGDF_ASSERT(typeOf(vT) == PNode);
+	OGDF_ASSERT(typeOf(vT) == NodeType::PNode);
 
 	Graph &M = skeleton(vT).getGraph();
 
@@ -325,7 +298,7 @@ void PlanarSPQRTree::swap(node vT, adjEntry adj1, adjEntry adj2)
 //   swapping two edges in the skeleton of a P-node
 void PlanarSPQRTree::swap(node vT, edge e1, edge e2)
 {
-	OGDF_ASSERT(typeOf(vT) == PNode);
+	OGDF_ASSERT(typeOf(vT) == NodeType::PNode);
 
 	if (e1->source() == e2->source())
 		swap(vT,e1->adjSource(),e2->adjSource());
@@ -342,20 +315,21 @@ double PlanarSPQRTree::numberOfEmbeddings(node vT) const
 	double num = 1.0;
 
 	switch(typeOf(vT)) {
-	case RNode:
+	case NodeType::RNode:
 		num = 2; break;
-	case PNode:
-		//node vFirst = skeleton(vT).getGraph().firstNode();
+	case NodeType::PNode:
+#if 0
+		node vFirst = skeleton(vT).getGraph().firstNode();
+#endif
 		for (int i = skeleton(vT).getGraph().firstNode()->degree()-1; i >= 2; --i)
 			num *= i;
 		break;
-	case SNode:
+	case NodeType::SNode:
 		break;
 	}
 
-	edge e;
-	forall_adj_edges(e,vT) {
-		node wT = e->target();
+	for(adjEntry adj : vT->adjEntries) {
+		node wT = adj->theEdge()->target();
 		if(wT != vT)
 			num *= numberOfEmbeddings(wT);
 	}
@@ -370,15 +344,14 @@ double PlanarSPQRTree::numberOfEmbeddings(node vT) const
 //
 void PlanarSPQRTree::randomEmbed()
 {
-	node vT;
-	forall_nodes(vT,tree()) {
-		if (typeOf(vT) == RNode) {
+	for (node vT : tree().nodes) {
+		if (typeOf(vT) == NodeType::RNode) {
 			int doReverse = randomNumber(0,1);
 
 			if (doReverse == 1)
 				reverse(vT);
 
-		} else if (typeOf(vT) == PNode) {
+		} else if (typeOf(vT) == NodeType::PNode) {
 			const Skeleton &S = skeleton(vT);
 			adjEntry adjRef = S.referenceEdge()->adjSource();
 
@@ -390,10 +363,8 @@ void PlanarSPQRTree::randomEmbed()
 			adjEdges.permute();
 
 			adj = adjRef->cyclicSucc();
-			SListConstIterator<adjEntry> it;
-			for (it = adjEdges.begin(); it.valid(); ++it)
+			for (adjEntry adjNext : adjEdges)
 			{
-				adjEntry adjNext = *it;
 				if (adjNext != adj) {
 					swap(vT,adj,adjNext);
 					adj = adjNext;
@@ -404,27 +375,20 @@ void PlanarSPQRTree::randomEmbed()
 	}
 }
 
-//***************************************************************
-//***************************************************************
-//**														   **
-//** Methods to enumerate all embeddings of the original graph **
-//**														   **
-//***************************************************************
-//***************************************************************
 
-long long PlanarSPQRTree::numberOfNodeEmbeddings(node vT) {
+long long PlanarSPQRTree::numberOfNodeEmbeddings(node vT) const {
 
 	long long num = 1;
 
 	switch(typeOf(vT)) {
-		case RNode:
+		case NodeType::RNode:
 			num = 2;
 			break;
-		case PNode:
+		case NodeType::PNode:
 			for (int i = skeleton(vT).getGraph().firstNode()->degree()-1; i >= 2; --i)
 				num *= i;
 			break;
-		case SNode:
+		case NodeType::SNode:
 			break;
 	}
 
@@ -437,26 +401,26 @@ void PlanarSPQRTree::embed(node &vT, long long x) {
 	OGDF_ASSERT(x < numberOfNodeEmbeddings(vT));
 
 	//if it is a P-node
-	if (typeOf(vT) == PNode) {
+	if (typeOf(vT) == NodeType::PNode) {
 		//encode the id of the permutation
 		long long id = x;
 		//number of elements of the permutation
 		const int p = skeleton(vT).getGraph().numberOfEdges() - 1;
 		//sequence for the edges
-		Array<int> seq(p);
+		Array<long long> seq(p);
 		//base
-		int b = 2;
+		long long b = 2;
 		//compute the correct sequence of the edges
 		for (int i = 0; i < p - 1; i++) {
 			seq[i] = id % b;
-			id = id / b;
+			id /= b;
 			b++;
 		}
 		//swap the sequence
 		int low  = 0;
 		int high = p-2;
 		while (low < high) {
-			int t = seq[low];
+			long long t = seq[low];
 			seq[low] = seq[high]; seq[high] = t;
 			low++; high--;
 		}
@@ -467,14 +431,14 @@ void PlanarSPQRTree::embed(node &vT, long long x) {
 		Array<bool> set(0,p-1,false);
 		for (int i = 0; i < p; i++) list[i] = i;
 		for (int i = 0; i < p; i++) {
-			int e = seq[i];
-			int cnt = 0;
+			long long e = seq[i];
+			long long cnt = 0;
 			int ind;
 			for (ind = 0; ind < p; ind++) {
-					if (!set[ind]) {
-							if (cnt == e) break;
-							cnt++;
-					}
+				if (!set[ind]) {
+					if (cnt == e) break;
+					++cnt;
+				}
 			}
 			permutation[ind] = list[i];
 			set[ind] = true;
@@ -483,7 +447,7 @@ void PlanarSPQRTree::embed(node &vT, long long x) {
 		//first vertex
 		List<adjEntry> order;
 		node nP = skeleton(vT).getGraph().firstNode();
-		skeleton(vT).getGraph().adjEntries(nP,order);
+		nP->allAdjEntries(order);
 		TargetComparer<AdjElement,AdjElement> comp;
 		order.quicksort(comp);
 		Array<adjEntry> normalized(p);
@@ -497,13 +461,13 @@ void PlanarSPQRTree::embed(node &vT, long long x) {
 		ListIterator<adjEntry> it = newOrder.begin();
 		while (it.valid()) {
 			newOrderLast.pushFront((*it)->twin());
-			it++;
+			++it;
 		}
 		skeleton(vT).getGraph().sort(skeleton(vT).getGraph().lastNode(),newOrderLast);
 		//P-node ends here
 	}
 	//if it is a R-node
-	if (typeOf(vT) == RNode) {
+	if (typeOf(vT) == NodeType::RNode) {
 		node nP = skeleton(vT).getGraph().firstNode();
 		if (x == 0 && nP->firstAdj()->index() > nP->lastAdj()->index()) reverse(vT);
 		if (x == 1 && nP->firstAdj()->index() < nP->lastAdj()->index()) reverse(vT);
@@ -517,12 +481,10 @@ void PlanarSPQRTree::embed(node &vT, long long x) {
 //
 void PlanarSPQRTree::firstEmbedding(Graph &G)
 {
-
 	OGDF_ASSERT(&G == &originalGraph());
 
 	m_finished = false;
-	node vT;
-	forall_nodes(vT,tree()) {
+	for (node vT : tree().nodes) {
 		firstEmbedding(vT);
 	}
 	embed(G);
@@ -534,14 +496,13 @@ void PlanarSPQRTree::firstEmbedding(Graph &G)
 //
 bool PlanarSPQRTree::nextEmbedding(Graph &G)
 {
-
 	OGDF_ASSERT(&G == &originalGraph());
 
 	//if there is at least one new embedding: compute it using
 	//nextEmbedding(n) to the first node of the SPQR-tree (represented by a list-iterator)
 	List<node> nodes;
 	tree().allNodes(nodes);
-	if(!m_finished && nextEmbedding(nodes.begin())) {
+	if (!m_finished && nextEmbedding(nodes.begin())) {
 		//compute the actual embedding of the original graph
 		embed(G);
 		return true;
@@ -550,34 +511,33 @@ bool PlanarSPQRTree::nextEmbedding(Graph &G)
 	return false;
 }
 
+
 //
 // computes the first embedding of the skeleton of node vT
 //
 void PlanarSPQRTree::firstEmbedding(node &vT)
 {
 	//if vT is a R-node
-	if (typeOf(vT) == RNode) {
+	if (typeOf(vT) == NodeType::RNode) {
 		//if the R-node were reversed in former steps
 		//then reverse it to its original embedding
 		node nP = skeleton(vT).getGraph().firstNode();
 		if (nP->firstAdj()->index() > nP->lastAdj()->index()) reverse(vT);
 	}
 	//if vT is a P-node
-	if (typeOf(vT) == PNode) {
+	if (typeOf(vT) == NodeType::PNode) {
 		//then sort the adjEntries by their indices
 		//first vertex
 		List<adjEntry> order;
 		node nP = skeleton(vT).getGraph().firstNode();
-		skeleton(vT).getGraph().adjEntries(nP,order);
+		nP->allAdjEntries(order);
 		TargetComparer<AdjElement,AdjElement> comp;
 		order.quicksort(comp);
 		skeleton(vT).getGraph().sort(nP,order);
 		//second vertex
 		List<adjEntry> newOrderLast;
-		ListIterator<adjEntry> it = order.begin();
-		while (it.valid()) {
-			newOrderLast.pushFront((*it)->twin());
-			it++;
+		for(adjEntry adj : order) {
+			newOrderLast.pushFront(adj->twin());
 		}
 		skeleton(vT).getGraph().sort(skeleton(vT).getGraph().lastNode(),newOrderLast);
 	}
@@ -596,10 +556,10 @@ void PlanarSPQRTree::reverse(node &vP, adjEntry &first, adjEntry &last)
 	//while there are swapable adjEntries: swap it, i.e.
 	//if left == right or left->pred() == right->succ() then stop
 	while (it_f != it_l && it_l->succ() != it_f) {
-			swap(vP,it_f,it_l);
-			temp = it_f;
-			it_f = it_l->succ();
-			it_l = temp->pred();
+		swap(vP,it_f,it_l);
+		temp = it_f;
+		it_f = it_l->succ();
+		it_l = temp->pred();
 	}
 }
 
@@ -610,7 +570,7 @@ void PlanarSPQRTree::reverse(node &vP, adjEntry &first, adjEntry &last)
 bool PlanarSPQRTree::nextEmbedding(node &vT)
 {
 	//if vT is a R-node
-	if (typeOf(vT) == RNode) {
+	if (typeOf(vT) == NodeType::RNode) {
 		node nP = skeleton(vT).getGraph().firstNode();
 		//compute the next embedding (might be the first embedding)
 		//of the sekeleton of vT
@@ -620,7 +580,7 @@ bool PlanarSPQRTree::nextEmbedding(node &vT)
 		return nP->firstAdj()->index() > nP->lastAdj()->index();
 	}
 	//if vT is a P-node
-	if (typeOf(vT) == PNode) {
+	if (typeOf(vT) == NodeType::PNode) {
 		//take on of the two nodes of the skeleton of vT
 		node nP = skeleton(vT).getGraph().firstNode();
 		//if its degree is two then there is only one embedding
@@ -636,9 +596,9 @@ bool PlanarSPQRTree::nextEmbedding(node &vT)
 		//compute the first embedding by reversing the order of the adjEntries
 		//beginning at the second adjEntry
 		if (it == nP->firstAdj()->succ()) {
-				last = nP->lastAdj();
-				reverse(vT,it,last);
-				return false;
+			last = nP->lastAdj();
+			reverse(vT,it,last);
+			return false;
 		}
 		//otherwise compute the next permutation (embedding)
 		it = it->pred();
@@ -652,7 +612,7 @@ bool PlanarSPQRTree::nextEmbedding(node &vT)
 		//and the last adjEntry of nP
 		last = nP->lastAdj();
 		it_max = it_max->succ();
-		if (it_max != NULL && it_max != last) reverse(vT,it_max,last);
+		if (it_max != nullptr && it_max != last) reverse(vT,it_max,last);
 		//the next permutation (embedding) was computed
 		return true;
 	}
@@ -669,7 +629,7 @@ bool PlanarSPQRTree::nextEmbedding(ListIterator<node> it)
 	//the first embedding of *it and the next embedding of *it++
 	//otherwise: compute the next embedding of *it
 	if (!nextEmbedding(*it)) {
-		it++;
+		++it;
 		//if there is a valid successor of *it in the list of P- and R-nodes: compute
 		//its next embedding
 		//otherwise: all embeddings are computed
@@ -679,5 +639,4 @@ bool PlanarSPQRTree::nextEmbedding(ListIterator<node> it)
 	return true;
 }
 
-
-} // end namespace ogdf
+}

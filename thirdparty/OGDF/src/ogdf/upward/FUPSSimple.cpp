@@ -1,11 +1,3 @@
-/*
- * $Revision: 3261 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-01-25 14:48:05 +0100 (Fri, 25 Jan 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implementation of FUPSSimple class.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,15 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/upward/FUPSSimple.h>
-#include <ogdf/upward/FeasibleUpwardPlanarSubgraph.h>
 #include <ogdf/upward/UpwardPlanarity.h>
 #include <ogdf/upward/FaceSinkGraph.h>
 #include <ogdf/basic/simple_graph_alg.h>
@@ -67,7 +55,7 @@ Module::ReturnType FUPSSimple::doCall(
 			delEdges = delEdges_cur;
 		}
 	}
-	return Module::retFeasible;
+	return Module::ReturnType::Feasible;
 }
 
 
@@ -88,27 +76,24 @@ void FUPSSimple::computeFUPS(UpwardPlanRep &UPR, List<edge> &delEdges)
 	if (random)
 		nonTreeEdges_orig.permute(); // random order
 
-	adjEntry extFaceHandle = 0;
+	adjEntry extFaceHandle = nullptr;
 
 	//insert nonTreeEdges
 	while (!nonTreeEdges_orig.empty()) {
 
-	/*
-	//------------------------------------debug
-	GraphAttributes AG(FUPS, GraphAttributes::nodeGraphics|
-						GraphAttributes::edgeGraphics|
-						GraphAttributes::nodeColor|
-						GraphAttributes::edgeColor|
-						GraphAttributes::nodeLabel|
-						GraphAttributes::edgeLabel
-						);
-	node v;
-	// label the nodes with their index
-	forall_nodes(v, AG.constGraph()) {
-		AG.label(v) = to_string(v->index());
-	}
-	AG.writeGML("c:/temp/spannTree.gml");
-	*/
+#if 0
+		GraphAttributes AG(FUPS, GraphAttributes::nodeGraphics |
+		                         GraphAttributes::edgeGraphics |
+		                         GraphAttributes::nodeStyle |
+		                         GraphAttributes::edgeStyle |
+		                         GraphAttributes::nodeLabel |
+		                         GraphAttributes::edgeLabel);
+		// label the nodes with their index
+		for(node v : AG.constGraph().nodes) {
+			AG.label(v) = to_string(v->index());
+		}
+		AG.writeGML("c:/temp/spannTree.gml");
+#endif
 
 		// make identical copy FUPSCopy of FUPS
 		//and insert e_orig in FUPSCopy
@@ -130,22 +115,20 @@ void FUPSSimple::computeFUPS(UpwardPlanRep &UPR, List<edge> &delEdges)
 
 
 #if 0
-			//*************************** debug ********************************
-			cout << endl << "FUPS : " << endl;
-			face ff;
-			forall_faces(ff, Beta) {
-				cout << "face " << ff->index() << ": ";
+			std::cout << std::endl << "FUPS : " << std::endl;
+			for(face ff : Beta.faces) {
+				std::cout << "face " << ff->index() << ": ";
 				adjEntry adjNext = ff->firstAdj();
 				do {
-					cout << adjNext->theEdge() << "; ";
+					std::cout << adjNext->theEdge() << "; ";
 					adjNext = adjNext->faceCycleSucc();
 				} while(adjNext != ff->firstAdj());
-				cout << endl;
+				std::cout << std::endl;
 			}
 			if (Beta.externalFace() != 0)
-				cout << "ext. face of the graph is: " << Beta.externalFace()->index() << endl;
+				std::cout << "ext. face of the graph is: " << Beta.externalFace()->index() << std::endl;
 			else
-				cout << "no ext. face set." << endl;
+				std::cout << "no ext. face set." << std::endl;
 #endif
 
 			GraphCopy M((const GraphCopy &) FUPSCopy); // use a identical copy of FUPSCopy to construct the merge graph of FUPSCopy
@@ -187,12 +170,10 @@ void FUPSSimple::getSpanTree(GraphCopy &GC, List<edge> &delEdges, bool random)
 
 	//mark the incident edges e1..e_i of super source s and the incident edges of the target node of the edge e1.._e_i as tree edge.
 	visited[s] = true;
-	adjEntry adj;
-	forall_adj(adj, s) {
+	for(adjEntry adj : s->adjEntries) {
 		isTreeEdge[adj] = true;
 		visited[adj->theEdge()->target()];
-		adjEntry adjTmp;
-		forall_adj(adjTmp, adj->theEdge()->target()) {
+		for(adjEntry adjTmp : adj->theEdge()->target()->adjEntries) {
 			isTreeEdge[adjTmp] = true;
 			node tgt = adjTmp->theEdge()->target();
 			if (!visited[tgt]) {
@@ -203,10 +184,8 @@ void FUPSSimple::getSpanTree(GraphCopy &GC, List<edge> &delEdges, bool random)
 	}
 
 	//traversing with dfs
-	forall_listiterators(node, it, toDo) {
-		node start = *it;
-		adjEntry adj;
-		forall_adj(adj, start) {
+	for(node start : toDo) {
+		for(adjEntry adj : start->adjEntries) {
 			node v = adj->theEdge()->target();
 			if (!visited[v])
 				dfs_visit(GC, adj->theEdge(), visited, isTreeEdge, random);
@@ -214,14 +193,13 @@ void FUPSSimple::getSpanTree(GraphCopy &GC, List<edge> &delEdges, bool random)
 	}
 
 	// delete all non tree edgesEdges to obtain a span tree
-	List<edge> l;
-	edge e;
-	forall_edges(e, GC) {
+	List<edge> list;
+	for(edge e : GC.edges) {
 		if (!isTreeEdge[e])
-			l.pushBack(e);
+			list.pushBack(e);
 	}
-	while (!l.empty()) {
-		e = l.popFrontRet();
+	while (!list.empty()) {
+		edge e = list.popFrontRet();
 		delEdges.pushBack(GC.original(e));
 		GC.delEdge(e);
 	}
@@ -238,7 +216,7 @@ void FUPSSimple::dfs_visit(
 {
 	treeEdges[e] = true;
 	List<edge> elist;
-	G.outEdges(e->target(), elist);
+	e->target()->outEdges(elist);
 	if (!elist.empty()) {
 		if (random)
 			elist.permute();
@@ -261,24 +239,22 @@ bool FUPSSimple::constructMergeGraph(GraphCopy &M, adjEntry adj_orig, const List
 	adjEntry ext_adj = M.copy(adj_orig->theEdge())->adjSource();
 	Beta.setExternalFace(Beta.rightFace(ext_adj));
 
-	//*************************** debug ********************************
-	/*
-	cout << endl << "FUPS : " << endl;
-	face ff;
-	forall_faces(ff, Beta) {
-		cout << "face " << ff->index() << ": ";
+#if 0
+	std::cout << std::endl << "FUPS : " << std::endl;
+	for(face ff : Beta.faces) {
+		std::cout << "face " << ff->index() << ": ";
 		adjEntry adjNext = ff->firstAdj();
 		do {
-			cout << adjNext->theEdge() << "; ";
+			std::cout << adjNext->theEdge() << "; ";
 			adjNext = adjNext->faceCycleSucc();
 		} while(adjNext != ff->firstAdj());
-		cout << endl;
+		std::cout << std::endl;
 	}
 	if (Beta.externalFace() != 0)
-		cout << "ext. face of the graph is: " << Beta.externalFace()->index() << endl;
+		std::cout << "ext. face of the graph is: " << Beta.externalFace()->index() << std::endl;
 	else
-		cout << "no ext. face set." << endl;
-	*/
+		std::cout << "no ext. face set." << std::endl;
+#endif
 
 	FaceSinkGraph fsg(Beta, M.copy(adj_orig->theNode()));
 	SList<node> aug_nodes;
@@ -287,38 +263,34 @@ bool FUPSSimple::constructMergeGraph(GraphCopy &M, adjEntry adj_orig, const List
 	fsg.possibleExternalFaces(fList); // use this method to call the methode checkForest()
 	node v_ext = fsg.faceNodeOf(Beta.externalFace());
 
-	OGDF_ASSERT(v_ext != 0);
+	OGDF_ASSERT(v_ext != nullptr);
 
 	fsg.stAugmentation(v_ext, M, aug_nodes, aug_edges);
 
-	/*
-	//------------------------------------debug
+#if 0
 	GraphAttributes AG(M, GraphAttributes::nodeGraphics|
-						GraphAttributes::edgeGraphics|
-						GraphAttributes::nodeColor|
-						GraphAttributes::edgeColor|
-						GraphAttributes::nodeLabel|
+						GraphAttributes::edgeGraphics |
+						GraphAttributes::nodeStyle |
+						GraphAttributes::edgeStyle |
+						GraphAttributes::nodeLabel |
 						GraphAttributes::edgeLabel
 						);
-	node v;
 	// label the nodes with their index
-	forall_nodes(v, AG.constGraph()) {
+	for(node v : AG.constGraph().nodes) {
 		AG.label(v) = to_string(v->index());
 	}
 	AG.writeGML("c:/temp/MergeFUPS.gml");
-	*/
-
+#endif
 
 	OGDF_ASSERT(isStGraph(M));
 
 	//add the deleted edges
-	forall_listiterators(edge, it, orig_edges) {
-		node a = M.copy((*it)->source());
-		node b = M.copy((*it)->target());
+	for(edge eOrig : orig_edges) {
+		node a = M.copy(eOrig->source());
+		node b = M.copy(eOrig->target());
 		M.newEdge(a, b);
 	}
-	return (isAcyclic(M));
+	return isAcyclic(M);
 }
 
-} // end namespace ogdf
-
+}

@@ -1,11 +1,3 @@
-/*
- * $Revision: 4005 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2014-03-30 05:25:21 +0200 (Sun, 30 Mar 2014) $
- ***************************************************************/
-
 /** \file
  * \brief Implements GDF write functionality of class GraphIO.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,12 +25,9 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/fileformats/GraphIO.h>
 #include <ogdf/fileformats/GDF.h>
@@ -52,7 +41,6 @@ namespace gdf {
 static inline void writeColor(std::ostream &os, const Color &color)
 {
 	int r = color.red(), g = color.green(), b = color.blue();
-	std::ostringstream ss;
 	os << "\"" << r << "," << g << "," << b << "\"";
 }
 
@@ -62,31 +50,35 @@ static inline void writeNodeHeader(
 	const GraphAttributes *GA)
 {
 	os << "nodedef>";
-	os << toString(na_name);
+	os << toString(NodeAttribute::Name);
 
 	const long attrs = GA ? GA->attributes() : 0;
 	if(attrs & GraphAttributes::nodeLabel) {
-		os << "," << toString(na_label);
+		os << "," << toString(NodeAttribute::Label);
 	}
 	if(attrs & GraphAttributes::nodeGraphics) {
-		os << "," << toString(na_x);
-		os << "," << toString(na_y);
+		os << "," << toString(NodeAttribute::X);
+		os << "," << toString(NodeAttribute::Y);
 		if(attrs & GraphAttributes::threeD) {
-			os << "," << toString(na_z);
+			os << "," << toString(NodeAttribute::Z);
 		}
-		os << "," << toString(na_shape);
-		os << "," << toString(na_width);
-		os << "," << toString(na_height);
+		os << "," << toString(NodeAttribute::Shape);
+		os << "," << toString(NodeAttribute::Width);
+		os << "," << toString(NodeAttribute::Height);
 	}
 	if(attrs & GraphAttributes::nodeStyle) {
-		os << "," << toString(na_fillColor);
-		os << "," << toString(na_strokeColor);
+		os << "," << toString(NodeAttribute::FillColor);
+		os << "," << toString(NodeAttribute::StrokeColor);
+		os << "," << toString(NodeAttribute::StrokeType);
+		os << "," << toString(NodeAttribute::StrokeWidth);
+		os << "," << toString(NodeAttribute::FillPattern);
+		os << "," << toString(NodeAttribute::FillBgColor);
 	}
 	if(attrs & GraphAttributes::nodeTemplate) {
-		os << "," << toString(na_template);
+		os << "," << toString(NodeAttribute::Template);
 	}
 	if(attrs & GraphAttributes::nodeWeight) {
-		os << "," << toString(na_weight);
+		os << "," << toString(NodeAttribute::Weight);
 	}
 
 	os << "\n";
@@ -122,6 +114,11 @@ static inline void writeNode(
 		writeColor(os, GA->fillColor(v));
 		os << ",";
 		writeColor(os, GA->strokeColor(v));
+		os << "," << toString(GA->strokeType(v));
+		os << "," << GA->strokeWidth(v);
+		os << "," << toString(GA->fillPattern(v));
+		os << ",";
+		writeColor(os, GA->fillBgColor(v));
 	}
 	if(attrs & GraphAttributes::nodeTemplate) {
 		os << "," << GA->templateNode(v);
@@ -139,26 +136,26 @@ static inline void writeEdgeHeader(
 	const GraphAttributes *GA)
 {
 	os << "edgedef>";
-	os << toString(ea_source);
-	os << "," << toString(ea_target);
+	os << toString(EdgeAttribute::Source);
+	os << "," << toString(EdgeAttribute::Target);
 	if(GA && GA->directed()) {
-		os << "," << toString(ea_directed);
+		os << "," << toString(EdgeAttribute::Directed);
 	}
 
 	const long attrs = GA ? GA->attributes() : 0;
 	if(attrs & GraphAttributes::edgeLabel) {
-		os << "," << toString(ea_label);
+		os << "," << toString(EdgeAttribute::Label);
 	}
 	if(attrs & (GraphAttributes::edgeIntWeight |
-		        GraphAttributes::edgeDoubleWeight))
+	            GraphAttributes::edgeDoubleWeight))
 	{
-		os << "," << toString(ea_weight);
+		os << "," << toString(EdgeAttribute::Weight);
 	}
 	if(attrs & GraphAttributes::edgeStyle) {
-		os << "," << toString(ea_color);
+		os << "," << toString(EdgeAttribute::Color);
 	}
 	if(attrs & GraphAttributes::edgeGraphics) {
-		os << "," << toString(ea_bends);
+		os << "," << toString(EdgeAttribute::Bends);
 	}
 
 	os << "\n";
@@ -192,13 +189,12 @@ static inline void writeEdge(
 		os << "," << "\"";
 
 		bool comma = false;
-		forall_listiterators(DPoint, it, GA->bends(e)) {
+		for(const DPoint &p : GA->bends(e)) {
 			if(comma) {
 				os << ",";
 			}
 			comma = true;
 
-			const DPoint &p = *it;
 			os << p.m_x << "," << p.m_y;
 		}
 
@@ -213,40 +209,49 @@ static void writeGraph(
 	std::ostream &os,
 	const Graph &G, const GraphAttributes *GA)
 {
+	std::ios_base::fmtflags currentFlags = os.flags();
+	os.flags(currentFlags | std::ios::fixed);
+
 	// Node definition section.
 	writeNodeHeader(os, GA);
 
-	node v;
-	forall_nodes(v, G) {
+	for(node v : G.nodes) {
 		writeNode(os, GA, v);
 	}
 
 	// Edge definition section.
 	writeEdgeHeader(os, GA);
 
-	edge e;
-	forall_edges(e, G) {
+	for(edge e : G.edges) {
 		writeEdge(os, GA, e);
 	}
+	os.flags(currentFlags);
 }
 
-
-} // end namespace gdf
+}
 
 
 bool GraphIO::writeGDF(const Graph &G, std::ostream &os)
 {
-	gdf::writeGraph(os, G, NULL);
-	return true;
+	bool result = os.good();
+
+	if(result) {
+		gdf::writeGraph(os, G, nullptr);
+	}
+
+	return result;
 }
 
 
 bool GraphIO::writeGDF(const GraphAttributes &GA, std::ostream &os)
 {
-	gdf::writeGraph(os, GA.constGraph(), &GA);
-	return true;
+	bool result = os.good();
+
+	if(result) {
+		gdf::writeGraph(os, GA.constGraph(), &GA);
+	}
+
+	return result;
 }
 
-
-} // end namespace ogdf
-
+}

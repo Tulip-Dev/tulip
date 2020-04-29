@@ -1,11 +1,3 @@
-/*
- * $Revision: 3846 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-19 10:33:14 +0100 (Tue, 19 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of BlockOrder and related classes
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,20 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_BLOCK_ORDER_H
-#define OGDF_BLOCK_ORDER_H
 
 #include <ogdf/basic/EdgeArray.h>
 #include <ogdf/basic/NodeArray.h>
@@ -63,17 +46,17 @@ private:
 	Array<node> m_nodes;
 public:
 
-	ArrayLevel(unsigned int size) : m_nodes(size) { }
+	explicit ArrayLevel(unsigned int size) : m_nodes(size) { }
 
-	ArrayLevel(const Array<node> &nodes) : m_nodes(nodes) { }
+	explicit ArrayLevel(const Array<node> &nodes) : m_nodes(nodes) { }
 
-	const node &operator[](int i) const { return m_nodes[i]; }
+	const node &operator[](int i) const override { return m_nodes[i]; }
 
-	node &operator[](int i) { return m_nodes[i]; }
+	node &operator[](int i) override { return m_nodes[i]; }
 
-	int size() const { return m_nodes.size(); }
+	int size() const override { return m_nodes.size(); }
 
-	int high() const { return m_nodes.high(); }
+	int high() const override { return m_nodes.high(); }
 
 };
 
@@ -90,13 +73,11 @@ class OGDF_EXPORT Block {
 
 	friend class BlockOrder;
 private:
-	BlockOrder *m_pOrder;  //!< The order to which this block belongs.
+	int m_index = 0; //!< The index of this block in BlockOrder.
 
-	int m_index; //!< The index of this block in BlockOrder.
+	int m_upper = 0; //!< The top level of this block.
 
-	int m_upper; //!< The top level of this block.
-
-	int m_lower; //!< The bottom level of this block.
+	int m_lower = 0; //!< The bottom level of this block.
 
 	Array<node> m_nodes; //!< Vertices from the proper hierarchy corresponding to this block
 
@@ -109,8 +90,8 @@ private:
 	Array<int> m_InvertedOutgoing;  //!< Positions of this block in m_NeighboursIncoming of neighbours.
 
 	// exactly one of those below is non null!
-	node m_Node; //!< The node for which this block was created.
-	edge m_Edge; //!< The edge for which this block was created.
+	node m_Node = nullptr; //!< The node for which this block was created.
+	edge m_Edge = nullptr; //!< The edge for which this block was created.
 
 	bool m_isEdgeBlock;
 	bool m_isNodeBlock;
@@ -122,11 +103,11 @@ public:
 
 	bool isVertexBlock() { return m_isNodeBlock; }
 
-	//! Creates new vertex block for a node \a v.
-	Block(BlockOrder *order, node v);
+	//! Creates new vertex block for a node \p v.
+	explicit Block(node v);
 
-	//! Creates new edge block for an edge \a e.
-	Block(BlockOrder *order, edge e);
+	//! Creates new edge block for an edge \p e.
+	explicit Block(edge e);
 
 };
 
@@ -144,7 +125,7 @@ public:
 class OGDF_EXPORT BlockOrder : public HierarchyLevelsBase {
 
 private:
-	enum direction { Plus, Minus };
+	enum class Direction { Plus, Minus };
 
 	GraphCopy m_GC; //!< The graph copy representing the topology of the proper hierarchy.
 
@@ -161,8 +142,10 @@ private:
 	int m_storedCrossings; //!< Numebr of crossings stored in the sifting step.
 	int m_bestCrossings; //!< The lowest number of crossing found in the sifting step.
 
-	//unsigned int m_storedCrossings;
-	//unsigned int m_currentCrossings;
+#if 0
+	unsigned int m_storedCrossings;
+	unsigned int m_currentCrossings;
+#endif
 
 	Array<Block *> m_Blocks; //!< The array of all blocks.
 	NodeArray<Block *> m_NodeBlocks; //!< The array of all vertex blocks.
@@ -170,7 +153,9 @@ private:
 
 	EdgeArray<bool> m_isActiveEdge; //!< Stores information about active edge blocks.
 
-	//unsigned int m_blocksCount;
+#if 0
+	unsigned int m_blocksCount;
+#endif
 	int m_activeBlocksCount;
 
 	Hierarchy &m_hierarchy; //!< The hierarchy on grid- and globalsifting operates.
@@ -188,34 +173,36 @@ private:
 
 public:
 
-	// ---- HierarchyLevelsBase members ----
+	//! \name HierarchyLevelsBase members
+	//! @{
+
 	//! Returns the <i>i</i>-th level.
-	const ArrayLevel &operator[](int i) const {
+	const ArrayLevel &operator[](int i) const override {
 		return *(m_levels[i]);
 	}
-	//! Returns the position of node \a v on its level.
-	int pos(node v) const {
+	//! Returns the position of node \p v on its level.
+	int pos(node v) const override {
 		return m_pos[v];
 	}
 	//! Returns the number of levels.
-	int size() const {
+	int size() const override {
 		return m_levels.size();
 	}
 
-	const Hierarchy &hierarchy() const {
+	const Hierarchy &hierarchy() const override {
 		return m_hierarchy;
 	}
 
-	//! Returns the adjacent nodes of \a v.
-	const Array<node> &adjNodes(node v, TraversingDir dir) const {
-		if ( dir == upward ) {
+	//! Returns the adjacent nodes of \p v.
+	const Array<node> &adjNodes(node v, TraversingDir dir) const override {
+		if ( dir == TraversingDir::upward ) {
 			return m_upperAdjNodes[v];
 		} else {
 			return m_lowerAdjNodes[v];
 		}
 	}
 
-	// ---- HierarchyLevelsBase members end ----
+	//! @}
 
 	// destruction
 	~BlockOrder() { deconstruct(); }
@@ -223,16 +210,21 @@ public:
 	//! Returns the number of blocks.
 	int blocksCount() { return m_Blocks.size(); }
 
-	//BlockOrder( const Graph &G, const NodeArray<int> &rank);
+#if 0
+	BlockOrder(const Graph &G, const NodeArray<int> &rank);
+#endif
 
-	BlockOrder( Hierarchy& hierarchy, bool longEdgesOnly = true );
+	explicit BlockOrder(Hierarchy& hierarchy, bool longEdgesOnly = true);
 
 	//! Calls the global sifting algorithm on graph (its hierarchy).
-	void globalSifting( int rho = 1, int nRepeats = 10 );
+	void globalSifting( int rho = 1, int nRepeats = 10, int *pNumCrossings = nullptr );
 
 private:
 	//! Does some initialization.
-	void doInit( bool longEdgesOnly = true ); //const NodeArray<int> &ranks);
+	void doInit( bool longEdgesOnly = true);
+#if 0
+	void doInit( bool longEdgesOnly = true, const NodeArray<int> &ranks);
+#endif
 
 	/**
 	 * \brief Creates sorted lists of neighbours for all blocks.
@@ -245,11 +237,11 @@ private:
 	 * \brief Updates adjacencies lists before swaping two blocks.
 	 *
 	 * Updates adjacencies lists of two blocks and their
-	 * neighbours in direction \a d. This function is called before
+	 * neighbours in direction \p d. This function is called before
 	 * blocks are swapped.
 	 * See UPDATE-ADJACENCIES in papers.
 	 */
-	void updateAdjacencies(Block *blockOfA, Block *blockOfB, direction d);
+	void updateAdjacencies(Block *blockOfA, Block *blockOfB, Direction d);
 
 	/**
 	 * \brief Calculates change of crossings made by a single swap.
@@ -258,7 +250,7 @@ private:
 	 * blocks in current permutation.
 	 * See USWAP in papers.
 	 */
-	int uswap(Block *blockOfA, Block *blockOfB, direction d, int level);
+	int uswap(Block *blockOfA, Block *blockOfB, Direction d, int level);
 
 	/**
 	 * \brief Swaps two consecutive blocks.
@@ -301,14 +293,15 @@ private:
 	}
 
 
-	// ---- GridSifting ----
+	//! \name GridSifting
+	//! @{
 
 	/**
 	 * \brief Moves block to next level.
 	 */
 	int verticalSwap( Block *b, int level );
 
-	//!< (Only used in verticalSwap().)
+	//! Only used in verticalSwap().
 	int localCountCrossings( const Array<int> &levels );
 
 	/**
@@ -323,18 +316,11 @@ public:
 	int m_verticalStepsBound;
 
 	/**
-	 * \brief Calss the grid sifting algorithm on a graph (its hierarchy).
+	 * \brief Calls the grid sifting algorithm on a graph (its hierarchy).
 	 */
 	void gridSifting( int nRepeats = 10 );
 
-	// ---- GridSifting end ----
-
-
-
+	//! @}
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

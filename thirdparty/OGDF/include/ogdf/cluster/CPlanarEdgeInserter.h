@@ -1,11 +1,3 @@
-/*
- * $Revision: 2564 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-07 00:03:48 +0200 (Sat, 07 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief  Declares CPlanarEdgeInserter class.
  *
@@ -21,7 +13,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -38,37 +30,24 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_CPLANAR_EDGE_INSERTER_H
-#define OGDF_CPLANAR_EDGE_INSERTER_H
-
 
 #include <ogdf/cluster/ClusterPlanRep.h>
 
 namespace ogdf {
 
-class NodePair
-{
-public:
-	node m_src, m_tgt;
-};
-
+//! Edge insertion algorithm for clustered graphs.
+/**
+ * @ingroup ga-cplanarity
+ */
 class OGDF_EXPORT CPlanarEdgeInserter
 {
-	//postprocessing options
-	enum PostProcessType {ppNone, ppRemoveReinsert};
+	//! Postprocessing options
+	enum class PostProcessType {None, RemoveReinsert};
 
 public:
 
@@ -79,9 +58,8 @@ public:
 	void call(
 		ClusterPlanRep& CPR,
 		CombinatorialEmbedding& E,
-		Graph& G,
-		const List<NodePair>& origEdges,
-		List<edge>& newEdges);
+		const Graph& G,
+		const List<edge>& origEdges);
 
 	void setPostProcessing(PostProcessType p)
 	{
@@ -104,16 +82,16 @@ protected:
 	void findShortestPath(
 		const CombinatorialEmbedding &E,
 		node s, //edge startpoint
-		node t,	//edge endpoint
+		node t, //edge endpoint
 		node sDummy, //representing s in network
 		node tDummy, //representing t in network
 		SList<adjEntry> &crossed,
 		FaceArray<node>& nodeOfFace);
 
-	edge insertEdge(
+	void insertEdge(
 		ClusterPlanRep &CPR,
 		CombinatorialEmbedding &E,
-		const NodePair& np,
+		edge insertMe,
 		FaceArray<node>& nodeOfFace,
 		EdgeArray<edge>& arcRightToLeft,
 		EdgeArray<edge>& arcLeftToRight,
@@ -129,18 +107,18 @@ protected:
 		NodeArray<cluster>& clusterOfFaceNode,
 		EdgeArray<edge>& arcTwin);
 
-	//use heuristics to improve the result if possible
+	//! Use heuristics to improve the result if possible.
 	void postProcess();
 
 private:
 
-	Graph* m_originalGraph;
+	const Graph* m_originalGraph = nullptr;
 	Graph m_dualGraph;
-	EdgeArray<int> m_eStatus; //status of dual graph arcs
-	EdgeArray<adjEntry> m_arcOrig; //original edges adj entry
-	PostProcessType m_ppType; //defines which kind of postprocessing to use
+	EdgeArray<int> m_eStatus; //!< Status of dual graph arcs.
+	EdgeArray<adjEntry> m_arcOrig; //!< Original edges adj entry.
+	PostProcessType m_ppType = PostProcessType::None; //!< Defines which kind of postprocessing to use.
 
-	//compute for every face the cluster that surrounds it
+	//! Compute for every face the cluster that surrounds it.
 	void deriveFaceCluster(
 		ClusterPlanRep& CPR,
 		CombinatorialEmbedding& E,
@@ -151,10 +129,7 @@ private:
 
 	//debug
 	void writeDual(const char *fileName);
-	void writeGML(ostream &os, const Layout &drawing);
-};//class CPlanarEdgeInserter
+	void writeGML(std::ostream &os, const Layout &drawing);
+};
 
-} // end namespace ogdf
-
-
-#endif
+}

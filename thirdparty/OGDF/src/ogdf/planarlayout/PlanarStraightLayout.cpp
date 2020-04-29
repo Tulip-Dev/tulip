@@ -1,11 +1,3 @@
-/*
- * $Revision: 2554 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-06 11:39:38 +0200 (Fri, 06 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Implements class PlanarStraightLayout
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,20 +25,15 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 
 #include <ogdf/planarlayout/PlanarStraightLayout.h>
-#include <ogdf/basic/GraphCopy.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/augmentation/PlanarAugmentation.h>
 #include <ogdf/augmentation/PlanarAugmentationFix.h>
-#include <ogdf/module/ShellingOrderModule.h>
 #include <ogdf/planarlayout/BiconnectedShellingOrder.h>
 #include <ogdf/planarity/SimpleEmbedder.h>
 
@@ -58,9 +45,9 @@ PlanarStraightLayout::PlanarStraightLayout()
 	m_sizeOptimization = true;
 	m_baseRatio        = 0.33;
 
-	m_augmenter.set(new PlanarAugmentation);
-	m_computeOrder.set(new BiconnectedShellingOrder);
-	m_embedder.set(new SimpleEmbedder);
+	m_augmenter.reset(new PlanarAugmentation);
+	m_computeOrder.reset(new BiconnectedShellingOrder);
+	m_embedder.reset(new SimpleEmbedder);
 }
 
 
@@ -73,32 +60,10 @@ void PlanarStraightLayout::doCall(
 {
 	// require to have a planar graph without multi-edges and self-loops;
 	// planarity is checked below
-	OGDF_ASSERT(isSimple(G) && isLoopFree(G));
+	OGDF_ASSERT(isSimple(G));
 
-	// handle special case of graphs with less than 3 nodes
-	if(G.numberOfNodes() < 3)
-	{
-		node v1, v2;
-		switch(G.numberOfNodes())
-		{
-		case 0:
-			boundingBox = IPoint(0,0);
-			return;
-
-		case 1:
-			v1 = G.firstNode();
-			gridLayout.x(v1) = gridLayout.y(v1) = 0;
-			boundingBox = IPoint(0,0);
-			return;
-
-		case 2:
-			v1 = G.firstNode();
-			v2 = G.lastNode ();
-			gridLayout.x(v1) = gridLayout.y(v1) = gridLayout.y(v2) = 0;
-			gridLayout.x(v2) = 1;
-			boundingBox = IPoint(1,0);
-			return;
-		}
+	if (G.numberOfNodes() < 2) {
+		return;
 	}
 
 	// we make a copy of G since we use planar biconnected augmentation
@@ -106,7 +71,7 @@ void PlanarStraightLayout::doCall(
 
 	if(fixEmbedding) {
 		// determine adjacency entry on external face of GC (if required)
-		if(adjExternal != 0) {
+		if(adjExternal != nullptr) {
 			edge eG  = adjExternal->theEdge();
 			edge eGC = GC.copy(eG);
 			adjExternal = (adjExternal == eG->adjSource()) ? eGC->adjSource() : eGC->adjTarget();
@@ -116,20 +81,20 @@ void PlanarStraightLayout::doCall(
 		augmenter.call(GC);
 
 	} else {
-		adjExternal = 0;
+		adjExternal = nullptr;
 
 		// augment graph planar biconnected
-		m_augmenter.get().call(GC);
+		m_augmenter->call(GC);
 
 		// embed augmented graph
-		m_embedder.get().call(GC,adjExternal);
+		m_embedder->call(GC,adjExternal);
 	}
 
 	// compute shelling order with shelling order module
-	m_computeOrder.get().baseRatio(m_baseRatio);
+	m_computeOrder->baseRatio(m_baseRatio);
 
 	ShellingOrder order;
-	m_computeOrder.get().callLeftmost(GC,order,adjExternal);
+	m_computeOrder->callLeftmost(GC,order,adjExternal);
 
 	// compute grid coordinates for GC
 	NodeArray<int> x(GC), y(GC);
@@ -137,12 +102,11 @@ void PlanarStraightLayout::doCall(
 
 	boundingBox.m_x = x[order(1,order.len(1))];
 	boundingBox.m_y = 0;
-	node v;
-	forall_nodes(v,GC)
+	for(node v : GC.nodes)
 		if(y[v] > boundingBox.m_y) boundingBox.m_y = y[v];
 
 	// copy coordinates from GC to G
-	forall_nodes(v,G) {
+	for(node v : G.nodes) {
 		node vCopy = GC.copy(v);
 		gridLayout.x(v) = x[vCopy];
 		gridLayout.y(v) = y[vCopy];
@@ -161,7 +125,7 @@ void PlanarStraightLayout::computeCoordinates(const Graph &G,
 
 	// upper[v] = w means x-coord. of v is relative to w
 	// (abs. x-coord. of v = x[v] + abs. x-coord of w)
-	NodeArray<node>	upper(G,0);
+	NodeArray<node>	upper(G,nullptr);
 
 	// initialize contour with base
 	const ShellingOrderSet &V1 = lmc[1];
@@ -178,7 +142,7 @@ void PlanarStraightLayout::computeCoordinates(const Graph &G,
 		if (i > 1)
 			prev[V1[i]] = V1[i-1];
 	}
-	prev[v1] = next[v2] = 0;
+	prev[v1] = next[v2] = nullptr;
 
 	// process shelling order from bottom to top
 	const int n = lmc.length();
@@ -186,12 +150,12 @@ void PlanarStraightLayout::computeCoordinates(const Graph &G,
 	for (k = 2; k <= n; ++k)
 	{
 		const ShellingOrderSet &Vk = lmc[k]; // Vk = { z_1,...,z_l }
-		int l = Vk.len();
+		int len = Vk.len();
 		node z1 = Vk[1];
 		node cl = Vk.left();  // left vertex
 		node cr = Vk.right(); // right vertex
 
-		// compute relative x-distance from c_i to cl for i = l+1, ..., r
+		// compute relative x-distance from c_i to cl for i = len+1, ..., r
 		int x_cr = 0;
 		node v;
 		for (v = next[cl]; v != cr; v = next[v])
@@ -202,8 +166,7 @@ void PlanarStraightLayout::computeCoordinates(const Graph &G,
 		x_cr += x[cr]; // x_cr = abs. x-coord(cr) - abs. x-coord(cl)
 
 		int offset;
-		if (m_sizeOptimization == true)
-		{
+		if (m_sizeOptimization) {
 			// optimization: compute minimal value offset by which cr must be
 			// shift to right
 			int yMax = y[cr];
@@ -212,7 +175,7 @@ void PlanarStraightLayout::computeCoordinates(const Graph &G,
 			// to left with slope -1, then offset must be at least 2
 			offset = (y[cl] < y[next[cl]] || y[cr] < y[prev[cr]]) ? 2 : 0;
 
-			// y_max = max { y[c_i] | l <= i <= r }
+			// y_max = max { y[c_i] | len <= i <= r }
 			for (v = cl; v != cr; v = next[v]) {
 				if (y[v] > yMax)
 					yMax = y[v];
@@ -220,25 +183,25 @@ void PlanarStraightLayout::computeCoordinates(const Graph &G,
 
 			// offset must be at least so large, such that
 			// y[z_i] > y_max for all i
-			offset = max (offset, 2*(yMax+l) - x_cr - y[cl] - y[cr]);
+			offset = max (offset, 2*(yMax+len) - x_cr - y[cl] - y[cr]);
 
 		} else // no size optimization
-			offset = 2*l;
+			offset = 2*len;
 
 		x_cr += offset;
 
-		// compute insert coordinates of z_i for 1 <= i <= l
-		x[z1] = (x_cr + y[cr] - y[cl]) / 2 - l + 1;
-		y[z1] = (x_cr + y[cr] + y[cl]) / 2 - l + 1;
+		// compute insert coordinates of z_i for 1 <= i <= len
+		x[z1] = (x_cr + y[cr] - y[cl]) / 2 - len + 1;
+		y[z1] = (x_cr + y[cr] + y[cl]) / 2 - len + 1;
 
-		for (i = 2; i <= l; i++) {
+		for (i = 2; i <= len; i++) {
 			x[Vk[i]] = 2;
 			y[Vk[i]] = y[z1];
 		}
 
 		// Compute shift values for cl,...,cr and relative x-coord. to a node
 		// upper[v] for inner nodes
-		// Let l <= c_alpha <= c_beta <= r max. with
+		// Let len <= c_alpha <= c_beta <= r max. with
 		//		y[cl] > ... > y[c_alpha] and y[c_beta] < ... < y[cr]
 		// Shift c_alpha,...,c_beta by offset/2 (c_alpha,c_beta only if != cl,
 		// cr)
@@ -287,25 +250,25 @@ void PlanarStraightLayout::computeCoordinates(const Graph &G,
 				upper[v]  = z1;
 			}
 
-		x[cr] = x_cr - (x[z1] + 2*(l-1));
+		x[cr] = x_cr - (x[z1] + 2*(len-1));
 
 		// update contour after insertion of z_1,...,z_l
-		for (i = 1; i <= l; i++)
+		for (i = 1; i <= len; i++)
 		{
-			if (i < l)
+			if (i < len)
 				next[Vk[i]] = Vk[i+1];
 			if (i > 1)
 				prev[Vk[i]] = Vk[i-1];
 		}
-		next [cl]    = z1;
-		next [Vk[l]] = cr;
-		prev [cr]    = Vk[l];
-		prev [z1]    = cl;
+		next [cl] = z1;
+		next [Vk[len]] = cr;
+		prev [cr] = Vk[len];
+		prev [z1] = cl;
 	}
 
 	// compute final x-coordinates for the nodes on the (final) contour
 	int sum = 0;
-	for (node v = v1; v != 0; v = next[v]) {
+	for (node v = v1; v != nullptr; v = next[v]) {
 		x[v] = (sum += x[v]);
 	}
 
@@ -315,11 +278,10 @@ void PlanarStraightLayout::computeCoordinates(const Graph &G,
 		for (i = 1; i <= lmc.len(k); i++)
 		{
 			node zi = lmc (k,i);
-			if (upper[zi] != 0)	// upper[zi] == 0 <=> z_i on contour
+			if (upper[zi] != nullptr)	// upper[zi] == 0 <=> z_i on contour
 				x[zi] += x[upper[zi]];
 		}
 	}
 }
 
-} // end namespace ogdf
-
+}

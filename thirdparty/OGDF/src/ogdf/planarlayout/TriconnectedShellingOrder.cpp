@@ -1,11 +1,3 @@
-/*
- * $Revision: 3091 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-11-30 11:07:34 +0100 (Fri, 30 Nov 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Implements class TriconnectedShellingOrder which computes
  * a shelling order for a triconnected planar graph.
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,12 +26,9 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 
 #include <ogdf/planarlayout/TriconnectedShellingOrder.h>
@@ -54,21 +43,15 @@
 
 namespace ogdf {
 
-
-
-//---------------------------------------------------------
-// class ComputeTricOrder
-//---------------------------------------------------------
 class ComputeTricOrder
 {
 public:
 	// constructor
 	ComputeTricOrder (
-			const Graph& G,                  	// biconnected planar graph
-			ConstCombinatorialEmbedding& E, 	// combinatorial embedding of G
-			face outerFace,              		// outer face
-			double baseRatio,          			// size of base (baseRatio * size(extFace)
-			bool preferNodes = false); 			// boolean value if nodes are prefered to faces
+			const Graph& G, // biconnected planar graph
+			ConstCombinatorialEmbedding& E, // combinatorial embedding of G
+			face outerFace, // outer face
+			bool preferNodes = false); // boolean value if nodes are prefered to faces
 
 
 
@@ -95,7 +78,7 @@ public:
 
 	// returns true <=> there are possible nodes or faces
 	bool isPossible(){
-		return (!(m_possibleNodes.empty() && m_possibleFaces.empty()));
+		return !(m_possibleNodes.empty() && m_possibleFaces.empty());
 	}
 
 	// returns true <=> the current selection is a node
@@ -105,7 +88,7 @@ public:
 
 	// test if face f has only one edge on outer face
 	bool isOnlyEdge(face f){
-		return ((m_outv[f] == 2) && (m_oute[f] == 1));
+		return m_outv[f] == 2 && m_oute[f] == 1;
 	}
 
 	// add a node v of face f to the outer face
@@ -146,40 +129,34 @@ public:
 	}
 
 	void output(){
-		cout << "ComputeTricOrder::output():" << endl;
-		cout << "nodes: " << endl;
-		node n;
-		forall_nodes(n, (*m_pGraph)){
-			cout << " node " << n << ": ";
-			cout << "m_visited == " << m_visited[n] << ", ";
-			cout << "m_sepf == " << m_sepf[n] << endl;
+		std::cout << "ComputeTricOrder::output():" << std::endl;
+		std::cout << "nodes: " << std::endl;
+		for (node n : m_pGraph->nodes){
+			std::cout << " node " << n << ": ";
+			std::cout << "m_visited == " << m_visited[n] << ", ";
+			std::cout << "m_sepf == " << m_sepf[n] << std::endl;
 		}
-		cout << "faces: " << endl;
-		face f;
-		forall_faces(f, (*m_pEmbedding)){
-			cout << " face " << f->index() << ": ";
-			cout << "  outv == " << m_outv[f] << ", ";
-			cout << "  oute == " << m_oute[f] << ", ";
-			cout << "  isSpearationFace == " << m_isSeparationFace[f] << endl;
-			cout << "  nodes in outerNodes: ";
-			ListIterator<node> it = m_outerNodes[f].begin();
-			while (it.valid()){
-				cout << " " << (*it) << ", ";
-				it++;
+
+		std::cout << "faces: " << std::endl;
+		for (face f : m_pEmbedding->faces){
+			std::cout << " face " << f->index() << ": ";
+			std::cout << "  outv == " << m_outv[f] << ", ";
+			std::cout << "  oute == " << m_oute[f] << ", ";
+			std::cout << "  isSpearationFace == " << m_isSeparationFace[f] << std::endl;
+			std::cout << "  nodes in outerNodes: ";
+			for (node n : m_outerNodes[f]) {
+				std::cout << " " << n << ", ";
 			}
-			cout << ". " << endl;
-			cout << "  edges in outerNodes: ";
-			ListIterator<edge> itE = m_outerEdges[f].begin();
-			while (itE.valid()){
-				cout << " " << (*itE) << ", ";
-				itE++;
+			std::cout << ". " << std::endl;
+			std::cout << "  edges in outerNodes: ";
+			for (edge e : m_outerEdges[f]) {
+				std::cout << " " << e << ", ";
 			}
-			cout << ". " << endl;
+			std::cout << ". " << std::endl;
 		}
 	}
 
 private:
-
 	void setUpdate(node n);
 
 	void setUpdate(face f);
@@ -187,52 +164,48 @@ private:
 
 	// member variables
 
-	const Graph             	*m_pGraph;     	// the graph
-	ConstCombinatorialEmbedding *m_pEmbedding; 	// the embedding of the graph
+	const Graph *m_pGraph; // the graph
+	ConstCombinatorialEmbedding *m_pEmbedding; // the embedding of the graph
 
-	face m_outerFace; 						// the outer/external face
+	face m_outerFace; // the outer/external face
 
-	node m_v1, m_v2;						// the two nodes on the "bottom edge"
+	node m_v1, m_v2; // the two nodes on the "bottom edge"
 
-	bool m_preferNodes;						// m_preferNodes = true <=> nodes are prefered to faces
-											// in selection of getNextPossible(..)
+	bool m_preferNodes; // m_preferNodes = true <=> nodes are prefered to faces in selection of getNextPossible(..)
 
-	NodeArray<int> m_visited, m_sepf;		// number of visited neighbours and separation faces
-	NodeArray< ListIterator<node> > m_link;	// item in m_possibleNodes containing v
+	NodeArray<int> m_visited, m_sepf; // number of visited neighbours and separation faces
+	NodeArray<ListIterator<node>> m_link; // item in m_possibleNodes containing v
 
-	List<node> m_possibleNodes;				// the possible nodes for the next step
-	List<face> m_possibleFaces;				// the possible faces for the next step
+	List<node> m_possibleNodes; // the possible nodes for the next step
+	List<face> m_possibleFaces; // the possible faces for the next step
 
-	NodeArray< ListIterator<node> > m_nodesLink;	// list-iterator in m_possibleNodes for each node, or NULL if it doesn't exist
-	FaceArray< ListIterator<face> > m_facesLink;	// list-iterator in m_possibleNodes for each node, or NULL
+	NodeArray<ListIterator<node>> m_nodesLink; // list-iterator in m_possibleNodes for each node, or nullptr if it doesn't exist
+	FaceArray<ListIterator<face>> m_facesLink; // list-iterator in m_possibleNodes for each node, or nullptr
 
-	List<node> m_updateNodes;				// list of actual changed nodes
-	List<face> m_updateFaces;				// list of actual changed faces
+	List<node> m_updateNodes; // list of actual changed nodes
+	List<face> m_updateFaces; // list of actual changed faces
 
-	NodeArray<bool> m_nodeUpdate;			// m_nodeUpdate[v] = true <=> v \in m_updateNodes
-	FaceArray<bool> m_faceUpdate; 			// m_faceUpdate[f] = true <=> f \in m_updateFaces
+	NodeArray<bool> m_nodeUpdate; // m_nodeUpdate[v] = true <=> v \in m_updateNodes
+	FaceArray<bool> m_faceUpdate; // m_faceUpdate[f] = true <=> f \in m_updateFaces
 
 	FaceArray<bool> m_isSeparationFace;
 
-	bool m_currentIsNode;					// m_currentIsNode == true <=> in the current step a node was picked
-											//  => V_k is a singleton. The Variable == false <=> V_k is a node set
+	bool m_currentIsNode; // m_currentIsNode == true <=> in the current step a node was picked => V_k is a singleton. The Variable == false <=> V_k is a node set
 
-	FaceArray<int> m_outv;					// number of nodes...
-	FaceArray<int> m_oute;					//... and edges of a face that also belong to the outer face
+	FaceArray<int> m_outv; // number of nodes...
+	FaceArray<int> m_oute; //... and edges of a face that also belong to the outer face
 
-	FaceArray< List<node> > m_outerNodes;	// nodes of each face that also belong to the outer face
-	FaceArray< List<edge> > m_outerEdges;	// edges of each face that also belong to the outer face
-
-};	// class ComputeTricOrder
+	FaceArray<List<node>> m_outerNodes; // nodes of each face that also belong to the outer face
+	FaceArray<List<edge>> m_outerEdges; // edges of each face that also belong to the outer face
+};
 
 
 // constructor
 ComputeTricOrder::ComputeTricOrder(
-	const Graph& G, 					// the graph
-	ConstCombinatorialEmbedding &E, 	// embedding of the graph
-	face outerFace,                   	// the outer face
-	double baseRatio,          			// size of base (baseRatio * size(extFace))
-	bool preferNodes) 					// boolean value if nodes are prefered to faces
+	const Graph& G, // the graph
+	ConstCombinatorialEmbedding &E, // embedding of the graph
+	face outerFace, // the outer face
+	bool preferNodes) // boolean value if nodes are prefered to faces
 {
 	m_pGraph = &G;
 	m_pEmbedding = &E;
@@ -242,12 +215,12 @@ ComputeTricOrder::ComputeTricOrder(
 	// initialize member variables
 	m_visited			.init(G, 0);
 	m_sepf				.init(G, 0);
-	m_link				.init(G, 0);
+	m_link				.init(G, nullptr);
 	m_nodeUpdate		.init(G, false);
 	m_faceUpdate		.init(E, false);
 	m_isSeparationFace	.init(E, false);
-	m_nodesLink			.init(G, 0);
-	m_facesLink			.init(E, 0);
+	m_nodesLink			.init(G, nullptr);
+	m_facesLink			.init(E, nullptr);
 	m_outv				.init(E, 0);
 	m_oute				.init(E, 0);
 	m_outerNodes		.init(E);
@@ -288,53 +261,48 @@ void ComputeTricOrder::initOuterNodes(node v1, node v2){
 	m_v1 = v1;
 	m_v2 = v2;
 
-	node v;
-
 	adjEntry firstAdj = m_outerFace->firstAdj();
-	adjEntry adjV;
 	// set firstAdj, so outerface is on the right
 	if (m_pEmbedding->rightFace(firstAdj) == m_outerFace)
 		firstAdj = firstAdj->cyclicSucc();
 
-	 adjEntry adjRun = firstAdj;
-	 // traverse all nodes of the outer face
-	 do {
-	 	 	v = adjRun->theNode();
-			// now traverse the faces f of v
-			// and increase outv[f] and add v to outerNodes[f]
-			forall_adj(adjV, v){
-				face f = m_pEmbedding->rightFace(adjV);
-				if (f != m_outerFace){
-					m_outv[f]++;
-					m_outerNodes[f].pushBack(v);
-				}
+	adjEntry adjRun = firstAdj;
+	// traverse all nodes of the outer face
+	do {
+		node v = adjRun->theNode();
+		// now traverse the faces f of v
+		// and increase outv[f] and add v to outerNodes[f]
+		for(adjEntry adjV : v->adjEntries){
+			face f = m_pEmbedding->rightFace(adjV);
+			if (f != m_outerFace){
+				m_outv[f]++;
+				m_outerNodes[f].pushBack(v);
 			}
-			adjRun = adjRun->twin()->cyclicSucc();
+		}
+		adjRun = adjRun->twin()->cyclicSucc();
 	} while (adjRun != firstAdj);
 }
 
 
 // initialize the edges of the external face
 // and the corresponding faces
-void ComputeTricOrder::initOuterEdges(){
-	edge e;
-	face f;
-
+void ComputeTricOrder::initOuterEdges()
+{
 	adjEntry firstAdj = m_outerFace->firstAdj();
 	// set firstAdj, so outerface is on the right
 	if (m_pEmbedding->rightFace(firstAdj) == m_outerFace)
-	 	firstAdj = firstAdj->cyclicSucc();
+		firstAdj = firstAdj->cyclicSucc();
 	adjEntry adjRun = firstAdj;
 	// traverse all edges of the outer face
 	do {
-	 	 e = adjRun->theEdge();
-	 	 f = m_pEmbedding->rightFace(adjRun);
-	 	 // verify that actual edge is not edge (v1,v2)
-	 	 if (!((e->source() == m_v1 && e->target() == m_v2) || ((e->source() == m_v2 && e->target() == m_v1)))){
-	 	 	m_oute[f]++;
-	 	 	m_outerEdges[f].pushBack(e);
-	 	 }
-		 adjRun = adjRun->twin()->cyclicSucc();
+		edge e = adjRun->theEdge();
+		face f = m_pEmbedding->rightFace(adjRun);
+		// verify that actual edge is not edge (v1,v2)
+		if (!e->isIncident(m_v1) || !e->isIncident(m_v2)) {
+			m_oute[f]++;
+			m_outerEdges[f].pushBack(e);
+		}
+		adjRun = adjRun->twin()->cyclicSucc();
 	} while (adjRun != firstAdj);
 }
 
@@ -345,10 +313,7 @@ void ComputeTricOrder::initOuterEdges(){
 node ComputeTricOrder::getOuterNodeDeg2(face f, NodeArray<adjEntry>& adjPred, NodeArray<adjEntry>& adjSucc){
 	// need the boolean value if v2 is found before another node with degree 2
 	bool foundV2;
-	node v;
-	ListIterator<node> it = m_outerNodes[f].begin();
-	for (it = m_outerNodes[f].begin(); it.valid(); it++){
-		v = *it;
+	for (node v : m_outerNodes[f]){
 		if (v == m_v2){
 			foundV2 = true;
 			continue;
@@ -367,7 +332,7 @@ node ComputeTricOrder::getOuterNodeDeg2(face f, NodeArray<adjEntry>& adjPred, No
 	if (foundV2)
 		return m_v2;
 	// no node found
-	return 0;
+	return nullptr;
 }
 
 
@@ -392,18 +357,15 @@ void ComputeTricOrder::setUpdate(face f){
 //	- v or f need to be inserted in possible list
 //	- v or f need to be deleted from possible list
 //	- f is becoming a separation face in the current step
-void ComputeTricOrder::doUpdate(){
-	bool isPossible, isSepFace;
-	node v;
-	face f;
-
+void ComputeTricOrder::doUpdate()
+{
 	// first update faces, because variables for nodes can change here
-	while (!m_updateFaces.empty()){
-		f = m_updateFaces.popFrontRet();
+	while (!m_updateFaces.empty()) {
+		face f = m_updateFaces.popFrontRet();
 
 		m_faceUpdate[f] = false;
 		// check if face f is a possible face
-		isPossible = ((m_outv[f] == m_oute[f] + 1) && (m_oute[f] >= 2) && (f != m_outerFace));
+		bool isPossible = ((m_outv[f] == m_oute[f] + 1) && (m_oute[f] >= 2) && (f != m_outerFace));
 
 		// insert face f if it is not in possible-faces-list
 		//  and is a possible face
@@ -414,26 +376,25 @@ void ComputeTricOrder::doUpdate(){
 		}
 		else
 			// delete f in possible-faces-list if it's not possible anymore
-			if (!isPossible){
-				m_possibleFaces.del(m_facesLink[f]);
-				m_facesLink[f] = 0;
-			}
+		if (!isPossible){
+			m_possibleFaces.del(m_facesLink[f]);
+			m_facesLink[f] = nullptr;
+		}
 
 		// test if face f is a separation face
-		isSepFace = ((m_outv[f] >= 3) || ((m_outv[f] == 2) && (m_oute[f] == 0)));
+		bool isSepFace = ((m_outv[f] >= 3) || ((m_outv[f] == 2) && (m_oute[f] == 0)));
 
-		if (!m_isSeparationFace[f]){
+		if (!m_isSeparationFace[f]) {
 			// f wasn't a separation face...
 			if (isSepFace){
 				// ... and is now one
 				m_isSeparationFace[f] = true;
 				// increase seperation-faces (->sepf) for all outer-nodes v in f
-				ListIterator<node> it;
-				for (it = m_outerNodes[f].begin(); it.valid(); it++)
-					incSepf(*it);
+				for (node v : m_outerNodes[f])
+					incSepf(v);
 			}
 		}
-		else{
+		else {
 			// face f was a separation face
 			if (!isSepFace)
 				// and isn't a separation face anymore
@@ -441,37 +402,31 @@ void ComputeTricOrder::doUpdate(){
 				// decrease of sepf is done before in main function
 				m_isSeparationFace[f] = false;
 		}
-	}// while (!m_updateFaces.empty())
+	}
 
 	// now update nodes
-	while (!m_updateNodes.empty()){
-		v = m_updateNodes.popFrontRet();
+	while (!m_updateNodes.empty()) {
+		node v = m_updateNodes.popFrontRet();
 
 		m_nodeUpdate[v] = false;
 		// check if v is a possible node
-		isPossible = ((m_visited[v] >= 1) && (m_sepf[v] == 0) && (v != m_v1) && (v != m_v2));
+		bool isPossible = ((m_visited[v] >= 1) && (m_sepf[v] == 0) && (v != m_v1) && (v != m_v2));
 
-		if (!m_nodesLink[v].valid()){
+		if (!m_nodesLink[v].valid()) {
 			// v is not in possible list, but v is a possible node
 			if (isPossible){
 				m_nodesLink[v] = m_possibleNodes.pushBack(v);
 			}
 		}
-		else{
+		else {
 			// v is in the possible list but actually not possible
 			if (!isPossible){
 				m_possibleNodes.del(m_nodesLink[v]);
-				m_nodesLink[v] = 0;
+				m_nodesLink[v] = nullptr;
 			}
 		}
-	}// while (!m_updateNodes.empty())
+	}
 }
-
-
-
-//---------------------------------------------------------
-// TriconnectedShellingOrder
-//---------------------------------------------------------
 
 void TriconnectedShellingOrder::doCall(
 		const Graph& G,
@@ -483,46 +438,42 @@ void TriconnectedShellingOrder::doCall(
 	bool preferNodes = false;
 
 	#ifdef OUTPUT_TSO
-		cout << "Graph G is planar         == " << isPlanar(G)  << endl;
-		cout << "Graph G has no self loops == " << isLoopFree(G) 		<< endl;
-		cout << "Graph G is connected      == " << isConnected(G) 		<< endl;
-		cout << "Graph G is triconnected   == " << isTriconnected(G) 	<< endl;
+		std::cout << "Graph G is planar         == " << isPlanar(G)  << std::endl;
+		std::cout << "Graph G has no self loops == " << isLoopFree(G) 		<< std::endl;
+		std::cout << "Graph G is connected      == " << isConnected(G) 		<< std::endl;
+		std::cout << "Graph G is triconnected   == " << isTriconnected(G) 	<< std::endl;
 	#endif
 
-	OGDF_ASSERT(isPlanar(G) == true);
-	OGDF_ASSERT(isLoopFree(G) 		== true);
-	OGDF_ASSERT(isTriconnected(G) 	== true);
+	OGDF_ASSERT(isPlanar(G));
+	OGDF_ASSERT(isLoopFree(G));
+	OGDF_ASSERT(isTriconnected(G));
 
 	// crate an embedding for G
 	ConstCombinatorialEmbedding E(G);
 
 	// set outerFace so adj is on it or to face with maximal size
-	face outerFace = (adj != 0) ? E.rightFace(adj) : E.maximalFace();
+	face outerFace = (adj != nullptr) ? E.rightFace(adj) : E.maximalFace();
 
-	#ifdef OUTPUT_TSO
-		cout << "faces:" << endl;
-		face fh;
-		forall_faces(fh,E) {
-			if (fh == outerFace)
-				cout << "  face *" << fh->index() << ":";
-			else
-				cout << "  face  " << fh->index() << ":";
-			adjEntry adj;
-			forall_face_adj(adj,fh)
-				cout << " " << adj;
-			cout << endl;
-		}
+#ifdef OUTPUT_TSO
+	std::cout << "faces:" << std::endl;
+	for(face fh : E.faces) {
+		if (fh == outerFace)
+			std::cout << "  face *" << fh->index() << ":";
+		else
+			std::cout << "  face  " << fh->index() << ":";
+		for (adjEntry fhAdj : fh->entries)
+			std::cout << " " << fhAdj;
+		std::cout << std::endl;
+	}
 
-		cout << "adjacency lists:" << endl;
-		node vh;
-		forall_nodes(vh,G) {
-			cout << "  node " << vh << ":";
-			adjEntry adj;
-			forall_adj(adj,vh)
-				cout << " " << adj;
-			cout << endl;
-		}
-	#endif
+	std::cout << "adjacency lists:" << std::endl;
+	for(node vh : G.nodes) {
+		std::cout << "  node " << vh << ":";
+		for(adjEntry vhAdj : vh->adjEntries)
+			std::cout << " " << vhAdj;
+		std::cout << std::endl;
+	}
+#endif
 
 	adjEntry firstAdj = outerFace->firstAdj();
 	// set firstAdj that the outer face is on the left of firstAdj
@@ -533,7 +484,7 @@ void TriconnectedShellingOrder::doCall(
 	node v1 = firstAdj->theNode();
 	node v2 = firstAdj->cyclicPred()->twinNode();
 
-	ComputeTricOrder cto(G, E, outerFace, m_baseRatio, preferNodes);
+	ComputeTricOrder cto(G, E, outerFace, preferNodes);
 
 	// if outerFace == {v_1,...,v_q}
 	// 		adjPred(v_i) == v_i -> v_{i-1}
@@ -550,7 +501,7 @@ void TriconnectedShellingOrder::doCall(
 		adjSucc[adjRun->theNode()] = adjRun;
 		adjRun = adjRun->twin()->cyclicSucc();
 	} while (adjRun != firstAdj);
-	adjPred[v1] = adjSucc[v2] = 0;
+	adjPred[v1] = adjSucc[v2] = nullptr;
 
 	// init outer nodes and outer edges
 	cto.initOuterNodes(v1, v2);
@@ -558,14 +509,16 @@ void TriconnectedShellingOrder::doCall(
 
 	// init the first possible node as the node in the middle of v_1
 	//   and v_2 on the outer face
-	int l = (outerFace->size() -2)/2;
-	if (l == 0)
-		l = 1;
+	int mid = (outerFace->size() -2)/2;
+	if (mid == 0)
+		mid = 1;
 	adjRun = firstAdj;
-	for (int i=1; i <= l; i++)
+	for (int i = 1; i <= mid; i++)
 		adjRun = adjRun->twin()->cyclicSucc();
 
-	cto.initPossible(adjRun->theNode());
+	if (G.numberOfNodes() >= 3) {
+		cto.initPossible(adjRun->theNode());
+	}
 
 	// node and face that are selected during the algorithm
 	node vk;
@@ -575,19 +528,17 @@ void TriconnectedShellingOrder::doCall(
 	// the actual nodeset V in the shelling order
 	ShellingOrderSet V;
 	// further auxiliary variables
-	adjEntry adj1, adj2;
-	node u;
 
 	#ifdef OUTPUT_TSO
-		cout << "finished initialization of cto, adjSucc, adjPred." << endl << flush;
-		cout << "v1 = " << v1 << ", v2 = " << v2 << ", first possible node = " << adjRun->theNode() << endl;
+		std::cout << "finished initialization of cto, adjSucc, adjPred." << std::endl << std::flush;
+		std::cout << "v1 = " << v1 << ", v2 = " << v2 << ", first possible node = " << adjRun->theNode() << std::endl;
 
-		forall_face_adj(adj1, outerFace){
-			cout << " node " << adj1->theNode() << ": adjPred=(" << adjPred[adj1->theNode()]
-				 << "), adjSucc=" << adjSucc[adj1->theNode()] << endl;
+		for(adjEntry adj1 : outerFace->entries) {
+			std::cout << " node " << adj1->theNode() << ": adjPred=(" << adjPred[adj1->theNode()]
+				 << "), adjSucc=" << adjSucc[adj1->theNode()] << std::endl;
 		}
 		cto.output();
-		cout << "starting main loop" << endl;
+		std::cout << "starting main loop" << std::endl;
 	#endif
 
 	// main loop
@@ -600,7 +551,7 @@ void TriconnectedShellingOrder::doCall(
 		if (cto.isNode()){
 
 			#ifdef OUTPUT_TSO
-				cout << " nextPossible is node " << vk << endl << flush;
+				std::cout << " nextPossible is node " << vk << std::endl << std::flush;
 			#endif
 
 			// current item is a node
@@ -614,7 +565,7 @@ void TriconnectedShellingOrder::doCall(
 		else{
 
 			#ifdef OUTPUT_TSO
-				cout << " nextPossible is face " << Fk->index() << endl << flush;
+				std::cout << " nextPossible is face " << Fk->index() << std::endl << std::flush;
 			#endif
 
 			// current item is a face
@@ -647,12 +598,12 @@ void TriconnectedShellingOrder::doCall(
 			V.rightAdj((adjSucc[cl])->twin());
 			// insert actual nodeset to the front of the shelling order
 			partition.pushFront(V);
-		}// current item is a face
+		}
 
-		#ifdef OUTPUT_TSO
-			cout << "  set cl = " << cl << endl;
-			cout << "  set cr = " << cr << endl;
-		#endif
+#ifdef OUTPUT_TSO
+		std::cout << "  set cl = " << cl << std::endl;
+		std::cout << "  set cr = " << cr << std::endl;
+#endif
 
 		// update adjSucc[cl] and adjPred[cr]
 		adjSucc[cl] = adjSucc[cl]->cyclicSucc();
@@ -664,9 +615,9 @@ void TriconnectedShellingOrder::doCall(
 
 		// traverse from cl to cr on the new outer face
 		//  and update adjSucc[] and adjPred[]
-		adj1 = adjSucc[cl]->twin();
+		adjEntry adj1 = adjSucc[cl]->twin();
 
-		for (u = adj1->theNode(); u != cr; u = adj1->theNode()){
+		for (node u = adj1->theNode(); u != cr; u = adj1->theNode()){
 			// increase oute for the right face of adj1
 			cto.incOute(E.leftFace(adj1));
 
@@ -686,27 +637,26 @@ void TriconnectedShellingOrder::doCall(
 			adjSucc[u] = adj1;
 
 			// add actual node to outerNodes[f]
-			for (adj2 = adjPred[u]; adj2 != adjSucc[u]; adj2 = adj2->cyclicPred()){
+			for (adjEntry adj2 = adjPred[u]; adj2 != adjSucc[u]; adj2 = adj2->cyclicPred()){
 				cto.addOuterNode(u, E.leftFace(adj2));
 			}
 			adj1 = adj1->twin();
 		}
 
-		if (!cto.isNode()){
-			if ( ((adjSucc[cl])->twinNode() == cr)
-						&& ( cto.isOnlyEdge(E.rightFace(adjSucc[cl])) ) ){
-				cto.decSepf(cl);
-				cto.decSepf(cr);
-			}
+		if (!cto.isNode()
+		 && adjSucc[cl]->twinNode() == cr
+		 && cto.isOnlyEdge(E.rightFace(adjSucc[cl]))) {
+			cto.decSepf(cl);
+			cto.decSepf(cr);
 		}
 
 		// update cto
 		cto.doUpdate();
 
-		#ifdef OUTPUT_TSO
-			cto.output();
-		#endif
-	}// while (cto.isPossible())
+#ifdef OUTPUT_TSO
+		cto.output();
+#endif
+	}
 
 	// finally push the base (v1,v2) to the order
 	V = ShellingOrderSet(2);
@@ -715,19 +665,16 @@ void TriconnectedShellingOrder::doCall(
 	partition.pushFront(V);
 
 	#ifdef OUTPUT_TSO
-		cout << "output of the computed partition:" << endl;
-		ListIterator<ShellingOrderSet> it;
+		std::cout << "output of the computed partition:" << std::endl;
 		int k = 1;
-		for (it = partition.begin(); it.valid(); it++){
-			int size = (*it).len();
-			cout << "nodeset with nr " << k << ":" << endl;
+		for (const ShellingOrderSet &S : partition) {
+			int size = S.len();
+			std::cout << "nodeset with nr " << k << ":" << std::endl;
 			for (int j=1; j<=size; j++)
-				cout << " node " << (*it)[j] <<", ";
-			cout << "." << endl;
+				std::cout << " node " << S[j] <<", ";
+			std::cout << "." << std::endl;
 		}
 	#endif
-}// void TriconnectedShellingOrder::doCall
+}
 
-
-} // end namespace ogdf
-
+}

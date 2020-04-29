@@ -1,11 +1,3 @@
-/*
- * $Revision: 3837 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 15:19:30 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of GEXF format reading utilities.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,30 +25,22 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_GEXF_PARSER_H
-#define OGDF_GEXF_PARSER_H
-
 
 #include <ogdf/basic/Graph.h>
 #include <ogdf/basic/GraphAttributes.h>
 #include <ogdf/cluster/ClusterGraph.h>
 #include <ogdf/cluster/ClusterGraphAttributes.h>
-#include <ogdf/basic/HashArray.h>
-#include <ogdf/fileformats/XmlParser.h>
+#include <ogdf/lib/pugixml/pugixml.h>
 
-#include <iostream>
+#include <unordered_map>
+#include <memory>
 #include <sstream>
+
 
 namespace ogdf {
 
@@ -65,13 +49,15 @@ namespace gexf {
 
 class Parser {
 private:
-	XmlParser m_xml;
-	XmlTagObject *m_graphTag, *m_nodesTag, *m_edgesTag;
+	std::istream &m_is;
 
-	HashArray<std::string, node> m_nodeId;
-	HashArray<std::string, cluster> m_clusterId;
+	pugi::xml_document m_xml;
+	pugi::xml_node m_graphTag, m_nodesTag, m_edgesTag;
 
-	HashArray<std::string, std::string> m_nodeAttr, m_edgeAttr;
+	std::unordered_map<std::string, node> m_nodeId;
+	std::unordered_map<std::string, cluster> m_clusterId;
+
+	std::unordered_map<std::string, std::string> m_nodeAttr, m_edgeAttr;
 
 	bool init();
 	bool readNodes(Graph &G, GraphAttributes *GA);
@@ -79,18 +65,18 @@ private:
 	bool readCluster(
 		Graph &G, ClusterGraph &C, ClusterGraphAttributes *CA,
 		cluster rootCluster,
-		const XmlTagObject &rootTag);
+		const pugi::xml_node rootTag);
 	bool readAttributes(
 		GraphAttributes &GA, node v,
-		const XmlTagObject &nodeTag);
+		const pugi::xml_node nodeTag);
 	bool readAttributes(
 		GraphAttributes &GA, edge e,
-		const XmlTagObject &edgeTag);
+		const pugi::xml_node edgeTag);
 
-	static void error(const XmlTagObject &tag, const std::string msg);
+	static void error(const pugi::xml_node tag, const std::string &msg);
 
 public:
-	Parser(std::istream &is);
+	explicit Parser(std::istream &is);
 
 	bool read(Graph &G);
 	bool read(Graph &G, GraphAttributes &GA);
@@ -98,10 +84,5 @@ public:
 	bool read(Graph &G, ClusterGraph &C, ClusterGraphAttributes &CA);
 };
 
-
 }
-
-} // end namespace ogdf
-
-
-#endif
+}

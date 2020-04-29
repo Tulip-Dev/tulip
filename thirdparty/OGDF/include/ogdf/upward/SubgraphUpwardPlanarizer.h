@@ -1,11 +1,3 @@
-/*
- * $Revision: 3188 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-01-10 09:53:32 +0100 (Thu, 10 Jan 2013) $
- ***************************************************************/
-
  /** \file
  * \brief Declaration of class SubgraphUpwardPlanarizer.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,34 +25,44 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifndef OGDF_SUBGRAPH_UPWARD_PLANARIZER_H
-#define OGDF_SUBGRAPH_UPWARD_PLANARIZER_H
+#pragma once
 
-
-#include <ogdf/basic/ModuleOption.h>
-#include <ogdf/module/AcyclicSubgraphModule.h>
-#include <ogdf/module/FUPSModule.h>
-#include <ogdf/module/UpwardEdgeInserterModule.h>
-#include <ogdf/module/UpwardPlanarizerModule.h>
+#include <memory>
+#include <ogdf/layered/AcyclicSubgraphModule.h>
+#include <ogdf/upward/FUPSModule.h>
+#include <ogdf/upward/UpwardEdgeInserterModule.h>
+#include <ogdf/upward/UpwardPlanarizerModule.h>
 #include <ogdf/upward/UpwardPlanRep.h>
 #include <ogdf/upward/FUPSSimple.h>
 #include <ogdf/upward/FixedEmbeddingUpwardEdgeInserter.h>
 #include <ogdf/decomposition/BCTree.h>
-#include <ogdf/module/AcyclicSubgraphModule.h>
 #include <ogdf/layered/GreedyCycleRemoval.h>
 
+namespace ogdf {
 
-namespace ogdf
-{
-
-
+/**
+ * Takes an acyclic connected non-upward-planar graph and planarizes it, i.e., we obtain an upward-planar graph
+ * where crossings are represented via dummy vertices. The code corresponds to the following paper by Hoi-Ming Wong:
+ *
+ *   M. Chimani, C. Gutwenger, P. Mutzel, H.-M. Wong.
+ *   Layer-Free Upward Crossing Minimization.
+ *   ACM Journal of Experimental Algorithmics, Vol. 15, Art.No. 2.2, 27 pages, ACM, 2010.
+ *
+ * \note To call the planarizer, an UpwardPlanRep is required. It needs to have the input graph as its orginal,
+ * but is initially empty! After the algorithm, it will hold the representation.
+ *
+ * Example for Input "Graph G":
+ * \code
+ *  UpwardPlanRep U;
+ *  U.createEmpty(G);
+ *  SubgraphUpwardPlanarizer sup;
+ *  sup.call(U, 0, 0);
+ * \endcode
+ */
 class OGDF_EXPORT SubgraphUpwardPlanarizer : public UpwardPlanarizerModule
 {
 
@@ -68,26 +70,26 @@ public:
 	//! Creates an instance of subgraph planarizer.
 	SubgraphUpwardPlanarizer()
 	{
-		 m_runs = 1;
+		m_runs = 1;
 		//set default module
-		m_subgraph.set(new FUPSSimple());
-		m_inserter.set(new FixedEmbeddingUpwardEdgeInserter());
-		m_acyclicMod.set(new GreedyCycleRemoval());
+		m_subgraph.reset(new FUPSSimple());
+		m_inserter.reset(new FixedEmbeddingUpwardEdgeInserter());
+		m_acyclicMod.reset(new GreedyCycleRemoval());
 	}
 
 	//! Sets the module option for the computation of the feasible upward planar subgraph.
 	void setSubgraph(FUPSModule *FUPS) {
-		m_subgraph.set(FUPS);
+		m_subgraph.reset(FUPS);
 	}
 
 	//! Sets the module option for the edge insertion module.
 	void setInserter(UpwardEdgeInserterModule *pInserter) {
-		m_inserter.set(pInserter);
+		m_inserter.reset(pInserter);
 	}
 
 	//! Sets the module option for acyclic subgraph module.
 	void setAcyclicSubgraphModule(AcyclicSubgraphModule *acyclicMod) {
-		m_acyclicMod.set(acyclicMod);
+		m_acyclicMod.reset(acyclicMod);
 	}
 
 	int runs() {return m_runs;}
@@ -97,11 +99,11 @@ protected:
 
 	virtual ReturnType doCall(UpwardPlanRep &UPR,
 		const EdgeArray<int>  &cost,
-		const EdgeArray<bool> &forbid);
+		const EdgeArray<bool> &forbid) override;
 
-	ModuleOption<FUPSModule> m_subgraph; //!< The upward planar subgraph algorithm.
-	ModuleOption<UpwardEdgeInserterModule> m_inserter; //!< The edge insertion module.
-	ModuleOption<AcyclicSubgraphModule> m_acyclicMod; //!<The acyclic subgraph module.
+	std::unique_ptr<FUPSModule> m_subgraph; //!< The upward planar subgraph algorithm.
+	std::unique_ptr<UpwardEdgeInserterModule> m_inserter; //!< The edge insertion module.
+	std::unique_ptr<AcyclicSubgraphModule> m_acyclicMod; //!<The acyclic subgraph module.
 	int m_runs;
 
 private:
@@ -110,23 +112,20 @@ private:
 
 	//! traversion the BTree and merge the component to a common graph
 	void dfsMerge(const GraphCopy &GC,
-			 BCTree &BC,
-			 NodeArray<GraphCopy> &biComps,
-			 NodeArray<UpwardPlanRep> &uprs,
-			 UpwardPlanRep &UPR_res,
-			 node parent_BC,
-			 node current_BC,
-			 NodeArray<bool> &nodesDone);
+	              BCTree &BC,
+	              NodeArray<GraphCopy> &biComps,
+	              NodeArray<UpwardPlanRep> &uprs,
+	              UpwardPlanRep &UPR_res,
+	              node parent_BC,
+	              node current_BC,
+	              NodeArray<bool> &nodesDone);
 
 
 	//! add UPR to UPR_res.
 	void merge(const GraphCopy &GC,
-		 UpwardPlanRep &UPR_res,
-		 const GraphCopy &block,
-		 UpwardPlanRep &UPR
-		 );
+	           UpwardPlanRep &UPR_res,
+	           const GraphCopy &block,
+	           UpwardPlanRep &UPR);
 };
 
 }
-
-#endif

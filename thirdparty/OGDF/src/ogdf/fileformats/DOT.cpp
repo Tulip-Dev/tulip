@@ -1,11 +1,3 @@
-/*
- * $Revision: 3837 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 15:19:30 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implementation of DOT string conversion functions.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,12 +25,9 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/fileformats/DOT.h>
 #include <ogdf/fileformats/Utils.h>
@@ -51,18 +40,26 @@ namespace dot {
 std::string toString(const Attribute &attr)
 {
 	switch(attr) {
-	case a_id: return "id";
-	case a_label: return "label";
-	case a_template: return "comment";
-	case a_width: return "width";
-	case a_height: return "height";
-	case a_shape: return "shape";
-	case a_position: return "pos";
-	case a_stroke: return "color";
-	case a_fill: return "fillcolor";
-	case a_weight: return "weight";
-	case a_arrow: return "arrow";
-	default: return "comment";
+		case Attribute::Id: return "id";
+		case Attribute::Label: return "label";
+		case Attribute::Template: return "comment";
+		case Attribute::Width: return "width";
+		case Attribute::Height: return "height";
+		case Attribute::Shape: return "shape";
+		case Attribute::Position: return "pos";
+		case Attribute::LabelPosition: return "labelpos";
+		case Attribute::Stroke: return "color";
+		case Attribute::StrokeType: return "stroketype";
+		case Attribute::Fill: return "fillcolor";
+		case Attribute::Weight: return "weight";
+		case Attribute::Arrow: return "arrow";
+		case Attribute::StrokeWidth: return "strokewidth";
+		case Attribute::FillPattern: return "fillpattern";
+		case Attribute::FillBackground: return "fillbgcolor";
+		case Attribute::Type: return "type";
+		case Attribute::Dir: return "dir";
+		case Attribute::SubGraphs: return "available_for";
+		default: return "comment";
 	}
 }
 
@@ -70,82 +67,70 @@ std::string toString(const Attribute &attr)
 std::string toString(const Shape &shape)
 {
 	switch(shape) {
-	case shRect: return "rect";
-	case shRoundedRect: return "rect"; // Not supported.
-	case shEllipse: return "ellipse";
-	case shTriangle: return "triangle";
-	case shPentagon: return "pentagon";
-	case shHexagon: return "hexagon";
-	case shOctagon: return "octagon";
-	case shRhomb: return "diamond";
-	case shTrapeze: return "trapezium";
-	case shParallelogram: return "parallelogram";
-	case shInvTriangle: return "invtriangle";
-	case shInvTrapeze: return "invtrapezium";
-	case shInvParallelogram: return "parallelogram"; // Not supported.
-	case shImage: return "box"; // Not supported.
-	default: return "rect";
+		case Shape::Rect:             return "rect";
+		case Shape::RoundedRect:      return "roundedrect";
+		case Shape::Ellipse:          return "ellipse";
+		case Shape::Triangle:         return "triangle";
+		case Shape::Pentagon:         return "pentagon";
+		case Shape::Hexagon:          return "hexagon";
+		case Shape::Octagon:          return "octagon";
+		case Shape::Rhomb:            return "diamond";
+		case Shape::Trapeze:          return "trapezium";
+		case Shape::Parallelogram:    return "parallelogram";
+		case Shape::InvTriangle:      return "invtriangle";
+		case Shape::InvTrapeze:       return "invtrapezium";
+		case Shape::InvParallelogram: return "invparallelogram";
+		case Shape::Image:            return "image";
 	}
+	OGDF_ASSERT(false);
+	return "UNKNOWN";
 }
 
 
 std::string toString(const EdgeArrow &arrow)
 {
 	switch(arrow) {
-	case eaNone: return "none";
-	case eaLast: return "forward";
-	case eaFirst: return "back";
-	case eaBoth: return "both";
-	case eaUndefined: return "none"; // Not supported.
-	default: return "none";
+		case EdgeArrow::None:      return "none";
+		case EdgeArrow::Last:      return "forward";
+		case EdgeArrow::First:     return "back";
+		case EdgeArrow::Both:      return "both";
+		case EdgeArrow::Undefined: return "none"; // Not supported.
 	}
+	OGDF_ASSERT(false);
+	return "UNKNOWN";
 }
 
 
 std::string toString(const Graph::EdgeType &type)
 {
-	// Based on IBM UML documentation:
-	// http://publib.boulder.ibm.com/infocenter/rsahelp/v7r0m0/index.jsp?topic=
-	// /com.ibm.xtools.modeler.doc/topics/crelsme_clssd.html
 	switch(type) {
-	case Graph::association: return "none";
-	case Graph::generalization: return "empty";
-	case Graph::dependency: return "open";
-	default: return "normal";
+		case Graph::EdgeType::association:    return "association";
+		case Graph::EdgeType::generalization: return "generalization";
+		case Graph::EdgeType::dependency:     return "dependency";
 	}
+	OGDF_ASSERT(false);
+	return "UNKNOWN";
 }
 
-
-// Map is lazily-evaluated (this could be avoided with C++11 constexpr).
-static Hashing<std::string, Attribute> *attrMap = NULL;
 
 Attribute toAttribute(const std::string &str)
 {
-	return toEnum(
-		str, attrMap, toString,
-		static_cast<Attribute>(0), a_unknown, a_unknown);
+	return toEnum(str, toString, static_cast<Attribute>(0), Attribute::Unknown, Attribute::Unknown);
 }
 
-
-// Same as attrMap but with shapes.
-static Hashing<std::string, Shape> *shapeMap = NULL;
 Shape toShape(const std::string &str) {
-	return toEnum(
-		str, shapeMap, toString,
-		shRect, shImage, shRect);
+	return toEnum(str, toString, Shape::Rect, Shape::Image, Shape::Rect);
 }
-
-// Same as attrMap but with arrows.
-static Hashing<std::string, EdgeArrow> *arrowMap = NULL;
 
 EdgeArrow toArrow(const std::string &str)
 {
-	return toEnum(
-		str, arrowMap, toString,
-		eaNone, eaUndefined, eaUndefined);
+	return toEnum(str, toString, EdgeArrow::None, EdgeArrow::Undefined, EdgeArrow::Undefined);
 }
 
+Graph::EdgeType toEdgeType(const std::string &str) {
+	return toEnum(str, toString, Graph::EdgeType::association, Graph::EdgeType::dependency, Graph::EdgeType::association);
+}
 
-} // end namespace graphml
+}
 
-} // end namespace ogdf
+}

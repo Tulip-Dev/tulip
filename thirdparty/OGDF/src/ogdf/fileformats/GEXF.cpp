@@ -1,11 +1,3 @@
-/*
- * $Revision: 3837 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 15:19:30 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implementation of GEXF string conversion functions.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,14 +25,12 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/fileformats/GEXF.h>
+#include <ogdf/fileformats/Utils.h>
 
 
 namespace ogdf {
@@ -51,12 +41,12 @@ namespace gexf {
 std::string toString(const Shape &shape)
 {
 	switch(shape) {
-	case shRect: return "square";
-	case shRoundedRect: return "rect"; // Not supported.
-	case shEllipse: return "disc";
-	case shTriangle: return "triangle";
-	case shRhomb: return "diamond";
-	case shImage: return "image";
+	case Shape::Rect: return "square";
+	case Shape::RoundedRect: return "rect"; // Not supported.
+	case Shape::Ellipse: return "disc";
+	case Shape::Triangle: return "triangle";
+	case Shape::Rhomb: return "diamond";
+	case Shape::Image: return "image";
 	default: return "disc";
 	}
 }
@@ -64,23 +54,28 @@ std::string toString(const Shape &shape)
 
 Shape toShape(const std::string &str)
 {
-	if(str == "square") {
-		return shRect;
-	} else if(str == "disc") {
-		return shEllipse;
-	} else if(str == "triangle") {
-		return shTriangle;
-	} else if(str == "diamond") {
-		return shRhomb;
-	} else if(str == "image") {
-		return shImage;
-	} else {
-		return shRect;
+	return toEnum(str, toString, Shape::Rect, Shape::Image, Shape::Rect);
+}
+
+std::string toGEXFStrokeType(const StrokeType &type)
+{
+	switch(type) {
+	case StrokeType::Solid: return "solid";
+	case StrokeType::Dot: return "dotted";
+	case StrokeType::Dash: return "dashed";
+	case StrokeType::Dashdot: return "dashdot";
+	case StrokeType::Dashdotdot: return "dashdotdot";
+	default: return "";
 	}
 }
 
+StrokeType toStrokeType(const std::string &str)
+{
+	// GEXF supports solid, dotted, dashed, double.
+	// We don't support double, but dashdot and dashdotdot instead.
+	return toEnum(str, toGEXFStrokeType, StrokeType::None, StrokeType::Dashdotdot, StrokeType::Solid);
+}
 
-} // end namespace gexf
+}
 
-} // end namespace ogdf
-
+}

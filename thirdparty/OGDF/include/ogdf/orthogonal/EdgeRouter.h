@@ -1,11 +1,3 @@
-/*
- * $Revision: 3188 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-01-10 09:53:32 +0100 (Thu, 10 Jan 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of EdgeRouter...
  *
@@ -19,7 +11,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -36,55 +28,22 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_EDGE_ROUTER_H
-#define OGDF_EDGE_ROUTER_H
-
-
-
-#include <ogdf/internal/orthogonal/RoutingChannel.h>
+#include <ogdf/orthogonal/internal/RoutingChannel.h>
 #include <ogdf/orthogonal/MinimumEdgeDistances.h>
 #include <ogdf/basic/Layout.h>
 #include <ogdf/basic/GridLayout.h>
 #include <ogdf/basic/GridLayoutMapped.h>
 #include <ogdf/planarity/PlanRep.h>
 #include <ogdf/orthogonal/OrthoRep.h>
-#include <ogdf/internal/orthogonal/NodeInfo.h>
+#include <ogdf/orthogonal/edge_router/NodeInfo.h>
 
 namespace ogdf {
-
-//! edge types, defined by necessary bends
-enum bend_type {
-	bend_free,
-	bend_1left,
-	bend_1right,
-	bend_2left,
-	bend_2right, //results
-	prob_bf,
-	prob_b1l,
-	prob_b1r,
-	prob_b2l,
-	prob_b2r
-}; //and preliminary
-
-
-// unprocessed, processed in degree1 preprocessing, used by degree1
-enum process_type {
-	unprocessed,
-	processed,
-	used
-};
-
 
 /**
  * Places node boxes in replacement areas of orthogonal
@@ -92,6 +51,7 @@ enum process_type {
  */
 class OGDF_EXPORT EdgeRouter
 {
+	using NodeInfo = edge_router::NodeInfo;
 public:
 	//constructor
 	EdgeRouter() { }
@@ -155,13 +115,17 @@ public:
 	//! sets values derivable from input
 	void initialize_node_info(node v, int sep);
 
-	// returns assigned connection point and glue point coordinates for each edge
-	int cp_x(adjEntry ae) { return m_acp_x[ae]; } //!< connection point (cage border) coord of source
-	int cp_y(adjEntry ae) { return m_acp_y[ae]; } //!< connection point (cage border) coord of source
-	int gp_x(adjEntry ae) { return m_agp_x[ae]; } //!< glue point (node border)
-	int gp_y(adjEntry ae) { return m_agp_y[ae]; } //!< glue point (node border)
+	//! Returns assigned connection point (cage border) x-coordinate of \p ae 's source
+	int cp_x(adjEntry ae) { return m_acp_x[ae]; }
 
-	bend_type abendType(adjEntry ae) { return m_abends[ae]; }
+	//! Returns assigned connection point (cage border) y-coordinate of \p ae 's source
+	int cp_y(adjEntry ae) { return m_acp_y[ae]; }
+
+	//! Returns assigned glue point (node border) x-coordinate
+	int gp_x(adjEntry ae) { return m_agp_x[ae]; }
+
+	//! Returns assigned glue point (node border) y-coordinate
+	int gp_y(adjEntry ae) { return m_agp_y[ae]; }
 
 	void addbends(BendString& bs, const char* s2);
 
@@ -203,12 +167,46 @@ public:
 	*/
 	void align(bool b) { m_align = b; }
 
-	//test fuer skalierende Kompaktierung
-	//void setOrSep(int sep)
-	//{m_hasOrSep = true; m_orSep = sep;}
-
+#if 0
+	//! Test for scaling compaction
+	void setOrSep(int sep) {m_hasOrSep = true; m_orSep = sep;}
+#endif
 
 private:
+	//! Edge types, defined by necessary bends
+	enum class BendType {
+		//! No resulting bends
+		BendFree,
+		//! One resulting bend to the left
+		Bend1Left,
+		//! One resulting bend to the right
+		Bend1Right,
+		//! Two resulting bends to the left
+		Bend2Left,
+		//! Two resulting bends to the right
+		Bend2Right,
+		//! No preliminary bends
+		ProbBf,
+		//! One preliminary bend to the left
+		ProbB1L,
+		//! One preliminary bend to the right
+		ProbB1R,
+		//! Two preliminary bends to the left
+		ProbB2L,
+		//! Two preliminary bends to the right
+		ProbB2R
+	};
+
+	//! Process status of nodes
+	enum class ProcessType {
+		//! unprocessed
+		unprocessed,
+		//! processed in degree-1 preprocessing
+		processed,
+		//! used by degree-1
+		used
+	};
+
 	PlanRep* m_prup;
 	GridLayoutMapped* m_layoutp;
 	OrthoRep* m_orp;
@@ -223,6 +221,8 @@ private:
 	int    m_sep;   //!< minimum separation
 	int    m_overh; //!< minimum overhang
 	double Cconst;  //!< relative sep to overhang / delta to eps
+
+	BendType abendType(adjEntry ae) { return m_abends[ae]; }
 
 	void unsplit(edge e1, edge e2);
 
@@ -242,7 +242,8 @@ private:
 	bool oppositeExpander(adjEntry ae) {
 		Graph::NodeType nt;
 		nt = m_prup->typeOf(oppositeNode(ae));
-		return ((nt == Graph::highDegreeExpander) || (nt == Graph::lowDegreeExpander));
+		return nt == Graph::NodeType::highDegreeExpander
+		    || nt == Graph::NodeType::lowDegreeExpander;
 	}
 	//if yes, set its m_oppositeBendType value according to the newly introduced bend
 
@@ -259,9 +260,59 @@ private:
 	 */
 	int compute_move(OrthoDir s_from, OrthoDir s_to, int& kflip, node v);
 
+	int updateBends(
+			const node v,
+			ListIterator<edge> &it,
+			const bool updateX,
+			const OrthoDir dir,
+			const bool bendLeft,
+			const bool bendUp,
+			int pos = 0);
+
+	void updateBends(
+			const node v,
+			ListIterator<edge> &it,
+			int &pos,
+			int &lastunbend,
+			const bool updateX,
+			const OrthoDir dir,
+			const bool bendLeft,
+			const bool bendUp,
+			const bool subtract);
+
+	void updateLowerEdgesBends(
+			const node v,
+			ListIterator<edge> &it,
+			int &pos,
+			int &base,
+			const bool updateX,
+			const OrthoDir dir,
+			const bool bendLeft);
+
+	void updateOneBend(
+			const bool isDoubleBend,
+			const adjEntry adj,
+			const node v,
+			const OrthoDir dir,
+			const bool bendLeft,
+			const BendType btSingle,
+			const BendType btDouble) {
+		const OrthoDir dirB = bendLeft ? OrthoRep::nextDir(dir) : OrthoRep::prevDir(dir);
+		auto &inf = infos[v];
+
+		if (isDoubleBend) { // paper E^
+			// must be double-bend
+			m_abends[adj] = btDouble;
+			inf.inc_E(dirB, dir);
+		} else {
+			// may be single-bend
+			m_abends[adj] = btSingle;
+			inf.inc_E_hook(dirB, dir);
+		}
+	}
+
 	NodeArray<int> m_newx, m_newy; //!< new placement position for original node
-	//!< node array saves info about changed position, no further change is allowed
-	NodeArray<bool> m_fixed;
+	NodeArray<bool> m_fixed; //!< saves info about changed position, no further change is allowed
 	EdgeArray<int>  lowe, uppe, lefte, righte; //!< max box borders for bendfree edges
 	AdjEntryArray<int>  alowe, auppe, alefte, arighte;
 	AdjEntryArray<int>  m_agp_x, m_agp_y; //!< because edges can connect two replacement cages
@@ -274,13 +325,13 @@ private:
 	 * 2 = single from right, 3 = int from left,
 	 * 4 = int from right,...
 	 */
-	AdjEntryArray<bend_type> m_abends;
+	AdjEntryArray<BendType> m_abends;
 
 	//! keep the information about the type of bend inserted at one end of an (originally unbend) edge, so that we can check possible bendsaving
-	NodeArray<bend_type> m_oppositeBendType;
+	NodeArray<BendType> m_oppositeBendType;
 
 	//! keep information about already processed Nodes
-	NodeArray<process_type> m_processStatus;
+	NodeArray<ProcessType> m_processStatus;
 
 	//alignment test
 	NodeArray<bool> m_mergerSon; //!< is part of merger son cage
@@ -288,6 +339,4 @@ private:
 	bool m_align;
 };
 
-} //end namespace
-
-#endif
+}

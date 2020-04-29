@@ -1,14 +1,5 @@
-/*
- * $Revision: 2524 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-03 09:54:22 +0200 (Tue, 03 Jul 2012) $
- ***************************************************************/
-
 /** \file
- * \brief Declaration of Spring-Embedder (Fruchterman,Reingold)
- *        algorithm with exact force computations.
+ * \brief Declaration of ogdf::SpringEmbedderFRExact.
  *
  * \author Carsten Gutwenger
  *
@@ -17,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,57 +25,39 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_SPRING_EMBEDDER_FR_EXACT_H
-#define OGDF_SPRING_EMBEDDER_FR_EXACT_H
-
-
-#include <ogdf/module/ForceLayoutModule.h>
+#include <ogdf/energybased/ForceLayoutModule.h>
 #include <ogdf/basic/SList.h>
-
+#include <ogdf/basic/GraphAttributes.h>
 
 namespace ogdf {
 
-
-class OGDF_EXPORT GraphCopyAttributes;
-class OGDF_EXPORT GraphCopy;
-
-
+//! Fruchterman-Reingold algorithm with (exact) layout.
 class OGDF_EXPORT SpringEmbedderFRExact : public ForceLayoutModule
 {
 public:
-	enum CoolingFunction { cfFactor, cfLogarithmic };
+	enum class CoolingFunction { Factor, Logarithmic };
 
 	//! Creates an instance of Fruchterman/Reingold (exact) layout.
 	SpringEmbedderFRExact();
 
-	// destructor
-	~SpringEmbedderFRExact() { }
-
-
-	//! Calls the layout algorithm for graph attributes \a GA.
-	void call(GraphAttributes &GA);
-
+	//! Calls the layout algorithm for graph attributes \p GA.
+	virtual void call(GraphAttributes &GA) override;
 
 	//! Returns the current setting of iterations.
 	int iterations() const {
 		return m_iterations;
 	}
 
-	//! Sets the number of iterations to \a i.
+	//! Sets the number of iterations to \p i.
 	void iterations(int i) {
-		OGDF_ASSERT(i > 0)
-			m_iterations = i;
+		OGDF_ASSERT(i > 0);
+		m_iterations = i;
 	}
 
 	//! Returns the current setting of nodes.
@@ -92,7 +65,7 @@ public:
 		return m_noise;
 	}
 
-	//! Sets the parameter noise to \a on.
+	//! Sets the parameter noise to \p on.
 	void noise(bool on) {
 		m_noise = on;
 	}
@@ -106,7 +79,7 @@ public:
 		return m_coolingFunction;
 	}
 
-	//! Sets the parameter coolingFunction to \a f.
+	//! Sets the parameter coolingFunction to \p f.
 	void coolingFunction(CoolingFunction f) {
 		m_coolingFunction = f;
 	}
@@ -114,19 +87,19 @@ public:
 	//! Returns the ideal edge length.
 	double idealEdgeLength() const { return m_idealEdgeLength; }
 
-	//! Sets the ideal edge length to \a len.
+	//! Sets the ideal edge length to \p len.
 	void idealEdgeLength(double len) { m_idealEdgeLength = len; }
 
 	//! Returns the minimum distance between connected components.
 	double minDistCC() const { return m_minDistCC; }
 
-	//! Sets the minimum distance between connected components to \a x.
+	//! Sets the minimum distance between connected components to \p x.
 	void minDistCC(double x) { m_minDistCC = x; }
 
 	//! Returns the page ratio.
 	double pageRatio() { return m_pageRatio; }
 
-	//! Sets the page ration to \a x.
+	//! Sets the page ration to \p x.
 	void pageRatio(double x) { m_pageRatio = x; }
 
 	void checkConvergence(bool b) {m_checkConvergence = b;}
@@ -146,7 +119,7 @@ private:
 		NodeArray<int>      m_mapNode;
 
 	public:
-		ArrayGraph(GraphAttributes &ga);
+		explicit ArrayGraph(GraphAttributes &ga);
 		~ArrayGraph();
 
 		void initCC(int i);
@@ -169,25 +142,27 @@ private:
 
 	double log2(double x) { return log(x) / log(2.0); }
 	double mylog2(int x) {
-		double l = 0.0;
+		double result = 0.0;
 		while(x > 0) {
-			l++;
+			result++;
 			x >>= 1;
 		}
-		return l/2;
+		return result/2;
 	}
 
 	void initialize(ArrayGraph &component);
 	void mainStep(ArrayGraph &component);
 	void mainStep_sse3(ArrayGraph &component);
 
+#if 0
 	// Fruchterman, Reingold
-	//double f_att(double d) { return d*d / m_idealEdgeLength; }
-	//double f_rep(double d) { return m_idealEdgeLength*m_idealEdgeLength / d; }
+	double f_att(double d) { return d*d / m_idealEdgeLength; }
+	double f_rep(double d) { return m_idealEdgeLength*m_idealEdgeLength / d; }
 
-	// eades
-	//double f_att(double d) { return 5.0 * d * log2(d/m_idealEdgeLength); }
-	//double f_rep(double d) { return 20.0 / d; }
+	// Eades
+	double f_att(double d) { return 5.0 * d * log2(d/m_idealEdgeLength); }
+	double f_rep(double d) { return 20.0 / d; }
+#endif
 
 	// cooling function
 	void cool(double &tx, double &ty, int &cF);
@@ -196,9 +171,10 @@ private:
 	bool   m_noise;      //!< Perform random perturbations?
 	CoolingFunction m_coolingFunction; //!< The selected cooling function
 
-
-	//double m_tx;
-	//double m_ty;
+#if 0
+	double m_tx;
+	double m_ty;
+#endif
 
 	double m_coolFactor_x;
 	double m_coolFactor_y;
@@ -207,7 +183,9 @@ private:
 	double m_minDistCC;       //!< The minimal distance between connected components.
 	double m_pageRatio;       //!< The page ratio.
 
-	//int m_cF;
+#if 0
+	int m_cF;
+#endif
 	double m_txNull;
 	double m_tyNull;
 	//see above at ArrayGraph
@@ -216,8 +194,4 @@ private:
 	double m_convTolerance; //<! Fraction of ideal edge length below which convergence is achieved
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

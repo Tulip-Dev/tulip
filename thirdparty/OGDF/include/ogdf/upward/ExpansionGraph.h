@@ -1,11 +1,3 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declares class ExpansionGraph...
  *
@@ -19,7 +11,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -36,21 +28,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_EXPANSION_GRAPH_H
-#define OGDF_EXPANSION_GRAPH_H
-
 
 #include <ogdf/basic/EdgeArray.h>
 #include <ogdf/basic/NodeArray.h>
@@ -60,14 +42,11 @@
 namespace ogdf {
 
 
-//---------------------------------------------------------
-// ExpansionGraph
-// represents expansion graph of each biconnected component
-// of a given digraph, i.e., each vertex v with in- and outdegree
-// greater than 1 is expanded into two vertices x and y connected
-// by an edge x->y such that all incoming edges are moved from
-// v to x and all outgoing edges from v to y
-//---------------------------------------------------------
+//! Represents expansion graph of each biconnected component
+//! of a given digraph, i.e., each vertex v with in- and outdegree
+//! greater than 1 is expanded into two vertices x and y connected
+//! by an edge x->y such that all incoming edges are moved from
+//! v to x and all outgoing edges from v to y
 class OGDF_EXPORT ExpansionGraph : public Graph
 {
 public:
@@ -107,7 +86,7 @@ public:
 
 	node representative(node v) const {
 		node vOrig = m_vOrig[v];
-		return (vOrig != 0) ? vOrig : m_vRep[v];
+		return (vOrig != nullptr) ? vOrig : m_vRep[v];
 	}
 
 	node copy(node vG) const {
@@ -140,7 +119,7 @@ public:
 private:
 	node getCopy(node vOrig) {
 		node vCopy = m_vCopy[vOrig];
-		if (vCopy == 0) {
+		if (vCopy == nullptr) {
 			vCopy = newNode();
 			m_vOrig[m_vCopy[vOrig] = vCopy] = vOrig;
 		}
@@ -154,10 +133,7 @@ private:
 	NodeArray<node>         m_vOrig;     // original vertex of copy
 	NodeArray<node>         m_vRep;
 	EdgeArray<edge>         m_eOrig;     // original edge of copy
-}; // class ExpansionGraph
+};
 
 
-} // end namespace ogdf
-
-
-#endif
+}

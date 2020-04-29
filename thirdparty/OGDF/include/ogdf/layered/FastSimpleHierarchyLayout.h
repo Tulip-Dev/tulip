@@ -1,23 +1,15 @@
-/*
- * $Revision: 3832 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 11:16:27 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief declaration of the FastSimpleHierarchyLayout
  * (third phase of sugiyama)
  *
- * \author Till Sch&auml;fer, Carsten Gutwenger
+ * \author Till Schäfer, Carsten Gutwenger
  *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,29 +26,22 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_FAST_SIMPLE_LAYOUT_H
-#define OGDF_FAST_SIMPLE_LAYOUT_H
-
-
-#include <ogdf/module/HierarchyLayoutModule.h>
+#include <ogdf/layered/HierarchyLayoutModule.h>
 #include <ogdf/layered/Hierarchy.h>
 #include <ogdf/basic/NodeArray.h>
 
 namespace ogdf {
 
 /**
- * \brief Coordinate assignment phase for the Sugiyama algorithm by Ulrik Brandes and Boris K&ouml;pf
+ * \brief Coordinate assignment phase for the Sugiyama algorithm by Ulrik Brandes and Boris Köpf
+ *
+ * @ingroup gd-hlm
  *
  * This class implements a hierarchy layout algorithm, i.e., it layouts
  * hierarchies with a given order of nodes on each layer. It is used as a third
@@ -72,7 +57,7 @@ namespace ogdf {
  *
  * The implementation is based on:
  *
- * Ulrik Brandes, Boris K&ouml;pf: <i>Fast and Simple Horizontal Coordinate Assignment</i>.
+ * Ulrik Brandes, Boris Köpf: <i>Fast and Simple Horizontal Coordinate Assignment</i>.
  * LNCS 2002, Volume 2265/2002, pp. 33-36
  *
  * <h3>Optional Parameters</h3>
@@ -108,7 +93,7 @@ private:
 	bool   m_leftToRight;	//!< stores the option <i>left-to-right</i>.
 
 protected:
-	void doCall(const HierarchyLevelsBase &levels, GraphCopyAttributes &AGC);
+	virtual void doCall(const HierarchyLevelsBase &levels, GraphAttributes &AGC) override;
 
 public:
 	//! Creates an instance of fast simple hierarchy layout.
@@ -136,7 +121,7 @@ public:
 		return m_minXSep;
 	}
 
-	//! Sets the option node distance to \a dist.
+	//! Sets the option node distance to \p dist.
 	void nodeDistance(double dist) {
 		m_minXSep = dist;
 	}
@@ -146,7 +131,7 @@ public:
 		return m_ySep;
 	}
 
-	//! Sets the option <i>layer distance</i> to \a dist.
+	//! Sets the option <i>layer distance</i> to \p dist.
 	void layerDistance(double dist) {
 		m_ySep = dist;
 	}
@@ -156,7 +141,7 @@ public:
 		return m_downward;
 	}
 
-	//! Sets the option <i>downward</i> to \a d.
+	//! Sets the option <i>downward</i> to \p d.
 	void downward(bool d) {
 		m_downward = d;
 	}
@@ -166,7 +151,7 @@ public:
 		return m_leftToRight;
 	}
 
-	//! Sets the option <i>left-to-right</i> to \a b.
+	//! Sets the option <i>left-to-right</i> to \p b.
 	void leftToRight(bool b) {
 		m_leftToRight = b;
 	}
@@ -176,7 +161,7 @@ public:
 		return m_balanced;
 	}
 
-	//! Sets the option <i>balanced</i> to \a b.
+	//! Sets the option <i>balanced</i> to \p b.
 	void balanced(bool b) {
 		m_balanced = b;
 	}
@@ -225,7 +210,7 @@ private:
 	 */
 	void computeBlockWidths(
 		const GraphCopy &GC,
-		const GraphCopyAttributes &GCA,
+		const GraphAttributes &GCA,
 		NodeArray<node> &root,
 		NodeArray<double> &blockWidth);
 
@@ -292,7 +277,4 @@ private:
 	node pred(const node v, const HierarchyLevelsBase &levels, const bool leftToRight);
 };
 
-} // end namespace ogdf
-
-
-#endif
+}

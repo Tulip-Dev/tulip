@@ -1,11 +1,3 @@
-/*
- * $Revision: 2599 $
- *
- * last checkin:
- *   $Author: chimani $
- *   $Date: 2012-07-15 22:39:24 +0200 (Sun, 15 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief A simple embedder algorithm.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,28 +25,25 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_SIMPLE_EMBEDDER_H
-#define OGDF_SIMPLE_EMBEDDER_H
-
-#include <ogdf/module/EmbedderModule.h>
+#include <ogdf/planarity/EmbedderModule.h>
 #include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/CombinatorialEmbedding.h>
 #include <ogdf/planarity/PlanRep.h>
 
 namespace ogdf {
 
-//! Planar graph embedding by using default planarEmbed.
+//! Embedder that chooses a largest face as the external one.
+/**
+ * Uses ogdf::planarEmbed() to compute an embedding.
+ *
+ * @ingroup ga-planarembed
+ */
 class OGDF_EXPORT SimpleEmbedder : public EmbedderModule
 {
 public:
@@ -67,7 +56,7 @@ public:
 	 * \param G is the original graph. Its adjacency list is changed by the embedder.
 	 * \param adjExternal is an adjacency entry on the external face and is set by the embedder.
 	 */
-	void call(Graph& G, adjEntry& adjExternal);
+	virtual void doCall(Graph& G, adjEntry& adjExternal) override;
 
 private:
 	/**
@@ -80,6 +69,4 @@ private:
 
 };
 
-} // end namespace ogdf
-
-#endif
+}

@@ -1,11 +1,3 @@
-/*
- * $Revision: 3210 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-01-15 11:58:53 +0100 (Tue, 15 Jan 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class SplitHeuristic.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,20 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_SPLIT_HEURISTIC_H
-#define OGDF_SPLIT_HEURISTIC_H
-
 
 #include <ogdf/basic/EdgeArray.h>
 #include <ogdf/layered/CrossingsMatrix.h>
@@ -56,37 +39,42 @@ namespace ogdf {
 
 
 //! The split heuristic for 2-layer crossing minimization.
+/**
+ * @ingroup gd-layered-crossmin
+ */
 class OGDF_EXPORT SplitHeuristic : public TwoLayerCrossMinSimDraw
 {
 public:
 	//! Creates a new instance of the split heuristic.
-	SplitHeuristic() { }
+	SplitHeuristic() : m_cm(nullptr) { }
 
 	//! Creates a new instance of the split heuristic.
-	SplitHeuristic(const SplitHeuristic &crossMin) { }
+	SplitHeuristic(const SplitHeuristic &crossMin) : m_cm(nullptr) { }
+
+	~SplitHeuristic() {
+		cleanup();
+	}
 
 	//! Returns a new instance of the splitheurisitc with the same option settings.
-	TwoLayerCrossMinSimDraw *clone() const { return new SplitHeuristic(*this); }
+	TwoLayerCrossMinSimDraw *clone() const override { return new SplitHeuristic(*this); }
 
 	//! Initializes crossing minimization for hierarchy \a H.
-	void init (const HierarchyLevels &levels);
+	void init (const HierarchyLevels &levels) override;
 
-	//! Calls the split heuristic for level \a L.
-	void call (Level &L);
+	//! Calls the split heuristic for level \p L.
+	void call (Level &L) override;
 
-	//! Calls the median heuristic for level \a L (simultaneous drawing).
-	void call (Level &L, const EdgeArray<__uint32> *edgeSubGraphs);
+	//! Calls the median heuristic for level \p L (simultaneous drawing).
+	void call (Level &L, const EdgeArray<uint32_t> *edgeSubGraphs) override;
 
 	//! Does some clean-up after calls.
-	void cleanup ();
+	void cleanup () override;
 
 private:
 	CrossingsMatrix *m_cm;
-	Array<node> buffer;
+	Array<node> m_buffer;
 
 	void recCall(Level&, int low, int high);
 };
 
-}// end namespace ogdf
-
-#endif
+}

@@ -1,11 +1,3 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration and implementation of GraphReduction class
  *        reduces by Leaves & Chains.
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,17 +26,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifndef OGDF_GRAPH_REDUCTION_H
-#define OGDF_GRAPH_REDUCTION_H
-
+#pragma once
 
 #include <ogdf/basic/NodeArray.h>
 #include <ogdf/basic/EdgeArray.h>
@@ -55,11 +41,12 @@
 namespace ogdf {
 
 
-//---------------------------------------------------------
-// GraphReduction
-// kick leaves & chains
-// GraphReduction is read-only !!!
-//---------------------------------------------------------
+//! Creates a reduced graph by removing leaves, self-loops, and reducing chains.
+/**
+ * @ingroup graphs decomp
+ *
+ * GraphReduction is read-only !!!
+ */
 class OGDF_EXPORT GraphReduction : public Graph {
 protected:
 
@@ -70,11 +57,11 @@ protected:
 	NodeArray<node> m_vReduction; // corresponding node in graph copy
 	EdgeArray<edge> m_eReduction; // corresponding chain of edges in graph copy
 
-	GraphReduction() : m_vOrig(), m_eOrig(), m_vReduction(), m_eReduction() {}
+	GraphReduction() : m_pGraph(nullptr) { }
 
 public:
 	// construction
-	GraphReduction(const Graph& G);
+	explicit GraphReduction(const Graph& G);
 	virtual ~GraphReduction() { }
 
 	// returns original graph
@@ -89,10 +76,6 @@ public:
 	node reduction(node v) const { return m_vReduction[v]; }
 	// returns reduction of edge e
 	edge reduction(edge e) const { return m_eReduction[e]; }
+};
 
-}; // class GraphCopy
-
-
-} // end namespace ogdf
-
-#endif
+}

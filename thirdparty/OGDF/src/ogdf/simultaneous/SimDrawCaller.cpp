@@ -1,11 +1,3 @@
-/*
- * $Revision: 3521 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-05-31 14:52:33 +0200 (Fri, 31 May 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Offers variety of possible algorithm calls for simultaneous
  * drawing.
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,12 +26,9 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include<ogdf/simultaneous/SimDrawCaller.h>
 #include<ogdf/layered/SugiyamaLayout.h>
@@ -50,30 +39,20 @@
 
 namespace ogdf {
 
-//*************************************************************
 // refreshes m_esg
-//
 void SimDrawCaller::updateESG()
 {
-	edge e;
-	forall_edges(e, *m_G)
+	for(edge e : m_G->edges)
 		(*m_esg)[e] = m_GA->subGraphBits(e);
+}
 
-} // end updateESG
-
-
-//*************************************************************
 // Constructor
-//
 SimDrawCaller::SimDrawCaller(SimDraw &SD) : SimDrawManipulatorModule(SD)
 {
-	m_esg = OGDF_NEW EdgeArray<__uint32>(*m_G);
+	m_esg = new EdgeArray<uint32_t>(*m_G);
 	updateESG();
+}
 
-} // end constructor
-
-
-//*************************************************************
 // call for SugiyamaLayout
 void SimDrawCaller::callSugiyamaLayout()
 {
@@ -81,8 +60,7 @@ void SimDrawCaller::callSugiyamaLayout()
 	m_SD->addAttribute(GraphAttributes::edgeGraphics);
 
 	// nodes get default size
-	node v;
-	forall_nodes(v, *m_G)
+	for(node v : m_G->nodes)
 		m_GA->height(v) = m_GA->width(v) = 5.0;
 
 	// actual call of SugiyamaLayout
@@ -90,11 +68,8 @@ void SimDrawCaller::callSugiyamaLayout()
 	SugiyamaLayout SL;
 	SL.setSubgraphs(m_esg); // needed to call SimDraw mode
 	SL.call(*m_GA);
+}
 
-} // end callSugiyamaLayout
-
-
-//*************************************************************
 // call for PlanarizationLayoutUML
 void SimDrawCaller::callPlanarizationLayout()
 {
@@ -102,29 +77,23 @@ void SimDrawCaller::callPlanarizationLayout()
 	m_SD->addAttribute(GraphAttributes::edgeGraphics);
 
 	// nodes get default size
-	node v;
-	forall_nodes(v, *m_G)
+	for(node v : m_G->nodes)
 		m_GA->height(v) = m_GA->width(v) = 5.0;
-
 
 	// actual call on PlanarizationLayout
 	PlanarizationLayout PL;
 	PL.callSimDraw(*m_GA);
+}
 
-} // end callPlanarizationLayout
-
-
-//*************************************************************
 // call for SubgraphPlanarizer
 // returns crossing number
 int SimDrawCaller::callSubgraphPlanarizer(int cc, int numberOfPermutations)
 {
 	// transfer edge costs if existent
 	EdgeArray<int> ec(*m_G, 1);
-	if(m_GA->attributes() & GraphAttributes::edgeIntWeight)
+	if(m_GA->has(GraphAttributes::edgeIntWeight))
 	{
-		edge e;
-		forall_edges(e,*m_G)
+		for(edge e : m_G->edges)
 			ec[e] = m_GA->intWeight(e);
 	}
 
@@ -136,15 +105,14 @@ int SimDrawCaller::callSubgraphPlanarizer(int cc, int numberOfPermutations)
 	// actual call for connected component cc
 	SubgraphPlanarizer SP;
 	VariableEmbeddingInserter* vei = new VariableEmbeddingInserter;
-	vei->removeReinsert(rrIncremental);
+	vei->removeReinsert(RemoveReinsertType::Incremental);
 	SP.setInserter(vei);
 	SP.permutations(numberOfPermutations);
-	SP.call(PR, cc, crossNum, &ec, 0, m_esg);
+	SP.call(PR, cc, crossNum, &ec, nullptr, m_esg);
 
 	// insert all dummy nodes into original graph *m_G
 	NodeArray<node> newOrigNode(PR);
-	node vPR;
-	forall_nodes(vPR, PR)
+	for(node vPR : PR.nodes)
 	{
 		if(PR.isDummy(vPR))
 		{
@@ -160,14 +128,14 @@ int SimDrawCaller::callSubgraphPlanarizer(int cc, int numberOfPermutations)
 	// insert all edges incident to dummy nodes into *m_G
 	EdgeArray<bool> toBeDeleted(*m_G, false);
 	EdgeArray<bool> visited(PR, false);
-	forall_nodes(vPR, PR)
+	for(node vPR : PR.nodes)
 	{
 		if(PR.isDummy(vPR))
 		{
 			node vNewOrig = newOrigNode[vPR]; //lebt in *m_G
-			edge e;
-			forall_adj_edges(e, vPR) //lebt in PR
-			{
+			//lebt in PR
+			for(adjEntry adj : vPR->adjEntries) {
+				edge e = adj->theEdge();
 				if(!visited[e])
 				{
 					node w = e->opposite(vPR); //lebt in PR
@@ -184,14 +152,13 @@ int SimDrawCaller::callSubgraphPlanarizer(int cc, int numberOfPermutations)
 	// delete all old edges in *m_G that are replaced by dummy node edges
 	List<edge> LE;
 	m_G->allEdges(LE);
-	forall_listiterators(edge, it, LE)
+	for(edge e : LE)
 	{
-		if(toBeDeleted[ (*it) ])
-			m_G->delEdge( (*it) );
+		if(toBeDeleted[e])
+			m_G->delEdge(e);
 	}
 
 	return crossNum;
+}
 
-} // end callSubgraphPlanarizer
-
-} // end namespace ogdf
+}

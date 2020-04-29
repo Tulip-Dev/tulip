@@ -1,11 +1,3 @@
-/*
- * $Revision: 3837 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 15:19:30 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declarations for GDF file format
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,21 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_GDF_H
-#define OGDF_GDF_H
-
 
 #include <ogdf/basic/graphics.h>
 #include <ogdf/basic/Hashing.h>
@@ -61,31 +43,41 @@ namespace ogdf {
 namespace gdf {
 
 
-enum NodeAttribute {
+enum class NodeAttribute {
 	// GDF standard
-	na_name = 0,
-	na_label,
-	na_x, na_y, na_z,
-	na_fillColor, na_strokeColor,
-	na_shape,
-	na_width, na_height,
+	Name = 0,
+	Label,
+	X,
+	Y,
+	Z,
+	FillColor,
+	FillPattern,
+	StrokeColor,
+	StrokeType,
+	StrokeWidth,
+
+	Shape,
+	Width,
+	Height,
 	// OGDF specific
-	na_template,
-	na_weight,
-	na_unknown
+	Template,
+	Weight,
+	FillBgColor,
+	Unknown
 };
 
 
-enum EdgeAttribute {
+enum class EdgeAttribute {
 	// GDF standard
-	ea_label = 0,
-	ea_source, ea_target,
-	ea_weight,
-	ea_directed,
-	ea_color,
+	Label = 0,
+	Source,
+	Target,
+	Weight,
+	Directed,
+	Color,
 	// OGDF specific
-	ea_bends,
-	ea_unknown
+	Bends,
+	Unknown
 };
 
 
@@ -97,10 +89,5 @@ NodeAttribute toNodeAttribute(const std::string &str);
 EdgeAttribute toEdgeAttribute(const std::string &str);
 Shape toShape(const std::string &str);
 
-
-} // end namespace gdf
-
-} // end namespace ogdf
-
-
-#endif
+}
+}

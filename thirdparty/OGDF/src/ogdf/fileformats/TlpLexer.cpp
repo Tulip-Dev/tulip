@@ -1,11 +1,3 @@
-/*
- * $Revision: 3837 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 15:19:30 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implementation of TLP file format lexer class.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,14 +25,13 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
+#include <ogdf/basic/basic.h>
 #include <ogdf/fileformats/TlpLexer.h>
+#include <ogdf/fileformats/GraphIO.h>
 
 
 namespace ogdf {
@@ -51,16 +42,16 @@ namespace tlp {
 std::ostream &operator <<(std::ostream &os, const Token &token)
 {
 	switch(token.type) {
-	case Token::tok_leftParen:
+	case Token::Type::leftParen:
 		os << "tok_(";
 		break;
-	case Token::tok_rightParen:
+	case Token::Type::rightParen:
 		os << "tok_)";
 		break;
-	case Token::tok_identifier:
+	case Token::Type::identifier:
 		os << "tok_id(" << *(token.value) << ")";
 		break;
-	case Token::tok_string:
+	case Token::Type::string:
 		os << "tok_str(\"" << *(token.value) << "\")";
 		break;
 	}
@@ -69,13 +60,13 @@ std::ostream &operator <<(std::ostream &os, const Token &token)
 }
 
 
-Token::Token(const Type &type, size_t line, size_t column)
-: type(type), line(line), column(column)
+Token::Token(const Type &tokenType, size_t tokenLine, size_t tokenColumn)
+: type(tokenType), line(tokenLine), column(tokenColumn)
 {
-	if(type == tok_identifier || type == tok_string) {
+	if(type == Type::identifier || type == Type::string) {
 		value = new std::string;
 	} else {
-		value = NULL;
+		value = nullptr;
 	}
 }
 
@@ -102,11 +93,9 @@ bool Lexer::fetchBuffer()
 
 void Lexer::cleanValues()
 {
-	for(std::vector<Token>::iterator it = m_tokens.begin();
-	    it != m_tokens.end();
-	    it++)
+	for(const Token &t : m_tokens)
 	{
-		delete it->value;
+		delete t.value;
 	}
 }
 
@@ -141,7 +130,7 @@ bool Lexer::tokenize()
 bool Lexer::tokenizeLine()
 {
 	while(m_begin != m_end && isspace(*m_begin)) {
-		m_begin++;
+		++m_begin;
 	}
 
 	// We got an end of a line or a comment.
@@ -150,14 +139,14 @@ bool Lexer::tokenizeLine()
 	}
 
 	if(*m_begin == '(') {
-		m_tokens.push_back(Token(Token::tok_leftParen, line(), column()));
-		m_begin++;
+		m_tokens.push_back(Token(Token::Type::leftParen, line(), column()));
+		++m_begin;
 		return tokenizeLine();
 	}
 
 	if(*m_begin == ')') {
-		m_tokens.push_back(Token(Token::tok_rightParen, line(), column()));
-		m_begin++;
+		m_tokens.push_back(Token(Token::Type::rightParen, line(), column()));
+		++m_begin;
 		return tokenizeLine();
 	}
 
@@ -169,24 +158,21 @@ bool Lexer::tokenizeLine()
 		return tokenizeIdentifier() && tokenizeLine();
 	}
 
-	std::cerr << "ERROR: Unexpected character \"" << *m_begin << "\" at ("
-	          << line() << ", " << column() << ").\n";
+	GraphIO::logger.lout() << "Unexpected character \"" << *m_begin << "\" at (" << line() << ", " << column() << ")." << std::endl;
 	return false;
 }
 
 
 bool Lexer::tokenizeString()
 {
-	m_begin++;
+	++m_begin;
 
-	Token token(Token::tok_string, line(), column());
+	Token token(Token::Type::string, line(), column());
 
 	for(;;) {
 		// Check whether we need to refill the buffer.
 		if(m_begin == m_end && !fetchBuffer()) {
-			std::cerr << "ERROR: End of input while parsing a string at ("
-			          << token.line << ", "
-			          << token.column << ").\n";
+			GraphIO::logger.lout() << "End of input while parsing a string at (" << token.line << ", " << token.column << ")." << std::endl;
 			return false;
 		}
 
@@ -197,13 +183,13 @@ bool Lexer::tokenizeString()
 		// Check whether we got a end of a string.
 		if(*m_begin == '"') {
 			m_tokens.push_back(token);
-			m_begin++;
+			++m_begin;
 			return true;
 		}
 
 		// If the to above failed, we just put new character.
 		*(token.value) += *m_begin;
-		m_begin++;
+		++m_begin;
 	}
 
 	return true;
@@ -212,19 +198,16 @@ bool Lexer::tokenizeString()
 
 bool Lexer::tokenizeIdentifier()
 {
-	Token token(Token::tok_identifier, line(), column());
+	Token token(Token::Type::identifier, line(), column());
 
 	while(m_begin != m_end && isIdentifier(*m_begin)) {
 		*(token.value) += *m_begin;
-		m_begin++;
+		++m_begin;
 	}
 
 	m_tokens.push_back(token);
 	return true;
 }
 
-
-} // end namespace tlp
-
-} // end namespace ogdf
-
+}
+}

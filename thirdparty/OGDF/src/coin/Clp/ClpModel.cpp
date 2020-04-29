@@ -2535,7 +2535,7 @@ ClpModel::chgRowUpper(const double * rowUpper)
           }
      } else {
           for (iRow = 0; iRow < numberRows; iRow++) {
-               rowUpper_[iRow] = COIN_DBL_MAX;;
+               rowUpper_[iRow] = COIN_DBL_MAX;
           }
      }
 }
@@ -2575,7 +2575,7 @@ ClpModel::chgColumnUpper(const double * columnUpper)
           }
      } else {
           for (iColumn = 0; iColumn < numberColumns; iColumn++) {
-               columnUpper_[iColumn] = COIN_DBL_MAX;;
+               columnUpper_[iColumn] = COIN_DBL_MAX;
           }
      }
 }
@@ -3531,7 +3531,7 @@ int ClpModel::emptyProblem(int * infeasNumber, double * infeasSum, bool printMes
                               } else {
                                    columnActivity_[i] = columnUpper_[i];
                                    status_[i] = 2;
-                                   numberDualInfeasibilities++;;
+                                   numberDualInfeasibilities++;
                                    sumDualInfeasibilities += fabs(objValue);
                                    returnCode |= 2;
                               }
@@ -3543,7 +3543,7 @@ int ClpModel::emptyProblem(int * infeasNumber, double * infeasSum, bool printMes
                               } else {
                                    columnActivity_[i] = columnLower_[i];
                                    status_[i] = 3;
-                                   numberDualInfeasibilities++;;
+                                   numberDualInfeasibilities++;
                                    sumDualInfeasibilities += fabs(objValue);
                                    returnCode |= 2;
                               }
@@ -3552,7 +3552,7 @@ int ClpModel::emptyProblem(int * infeasNumber, double * infeasSum, bool printMes
                     } else {
                          columnActivity_[i] = 0.0;
                          if (objValue) {
-                              numberDualInfeasibilities++;;
+                              numberDualInfeasibilities++;
                               sumDualInfeasibilities += fabs(objValue);
                               returnCode |= 2;
                          }
@@ -3619,7 +3619,7 @@ ClpModel::writeMps(const char *filename,
      writer.setMpsData(*(matrix_->getPackedMatrix()), COIN_DBL_MAX,
                        getColLower(), getColUpper(),
                        objective,
-                       static_cast<const char*> (NULL) /*integrality*/,
+                       reinterpret_cast<const char*> (NULL) /*integrality*/,
                        getRowLower(), getRowUpper(),
                        columnNames, rowNames);
      // Pass in array saying if each variable integer

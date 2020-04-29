@@ -1,11 +1,3 @@
-/*
- * $Revision: 3188 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-01-10 09:53:32 +0100 (Thu, 10 Jan 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class IncNodeInserter.
  *
@@ -21,7 +13,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -38,22 +30,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-
-#ifndef OGDF_INCNODEINSERTER_H
-#define OGDF_INCNODEINSERTER_H
-
 
 #include <ogdf/planarity/PlanRepInc.h>
 #include <ogdf/uml/UMLGraph.h>
@@ -62,34 +43,24 @@
 
 namespace ogdf {
 
-
-//===============================================
-//main function(s):
-//
-// insertcopyNode insert a node into a face
-//
-//===============================================
-
-
 class OGDF_EXPORT IncNodeInserter
 {
 public:
-	//creates inserter on PG
-	IncNodeInserter(PlanRepInc &PG) : m_planRep(&PG ) { }
+	//! Creates inserter on \p PG
+	explicit IncNodeInserter(PlanRepInc &PG) : m_planRep(&PG ) { }
 
-	//insert copy in m_planRep for original node v
+	//! Inserts copy in #m_planRep for original node \p v
 	virtual void insertCopyNode(node v, CombinatorialEmbedding &E,
 		Graph::NodeType vTyp) = 0;
 
 protected:
-	//returns a face to insert a copy of v and a list of
-	//adjacency entries corresponding to the insertion adjEntries
-	//for the adjacent edges
+	//! Returns a face to insert a copy of \p v and a list of
+	//! adjacency entries corresponding to the insertion adjEntries
+	//! for the adjacent edges
 	virtual face getInsertionFace(node v, CombinatorialEmbedding &E) = 0;
 
-	PlanRepInc* m_planRep; //the PlanRep that is changed
-}; //incnodeinserter
+	//! pointer to a PlanRepInc that is to be changed
+	PlanRepInc* m_planRep;
+};
 
-} //end namespace ogdf
-
-#endif
+}

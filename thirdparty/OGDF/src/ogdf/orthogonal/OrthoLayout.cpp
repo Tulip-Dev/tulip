@@ -1,11 +1,3 @@
-/*
- * $Revision: 3533 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2013-06-03 18:22:41 +0200 (Mon, 03 Jun 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Implements planar orthogonal drawing algorithm
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,12 +25,9 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 
 #include <ogdf/orthogonal/OrthoLayout.h>
@@ -46,8 +35,6 @@
 #include <ogdf/orthogonal/OrthoShaper.h>
 #include <ogdf/orthogonal/FlowCompaction.h>
 #include <ogdf/orthogonal/EdgeRouter.h>
-#include <ogdf/orthogonal/MinimumEdgeDistances.h>
-#include <ogdf/internal/orthogonal/RoutingChannel.h>
 
 
 namespace ogdf {
@@ -72,9 +59,7 @@ void OrthoLayout::call(PlanRep &PG,
 	adjEntry adjExternal,
 	Layout &drawing)
 {
-	//--------------------------------------
 	// special cases
-	//--------------------------------------
 	if(PG.empty())
 		return;
 
@@ -90,10 +75,7 @@ void OrthoLayout::call(PlanRep &PG,
 		return;
 	}
 
-
-	//---------------------------------------------------------------
 	// compaction with scaling: help node cages to pass by each other
-	//---------------------------------------------------------------
 	double separation = m_separation;
 	if (m_useScalingCompaction)
 	{
@@ -102,10 +84,7 @@ void OrthoLayout::call(PlanRep &PG,
 		separation = scaleFactor*m_separation; //reduce this step by step in compaction
 	}
 
-
-	//--------------------------------------
 	// PHASE 1: determine orthogonal shape
-	//--------------------------------------
 
 	// expand high-degree vertices
 	PG.expand();
@@ -124,9 +103,7 @@ void OrthoLayout::call(PlanRep &PG,
 	OFG.call(PG,E,OR);
 
 
-	//------------------------------------------------------------------
 	// PHASE 2: construction of a feasible drawing of the expanded graph
-	//------------------------------------------------------------------
 
 	// expand low degree vertices
 	PG.expandLowDegreeVertices(OR);
@@ -140,7 +117,7 @@ void OrthoLayout::call(PlanRep &PG,
 	// apply constructive compaction heuristics
 	OR.normalize();
 	OR.dissect2(&PG);
-	OR.orientate(PG,odNorth);
+	OR.orientate(PG,OrthoDir::North);
 
 	// compute cage information and routing channels
 	OR.computeCageInfoUML(PG);
@@ -157,9 +134,8 @@ void OrthoLayout::call(PlanRep &PG,
 	RoutingChannel<int> rcGrid(PG, gridDrawing.toGrid(separation), m_cOverhang);
 	rcGrid.computeRoutingChannels(OR);
 
-	node v;
 	const OrthoRep::VertexInfoUML *pInfoExp;
-	forall_nodes(v,PG) {
+	for(node v : PG.nodes) {
 		pInfoExp = OR.cageInfo(v);
 		if (pInfoExp) break;
 	}
@@ -176,23 +152,25 @@ void OrthoLayout::call(PlanRep &PG,
 	fc.improvementHeuristics(PG, OR, rcGrid, gridDrawing);
 
 
-	//--------------------------------------
 	// PHASE 3: routing of edges
-	//--------------------------------------
 
-	EdgeRouter router;
 	MinimumEdgeDistances<int> minDistGrid(PG, gridDrawing.toGrid(separation));
-	router.call(PG, OR, gridDrawing, E, rcGrid, minDistGrid, gridDrawing.width(), gridDrawing.height());
+	{
+		EdgeRouter router;
+		router.call(PG, OR, gridDrawing, E, rcGrid, minDistGrid, gridDrawing.width(), gridDrawing.height());
+	}
 
-	OR.orientate(pInfoExp->m_corner[odNorth],odNorth);
+	OR.orientate(pInfoExp->m_corner[static_cast<int>(OrthoDir::North)],OrthoDir::North);
 
 
-	//-------------------------------------------------
 	// PHASE 4: apply improvement compaction heuristics
-	//-------------------------------------------------
 
-	// call flow compaction on grid
-	fc.improvementHeuristics(PG, OR, minDistGrid, gridDrawing, int(gridDrawing.toGrid(m_separation)));
+	try {
+		// call flow compaction on grid
+		fc.improvementHeuristics(PG, OR, minDistGrid, gridDrawing, int(gridDrawing.toGrid(m_separation)));
+	} catch(AlgorithmFailureException) {
+		// too bad, that did not work out..
+	}
 
 
 	// re-map result
@@ -219,8 +197,7 @@ void OrthoLayout::computeBoundingBox(
 	minX = maxX = drawing.x(PG.firstNode());
 	minY = maxY = drawing.y(PG.firstNode());
 
-	node v;
-	forall_nodes(v,PG)
+	for(node v : PG.nodes)
 	{
 		double x = drawing.x(v);
 		if (x < minX) minX = x;
@@ -234,7 +211,7 @@ void OrthoLayout::computeBoundingBox(
 	double deltaX = m_margin - minX;
 	double deltaY = m_margin - minY;
 
-	forall_nodes(v,PG)
+	for(node v : PG.nodes)
 	{
 		drawing.x(v) += deltaX;
 		drawing.y(v) += deltaY;
@@ -243,6 +220,4 @@ void OrthoLayout::computeBoundingBox(
 	m_boundingBox = DPoint(maxX+deltaX+m_margin, maxY+deltaY+m_margin);
 }
 
-
-} // end namespace ogdf
-
+}

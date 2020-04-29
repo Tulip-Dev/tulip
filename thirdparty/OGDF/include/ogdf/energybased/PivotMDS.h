@@ -1,11 +1,3 @@
-/*
- * $Revision: 4377 $
- *
- * last checkin:
- *   $Author: klein $
- *   $Date: 2014-08-31 12:45:39 +0200 (Sun, 31 Aug 2014) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of the pivot MDS. By setting the number of pivots to
  * infinity this algorithm behaves just like classical MDS.
@@ -19,7 +11,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -36,44 +28,30 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifndef OGDF_PIVOT_MDS_H
-#define OGDF_PIVOT_MDS_H
-
+#pragma once
 
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/graphalg/ShortestPathAlgorithms.h>
-#include <ogdf/module/LayoutModule.h>
-
+#include <ogdf/basic/LayoutModule.h>
 
 namespace ogdf {
 
-#ifndef isnan
-template<typename T>
-inline bool isnan(T value)
-{
-	return value != value;
-}
-#endif
-
-
-#ifndef isinf
-// requires #include <limits>
 template<typename T>
 inline bool isinf(T value)
 {
-return std::numeric_limits<T>::has_infinity &&
-value == std::numeric_limits<T>::infinity();
+	return std::numeric_limits<T>::has_infinity &&
+		value == std::numeric_limits<T>::infinity();
 }
-#endif
 
 
+//! The Pivot MDS (multi-dimensional scaling) layout algorithm.
+/**
+ * @ingroup gd-energy
+ */
 class OGDF_EXPORT PivotMDS : public LayoutModule {
 public:
 	PivotMDS() : m_numberOfPivots(250), m_edgeCosts(100), m_hasEdgeCostsAttribute(false) { }
@@ -92,11 +70,16 @@ public:
 		m_edgeCosts = edgeCosts;
 	}
 
-	//! Calls the layout algorithm for graph attributes \a GA.
-	void call(GraphAttributes& GA);
+	//! Calls the layout algorithm for graph attributes \p GA.
+	virtual void call(GraphAttributes& GA) override;
+
 
 	void useEdgeCostsAttribute(bool useEdgeCostsAttribute) {
 		m_hasEdgeCostsAttribute = useEdgeCostsAttribute;
+	}
+
+	bool useEdgeCostsAttribute() const {
+		return m_hasEdgeCostsAttribute;
 	}
 
 private:
@@ -128,7 +111,7 @@ private:
 	//! Centers the pivot matrix.
 	void centerPivotmatrix(Array<Array<double> >& pivotMatrix);
 
-	//! Computes the pivot mds layout of the given connected graph of \a GA.
+	//! Computes the pivot mds layout of the given connected graph of \p GA.
 	void pivotMDSLayout(GraphAttributes& GA);
 
 	void copySPSS(Array<double>& copyTo, NodeArray<double>& copyFrom);
@@ -145,29 +128,26 @@ private:
 	//! Computes the pivot distance matrix based on the maxmin strategy
 	void getPivotDistanceMatrix(const GraphAttributes& GA, Array<Array<double> >& pivDistMatrix);
 
-	//! Checks whether the given graph is a path or not. Only works if no size 2 cycles exist
+	//! Checks whether the given graph is a path or not.
 	node getRootedPath(const Graph& G);
 
-	//! Normalizes the vector \a x.
+	//! Normalizes the vector \p x.
 	double normalize(Array<double>& x);
 
-	//! Computes the product of two vectors \a x and \a y.
+	//! Computes the product of two vectors \p x and \p y.
 	double prod(const Array<double>& x, const Array<double>& y);
 
-	//! Fills the given \a matrix with random doubles d 0 <= d <= 1.
+	//! Fills the given \p matrix with random doubles d 0 <= d <= 1.
 	void randomize(Array<Array<double> >& matrix);
 
-	//! Computes the self product of \a d.
+	//! Computes the self product of \p d.
 	void selfProduct(const Array<Array<double> >&d, Array<Array<double> >& result);
 
-	//! Computes the singular value decomposition of matrix \a K.
+	//! Computes the singular value decomposition of matrix \p K.
 	void singularValueDecomposition(
 		Array<Array<double> >& K,
 		Array<Array<double> >& eVecs,
 		Array<double>& eVals);
 };
 
-
-} // end namespace ogdf
-
-#endif
+}

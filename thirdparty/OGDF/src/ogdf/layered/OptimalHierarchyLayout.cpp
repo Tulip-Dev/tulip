@@ -1,11 +1,3 @@
-/*
- * $Revision: 3832 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 11:16:27 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration and implementation of the optimal
 //   third phase of the sugiyama algorithm
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,27 +26,17 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 
+#include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/layered/OptimalHierarchyLayout.h>
-#include <ogdf/layered/Hierarchy.h>
 #include <ogdf/lpsolver/LPSolver.h>
-
-
-#ifdef OGDF_LP_SOLVER
 
 namespace ogdf {
 
-
-//---------------------------------------------------------
-// Constructor
-//---------------------------------------------------------
 OptimalHierarchyLayout::OptimalHierarchyLayout()
 {
 	m_nodeDistance       = LayoutStandards::defaultNodeSeparation();
@@ -64,10 +46,6 @@ OptimalHierarchyLayout::OptimalHierarchyLayout()
 	m_weightBalancing    = 0.1;
 }
 
-
-//---------------------------------------------------------
-// Copy Constructor
-//---------------------------------------------------------
 OptimalHierarchyLayout::OptimalHierarchyLayout(const OptimalHierarchyLayout &ohl)
 {
 	m_nodeDistance       = ohl.nodeDistance();
@@ -77,10 +55,6 @@ OptimalHierarchyLayout::OptimalHierarchyLayout(const OptimalHierarchyLayout &ohl
 	m_weightBalancing    = ohl.weightBalancing();
 }
 
-
-//---------------------------------------------------------
-// Assignment Operator
-//---------------------------------------------------------
 OptimalHierarchyLayout &OptimalHierarchyLayout::operator=(const OptimalHierarchyLayout &ohl)
 {
 	m_nodeDistance       = ohl.nodeDistance();
@@ -92,15 +66,13 @@ OptimalHierarchyLayout &OptimalHierarchyLayout::operator=(const OptimalHierarchy
 	return *this;
 }
 
-
-//---------------------------------------------------------
-// Call for Graphs
-//---------------------------------------------------------
-void OptimalHierarchyLayout::doCall(const HierarchyLevelsBase &levels,GraphCopyAttributes &AGC)
+void OptimalHierarchyLayout::doCall(const HierarchyLevelsBase &levels,GraphAttributes &AGC)
 {
 	// trivial cases
 	const GraphCopy &GC = levels.hierarchy();
 	const int n = GC.numberOfNodes();
+
+	OGDF_ASSERT(isSimpleUndirected(GC));
 
 	if(n == 0)
 		return; // nothing to do
@@ -117,13 +89,9 @@ void OptimalHierarchyLayout::doCall(const HierarchyLevelsBase &levels,GraphCopyA
 	computeYCoordinates(levels,AGC);
 }
 
-
-//---------------------------------------------------------
-// Compute x-coordinates (LP-based approach) (for graphs)
-//---------------------------------------------------------
 void OptimalHierarchyLayout::computeXCoordinates(
 	const HierarchyLevelsBase &levels,
-	GraphCopyAttributes &AGC)
+	GraphAttributes &AGC)
 {
 	const Hierarchy &H  = levels.hierarchy();
 	const GraphCopy &GC = H;
@@ -143,13 +111,13 @@ void OptimalHierarchyLayout::computeXCoordinates(
 		{
 			node v = L[j];
 
-			if(H.isLongEdgeDummy(v) == true) {
+			if(H.isLongEdgeDummy(v)) {
 				isVirtual[v] = true;
 
 				node u = v->firstAdj()->theEdge()->target();
 				if(u == v) u = v->lastAdj()->theEdge()->target();
 
-				if(H.isLongEdgeDummy(u) == true) {
+				if(H.isLongEdgeDummy(u)) {
 					int down = levels.pos(u);
 					if(last != -1 && last > down) {
 						isVirtual[v] = false;
@@ -165,27 +133,22 @@ void OptimalHierarchyLayout::computeXCoordinates(
 	//
 	// determine variables of LP
 	//
-	int nSegments     = 0;	// number of vertical segments
-	int nRealVertices = 0;	// number of real vertices
-	int nEdges        = 0;	// number of edges not in vertical segments
-	int nBalanced     = 0;	// number of real vertices with deg > 1 for which
-							// balancing constraints may be applied
+	int nSegments     = 0; // number of vertical segments
+	int nRealVertices = 0; // number of real vertices
+	int nEdges        = 0; // number of edges not in vertical segments
+	int nBalanced     = 0; // number of real vertices with deg > 1 for which balancing constraints may be applied
 
-	NodeArray<int> vIndex(GC,-1);	// for real node: index of x[v]
-									// for dummy: index of corresponding segment
-	NodeArray<int> bIndex(GC,-1);	// (relative) index of b[v]
-	EdgeArray<int> eIndex(GC,-1);	// for edge not in vertical segment:
-									//   its index
-	Array<int> count(GC.numberOfEdges());	// counts the number of dummy vertices
-											// in corresponding segment that are not at
-											// position 0
+	NodeArray<int> vIndex(GC,-1); // for real node: index of x[v] for dummy: index of corresponding segment
+	NodeArray<int> bIndex(GC,-1); // (relative) index of b[v]
+	EdgeArray<int> eIndex(GC,-1); // for edge not in vertical segment: its index
+	Array<int> count(GC.numberOfEdges()); // counts the number of dummy vertices in corresponding segment that are not at position 0
 
 	for(i = 0; i < k; ++i)
 	{
 		const LevelBase &L = levels[i];
 		for(int j = 0; j < L.size(); ++j) {
 			node v = L[j];
-			if(isVirtual[v] == true)
+			if(isVirtual[v])
 				continue;
 
 			// we've found a real vertex
@@ -194,8 +157,8 @@ void OptimalHierarchyLayout::computeXCoordinates(
 				bIndex[v] = nBalanced++;
 
 			// consider all outgoing edges
-			edge e;
-			forall_adj_edges(e,v) {
+			for(adjEntry adj : v->adjEntries) {
+				edge e = adj->theEdge();
 				node w = e->target();
 				if(w == v)
 					continue;
@@ -203,7 +166,7 @@ void OptimalHierarchyLayout::computeXCoordinates(
 				// we've found an edge not belonging to a vetical segment
 				eIndex[e] = nEdges++;
 
-				if(isVirtual[w] == false)
+				if(!isVirtual[w])
 					continue;
 
 				// we've found a vertical segment
@@ -263,7 +226,7 @@ void OptimalHierarchyLayout::computeXCoordinates(
 		for(int j = 0; j < L.size(); ++j) {
 			node v = L[j];
 
-			if(isVirtual[v] == false) {
+			if(!isVirtual[v]) {
 				i = vertexOffset + vIndex[v];
 				matrixBegin[i] = nNonZeroes;
 
@@ -276,25 +239,23 @@ void OptimalHierarchyLayout::computeXCoordinates(
 				else
 					cstrSep = 2;
 
-				int count =  cstrSep + 2*v->degree();
+				int cnt =  cstrSep + 2*v->degree();
 				if(nBalanced > 0) {
 					if(v->degree() > 1)
-						count += 2;
-					adjEntry adj;
-					forall_adj(adj,v) {
+						cnt += 2;
+					for(adjEntry adj : v->adjEntries) {
 						node w = adj->twinNode();
 						if(bIndex[w] != -1)
-							count += 2;
+							cnt += 2;
 					}
 				}
 
-				matrixCount[i] = count;
+				matrixCount[i] = cnt;
 				nNonZeroes += matrixCount[i];
 
 			} else if (nBalanced > 0) {
 				i = vIndex[v];
-				adjEntry adj;
-				forall_adj(adj,v) {
+				for(adjEntry adj : v->adjEntries) {
 					node w = adj->twinNode();
 					if(bIndex[w] != -1)
 						count[i] += 2;
@@ -332,8 +293,7 @@ void OptimalHierarchyLayout::computeXCoordinates(
 	// Constraints:
 	//   d_(u,v) - x_u + x_v >= 0
 	//   d_(u,v) + x_u - x_v >= 0
-	edge e;
-	forall_edges(e,GC)
+	for(edge e : GC.edges)
 	{
 		int dCol = eIndex[e];
 		if(dCol >= 0) {
@@ -416,8 +376,8 @@ void OptimalHierarchyLayout::computeXCoordinates(
 			debugNonZeroCount++;
 
 			equationSense[currentRow] = 'G';
-			rightHandSide[currentRow] =
-				m_nodeDistance + 0.5*(AGC.getWidth(v)+AGC.getWidth(u));
+			rightHandSide[currentRow] = m_nodeDistance +
+				0.5*(getWidth(AGC, levels, v) + getWidth(AGC, levels, u));
 
 			++currentRow;
 		}
@@ -452,8 +412,7 @@ void OptimalHierarchyLayout::computeXCoordinates(
 				debugNonZeroCount++;
 
 				double f = 1.0 / v->degree();
-				adjEntry adj;
-				forall_adj(adj,v) {
+				for(adjEntry adj : v->adjEntries) {
 					node u = adj->twinNode();
 					int uCol = vIndex[u];
 					uCol += (isVirtual[u]) ? segmentOffset : vertexOffset;
@@ -481,7 +440,7 @@ void OptimalHierarchyLayout::computeXCoordinates(
 				debugNonZeroCount++;
 
 				f = -1.0 / v->degree();
-				forall_adj(adj,v) {
+				for(adjEntry adj : v->adjEntries) {
 					node u = adj->twinNode();
 					int uCol = vIndex[u];
 					uCol += (isVirtual[u]) ? segmentOffset : vertexOffset;
@@ -513,7 +472,7 @@ void OptimalHierarchyLayout::computeXCoordinates(
 
 	// objective function
 	Array<double> obj(nCols);
-	forall_edges(e,GC) {
+	for(edge e : GC.edges) {
 		i = eIndex[e];
 		if(i >= 0) {
 			// edge segments connecting to a vertical segment
@@ -521,9 +480,9 @@ void OptimalHierarchyLayout::computeXCoordinates(
 			// three edges in GC) get a special weight; all others
 			// have weight 1.0
 			obj[i] = (GC.chain(GC.original(e)).size() >= 3) ? m_weightSegments : 1.0;
-			if(isVirtual[e->source()] == false && e->source()->degree() == 1)
+			if(!isVirtual[e->source()] && e->source()->degree() == 1)
 				obj[i] += m_weightBalancing;
-			if(isVirtual[e->target()] == false && e->target()->degree() == 1)
+			if(!isVirtual[e->target()] && e->target()->degree() == 1)
 				obj[i] += m_weightBalancing;
 		}
 	}
@@ -534,9 +493,9 @@ void OptimalHierarchyLayout::computeXCoordinates(
 	for(; i < nCols; ++i)
 		obj[i] = m_weightBalancing;
 
-
 	// output problem
-	/*ofstream os("c:\\work\\GDE\\out.txt");
+#if 0
+	std::ofstream os("c:\\work\\GDE\\out.txt");
 	os << "nRows = " << nRows << "\n";
 	os << "nCols = " << nCols << "\n";
 	os << "nNonZeroes = " << nNonZeroes << "\n";
@@ -550,45 +509,44 @@ void OptimalHierarchyLayout::computeXCoordinates(
 	for(i = 0; i < nRows; ++i)
 		os << " [" << i << "]  " << equationSense[i] << ", " << rightHandSide[i] << "\n";
 
-	os.flush();*/
-
+	os.std::flush();
+#endif
 
 	// solve LP
 	double optimum;
 	Array<double> x(nCols);
 
+#ifdef OGDF_DEBUG
 	LPSolver::Status status =
-		solver.optimize(LPSolver::lpMinimize, obj,
+#endif
+	solver.optimize(LPSolver::OptimizationGoal::Minimize, obj,
 		matrixBegin, matrixCount, matrixIndex, matrixValue,
 		rightHandSide, equationSense,
-		lowerBound, upperBound,
-		optimum, x);
+		lowerBound, upperBound, optimum, x);
 
-	OGDF_ASSERT(status == LPSolver::lpOptimal);
+	OGDF_ASSERT(status == LPSolver::Status::Optimal);
 
-	/*os << "\nx\n";
+#if 0
+	os << "\nx\n";
 	for(i = 0; i < nCols; ++i)
 		os << " [" << i << "]  " << x[i] << "\n";
 
-	os.close();*/
+	os.close();
+#endif
 
 	// assign x coordinates
-	node v;
-	forall_nodes(v,GC) {
-		if(isVirtual[v])
+	for (node v : GC.nodes) {
+		if (isVirtual[v]) {
 			AGC.x(v) = x[segmentOffset+vIndex[v]];
-		else
+		} else {
 			AGC.x(v) = x[vertexOffset+vIndex[v]];
+		}
 	}
 }
 
-
-//---------------------------------------------------------
-// Compute y-coordinates (for graphs)
-//---------------------------------------------------------
 void OptimalHierarchyLayout::computeYCoordinates(
 	const HierarchyLevelsBase &levels,
-	GraphCopyAttributes &AGC)
+	GraphAttributes &AGC)
 {
 	const int k = levels.size();
 	int i;
@@ -599,7 +557,7 @@ void OptimalHierarchyLayout::computeYCoordinates(
 	for(i = 0; i < k; ++i) {
 		const LevelBase &L = levels[i];
 		for(int j = 0; j < L.size(); ++j) {
-			double h = AGC.getHeight(L[j]);
+			double h = getHeight(AGC, levels, L[j]);
 			if(h > height[i])
 				height[i] = h;
 		}
@@ -620,12 +578,12 @@ void OptimalHierarchyLayout::computeYCoordinates(
 
 		double dy = m_layerDistance;
 
-		if(m_fixedLayerDistance == false)
+		if(!m_fixedLayerDistance)
 		{
 			for(int j = 0; j < L.size(); ++j) {
 				node v = L[j];
-				edge e;
-				forall_adj_edges(e,v) {
+				for(adjEntry adj : v->adjEntries) {
+					edge e = adj->theEdge();
 					node w = e->target();
 					if(w != v) {
 						double dvw = fabs(AGC.x(v)-AGC.x(w)) / 3.0;
@@ -644,5 +602,3 @@ void OptimalHierarchyLayout::computeYCoordinates(
 }
 
 }
-
-#endif

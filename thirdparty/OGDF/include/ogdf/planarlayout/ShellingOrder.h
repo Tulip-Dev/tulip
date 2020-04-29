@@ -1,11 +1,3 @@
-/*
- * $Revision: 2523 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declares classes ShellingOrderSet and ShellingOrder.
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,21 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_SHELLING_ORDER_H
-#define OGDF_SHELLING_ORDER_H
-
 
 #include <ogdf/basic/NodeArray.h>
 
@@ -58,32 +40,29 @@ namespace ogdf {
 /**
  * \brief The node set in a shelling order of a graph.
  */
-class OGDF_EXPORT ShellingOrderSet : public Array<node>
+class ShellingOrderSet : public Array<node>
 {
 public:
 	//! Creates an empty shelling order set.
 	ShellingOrderSet() : Array<node>()
 	{
-		m_leftVertex = m_rightVertex = 0;
-		m_leftAdj    = m_rightAdj    = 0;
+		m_leftVertex = m_rightVertex = nullptr;
+		m_leftAdj    = m_rightAdj    = nullptr;
 	}
 
-	//! Creates a shelling order set for \a l nodes.
+	//! Creates a shelling order set for \p n nodes.
 	/**
-	 * @param l is the number of nodes in the set.
+	 * @param n is the number of nodes in the set.
 	 * @param adjL points to the left-node of the set.
 	 * @param adjR points to the right-node of the set.
 	 */
-	ShellingOrderSet(int l, adjEntry adjL = 0, adjEntry adjR = 0) : Array<node>(1,l)
+	ShellingOrderSet(int n, adjEntry adjL = nullptr, adjEntry adjR = nullptr) : Array<node>(1, n)
 	{
-		m_leftVertex  = (adjL != 0) ? adjL->twinNode() : 0;
-		m_rightVertex = (adjR != 0) ? adjR->twinNode() : 0;
+		m_leftVertex  = (adjL != nullptr) ? adjL->twinNode() : nullptr;
+		m_rightVertex = (adjR != nullptr) ? adjR->twinNode() : nullptr;
 		m_leftAdj     = adjL;
 		m_rightAdj    = adjR;
 	}
-
-	// destructor
-	~ShellingOrderSet() { }
 
 
 	//! Returns the left-node of the set.
@@ -101,37 +80,37 @@ public:
 		return m_leftAdj;
 	}
 
-	//! Returns the adjacency entry pointing from \a <I>z<SUB>p</SUB></I> to the right node (or 0 if no such node).
+	//! Returns the adjacency entry pointing from <I>z<SUB>p</SUB></I> to the right node (or 0 if no such node).
 	adjEntry rightAdj() const {
 		return m_rightAdj;
 	}
 
 	//! Returns true iff the adjacency entry to the left-node exists.
 	bool hasLeft() const {
-		return m_leftAdj != 0;
+		return m_leftAdj != nullptr;
 	}
 
 	//! Returns true iff the adjacency entry to the right-node exists.
 	bool hasRight() const {
-		return m_rightAdj != 0;
+		return m_rightAdj != nullptr;
 	}
 
-	//! Sets the left-node to \a cl.
+	//! Sets the left-node to \p cl.
 	void left(node cl) {
 		m_leftVertex = cl;
 	}
 
-	//! Sets the right-node to \a cr.
+	//! Sets the right-node to \p cr.
 	void right (node cr) {
 		m_rightVertex = cr;
 	}
 
-	//! Sets the adjacency entry pointing to the left-node to \a adjL.
+	//! Sets the adjacency entry pointing to the left-node to \p adjL.
 	void leftAdj(adjEntry adjL) {
 		m_leftAdj = adjL;
 	}
 
-	//! Sets the adjacency entry pointing to the right-node to \a adjR.
+	//! Sets the adjacency entry pointing to the right-node to \p adjR.
 	void rightAdj(adjEntry adjR) {
 		m_rightAdj = adjR;
 	}
@@ -151,14 +130,6 @@ public:
 		return Array<node>::operator[](i);
 	}
 
-	//! Assignment operator.
-	void operator= (const ShellingOrderSet& S) {
-		Array<node>::operator= (S);
-		left     (S.left());
-		right    (S.right());
-		leftAdj (S.leftAdj());
-		rightAdj(S.rightAdj());
-	}
 
 private:
 	node m_leftVertex;   //!< the left-node of the set.
@@ -166,9 +137,6 @@ private:
 	adjEntry m_leftAdj;  //!< the adjacency entry pointing to the left-node.
 	adjEntry m_rightAdj; //!< the adjacency entry pointing to the right-node.
 };
-
-
-
 
 /**
  * \brief The shelling order of a graph.
@@ -179,15 +147,14 @@ public:
 
 	//! Creates an empty shelling order.
 	ShellingOrder() {
-		m_pGraph = 0;
+		m_pGraph = nullptr;
 	}
 
-	//ShellingOrder(const Graph &G, const List<ShellingOrderSet> &partition);
-
+#if 0
+	ShellingOrder(const Graph &G, const List<ShellingOrderSet> &partition);
+#endif
 
 	~ShellingOrder() { }
-
-
 
 	//! Returns the graph associated with the shelling order.
 	const Graph& getGraph() const {
@@ -231,14 +198,14 @@ public:
 
 
 	/**
-	 * \brief Initializes the shelling order for graph \a G with a given node partition.
+	 * \brief Initializes the shelling order for graph \p G with a given node partition.
 	 * @param G is the associated graph.
 	 * @param partition is the node partition.
 	 */
 	void init(const Graph &G, const List<ShellingOrderSet> &partition);
 
 	/**
-	 * \brief Initializes the shelling order for graph \a G with a given node partition and transforms it into a leftmost order.
+	 * \brief Initializes the shelling order for graph \p G with a given node partition and transforms it into a leftmost order.
 	 * @param G is the associated graph.
 	 * @param partition is the node partition.
 	 */
@@ -255,9 +222,4 @@ private:
 	NodeArray<int>          m_rank;   //!< the rank of nodes.
 };
 
-
-
-} // end namespace ogdf
-
-
-#endif
+}

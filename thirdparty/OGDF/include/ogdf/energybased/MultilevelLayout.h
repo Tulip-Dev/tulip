@@ -1,11 +1,3 @@
-/*
- * $Revision: 2802 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-10-11 13:55:26 +0200 (Thu, 11 Oct 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class MultilevelLayout which realizes a
  * wrapper for the multilevel layout computation using the
@@ -18,7 +10,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -35,63 +27,46 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_MULTILEVEL_LAYOUT_H
-#define OGDF_MULTILEVEL_LAYOUT_H
-
 
 #include <ogdf/basic/NodeArray.h>
 #include <ogdf/basic/GraphAttributes.h>
-#include <ogdf/energybased/multilevelmixer/ModularMultilevelMixer.h>
-#include <ogdf/energybased/multilevelmixer/InitialPlacer.h>
-#include <ogdf/energybased/multilevelmixer/ScalingLayout.h>
+#include <ogdf/energybased/multilevel_mixer/ModularMultilevelMixer.h>
+#include <ogdf/energybased/multilevel_mixer/InitialPlacer.h>
+#include <ogdf/energybased/multilevel_mixer/ScalingLayout.h>
 #include <ogdf/packing/ComponentSplitterLayout.h>
 #include <ogdf/basic/PreprocessorLayout.h>
-#include <ogdf/basic/Constraints.h>
 
 namespace ogdf {
 
-	class OGDF_EXPORT MultilevelLayout : public LayoutModule
-	{
-		public:
-			//! Constructor
-			MultilevelLayout();
+//! The multilevel drawing framework.
+/**
+ * @ingroup gd-energy
+ */
+class OGDF_EXPORT MultilevelLayout : public LayoutModule
+{
+public:
+	//! Constructor
+	MultilevelLayout();
 
-			//! Destructor
-			virtual ~MultilevelLayout() {delete m_pp;}
+	//! Calculates a drawing for the Graph GA.
+	virtual void call(GraphAttributes &GA) override;
 
-			//! Calculates a drawing for the Graph GA.
-			void call(GraphAttributes &GA);
+	//Setting of the three main phases' methods
+	//! Sets the single level layout
+	void setLayout(LayoutModule* L);
+	//! Sets the method used for coarsening
+	void setMultilevelBuilder(MultilevelBuilder* B);
+	//! Sets the placement method used when refining the levels again.
+	void setPlacer(InitialPlacer* P);
 
-			//! Calculates a drawing for the Graph GA and tries to satisfy
-			//! the constraints in CG if supported.
-			virtual void call(GraphAttributes &GA, GraphConstraints &GC);
+private:
+	ModularMultilevelMixer* m_mixer;
+	PreprocessorLayout m_preproc;
+};
 
-			//Setting of the three main phases' methods
-			//! Sets the single level layout
-			void setLayout(LayoutModule* L);
-			//! Sets the method used for coarsening
-			void setMultilevelBuilder(MultilevelBuilder* B);
-			//! Sets the placement method used when refining the levels again.
-			void setPlacer(InitialPlacer* P);
-
-
-		private:
-			ModularMultilevelMixer* m_mmm;
-			ScalingLayout* m_sc;
-			ComponentSplitterLayout* m_cs;
-			PreprocessorLayout* m_pp;
-	};
-} //end namespace ogdf
-#endif
+}

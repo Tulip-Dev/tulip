@@ -1,26 +1,4 @@
 //----------------------
-// CGL
-//
-
-/* Version number of project */
-#define CGL_VERSION "0.57.3"
-
-/* Major Version number of project */
-#define CGL_VERSION_MAJOR 0
-
-/* Minor Version number of project */
-#define CGL_VERSION_MINOR 57
-
-/* Release Version number of project */
-#define CGL_VERSION_RELEASE 3
-
-/* Define to the debug sanity check level (0 is no test) */
-#define COIN_CGL_CHECKLEVEL 0
-
-/* Define to the debug verbosity level (0 is no output) */
-#define COIN_CGL_VERBOSITY 0
-
-//----------------------
 // CLP
 //
 
@@ -87,34 +65,11 @@
 
 
 //----------------------
-// Symphony
-//
-
-/* Version number of project */
-#define SYMPHONY_VERSION "5.4.5"
-
-/* Major Version number of project */
-#define SYMPHONY_VERSION_MAJOR 5
-
-/* Minor Version number of project */
-#define SYMPHONY_VERSION_MINOR 4
-
-/* Release Version number of project */
-#define SYMPHONY_VERSION_RELEASE 5
-
-/* Define to the debug sanity check level (0 is no test) */
-#define COIN_SYMPHONY_CHECKLEVEL 0
-
-/* Define to the debug verbosity level (0 is no output) */
-#define COIN_SYMPHONY_VERBOSITY 0
-
-
-//----------------------
 // Available Packages
 //
 
 /* Define to 1 if the Cgl package is available */
-#define COIN_HAS_CGL 1
+/* #undef COIN_HAS_CGL */
 
 /* Define to 1 if the Clp package is available */
 #define COIN_HAS_CLP 1
@@ -156,7 +111,7 @@
 /* #undef COIN_HAS_MSK */
 
 /* Define to 1 if the Sample package is available */
-#define COIN_HAS_SAMPLE 1
+/* #undef COIN_HAS_SAMPLE */
 
 /* Define to 1 if the Vol package is available */
 /* #undef COIN_HAS_VOL */
@@ -221,39 +176,19 @@
 #define HAVE_UNISTD_H 1
 
 /* Define to be the name of C-function for Inf check */
-#ifndef _MSC_VER
 #define COIN_C_FINITE std::isfinite
-#else
-#define COIN_C_FINITE _finite
-#endif
 
 /* Define to be the name of C-function for NaN check */
-#if defined(_MSC_VER) && !defined(NAN)
-#define COIN_C_ISNAN _isnan
-#else
 #define COIN_C_ISNAN std::isnan
-#endif
 
 /* Define to 64bit integer type */
-/* Define to integer type capturing pointer */
-/* Define to 64bit unsigned integer type */
-#ifndef WIN32
 #define COIN_INT64_T int64_t
+
+/* Define to integer type capturing pointer */
 #define COIN_INTPTR_T intptr_t
+
+/* Define to 64bit unsigned integer type */
 #define COIN_UINT64_T int64_t
-#else
-/* Use 64-bit integer type provided by Microsoft */
-#ifdef _MSC_VER
-# define COIN_INT64_T __int64
-# define COIN_UINT64_T unsigned __int64
-  /* Define to integer type capturing pointer */
-# define COIN_INTPTR_T intptr_t
-#else
-# define COIN_INT64_T long long
-# define COIN_UINT64_T unsigned long long
-# define COIN_INTPTR_T int*
-#endif
-#endif
 
 /* Define to a macro mangling the given C identifier (in lower and upper
    case), which must not contain underscores, for linking with Fortran. */

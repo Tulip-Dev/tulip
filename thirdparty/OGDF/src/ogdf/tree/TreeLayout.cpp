@@ -1,11 +1,3 @@
-/*
- * $Revision: 3167 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2012-12-18 18:08:37 +0100 (Tue, 18 Dec 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Linear time layout algorithm for trees (TreeLayout)
  * based on Walker's algorithm
@@ -17,7 +9,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -34,25 +26,14 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 
 #include <ogdf/tree/TreeLayout.h>
-#include <ogdf/basic/List.h>
-#include <ogdf/basic/Math.h>
-
-
 #include <ogdf/basic/AdjEntryArray.h>
-#include <math.h>
-
-
 #include <ogdf/basic/simple_graph_alg.h>
-#include <ogdf/basic/Stack.h>
 
 
 namespace ogdf {
@@ -64,9 +45,8 @@ TreeLayout::TreeLayout()
 	 m_levelDistance(50),
 	 m_treeDistance(50),
 	 m_orthogonalLayout(false),
-	 m_orientation(topToBottom),
-	 m_selectRoot(rootIsSource),
-	 m_pGraph(0)
+	 m_orientation(Orientation::topToBottom),
+	 m_selectRoot(RootSelectionType::Source)
 { }
 
 
@@ -78,10 +58,6 @@ TreeLayout::TreeLayout(const TreeLayout &tl)
 	 m_orthogonalLayout(tl.m_orthogonalLayout),
 	 m_orientation(tl.m_orientation),
 	 m_selectRoot(tl.m_selectRoot)
-{ }
-
-
-TreeLayout::~TreeLayout()
 { }
 
 
@@ -98,141 +74,257 @@ TreeLayout &TreeLayout::operator=(const TreeLayout &tl)
 }
 
 
-// comparer class used for sorting adjacency entries according to their angle
-class TreeLayout::AdjComparer
-{
-public:
-	AdjComparer(const AdjEntryArray<double> &angle) {
-		m_pAngle = &angle;
+struct TreeLayout::TreeStructure {
+
+	GraphAttributes &m_ga;
+	NodeArray<int> m_number;         //!< Consecutive numbers for children.
+
+	NodeArray<node> m_parent;        //!< Parent node, 0 if root.
+	NodeArray<node> m_leftSibling;   //!< Left sibling, 0 if none.
+	NodeArray<node> m_firstChild;    //!< Leftmost child, 0 if leaf.
+	NodeArray<node> m_lastChild;	 //!< Rightmost child, 0 if leaf.
+	NodeArray<node> m_thread;        //!< Thread, 0 if none.
+	NodeArray<node> m_ancestor;      //!< Actual highest ancestor.
+
+	NodeArray<double> m_preliminary; //!< Preliminary x-coordinates.
+	NodeArray<double> m_modifier;    //!< Modifier of x-coordinates.
+	NodeArray<double> m_change;      //!< Change of shift applied to subtrees.
+	NodeArray<double> m_shift;       //!< Shift applied to subtrees.
+
+
+	// initialize all node arrays and
+	// compute the tree structure from the adjacency lists
+	//
+	// returns the root nodes in roots
+	TreeStructure(const Graph &tree, GraphAttributes &GA, List<node> &roots) :
+		m_ga(GA),
+		m_number(tree, 0),
+		m_parent(tree, nullptr),
+		m_leftSibling(tree, nullptr),
+		m_firstChild(tree, nullptr),
+		m_lastChild(tree, nullptr),
+		m_thread(tree, nullptr),
+		m_ancestor(tree, nullptr),
+		m_preliminary(tree, 0),
+		m_modifier(tree, 0),
+		m_change(tree, 0),
+		m_shift(tree, 0)
+	{
+		// compute the tree structure
+
+		// find the roots
+		//node root = 0;
+		for (node v : tree.nodes) {
+			if (v->indeg() == 0)
+				roots.pushBack(v);
+		}
+
+		int childCounter;
+		for (node v : tree.nodes) {
+
+			// determine
+			// - the parent node of v
+			// - the leftmost and rightmost child of v
+			// - the numbers of the children of v
+			// - the left siblings of the children of v
+			// and initialize the actual ancestor of v
+
+			m_ancestor[v] = v;
+			if (isLeaf(v)) {
+				if (v->indeg() == 0) { // is v a root
+					m_parent[v] = nullptr;
+					m_leftSibling[v] = nullptr;
+				}
+				else {
+					m_firstChild[v] = m_lastChild[v] = nullptr;
+					m_parent[v] = v->firstAdj()->theEdge()->source();
+				}
+			}
+			else {
+
+				// traverse the adjacency list of v
+				adjEntry first;    // first leaving edge
+				adjEntry stop;     // successor of last leaving edge
+				first = v->firstAdj();
+				if (v->indeg() == 0) { // is v a root
+					stop = first;
+					m_parent[v] = nullptr;
+					m_leftSibling[v] = nullptr;
+				}
+				else {
+
+					// search for first leaving edge
+					while (first->theEdge()->source() == v)
+						first = first->cyclicSucc();
+					m_parent[v] = first->theEdge()->source();
+					stop = first;
+					first = first->cyclicSucc();
+				}
+
+				// traverse the children of v
+				m_firstChild[v] = first->theEdge()->target();
+				m_number[m_firstChild[v]] = childCounter = 0;
+				m_leftSibling[m_firstChild[v]] = nullptr;
+				adjEntry previous = first;
+				while (first->cyclicSucc() != stop) {
+					first = first->cyclicSucc();
+					m_number[first->theEdge()->target()] = ++childCounter;
+					m_leftSibling[first->theEdge()->target()]
+						= previous->theEdge()->target();
+					previous = first;
+				}
+				m_lastChild[v] = first->theEdge()->target();
+			}
+		}
 	}
 
-	int compare(const adjEntry &adjX, const adjEntry &adjY) const {
-		if ((*m_pAngle)[adjX] < (*m_pAngle)[adjY])
-			return -1;
-		else
-			if ((*m_pAngle)[adjX] > (*m_pAngle)[adjY])
-				return 1;
-		else
-			return 0;
-	}
-	OGDF_AUGMENT_COMPARER(adjEntry)
+	// returns whether node v is a leaf
+	bool isLeaf(node v) const
+	{
+		OGDF_ASSERT(v != nullptr);
 
-private:
-	const AdjEntryArray<double> *m_pAngle;
+		// node v is a leaf if and only if no edge leaves v
+		return v->outdeg() == 0;
+	}
+
+	// returns the successor of node v on the left contour
+	// returns 0 if there is none
+	node nextOnLeftContour(node v) const
+	{
+		OGDF_ASSERT(v != nullptr);
+		OGDF_ASSERT(v->graphOf() == m_firstChild.graphOf());
+		OGDF_ASSERT(v->graphOf() == m_thread.graphOf());
+
+		// if v has children, the successor of v on the left contour
+		// is its leftmost child,
+		// otherwise, the successor is the thread of v (may be 0)
+		if (m_firstChild[v] != nullptr)
+			return m_firstChild[v];
+		else
+			return m_thread[v];
+	}
+
+	// returns the successor of node v on the right contour
+	// returns 0 if there is none
+	node nextOnRightContour(node v) const
+	{
+		OGDF_ASSERT(v != nullptr);
+		OGDF_ASSERT(v->graphOf() == m_lastChild.graphOf());
+		OGDF_ASSERT(v->graphOf() == m_thread.graphOf());
+
+		// if v has children, the successor of v on the right contour
+		// is its rightmost child,
+		// otherwise, the successor is the thread of v (may be 0)
+		if (m_lastChild[v] != nullptr)
+			return m_lastChild[v];
+		else
+			return m_thread[v];
+	}
+
 };
 
 
-
-void TreeLayout::setRoot(GraphAttributes &AG, Graph &tree)
+void TreeLayout::setRoot(GraphAttributes &AG, Graph &tree, SListPure<edge> &reversedEdges)
 {
-	m_pGraph = &tree;
-
 	NodeArray<bool> visited(tree,false);
-	StackPure<node> S;
+	ArrayBuffer<node> S;
 
-	node v;
-	forall_nodes(v,tree)
+	for(node v : tree.nodes)
 	{
 		if(visited[v]) continue;
 
 		// process a new connected component
-		node root = 0;
+		node root = nullptr;
 		S.push(v);
 
 		while(!S.empty())
 		{
-			node x = S.pop();
+			node x = S.popRet();
 			visited[x] = true;
 
 			if(!root) {
-				if(m_selectRoot == rootIsSource) {
+				if(m_selectRoot == RootSelectionType::Source) {
 					if (x->indeg() == 0)
 						root = x;
-				} else if (m_selectRoot == rootIsSink) {
+				} else if (m_selectRoot == RootSelectionType::Sink) {
 					if (x->outdeg() == 0)
 						root = x;
 				} else { // selectByCoordinate
 					root = x;
 				}
 
-			} else if(m_selectRoot == rootByCoord) {
+			} else if(m_selectRoot == RootSelectionType::ByCoord) {
 				switch(m_orientation)
 				{
-				case bottomToTop:
+				case Orientation::bottomToTop:
 					if(AG.y(x) < AG.y(root))
 						root = x;
 					break;
-				case topToBottom:
+				case Orientation::topToBottom:
 					if(AG.y(x) > AG.y(root))
 						root = x;
 					break;
-				case leftToRight:
+				case Orientation::leftToRight:
 					if(AG.x(x) < AG.x(root))
 						root = x;
 					break;
-				case rightToLeft:
+				case Orientation::rightToLeft:
 					if(AG.x(x) > AG.x(root))
 						root = x;
 					break;
 				}
 			}
 
-			adjEntry adj;
-			forall_adj(adj,x) {
+			for(adjEntry adj : x->adjEntries) {
 				node w = adj->twinNode();
 				if(!visited[w])
 					S.push(w);
 			}
 		}
 
-		if(root == 0) {
-			undoReverseEdges(AG);
-			OGDF_THROW_PARAM(PreconditionViolatedException, pvcForest);
-		}
+		OGDF_ASSERT(root != nullptr);
 
-		adjustEdgeDirections(tree,root,0);
+		adjustEdgeDirections(tree, reversedEdges, root, nullptr);
 	}
 }
 
 
-void TreeLayout::adjustEdgeDirections(Graph &G, node v, node parent)
+void TreeLayout::adjustEdgeDirections(Graph &G, SListPure<edge> &reversedEdges, node v, node parent)
 {
-	adjEntry adj;
-	forall_adj(adj,v) {
+	for (adjEntry adj : v->adjEntries) {
 		node w = adj->twinNode();
-		if(w == parent) continue;
+		if (w == parent) continue;
 		edge e = adj->theEdge();
-		if(w != e->target()) {
+		if (w != e->target()) {
 			G.reverseEdge(e);
-			m_reversedEdges.pushBack(e);
+			reversedEdges.pushBack(e);
 		}
-		adjustEdgeDirections(G,w,v);
+		adjustEdgeDirections(G, reversedEdges, w, v);
 	}
 }
+
 
 void TreeLayout::callSortByPositions(GraphAttributes &AG, Graph &tree)
 {
 	OGDF_ASSERT(&tree == &(AG.constGraph()));
 
-	if (!isFreeForest(tree))
-		OGDF_THROW_PARAM(PreconditionViolatedException, pvcForest);
+	OGDF_ASSERT(isAcyclicUndirected(tree));
 
-	setRoot(AG,tree);
+	SListPure<edge> reversedEdges;
+	setRoot(AG, tree, reversedEdges);
 
 	// stores angle of adjacency entry
 	AdjEntryArray<double> angle(tree);
 
-	AdjComparer cmp(angle);
+	GenericComparer<adjEntry, double> cmp(angle);
 
-	node v;
-	forall_nodes(v,tree)
+	for(node v : tree.nodes)
 	{
 		// position of node v
 		double cx = AG.x(v);
 		double cy = AG.y(v);
 
-		adjEntry adj;
-		forall_adj(adj,v)
+		for(adjEntry adj : v->adjEntries)
 		{
 			// adjacent node
 			node w = adj->twinNode();
@@ -247,9 +339,9 @@ void TreeLayout::callSortByPositions(GraphAttributes &AG, Graph &tree)
 				continue;
 			}
 
-			if(m_orientation == leftToRight || m_orientation == rightToLeft)
-				swap(dx,dy);
-			if(m_orientation == topToBottom || m_orientation == rightToLeft)
+			if(m_orientation == Orientation::leftToRight || m_orientation == Orientation::rightToLeft)
+				std::swap(dx, dy);
+			if(m_orientation == Orientation::topToBottom || m_orientation == Orientation::rightToLeft)
 				dy = -dy;
 
 			// compute angle of adj
@@ -270,7 +362,7 @@ void TreeLayout::callSortByPositions(GraphAttributes &AG, Graph &tree)
 
 		// get list of all adjacency entries at v
 		SListPure<adjEntry> entries;
-		tree.adjEntries(v, entries);
+		v->allAdjEntries(entries);
 
 		// sort entries according to angle
 		entries.quicksort(cmp);
@@ -281,6 +373,9 @@ void TreeLayout::callSortByPositions(GraphAttributes &AG, Graph &tree)
 
 	// adjacency lists are now sorted, so we can apply the usual call
 	call(AG);
+
+	// restore temporarily removed edges again
+	undoReverseEdges(AG, tree, reversedEdges);
 }
 
 
@@ -289,28 +384,25 @@ void TreeLayout::call(GraphAttributes &AG)
 	const Graph &tree = AG.constGraph();
 	if(tree.numberOfNodes() == 0) return;
 
-	if (!isForest(tree))
-		OGDF_THROW_PARAM(PreconditionViolatedException, pvcForest);
-
+	OGDF_ASSERT(isArborescenceForest(tree));
 	OGDF_ASSERT(m_siblingDistance > 0);
 	OGDF_ASSERT(m_subtreeDistance > 0);
 	OGDF_ASSERT(m_levelDistance > 0);
 
 	// compute the tree structure
 	List<node> roots;
-	initializeTreeStructure(tree,roots);
+	TreeStructure ts(tree, AG, roots);
 
-	if(m_orientation == topToBottom || m_orientation == bottomToTop)
+	if(m_orientation == Orientation::topToBottom || m_orientation == Orientation::bottomToTop)
 	{
-		ListConstIterator<node> it;
 		double minX = 0, maxX = 0;
-		for(it = roots.begin(); it.valid(); ++it)
+		for(ListConstIterator<node> it = roots.begin(); it.valid(); ++it)
 		{
 			node root = *it;
 
 			// compute x-coordinates
-			firstWalk(root,AG,true);
-			secondWalkX(root,-m_preliminary[root],AG);
+			firstWalk(ts, root, true);
+			secondWalkX(ts, root, -ts.m_preliminary[root]);
 
 			// compute y-coordinates
 			computeYCoordinatesAndEdgeShapes(root,AG);
@@ -329,17 +421,14 @@ void TreeLayout::call(GraphAttributes &AG)
 
 		// The computed layout draws a tree downwards. If we want to draw the
 		// tree upwards, we simply invert all y-coordinates.
-		if(m_orientation == bottomToTop)
+		if(m_orientation == Orientation::bottomToTop)
 		{
-			node v;
-			forall_nodes(v,tree)
+			for(node v : tree.nodes)
 				AG.y(v) = -AG.y(v);
 
-			edge e;
-			forall_edges(e,tree) {
-				ListIterator<DPoint> it;
-				for(it = AG.bends(e).begin(); it.valid(); ++it)
-					(*it).m_y = -(*it).m_y;
+			for(edge e : tree.edges) {
+				for(DPoint &p: AG.bends(e))
+					p.m_y = -p.m_y;
 			}
 		}
 
@@ -351,8 +440,8 @@ void TreeLayout::call(GraphAttributes &AG)
 			node root = *it;
 
 			// compute y-coordinates
-			firstWalk(root,AG,false);
-			secondWalkY(root,-m_preliminary[root],AG);
+			firstWalk(ts, root, false);
+			secondWalkY(ts, root, -ts.m_preliminary[root]);
 
 			// compute y-coordinates
 			computeXCoordinatesAndEdgeShapes(root,AG);
@@ -371,56 +460,51 @@ void TreeLayout::call(GraphAttributes &AG)
 
 		// The computed layout draws a tree upwards. If we want to draw the
 		// tree downwards, we simply invert all y-coordinates.
-		if(m_orientation == rightToLeft)
+		if(m_orientation == Orientation::rightToLeft)
 		{
-			node v;
-			forall_nodes(v,tree)
+			for(node v : tree.nodes)
 				AG.x(v) = -AG.x(v);
 
-			edge e;
-			forall_edges(e,tree) {
-				ListIterator<DPoint> it;
-				for(it = AG.bends(e).begin(); it.valid(); ++it)
-					(*it).m_x = -(*it).m_x;
+			for(edge e : tree.edges) {
+				for(DPoint &p: AG.bends(e))
+					p.m_x = -p.m_x;
 			}
 		}
 
 	}
-
-	// delete the tree structure
-	deleteTreeStructure();
-
-	// restore temporarily removed edges again
-	undoReverseEdges(AG);
 }
 
-void TreeLayout::undoReverseEdges(GraphAttributes &AG)
+void TreeLayout::undoReverseEdges(GraphAttributes &AG, Graph &tree, SListPure<edge> &reversedEdges)
 {
+#if 0
 	if(m_pGraph) {
-		while(!m_reversedEdges.empty()) {
-			edge e = m_reversedEdges.popFrontRet();
-			m_pGraph->reverseEdge(e);
+#endif
+		while(!reversedEdges.empty()) {
+			edge e = reversedEdges.popFrontRet();
+			tree.reverseEdge(e);
 			AG.bends(e).reverse();
 		}
 
-		m_pGraph = 0;
+#if 0
+		m_pGraph = nullptr;
 	}
+#endif
 }
 
 void TreeLayout::findMinX(GraphAttributes &AG, node root, double &minX)
 {
-	Stack<node> S;
+	ArrayBuffer<node> S;
 	S.push(root);
 
 	while(!S.empty())
 	{
-		node v = S.pop();
+		node v = S.popRet();
 
 		double left = AG.x(v) - AG.width(v)/2;
 		if(left < minX) minX = left;
 
-		edge e;
-		forall_adj_edges(e,v) {
+		for(adjEntry adj : v->adjEntries) {
+			edge e = adj->theEdge();
 			node w = e->target();
 			if(w != v) S.push(w);
 		}
@@ -429,18 +513,18 @@ void TreeLayout::findMinX(GraphAttributes &AG, node root, double &minX)
 
 void TreeLayout::findMinY(GraphAttributes &AG, node root, double &minY)
 {
-	Stack<node> S;
+	ArrayBuffer<node> S;
 	S.push(root);
 
 	while(!S.empty())
 	{
-		node v = S.pop();
+		node v = S.popRet();
 
 		double left = AG.y(v) - AG.height(v)/2;
 		if(left < minY) minY = left;
 
-		edge e;
-		forall_adj_edges(e,v) {
+		for(adjEntry adj : v->adjEntries) {
+			edge e = adj->theEdge();
 			node w = e->target();
 			if(w != v) S.push(w);
 		}
@@ -450,16 +534,16 @@ void TreeLayout::findMinY(GraphAttributes &AG, node root, double &minY)
 
 void TreeLayout::shiftTreeX(GraphAttributes &AG, node root, double shift)
 {
-	Stack<node> S;
+	ArrayBuffer<node> S;
 	S.push(root);
 	while(!S.empty())
 	{
-		node v = S.pop();
+		node v = S.popRet();
 
 		AG.x(v) += shift;
 
-		edge e;
-		forall_adj_edges(e,v) {
+		for(adjEntry adj : v->adjEntries) {
+			edge e = adj->theEdge();
 			node w = e->target();
 			if(w != v) {
 				ListIterator<DPoint> itP;
@@ -473,16 +557,16 @@ void TreeLayout::shiftTreeX(GraphAttributes &AG, node root, double shift)
 
 void TreeLayout::shiftTreeY(GraphAttributes &AG, node root, double shift)
 {
-	Stack<node> S;
+	ArrayBuffer<node> S;
 	S.push(root);
 	while(!S.empty())
 	{
-		node v = S.pop();
+		node v = S.popRet();
 
 		AG.y(v) += shift;
 
-		edge e;
-		forall_adj_edges(e,v) {
+		for(adjEntry adj : v->adjEntries) {
+			edge e = adj->theEdge();
 			node w = e->target();
 			if(w != v) {
 				ListIterator<DPoint> itP;
@@ -497,17 +581,17 @@ void TreeLayout::shiftTreeY(GraphAttributes &AG, node root, double shift)
 
 void TreeLayout::findMaxX(GraphAttributes &AG, node root, double &maxX)
 {
-	Stack<node> S;
+	ArrayBuffer<node> S;
 	S.push(root);
 	while(!S.empty())
 	{
-		node v = S.pop();
+		node v = S.popRet();
 
 		double right = AG.x(v) + AG.width(v)/2;
 		if(right > maxX) maxX = right;
 
-		edge e;
-		forall_adj_edges(e,v) {
+		for(adjEntry adj : v->adjEntries) {
+			edge e = adj->theEdge();
 			node w = e->target();
 			if(w != v) S.push(w);
 		}
@@ -516,17 +600,17 @@ void TreeLayout::findMaxX(GraphAttributes &AG, node root, double &maxX)
 
 void TreeLayout::findMaxY(GraphAttributes &AG, node root, double &maxY)
 {
-	Stack<node> S;
+	ArrayBuffer<node> S;
 	S.push(root);
 	while(!S.empty())
 	{
-		node v = S.pop();
+		node v = S.popRet();
 
 		double right = AG.y(v) + AG.height(v)/2;
 		if(right > maxY) maxY = right;
 
-		edge e;
-		forall_adj_edges(e,v) {
+		for(adjEntry adj : v->adjEntries) {
+			edge e = adj->theEdge();
 			node w = e->target();
 			if(w != v) S.push(w);
 		}
@@ -534,196 +618,52 @@ void TreeLayout::findMaxY(GraphAttributes &AG, node root, double &maxY)
 }
 
 
-//node TreeLayout::initializeTreeStructure(const Graph &tree)
-void TreeLayout::initializeTreeStructure(const Graph &tree, List<node> &roots)
+void TreeLayout::firstWalk(TreeStructure &ts, node subtree, bool upDown)
 {
-	node v;
-
-	// initialize node arrays
-	m_number     .init(tree,0);
-	m_parent     .init(tree,0);
-	m_leftSibling.init(tree,0);
-	m_firstChild .init(tree,0);
-	m_lastChild  .init(tree,0);
-	m_thread     .init(tree,0);
-	m_ancestor   .init(tree,0);
-	m_preliminary.init(tree,0);
-	m_modifier   .init(tree,0);
-	m_change     .init(tree,0);
-	m_shift      .init(tree,0);
-
-	// compute the tree structure
-
-	// find the roots
-	//node root = 0;
-	forall_nodes(v,tree) {
-		if(v->indeg() == 0)
-			roots.pushBack(v);
-	}
-
-	int childCounter;
-	forall_nodes(v,tree) {
-
-		// determine
-		// - the parent node of v
-		// - the leftmost and rightmost child of v
-		// - the numbers of the children of v
-		// - the left siblings of the children of v
-		// and initialize the actual ancestor of v
-
-		m_ancestor[v] = v;
-		if(isLeaf(v)) {
-			if(v->indeg() == 0) { // is v a root
-				m_parent[v] = 0;
-				m_leftSibling[v] = 0;
-			}
-			else {
-				m_firstChild[v] = m_lastChild[v] = 0;
-				m_parent[v] = v->firstAdj()->theEdge()->source();
-			}
-		}
-		else {
-
-			// traverse the adjacency list of v
-			adjEntry first;    // first leaving edge
-			adjEntry stop;     // successor of last leaving edge
-			first = v->firstAdj();
-			if(v->indeg() == 0) { // is v a root
-				stop = first;
-				m_parent[v] = 0;
-				m_leftSibling[v] = 0;
-			}
-			else {
-
-				// search for first leaving edge
-				while(first->theEdge()->source() == v)
-					first = first->cyclicSucc();
-				m_parent[v] = first->theEdge()->source();
-				stop = first;
-				first = first->cyclicSucc();
-			}
-
-			// traverse the children of v
-			m_firstChild[v] = first->theEdge()->target();
-			m_number[m_firstChild[v]] = childCounter = 0;
-			m_leftSibling[m_firstChild[v]] = 0;
-			adjEntry previous = first;
-			while(first->cyclicSucc() != stop) {
-				first = first->cyclicSucc();
-				m_number[first->theEdge()->target()] = ++childCounter;
-				m_leftSibling[first->theEdge()->target()]
-					= previous->theEdge()->target();
-				previous = first;
-			}
-			m_lastChild[v] = first->theEdge()->target();
-		}
-	}
-}
-
-
-void TreeLayout::deleteTreeStructure()
-{
-	m_number     .init();
-	m_parent     .init();
-	m_leftSibling.init();
-	m_firstChild .init();
-	m_lastChild  .init();
-	m_thread     .init();
-	m_ancestor   .init();
-	m_preliminary.init();
-	m_modifier   .init();
-	m_change     .init();
-	m_shift      .init();
-}
-
-
-int TreeLayout::isLeaf(node v) const
-{
-	OGDF_ASSERT(v != 0);
-
-	// node v is a leaf if and only if no edge leaves v
-	return v->outdeg() == 0;
-}
-
-
-node TreeLayout::nextOnLeftContour(node v) const
-{
-	OGDF_ASSERT(v != 0);
-	OGDF_ASSERT(v->graphOf() == m_firstChild.graphOf());
-	OGDF_ASSERT(v->graphOf() == m_thread.graphOf());
-
-	// if v has children, the successor of v on the left contour
-	// is its leftmost child,
-	// otherwise, the successor is the thread of v (may be 0)
-	if(m_firstChild[v] != 0)
-		return m_firstChild[v];
-	else
-		return m_thread[v];
-}
-
-
-node TreeLayout::nextOnRightContour(node v) const
-{
-	OGDF_ASSERT(v != 0);
-	OGDF_ASSERT(v->graphOf() == m_lastChild.graphOf());
-	OGDF_ASSERT(v->graphOf() == m_thread.graphOf());
-
-	// if v has children, the successor of v on the right contour
-	// is its rightmost child,
-	// otherwise, the successor is the thread of v (may be 0)
-	if(m_lastChild[v] != 0)
-		return m_lastChild[v];
-	else
-		return m_thread[v];
-}
-
-
-void TreeLayout::firstWalk(node subtree,const GraphAttributes &AG,bool upDown)
-{
-	OGDF_ASSERT(subtree != 0);
-	OGDF_ASSERT(subtree->graphOf() == m_leftSibling.graphOf());
-	OGDF_ASSERT(subtree->graphOf() == m_preliminary.graphOf());
-	OGDF_ASSERT(subtree->graphOf() == m_firstChild.graphOf());
-	OGDF_ASSERT(subtree->graphOf() == m_lastChild.graphOf());
-	OGDF_ASSERT(subtree->graphOf() == m_modifier.graphOf());
-	OGDF_ASSERT(subtree->graphOf() == m_change.graphOf());
-	OGDF_ASSERT(subtree->graphOf() == m_shift.graphOf());
+	OGDF_ASSERT(subtree != nullptr);
+	OGDF_ASSERT(subtree->graphOf() == ts.m_leftSibling.graphOf());
+	OGDF_ASSERT(subtree->graphOf() == ts.m_preliminary.graphOf());
+	OGDF_ASSERT(subtree->graphOf() == ts.m_firstChild.graphOf());
+	OGDF_ASSERT(subtree->graphOf() == ts.m_lastChild.graphOf());
+	OGDF_ASSERT(subtree->graphOf() == ts.m_modifier.graphOf());
+	OGDF_ASSERT(subtree->graphOf() == ts.m_change.graphOf());
+	OGDF_ASSERT(subtree->graphOf() == ts.m_shift.graphOf());
 
 	// compute a preliminary x-coordinate for subtree
-	if(isLeaf(subtree)) {
+	if(ts.isLeaf(subtree)) {
 
 		// place subtree close to the left sibling
-		node leftSibling = m_leftSibling[subtree];
-		if(leftSibling != 0) {
+		node leftSibling = ts.m_leftSibling[subtree];
+		if(leftSibling != nullptr) {
 			if(upDown) {
-				m_preliminary[subtree] = m_preliminary[leftSibling]
-					+ (AG.width(subtree) + AG.width(leftSibling)) / 2
+				ts.m_preliminary[subtree] = ts.m_preliminary[leftSibling]
+					+ (ts.m_ga.width(subtree) + ts.m_ga.width(leftSibling)) / 2
 					+ m_siblingDistance;
 			} else {
-				m_preliminary[subtree] = m_preliminary[leftSibling]
-					+ (AG.height(subtree) + AG.height(leftSibling)) / 2
+				ts.m_preliminary[subtree] = ts.m_preliminary[leftSibling]
+					+ (ts.m_ga.height(subtree) + ts.m_ga.height(leftSibling)) / 2
 					+ m_siblingDistance;
 			}
 		}
-		else m_preliminary[subtree] = 0;
+		else ts.m_preliminary[subtree] = 0;
 	}
 	else {
-		node defaultAncestor = m_firstChild[subtree];
+		node defaultAncestor = ts.m_firstChild[subtree];
 
 		// collect the children of subtree
 		List<node> children;
-		node v = m_lastChild[subtree];
+		node v = ts.m_lastChild[subtree];
 		do {
 			children.pushFront(v);
-			v = m_leftSibling[v];
-		} while(v != 0);
+			v = ts.m_leftSibling[v];
+		} while(v != nullptr);
 
 		ListIterator<node> it;
 
 		// apply firstwalk and apportion to the children
-		for(it = children.begin(); it.valid(); it = it.succ()) {
-			firstWalk(*it,AG,upDown);
-			apportion(*it,defaultAncestor,AG,upDown);
+		for (it = children.begin(); it.valid(); it = it.succ()) {
+			firstWalk(ts, *it, upDown);
+			apportion(ts, *it, defaultAncestor, upDown);
 		}
 
 		// shift the small subtrees
@@ -731,49 +671,49 @@ void TreeLayout::firstWalk(node subtree,const GraphAttributes &AG,bool upDown)
 		double change = 0;
 		children.reverse();
 		for(it = children.begin(); it.valid(); it = it.succ()) {
-			m_preliminary[*it] += shift;
-			m_modifier[*it] += shift;
-			change += m_change[*it];
-			shift += m_shift[*it] + change;
+			ts.m_preliminary[*it] += shift;
+			ts.m_modifier[*it] += shift;
+			change += ts.m_change[*it];
+			shift += ts.m_shift[*it] + change;
 		}
 
 		// place the parent node
-		double midpoint = (m_preliminary[children.front()] + m_preliminary[children.back()]) / 2;
-		node leftSibling = m_leftSibling[subtree];
-		if(leftSibling != 0) {
+		double midpoint = (ts.m_preliminary[children.front()] + ts.m_preliminary[children.back()]) / 2;
+		node leftSibling = ts.m_leftSibling[subtree];
+		if(leftSibling != nullptr) {
 			if(upDown) {
-				m_preliminary[subtree] = m_preliminary[leftSibling]
-					+ (AG.width(subtree) + AG.width(leftSibling)) / 2
+				ts.m_preliminary[subtree] = ts.m_preliminary[leftSibling]
+					+ (ts.m_ga.width(subtree) + ts.m_ga.width(leftSibling)) / 2
 					+ m_siblingDistance;
 			} else {
-				m_preliminary[subtree] = m_preliminary[leftSibling]
-					+ (AG.height(subtree) + AG.height(leftSibling)) / 2
+				ts.m_preliminary[subtree] = ts.m_preliminary[leftSibling]
+					+ (ts.m_ga.height(subtree) + ts.m_ga.height(leftSibling)) / 2
 					+ m_siblingDistance;
 			}
-			m_modifier[subtree] =
-				m_preliminary[subtree] - midpoint;
+			ts.m_modifier[subtree] =
+				ts.m_preliminary[subtree] - midpoint;
 		}
-		else m_preliminary[subtree] = midpoint;
+		else ts.m_preliminary[subtree] = midpoint;
 	}
 }
 
 void TreeLayout::apportion(
+	TreeStructure &ts,
 	node subtree,
 	node &defaultAncestor,
-	const GraphAttributes &AG,
 	bool upDown)
 {
-	OGDF_ASSERT(subtree != 0);
+	OGDF_ASSERT(subtree != nullptr);
 	OGDF_ASSERT(subtree->graphOf() == defaultAncestor->graphOf());
-	OGDF_ASSERT(subtree->graphOf() == m_leftSibling.graphOf());
-	OGDF_ASSERT(subtree->graphOf() == m_firstChild.graphOf());
-	OGDF_ASSERT(subtree->graphOf() == m_modifier.graphOf());
-	OGDF_ASSERT(subtree->graphOf() == m_ancestor.graphOf());
-	OGDF_ASSERT(subtree->graphOf() == m_change.graphOf());
-	OGDF_ASSERT(subtree->graphOf() == m_shift.graphOf());
-	OGDF_ASSERT(subtree->graphOf() == m_thread.graphOf());
+	OGDF_ASSERT(subtree->graphOf() == ts.m_leftSibling.graphOf());
+	OGDF_ASSERT(subtree->graphOf() == ts.m_firstChild.graphOf());
+	OGDF_ASSERT(subtree->graphOf() == ts.m_modifier.graphOf());
+	OGDF_ASSERT(subtree->graphOf() == ts.m_ancestor.graphOf());
+	OGDF_ASSERT(subtree->graphOf() == ts.m_change.graphOf());
+	OGDF_ASSERT(subtree->graphOf() == ts.m_shift.graphOf());
+	OGDF_ASSERT(subtree->graphOf() == ts.m_thread.graphOf());
 
-	if(m_leftSibling[subtree] == 0) return;
+	if(ts.m_leftSibling[subtree] == nullptr) return;
 
 	// check distance to the left of the subtree
 	// and traverse left/right inside/outside contour
@@ -788,63 +728,63 @@ void TreeLayout::apportion(
 	node leftAncestor,rightAncestor;
 
 	// start the traversal at the actual level
-	node leftContourOut  = m_firstChild[m_parent[subtree]];
-	node leftContourIn   = m_leftSibling[subtree];
+	node leftContourOut  = ts.m_firstChild[ts.m_parent[subtree]];
+	node leftContourIn   = ts.m_leftSibling[subtree];
 	node rightContourIn  = subtree;
 	node rightContourOut = subtree;
 	bool stop = false;
 	do {
 
 		// add modifiers
-		leftModSumOut  += m_modifier[leftContourOut];
-		leftModSumIn   += m_modifier[leftContourIn];
-		rightModSumIn  += m_modifier[rightContourIn];
-		rightModSumOut += m_modifier[rightContourOut];
+		leftModSumOut  += ts.m_modifier[leftContourOut];
+		leftModSumIn   += ts.m_modifier[leftContourIn];
+		rightModSumIn  += ts.m_modifier[rightContourIn];
+		rightModSumOut += ts.m_modifier[rightContourOut];
 
 		// actualize ancestor for right contour
-		m_ancestor[rightContourOut] = subtree;
+		ts.m_ancestor[rightContourOut] = subtree;
 
-		if(nextOnLeftContour(leftContourOut) != 0 && nextOnRightContour(rightContourOut) != 0)
+		if(ts.nextOnLeftContour(leftContourOut) != nullptr && ts.nextOnRightContour(rightContourOut) != nullptr)
 		{
 			// continue traversal
-			leftContourOut  = nextOnLeftContour(leftContourOut);
-			leftContourIn   = nextOnRightContour(leftContourIn);
-			rightContourIn  = nextOnLeftContour(rightContourIn);
-			rightContourOut = nextOnRightContour(rightContourOut);
+			leftContourOut  = ts.nextOnLeftContour(leftContourOut);
+			leftContourIn   = ts.nextOnRightContour(leftContourIn);
+			rightContourIn  = ts.nextOnLeftContour(rightContourIn);
+			rightContourOut = ts.nextOnRightContour(rightContourOut);
 
 			// check if subtree has to be moved
 			if(upDown) {
-				moveDistance = m_preliminary[leftContourIn] + leftModSumIn
-					+ (AG.width(leftContourIn) + AG.width(rightContourIn)) / 2
+				moveDistance = ts.m_preliminary[leftContourIn] + leftModSumIn
+					+ (ts.m_ga.width(leftContourIn) + ts.m_ga.width(rightContourIn)) / 2
 					+ m_subtreeDistance
-					- m_preliminary[rightContourIn] - rightModSumIn;
+					- ts.m_preliminary[rightContourIn] - rightModSumIn;
 			} else {
-				moveDistance = m_preliminary[leftContourIn] + leftModSumIn
-					+ (AG.height(leftContourIn) + AG.height(rightContourIn)) / 2
+				moveDistance = ts.m_preliminary[leftContourIn] + leftModSumIn
+					+ (ts.m_ga.height(leftContourIn) + ts.m_ga.height(rightContourIn)) / 2
 					+ m_subtreeDistance
-					- m_preliminary[rightContourIn] - rightModSumIn;
+					- ts.m_preliminary[rightContourIn] - rightModSumIn;
 			}
 			if(moveDistance > 0) {
 
 				// compute highest different ancestors of leftContourIn
 				// and rightContourIn
-				if(m_parent[m_ancestor[leftContourIn]] == m_parent[subtree])
-					leftAncestor = m_ancestor[leftContourIn];
+				if(ts.m_parent[ts.m_ancestor[leftContourIn]] == ts.m_parent[subtree])
+					leftAncestor = ts.m_ancestor[leftContourIn];
 				else leftAncestor = defaultAncestor;
 				rightAncestor = subtree;
 
 				// compute the number of small subtrees in between (plus 1)
 				numberOfSubtrees =
-					m_number[rightAncestor] - m_number[leftAncestor];
+					ts.m_number[rightAncestor] - ts.m_number[leftAncestor];
 
 				// compute the shifts and changes of shift
-				m_change[rightAncestor] -= moveDistance / numberOfSubtrees;
-				m_shift[rightAncestor] += moveDistance;
-				m_change[leftAncestor] += moveDistance / numberOfSubtrees;
+				ts.m_change[rightAncestor] -= moveDistance / numberOfSubtrees;
+				ts.m_shift[rightAncestor] += moveDistance;
+				ts.m_change[leftAncestor] += moveDistance / numberOfSubtrees;
 
 				// move subtree to the right by moveDistance
-				m_preliminary[rightAncestor] += moveDistance;
-				m_modifier[rightAncestor] += moveDistance;
+				ts.m_preliminary[rightAncestor] += moveDistance;
+				ts.m_modifier[rightAncestor] += moveDistance;
 				rightModSumIn += moveDistance;
 				rightModSumOut += moveDistance;
 			}
@@ -853,71 +793,75 @@ void TreeLayout::apportion(
 	} while(!stop);
 
 	// adjust threads
-	if(nextOnRightContour(rightContourOut) == 0 && nextOnRightContour(leftContourIn) != 0)
+	if(ts.nextOnRightContour(rightContourOut) == nullptr && ts.nextOnRightContour(leftContourIn) != nullptr)
 	{
 		// right subtree smaller than left subforest
-		m_thread[rightContourOut] = nextOnRightContour(leftContourIn);
-		m_modifier[rightContourOut] += leftModSumIn - rightModSumOut;
+		ts.m_thread[rightContourOut] = ts.nextOnRightContour(leftContourIn);
+		ts.m_modifier[rightContourOut] += leftModSumIn - rightModSumOut;
 	}
 
-	if(nextOnLeftContour(leftContourOut) == 0 && nextOnLeftContour(rightContourIn) != 0)
+	if(ts.nextOnLeftContour(leftContourOut) == nullptr && ts.nextOnLeftContour(rightContourIn) != nullptr)
 	{
 		// left subforest smaller than right subtree
-		m_thread[leftContourOut] = nextOnLeftContour(rightContourIn);
-		m_modifier[leftContourOut] += rightModSumIn - leftModSumOut;
+		ts.m_thread[leftContourOut] = ts.nextOnLeftContour(rightContourIn);
+		ts.m_modifier[leftContourOut] += rightModSumIn - leftModSumOut;
 		defaultAncestor = subtree;
 	}
 }
 
 
-void TreeLayout::secondWalkX(node subtree,
-							double modifierSum,
-							GraphAttributes &AG)
+void TreeLayout::secondWalkX(
+	TreeStructure &ts,
+	node subtree,
+	double modifierSum)
 {
-	OGDF_ASSERT(subtree != 0);
-	OGDF_ASSERT(subtree->graphOf() == m_preliminary.graphOf());
-	OGDF_ASSERT(subtree->graphOf() == m_modifier.graphOf());
+	OGDF_ASSERT(subtree != nullptr);
+	OGDF_ASSERT(subtree->graphOf() == ts.m_preliminary.graphOf());
+	OGDF_ASSERT(subtree->graphOf() == ts.m_modifier.graphOf());
 
 	// compute final x-coordinates for the subtree
 	// by recursively aggregating modifiers
-	AG.x(subtree) = m_preliminary[subtree] + modifierSum;
-	modifierSum += m_modifier[subtree];
-	edge e;
-	forall_adj_edges(e,subtree) if(e->target() != subtree)
-		secondWalkX(e->target(),modifierSum,AG);
+	ts.m_ga.x(subtree) = ts.m_preliminary[subtree] + modifierSum;
+	modifierSum += ts.m_modifier[subtree];
+	for(adjEntry adj : subtree->adjEntries) {
+		edge e = adj->theEdge();
+		if (e->target() != subtree)
+			secondWalkX(ts, e->target(), modifierSum);
+	}
 }
 
-void TreeLayout::secondWalkY(node subtree,
-							double modifierSum,
-							GraphAttributes &AG)
+
+void TreeLayout::secondWalkY(
+	TreeStructure &ts,
+	node subtree,
+	double modifierSum)
 {
-	OGDF_ASSERT(subtree != 0);
-	OGDF_ASSERT(subtree->graphOf() == m_preliminary.graphOf());
-	OGDF_ASSERT(subtree->graphOf() == m_modifier.graphOf());
+	OGDF_ASSERT(subtree != nullptr);
+	OGDF_ASSERT(subtree->graphOf() == ts.m_preliminary.graphOf());
+	OGDF_ASSERT(subtree->graphOf() == ts.m_modifier.graphOf());
 
 	// compute final y-coordinates for the subtree
 	// by recursively aggregating modifiers
-	AG.y(subtree) = m_preliminary[subtree] + modifierSum;
-	modifierSum += m_modifier[subtree];
-	edge e;
-	forall_adj_edges(e,subtree) if(e->target() != subtree)
-		secondWalkY(e->target(),modifierSum,AG);
+	ts.m_ga.y(subtree) = ts.m_preliminary[subtree] + modifierSum;
+	modifierSum += ts.m_modifier[subtree];
+	for(adjEntry adj : subtree->adjEntries) {
+		node t = adj->theEdge()->target();
+		if (t != subtree)
+			secondWalkY(ts, t, modifierSum);
+	}
 }
 
 
 void TreeLayout::computeYCoordinatesAndEdgeShapes(node root, GraphAttributes &AG)
 {
-	OGDF_ASSERT(root != 0);
+	OGDF_ASSERT(root != nullptr);
 
 	// compute y-coordinates and edge shapes
-	node v,w;
-	edge e;
 	List<node> oldLevel;   // the nodes of the old level
 	List<node> newLevel;   // the nodes of the new level
 	ListIterator<node> it;
 	double yCoordinate;    // the y-coordinate for the new level
 	double edgeCoordinate; // the y-coordinate for edge bends
-	double oldHeight;      // the maximal node height on the old level
 	double newHeight;      // the maximal node height on the new level
 
 	// traverse the tree level by level
@@ -925,28 +869,31 @@ void TreeLayout::computeYCoordinatesAndEdgeShapes(node root, GraphAttributes &AG
 	AG.y(root) = yCoordinate = 0;
 	newHeight = AG.height(root);
 	while(!newLevel.empty()) {
-		oldHeight = newHeight;
+		double oldHeight = newHeight; // the maximal node height on the old level
 		newHeight = 0;
 		oldLevel.conc(newLevel);
 		while(!oldLevel.empty()) {
-			v = oldLevel.popFrontRet();
-			forall_adj_edges(e,v) if(e->target() != v) {
-				w = e->target();
-				newLevel.pushBack(w);
+			node v = oldLevel.popFrontRet();
+			for(adjEntry adj : v->adjEntries) {
+				edge e = adj->theEdge();
+				if(e->target() != v) {
+					node w = adj->theEdge()->target();
+					newLevel.pushBack(w);
 
-				// compute the shape of edge e
-				DPolyline &edgeBends = AG.bends(e);
-				edgeBends.clear();
-				if(m_orthogonalLayout) {
-					edgeCoordinate =
-						yCoordinate + (oldHeight + m_levelDistance) / 2;
-					edgeBends.pushBack(DPoint(AG.x(v),edgeCoordinate));
-					edgeBends.pushBack(DPoint(AG.x(w),edgeCoordinate));
+					// compute the shape of edge e
+					DPolyline &edgeBends = AG.bends(e);
+					edgeBends.clear();
+					if(m_orthogonalLayout) {
+						edgeCoordinate =
+							yCoordinate + (oldHeight + m_levelDistance) / 2;
+						edgeBends.pushBack(DPoint(AG.x(v),edgeCoordinate));
+						edgeBends.pushBack(DPoint(AG.x(w),edgeCoordinate));
+					}
+
+					// compute the maximal node height on the new level
+					if(AG.height(e->target()) > newHeight)
+						newHeight = AG.height(e->target());
 				}
-
-				// compute the maximal node height on the new level
-				if(AG.height(e->target()) > newHeight)
-					newHeight = AG.height(e->target());
 			}
 		}
 
@@ -959,17 +906,14 @@ void TreeLayout::computeYCoordinatesAndEdgeShapes(node root, GraphAttributes &AG
 
 void TreeLayout::computeXCoordinatesAndEdgeShapes(node root, GraphAttributes &AG)
 {
-	OGDF_ASSERT(root != 0);
+	OGDF_ASSERT(root != nullptr);
 
 	// compute y-coordinates and edge shapes
-	node v,w;
-	edge e;
 	List<node> oldLevel;   // the nodes of the old level
 	List<node> newLevel;   // the nodes of the new level
 	ListIterator<node> it;
 	double xCoordinate;    // the x-coordinate for the new level
 	double edgeCoordinate; // the x-coordinate for edge bends
-	double oldWidth;       // the maximal node width on the old level
 	double newWidth;       // the maximal node width on the new level
 
 	// traverse the tree level by level
@@ -977,28 +921,31 @@ void TreeLayout::computeXCoordinatesAndEdgeShapes(node root, GraphAttributes &AG
 	AG.x(root) = xCoordinate = 0;
 	newWidth = AG.width(root);
 	while(!newLevel.empty()) {
-		oldWidth = newWidth;
+		double oldWidth = newWidth; // the maximal node width on the old level
 		newWidth = 0;
 		oldLevel.conc(newLevel);
 		while(!oldLevel.empty()) {
-			v = oldLevel.popFrontRet();
-			forall_adj_edges(e,v) if(e->target() != v) {
-				w = e->target();
-				newLevel.pushBack(w);
+			node v = oldLevel.popFrontRet();
+			for(adjEntry adj : v->adjEntries) {
+				edge e = adj->theEdge();
+				if(e->target() != v) {
+					node w = e->target();
+					newLevel.pushBack(w);
 
-				// compute the shape of edge e
-				DPolyline &edgeBends = AG.bends(e);
-				edgeBends.clear();
-				if(m_orthogonalLayout) {
-					edgeCoordinate =
-						xCoordinate + (oldWidth + m_levelDistance) / 2;
-					edgeBends.pushBack(DPoint(edgeCoordinate,AG.y(v)));
-					edgeBends.pushBack(DPoint(edgeCoordinate,AG.y(w)));
+					// compute the shape of edge e
+					DPolyline &edgeBends = AG.bends(e);
+					edgeBends.clear();
+					if(m_orthogonalLayout) {
+						edgeCoordinate =
+							xCoordinate + (oldWidth + m_levelDistance) / 2;
+						edgeBends.pushBack(DPoint(edgeCoordinate,AG.y(v)));
+						edgeBends.pushBack(DPoint(edgeCoordinate,AG.y(w)));
+					}
+
+					// compute the maximal node width on the new level
+					if(AG.width(e->target()) > newWidth)
+						newWidth = AG.width(e->target());
 				}
-
-				// compute the maximal node width on the new level
-				if(AG.width(e->target()) > newWidth)
-					newWidth = AG.width(e->target());
 			}
 		}
 
@@ -1009,5 +956,4 @@ void TreeLayout::computeXCoordinatesAndEdgeShapes(node root, GraphAttributes &AG
 	}
 }
 
-
-} // end namespace ogdf
+}

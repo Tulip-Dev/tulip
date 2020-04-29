@@ -1,11 +1,3 @@
-/*
- * $Revision: 4000 $
- *
- * last checkin:
- *   $Author: beyer $
- *   $Date: 2014-03-28 20:18:18 +0100 (Fri, 28 Mar 2014) $
- ***************************************************************/
-
 /** \file
  * \brief Declration of stress minimized layout based on majorization.
  * It can be applied to connected as well as unconnected graphs. If
@@ -20,7 +12,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -37,18 +29,13 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifndef OGDF_STRESS_MINIMIZATION_H
-#define OGDF_STRESS_MINIMIZATION_H
+#pragma once
 
-
-#include <ogdf/module/LayoutModule.h>
+#include <ogdf/basic/LayoutModule.h>
 #include <ogdf/energybased/PivotMDS.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/graphalg/ShortestPathAlgorithms.h>
@@ -56,21 +43,22 @@
 
 namespace ogdf {
 
-
+//! Energy-based layout using stress minimization.
+/**
+ * @ingroup gd-energy
+ */
 class OGDF_EXPORT StressMinimization: public LayoutModule {
 
 public:
-
-
-	enum TERMINATION_CRITERION {
-		NONE, POSITION_DIFFERENCE, STRESS
+	enum class TerminationCriterion {
+		None, PositionDifference, Stress
 	};
 
 	//! Constructor: Constructs instance of stress majorization.
 	StressMinimization() :
 			m_hasEdgeCostsAttribute(false), m_hasInitialLayout(false), m_numberOfIterations(
 					200), m_edgeCosts(100), m_avgEdgeCosts(-1), m_componentLayout(
-					false), m_terminationCriterion(NONE), m_fixXCoords(false), m_fixYCoords(
+					false), m_terminationCriterion(TerminationCriterion::None), m_fixXCoords(false), m_fixYCoords(
 					false), m_fixZCoords(false) {
 	}
 
@@ -79,9 +67,7 @@ public:
 	}
 
 	//! Calls the layout algorithm with uniform edge costs.
-	void call(GraphAttributes& GA);
-
-	void call(GraphAttributes &GA, GraphConstraints & GC) { call(GA); }
+	virtual void call(GraphAttributes& GA) override;
 
 	//! Tells whether the current layout should be used or the initial layout
 	//! needs to be computed.
@@ -108,8 +94,8 @@ public:
 	//! 0 the default value (200) is used.
 	inline void setIterations(int numberOfIterations);
 
-	//! Tells which \a TERMINATION_CRITERIA should be used
-	inline void convergenceCriterion(TERMINATION_CRITERION criterion);
+	//! Tells which TerminationCriterion should be used
+	inline void convergenceCriterion(TerminationCriterion criterion);
 
 	//! Tells whether the edge costs are uniform or defined by some edge costs attribute.
 	inline void useEdgeCostsAttribute(bool useEdgeCostsAttribute);
@@ -143,7 +129,7 @@ private:
 	bool m_componentLayout;
 
 	//! Indicates whether epsilon convergence is used or not.
-	TERMINATION_CRITERION m_terminationCriterion;
+	TerminationCriterion m_terminationCriterion;
 
 	//! Indicates whether the x coordinates will be modified or not.
 	bool m_fixXCoords;
@@ -166,7 +152,6 @@ private:
 
 	//! Calculates the weight matrix of the shortest path matrix. This is done by w_ij = s_ij^{-2}
 	void calcWeights(const Graph& G,
-			const int dimension,
 			NodeArray<NodeArray<double> >& shortestPathMatrix,
 			NodeArray<NodeArray<double> >& weightMatrix);
 
@@ -205,7 +190,7 @@ private:
 			NodeArray<NodeArray<double> >& weightMatrix);
 
 	//! Replaces infinite distances to the given value
-	void replaceInfinityDistances(const int dimension,
+	void replaceInfinityDistances(
 			NodeArray<NodeArray<double> >& shortestPathMatrix, double newVal);
 
 }
@@ -235,7 +220,7 @@ void StressMinimization::setIterations(int numberOfIterations) {
 	m_numberOfIterations = (numberOfIterations > 0) ? numberOfIterations : 100;
 }
 
-void StressMinimization::convergenceCriterion(TERMINATION_CRITERION criterion) {
+void StressMinimization::convergenceCriterion(TerminationCriterion criterion) {
 	m_terminationCriterion = criterion;
 }
 
@@ -243,5 +228,4 @@ void StressMinimization::useEdgeCostsAttribute(bool useEdgeCostsAttribute) {
 	m_hasEdgeCostsAttribute = useEdgeCostsAttribute;
 }
 
-} // end namespace
-#endif // OGDF_STRESS_MINIMIZATION_H
+}

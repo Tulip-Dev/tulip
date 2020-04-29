@@ -1,11 +1,3 @@
-/*
- * $Revision: 3837 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 15:19:30 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declarations for GraphML Parser
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,62 +25,48 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_GRAPHML_PARSER_H
-#define OGDF_GRAPHML_PARSER_H
-
-
-#include <ogdf/basic/Graph.h>
-#include <ogdf/basic/GraphAttributes.h>
-#include <ogdf/cluster/ClusterGraph.h>
-#include <ogdf/cluster/ClusterGraphAttributes.h>
+#include <ogdf/fileformats/GraphIO.h>
 
 #include <ogdf/basic/HashArray.h>
-#include <ogdf/basic/List.h>
-#include <ogdf/fileformats/XmlParser.h>
+#include <ogdf/lib/pugixml/pugixml.h>
 
 #include <sstream>
-
+#include <unordered_map>
 
 namespace ogdf {
 
 class GraphMLParser {
 private:
-	XmlParser m_xml;
-	XmlTagObject *m_graphTag; // "Almost root" tag.
+	pugi::xml_document m_xml;
+	pugi::xml_node m_graphTag; // "Almost root" tag.
 
-	HashArray<string, node> m_nodeId; // Maps GraphML node id to Graph node.
-	HashArray<string, string> m_attrName; // Maps attribute id to its name.
+	 // Maps GraphML node id to Graph node.
+	std::unordered_map<string, node> m_nodeId;
+
+	// Maps attribute id to its name.
+	std::unordered_map<string, string> m_attrName;
 
 	bool readData(
 		GraphAttributes &GA,
-		const node &v, const XmlTagObject &nodeData);
+		const node &v, const pugi::xml_node nodeData);
 	bool readData(
 		GraphAttributes &GA,
-		const edge &e, const XmlTagObject &edgeData);
+		const edge &e, const pugi::xml_node edgeData);
 	bool readData(
 		ClusterGraphAttributes &CA,
-		const cluster &c, const XmlTagObject &clusterData);
+		const cluster &c, const pugi::xml_node clusterData);
 
 	// Finds all data-keys for given element and calls appropiate "readData".
 	template <typename A, typename T>
-	bool readAttributes(A &GA, const T &elem, const XmlTagObject &elemTag) {
-		List<XmlTagObject *> dataTags;
-		elemTag.findSonXmlTagObjectByName("data", dataTags);
-
-		forall_listiterators(XmlTagObject *, it, dataTags) {
-			const bool result = readData(GA, elem, **it);
-
+	bool readAttributes(A &GA, const T &elem, const pugi::xml_node xmlElem) {
+		for (pugi::xml_node dataTag : xmlElem.children("data")) {
+			const bool result = readData(GA, elem, dataTag);
 			if(!result) {
 				return false;
 			}
@@ -99,18 +77,18 @@ private:
 
 	bool readNodes(
 		Graph &G, GraphAttributes *GA,
-		const XmlTagObject &rootTag);
+		const pugi::xml_node rootTag);
 	bool readEdges(
 		Graph &G, GraphAttributes *GA,
-		const XmlTagObject &rootTag);
+		const pugi::xml_node rootTag);
 	bool readClusters(
 		Graph &G, ClusterGraph &C, ClusterGraphAttributes *CA,
-		const cluster &rootCluster, const XmlTagObject &clusterRoot);
+		const cluster &rootCluster, const pugi::xml_node clusterRoot);
 
 	bool m_error;
 
 public:
-	GraphMLParser(istream &in);
+	explicit GraphMLParser(std::istream &in);
 	~GraphMLParser();
 
 	bool read(Graph &G);
@@ -119,8 +97,4 @@ public:
 	bool read(Graph &G, ClusterGraph &C, ClusterGraphAttributes &CA);
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

@@ -1,11 +1,3 @@
-/*
- * $Revision: 3832 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 11:16:27 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration and implementation of Level class
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,22 +25,11 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
-
-#ifndef OGDF_LEVEL_H
-#define OGDF_LEVEL_H
-
-
 
 #include <ogdf/basic/Graph.h>
 #include <ogdf/basic/SList.h>
@@ -66,7 +47,7 @@ class WeightComparer {
 	const NodeArray<T> *m_pWeight;
 
 public:
-	WeightComparer(const NodeArray<T> *pWeight) : m_pWeight(pWeight) { }
+	explicit WeightComparer(const NodeArray<T> *pWeight) : m_pWeight(pWeight) { }
 
 	bool less(node v, node w) const { return (*m_pWeight)[v] < (*m_pWeight)[w]; }
 	bool operator()(node v, node w) const { return (*m_pWeight)[v] < (*m_pWeight)[w]; }
@@ -88,7 +69,7 @@ class OGDF_EXPORT Level : public LevelBase {
 	int m_index;             //!< The index of this level.
 
 public:
-	//! Creates a level with index \a index in hierarchy \a pHierarchy.
+	//! Creates a level with index \p index in hierarchy \p pLevels.
 	/**
 	 * @param pLevels is a pointer to the hierarchy to which the created level will belong.
 	 * @param index   is the index of the level.
@@ -100,39 +81,39 @@ public:
 	// destruction
 	~Level() { }
 
-	//! Returns the node at position \a i.
-	const node &operator[](int i) const { return m_nodes[i]; }
-	//! Returns the node at position \a i.
-	node &operator[](int i) { return m_nodes[i]; }
+	//! Returns the node at position \p i.
+	const node &operator[](int i) const override { return m_nodes[i]; }
+	//! Returns the node at position \p i.
+	node &operator[](int i) override { return m_nodes[i]; }
 
 	//! Returns the number of nodes on this level.
-	int size() const { return m_nodes.size(); }
+	int size() const override { return m_nodes.size(); }
 
 	//! Returns the maximal array index (= size()-1).
-	int high() const { return m_nodes.high(); }
+	int high() const override { return m_nodes.high(); }
 
 	//! Returns the array index of this level in the hierarchy.
 	int index() const { return m_index; }
 
-	//! Returns the (sorted) array of adjacent nodes of \a v (according to direction()).
+	//! Returns the (sorted) array of adjacent nodes of \p v (according to direction()).
 	const Array<node> &adjNodes(node v) const;
 
 	//! Returns the hierarchy to which this level belongs.
 	const HierarchyLevels &levels() const { return *m_pLevels; }
 
-	//! Exchanges nodes at position \a i and \a j.
+	//! Exchanges nodes at position \p i and \p j.
 	void swap(int i, int j);
 
-	//! Sorts the nodes according to \a weight using quicksort.
+	//! Sorts the nodes according to \p weight using quicksort.
 	void sort(NodeArray<double> &weight);
 
-	//! Sorts the nodes according to \a weight using bucket sort.
+	//! Sorts the nodes according to \p weight using bucket sort.
 	void sort(NodeArray<int> &weight, int minBucket, int maxBucket);
 
-	//! Sorts the nodes according to \a weight (without special placement for "isolated" nodes).
+	//! Sorts the nodes according to \p weight (without special placement for "isolated" nodes).
 	void sortByWeightOnly(NodeArray<double> &weight);
 
-	//!Sorts the nodes according to \a orderComparer
+	//!Sorts the nodes according to \p orderComparer
 	template<class C>
 	void sortOrder(C &orderComparer) {
 		m_nodes.quicksort(orderComparer);
@@ -141,7 +122,7 @@ public:
 
 	void recalcPos();
 
-	friend ostream &operator<<(ostream &os, const Level &L) {
+	friend std::ostream &operator<<(std::ostream &os, const Level &L) {
 		os << L.m_nodes;
 		return os;
 	}
@@ -153,7 +134,4 @@ private:
 	OGDF_MALLOC_NEW_DELETE
 };
 
-} // end namespace ogdf
-
-
-#endif
+}

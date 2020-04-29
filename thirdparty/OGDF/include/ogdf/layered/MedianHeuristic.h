@@ -1,11 +1,3 @@
-/*
- * $Revision: 3833 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2013-11-13 11:23:15 +0100 (Wed, 13 Nov 2013) $
- ***************************************************************/
-
 /** \file
  * \brief Declaration of class MedianHeuristic
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,30 +25,20 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
-
-#ifdef _MSC_VER
 #pragma once
-#endif
 
-#ifndef OGDF_MEDIAN_HEURISTIC_H
-#define OGDF_MEDIAN_HEURISTIC_H
-
-
-
-#include <ogdf/module/LayerByLayerSweep.h>
-
+#include <ogdf/layered/LayerByLayerSweep.h>
 
 namespace ogdf {
 
-
 //! The median heuristic for 2-layer crossing minimization.
+/**
+ * @ingroup gd-layered-crossmin
+ */
 class OGDF_EXPORT MedianHeuristic : public LayerByLayerSweep
 {
 public:
@@ -67,23 +49,22 @@ public:
 	MedianHeuristic(const MedianHeuristic &crossMin) { }
 
 	//! Returns a new instance of the median heuristic with the same option settings.
-	LayerByLayerSweep *clone() const { return new MedianHeuristic; }
+	virtual LayerByLayerSweep *clone() const override
+	{
+		return new MedianHeuristic;
+	}
 
 	//! Initializes crossing minimization for hierarchy \a H.
-	void init (const HierarchyLevels &levels) { m_weight.init(levels.hierarchy()); }
+	virtual void init (const HierarchyLevels &levels) override { m_weight.init(levels.hierarchy()); }
 
-	//! Calls the median heuristic for level \a L.
-	void call (Level &L);
+	//! Calls the median heuristic for level \p L.
+	virtual void call (Level &L) override;
 
 	//! Does some clean-up after calls.
-	void cleanup () { m_weight.init(); }
+	virtual void cleanup () override { m_weight.init(); }
 
 private:
 	NodeArray<int> m_weight; //!< The median weight of a node.
 };
 
-
-} // end namespace ogdf
-
-
-#endif
+}

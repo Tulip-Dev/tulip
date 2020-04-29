@@ -1,11 +1,3 @@
-/*
- * $Revision: 2804 $
- *
- * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-10-11 13:58:53 +0200 (Thu, 11 Oct 2012) $
- ***************************************************************/
-
 /** \file
  * \brief Implements class MultilevelLayout
  *
@@ -16,7 +8,7 @@
  *
  * \par
  * Copyright (C)<br>
- * See README.txt in the root directory of the OGDF installation for details.
+ * See README.md in the OGDF root directory for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -33,74 +25,62 @@
  *
  * \par
  * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+ * License along with this program; if not, see
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 
 #include <ogdf/energybased/MultilevelLayout.h>
-#include <ogdf/energybased/SpringEmbedderFR.h>
+#include <ogdf/energybased/SpringEmbedderGridVariant.h>
 
 namespace ogdf {
 
 //! Sets the single level layout
 void MultilevelLayout::setLayout(LayoutModule* L)
 {
-	m_mmm->setLevelLayoutModule(L);
+	m_mixer->setLevelLayoutModule(L);
 }
 
 
 //! Sets the method used for coarsening
 void MultilevelLayout::setMultilevelBuilder(MultilevelBuilder* B)
 {
-	m_mmm->setMultilevelBuilder(B);
+	m_mixer->setMultilevelBuilder(B);
 }
 
 
 //! Sets the placement method used when refining the levels again.
 void MultilevelLayout::setPlacer(InitialPlacer* P)
 {
-	m_mmm->setInitialPlacer(P);
+	m_mixer->setInitialPlacer(P);
 }
 
 
 MultilevelLayout::MultilevelLayout()
 {
-	m_mmm = new ModularMultilevelMixer();
-	m_sc = new ScalingLayout();
-	m_cs = new ComponentSplitterLayout();
-	m_pp = new PreprocessorLayout();
-	//initial placer, coarsener are the default
-	//modules of m_mmm.
-	//For the layout, we set a scaling layout with
-	//standard level layout FR. This scales the layout
-	//on each level (with a constant factor) and then applies the FR.
-	m_sc->setSecondaryLayout(new SpringEmbedderFR);
-	m_sc->setScalingType(ScalingLayout::st_relativeToDrawing);
-	m_sc->setLayoutRepeats(1);
+	// For the layout, we set a scaling layout with
+	// standard level layout FR. This scales the layout
+	// on each level (with a constant factor) and then applies the FR.
 
-	m_sc->setScaling(1.0, 1.5);
-	m_sc->setExtraScalingSteps(2);
-	m_mmm->setLevelLayoutModule(m_sc);
+	ScalingLayout* scaling = new ScalingLayout;
+	scaling->setSecondaryLayout(new SpringEmbedderGridVariant);
+	scaling->setScalingType(ScalingLayout::ScalingType::RelativeToDrawing);
+	scaling->setLayoutRepeats(1);
 
-	//	m_mmm->setLayoutRepeats(1);
-	//	m_mmm->setAllEdgeLenghts(5.0);
-	//	m_mmm->setAllNodeSizes(1.0);
+	scaling->setScaling(1.0, 1.5);
+	scaling->setExtraScalingSteps(2);
 
-	m_cs->setLayoutModule(m_mmm);
-	m_pp->setLayoutModule(m_cs);
-	m_pp->setRandomizePositions(true);
+	m_mixer = new ModularMultilevelMixer;
+	m_mixer->setLevelLayoutModule(scaling);
+#if 0
+	m_mixer->setLayoutRepeats(1);
+	m_mixer->setAllEdgeLengths(5.0);
+	m_mixer->setAllNodeSizes(1.0);
+#endif
 
-}//constructor
-
-
-void MultilevelLayout::call(GraphAttributes &GA, GraphConstraints &GC)
-{
-	//we assume that both structures work on the same graph
-
-	OGDF_THROW(AlgorithmFailureException);
+	ComponentSplitterLayout* splitter = new ComponentSplitterLayout;
+	splitter->setLayoutModule(m_mixer);
+	m_preproc.setLayoutModule(splitter);
+	m_preproc.setRandomizePositions(true);
 }
 
 
@@ -110,9 +90,9 @@ void MultilevelLayout::call(GraphAttributes &GA)
 
 	// Call the nested call, including preprocessing,
 	// component splitting, scaling, level layout.
-	m_pp->call(MLG);
+	m_preproc.call(MLG);
 
 	MLG.exportAttributes(GA);
 }
 
-} //end namespace ogdf
+}

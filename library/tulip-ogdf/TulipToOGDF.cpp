@@ -20,8 +20,6 @@
 #include "tulip2ogdf/TulipToOGDF.h"
 #include <tulip/PropertyTypes.h>
 #include <tulip/LayoutProperty.h>
-#include <ogdf/basic/geometry.h>
-#include <ogdf/fileformats/GraphIO.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/NumericProperty.h>
 
@@ -93,9 +91,9 @@ TulipToOGDF::TulipToOGDF(tlp::Graph *g, bool importEdgeBends)
   }
 }
 
-void TulipToOGDF::saveToGML(const char *fileName) {
-  GraphIO::writeGML(ogdfAttributes, fileName);
-}
+//void TulipToOGDF::saveToGML(const char *fileName) {
+//  GraphIO::writeGML(ogdfAttributes, fileName);
+//}
 
 tlp::Graph &TulipToOGDF::getTlp() {
   return *tulipGraph;
