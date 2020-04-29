@@ -42,7 +42,8 @@ static const char *paramHelp[] = {
     "Fixes the cost values to special configurations.",
 
     // Speed
-    "More convenient way of setting the speed of the algorithm. Influences number of iterations per temperature step, starting temperature, and cooling factor.",
+    "More convenient way of setting the speed of the algorithm. Influences number of iterations "
+    "per temperature step, starting temperature, and cooling factor.",
 
     // preferredEdgeLength
     "The preferred edge length.",

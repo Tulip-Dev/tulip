@@ -67,7 +67,7 @@ public:
     }
 
     // ensure the input graph is simple as the layout failed in non multi-threaded mode otherwise
-  //  ogdf::makeSimple(tlpToOGDF->getOGDFGraph());
+    //  ogdf::makeSimple(tlpToOGDF->getOGDFGraph());
   }
 
 private:

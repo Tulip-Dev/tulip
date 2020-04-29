@@ -327,8 +327,10 @@ QString StringCollectionEditorCreator::displayText(const QVariant &var) const {
 class PropertiesCollectionDialog : public StringsListSelectionDialog {
 
 public:
-  PropertiesCollectionDialog(QWidget *parent) :
-    StringsListSelectionDialog("Select properties", parent, StringsListSelectionWidget::DOUBLE_LIST), ok(QDialog::Rejected) {
+  PropertiesCollectionDialog(QWidget *parent)
+      : StringsListSelectionDialog("Select properties", parent,
+                                   StringsListSelectionWidget::DOUBLE_LIST),
+        ok(QDialog::Rejected) {
     setSelectedStringsListLabel("Selected properties");
     setModal(true);
     setMinimumSize(500, 400);
@@ -358,23 +360,19 @@ QWidget *PropertiesCollectionEditorCreator::createWidget(QWidget *parent) const 
   return new PropertiesCollectionDialog(parent);
 }
 
-void PropertiesCollectionEditorCreator::setEditorData(QWidget *widget,
-						    const QVariant &var, bool,
-						    tlp::Graph *) {
+void PropertiesCollectionEditorCreator::setEditorData(QWidget *widget, const QVariant &var, bool,
+                                                      tlp::Graph *) {
   PropertiesCollection col = var.value<PropertiesCollection>();
-  PropertiesCollectionDialog *dialog =
-    static_cast<PropertiesCollectionDialog *>(widget);
+  PropertiesCollectionDialog *dialog = static_cast<PropertiesCollectionDialog *>(widget);
   dialog->previouslySelected = col.getSelected();
   dialog->setStringsList(col.getUnselected(), col.getSelected());
 }
 
 QVariant PropertiesCollectionEditorCreator::editorData(QWidget *widget, tlp::Graph *g) {
   PropertiesCollection col(g);
-  PropertiesCollectionDialog *dialog =
-    static_cast<PropertiesCollectionDialog *>(widget);
-  col.setSelected(dialog->ok == QDialog::Rejected
-		  ? dialog->previouslySelected
-		  : dialog->getSelectedStringsList());
+  PropertiesCollectionDialog *dialog = static_cast<PropertiesCollectionDialog *>(widget);
+  col.setSelected(dialog->ok == QDialog::Rejected ? dialog->previouslySelected
+                                                  : dialog->getSelectedStringsList());
   return QVariant::fromValue<PropertiesCollection>(col);
 }
 

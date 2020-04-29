@@ -91,7 +91,7 @@ TulipToOGDF::TulipToOGDF(tlp::Graph *g, bool importEdgeBends)
   }
 }
 
-//void TulipToOGDF::saveToGML(const char *fileName) {
+// void TulipToOGDF::saveToGML(const char *fileName) {
 //  GraphIO::writeGML(ogdfAttributes, fileName);
 //}
 

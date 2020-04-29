@@ -119,7 +119,9 @@ struct DataTypeSerializer {
   DataTypeSerializer(const std::string &otn) : outputTypeName(otn), graph(nullptr) {}
   virtual ~DataTypeSerializer() {}
   // set the current graph if needed
-  void setGraph(Graph *g) { graph = g; }
+  void setGraph(Graph *g) {
+    graph = g;
+  }
   // return a copy of this
   virtual DataTypeSerializer *clone() const = 0;
   // write the DataType embedded value into the output stream

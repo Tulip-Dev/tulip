@@ -96,7 +96,8 @@ public:
 
       if (dataSet->get("terminationCriterion", sc)) {
         if (sc.getCurrentString() == "PositionDifference") {
-          stressm->convergenceCriterion(StressMinimization::TerminationCriterion::PositionDifference);
+          stressm->convergenceCriterion(
+              StressMinimization::TerminationCriterion::PositionDifference);
         } else if (sc.getCurrentString() == "Stress") {
           stressm->convergenceCriterion(StressMinimization::TerminationCriterion::Stress);
         } else {

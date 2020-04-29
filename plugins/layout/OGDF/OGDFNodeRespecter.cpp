@@ -24,43 +24,44 @@ using namespace ogdf;
 
 static const char *paramHelp[] = {
     // number of iterations
-     "The maximum number of iterations."
-
+    "The maximum number of iterations."
 
 };
 
 class OGDFNodeRespecter : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Node Respecter (OGDF)", "Max Isen", "12/11/2017",
-                    "This is a force-directed layout algorithm respecting the shapes and sizes of nodes."
-                    "It aims to minimize the number of node overlaps as well as the number of edges crossing through non-incident nodes."
-                    "In order to achieve this, the algorithm adapts its forces to the node sizes and bends edges around close-by nodes."
-                    "The edge bends are created by introducing dummy nodes into the graph, positioning all nodes according to forces acting upon them,"
-                    "filtering out unnecessary dummy nodes, and then replacing the remaining dummy nodes by edge bends."
-                    "The algorithm is documented in and was developed for the bachelor thesis: Max Ilsen: Energy-Based Layout Algorithms for Graphs with Large Nodes. University of Osnabrueck, 2017",
-                    "1.0", "Force Directed")
+  PLUGININFORMATION(
+      "Node Respecter (OGDF)", "Max Isen", "12/11/2017",
+      "This is a force-directed layout algorithm respecting the shapes and sizes of nodes."
+      "It aims to minimize the number of node overlaps as well as the number of edges crossing "
+      "through non-incident nodes."
+      "In order to achieve this, the algorithm adapts its forces to the node sizes and bends edges "
+      "around close-by nodes."
+      "The edge bends are created by introducing dummy nodes into the graph, positioning all nodes "
+      "according to forces acting upon them,"
+      "filtering out unnecessary dummy nodes, and then replacing the remaining dummy nodes by edge "
+      "bends."
+      "The algorithm is documented in and was developed for the bachelor thesis: Max Ilsen: "
+      "Energy-Based Layout Algorithms for Graphs with Large Nodes. University of Osnabrueck, 2017",
+      "1.0", "Force Directed")
   OGDFNodeRespecter(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, new ogdf::NodeRespecterLayout()) {
-        addInParameter<unsigned>("number of iterations", paramHelp[0], "30000");
-
+    addInParameter<unsigned>("number of iterations", paramHelp[0], "30000");
   }
   ~OGDFNodeRespecter() override {}
 
   void beforeCall() override {
     ogdf::NodeRespecterLayout *npl = static_cast<ogdf::NodeRespecterLayout *>(ogdfLayoutAlgo);
-    if(dataSet!=nullptr) {
-        double dval = 0;
-        int ival = 0;
-        unsigned uval = 0;
-        bool bval = 0;
+    if (dataSet != nullptr) {
+      double dval = 0;
+      int ival = 0;
+      unsigned uval = 0;
+      bool bval = 0;
 
-        if (dataSet->get("number of iterations", uval))
-          npl->setNumberOfIterations(uval);
-
-
+      if (dataSet->get("number of iterations", uval))
+        npl->setNumberOfIterations(uval);
     }
-
   }
 };
 

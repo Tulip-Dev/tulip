@@ -67,10 +67,10 @@ public:
   ~OGDFFastMultipoleEmbedder() override {}
 
   void beforeCall() override {
-      ogdf::ComponentSplitterLayout *csl =
-              static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
-      // ComponentSplitterLayout takes ownership of the FastMultipoleEmbedder instance
-      csl->setLayoutModule(fme);
+    ogdf::ComponentSplitterLayout *csl =
+        static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
+    // ComponentSplitterLayout takes ownership of the FastMultipoleEmbedder instance
+    csl->setLayoutModule(fme);
 
     if (dataSet != nullptr) {
       double dval = 0;
@@ -97,7 +97,7 @@ public:
     }
 
     // ensure the input graph is simple as the layout failed in non multi-threaded mode otherwise
-   // ogdf::makeSimple(tlpToOGDF->getOGDFGraph());
+    // ogdf::makeSimple(tlpToOGDF->getOGDFGraph());
   }
 
 private:

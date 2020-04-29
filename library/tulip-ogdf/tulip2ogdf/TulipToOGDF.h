@@ -44,7 +44,7 @@ class TLP_OGDF_SCOPE TulipToOGDF {
 public:
   TulipToOGDF(tlp::Graph *g, bool importEdgeBends = true);
 
-  //void saveToGML(const char *fileName);
+  // void saveToGML(const char *fileName);
 
   tlp::Graph &getTlp();
   ogdf::GraphAttributes &getOGDFGraphAttr();
