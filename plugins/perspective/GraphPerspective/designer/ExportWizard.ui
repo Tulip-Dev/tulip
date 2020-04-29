@@ -21,14 +21,6 @@
    <string notr="true">QWizard {
 background-color: white;
 }
-QListView, QListWidget {
-background-color: white;
-border: 0px;
-}
-
-QListWidget::item {
-padding: 6px;
-}
 
 #categoryFrame,#parametersFrame,#algorithmFrame {
 border: 1px solid #C9C9C9;
@@ -68,7 +60,7 @@ border: 0px;
     <item>
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;Export the currently selected graph in the &lt;span style=&quot; font-weight:600;&quot;&gt;Graphs&lt;/span&gt; list using one of the export methods listed below.&lt;br/&gt;Adjust its parameters if needed. Once you're done, click &lt;span style=&quot; font-weight:600;&quot;&gt;Finish&lt;/span&gt; to export your graph.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;br/&gt;Export the currently selected graph in the &lt;b&gt;Graphs&lt;/b&gt; list using one of the export methods listed below.&lt;br/&gt;Adjust its parameters if needed. Once you're done, click &lt;b&gt;OK&lt;/b&gt; to export your graph.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
@@ -77,21 +69,21 @@ border: 0px;
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-	 <widget class="QLabel" name="exportFileLabel">
-	   <property name="text">
-	     <string>Export file</string>
-	   </property>
-	 </widget>
-       </item>
-       <item>
+      <item>
+       <widget class="QLabel" name="exportFileLabel">
+        <property name="text">
+         <string>Export file</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="ClearableLineEdit" name="pathEdit">
+        <property name="toolTip">
+         <string>Set the full path of the file where you want to save the graph or click on the browse button</string>
+        </property>
         <property name="placeholderText">
          <string>Set the full path of the file where you want to save the graph or click on the browse button</string>
         </property>
-	<property name="toolTip">
-	  <string>Set the full path of the file where you want to save the graph or click on the browse button</string>
-	</property>
        </widget>
       </item>
       <item>
@@ -102,13 +94,13 @@ border: 0px;
           <height>32</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Choose the export file location</string>
+        </property>
         <property name="icon">
          <iconset>
           <normaloff>:/tulip/graphperspective/icons/16/document-open.png</normaloff>:/tulip/graphperspective/icons/16/document-open.png</iconset>
         </property>
-	<property name="toolTip">
-	  <string>Choose the export file location</string>
-	</property>
        </widget>
       </item>
      </layout>
@@ -131,16 +123,7 @@ border: 0px;
           <property name="spacing">
            <number>10</number>
           </property>
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>0</number>
           </property>
           <item>
@@ -207,16 +190,7 @@ border: 0px;
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>0</number>
           </property>
           <item>
@@ -235,16 +209,7 @@ border: 0px;
               <property name="spacing">
                <number>10</number>
               </property>
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="topMargin">
-               <number>0</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
-              <property name="bottomMargin">
+              <property name="margin">
                <number>0</number>
               </property>
               <item>
