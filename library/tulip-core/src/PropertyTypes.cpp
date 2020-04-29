@@ -1146,12 +1146,12 @@ struct PropertiesCollectionSerializer : public TypedDataSerializer<PropertiesCol
   }
 
   // called when writing a tlp file, which should never happen
-  void write(ostream &os, const PropertiesCollection &) override {
+  void write(ostream &, const PropertiesCollection &) override {
     throw TulipException("PropertiesCollectionSerializer::write is not implemented");
   }
 
   // called when reading a tlp file, which should never happen
-  bool read(istream &is, PropertiesCollection &) override {
+  bool read(istream &, PropertiesCollection &) override {
     throw TulipException("PropertiesCollectionSerializer::read is not implemented");
   }
 
