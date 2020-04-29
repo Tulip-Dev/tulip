@@ -68,9 +68,9 @@ public:
   void setMaxSelectedStringsListSize(const unsigned int maxSize);
 
   /**
-   * sets the strings list and the already selected strings
+   * sets the unselected and selected strings lists
    */
-  void setStringsList(const std::vector<std::string> &strList,
+  void setStringsList(const std::vector<std::string> &unselList,
                       const std::vector<std::string> &selList);
 
   /**
