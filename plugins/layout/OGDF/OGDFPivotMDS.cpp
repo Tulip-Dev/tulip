@@ -41,7 +41,8 @@ class OGDFPivotMDS : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Pivot MDS (OGDF)", "Mark Ortmann", "29/05/2015",
-                    "The Pivot MDS (multi-dimensional scaling) layout algorithm. By setting the number of pivots to infinity this algorithm behaves just like "
+                    "The Pivot MDS (multi-dimensional scaling) layout algorithm. By setting the "
+                    "number of pivots to infinity this algorithm behaves just like "
                     "classical MDS. See:<br/><b>Eigensolver methods for progressive "
                     "multidimensional scaling of large data.</b> Brandes and Pich",
                     "1.0", "Force Directed")
@@ -54,10 +55,9 @@ public:
   ~OGDFPivotMDS() override {}
 
   void beforeCall() override {
-      ComponentSplitterLayout *csl =
-          static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
-      PivotMDS *pivotMds(new ogdf::PivotMDS());
-      csl->setLayoutModule(pivotMds);
+    ComponentSplitterLayout *csl = static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
+    PivotMDS *pivotMds(new ogdf::PivotMDS());
+    csl->setLayoutModule(pivotMds);
 
     if (dataSet != nullptr) {
       bool bval = false;
@@ -74,7 +74,6 @@ public:
         pivotMds->useEdgeCostsAttribute(bval);
     }
   }
-
 };
 
 PLUGIN(OGDFPivotMDS)

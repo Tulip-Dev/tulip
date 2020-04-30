@@ -42,10 +42,12 @@ static const char *paramHelp[] = {
 class OGDFCircular : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Circular (OGDF)", "Carsten Gutwenger", "13/11/2007",
-                    "Implements a circular layout based on the following publication:"
-                    "Ugur Dogrusöz, Brendan Madden, Patrick Madden: Circular Layout in the Graph Layout Toolkit."
-                    "Proc. Graph Drawing 1996, LNCS 1190, pp. 92-100, 1997.", "1.4", "Basic")
+  PLUGININFORMATION(
+      "Circular (OGDF)", "Carsten Gutwenger", "13/11/2007",
+      "Implements a circular layout based on the following publication:"
+      "Ugur Dogrusöz, Brendan Madden, Patrick Madden: Circular Layout in the Graph Layout Toolkit."
+      "Proc. Graph Drawing 1996, LNCS 1190, pp. 92-100, 1997.",
+      "1.4", "Basic")
   OGDFCircular(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, new ogdf::CircularLayout()) {
     addInParameter<double>("minDistCircle", paramHelp[0], "20.0", false);

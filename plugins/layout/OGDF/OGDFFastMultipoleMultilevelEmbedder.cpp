@@ -50,10 +50,10 @@ public:
   ~OGDFFastMultipoleMultiLevelEmbedder() override {}
 
   void beforeCall() override {
-      ogdf::ComponentSplitterLayout *csl =
-          static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
-      // ComponentSplitterLayout takes ownership of the FastMultipoleMultilevelEmbedder instance
-      csl->setLayoutModule(fmme);
+    ogdf::ComponentSplitterLayout *csl =
+        static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
+    // ComponentSplitterLayout takes ownership of the FastMultipoleMultilevelEmbedder instance
+    csl->setLayoutModule(fmme);
 
     if (dataSet != nullptr) {
       int ival = 0;

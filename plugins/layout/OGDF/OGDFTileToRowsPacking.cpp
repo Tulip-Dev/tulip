@@ -36,13 +36,13 @@ public:
                     "The tile-to-rows algorithm for packing drawings of connected components.",
                     "1.0", "Misc")
   OGDFTileToRowsPacking(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()) {
-  }
+      : OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()) {}
 
   void beforeCall() override {
-      ogdf::ComponentSplitterLayout *csl = static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
-      // ComponentSplitterLayout takes ownership of the SameLayout instance
-      csl->setLayoutModule(new SameLayout());
+    ogdf::ComponentSplitterLayout *csl =
+        static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
+    // ComponentSplitterLayout takes ownership of the SameLayout instance
+    csl->setLayoutModule(new SameLayout());
   }
 };
 
