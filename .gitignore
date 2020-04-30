@@ -56,3 +56,8 @@ __pycache__/
 # Prevent committing generated doc
 doc/html
 
+# CLion settings folder
+.idea/
+
+# Visual Studio settings folder
+.vs/
