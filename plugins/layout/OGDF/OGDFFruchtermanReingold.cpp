@@ -60,26 +60,17 @@ static const char *paramHelp[] = {
     // convergence tolerance
     "The convergence tolerance parameter."};
 
-class OGDFFrutchermanReingold : public OGDFLayoutPluginBase {
+class OGDFFruchtermanReingold : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Frutcherman Reingold (OGDF)", "Stephan Hachul", "15/11/2007",
+  PLUGININFORMATION("Fruchterman Reingold (OGDF)", "Stephan Hachul", "15/11/2007",
                     "Implements the Fruchterman and Reingold layout algorithm, first published "
                     "as:<br/><b>Graph Drawing by Force-Directed Placement</b>, Fruchterman, Thomas "
                     "M. J., Reingold, Edward M., Software – Practice & Experience (Wiley) Volume "
                     "21, Issue 11, pages 1129–1164, (1991)",
                     "1.1", "Force Directed")
-  OGDFFrutchermanReingold(const tlp::PluginContext *context);
-  ~OGDFFrutchermanReingold() override;
 
-  void beforeCall() override;
-};
-
-/*Nom de la classe, Nom du plugins, nom de l'auteur,date de
- creation,information, realease, groupe*/
-PLUGIN(OGDFFrutchermanReingold)
-
-OGDFFrutchermanReingold::OGDFFrutchermanReingold(const tlp::PluginContext *context)
+OGDFFruchtermanReingold(const tlp::PluginContext *context)
     : OGDFLayoutPluginBase(context, new ogdf::SpringEmbedderFRExact()) {
   addInParameter<int>("iterations", paramHelp[0], "1000");
   addInParameter<bool>("noise", paramHelp[1], "true");
@@ -92,11 +83,13 @@ OGDFFrutchermanReingold::OGDFFrutchermanReingold(const tlp::PluginContext *conte
   addInParameter<double>("pageRatio", paramHelp[7], "1.0");
   addInParameter<bool>("check convergence", paramHelp[8], "true");
   addInParameter<double>("convergence tolerance", paramHelp[9], "0.01");
+  // old name
+  declareDeprecatedName("Frutcherman Reingold (OGDF)");
 }
 
-OGDFFrutchermanReingold::~OGDFFrutchermanReingold() {}
+~OGDFFruchtermanReingold() override {}
 
-void OGDFFrutchermanReingold::beforeCall() {
+void beforeCall() override {
   ogdf::SpringEmbedderFRExact *sefr = static_cast<ogdf::SpringEmbedderFRExact *>(ogdfLayoutAlgo);
 
   if (dataSet != nullptr) {
@@ -142,3 +135,6 @@ void OGDFFrutchermanReingold::beforeCall() {
       sefr->convTolerance(dval);
   }
 }
+};
+
+PLUGIN(OGDFFruchtermanReingold)
