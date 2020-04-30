@@ -45,16 +45,15 @@ public:
         fmme(new ogdf::FastMultipoleMultilevelEmbedder()) {
     addInParameter<int>("number of threads", paramHelp[0], "2");
     addInParameter<int>("multilevel nodes bound", paramHelp[1], "10");
-
-    ogdf::ComponentSplitterLayout *csl =
-        static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
-    // ComponentSplitterLayout takes ownership of the FastMultipoleMultilevelEmbedder instance
-    csl->setLayoutModule(fmme);
   }
 
   ~OGDFFastMultipoleMultiLevelEmbedder() override {}
 
   void beforeCall() override {
+      ogdf::ComponentSplitterLayout *csl =
+          static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
+      // ComponentSplitterLayout takes ownership of the FastMultipoleMultilevelEmbedder instance
+      csl->setLayoutModule(fmme);
 
     if (dataSet != nullptr) {
       int ival = 0;

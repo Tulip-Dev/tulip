@@ -27,9 +27,15 @@ using namespace ogdf;
 
 static const char *paramHelp[] = {
     // page ratio
-    "Sets the option pageRatio."};
+    "Sets the option pageRatio.",
+
+    //number of crossings
+    "Returns the number of crossings in the computed layout"
+};
 
 class OGDFPlanarizationGrid : public OGDFLayoutPluginBase {
+
+    ogdf::PlanarizationGridLayout *pgl;
 
 public:
   PLUGININFORMATION("Planarization Grid (OGDF)", "Carsten Gutwenger", "12/11/2007",
@@ -40,22 +46,26 @@ public:
                     "layout algorithm to produce a drawing on a grid.",
                     "1.0", "Planar")
   OGDFPlanarizationGrid(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, new ogdf::PlanarizationGridLayout()) {
+      : OGDFLayoutPluginBase(context, new ogdf::PlanarizationGridLayout()),pgl(static_cast<ogdf::PlanarizationGridLayout *>(ogdfLayoutAlgo)) {
     addInParameter<double>("page ratio", paramHelp[0], "1.1");
+    addOutParameter<int>("number of crossings",paramHelp[1]);
   }
 
   ~OGDFPlanarizationGrid() override {}
 
   void beforeCall() override {
-    ogdf::PlanarizationGridLayout *pgl =
-        static_cast<ogdf::PlanarizationGridLayout *>(ogdfLayoutAlgo);
-
     if (dataSet != nullptr) {
       double dval = 0;
 
       if (dataSet->get("page ratio", dval))
         pgl->pageRatio(dval);
     }
+  }
+
+  void afterCall() override {
+      if(dataSet!=nullptr) {
+          dataSet->set("number of crossings", pgl->numberOfCrossings());
+      }
   }
 };
 

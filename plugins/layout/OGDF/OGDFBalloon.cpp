@@ -41,15 +41,15 @@ public:
       : OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()),
         balloon(new ogdf::BalloonLayout()) {
     addInParameter<bool>("Even angles", paramHelp[0], "false", false);
-    ogdf::ComponentSplitterLayout *csl =
-        static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
-    // ComponentSplitterLayout takes ownership of the BalloonLayout instance
-    csl->setLayoutModule(balloon);
+
   }
   ~OGDFBalloon() override {}
 
   void beforeCall() override {
-
+      ogdf::ComponentSplitterLayout *csl =
+          static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
+      // ComponentSplitterLayout takes ownership of the BalloonLayout instance
+      csl->setLayoutModule(balloon);
     if (dataSet != nullptr) {
       bool val = false;
 

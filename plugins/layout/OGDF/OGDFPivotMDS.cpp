@@ -41,24 +41,23 @@ class OGDFPivotMDS : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Pivot MDS (OGDF)", "Mark Ortmann", "29/05/2015",
-                    "By setting the number of pivots to infinity this algorithm behaves just like "
+                    "The Pivot MDS (multi-dimensional scaling) layout algorithm. By setting the number of pivots to infinity this algorithm behaves just like "
                     "classical MDS. See:<br/><b>Eigensolver methods for progressive "
                     "multidimensional scaling of large data.</b> Brandes and Pich",
                     "1.0", "Force Directed")
   OGDFPivotMDS(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()),
-        pivotMds(new ogdf::PivotMDS()) {
+      : OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()) {
     addInParameter<int>("number of pivots", paramHelp[0], "250", false);
     addInParameter<bool>("use edge costs", paramHelp[1], "false", false);
     addInParameter<double>("edge costs", paramHelp[2], "100", false);
-
-    ogdf::ComponentSplitterLayout *csl =
-        static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
-    csl->setLayoutModule(pivotMds);
   }
   ~OGDFPivotMDS() override {}
 
   void beforeCall() override {
+      ComponentSplitterLayout *csl =
+          static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
+      PivotMDS *pivotMds(new ogdf::PivotMDS());
+      csl->setLayoutModule(pivotMds);
 
     if (dataSet != nullptr) {
       bool bval = false;
@@ -76,8 +75,6 @@ public:
     }
   }
 
-private:
-  ogdf::PivotMDS *pivotMds;
 };
 
 PLUGIN(OGDFPivotMDS)

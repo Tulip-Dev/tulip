@@ -37,6 +37,9 @@ static const char *paramHelp[] = {
     // fixYCoordinates
     "Tells whether the y coordinates are allowed to be modified or not.",
 
+    // fixZCoordinates
+    "Tells whether the z coordinates are allowed to be modified or not.",
+
     // hasInitialLayout
     "Tells whether the current layout should be used or the initial layout needs to be computed.",
 
@@ -60,29 +63,31 @@ static const char *paramHelp[] = {
 
 };
 
-class OGDFStressMajorization : public OGDFLayoutPluginBase {
+class OGDFStressMinimization : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Stress Majorization (OGDF)", "Karsten Klein", "12/11/2007",
+  PLUGININFORMATION("Stress Minimization (OGDF)", "Karsten Klein", "12/11/2007",
                     "Implements an alternative to force-directed layout which is a distance-based "
-                    "layout realized by the stress majorization approach. ",
+                    "layout realized by the stress minimization via majorization algorithm. ",
                     "2.0", "Force Directed")
-  OGDFStressMajorization(const tlp::PluginContext *context)
+  OGDFStressMinimization(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, new ogdf::StressMinimization()) {
     addInParameter<StringCollection>("terminationCriterion", paramHelp[0],
                                      "None;PositionDifference;Stress", true,
                                      "None <br> PositionDifference <br> Stress");
     addInParameter<bool>("fixXCoordinates", paramHelp[1], "false");
     addInParameter<bool>("fixYCoordinates", paramHelp[2], "false");
-    addInParameter<bool>("hasInitialLayout", paramHelp[3], "false");
-    addInParameter<bool>("layoutComponentsSeparately", paramHelp[4], "false");
-    addInParameter<int>("numberOfIterations", paramHelp[5], "200");
-    addInParameter<double>("edgeCosts", paramHelp[6], "100");
-    addInParameter<bool>("useEdgeCostsProperty", paramHelp[7], "false");
-    addInParameter<tlp::NumericProperty *>("edgeCostsProperty", paramHelp[8], "viewMetric");
+    addInParameter<bool>("fixZCoordinates", paramHelp[3], "false");
+    addInParameter<bool>("hasInitialLayout", paramHelp[4], "false");
+    addInParameter<bool>("layoutComponentsSeparately", paramHelp[5], "false");
+    addInParameter<int>("numberOfIterations", paramHelp[6], "200");
+    addInParameter<double>("edgeCosts", paramHelp[7], "100");
+    addInParameter<bool>("useEdgeCostsProperty", paramHelp[8], "false");
+    addInParameter<tlp::NumericProperty *>("edgeCostsProperty", paramHelp[9], "viewMetric");
+    declareDeprecatedName("Stress Majorization (OGDF)");
   }
 
-  ~OGDFStressMajorization() override {}
+  ~OGDFStressMinimization() override {}
 
   void beforeCall() override {
     ogdf::StressMinimization *stressm = static_cast<ogdf::StressMinimization *>(ogdfLayoutAlgo);
@@ -113,6 +118,10 @@ public:
         stressm->fixXCoordinates(bval);
       }
 
+      if (dataSet->get("fixZCoordinates", bval)) {
+        stressm->fixZCoordinates(bval);
+      }
+
       if (dataSet->get("hasInitialLayout", bval)) {
         stressm->hasInitialLayout(bval);
       }
@@ -141,4 +150,4 @@ public:
   }
 };
 
-PLUGIN(OGDFStressMajorization)
+PLUGIN(OGDFStressMinimization)

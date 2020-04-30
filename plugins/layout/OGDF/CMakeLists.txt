@@ -13,7 +13,7 @@ OGDFBalloon.cpp
 OGDFDavidsonHarel.cpp
 OGDFTree.cpp
 OGDFGemFrick.cpp
-OGDFStressMajorization.cpp
+OGDFStressMinimization.cpp
 OGDFSugiyama.cpp
 OGDFDominance.cpp
 OGDFPlanarizationGrid.cpp

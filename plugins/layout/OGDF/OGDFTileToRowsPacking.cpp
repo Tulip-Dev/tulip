@@ -37,10 +37,12 @@ public:
                     "1.0", "Misc")
   OGDFTileToRowsPacking(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()) {
-    ogdf::ComponentSplitterLayout *csl =
-        static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
-    // ComponentSplitterLayout takes ownership of the SameLayout instance
-    csl->setLayoutModule(new SameLayout());
+  }
+
+  void beforeCall() override {
+      ogdf::ComponentSplitterLayout *csl = static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
+      // ComponentSplitterLayout takes ownership of the SameLayout instance
+      csl->setLayoutModule(new SameLayout());
   }
 };
 
