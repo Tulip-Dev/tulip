@@ -104,14 +104,6 @@ ENDIF (TULIP_BUILD_FOR_APPIMAGE)
 
 INCLUDE(GNUInstallDirs)
 
-# workaround an install issue on Debian when using CMake < 3
-# see https://github.com/Kitware/CMake/commit/620939e4e6f5a61cd5c0fac2704de4bfda0eb7ef
-IF(LINUX AND CMAKE_VERSION VERSION_LESS 3.0)
-  IF(EXISTS "/etc/debian_version" AND NOT "${CMAKE_INSTALL_PREFIX}" MATCHES "^/usr/?$")
-    SET(CMAKE_INSTALL_LIBDIR lib)
-  ENDIF(EXISTS "/etc/debian_version" AND NOT "${CMAKE_INSTALL_PREFIX}" MATCHES "^/usr/?$")
-ENDIF(LINUX AND CMAKE_VERSION VERSION_LESS 3.0)
-
 SET(TulipLibInstallDir ${CMAKE_INSTALL_LIBDIR})
 SET(TulipPluginsInstallDir ${TulipLibInstallDir}/tulip)
 SET(TulipGlyphPluginsInstallDir ${TulipPluginsInstallDir}/glyph)
