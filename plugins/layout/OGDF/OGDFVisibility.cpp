@@ -39,19 +39,20 @@ public:
                     "representations (horizontal segments for nodes, vectical segments for edges).",
                     "1.1", "Hierarchical")
   OGDFVisibility(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()),
-        visibility(new ogdf::VisibilityLayout()) {
+      : OGDFLayoutPluginBase(context, new ComponentSplitterLayout()){
     addInParameter<int>("minimum grid distance", paramHelp[0], "1");
     addInParameter<bool>("transpose", paramHelp[1], "false");
-    ogdf::ComponentSplitterLayout *csl =
-        static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
-    // ComponentSplitterLayout takes ownership of the VisibilityLayout instance
-    csl->setLayoutModule(visibility);
   }
 
   ~OGDFVisibility() override {}
 
   void beforeCall() override {
+
+      ogdf::ComponentSplitterLayout *csl =
+          static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
+      // ComponentSplitterLayout takes ownership of the VisibilityLayout instance
+      VisibilityLayout *visibility = new ogdf::VisibilityLayout();
+      csl->setLayoutModule(visibility);
 
     if (dataSet != nullptr) {
       int ival = 0;
@@ -73,8 +74,6 @@ public:
     }
   }
 
-private:
-  ogdf::VisibilityLayout *visibility;
 };
 
 PLUGIN(OGDFVisibility)

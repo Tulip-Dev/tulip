@@ -88,8 +88,9 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       (openGL_OK ? tlpStringToQString(OpenGlConfigManager::getOpenGLVendor())
                  : QString("unknown")) +
       "): <a href=\"https://www.opengl.org\">https://www.opengl.org</a> </li>"
-      "  <li> <b>OGDF</b> v2020.02 (Catalpa) aka the Open Graph Drawing Framework : <a "
-      "href=\"http://www.ogdf.net\">http://www.ogdf.net</a> </li>"
+       "<li><b>OGDF</b> v2020.02 (Catalpa) stands both for <b>O</b>pen <b>G</b>raph <b>D</b>rawing <b>F</b>ramework (the original name)<br>"
+        "and <b>O</b>pen <b>G</b>raph algorithms and <b>D</b>ata structures <b>F</b>ramework: <a "
+      "href=\"https://ogdf.uos.de/\">https://ogdf.uos.de/</a> </li>"
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 
       "  <li> <b> Python </b> " +

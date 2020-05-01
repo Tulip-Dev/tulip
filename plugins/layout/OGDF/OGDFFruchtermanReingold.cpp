@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-
 #include <ogdf/energybased/SpringEmbedderFRExact.h>
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
 #include <tulip/StringCollection.h>

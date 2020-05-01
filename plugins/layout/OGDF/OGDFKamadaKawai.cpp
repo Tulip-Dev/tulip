@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #include <ogdf/energybased/SpringEmbedderKK.h>
 
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>

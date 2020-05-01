@@ -21,12 +21,22 @@
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
 
 using namespace tlp;
+using namespace ogdf;
 
 static const char *paramHelp[] = {
     // transpose
-    "If true, transpose the layout vertically."};
+    "If true, transpose the layout vertically.",
+
+    //number of crossings
+    "Returns the number of crossings",
+
+    //number of layers
+    "Returns the number of layers/levels"
+};
 
 class OGDFUpwardPlanarization : public OGDFLayoutPluginBase {
+
+    UpwardPlanarizationLayout *upl;
 
 public:
   PLUGININFORMATION("Upward Planarization (OGDF)", "Hoi-Ming Wong", "12/11/2007",
@@ -37,12 +47,16 @@ public:
   OGDFUpwardPlanarization(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()) {
     addInParameter<bool>("transpose", paramHelp[0], "false");
-    ogdf::ComponentSplitterLayout *csl =
-        static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
-    csl->setLayoutModule(new ogdf::UpwardPlanarizationLayout());
+    addOutParameter<int>("number of crossings", paramHelp[1]);
+    addOutParameter<int>("number of layers", paramHelp[2]);
+
   }
 
-  ~OGDFUpwardPlanarization() override {}
+  void beforeCall() override {
+      ComponentSplitterLayout *csl =  static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
+      upl = new UpwardPlanarizationLayout();
+      csl->setLayoutModule(upl);
+  }
 
   void afterCall() override {
     if (dataSet != nullptr) {
@@ -53,6 +67,9 @@ public:
           transposeLayoutVertically();
         }
       }
+      dataSet->set("number of crossings", upl->numberOfCrossings());
+      dataSet->set("number of layers", upl->numberOfLevels());
+
     }
   }
 };

@@ -22,6 +22,7 @@
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
 
 using namespace tlp;
+using namespace ogdf;
 
 static const char *paramHelp[] = {
     // Even angles
@@ -38,17 +39,17 @@ public:
       "Cone Trees</b> by Carriere and Kazman. ",
       "1.4", "Hierarchical")
   OGDFBalloon(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()),
-        balloon(new ogdf::BalloonLayout()) {
+      : OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()){
     addInParameter<bool>("Even angles", paramHelp[0], "false", false);
   }
-  ~OGDFBalloon() override {}
 
   void beforeCall() override {
-    ogdf::ComponentSplitterLayout *csl =
-        static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
-    // ComponentSplitterLayout takes ownership of the BalloonLayout instance
-    csl->setLayoutModule(balloon);
+      ogdf::ComponentSplitterLayout *csl =
+          static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
+      // ComponentSplitterLayout takes ownership of the BalloonLayout instance
+      BalloonLayout *balloon = new BalloonLayout();
+      csl->setLayoutModule(balloon);
+
     if (dataSet != nullptr) {
       bool val = false;
 
@@ -57,8 +58,6 @@ public:
     }
   }
 
-private:
-  ogdf::BalloonLayout *balloon;
 };
 
 PLUGIN(OGDFBalloon)
