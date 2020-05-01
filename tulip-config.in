@@ -103,7 +103,7 @@ while test $# -gt 0; do
       OUTPUT=`echo ${OUTPUT} @VERSION@`
       ;;
     --cxxflags)
-      OUTPUT=`echo ${OUTPUT} @CMAKE_CXX_FLAGS@ @OPENMP_CXX_FLAGS@ ${ndebugflag} ${osx_sysroot} -I${includedir}`
+      OUTPUT=`echo ${OUTPUT} @CMAKE_CXX_FLAGS@ @TULIP_CONFIG_CXX11_FLAG@ @OPENMP_CXX_FLAGS@ ${ndebugflag} ${osx_sysroot} -I${includedir}`
       ;;
     --glincludes)
       OUTPUT=`echo ${OUTPUT} @GL_INCLUDES@`
