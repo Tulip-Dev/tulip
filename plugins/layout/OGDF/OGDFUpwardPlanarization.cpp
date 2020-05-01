@@ -27,16 +27,15 @@ static const char *paramHelp[] = {
     // transpose
     "If true, transpose the layout vertically.",
 
-    //number of crossings
+    // number of crossings
     "Returns the number of crossings",
 
-    //number of layers
-    "Returns the number of layers/levels"
-};
+    // number of layers
+    "Returns the number of layers/levels"};
 
 class OGDFUpwardPlanarization : public OGDFLayoutPluginBase {
 
-    UpwardPlanarizationLayout *upl;
+  UpwardPlanarizationLayout *upl;
 
 public:
   PLUGININFORMATION("Upward Planarization (OGDF)", "Hoi-Ming Wong", "12/11/2007",
@@ -49,13 +48,12 @@ public:
     addInParameter<bool>("transpose", paramHelp[0], "false");
     addOutParameter<int>("number of crossings", paramHelp[1]);
     addOutParameter<int>("number of layers", paramHelp[2]);
-
   }
 
   void beforeCall() override {
-      ComponentSplitterLayout *csl =  static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
-      upl = new UpwardPlanarizationLayout();
-      csl->setLayoutModule(upl);
+    ComponentSplitterLayout *csl = static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
+    upl = new UpwardPlanarizationLayout();
+    csl->setLayoutModule(upl);
   }
 
   void afterCall() override {
@@ -69,7 +67,6 @@ public:
       }
       dataSet->set("number of crossings", upl->numberOfCrossings());
       dataSet->set("number of layers", upl->numberOfLevels());
-
     }
   }
 };

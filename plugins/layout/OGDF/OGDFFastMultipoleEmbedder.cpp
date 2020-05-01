@@ -61,16 +61,14 @@ public:
     addInParameter<double>("default node size", paramHelp[3], "20.0");
     addInParameter<double>("default edge length", paramHelp[4], "1.0");
     addInParameter<int>("number of threads", paramHelp[5], "2");
-
   }
 
   void beforeCall() override {
 
-      ComponentSplitterLayout *csl =
-          static_cast<ComponentSplitterLayout *>(ogdfLayoutAlgo);
-      // ComponentSplitterLayout takes ownership of the FastMultipoleEmbedder instance
-      FastMultipoleEmbedder *fme = new FastMultipoleEmbedder();
-      csl->setLayoutModule(fme);
+    ComponentSplitterLayout *csl = static_cast<ComponentSplitterLayout *>(ogdfLayoutAlgo);
+    // ComponentSplitterLayout takes ownership of the FastMultipoleEmbedder instance
+    FastMultipoleEmbedder *fme = new FastMultipoleEmbedder();
+    csl->setLayoutModule(fme);
 
     if (dataSet != nullptr) {
       double dval = 0;
@@ -99,7 +97,6 @@ public:
     // ensure the input graph is simple as the layout failed in non multi-threaded mode otherwise
     // ogdf::makeSimple(tlpToOGDF->getOGDFGraph());
   }
-
 };
 
 PLUGIN(OGDFFastMultipoleEmbedder)

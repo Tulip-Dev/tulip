@@ -51,7 +51,6 @@ public:
     addInParameter<int>("number of pivots", paramHelp[0], "250", false);
     addInParameter<bool>("use edge costs", paramHelp[1], "false", false);
     addInParameter<double>("edge costs", paramHelp[2], "100", false);
-
   }
   ~OGDFPivotMDS() override {}
 

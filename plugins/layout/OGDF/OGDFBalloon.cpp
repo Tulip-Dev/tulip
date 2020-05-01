@@ -39,16 +39,16 @@ public:
       "Cone Trees</b> by Carriere and Kazman. ",
       "1.4", "Hierarchical")
   OGDFBalloon(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()){
+      : OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()) {
     addInParameter<bool>("Even angles", paramHelp[0], "false", false);
   }
 
   void beforeCall() override {
-      ogdf::ComponentSplitterLayout *csl =
-          static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
-      // ComponentSplitterLayout takes ownership of the BalloonLayout instance
-      BalloonLayout *balloon = new BalloonLayout();
-      csl->setLayoutModule(balloon);
+    ogdf::ComponentSplitterLayout *csl =
+        static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
+    // ComponentSplitterLayout takes ownership of the BalloonLayout instance
+    BalloonLayout *balloon = new BalloonLayout();
+    csl->setLayoutModule(balloon);
 
     if (dataSet != nullptr) {
       bool val = false;
@@ -57,7 +57,6 @@ public:
         balloon->setEvenAngles(val);
     }
   }
-
 };
 
 PLUGIN(OGDFBalloon)
