@@ -12,6 +12,7 @@ OGDFCircular.cpp
 OGDFBalloon.cpp
 OGDFDavidsonHarel.cpp
 OGDFTree.cpp
+OGDFRadialTree.cpp
 OGDFGemFrick.cpp
 OGDFStressMinimization.cpp
 OGDFSugiyama.cpp
