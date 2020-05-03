@@ -22,7 +22,7 @@ OGDFBertaultLayout.cpp
 OGDFPivotMDS.cpp
 OGDFTileToRowsPacking.cpp
 OGDFPlanarizationLayout.cpp
-#OGDFNodeRespecter.cpp
+OGDFNodeRespecter.cpp
 )
 
 DISABLE_COMPILER_WARNINGS()
