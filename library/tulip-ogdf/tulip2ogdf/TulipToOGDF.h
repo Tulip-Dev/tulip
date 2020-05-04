@@ -25,10 +25,9 @@
 
 #include <tulip/tulipconf.h>
 #include <tulip/Graph.h>
-#include <tulip/TlpTools.h>
-#include <tulip/StringProperty.h>
 #include <tulip/NumericProperty.h>
 #include <tulip/StaticProperty.h>
+#include <tulip/Coord.h>
 
 #include <exception>
 #include <string>
@@ -36,7 +35,6 @@
 #include <vector>
 
 namespace tlp {
-class DoubleProperty;
 class SizeProperty;
 // namespace tlp
 
@@ -44,9 +42,6 @@ class TLP_OGDF_SCOPE TulipToOGDF {
 public:
   TulipToOGDF(tlp::Graph *g, bool importEdgeBends = true);
 
-  // void saveToGML(const char *fileName);
-
-  tlp::Graph &getTlp();
   ogdf::GraphAttributes &getOGDFGraphAttr();
   ogdf::Graph &getOGDFGraph();
 
