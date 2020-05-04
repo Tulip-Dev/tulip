@@ -530,12 +530,12 @@ error-range                   0-0
 7,3,0,0,0,30,0,3867920,10,AT Translated Set 2 keyboard
 0,3,0,0,0,30,0,3867920
 6,3,0,0,0,30,0,3867920,3,Virtual core keyboard
-7,2,0,0,0,28,0,3869308,10,AT Translated Set 2 keyboard
-0,2,0,0,0,28,0,3869308
-6,2,0,0,0,28,0,3869308,3,Virtual core keyboard
-7,3,0,0,0,28,0,3869368,10,AT Translated Set 2 keyboard
-0,3,0,0,0,28,0,3869368
-6,3,0,0,0,28,0,3869368,3,Virtual core keyboard
+7,2,0,0,0,54,0,3869308,10,AT Translated Set 2 keyboard
+0,2,0,0,0,54,0,3869308
+6,2,0,0,0,54,0,3869308,3,Virtual core keyboard
+7,3,0,0,0,54,0,3869368,10,AT Translated Set 2 keyboard
+0,3,0,0,0,54,0,3869368
+6,3,0,0,0,54,0,3869368,3,Virtual core keyboard
 7,6,287,139,0,0,0,3870719,14,'USB Optical Mouse'
 0,6,287,142,0,0,0,3870719
 6,6,287,142,0,0,0,3870719,2,'Virtual core pointer'
