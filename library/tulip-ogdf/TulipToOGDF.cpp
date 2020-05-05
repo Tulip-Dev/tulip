@@ -152,9 +152,9 @@ void TulipToOGDF::copyTlpNodeSizeToOGDF(tlp::SizeProperty *size) {
   for (unsigned int i = 0; i < nbEdges; ++i) {
     const std::pair<tlp::node, tlp::node> &ends = tulipGraph->ends(edges[i]);
     ogdf::node srcOgdf = ogdfNodes[ends.first];
-    tlp::Size s = size->getNodeValue(ends.first);
+    const tlp::Size &s = size->getNodeValue(ends.first);
     ogdf::node tgtOgdf = ogdfNodes[ends.second];
-    tlp::Size s2 = size->getNodeValue(ends.second);
+    const tlp::Size &s2 = size->getNodeValue(ends.second);
 
     ogdfAttributes.width(srcOgdf) = s.getW();
     ogdfAttributes.height(srcOgdf) = s.getH();
