@@ -75,21 +75,6 @@ IF(NOT LINUX)
 ENDIF(NOT LINUX)
 
 ## ========================================================
-## Operating system preprocessor macros
-## ========================================================
-IF(LINUX)
-  ADD_DEFINITIONS("-D_LINUX")
-ENDIF(LINUX)
-IF(WIN32)
-  ADD_DEFINITIONS("-D_WIN32")
-  # ensure WIN32 is defined (as it is not the case when compiling with MinGW and C++11 standard activated)
-  ADD_DEFINITIONS("-DWIN32")
-ENDIF(WIN32)
-IF(APPLE)
-  ADD_DEFINITIONS("-D__APPLE__")
-ENDIF(APPLE)
-
-## ========================================================
 ## AppImage build
 ## ========================================================
 IF (TULIP_BUILD_FOR_APPIMAGE)

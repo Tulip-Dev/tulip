@@ -64,10 +64,22 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
   SET(CMAKE_CXX_STANDARD_REQUIRED ON)
   SET(CMAKE_CXX_EXTENSIONS OFF)
 
+  ## ========================================================
+  ## Operating system preprocessor macros
+  ## ========================================================
+  IF(LINUX)
+    ADD_DEFINITIONS("-D_LINUX")
+  ENDIF(LINUX)
   IF(WIN32)
+    ADD_DEFINITIONS("-D_WIN32")
+    # ensure WIN32 is defined (as it is not the case when compiling with MinGW and C++11 standard activated)
+    ADD_DEFINITIONS("-DWIN32")
     # ensure math defines (e.g. M_PI) are available (as they have been dropped from C++11 standard)
     ADD_DEFINITIONS("-D_USE_MATH_DEFINES")
   ENDIF(WIN32)
+  IF(APPLE)
+    ADD_DEFINITIONS("-D__APPLE__")
+  ENDIF(APPLE)
 
   IF(NOT MSVC) # Visual Studio does not recognize these options
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused -Wno-long-long -Wold-style-cast")
