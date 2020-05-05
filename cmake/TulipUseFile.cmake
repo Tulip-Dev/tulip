@@ -64,6 +64,11 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
   SET(CMAKE_CXX_STANDARD_REQUIRED ON)
   SET(CMAKE_CXX_EXTENSIONS OFF)
 
+  IF(WIN32)
+    # ensure math defines (e.g. M_PI) are available (as they have been dropped from C++11 standard)
+    ADD_DEFINITIONS("-D_USE_MATH_DEFINES")
+  ENDIF(WIN32)
+
   IF(NOT MSVC) # Visual Studio does not recognize these options
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused -Wno-long-long -Wold-style-cast")
     IF(NOT APPLE)
