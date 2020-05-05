@@ -123,15 +123,15 @@ vector<tlp::Coord> TulipToOGDF::getEdgeCoordFromOGDFGraphAttr(unsigned int edgeI
   ogdf::DPolyline line = ogdfAttributes.bends(e);
   vector<tlp::Coord> v;
 
-  for(const DPoint& p:line) {
-   v.push_back(tlp::Coord(p.m_x, p.m_y, 0.));
+  for (const DPoint &p : line) {
+    v.push_back(tlp::Coord(p.m_x, p.m_y, 0.));
   }
 
   return v;
 }
 
 void TulipToOGDF::copyTlpNumericPropertyToOGDFEdgeLength(tlp::NumericProperty *metric) {
-  if (metric==nullptr)
+  if (metric == nullptr)
     return;
 
   const std::vector<tlp::edge> &edges = tulipGraph->edges();
@@ -143,7 +143,7 @@ void TulipToOGDF::copyTlpNumericPropertyToOGDFEdgeLength(tlp::NumericProperty *m
 }
 
 void TulipToOGDF::copyTlpNodeSizeToOGDF(tlp::SizeProperty *size) {
-  if (size==nullptr)
+  if (size == nullptr)
     return;
 
   const std::vector<tlp::edge> &edges = tulipGraph->edges();
@@ -168,7 +168,7 @@ void TulipToOGDF::copyTlpNodeSizeToOGDF(tlp::SizeProperty *size) {
 }
 
 void TulipToOGDF::copyTlpNumericPropertyToOGDFNodeWeight(tlp::NumericProperty *metric) {
-  if (metric==nullptr)
+  if (metric == nullptr)
     return;
 
   const std::vector<tlp::node> &nodes = tulipGraph->nodes();

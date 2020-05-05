@@ -32,13 +32,13 @@ using namespace ogdf;
 #define ELT_POSTPROCESSINGCOMPLETE 2
 
 static const char *paramHelp[] = {
-    //random initial placement
+    // random initial placement
     "Use a random initial placement",
 
-    //Post Processing
+    // Post Processing
     "Sets whether unnecessary edge bends should be filtered out in a post-processing step.",
 
-    //Bends Normalization Angle
+    // Bends Normalization Angle
     "Sets bends normalization angle in [0...Pi].",
 
     // number of iterations
@@ -47,7 +47,7 @@ static const char *paramHelp[] = {
     // Minimal Temperature
     "The minimal Temperature >= 0",
 
-    //Initial Temperature
+    // Initial Temperature
     "Sets the initial Temperature > Minimal Temperature.",
 
     // Temperature Decrease
@@ -87,8 +87,10 @@ static const char *paramHelp[] = {
 
 static const char *postProcesingValuesDescription =
     "None <i>(Keep all bends. )</i><br>"
-    "KeepMultiEdgeBends <i>(Activate post-processing but keep all bends on multi-edges and self-loops (such that the corresponding edges are visible).)</i><br>"
-    "Complete <i>(Activate post-processing: Remove all bends that do not prevent edge-node intersections.)</i><br>";
+    "KeepMultiEdgeBends <i>(Activate post-processing but keep all bends on multi-edges and "
+    "self-loops (such that the corresponding edges are visible).)</i><br>"
+    "Complete <i>(Activate post-processing: Remove all bends that do not prevent edge-node "
+    "intersections.)</i><br>";
 
 class OGDFNodeRespecter : public OGDFLayoutPluginBase {
 
@@ -109,23 +111,27 @@ public:
       "1.0", "Force Directed")
   OGDFNodeRespecter(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, new ogdf::NodeRespecterLayout()) {
-      addInParameter<bool>("random initial placement", paramHelp[0], "true",false);
-      addInParameter<StringCollection>(ELT_POSTPROCESSING, paramHelp[1],ELT_POSTPROCESSINGLIST,false,postProcesingValuesDescription);
-      addInParameter<double>("Bends Normalization Angle", paramHelp[2], to_string(Math::pi), false);
-      addInParameter<int>("number of iterations", paramHelp[3], "30000", false);
-      addInParameter<double>("Minimal Temperature", paramHelp[4], "1.0", false);
-      addInParameter<double>("Initial Temperature", paramHelp[5], "10.0",false);
-      addInParameter<double>("Temperature Decrease", paramHelp[6],"0.0", false);
-      addInParameter<double>("Gravitation", paramHelp[7], "0.0625", false);
-      addInParameter<double>("Oscillation Angle", paramHelp[8], to_string(Math::pi_2), false);
-      addInParameter<double>("Desired Minimal Edge Length", paramHelp[9], to_string(LayoutStandards::defaultNodeSeparation()), false);
-      addInParameter<int>("Init Dummies Per Edge", paramHelp[10], "1", false);
-      addInParameter<int>("Maximal Dummies Per Edge", paramHelp[11], "3", false);
-      addInParameter<double>("Dummy Insertion Threshold", paramHelp[12], "5", false);
-      addInParameter<double>("Maximum Disturbance", paramHelp[13], "0", false);
-      addInParameter<double>("Repulsion Distance", paramHelp[14], to_string(2*LayoutStandards::defaultNodeSeparation()), false);
-      addInParameter<double>("Min Distance CC", paramHelp[15], to_string(LayoutStandards::defaultCCSeparation()), false);
-      addInParameter<double>("Page Ratio", paramHelp[16], "1.0", false);
+    addInParameter<bool>("random initial placement", paramHelp[0], "true", false);
+    addInParameter<StringCollection>(ELT_POSTPROCESSING, paramHelp[1], ELT_POSTPROCESSINGLIST,
+                                     false, postProcesingValuesDescription);
+    addInParameter<double>("Bends Normalization Angle", paramHelp[2], to_string(Math::pi), false);
+    addInParameter<int>("number of iterations", paramHelp[3], "30000", false);
+    addInParameter<double>("Minimal Temperature", paramHelp[4], "1.0", false);
+    addInParameter<double>("Initial Temperature", paramHelp[5], "10.0", false);
+    addInParameter<double>("Temperature Decrease", paramHelp[6], "0.0", false);
+    addInParameter<double>("Gravitation", paramHelp[7], "0.0625", false);
+    addInParameter<double>("Oscillation Angle", paramHelp[8], to_string(Math::pi_2), false);
+    addInParameter<double>("Desired Minimal Edge Length", paramHelp[9],
+                           to_string(LayoutStandards::defaultNodeSeparation()), false);
+    addInParameter<int>("Init Dummies Per Edge", paramHelp[10], "1", false);
+    addInParameter<int>("Maximal Dummies Per Edge", paramHelp[11], "3", false);
+    addInParameter<double>("Dummy Insertion Threshold", paramHelp[12], "5", false);
+    addInParameter<double>("Maximum Disturbance", paramHelp[13], "0", false);
+    addInParameter<double>("Repulsion Distance", paramHelp[14],
+                           to_string(2 * LayoutStandards::defaultNodeSeparation()), false);
+    addInParameter<double>("Min Distance CC", paramHelp[15],
+                           to_string(LayoutStandards::defaultCCSeparation()), false);
+    addInParameter<double>("Page Ratio", paramHelp[16], "1.0", false);
   }
 
   void beforeCall() override {
