@@ -93,7 +93,6 @@ protected:
 #else
     return QSize(width, fontMetrics().horizontalAdvance(tabText(index)) * 2 + iconSize().width());
 #endif
-
   }
 };
 
