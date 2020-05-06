@@ -136,7 +136,7 @@ pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutPr
   if (layout->hasNonDefaultValuatedEdges()) {
     for (auto e : graph->edges()) {
       if (selection == nullptr || selection->getEdgeValue(e)) {
-        for (const auto coord : layout->getEdgeValue(e)) {
+        for (const auto &coord : layout->getEdgeValue(e)) {
           double curRad = (coord - centre).norm();
 
           if (curRad > maxRad) {
