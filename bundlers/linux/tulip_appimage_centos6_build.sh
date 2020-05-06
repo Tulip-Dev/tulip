@@ -17,7 +17,7 @@ yum -y install devtoolset-7
 
 # install tulip deps
 yum -y install zlib-devel qhull-devel cppunit-devel
-yum -y install freetype-devel libpng-devel libjpeg-devel glew-devel
+yum -y install freetype-devel glew-devel
 
 # needed for generating the AppImage
 yum -y install fuse fuse-libs
