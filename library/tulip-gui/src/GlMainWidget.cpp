@@ -275,8 +275,8 @@ void GlMainWidget::doneCurrent() {
 bool GlMainWidget::isCurrent() {
   auto current = QOpenGLContext::currentContext();
   return (current != nullptr) &&
-    (isVisible() ? (current == context())
-     : (current == GlOffscreenRenderer::getInstance()->getOpenGLContext()));
+         (isVisible() ? (current == context())
+                      : (current == GlOffscreenRenderer::getInstance()->getOpenGLContext()));
 }
 //==================================================
 bool GlMainWidget::pickGlEntities(const int x, const int y, const int width, const int height,

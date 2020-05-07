@@ -1118,9 +1118,9 @@ void GeographicViewGraphicsView::createLayoutWithLatLngs(const std::string &lati
 
   if (graph->existProperty(latitudePropertyName) && graph->existProperty(longitudePropertyName)) {
     DoubleProperty *latitudeProperty =
-      graph->getProperty<DoubleProperty>(latPropName = latitudePropertyName);
+        graph->getProperty<DoubleProperty>(latPropName = latitudePropertyName);
     DoubleProperty *longitudeProperty =
-      graph->getProperty<DoubleProperty>(lngPropName = longitudePropertyName);
+        graph->getProperty<DoubleProperty>(lngPropName = longitudePropertyName);
     for (auto n : graph->nodes()) {
       latLng.first = latitudeProperty->getNodeValue(n);
       latLng.second = longitudeProperty->getNodeValue(n);
@@ -1181,8 +1181,7 @@ void GeographicViewGraphicsView::timerEvent(QTimerEvent *event) {
 
 void GeographicViewGraphicsView::refreshMap() {
 
-  if (!leafletMaps->isVisible() || !leafletMaps->mapLoaded() ||
-      !glMainWidget->isCurrent()) {
+  if (!leafletMaps->isVisible() || !leafletMaps->mapLoaded() || !glMainWidget->isCurrent()) {
     return;
   }
 
@@ -1252,12 +1251,10 @@ void GeographicViewGraphicsView::setGeoShape(IntegerProperty *property) {
 void GeographicViewGraphicsView::treatEvent(const Event &ev) {
   const PropertyEvent *propEvt = dynamic_cast<const PropertyEvent *>(&ev);
 
-  if (propEvt &&
-      propEvt->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE &&
+  if (propEvt && propEvt->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE &&
       propEvt->getProperty() == geoLayout) {
     // update latitude/longitude properties
-    if (graph->existProperty(latPropName) &&
-	graph->existProperty(lngPropName)) {
+    if (graph->existProperty(latPropName) && graph->existProperty(lngPropName)) {
       DoubleProperty *lat = graph->getProperty<DoubleProperty>(latPropName);
       DoubleProperty *lng = graph->getProperty<DoubleProperty>(lngPropName);
       node n = propEvt->getNode();
