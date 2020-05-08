@@ -100,8 +100,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       "  <li> <b> SIP </b> " +
       getSipVersion() +
       ": <a "
-      "href=\"https://www.riverbankcomputing.com/software/sip/\">https://"
-      "www.riverbankcomputing.com/software/sip</a> </li>"
+      "href=\"https://www.riverbankcomputing.com/software/sip/intro\">https://"
+      "www.riverbankcomputing.com/software/sip/intro</a> </li>"
 #endif
       "</ul>"
       "</p>";
