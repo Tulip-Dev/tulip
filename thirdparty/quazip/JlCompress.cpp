@@ -24,7 +24,6 @@ see quazip/(un)zip.h files for details. Basically it's the zlib license.
 */
 
 #include "JlCompress.h"
-#include <QDebug>
 
 static bool copyData(QIODevice &inFile, QIODevice &outFile)
 {
@@ -353,10 +352,16 @@ QStringList JlCompress::extractFiles(QuaZip &zip, const QStringList &files, cons
     return extracted;
 }
 
-QStringList JlCompress::extractDir(QString fileCompressed, QString dir) {
+QStringList JlCompress::extractDir(QString fileCompressed, QTextCodec* fileNameCodec, QString dir) {
     // Apro lo zip
     QuaZip zip(fileCompressed);
+    if (fileNameCodec)
+        zip.setFileNameCodec(fileNameCodec);
     return extractDir(zip, dir);
+}
+
+QStringList JlCompress::extractDir(QString fileCompressed, QString dir) {
+    return extractDir(fileCompressed, NULL, dir);
 }
 
 QStringList JlCompress::extractDir(QuaZip &zip, const QString &dir)
@@ -429,10 +434,17 @@ QStringList JlCompress::getFileList(QuaZip *zip)
     return lst;
 }
 
-QStringList JlCompress::extractDir(QIODevice *ioDevice, QString dir)
+QStringList JlCompress::extractDir(QIODevice* ioDevice, QTextCodec* fileNameCodec, QString dir)
 {
     QuaZip zip(ioDevice);
+    if (fileNameCodec)
+        zip.setFileNameCodec(fileNameCodec);
     return extractDir(zip, dir);
+}
+
+QStringList JlCompress::extractDir(QIODevice *ioDevice, QString dir)
+{
+    return extractDir(ioDevice, NULL, dir);
 }
 
 QStringList JlCompress::getFileList(QIODevice *ioDevice)

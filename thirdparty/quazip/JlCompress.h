@@ -29,10 +29,11 @@ see quazip/(un)zip.h files for details. Basically it's the zlib license.
 #include "quazip.h"
 #include "quazipfile.h"
 #include "quazipfileinfo.h"
-#include <QString>
-#include <QDir>
-#include <QFileInfo>
-#include <QFile>
+#include <QtCore/QString>
+#include <QtCore/QDir>
+#include <QtCore/QFileInfo>
+#include <QtCore/QFile>
+#include <QtCore/QTextCodec>
 
 /// Utility class for typical operations.
 /**
@@ -152,6 +153,15 @@ public:
       \return The list of the full paths of the files extracted, empty on failure.
       */
     static QStringList extractDir(QString fileCompressed, QString dir = QString());
+    /// Extract a whole archive.
+    /**
+      \param fileCompressed The name of the archive.
+      \param fileNameCodec The codec to use for file names.
+      \param dir The directory to extract to, the current directory if
+      left empty.
+      \return The list of the full paths of the files extracted, empty on failure.
+      */
+    static QStringList extractDir(QString fileCompressed, QTextCodec* fileNameCodec, QString dir = QString());
     /// Get the file list.
     /**
       \return The list of the files in the archive, or, more precisely, the
@@ -185,6 +195,15 @@ public:
       \return The list of the full paths of the files extracted, empty on failure.
       */
     static QStringList extractDir(QIODevice *ioDevice, QString dir = QString());
+    /// Extract a whole archive.
+    /**
+      \param ioDevice pointer to device with compressed data.
+      \param fileNameCodec The codec to use for file names.
+      \param dir The directory to extract to, the current directory if
+      left empty.
+      \return The list of the full paths of the files extracted, empty on failure.
+      */
+    static QStringList extractDir(QIODevice* ioDevice, QTextCodec* fileNameCodec, QString dir = QString());
     /// Get the file list.
     /**
       \return The list of the files in the archive, or, more precisely, the
