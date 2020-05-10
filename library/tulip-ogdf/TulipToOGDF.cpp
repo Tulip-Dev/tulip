@@ -120,10 +120,9 @@ tlp::Coord TulipToOGDF::getNodeCoordFromOGDFGraphAttr(unsigned int nodeIndex) {
 
 vector<tlp::Coord> TulipToOGDF::getEdgeCoordFromOGDFGraphAttr(unsigned int edgeIndex) {
   ogdf::edge e = ogdfEdges[edgeIndex];
-  ogdf::DPolyline line = ogdfAttributes.bends(e);
   vector<tlp::Coord> v;
 
-  for (const DPoint &p : line) {
+  for (const DPoint &p : ogdfAttributes.bends(e)) {
     v.push_back(tlp::Coord(p.m_x, p.m_y, 0.));
   }
 
