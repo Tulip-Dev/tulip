@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <ogdf/basic/internal/config.h>
 #include <tulip/AboutTulipPage.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
@@ -88,10 +89,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       (openGL_OK ? tlpStringToQString(OpenGlConfigManager::getOpenGLVendor())
                  : QString("unknown")) +
       "): <a href=\"https://www.opengl.org\">https://www.opengl.org</a> </li>"
-      "<li><b>OGDF</b> v2020.02 (Catalpa) stands both for <b>O</b>pen <b>G</b>raph <b>D</b>rawing "
-      "<b>F</b>ramework (the original name)<br>"
-      "and <b>O</b>pen <b>G</b>raph algorithms and <b>D</b>ata structures <b>F</b>ramework: <a "
-      "href=\"https://ogdf.uos.de/\">https://ogdf.uos.de/</a> </li>"
+      "<li><b>OGDF</b> v" + OGDF_VERSION + ": <a "
+      "href=\"http://ogdf.net/\">http://ogdf.net/</a> </li>"
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 
       "  <li> <b> Python </b> " +
@@ -100,8 +99,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       "  <li> <b> SIP </b> " +
       getSipVersion() +
       ": <a "
-      "href=\"https://www.riverbankcomputing.com/software/sip/\">https://"
-      "www.riverbankcomputing.com/software/sip/</a> </li>"
+      "href=\"https://www.riverbankcomputing.com/software/sip\">https://"
+      "www.riverbankcomputing.com/software/sip</a> </li>"
 #endif
       "</ul>"
       "</p>";
