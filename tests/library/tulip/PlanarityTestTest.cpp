@@ -37,7 +37,7 @@ static Graph *tlp_loadGraph(const std::string &filename) {
   return sg;
 }
 
-static Graph* graph;
+static Graph *graph;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PlanarityTestTest);
 //==========================================================
