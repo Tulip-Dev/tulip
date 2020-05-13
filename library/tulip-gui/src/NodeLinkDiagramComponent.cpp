@@ -341,7 +341,8 @@ void NodeLinkDiagramComponent::registerTriggers() {
     return;
 
   addRedrawTrigger(getGlMainWidget()->getScene()->getGlGraphComposite()->getGraph());
-  const auto &properties = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->properties();
+  const auto &properties =
+      getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->properties();
 
   for (auto prop : properties) {
     addRedrawTrigger(prop);

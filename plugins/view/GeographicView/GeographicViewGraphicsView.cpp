@@ -374,8 +374,8 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
       geoViewSize(nullptr), geoViewShape(nullptr), geoLayoutBackup(nullptr),
       mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false),
       polygonEntity(nullptr), planisphereEntity(nullptr), noLayoutMsgBox(nullptr),
-      firstGlobeSwitch(true), geoLayoutComputed(false), renderFbo(nullptr),
-      latProp(nullptr), lngProp(nullptr) {
+      firstGlobeSwitch(true), geoLayoutComputed(false), renderFbo(nullptr), latProp(nullptr),
+      lngProp(nullptr) {
   mapTextureId = "leafletMap" + to_string(reinterpret_cast<uintptr_t>(this));
   setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing |
                  QPainter::TextAntialiasing);
@@ -1124,8 +1124,7 @@ void GeographicViewGraphicsView::createLayoutWithLatLngs(const std::string &latP
   }
 
   if (graph->existProperty(edgesPathsPropertyName)) {
-    auto edgesPathsProperty =
-        graph->getProperty<DoubleVectorProperty>(edgesPathsPropertyName);
+    auto edgesPathsProperty = graph->getProperty<DoubleVectorProperty>(edgesPathsPropertyName);
     for (auto e : graph->edges()) {
       auto &edgePath = edgesPathsProperty->getEdgeValue(e);
       std::vector<std::pair<double, double>> latLngs;
@@ -1175,8 +1174,7 @@ void GeographicViewGraphicsView::timerEvent(QTimerEvent *event) {
 #endif
 
 void GeographicViewGraphicsView::refreshMap() {
-  if (!leafletMaps->isVisible() ||
-      !leafletMaps->mapLoaded() || !glMainWidget->isCurrent()) {
+  if (!leafletMaps->isVisible() || !leafletMaps->mapLoaded() || !glMainWidget->isCurrent()) {
     return;
   }
 
@@ -1439,7 +1437,7 @@ void GeographicViewGraphicsView::switchViewType() {
 
         unsigned int bendsNumber = 2;
         vector<Coord> bends;
-	bends.reserve(bendsNumber);
+        bends.reserve(bendsNumber);
 
         for (unsigned int i = 0; i < bendsNumber; ++i) {
           Coord &&tmp = srcC + ((tgtC - srcC) / (bendsNumber + 1.f)) * (i + 1.f);
