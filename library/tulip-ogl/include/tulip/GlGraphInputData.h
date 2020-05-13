@@ -439,7 +439,7 @@ public:
     setProperty(VIEW_ICON, property);
   }
 
-  std::set<tlp::PropertyInterface *> properties() const {
+  const std::set<tlp::PropertyInterface *> &properties() const {
     return _properties;
   }
 

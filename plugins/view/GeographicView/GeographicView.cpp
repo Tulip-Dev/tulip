@@ -421,15 +421,10 @@ void GeographicView::registerTriggers() {
 
   addRedrawTrigger(
       geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite()->getGraph());
-  std::set<tlp::PropertyInterface *> properties = geoViewGraphicsView->getGlMainWidget()
-                                                      ->getScene()
-                                                      ->getGlGraphComposite()
-                                                      ->getInputData()
-                                                      ->properties();
+  auto &properties = geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->properties();
 
-  for (std::set<tlp::PropertyInterface *>::iterator it = properties.begin(); it != properties.end();
-       ++it) {
-    addRedrawTrigger(*it);
+  for (auto prop : properties) {
+    addRedrawTrigger(prop);
   }
 }
 
