@@ -433,10 +433,9 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
   // hide the graphics widget used to configure the view
   // before taking a snapshot
   QList<QGraphicsProxyWidget *> gWidgetsToRestore;
-  QList<QGraphicsItem *> sceneItems = geoViewGraphicsView->scene()->items();
 
-  for (int i = 0; i < sceneItems.size(); ++i) {
-    QGraphicsProxyWidget *gWidget = dynamic_cast<QGraphicsProxyWidget *>(sceneItems.at(i));
+  for (auto item : geoViewGraphicsView->scene()->items()) {
+    QGraphicsProxyWidget *gWidget = dynamic_cast<QGraphicsProxyWidget *>(item);
 
     if (gWidget && gWidget->isVisible()) {
       gWidget->hide();
@@ -453,8 +452,8 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
   painter.end();
 
   // restore the graphics widgets previously hidden
-  for (int i = 0; i < gWidgetsToRestore.size(); ++i) {
-    gWidgetsToRestore.at(i)->show();
+  for (auto gWidget : gWidgetsToRestore) {
+    gWidget->show();
   }
 
   return QPixmap::fromImage(snapshotImage)

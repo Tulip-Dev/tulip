@@ -189,7 +189,7 @@ private:
   QOpenGLFramebufferObject *renderFbo;
   GlLayer *backgroundLayer;
   std::string mapTextureId;
-  std::string latPropName, lngPropName;
+  DoubleProperty* latProp, *lngProp;
 };
 } // namespace tlp
 
