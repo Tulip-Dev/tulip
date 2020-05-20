@@ -61,8 +61,6 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
 
   # enable C++11
   SET(CMAKE_CXX_STANDARD 11)
-  SET(CMAKE_CXX_STANDARD_REQUIRED ON)
-  SET(CMAKE_CXX_EXTENSIONS OFF)
 
   ## ========================================================
   ## Operating system preprocessor macros
