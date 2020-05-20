@@ -18,23 +18,19 @@ echo TULIP_BUILD_CORE_ONLY=%TULIP_BUILD_CORE_ONLY%
 rem Set the paths appropriately
 PATH C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%
 
-rem Upgrade the MSYS2 platform
-bash -lc "pacman --noconfirm --sync --refresh --sysupgrade"
+rem Update the MSYS2 platform
+rem without --sysupgrade which fails
+rem since MSYS2 version 20200517 is online
+bash -lc "pacman --noconfirm --sync --refresh"
+rem Update pacman
+bash -lc "pacman --noconfirm -S pacman"
+rem finally upgrade the platform
+bash -lc "pacman --noconfirm -Syu"
 rem display pacman version
 bash -lc "pacman -V"
 
 rem Install required tools
 bash -lc "pacman --noconfirm -S --needed base-devel unzip"
-
-rem Remove Ada and ObjC compilers as they are now dropped by MSYS2
-rem and cause conflicts for installing GCC 9
-rem (see https://github.com/msys2/MINGW-packages/issues/5434)
-bash -lc "pacman --noconfirm -R mingw-w64-%MSYS2_ARCH%-gcc-ada"
-bash -lc "pacman --noconfirm -R mingw-w64-%MSYS2_ARCH%-gcc-objc"
-rem These two packages must also be removed as they are outdated
-rem and break GCC 9 install on AppVeyor environment
-bash -lc "pacman --noconfirm -Rdd mingw-w64-%MSYS2_ARCH%-ncurses"
-bash -lc "pacman --noconfirm -Rdd mingw-w64-%MSYS2_ARCH%-termcap"
 
 rem Always install latest GCC toolchain in order to detect possible build failures
 rem when its version evolves
@@ -60,16 +56,7 @@ bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-glew"
 bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-qt5"
 bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-quazip"
 bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-qtwebkit"
-rem Workaround a MSYS2 packaging issue for Qt5
-rem (see https://github.com/msys2/MINGW-packages/issues/5253)
-rem Qt 5.12.3
-bash -lc "sed -i -e 's/C:\/building\/msys32/C:\/msys64/g' C:/msys64/mingw64/lib/cmake/Qt5Gui/Qt5GuiConfigExtras.cmake || true"
-rem Qt 5.12.4
-bash -lc "sed -i -e 's/C:\/building\/msys64/C:\/msys64/g' C:/msys64/mingw64/lib/cmake/Qt5Gui/Qt5GuiConfigExtras.cmake || true"
-rem Workaround for QtWebkit detection as current MSYS2 package has not been rebuilt
-rem against Qt 5.12.4 and Qt version detection is too strict in QtWebKit CMake module
-bash -lc "sed -i -e 's/5\.12\.3/5\.12\.4/g' C:/msys64/mingw64/lib/cmake/Qt5WebKit/Qt5WebKitConfig.cmake || true"
-bash -lc "sed -i -e 's/5\.12\.3/5\.12\.4/g' C:/msys64/mingw64/lib/cmake/Qt5WebKitWidgets/Qt5WebKitWidgetsConfig.cmake || true"
+
 set TULIP_BUILD_DOC=ON
 goto tulip_build
 
