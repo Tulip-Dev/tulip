@@ -329,7 +329,7 @@ ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 ## Include and library paths
 ## ========================================================
 SET(GZStreamInclude ${PROJECT_SOURCE_DIR}/thirdparty/gzstream/)
-SET(GZStreamLibrary gzstream-tulip-${TulipMMVersion})
+SET(GZStreamLibrary gzstream)
 IF(NOT TULIP_BUILD_CORE_ONLY)
   IF(QUAZIP_FOUND)
     SET(QuazipInclude ${QUAZIP_INCLUDE_DIRS})
