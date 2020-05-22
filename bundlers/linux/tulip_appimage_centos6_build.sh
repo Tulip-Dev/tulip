@@ -39,7 +39,7 @@ else
 fi
 
 # install Python 3.6 from the IUS Community Project
-wget https://centos6.iuscommunity.org/ius-release.rpm
+wget https://repo.ius.io/ius-release-el6.rpm
 rpm -Uvh ius-release*rpm
 yum -y install python36u-devel python36u-pip
 pip3.6 install sphinx
