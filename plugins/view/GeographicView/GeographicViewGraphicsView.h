@@ -105,10 +105,6 @@ public:
 
   void treatEvent(const Event &ev) override;
 
-  void afterSetNodeValue(PropertyInterface *, const node);
-
-  void afterSetAllNodeValue(PropertyInterface *);
-
   GlMainWidgetGraphicsItem *getGlMainWidgetItem() {
     return glWidgetItem;
   }
@@ -158,7 +154,6 @@ private:
   Graph *graph;
   LeafletMaps *leafletMaps;
   std::unordered_map<node, std::pair<double, double>> nodeLatLng;
-  std::unordered_map<node, std::pair<double, double>> nodeLatLngFOR;
   std::unordered_map<edge, std::vector<std::pair<double, double>>> edgeBendsLatLng;
   Camera globeCameraBackup;
   Camera mapCameraBackup;
@@ -194,6 +189,7 @@ private:
   QOpenGLFramebufferObject *renderFbo;
   GlLayer *backgroundLayer;
   std::string mapTextureId;
+  DoubleProperty *latProp, *lngProp;
 };
 } // namespace tlp
 

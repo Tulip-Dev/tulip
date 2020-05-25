@@ -103,7 +103,7 @@ while test $# -gt 0; do
       OUTPUT=`echo ${OUTPUT} @VERSION@`
       ;;
     --cxxflags)
-      OUTPUT=`echo ${OUTPUT} @CMAKE_CXX_FLAGS@ @OPENMP_CXX_FLAGS@ ${ndebugflag} ${osx_sysroot} -I${includedir}`
+      OUTPUT=`echo ${OUTPUT} @CMAKE_CXX_FLAGS@ @TULIP_CONFIG_CXX11_FLAGS@ @OPENMP_CXX_FLAGS@ ${ndebugflag} ${osx_sysroot} -I${includedir}`
       ;;
     --glincludes)
       OUTPUT=`echo ${OUTPUT} @GL_INCLUDES@`
@@ -112,10 +112,10 @@ while test $# -gt 0; do
       OUTPUT=`echo ${OUTPUT} @GL_LDFLAGS@ @LIB_GL@`
       ;;
     --libs)
-      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} ${libdir}/lib@GZStreamLibrary@.${libextension} ${libdir}/libtulip-ogl-${libversion}.${libextension} ${libdir}/lib@FTGLLibrary@.${libextension} ${libdir}/libtulip-gui-${libversion}.${libextension} ${quaziplib} @CMAKE_SHARED_LINKER_FLAGS@ @OPENMP_CXX_FLAGS@`
+      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} ${libdir}/libtulip-ogl-${libversion}.${libextension} ${libdir}/lib@FTGLLibrary@.${libextension} ${libdir}/libtulip-gui-${libversion}.${libextension} ${quaziplib} @CMAKE_SHARED_LINKER_FLAGS@ @OPENMP_CXX_FLAGS@`
       ;;
     --lib_tulip)
-      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} ${libdir}/lib@GZStreamLibrary@.${libextension} @CMAKE_SHARED_LINKER_FLAGS@ @OPENMP_CXX_FLAGS@`
+      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} @CMAKE_SHARED_LINKER_FLAGS@ @OPENMP_CXX_FLAGS@`
       ;;
     --lib_ogl)
       OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-ogl-${libversion}.${libextension}  ${libdir}/lib@FTGLLibrary@.${libextension}`

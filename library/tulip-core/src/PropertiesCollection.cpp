@@ -24,8 +24,7 @@
 using namespace std;
 using namespace tlp;
 
-PropertiesCollection::PropertiesCollection(const Graph *graph, 
-				       bool selectViewProp) {
+PropertiesCollection::PropertiesCollection(const Graph *graph, bool selectViewProp) {
   for (const string &propertyName : graph->getProperties()) {
     _props.push_back(propertyName);
     // all user defined properties are selected
@@ -44,9 +43,9 @@ bool PropertiesCollection::setSelected(const std::vector<std::string> &selected)
     found = false;
     for (auto &d : _props)
       if (s == d) {
-	_selected.push_back(s);
-	found = true;
-	break;
+        _selected.push_back(s);
+        found = true;
+        break;
       }
   }
   return found;
@@ -58,8 +57,8 @@ std::vector<std::string> PropertiesCollection::getUnselected() const {
     bool found = false;
     for (auto &s : _selected) {
       if (s == prop) {
-	found = true;
-	break;
+        found = true;
+        break;
       }
     }
     if (!found)

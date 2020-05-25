@@ -39,7 +39,8 @@ static const char *paramHelp[] = {
     // export id of graph elements
     "This parameter indicates if the id of graph elements has to be exported",
     // exported properties
-    "This parameter indicates the properties to be exported. Default indicates only the user defined properties",
+    "This parameter indicates the properties to be exported. Default indicates only the user "
+    "defined properties",
     // the field separator
     "This parameter indicates the field separator (sequence of one or more characters used to "
     "specify the boundary between two consecutive fields).",
@@ -89,7 +90,8 @@ CsvExport::CsvExport(const PluginContext *context) : ExportModule(context) {
   addInParameter<bool>(EXPORT_SELECTION, paramHelp[1], "false");
   addInParameter<BooleanProperty>("Export selection property", paramHelp[2], "viewSelection");
   addInParameter<bool>(EXPORT_ID, paramHelp[3], "false");
-  addInParameter<PropertiesCollection>(EXPORTED_PROPERTIES, paramHelp[4], "the user defined properties");
+  addInParameter<PropertiesCollection>(EXPORTED_PROPERTIES, paramHelp[4],
+                                       "the user defined properties");
   addInParameter<StringCollection>(FIELD_SEPARATOR, paramHelp[5], FIELD_SEPARATORS);
   addInParameter<string>(FIELD_SEPARATOR_CUSTOM, paramHelp[6], CUSTOM_MARK);
   addInParameter<StringCollection>(STRING_DELIMITER, paramHelp[7], STRING_DELIMITERS);
@@ -200,7 +202,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
 
   for (auto &propName : propsCollection.getSelected()) {
     auto prop = graph->getProperty(propName);
-     ++nbProps;
+    ++nbProps;
     props.push_back(prop);
     propIsString.push_back(dynamic_cast<tlp::StringProperty *>(prop));
 

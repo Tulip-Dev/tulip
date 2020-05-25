@@ -119,10 +119,10 @@ static const char *paramHelp[] = {
     // transpose vertically
     "Transpose the layout vertically from top to bottom.",
 
-    //number of crossings
+    // number of crossings
     "Returns the number of crossings in the computed layout.",
 
-    //number of layers/levels
+    // number of layers/levels
     "Returns the number of layers/levels in the computed layout."
 
 };
@@ -154,10 +154,12 @@ static const char *hierarchyLayoutValuesDescription =
     "OptimalHierarchyLayout <i>(The LP-based hierarchy layout algorithm)</i>";
 
 class OGDFSugiyama : public OGDFLayoutPluginBase {
-    ogdf::SugiyamaLayout *sugiyama;
+  ogdf::SugiyamaLayout *sugiyama;
+
 public:
   OGDFSugiyama(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, new ogdf::SugiyamaLayout()), sugiyama(static_cast<ogdf::SugiyamaLayout *>(ogdfLayoutAlgo)) {
+      : OGDFLayoutPluginBase(context, new ogdf::SugiyamaLayout()),
+        sugiyama(static_cast<ogdf::SugiyamaLayout *>(ogdfLayoutAlgo)) {
     addInParameter<int>("fails", paramHelp[0], "4");
     addInParameter<int>("runs", paramHelp[1], "15");
     addInParameter<double>("node distance", paramHelp[2], "3");
@@ -299,7 +301,6 @@ public:
       dataSet->set("Number of levels/layers", sugiyama->numberOfLevels());
     }
   }
-
 };
 
 PLUGIN(OGDFSugiyama)

@@ -1,6 +1,6 @@
 ADD_CORE_FILES(.)
 
-INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${OGDFInclude} ${OGDFBuildInclude})
+INCLUDE_DIRECTORIES(. ${TulipCoreBuildInclude} ${TulipCoreInclude} ${OGDFInclude} ${OGDFBuildInclude})
 
 IF(WIN32)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDLL_TULIP_OGDF")

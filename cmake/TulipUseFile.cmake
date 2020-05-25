@@ -59,22 +59,25 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
   STRING(FIND "${CMAKE_CXX_COMPILER_ID}" "Clang" CLANG_POS)
   STRING(COMPARE NOTEQUAL "${CLANG_POS}" "-1" CLANG)
 
-  # enable C++11 (not required for GCC >= 6.1 as the standard is enabled by default)
-  # set -std=c++11 only if no other standard (eg. c++14, c++17, gnu++11, gnu++14, gnu++1z)
-  # has already been manually specified
-  STRING(FIND "${CMAKE_CXX_FLAGS}" "-std=" STD_POS)
-  IF(${STD_POS} EQUAL -1)
-    IF(CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.7)
-      TULIP_SET_CXX_COMPILER_FLAG("-std=c++0x")
-    ELSE(CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.7)
-      IF((CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 6.1) OR CLANG)
-        TULIP_SET_CXX_COMPILER_FLAG("-std=c++11")
-      ENDIF((CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 6.1) OR CLANG)
-    ENDIF(CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.7)
-    IF(CLANG AND APPLE)
-      TULIP_SET_CXX_COMPILER_FLAG("-stdlib=libc++")
-    ENDIF(CLANG AND APPLE)
-  ENDIF(${STD_POS} EQUAL -1)
+  # enable C++11
+  SET(CMAKE_CXX_STANDARD 11)
+
+  ## ========================================================
+  ## Operating system preprocessor macros
+  ## ========================================================
+  IF(LINUX)
+    ADD_DEFINITIONS("-D_LINUX")
+  ENDIF(LINUX)
+  IF(WIN32)
+    ADD_DEFINITIONS("-D_WIN32")
+    # ensure WIN32 is defined (as it is not the case when compiling with MinGW and C++11 standard activated)
+    ADD_DEFINITIONS("-DWIN32")
+    # ensure math defines (e.g. M_PI) are available (as they have been dropped from C++11 standard)
+    ADD_DEFINITIONS("-D_USE_MATH_DEFINES")
+  ENDIF(WIN32)
+  IF(APPLE)
+    ADD_DEFINITIONS("-D__APPLE__")
+  ENDIF(APPLE)
 
   IF(NOT MSVC) # Visual Studio does not recognize these options
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused -Wno-long-long -Wold-style-cast")

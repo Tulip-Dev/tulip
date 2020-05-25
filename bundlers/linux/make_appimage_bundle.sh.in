@@ -210,7 +210,7 @@ looking_for_plugin_dependencies $PYTHON_PACKAGE_BUNDLE_DIR/lib-dynload
 
 pushd $BUNDLE_LIB_DIR > /dev/null 2>&1
 # remove unneeded libs
-LIBS=$(ls libc.* libdbus*.* libdl.* libdrm.* libelf.* libexpat.* libfontconfig.* libfreetype.* libgio-*.* libglib-*.* libgobject-*.* libgcc_s.* libGL.* libm.* libnsl.* libpthread.* libresolv.* librt.* libstdc++.* libutil.*  libuuid.* libxcb*.* libX*.* libz.* 2> /dev/null)
+LIBS=$(ls libc.* libdbus*.* libdl.* libdrm.* libelf.* libexpat.* libfontconfig.* libfreetype.* libgio-*.* libglib-*.* libgobject-*.* libgcc_s.* libGL.* libm.* libnsl.* libpthread.* libresolv.* librt.* libstdc++.* libutil.*  libuuid.* libxcb*.* libxml2.* libxslt.* libX*.* libz.* 2> /dev/null)
 if [ "$LIBS" != "" ]; then
   rm $LIBS
 fi

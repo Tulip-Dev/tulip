@@ -58,36 +58,37 @@ static const char *embedderValuesDescription =
     "maximum external face, plus layers approach)</i><br>"
     "EmbedderMinDepthPiTa <i>(Planar graph embedding with minimum block-nesting depth for given "
     "embedded blocks)</i>"
-    "EmbedderOptimalFlexDraw <i>(Planar graph embedding with minimum cost)</i>"
-    ;
+    "EmbedderOptimalFlexDraw <i>(Planar graph embedding with minimum cost)</i>";
 
 static const char *paramHelp[] = {
     // page ratio
     "Sets the option page ratio.",
 
-    //minCliqueSize
-    "If preprocessing of cliques is considered, this option determines the minimal size of cliques to search for",
+    // minCliqueSize
+    "If preprocessing of cliques is considered, this option determines the minimal size of cliques "
+    "to search for",
 
     // Embedder
     "The result of the crossing minimization step is a planar graph, in which crossings are "
     "replaced by dummy nodes. The embedder then computes a planar embedding of this planar graph.",
 
-    //crossings
-    "Returns the number of crossings in the computed layout."
-};
+    // crossings
+    "Returns the number of crossings in the computed layout."};
 
 class OGDFPlanarizationLayout : public OGDFLayoutPluginBase {
 
-    ogdf::PlanarizationLayout *pl;
+  ogdf::PlanarizationLayout *pl;
 
 public:
   PLUGININFORMATION("Planarization Layout (OGDF)", "Carsten Gutwenger", "12/11/2007",
                     "The planarization approach for drawing graphs.", "1.0", "Planar")
   OGDFPlanarizationLayout(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, new ogdf::PlanarizationLayout()),pl(static_cast<ogdf::PlanarizationLayout *>(ogdfLayoutAlgo)) {
+      : OGDFLayoutPluginBase(context, new ogdf::PlanarizationLayout()),
+        pl(static_cast<ogdf::PlanarizationLayout *>(ogdfLayoutAlgo)) {
     addInParameter<double>("page ratio", paramHelp[0], "1.1");
     addInParameter<int>("minimal clique size", paramHelp[1], "3");
-    addInParameter<StringCollection>(ELT_EMBEDDER, paramHelp[2], ELT_EMBEDDER_LIST, true, embedderValuesDescription);
+    addInParameter<StringCollection>(ELT_EMBEDDER, paramHelp[2], ELT_EMBEDDER_LIST, true,
+                                     embedderValuesDescription);
     addOutParameter<int>("number of crossings", paramHelp[3]);
   }
 
@@ -96,7 +97,7 @@ public:
   void beforeCall() override {
     if (dataSet != nullptr) {
       double dval = 0;
-      int clique_size=3;
+      int clique_size = 3;
       StringCollection sc;
 
       if (dataSet->get("page ratio", dval))
@@ -128,7 +129,7 @@ public:
   }
 
   void afterCall() override {
-      dataSet->set("number of crossings", pl->numberOfCrossings());
+    dataSet->set("number of crossings", pl->numberOfCrossings());
   }
 };
 

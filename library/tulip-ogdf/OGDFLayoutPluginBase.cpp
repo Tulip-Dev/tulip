@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip2ogdf/OGDFLayoutPluginBase.h"
+#include <tulip2ogdf/OGDFLayoutPluginBase.h>
 
 #include <vector>
 
@@ -103,7 +103,7 @@ bool OGDFLayoutPluginBase::run() {
   // retrieve nodes coordinates computed by the OGDF Layout Algorithm
   // and store them in the Tulip Layout Property
   const std::vector<tlp::node> &nodes = graph->nodes();
-  unsigned int nbElts = nodes.size();
+  size_t nbElts = nodes.size();
 
   for (unsigned int i = 0; i < nbElts; ++i) {
     tlp::Coord nodeCoord = tlpToOGDF->getNodeCoordFromOGDFGraphAttr(i);
@@ -124,7 +124,7 @@ bool OGDFLayoutPluginBase::run() {
   return true;
 }
 
-void OGDFLayoutPluginBase::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) {
+void OGDFLayoutPluginBase::callOGDFLayoutAlgorithm(GraphAttributes &gAttributes) {
   ogdfLayoutAlgo->call(gAttributes);
 }
 
@@ -145,11 +145,11 @@ void OGDFLayoutPluginBase::transposeLayoutVertically() {
   }
 
   for (auto e : edges) {
-    std::vector<tlp::Coord> bends = result->getEdgeValue(e);
+    const std::vector<tlp::Coord> &bends = result->getEdgeValue(e);
 
-    if (bends.size()) {
-      for (size_t i = 0; i < bends.size(); ++i) {
-        bends[i][1] = midY - (bends[i][1] - midY);
+    if (!bends.empty()) {
+      for (auto b : bends) {
+        b[1] = midY - (b[1] - midY);
       }
 
       result->setEdgeValue(e, bends);

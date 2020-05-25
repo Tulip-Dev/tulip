@@ -29,7 +29,7 @@
 #ifndef GZSTREAM_H
 #define GZSTREAM_H 1
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(GZSTREAM_STATIC)
 # 	ifdef GZSTREAM_DLL
 #		define GZSTREAM_SCOPE       __declspec(dllexport)
 #	else

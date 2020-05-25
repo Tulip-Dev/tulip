@@ -351,7 +351,7 @@ void simplifyPolyFile(QString fileName, float definition) {
   }
 }
 
-double latitudeToMercator(double latitude) {
+static double latitudeToMercator(double latitude) {
   double mercatorLatitude = latitude * M_PI / 360.;
   mercatorLatitude = sin(abs(mercatorLatitude));
   mercatorLatitude = log((1. + mercatorLatitude) / (1. - mercatorLatitude)) / 2.;
@@ -362,11 +362,9 @@ double latitudeToMercator(double latitude) {
   return mercatorLatitude / M_PI * 360.;
 }
 
-double mercatorToLatitude(double mercator) {
+static double mercatorToLatitude(double mercator) {
   return atan(sinh(mercator / 360. * M_PI)) / M_PI * 360.;
 }
-
-QGraphicsProxyWidget *proxyGM = nullptr;
 
 GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
                                                        QGraphicsScene *graphicsScene,
@@ -376,7 +374,8 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
       geoViewSize(nullptr), geoViewShape(nullptr), geoLayoutBackup(nullptr),
       mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false),
       polygonEntity(nullptr), planisphereEntity(nullptr), noLayoutMsgBox(nullptr),
-      firstGlobeSwitch(true), geoLayoutComputed(false), renderFbo(nullptr) {
+      firstGlobeSwitch(true), geoLayoutComputed(false), renderFbo(nullptr), latProp(nullptr),
+      lngProp(nullptr) {
   mapTextureId = "leafletMap" + to_string(reinterpret_cast<uintptr_t>(this));
   setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing |
                  QPainter::TextAntialiasing);
@@ -395,7 +394,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
 
   addressSelectionDialog = new AddressSelectionDialog(Perspective::instance()->mainWindow());
 
-  QGraphicsProxyWidget *proxyGM = scene()->addWidget(leafletMaps);
+  auto proxyGM = scene()->addWidget(leafletMaps);
   proxyGM->setPos(0, 0);
   proxyGM->setParentItem(_placeholderItem);
 
@@ -567,7 +566,11 @@ void GeographicViewGraphicsView::setGraph(Graph *graph) {
     backgroundLayer->addGlEntity(backgroundRect, "geoview_background");
     scene->addExistingLayerBefore(backgroundLayer, "Main");
 
+    if (geoLayout)
+      geoLayout->removeListener(this);
     geoLayout = graph->getProperty<LayoutProperty>("viewLayout");
+    geoLayout->addListener(this);
+
     geoViewSize = graph->getProperty<SizeProperty>("viewSize");
     geoViewShape = graph->getProperty<IntegerProperty>("viewShape");
     polygonEntity = nullptr;
@@ -965,12 +968,10 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
 
   if (graph->existProperty(addressPropertyName)) {
     StringProperty *addressProperty = graph->getProperty<StringProperty>(addressPropertyName);
-    DoubleProperty *latitudeProperty = nullptr;
-    DoubleProperty *longitudeProperty = nullptr;
 
     if (createLatAndLngProps) {
-      latitudeProperty = graph->getProperty<DoubleProperty>("latitude");
-      longitudeProperty = graph->getProperty<DoubleProperty>("longitude");
+      latProp = graph->getProperty<DoubleProperty>("latitude");
+      lngProp = graph->getProperty<DoubleProperty>("longitude");
     }
 
     int nbNodes = graph->numberOfNodes();
@@ -1010,14 +1011,14 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
             latLng = nodeLatLng[n] = addressesLatLngMap[addr];
 
             if (createLatAndLngProps) {
-              latitudeProperty->setNodeValue(n, latLng.first);
-              longitudeProperty->setNodeValue(n, latLng.second);
+              latProp->setNodeValue(n, latLng.first);
+              lngProp->setNodeValue(n, latLng.second);
             }
           } else {
             if (!resetLatAndLngValues) {
               // check if latitude/longitude are already set
-              latLng.first = latitudeProperty->getNodeValue(n);
-              latLng.second = longitudeProperty->getNodeValue(n);
+              latLng.first = latProp->getNodeValue(n);
+              latLng.second = lngProp->getNodeValue(n);
               if (latLng.first != 0 || latLng.second != 0) {
                 nodeLatLng[n] = addressesLatLngMap[addr] = latLng;
                 continue;
@@ -1082,8 +1083,8 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
             nodeLatLng[n] = addressesLatLngMap[addr] = latLng;
 
             if (createLatAndLngProps) {
-              latitudeProperty->setNodeValue(n, latLng.first);
-              longitudeProperty->setNodeValue(n, latLng.second);
+              latProp->setNodeValue(n, latLng.first);
+              lngProp->setNodeValue(n, latLng.second);
             }
           }
         }
@@ -1106,27 +1107,26 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
   geocodingActive = false;
 }
 
-void GeographicViewGraphicsView::createLayoutWithLatLngs(const std::string &latitudePropertyName,
-                                                         const std::string &longitudePropertyName,
+void GeographicViewGraphicsView::createLayoutWithLatLngs(const std::string &latPropName,
+                                                         const std::string &lngPropName,
                                                          const string &edgesPathsPropertyName) {
   nodeLatLng.clear();
   pair<double, double> latLng;
 
-  if (graph->existProperty(latitudePropertyName) && graph->existProperty(longitudePropertyName)) {
-    DoubleProperty *latitudeProperty = graph->getProperty<DoubleProperty>(latitudePropertyName);
-    DoubleProperty *longitudeProperty = graph->getProperty<DoubleProperty>(longitudePropertyName);
+  if (graph->existProperty(latPropName) && graph->existProperty(lngPropName)) {
+    latProp = graph->getProperty<DoubleProperty>(latPropName);
+    lngProp = graph->getProperty<DoubleProperty>(lngPropName);
     for (auto n : graph->nodes()) {
-      latLng.first = latitudeProperty->getNodeValue(n);
-      latLng.second = longitudeProperty->getNodeValue(n);
+      latLng.first = latProp->getNodeValue(n);
+      latLng.second = lngProp->getNodeValue(n);
       nodeLatLng[n] = latLng;
     }
   }
 
   if (graph->existProperty(edgesPathsPropertyName)) {
-    DoubleVectorProperty *edgesPathsProperty =
-        graph->getProperty<DoubleVectorProperty>(edgesPathsPropertyName);
+    auto edgesPathsProperty = graph->getProperty<DoubleVectorProperty>(edgesPathsPropertyName);
     for (auto e : graph->edges()) {
-      const std::vector<double> &edgePath = edgesPathsProperty->getEdgeValue(e);
+      auto &edgePath = edgesPathsProperty->getEdgeValue(e);
       std::vector<std::pair<double, double>> latLngs;
       latLngs.reserve(edgePath.size() / 2);
 
@@ -1174,8 +1174,7 @@ void GeographicViewGraphicsView::timerEvent(QTimerEvent *event) {
 #endif
 
 void GeographicViewGraphicsView::refreshMap() {
-
-  if (!leafletMaps->isVisible() || !leafletMaps->mapLoaded()) {
+  if (!leafletMaps->isVisible() || !leafletMaps->mapLoaded() || !glMainWidget->isCurrent()) {
     return;
   }
 
@@ -1221,9 +1220,13 @@ void GeographicViewGraphicsView::centerMapOnNode(const node n) {
 }
 
 void GeographicViewGraphicsView::setGeoLayout(LayoutProperty *property) {
-  *property = *geoLayout;
-  geoLayout = property;
-  glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setElementLayout(geoLayout);
+  if (property != geoLayout) {
+    geoLayout->removeListener(this);
+    *property = *geoLayout;
+    geoLayout = property;
+    geoLayout->addListener(this);
+    glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setElementLayout(geoLayout);
+  }
 }
 
 void GeographicViewGraphicsView::setGeoSizes(SizeProperty *property) {
@@ -1238,48 +1241,28 @@ void GeographicViewGraphicsView::setGeoShape(IntegerProperty *property) {
   glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setElementShape(geoViewShape);
 }
 
-void GeographicViewGraphicsView::afterSetNodeValue(PropertyInterface *prop, const node n) {
-  if (geoViewSize != nullptr) {
-    SizeProperty *viewSize = static_cast<SizeProperty *>(prop);
-    const Size &nodeSize = viewSize->getNodeValue(n);
-    float sizeFactor = pow(1.3f, float(leafletMaps->getCurrentMapZoom()));
-    geoViewSize->setNodeValue(n, Size(sizeFactor * nodeSize.getW(), sizeFactor * nodeSize.getH(),
-                                      sizeFactor * nodeSize.getD()));
-  }
-}
-
-void GeographicViewGraphicsView::afterSetAllNodeValue(PropertyInterface *prop) {
-  if (geoViewSize != nullptr) {
-    SizeProperty *viewSize = static_cast<SizeProperty *>(prop);
-    const Size &nodeSize = viewSize->getNodeValue(graph->getOneNode());
-    float sizeFactor = pow(1.3f, float(leafletMaps->getCurrentMapZoom()));
-    geoViewSize->setAllNodeValue(Size(sizeFactor * nodeSize.getW(), sizeFactor * nodeSize.getH(),
-                                      sizeFactor * nodeSize.getD()));
-  }
-}
-
 void GeographicViewGraphicsView::treatEvent(const Event &ev) {
   const PropertyEvent *propEvt = dynamic_cast<const PropertyEvent *>(&ev);
 
-  if (propEvt) {
-    PropertyInterface *prop = propEvt->getProperty();
-
-    switch (propEvt->getType()) {
-    case PropertyEvent::TLP_AFTER_SET_NODE_VALUE:
-      afterSetNodeValue(prop, propEvt->getNode());
-      break;
-
-    case PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE:
-      afterSetAllNodeValue(prop);
-      break;
-
-    default:
-      break;
+  if (propEvt && propEvt->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE &&
+      propEvt->getProperty() == geoLayout) {
+    // update latitude/longitude properties
+    if (latProp && lngProp) {
+      node n = propEvt->getNode();
+      pair<double, double> latLng;
+      const auto &l = geoLayout->getNodeValue(n);
+      latProp->setNodeValue(n, latLng.first = mercatorToLatitude(l.y()) / 2.);
+      lngProp->setNodeValue(n, latLng.second = l.x() / 2.);
+      nodeLatLng[n] = latLng;
     }
   }
 }
 
 void GeographicViewGraphicsView::switchViewType() {
+  bool makeCurrent = !glMainWidget->isCurrent();
+  if (makeCurrent)
+    glMainWidget->makeCurrent();
+
   GeographicView::ViewType viewType = _geoView->viewType();
 
   bool enableLeafletMap = false;
@@ -1361,6 +1344,7 @@ void GeographicViewGraphicsView::switchViewType() {
   layer->setCamera(new Camera(glMainWidget->getScene()));
 
   if (viewType != GeographicView::Globe && geoLayoutComputed) {
+    geoLayout->removeListener(this);
     SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");
 
     for (auto n : graph->nodes()) {
@@ -1374,6 +1358,7 @@ void GeographicViewGraphicsView::switchViewType() {
             n, Coord(nodeLatLng[n].second * 2., latitudeToMercator(nodeLatLng[n].first * 2.), 0));
       }
     }
+    geoLayout->addListener(this);
 
     if (!edgeBendsLatLng.empty()) {
       for (auto e : graph->edges()) {
@@ -1452,6 +1437,7 @@ void GeographicViewGraphicsView::switchViewType() {
 
         unsigned int bendsNumber = 2;
         vector<Coord> bends;
+        bends.reserve(bendsNumber);
 
         for (unsigned int i = 0; i < bendsNumber; ++i) {
           Coord &&tmp = srcC + ((tgtC - srcC) / (bendsNumber + 1.f)) * (i + 1.f);
@@ -1504,6 +1490,9 @@ void GeographicViewGraphicsView::switchViewType() {
   Observable::unholdObservers();
 
   graph->popIfNoUpdates();
+
+  if (makeCurrent)
+    glMainWidget->doneCurrent();
 
   draw();
 }

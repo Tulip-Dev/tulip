@@ -31,12 +31,12 @@ namespace tlp {
 class Graph;
 
 /**
- * This class represents the list of strings (identifying the graph properties)  that can be used as plugin parameter to select some of the properties of a given graph.
+ * This class represents the list of strings (identifying the graph properties)  that can be used as
+ * plugin parameter to select some of the properties of a given graph.
  */
 class TLP_SCOPE PropertiesCollection {
   std::vector<std::string> _props;
   std::vector<std::string> _selected;
-  
 
 public:
   /**
@@ -48,10 +48,10 @@ public:
    * Initializes a collection with all properties of a graph selected
    *
    * @param graph the Graph for which the properties have to be selected
-   * @param selectViewProperties a flag indicating if the view properties have to be selected. Default is false
+   * @param selectViewProperties a flag indicating if the view properties have to be selected.
+   * Default is false
    */
-  explicit PropertiesCollection(const Graph* graph,
-				bool selectViewProperties = false);
+  explicit PropertiesCollection(const Graph *graph, bool selectViewProperties = false);
 
   /**
    * Returns all the selectable string entries.
@@ -103,7 +103,6 @@ public:
     return _selected.empty();
   }
 
-  
   /**
    * @brief clear the content of the collection.
    */

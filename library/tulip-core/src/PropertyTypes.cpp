@@ -1139,7 +1139,8 @@ struct EdgeVectorTypeSerializer : public TypedDataSerializer<vector<edge>> {
 };
 
 struct PropertiesCollectionSerializer : public TypedDataSerializer<PropertiesCollection> {
-  PropertiesCollectionSerializer() : TypedDataSerializer<PropertiesCollection>("PropertiesCollection") {}
+  PropertiesCollectionSerializer()
+      : TypedDataSerializer<PropertiesCollection>("PropertiesCollection") {}
 
   DataTypeSerializer *clone() const override {
     return new PropertiesCollectionSerializer();
@@ -1161,7 +1162,7 @@ struct PropertiesCollectionSerializer : public TypedDataSerializer<PropertiesCol
     oss << '"';
     for (size_t i = 0; i < selected.size(); ++i) {
       if (i)
-	oss << ", ";
+        oss << ", ";
       oss << selected[i];
     }
     oss << '"';

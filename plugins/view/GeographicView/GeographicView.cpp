@@ -421,15 +421,14 @@ void GeographicView::registerTriggers() {
 
   addRedrawTrigger(
       geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite()->getGraph());
-  std::set<tlp::PropertyInterface *> properties = geoViewGraphicsView->getGlMainWidget()
-                                                      ->getScene()
-                                                      ->getGlGraphComposite()
-                                                      ->getInputData()
-                                                      ->properties();
+  auto &properties = geoViewGraphicsView->getGlMainWidget()
+                         ->getScene()
+                         ->getGlGraphComposite()
+                         ->getInputData()
+                         ->properties();
 
-  for (std::set<tlp::PropertyInterface *>::iterator it = properties.begin(); it != properties.end();
-       ++it) {
-    addRedrawTrigger(*it);
+  for (auto prop : properties) {
+    addRedrawTrigger(prop);
   }
 }
 
@@ -438,10 +437,9 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
   // hide the graphics widget used to configure the view
   // before taking a snapshot
   QList<QGraphicsProxyWidget *> gWidgetsToRestore;
-  QList<QGraphicsItem *> sceneItems = geoViewGraphicsView->scene()->items();
 
-  for (int i = 0; i < sceneItems.size(); ++i) {
-    QGraphicsProxyWidget *gWidget = dynamic_cast<QGraphicsProxyWidget *>(sceneItems.at(i));
+  for (auto item : geoViewGraphicsView->scene()->items()) {
+    QGraphicsProxyWidget *gWidget = dynamic_cast<QGraphicsProxyWidget *>(item);
 
     if (gWidget && gWidget->isVisible()) {
       gWidget->hide();
@@ -458,8 +456,8 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
   painter.end();
 
   // restore the graphics widgets previously hidden
-  for (int i = 0; i < gWidgetsToRestore.size(); ++i) {
-    gWidgetsToRestore.at(i)->show();
+  for (auto gWidget : gWidgetsToRestore) {
+    gWidget->show();
   }
 
   return QPixmap::fromImage(snapshotImage)

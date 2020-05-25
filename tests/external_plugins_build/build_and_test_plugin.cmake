@@ -71,6 +71,9 @@ ENDIF("${CMD_RESULT}" STREQUAL "0")
 IF("${CMD_RESULT}" STREQUAL "0")
   EXECUTE_PROCESS(COMMAND ${TEST_PLUGINS_EXE} ${TULIP_INSTALL_DIR}/lib/tulip/test
                   RESULT_VARIABLE CMD_RESULT)
+ELSE()
+# Exit with error if something went wrong
+MESSAGE(FATAL_ERROR "The test of build of external plugins (cmake) failed !")
 ENDIF("${CMD_RESULT}" STREQUAL "0")
 
 # Build a Tulip plugin using make and tulip-config
@@ -89,12 +92,10 @@ IF(NOT MSVC)
   STRING(REPLACE "prefix=${CMAKE_INSTALL_PREFIX}" "prefix=${TULIP_INSTALL_DIR}" TULIP_CONFIG "${TULIP_CONFIG}")
   FILE(WRITE ${TULIP_INSTALL_DIR}/bin/tulip-config "${TULIP_CONFIG}")
 
-  IF("${CMD_RESULT}" STREQUAL "0")
-    # ensure a clean build
-    EXECUTE_PROCESS(COMMAND make clean
-      WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/plugins_src
-      RESULT_VARIABLE CMD_RESULT)
-  ENDIF("${CMD_RESULT}" STREQUAL "0")
+  # ensure a clean build
+  EXECUTE_PROCESS(COMMAND make clean
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/plugins_src
+    RESULT_VARIABLE CMD_RESULT)
 
   IF("${CMD_RESULT}" STREQUAL "0")
     EXECUTE_PROCESS(COMMAND make
@@ -113,9 +114,9 @@ IF(NOT MSVC)
                     RESULT_VARIABLE CMD_RESULT)
   ENDIF("${CMD_RESULT}" STREQUAL "0")
 
-ENDIF(NOT MSVC)
-
 # Exit with error if something went wrong
 IF(NOT "${CMD_RESULT}" STREQUAL "0")
-  MESSAGE(FATAL_ERROR "The external plugins compilation test failed !")
+  MESSAGE(FATAL_ERROR "The test of build of external plugins (tulip-config + make) failed !")
 ENDIF(NOT "${CMD_RESULT}" STREQUAL "0")
+
+ENDIF(NOT MSVC)

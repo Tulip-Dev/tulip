@@ -10,14 +10,14 @@ yum -y install zlib-devel qhull-devel ccache
 
 pushd /tmp
 
-# download, build and install cmake-2.8.12 needed by tulip
-curl -LO https://cmake.org/files/v2.8/cmake-2.8.12.tar.gz
-tar zxvf cmake-2.8.12.tar.gz
-pushd cmake-2.8.12
-cmake28 . && make -j4 install
+# download, build and install cmake-3.1.3 needed by tulip
+curl -LO https://cmake.org/files/v3.1/cmake-3.1.3.tar.gz
+tar zxvf cmake-3.1.3.tar.gz
+pushd cmake-3.1.3
+./bootstrap && make -j4 install
 popd
 # remove cmake source
-rm -rf cmake-2.8.12*
+rm -rf cmake-3.1.3*
 popd
 
 # get tulip source dir

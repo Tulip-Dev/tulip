@@ -56,7 +56,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build with cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
@@ -104,7 +104,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build with cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4  || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
@@ -276,8 +276,7 @@ jobs:
         - export COLUMNS=80
         # install MacPorts in order to easily retrieve Tulip dependencies
         - wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
-        - chmod +x ./macports-ci
-        - travis_wait ./macports-ci install
+        - source ./macports-ci install
         - export PATH=/opt/local/bin:$PATH
         # install Tulip core build dependencies
         - sudo port -N install cmake
@@ -294,7 +293,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
@@ -309,7 +308,7 @@ jobs:
       if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
       os: osx
       # use the most recent Xcode version
-      osx_image: xcode10.3
+      osx_image: xcode11.4
       compiler: clang
       cache: ccache
       install:
@@ -317,12 +316,11 @@ jobs:
         - export COLUMNS=80
         # install MacPorts in order to easily retrieve Tulip dependencies
         - wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
-        - chmod +x ./macports-ci
-        - travis_wait ./macports-ci install
+        - source ./macports-ci install
         - export PATH=/opt/local/bin:$PATH
         # install Tulip core build dependencies
         - sudo port -N install cmake
-        - sudo port -N install clang-9.0
+        - sudo port -N install clang-10
         - sudo port -N install ccache
         - sudo port -N install ninja
         - sudo port -N install qhull
@@ -336,7 +334,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/opt/local/bin/clang-mp-9.0 -DCMAKE_CXX_COMPILER=/opt/local/bin/clang++-mp-9.0 -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/opt/local/bin/clang-mp-10 -DCMAKE_CXX_COMPILER=/opt/local/bin/clang++-mp-10 -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
@@ -377,7 +375,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
@@ -392,7 +390,7 @@ jobs:
       if: commit_message !~ /\[(linux|macports|windows)-only\]$/
       os: osx
       # use the most recent Xcode version
-      osx_image: xcode11.2
+      osx_image: xcode11.4
       compiler: clang
       cache:
         ccache: true
@@ -418,7 +416,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
@@ -442,8 +440,7 @@ jobs:
         - export COLUMNS=80
         # install MacPorts in order to easily retrieve Tulip build dependencies
         - wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
-        - chmod +x ./macports-ci
-        - travis_wait ./macports-ci install
+        - source ./macports-ci install
         - export PATH=/opt/local/bin:$PATH
         # install Tulip complete build dependencies
         - sudo port -N install cmake
@@ -484,7 +481,7 @@ jobs:
       if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
       os: osx
       # use the most recent Xcode version
-      osx_image: xcode10.3
+      osx_image: xcode11.4
       compiler: clang
       cache: ccache
       install:
@@ -492,12 +489,11 @@ jobs:
         - export COLUMNS=80
         # install MacPorts in order to easily retrieve Tulip dependencies
         - wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
-        - chmod +x ./macports-ci
-        - travis_wait ./macports-ci install
+        - source ./macports-ci install
         - export PATH=/opt/local/bin:$PATH
         # install Tulip complete build dependencies
         - sudo port -N install cmake
-        - sudo port -N install clang-9.0
+        - sudo port -N install clang-10
         - sudo port -N install ccache
         - sudo port -N install ninja
         - sudo port -N install qt5-qtbase
@@ -520,7 +516,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip complete build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/opt/local/bin/clang-mp-9.0 -DCMAKE_CXX_COMPILER=/opt/local/bin/clang++-mp-9.0 -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DGLEW_SHARED_LIBRARY_RELEASE=/opt/local/lib/libGLEW.dylib
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/opt/local/bin/clang-mp-10 -DCMAKE_CXX_COMPILER=/opt/local/bin/clang++-mp-10 -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DGLEW_SHARED_LIBRARY_RELEASE=/opt/local/lib/libGLEW.dylib
         # compile Tulip using ninja for faster builds
         - ninja -j4
         - ninja -j4 install
@@ -589,7 +585,7 @@ jobs:
       if: commit_message !~ /\[(linux|macports|windows)-only\]$/
       os: osx
       # use the most recent Xcode version
-      osx_image: xcode11.2
+      osx_image: xcode11.4
       compiler: clang
       cache:
         ccache: true

@@ -204,6 +204,10 @@ void StressMinimization::fixYCoordinates(bool fix) {
 	m_fixYCoords = fix;
 }
 
+void StressMinimization::fixZCoordinates(bool fix) {
+	m_fixZCoords = fix;
+}
+
 void StressMinimization::hasInitialLayout(bool hasInitialLayout) {
 	m_hasInitialLayout = hasInitialLayout;
 }

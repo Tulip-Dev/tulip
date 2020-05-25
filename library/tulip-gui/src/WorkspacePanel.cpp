@@ -88,7 +88,11 @@ public:
 protected:
   QSize tabSizeHint(int index) const {
     int width = QTabBar::tabSizeHint(index).width();
+#if (QT_VERSION < QT_VERSION_CHECK(5, 11, 0))
     return QSize(width, fontMetrics().width(tabText(index)) * 2 + iconSize().width());
+#else
+    return QSize(width, fontMetrics().horizontalAdvance(tabText(index)) * 2 + iconSize().width());
+#endif
   }
 };
 

@@ -230,6 +230,11 @@ public:
   void doneCurrent();
 
   /**
+   * Indicates if this is associated to the current OpenGL context
+   */
+  bool isCurrent();
+
+  /**
    * Resize openGL view
    */
   void resizeGL(int w, int h) override;

@@ -30,7 +30,7 @@
 #define ELT_RIGHTTOLEFT 3
 
 #define ELT_ROOTSELECTION "Root selection"
-#define ELT_ROOTSELECTIONLIST "rootIsSource;rootIsSink;rootByCoord"
+#define ELT_ROOTSELECTIONLIST "Source;Sink;ByCoord"
 #define ELT_ROOTSOURCE 0
 #define ELT_ROOTSINK 1
 #define ELT_ROOTCOORD 2
@@ -67,9 +67,9 @@ static const char *orientationValuesDescription =
     "rightToLeft <i>(Edges are oriented from right to left)</i>";
 
 static const char *rootSelectionValuesDescription =
-    "rootIsSource <i>(Select a source in the graph)</i><br>"
-    "rootIsSink <i>(Select a sink in the graph)</i><br>"
-    "rootByCoord <i>(Use the coordinates, e.g., select the topmost node if orientation is "
+    "Source <i>(Select a source in the graph)</i><br>"
+    "Sink <i>(Select a sink in the graph)</i><br>"
+    "ByCoord <i>(Use the coordinates, e.g., select the topmost node if orientation is "
     "topToBottom)</i>";
 
 class OGDFTree : public OGDFLayoutPluginBase {

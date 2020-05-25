@@ -354,7 +354,7 @@ bool TulipProject::clearProject() {
                                               QDir::AllDirs | QDir::Files,
                                           QDir::DirsFirst));
 
-  for (const QFileInfo info : entries) {
+  for (const QFileInfo &info : entries) {
     bool result = true;
     if (info.isDir()) {
       QDir dird(info.absoluteFilePath());
