@@ -116,19 +116,15 @@ IF(TULIP_BUILD_PYTHON_COMPONENTS)
   SET_SOURCE_FILES_PROPERTIES(AboutTulipPageUtils.cpp
                               PROPERTIES COMPILE_DEFINITIONS "${TLPGUI_PYTHON_COMPILE_DEFINITIONS}")
   ADD_LIBRARY(tulip-gui-python STATIC ${PYTHON_PART_SRCS})
+  # allow the static library to be used to build shared libs
+  SET_TARGET_PROPERTIES(tulip-gui-python PROPERTIES POSITION_INDEPENDENT_CODE ON)
   TARGET_LINK_LIBRARIES(tulip-gui-python ${QT_LIBRARIES})
-  IF(UNIX)
-    SET_TARGET_PROPERTIES(tulip-gui-python
-                          PROPERTIES COMPILE_OPTIONS "-fPIC")
-  ENDIF(UNIX)
 ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 
 ADD_LIBRARY(tulip-about-page-utils STATIC AboutTulipPageUtils.cpp)
+# allow the static library to be used to build shared libs
+SET_TARGET_PROPERTIES(tulip-about-page-utils PROPERTIES POSITION_INDEPENDENT_CODE ON)
 TARGET_LINK_LIBRARIES(tulip-about-page-utils ${QT_LIBRARIES})
-IF(UNIX)
-  SET_TARGET_PROPERTIES(tulip-about-page-utils
-                        PROPERTIES COMPILE_OPTIONS "-fPIC")
-ENDIF(UNIX)
 
 QTX_WRAP_UI(UI_HEADERS
   ../designer/AboutTulipPage.ui

@@ -7,10 +7,6 @@ ADD_SUBDIRECTORY(LinLog)
 
 INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude})
 
-IF(UNIX)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-ENDIF(UNIX)
-
 SET(LayoutUtils_SRCS 
   DatasetTools.cpp
   OrientableCoord.cpp
@@ -23,6 +19,8 @@ SET(LayoutUtils_SRCS
 IF(NOT EMSCRIPTEN)
 SET(LayoutUtilsLibraryName LayoutUtils)
 ADD_LIBRARY(${LayoutUtilsLibraryName} STATIC ${LayoutUtils_SRCS})
+# allow the static library to be used to build shared libs
+SET_TARGET_PROPERTIES(${LayoutUtilsLibraryName} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 ELSE(NOT EMSCRIPTEN)
 SET(LayoutUtilsLibraryName "")
 ENDIF(NOT EMSCRIPTEN)

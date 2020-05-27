@@ -20,15 +20,13 @@ SET(QHULL_LIB_SRCS
     userprintf_rbox_r.c
 )
 
-IF(UNIX)
-    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
-ENDIF(UNIX)
-
 IF(MINGW AND X86_64)
     ADD_DEFINITIONS(-D_WIN64)
 ENDIF(MINGW AND X86_64)
 
 ADD_LIBRARY(${QhullLibrary} STATIC ${QHULL_LIB_SRCS})
+# allow the static library to be used to build shared libs
+SET_TARGET_PROPERTIES(${QhullLibrary} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 IF(UNIX)
     TARGET_LINK_LIBRARIES(${QhullLibrary} m)
