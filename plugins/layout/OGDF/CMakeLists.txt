@@ -1,6 +1,8 @@
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${OGDFInclude} ${TulipOGDFInclude} ${OGDFBuildInclude})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${OGDFInclude} ${OGDFBuildInclude})
 
 SET(PLUGINS_SRCS
+tulip2ogdf/OGDFLayoutPluginBase.cpp
+tulip2ogdf/TulipToOGDF.cpp
 OGDFFm3.cpp
 OGDFUpwardPlanarization.cpp
 OGDFFruchtermanReingold.cpp
@@ -27,11 +29,7 @@ OGDFNodeRespecter.cpp
 
 DISABLE_COMPILER_WARNINGS()
 
-FOREACH(OGDFPlugin ${PLUGINS_SRCS})
-  STRING(REGEX REPLACE ".cpp" "" PLUGIN_NAME ${OGDFPlugin})
-  STRING(REGEX REPLACE ".*/" "" PLUGIN_NAME ${PLUGIN_NAME})
-  ADD_LIBRARY(${PLUGIN_NAME}-${TulipVersion} SHARED ${OGDFPlugin})
-  TARGET_LINK_LIBRARIES(${PLUGIN_NAME}-${TulipVersion} ${TulipLibName} ${LibTulipOGDFName} ${OGDF_LIBRARY})
+ADD_LIBRARY(OGDFPlugins-${TulipVersion} SHARED ${PLUGINS_SRCS})
+TARGET_LINK_LIBRARIES(OGDFPlugins-${TulipVersion} ${LibTulipCoreName} ${OGDFLibrary})
 
-  TULIP_INSTALL_PLUGIN(${PLUGIN_NAME}-${TulipVersion} ${TulipPluginsInstallDir})
-ENDFOREACH()
+TULIP_INSTALL_PLUGIN(OGDFPlugins-${TulipVersion} ${TulipPluginsInstallDir})

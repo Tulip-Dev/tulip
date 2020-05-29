@@ -16,7 +16,6 @@ TARGET_LINK_LIBRARIES(packagePlugins
                       ${LibTulipCoreName}
                       ${LibTulipGUIName}
                       ${LibTulipOGLName}
-                      ${LibTulipOGDFName}
                       ${OGDFLibrary}
                       ${QT_LIBRARIES}
                       ${QuazipLibrary})

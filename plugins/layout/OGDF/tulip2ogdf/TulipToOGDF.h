@@ -23,7 +23,6 @@
 
 #include <ogdf/basic/GraphAttributes.h>
 
-#include <tulip/tulipconf.h>
 #include <tulip/Graph.h>
 #include <tulip/NumericProperty.h>
 #include <tulip/StaticProperty.h>
@@ -38,7 +37,7 @@ namespace tlp {
 class SizeProperty;
 // namespace tlp
 
-class TLP_OGDF_SCOPE TulipToOGDF {
+class TulipToOGDF {
 public:
   TulipToOGDF(tlp::Graph *g, bool importEdgeBends = true);
 
