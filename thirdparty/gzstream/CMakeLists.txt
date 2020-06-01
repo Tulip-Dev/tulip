@@ -7,15 +7,7 @@ SET(gzstream_SRCS
 
 INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
-IF(MSVC)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGZSTREAM_STATIC")
-ENDIF(MSVC)
-
-# add -fPIC to allow the produced static library to be used
-# to build a shared library
-IF(UNIX)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-ENDIF(UNIX)
-
 ADD_LIBRARY(${GZStreamLibrary} STATIC ${gzstream_SRCS})
+# allow the static library to be used to build shared libs
+SET_TARGET_PROPERTIES(${GZStreamLibrary} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 TARGET_LINK_LIBRARIES(${GZStreamLibrary} ${ZLIB_LIBRARY})
