@@ -1,7 +1,12 @@
 # OGDF (library only) CMake configuration
 
 # cache configuration
-option(BUILD_SHARED_LIBS "Whether to build shared libraries instead of static ones." OFF)
+IF(MSVC)
+  option(BUILD_SHARED_LIBS "Whether to build shared libraries instead of static ones." ON)
+ELSE(MSVC)
+  option(BUILD_SHARED_LIBS "Whether to build shared libraries instead of static ones." OFF)
+ENDIF(MSVC)
+
 set(OGDF_MEMORY_MANAGER "POOL_TS" CACHE STRING "Memory manager to be used.")
 set_property(CACHE OGDF_MEMORY_MANAGER PROPERTY STRINGS POOL_TS POOL_NTS MALLOC_TS)
 set(OGDF_DEBUG_MODE "REGULAR" CACHE STRING "Whether to use (heavy) OGDF assertions in debug mode.")
@@ -188,3 +193,14 @@ endif()
 #install(EXPORT OgdfTargets DESTINATION "${OGDF_INSTALL_CMAKE_DIR}")
 #install(FILES "${PROJECT_BINARY_DIR}/ogdf-config.cmake" DESTINATION "${OGDF_INSTALL_CMAKE_DIR}")
 #export(EXPORT OgdfTargets)
+
+IF(MSVC)
+INSTALL(TARGETS ${OGDFLibrary}
+        RUNTIME DESTINATION ${TulipBinInstallDir}
+        LIBRARY DESTINATION ${TulipLibInstallDir}
+        ARCHIVE DESTINATION ${TulipLibInstallDir})
+
+IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+  TULIP_COPY_TARGET_LIBRARY_POST_BUILD(${OGDFLibrary} ${TULIP_PYTHON_NATIVE_FOLDER} wheel)
+ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+ENDIF(MSVC)
