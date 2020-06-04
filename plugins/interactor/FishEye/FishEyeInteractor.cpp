@@ -164,22 +164,22 @@ bool FishEyeInteractorComponent::eventFilter(QObject *obj, QEvent *e) {
     if (vDelta != 0) {
       activateFishEye = true;
       if (wheelEvent->modifiers() == Qt::ControlModifier) {
-	configWidget->setFishEyeRadius(configWidget->getFishEyeRadius() +
-				       configWidget->getFishEyeRadiusIncrementStep() * (vDelta/120));
-	glWidget->redraw();
-	return true;
+        configWidget->setFishEyeRadius(configWidget->getFishEyeRadius() +
+                                       configWidget->getFishEyeRadiusIncrementStep() *
+                                           (vDelta / 120));
+        glWidget->redraw();
+        return true;
       } else if (wheelEvent->modifiers() == Qt::ShiftModifier) {
-	float newHeight =
-	  configWidget->getFishEyeHeight() +
-	  configWidget->getFishEyeHeightIncrementStep() * (vDelta/120);
+        float newHeight = configWidget->getFishEyeHeight() +
+                          configWidget->getFishEyeHeightIncrementStep() * (vDelta / 120);
 
-	if (newHeight < 0) {
-	  newHeight = 0;
-	}
+        if (newHeight < 0) {
+          newHeight = 0;
+        }
 
-	configWidget->setFishEyeHeight(newHeight);
-	glWidget->redraw();
-	return true;
+        configWidget->setFishEyeHeight(newHeight);
+        glWidget->redraw();
+        return true;
       }
     }
   }

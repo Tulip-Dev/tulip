@@ -210,9 +210,9 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
     QWheelEvent *we = static_cast<QWheelEvent *>(e);
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-      auto wePos = we->pos();
+    auto wePos = we->pos();
 #else
-      auto wePos = we->position();
+    auto wePos = we->position();
 #endif
     if (selectInAugmentedDisplayGraph(wePos.x(), wePos.y(), selectedEntity) &&
         selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {

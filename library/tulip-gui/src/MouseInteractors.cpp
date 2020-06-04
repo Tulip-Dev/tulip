@@ -57,7 +57,7 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
       auto wePos = we->position();
 #endif
       g->getScene()->zoomXY(g->screenToViewport(vDelta) / WHEEL_DELTA,
-			    g->screenToViewport(wePos.x()), g->screenToViewport(wePos.y()));
+                            g->screenToViewport(wePos.x()), g->screenToViewport(wePos.y()));
       g->draw(false);
       return true;
     }

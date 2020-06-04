@@ -167,9 +167,9 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
       int vDelta = static_cast<QWheelEvent *>(e)->angleDelta().y();
       if (vDelta != 0) {
 #define WHEEL_DELTA 120
-	g->getScene()->zoomXY(vDelta / WHEEL_DELTA, g->width() / 2., g->height() / 2.);
-	view()->draw();
-	return true;
+        g->getScene()->zoomXY(vDelta / WHEEL_DELTA, g->width() / 2., g->height() / 2.);
+        view()->draw();
+        return true;
       }
       return false;
     }

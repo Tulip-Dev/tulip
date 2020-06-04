@@ -308,8 +308,7 @@ void SOMPropertiesWidget::setData(const DataSet &data) {
 #else
     auto skipEmpty = Qt::SkipEmptyParts;
 #endif
-    QStringList list =
-      tlpStringToQString(propertiesString).split(";", skipEmpty);
+    QStringList list = tlpStringToQString(propertiesString).split(";", skipEmpty);
     vector<string> properties;
 
     for (const QString &s : list) {
