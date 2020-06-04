@@ -1165,7 +1165,7 @@ void GraphPerspective::open(QString fileName) {
         // ensure predictable behavior
         // needed by gui tests
         inGuiTestingMode() ? QFileDialog::DontUseNativeDialog
-                           : static_cast<QFileDialog::Options>(0));
+	                   : QFileDialog::Options());
 
   if (!fileName.isEmpty()) {
     QFileInfo fileInfo(fileName);

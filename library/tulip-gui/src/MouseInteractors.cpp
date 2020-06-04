@@ -42,16 +42,22 @@ using namespace std;
 //===============================================================
 bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
 // according to Qt's doc, this constant has been defined by wheel mouse vendors
-// we need it to interpret the value of QWheelEvent->delta()
+// we need it to interpret the value of QWheelEvent->angleDelta()
 #define WHEEL_DELTA 120
   GlMainWidget *g = static_cast<GlMainWidget *>(widget);
 
   if (e->type() == QEvent::Wheel) {
     QWheelEvent *we = static_cast<QWheelEvent *>(e);
 
-    if (we->orientation() == Qt::Vertical && we->modifiers() == Qt::NoModifier) {
-      g->getScene()->zoomXY(g->screenToViewport(we->delta()) / WHEEL_DELTA,
-                            g->screenToViewport(we->x()), g->screenToViewport(we->y()));
+    auto vDelta = we->angleDelta().y();
+    if (vDelta != 0 && we->modifiers() == Qt::NoModifier) {
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
+      auto wePos = we->pos();
+#else
+      auto wePos = we->position();
+#endif
+      g->getScene()->zoomXY(g->screenToViewport(vDelta) / WHEEL_DELTA,
+			    g->screenToViewport(wePos.x()), g->screenToViewport(wePos.y()));
       g->draw(false);
       return true;
     }

@@ -209,10 +209,16 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
   if (e->type() == QEvent::Wheel && centralNodeLocked && !circleLayoutSet) {
     QWheelEvent *we = static_cast<QWheelEvent *>(e);
 
-    if (selectInAugmentedDisplayGraph(we->x(), we->y(), selectedEntity) &&
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
+      auto wePos = we->pos();
+#else
+      auto wePos = we->position();
+#endif
+    if (selectInAugmentedDisplayGraph(wePos.x(), wePos.y(), selectedEntity) &&
         selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
       if (selectedEntity.getComplexEntityId() == neighborhoodGraphCentralNode.id) {
-        int numSteps = we->delta() / 120;
+        auto delta = we->angleDelta();
+        int numSteps = (delta.x() ? delta.x() : delta.y()) / 120;
         neighborhoodDist += numSteps;
 
         if (neighborhoodDist < 1) {

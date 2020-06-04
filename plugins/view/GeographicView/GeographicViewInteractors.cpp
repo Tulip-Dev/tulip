@@ -155,7 +155,6 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
   GeographicView *geoView = static_cast<GeographicView *>(view());
   GlMainWidget *g = static_cast<GlMainWidget *>(widget);
   QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
-  QWheelEvent *qWheelEv = dynamic_cast<QWheelEvent *>(e);
 
   if (geoView->viewType() == GeographicView::OpenStreetMap ||
       geoView->viewType() == GeographicView::EsriSatellite ||
@@ -164,11 +163,15 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
       geoView->viewType() == GeographicView::LeafletCustomTileLayer) {
     return false;
   } else if (geoView->viewType() == GeographicView::Globe) {
-    if (e->type() == QEvent::Wheel && qWheelEv->orientation() == Qt::Vertical) {
+    if (e->type() == QEvent::Wheel) {
+      int vDelta = static_cast<QWheelEvent *>(e)->angleDelta().y();
+      if (vDelta != 0) {
 #define WHEEL_DELTA 120
-      g->getScene()->zoomXY(qWheelEv->delta() / WHEEL_DELTA, g->width() / 2., g->height() / 2.);
-      view()->draw();
-      return true;
+	g->getScene()->zoomXY(vDelta / WHEEL_DELTA, g->width() / 2., g->height() / 2.);
+	view()->draw();
+	return true;
+      }
+      return false;
     }
 
     if (e->type() == QEvent::MouseButtonPress && !inRotation) {

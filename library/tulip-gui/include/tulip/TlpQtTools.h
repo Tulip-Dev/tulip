@@ -144,6 +144,13 @@ inline QDebug operator<<(QDebug dbg, const std::string &s) {
   return dbg.space();
 }
 
+// Qt 5.15 warning fix
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
+#define QT_ENDL endl
+#else
+#define QT_ENDL Qt::endl
+#endif
+
 // useful macros needed for menu actions building
 #ifdef __APPLE__
 #define SET_TOOLTIP_WITH_CTRL_SHORTCUT(a, tt, sc)                                                  \

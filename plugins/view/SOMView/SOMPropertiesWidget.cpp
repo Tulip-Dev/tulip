@@ -303,7 +303,13 @@ void SOMPropertiesWidget::setData(const DataSet &data) {
     string propertiesString;
     data.get("properties", propertiesString);
     // Use QString split function to parse string.
-    QStringList list = tlpStringToQString(propertiesString).split(";", QString::SkipEmptyParts);
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
+    auto skipEmpty = QString::SkipEmptyParts;
+#else
+    auto skipEmpty = Qt::SkipEmptyParts;
+#endif
+    QStringList list =
+      tlpStringToQString(propertiesString).split(";", skipEmpty);
     vector<string> properties;
 
     for (const QString &s : list) {

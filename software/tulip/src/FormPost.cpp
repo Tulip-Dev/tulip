@@ -18,6 +18,7 @@
  */
 #include "FormPost.h"
 
+#include <tulip/TlpTools.h>
 #include <QFile>
 #include <QDateTime>
 #include <QVariant>
@@ -102,9 +103,10 @@ QNetworkReply *FormPost::postData(QString url) {
   host = url.right(url.length() - url.indexOf("://") - 3);
   host = host.left(host.indexOf("/"));
   QString crlf = "\r\n";
-  qsrand(QDateTime::currentDateTime().toTime_t());
+  tlp::setSeedOfRandomSequence(QDateTime::currentDateTime().toTime_t());
+  tlp::initRandomSequence();
   QString b =
-      QVariant(qrand()).toString() + QVariant(qrand()).toString() + QVariant(qrand()).toString();
+      QVariant(rand()).toString() + QVariant(rand()).toString() + QVariant(rand()).toString();
   QString boundary = "---------------------------" + b;
   QString endBoundary = crlf + "--" + boundary + "--" + crlf;
   QString contentType = "multipart/form-data; boundary=" + boundary;

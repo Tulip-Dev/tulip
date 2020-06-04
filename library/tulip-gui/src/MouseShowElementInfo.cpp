@@ -98,12 +98,16 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
   // ensure the info window stays visible while using the wheel or clicking in it
   if (_informationWidget->isVisible() &&
       (e->type() == QEvent::Wheel || e->type() == QEvent::MouseButtonPress)) {
-    QRect widgetRect = _informationWidget->geometry();
-    QPoint cursorPos;
+    QRectF widgetRect(_informationWidget->geometry());
+    QPointF cursorPos;
     if (e->type() == QEvent::Wheel) {
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
       cursorPos = static_cast<QWheelEvent *>(e)->pos();
+#else
+      cursorPos = static_cast<QWheelEvent *>(e)->position();
+#endif
     } else {
-      cursorPos = static_cast<QMouseEvent *>(e)->pos();
+      cursorPos = static_cast<QMouseEvent *>(e)->localPos();
     }
 
     if (!widgetRect.contains(cursorPos)) {

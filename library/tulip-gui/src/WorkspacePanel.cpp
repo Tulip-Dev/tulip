@@ -303,7 +303,7 @@ bool WorkspacePanel::eventFilter(QObject *obj, QEvent *ev) {
   // because of possible mis-synchronization of Qt events
   if (_ui) {
     if (obj == _ui->interactorsFrame && ev->type() == QEvent::Wheel) {
-      if (static_cast<QWheelEvent *>(ev)->delta() > 0)
+      if (static_cast<QWheelEvent *>(ev)->angleDelta().y() > 0)
         scrollInteractorsLeft();
       else
         scrollInteractorsRight();
