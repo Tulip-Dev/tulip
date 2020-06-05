@@ -253,7 +253,7 @@ public:
    * @param step of zoom
    */
   void zoom(int step) {
-    zoomFactor(powf(1.1, step));
+    zoomFactor(powf(1.1f, step));
   }
 
   /**
