@@ -21,8 +21,6 @@
 #define _ARRAY_H
 
 
-#include <Python.h>
-
 #include "sipint.h"
 
 

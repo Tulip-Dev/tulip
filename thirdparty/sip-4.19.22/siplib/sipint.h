@@ -21,8 +21,6 @@
 #define _SIPINT_H
 
 
-#include <Python.h>
-
 #include "sip.h"
 
 

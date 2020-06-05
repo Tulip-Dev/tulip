@@ -17,10 +17,6 @@
  */
 
 
-#include <Python.h>
-#include <datetime.h>
-#include <frameobject.h>
-
 #include <assert.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -31,6 +27,8 @@
 #include "sipint.h"
 #include "array.h"
 
+#include <datetime.h>
+#include <frameobject.h>
 
 /* There doesn't seem to be a standard way of checking for C99 support. */
 #if !defined(va_copy)

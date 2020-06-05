@@ -35,8 +35,6 @@
  */
 
 
-#include <Python.h>
-
 #include <limits.h>
 
 #include "sipint.h"
