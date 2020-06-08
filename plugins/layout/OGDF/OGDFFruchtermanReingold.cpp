@@ -70,7 +70,7 @@ public:
                     "1.1", "Force Directed")
 
   OGDFFruchtermanReingold(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, new ogdf::SpringEmbedderFRExact()) {
+  : OGDFLayoutPluginBase(context, context ? new ogdf::SpringEmbedderFRExact() : nullptr) {
     addInParameter<int>("iterations", paramHelp[0], "1000");
     addInParameter<bool>("noise", paramHelp[1], "true");
     addInParameter<bool>("use node weights", paramHelp[2], "false");

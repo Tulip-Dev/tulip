@@ -66,7 +66,7 @@ public:
                     "15(4), pp. 301-331, 1996.",
                     "1.3", "Force Directed")
   OGDFDavidsonHarel(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, new ogdf::DavidsonHarelLayout()) {
+  : OGDFLayoutPluginBase(context, context ? new ogdf::DavidsonHarelLayout() : nullptr) {
     addInParameter<StringCollection>(ELT_SETTINGS, paramHelp[0], ELT_SETTINGSLIST, true,
                                      "Standard <br> Repulse <br> Planar");
     addInParameter<StringCollection>(ELT_SPEED, paramHelp[1], ELT_SPEEDLIST, true,

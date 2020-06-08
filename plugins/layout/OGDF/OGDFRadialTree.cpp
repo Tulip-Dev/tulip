@@ -52,7 +52,7 @@ public:
   PLUGININFORMATION("Radial Tree (OGDF)", "Carsten Gutwenger", "02/02/2020",
                     "The radial tree layout algorithm. ", "1.0", "Tree")
   OGDFRadialTree(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, new ogdf::RadialTreeLayout()) {
+  : OGDFLayoutPluginBase(context, context ? new ogdf::RadialTreeLayout() : nullptr) {
     addInParameter<double>("levels distance", paramHelp[0], "50");
     addInParameter<double>("trees distance", paramHelp[1], "50");
     addInParameter<StringCollection>(ELT_ROOTSELECTION, paramHelp[2], ELT_ROOTSELECTIONLIST, true,

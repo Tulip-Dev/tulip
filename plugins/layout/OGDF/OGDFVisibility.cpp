@@ -36,10 +36,10 @@ class OGDFVisibility : public OGDFLayoutPluginBase {
 public:
   PLUGININFORMATION("Visibility (OGDF)", "Hoi-Ming Wong", "12/11/2007",
                     "Implements a simple upward drawing algorithm based on visibility "
-                    "representations (horizontal segments for nodes, vectical segments for edges).",
+                    "representations (horizontal segments for nodes, vertical segments for edges).",
                     "1.1", "Hierarchical")
   OGDFVisibility(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, new ComponentSplitterLayout()) {
+  : OGDFLayoutPluginBase(context, context ? new ComponentSplitterLayout() : nullptr) {
     addInParameter<int>("minimum grid distance", paramHelp[0], "1");
     addInParameter<bool>("transpose", paramHelp[1], "false");
   }

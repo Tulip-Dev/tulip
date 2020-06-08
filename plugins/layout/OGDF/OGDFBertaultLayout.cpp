@@ -43,7 +43,7 @@ public:
                     "embedding in the graph.",
                     "1.0", "Force Directed")
   OGDFBertaultLayout(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, new ogdf::BertaultLayout()) {
+  : OGDFLayoutPluginBase(context, context ? new ogdf::BertaultLayout() : nullptr) {
     addInParameter<bool>("impred", paramHelp[0], "false", false);
     addInParameter<int>("iterno", paramHelp[1], "20", false);
     addInParameter<double>("reqlength", paramHelp[2], "0.0", false);

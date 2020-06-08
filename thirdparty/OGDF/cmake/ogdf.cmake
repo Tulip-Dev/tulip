@@ -1,11 +1,7 @@
 # OGDF (library only) CMake configuration
 
 # cache configuration
-IF(MSVC)
-  option(BUILD_SHARED_LIBS "Whether to build shared libraries instead of static ones." ON)
-ELSE(MSVC)
-  option(BUILD_SHARED_LIBS "Whether to build shared libraries instead of static ones." OFF)
-ENDIF(MSVC)
+option(BUILD_SHARED_LIBS "Whether to build shared libraries instead of static ones." OFF)
 
 set(OGDF_MEMORY_MANAGER "POOL_TS" CACHE STRING "Memory manager to be used.")
 set_property(CACHE OGDF_MEMORY_MANAGER PROPERTY STRINGS POOL_TS POOL_NTS MALLOC_TS)
@@ -67,7 +63,11 @@ mark_as_advanced(OGDF_EXTRA_CXX_FLAGS_RELEASE)
 file(GLOB_RECURSE ogdf_headers include/ogdf/*.h)
 file(GLOB_RECURSE ogdf_sources src/ogdf/*.cpp)
 set(ogdf_sources "${ogdf_sources};${ogdf_headers}")
-add_library(${OGDFLibrary} "${ogdf_sources}")
+IF(BUILD_SHARED_LIBS)
+add_library(${OGDFLibrary} SHARED "${ogdf_sources}")
+ELSE(BUILD_SHARED_LIBS)
+add_library(${OGDFLibrary} STATIC "${ogdf_sources}")
+ENDIF(BUILD_SHARED_LIBS)
 set_target_properties(${OGDFLibrary} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_link_libraries(${OGDFLibrary} PUBLIC COIN)
 group_files(ogdf_sources "ogdf")
@@ -194,7 +194,7 @@ endif()
 #install(FILES "${PROJECT_BINARY_DIR}/ogdf-config.cmake" DESTINATION "${OGDF_INSTALL_CMAKE_DIR}")
 #export(EXPORT OgdfTargets)
 
-IF(MSVC)
+IF(BUILD_SHARED_LIBS)
 INSTALL(TARGETS ${OGDFLibrary}
         RUNTIME DESTINATION ${TulipBinInstallDir}
         LIBRARY DESTINATION ${TulipLibInstallDir}
@@ -203,4 +203,4 @@ INSTALL(TARGETS ${OGDFLibrary}
 IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
   TULIP_COPY_TARGET_LIBRARY_POST_BUILD(${OGDFLibrary} ${TULIP_PYTHON_NATIVE_FOLDER} wheel)
 ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
-ENDIF(MSVC)
+ENDIF(BUILD_SHARED_LIBS)

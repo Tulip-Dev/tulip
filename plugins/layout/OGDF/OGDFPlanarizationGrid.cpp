@@ -45,7 +45,7 @@ public:
                     "layout algorithm to produce a drawing on a grid.",
                     "1.0", "Planar")
   OGDFPlanarizationGrid(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, new ogdf::PlanarizationGridLayout()),
+  : OGDFLayoutPluginBase(context, context ? new ogdf::PlanarizationGridLayout() : nullptr),
         pgl(static_cast<ogdf::PlanarizationGridLayout *>(ogdfLayoutAlgo)) {
     addInParameter<double>("page ratio", paramHelp[0], "1.1");
     addOutParameter<int>("number of crossings", paramHelp[1]);

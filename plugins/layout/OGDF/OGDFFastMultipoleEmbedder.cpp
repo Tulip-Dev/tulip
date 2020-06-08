@@ -54,7 +54,7 @@ public:
                     "modified attractive forces.",
                     "1.0", "Force Directed")
   OGDFFastMultipoleEmbedder(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()) {
+  : OGDFLayoutPluginBase(context, context ? new ogdf::ComponentSplitterLayout() : nullptr) {
     addInParameter<int>("number of iterations", paramHelp[0], "100");
     addInParameter<int>("number of coefficients", paramHelp[1], "5");
     addInParameter<bool>("randomize layout", paramHelp[2], "true");
