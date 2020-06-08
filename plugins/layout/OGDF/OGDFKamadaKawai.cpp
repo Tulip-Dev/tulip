@@ -58,7 +58,7 @@ public:
                     "to their graph theoretic distance. ",
                     "1.0", "Force Directed")
   OGDFKamadaKawai(const tlp::PluginContext *context)
-  : OGDFLayoutPluginBase(context, context ? new ogdf::SpringEmbedderKK() : nullptr) {
+      : OGDFLayoutPluginBase(context, context ? new ogdf::SpringEmbedderKK() : nullptr) {
     addInParameter<double>("stop tolerance", paramHelp[0], "0.001");
     addInParameter<bool>("used layout", paramHelp[1], "true");
     addInParameter<double>("zero length", paramHelp[2], "0");

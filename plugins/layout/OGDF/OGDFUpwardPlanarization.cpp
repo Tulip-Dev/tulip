@@ -44,7 +44,7 @@ public:
                     "less crossings than Sugiyama layout.",
                     "1.1", "Hierarchical")
   OGDFUpwardPlanarization(const tlp::PluginContext *context)
-  : OGDFLayoutPluginBase(context, context ? new ogdf::ComponentSplitterLayout() : nullptr) {
+      : OGDFLayoutPluginBase(context, context ? new ogdf::ComponentSplitterLayout() : nullptr) {
     addInParameter<bool>("transpose", paramHelp[0], "false");
     addOutParameter<int>("number of crossings", paramHelp[1]);
     addOutParameter<int>("number of layers", paramHelp[2]);

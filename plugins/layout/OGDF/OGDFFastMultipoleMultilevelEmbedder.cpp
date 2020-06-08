@@ -41,7 +41,7 @@ public:
                     "which utilizes various tools to speed up the computation.",
                     "1.1", "Multilevel")
   OGDFFastMultipoleMultiLevelEmbedder(const tlp::PluginContext *context)
-  : OGDFLayoutPluginBase(context, context ? new ogdf::ComponentSplitterLayout() : nullptr) {
+      : OGDFLayoutPluginBase(context, context ? new ogdf::ComponentSplitterLayout() : nullptr) {
     addInParameter<int>("number of threads", paramHelp[0], "2");
     addInParameter<int>("multilevel nodes bound", paramHelp[1], "10");
   }

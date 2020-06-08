@@ -84,7 +84,7 @@ public:
 };
 
 OGDFGemFrick::OGDFGemFrick(const tlp::PluginContext *context)
-  : OGDFLayoutPluginBase(context, context ? new ogdf::GEMLayout() : nullptr) {
+    : OGDFLayoutPluginBase(context, context ? new ogdf::GEMLayout() : nullptr) {
   addInParameter<int>("number of rounds", paramHelp[0], "30000");
   addInParameter<double>("minimal temperature", paramHelp[1], "0.005");
   addInParameter<double>("initial temperature", paramHelp[2], "12.0");

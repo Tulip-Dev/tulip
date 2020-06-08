@@ -83,7 +83,7 @@ public:
   PLUGININFORMATION("Planarization Layout (OGDF)", "Carsten Gutwenger", "12/11/2007",
                     "The planarization approach for drawing graphs.", "1.0", "Planar")
   OGDFPlanarizationLayout(const tlp::PluginContext *context)
-  : OGDFLayoutPluginBase(context, context ? new ogdf::PlanarizationLayout() : nullptr),
+      : OGDFLayoutPluginBase(context, context ? new ogdf::PlanarizationLayout() : nullptr),
         pl(static_cast<ogdf::PlanarizationLayout *>(ogdfLayoutAlgo)) {
     addInParameter<double>("page ratio", paramHelp[0], "1.1");
     addInParameter<int>("minimal clique size", paramHelp[1], "3");

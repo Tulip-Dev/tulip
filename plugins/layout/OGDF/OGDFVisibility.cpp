@@ -39,7 +39,7 @@ public:
                     "representations (horizontal segments for nodes, vertical segments for edges).",
                     "1.1", "Hierarchical")
   OGDFVisibility(const tlp::PluginContext *context)
-  : OGDFLayoutPluginBase(context, context ? new ComponentSplitterLayout() : nullptr) {
+      : OGDFLayoutPluginBase(context, context ? new ComponentSplitterLayout() : nullptr) {
     addInParameter<int>("minimum grid distance", paramHelp[0], "1");
     addInParameter<bool>("transpose", paramHelp[1], "false");
   }

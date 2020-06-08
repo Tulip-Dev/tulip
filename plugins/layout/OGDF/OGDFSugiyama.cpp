@@ -158,7 +158,7 @@ class OGDFSugiyama : public OGDFLayoutPluginBase {
 
 public:
   OGDFSugiyama(const tlp::PluginContext *context)
-    : OGDFLayoutPluginBase(context, context ? new ogdf::SugiyamaLayout() : nullptr),
+      : OGDFLayoutPluginBase(context, context ? new ogdf::SugiyamaLayout() : nullptr),
         sugiyama(static_cast<ogdf::SugiyamaLayout *>(ogdfLayoutAlgo)) {
     addInParameter<int>("fails", paramHelp[0], "4");
     addInParameter<int>("runs", paramHelp[1], "15");

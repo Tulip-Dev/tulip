@@ -110,7 +110,7 @@ public:
       "Energy-Based Layout Algorithms for Graphs with Large Nodes. University of Osnabrueck, 2017",
       "1.0", "Force Directed")
   OGDFNodeRespecter(const tlp::PluginContext *context)
-  : OGDFLayoutPluginBase(context, context ? new ogdf::NodeRespecterLayout() : nullptr) {
+      : OGDFLayoutPluginBase(context, context ? new ogdf::NodeRespecterLayout() : nullptr) {
     addInParameter<bool>("random initial placement", paramHelp[0], "true", false);
     addInParameter<StringCollection>(ELT_POSTPROCESSING, paramHelp[1], ELT_POSTPROCESSINGLIST,
                                      false, postProcesingValuesDescription);

@@ -49,7 +49,7 @@ public:
       "Proc. Graph Drawing 1996, LNCS 1190, pp. 92-100, 1997.",
       "1.4", "Basic")
   OGDFCircular(const tlp::PluginContext *context)
-  : OGDFLayoutPluginBase(context, context ? new ogdf::CircularLayout() : nullptr) {
+      : OGDFLayoutPluginBase(context, context ? new ogdf::CircularLayout() : nullptr) {
     addInParameter<double>("minDistCircle", paramHelp[0], "20.0", false);
     addInParameter<double>("minDistLevel", paramHelp[1], "20.0", false);
     addInParameter<double>("minDistSibling", paramHelp[2], "10.0", false);
