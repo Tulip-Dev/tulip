@@ -400,8 +400,8 @@ void GlBox::draw(const Color &fillColor, const Color &outlineColor, float outlin
   box.setTextureName(textureFile);
   box.setFillColor(fillColor);
   box.setOutlineColor(outlineColor);
-  if (outlineWidth < 1e-6)
-    outlineWidth = 1e-6;
+  if (outlineWidth < 1e-6f)
+    outlineWidth = 1e-6f;
   box.setOutlineSize(outlineWidth);
 
   box.draw(lod, nullptr);
