@@ -277,9 +277,6 @@ ELSE(NOT TULIP_USE_THIRDPARTY_QHULL)
 ENDIF(NOT TULIP_USE_THIRDPARTY_QHULL)
 
 
-#Yajl
-FIND_PACKAGE(Yajl)
-
 IF(NOT TULIP_BUILD_CORE_ONLY)
   # OpenGL
   FIND_PACKAGE(OpenGL REQUIRED)
@@ -357,13 +354,9 @@ ELSE(QHULL_FOUND)
   SET(QhullLibrary qhullstatic)
 ENDIF(QHULL_FOUND)
 
-IF(YAJL_FOUND)
-  SET(YajlInclude ${YAJL_INCLUDE_DIRS})
-  SET(YajlLibrary ${YAJL_LIBRARIES})
-ELSE(YAJL_FOUND)
-  SET(YajlInclude ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src/api ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/yajl/yajl-2.1.0/include)
-  SET(YajlLibrary yajl-tulip-${TulipMMVersion})
-ENDIF(YAJL_FOUND)
+# use thirdparty/yajl to ensure the static lib can be used to build shared libs
+SET(YajlInclude ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src/api ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/yajl/yajl-2.1.0/include)
+SET(YajlLibrary yajl_s)
 
 SET(UTF8CppInclude ${PROJECT_SOURCE_DIR}/thirdparty/utf8-cpp/source)
 

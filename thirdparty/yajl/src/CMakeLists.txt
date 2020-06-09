@@ -35,15 +35,17 @@ SET (shareDir ${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/share/pkgconfig)
 # set the output path for libraries
 # SET(LIBRARY_OUTPUT_PATH ${libDir})
 
-#ADD_LIBRARY(yajl_s STATIC ${SRCS} ${HDRS} ${PUB_HDRS})
+ADD_LIBRARY(yajl_s STATIC ${SRCS} ${HDRS} ${PUB_HDRS})
+# allow the static library to be used to build shared libs
+SET_TARGET_PROPERTIES(yajl_s PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
-ADD_LIBRARY(${YajlLibrary} SHARED ${SRCS} ${HDRS} ${PUB_HDRS})
+#ADD_LIBRARY(${YajlLibrary} SHARED ${SRCS} ${HDRS} ${PUB_HDRS})
 
 #### setup shared library version number
-SET_TARGET_PROPERTIES(${YajlLibrary} PROPERTIES
-                      DEFINE_SYMBOL YAJL_SHARED
-                      SOVERSION ${YAJL_MAJOR}
-                      VERSION ${YAJL_MAJOR}.${YAJL_MINOR}.${YAJL_MICRO})
+#SET_TARGET_PROPERTIES(${YajlLibrary} PROPERTIES
+#                      DEFINE_SYMBOL YAJL_SHARED
+#                      SOVERSION ${YAJL_MAJOR}
+#                      VERSION ${YAJL_MAJOR}.${YAJL_MINOR}.${YAJL_MICRO})
 
 #### ensure a .dylib has correct absolute installation paths upon installation
 #IF(APPLE)
@@ -83,12 +85,3 @@ INCLUDE_DIRECTORIES(${incDir}/..)
 #INSTALL(FILES ${PUB_HDRS} DESTINATION include/yajl)
 #INSTALL(FILES ${incDir}/yajl_version.h DESTINATION include/yajl)
 #INSTALL(FILES ${shareDir}/yajl.pc DESTINATION share/pkgconfig)
-
-INSTALL(TARGETS ${YajlLibrary}
-        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT yajl
-        LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT yajl)
-
-
-IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
-  TULIP_COPY_TARGET_LIBRARY_POST_BUILD(${YajlLibrary} ${TULIP_PYTHON_NATIVE_FOLDER} wheel)
-ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)

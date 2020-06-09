@@ -45,7 +45,6 @@ jobs:
             - ccache
             - ninja-build
             - libqhull-dev
-            - libyajl-dev
             - libpython2.7-dev
             - libcppunit-dev
             - binutils-dev
@@ -87,7 +86,6 @@ jobs:
             - ccache
             - ninja-build
             - libqhull-dev
-            - libyajl-dev
             - libcppunit-dev
             - binutils-dev
             - python3.8
@@ -135,7 +133,6 @@ jobs:
             - doxygen
             - graphviz
             - libqhull-dev
-            - libyajl-dev
             - libpython2.7-dev
             - python-sphinx
             - libcppunit-dev
@@ -192,7 +189,6 @@ jobs:
             - doxygen
             - graphviz
             - libqhull-dev
-            - libyajl-dev
             - libcppunit-dev
             - binutils-dev
             - python3.8
@@ -283,7 +279,6 @@ jobs:
         - sudo port -N install ccache
         - sudo port -N install ninja
         - sudo port -N install qhull
-        - sudo port -N install yajl
         - sudo port -N install pkgconfig
         - sudo port -N install cppunit
       env:
@@ -324,7 +319,6 @@ jobs:
         - sudo port -N install ccache
         - sudo port -N install ninja
         - sudo port -N install qhull
-        - sudo port -N install yajl
         - sudo port -N install pkgconfig
         - sudo port -N install cppunit
       env:
@@ -364,7 +358,6 @@ jobs:
             - ninja
             - llvm
             - qhull
-            - yajl
             - cppunit
             - pkg-config
           update: true
@@ -405,7 +398,6 @@ jobs:
             - ninja
             - llvm
             - qhull
-            - yajl
             - cppunit
             - pkg-config
           update: true
@@ -453,7 +445,6 @@ jobs:
         - sudo port -N install freetype
         - sudo port -N install glew
         - sudo port -N install qhull
-        - sudo port -N install yajl
         - sudo port -N install pkgconfig
         - sudo port -N install cppunit
         - curl -O https://bootstrap.pypa.io/get-pip.py
@@ -503,7 +494,6 @@ jobs:
         - sudo port -N install freetype
         - sudo port -N install glew
         - sudo port -N install qhull
-        - sudo port -N install yajl
         - sudo port -N install pkgconfig
         - sudo port -N install cppunit
         - curl -O https://bootstrap.pypa.io/get-pip.py
@@ -546,7 +536,6 @@ jobs:
             - ninja
             - llvm
             - qhull
-            - yajl
             - cppunit
             - pkg-config
             - glew
@@ -600,7 +589,6 @@ jobs:
             - ninja
             - llvm
             - qhull
-            - yajl
             - cppunit
             - pkg-config
             - glew
