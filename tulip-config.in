@@ -16,6 +16,12 @@ plugincxxflags="-fPIC -DPIC"
 pluginldflags=-shared
 pluginpath=@libdir@/tulip
 quaziplib=@QuazipLibrary@
+# unset quaziplib if it is not a shared lib
+echo $quaziplib | grep '@CMAKE_SHARED_LIBRARY_SUFFIX@' > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    unset quaziplib
+fi
+
 if [ "@CMAKE_DEBUG_MODE@" = "FALSE" ]; then
   ndebugflag=-DNDEBUG
 fi
