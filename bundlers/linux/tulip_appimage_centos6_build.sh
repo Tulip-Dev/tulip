@@ -16,7 +16,7 @@ yum -y install centos-release-scl
 yum -y install devtoolset-7
 
 # install tulip deps
-yum -y install zlib-devel qhull-devel cppunit-devel
+yum -y install zlib-devel cppunit-devel
 yum -y install freetype-devel glew-devel
 
 # needed for generating the AppImage

@@ -268,8 +268,15 @@ IF(NOT EMSCRIPTEN)
 
 ENDIF(NOT EMSCRIPTEN)
 
+# use thirdparty static libs when needed
+IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET OR TULIP_BUILD_FOR_APPIMAGE)
+  SET(TULIP_USE_THIRDPARTY_STATIC_LIBS ON)
+ELSE(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET OR TULIP_BUILD_FOR_APPIMAGE)
+  SET(TULIP_USE_THIRDPARTY_STATIC_LIBS OFF)
+ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET OR TULIP_BUILD_FOR_APPIMAGE)
+
 # Qhull
-SET(TULIP_USE_THIRDPARTY_QHULL OFF CACHE BOOL "If activated, force the use of reentrant qhull library located in thirdparty instead of trying to find it on the system.")
+SET(TULIP_USE_THIRDPARTY_QHULL ${TULIP_USE_THIRDPARTY_STATIC_LIBS} CACHE BOOL "If activated, force the use of reentrant qhull library located in thirdparty instead of trying to find it on the system.")
 IF(NOT TULIP_USE_THIRDPARTY_QHULL)
   FIND_PACKAGE(Qhull)
 ELSE(NOT TULIP_USE_THIRDPARTY_QHULL)
@@ -308,7 +315,7 @@ ENDIF(TULIP_BUILD_GL_TEX_LOADER)
   FIND_PACKAGE(QtX)
 
   # Quazip
-SET(TULIP_USE_THIRDPARTY_QUAZIP OFF CACHE BOOL "If activated, force the use of quazip library located in thirdparty instead of trying to find it on the system.")
+SET(TULIP_USE_THIRDPARTY_QUAZIP ${TULIP_USE_THIRDPARTY_STATIC_LIBS} CACHE BOOL "If activated, force the use of quazip library located in thirdparty instead of trying to find it on the system.")
 IF(NOT TULIP_USE_THIRDPARTY_QUAZIP)
   FIND_PACKAGE(QuaZip)
 ELSE(NOT TULIP_USE_THIRDPARTY_QUAZIP)
@@ -332,7 +339,9 @@ IF(NOT TULIP_BUILD_CORE_ONLY)
     SET(QuazipLibrary ${QUAZIP_LIBRARIES})
   ELSE(QUAZIP_FOUND)
     SET(QuazipInclude ${PROJECT_SOURCE_DIR}/thirdparty/quazip/)
-    SET(QuazipLibrary quazip-tulip-${TulipMMVersion})
+    SET(QuazipLibrary quazip)
+    # use static lib
+    ADD_DEFINITIONS(-DQUAZIP_STATIC)
   ENDIF(QUAZIP_FOUND)
 
   SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl/)
