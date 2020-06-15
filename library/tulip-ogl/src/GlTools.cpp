@@ -458,14 +458,10 @@ std::vector<Coord> computeNormals(const std::vector<Coord> &vertices,
 #define HRESf 64.f
 #define DPI 72
 
-void tesselateFontIcon(const std::string &fontFile,
-		       unsigned int iconCodePoint,
-		       GLuint &renderingDataBuffer,
-		       GLuint &indicesBuffer,
-		       unsigned int &nbVertices,
-		       unsigned int &nbIndices,
-		       unsigned int &nbOutlineIndices,
-		       BoundingBox &boundingBox) {
+void tesselateFontIcon(const std::string &fontFile, unsigned int iconCodePoint,
+                       GLuint &renderingDataBuffer, GLuint &indicesBuffer, unsigned int &nbVertices,
+                       unsigned int &nbIndices, unsigned int &nbOutlineIndices,
+                       BoundingBox &boundingBox) {
 
   const FT_Library *library = FTLibrary::Instance().GetLibrary();
 
@@ -524,12 +520,12 @@ void tesselateFontIcon(const std::string &fontFile,
       tlp::Coord p(point.Xf() / HRESf, point.Yf() / HRESf, 0.0f);
 
       if (vertexIdx.find(p) == vertexIdx.end()) {
-	meshBB.expand(p);
-	vertices.push_back(p);
-	indices.push_back(idx++);
-	vertexIdx[vertices.back()] = indices.back();
+        meshBB.expand(p);
+        vertices.push_back(p);
+        indices.push_back(idx++);
+        vertexIdx[vertices.back()] = indices.back();
       } else {
-	indices.push_back(vertexIdx[p]);
+        indices.push_back(vertexIdx[p]);
       }
     }
   }
@@ -564,12 +560,12 @@ void tesselateFontIcon(const std::string &fontFile,
   for (size_t i = 0; i < vertices.size(); ++i) {
     if (meshBB.height() > meshBB.width()) {
       vertices[i][0] = ((vertices[i][0] - minC[0]) / (maxC[0] - minC[0]) - 0.5) *
-	(meshBB.width() / float(meshBB.height()));
+                       (meshBB.width() / float(meshBB.height()));
       vertices[i][1] = ((vertices[i][1] - minC[1]) / (maxC[1] - minC[1])) - 0.5;
     } else {
       vertices[i][0] = ((vertices[i][0] - minC[0]) / (maxC[0] - minC[0])) - 0.5;
       vertices[i][1] = (((vertices[i][1] - minC[1]) / (maxC[1] - minC[1])) - 0.5) *
-	(meshBB.height() / float(meshBB.width()));
+                       (meshBB.height() / float(meshBB.width()));
     }
 
     const tlp::Coord &v = vertices[i];
@@ -582,18 +578,17 @@ void tesselateFontIcon(const std::string &fontFile,
 
   glBindBuffer(GL_ARRAY_BUFFER, renderingDataBuffer);
   glBufferData(GL_ARRAY_BUFFER, (vertices.size() * 3 + texCoords.size() * 2) * sizeof(float),
-	       nullptr, GL_STATIC_DRAW);
+               nullptr, GL_STATIC_DRAW);
   glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * 3 * sizeof(float), &vertices[0]);
   glBufferSubData(GL_ARRAY_BUFFER, vertices.size() * 3 * sizeof(float),
-		  texCoords.size() * 2 * sizeof(float), &texCoords[0]);
+                  texCoords.size() * 2 * sizeof(float), &texCoords[0]);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-	       (indices.size() + outlineIndices.size()) * sizeof(unsigned short), nullptr,
-	       GL_STATIC_DRAW);
-  glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indices.size() * sizeof(unsigned short),
-		  &indices[0]);
+               (indices.size() + outlineIndices.size()) * sizeof(unsigned short), nullptr,
+               GL_STATIC_DRAW);
+  glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indices.size() * sizeof(unsigned short), &indices[0]);
   glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short),
-		  outlineIndices.size() * sizeof(unsigned short), &outlineIndices[0]);
+                  outlineIndices.size() * sizeof(unsigned short), &outlineIndices[0]);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

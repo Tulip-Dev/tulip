@@ -68,9 +68,8 @@ public:
               const float outlineSize) {
 
     if (renderingDataBuffer == 0) {
-      tesselateFontIcon(fontFile, iconCodePoint,
-			renderingDataBuffer, indicesBuffer,
-			nbVertices, nbIndices, nbOutlineIndices, boundingBox);
+      tesselateFontIcon(fontFile, iconCodePoint, renderingDataBuffer, indicesBuffer, nbVertices,
+                        nbIndices, nbOutlineIndices, boundingBox);
     }
 
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -102,7 +101,6 @@ public:
   const BoundingBox &getBoundingBox() const {
     return boundingBox;
   }
-
 };
 
 static FontIcon defaultFontIcon;
