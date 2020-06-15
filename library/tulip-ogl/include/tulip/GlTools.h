@@ -102,6 +102,15 @@ TLP_GL_SCOPE std::vector<Coord> computeNormals(const std::vector<Coord> &vertice
  */
 TLP_GL_SCOPE std::vector<Coord> computeNormals(const std::vector<Coord> &vertices,
                                                const std::vector<unsigned int> &facesIndices);
+
+TLP_GL_SCOPE void tesselateFontIcon(const std::string &fontFile,
+				    unsigned int iconCodePoint,
+				    GLuint &renderingDataBuffer,
+				    GLuint &indicesBuffer,
+				    unsigned int &nbVertices,
+				    unsigned int &nbIndices,
+				    unsigned int &nbOutlineIndices,
+				    BoundingBox &boundingBox);
 } // namespace tlp
 
 #endif // DOXYGEN_NOTFOR_DEVEL

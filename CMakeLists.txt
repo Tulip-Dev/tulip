@@ -345,9 +345,11 @@ IF(NOT TULIP_BUILD_CORE_ONLY)
   ENDIF(QUAZIP_FOUND)
 
   SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl/)
-  SET(FTGLLibrary ftgl-tulip-${TulipMMVersion})
+  SET(FTGLLibrary ftgl)
+  ADD_DEFINITIONS(-DFTGL_LIBRARY_STATIC)
   SET(Tess2Include ${PROJECT_SOURCE_DIR}/thirdparty/libtess2/Include)
-  SET(Tess2Library tess2-tulip-${TulipMMVersion})
+  SET(Tess2Library tess2)
+  ADD_DEFINITIONS(-DTESS2_LIBRARY_STATIC)
 ENDIF(NOT TULIP_BUILD_CORE_ONLY)
 
 SET(OGDFInclude ${PROJECT_SOURCE_DIR}/thirdparty/OGDF/include)

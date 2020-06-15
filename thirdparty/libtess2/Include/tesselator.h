@@ -32,7 +32,7 @@
 #ifndef TESSELATOR_H
 #define TESSELATOR_H
 
-#ifdef WIN32
+#if defined(WIN32) && !defined(TESS2_LIBRARY_STATIC)
 #  ifdef DLL_TESS2
 #    define TESS2_SCOPE       __declspec(dllexport)
 #  else

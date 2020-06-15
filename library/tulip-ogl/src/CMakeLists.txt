@@ -81,7 +81,7 @@ ENDIF(TULIP_BUILD_GL_TEX_LOADER)
 ADD_LIBRARY (${LibTulipOGLName} SHARED ${tulip-ogl_LIB_SRCS})
 TARGET_LINK_LIBRARIES(${LibTulipOGLName} ${FTGLLibrary} ${GLEW_LIBRARY}
                       ${LibTulipCoreName} ${OPENGL_gl_LIBRARY}
-                      ${FREETYPE_LIBRARY} ${Tess2Library})
+                      ${FREETYPE_LIBRARY})
 IF(TULIP_BUILD_GL_TEX_LOADER)
   TARGET_LINK_LIBRARIES(${LibTulipOGLName} ${JPEG_LIBRARY} ${PNG_LIBRARY})
 ENDIF(TULIP_BUILD_GL_TEX_LOADER)

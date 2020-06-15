@@ -119,19 +119,12 @@ SET(ftlayout_SRCS
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${Tess2Include} ${FREETYPE_INCLUDE_DIRS} ${GLEW_INCLUDE_DIR})
 
-ADD_LIBRARY(${FTGLLibrary} SHARED ${ftgl_SRCS} ${ftgl_headers_SRCS} ${ftglyph_SRCS} ${ftfont_SRCS} ${ftlayout_SRCS})
-TARGET_LINK_LIBRARIES(${FTGLLibrary} ${OPENGL_gl_LIBRARY} ${FREETYPE_LIBRARY} ${Tess2Library} ${GLEW_LIBRARY})
+ADD_LIBRARY(${FTGLLibrary} STATIC ${ftgl_SRCS} ${ftgl_headers_SRCS} ${ftglyph_SRCS} ${ftfont_SRCS} ${ftlayout_SRCS} $<TARGET_OBJECTS:${Tess2Library}>)
+# allow the object files to be used to build shared libs
+SET_TARGET_PROPERTIES(${FTGLLibrary} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+TARGET_LINK_LIBRARIES(${FTGLLibrary} ${OPENGL_gl_LIBRARY} ${FREETYPE_LIBRARY} ${GLEW_LIBRARY})
 # Prevent link issues with MSVC when freetype is dynamically linked
 # against zlib and libpng
 IF(MSVC)
   TARGET_LINK_LIBRARIES(${FTGLLibrary} ${ZLIB_LIBRARY} ${PNG_LIBRARY})
 ENDIF(MSVC)
-
-SET_TARGET_PROPERTIES(${FTGLLibrary} PROPERTIES
-  SOVERSION ${FTGL_SOVERSION}
-  VERSION ${VERSION_SERIES}.${VERSION_MAJOR}.${VERSION_MINOR})
-
-INSTALL(TARGETS ${FTGLLibrary}
-       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT ftgl
-       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT ftgl
-       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT ftgl)

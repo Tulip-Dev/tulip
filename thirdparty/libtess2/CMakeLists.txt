@@ -1,5 +1,5 @@
 IF(WIN32)
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DDLL_TESS2")
+  ADD_DEFINITIONS("-DDLL_TESS2")
 ENDIF(WIN32)
 
 SET(libtess2_SRCS
@@ -13,9 +13,6 @@ SET(libtess2_SRCS
 
 INCLUDE_DIRECTORIES(${Tess2Include})
 
-ADD_LIBRARY(${Tess2Library} SHARED ${libtess2_SRCS})
-
-INSTALL(TARGETS ${Tess2Library}
-        RUNTIME DESTINATION ${TulipBinInstallDir}
-        LIBRARY DESTINATION ${TulipLibInstallDir}
-        ARCHIVE DESTINATION ${TulipLibInstallDir})
+ADD_LIBRARY(${Tess2Library} OBJECT ${libtess2_SRCS})
+# allow the object files to be used to build shared libs
+SET_TARGET_PROPERTIES(${Tess2Library} PROPERTIES POSITION_INDEPENDENT_CODE ON)

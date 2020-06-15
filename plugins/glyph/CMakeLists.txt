@@ -6,12 +6,6 @@ MACRO(GLYPH name source)
   TULIP_INSTALL_PLUGIN(${name}-${TulipVersion} ${TulipGlyphPluginsInstallDir})
 ENDMACRO(GLYPH)
 
-MACRO(FONTGLYPH name source)
-  ADD_LIBRARY(${name}-${TulipVersion} SHARED ${source})
-  TARGET_LINK_LIBRARIES(${name}-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${FTGLLibrary})
-  TULIP_INSTALL_PLUGIN(${name}-${TulipVersion} ${TulipGlyphPluginsInstallDir})
-ENDMACRO(FONTGLYPH)
-
 GLYPH(Cone cone.cpp)
 
 GLYPH(Circle circle.cpp)
@@ -35,7 +29,7 @@ GLYPH(Cross cross.cpp)
 GLYPH(GlowSphere glowsphere.cpp)
 GLYPH(ShadowedSphere shadowedsphere.cpp)
 GLYPH(Star star.cpp)
-FONTGLYPH(FontIcon fonticon.cpp)
+GLYPH(FontIcon fonticon.cpp)
 
 INSTALL(FILES radialGradientTexture.png bottomShadowTexture.png leftBottomShadowTexture.png rightBottomShadowTexture.png
         DESTINATION ${TulipBitmapInstallDir}
