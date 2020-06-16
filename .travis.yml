@@ -303,7 +303,7 @@ jobs:
       if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
       os: osx
       # use the most recent Xcode version
-      osx_image: xcode11.4
+      osx_image: xcode11.5
       compiler: clang
       cache: ccache
       install:
@@ -383,7 +383,7 @@ jobs:
       if: commit_message !~ /\[(linux|macports|windows)-only\]$/
       os: osx
       # use the most recent Xcode version
-      osx_image: xcode11.4
+      osx_image: xcode11.5
       compiler: clang
       cache:
         ccache: true
@@ -472,7 +472,7 @@ jobs:
       if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
       os: osx
       # use the most recent Xcode version
-      osx_image: xcode11.4
+      osx_image: xcode11.5
       compiler: clang
       cache: ccache
       install:
@@ -574,7 +574,7 @@ jobs:
       if: commit_message !~ /\[(linux|macports|windows)-only\]$/
       os: osx
       # use the most recent Xcode version
-      osx_image: xcode11.4
+      osx_image: xcode11.5
       compiler: clang
       cache:
         ccache: true
