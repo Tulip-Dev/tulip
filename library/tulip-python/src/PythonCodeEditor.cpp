@@ -1263,8 +1263,7 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
   }
 
   if (mapToGlobal(QPoint(0, bottom + _autoCompletionList->height())).y() >
-      QApplication::primaryScreen()->geometry().height()
-  )
+      QApplication::primaryScreen()->geometry().height())
     _autoCompletionList->move(mapToGlobal(QPoint(pos, top - _autoCompletionList->height())));
   else
     _autoCompletionList->move(mapToGlobal(QPoint(pos, bottom)));
