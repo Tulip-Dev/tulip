@@ -5,8 +5,8 @@
 #     * Qt 5.5 on Linux, Qt 5.9 on MacOS
 #     * Python 2.7
 #  - a "modern" Tulip build using:
-#     * recent compiler (GCC 9.x on Linux, clang 9.x from MacPorts or Homebrew on MacOS)
-#     * Qt 5.13 on Linux, Qt 5.12 on MacOS/MacPorts, Qt 5.13 on MacOS/Homebrew
+#     * recent compiler (GCC 9.x on Linux, clang 10.x from MacPorts or Homebrew on MacOS)
+#     * Qt 5.14.2 on Linux, Qt 5.15 on MacOS/MacPorts, Qt 5.15 on MacOS/Homebrew
 #     * Python 3.8 on Linux, Python 2.7 on MacOS
 # As TravisCI limits build job times to 45 minutes, Tulip is built in two successive stages
 # to avoid timeouts (which happened often with MacOs builds):
@@ -125,6 +125,10 @@ jobs:
         - xvfb
       addons:
         apt:
+          # we use Qt 5.6.1 from ppa:kubuntu-ppa/backports
+          # instead of default 5.5.1 package
+          sources:
+            - sourceline: "ppa:kubuntu-ppa/backports"
           # install Tulip build dependencies
           packages:
             - cmake
@@ -174,7 +178,7 @@ jobs:
         apt:
           # we need GCC 9.x from ppa:ubuntu-toolchain-r/test
           # Python 3.8.x from ppa:deadsnakes/ppa
-          # and Qt 5.13 from http://archive.neon.kde.org/user/
+          # and Qt 5.14.x from http://archive.neon.kde.org/user/
           sources:
             - sourceline: "ppa:ubuntu-toolchain-r/test"
             - sourceline: "ppa:deadsnakes/ppa"
