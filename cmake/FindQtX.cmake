@@ -61,13 +61,13 @@ MACRO(SETUP_QT_LIBRARIES QtModule LIBRARIES)
   SET(${LIBRARIES} ${${LIBRARIES}} ${Qt5${QtModule}_LIBRARIES} ${Qt5${QtModule}_LIBRARIES})
 ENDMACRO(SETUP_QT_LIBRARIES)
 
-FIND_PACKAGE(Qt5Widgets 5.5 REQUIRED)
-FIND_PACKAGE(Qt5Network 5.5 REQUIRED)
+FIND_PACKAGE(Qt5Widgets 5.6 REQUIRED)
+FIND_PACKAGE(Qt5Network 5.6 REQUIRED)
 
 SET(QT_FULL_VERSION ${Qt5Widgets_VERSION_STRING})
 # Qt5Widgets_VERSION_STRING has been deprecated in favor of Qt5Widgets_VERSION since
 # a few releases of Qt5 and seems to have been removed in some Linux distributions
-# (experienced on KDE Neon Developer edition that now uses Qt 5.9)
+# (experienced on KDE Neon Developer edition with Qt 5.9)
 IF("${QT_FULL_VERSION}" STREQUAL "")
   SET(QT_FULL_VERSION ${Qt5Widgets_VERSION})
 ENDIF("${QT_FULL_VERSION}" STREQUAL "")

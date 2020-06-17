@@ -171,11 +171,9 @@ int main(int argc, char **argv) {
 
   // Enables resource sharing between the OpenGL contexts
   QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
   // Enables high-DPI scaling on X11 or Windows platforms
   // Enabled on MacOSX with NSHighResolutionCapable key in Info.plist file
   QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
-#endif
 
   QApplication tulip_perspective(argc, argv);
   // the applicationName below is used to identify the location
