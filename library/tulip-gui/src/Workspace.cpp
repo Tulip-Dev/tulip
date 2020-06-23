@@ -46,7 +46,7 @@ using namespace tlp;
   */
 Workspace::Workspace(QWidget *parent)
     : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _oldWorkspaceMode(nullptr),
-      _focusedPanel(nullptr), _focusedPanelHighlighting(false), _model(nullptr),
+      _focusedPanel(nullptr), _focusedPanelHighlighting(false), _model(nullptr), _exposeButton(nullptr),
       _autoCenterViews(false) {
   _ui->setupUi(this);
   _ui->bottomFrame->setVisible(false);
