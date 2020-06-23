@@ -5,18 +5,17 @@
 
 # install base build system
 yum -y install epel-release
-yum -y install xz cmake unzip make wget ccache
+yum -y install xz cmake3 unzip make wget ccache
 
-# install GCC 4.8.2 as Tulip requires a C++11 compiler
-wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
-yum -y install devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-gcc-c++
+# install GCC 7 as OGDF v.2020.02 requires a quite advanced C++11 compiler
+yum -y install centos-release-scl
+yum -y install devtoolset-7
 
 # install Python 3.6
-yum -y install centos-release-scl
 yum -y install rh-python36-python rh-python36-python-devel rh-python36-python-sphinx
 
 # install devel packages needed by Tulip
-yum -y install freetype-devel glew-devel libjpeg-devel libpng-devel qt5-qtbase-devel qt5-qtwebkit-devel zlib-devel
+yum -y install freetype-devel glew-devel qt5-qtbase-devel qt5-qtwebkit-devel zlib-devel
 
 # get Tulip latest source
 wget -O tulip_latest_src.zip https://sourceforge.net/projects/auber/files/latest/download
@@ -30,8 +29,8 @@ unzip ../tulip_latest_src.zip
 mkdir build
 cd build
 
-# enable devtoolset-2 env
-scl enable devtoolset-2 bash
+# enable devtoolset-7 env
+scl enable devtoolset-7 bash
 
 # enable python-36 env
 scl enable rh-python36 bash
