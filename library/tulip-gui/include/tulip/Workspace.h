@@ -48,8 +48,6 @@ class TulipProject;
 class TLP_QT_SCOPE Workspace : public QWidget {
   Q_OBJECT
 
-  Q_PROPERTY(bool bottomFrameVisible READ isBottomFrameVisible WRITE setBottomFrameVisible)
-
   Ui::Workspace *_ui;
   QList<WorkspacePanel *> _panels;
   int _currentPanelIndex;
@@ -75,8 +73,6 @@ public:
     return _panels.empty();
   }
   QList<tlp::View *> panels() const;
-
-  bool isBottomFrameVisible() const;
 
 public slots:
   void delView(tlp::View *view);
@@ -112,7 +108,6 @@ public slots:
   void writeProject(tlp::TulipProject *, QMap<tlp::Graph *, QString>, tlp::PluginProgress *);
   void readProject(tlp::TulipProject *, QMap<QString, tlp::Graph *>, tlp::PluginProgress *);
 
-  void setBottomFrameVisible(bool);
   void setPageCountLabel(QLabel *l);
 
   void redrawPanels(bool center = false);

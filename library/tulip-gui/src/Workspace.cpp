@@ -49,7 +49,7 @@ Workspace::Workspace(QWidget *parent)
       _focusedPanel(nullptr), _focusedPanelHighlighting(false), _model(nullptr),
       _autoCenterViews(false) {
   _ui->setupUi(this);
-  setExposeModeSwitch(_ui->exposeButton);
+  _ui->bottomFrame->setVisible(false);
   _ui->startupMainFrame->hide();
   _ui->workspaceContents->setCurrentWidget(_ui->startupPage);
   connect(_ui->startupButton, SIGNAL(clicked()), this, SIGNAL(addPanelRequest()));
@@ -350,7 +350,8 @@ void Workspace::updateAvailableModes() {
   bool enableNavigation = !_panels.empty();
   _ui->nextPageButton->setEnabled(enableNavigation);
   _ui->previousPageButton->setEnabled(enableNavigation);
-  _exposeButton->setEnabled(enableNavigation);
+  if (_exposeButton)
+    _exposeButton->setEnabled(enableNavigation);
 }
 
 void Workspace::updatePanels() {
@@ -732,10 +733,6 @@ void Workspace::readProject(TulipProject *project, QMap<QString, Graph *> rootId
   delete workspaceXml;
 }
 
-void Workspace::setBottomFrameVisible(bool f) {
-  _ui->bottomFrame->setVisible(f);
-}
-
 void Workspace::setPageCountLabel(QLabel *l) {
   _ui->pagesLabel = l;
 }
@@ -751,10 +748,6 @@ void Workspace::redrawPanels(bool center) {
 
 void Workspace::setAutoCenterPanelsOnDraw(bool f) {
   _autoCenterViews = f;
-}
-
-bool Workspace::isBottomFrameVisible() const {
-  return _ui->bottomFrame->isVisible();
 }
 
 void Workspace::swapPanelsRequested(WorkspacePanel *panel) {
