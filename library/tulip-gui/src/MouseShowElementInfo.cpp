@@ -38,7 +38,7 @@ using namespace std;
 using namespace tlp;
 
 MouseShowElementInfo::MouseShowElementInfo(const bool showVisualPropButton)
-  : _ui(new Ui::ElementInformationWidget), _informationWidget(new QWidget()),
+    : _ui(new Ui::ElementInformationWidget), _informationWidget(new QWidget()),
       _informationWidgetItem(new QGraphicsProxyWidget()), glMainWidget(nullptr), _show(true) {
   _informationWidget->installEventFilter(this);
   Perspective::setStyleSheet(_informationWidget);
