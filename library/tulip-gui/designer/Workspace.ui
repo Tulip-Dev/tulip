@@ -43,9 +43,11 @@ background-color: #A9A9A9;
      <property name="styleSheet">
       <string notr="true">#workspaceContents {
 border: 0px;
-background-color: white;
 }
-
+QPushButton::flat{
+border-image: none;
+background-color: transparent;
+}
 PlaceHolderWidget {
 background-color: white;
 }</string>

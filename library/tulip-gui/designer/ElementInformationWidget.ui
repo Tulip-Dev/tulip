@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>ElementInformationWidget</class>
- <widget class="QWidget" name="ElementInformationWidget">
+ <widget class="QWidget" name="elementInformationWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -35,10 +35,18 @@
    <item>
     <widget class="QFrame" name="frame">
      <property name="styleSheet">
-      <string notr="true">#frame{
-background-color: white;
-border: 1px solid #C9C9C9;
-}</string>
+       <string notr="true">
+QPushButton::flat{
+border-image: none;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
+background-color: transparent;
+}
+QPushButton:hover {
+border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
+}
+</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <property name="spacing">
@@ -67,9 +75,7 @@ border: 1px solid #C9C9C9;
            </sizepolicy>
           </property>
           <property name="styleSheet">
-           <string notr="true">font: bold 12px;
-color: black;
-background-color: white;</string>
+           <string notr="true">font: bold 12px</string>
           </property>
           <property name="text">
            <string/>
@@ -110,15 +116,12 @@ background-color: white;</string>
        <widget class="QTableView" name="tableView">
         <property name="styleSheet">
          <string notr="true">QTableView {
-background-color: white;
 border: 0px;
 font: 12px;
 }
 QHeaderView::section {
-background-color: white;
 width: 150px;
 font: bold 12px;
-color: black;
 }</string>
         </property>
         <property name="frameShape">

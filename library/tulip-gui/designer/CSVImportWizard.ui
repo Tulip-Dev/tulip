@@ -21,7 +21,6 @@
   </property>
   <property name="styleSheet">
     <string notr="true">
-      QWizard { background-color: white; }
       QGroupBox { font-weight: bold; }
     </string>
   </property>

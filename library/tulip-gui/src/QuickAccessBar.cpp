@@ -42,6 +42,7 @@
 #include <tulip/SnapshotDialog.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/CaptionGraphicsSubItems.h>
+#include <tulip/Perspective.h>
 
 using namespace tlp;
 
@@ -124,6 +125,9 @@ QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem,
     : QuickAccessBar(parent), _ui(new Ui::QuickAccessBar), _quickAccessBarItem(quickAccessBarItem),
       delegate(new TulipItemDelegate(this)), _oldFontScale(1), _oldNodeScale(1),
       _captionsInitialized(false) {
+  QString ss = Perspective::styleSheet();
+  ss.append("#QuickAccessBar { background-color: rgba(255,255,255,100); }");
+  setStyleSheet(ss);
   _ui->setupUi(this);
   _ui->backgroundColorButton->setDialogTitle("Choose the background color");
   _ui->nodeColorButton->setDialogTitle("Choose the node's default color");

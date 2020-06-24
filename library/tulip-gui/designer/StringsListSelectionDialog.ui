@@ -22,12 +22,6 @@
    </property>
    <item>
     <widget class="QFrame" name="frame">
-     <property name="styleSheet">
-      <string notr="true">#frame {
-background-color: white;
-border: 1px solid #C9C9C9;
-}</string>
-     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>

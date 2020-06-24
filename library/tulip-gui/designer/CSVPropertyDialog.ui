@@ -18,7 +18,6 @@
   </property>
   <property name="styleSheet">
     <string notr="true">
-      QDialog { background-color: white; }
       #columnLabel { font: bold; }
       QGroupBox { font-weight: bold; }
     </string>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>InteractorConfigWidget</class>
- <widget class="QDialog" name="InteractorConfigWidget">
+ <widget class="QDialog" name="interactorConfigWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -12,9 +12,6 @@
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
-  </property>
-  <property name="styleSheet">
-   <string notr="true">#contents { background-color: white; border: 1px solid #C9C9C9; }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="leftMargin">
@@ -44,12 +41,6 @@
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QScrollArea" name="scrollAreaDoc">
-         <property name="autoFillBackground">
-          <bool>false</bool>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background: white</string>
-         </property>
          <property name="widgetResizable">
           <bool>true</bool>
          </property>

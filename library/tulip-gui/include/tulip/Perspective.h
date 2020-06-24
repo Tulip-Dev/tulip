@@ -277,6 +277,18 @@ public:
     instance()->displayLogMessages();
   }
 
+  /**
+   * @brief a static function to set the same style sheet
+   * as the instance main window style sheet
+   */
+  static void setStyleSheet(QWidget *w);
+
+  /**
+   * @brief a static function to get
+   * the instance main window style sheet
+   */
+  static QString styleSheet();
+
 public slots:
   /**
    * @brief Called when the user wants to close the application.

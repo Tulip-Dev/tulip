@@ -200,3 +200,12 @@ void Perspective::displayStatusMessage(const QString &msg) {
 void Perspective::clearStatusMessage() {
   mainWindow()->statusBar()->clearMessage();
 }
+
+void Perspective::setStyleSheet(QWidget *w) {
+  if (instance())
+    w->setStyleSheet(instance()->mainWindow()->styleSheet());
+}
+
+QString Perspective::styleSheet() {
+  return instance() ? instance()->mainWindow()->styleSheet() : QString();
+}

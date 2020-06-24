@@ -45,11 +45,8 @@
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <widget class="QLabel" name="label">
-            <property name="styleSheet">
-             <string notr="true">font-weight: bold;</string>
-            </property>
             <property name="text">
-             <string>Name:</string>
+             <string>Name</string>
             </property>
            </widget>
           </item>
@@ -62,11 +59,8 @@
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
            <widget class="QLabel" name="label_2">
-            <property name="styleSheet">
-             <string notr="true">font-weight: bold;</string>
-            </property>
             <property name="text">
-             <string>Style:</string>
+             <string>Style</string>
             </property>
            </widget>
           </item>
@@ -121,11 +115,8 @@
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
            <widget class="QLabel" name="label_3">
-            <property name="styleSheet">
-             <string notr="true">font-weight: bold;</string>
-            </property>
             <property name="text">
-             <string>Size:</string>
+             <string>Size</string>
             </property>
            </widget>
           </item>

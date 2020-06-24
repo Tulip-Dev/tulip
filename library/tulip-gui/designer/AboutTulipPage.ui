@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>AboutTulipPageData</class>
- <widget class="QWidget" name="AboutTulipPageData">
+ <widget class="QWidget" name="aboutTulipPageData">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -12,11 +12,6 @@
   </property>
   <property name="windowTitle">
    <string>About Tulip</string>
-  </property>
-  <property name="styleSheet">
-   <string notr="true">QWidget{
-background-color: white;
-}</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
    <property name="leftMargin">

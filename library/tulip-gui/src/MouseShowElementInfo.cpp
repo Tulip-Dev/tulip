@@ -32,14 +32,16 @@
 #include <tulip/GlScene.h>
 #include <tulip/MouseShowElementInfo.h>
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/Perspective.h>
 
 using namespace std;
 using namespace tlp;
 
 MouseShowElementInfo::MouseShowElementInfo(const bool showVisualPropButton)
-    : _ui(new Ui::ElementInformationWidget), _informationWidget(new QWidget()),
+  : _ui(new Ui::ElementInformationWidget), _informationWidget(new QWidget()),
       _informationWidgetItem(new QGraphicsProxyWidget()), glMainWidget(nullptr), _show(true) {
   _informationWidget->installEventFilter(this);
+  Perspective::setStyleSheet(_informationWidget);
   _ui->setupUi(_informationWidget);
 // workaround to get rid of Qt5 warnings : QMacCGContext:: Unsupported painter devtype type 1
 // see https://bugreports.qt.io/browse/QTBUG-32639
