@@ -193,7 +193,7 @@ public:
       QFont f;
       QWidget *p = dynamic_cast<QWidget *>(QAbstractItemModel::parent());
       if (p)
-	f = p->font();
+        f = p->font();
 
       f.setBold(true);
       return f;

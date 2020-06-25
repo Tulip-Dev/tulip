@@ -171,8 +171,9 @@ QPushButton *PropertiesEditor::getPropertiesMatchButton() {
 }
 
 void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
-  _contextProperty =
-      _ui->propertiesTableView->indexAt(p).data(TulipModel::PropertyRole).value<PropertyInterface *>();
+  _contextProperty = _ui->propertiesTableView->indexAt(p)
+                         .data(TulipModel::PropertyRole)
+                         .value<PropertyInterface *>();
   _contextPropertyList.clear();
 
   for (const QModelIndex &sidx : _ui->propertiesTableView->selectionModel()->selectedRows()) {
@@ -370,7 +371,8 @@ void PropertiesEditor::setPropsVisibility(int state) {
     // reset property name filter
     _ui->propertiesFilterEdit->setText(QString());
     // no filter
-    static_cast<QSortFilterProxyModel *>(_ui->propertiesTableView->model())->setFilterFixedString("");
+    static_cast<QSortFilterProxyModel *>(_ui->propertiesTableView->model())
+        ->setFilterFixedString("");
   }
 
   bool showVisualP = _ui->visualPropertiesCheck->isChecked();
