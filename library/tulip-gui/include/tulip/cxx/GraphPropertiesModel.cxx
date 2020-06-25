@@ -151,6 +151,9 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
 
   else if (role == Qt::FontRole) {
     QFont f;
+    QWidget *p = dynamic_cast<QWidget *>(QAbstractItemModel::parent());
+    if (p)
+      f = p->font();
 
     if (!_placeholder.isEmpty() && index.row() == 0)
       f.setItalic(true);

@@ -24,6 +24,7 @@
 #include <QMimeData>
 #include <QSet>
 #include <QCryptographicHash>
+#include <QWidget>
 
 #include <tulip/TlpTools.h>
 #include <tulip/TulipMetaTypes.h>
@@ -529,6 +530,9 @@ QVariant GraphHierarchiesModel::data(const QModelIndex &index, int role) const {
 
   else if (role == Qt::FontRole) {
     QFont f;
+    QWidget *p = dynamic_cast<QWidget *>(QAbstractItemModel::parent());
+    if (p)
+      f = p->font();
 
     if (graph == _currentGraph)
       f.setBold(true);

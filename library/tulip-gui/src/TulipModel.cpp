@@ -19,6 +19,7 @@
 #include "tulip/TulipModel.h"
 
 #include <QFont>
+#include <QWidget>
 
 using namespace tlp;
 
@@ -29,6 +30,10 @@ TulipModel::~TulipModel() {}
 QVariant TulipModel::headerData(int, Qt::Orientation orientation, int role) const {
   if (orientation == Qt::Horizontal && role == Qt::FontRole) {
     QFont f;
+    QWidget *p = dynamic_cast<QWidget *>(QAbstractItemModel::parent());
+    if (p)
+      f = p->font();
+
     f.setBold(true);
     f.setPointSize(f.pointSize() - 1);
     return f;

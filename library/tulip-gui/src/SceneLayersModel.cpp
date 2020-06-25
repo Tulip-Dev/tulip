@@ -21,6 +21,7 @@
 
 #include <QFont>
 #include <QVector>
+#include <QWidget>
 
 #include <tulip/GlScene.h>
 #include <tulip/GlGraphComposite.h>
@@ -255,6 +256,10 @@ QVariant SceneLayersModel::data(const QModelIndex &index, int role) const {
 
   if (role == Qt::FontRole && layer != nullptr) {
     QFont f;
+    QWidget *p = dynamic_cast<QWidget *>(QAbstractItemModel::parent());
+    if (p)
+      f = p->font();
+
     f.setBold(true);
     return f;
   }

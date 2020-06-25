@@ -25,6 +25,7 @@
 
 #include <QIcon>
 #include <QFont>
+#include <QWidget>
 
 #include <tulip/TulipModel.h>
 #include <tulip/TlpQtTools.h>
@@ -190,6 +191,10 @@ public:
             .arg(item->info);
     } else if (role == Qt::FontRole && !index.parent().parent().isValid()) {
       QFont f;
+      QWidget *p = dynamic_cast<QWidget *>(QAbstractItemModel::parent());
+      if (p)
+	f = p->font();
+
       f.setBold(true);
       return f;
     } else if (role == Qt::DecorationRole && item->children.isEmpty() &&

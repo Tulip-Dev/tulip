@@ -22,6 +22,7 @@
 
 #include <QStringList>
 #include <QFont>
+#include <QWidget>
 
 namespace tlp {
 
@@ -72,6 +73,10 @@ QVariant GlSimpleEntityItemModel::headerData(int section, Qt::Orientation orient
 
   if (orientation == Qt::Horizontal && role == Qt::FontRole) {
     QFont f;
+    QWidget *p = dynamic_cast<QWidget *>(QAbstractItemModel::parent());
+    if (p)
+      f = p->font();
+
     f.setBold(true);
     f.setPointSize(f.pointSize() - 1);
     return f;
