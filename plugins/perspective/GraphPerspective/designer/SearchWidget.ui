@@ -18,7 +18,6 @@
   </property>
   <property name="styleSheet">
     <string notr="true">
-      QFrame { background-color: white; }
       QLabel { font: bold; }
     </string>
   </property>

@@ -46,8 +46,8 @@ ExportWizard::ExportWizard(Graph *g, const QString &exportFile, QWidget *parent)
   connect(_ui->exportModules->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
           this, SLOT(algorithmSelected(QModelIndex)));
 
-  _ui->parametersList->setItemDelegate(new TulipItemDelegate(_ui->parametersList));
-  _ui->parametersList->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+  _ui->parameters->setItemDelegate(new TulipItemDelegate(_ui->parameters));
+  _ui->parameters->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
   connect(_ui->exportModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton),
           SLOT(click()));
 
@@ -60,7 +60,7 @@ ExportWizard::ExportWizard(Graph *g, const QString &exportFile, QWidget *parent)
 }
 
 ExportWizard::~ExportWizard() {
-  delete _ui->parametersList->model();
+  delete _ui->parameters->model();
   delete _ui;
 }
 
@@ -68,14 +68,14 @@ void ExportWizard::algorithmSelected(const QModelIndex &index) {
   QString alg(index.data().toString());
   string algs(tlp::QStringToTlpString(alg));
   _ui->parametersFrame->setVisible(!alg.isEmpty());
-  QAbstractItemModel *oldModel = _ui->parametersList->model();
+  QAbstractItemModel *oldModel = _ui->parameters->model();
   QAbstractItemModel *newModel = nullptr;
 
   if (PluginLister::pluginExists(algs)) {
     newModel = new ParameterListModel(PluginLister::getPluginParameters(algs), _graph);
   }
 
-  _ui->parametersList->setModel(newModel);
+  _ui->parameters->setModel(newModel);
 
   QString parametersText("<b>Parameters</b>");
   parametersText += "&nbsp;<font size=-2>[" + alg + "]</font>";
@@ -93,7 +93,7 @@ QString ExportWizard::algorithm() const {
 }
 
 tlp::DataSet ExportWizard::parameters() const {
-  ParameterListModel *model = dynamic_cast<ParameterListModel *>(_ui->parametersList->model());
+  ParameterListModel *model = dynamic_cast<ParameterListModel *>(_ui->parameters->model());
 
   if (model == nullptr)
     return DataSet();
@@ -106,7 +106,7 @@ QString ExportWizard::outputFile() const {
 }
 
 void ExportWizard::updateFinishButton() {
-  button(QWizard::FinishButton)->setEnabled(_ui->parametersList->model() != nullptr);
+  button(QWizard::FinishButton)->setEnabled(_ui->parameters->model() != nullptr);
 }
 
 void ExportWizard::pathChanged(QString s) {

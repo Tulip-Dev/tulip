@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>PathFinderConfigurationData</class>
- <widget class="QWidget" name="PathFinderConfigurationData">
+ <widget class="QWidget" name="pathFinderConfigWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -18,11 +18,6 @@
   </property>
   <property name="windowTitle">
    <string>Form</string>
-  </property>
-  <property name="styleSheet">
-    <string notr="true">
-      #PathFinderConfigurationData { background-color: white; }
-    </string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

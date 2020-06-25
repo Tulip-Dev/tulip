@@ -43,8 +43,8 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
   connect(_ui->importModules->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
           this, SLOT(algorithmSelected(QModelIndex)));
 
-  _ui->parametersList->setItemDelegate(new TulipItemDelegate(_ui->parametersList));
-  _ui->parametersList->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+  _ui->parameters->setItemDelegate(new TulipItemDelegate(_ui->parameters));
+  _ui->parameters->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
   connect(_ui->importModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton),
           SLOT(click()));
   // display OK instead of Finish
@@ -70,7 +70,7 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
 }
 
 ImportWizard::~ImportWizard() {
-  delete _ui->parametersList->model();
+  delete _ui->parameters->model();
   delete _ui;
 }
 
@@ -78,7 +78,7 @@ void ImportWizard::algorithmSelected(const QModelIndex &index) {
   QString alg(index.data().toString());
   string algs = tlp::QStringToTlpString(alg);
   _ui->parametersFrame->setVisible(!alg.isEmpty());
-  QAbstractItemModel *oldModel = _ui->parametersList->model();
+  QAbstractItemModel *oldModel = _ui->parameters->model();
   QAbstractItemModel *newModel = nullptr;
   bool isGroup = index.model()->index(0, index.column(), index).isValid();
 
@@ -98,7 +98,7 @@ void ImportWizard::algorithmSelected(const QModelIndex &index) {
   _ui->categoryLabel->setText(categoryText);
   _ui->parametersLabel->setText(parametersText);
 
-  _ui->parametersList->setModel(newModel);
+  _ui->parameters->setModel(newModel);
 
   delete oldModel;
   updateFinishButton();
@@ -112,7 +112,7 @@ QString ImportWizard::algorithm() const {
 }
 
 tlp::DataSet ImportWizard::parameters() const {
-  ParameterListModel *model = dynamic_cast<ParameterListModel *>(_ui->parametersList->model());
+  ParameterListModel *model = dynamic_cast<ParameterListModel *>(_ui->parameters->model());
 
   if (model == nullptr)
     return DataSet();
@@ -121,5 +121,5 @@ tlp::DataSet ImportWizard::parameters() const {
 }
 
 void ImportWizard::updateFinishButton() {
-  button(QWizard::FinishButton)->setEnabled(_ui->parametersList->model() != nullptr);
+  button(QWizard::FinishButton)->setEnabled(_ui->parameters->model() != nullptr);
 }

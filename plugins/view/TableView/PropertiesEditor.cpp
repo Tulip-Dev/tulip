@@ -53,6 +53,7 @@ PropertiesEditor::PropertiesEditor(QWidget *parent)
     : QWidget(parent), _ui(new Ui::PropertiesEditor), _contextProperty(nullptr), _graph(nullptr),
       _delegate(new tlp::TulipItemDelegate), _sourceModel(nullptr), filteringProperties(false),
       editorParent(parent), _caseSensitiveSearch(Qt::CaseSensitive) {
+  Perspective::setStyleSheet(this);
   _ui->setupUi(this);
   connect(_ui->newButton, SIGNAL(clicked()), this, SLOT(newProperty()));
   // use a push button instead of a combobox
@@ -73,7 +74,7 @@ void PropertiesEditor::setCaseSensitive(Qt::CaseSensitivity cs) {
 
 void PropertiesEditor::setGraph(tlp::Graph *g) {
   _graph = g;
-  QSortFilterProxyModel *model = new QSortFilterProxyModel(_ui->tableView);
+  QSortFilterProxyModel *model = new QSortFilterProxyModel(_ui->propertiesTableView);
   delete _sourceModel;
   _sourceModel = new GraphPropertiesModel<PropertyInterface>(g, true);
   model->setSourceModel(_sourceModel);
@@ -86,11 +87,11 @@ void PropertiesEditor::setGraph(tlp::Graph *g) {
           SLOT(displayedPropertiesRemoved(const QModelIndex &, int, int)));
   connect(model, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this,
           SLOT(displayedPropertiesInserted(const QModelIndex &, int, int)));
-  _ui->tableView->setModel(model);
+  _ui->propertiesTableView->setModel(model);
   connect(_sourceModel, SIGNAL(checkStateChanged(QModelIndex, Qt::CheckState)), this,
           SLOT(checkStateChanged(QModelIndex, Qt::CheckState)));
-  _ui->tableView->resizeColumnsToContents();
-  _ui->tableView->sortByColumn(0, Qt::AscendingOrder);
+  _ui->propertiesTableView->resizeColumnsToContents();
+  _ui->propertiesTableView->sortByColumn(0, Qt::AscendingOrder);
   _ui->visualPropertiesCheck->setChecked(true);
 }
 
@@ -156,7 +157,7 @@ void PropertiesEditor::setPropertiesFilter(QString filter) {
     // convert the sql like filter
     convertLikeFilter(filter);
 
-  static_cast<QSortFilterProxyModel *>(_ui->tableView->model())
+  static_cast<QSortFilterProxyModel *>(_ui->propertiesTableView->model())
       ->setFilterRegExp(QRegExp(filter, _caseSensitiveSearch));
   filteringProperties = false;
 }
@@ -171,10 +172,10 @@ QPushButton *PropertiesEditor::getPropertiesMatchButton() {
 
 void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
   _contextProperty =
-      _ui->tableView->indexAt(p).data(TulipModel::PropertyRole).value<PropertyInterface *>();
+      _ui->propertiesTableView->indexAt(p).data(TulipModel::PropertyRole).value<PropertyInterface *>();
   _contextPropertyList.clear();
 
-  for (const QModelIndex &sidx : _ui->tableView->selectionModel()->selectedRows()) {
+  for (const QModelIndex &sidx : _ui->propertiesTableView->selectionModel()->selectedRows()) {
     _contextPropertyList += sidx.data(TulipModel::PropertyRole).value<PropertyInterface *>();
   }
 
@@ -369,7 +370,7 @@ void PropertiesEditor::setPropsVisibility(int state) {
     // reset property name filter
     _ui->propertiesFilterEdit->setText(QString());
     // no filter
-    static_cast<QSortFilterProxyModel *>(_ui->tableView->model())->setFilterFixedString("");
+    static_cast<QSortFilterProxyModel *>(_ui->propertiesTableView->model())->setFilterFixedString("");
   }
 
   bool showVisualP = _ui->visualPropertiesCheck->isChecked();
@@ -401,7 +402,7 @@ void PropertiesEditor::showVisualProperties(bool f) {
   // reset property name filter
   _ui->propertiesFilterEdit->setText(QString());
 
-  static_cast<QSortFilterProxyModel *>(_ui->tableView->model())->setFilterFixedString("");
+  static_cast<QSortFilterProxyModel *>(_ui->propertiesTableView->model())->setFilterFixedString("");
 
   // ensure all visual properties are shown/hidden
   for (int i = 0; i < _sourceModel->rowCount(); ++i) {

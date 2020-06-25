@@ -21,11 +21,13 @@
 #include "ui_NeighborhoodHighlighterConfigWidget.h"
 
 #include <tulip/TlpQtTools.h>
+#include <tulip/Perspective.h>
 
 using namespace tlp;
 
 NeighborhoodHighlighterConfigWidget::NeighborhoodHighlighterConfigWidget(QWidget *parent)
     : QWidget(parent), _ui(new Ui::NeighborhoodHighlighterConfigWidgetData) {
+  Perspective::setStyleSheet(this);
   _ui->setupUi(this);
 }
 

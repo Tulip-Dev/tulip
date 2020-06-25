@@ -20,11 +20,14 @@
 #include "PathFinderConfigurationWidget.h"
 #include "ui_PathFinderConfiguration.h"
 
+#include <tulip/Perspective.h>
+
 using namespace tlp;
 using namespace std;
 
 PathFinderConfigurationWidget::PathFinderConfigurationWidget(QWidget *parent)
     : QWidget(parent), _ui(new Ui::PathFinderConfigurationData) {
+  Perspective::setStyleSheet(this);
   _ui->setupUi(this);
 
   connect(_ui->weightCombo, SIGNAL(activated(const QString &)), this,

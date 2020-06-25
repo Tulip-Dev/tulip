@@ -31,6 +31,7 @@ using namespace std;
 namespace tlp {
 MatrixViewConfigurationWidget::MatrixViewConfigurationWidget(QWidget *parent)
     : QWidget(parent), _ui(new Ui::MatrixViewConfigurationWidget()), _modifyingMetricList(false) {
+  Perspective::setStyleSheet(this);
   _ui->setupUi(this);
   connect(_ui->orderingMetricCombo, SIGNAL(currentIndexChanged(int)), this,
           SLOT(orderingMetricComboIndexChanged(int)));

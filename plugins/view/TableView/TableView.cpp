@@ -30,6 +30,7 @@
 #include <tulip/Perspective.h>
 #include <tulip/CopyPropertyDialog.h>
 #include <tulip/PropertyCreationDialog.h>
+#include <tulip/Perspective.h>
 
 #include <QResizeEvent>
 #include <QGraphicsView>
@@ -145,6 +146,7 @@ void TableView::setupWidget() {
   // for automatic resizing of the viewport
   graphicsView()->viewport()->parentWidget()->installEventFilter(this);
   QWidget *centralWidget = new QWidget();
+  Perspective::setStyleSheet(centralWidget);
   _ui->setupUi(centralWidget);
   activateTooltipAndUrlManager(_ui->table->viewport());
   // no need to display standard View context menu

@@ -16,14 +16,6 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <property name="styleSheet">
-   <string notr="true">#algFrame {
-  border-top: 0px solid red;
-  border-left: 0px solid red;
-  border-right: 0px solid red;
-  border-bottom: 1px solid #E5E5E5;
-}</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -38,6 +30,35 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="styleSheet">
+       <string notr="true">#algFrame {
+border-top: 0px solid red;
+border-left: 0px solid red;
+border-right: 0px solid red;
+border-bottom: 1px solid #E5E5E5;
+}
+
+QPushButton:flat {
+border-image: none;
+border: 1px solid #E9E9E9;
+outline: none;
+}
+
+QPushButton:hover {
+border-image: none;
+border: 1px solid #C9C9C9;
+}
+
+QPushButton:disabled {
+color:gray;
+}
+
+QPushButton:pressed{
+border-image: none;
+background-color: #E9E9E9;
+border: 1px solid #C9C9C9;
+}</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <property name="spacing">
@@ -166,27 +187,6 @@ image: url(:/tulip/graphperspective/icons/16/favorite-empty.png);
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QHeaderView::section {
-background-color: white;
-color: black;
-padding-left: 4px;
-padding-right: 4px;
-margin-bottom: -1px;
-border: 1px solid #C9C9C9;
-border-bottom: 0px;
-font: bold;
-}
-QHeaderView {
-background-color: white;
-font: bold 12px;
-}
-QTableView {
-background-color: white;
-font: 12px;
-}
-</string>
      </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>NeighborhoodHighlighterConfigWidgetData</class>
- <widget class="QWidget" name="NeighborhoodHighlighterConfigWidgetData">
+ <widget class="QWidget" name="neighborhoodHighlighterConfigWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -18,11 +18,6 @@
   </property>
   <property name="windowTitle">
    <string>Form</string>
-  </property>
-  <property name="styleSheet">
-    <string notr="true">
-      #NeighborhoodHighlighterConfigWidgetData { background-color: white; }
-    </string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>

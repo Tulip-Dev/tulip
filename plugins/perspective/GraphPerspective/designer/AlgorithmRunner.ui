@@ -16,79 +16,6 @@
     <height>0</height>
    </size>
   </property>
-  <property name="styleSheet">
-   <string notr="true">#AlgorithmRunner, #contents {
-background-color: white;
-}
-ExpandableGroupBox[ expanded = &quot;true&quot; ] {
-margin-top: 1.5ex;
-}
-ExpandableGroupBox[ expanded = &quot;false&quot; ] {
-margin-top: 0ex;
-margin-left: 0ex;
-}
-ExpandableGroupBox::title {
-subcontrol-origin: margin;
-subcontrol-position: top left;
-padding: 0 3px;
-}
-#favoritesBox::title {
-spacing: 24px;
-}
-ExpandableGroupBox::indicator:unchecked {
-image: url(:/tulip/gui/ui/right_arrow-black.png);
-}
-ExpandableGroupBox::indicator:checked {
-image: url(:/tulip/gui/ui/down_arrow-black.png);
-}
-ExpandableGroupBox {
-background-color: &quot;#FDFDFD&quot;;
-border: 1px solid &quot;#E9E9E9&quot;;
-}
-#favoritesBox {
-border-bottom: 1px solid #C9C9C9;
-}
-ExpandableGroupBox[ root = &quot;true&quot; ] {
-font: bold;
-}
-ExpandableGroupBox[ root = &quot;false&quot; ] {
-border: 0px;
-}
-ExpandableGroupBox[root = &quot;true&quot; ][expanded = &quot;true&quot; ] {
-margin-left: 1ex;
-}
-ExpandableGroupBox[root = &quot;false&quot; ][expanded = &quot;true&quot; ] {
-margin-left: 1ex;
-}
-QToolButton, QComboBox {
-border-image: url(:/tulip/gui/ui/btn_26.png) 4;
-border-width: 4;
-padding: 0px 6px;
-font-size: 12px;
-}
-QPushButton:flat {
-border-image: none;
-background-color: white;
-border: 1px solid &quot;#E9E9E9&quot;;
-color: black;
-outline: none;
-/*margin: 2*/
-}
-QPushButton:hover {
-border-image: none;
-background-color: white;
-border: 1px solid &quot;#C9C9C9&quot;;
-}
-QPushButton:disabled {
-color:gray;
-}
-QPushButton:pressed{
-border-image: none;
-background-color: &quot;#E9E9E9&quot;;
-border: 1px solid &quot;#C9C9C9&quot;;
-}
-</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -125,7 +52,6 @@ border: 1px solid &quot;#C9C9C9&quot;;
      </property>
      <property name="styleSheet">
       <string notr="true">#searchBox {
-  background-color: white;
   border-left: 1px solid &quot;#C9C9C9&quot;;
   border-right: 0px;
   border-top: 0px;
@@ -146,6 +72,43 @@ border: 1px solid &quot;#C9C9C9&quot;;
       <number>1</number>
      </property>
      <widget class="QScrollArea" name="algorithmList">
+  <property name="styleSheet">
+   <string notr="true">
+ExpandableGroupBox[ expanded = &quot;true&quot; ] {
+margin-top: 1.5ex;
+}
+ExpandableGroupBox[ expanded = &quot;false&quot; ] {
+margin-top: 0ex;
+margin-left: 0ex;
+}
+ExpandableGroupBox::title {
+subcontrol-origin: margin;
+subcontrol-position: top left;
+padding: 0 3px;
+}
+ExpandableGroupBox::indicator:unchecked {
+image: url(:/tulip/gui/ui/right_arrow-black.png);
+}
+ExpandableGroupBox::indicator:checked {
+image: url(:/tulip/gui/ui/down_arrow-black.png);
+}
+ExpandableGroupBox {
+border: 1px solid #E9E9E9;
+}
+ExpandableGroupBox[ root = &quot;true&quot; ] {
+font: bold;
+}
+ExpandableGroupBox[ root = &quot;false&quot; ] {
+border: 0px;
+}
+ExpandableGroupBox[root = &quot;true&quot; ][expanded = &quot;true&quot; ] {
+margin-left: 1ex;
+}
+ExpandableGroupBox[root = &quot;false&quot; ][expanded = &quot;true&quot; ] {
+margin-left: 1ex;
+}
+</string>
+  </property>
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -193,6 +156,10 @@ border: 1px solid &quot;#C9C9C9&quot;;
             <property name="styleSheet">
              <string notr="true">#favoritesBox {
 border: 0px;
+}
+
+#favoritesBox::title {
+spacing: 24px;
 }</string>
             </property>
             <property name="title">

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>PropertiesEditor</class>
- <widget class="QWidget" name="PropertiesEditor">
+ <widget class="QWidget" name="propertiesEditor">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -18,94 +18,6 @@
   </property>
   <property name="windowTitle">
    <string>Properties</string>
-  </property>
-  <property name="styleSheet">
-   <string notr="true">QPushButton, QComboBox {
-border-image: url(:/tulip/gui/ui/btn_26.png) 4;
-border-width: 4;
-padding: 0px 6px;
-font-size: 12px;
-}
-QPushButton, QComboBox, QLabel {
-color: black;
-}
-QPushButton:hover, QComboBox:hover {
-border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
-}
-QPushButton:disabled, QComboBox::disabled {
-color:gray;
-}
-QPushButton:pressed{
-border-image: url(:/tulip/gui/ui/btn_26_pressed.png) 4;
-}
-QPushButton::menu-indicator{
-subcontrol-origin: margin;
-subcontrol-position: center right;
-right: 4px;
-}
-QPushButton {
-outline: none;
-margin: 2
-}
-
-
-QComboBox::down-arrow {
-image: url(:/tulip/gui/ui/combobox_arrow.png);
-}
-
-QComboBox:drop-down {
-subcontrol-origin: padding;
-subcontrol-position: top right;
-border-left-style: none; 
-border-top-right-radius: 1px;
-border-bottom-right-radius: 1px;
-}
-
-#PropertiesEditor {
-background-color: white;
-border: 0px;
-}
-QScrollArea {
-border: 0px;
-}
-QFrame[ section=&quot;true&quot; ] {
-border: 1px solid #D9D9D9;
-padding-top: 0px;
-}
-QFrame[ subsection = &quot;true&quot; ] {
-border-top: 1px solid #D9D9D9;
-padding-top: 5px;
-background-color: #F4F4F4;
-}
-#frame_2 {
-border-right: 0px;
-}
-QPushButton[flat=&quot;true&quot;] {
-font: bold;
-border-image: none;
-border-width: 4;
-padding: 0px 6px;
-font-size: 12px;
-background-color: transparent;
-}
-QTableView {
-font: 12px;
-}
-QTableView::indicator:checked {
-image: url(:/tulip/gui/icons/eye.png);
-}
-QTableView::indicator:unchecked {
-image: url(:/tulip/gui/icons/eye_disabled.png);
-}
-QCheckBox::indicator:checked {
-image: url(:/tulip/gui/icons/eye.png);
-}
-#propsVisibilityCheck::indicator:indeterminate {
-image: url(:/tulip/gui/icons/eye_partially_disabled.png);
-}
-QCheckBox::indicator:unchecked {
-image: url(:/tulip/gui/icons/eye_disabled.png);
-}</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -277,6 +189,16 @@ matches the given regular expression.</string>
    </item>
    <item>
     <widget class="QFrame" name="frame_2">
+      <property name="styleSheet">
+	<string notr="true">
+#frame_2 {
+border-right: 0px;
+}
+QFrame[ section=&quot;true&quot; ] {
+border: 1px solid #D9D9D9;
+padding-top: 0px;
+}</string>
+      </property>
      <property name="section" stdset="0">
       <bool>true</bool>
      </property>
@@ -288,7 +210,19 @@ matches the given regular expression.</string>
        <number>0</number>
       </property>
       <item>
-       <widget class="QTableView" name="tableView">
+       <widget class="QTableView" name="propertiesTableView">
+	 <property name="styleSheet">
+	   <string notr="true">
+QTableView {
+font: 12px;
+}
+QTableView::indicator:checked {
+image: url(:/tulip/gui/icons/eye.png);
+}
+QTableView::indicator:unchecked {
+image: url(:/tulip/gui/icons/eye_disabled.png);
+}</string>
+	 </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -322,9 +256,6 @@ matches the given regular expression.</string>
         <property name="cornerButtonEnabled">
          <bool>false</bool>
         </property>
-        <attribute name="horizontalHeaderMinimumSectionSize">
-         <number>50</number>
-        </attribute>
         <attribute name="horizontalHeaderStretchLastSection">
          <bool>true</bool>
         </attribute>
