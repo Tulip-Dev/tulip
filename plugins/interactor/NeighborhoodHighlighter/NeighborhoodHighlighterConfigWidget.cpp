@@ -26,7 +26,7 @@
 using namespace tlp;
 
 NeighborhoodHighlighterConfigWidget::NeighborhoodHighlighterConfigWidget(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::NeighborhoodHighlighterConfigWidgetData) {
+    : QWidget(parent), _ui(new Ui::NeighborhoodHighlighterConfigWidget) {
   Perspective::setStyleSheet(this);
   _ui->setupUi(this);
 }

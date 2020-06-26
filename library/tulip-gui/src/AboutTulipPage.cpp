@@ -47,7 +47,7 @@ const QString TulipRepoUrl = "https://github.com/Tulip-Dev/tulip";
 using namespace tlp;
 
 AboutTulipPage::AboutTulipPage(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::AboutTulipPageData()) {
+    : QWidget(parent), _ui(new Ui::AboutTulipPageWidget()) {
   _ui->setupUi(this);
 
   QString title("Tulip ");

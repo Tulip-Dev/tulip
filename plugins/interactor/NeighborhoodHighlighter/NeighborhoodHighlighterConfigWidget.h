@@ -25,7 +25,7 @@
 #include <QWidget>
 
 namespace Ui {
-class NeighborhoodHighlighterConfigWidgetData;
+class NeighborhoodHighlighterConfigWidget;
 }
 
 namespace tlp {
@@ -34,7 +34,7 @@ class NeighborhoodHighlighterConfigWidget : public QWidget {
 
   Q_OBJECT
 
-  Ui::NeighborhoodHighlighterConfigWidgetData *_ui;
+  Ui::NeighborhoodHighlighterConfigWidget *_ui;
 
 public:
   NeighborhoodHighlighterConfigWidget(QWidget *parent = nullptr);

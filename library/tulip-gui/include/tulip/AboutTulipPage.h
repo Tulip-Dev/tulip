@@ -27,7 +27,7 @@
 #include <QWidget>
 
 namespace Ui {
-class AboutTulipPageData;
+class AboutTulipPageWidget;
 }
 
 namespace tlp {
@@ -49,7 +49,7 @@ private slots:
   void openUrlInBrowser(const QString &url);
 
 private:
-  Ui::AboutTulipPageData *_ui;
+  Ui::AboutTulipPageWidget *_ui;
 };
 } // namespace tlp
 

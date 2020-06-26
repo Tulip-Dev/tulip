@@ -26,7 +26,7 @@ using namespace tlp;
 using namespace std;
 
 PathFinderConfigurationWidget::PathFinderConfigurationWidget(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::PathFinderConfigurationData) {
+    : QWidget(parent), _ui(new Ui::PathFinderConfigWidget) {
   Perspective::setStyleSheet(this);
   _ui->setupUi(this);
 

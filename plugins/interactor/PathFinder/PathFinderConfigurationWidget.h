@@ -25,7 +25,7 @@
 #include <string>
 
 namespace Ui {
-class PathFinderConfigurationData;
+class PathFinderConfigWidget;
 }
 
 class QString;
@@ -34,7 +34,7 @@ namespace tlp {
 class PathFinderConfigurationWidget : public QWidget {
   Q_OBJECT
 
-  Ui::PathFinderConfigurationData *_ui;
+  Ui::PathFinderConfigWidget *_ui;
 
 public:
   PathFinderConfigurationWidget(QWidget *parent = nullptr);

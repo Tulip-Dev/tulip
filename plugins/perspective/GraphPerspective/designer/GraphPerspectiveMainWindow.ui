@@ -23,22 +23,22 @@
   <property name="styleSheet">
    <string notr="true">
 
-#aboutTulipPageWidget, #AlgorithmRunner, #AlgorithmRunner #contents, #mainWidget, #elementInformationWidget QFrame, #fishEyeConfigWidget, #interactorConfigWidget QLabel, #neighborhoodHighlighterConfigWidget, #pathFinderConfigWidget, #propertiesEditor, #tableViewWidget, QAbstractItemView, QDialog, QHeaderView::section, QMessageBox, QStackedWidget, QWizard { background-color: white; }
+#AboutTulipPageWidget, #AlgorithmRunner, #AlgorithmRunner #contents, #mainWidget, #ElementInformationWidget QFrame, #FishEyeConfigWidget, #InteractorConfigWidget QLabel, #NeighborhoodHighlighterConfigWidget, #PathFinderConfigWidget, #PropertiesEditor, #TableViewWidget, QAbstractItemView, QDialog, QHeaderView::section, QMessageBox, QStackedWidget, QWizard { background-color: white; }
 
 #scrollArea, #scrollAreaWidgetContents {
 background-color: white;
 border: 0px;
 }
 
-#propertiesEditor QCheckBox::indicator:checked {
+#PropertiesEditor QCheckBox::indicator:checked {
 image: url(:/tulip/gui/icons/eye.png);
 }
 
-#propertiesEditor QCheckBox::indicator:indeterminate {
+#PropertiesEditor QCheckBox::indicator:indeterminate {
 image: url(:/tulip/gui/icons/eye_partially_disabled.png);
 }
 
-#propertiesEditor QCheckBox::indicator:unchecked {
+#PropertiesEditor QCheckBox::indicator:unchecked {
 image: url(:/tulip/gui/icons/eye_disabled.png);
 }
 
