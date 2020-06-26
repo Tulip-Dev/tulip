@@ -28,7 +28,7 @@ namespace tlp {
 
 ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &params,
                                        tlp::Graph *graph, QObject *parent, bool showIcons)
-  : TulipModel(parent), _graph(graph), _showIcons(showIcons) {
+    : TulipModel(parent), _graph(graph), _showIcons(showIcons) {
   std::vector<ParameterDescription> outParams;
   // first add in parameters
   for (const ParameterDescription &param : params.getParameters()) {
