@@ -20,41 +20,7 @@
    <string>Find / Replace</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QPushButton {
-border-image: url(:/tulip/gui/ui/btn_26.png) 4;
-border-width: 4;
-padding: 0px 6px;
-font-size: 12px;
-}
-QPushButton::flat {
-border-image: none;
-border-width: 4;
-padding: 0px 6px;
-font-size: 12px;
-background-color: transparent;
-}
-QPushButton {
-color: black;
-}
-QPushButton:hover {
-border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
-}
-QPushButton:disabled {
-color:gray;
-}
-QPushButton:pressed {
-border-image: url(:/tulip/gui/ui/btn_26_pressed.png) 4;
-}
-QPushButton::menu-indicator{
-subcontrol-origin: margin;
-subcontrol-position: center right;
-right: 4px;
-}
-QPushButton {
-outline: none;
-margin: 2
-}
-QLabel {
+   <string notr="true">QLabel {
 font: bold;
 }
    </string>

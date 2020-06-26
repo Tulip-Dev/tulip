@@ -25,11 +25,6 @@
   <property name="autoFillBackground">
    <bool>false</bool>
   </property>
-  <property name="styleSheet">
-   <string notr="true">
-      QFrame { background-color: white; }
-    </string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
    <property name="spacing">
     <number>0</number>
@@ -48,6 +43,36 @@
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
+     <property name="styleSheet">
+       <string notr="true">
+QTabWidget::pane {
+border-top: none;
+}
+
+QTabBar::tab {
+font:normal;
+}
+
+QToolButton {
+border-image:none;
+border-top: 1px;
+border-bottom: 1px;
+border-left: 0px;
+border-right: 0px;
+font: bold 10px;
+}
+
+QToolButton:hover {
+border-width: 1px;
+border-style: solid;
+border-color: #A0A0A0;
+}
+
+QToolButton:pressed {
+background-color: #A0A0A0;
+}
+       </string>
+      </property>
      <widget class="PythonTabWidget" name="tabWidget">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -55,39 +80,10 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="styleSheet">
-       <string notr="true">QTabWidget::pane { 
-     border-top: none;
- }
-</string>
-      </property>
       <property name="currentIndex">
        <number>0</number>
       </property>
       <widget class="QWidget" name="scriptsTab">
-       <property name="styleSheet">
-        <string notr="true">QTabWidget::pane { /* The tab widget frame */
-	border-top: none;
-	}
-	QToolButton {
-	border-image:none;
-	border-top: 1px;
-	border-bottom: 1px;
-	border-left: 0px;
-	border-right: 0px;
-	font: bold 10px;
-	}
-QToolButton:hover {
-border-width: 1px;
-    border-style: solid;
-    border-color: #A0A0A0;
-}
-
-QToolButton:pressed {
-background-color: #A0A0A0;
-}
-	</string>
-       </property>
        <attribute name="title">
         <string>Scripts editor</string>
        </attribute>
@@ -283,16 +279,6 @@ background-color: #A0A0A0;
             <height>100</height>
            </size>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QTabBar::tab {
-    font:normal;
-}
-
-QTabWidget::pane { /* The tab widget frame */
-    border-top: none;
- }
-</string>
-          </property>
           <property name="currentIndex">
            <number>0</number>
           </property>
@@ -319,29 +305,6 @@ QTabWidget::pane { /* The tab widget frame */
       <widget class="QWidget" name="pluginsTab">
        <property name="enabled">
         <bool>true</bool>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QTabWidget::pane { /* The tab widget frame */
-	border-top: none;
-	}
-	QToolButton {
-	border-image:none;
-	border-top: 1px;
-	border-bottom: 1px;
-	border-left: 0px;
-	border-right: 0px;
-	font: bold 10px;
-	}
-QToolButton:hover {
-border-width: 1px;
-    border-style: solid;
-    border-color: #A0A0A0;
-}
-
-QToolButton:pressed {
-background-color: #A0A0A0;
-}
-	</string>
        </property>
        <attribute name="title">
         <string>Plugins editor</string>
@@ -509,12 +472,6 @@ background-color: #A0A0A0;
             <height>100</height>
            </size>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QTabBar::tab {
-    font:normal;
-}
-</string>
-          </property>
           <property name="currentIndex">
            <number>0</number>
           </property>
@@ -539,28 +496,6 @@ background-color: #A0A0A0;
        </layout>
       </widget>
       <widget class="QWidget" name="modulesTab">
-       <property name="styleSheet">
-        <string notr="true">QTabWidget::pane { /* The tab widget frame */
-    border-top: none;
-    }
-	QToolButton {
-	border-image:none;
-	border-top: 1px;
-	border-bottom: 1px;
-	border-left: 0px;
-	border-right: 0px;
-	font: bold 10px;
-	}
-QToolButton:hover {
-border-width: 1px;
-    border-style: solid;
-    border-color: #A0A0A0;
-}
-
-QToolButton:pressed {
-background-color: #A0A0A0;
-}</string>
-       </property>
        <attribute name="title">
         <string>Modules editor</string>
        </attribute>
@@ -762,11 +697,6 @@ background-color: #A0A0A0;
             <height>100</height>
            </size>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QTabBar::tab {
-font:normal;
-}</string>
-          </property>
           <property name="currentIndex">
            <number>0</number>
           </property>
@@ -801,11 +731,6 @@ font:normal;
        </property>
        <item>
         <widget class="QTabWidget" name="consoleTab">
-         <property name="styleSheet">
-          <string notr="true">QTabWidget::pane { /* The tab widget frame */
-    border-top: none;
- }</string>
-         </property>
          <property name="currentIndex">
           <number>0</number>
          </property>
@@ -1085,7 +1010,7 @@ can not be undone but performance of the script execution will be better
              <string>Decrease/Increase the size of the font of the python code editors</string>
             </property>
             <property name="text">
-             <string>Font size :</string>
+             <string>Font size:</string>
             </property>
            </widget>
           </item>
@@ -1212,7 +1137,7 @@ can not be undone but performance of the script execution will be better
           <item>
            <widget class="QLabel" name="label_3">
             <property name="text">
-             <string>Font size :</string>
+             <string>Font size:</string>
             </property>
            </widget>
           </item>
@@ -1286,7 +1211,7 @@ can not be undone but performance of the script execution will be better
        <item>
         <widget class="QLabel" name="label_5">
          <property name="text">
-          <string>Font size :</string>
+          <string>Font size:</string>
          </property>
         </widget>
        </item>
