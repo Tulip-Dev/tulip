@@ -27,8 +27,8 @@
 namespace tlp {
 
 ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &params,
-                                       tlp::Graph *graph, QObject *parent)
-    : TulipModel(parent), _graph(graph) {
+                                       tlp::Graph *graph, QObject *parent, bool showIcons)
+  : TulipModel(parent), _graph(graph), _showIcons(showIcons) {
   std::vector<ParameterDescription> outParams;
   // first add in parameters
   for (const ParameterDescription &param : params.getParameters()) {
@@ -74,7 +74,7 @@ QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
   else if (role == Qt::WhatsThisRole)
     return tlp::tlpStringToQString(info.getHelp());
   else if (role == Qt::BackgroundRole) {
-    if (info.isMandatory())
+    if (info.isMandatory() || !_showIcons)
       return QColor(255, 255, 222);
     else
       return QColor(222, 255, 222);
@@ -121,7 +121,7 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
         return QColor(222, 255, 222);
     } else if (role == Qt::ToolTipRole) {
       return tlp::tlpStringToQString(info.getHelp());
-    } else if (role == Qt::DecorationRole) {
+    } else if (role == Qt::DecorationRole && _showIcons) {
       if (info.getDirection() == IN_PARAM) {
         return QIcon(":/tulip/gui/icons/32/input.png");
       } else if (info.getDirection() == OUT_PARAM) {
