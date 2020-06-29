@@ -44,6 +44,7 @@
 #include <tulip/PluginLister.h>
 #include <tulip/TulipMimes.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/Perspective.h>
 
 using namespace tlp;
 
@@ -201,11 +202,13 @@ void WorkspacePanel::setView(tlp::View *view) {
 #else
     QTabWidget *viewConfigurationTabs = new QTabWidget();
 #endif
+    // set a name to be used with the main window style sheet
+    viewConfigurationTabs->setObjectName("viewConfigTabWidget");
+    Perspective::setStyleSheet(viewConfigurationTabs);
     viewConfigurationTabs->setTabsClosable(true);
     connect(viewConfigurationTabs, SIGNAL(tabCloseRequested(int)), this,
             SLOT(hideConfigurationTab()));
     viewConfigurationTabs->setTabPosition(QTabWidget::West);
-    viewConfigurationTabs->setStyleSheet(_view->configurationWidgetsStyleSheet());
     viewConfigurationTabs->findChild<QTabBar *>()->installEventFilter(this);
 
     for (auto w : _view->configurationWidgets()) {

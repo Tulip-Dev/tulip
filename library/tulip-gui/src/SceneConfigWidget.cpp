@@ -35,7 +35,6 @@ using namespace tlp;
 
 SceneConfigWidget::SceneConfigWidget(QWidget *parent)
     : QWidget(parent), _ui(new Ui::SceneConfigWidget), _glMainWidget(nullptr), _resetting(false) {
-  Perspective::setStyleSheet(this);
   _ui->setupUi(this);
 
   connect(_ui->dynamicFontSizeRB, SIGNAL(toggled(bool)), this, SLOT(dynamicFontRBToggled(bool)));

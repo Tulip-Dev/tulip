@@ -23,13 +23,11 @@
 #include <tulip/GlMainView.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/SceneLayersModel.h>
-#include <tulip/Perspective.h>
 
 using namespace tlp;
 
 SceneLayersConfigWidget::SceneLayersConfigWidget(QWidget *parent)
     : QWidget(parent), _ui(new Ui::SceneLayersConfigWidget), _glMainWidget(nullptr) {
-  Perspective::setStyleSheet(this);
   _ui->setupUi(this);
 }
 
