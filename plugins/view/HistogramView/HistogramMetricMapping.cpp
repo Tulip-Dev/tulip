@@ -26,8 +26,10 @@
 #include <tulip/GlNode.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/ColorScalesManager.h>
+#include <tulip/Perspective.h>
 
 #include <QToolTip>
+#include <QMainWindow>
 #include <QMenu>
 
 #include <algorithm>
@@ -668,18 +670,20 @@ void HistogramMetricMapping::initInteractor() {
   if (!histoView->getDetailedHistogram())
     return;
 
+  // interactor dialogs use perspective main window style sheet
   if (colorScaleConfigDialog == nullptr) {
-    colorScaleConfigDialog = new ColorScaleConfigDialog(*colorScale, histoView->getGlMainWidget());
+    colorScaleConfigDialog = new ColorScaleConfigDialog(*colorScale, Perspective::instance()->mainWindow());
     dialogColorScale = *colorScale = colorScaleConfigDialog->getColorScale();
     colorScale->setColorMapTransparency(200);
   }
 
   if (sizeScaleConfigDialog == nullptr) {
-    sizeScaleConfigDialog = new SizeScaleConfigDialog(histoView->getGlMainWidget());
+    sizeScaleConfigDialog = new SizeScaleConfigDialog(Perspective::instance()->mainWindow());
   }
 
   if (glyphScaleConfigDialog == nullptr) {
-    glyphScaleConfigDialog = new GlyphScaleConfigDialog(histoView->getGlMainWidget());
+    // use perspective main window style sheet
+    glyphScaleConfigDialog = new GlyphScaleConfigDialog(Perspective::instance()->mainWindow());
   }
 
   histoXAxis = histoView->getDetailedHistogram()->getXAxis();
