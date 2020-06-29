@@ -54,6 +54,11 @@ padding-right: 4px;
 font: bold 10pt;
 }
 
+QPlainTextEdit {
+background-color: white;
+selection-background-color: #C0C0C0;
+}
+
 QPushButton, QComboBox, QLabel, QToolButton {
 color: black;
 }

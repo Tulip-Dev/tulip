@@ -468,9 +468,6 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent)
   _currentFont.setPointSize(8);
 #endif
 
-  setStyleSheet("QFrame { background-color: white; }"
-                "QPlainTextEdit { selection-background-color: #C0C0C0; }");
-
   format.setFont(_currentFont);
   setCurrentCharFormat(format);
 
