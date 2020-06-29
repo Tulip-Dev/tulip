@@ -672,7 +672,8 @@ void HistogramMetricMapping::initInteractor() {
 
   // interactor dialogs use perspective main window style sheet
   if (colorScaleConfigDialog == nullptr) {
-    colorScaleConfigDialog = new ColorScaleConfigDialog(*colorScale, Perspective::instance()->mainWindow());
+    colorScaleConfigDialog =
+        new ColorScaleConfigDialog(*colorScale, Perspective::instance()->mainWindow());
     dialogColorScale = *colorScale = colorScaleConfigDialog->getColorScale();
     colorScale->setColorMapTransparency(200);
   }
