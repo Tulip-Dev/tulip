@@ -281,7 +281,7 @@ image: url(:/tulip/gui/icons/eye_disabled.png);
  </resources>
  <connections>
   <connection>
-   <sender>tableView</sender>
+   <sender>propertiesTableView</sender>
    <signal>customContextMenuRequested(QPoint)</signal>
    <receiver>PropertiesEditor</receiver>
    <slot>showCustomContextMenu(QPoint)</slot>
