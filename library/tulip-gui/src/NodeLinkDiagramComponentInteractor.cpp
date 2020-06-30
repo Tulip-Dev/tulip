@@ -17,6 +17,7 @@
  *
  */
 
+#include <tulip/Interactor.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/NodeLinkDiagramComponent.h>
 
@@ -29,6 +30,7 @@ NodeLinkDiagramComponentInteractor::NodeLinkDiagramComponentInteractor(const QSt
                                                                        const QString &text,
                                                                        unsigned int priority)
     : GLInteractorComposite(QIcon(iconPath), text), _label(new QLabel), _priority(priority) {
+  Interactor::setupConfigWidget(_label);
   _label->setWordWrap(true);
   _label->setAlignment(Qt::AlignTop);
   _label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

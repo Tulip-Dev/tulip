@@ -63,13 +63,13 @@ void InteractorConfigWidget::clearWidgets() {
     }
     if ((isOldDocConfigWidget && _interactor->configurationWidget() != DocWidget) ||
         (_interactor->configurationDocWidget() != DocWidget)) {
-      _ui->scrollAreaDoc->widget()->hide();
-      _ui->scrollAreaDoc->takeWidget();
+      _ui->interactorConfigWidgetDoc->widget()->hide();
+      _ui->interactorConfigWidgetDoc->takeWidget();
     }
     if ((isOldOptionsConfigWidget && _interactor->configurationWidget() != OptionsWidget) ||
         (_interactor->configurationOptionsWidget() != OptionsWidget)) {
-      _ui->scrollAreaOptions->widget()->hide();
-      _ui->scrollAreaOptions->takeWidget();
+      _ui->interactorConfigWidgetOptions->widget()->hide();
+      _ui->interactorConfigWidgetOptions->takeWidget();
     }
     _interactor = nullptr;
   }
@@ -107,27 +107,27 @@ bool InteractorConfigWidget::setWidgets(Interactor *interactor) {
       if ((isOldDocConfigWidget && _interactor->configurationWidget() != DocWidget) ||
           (_interactor->configurationDocWidget() != DocWidget)) {
         if (_ui->tabWidget->isTabEnabled(0)) {
-          _ui->scrollAreaDoc->widget()->hide();
-          _ui->scrollAreaDoc->takeWidget();
+          _ui->interactorConfigWidgetDoc->widget()->hide();
+          _ui->interactorConfigWidgetDoc->takeWidget();
         }
       }
       if ((isOldOptionsConfigWidget && _interactor->configurationWidget() != OptionsWidget) ||
           (_interactor->configurationOptionsWidget() != OptionsWidget)) {
         if (_ui->tabWidget->isTabEnabled(1)) {
-          _ui->scrollAreaOptions->widget()->hide();
-          _ui->scrollAreaOptions->takeWidget();
+          _ui->interactorConfigWidgetOptions->widget()->hide();
+          _ui->interactorConfigWidgetOptions->takeWidget();
         }
       }
     }
 
     if (DocWidget != nullptr) {
-      _ui->scrollAreaDoc->setWidget(DocWidget);
+      _ui->interactorConfigWidgetDoc->setWidget(DocWidget);
       _ui->tabWidget->setTabEnabled(0, true); // in case it was previously set to false
     } else
       _ui->tabWidget->setTabEnabled(0, false);
 
     if (OptionsWidget != nullptr) {
-      _ui->scrollAreaOptions->setWidget(OptionsWidget);
+      _ui->interactorConfigWidgetOptions->setWidget(OptionsWidget);
       _ui->tabWidget->setTabEnabled(1, true); // in case it was previously set to false
     } else
       _ui->tabWidget->setTabEnabled(1, false);

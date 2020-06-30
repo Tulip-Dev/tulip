@@ -18,6 +18,8 @@
  */
 #include <algorithm>
 
+#include <QWidget>
+
 #include <tulip/Interactor.h>
 #include <tulip/PluginLister.h>
 #include <tulip/View.h>
@@ -70,4 +72,8 @@ void InteractorLister::initInteractorsDependencies() {
 
 QList<string> InteractorLister::compatibleInteractors(const std::string &viewName) {
   return _compatibilityMap[viewName];
+}
+
+void Interactor::setupConfigWidget(QWidget *w) {
+  w->setObjectName("interactorConfigWidget");
 }

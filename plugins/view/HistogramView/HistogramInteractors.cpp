@@ -157,6 +157,7 @@ HistogramInteractorStatistics::~HistogramInteractorStatistics() {
 
 void HistogramInteractorStatistics::construct() {
   histoStatsConfigWidget = new HistoStatsConfigWidget();
+  Interactor::setupConfigWidget(histoStatsConfigWidget);
   histoStatistics = new HistogramStatistics(histoStatsConfigWidget);
   push_back(histoStatistics);
   push_back(new MousePanNZoomNavigator);

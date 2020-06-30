@@ -23,7 +23,7 @@
   <property name="styleSheet">
    <string notr="true">
 
-#AboutTulipPageWidget, #AlgorithmRunner, #AlgorithmRunner #contents, #mainWidget, #ElementInformationWidget QFrame, #FishEyeConfigWidget, #InteractorConfigWidget QLabel, #NeighborhoodHighlighterConfigWidget, #PathFinderConfigWidget, #TableViewWidget, QAbstractItemView, QDialog, QHeaderView::section, QMessageBox, QStackedWidget, QWizard { background-color: white; }
+#AboutTulipPageWidget, #AlgorithmRunner, #AlgorithmRunner #contents, #consoleWidget, #interactorConfigWidget, #interactorConfigWidgetDoc, #interactorConfigWidgetOptions, #mainWidget, #stringsListSelectionWidget, #TableViewWidget, QAbstractItemView, QDialog, QHeaderView::section, QMessageBox, QStackedWidget, QWizard { background-color: white; }
 
 #scrollArea, #scrollAreaWidgetContents {
 background-color: white;

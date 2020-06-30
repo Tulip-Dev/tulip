@@ -17,10 +17,12 @@
  *
  */
 
-#include <QColorDialog>
+#include <QMainWindow>
 #include <QPainter>
 #include <QLinearGradient>
 
+#include <tulip/Interactor.h>
+#include <tulip/Perspective.h>
 #include "ScatterPlotCorrelCoeffSelectorOptionsWidget.h"
 #include "ui_ScatterPlotCorrelCoeffSelectorOptionsWidget.h"
 
@@ -29,10 +31,11 @@ namespace tlp {
 ScatterPlotCorrelCoeffSelectorOptionsWidget::ScatterPlotCorrelCoeffSelectorOptionsWidget(
     QWidget *parent)
     : QWidget(parent), _ui(new Ui::ScatterPlotCorrelCoeffSelectorOptionsWidgetData) {
+  Interactor::setupConfigWidget(this);
   _ui->setupUi(this);
-  _ui->minusOneColorButton->setDialogParent(parent);
-  _ui->zeroColorButton->setDialogParent(parent);
-  _ui->oneColorButton->setDialogParent(parent);
+  _ui->minusOneColorButton->setDialogParent(Perspective::instance()->mainWindow());
+  _ui->zeroColorButton->setDialogParent(Perspective::instance()->mainWindow());
+  _ui->oneColorButton->setDialogParent(Perspective::instance()->mainWindow());
   _ui->minusOneColorButton->setDialogTitle("Choose the color for -1");
   _ui->zeroColorButton->setDialogTitle("Choose the color for 0");
   _ui->oneColorButton->setDialogTitle("Choose the color for 1");

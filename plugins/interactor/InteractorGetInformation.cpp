@@ -19,6 +19,7 @@
 
 #include <vector>
 
+#include <tulip/Interactor.h>
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseShowElementInfo.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
@@ -41,10 +42,7 @@ class InteractorGetInformation : public NodeLinkDiagramComponentInteractor {
     InteractorGetInformation *_interactor;
 
   public:
-    ConfigWidget(InteractorGetInformation *interactor) : _interactor(interactor) {
-      setObjectName("configWidget");
-      setStyleSheet("#configWidget { background-color: white; } #label { font: bold; }");
-    }
+    ConfigWidget(InteractorGetInformation *interactor) : _interactor(interactor) {}
 
     void hideEvent(QHideEvent *) override {
       _interactor->setVisibleProperties();
@@ -107,6 +105,7 @@ public:
     push_back(_elementInfo = new MouseShowElementInfo);
     // build configuration widget
     _configWidget = new ConfigWidget(this);
+    Interactor::setupConfigWidget(_configWidget);
     QVBoxLayout *verticalLayout = new QVBoxLayout(_configWidget);
     QLabel *label = new QLabel("Visible properties");
     label->setObjectName("label");

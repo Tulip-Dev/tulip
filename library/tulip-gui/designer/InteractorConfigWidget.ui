@@ -40,7 +40,7 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QScrollArea" name="scrollAreaDoc">
+        <widget class="QScrollArea" name="interactorConfigWidgetDoc">
          <property name="widgetResizable">
           <bool>true</bool>
          </property>
@@ -64,7 +64,7 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QScrollArea" name="scrollAreaOptions">
+        <widget class="QScrollArea" name="interactorConfigWidgetOptions">
          <property name="widgetResizable">
           <bool>true</bool>
          </property>

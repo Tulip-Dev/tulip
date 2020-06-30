@@ -135,6 +135,12 @@ public:
     */
   virtual void construct() = 0;
 
+  /**
+    @brief this method should be called before setting up the ui
+    * of an interactor config widget
+    */
+  static void setupConfigWidget(QWidget *);
+
 public slots:
   /**
     @brief Defines the view object associated to this interactor.

@@ -21,13 +21,13 @@
 
 #include "ui_FishEyeConfigWidget.h"
 
-#include <tulip/Perspective.h>
+#include <tulip/Interactor.h>
 
 using namespace tlp;
 
 FishEyeConfigWidget::FishEyeConfigWidget(QWidget *parent)
     : QWidget(parent), _ui(new Ui::FishEyeConfigWidget) {
-  Perspective::setStyleSheet(this);
+  Interactor::setupConfigWidget(this);
   _ui->setupUi(this);
 }
 
