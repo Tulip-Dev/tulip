@@ -944,12 +944,12 @@ NEW-WINDOW:528,127:58720382,58720382,58720470,0,0,0:0x0+1172+819:0,0:
 7,6,1401,870,0,0,0,106022061,9,'VirtualBox mouse integration'
 7,6,1401,871,0,0,0,106022069,9,'VirtualBox mouse integration'
 7,6,1401,872,0,0,0,106022093,9,'VirtualBox mouse integration'
-7,6,1401,873,0,0,0,106022109,9,'VirtualBox mouse integration'
+7,6,1391,873,0,0,0,106022109,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,106023657,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,106023657,2,Virtual core pointer
 7,5,0,0,1,0,0,106023842,12,ImExPS/2 Generic Explorer Mouse
 6,5,0,0,1,0,0,106023842,2,Virtual core pointer
-7,6,1401,874,0,0,0,106024213,9,'VirtualBox mouse integration'
+7,6,1391,874,0,0,0,106024213,9,'VirtualBox mouse integration'
 7,6,1401,873,0,0,0,106024221,9,'VirtualBox mouse integration'
 7,6,1401,872,0,0,0,106024229,9,'VirtualBox mouse integration'
 7,6,1401,869,0,0,0,106024237,9,'VirtualBox mouse integration'
@@ -1035,12 +1035,12 @@ NEW-WINDOW:528,127:58720382,58720382,58720470,0,0,0:0x0+1172+819:0,0:
 7,6,1363,778,0,0,0,106025453,9,'VirtualBox mouse integration'
 7,6,1363,777,0,0,0,106025461,9,'VirtualBox mouse integration'
 7,6,1362,777,0,0,0,106025469,9,'VirtualBox mouse integration'
-7,6,1361,777,0,0,0,106025493,9,'VirtualBox mouse integration'
+7,6,1356,777,0,0,0,106025493,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,106026048,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,106026048,2,Virtual core pointer
 7,5,0,0,1,0,0,106026225,12,ImExPS/2 Generic Explorer Mouse
 6,5,0,0,1,0,0,106026225,2,Virtual core pointer
-7,6,1361,776,0,0,0,106026359,9,'VirtualBox mouse integration'
+7,6,1351,776,0,0,0,106026359,9,'VirtualBox mouse integration'
 7,6,1362,776,0,0,0,106026366,9,'VirtualBox mouse integration'
 7,6,1363,776,0,0,0,106026373,9,'VirtualBox mouse integration'
 7,6,1366,776,0,0,0,106026397,9,'VirtualBox mouse integration'
@@ -1223,12 +1223,12 @@ NEW-WINDOW:528,127:58720382,58720382,58720470,0,0,0:0x0+1172+819:0,0:
 7,6,1316,153,0,0,0,106028189,9,'VirtualBox mouse integration'
 7,6,1317,153,0,0,0,106028197,9,'VirtualBox mouse integration'
 7,6,1317,152,0,0,0,106028221,9,'VirtualBox mouse integration'
-7,6,1317,151,0,0,0,106028237,9,'VirtualBox mouse integration'
+7,6,1312,151,0,0,0,106028237,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,106028975,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,106028975,2,Virtual core pointer
 7,5,0,0,1,0,0,106029161,12,ImExPS/2 Generic Explorer Mouse
 6,5,0,0,1,0,0,106029161,2,Virtual core pointer
-7,6,1317,150,0,0,0,106030637,9,'VirtualBox mouse integration'
+7,6,1307,150,0,0,0,106030637,9,'VirtualBox mouse integration'
 7,6,1319,150,0,0,0,106030644,9,'VirtualBox mouse integration'
 7,6,1317,150,0,0,0,106030652,9,'VirtualBox mouse integration'
 7,6,1308,151,0,0,0,106030660,9,'VirtualBox mouse integration'
