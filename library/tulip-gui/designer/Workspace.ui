@@ -985,22 +985,6 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>exposeButton</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>Workspace</receiver>
-   <slot>expose(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>32</x>
-     <y>623</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>543</x>
-     <y>318</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>split3ModeButton</sender>
    <signal>clicked()</signal>
    <receiver>Workspace</receiver>
