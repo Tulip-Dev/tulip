@@ -1657,11 +1657,11 @@ bool PythonCodeEditor::loadCodeFromFile(const QString &filePath) {
 
   if (filePath == getFileName() && !toPlainText().isEmpty()) {
     if (scriptCode != getCleanCode() &&
-        QMessageBox::question(
-            nullptr, "File changed on disk",
-            QString("The file ") + filePath +
-                " has been modified by another editor. Do you want to reload it?",
-            QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
+        QMessageBox::question(nullptr, "File changed on disk",
+                              QString("The file ") + filePath +
+                                  " has been modified by another editor. Do you want to reload it?",
+                              QMessageBox::Yes | QMessageBox::No,
+                              QMessageBox::Yes) == QMessageBox::Yes) {
       setPlainText(scriptCode);
     } else {
       return false;
