@@ -22,7 +22,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Number of glyphs :</string>
+        <string>Number of glyphs:</string>
        </property>
       </widget>
      </item>

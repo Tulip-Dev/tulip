@@ -101,11 +101,11 @@ void IdManager::getFreeId(unsigned int id) {
 //-----------------------------------------------------------
 ostream &tlp::operator<<(std::ostream &os, const tlp::IdManager &idM) {
   os << endl << "--------------------------------------" << endl;
-  os << "Id Manager Information :" << endl;
-  os << "Minimum index :" << idM.state.firstId << endl;
-  os << "Maximum index :" << idM.state.nextId - 1 << endl;
-  os << "Size          :" << idM.state.freeIds.size() << endl;
-  os << "Fragmentation :"
+  os << "Id Manager Information:" << endl;
+  os << "Minimum index:" << idM.state.firstId << endl;
+  os << "Maximum index:" << idM.state.nextId - 1 << endl;
+  os << "Size         :" << idM.state.freeIds.size() << endl;
+  os << "Fragmentation:"
      << double(idM.state.freeIds.size()) / (1 + idM.state.nextId - idM.state.firstId) << endl;
   return os;
 }

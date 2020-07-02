@@ -39,7 +39,7 @@ struct Strahler {
  *  "Bulletin Geological Society of America 63,pages 1117-1142.",\n
  *   1952.\n
  *
- *  Extended to graphs in :
+ *  Extended to graphs in:
  *
  *  D. Auber, \n
  *  Using Strahler numbers for real time visual exploration of huge graphs, \n
@@ -63,7 +63,7 @@ public:
       "This is an implementation of the Strahler numbers computation, first published as:<br/>"
       "<b>Hypsomic analysis of erosional topography</b>, A.N. Strahler, Bulletin Geological "
       "Society of America 63,pages 1117-1142 (1952).<br/>"
-      "Extended to graphs in :<br/><b>Using Strahler numbers for real time visual exploration of "
+      "Extended to graphs in:<br/><b>Using Strahler numbers for real time visual exploration of "
       "huge graphs</b>, D. Auber, ICCVG, International Conference on Computer Vision and Graphics, "
       "pages 56-69 (2002)",
       "1.0", "Graph")

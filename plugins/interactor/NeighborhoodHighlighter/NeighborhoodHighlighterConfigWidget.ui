@@ -89,7 +89,7 @@ and reachable nodes:</string>
      <item>
       <widget class="QLineEdit" name="distanceLineEdit">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="text">
         <string>1</string>
@@ -173,7 +173,7 @@ and reachable nodes:</string>
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Bring and Go animation :</string>
+      <string>Bring and Go animation:</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>

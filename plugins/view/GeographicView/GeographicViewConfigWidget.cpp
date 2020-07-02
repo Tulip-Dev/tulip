@@ -52,7 +52,7 @@ void GeographicViewConfigWidget::openPolyFileBrowser() {
 void GeographicViewConfigWidget::openCsvHelp() {
   QMessageBox::about(nullptr, "Map csv file format",
                      "If you want to import a csv file into this view, your file must be in the "
-                     "format :\nid\tlng\tlat\nid\tlng\tlat\n...\nwith id : id of the polygon");
+                     "format:\nid\tlng\tlat\nid\tlng\tlat\n...\nwith id: id of the polygon");
 }
 
 void GeographicViewConfigWidget::openPolyHelp() {

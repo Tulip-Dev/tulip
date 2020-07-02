@@ -61,11 +61,11 @@ void HistogramInteractorNavigation::construct() {
       "become available. To go back to the histograms previews matrix, double click anywhere in "
       "the view.</p>" +
       "<p>Otherwise, this interactor offers the same functionnalities as the one in the \"Node "
-      "Link Diagram view\". The commands are described below :</p>" +
-      "<b>Ctrl + Mouse up/down</b> : zoom<br>" + "<b>Ctrl + Mouse left/right</b> : z rotation<br>" +
-      "<b>Shift + Mouse</b> : rotation<br>" + "<b>Key up/down</b> : up/down<br>" +
-      "<b>Key left/right</b> : left/right<br>" + "<b>Key page up/down</b> : zoom<br>" +
-      "<b>Key insert</b> : rotate<br>" + "</body></html>");
+      "Link Diagram view\". The commands are described below:</p>" +
+      "<b>Ctrl + Mouse up/down</b>: zoom<br>" + "<b>Ctrl + Mouse left/right</b>: z rotation<br>" +
+      "<b>Shift + Mouse</b>: rotation<br>" + "<b>Key up/down</b>: up/down<br>" +
+      "<b>Key left/right</b>: left/right<br>" + "<b>Key page up/down</b>: zoom<br>" +
+      "<b>Key insert</b>: rotate<br>" + "</body></html>");
   push_back(new HistogramViewNavigator);
   push_back(new MouseNKeysNavigator);
 }
@@ -105,7 +105,7 @@ void HistogramInteractorMetricMapping::construct() {
       "<img src=\":/SizeScaleConfigDialog.png\" width=\"280\" height=\"280\" border=\"0\" "
       "alt=\"\"><br />" +
       "The top part of the dialog allows to select on which size property the mapping has to be "
-      "performed : <i>viewSize</i> or <i>viewBorderWidth</i>.<br />" +
+      "performed: <i>viewSize</i> or <i>viewBorderWidth</i>.<br />" +
       "The middle part of the dialog aims to configure the minimum and maximum size to use for the "
       "mapping.<br />" +
       "The bottom part of the dialog allows to select on which dimensions the size mapping has to "

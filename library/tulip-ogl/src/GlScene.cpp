@@ -241,7 +241,7 @@ GlLayer *GlScene::createLayer(const std::string &name) {
 
   if (oldLayer != nullptr) {
     tlp::warning()
-        << "Warning : You have a layer in the scene with same name : old layer will be deleted"
+        << "Warning: You have a layer in the scene with same name, old layer will be deleted"
         << endl;
     removeLayer(oldLayer);
   }
@@ -273,7 +273,7 @@ GlLayer *GlScene::createLayerBefore(const std::string &layerName,
       if (oldLayer != nullptr) {
         removeLayer(oldLayer);
         tlp::warning()
-            << "Warning : You have a layer in the scene with same name : old layer will be deleted"
+            << "Warning: You have a layer in the scene with same name, old layer will be deleted"
             << endl;
       }
 
@@ -301,7 +301,7 @@ GlLayer *GlScene::createLayerAfter(const std::string &layerName,
 
       if (oldLayer != nullptr) {
         tlp::warning()
-            << "Warning : You have a layer in the scene with same name : old layer will be deleted"
+            << "Warning: You have a layer in the scene with same name, old layer will be deleted"
             << endl;
         removeLayer(oldLayer);
       }
@@ -318,7 +318,7 @@ void GlScene::addExistingLayer(GlLayer *layer) {
 
   if (oldLayer != nullptr) {
     tlp::warning()
-        << "Warning : You have a layer in the scene with same name : old layer will be deleted"
+        << "Warning: You have a layer in the scene with same name, old layer will be deleted"
         << endl;
     removeLayer(oldLayer);
   }
@@ -344,7 +344,7 @@ bool GlScene::addExistingLayerBefore(GlLayer *layer, const std::string &beforeLa
 
       if (oldLayer != nullptr) {
         tlp::warning()
-            << "Warning : You have a layer in the scene with same name : old layer will be deleted"
+            << "Warning: You have a layer in the scene with same name, old layer will be deleted"
             << endl;
         removeLayer(oldLayer);
       }
@@ -372,7 +372,7 @@ bool GlScene::addExistingLayerAfter(GlLayer *layer, const std::string &afterLaye
 
       if (oldLayer != nullptr) {
         tlp::warning()
-            << "Warning : You have a layer in the scene with same name : old layer will be deleted"
+            << "Warning: You have a layer in the scene with same name, old layer will be deleted"
             << endl;
         removeLayer(oldLayer);
       }

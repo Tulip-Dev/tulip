@@ -35,7 +35,7 @@
       </size>
      </property>
      <property name="title">
-      <string>General draw parameters : </string>
+      <string>General draw parameters:</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <property name="sizeConstraint">
@@ -56,7 +56,7 @@
       <item row="2" column="0" colspan="3">
        <widget class="QGroupBox" name="groupBox_4">
         <property name="title">
-         <string>Lines colors alpha value :</string>
+         <string>Lines colors alpha value:</string>
         </property>
         <layout class="QGridLayout" name="gridLayout">
          <property name="sizeConstraint">
@@ -131,7 +131,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Non highlighted elements colors alpha value :                                 </string>
+         <string>Non highlighted elements colors alpha value:                                 </string>
         </property>
        </widget>
       </item>
@@ -154,7 +154,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Background color :</string>
+         <string>Background color:</string>
         </property>
        </widget>
       </item>
@@ -167,7 +167,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Axis height :  </string>
+         <string>Axis height:</string>
         </property>
        </widget>
       </item>
@@ -258,7 +258,7 @@
       </size>
      </property>
      <property name="title">
-      <string>Draw nodes on axis : </string>
+      <string>Draw nodes on axis:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -297,7 +297,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Minimum axis node size : </string>
+           <string>Minimum axis node size:</string>
           </property>
          </widget>
         </item>
@@ -339,7 +339,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Maximum axis node size : </string>
+           <string>Maximum axis node size:</string>
           </property>
          </widget>
         </item>
@@ -388,7 +388,7 @@
       </size>
      </property>
      <property name="title">
-      <string>Apply texture on lines :  </string>
+      <string>Apply texture on lines:</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -434,7 +434,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Use texture from file :</string>
+         <string>Use texture from file:</string>
         </property>
        </widget>
       </item>

@@ -13,11 +13,11 @@ As you can see, we are here again speaking of the framework and no more of the p
 
 The plugins center panel is divided into three parts.
 
-* The toolbar : located at the top, contains the "Plugins center" and "Repositories" buttons and the plugins search field.
+* The toolbar: located at the top, contains the "Plugins center" and "Repositories" buttons and the plugins search field.
 
-* The side menu : contains the plugin categories and the errors found during the importation of the plugins.
+* The side menu: contains the plugin categories and the errors found during the importation of the plugins.
 
-* The main view : display the current content.
+* The main view: display the current content.
 			
 
 Navigate through the plugins
@@ -31,7 +31,7 @@ Navigate through the plugins
 .. |icon_perspective| image:: ../../software/tulip/resources/icons/64/plugin_controller.png
 
 Upon clicking on the "Plugins center button", located at the top left of the panel, you will be able to browse the available plugins.
-Plugins are sorted by categories :
+Plugins are sorted by categories:
 
 * |icon_algorithm| **Algorithms**: here are regrouped the plugins to perform a specific test or layout on your values. Despite an impressive number of proposed algorithms, new or more efficient versions of the already existing ones may be implemented depending of research publications.
 

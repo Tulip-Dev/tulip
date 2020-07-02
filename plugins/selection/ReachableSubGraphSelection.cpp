@@ -38,9 +38,9 @@ static const char *paramHelp[] = {
     "This parameter defines the maximal distance of reachable nodes."};
 
 static const char *directionValuesDescription =
-    "output edges : <i>follow output edges (directed)</i><br>"
+    "output edges: <i>follow output edges (directed)</i><br>"
     "input edges : <i>follow input edges (reverse-directed)</i><br>"
-    "all edges : <i>all edges (undirected)</i>";
+    "all edges   : <i>all edges (undirected)</i>";
 
 static const char *edgesDirectionLabels[] = {"output edges", "input edges", "all edges"};
 

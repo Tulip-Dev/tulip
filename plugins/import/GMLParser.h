@@ -334,8 +334,8 @@ struct GMLParser {
         case BOOLTOKEN:
 
           if (!builderStack.front()->addBool(currentValue.str, nextValue.boolean)) {
-            std::cerr << "Error parsing stream line :" << tokenParser.curLine
-                      << " char : " << tokenParser.curChar << std::endl;
+            std::cerr << "Error parsing stream line:" << tokenParser.curLine
+                      << " char: " << tokenParser.curChar << std::endl;
             return false;
           }
 
@@ -344,8 +344,8 @@ struct GMLParser {
         case INTTOKEN:
 
           if (!builderStack.front()->addInt(currentValue.str, nextValue.integer)) {
-            std::cerr << "Error parsing stream line :" << tokenParser.curLine
-                      << " char : " << tokenParser.curChar << std::endl;
+            std::cerr << "Error parsing stream line:" << tokenParser.curLine
+                      << " char: " << tokenParser.curChar << std::endl;
             return false;
           }
 
@@ -354,8 +354,8 @@ struct GMLParser {
         case DOUBLETOKEN:
 
           if (!builderStack.front()->addDouble(currentValue.str, nextValue.real)) {
-            std::cerr << "Error parsing stream line :" << tokenParser.curLine
-                      << " char : " << tokenParser.curChar << std::endl;
+            std::cerr << "Error parsing stream line:" << tokenParser.curLine
+                      << " char: " << tokenParser.curChar << std::endl;
             return false;
           }
 
@@ -364,8 +364,8 @@ struct GMLParser {
         case STRINGTOKEN:
 
           if (!builderStack.front()->addString(currentValue.str, nextValue.str)) {
-            std::cerr << "Error parsing stream line :" << tokenParser.curLine
-                      << " char : " << tokenParser.curChar << std::endl;
+            std::cerr << "Error parsing stream line:" << tokenParser.curLine
+                      << " char: " << tokenParser.curChar << std::endl;
             return false;
           }
 
@@ -390,8 +390,8 @@ struct GMLParser {
         if (builderStack.front()->close())
           delete builderStack.front();
         else {
-          std::cerr << "Error parsing stream line :" << tokenParser.curLine
-                    << " char : " << tokenParser.curChar << std::endl;
+          std::cerr << "Error parsing stream line:" << tokenParser.curLine
+                    << " char: " << tokenParser.curChar << std::endl;
           return false;
         }
 
@@ -399,8 +399,8 @@ struct GMLParser {
         break;
 
       default:
-        std::cerr << "Error parsing stream line :" << tokenParser.curLine
-                  << " char : " << tokenParser.curChar << std::endl;
+        std::cerr << "Error parsing stream line:" << tokenParser.curLine
+                  << " char: " << tokenParser.curChar << std::endl;
         return false;
       }
     }

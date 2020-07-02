@@ -208,7 +208,7 @@ border: 1px solid #C9C9C9;
           <enum>QFrame::NoFrame</enum>
          </property>
          <property name="plainText">
-          <string>Steps to reproduce :</string>
+          <string>Steps to reproduce:</string>
          </property>
         </widget>
        </item>

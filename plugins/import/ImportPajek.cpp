@@ -516,7 +516,7 @@ public:
       ++lineNumber;
 
       if (!treatLine(line)) {
-        errors << "An error occurs while parsing file : " << filename << endl;
+        errors << "An error occurs while parsing file: " << filename << endl;
         errors << "[ERROR] at line " << lineNumber << endl;
 
         if (pluginProgress) {

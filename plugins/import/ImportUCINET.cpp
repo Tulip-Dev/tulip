@@ -1044,7 +1044,7 @@ public:
 
       if (result == false) {
         errors << endl;
-        errors << "error found while parsing file : " << filename << endl;
+        errors << "error found while parsing file: " << filename << endl;
         errors << "at line " << lineNumber << endl;
 
         if (pluginProgress) {

@@ -468,7 +468,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   buttonProxy->setPos(20, 76);
 
   QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning, "Geolocated layout not initialized",
-                                        "Warning : the geolocated layout\n"
+                                        "Warning: the geolocated layout\n"
                                         "has not been initialized yet.\n"
                                         "The graph will not be displayed until\n"
                                         "that operation has been performed.\n\n"
@@ -853,7 +853,7 @@ void GeographicViewGraphicsView::loadCsvFile(QString fileName) {
 
   if (!polygonEntity) {
     QMessageBox::critical(nullptr, "Can't read .poly file",
-                          "We can't read csv file : " + fileName + "\nVerify the file.");
+                          "We can't read csv file: " + fileName + "\nVerify the file.");
     return;
   }
 
@@ -876,7 +876,7 @@ void GeographicViewGraphicsView::loadPolyFile(QString fileName) {
 
   if (!polygonEntity) {
     QMessageBox::critical(nullptr, "Can't read .poly file",
-                          "We can't read .poly file : " + fileName + "\nVerify the file.");
+                          "We can't read .poly file: " + fileName + "\nVerify the file.");
     return;
   }
 
@@ -1091,7 +1091,7 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
       }
     }
     if (failures) {
-      QString msg = QString("%1 %2 have not been geolocated.\nDo you want to see %3 ?")
+      QString msg = QString("%1 %2 have not been geolocated.\nDo you want to see %3?")
                         .arg(failures > 1 ? QString::number(failures) : QString("One"))
                         .arg(failures > 1 ? "addresses" : "address")
                         .arg(failures > 1 ? "them" : "it");

@@ -45,39 +45,39 @@ List of main modification operations
 
 * *edge addEdge(node,node)*: create a new edge in the graph, given the source and target.
 
-* *void delNode(node)* : deletes the given node.
+* *void delNode(node)*: deletes the given node.
 
-* *void delEdge(edge)* : deletes the given edge.
+* *void delEdge(edge)*: deletes the given edge.
 
-* *void reverse(edge)* : reverses an edge (swaps source and target).
+* *void reverse(edge)*: reverses an edge (swaps source and target).
 
 
 List of main access operations
 ------------------------------
 
-* *unsigned int deg(node)* : returns the degree of a node (number of edges).
+* *unsigned int deg(node)*: returns the degree of a node (number of edges).
 
-* *unsigned int indeg(node)* : returns the in degree of a node (number of times it is a target).
+* *unsigned int indeg(node)*: returns the in degree of a node (number of times it is a target).
 
-* *unsigned int outdeg(node)* : returns the out degree of a node (number of times it is a source).
+* *unsigned int outdeg(node)*: returns the out degree of a node (number of times it is a source).
 
-* *node source(edge)* : returns the source of an edge.
+* *node source(edge)*: returns the source of an edge.
 
-* *node target(edge)* : returns the target of an edge.
+* *node target(edge)*: returns the target of an edge.
 
-* *node opposite(edge,node)* : it enables to obtain the opposite of a node of an edge.
+* *node opposite(edge,node)*: it enables to obtain the opposite of a node of an edge.
 
-* *Iterator * getInNodes(node)* : returns an iterator on the predecessor nodes of a node.
+* *Iterator \*getInNodes(node)*: returns an iterator on the predecessor nodes of a node.
 
-* *Iterator * getOutNodes(node)* : returns an iterator on the successor nodes of a node.
+* *Iterator \*getOutNodes(node)*: returns an iterator on the successor nodes of a node.
 
-* *Iterator * getInOutNodes(node)* : returns an iterator on the neighbor nodes of a node.
+* *Iterator \*getInOutNodes(node)*: returns an iterator on the neighbor nodes of a node.
 
-* *Iterator * getInEdges(node)* : returns an iterator on the predecessor edges of a node.
+* *Iterator \*getInEdges(node)*: returns an iterator on the predecessor edges of a node.
 
-* *Iterator * getOutEdges(node)* : returns an iterator on the successor edges of a node.
+* *Iterator \*getOutEdges(node)*: returns an iterator on the successor edges of a node.
 
-* *Iterator * getInOutEdges(node)* : returns an iterator on the neighbor edges of a node.
+* *Iterator \*getInOutEdges(node)*: returns an iterator on the neighbor edges of a node.
 
 
 .. _tulip_library_hierarchy:
@@ -97,19 +97,19 @@ In order to manipulate a hierarchy of graphs, more functions have been added to 
 List of main modification operations
 ------------------------------------
 
-* *Graph *addSubGraph()* : returns an empty subgraph of this graph.
-* *Graph *delSubGraph(Graph *)* : deletes a subgraph. Its descendants
+* *Graph *addSubGraph()*: returns an empty subgraph of this graph.
+* *Graph *delSubGraph(Graph *)*: deletes a subgraph. Its descendants
     continue to be descendants of this graph.
-* *Graph *delAllSubGraph(Graph *)* : deletes a subgraph and all its descendants.
-* *edge addEdge(edge)* : adds an edge element from another graph in the hierarchy.
-* *void addNode(node)* : adds a node element from another graph in the hierarchy.
+* *Graph *delAllSubGraph(Graph *)*: deletes a subgraph and all its descendants.
+* *edge addEdge(edge)*: adds an edge element from another graph in the hierarchy.
+* *void addNode(node)*: adds a node element from another graph in the hierarchy.
 
 
 List of main access operations
 ------------------------------
 
-* *Iterator * getSubGraphs()* : returns an iterator on the subgraphs.
-* *Graph * getSuperGraph()* : returns the parent of the graph. If the graph has no parent, it returns the graph itself.
+* *Iterator \*getSubGraphs()*: returns an iterator on the subgraphs.
+* *Graph \*getSuperGraph()*: returns the parent of the graph. If the graph has no parent, it returns the graph itself.
 
 
 .. _tulip_library_attributes:
@@ -119,11 +119,11 @@ Attributes
 
 An attributes is a kind of property that can be associated to a graph. An attributes has a name (a string) and a value of any type. It can be, for example ,the name of a graph, or a date of creation of the graph.  
 
-Attributes can be added and accessed with those three following member functions :
+Attributes can be added and accessed with those three following member functions:
 
-* *const DataSet getAttributes()* : returns the attributes of a graph.
-* *template<typename ATTRIBUTETYPE>bool getAttribute(const std::string &name, ATTRIBUTETYPE &value)* : get an attribute associated value.
-* *template<typename ATTRIBUTETYPE>void setAttribute (const std::string &name, const ATTRIBUTETYPE &value)* : set an attribute associated value.
+* *const DataSet getAttributes()*: returns the attributes of a graph.
+* *template<typename ATTRIBUTETYPE>bool getAttribute(const std::string &name, ATTRIBUTETYPE &value)*: get an attribute associated value.
+* *template<typename ATTRIBUTETYPE>void setAttribute (const std::string &name, const ATTRIBUTETYPE &value)*: set an attribute associated value.
 
 
 .. _tulip_library_properties:
@@ -143,23 +143,23 @@ A property can be seen as an associative table where you can set and get the val
 List of main modification operations
 ------------------------------------
 
-* *void setNodeValue(node,TYPE)* : sets the value of a node.
-* *void setAllNodeValue(TYPE)* : sets the value of all nodes.
-* *void setEdgeValue(edge,TYPE)* : sets the value of an edge.
-* *void setAllEdgeValue(TYPE)* : sets the value of all edges.
+* *void setNodeValue(node,TYPE)*: sets the value of a node.
+* *void setAllNodeValue(TYPE)*: sets the value of all nodes.
+* *void setEdgeValue(edge,TYPE)*: sets the value of an edge.
+* *void setAllEdgeValue(TYPE)*: sets the value of all edges.
 
 
 List of main access operations
 ------------------------------
 
-* *TYPE getNodeValue(node)* : returns the value of a node.
-* *TYPE getEdgeValue(edge)* : returns the value of an edge.
+* *TYPE getNodeValue(node)*: returns the value of a node.
+* *TYPE getEdgeValue(edge)*: returns the value of an edge.
 
 For each property type there is a specific implementation (subclass) that allows operations which are specific to the property type (see Tulip libraries documentation). For instance, it is possible to obtain the maximum value of a property if the property type is *double*. 
 
 A graph includes a set of functions that enables to obtain/create/delete a property. Because
 the C++ signature of functions does not include the return type, the syntax for this call is not 
-very simple. For instance, if one wants to obtain a property containing double (called DoubleProperty in Tulip) one must use the following syntax : *DoubleProperty *metric=graph->getProperty<DoubleProperty>("name of the property");*
+very simple. For instance, if one wants to obtain a property containing double (called DoubleProperty in Tulip) one must use the following syntax: *DoubleProperty *metric=graph->getProperty<DoubleProperty>("name of the property");*
 
 In the graph each property is identified by its name which is a std::string, when one asks for a property the type of this property is checked using the run time type interrogation mechanism of C++. Warning: This test only happens when one compiles its sources in DEBUG mode (default mode). In order to ease the navigation/edition of the set of properties, a set of functions is accessible through the graph interface.
 
@@ -167,10 +167,10 @@ In the graph each property is identified by its name which is a std::string, whe
 List of main operations
 -----------------------
 
-* *Iterator<std::string> * getLocalProperties()* : returns an iterator on all local properties of this graph.
-* *void delLocalProperty(const std::string&)* : deletes a property.
-* *bool existLocalProperty(const std::string&)* : returns true if a local property exists.
-* *PropertyType * getLocalProperty (const std::string&)* : returns the property, or creates it if it does not exist.
+* *Iterator<std::string> \*getLocalProperties()*: returns an iterator on all local properties of this graph.
+* *void delLocalProperty(const std::string&)*: deletes a property.
+* *bool existLocalProperty(const std::string&)*: returns true if a local property exists.
+* *PropertyType \*getLocalProperty (const std::string&)*: returns the property, or creates it if it does not exist.
 
 For the property mechanism described above to work with a hierarchy of graphs, a mechanism have been added to share properties between graphs, which works like this: if a property exists in an ancestor of a graph G, it also exists in the graph G. Thus, properties of graphs are inherited like members of objects in object-oriented languages. In order to facilitate the navigation/edition of properties, a set of function is accessible through the graph interface.
 
@@ -178,9 +178,9 @@ For the property mechanism described above to work with a hierarchy of graphs, a
 List of available operations
 ----------------------------
 
-* *Iterator<std::string> * getInheritedProperties()* : returns an iterator on all inherited properties.
-* *Iterator<std::string> * getProperties()* : returns an iterator on all properties (both inherited and local).
-* *bool existProperty(const std::string&)* : returns true if the property exists (inherited or local).
-* *PropertyType * getProperty(const std::string&)* : returns the property (inherited or local) or creates it if does not exist.
+* *Iterator<std::string> \*getInheritedProperties()*: returns an iterator on all inherited properties.
+* *Iterator<std::string> \*getProperties()*: returns an iterator on all properties (both inherited and local).
+* *bool existProperty(const std::string&)*: returns true if the property exists (inherited or local).
+* *PropertyType \*getProperty(const std::string&)*: returns the property (inherited or local) or creates it if does not exist.
 
 

@@ -227,7 +227,7 @@ void TulipViewsManager::setViewVisible(tlp::View *view, const bool visible) {
     if (visible) {
       viewToWindow[view] = new ViewMainWindow();
       viewToWindow[view]->setWindowTitle(
-          ("Tulip : " + view->name() + " : " + view->graph()->getName()).c_str());
+          ("Tulip: " + view->name() + " - " + view->graph()->getName()).c_str());
       viewToWindow[view]->setCentralWidget(viewToPanel[view]);
       viewToWindow[view]->setVisible(true);
     } else {

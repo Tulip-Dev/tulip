@@ -56,11 +56,11 @@ void PixelOrientedInteractorNavigation::construct() {
       "become available. To go back to the pixel oriented previews matrix, double click anywhere "
       "in the view.</p>" +
       "<p>Otherwise, this interactor offers the same functionnalities as the one in the \"Node "
-      "Link Diagram view\". The commands are described below :</p>" +
-      "<b>Ctrl + Mouse up/down</b> : zoom<br>" + "<b>Ctrl + Mouse left/right</b> : z rotation<br>" +
-      "<b>Shift + Mouse</b> : rotation<br>" + "<b>Key up/down</b> : up/down<br>" +
-      "<b>Key left/right</b> : left/right<br>" + "<b>Key page up/down</b> : zoom<br>" +
-      "<b>Key insert</b> : rotate<br>" + "</body>" + "</html>");
+      "Link Diagram view\". The commands are described below:</p>" +
+      "<b>Ctrl + Mouse up/down</b>: zoom<br>" + "<b>Ctrl + Mouse left/right</b>: z rotation<br>" +
+      "<b>Shift + Mouse</b>: rotation<br>" + "<b>Key up/down</b>: up/down<br>" +
+      "<b>Key left/right</b>: left/right<br>" + "<b>Key page up/down</b>: zoom<br>" +
+      "<b>Key insert</b>: rotate<br>" + "</body>" + "</html>");
   push_back(new PixelOrientedViewNavigator);
   push_back(new MouseNKeysNavigator);
 }

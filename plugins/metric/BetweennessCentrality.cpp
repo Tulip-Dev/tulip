@@ -35,11 +35,11 @@ static const char *paramHelp[] = {
 
     // norm
     "If true the node measure will be normalized<br>"
-    " - if not directed : m(n) = 2*c(n) / (#V - 1)(#V - 2)<br>"
-    " - if directed     : m(n) = c(n) / (#V - 1)(#V - 2)<br>"
+    " - if not directed: m(n) = 2*c(n) / (#V - 1)(#V - 2)<br>"
+    " - if directed    : m(n) = c(n) / (#V - 1)(#V - 2)<br>"
     "If true the edge measure will be normalized<br>"
-    " - if not directed : m(e) = 2*c(e) / (#V / 2)(#V / 2)<br>"
-    " - if directed     : m(e) = c(e) / (#V / 2)(#V / 2)",
+    " - if not directed: m(e) = 2*c(e) / (#V / 2)(#V / 2)<br>"
+    " - if directed    : m(e) = c(e) / (#V / 2)(#V / 2)",
 
     // weight
     "An existing edge weight metric property.",
@@ -69,7 +69,7 @@ static const char *paramHelp[] = {
  *  volume 25, \n
  *  pages 163-177
  *
- *  The edge betweenness centrality is also computed, it is described in :
+ *  The edge betweenness centrality is also computed, it is described in:
  *
  *  Newman, M. E. J. and Girvan, M. \n
  *  "Finding and evaluating community structure in networks",  \n

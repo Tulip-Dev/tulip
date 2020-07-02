@@ -127,7 +127,7 @@ The PropertyAlgorithm class
 
 The PropertyAlgorithm class (which inherits of the *Algorithm* class), is the parent class of different types of algorithms such as the *BooleanAlgorithm* class or the *LayoutAlgorithm* class. This class is important as most of the specific algorithms developed will have to inherit from it. For example, if you write a plug-in to update the graph layout, your class will have to inherit from the *LayoutAlgorithm* class which, itself, inherits from the *PropertyAlgorithm* class.
 
- Following is a table showing the subclasses of PropertyAlgorithm, with the corresponding, class of result property, the default graph property and the 'Algorithms' group in the GUI :
+ Following is a table showing the subclasses of PropertyAlgorithm, with the corresponding, class of result property, the default graph property and the 'Algorithms' group in the GUI:
 
 .. csv-table::
    :header: "Class name", "Result class name", "Graph property replaced (by default)", "Algorithms group"
@@ -228,7 +228,7 @@ The class PropertyAlgorithm provides the following methods to declare a paramete
 
 The new parameters added to the plug-in are, by default, IN parameters. The OUT parameters are defined depending of the *PropertyAlgorithm* used. INOUT parameters gives the developer the abilities to extract additionnal information.
 
-This methods have to be called in the constructor of your class. Following is a description of its fields :
+This methods have to be called in the constructor of your class. Following is a description of its fields:
 
 * *name*: Name of the new parameter.
 * *help*: This parameter will be used to add a documentation to the parameter (See example below).
@@ -453,7 +453,7 @@ The class *Algorithm* is the class from which your algorithm will inherits if yo
 Public members
 --------------
 
-Following is a list of all public members :
+Following is a list of all public members:
 
 * *Algorithm (const PluginContext * context)*:
   As previously described, the constructor is the right place to declare the parameters needed by the algorithm::
@@ -508,7 +508,7 @@ In this section, we will learn how to create import plug-ins. Those plug-ins wil
 Public members
 --------------
 
-Following is a list of all public members :
+Following is a list of all public members:
 
 * *ImportModule (AlgorithmContext context)*:
   Again, the parameters needed by the algorithm must be declared into the constructor (example of *RandomTree.cpp*)::
@@ -535,7 +535,7 @@ The methods above must be redefined in our plugin (as shown in the :ref:`import 
 Protected members
 -----------------
 
-Following is a list of all protected members :
+Following is a list of all protected members:
 
 * *Graph * graph*:
   Still the same.
@@ -612,7 +612,7 @@ In this section, we will learn how to create export plug-ins. Those plug-ins wil
 Public members
 --------------
 
-Following is a list of the usual public members :
+Following is a list of the usual public members:
 
 * *ExportModule (tlp::PluginContext * context)*:
   Following the examples seen to this point, we still have to use the constructor to add the parameters::
@@ -637,7 +637,7 @@ The methods above will be redefined in our plugin (see the :ref:`export skeleton
 Protected members
 -----------------
 
-Following is a list of all protected members :
+Following is a list of all protected members:
 
 * *Graph * graph*:
   Nothing new here...

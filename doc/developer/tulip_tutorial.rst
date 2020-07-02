@@ -5,7 +5,7 @@
 Starting with the Tulip library
 *******************************
 
-Before doing any of the tutorials please read the following warnings :
+Before doing any of the tutorials please read the following warnings:
 
 * Follow the tutorials, one by one, from the first one to the last one.
 	
@@ -42,7 +42,7 @@ This command will be formed as
 
 .. _tulip_library_tutorial_001:
 
-TUTORIAL 001 : Graphs creation, adding and deleting nodes or edges.
+TUTORIAL 001: Graphs creation, adding and deleting nodes or edges.
 ===================================================================
 
 In this first tutorial, we will show you how to create a graph, add three nodes and three edges, remove an edge and a node, and finally, print the result on the standard output.
@@ -62,11 +62,11 @@ Let's start with the files we need to include ::
   #include <tulip/TlpTools.h>
   #include <tulip/Graph.h
 
-* *iostream :* This "file" contains the C++ standard declarations for input and output streams. We need it in this tutorial to print the final graph on the standard output.
+* *iostream*: This "file" contains the C++ standard declarations for input and output streams. We need it in this tutorial to print the final graph on the standard output.
         	
-* *tulip/TlpTools.h :* This file gives access to the standard tools for Tulip.
+* *tulip/TlpTools.h*: This file gives access to the standard tools for Tulip.
         	
-* *tulip/Graph.h :* This file is the core of the tulip graph API. It provides declarations for graphs (edges, nodes) and functions to load one from a file, to save one, and a lot more. You can find a list in the Tulip Graph library `documentation <../../doxygen/tulip-lib/Graph_8h.html>`_.
+* *tulip/Graph.h*: This file is the core of the tulip graph API. It provides declarations for graphs (edges, nodes) and functions to load one from a file, to save one, and a lot more. You can find a list in the Tulip Graph library `documentation <../../doxygen/tulip-lib/Graph_8h.html>`_.
         	
 The namespaces usage declarations, so that we can omit namespace prefix. ::
 
@@ -139,10 +139,10 @@ Following is a picture of the graph that we just have created. It is being displ
   	
 The Graph class provides member functions to delete edges and nodes.
 
-* *void tlp::Graph::delEdge (const edge, bool deleteInAncestorGraphs = false)* :
+* *void tlp::Graph::delEdge (const edge, bool deleteInAncestorGraphs = false)*:
   delete an edge of the graph. This edge is also removed in all the subgraphs hierarchy to maintain the subgraph relation between graphs; if the second argument is set to *true*, the edge is also removed from the graph ancestors. The ordering of edges is preserved. 
   		
-* *void tlp::Graph::delNode (const node, bool deleteInAncestorGraphs = false)* :
+* *void tlp::Graph::delNode (const node, bool deleteInAncestorGraphs = false)*:
   delete a node of the graph. This node is also removed in all the subgraph of the graph to maintain the subgraph relation between graphs; if the second argument is set to *true*, the node is also removed from the graph ancestors. When the node is deleted, all its edges are deleted (in and out edges).
   		
 The class Graph implements member functions like *void delAllNode (const node)*, and, *void delAllEdge (const edge)*. ::
@@ -174,9 +174,9 @@ The class graph has a friend function which is an overload of the stream operato
 8. Saving a graph
 -----------------
 
-Instead of having our graph printed on the standard output, we can save it in a .tlp (tulip format) suffixed file that can be read by tulip : ::
+Instead of having our graph printed on the standard output, we can save it in a .tlp (tulip format) suffixed file that can be read by tulip: ::
 
-  //Save  the graph :
+  //Save  the graph:
   tlp::saveGraph(graph,"tutorial001.tlp");
 
 
@@ -214,12 +214,12 @@ You can download the source by clicking on this :download:`link <./_documents/tu
 
 .. _tulip_library_tutorial_002:
 
-TUTORIAL 002 : Iterating the structures of a graph (class Iterator and the macro forEach)
+TUTORIAL 002: Iterating the structures of a graph (class Iterator and the macro forEach)
 =========================================================================================
 
 In this tutorial, we will, display on the standard output, all the structures using iterators. For each node, we will display its ancestors, successors, neighbors, and, its incoming and outgoing edges.
 
-In this tutorial, the graph created is the same that in Tutorial 1 (after the 3 edges were added) see the following picture :
+In this tutorial, the graph created is the same that in Tutorial 1 (after the 3 edges were added) see the following picture:
 
 .. image:: _images/tuto_001_graphcreated_1.png
     	
@@ -234,11 +234,11 @@ Let's start with the files we need to include ::
   #include <tulip/TlpTools.h>
   #include <tulip/Graph.h>
 
-* *iostream* : This "file" contains the C++ standard declarations for in and out streams. We need it in this tutorial to print the final graph on the standard output.
+* *iostream*: This "file" contains the C++ standard declarations for in and out streams. We need it in this tutorial to print the final graph on the standard output.
         	
-* *tulip/TlpTools.h* : This file gives access to the standard tools for Tulip.
+* *tulip/TlpTools.h*: This file gives access to the standard tools for Tulip.
         	
-* *tulip/Graph.h* : This file is the core of the tulip graph API. It provides declarations for graphs (edges , nodes) and functions to load one from a file, to save one, and a lot more. You can find a list in the Tulip Graph library `documentation <../../doxygen/tulip-lib/Graph_8h.html>`_.
+* *tulip/Graph.h*: This file is the core of the tulip graph API. It provides declarations for graphs (edges , nodes) and functions to load one from a file, to save one, and a lot more. You can find a list in the Tulip Graph library `documentation <../../doxygen/tulip-lib/Graph_8h.html>`_.
         	
 As you can see, we just need the "Graph.h" header file to create a graph and iterate its nodes, even though the declaration of the abstract class "Iterator" is in Iterator.h
 
@@ -301,7 +301,7 @@ To iterate the predecessors of a node, we use the same type of Iterator, but, in
     while(itN->hasNext()) {
       cout << itN->next().id;
       if (itN->hasNext()) cout << ",";
-    } delete itN; //!!!Warning : do not forget to delete iterators (memory leak)
+    } delete itN; //!!!Warning: do not forget to delete iterators (memory leak)
     cout << "}" << endl;
 
 
@@ -319,7 +319,7 @@ To iterate the successors of a node, we just need to use the function *Iterator<
     while (itN->hasNext()) {
       cout << itN->next().id;
       if (itN->hasNext()) cout << ",";
-    } delete itN; //!!!Warning : do not forget to delete iterators (memory leak)
+    } delete itN; //!!!Warning: do not forget to delete iterators (memory leak)
     cout << "}" << endl;
 
 
@@ -337,7 +337,7 @@ For neighbors, we will use the function *Iterator<node> * Graph::getInOutNodes (
     while(itN->hasNext()) {
       cout << itN->next().id;
       if (itN->hasNext()) cout << ",";
-    } delete itN; //!!!Warning : do not forget to delete iterators (memory leak)
+    } delete itN; //!!!Warning: do not forget to delete iterators (memory leak)
     cout << "}" << endl;
 
 
@@ -355,7 +355,7 @@ For incoming edges, we will use an Iterator over edges with the member function 
     while(itE->hasNext()) {
       cout << itE->next().id;
       if (itE->hasNext()) cout << ",";
-    } delete itE; //!!!Warning : do not forget to delete iterators (memory leak)
+    } delete itE; //!!!Warning: do not forget to delete iterators (memory leak)
     cout << "}" << endl;
     cout << " outcoming edges: {";
 
@@ -373,7 +373,7 @@ For outgoing edges, we will use the function *Iterator<edge> * Graph::getOutEdge
     while(itE->hasNext()) {
       cout << itE->next().id;
       if (itE->hasNext()) cout << ",";
-    } delete itE; //!!!Warning : do not forget to delete iterators (memory leak)
+    } delete itE; //!!!Warning: do not forget to delete iterators (memory leak)
     cout << "}" << endl;
 
 
@@ -391,7 +391,7 @@ For adjacent edges, we will use the function *Iterator<edge> * Graph::getInOutEd
     while(itE->hasNext()) {
       cout << itE->next().id;
       if (itE->hasNext()) cout << ",";
-    } delete itE; //!!!Warning : do not forget to delete iterators (memory leak)
+    } delete itE; //!!!Warning: do not forget to delete iterators (memory leak)
     cout << "}" << endl;
 
 
@@ -403,7 +403,7 @@ Don't forget memory leaks
 As we are still in the first while (iterating through all nodes) we need to delete the Iterator on Nodes::
 
     }// end while 
-    delete itNodes; //!!!Warning : do not forget to delete iterators (memory leak)
+    delete itNodes; //!!!Warning: do not forget to delete iterators (memory leak)
 
 
 .. _code-example-graphit-edges:
@@ -422,7 +422,7 @@ Some times it can be useful to iterate all the edges, for example in the algorit
     cout << " source: " << graph->source(e).id;
     cout << " target: " << graph->target(e).id;
     cout << endl;
-  } delete itEdges; //!!!Warning : do not forget to delete iterators (memory leak)
+  } delete itEdges; //!!!Warning: do not forget to delete iterators (memory leak)
 
 
 .. _code-example-foreach:
@@ -430,13 +430,13 @@ Some times it can be useful to iterate all the edges, for example in the algorit
 10. The forEach Macro
 ---------------------
 
-To simplify the use of Iterators, the API of tulip provides a macro forEach which is quite similar to the foreach of C# or Java. It takes two parameters :
+To simplify the use of Iterators, the API of tulip provides a macro forEach which is quite similar to the foreach of C# or Java. It takes two parameters:
 
 *  A variable
     			
-* An Iterator for the same type as the variable, for example : Variable of type node, Graph::getNodes().
+* An Iterator for the same type as the variable, for example: Variable of type node, Graph::getNodes().
     			
-This macro function is defined in the header file : tulip/ForEach.h
+This macro function is defined in the header file: tulip/ForEach.h
 
 Following is a small example of its use. ::
 
@@ -448,7 +448,7 @@ Following is a small example of its use. ::
   //... 
   
   node n = graph->getOneNode();	
-  cout << "In Edges :" << endl;		
+  cout << "In Edges: " << endl;
   edge e;
   forEach(e, graph->getInEdges(n))
   {
@@ -483,7 +483,7 @@ You can download the :download:`source using the iterator <./_documents/tutorial
 
 .. _tulip_library_tutorial_003:
 
-TUTORIAL 003 : Properties
+TUTORIAL 003: Properties
 =========================
 
 This tutorial will show you how to add/create properties to a Graph. For local or inherited properties, see tutorial 005. An instance of a property is owned by a graph and is an association table between the elements of graph (nodes and edges) and values of a predefined type.
@@ -496,28 +496,28 @@ This tutorial will show you how to add/create properties to a Graph. For local o
 
 In tulip API, every type of property is declared in its own header file. Following is a list of those header files and the type of value which can be associated to an element of the graph:
 
-* DoubleProperty : tulip/DoubleProperty.h
+* DoubleProperty: tulip/DoubleProperty.h
         			value type for edge = double, node = double
         		
-* BooleanProperty : tulip/BooleanProperty.h
+* BooleanProperty: tulip/BooleanProperty.h
         			value type for edge = bool, node = bool
         		
 * IntegerProperty: tulip/IntegerProperty.h
         			value type for edge = int, node = int
         		
-* LayoutProperty : tulip/LayoutProperty.h
+* LayoutProperty: tulip/LayoutProperty.h
         			value type for edge = Coord(), node = vector<Coord>()
         		
-* ColorProperty : tulip/ColorProperty.h
+* ColorProperty: tulip/ColorProperty.h
         			value type for edge = Color(), node = Color()
         		
-* SizeProperty : tulip/SizeProperty.h
+* SizeProperty: tulip/SizeProperty.h
         			value type for edge = Size(), node = Size()
         		
-* StringProperty : tulip/StringProperty.h
+* StringProperty: tulip/StringProperty.h
         			value type for edge = string, node = string
         		 
-* GraphProperty : tulip/GraphProperty.h
+* GraphProperty: tulip/GraphProperty.h
         			value type for edge = graph, node = graph
 
 
@@ -569,7 +569,7 @@ Following is an example::
   strings->setAllEdgeValue("first");
   meta->setAllNodeValue(graph); //an existing graph
 
-Following is the display (in the tulip GUI) of the list of a node associated values for the properties previously created :
+Following is the display (in the tulip GUI) of the list of a node associated values for the properties previously created:
 
 .. image:: _images/tuto_003_properties_1.png
     :width: 600
@@ -611,7 +611,7 @@ The source is available this :download:`way <./_documents/tutorial003.cpp>`.
 
 .. _tulip_library_tutorial_004:
 
-TUTORIAL 004 : Create your first subgraph
+TUTORIAL 004: Create your first subgraph
 =========================================
 
 This tutorial will teach you how to create subgraphs. At the end of it, we will have a hierarchy of 3 graphs. Before anything consider the following function that creates 3 nodes and 3 edges (same as in the previous tutorials)::
@@ -644,7 +644,7 @@ We now need to create some nodes and edges::
   buildGraph(subgraph1);
   buildGraph(subgraph2);
         	
-Following is the hierarchy we have just created, displayed with tulip :
+Following is the hierarchy we have just created, displayed with tulip:
 
 .. image:: _images/tuto_004_subgraph_1.png
 
@@ -656,7 +656,7 @@ We can verify it by iterating our graph's subgraphs using the function *Iterator
     cout << itS->next() << endl;
   delete itS;
 
-We shall obtain something like :
+We shall obtain something like:
 
 .. image:: _images/tuto_004_graph_1.png
     :width: 600
@@ -672,7 +672,7 @@ Pick the source file :download:`here <./_documents/tutorial004.cpp>`.
 
 .. _tulip_library_tutorial_005:
 
-TUTORIAL 005 : Properties and subgraphs
+TUTORIAL 005: Properties and subgraphs
 =======================================
 
 In this tutorial, we will show you how to use properties with subgraphs, how to deal with properties in a big hierarchy. To do so, we will create a graph with some properties, several subgraphs with other properties and iterate the local and inherited properties.
@@ -706,7 +706,7 @@ We will first begin with the creation of the graph and its properties::
 
 *The function void buildGraph(Graph *g), is the one implemented in Tutorial 003.*
 
-In the sample of code above, we create a graph with 3 properties : firstSelection (select), fisrtColors and firstMetric. We then set all nodes and edges "firstSelection" associated value to true which means that all nodes and edges are selected. We then create two subgraphs out of our selection (the entire graph):: 
+In the sample of code above, we create a graph with 3 properties: firstSelection (select), fisrtColors and firstMetric. We then set all nodes and edges "firstSelection" associated value to true which means that all nodes and edges are selected. We then create two subgraphs out of our selection (the entire graph)::
         		
   //Create a hierarchy of subgraph (they all own the same elements)
   Graph *subgraph1=graph->addSubGraph(select);
@@ -832,7 +832,7 @@ The whole example is, as usual, available :download:`here <./_documents/tutorial
     			
 .. _tulip_library_tutorial_006:
 
-TUTORIAL 006 : Edges order
+TUTORIAL 006: Edges order
 ==========================
 
 In this tutorial, we will learn how to change edges order in the graph edges adjacency list (please visit `Wikipedia: Adjacency and degree <http://en.wikipedia.org/wiki/Acyclic_Graph#Adjacency_and_degree>`_ for more details ). Indeed, it can be useful to sort the edges considering a metric.
@@ -843,7 +843,7 @@ In this tutorial, we will learn how to change edges order in the graph edges adj
 1. Creation of the graph and its edges
 --------------------------------------
 
-We will create a graph with 4 nodes and 4 edges. Their "id number" will start from 0 just like in the figure below :
+We will create a graph with 4 nodes and 4 edges. Their "id number" will start from 0 just like in the figure below:
 
 .. image:: _images/tuto_006_edgeorder_1.png
     :width: 400
@@ -869,7 +869,7 @@ Following is the sample of code that created such a graph::
     graph->addEdge(n2,n0);
     graph->addEdge(n3,n0);
 
-As you can see, node 0 has three edges : edge 1,edge 2 and edge 3. And if we display its edges adjacency list (see last section for function *void displayAdjacency(node n, Graph *graph)* ) we obtain the following output::
+As you can see, node 0 has three edges: edge 1,edge 2 and edge 3. And if we display its edges adjacency list (see last section for function *void displayAdjacency(node n, Graph *graph)* ) we obtain the following output::
 
   1 2 3
 
@@ -894,7 +894,7 @@ As you can see, the adjacency list has changed::
 3. Setting an order
 -------------------
 
-An other way to change the edges order is to use a vector of type edge and the function : *void Graph::setEdgeOrder (const node, const std::vector < edge  > )*, following is an example that will replace e2 and e3 in their original order::
+An other way to change the edges order is to use a vector of type edge and the function: *void Graph::setEdgeOrder (const node, const std::vector < edge  > )*, following is an example that will replace e2 and e3 in their original order::
 
   vector<edge> tmp(2);
   tmp[0]=e2;
@@ -924,22 +924,22 @@ The tutorial source is offered :download:`here <./_documents/tutorial006.cpp>`.
 
 .. _tulip_library_tutorial_007:
 
-TUTORIAL 007 : Mutable Collection
+TUTORIAL 007: Mutable Collection
 =================================
 
-In this small tutorial, we will learn how to use the Mutable Container (an efficient associative container) of the tulip API that enables :
+In this small tutorial, we will learn how to use the Mutable Container (an efficient associative container) of the tulip API that enables:
 
 * A tradeoff between speed and memory.
      			
 * To manage fragmented index
 
-The direct access in this container is forbidden, but it exist a getter and a setter :
+The direct access in this container is forbidden, but it exist a getter and a setter:
 
 *  *const ReturnType<TYPE>::ConstValue MutableContainer<type>::get(const unsigned int i) const* that returns a reference instead of a copy in order to minimize the number copy of objects, user must be aware that calling the set function can devalidate this reference
 			
 * *void MutableContainer<type>::set( const unsigned int i,const TYPE value).*
 			 
-The MutableContainer has two more methods :
+The MutableContainer has two more methods:
 
 * *void setAll (const TYPE value)*
      			
@@ -961,11 +961,11 @@ Following is a small example of its use::
 
 .. _tulip_library_tutorial_008:
 
-TUTORIAL 008 : Graph Tests
+TUTORIAL 008: Graph Tests
 ==========================
 
 The tulip API has special functions to test if a graph corresponds to a specific class of graph. Moreover results are buffered and automatically updated if it is possible in constant time. 
-Each test is running with a specific function which can be found in the graph class header file. Following is a list of those tests :
+Each test is running with a specific function which can be found in the graph class header file. Following is a list of those tests:
 
 * *AcyclicTest::isAcyclic(graph);*
     			
@@ -1003,7 +1003,7 @@ should give you something similar to
 
 .. _tulip_library_tutorial_009:
 
-TUTORIAL 009 : Graph observation and event detection
+TUTORIAL 009: Graph observation and event detection
 ====================================================
      	
 In this tutorial, we will show you how to use the *Observable* classe that enables to receive notification when a graph is updated.
@@ -1037,7 +1037,7 @@ The second method is used to develop the operations to follow when encountering 
   
       switch(gEvt->getType()) {
       case GraphEvent::TLP_ADD_NODE:
-        cout << "Event : Node Created" << endl;
+        cout << "Event: Node Created" << endl;
         break;
   
       default:
@@ -1084,12 +1084,12 @@ We compile the program using the standard command line
 The execution output should resemble to the following::
 
   ./tutorial009
-    Event : Node Created
-    Event : Node Created
-    Event : Edge Created
-    Event : Edge Reversed
-    Event : Node Deleted
-    Event : Edge Deleted
+    Event: Node Created
+    Event: Node Created
+    Event: Edge Created
+    Event: Edge Reversed
+    Event: Node Deleted
+    Event: Edge Deleted
 
 
 Source Code

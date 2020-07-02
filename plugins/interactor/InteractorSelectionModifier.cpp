@@ -51,21 +51,21 @@ public:
   void construct() override {
     setConfigurationWidgetText(
         QString("<h3>Move/Reshape rectangle selection</h3>") + "<u>Modify selection</u><br/><br/>" +
-        "Resize : <ul><li><b>Mouse left</b> down on triangle + moves</li></ul>" +
+        "Resize: <ul><li><b>Mouse left</b> down on triangle + moves</li></ul>" +
         "<ul><li><b>Mouse left</b> down on square + moves</li></ul>" +
-        "Only change node size : <ul><li><b>Ctrl + Mouse left</b> down on triangle + "
+        "Only change node size: <ul><li><b>Ctrl + Mouse left</b> down on triangle + "
         "moves</li></ul>" +
-        "Only change selection size : <ul><li><b>Shift + Mouse left</b> down on triangle + "
+        "Only change selection size: <ul><li><b>Shift + Mouse left</b> down on triangle + "
         "moves</li></ul>" +
-        "Rotate : <ul><li><b>Mouse left</b> down on circle + moves</li></ul>" +
-        "Only rotate nodes : <ul><li><b>Ctrl + Mouse left</b> down on circle + moves</li></ul>" +
-        "Only rotate selection : <ul><li><b>Shift + Mouse left</b> down on circle + "
+        "Rotate: <ul><li><b>Mouse left</b> down on circle + moves</li></ul>" +
+        "Only rotate nodes: <ul><li><b>Ctrl + Mouse left</b> down on circle + moves</li></ul>" +
+        "Only rotate selection: <ul><li><b>Shift + Mouse left</b> down on circle + "
         "moves</li></ul>" +
-        "Translate : <ul><li><b>Mouse left</b> down inside rectangle + moves</li>"
+        "Translate: <ul><li><b>Mouse left</b> down inside rectangle + moves</li>"
         "<li> or <b>Arrow</b> keys</li></ul>" +
-        "Align vertically/horizontally : <ul><li><b>Mouse left</b> click on two arrows icon in top "
+        "Align vertically/horizontally: <ul><li><b>Mouse left</b> click on two arrows icon in top "
         "right zone</li></ul>" +
-        "Align left/right/top/bottom : <ul><li><b>Mouse left</b> click on simple arrow icon in top "
+        "Align left/right/top/bottom: <ul><li><b>Mouse left</b> click on simple arrow icon in top "
         "right zone</li></ul>" +
         "<u>Navigation in the graph</u><br/><br/>" +
         "Translation (if no selection): <ul><li><b>Arrow</b> keys</li></ul>" +

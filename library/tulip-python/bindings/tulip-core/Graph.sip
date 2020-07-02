@@ -283,7 +283,7 @@ class Graph : tlp::Observable /Abstract/ {
 %End
 
 %Docstring
-This is the main Tulip class. It enables to :
+This is the main Tulip class. It enables to:
 
   * create a directed graph
   * create and manipulate a subgraphs hierarchy
@@ -490,7 +490,7 @@ Delete a subgraph of this graph. The subgraph's subgraphs become subgraphs of th
     } else {
       // the subgraph will be deleted after the call to tlp::Graph::delSubGraph(tlp::Graph *)
       // we need to release the SIP wrapper associated to the C++ pointer otherwise the following
-      // Python code raises a segmentation fault :
+      // Python code raises a segmentation fault:
       // sg = graph.addSubGraph()
       // graph.delSubGraph(sg)
       // print sg # or any operation on sg
@@ -523,7 +523,7 @@ Delete a subgraph of this graph and all its subgraphs.
     } else {
       // the subgraphs will be deleted after the call to tlp::Graph::delAllSubGraphs(tlp::Graph *)
       // we need to release the possible SIP wrappers associated to the C++ pointers otherwise the following
-      // Python code raises a segmentation fault :
+      // Python code raises a segmentation fault:
       // sg = graph.addSubGraph()
       // sg2 = sg.addSubGraph()
       // graph.delAllSubGraphs(sg2)
@@ -1073,14 +1073,14 @@ the graph's ancestors to maintain the subgraph relation between graphs.
         sipCpp->addEdge(*a0);
       } else {
         std::ostringstream oss;
-        oss << "Error : edge " << a0->id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+        oss << "Error: edge " << a0->id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
             << "because the graph does not contain its target node.";
         printErrorMessage(oss.str());
         sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->target(*a0));
       }
     } else {
       std::ostringstream oss;
-      oss << "Error : edge " << a0->id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+      oss << "Error: edge " << a0->id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
           << "because the graph does not contain its source node.";
       printErrorMessage(oss.str());
       sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->source(*a0));
@@ -1107,7 +1107,7 @@ the graph ancestors to maintain the subgraph relation between graphs.
 
 .. warning:: The added edges must be elements of the graph hierarchy, thus they must be elements of the root graph.
 
-.. warning : One cannot add existing edges to the root graph.
+.. warning: One cannot add existing edges to the root graph.
 %End
 
 %MethodCode
@@ -1121,7 +1121,7 @@ the graph ancestors to maintain the subgraph relation between graphs.
     } else {
       if (!sipCpp->isElement(sipCpp->getRoot()->source(e))) {
         std::ostringstream oss;
-        oss << "Error : edge " << e.id << " cannot be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+        oss << "Error: edge " << e.id << " cannot be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
             << "because the graph does not contain its source node.";
         printErrorMessage(oss.str());
         sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->source(e));
@@ -1129,7 +1129,7 @@ the graph ancestors to maintain the subgraph relation between graphs.
       }
       if (!sipCpp->isElement(sipCpp->getRoot()->target(e))) {
         std::ostringstream oss;
-        oss << "Error : edge " << e.id << " cannot be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+        oss << "Error: edge " << e.id << " cannot be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
             << "because the graph does not contain its target node.";
         printErrorMessage(oss.str());
         sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->target(e));
@@ -1172,7 +1172,7 @@ the graph ancestors to maintain the subgraph relation between graphs.
     } else {
       if (!sipCpp->isElement(sipCpp->getRoot()->source(e))) {
           std::ostringstream oss;
-          oss << "Error : edge " << e.id << " cannot be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+          oss << "Error: edge " << e.id << " cannot be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
               << "because the graph does not contain its source node.";
           printErrorMessage(oss.str());
           sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->source(e));
@@ -1180,7 +1180,7 @@ the graph ancestors to maintain the subgraph relation between graphs.
       }
       if (!sipCpp->isElement(sipCpp->getRoot()->target(e))) {
           std::ostringstream oss;
-          oss << "Error : edge " << e.id << " cannot be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+          oss << "Error: edge " << e.id << " cannot be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
               << "because the graph does not contain its target node.";
           printErrorMessage(oss.str());
           sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->target(e));
@@ -1569,7 +1569,7 @@ Returns the ith predecessor of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:param i: the position in the predecessor nodes list (warning : first index is 1 not 0)
+:param i: the position in the predecessor nodes list (warning: first index is 1 not 0)
 :type i: integer
 :rtype: :class:`tlp.node`
 :throws: an exception if the node does not belong to the graph or if the requested index is lesser than the number of predecessor nodes
@@ -1579,7 +1579,7 @@ Returns the ith predecessor of a node.
 %MethodCode
   if (sipCpp->isElement(*a0)) {
     if (a1 == 0) {
-      PyErr_SetString(PyExc_Exception, "Error : first index for tlp.Graph.getInNode is 1 not 0");
+      PyErr_SetString(PyExc_Exception, "Error: first index for tlp.Graph.getInNode is 1 not 0");
       sipIsErr = -1;
     } else if (a1 <= sipCpp->indeg(*a0)) {
       sipRes = new tlp::node(sipCpp->getInNode(*a0, a1));
@@ -1628,7 +1628,7 @@ Returns the ith successor of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:param i: the position in the successor nodes list (warning : first index is 1 not 0)
+:param i: the position in the successor nodes list (warning: first index is 1 not 0)
 :type i: integer
 :rtype: :class:`tlp.node`
 :throws: an exception if the node does not belong to the graph or if the requested index is lesser than the number of successor nodes
@@ -1637,7 +1637,7 @@ Returns the ith successor of a node.
 %MethodCode
   if (sipCpp->isElement(*a0)) {
     if (a1 == 0) {
-      PyErr_SetString(PyExc_Exception, "Error : first index for tlp.Graph.getOutNode is 1 not 0");
+      PyErr_SetString(PyExc_Exception, "Error: first index for tlp.Graph.getOutNode is 1 not 0");
       sipIsErr = -1;
     }else if (a1 <= sipCpp->outdeg(*a0)) {
       sipRes = new tlp::node(sipCpp->getOutNode(*a0, a1));
@@ -4207,7 +4207,7 @@ Loads a graph serialized in a file trough one the available Tulip import plugins
 
 Since Tulip 4.8, the selection of the import plugin is based on the provided filename extension.
 The import will fail if the selected import plugin is not loaded.
-The graph file formats that can currently be imported are : TLP (.tlp, .tlp.gz, .tlpz), TLP Binary (.tlpb, .tlpb.gz, .tlpbz), TLP JSON (.json),
+The graph file formats that can currently be imported are: TLP (.tlp, .tlp.gz, .tlpz), TLP Binary (.tlpb, .tlpb.gz, .tlpbz), TLP JSON (.json),
 Gephi (.gexf), Pajek (.net, .paj), GML (.gml), Graphviz (.dot) and UCINET (.txt).
 
 Before Tulip 4.8 and as a fallback, this function uses the "TLP Import" import plugin
@@ -4411,7 +4411,7 @@ Exports a graph to a file using a Tulip :ref:`export plugin <exportpluginsdoc>`.
         sipIsErr = -1;
       }
     } else {
-      std::string msg = "Export error : The specified file path (";
+      std::string msg = "Export error: The specified file path (";
       msg += *a2;
       msg += ") is not valid.";
       printErrorMessage(msg);

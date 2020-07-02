@@ -29,7 +29,7 @@ using namespace tlp;
 /** \addtogroup clustering */
 /*@{*/
 /** \file
- * @brief This plugin is an implementation of a fuzzy clustering procedure. First introduced in :
+ * @brief This plugin is an implementation of a fuzzy clustering procedure. First introduced in:
  *
  * Ahn, Y.Y. and Bagrow, J.P. and Lehmann, S., \n
  * "Link communities reveal multiscale complexity in networks", \n
@@ -37,7 +37,7 @@ using namespace tlp;
  * pages 761--764, \n
  * 2010 \n
  *
- * The result of this procedure is saved as an edge metric : two edges share the same value
+ * The result of this procedure is saved as an edge metric: two edges share the same value
  * if they are part of the same group.
  * The result for a node shows the number of groups to which it belongs.
  *
@@ -52,7 +52,7 @@ public:
   PLUGININFORMATION(
       "Link Communities", "François Queyroi", "25/02/11",
       "Edges partitioning measure used for community detection.<br>"
-      "It is an implementation of a fuzzy clustering procedure. First introduced in :<br>"
+      "It is an implementation of a fuzzy clustering procedure. First introduced in:<br>"
       " <b>Link communities reveal multiscale complexity in networks</b>, Ahn, Y.Y. and Bagrow, "
       "J.P. and Lehmann, S., Nature vol:466, 761--764 (2010)",
       "1.0", "Clustering")

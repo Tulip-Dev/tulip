@@ -39,7 +39,7 @@ static const char *paramHelp[] = {
     "If true, the returned values are normalized. "
     "For the closeness centrality, the reciprocal of the sum of distances is returned. "
     "The eccentricity values are divided by the graph diameter. "
-    "<b> Warning : </b> The normalized eccentricity values should be computed on a (strongly) "
+    "<b> Warning: </b> The normalized eccentricity values should be computed on a (strongly) "
     "connected graph.",
 
     // directed

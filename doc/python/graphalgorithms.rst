@@ -6,12 +6,12 @@ Applying an algorithm on a graph
 ================================ 
 
 In Tulip, algorithms are implemented as plugins (automatically loaded when importing the :mod:`tulip` module).
-There is two main type of algorithms :
+There is two main type of algorithms:
 
-    * *General* : algorithms of this type can work on the input graph in a free manner and perform a variety of tasks
+    * *General*: algorithms of this type can work on the input graph in a free manner and perform a variety of tasks
 	  (modifying the graph structure, creating graph properties, ...).
 
-    * *Property* : algorithms of this type can only compute data to attach on the graph elements and fill an output
+    * *Property*: algorithms of this type can only compute data to attach on the graph elements and fill an output
 	  graph property (e.g. layout algorithm, metric algorithm, ...).
 
 In the remaining of this section, you will learn how to call each type of algorithm from Python 
@@ -37,11 +37,11 @@ This algorithm takes 3 parameters as illustrated in the screenshot below:
 .. figure:: equalValueParameters.png
    :align: center    
  
-Below is a description of each parameter :
+Below is a description of each parameter:
 
-	* *Property* : the input graph property of type :class:`tlp.PropertyInterface` from which to compute the partition
-	* *Type* : a :class:`tlp.StringCollection` parameter to choose the type of the elements to partition (two possible values : "nodes" or "edges")
-	* *Connected* : a boolean parameter indicating whether the output subgraphs have to be connected
+	* *Property*: the input graph property of type :class:`tlp.PropertyInterface` from which to compute the partition
+	* *Type*: a :class:`tlp.StringCollection` parameter to choose the type of the elements to partition (two possible values : "nodes" or "edges")
+	* *Connected*: a boolean parameter indicating whether the output subgraphs have to be connected
 
 The sample code below illustrates how to call this algorithm from Python. We assume that a Tulip graph
 is bound to a "graph" variable and this graph contains a double property called "myMetric"::
@@ -80,12 +80,12 @@ This algorithm takes 4 parameters as illustrated in the screenshot below:
 .. figure:: hierarchicalGraphParameter.png
    :align: center    
  
-Below is a description of each parameter :
+Below is a description of each parameter:
 
-	* *node size* : an input size property of type :class:`tlp.SizeProperty` that contains nodes sizes
-	* *orientation* : a :class:`tlp.StringCollection` parameter to choose the layout orientation (two possible values : "horizontal" or "vertical")
-	* *layer spacing* : a float parameter to set up the minimum distance between two layers in the drawing
-	* *node spacing* : a float parameter to set up the minimum distance between two nodes in the same layer  
+	* *node size*: an input size property of type :class:`tlp.SizeProperty` that contains nodes sizes
+	* *orientation*: a :class:`tlp.StringCollection` parameter to choose the layout orientation (two possible values: "horizontal" or "vertical")
+	* *layer spacing*: a float parameter to set up the minimum distance between two layers in the drawing
+	* *node spacing*: a float parameter to set up the minimum distance between two nodes in the same layer
 
 The sample code below illustrates how to call this layout algorithm from Python. We assume that a Tulip graph
 is bound to a "graph" variable::

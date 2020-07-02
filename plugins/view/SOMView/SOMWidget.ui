@@ -64,7 +64,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Current property :</string>
+           <string>Current property:</string>
           </property>
          </widget>
         </item>
