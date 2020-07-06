@@ -268,6 +268,6 @@ void GraphPerspectiveLogger::decreaseFontSize() {
 }
 
 void GraphPerspectiveLogger::increaseFontSize() {
-  int fs = _ui->listWidget->font().pointSize() + 1;
+  int fs = _ui->listWidget->font().pointSize();
   _ui->listWidget->setStyleSheet(QString("QListView { font-size: %1pt; }").arg(fs + 1));
 }
