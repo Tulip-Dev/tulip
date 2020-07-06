@@ -121,6 +121,8 @@ static void computeCubicBezierPoints(const Coord &p0, const Coord &p1, const Coo
 static map<double, vector<double>> tCoeffs;
 static map<double, vector<double>> sCoeffs;
 
+/* We revert this function to its previous version
+   because this latest one inexplicably causes a crash on MacOS
 static void computeCoefficients(double t, unsigned int nbControlPoints) {
   double s = (1.0 - t);
   TLP_LOCK_SECTION(computeCoefficients) {
@@ -146,6 +148,36 @@ static void computeCoefficients(double t, unsigned int nbControlPoints) {
         for (size_t i = oldSize; i < nbControlPoints; ++i) {
           tCoeff[i] = pow(t, double(i));
           sCoeff[i] = pow(s, double(i));
+        }
+      }
+    }
+  }
+  TLP_UNLOCK_SECTION(computeCoefficients);
+}
+*/
+static void computeCoefficients(double t, unsigned int nbControlPoints) {
+  double s = (1.0 - t);
+  TLP_LOCK_SECTION(computeCoefficients) {
+    if (tCoeffs.find(t) == tCoeffs.end()) {
+      vector<double> tCoeff, sCoeff;
+
+      for (size_t i = 0; i < nbControlPoints; ++i) {
+        tCoeff.push_back(pow(t, double(i)));
+        sCoeff.push_back(pow(s, double(i)));
+      }
+
+      tCoeffs[t] = tCoeff;
+      sCoeffs[t] = sCoeff;
+    } else {
+      vector<double> &tCoeff = tCoeffs[t];
+      vector<double> &sCoeff = sCoeffs[t];
+
+      if (tCoeff.size() < nbControlPoints) {
+        size_t oldSize = tCoeff.size();
+
+        for (size_t i = oldSize; i < nbControlPoints; ++i) {
+          tCoeff.push_back(pow(t, double(i)));
+          sCoeff.push_back(pow(s, double(i)));
         }
       }
     }
