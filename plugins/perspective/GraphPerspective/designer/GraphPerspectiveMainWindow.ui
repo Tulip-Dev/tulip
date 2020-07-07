@@ -43,7 +43,7 @@ image: url(:/tulip/gui/icons/eye_disabled.png);
 }
 
 #parameters {
-font: 10pt;
+font: 12px;
 }
 
 #parameters QHeaderView::section {
@@ -51,7 +51,7 @@ background-color: white;
 padding-top: -1px;
 padding-left: 4px;
 padding-right: 4px;
-font: bold 10pt;
+font: bold 12px;
 }
 
 QPlainTextEdit {

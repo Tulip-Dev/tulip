@@ -53,8 +53,8 @@
    <item>
     <widget class="QLabel" name="iconsCreditLabel">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Special credit for the design of icons goes to:&lt;/span&gt;&lt;br/&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Font Awesome &lt;/span&gt;&lt;a href=&quot;http://fontawesome.io&quot;&gt;&lt;span style=&quot; font-size:8pt; color:#0000ff;&quot;&gt;http://fontawesome.io&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;
-&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Material Design Icons &lt;/span&gt;&lt;a href=&quot;https://materialdesignicons.com&quot;&gt;&lt;span style=&quot;font-size:8pt;color:#0000ff;&quot;&gt;https://materialdesignicons.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;p style=&quot; font-size:11px;&quot;&gt;Special credit for the design of icons goes to:&lt;br/&gt;&lt;b&gt;Font Awesome &lt;/b&gt;&lt;a href=&quot;http://fontawesome.io&quot;&gt;&lt;span style=&quot;color:#0000ff;&quot;&gt;http://fontawesome.io&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;
+&lt;b&gt;Material Design Icons &lt;/b&gt;&lt;a href=&quot;https://materialdesignicons.com&quot;&gt;&lt;span style=&quot;color:#0000ff;&quot;&gt;https://materialdesignicons.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</string>
      </property>
      <property name="textFormat">
       <enum>Qt::AutoText</enum>

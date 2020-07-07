@@ -37,15 +37,13 @@ TulipFontIconDialog::TulipFontIconDialog(QWidget *parent)
   _ui->setupUi(this);
 
   _ui->iconsCreditLabel->setText(
-      QString("<html><head/><body><p><span style=\" font-size:8pt;\">Special credit for the design "
-              "of icons goes to:</span><br/><span style=\" font-size:8pt; font-weight:600;\">Font "
-              "Awesome </span><span style=\"font-size:8pt; color:#0000ff;\"><a "
-              "href=\"http://fontawesome.com\">http://fontawesome.com</a></span><span style=\" "
-              "font-size:8pt;\"> (v%1)</span><br/><span style=\"font-size:8pt; "
-              "font-weight:600;\">Material Design Icons </span><span "
-              "style=\"font-size:8pt;color:#0000ff;\"><a "
+      QString("<p style=\" font-size:11px;\">Special credit for the design "
+              "of icons goes to:<br/><b>Font "
+              "Awesome </b><span style=\"color:#0000ff;\"><a "
+              "href=\"http://fontawesome.com\">http://fontawesome.com</a></span> (v%1)<br/><b>Material Design Icons </b><span "
+              "style=\"color:#0000ff;\"><a "
               "href=\"https://materialdesignicons.com\">https://materialdesignicons.com</a></"
-              "span><span style=\" font-size:8pt;\"> (v%2)</span></p></body></html>")
+              "span> (v%2)</p>")
           .arg(TulipFontAwesome::getVersion().c_str())
           .arg(TulipMaterialDesignIcons::getVersion().c_str()));
   connect(_ui->iconNameFilterLineEdit, SIGNAL(textChanged(const QString &)), this,

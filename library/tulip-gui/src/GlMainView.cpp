@@ -187,7 +187,7 @@ void GlMainView::updateShowOverviewButton() {
     _showOvButton = new QPushButton();
     _showOvButton->setMaximumSize(10, 10);
     _showOvButton->setCheckable(true);
-    _showOvButton->setStyleSheet("QPushButton {font-family: Arial; font-size: 10pt; border:none};");
+    _showOvButton->setStyleSheet("QPushButton {font-family: Arial; font-size: 13px; border:none};");
     proxy->setWidget(_showOvButton);
     addToScene(proxy);
     proxy->setZValue(10);
@@ -246,7 +246,7 @@ void GlMainView::updateShowQuickAccessBarButton() {
       _showQabButton->setMaximumSize(10, 10);
       _showQabButton->setCheckable(true);
       _showQabButton->setStyleSheet(
-          "QPushButton {font-family: Arial; font-size: 10pt; border:none};");
+          "QPushButton {font-family: Arial; font-size: 13px; border:none};");
       proxy->setWidget(_showQabButton);
       addToScene(proxy);
       proxy->setZValue(10);
