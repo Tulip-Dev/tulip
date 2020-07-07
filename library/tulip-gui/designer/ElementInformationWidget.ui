@@ -34,20 +34,6 @@
    </property>
    <item>
     <widget class="QFrame" name="frame">
-     <property name="styleSheet">
-       <string notr="true">
-QPushButton::flat{
-border-image: none;
-border-width: 4;
-padding: 0px 6px;
-font-size: 12px;
-background-color: transparent;
-}
-QPushButton:hover {
-border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
-}
-</string>
-     </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <property name="spacing">
        <number>5</number>
@@ -87,6 +73,20 @@ border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
         </item>
         <item>
          <widget class="QPushButton" name="closeButton">
+	   <property name="styleSheet">
+	     <string notr="true">
+QPushButton::flat{
+border-image: none;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
+background-color: transparent;
+}
+QPushButton:hover {
+border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
+}
+	     </string>
+	   </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
