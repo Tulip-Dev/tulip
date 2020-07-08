@@ -81,8 +81,8 @@ fi
 # build a bundle dir suitable for AppImageKit
 sh bundlers/linux/make_appimage_bundle.sh --appdir $PWD --perspective $PERSPECTIVE
 
-# get appimagetool
-wget "https://github.com/probonopd/AppImageKit/releases/download/continuous/appimagetool-$(uname -p).AppImage"
+# get latest released appimagetool
+wget "https://github.com/probonopd/AppImageKit/releases/download/12/appimagetool-$(uname -p).AppImage"
 chmod a+x appimagetool-$(uname -p).AppImage
 
 # finally build the portable app
