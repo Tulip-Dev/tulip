@@ -84,10 +84,10 @@ echo "export TLP_DIR=\${BUNDLE_DIR}/usr/lib" >> $APPRUN_FILE
 echo "export OPENSSL_CONF=" >> $APPRUN_FILE
 echo "if [ \"\$1\" = \"-no-output-filtering\" ]; then" >> $APPRUN_FILE
 # for debugging purpose, allow to run without filtering of console output
-echo "  \${BUNDLE_DIR}/usr/bin/tulip_perspective -p Tulip" >> $APPRUN_FILE
+echo "  \${BUNDLE_DIR}/usr/bin/tulip_perspective -p ${PERSPECTIVE}" >> $APPRUN_FILE
 echo "else" >> $APPRUN_FILE
 # run with gtk output hidden
-echo "  \${BUNDLE_DIR}/usr/bin/tulip_perspective -p Tulip 2>&1 | sed -e '/Gtk-/d'" >> $APPRUN_FILE
+echo "  \${BUNDLE_DIR}/usr/bin/tulip_perspective -p ${PERSPECTIVE} 2>&1 | sed -e '/Gtk-/d'" >> $APPRUN_FILE
 echo "fi" >> $APPRUN_FILE
 chmod 755 $APPRUN_FILE
 
