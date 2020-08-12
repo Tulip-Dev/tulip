@@ -18,6 +18,9 @@ echo TULIP_BUILD_CORE_ONLY=%TULIP_BUILD_CORE_ONLY%
 rem Set the paths appropriately
 PATH C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%
 
+rem first manually install the new MSYS2 keyring
+rem see https://www.msys2.org/news/#2020-06-29-new-packagers
+bash -lc "pacman --noconfirm -U http://repo.msys2.org/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz"
 rem Update the MSYS2 platform
 rem without --sysupgrade which fails
 rem since MSYS2 version 20200517 is online
