@@ -28,8 +28,8 @@ Graph layout
 ------------
 
 The layout of the graph can be modified through the use of the **"viewLayout"** graph property (of type :class:`tlp.LayoutProperty`).
-The position of a node is defined by a 3d point (of type :class:`tlp.Coord`). Bends (or curve control points) can also be set
-on the edges through a list of 3d points.
+The position of a node is defined by a 3D point (of type :class:`tlp.Coord`). Bends (or curve control points) can also be set
+on the edges through a list of 3D points.
 
 The sample code below shows how to set a random layout from Python::
 
@@ -264,7 +264,7 @@ Constants are also available for code readability, here is the exhaustive list :
     * :const:`tlp.EdgeExtremityShape.Sphere`
     * :const:`tlp.EdgeExtremityShape.Square`
     * :const:`tlp.EdgeExtremityShape.Star`
-    * :const:`tlp.EdgeExtremityShape.FontAwesomeIcon` (see :class:`tlp.TulipFontAwesome`)
+    * :const:`tlp.EdgeExtremityShape.Icon` (see :class:`tlp.TulipFontAwesome` and :class:`tlp.TulipMaterialDesignIcons`)
 
 The sample code below set the shape of the selected nodes to a circle::
 

@@ -39,7 +39,7 @@ Since Tulip 5.0, the undo feature on graph state is now handled in that componen
 .. |icon_stop| image:: ../../library/tulip-gui/resources/icons/22/stop.png
     :width: 15
 
-More sophisticated ways to write python code for graphs managemet purpose are proposed in the upper part of the Python IDE:
+More sophisticated ways to write python code for graphs management purpose are proposed in the upper part of the Python IDE:
 
 - A **Scripts editor** (see :ref:`Figure 2<fig2>`): it allows to write scripts that can be applied to the
   graphs currently loaded in Tulip. To do so, the "main(graph)" function has to be defined in the script code
@@ -102,7 +102,7 @@ list will popup. Its contents will depend on the context before the current posi
 Python objects autocompletion
 """"""""""""""""""""""""""""""
 
-The autocompletion list feature is really useful to get the content of the dictionary
+The autocompletion list feature is really useful to get the contents of the dictionary
 of Python objects. The list is filled by fetching the contents of a database according to the context.
 That database contains the API of all standard Python modules but also the tulip ones.
 That database is also updated dynamically by performing a static analysis on the source code (in particular,
@@ -141,7 +141,7 @@ The autocompletion list facilitates the development of Tulip Python scripts espe
 
 - **Autocompletion for algorithm parameters**
 
-  Parameters can be passed to Tulip algorithms through a dictionnry. The parameters are
+  Parameters can be passed to Tulip algorithms through a dictionary. The parameters are
   identified by their names. The autocompletion list can be used to get the names of these parameters.
   :ref:`Figure 7<fig7>` shows an example of the autocompletion list contents when requesting the parameters
   of the layout algorithm : "FM^3 (OGDF)".
@@ -173,7 +173,7 @@ The autocompletion list facilitates the development of Tulip Python scripts espe
   on those type of objects, you can either use specific methods (for instance : :meth:`tlp.Graph.getLayoutProperty`, :meth:`tlp.Graph.getSizeProperty`)
   that take the name of the property to retrieve as parameter or the following syntax : *graph["property name"]*. When requesting the autocompletion list
   for the following context : *graph.get*Property(* or *graph[*, the list will be filled with the names of the corresponding and existing properties.
-  :ref:`Figure 9<fig9>` show an example of the contents of the autocompletion list for the following context : *graph[*.
+  :ref:`Figure 9<fig9>` shows an example of the contents of the autocompletion list for the following context : *graph[*.
 
 .. _fig9:
 .. figure:: autocompletion_properties.png
@@ -257,7 +257,7 @@ at the shell prompt to perform that task::
     >>> from tulipgui import tlpgui
 
 .. note::
-  If you have installed Tulip from a Windows installer or a Mac OS bundle, the Tulip-Python modules were built against Python 2.7
+  If you have installed Tulip from a Mac OS bundle, the Tulip-Python modules were built against Python 2.7
   and you need to use the same Python version in order to be able to import them.
 
 Customizing the Python environment
@@ -274,14 +274,14 @@ For instance, that feature could be used to :
 
         * add new Python functions and classes to the environment that will be available each time the tulip module is imported
 
-When the tulip module is imported from the first time in the current Python session, the content of the following directories
+When the tulip module is imported from the first time in the current Python session, the contents of the following directories
 will be scan for Python files (.py extension) :
 
         * <tulip_install_dir>/lib/tulip/python/startup
 
         * <home_dir>/.Tulip-x.y/python/startup
 
-Then, for each Python file found, its content will be read and executed in the context of the Python main module
+Then, for each Python file found, its contents will be read and executed in the context of the Python main module
 (the file will not be imported as a Python module).
 
 

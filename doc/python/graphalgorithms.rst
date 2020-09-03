@@ -5,10 +5,10 @@
 Applying an algorithm on a graph
 ================================ 
 
-In Tulip, algorithms are implemented as plugins (automatically loaded when importing the :mod:`tulip` module).
-There is two main type of algorithms:
+In Tulip, algorithms are implemented through plugins (automatically loaded when importing the :mod:`tulip` module).
+There are two main type of algorithms:
 
-    * *General*: algorithms of this type can work on the input graph in a free manner and perform a variety of tasks
+    * *General*: algorithms of this type can work on the input graph in a free manner and perform various tasks
 	  (modifying the graph structure, creating graph properties, ...).
 
     * *Property*: algorithms of this type can only compute data to attach on the graph elements and fill an output

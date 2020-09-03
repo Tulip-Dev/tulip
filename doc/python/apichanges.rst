@@ -91,7 +91,7 @@ API improvements
 Values for graph properties of type :class:`tlp.ColorProperty`, :class:`tlp.LayoutProperty` and
 :class:`tlp.SizeProperty` can now be set using tuples.
 
-For modifying the content of a :class:`tlp.ColorProperty`, it is now possible to use the
+To modify the content of a :class:`tlp.ColorProperty`, it is now possible to use the
 following syntax::
 
   viewColor = graph.getColorProperty('viewColor')
@@ -102,7 +102,7 @@ following syntax::
   graph['viewColor'][n] = (100, 0, 255)
   graph['viewColor'][n] = (0, 0, 255, 200)
 
-For modifying the content of a :class:`tlp.LayoutProperty` or :class:`tlp.SizeProperty`,
+To modify the content of a :class:`tlp.LayoutProperty` or :class:`tlp.SizeProperty`,
 it is now possible to use the following syntax::
 
   viewLayout = graph.getLayoutProperty('viewLayout')
@@ -123,7 +123,7 @@ it is now possible to use the following syntax::
 .. warning::
 
   In order to successfully set a property values using a tuple, the types of the elements
-  it contains and its length are constrained according to the the property type:
+  it contains and its length are constrained according to the property type:
 
     * for :class:`tlp.ColorProperty`: the tuple must contain 3 or 4 integers between 0 and 255
     * for :class:`tlp.LayoutProperty` and :class:`tlp.SizeProperty`: the tuple must contain 2 or 3
@@ -177,7 +177,7 @@ The following bugs have been corrected since the 4.10 release:
   * fix a regression in the :ref:`string collection plugin parameter improvement <deprecatedStringCollection>`
     when writing Tulip Python plugins
 
-  * fix possible crashs that coud occur when a :class:`tlp.Graph` instance owned by Python and not C++
+  * fix possible crashs that could occur when a :class:`tlp.Graph` instance owned by Python and not C++
     (for instance when using :func:`tlp.newGraph()`) is garbage collected
 
   * on windows platform when using the Python IDE from the main Tulip GUI:
@@ -215,16 +215,13 @@ have been deprecated and will be removed in the next release. You should now use
 instance :meth:`tlp.BooleanProperty.setValueToGraphNodes`, :meth:`tlp.DoubleProperty.setValueToGraphEdges`.
 
 The methods :meth:`tlp.Graph.setNodePropertiesValues` and :meth:`tlp.Graph.setEdgePropertiesValues`
-now benefits from the type inference feature introduced in Tulip-Python 4.9, meaning you can now create
+now benefit from the type inference feature introduced in Tulip-Python 4.9, meaning you can now create
 properties and set their values in one call. The signatures of the methods :meth:`tlp.Graph.addNode`
 and :meth:`tlp.Graph.addEdge` have also been updated in order to set properties values while adding elements
 to a graph.
 
 All graph properties classes now have methods to return iterators on graph elements who have a
 specific value: :meth:`tlp.DoubleProperty.getNodesEqualTo`, :meth:`tlp.StringProperty.getEdgesEqualTo`, ...
-
-Last but not least, a new helper class :class:`tlp.TulipMaterialDesignIcons` has been added to ease the configuration
-of the rendering of graph nodes as icons in the main Tulip software.
 
 Tulip-Python 4.10
 -----------------
@@ -234,11 +231,11 @@ Bugs fixes
 
 The following bugs have been fixed since the 4.9 release:
 
-  * When calling a graph property algorithm trough dedicated methods of the :class:`tlp.Graph` class,
+  * When calling a graph property algorithm through dedicated methods of the :class:`tlp.Graph` class,
     for instance :meth:`tlp.Graph.applyDoubleAlgorithm`, ensure values stored in the result property
     of the algorithm are not resetted to the default ones before calling the algorithm.
 
-  * Regression when writing a Tulip plugin in Python, it was no more possible to modify the content of the dictionnary
+  * Regression when writing a Tulip plugin in Python, it was no more possible to modify the content of the dictionary
     storing the plugin parameters (and thus, output plugin parameters were no more taken into account).
 
   * On Linux platform, a side effect that could lead to a segmentation fault when importing some dynamic
@@ -256,7 +253,7 @@ The following methods have been added to the API:
 
 The signatures of the methods for setting all nodes / edges values in a graph property,
 for instance :meth:`tlp.BooleanProperty.setAllNodeValue`, :meth:`tlp.DoubleProperty.setAllEdgeValue`,
-have been updated. They now take an optionnal :class:`tlp.Graph` parameter, enabling to only
+have been updated. They now take an optional :class:`tlp.Graph` parameter, enabling to only
 set the nodes / edges values contained in that subgraph.
 
 The method :meth:`tlp.Graph.attributeExist` is now deprecated, :meth:`tlp.Graph.existAttribute`
@@ -281,11 +278,11 @@ No need to use the :class:`tlp.ColorScale` class directly as plugin parameter an
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 For commodity of use in the Python world, it is now possible to define Tulip color scales
-trough the following ways:
+through the following ways:
 
   * using a list of :class:`tlp.Color` that will define a color scale with regular stop points
 
-  * using a dictionnary with float keys (between 0.0 and 1.0) and :class:`tlp.Color` values
+  * using a dictionary with float keys (between 0.0 and 1.0) and :class:`tlp.Color` values
 
 For instance, if one wants to apply a color mapping to graph nodes according to their degrees,
 the following script can now be used::
@@ -315,7 +312,7 @@ Tulip predefined color scales can now be easily retrieved from Python
 
 Tulip is bundled with a lot of predefined color scales (in particular, the great ones from `Color Brewer <http://colorbrewer2.org/>`_).
 You can get a preview of them in the color scale config dialog inside the main Tulip GUI. The dialog can be displayed
-trough the 'Edit -> Color scales management' main menu entry or by double clicking on the color scale parameter in the
+through the 'Edit -> Color scales management' main menu entry or by double clicking on the color scale parameter in the
 configuration table of the 'Color Mapping' algorithm.
 
 These color scales can now be easily retrieved from Python by using the static :class:`tulipgui.tlpgui.ColorScalesManager` class.
@@ -337,7 +334,7 @@ Special syntax for automatic creation of graph properties through type inference
 For convenient use, in particular when importing graph data, it is now possible to create
 graph properties on the fly without prior calls to the methods dedicated to these tasks (e.g.
 :meth:`tlp.Graph.getBooleanProperty`, :meth:`tlp.Graph.getIntegerProperty`, :meth:`tlp.Graph.getDoubleProperty`, ...).
-It allows to save a consequent lines of code but also to work faster using the tulip Python API.
+It allows to avoid many lines of code but also to work faster using the tulip Python API.
 
 For instance, consider the following task : importing nodes data from a JSON file.
 As an example, we will use the following file containing data about cars with different types : string, float and integer,
@@ -401,8 +398,8 @@ Improvements regarding the declaration and transmission of file / directory para
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When implementing Tulip plugins in Python (see :ref:`Writing Tulip plugins in Python <tulippythonplugins>`),
-it can be usefull to declare a file / directory parameter to perform
-a variety of tasks during the plugin execution: reading / writing graph data to a file, logging messages to a file, ...
+it can be useful to declare a file / directory parameter to perform
+various tasks during the plugin execution: reading / writing graph data to a file, logging messages to a file, ...
 
 Prior to the 4.9 release, it was necessary to declare a file parameter in the plugin constructor the way below::
 
@@ -415,7 +412,7 @@ To retrieve the path of the file selected by the user, the following instruction
 
   filename = self.dataSet['file::filename']
 
-That way to proceed is not really intuitive so Tulip 4.9 introduces a more user friendly mechanism to work
+Sice this approach is not really intuitive so Tulip 4.9 introduces a more user_friendly mechanism to work
 with file / directory parameters : two new methods have been added in order to easily declare file / directory parameters
 (:meth:`tlp.WithParameter.addFileParameter`, :meth:`tlp.WithParameter.addDirectoryParameter`)
 and it is no more needed to explicitely write the "file::" prefix.
@@ -428,7 +425,7 @@ And to get the path of the file selected by the user, you can now simply write i
 
   filename = self.dataSet['filename']
 
-In the same manner, when transmitting a file parameter to a plugin trough a dictionnary (see :ref:`Applying an algorithm on a graph <applyGraphAlgorithm>`),
+In the same manner, when transmitting a file parameter to a plugin through a dictionary (see :ref:`Applying an algorithm on a graph <applyGraphAlgorithm>`),
 the "file::" prefix is no more required to be written.
 
 Nevertheless for backward compatibility, the old mechanism can still be used.
@@ -439,13 +436,13 @@ Tulip-Python 4.8.1
 New methods for getting / setting graph properties values for nodes and edges added
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Convenient methods that rely on the use of a dictionnary for setting and getting
+Convenient methods that rely on the use of a dictionary for setting and getting
 properties values for nodes and edges have been added to the :class:`tlp.Graph` class :
 
-  * :meth:`tlp.Graph.getNodePropertiesValues` : returns a dictionnary filled with all graph properties values for a given node
-  * :meth:`tlp.Graph.getEdgePropertiesValues` : returns a dictionnary filled with all graph properties values for a given edge
-  * :meth:`tlp.Graph.setNodePropertiesValues` : sets multiple properties values stored in a dictionnary for a given node
-  * :meth:`tlp.Graph.setEdgePropertiesValues` : sets multiple properties values stored in a dictionnary for a given edge
+  * :meth:`tlp.Graph.getNodePropertiesValues` : returns a dictionary filled with all graph properties values for a given node
+  * :meth:`tlp.Graph.getEdgePropertiesValues` : returns a dictionary filled with all graph properties values for a given edge
+  * :meth:`tlp.Graph.setNodePropertiesValues` : sets multiple properties values stored in a dictionary for a given node
+  * :meth:`tlp.Graph.setEdgePropertiesValues` : sets multiple properties values stored in a dictionary for a given edge
 
 For instance, the sample code below sets multiple graph view properties values for each node of a graph::
 
@@ -483,8 +480,8 @@ Deprecation of the direct use of the :class:`tlp.DataSet` class
 Formerly, the class :class:`tlp.DataSet` was used to transmit parameters to the algorithms
 that can be executed on an instance of a :class:`tlp.Graph` class (see :ref:`Applying an algorithm on a graph <applyGraphAlgorithm>`).
 
-For commodity of use in the Python world, that class is now internally mapped to a dictionnary indexed by string keys (parameters names).
-To get a dictionnary filled with default parameters for an algorithm,
+For commodity of use in the Python world, that class is now internally mapped to a dictionary indexed by string keys (parameters names).
+To get a dictionary filled with default parameters for an algorithm,
 you can use the :func:`tlp.getDefaultPluginParameters` function.
 
 Nevertheless for backward compatibilty, it is still possible to create
@@ -515,7 +512,7 @@ and you can now simply write::
 
 If the provided string is not contained in the string collection associated
 to a plugin parameter, an exception will be thrown when trying to execute the plugin
-trough dedicated methods/functions.
+through dedicated methods/functions.
 
 Nevertheless for backward compatibilty, it is still possible to create
 instance of that class.
