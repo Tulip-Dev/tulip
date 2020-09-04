@@ -76,11 +76,6 @@ font: italic;
         </item>
         <item>
          <widget class="QPushButton" name="browseButton">
-          <property name="styleSheet">
-           <string notr="true">.QWidget, QScrollArea, .QFrame {
-background-color: white;
-}</string>
-          </property>
           <property name="text">
            <string/>
           </property>

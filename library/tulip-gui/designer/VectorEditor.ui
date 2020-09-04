@@ -36,9 +36,6 @@ padding: 0px 6px;
 font-size: 12px;
 background-color: transparent;
 }
-QPushButton, QComboBox, QLabel {
-color: black;
-}
 QPushButton:hover, QComboBox:hover {
 border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
 }

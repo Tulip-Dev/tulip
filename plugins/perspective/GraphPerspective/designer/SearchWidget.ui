@@ -380,13 +380,6 @@
              <height>30</height>
             </size>
            </property>
-           <property name="styleSheet">
-            <string notr="true">QTableView {
-border: 1px solid #C9C9C9;
-color: black;
-font: 12px;
-}</string>
-           </property>
            <property name="frameShape">
             <enum>QFrame::NoFrame</enum>
            </property>

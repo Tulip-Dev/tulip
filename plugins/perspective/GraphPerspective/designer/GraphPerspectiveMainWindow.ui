@@ -25,8 +25,30 @@
 
 #AboutTulipPageWidget, #AlgorithmRunner, #AlgorithmRunner #contents, #consoleWidget, #ElementInformationWidget, #interactorConfigWidget, #interactorConfigWidgetDoc, #interactorConfigWidgetOptions, #mainWidget, #stringsListSelectionWidget, #TableViewWidget, QAbstractItemView, QDialog, QHeaderView::section, QMessageBox, QStackedWidget, QWizard { background-color: white; }
 
-#scrollArea, #scrollAreaWidgetContents {
+#AxisSlidersOptions { background-color: white; }
+
+#HeaderFrameData QComboBox QAbstractItemView {
 background-color: white;
+color: black;
+border: 1px solid #C9C9C9;
+}
+
+#parameters {
+font: 12px;
+}
+
+#parameters QHeaderView::section {
+background-color: white;
+padding-top: -1px;
+padding-left: 4px;
+padding-right: 4px;
+font: bold 12px;
+}
+
+#PreferencesDialog QHeaderView::section {
+height: 30px;
+font: bold 12px;
+color: black;
 border: 0px;
 }
 
@@ -42,16 +64,19 @@ image: url(:/tulip/gui/icons/eye_partially_disabled.png);
 image: url(:/tulip/gui/icons/eye_disabled.png);
 }
 
-#parameters {
+#scrollArea, #scrollAreaWidgetContents {
+background-color: white;
+border: 0px;
+}
+
+#SearchWidget QTableView {
+border: 1px solid #C9C9C9;
+color: black;
 font: 12px;
 }
 
-#parameters QHeaderView::section {
-background-color: white;
-padding-top: -1px;
-padding-left: 4px;
-padding-right: 4px;
-font: bold 12px;
+#VectorEditor QPushButton, QComboBox, QLabel {
+color: black;
 }
 
 QPlainTextEdit {

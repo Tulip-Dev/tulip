@@ -252,12 +252,6 @@ If not, a new random seed will be set to initialize each new random sequence.&lt
             <string notr="true">QAbstractItemView {
 border: 0px;
 }
-QHeaderView::section {
-height: 30px;
-font: bold 12px;
-color: black;
-border: 0px;
-}
 QTableView {
 font: 12px;
 }
