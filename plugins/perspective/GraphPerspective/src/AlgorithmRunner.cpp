@@ -342,8 +342,12 @@ bool AlgorithmRunner::eventFilter(QObject *obj, QEvent *ev) {
       QFont f;
       f.setItalic(true);
       painter.setFont(f);
-      painter.setBrush(QColor(107, 107, 107));
-      painter.setPen(QColor(107, 107, 107));
+      QColor bColor(107, 107, 107);
+      // use a lighter color when background is not white
+      if (palette().color(QWidget::backgroundRole()) != QColor(255, 255, 255))
+	bColor = QColor(157, 157, 157);
+      painter.setBrush(bColor);
+      painter.setPen(bColor);
       painter.drawText(0, 8 + (px.height() - 12) / 2, _ui->favoritesBox->widget()->width(), 65535,
                        /*Qt::AlignHCenter | Qt::AlignTop |*/ Qt::TextWordWrap,
                        "Put your favorite algorithms here");
