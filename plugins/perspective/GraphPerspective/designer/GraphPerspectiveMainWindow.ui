@@ -79,6 +79,11 @@ font: 12px;
 color: black;
 }
 
+* [ clearableLineEdit = &quot;true&quot; ] {
+background-color: white;
+color: black;
+}
+
 QPlainTextEdit {
 background-color: white;
 selection-background-color: #C0C0C0;

@@ -33,6 +33,7 @@ void ClearableLineEdit::initPixmap() {
 ClearableLineEdit::ClearableLineEdit(QWidget *parent)
     : QLineEdit(parent), _clearButtonHovered(false) {
   setMouseTracking(true);
+  setProperty("clearableLineEdit", true);
 }
 
 void ClearableLineEdit::paintEvent(QPaintEvent *ev) {
