@@ -46,9 +46,12 @@
 
 using namespace tlp;
 
-AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent)
+AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName,
+					 bool darkBackground,
+					 QWidget *parent)
     : QWidget(parent), _ui(new Ui::AlgorithmRunnerItem), _pluginName(pluginName), _graph(nullptr),
       _storeResultAsLocal(true) {
+  setProperty("algorithRunnerItem", true);
   _ui->setupUi(this);
   connect(_ui->favoriteCheck, SIGNAL(toggled(bool)), this, SIGNAL(favorized(bool)));
   const Plugin &plugin = PluginLister::pluginInformation(QStringToTlpString(pluginName));
@@ -68,6 +71,11 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent)
                       .arg(plugin.programmingLanguage().c_str()));
   // initialize parameters only if needed
   _ui->parameters->setVisible(false);
+  // set foreground colors according to contents background color
+  if (darkBackground) {
+    _ui->parameters->setStyleSheet("QHeaderView::section { color: white }");
+    _ui->playButton->setStyleSheet("QPushButton { color: white; text-align: left; } ");
+  }
 
   if (!plugin.getParameters().empty()) {
     _ui->parameters->setItemDelegate(new TulipItemDelegate(_ui->parameters));

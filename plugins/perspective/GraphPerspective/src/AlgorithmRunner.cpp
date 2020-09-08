@@ -63,6 +63,8 @@ static ExpandableGroupBox *createGroupBox(QString name, bool root = false) {
 
 void AlgorithmRunner::buildTreeUi(QWidget *w, PluginModel<tlp::Algorithm> *model,
                                   const QModelIndex &parent, bool root) {
+  bool darkBackground =
+    _ui->contents->palette().color(backgroundRole()) != QColor(255, 255, 255);
   for (int i = 0; i < model->rowCount(parent); ++i) {
     QModelIndex index = model->index(i, 0, parent);
     QString name = model->data(index).toString();
@@ -72,7 +74,7 @@ void AlgorithmRunner::buildTreeUi(QWidget *w, PluginModel<tlp::Algorithm> *model
       w->layout()->addWidget(groupBox);
       buildTreeUi(groupBox->widget(), model, index);
     } else {
-      AlgorithmRunnerItem *item = new AlgorithmRunnerItem(name);
+      AlgorithmRunnerItem *item = new AlgorithmRunnerItem(name, darkBackground);
       QObject::connect(this, SIGNAL(setStoreResultAsLocal(bool)), item,
                        SLOT(setStoreResultAsLocal(bool)));
       w->layout()->addWidget(item);
@@ -130,7 +132,9 @@ void AlgorithmRunner::insertItem(QWidget *w, const QString &name) {
     }
   }
 
-  AlgorithmRunnerItem *item = new AlgorithmRunnerItem(name);
+  bool darkBackground =
+    _ui->contents->palette().color(backgroundRole()) !=  QColor(255, 255, 255);
+  AlgorithmRunnerItem *item = new AlgorithmRunnerItem(name, darkBackground);
   QObject::connect(this, SIGNAL(setStoreResultAsLocal(bool)), item,
                    SLOT(setStoreResultAsLocal(bool)));
   QObject::connect(item, SIGNAL(favorized(bool)), this, SLOT(favorized(bool)));
@@ -181,6 +185,16 @@ void AlgorithmRunner::refreshTreeUi(QWidget *w) {
 AlgorithmRunner::AlgorithmRunner(QWidget *parent)
     : QWidget(parent), _ui(new Ui::AlgorithmRunner), _graph(nullptr) {
   _ui->setupUi(this);
+  bool darkBackground =
+    _ui->contents->palette().color(backgroundRole()) != QColor(255, 255, 255);
+  if (darkBackground) {
+    // set style sheets according to contents background color
+    auto ass = _ui->algorithmList->styleSheet();
+    ass.replace(QString("black"), QString("white"));
+    _ui->algorithmList->setStyleSheet(ass);
+    _ui->favoritesBox->setStyleSheet(ass.append(_ui->favoritesBox->styleSheet()));
+
+  }
   _ui->favoritesBox->setWidget(new QWidget());
   _ui->favoritesBox->widget()->setAcceptDrops(true);
   _ui->favoritesBox->widget()->setMinimumHeight(45);
@@ -344,7 +358,7 @@ bool AlgorithmRunner::eventFilter(QObject *obj, QEvent *ev) {
       painter.setFont(f);
       QColor bColor(107, 107, 107);
       // use a lighter color when background is not white
-      if (palette().color(QWidget::backgroundRole()) != QColor(255, 255, 255))
+      if (palette().color(backgroundRole()) != QColor(255, 255, 255))
         bColor = QColor(157, 157, 157);
       painter.setBrush(bColor);
       painter.setPen(bColor);
@@ -413,7 +427,9 @@ void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
   }
 
   _ui->favoritesBox->widget()->setMinimumHeight(0);
-  AlgorithmRunnerItem *item = new AlgorithmRunnerItem(algName);
+  bool darkBackground =
+    _ui->contents->palette().color(backgroundRole()) !=  QColor(255, 255, 255);
+    AlgorithmRunnerItem *item = new AlgorithmRunnerItem(algName, darkBackground);
   item->setGraph(_graph);
 
   if (!data.empty()) {
