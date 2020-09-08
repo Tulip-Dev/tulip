@@ -46,9 +46,7 @@
 
 using namespace tlp;
 
-AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName,
-					 bool darkBackground,
-					 QWidget *parent)
+AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, bool darkBackground, QWidget *parent)
     : QWidget(parent), _ui(new Ui::AlgorithmRunnerItem), _pluginName(pluginName), _graph(nullptr),
       _storeResultAsLocal(true) {
   setProperty("algorithRunnerItem", true);

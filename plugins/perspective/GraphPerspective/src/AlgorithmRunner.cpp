@@ -63,8 +63,7 @@ static ExpandableGroupBox *createGroupBox(QString name, bool root = false) {
 
 void AlgorithmRunner::buildTreeUi(QWidget *w, PluginModel<tlp::Algorithm> *model,
                                   const QModelIndex &parent, bool root) {
-  bool darkBackground =
-    _ui->contents->palette().color(backgroundRole()) != QColor(255, 255, 255);
+  bool darkBackground = _ui->contents->palette().color(backgroundRole()) != QColor(255, 255, 255);
   for (int i = 0; i < model->rowCount(parent); ++i) {
     QModelIndex index = model->index(i, 0, parent);
     QString name = model->data(index).toString();
@@ -132,8 +131,7 @@ void AlgorithmRunner::insertItem(QWidget *w, const QString &name) {
     }
   }
 
-  bool darkBackground =
-    _ui->contents->palette().color(backgroundRole()) !=  QColor(255, 255, 255);
+  bool darkBackground = _ui->contents->palette().color(backgroundRole()) != QColor(255, 255, 255);
   AlgorithmRunnerItem *item = new AlgorithmRunnerItem(name, darkBackground);
   QObject::connect(this, SIGNAL(setStoreResultAsLocal(bool)), item,
                    SLOT(setStoreResultAsLocal(bool)));
@@ -185,15 +183,13 @@ void AlgorithmRunner::refreshTreeUi(QWidget *w) {
 AlgorithmRunner::AlgorithmRunner(QWidget *parent)
     : QWidget(parent), _ui(new Ui::AlgorithmRunner), _graph(nullptr) {
   _ui->setupUi(this);
-  bool darkBackground =
-    _ui->contents->palette().color(backgroundRole()) != QColor(255, 255, 255);
+  bool darkBackground = _ui->contents->palette().color(backgroundRole()) != QColor(255, 255, 255);
   if (darkBackground) {
     // set style sheets according to contents background color
     auto ass = _ui->algorithmList->styleSheet();
     ass.replace(QString("black"), QString("white"));
     _ui->algorithmList->setStyleSheet(ass);
     _ui->favoritesBox->setStyleSheet(ass.append(_ui->favoritesBox->styleSheet()));
-
   }
   _ui->favoritesBox->setWidget(new QWidget());
   _ui->favoritesBox->widget()->setAcceptDrops(true);
@@ -427,9 +423,8 @@ void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
   }
 
   _ui->favoritesBox->widget()->setMinimumHeight(0);
-  bool darkBackground =
-    _ui->contents->palette().color(backgroundRole()) !=  QColor(255, 255, 255);
-    AlgorithmRunnerItem *item = new AlgorithmRunnerItem(algName, darkBackground);
+  bool darkBackground = _ui->contents->palette().color(backgroundRole()) != QColor(255, 255, 255);
+  AlgorithmRunnerItem *item = new AlgorithmRunnerItem(algName, darkBackground);
   item->setGraph(_graph);
 
   if (!data.empty()) {

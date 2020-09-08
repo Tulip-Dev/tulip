@@ -43,7 +43,8 @@ class AlgorithmRunnerItem : public QWidget {
   static tlp::ParameterListModel *colorMappingModel;
 
 public:
-  explicit AlgorithmRunnerItem(QString pluginName, bool darkBackground = false, QWidget *parent = nullptr);
+  explicit AlgorithmRunnerItem(QString pluginName, bool darkBackground = false,
+                               QWidget *parent = nullptr);
   ~AlgorithmRunnerItem() override;
 
   QString name() const;
