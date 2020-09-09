@@ -35,6 +35,15 @@ using namespace std;
 ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::ImportWizard) {
   _ui->setupUi(this);
 
+  bool darkBackground =
+    palette().color(backgroundRole()) != QColor(255, 255, 255);
+  // update foreground colors according to background color
+  if (darkBackground) {
+    auto ss = _ui->importModules->styleSheet();
+    ss.replace("black", "white");
+    _ui->importModules->setStyleSheet(ss);
+    _ui->parameters->setStyleSheet("QHeaderView::section { color: white }");
+  }
   PluginModel<tlp::ImportModule> *model = new PluginModel<tlp::ImportModule>(_ui->importModules);
 
   _ui->importModules->setModel(model);

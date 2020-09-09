@@ -38,6 +38,16 @@ ExportWizard::ExportWizard(Graph *g, const QString &exportFile, QWidget *parent)
   _ui->setupUi(this);
   button(QWizard::FinishButton)->setEnabled(false);
 
+  bool darkBackground =
+    palette().color(backgroundRole()) != QColor(255, 255, 255);
+  // update foreground colors according to background color
+  if (darkBackground) {
+    auto ss = _ui->exportModules->styleSheet();
+    ss.replace("black", "white");
+    _ui->exportModules->setStyleSheet(ss);
+    _ui->parameters->setStyleSheet("QHeaderView::section { color: white }");
+  }
+
   PluginModel<tlp::ExportModule> *model = new PluginModel<tlp::ExportModule>(_ui->exportModules);
 
   _ui->exportModules->setModel(model);

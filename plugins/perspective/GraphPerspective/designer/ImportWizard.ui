@@ -115,8 +115,10 @@ border: 0px;
          <item>
           <widget class="QTreeView" name="importModules">
            <property name="styleSheet">
-            <string notr="true"> QTreeView::branch {
- border-image: url(none.png) 0;
+             <string notr="true">QTreeView { color: black; }
+
+ QTreeView::branch {
+         border-image: url(none.png) 0;
  }
 
  QTreeView::branch:has-children:!has-siblings:closed,

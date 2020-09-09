@@ -144,8 +144,10 @@ border: 0px;
           <item>
            <widget class="QTreeView" name="exportModules">
             <property name="styleSheet">
-             <string notr="true"> QTreeView::branch {
- border-image: url(none.png) 0;
+             <string notr="true">QTreeView:enabled { color: black; }
+
+ QTreeView::branch {
+         border-image: url(none.png) 0;
  }
 
  QTreeView::branch:has-children:!has-siblings:closed,
