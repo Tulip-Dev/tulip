@@ -36,7 +36,7 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
   _ui->setupUi(this);
 
   bool darkBackground =
-    _ui->importModules->palette().color(backgroundRole()) != QColor(255, 255, 255);
+      _ui->importModules->palette().color(backgroundRole()) != QColor(255, 255, 255);
   // update foreground colors according to background color
   if (darkBackground) {
     auto ss = _ui->importModules->styleSheet();

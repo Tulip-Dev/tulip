@@ -39,7 +39,7 @@ ExportWizard::ExportWizard(Graph *g, const QString &exportFile, QWidget *parent)
   button(QWizard::FinishButton)->setEnabled(false);
 
   bool darkBackground =
-    _ui->exportModules->palette().color(backgroundRole()) != QColor(255, 255, 255);
+      _ui->exportModules->palette().color(backgroundRole()) != QColor(255, 255, 255);
   // update foreground colors according to background color
   if (darkBackground) {
     auto ss = _ui->exportModules->styleSheet();
