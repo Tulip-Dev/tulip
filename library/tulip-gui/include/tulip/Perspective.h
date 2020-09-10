@@ -289,6 +289,12 @@ public:
    */
   static QString styleSheet();
 
+  /**
+   * @brief a static function to check dark mode
+   */
+  static bool inDarkMode();
+
+
 public slots:
   /**
    * @brief Called when the user wants to close the application.
@@ -376,6 +382,11 @@ protected slots:
    * @brief a virtual function to log a message
    */
   virtual void logMessage(QtMsgType, const QMessageLogContext &, const QString &) {}
+
+  /**
+   * @brief a virtual function to check dark mode
+   */
+  virtual bool hasDarkBackground() { return false; }
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Perspective::ProgressOptions)
 } // namespace tlp

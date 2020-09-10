@@ -209,3 +209,7 @@ void Perspective::setStyleSheet(QWidget *w) {
 QString Perspective::styleSheet() {
   return instance() ? instance()->mainWindow()->styleSheet() : QString();
 }
+
+bool Perspective::inDarkMode() {
+  return instance() ? instance()->hasDarkBackground() : false;
+}

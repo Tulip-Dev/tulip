@@ -512,6 +512,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
+
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   // ensure the loading of python plugins
   // before instantiating PythonIDE
@@ -1918,6 +1919,11 @@ void GraphPerspective::displayStatusMessage(const QString &msg) {
 
 void GraphPerspective::clearStatusMessage() {
   _ui->statusLabel->setText("");
+}
+
+bool GraphPerspective::hasDarkBackground() {
+  QWidget *w = _ui->algorithmRunner->findChild<QWidget *>("contents");
+  return w->palette().color(w->backgroundRole()) != QColor(255, 255, 255);
 }
 
 PLUGIN(GraphPerspective)
