@@ -23,7 +23,7 @@
   <property name="styleSheet">
    <string notr="true">
 
-#AboutTulipPageWidget, #AlgorithmRunner, #AlgorithmRunner #contents, #consoleWidget, #ElementInformationWidget, #interactorConfigWidget, #interactorConfigWidgetDoc, #interactorConfigWidgetOptions, #mainWidget, #stringsListSelectionWidget, #TableViewWidget, QAbstractItemView, QDialog, QHeaderView::section, QMessageBox, QStackedWidget, QWizard { background-color: white; }
+#AboutTulipPageWidget, #AlgorithmRunner, #AlgorithmRunner #contents, tlp--AlgorithRunnerItem, #consoleWidget, #ElementInformationWidget, #interactorConfigWidget, #interactorConfigWidgetDoc, #interactorConfigWidgetOptions, #mainWidget, #stringsListSelectionWidget, #TableViewWidget, QAbstractItemView, QCheckBox, QDialog, QHeaderView::section, QMessageBox, QStackedWidget, QWizard { background-color: white; }
 
 #AxisSlidersOptions { background-color: white; }
 
@@ -75,7 +75,7 @@ color: black;
 font: 12px;
 }
 
-#VectorEditor QPushButton, QComboBox, QLabel {
+QComboBox QAbstractItemView, QComboBox:item, QCheckBox, QGroupBox:enabled, QHeaderView::section, QLabel, QListWidget, QTableWidget, QToolButton, QTreeView {
 color: black;
 }
 
@@ -89,7 +89,7 @@ background-color: white;
 selection-background-color: #C0C0C0;
 }
 
-QPushButton, QComboBox, QLabel, QToolButton {
+QPushButton, QComboBox {
 color: black;
 }
 

@@ -86,9 +86,6 @@ subcontrol-origin: margin;
 subcontrol-position: top left;
 padding: 0 3px;
 }
-ExpandableGroupBox:enabled {
-color: black;
-}
 ExpandableGroupBox::indicator:unchecked {
 image: url(:/tulip/gui/ui/right_arrow-black.png);
 }
