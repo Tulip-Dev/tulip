@@ -240,7 +240,9 @@ QString PropertyEditorCreator<PROPTYPE>::displayText(const QVariant &v) const {
 
 template <typename ElementType>
 QWidget *VectorEditorCreator<ElementType>::createWidget(QWidget *) const {
-  VectorEditor *w = new VectorEditor(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow()->centralWidget() : nullptr);
+  VectorEditor *w = new VectorEditor(
+      tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow()->centralWidget()
+                                   : nullptr);
   w->setWindowFlags(Qt::Dialog);
   w->setWindowModality(Qt::ApplicationModal);
   return w;

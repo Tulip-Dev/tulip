@@ -294,7 +294,6 @@ public:
    */
   static bool inDarkMode();
 
-
 public slots:
   /**
    * @brief Called when the user wants to close the application.
@@ -386,7 +385,9 @@ protected slots:
   /**
    * @brief a virtual function to check dark mode
    */
-  virtual bool hasDarkBackground() { return false; }
+  virtual bool hasDarkBackground() {
+    return false;
+  }
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Perspective::ProgressOptions)
 } // namespace tlp
