@@ -26,6 +26,7 @@
 #include <QComboBox>
 #include <QPainter>
 #include <QDoubleSpinBox>
+#include <QMainWindow>
 
 #include <tulip/DataSet.h>
 #include <tulip/VectorEditor.h>
@@ -33,6 +34,7 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/ScientificDoubleSpinBox.h>
+#include <tulip/Perspective.h>
 
 namespace tlp {
 
@@ -238,7 +240,7 @@ QString PropertyEditorCreator<PROPTYPE>::displayText(const QVariant &v) const {
 
 template <typename ElementType>
 QWidget *VectorEditorCreator<ElementType>::createWidget(QWidget *) const {
-  VectorEditor *w = new VectorEditor(nullptr);
+  VectorEditor *w = new VectorEditor(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow()->centralWidget() : nullptr);
   w->setWindowFlags(Qt::Dialog);
   w->setWindowModality(Qt::ApplicationModal);
   return w;
