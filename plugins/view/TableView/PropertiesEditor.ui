@@ -56,11 +56,11 @@
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">font-weight: bold;
-color: #595959;</string>
+         <string notr="true">
+font-weight: bold; font-size: 22px; color: #A0A0A0A0</string>
         </property>
         <property name="text">
-         <string>&lt;font size=&quot;5&quot;&gt;Properties&lt;/font&gt;</string>
+         <string>Properties</string>
         </property>
        </widget>
       </item>
@@ -216,12 +216,7 @@ padding-top: 0px;
 QTableView {
 font: 12px;
 }
-QTableView::indicator:checked {
-image: url(:/tulip/gui/icons/eye.png);
-}
-QTableView::indicator:unchecked {
-image: url(:/tulip/gui/icons/eye_disabled.png);
-}</string>
+</string>
 	 </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">

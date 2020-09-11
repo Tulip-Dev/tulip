@@ -93,26 +93,13 @@ QToolButton:checked {
            </size>
           </property>
           <property name="styleSheet">
-           <string notr="true">font: bold; font-size: 22px;
-	    color: #595959;</string>
+           <string notr="true">
+font: bold; font-size: 22px; color: #A0A0A0A0</string>
           </property>
           <property name="text">
            <string>Nodes</string>
           </property>
          </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </item>

@@ -50,11 +50,11 @@
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">font-weight: bold;
-	       color: #595959;</string>
+         <string notr="true">
+font-weight: bold; font-size: 22px; color: #A0A0A0A0</string>
         </property>
         <property name="text">
-         <string>&lt;font size=&quot;5&quot;&gt;Layer settings&lt;/font&gt;</string>
+         <string>Layer settings</string>
         </property>
        </widget>
       </item>

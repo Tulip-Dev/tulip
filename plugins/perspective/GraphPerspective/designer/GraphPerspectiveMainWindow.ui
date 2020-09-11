@@ -23,7 +23,7 @@
   <property name="styleSheet">
    <string notr="true">
 
-#AboutTulipPageWidget, #AlgorithmRunner, #AlgorithmRunner #contents, tlp--AlgorithRunnerItem, #consoleWidget, #ElementInformationWidget, #interactorConfigWidget, #interactorConfigWidgetDoc, #interactorConfigWidgetOptions, #mainWidget, #stringsListSelectionWidget, #TableViewWidget, QAbstractItemView, QCheckBox, QDialog, QHeaderView::section, QMessageBox, QStackedWidget, QWizard { background-color: white; }
+#AboutTulipPageWidget, #AlgorithmRunner, #AlgorithmRunner #contents, tlp--AlgorithRunnerItem, #consoleWidget, #ElementInformationWidget, #interactorConfigWidget, #interactorConfigWidgetDoc, #interactorConfigWidgetOptions, #mainWidget, #PanelSelectionWizard QTextBrowser, #stringsListSelectionWidget, #TableViewWidget, QAbstractItemView, QCheckBox, QDialog, QHeaderView::section, QMessageBox, QRadioButton, QStackedWidget, QTabBar::tab, QTableView QTableCornerButton::section, QWizard { background-color: white; }
 
 #AxisSlidersOptions { background-color: white; }
 
@@ -52,7 +52,7 @@ color: black;
 border: 0px;
 }
 
-#PropertiesEditor QCheckBox::indicator:checked {
+#PropertiesEditor QCheckBox::indicator:checked, QTableView::indicator:checked {
 image: url(:/tulip/gui/icons/eye.png);
 }
 
@@ -60,7 +60,7 @@ image: url(:/tulip/gui/icons/eye.png);
 image: url(:/tulip/gui/icons/eye_partially_disabled.png);
 }
 
-#PropertiesEditor QCheckBox::indicator:unchecked {
+#PropertiesEditor QCheckBox::indicator:unchecked, QTableView::indicator:unchecked {
 image: url(:/tulip/gui/icons/eye_disabled.png);
 }
 
@@ -75,13 +75,17 @@ color: black;
 font: 12px;
 }
 
-QComboBox QAbstractItemView, QComboBox:item, QCheckBox, QGroupBox:enabled, QHeaderView::section, QLabel, QListWidget, QTableWidget, QToolButton, QTreeView {
+#ElementInformationWidget, #ElementInformationWidget QPushButton, #PanelSelectionWizard QTextBrowser, #PanelSelectionWizard QListView, QComboBox QAbstractItemView, QComboBox:item, QCheckBox, QGroupBox:enabled, QHeaderView::section, QLabel, QListWidget, QRadioButton, QTabBar::tab, QTableWidget, QTableView, QToolButton, QTreeView {
 color: black;
 }
 
 * [ clearableLineEdit = &quot;true&quot; ] {
 background-color: white;
 color: black;
+}
+
+QListView, QTableView, QTreeView {
+alternate-background-color: #A0A0A0;
 }
 
 QPlainTextEdit {
@@ -197,6 +201,24 @@ padding-top: 20px;
 QFrame[ subsection = &quot;true&quot; ] {
 border-top: 1px solid #D9D9D9;
 padding-top: 5px;
+}
+
+QTabBar::tab {
+background: #A0A0A0;
+border: 1px solid #808080;
+border-top-left-radius: 2px;
+border-top-right-radius: 2px;
+min-width: 8ex;
+padding: 5px;
+}
+
+QTabBar::tab:selected {
+background: white;
+border-bottom-color: white;
+}
+
+QTabBar::tab:!selected:hover {
+background: #D0D0D0D0;
 }
    </string>
   </property>

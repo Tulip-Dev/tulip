@@ -50,11 +50,11 @@
          </sizepolicy>
         </property>
         <property name="styleSheet">
-         <string notr="true">font-weight: bold;
-		 color: #595959;</string>
+         <string notr="true">
+font-weight: bold; font-size: 18px; color: #A0A0A0A0</string>
         </property>
         <property name="text">
-         <string>&lt;font size=&quot;4&quot;&gt;Scene rendering settings&lt;/font&gt;</string>
+         <string>Scene rendering settings</string>
         </property>
        </widget>
       </item>

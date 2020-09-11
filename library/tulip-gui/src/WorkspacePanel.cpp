@@ -204,6 +204,10 @@ void WorkspacePanel::setView(tlp::View *view) {
 #endif
     // use the main window style sheet
     auto ss = Perspective::styleSheet();
+    // remove QTabBar specs
+    auto pos = ss.indexOf("QTabBar::tab {");
+    ss.remove(pos, ss.length() - pos);
+    // append the new ones
     ss.append(R"(
 QTabWidget {
   background-color: transparent;
