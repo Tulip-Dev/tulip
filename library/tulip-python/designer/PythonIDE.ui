@@ -1016,6 +1016,10 @@ can not be undone but performance of the script execution will be better
           </item>
           <item>
            <widget class="QToolButton" name="decreaseFontSizeButton_2">
+	    <property name="styleSheet">
+	     <string notr="true">QToolButton { color: black; }
+             </string>
+	    </property>
             <property name="maximumSize">
              <size>
               <width>19</width>
@@ -1032,6 +1036,10 @@ can not be undone but performance of the script execution will be better
           </item>
           <item>
            <widget class="QToolButton" name="increaseFontSizeButton_2">
+	    <property name="styleSheet">
+	     <string notr="true">QToolButton { color: black; }
+             </string>
+	    </property>
             <property name="maximumSize">
              <size>
               <width>19</width>
@@ -1143,6 +1151,10 @@ can not be undone but performance of the script execution will be better
           </item>
           <item>
            <widget class="QToolButton" name="decreaseFontSizeButton">
+	    <property name="styleSheet">
+	     <string notr="true">QToolButton { color: black; }
+             </string>
+	    </property>
             <property name="maximumSize">
              <size>
               <width>19</width>
@@ -1162,6 +1174,10 @@ can not be undone but performance of the script execution will be better
           </item>
           <item>
            <widget class="QToolButton" name="increaseFontSizeButton">
+	    <property name="styleSheet">
+	     <string notr="true">QToolButton { color: black; }
+             </string>
+	    </property>
             <property name="maximumSize">
              <size>
               <width>19</width>
@@ -1217,6 +1233,10 @@ can not be undone but performance of the script execution will be better
        </item>
        <item>
         <widget class="QToolButton" name="decreaseFontSizeButton_3">
+	 <property name="styleSheet">
+	  <string notr="true">QToolButton { color: black; }
+          </string>
+	 </property>
          <property name="maximumSize">
           <size>
            <width>19</width>
@@ -1230,6 +1250,10 @@ can not be undone but performance of the script execution will be better
        </item>
        <item>
         <widget class="QToolButton" name="increaseFontSizeButton_3">
+	 <property name="styleSheet">
+	  <string notr="true">QToolButton { color: black; }
+          </string>
+	 </property>
          <property name="maximumSize">
           <size>
            <width>19</width>
