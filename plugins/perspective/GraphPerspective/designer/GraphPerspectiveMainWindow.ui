@@ -53,15 +53,15 @@ border: 0px;
 }
 
 #PropertiesEditor QCheckBox::indicator:checked, QTableView::indicator:checked {
-image: url(:/tulip/gui/icons/eye.png);
+image: url(:/tulip/gui/icons/eye-black.png);
 }
 
 #PropertiesEditor QCheckBox::indicator:indeterminate {
-image: url(:/tulip/gui/icons/eye_partially_disabled.png);
+image: url(:/tulip/gui/icons/eye_partially_disabled-black.png);
 }
 
 #PropertiesEditor QCheckBox::indicator:unchecked, QTableView::indicator:unchecked {
-image: url(:/tulip/gui/icons/eye_disabled.png);
+image: url(:/tulip/gui/icons/eye_disabled-black.png);
 }
 
 #scrollArea, #scrollAreaWidgetContents {

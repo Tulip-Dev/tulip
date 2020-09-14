@@ -90,9 +90,12 @@
         <file>icons/20/edge_size_interpolation.png</file>
         <file>icons/20/node_color_interpolation.png</file>
         <file>icons/20/node_size_interpolation.png</file>
-        <file>icons/eye.png</file>
-        <file>icons/eye_disabled.png</file>
-        <file>icons/eye_partially_disabled.png</file>
+        <file>icons/eye-black.png</file>
+        <file>icons/eye_disabled-black.png</file>
+        <file>icons/eye_partially_disabled-black.png</file>
+        <file>icons/eye-white.png</file>
+        <file>icons/eye_disabled-white.png</file>
+        <file>icons/eye_partially_disabled-white.png</file>
         <file>ui/left_arrow-white.png</file>
         <file>ui/right_arrow-white.png</file>
         <file>ui/six_screen.png</file>
