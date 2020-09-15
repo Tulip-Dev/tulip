@@ -34,6 +34,7 @@ border: 1px solid #C9C9C9;
 }
 
 #parameters {
+color: black;
 font: 12px;
 }
 
