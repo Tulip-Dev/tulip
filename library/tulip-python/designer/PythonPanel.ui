@@ -25,11 +25,6 @@
      <property name="toolTip">
       <string/>
      </property>
-     <property name="styleSheet">
-      <string notr="true">QTabWidget::pane { 
-     border-top: none;
- }</string>
-     </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <property name="spacing">
        <number>0</number>
@@ -52,7 +47,7 @@
          </size>
         </property>
         <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>

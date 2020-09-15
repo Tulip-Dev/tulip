@@ -45,10 +45,6 @@
      </property>
      <property name="styleSheet">
        <string notr="true">
-QTabWidget::pane {
-border-top: none;
-}
-
 QTabBar::tab {
 font:normal;
 }
@@ -96,6 +92,9 @@ background-color: #A0A0A0;
         </property>
         <item>
          <widget class="QFrame" name="mainScriptToolBarWidget">
+          <property name="styleSheet">
+           <string notr="true">QFrame { border-top: none; }</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -318,6 +317,9 @@ background-color: #A0A0A0;
         </property>
         <item>
          <widget class="QFrame" name="pluginsToolBarWidget">
+	  <property name="styleSheet">
+	   <string notr="true">QFrame { border-top: none; }</string>
+	  </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -508,6 +510,9 @@ background-color: #A0A0A0;
         </property>
         <item>
          <widget class="QFrame" name="modulesToolBarWidget">
+          <property name="styleSheet">
+           <string notr="true">QFrame { border-top: none; }</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -747,6 +752,9 @@ background-color: #A0A0A0;
            </property>
            <item>
             <widget class="QTextBrowser" name="consoleWidget">
+             <property name="styleSheet">
+              <string notr="true">QTextBrowser { border-top: none; }</string>
+             </property>
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
                <horstretch>0</horstretch>
