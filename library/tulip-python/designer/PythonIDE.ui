@@ -70,6 +70,9 @@ background-color: #A0A0A0;
        </string>
       </property>
      <widget class="PythonTabWidget" name="tabWidget">
+      <property name="styleSheet">
+       <string notr="true">QFrame { border-top: none; }</string>
+      </property>
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -92,9 +95,6 @@ background-color: #A0A0A0;
         </property>
         <item>
          <widget class="QFrame" name="mainScriptToolBarWidget">
-          <property name="styleSheet">
-           <string notr="true">QFrame { border-top: none; }</string>
-          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -317,9 +317,6 @@ background-color: #A0A0A0;
         </property>
         <item>
          <widget class="QFrame" name="pluginsToolBarWidget">
-	  <property name="styleSheet">
-	   <string notr="true">QFrame { border-top: none; }</string>
-	  </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -510,9 +507,6 @@ background-color: #A0A0A0;
         </property>
         <item>
          <widget class="QFrame" name="modulesToolBarWidget">
-          <property name="styleSheet">
-           <string notr="true">QFrame { border-top: none; }</string>
-          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
