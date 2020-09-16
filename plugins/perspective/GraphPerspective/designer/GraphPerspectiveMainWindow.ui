@@ -216,11 +216,17 @@ padding: 5px;
 
 QTabBar::tab:selected {
 background: white;
-border-bottom-color: white;
+margin-bottom: -1px;
 }
 
 QTabBar::tab:!selected:hover {
 background: #D0D0D0D0;
+}
+
+QTabWidget::pane {
+background: #80808080;
+padding: 1px;
+top: -1px;
 }
    </string>
   </property>
