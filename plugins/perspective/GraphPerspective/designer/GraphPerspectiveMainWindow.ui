@@ -1775,7 +1775,7 @@ QToolButton:hover {
   <action name="actionPreferences">
    <property name="icon">
     <iconset>
-     <normaloff>:/tulip/gui/icons/16/setting.png</normaloff>:/tulip/gui/icons/16/settings.png</iconset>
+     <normaloff>:/tulip/gui/icons/16/settings.png</normaloff>:/tulip/gui/icons/16/settings.png</iconset>
    </property>
    <property name="text">
     <string>Preferences...</string>
