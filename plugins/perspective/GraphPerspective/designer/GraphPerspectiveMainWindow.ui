@@ -23,7 +23,7 @@
   <property name="styleSheet">
    <string notr="true">
 
-#AboutTulipPageWidget, #AlgorithmRunner, #AlgorithmRunner #contents, tlp--AlgorithRunnerItem, #ElementInformationWidget, #interactorConfigWidget, #interactorConfigWidgetDoc, #interactorConfigWidgetOptions, #mainWidget, #stringsListSelectionWidget, #TableViewWidget, QAbstractItemView, QCheckBox, QDialog, QHeaderView::section, QMessageBox, QRadioButton, QStackedWidget, QTabBar::tab, QTableView QTableCornerButton::section, QTextBrowser, QWizard { background-color: white; }
+#AboutTulipPageWidget, #AlgorithmRunner, #AlgorithmRunner #contents, tlp--AlgorithRunnerItem, #ElementInformationWidget, #interactorConfigWidget, #interactorConfigWidgetDoc, #interactorConfigWidgetOptions, #mainWidget, #stringsListSelectionWidget, #TableViewWidget, QAbstractItemView, QCheckBox, QDialog, QHeaderView::section, QMessageBox, QRadioButton, QStackedWidget, QTabBar::tab, QTableView QTableCornerButton::section, QTextBrowser, QWizard, QWizard > * { background-color: white; }
 
 #AxisSlidersOptions { background-color: white; }
 
@@ -81,6 +81,7 @@ color: black;
 }
 
 * [ clearableLineEdit = &quot;true&quot; ] {
+border: 1px solid #808080;
 background-color: white;
 color: black;
 }
@@ -159,11 +160,6 @@ border-top-right-radius: 1px;
 border-bottom-right-radius: 1px;
 }
 
-QSplitter::handle {
-background-color: #C0C0C0;
-border-width:0px;
-}
-
 QFrame[ bottomFrame = &quot;true&quot; ] * {
 font: bold 11px;
 }
@@ -211,6 +207,19 @@ padding-top: 20px;
 QFrame[ subsection = &quot;true&quot; ] {
 border-top: 1px solid #D9D9D9;
 padding-top: 5px;
+}
+
+QSplitter::handle {
+background-color: #C0C0C0;
+border-width:0px;
+}
+
+QScrollBar {
+background-color: #D0D0D0;
+}
+
+QScrollBar::sub-page, QScrollBar::add-page {
+background-color: #A0A0A0;
 }
 
 QTableWidget, QTableView {
