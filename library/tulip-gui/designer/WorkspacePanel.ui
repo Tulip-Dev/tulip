@@ -107,7 +107,7 @@ QComboBox,QLabel {
 height:20px;
 }
 QComboBox::down-arrow {
-image: url(&quot;:/tulip/gui/ui/down_arrow-white.png&quot;);
+image: url(:/tulip/gui/ui/down_arrow-white.png);
 }
 QComboBox:drop-down {
 subcontrol-origin: padding;

@@ -28,6 +28,8 @@
         <file>ui/blackclosebutton.png</file>
         <file>ui/down_arrow-black.png</file>
         <file>ui/down_arrow-white.png</file>
+        <file>ui/up_arrow-black.png</file>
+        <file>ui/up_arrow-white.png</file>
         <file>ui/grid_screen.png</file>
         <file>ui/lightclosebutton.png</file>
         <file>ui/whiteclosebutton.png</file>

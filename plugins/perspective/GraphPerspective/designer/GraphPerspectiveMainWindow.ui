@@ -85,7 +85,15 @@ background-color: white;
 color: black;
 }
 
-QListView, QTableView, QTreeView {
+QHeaderView::down-arrow {
+image: url(:/tulip/gui/ui/down_arrow-black.png);
+}
+
+QHeaderView::up-arrow {
+image: url(:/tulip/gui/ui/up_arrow-black.png);
+}
+
+QListView, QTableView {
 alternate-background-color: #A0A0A0;
 }
 
@@ -203,6 +211,10 @@ padding-top: 20px;
 QFrame[ subsection = &quot;true&quot; ] {
 border-top: 1px solid #D9D9D9;
 padding-top: 5px;
+}
+
+QTableWidget, QTableView {
+gridline-color: #808080;
 }
 
 QTabBar::tab {

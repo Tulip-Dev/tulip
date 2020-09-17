@@ -60,14 +60,14 @@ color: white;
 }
 
 #expandButton {
-image: url(&quot;:/tulip/gui/ui/arrowup.png&quot;);
+image: url(:/tulip/gui/ui/arrowup.png);
 }
 #expandButton::checked {
-image: url(&quot;:/tulip/gui/ui/arrowdown.png&quot;);
+image: url(:/tulip/gui/ui/arrowdown.png);
 }
 
 QComboBox::down-arrow {
-image: url(&quot;:/tulip/gui/ui/down_arrow-white.png&quot;);
+image: url(:/tulip/gui/ui/down_arrow-white.png);
 }
 QComboBox:drop-down {
 subcontrol-origin: padding;
