@@ -221,6 +221,9 @@ void PythonEditorsTabWidget::saveEditorContentToFile(int editorIdx) {
 
 void PythonEditorsTabWidget::closeTabRequested(int tab) {
   emit tabAboutToBeDeleted(tab);
+}
+
+void PythonEditorsTabWidget::closeTab(int tab) {
   QWidget *editorWidget = widget(tab);
   _dontTreatFocusIn = true;
   delete editorWidget;

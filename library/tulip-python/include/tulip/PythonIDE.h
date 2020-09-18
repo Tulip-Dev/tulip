@@ -121,7 +121,7 @@ private:
   tlp::PythonCodeEditor *getPluginEditor(int idx) const;
   tlp::PythonCodeEditor *getCurrentPluginEditor() const;
 
-  bool closeEditorTabRequested(PythonEditorsTabWidget *tabWidget, int idx, bool mayCancel = false);
+  bool closeEditorTabRequested(PythonEditorsTabWidget *tabWidget, int idx);
   bool loadModuleFromSrcCode(const QString &moduleName, const QString &moduleSrcCode);
 
   void loadScriptsAndModulesFromPythonScriptViewDataSet(const DataSet &dataSet);

@@ -1886,8 +1886,7 @@ void PythonIDE::stopCurrentScript() {
   _ui->progressBar->hide();
 }
 
-bool PythonIDE::closeEditorTabRequested(PythonEditorsTabWidget *tabWidget, int idx,
-                                        bool mayCancel) {
+bool PythonIDE::closeEditorTabRequested(PythonEditorsTabWidget *tabWidget, int idx) {
   QString curTabText = tabWidget->tabText(idx);
 
   // workaround a Qt5 bug on linux
@@ -1910,8 +1909,7 @@ bool PythonIDE::closeEditorTabRequested(PythonEditorsTabWidget *tabWidget, int i
                                   (fileName.isEmpty() ? curTabText : fileName) +
                                   QString("\n has been edited but has not been saved to disk.\n"
                                           "Do you want to save it to disk ?"),
-                              QMessageBox::Save | QMessageBox::Discard |
-                                  (mayCancel ? QMessageBox::Cancel : QMessageBox::Save),
+                              QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
                               QMessageBox::Save);
 
     if (button == QMessageBox::Save) {
@@ -2010,6 +2008,8 @@ void PythonIDE::closeModuleTabRequested(int idx) {
     if (_project->exists(projectFile)) {
       _project->removeFile(projectFile);
     }
+
+    _ui->modulesTabWidget->closeTab(idx);
   }
 }
 
@@ -2032,6 +2032,8 @@ void PythonIDE::closeScriptTabRequested(int idx) {
     if (_project->exists(projectFile)) {
       _project->removeFile(projectFile);
     }
+
+    _ui->mainScriptsTabWidget->closeTab(idx);
   }
 
   if (_ui->mainScriptsTabWidget->count() == 1) {
@@ -2062,6 +2064,8 @@ void PythonIDE::closePluginTabRequested(int idx) {
       if (_project->exists(projectFile)) {
         _project->removeFile(projectFile);
       }
+
+    _ui->pluginsTabWidget->closeTab(idx);
     }
   }
 

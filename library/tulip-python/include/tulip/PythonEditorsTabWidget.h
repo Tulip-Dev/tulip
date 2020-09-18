@@ -63,6 +63,8 @@ public:
 
   QTabBar *tabBar() const;
 
+  void closeTab(int tab);
+
 signals:
 
   void tabAboutToBeDeleted(int);
