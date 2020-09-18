@@ -1901,16 +1901,15 @@ bool PythonIDE::closeEditorTabRequested(PythonEditorsTabWidget *tabWidget, int i
   if (curTabText[curTabText.size() - 1] == '*' || fileName.isEmpty() ||
       !QFileInfo(fileName).exists()) {
 
-    QMessageBox::StandardButton button =
-        QMessageBox::question(QApplication::activeWindow(), QString("Save edited Python code"),
-                              QString("The code of ") +
-                                  // if the editor has not yet a file name
-                                  // show the tab text instead
-                                  (fileName.isEmpty() ? curTabText : fileName) +
-                                  QString("\n has been edited but has not been saved to disk.\n"
-                                          "Do you want to save it to disk ?"),
-                              QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
-                              QMessageBox::Save);
+    QMessageBox::StandardButton button = QMessageBox::question(
+        QApplication::activeWindow(), QString("Save edited Python code"),
+        QString("The code of ") +
+            // if the editor has not yet a file name
+            // show the tab text instead
+            (fileName.isEmpty() ? curTabText : fileName) +
+            QString("\n has been edited but has not been saved to disk.\n"
+                    "Do you want to save it to disk ?"),
+        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel, QMessageBox::Save);
 
     if (button == QMessageBox::Save) {
       if (fileName.isEmpty()) {
@@ -2065,7 +2064,7 @@ void PythonIDE::closePluginTabRequested(int idx) {
         _project->removeFile(projectFile);
       }
 
-    _ui->pluginsTabWidget->closeTab(idx);
+      _ui->pluginsTabWidget->closeTab(idx);
     }
   }
 
