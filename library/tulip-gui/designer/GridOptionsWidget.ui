@@ -37,6 +37,9 @@
       </property>
       <item>
        <widget class="QTableView" name="tableView">
+	<property name="styleSheet">
+         <string notr="true">QTableView { color: black; }</string>
+        </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
