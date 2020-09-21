@@ -22,8 +22,10 @@
 #include "GeographicView.h"
 
 #include <QFileDialog>
+#include <QMainWindow>
 #include <QMessageBox>
 
+#include <tulip/Perspective.h>
 #include <tulip/TlpQtTools.h>
 
 using namespace std;
@@ -41,22 +43,23 @@ GeographicViewConfigWidget::~GeographicViewConfigWidget() {
 
 void GeographicViewConfigWidget::openCsvFileBrowser() {
   _ui->csvFile->setText(
-      QFileDialog::getOpenFileName(nullptr, "Open csv file", "./", "cvs file (*.*)"));
+      QFileDialog::getOpenFileName(Perspective::instance()->mainWindow()->centralWidget(), "Open csv file", "./", "cvs file (*.*)"));
 }
 
 void GeographicViewConfigWidget::openPolyFileBrowser() {
   _ui->polyFile->setText(
-      QFileDialog::getOpenFileName(nullptr, "Open .poly file", "./", "Poly file (*.poly)"));
+      QFileDialog::getOpenFileName(Perspective::instance()->mainWindow()->centralWidget(), "Open .poly file", "./", "Poly file (*.poly)"));
 }
 
 void GeographicViewConfigWidget::openCsvHelp() {
-  QMessageBox::about(nullptr, "Map csv file format",
+  QMessageBox::about(Perspective::instance()->mainWindow()->centralWidget(),
+		     "Map csv file format",
                      "If you want to import a csv file into this view, your file must be in the "
                      "format:\nid\tlng\tlat\nid\tlng\tlat\n...\nwith id: id of the polygon");
 }
 
 void GeographicViewConfigWidget::openPolyHelp() {
-  QMessageBox::about(nullptr, "Map poly files",
+  QMessageBox::about(Perspective::instance()->mainWindow()->centralWidget(), "Map poly files",
                      ".poly files format are an open street map "
                      "format.\nYou can download .poly file on "
                      ":\nhttp://downloads.cloudmade.com/");

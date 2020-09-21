@@ -852,7 +852,8 @@ void GeographicViewGraphicsView::loadCsvFile(QString fileName) {
   polygonEntity = readCsvFile(fileName);
 
   if (!polygonEntity) {
-    QMessageBox::critical(nullptr, "Can't read .poly file",
+    QMessageBox::critical(Perspective::instance()->mainWindow()->centralWidget(),
+			  "Can't read .poly file",
                           "We can't read csv file: " + fileName + "\nVerify the file.");
     return;
   }
@@ -875,7 +876,8 @@ void GeographicViewGraphicsView::loadPolyFile(QString fileName) {
   polygonEntity = readPolyFile(fileName);
 
   if (!polygonEntity) {
-    QMessageBox::critical(nullptr, "Can't read .poly file",
+    QMessageBox::critical(Perspective::instance()->mainWindow()->centralWidget(),
+			  "Can't read .poly file",
                           "We can't read .poly file: " + fileName + "\nVerify the file.");
     return;
   }

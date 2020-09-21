@@ -1039,7 +1039,7 @@ QList<QWidget *> SOMView::configurationWidgets() const {
 void SOMView::gridStructurePropertiesUpdated() {
 
   if (!checkGridValidity()) {
-    QMessageBox::critical(nullptr, tr("Bad grid"),
+    QMessageBox::critical(getGlMainWidget(), tr("Bad grid"),
                           tr("Cannot connect opposite nodes in an hexagonal grid with odd height"));
     return;
   }

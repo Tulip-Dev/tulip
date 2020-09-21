@@ -31,6 +31,7 @@
 #include "highlighters/EnclosingCircleHighlighter.h"
 #include "highlighters/ZoomAndPanHighlighter.h"
 
+#include <QApplication>
 #include <QListWidget>
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -224,13 +225,14 @@ void PathFinder::configureHighlighterButtonPressed() {
   }
 
   if (ahler.empty()) {
-    QMessageBox::warning(nullptr, "Nothing selected", "No highlighter selected");
+    QMessageBox::warning(QApplication::activeWindow(),
+			 "Nothing selected", "No highlighter selected");
     return;
   }
 
   for (auto hler : ahler) {
     if (hler->isConfigurable()) {
-      QDialog *dialog = new QDialog;
+      QDialog *dialog = new QDialog(QApplication::activeWindow());
       QVBoxLayout *verticalLayout = new QVBoxLayout(dialog);
       verticalLayout->setObjectName("verticalLayout");
       QVBoxLayout *mainLayout = new QVBoxLayout();
@@ -253,7 +255,8 @@ void PathFinder::configureHighlighterButtonPressed() {
       dialog->exec();
       delete dialog;
     } else
-      QMessageBox::warning(nullptr, tlpStringToQString(hler->getName()),
+      QMessageBox::warning(QApplication::activeWindow(),
+			   tlpStringToQString(hler->getName()),
                            "No configuration available for this highlighter");
   }
 }
