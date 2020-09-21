@@ -225,8 +225,8 @@ void PathFinder::configureHighlighterButtonPressed() {
   }
 
   if (ahler.empty()) {
-    QMessageBox::warning(QApplication::activeWindow(),
-			 "Nothing selected", "No highlighter selected");
+    QMessageBox::warning(QApplication::activeWindow(), "Nothing selected",
+                         "No highlighter selected");
     return;
   }
 
@@ -255,8 +255,7 @@ void PathFinder::configureHighlighterButtonPressed() {
       dialog->exec();
       delete dialog;
     } else
-      QMessageBox::warning(QApplication::activeWindow(),
-			   tlpStringToQString(hler->getName()),
+      QMessageBox::warning(QApplication::activeWindow(), tlpStringToQString(hler->getName()),
                            "No configuration available for this highlighter");
   }
 }

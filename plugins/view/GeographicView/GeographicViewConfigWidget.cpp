@@ -43,17 +43,18 @@ GeographicViewConfigWidget::~GeographicViewConfigWidget() {
 
 void GeographicViewConfigWidget::openCsvFileBrowser() {
   _ui->csvFile->setText(
-      QFileDialog::getOpenFileName(Perspective::instance()->mainWindow()->centralWidget(), "Open csv file", "./", "cvs file (*.*)"));
+      QFileDialog::getOpenFileName(Perspective::instance()->mainWindow()->centralWidget(),
+                                   "Open csv file", "./", "cvs file (*.*)"));
 }
 
 void GeographicViewConfigWidget::openPolyFileBrowser() {
   _ui->polyFile->setText(
-      QFileDialog::getOpenFileName(Perspective::instance()->mainWindow()->centralWidget(), "Open .poly file", "./", "Poly file (*.poly)"));
+      QFileDialog::getOpenFileName(Perspective::instance()->mainWindow()->centralWidget(),
+                                   "Open .poly file", "./", "Poly file (*.poly)"));
 }
 
 void GeographicViewConfigWidget::openCsvHelp() {
-  QMessageBox::about(Perspective::instance()->mainWindow()->centralWidget(),
-		     "Map csv file format",
+  QMessageBox::about(Perspective::instance()->mainWindow()->centralWidget(), "Map csv file format",
                      "If you want to import a csv file into this view, your file must be in the "
                      "format:\nid\tlng\tlat\nid\tlng\tlat\n...\nwith id: id of the polygon");
 }
