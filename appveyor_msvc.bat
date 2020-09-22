@@ -67,7 +67,7 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 
 rem get, compile and install glew
 cd C:/tulip_dependencies
-curl -LO https://sourceforge.mirrorservice.org/g/gl/glew/glew/2.2.0/glew-2.2.0.zip
+curl -L https://sourceforge.net/projects/glew/files/glew/2.2.0/glew-2.2.0.zip/download -o glew-2.2.0.zip
 if %errorlevel% neq 0 exit /b %errorlevel%
 7z x glew-2.2.0.zip
 cd glew-2.2.0/build/cmake
