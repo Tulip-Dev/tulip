@@ -25,8 +25,7 @@
 
 using namespace tlp;
 
-PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent,
-					     bool darkBackground)
+PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent, bool darkBackground)
     : QSyntaxHighlighter(parent), _shellMode(false) {
 
   QTextCharFormat builtinFormat;
@@ -34,16 +33,22 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent,
 
   HighlightingRule rule;
 
-  _commentFormat.setForeground(darkBackground ? QColor(Qt::darkGreen).lighter(150) : QColor(Qt::darkGreen));
+  _commentFormat.setForeground(darkBackground ? QColor(Qt::darkGreen).lighter(150)
+                                              : QColor(Qt::darkGreen));
   _functionFormat.setFontWeight(QFont::Bold);
-  _functionFormat.setForeground(darkBackground ? QColor(Qt::darkCyan).lighter(150) : QColor(Qt::darkCyan));
-  _tlpApiFormat.setForeground(darkBackground ? QColor(128, 128, 0).lighter(150) : QColor(128, 128, 0));
+  _functionFormat.setForeground(darkBackground ? QColor(Qt::darkCyan).lighter(150)
+                                               : QColor(Qt::darkCyan));
+  _tlpApiFormat.setForeground(darkBackground ? QColor(128, 128, 0).lighter(150)
+                                             : QColor(128, 128, 0));
   _classFormat.setFontWeight(QFont::Bold);
   _classFormat.setForeground(darkBackground ? QColor(Qt::blue).lighter(150) : QColor(Qt::blue));
   _qtApiFormat.setForeground(darkBackground ? QColor(0, 110, 40).lighter(150) : QColor(0, 110, 40));
-  _keywordFormat.setForeground(darkBackground ? QColor(Qt::darkBlue).lighter(150) : QColor(Qt::darkBlue));
-  _numberFormat.setForeground(darkBackground ? QColor(Qt::darkCyan).lighter(150) : QColor(Qt::darkCyan));
-  _quotationFormat.setForeground(darkBackground ? QColor(Qt::darkMagenta).lighter(150) : QColor(Qt::darkMagenta));
+  _keywordFormat.setForeground(darkBackground ? QColor(Qt::darkBlue).lighter(150)
+                                              : QColor(Qt::darkBlue));
+  _numberFormat.setForeground(darkBackground ? QColor(Qt::darkCyan).lighter(150)
+                                             : QColor(Qt::darkCyan));
+  _quotationFormat.setForeground(darkBackground ? QColor(Qt::darkMagenta).lighter(150)
+                                                : QColor(Qt::darkMagenta));
 
   rule.pattern = QRegExp("def [A-Za-z_][A-Za-z0-9_]+(?=\\()");
   rule.format = _functionFormat;

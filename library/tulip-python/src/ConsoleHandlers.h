@@ -61,7 +61,10 @@ public slots:
     if (errorOutput) {
       brush.setColor(Qt::red);
     } else {
-      brush.setColor((consoleWidget->palette().color(consoleWidget->backgroundRole()) == QColor(255, 255, 255)) ? Qt::black : Qt::white);
+      brush.setColor(
+          (consoleWidget->palette().color(consoleWidget->backgroundRole()) == QColor(255, 255, 255))
+              ? Qt::black
+              : Qt::white);
     }
 
     QTextCursor cursor;
