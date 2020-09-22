@@ -87,7 +87,7 @@ void PythonShellWidget::insert(const QString &txt, const bool atEnd) {
   }
 
   QTextCharFormat formt = textCursor().charFormat();
-  formt.setForeground(Qt::black);
+  formt.setForeground(_darkBackground ? Qt::white : Qt::black);
   textCursor().insertText(txt, formt);
 }
 

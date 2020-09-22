@@ -468,6 +468,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent)
   _currentFont.setPointSize(8);
 #endif
 
+  _darkBackground = Perspective::inDarkMode();
   format.setFont(_currentFont);
   setCurrentCharFormat(format);
 
@@ -478,7 +479,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent)
   updateLineNumberAreaWidth();
 
   _parenHighlighter = new ParenMatcherHighlighter(document());
-  _highlighter = new PythonCodeHighlighter(document());
+  _highlighter = new PythonCodeHighlighter(document(), _darkBackground);
 
   if (_autoCompletionList == nullptr) {
     _autoCompletionList = new AutoCompletionList();
@@ -585,7 +586,7 @@ void PythonCodeEditor::resizeEvent(QResizeEvent *e) {
 
 void PythonCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event) {
   QPainter painter(_lineNumberArea);
-  painter.fillRect(event->rect(), Qt::lightGray);
+  painter.fillRect(event->rect(), QColor("silver"));
 
   QTextBlock block = firstVisibleBlock();
   int blockNumber = block.blockNumber();
@@ -894,7 +895,7 @@ void PythonCodeEditor::highlightCurrentLine() {
 
   if (highlightEditedLine() && !isReadOnly() && selectedText().isEmpty()) {
     QTextEdit::ExtraSelection selection;
-    QColor lineColor = QColor(Qt::yellow).lighter(160);
+    QColor lineColor = _darkBackground ? QColor("orange") : QColor(Qt::yellow).lighter(150);
     selection.format = textCursor().block().charFormat();
     selection.format.setBackground(lineColor);
     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
@@ -914,10 +915,10 @@ void PythonCodeEditor::highlightSelection() {
     findFlags |= QTextDocument::FindCaseSensitively;
     findFlags |= QTextDocument::FindWholeWords;
     QTextCursor cursor = document()->find(text, QTextCursor(document()->begin()), findFlags);
+    QColor lineColor = _darkBackground ? QColor("orange").darker(150) : QColor(Qt::yellow);
 
     while (!cursor.isNull()) {
       QTextEdit::ExtraSelection selection;
-      QColor lineColor = QColor(Qt::yellow);
       selection.format = cursor.block().charFormat();
       selection.format.setBackground(lineColor);
       selection.cursor = cursor;

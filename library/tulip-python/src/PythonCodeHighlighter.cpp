@@ -25,7 +25,8 @@
 
 using namespace tlp;
 
-PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
+PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent,
+					     bool darkBackground)
     : QSyntaxHighlighter(parent), _shellMode(false) {
 
   QTextCharFormat builtinFormat;
@@ -33,13 +34,16 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
 
   HighlightingRule rule;
 
-  _commentFormat.setForeground(Qt::darkGreen);
+  _commentFormat.setForeground(darkBackground ? QColor(Qt::darkGreen).lighter(150) : QColor(Qt::darkGreen));
   _functionFormat.setFontWeight(QFont::Bold);
-  _functionFormat.setForeground(Qt::darkCyan);
-  _tlpApiFormat.setForeground(QColor(128, 128, 0));
+  _functionFormat.setForeground(darkBackground ? QColor(Qt::darkCyan).lighter(150) : QColor(Qt::darkCyan));
+  _tlpApiFormat.setForeground(darkBackground ? QColor(128, 128, 0).lighter(150) : QColor(128, 128, 0));
   _classFormat.setFontWeight(QFont::Bold);
-  _classFormat.setForeground(Qt::blue);
-  _qtApiFormat.setForeground(QColor(0, 110, 40));
+  _classFormat.setForeground(darkBackground ? QColor(Qt::blue).lighter(150) : QColor(Qt::blue));
+  _qtApiFormat.setForeground(darkBackground ? QColor(0, 110, 40).lighter(150) : QColor(0, 110, 40));
+  _keywordFormat.setForeground(darkBackground ? QColor(Qt::darkBlue).lighter(150) : QColor(Qt::darkBlue));
+  _numberFormat.setForeground(darkBackground ? QColor(Qt::darkCyan).lighter(150) : QColor(Qt::darkCyan));
+  _quotationFormat.setForeground(darkBackground ? QColor(Qt::darkMagenta).lighter(150) : QColor(Qt::darkMagenta));
 
   rule.pattern = QRegExp("def [A-Za-z_][A-Za-z0-9_]+(?=\\()");
   rule.format = _functionFormat;
@@ -57,7 +61,6 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
   rule.format = builtinFormat;
   _highlightingRules.append(rule);
 
-  _keywordFormat.setForeground(Qt::darkBlue);
   _keywordFormat.setFontWeight(QFont::Bold);
   QStringList keywordPatterns;
   int i = 0;
@@ -128,7 +131,6 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
     _highlightingRules.append(rule);
   }
 
-  _numberFormat.setForeground(Qt::darkCyan);
   rule.pattern = QRegExp("\\b[0-9]+[lL]?\\b");
   rule.format = _numberFormat;
   _highlightingRules.append(rule);
@@ -136,8 +138,6 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
   _highlightingRules.append(rule);
   rule.pattern = QRegExp("\\b[0-9]+(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\\b");
   _highlightingRules.append(rule);
-
-  _quotationFormat.setForeground(Qt::darkMagenta);
 }
 
 void PythonCodeHighlighter::highlightBlock(const QString &text) {

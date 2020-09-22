@@ -47,7 +47,8 @@ class PythonCodeHighlighter : public QSyntaxHighlighter {
   bool _shellMode;
 
 public:
-  explicit PythonCodeHighlighter(QTextDocument *parent = nullptr);
+  explicit PythonCodeHighlighter(QTextDocument *parent = nullptr,
+				 bool darkBackground = false);
 
   void setShellMode(const bool shellMode) {
     _shellMode = shellMode;

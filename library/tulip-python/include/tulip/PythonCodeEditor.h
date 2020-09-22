@@ -316,6 +316,7 @@ protected:
   bool _findReplaceActivate;
   bool _commentShortcutsActivate;
   bool _indentShortcutsActivate;
+  bool _darkBackground;
 
   QPoint _toolTipPos;
   QString _toolTipText;
