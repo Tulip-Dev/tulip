@@ -55,10 +55,10 @@ if "%TULIP_BUILD_CORE_ONLY%" == "0" (
 :install_complete_tulip_build_dependencies
 rem get, compile and install freetype
 cd C:/tulip_dependencies
-curl -LO http://download.savannah.gnu.org/releases/freetype/freetype-2.8.tar.gz
+curl -LO http://download.savannah.gnu.org/releases/freetype/freetype-2.10.tar.gz
 if %errorlevel% neq 0 exit /b %errorlevel%
-7z x freetype-2.8.tar.gz -so | 7z x -aoa -si -ttar
-cd freetype-2.8
+7z x freetype-2.10.tar.gz -so | 7z x -aoa -si -ttar
+cd freetype-2.10
 md build && cd build
 cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INSTALL_PREFIX="C:/tulip_dependencies" ..
 if %errorlevel% neq 0 exit /b %errorlevel%
@@ -67,10 +67,10 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 
 rem get, compile and install glew
 cd C:/tulip_dependencies
-curl -LO https://sourceforge.mirrorservice.org/g/gl/glew/glew/2.1.0/glew-2.1.0.zip
+curl -LO https://sourceforge.mirrorservice.org/g/gl/glew/glew/2.2.0/glew-2.2.0.zip
 if %errorlevel% neq 0 exit /b %errorlevel%
-7z x glew-2.1.0.zip
-cd glew-2.1.0/build/cmake
+7z x glew-2.2.0.zip
+cd glew-2.2.0/build/cmake
 cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INSTALL_PREFIX="C:/tulip_dependencies" .
 if %errorlevel% neq 0 exit /b %errorlevel%
 msbuild INSTALL.vcxproj /m /clp:ErrorsOnly /p:Configuration=Release %CLCACHE_MSBUILD_CONF%
