@@ -55,10 +55,10 @@ if "%TULIP_BUILD_CORE_ONLY%" == "0" (
 :install_complete_tulip_build_dependencies
 rem get, compile and install freetype
 cd C:/tulip_dependencies
-curl -LO http://download.savannah.gnu.org/releases/freetype/freetype-2.10.tar.gz
+curl -LO http://download.savannah.gnu.org/releases/freetype/freetype-2.10.2.tar.gz
 if %errorlevel% neq 0 exit /b %errorlevel%
-7z x freetype-2.10.tar.gz -so | 7z x -aoa -si -ttar
-cd freetype-2.10
+7z x freetype-2.10.2.tar.gz -so | 7z x -aoa -si -ttar
+cd freetype-2.10.2
 md build && cd build
 cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INSTALL_PREFIX="C:/tulip_dependencies" ..
 if %errorlevel% neq 0 exit /b %errorlevel%
