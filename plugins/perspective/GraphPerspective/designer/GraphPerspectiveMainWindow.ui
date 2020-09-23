@@ -297,11 +297,15 @@ margin-bottom: -1px;
 }
 
 QTabBar::tab:!selected:hover {
-background: #D0D0D0D0;
+background: #D0D0D0;
+}
+
+QTabBar::tab:disabled {
+color: #808080;
 }
 
 QTabWidget::pane {
-background: #80808080;
+background: #808080;
 padding: 1px;
 top: -1px;
 }
