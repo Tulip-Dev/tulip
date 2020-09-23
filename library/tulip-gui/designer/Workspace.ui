@@ -498,7 +498,7 @@ background-color: white;
     </widget>
    </item>
    <item>
-    <widget class="QFrame" name="bottomFrame">
+    <widget class="QFrame" name="hiddenFrame">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
        <horstretch>0</horstretch>
@@ -510,9 +510,6 @@ background-color: white;
      </property>
      <property name="frameShadow">
       <enum>QFrame::Plain</enum>
-     </property>
-     <property name="bottomFrame" stdset="0">
-      <bool>true</bool>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="spacing">

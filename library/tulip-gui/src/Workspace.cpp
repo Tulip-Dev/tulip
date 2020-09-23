@@ -49,7 +49,7 @@ Workspace::Workspace(QWidget *parent)
       _focusedPanel(nullptr), _focusedPanelHighlighting(false), _model(nullptr),
       _exposeButton(nullptr), _autoCenterViews(false) {
   _ui->setupUi(this);
-  _ui->bottomFrame->setVisible(false);
+  _ui->hiddenFrame->setVisible(false);
   _ui->startupMainFrame->hide();
   _ui->workspaceContents->setCurrentWidget(_ui->startupPage);
   connect(_ui->startupButton, SIGNAL(clicked()), this, SIGNAL(addPanelRequest()));
@@ -317,7 +317,7 @@ void Workspace::switchWorkspaceMode(QWidget *page) {
     return;
 
   _ui->workspaceContents->setCurrentWidget(page);
-  _ui->bottomFrame->setEnabled(page != _ui->startupPage);
+  _ui->hiddenFrame->setEnabled(page != _ui->startupPage);
   updateStartupMode();
   updatePanels();
 }
