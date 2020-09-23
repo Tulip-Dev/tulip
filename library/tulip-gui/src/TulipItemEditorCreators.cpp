@@ -100,7 +100,7 @@ public:
 /*
   ColorEditorCreator
 */
-QWidget *ColorEditorCreator::createWidget(QWidget*) const {
+QWidget *ColorEditorCreator::createWidget(QWidget *) const {
   TulipColorDialog *colorDialog = new TulipColorDialog(QApplication::activeWindow());
   colorDialog->setModal(true);
   return colorDialog;
@@ -159,7 +159,7 @@ QString BooleanEditorCreator::displayText(const QVariant &v) const {
 /*
   CoordEditorCreator
 */
-QWidget *CoordEditorCreator::createWidget(QWidget*) const {
+QWidget *CoordEditorCreator::createWidget(QWidget *) const {
   return new CoordEditor(QApplication::activeWindow(), editSize);
 }
 
@@ -413,9 +413,8 @@ public:
 /*
   TulipFileDescriptorEditorCreator
   */
-QWidget *TulipFileDescriptorEditorCreator::createWidget(QWidget*) const {
-  QFileDialog *dlg =
-    new TulipFileDialog(QApplication::activeWindow());
+QWidget *TulipFileDescriptorEditorCreator::createWidget(QWidget *) const {
+  QFileDialog *dlg = new TulipFileDialog(QApplication::activeWindow());
 #if defined(__APPLE__)
   dlg->setOption(QFileDialog::DontUseNativeDialog, true);
 #else
@@ -578,7 +577,7 @@ QSize TulipFileDescriptorEditorCreator::sizeHint(const QStyleOptionViewItem &opt
 /*
   TextureFileEditorCreator
   */
-QWidget *TextureFileEditorCreator::createWidget(QWidget*) const {
+QWidget *TextureFileEditorCreator::createWidget(QWidget *) const {
   return new TextureFileDialog(QApplication::activeWindow());
 }
 
@@ -654,7 +653,7 @@ QSize TextureFileEditorCreator::sizeHint(const QStyleOptionViewItem &option,
 /*
   TulipFontIconCreator
   */
-QWidget *TulipFontIconCreator::createWidget(QWidget*) const {
+QWidget *TulipFontIconCreator::createWidget(QWidget *) const {
   // Due to a Qt issue when embedding a combo box with a large amount
   // of items in a QGraphicsScene (popup has a too large height,
   // making the scrollbars unreachable ...), we use a native
@@ -717,7 +716,7 @@ QSize TulipFontIconCreator::sizeHint(const QStyleOptionViewItem &option,
 }
 
 /// NodeShapeEditorCreator
-QWidget *NodeShapeEditorCreator::createWidget(QWidget*) const {
+QWidget *NodeShapeEditorCreator::createWidget(QWidget *) const {
   // Due to a Qt issue when embedding a combo box with a large amount
   // of items in a QGraphicsScene (popup has a too large height,
   // making the scrollbars unreachable ...), we use a native
@@ -730,8 +729,7 @@ QWidget *NodeShapeEditorCreator::createWidget(QWidget*) const {
     shapes.emplace_back(shapeName, pixmap);
   }
 
-  return new ShapeDialog(std::move(shapes),
-                         QApplication::activeWindow());
+  return new ShapeDialog(std::move(shapes), QApplication::activeWindow());
 }
 
 void NodeShapeEditorCreator::setEditorData(QWidget *w, const QVariant &data, bool, tlp::Graph *) {
@@ -785,7 +783,7 @@ bool NodeShapeEditorCreator::paint(QPainter *painter, const QStyleOptionViewItem
 }
 
 /// EdgeExtremityShapeEditorCreator
-QWidget *EdgeExtremityShapeEditorCreator::createWidget(QWidget*) const {
+QWidget *EdgeExtremityShapeEditorCreator::createWidget(QWidget *) const {
   // Due to a Qt issue when embedding a combo box with a large amount
   // of items in a QGraphicsScene (popup has a too large height,
   // making the scrollbars unreachable ...), we use a native
@@ -800,8 +798,7 @@ QWidget *EdgeExtremityShapeEditorCreator::createWidget(QWidget*) const {
     shapes.emplace_back(shapeName, pixmap);
   }
 
-  ShapeDialog *shapeDialog = new ShapeDialog(std::move(shapes),
-					     QApplication::activeWindow());
+  ShapeDialog *shapeDialog = new ShapeDialog(std::move(shapes), QApplication::activeWindow());
   shapeDialog->setWindowTitle("Select an edge extremity shape");
   return shapeDialog;
 }
@@ -889,7 +886,7 @@ QString EdgeShapeEditorCreator::displayText(const QVariant &data) const {
 }
 
 // TulipFontEditorCreator
-QWidget *TulipFontEditorCreator::createWidget(QWidget*) const {
+QWidget *TulipFontEditorCreator::createWidget(QWidget *) const {
   return new TulipFontDialog(QApplication::activeWindow());
 }
 void TulipFontEditorCreator::setEditorData(QWidget *editor, const QVariant &data, bool,
@@ -998,7 +995,7 @@ QString EdgeSetEditorCreator::displayText(const QVariant &var) const {
   return ss.str().c_str();
 }
 
-QWidget *QVectorBoolEditorCreator::createWidget(QWidget*) const {
+QWidget *QVectorBoolEditorCreator::createWidget(QWidget *) const {
   VectorEditor *w = new VectorEditor(QApplication::activeWindow());
   w->setWindowFlags(Qt::Dialog);
   w->setWindowModality(Qt::ApplicationModal);
@@ -1057,7 +1054,7 @@ QString QVectorBoolEditorCreator::displayText(const QVariant &data) const {
 }
 
 // QStringEditorCreator
-QWidget *QStringEditorCreator::createWidget(QWidget*) const {
+QWidget *QStringEditorCreator::createWidget(QWidget *) const {
   StringEditor *editor = new StringEditor(QApplication::activeWindow());
   editor->setWindowTitle(QString("Set ") + propName.c_str() + " value");
   editor->setMinimumSize(QSize(250, 250));
@@ -1101,7 +1098,7 @@ QString StdStringEditorCreator::displayText(const QVariant &var) const {
 }
 
 // QStringListEditorCreator
-QWidget *QStringListEditorCreator::createWidget(QWidget*) const {
+QWidget *QStringListEditorCreator::createWidget(QWidget *) const {
   VectorEditor *w = new VectorEditor(QApplication::activeWindow());
   w->setWindowFlags(Qt::Dialog);
   w->setWindowModality(Qt::ApplicationModal);
