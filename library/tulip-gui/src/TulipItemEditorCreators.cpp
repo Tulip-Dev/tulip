@@ -38,7 +38,6 @@
 #include <tulip/TulipFontDialog.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/GraphPropertiesModel.h>
-#include <tulip/Perspective.h>
 #include <tulip/PluginLister.h>
 #include <tulip/TulipItemEditorCreators.h>
 #include <tulip/TulipFontAwesome.h>
@@ -101,9 +100,8 @@ public:
 /*
   ColorEditorCreator
 */
-QWidget *ColorEditorCreator::createWidget(QWidget *parent) const {
-  TulipColorDialog *colorDialog = new TulipColorDialog(
-      tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : parent);
+QWidget *ColorEditorCreator::createWidget(QWidget*) const {
+  TulipColorDialog *colorDialog = new TulipColorDialog(QApplication::activeWindow());
   colorDialog->setModal(true);
   return colorDialog;
 }
@@ -161,9 +159,8 @@ QString BooleanEditorCreator::displayText(const QVariant &v) const {
 /*
   CoordEditorCreator
 */
-QWidget *CoordEditorCreator::createWidget(QWidget *parent) const {
-  return new CoordEditor(Perspective::instance() ? Perspective::instance()->mainWindow() : parent,
-                         editSize);
+QWidget *CoordEditorCreator::createWidget(QWidget*) const {
+  return new CoordEditor(QApplication::activeWindow(), editSize);
 }
 
 void CoordEditorCreator::setEditorData(QWidget *w, const QVariant &v, bool, tlp::Graph *) {
@@ -416,9 +413,9 @@ public:
 /*
   TulipFileDescriptorEditorCreator
   */
-QWidget *TulipFileDescriptorEditorCreator::createWidget(QWidget *parent) const {
+QWidget *TulipFileDescriptorEditorCreator::createWidget(QWidget*) const {
   QFileDialog *dlg =
-      new TulipFileDialog(Perspective::instance() ? Perspective::instance()->mainWindow() : parent);
+    new TulipFileDialog(QApplication::activeWindow());
 #if defined(__APPLE__)
   dlg->setOption(QFileDialog::DontUseNativeDialog, true);
 #else
@@ -581,9 +578,8 @@ QSize TulipFileDescriptorEditorCreator::sizeHint(const QStyleOptionViewItem &opt
 /*
   TextureFileEditorCreator
   */
-QWidget *TextureFileEditorCreator::createWidget(QWidget *parent) const {
-  return new TextureFileDialog(Perspective::instance() ? Perspective::instance()->mainWindow()
-                                                       : parent);
+QWidget *TextureFileEditorCreator::createWidget(QWidget*) const {
+  return new TextureFileDialog(QApplication::activeWindow());
 }
 
 void TextureFileEditorCreator::setEditorData(QWidget *w, const QVariant &v, bool, tlp::Graph *) {
@@ -658,13 +654,12 @@ QSize TextureFileEditorCreator::sizeHint(const QStyleOptionViewItem &option,
 /*
   TulipFontIconCreator
   */
-QWidget *TulipFontIconCreator::createWidget(QWidget *parent) const {
+QWidget *TulipFontIconCreator::createWidget(QWidget*) const {
   // Due to a Qt issue when embedding a combo box with a large amount
   // of items in a QGraphicsScene (popup has a too large height,
   // making the scrollbars unreachable ...), we use a native
   // dialog with the combo box inside
-  return new TulipFontIconDialog(Perspective::instance() ? Perspective::instance()->mainWindow()
-                                                         : parent);
+  return new TulipFontIconDialog(QApplication::activeWindow());
 }
 
 void TulipFontIconCreator::setEditorData(QWidget *w, const QVariant &v, bool, tlp::Graph *) {
@@ -722,7 +717,7 @@ QSize TulipFontIconCreator::sizeHint(const QStyleOptionViewItem &option,
 }
 
 /// NodeShapeEditorCreator
-QWidget *NodeShapeEditorCreator::createWidget(QWidget *parent) const {
+QWidget *NodeShapeEditorCreator::createWidget(QWidget*) const {
   // Due to a Qt issue when embedding a combo box with a large amount
   // of items in a QGraphicsScene (popup has a too large height,
   // making the scrollbars unreachable ...), we use a native
@@ -736,7 +731,7 @@ QWidget *NodeShapeEditorCreator::createWidget(QWidget *parent) const {
   }
 
   return new ShapeDialog(std::move(shapes),
-                         Perspective::instance() ? Perspective::instance()->mainWindow() : parent);
+                         QApplication::activeWindow());
 }
 
 void NodeShapeEditorCreator::setEditorData(QWidget *w, const QVariant &data, bool, tlp::Graph *) {
@@ -790,7 +785,7 @@ bool NodeShapeEditorCreator::paint(QPainter *painter, const QStyleOptionViewItem
 }
 
 /// EdgeExtremityShapeEditorCreator
-QWidget *EdgeExtremityShapeEditorCreator::createWidget(QWidget *parent) const {
+QWidget *EdgeExtremityShapeEditorCreator::createWidget(QWidget*) const {
   // Due to a Qt issue when embedding a combo box with a large amount
   // of items in a QGraphicsScene (popup has a too large height,
   // making the scrollbars unreachable ...), we use a native
@@ -805,8 +800,8 @@ QWidget *EdgeExtremityShapeEditorCreator::createWidget(QWidget *parent) const {
     shapes.emplace_back(shapeName, pixmap);
   }
 
-  ShapeDialog *shapeDialog = new ShapeDialog(
-      std::move(shapes), Perspective::instance() ? Perspective::instance()->mainWindow() : parent);
+  ShapeDialog *shapeDialog = new ShapeDialog(std::move(shapes),
+					     QApplication::activeWindow());
   shapeDialog->setWindowTitle("Select an edge extremity shape");
   return shapeDialog;
 }
@@ -894,9 +889,8 @@ QString EdgeShapeEditorCreator::displayText(const QVariant &data) const {
 }
 
 // TulipFontEditorCreator
-QWidget *TulipFontEditorCreator::createWidget(QWidget *parent) const {
-  return new TulipFontDialog(Perspective::instance() ? Perspective::instance()->mainWindow()
-                                                     : parent);
+QWidget *TulipFontEditorCreator::createWidget(QWidget*) const {
+  return new TulipFontDialog(QApplication::activeWindow());
 }
 void TulipFontEditorCreator::setEditorData(QWidget *editor, const QVariant &data, bool,
                                            tlp::Graph *) {
@@ -1004,9 +998,8 @@ QString EdgeSetEditorCreator::displayText(const QVariant &var) const {
   return ss.str().c_str();
 }
 
-QWidget *QVectorBoolEditorCreator::createWidget(QWidget *parent) const {
-  VectorEditor *w = new VectorEditor(
-      tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : parent);
+QWidget *QVectorBoolEditorCreator::createWidget(QWidget*) const {
+  VectorEditor *w = new VectorEditor(QApplication::activeWindow());
   w->setWindowFlags(Qt::Dialog);
   w->setWindowModality(Qt::ApplicationModal);
   return w;
@@ -1064,9 +1057,8 @@ QString QVectorBoolEditorCreator::displayText(const QVariant &data) const {
 }
 
 // QStringEditorCreator
-QWidget *QStringEditorCreator::createWidget(QWidget *parent) const {
-  StringEditor *editor = new StringEditor(
-      tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : parent);
+QWidget *QStringEditorCreator::createWidget(QWidget*) const {
+  StringEditor *editor = new StringEditor(QApplication::activeWindow());
   editor->setWindowTitle(QString("Set ") + propName.c_str() + " value");
   editor->setMinimumSize(QSize(250, 250));
   return editor;
@@ -1109,9 +1101,8 @@ QString StdStringEditorCreator::displayText(const QVariant &var) const {
 }
 
 // QStringListEditorCreator
-QWidget *QStringListEditorCreator::createWidget(QWidget *parent) const {
-  VectorEditor *w = new VectorEditor(
-      tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : parent);
+QWidget *QStringListEditorCreator::createWidget(QWidget*) const {
+  VectorEditor *w = new VectorEditor(QApplication::activeWindow());
   w->setWindowFlags(Qt::Dialog);
   w->setWindowModality(Qt::ApplicationModal);
   return w;
