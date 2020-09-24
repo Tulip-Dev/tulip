@@ -22,6 +22,7 @@
 
 #include <QScrollArea>
 #include <QLabel>
+#include <QHideEvent>
 #include <QShowEvent>
 
 #include <tulip/TlpQtTools.h>
@@ -36,95 +37,57 @@ InteractorConfigWidget::InteractorConfigWidget(QWidget *parent)
 }
 
 InteractorConfigWidget::~InteractorConfigWidget() {
+  // removes current config widgets from the layout
+  // It is up to the interactor developer to delete its config widget
+  _ui->interactorConfigWidgetDoc->takeWidget();
+  _ui->interactorConfigWidgetOptions->takeWidget();
+
   delete _ui;
 }
 
-void InteractorConfigWidget::clearWidgets() {
-  // removes widget from the layout to not delete the object and give back parenthood. It is up to
-  // the interactor developer to delete its config widget
-  if (_interactor != nullptr) {
-    // take all widgets
-    QWidget *oldConfig(_interactor->configurationWidget());
-    // if old config is present and is only a QLabel => Documentation tab, else Options tab
-    QWidget *DocWidget = nullptr;
-    QWidget *OptionsWidget = nullptr;
-    bool isOldDocConfigWidget(false), isOldOptionsConfigWidget(false);
-    if (oldConfig != nullptr) {
-      if (dynamic_cast<QLabel *>(oldConfig) != nullptr) {
-        DocWidget = oldConfig;
-        isOldDocConfigWidget = true;
-      } else {
-        OptionsWidget = oldConfig;
-        isOldOptionsConfigWidget = true;
-      }
-    } else {
-      DocWidget = _interactor->configurationDocWidget();
-      OptionsWidget = _interactor->configurationOptionsWidget();
-    }
-    if ((isOldDocConfigWidget && _interactor->configurationWidget() != DocWidget) ||
-        (_interactor->configurationDocWidget() != DocWidget)) {
-      _ui->interactorConfigWidgetDoc->widget()->hide();
-      _ui->interactorConfigWidgetDoc->takeWidget();
-    }
-    if ((isOldOptionsConfigWidget && _interactor->configurationWidget() != OptionsWidget) ||
-        (_interactor->configurationOptionsWidget() != OptionsWidget)) {
-      _ui->interactorConfigWidgetOptions->widget()->hide();
-      _ui->interactorConfigWidgetOptions->takeWidget();
-    }
-    _interactor = nullptr;
-  }
-}
-
 bool InteractorConfigWidget::setWidgets(Interactor *interactor) {
-  // take all widgets
+  // removes current config widgets from the layout
+  // It is up to the interactor developer to delete its config widget
+  _ui->interactorConfigWidgetDoc->takeWidget();
+  _ui->interactorConfigWidgetOptions->takeWidget();
+
   QWidget *oldConfig(interactor->configurationWidget());
   // if old config is present and is only a QLabel => Documentation tab, else Options tab
   QWidget *DocWidget = nullptr;
   QWidget *OptionsWidget = nullptr;
-  bool isOldDocConfigWidget(false), isOldOptionsConfigWidget(false);
   if (oldConfig != nullptr) {
-    if (dynamic_cast<QLabel *>(oldConfig) != nullptr) {
+    if (dynamic_cast<QLabel *>(oldConfig) != nullptr)
       DocWidget = oldConfig;
-      isOldDocConfigWidget = true;
-    } else {
+    else
       OptionsWidget = oldConfig;
-      isOldOptionsConfigWidget = true;
-    }
   } else {
     DocWidget = interactor->configurationDocWidget();
     OptionsWidget = interactor->configurationOptionsWidget();
   }
 
   if ((DocWidget == nullptr) && (OptionsWidget == nullptr)) {
-    clearWidgets();
+    _interactor = nullptr;
     hide();
     return false;
   } else {
     setWindowTitle(tlpStringToQString(interactor->info()));
-    // removes widget from the layout to not delete the object and give back parenthood. It is up to
-    // the interactor developer to delete its config widget
-    if (_interactor != nullptr) {
-      if ((isOldDocConfigWidget && _interactor->configurationWidget() != DocWidget) ||
-          (_interactor->configurationDocWidget() != DocWidget)) {
-        if (_ui->tabWidget->isTabEnabled(0)) {
-          _ui->interactorConfigWidgetDoc->widget()->hide();
-          _ui->interactorConfigWidgetDoc->takeWidget();
-        }
-      }
-      if ((isOldOptionsConfigWidget && _interactor->configurationWidget() != OptionsWidget) ||
-          (_interactor->configurationOptionsWidget() != OptionsWidget)) {
-        if (_ui->tabWidget->isTabEnabled(1)) {
-          _ui->interactorConfigWidgetOptions->widget()->hide();
-          _ui->interactorConfigWidgetOptions->takeWidget();
-        }
-      }
-    }
 
     if (DocWidget != nullptr) {
       _ui->interactorConfigWidgetDoc->setWidget(DocWidget);
       _ui->tabWidget->setTabEnabled(0, true); // in case it was previously set to false
-    } else
+      if (OptionsWidget != nullptr) {
+	auto idx = lastIndex.find(interactor->info());
+	if (idx != lastIndex.end())
+	  // restore current tab index
+	  _ui->tabWidget->setCurrentIndex(idx->second);
+	else
+	  _ui->tabWidget->setCurrentIndex(0);
+      } else
+	_ui->tabWidget->setCurrentIndex(0);
+    } else {
       _ui->tabWidget->setTabEnabled(0, false);
+      _ui->tabWidget->setCurrentIndex(1);
+    }
 
     if (OptionsWidget != nullptr) {
       _ui->interactorConfigWidgetOptions->setWidget(OptionsWidget);
@@ -143,4 +106,11 @@ void InteractorConfigWidget::showEvent(QShowEvent *ev) {
   if (parentWidget())
     move(parentWidget()->window()->frameGeometry().topLeft() +
          parentWidget()->window()->rect().center() - rect().center());
+}
+
+void InteractorConfigWidget::hideEvent(QHideEvent *ev) {
+  if (_ui->tabWidget->isTabEnabled(0) && _ui->tabWidget->isTabEnabled(1))
+    // register current tab index
+    lastIndex[_interactor->info()] = _ui->tabWidget->currentIndex();
+  QDialog::hideEvent(ev);
 }

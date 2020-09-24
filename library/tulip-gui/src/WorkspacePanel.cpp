@@ -134,8 +134,8 @@ WorkspacePanel::~WorkspacePanel() {
 
   if (_view != nullptr) {
     disconnect(_view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
-    _interactorConfigWidget->clearWidgets();
     delete _view;
+    delete _interactorConfigWidget;
     // same as above
     _view = nullptr;
   }
@@ -143,7 +143,6 @@ WorkspacePanel::~WorkspacePanel() {
 void WorkspacePanel::viewDestroyed() {
   if (_view != nullptr) {
     disconnect(_view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
-    _interactorConfigWidget->clearWidgets();
     _view = nullptr;
   }
 

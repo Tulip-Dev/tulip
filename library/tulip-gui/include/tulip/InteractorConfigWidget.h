@@ -22,11 +22,13 @@
 #define INTERACTORCONFIGWIDGET_H
 
 #include <QDialog>
+#include <unordered_map>
 
 namespace Ui {
 class InteractorConfigWidget;
 }
 
+class QHideEvent;
 class QShowEvent;
 
 namespace tlp {
@@ -36,14 +38,16 @@ class InteractorConfigWidget : public QDialog {
 
   Ui::InteractorConfigWidget *_ui;
   Interactor *_interactor;
+  // current index registration per interactor
+  std::unordered_map<std::string, int> lastIndex;
 
 public:
   explicit InteractorConfigWidget(QWidget *parent = nullptr);
   ~InteractorConfigWidget();
   bool setWidgets(Interactor *interactor);
-  void clearWidgets();
 
   void showEvent(QShowEvent *) override;
+  void hideEvent(QHideEvent *) override;
 };
 
 } // namespace tlp
