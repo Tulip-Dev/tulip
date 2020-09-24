@@ -690,7 +690,8 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
     QRect tooltipRect(tPos, tPos + QPoint(width + 2 * charWidth(' '), height));
 #endif
     painter.drawRect(tooltipRect);
-    painter.fillRect(tooltipRect, QColor(249, 251, 100, 200));
+    painter.fillRect(tooltipRect, QColor("#FFFFD3"));
+    painter.setPen(Qt::black);
 #ifndef __APPLE__
     painter.drawText(tooltipRect, _toolTipText);
 #else
@@ -895,7 +896,7 @@ void PythonCodeEditor::highlightCurrentLine() {
 
   if (highlightEditedLine() && !isReadOnly() && selectedText().isEmpty()) {
     QTextEdit::ExtraSelection selection;
-    QColor lineColor = _darkBackground ? QColor("orange") : QColor(Qt::yellow).lighter(150);
+    QColor lineColor(_darkBackground ? "#D0D0D0" : "#D8D8D8");
     selection.format = textCursor().block().charFormat();
     selection.format.setBackground(lineColor);
     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
@@ -915,7 +916,7 @@ void PythonCodeEditor::highlightSelection() {
     findFlags |= QTextDocument::FindCaseSensitively;
     findFlags |= QTextDocument::FindWholeWords;
     QTextCursor cursor = document()->find(text, QTextCursor(document()->begin()), findFlags);
-    QColor lineColor = _darkBackground ? QColor("orange").darker(150) : QColor(Qt::yellow);
+    QColor lineColor = QColor(_darkBackground ? "#D0D0D0" : "#D8D8D8").darker(110);
 
     while (!cursor.isNull()) {
       QTextEdit::ExtraSelection selection;
