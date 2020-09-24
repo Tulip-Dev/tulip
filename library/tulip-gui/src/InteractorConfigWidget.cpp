@@ -76,14 +76,14 @@ bool InteractorConfigWidget::setWidgets(Interactor *interactor) {
       _ui->interactorConfigWidgetDoc->setWidget(DocWidget);
       _ui->tabWidget->setTabEnabled(0, true); // in case it was previously set to false
       if (OptionsWidget != nullptr) {
-	auto idx = lastIndex.find(interactor->info());
-	if (idx != lastIndex.end())
-	  // restore current tab index
-	  _ui->tabWidget->setCurrentIndex(idx->second);
-	else
-	  _ui->tabWidget->setCurrentIndex(0);
+        auto idx = lastIndex.find(interactor->info());
+        if (idx != lastIndex.end())
+          // restore current tab index
+          _ui->tabWidget->setCurrentIndex(idx->second);
+        else
+          _ui->tabWidget->setCurrentIndex(0);
       } else
-	_ui->tabWidget->setCurrentIndex(0);
+        _ui->tabWidget->setCurrentIndex(0);
     } else {
       _ui->tabWidget->setTabEnabled(0, false);
       _ui->tabWidget->setCurrentIndex(1);
