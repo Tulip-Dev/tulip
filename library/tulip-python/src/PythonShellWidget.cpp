@@ -37,23 +37,23 @@ static QString ps1 = ">>> ";
 static QString ps2 = "... ";
 
 static QString rtrim(const QString &s) {
-  int lastNonSpaceIdx = s.length() - 1;
-
-  while (s.at(lastNonSpaceIdx).isSpace()) {
-    --lastNonSpaceIdx;
+  for (int lastNonSpaceIdx = s.length() - 1; lastNonSpaceIdx != -1;
+       --lastNonSpaceIdx) {
+    if (!s.at(lastNonSpaceIdx).isSpace())
+      return s.left(lastNonSpaceIdx + 1);
   }
 
-  return s.mid(0, lastNonSpaceIdx + 1);
+  return "";
 }
 
 static QString ltrim(const QString &s) {
-  int firstNonSpaceIdx = 0;
-
-  while (s.at(firstNonSpaceIdx).isSpace()) {
-    ++firstNonSpaceIdx;
+  for (int firstNonSpaceIdx = 0; firstNonSpaceIdx < s.length();
+       ++firstNonSpaceIdx) {
+    if (!s.at(firstNonSpaceIdx).isSpace())
+      return s.right(s.length() - firstNonSpaceIdx);
   }
 
-  return s.mid(firstNonSpaceIdx);
+  return "";
 }
 
 PythonShellWidget::PythonShellWidget(QWidget *parent, bool showBanner) : PythonCodeEditor(parent) {
