@@ -1788,9 +1788,12 @@ void GraphPerspective::pluginsListChanged() {
 }
 
 void GraphPerspective::addNewGraph() {
-  Graph *g = tlp::newGraph();
-  _graphs->addGraph(g);
-  showStartPanels(g);
+  DataSet ds;
+  this->importGraph(string("Empty graph"), ds);
+  //the code below causes random crash with QTreeView
+  //  Graph *g = tlp::newGraph();
+  //_graphs->addGraph(g);
+  //showStartPanels(g);
 }
 
 void GraphPerspective::newProject() {
