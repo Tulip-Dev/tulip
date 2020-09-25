@@ -35,9 +35,6 @@ using namespace tlp;
 CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage(QWidget *parent)
     : QWizardPage(parent), parserConfigurationWidget(new CSVParserConfigurationWidget(this)),
       previewTableWidget(new CSVTableWidget(this)), previewLineNumber(6) {
-#if defined(__APPLE__)
-  setWizardStyle(QWizard::ClassicStyle);
-#endif
 
   QVBoxLayout *vbLayout = new QVBoxLayout();
   vbLayout->setContentsMargins(0, 0, 0, 0);
@@ -154,6 +151,10 @@ void CSVGraphMappingConfigurationQWizardPage::initializePage() {
 Graph *CSVImportWizard::graph = nullptr;
 
 CSVImportWizard::CSVImportWizard(QWidget *parent) : QWizard(parent), ui(new Ui::CSVImportWizard) {
+#if defined(__APPLE__)
+  setWizardStyle(QWizard::ClassicStyle);
+#endif
+
   // ensure there is a Cancel button (may be hidden on Mac)
   setOptions(options() & ~QWizard::NoCancelButton);
   ui->setupUi(this);
