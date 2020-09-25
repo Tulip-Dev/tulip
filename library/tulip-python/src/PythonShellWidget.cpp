@@ -37,8 +37,7 @@ static QString ps1 = ">>> ";
 static QString ps2 = "... ";
 
 static QString rtrim(const QString &s) {
-  for (int lastNonSpaceIdx = s.length() - 1; lastNonSpaceIdx != -1;
-       --lastNonSpaceIdx) {
+  for (int lastNonSpaceIdx = s.length() - 1; lastNonSpaceIdx != -1; --lastNonSpaceIdx) {
     if (!s.at(lastNonSpaceIdx).isSpace())
       return s.left(lastNonSpaceIdx + 1);
   }
@@ -47,8 +46,7 @@ static QString rtrim(const QString &s) {
 }
 
 static QString ltrim(const QString &s) {
-  for (int firstNonSpaceIdx = 0; firstNonSpaceIdx < s.length();
-       ++firstNonSpaceIdx) {
+  for (int firstNonSpaceIdx = 0; firstNonSpaceIdx < s.length(); ++firstNonSpaceIdx) {
     if (!s.at(firstNonSpaceIdx).isSpace())
       return s.right(s.length() - firstNonSpaceIdx);
   }
