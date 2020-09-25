@@ -33,6 +33,10 @@ using namespace tlp;
 using namespace std;
 
 ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::ImportWizard) {
+#if defined(__APPLE__)
+  setWizardStyle(QWizard::ClassicStyle);
+#endif
+
   _ui->setupUi(this);
 
   bool darkBackground =

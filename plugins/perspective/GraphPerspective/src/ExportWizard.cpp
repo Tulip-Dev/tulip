@@ -35,6 +35,10 @@ using namespace std;
 
 ExportWizard::ExportWizard(Graph *g, const QString &exportFile, QWidget *parent)
     : QWizard(parent), _ui(new Ui::ExportWizard), _graph(g) {
+#if defined(__APPLE__)
+  setWizardStyle(QWizard::ClassicStyle);
+#endif
+
   _ui->setupUi(this);
   button(QWizard::FinishButton)->setEnabled(false);
 

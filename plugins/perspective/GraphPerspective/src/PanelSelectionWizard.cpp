@@ -33,6 +33,10 @@ using namespace std;
 
 PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel *model, QWidget *parent)
     : QWizard(parent), _ui(new Ui::PanelSelectionWizard), _model(model), _view(nullptr) {
+#if defined(__APPLE__)
+  setWizardStyle(QWizard::ClassicStyle);
+#endif
+
   _ui->setupUi(this);
   connect(this, SIGNAL(currentIdChanged(int)), this, SLOT(pageChanged(int)));
   _ui->graphCombo->setModel(_model);
