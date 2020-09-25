@@ -80,7 +80,7 @@ font: 12px;
 color: black;
 }
 
-* [ clearableLineEdit = &quot;true&quot; ] {
+QLineEdit[clearableLineEdit] {
 border: 1px solid #808080;
 background-color: white;
 color: black;
@@ -258,11 +258,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
 QFrame[ section=&quot;true&quot; ] {
 border-top: 1px solid #D9D9D9;
 padding-top: 20px;
-}
-
-QFrame[ subsection = &quot;true&quot; ] {
-border-top: 1px solid #D9D9D9;
-padding-top: 5px;
 }
 
 QSplitter::handle {

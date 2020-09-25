@@ -474,7 +474,7 @@ sensitive</string>
 #frame_2 {
 border-right: 0px;
 }
-QFrame[ section=&quot;true&quot; ] {
+QFrame[section] {
 border: 1px solid #D9D9D9;
 padding-top: 0px;
 }</string>
