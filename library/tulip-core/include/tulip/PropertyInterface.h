@@ -124,8 +124,8 @@ public:
   virtual PropertyInterface *clonePrototype(Graph *graph, const std::string &name) const = 0;
 
   /**
-   * @brief Gets a string describing the type of the property value (e.g. "graph", "double", "layout",
-   * "string", "integer", "color", "size").
+   * @brief Gets a string describing the type of the property value (e.g. "graph", "double",
+   * "layout", "string", "integer", "color", "size").
    * @return The name of this property's type.
    */
   virtual const std::string &getTypename() const = 0;
