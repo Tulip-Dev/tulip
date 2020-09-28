@@ -42,6 +42,12 @@ public:
   const std::string &getTypename() const override {
     return propertyTypename;
   }
+  const std::string &getCppClassName() const override {
+    static std::string className;
+    if (className.empty())
+      PRETTY_FUNCTION_TO_CLASS_NAME(className);
+    return className;
+  }
 
   /**
    * Reverses all values associated to graph elements,
@@ -72,6 +78,12 @@ public:
   static const std::string propertyTypename;
   const std::string &getTypename() const override {
     return propertyTypename;
+  }
+  const std::string &getCppClassName() const override {
+    static std::string className;
+    if (className.empty())
+      PRETTY_FUNCTION_TO_CLASS_NAME(className);
+    return className;
   }
 };
 } // namespace tlp

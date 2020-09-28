@@ -124,11 +124,18 @@ public:
   virtual PropertyInterface *clonePrototype(Graph *graph, const std::string &name) const = 0;
 
   /**
-   * @brief Gets a string describing the type of the property (e.g. "graph", "double", "layout",
+   * @brief Gets a string describing the type of the property value (e.g. "graph", "double", "layout",
    * "string", "integer", "color", "size").
    * @return The name of this property's type.
    */
   virtual const std::string &getTypename() const = 0;
+
+  /**
+   * @brief Gets a string giving the name of a the PropertyInterface subclass
+   * (e.g "tlp::BooleanProperty", "tlp::DoubleProperty", ...)
+   * @return The subclass name.
+   */
+  virtual const std::string &getCppClassName() const = 0;
 
   /**
    * @brief Gets the name of the property (e.g. viewLayout).

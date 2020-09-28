@@ -24,7 +24,6 @@
 
 #include <list>
 #include <string>
-#include <typeinfo>
 #include <tulip/tulipconf.h>
 
 namespace tlp {

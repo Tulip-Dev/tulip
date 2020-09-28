@@ -98,6 +98,15 @@ inline std::string demangleTlpClassName(const char *className) {
   return demangleClassName(className, true);
 }
 
+// extract a class name from a method signature
+#define PRETTY_FUNCTION_TO_CLASS_NAME(var) {		\
+  std::string func(__PRETTY_FUNCTION__);		\
+  auto e_pos = func.find('(');				\
+  e_pos = func.rfind("::", e_pos);			\
+  auto b_pos = func.rfind(' ', e_pos)  + 1;		\
+  var = func.substr(b_pos, e_pos - b_pos);		\
+}
+
 /**
  * @brief Returns an istream to read from a gzipped file (uses gzstream lib).
  * The stream has to be deleted after use.

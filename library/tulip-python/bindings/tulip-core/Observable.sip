@@ -150,38 +150,12 @@ To attach to an object for receiving events, call its :meth:`tlp.Observable.addO
 %ConvertToSubClassCode
   if (dynamic_cast<tlp::Graph *>(sipCpp)) {
     sipType = sipFindType("tlp::Graph");
-  } else if (dynamic_cast<tlp::BooleanProperty *>(sipCpp)) {
-    sipType = sipFindType("tlp::BooleanProperty");
-  } else if (dynamic_cast<tlp::ColorProperty *>(sipCpp)) {
-    sipType = sipFindType("tlp::ColorProperty");
-  } else if (dynamic_cast<tlp::DoubleProperty *>(sipCpp)) {
-    sipType = sipFindType("tlp::DoubleProperty");
-  } else if (dynamic_cast<tlp::GraphProperty *>(sipCpp)) {
-    sipType = sipFindType("tlp::GraphProperty");
-  } else if (dynamic_cast<tlp::IntegerProperty *>(sipCpp)) {
-    sipType = sipFindType("tlp::IntegerProperty");
-  } else if (dynamic_cast<tlp::LayoutProperty *>(sipCpp)) {
-    sipType = sipFindType("tlp::LayoutProperty");
-  } else if (dynamic_cast<tlp::SizeProperty *>(sipCpp)) {
-    sipType = sipFindType("tlp::SizeProperty");
-  } else if (dynamic_cast<tlp::StringProperty *>(sipCpp)) {
-    sipType = sipFindType("tlp::StringProperty");
-  } else if (dynamic_cast<tlp::BooleanVectorProperty *>(sipCpp)) {
-    sipType = sipFindType("tlp::BooleanVectorProperty");
-  } else if (dynamic_cast<tlp::ColorVectorProperty *>(sipCpp)) {
-    sipType = sipFindType("tlp::ColorVectorProperty");
-  } else if (dynamic_cast<tlp::DoubleVectorProperty *>(sipCpp)) {
-    sipType = sipFindType("tlp::DoubleVectorProperty");
-  } else if (dynamic_cast<tlp::IntegerVectorProperty *>(sipCpp)) {
-    sipType = sipFindType("tlp::IntegerVectorProperty");
-  } else if (dynamic_cast<tlp::CoordVectorProperty *>(sipCpp)) {
-    sipType = sipFindType("tlp::CoordVectorProperty");
-  } else if (dynamic_cast<tlp::SizeVectorProperty *>(sipCpp)) {
-    sipType = sipFindType("tlp::SizeVectorProperty");
-  } else if (dynamic_cast<tlp::StringVectorProperty *>(sipCpp)) {
-    sipType = sipFindType("tlp::StringVectorProperty");
   } else {
-    sipType = NULL;
+    tlp::PropertyInterface *prop = dynamic_cast<tlp::PropertyInterface *>(sipCpp);
+    if (prop)
+      sipType = sipFindType(prop->getCppClassName().c_str());
+    else
+      sipType = NULL;
   }
 %End
 

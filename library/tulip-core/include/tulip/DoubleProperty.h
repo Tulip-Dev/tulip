@@ -48,6 +48,12 @@ public:
   const std::string &getTypename() const override {
     return propertyTypename;
   }
+  const std::string &getCppClassName() const override {
+    static std::string className;
+    if (className.empty())
+      PRETTY_FUNCTION_TO_CLASS_NAME(className);
+    return className;
+  }
 
   void setNodeValue(const node n, tlp::StoredType<double>::ReturnedConstValue v) override;
   void setEdgeValue(const edge e, tlp::StoredType<double>::ReturnedConstValue v) override;
@@ -129,6 +135,12 @@ public:
   static const std::string propertyTypename;
   const std::string &getTypename() const override {
     return propertyTypename;
+  }
+  const std::string &getCppClassName() const override {
+    static std::string className;
+    if (className.empty())
+      PRETTY_FUNCTION_TO_CLASS_NAME(className);
+    return className;
   }
 };
 } // namespace tlp

@@ -42,6 +42,12 @@ public:
   const std::string &getTypename() const override {
     return propertyTypename;
   }
+  const std::string &getCppClassName() const override {
+    static std::string className;
+    if (className.empty())
+      PRETTY_FUNCTION_TO_CLASS_NAME(className);
+    return className;
+  }
 
   int compare(const node n1, const node n2) const override;
   int compare(const edge e1, const edge e2) const override;
@@ -61,6 +67,12 @@ public:
   static const std::string propertyTypename;
   const std::string &getTypename() const override {
     return propertyTypename;
+  }
+  const std::string &getCppClassName() const override {
+    static std::string className;
+    if (className.empty())
+      PRETTY_FUNCTION_TO_CLASS_NAME(className);
+    return className;
   }
 };
 } // namespace tlp
