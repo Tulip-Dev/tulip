@@ -961,7 +961,7 @@ void setAllNodeValue(SIP_PYOBJECT val);
   #else
     PyObject *pName = PyString_FromString("__getitem__");
   #endif
-    sipRes = PyObject_CallMethodObjArgs(pyProp, pName, a0Wrapper);
+    sipRes = PyObject_CallMethodObjArgs(pyProp, pName, a0Wrapper, NULL);
     Py_XDECREF(pName);
     Py_XDECREF(pyProp);
   } else {
@@ -979,7 +979,7 @@ void setAllNodeValue(SIP_PYOBJECT val);
   #else
     PyObject *pName = PyString_FromString("__getitem__");
   #endif
-    sipRes = PyObject_CallMethodObjArgs(pyProp, pName, a0Wrapper);
+    sipRes = PyObject_CallMethodObjArgs(pyProp, pName, a0Wrapper, NULL);
     Py_XDECREF(pName);
     Py_XDECREF(pyProp);
   } else {
