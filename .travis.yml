@@ -176,11 +176,9 @@ jobs:
         - xvfb
       addons:
         apt:
-          # we need GCC 9.x from ppa:ubuntu-toolchain-r/test
           # Python 3.8.x from ppa:deadsnakes/ppa
           # and Qt 5.14.x from http://archive.neon.kde.org/user/
           sources:
-            - sourceline: "ppa:ubuntu-toolchain-r/test"
             - sourceline: "ppa:deadsnakes/ppa"
             - sourceline: 'deb http://archive.neon.kde.org/user/ focal main'
               key_url: 'http://archive.neon.kde.org/public.key'
@@ -210,8 +208,6 @@ jobs:
       env:
         # use Python 3.8
         - PYTHON_EXECUTABLE=/usr/bin/python3.8
-        # use GCC 9
-        - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
       script:
         # create build directory
         - mkdir build && cd build
