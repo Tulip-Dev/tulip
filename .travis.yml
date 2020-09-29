@@ -69,7 +69,7 @@ jobs:
       # at the end of the commit message
       if: commit_message !~ /\[(macos|macports|homebrew|windows)-only\]$/
       os: linux
-      dist: bionic
+      dist: focal
       compiler: gcc
       cache: ccache
       addons:
@@ -169,7 +169,7 @@ jobs:
       # at the end of the commit message
       if: commit_message !~ /\[(macos|macports|homebrew|windows)-only\]$/
       os: linux
-      dist: bionic
+      dist: focal
       compiler: gcc
       cache: ccache
       services:
@@ -182,7 +182,7 @@ jobs:
           sources:
             - sourceline: "ppa:ubuntu-toolchain-r/test"
             - sourceline: "ppa:deadsnakes/ppa"
-            - sourceline: 'deb http://archive.neon.kde.org/user/ bionic main'
+            - sourceline: 'deb http://archive.neon.kde.org/user/ focal main'
               key_url: 'http://archive.neon.kde.org/public.key'
           # install Tulip build dependencies
           packages:
