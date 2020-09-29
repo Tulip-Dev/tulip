@@ -28,6 +28,7 @@
 #include <tulip/Observable.h>
 //#include <tulip/Node.h>
 #include <tulip/Edge.h>
+#include <tulip/TlpTools.h>
 
 namespace tlp {
 
@@ -136,6 +137,20 @@ public:
    * @return The subclass name.
    */
   virtual const std::string &getCppClassName() const = 0;
+
+///@cond DOXYGEN_HIDDEN
+  // the following macro gives a generic definition of getCppClassName()
+  // it is used when declaring PropertyInterface subclasses
+#define DEFINE_GET_CPP_CLASS_NAME					\
+  const std::string &getCppClassName() const override {			\
+    static std::string className;					\
+    if (className.empty()) {						\
+      std::string dcn(demangleClassName(typeid(this).name(), false));	\
+      className = dcn.substr(0, dcn.find(' '));				\
+    }									\
+    return className;							\
+  }
+///@endcond
 
   /**
    * @brief Gets the name of the property (e.g. viewLayout).
