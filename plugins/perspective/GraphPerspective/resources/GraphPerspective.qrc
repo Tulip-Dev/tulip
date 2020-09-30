@@ -17,9 +17,7 @@
         <file>icons/16/edit-undo.png</file>
         <file>icons/16/favorite.png</file>
         <file>icons/16/favorite-empty.png</file>
-        <file>icons/16/favorite-empty-hover.png</file>
         <file>icons/16/favorite-hover.png</file>
-        <file>icons/16/find-plugins.png</file>
         <file>icons/16/full-screen.png</file>
         <file>icons/16/group.png</file>
         <file>icons/16/hierarchy_add.png</file>
@@ -60,6 +58,5 @@
         <file>ui/panel_button_hover.png</file>
         <file>ui/panel_button_pressed.png</file>
         <file>icons/32/desktop.png</file>
-        <file>icons/32/magnifying-glass.png</file>
     </qresource>
 </RCC>

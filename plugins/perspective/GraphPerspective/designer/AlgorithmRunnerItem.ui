@@ -166,12 +166,18 @@ QCheckBox::indicator:unchecked {
 image: url(:/tulip/graphperspective/icons/16/favorite-empty.png);
 }
 QCheckBox::indicator:unchecked:hover {
+image: url(:/tulip/graphperspective/icons/16/favorite-hover.png);
+}
+QCheckBox::indicator:unchecked:pressed {
 image: url(:/tulip/graphperspective/icons/16/favorite.png);
 }
 QCheckBox::indicator:checked {
 image: url(:/tulip/graphperspective/icons/16/favorite.png);
 }
 QCheckBox::indicator:checked:hover {
+image: url(:/tulip/graphperspective/icons/16/favorite-hover.png);
+}
+QCheckBox::indicator:checked:pressed {
 image: url(:/tulip/graphperspective/icons/16/favorite-empty.png);
 }</string>
         </property>
