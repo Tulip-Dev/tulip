@@ -246,7 +246,7 @@ color scale</string>
           <string>Preview</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignCenter</set>
+          <set>Qt::AlignHCenter</set>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
@@ -423,7 +423,7 @@ color scale</string>
           <string>Preview</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignCenter</set>
+          <set>Qt::AlignHCenter</set>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
           <item>

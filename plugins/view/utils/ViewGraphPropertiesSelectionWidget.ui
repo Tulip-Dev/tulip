@@ -32,7 +32,7 @@
       <string>Pick data location from graph: </string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignHCenter</set>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <property name="spacing">
@@ -92,7 +92,7 @@
       <string>Select graph properties: </string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignHCenter</set>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
