@@ -74,14 +74,11 @@ jobs:
       cache: ccache
       addons:
         apt:
-          # we need GCC 9.x from ppa:ubuntu-toolchain-r/test
           # Python 3.8.x from ppa:deadsnakes/ppa
           sources:
-            - sourceline: "ppa:ubuntu-toolchain-r/test"
             - sourceline: "ppa:deadsnakes/ppa"
           # install Tulip build dependencies
           packages:
-            - g++-9
             - cmake
             - ccache
             - ninja-build
@@ -90,14 +87,9 @@ jobs:
             - binutils-dev
             - python3.8
             - libpython3.8-dev
-      before_install:
-        # force the use of GCC 9
-        - eval "${MATRIX_EVAL}"
       env:
         # use Python 3.8
         - PYTHON_EXECUTABLE=/usr/bin/python3.8
-        # use GCC 9
-        - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
       script:
         # create build directory
         - mkdir build && cd build
@@ -184,7 +176,6 @@ jobs:
               key_url: 'http://archive.neon.kde.org/public.key'
           # install Tulip build dependencies
           packages:
-            - g++-9
             - cmake
             - ccache
             - ninja-build
@@ -202,9 +193,6 @@ jobs:
             - libpng-dev
             - libjpeg-dev
             - libfreetype6-dev
-      install:
-        # force the use of GCC 9
-        - eval "${MATRIX_EVAL}"
       env:
         # use Python 3.8
         - PYTHON_EXECUTABLE=/usr/bin/python3.8
@@ -288,7 +276,7 @@ jobs:
         # configure Tulip core build using cmake
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DTRAVIS_BUILD_THIRDPARTY_ONLY=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
-        - ninja -j4 || travis_terminate 1
+        - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip thirdparty build on Mac OS (MacPorts)
@@ -323,7 +311,7 @@ jobs:
         # configure Tulip thirdparty build using cmake
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/opt/local/bin/clang-mp-10 -DCMAKE_CXX_COMPILER=/opt/local/bin/clang++-mp-10 -DTRAVIS_BUILD_THIRDPARTY_ONLY=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
-        - ninja -j4 || travis_terminate 1
+        - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # legacy Tulip thirdparty build on Mac OS (Homebrew)
@@ -358,7 +346,7 @@ jobs:
         # configure Tulip thirdparty build using cmake
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DTRAVIS_BUILD_THIRDPARTY_ONLY=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
-        - ninja -j4 || travis_terminate 1
+        - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip thirdparty build on Mac OS (Homebrew)
@@ -393,7 +381,7 @@ jobs:
         # configure Tulip thirdparty build using cmake
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DTRAVIS_BUILD_THIRDPARTY_ONLY=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
-        - ninja -j4 || travis_terminate 1
+        - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
 
   #==============================================================================================================================================================
     # Tulip core build stage on Mac OS
@@ -430,8 +418,8 @@ jobs:
         # configure Tulip core build using cmake
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
-        - ninja -j4 || travis_terminate 1
-        - ninja -j4 install || travis_terminate 1
+        - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
+        - ninja -j$(getconf _NPROCESSORS_ONLN) install || travis_terminate 1
         # run Tulip unit tests
         - ninja runTests
 
@@ -470,8 +458,8 @@ jobs:
         # configure Tulip core build using cmake
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/opt/local/bin/clang-mp-10 -DCMAKE_CXX_COMPILER=/opt/local/bin/clang++-mp-10 -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
-        - ninja -j4 || travis_terminate 1
-        - ninja -j4 install || travis_terminate 1
+        - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
+        - ninja -j$(getconf _NPROCESSORS_ONLN) install || travis_terminate 1
         # run Tulip unit tests
         - ninja runTests
 
@@ -510,8 +498,8 @@ jobs:
         # configure Tulip core build using cmake
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
-        - ninja -j4 || travis_terminate 1
-        - ninja -j4 install || travis_terminate 1
+        - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
+        - ninja -j$(getconf _NPROCESSORS_ONLN) install || travis_terminate 1
         # run Tulip unit tests
         - ninja runTests
 
@@ -550,8 +538,8 @@ jobs:
         # configure Tulip core build using cmake
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
-        - ninja -j4 || travis_terminate 1
-        - ninja -j4 install || travis_terminate 1
+        - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
+        - ninja -j$(getconf _NPROCESSORS_ONLN) install || travis_terminate 1
         # run Tulip unit tests
         - ninja runTests
 
@@ -599,8 +587,8 @@ jobs:
         # configure Tulip complete build using cmake
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DGLEW_SHARED_LIBRARY_RELEASE=/opt/local/lib/libGLEW.dylib || travis_terminate 1
         # compile Tulip using ninja for faster builds
-        - ninja -j4 || travis_terminate 1
-        - ninja -j4 install || travis_terminate 1
+        - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
+        - ninja -j$(getconf _NPROCESSORS_ONLN) install || travis_terminate 1
         # run Tulip unit tests
         - ninja runTests || travis_terminate 1
 
@@ -648,8 +636,8 @@ jobs:
         # configure Tulip complete build using cmake
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/opt/local/bin/clang-mp-10 -DCMAKE_CXX_COMPILER=/opt/local/bin/clang++-mp-10 -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DGLEW_SHARED_LIBRARY_RELEASE=/opt/local/lib/libGLEW.dylib
         # compile Tulip using ninja for faster builds
-        - ninja -j4
-        - ninja -j4 install
+        - ninja -j$(getconf _NPROCESSORS_ONLN)
+        - ninja -j$(getconf _NPROCESSORS_ONLN) install
         # run Tulip unit tests
         - ninja runTests
 
@@ -701,8 +689,8 @@ jobs:
         # configure Tulip build using cmake
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DCMAKE_PREFIX_PATH=/usr/local/opt/qt -DSPHINX_EXECUTABLE=$HOME/Library/Python/2.7/bin/sphinx-build -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
-        - ninja -j4 || travis_terminate 1
-        - ninja -j4 install || travis_terminate 1
+        - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
+        - ninja -j$(getconf _NPROCESSORS_ONLN) install || travis_terminate 1
         # run Tulip unit tests
         - ninja runTests
 
@@ -755,7 +743,7 @@ jobs:
         # configure Tulip build using cmake
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DCMAKE_PREFIX_PATH=/usr/local/opt/qt -DSPHINX_EXECUTABLE=$HOME/Library/Python/2.7/bin/sphinx-build -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
-        - ninja -j4 || travis_terminate 1
-        - ninja -j4 install || travis_terminate 1
+        - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
+        - ninja -j$(getconf _NPROCESSORS_ONLN) install || travis_terminate 1
         # run Tulip unit tests
         - ninja runTests
