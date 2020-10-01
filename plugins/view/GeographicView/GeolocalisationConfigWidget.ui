@@ -37,7 +37,7 @@
    <item>
     <widget class="QLabel" name="label_6">
      <property name="text">
-      <string>&lt;html&gt;&lt;body&gt;&lt;p&gt;Use the &lt;a href=&quot;https://nominatim.openstreetmap.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Nominatim&lt;/span&gt;&lt;/a&gt; geocoding service to get the nodes locations corresponding to the values stored in the&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;body&gt;&lt;p&gt;Use the &lt;a href=&quot;https://nominatim.openstreetmap.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0d47f1;&quot;&gt;Nominatim&lt;/span&gt;&lt;/a&gt; geocoding service to get the nodes locations corresponding to the values stored in the&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>

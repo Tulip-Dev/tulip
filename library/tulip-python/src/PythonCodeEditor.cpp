@@ -934,7 +934,7 @@ void PythonCodeEditor::highlightSelection() {
 void PythonCodeEditor::createParenSelection(int pos) {
   QList<QTextEdit::ExtraSelection> selections = extraSelections();
   QTextEdit::ExtraSelection selection;
-  selection.format.setForeground(Qt::red);
+  selection.format.setForeground(QColor("#FFAB00"));
   QTextCursor cursor = textCursor();
   cursor.setPosition(pos);
   cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
@@ -951,7 +951,7 @@ void PythonCodeEditor::highlightErrors() {
     QTextBlock block = document()->findBlockByNumber(_currentErrorLines.at(i));
     selection.format = block.charFormat();
     selection.format.setUnderlineStyle(QTextCharFormat::WaveUnderline);
-    selection.format.setUnderlineColor(Qt::red);
+    selection.format.setUnderlineColor(QColor("#D51A1A"));
     selection.cursor = QTextCursor(block);
     selection.cursor.select(QTextCursor::LineUnderCursor);
     selections.append(selection);

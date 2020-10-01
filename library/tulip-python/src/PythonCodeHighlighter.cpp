@@ -33,16 +33,16 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent, bool /*darkB
 
   HighlightingRule rule;
 
-  _commentFormat.setForeground(QColor("#34CE51"));
+  _commentFormat.setForeground(QColor("#388E3C"));
   _functionFormat.setFontWeight(QFont::Bold);
-  _functionFormat.setForeground(QColor("#0078F0"));
-  _tlpApiFormat.setForeground(QColor("#7E7E00"));
+  _functionFormat.setForeground(QColor("#0D47F1"));
+  _tlpApiFormat.setForeground(QColor("#E65100"));
   _classFormat.setFontWeight(QFont::Bold);
-  _classFormat.setForeground(QColor(Qt::blue).lighter(150));
+  _classFormat.setForeground(QColor("#7E57C2"));
   _qtApiFormat.setForeground(QColor("#00D09A"));
   _keywordFormat.setForeground(QColor("#00A8FF"));
-  _numberFormat.setForeground(QColor(Qt::darkCyan));
-  _quotationFormat.setForeground(QColor(Qt::darkMagenta).lighter(200));
+  _numberFormat.setForeground(QColor("#00B8D4"));
+  _quotationFormat.setForeground(QColor("#E040FB"));
 
   rule.pattern = QRegExp("def [A-Za-z_][A-Za-z0-9_]+(?=\\()");
   rule.format = _functionFormat;
