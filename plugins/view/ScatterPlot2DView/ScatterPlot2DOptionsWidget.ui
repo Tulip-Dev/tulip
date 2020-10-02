@@ -133,14 +133,18 @@
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Scatterplot matrix cells background color</string>
-     </property>
+    <widget class="QFrame" name="frame">
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <property name="bottomMargin">
        <number>0</number>
       </property>
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Scatterplot matrix cells background color</string>
+        </property>
+       </widget>
+      </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
@@ -264,12 +268,9 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_2">
+    <widget class="QFrame" name="frame_2">
      <property name="toolTip">
       <string>adapt the size rendering in the plots depending on the initial node size</string>
-     </property>
-     <property name="title">
-      <string>Size mapping</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
@@ -284,48 +285,15 @@
       <property name="bottomMargin">
        <number>0</number>
       </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Minimum size:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QSpinBox" name="minSizeSpinBox">
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>1000</number>
-        </property>
-        <property name="value">
-         <number>20</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
+      <item row="2" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
          <string>Maximum size:</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="QSpinBox" name="maxSizeSpinBox">
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>1000</number>
-        </property>
-        <property name="value">
-         <number>30</number>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <spacer name="horizontalSpacer_4">
+      <item row="2" column="1">
+       <spacer name="horizontalSpacer_5">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -338,7 +306,7 @@
        </spacer>
       </item>
       <item row="1" column="1">
-       <spacer name="horizontalSpacer_5">
+       <spacer name="horizontalSpacer_4">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -349,6 +317,46 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="1" column="2">
+       <widget class="QSpinBox" name="minSizeSpinBox">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>1000</number>
+        </property>
+        <property name="value">
+         <number>20</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QSpinBox" name="maxSizeSpinBox">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>1000</number>
+        </property>
+        <property name="value">
+         <number>30</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Minimum size:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Size mapping</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -398,14 +406,18 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="xAxisGroupBox">
-     <property name="title">
-      <string>X axis</string>
-     </property>
+    <widget class="QFrame" name="xAxisFrame">
      <layout class="QVBoxLayout" name="verticalLayout_5">
       <property name="bottomMargin">
        <number>0</number>
       </property>
+      <item>
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>X axis</string>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="QCheckBox" name="useXScaleCheckBox">
         <property name="toolTip">
@@ -482,14 +494,18 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="yAxisGroupBox">
-     <property name="title">
-      <string>Y axis</string>
-     </property>
+    <widget class="QFrame" name="yAxisFrame">
      <layout class="QVBoxLayout" name="verticalLayout_6">
       <property name="bottomMargin">
        <number>0</number>
       </property>
+      <item>
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Y axis</string>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="QCheckBox" name="useYScaleCheckBox">
         <property name="toolTip">

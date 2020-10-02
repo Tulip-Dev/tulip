@@ -69,11 +69,11 @@ void ParallelCoordsDrawConfigWidget::setAxisHeight(const unsigned int aHeight) {
 }
 
 bool ParallelCoordsDrawConfigWidget::drawPointOnAxis() const {
-  return _ui->gBoxAxisPoints->isChecked();
+  return _ui->cBoxAxisPoints->isChecked();
 }
 
 string ParallelCoordsDrawConfigWidget::getLinesTextureFilename() const {
-  if (_ui->gBoxLineTexture->isChecked()) {
+  if (_ui->cBoxLineTexture->isChecked()) {
     if (_ui->defaultTexture->isChecked()) {
       return DEFAULT_TEXTURE_FILE;
     } else {
@@ -87,7 +87,7 @@ string ParallelCoordsDrawConfigWidget::getLinesTextureFilename() const {
 void ParallelCoordsDrawConfigWidget::setLinesTextureFilename(
     const std::string &linesTextureFileName) {
   if (!linesTextureFileName.empty()) {
-    _ui->gBoxLineTexture->setChecked(true);
+    _ui->cBoxLineTexture->setChecked(true);
 
     if (linesTextureFileName == DEFAULT_TEXTURE_FILE) {
       _ui->defaultTexture->setChecked(true);
@@ -96,7 +96,7 @@ void ParallelCoordsDrawConfigWidget::setLinesTextureFilename(
       _ui->userTextureFile->setText(tlpStringToQString(linesTextureFileName));
     }
   } else {
-    _ui->gBoxLineTexture->setChecked(false);
+    _ui->cBoxLineTexture->setChecked(false);
   }
 }
 
@@ -171,7 +171,7 @@ Color ParallelCoordsDrawConfigWidget::getBackgroundColor() const {
 }
 
 void ParallelCoordsDrawConfigWidget::setDrawPointOnAxis(const bool drawPointOnAxis) {
-  _ui->gBoxAxisPoints->setChecked(drawPointOnAxis);
+  _ui->cBoxAxisPoints->setChecked(drawPointOnAxis);
 }
 
 unsigned int ParallelCoordsDrawConfigWidget::getUnhighlightedEltsColorsAlphaValue() const {

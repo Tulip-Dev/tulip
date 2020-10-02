@@ -26,7 +26,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -229,7 +229,7 @@ color scale</string>
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_2">
+        <widget class="QFrame" name="frame_2">
          <property name="minimumSize">
           <size>
            <width>105</width>
@@ -242,13 +242,17 @@ color scale</string>
            <height>16777215</height>
           </size>
          </property>
-         <property name="title">
-          <string>Preview</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignHCenter</set>
-         </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>Preview</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
@@ -406,7 +410,7 @@ color scale</string>
         </layout>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QFrame" name="frame_1">
          <property name="minimumSize">
           <size>
            <width>105</width>
@@ -419,13 +423,17 @@ color scale</string>
            <height>16777215</height>
           </size>
          </property>
-         <property name="title">
-          <string>Preview</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignHCenter</set>
-         </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
+          <item>
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Preview</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>

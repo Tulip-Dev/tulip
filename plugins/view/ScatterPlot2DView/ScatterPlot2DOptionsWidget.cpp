@@ -60,8 +60,8 @@ ScatterPlot2DOptionsWidget::~ScatterPlot2DOptionsWidget() {
 }
 
 void ScatterPlot2DOptionsWidget::setWidgetEnabled(const bool enabled) {
-  _ui->xAxisGroupBox->setEnabled(enabled);
-  _ui->yAxisGroupBox->setEnabled(enabled);
+  _ui->xAxisFrame->setEnabled(enabled);
+  _ui->yAxisFrame->setEnabled(enabled);
 }
 
 Color ScatterPlot2DOptionsWidget::getMinusOneColor() const {

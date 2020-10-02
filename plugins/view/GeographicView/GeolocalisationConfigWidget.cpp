@@ -113,7 +113,7 @@ void GeolocalisationConfigWidget::setEdgesPathsPropertyName(
       _ui->edgesPathsPropertyCB->findText(tlpStringToQString(edgesPathsPropertyName));
 
   if (edgesPathsPropertyIndex != -1) {
-    _ui->edgesControlPointsGB->setChecked(true);
+    _ui->edgesPathsCB->setChecked(true);
     _ui->edgesPathsPropertyCB->setCurrentIndex(edgesPathsPropertyIndex);
   }
 }
@@ -158,7 +158,7 @@ void GeolocalisationConfigWidget::enableDisableComboBoxes() {
 }
 
 bool GeolocalisationConfigWidget::useEdgesPaths() const {
-  return _ui->edgesControlPointsGB->isChecked();
+  return _ui->edgesPathsCB->isChecked();
 }
 
 std::string GeolocalisationConfigWidget::getEdgesPathsPropertyName() const {

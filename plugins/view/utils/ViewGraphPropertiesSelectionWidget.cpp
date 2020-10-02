@@ -93,8 +93,7 @@ vector<string> ViewGraphPropertiesSelectionWidget::getSelectedGraphProperties() 
 }
 
 void ViewGraphPropertiesSelectionWidget::setWidgetEnabled(const bool enabled) {
-  _ui->groupBox->setEnabled(enabled);
-  _ui->groupBox2->setEnabled(enabled);
+  setEnabled(enabled);
 }
 
 void ViewGraphPropertiesSelectionWidget::setSelectedProperties(vector<string> selectedProperties) {

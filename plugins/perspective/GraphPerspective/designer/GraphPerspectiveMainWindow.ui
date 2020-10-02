@@ -76,7 +76,7 @@ color: black;
 font: 12px;
 }
 
-#ElementInformationWidget, #ElementInformationWidget QPushButton, #PanelSelectionWizard QListView, QComboBox QAbstractItemView, QComboBox:item, QCheckBox, QGroupBox:enabled, QHeaderView::section, QLabel, QListWidget, QRadioButton, QTabBar::tab, QTableWidget, QTableView, QTextBrowser, QToolButton, QTreeView {
+#ElementInformationWidget, #ElementInformationWidget QPushButton, #PanelSelectionWizard QListView, QComboBox QAbstractItemView:enabled, QComboBox:item:enabled, QCheckBox:enabled, QGroupBox:enabled, QHeaderView::section:enabled, QLabel:enabled, QListWidget:enabled, QRadioButton:enabled, QTabBar::tab:enabled, QTableWidget:enabled, QTableView:enabled, QTextBrowser:enabled, QToolButton:enabled, QTreeView:enabled {
 color: black;
 }
 
