@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>381</width>
-    <height>565</height>
+    <width>385</width>
+    <height>439</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -56,6 +56,9 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
       <item>
        <widget class="QCheckBox" name="uniformQuantificationCB">
         <property name="toolTip">
@@ -172,11 +175,21 @@
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="xAxisGroupBox">
-        <property name="title">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
          <string>X axis</string>
         </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="xAxisFrame">
         <layout class="QVBoxLayout" name="verticalLayout_3">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
          <property name="bottomMargin">
           <number>0</number>
          </property>
@@ -305,11 +318,21 @@
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="yAxisGroupBox">
-        <property name="title">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
          <string>Y axis</string>
         </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="yAxisFrame">
         <layout class="QVBoxLayout" name="verticalLayout_5">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
          <property name="bottomMargin">
           <number>0</number>
          </property>

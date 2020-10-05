@@ -47,15 +47,15 @@ QString HistoStatsConfigWidget::getKernelFunctionName() const {
 }
 
 bool HistoStatsConfigWidget::densityEstimation() const {
-  return _ui->densityEstimationGB->isChecked();
+  return _ui->densityEstimationCB->isChecked();
 }
 
 bool HistoStatsConfigWidget::displayMeanAndStandardDeviation() const {
-  return _ui->displayMeanAndSdGB->isChecked();
+  return _ui->displayMeanAndSdCB->isChecked();
 }
 
 bool HistoStatsConfigWidget::nodesSelection() const {
-  return _ui->nodesSelectionGB->isChecked();
+  return _ui->nodesSelectionCB->isChecked();
 }
 
 double HistoStatsConfigWidget::getSelectionLowerBound() const {

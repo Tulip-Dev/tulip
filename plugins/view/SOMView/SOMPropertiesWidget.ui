@@ -7,30 +7,46 @@
     <x>0</x>
     <y>0</y>
     <width>391</width>
-    <height>530</height>
+    <height>471</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <item>
-    <widget class="QGroupBox" name="GridRepresentationGrouBox">
+    <widget class="QLabel" name="label_9">
+     <property name="text">
+      <string>Grid</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="GridRepresentationGrouBox">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="title">
-      <string>Grid</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>9</number>
+      </property>
+      <property name="topMargin">
        <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>9</number>
+      </property>
+      <property name="bottomMargin">
+       <number>9</number>
       </property>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -117,39 +133,39 @@
         </property>
        </widget>
       </item>
-      <item>
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
      </layout>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="learningRatePropertiesGroupBox">
+    <widget class="QLabel" name="label_10">
+     <property name="text">
+      <string>Learning rate</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="learningRatePropertiesFrame">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="title">
-      <string>Learning rate</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>9</number>
+      </property>
+      <property name="topMargin">
        <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>9</number>
+      </property>
+      <property name="bottomMargin">
+       <number>9</number>
       </property>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -175,39 +191,39 @@
         </item>
        </layout>
       </item>
-      <item>
-       <spacer name="verticalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
      </layout>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="diffusionRatePropertiesGroupBox">
+    <widget class="QLabel" name="label_11">
+     <property name="text">
+      <string>Diffusion rate</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="diffusionRatePropertiesFrame">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="title">
-      <string>Diffusion rate</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_4">
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>9</number>
+      </property>
+      <property name="topMargin">
        <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>9</number>
+      </property>
+      <property name="bottomMargin">
+       <number>9</number>
       </property>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -276,61 +292,36 @@
         </item>
        </layout>
       </item>
-      <item>
-       <spacer name="verticalSpacer_6">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
      </layout>
     </widget>
    </item>
    <item>
-    <spacer name="verticalSpacer_3">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+    <widget class="QLabel" name="label_12">
+     <property name="text">
+      <string>Representation</string>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
+    </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="representationGroupBox">
+    <widget class="QFrame" name="representationFrame">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="title">
-      <string>Representation</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_5">
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
       <property name="topMargin">
-       <number>5</number>
+       <number>0</number>
       </property>
       <property name="rightMargin">
        <number>0</number>
       </property>
       <property name="bottomMargin">
-       <number>0</number>
+       <number>9</number>
       </property>
       <item>
        <widget class="QCheckBox" name="autoMappingCheckBox">
@@ -353,48 +344,36 @@
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="nodeSizeMappingGroupBox">
-        <property name="title">
-         <string>Node Size Mapping</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+       <widget class="QLabel" name="label_14">
+        <property name="text">
+         <string>Node size Mapping</string>
         </property>
        </widget>
       </item>
       <item>
-       <spacer name="verticalSpacer_4">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
+       <widget class="QFrame" name="nodeSizeMappingFrame"/>
       </item>
      </layout>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="animationGroupBox">
-     <property name="title">
+    <widget class="QLabel" name="label_13">
+     <property name="text">
       <string>Animation</string>
      </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="animationFrame">
      <layout class="QVBoxLayout" name="verticalLayout_6">
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
       <property name="topMargin">
-       <number>5</number>
+       <number>0</number>
       </property>
       <property name="rightMargin">
-       <number>0</number>
+       <number>9</number>
       </property>
       <property name="bottomMargin">
        <number>0</number>
@@ -430,56 +409,26 @@
         </item>
        </layout>
       </item>
-      <item>
-       <spacer name="verticalSpacer_8">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <spacer name="verticalSpacer_5">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer_5">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>animationCheckBox</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>SOMPropertiesWidget</receiver>
-   <slot>animationCheckBoxClicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>171</x>
-     <y>475</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>171</x>
-     <y>264</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>animationCheckBoxClicked()</slot>
  </slots>

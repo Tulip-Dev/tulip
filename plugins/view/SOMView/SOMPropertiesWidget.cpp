@@ -45,10 +45,10 @@ SOMPropertiesWidget::SOMPropertiesWidget(SOMView *view, QWidget *parent)
 
   defaultScale->addObserver(this);
 
-  QVBoxLayout *sizeMappingLayout = new QVBoxLayout(_ui->nodeSizeMappingGroupBox);
+  QVBoxLayout *sizeMappingLayout = new QVBoxLayout(_ui->nodeSizeMappingFrame);
   sizeMappingLayout->setMargin(0);
   sizeMappingLayout->setSpacing(0);
-  sizeMappingLayout->setContentsMargins(0, 5, 0, 0);
+  sizeMappingLayout->setContentsMargins(6, 0, 0, 0);
   sizeMappingButtonGroup = new QButtonGroup();
   noNodeSizeMappingRadioButton = new QRadioButton("No size mapping");
   sizeMappingButtonGroup->addButton(noNodeSizeMappingRadioButton);

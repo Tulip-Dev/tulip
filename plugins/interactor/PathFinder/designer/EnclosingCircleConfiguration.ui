@@ -7,13 +7,16 @@
     <x>0</x>
     <y>0</y>
     <width>466</width>
-    <height>200</height>
+    <height>148</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QLabel" name="label">
      <property name="sizePolicy">
@@ -58,11 +61,24 @@
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
+    <widget class="QLabel" name="label_3">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
       <string>Alpha channel</string>
      </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frame">
      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
       <item>
        <widget class="QSlider" name="alphaSlider">
         <property name="maximum">
@@ -111,22 +127,5 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>alphaSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>label_2</receiver>
-   <slot>setNum(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>171</x>
-     <y>135</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>355</x>
-     <y>135</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
