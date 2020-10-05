@@ -20,7 +20,6 @@
 #define RECTANGLEPACKING_H
 
 #include <vector>
-#include "Number.h"
 #include "RectangleRelativePositionList.h"
 
 /**

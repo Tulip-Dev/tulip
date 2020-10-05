@@ -40,9 +40,9 @@ RectanglePacking::~RectanglePacking() {
 
 void RectanglePacking::optimalPositionOfNewRectangle(vector<Rectangle<float>>::iterator itNewRect) {
   float ratio;
-  Number bestRatio(Number::infini);
+  float bestRatio = std::numeric_limits<double>::infinity();
   float perimeterOfBoundingRectangle;
-  Number bestPerimeterOfBoundingRectangle(Number::infini);
+  float bestPerimeterOfBoundingRectangle = std::numeric_limits<double>::infinity();
   int positionInFirstSequence, positionInSecondSequence;
   list<RectangleRelativePosition>::iterator itPositionInFirstSequence;
   list<RectangleRelativePosition>::iterator itBestPositionInFirstSequence;
@@ -69,8 +69,8 @@ void RectanglePacking::optimalPositionOfNewRectangle(vector<Rectangle<float>>::i
       if (((ratio <= 1.2f) && ((bestRatio > 1.2f) || (bestPerimeterOfBoundingRectangle >
                                                       perimeterOfBoundingRectangle))) ||
           ((1.2f < ratio) && (bestRatio > ratio))) {
-        bestRatio.value = ratio;
-        bestPerimeterOfBoundingRectangle.value = perimeterOfBoundingRectangle;
+        bestRatio = ratio;
+        bestPerimeterOfBoundingRectangle = perimeterOfBoundingRectangle;
         bestPlaceInFirstSequence = positionInFirstSequence;
         bestPlaceInSecondSequence = positionInSecondSequence;
         bestWidthOfBoundingBox = maxWidthOfBoundingBox;
@@ -535,9 +535,9 @@ void RectanglePacking::continueColumn(vector<Rectangle<float>>::iterator itr, fl
 void RectanglePacking::optimalPositionOfNewRectangleLimPos(
     vector<Rectangle<float>>::iterator itNewRect, int numberTestedPositions) {
   float ratio;
-  Number bestRatio(Number::infini);
+  float bestRatio = std::numeric_limits<double>::infinity();
   float perimeterOfBoundingRectangle;
-  Number bestPerimeterOfBoundingRectangle(Number::infini);
+  float bestPerimeterOfBoundingRectangle = std::numeric_limits<double>::infinity();
   int positionInFirstSequence, positionInSecondSequence;
   list<RectangleRelativePosition>::iterator itPositionInFirstSequence;
   list<RectangleRelativePosition>::iterator itBestPositionInFirstSequence;
@@ -585,8 +585,8 @@ void RectanglePacking::optimalPositionOfNewRectangleLimPos(
         if (((ratio <= 1.2f) && ((bestRatio > 1.2f) || (bestPerimeterOfBoundingRectangle >
                                                         perimeterOfBoundingRectangle))) ||
             ((1.2f < ratio) && (bestRatio > ratio))) {
-          bestRatio.value = ratio;
-          bestPerimeterOfBoundingRectangle.value = perimeterOfBoundingRectangle;
+          bestRatio = ratio;
+          bestPerimeterOfBoundingRectangle = perimeterOfBoundingRectangle;
           bestPlaceInFirstSequence = positionInFirstSequence;
           bestPlaceInSecondSequence = positionInSecondSequence;
           bestWidthOfBoundingBox = maxWidthOfBoundingBox;

@@ -32,7 +32,6 @@ TARGET_LINK_LIBRARIES(MixedModel-${TulipVersion} ${LayoutUtilsLibraryName} ${Lib
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(ConnectedComponentPacking_SRCS 
   ConnectedComponentPacking.cpp
-  Number.cpp
   RectanglePacking.cpp
   rectanglePackingFonctions.cpp
   RectangleRelativePositionList.cpp
