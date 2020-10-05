@@ -67,6 +67,11 @@ struct OpenMPDefaultOptions {
       num_threads = atoi(num_threads_ptr);
     omp_set_num_threads(num_threads);
 
+#if _OPENMP > 200805
+    // supported since OpenMP 3.0
+    omp_set_max_active_levels(2);
+#else
+#if _OPENMP < 201811
 #ifdef _LINUX
     // OMP_NESTED=TRUE
     // must be used with care (especially on MacOSX)
@@ -76,11 +81,6 @@ struct OpenMPDefaultOptions {
 #else
     bool nested = false;
 #endif
-#if _OPENMP > 200805
-    // supported since OpenMP 3.0
-    omp_set_max_active_levels(2);
-#else
-#if _OPENMP < 201811
     // deprecated since OpenMP 5.0
     auto nested_ptr = getenv("OMP_NESTED");
     if (nested_ptr)
