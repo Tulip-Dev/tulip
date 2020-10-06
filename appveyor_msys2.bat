@@ -22,7 +22,12 @@ rem first manually install the new MSYS2 keyring from repo.msys2.org
 rem see https://www.msys2.org/news/#2020-06-29-new-packagers
 rem if repo.msys2.org is not online, use a mirror site
 rem see https://github.com/msys2/MINGW-packages/issues/7084
-bash -lc "pacman --noconfirm -U http://repo.msys2.org/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz; if [ \"$?\" != \"0\" ]; then pacman --noconfirm -U https://mirror.selfnet.de/msys2/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz; echo 'Server = https://mirror.selfnet.de/mirrors/msys2/mingw/x86_64/' > /etc/pacman.d/mirrorlist.mingw64; echo 'Server = https://mirror.selfnet.de/mirrors/msys2/mingw/i686/' > /etc/pacman.d/mirrorlist.mingw32; echo 'Server = https://mirror.selfnet.de/mirrors/msys2/msys/$arch/' > /etc/pacman.d/mirrorlist.msys; fi"
+bash -lc "pacman --noconfirm -U http://repo.msys2.org/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz; if [ \"$?\" != \"0\" ]; then touch use_mirror_site; fi"
+
+rem configure mirror site if needed
+if exist use_mirror_site (
+bash -lc "echo 'Server = https://mirror.selfnet.de/mirrors/msys2/mingw/x86_64/' > /etc/pacman.d/mirrorlist.mingw64; echo 'Server = https://mirror.selfnet.de/mirrors/msys2/mingw/i686/' > /etc/pacman.d/mirrorlist.mingw32; echo 'Server = https://mirror.selfnet.de/mirrors/msys2/msys/$arch/' > /etc/pacman.d/mirrorlist.msys; pacman --noconfirm -U https://mirror.selfnet.de/msys2/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz;")
+
 rem Update the MSYS2 platform
 rem without --sysupgrade which fails
 rem since MSYS2 version 20200517 is online
@@ -30,6 +35,11 @@ bash -lc "pacman --noconfirm --sync --refresh"
 rem Update pacman
 rem https://www.msys2.org/news/#2020-05-31-update-fails-with-could-not-open-file
 bash -lc "pacman --noconfirm -Sydd pacman"
+
+rem as pacman has been updated configure mirror site if needed
+if exist use_mirror_site (
+bash -lc "echo 'Server = https://mirror.selfnet.de/mirrors/msys2/mingw/x86_64/' > /etc/pacman.d/mirrorlist.mingw64; echo 'Server = https://mirror.selfnet.de/mirrors/msys2/mingw/i686/' > /etc/pacman.d/mirrorlist.mingw32; echo 'Server = https://mirror.selfnet.de/mirrors/msys2/msys/$arch/' > /etc/pacman.d/mirrorlist.msys")
+
 rem finally upgrade the platform
 bash -lc "pacman --noconfirm -Syu"
 rem display pacman version
