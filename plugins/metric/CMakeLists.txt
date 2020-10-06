@@ -75,6 +75,10 @@ ADD_LIBRARY(LouvainClustering-${TulipVersion} SHARED LouvainClustering.cpp)
 TARGET_LINK_LIBRARIES(LouvainClustering-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+ADD_LIBRARY(SecondOrderCentrality-${TulipVersion} SHARED SecondOrderCentrality.cpp)
+TARGET_LINK_LIBRARIES(SecondOrderCentrality-${TulipVersion} ${LibTulipCoreName})
+
+##----------------------------------------------------------------------------------------------------------------------------
 ADD_LIBRARY(LinkCommunities-${TulipVersion} SHARED LinkCommunities.cpp)
 TARGET_LINK_LIBRARIES(LinkCommunities-${TulipVersion} ${LibTulipCoreName})
 
@@ -113,3 +117,4 @@ TULIP_INSTALL_PLUGIN(LinkCommunities-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(MCLClustering-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(PageRank-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(WelshPowell-${TulipVersion} ${TulipPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(SecondOrderCentrality-${TulipVersion} ${TulipPluginsInstallDir})
