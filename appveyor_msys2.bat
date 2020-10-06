@@ -28,7 +28,8 @@ rem without --sysupgrade which fails
 rem since MSYS2 version 20200517 is online
 bash -lc "pacman --noconfirm --sync --refresh"
 rem Update pacman
-bash -lc "pacman --noconfirm -S pacman"
+rem https://www.msys2.org/news/#2020-05-31-update-fails-with-could-not-open-file
+bash -lc "pacman --noconfirm -Sydd pacman"
 rem finally upgrade the platform
 bash -lc "pacman --noconfirm -Syu"
 rem display pacman version
