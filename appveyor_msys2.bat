@@ -22,7 +22,7 @@ rem first manually install the new MSYS2 keyring from repo.msys2.org
 rem see https://www.msys2.org/news/#2020-06-29-new-packagers
 rem if repo.msys2.org is not online, use a mirror site
 rem see https://github.com/msys2/MINGW-packages/issues/7084
-bash -lc "pacman --noconfirm -U http://repo.msys2.org/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz; if [ \"$?\" != \"0\" ]; then touch use_mirror_site; fi"
+bash -lc "pacman --noconfirm -U http://repo.msys2.org/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz; if [ \"$?\" != \"0\" ]; then touch '%cd%/use_mirror_site'; fi"
 
 rem configure mirror site if needed
 if exist use_mirror_site (
