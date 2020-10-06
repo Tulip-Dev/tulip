@@ -26,7 +26,7 @@ bash -lc "pacman --noconfirm -U http://repo.msys2.org/msys/x86_64/msys2-keyring-
 
 rem configure mirror site if needed
 if exist use_mirror_site (
-bash -lc "echo 'Server = https://mirror.selfnet.de/mirrors/msys2/mingw/x86_64/' > /etc/pacman.d/mirrorlist.mingw64; echo 'Server = https://mirror.selfnet.de/mirrors/msys2/mingw/i686/' > /etc/pacman.d/mirrorlist.mingw32; echo 'Server = https://mirror.selfnet.de/mirrors/msys2/msys/$arch/' > /etc/pacman.d/mirrorlist.msys; pacman --noconfirm -U https://mirror.selfnet.de/msys2/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz;")
+bash -lc "echo 'Server = https://mirror.selfnet.de/msys2/mingw/x86_64/' > /etc/pacman.d/mirrorlist.mingw64; echo 'Server = https://mirror.selfnet.de/msys2/mingw/i686/' > /etc/pacman.d/mirrorlist.mingw32; echo 'Server = https://mirror.selfnet.de/msys2/msys/$arch/' > /etc/pacman.d/mirrorlist.msys; pacman --noconfirm -U https://mirror.selfnet.de/msys2/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz;")
 
 rem Update the MSYS2 platform
 rem without --sysupgrade which fails
@@ -38,7 +38,7 @@ bash -lc "pacman --noconfirm -Sydd pacman"
 
 rem as pacman has been updated configure mirror site if needed
 if exist use_mirror_site (
-bash -lc "echo 'Server = https://mirror.selfnet.de/mirrors/msys2/mingw/x86_64/' > /etc/pacman.d/mirrorlist.mingw64; echo 'Server = https://mirror.selfnet.de/mirrors/msys2/mingw/i686/' > /etc/pacman.d/mirrorlist.mingw32; echo 'Server = https://mirror.selfnet.de/mirrors/msys2/msys/$arch/' > /etc/pacman.d/mirrorlist.msys")
+bash -lc "echo 'Server = https://mirror.selfnet.de/msys2/mingw/x86_64/' > /etc/pacman.d/mirrorlist.mingw64; echo 'Server = https://mirror.selfnet.de/msys2/mingw/i686/' > /etc/pacman.d/mirrorlist.mingw32; echo 'Server = https://mirror.selfnet.de/msys2/msys/$arch/' > /etc/pacman.d/mirrorlist.msys")
 
 rem finally upgrade the platform
 bash -lc "pacman --noconfirm -Syu"
