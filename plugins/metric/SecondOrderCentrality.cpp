@@ -102,13 +102,19 @@ bool SecondOrderCentrality::randomWalk(NodeStaticProperty<vector<int> > &tickVec
     if(dataSet!=nullptr) {
         dataSet->get("Selection", viewSelection);
     }
-    if(viewSelection->hasNonDefaultValuatedNodes())  {
-        auto *selNodesIt = viewSelection->getNonDefaultValuatedNodes(graph);
-        activeNode = selNodesIt->next();
-        delete selNodesIt;
+    if (viewSelection->hasNonDefaultValuatedNodes())  {
+	auto *selNodesIt = viewSelection->getNonDefaultValuatedNodes(graph);
+	while (selNodesIt->hasNext()) {
+	  node n = selNodesIt->next();
+	  // we must find a node with neighbors
+	  if (graph->deg(n))
+	    activeNode = n;
+	} delete selNodesIt;
     }
-    else {
-        activeNode = graph->getRandomNode();
+    if (!activeNode.isValid()) {
+      do { activeNode = graph->getRandomNode(); }
+      // we must find a node with neighbors
+      while(graph->deg(activeNode) == 0);
     }
 
     //start random walk
