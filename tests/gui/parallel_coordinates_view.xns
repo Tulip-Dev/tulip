@@ -923,14 +923,14 @@ NEW-WINDOW:528,127:62914658,62914658,62914757,0,0,0:0x0+1172+819:0,0:
 7,6,1217,629,0,0,0,116770767,9,'VirtualBox mouse integration'
 7,6,1217,628,0,0,0,116770775,9,'VirtualBox mouse integration'
 7,6,1216,627,0,0,0,116770783,9,'VirtualBox mouse integration'
-7,6,1216,625,0,0,0,116770791,9,'VirtualBox mouse integration'
-7,6,1215,623,0,0,0,116771031,9,'VirtualBox mouse integration'
-7,6,1215,621,0,0,0,116771039,9,'VirtualBox mouse integration'
+7,6,1220,628,0,0,0,116770791,9,'VirtualBox mouse integration'
+7,6,1220,628,0,0,0,116771031,9,'VirtualBox mouse integration'
+7,6,1220,628,0,0,0,116771039,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,116771472,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,116771472,2,Virtual core pointer
 7,5,0,0,1,0,0,116771612,12,ImExPS/2 Generic Explorer Mouse
 6,5,0,0,1,0,0,116771612,2,Virtual core pointer
-7,6,1215,620,0,0,0,116771880,9,'VirtualBox mouse integration'
+7,6,1215,628,0,0,0,116771880,9,'VirtualBox mouse integration'
 7,6,1215,618,0,0,0,116771888,9,'VirtualBox mouse integration'
 7,6,1213,615,0,0,0,116771896,9,'VirtualBox mouse integration'
 7,6,1212,612,0,0,0,116771904,9,'VirtualBox mouse integration'

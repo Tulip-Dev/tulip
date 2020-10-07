@@ -830,8 +830,8 @@ NEW-WINDOW:528,127:58720348,58720348,58720447,0,0,0:0x0+1172+819:0,0:
 7,6,1384,267,0,0,0,105663405,9,'VirtualBox mouse integration'
 7,6,1384,266,0,0,0,105663413,9,'VirtualBox mouse integration'
 7,6,1384,265,0,0,0,105663429,9,'VirtualBox mouse integration'
-7,6,1383,265,0,0,0,105663469,9,'VirtualBox mouse integration'
-7,6,1372,265,0,0,0,105663493,9,'VirtualBox mouse integration'
+7,6,1383,275,0,0,0,105663469,9,'VirtualBox mouse integration'
+7,6,1372,275,0,0,0,105663493,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,105663768,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,105663768,2,Virtual core pointer
 7,5,0,0,1,0,0,105663962,12,ImExPS/2 Generic Explorer Mouse
@@ -861,8 +861,8 @@ NEW-WINDOW:528,127:58720348,58720348,58720447,0,0,0:0x0+1172+819:0,0:
 7,6,1381,283,0,0,0,105664757,9,'VirtualBox mouse integration'
 7,6,1381,282,0,0,0,105664773,9,'VirtualBox mouse integration'
 7,6,1382,281,0,0,0,105664789,9,'VirtualBox mouse integration'
-7,6,1382,280,0,0,0,105664861,9,'VirtualBox mouse integration'
-7,6,1372,279,0,0,0,105664868,9,'VirtualBox mouse integration'
+7,6,1382,289,0,0,0,105664861,9,'VirtualBox mouse integration'
+7,6,1372,289,0,0,0,105664868,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,105665136,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,105665136,2,Virtual core pointer
 7,5,0,0,1,0,0,105665337,12,ImExPS/2 Generic Explorer Mouse
@@ -887,8 +887,8 @@ NEW-WINDOW:528,127:58720348,58720348,58720447,0,0,0:0x0+1172+819:0,0:
 7,6,1383,294,0,0,0,105665956,9,'VirtualBox mouse integration'
 7,6,1383,295,0,0,0,105666004,9,'VirtualBox mouse integration'
 7,6,1383,296,0,0,0,105666036,9,'VirtualBox mouse integration'
-7,6,1383,297,0,0,0,105666052,9,'VirtualBox mouse integration'
-7,6,1373,298,0,0,0,105666084,9,'VirtualBox mouse integration'
+7,6,1383,308,0,0,0,105666052,9,'VirtualBox mouse integration'
+7,6,1373,308,0,0,0,105666084,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,105666609,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,105666609,2,Virtual core pointer
 7,5,0,0,1,0,0,105666810,12,ImExPS/2 Generic Explorer Mouse
