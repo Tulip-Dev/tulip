@@ -118,13 +118,8 @@ bool SecondOrderCentrality::randomWalk(NodeStaticProperty<vector<int>> &tickVect
     }
     delete selNodesIt;
   }
-  if (!activeNode.isValid()) {
-    do {
-      activeNode = graph->getRandomNode();
-    }
-    // we must find a node with neighbors
-    while (graph->deg(activeNode) == 0);
-  }
+  if (!activeNode.isValid())
+    activeNode = graph->ends(graph->getRandomEdge()).first;
 
   // start random walk
   while (tick < maxNbSteps) {
@@ -157,6 +152,10 @@ bool SecondOrderCentrality::randomWalk(NodeStaticProperty<vector<int>> &tickVect
 
 //========================================================================================
 bool SecondOrderCentrality::run() {
+  // measure is 0 in this case
+  if (graph->numberOfEdges() <= 1)
+    return true;
+
   // initialize a random sequence according the given seed
   tlp::initRandomSequence();
 
