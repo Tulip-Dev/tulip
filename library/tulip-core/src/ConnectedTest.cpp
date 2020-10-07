@@ -74,6 +74,10 @@ bool ConnectedTest::isConnected(const tlp::Graph *const graph) {
   if (graph->isEmpty())
     return true;
 
+  // trees are the minimally connected graphs
+  if (graph->numberOfEdges() < graph->numberOfNodes() - 1)
+    return false;
+
   NodeStaticProperty<bool> visited(graph);
   visited.setAll(false);
   unsigned int count = connectedTest(graph, graph->getOneNode(), visited);
@@ -97,6 +101,10 @@ void ConnectedTest::makeConnected(Graph *graph, vector<edge> &addedEdges) {
 unsigned int ConnectedTest::numberOfConnectedComponents(const tlp::Graph *const graph) {
   if (graph->isEmpty())
     return 0u;
+
+  // trees are the minimally connected graphs
+  if (graph->numberOfNodes() == graph->numberOfEdges() + 1)
+    return 1u;
 
   graph->removeListener(instance);
   vector<node> toLink;
