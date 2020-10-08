@@ -68,10 +68,11 @@ public:
 static const char *paramHelp[] = {
     // selection
     "Boolean Property for choosing the starting node instead of choosing a node randomly if "
-    "nothing is selected."//,
-    // nb
-//    "Number of random walkers. A value of 0 indicates to use the default value consisting in the "
-//    "number of possible threads."
+    "nothing is selected." //,
+                           // nb
+    //    "Number of random walkers. A value of 0 indicates to use the default value consisting in
+    //    the "
+    //    "number of possible threads."
 
 };
 //========================================================================================
@@ -154,13 +155,12 @@ bool SecondOrderCentrality::randomWalk(NodeStaticProperty<vector<int>> &tickVect
 
 //========================================================================================
 bool SecondOrderCentrality::check(string &err) {
-    if (graph->numberOfEdges() <= 1) {
-        err = "Cannot compute metric on this graph (not enough edges).";
-        return false;
-    }
-    return true;
+  if (graph->numberOfEdges() <= 1) {
+    err = "Cannot compute metric on this graph (not enough edges).";
+    return false;
+  }
+  return true;
 }
-
 
 //========================================================================================
 bool SecondOrderCentrality::run() {
