@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <numeric>
+#include <cmath>
 
 using namespace std;
 using namespace tlp;
@@ -58,6 +59,7 @@ public:
       "0.9", "Clustering")
   SecondOrderCentrality(const tlp::PluginContext *);
   bool run() override;
+  bool check(string &err) override;
   bool randomWalk(NodeStaticProperty<vector<int>> &tickVector, const unsigned &maxNbSteps);
   node getRandomNeighbor(const node n);
 };
@@ -66,10 +68,10 @@ public:
 static const char *paramHelp[] = {
     // selection
     "Boolean Property for choosing the starting node instead of choosing a node randomly if "
-    "nothing is selected.",
+    "nothing is selected."//,
     // nb
-    "Number of random walkers. A value of 0 indicates to use the default value consisting in the "
-    "number of possible threads."
+//    "Number of random walkers. A value of 0 indicates to use the default value consisting in the "
+//    "number of possible threads."
 
 };
 //========================================================================================
@@ -151,11 +153,17 @@ bool SecondOrderCentrality::randomWalk(NodeStaticProperty<vector<int>> &tickVect
 }
 
 //========================================================================================
-bool SecondOrderCentrality::run() {
-  // measure is 0 in this case
-  if (graph->numberOfEdges() <= 1)
+bool SecondOrderCentrality::check(string &err) {
+    if (graph->numberOfEdges() <= 1) {
+        err = "Cannot compute metric on this graph (not enough edges).";
+        return false;
+    }
     return true;
+}
 
+
+//========================================================================================
+bool SecondOrderCentrality::run() {
   // initialize a random sequence according the given seed
   tlp::initRandomSequence();
 
@@ -193,7 +201,7 @@ bool SecondOrderCentrality::run() {
       res[i] = sqrt(accum / (val.size() - 1));
 
     } else {
-      res[i] = -1;
+      res[i] = nan("");
     }
   });
   res.copyToProperty(result);
