@@ -135,7 +135,9 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
       break;
     }
 
-    default: { return false; }
+    default: {
+      return false;
+    }
     }
 
     glMainWidget->redraw();
