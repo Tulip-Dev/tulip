@@ -345,6 +345,9 @@
       </item>
       <item>
        <widget class="QLabel" name="label_14">
+        <property name="styleSheet">
+         <string notr="true">margin-top: 6px;</string>
+        </property>
         <property name="text">
          <string>Node size Mapping</string>
         </property>

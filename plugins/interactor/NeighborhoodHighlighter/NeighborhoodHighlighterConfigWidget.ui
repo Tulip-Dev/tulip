@@ -2,12 +2,20 @@
 <ui version="4.0">
  <class>NeighborhoodHighlighterConfigWidget</class>
  <widget class="QWidget" name="NeighborhoodHighlighterConfigWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>371</width>
+    <height>443</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="spacing">
-    <number>0</number>
+    <number>6</number>
    </property>
    <item>
     <widget class="QLabel" name="label_4">
@@ -26,7 +34,7 @@
     <widget class="QFrame" name="frame">
      <layout class="QVBoxLayout" name="verticalLayout">
       <property name="spacing">
-       <number>0</number>
+       <number>6</number>
       </property>
       <property name="topMargin">
        <number>0</number>
@@ -171,6 +179,15 @@ and reachable nodes:</string>
       </property>
       <item>
        <layout class="QFormLayout" name="formLayout">
+        <property name="fieldGrowthPolicy">
+         <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+        </property>
+        <property name="labelAlignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="formAlignment">
+         <set>Qt::AlignHCenter|Qt::AlignTop</set>
+        </property>
         <item row="0" column="0">
          <widget class="QLabel" name="label_2">
           <property name="sizePolicy">

@@ -7,15 +7,21 @@
     <x>0</x>
     <y>0</y>
     <width>448</width>
-    <height>688</height>
+    <height>539</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Options</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <property name="bottomMargin">
+      <number>9</number>
+     </property>
      <item>
       <widget class="QLabel" name="label">
        <property name="font">
@@ -133,31 +139,33 @@
     </layout>
    </item>
    <item>
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Scatterplot matrix cells background color</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QFrame" name="frame">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
-      <property name="bottomMargin">
+      <property name="topMargin">
        <number>0</number>
       </property>
       <item>
-       <widget class="QLabel" name="label_2">
+       <widget class="QRadioButton" name="uniformBackgroundRB">
         <property name="text">
-         <string>Scatterplot matrix cells background color</string>
+         <string>Same as scene</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
         </property>
        </widget>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="QRadioButton" name="uniformBackgroundRB">
-          <property name="text">
-           <string>Same as scene</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
       </item>
       <item>
        <widget class="QRadioButton" name="mapBackgroundColorRB">
@@ -174,6 +182,9 @@
       </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>2</number>
+        </property>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
@@ -268,6 +279,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Size mapping</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QFrame" name="frame_2">
      <property name="toolTip">
       <string>adapt the size rendering in the plots depending on the initial node size</string>
@@ -277,12 +295,15 @@
        <number>9</number>
       </property>
       <property name="topMargin">
-       <number>9</number>
+       <number>0</number>
       </property>
       <property name="rightMargin">
        <number>9</number>
       </property>
-      <property name="bottomMargin">
+      <property name="horizontalSpacing">
+       <number>4</number>
+      </property>
+      <property name="verticalSpacing">
        <number>0</number>
       </property>
       <item row="2" column="0">
@@ -351,13 +372,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Size mapping</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -373,6 +387,9 @@
      <property name="toolTip">
       <string>allow to display the edges above the scatterplot</string>
      </property>
+     <property name="styleSheet">
+      <string notr="true">margin-bottom: 6px</string>
+     </property>
      <property name="text">
       <string>Show graph edges above scatterplot</string>
      </property>
@@ -380,6 +397,9 @@
    </item>
    <item>
     <widget class="QCheckBox" name="showLabelCB">
+     <property name="styleSheet">
+      <string notr="true">margin-bottom: 6px</string>
+     </property>
      <property name="text">
       <string>Show node labels</string>
      </property>
@@ -390,6 +410,9 @@
    </item>
    <item>
     <widget class="QCheckBox" name="scaleLabels">
+     <property name="styleSheet">
+      <string notr="true">margin-bottom: 9px</string>
+     </property>
      <property name="text">
       <string>Scale node labels to fit to node's size</string>
      </property>
@@ -406,18 +429,18 @@
     </widget>
    </item>
    <item>
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>X axis</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QFrame" name="xAxisFrame">
      <layout class="QVBoxLayout" name="verticalLayout_5">
-      <property name="bottomMargin">
+      <property name="topMargin">
        <number>0</number>
       </property>
-      <item>
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>X axis</string>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QCheckBox" name="useXScaleCheckBox">
         <property name="toolTip">
@@ -494,18 +517,21 @@
     </widget>
    </item>
    <item>
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>Y axis</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QFrame" name="yAxisFrame">
      <layout class="QVBoxLayout" name="verticalLayout_6">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
       <property name="bottomMargin">
        <number>0</number>
       </property>
-      <item>
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Y axis</string>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QCheckBox" name="useYScaleCheckBox">
         <property name="toolTip">

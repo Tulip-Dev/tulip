@@ -46,8 +46,9 @@ SOMPropertiesWidget::SOMPropertiesWidget(SOMView *view, QWidget *parent)
   defaultScale->addObserver(this);
 
   QVBoxLayout *sizeMappingLayout = new QVBoxLayout(_ui->nodeSizeMappingFrame);
-  sizeMappingLayout->setMargin(0);
+#ifndef __APPLE__
   sizeMappingLayout->setSpacing(0);
+#endif
   sizeMappingLayout->setContentsMargins(6, 0, 0, 0);
   sizeMappingButtonGroup = new QButtonGroup();
   noNodeSizeMappingRadioButton = new QRadioButton("No size mapping");
