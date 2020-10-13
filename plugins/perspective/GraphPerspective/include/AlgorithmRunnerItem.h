@@ -54,6 +54,7 @@ public:
   void setFavorite(bool);
 
 protected:
+  bool eventFilter(QObject *, QEvent *) override;
   void mousePressEvent(QMouseEvent *ev) override;
   void mouseMoveEvent(QMouseEvent *ev) override;
 

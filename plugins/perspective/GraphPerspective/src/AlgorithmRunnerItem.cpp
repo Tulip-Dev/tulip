@@ -93,6 +93,8 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, bool darkBackground
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
 
   connect(_ui->favoriteCheck, SIGNAL(stateChanged(int)), this, SLOT(favoriteChanged(int)));
+  // used to display plugin doc in a QMessageBox
+  _ui->settingsButton->installEventFilter(this);
 }
 
 AlgorithmRunnerItem::~AlgorithmRunnerItem() {
@@ -519,6 +521,19 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
   connect(mimeData, SIGNAL(mimeRun(tlp::Graph *)), this, SLOT(run(tlp::Graph *)));
   drag->setMimeData(mimeData);
   drag->exec(Qt::CopyAction | Qt::MoveAction);
+}
+
+bool AlgorithmRunnerItem::eventFilter(QObject *, QEvent *ev) {
+  if (ev->type() == QEvent::MouseButtonRelease) {
+    QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(ev);
+    if (qMouseEv->button() == Qt::RightButton) {
+      QMessageBox::information(parentWidget(),
+			       this->name().append(" documentation"),
+			       _ui->playButton->toolTip());
+      return true;
+    }
+  }
+  return false;
 }
 
 void AlgorithmRunnerItem::afterRun(Graph *g, const tlp::DataSet &dataSet) {
