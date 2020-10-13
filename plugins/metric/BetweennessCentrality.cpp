@@ -67,7 +67,8 @@ static const char *paramHelp[] = {
  *  "Journal of Mathematical Sociology" \n
  *  "2001", \n
  *  volume 25, \n
- *  pages 163-177
+ *  pages 163-177,\n
+ *  doi = 10.1080/0022250X.2001.9990249
  *
  *  The edge betweenness centrality is also computed, it is described in:
  *
@@ -75,7 +76,8 @@ static const char *paramHelp[] = {
  *  "Finding and evaluating community structure in networks",  \n
  *  "Physics Reviews E",  \n
  *  "2004",  \n
- *  volume 69
+ *  volume 69,
+ *  doi = 10.1103/PhysRevE.69.026113
  *
  *
  *  \note The complexity of the algorithm is O(|V| * |E|) in time
@@ -94,12 +96,12 @@ class BetweennessCentrality : public DoubleAlgorithm {
 public:
   PLUGININFORMATION(
       "Betweenness Centrality", "David Auber", "03/01/2005",
-      "Computes the betweeness centrality as described for<ul>"
+      "Computes the betweeness centrality as described for:<ul>"
       "<li>nodes in <b>A Faster Algorithm for Betweenness Centrality</b>, U. Brandes, Journal of "
-      "Mathematical Sociology volume 25, pages 163-177 (2001)</li>"
+      "Mathematical Sociology volume 25, pages 163-177 (2001), doi: <a href=\"https://doi.org/10.1080/0022250X.2001.9990249\">10.1080/0022250X.2001.9990249</a></li>"
       "<li>edges in <b>Finding and evaluating community structure in networks</b>, M. E. J. Newman "
-      "and M. Girvan, Physics Reviews E, volume 69 (2004).</li></ul>"
-      "The average path length is alo computed.",
+      "and M. Girvan, Physics Reviews E, volume 69 (2004), doi: <a href=\"https://doi.org/10.1103/PhysRevE.69.026113\">10.1103/PhysRevE.69.026113</a>.</li></ul>"
+      "The average path length is also computed.",
       "1.4", "Graph")
   BetweennessCentrality(const PluginContext *context) : DoubleAlgorithm(context) {
     addInParameter<bool>("directed", paramHelp[0], "false");
