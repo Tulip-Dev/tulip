@@ -25,7 +25,6 @@
 
 #include <algorithm>
 #include <numeric>
-#include <cmath>
 
 using namespace std;
 using namespace tlp;
@@ -39,11 +38,15 @@ using namespace tlp;
  * first published as:
  *
  * Kermarrec, A.-M., et al. (2011). "Second order centrality: Distributed assessment of nodes
- *criticity in complex networks." Computer Communications 34(5): 619-628. doi:
- *https://dx.doi.org/10.1016/j.comcom.2010.06.007
+ * criticity in complex networks." Computer Communications 34(5): 619-628. doi:
+ * https://dx.doi.org/10.1016/j.comcom.2010.06.007.
+ *
+ * This algorithm computes the standard deviation of the return time on each node of
+ * a random walker. Central nodes are those with the lower values.
  *
  * \author Bruno Pinaud, LaBRI
  *
+ * \todo Make it parallel: 30 walkers per node instead of one
  *
  **/
 class SecondOrderCentrality : public tlp::DoubleAlgorithm {
@@ -51,12 +54,14 @@ class SecondOrderCentrality : public tlp::DoubleAlgorithm {
 public:
   PLUGININFORMATION(
       "Second Order Centrality", "Bruno Pinaud", "01/10/2020",
-      "An implementation of the Second Order centrality measure first published as:<br>"
+      "<p>An implementation of the Second Order centrality measure first published as:<br>"
       "Kermarrec, A.-M., et al. (2011). \"Second order centrality: Distributed assessment of nodes "
       "criticity in complex networks.\" Computer Communications 34(5): 619-628, doi: <a "
       "href=\"https://dx.doi.org/10.1016/j.comcom.2010.06.007\">https://dx.doi.org/10.1016/"
-      "j.comcom.2010.06.007</a>.",
-      "0.9", "Clustering")
+      "j.comcom.2010.06.007</a>.<p>"
+          "<p>This algorithm computes the standard deviation of the return time on each node of"
+          "a random walker. Central nodes are those with the lower values.</p>",
+      "1.0", "Clustering")
   SecondOrderCentrality(const tlp::PluginContext *);
   bool run() override;
   bool check(string &err) override;
@@ -68,11 +73,9 @@ public:
 static const char *paramHelp[] = {
     // selection
     "Boolean Property for choosing the starting node instead of choosing a node randomly if "
-    "nothing is selected." //,
-                           // nb
-    //    "Number of random walkers. A value of 0 indicates to use the default value consisting in
-    //    the "
-    //    "number of possible threads."
+    "nothing is selected.",
+    //debug
+    "Activate debug mode to get the vector of each time the walker pass through a node in a property called tickVector."
 
 };
 //========================================================================================
@@ -80,8 +83,7 @@ static const char *paramHelp[] = {
 SecondOrderCentrality::SecondOrderCentrality(const tlp::PluginContext *context)
     : DoubleAlgorithm(context) {
   addInParameter<BooleanProperty>("Selection", paramHelp[0], "viewSelection", false);
-  // TODO: create a parallel version with as many walkers as possible threads
-  //    addInParameter<unsigned>("nb_walkers", paramHelp[1], "0", false);
+  addInParameter<bool>("Debug mode", paramHelp[1], "false");
 }
 
 node SecondOrderCentrality::getRandomNeighbor(const node n) {
@@ -155,15 +157,16 @@ bool SecondOrderCentrality::randomWalk(NodeStaticProperty<vector<int>> &tickVect
 
 //========================================================================================
 bool SecondOrderCentrality::check(string &err) {
-  if (graph->numberOfEdges() <= 1) {
-    err = "Cannot compute metric on this graph (not enough edges).";
-    return false;
-  }
-  return true;
+    if (graph->numberOfEdges() ==0) {
+        err = "No edges. Cannot compute metric on this graph.";
+        return false;
+    }
+    return true;
 }
 
 //========================================================================================
 bool SecondOrderCentrality::run() {
+
   // initialize a random sequence according the given seed
   tlp::initRandomSequence();
 
@@ -201,14 +204,19 @@ bool SecondOrderCentrality::run() {
       res[i] = sqrt(accum / (val.size() - 1));
 
     } else {
-      res[i] = nan("");
+      res[i] = DBL_MAX;
     }
   });
   res.copyToProperty(result);
+    bool debug(false);
+    if(dataSet!=nullptr)
+        dataSet->get("Debug mode", debug);
+    if(debug) {
+        IntegerVectorProperty* tickprop = graph->getProperty<IntegerVectorProperty>("tickVector");
+        tickVector.copyToProperty(tickprop);
+    }
 
-  // for debug only
-  //  IntegerVectorProperty* tickprop = graph->getProperty<IntegerVectorProperty>("tickVector");
-  //  tickVector.copyToProperty(tickprop);
+
 
   return true;
 }
