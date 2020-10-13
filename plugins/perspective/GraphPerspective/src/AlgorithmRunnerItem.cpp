@@ -527,9 +527,8 @@ bool AlgorithmRunnerItem::eventFilter(QObject *, QEvent *ev) {
   if (ev->type() == QEvent::MouseButtonRelease) {
     QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(ev);
     if (qMouseEv->button() == Qt::RightButton) {
-      QMessageBox::information(parentWidget(),
-			       this->name().append(" documentation"),
-			       _ui->playButton->toolTip());
+      QMessageBox::information(parentWidget(), this->name().append(" documentation"),
+                               _ui->playButton->toolTip());
       return true;
     }
   }

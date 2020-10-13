@@ -59,8 +59,8 @@ public:
       "criticity in complex networks.\" Computer Communications 34(5): 619-628, <br/>doi: <a "
       "href=\"https://dx.doi.org/10.1016/j.comcom.2010.06.007\">https://dx.doi.org/10.1016/"
       "j.comcom.2010.06.007</a>.</p>"
-          "<p>This algorithm computes the standard deviation of the return time on each node of"
-          " a random walker. Central nodes are those with the lower values.</p>",
+      "<p>This algorithm computes the standard deviation of the return time on each node of"
+      " a random walker. Central nodes are those with the lower values.</p>",
       "1.0", "Clustering")
   SecondOrderCentrality(const tlp::PluginContext *);
   bool run() override;
@@ -74,8 +74,9 @@ static const char *paramHelp[] = {
     // selection
     "Boolean Property for choosing the starting node instead of choosing a node randomly if "
     "nothing is selected.",
-    //debug
-    "Activate debug mode to get the vector of each time the walker pass through a node in a property called tickVector."
+    // debug
+    "Activate debug mode to get the vector of each time the walker pass through a node in a "
+    "property called tickVector."
 
 };
 //========================================================================================
@@ -157,11 +158,11 @@ bool SecondOrderCentrality::randomWalk(NodeStaticProperty<vector<int>> &tickVect
 
 //========================================================================================
 bool SecondOrderCentrality::check(string &err) {
-    if (graph->numberOfEdges() ==0) {
-        err = "No edges. Cannot compute metric on this graph.";
-        return false;
-    }
-    return true;
+  if (graph->numberOfEdges() == 0) {
+    err = "No edges. Cannot compute metric on this graph.";
+    return false;
+  }
+  return true;
 }
 
 //========================================================================================
@@ -208,15 +209,13 @@ bool SecondOrderCentrality::run() {
     }
   });
   res.copyToProperty(result);
-    bool debug(false);
-    if(dataSet!=nullptr)
-        dataSet->get("Debug mode", debug);
-    if(debug) {
-        IntegerVectorProperty* tickprop = graph->getProperty<IntegerVectorProperty>("tickVector");
-        tickVector.copyToProperty(tickprop);
-    }
-
-
+  bool debug(false);
+  if (dataSet != nullptr)
+    dataSet->get("Debug mode", debug);
+  if (debug) {
+    IntegerVectorProperty *tickprop = graph->getProperty<IntegerVectorProperty>("tickVector");
+    tickVector.copyToProperty(tickprop);
+  }
 
   return true;
 }

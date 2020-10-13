@@ -37,12 +37,14 @@
  */
 class ClusterMetric : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Cluster", "David Auber", "26/02/2003",
-                    "Computes the Cluster metric as described in:<br>"
-                    "<b>Software component capture using graph clustering</b>, Y. Chiricota. "
-                    "F. Jourdan, an G. Melancon, Proceedings of the 11th IEEE International Workshop on Program Comprehension, 2003."
-                    "doi: <a href=\"https://doi.org/10.1109/WPC.2003.1199205\">10.1109/WPC.2003.1199205</a>",
-                    "1.0", "Graph")
+  PLUGININFORMATION(
+      "Cluster", "David Auber", "26/02/2003",
+      "Computes the Cluster metric as described in:<br>"
+      "<b>Software component capture using graph clustering</b>, Y. Chiricota. "
+      "F. Jourdan, an G. Melancon, Proceedings of the 11th IEEE International Workshop on Program "
+      "Comprehension, 2003."
+      "doi: <a href=\"https://doi.org/10.1109/WPC.2003.1199205\">10.1109/WPC.2003.1199205</a>",
+      "1.0", "Graph")
   ClusterMetric(const tlp::PluginContext *context);
   bool run() override;
 };
