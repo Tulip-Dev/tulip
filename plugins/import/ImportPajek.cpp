@@ -111,7 +111,9 @@ public:
   PLUGININFORMATION("Pajek", "Patrick Mary", "09/05/2011",
                     "<p>Supported extensions: net, paj</p><p>Imports a new graph from a file "
                     "(.net) in Pajek NET format<br/>as it is described in the Pajek manual "
-                    "(<a href=\"http://mrvar.fdv.uni-lj.si/pajek/pajekman.pdf\">http://mrvar.fdv.uni-lj.si/pajek/pajekman.pdf</a>)</p>"
+                    "(<a "
+                    "href=\"http://mrvar.fdv.uni-lj.si/pajek/pajekman.pdf\">http://"
+                    "mrvar.fdv.uni-lj.si/pajek/pajekman.pdf</a>)</p>"
                     "<p>Warning: the "
                     "description of the edges with Matrix (adjacency lists)is not yet "
                     "supported.</p>",

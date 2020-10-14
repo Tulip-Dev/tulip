@@ -149,7 +149,7 @@ tlp::DataSet ImportWizard::parameters() const {
 void ImportWizard::helpButtonClicked() {
   // display current import plugin documentation
   QMessageBox::information(this, _index->data().toString().append(" documentation"),
-			   _index->data(Qt::ToolTipRole).toString());
+                           _index->data(Qt::ToolTipRole).toString());
 }
 
 void ImportWizard::updateFinishButton() {
