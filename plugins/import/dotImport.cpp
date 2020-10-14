@@ -63,8 +63,8 @@ static const char *paramHelp[] = {
 class DotImport : public ImportModule {
 public:
   PLUGININFORMATION("graphviz", "Gerald Gainant", "01/03/2004",
-                    "<p>Supported extensions: dot</p><p>Imports a new graph from a file in the dot "
-                    "input format.</p>",
+                    "<p>Supported extensions: dot</p><p>Imports a new graph from a file in the dot input format.</p>"
+                    "<p>(see <a href=\"https://www.graphviz.org/doc/info/lang.html\">https://www.graphviz.org/doc/info/lang.html</a>)</p>",
                     "1.0", "File")
   std::list<std::string> fileExtensions() const override {
     std::list<std::string> l;

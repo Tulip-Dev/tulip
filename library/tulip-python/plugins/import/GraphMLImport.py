@@ -227,7 +227,7 @@ class GraphMLImport(tlp.ImportModule):
 
 pluginDoc = """
 <p>Supported extension: graphml</p><p>Imports a graph from a file in the
-GraphML format (http://graphml.graphdrawing.org/).
+GraphML format (<a href=\"http://graphml.graphdrawing.org/">http://graphml.graphdrawing.org</a>).
 GraphML is a comprehensive and easy-to-use file format for graphs.
 It consists of a language core to describe the structural properties
 of a graph and a flexible extension mechanism to add application-specific

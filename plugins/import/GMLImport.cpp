@@ -549,8 +549,8 @@ class GMLImport : public ImportModule {
 public:
   PLUGININFORMATION("GML", "Auber", "04/07/2001",
                     "<p>Supported extension: gml</p><p>Imports a new graph from a file (.gml) in "
-                    "the GML input format (used by Graphlet).<br/>See "
-                    "<b>www.infosun.fmi.uni-passau.de/Graphlet/GML/</b> for details.</p>",
+                    "the GML input format (used by Graphlet).<p/>See "
+                    "<a href=\"http://www.infosun.fim.uni-passau.de/Graphlet/GML/gml-tr.html\">http://www.infosun.fmi.uni-passau.de/Graphlet/GML/gml-tr.html</a> for details.</p>",
                     "1.1", "File")
   std::list<std::string> fileExtensions() const override {
     std::list<std::string> l;

@@ -202,8 +202,8 @@ class ImportUCINET : public ImportModule {
 public:
   PLUGININFORMATION("UCINET", "Patrick Mary", "12/09/2011",
                     "<p>Supported extensions: txt</p><p>Imports a new graph from a text file in "
-                    "UCINET DL input format<br/>as it is described in the UCINET reference manual "
-                    "(<b>http://www.analytictech.com/ucinet/documentation/reference.rtf</b></p>)",
+                    "UCINET DL input format<br/>as it is described in the UCINET reference manual<br/>"
+                    "(see <a href=\"http://www.analytictech.com/ucinet/documentation/reference.rtf\">http://www.analytictech.com/ucinet/documentation/reference.rtf</a>)</p>",
                     "1.0", "File")
   std::list<std::string> fileExtensions() const override {
     std::list<std::string> l;
