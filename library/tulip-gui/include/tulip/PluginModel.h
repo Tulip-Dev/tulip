@@ -186,8 +186,8 @@ public:
       if (item->info.isEmpty())
         return item->name;
       else
-        return QString("<table><tr><td>%1</td></tr><tr><td><i>%2</i></td></tr></table>")
-            .arg(item->name + ":")
+        return QString("<table><tr><td><b>%1</b></td></tr><tr><td><i>%2</i></td></tr></table>")
+            .arg(item->name)
             .arg(item->info);
     } else if (role == Qt::FontRole && !index.parent().parent().isValid()) {
       QFont f;

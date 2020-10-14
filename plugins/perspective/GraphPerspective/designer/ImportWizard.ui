@@ -21,7 +21,7 @@
    <bool>true</bool>
   </property>
   <property name="options">
-   <set>QWizard::ExtendedWatermarkPixmap|QWizard::HaveFinishButtonOnEarlyPages|QWizard::NoBackButtonOnStartPage</set>
+   <set>QWizard::ExtendedWatermarkPixmap|QWizard::HaveFinishButtonOnEarlyPages|QWizard::HaveHelpButton|QWizard::NoBackButtonOnStartPage</set>
   </property>
   <property name="titleFormat">
    <enum>Qt::RichText</enum>
@@ -30,11 +30,8 @@
    <enum>Qt::RichText</enum>
   </property>
   <widget class="QWizardPage" name="choosePluginPage">
-   <property name="title">
-    <string>&lt;img src=&quot;:/tulip/gui/icons/64/document-import.png&quot; width=32 height=32/&gt; Graph importing Wizard</string>
-   </property>
    <property name="styleSheet">
-     <string notr="true">QListView, QListWidget {
+    <string notr="true">QListView, QListWidget {
 border: 0px;
 }
 
@@ -52,6 +49,9 @@ stop:1 rgba(0,0,0,0),
 stop:0 #F0F0F0);
 border: 0px;
 }</string>
+   </property>
+   <property name="title">
+    <string>&lt;img src=&quot;:/tulip/gui/icons/64/document-import.png&quot; width=32 height=32/&gt; Graph importing Wizard</string>
    </property>
    <attribute name="pageId">
     <string notr="true">0</string>
@@ -112,7 +112,7 @@ border: 0px;
          <item>
           <widget class="QTreeView" name="importModules">
            <property name="styleSheet">
-             <string notr="true">QTreeView { color: black; }
+            <string notr="true">QTreeView { color: black; }
 
  QTreeView::branch {
          border-image: url(none.png) 0;
@@ -229,11 +229,11 @@ border: 0px;
                <attribute name="horizontalHeaderVisible">
                 <bool>false</bool>
                </attribute>
-               <attribute name="horizontalHeaderDefaultSectionSize">
-                <number>200</number>
-               </attribute>
                <attribute name="horizontalHeaderMinimumSectionSize">
                 <number>150</number>
+               </attribute>
+               <attribute name="horizontalHeaderDefaultSectionSize">
+                <number>200</number>
                </attribute>
                <attribute name="horizontalHeaderStretchLastSection">
                 <bool>true</bool>

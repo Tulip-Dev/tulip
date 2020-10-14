@@ -36,6 +36,7 @@ class ExportWizard : public QWizard {
 
   Ui::ExportWizard *_ui;
   tlp::Graph *_graph;
+  QModelIndex const *_index;
 
 public:
   explicit ExportWizard(tlp::Graph *g, const QString &exportFile, QWidget *parent = nullptr);
@@ -51,6 +52,7 @@ protected slots:
 
   void pathChanged(QString s);
   void browseButtonClicked();
+  void helpButtonClicked();
   bool validateCurrentPage() override;
 };
 
