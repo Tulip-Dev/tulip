@@ -345,6 +345,8 @@ Information about the graph structure
 
 .. automethod:: tulip::tlp.Graph.existAttribute
 
+.. automethod:: tulip::tlp.Graph.getEdges(node1, node2, directed=True)
+
 .. automethod:: tulip::tlp.Graph.isEmpty
 
 .. automethod:: tulip::tlp.Graph.numberOfNodes
