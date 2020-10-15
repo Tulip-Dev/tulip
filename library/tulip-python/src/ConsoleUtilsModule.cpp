@@ -208,14 +208,19 @@ static PyTypeObject consoleutils_ConsoleOutputType = {
     0,
     0,
     0
-#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 4
+#if PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 4
+    ,
+    0
+#if PY_MINOR_VERSION >= 8
+    ,
+    0
+#if PY_MINOR_VERSION < 9
     ,
     0
 #endif
-#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 8
-    ,
-    0,
-    0
+#endif
+#elif PY_MAJOR_VERSION > 3
+#error Python major version PY_MAJOR_VERSION not supported
 #endif
 };
 
@@ -312,14 +317,19 @@ static PyTypeObject consoleutils_ConsoleInputType = {
     0,
     0,
     0
-#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 4
+#if PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 4
+    ,
+    0
+#if PY_MINOR_VERSION >= 8
+    ,
+    0
+#if PY_MINOR_VERSION < 9
     ,
     0
 #endif
-#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 8
-    ,
-    0,
-    0
+#endif
+#elif PY_MAJOR_VERSION > 3
+#error Python major version PY_MAJOR_VERSION not supported
 #endif
 };
 
