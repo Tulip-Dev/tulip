@@ -206,8 +206,8 @@ void Workspace::delView(tlp::View *view) {
     if (it->view() == view) {
       delete it;
       _panels.removeOne(it);
-      if(_panels.empty()) {
-          emit panelsEmpty();
+      if (_panels.empty()) {
+        emit panelsEmpty();
       }
       return;
     }
@@ -222,8 +222,8 @@ void Workspace::panelDestroyed(QObject *obj) {
 
   int removeCount = _panels.removeAll(panel);
 
-  if(_panels.empty()) {
-      emit panelsEmpty();
+  if (_panels.empty()) {
+    emit panelsEmpty();
   }
 
   if (removeCount == 0)

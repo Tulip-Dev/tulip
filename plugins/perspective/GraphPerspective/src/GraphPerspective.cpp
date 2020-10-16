@@ -533,8 +533,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
       "Save the current project (current graphs with current views) in the attached file", "S");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionSave_Project_as, "Save Project as a new file name",
                                  "Shift+S");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionImport, "Display the Graph import wizard",
-                                 "Shift+O");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionImport, "Display the Graph import wizard", "Shift+O");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExit, "Exit from Tulip perspective", "Q");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionUndo, "Undo the latest update of the current graph",
                                  "Z");
@@ -862,8 +861,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 }
 
 void GraphPerspective::panelsEmpty() {
-    _ui->actionExposePanels->setEnabled(false);
-    _ui->action_Remove_All->setEnabled(false);
+  _ui->actionExposePanels->setEnabled(false);
+  _ui->action_Remove_All->setEnabled(false);
 }
 
 void GraphPerspective::showStartMessage() {
@@ -1716,9 +1715,9 @@ void GraphPerspective::closePanelsForGraph(tlp::Graph *g) {
     }
   }
 
-  if(_ui->workspace->empty()) {
-      _ui->actionExposePanels->setEnabled(false);
-      _ui->action_Remove_All->setEnabled(false);
+  if (_ui->workspace->empty()) {
+    _ui->actionExposePanels->setEnabled(false);
+    _ui->action_Remove_All->setEnabled(false);
   }
 }
 
