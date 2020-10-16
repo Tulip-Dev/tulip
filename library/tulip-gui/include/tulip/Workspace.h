@@ -123,6 +123,7 @@ signals:
   void focusedPanelSynchronized();
   void addPanelRequest(tlp::Graph *g = nullptr);
   void importGraphRequest();
+  void panelsEmpty();
 
 protected slots:
   void viewNeedsDraw();

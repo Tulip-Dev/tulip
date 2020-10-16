@@ -749,6 +749,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionSearch, SIGNAL(triggered()), this, SLOT(showSearchDialog()));
   connect(_ui->workspace, SIGNAL(importGraphRequest()), this, SLOT(importGraph()));
   connect(_ui->action_Remove_All, SIGNAL(triggered()), _ui->workspace, SLOT(closeAll()));
+  connect(_ui->workspace, SIGNAL(panelsEmpty()), this, SLOT(panelsEmpty()));
   _ui->addPanelButton->setDefaultAction(_ui->actionCreate_panel);
   connect(_ui->actionColor_scales_management, SIGNAL(triggered()), this,
           SLOT(displayColorScalesDialog()));
@@ -858,6 +859,11 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   }
 
   logCleared();
+}
+
+void GraphPerspective::panelsEmpty() {
+    _ui->actionExposePanels->setEnabled(false);
+    _ui->action_Remove_All->setEnabled(false);
 }
 
 void GraphPerspective::showStartMessage() {
@@ -1550,6 +1556,7 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   }
 
   _ui->actionExposePanels->setEnabled(!_ui->workspace->empty());
+  _ui->action_Remove_All->setEnabled(!_ui->workspace->empty());
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 
@@ -1707,6 +1714,11 @@ void GraphPerspective::closePanelsForGraph(tlp::Graph *g) {
     for (auto v : viewsToDelete) {
       _ui->workspace->delView(v);
     }
+  }
+
+  if(_ui->workspace->empty()) {
+      _ui->actionExposePanels->setEnabled(false);
+      _ui->action_Remove_All->setEnabled(false);
   }
 }
 

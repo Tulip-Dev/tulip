@@ -129,6 +129,7 @@ void Workspace::closeAll() {
     delete p; // beware: the destroyed signal is connected to panelDestroyed
   }
   _panels.clear();
+  emit panelsEmpty();
 }
 
 QList<tlp::View *> Workspace::panels() const {
@@ -205,6 +206,9 @@ void Workspace::delView(tlp::View *view) {
     if (it->view() == view) {
       delete it;
       _panels.removeOne(it);
+      if(_panels.empty()) {
+          emit panelsEmpty();
+      }
       return;
     }
   }
@@ -217,6 +221,10 @@ void Workspace::panelDestroyed(QObject *obj) {
     _focusedPanel = nullptr;
 
   int removeCount = _panels.removeAll(panel);
+
+  if(_panels.empty()) {
+      emit panelsEmpty();
+  }
 
   if (removeCount == 0)
     return;

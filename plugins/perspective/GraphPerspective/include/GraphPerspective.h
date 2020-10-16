@@ -169,6 +169,7 @@ protected slots:
   void showStartMessage();
   void resetLoggerDialogPosition();
   void showHideLogger();
+  void panelsEmpty();
   void showHideMenuBar();
   void updateLogIconsAndCounters();
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
