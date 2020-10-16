@@ -533,7 +533,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
       "Save the current project (current graphs with current views) in the attached file", "S");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionSave_Project_as, "Save Project as a new file name",
                                  "Shift+S");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionImport, "Display the Graph importing wizard",
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionImport, "Display the Graph import wizard",
                                  "Shift+O");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExit, "Exit from Tulip perspective", "Q");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionUndo, "Undo the latest update of the current graph",
@@ -595,7 +595,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->loggerMessageWarning->setToolTip(_ui->loggerMessageInfo->toolTip());
   _ui->loggerMessageError->setToolTip(_ui->loggerMessageInfo->toolTip());
   SET_TIPS(_ui->csvImportButton, "Import data in the current graph using a csv formatted file");
-  SET_TIPS(_ui->importButton, "Display the Graph importing wizard");
+  SET_TIPS(_ui->importButton, "Display the Graph import wizard");
   SET_TIPS(_ui->pluginsButton, "Display the Plugin center");
   SET_TIPS(_ui->sidebarButton, "Hide Sidebar");
   SET_TIPS(_ui->menubarButton, "Hide Menubar");

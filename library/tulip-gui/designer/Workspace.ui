@@ -99,7 +99,7 @@ background-color: white;
           <item>
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>&lt;p&gt;&lt;b&gt;There is no graph currently loaded into the workspace.&lt;br/&gt;Create a new graph from the Graph importing wizard by clicking on the button above&lt;/b&gt;&lt;/p&gt;</string>
+             <string>&lt;p&gt;&lt;b&gt;There is no graph currently loaded into the workspace.&lt;br/&gt;Create a new graph from the Graph import wizard by clicking on the button above&lt;/b&gt;&lt;/p&gt;</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>

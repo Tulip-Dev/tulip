@@ -1928,7 +1928,7 @@ border: 0px;
     <string>Export</string>
    </property>
    <property name="toolTip">
-    <string>Show the Graph exporting wizard for the current graph</string>
+    <string>Show the Graph export wizard for the current graph</string>
    </property>
   </action>
   <action name="actionOpen_Project">
