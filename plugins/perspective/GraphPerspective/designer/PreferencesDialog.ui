@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>727</width>
-    <height>347</height>
+    <height>380</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -51,7 +51,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -185,7 +185,7 @@ If not, a new random seed will be set to initialize each new random sequence.&lt
               <string notr="true">QLabel  {font-style: normal }</string>
              </property>
              <property name="text">
-              <string>Log every interactive call to a plugin:</string>
+              <string>Log every interactive call to a plugin</string>
              </property>
             </widget>
            </item>
@@ -269,11 +269,11 @@ font: 12px;
            <property name="cornerButtonEnabled">
             <bool>false</bool>
            </property>
-           <attribute name="horizontalHeaderDefaultSectionSize">
-            <number>200</number>
-           </attribute>
            <attribute name="horizontalHeaderMinimumSectionSize">
             <number>1</number>
+           </attribute>
+           <attribute name="horizontalHeaderDefaultSectionSize">
+            <number>200</number>
            </attribute>
            <row>
             <property name="text">
@@ -450,7 +450,7 @@ font: 12px;
             <item>
              <widget class="QLabel" name="labeltype">
               <property name="text">
-               <string>Type:</string>
+               <string>Type</string>
               </property>
              </widget>
             </item>
@@ -503,7 +503,7 @@ font: 12px;
             <item>
              <widget class="QLabel" name="labelhost">
               <property name="text">
-               <string>Host:</string>
+               <string>Host</string>
               </property>
              </widget>
             </item>

@@ -19,11 +19,6 @@
   <property name="windowTitle">
    <string>Import CSV data</string>
   </property>
-  <property name="styleSheet">
-    <string notr="true">
-      QGroupBox { font-weight: bold; }
-    </string>
-  </property>
   <widget class="tlp::CSVParsingConfigurationQWizardPage" name="parserConfigurationWizardPage">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">

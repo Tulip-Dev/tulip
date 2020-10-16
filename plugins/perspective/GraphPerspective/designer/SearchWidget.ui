@@ -47,7 +47,7 @@
           <string>The graph on which the search will be performed</string>
          </property>
          <property name="text">
-          <string>graph:</string>
+          <string>graph</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -66,7 +66,7 @@
           <string>The element type on which the search will be performed</string>
          </property>
          <property name="text">
-          <string>scope:</string>
+          <string>scope</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -82,7 +82,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>search for:</string>
+          <string>search for</string>
          </property>
         </widget>
        </item>
@@ -169,7 +169,7 @@
             <string>Choose 'Do not modify selection' to only count the number of nodes/edges found</string>
            </property>
            <property name="text">
-            <string>selection mode:</string>
+            <string>selection mode</string>
            </property>
           </widget>
          </item>
@@ -227,7 +227,7 @@
             <string>The graph property whose values associated with the found elements will be modified</string>
            </property>
            <property name="text">
-            <string>store results in:</string>
+            <string>store results in</string>
            </property>
           </widget>
          </item>

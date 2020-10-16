@@ -23,7 +23,7 @@
       <string notr="true">font-weight: bold</string>
      </property>
      <property name="text">
-      <string>Pick data location from graph:</string>
+      <string>Pick data location from graph</string>
      </property>
     </widget>
    </item>
@@ -48,7 +48,16 @@
       <property name="spacing">
        <number>9</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>9</number>
+      </property>
+      <property name="topMargin">
+       <number>9</number>
+      </property>
+      <property name="rightMargin">
+       <number>9</number>
+      </property>
+      <property name="bottomMargin">
        <number>9</number>
       </property>
       <item>
@@ -96,7 +105,7 @@
       <string notr="true">font-weight: bold</string>
      </property>
      <property name="text">
-      <string>Select graph properties:</string>
+      <string>Select graph properties</string>
      </property>
     </widget>
    </item>

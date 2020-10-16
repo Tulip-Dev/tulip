@@ -22,6 +22,9 @@
      <property name="text">
       <string>Fisheye type</string>
      </property>
+     <property name="groupTitle" stdset="0">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
    <item>
@@ -89,6 +92,9 @@
      <property name="text">
       <string>Fisheye parameters</string>
      </property>
+     <property name="groupTitle" stdset="0">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
    <item>
@@ -114,7 +120,7 @@
         <item>
          <widget class="QLabel" name="label">
           <property name="text">
-           <string>Radius:</string>
+           <string>Radius</string>
           </property>
          </widget>
         </item>
@@ -132,7 +138,7 @@
         <item>
          <widget class="QLabel" name="label_2">
           <property name="text">
-           <string>Height:</string>
+           <string>Height</string>
           </property>
          </widget>
         </item>
@@ -176,7 +182,7 @@ p, li { white-space: pre-wrap; }
      <item>
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Radius increment step:</string>
+        <string>Radius increment step</string>
        </property>
       </widget>
      </item>
@@ -224,7 +230,7 @@ p, li { white-space: pre-wrap; }
      <item>
       <widget class="QLabel" name="label_6">
        <property name="text">
-        <string>Height increment step:</string>
+        <string>Height increment step</string>
        </property>
       </widget>
      </item>

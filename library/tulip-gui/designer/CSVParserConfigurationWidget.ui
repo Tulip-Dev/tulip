@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>657</width>
-    <height>240</height>
+    <height>247</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,11 +30,21 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
       <string>File</string>
      </property>
+     <property name="groupTitle" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frame">
      <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
@@ -172,14 +182,21 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_2">
-     <property name="title">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
       <string>Delimiters</string>
      </property>
-     <property name="flat">
-      <bool>false</bool>
+     <property name="groupTitle" stdset="0">
+      <bool>true</bool>
      </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frame_2">
      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_6">
         <item>

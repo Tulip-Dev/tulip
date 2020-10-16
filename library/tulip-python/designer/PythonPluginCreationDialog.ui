@@ -9,23 +9,17 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>533</width>
-    <height>398</height>
+    <width>541</width>
+    <height>377</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Tulip Python plugin creation</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">QLabel {
-font: bold;
-}
-QGroupBox {
-font: italic;
-}
-</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QLabel" name="label_10">
      <property name="maximumSize">
@@ -34,16 +28,29 @@ font: italic;
        <height>50</height>
       </size>
      </property>
+     <property name="styleSheet">
+      <string notr="true">margin-bottom: 9px</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
      <property name="text">
       <string>&lt;b&gt;&lt;i&gt;Please give the necessary information to generate the source code skeleton&lt;br/&gt; of the Tulip Python plugin to be created&lt;/i&gt;&lt;/b&gt;</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
+    <widget class="QLabel" name="label_11">
+     <property name="text">
       <string>Mandatory</string>
      </property>
+     <property name="groupTitle" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frame">
      <layout class="QFormLayout" name="formLayout_2">
       <property name="fieldGrowthPolicy">
        <enum>QFormLayout::ExpandingFieldsGrow</enum>
@@ -51,8 +58,17 @@ font: italic;
       <property name="verticalSpacing">
        <number>3</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
        <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>9</number>
       </property>
       <item row="0" column="0">
        <widget class="QLabel" name="label">
@@ -60,7 +76,7 @@ font: italic;
          <string notr="true">the path of the file where the plugin source code will be saved</string>
         </property>
         <property name="text">
-         <string>File: </string>
+         <string>File</string>
         </property>
        </widget>
       </item>
@@ -93,7 +109,7 @@ font: italic;
          <string notr="true">The type of plugin to create</string>
         </property>
         <property name="text">
-         <string>Type: </string>
+         <string>Type</string>
         </property>
        </widget>
       </item>
@@ -147,21 +163,21 @@ font: italic;
       <item row="2" column="0">
        <widget class="QLabel" name="label_2">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;body&gt;The name of the Python plugin class:&lt;ul&gt;
+         <string>&lt;html&gt;&lt;body&gt;The name of the Python plugin class&lt;ul&gt;
 &lt;li&gt;must start with a letter or the underscore character,&lt;/li&gt;
 &lt;li&gt;cannot start with a number,&lt;/li&gt;
 &lt;li&gt;can only contain A-z, 0-9, or _ characters.&lt;/li&gt;
 &lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
-         <string>Class name:</string>
+         <string>Class name</string>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
        <widget class="QLineEdit" name="pluginClassName">
         <property name="toolTip">
-         <string notr="true">&lt;html&gt;&lt;body&gt;Enter the name of the Python plugin class:&lt;ul&gt;
+         <string notr="true">&lt;html&gt;&lt;body&gt;Enter the name of the Python plugin class&lt;ul&gt;
 &lt;li&gt;must start with a letter or the underscore character,&lt;/li&gt;
 &lt;li&gt;cannot start with a number,&lt;/li&gt;
 &lt;li&gt;can only contain A-z, 0-9, or _ characters.&lt;/li&gt;
@@ -175,7 +191,7 @@ font: italic;
          <string notr="true">The name of the plugin as it will be displayed in the GUI</string>
         </property>
         <property name="text">
-         <string>Name:</string>
+         <string>Name</string>
         </property>
        </widget>
       </item>
@@ -190,16 +206,32 @@ font: italic;
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_2">
-     <property name="title">
+    <widget class="QLabel" name="label_12">
+     <property name="text">
       <string>Optional</string>
      </property>
+     <property name="groupTitle" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frame_2">
      <layout class="QFormLayout" name="formLayout">
       <property name="verticalSpacing">
        <number>3</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
        <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>9</number>
       </property>
       <item row="0" column="0">
        <widget class="QLabel" name="label_5">
@@ -207,7 +239,7 @@ font: italic;
          <string notr="true">The name of the plugin's author</string>
         </property>
         <property name="text">
-         <string>Author:</string>
+         <string>Author</string>
         </property>
        </widget>
       </item>
@@ -224,7 +256,7 @@ font: italic;
          <string notr="true">The creation date of the plugin</string>
         </property>
         <property name="text">
-         <string>Date:</string>
+         <string>Date</string>
         </property>
        </widget>
       </item>
@@ -241,7 +273,7 @@ font: italic;
          <string>Some information about the plugin that will be displayed in the GUI to facilitate user choice</string>
         </property>
         <property name="text">
-         <string>Description:</string>
+         <string>Description</string>
         </property>
        </widget>
       </item>
@@ -258,7 +290,7 @@ font: italic;
          <string>The version number of the plugin</string>
         </property>
         <property name="text">
-         <string>Version:</string>
+         <string>Version</string>
         </property>
        </widget>
       </item>
@@ -278,7 +310,7 @@ font: italic;
          <string>The group (a kind of sub-menu) in which the plugin will be added in the list of plugins displayed in the GUI</string>
         </property>
         <property name="text">
-         <string>Group: </string>
+         <string>Group</string>
         </property>
        </widget>
       </item>

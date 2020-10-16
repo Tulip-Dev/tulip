@@ -144,9 +144,8 @@ font-weight: bold; font-size: 18px; color: #A0A0A0A0</string>
               <height>0</height>
              </size>
             </property>
-            <property name="styleSheet">
-             <string notr="true">font-weight: bold;
-background-color: rgb(160, 160, 160);</string>
+            <property name="groupTitle" stdset="0">
+             <bool>true</bool>
             </property>
             <property name="text">
              <string>Colors</string>
@@ -301,9 +300,8 @@ background-color: rgb(160, 160, 160);</string>
                 <height>0</height>
                </size>
               </property>
-              <property name="styleSheet">
-               <string notr="true">font-weight: bold;
-background-color: rgb(160, 160, 160);</string>
+              <property name="groupTitle" stdset="0">
+               <bool>true</bool>
               </property>
               <property name="text">
                <string>Edges</string>
@@ -445,9 +443,8 @@ background-color: rgb(160, 160, 160);</string>
           </property>
           <item>
            <widget class="QLabel" name="label_3">
-            <property name="styleSheet">
-             <string notr="true">font-weight: bold;
-background-color: rgb(160, 160, 160);</string>
+            <property name="groupTitle" stdset="0">
+             <bool>true</bool>
             </property>
             <property name="text">
              <string>Elements ordering</string>
@@ -552,9 +549,8 @@ background-color: rgb(160, 160, 160);</string>
               <height>0</height>
              </size>
             </property>
-            <property name="styleSheet">
-             <string notr="true">font-weight: bold;
-background-color: rgb(160, 160, 160);</string>
+            <property name="groupTitle" stdset="0">
+             <bool>true</bool>
             </property>
             <property name="text">
              <string>Labels</string>
@@ -868,9 +864,8 @@ background-color: rgb(160, 160, 160);</string>
                 <height>0</height>
                </size>
               </property>
-              <property name="styleSheet">
-               <string notr="true">font-weight: bold;
-background-color: rgb(160, 160, 160);</string>
+              <property name="groupTitle" stdset="0">
+               <bool>true</bool>
               </property>
               <property name="text">
                <string>Graph changing</string>
@@ -951,9 +946,8 @@ of the scene remains unchanged.</string>
                 <height>0</height>
                </size>
               </property>
-              <property name="styleSheet">
-               <string notr="true">font-weight: bold;
-background-color: rgb(160, 160, 160);</string>
+              <property name="groupTitle" stdset="0">
+               <bool>true</bool>
               </property>
               <property name="text">
                <string>Projection</string>

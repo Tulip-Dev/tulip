@@ -20,7 +20,7 @@
       <string notr="true">QLabel { font: bold; }</string>
      </property>
      <property name="text">
-      <string>Select geolocation method:</string>
+      <string>Select geolocation method</string>
      </property>
     </widget>
    </item>
@@ -133,7 +133,7 @@
    <item>
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Use the nodes locations stored in latitude/longitude properties:</string>
+      <string>Use the nodes locations stored in latitude/longitude properties</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -202,7 +202,7 @@
       <item>
        <widget class="QCheckBox" name="edgesPathsCB">
         <property name="enabled">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="text">
          <string>edges pat&amp;hs</string>
@@ -223,14 +223,14 @@
         </item>
         <item>
          <widget class="QComboBox" name="edgesPathsPropertyCB">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="enabled">
-           <bool>false</bool>
           </property>
           <property name="toolTip">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select a double vector property containing lists of &lt;br/&gt;latitude/longitude (in the form [lat1, lng1, lat2, lng2, ...]) &lt;br/&gt;defining paths for edges&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>

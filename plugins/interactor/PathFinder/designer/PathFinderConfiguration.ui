@@ -76,7 +76,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>&lt;b&gt;Weight metric:&lt;/b&gt;</string>
+        <string>&lt;b&gt;Weight metric&lt;/b&gt;</string>
        </property>
       </widget>
      </item>
@@ -96,7 +96,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>&lt;b&gt;Edges direction: &lt;/b&gt;</string>
+        <string>&lt;b&gt;Edges direction&lt;/b&gt;</string>
        </property>
       </widget>
      </item>
@@ -110,7 +110,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>&lt;b&gt;Path type:&lt;/b&gt;</string>
+        <string>&lt;b&gt;Path type&lt;/b&gt;</string>
        </property>
       </widget>
      </item>
@@ -145,7 +145,7 @@
         <bool>false</bool>
        </property>
        <property name="text">
-        <string>Max path length:</string>
+        <string>Max path length</string>
        </property>
       </widget>
      </item>

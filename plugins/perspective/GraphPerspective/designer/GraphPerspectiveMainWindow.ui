@@ -260,6 +260,12 @@ border-top: 1px solid #D9D9D9;
 padding-top: 20px;
 }
 
+QLabel[groupTitle] {
+background-color: lightgray;
+color: black;
+font-weight: bold;
+}
+
 QSplitter::handle {
 background-color: #C0C0C0;
 border-width:0px;

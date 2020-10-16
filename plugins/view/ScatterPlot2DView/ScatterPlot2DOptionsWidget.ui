@@ -18,22 +18,39 @@
     <number>0</number>
    </property>
    <item>
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>General draw parameters</string>
+     </property>
+     <property name="groupTitle" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <property name="bottomMargin">
       <number>9</number>
      </property>
      <item>
       <widget class="QLabel" name="label">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
        <property name="text">
-        <string>Scene background color</string>
+        <string>Background color</string>
        </property>
       </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item>
       <widget class="tlp::ColorButton" name="backColorButton">
@@ -139,9 +156,51 @@
     </layout>
    </item>
    <item>
+    <widget class="QCheckBox" name="showEdgesCB">
+     <property name="toolTip">
+      <string>allow to display the edges above the scatterplot</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">margin-bottom: 6px</string>
+     </property>
+     <property name="text">
+      <string>Show graph edges above scatterplot</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="showLabelCB">
+     <property name="styleSheet">
+      <string notr="true">margin-bottom: 6px</string>
+     </property>
+     <property name="text">
+      <string>Show node labels</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="scaleLabels">
+     <property name="styleSheet">
+      <string notr="true">margin-bottom: 9px</string>
+     </property>
+     <property name="text">
+      <string>Scale node labels to fit to node's size</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>Scatterplot matrix cells background color</string>
+     </property>
+     <property name="groupTitle" stdset="0">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -160,7 +219,7 @@
       <item>
        <widget class="QRadioButton" name="uniformBackgroundRB">
         <property name="text">
-         <string>Same as scene</string>
+         <string>Same as general background color</string>
         </property>
         <property name="checked">
          <bool>false</bool>
@@ -283,6 +342,9 @@
      <property name="text">
       <string>Size mapping</string>
      </property>
+     <property name="groupTitle" stdset="0">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
    <item>
@@ -309,7 +371,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Maximum size:</string>
+         <string>Maximum size</string>
         </property>
        </widget>
       </item>
@@ -368,7 +430,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Minimum size:</string>
+         <string>Minimum size</string>
         </property>
        </widget>
       </item>
@@ -376,62 +438,12 @@
     </widget>
    </item>
    <item>
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="showEdgesCB">
-     <property name="toolTip">
-      <string>allow to display the edges above the scatterplot</string>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">margin-bottom: 6px</string>
-     </property>
-     <property name="text">
-      <string>Show graph edges above scatterplot</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="showLabelCB">
-     <property name="styleSheet">
-      <string notr="true">margin-bottom: 6px</string>
-     </property>
-     <property name="text">
-      <string>Show node labels</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="scaleLabels">
-     <property name="styleSheet">
-      <string notr="true">margin-bottom: 9px</string>
-     </property>
-     <property name="text">
-      <string>Scale node labels to fit to node's size</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="Line" name="line_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QLabel" name="label_6">
      <property name="text">
       <string>X axis</string>
+     </property>
+     <property name="groupTitle" stdset="0">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -520,6 +532,9 @@
     <widget class="QLabel" name="label_7">
      <property name="text">
       <string>Y axis</string>
+     </property>
+     <property name="groupTitle" stdset="0">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

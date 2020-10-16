@@ -81,7 +81,7 @@ border: 0px;
           </sizepolicy>
          </property>
          <property name="text">
-          <string>&lt;b&gt;Selected graph:&lt;/b&gt;</string>
+          <string>&lt;b&gt;Selected graph&lt;/b&gt;</string>
          </property>
         </widget>
        </item>

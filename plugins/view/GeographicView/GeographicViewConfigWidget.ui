@@ -16,14 +16,11 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="label">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="text">
-      <string>Use shared property for:</string>
+      <string>Use shared property for</string>
+     </property>
+     <property name="groupTitle" stdset="0">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -68,22 +65,12 @@
     </layout>
    </item>
    <item>
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QLabel" name="label_2">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="text">
-      <string>Polygon mode shape file:</string>
+      <string>Polygon mode shape file</string>
+     </property>
+     <property name="groupTitle" stdset="0">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -266,22 +253,12 @@
     </layout>
    </item>
    <item>
-    <widget class="Line" name="line_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QLabel" name="label_3">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="text">
-      <string>Leaflet Custom Tile Layer url:</string>
+      <string>Leaflet Custom Tile Layer url</string>
+     </property>
+     <property name="groupTitle" stdset="0">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

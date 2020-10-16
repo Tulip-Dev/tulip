@@ -65,7 +65,7 @@
               <string notr="true">font: bold;</string>
              </property>
           <property name="text">
-           <string>graph:</string>
+           <string>graph </string>
           </property>
          </widget>
         </item>

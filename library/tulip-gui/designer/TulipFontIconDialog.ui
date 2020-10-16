@@ -34,7 +34,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Filter icon by name:</string>
+        <string>Filter icon by name</string>
        </property>
       </widget>
      </item>

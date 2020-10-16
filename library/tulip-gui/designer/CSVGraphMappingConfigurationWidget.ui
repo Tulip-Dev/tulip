@@ -233,14 +233,14 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_9">
              <property name="text">
-              <string>Source columns:</string>
+              <string>Source columns</string>
              </property>
             </widget>
            </item>
            <item row="0" column="1">
             <widget class="QLabel" name="label_10">
              <property name="text">
-              <string>Destination columns:</string>
+              <string>Destination columns</string>
              </property>
             </widget>
            </item>
@@ -267,14 +267,14 @@
            <item row="3" column="0">
             <widget class="QLabel" name="label_15">
              <property name="text">
-              <string>Source properties:</string>
+              <string>Source properties</string>
              </property>
             </widget>
            </item>
            <item row="3" column="1">
             <widget class="QLabel" name="label_16">
              <property name="text">
-              <string>Destination properties:</string>
+              <string>Destination properties</string>
              </property>
             </widget>
            </item>
@@ -338,14 +338,14 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_11">
              <property name="text">
-              <string>Columns identifier:</string>
+              <string>Columns identifier</string>
              </property>
             </widget>
            </item>
            <item row="0" column="1">
             <widget class="QLabel" name="label_12">
              <property name="text">
-              <string>Properties identifier:</string>
+              <string>Properties identifier</string>
              </property>
             </widget>
            </item>
@@ -428,14 +428,14 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_13">
              <property name="text">
-              <string>Columns identifier:</string>
+              <string>Columns identifier</string>
              </property>
             </widget>
            </item>
            <item row="0" column="1">
             <widget class="QLabel" name="label_14">
              <property name="text">
-              <string>Properties identifier:</string>
+              <string>Properties identifier</string>
              </property>
             </widget>
            </item>

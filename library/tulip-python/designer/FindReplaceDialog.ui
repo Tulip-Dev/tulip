@@ -67,7 +67,7 @@ font: bold;
         </size>
        </property>
        <property name="text">
-        <string>Find: </string>
+        <string>Find </string>
        </property>
       </widget>
      </item>
@@ -89,7 +89,7 @@ font: bold;
         </size>
        </property>
        <property name="text">
-        <string>Replace with:</string>
+        <string>Replace with</string>
        </property>
       </widget>
      </item>
@@ -108,7 +108,7 @@ font: bold;
        <item>
         <widget class="QLabel" name="optionsLabel">
          <property name="text">
-          <string>Option:</string>
+          <string>Option </string>
          </property>
         </widget>
        </item>
@@ -121,7 +121,7 @@ font: bold;
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Search:</string>
+          <string>Search </string>
          </property>
         </widget>
        </item>

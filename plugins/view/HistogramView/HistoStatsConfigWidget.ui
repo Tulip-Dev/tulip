@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>279</width>
-    <height>332</height>
+    <width>314</width>
+    <height>318</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -99,7 +99,7 @@
       <item>
        <widget class="QCheckBox" name="nodesSelectionCB">
         <property name="text">
-         <string>Select nodes in range:</string>
+         <string>Select nodes in range</string>
         </property>
        </widget>
       </item>
@@ -132,14 +132,14 @@
          <item row="1" column="0">
           <widget class="QLabel" name="label_6">
            <property name="text">
-            <string>Upper bound:</string>
+            <string>Upper bound</string>
            </property>
           </widget>
          </item>
          <item row="0" column="0">
           <widget class="QLabel" name="label_5">
            <property name="text">
-            <string>Lower bound:</string>
+            <string>Lower bound</string>
            </property>
           </widget>
          </item>
@@ -152,7 +152,7 @@
    <item>
     <widget class="QCheckBox" name="densityEstimationCB">
      <property name="text">
-      <string>Density estimation:</string>
+      <string>Density estimation</string>
      </property>
     </widget>
    </item>
@@ -165,14 +165,8 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="leftMargin">
-       <number>9</number>
-      </property>
       <property name="topMargin">
        <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>9</number>
       </property>
       <property name="bottomMargin">
        <number>0</number>
@@ -182,7 +176,7 @@
         <item>
          <widget class="QLabel" name="label_2">
           <property name="text">
-           <string>Bandwidth:</string>
+           <string>Bandwidth</string>
           </property>
          </widget>
         </item>
@@ -209,7 +203,7 @@
         <item>
          <widget class="QLabel" name="label">
           <property name="text">
-           <string>Sample Step:</string>
+           <string>Sample Step</string>
           </property>
          </widget>
         </item>
@@ -229,62 +223,60 @@
        </layout>
       </item>
       <item>
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Kernel function:</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>Kernel function</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="kernelFunctionsList">
+          <property name="currentIndex">
+           <number>1</number>
+          </property>
+          <item>
+           <property name="text">
+            <string>Uniform</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Gaussian</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Triangle</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Epanechnikov</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Quartic</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Cubic</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Cosine</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QFrame" name="frame_3">
-        <layout class="QVBoxLayout" name="verticalLayout_3">
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QComboBox" name="kernelFunctionsList">
-           <property name="currentIndex">
-            <number>1</number>
-           </property>
-           <item>
-            <property name="text">
-             <string>Uniform</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Gaussian</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Triangle</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Epanechnikov</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Quartic</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Cubic</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Cosine</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-        </layout>
-       </widget>
+       <widget class="QFrame" name="frame_3"/>
       </item>
      </layout>
     </widget>
