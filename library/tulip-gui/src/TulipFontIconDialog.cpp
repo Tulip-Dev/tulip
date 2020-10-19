@@ -22,6 +22,7 @@
 #include <tulip/TulipFontAwesome.h>
 #include <tulip/TulipMaterialDesignIcons.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/Perspective.h>
 
 #include <QRegExp>
 #include <QDesktopServices>
@@ -39,10 +40,10 @@ TulipFontIconDialog::TulipFontIconDialog(QWidget *parent)
   _ui->iconsCreditLabel->setText(
       QString("<p style=\" font-size:11px;\">Special credit for the design "
               "of icons goes to:<br/><b>Font "
-              "Awesome </b><span style=\"color:#0000ff;\"><a "
+              "Awesome </b><span style=\"color:#0d47f1;\"><a "
               "href=\"http://fontawesome.com\">http://fontawesome.com</a></span> "
               "(v%1)<br/><b>Material Design Icons </b><span "
-              "style=\"color:#0000ff;\"><a "
+              "style=\"color:#0d47f1;\"><a "
               "href=\"https://materialdesignicons.com\">https://materialdesignicons.com</a></"
               "span> (v%2)</p>")
           .arg(TulipFontAwesome::getVersion().c_str())
@@ -61,12 +62,13 @@ void TulipFontIconDialog::updateIconList() {
   QRegExp regexp(_ui->iconNameFilterLineEdit->text());
 
   std::vector<std::string> iconNames = TulipFontAwesome::getSupportedIcons();
+  bool darkMode = Perspective::inDarkMode();
 
   for (auto &it : iconNames) {
     QString iconName = tlpStringToQString(it);
 
     if (regexp.indexIn(iconName) != -1) {
-      _ui->iconListWidget->addItem(new QListWidgetItem(TulipFontIconEngine::icon(it), iconName));
+      _ui->iconListWidget->addItem(new QListWidgetItem(TulipFontIconEngine::icon(it, darkMode), iconName));
     }
   }
 
@@ -76,7 +78,7 @@ void TulipFontIconDialog::updateIconList() {
     QString iconName = tlpStringToQString(it);
 
     if (regexp.indexIn(iconName) != -1) {
-      _ui->iconListWidget->addItem(new QListWidgetItem(TulipFontIconEngine::icon(it), iconName));
+      _ui->iconListWidget->addItem(new QListWidgetItem(TulipFontIconEngine::icon(it, darkMode), iconName));
     }
   }
 

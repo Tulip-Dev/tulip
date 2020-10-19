@@ -55,10 +55,10 @@ QFont &TulipFontIconEngine::init(const std::string &iconName) {
   return qFonts[fontFile];
 }
 
-TulipFontIconEngine::TulipFontIconEngine(const std::string &iconName) : font(init(iconName)) {}
+TulipFontIconEngine::TulipFontIconEngine(const std::string &iconName, bool dm) : font(init(iconName)), darkMode(dm) {}
 
-TulipFontIconEngine::TulipFontIconEngine(const QString &iconName)
-    : font(init(QStringToTlpString(iconName))) {}
+TulipFontIconEngine::TulipFontIconEngine(const QString &iconName, bool dm)
+  : font(init(QStringToTlpString(iconName))), darkMode(dm) {}
 
 void TulipFontIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mode mode,
                                 QIcon::State) {
@@ -71,6 +71,9 @@ void TulipFontIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mod
     color.setRgb(10, 10, 10);
   else if (mode == QIcon::Disabled)
     color.setRgb(70, 70, 70, 60);
+  // invert color if in dark mode
+  if (darkMode)
+    color.setRgb(255 - color.red(), 255 - color.green(), 255 - color.blue());
   painter->setPen(color);
 
   // add some 'padding' around the icon

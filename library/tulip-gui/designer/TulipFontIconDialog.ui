@@ -52,10 +52,6 @@
    </item>
    <item>
     <widget class="QLabel" name="iconsCreditLabel">
-     <property name="text">
-      <string>&lt;p style=&quot; font-size:11px;&quot;&gt;Special credit for the design of icons goes to:&lt;br/&gt;&lt;b&gt;Font Awesome &lt;/b&gt;&lt;a href=&quot;http://fontawesome.io&quot;&gt;&lt;span style=&quot;color:#0000ff;&quot;&gt;http://fontawesome.io&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;
-&lt;b&gt;Material Design Icons &lt;/b&gt;&lt;a href=&quot;https://materialdesignicons.com&quot;&gt;&lt;span style=&quot;color:#0000ff;&quot;&gt;https://materialdesignicons.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</string>
-     </property>
      <property name="textFormat">
       <enum>Qt::AutoText</enum>
      </property>
@@ -66,7 +62,7 @@
       <number>0</number>
      </property>
      <property name="openExternalLinks">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
     </widget>
    </item>
