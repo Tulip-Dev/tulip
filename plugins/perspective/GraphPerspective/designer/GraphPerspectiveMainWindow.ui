@@ -261,8 +261,7 @@ padding-top: 20px;
 }
 
 QLabel[groupTitle] {
-background-color: lightgray;
-color: black;
+background-color: #A0A0A0;
 font-weight: bold;
 }
 
@@ -288,17 +287,20 @@ background: #A0A0A0;
 border: 1px solid #808080;
 border-top-left-radius: 2px;
 border-top-right-radius: 2px;
+font-weight: 100;
 min-width: 8ex;
 padding: 5px;
 }
 
 QTabBar::tab:selected {
 background: white;
+font-weight: normal;
 margin-bottom: -1px;
 }
 
 QTabBar::tab:!selected:hover {
 background: #D0D0D0;
+font-weight: 300;
 }
 
 QTabBar::tab:disabled {

@@ -45,10 +45,6 @@
      </property>
      <property name="styleSheet">
        <string notr="true">
-QTabBar::tab {
-font:normal;
-}
-
 QToolButton {
 border-image:none;
 border-top: 1px;
