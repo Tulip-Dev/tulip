@@ -57,7 +57,9 @@ public:
   PLUGININFORMATION("GML Export", "Auber David", "31/07/2001",
                     "<p>Supported extensions: gml</p><p>Exports a Tulip graph in a file using the "
                     "GML format (used by Graphlet).<br/>See: "
-                    "<a href=\"http://www.infosun.fim.uni-passau.de/Graphlet/GML/\">http://www.infosun.fim.uni-passau.de/Graphlet/GML/</a> for details.</p>",
+                    "<a "
+                    "href=\"http://www.infosun.fim.uni-passau.de/Graphlet/GML/\">http://"
+                    "www.infosun.fim.uni-passau.de/Graphlet/GML/</a> for details.</p>",
                     "1.0", "File")
   std::string fileExtension() const override {
     return "gml";

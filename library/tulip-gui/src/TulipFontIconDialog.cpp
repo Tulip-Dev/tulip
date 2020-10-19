@@ -68,7 +68,8 @@ void TulipFontIconDialog::updateIconList() {
     QString iconName = tlpStringToQString(it);
 
     if (regexp.indexIn(iconName) != -1) {
-      _ui->iconListWidget->addItem(new QListWidgetItem(TulipFontIconEngine::icon(it, darkMode), iconName));
+      _ui->iconListWidget->addItem(
+          new QListWidgetItem(TulipFontIconEngine::icon(it, darkMode), iconName));
     }
   }
 
@@ -78,7 +79,8 @@ void TulipFontIconDialog::updateIconList() {
     QString iconName = tlpStringToQString(it);
 
     if (regexp.indexIn(iconName) != -1) {
-      _ui->iconListWidget->addItem(new QListWidgetItem(TulipFontIconEngine::icon(it, darkMode), iconName));
+      _ui->iconListWidget->addItem(
+          new QListWidgetItem(TulipFontIconEngine::icon(it, darkMode), iconName));
     }
   }
 

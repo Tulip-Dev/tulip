@@ -55,10 +55,11 @@ QFont &TulipFontIconEngine::init(const std::string &iconName) {
   return qFonts[fontFile];
 }
 
-TulipFontIconEngine::TulipFontIconEngine(const std::string &iconName, bool dm) : font(init(iconName)), darkMode(dm) {}
+TulipFontIconEngine::TulipFontIconEngine(const std::string &iconName, bool dm)
+    : font(init(iconName)), darkMode(dm) {}
 
 TulipFontIconEngine::TulipFontIconEngine(const QString &iconName, bool dm)
-  : font(init(QStringToTlpString(iconName))), darkMode(dm) {}
+    : font(init(QStringToTlpString(iconName))), darkMode(dm) {}
 
 void TulipFontIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mode mode,
                                 QIcon::State) {

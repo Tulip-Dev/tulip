@@ -38,7 +38,8 @@ class ImprovedWalkerIterator;
  *  Improving Walker’s Algorithm to Run in Linear Time. \n
  *  Buchheim C., Jünger M., Leipert S. (2002)\n
  *  In: Goodrich M.T., Kobourov S.G. (eds) Graph Drawing (GD) 2002. \n
- *  Lecture Notes in Computer Science, vol 2528. Springer, Berlin, Heidelberg. <a href=\"https://doi.org/10.1007/3-540-36151-0_32\">10.1007/3-540-36151-0_32</a>
+ *  Lecture Notes in Computer Science, vol 2528. Springer, Berlin, Heidelberg. <a
+ *href=\"https://doi.org/10.1007/3-540-36151-0_32\">10.1007/3-540-36151-0_32</a>
  *
  *  \note This algorithm works on tree.
  *  Let n be the number of nodes, the algorithm complexity is in O(n).
@@ -52,18 +53,20 @@ class ImprovedWalker : public tlp::LayoutAlgorithm {
   friend class ImprovedWalkerUnitTests;
 
 public:
-  PLUGININFORMATION("Improved Walker",
-                    "Julien Testut, Antony Durand, Pascal Ollier, "
-                    "Yashvin Nababsing, Sebastien Leclerc, "
-                    "Thibault Ruchon, Eric Dauchier",
-                    "11/11/04",
-                    "It is a linear implementation of the Walker's tree layout improved algorithm "
-                    "published as:<br/>"
-                    "<b>Improving Walker’s Algorithm to Run in Linear Time.</b><br>"
-                    "Buchheim C., Jünger M., Leipert S. (2002), "
-                    "In: Goodrich M.T., Kobourov S.G. (eds) Graph Drawing (GD) 2002, "
-                    "Lecture Notes in Computer Science, vol 2528. Springer, Berlin, Heidelberg. <a href=\"https://doi.org/10.1007/3-540-36151-0_32\">10.1007/3-540-36151-0_32</a>",
-                    "1.0", "Tree")
+  PLUGININFORMATION(
+      "Improved Walker",
+      "Julien Testut, Antony Durand, Pascal Ollier, "
+      "Yashvin Nababsing, Sebastien Leclerc, "
+      "Thibault Ruchon, Eric Dauchier",
+      "11/11/04",
+      "It is a linear implementation of the Walker's tree layout improved algorithm "
+      "published as:<br/>"
+      "<b>Improving Walker’s Algorithm to Run in Linear Time.</b><br>"
+      "Buchheim C., Jünger M., Leipert S. (2002), "
+      "In: Goodrich M.T., Kobourov S.G. (eds) Graph Drawing (GD) 2002, "
+      "Lecture Notes in Computer Science, vol 2528. Springer, Berlin, Heidelberg. <a "
+      "href=\"https://doi.org/10.1007/3-540-36151-0_32\">10.1007/3-540-36151-0_32</a>",
+      "1.0", "Tree")
   ImprovedWalker(const tlp::PluginContext *context);
   ~ImprovedWalker() override;
 

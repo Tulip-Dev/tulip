@@ -56,8 +56,11 @@ public:
                     "published as:<br/>"
                     "<b>Winding Roads: Routing edges into bundles</b><br>,"
                     "Antoine Lambert, Romain Bourqui and David Auber, "
-                    "Computer Graphics Forum special issue on 12th Eurographics/IEEE-VGTC Symposium on Visualization, "
-                    "pages 853-862 (2010), doi: <a href=\"https://doi.org/10.1111/j.1467-8659.2009.01700.x\">10.1111/j.1467-8659.2009.01700.x</a>",
+                    "Computer Graphics Forum special issue on 12th Eurographics/IEEE-VGTC "
+                    "Symposium on Visualization, "
+                    "pages 853-862 (2010), doi: <a "
+                    "href=\"https://doi.org/10.1111/j.1467-8659.2009.01700.x\">10.1111/"
+                    "j.1467-8659.2009.01700.x</a>",
                     "1.4", "")
   bool run() override;
 

@@ -283,8 +283,7 @@ void ImprovedWalker::combineSubtree(tlp::node v, tlp::node *defaultAncestor) {
       modChildX[nodeOutsideRight] += shiftInsideLeft - shiftOutsideRight;
     }
 
-    if (nextLeftContour(nodeInsideRight).isValid() &&
-        !nextLeftContour(nodeOutsideLeft).isValid()) {
+    if (nextLeftContour(nodeInsideRight).isValid() && !nextLeftContour(nodeOutsideLeft).isValid()) {
       thread[nodeOutsideLeft] = nextLeftContour(nodeInsideRight);
       modChildX[nodeOutsideLeft] += shiftInsideRight - shiftOutsideLeft;
 
