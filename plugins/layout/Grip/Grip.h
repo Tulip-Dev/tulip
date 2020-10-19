@@ -30,10 +30,9 @@
  *  An implementation of a force directed graph drawing
  *  algorithm first published as:
  *
- *  P. Gajer and S.G. Kobourov,
- *  "GRIP: Graph dRawing with Intelligent Placement",
- *  in Journal Graph Algorithm and Applications, vol. 6, no. 3,
- *  p. 203-224, 2002
+ *  GRIP: Graph dRawing with Intelligent Placement</b>, P. Gajer and S.G.
+ *  Kobourov, Graph Drawing (GD) 2000, Lecture Notes in Computer Science,
+ *  vol 1984. Springer, Berlin, Heidelberg. doi: <a href=\"https://doi.org/10.1007/3-540-44541-2_21\">10.1007/3-540-44541-2_21</a>
  *
  *  <b>HISTORY</b>
  *
@@ -49,8 +48,8 @@ public:
   PLUGININFORMATION("GRIP", "Romain Bourqui", "01/11/2010",
                     "Implements a force directed graph drawing algorithm first published as:<br/>"
                     "<b>GRIP: Graph dRawing with Intelligent Placement</b>, P. Gajer and S.G. "
-                    "Kobourov, Journal Graph Algorithm and Applications, vol. 6, no. 3, pages "
-                    "203--224, (2002).",
+                    "Kobourov, Graph Drawing (GD) 2000, Lecture Notes in Computer Science, "
+                    "vol 1984. Springer, Berlin, Heidelberg. doi: <a href=\"https://doi.org/10.1007/3-540-44541-2_21\">10.1007/3-540-44541-2_21</a>",
                     "1.1", "Force Directed")
 
   Grip(const tlp::PluginContext *);

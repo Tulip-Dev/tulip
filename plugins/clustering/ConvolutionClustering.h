@@ -26,7 +26,7 @@
 /** This plugin allow the discretization and the filtering of the distribution of
  * a node metric using convolution.
  *
- * A detailed usage of this procedure is detailed in :
+ * A detailed usage of this procedure is detailed in:
  *
  * D. Auber, M. Delest and Y. Chiricota \n
  * "Strahler based graph clustering using convolution",\n
@@ -41,7 +41,11 @@ class ConvolutionClustering : public tlp::DoubleAlgorithm {
 public:
   PLUGININFORMATION(
       "Convolution", "David Auber", "14/08/2001",
-      "Discretization and filtering of the distribution of a node metric using a convolution.",
+      "Discretization and filtering of the distribution of a node metric using a convolution following: <br>"
+      "Strahler based graph clustering using convolution, "
+      "D. Auber, M. Delest and Y. Chiricota, "
+      "Proceedings of the Eighth International Conference on Information Visualisation, 2004. IV 2004, "
+      "doi: <a href=\"https://doi.org/10.1109/IV.2004.1320123\">10.1109/IV.2004.1320123</a>",
       "2.1", "Clustering")
   ConvolutionClustering(tlp::PluginContext *context);
   bool run() override;

@@ -31,12 +31,11 @@
  * This plugin performs a single-linkage clustering.
  * The similarity measure used here is the Strength Metric computed on edges.
  * The best threshold is found using MQ Quality Measure.
- * See :
+ * See:
  *
  * Y. Chiricota, F. Jourdan and G. Melancon, G. \n
  * "Software components capture using graph clustering", \n
- * IEEE Computer Society, \n
- * 2003.
+ * IWPC '03: Proceedings of the 11th IEEE International Workshop on Program Comprehension, 2003
  *
  */
 class StrengthClustering : public tlp::DoubleAlgorithm {
@@ -44,9 +43,10 @@ public:
   PLUGININFORMATION("Strength Clustering", "David Auber", "27/01/2003",
                     "Implements a single-linkage clustering. The similarity measure used here is "
                     "the Strength Metric computed on edges. The best threshold is found using MQ "
-                    "Quality Measure. See :<br/>"
-                    "<b>Software component capture using graph clustering</b>, Y. Chiricota. "
-                    "F.Jourdan, an G.Melancon, IWPC (2002).",
+                    "Quality Measure. See:<br/>"
+                    "<b>Software component capture using graph clustering</b>, "
+                    "Y. Chiricota, F.Jourdan, and G. Melancon, "
+                    "IWPC '03: Proceedings of the 11th IEEE International Workshop on Program Comprehension",
                     "2.0", "Clustering")
   StrengthClustering(tlp::PluginContext *context);
   ~StrengthClustering() override;

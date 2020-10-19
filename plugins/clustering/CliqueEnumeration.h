@@ -31,13 +31,11 @@
 /**
  * \file
  * \brief Compute all maximal cliques (or maximal cliques whose size is above a given threshold)
- * according to the Eppstein algorithm. See
+ * according to:
  *
- * Eppstein, Loffler and Strash, \n
- * "Listing All Maximal Cliques in Sparse Graphs in Near-optimal Time",\n
- * "Experimental Algorithms", Springer\n
- * "2011"
- *
+ * Listing All Maximal Cliques in Sparse Graphs in Near-optimal Time</b>,
+ * In: Cheong O., Chwa KY., Park K. (eds) Algorithms and Computation. ISAAC 2010. Lecture Notes in Computer Science,
+ * vol 6506. Springer, Berlin, Heidelberg. doi: <a href=\"https://doi.org/10.1007/978-3-642-17517-6_36\">10.1007/978-3-642-17517-6_36</a>,
  *
  *  <b>HISTORY</b>
  *
@@ -72,9 +70,8 @@ public:
       "Compute all maximal cliques (or maximal cliques whose size is above a given threshold)"
       " according to algorithm. published as:<br/>"
       "<b>Listing All Maximal Cliques in Sparse Graphs in Near-optimal Time</b>, "
-      " Eppstein, Loffler and Strash, "
-      "Experimental Algorithms, Springer, "
-      "2011",
+      "In: Cheong O., Chwa KY., Park K. (eds) Algorithms and Computation. ISAAC 2010. Lecture Notes in Computer Science, "
+      "vol 6506. Springer, Berlin, Heidelberg. doi: <a href=\"https://doi.org/10.1007/978-3-642-17517-6_36\">10.1007/978-3-642-17517-6_36</a>",
       "1.0", "Clustering")
 
   CliqueEnumeration(tlp::PluginContext *);

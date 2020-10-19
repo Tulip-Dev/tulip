@@ -50,14 +50,14 @@ void printSize(ostream &os, const Size &v) {
 /**
  * This plugin records a Tulip graph structure using the GML File format.
  * This format is the file format used by Graphlet.
- * See www.infosun.fmi.uni-passau.de/Graphlet/GML/ for details.
+ * See www.infosun.fim.uni-passau.de/Graphlet/GML/ for details.
  */
 class GMLExport : public tlp::ExportModule {
 public:
   PLUGININFORMATION("GML Export", "Auber David", "31/07/2001",
                     "<p>Supported extensions: gml</p><p>Exports a Tulip graph in a file using the "
-                    "GML format (used by Graphlet).<br/>See "
-                    "<b>www.infosun.fmi.uni-passau.de/Graphlet/GML/</b> for details.</p>",
+                    "GML format (used by Graphlet).<br/>See: "
+                    "<a href=\"http://www.infosun.fim.uni-passau.de/Graphlet/GML/\">http://www.infosun.fim.uni-passau.de/Graphlet/GML/</a> for details.</p>",
                     "1.0", "File")
   std::string fileExtension() const override {
     return "gml";

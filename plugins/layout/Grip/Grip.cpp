@@ -20,8 +20,6 @@
 #include "MISFiltering.h"
 #include "Distances.h"
 
-#include <tulip/TulipPluginHeaders.h>
-
 using namespace std;
 using namespace tlp;
 
