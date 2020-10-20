@@ -93,8 +93,6 @@ public:
 
   bool terminated() override;
 
-  bool hasDarkBackground() override;
-
 public slots:
   void importGraph();
   void exportGraph(tlp::Graph *g = nullptr);

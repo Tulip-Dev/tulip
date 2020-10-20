@@ -22,7 +22,7 @@
 #include <tulip/TulipFontAwesome.h>
 #include <tulip/TulipMaterialDesignIcons.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/Perspective.h>
+#include <tulip/TulipSettings.h>
 
 #include <QRegExp>
 #include <QDesktopServices>
@@ -62,7 +62,7 @@ void TulipFontIconDialog::updateIconList() {
   QRegExp regexp(_ui->iconNameFilterLineEdit->text());
 
   std::vector<std::string> iconNames = TulipFontAwesome::getSupportedIcons();
-  bool darkMode = Perspective::inDarkMode();
+  bool darkMode = TulipSettings::instance().isDisplayInDarkMode();
 
   for (auto &it : iconNames) {
     QString iconName = tlpStringToQString(it);

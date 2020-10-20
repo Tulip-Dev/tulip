@@ -156,6 +156,35 @@ void usage(const QString &error) {
   exit(returnCode);
 }
 
+SimplePluginProgressDialog *createProgress(QString &iconPath, QString &title) {
+ SimplePluginProgressDialog *progress = new SimplePluginProgressDialog();
+  progress->setStopButtonVisible(false);
+  progress->setCancelButtonVisible(false);
+  progress->showPreview(false);
+
+  progress->resize(500, std::min(50, progress->height()));
+  progress->setComment(QString("Initializing ") + title);
+  progress->setWindowTitle(title);
+  progress->progress(0, 100);
+
+  QIcon icon = progress->windowIcon();
+
+  if (!iconPath.isEmpty()) {
+    QString iconFullPath = tlpStringToQString(TulipBitmapDir) + iconPath;
+    QIcon tmp(iconFullPath);
+
+    if (tmp.pixmap(QSize(16, 16)).isNull() == false)
+      icon = tmp;
+    else
+      usage("Could not load icon: " + iconFullPath);
+  }
+
+  progress->setWindowIcon(icon);
+  progress->show();
+
+  return progress;
+}
+
 int main(int argc, char **argv) {
 
   CrashHandling::installCrashHandler();
@@ -232,21 +261,6 @@ int main(int argc, char **argv) {
     }
   }
 
-  // Create perspective's window
-  TulipPerspectiveProcessMainWindow *mainWindow = new TulipPerspectiveProcessMainWindow(title);
-  mainWindow->setVisible(false);
-
-  // Progress bar dialog
-  SimplePluginProgressDialog *progress = new SimplePluginProgressDialog();
-  progress->setStopButtonVisible(false);
-  progress->setCancelButtonVisible(false);
-  progress->showPreview(false);
-
-  progress->resize(500, std::min(50, progress->height()));
-  progress->setComment(QString("Initializing ") + title);
-  progress->setWindowTitle(title);
-  progress->progress(0, 100);
-
   initTulipLib(QStringToTlpString(QApplication::applicationDirPath()).c_str());
 
 #ifdef _MSC_VER
@@ -256,22 +270,8 @@ int main(int argc, char **argv) {
   CrashHandling::setExtraSymbolsSearchPaths(tlp::TulipShareDir + "pdb");
 #endif
 
-  QIcon icon = progress->windowIcon();
-
-  if (!iconPath.isEmpty()) {
-    QString iconFullPath = tlpStringToQString(TulipBitmapDir) + iconPath;
-    QIcon tmp(iconFullPath);
-
-    if (tmp.pixmap(QSize(16, 16)).isNull() == false)
-      icon = tmp;
-    else
-      usage("Could not load icon: " + iconFullPath);
-  }
-
-  progress->setWindowIcon(icon);
-  progress->show();
-
-  TulipProject *project = nullptr;
+  // create Progress bar dialog
+  SimplePluginProgressDialog *progress = createProgress(iconPath, title);
 
   // Init tulip
   try {
@@ -282,74 +282,89 @@ int main(int argc, char **argv) {
     exit(1);
   }
 
-  QFileInfo fileInfo(projectFilePath);
+  int result;
+  bool start = true;
+  while(start) {
+   QFileInfo fileInfo(projectFilePath);
 
-  if (!projectFilePath.isEmpty() && (!fileInfo.exists() || fileInfo.isDir())) {
-    usage("File " + projectFilePath + " not found or is a directory");
-  }
+    if (!projectFilePath.isEmpty() && (!fileInfo.exists() || fileInfo.isDir())) {
+      usage("File " + projectFilePath + " not found or is a directory");
+    }
 
-  if (!projectFilePath.isEmpty() && projectFilePath.endsWith(".tlpx")) {
-    project = TulipProject::openProject(projectFilePath, progress);
-  }
+    if (!progress)
+      progress = createProgress(iconPath, title);
 
-  if (project == nullptr) {
-    context->externalFile = projectFilePath;
-    project = TulipProject::newProject();
-  } else if (perspectiveName.isEmpty()) {
-    perspectiveName = project->perspective();
-  }
+    TulipProject *project = nullptr;
+    if (!projectFilePath.isEmpty() && projectFilePath.endsWith(".tlpx")) {
+      project = TulipProject::openProject(projectFilePath, progress);
+     if (perspectiveName.isEmpty())
+	perspectiveName = project->perspective();
+    } else {
+      context->externalFile = projectFilePath;
+      project = TulipProject::newProject();
+    }
+    if (perspectiveName.isEmpty()) {
+      // set Tulip as default perspective
+      perspectiveName = "Tulip";
+    }
 
-  if (perspectiveName.isEmpty()) {
-    // set Tulip as default perspective
-    perspectiveName = "Tulip";
-  }
+    context->project = project;
+    context->parameters = extraParams;
+    project->setPerspective(perspectiveName);
+    // Initialize main window.
+    progress->progress(100, 100);
+    progress->setComment("Setting up GUI (this can take some time)");
+    // Create perspective's window
+    TulipPerspectiveProcessMainWindow *mainWindow = new TulipPerspectiveProcessMainWindow(title);
+    mainWindow->setVisible(false);
 
-  context->project = project;
-  context->parameters = extraParams;
-  project->setPerspective(perspectiveName);
+    context->mainWindow = mainWindow;
 
-  // Initialize main window.
-  progress->progress(100, 100);
-  progress->setComment("Setting up GUI (this can take some time)");
-  context->mainWindow = mainWindow;
-
-  // Create perspective object
-  Perspective *perspective =
+    // Create perspective object
+    Perspective *perspective =
       PluginLister::getPluginObject<Perspective>(tlp::QStringToTlpString(perspectiveName), context);
 
-  if (perspective == nullptr) {
-    usage("Cannot open perspective: " + perspectiveName +
-          "\nWrong plugin type or plugin not found.");
+    if (perspective == nullptr) {
+      usage("Cannot open perspective: " + perspectiveName +
+	    "\nWrong plugin type or plugin not found.");
+    }
+
+    Perspective::setInstance(perspective);
+    mainWindow->setProject(project);
+
+    perspective->start(progress);
+
+    mainWindow->projectFileChanged(projectFilePath);
+
+    mainWindow->setWindowIcon(progress->windowIcon());
+    mainWindow->show();
+
+    delete progress;
+    progress = nullptr;
+
+    // the delay of geometry update until perspective execution
+    // seems to ensure that the four parameters (x,y,w,h)
+    // are taken into account
+    if (windowGeometry.isValid()) {
+      mainWindow->setGeometry(windowGeometry);
+    } else {
+      mainWindow->move(0, 0);
+      mainWindow->resize(QDesktopWidget().availableGeometry(mainWindow).size() * 0.9);
+    }
+
+    TulipSettings::instance().setFirstRun(false);
+    TulipSettings::instance().setFirstTulipMMRun(false);
+    result = tulip_perspective.exec();
+
+    if ((start = perspective->needRestart()))
+      // current geometry will be restored at the next start up
+      windowGeometry = mainWindow->frameGeometry();
+
+    delete perspective;
+    delete mainWindow;
+
   }
-
-  Perspective::setInstance(perspective);
-  mainWindow->setProject(project);
-
-  perspective->start(progress);
-
-  mainWindow->projectFileChanged(projectFilePath);
-
-  delete progress;
   delete context;
-
-  mainWindow->setWindowIcon(icon);
-  mainWindow->show();
-
-  // the delay of geometry update until perspective execution
-  // seems to ensure that the four parameters (x,y,w,h)
-  // are taken into account
-  if (windowGeometry.isValid()) {
-    mainWindow->setGeometry(windowGeometry);
-  } else {
-    mainWindow->move(0, 0);
-    mainWindow->resize(QDesktopWidget().availableGeometry(mainWindow).size() * 0.9);
-  }
-
-  TulipSettings::instance().setFirstRun(false);
-  TulipSettings::instance().setFirstTulipMMRun(false);
-  int result = tulip_perspective.exec();
-  delete perspective;
-  delete mainWindow;
 
   // We need to clear allocated OpenGL resources
   // to remove a segfault when we close tulip

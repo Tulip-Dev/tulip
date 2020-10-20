@@ -23,6 +23,7 @@
 #include "tulip/ParenMatcherHighlighter.h"
 
 #include <tulip/Perspective.h>
+#include <tulip/TulipSettings.h>
 
 #include <QTextStream>
 #include <QPainter>
@@ -468,7 +469,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent)
   _currentFont.setPointSize(8);
 #endif
 
-  _darkBackground = Perspective::inDarkMode();
+  _darkBackground = TulipSettings::instance().isDisplayInDarkMode();
   format.setFont(_currentFont);
   setCurrentCharFormat(format);
 

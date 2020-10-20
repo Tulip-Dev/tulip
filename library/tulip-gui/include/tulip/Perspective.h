@@ -241,6 +241,16 @@ public:
     emit resetWindowTitle();
   }
 
+
+  bool _restartNeeded;
+  /**
+   * @brief a function to indicate restart
+   */
+  bool needRestart() {
+    return _restartNeeded;
+  }
+
+
   /**
    * @brief a static function to ease the display of status messages
    */
@@ -288,11 +298,6 @@ public:
    * the instance main window style sheet
    */
   static QString styleSheet();
-
-  /**
-   * @brief a static function to check dark mode
-   */
-  static bool inDarkMode();
 
 public slots:
   /**
@@ -381,13 +386,6 @@ protected slots:
    * @brief a virtual function to log a message
    */
   virtual void logMessage(QtMsgType, const QMessageLogContext &, const QString &) {}
-
-  /**
-   * @brief a virtual function to check dark mode
-   */
-  virtual bool hasDarkBackground() {
-    return false;
-  }
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Perspective::ProgressOptions)
 } // namespace tlp

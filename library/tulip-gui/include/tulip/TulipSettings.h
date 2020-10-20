@@ -177,6 +177,9 @@ public:
   bool warnUserAboutGraphicsCard() const;
   void setWarnUserAboutGraphicsCard(bool);
 
+  bool isDisplayInDarkMode() const;
+  void setDisplayInDarkMode(bool);
+
   // no longer used
   _DEPRECATED bool showStatusBar() const;
   _DEPRECATED void setShowStatusBar(bool);

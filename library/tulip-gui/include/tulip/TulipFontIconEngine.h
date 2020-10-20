@@ -25,7 +25,7 @@
 #include <QPixmap>
 #include <QFont>
 #include <tulip/tulipconf.h>
-#include <tulip/Perspective.h>
+#include <tulip/TulipSettings.h>
 
 class TLP_QT_SCOPE TulipFontIconEngine : public QIconEngine {
   QString iconQString;
@@ -62,12 +62,12 @@ public:
 
   static inline QPixmap pixmap(const std::string &iconName, unsigned int height,
                                QIcon::Mode mode = QIcon::Normal, QIcon::State state = QIcon::On) {
-    return TulipFontIconEngine(iconName, tlp::Perspective::instance()->inDarkMode()).pixmap(QSize(height, height), mode, state);
+    return TulipFontIconEngine(iconName, tlp::TulipSettings::instance().isDisplayInDarkMode()).pixmap(QSize(height, height), mode, state);
   }
 
   static inline QPixmap pixmap(const QString &iconName, unsigned int height,
                                QIcon::Mode mode = QIcon::Normal, QIcon::State state = QIcon::On) {
-    return TulipFontIconEngine(iconName, tlp::Perspective::instance()->inDarkMode()).pixmap(QSize(height, height), mode, state);
+    return TulipFontIconEngine(iconName, tlp::TulipSettings::instance().isDisplayInDarkMode()).pixmap(QSize(height, height), mode, state);
   }
 };
 

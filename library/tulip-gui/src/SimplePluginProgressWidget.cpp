@@ -27,12 +27,14 @@
 #include <iostream>
 
 #include <tulip/TlpQtTools.h>
+#include <tulip/TulipSettings.h>
 
 using namespace tlp;
 
 SimplePluginProgressWidget::SimplePluginProgressWidget(QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, f), _ui(new Ui::SimplePluginProgressWidgetData),
       _lastUpdate(QTime::currentTime()), _state(tlp::TLP_CONTINUE) {
+
   _ui->setupUi(this);
   _ui->cancelButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogCancelButton));
   _ui->stopButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_MediaStop));
@@ -139,9 +141,20 @@ void SimplePluginProgressWidget::stopClicked() {
 // ===================
 
 SimplePluginProgressDialog::SimplePluginProgressDialog(QWidget *parent)
-    : QDialog(parent, Qt::WindowTitleHint | Qt::CustomizeWindowHint), _painted(false),
-      _progress(new SimplePluginProgressWidget(this)) {
+    : QDialog(parent, Qt::WindowTitleHint | Qt::CustomizeWindowHint), _painted(false) {
   setModal(true);
+  // configure style sheet
+  QString s_sheet(R"(
+QDialog, QLabel, #SimplePluginProgressWidgetData { background-color: %BG_COLOR%; }
+QLabel { color: %FG_COLOR%; }
+)");
+
+  if (TulipSettings::instance().isDisplayInDarkMode())
+    s_sheet.replace("%BG_COLOR%", "#323232").replace("%FG_COLOR%", "white");
+  else
+    s_sheet.replace("%BG_COLOR%", "white").replace("%FG_COLOR%", "black");
+  setStyleSheet(s_sheet);
+  _progress = new SimplePluginProgressWidget(this);
   QVBoxLayout *mainLayout = new QVBoxLayout(this);
   mainLayout->setContentsMargins(0, 0, 0, 0);
   mainLayout->addWidget(_progress);

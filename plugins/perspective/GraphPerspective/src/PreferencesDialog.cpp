@@ -241,6 +241,7 @@ void PreferencesDialog::writeSettings() {
   TulipSettings::instance().setViewOrtho(_ui->viewOrthoCheck->isChecked());
   TulipSettings::instance().setResultPropertyStored(_ui->resultPropertyStoredCheck->isChecked());
   TulipSettings::instance().setLogPluginCall(_ui->logCombo->currentIndex());
+  TulipSettings::instance().setDisplayInDarkMode(_ui->displayModeCombo->currentIndex());
   TulipSettings::instance().setUseTlpbFileFormat(_ui->usetlpbformat->isChecked());
 
   if (_ui->randomSeedCheck->isChecked()) {
@@ -330,6 +331,7 @@ void PreferencesDialog::readSettings() {
   _ui->resultPropertyStoredCheck->setChecked(TulipSettings::instance().isResultPropertyStored());
   _ui->colorMappingCheck->setChecked(TulipSettings::instance().isAutomaticMapMetric());
   _ui->logCombo->setCurrentIndex(TulipSettings::instance().logPluginCall());
+  _ui->displayModeCombo->setCurrentIndex(TulipSettings::instance().isDisplayInDarkMode() ? 1 : 0);
 
   if (TulipSettings::instance().isUseTlpbFileFormat()) {
     _ui->usetlpbformat->setChecked(true);

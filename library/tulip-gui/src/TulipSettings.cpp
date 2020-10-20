@@ -72,6 +72,7 @@ static const QString TS_UseTlpbFileFormat = "graph/auto/usetlpb";
 static const QString TS_SeedForRandomSequence = "graph/auto/seed";
 
 static const QString TS_WarnUserAboutGraphicsCard = "app/warn_about_graphics_card";
+static const QString TS_DisplayInDarkMode = "app/gui/display_in_dark_mode";
 static const QString TS_ShowStatusBar = "app/gui/show_status_bar";
 static const QString TS_LoggerAnchored = "app/gui/logger_anchored";
 
@@ -447,6 +448,15 @@ bool TulipSettings::warnUserAboutGraphicsCard() const {
 
 void TulipSettings::setWarnUserAboutGraphicsCard(bool f) {
   setValue(TS_WarnUserAboutGraphicsCard, f);
+}
+
+bool TulipSettings::isDisplayInDarkMode() const {
+  return value(TS_DisplayInDarkMode, false).toBool();
+}
+
+void TulipSettings::setDisplayInDarkMode(bool f) {
+  if (f != isDisplayInDarkMode())
+    setValue(TS_DisplayInDarkMode, f);
 }
 
 bool TulipSettings::showStatusBar() const {
