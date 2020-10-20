@@ -157,7 +157,7 @@ void usage(const QString &error) {
 }
 
 SimplePluginProgressDialog *createProgress(QString &iconPath, QString &title) {
- SimplePluginProgressDialog *progress = new SimplePluginProgressDialog();
+  SimplePluginProgressDialog *progress = new SimplePluginProgressDialog();
   progress->setStopButtonVisible(false);
   progress->setCancelButtonVisible(false);
   progress->showPreview(false);
@@ -284,8 +284,8 @@ int main(int argc, char **argv) {
 
   int result;
   bool start = true;
-  while(start) {
-   QFileInfo fileInfo(projectFilePath);
+  while (start) {
+    QFileInfo fileInfo(projectFilePath);
 
     if (!projectFilePath.isEmpty() && (!fileInfo.exists() || fileInfo.isDir())) {
       usage("File " + projectFilePath + " not found or is a directory");
@@ -297,8 +297,8 @@ int main(int argc, char **argv) {
     TulipProject *project = nullptr;
     if (!projectFilePath.isEmpty() && projectFilePath.endsWith(".tlpx")) {
       project = TulipProject::openProject(projectFilePath, progress);
-     if (perspectiveName.isEmpty())
-	perspectiveName = project->perspective();
+      if (perspectiveName.isEmpty())
+        perspectiveName = project->perspective();
     } else {
       context->externalFile = projectFilePath;
       project = TulipProject::newProject();
@@ -321,12 +321,12 @@ int main(int argc, char **argv) {
     context->mainWindow = mainWindow;
 
     // Create perspective object
-    Perspective *perspective =
-      PluginLister::getPluginObject<Perspective>(tlp::QStringToTlpString(perspectiveName), context);
+    Perspective *perspective = PluginLister::getPluginObject<Perspective>(
+        tlp::QStringToTlpString(perspectiveName), context);
 
     if (perspective == nullptr) {
       usage("Cannot open perspective: " + perspectiveName +
-	    "\nWrong plugin type or plugin not found.");
+            "\nWrong plugin type or plugin not found.");
     }
 
     Perspective::setInstance(perspective);
@@ -362,7 +362,6 @@ int main(int argc, char **argv) {
 
     delete perspective;
     delete mainWindow;
-
   }
   delete context;
 

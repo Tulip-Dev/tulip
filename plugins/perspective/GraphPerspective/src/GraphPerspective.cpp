@@ -2074,30 +2074,30 @@ void GraphPerspective::openPreferences() {
   if (dlg.exec() == QDialog::Accepted) {
     dlg.writeSettings();
 
-    _restartNeeded =
-      darkMode != TulipSettings::instance().isDisplayInDarkMode();
-      if (_restartNeeded)
-	_restartNeeded =
-	  QMessageBox::question(_mainWindow, "Display mode update",
-				QString("The display mode cannot be updated until the next start up.\nDo you want to restart now?"),
-				QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes;
+    _restartNeeded = darkMode != TulipSettings::instance().isDisplayInDarkMode();
+    if (_restartNeeded)
+      _restartNeeded =
+          QMessageBox::question(_mainWindow, "Display mode update",
+                                QString("The display mode cannot be updated until the next start "
+                                        "up.\nDo you want to restart now?"),
+                                QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes;
 
     if (_restartNeeded)
       _mainWindow->close();
     else {
       for (auto v : _ui->workspace->panels()) {
-	GlMainView *glMainView = dynamic_cast<tlp::GlMainView *>(v);
+        GlMainView *glMainView = dynamic_cast<tlp::GlMainView *>(v);
 
-	if (glMainView != nullptr) {
-	  if (glMainView->getGlMainWidget() != nullptr) {
-	    glMainView->getGlMainWidget()
-              ->getScene()
-              ->getGlGraphComposite()
-              ->getRenderingParametersPointer()
-              ->setSelectionColor(TulipSettings::instance().defaultSelectionColor());
-	    glMainView->redraw();
-	  }
-	}
+        if (glMainView != nullptr) {
+          if (glMainView->getGlMainWidget() != nullptr) {
+            glMainView->getGlMainWidget()
+                ->getScene()
+                ->getGlGraphComposite()
+                ->getRenderingParametersPointer()
+                ->setSelectionColor(TulipSettings::instance().defaultSelectionColor());
+            glMainView->redraw();
+          }
+        }
       }
     }
   }
