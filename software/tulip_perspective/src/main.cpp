@@ -356,9 +356,12 @@ int main(int argc, char **argv) {
     TulipSettings::instance().setFirstTulipMMRun(false);
     result = tulip_perspective.exec();
 
-    if ((start = perspective->needRestart()))
+    if ((start = perspective->needRestart())) {
       // current geometry will be restored at the next start up
       windowGeometry = mainWindow->frameGeometry();
+      // and the current project file too
+      projectFilePath = project->projectFile();
+    }
 
     delete perspective;
     delete mainWindow;
