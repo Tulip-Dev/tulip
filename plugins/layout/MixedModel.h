@@ -19,6 +19,9 @@
 #ifndef _MixedModel_H
 #define _MixedModel_H
 
+#include <tulip/LayoutProperty.h>
+#include <tulip/PlanarConMap.h>
+
 #include <unordered_map>
 
 /** \addtogroup layout */
@@ -29,9 +32,8 @@
  *  C. Gutwenger and P. Mutzel, \n
  *  "Planar Polyline Drawings with Good Angular Resolution", \n
  *  "Lecture Notes In Computer Science, Vol. 1547" \n
- *  "Proceedings of the 6th International Symposium on Graph Drawing," \n
- *  pages "167--182" \n
- *  1998 \n
+ *  "Proceedings of the 6th International Symposium on Graph Drawing (GD 1998)," \n
+ *  pages "167--182", 1999, doi: <a href=\"https://doi.org/10.1007/3-540-37623-2_13\">https://doi.org/10.1007/3-540-37623-2_13</a>\n
  *
  *  Let n be the number of nodes, the original algorithm complexity is in O(n).\n
  *  But the implementation of the canonical ordering has not been made in O(n).\n
@@ -49,7 +51,8 @@ public:
                     "Implements the planar polyline graph drawing algorithm, the mixed model "
                     "algorithm, first published as:<br/>"
                     "<b>Planar Polyline Drawings with Good Angular Resolution</b>, C. Gutwenger "
-                    "and P. Mutzel, LNCS, Vol. 1547 pages 167--182 (1998).",
+                    "and P. Mutzel, LNCS, Vol. 1547 pages 167--182 (1999), "
+                    "doi: <a href=\"https://doi.org/10.1007/3-540-37623-2_13\">https://doi.org/10.1007/3-540-37623-2_13</a>",
                     "1.0", "Planar")
   MixedModel(const tlp::PluginContext *context);
   ~MixedModel() override;

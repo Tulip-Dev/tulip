@@ -31,13 +31,16 @@
 #include <algorithm>
 #include <vector>
 #include <set>
-#include <tulip/TulipPluginHeaders.h>
+
+#include <tulip/LayoutProperty.h>
 #include <tulip/Vector.h>
 #include <tulip/BoundingBox.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/ConnectedTest.h>
 #include <tulip/ParametricCurves.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/DoubleProperty.h>
 
 #include "DatasetTools.h"
 
@@ -78,7 +81,8 @@ public:
       "Implements the connected component packing algorithm published as:<br/>"
       "<b>Disconnected Graph Layout and the Polyomino Packing Approach</b>, Freivalds Karlis, "
       "Dogrusoz Ugur and Kikusts Paulis, "
-      "Graph Drawing '01 Revised Papers from the 9th International Symposium on Graph Drawing.",
+      "9th International Symposium on Graph Drawing 2001,"
+      "LNCS Vol. 2265 (2002), pp 378-391, doi: <a href=\"https://doi.org/10.1007/3-540-45848-4_30\">https://doi.org/10.1007/3-540-45848-4_30</a>",
       "1.0", "Misc")
   PolyominoPacking(const tlp::PluginContext *context);
 
@@ -154,14 +158,9 @@ bool PolyominoPacking::run() {
   vector<vector<node>> connectedComponents;
   tlp::ConnectedTest::computeConnectedComponents(graph, connectedComponents);
 
-  if (connectedComponents.size() <= 1) {
-    for (auto n : graph->nodes()) {
-      result->setNodeValue(n, layout->getNodeValue(n));
-    }
-    for (auto e : graph->edges()) {
-      result->setEdgeValue(e, layout->getEdgeValue(e));
-    }
-    return true;
+  if (connectedComponents.size() == 1) {
+      result->copy(layout);
+      return true;
   }
 
   shape = graph->getProperty<IntegerProperty>("viewShape");
@@ -194,7 +193,7 @@ bool PolyominoPacking::run() {
     return true;
 
   if (pluginProgress) {
-    pluginProgress->setComment("Generating polyominos ...");
+    pluginProgress->setComment("Generating polyominos...");
     if (pluginProgress->progress(0, polyominos.size()) != TLP_CONTINUE)
       return pluginProgress->state() != TLP_CANCEL;
   }
@@ -209,7 +208,7 @@ bool PolyominoPacking::run() {
   std::sort(polyominos.begin(), polyominos.end(), polyPerimOrdering());
 
   if (pluginProgress) {
-    pluginProgress->setComment("Packing polyominos ...");
+    pluginProgress->setComment("Packing polyominos...");
     if (pluginProgress->progress(0, polyominos.size()) != TLP_CONTINUE)
       return pluginProgress->state() != TLP_CANCEL;
   }

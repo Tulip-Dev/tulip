@@ -19,7 +19,7 @@
 #ifndef _TutteLAYOUT_H
 #define _TutteLAYOUT_H
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/LayoutProperty.h>
 
 /** \addtogroup layout */
 

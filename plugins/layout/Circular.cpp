@@ -19,6 +19,9 @@
 #include "Circular.h"
 #include "DatasetTools.h"
 
+#include <tulip/ConnectedTest.h>
+#include <tulip/GraphTools.h>
+
 PLUGIN(Circular)
 
 using namespace std;
@@ -36,7 +39,6 @@ Circular::Circular(const tlp::PluginContext *context) : LayoutAlgorithm(context)
 
 //===============================================================================
 static vector<node> extractCycle(node n, deque<node> &st) {
-  // tlp::warning() << __PRETTY_FUNCTION__ << endl;
   vector<node> result;
   auto it = st.rbegin();
 

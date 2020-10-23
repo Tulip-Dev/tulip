@@ -19,7 +19,7 @@
 #ifndef _RANDOMLAYOUT_H
 #define _RANDOMLAYOUT_H
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/LayoutProperty.h>
 
 /** This plugin is an implementation of a random 3D/2D layout
  *
@@ -27,12 +27,12 @@
  *  Let n be the number of nodes, the algorithm complexity is in O(n).
  *
  *
- *  \author David Auber University Bordeaux I France, Email : auber@tulip-software.com
+ *  \author David Auber University of Bordeaux France
  */
 class Random : public tlp::LayoutAlgorithm {
 public:
   PLUGININFORMATION("Random layout", "David Auber", "01/12/1999",
-                    "The positions of the graph nodes are randomly selected.", "1.1", "Basic")
+                    "The positions of the graph nodes are randomly selected in a 1024x1024 square.", "1.1", "Basic")
   Random(const tlp::PluginContext *context);
 
   bool run() override;

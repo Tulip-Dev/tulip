@@ -18,6 +18,8 @@
  */
 #include <tulip/GraphTools.h>
 #include <tulip/StringCollection.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/TreeTest.h>
 
 #include "TreeReingoldAndTilfordExtended.h"
 #include "DatasetTools.h"

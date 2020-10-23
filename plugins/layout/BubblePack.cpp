@@ -17,8 +17,13 @@
  *
  */
 #include <algorithm>
+
 #include <tulip/Circle.h>
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/StaticProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/ConnectedTest.h>
+#include <tulip/TreeTest.h>
 
 class BubblePack : public tlp::LayoutAlgorithm {
 public:

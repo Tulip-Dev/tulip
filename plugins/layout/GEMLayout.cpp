@@ -18,6 +18,12 @@
  */
 
 #include "GEMLayout.h"
+
+#include <tulip/NumericProperty.h>
+#include <tulip/GraphTools.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/ConnectedTest.h>
+
 // An implementation of the GEM3D layout algorithm, based on
 // code by Arne Frick placed in the public domain.  See GEMLayout.h for further details.
 

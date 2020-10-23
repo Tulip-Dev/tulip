@@ -16,18 +16,25 @@
  * See the GNU General Public License for more details.
  *
  */
+#include "MixedModel.h"
+
 #include <algorithm>
-#include <tulip/TulipPluginHeaders.h>
+
 #include <tulip/MapIterator.h>
-#include <tulip/PlanarConMap.h>
 #include <tulip/Ordering.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/Bfs.h>
 #include <tulip/GraphTools.h>
 #include <tulip/StringCollection.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/ConnectedTest.h>
+#include <tulip/PlanarityTest.h>
+#include <tulip/BiconnectedTest.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/SimpleTest.h>
+#include <tulip/ColorProperty.h>
 
-#include "MixedModel.h"
 #include "DatasetTools.h"
 
 PLUGIN(MixedModel)

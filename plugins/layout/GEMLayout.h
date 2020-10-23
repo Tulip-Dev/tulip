@@ -21,7 +21,11 @@
 
 #include <vector>
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/LayoutProperty.h>
+
+namespace tlp{
+class NumericProperty;
+}
 
 /** \addtogroup layout */
 
@@ -33,7 +37,8 @@
  *  "A fast, adaptive layout algorithm for undirected graphs", \n
  *  In R. Tamassia and I. Tollis (Eds), \n
  *  Graph Drawing'94, \n
- *  Volume 894 of Lecture Notes in Computer Science, Springer Verlag, 1995.
+ *  Volume 894 of Lecture Notes in Computer Science, Springer Verlag, 1995, \n
+ *  doi: <a href=\"https://doi.org/10.1007/3-540-58950-3_393\">10.1007/3-540-58950-3_393</a>
  *
  *  <b>HISTORY</b>
  *
@@ -79,7 +84,7 @@ public:
                     "Implements the GEM-2d layout algorithm first published as:<br/>"
                     " <b>A fast, adaptive layout algorithm for undirected graphs</b>, A. Frick, A. "
                     "Ludwig, and H. Mehldau, Graph Drawing'94, Volume 894 of Lecture Notes in "
-                    "Computer Science (1995).",
+                    "Computer Science (1995), doi: <a href=\"https://doi.org/10.1007/3-540-58950-3_393\">10.1007/3-540-58950-3_393</a>",
                     "1.2", "Force Directed")
   GEMLayout(const tlp::PluginContext *context);
   ~GEMLayout() override;

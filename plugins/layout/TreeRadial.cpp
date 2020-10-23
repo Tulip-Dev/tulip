@@ -17,7 +17,10 @@
  *
  */
 #include <stack>
-#include <tulip/TulipPluginHeaders.h>
+
+#include <tulip/LayoutProperty.h>
+#include <tulip/TreeTest.h>
+
 #include "DatasetTools.h"
 
 using namespace std;

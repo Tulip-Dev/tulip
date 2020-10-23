@@ -17,6 +17,8 @@
  *
  */
 #include <tulip/GraphTools.h>
+#include <tulip/TreeTest.h>
+
 #include "TreeLeaf.h"
 #include "DatasetTools.h"
 #include "Orientation.h"

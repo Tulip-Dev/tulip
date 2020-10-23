@@ -19,7 +19,8 @@
 #ifndef _BUBBLETREELAYOUT_H
 #define _BUBBLETREELAYOUT_H
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/StaticProperty.h>
 
 /** \addtogroup layout */
 
@@ -28,7 +29,8 @@
  *
  *  Bubble Tree Drawing Algorithm : \n
  *  D. Auber and S. Grivet and J-P Domenger and Guy Melancon, \n
- *  In International Conference on Computer Vision and Graphics, pages 633-641, september 2004.
+ *  Computer Vision and Graphics. Computational Imaging and Vision, vol 32, 2006. \n
+ *  Springer, Dordrecht <a href=\"https://doi.org/10.1007/1-4020-4179-9_91\">10.1007/1-4020-4179-9_91</a>",
  *
  *
  *  Let n be the number of nodes, the algorithm complexity is in O(n) or O(nlog(n)),
@@ -46,10 +48,11 @@
 class BubbleTree : public tlp::LayoutAlgorithm {
 public:
   PLUGININFORMATION("Bubble Tree", "D.Auber/S.Grivet", "16/05/2003",
-                    "Implement the bubble tree drawing algorithm first published as:<br/>"
-                    "<b>Bubble Tree Drawing Algorithm</b>, S. Grivet and D. Auber and J-P Domenger "
-                    "and Guy Melancon, ICCVG, pages 633-641 (2004)."
-                    "The layout produced can be used for visual detection of similarities.",
+                    "Implement the bubble tree drawing algorithm first published as:<br>"
+                    "<b>Bubble Tree Drawing Algorithm</b>, "
+                    "S. Grivet, D. Auber, J-P Domenger and Guy Melancon, "
+                    "Computer Vision and Graphics. Computational Imaging and Vision, vol 32, 2006. Springer, Dordrecht, "
+                    "doi: <a href=\"https://doi.org/10.1007/1-4020-4179-9_91\">10.1007/1-4020-4179-9_91</a>",
                     "1.1", "Tree")
   BubbleTree(const tlp::PluginContext *context);
   ~BubbleTree() override;

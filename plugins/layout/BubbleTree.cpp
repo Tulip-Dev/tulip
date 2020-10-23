@@ -17,7 +17,11 @@
  *
  */
 #include <algorithm>
+
 #include <tulip/Circle.h>
+#include <tulip/ConnectedTest.h>
+#include <tulip/TreeTest.h>
+
 #include "BubbleTree.h"
 #include "DatasetTools.h"
 
