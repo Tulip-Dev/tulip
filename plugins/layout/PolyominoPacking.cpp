@@ -82,7 +82,9 @@ public:
       "<b>Disconnected Graph Layout and the Polyomino Packing Approach</b>, Freivalds Karlis, "
       "Dogrusoz Ugur and Kikusts Paulis, "
       "9th International Symposium on Graph Drawing 2001,"
-      "LNCS Vol. 2265 (2002), pp 378-391, doi: <a href=\"https://doi.org/10.1007/3-540-45848-4_30\">https://doi.org/10.1007/3-540-45848-4_30</a>",
+      "LNCS Vol. 2265 (2002), pp 378-391, doi: <a "
+      "href=\"https://doi.org/10.1007/3-540-45848-4_30\">https://doi.org/10.1007/3-540-45848-4_30</"
+      "a>",
       "1.0", "Misc")
   PolyominoPacking(const tlp::PluginContext *context);
 
@@ -159,8 +161,8 @@ bool PolyominoPacking::run() {
   tlp::ConnectedTest::computeConnectedComponents(graph, connectedComponents);
 
   if (connectedComponents.size() == 1) {
-      result->copy(layout);
-      return true;
+    result->copy(layout);
+    return true;
   }
 
   shape = graph->getProperty<IntegerProperty>("viewShape");

@@ -50,13 +50,14 @@ struct LR {
  */
 class TreeReingoldAndTilfordExtended : public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATION("Hierarchical Tree (R-T Extended)", "David Auber and Romain Bourqui",
-                    "24/09/2010",
-                    "Implements the hierarchical tree layout algorithm first published as:<br/>"
-                    "<b>Tidier Drawings of Trees</b>, E.M. Reingold and J.S. Tilford, IEEE "
-                    "Transactions on Software Engineering pages 223--228 (1981), "
-                    "doi: <a href=\"https://doi.org/10.1109/TSE.1981.234519\">doi.org/10.1109/TSE.1981.234519</a>.",
-                    "1.1", "Tree")
+  PLUGININFORMATION(
+      "Hierarchical Tree (R-T Extended)", "David Auber and Romain Bourqui", "24/09/2010",
+      "Implements the hierarchical tree layout algorithm first published as:<br/>"
+      "<b>Tidier Drawings of Trees</b>, E.M. Reingold and J.S. Tilford, IEEE "
+      "Transactions on Software Engineering pages 223--228 (1981), "
+      "doi: <a "
+      "href=\"https://doi.org/10.1109/TSE.1981.234519\">doi.org/10.1109/TSE.1981.234519</a>.",
+      "1.1", "Tree")
   TreeReingoldAndTilfordExtended(const tlp::PluginContext *context);
   ~TreeReingoldAndTilfordExtended() override;
   bool run() override;

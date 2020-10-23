@@ -49,7 +49,8 @@ public:
       "Implements an extension of the Cone tree layout algorithm first published as:<br/>"
       "<b>Interacting with Huge Hierarchies: Beyond Cone Trees </b>, A. FJ. Carriere and R. "
       "Kazman, InfoViz'95, IEEE Symposium on Information Visualization pages 74--78 (1995),"
-      "doi: <a href=\"https://dx.doi.org/10.1109/INFVIS.1995.528689\">10.1109/INFVIS.1995.528689</a>",
+      "doi: <a "
+      "href=\"https://dx.doi.org/10.1109/INFVIS.1995.528689\">10.1109/INFVIS.1995.528689</a>",
       "1.0", "Tree")
   ConeTreeExtended(const tlp::PluginContext *context);
   ~ConeTreeExtended() override;
