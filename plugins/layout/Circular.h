@@ -19,7 +19,7 @@
 #ifndef _BUBBLE_CIRCULARLAYOUT_H
 #define _BUBBLE_CIRCULARLAYOUT_H
 
-#include <tulip/LayoutProperty.h>.h>
+#include <tulip/LayoutProperty.h>
 
 /** \addtogroup layout */
 
