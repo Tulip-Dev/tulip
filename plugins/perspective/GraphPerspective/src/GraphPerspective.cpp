@@ -572,8 +572,8 @@ color: %FG_COLOR%;
 
 QLineEdit[clearableLineEdit] {
 border: 1px solid #808080;
-background-color: %BG_COLOR%;
-color: %FG_COLOR%;
+background-color: white;
+color: black;
 }
 
 QHeaderView::down-arrow {
