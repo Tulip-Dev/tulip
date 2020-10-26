@@ -55,8 +55,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
   QString git_rev(getTulipGitRevision());
 
   if (!git_rev.isEmpty())
-    title += "<br/>(Git commit: <a href=\"" + TulipRepoUrl + "/commit/" + git_rev + "\">" + "<span style=\"color: #0d47f1;\">" +
-      git_rev.mid(0, 7) + "</span></a>)";
+    title += "<br/>(Git commit: <a href=\"" + TulipRepoUrl + "/commit/" + git_rev + "\">" +
+             "<span style=\"color: #0d47f1;\">" + git_rev.mid(0, 7) + "</span></a>)";
 
   _ui->logolabel->setPixmap(QPixmap(tlpStringToQString(TulipBitmapDir + "/logo.bmp")));
   _ui->TulipLabel->setText(
@@ -65,8 +65,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       "  <body>"
       "    <p align=\"center\"><span style=\" font-size:24pt; font-weight:600;\">" +
       title + "</span></p>" +
-      (!git_rev.isEmpty() ? (QString("    <p align=\"center\"><a href=\"") + TulipRepoUrl + "\">" + "<span style=\"color: #0d47f1;\">" +
-                             TulipRepoUrl + "</span></a></p>")
+      (!git_rev.isEmpty() ? (QString("    <p align=\"center\"><a href=\"") + TulipRepoUrl + "\">" +
+                             "<span style=\"color: #0d47f1;\">" + TulipRepoUrl + "</span></a></p>")
                           : QString()) +
       "  </body>"
       "</html>");
@@ -82,27 +82,31 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       "<ul>"
       "  <li> <b> Qt </b> " +
       tlpStringToQString(qVersion()) +
-    ": <a href=\"https://www.qt.io\"><span style=\"color: #0d47f1;\">https://www.qt.io</span></a></li>"
+      ": <a href=\"https://www.qt.io\"><span style=\"color: "
+      "#0d47f1;\">https://www.qt.io</span></a></li>"
       "  <li> <b> OpenGL </b> " +
       (openGL_OK ? QString::number(OpenGlConfigManager::getOpenGLVersion()) : QString("?.?")) +
       " (from vendor " +
       (openGL_OK ? tlpStringToQString(OpenGlConfigManager::getOpenGLVendor())
                  : QString("unknown")) +
-    "): <a href=\"https://www.opengl.org\"><span style=\"color: #0d47f1;\">https://www.opengl.org</span></a> </li>"
+      "): <a href=\"https://www.opengl.org\"><span style=\"color: "
+      "#0d47f1;\">https://www.opengl.org</span></a> </li>"
       "<li><b>OGDF</b> v" +
       OGDF_VERSION +
       ": <a "
-    "href=\"http://ogdf.net/\"><span style=\"color: #0d47f1;\">http://ogdf.net/</span></a> </li>"
+      "href=\"http://ogdf.net/\"><span style=\"color: #0d47f1;\">http://ogdf.net/</span></a> </li>"
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 
       "  <li> <b> Python </b> " +
       PythonVersionChecker::compiledVersion() +
-    ": <a href=\"https://www.python.org\"><span style=\"color: #0d47f1;\">https://www.python.org</span></a> </li>"
+      ": <a href=\"https://www.python.org\"><span style=\"color: "
+      "#0d47f1;\">https://www.python.org</span></a> </li>"
       "  <li> <b> SIP </b> " +
       getSipVersion() +
       ": <a "
-      "href=\"https://www.riverbankcomputing.com/software/sip\"><span style=\"color: #0d47f1;\">https://"
-    "www.riverbankcomputing.com/software/sip</span></a> </li>"
+      "href=\"https://www.riverbankcomputing.com/software/sip\"><span style=\"color: "
+      "#0d47f1;\">https://"
+      "www.riverbankcomputing.com/software/sip</span></a> </li>"
 #endif
       "</ul>"
       "</p>";
