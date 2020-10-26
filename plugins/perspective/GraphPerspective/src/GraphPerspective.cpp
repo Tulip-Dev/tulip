@@ -513,7 +513,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
   // configure style sheet
   QString s_sheet(R"(
-#AboutTulipPageWidget, #AlgorithmRunner, #AlgorithmRunner #contents, tlp--AlgorithRunnerItem, #ElementInformationWidget, #interactorConfigWidget, #interactorConfigWidgetDoc, #interactorConfigWidgetOptions, #mainWidget, #stringsListSelectionWidget, #TableViewWidget, QAbstractItemView, QCheckBox, QDialog, QHeaderView::section, QMessageBox, QRadioButton, QStackedWidget, QTabBar::tab, QTableView QTableCornerButton::section, QTextBrowser, QWizard, QWizard > * { background-color: %BG_COLOR%; }
+#AboutTulipPageWidget, #AboutTulipPageWidget QTextEdit, #AlgorithmRunner, #AlgorithmRunner #contents, tlp--AlgorithRunnerItem, #ElementInformationWidget, #interactorConfigWidget, #interactorConfigWidgetDoc, #interactorConfigWidgetOptions, #mainWidget, #stringsListSelectionWidget, #TableViewWidget, QAbstractItemView, QCheckBox, QDialog, QHeaderView::section, QMessageBox, QRadioButton, QStackedWidget, QTabBar::tab, QTableView QTableCornerButton::section, QTextBrowser, QWizard, QWizard > * { background-color: %BG_COLOR%; }
 
 #AxisSlidersOptions { background-color: %BG_COLOR%; }
 
@@ -566,7 +566,7 @@ color: %FG_COLOR%;
 font: 12px;
 }
 
-#ElementInformationWidget, #ElementInformationWidget QPushButton, #PanelSelectionWizard QListView, QComboBox QAbstractItemView:enabled, QComboBox:item:enabled, QCheckBox:enabled, QGroupBox:enabled, QHeaderView::section:enabled, QLabel:enabled, QListWidget:enabled, QRadioButton:enabled, QTabBar::tab:enabled, QTableWidget:enabled, QTableView:enabled, QTextBrowser:enabled, QToolButton:enabled, QTreeView:enabled {
+#AboutTulipPageWidget QTextEdit:enabled, #ElementInformationWidget, #ElementInformationWidget QPushButton, #PanelSelectionWizard QListView, QComboBox QAbstractItemView:enabled, QComboBox:item:enabled, QCheckBox:enabled, QGroupBox:enabled, QHeaderView::section:enabled, QLabel:enabled, QListWidget:enabled, QRadioButton:enabled, QTabBar::tab:enabled, QTableWidget:enabled, QTableView:enabled, QTextBrowser:enabled, QToolButton:enabled, QTreeView:enabled {
 color: %FG_COLOR%;
 }
 
