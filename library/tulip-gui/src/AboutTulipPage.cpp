@@ -104,7 +104,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       "<li><a href=\"https://www.python.org\"><span style=\"color: #0d47f1;\">"
       "<b> Python </b></span></a> " + PythonVersionChecker::compiledVersion() +
       "</li>"
-      "<li> <a href=\"https://www.riverbankcomputing.com/software/sip\"><span style=\"color: #0d47f1;\">"
+      "<li> <a href=\"https://www.riverbankcomputing.com/software/sip\"><span style=\"color:
+#0d47f1;\">"
       "<b>SIP</b></span></a> " + getSipVersion() + "</li>"
 #endif
       "</ul>"
@@ -136,7 +137,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       "href=\"https://www.riverbankcomputing.com/software/sip\"><span style=\"color: "
       "#0d47f1;\">www.riverbankcomputing.com/software/sip</span></a></li>"
 #endif
-      "<li><b>Font Awesome</b> " + TulipFontAwesome::getVersion().c_str() +
+      "<li><b>Font Awesome</b> " +
+      TulipFontAwesome::getVersion().c_str() +
       ": <a href=\"http://fontawesome.com\"><span style=\"color: #0d47f1;\">"
       "fontawesome.com</span></a></li>"
       "<li><b>Material Design Icons</b> " +
@@ -158,7 +160,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
           SLOT(openUrlInBrowser(const QString &)));
   connect(_ui->TulipLabel, SIGNAL(linkActivated(const QString &)), this,
           SLOT(openUrlInBrowser(const QString &)));
-  connect(_ui->websiteLabel, SIGNAL(linkActivated(const QString &)), this, SLOT(openUrlInBrowser(const QString &)));
+  connect(_ui->websiteLabel, SIGNAL(linkActivated(const QString &)), this,
+          SLOT(openUrlInBrowser(const QString &)));
 
   // Fetch RSS
   _ui->rssScroll->setVisible(false);
@@ -232,7 +235,8 @@ void AboutTulipPage::rssReply(QNetworkReply *reply) {
         label->setMinimumWidth(1);
         label->setWordWrap(true);
         label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        connect(label, SIGNAL(linkActivated(const QString &)), this, SLOT(openUrlInBrowser(const QString &)));
+        connect(label, SIGNAL(linkActivated(const QString &)), this,
+                SLOT(openUrlInBrowser(const QString &)));
         rssLayout->addWidget(label);
       }
     }
