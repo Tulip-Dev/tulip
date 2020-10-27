@@ -30,6 +30,8 @@ namespace Ui {
 class AboutTulipPageWidget;
 }
 
+class QNetworkReply;
+
 namespace tlp {
 
 /**
@@ -47,6 +49,7 @@ public:
 private slots:
 
   void openUrlInBrowser(const QString &url);
+  void rssReply(QNetworkReply *);
 
 private:
   Ui::AboutTulipPageWidget *_ui;

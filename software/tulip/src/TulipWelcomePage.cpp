@@ -47,15 +47,8 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent)
   _ui->setupUi(this);
 
   // Finalize Ui
-  connect(_ui->websiteLabel, SIGNAL(linkActivated(QString)), this, SLOT(openLink(QString)));
   _ui->openProjectButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DirHomeIcon));
   connect(_ui->openProjectButton, SIGNAL(clicked()), this, SIGNAL(openProject()));
-
-  // Fetch RSS
-  _ui->rssScroll->setVisible(false);
-  QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-  connect(manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(rssReply(QNetworkReply *)));
-  manager->get(QNetworkRequest(QUrl(RSS_URL)));
 
   // Recent documents list
   TulipSettings::instance().checkRecentDocuments();
@@ -83,57 +76,6 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent)
 
 TulipWelcomePage::~TulipWelcomePage() {
   delete _ui;
-}
-
-void TulipWelcomePage::rssReply(QNetworkReply *reply) {
-  sender()->deleteLater();
-  QXmlStreamReader xmlReader(reply);
-  unsigned i = 0;
-  QVBoxLayout *rssLayout = new QVBoxLayout;
-  rssLayout->setContentsMargins(0, 0, 0, 0);
-  rssLayout->setSpacing(30);
-  _ui->rssScroll->widget()->setLayout(rssLayout);
-
-  while (!xmlReader.atEnd() && i < RSS_LIMIT) {
-    if (xmlReader.readNextStartElement()) {
-      QString title, description;
-
-      if (xmlReader.name() == "item") {
-        ++i;
-        _ui->rssError->setVisible(false);
-        _ui->rssScroll->setVisible(true);
-        QXmlStreamReader::TokenType p(xmlReader.readNext());
-
-        while (xmlReader.name() != "item" && p != QXmlStreamReader::EndElement) {
-          xmlReader.readNextStartElement();
-
-          if (xmlReader.name() == "title")
-            title = xmlReader.readElementText();
-
-          if (xmlReader.name() == "description")
-            description = xmlReader.readElementText();
-        }
-
-        QString text("<p><span style=\"color:#626262; font-size:large;\">");
-        text += title + "</span></p><p><span>" + description + "</span></p>";
-        QLabel *label = new QLabel(text, nullptr);
-        label->setMinimumWidth(1);
-        label->setWordWrap(true);
-        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        connect(label, SIGNAL(linkActivated(QString)), this, SLOT(openLink(QString)));
-        rssLayout->addWidget(label);
-      }
-    }
-
-    if (xmlReader.hasError()) {
-      _ui->rssError->setVisible(true);
-      _ui->rssScroll->setVisible(false);
-    }
-  }
-}
-
-void TulipWelcomePage::openLink(const QString &link) {
-  QDesktopServices::openUrl(link);
 }
 
 void TulipWelcomePage::recentFileLinkActivated(const QString &link) {

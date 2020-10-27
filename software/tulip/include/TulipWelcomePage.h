@@ -47,8 +47,6 @@ signals:
   void openFile(QString);
 
 protected slots:
-  void rssReply(QNetworkReply *);
-  void openLink(const QString &link);
   void recentFileLinkActivated(const QString &);
 
 private:
