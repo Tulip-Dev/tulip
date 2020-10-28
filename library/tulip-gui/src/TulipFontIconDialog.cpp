@@ -40,12 +40,12 @@ TulipFontIconDialog::TulipFontIconDialog(QWidget *parent)
   _ui->iconsCreditLabel->setText(
       QString("<p style=\" font-size:11px;\">Special credit for the design "
               "of icons goes to:<br/><b>Font "
-              "Awesome </b><span style=\"color:#0d47f1;\"><a "
-              "href=\"http://fontawesome.com\">http://fontawesome.com</a></span> "
-              "(v%1)<br/><b>Material Design Icons </b><span "
-              "style=\"color:#0d47f1;\"><a "
-              "href=\"https://materialdesignicons.com\">https://materialdesignicons.com</a></"
-              "span> (v%2)</p>")
+              "Awesome </b><a "
+              "href=\"http://fontawesome.com\"><span style=\"color:#0d47f1;\">fontawesome.com</span></a> "
+              "(v%1)<br/><b>Material Design Icons </b>"
+              "<a "
+              "href=\"https://materialdesignicons.com\"><span style=\"color:#0d47f1;\">materialdesignicons.com</span></"
+              "a> (v%2)</p>")
           .arg(TulipFontAwesome::getVersion().c_str())
           .arg(TulipMaterialDesignIcons::getVersion().c_str()));
   connect(_ui->iconNameFilterLineEdit, SIGNAL(textChanged(const QString &)), this,
