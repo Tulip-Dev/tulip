@@ -100,6 +100,7 @@ GeographicViewShowElementInfo::GeographicViewShowElementInfo() : _editor(nullptr
   Ui::ElementInformationWidget ui;
   _informationWidget = new QWidget();
   _informationWidget->installEventFilter(this);
+  Perspective::setStyleSheet(_informationWidget);
   ui.setupUi(_informationWidget);
   ui.displayTulipProp->hide();
   connect(ui.closeButton, SIGNAL(clicked()), this, SLOT(hideInfos()));

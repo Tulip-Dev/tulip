@@ -475,6 +475,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
                                         "Open the Geolocation configuration tab\n"
                                         "to proceed.");
   msgBox->setModal(false);
+  Perspective::setStyleSheet(msgBox);
   noLayoutMsgBox = scene()->addWidget(msgBox);
   noLayoutMsgBox->setParentItem(_placeholderItem);
 
