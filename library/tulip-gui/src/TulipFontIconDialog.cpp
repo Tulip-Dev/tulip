@@ -41,10 +41,12 @@ TulipFontIconDialog::TulipFontIconDialog(QWidget *parent)
       QString("<p style=\" font-size:11px;\">Special credit for the design "
               "of icons goes to:<br/><b>Font "
               "Awesome </b><a "
-              "href=\"http://fontawesome.com\"><span style=\"color:#0d47f1;\">fontawesome.com</span></a> "
+              "href=\"http://fontawesome.com\"><span "
+              "style=\"color:#0d47f1;\">fontawesome.com</span></a> "
               "(v%1)<br/><b>Material Design Icons </b>"
               "<a "
-              "href=\"https://materialdesignicons.com\"><span style=\"color:#0d47f1;\">materialdesignicons.com</span></"
+              "href=\"https://materialdesignicons.com\"><span "
+              "style=\"color:#0d47f1;\">materialdesignicons.com</span></"
               "a> (v%2)</p>")
           .arg(TulipFontAwesome::getVersion().c_str())
           .arg(TulipMaterialDesignIcons::getVersion().c_str()));
