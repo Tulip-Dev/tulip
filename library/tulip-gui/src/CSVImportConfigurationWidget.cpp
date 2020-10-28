@@ -78,6 +78,7 @@ QString PropertyConfigurationWidget::getPropertyName() const {
 void PropertyConfigurationWidget::setPropertyName(const QString &pName) {
   _name = QStringToTlpString(pName);
   propertyEditButton->setText(QString("%1\n[%2]").arg(pName).arg(QString(_type.c_str())));
+  propertyEditButton->setToolTip(QString("<center><b>Column #%1</b></center>name: %2<br/>type: %3<br>Click for more import options.").arg(propertyNumber).arg(pName).arg(_type.c_str()));
 }
 
 unsigned int PropertyConfigurationWidget::getPropertyNumber() const {
@@ -236,7 +237,9 @@ void CSVTableHeader::checkBoxPressed(int logicalIndex) {
 
 CSVTableWidget::CSVTableWidget(QWidget *parent)
     : QTableWidget(parent), maxLineNumber(UINT_MAX), firstLineIndex(0), checkCommentsLines(true),
-      nbCommentsLines(0) {}
+      nbCommentsLines(0) {
+  horizontalHeader()->setMinimumSectionSize(50);
+}
 
 bool CSVTableWidget::begin() {
   clear();
