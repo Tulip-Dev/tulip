@@ -162,8 +162,7 @@ void PreferencesDialog::writeSettings() {
 
   if (TulipSettings::defaultColor(tlp::NODE) !=
       model->data(model->index(0, 1)).value<tlp::Color>()) {
-    TulipSettings::setDefaultColor(tlp::NODE,
-                                              model->data(model->index(0, 1)).value<tlp::Color>());
+    TulipSettings::setDefaultColor(tlp::NODE, model->data(model->index(0, 1)).value<tlp::Color>());
 
     if (applyDrawingDefaults)
       setDefaultNodeValueInProperty<ColorProperty>(
@@ -172,36 +171,31 @@ void PreferencesDialog::writeSettings() {
 
   if (TulipSettings::defaultColor(tlp::EDGE) !=
       model->data(model->index(0, 2)).value<tlp::Color>()) {
-    TulipSettings::setDefaultColor(tlp::EDGE,
-                                              model->data(model->index(0, 2)).value<tlp::Color>());
+    TulipSettings::setDefaultColor(tlp::EDGE, model->data(model->index(0, 2)).value<tlp::Color>());
 
     if (applyDrawingDefaults)
       setDefaultEdgeValueInProperty<ColorProperty>(
           "viewColor", TulipSettings::defaultColor(tlp::EDGE), graphPush);
   }
 
-  if (TulipSettings::defaultSize(tlp::NODE) !=
-      model->data(model->index(1, 1)).value<tlp::Size>()) {
-    TulipSettings::setDefaultSize(tlp::NODE,
-                                             model->data(model->index(1, 1)).value<tlp::Size>());
-    setDefaultNodeValueInProperty<SizeProperty>(
-        "viewSize", TulipSettings::defaultSize(tlp::NODE), graphPush);
+  if (TulipSettings::defaultSize(tlp::NODE) != model->data(model->index(1, 1)).value<tlp::Size>()) {
+    TulipSettings::setDefaultSize(tlp::NODE, model->data(model->index(1, 1)).value<tlp::Size>());
+    setDefaultNodeValueInProperty<SizeProperty>("viewSize", TulipSettings::defaultSize(tlp::NODE),
+                                                graphPush);
   }
 
-  if (TulipSettings::defaultSize(tlp::EDGE) !=
-      model->data(model->index(1, 2)).value<tlp::Size>()) {
-    TulipSettings::setDefaultSize(tlp::EDGE,
-                                             model->data(model->index(1, 2)).value<tlp::Size>());
+  if (TulipSettings::defaultSize(tlp::EDGE) != model->data(model->index(1, 2)).value<tlp::Size>()) {
+    TulipSettings::setDefaultSize(tlp::EDGE, model->data(model->index(1, 2)).value<tlp::Size>());
 
     if (applyDrawingDefaults)
-      setDefaultEdgeValueInProperty<SizeProperty>(
-          "viewSize", TulipSettings::defaultSize(tlp::EDGE), graphPush);
+      setDefaultEdgeValueInProperty<SizeProperty>("viewSize", TulipSettings::defaultSize(tlp::EDGE),
+                                                  graphPush);
   }
 
   if (TulipSettings::defaultShape(tlp::NODE) !=
       model->data(model->index(2, 1)).value<NodeShape::NodeShapes>()) {
-    TulipSettings::setDefaultShape(
-        tlp::NODE, model->data(model->index(2, 1)).value<NodeShape::NodeShapes>());
+    TulipSettings::setDefaultShape(tlp::NODE,
+                                   model->data(model->index(2, 1)).value<NodeShape::NodeShapes>());
 
     if (applyDrawingDefaults)
       setDefaultNodeValueInProperty<IntegerProperty>(
@@ -216,21 +210,18 @@ void PreferencesDialog::writeSettings() {
         "viewShape", TulipSettings::defaultShape(tlp::EDGE), graphPush);
   }
 
-  if (TulipSettings::defaultLabelColor() !=
-      model->data(model->index(4, 1)).value<tlp::Color>()) {
-    TulipSettings::setDefaultLabelColor(
-        model->data(model->index(4, 1)).value<tlp::Color>());
+  if (TulipSettings::defaultLabelColor() != model->data(model->index(4, 1)).value<tlp::Color>()) {
+    TulipSettings::setDefaultLabelColor(model->data(model->index(4, 1)).value<tlp::Color>());
 
     if (applyDrawingDefaults) {
-      setDefaultNodeValueInProperty<ColorProperty>(
-          "viewLabelColor", TulipSettings::defaultLabelColor(), graphPush);
-      setDefaultEdgeValueInProperty<ColorProperty>(
-          "viewLabelColor", TulipSettings::defaultLabelColor(), graphPush);
+      setDefaultNodeValueInProperty<ColorProperty>("viewLabelColor",
+                                                   TulipSettings::defaultLabelColor(), graphPush);
+      setDefaultEdgeValueInProperty<ColorProperty>("viewLabelColor",
+                                                   TulipSettings::defaultLabelColor(), graphPush);
     }
   }
 
-  TulipSettings::setDefaultSelectionColor(
-      model->data(model->index(3, 1)).value<tlp::Color>());
+  TulipSettings::setDefaultSelectionColor(model->data(model->index(3, 1)).value<tlp::Color>());
 
   TulipSettings::applyProxySettings();
 
@@ -297,24 +288,24 @@ void PreferencesDialog::readSettings() {
   _ui->proxyPassword->setText(TulipSettings::proxyPassword());
 
   QAbstractItemModel *model = _ui->graphDefaultsTable->model();
-  model->setData(model->index(0, 1), QVariant::fromValue<tlp::Color>(
-                                         TulipSettings::defaultColor(tlp::NODE)));
-  model->setData(model->index(0, 2), QVariant::fromValue<tlp::Color>(
-                                         TulipSettings::defaultColor(tlp::EDGE)));
+  model->setData(model->index(0, 1),
+                 QVariant::fromValue<tlp::Color>(TulipSettings::defaultColor(tlp::NODE)));
+  model->setData(model->index(0, 2),
+                 QVariant::fromValue<tlp::Color>(TulipSettings::defaultColor(tlp::EDGE)));
   model->setData(model->index(1, 1),
                  QVariant::fromValue<tlp::Size>(TulipSettings::defaultSize(tlp::NODE)));
   model->setData(model->index(1, 2),
                  QVariant::fromValue<tlp::Size>(TulipSettings::defaultSize(tlp::EDGE)));
   model->setData(model->index(2, 1),
-                 QVariant::fromValue<NodeShape::NodeShapes>(static_cast<NodeShape::NodeShapes>(
-                     TulipSettings::defaultShape(tlp::NODE))));
+                 QVariant::fromValue<NodeShape::NodeShapes>(
+                     static_cast<NodeShape::NodeShapes>(TulipSettings::defaultShape(tlp::NODE))));
   model->setData(model->index(2, 2),
-                 QVariant::fromValue<EdgeShape::EdgeShapes>(static_cast<EdgeShape::EdgeShapes>(
-                     TulipSettings::defaultShape(tlp::EDGE))));
-  model->setData(model->index(3, 1), QVariant::fromValue<tlp::Color>(
-                                         TulipSettings::getDefaultSelectionColor()));
-  model->setData(model->index(3, 2), QVariant::fromValue<tlp::Color>(
-                                         TulipSettings::getDefaultSelectionColor()));
+                 QVariant::fromValue<EdgeShape::EdgeShapes>(
+                     static_cast<EdgeShape::EdgeShapes>(TulipSettings::defaultShape(tlp::EDGE))));
+  model->setData(model->index(3, 1),
+                 QVariant::fromValue<tlp::Color>(TulipSettings::getDefaultSelectionColor()));
+  model->setData(model->index(3, 2),
+                 QVariant::fromValue<tlp::Color>(TulipSettings::getDefaultSelectionColor()));
   model->setData(model->index(4, 1),
                  QVariant::fromValue<tlp::Color>(TulipSettings::defaultLabelColor()));
   model->setData(model->index(4, 2),
@@ -387,25 +378,21 @@ void PreferencesDialog::resetToTulipDefaults(int row, int updateMode) {
   switch (row) {
   case 0: // default color
     if (updateMode == RESET_NODE)
-      model->setData(
-          model->index(0, 1),
-          QVariant::fromValue<tlp::Color>(TulipSettings::defaultColor(tlp::NODE, true)));
+      model->setData(model->index(0, 1),
+                     QVariant::fromValue<tlp::Color>(TulipSettings::defaultColor(tlp::NODE, true)));
     else
-      model->setData(
-          model->index(0, 2),
-          QVariant::fromValue<tlp::Color>(TulipSettings::defaultColor(tlp::EDGE, true)));
+      model->setData(model->index(0, 2),
+                     QVariant::fromValue<tlp::Color>(TulipSettings::defaultColor(tlp::EDGE, true)));
 
     break;
 
   case 1: // default size
     if (updateMode == RESET_NODE)
-      model->setData(
-          model->index(1, 1),
-          QVariant::fromValue<tlp::Size>(TulipSettings::defaultSize(tlp::NODE, true)));
+      model->setData(model->index(1, 1),
+                     QVariant::fromValue<tlp::Size>(TulipSettings::defaultSize(tlp::NODE, true)));
     else
-      model->setData(
-          model->index(1, 2),
-          QVariant::fromValue<tlp::Size>(TulipSettings::defaultSize(tlp::EDGE, true)));
+      model->setData(model->index(1, 2),
+                     QVariant::fromValue<tlp::Size>(TulipSettings::defaultSize(tlp::EDGE, true)));
 
     break;
 
@@ -423,23 +410,21 @@ void PreferencesDialog::resetToTulipDefaults(int row, int updateMode) {
 
   case 3: // default selection color
     if (updateMode == RESET_NODE)
-      model->setData(
-          model->index(3, 1),
-          QVariant::fromValue<tlp::Color>(TulipSettings::getDefaultSelectionColor(true)));
+      model->setData(model->index(3, 1), QVariant::fromValue<tlp::Color>(
+                                             TulipSettings::getDefaultSelectionColor(true)));
     else
-      model->setData(
-          model->index(3, 2),
-          QVariant::fromValue<tlp::Color>(TulipSettings::getDefaultSelectionColor(true)));
+      model->setData(model->index(3, 2), QVariant::fromValue<tlp::Color>(
+                                             TulipSettings::getDefaultSelectionColor(true)));
 
     break;
 
   case 4: // default label color
     if (updateMode == RESET_NODE)
-      model->setData(model->index(4, 1), QVariant::fromValue<tlp::Color>(
-                                             TulipSettings::defaultLabelColor(true)));
+      model->setData(model->index(4, 1),
+                     QVariant::fromValue<tlp::Color>(TulipSettings::defaultLabelColor(true)));
     else
-      model->setData(model->index(4, 2), QVariant::fromValue<tlp::Color>(
-                                             TulipSettings::defaultLabelColor(true)));
+      model->setData(model->index(4, 2),
+                     QVariant::fromValue<tlp::Color>(TulipSettings::defaultLabelColor(true)));
 
   default:
     break;

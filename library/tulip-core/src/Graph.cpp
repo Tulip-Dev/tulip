@@ -103,24 +103,18 @@ static void setViewPropertiesDefaults(Graph *g) {
                     texture = "viewTexture", tgtAnchorSize = "viewTgtAnchorSize";
 
   if (!g->existProperty(shapes)) {
-    g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(
-        TulipViewSettings::defaultShape(NODE));
-    g->getProperty<IntegerProperty>(shapes)->setAllEdgeValue(
-        TulipViewSettings::defaultShape(EDGE));
+    g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(TulipViewSettings::defaultShape(NODE));
+    g->getProperty<IntegerProperty>(shapes)->setAllEdgeValue(TulipViewSettings::defaultShape(EDGE));
   }
 
   if (!g->existProperty(colors)) {
-    g->getProperty<ColorProperty>(colors)->setAllNodeValue(
-        TulipViewSettings::defaultColor(NODE));
-    g->getProperty<ColorProperty>(colors)->setAllEdgeValue(
-        TulipViewSettings::defaultColor(EDGE));
+    g->getProperty<ColorProperty>(colors)->setAllNodeValue(TulipViewSettings::defaultColor(NODE));
+    g->getProperty<ColorProperty>(colors)->setAllEdgeValue(TulipViewSettings::defaultColor(EDGE));
   }
 
   if (!g->existProperty(sizes)) {
-    g->getProperty<SizeProperty>(sizes)->setAllNodeValue(
-        TulipViewSettings::defaultSize(NODE));
-    g->getProperty<SizeProperty>(sizes)->setAllEdgeValue(
-        TulipViewSettings::defaultSize(EDGE));
+    g->getProperty<SizeProperty>(sizes)->setAllNodeValue(TulipViewSettings::defaultSize(NODE));
+    g->getProperty<SizeProperty>(sizes)->setAllEdgeValue(TulipViewSettings::defaultSize(EDGE));
   }
 
   if (!g->existProperty(metrics)) {
@@ -129,10 +123,8 @@ static void setViewPropertiesDefaults(Graph *g) {
   }
 
   if (!g->existProperty(fonts)) {
-    g->getProperty<StringProperty>(fonts)->setAllNodeValue(
-        TulipViewSettings::defaultFontFile());
-    g->getProperty<StringProperty>(fonts)->setAllEdgeValue(
-        TulipViewSettings::defaultFontFile());
+    g->getProperty<StringProperty>(fonts)->setAllNodeValue(TulipViewSettings::defaultFontFile());
+    g->getProperty<StringProperty>(fonts)->setAllEdgeValue(TulipViewSettings::defaultFontFile());
   }
 
   if (!g->existProperty(fontSizes)) {

@@ -111,8 +111,7 @@ static bool tulipCanOpenFile(const QString &path) {
 }
 
 GraphPerspective::GraphPerspective(const tlp::PluginContext *c)
-    : Perspective(c), _ui(nullptr), _graphs(new GraphHierarchiesModel(this)),
-      _logger(nullptr),
+    : Perspective(c), _ui(nullptr), _graphs(new GraphHierarchiesModel(this)), _logger(nullptr),
       _searchDialog(nullptr) {
   Q_INIT_RESOURCE(GraphPerspective);
 
@@ -1150,8 +1149,7 @@ top: -1px;
   // for former user who has never launched Tulip 5.3
   // we show a message to ask him if he wants to use
   // tlpb as default graph file format
-  if (TulipSettings::isFirstTulipMMRun() &&
-      !TulipSettings::userHasLaunchedTulipMM("5.3") &&
+  if (TulipSettings::isFirstTulipMMRun() && !TulipSettings::userHasLaunchedTulipMM("5.3") &&
       !TulipSettings::isFirstRun() && !TulipSettings::isUseTlpbFileFormat()) {
     QTimer::singleShot(500, this, SLOT(showStartMessage()));
   }

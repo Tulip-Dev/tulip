@@ -92,7 +92,7 @@ TulipSettings &TulipSettings::instance() {
 
 void TulipSettings::synchronizeSettings() {
   instance().sync();
-}  
+}
 
 void TulipSettings::synchronizeViewSettings() {
   TulipViewSettings::setDefaultColor(NODE, defaultColor(NODE));
@@ -186,8 +186,9 @@ QString TulipSettings::elementKey(const QString &configEntry, tlp::ElementType e
 }
 
 tlp::Color TulipSettings::defaultColor(tlp::ElementType elem, bool tulipDefault) {
-  QString val = instance().value(elementKey(tulipDefault ? TS_DefaultOfDefault : TS_DefaultColor, elem),
-                      (elem == tlp::NODE ? "(255, 95, 95)" : "(180,180,180)"))
+  QString val = instance()
+                    .value(elementKey(tulipDefault ? TS_DefaultOfDefault : TS_DefaultColor, elem),
+                           (elem == tlp::NODE ? "(255, 95, 95)" : "(180,180,180)"))
                     .toString();
   Color result;
   ColorType::fromString(result, QStringToTlpString(val));
@@ -201,8 +202,9 @@ void TulipSettings::setDefaultColor(tlp::ElementType elem, const tlp::Color &col
 }
 
 Color TulipSettings::defaultLabelColor(bool tulipDefault) {
-  QString val =
-      instance().value(tulipDefault ? TS_DefaultOfDefault : TS_DefaultLabelColor, "(0, 0, 0)").toString();
+  QString val = instance()
+                    .value(tulipDefault ? TS_DefaultOfDefault : TS_DefaultLabelColor, "(0, 0, 0)")
+                    .toString();
   Color result;
   ColorType::fromString(result, QStringToTlpString(val));
   return result;
@@ -215,8 +217,9 @@ void TulipSettings::setDefaultLabelColor(const Color &color) {
 }
 
 tlp::Size TulipSettings::defaultSize(tlp::ElementType elem, bool tulipDefault) {
-  QString val = instance().value(elementKey(tulipDefault ? TS_DefaultOfDefault : TS_DefaultSize, elem),
-                      (elem == tlp::NODE ? "(1,1,1)" : "(0.125,0.125,0.5)"))
+  QString val = instance()
+                    .value(elementKey(tulipDefault ? TS_DefaultOfDefault : TS_DefaultSize, elem),
+                           (elem == tlp::NODE ? "(1,1,1)" : "(0.125,0.125,0.5)"))
                     .toString();
   Size result;
   SizeType::fromString(result, QStringToTlpString(val));
@@ -230,8 +233,9 @@ void TulipSettings::setDefaultSize(tlp::ElementType elem, const tlp::Size &size)
 }
 
 int TulipSettings::defaultShape(tlp::ElementType elem, bool tulipDefault) {
-  return instance().value(elementKey(tulipDefault ? TS_DefaultOfDefault : TS_DefaultShape, elem),
-               (elem == tlp::NODE ? int(NodeShape::Circle) : int(EdgeShape::Polyline)))
+  return instance()
+      .value(elementKey(tulipDefault ? TS_DefaultOfDefault : TS_DefaultShape, elem),
+             (elem == tlp::NODE ? int(NodeShape::Circle) : int(EdgeShape::Polyline)))
       .toInt();
 }
 
@@ -242,7 +246,8 @@ void TulipSettings::setDefaultShape(tlp::ElementType elem, int shape) {
 
 tlp::Color TulipSettings::defaultSelectionColor(bool tulipDefault) {
   QString val =
-      instance().value(tulipDefault ? TS_DefaultOfDefault : TS_DefaultSelectionColor, "(23, 81, 228)")
+      instance()
+          .value(tulipDefault ? TS_DefaultOfDefault : TS_DefaultSelectionColor, "(23, 81, 228)")
           .toString();
   Color result;
   ColorType::fromString(result, QStringToTlpString(val));
