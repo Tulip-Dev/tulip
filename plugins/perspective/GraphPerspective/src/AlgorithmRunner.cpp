@@ -240,7 +240,7 @@ AlgorithmRunner::AlgorithmRunner(QWidget *parent)
     connect(i, SIGNAL(favorized(bool)), this, SLOT(favorized(bool)));
   }
 
-  for (const QString &a : TulipSettings::instance().favoriteAlgorithms()) {
+  for (const QString &a : TulipSettings::favoriteAlgorithms()) {
     addFavorite(a);
   }
 
@@ -405,7 +405,7 @@ void AlgorithmRunner::removeFavorite(const QString &algName) {
     }
   }
 
-  TulipSettings::instance().removeFavoriteAlgorithm(algName);
+  TulipSettings::removeFavoriteAlgorithm(algName);
 
   if (_favorites.isEmpty())
     _ui->favoritesBox->widget()->setMinimumHeight(45);
@@ -415,7 +415,7 @@ void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
   if (!PluginLister::pluginExists(QStringToTlpString(algName)))
     return;
 
-  TulipSettings::instance().addFavoriteAlgorithm(algName);
+  TulipSettings::addFavoriteAlgorithm(algName);
 
   for (auto i : _favorites) {
     if (i->name() == algName)

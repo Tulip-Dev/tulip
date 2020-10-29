@@ -352,8 +352,8 @@ int main(int argc, char **argv) {
       mainWindow->resize(QDesktopWidget().availableGeometry(mainWindow).size() * 0.9);
     }
 
-    TulipSettings::instance().setFirstRun(false);
-    TulipSettings::instance().setFirstTulipMMRun(false);
+    TulipSettings::setFirstRun(false);
+    TulipSettings::setFirstTulipMMRun(false);
     result = tulip_perspective.exec();
 
     if ((start = perspective->needRestart())) {

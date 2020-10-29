@@ -64,7 +64,7 @@ void TulipFontIconDialog::updateIconList() {
   QRegExp regexp(_ui->iconNameFilterLineEdit->text());
 
   std::vector<std::string> iconNames = TulipFontAwesome::getSupportedIcons();
-  bool darkMode = TulipSettings::instance().isDisplayInDarkMode();
+  bool darkMode = TulipSettings::isDisplayInDarkMode();
 
   for (auto &it : iconNames) {
     QString iconName = tlpStringToQString(it);

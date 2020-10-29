@@ -75,7 +75,7 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
                       "needed.<br/>Click <b>Ok</b> to import your graph, then visualize it using "
                       "the ");
 
-  if (TulipSettings::instance().displayDefaultViews())
+  if (TulipSettings::displayDefaultViews())
     importLabel += "<b>Node Link Diagram</b> and <b>Spreadsheet</b> (automatically opened) views.";
   else
     importLabel += "<img src=\":/tulip/gui/icons/16/list-add.png\"/>&nbsp;<b>Add "

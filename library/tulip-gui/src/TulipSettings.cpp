@@ -76,6 +76,8 @@ static const QString TS_DisplayInDarkMode = "app/gui/display_in_dark_mode";
 static const QString TS_ShowStatusBar = "app/gui/show_status_bar";
 static const QString TS_LoggerAnchored = "app/gui/logger_anchored";
 
+static const QString TS_RecentPerspectiveFiles = "perspective/recent_files";
+
 TulipSettings::TulipSettings() : QSettings("TulipSoftware", "Tulip") {}
 
 TulipSettings &TulipSettings::instance() {
@@ -88,33 +90,37 @@ TulipSettings &TulipSettings::instance() {
   return *_instance;
 }
 
+void TulipSettings::synchronizeSettings() {
+  instance().sync();
+}  
+
 void TulipSettings::synchronizeViewSettings() {
-  TulipViewSettings::instance().setDefaultColor(NODE, defaultColor(NODE));
-  TulipViewSettings::instance().setDefaultColor(EDGE, defaultColor(EDGE));
-  TulipViewSettings::instance().setDefaultSize(NODE, defaultSize(NODE));
-  TulipViewSettings::instance().setDefaultSize(EDGE, defaultSize(EDGE));
-  TulipViewSettings::instance().setDefaultShape(NODE, defaultShape(NODE));
-  TulipViewSettings::instance().setDefaultShape(EDGE, defaultShape(EDGE));
-  TulipViewSettings::instance().setDefaultLabelColor(defaultLabelColor());
+  TulipViewSettings::setDefaultColor(NODE, defaultColor(NODE));
+  TulipViewSettings::setDefaultColor(EDGE, defaultColor(EDGE));
+  TulipViewSettings::setDefaultSize(NODE, defaultSize(NODE));
+  TulipViewSettings::setDefaultSize(EDGE, defaultSize(EDGE));
+  TulipViewSettings::setDefaultShape(NODE, defaultShape(NODE));
+  TulipViewSettings::setDefaultShape(EDGE, defaultShape(EDGE));
+  TulipViewSettings::setDefaultLabelColor(defaultLabelColor());
 }
 
-QStringList TulipSettings::recentDocuments() const {
-  return value(TS_RecentDocuments).toStringList();
+QStringList TulipSettings::recentDocuments() {
+  return instance().value(TS_RecentDocuments).toStringList();
 }
 
 void TulipSettings::checkRecentDocuments() {
-  QList<QVariant> recentDocumentsValue = value(TS_RecentDocuments).toList();
+  QList<QVariant> recentDocumentsValue = instance().value(TS_RecentDocuments).toList();
 
   for (const QVariant &doc : recentDocumentsValue) {
     if (!QFileInfo(doc.toString()).exists())
       recentDocumentsValue.removeAll(doc);
   }
 
-  setValue(TS_RecentDocuments, recentDocumentsValue);
+  _instance->setValue(TS_RecentDocuments, recentDocumentsValue);
 }
 
 void TulipSettings::addToRecentDocuments(const QString &name) {
-  QList<QVariant> recentDocumentsValue = value(TS_RecentDocuments).toList();
+  QList<QVariant> recentDocumentsValue = instance().value(TS_RecentDocuments).toList();
 
   if (recentDocumentsValue.contains(name))
     recentDocumentsValue.removeAll(name);
@@ -124,55 +130,55 @@ void TulipSettings::addToRecentDocuments(const QString &name) {
   while (recentDocumentsValue.size() > 5)
     recentDocumentsValue.pop_back();
 
-  setValue(TS_RecentDocuments, recentDocumentsValue);
+  _instance->setValue(TS_RecentDocuments, recentDocumentsValue);
 }
 
 void TulipSettings::addRemoteLocation(const QString &remoteLocation) {
-  QStringList remoteLocations = value(TS_RemoteLocations).toStringList();
+  QStringList remoteLocations = instance().value(TS_RemoteLocations).toStringList();
 
   if (!remoteLocations.contains(remoteLocation)) {
     remoteLocations.append(remoteLocation);
   }
 
-  setValue(TS_RemoteLocations, remoteLocations);
+  _instance->setValue(TS_RemoteLocations, remoteLocations);
 }
 
 void TulipSettings::removeRemoteLocation(const QString &remoteLocation) {
-  QStringList remoteLocations = value(TS_RemoteLocations).toStringList();
+  QStringList remoteLocations = instance().value(TS_RemoteLocations).toStringList();
 
   if (remoteLocations.contains(remoteLocation)) {
     remoteLocations.removeOne(remoteLocation);
   }
 
-  setValue(TS_RemoteLocations, remoteLocations);
+  _instance->setValue(TS_RemoteLocations, remoteLocations);
 }
 
-const QStringList TulipSettings::remoteLocations() const {
-  return value(TS_RemoteLocations).toStringList();
+const QStringList TulipSettings::remoteLocations() {
+  return instance().value(TS_RemoteLocations).toStringList();
 }
 
-const QStringList TulipSettings::pluginsToRemove() const {
-  return value(TS_PluginsToRemove).toStringList();
+const QStringList TulipSettings::pluginsToRemove() {
+  return instance().value(TS_PluginsToRemove).toStringList();
 }
 
 void TulipSettings::markPluginForRemoval(const QString &pluginLibrary) {
-  QStringList markedPlugins = value(TS_PluginsToRemove).toStringList();
+  QStringList markedPlugins = instance().value(TS_PluginsToRemove).toStringList();
 
   if (!markedPlugins.contains(pluginLibrary)) {
     markedPlugins.append(pluginLibrary);
   }
 
-  setValue(TS_PluginsToRemove, markedPlugins);
+  _instance->setValue(TS_PluginsToRemove, markedPlugins);
 }
 
 void TulipSettings::unmarkPluginForRemoval(const QString &pluginLibrary) {
-  QStringList markedPlugins = value(TS_PluginsToRemove).toStringList();
+  QStringList markedPlugins = instance().value(TS_PluginsToRemove).toStringList();
 
   if (markedPlugins.contains(pluginLibrary)) {
     markedPlugins.removeAll(pluginLibrary);
   }
 
-  setValue(TS_PluginsToRemove, markedPlugins);
+  _instance->setValue(TS_PluginsToRemove, markedPlugins);
 }
 
 QString TulipSettings::elementKey(const QString &configEntry, tlp::ElementType elem) {
@@ -180,7 +186,7 @@ QString TulipSettings::elementKey(const QString &configEntry, tlp::ElementType e
 }
 
 tlp::Color TulipSettings::defaultColor(tlp::ElementType elem, bool tulipDefault) {
-  QString val = value(elementKey(tulipDefault ? TS_DefaultOfDefault : TS_DefaultColor, elem),
+  QString val = instance().value(elementKey(tulipDefault ? TS_DefaultOfDefault : TS_DefaultColor, elem),
                       (elem == tlp::NODE ? "(255, 95, 95)" : "(180,180,180)"))
                     .toString();
   Color result;
@@ -190,13 +196,13 @@ tlp::Color TulipSettings::defaultColor(tlp::ElementType elem, bool tulipDefault)
 
 void TulipSettings::setDefaultColor(tlp::ElementType elem, const tlp::Color &color) {
   QString value = tlp::ColorType::toString(color).c_str();
-  setValue(elementKey(TS_DefaultColor, elem), value);
-  TulipViewSettings::instance().setDefaultColor(elem, color);
+  instance().setValue(elementKey(TS_DefaultColor, elem), value);
+  TulipViewSettings::setDefaultColor(elem, color);
 }
 
 Color TulipSettings::defaultLabelColor(bool tulipDefault) {
   QString val =
-      value(tulipDefault ? TS_DefaultOfDefault : TS_DefaultLabelColor, "(0, 0, 0)").toString();
+      instance().value(tulipDefault ? TS_DefaultOfDefault : TS_DefaultLabelColor, "(0, 0, 0)").toString();
   Color result;
   ColorType::fromString(result, QStringToTlpString(val));
   return result;
@@ -204,12 +210,12 @@ Color TulipSettings::defaultLabelColor(bool tulipDefault) {
 
 void TulipSettings::setDefaultLabelColor(const Color &color) {
   QString value = tlp::ColorType::toString(color).c_str();
-  setValue(TS_DefaultLabelColor, value);
-  TulipViewSettings::instance().setDefaultLabelColor(color);
+  instance().setValue(TS_DefaultLabelColor, value);
+  TulipViewSettings::setDefaultLabelColor(color);
 }
 
 tlp::Size TulipSettings::defaultSize(tlp::ElementType elem, bool tulipDefault) {
-  QString val = value(elementKey(tulipDefault ? TS_DefaultOfDefault : TS_DefaultSize, elem),
+  QString val = instance().value(elementKey(tulipDefault ? TS_DefaultOfDefault : TS_DefaultSize, elem),
                       (elem == tlp::NODE ? "(1,1,1)" : "(0.125,0.125,0.5)"))
                     .toString();
   Size result;
@@ -219,37 +225,41 @@ tlp::Size TulipSettings::defaultSize(tlp::ElementType elem, bool tulipDefault) {
 
 void TulipSettings::setDefaultSize(tlp::ElementType elem, const tlp::Size &size) {
   QString value = tlp::SizeType::toString(size).c_str();
-  setValue(elementKey(TS_DefaultSize, elem), value);
-  TulipViewSettings::instance().setDefaultSize(elem, size);
+  instance().setValue(elementKey(TS_DefaultSize, elem), value);
+  TulipViewSettings::setDefaultSize(elem, size);
 }
 
 int TulipSettings::defaultShape(tlp::ElementType elem, bool tulipDefault) {
-  return value(elementKey(tulipDefault ? TS_DefaultOfDefault : TS_DefaultShape, elem),
+  return instance().value(elementKey(tulipDefault ? TS_DefaultOfDefault : TS_DefaultShape, elem),
                (elem == tlp::NODE ? int(NodeShape::Circle) : int(EdgeShape::Polyline)))
       .toInt();
 }
 
 void TulipSettings::setDefaultShape(tlp::ElementType elem, int shape) {
-  setValue(elementKey(TS_DefaultShape, elem), shape);
-  TulipViewSettings::instance().setDefaultShape(elem, shape);
+  instance().setValue(elementKey(TS_DefaultShape, elem), shape);
+  TulipViewSettings::setDefaultShape(elem, shape);
 }
 
 tlp::Color TulipSettings::defaultSelectionColor(bool tulipDefault) {
   QString val =
-      value(tulipDefault ? TS_DefaultOfDefault : TS_DefaultSelectionColor, "(23, 81, 228)")
+      instance().value(tulipDefault ? TS_DefaultOfDefault : TS_DefaultSelectionColor, "(23, 81, 228)")
           .toString();
   Color result;
   ColorType::fromString(result, QStringToTlpString(val));
   return result;
 }
 
-void TulipSettings::setDefaultSelectionColor(const tlp::Color &color) {
-  QString value = tlp::ColorType::toString(color).c_str();
-  setValue(TS_DefaultSelectionColor, value);
+tlp::Color TulipSettings::getDefaultSelectionColor(bool flag) {
+  return instance().defaultSelectionColor(flag);
 }
 
-QSet<QString> TulipSettings::favoriteAlgorithms() const {
-  auto ls = value(TS_FavoriteAlgorithms, QStringList()).toStringList();
+void TulipSettings::setDefaultSelectionColor(const tlp::Color &color) {
+  QString value = tlp::ColorType::toString(color).c_str();
+  instance().setValue(TS_DefaultSelectionColor, value);
+}
+
+QSet<QString> TulipSettings::favoriteAlgorithms() {
+  auto ls = instance().value(TS_FavoriteAlgorithms, QStringList()).toStringList();
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
   return ls.toSet();
 #else
@@ -260,69 +270,69 @@ QSet<QString> TulipSettings::favoriteAlgorithms() const {
 void TulipSettings::addFavoriteAlgorithm(const QString &name) {
   QSet<QString> favAlgs = favoriteAlgorithms();
   favAlgs.insert(name);
-  setFavoriteAlgorithms(favAlgs);
+  instance().setFavoriteAlgorithms(favAlgs);
 }
 
 void TulipSettings::removeFavoriteAlgorithm(const QString &name) {
   QSet<QString> favAlgs = favoriteAlgorithms();
   favAlgs.remove(name);
-  setFavoriteAlgorithms(favAlgs);
+  instance().setFavoriteAlgorithms(favAlgs);
 }
 
-bool TulipSettings::isProxyEnabled() const {
-  return value(TS_ProxyEnabled).toBool();
+bool TulipSettings::isProxyEnabled() {
+  return instance().value(TS_ProxyEnabled).toBool();
 }
 
 void TulipSettings::setProxyEnabled(bool f) {
-  setValue(TS_ProxyEnabled, f);
+  instance().setValue(TS_ProxyEnabled, f);
 }
 
-QNetworkProxy::ProxyType TulipSettings::proxyType() const {
-  return static_cast<QNetworkProxy::ProxyType>(value(TS_ProxyType).toInt());
+QNetworkProxy::ProxyType TulipSettings::proxyType() {
+  return static_cast<QNetworkProxy::ProxyType>(instance().value(TS_ProxyType).toInt());
 }
 
 void TulipSettings::setProxyType(QNetworkProxy::ProxyType t) {
-  setValue(TS_ProxyType, int(t));
+  instance().setValue(TS_ProxyType, int(t));
 }
 
-QString TulipSettings::proxyHost() const {
-  return value(TS_ProxyHost).toString();
+QString TulipSettings::proxyHost() {
+  return instance().value(TS_ProxyHost).toString();
 }
 
 void TulipSettings::setProxyHost(const QString &h) {
-  setValue(TS_ProxyHost, h);
+  instance().setValue(TS_ProxyHost, h);
 }
 
-unsigned int TulipSettings::proxyPort() const {
-  return value(TS_ProxyPort).toUInt();
+unsigned int TulipSettings::proxyPort() {
+  return instance().value(TS_ProxyPort).toUInt();
 }
 
 void TulipSettings::setProxyPort(unsigned int p) {
-  setValue(TS_ProxyPort, p);
+  instance().setValue(TS_ProxyPort, p);
 }
 
-bool TulipSettings::isUseProxyAuthentification() const {
-  return value(TS_ProxyUseAuth).toBool();
+bool TulipSettings::isUseProxyAuthentification() {
+  return instance().value(TS_ProxyUseAuth).toBool();
 }
 
 void TulipSettings::setUseProxyAuthentification(bool f) {
-  setValue(TS_ProxyUseAuth, f);
+  instance().setValue(TS_ProxyUseAuth, f);
 }
 
-QString TulipSettings::proxyUsername() const {
-  return value(TS_ProxyUsername).toString();
+QString TulipSettings::proxyUsername() {
+  return instance().value(TS_ProxyUsername).toString();
 }
 
 void TulipSettings::setProxyUsername(const QString &s) {
-  setValue(TS_ProxyUsername, s);
+  instance().setValue(TS_ProxyUsername, s);
 }
 
-QString TulipSettings::proxyPassword() const {
-  return value(TS_ProxyPassword).toString();
+QString TulipSettings::proxyPassword() {
+  return instance().value(TS_ProxyPassword).toString();
 }
 
 void TulipSettings::setProxyPassword(const QString &s) {
-  setValue(TS_ProxyPassword, s);
+  instance().setValue(TS_ProxyPassword, s);
 }
 
 void TulipSettings::applyProxySettings() {
@@ -338,141 +348,149 @@ void TulipSettings::applyProxySettings() {
     QNetworkProxyFactory::setUseSystemConfiguration(true);
 }
 
-bool TulipSettings::isFirstRun() const {
-  return contains(TS_FirstRun) == false;
+bool TulipSettings::isFirstRun() {
+  return instance().contains(TS_FirstRun) == false;
 }
 
 void TulipSettings::setFirstRun(bool f) {
-  setValue(TS_FirstRun, f);
+  instance().setValue(TS_FirstRun, f);
 }
 
-bool TulipSettings::isFirstTulipMMRun() const {
-  return contains(TS_FirstRunMM) == false;
+bool TulipSettings::isFirstTulipMMRun() {
+  return instance().contains(TS_FirstRunMM) == false;
 }
 
 bool TulipSettings::userHasLaunchedTulipMM(const std::string &mmVersion) {
-  return contains(QString("app/") + mmVersion.c_str() + "/firstRun");
+  return instance().contains(QString("app/") + mmVersion.c_str() + "/firstRun");
 }
 
 void TulipSettings::setFirstTulipMMRun(bool f) {
-  setValue(TS_FirstRunMM, f);
+  instance().setValue(TS_FirstRunMM, f);
 }
 
-bool TulipSettings::displayDefaultViews() const {
-  return value(TS_AutomaticDisplayDefaultViews, true).toBool();
+bool TulipSettings::displayDefaultViews() {
+  return instance().value(TS_AutomaticDisplayDefaultViews, true).toBool();
 }
 
 void TulipSettings::setDisplayDefaultViews(bool f) {
-  setValue(TS_AutomaticDisplayDefaultViews, f);
+  instance().setValue(TS_AutomaticDisplayDefaultViews, f);
 }
 
-bool TulipSettings::isAutomaticMapMetric() const {
-  return value(TS_AutomaticMapMetric, false).toBool();
+bool TulipSettings::isAutomaticMapMetric() {
+  return instance().value(TS_AutomaticMapMetric, false).toBool();
 }
 
 void TulipSettings::setAutomaticMapMetric(bool f) {
-  setValue(TS_AutomaticMapMetric, f);
+  instance().setValue(TS_AutomaticMapMetric, f);
 }
 
-bool TulipSettings::isAutomaticRatio() const {
-  return value(TS_AutomaticPerfectAspectRatio, false).toBool();
+bool TulipSettings::isAutomaticRatio() {
+  return instance().value(TS_AutomaticPerfectAspectRatio, false).toBool();
 }
 
 void TulipSettings::setAutomaticRatio(bool f) {
-  setValue(TS_AutomaticPerfectAspectRatio, f);
+  instance().setValue(TS_AutomaticPerfectAspectRatio, f);
 }
 
-bool TulipSettings::isAutomaticCentering() const {
-  return value(TS_AutomaticCentering, true).toBool();
+bool TulipSettings::isAutomaticCentering() {
+  return instance().value(TS_AutomaticCentering, true).toBool();
 }
 
 void TulipSettings::setAutomaticCentering(bool f) {
-  setValue(TS_AutomaticCentering, f);
+  instance().setValue(TS_AutomaticCentering, f);
 }
 
-bool TulipSettings::isViewOrtho() const {
-  return value(TS_ViewOrtho, true).toBool();
+bool TulipSettings::isViewOrtho() {
+  return instance().value(TS_ViewOrtho, true).toBool();
 }
 
 void TulipSettings::setViewOrtho(bool f) {
-  setValue(TS_ViewOrtho, f);
+  instance().setValue(TS_ViewOrtho, f);
 }
 
 void TulipSettings::setFavoriteAlgorithms(const QSet<QString> &lst) {
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-  setValue(TS_FavoriteAlgorithms, static_cast<QStringList>(lst.toList()));
+  instance().setValue(TS_FavoriteAlgorithms, static_cast<QStringList>(lst.toList()));
 #else
-  setValue(TS_FavoriteAlgorithms, QStringList(lst.begin(), lst.end()));
+  instance().setValue(TS_FavoriteAlgorithms, QStringList(lst.begin(), lst.end()));
 #endif
 }
 
-bool TulipSettings::isResultPropertyStored() const {
-  return value(TS_ResultPropertyStored, false).toBool();
+bool TulipSettings::isResultPropertyStored() {
+  return instance().value(TS_ResultPropertyStored, false).toBool();
 }
 
 void TulipSettings::setResultPropertyStored(bool f) {
-  setValue(TS_ResultPropertyStored, f);
+  instance().setValue(TS_ResultPropertyStored, f);
 }
 
-unsigned int TulipSettings::logPluginCall() const {
-  return value(TS_LogPluginCall, NoLog).toUInt();
+unsigned int TulipSettings::logPluginCall() {
+  return instance().value(TS_LogPluginCall, NoLog).toUInt();
 }
 
 void TulipSettings::setLogPluginCall(unsigned int val) {
-  setValue(TS_LogPluginCall, val);
+  instance().setValue(TS_LogPluginCall, val);
 }
 
-bool TulipSettings::isUseTlpbFileFormat() const {
-  return value(TS_UseTlpbFileFormat, true).toBool();
+bool TulipSettings::isUseTlpbFileFormat() {
+  return instance().value(TS_UseTlpbFileFormat, true).toBool();
 }
 
 void TulipSettings::setUseTlpbFileFormat(bool f) {
-  setValue(TS_UseTlpbFileFormat, f);
+  instance().setValue(TS_UseTlpbFileFormat, f);
 }
 
-unsigned int TulipSettings::seedOfRandomSequence() const {
-  return value(TS_SeedForRandomSequence, tlp::getSeedOfRandomSequence()).toUInt();
+unsigned int TulipSettings::seedOfRandomSequence() {
+  return instance().value(TS_SeedForRandomSequence, tlp::getSeedOfRandomSequence()).toUInt();
 }
 
 void TulipSettings::setSeedOfRandomSequence(unsigned int seed) {
-  setValue(TS_SeedForRandomSequence, seed);
+  instance().setValue(TS_SeedForRandomSequence, seed);
 }
 
 void TulipSettings::initSeedOfRandomSequence() {
   tlp::setSeedOfRandomSequence(seedOfRandomSequence());
 }
 
-bool TulipSettings::warnUserAboutGraphicsCard() const {
-  return value(TS_WarnUserAboutGraphicsCard, true).toBool();
+bool TulipSettings::warnUserAboutGraphicsCard() {
+  return instance().value(TS_WarnUserAboutGraphicsCard, true).toBool();
 }
 
 void TulipSettings::setWarnUserAboutGraphicsCard(bool f) {
-  setValue(TS_WarnUserAboutGraphicsCard, f);
+  instance().setValue(TS_WarnUserAboutGraphicsCard, f);
 }
 
-bool TulipSettings::isDisplayInDarkMode() const {
-  return value(TS_DisplayInDarkMode, false).toBool();
+bool TulipSettings::isDisplayInDarkMode() {
+  return instance().value(TS_DisplayInDarkMode, false).toBool();
 }
 
 void TulipSettings::setDisplayInDarkMode(bool f) {
   if (f != isDisplayInDarkMode())
-    setValue(TS_DisplayInDarkMode, f);
+    instance().setValue(TS_DisplayInDarkMode, f);
 }
 
-bool TulipSettings::showStatusBar() const {
-  return value(TS_ShowStatusBar, true).toBool();
+bool TulipSettings::showStatusBar() {
+  return instance().value(TS_ShowStatusBar, true).toBool();
 }
 
 void TulipSettings::setShowStatusBar(bool f) {
-  setValue(TS_ShowStatusBar, f);
+  instance().setValue(TS_ShowStatusBar, f);
 }
 
-bool TulipSettings::loggerAnchored() const {
-  return value(TS_LoggerAnchored, true).toBool();
+bool TulipSettings::loggerAnchored() {
+  return instance().value(TS_LoggerAnchored, true).toBool();
 }
 
 void TulipSettings::setLoggerAnchored(bool f) {
-  setValue(TS_LoggerAnchored, f);
+  instance().setValue(TS_LoggerAnchored, f);
+}
+
+QStringList TulipSettings::recentPerspectiveFiles() {
+  return instance().value(TS_RecentPerspectiveFiles).toStringList();
+}
+
+void TulipSettings::setRecentPerspectiveFiles(QStringList &files) {
+  instance().value(TS_RecentPerspectiveFiles, files);
 }
 
 void TulipSettings::treatEvent(const Event &message) {

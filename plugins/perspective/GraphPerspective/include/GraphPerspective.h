@@ -57,7 +57,6 @@ class GraphPerspective : public tlp::Perspective, tlp::Observable {
 
   void reserveDefaultProperties();
   QString _lastOpenLocation;
-  QString _recentDocumentsSettingsKey;
 
   void buildRecentDocumentsMenu();
   void addRecentDocument(const QString &path);

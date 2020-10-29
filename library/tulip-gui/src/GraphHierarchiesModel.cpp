@@ -399,7 +399,7 @@ QMap<tlp::Graph *, QString> GraphHierarchiesModel::writeProject(tlp::TulipProjec
     QString folder = GRAPHS_PATH + "/" + QString::number(i++) + "/";
     project->mkpath(folder);
 
-    if (!TulipSettings::instance().isUseTlpbFileFormat())
+    if (!TulipSettings::isUseTlpbFileFormat())
       tlp::saveGraph(g, QStringToTlpString(project->toAbsolutePath(folder + "graph.tlp")),
                      progress);
     else

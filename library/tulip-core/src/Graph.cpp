@@ -104,23 +104,23 @@ static void setViewPropertiesDefaults(Graph *g) {
 
   if (!g->existProperty(shapes)) {
     g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(
-        TulipViewSettings::instance().defaultShape(NODE));
+        TulipViewSettings::defaultShape(NODE));
     g->getProperty<IntegerProperty>(shapes)->setAllEdgeValue(
-        TulipViewSettings::instance().defaultShape(EDGE));
+        TulipViewSettings::defaultShape(EDGE));
   }
 
   if (!g->existProperty(colors)) {
     g->getProperty<ColorProperty>(colors)->setAllNodeValue(
-        TulipViewSettings::instance().defaultColor(NODE));
+        TulipViewSettings::defaultColor(NODE));
     g->getProperty<ColorProperty>(colors)->setAllEdgeValue(
-        TulipViewSettings::instance().defaultColor(EDGE));
+        TulipViewSettings::defaultColor(EDGE));
   }
 
   if (!g->existProperty(sizes)) {
     g->getProperty<SizeProperty>(sizes)->setAllNodeValue(
-        TulipViewSettings::instance().defaultSize(NODE));
+        TulipViewSettings::defaultSize(NODE));
     g->getProperty<SizeProperty>(sizes)->setAllEdgeValue(
-        TulipViewSettings::instance().defaultSize(EDGE));
+        TulipViewSettings::defaultSize(EDGE));
   }
 
   if (!g->existProperty(metrics)) {
@@ -130,68 +130,68 @@ static void setViewPropertiesDefaults(Graph *g) {
 
   if (!g->existProperty(fonts)) {
     g->getProperty<StringProperty>(fonts)->setAllNodeValue(
-        TulipViewSettings::instance().defaultFontFile());
+        TulipViewSettings::defaultFontFile());
     g->getProperty<StringProperty>(fonts)->setAllEdgeValue(
-        TulipViewSettings::instance().defaultFontFile());
+        TulipViewSettings::defaultFontFile());
   }
 
   if (!g->existProperty(fontSizes)) {
     g->getProperty<IntegerProperty>(fontSizes)->setAllNodeValue(
-        TulipViewSettings::instance().defaultFontSize());
+        TulipViewSettings::defaultFontSize());
     g->getProperty<IntegerProperty>(fontSizes)->setAllEdgeValue(
-        TulipViewSettings::instance().defaultFontSize());
+        TulipViewSettings::defaultFontSize());
   }
 
   if (!g->existProperty(borderWidth)) {
     g->getProperty<DoubleProperty>(borderWidth)
-        ->setAllNodeValue(TulipViewSettings::instance().defaultBorderWidth(NODE));
+        ->setAllNodeValue(TulipViewSettings::defaultBorderWidth(NODE));
     g->getProperty<DoubleProperty>(borderWidth)
-        ->setAllEdgeValue(TulipViewSettings::instance().defaultBorderWidth(EDGE));
+        ->setAllEdgeValue(TulipViewSettings::defaultBorderWidth(EDGE));
   }
 
   if (!g->existProperty(borderColor)) {
     g->getProperty<ColorProperty>(borderColor)
-        ->setAllNodeValue(TulipViewSettings::instance().defaultBorderColor(NODE));
+        ->setAllNodeValue(TulipViewSettings::defaultBorderColor(NODE));
     g->getProperty<ColorProperty>(borderColor)
-        ->setAllEdgeValue(TulipViewSettings::instance().defaultBorderColor(EDGE));
+        ->setAllEdgeValue(TulipViewSettings::defaultBorderColor(EDGE));
   }
 
   if (!g->existProperty(tgtShape)) {
     g->getProperty<IntegerProperty>(tgtShape)->setAllEdgeValue(
-        TulipViewSettings::instance().defaultEdgeExtremityTgtShape());
+        TulipViewSettings::defaultEdgeExtremityTgtShape());
   }
 
   if (!g->existProperty(srcShape)) {
     g->getProperty<IntegerProperty>(srcShape)->setAllEdgeValue(
-        TulipViewSettings::instance().defaultEdgeExtremitySrcShape());
+        TulipViewSettings::defaultEdgeExtremitySrcShape());
   }
 
   if (!g->existProperty(labelColor)) {
     g->getProperty<ColorProperty>(labelColor)
-        ->setAllNodeValue(TulipViewSettings::instance().defaultLabelColor());
+        ->setAllNodeValue(TulipViewSettings::defaultLabelColor());
     g->getProperty<ColorProperty>(labelColor)
-        ->setAllEdgeValue(TulipViewSettings::instance().defaultLabelColor());
+        ->setAllEdgeValue(TulipViewSettings::defaultLabelColor());
   }
 
   if (!g->existProperty(labelBorderColor)) {
     g->getProperty<ColorProperty>(labelBorderColor)
-        ->setAllNodeValue(TulipViewSettings::instance().defaultLabelBorderColor());
+        ->setAllNodeValue(TulipViewSettings::defaultLabelBorderColor());
     g->getProperty<ColorProperty>(labelBorderColor)
-        ->setAllEdgeValue(TulipViewSettings::instance().defaultLabelBorderColor());
+        ->setAllEdgeValue(TulipViewSettings::defaultLabelBorderColor());
   }
 
   if (!g->existProperty(labelBorderWidth)) {
     g->getProperty<DoubleProperty>(labelBorderWidth)
-        ->setAllNodeValue(TulipViewSettings::instance().defaultLabelBorderWidth());
+        ->setAllNodeValue(TulipViewSettings::defaultLabelBorderWidth());
     g->getProperty<DoubleProperty>(labelBorderWidth)
-        ->setAllEdgeValue(TulipViewSettings::instance().defaultLabelBorderWidth());
+        ->setAllEdgeValue(TulipViewSettings::defaultLabelBorderWidth());
   }
 
   if (!g->existProperty(labelPosition)) {
     g->getProperty<IntegerProperty>(labelPosition)
-        ->setAllNodeValue(TulipViewSettings::instance().defaultLabelPosition());
+        ->setAllNodeValue(TulipViewSettings::defaultLabelPosition());
     g->getProperty<IntegerProperty>(labelPosition)
-        ->setAllEdgeValue(TulipViewSettings::instance().defaultLabelPosition());
+        ->setAllEdgeValue(TulipViewSettings::defaultLabelPosition());
   }
 
   if (!g->existProperty(layout)) {
@@ -206,12 +206,12 @@ static void setViewPropertiesDefaults(Graph *g) {
 
   if (!g->existProperty(srcAnchorSize)) {
     g->getProperty<SizeProperty>(srcAnchorSize)
-        ->setAllEdgeValue(TulipViewSettings::instance().defaultEdgeExtremitySrcSize());
+        ->setAllEdgeValue(TulipViewSettings::defaultEdgeExtremitySrcSize());
   }
 
   if (!g->existProperty(tgtAnchorSize)) {
     g->getProperty<SizeProperty>(tgtAnchorSize)
-        ->setAllEdgeValue(TulipViewSettings::instance().defaultEdgeExtremityTgtSize());
+        ->setAllEdgeValue(TulipViewSettings::defaultEdgeExtremityTgtSize());
   }
 
   if (!g->existProperty(texture)) {

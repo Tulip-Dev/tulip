@@ -70,7 +70,7 @@ GlMainWidget::GlMainWidget(QWidget *parent, View *view)
   format.setSamples(OpenGlConfigManager::maxNumberOfSamples());
   format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
   setFormat(format);
-  getScene()->setViewOrtho(TulipSettings::instance().isViewOrtho());
+  getScene()->setViewOrtho(TulipSettings::isViewOrtho());
   OpenGlConfigManager::initExtensions();
   doneCurrent();
 }

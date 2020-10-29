@@ -112,7 +112,7 @@ static bool tulipCanOpenFile(const QString &path) {
 
 GraphPerspective::GraphPerspective(const tlp::PluginContext *c)
     : Perspective(c), _ui(nullptr), _graphs(new GraphHierarchiesModel(this)),
-      _recentDocumentsSettingsKey("perspective/recent_files"), _logger(nullptr),
+      _logger(nullptr),
       _searchDialog(nullptr) {
   Q_INIT_RESOURCE(GraphPerspective);
 
@@ -159,7 +159,7 @@ void GraphPerspective::reserveDefaultProperties() {
 void GraphPerspective::buildRecentDocumentsMenu() {
   _ui->menuOpen_recent_file->clear();
 
-  for (const QString &s : TulipSettings::instance().recentDocuments()) {
+  for (const QString &s : TulipSettings::recentDocuments()) {
     if (!QFileInfo(s).exists() || !tulipCanOpenFile(s))
       continue;
 
@@ -170,8 +170,7 @@ void GraphPerspective::buildRecentDocumentsMenu() {
 
   _ui->menuOpen_recent_file->addSeparator();
 
-  for (const QString &s :
-       TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList()) {
+  for (const QString &s : TulipSettings::recentPerspectiveFiles()) {
     if (!QFileInfo(s).exists() || !tulipCanOpenFile(s))
       continue;
 
@@ -183,7 +182,7 @@ void GraphPerspective::buildRecentDocumentsMenu() {
 }
 
 void GraphPerspective::addRecentDocument(const QString &path) {
-  QStringList recents = TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList();
+  QStringList recents = TulipSettings::recentPerspectiveFiles();
 
   if (recents.contains(path) || !tulipCanOpenFile(path)) {
     return;
@@ -194,8 +193,8 @@ void GraphPerspective::addRecentDocument(const QString &path) {
   if (recents.size() > 10)
     recents.pop_front();
 
-  TulipSettings::instance().setValue(_recentDocumentsSettingsKey, recents);
-  TulipSettings::instance().sync();
+  TulipSettings::setRecentPerspectiveFiles(recents);
+  TulipSettings::synchronizeSettings();
   buildRecentDocumentsMenu();
 }
 
@@ -270,7 +269,7 @@ void GraphPerspective::logMessage(QtMsgType type, const QMessageLogContext &cont
       std::cout << QStringToTlpString(msg) << std::endl;
     else
       std::cerr << QStringToTlpString(msg) << std::endl;
-    // redirect to GraphPerpectiveLogger
+    // redirect to GraphPerspectiveLogger
     _logger->log(type, context, msg, false);
   }
 
@@ -804,7 +803,7 @@ top: -1px;
 }
 )");
 
-  if (TulipSettings::instance().isDisplayInDarkMode())
+  if (TulipSettings::isDisplayInDarkMode())
     s_sheet.replace("%BG_COLOR%", "#323232").replace("%FG_COLOR%", "white");
   else
     s_sheet.replace("%BG_COLOR%", "white").replace("%FG_COLOR%", "black");
@@ -992,7 +991,7 @@ top: -1px;
   Perspective::redirectStatusTipOfMenu(_ui->menuHelp);
   Perspective::redirectStatusTipOfMenu(_ui->menuWindow);
 
-  TulipSettings::instance().synchronizeViewSettings();
+  TulipSettings::synchronizeViewSettings();
 
   qInstallMessageHandler(Perspective::showLogMessage);
 
@@ -1151,9 +1150,9 @@ top: -1px;
   // for former user who has never launched Tulip 5.3
   // we show a message to ask him if he wants to use
   // tlpb as default graph file format
-  if (TulipSettings::instance().isFirstTulipMMRun() &&
-      !TulipSettings::instance().userHasLaunchedTulipMM("5.3") &&
-      !TulipSettings::instance().isFirstRun() && !TulipSettings::instance().isUseTlpbFileFormat()) {
+  if (TulipSettings::isFirstTulipMMRun() &&
+      !TulipSettings::userHasLaunchedTulipMM("5.3") &&
+      !TulipSettings::isFirstRun() && !TulipSettings::isUseTlpbFileFormat()) {
     QTimer::singleShot(500, this, SLOT(showStartMessage()));
   }
 
@@ -1175,7 +1174,7 @@ void GraphPerspective::showStartMessage() {
               "choose this format, but you can click on <b>Apply</b>, if you want to use it as of "
               "now for the save of graphs in your project files.</p></body></html>"),
           QMessageBox::Apply | QMessageBox::Close, QMessageBox::Close) == QMessageBox::Apply)
-    TulipSettings::instance().setUseTlpbFileFormat(true);
+    TulipSettings::setUseTlpbFileFormat(true);
 }
 
 void GraphPerspective::openExternalFile() {
@@ -1234,11 +1233,11 @@ void GraphPerspective::exportGraph(Graph *g) {
                               tlp::tlpStringToQString(prg->getError()) + "</b>");
   } else {
     // log export plugin call
-    if (TulipSettings::instance().logPluginCall() != TulipSettings::NoLog) {
+    if (TulipSettings::logPluginCall() != TulipSettings::NoLog) {
       std::stringstream log;
       log << exportPluginName.c_str() << " - " << data.toString().c_str();
 
-      if (TulipSettings::instance().logPluginCall() == TulipSettings::LogCallWithExecutionTime)
+      if (TulipSettings::logPluginCall() == TulipSettings::LogCallWithExecutionTime)
         log << ": " << start.msecsTo(QTime::currentTime()) << "ms";
 
       qDebug() << log.str().c_str();
@@ -1300,11 +1299,11 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
     delete prg;
 
     // log import plugin call
-    if (TulipSettings::instance().logPluginCall() != TulipSettings::NoLog) {
+    if (TulipSettings::logPluginCall() != TulipSettings::NoLog) {
       std::stringstream log;
       log << module.c_str() << " import - " << data.toString().c_str();
 
-      if (TulipSettings::instance().logPluginCall() == TulipSettings::LogCallWithExecutionTime)
+      if (TulipSettings::logPluginCall() == TulipSettings::LogCallWithExecutionTime)
         log << ": " << start.msecsTo(QTime::currentTime()) << "ms";
 
       qDebug() << log.str().c_str();
@@ -1425,7 +1424,7 @@ bool GraphPerspective::saveAs(const QString &path) {
   bool ret = _project->write(path, &progress);
 
   if (ret)
-    TulipSettings::instance().addToRecentDocuments(path);
+    TulipSettings::addToRecentDocuments(path);
 
   return ret;
 }
@@ -1484,7 +1483,7 @@ void GraphPerspective::open(QString fileName) {
     for (const std::string &extension : modules.keys()) {
       if (fileName.endsWith(".tlpx")) {
         openProjectFile(fileName);
-        TulipSettings::instance().addToRecentDocuments(fileInfo.absoluteFilePath());
+        TulipSettings::addToRecentDocuments(fileInfo.absoluteFilePath());
         break;
       } else if (fileName.endsWith(QString::fromStdString(extension))) {
         DataSet params;
@@ -1948,7 +1947,7 @@ void GraphPerspective::CSVImport() {
 }
 
 void GraphPerspective::showStartPanels(Graph *g) {
-  if (TulipSettings::instance().displayDefaultViews() == false)
+  if (TulipSettings::displayDefaultViews() == false)
     return;
 
   // expose mode is not safe to add a new panel
@@ -2067,14 +2066,14 @@ void GraphPerspective::showSearchDialog(bool f) {
 }
 
 void GraphPerspective::openPreferences() {
-  bool darkMode = TulipSettings::instance().isDisplayInDarkMode();
+  bool darkMode = TulipSettings::isDisplayInDarkMode();
   PreferencesDialog dlg(_ui->mainWidget);
   dlg.readSettings();
 
   if (dlg.exec() == QDialog::Accepted) {
     dlg.writeSettings();
 
-    _restartNeeded = darkMode != TulipSettings::instance().isDisplayInDarkMode();
+    _restartNeeded = darkMode != TulipSettings::isDisplayInDarkMode();
     if (_restartNeeded)
       _restartNeeded =
           QMessageBox::question(_mainWindow, "Display mode update",
@@ -2094,7 +2093,7 @@ void GraphPerspective::openPreferences() {
                 ->getScene()
                 ->getGlGraphComposite()
                 ->getRenderingParametersPointer()
-                ->setSelectionColor(TulipSettings::instance().defaultSelectionColor());
+                ->setSelectionColor(TulipSettings::getDefaultSelectionColor());
             glMainView->redraw();
           }
         }

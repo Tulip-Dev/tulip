@@ -365,12 +365,12 @@ public:
 void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
 
   QLocale::setDefault(QLocale(QLocale::English));
-  TulipSettings::instance().applyProxySettings();
-  TulipSettings::instance().initSeedOfRandomSequence();
+  TulipSettings::applyProxySettings();
+  TulipSettings::initSeedOfRandomSequence();
 
-  if (TulipSettings::instance().isFirstTulipMMRun()) {
-    TulipSettings::instance().addRemoteLocation(PluginManager::STABLE_LOCATION);
-    TulipSettings::instance().addRemoteLocation(PluginManager::TESTING_LOCATION);
+  if (TulipSettings::isFirstTulipMMRun()) {
+    TulipSettings::addRemoteLocation(PluginManager::STABLE_LOCATION);
+    TulipSettings::addRemoteLocation(PluginManager::TESTING_LOCATION);
   }
 
   QDir::home().mkpath(tlp::localPluginsPath());

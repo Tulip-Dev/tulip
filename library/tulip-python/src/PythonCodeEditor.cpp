@@ -469,7 +469,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent)
   _currentFont.setPointSize(8);
 #endif
 
-  _darkBackground = TulipSettings::instance().isDisplayInDarkMode();
+  _darkBackground = TulipSettings::isDisplayInDarkMode();
   format.setFont(_currentFont);
   setCurrentCharFormat(format);
 

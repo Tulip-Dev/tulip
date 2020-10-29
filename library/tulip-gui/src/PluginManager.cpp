@@ -147,15 +147,15 @@ public:
 };
 
 void PluginManager::addRemoteLocation(const QString &location) {
-  TulipSettings::instance().addRemoteLocation(location);
+  TulipSettings::addRemoteLocation(location);
 }
 
 void PluginManager::removeRemoteLocation(const QString &location) {
-  TulipSettings::instance().removeRemoteLocation(location);
+  TulipSettings::removeRemoteLocation(location);
 }
 
 QStringList PluginManager::remoteLocations() {
-  return TulipSettings::instance().remoteLocations();
+  return TulipSettings::remoteLocations();
 }
 
 QStringList PluginManager::_markedForInstallation = QStringList();
@@ -201,7 +201,7 @@ PluginManager::PluginInformationList PluginManager::listPlugins(PluginLocations 
 }
 
 void PluginManager::markForRemoval(const QString &plugin) {
-  TulipSettings::instance().markPluginForRemoval(plugin);
+  TulipSettings::markPluginForRemoval(plugin);
 }
 
 void PluginManager::markForInstallation(const QString &plugin, QObject *recv,
@@ -222,11 +222,11 @@ QStringList PluginManager::markedForInstallation() {
 }
 
 QStringList PluginManager::markedForRemoval() {
-  return TulipSettings::instance().pluginsToRemove();
+  return TulipSettings::pluginsToRemove();
 }
 
 void PluginManager::unmarkForRemoval(const QString &file) {
-  TulipSettings::instance().unmarkPluginForRemoval(file);
+  TulipSettings::unmarkPluginForRemoval(file);
 }
 
 PluginInformation::PluginInformation() {}

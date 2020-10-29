@@ -47,7 +47,7 @@ TulipViewSettings &TulipViewSettings::instance() {
   return _instance;
 }
 
-Color TulipViewSettings::defaultColor(ElementType elem) const {
+Color TulipViewSettings::defaultColor(ElementType elem) {
   if (elem == NODE) {
     return _defaultNodeColor;
   } else {
@@ -68,7 +68,7 @@ void TulipViewSettings::setDefaultColor(ElementType elem, const Color &color) {
   _instance.sendEvent(ViewSettingsEvent(elem, color));
 }
 
-Color TulipViewSettings::defaultBorderColor(ElementType elem) const {
+Color TulipViewSettings::defaultBorderColor(ElementType elem) {
   if (elem == NODE) {
     return _defaultNodeBorderColor;
   } else {
@@ -84,7 +84,7 @@ void TulipViewSettings::setDefaultBorderColor(ElementType elem, const Color &col
   }
 }
 
-float TulipViewSettings::defaultBorderWidth(ElementType elem) const {
+float TulipViewSettings::defaultBorderWidth(ElementType elem) {
   if (elem == NODE) {
     return _defaultNodeBorderWidth;
   } else {
@@ -100,7 +100,7 @@ void TulipViewSettings::setdefaultBorderWidth(ElementType elem, float borderWidt
   }
 }
 
-Color TulipViewSettings::defaultLabelColor() const {
+Color TulipViewSettings::defaultLabelColor() {
   return _defaultLabelColor;
 }
 
@@ -112,7 +112,7 @@ void TulipViewSettings::setDefaultLabelColor(const Color &color) {
   _instance.sendEvent(ViewSettingsEvent(color));
 }
 
-Color TulipViewSettings::defaultLabelBorderColor() const {
+Color TulipViewSettings::defaultLabelBorderColor() {
   return _defaultLabelBorderColor;
 }
 
@@ -120,7 +120,7 @@ void TulipViewSettings::setDefaultLabelBorderColor(const Color &color) {
   _defaultLabelBorderColor = color;
 }
 
-float TulipViewSettings::defaultLabelBorderWidth() const {
+float TulipViewSettings::defaultLabelBorderWidth() {
   return _defaultLabelBorderWidth;
 }
 
@@ -135,7 +135,7 @@ TulipViewSettings::labelmap TulipViewSettings::POSITION_LABEL_MAP = {
     {LabelPosition::Left, "Left"},
     {LabelPosition::Right, "Right"}};
 
-int TulipViewSettings::defaultLabelPosition() const {
+int TulipViewSettings::defaultLabelPosition() {
   return _defaultLabelPosition;
 }
 
@@ -143,7 +143,7 @@ void TulipViewSettings::setDefaultLabelPosition(int position) {
   _defaultLabelPosition = position;
 }
 
-Size TulipViewSettings::defaultSize(ElementType elem) const {
+Size TulipViewSettings::defaultSize(ElementType elem) {
   if (elem == NODE) {
     return _defaultNodeSize;
   } else {
@@ -164,7 +164,7 @@ void TulipViewSettings::setDefaultSize(ElementType elem, const Size &size) {
   _instance.sendEvent(ViewSettingsEvent(elem, size));
 }
 
-int TulipViewSettings::defaultShape(ElementType elem) const {
+int TulipViewSettings::defaultShape(ElementType elem) {
   if (elem == NODE) {
     return _defaultNodeShape;
   } else {
@@ -185,7 +185,7 @@ void TulipViewSettings::setDefaultShape(ElementType elem, int shape) {
   _instance.sendEvent(ViewSettingsEvent(elem, shape));
 }
 
-int TulipViewSettings::defaultEdgeExtremitySrcShape() const {
+int TulipViewSettings::defaultEdgeExtremitySrcShape() {
   return _defaultEdgeExtremitySrcShape;
 }
 
@@ -193,7 +193,7 @@ void TulipViewSettings::setDefaultEdgeExtremitySrcShape(int shape) {
   _defaultEdgeExtremitySrcShape = shape;
 }
 
-int TulipViewSettings::defaultEdgeExtremityTgtShape() const {
+int TulipViewSettings::defaultEdgeExtremityTgtShape() {
   return _defaultEdgeExtremityTgtShape;
 }
 
@@ -201,7 +201,7 @@ void TulipViewSettings::setDefaultEdgeExtremityTgtShape(int shape) {
   _defaultEdgeExtremityTgtShape = shape;
 }
 
-Size TulipViewSettings::defaultEdgeExtremitySrcSize() const {
+Size TulipViewSettings::defaultEdgeExtremitySrcSize() {
   return _defaultEdgeExtremitySrcSize;
 }
 
@@ -209,7 +209,7 @@ void TulipViewSettings::setDefaultEdgeExtremitySrcSize(const Size &size) {
   _defaultEdgeExtremitySrcSize = size;
 }
 
-Size TulipViewSettings::defaultEdgeExtremityTgtSize() const {
+Size TulipViewSettings::defaultEdgeExtremityTgtSize() {
   return _defaultEdgeExtremityTgtSize;
 }
 
@@ -217,7 +217,7 @@ void TulipViewSettings::setDefaultEdgeExtremityTgtSize(const Size &size) {
   _defaultEdgeExtremityTgtSize = size;
 }
 
-std::string TulipViewSettings::defaultFontFile() const {
+std::string TulipViewSettings::defaultFontFile() {
   // _defaultFontFile initialization must be delayed
   // until TulipBitmapDir is set
   if (_defaultFontFile.empty())
@@ -229,11 +229,12 @@ void TulipViewSettings::setDefaultFontFile(const std::string &fontFile) {
   _defaultFontFile = fontFile;
 }
 
-int TulipViewSettings::defaultFontSize() const {
+int TulipViewSettings::defaultFontSize() {
   return _defaultFontSize;
 }
 
 void TulipViewSettings::setDefaultFontSize(int fontSize) {
   _defaultFontSize = fontSize;
 }
+
 } // namespace tlp

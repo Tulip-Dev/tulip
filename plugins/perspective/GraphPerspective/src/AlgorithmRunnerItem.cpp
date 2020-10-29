@@ -423,7 +423,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
       // restore it in the dataset
       dataSet.set(opp.name, opp.dest);
 
-      if (opp.name == "result" && TulipSettings::instance().isResultPropertyStored()) {
+      if (opp.name == "result" && TulipSettings::isResultPropertyStored()) {
         // store the result property values in an automatically named property
         std::string storedResultName =
             algorithm + " - " + originalDataSet.toString() + "(" + opp.dest->getName() + ")";
@@ -434,11 +434,11 @@ void AlgorithmRunnerItem::run(Graph *g) {
     }
 
     // display spentTime if needed
-    if (TulipSettings::instance().logPluginCall() != TulipSettings::NoLog) {
+    if (TulipSettings::logPluginCall() != TulipSettings::NoLog) {
       std::stringstream log;
       log << algorithm.c_str() << " - " << dataSet.toString().c_str();
 
-      if (TulipSettings::instance().logPluginCall() == TulipSettings::LogCallWithExecutionTime)
+      if (TulipSettings::logPluginCall() == TulipSettings::LogCallWithExecutionTime)
         log << ": " << spentTime << "ms";
 
       qDebug() << log.str().c_str();
@@ -539,7 +539,7 @@ void AlgorithmRunnerItem::afterRun(Graph *g, const tlp::DataSet &dataSet) {
   std::string stdName = QStringToTlpString(name());
 
   if (PluginLister::pluginExists<LayoutAlgorithm>(stdName)) {
-    if (TulipSettings::instance().isAutomaticRatio()) {
+    if (TulipSettings::isAutomaticRatio()) {
       LayoutProperty *prop = nullptr;
       dataSet.get<LayoutProperty *>("result", prop);
 
@@ -547,15 +547,15 @@ void AlgorithmRunnerItem::afterRun(Graph *g, const tlp::DataSet &dataSet) {
         prop->perfectAspectRatio(g);
     }
 
-    if (TulipSettings::instance().isAutomaticCentering())
+    if (TulipSettings::isAutomaticCentering())
       Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
-  } else if (TulipSettings::instance().isAutomaticCentering() &&
+  } else if (TulipSettings::isAutomaticCentering() &&
              PluginLister::pluginExists<Algorithm>(stdName) &&
              !PluginLister::pluginExists<PropertyAlgorithm>(stdName) &&
              !PluginLister::pluginExists<GraphTest>(stdName)) {
     Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
   } else if (PluginLister::pluginExists<DoubleAlgorithm>(stdName) &&
-             TulipSettings::instance().isAutomaticMapMetric()) {
+             TulipSettings::isAutomaticMapMetric()) {
     DoubleProperty *prop = nullptr;
     dataSet.get<DoubleProperty *>("result", prop);
 

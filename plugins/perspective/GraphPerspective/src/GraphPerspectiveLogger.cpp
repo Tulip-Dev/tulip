@@ -67,7 +67,7 @@ GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget *parent)
   connect(button, SIGNAL(clicked()), this, SLOT(clear()));
   connect(button, SIGNAL(clicked()), this, SLOT(hide()));
   connect(_ui->anchoredCB, SIGNAL(toggled(bool)), this, SLOT(setAnchored(bool)));
-  _ui->anchoredCB->setChecked(tlp::TulipSettings::instance().loggerAnchored());
+  _ui->anchoredCB->setChecked(tlp::TulipSettings::loggerAnchored());
   connect(_ui->decreaseFontSizeButton, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
   connect(_ui->increaseFontSizeButton, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
   auto shortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Minus), this);
@@ -254,7 +254,7 @@ void GraphPerspectiveLogger::setAnchored(bool anchored) {
     setMaximumSize(QSize(16777215, 16777215));
   }
 
-  tlp::TulipSettings::instance().setLoggerAnchored(anchored);
+  tlp::TulipSettings::setLoggerAnchored(anchored);
 
   // force the update of the window after modifying its flags
   if (visible) {

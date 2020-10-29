@@ -304,7 +304,7 @@ void TulipMainWindow::createPerspective(const QString &name, const QVariantMap &
 }
 void TulipMainWindow::openProjectWith(const QString &file, const QString &perspective,
                                       const QVariantMap &parameters) {
-  TulipSettings::instance().addToRecentDocuments(file);
+  TulipSettings::addToRecentDocuments(file);
   TulipPerspectiveProcessHandler::instance()->createPerspective(perspective, file, parameters);
 }
 

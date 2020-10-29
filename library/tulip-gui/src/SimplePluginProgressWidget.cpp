@@ -149,7 +149,7 @@ QDialog, QLabel, #SimplePluginProgressWidgetData { background-color: %BG_COLOR%;
 QLabel { color: %FG_COLOR%; }
 )");
 
-  if (TulipSettings::instance().isDisplayInDarkMode())
+  if (TulipSettings::isDisplayInDarkMode())
     s_sheet.replace("%BG_COLOR%", "#323232").replace("%FG_COLOR%", "white");
   else
     s_sheet.replace("%BG_COLOR%", "white").replace("%FG_COLOR%", "black");

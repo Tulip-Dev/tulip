@@ -51,8 +51,8 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent)
   connect(_ui->openProjectButton, SIGNAL(clicked()), this, SIGNAL(openProject()));
 
   // Recent documents list
-  TulipSettings::instance().checkRecentDocuments();
-  QStringList recentDocs = TulipSettings::instance().recentDocuments();
+  TulipSettings::checkRecentDocuments();
+  QStringList recentDocs = TulipSettings::recentDocuments();
 
   if (!recentDocs.empty()) {
     QString txt;
