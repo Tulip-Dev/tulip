@@ -904,9 +904,9 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
         }
 
         // disable view context menu
-	histoView->setShowContextMenu(false);
+        histoView->setShowContextMenu(false);
 
-	QAction *clickedAction = popupMenu->exec(me->globalPos());
+        QAction *clickedAction = popupMenu->exec(me->globalPos());
         MappingType oldMappingType = mappingType;
 
         if (clickedAction == viewColorMappingAction) {
@@ -941,7 +941,7 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
         }
 
         glWidget->draw();
-	ret = true;
+        ret = true;
       }
     }
   } else if (e->type() == QEvent::MouseButtonRelease) {
