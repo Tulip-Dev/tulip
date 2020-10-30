@@ -115,7 +115,7 @@
    <item>
     <widget class="QLabel" name="label_5">
      <property name="text">
-      <string>Apply size mapping on dimensions</string>
+      <string>Apply size mapping on axes</string>
      </property>
      <property name="groupTitle" stdset="0">
       <bool>true</bool>

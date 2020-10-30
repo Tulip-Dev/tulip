@@ -173,7 +173,7 @@ void InteractorAxisSliders::construct() {
       "<p>It is also possible to <b>drag the range defined by two axis sliders</b>, by putting the "
       "mouse pointer between them (a translucent rectangle will appear) and drag and drop it along "
       "the axis.</p>" +
-      "<p>It is possible to filter the current highlighted elements set on other dimensions. To do "
+      "<p>It is possible to filter the current highlighted elements set on other properties. To do "
       "so, hold the <b>control key</b> while using the axis sliders (they will be colored in "
       "orange to indicate that multi-filtering is activated). In that case, the data filtering "
       "will be applied on the result of the previous ones if any, not on the entire dataset.</p>" +
@@ -182,9 +182,9 @@ void InteractorAxisSliders::construct() {
       "pressing this key), the elements located in the slider range will be added to the current "
       "highlighted elements set." +
       "<p>The sliders of the axis whose range has been modified will be colored in blue to "
-      "indicate on which dimensions the data filtering is made. The other axis sliders will also "
+      "indicate on which propertiess the data filtering is made. The other axis sliders will also "
       "move automatically to show in which ranges the highlighted data are included on the other "
-      "dimensions.</p>" +
+      "properties.</p>" +
       "</body>" + "</html>");
   configwidget = new AxisSliderOptions();
   connect(configwidget, SIGNAL(resetSliders()), view(), SLOT(resetHightlightedElementsSlot()));
@@ -264,7 +264,7 @@ void InteractorAxisSpacer::construct() {
       "to modify its position. The axis can not be moved further that its neighbors.</p>" +
       "<p>By double clicking anywhere in the view, the axis positions will be reset to the default "
       "ones and the axis will we equally spaced.</p>" +
-      "<p>The axis positions will also be reset to default when the number of selected dimensions "
+      "<p>The axis positions will also be reset to default when the number of selected properties "
       "changes.</p>" +
       "</body>" + "</html>");
   push_back(new MousePanNZoomNavigator);

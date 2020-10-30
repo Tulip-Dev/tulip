@@ -62,7 +62,7 @@ SOMPropertiesWidget::SOMPropertiesWidget(SOMView *view, QWidget *parent)
   // Display multiple properties at same time
   multiplePropertiesRepresentation = false;
 
-  dimensionConfigurationWidget->setWindowTitle("Dimensions");
+  dimensionConfigurationWidget->setWindowTitle("Properties");
   setWindowTitle("Options");
 }
 

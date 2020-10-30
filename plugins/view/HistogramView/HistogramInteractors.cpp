@@ -108,9 +108,9 @@ void HistogramInteractorMetricMapping::construct() {
       "performed: <i>viewSize</i> or <i>viewBorderWidth</i>.<br />" +
       "The middle part of the dialog aims to configure the minimum and maximum size to use for the "
       "mapping.<br />" +
-      "The bottom part of the dialog allows to select on which dimensions the size mapping has to "
+      "The bottom part of the dialog allows to select on which axes the size mapping has to "
       "be applied when it is performed on the viewSize property.<br />" +
-      "Once the wanted parameters have been set, press the \"OK\" button to apply them.</p>" +
+      "Once the needed parameters have been set, press the \"OK\" button to apply them.</p>" +
       "<h4>Glyph mapping configuration</h4>" +
       "<p>The configuration dialog for the size mapping is illustrated below.<br />" +
       "<img src=\":/GlyphScaleConfigDialog.png\" width=\"280\" height=\"280\" border=\"0\" "
