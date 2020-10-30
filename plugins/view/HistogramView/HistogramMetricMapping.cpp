@@ -766,6 +766,9 @@ void HistogramMetricMapping::initInteractor() {
 }
 
 bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
+  if (e->type() == QEvent::ContextMenu)
+    // enable view context menu
+    histoView->setShowContextMenu(true);
 
   QMouseEvent *me = dynamic_cast<QMouseEvent *>(e);
 
@@ -869,6 +872,7 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
     if (me->buttons() == Qt::LeftButton && selectedAnchor != nullptr) {
       curveDragStarted = true;
       glWidget->setCursor(QCursor(Qt::ClosedHandCursor));
+      ret = true;
     } else if (me->buttons() == Qt::RightButton) {
       int x = glWidget->width() - me->x();
       int y = me->y();
@@ -899,7 +903,10 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
           glyphMapping->setChecked(true);
         }
 
-        QAction *clickedAction = popupMenu->exec(me->globalPos());
+        // disable view context menu
+	histoView->setShowContextMenu(false);
+
+	QAction *clickedAction = popupMenu->exec(me->globalPos());
         MappingType oldMappingType = mappingType;
 
         if (clickedAction == viewColorMappingAction) {
@@ -908,7 +915,7 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
           mappingType = VIEWBORDERCOLOR_MAPPING;
         } else if (clickedAction == sizeMapping) {
           mappingType = SIZE_MAPPING;
-        } else {
+        } else if (clickedAction == glyphMapping) {
           mappingType = GLYPH_MAPPING;
         }
 
@@ -934,10 +941,9 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
         }
 
         glWidget->draw();
+	ret = true;
       }
     }
-
-    ret = true;
   } else if (e->type() == QEvent::MouseButtonRelease) {
     if (curveDragStarted) {
       updateGraphWithMapping(histoView->histoGraph(),
