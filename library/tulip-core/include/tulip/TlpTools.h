@@ -150,7 +150,8 @@ TLP_SCOPE double randomDouble(double max = 1.0);
 /**
  * @brief returns if a path exists
  * @param pathname an utf-8 encoded string containing the path to check
- * @return true if a file or directory according pathname can be accessed, falseif not and errno is set
+ * @return true if a file or directory according pathname can be accessed, falseif not and errno is
+ * set
  */
 TLP_SCOPE bool pathExist(const std::string &pathname);
 

@@ -1014,10 +1014,10 @@ public:
                                                       // to avoid pb using tellg
                                                       // on the input stream
                                                       std::ifstream::binary);
-	// get file size
-	input->seekg(0, std::ios::end);
-	size = input->tellg();
-	input->seekg(0, std::ios::beg);
+        // get file size
+        input->seekg(0, std::ios::end);
+        size = input->tellg();
+        input->seekg(0, std::ios::beg);
       }
     } else {
       dataSet->get<std::string>("file::data", data);
