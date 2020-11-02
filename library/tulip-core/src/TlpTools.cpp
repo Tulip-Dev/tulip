@@ -17,6 +17,8 @@
  *
  */
 
+#include <gzstream.h>
+
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
@@ -36,7 +38,6 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <utf8.h>
-#include <wchar.h>
 #ifdef _MSC_VER
 #include <dbghelp.h>
 #endif
@@ -48,7 +49,6 @@
 #include <dlfcn.h>
 #endif
 
-#include <gzstream.h>
 #include <tulip/TulipException.h>
 #include <tulip/TlpTools.h>
 #include <tulip/Plugin.h>
