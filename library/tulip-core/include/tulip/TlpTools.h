@@ -23,14 +23,7 @@
 #include <iostream>
 #include <climits>
 #include <sys/types.h>
-#include <sys/stat.h>
 #include <tulip/tulipconf.h>
-
-#ifdef WIN32
-typedef struct _stat tlp_stat_t;
-#else
-typedef struct stat tlp_stat_t;
-#endif
 
 // The hash_combine function from the boost library
 // Call it repeatedly to incrementally create a hash value from several variables.
@@ -155,12 +148,11 @@ TLP_SCOPE unsigned int randomUnsignedInteger(unsigned int max);
 TLP_SCOPE double randomDouble(double max = 1.0);
 
 /**
- * @brief Cross-platform function to stat a path on a filesystem. Its purpose is to support
- * paths on windows platform containing non-ascii characters.
- * @param pathname an utf-8 encoded string containing the path name to stat
- * @param buf a pointer to a tlp_stat_t structure (a typedef for struct stat)
+ * @brief returns if a path exists
+ * @param pathname an utf-8 encoded string containing the path to check
+ * @return true if a file or directory according pathname can be accessed, falseif not and errno is set
  */
-TLP_SCOPE int statPath(const std::string &pathname, tlp_stat_t *buf);
+TLP_SCOPE bool pathExist(const std::string &pathname);
 
 /**
  * @brief Cross-platform function to get an input file stream. Its purpose is to support

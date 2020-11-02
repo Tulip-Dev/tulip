@@ -34,7 +34,6 @@
 #include <cstdlib>
 #include <dlfcn.h>
 #include <dirent.h>
-#include <sys/stat.h>
 #include <cerrno>
 #endif
 
@@ -387,8 +386,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive,
         // we do not try to load the current one
         if (!userPluginsPath.empty()) {
           std::string userPluginLibrary = userPluginsPath + "/" + lib;
-          struct stat slib;
-          if (stat(userPluginLibrary.c_str(), &slib) == 0)
+          if (pathExist(userPluginLibrary.c_str()))
             continue;
         }
         if (loader != nullptr)

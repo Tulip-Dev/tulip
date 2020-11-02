@@ -18,7 +18,6 @@
  */
 
 #include <cerrno>
-#include <sys/stat.h>
 #include <sstream>
 #include <stack>
 

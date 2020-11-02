@@ -569,10 +569,7 @@ public:
     if (!dataSet->get<string>("file::filename", filename))
       return false;
 
-    tlp_stat_t infoEntry;
-    int result = statPath(filename, &infoEntry);
-
-    if (result == -1) {
+    if (!pathExist(filename)) {
       pluginProgress->setError(strerror(errno));
       return false;
     }

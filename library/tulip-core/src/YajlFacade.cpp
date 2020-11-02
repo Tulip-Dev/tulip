@@ -105,10 +105,7 @@ static int parse_end_array(void *ctx) {
 
 void YajlParseFacade::parse(std::string filename) {
   // check if file exists
-  tlp_stat_t infoEntry;
-  bool result = tlp::statPath(filename, &infoEntry) == 0;
-
-  if (!result) {
+  if (!tlp::pathExist(filename)) {
     std::stringstream ess;
     ess << filename.c_str() << ": " << strerror(errno);
     _errorMessage = ess.str();

@@ -18,7 +18,6 @@
  */
 #include <fstream>
 #include <cerrno>
-#include <sys/stat.h>
 #include <tulip/TLPBExportImport.h>
 #include <tulip/TlpTools.h>
 #include <tulip/GraphAbstract.h>
@@ -74,10 +73,8 @@ bool TLPBImport::importGraph() {
 
   if (dataSet->exists("file::filename")) {
     dataSet->get<std::string>("file::filename", filename);
-    struct stat infoEntry;
-    bool result = stat(filename.c_str(), &infoEntry) == 0;
 
-    if (!result) {
+    if (!pathExist(filename.c_str())) {
       std::stringstream ess;
       ess << filename.c_str() << ": " << strerror(errno);
       pluginProgress->setError(ess.str());
