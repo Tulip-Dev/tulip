@@ -119,7 +119,7 @@ void GlMainView::drawOverview(bool generatePixmap) {
     sceneRectChanged(QRectF(QPoint(0, 0), graphicsView()->size()));
   }
 
-  if (_updateOverview) {
+  if (_updateOverview && _glMainWidget->isCurrent()) {
     _overviewItem->draw(generatePixmap);
   }
 }
