@@ -250,7 +250,7 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
       else
         glWidget->setCursor(QCursor());
     } else {
-      *neighborhoodGraphColors = *neighborhoodGraphBackupColors;
+      neighborhoodGraphColors->copy(neighborhoodGraphBackupColors);
 
       if (selectInAugmentedDisplayGraph(qMouseEv->x(), qMouseEv->y(), selectedEntity) &&
           selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
@@ -378,7 +378,7 @@ node NeighborhoodHighlighter::selectNodeInOriginalGraph(GlMainWidget *glWidget, 
       glWidget->screenToViewport(3), glWidget->screenToViewport(3), nullptr, selectedElements);
 
   if (!selectedElements.empty()) {
-    n = node(selectedElements[0].getComplexEntityId());
+      n = selectedElements[0].getNode();
   }
 
   return n;
@@ -413,8 +413,7 @@ void NeighborhoodHighlighter::performZoomAndPan(const BoundingBox &destBB,
 void NeighborhoodHighlighter::cleanupNeighborhoodGraph() {
   delete glNeighborhoodGraph;
   glNeighborhoodGraph = nullptr;
-  delete neighborhoodGraph;
-  neighborhoodGraph = nullptr;
+  //delete properties first
   delete neighborhoodGraphLayout;
   neighborhoodGraphLayout = nullptr;
   delete neighborhoodGraphCircleLayout;
@@ -425,6 +424,9 @@ void NeighborhoodHighlighter::cleanupNeighborhoodGraph() {
   neighborhoodGraphColors = nullptr;
   delete neighborhoodGraphBackupColors;
   neighborhoodGraphBackupColors = nullptr;
+  //last delete neighborhoodGraph
+  delete neighborhoodGraph;
+  neighborhoodGraph = nullptr;
 }
 
 void NeighborhoodHighlighter::buildNeighborhoodGraph(node n, Graph *g) {
@@ -471,8 +473,8 @@ void NeighborhoodHighlighter::updateNeighborhoodGraphLayoutAndColors() {
       neighborhoodGraphBackupColors->setEdgeValue(e, origGraphColors->getEdgeValue(e));
     }
 
-    *neighborhoodGraphLayout = *neighborhoodGraphOriginalLayout;
-    *neighborhoodGraphColors = *neighborhoodGraphBackupColors;
+    neighborhoodGraphLayout->copy(neighborhoodGraphOriginalLayout);
+    neighborhoodGraphColors->copy(neighborhoodGraphBackupColors);
   }
 }
 
@@ -590,14 +592,13 @@ void NeighborhoodHighlighter::computeNeighborhoodGraphCircleLayout() {
   for (auto e : neighborhoodGraph->edges()) {
     const std::pair<node, node> &eEnds = neighborhoodGraph->ends(e);
     node srcNode = eEnds.first;
-    node tgtNode = eEnds.second;
     Coord finalBendsCoord;
 
     if (srcNode != neighborhoodGraphCentralNode) {
       Coord srcNodeCoord = neighborhoodGraphCircleLayout->getNodeValue(srcNode);
       finalBendsCoord = circleCenter + (srcNodeCoord - circleCenter) / 2.f;
     } else {
-      Coord tgtNodeCoord = neighborhoodGraphCircleLayout->getNodeValue(tgtNode);
+      Coord tgtNodeCoord = neighborhoodGraphCircleLayout->getNodeValue(eEnds.second);
       finalBendsCoord = circleCenter + (tgtNodeCoord - circleCenter) / 2.f;
     }
 

@@ -29,19 +29,17 @@ LoopSelection::LoopSelection(const tlp::PluginContext *context) : BooleanAlgorit
 //============================================
 bool LoopSelection::run() {
   result->setAllNodeValue(false);
-  unsigned cpt = 0;
   for (auto e : graph->edges()) {
     auto eEnds = graph->ends(e);
 
     if (eEnds.first == eEnds.second) {
       result->setEdgeValue(e, true);
-      ++cpt;
     }
   }
 
   // output some useful information
   if (dataSet != nullptr) {
-    dataSet->set("#edges selected", cpt);
+    dataSet->set("#edges selected", result->numberOfNonDefaultValuatedEdges(graph));
   }
 
   return true;
