@@ -34,7 +34,7 @@ using namespace tlp;
 using namespace std;
 
 ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::ImportWizard) {
-#if defined(__APPLE__)
+#if !defined(__LINUX)
   setWizardStyle(QWizard::ClassicStyle);
 #endif
 

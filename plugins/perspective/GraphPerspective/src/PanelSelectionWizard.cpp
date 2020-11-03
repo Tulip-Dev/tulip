@@ -33,7 +33,7 @@ using namespace std;
 
 PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel *model, QWidget *parent)
     : QWizard(parent), _ui(new Ui::PanelSelectionWizard), _model(model), _view(nullptr) {
-#if defined(__APPLE__)
+#if !defined(__LINUX)
   setWizardStyle(QWizard::ClassicStyle);
 #endif
 

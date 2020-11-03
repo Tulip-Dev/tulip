@@ -151,7 +151,7 @@ void CSVGraphMappingConfigurationQWizardPage::initializePage() {
 Graph *CSVImportWizard::graph = nullptr;
 
 CSVImportWizard::CSVImportWizard(QWidget *parent) : QWizard(parent), ui(new Ui::CSVImportWizard) {
-#if defined(__APPLE__)
+#if !defined(__LINUX)
   setWizardStyle(QWizard::ClassicStyle);
 #endif
 
