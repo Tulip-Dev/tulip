@@ -64,10 +64,10 @@ using namespace tlp;
 class KCores : public tlp::DoubleAlgorithm {
 public:
   PLUGININFORMATION("K-Cores", "David Auber", "28/05/2006",
-                    "Node partitioning measure based on the K-core decomposition of a graph.<br/>"
+                    "Node partitioning measure based on the K-core decomposition of a graph.<br>"
                     "K-cores were first introduced in:<br/><b>Network structure and minimum "
-                    "degree</b>, S. B. Seidman, Social Networks 5:269-287 (1983).<br/>"
-                    "This is a method for simplifying a graph topology which helps in analysis and "
+                    "degree</b>, S. B. Seidman, Social Networks 5:269-287 (1983), doi: <a href=\"https://doi.org/10.1016/0378-8733(83)90028-X\">10.1016/0378-8733(83)90028-X</a>."
+                    "<br>This is a method for simplifying a graph topology which helps in analysis and "
                     "visualization of social networks.<br>"
                     "<b>Note</b>: use the default parameters to compute simple K-Cores (undirected "
                     "and unweighted).",

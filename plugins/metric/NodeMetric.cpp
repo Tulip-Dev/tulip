@@ -19,6 +19,8 @@
 #include <stack>
 #include "NodeMetric.h"
 
+#include <tulip/AcyclicTest.h>
+
 PLUGIN(NodeMetric)
 
 using namespace std;

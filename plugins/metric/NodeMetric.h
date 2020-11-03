@@ -19,7 +19,7 @@
 #ifndef _NODEMETRIC_H
 #define _NODEMETRIC_H
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/DoubleProperty.h>
 
 /** \addtogroup metric */
 
