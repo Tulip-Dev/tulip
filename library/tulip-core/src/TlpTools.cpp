@@ -17,8 +17,6 @@
  *
  */
 
-#include <gzstream.h>
-
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
@@ -33,11 +31,17 @@
 #ifndef _WIN32
 #include <sys/stat.h>
 #include <unistd.h>
+#include <gzstream.h>
 #endif
 
 #ifdef _WIN32
 #include <windows.h>
 #include <utf8.h>
+// msys2 build hack
+#define __CRT__NO_INLINE
+#include <gzstream.h>
+#undef __CRT__NO_INLINE
+
 #ifdef _MSC_VER
 #include <dbghelp.h>
 #endif
