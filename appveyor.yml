@@ -27,53 +27,27 @@ environment:
     - MSYS2_ARCH: x86_64
       MSYSTEM: MINGW64
       PYTHON2_HOME: "C:/Python27-x64"
-      PYTHON3_HOME: "C:/Python37-x64"
+      PYTHON3_HOME: "C:/Python38-x64"
 
     # 64 bits GCC complete build
     - MSYS2_ARCH: x86_64
       MSYSTEM: MINGW64
       PYTHON2_HOME: "C:/Python27-x64"
-      PYTHON3_HOME: "C:/Python37-x64"
+      PYTHON3_HOME: "C:/Python38-x64"
 
     # 64 bits MSVC core build
     - CMAKE_VS_GENERATOR: "Visual Studio 15 2017 Win64"
       MSVC_PLATFORM: "x64"
       MSVC_PLATFORM_TOOLSET: "v141"
       QT5_DIR: "C:/Qt/5.13/msvc2017_64"
-      PYTHON_EXECUTABLE: "C:/Python37-x64/python.exe"
+      PYTHON_EXECUTABLE: "C:/Python38-x64/python.exe"
 
     # 64 bits MSVC complete build
     - CMAKE_VS_GENERATOR: "Visual Studio 15 2017 Win64"
       MSVC_PLATFORM: "x64"
       MSVC_PLATFORM_TOOLSET: "v141"
       QT5_DIR: "C:/Qt/5.13/msvc2017_64"
-      PYTHON_EXECUTABLE: "C:/Python37-x64/python.exe"
-
-    ## 32 bits GCC core build
-    #- MSYS2_ARCH: i686
-      #MSYSTEM: MINGW32
-      #PYTHON2_HOME: "C:/Python27"
-      #PYTHON3_HOME: "C:/Python37"
-
-    ## 32 bits GCC complete build
-    #- MSYS2_ARCH: i686
-      #MSYSTEM: MINGW32
-      #PYTHON2_HOME: "C:/Python27"
-      #PYTHON3_HOME: "C:/Python37"
-
-    ## 32 bits MSVC core build
-    #- CMAKE_VS_GENERATOR: "Visual Studio 14 2015"
-      #MSVC_PLATFORM: "Win32"
-      #MSVC_PLATFORM_TOOLSET: "v140"
-      #QT5_DIR: "C:/Qt/5.9/msvc2015"
-      #PYTHON_EXECUTABLE: "C:/Python37/python.exe"
-
-    ## 32 bits MSVC complete build
-    #- CMAKE_VS_GENERATOR: "Visual Studio 14 2015"
-      #MSVC_PLATFORM: "Win32"
-      #MSVC_PLATFORM_TOOLSET: "v140"
-      #QT5_DIR: "C:/Qt/5.9/msvc2015"
-      #PYTHON_EXECUTABLE: "C:/Python37/python.exe"
+      PYTHON_EXECUTABLE: "C:/Python38-x64/python.exe"
 
 # nothing to build if a non-windows platform
 # is specified at the end of the commit message
