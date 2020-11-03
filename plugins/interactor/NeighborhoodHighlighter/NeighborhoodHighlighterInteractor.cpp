@@ -378,7 +378,7 @@ node NeighborhoodHighlighter::selectNodeInOriginalGraph(GlMainWidget *glWidget, 
       glWidget->screenToViewport(3), glWidget->screenToViewport(3), nullptr, selectedElements);
 
   if (!selectedElements.empty()) {
-      n = selectedElements[0].getNode();
+    n = selectedElements[0].getNode();
   }
 
   return n;
@@ -413,7 +413,7 @@ void NeighborhoodHighlighter::performZoomAndPan(const BoundingBox &destBB,
 void NeighborhoodHighlighter::cleanupNeighborhoodGraph() {
   delete glNeighborhoodGraph;
   glNeighborhoodGraph = nullptr;
-  //delete properties first
+  // delete properties first
   delete neighborhoodGraphLayout;
   neighborhoodGraphLayout = nullptr;
   delete neighborhoodGraphCircleLayout;
@@ -424,7 +424,7 @@ void NeighborhoodHighlighter::cleanupNeighborhoodGraph() {
   neighborhoodGraphColors = nullptr;
   delete neighborhoodGraphBackupColors;
   neighborhoodGraphBackupColors = nullptr;
-  //last delete neighborhoodGraph
+  // last delete neighborhoodGraph
   delete neighborhoodGraph;
   neighborhoodGraph = nullptr;
 }
