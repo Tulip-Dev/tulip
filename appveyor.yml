@@ -1,11 +1,11 @@
 # Tulip continuous integration on windows platform through AppVeyor.
 # Tulip will be compiled for 32 bits and 64 bits windows using :
 #   - GCC compiler provided by the MSYS2 project
-#   - Microsoft Visual Studio 2015 compiler
-# C++11 standard, Qt >= 5.9 and Python 3.7 will be used to build Tulip with both compilers.
+#   - Microsoft Visual Studio 2019 compiler
+# C++11 standard, Qt >= 5.9 and Python 3.8 will be used to build Tulip with both compilers.
 
-# use Visual Studio 2017 appveyor image for the builds
-os: Visual Studio 2017
+# use Visual Studio 2019 appveyor image for the builds
+os: Visual Studio 2019
 
 # Use build caches that will be saved and restored between build jobs.
 # Those caches will hold ccache content for gcc builds and clcache content for msvc builds
@@ -36,17 +36,17 @@ environment:
       PYTHON3_HOME: "C:/Python38-x64"
 
     # 64 bits MSVC core build
-    - CMAKE_VS_GENERATOR: "Visual Studio 15 2017 Win64"
+    - CMAKE_VS_GENERATOR: "Visual Studio 16 2019"
       MSVC_PLATFORM: "x64"
-      MSVC_PLATFORM_TOOLSET: "v141"
-      QT5_DIR: "C:/Qt/5.13/msvc2017_64"
+      MSVC_PLATFORM_TOOLSET: "v142"
+      QT5_DIR: "C:/Qt/5.15/msvc2019_64"
       PYTHON_EXECUTABLE: "C:/Python38-x64/python.exe"
 
     # 64 bits MSVC complete build
-    - CMAKE_VS_GENERATOR: "Visual Studio 15 2017 Win64"
+    - CMAKE_VS_GENERATOR: "Visual Studio 16 2019"
       MSVC_PLATFORM: "x64"
-      MSVC_PLATFORM_TOOLSET: "v141"
-      QT5_DIR: "C:/Qt/5.13/msvc2017_64"
+      MSVC_PLATFORM_TOOLSET: "v142"
+      QT5_DIR: "C:/Qt/5.15/msvc2019_64"
       PYTHON_EXECUTABLE: "C:/Python38-x64/python.exe"
 
 # nothing to build if a non-windows platform
