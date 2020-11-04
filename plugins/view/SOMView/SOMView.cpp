@@ -1156,9 +1156,6 @@ void SOMView::addEmptyViewLabel() {
   mainLayer->addGlEntity(noDimsLabel, "no dimensions label");
   mainLayer->addGlEntity(noDimsLabel1, "no dimensions label 1");
   mainLayer->addGlEntity(noDimsLabel2, "no dimensions label 2");
-  BoundingBox bbox(noDimsLabel->getBoundingBox());
-  bbox.expand(noDimsLabel2->getBoundingBox()[0]);
-  bbox.expand(noDimsLabel2->getBoundingBox()[1]);
   previewWidget->getScene()->centerScene();
 }
 
