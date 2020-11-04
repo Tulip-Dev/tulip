@@ -83,7 +83,7 @@ goto tulip_build
 rem we are good to go, let's compile and install Tulip now
 cd %APPVEYOR_BUILD_FOLDER%
 md build && cd build
-cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INCLUDE_PATH="C:/tulip_dependencies/include" -DCMAKE_LIBRARY_PATH="C:/tulip_dependencies/lib;C:/tulip_dependencies/bin" -DCMAKE_PREFIX_PATH="%QT5_DIR%" -DPYTHON_EXECUTABLE="%PYTHON_EXECUTABLE%" -DTULIP_BUILD_CORE_ONLY=%TULIP_BUILD_CORE_ONLY% -DTULIP_BUILD_TESTS=ON ..
+cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INCLUDE_PATH="C:/tulip_dependencies/include" -DCMAKE_LIBRARY_PATH="C:/tulip_dependencies/lib;C:/tulip_dependencies/bin" -DCMAKE_PREFIX_PATH="%QT5_DIR%" -DPYTHON_EXECUTABLE="%PYTHON_EXECUTABLE%" -DTULIP_BUILD_CORE_ONLY=%TULIP_BUILD_CORE_ONLY% -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=OFF ..
 if %errorlevel% neq 0 exit /b %errorlevel%
 msbuild INSTALL.vcxproj /m /p:Configuration=Release %CLCACHE_MSBUILD_CONF%
 if %errorlevel% neq 0 exit /b %errorlevel%
