@@ -150,6 +150,16 @@ public slots:
   virtual void setView(tlp::View *) = 0;
 
   /**
+   * @brief This method is called whenever the context menu is required on the view.
+   * @param point The screen coordinates where the context menu should be displayed.
+    @return true or false whether the context menu has been shown or not
+   */
+  virtual bool showContextMenu(const QPoint &/*point*/,
+			       const QPointF &/*scenePoint*/) {
+    return false;
+  }
+
+  /**
     @brief Install the interactor on the given target
     A call to this method means that the interactor should start listening to the target's events
     and handle them.

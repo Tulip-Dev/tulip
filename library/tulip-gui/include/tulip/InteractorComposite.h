@@ -75,6 +75,16 @@ public:
    * @brief A callback method after setView was called.
    */
   virtual void viewChanged(View *) {}
+
+  /**
+   * @brief This method is called whenever the context menu is required on the view.
+   * @param point The screen coordinates where the context menu should be displayed.
+    @return true or false whether the context menu has been shown or not
+   */
+  virtual bool showContextMenu(const QPoint &/*point*/,
+			       const QPointF &/*scenePoint*/) {
+    return false;
+  }
 };
 
 /**
@@ -165,6 +175,12 @@ public:
     @brief Push an InteractorComponent at the beginning of the list
     */
   void push_front(InteractorComponent *component);
+
+  /**
+    @brief iterate on _components to show context menu
+    */
+  bool showContextMenu(const QPoint &/*point*/,
+		       const QPointF &/*scenePoint*/) override;
 
 public slots:
   void undoIsDone() override;

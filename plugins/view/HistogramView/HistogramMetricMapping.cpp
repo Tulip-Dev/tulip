@@ -28,6 +28,7 @@
 #include <tulip/ColorScalesManager.h>
 #include <tulip/Perspective.h>
 
+#include <QApplication>
 #include <QToolTip>
 #include <QMainWindow>
 #include <QMenu>
@@ -766,10 +767,6 @@ void HistogramMetricMapping::initInteractor() {
 }
 
 bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
-  if (e->type() == QEvent::ContextMenu)
-    // enable view context menu
-    histoView->setShowContextMenu(true);
-
   QMouseEvent *me = dynamic_cast<QMouseEvent *>(e);
 
   if (!me)
@@ -873,76 +870,6 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
       curveDragStarted = true;
       glWidget->setCursor(QCursor(Qt::ClosedHandCursor));
       ret = true;
-    } else if (me->buttons() == Qt::RightButton) {
-      int x = glWidget->width() - me->x();
-      int y = me->y();
-      Coord screenCoords(x, y, 0);
-      Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
-          glWidget->screenToViewport(screenCoords)));
-
-      if (pointerUnderScale(sceneCoords)) {
-        if (mappingType == VIEWCOLOR_MAPPING) {
-          viewColorMappingAction->setChecked(true);
-          viewBorderColorMappingAction->setChecked(false);
-          sizeMapping->setChecked(false);
-          glyphMapping->setChecked(false);
-        } else if (mappingType == VIEWBORDERCOLOR_MAPPING) {
-          viewColorMappingAction->setChecked(false);
-          viewBorderColorMappingAction->setChecked(true);
-          sizeMapping->setChecked(false);
-          glyphMapping->setChecked(false);
-        } else if (mappingType == SIZE_MAPPING) {
-          viewColorMappingAction->setChecked(false);
-          viewBorderColorMappingAction->setChecked(false);
-          sizeMapping->setChecked(true);
-          glyphMapping->setChecked(false);
-        } else {
-          viewColorMappingAction->setChecked(false);
-          viewBorderColorMappingAction->setChecked(false);
-          sizeMapping->setChecked(false);
-          glyphMapping->setChecked(true);
-        }
-
-        // disable view context menu
-        histoView->setShowContextMenu(false);
-
-        QAction *clickedAction = popupMenu->exec(me->globalPos());
-        MappingType oldMappingType = mappingType;
-
-        if (clickedAction == viewColorMappingAction) {
-          mappingType = VIEWCOLOR_MAPPING;
-        } else if (clickedAction == viewBorderColorMappingAction) {
-          mappingType = VIEWBORDERCOLOR_MAPPING;
-        } else if (clickedAction == sizeMapping) {
-          mappingType = SIZE_MAPPING;
-        } else if (clickedAction == glyphMapping) {
-          mappingType = GLYPH_MAPPING;
-        }
-
-        if (mappingType != oldMappingType) {
-          vector<Coord> oldCurvePoints;
-          oldCurvePoints.push_back(curve->getFirstCurvePoint());
-          const vector<Coord> &intermediateCurvePoints = curve->getCurvePoints();
-          oldCurvePoints.insert(oldCurvePoints.end(), intermediateCurvePoints.begin(),
-                                intermediateCurvePoints.end());
-          oldCurvePoints.push_back(curve->getLastCurvePoint());
-          curveShapeForMapping[oldMappingType] = oldCurvePoints;
-
-          if (curveShapeForMapping.find(mappingType) != curveShapeForMapping.end()) {
-            vector<Coord> curvePoints(curveShapeForMapping[mappingType]);
-            curve->setCurveStartPoint(curvePoints[0]);
-            curve->setLastCurvePoint(curvePoints[curvePoints.size() - 1]);
-            curvePoints.erase(curvePoints.begin());
-            curvePoints.pop_back();
-            curve->setCurvePoints(curvePoints);
-          } else {
-            curve->resetCurve();
-          }
-        }
-
-        glWidget->draw();
-        ret = true;
-      }
     }
   } else if (e->type() == QEvent::MouseButtonRelease) {
     if (curveDragStarted) {
@@ -959,6 +886,76 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
   Observable::unholdObservers();
 
   return ret;
+}
+
+bool HistogramMetricMapping::showContextMenu(const QPoint & globalPoint,
+					     const QPointF &/*scenePoint*/) {
+  GlMainWidget *glWidget = histoView->getGlMainWidget();
+  QPoint point = QApplication::widgetAt(globalPoint)->mapFromGlobal(globalPoint);
+  Coord screenCoords(glWidget->width() - point.x(), point.y(), 0);
+  Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
+          glWidget->screenToViewport(screenCoords)));
+  if (pointerUnderScale(sceneCoords)) {
+    if (mappingType == VIEWCOLOR_MAPPING) {
+      viewColorMappingAction->setChecked(true);
+      viewBorderColorMappingAction->setChecked(false);
+      sizeMapping->setChecked(false);
+      glyphMapping->setChecked(false);
+    } else if (mappingType == VIEWBORDERCOLOR_MAPPING) {
+      viewColorMappingAction->setChecked(false);
+      viewBorderColorMappingAction->setChecked(true);
+      sizeMapping->setChecked(false);
+      glyphMapping->setChecked(false);
+    } else if (mappingType == SIZE_MAPPING) {
+      viewColorMappingAction->setChecked(false);
+      viewBorderColorMappingAction->setChecked(false);
+      sizeMapping->setChecked(true);
+      glyphMapping->setChecked(false);
+    } else {
+      viewColorMappingAction->setChecked(false);
+      viewBorderColorMappingAction->setChecked(false);
+      sizeMapping->setChecked(false);
+      glyphMapping->setChecked(true);
+    }
+
+    QAction *clickedAction = popupMenu->exec(globalPoint);
+    MappingType oldMappingType = mappingType;
+
+    if (clickedAction == viewColorMappingAction) {
+      mappingType = VIEWCOLOR_MAPPING;
+    } else if (clickedAction == viewBorderColorMappingAction) {
+      mappingType = VIEWBORDERCOLOR_MAPPING;
+    } else if (clickedAction == sizeMapping) {
+      mappingType = SIZE_MAPPING;
+    } else if (clickedAction == glyphMapping) {
+      mappingType = GLYPH_MAPPING;
+    }
+
+    if (mappingType != oldMappingType) {
+      vector<Coord> oldCurvePoints;
+      oldCurvePoints.push_back(curve->getFirstCurvePoint());
+      const vector<Coord> &intermediateCurvePoints = curve->getCurvePoints();
+      oldCurvePoints.insert(oldCurvePoints.end(), intermediateCurvePoints.begin(),
+			    intermediateCurvePoints.end());
+      oldCurvePoints.push_back(curve->getLastCurvePoint());
+      curveShapeForMapping[oldMappingType] = oldCurvePoints;
+
+      if (curveShapeForMapping.find(mappingType) != curveShapeForMapping.end()) {
+	vector<Coord> curvePoints(curveShapeForMapping[mappingType]);
+	curve->setCurveStartPoint(curvePoints[0]);
+	curve->setLastCurvePoint(curvePoints[curvePoints.size() - 1]);
+	curvePoints.erase(curvePoints.begin());
+	curvePoints.pop_back();
+	curve->setCurvePoints(curvePoints);
+      } else {
+	curve->resetCurve();
+      }
+    }
+
+    glWidget->draw();
+    return true;
+  }
+  return false;
 }
 
 bool HistogramMetricMapping::draw(GlMainWidget *glMainWidget) {

@@ -79,6 +79,14 @@ void InteractorComposite::setView(tlp::View *view) {
     i->setView(view);
 }
 
+bool InteractorComposite::showContextMenu(const QPoint &point,
+					  const QPointF &scenePoint) {
+  for (auto i : _components)
+    if (i->showContextMenu(point, scenePoint))
+      return true;
+  return false;
+}
+
 InteractorComposite::iterator InteractorComposite::begin() {
   return _components.begin();
 }

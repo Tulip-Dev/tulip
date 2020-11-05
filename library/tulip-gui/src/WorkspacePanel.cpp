@@ -362,8 +362,8 @@ void WorkspacePanel::closeEvent(QCloseEvent *event) {
 bool WorkspacePanel::eventFilter(QObject *obj, QEvent *ev) {
   if (_view != nullptr) {
     if (ev->type() == QEvent::GraphicsSceneContextMenu) {
-      _view->showContextMenu(QCursor::pos(),
-                             static_cast<QGraphicsSceneContextMenuEvent *>(ev)->scenePos());
+      return _view->showContextMenu(QCursor::pos(),
+				    static_cast<QGraphicsSceneContextMenuEvent *>(ev)->scenePos());
     } else if (_viewConfigurationWidgets != nullptr &&
                _view->configurationWidgets().contains(qobject_cast<QWidget *>(obj)))
       return true;

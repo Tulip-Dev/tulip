@@ -115,7 +115,12 @@ void View::fillContextMenu(QMenu *menu, edge e) {
     _tturlManager->fillContextMenu(menu, e);
 }
 
-void View::showContextMenu(const QPoint &point, const QPointF &scenePoint) {
+bool View::showContextMenu(const QPoint &point, const QPointF &scenePoint) {
+  // try to display current interactor context menu first
+  if (_currentInteractor &&
+      _currentInteractor->showContextMenu(point, scenePoint))
+    return true;
+
   if (_displayContextMenu) {
     QMenu menu;
     menu.setStyleSheet("QMenu::item:disabled {color: white; background-color: "
@@ -127,8 +132,10 @@ void View::showContextMenu(const QPoint &point, const QPointF &scenePoint) {
       Perspective::redirectStatusTipOfMenu(&menu);
       menu.move(point);
       menu.exec();
+      return true;
     }
   }
+  return false;
 }
 
 DataSet View::state() const {
