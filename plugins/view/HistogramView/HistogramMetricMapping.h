@@ -226,8 +226,7 @@ public:
   bool draw(GlMainWidget *glMainWidget) override;
   bool compute(GlMainWidget *glMainWidget) override;
   void viewChanged(View *view) override;
-  bool showContextMenu(const QPoint &globalPoint,
-		       const QPointF &scenePoint) override;
+  bool showContextMenu(const QPoint &globalPoint, const QPointF &scenePoint) override;
 
   bool pointerUnderScale(const Coord &sceneCoords);
   void updateGraphWithMapping(Graph *graph, LayoutProperty *histogramLayout);

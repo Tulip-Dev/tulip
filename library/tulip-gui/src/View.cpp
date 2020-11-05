@@ -117,8 +117,7 @@ void View::fillContextMenu(QMenu *menu, edge e) {
 
 bool View::showContextMenu(const QPoint &point, const QPointF &scenePoint) {
   // try to display current interactor context menu first
-  if (_currentInteractor &&
-      _currentInteractor->showContextMenu(point, scenePoint))
+  if (_currentInteractor && _currentInteractor->showContextMenu(point, scenePoint))
     return true;
 
   if (_displayContextMenu) {

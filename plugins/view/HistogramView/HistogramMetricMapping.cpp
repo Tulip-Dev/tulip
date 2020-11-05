@@ -888,13 +888,13 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
   return ret;
 }
 
-bool HistogramMetricMapping::showContextMenu(const QPoint & globalPoint,
-					     const QPointF &/*scenePoint*/) {
+bool HistogramMetricMapping::showContextMenu(const QPoint &globalPoint,
+                                             const QPointF & /*scenePoint*/) {
   GlMainWidget *glWidget = histoView->getGlMainWidget();
   QPoint point = QApplication::widgetAt(globalPoint)->mapFromGlobal(globalPoint);
   Coord screenCoords(glWidget->width() - point.x(), point.y(), 0);
   Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
-          glWidget->screenToViewport(screenCoords)));
+      glWidget->screenToViewport(screenCoords)));
   if (pointerUnderScale(sceneCoords)) {
     if (mappingType == VIEWCOLOR_MAPPING) {
       viewColorMappingAction->setChecked(true);
@@ -936,19 +936,19 @@ bool HistogramMetricMapping::showContextMenu(const QPoint & globalPoint,
       oldCurvePoints.push_back(curve->getFirstCurvePoint());
       const vector<Coord> &intermediateCurvePoints = curve->getCurvePoints();
       oldCurvePoints.insert(oldCurvePoints.end(), intermediateCurvePoints.begin(),
-			    intermediateCurvePoints.end());
+                            intermediateCurvePoints.end());
       oldCurvePoints.push_back(curve->getLastCurvePoint());
       curveShapeForMapping[oldMappingType] = oldCurvePoints;
 
       if (curveShapeForMapping.find(mappingType) != curveShapeForMapping.end()) {
-	vector<Coord> curvePoints(curveShapeForMapping[mappingType]);
-	curve->setCurveStartPoint(curvePoints[0]);
-	curve->setLastCurvePoint(curvePoints[curvePoints.size() - 1]);
-	curvePoints.erase(curvePoints.begin());
-	curvePoints.pop_back();
-	curve->setCurvePoints(curvePoints);
+        vector<Coord> curvePoints(curveShapeForMapping[mappingType]);
+        curve->setCurveStartPoint(curvePoints[0]);
+        curve->setLastCurvePoint(curvePoints[curvePoints.size() - 1]);
+        curvePoints.erase(curvePoints.begin());
+        curvePoints.pop_back();
+        curve->setCurvePoints(curvePoints);
       } else {
-	curve->resetCurve();
+        curve->resetCurve();
       }
     }
 

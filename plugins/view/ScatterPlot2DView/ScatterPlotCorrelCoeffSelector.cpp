@@ -348,8 +348,7 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
   return false;
 }
 
-bool ScatterPlotCorrelCoeffSelector::showContextMenu(const QPoint &globalPoint,
-						     const QPointF &) {
+bool ScatterPlotCorrelCoeffSelector::showContextMenu(const QPoint &globalPoint, const QPointF &) {
   if (selectedPolygon != nullptr) {
     auto glWidget = scatterView->getGlMainWidget();
     QMenu contextMenu(glWidget);
@@ -359,7 +358,7 @@ bool ScatterPlotCorrelCoeffSelector::showContextMenu(const QPoint &globalPoint,
 
     if (selectedAction == deletePoly) {
       polygons.erase(std::remove(polygons.begin(), polygons.end(), selectedPolygon),
-		     polygons.end());
+                     polygons.end());
       polygonsToNodesSubsetAndCorrelCoeff.erase(selectedPolygon);
       delete selectedPolygon;
       selectedPolygon = nullptr;
@@ -372,23 +371,23 @@ bool ScatterPlotCorrelCoeffSelector::showContextMenu(const QPoint &globalPoint,
       Observable::holdObservers();
 
       for (size_t i = 0; i < polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first.size();
-	   ++i) {
-	viewSelection->setNodeValue(
-				    polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first[i], true);
+           ++i) {
+        viewSelection->setNodeValue(polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first[i],
+                                    true);
       }
 
       for (size_t i = 0; i < polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first.size();
-	   ++i) {
-	for (size_t j = i + 1;
-	     j < polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first.size(); ++j) {
-	  edge e = graph->existEdge(
-				    polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first[i],
-				    polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first[j], false);
+           ++i) {
+        for (size_t j = i + 1;
+             j < polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first.size(); ++j) {
+          edge e = graph->existEdge(polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first[i],
+                                    polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first[j],
+                                    false);
 
-	  if (e.isValid()) {
-	    viewSelection->setEdgeValue(e, true);
-	  }
-	}
+          if (e.isValid()) {
+            viewSelection->setEdgeValue(e, true);
+          }
+        }
       }
       Observable::unholdObservers();
     }

@@ -81,8 +81,7 @@ public:
    * @param point The screen coordinates where the context menu should be displayed.
     @return true or false whether the context menu has been shown or not
    */
-  virtual bool showContextMenu(const QPoint &/*point*/,
-			       const QPointF &/*scenePoint*/) {
+  virtual bool showContextMenu(const QPoint & /*point*/, const QPointF & /*scenePoint*/) {
     return false;
   }
 };
@@ -179,8 +178,7 @@ public:
   /**
     @brief iterate on _components to show context menu
     */
-  bool showContextMenu(const QPoint &/*point*/,
-		       const QPointF &/*scenePoint*/) override;
+  bool showContextMenu(const QPoint & /*point*/, const QPointF & /*scenePoint*/) override;
 
 public slots:
   void undoIsDone() override;
