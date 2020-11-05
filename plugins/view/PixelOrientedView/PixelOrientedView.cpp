@@ -112,31 +112,21 @@ void PixelOrientedView::initGlWidget() {
   if (mainLayer == nullptr) {
     mainLayer = new GlLayer("Main");
     getGlMainWidget()->getScene()->addExistingLayer(mainLayer);
-  }
-
-  if (mainLayer->findGlEntity("graph")) {
-    GlGraphComposite *lastGraphComposite =
-        static_cast<GlGraphComposite *>(mainLayer->findGlEntity("graph"));
-    Graph *theGraph = lastGraphComposite->getInputData()->getGraph();
-
-    if (theGraph)
-      theGraph->removeListener(lastGraphComposite);
-  }
-
-  if (overviewsComposite != nullptr) {
+  } else {
     overviewsComposite->reset(true);
     detailOverview = nullptr;
+    mainLayer->getComposite()->reset(true);
   }
-
-  mainLayer->getComposite()->reset(true);
-
   overviewsComposite = new GlComposite();
   mainLayer->addGlEntity(overviewsComposite, "overview composite");
 
   detailViewLabel = nullptr;
 
+  GlGraphComposite *lastGraphComposite = graphComposite;
   graphComposite = new GlGraphComposite(pixelOrientedGraph);
   mainLayer->addGlEntity(graphComposite, "graph");
+  delete lastGraphComposite;
+
   setGraphView(graphComposite, false);
 }
 
