@@ -159,7 +159,7 @@ public slots:
 
 private:
   void interactorsInstalled(const QList<tlp::Interactor *> &) override;
-  void initGlWidget(Graph *graph);
+  void initGlWidget();
   void generateScatterPlots();
 
   void destroyOverviewsIfNeeded();

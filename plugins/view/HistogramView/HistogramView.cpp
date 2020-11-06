@@ -87,15 +87,13 @@ QList<QWidget *> HistogramView::configurationWidgets() const {
   return QList<QWidget *>() << propertiesSelectionWidget << histoOptionsWidget;
 }
 
-void HistogramView::initGlWidget(Graph *) {
-  GlLayer *layer = getGlMainWidget()->getScene()->getLayer("Main");
+void HistogramView::initGlWidget() {
+  mainLayer = getGlMainWidget()->getScene()->getLayer("Main");
 
-  if (layer == nullptr) {
-    layer = new GlLayer("Main");
-    getGlMainWidget()->getScene()->addExistingLayer(layer);
+  if (mainLayer == nullptr) {
+    mainLayer = new GlLayer("Main");
+    getGlMainWidget()->getScene()->addExistingLayer(mainLayer);
   }
-
-  mainLayer = layer;
 
   cleanupGlScene();
 
@@ -152,14 +150,11 @@ QuickAccessBar *HistogramView::getQuickAccessBarImpl() {
 }
 
 void HistogramView::setState(const DataSet &dataSet) {
-
   GlMainWidget *gl = getGlMainWidget();
 
   if (!isConstruct) {
     isConstruct = true;
     gl->installEventFilter(this);
-    setOverviewVisible(true);
-
     propertiesSelectionWidget = new ViewGraphPropertiesSelectionWidget();
     histoOptionsWidget = new HistoOptionsWidget();
     propertiesSelectionWidget->setWidgetEnabled(true);
@@ -183,11 +178,10 @@ void HistogramView::setState(const DataSet &dataSet) {
       lastGraph->getProperty("viewTexture")->removeListener(this);
     }
 
-    initGlWidget(graph());
+    initGlWidget();
     detailedHistogram = nullptr;
 
-    if (edgeAsNodeGraph)
-      delete edgeAsNodeGraph;
+    delete edgeAsNodeGraph;
 
     if (_histoGraph) {
       edgeAsNodeGraph = tlp::newGraph();
@@ -351,7 +345,6 @@ void HistogramView::setState(const DataSet &dataSet) {
   }
 
   bool quickAccessBarVisible = false;
-
   if (dataSet.get<bool>("quickAccessBarVisible", quickAccessBarVisible)) {
     needQuickAccessBar = true;
     setQuickAccessBarVisible(quickAccessBarVisible);
@@ -541,12 +534,16 @@ void HistogramView::draw() {
 
     if (quickAccessBarVisible())
       _quickAccessBar->setEnabled(false);
+    setOverviewVisible(false);
 
+    lastNbHistograms = 0;
     return;
   }
 
+  removeEmptyViewLabel();
   if (quickAccessBarVisible())
     _quickAccessBar->setEnabled(true);
+  setOverviewVisible(true);
 
   if (detailedHistogram != nullptr) {
     needUpdateHistogram = true;
@@ -558,10 +555,6 @@ void HistogramView::draw() {
 
   if (!smallMultiplesView && detailedHistogram != nullptr) {
     switchFromSmallMultiplesToDetailedView(detailedHistogram);
-  }
-
-  if (!selectedProperties.empty()) {
-    removeEmptyViewLabel();
   }
 
   if (!smallMultiplesView &&
@@ -577,11 +570,8 @@ void HistogramView::draw() {
   if (lastNbHistograms != selectedProperties.size()) {
     centerView();
     lastNbHistograms = selectedProperties.size();
-    return;
-  }
-
-  gl->draw();
-  lastNbHistograms = selectedProperties.size();
+  } else
+    gl->draw();
 }
 
 void HistogramView::refresh() {

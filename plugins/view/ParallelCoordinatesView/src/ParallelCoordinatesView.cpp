@@ -69,7 +69,7 @@ ParallelCoordinatesView::ParallelCoordinatesView(const PluginContext *)
       axisPointsGraph(nullptr), graphProxy(nullptr), parallelCoordsDrawing(nullptr),
       dataConfigWidget(nullptr), drawConfigWidget(nullptr), firstSet(true),
       lastNbSelectedProperties(0), center(false), lastViewWindowWidth(0), lastViewWindowHeight(0),
-      isConstruct(false), dontCenterViewAfterConfLoaded(false), needDraw(false) {}
+      isConstruct(false), dontCenterViewAfterConfLoaded(false) {}
 
 ParallelCoordinatesView::~ParallelCoordinatesView() {
   for (auto obs : triggers()) {
@@ -131,7 +131,6 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
   if (!isConstruct) {
     initGlWidget();
     buildContextMenu();
-    setOverviewVisible(true);
     getGlMainWidget()->installEventFilter(this);
 
     dataConfigWidget = new ViewGraphPropertiesSelectionWidget();
@@ -438,53 +437,43 @@ void ParallelCoordinatesView::removeEmptyViewLabel() {
 }
 
 void ParallelCoordinatesView::draw() {
-  if (graph()) {
-    if (graphProxy->selectedPropertiesisEmpty()) {
-      removeEmptyViewLabel();
-      addEmptyViewLabel();
-      toggleInteractors(false);
-      if (quickAccessBarVisible())
-        _quickAccessBar->setEnabled(false);
-      getGlMainWidget()->getScene()->centerScene();
-      getGlMainWidget()->draw();
-      return;
-    } else {
-      removeEmptyViewLabel();
-      if (quickAccessBarVisible())
-        _quickAccessBar->setEnabled(true);
-      toggleInteractors(true);
-      if (graphProxy->getDataCount() > PROGRESS_BAR_DISPLAY_NB_DATA_THRESHOLD) {
-        updateWithProgressBar();
-      } else {
-        updateWithoutProgressBar();
-      }
-    }
+  GlMainWidget *gl = getGlMainWidget();
 
-    if (lastNbSelectedProperties != graphProxy->getNumberOfSelectedProperties() || center) {
-      if (!dontCenterViewAfterConfLoaded) {
-        centerView();
-      } else {
-        dontCenterViewAfterConfLoaded = false;
-      }
-
-      center = false;
-    } else {
-      getGlMainWidget()->draw();
-    }
-
-    lastNbSelectedProperties = graphProxy->getNumberOfSelectedProperties();
+  if (graphProxy->selectedPropertiesisEmpty()) {
+    removeEmptyViewLabel();
+    addEmptyViewLabel();
+    toggleInteractors(false);
+    if (quickAccessBarVisible())
+      _quickAccessBar->setEnabled(false);
+    setOverviewVisible(false);
+    gl->getScene()->centerScene();
+    gl->draw();
+    lastNbSelectedProperties = 0;
+    return;
+  }
+  removeEmptyViewLabel();
+  toggleInteractors(true);
+  if (quickAccessBarVisible())
+    _quickAccessBar->setEnabled(true);
+  setOverviewVisible(true);
+  if (graphProxy->getDataCount() > PROGRESS_BAR_DISPLAY_NB_DATA_THRESHOLD) {
+    updateWithProgressBar();
   } else {
-    getGlMainWidget()->draw();
+    updateWithoutProgressBar();
   }
 
-  needDraw = false;
-}
+  if (lastNbSelectedProperties != graphProxy->getNumberOfSelectedProperties() || center) {
+    if (!dontCenterViewAfterConfLoaded) {
+      centerView();
+    } else {
+      dontCenterViewAfterConfLoaded = false;
+    }
 
-void ParallelCoordinatesView::refresh() {
-  if (!needDraw)
-    getGlMainWidget()->redraw();
-  else
-    draw();
+    center = false;
+  } else {
+    gl->draw();
+  }
+  lastNbSelectedProperties = graphProxy->getNumberOfSelectedProperties();
 }
 
 void ParallelCoordinatesView::init() {
@@ -714,7 +703,6 @@ void ParallelCoordinatesView::setupAndDrawView() {
   }
 
   registerTriggers();
-  needDraw = true;
   draw();
   drawOverview(true);
 }

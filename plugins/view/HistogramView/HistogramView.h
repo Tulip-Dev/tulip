@@ -143,7 +143,7 @@ protected slots:
 private:
   void interactorsInstalled(const QList<tlp::Interactor *> &) override;
   void registerTriggers();
-  void initGlWidget(Graph *graph);
+  void initGlWidget();
   void buildHistograms();
 
   void updateDetailedHistogramAxis();

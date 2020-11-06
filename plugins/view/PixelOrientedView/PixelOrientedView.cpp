@@ -139,7 +139,6 @@ void PixelOrientedView::setLayoutFunction(pocore::LayoutFunction *layoutFunction
 }
 
 void PixelOrientedView::setState(const DataSet &dataSet) {
-
   if (!isConstruct) {
     isConstruct = true;
     propertiesSelectionWidget = new ViewGraphPropertiesSelectionWidget();
@@ -147,40 +146,13 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
     pixelOrientedMediator = new PixelOrientedMediator(spiralLayout, nullptr);
     optionsWidget = new PixelOrientedOptionsWidget();
     layoutFunctionsMap["Spiral"] = spiralLayout;
-    setOverviewVisible(true);
   }
 
   GlMainView::setState(dataSet);
 
-  Graph *lastGraph = this->pixelOrientedGraph;
+  Graph *lastGraph = pixelOrientedGraph;
 
-  if (graph() == nullptr) {
-    this->pixelOrientedGraph = graph();
-    destroyData();
-    initGlWidget();
-    lastNbNodes = 0;
-
-    if (lastGraph != nullptr && lastGraph != pixelOrientedGraph) {
-      overviewsComposite->reset(true);
-      overviewsMap.clear();
-      detailOverview = nullptr;
-      newGraphSet = true;
-    }
-
-    for (auto obs : triggers()) {
-      removeRedrawTrigger(obs);
-    }
-
-    propertiesSelectionWidget->setWidgetParameters(nullptr, propertiesTypesFilter);
-
-    center = true;
-    draw();
-    center = false;
-
-    return;
-  }
-
-  if (tulipNodeColorMapping != nullptr && this->pixelOrientedGraph != graph()) {
+  if (tulipNodeColorMapping != nullptr && pixelOrientedGraph != graph()) {
     delete tulipNodeColorMapping;
     tulipNodeColorMapping = nullptr;
   }
@@ -191,7 +163,7 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
   }
 
   if (lastGraph == nullptr || lastGraph != graph()) {
-    this->pixelOrientedGraph = graph();
+    pixelOrientedGraph = graph();
     initGlWidget();
     destroyData();
     lastNbNodes = pixelOrientedGraph->numberOfNodes();
@@ -253,33 +225,26 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
     }
   }
 
-  string detailOverviewName;
-  dataSet.get("detail overview  name", detailOverviewName);
-
-  center = true;
-
   if (haveSelectedGraphProperties) {
     updateOverviews(true);
     getGlMainWidget()->centerScene();
+  } else
+    draw();
+
+  registerTriggers();
+
+  string detailOverviewName;
+  dataSet.get("detail overview  name", detailOverviewName);
+  if (!detailOverviewName.empty()) {
+    switchFromSmallMultiplesToDetailView(overviewsMap[detailOverviewName]);
   }
 
   bool quickAccessBarVisible = false;
-
   if (dataSet.get<bool>("quickAccessBarVisible", quickAccessBarVisible)) {
     needQuickAccessBar = true;
     setQuickAccessBarVisible(quickAccessBarVisible);
   } else // display quickaccessbar
     setQuickAccessBarVisible(true);
-
-  draw();
-  center = false;
-
-  if (!detailOverviewName.empty()) {
-    switchFromSmallMultiplesToDetailView(overviewsMap[detailOverviewName]);
-  }
-
-  drawOverview(true);
-  registerTriggers();
 }
 
 DataSet PixelOrientedView::state() const {
@@ -487,73 +452,70 @@ void PixelOrientedView::draw() {
   GlMainWidget *glw = getGlMainWidget();
   GlScene *scene = glw->getScene();
 
-  if (pixelOrientedGraph != nullptr) {
-    scene->setBackgroundColor(optionsWidget->getBackgroundColor());
-    unsigned int lastNbDimensionsSelected = selectedGraphProperties.size();
-    destroyOverviewsIfNeeded();
+  scene->setBackgroundColor(optionsWidget->getBackgroundColor());
+  unsigned int lastNbDimensionsSelected = selectedGraphProperties.size();
+  destroyOverviewsIfNeeded();
 
-    if (pixelOrientedGraph->numberOfNodes() >= 2) // We stop the creation of pixel overviews if we
-                                                  // have less than 2 nodes as we need at least two
-                                                  // to compute sizes for overview
-      initPixelView();
-    else
-      selectedGraphProperties.clear();
+  if (pixelOrientedGraph->numberOfNodes() >= 2) // We stop the creation of pixel overviews if we
+    // have less than 2 nodes as we need at least two
+    // to compute sizes for overview
+    initPixelView();
+  else
+    selectedGraphProperties.clear();
 
-    if (selectedGraphProperties.empty()) {
-      if (!smallMultiplesView) {
-        switchFromDetailViewToSmallMultiples();
-      }
-
-      removeEmptyViewLabel();
-      addEmptyViewLabel();
-      if (quickAccessBarVisible())
-        _quickAccessBar->setEnabled(false);
-      scene->centerScene();
-      glw->draw();
-      return;
-    } else {
-      removeEmptyViewLabel();
-      if (quickAccessBarVisible())
-        _quickAccessBar->setEnabled(true);
-    }
-
-    if (lastNbDimensionsSelected != selectedGraphProperties.size()) {
-      center = true;
-    }
-
-    if (!smallMultiplesView && lastNbDimensionsSelected == 1 &&
-        selectedGraphProperties.size() > 1) {
+  if (selectedGraphProperties.empty()) {
+    if (!smallMultiplesView) {
       switchFromDetailViewToSmallMultiples();
-    } else if (selectedGraphProperties.size() == 1) {
-      glw->makeCurrent();
-      overviewsMap[selectedGraphProperties[0]]->computePixelView();
-      overviewGenMap[selectedGraphProperties[0]] = true;
-      switchFromSmallMultiplesToDetailView(overviewsMap[selectedGraphProperties[0]]);
-    } else if (!smallMultiplesView && detailOverview != nullptr) {
-      detailOverview->computePixelView();
-      smallMultiplesNeedUpdate = true;
-
-      if (newGraphSet) {
-        switchFromSmallMultiplesToDetailView(detailOverview);
-        newGraphSet = false;
-      }
-    } else if (!smallMultiplesView && detailOverview == nullptr) {
-      switchFromDetailViewToSmallMultiples();
-    } else {
-      glw->makeCurrent();
-      updateOverviews(true);
     }
 
-    if (!smallMultiplesView && detailViewLabel != nullptr) {
-      detailViewLabel->setColor(getTextColor());
-    }
+    removeEmptyViewLabel();
+    addEmptyViewLabel();
+    if (quickAccessBarVisible())
+      _quickAccessBar->setEnabled(false);
+    setOverviewVisible(false);
+    glw->centerScene();
+    return;
+  }
 
-    if (center) {
-      centerView();
-      center = false;
-    } else {
-      glw->draw();
+  removeEmptyViewLabel();
+  if (quickAccessBarVisible())
+    _quickAccessBar->setEnabled(true);
+  setOverviewVisible(true);
+
+  if (lastNbDimensionsSelected != selectedGraphProperties.size()) {
+    center = true;
+  }
+
+  if (!smallMultiplesView && lastNbDimensionsSelected == 1 &&
+      selectedGraphProperties.size() > 1) {
+    switchFromDetailViewToSmallMultiples();
+  } else if (selectedGraphProperties.size() == 1) {
+    glw->makeCurrent();
+    overviewsMap[selectedGraphProperties[0]]->computePixelView();
+    overviewGenMap[selectedGraphProperties[0]] = true;
+    switchFromSmallMultiplesToDetailView(overviewsMap[selectedGraphProperties[0]]);
+  } else if (!smallMultiplesView && detailOverview != nullptr) {
+    detailOverview->computePixelView();
+    smallMultiplesNeedUpdate = true;
+
+    if (newGraphSet) {
+      switchFromSmallMultiplesToDetailView(detailOverview);
+      newGraphSet = false;
     }
+  } else if (!smallMultiplesView && detailOverview == nullptr) {
+    switchFromDetailViewToSmallMultiples();
+  } else {
+    glw->makeCurrent();
+    updateOverviews(true);
+  }
+
+  if (!smallMultiplesView && detailViewLabel != nullptr) {
+    detailViewLabel->setColor(getTextColor());
+  }
+
+  if (center) {
+    centerView();
+    center = false;
   } else {
     glw->draw();
   }
@@ -602,24 +564,24 @@ void PixelOrientedView::centerView(bool) {
 }
 
 void PixelOrientedView::updateOverviews(const bool updateAll) {
-
-  if (smallMultiplesView) {
-    mainLayer->deleteGlEntity(overviewsComposite);
-  } else {
-    setGraphView(graphComposite, false);
-    mainLayer->deleteGlEntity(detailViewLabel);
-  }
-
   unsigned int nbOverviews = selectedGraphProperties.size();
-  unsigned currentStep = 0;
-  Camera &cam = getGlMainWidget()->getScene()->getGraphCamera();
-  double sceneRadiusBak = cam.getSceneRadius();
-  double zoomFactorBak = cam.getZoomFactor();
-  Coord eyesBak = cam.getEyes();
-  Coord centerBak = cam.getCenter();
-  Coord upBak = cam.getUp();
 
   if (nbOverviews) {
+    if (smallMultiplesView) {
+      mainLayer->deleteGlEntity(overviewsComposite);
+    } else {
+      setGraphView(graphComposite, false);
+      mainLayer->deleteGlEntity(detailViewLabel);
+    }
+
+    unsigned currentStep = 0;
+    Camera &cam = getGlMainWidget()->getScene()->getGraphCamera();
+    double sceneRadiusBak = cam.getSceneRadius();
+    double zoomFactorBak = cam.getZoomFactor();
+    Coord eyesBak = cam.getEyes();
+    Coord centerBak = cam.getCenter();
+    Coord upBak = cam.getUp();
+
     QProgressDialog progress(Perspective::instance()->mainWindow());
     progress.setCancelButton(nullptr);
     progress.setWindowTitle("Computing pixel oriented view for: ");
@@ -639,22 +601,22 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
         progress.setValue(++currentStep);
       }
     }
+
+    if (smallMultiplesView) {
+      mainLayer->addGlEntity(overviewsComposite, "overviews composite");
+    } else {
+      setGraphView(graphComposite, true);
+      mainLayer->addGlEntity(detailViewLabel, "dimension label");
+    }
+
+    cam.setSceneRadius(sceneRadiusBak);
+    cam.setZoomFactor(zoomFactorBak);
+    cam.setEyes(eyesBak);
+    cam.setCenter(centerBak);
+    cam.setUp(upBak);
+
+    getGlMainWidget()->draw();
   }
-
-  if (smallMultiplesView) {
-    mainLayer->addGlEntity(overviewsComposite, "overviews composite");
-  } else {
-    setGraphView(graphComposite, true);
-    mainLayer->addGlEntity(detailViewLabel, "dimension label");
-  }
-
-  cam.setSceneRadius(sceneRadiusBak);
-  cam.setZoomFactor(zoomFactorBak);
-  cam.setEyes(eyesBak);
-  cam.setCenter(centerBak);
-  cam.setUp(upBak);
-
-  getGlMainWidget()->draw();
 }
 
 vector<PixelOrientedOverview *> PixelOrientedView::getOverviews() {
@@ -795,6 +757,7 @@ void PixelOrientedView::applySettings() {
       mainLayer->addGlEntity(detailViewLabel, "dimension label");
       centerView();
     }
+    drawOverview(true);
   }
 }
 } // namespace tlp

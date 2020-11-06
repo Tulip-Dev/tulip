@@ -151,7 +151,6 @@ public:
 public slots:
 
   void draw() override;
-  void refresh() override;
   void init();
   ParallelCoordinatesGraphProxy *getGraphProxy() {
     return graphProxy;
@@ -240,7 +239,6 @@ private:
 
   bool isConstruct;
   bool dontCenterViewAfterConfLoaded;
-  bool needDraw;
 };
 } // namespace tlp
 

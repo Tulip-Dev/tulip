@@ -90,7 +90,7 @@ ScatterPlot2DView::~ScatterPlot2DView() {
   delete edgeAsNodeGraph;
 }
 
-void ScatterPlot2DView::initGlWidget(Graph *) {
+void ScatterPlot2DView::initGlWidget() {
   GlLayer *layer = getGlMainWidget()->getScene()->getLayer("Main");
 
   if (layer == nullptr) {
@@ -158,6 +158,8 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     needQuickAccessBar = true;
   }
 
+  GlMainView::setState(dataSet);
+
   Graph *lastGraph = scatterPlotGraph;
   scatterPlotGraph = graph();
   propertiesSelectionWidget->setWidgetParameters(scatterPlotGraph, propertiesTypesFilter);
@@ -174,6 +176,9 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
       lastGraph->getProperty("viewShape")->removeListener(this);
       lastGraph->getProperty("viewTexture")->removeListener(this);
     }
+
+    initGlWidget();
+    detailedScatterPlot = nullptr;
 
     delete edgeAsNodeGraph;
 
@@ -216,8 +221,6 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     } else
       edgeAsNodeGraph = nullptr;
 
-    initGlWidget(scatterPlotGraph);
-    detailedScatterPlot = nullptr;
     destroyOverviews();
   }
 
@@ -302,9 +305,6 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
   propertiesSelectionWidget->setDataLocation(dataLocation);
   viewConfigurationChanged();
 
-  if (overviewVisible())
-    drawOverview(true);
-
   string detailScatterPlotX = "";
   string detailScatterPlotY = "";
   dataSet.get("detailed scatterplot x dim", detailScatterPlotX);
@@ -335,8 +335,6 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     setQuickAccessBarVisible(quickAccessBarVisible);
   } else // display quickaccessbar
     setQuickAccessBarVisible(true);
-
-  GlMainView::setState(dataSet);
 }
 
 DataSet ScatterPlot2DView::state() const {
@@ -638,9 +636,11 @@ void ScatterPlot2DView::viewConfigurationChanged() {
   }
 
   draw();
+  drawOverview(true);
 }
 
 void ScatterPlot2DView::draw() {
+  GlMainWidget *gl = getGlMainWidget();
 
   destroyOverviewsIfNeeded();
 
@@ -657,11 +657,11 @@ void ScatterPlot2DView::draw() {
     matrixUpdateNeeded = false;
     switchFromDetailViewToMatrixView();
     addEmptyViewLabel();
-    getGlMainWidget()->getScene()->centerScene();
-    getGlMainWidget()->draw();
+    gl->centerScene();
 
     if (quickAccessBarVisible())
       _quickAccessBar->setEnabled(false);
+    setOverviewVisible(false);
 
     return;
   } else {
@@ -670,12 +670,13 @@ void ScatterPlot2DView::draw() {
 
   if (quickAccessBarVisible())
     _quickAccessBar->setEnabled(true);
+  setOverviewVisible(true);
 
   computeNodeSizes();
   buildScatterPlotsMatrix();
 
   if (!matrixView && detailedScatterPlot != nullptr) {
-    getGlMainWidget()->makeCurrent();
+    gl->makeCurrent();
     detailedScatterPlot->generateOverview();
     axisComposite->reset(false);
     axisComposite->addGlEntity(detailedScatterPlot->getXAxis(), "x axis");
@@ -687,7 +688,7 @@ void ScatterPlot2DView::draw() {
       newGraphSet = false;
     }
   } else if (matrixView) {
-    getGlMainWidget()->makeCurrent();
+    gl->makeCurrent();
     generateScatterPlots();
   } else if (!matrixView && detailedScatterPlot == nullptr) {
     switchFromDetailViewToMatrixView();
@@ -697,27 +698,28 @@ void ScatterPlot2DView::draw() {
   if (center) {
     centerView();
   } else {
-    getGlMainWidget()->draw();
+    gl->draw();
   }
 }
 
 void ScatterPlot2DView::centerView(bool) {
-  if (!getGlMainWidget()->isVisible()) {
+  GlMainWidget *gl = getGlMainWidget();
+
+  if (!gl->isVisible()) {
     if (lastViewWindowWidth != 0 && lastViewWindowHeight != 0) {
-      getGlMainWidget()->getScene()->adjustSceneToSize(lastViewWindowWidth, lastViewWindowHeight);
+      gl->getScene()->adjustSceneToSize(lastViewWindowWidth, lastViewWindowHeight);
     } else {
-      getGlMainWidget()->getScene()->centerScene();
+      gl->centerScene();
     }
   } else {
-    getGlMainWidget()->getScene()->adjustSceneToSize(getGlMainWidget()->width(),
-                                                     getGlMainWidget()->height());
+    gl->getScene()->adjustSceneToSize(gl->width(), gl->height());
   }
 
   // we apply a zoom factor to preserve a 50 px margin width
   // to ensure the scene will not be drawn under the configuration tabs title
   float glWidth = graphicsView()->width();
-  getGlMainWidget()->getScene()->zoomFactor((glWidth - 50) / glWidth);
-  getGlMainWidget()->draw();
+  gl->getScene()->zoomFactor((glWidth - 50) / glWidth);
+  gl->draw();
   center = false;
 }
 
