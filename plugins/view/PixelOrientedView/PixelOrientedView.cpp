@@ -486,8 +486,7 @@ void PixelOrientedView::draw() {
     center = true;
   }
 
-  if (!smallMultiplesView && lastNbDimensionsSelected == 1 &&
-      selectedGraphProperties.size() > 1) {
+  if (!smallMultiplesView && lastNbDimensionsSelected == 1 && selectedGraphProperties.size() > 1) {
     switchFromDetailViewToSmallMultiples();
   } else if (selectedGraphProperties.size() == 1) {
     glw->makeCurrent();
