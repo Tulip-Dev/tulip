@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# configure to print subsequent commands as they are executed
+set -x
+
 # first install MacPorts in order to easily retrieve Tulip dependencies
 curl -LO https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
 source ./macports-ci install
