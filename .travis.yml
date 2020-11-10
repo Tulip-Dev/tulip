@@ -260,10 +260,10 @@ jobs:
 
       script:
         # setup build env
-        - TRAVIS_BUILD_THIRDPARTY_ONLY=ON
-        - TULIP_USE_CCACHE=ON
+        - export TRAVIS_BUILD_THIRDPARTY_ONLY=ON
+        - export TULIP_USE_CCACHE=ON
         # launch macports build
-        - source ./bundlers/mac/macports_build.sh
+        - bash -xe ./bundlers/mac/macports_build.sh
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip thirdparty build on Mac OS (MacPorts)
@@ -281,11 +281,11 @@ jobs:
 
       script:
         # setup build env
-        - CLANG_COMPILER_VERSION=10
-        - TRAVIS_BUILD_THIRDPARTY_ONLY=ON
-        - TULIP_USE_CCACHE=ON
+        - export CLANG_COMPILER_VERSION=10
+        - export TRAVIS_BUILD_THIRDPARTY_ONLY=ON
+        - export TULIP_USE_CCACHE=ON
         # launch macports build
-        - source ./bundlers/mac/macports_build.sh
+        - bash -xe ./bundlers/mac/macports_build.sh
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # legacy Tulip thirdparty build on Mac OS (Homebrew)
@@ -374,12 +374,12 @@ jobs:
 
       script:
         # setup build env
-        - TULIP_BUILD_CORE_ONLY=ON
-        - TULIP_BUILD_TESTS=ON
-        - TULIP_USE_CCACHE=ON
-        - TULIP_BUILD_TESTS=ON
+        - export TULIP_BUILD_CORE_ONLY=ON
+        - export TULIP_BUILD_TESTS=ON
+        - export TULIP_USE_CCACHE=ON
+        - export TULIP_BUILD_TESTS=ON
         # launch macports build
-        - source ./bundlers/mac/macports_build.sh
+        - bash -xe ./bundlers/mac/macports_build.sh
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip core build on Mac OS (MacPorts)
@@ -397,12 +397,12 @@ jobs:
 
       script:
         # setup build env
-        - CLANG_COMPILER_VERSION=10
-        - TULIP_BUILD_CORE_ONLY=ON
-        - TULIP_BUILD_TESTS=ON
-        - TULIP_USE_CCACHE=ON
+        - export CLANG_COMPILER_VERSION=10
+        - export TULIP_BUILD_CORE_ONLY=ON
+        - export TULIP_BUILD_TESTS=ON
+        - export TULIP_USE_CCACHE=ON
         # launch macports build
-        - source ./bundlers/mac/macports_build.sh
+        - bash -xe ./bundlers/mac/macports_build.sh
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # legacy Tulip core build on Mac OS (Homebrew)
@@ -501,10 +501,10 @@ jobs:
 
       script:
         # setup build env
-        - TULIP_BUILD_TESTS=ON
-        - TULIP_USE_CCACHE=ON
+        - export TULIP_BUILD_TESTS=ON
+        - export TULIP_USE_CCACHE=ON
         # launch macports build
-        - source ./bundlers/mac/macports_build.sh
+        - bash -xe ./bundlers/mac/macports_build.sh
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip complete build on Mac OS (MacPorts)
@@ -522,11 +522,11 @@ jobs:
 
       script:
         # setup build env
-        - CLANG_COMPILER_VERSION=10
-        - TULIP_BUILD_TESTS=ON
-        - TULIP_USE_CCACHE=ON
+        - export CLANG_COMPILER_VERSION=10
+        - export TULIP_BUILD_TESTS=ON
+        - export TULIP_USE_CCACHE=ON
         # launch macports build
-        - source ./bundlers/mac/macports_build.sh
+        - bash -xe ./bundlers/mac/macports_build.sh
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # legacy Tulip complete build on Mac OS (Homebrew)

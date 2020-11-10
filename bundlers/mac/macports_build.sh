@@ -1,12 +1,10 @@
 #!/bin/bash
 
-# configure to print subsequent commands as they are executed
-set -x
-
 # first install MacPorts in order to easily retrieve Tulip dependencies
 curl -LO https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
-source ./macports-ci install
+bash ./macports-ci install
 
+# configure PATH with macports binaries installation dir
 export PATH=/opt/local/bin:$PATH
 
 # configure according clang compiler version (9.0, 10, ...)
