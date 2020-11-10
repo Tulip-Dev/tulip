@@ -73,6 +73,8 @@ The vertical toolbar, on the left of the main window, contains 8 buttons:
 
 .. image:: _images/i_panels.png
 
+When overviews are displayed, you can then double-click on a panel icon to open it, click on the cross in the top-right corner of the icon to delete it, or click again on the **Panels** button to return to the views currently displayed in the workspace.
+
 * |icon_develop| **Python**: displays the Tulip python IDE (find more in :ref:`developer_view`).
 
 * |icon_search| **Search**: displays the Search dialog (find more in :ref:`search_dialog`).
@@ -224,8 +226,8 @@ Tulip can be configured in several ways. The simplest way is to display the sett
 .. image:: _images/i_settings.png
 
 
-The *Automatic actions* settings, contains a few specific options. You can, for instance, adjust the aspect ratio when updating the layout, indicate the default projection type, automatically adapt the color according the metric being computed, display the time used to run an algorithm or indicate the graph file format to be used when saving a Tulip project.
+The *Automatic actions* tab, contains a few specific options. You can, for instance, adjust the aspect ratio when updating the layout, indicate the default projection type, automatically adapt the color according the metric being computed, display the time used to run an algorithm or indicate the graph file format to be used when saving a Tulip project.
 
-The *Drawing defaults* settings, such as the color, shape and size, are used for every new nodes and edges. The selection color is used to enhance the selected elements in the 3D views.
+The *Display settings* tab allows to choose the *Display mode* (Light or Dark) and to select the *Drawing defaults* such as the color, shape and size used for every new nodes and edges. The selection color is used to enhance the selected elements in the 3D views.
 
 You can also change the *Proxy settings* such as: the socket, the host address and the port to use. 

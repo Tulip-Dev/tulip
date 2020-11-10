@@ -12,7 +12,7 @@ As it has been seen in :ref:`gui`, the workspace is where all the visualization 
 Manage the panels
 =================
 
-.. |icon_workspace_macros| image:: _images/icon_workspace_macros.png
+.. |icon_show_hide_bars_add_panel| image:: _images/icon_bars_and_addpanel.png
 .. |icon_panel_arrow| image:: _images/icon_panel_arrow.png
 .. |icon_panels| image:: _images/icon_panels.png
 .. |icon_close_panel| image:: _images/icon_close_panel.png
@@ -23,19 +23,15 @@ Manage the panels
 
 When working on Tulip, you will need several panels to see all the information you need. In order to easily compare or sort your results, you can find at the bottom of the workspace a toolbar containing three groups of buttons :
 
-* |icon_workspace_macros|: here, only the first button, *Expose*, requires our attention. Clicking on it allows us to see icons representing every panel currently open.
-
-.. image:: _images/i_workspace_expose.png
-    :width: 600
-
-You can then double-click on a panel icon to open it, click on the cross in the top-right corner of the icon to delete it, or click again on the *Expose* button to return to the previously selected view.
+* |icon_show_hide_bars_add_panel|: You can show/hide the side bar in clicking on the first icon, show/hide the menu bar in clicking on the second icon, or open a new panel for the current graph in clicking on the *Add panel* button.
 
 * |icon_panel_arrow|: You can simply change the currently displayed panels by clicking on the arrows.
 
-* |icon_panels|: These icons appear depending of the number of opened panels. Clicking on one of those change the tiling of the workspace according to the icon.
+* |icon_panels|: These icons appear depending of the number of opened panels. Clicking on one of those changes the tiling of the workspace according to the icon.
 
 .. image:: _images/i_workspace_6panels.png
     :width: 600
+Here is an example of the 6-panels tiling
 
 |
 

@@ -236,8 +236,6 @@ Here is the final layout. As we can see, it is not perfect, and there are some i
 Analysis of a Multivariate Dataset
 ==================================
 
-.. |icon_workspace_macros| image:: _images/icon_workspace_macros.png
-
 .. |icon_wsm_node_size_set| image:: ../../library/tulip-gui/resources/icons/20/set_node_size.png
 
 .. |icon_wsm_node_color_set| image:: ../../library/tulip-gui/resources/icons/20/set_node_color.png
