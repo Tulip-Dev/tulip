@@ -228,8 +228,8 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
   if (haveSelectedGraphProperties) {
     updateOverviews(true);
     getGlMainWidget()->centerScene();
-  } else
-    draw();
+  }
+  draw();
 
   registerTriggers();
 
