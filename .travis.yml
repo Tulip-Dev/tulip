@@ -2,13 +2,13 @@
 # Two type of builds are performed by os:
 #  - a "legacy" Tulip build using :
 #     * default system compiler (GCC 5.4 on Linux, clang from Xcode9.x on Mac OS)
-#     * Qt 5.5 on Linux, Qt 5.9 on MacOS
+#     * Qt 5.6 on Linux, Qt 5.9 on MacOS
 #     * Python 2.7
 #  - a "modern" Tulip build using:
 #     * recent compiler (GCC 9.x on Linux, clang 10.x from MacPorts or Homebrew on MacOS)
-#     * Qt 5.14.2 on Linux, Qt 5.15 on MacOS/MacPorts, Qt 5.15 on MacOS/Homebrew
-#     * Python 3.8 on Linux, Python 2.7 on MacOS
-# As TravisCI limits build job times to 45 minutes, Tulip is built in two successive stages
+#     * Qt 5.15 on Linux and MacOS/Homebrew, Qt 5.14.2 on MacOS/MacPorts
+#     * Python 3.9 on Linux, Python 2.7 on MacOS
+# As TravisCI limits build job times to 50 minutes, Tulip is built in two successive stages
 # to avoid timeouts (which happened often with MacOs builds):
 #  - a core build with no Tulip OpenGL and Qt components
 #  - a complete build including OpenGL and Qt components
@@ -74,7 +74,7 @@ jobs:
       cache: ccache
       addons:
         apt:
-          # Python 3.8.x from ppa:deadsnakes/ppa
+          # Python 3.9.x from ppa:deadsnakes/ppa
           sources:
             - sourceline: "ppa:deadsnakes/ppa"
           # install Tulip build dependencies
@@ -85,11 +85,11 @@ jobs:
             - libqhull-dev
             - libcppunit-dev
             - binutils-dev
-            - python3.8
-            - libpython3.8-dev
+            - python3.9
+            - libpython3.9-dev
       env:
-        # use Python 3.8
-        - PYTHON_EXECUTABLE=/usr/bin/python3.8
+        # use Python 3.9
+        - PYTHON_EXECUTABLE=/usr/bin/python3.9
       script:
         # create build directory
         - mkdir build && cd build
@@ -168,8 +168,8 @@ jobs:
         - xvfb
       addons:
         apt:
-          # Python 3.8.x from ppa:deadsnakes/ppa
-          # and Qt 5.14.x from http://archive.neon.kde.org/user/
+          # Python 3.9.x from ppa:deadsnakes/ppa
+          # and Qt 5.15.x from http://archive.neon.kde.org/user/
           sources:
             - sourceline: "ppa:deadsnakes/ppa"
             - sourceline: 'deb http://archive.neon.kde.org/user/ focal main'
@@ -184,8 +184,8 @@ jobs:
             - libqhull-dev
             - libcppunit-dev
             - binutils-dev
-            - python3.8
-            - libpython3.8-dev
+            - python3.9
+            - libpython3.9-dev
             - qt5-default
             - libqt5webkit5-dev
             - libquazip5-dev
@@ -194,8 +194,8 @@ jobs:
             - libjpeg-dev
             - libfreetype6-dev
       env:
-        # use Python 3.8
-        - PYTHON_EXECUTABLE=/usr/bin/python3.8
+        # use Python 3.9
+        - PYTHON_EXECUTABLE=/usr/bin/python3.9
       script:
         # create build directory
         - mkdir build && cd build
