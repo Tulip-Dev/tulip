@@ -86,6 +86,7 @@ jobs:
             - libcppunit-dev
             - binutils-dev
             - python3.9
+            - python3.9-distutils
             - libpython3.9-dev
       env:
         # use Python 3.9
@@ -185,6 +186,7 @@ jobs:
             - libcppunit-dev
             - binutils-dev
             - python3.9
+            - python3.9-distutils
             - libpython3.9-dev
             - qt5-default
             - libqt5webkit5-dev
