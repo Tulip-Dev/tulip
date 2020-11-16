@@ -30,8 +30,7 @@ using namespace tlp;
 using namespace std;
 
 // Current Python versions
-static const char *pythonVersion[] = {"3.8", "3.7", "3.6", "3.5", "3.4", "3.3",  "3.2",
-                                      "3.1", "3.0", "2.7", "2.6", "2.5", nullptr};
+static const char *pythonVersion[] = {"3.9", "3.8", "3.7", "3.6", "3.5", "2.7", nullptr};
 
 // Windows specific functions
 #ifdef WIN32
@@ -139,6 +138,7 @@ static QString pythonHome(const QString &pythonVersion) {
 // Function which tries to run a specific version of the python interpreter.
 static bool runPython(const QString &version) {
   QProcess pythonProcess;
+  pythonProcess.setProcessEnvironment(QProcessEnvironment::systemEnvironment());
   pythonProcess.start(QString("python") + version, QStringList() << "--version");
   return pythonProcess.waitForFinished(-1) && pythonProcess.exitStatus() == QProcess::NormalExit;
 }
