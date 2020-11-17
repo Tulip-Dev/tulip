@@ -894,8 +894,8 @@ top: -1px;
   SET_TIPS(_ui->csvImportButton, "Import data in the current graph using a csv formatted file");
   SET_TIPS(_ui->importButton, "Display the Graph import wizard");
   SET_TIPS(_ui->pluginsButton, "Display the Plugin center");
-  SET_TIPS(_ui->sidebarButton, "Hide Sidebar");
-  SET_TIPS(_ui->menubarButton, "Hide Menubar");
+  SET_TIPS(_ui->sidebarButton, "Hide the Algorithms/Graphs panels");
+  SET_TIPS(_ui->menubarButton, "Hide the menu bar");
   SET_TIPS(_ui->singleModeButton, "Switch to 1 panel mode");
   SET_TIPS(_ui->splitModeButton, "Switch to 2 panels mode");
   SET_TIPS(_ui->splitHorizontalModeButton, "Switch to 2 panels mode");
@@ -1136,6 +1136,10 @@ top: -1px;
   _ui->pluginsButton->hide();
   _ui->menuHelp->removeAction(_ui->actionPlugins_Center);
 #else
+#if defined(__APPLE__)
+  // the menu cannot be hidden on Mac
+  _ui->menubarButton->hide();
+#endif
   // show the 'Plugins center' menu entry and button only if connected to the Tulip agent
   _ui->pluginsButton->setVisible(checkSocketConnected());
   _ui->actionPlugins_Center->setVisible(checkSocketConnected());
@@ -2184,10 +2188,10 @@ void GraphPerspective::showAPIDocumentation() {
 void GraphPerspective::showHideSideBar() {
   if (_ui->docksWidget->isVisible()) {
     _ui->docksWidget->setVisible(false);
-    SET_TIPS(_ui->sidebarButton, "Show Sidebar");
+    SET_TIPS(_ui->sidebarButton, "Show the Algorithms/Graphs panels");
   } else {
     _ui->docksWidget->setVisible(true);
-    SET_TIPS(_ui->sidebarButton, "Hide Sidebar");
+    SET_TIPS(_ui->sidebarButton, "Hide the Algorithms/Graphs panels");
   }
 
   if (_logger->anchored()) {
@@ -2198,10 +2202,10 @@ void GraphPerspective::showHideSideBar() {
 void GraphPerspective::showHideMenuBar() {
   if (_mainWindow->menuBar()->isVisible()) {
     _mainWindow->menuBar()->setVisible(false);
-    SET_TIPS(_ui->menubarButton, "Show Menubar");
+    SET_TIPS(_ui->menubarButton, "Show the menu bar");
   } else {
     _mainWindow->menuBar()->setVisible(true);
-    SET_TIPS(_ui->menubarButton, "Hide Menubar");
+    SET_TIPS(_ui->menubarButton, "Hide the manu bar");
   }
 }
 
