@@ -30,6 +30,10 @@
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QStringList>
+#ifdef __APPLE__
+#include <QProcess>
+#include <QSysInfo>
+#endif
 
 using namespace tlp;
 using namespace std;
@@ -466,6 +470,19 @@ void TulipSettings::setWarnUserAboutGraphicsCard(bool f) {
 }
 
 bool TulipSettings::isDisplayInDarkMode() {
+#ifdef __APPLE__
+  if (!instance().contains(TS_DisplayInDarkMode)) {
+    QString minorVersion = QSysInfo::productVersion().mid(3);
+    // Dark mode exists since MacOS 10.14
+    if (minorVersion.toUInt() > 13) {
+      QProcess process;
+      process.start("defaults read -g AppleInterfaceStyle");
+      process.waitForFinished(-1);
+      QString output(process.readAllStandardOutput());
+      return output.compare("Dark") == 0;
+    }
+  }
+#endif
   return instance().value(TS_DisplayInDarkMode, false).toBool();
 }
 
