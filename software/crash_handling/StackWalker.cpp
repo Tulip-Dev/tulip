@@ -281,7 +281,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
       if (file_exist("/usr/bin/atos") && file_exist(dsoName)) {
         int64_t exOffset = getOffsetInExecutable(array[i]);
         std::ostringstream oss;
-        oss << "atos -d -o " << dsoName;
+        oss << "atos -o " << dsoName;
 #ifdef X86_64
         oss << " -arch x86_64 ";
 #else
