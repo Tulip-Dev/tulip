@@ -52,7 +52,7 @@ make -j$(getconf _NPROCESSORS_ONLN) install
 if [ "$TRAVIS_BUILD_THIRDPARTY_ONLY" != "ON" ]; then
 # run Tulip unit tests
   if [ "$TULIP_BUILD_TESTS" == "ON" ]; then
-    make runTests
+    make test
   fi
 # build Tulip bundle
   if [ "$TULIP_MAKE_BUNDLE" == "ON" ]; then
