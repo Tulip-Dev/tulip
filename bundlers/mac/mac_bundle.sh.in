@@ -56,9 +56,15 @@ cp -r "${TULIP_DIR}"/* .
 mv lib/*.dylib Frameworks/
 rm -rf include
 rm -rf lib/cmake
-rm lib/tulip/python/*.pyc lib/tulip/python/*.pyo 2>/dev/null
-rm lib/tulip/python/tulip/*.pyc lib/tulip/python/tulip/*.pyo 2>/dev/null
-rm lib/tulip/python/tulipgui/*.pyc lib/tulip/python/tulipgui/*.pyo 2>/dev/null
+find lib/tulip/python  \( -name '*.pyc' -o -name '*.pyo' \) | xargs rm -rf
+
+if [ "$PYTHON_BUILD" = "ON" ]  && [ -d /Library/Frameworks/Python.framework/Versions/@PYTHON_VERSION@ ]
+then
+echo 'Copying Python Framework'
+mkdir -p Frameworks/Python.framework/Versions/@PYTHON_VERSION@
+cp -r /Library/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/* Frameworks/Python.framework/Versions/@PYTHON_VERSION@/
+find Frameworks/Python.framework \( -name '*.pyc' -o -name '*.pyo' \) | xargs rm -rf
+fi
 
 echo 'Copying license'
 cd "${DEST_DIR}/application"
@@ -69,13 +75,6 @@ echo 'Copying Resources'
 cd "${DEST_DIR}/application/Tulip.app/Contents/Frameworks/"
 cp -r "${QT_LIB_DIR}/QtGui.framework/Resources/qt_menu.nib" ../Resources 2>/dev/null
 cp "@QT_QTCLUCENE_LIBRARY@" . 2>/dev/null
-
-#echo 'Copying more libraries'
-#for lib in libGLEW libfreetype libz libstdc++; do
-#  for search_path in /usr/lib /opt/local/lib ; do
-#    [ "$(ls $search_path/$lib.*.dylib 2> /dev/null)" != "" ] && cp $search_path/$lib.*.dylib .
-#  done
-#done
 
 # use macdeployqt to configure exe & libraries
 cd ..
@@ -105,6 +104,11 @@ export DYLD_FRAMEWORK_PATH="\$(pwd)/Frameworks"
 export DYLD_FALLBACK_LIBRARY_PATH="\$(pwd)/Frameworks"
 export QT_QPA_PLATFORM_PLUGIN_PATH="\$(pwd)/PlugIns/platforms"
 export QT_PLUGIN_PATH="\$(pwd)/PlugIns"
+PY_VERSION=\$(ls ./Frameworks/Python.Framework/Versions)
+if [ "\$?" == "0" ]; then
+  export PATH="\$(pwd)/Frameworks/Python.Framework/Versions/\$PY_VERSION/bin:\$PATH"
+fi
+
 "\$(pwd)"/bin/tulip
 
 EOF
@@ -119,9 +123,9 @@ sh "${SRC_DIR}/make_dmg.sh" ${APP_NAME} "@TulipVersion@" "${DEST_DIR}/applicatio
 # rename dmg if needed
 if [ "$PYTHON_BUILD" = "ON" ]
 then
-echo "${APP_NAME}-@TulipVersion@_qt@QT_VERSION@.dmg has been correctly generated in ${DEST_DIR}"
-mv ${APP_NAME}-@TulipVersion@.dmg ${APP_NAME}-@TulipVersion@_qt@QT_VERSION@.dmg
+  DMG_NAME="${APP_NAME}-@TulipVersion@_qt@QT_VERSION@_py@PYTHON_VERSION@.dmg"
 else
-echo "${APP_NAME}-@TulipVersion@_qt@QT_VERSION@_no_python.dmg has been correctly generated in ${DEST_DIR}"
-mv ${APP_NAME}-@TulipVersion@.dmg ${APP_NAME}-@TulipVersion@_qt@QT_VERSION@_no_python.dmg
+  DMG_NAME="${APP_NAME}-@TulipVersion@_qt@QT_VERSION@_no_python.dmg"
 fi
+echo "${DMG_NAME} has been correctly generated in ${DEST_DIR}"
+mv ${APP_NAME}-@TulipVersion@.dmg ${DMG_NAME}
