@@ -37,9 +37,6 @@
 #include "PerspectiveItemWidget.h"
 #include "ui_TulipWelcomePage.h"
 
-static const QString RSS_URL = "https://tulip.labri.fr/TulipDrupal/?q=newsFeed.xml";
-static const unsigned RSS_LIMIT = 3;
-
 using namespace tlp;
 
 TulipWelcomePage::TulipWelcomePage(QWidget *parent)
