@@ -27,27 +27,27 @@ environment:
     - MSYS2_ARCH: x86_64
       MSYSTEM: MINGW64
       PYTHON2_HOME: "C:/Python27-x64"
-      PYTHON3_HOME: "C:/Python38-x64"
+      PYTHON3_HOME: "C:/Python39-x64"
 
     # 64 bits GCC complete build
     - MSYS2_ARCH: x86_64
       MSYSTEM: MINGW64
       PYTHON2_HOME: "C:/Python27-x64"
-      PYTHON3_HOME: "C:/Python38-x64"
+      PYTHON3_HOME: "C:/Python39-x64"
 
     # 64 bits MSVC core build
     - CMAKE_VS_GENERATOR: "Visual Studio 16 2019"
       MSVC_PLATFORM: "x64"
       MSVC_PLATFORM_TOOLSET: "v142"
       QT5_DIR: "C:/Qt/5.15/msvc2019_64"
-      PYTHON_EXECUTABLE: "C:/Python38-x64/python.exe"
+      PYTHON_EXECUTABLE: "C:/Python39-x64/python.exe"
 
     # 64 bits MSVC complete build
     - CMAKE_VS_GENERATOR: "Visual Studio 16 2019"
       MSVC_PLATFORM: "x64"
       MSVC_PLATFORM_TOOLSET: "v142"
       QT5_DIR: "C:/Qt/5.15/msvc2019_64"
-      PYTHON_EXECUTABLE: "C:/Python38-x64/python.exe"
+      PYTHON_EXECUTABLE: "C:/Python39-x64/python.exe"
 
 # nothing to build if a non-windows platform
 # is specified at the end of the commit message
