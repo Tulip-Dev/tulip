@@ -31,6 +31,7 @@ When working on Tulip, you will need several panels to see all the information y
 
 .. image:: _images/i_workspace_6panels.png
     :width: 600
+
 Here is an example of the 6-panels tiling
 
 |
