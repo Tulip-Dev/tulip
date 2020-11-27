@@ -108,12 +108,8 @@ if "%TULIP_BUILD_CORE_ONLY%" == "0" (
   bash -lc "cd build && make bundle"
 )
 
-rem Install sphinx for Python 2
-set PATH=%PYTHON2_HOME%;%PYTHON2_HOME%/Scripts;%PATH%
-pip install sphinx
-
-rem Build Tulip with Python 2, run its unit tests and package it
-bash -lc "cd build && cmake -G \"MSYS Makefiles\" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_NEED_RESPONSE=ON -DTULIP_BUILD_CORE_ONLY=%TULIP_BUILD_CORE_ONLY% -DTULIP_BUILD_DOC=%TULIP_BUILD_DOC% -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DPYTHON_EXECUTABLE=%PYTHON2_HOME%/python.exe .."
+rem Build Tulip without Python, run its unit tests and package it
+bash -lc "cd build && cmake -G \"MSYS Makefiles\" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_NEED_RESPONSE=ON -DTULIP_BUILD_CORE_ONLY=%TULIP_BUILD_CORE_ONLY% -DTULIP_BUILD_DOC=%TULIP_BUILD_DOC% -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_PYTHON_COMPONENTS=OFF .."
 if %errorlevel% neq 0 exit /b %errorlevel%
 bash -lc "cd build && make -j4 install"
 if %errorlevel% neq 0 exit /b %errorlevel%

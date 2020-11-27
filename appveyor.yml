@@ -1,8 +1,8 @@
 # Tulip continuous integration on windows platform through AppVeyor.
-# Tulip will be compiled for 32 bits and 64 bits windows using :
+# Tulip will be compiled 64 bits windows using :
 #   - GCC compiler provided by the MSYS2 project
 #   - Microsoft Visual Studio 2019 compiler
-# C++11 standard, Qt >= 5.9 and Python 3.8 will be used to build Tulip with both compilers.
+# C++11 standard, Qt 5.5 and Python 3.9 will be used to build Tulip with both compilers.
 
 # use Visual Studio 2019 appveyor image for the builds
 os: Visual Studio 2019
@@ -26,13 +26,11 @@ environment:
     # 64 bits GCC core build
     - MSYS2_ARCH: x86_64
       MSYSTEM: MINGW64
-      PYTHON2_HOME: "C:/Python27-x64"
       PYTHON3_HOME: "C:/Python39-x64"
 
     # 64 bits GCC complete build
     - MSYS2_ARCH: x86_64
       MSYSTEM: MINGW64
-      PYTHON2_HOME: "C:/Python27-x64"
       PYTHON3_HOME: "C:/Python39-x64"
 
     # 64 bits MSVC core build
