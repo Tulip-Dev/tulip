@@ -169,9 +169,7 @@ protected slots:
   void panelsEmpty();
   void showHideMenuBar();
   void updateLogIconsAndCounters();
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
   void initPythonIDE();
-#endif
   void displayStatusMessage(const QString &s) override;
   void clearStatusMessage() override;
 

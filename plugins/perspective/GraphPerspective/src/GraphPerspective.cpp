@@ -1520,12 +1520,12 @@ void GraphPerspective::openProjectFile(const QString &path) {
   }
 }
 
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
 void GraphPerspective::initPythonIDE() {
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
   buildPythonIDE();
   _pythonIDE->setProject(_project);
-}
 #endif
+}
 
 void GraphPerspective::deleteSelectedElementsFromRootGraph() {
   deleteSelectedElements(true);
