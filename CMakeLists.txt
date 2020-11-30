@@ -18,9 +18,9 @@ IF(POLICY CMP0068)
   CMAKE_POLICY(SET CMP0068 NEW)
 ENDIF(POLICY CMP0068)
 
-# Force the use of the legacy libGL.so for CMake >= 3.11
+# allow FindOpenGL to use GLVND when available
 IF(POLICY CMP0072)
-  CMAKE_POLICY(SET CMP0072 OLD)
+  CMAKE_POLICY(SET CMP0072 NEW)
 ENDIF(POLICY CMP0072)
 
 # enable the use of ccache for Tulip developers to speed up the build process
