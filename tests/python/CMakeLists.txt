@@ -1,5 +1,3 @@
-IF((NOT DEFINED ENV{APPVEYOR}) AND (NOT Python3_VERSION_MINOR EQUAL 8))
 UNIT_TEST(PythonGraphStructureTest test_graph_structure)
 UNIT_TEST(PythonGraphPropertiesTest test_graph_properties)
 UNIT_TEST(PythonPluginParametersTest test_plugin_registration_and_parameters)
-ENDIF((NOT DEFINED ENV{APPVEYOR}) AND (NOT Python3_VERSION_MINOR EQUAL 8))

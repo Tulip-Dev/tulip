@@ -29,11 +29,21 @@ if platform.system() == 'Windows':
         _tulipNativeLibsPath,
         os.path.join(_tulipNativeLibsPath, '../../..'),
         os.environ['PATH'])
+    # see https://docs.python.org/3/library/os.html#os.add_dll_directory
+    if sys.version_info >= (3, 8):
+        dirs = []
+        paths = os.environ['PATH'].split(";")
+        for p in paths:
+            if os.path.isdir(p):
+                dirs.append(os.add_dll_directory(p))
 
 import _tulip # noqa
 
+# cleanup
 sys.path.pop()
-
+if platform.system() == 'Windows' and sys.version_info >= (3, 8):
+    for d in dirs:
+        d.close()
 
 class tlpType(_tulip.tlp.__class__):
 
@@ -75,6 +85,7 @@ class tlp(with_metaclass(tlpType, _tulip.tlp)):
         try:
             pluginFile = open(pluginFilePath)
             pluginFileContent = pluginFile.read()
+            pluginFile.close()
         except Exception:
             return False
 
@@ -141,8 +152,10 @@ def runStartupScripts(scriptsPath):
     for file in files:
         filePath = os.path.join(scriptsPath, file)
         if os.path.isfile(filePath) and filePath.endswith('.py'):
-            exec(compile(open(filePath).read(), filePath, 'exec'),
+            fd = open(filePath)
+            exec(compile(fd.read(), filePath, 'exec'),
                  globals(), locals())
+            fd.close()
 
 
 runStartupScripts(startupScriptsPath)
