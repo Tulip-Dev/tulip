@@ -11,9 +11,13 @@ yum -y update
 yum -y install epel-release
 yum -y install xz cmake3 tar gzip make wget ccache
 
-# install GCC 7 as OGDF requires a quite advanced C++11 compiler
-yum -y install centos-release-scl
-yum -y install devtoolset-7
+# if needed install GCC 7 as OGDF requires a quite advanced C++11 compiler
+which gcc > /dev/null 2>&1
+if [ $? -neq 0 ]; then
+  yum -y install centos-release-scl
+  yum -y install devtoolset-7
+  COMPILER_DEFINES="-DCMAKE_C_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/gcc -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/g++"
+fi
 
 # install tulip deps
 yum -y install zlib-devel cppunit-devel
@@ -63,7 +67,7 @@ else
   RUN_TESTS=OFF
 fi
 
-cmake3 -DCMAKE_C_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/gcc -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/g++ -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=$QT_PATH -DPYTHON_EXECUTABLE=/usr/bin/python3.6 -DTULIP_USE_CCACHE=$CCACHE -DTULIP_BUILD_FOR_APPIMAGE=ON -DTULIP_BUILD_TESTS=$RUN_TESTS ..
+cmake3 $COMPILER_DEFINES -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=$QT_PATH -DPYTHON_EXECUTABLE=/usr/bin/python3.6 -DTULIP_USE_CCACHE=$CCACHE -DTULIP_BUILD_FOR_APPIMAGE=ON -DTULIP_BUILD_TESTS=$RUN_TESTS ..
 make -j4 install
 
 # run unit tests
