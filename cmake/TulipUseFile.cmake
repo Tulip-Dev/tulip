@@ -60,7 +60,7 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
   STRING(COMPARE NOTEQUAL "${CLANG_POS}" "-1" CLANG)
 
   # enable C++11
-  SET(CMAKE_CXX_STANDARD 11)
+  SET(CMAKE_CXX_STANDARD 14)
 
   ## ========================================================
   ## Operating system preprocessor macros
