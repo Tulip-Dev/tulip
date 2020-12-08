@@ -30,14 +30,6 @@ class PropertyInterface : tlp::Observable /Abstract/ {
 #include <tulip/PropertyInterface.h>
 %End
 
-%ConvertToSubClassCode
-  tlp::PropertyInterface *prop = dynamic_cast<tlp::PropertyInterface *>(sipCpp);
-  if (prop)
-    sipType = sipFindType(prop->getCppClassName().c_str());
-  else
-    sipType = NULL;
-%End
-
 public:
  
   tlp::Graph * getGraph();
