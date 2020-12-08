@@ -126,7 +126,7 @@ setup(
     url='http://tulip.labri.fr/',
     project_urls={
         'Documentation': 'http://tulip.labri.fr/Documentation/current/tulip-python/html/index.html',
-        'Issue Tracker': 'https://github.com/Tulip-dev/tulip/issues',
+        'Issue Tracker': 'https://sourceforge.net/p/auber/bugs/',
         'Sources': 'https://github.com/Tulip-dev/tulip',
     },
 
@@ -165,6 +165,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ],
 
     keywords='graph theory algorithms visualization',
@@ -175,7 +176,7 @@ setup(
         'tulip': tulip_native_libs + ['plugins/color/*',
                                       'plugins/general/*',
                                       'plugins/import/*',
-                                      'plugins/layout/*',
+                                      'plugins/layout/H3Layout.py',
                                       'plugins/layout/h3/*'],
     },
 
