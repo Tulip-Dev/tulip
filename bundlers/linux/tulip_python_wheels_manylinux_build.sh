@@ -6,12 +6,7 @@ TULIP_PYTHON_TEST_WHEEL_SUFFIX=$1
 
 # install tulip-core wheel deps
 # yum -y install epel-release
-yum -y install zlib-devel qhull-devel ccache cmake3
-
-# install Python 3.6 from the IUS Community Project
-curl -LO https://repo.ius.io/ius-release-el6.rpm
-rpm -Uvh ius-release*rpm
-yum -y install python36u-devel
+yum -y install zlib-devel qhull-devel python-devel ccache cmake3
 
 # get tulip source dir
 if [ -d /tulip ]
@@ -32,16 +27,18 @@ else
   mkdir /tmp/tulip_build; cd /tmp/tulip_build
 fi
 
-# configure Tulip build with Python 3.6 to ensure correct sip build
-cmake3 ${TULIP_SRC} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/tmp/tulip_install -DPYTHON_EXECUTABLE=/usr/bin/python3.6 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_USE_CCACHE=ON
-
 TULIP_PYTHON_TEST="from tulip import tlp; from platform import python_version; str = '==> Tulip ' + tlp.getTulipRelease() + ' successfully imported in Python ' + python_version(); print(str)"
 # iterate on available Python versions
-for CPYBIN in /opt/python/cp3*/bin
+for CPYBIN in /opt/python/cp*/bin
 do
-   ${CPYBIN}/pip install wheel
+  pushd $CPYBIN
+  cd ..
+  CPYDIR=$(basename $PWD)
+  popd
+  CPYINC=/opt/python/$CPYDIR/include/$(ls ${CPYBIN}/../include)
   # configure and build python wheel with specific Python version
-  cmake3 ${TULIP_SRC} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/tmp/tulip_install -DPYTHON_EXECUTABLE=${CPYBIN}/python -DTULIP_ACTIVATE_PYTHON_WHEEL_TARGET=ON -DTULIP_PYTHON_TEST_WHEEL_SUFFIX=${TULIP_PYTHON_TEST_WHEEL_SUFFIX} -DTULIP_USE_CCACHE=ON
+  cmake3 ${TULIP_SRC} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INCLUDE_PATH=${CPYINC} -DCMAKE_INSTALL_PREFIX=/tmp/tulip_install -DPYTHON_EXECUTABLE=${CPYBIN}/python -DTULIP_ACTIVATE_PYTHON_WHEEL_TARGET=ON -DTULIP_PYTHON_TEST_WHEEL_SUFFIX=${TULIP_PYTHON_TEST_WHEEL_SUFFIX} -DTULIP_USE_CCACHE=ON
+  TULIP_VERSION=$(bash ./tulip-config --version)
   make -j4
   make test-wheel
   if [ $? -ne 0 ]
@@ -50,7 +47,7 @@ do
   fi
   # check the test wheel
   pushd ./library/tulip-python/bindings/tulip-core/tulip_module/dist
-  ${CPYBIN}/pip install $(ls *${TULIP_PYTHON_TEST_WHEEL_SUFFIX}*.whl -t | head -1)
+  ${CPYBIN}/pip install $(ls *${TULIP_VERSION}.${TULIP_PYTHON_TEST_WHEEL_SUFFIX}-${CPYDIR}-*.whl)
   ${CPYBIN}/python -c "$TULIP_PYTHON_TEST"
   if [ $? -ne 0 ]
   then
@@ -62,7 +59,7 @@ do
 
   # check the tulip-core wheel
   pushd ./library/tulip-python/bindings/tulip-core/tulip_module/dist
-  ${CPYBIN}/pip install $(ls -t | head -1)
+  ${CPYBIN}/pip install $(ls *${TULIP_VERSION}-${CPYDIR}-*.whl)
   ${CPYBIN}/python -c "$TULIP_PYTHON_TEST"
   if [ $? -ne 0 ]
   then
