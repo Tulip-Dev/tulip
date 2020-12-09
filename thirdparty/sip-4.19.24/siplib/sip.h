@@ -28,8 +28,42 @@
  */
 #undef slots
 
+// Need to include cmath before Python.h when compiling with MinGW and C++11 standard
+// to avoid a compilation error (see http://stackoverflow.com/questions/28683358/)
+#if defined(__MINGW32__) && defined(__cplusplus)
+#include <math.h>
+#include <cmath>
+#endif
 
-#include <Python.h>
+#if defined(_MSC_VER) && defined(_DEBUG)
+// Include these low level headers before undefing _DEBUG. Otherwise when doing
+// a debug build against a release build of python the compiler will end up
+// including these low level headers without DEBUG enabled, causing it to try
+// and link release versions of this low level C api.
+# include <basetsd.h>
+# include <assert.h>
+# include <ctype.h>
+# include <errno.h>
+# include <io.h>
+# include <math.h>
+# include <sal.h>
+# include <stdarg.h>
+# include <stddef.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <sys/stat.h>
+# include <time.h>
+# include <wchar.h>
+#  undef _DEBUG
+#  if _MSC_VER >= 1400
+#    define _CRT_NOFORCE_MANIFEST 1
+#  endif
+#  include <Python.h>
+#  define _DEBUG
+# else
+#  include <Python.h>
+# endif
 
 /*
  * There is a mis-feature somewhere with the Borland compiler.  This works
