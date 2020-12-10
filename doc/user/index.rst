@@ -13,7 +13,7 @@ When starting the software, the **Projects** window will appear. You can then op
 .. figure:: _images/tulip-screen.png
     :width: 600
 
-The current documentation will present in details the Tulip Perspective. If you are interested in customizing the application, you can develop your very own Tulip perspective to implement specific solutions. One example of such developement is Porgy, available through the `Porgy website <http://porgy.labri.fr>`_.
+The current documentation presents in details the Tulip Perspective. If you are interested in customizing the application, you can develop your own Tulip perspective to implement specific solutions. One example of such developement is Porgy, available through the `Porgy website <https://porgy.labri.fr>`_.
 
 .. highlight:: c
 
