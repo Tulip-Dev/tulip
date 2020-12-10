@@ -16,7 +16,7 @@ The standard Tulip tool contains a lot of frequently updated and improved algori
 Algorithm
 =========
 
-You will find in this group algorithms managing the graph structure.
+This group contains algorithms managing the graph structure.
 
 * **Clustering**:
 
@@ -28,7 +28,7 @@ You will find in this group algorithms managing the graph structure.
 
 * **Topology update**:
 
-  If your graph does not comply to the exigences of a distinctive topology, you will find here some functions to transform and adapt it.
+  If your graph does not comply to the exigences of a distinctive topology, you have here functions to transform and adapt it.
 
 * **Triangulation**:
 
@@ -64,7 +64,7 @@ Tulip allows the visualization of information, and thus, provides several layout
 
 * **Force Directed**:
 
-  These layouts will try to place nodes so that the distance in the graph (specific metric on the edges) should be the closest to the distance on the drawing. Known such algorithm are the FM^3, the GEM Frick and the Kamada Kawai.
+  These layouts try to place nodes so that the distance in the graph (specific metric on the edges) should be the closest to the distance on the drawing. Known algorithms are FM^3, GEM Frick and Kamada Kawai.
 
 * **Hierarchical**:
 
@@ -108,7 +108,7 @@ Measure algorithms are used to compute different metrics (on edges or nodes). Th
 
 * **Hierarchical**
 
-  Those algorithms are specific for tree and hierarchical representations. You will find algorithms allowing to compute the depth, the induced number of nodes or leaves, the dag level...
+  Those algorithms are specific for tree and hierarchical representations. You have algorithms allowing to compute for instancce the depth, the induced number of nodes or leaves, the dag level
 
 * **Misc**
 

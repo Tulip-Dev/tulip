@@ -21,7 +21,7 @@ Manage the panels
 .. |icon_link| image:: _images/i_link.png
 .. |icon_unlink| image:: _images/i_unlink.png
 
-When working on Tulip, you will need several panels to see all the information you need. In order to easily compare or sort your results, you can find at the bottom of the workspace a toolbar containing three groups of buttons :
+When working with Tulip, you have several panels to see all the information you need. In order to easily compare or sort your results, you can find at the bottom of the workspace a toolbar containing three groups of buttons:
 
 * |icon_show_hide_bars_add_panel|: You can show/hide the side bar in clicking on the first icon, show/hide the menu bar in clicking on the second icon, or open a new panel for the current graph in clicking on the *Add panel* button.
 
@@ -36,17 +36,17 @@ Here is an example of the 6-panels tiling
 
 |
 
-In the title bar of a workspace panel, you will find different buttons:
+In the title bar of a workspace panel, you have different buttons:
 
-* |icon_list_graph|: Clicking on this button will display a list of opened graphs. The name of the current one is displayed using a bold font. Choosing an other graph will modify the current panel and update the visualized information.
+* |icon_list_graph|: Clicking on this button displays a list of opened graphs. The name of the current one is displayed using a bold font. Choosing an other graph modifies the current panel and update the visualized information.
 
-* |icon_unlink|: When this icon is displayed, it indicates that the selection of the current graph in this workspace panel, is not synchronized with the selection of the active graph in the Graphs panel. Clicking on the button displaying this icon will enable the synchronization.
+* |icon_unlink|: When this icon is displayed, it indicates that the selection of the current graph in this workspace panel, is not synchronized with the selection of the active graph in the Graphs panel. Clicking on the button displaying this icon enables the synchronization.
 
-* |icon_link|: When this icon is displayed, it indicates that the selection of the current graph in this workspace panel, is synchronized with the selection of the active graph in the Graphs panel. This means that when selecting a graph in the Graphs panel, it will be automatically the current one in this workspace panel if it is the active panel. Clicking on the button displaying this icon will disable the synchronization.
+* |icon_link|: When this icon is displayed, it indicates that the selection of the current graph in this workspace panel, is synchronized with the selection of the active graph in the Graphs panel. This means that when selecting a graph in the Graphs panel, it becomes automatically the current one in this workspace panel if it is the active panel. Clicking on the button displaying this icon disables the synchronization.
 
 * |icon_move_panel|: When using the tiled display, you can press on this icon to move a panel and exchange its place with the one of another displayed panel. 
 
-* |icon_close_panel|: Clicking on this icon will delete the current panel.
+* |icon_close_panel|: Clicking on this icon deletes the current panel.
 
 The title bar of the currently active workspace panel is highlited with a top green line.
 
@@ -199,7 +199,7 @@ This part of the panel shows the graph. From here, the user can exploit two elem
 
   * |icon_wsm_label_font_set|: Change the default label font.
 
-  When clicked on, some of these icons will change to adapt to the current situation, by either alterning between two versions for the toggle buttons, or by indicating the color or the chosen font.
+  When clicked on, some of these icons adapt themselves to the current situation, by either alterning between two versions for the toggle buttons, or by indicating the color or the chosen font.
 
 * The second element is the contextual menu displayed on a right click.
 
@@ -287,7 +287,7 @@ The second part contains the tools icons:
 
 .. image:: _images/icon_wst_toolbar.png
 
-The use of the tools will not be explained in detail here. More information about their use can be found by selecting the tool and clicking on the configuration panel button.
+The use of the tools is not be explained in detail here. More information about their use can be found by selecting the tool and clicking on the configuration panel button.
 
 * |icon_wst_navigate_graph|: navigate in graph.
 
@@ -367,7 +367,7 @@ The **Visible** column allows you to select the elements you want to display. Th
 FAQ
 ---
 
-The Node-Link Diagram being one of the mostly used view, it is also the one we are asked the more about. We will list here some of the more frequently asked questions in order to allow you to maybe find a direct answer to your problem.
+The Node-Link Diagram being one of the mostly used view, it is also the one we are asked the more about. We list here some of the more frequently asked questions in order to allow you to maybe find a direct answer to your problem.
 
 **Labels**
 
@@ -381,7 +381,7 @@ The Node-Link Diagram being one of the mostly used view, it is also the one we a
 
 * *The size of the labels is not adapted. Even when I try to augment it for each node, nothing happens; what should I do?*
 
-  By default, the label size is set to a certain interval. The size appreciation in Tulip can be deceptive so we have decided to implement a dynamic font size, scaling the font according to your view. However, some people may need more control upon the label size. You will find in the Scene Rendering Settings (see :ref:`workspace_diagram_scene`) options to manage the font size interval or to use a fixed value. Checking the *Fit labels size to nodes size* option also adapts the labels to the corresponding nodes according to their size.
+  By default, the label size is set to a certain interval. The size appreciation in Tulip can be deceptive so we have decided to implement a dynamic font size, scaling the font according to your view. However, some people may need more control upon the label size. The Scene Rendering Settings (see :ref:`workspace_diagram_scene`) options can manage font size interval or use a fixed value. Checking the *Fit labels size to nodes size* option also adapts the labels to the corresponding nodes according to their size.
 
 * *I have set a few label for some edges but I can not see them. The label density is set to* Show all *and I am sure the labels are not hidden. How can I fix this?*
 
@@ -399,13 +399,13 @@ The Node-Link Diagram being one of the mostly used view, it is also the one we a
 
 * *When I change the size of my edges, the layout stays identical, how should I proceed to modify that?*
 
-  Just like the color and the arrows issues, the program will not use the size value given for each edge if the size interpolation is enabled. To resolve your issue, click on the size interpolation icon (|icon_wsm_edge_size_interpol_en|) in the quick access menu (see :ref:`workspace_diagram_main`) or check/uncheck the *Enable size interpolation* option in the Scene Rendering Settings (see :ref:`workspace_diagram_scene`).
+  Just like the color and the arrows issues, the program does not use the size value given for each edge if the size interpolation is enabled. To resolve your issue, click on the size interpolation icon (|icon_wsm_edge_size_interpol_en|) in the quick access menu (see :ref:`workspace_diagram_main`) or check/uncheck the *Enable size interpolation* option in the Scene Rendering Settings (see :ref:`workspace_diagram_scene`).
 
 **Color/Transparency**
 
 * *I can not see the edges/nodes. Changing their color is not helping, what happened?*
 
-  Before changing every parameter in your graph, check if the edges/nodes are *visible*. This option can be verified by checking the *Nodes* and *Edges* box in the column *Visible* in the *Layer* panel. For the edges, clicking on |icon_wsm_edge_visible_dis| in the quick access bar will realize the same action.
+  Before changing every parameter in your graph, check if the edges/nodes are *visible*. This option can be verified by checking the *Nodes* and *Edges* box in the column *Visible* in the *Layer* panel. For the edges, clicking on |icon_wsm_edge_visible_dis| in the quick access bar realizes the same action.
 
   If you have change the nodes or edges color manually, maybe you also have modified the alpha component, changing the color to be transparent. Selecting the edges or nodes and setting the alpha value to 255 in the color picker should solve the issue. Use the icons |icon_wsm_node_color_set| and |icon_wsm_edge_color_set| to do so.
 
@@ -479,13 +479,13 @@ Here is the list of all the rendering properties (e: used with edges, n: used wi
 
 The spreadsheet view allows you to select the elements you want to watch by choosing *Nodes* or *Edges* in the *Show* combo box. A filter is available to pick elements depending of their selection in the *node link diagram*, or to match a given pattern in a specific column. The set of displayed columns can be restricted to those whose the name matches a given pattern.
 
-The value stored in the table can be modified by several ways. A double click on one of the cells will offers to enter the value for one property and one element (edge or node). A right click in one of the cells opens the following menu :
+The value stored in the table can be modified by several ways. A double click on one of the cells offers to enter the value for one property and one element (edge or node). A right click in one of the cells opens the following menu :
 
 .. image:: _images/i_workspace_rclick_elements.png
 
 Two types of action can be done, the ones concerning the property values and the ones concerning the selection of the element. The property values can be set for all nodes or edges (having the property or belonging to the current graph), the ones selected (where *viewSelection = true*) or the ones  corresponding to the highlighted rows (current element and the ones clicked on while maintaining *Ctrl* pushed). The values of the current property (corresponding to the current cell column) can also be copied into *viewLabel* in order to display them in the graph.
 
-A right click in the column header will open the following menu :
+A right click in the column header opens the following menu:
 
 .. image:: _images/i_workspace_rclick_header.png
 
@@ -504,7 +504,7 @@ In the top right of the panel, you can find the tab *Properties*.
 
 Here you can manage the properties. The eye-shaped check boxes make visible/not visible the properties in the table in the main window. The [+ Add new] button allows to create new properties.
 	   
-A right click will open a contextual menu :
+A right click opens a contextual menu :
 
 .. image:: _images/i_workspace_rclick_properties.png
 
@@ -612,9 +612,9 @@ Geolocation
 
 A geolocation tool has been embedded in the view, exploiting the `Nominatim <https://nominatim.openstreetmap.org/>`_ geocoding service. It can appropriately place the nodes on the map.
 
-You can choose among two methods to place the elements, either by providing a valid address for each node, stored in a property you will select, or by using the already computed latitude and longitude values, each contained in their respective properties.
+You can choose among two methods to place the elements, either by providing a valid address for each node, stored in a property you select, or by using the already computed latitude and longitude values, each contained in their respective properties.
 
-Once the service is being queried, you will have to specify the corresponding town/address for the ambiguous choices. You can choose to keep the result values obtained in latitude/longitude properties to ease a possible next use of your data.
+Once the service is being queried, you have to specify the corresponding town/address for the ambiguous choices. You can choose to keep the result values obtained in latitude/longitude properties to ease a possible next use of your data.
 
 The node placement should be instantaneous otherwise, close and reopen the view to update the new layout.
 
@@ -652,7 +652,7 @@ Histogram view
 
 To illustrate the use of this view, we need an example. You can create one by importing a new grid approximation with 500 nodes and a maximum degree of 40. You then add two new properties using the :ref:`spreadsheet view<workspace_spreadsheet>` (use the *Add property* button in the *Properties* tab): *Degree* and *Betweenness Centrality*. Then, use the appropriate algorithms to fill the properties with the needed information. A pre configured document can be found :download:`here <_documents/Histogram.tlpx>`.
 
-Upon opening the file, you will find something similar to the following screenshot:
+Upon opening the file, you find something similar to the following screenshot:
 
 .. image:: _images/i_histogram_main.png
     :width: 600
@@ -674,7 +674,7 @@ In a similar way to what we have seen before, you can find tabs in the top right
 
 .. image:: _images/i_histogram_properties.png
 
-In this panel, you can select the properties you are interested in. The nodes or edges presenting identical features will then be grouped, creating one new histogram for each property selected. This panel is only available when you are in the view presenting every histogram, the fields will be disabled otherwise.
+In this panel, you can select the properties you are interested in. The nodes or edges presenting identical features are then grouped, creating one new histogram for each property selected. This panel is only available when you are in the view presenting every histogram, the fields are disabled otherwise.
 
 .. _workspace_histogram_options:
 
@@ -685,7 +685,7 @@ The second tab offers options to customize the histogram. It can only be used wh
 
 .. image:: _images/i_histogram_options.png
 
-These settings will alter the initial histogram by customizing the discrete intervals used.
+These settings alter the initial histogram by customizing the discrete intervals used.
 
 * **Background color**: changes the background color.
 
@@ -733,7 +733,7 @@ The view provides two exclusive tools, only available when viewing a sole histog
 
   * **Select nodes in range**: choose the lower and upper bound and select the nodes in between.
 
-  * **Density estimation**: Tulip will display a curve representing the distribution according to a given function (Uniform, Gaussian, Triangle, Epanechnikov, Quartic, Cubic or Cosine).
+  * **Density estimation**: Tulip displays a curve representing the distribution according to a given function (Uniform, Gaussian, Triangle, Epanechnikov, Quartic, Cubic or Cosine).
 
   Do not forget to click on *Apply* to commit your changes.
 
@@ -749,14 +749,14 @@ The view provides two exclusive tools, only available when viewing a sole histog
 Parallel coordinates view
 =========================
 
-To present this view, we will use a dataset containing car specifications such as the city and highway autonomy, the engine displacement, the retail price, the physical dimensions... This document can be opened in Tulip as a project, available :download:`here <./_documents/Cars_data.tlpx>`, or can be imported with the :download:`original CSV file <./_documents/04cars_data.csv>`. The original file can be found on `this site <http://igva2012.wikispaces.asu.edu/file/detail/04cars.csv>`_.
+To present this view, we use a dataset containing car specifications such as the city and highway autonomy, the engine displacement, the retail price, the physical dimensions... This document can be opened in Tulip as a project, available :download:`here <./_documents/Cars_data.tlpx>`, or can be imported with the :download:`original CSV file <./_documents/04cars_data.csv>`. The original file can be found on `this site <http://igva2012.wikispaces.asu.edu/file/detail/04cars.csv>`_.
 
 More information about the CSV import tool and mechanism can be found in the section :ref:`csv`.
 
 .. image:: _images/i_parallel_main.png
     :width: 600
 
-Once the view is created, you will need to specify the properties you want to compare, to do so, use the *Properties* tab.
+Once the view is created, you need to specify the properties you want to compare, to do so, use the *Properties* tab.
 
 
 .. _workspace_parallel_properties:
@@ -823,7 +823,7 @@ Further information about each of these tools can be found in their own help/con
 Special menus
 -------------
 
-A right click anywhere but on the axis in the view will display the standard contextual menu seen before but with additional options related to the current view. Two items, *View Setup* and *Options*, are available:
+A right click anywhere but on the axis in the view displays the standard contextual menu seen before but with additional options related to the current view. Two items, *View Setup* and *Options*, are available:
 
 * *View Setup*: 
 
@@ -839,7 +839,7 @@ When you perform a right click on one of the axis, Tulip proposes to either *Rem
 
 .. image:: _images/i_parallel_main_axis_conf.png
 
-Here you will be able to specify, among others, the number of tick marks, the axis order and the use of a logarithm scale.
+Here you are able to specify, among others, the number of tick marks, the axis order and the use of a logarithm scale.
 
 
 .. _workspace_pixel:
@@ -847,7 +847,7 @@ Here you will be able to specify, among others, the number of tick marks, the ax
 Pixel oriented view
 ===================
 
-The pixel oriented view gives you four different solutions to sort your nodes depending of the values on a given property. To illustrate its use and its capabilities, we will use the dataset introduced previously, which can be downloaded :download:`here <./_documents/Cars_data.tlpx>` in its Tulip project form, or :download:`here<./_documents/04cars_data.csv>`, in its CSV form.
+The pixel oriented view gives you four different solutions to sort your nodes depending of the values on a given property. To illustrate its use and its capabilities, we use the dataset introduced previously, which can be downloaded :download:`here <./_documents/Cars_data.tlpx>` in its Tulip project form, or :download:`here<./_documents/04cars_data.csv>`, in its CSV form.
 
 .. image:: _images/i_pixel_main.png
     :width: 600
@@ -861,7 +861,7 @@ In order to use this view, you have to choose first the properties you want to a
 
 .. image:: _images/i_pixel_properties.png
 
-Pixel oriented tools usually exploit a layout algorithm, moving the nodes into a specific configuration, following a space-filling curve, and ordering them according to one of the properties. The second parameter will be used to perform a color mapping, similar to the one shown in our example, aiming at underlining the correlation between the two properties.
+Pixel oriented tools usually exploit a layout algorithm, moving the nodes into a specific configuration, following a space-filling curve, and ordering them according to one of the properties. The second parameter is used to perform a color mapping, similar to the one shown in our example, aiming at underlining the correlation between the two properties.
 
 .. _workspace_pixel_options:
 
@@ -872,7 +872,7 @@ This second tab proposes to choose among four space-filling curve implementation
 
 .. image:: _images/i_pixel_options.png
 
-The nodes disposition will be arranged to match the chosen representation.
+The nodes disposition is arranged to match the chosen representation.
 
 * Discrete spiral:
 
@@ -902,7 +902,7 @@ Scatter plot 2D view
 
 The pixel oriented and the parallel coordinates views both aim to underline the correlation between two properties, the first one by displaying a tendency noticeable with a coloration, and the second one by showing the relation between two properties for the same element.
 
-The scatterplot view can be used in a similar way. As a list of properties is selected, a plot for each couple of distinct properties will be created.
+The scatterplot view can be used in a similar way. As a list of properties is selected, a plot for each couple of distinct properties is created.
 
 .. image:: _images/i_scatterplot_main.png
     :width: 600
@@ -929,7 +929,7 @@ Options
 In this tab, you can select the scene and the scatterplots background color. By default, the second one uses a color scale to indicate whether the plot correlation coefficient detects a link between the two current properties or not.
 You can customize the colorscale with a click on the *-1*, *0* and *1* buttons to specify which color to use for each value.
 
-The size mapping options will adapt the size rendering in the plots depending on the initial node size.
+The size mapping options adapts the size rendering in the plots depending on the initial node size.
 
 The next check box allow to display the edges above the scatterplot.
 
@@ -987,12 +987,12 @@ Example: Coloring a graph
 
 We can apply some of these new knowledges to a small example aiming at coloring a graph. First we need to open the panels *Node Link Diagram* and *Spreadsheet View*, presented earlier in this chapter. To do so :
 
-* Create a random graph by clicking on |icon_import|. The default Grid Approximation, under the Graph category will be fine.
+* Create a random graph by clicking on |icon_import|. The default Grid Approximation, under the Graph category is fine.
 
   .. image:: _images/tutorial_color-graph_grey.png
     :width: 400
 
-* By default, new Spreadsheet and Node Link Diagram panels will automatically open upon each graph import. If you are using a previously created graph, you can open these by clicking on |icon_add| or |icon_addsmall| **Add panel** and selecting the appropriate panel types.
+* By default, new Spreadsheet and Node Link Diagram panels are automatically opened upon each graph import. If you are using a previously created graph, you can open these by clicking on |icon_add| or |icon_addsmall| **Add panel** and selecting the appropriate panel types.
 
 * In the algorithm panel, search under the category *Measure*, subcategory *Graph*, the *Betweenness Centrality* button.
 
@@ -1028,7 +1028,7 @@ Once those are correctly set, you can launch the algorithm.
 
 If you do not see the labels, verify the parameters in the tab *Scene* or that the button |icon_wsm_label_visible_dis| is not toggled.
 
-* From here, you can redo a *Color Mapping*. By selecting *viewMetric* or *viewLabel* as the source, you will obtained a coloration following the Id of the nodes.
+* From here, you can redo a *Color Mapping*. By selecting *viewMetric* or *viewLabel* as the source, you obtain a coloration following the Id of the nodes.
 
 
 Do not hesitate to try different combinations of algorithms to further discover the application.

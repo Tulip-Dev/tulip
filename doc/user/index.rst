@@ -8,7 +8,7 @@ Welcome to the Tulip user oriented documentation!
 #################################################
 
 We suggest to run Tulip and experiment with the concepts explained while reading this Manual. In itself, the interactive part of Tulip (also called Tulip agent on Windows platform) is quite limited. The user interface proposes only three distinct tabs. The first one allow to choose among the projects or perspectives of Tulip, the second one is the :ref:`plugins center <plugin>` and the third one present additional information about the software and the team behind it.
-When starting the software, the **Projects** window will appear. You can then open one of the perspectives of Tulip by clicking on the corresponding green arrow icon or double clicking on their description box. The "Open Project" button also allows you to directly open one of your Tulip file, graph or project. 
+When starting the software, the **Projects** window appears. You can then open one of the perspectives of Tulip by clicking on the corresponding green arrow icon or double clicking on their description box. The "Open Project" button also allows you to directly open one of your Tulip file, graph or project. 
 
 .. figure:: _images/tulip-screen.png
     :width: 600

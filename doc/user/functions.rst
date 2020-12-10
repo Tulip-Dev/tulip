@@ -18,7 +18,7 @@ Tulip supports graphs hierarchies. The navigation in the tree of subgraphs can b
 Definitions
 -----------
 
-As an example to illustrate our explanations, we will use the following graph (roughly representing the Orion constellation). The corresponding Tulip project can be downloaded with :download:`this link <./_documents/Orion.tlpx>`.
+As an example to illustrate our explanations, we use the following graph (roughly representing the Orion constellation). The corresponding Tulip project can be downloaded with :download:`this link <./_documents/Orion.tlpx>`.
 
 .. image:: _images/hierarchy_orion_simple.png
     :width: 600
@@ -80,7 +80,7 @@ The meta-nodes can also be embedded into other meta-nodes, creating nested meta-
 Meta-graph creation
 ^^^^^^^^^^^^^^^^^^^
 
-When meta-nodes are created, Tulip follows a specific behaviour. With the clustering of nodes, new subgraphs are created in order to improve the visualization. If the action is done from the root level of the hierarchy, a meta-graph, named by default *groups*, will display the whole graph with the appropriate meta-nodes and a subgraph, named in the form *grp_vwxyz*, will only contains the clustered nodes. Otherwise, if the action is realized from a lower level in the hierarchy, only the second subgraph graph will be created at the same level in the hierarchy.
+When meta-nodes are created, Tulip follows a specific behaviour. With the clustering of nodes, new subgraphs are created in order to improve the visualization. If the action is done from the root level of the hierarchy, a meta-graph, named by default *groups*, displays the whole graph with the appropriate meta-nodes. For each meta-node, a subgraph, named in the form *grp_vwxyz*, only contains the clustered nodes. Otherwise, if the action is realized from a lower level in the hierarchy, only the second subgraph graph is created at the same level in the hierarchy.
 
 The creation of meta-graph modifies the root graph (here Orion) which represents all nodes (including the meta-nodes and the representation of the subgraph inside it) and all edges (including the meta-edges). So much information overlapping can be displayed unclearly:
 
@@ -97,9 +97,9 @@ Creating subgraphs or meta-nodes
 
 You can simply create a subgraph by selecting the nodes and edges you want to isolate in your graph and click on the *Create subgraph from selection* option. It can be found either with a right click on the graph name in the graph list or in the *Edit* menu.
 
-From those menus you will also be able to create empty subgraphs. You can add here new nodes and edges, which will be directly added into the subgraphs above the current one in the hierarchy. The *Create clone subgraph* action will duplicate the target graph in a subgraph just beneath it in the hierchical scale.
+From those menus it is also possible to create empty subgraphs. The *Create clone subgraph* action duplicates the target graph in a subgraph just beneath it in the hierchical scale.
 
-To create a meta-node, you can proceed in a fashion similar to the one followed to create subgraph from selection. Once you have picked the nodes, click on the option *Group elements* in the *Edit* menu. 
+To create a meta-node, you can proceed like the creation of subgraph from selection. Once you have selected nodes, click on the option *Group elements* in the *Edit* menu. 
 
 Optionally, the edge selection for the subgraph creation can be realized with the "Induced Sub-graph" algorithm.
 
@@ -113,7 +113,7 @@ You can delete a subgraph or a meta-node by selecting the appropriate option pro
 
 The removal of a subgraph is pretty straight forward. If *Delete* is chosen, only the current subgraph is removed, letting its subgraphs going one step up in the graphs hierarchy; its direct subgraphs become subgraphs of its parent graph. If *Delete all* is chosen, all the subgraphs are removed from the hierarchy.
 
-Deleting a meta-node removes all nodes in this particular meta-node, but not its representation in the other graphs. To properly delete the meta-node, you first need to ungroup it. By doing so, all the edges will resume to their old anchor nodes. This modification propagates through the hierarchy tree, up to the root. The subgraphs created with the meta-node are not deleted, however, the meta-node disappears as it is removed and the ungrouped nodes does not remplace it.
+Deleting a meta-node removes all nodes in this particular meta-node, but not its representation in the other graphs. To properly delete the meta-node, you first need to ungroup it. By doing so, all edges resume to their old anchored nodes. This modification propagates through the hierarchy tree, up to the root. The subgraphs created with the meta-node are not deleted, however, the meta-node disappears as it is removed and the ungrouped nodes does not remplace it.
 
 
 .. _hierarchy-uses:
@@ -121,11 +121,11 @@ Deleting a meta-node removes all nodes in this particular meta-node, but not its
 Modifying subgraphs or meta-nodes
 ---------------------------------
 
-If you change the position of a node (*viewLayout* property) within a subgraph (with the mouse or through a layout algorithm), the same node will be moved in the root graph, if the *viewLayout* property accessible in the subgraph in the one inherited from the root graph.
+If you change the position of a node (*viewLayout* property) within a subgraph (with the mouse or through a layout algorithm), the same node is moved in the root graph, if the *viewLayout* property accessible in the subgraph is inherited from the root graph.
 
 If you use a measure algorithm on a subgraph, new local properties are created. Those properties are not applied to the root graph (if properties are not defined on the subgraph, they are inherited).
 
-You can also note that, because of the hierarchy, some actions (delete, rename...) done in the root graph or in one of the non-final subgraph will obviously pass on to every subgraph. Identically, the creation of a node in a subgraph will add it in each of the graphs above.
+You can also note that, because of the hierarchy, some actions (delete, rename...) done in the root graph or in one of the non-final subgraph is passed on to every subgraph. Identically, the creation of a node in a subgraph adds it in each of the parent graphs of the hierarchy.
 
 
 .. _csv:
@@ -141,7 +141,7 @@ Tulip proposes an import wizard for CSV files. Comma-separated values files are 
 Example files
 -------------
 
-In this part, we will present the functionality with an example. To this end, the two following files have been used :
+In this part, we present the functionality with an example. To this end, the two following files have been used :
 
 :download:`nodes.csv <./_documents/nodes.csv>`::
 
@@ -220,7 +220,7 @@ The purpose of each labeled component is explained below:
 
 7. The character used as decimal mark when specifying decimal numbers: '.' or ','.
 
-8. The preview area : this area displays a preview of the file as it will be interpreted with the current settings.
+8. The preview area : this area displays a preview of the file interpreted with the current settings.
 
 
 You can click on "Next" to access to the following panel.
@@ -236,15 +236,15 @@ The second panel allows the user to define the line range, which columns to impo
 
 The purpose of each labeled component is explained below:
 
-1. Use first line tokens as column names : use the elements in the first line as default names for the columns. If checked the first line will be skipped during the import process. In any case, you can alter the name of the fields if they do not suit you.
+1. Use first line tokens as column names: use the elements in the first line as default names for the columns. If checked the first line is skipped during the import process. In any case, you can alter the name of the fields if they do not suit you.
 
-2. The line range spinbuttons : these two spin buttons allow the user to select the start and end rows for the data to import. The spin boxes can be used either by typing a new value in the text entry area where the numbers are displayed, or by using the mouse button to click on the upwards arrow to increase the number and the downwards arrow to decrease the number. For instance, if the text file contained a large header area with meta information, this header could be excluded from the data imported by increasing the number of the starting, "From", line.
+2. The line range spinbuttons: these two spin buttons allow the user to select the start and end rows for the data to import. The spin boxes can be used either by typing a new value in the text entry area where the numbers are displayed, or by using the mouse button to click on the upwards arrow to increase the number and the downwards arrow to decrease the number. For instance, if the text file contained a large header area with meta information, this header could be excluded from the data imported by increasing the number of the starting, "From", line.
 
-3. The columns configuration area : this area allows the user to configure each column detected in the file. Any single column can be excluded from the data imported by clicking in the checkbox under its name to remove the check mark. User can configure a column by clicking on the button containing it's original name. The name, data type and other configuration options of a column can be changed using the configuration dialog displayed when clicking on the button. The name and data type of a column can be used to create a new Tulip property or identify an existing one. You cannot input the same name as another column, but you can use the name of an already existing property (viewLabel for example) to fill the nodes or edges corresponding values with the column contents. Details about the copy of the contents of a property into another property can be found in the :ref:`workspace_spreadsheet` documentation. 
+3. The columns configuration area: this area allows the user to configure each column detected in the file. Any single column can be excluded from the data imported by clicking in the checkbox under its name to remove the check mark. User can configure a column by clicking on the button containing it's original name. The name, data type and other configuration options of a column can be changed using the configuration dialog displayed when clicking on the button. The name and data type of a column can be used to create a new Tulip property or identify an existing one. You cannot input the same name as another column, but you can use the name of an already existing property (viewLabel for example) to fill the nodes or edges corresponding values with the column contents. Details about the copy of the contents of a property into another property can be found in the :ref:`workspace_spreadsheet` documentation. 
 
-4. The preview area : this area displays a preview of the file as it will be interpreted with these settings. If a column isn't selected it will not appear in the preview.
+4. The preview area: this area displays a preview of the file interpreted with these settings. If a column is not selected, it does not appear in the preview.
 
-5. The number of preview lines spinbutton : allows the user to increase the number of preview. If unchecked all the file will be displayed.
+5. The number of preview lines spinbutton: allows the user to increase the number of line in the preview. If unchecked all the file is displayed.
 
 In our example, all the default choices are ok, so you can click on "Next" to access to the final panel.
 
@@ -299,7 +299,7 @@ Import selected columns on existing relations(edges).
 For each row we compare the destination relation id to graph relations ids. If there is a correspondence, the row data are imported on the first matching relation.
 
 
-The node import is very straightforward. Very few changes must be made during the process. Is the end, you will obtain a graph containing only the nodes randomly placed in the node link diagram view.
+The node import is very straightforward. Very few changes must be made during the process. In the end, you obtain a graph containing only the nodes randomly placed in the node link diagram view.
 	
 
 .. _csv_import_edges:
@@ -338,7 +338,7 @@ In the  current application, we want to import the edges on new relations (or ed
 
 A relation is specified by a source identifier and a destination identifier. Both identifiers are defined by the values in the source and destination columns. For each row we compare the values in the source and destination columns, to the values in the source and destination properties for all the existing node entities. If the source and destination identifiers correspond to existing node entities a new relation is created between those entities. If there is no entities in the graph with such identifier you can force the creation of missing entities with the “Create missing entities” option.
 
-In our example, instead of the "viewLabel" default property, we specify the previously created "node_id" property as the one against which we will map the "Source" and "Target" fields.
+In our example, instead of the "viewLabel" default property, we specify the previously created "node_id" property as the one against which we map the "Source" and "Target" fields.
 
 
 .. _csv_import_final:
