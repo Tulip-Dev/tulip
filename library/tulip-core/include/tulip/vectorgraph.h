@@ -439,7 +439,7 @@ public:
   }
   //=======================================================
   /**
-   * @brief Reconnect the edeg e to have the new given extremities
+   * @brief Reconnect the edge e to have the new given extremities
    * @warning That operation modifies the array of neighboors of extrmities of edges, thus
    * it invalidates iterators on adjacency for the nodes at the extremities of the modified
    * edges and nodes.
@@ -449,13 +449,13 @@ public:
   //=======================================================
   /**
    * @brief Shuffle the array of graph nodes
-   * @remark dependent of stl::random_shuffle algorithm (should be o(N))
+   * @remark dependent of stl::shuffle algorithm (should be o(N))
    */
   void shuffleNodes();
   //=======================================================
   /**
    * @brief Shuffle the array of graph edges
-   * @remark dependent of stl::random_shuffle algorithm (should be o(E))
+   * @remark dependent of stl::shuffle algorithm (should be o(E))
    */
   void shuffleEdges();
   //=======================================================
