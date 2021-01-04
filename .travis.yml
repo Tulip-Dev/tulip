@@ -296,8 +296,8 @@ jobs:
       # at the end of the commit message
       if: commit_message !~ /\[(linux|macports|windows)-only\]$/
       os: osx
-      # use the older osx 10.13 image acceptable for homebrew
-      osx_image: xcode10.1
+      # use the oldest osx 10.14 image acceptable for homebrew
+      osx_image: xcode10.2
       compiler: clang
       cache:
         ccache: true
@@ -315,7 +315,7 @@ jobs:
           update: true
 
       env:
-        - ENV="MacOS default, LLVM Clang, Homebrew"
+        - ENV="MacOS oldest, LLVM Clang, Homebrew"
       script:
         # create build directory
         - mkdir build && cd build
@@ -413,8 +413,8 @@ jobs:
       # at the end of the commit message
       if: commit_message !~ /\[(linux|macports|windows)-only\]$/
       os: osx
-      # use the older osx 10.13 image acceptable for homebrew
-      osx_image: xcode10.1
+      # use the oldest osx 10.14 image acceptable for homebrew
+      osx_image: xcode10.2
       compiler: clang
       cache:
         ccache: true
@@ -434,7 +434,7 @@ jobs:
           update: true
 
       env:
-        - ENV="MacOS default, LLVM Clang, Homebrew"
+        - ENV="MacOS oldest, LLVM Clang, Homebrew"
       script:
         # create build directory
         - mkdir build && cd build
@@ -537,8 +537,8 @@ jobs:
       # at the end of the commit message
       if: commit_message !~ /\[(linux|macports|windows)-only\]$/
       os: osx
-      # use the older osx 10.13 image acceptable for homebrew
-      osx_image: xcode10.1
+      # use the oldest osx 10.14 image acceptable for homebrew
+      osx_image: xcode10.2
       compiler: clang
       cache:
         ccache: true
@@ -567,10 +567,8 @@ jobs:
         - curl -O https://bootstrap.pypa.io/get-pip.py
         - sudo python get-pip.py
         - pip install --user sphinx==1.7.9
-        # add missing sdk if needed
-        - ls /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk || sudo ln -s /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk
       env:
-        - ENV="MacOS default, LLVM Clang, Homebrew"
+        - ENV="MacOS oldest, LLVM Clang, Homebrew"
 
       script:
         # create build directory
