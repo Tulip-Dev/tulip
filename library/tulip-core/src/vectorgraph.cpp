@@ -22,6 +22,7 @@
 #include <cassert>
 #include <iostream>
 #include <string>
+#include <random>
 
 #include <tulip/vectorgraph.h>
 #include <tulip/Node.h>
@@ -541,14 +542,20 @@ void VectorGraph::setEnds(const edge e, const node src, const node tgt) {
 }
 //=======================================================
 void VectorGraph::shuffleNodes() {
-  random_shuffle(_nodes.begin(), _nodes.end());
+  std::random_device rd;
+  std::mt19937 g(rd());
+
+  std::shuffle(_nodes.begin(), _nodes.end(), g);
 
   // recompute indices of nodes
   _nodes.reIndex();
 }
 //=======================================================
 void VectorGraph::shuffleEdges() {
-  random_shuffle(_edges.begin(), _edges.end());
+  std::random_device rd;
+  std::mt19937 g(rd());
+
+  std::shuffle(_edges.begin(), _edges.end(), g);
 
   // recompute indices of edges
   _edges.reIndex();

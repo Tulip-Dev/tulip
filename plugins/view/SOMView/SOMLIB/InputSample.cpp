@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <random>
 #include "InputSample.h"
 #include <tulip/Iterator.h>
 #include <tulip/StlIterator.h>
@@ -297,7 +298,10 @@ tlp::Iterator<tlp::node> *InputSample::getNodes() {
 tlp::Iterator<tlp::node> *InputSample::getRandomNodeOrder() {
   if (rootGraph) {
     randomVector = rootGraph->nodes();
-    random_shuffle(randomVector.begin(), randomVector.end());
+    std::random_device rd;
+    std::mt19937 g(rd());
+
+    std::shuffle(randomVector.begin(), randomVector.end(), g);
 
     return new StlIterator<node, vector<node>::iterator>(randomVector.begin(), randomVector.end());
   } else
