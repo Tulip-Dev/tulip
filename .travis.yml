@@ -3,14 +3,15 @@
 #  - a "legacy" Tulip build using :
 #     * default system compiler (GCC 5.4 on Linux, clang from Xcode9.x on Mac OS)
 #     * Qt 5.6 on Linux, Qt 5.9 on MacOS
-#     * Python 2.7
+#     * Python 2.7, Python 3.5 on Linux
 #  - a "modern" Tulip build using:
 #     * recent compiler (GCC 9.x on Linux, clang 10.x from MacPorts or Homebrew on MacOS)
 #     * Qt 5.15 on Linux and MacOS/Homebrew, Qt 5.14.2 on MacOS/MacPorts
 #     * Python 3.9 on Linux, Python 2.7 on MacOS
-# As TravisCI limits build job times to 50 minutes, Tulip is built in two successive stages
+# As TravisCI limits build job times to 50 minutes, Tulip is built in 2 or 3 successive stages
 # to avoid timeouts (which happened often with MacOs builds):
-#  - a core build with no Tulip OpenGL and Qt components
+#  - a third party only build
+#  - a core build with no OpenGL and Qt components
 #  - a complete build including OpenGL and Qt components
 # The trick is to use travis build cache and ccache to cache already compiled object
 # files between stages and thus not exceeding Travis build timeout limits
@@ -45,12 +46,12 @@ jobs:
             - ccache
             - ninja-build
             - libqhull-dev
-            - libpython2.7-dev
+            - python3.5-dev
             - libcppunit-dev
             - binutils-dev
       env:
-        # use Python 2.7
-        - PYTHON_EXECUTABLE=/usr/bin/python2.7
+        # use Python 3.5
+        - PYTHON_EXECUTABLE=/usr/bin/python3.5
       script:
         # create build directory
         - mkdir build && cd build
@@ -62,7 +63,7 @@ jobs:
         # run Tulip unit tests
         - ninja runTests
 
-    #--------------------------------------------------------------------------------------------------------------------------------------------------------------
+   #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip core build on Linux
     -
       # nothing to build if a non-linux platform is specified
@@ -130,7 +131,7 @@ jobs:
             - doxygen
             - graphviz
             - libqhull-dev
-            - libpython2.7-dev
+            - python3.5-dev
             - python-sphinx
             - libcppunit-dev
             - binutils-dev
@@ -142,8 +143,8 @@ jobs:
             - libjpeg-dev
             - libfreetype6-dev
       env:
-        # use Python 2.7
-        - PYTHON_EXECUTABLE=/usr/bin/python2.7
+        # use Python 3.5
+        - PYTHON_EXECUTABLE=/usr/bin/python3.5
       script:
         # create build directory
         - mkdir build && cd build
@@ -312,6 +313,7 @@ jobs:
             - ninja
             - llvm@9
             - qhull
+          update: true
 
       env:
         - ENV="MacOS oldest, LLVM Clang, Homebrew"
@@ -430,6 +432,7 @@ jobs:
             - qhull
             - cppunit
             - pkg-config
+          update: true
 
       env:
         - ENV="MacOS oldest, LLVM Clang, Homebrew"
@@ -557,6 +560,7 @@ jobs:
             - freetype
             - qt5
             - quazip
+          update: true
 
       install:
         # set columns in terminal, required for curl to work correctly:
