@@ -310,9 +310,8 @@ jobs:
             - ccache
             - cmake
             - ninja
-            - llvm
+            - llvm@9
             - qhull
-          update: true
 
       env:
         - ENV="MacOS oldest, LLVM Clang, Homebrew"
@@ -427,11 +426,10 @@ jobs:
             - ccache
             - cmake
             - ninja
-            - llvm
+            - llvm@9
             - qhull
             - cppunit
             - pkg-config
-          update: true
 
       env:
         - ENV="MacOS oldest, LLVM Clang, Homebrew"
@@ -551,7 +549,7 @@ jobs:
             - ccache
             - cmake
             - ninja
-            - llvm
+            - llvm@9
             - qhull
             - cppunit
             - pkg-config
@@ -559,7 +557,6 @@ jobs:
             - freetype
             - qt5
             - quazip
-          update: true
 
       install:
         # set columns in terminal, required for curl to work correctly:
