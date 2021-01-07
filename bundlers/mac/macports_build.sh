@@ -30,13 +30,20 @@ if [ "$TRAVIS_BUILD_THIRDPARTY_ONLY" != "ON" ]; then
   if [ "$TULIP_BUILD_TESTS" == "ON" ]; then
     sudo port -N install pkgconfig cppunit
   fi
-  PYTHON_DEFINE=-DPYTHON_EXECUTABLE=/usr/bin/python2.7
+  if [ "$PYTHON_EXECUTABLE" == "" ]; then
+    PYTHON_EXECUTABLE=/usr/bin/python2.7
+  fi
 # install Tulip complete build dependencies
   if [ "$TULIP_BUILD_CORE_ONLY" != "ON" ]; then
-    sudo port -N install qt5-qtbase qt5-qttools qt5-qtwebkit quazip freetype glew
+    if [ "$Qt5_DIR" != "" ]; then
+      CMAKE_PREFIX_PATH_DEFINE="-DCMAKE_PREFIX_PATH=$Qt5_DIR"
+    else
+      sudo port -N install qt5-qtbase qt5-qttools qt5-qtwebkit quazip
+    fi
+    sudo port -N install freetype glew
     curl -O https://bootstrap.pypa.io/get-pip.py
-    sudo python get-pip.py
-    pip install --user sphinx==1.7.9
+    sudo $PYTHON_EXECUTABLE get-pip.py
+    $PYTHON_EXECUTABLE -m pip install --user sphinx==1.7.9
     TULIP_GUI_DEFINES="-DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DGLEW_SHARED_LIBRARY_RELEASE=/opt/local/lib/libGLEW.dylib"
   fi
 fi
@@ -45,7 +52,7 @@ fi
 mkdir build && cd build
 
 # configure Tulip build
-cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install ${CLANG_COMPILER_DEFINES} ${PYTHON_DEFINE} -DTRAVIS_BUILD_THIRDPARTY_ONLY=${TRAVIS_BUILD_THIRDPARTY_ONLY} -DTULIP_BUILD_CORE_ONLY=${TULIP_BUILD_CORE_ONLY} -DTULIP_BUILD_DOC=${TULIP_BUILD_DOC} -DTULIP_BUILD_TESTS=${TULIP_BUILD_TESTS} -DTULIP_USE_CCACHE=$TULIP_USE_CCACHE ${TULIP_GUI_DEFINES}
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install ${CLANG_COMPILER_DEFINES} ${CMAKE_PREFIX_PATH_DEFINE} -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE -DTRAVIS_BUILD_THIRDPARTY_ONLY=$TRAVIS_BUILD_THIRDPARTY_ONLY -DTULIP_BUILD_CORE_ONLY=$TULIP_BUILD_CORE_ONLY -DTULIP_BUILD_DOC=$TULIP_BUILD_DOC -DTULIP_BUILD_TESTS=$TULIP_BUILD_TESTS -DTULIP_USE_CCACHE=$TULIP_USE_CCACHE ${TULIP_GUI_DEFINES}
 # compile Tulip
 make -j$(getconf _NPROCESSORS_ONLN) install
 

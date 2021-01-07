@@ -399,9 +399,13 @@ jobs:
         - ENV="MacOS most recent, LLVM Clang, MacPorts"
 
       script:
-        # setup build env
+	# get Python 3.9 and install it
+	- curl -LO https://www.python.org/ftp/python/3.9.1/python-3.9.1-macosx10.9.pkg
+	- sudo installer -store -pkg python-3.9.*.pkg -target /
+	# setup build env
         - export CLANG_COMPILER_VERSION=10
-        - export TULIP_BUILD_CORE_ONLY=ON
+        - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.9/bin/python3
+	- export TULIP_BUILD_CORE_ONLY=ON
         - export TULIP_BUILD_TESTS=ON
         - export TULIP_USE_CCACHE=ON
         # launch macports build
@@ -524,8 +528,12 @@ jobs:
         - ENV="MacOS most recent, LLVM Clang, MacPorts"
 
       script:
-        # setup build env
+	# get Python 3.9 and install it
+	- curl -LO https://www.python.org/ftp/python/3.9.1/python-3.9.1-macosx10.9.pkg
+	- sudo installer -store -pkg python-3.9.*.pkg -target /
+	# setup build env
         - export CLANG_COMPILER_VERSION=10
+        - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.9/bin/python3
         - export TULIP_BUILD_TESTS=ON
         - export TULIP_USE_CCACHE=ON
         # launch macports build
