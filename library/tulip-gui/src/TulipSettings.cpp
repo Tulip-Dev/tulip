@@ -476,7 +476,7 @@ bool TulipSettings::isDisplayInDarkMode() {
     // Dark mode exists since MacOS 10.14
     if (minorVersion.toUInt() > 13) {
       QProcess process;
-      process.start("defaults read -g AppleInterfaceStyle");
+      process.start("defaults", {"read", "-g", "AppleInterfaceStyle"});
       process.waitForFinished(-1);
       QString output(process.readAllStandardOutput());
       return output.compare("Dark") == 0;
