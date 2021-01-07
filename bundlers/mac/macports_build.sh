@@ -35,16 +35,18 @@ if [ "$TRAVIS_BUILD_THIRDPARTY_ONLY" != "ON" ]; then
   fi
 # install Tulip complete build dependencies
   if [ "$TULIP_BUILD_CORE_ONLY" != "ON" ]; then
+    sudo port -N install freetype glew
+    TULIP_GUI_DEFINES="-DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DGLEW_SHARED_LIBRARY_RELEASE=/opt/local/lib/libGLEW.dylib"
     if [ "$Qt5_DIR" != "" ]; then
       CMAKE_PREFIX_PATH_DEFINE="-DCMAKE_PREFIX_PATH=$Qt5_DIR"
     else
       sudo port -N install qt5-qtbase qt5-qttools qt5-qtwebkit quazip
     fi
-    sudo port -N install freetype glew
-    curl -O https://bootstrap.pypa.io/get-pip.py
-    sudo $PYTHON_EXECUTABLE get-pip.py
-    $PYTHON_EXECUTABLE -m pip install --user sphinx==1.7.9
-    TULIP_GUI_DEFINES="-DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DGLEW_SHARED_LIBRARY_RELEASE=/opt/local/lib/libGLEW.dylib"
+    if [ "$TULIP_BUILD_DOC" == "ON" ]; then
+      curl -O https://bootstrap.pypa.io/get-pip.py
+      sudo $PYTHON_EXECUTABLE get-pip.py
+      $PYTHON_EXECUTABLE -m pip install --user sphinx==1.7.9
+    fi
   fi
 fi
 
