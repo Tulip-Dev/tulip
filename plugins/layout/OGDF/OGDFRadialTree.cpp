@@ -61,26 +61,35 @@ public:
 
   ~OGDFRadialTree() override {}
 
+  bool check(string &error) override {
+    if (!tlp::TreeTest::isTree(graph)) {
+      error += "graph is not a directed tree";
+      return false;
+    }
+
+    return true;
+  }
+
   void beforeCall() override {
-    ogdf::RadialTreeLayout *tree = static_cast<ogdf::RadialTreeLayout *>(ogdfLayoutAlgo);
+    ogdf::RadialTreeLayout *layout = static_cast<ogdf::RadialTreeLayout *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {
       double dval = 0;
       StringCollection sc;
 
       if (dataSet->get("levels distance", dval))
-        tree->levelDistance(dval);
+        layout->levelDistance(dval);
 
       if (dataSet->get("trees distance", dval))
-        tree->connectedComponentDistance(dval);
+        layout->connectedComponentDistance(dval);
 
       if (dataSet->get(ELT_ROOTSELECTION, sc)) {
         if (sc.getCurrent() == ELT_ROOTSOURCE) {
-          tree->rootSelection(RadialTreeLayout::RootSelectionType::Source);
+          layout->rootSelection(RadialTreeLayout::RootSelectionType::Source);
         } else if (sc.getCurrent() == ELT_ROOTSINK) {
-          tree->rootSelection(RadialTreeLayout::RootSelectionType::Sink);
+          layout->rootSelection(RadialTreeLayout::RootSelectionType::Sink);
         } else {
-          tree->rootSelection(RadialTreeLayout::RootSelectionType::Center);
+          layout->rootSelection(RadialTreeLayout::RootSelectionType::Center);
         }
       }
     }

@@ -94,6 +94,15 @@ public:
 
   ~OGDFTree() override {}
 
+  bool check(string &error) override {
+    if (!tlp::TreeTest::isTree(graph)) {
+      error += "graph is not a directed tree";
+      return false;
+    }
+
+    return true;
+  }
+
   void beforeCall() override {
     ogdf::TreeLayout *tree = static_cast<ogdf::TreeLayout *>(ogdfLayoutAlgo);
 
