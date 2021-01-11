@@ -50,7 +50,7 @@ environment:
 # nothing to build if a non-windows platform
 # is specified at the end of the commit message
 skip_commits:
-  message: /\[(linux|macos|macports|homebrew)-only\]$/
+  message: /\[(appimage|linux|macos|macports|homebrew)-only\]$/
 
 # build script that simply call the right batch script depending on the compiler used
 build_script:

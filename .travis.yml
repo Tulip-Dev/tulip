@@ -3,11 +3,11 @@
 #  - a "legacy" Tulip build using :
 #     * default system compiler (GCC 5.4 on Linux, clang from Xcode9.x on Mac OS)
 #     * Qt 5.6 on Linux, Qt 5.9 on MacOS
-#     * Python 2.7, Python 3.5 on Linux
+#     * Python 2.7 on MacOS, Python 3.5 on Linux
 #  - a "modern" Tulip build using:
 #     * recent compiler (GCC 9.x on Linux, clang 10.x from MacPorts or Homebrew on MacOS)
-#     * Qt 5.15 on Linux and MacOS/Homebrew, Qt 5.14.2 on MacOS/MacPorts
-#     * Python 3.9 on Linux, Python 2.7 on MacOS
+#     * Qt 5.15 on Linux and MacOS
+#     * Python 3.9 on Linux and MacOS
 # As TravisCI limits build job times to 50 minutes, Tulip is built in 2 or 3 successive stages
 # to avoid timeouts (which happened often with MacOs builds):
 #  - a third party only build
@@ -32,7 +32,7 @@ jobs:
     - stage: Tulip core build (Linux)
       # nothing to build if a non-linux platform is specified
       # at the end of the commit message
-      if: commit_message !~ /\[(macos|macports|homebrew|windows)-only\]$/
+      if: commit_message !~ /\[(appimage|macos|macports|homebrew|windows)-only\]$/
     # legacy Tulip core build on Linux
       os: linux
       dist: xenial
@@ -68,7 +68,7 @@ jobs:
     -
       # nothing to build if a non-linux platform is specified
       # at the end of the commit message
-      if: commit_message !~ /\[(macos|macports|homebrew|windows)-only\]$/
+      if: commit_message !~ /\[(appimage|macos|macports|homebrew|windows)-only\]$/
       os: linux
       dist: focal
       compiler: gcc
@@ -108,7 +108,7 @@ jobs:
     - stage: Tulip complete build (Linux)
       # nothing to build if a non-linux platform is specified
       # at the end of the commit message
-      if: commit_message !~ /\[(macos|macports|homebrew|windows)-only\]$/
+      if: commit_message !~ /\[(appimage|macos|macports|homebrew|windows)-only\]$/
       # legacy Tulip complete build on Linux
       # we also build the documentation in this one
       os: linux
@@ -161,7 +161,7 @@ jobs:
     -
       # nothing to build if a non-linux platform is specified
       # at the end of the commit message
-      if: commit_message !~ /\[(macos|macports|homebrew|windows)-only\]$/
+      if: commit_message !~ /\[(appimage|macos|macports|homebrew|windows)-only\]$/
       os: linux
       dist: focal
       compiler: gcc
@@ -251,7 +251,7 @@ jobs:
     - stage: Tulip thirdparty build (Mac OS)
       # nothing to build if a non-macports platform is specified
       # at the end of the commit message
-      if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
+      if: commit_message !~ /\[(appimage|linux|homebrew|windows)-only\]$/
     # legacy Tulip thirdparty build on Mac OS (MacPorts)
       os: osx
       # use default osx image
@@ -273,7 +273,7 @@ jobs:
     -
       # nothing to build if a non-macports platform is specified
       # at the end of the commit message
-      if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
+      if: commit_message !~ /\[(appimage|linux|homebrew|windows)-only\]$/
       os: osx
       # use the most recent Xcode version
       osx_image: xcode12.2
@@ -295,7 +295,7 @@ jobs:
     -
       # nothing to build if a non-homebrew platform is specified
       # at the end of the commit message
-      if: commit_message !~ /\[(linux|macports|windows)-only\]$/
+      if: commit_message !~ /\[(appimage|linux|macports|windows)-only\]$/
       os: osx
       # use the oldest osx 10.14 image acceptable for homebrew
       osx_image: xcode10.2
@@ -330,7 +330,7 @@ jobs:
     -
       # nothing to build if a non-homebrew platform is specified
       # at the end of the commit message
-      if: commit_message !~ /\[(linux|macports|windows)-only\]$/
+      if: commit_message !~ /\[(appimage|linux|macports|windows)-only\]$/
       os: osx
       # use the most recent Xcode version
       osx_image: xcode12.2
@@ -365,7 +365,7 @@ jobs:
     - stage: Tulip core build (Mac OS)
       # nothing to build if a non-macports platform is specified
       # at the end of the commit message
-      if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
+      if: commit_message !~ /\[(appimage|linux|homebrew|windows)-only\]$/
     # legacy Tulip core build on Mac OS (MacPorts)
       os: osx
       # use default osx image
@@ -389,7 +389,7 @@ jobs:
     -
       # nothing to build if a non-macports platform is specified
       # at the end of the commit message
-      if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
+      if: commit_message !~ /\[(appimage|linux|homebrew|windows)-only\]$/
       os: osx
       # use the most recent Xcode version
       osx_image: xcode12.2
@@ -416,7 +416,7 @@ jobs:
     -
       # nothing to build if a non-homebrew platform is specified
       # at the end of the commit message
-      if: commit_message !~ /\[(linux|macports|windows)-only\]$/
+      if: commit_message !~ /\[(appimage|linux|macports|windows)-only\]$/
       os: osx
       # use the oldest osx 10.14 image acceptable for homebrew
       osx_image: xcode10.2
@@ -456,7 +456,7 @@ jobs:
     -
       # nothing to build if a non-homebrew platform is specified
       # at the end of the commit message
-      if: commit_message !~ /\[(linux|macports|windows)-only\]$/
+      if: commit_message !~ /\[(appimage|linux|macports|windows)-only\]$/
       os: osx
       # use the most recent Xcode version
       osx_image: xcode12.2
@@ -496,7 +496,7 @@ jobs:
     - stage: Tulip complete build (Mac OS)
       # nothing to build if a non-macports platform is specified
       # at the end of the commit message
-      if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
+      if: commit_message !~ /\[(appimage|linux|homebrew|windows)-only\]$/
     # legacy Tulip complete build on Mac OS (MacPorts)
       os: osx
       # use default osx image
@@ -518,7 +518,7 @@ jobs:
     -
       # nothing to build if a non-macports platform is specified
       # at the end of the commit message
-      if: commit_message !~ /\[(linux|homebrew|windows)-only\]$/
+      if: commit_message !~ /\[(appimage|linux|homebrew|windows)-only\]$/
       os: osx
       # use the most recent Xcode version
       osx_image: xcode12.2
@@ -544,7 +544,7 @@ jobs:
     -
       # nothing to build if a non-homebrew platform is specified
       # at the end of the commit message
-      if: commit_message !~ /\[(linux|macports|windows)-only\]$/
+      if: commit_message !~ /\[(appimage|linux|macports|windows)-only\]$/
       os: osx
       # use the oldest osx 10.14 image acceptable for homebrew
       osx_image: xcode10.2
@@ -595,7 +595,7 @@ jobs:
     -
       # nothing to build if a non-homebrew platform is specified
       # at the end of the commit message
-      if: commit_message !~ /\[(linux|macports|windows)-only\]$/
+      if: commit_message !~ /\[(appimage|linux|macports|windows)-only\]$/
       os: osx
       # use the most recent Xcode version
       osx_image: xcode12.2

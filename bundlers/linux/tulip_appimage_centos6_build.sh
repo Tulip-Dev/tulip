@@ -42,11 +42,10 @@ else
   QT_PATH=$3
 fi
 
-# install Python 3.6 from the IUS Community Project
-wget https://repo.ius.io/ius-release-el6.rpm
-rpm -Uvh ius-release*rpm
-yum -y install python36u-devel python36u-pip
-pip3.6 install sphinx
+# install Python 3.6 needed packages
+yum -y install rh-python36-python rh-python36-python-devel rh-python36-python-sphinx
+# use it
+PYTHON_EXECUTABLE=$(scl enable rh-python36 'which python3.6')
 
 # build and install tulip
 if [ -d /tulip/build ]; then
@@ -67,7 +66,7 @@ else
   RUN_TESTS=OFF
 fi
 
-cmake3 $COMPILER_DEFINES -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=$QT_PATH -DPYTHON_EXECUTABLE=/usr/bin/python3.6 -DTULIP_USE_CCACHE=$CCACHE -DTULIP_BUILD_FOR_APPIMAGE=ON -DTULIP_BUILD_TESTS=$RUN_TESTS ..
+cmake3 $COMPILER_DEFINES -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=$QT_PATH -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE -DTULIP_USE_CCACHE=$CCACHE -DTULIP_BUILD_FOR_APPIMAGE=ON -DTULIP_BUILD_TESTS=$RUN_TESTS ..
 make -j4 install
 
 # run unit tests
