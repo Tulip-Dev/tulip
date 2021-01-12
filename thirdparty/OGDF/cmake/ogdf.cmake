@@ -61,7 +61,9 @@ mark_as_advanced(OGDF_EXTRA_CXX_FLAGS_RELEASE)
 
 # compilation
 file(GLOB_RECURSE ogdf_headers include/ogdf/*.h)
-file(GLOB_RECURSE ogdf_sources src/ogdf/*.cpp)
+#file(GLOB_RECURSE ogdf_sources src/ogdf/*.cpp)
+# compile only files needed for tulip build
+file(STRINGS cmake/ogdf_files_for_tlp.txt ogdf_sources)
 set(ogdf_sources "${ogdf_sources};${ogdf_headers}")
 IF(BUILD_SHARED_LIBS)
 add_library(${OGDFLibrary} SHARED "${ogdf_sources}")

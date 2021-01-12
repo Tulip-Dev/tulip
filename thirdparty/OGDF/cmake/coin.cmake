@@ -12,7 +12,9 @@ else()
 endif()
 
 # compilation
-file(GLOB_RECURSE COIN_SOURCES src/coin/*.cpp)
+#file(GLOB_RECURSE COIN_SOURCES src/coin/*.cpp)
+# compile only files needed for tulip build
+file(STRINGS cmake/coin_files_for_tlp.txt COIN_SOURCES)
 if(NOT COIN_SOLVER STREQUAL "GRB")
   list(REMOVE_ITEM COIN_SOURCES "${PROJECT_SOURCE_DIR}/src/coin/Osi/OsiGrbSolverInterface.cpp")
 endif()
