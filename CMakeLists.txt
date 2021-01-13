@@ -1,5 +1,8 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.1)
 
+# First display CMake version
+MESSAGE(STATUS "Using CMake ${CMAKE_VERSION}")
+
 # Remove CMake warnings related to Qt5
 IF(POLICY CMP0020)
   CMAKE_POLICY(SET CMP0020 NEW)
