@@ -104,9 +104,9 @@ export DYLD_FRAMEWORK_PATH="\$(pwd)/Frameworks"
 export DYLD_FALLBACK_LIBRARY_PATH="\$(pwd)/Frameworks"
 export QT_QPA_PLATFORM_PLUGIN_PATH="\$(pwd)/PlugIns/platforms"
 export QT_PLUGIN_PATH="\$(pwd)/PlugIns"
-if [ -d ./Frameworks/Python.Framework/Versions ]; then
-  PY_VERSION=\$(ls ./Frameworks/Python.Framework/Versions)
-  export PATH="\$(pwd)/Frameworks/Python.Framework/Versions/\$PY_VERSION/bin:\$PATH"
+if [ -d ./Frameworks/Python.framework/Versions ]; then
+  PY_VERSION=\$(ls ./Frameworks/Python.framework/Versions)
+  export PATH="\$(pwd)/Frameworks/Python.framework/Versions/\$PY_VERSION/bin:\$PATH"
 fi
 
 "\$(pwd)"/bin/tulip
