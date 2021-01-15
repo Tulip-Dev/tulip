@@ -20,8 +20,6 @@ import os.path
 import sys
 import platform
 
-from tulip import tlp
-
 # fix an ubuntu bug when using the nvidia driver,
 # when the python interpreter dynamically loads the GL library,
 # it ends up loading the mesa one instead of the nvidia one.
@@ -37,29 +35,27 @@ if hasattr(os, 'uname'):
 _tulipGuiNativeLibsPath = '%s/native/' % os.path.dirname(__file__)
 _tulipGuiNativePluginsPath = '%splugins' % _tulipGuiNativeLibsPath
 _tulipGuiPluginsPath = '%s/plugins/' % os.path.dirname(__file__)
-
 sys.path.append(_tulipGuiNativeLibsPath)
 
 if platform.system() == 'Windows':
     os.environ['PATH'] = '%s;%s../../../;%s' % (
         _tulipGuiNativeLibsPath, _tulipGuiNativeLibsPath, os.environ['PATH'])
+    # see https://docs.python.org/3/library/os.html#os.add_dll_directory
+    if sys.version_info >= (3, 8):
+        dirs = []
+        paths = os.environ['PATH'].split(";")
+        for p in paths:
+            if os.path.isdir(p):
+                dirs.append(os.add_dll_directory(p))
 
-if not sys.argv[0] == 'tulip':
-    # when the tulipgui module is installed from the Python Packaging Index
-    # modify the TulipBitmapDir variable as it is different from
-    # the default one
-    bitmapDir = '%s/share/bitmaps/' % os.path.dirname(__file__)
-    if os.path.isdir(bitmapDir):
-        tlp.TulipBitmapDir = bitmapDir
-        tlp.TulipPluginsPath = _tulipGuiNativePluginsPath
-        tlp.TulipViewSettings.instance().setDefaultFontFile(
-            '%sfont.ttf' % tlp.TulipBitmapDir)
-
+from tulip import tlp
 
 import _tulipgui # noqa
 
 sys.path.pop()
-
+if platform.system() == 'Windows' and sys.version_info >= (3, 8):
+    for d in dirs:
+        d.close()
 
 class tlpgui(_tulipgui.tlpgui):
     pass
@@ -69,23 +65,7 @@ def tulipguiExitFunc():
     import tulipgui
     tulipgui.tlpgui.runQtMainLoop()
 
-
-# fix loading of Tulip plugins when the tulipgui module has been installed
-# with the pip tool
-if platform.system() == 'Linux' and os.path.exists(_tulipGuiNativePluginsPath):
-    dlOpenFlagsBackup = sys.getdlopenflags()
-    if sys.version_info < (3, 6):
-        import DLFCN
-        dlOpenFlags = DLFCN.RTLD_NOW | DLFCN.RTLD_GLOBAL
-    else:
-        dlOpenFlags = os.RTLD_NOW | os.RTLD_GLOBAL
-    sys.setdlopenflags(dlOpenFlags)
-
 tlp.loadTulipPluginsFromDir(_tulipGuiPluginsPath)
-
-if (platform.system() == 'Linux'
-        and os.path.exists(_tulipGuiNativePluginsPath)):
-    sys.setdlopenflags(dlOpenFlagsBackup)
 
 # Check if we are in script execution mode
 # (sys.ps1 is not defined in that case)
