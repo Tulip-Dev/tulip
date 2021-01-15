@@ -252,7 +252,9 @@ PythonInterpreter::PythonInterpreter()
 
     PySys_SetArgv(argc, argv);
 
+#if PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION < 9
     PyEval_InitThreads();
+#endif
     mainThreadState = PyEval_SaveThread();
   }
 
