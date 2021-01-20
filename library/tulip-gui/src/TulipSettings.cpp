@@ -470,8 +470,8 @@ void TulipSettings::setWarnUserAboutGraphicsCard(bool f) {
 }
 
 bool TulipSettings::isDisplayInDarkMode() {
-#ifdef __APPLE__
   if (!instance().contains(TS_DisplayInDarkMode)) {
+#ifdef __APPLE__
     QString osVersion = QSysInfo::productVersion();
      // Dark mode exists since MacOS 10.14
     if (osVersion >= "10.14") {
@@ -481,8 +481,14 @@ bool TulipSettings::isDisplayInDarkMode() {
       QString output(process.readAllStandardOutput());
       return output.contains("Dark", Qt::CaseInsensitive);
     }
-  }
 #endif
+#ifdef _WIN32
+  QSettings settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", QSettings::NativeFormat);
+  return settings.value("AppsUseLightTheme", 1) == 0;
+#endif
+  return false;
+ }
+
   return instance().value(TS_DisplayInDarkMode, false).toBool();
 }
 
