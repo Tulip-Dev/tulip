@@ -472,14 +472,14 @@ void TulipSettings::setWarnUserAboutGraphicsCard(bool f) {
 bool TulipSettings::isDisplayInDarkMode() {
 #ifdef __APPLE__
   if (!instance().contains(TS_DisplayInDarkMode)) {
-    QString minorVersion = QSysInfo::productVersion().mid(3);
-    // Dark mode exists since MacOS 10.14
-    if (minorVersion.toUInt() > 13) {
+    QString osVersion = QSysInfo::productVersion();
+     // Dark mode exists since MacOS 10.14
+    if (osVersion >= "10.14") {
       QProcess process;
       process.start("defaults", {"read", "-g", "AppleInterfaceStyle"});
       process.waitForFinished(-1);
       QString output(process.readAllStandardOutput());
-      return output.compare("Dark") == 0;
+      return output.contains("Dark", Qt::CaseInsensitive);
     }
   }
 #endif
