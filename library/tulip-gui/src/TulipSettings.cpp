@@ -473,7 +473,7 @@ bool TulipSettings::isDisplayInDarkMode() {
   if (!instance().contains(TS_DisplayInDarkMode)) {
 #ifdef __APPLE__
     QString osVersion = QSysInfo::productVersion();
-     // Dark mode exists since MacOS 10.14
+    // Dark mode exists since MacOS 10.14
     if (osVersion >= "10.14") {
       QProcess process;
       process.start("defaults", {"read", "-g", "AppleInterfaceStyle"});
@@ -483,11 +483,13 @@ bool TulipSettings::isDisplayInDarkMode() {
     }
 #endif
 #ifdef _WIN32
-  QSettings settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", QSettings::NativeFormat);
-  return settings.value("AppsUseLightTheme", 1) == 0;
+    QSettings settings(
+        "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+        QSettings::NativeFormat);
+    return settings.value("AppsUseLightTheme", 1) == 0;
 #endif
-  return false;
- }
+    return false;
+  }
 
   return instance().value(TS_DisplayInDarkMode, false).toBool();
 }
