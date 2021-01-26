@@ -97,9 +97,6 @@ public:
    *graph->getRoot()->delNode()).
    **/
   static void cleanComputedTree(Graph *graph, Graph *tree);
-
-private:
-  static bool isFreeTree(const Graph *graph, node curRoot);
 };
 } // namespace tlp
 #endif
