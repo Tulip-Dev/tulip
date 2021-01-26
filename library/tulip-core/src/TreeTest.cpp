@@ -104,7 +104,7 @@ bool TreeTest::isTree(const tlp::Graph *graph) {
 bool TreeTest::isFreeTree(const tlp::Graph *graph) {
   auto nbNodes = graph->numberOfNodes();
   return (nbNodes && (graph->numberOfEdges() == nbNodes - 1)) ? ConnectedTest::isConnected(graph)
-                                                               : false;
+                                                              : false;
 }
 //====================================================================
 // simple structure to implement
