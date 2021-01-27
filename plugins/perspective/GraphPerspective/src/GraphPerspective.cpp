@@ -662,26 +662,22 @@ stop:0 rgb(75,75,75),
 stop:1 rgb(60, 60, 60));
 }
 
-#bottomFrame QPushButton, #bottomFrame QLabel {
+#bottomFrame QPushButton, #bottomFrame QLabel, #bottomFrame QToolButton {
 color: white;
 }
 
-#bottomFrame QPushButton {
+#bottomFrame QPushButton, #bottomFrame QToolButton {
 border: 0px;
 border-image: none;
 }
 
-#bottomFrame QPushButton:hover {
-border: 0px;
-border-image: none;
+#bottomFrame QPushButton:hover, #bottomFrame QToolButton:hover {
 background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1,
 stop:0 rgb(85,85,85),
 stop:1 rgb(70, 70, 70));
 }
 
 #bottomFrame QPushButton:pressed, #bottomFrame .QPushButton:checked {
-border: 0px;
-border-image: none;
 background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1,
 stop:0 rgb(105,105,105),
 stop:1 rgb(90, 90, 90));
@@ -715,32 +711,8 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
 }
 
 #bottomFrame QToolButton {
-	border-image:none;
-	border-top: 1px solid rgba(0,0,0,0);
-	border-bottom: 1px solid rgba(0,0,0,0);
-	border-left: 0px solid rgba(0,0,0,0);
-	border-right: 0px solid rgba(0,0,0,0);
-	color: white;
-	font: bold 10px;
-	height:20px;
-    background-color: rgba(0,0,0,0);
-}
-
-#bottomFrame QToolButton:hover {
-	border-image:none;
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0,
-    stop:0 rgba(93, 93, 93, 255),
-    stop:1 rgba(150, 150, 150, 255));
-	border-top: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
-	stop: 0.0 rgba(0,0,0,0),
-	stop: 0.4 rgba(170,170,170,255),
-	stop: 0.5 rgba(170,170,170,255),
-	stop: 1.0 rgba(0,0,0,0));
-	border-bottom: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
-	stop: 0.0 rgba(0,0,0,0),
-	stop: 0.4 rgba(170,170,170,255),
-	stop: 0.5 rgba(170,170,170,255),
-	stop: 1.0 rgba(0,0,0,0));
+font: bold 10px;
+height:20px;
 }
 
 QFrame[ section=\"true\" ] {

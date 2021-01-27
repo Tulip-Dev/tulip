@@ -39,22 +39,25 @@ border-right: 0px solid red;
 border-bottom: 1px solid #E5E5E5;
 }
 
-QPushButton:flat {
+QPushButton {
 border-image: none;
 border: 1px solid #E9E9E9;
-outline: none;
-}
-
-QPushButton:hover {
-border-image: none;
-border: 1px solid #C9C9C9;
 }
 
 QPushButton:disabled {
 color:gray;
 }
 
-QPushButton:pressed{
+#settingsButton {
+border: 0px;
+}
+
+QPushButton:hover, #settingsButton:hover {
+border-image: none;
+border: 1px solid #C9C9C9;
+}
+
+QPushButton:pressed, #settingsButton:pressed {
 border-image: none;
 background-color: #E9E9E9;
 border: 1px solid #C9C9C9;
@@ -104,9 +107,6 @@ Right click: display plugin documentation</string>
         <property name="checkable">
          <bool>true</bool>
         </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
        </widget>
       </item>
       <item>
@@ -126,9 +126,6 @@ Right click: display plugin documentation</string>
           <width>16</width>
           <height>16</height>
          </size>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
         </property>
        </widget>
       </item>
