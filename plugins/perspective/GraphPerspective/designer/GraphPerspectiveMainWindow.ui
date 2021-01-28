@@ -953,7 +953,7 @@ border: 0px;
                    <normaloff>:/tulip/gui/ui/previous.png</normaloff>:/tulip/gui/ui/previous.png</iconset>
                  </property>
                  <property name="flat">
-                   <bool>true</bool>
+                  <bool>true</bool>
                  </property>
                  <property name="shortcut">
                   <string>Shift+Left</string>
@@ -982,7 +982,7 @@ border: 0px;
                    <normaloff>:/tulip/gui/ui/next.png</normaloff>:/tulip/gui/ui/next.png</iconset>
                  </property>
                  <property name="flat">
-                   <bool>true</bool>
+                  <bool>true</bool>
                  </property>
                  <property name="shortcut">
                   <string>Shift+Right</string>
@@ -1021,7 +1021,7 @@ border: 0px;
                    <normaloff>:/tulip/gui/ui/full_screen.png</normaloff>:/tulip/gui/ui/full_screen.png</iconset>
                  </property>
                  <property name="flat">
-                   <bool>true</bool>
+                  <bool>true</bool>
                  </property>
                 </widget>
                </item>
@@ -1044,7 +1044,7 @@ border: 0px;
                    <normaloff>:/tulip/gui/ui/split_screen.png</normaloff>:/tulip/gui/ui/split_screen.png</iconset>
                  </property>
                  <property name="flat">
-                   <bool>true</bool>
+                  <bool>true</bool>
                  </property>
                 </widget>
                </item>
@@ -1065,6 +1065,9 @@ border: 0px;
                  <property name="icon">
                   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
                    <normaloff>:/tulip/gui/ui/split_screen_horizontal.png</normaloff>:/tulip/gui/ui/split_screen_horizontal.png</iconset>
+                 </property>
+                 <property name="flat">
+                  <bool>true</bool>
                  </property>
                 </widget>
                </item>
@@ -1087,7 +1090,7 @@ border: 0px;
                    <normaloff>:/tulip/gui/ui/split3_screen.png</normaloff>:/tulip/gui/ui/split3_screen.png</iconset>
                  </property>
                  <property name="flat">
-                   <bool>true</bool>
+                  <bool>true</bool>
                  </property>
                 </widget>
                </item>
@@ -1110,7 +1113,7 @@ border: 0px;
                    <normaloff>:/tulip/gui/ui/split3_2_screen.png</normaloff>:/tulip/gui/ui/split3_2_screen.png</iconset>
                  </property>
                  <property name="flat">
-                   <bool>true</bool>
+                  <bool>true</bool>
                  </property>
                 </widget>
                </item>
@@ -1133,7 +1136,7 @@ border: 0px;
                    <normaloff>:/tulip/gui/ui/split3_3_screen.png</normaloff>:/tulip/gui/ui/split3_3_screen.png</iconset>
                  </property>
                  <property name="flat">
-                   <bool>true</bool>
+                  <bool>true</bool>
                  </property>
                 </widget>
                </item>
@@ -1156,7 +1159,7 @@ border: 0px;
                    <normaloff>:/tulip/gui/ui/grid_screen.png</normaloff>:/tulip/gui/ui/grid_screen.png</iconset>
                  </property>
                  <property name="flat">
-                   <bool>true</bool>
+                  <bool>true</bool>
                  </property>
                 </widget>
                </item>
@@ -1179,7 +1182,7 @@ border: 0px;
                    <normaloff>:/tulip/gui/ui/six_screen.png</normaloff>:/tulip/gui/ui/six_screen.png</iconset>
                  </property>
                  <property name="flat">
-                   <bool>true</bool>
+                  <bool>true</bool>
                  </property>
                 </widget>
                </item>

@@ -44,10 +44,6 @@ border-image: none;
 border: 1px solid #E9E9E9;
 }
 
-QPushButton:disabled {
-color:gray;
-}
-
 #settingsButton {
 border: 0px;
 }
