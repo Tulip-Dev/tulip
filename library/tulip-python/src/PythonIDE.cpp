@@ -1628,7 +1628,7 @@ void PythonIDE::newScript() {
 
 void PythonIDE::loadScript() {
   QString fileName =
-      QFileDialog::getOpenFileName(nullptr, "Open main script", "", "Python script (*.py)");
+      QFileDialog::getOpenFileName(this, "Open main script", "", "Python script (*.py)");
   loadScript(fileName);
 }
 
