@@ -1988,7 +1988,6 @@ bool PythonIDE::eventFilter(QObject *obj, QEvent *event) {
 }
 
 void PythonIDE::closeModuleTabRequested(int idx) {
-
   QString moduleFile = getModuleEditor(idx)->getFileName();
   QFileInfo fileInfo(moduleFile);
   QString projectFile = PYTHON_MODULES_PATH + "/" + fileInfo.fileName();
@@ -1998,14 +1997,12 @@ void PythonIDE::closeModuleTabRequested(int idx) {
   }
 
   if (closeEditorTabRequested(_ui->modulesTabWidget, idx)) {
-    if (!_project) {
-      return;
-    }
+    if (_project) {
+      writeModulesFilesList(idx);
 
-    writeModulesFilesList(idx);
-
-    if (_project->exists(projectFile)) {
-      _project->removeFile(projectFile);
+      if (_project->exists(projectFile)) {
+	_project->removeFile(projectFile);
+      }
     }
 
     _ui->modulesTabWidget->closeTab(idx);
@@ -2013,7 +2010,6 @@ void PythonIDE::closeModuleTabRequested(int idx) {
 }
 
 void PythonIDE::closeScriptTabRequested(int idx) {
-
   QString scriptFile = getMainScriptEditor(idx)->getFileName();
   QFileInfo fileInfo(scriptFile);
   QString projectFile = PYTHON_SCRIPTS_PATH + "/" + fileInfo.fileName();
@@ -2022,26 +2018,24 @@ void PythonIDE::closeScriptTabRequested(int idx) {
     return;
   }
 
-  closeEditorTabRequested(_ui->mainScriptsTabWidget, idx);
+  if (closeEditorTabRequested(_ui->mainScriptsTabWidget, idx)) {
+    if (_project) {
 
-  if (_project) {
+      writeScriptsFilesList(idx);
 
-    writeScriptsFilesList(idx);
-
-    if (_project->exists(projectFile)) {
-      _project->removeFile(projectFile);
+      if (_project->exists(projectFile)) {
+	_project->removeFile(projectFile);
+      }
     }
-
     _ui->mainScriptsTabWidget->closeTab(idx);
-  }
 
-  if (_ui->mainScriptsTabWidget->count() == 1) {
-    _ui->runScriptButton->setEnabled(false);
+    if (_ui->mainScriptsTabWidget->count() == 1) {
+      _ui->runScriptButton->setEnabled(false);
+    }
   }
 }
 
 void PythonIDE::closePluginTabRequested(int idx) {
-
   QString pluginFile = getPluginEditor(idx)->getFileName();
   QFileInfo fileInfo(pluginFile);
   QString projectFile = PYTHON_PLUGINS_PATH + "/" + fileInfo.fileName();
@@ -2051,26 +2045,24 @@ void PythonIDE::closePluginTabRequested(int idx) {
   }
 
   if (closeEditorTabRequested(_ui->pluginsTabWidget, idx)) {
-
     _editedPluginsClassName.remove(pluginFile);
     _editedPluginsType.remove(pluginFile);
     _editedPluginsName.remove(pluginFile);
 
     if (_project) {
-
       writePluginsFilesList(idx);
 
       if (_project->exists(projectFile)) {
         _project->removeFile(projectFile);
       }
-
-      _ui->pluginsTabWidget->closeTab(idx);
     }
-  }
 
-  if (_ui->pluginsTabWidget->count() == 1) {
-    _ui->registerPluginButton->setEnabled(false);
-    _ui->removePluginButton->setEnabled(false);
+    _ui->pluginsTabWidget->closeTab(idx);
+
+    if (_ui->pluginsTabWidget->count() == 1) {
+      _ui->registerPluginButton->setEnabled(false);
+      _ui->removePluginButton->setEnabled(false);
+    }
   }
 }
 
