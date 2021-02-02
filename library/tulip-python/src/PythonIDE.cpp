@@ -2001,7 +2001,7 @@ void PythonIDE::closeModuleTabRequested(int idx) {
       writeModulesFilesList(idx);
 
       if (_project->exists(projectFile)) {
-	_project->removeFile(projectFile);
+        _project->removeFile(projectFile);
       }
     }
 
@@ -2024,7 +2024,7 @@ void PythonIDE::closeScriptTabRequested(int idx) {
       writeScriptsFilesList(idx);
 
       if (_project->exists(projectFile)) {
-	_project->removeFile(projectFile);
+        _project->removeFile(projectFile);
       }
     }
     _ui->mainScriptsTabWidget->closeTab(idx);
