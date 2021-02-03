@@ -46,6 +46,8 @@ if [ "$TRAVIS_BUILD_THIRDPARTY_ONLY" != "ON" ]; then
       curl -O https://bootstrap.pypa.io/get-pip.py
       sudo $PYTHON_EXECUTABLE get-pip.py
       $PYTHON_EXECUTABLE -m pip install --user sphinx==1.7.9
+      PYTHON_MAJOR_MINOR=$($PYTHON_EXECUTABLE -c "print(__import__('sys').version.split(' ')[0])" | cut -d'.' -f '1 2')
+      SPHINX_EXECUTABLE=$HOME/Library/Python/$PYTHON_MAJOR_MINOR
     fi
   fi
 fi

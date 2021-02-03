@@ -447,9 +447,9 @@ jobs:
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm@9/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm@9/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
-        - ninja -j$(getconf _NPROCESSORS_ONLN) install || travis_terminate 1
+        #- ninja -j$(getconf _NPROCESSORS_ONLN) install || travis_terminate 1
         # run Tulip unit tests
-        - ninja runTests
+        #- ninja runTests
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip core build on Mac OS (Homebrew)
@@ -487,9 +487,9 @@ jobs:
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
-        - ninja -j$(getconf _NPROCESSORS_ONLN) install || travis_terminate 1
+        #- ninja -j$(getconf _NPROCESSORS_ONLN) install || travis_terminate 1
         # run Tulip unit tests
-        - ninja runTests
+        #- ninja runTests
 
   #==============================================================================================================================================================
     # Tulip complete build stage on Mac OS
@@ -508,6 +508,7 @@ jobs:
 
       script:
         # setup build env
+        - export TULIP_BUILD_DOC=ON
         - export TULIP_BUILD_TESTS=ON
         - export TULIP_USE_CCACHE=ON
         # launch macports build
@@ -586,9 +587,9 @@ jobs:
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm@9/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm@9/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DCMAKE_PREFIX_PATH=/usr/local/opt/qt -DSPHINX_EXECUTABLE=$HOME/Library/Python/2.7/bin/sphinx-build -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
-        - ninja -j$(getconf _NPROCESSORS_ONLN) install || travis_terminate 1
+        #- ninja -j$(getconf _NPROCESSORS_ONLN) install || travis_terminate 1
         # run Tulip unit tests
-        - ninja runTests
+        #- ninja runTests
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip complete build on Mac OS (Homebrew)
@@ -640,6 +641,6 @@ jobs:
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DCMAKE_PREFIX_PATH=/usr/local/opt/qt -DSPHINX_EXECUTABLE=$HOME/Library/Python/2.7/bin/sphinx-build -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
-        - ninja -j$(getconf _NPROCESSORS_ONLN) install || travis_terminate 1
+        #- ninja -j$(getconf _NPROCESSORS_ONLN) install || travis_terminate 1
         # run Tulip unit tests
-        - ninja runTests
+        #- ninja runTests
