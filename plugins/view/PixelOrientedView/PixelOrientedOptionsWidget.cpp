@@ -32,7 +32,6 @@ using namespace tlp;
 PixelOrientedOptionsWidget::PixelOrientedOptionsWidget(QWidget *parent)
     : QWidget(parent), _ui(new Ui::PixelOrientedOptionsWidgetData), oldValuesInitialized(false) {
   _ui->setupUi(this);
-  _ui->backColorButton->setDialogParent(Perspective::instance()->mainWindow());
   _ui->backColorButton->setDialogTitle("Choose the background color");
   setBackgroundColor(Color(255, 255, 255));
 }

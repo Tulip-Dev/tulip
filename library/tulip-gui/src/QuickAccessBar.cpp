@@ -256,13 +256,6 @@ void QuickAccessBar::setGlMainView(GlMainView *v) {
 void QuickAccessBarImpl::reset() {
   _resetting = true;
 
-  _ui->backgroundColorButton->setDialogParent(_mainView->graphicsView()->window());
-  _ui->nodeColorButton->setDialogParent(_mainView->graphicsView()->window());
-  _ui->edgeColorButton->setDialogParent(_mainView->graphicsView()->window());
-  _ui->nodeBorderColorButton->setDialogParent(_mainView->graphicsView()->window());
-  _ui->edgeBorderColorButton->setDialogParent(_mainView->graphicsView()->window());
-  _ui->labelColorButton->setDialogParent(_mainView->graphicsView()->window());
-
   _ui->backgroundColorButton->setTulipColor(scene()->getBackgroundColor());
   _ui->colorInterpolationToggle->setChecked(renderingParameters()->isEdgeColorInterpolate());
   _ui->sizeInterpolationToggle->setChecked(renderingParameters()->isEdgeSizeInterpolate());

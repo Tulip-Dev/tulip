@@ -31,10 +31,6 @@ namespace tlp {
 ScatterPlot2DOptionsWidget::ScatterPlot2DOptionsWidget(QWidget *parent)
     : QWidget(parent), oldValuesInitialized(false), _ui(new Ui::ScatterPlot2DOptionsWidgetData) {
   _ui->setupUi(this);
-  _ui->backColorButton->setDialogParent(Perspective::instance()->mainWindow());
-  _ui->minusOneColorButton->setDialogParent(Perspective::instance()->mainWindow());
-  _ui->zeroColorButton->setDialogParent(Perspective::instance()->mainWindow());
-  _ui->oneColorButton->setDialogParent(Perspective::instance()->mainWindow());
   _ui->backColorButton->setDialogTitle("Choose the background color");
   _ui->minusOneColorButton->setDialogTitle("Choose the color for -1");
   _ui->zeroColorButton->setDialogTitle("Choose the color for 0");

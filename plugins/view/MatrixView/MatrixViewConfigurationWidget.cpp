@@ -44,9 +44,6 @@ MatrixViewConfigurationWidget::MatrixViewConfigurationWidget(QWidget *parent)
           SIGNAL(enableEdgeColorInterpolation(bool)));
   connect(_ui->orientedCBox, SIGNAL(clicked(bool)), this, SIGNAL(updateOriented(bool)));
   connect(_ui->ascendingOrderCBox, SIGNAL(toggled(bool)), this, SLOT(orderingDirectionChanged()));
-
-  if (Perspective::instance())
-    _ui->backgroundColorBtn->setDialogParent(Perspective::instance()->mainWindow());
 }
 
 MatrixViewConfigurationWidget::~MatrixViewConfigurationWidget() {

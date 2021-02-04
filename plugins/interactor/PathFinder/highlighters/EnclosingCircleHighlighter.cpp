@@ -43,7 +43,6 @@ EnclosingCircleConfigurationWidget::EnclosingCircleConfigurationWidget(Color &ci
           SIGNAL(inverseColorRadioChecked(bool)));
   connect(_ui->circleColorBtn, SIGNAL(clicked()), this, SIGNAL(colorButtonClicked()));
   connect(_ui->alphaSlider, SIGNAL(valueChanged(int)), this, SIGNAL(alphaChanged(int)));
-  _ui->circleColorBtn->setDialogParent(parent);
   _ui->circleColorBtn->setDialogTitle("Choose the enclosing circle color");
   _ui->circleColorBtn->setTulipColor(circleColor);
 }

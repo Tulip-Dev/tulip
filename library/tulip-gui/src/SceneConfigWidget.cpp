@@ -40,12 +40,6 @@ SceneConfigWidget::SceneConfigWidget(QWidget *parent)
   connect(_ui->dynamicFontSizeRB, SIGNAL(toggled(bool)), this, SLOT(dynamicFontRBToggled(bool)));
   _ui->selectionColorButton->setDialogTitle("Choose the color of selected nodes or edges");
   _ui->backgroundColorButton->setDialogTitle("Choose the background color");
-
-  if (Perspective::instance() != nullptr && Perspective::instance()->mainWindow() != nullptr) {
-    _ui->selectionColorButton->setDialogParent(Perspective::instance()->mainWindow());
-    _ui->backgroundColorButton->setDialogParent(Perspective::instance()->mainWindow());
-  }
-
   _ui->labelsDisabledLabel->installEventFilter(this);
   _ui->labelsNoOverlapLabel->installEventFilter(this);
   _ui->labelsShowAllLabel->installEventFilter(this);

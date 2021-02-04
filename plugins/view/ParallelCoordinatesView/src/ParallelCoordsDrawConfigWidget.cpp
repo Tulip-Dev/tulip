@@ -44,10 +44,6 @@ ParallelCoordsDrawConfigWidget::ParallelCoordsDrawConfigWidget(QWidget *parent)
           SLOT(minAxisPointSizeValueChanged(int)));
   connect(_ui->maxAxisPointSize, SIGNAL(valueChanged(int)), this,
           SLOT(maxAxisPointSizeValueChanged(int)));
-
-  if (Perspective::instance() != nullptr && Perspective::instance()->mainWindow() != nullptr) {
-    _ui->bgColorButton->setDialogParent(Perspective::instance()->mainWindow());
-  }
 }
 
 ParallelCoordsDrawConfigWidget::~ParallelCoordsDrawConfigWidget() {

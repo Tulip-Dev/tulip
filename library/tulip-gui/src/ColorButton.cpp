@@ -18,8 +18,8 @@
  */
 #include "tulip/ColorButton.h"
 
+#include <QApplication>
 #include <QColorDialog>
-#include <QMainWindow>
 #include <QStylePainter>
 
 #include <tulip/TlpTools.h>
@@ -29,7 +29,7 @@
 using namespace tlp;
 
 ChooseColorButton::ChooseColorButton(QWidget *parent)
-    : QPushButton(parent), _color(Qt::black), _dialogParent(parent) {
+    : QPushButton(parent), _color(Qt::black) {
   connect(this, SIGNAL(clicked()), this, SLOT(chooseColor()));
   setFocusPolicy(Qt::WheelFocus);
 }
@@ -40,10 +40,6 @@ QColor ChooseColorButton::color() const {
 
 QString ChooseColorButton::text() const {
   return _text;
-}
-
-void ChooseColorButton::setDialogParent(QWidget *w) {
-  _dialogParent = w;
 }
 
 void ChooseColorButton::setDialogTitle(const QString &title) {
@@ -71,7 +67,7 @@ void ChooseColorButton::setTulipColor(const tlp::Color &c) {
 
 void ChooseColorButton::chooseColor() {
   QColor c = QColorDialog::getColor(
-      _color, _dialogParent, _dialogTitle.isEmpty() ? QString("Choose a color") : _dialogTitle,
+      _color, QApplication::activeWindow(), _dialogTitle.isEmpty() ? QString("Choose a color") : _dialogTitle,
       // do not use native dialog to ensure alpha channel can be set
       // it may not be shown when using gnome
       QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);

@@ -33,9 +33,6 @@ ScatterPlotCorrelCoeffSelectorOptionsWidget::ScatterPlotCorrelCoeffSelectorOptio
     : QWidget(parent), _ui(new Ui::ScatterPlotCorrelCoeffSelectorOptionsWidgetData) {
   Interactor::setupConfigWidget(this);
   _ui->setupUi(this);
-  _ui->minusOneColorButton->setDialogParent(Perspective::instance()->mainWindow());
-  _ui->zeroColorButton->setDialogParent(Perspective::instance()->mainWindow());
-  _ui->oneColorButton->setDialogParent(Perspective::instance()->mainWindow());
   _ui->minusOneColorButton->setDialogTitle("Choose the color for -1");
   _ui->zeroColorButton->setDialogTitle("Choose the color for 0");
   _ui->oneColorButton->setDialogTitle("Choose the color for 1");
