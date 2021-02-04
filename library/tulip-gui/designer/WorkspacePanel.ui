@@ -84,24 +84,18 @@ border: 0px;
 color: white;
 }
 QComboBox:hover, QToolButton:hover, QPushButton:hover {
-border-image:none;
 background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
 stop: 0 #8F8F8F,
 stop: 0.4 #7C7C7C,
 stop: 0.401 #6F6F6F,
 stop: 1 #565656);
-border: 0px;
-color: white;
 }
 QToolButton:pressed, QPushButton:pressed {
-border-image:none;
 background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
 stop: 0 #777777,
 stop: 0.4 #646464,
 stop: 0.401 #575757,
 stop: 1 #3e3e3e);
-border: 0px;
-color: white;
 }
 QComboBox,QLabel {
 height:20px;
@@ -115,11 +109,6 @@ subcontrol-position: top right;
 border-left-style: none; 
 border-top-right-radius: 1px;
 border-bottom-right-radius: 1px;
-}
-QComboBox QAbstractItemView {
-background-color: white;
-color: black;
-border: 1px solid #C9C9C9;
 }</string>
         </property>
         <property name="header" stdset="0">
