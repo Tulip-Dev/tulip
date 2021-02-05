@@ -99,6 +99,8 @@
         <file>icons/eye-white.png</file>
         <file>icons/eye_disabled-white.png</file>
         <file>icons/eye_partially_disabled-white.png</file>
+        <file>ui/left_arrow-gray.png</file>
+        <file>ui/right_arrow-gray.png</file>
         <file>ui/left_arrow-white.png</file>
         <file>ui/right_arrow-white.png</file>
         <file>ui/six_screen.png</file>

@@ -31,6 +31,9 @@ stop: 0.4 #707070,
 stop: 0.401 #636363,
 stop: 1 #4a4a4a);
 color: white;
+}
+Line {
+background-color: #A9A9A9;
 }</string>
      </property>
      <property name="border" stdset="0">
@@ -122,30 +125,6 @@ border-bottom-right-radius: 1px;
           <number>0</number>
          </property>
          <item>
-          <widget class="Line" name="sep1">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>22</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>1</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">#sep1 {
-background-color: #A9A9A9;
-}</string>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QToolButton" name="currentInteractorButton">
            <property name="minimumSize">
             <size>
@@ -203,8 +182,9 @@ font: bold 10px;
             </size>
            </property>
            <property name="icon">
-            <iconset>
-             <normaloff>:/tulip/gui/ui/left_arrow-white.png</normaloff>:/tulip/gui/ui/left_arrow-white.png</iconset>
+            <iconset resource="../resources/TulipGUIResource.qrc">
+             <normaloff>:/tulip/gui/ui/left_arrow-white.png</normaloff>
+             <disabledoff>:/tulip/gui/ui/left_arrow-gray.png</disabledoff>:/tulip/gui/ui/left_arrow-white.png</iconset>
            </property>
           </widget>
          </item>
@@ -276,8 +256,9 @@ font: bold 10px;
             </size>
            </property>
            <property name="icon">
-            <iconset>
-             <normaloff>:/tulip/gui/ui/right_arrow-white.png</normaloff>:/tulip/gui/ui/right_arrow-white.png</iconset>
+            <iconset resource="../resources/TulipGUIResource.qrc">
+             <normaloff>:/tulip/gui/ui/right_arrow-white.png</normaloff>
+             <disabledoff>:/tulip/gui/ui/right_arrow-gray.png</disabledoff>:/tulip/gui/ui/right_arrow-white.png</iconset>
            </property>
           </widget>
          </item>
@@ -288,11 +269,6 @@ font: bold 10px;
              <width>1</width>
              <height>16777215</height>
             </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">#sep2 {
-background-color: #A9A9A9;
-}</string>
            </property>
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -344,7 +320,7 @@ becomes the current one in the workspace active panel.</string>
             <string/>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../resources/TulipGUIResource.qrc">
              <normaloff>:/tulip/gui/icons/16/unlink.png</normaloff>:/tulip/gui/icons/16/unlink.png</iconset>
            </property>
            <property name="iconSize">
@@ -366,11 +342,6 @@ becomes the current one in the workspace active panel.</string>
              <height>16777215</height>
             </size>
            </property>
-           <property name="styleSheet">
-            <string notr="true">#sep3 {
-background-color: #A9A9A9;
-}</string>
-           </property>
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
@@ -382,7 +353,7 @@ background-color: #A9A9A9;
             <string>Press here to begin dragging this view</string>
            </property>
            <property name="pixmap">
-            <pixmap>:/tulip/gui/ui/lightdragbutton.png</pixmap>
+            <pixmap resource="../resources/TulipGUIResource.qrc">:/tulip/gui/ui/lightdragbutton.png</pixmap>
            </property>
           </widget>
          </item>
@@ -395,7 +366,7 @@ background-color: #A9A9A9;
             <string/>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../resources/TulipGUIResource.qrc">
              <normaloff>:/tulip/gui/ui/lightclosebutton.png</normaloff>:/tulip/gui/ui/lightclosebutton.png</iconset>
            </property>
           </widget>
@@ -429,7 +400,9 @@ background-color: #A9A9A9;
    <header location="global">tulip/DragHandle.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../resources/TulipGUIResource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>currentInteractorButton</sender>

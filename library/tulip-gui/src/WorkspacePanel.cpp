@@ -459,8 +459,8 @@ void WorkspacePanel::refreshInteractorsToolbar() {
   bool interactorsUiShown = !compatibleInteractors.isEmpty();
   _ui->currentInteractorButton->setVisible(interactorsUiShown);
   _ui->interactorsFrame->setVisible(interactorsUiShown);
-  _ui->sep1->setVisible(interactorsUiShown);
   _ui->sep2->setVisible(interactorsUiShown);
+  _ui->sep4->setVisible(interactorsUiShown);
 
   if (interactorsUiShown) {
     QHBoxLayout *interactorsLayout = new QHBoxLayout;
@@ -499,11 +499,19 @@ void WorkspacePanel::actionChanged() {
 void WorkspacePanel::scrollInteractorsRight() {
   QScrollBar *scrollBar = _ui->scrollArea->horizontalScrollBar();
   scrollBar->setSliderPosition(scrollBar->sliderPosition() + scrollBar->singleStep());
+  if (scrollBar->sliderPosition() == scrollBar->maximum())
+    _ui->interactorsRight->setEnabled(false);
+  if (scrollBar->sliderPosition() > scrollBar->minimum())
+  _ui->interactorsLeft->setEnabled(true);
 }
 
 void WorkspacePanel::scrollInteractorsLeft() {
   QScrollBar *scrollBar = _ui->scrollArea->horizontalScrollBar();
   scrollBar->setSliderPosition(scrollBar->sliderPosition() - scrollBar->singleStep());
+  if (scrollBar->sliderPosition() < scrollBar->maximum())
+    _ui->interactorsRight->setEnabled(true);
+  if (scrollBar->sliderPosition() == scrollBar->minimum())
+  _ui->interactorsLeft->setEnabled(false);
 }
 
 void WorkspacePanel::resetInteractorsScrollButtonsVisibility() {
@@ -511,6 +519,10 @@ void WorkspacePanel::resetInteractorsScrollButtonsVisibility() {
   bool interactorScrollBtnVisible = scrollBar->minimum() != scrollBar->maximum();
   _ui->interactorsLeft->setVisible(interactorScrollBtnVisible);
   _ui->interactorsRight->setVisible(interactorScrollBtnVisible);
+  if (interactorScrollBtnVisible) {
+    _ui->interactorsRight->setEnabled(scrollBar->sliderPosition() != scrollBar->maximum());
+    _ui->interactorsLeft->setEnabled(scrollBar->sliderPosition() != scrollBar->minimum());
+  }
 }
 
 void WorkspacePanel::setGraphsModel(tlp::GraphHierarchiesModel *model) {
