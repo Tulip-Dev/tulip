@@ -63,7 +63,6 @@ static ExpandableGroupBox *createGroupBox(QString name, bool root = false) {
 
 void AlgorithmRunner::buildTreeUi(QWidget *w, PluginModel<tlp::Algorithm> *model,
                                   const QModelIndex &parent, bool root) {
-  bool darkBackground = _ui->contents->palette().color(backgroundRole()) != QColor(255, 255, 255);
   for (int i = 0; i < model->rowCount(parent); ++i) {
     QModelIndex index = model->index(i, 0, parent);
     QString name = model->data(index).toString();
@@ -73,7 +72,7 @@ void AlgorithmRunner::buildTreeUi(QWidget *w, PluginModel<tlp::Algorithm> *model
       w->layout()->addWidget(groupBox);
       buildTreeUi(groupBox->widget(), model, index);
     } else {
-      AlgorithmRunnerItem *item = new AlgorithmRunnerItem(name, darkBackground);
+      AlgorithmRunnerItem *item = new AlgorithmRunnerItem(name, _darkBackground);
       QObject::connect(this, SIGNAL(setStoreResultAsLocal(bool)), item,
                        SLOT(setStoreResultAsLocal(bool)));
       w->layout()->addWidget(item);
@@ -131,8 +130,7 @@ void AlgorithmRunner::insertItem(QWidget *w, const QString &name) {
     }
   }
 
-  bool darkBackground = _ui->contents->palette().color(backgroundRole()) != QColor(255, 255, 255);
-  AlgorithmRunnerItem *item = new AlgorithmRunnerItem(name, darkBackground);
+  AlgorithmRunnerItem *item = new AlgorithmRunnerItem(name, _darkBackground);
   QObject::connect(this, SIGNAL(setStoreResultAsLocal(bool)), item,
                    SLOT(setStoreResultAsLocal(bool)));
   QObject::connect(item, SIGNAL(favorized(bool)), this, SLOT(favorized(bool)));
@@ -183,8 +181,8 @@ void AlgorithmRunner::refreshTreeUi(QWidget *w) {
 AlgorithmRunner::AlgorithmRunner(QWidget *parent)
     : QWidget(parent), _ui(new Ui::AlgorithmRunner), _graph(nullptr) {
   _ui->setupUi(this);
-  bool darkBackground = _ui->contents->palette().color(backgroundRole()) != QColor(255, 255, 255);
-  if (darkBackground) {
+  _darkBackground = _ui->contents->palette().color(backgroundRole()) != QColor(255, 255, 255);
+  if (_darkBackground) {
     // set style sheets according to contents background color
     auto ass = _ui->algorithmList->styleSheet();
     ass.replace(QString("black"), QString("white"));
@@ -423,8 +421,7 @@ void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
   }
 
   _ui->favoritesBox->widget()->setMinimumHeight(0);
-  bool darkBackground = _ui->contents->palette().color(backgroundRole()) != QColor(255, 255, 255);
-  AlgorithmRunnerItem *item = new AlgorithmRunnerItem(algName, darkBackground);
+  AlgorithmRunnerItem *item = new AlgorithmRunnerItem(algName, _darkBackground);
   item->setGraph(_graph);
 
   if (!data.empty()) {

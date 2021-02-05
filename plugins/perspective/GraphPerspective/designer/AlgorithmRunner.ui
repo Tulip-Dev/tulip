@@ -52,10 +52,10 @@
      </property>
      <property name="styleSheet">
       <string notr="true">#searchBox {
-  border-left: 1px solid &quot;#C9C9C9&quot;;
+  border-left: 1px solid #C9C9C9;
   border-right: 0px;
   border-top: 0px;
-  border-bottom: 1px solid &quot;#C9C9C9&quot;;
+  border-bottom: 1px solid #C9C9C9;
 }</string>
      </property>
      <property name="placeholderText">
@@ -80,6 +80,7 @@ margin-top: 1.5ex;
 ExpandableGroupBox[ expanded = &quot;false&quot; ] {
 margin-top: 0ex;
 margin-left: 0ex;
+border-top: 0px;
 }
 ExpandableGroupBox::title {
 subcontrol-origin: margin;
@@ -93,13 +94,16 @@ ExpandableGroupBox::indicator:checked {
 image: url(:/tulip/gui/ui/down_arrow-black.png);
 }
 ExpandableGroupBox {
-border: 1px solid #E9E9E9;
+border-top: 1px solid #E9E9E9;
+border-left: 1px solid #E9E9E9;
+border-right: 0px;
+border-bottom: 0px;
 }
 ExpandableGroupBox[ root = &quot;true&quot; ] {
 font: bold;
 }
 ExpandableGroupBox[ root = &quot;false&quot; ] {
-border: 0px;
+border-left: 0px;
 }
 ExpandableGroupBox[root = &quot;true&quot; ][expanded = &quot;true&quot; ] {
 margin-left: 1ex;
