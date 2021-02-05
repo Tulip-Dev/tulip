@@ -502,7 +502,7 @@ void WorkspacePanel::scrollInteractorsRight() {
   if (scrollBar->sliderPosition() == scrollBar->maximum())
     _ui->interactorsRight->setEnabled(false);
   if (scrollBar->sliderPosition() > scrollBar->minimum())
-  _ui->interactorsLeft->setEnabled(true);
+    _ui->interactorsLeft->setEnabled(true);
 }
 
 void WorkspacePanel::scrollInteractorsLeft() {
@@ -511,7 +511,7 @@ void WorkspacePanel::scrollInteractorsLeft() {
   if (scrollBar->sliderPosition() < scrollBar->maximum())
     _ui->interactorsRight->setEnabled(true);
   if (scrollBar->sliderPosition() == scrollBar->minimum())
-  _ui->interactorsLeft->setEnabled(false);
+    _ui->interactorsLeft->setEnabled(false);
 }
 
 void WorkspacePanel::resetInteractorsScrollButtonsVisibility() {
