@@ -582,7 +582,7 @@ QHeaderView::up-arrow {
 image: url(:/tulip/gui/ui/up_arrow-%FG_COLOR%.png);
 }
 
-QListView, QTableView {
+QListView, QTableView, QTreeView {
 alternate-background-color: #A0A0A0;
 }
 
@@ -659,7 +659,7 @@ border-right: 1px solid rgba(117,117,117,255);
 border-left: 0px;
 background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1,
 stop:0 rgb(75,75,75),
-stop:1 rgb(60, 60, 60));
+stop:1 rgb(60,60,60));
 }
 
 #bottomFrame QPushButton, #bottomFrame QLabel, #bottomFrame QToolButton {
@@ -674,13 +674,13 @@ border-image: none;
 #bottomFrame QPushButton:hover, #bottomFrame QToolButton:hover {
 background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1,
 stop:0 rgb(85,85,85),
-stop:1 rgb(70, 70, 70));
+stop:1 rgb(70,70,70));
 }
 
-#bottomFrame QPushButton:pressed, #bottomFrame .QPushButton:checked {
+#bottomFrame QPushButton:pressed, #bottomFrame .QPushButton:checked, #bottomFrame QToolButton:pressed {
 background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1,
-stop:0 rgb(105,105,105),
-stop:1 rgb(90, 90, 90));
+stop:0 rgb(65,65,65),
+stop:1 rgb(50,50,50));
 }
 
 #bottomFrame OutputPanelButton{

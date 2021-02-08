@@ -53,35 +53,33 @@
 
 QToolButton {
 	border-image:none;
-	border-top: 1px solid rgba(0,0,0,0);
-	border-bottom: 1px solid rgba(0,0,0,0);
-	border-left: 0px solid rgba(0,0,0,0);
-	border-right: 0px solid rgba(0,0,0,0);
+	border-top: 1px solid transparent;
+	border-bottom: 1px solid transparent;
+	border-left: 0px solid transparent;
+	border-right: 0px solid transparent;
 	color: white;
 	font: bold 10px;
 	height:20px;
-    background-color: rgba(0,0,0,0);
+    background-color: transparent;
 }
 
 QToolButton:hover {
-	border-image:none;
 	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0,
     stop:0 rgba(93, 93, 93, 255),
     stop:1 rgba(150, 150, 150, 255));
 	border-top: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
-	stop: 0.0 rgba(0,0,0,0),
+	stop: 0.0 transparent,
 	stop: 0.4 rgba(170,170,170,255),
 	stop: 0.5 rgba(170,170,170,255),
-	stop: 1.0 rgba(0,0,0,0));
+	stop: 1.0 transparent);
 	border-bottom: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
-	stop: 0.0 rgba(0,0,0,0),
+	stop: 0.0 transparent,
 	stop: 0.4 rgba(170,170,170,255),
 	stop: 0.5 rgba(170,170,170,255),
-	stop: 1.0 rgba(0,0,0,0));
+	stop: 1.0 transparent);
 }
 
 QToolButton:checked, QToolButton:checked:pressed, QToolButton:pressed {
-	border-image:none;
 	color: black;
     background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
     stop:0 rgba(198, 198, 198, 255), 
@@ -89,17 +87,7 @@ QToolButton:checked, QToolButton:checked:pressed, QToolButton:pressed {
 	border-top: 1px solid rgba(70,70,70,255);
 	border-bottom: 1px solid rgba(70,70,70,255);
 }
-
-QPushButton::pressed {
-	border-image:none;
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(53, 53, 53, 255), stop:1 rgba(120, 120, 120, 255));
-	border-top: 1px solid rgba(70,70,70,255);
-	border-bottom: 1px solid rgba(70,70,70,255);
-}
-
-QToolButton:pressed {
-	border-image:none;
-}</string>
+</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
