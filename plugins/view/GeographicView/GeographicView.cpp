@@ -48,7 +48,7 @@ using namespace tlp;
 GeographicView::GeographicView(PluginContext *)
     : geoViewGraphicsView(nullptr), geoViewConfigWidget(nullptr),
       geolocalisationConfigWidget(nullptr), sceneConfigurationWidget(nullptr),
-      sceneLayersConfigurationWidget(nullptr), centerViewAction(nullptr),
+      sceneLayersConfigurationWidget(nullptr), centerOnNodeAction(nullptr),
       showConfPanelAction(nullptr), useSharedLayoutProperty(true), useSharedSizeProperty(true),
       useSharedShapeProperty(true), mapCenterLatitudeInit(0), mapCenterLongitudeInit(0),
       mapZoomInit(0), _viewActionsManager(nullptr) {
@@ -85,8 +85,9 @@ void GeographicView::setupUi() {
   sceneLayersConfigurationWidget = new SceneLayersConfigWidget();
   sceneLayersConfigurationWidget->setGlMainWidget(geoViewGraphicsView->getGlMainWidget());
 
-  centerViewAction = new QAction("Center view", this);
-  connect(centerViewAction, SIGNAL(triggered()), this, SLOT(centerView()));
+  centerOnNodeAction = new QAction("Center on node", this);
+  centerOnNodeAction->setToolTip("Center the view on the node under the menu top left corner");
+  connect(centerOnNodeAction, SIGNAL(triggered()), this, SLOT(centerOnNode()));
 
   activateTooltipAndUrlManager(geoViewGraphicsView->getGlMainWidget());
   _viewActionsManager = new ViewActionsManager(this, geoViewGraphicsView->getGlMainWidget(), true);
@@ -113,6 +114,28 @@ void GeographicView::viewTypeChanged(QString viewTypeName) {
 
 void GeographicView::fillContextMenu(QMenu *menu, const QPointF &pf) {
   _viewActionsManager->fillContextMenu(menu);
+  // Check if a node is under the mouse pointer
+  bool result;
+  SelectedEntity entity;
+  result = geoViewGraphicsView->getGlMainWidget()->pickNodesEdges(pf.x(), pf.y(), entity);
+
+  if (result && entity.getEntityType() == SelectedEntity::NODE_SELECTED) {
+    auto id = entity.getComplexEntityId();
+    _nodeUnderMouse = node(id);
+    QString sId = QString::number(id);
+    centerOnNodeAction->setText("Center view on node #" + sId);
+    // insert after center view
+    QAction *centerViewAction = nullptr;
+    for (auto *action : menu->actions()) {
+      if (centerViewAction) {
+	menu->insertAction(action, centerOnNodeAction);
+	break;
+      }
+      if (action->text() == "Center view")
+	centerViewAction = action;
+    }
+  }
+
   QAction *action = menu->addAction("Zoom +");
   action->setToolTip(QString("Increase zoom level"));
   connect(action, SIGNAL(triggered()), this, SLOT(zoomIn()));
@@ -290,6 +313,10 @@ void GeographicView::computeGeoLayout() {
 
 void GeographicView::centerView() {
   geoViewGraphicsView->centerView();
+}
+
+void GeographicView::centerOnNode() {
+  geoViewGraphicsView->centerMapOnNode(_nodeUnderMouse);
 }
 
 void GeographicView::zoomIn() {

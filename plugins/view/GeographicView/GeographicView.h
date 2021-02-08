@@ -162,6 +162,7 @@ public slots:
   }
 
   void centerView();
+  void centerOnNode();
 
   void viewTypeChanged(QString viewTypeName);
 
@@ -191,7 +192,7 @@ private:
   SceneConfigWidget *sceneConfigurationWidget;
   SceneLayersConfigWidget *sceneLayersConfigurationWidget;
 
-  QAction *centerViewAction;
+  QAction *centerOnNodeAction;
   QAction *showConfPanelAction;
 
   ViewType _viewType;
@@ -205,6 +206,7 @@ private:
   ViewActionsManager *_viewActionsManager;
 
   QMap<ViewType, QString> _viewTypeToName;
+  node _nodeUnderMouse;
 };
 } // namespace tlp
 
