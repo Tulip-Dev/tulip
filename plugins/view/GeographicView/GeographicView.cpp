@@ -128,11 +128,11 @@ void GeographicView::fillContextMenu(QMenu *menu, const QPointF &pf) {
     QAction *centerViewAction = nullptr;
     for (auto *action : menu->actions()) {
       if (centerViewAction) {
-	menu->insertAction(action, centerOnNodeAction);
-	break;
+        menu->insertAction(action, centerOnNodeAction);
+        break;
       }
       if (action->text() == "Center view")
-	centerViewAction = action;
+        centerViewAction = action;
     }
   }
 
