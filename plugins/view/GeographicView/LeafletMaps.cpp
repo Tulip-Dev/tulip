@@ -383,6 +383,7 @@ void LeafletMaps::setMapBounds(Coord nw, Coord se) {
   executeJavascript(code);
 }
 
+/* not used
 void LeafletMaps::panMap(int dx, int dy) {
   QString code = "map.panBy(L.point(%1, %2));";
   executeJavascript(code.arg(dx).arg(dy));
@@ -423,5 +424,6 @@ pair<double, double> LeafletMaps::getMapCurrentNorthEastLatLng() {
 
   return latLng;
 }
+*/
 
 } // namespace tlp

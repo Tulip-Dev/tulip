@@ -90,11 +90,13 @@ public:
 
   void setMapBounds(Coord nw, Coord se);
 
+  /* not used
   void panMap(int dx, int dy);
 
   std::pair<double, double> getMapCurrentSouthWestLatLng();
 
   std::pair<double, double> getMapCurrentNorthEastLatLng();
+  */
 
   int getWorldWidth();
 
