@@ -211,6 +211,7 @@ GlComposite *readCsvFile(QString fileName) {
   return composite;
 }
 
+/* not used
 void simplifyPolyFile(QString fileName, float definition) {
 
   map<string, vector<vector<Coord>>> clearPolygons;
@@ -350,6 +351,7 @@ void simplifyPolyFile(QString fileName, float definition) {
     }
   }
 }
+*/
 
 static double latitudeToMercator(double latitude) {
   double mercatorLatitude = latitude * M_PI / 360.;
@@ -1083,12 +1085,15 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
             }
 
             const pair<double, double> &latLng = geocodingResults[idx].latLng;
-            nodeLatLng[n] = addressesLatLngMap[addr] = latLng;
+            nodeLatLng[n] = latLng;
 
             if (createLatAndLngProps) {
               latProp->setNodeValue(n, latLng.first);
               lngProp->setNodeValue(n, latLng.second);
             }
+
+	    if (addressSelectionDialog->rememberAddressChoice())
+	      addressesLatLngMap[addr] = latLng;
           }
         }
       }
