@@ -1092,8 +1092,8 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
               lngProp->setNodeValue(n, latLng.second);
             }
 
-	    if (addressSelectionDialog->rememberAddressChoice())
-	      addressesLatLngMap[addr] = latLng;
+            if (addressSelectionDialog->rememberAddressChoice())
+              addressesLatLngMap[addr] = latLng;
           }
         }
       }
