@@ -65,13 +65,15 @@ public:
     return imageSize[1];
   }
 
+  /* not used
   void changeZoom(int i);
 
   void backupScreenFunctionsParameters();
+
+  void restoreScreenFunctionsParameters();
+  */
   void setScreenFunctionsParameters(double zoom, double translationX, double translationY,
                                     double fishEyeRadius);
-  void restoreScreenFunctionsParameters();
-
   unsigned int getCenterItem() const {
     return centerItem;
   }
@@ -79,9 +81,11 @@ public:
     this->centerItem = centerItem;
   }
 
+  /* not used
   void setLastMousePosition(const int x, const int y);
   void updateFishEyePosition(const int x, const int y, DimensionBase *data);
   void translateFishEye(const int x, const int y);
+  */
   Vec2i getFishEyeTranslationVector() const {
     return fishTranslation;
   }

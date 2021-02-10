@@ -76,6 +76,7 @@ double TulipGraphDimension::getNodeValue(const node n) const {
   return (d - minValue()) / delta;
 }
 
+/* not used
 std::string TulipGraphDimension::getItemLabelAtRank(const unsigned int rank) const {
   node n = nodeSorter->getNodeAtRankForProperty(rank, dimName);
   string label = graph->getProperty<StringProperty>("viewLabel")->getNodeValue(n);
@@ -86,6 +87,7 @@ std::string TulipGraphDimension::getItemLabel(const unsigned int itemId) const {
   string label = graph->getProperty<StringProperty>("viewLabel")->getNodeValue(node(itemId));
   return label;
 }
+*/
 
 double TulipGraphDimension::getItemValue(const unsigned int itemId) const {
   if (propertyType == "double") {

@@ -38,8 +38,10 @@ public:
 
   unsigned int numberOfItems() const override;
   unsigned int numberOfValues() const override;
+  /* not used
   std::string getItemLabelAtRank(const unsigned int rank) const override;
   std::string getItemLabel(const unsigned int itemId) const override;
+  */
   double getItemValue(const unsigned int itemId) const override;
   double getItemValueAtRank(const unsigned int rank) const override;
   unsigned int getItemIdAtRank(const unsigned int rank) override;

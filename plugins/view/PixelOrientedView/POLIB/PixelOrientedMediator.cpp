@@ -56,6 +56,7 @@ Vec2i PixelOrientedMediator::sceneToScreen(const pocore::Vec2i &p) {
   return result;
 }
 
+/* not used
 void PixelOrientedMediator::changeZoom(int i) {
   if (i < 50) {
     zoom = double(i) / 50.;
@@ -71,6 +72,7 @@ void PixelOrientedMediator::backupScreenFunctionsParameters() {
   trans2->getTranslation(translationXBak, translationYBak);
   fishEyeRadiusBak = trans1->getRadius();
 }
+*/
 
 void PixelOrientedMediator::setScreenFunctionsParameters(double zoom, double translationX,
                                                          double translationY,
@@ -80,6 +82,7 @@ void PixelOrientedMediator::setScreenFunctionsParameters(double zoom, double tra
   trans1->setRadius(fishEyeRadius);
 }
 
+/*
 void PixelOrientedMediator::restoreScreenFunctionsParameters() {
   trans2->setZoom(zoomBak);
   trans2->setTranslation(translationXBak, translationYBak);
@@ -126,6 +129,7 @@ void PixelOrientedMediator::translateFishEye(const int x, const int y) {
   trans1->setCenter(fishCenter[0] - ((totalFishMove[0] + lastMousePosition[0] - x)),
                     fishCenter[1] + ((totalFishMove[1] + lastMousePosition[1] - yScreen)));
 }
+*/
 
 unsigned int PixelOrientedMediator::getRankForPixelPos(Vec2i pos) {
   Vec2f fPos = screenToScene(pos);
