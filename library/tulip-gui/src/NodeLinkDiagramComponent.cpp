@@ -477,8 +477,11 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
                                                   SLOT(removeOutEdgesFromSelection()));
       action->setToolTip(QString("Remove the output edges of node #") + sId +
                          " from the current selection");
-      action = removeFromSelectionMenu->addAction("node and its neighbourhood", this, SLOT(removeNodeAndAllNeighbourNodesAndEdgesFromSelection()));
-      action->setToolTip(QString("Remove the node and the adjacent nodes of node #") + sId + " from the current selection");
+      action = removeFromSelectionMenu->addAction(
+          "node and its neighbourhood", this,
+          SLOT(removeNodeAndAllNeighbourNodesAndEdgesFromSelection()));
+      action->setToolTip(QString("Remove the node and the adjacent nodes of node #") + sId +
+                         " from the current selection");
     } else {
       action = removeFromSelectionMenu->addAction("edge", this, SLOT(removeItemFromSelection()));
       action->setToolTip(QString("Remove the edge #") + sId + " from the current selection");
