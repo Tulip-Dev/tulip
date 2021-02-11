@@ -67,8 +67,8 @@ struct entityWithDistanceCompare {
     if (e1.distance < e2.distance)
       return false;
 
-    BoundingBox &bb1 = e1.entity->boundingBox;
-    BoundingBox &bb2 = e2.entity->boundingBox;
+    const BoundingBox &bb1 = e1.entity->boundingBox;
+    const BoundingBox &bb2 = e2.entity->boundingBox;
 
     if (bb1[1][0] - bb1[0][0] > bb2[1][0] - bb2[0][0])
       return false;

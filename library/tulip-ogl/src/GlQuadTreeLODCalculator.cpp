@@ -36,7 +36,7 @@ using namespace std;
 
 namespace tlp {
 
-BoundingBox computeNewBoundingBox(const BoundingBox &box, const Coord &centerScene, double aX,
+/*BoundingBox computeNewBoundingBox(const BoundingBox &box, const Coord &centerScene, double aX,
                                   double aY) {
   // compute a new bounding box : this bounding box is the rotation of the old bounding box
   Coord &&size = (box[1] - box[0]) / 2.f;
@@ -47,7 +47,7 @@ BoundingBox computeNewBoundingBox(const BoundingBox &box, const Coord &centerSce
   center[1] = centerScene[1] + (cos(aX) * (center[1] - centerScene[1]));
 
   return BoundingBox(center - size, center + size);
-}
+  }*/
 
 GlQuadTreeLODCalculator::GlQuadTreeLODCalculator()
     : haveToCompute(true), haveToInitObservers(true),

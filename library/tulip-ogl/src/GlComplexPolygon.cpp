@@ -382,12 +382,12 @@ void GlComplexPolygon::runTesselation() {
     // iterate over polygons computed by tessellation
     for (int i = 0; i < nelems; ++i) {
       std::vector<tlp::Coord> verticesTmp;
-      const int *p = &elems[i * nvp];
+      const int *poly = &elems[i * nvp];
 
-      for (int j = 0; j < nvp && p[j] != TESS_UNDEF; ++j) {
-        int idxx = p[j] * 3;
-        int idxy = p[j] * 3 + 1;
-        int idxz = p[j] * 3 + 2;
+      for (int j = 0; j < nvp && poly[j] != TESS_UNDEF; ++j) {
+        int idxx = poly[j] * 3;
+        int idxy = poly[j] * 3 + 1;
+        int idxz = poly[j] * 3 + 2;
         Coord p(verts[idxx], verts[idxy], verts[idxz]);
         verticesTmp.emplace_back(p);
 

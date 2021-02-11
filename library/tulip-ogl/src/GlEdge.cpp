@@ -179,7 +179,6 @@ void GlEdge::draw(float lod, const GlGraphInputData *data, Camera *camera) {
 
   if (data->getGlVertexArrayManager()->renderingIsBegin()) {
     if (lodSize > -5 && lodSize < 5) {
-      vertexArrayRendering = true;
       data->getGlVertexArrayManager()->activateLineEdgeDisplay(this, selected);
       return;
     } else if (!data->parameters->isEdge3D() && edgeTexture.empty()) {
@@ -423,12 +422,10 @@ void GlEdge::drawLabel(GlLabel &label, OcclusionTest *test, const GlGraphInputDa
 
   int fontSize = data->getElementFontSize()->getEdgeValue(e);
 
-  if (select)
+  if (select) {
     fontSize += 2;
-
-  if (select)
     label.setStencil(data->parameters->getSelectedEdgesStencil());
-  else
+  } else
     label.setStencil(data->parameters->getEdgesLabelStencil());
 
   label.setFontNameSizeAndColor(data->getElementFont()->getEdgeValue(e), fontSize, fontColor);

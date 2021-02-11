@@ -172,10 +172,8 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
               result = selection->getNodeValue(node(selectedEntity.getComplexEntityId()));
 
               if (revertSelection || boolVal != result) {
-                if (needPush) {
+                if (needPush)
                   graph->push();
-                  needPush = false;
-                }
 
                 selection->setNodeValue(node(selectedEntity.getComplexEntityId()), !result);
               }
@@ -189,10 +187,8 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
               result = selection->getEdgeValue(edge(selectedEntity.getComplexEntityId()));
 
               if (revertSelection || boolVal != result) {
-                if (needPush) {
+                if (needPush)
                   graph->push();
-                  needPush = false;
-                }
 
                 selection->setEdgeValue(edge(selectedEntity.getComplexEntityId()), !result);
               }

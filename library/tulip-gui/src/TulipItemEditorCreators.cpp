@@ -514,21 +514,14 @@ bool TulipFileDescriptorEditorCreator::paint(QPainter *painter, const QStyleOpti
   QString imageFilePath = fileInfo.absoluteFilePath();
 
   QIcon icon;
-  QString text;
-
   const QIcon &imageIcon = imageIconPool.getIconForImageFile(imageFilePath);
 
   if (!imageIcon.isNull()) {
     icon = imageIcon;
-    text = fileInfo.fileName();
   } else if (fileInfo.isFile()) {
     icon = QApplication::style()->standardIcon(QStyle::SP_FileIcon);
-    text = fileInfo.fileName();
   } else if (fileInfo.isDir()) {
     icon = QApplication::style()->standardIcon(QStyle::SP_DirIcon);
-    QDir d1 = fileInfo.dir();
-    d1.cdUp();
-    text = fileInfo.absoluteFilePath().remove(0, d1.absolutePath().length() - 1);
   }
 
   int iconSize = rect.height() - 4;

@@ -61,7 +61,6 @@ void GlColorScale::updateDrawing() {
     colorScalePolyQuad->setOutlineWidth(2);
   }
 
-  map<float, Color> colorMap = colorScale->getColorMap();
   Coord currentMin, currentMax;
 
   for (const auto &colorMapIt : colorScale->getColorMap()) {

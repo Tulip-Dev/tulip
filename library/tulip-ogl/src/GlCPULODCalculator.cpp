@@ -115,9 +115,8 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, const Co
                                             const Vector<int, 4> &globalViewport,
                                             const Vector<int, 4> &currentViewport) {
 
-  unsigned int nb = 0;
   if ((renderingEntitiesFlag & RenderingSimpleEntities) != 0) {
-    nb = layerLODUnit->simpleEntitiesLODVector.size();
+    auto nb = layerLODUnit->simpleEntitiesLODVector.size();
     TLP_PARALLEL_MAP_INDICES(nb, [&](unsigned int i) {
       layerLODUnit->simpleEntitiesLODVector[i].lod =
           calculateAABBSize(layerLODUnit->simpleEntitiesLODVector[i].boundingBox, eye,
@@ -126,7 +125,7 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, const Co
   }
 
   if ((renderingEntitiesFlag & RenderingNodes) != 0) {
-    nb = layerLODUnit->nodesLODVector.size();
+    auto nb = layerLODUnit->nodesLODVector.size();
     TLP_PARALLEL_MAP_INDICES(nb, [&](unsigned int i) {
       layerLODUnit->nodesLODVector[i].lod =
           calculateAABBSize(layerLODUnit->nodesLODVector[i].boundingBox, eye, transformMatrix,
@@ -135,7 +134,7 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, const Co
   }
 
   if ((renderingEntitiesFlag & RenderingEdges) != 0) {
-    nb = layerLODUnit->edgesLODVector.size();
+    auto nb = layerLODUnit->edgesLODVector.size();
 
     if (computeEdgesLOD) {
       TLP_PARALLEL_MAP_INDICES(nb, [&](unsigned int i) {

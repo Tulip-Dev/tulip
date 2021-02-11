@@ -341,7 +341,8 @@ void buildCurvePoints(const vector<Coord> &vertices, const vector<float> &sizes,
   float inversion = 1;
 
   if (startN != vertices[0]) {
-    inversion = computeExtrusion(startN, vertices[0], vertices[1], sizes[0], inversion, result,
+    inversion = computeExtrusion(startN, vertices[0], vertices[1],
+				 sizes[0], inversion, result,
                                  false, twoPointsCurve);
   } else {
     inversion = computeExtrusion(vertices[0] - (vertices[1] - vertices[0]), vertices[0],
@@ -349,17 +350,19 @@ void buildCurvePoints(const vector<Coord> &vertices, const vector<float> &sizes,
   }
 
   for (unsigned int i = 1; i < sz - 1; ++i) {
-    inversion = computeExtrusion(vertices[i - 1], vertices[i], vertices[i + 1], sizes[i], inversion,
+    inversion = computeExtrusion(vertices[i - 1], vertices[i],
+				 vertices[i + 1], sizes[i], inversion,
                                  result, false, twoPointsCurve);
   }
 
   if (endN != vertices[sz - 1]) {
-    inversion = computeExtrusion(vertices[sz - 2], vertices[sz - 1], endN, sizes[sizes.size() - 1],
-                                 inversion, result, true, twoPointsCurve);
+    computeExtrusion(vertices[sz - 2], vertices[sz - 1],
+		     endN, sizes[sizes.size() - 1],
+		     inversion, result, true, twoPointsCurve);
   } else {
-    inversion = computeExtrusion(vertices[sz - 2], vertices[sz - 1],
-                                 vertices[sz - 1] + (vertices[sz - 1] - vertices[sz - 2]),
-                                 sizes[sizes.size() - 1], inversion, result, true, twoPointsCurve);
+    computeExtrusion(vertices[sz - 2], vertices[sz - 1],
+		     vertices[sz - 1] + (vertices[sz - 1] - vertices[sz - 2]),
+		     sizes[sizes.size() - 1], inversion, result, true, twoPointsCurve);
   }
 }
 //==============================================

@@ -65,7 +65,6 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
 
   if (e->type() == QEvent::Gesture) {
     QGestureEvent *gesture = static_cast<QGestureEvent *>(e);
-    QPointF center;
     // swipe events and pan events are never fired, known Qt bug
     /*if(gesture->gesture(Qt::SwipeGesture)) {
       QSwipeGesture* swipe = (QSwipeGesture*)gesture->gesture(Qt::SwipeGesture);
@@ -126,7 +125,6 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
           isGesturing = false;
         }
 
-        center = pan->delta();
         g->getScene()->translateCamera(g->screenToViewport(pan->delta().x()),
                                        -g->screenToViewport(pan->delta().y()), 0);
       }
