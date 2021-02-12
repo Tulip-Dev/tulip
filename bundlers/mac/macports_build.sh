@@ -40,7 +40,11 @@ if [ "$TRAVIS_BUILD_THIRDPARTY_ONLY" != "ON" ]; then
     if [ "$Qt5_DIR" != "" ]; then
       CMAKE_PREFIX_PATH_DEFINE="-DCMAKE_PREFIX_PATH=$Qt5_DIR"
     else
-      sudo port -N install qt5-qtbase qt5-qttools qt5-qtwebkit quazip
+      # set Qt5_VERSION if needed
+     if [ "$Qt5_VERSION" == "" ]; then
+       Qt5_VERSION=qt5
+     fi
+     sudo port -N install $Qt5_VERSION-qtbase $Qt5_VERSION-qttools $Qt5_VERSION-qtwebkit
     fi
     if [ "$TULIP_BUILD_DOC" == "ON" ]; then
       $PYTHON_EXECUTABLE -m pip install --user sphinx==1.7.9
