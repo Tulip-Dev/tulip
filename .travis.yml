@@ -284,7 +284,7 @@ jobs:
 
       script:
         # setup build env
-        - export CLANG_COMPILER_VERSION=11
+        - export CLANG_COMPILER_VERSION=10
         - export TRAVIS_BUILD_THIRDPARTY_ONLY=ON
         - export TULIP_USE_CCACHE=ON
         # launch macports build
@@ -403,7 +403,7 @@ jobs:
         - curl -LO https://www.python.org/ftp/python/3.9.1/python-3.9.1-macosx10.9.pkg
         - sudo installer -store -pkg python-3.9.*.pkg -target /
         # setup build env
-        - export CLANG_COMPILER_VERSION=11
+        - export CLANG_COMPILER_VERSION=10
         - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.9/bin/python3
         - export TULIP_BUILD_CORE_ONLY=ON
         - export TULIP_BUILD_TESTS=ON
@@ -512,7 +512,7 @@ jobs:
         - export TULIP_BUILD_TESTS=ON
         - export TULIP_USE_CCACHE=ON
         # launch macports build
-        - bash -xe ./bundlers/mac/macports_build.sh
+        - travis_wait bash -xe ./bundlers/mac/macports_build.sh
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip complete build on Mac OS (MacPorts)
@@ -533,12 +533,12 @@ jobs:
         - curl -LO https://www.python.org/ftp/python/3.9.1/python-3.9.1-macosx10.9.pkg
         - sudo installer -store -pkg python-3.9.*.pkg -target /
         # setup build env
-        - export CLANG_COMPILER_VERSION=11
+        - export CLANG_COMPILER_VERSION=10
         - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.9/bin/python3
         - export TULIP_BUILD_TESTS=ON
         - export TULIP_USE_CCACHE=ON
         # launch macports build
-        - bash -xe ./bundlers/mac/macports_build.sh
+        - travis_wait bash -xe ./bundlers/mac/macports_build.sh
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # legacy Tulip complete build on Mac OS (Homebrew)
