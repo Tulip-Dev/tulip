@@ -1182,10 +1182,11 @@ void GeographicViewGraphicsView::timerEvent(QTimerEvent *event) {
 #endif
 
 void GeographicViewGraphicsView::refreshMap() {
-  if (!leafletMaps->isVisible() || !leafletMaps->mapLoaded() || !glMainWidget->isCurrent()) {
+  if (!leafletMaps->isVisible() || !leafletMaps->mapLoaded()) {
     return;
   }
 
+  GlOffscreenRenderer::getInstance()->makeOpenGLContextCurrent();
   BoundingBox bb;
   Coord rightCoord = leafletMaps->getPixelPosOnScreenForLatLng(180, 180);
   Coord leftCoord = leafletMaps->getPixelPosOnScreenForLatLng(0, 0);
@@ -1267,10 +1268,6 @@ void GeographicViewGraphicsView::treatEvent(const Event &ev) {
 }
 
 void GeographicViewGraphicsView::switchViewType() {
-  bool makeCurrent = !glMainWidget->isCurrent();
-  if (makeCurrent)
-    glMainWidget->makeCurrent();
-
   GeographicView::ViewType viewType = _geoView->viewType();
 
   bool enableLeafletMap = false;
@@ -1498,9 +1495,6 @@ void GeographicViewGraphicsView::switchViewType() {
   Observable::unholdObservers();
 
   graph->popIfNoUpdates();
-
-  if (makeCurrent)
-    glMainWidget->doneCurrent();
 
   draw();
 }

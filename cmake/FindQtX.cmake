@@ -137,8 +137,10 @@ ENDIF(APPLE)
 
 # Check if the Qt5 installation is bundled with WebKit (deprecated since Qt 5.5)
 # and setup its use if it is the case.
+# Since WebKit is the default we may want to force WebEngine for testing purpose
+SET(TULIP_GEOVIEW_USE_WEBENGINE OFF CACHE BOOL "Use QWebEngine ? [ON|OFF]")
 SET(QT_WEBKIT_WIDGETS_CMAKE_DIR "${QT_CMAKE_DIR}/Qt5WebKitWidgets")
-IF(EXISTS ${QT_WEBKIT_WIDGETS_CMAKE_DIR})
+IF(NOT TULIP_GEOVIEW_USE_WEBENGINE AND EXISTS ${QT_WEBKIT_WIDGETS_CMAKE_DIR})
   FIND_PACKAGE(Qt5WebKit)
   FIND_PACKAGE(Qt5WebKitWidgets)
   IF(${Qt5WebKit_FOUND} AND ${Qt5WebKitWidgets_FOUND})
@@ -147,7 +149,7 @@ IF(EXISTS ${QT_WEBKIT_WIDGETS_CMAKE_DIR})
     SETUP_QT_LIBRARIES(WebKit QT_WEB_LIBRARIES)
     SETUP_QT_LIBRARIES(WebKitWidgets QT_WEB_LIBRARIES)
   ENDIF(${Qt5WebKit_FOUND} AND ${Qt5WebKitWidgets_FOUND})
-ENDIF(EXISTS ${QT_WEBKIT_WIDGETS_CMAKE_DIR})
+ENDIF(NOT TULIP_GEOVIEW_USE_WEBENGINE AND EXISTS ${QT_WEBKIT_WIDGETS_CMAKE_DIR})
 
 # If Qt5 is not bundled with WebKit then check if its installation
 # provides WebEngine (new web module since Qt 5.4) and setup its use.
