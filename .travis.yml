@@ -254,8 +254,8 @@ jobs:
       if: commit_message !~ /\[(appimage|linux|homebrew|windows)-only\]$/
     # legacy Tulip thirdparty build on Mac OS (MacPorts)
       os: osx
-      # use default osx image
-      #osx_image: xcode9.2
+      # use the oldest osx image acceptable for macports without build
+      osx_image: xcode10.2
       compiler: clang
       cache:
         ccache: true
@@ -374,8 +374,8 @@ jobs:
       if: commit_message !~ /\[(appimage|linux|homebrew|windows)-only\]$/
     # legacy Tulip core build on Mac OS (MacPorts)
       os: osx
-      # use default osx image
-      #osx_image: xcode9.2
+      # use the oldest osx image acceptable for macports without build
+      osx_image: xcode10.2
       compiler: clang
       cache:
         ccache: true
@@ -387,9 +387,9 @@ jobs:
       script:
         # setup build env
         - export TULIP_BUILD_CORE_ONLY=ON
+        - export TULIP_BUILD_DOC=OFF
         - export TULIP_BUILD_TESTS=ON
         - export MACPORTS_CI_CCACHE=ON
-        - export TULIP_BUILD_TESTS=ON
         # launch macports build
         - bash -xe ./bundlers/mac/macports_build.sh
 
@@ -511,8 +511,8 @@ jobs:
       if: commit_message !~ /\[(appimage|linux|homebrew|windows)-only\]$/
     # legacy Tulip complete build on Mac OS (MacPorts)
       os: osx
-      # use default osx image
-      #osx_image: xcode9.2
+      # use the oldest osx image acceptable for macports without build
+      osx_image: xcode10.2
       compiler: clang
       cache:
         ccache: true
@@ -525,7 +525,6 @@ jobs:
         # setup build env
         - export TULIP_BUILD_DOC=ON
         - export TULIP_BUILD_TESTS=ON
-        - export TULIP_BUILD_GEOVIEW=OFF
         - export MACPORTS_CI_CCACHE=ON
         # launch macports build
         - travis_wait bash -xe ./bundlers/mac/macports_build.sh
