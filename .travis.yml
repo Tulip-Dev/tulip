@@ -258,13 +258,15 @@ jobs:
       #osx_image: xcode9.2
       compiler: clang
       cache: ccache
+        directories:
+        - $HOME/.macports-ci-ccache
       env:
         - ENV="MacOS default, AppleClang, MacPorts"
 
       script:
         # setup build env
         - export TRAVIS_BUILD_THIRDPARTY_ONLY=ON
-        - export TULIP_USE_CCACHE=ON
+        - export MACPORTS_CI_CCACHE=ON
         # launch macports build
         - bash -xe ./bundlers/mac/macports_build.sh
 
@@ -279,6 +281,8 @@ jobs:
       osx_image: xcode12.2
       compiler: clang
       cache: ccache
+        directories:
+        - $HOME/.macports-ci-ccache
       env:
         - ENV="MacOS most recent, LLVM Clang, MacPorts"
 
@@ -286,7 +290,7 @@ jobs:
         # setup build env
         - export CLANG_COMPILER_VERSION=10
         - export TRAVIS_BUILD_THIRDPARTY_ONLY=ON
-        - export TULIP_USE_CCACHE=ON
+        - export MACPORTS_CI_CCACHE=ON
         # launch macports build
         - bash -xe ./bundlers/mac/macports_build.sh
 
@@ -372,6 +376,8 @@ jobs:
       #osx_image: xcode9.2
       compiler: clang
       cache: ccache
+        directories:
+        - $HOME/.macports-ci-ccache
       env:
         - ENV="MacOS default, AppleClang, MacPorts"
 
@@ -379,7 +385,7 @@ jobs:
         # setup build env
         - export TULIP_BUILD_CORE_ONLY=ON
         - export TULIP_BUILD_TESTS=ON
-        - export TULIP_USE_CCACHE=ON
+        - export MACPORTS_CI_CCACHE=ON
         - export TULIP_BUILD_TESTS=ON
         # launch macports build
         - bash -xe ./bundlers/mac/macports_build.sh
@@ -395,6 +401,8 @@ jobs:
       osx_image: xcode12.2
       compiler: clang
       cache: ccache
+        directories:
+        - $HOME/.macports-ci-ccache
       env:
         - ENV="MacOS most recent, LLVM Clang, MacPorts"
 
@@ -407,7 +415,7 @@ jobs:
         - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.9/bin/python3
         - export TULIP_BUILD_CORE_ONLY=ON
         - export TULIP_BUILD_TESTS=ON
-        - export TULIP_USE_CCACHE=ON
+        - export MACPORTS_CI_CCACHE=ON
         # launch macports build
         - bash -xe ./bundlers/mac/macports_build.sh
 
@@ -503,6 +511,8 @@ jobs:
       #osx_image: xcode9.2
       compiler: clang
       cache: ccache
+        directories:
+        - $HOME/.macports-ci-ccache
       env:
         - ENV="MacOS default, AppleClang, MacPorts"
 
@@ -510,7 +520,7 @@ jobs:
         # setup build env
         - export TULIP_BUILD_DOC=ON
         - export TULIP_BUILD_TESTS=ON
-        - export TULIP_USE_CCACHE=ON
+        - export MACPORTS_CI_CCACHE=ON
         # launch macports build
         - travis_wait bash -xe ./bundlers/mac/macports_build.sh
 
@@ -525,6 +535,8 @@ jobs:
       osx_image: xcode12.2
       compiler: clang
       cache: ccache
+        directories:
+        - $HOME/.macports-ci-ccache
       env:
         - ENV="MacOS most recent, LLVM Clang, MacPorts"
 
@@ -536,7 +548,7 @@ jobs:
         - export CLANG_COMPILER_VERSION=10
         - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.9/bin/python3
         - export TULIP_BUILD_TESTS=ON
-        - export TULIP_USE_CCACHE=ON
+        - export MACPORTS_CI_CCACHE=ON
         # launch macports build
         - travis_wait bash -xe ./bundlers/mac/macports_build.sh
 

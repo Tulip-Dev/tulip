@@ -6,6 +6,11 @@ export COLUMNS=80
 # first install MacPorts in order to easily retrieve Tulip dependencies
 curl -LO https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
 bash ./macports-ci install
+# enable ci caching if needed
+if [ "$MACPORTS_CI_CCACHE" == "ON" ]; then
+  bash ./macports-ci ccache
+  TULIP_USE_CCACHE=ON
+fi
 
 # configure PATH with macports binaries installation dir
 export PATH=/opt/local/bin:$PATH
@@ -31,7 +36,11 @@ if [ "$TRAVIS_BUILD_THIRDPARTY_ONLY" != "ON" ]; then
     sudo port -N install pkgconfig cppunit
   fi
   if [ "$PYTHON_EXECUTABLE" == "" ]; then
-    PYTHON_EXECUTABLE=/usr/bin/python2.7
+    if [ -e /usr/bin/python3 ]; then
+      PYTHON_EXECUTABLE=/usr/bin/python3
+    else
+      PYTHON_EXECUTABLE=/usr/bin/python2.7
+    fi
   fi
 # install Tulip complete build dependencies
   if [ "$TULIP_BUILD_CORE_ONLY" != "ON" ]; then
@@ -52,6 +61,11 @@ if [ "$TRAVIS_BUILD_THIRDPARTY_ONLY" != "ON" ]; then
       TULIP_DOC_DEFINES="-DTULIP_BUILD_DOC=ON -DSPHINX_EXECUTABLE=$HOME/Library/Python/$PYTHON_MAJOR_MINOR/bin/sphinx-build"
     fi
   fi
+fi
+
+# save ci cache if needed
+if [ "$MACPORTS_CI_CCACHE" == "ON" ]; then
+  bash ./macports-ci ccache --save
 fi
 
 # create build directory
