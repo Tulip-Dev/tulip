@@ -525,6 +525,7 @@ jobs:
         # setup build env
         - export TULIP_BUILD_DOC=ON
         - export TULIP_BUILD_TESTS=ON
+        - export TULIP_GEOVIEW_USE_WEBENGINE=ON
         - export MACPORTS_CI_CCACHE=ON
         # launch macports build
         - travis_wait bash -xe ./bundlers/mac/macports_build.sh
@@ -554,6 +555,7 @@ jobs:
         - export CLANG_COMPILER_VERSION=10
         - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.9/bin/python3
         - export TULIP_BUILD_TESTS=ON
+        - export TULIP_GEOVIEW_USE_WEBENGINE=ON
         - export MACPORTS_CI_CCACHE=ON
         # launch macports build
         - travis_wait bash -xe ./bundlers/mac/macports_build.sh
