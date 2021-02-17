@@ -6,14 +6,14 @@ export COLUMNS=80
 # first install MacPorts in order to easily retrieve Tulip dependencies
 curl -LO https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
 bash ./macports-ci install
+# configure PATH with macports binaries installation dir
+export PATH=/opt/local/bin:$PATH
+
 # enable ci caching if needed
 if [ "$MACPORTS_CI_CCACHE" == "ON" ]; then
   bash ./macports-ci ccache
   TULIP_USE_CCACHE=ON
 fi
-
-# configure PATH with macports binaries installation dir
-export PATH=/opt/local/bin:$PATH
 
 # configure according clang compiler version (9.0, 10, ...)
 if [ "$CLANG_COMPILER_VERSION" != "" ]; then
