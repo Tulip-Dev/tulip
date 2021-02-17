@@ -53,15 +53,18 @@ if [ "$TRAVIS_BUILD_THIRDPARTY_ONLY" != "ON" ]; then
       CMAKE_PREFIX_PATH_DEFINE="-DCMAKE_PREFIX_PATH=$Qt5_DIR"
     else
       # set Qt5_VERSION if needed
-     if [ "$Qt5_VERSION" == "" ]; then
-       Qt5_VERSION=qt5
-     fi
-     if [ "$TULIP_GEOVIEW_USE_WEBENGINE" == "ON" ]; then
-       QT_WEB_PKG=qtwebengine
-     else
-       QT_WEB_PKG=qtwebkit
-     fi
-     sudo port -N install $Qt5_VERSION-qtbase $Qt5_VERSION-qttools $Qt5_VERSION-$QT_WEB_PKG
+      if [ "$Qt5_VERSION" == "" ]; then
+        Qt5_VERSION=qt5
+      fi
+      if [ "$TULIP_GEOVIEW_USE_WEBENGINE" == "ON" ]; then
+        QT_WEB_PKG=qtwebengine
+      else
+        QT_WEB_PKG=qtwebkit
+      fi
+      sudo port -N install $Qt5_VERSION-qtbase $Qt5_VERSION-qttools
+      if [ "$TULIP_BUILD_GEOVIEW" != "OFF" ]; then
+        sudo port -N install $Qt5_VERSION-$QT_WEB_PKG
+      fi
     fi
     if [ "$TULIP_BUILD_DOC" == "ON" ]; then
       $PYTHON_EXECUTABLE -m pip install --user sphinx==1.7.9
