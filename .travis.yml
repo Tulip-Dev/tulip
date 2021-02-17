@@ -257,7 +257,8 @@ jobs:
       # use default osx image
       #osx_image: xcode9.2
       compiler: clang
-      cache: ccache
+      cache:
+        ccache: true
         directories:
         - $HOME/.macports-ci-ccache
       env:
@@ -280,7 +281,8 @@ jobs:
       # use the most recent Xcode version
       osx_image: xcode12.2
       compiler: clang
-      cache: ccache
+      cache:
+        ccache: true
         directories:
         - $HOME/.macports-ci-ccache
       env:
@@ -375,7 +377,8 @@ jobs:
       # use default osx image
       #osx_image: xcode9.2
       compiler: clang
-      cache: ccache
+      cache:
+        ccache: true
         directories:
         - $HOME/.macports-ci-ccache
       env:
@@ -400,7 +403,8 @@ jobs:
       # use the most recent Xcode version
       osx_image: xcode12.2
       compiler: clang
-      cache: ccache
+      cache:
+        ccache: true
         directories:
         - $HOME/.macports-ci-ccache
       env:
@@ -510,7 +514,8 @@ jobs:
       # use default osx image
       #osx_image: xcode9.2
       compiler: clang
-      cache: ccache
+      cache:
+        ccache: true
         directories:
         - $HOME/.macports-ci-ccache
       env:
@@ -534,7 +539,8 @@ jobs:
       # use the most recent Xcode version
       osx_image: xcode12.2
       compiler: clang
-      cache: ccache
+      cache:
+        ccache: true
         directories:
         - $HOME/.macports-ci-ccache
       env:
