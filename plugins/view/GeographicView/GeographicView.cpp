@@ -54,12 +54,15 @@ GeographicView::GeographicView(PluginContext *)
       mapZoomInit(0), _viewActionsManager(nullptr) {
   _viewType = OpenStreetMap;
   _viewTypeToName[OpenStreetMap] = "Open Street Map (Leaflet)";
+  _viewTypeToName[EsriStreetMap] = "Esri Street Map (Leaflet)";
+  _viewTypeToName[EsriTopoMap] = "Esri Topographic Map (Leaflet)";
+  _viewTypeToName[EsriNatGeoMap] = "Esri National Geographic Map (Leaflet)";
   _viewTypeToName[EsriSatellite] = "Esri Satellite (Leaflet)";
-  _viewTypeToName[EsriTerrain] = "Esri Terrain (Leaflet)";
-  _viewTypeToName[EsriGrayCanvas] = "Esri Gray Canvas (Leaflet)";
+  _viewTypeToName[EsriLightGrayCanvas] = "Esri Light Gray Canvas (Leaflet)";
+  _viewTypeToName[EsriDarkGrayCanvas] = "Esri Dark Gray Canvas (Leaflet)";
+  _viewTypeToName[LeafletCustomTileLayer] = "Custom Tile Layer (Leaflet)";
   _viewTypeToName[Polygon] = "Polygon";
   _viewTypeToName[Globe] = "Globe";
-  _viewTypeToName[LeafletCustomTileLayer] = "Custom Tile Layer (Leaflet)";
 }
 
 GeographicView::~GeographicView() {

@@ -76,9 +76,12 @@ class GeographicView : public View {
 public:
   enum ViewType {
     OpenStreetMap = 0,
+    EsriStreetMap,
+    EsriTopoMap,
+    EsriNatGeoMap,
     EsriSatellite,
-    EsriTerrain,
-    EsriGrayCanvas,
+    EsriLightGrayCanvas,
+    EsriDarkGrayCanvas,
     LeafletCustomTileLayer,
     Polygon,
     Globe

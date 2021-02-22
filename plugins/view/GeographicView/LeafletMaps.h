@@ -21,18 +21,18 @@
 #define LEAFLET_MAPS_H
 
 #ifdef QT_HAS_WEBKIT
+
 #include <QWebView>
+#define QWEBVIEW QWebView
 #include <QWebFrame>
-#else
+#define QWEBFRAME QWebFrame
+
+#else // QT_HAS_WEBENGINE
+
 #include <QWebEngineView>
+#define QWEBVIEW QWebEngineView
+#define QWEBFRAME QWebEnginePage
 #include <QEventLoop>
-#endif
-#include <tulip/Coord.h>
-#include <tulip/Graph.h>
-
-namespace tlp {
-
-#ifdef QT_HAS_WEBENGINE
 
 class MapRefresher : public QObject {
 
@@ -46,96 +46,6 @@ signals:
 
   void refreshMapSignal();
 };
-
-#endif
-
-#ifdef QT_HAS_WEBKIT
-class LeafletMaps : public QWebView {
-#else
-class LeafletMaps : public QWebEngineView {
-#endif
-
-  Q_OBJECT
-
-public:
-  LeafletMaps(QWidget *parent = nullptr);
-
-  ~LeafletMaps();
-
-  bool pageLoaded();
-
-  bool mapLoaded();
-
-  void setMapCenter(double latitude, double longitude);
-
-  int getCurrentMapZoom();
-
-  void setCurrentZoom(int zoom);
-
-  std::pair<double, double> getCurrentMapCenter();
-
-  Coord getPixelPosOnScreenForLatLng(double lat, double lng);
-
-  Coord mercatorProjection(const Coord &swPixel, const Coord &nePixel, const double latitude,
-                           const double longitude);
-
-  std::pair<double, double> getLatLngForPixelPosOnScreen(int x, int y);
-
-  bool pageInit() const {
-    return init;
-  }
-
-  void setMapBounds(Graph *graph,
-                    const std::unordered_map<node, std::pair<double, double>> &nodesLatLngs);
-
-  void setMapBounds(Coord nw, Coord se);
-
-  /* not used
-  void panMap(int dx, int dy);
-
-  std::pair<double, double> getMapCurrentSouthWestLatLng();
-
-  std::pair<double, double> getMapCurrentNorthEastLatLng();
-  */
-
-  int getWorldWidth();
-
-  void switchToOpenStreetMap();
-
-  void switchToEsriSatellite();
-
-  void switchToEsriTerrain();
-
-  void switchToEsriGrayCanvas();
-
-  void switchToCustomTileLayer(const QString &customTileLayerUrl);
-
-signals:
-
-  void currentZoomChanged();
-  void refreshMap();
-
-private slots:
-
-  void triggerLoading();
-
-private:
-  QVariant executeJavascript(const QString &jsCode);
-
-  bool init;
-#ifdef QT_HAS_WEBKIT
-  QWebFrame *frame;
-#else
-  QWebEnginePage *frame;
-#endif
-  int x, y;
-
-#ifdef QT_HAS_WEBENGINE
-  MapRefresher *mapRefresher;
-#endif
-};
-
-#ifdef QT_HAS_WEBENGINE
 
 // Use this class as a hack to simulate synchronous javascript callbacks
 // as QtWebEngine is asynchronous while QtWebKit was not
@@ -175,6 +85,70 @@ private:
 };
 
 #endif
+
+#include <tulip/Coord.h>
+#include <tulip/Graph.h>
+
+namespace tlp {
+
+class LeafletMaps : public QWEBVIEW {
+
+  Q_OBJECT
+
+#if defined QT_HAS_WEBENGINE
+  MapRefresher *mapRefresher;
+  ~LeafletMaps() {
+    delete mapRefresher;
+  }
+#endif
+
+public:
+  LeafletMaps(QWidget *parent = nullptr);
+
+  bool pageLoaded();
+
+  bool mapLoaded();
+
+  void setMapCenter(double latitude, double longitude);
+
+  int getCurrentMapZoom();
+
+  void setCurrentZoom(int zoom);
+
+  std::pair<double, double> getCurrentMapCenter();
+
+  Coord getPixelPosOnScreenForLatLng(double lat, double lng);
+
+  std::pair<double, double> getLatLngForPixelPosOnScreen(int x, int y);
+
+  bool pageInit() const {
+    return init;
+  }
+
+  void setMapBounds(Graph *graph,
+                    const std::unordered_map<node, std::pair<double, double>> &nodesLatLngs);
+
+  void switchMap(const char* switchFuncName);
+
+  void switchToCustomTileLayer(const QString &customTileLayerUrl);
+
+signals:
+
+  void currentZoomChanged();
+  void refreshMap();
+
+private slots:
+
+  void triggerLoading();
+
+private:
+  QVariant executeJavascript(const QString &jsCode);
+
+  bool init;
+  QWEBFRAME *frame;
+  int x, y;
+};
+
 } // namespace tlp
 
 #endif // LEAFLET_MAPS_H
