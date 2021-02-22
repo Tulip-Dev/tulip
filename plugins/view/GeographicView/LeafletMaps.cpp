@@ -35,17 +35,17 @@ using namespace std;
 
 namespace tlp {
 
-const char* htmlMap =
-  R"(
+const char *htmlMap =
+    R"(
 <html>
 <head>
 )"
 #ifdef QT_HAS_WEBENGINE
-  R"(
+    R"(
 <script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
 )"
 #endif
-  R"(
+    R"(
 <link rel="stylesheet" href="qrc:///tulip/view/geographic/leaflet/leaflet.css"/>
 <script src="qrc:///tulip/view/geographic/leaflet/leaflet.js"></script>
 <script type="text/javascript">
@@ -183,7 +183,7 @@ function switchToCustomTileLayer(customTileLayerUrl) {
 }
 )"
 #ifdef QT_HAS_WEBENGINE
-  R"(
+    R"(
 document.addEventListener("DOMContentLoaded", function () {
   new QWebChannel(qt.webChannelTransport, function (channel) {
     leafletMapsQObject = channel.objects.leafletMapsQObject;
@@ -192,7 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 )"
 #endif
-  R"(
+    R"(
 </script>
 </head>
 <body style="margin:0px; padding:0px;" >
@@ -256,7 +256,7 @@ void LeafletMaps::triggerLoading() {
   init = true;
 }
 
-void LeafletMaps::switchMap(const char* switchFunction) {
+void LeafletMaps::switchMap(const char *switchFunction) {
   QString code = "%1()";
   executeJavascript(code.arg(switchFunction));
 }
