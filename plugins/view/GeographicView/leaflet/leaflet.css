@@ -1,5 +1,11 @@
 /* required styles */
 
+/* Tulip may hangs after a click on a html link (in attribution)
+   so disable all of them */
+a {
+ pointer-events: none;
+}
+
 .leaflet-pane,
 .leaflet-tile,
 .leaflet-marker-icon,
@@ -532,7 +538,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	}
 
 .leaflet-oldie .leaflet-popup-content-wrapper {
-	zoom: 1;
+	-ms-zoom: 1;
 	}
 .leaflet-oldie .leaflet-popup-tip {
 	width: 24px;
