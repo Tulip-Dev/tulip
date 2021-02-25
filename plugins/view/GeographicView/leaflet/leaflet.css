@@ -1,11 +1,5 @@
 /* required styles */
 
-/* Tulip may hangs after a click on a html link (in attribution)
-   so disable all of them */
-a {
- pointer-events: none;
-}
-
 .leaflet-pane,
 .leaflet-tile,
 .leaflet-marker-icon,

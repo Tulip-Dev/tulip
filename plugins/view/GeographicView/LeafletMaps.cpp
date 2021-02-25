@@ -46,6 +46,13 @@ const char *htmlMap =
 )"
 #endif
     R"(
+<style>
+/* Tulip may hangs after a click on a html link (in attribution)
+   so disable all of them */
+a {
+ pointer-events: none;
+}
+</style>
 <link rel="stylesheet" href="qrc:///tulip/view/geographic/leaflet/leaflet.css"/>
 <script src="qrc:///tulip/view/geographic/leaflet/leaflet.js"></script>
 <script type="text/javascript">
