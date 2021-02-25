@@ -289,18 +289,11 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
 
   // combo box to choose the map type
   viewTypeComboBox = new QComboBox;
-  viewTypeComboBox->addItems(
-      QStringList() << _geoView->getViewNameFromType(GeographicView::OpenStreetMap)
-                    << _geoView->getViewNameFromType(GeographicView::OpenStreetMap)
-                    << _geoView->getViewNameFromType(GeographicView::EsriStreetMap)
-                    << _geoView->getViewNameFromType(GeographicView::EsriTopoMap)
-                    << _geoView->getViewNameFromType(GeographicView::EsriNatGeoMap)
-                    << _geoView->getViewNameFromType(GeographicView::EsriSatellite)
-                    << _geoView->getViewNameFromType(GeographicView::EsriLightGrayCanvas)
-                    << _geoView->getViewNameFromType(GeographicView::EsriDarkGrayCanvas)
-                    << _geoView->getViewNameFromType(GeographicView::LeafletCustomTileLayer)
-                    << _geoView->getViewNameFromType(GeographicView::Polygon)
-                    << _geoView->getViewNameFromType(GeographicView::Globe));
+  QStringList mapItems;
+  mapItems.append(_geoView->getViewNameFromType(GeographicView::OpenStreetMap));
+  for (GeographicView::ViewType t = GeographicView::OpenStreetMap; t <= GeographicView::Globe; t = GeographicView::ViewType(t + 1))
+    mapItems.append(_geoView->getViewNameFromType(t));
+  viewTypeComboBox->addItems(mapItems);
   viewTypeComboBox->insertSeparator(1);
 
   QGraphicsProxyWidget *comboBoxProxy = scene()->addWidget(viewTypeComboBox);
@@ -1136,47 +1129,6 @@ void GeographicViewGraphicsView::switchViewType() {
   bool enablePlanisphere = false;
 
   switch (viewType) {
-  case GeographicView::OpenStreetMap: {
-    enableLeafletMap = true;
-    leafletMaps->switchMap("toOpenStreetMap");
-    break;
-  }
-
-  case GeographicView::EsriStreetMap: {
-    enableLeafletMap = true;
-    leafletMaps->switchMap("toEsriStreetMap");
-    break;
-  }
-
-  case GeographicView::EsriTopoMap: {
-    enableLeafletMap = true;
-    leafletMaps->switchMap("toEsriTopoMap");
-    break;
-  }
-
-  case GeographicView::EsriNatGeoMap: {
-    enableLeafletMap = true;
-    leafletMaps->switchMap("toEsriNatGeoMap");
-    break;
-  }
-
-  case GeographicView::EsriSatellite: {
-    enableLeafletMap = true;
-    leafletMaps->switchMap("toEsriSatellite");
-    break;
-  }
-
-  case GeographicView::EsriLightGrayCanvas: {
-    enableLeafletMap = true;
-    leafletMaps->switchMap("toEsriLightGrayCanvas");
-    break;
-  }
-
-  case GeographicView::EsriDarkGrayCanvas: {
-    enableLeafletMap = true;
-    leafletMaps->switchMap("toEsriDarkGrayCanvas");
-    break;
-  }
 
   case GeographicView::LeafletCustomTileLayer: {
     enableLeafletMap = true;
@@ -1197,7 +1149,8 @@ void GeographicViewGraphicsView::switchViewType() {
   }
 
   default:
-    break;
+    enableLeafletMap = true;
+    leafletMaps->switchToBaseLayer(_geoView->getViewNameFromType(viewType));
   }
 
   if (planisphereEntity && planisphereEntity->isVisible()) {

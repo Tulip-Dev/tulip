@@ -255,7 +255,7 @@
    <item>
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Leaflet Custom Tile Layer url</string>
+      <string>Leaflet Custom Tile Layer provider url</string>
      </property>
      <property name="groupTitle" stdset="0">
       <bool>true</bool>
@@ -265,7 +265,7 @@
    <item>
     <widget class="QLineEdit" name="customTileLayerUrl">
      <property name="toolTip">
-      <string>Enter a tile layer url in the form 'http://{s}.somedomain.com/blabla/{z}/{x}/{y}{r}'</string>
+      <string>The tile layer provider url can be in the form: http://{s}.tilesprovider.org/.../{z}/{x}/{y}.png</string>
      </property>
     </widget>
    </item>

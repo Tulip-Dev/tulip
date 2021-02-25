@@ -53,14 +53,19 @@ GeographicView::GeographicView(PluginContext *)
       useSharedShapeProperty(true), mapCenterLatitudeInit(0), mapCenterLongitudeInit(0),
       mapZoomInit(0), _viewActionsManager(nullptr) {
   _viewType = OpenStreetMap;
-  _viewTypeToName[OpenStreetMap] = "Open Street Map (Leaflet)";
-  _viewTypeToName[EsriStreetMap] = "Esri Street Map (Leaflet)";
-  _viewTypeToName[EsriTopoMap] = "Esri Topographic Map (Leaflet)";
-  _viewTypeToName[EsriNatGeoMap] = "Esri National Geographic Map (Leaflet)";
-  _viewTypeToName[EsriSatellite] = "Esri Satellite (Leaflet)";
-  _viewTypeToName[EsriLightGrayCanvas] = "Esri Light Gray Canvas (Leaflet)";
-  _viewTypeToName[EsriDarkGrayCanvas] = "Esri Dark Gray Canvas (Leaflet)";
-  _viewTypeToName[LeafletCustomTileLayer] = "Custom Tile Layer (Leaflet)";
+  _viewTypeToName[OpenStreetMap] = "OpenStreetMap";
+  _viewTypeToName[OpenTopoMap] = "OpenTopoMap";
+  _viewTypeToName[EsriStreetMap] = "Esri World Street Map";
+  _viewTypeToName[EsriTopoMap] = "Esri Topographic Map";
+  _viewTypeToName[EsriNatGeoMap] = "Esri National Geographic Map";
+  _viewTypeToName[EsriSatellite] = "Esri World Imagery";
+  _viewTypeToName[EsriLightGrayCanvas] = "Esri Light Gray Canvas";
+  _viewTypeToName[EsriDarkGrayCanvas] = "Esri Dark Gray Canvas";
+  _viewTypeToName[CartoDB] = "CartoDB Map";
+  _viewTypeToName[CartoDBLight] = "CartoDB Light Map";
+  _viewTypeToName[CartoDBDark] = "CartoDB Dark Map";
+  _viewTypeToName[WikimediaMap] = "Wikimedia Map";
+  _viewTypeToName[LeafletCustomTileLayer] = "Leaflet Custom Tile Layer";
   _viewTypeToName[Polygon] = "Polygon";
   _viewTypeToName[Globe] = "Globe";
 }
@@ -503,7 +508,7 @@ GeographicView::ViewType GeographicView::getViewTypeFromName(const QString &name
   return OpenStreetMap;
 }
 
-QString GeographicView::getViewNameFromType(GeographicView::ViewType viewType) const {
+const char *GeographicView::getViewNameFromType(GeographicView::ViewType viewType) const {
   if (_viewTypeToName.contains(viewType)) {
     return _viewTypeToName[viewType];
   }

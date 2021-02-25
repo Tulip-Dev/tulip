@@ -128,7 +128,7 @@ public:
   void setMapBounds(Graph *graph,
                     const std::unordered_map<node, std::pair<double, double>> &nodesLatLngs);
 
-  void switchMap(const char *switchFuncName);
+  void switchToBaseLayer(const char *layerName);
 
   void switchToCustomTileLayer(const QString &customTileLayerUrl);
 
