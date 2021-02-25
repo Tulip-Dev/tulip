@@ -291,7 +291,8 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   viewTypeComboBox = new QComboBox;
   QStringList mapItems;
   mapItems.append(_geoView->getViewNameFromType(GeographicView::OpenStreetMap));
-  for (GeographicView::ViewType t = GeographicView::OpenStreetMap; t <= GeographicView::Globe; t = GeographicView::ViewType(t + 1))
+  for (GeographicView::ViewType t = GeographicView::OpenStreetMap; t <= GeographicView::Globe;
+       t = GeographicView::ViewType(t + 1))
     mapItems.append(_geoView->getViewNameFromType(t));
   viewTypeComboBox->addItems(mapItems);
   viewTypeComboBox->insertSeparator(1);
