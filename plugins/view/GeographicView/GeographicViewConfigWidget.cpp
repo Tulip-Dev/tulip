@@ -67,8 +67,9 @@ void GeographicViewConfigWidget::openPolyHelp() {
 }
 
 void GeographicViewConfigWidget::openTileServerUrlHelp() {
-  QMessageBox::about(Perspective::instance()->mainWindow()->centralWidget(), "Url of the tile server",
-R"(
+  QMessageBox::about(Perspective::instance()->mainWindow()->centralWidget(),
+                     "Url of the tile server",
+                     R"(
 <p>You must give the url of a map tiles server.<br/>
 It can be:
 <ul>
@@ -83,7 +84,7 @@ It can be:
 
 void GeographicViewConfigWidget::openTilesAttributionHelp() {
   QMessageBox::about(Perspective::instance()->mainWindow()->centralWidget(), "Tiles attribution",
-R"(
+                     R"(
 <p>If you need to publish some images produced by the
  <b>Geographic View</b>, these images must display the tiles
  attribution, i.e. the name(s) of the various contributors

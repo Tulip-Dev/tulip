@@ -1134,8 +1134,7 @@ void GeographicViewGraphicsView::switchViewType() {
   case GeographicView::LeafletCustomTileLayer: {
     enableLeafletMap = true;
     QString url = _geoView->getConfigWidget()->getCustomTileLayerUrl();
-    QString attribution =
-      _geoView->getConfigWidget()->getCustomTilesAttribution();
+    QString attribution = _geoView->getConfigWidget()->getCustomTilesAttribution();
     // if attribution is empty or fill with white spaces
     // set it to url
     if (attribution.simplified().isEmpty())

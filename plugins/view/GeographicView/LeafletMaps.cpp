@@ -250,8 +250,7 @@ void LeafletMaps::switchToBaseLayer(const char *layerName) {
   executeJavascript(code.arg(layerName));
 }
 
-void LeafletMaps::switchToCustomTileLayer(const QString &url,
-					  const QString& attribution) {
+void LeafletMaps::switchToCustomTileLayer(const QString &url, const QString &attribution) {
   QString code = "switchToCustomTileLayer('%1', '%2')";
   executeJavascript(code.arg(url, attribution));
 }
