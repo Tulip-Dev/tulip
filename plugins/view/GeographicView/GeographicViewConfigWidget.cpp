@@ -66,6 +66,36 @@ void GeographicViewConfigWidget::openPolyHelp() {
                      ":\nhttp://downloads.cloudmade.com/");
 }
 
+void GeographicViewConfigWidget::openTileServerUrlHelp() {
+  QMessageBox::about(Perspective::instance()->mainWindow()->centralWidget(), "Url of the tile server",
+R"(
+<p>You must give the url of a map tiles server.<br/>
+It can be:
+<ul>
+<li>the url of a commercial tiles provider, needing a user registered key,
+ as for example, the url of a <b>MapTiler</b> server:<br/>
+<b>https://api.maptiler.com/maps/streets/{z}/{x}/{y}{r}.png?key=&lt;your own key&gt;</b>,</li>
+<li>the url of a free tiles server, such as the <b>Stamen Toner</b> one:<br/>
+<b>http://a.tile.stamen.com/toner/{z}/{x}/{y}.png</b>,</li>
+<li>or the url of your own map tiles server.</li></ul></p>
+)");
+}
+
+void GeographicViewConfigWidget::openTilesAttributionHelp() {
+  QMessageBox::about(Perspective::instance()->mainWindow()->centralWidget(), "Tiles attribution",
+R"(
+<p>If you need to publish some images produced by the
+ <b>Geographic View</b>, these images must display the tiles
+ attribution, i.e. the name(s) of the various contributors
+ of the tiles you are using, as indicated by the tiles
+ provider and as it is automatically done for the tiles servers
+ proposed by Tulip.<br/>
+For example, if you are using the tiles provided by one of the
+ <b>USGS</b> servers, you should then set the tiles attribution to<br/>
+<b>Tiles courtesy of the &lt;a href="https://usgs.gov/"&gt;U.S. Geological Survey&lt;/a&gt;</b>.</p>
+)");
+}
+
 bool GeographicViewConfigWidget::useSharedLayoutProperty() const {
   return _ui->layoutCheckBox->isChecked();
 }
@@ -228,4 +258,8 @@ DataSet GeographicViewConfigWidget::state() const {
 
 QString GeographicViewConfigWidget::getCustomTileLayerUrl() const {
   return _ui->customTileLayerUrl->text();
+}
+
+QString GeographicViewConfigWidget::getCustomTilesAttribution() const {
+  return _ui->customTileLayerAttribution->text();
 }

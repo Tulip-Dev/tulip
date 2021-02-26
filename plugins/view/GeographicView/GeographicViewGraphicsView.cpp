@@ -1133,8 +1133,14 @@ void GeographicViewGraphicsView::switchViewType() {
 
   case GeographicView::LeafletCustomTileLayer: {
     enableLeafletMap = true;
-    QString customTileLayerUrl = _geoView->getConfigWidget()->getCustomTileLayerUrl();
-    leafletMaps->switchToCustomTileLayer(customTileLayerUrl);
+    QString url = _geoView->getConfigWidget()->getCustomTileLayerUrl();
+    QString attribution =
+      _geoView->getConfigWidget()->getCustomTilesAttribution();
+    // if attribution is empty or fill with white spaces
+    // set it to url
+    if (attribution.simplified().isEmpty())
+      attribution = url;
+    leafletMaps->switchToCustomTileLayer(url, attribution);
     break;
   }
 

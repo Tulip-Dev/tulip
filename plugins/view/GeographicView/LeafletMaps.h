@@ -130,7 +130,7 @@ public:
 
   void switchToBaseLayer(const char *layerName);
 
-  void switchToCustomTileLayer(const QString &customTileLayerUrl);
+  void switchToCustomTileLayer(const QString &url, const QString &attrib);
 
 signals:
 

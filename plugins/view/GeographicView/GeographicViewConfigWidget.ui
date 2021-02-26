@@ -255,7 +255,7 @@
    <item>
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Leaflet Custom Tile Layer provider url</string>
+      <string>Leaflet Custom Tile Layer</string>
      </property>
      <property name="groupTitle" stdset="0">
       <bool>true</bool>
@@ -263,9 +263,72 @@
     </widget>
    </item>
    <item>
+    <layout class="QHBoxLayout" name="urlLayout">
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Tile server url</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="tileServerUrlHelpButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/tulip/view/geographic/help-contents.png</normaloff>:/tulip/view/geographic/help-contents.png</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <widget class="QLineEdit" name="customTileLayerUrl">
      <property name="toolTip">
-      <string>The tile layer provider url can be in the form: http://{s}.tilesprovider.org/.../{z}/{x}/{y}.png</string>
+      <string>The url can be in the form: http://{s}.tilesprovider.org/.../{z}/{x}/{y}.png</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="attributionLayout">
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Tiles attribution</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="tilesAttributionHelpButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/tulip/view/geographic/help-contents.png</normaloff>:/tulip/view/geographic/help-contents.png</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="customTileLayerAttribution">
+     <property name="toolTip">
+      <string>Refer to the map tiles provider to set the tiles attribution.</string>
      </property>
     </widget>
    </item>
@@ -415,6 +478,38 @@
    </hints>
   </connection>
   <connection>
+   <sender>tileServerUrlHelpButton</sender>
+   <signal>clicked()</signal>
+   <receiver>GeographicViewConfigWidgetData</receiver>
+   <slot>openTileServerUrlHelp()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>261</x>
+     <y>263</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>145</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tilesAttributionHelpButton</sender>
+   <signal>clicked()</signal>
+   <receiver>GeographicViewConfigWidgetData</receiver>
+   <slot>openTilesAttributionHelp()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>261</x>
+     <y>263</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>145</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>mapToPolygon</sender>
    <signal>clicked()</signal>
    <receiver>GeographicViewConfigWidgetData</receiver>
@@ -436,6 +531,8 @@
   <slot>openCsvFileBrowser()</slot>
   <slot>openCsvHelp()</slot>
   <slot>openPolyHelp()</slot>
+  <slot>openTileServerUrlHelp()</slot>
+  <slot>openTilesAttributionHelp()</slot>
   <slot>mapToPolygonSlot()</slot>
  </slots>
 </ui>

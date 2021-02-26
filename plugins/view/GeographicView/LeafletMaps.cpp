@@ -162,9 +162,9 @@ function switchToLayer(layer) {
   currentLayer = layer;
   refreshMap();
 }
-function switchToCustomTileLayer(customTileLayerUrl) {
-  var layer = L.tileLayer(customTileLayerUrl, {
-      attribution: customTileLayerUrl,
+function switchToCustomTileLayer(url, attribution) {
+  var layer = L.tileLayer(url, {
+      attribution: attribution,
       errorTileUrl: 'qrc:///tulip/view/geographic/leaflet/no-tile.png'
   });
   addEventHandlersToLayer(layer);
@@ -250,9 +250,10 @@ void LeafletMaps::switchToBaseLayer(const char *layerName) {
   executeJavascript(code.arg(layerName));
 }
 
-void LeafletMaps::switchToCustomTileLayer(const QString &customTileLayerUrl) {
-  QString code = "switchToCustomTileLayer('%1')";
-  executeJavascript(code.arg(customTileLayerUrl));
+void LeafletMaps::switchToCustomTileLayer(const QString &url,
+					  const QString& attribution) {
+  QString code = "switchToCustomTileLayer('%1', '%2')";
+  executeJavascript(code.arg(url, attribution));
 }
 
 void LeafletMaps::setMapCenter(double latitude, double longitude) {

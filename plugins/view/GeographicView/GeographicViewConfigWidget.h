@@ -53,6 +53,7 @@ public:
   bool polyOptionsChanged();
 
   QString getCustomTileLayerUrl() const;
+  QString getCustomTilesAttribution() const;
 
   void setState(const DataSet &dataSet);
 
@@ -67,6 +68,8 @@ public slots:
   void openPolyFileBrowser();
   void openCsvHelp();
   void openPolyHelp();
+  void openTileServerUrlHelp();
+  void openTilesAttributionHelp();
 
   void mapToPolygonSlot() {
     emit mapToPolygonSignal();
