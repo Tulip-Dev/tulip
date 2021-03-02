@@ -94,7 +94,7 @@ mv MacOS/Tulip bin/tulip
 mv ${DEST_DIR}/application/Tulip.app ${DEST_DIR}/application/${APP_NAME}-@TulipVersion@.app
 
 # create launcher
-cat > MacOs/Tulip <<EOF
+cat > MacOS/Tulip <<EOF
 #!/bin/sh
 
 wd="\${0%/*}"
