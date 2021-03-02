@@ -151,9 +151,7 @@ public slots:
 
   void refresh() override;
 
-  void graphChanged(Graph *) override {
-    setState(DataSet());
-  }
+  void graphChanged(tlp::Graph *) override;
 
   void graphDeleted(tlp::Graph *) override {}
 

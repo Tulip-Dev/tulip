@@ -29,6 +29,7 @@
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/GlOffscreenRenderer.h>
+#include <tulip/TulipViewSettings.h>
 
 #include <QMenu>
 #include <QThread>
@@ -99,6 +100,21 @@ void GeographicView::setupUi() {
 
   activateTooltipAndUrlManager(geoViewGraphicsView->getGlMainWidget());
   _viewActionsManager = new ViewActionsManager(this, geoViewGraphicsView->getGlMainWidget(), true);
+}
+
+void GeographicView::graphChanged(Graph *g) {
+  setState(DataSet());
+
+  if (g->isEmpty()) {
+    // we perform an acceptable automatic configuration
+    // in order to allow an interactive creation of the graph
+    // over the geographic map, using the 'Add nodes/edges'
+    // and 'Edit edge bends' view interactors
+    auto prop = g->getProperty<SizeProperty>("viewSize");
+    if (prop->getNodeDefaultValue() == TulipViewSettings::defaultSize(ElementType::NODE))
+      prop->setNodeDefaultValue({0.0005, 0.0005, 0.0005});
+    computeGeoLayout();
+  }
 }
 
 void GeographicView::viewTypeChanged(QString viewTypeName) {
