@@ -240,9 +240,11 @@ void GeographicViewConfigWidget::setState(const DataSet &dataSet) {
   if (dataSet.get("useSharedShape", useShared))
     _ui->shapeCheckBox->setChecked(useShared);
 
-  string customTileLayerUrl;
-  if (dataSet.get("customTileLayerUrl", customTileLayerUrl))
-    _ui->customTileLayerUrl->setText(tlpStringToQString(customTileLayerUrl));
+  string customInfos;
+  if (dataSet.get("customTileLayerUrl", customInfos))
+    _ui->customTileLayerUrl->setText(tlpStringToQString(customInfos));
+  if (dataSet.get("customTilesAttribution", customInfos))
+    _ui->customTileLayerAttribution->setText(tlpStringToQString(customInfos));
 }
 
 DataSet GeographicViewConfigWidget::state() const {
@@ -254,6 +256,7 @@ DataSet GeographicViewConfigWidget::state() const {
   data.set("useSharedSize", useSharedSizeProperty());
   data.set("useSharedShape", useSharedShapeProperty());
   data.set("customTileLayerUrl", QStringToTlpString(getCustomTileLayerUrl()));
+  data.set("customTilesAttribution", QStringToTlpString(getCustomTilesAttribution()));
   return data;
 }
 
