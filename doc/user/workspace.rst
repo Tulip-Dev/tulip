@@ -548,36 +548,81 @@ Geographic view
 Map modes
 ---------
 
-The geographic view provides six different map modes. You can switch between them by clicking on the button in the top left corner. Test them in order to customize the visualization background to your need.
+The geographic view provides different map modes. You can switch between them by clicking on the button in the top left corner. Test them in order to customize the visualization background to your needs.
 
-* Open Stree Map:
+* OpenStreeMap:
 
-.. image:: _images/i_geographic_main_roadmap.png
+.. image:: _images/geoview_openstreetmap.png
     :width: 400
 
-* Esri Satellite:
+* OpenTopoMap :
 
-.. image:: _images/i_geographic_main_satellite.png
+.. image:: _images/geoview_opentopomap.png
     :width: 400
 
-* Esri Terrain:
+* Esri World Street Map:
 
-.. image:: _images/i_geographic_main_terrain.png
+.. image:: _images/geoview_esri_world_street_map.png
     :width: 400
 
-* Esri Gray Canvas:
+* Esri Topographic Map:
 
-.. image:: _images/i_geographic_main_hybrid.png
+.. image:: _images/geoview_esri_topographic_map.png
     :width: 400
+
+* Esri National Geographic Map:
+
+.. image:: _images/geoview_esri_national_geographic_map.png
+    :width: 400
+
+* Esri World Imagery:
+
+.. image:: _images/geoview_esri_world_imagery.png
+    :width: 400
+
+* Esri Light Gray Canvas:
+
+.. image:: _images/geoview_esri_light_gray_canvas.png
+    :width: 400
+
+* Esri Dark Gray Canvas:
+
+.. image:: _images/geoview_esri_dark_gray_canvas.png
+    :width: 400
+
+* CartoDB Map:
+
+.. image:: _images/geoview_cartodb_map.png
+    :width: 400
+
+* CartoDB Light Map:
+
+.. image:: _images/geoview_cartodb_light_map.png
+    :width: 400
+
+* CartoDB Dark Map:
+
+.. image:: _images/geoview_cartodb_dark_map.png
+    :width: 400
+
+* Wikimedia Map:
+
+.. image:: _images/geoview_wikimedia_map.png
+    :width: 400
+
+* Leaflet Custom Tile Layer:
+
+.. image:: _images/geoview_leaflet_custom_tile_layer.png
+    :width: 600
 
 * Polygon:
 
-.. image:: _images/i_geographic_main_polygon.png
+.. image:: _images/geoview_polygon.png
     :width: 400
 
 * Globe:
 
-.. image:: _images/i_geographic_main_globe.png
+.. image:: _images/geoview_globe.png
     :width: 400
 
 
