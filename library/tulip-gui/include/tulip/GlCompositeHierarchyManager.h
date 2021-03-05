@@ -68,7 +68,7 @@ protected:
   void treatEvent(const Event &) override;
 
 private:
-  const tlp::Color getColor();
+  const tlp::Color &getColor();
   int _currentColor;
 
   /**

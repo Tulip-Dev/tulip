@@ -64,8 +64,8 @@ GlCompositeHierarchyManager::GlCompositeHierarchyManager(Graph *graph, GlLayer *
   }
 }
 
-const tlp::Color GlCompositeHierarchyManager::getColor() {
-  tlp::Color current = this->_fillColors.at(_currentColor++);
+const tlp::Color &GlCompositeHierarchyManager::getColor() {
+  const tlp::Color &current = _fillColors[_currentColor++];
   _currentColor = _currentColor % _fillColors.size();
   return current;
 }
@@ -87,7 +87,7 @@ void GlCompositeHierarchyManager::buildComposite(Graph *current, GlComposite *co
     composite->addGlEntity(newComposite, naming.str());
 
     for (Graph *sg : current->subGraphs()) {
-      this->buildComposite(sg, newComposite);
+      buildComposite(sg, newComposite);
     }
   }
 }
@@ -219,14 +219,14 @@ void GlCompositeHierarchyManager::treatEvents(const std::vector<Event> &) {
 
 void GlCompositeHierarchyManager::setGraph(tlp::Graph *graph) {
   // TODO here we could rebuild only if the graph is not in the composites map
-  this->_graph = graph;
+  _graph = graph;
   //    deleteComposite();
   if (_isVisible)
-    this->createComposite();
+    createComposite();
 }
 
 void GlCompositeHierarchyManager::createComposite() {
-  this->_composite->reset(true);
+  _composite->reset(true);
   _graphsComposites.clear();
   LayoutProperty *layout = _graph->getProperty<LayoutProperty>(_layout->getName());
   if (layout != _layout) {
@@ -247,15 +247,14 @@ void GlCompositeHierarchyManager::createComposite() {
     _rotation->addObserver(this);
   }
 
-  //    this->_composite->setVisible(_isVisible);
-  this->buildComposite(_graph, _composite);
+  buildComposite(_graph, _composite);
 }
 
 void GlCompositeHierarchyManager::setVisible(bool visible) {
   if (_isVisible == visible)
     return;
 
-  this->_isVisible = visible;
+  _isVisible = visible;
   _composite->setVisible(visible);
 
   if (_isVisible) {
