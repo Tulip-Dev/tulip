@@ -228,7 +228,28 @@ do
   fi
 done
 
+# check if QtWebEngineProcess exe is needed
+ls -l libQt5WebEngineCore.so.5 > /dev/null 2>&1
+if [ $? -eq 0 ]; then
+  mkdir ../libexec
+  # copy exe
+  cp $(${QMAKE} -query QT_INSTALL_LIBEXECS)/QtWebEngineProcess ../libexec
+  # copy needed resources
+  cp -r $(${QMAKE} -query QT_INSTALL_DATA)/resources ..
+  # copy needed translations
+  mkdir ../translations
+  cp -r $(${QMAKE} -query QT_INSTALL_TRANSLATIONS)/qtwebengine_locales ../translations
+  # copy needed missing libs
+  for LIB in $(ldd ../libexec/QtWebEngineProcess | grep "=> /" | awk '{print $3}')
+  do
+    if [ ! -e $(basename $LIB) ]; then
+      cp -v --preserve=mode $LIB .
+    fi
+  done;
+fi
+
 popd > /dev/null 2>&1
+
 
 pushd $BUNDLE_USR_DIR > /dev/null 2>&1
 
