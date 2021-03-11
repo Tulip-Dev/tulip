@@ -20,7 +20,6 @@
 
 #include <tulip/Graph.h>
 #include <tulip/GlLayer.h>
-#include <tulip/GlConvexHull.h>
 #include <tulip/GlConvexGraphHull.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/LayoutProperty.h>

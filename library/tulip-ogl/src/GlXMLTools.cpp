@@ -32,7 +32,6 @@
 #include <tulip/GlSphere.h>
 #include <tulip/GlCurve.h>
 #include <tulip/GlComplexPolygon.h>
-#include <tulip/GlConvexHull.h>
 #include <tulip/GlQuad.h>
 
 using namespace std;
@@ -151,8 +150,6 @@ GlSimpleEntity *GlXMLTools::createEntity(const string &name) {
     return new GlComplexPolygon();
   } else if (name == "GlComposite") {
     return new GlComposite();
-  } else if (name == "GlConvexHull") {
-    return new GlConvexHull;
   } else if (name == "GlCurve") {
     return new GlCurve();
   } else if (name == "GlGraphComposite") {

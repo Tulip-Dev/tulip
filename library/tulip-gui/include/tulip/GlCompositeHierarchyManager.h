@@ -37,8 +37,6 @@ class Color;
 class LayoutProperty;
 class DoubleProperty;
 class SizeProperty;
-struct ConvexHullItem;
-class GlConvexHull;
 class Graph;
 class GlLayer;
 
@@ -72,7 +70,7 @@ private:
   int _currentColor;
 
   /**
-   * Create the hierarchy of ConvexHullItem
+   * Create the hierarchy of GlConvexGraphHull
    */
   void buildComposite(tlp::Graph *current, tlp::GlComposite *composite);
 

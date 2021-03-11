@@ -19,7 +19,6 @@ SET(tulip-ogl_LIB_SRCS
   GlComplexPolygon.cpp
   GlComposite.cpp
   GlConvexGraphHull.cpp
-  GlConvexHull.cpp
   GlCPULODCalculator.cpp
   GlCubicBSplineInterpolation.cpp
   GlCurve.cpp
