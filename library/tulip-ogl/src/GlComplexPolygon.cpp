@@ -247,17 +247,17 @@ const int nbFloatPerVertex = 5;
 namespace tlp {
 
 GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords, Color fcolor, int polygonEdgesType,
-                                   const string &textureName)
+                                   const string &textureName, bool textured)
     : currentVector(-1), outlined(false), fillColor(fcolor), outlineSize(1),
-      textureName(textureName), textureZoom(1.) {
+      textureName(textureName), textured(textured), textureZoom(1.) {
   createPolygon(coords, polygonEdgesType);
   runTesselation();
 }
 //=====================================================
 GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords, Color fcolor, Color ocolor,
-                                   int polygonEdgesType, const string &textureName)
+                                   int polygonEdgesType, const string &textureName, bool textured)
     : currentVector(-1), outlined(true), fillColor(fcolor), outlineColor(ocolor), outlineSize(1),
-      textureName(textureName), textureZoom(1.) {
+      textureName(textureName), textured(textured), textureZoom(1.) {
   if (!coords.empty()) {
     createPolygon(coords, polygonEdgesType);
     runTesselation();
@@ -265,9 +265,9 @@ GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords, Color fcolor, Co
 }
 //=====================================================
 GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord>> &coords, Color fcolor,
-                                   int polygonEdgesType, const string &textureName)
+                                   int polygonEdgesType, const string &textureName, bool textured)
     : currentVector(-1), outlined(false), fillColor(fcolor), outlineSize(1),
-      textureName(textureName), textureZoom(1.) {
+      textureName(textureName), textured(textured), textureZoom(1.) {
   for (size_t i = 0; i < coords.size(); ++i) {
     createPolygon(coords[i], polygonEdgesType);
   }
@@ -276,9 +276,9 @@ GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord>> &coords, Color fc
 }
 //=====================================================
 GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord>> &coords, Color fcolor, Color ocolor,
-                                   int polygonEdgesType, const string &textureName)
+                                   int polygonEdgesType, const string &textureName, bool textured)
     : currentVector(-1), outlined(true), fillColor(fcolor), outlineColor(ocolor), outlineSize(1),
-      textureName(textureName), textureZoom(1.) {
+      textureName(textureName), textured(textured), textureZoom(1.) {
   for (unsigned int i = 0; i < coords.size(); ++i) {
     createPolygon(coords[i], polygonEdgesType);
   }
@@ -338,6 +338,11 @@ string GlComplexPolygon::getTextureName() {
 //=====================================================
 void GlComplexPolygon::setTextureName(const string &name) {
   textureName = name;
+}
+//=====================================================
+void GlComplexPolygon::setTextureActivation(bool flag) {
+  if (textured != flag)
+    textured = flag;
 }
 //=====================================================
 void GlComplexPolygon::addPoint(const Coord &point) {
@@ -450,7 +455,7 @@ void GlComplexPolygon::draw(float, Camera *) {
   glDisable(GL_CULL_FACE);
   glEnable(GL_COLOR_MATERIAL);
 
-  if (!textureName.empty()) {
+  if (textured && !textureName.empty()) {
     if (GlTextureManager::activateTexture(textureName))
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   }
@@ -468,7 +473,7 @@ void GlComplexPolygon::draw(float, Camera *) {
 
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-  if (!textureName.empty()) {
+  if (textured && !textureName.empty()) {
     GlTextureManager::deactivateTexture();
   }
 
