@@ -97,21 +97,24 @@ public:
    * want
    */
   GlComplexPolygon(const std::vector<Coord> &coords, Color fcolor, Color ocolor,
-                   int polygonEdgesType = 0, const std::string &textureName = "", bool textured = true);
+                   int polygonEdgesType = 0, const std::string &textureName = "",
+                   bool textured = true);
   /**
    * @brief Constructor with a vector of vector of coords (the first vector of coord is the polygon
    * and others vectors are holes in polygon), a fill color, a polygon edges type(0 -> straight
    * lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
    */
   GlComplexPolygon(const std::vector<std::vector<Coord>> &coords, Color fcolor,
-                   int polygonEdgesType = 0, const std::string &textureName = "", bool textured = true);
+                   int polygonEdgesType = 0, const std::string &textureName = "",
+                   bool textured = true);
   /**
    * @brief Constructor with a vector of vector of coords (the first vector of coord is the polygon
    * and others vectors are holes in polygon), a fill color, an outline color a polygon edges type(0
    * -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
    */
   GlComplexPolygon(const std::vector<std::vector<Coord>> &coords, Color fcolor, Color ocolor,
-                   int polygonEdgesType = 0, const std::string &textureName = "", bool textured = true);
+                   int polygonEdgesType = 0, const std::string &textureName = "",
+                   bool textured = true);
 
   ~GlComplexPolygon() override {}
 
@@ -199,7 +202,6 @@ public:
    *  @brief set if texture must be applied
    */
   void setTextureActivation(bool);
-
 
   /**
    * @brief Draw a thick (textured) border around the polygon.
