@@ -15,6 +15,11 @@ INSTALL(FILES fontb.ttf
               halfCylinderTexture.png
               cylinderTexture.png
               roundTexture.png
+	      backSlashStripesTexture.png
+	      circleTexture.png
+	      horizontalStripesTexture.png
+	      verticalStripesTexture.png
+	      slashStripesTexture.png
         DESTINATION ${TulipBitmapInstallDir}
         COMPONENT tulip_ogl)
 

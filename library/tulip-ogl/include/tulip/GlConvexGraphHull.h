@@ -23,17 +23,31 @@
 
 #include <tulip/Color.h>
 #include <tulip/tulipconf.h>
+#include <tulip/GlComposite.h>
 
 namespace tlp {
 
-class GlComposite;
-class GlSimpleEntity;
-class Camera;
 class Graph;
 class LayoutProperty;
 class SizeProperty;
 class DoubleProperty;
 class GlComplexPolygon;
+
+/**
+ * @brief This class is a specific container for GlConvexGraphHull
+ * it allows to indicates if the textures of the hulls have to be applied
+ * or not
+ */
+class TLP_GL_SCOPE GlConvexGraphHullsComposite : public GlComposite {
+  bool textured;
+public:
+  GlConvexGraphHullsComposite() : textured(false) {}
+
+  bool hullsTextureActivation() {
+    return textured;
+  }
+  void setHullsTextureActivation(bool);
+};
 
 /**
  * @brief This class draws a convex hull around a graph.
@@ -60,9 +74,10 @@ public:
    * @param size The property defining the graph's elements' sizes.
    * @param rotation The property defining the graph's elements' rotation.
    **/
-  GlConvexGraphHull(GlComposite *parent, const std::string &name, const tlp::Color &fcolor,
-                    Graph *graph, LayoutProperty *layout, SizeProperty *size,
-                    DoubleProperty *rotation);
+  GlConvexGraphHull(GlConvexGraphHullsComposite *parent, const std::string &name,
+		    const tlp::Color &fcolor, const std::string &texName,
+		    Graph *graph, LayoutProperty *layout, SizeProperty *size,
+		    DoubleProperty *rotation);
 
   ~GlConvexGraphHull();
 
@@ -74,11 +89,13 @@ public:
 
   void setVisible(bool visible);
   bool isVisible();
+  void setTextureZoom(float zoom);
 
 private:
-  GlComposite *_parent;
+  GlConvexGraphHullsComposite *_parent;
   std::string _name;
   Color _fcolor;
+  std::string _tex;
   GlComplexPolygon *_polygon;
   Graph *graph;
   LayoutProperty *_layout;

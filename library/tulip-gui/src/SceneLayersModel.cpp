@@ -26,6 +26,8 @@
 #include <tulip/GlScene.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlSceneObserver.h>
+#include <tulip/GlComplexPolygon.h>
+#include <tulip/GlConvexGraphHull.h>
 
 using namespace tlp;
 
@@ -168,7 +170,8 @@ int SceneLayersModel::rowCount(const QModelIndex &parent) const {
 }
 
 int SceneLayersModel::columnCount(const QModelIndex &) const {
-  return 3;
+  // Name, Visible, Texture, Stencil
+  return 4;
 }
 
 QVariant SceneLayersModel::data(const QModelIndex &index, int role) const {
@@ -229,7 +232,7 @@ QVariant SceneLayersModel::data(const QModelIndex &index, int role) const {
       if (index.column() == 1)
         return (visible ? Qt::Checked : Qt::Unchecked);
 
-      if (index.column() == 2)
+      if (index.column() == 3)
         return (stencil == NO_STENCIL ? Qt::Unchecked : Qt::Checked);
     }
 
@@ -268,7 +271,19 @@ QVariant SceneLayersModel::data(const QModelIndex &index, int role) const {
     if (index.column() == 1)
       return (entity->isVisible() ? Qt::Checked : Qt::Unchecked);
 
-    if (index.column() == 2)
+    if (index.column() == 2) {
+      GlComplexPolygon *pl = dynamic_cast<GlComplexPolygon *>(entity);
+      if (pl)
+	return (pl->textureActivation() ? Qt::Checked : Qt::Unchecked);
+      else {
+	GlConvexGraphHullsComposite *composite =
+	  dynamic_cast<GlConvexGraphHullsComposite *>(entity);
+	if (composite)
+	  return (composite->hullsTextureActivation() ? Qt::Checked : Qt::Unchecked);
+      }
+    }
+
+    if (index.column() == 3)
       return (entity->getStencil() == NO_STENCIL ? Qt::Unchecked : Qt::Checked);
   }
 
@@ -344,7 +359,18 @@ bool SceneLayersModel::setData(const QModelIndex &index, const QVariant &value, 
       layer->setVisible(val);
 
     entity->setVisible(val);
-  } else if (index.column() == 2)
+  } else if (index.column() == 2) {
+    GlComplexPolygon *pl = dynamic_cast<GlComplexPolygon *>(entity);
+    if (pl)
+      pl->setTextureActivation(val);
+    else {
+      GlConvexGraphHullsComposite *composite =
+	  dynamic_cast<GlConvexGraphHullsComposite *>(entity);
+      if (composite)
+	composite->setHullsTextureActivation(val);
+    }
+  }
+  else
     entity->setStencil(val ? FULL_STENCIL : 0xFFFF);
 
   emit drawNeeded(_scene);
@@ -354,12 +380,16 @@ bool SceneLayersModel::setData(const QModelIndex &index, const QVariant &value, 
 QVariant SceneLayersModel::headerData(int section, Qt::Orientation orientation, int role) const {
   if (orientation == Qt::Horizontal) {
     if (role == Qt::DisplayRole) {
-      if (section == 0)
+      switch (section) {
+      case 0:
         return "Name";
-      else if (section == 1)
+      case 1:
         return "Visible";
-      else
+      case 2:
+	return "Texture";
+      case 3:
         return "Stencil";
+      }
     }
 
     else if (role == Qt::TextAlignmentRole)

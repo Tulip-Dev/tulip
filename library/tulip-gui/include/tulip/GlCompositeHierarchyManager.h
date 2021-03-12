@@ -26,11 +26,9 @@
 
 #include <tulip/DataSet.h>
 #include <tulip/Observable.h>
-#include <tulip/GlComposite.h>
+#include <tulip/GlConvexGraphHull.h>
 
 namespace tlp {
-
-class GlConvexGraphHull;
 
 struct node;
 class Color;
@@ -68,19 +66,22 @@ protected:
 private:
   const tlp::Color &getColor();
   int _currentColor;
+  const std::string &getTexture();
+  int _currentTexture;
 
   /**
    * Create the hierarchy of GlConvexGraphHull
    */
-  void buildComposite(tlp::Graph *current, tlp::GlComposite *composite);
+  void buildComposite(tlp::Graph *current, tlp::GlConvexGraphHullsComposite *composite);
 
   Graph *_graph;
   GlLayer *_layer;
-  GlComposite *_composite;
+  GlConvexGraphHullsComposite *_composite;
   LayoutProperty *_layout;
   SizeProperty *_size;
   DoubleProperty *_rotation;
   std::vector<Color> _fillColors;
+  std::vector<std::string> _fillTextures;
   std::string _layerName;
   bool _isVisible;
   const std::string _subCompositesSuffix;
@@ -90,16 +91,7 @@ private:
   /**
    * This map contains the composite that contains the associated graph's hull.
    */
-  std::map<tlp::Graph *, std::pair<tlp::GlComposite *, GlConvexGraphHull *>> _graphsComposites;
-};
-
-class GlHierarchyMainComposite : public GlComposite {
-public:
-  GlHierarchyMainComposite(GlCompositeHierarchyManager *manager);
-  void setVisible(bool visible) override;
-
-private:
-  GlCompositeHierarchyManager *_manager;
+  std::map<tlp::Graph *, std::pair<tlp::GlConvexGraphHullsComposite *, GlConvexGraphHull *>> _graphsComposites;
 };
 } // namespace tlp
 
