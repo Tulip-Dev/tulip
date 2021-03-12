@@ -91,7 +91,8 @@ private:
   /**
    * This map contains the composite that contains the associated graph's hull.
    */
-  std::map<tlp::Graph *, std::pair<tlp::GlConvexGraphHullsComposite *, GlConvexGraphHull *>> _graphsComposites;
+  std::map<tlp::Graph *, std::pair<tlp::GlConvexGraphHullsComposite *, GlConvexGraphHull *>>
+      _graphsComposites;
 };
 } // namespace tlp
 

@@ -32,12 +32,12 @@ void GlConvexGraphHullsComposite::setHullsTextureActivation(bool flag) {
     for (auto entity : getGlEntities()) {
       GlComplexPolygon *pl = dynamic_cast<GlComplexPolygon *>(entity.second);
       if (pl)
-	pl->setTextureActivation(flag);
+        pl->setTextureActivation(flag);
       else {
-	GlConvexGraphHullsComposite *composite =
-	  dynamic_cast<GlConvexGraphHullsComposite *>(entity.second);
-	if (composite)
-	  composite->setHullsTextureActivation(flag);
+        GlConvexGraphHullsComposite *composite =
+            dynamic_cast<GlConvexGraphHullsComposite *>(entity.second);
+        if (composite)
+          composite->setHullsTextureActivation(flag);
       }
     }
   }
@@ -46,12 +46,11 @@ void GlConvexGraphHullsComposite::setHullsTextureActivation(bool flag) {
 int GlConvexGraphHull::bezierValue = 1;
 
 GlConvexGraphHull::GlConvexGraphHull(GlConvexGraphHullsComposite *parent, const std::string &name,
-                                     const tlp::Color &fcolor, const std::string &tex,
-				     Graph *graph, LayoutProperty *layout,
-                                     SizeProperty *size, DoubleProperty *rotation)
-  : _parent(parent), _name(name), _fcolor(fcolor), _tex(tex),
-    _polygon(nullptr), graph(graph),
-    _layout(layout), _size(size), _rotation(rotation) {
+                                     const tlp::Color &fcolor, const std::string &tex, Graph *graph,
+                                     LayoutProperty *layout, SizeProperty *size,
+                                     DoubleProperty *rotation)
+    : _parent(parent), _name(name), _fcolor(fcolor), _tex(tex), _polygon(nullptr), graph(graph),
+      _layout(layout), _size(size), _rotation(rotation) {
   assert(graph);
 
   updateHull();
@@ -98,7 +97,7 @@ void GlConvexGraphHull::setVisible(bool visible) {
 }
 
 void GlConvexGraphHull::setTextureZoom(float zoom) {
-   _polygon->setTextureZoom(zoom);
+  _polygon->setTextureZoom(zoom);
 }
 
 } // namespace tlp

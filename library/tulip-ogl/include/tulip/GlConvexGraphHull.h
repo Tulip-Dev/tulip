@@ -40,6 +40,7 @@ class GlComplexPolygon;
  */
 class TLP_GL_SCOPE GlConvexGraphHullsComposite : public GlComposite {
   bool textured;
+
 public:
   GlConvexGraphHullsComposite() : textured(false) {}
 
@@ -75,9 +76,8 @@ public:
    * @param rotation The property defining the graph's elements' rotation.
    **/
   GlConvexGraphHull(GlConvexGraphHullsComposite *parent, const std::string &name,
-		    const tlp::Color &fcolor, const std::string &texName,
-		    Graph *graph, LayoutProperty *layout, SizeProperty *size,
-		    DoubleProperty *rotation);
+                    const tlp::Color &fcolor, const std::string &texName, Graph *graph,
+                    LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation);
 
   ~GlConvexGraphHull();
 

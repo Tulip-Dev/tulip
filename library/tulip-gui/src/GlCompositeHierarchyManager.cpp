@@ -58,7 +58,7 @@ GlCompositeHierarchyManager::GlCompositeHierarchyManager(Graph *graph, GlLayer *
                                                          DoubleProperty *rotation, bool visible,
                                                          const std::string &namingProperty,
                                                          const std::string &subCompositeSuffix)
-: _currentColor(0), _currentTexture(0), _graph(graph), _layer(layer),
+    : _currentColor(0), _currentTexture(0), _graph(graph), _layer(layer),
       _composite(new GlHierarchyMainComposite(this)), _layout(layout), _size(size),
       _rotation(rotation), _layerName(layerName), _isVisible(visible),
       _subCompositesSuffix(subCompositeSuffix), _nameAttribute(namingProperty) {
@@ -100,7 +100,8 @@ const std::string &GlCompositeHierarchyManager::getTexture() {
   return current;
 }
 
-void GlCompositeHierarchyManager::buildComposite(Graph *current, GlConvexGraphHullsComposite* composite) {
+void GlCompositeHierarchyManager::buildComposite(Graph *current,
+                                                 GlConvexGraphHullsComposite *composite) {
   static bool loadTextures = true;
   if (loadTextures) {
     for (const string &texture : _fillTextures)
@@ -111,16 +112,16 @@ void GlCompositeHierarchyManager::buildComposite(Graph *current, GlConvexGraphHu
 
   stringstream naming;
   naming << current->getName() << " [#" << current->getId() << ']';
-  GlConvexGraphHull *hull = new GlConvexGraphHull(composite, naming.str(), getColor(), _fillTextures[_currentColor - 1], current,
-                                                  _layout, _size, _rotation);
+  GlConvexGraphHull *hull =
+      new GlConvexGraphHull(composite, naming.str(), getColor(), _fillTextures[_currentColor - 1],
+                            current, _layout, _size, _rotation);
   hull->setTextureZoom(0.02);
 
-  _graphsComposites.emplace(current,
-                            std::pair<GlConvexGraphHullsComposite *, GlConvexGraphHull *>(composite, hull));
+  _graphsComposites.emplace(
+      current, std::pair<GlConvexGraphHullsComposite *, GlConvexGraphHull *>(composite, hull));
 
   if (!current->subGraphs().empty()) {
-    GlConvexGraphHullsComposite *newComposite =
-      new GlConvexGraphHullsComposite();
+    GlConvexGraphHullsComposite *newComposite = new GlConvexGraphHullsComposite();
     naming << " - " << _subCompositesSuffix;
     composite->addGlEntity(newComposite, naming.str());
 

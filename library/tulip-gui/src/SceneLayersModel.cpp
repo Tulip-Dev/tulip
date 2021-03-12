@@ -274,12 +274,12 @@ QVariant SceneLayersModel::data(const QModelIndex &index, int role) const {
     if (index.column() == 2) {
       GlComplexPolygon *pl = dynamic_cast<GlComplexPolygon *>(entity);
       if (pl)
-	return (pl->textureActivation() ? Qt::Checked : Qt::Unchecked);
+        return (pl->textureActivation() ? Qt::Checked : Qt::Unchecked);
       else {
-	GlConvexGraphHullsComposite *composite =
-	  dynamic_cast<GlConvexGraphHullsComposite *>(entity);
-	if (composite)
-	  return (composite->hullsTextureActivation() ? Qt::Checked : Qt::Unchecked);
+        GlConvexGraphHullsComposite *composite =
+            dynamic_cast<GlConvexGraphHullsComposite *>(entity);
+        if (composite)
+          return (composite->hullsTextureActivation() ? Qt::Checked : Qt::Unchecked);
       }
     }
 
@@ -364,13 +364,11 @@ bool SceneLayersModel::setData(const QModelIndex &index, const QVariant &value, 
     if (pl)
       pl->setTextureActivation(val);
     else {
-      GlConvexGraphHullsComposite *composite =
-	  dynamic_cast<GlConvexGraphHullsComposite *>(entity);
+      GlConvexGraphHullsComposite *composite = dynamic_cast<GlConvexGraphHullsComposite *>(entity);
       if (composite)
-	composite->setHullsTextureActivation(val);
+        composite->setHullsTextureActivation(val);
     }
-  }
-  else
+  } else
     entity->setStencil(val ? FULL_STENCIL : 0xFFFF);
 
   emit drawNeeded(_scene);
@@ -386,7 +384,7 @@ QVariant SceneLayersModel::headerData(int section, Qt::Orientation orientation, 
       case 1:
         return "Visible";
       case 2:
-	return "Texture";
+        return "Texture";
       case 3:
         return "Stencil";
       }
