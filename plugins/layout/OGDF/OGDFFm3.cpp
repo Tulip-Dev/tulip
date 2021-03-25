@@ -284,7 +284,9 @@ void OGDFFm3::beforeCall() {
   ogdf::FMMMLayout *fmmm = static_cast<ogdf::FMMMLayout *>(ogdfLayoutAlgo);
 
   if (dataSet != nullptr) {
-    fmmm->useHighLevelOptions(true);
+    // Since we choosed to expose low level options
+    // we must ensure they will be used
+    fmmm->useHighLevelOptions(false);
     SizeProperty *size = nullptr;
 
     if (dataSet->get("Node Size", size))
