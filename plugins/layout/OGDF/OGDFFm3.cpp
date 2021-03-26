@@ -88,7 +88,8 @@ using namespace std;
 #define ELT_GRIDAPPROXIMATION 2
 
 #define ELT_INITIALPLACEMENTFORCES "Initial Placement Forces"
-#define ELT_INITIALPLACEMENTFORCESLIST "Default;RandomRandIterNr;RandomTime;UniformGrid;KeepPositions"
+#define ELT_INITIALPLACEMENTFORCESLIST                                                             \
+  "Default;RandomRandIterNr;RandomTime;UniformGrid;KeepPositions"
 #define ELT_RANDOMRANDITERNR 1
 #define ELT_RANDOMTIME 2
 #define ELT_UNIFORMGRID 3
@@ -120,7 +121,8 @@ static const char *paramHelp[] = {
 
     // New initial placement
     "Indicates the initial placement before running algorithm. "
-    "This is a high level option inducing an implicit value to the 'Initial Placement Forces' parameter.",
+    "This is a high level option inducing an implicit value to the 'Initial Placement Forces' "
+    "parameter.",
 
     // Fixed iterations
     "The fixed number of iterations for the stop criterion. "
@@ -165,7 +167,8 @@ static const char *paramHelp[] = {
 
     // Initial Placement Forces
     "Specifies how the initial placement is done. "
-    "If not set do default, it supersedes the value induced by the 'New initial placement' parameter.",
+    "If not set do default, it supersedes the value induced by the 'New initial placement' "
+    "parameter.",
 
     // Reduced Tree Construction
     "Specifies how the reduced bucket quadtree is constructed.",
@@ -364,12 +367,11 @@ void OGDFFm3::beforeCall() {
     if (dataSet->get("Node Size", size))
       tlpToOGDF->copyTlpNodeSizeToOGDF(size);
 
-
     int ival = 0;
 
     if (dataSet->get("Fixed iterations", ival)) {
       if (ival)
-	fmmm->fixedIterations(ival);
+        fmmm->fixedIterations(ival);
     }
 
     double dval = 0;
@@ -467,21 +469,21 @@ void OGDFFm3::beforeCall() {
     if (dataSet->get(ELT_INITIALPLACEMENTFORCES, stringCollection)) {
       auto current = stringCollection.getCurrent();
       if (current != 0) {
-	switch (current) {
-	case ELT_UNIFORMGRID:
-	  fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::UniformGrid);
-	  break;
-	case ELT_RANDOMTIME:
-	  fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::RandomTime);
-	  break;
-	case ELT_RANDOMRANDITERNR:
-	  fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::RandomRandIterNr);
-	  break;
-	case ELT_KEEPPOSITIONS:
-	  fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::KeepPositions);
-	default:
-	  break;
-	}
+        switch (current) {
+        case ELT_UNIFORMGRID:
+          fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::UniformGrid);
+          break;
+        case ELT_RANDOMTIME:
+          fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::RandomTime);
+          break;
+        case ELT_RANDOMRANDITERNR:
+          fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::RandomRandIterNr);
+          break;
+        case ELT_KEEPPOSITIONS:
+          fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::KeepPositions);
+        default:
+          break;
+        }
       }
     }
 
