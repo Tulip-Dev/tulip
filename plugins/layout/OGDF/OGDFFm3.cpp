@@ -88,11 +88,11 @@ using namespace std;
 #define ELT_GRIDAPPROXIMATION 2
 
 #define ELT_INITIALPLACEMENTFORCES "Initial Placement Forces"
-#define ELT_INITIALPLACEMENTFORCESLIST "RandomRandIterNr;RandomTime;UniformGrid;KeepPositions"
-#define ELT_RANDOMRANDITERNR 0
-#define ELT_RANDOMTIME 1
-#define ELT_UNIFORMGRID 2
-#define ELT_KEEPPOSITIONS 3
+#define ELT_INITIALPLACEMENTFORCESLIST "Default;RandomRandIterNr;RandomTime;UniformGrid;KeepPositions"
+#define ELT_RANDOMRANDITERNR 1
+#define ELT_RANDOMTIME 2
+#define ELT_UNIFORMGRID 3
+#define ELT_KEEPPOSITIONS 4
 
 #define ELT_REDUCEDTREECONSTRCUCTION "Reduced Tree Construction"
 #define ELT_REDUCEDTREECONSTRCUCTIONLIST "SubtreeBySubtree;PathByPath"
@@ -119,10 +119,12 @@ static const char *paramHelp[] = {
     "The unit edge length.",
 
     // New initial placement
-    "Indicates the initial placement before running algorithm.",
+    "Indicates the initial placement before running algorithm. "
+    "This is a high level option inducing an implicit value to the 'Initial Placement Forces' parameter.",
 
     // Fixed iterations
-    "The fixed number of iterations for the stop criterion.",
+    "The fixed number of iterations for the stop criterion. "
+    "If not set to 0, it supersedes the value induced by the 'Quality vs Speed' parameter.",
 
     // Threshold
     "The threshold for the stop criterion.",
@@ -131,7 +133,8 @@ static const char *paramHelp[] = {
     "Possible page formats.",
 
     // Quality vs Speed
-    "Trade-off between run-time and quality.",
+    "Trade-off between run-time and quality. "
+    "This is a high level option inducing an implicit value to the 'Fixed iterations' parameter.",
 
     // Edge Length Measurement
     "Specifies how the length of an edge is measured.",
@@ -161,7 +164,8 @@ static const char *paramHelp[] = {
     "Specifies how to calculate repulsive forces.",
 
     // Initial Placement Forces
-    "Specifies how the initial placement is done.",
+    "Specifies how the initial placement is done. "
+    "If not set do default, it supersedes the value induced by the 'New initial placement' parameter.",
 
     // Reduced Tree Construction
     "Specifies how the reduced bucket quadtree is constructed.",
@@ -224,7 +228,7 @@ public:
   PLUGININFORMATION("FM^3 (OGDF)", "Stephan Hachul", "09/11/2007",
                     "Implements the FM³ layout algorithm by Hachul and Jünger. It is a multilevel, "
                     "force-directed layout algorithm that can be applied to very large graphs.",
-                    "1.2", "Force Directed")
+                    "1.3", "Force Directed")
   OGDFFm3(const tlp::PluginContext *context);
   ~OGDFFm3() override;
   void beforeCall() override;
@@ -241,7 +245,7 @@ OGDFFm3::OGDFFm3(const tlp::PluginContext *context)
   addInParameter<SizeProperty>("Node Size", paramHelp[1], "viewSize", false);
   addInParameter<double>("Unit edge length", paramHelp[2], "10.0", false);
   addInParameter<bool>("New initial placement", paramHelp[3], "true");
-  addInParameter<int>("Fixed iterations", paramHelp[4], "30");
+  addInParameter<int>("Fixed iterations", paramHelp[4], "0");
   addInParameter<double>("Threshold", paramHelp[5], "0.01");
   addInParameter<StringCollection>(ELT_PAGEFORMAT, paramHelp[6], ELT_PAGEFORMATLIST, true,
                                    pageFormatValuesDescription);
@@ -284,14 +288,6 @@ void OGDFFm3::beforeCall() {
   ogdf::FMMMLayout *fmmm = static_cast<ogdf::FMMMLayout *>(ogdfLayoutAlgo);
 
   if (dataSet != nullptr) {
-    // Since we choosed to expose low level options
-    // we must ensure they will be used
-    fmmm->useHighLevelOptions(false);
-    SizeProperty *size = nullptr;
-
-    if (dataSet->get("Node Size", size))
-      tlpToOGDF->copyTlpNodeSizeToOGDF(size);
-
     double edgeLenth = 10;
 
     if (dataSet->get("Unit edge length", edgeLenth))
@@ -301,18 +297,6 @@ void OGDFFm3::beforeCall() {
 
     if (dataSet->get("New initial placement", bval)) {
       fmmm->newInitialPlacement(bval);
-    }
-
-    int ival = 0;
-
-    if (dataSet->get("Fixed iterations", ival)) {
-      fmmm->fixedIterations(ival);
-    }
-
-    double dval = 0;
-
-    if (dataSet->get("Threshold", dval)) {
-      fmmm->threshold(dval);
     }
 
     if (dataSet->get(ELT_PAGEFORMAT, stringCollection)) {
@@ -333,6 +317,65 @@ void OGDFFm3::beforeCall() {
       } else {
         fmmm->qualityVersusSpeed(FMMMOptions::QualityVsSpeed::BeautifulAndFast);
       }
+    }
+
+    // Since we choosed to expose some low level options
+    // we must ensure they will be used
+    fmmm->useHighLevelOptions(false);
+    // and to do our own processing of high level options
+    // using the same processing that the one in
+    // FMMMLayout::update_low_level_options_due_to_high_level_options_settings()
+    // but avoiding to reinitialize all low level options
+    switch (fmmm->pageFormat()) {
+    case FMMMOptions::PageFormatType::Square:
+      fmmm->pageRatio(1.0);
+      break;
+    case FMMMOptions::PageFormatType::Landscape:
+      fmmm->pageRatio(1.4142);
+      break;
+    case FMMMOptions::PageFormatType::Portrait:
+      fmmm->pageRatio(0.7071);
+    }
+
+    if (fmmm->newInitialPlacement())
+      fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::RandomTime);
+    else
+      fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::RandomRandIterNr);
+
+    switch (fmmm->qualityVersusSpeed()) {
+    case FMMMOptions::QualityVsSpeed::GorgeousAndEfficient:
+      fmmm->fixedIterations(60);
+      fmmm->fineTuningIterations(40);
+      fmmm->nmPrecision(6);
+      break;
+    case FMMMOptions::QualityVsSpeed::BeautifulAndFast:
+      fmmm->fixedIterations(30);
+      fmmm->fineTuningIterations(20);
+      fmmm->nmPrecision(4);
+      break;
+    case FMMMOptions::QualityVsSpeed::NiceAndIncredibleSpeed:
+      fmmm->fixedIterations(15);
+      fmmm->fineTuningIterations(10);
+      fmmm->nmPrecision(2);
+    }
+
+    SizeProperty *size = nullptr;
+
+    if (dataSet->get("Node Size", size))
+      tlpToOGDF->copyTlpNodeSizeToOGDF(size);
+
+
+    int ival = 0;
+
+    if (dataSet->get("Fixed iterations", ival)) {
+      if (ival)
+	fmmm->fixedIterations(ival);
+    }
+
+    double dval = 0;
+
+    if (dataSet->get("Threshold", dval)) {
+      fmmm->threshold(dval);
     }
 
     if (dataSet->get(ELT_EDGELENGTHMEASUREMENT, stringCollection)) {
@@ -422,14 +465,23 @@ void OGDFFm3::beforeCall() {
     }
 
     if (dataSet->get(ELT_INITIALPLACEMENTFORCES, stringCollection)) {
-      if (stringCollection.getCurrent() == ELT_UNIFORMGRID) {
-        fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::UniformGrid);
-      } else if (stringCollection.getCurrent() == ELT_RANDOMTIME) {
-        fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::RandomTime);
-      } else if (stringCollection.getCurrent() == ELT_RANDOMRANDITERNR) {
-        fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::RandomRandIterNr);
-      } else {
-        fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::KeepPositions);
+      auto current = stringCollection.getCurrent();
+      if (current != 0) {
+	switch (current) {
+	case ELT_UNIFORMGRID:
+	  fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::UniformGrid);
+	  break;
+	case ELT_RANDOMTIME:
+	  fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::RandomTime);
+	  break;
+	case ELT_RANDOMRANDITERNR:
+	  fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::RandomRandIterNr);
+	  break;
+	case ELT_KEEPPOSITIONS:
+	  fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::KeepPositions);
+	default:
+	  break;
+	}
       }
     }
 
