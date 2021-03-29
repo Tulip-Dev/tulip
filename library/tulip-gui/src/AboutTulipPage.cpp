@@ -49,7 +49,7 @@ extern QString getTulipGitRevision();
 } // namespace tlp
 
 static const QString TulipRepoUrl = "https://github.com/Tulip-Dev/tulip";
-static const QString RSS_URL = "https://tulip.labri.fr/TulipDrupal/?q=newsFeed.xml";
+static const QString RSS_URL = "https://tulip.labri.fr/site/?q=newsFeed.xml";
 static const unsigned RSS_LIMIT = 3;
 
 using namespace tlp;
