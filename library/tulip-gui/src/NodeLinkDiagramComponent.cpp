@@ -346,7 +346,8 @@ void NodeLinkDiagramComponent::setZOrdering(bool f) {
 void NodeLinkDiagramComponent::showGridControl() {
   if (!_gridOptions) {
     ParameterDescriptionList gridParameters;
-    gridParameters.add<StringCollection>("Grid mode", "", "No grid;Space divisions;Fixed size", true);
+    gridParameters.add<StringCollection>("Grid mode", "", "No grid;Space divisions;Fixed size",
+                                         true);
     gridParameters.add<Size>("Grid size", "", "(1,1,1)", false);
     gridParameters.add<Size>("Margins", "", "(0.5,0.5,0.5)", false);
     gridParameters.add<Color>("Grid color", "", "(0,0,0,255)", false);
