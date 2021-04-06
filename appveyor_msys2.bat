@@ -31,12 +31,13 @@ bash -lc "echo 'configure https://mirror.selfnet.de/msys2 as mirror site'; echo 
 rem Update the MSYS2 platform
 rem without --sysupgrade which fails
 rem since MSYS2 version 20200517 is online
-bash -lc "pacman --noconfirm --sync --refresh"
+rem bash -lc "pacman --noconfirm --sync --refresh"
 rem Update pacman
 rem https://www.msys2.org/news/#2020-05-31-update-fails-with-could-not-open-file
-bash -lc "pacman --noconfirm -Sydd pacman"
+rem bash -lc "pacman --noconfirm -Sydd pacman"
 
 rem finally upgrade the platform
+bash -lc "pacman --noconfirm -Syuu"
 bash -lc "pacman --noconfirm -Syuu"
 
 rem as pacman has been updated configure mirror site if needed
