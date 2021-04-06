@@ -37,7 +37,7 @@ rem https://www.msys2.org/news/#2020-05-31-update-fails-with-could-not-open-file
 bash -lc "pacman --noconfirm -Sydd pacman"
 
 rem finally upgrade the platform
-bash -lc "pacman --noconfirm -Syu"
+bash -lc "pacman --noconfirm -Syuu"
 
 rem as pacman has been updated configure mirror site if needed
 if exist use_mirror_site (
