@@ -59,6 +59,7 @@ NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
     delete grid_ui->tableView->itemDelegate();
 
   delete grid_ui;
+  delete _gridOptions;
   delete manager;
 }
 
@@ -119,22 +120,6 @@ void NodeLinkDiagramComponent::draw() {
 }
 
 void NodeLinkDiagramComponent::setState(const tlp::DataSet &data) {
-  ParameterDescriptionList gridParameters;
-  gridParameters.add<StringCollection>("Grid mode", "", "No grid;Space divisions;Fixed size", true);
-  gridParameters.add<Size>("Grid size", "", "(1,1,1)", false);
-  gridParameters.add<Size>("Margins", "", "(0.5,0.5,0.5)", false);
-  gridParameters.add<Color>("Grid color", "", "(0,0,0,255)", false);
-  gridParameters.add<bool>("X grid", "", "true", false);
-  gridParameters.add<bool>("Y grid", "", "true", false);
-  gridParameters.add<bool>("Z grid", "", "true", false);
-  ParameterListModel *model = new ParameterListModel(gridParameters, nullptr, this);
-
-  grid_ui = new Ui::GridOptionsWidget;
-  _gridOptions = new QDialog(graphicsView());
-  grid_ui->setupUi(_gridOptions);
-  grid_ui->tableView->setModel(model);
-  grid_ui->tableView->setItemDelegate(new TulipItemDelegate(grid_ui->tableView));
-
   setOverviewVisible(true);
   setQuickAccessBarVisible(true);
   GlMainView::setState(data);
@@ -359,6 +344,23 @@ void NodeLinkDiagramComponent::setZOrdering(bool f) {
 }
 
 void NodeLinkDiagramComponent::showGridControl() {
+  if (!_gridOptions) {
+    ParameterDescriptionList gridParameters;
+    gridParameters.add<StringCollection>("Grid mode", "", "No grid;Space divisions;Fixed size", true);
+    gridParameters.add<Size>("Grid size", "", "(1,1,1)", false);
+    gridParameters.add<Size>("Margins", "", "(0.5,0.5,0.5)", false);
+    gridParameters.add<Color>("Grid color", "", "(0,0,0,255)", false);
+    gridParameters.add<bool>("X grid", "", "true", false);
+    gridParameters.add<bool>("Y grid", "", "true", false);
+    gridParameters.add<bool>("Z grid", "", "true", false);
+    ParameterListModel *model = new ParameterListModel(gridParameters, nullptr, this);
+
+    grid_ui = new Ui::GridOptionsWidget;
+    _gridOptions = new QDialog(graphicsView());
+    grid_ui->setupUi(_gridOptions);
+    grid_ui->tableView->setModel(model);
+    grid_ui->tableView->setItemDelegate(new TulipItemDelegate(grid_ui->tableView));
+  }
   if (_gridOptions->exec() == QDialog::Rejected)
     return;
 
