@@ -65,11 +65,11 @@ static void toggleGraphView(GlGraphComposite *glGraph, bool displayNodes) {
 PLUGIN(ParallelCoordinatesView)
 
 ParallelCoordinatesView::ParallelCoordinatesView(const PluginContext *)
-    : GlMainView(true), viewSetupMenu(nullptr), mainLayer(nullptr), axisSelectionLayer(nullptr), glGraphComposite(nullptr),
-      axisPointsGraph(nullptr), graphProxy(nullptr), parallelCoordsDrawing(nullptr),
-      dataConfigWidget(nullptr), drawConfigWidget(nullptr), firstSet(true),
-      lastNbSelectedProperties(0), center(false), lastViewWindowWidth(0), lastViewWindowHeight(0),
-      isConstruct(false), dontCenterViewAfterConfLoaded(false) {}
+    : GlMainView(true), viewSetupMenu(nullptr), mainLayer(nullptr), axisSelectionLayer(nullptr),
+      glGraphComposite(nullptr), axisPointsGraph(nullptr), graphProxy(nullptr),
+      parallelCoordsDrawing(nullptr), dataConfigWidget(nullptr), drawConfigWidget(nullptr),
+      firstSet(true), lastNbSelectedProperties(0), center(false), lastViewWindowWidth(0),
+      lastViewWindowHeight(0), isConstruct(false), dontCenterViewAfterConfLoaded(false) {}
 
 ParallelCoordinatesView::~ParallelCoordinatesView() {
   for (auto obs : triggers()) {
