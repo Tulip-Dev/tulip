@@ -65,7 +65,7 @@ static void toggleGraphView(GlGraphComposite *glGraph, bool displayNodes) {
 PLUGIN(ParallelCoordinatesView)
 
 ParallelCoordinatesView::ParallelCoordinatesView(const PluginContext *)
-    : GlMainView(true), mainLayer(nullptr), axisSelectionLayer(nullptr), glGraphComposite(nullptr),
+    : GlMainView(true), viewSetupMenu(nullptr), mainLayer(nullptr), axisSelectionLayer(nullptr), glGraphComposite(nullptr),
       axisPointsGraph(nullptr), graphProxy(nullptr), parallelCoordsDrawing(nullptr),
       dataConfigWidget(nullptr), drawConfigWidget(nullptr), firstSet(true),
       lastNbSelectedProperties(0), center(false), lastViewWindowWidth(0), lastViewWindowHeight(0),
@@ -81,6 +81,7 @@ ParallelCoordinatesView::~ParallelCoordinatesView() {
   graphProxy = nullptr;
   delete dataConfigWidget;
   delete drawConfigWidget;
+  delete viewSetupMenu;
 }
 
 QuickAccessBar *ParallelCoordinatesView::getQuickAccessBarImpl() {
