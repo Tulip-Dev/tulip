@@ -18,31 +18,9 @@ echo TULIP_BUILD_CORE_ONLY=%TULIP_BUILD_CORE_ONLY%
 rem Set the paths appropriately
 PATH C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%
 
-rem first manually install the new MSYS2 keyring from repo.msys2.org
-rem see https://www.msys2.org/news/#2020-06-29-new-packagers
-rem if repo.msys2.org is not online, use a mirror site
-rem see https://github.com/msys2/MINGW-packages/issues/7084
-bash -lc "pacman --noconfirm -U http://repo.msys2.org/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz; if [ \"$?\" != \"0\" ]; then echo '*** repo.msys2.org seems down, use mirror site instead ***'; touch '%cd%/use_mirror_site'; else echo '*** repo.msys2.org is online ***'; fi"
-
-rem configure mirror site if needed
-if exist use_mirror_site (
-bash -lc "echo 'configure https://mirror.selfnet.de/msys2 as mirror site'; echo 'Server = https://mirror.selfnet.de/msys2/mingw/x86_64/' > /etc/pacman.d/mirrorlist.mingw64; echo 'Server = https://mirror.selfnet.de/msys2/mingw/i686/' > /etc/pacman.d/mirrorlist.mingw32; echo 'Server = https://mirror.selfnet.de/msys2/msys/$arch/' > /etc/pacman.d/mirrorlist.msys; pacman --noconfirm -U https://mirror.selfnet.de/msys2/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz;")
-
-rem Update the MSYS2 platform
-rem without --sysupgrade which fails
-rem since MSYS2 version 20200517 is online
-rem bash -lc "pacman --noconfirm --sync --refresh"
-rem Update pacman
-rem https://www.msys2.org/news/#2020-05-31-update-fails-with-could-not-open-file
-rem bash -lc "pacman --noconfirm -Sydd pacman"
-
-rem finally upgrade the platform
+rem upgrade MSYS2 platform according https://www.msys2.org/docs/ci/#appveyor
 bash -lc "pacman --noconfirm -Syuu"
 bash -lc "pacman --noconfirm -Syuu"
-
-rem as pacman has been updated configure mirror site if needed
-if exist use_mirror_site (
-bash -lc "echo 'Server = https://mirror.selfnet.de/msys2/mingw/x86_64/' > /etc/pacman.d/mirrorlist.mingw64; echo 'Server = https://mirror.selfnet.de/msys2/mingw/i686/' > /etc/pacman.d/mirrorlist.mingw32; echo 'Server = https://mirror.selfnet.de/msys2/msys/$arch/' > /etc/pacman.d/mirrorlist.msys")
 
 rem display pacman version
 bash -lc "pacman -V"
