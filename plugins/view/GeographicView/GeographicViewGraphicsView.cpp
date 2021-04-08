@@ -324,14 +324,14 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   buttonProxy->setParentItem(_placeholderItem);
   buttonProxy->setPos(20, 76);
 
-  QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning, "Geolocated layout not initialized",
-                                        "Warning: the geolocated layout\n"
-                                        "has not been initialized yet.\n"
-                                        "The graph will not be displayed until\n"
-                                        "that operation has been performed.\n\n"
-                                        "Open the Geolocation configuration tab\n"
+  QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning, "",
+                                        "<font size=\"+1\"><b>The geolocated layout<br/>"
+                                        "has not been initialized yet.</b></font><br/><br/>"
+                                        "Open the <b>Geolocation</b> configuration tab<br/>"
                                         "to proceed.");
   msgBox->setModal(false);
+  // set a specific name before applying style sheet
+  msgBox->setObjectName("needConfigurationMessageBox");
   Perspective::setStyleSheet(msgBox);
   noLayoutMsgBox = scene()->addWidget(msgBox);
   noLayoutMsgBox->setParentItem(_placeholderItem);

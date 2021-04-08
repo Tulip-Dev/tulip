@@ -715,6 +715,10 @@ font: bold 10px;
 height:20px;
 }
 
+#needConfigurationMessageBox {
+border: 1px solid #808080;
+}
+
 QFrame[ section=\"true\" ] {
 border-top: 1px solid #D9D9D9;
 padding-top: 20px;
@@ -727,7 +731,7 @@ font-weight: bold;
 
 QSplitter::handle {
 background-color: #C0C0C0;
-border-width:0px;
+border-width: 0px;
 }
 
 QScrollBar {
