@@ -27,18 +27,13 @@
 #include "QuantitativeParallelAxis.h"
 
 #include <QMenu>
-#include <QImageWriter>
-#include <QDir>
 #include <QGraphicsView>
 #include <QKeyEvent>
 
-#include <tulip/GlTools.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/Interactor.h>
-#include <tulip/GlTextureManager.h>
 #include <tulip/GlGraphComposite.h>
-#include <tulip/PropertyInterface.h>
 
 #include "../utils/ViewGraphPropertiesSelectionWidget.h"
 

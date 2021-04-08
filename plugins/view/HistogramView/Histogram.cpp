@@ -23,8 +23,6 @@
 #include <tulip/Gl2DRect.h>
 #include <tulip/GlOffscreenRenderer.h>
 #include <tulip/GlTextureManager.h>
-#include <tulip/TlpTools.h>
-#include <tulip/TulipViewSettings.h>
 
 #include "Histogram.h"
 

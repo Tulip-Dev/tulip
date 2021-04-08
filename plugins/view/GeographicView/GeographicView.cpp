@@ -17,26 +17,18 @@
  *
  */
 
-#include <tulip/GlTextureManager.h>
 #include <tulip/GlMainWidget.h>
-#include <tulip/Camera.h>
-#include <tulip/GlTools.h>
 #include <tulip/Interactor.h>
 #include <tulip/DataSet.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlComplexPolygon.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/OpenGlConfigManager.h>
 #include <tulip/NodeLinkDiagramComponent.h>
-#include <tulip/GlOffscreenRenderer.h>
 #include <tulip/TulipViewSettings.h>
 
 #include <QMenu>
-#include <QThread>
 #include <QComboBox>
-#include <QTimeLine>
 #include <QApplication>
-#include <QMessageBox>
 #include <QTimer>
 
 #include <iostream>

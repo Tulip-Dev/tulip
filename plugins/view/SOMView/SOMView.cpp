@@ -34,8 +34,6 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/Interactor.h>
-#include <tulip/ImportModule.h>
-#include <tulip/GlLODCalculator.h>
 #include <tulip/GlLabel.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/GlMainWidget.h>

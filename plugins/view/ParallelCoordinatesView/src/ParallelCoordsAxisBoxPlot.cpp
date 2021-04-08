@@ -17,12 +17,10 @@
  *
  */
 
-#include <tulip/TlpTools.h>
 #include <tulip/GlPolygon.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlQuad.h>
 #include <tulip/GlLines.h>
-#include <tulip/GlSimpleEntity.h>
 #include <tulip/GlMainWidget.h>
 
 #include "ParallelCoordinatesView.h"

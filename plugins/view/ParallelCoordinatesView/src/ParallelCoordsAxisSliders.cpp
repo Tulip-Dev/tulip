@@ -17,7 +17,6 @@
  *
  */
 
-#include <tulip/TlpTools.h>
 #include <tulip/GlPolygon.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlQuad.h>

@@ -20,13 +20,8 @@
 #ifndef HISTOGRAMCOLORMAPPING_H_
 #define HISTOGRAMCOLORMAPPING_H_
 
-#include <QCursor>
-#include <QMouseEvent>
-
 #include <tulip/tulipconf.h>
 #include <tulip/GLInteractor.h>
-#include <tulip/TlpTools.h>
-#include <tulip/GlSimpleEntity.h>
 #include <tulip/GlCircle.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlPolyQuad.h>
@@ -39,6 +34,9 @@
 #include "HistogramView.h"
 #include "SizeScaleConfigDialog.h"
 #include "GlyphScaleConfigDialog.h"
+
+class QMenu;
+class QAction;
 
 namespace tlp {
 

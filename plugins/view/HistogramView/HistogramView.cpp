@@ -18,12 +18,10 @@
  */
 
 #include <tulip/GlQuantitativeAxis.h>
-#include <tulip/TlpTools.h>
 #include <tulip/Interactor.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlRect.h>
-#include <tulip/GlTextureManager.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/QuickAccessBar.h>
 #include <tulip/TulipViewSettings.h>

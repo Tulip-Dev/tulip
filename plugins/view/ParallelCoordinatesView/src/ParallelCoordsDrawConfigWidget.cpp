@@ -18,11 +18,7 @@
  */
 
 #include <QFileDialog>
-#include <QColorDialog>
-#include <QMainWindow>
 
-#include <tulip/TlpTools.h>
-#include <tulip/Perspective.h>
 #include <tulip/TlpQtTools.h>
 
 #include "ParallelTools.h"

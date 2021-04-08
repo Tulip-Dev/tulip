@@ -28,11 +28,7 @@
 #include <tulip/GlMainView.h>
 #include <tulip/ViewActionsManager.h>
 
-#include <QGraphicsScene>
-#include <QResizeEvent>
 #include <QGraphicsItem>
-#include <QDialog>
-#include <QThread>
 #include <QMap>
 
 #include <map>

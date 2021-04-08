@@ -29,7 +29,6 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/GlLabel.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/ParametricCurves.h>

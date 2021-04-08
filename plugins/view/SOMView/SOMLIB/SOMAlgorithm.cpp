@@ -23,10 +23,7 @@
 #include "SOMMap.h"
 #include "InputSample.h"
 
-#include <tulip/DoubleProperty.h>
-#include <tulip/IntegerProperty.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/GlyphManager.h>
+#include <tulip/MutableContainer.h>
 #include <tulip/TlpTools.h>
 
 using namespace tlp;
