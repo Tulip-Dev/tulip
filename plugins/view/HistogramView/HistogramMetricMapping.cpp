@@ -32,6 +32,7 @@
 #include <QToolTip>
 #include <QMainWindow>
 #include <QMenu>
+#include <QMouseEvent>
 
 #include <algorithm>
 
