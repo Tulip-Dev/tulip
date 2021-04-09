@@ -33,8 +33,8 @@ struct TulipGraphicsView : public QGraphicsView {
   ViewWidget *_viewWidget;
   QGraphicsItem *_centralItem;
 
-  TulipGraphicsView(ViewWidget *w) :
-    QGraphicsView(new QGraphicsScene()), _viewWidget(w), _centralItem(nullptr) {
+  TulipGraphicsView(ViewWidget *w)
+      : QGraphicsView(new QGraphicsScene()), _viewWidget(w), _centralItem(nullptr) {
     setAcceptDrops(false);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

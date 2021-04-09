@@ -151,8 +151,8 @@ QList<QWidget *> ScatterPlot2DView::configurationWidgets() const {
 
 void ScatterPlot2DView::graphicsViewResized(int w, int h) {
   if (initialized && noPropertyMsgBox->isVisible()) {
-    noPropertyMsgBox->setPos(w/2 - noPropertyMsgBox->sceneBoundingRect().width() / 2,
-			     h/2 - noPropertyMsgBox->sceneBoundingRect().height() / 2);
+    noPropertyMsgBox->setPos(w / 2 - noPropertyMsgBox->sceneBoundingRect().width() / 2,
+                             h / 2 - noPropertyMsgBox->sceneBoundingRect().height() / 2);
   }
 }
 
@@ -166,17 +166,17 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     needQuickAccessBar = true;
 
     // build QMessageBox indicating the lack of selected properties
-    QGraphicsRectItem* qgrItem = new QGraphicsRectItem(0, 0, 1, 1);
+    QGraphicsRectItem *qgrItem = new QGraphicsRectItem(0, 0, 1, 1);
     qgrItem->setBrush(Qt::transparent);
     qgrItem->setPen(QPen(Qt::transparent));
     graphicsView()->scene()->addItem(qgrItem);
 
     QMessageBox *msgBox =
-      new QMessageBox(QMessageBox::Warning, "",
-		      "<b><font size=\"+1\">"
-		      "Select at least two graph properties.</font></b><br/><br/>"
-		      "Open the <b>Properties</b> configuration tab<br/>"
-		      "to proceed.");
+        new QMessageBox(QMessageBox::Warning, "",
+                        "<b><font size=\"+1\">"
+                        "Select at least two graph properties.</font></b><br/><br/>"
+                        "Open the <b>Properties</b> configuration tab<br/>"
+                        "to proceed.");
     msgBox->setModal(false);
     // set a specific name before applying style sheet
     msgBox->setObjectName("needConfigurationMessageBox");

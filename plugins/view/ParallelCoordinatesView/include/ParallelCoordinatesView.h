@@ -112,7 +112,6 @@ public:
   bool getNodeOrEdgeAtViewportPos(int x, int y, node &n, edge &e) const override;
   void graphicsViewResized(int w, int h) override;
 
-
   // methods called by interactors
   void setDataUnderPointerSelectFlag(const int x, const int y, const bool selectFlag);
   void setDataInRegionSelectFlag(const int x, const int y, const unsigned int width,

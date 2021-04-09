@@ -66,7 +66,7 @@ public:
     */
   QGraphicsView *graphicsView() const override;
 
-  virtual void graphicsViewResized(int/* width */, int/* height */) {}
+  virtual void graphicsViewResized(int /* width */, int /* height */) {}
 
 public slots:
   /**

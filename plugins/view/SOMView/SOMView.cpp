@@ -139,17 +139,16 @@ void SOMView::construct(QWidget *) {
   som = nullptr;
 
   // build QMessageBox indicating the lack of selected properties
-  QGraphicsRectItem* qgrItem = new QGraphicsRectItem(0, 0, 1, 1);
+  QGraphicsRectItem *qgrItem = new QGraphicsRectItem(0, 0, 1, 1);
   qgrItem->setBrush(Qt::transparent);
   qgrItem->setPen(QPen(Qt::transparent));
   graphicsView()->scene()->addItem(qgrItem);
 
-  QMessageBox *msgBox =
-    new QMessageBox(QMessageBox::Warning, "",
-		    "<b><font size=\"+1\">"
-		    "No graph properties selected.</b></font><br/><br/>"
-		    "Open the <b>Properties</b> configuration tab<br/>"
-		    "to proceed.");
+  QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning, "",
+                                        "<b><font size=\"+1\">"
+                                        "No graph properties selected.</b></font><br/><br/>"
+                                        "Open the <b>Properties</b> configuration tab<br/>"
+                                        "to proceed.");
   msgBox->setModal(false);
   // set a specific name before applying style sheet
   msgBox->setObjectName("needConfigurationMessageBox");
@@ -222,8 +221,8 @@ void SOMView::initMenu() {
 
 void SOMView::graphicsViewResized(int w, int h) {
   if (isConstruct && noPropertyMsgBox->isVisible()) {
-    noPropertyMsgBox->setPos(w/2 - noPropertyMsgBox->sceneBoundingRect().width() / 2,
-			     h/2 - noPropertyMsgBox->sceneBoundingRect().height() / 2);
+    noPropertyMsgBox->setPos(w / 2 - noPropertyMsgBox->sceneBoundingRect().width() / 2,
+                             h / 2 - noPropertyMsgBox->sceneBoundingRect().height() / 2);
   }
 }
 
