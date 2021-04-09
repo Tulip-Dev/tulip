@@ -28,6 +28,8 @@
 
 #include "../../utils/PluginNames.h"
 
+class QGraphicsProxyWidget;
+
 namespace tlp {
 class SOMPreviewComposite;
 class SOMMap;
@@ -79,6 +81,7 @@ public:
   void setState(const DataSet &dataSet) override;
   DataSet state() const override;
   void graphChanged(Graph *) override;
+  void graphicsViewResized(int w, int h) override;
   void draw() override;
   void drawMapWidget();
   void drawPreviewWidget();
@@ -231,10 +234,6 @@ protected slots:
 
 private:
   void copyToGlMainWidget(GlMainWidget *widget);
-
-  void addEmptyViewLabel();
-  void removeEmptyViewLabel();
-
   void registerTriggers();
 
   /**
@@ -353,6 +352,8 @@ private:
 
   GlMainWidget *previewWidget;
   GlMainWidget *mapWidget;
+
+  QGraphicsProxyWidget *noPropertyMsgBox;
 
   bool isDetailedMode;
 

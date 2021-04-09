@@ -28,9 +28,11 @@
 #include <tulip/TulipViewSettings.h>
 #include <tulip/Perspective.h>
 
-#include <QGraphicsView>
 #include <QApplication>
 #include <QMainWindow>
+#include <QGraphicsView>
+#include <QGraphicsProxyWidget>
+#include <QMessageBox>
 #include <QProgressDialog>
 
 #include "ScatterPlot2DView.h"
@@ -91,22 +93,21 @@ ScatterPlot2DView::~ScatterPlot2DView() {
 }
 
 void ScatterPlot2DView::initGlWidget() {
-  GlLayer *layer = getGlMainWidget()->getScene()->getLayer("Main");
+  mainLayer = getGlMainWidget()->getScene()->getLayer("Main");
 
-  if (layer == nullptr) {
-    layer = new GlLayer("Main");
-    getGlMainWidget()->getScene()->addExistingLayer(layer);
+  if (mainLayer == nullptr) {
+    mainLayer = new GlLayer("Main");
+    getGlMainWidget()->getScene()->addExistingLayer(mainLayer);
   }
-
-  mainLayer = layer;
 
   cleanupGlScene();
 
   if (emptyGraph == nullptr) {
     emptyGraph = newGraph();
     glGraphComposite = new GlGraphComposite(emptyGraph);
-    mainLayer->addGlEntity(glGraphComposite, "graph");
   }
+
+  mainLayer->addGlEntity(glGraphComposite, "graph");
 
   if (matrixComposite == nullptr) {
     matrixComposite = new GlComposite();
@@ -148,6 +149,13 @@ QList<QWidget *> ScatterPlot2DView::configurationWidgets() const {
   return QList<QWidget *>() << propertiesSelectionWidget << optionsWidget;
 }
 
+void ScatterPlot2DView::graphicsViewResized(int w, int h) {
+  if (initialized && noPropertyMsgBox->isVisible()) {
+    noPropertyMsgBox->setPos(w/2 - noPropertyMsgBox->sceneBoundingRect().width() / 2,
+			     h/2 - noPropertyMsgBox->sceneBoundingRect().height() / 2);
+  }
+}
+
 void ScatterPlot2DView::setState(const DataSet &dataSet) {
   if (!initialized) {
     propertiesSelectionWidget = new ViewGraphPropertiesSelectionWidget();
@@ -156,6 +164,25 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     initialized = true;
     setOverviewVisible(true);
     needQuickAccessBar = true;
+
+    // build QMessageBox indicating the lack of selected properties
+    QGraphicsRectItem* qgrItem = new QGraphicsRectItem(0, 0, 1, 1);
+    qgrItem->setBrush(Qt::transparent);
+    qgrItem->setPen(QPen(Qt::transparent));
+    graphicsView()->scene()->addItem(qgrItem);
+
+    QMessageBox *msgBox =
+      new QMessageBox(QMessageBox::Warning, "",
+		      "<b><font size=\"+1\">"
+		      "Select at least two graph properties.</font></b><br/><br/>"
+		      "Open the <b>Properties</b> configuration tab<br/>"
+		      "to proceed.");
+    msgBox->setModal(false);
+    // set a specific name before applying style sheet
+    msgBox->setObjectName("needConfigurationMessageBox");
+    Perspective::setStyleSheet(msgBox);
+    noPropertyMsgBox = graphicsView()->scene()->addWidget(msgBox);
+    noPropertyMsgBox->setParentItem(qgrItem);
   }
 
   GlMainView::setState(dataSet);
@@ -576,46 +603,11 @@ void ScatterPlot2DView::buildScatterPlotsMatrix() {
     centerView();
 }
 
-void ScatterPlot2DView::addEmptyViewLabel() {
-  Color backgroundColor(optionsWidget->getBackgroundColor());
-  getGlMainWidget()->getScene()->setBackgroundColor(backgroundColor);
-
-  Color foregroundColor;
-  int bgV = backgroundColor.getV();
-
-  if (bgV < 128) {
-    foregroundColor = Color(255, 255, 255);
-  } else {
-    foregroundColor = Color(0, 0, 0);
-  }
-
-  GlLabel *noDimsLabel =
-      new GlLabel(Coord(0.0f, 0.0f, 0.0f), Size(200.0f, 200.0f), foregroundColor);
-  noDimsLabel->setText(ViewName::ScatterPlot2DViewName);
-  mainLayer->addGlEntity(noDimsLabel, "no dimensions label");
-  GlLabel *noDimsLabel1 =
-      new GlLabel(Coord(0.0f, -50.0f, 0.0f), Size(400.0f, 200.0f), foregroundColor);
-  noDimsLabel1->setText("Select at least two graph properties.");
-  mainLayer->addGlEntity(noDimsLabel1, "no dimensions label 1");
-  GlLabel *noDimsLabel2 =
-      new GlLabel(Coord(0.0f, -100.0f, 0.0f), Size(700.0f, 200.0f), foregroundColor);
-  noDimsLabel2->setText("Go to the \"Properties\" tab in top right corner.");
-  mainLayer->addGlEntity(noDimsLabel2, "no dimensions label 2");
-}
-
-void ScatterPlot2DView::removeEmptyViewLabel() {
-  GlSimpleEntity *noDimsLabel = mainLayer->findGlEntity("no dimensions label");
-  GlSimpleEntity *noDimsLabel1 = mainLayer->findGlEntity("no dimensions label 1");
-  GlSimpleEntity *noDimsLabel2 = mainLayer->findGlEntity("no dimensions label 2");
-
-  if (noDimsLabel != nullptr) {
-    mainLayer->deleteGlEntity(noDimsLabel);
-    delete noDimsLabel;
-    mainLayer->deleteGlEntity(noDimsLabel1);
-    delete noDimsLabel1;
-    mainLayer->deleteGlEntity(noDimsLabel2);
-    delete noDimsLabel2;
-  }
+void ScatterPlot2DView::propertiesSelected(bool flag) {
+  noPropertyMsgBox->setVisible(!flag);
+  if (quickAccessBarVisible())
+    _quickAccessBar->setEnabled(flag);
+  setOverviewVisible(flag);
 }
 
 void ScatterPlot2DView::viewConfigurationChanged() {
@@ -653,25 +645,15 @@ void ScatterPlot2DView::draw() {
 
   if (selectedGraphProperties.size() < 2) {
     destroyOverviews();
-    removeEmptyViewLabel();
+    propertiesSelected(false);
     matrixUpdateNeeded = false;
     switchFromDetailViewToMatrixView();
-    addEmptyViewLabel();
     gl->centerScene();
 
-    if (quickAccessBarVisible())
-      _quickAccessBar->setEnabled(false);
-    setOverviewVisible(false);
-
     return;
-  } else {
-    removeEmptyViewLabel();
   }
 
-  if (quickAccessBarVisible())
-    _quickAccessBar->setEnabled(true);
-  setOverviewVisible(true);
-
+  propertiesSelected(true);
   computeNodeSizes();
   buildScatterPlotsMatrix();
 

@@ -22,7 +22,6 @@
 
 #include <tulip/Graph.h>
 #include <tulip/GlMainWidget.h>
-#include <tulip/GlRect.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlLayer.h>
 #include <tulip/GlLabel.h>
@@ -44,6 +43,8 @@
 
 #include <QApplication>
 #include <QGraphicsView>
+#include <QGraphicsProxyWidget>
+#include <QMessageBox>
 #include <QMainWindow>
 #include <QProgressDialog>
 #include <QTimer>
@@ -135,6 +136,13 @@ void PixelOrientedView::setLayoutFunction(pocore::LayoutFunction *layoutFunction
   pixelOrientedMediator->setLayoutFunction(layoutFunction);
 }
 
+void PixelOrientedView::graphicsViewResized(int w, int h) {
+  if (isConstruct && noPropertyMsgBox->isVisible()) {
+    noPropertyMsgBox->setPos(w/2 - noPropertyMsgBox->sceneBoundingRect().width() / 2,
+			     h/2 - noPropertyMsgBox->sceneBoundingRect().height() / 2);
+  }
+}
+
 void PixelOrientedView::setState(const DataSet &dataSet) {
   if (!isConstruct) {
     isConstruct = true;
@@ -143,6 +151,25 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
     pixelOrientedMediator = new PixelOrientedMediator(spiralLayout, nullptr);
     optionsWidget = new PixelOrientedOptionsWidget();
     layoutFunctionsMap["Spiral"] = spiralLayout;
+
+    // build QMessageBox indicating the lack of selected properties
+    QGraphicsRectItem* qgrItem = new QGraphicsRectItem(0, 0, 1, 1);
+    qgrItem->setBrush(Qt::transparent);
+    qgrItem->setPen(QPen(Qt::transparent));
+    graphicsView()->scene()->addItem(qgrItem);
+
+    QMessageBox *msgBox =
+      new QMessageBox(QMessageBox::Warning, "",
+		      "<b><font size=\"+1\">"
+		      "No graph properties selected.</font></b><br/><br/>"
+		      "Open the <b>Properties</b> configuration tab<br/>"
+		      "to proceed.");
+    msgBox->setModal(false);
+    // set a specific name before applying style sheet
+    msgBox->setObjectName("needConfigurationMessageBox");
+    Perspective::setStyleSheet(msgBox);
+    noPropertyMsgBox = graphicsView()->scene()->addWidget(msgBox);
+    noPropertyMsgBox->setParentItem(qgrItem);
   }
 
   GlMainView::setState(dataSet);
@@ -404,45 +431,21 @@ void PixelOrientedView::destroyData() {
   dataMap.clear();
 }
 
-void PixelOrientedView::addEmptyViewLabel() {
-  Color backgroundColor(optionsWidget->getBackgroundColor());
-  getGlMainWidget()->getScene()->setBackgroundColor(backgroundColor);
-
-  Color textColor = getTextColor();
-
-  GlLabel *noDimsLabel = new GlLabel(Coord(0.0f, 0.0f, 0.0f), Size(200.0f, 200.0f), textColor);
-  noDimsLabel->setText(ViewName::PixelOrientedViewName);
-  mainLayer->addGlEntity(noDimsLabel, "no dimensions label");
-  GlLabel *noDimsLabel1 = new GlLabel(Coord(0.0f, -50.0f, 0.0f), Size(400.0f, 200.0f), textColor);
-  noDimsLabel1->setText("No graph properties selected.");
-  mainLayer->addGlEntity(noDimsLabel1, "no dimensions label 1");
-  GlLabel *noDimsLabel2 = new GlLabel(Coord(0.0f, -100.0f, 0.0f), Size(700.0f, 200.0f), textColor);
-  noDimsLabel2->setText("Go to the \"Properties\" tab in top right corner.");
-  mainLayer->addGlEntity(noDimsLabel2, "no dimensions label 2");
-
-  mainLayer->deleteGlEntity(graphComposite);
-}
-
-void PixelOrientedView::removeEmptyViewLabel() {
-  GlSimpleEntity *noDimsLabel = mainLayer->findGlEntity("no dimensions label");
-  GlSimpleEntity *noDimsLabel1 = mainLayer->findGlEntity("no dimensions label 1");
-  GlSimpleEntity *noDimsLabel2 = mainLayer->findGlEntity("no dimensions label 2");
-
-  if (noDimsLabel != nullptr) {
-    mainLayer->deleteGlEntity(noDimsLabel);
-    delete noDimsLabel;
-    mainLayer->deleteGlEntity(noDimsLabel1);
-    delete noDimsLabel1;
-    mainLayer->deleteGlEntity(noDimsLabel2);
-    delete noDimsLabel2;
-
-    mainLayer->addGlEntity(graphComposite, "graph");
-  }
-}
-
 void PixelOrientedView::generatePixelOverview(PixelOrientedOverview *pixelOverview) {
   pixelOverview->computePixelView();
   overviewGenMap[pixelOverview->getDimensionName()] = true;
+}
+
+void PixelOrientedView::propertiesSelected(bool flag) {
+  noPropertyMsgBox->setVisible(!flag);
+  toggleInteractors(flag);
+  if (quickAccessBarVisible())
+    _quickAccessBar->setEnabled(flag);
+  setOverviewVisible(flag);
+  if (flag)
+    mainLayer->addGlEntity(graphComposite, "graph");
+  else
+    mainLayer->deleteGlEntity(graphComposite);
 }
 
 void PixelOrientedView::draw() {
@@ -465,19 +468,12 @@ void PixelOrientedView::draw() {
       switchFromDetailViewToSmallMultiples();
     }
 
-    removeEmptyViewLabel();
-    addEmptyViewLabel();
-    if (quickAccessBarVisible())
-      _quickAccessBar->setEnabled(false);
-    setOverviewVisible(false);
+    propertiesSelected(false);
     glw->centerScene();
     return;
   }
 
-  removeEmptyViewLabel();
-  if (quickAccessBarVisible())
-    _quickAccessBar->setEnabled(true);
-  setOverviewVisible(true);
+  propertiesSelected(true);
 
   if (lastNbDimensionsSelected != selectedGraphProperties.size()) {
     center = true;

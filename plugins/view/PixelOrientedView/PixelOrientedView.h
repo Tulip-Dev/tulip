@@ -40,6 +40,8 @@
 #include "PixelOrientedOverview.h"
 #include "PixelOrientedOptionsWidget.h"
 
+class QGraphicsProxyWidget;
+
 namespace tlp {
 
 class ViewGraphPropertiesSelectionWidget;
@@ -94,6 +96,7 @@ public:
   QuickAccessBar *getQuickAccessBarImpl() override;
   void setState(const DataSet &dataSet) override;
   DataSet state() const override;
+  void graphicsViewResized(int w, int h) override;
   Graph *getPixelOrientedGraph() {
     return pixelOrientedGraph;
   }
@@ -127,8 +130,7 @@ private:
   void destroyData();
   void destroyOverviewsIfNeeded();
   void updateOverviews(const bool updateAll = false);
-  void addEmptyViewLabel();
-  void removeEmptyViewLabel();
+  void propertiesSelected(bool);
   Color getTextColor() const;
 
   Graph *pixelOrientedGraph;
@@ -154,6 +156,8 @@ private:
   std::map<std::string, PixelOrientedOverview *> overviewsMap;
   std::map<std::string, bool> overviewGenMap;
   std::map<std::string, pocore::TulipGraphDimension *> dataMap;
+
+  QGraphicsProxyWidget *noPropertyMsgBox;
 
   unsigned int overviewWidth;
   unsigned int overviewHeight;

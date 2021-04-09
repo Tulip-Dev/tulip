@@ -30,9 +30,11 @@
 using namespace tlp;
 
 struct TulipGraphicsView : public QGraphicsView {
+  ViewWidget *_viewWidget;
   QGraphicsItem *_centralItem;
 
-  TulipGraphicsView() : QGraphicsView(new QGraphicsScene()), _centralItem(nullptr) {
+  TulipGraphicsView(ViewWidget *w) :
+    QGraphicsView(new QGraphicsScene()), _viewWidget(w), _centralItem(nullptr) {
     setAcceptDrops(false);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -57,6 +59,8 @@ struct TulipGraphicsView : public QGraphicsView {
       glMainWidgetItem->resize(width(), height());
     else if (proxyWidget)
       proxyWidget->resize(width(), height());
+
+    _viewWidget->graphicsViewResized(width(), height());
 
     if (scene())
       scene()->update();
@@ -90,7 +94,9 @@ QGraphicsView *ViewWidget::graphicsView() const {
 }
 
 void ViewWidget::setupUi() {
-  _graphicsView = new TulipGraphicsView();
+  // instantiate the graphicsView
+  // (will be deleted by the WorkspacePanel destructor)
+  _graphicsView = new TulipGraphicsView(this);
   _graphicsView->setFrameStyle(QFrame::NoFrame);
   _graphicsView->scene()->setBackgroundBrush(Qt::white);
   setupWidget();

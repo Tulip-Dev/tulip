@@ -38,10 +38,13 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlGraphComposite.h>
+#include <tulip/Perspective.h>
 
 #include <QMenu>
 #include <QTimer>
 #include <QToolTip>
+#include <QGraphicsView>
+#include <QGraphicsProxyWidget>
 #include <QMessageBox>
 #include <QMouseEvent>
 
@@ -134,6 +137,25 @@ void SOMView::construct(QWidget *) {
 
   // Init the map to nullptr
   som = nullptr;
+
+  // build QMessageBox indicating the lack of selected properties
+  QGraphicsRectItem* qgrItem = new QGraphicsRectItem(0, 0, 1, 1);
+  qgrItem->setBrush(Qt::transparent);
+  qgrItem->setPen(QPen(Qt::transparent));
+  graphicsView()->scene()->addItem(qgrItem);
+
+  QMessageBox *msgBox =
+    new QMessageBox(QMessageBox::Warning, "",
+		    "<b><font size=\"+1\">"
+		    "No graph properties selected.</b></font><br/><br/>"
+		    "Open the <b>Properties</b> configuration tab<br/>"
+		    "to proceed.");
+  msgBox->setModal(false);
+  // set a specific name before applying style sheet
+  msgBox->setObjectName("needConfigurationMessageBox");
+  Perspective::setStyleSheet(msgBox);
+  noPropertyMsgBox = graphicsView()->scene()->addWidget(msgBox);
+  noPropertyMsgBox->setParentItem(qgrItem);
 }
 
 void SOMView::initGlMainViews() {
@@ -198,6 +220,13 @@ void SOMView::initMenu() {
   connect(selectNodesInMaskAction, SIGNAL(triggered()), this, SLOT(selectAllNodesInMask()));
 }
 
+void SOMView::graphicsViewResized(int w, int h) {
+  if (isConstruct && noPropertyMsgBox->isVisible()) {
+    noPropertyMsgBox->setPos(w/2 - noPropertyMsgBox->sceneBoundingRect().width() / 2,
+			     h/2 - noPropertyMsgBox->sceneBoundingRect().height() / 2);
+  }
+}
+
 void SOMView::setState(const DataSet &dataSet) {
 
   if (!isConstruct)
@@ -241,7 +270,7 @@ void SOMView::setState(const DataSet &dataSet) {
 
   // Display the empty label if no properties are selected.
   if (properties->getSelectedProperties().empty())
-    addEmptyViewLabel();
+    noPropertyMsgBox->show();
 
   registerTriggers();
 
@@ -488,11 +517,7 @@ void SOMView::drawPreviewWidget() {
 }
 
 void SOMView::draw() {
-  removeEmptyViewLabel();
-  previewWidget->getScene()->getLayer("Main");
-
-  if (properties->getSelectedProperties().empty())
-    addEmptyViewLabel();
+  noPropertyMsgBox->setVisible(properties->getSelectedProperties().empty());
 
   getGlMainWidget()->draw(true);
 }
@@ -1141,33 +1166,6 @@ void SOMView::interactorsInstalled(const QList<tlp::Interactor *> &) {
 void SOMView::dimensionUpdated() {
   computeSOMMap();
   draw();
-}
-
-void SOMView::addEmptyViewLabel() {
-  GlLayer *mainLayer = previewWidget->getScene()->getLayer("Main");
-  GlLabel *noDimsLabel = new GlLabel(Coord(0, 0, 0), Size(200, 100), Color(0, 0, 0));
-  noDimsLabel->setText(ViewName::SOMViewName);
-  GlLabel *noDimsLabel1 = new GlLabel(Coord(0, -50, 0), Size(400, 100), Color(0, 0, 0));
-  noDimsLabel1->setText("No property selected.");
-  GlLabel *noDimsLabel2 = new GlLabel(Coord(0, -100, 0), Size(700, 200), Color(0, 0, 0));
-  noDimsLabel2->setText("Go to the \"Properties\" tab in top right corner.");
-  mainLayer->addGlEntity(noDimsLabel, "no dimensions label");
-  mainLayer->addGlEntity(noDimsLabel1, "no dimensions label 1");
-  mainLayer->addGlEntity(noDimsLabel2, "no dimensions label 2");
-  previewWidget->getScene()->centerScene();
-}
-
-void SOMView::removeEmptyViewLabel() {
-  GlLayer *mainLayer = previewWidget->getScene()->getLayer("Main");
-  GlSimpleEntity *noDimsLabel = mainLayer->findGlEntity("no dimensions label");
-  GlSimpleEntity *noDimsLabel1 = mainLayer->findGlEntity("no dimensions label 1");
-  GlSimpleEntity *noDimsLabel2 = mainLayer->findGlEntity("no dimensions label 2");
-
-  if (noDimsLabel) {
-    mainLayer->deleteGlEntity(noDimsLabel);
-    mainLayer->deleteGlEntity(noDimsLabel1);
-    mainLayer->deleteGlEntity(noDimsLabel2);
-  }
 }
 
 void SOMView::registerTriggers() {

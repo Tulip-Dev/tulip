@@ -28,12 +28,15 @@
 
 #include <QMenu>
 #include <QGraphicsView>
+#include <QGraphicsProxyWidget>
+#include <QMessageBox>
 #include <QKeyEvent>
 
 #include <tulip/GlLabel.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/Interactor.h>
 #include <tulip/GlGraphComposite.h>
+#include <tulip/Perspective.h>
 
 #include "../utils/ViewGraphPropertiesSelectionWidget.h"
 
@@ -122,6 +125,13 @@ QList<QWidget *> ParallelCoordinatesView::configurationWidgets() const {
   return QList<QWidget *>() << dataConfigWidget << drawConfigWidget;
 }
 
+void ParallelCoordinatesView::graphicsViewResized(int w, int h) {
+  if (isConstruct && noPropertyMsgBox->isVisible()) {
+    noPropertyMsgBox->setPos(w/2 - noPropertyMsgBox->sceneBoundingRect().width() / 2,
+			     h/2 - noPropertyMsgBox->sceneBoundingRect().height() / 2);
+  }
+}
+
 void ParallelCoordinatesView::setState(const DataSet &dataSet) {
 
   if (!isConstruct) {
@@ -133,6 +143,25 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
     drawConfigWidget = new ParallelCoordsDrawConfigWidget();
 
     isConstruct = true;
+
+    // build QMessageBox indicating the lack of selected properties
+    QGraphicsRectItem* qgrItem = new QGraphicsRectItem(0, 0, 1, 1);
+    qgrItem->setBrush(Qt::transparent);
+    qgrItem->setPen(QPen(Qt::transparent));
+    graphicsView()->scene()->addItem(qgrItem);
+
+    QMessageBox *msgBox =
+      new QMessageBox(QMessageBox::Warning, "",
+		      "<b><font size=\"+1\">"
+		      "No graph properties selected.</font></b><br/><br/>"
+		      "Open the <b>Properties</b> configuration tab<br/>"
+		      "to proceed.");
+    msgBox->setModal(false);
+    // set a specific name before applying style sheet
+    msgBox->setObjectName("needConfigurationMessageBox");
+    Perspective::setStyleSheet(msgBox);
+    noPropertyMsgBox = graphicsView()->scene()->addWidget(msgBox);
+    noPropertyMsgBox->setParentItem(qgrItem);
   }
 
   GlMainView::setState(dataSet);
@@ -384,51 +413,20 @@ void ParallelCoordinatesView::updateWithProgressBar() {
   }
 }
 
-void ParallelCoordinatesView::addEmptyViewLabel() {
-  Color backgroundColor(drawConfigWidget->getBackgroundColor());
-  getGlMainWidget()->getScene()->setBackgroundColor(backgroundColor);
-
-  Color foregroundColor;
-  int bgV = backgroundColor.getV();
-
-  if (bgV < 128) {
-    foregroundColor = Color(255, 255, 255);
-  } else {
-    foregroundColor = Color(0, 0, 0);
-  }
-
-  GlLabel *noDimsLabel = new GlLabel(Coord(0, 0, 0), Size(200, 200), foregroundColor);
-  noDimsLabel->setText(ViewName::ParallelCoordinatesViewName);
-  mainLayer->addGlEntity(noDimsLabel, "no dimensions label");
-  GlLabel *noDimsLabel1 =
-      new GlLabel(Coord(0.0f, -50.0f, 0.0f), Size(400.0f, 200.0f), foregroundColor);
-  noDimsLabel1->setText("No graph properties selected.");
-  mainLayer->addGlEntity(noDimsLabel1, "no dimensions label 1");
-  GlLabel *noDimsLabel2 =
-      new GlLabel(Coord(0.0f, -100.0f, 0.0f), Size(700.0f, 200.0f), foregroundColor);
-  noDimsLabel2->setText("Go to the \"Properties\" tab in top right corner.");
-  mainLayer->addGlEntity(noDimsLabel2, "no dimensions label 2");
-  mainLayer->deleteGlEntity(parallelCoordsDrawing);
-  mainLayer->deleteGlEntity(glGraphComposite);
-}
-
-void ParallelCoordinatesView::removeEmptyViewLabel() {
-  GlSimpleEntity *noDimsLabel = mainLayer->findGlEntity("no dimensions label");
-  GlSimpleEntity *noDimsLabel1 = mainLayer->findGlEntity("no dimensions label 1");
-  GlSimpleEntity *noDimsLabel2 = mainLayer->findGlEntity("no dimensions label 2");
-
-  if (noDimsLabel != nullptr) {
-    mainLayer->deleteGlEntity(noDimsLabel);
-    delete noDimsLabel;
-    mainLayer->deleteGlEntity(noDimsLabel1);
-    delete noDimsLabel1;
-    mainLayer->deleteGlEntity(noDimsLabel2);
-    delete noDimsLabel2;
-
+void ParallelCoordinatesView::propertiesSelected(bool flag) {
+  noPropertyMsgBox->setVisible(!flag);
+  toggleInteractors(flag);
+  if (quickAccessBarVisible())
+    _quickAccessBar->setEnabled(flag);
+  setOverviewVisible(flag);
+  if (flag) {
     if (parallelCoordsDrawing)
       mainLayer->addGlEntity(parallelCoordsDrawing, "Parallel Coordinates");
 
     mainLayer->addGlEntity(glGraphComposite, "graph");
+  } else {
+    mainLayer->deleteGlEntity(parallelCoordsDrawing);
+    mainLayer->deleteGlEntity(glGraphComposite);
   }
 }
 
@@ -436,22 +434,13 @@ void ParallelCoordinatesView::draw() {
   GlMainWidget *gl = getGlMainWidget();
 
   if (graphProxy->selectedPropertiesisEmpty()) {
-    removeEmptyViewLabel();
-    addEmptyViewLabel();
-    toggleInteractors(false);
-    if (quickAccessBarVisible())
-      _quickAccessBar->setEnabled(false);
-    setOverviewVisible(false);
+    propertiesSelected(false);
     gl->getScene()->centerScene();
     gl->draw();
     lastNbSelectedProperties = 0;
     return;
   }
-  removeEmptyViewLabel();
-  toggleInteractors(true);
-  if (quickAccessBarVisible())
-    _quickAccessBar->setEnabled(true);
-  setOverviewVisible(true);
+  propertiesSelected(true);
   if (graphProxy->getDataCount() > PROGRESS_BAR_DISPLAY_NB_DATA_THRESHOLD) {
     updateWithProgressBar();
   } else {

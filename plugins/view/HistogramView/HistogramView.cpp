@@ -22,6 +22,8 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlRect.h>
+
+#include <tulip/Perspective.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/QuickAccessBar.h>
 #include <tulip/TulipViewSettings.h>
@@ -29,6 +31,9 @@
 #include <QHelpEvent>
 #include <QApplication>
 #include <QToolTip>
+#include <QGraphicsView>
+#include <QGraphicsProxyWidget>
+#include <QMessageBox>
 
 #include "HistogramView.h"
 #include "HistogramInteractors.h"
@@ -60,8 +65,8 @@ HistogramView::HistogramView(const PluginContext *)
       xAxisDetail(nullptr), yAxisDetail(nullptr), _histoGraph(nullptr), emptyGraph(nullptr),
       emptyGlGraphComposite(nullptr), histogramsComposite(nullptr), labelsComposite(nullptr),
       axisComposite(nullptr), smallMultiplesView(true), mainLayer(nullptr),
-      detailedHistogram(nullptr), sceneRadiusBak(0), zoomFactorBak(0), noDimsLabel(nullptr),
-      noDimsLabel1(nullptr), noDimsLabel2(nullptr), emptyRect(nullptr), emptyRect2(nullptr),
+      detailedHistogram(nullptr), sceneRadiusBak(0), zoomFactorBak(0),
+      emptyRect(nullptr), emptyRect2(nullptr),
       isConstruct(false), lastNbHistograms(0), dataLocation(NODE), needUpdateHistogram(false),
       edgeAsNodeGraph(nullptr) {}
 
@@ -147,6 +152,13 @@ QuickAccessBar *HistogramView::getQuickAccessBarImpl() {
   return _bar;
 }
 
+void HistogramView::graphicsViewResized(int w, int h) {
+  if (isConstruct && noPropertyMsgBox->isVisible()) {
+    noPropertyMsgBox->setPos(w/2 - noPropertyMsgBox->sceneBoundingRect().width() / 2,
+			     h/2 - noPropertyMsgBox->sceneBoundingRect().height() / 2);
+  }
+}
+
 void HistogramView::setState(const DataSet &dataSet) {
   GlMainWidget *gl = getGlMainWidget();
 
@@ -157,6 +169,25 @@ void HistogramView::setState(const DataSet &dataSet) {
     histoOptionsWidget = new HistoOptionsWidget();
     propertiesSelectionWidget->setWidgetEnabled(true);
     histoOptionsWidget->setWidgetEnabled(false);
+
+    // build QMessageBox indicating the lack of selected properties
+    QGraphicsRectItem* qgrItem = new QGraphicsRectItem(0, 0, 1, 1);
+    qgrItem->setBrush(Qt::transparent);
+    qgrItem->setPen(QPen(Qt::transparent));
+    graphicsView()->scene()->addItem(qgrItem);
+
+    QMessageBox *msgBox =
+      new QMessageBox(QMessageBox::Warning, "",
+		      "<b><font size=\"+1\">"
+		      "No graph properties selected.</font></b><br/><br/>"
+		      "Open the <b>Properties</b> configuration tab<br/>"
+		      "to proceed.");
+    msgBox->setModal(false);
+    // set a specific name before applying style sheet
+    msgBox->setObjectName("needConfigurationMessageBox");
+    Perspective::setStyleSheet(msgBox);
+    noPropertyMsgBox = graphicsView()->scene()->addWidget(msgBox);
+    noPropertyMsgBox->setParentItem(qgrItem);
   }
 
   GlMainView::setState(dataSet);
@@ -430,52 +461,6 @@ bool HistogramView::eventFilter(QObject *object, QEvent *event) {
   return GlMainView::eventFilter(object, event);
 }
 
-void HistogramView::addEmptyViewLabel() {
-
-  Color backgroundColor(histoOptionsWidget->getBackgroundColor());
-  getGlMainWidget()->getScene()->setBackgroundColor(backgroundColor);
-
-  Color foregroundColor;
-  int bgV = backgroundColor.getV();
-
-  if (bgV < 128) {
-    foregroundColor = Color(255, 255, 255);
-  } else {
-    foregroundColor = Color(0, 0, 0);
-  }
-
-  if (noDimsLabel == nullptr) {
-    noDimsLabel = new GlLabel(Coord(0, 0, 0), Size(200, 200), foregroundColor);
-    noDimsLabel->setText(ViewName::HistogramViewName);
-    noDimsLabel1 = new GlLabel(Coord(0, -50, 0), Size(400, 200), foregroundColor);
-    noDimsLabel1->setText("No graph properties selected.");
-    noDimsLabel2 = new GlLabel(Coord(0, -100, 0), Size(700, 200), foregroundColor);
-    noDimsLabel2->setText("Go to the \"Properties\" tab in top right corner.");
-  } else {
-    noDimsLabel->setColor(foregroundColor);
-    noDimsLabel1->setColor(foregroundColor);
-    noDimsLabel2->setColor(foregroundColor);
-  }
-
-  mainLayer->addGlEntity(noDimsLabel, "no dimensions label");
-  mainLayer->addGlEntity(noDimsLabel1, "no dimensions label 1");
-  mainLayer->addGlEntity(noDimsLabel2, "no dimensions label 2");
-}
-
-void HistogramView::removeEmptyViewLabel() {
-  if (noDimsLabel != nullptr) {
-    mainLayer->deleteGlEntity(noDimsLabel);
-    delete noDimsLabel;
-    noDimsLabel = nullptr;
-    mainLayer->deleteGlEntity(noDimsLabel1);
-    delete noDimsLabel1;
-    noDimsLabel1 = nullptr;
-    mainLayer->deleteGlEntity(noDimsLabel2);
-    delete noDimsLabel2;
-    noDimsLabel2 = nullptr;
-  }
-}
-
 void HistogramView::viewConfigurationChanged() {
   getGlMainWidget()->getScene()->setBackgroundColor(histoOptionsWidget->getBackgroundColor());
   bool dataLocationChanged = propertiesSelectionWidget->getDataLocation() != dataLocation;
@@ -514,6 +499,14 @@ void HistogramView::viewConfigurationChanged() {
   drawOverview(true);
 }
 
+void HistogramView::propertiesSelected(bool flag) {
+  noPropertyMsgBox->setVisible(!flag);
+  toggleInteractors(flag);
+  if (quickAccessBarVisible())
+    _quickAccessBar->setEnabled(flag);
+  setOverviewVisible(flag);
+}
+
 void HistogramView::draw() {
   GlMainWidget *gl = getGlMainWidget();
 
@@ -526,22 +519,14 @@ void HistogramView::draw() {
       switchFromDetailedViewToSmallMultiples();
     }
 
-    removeEmptyViewLabel();
-    addEmptyViewLabel();
+    propertiesSelected(false);
     gl->centerScene();
-
-    if (quickAccessBarVisible())
-      _quickAccessBar->setEnabled(false);
-    setOverviewVisible(false);
 
     lastNbHistograms = 0;
     return;
   }
 
-  removeEmptyViewLabel();
-  if (quickAccessBarVisible())
-    _quickAccessBar->setEnabled(true);
-  setOverviewVisible(true);
+  propertiesSelected(true);
 
   if (detailedHistogram != nullptr) {
     needUpdateHistogram = true;

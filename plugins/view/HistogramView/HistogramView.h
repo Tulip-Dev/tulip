@@ -30,6 +30,8 @@
 
 #include <tulip/OpenGlIncludes.h>
 
+class QGraphicsProxyWidget;
+
 namespace tlp {
 
 class Graph;
@@ -86,6 +88,7 @@ public:
   void setState(const DataSet &dataSet) override;
   DataSet state() const override;
   void graphChanged(Graph *graph) override;
+  void graphicsViewResized(int w, int h) override;
   Graph *histoGraph() {
     return _histoGraph;
   }
@@ -149,8 +152,7 @@ private:
   void updateDetailedHistogramAxis();
   void destroyHistogramsIfNeeded();
   void cleanupGlScene();
-  void addEmptyViewLabel();
-  void removeEmptyViewLabel();
+  void propertiesSelected(bool);
 
   void setLayoutUpdateNeeded() {
     if (detailedHistogram)
@@ -169,6 +171,8 @@ private:
 
   ViewGraphPropertiesSelectionWidget *propertiesSelectionWidget;
   HistoOptionsWidget *histoOptionsWidget;
+
+  QGraphicsProxyWidget *noPropertyMsgBox;
 
   GlQuantitativeAxis *xAxisDetail, *yAxisDetail;
   Graph *_histoGraph, *emptyGraph;
@@ -190,8 +194,6 @@ private:
   Coord centerBak;
   Coord upBak;
 
-  GlLabel *noDimsLabel, *noDimsLabel1;
-  GlLabel *noDimsLabel2;
   GlRect *emptyRect;
   GlRect *emptyRect2;
 

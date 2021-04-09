@@ -33,6 +33,7 @@
 #include <tulip/Graph.h>
 
 class QMenu;
+class QGraphicsProxyWidget;
 
 namespace tlp {
 
@@ -109,6 +110,8 @@ public:
   void fillContextMenu(QMenu *menu, const QPointF &point) override;
   QList<QWidget *> configurationWidgets() const override;
   bool getNodeOrEdgeAtViewportPos(int x, int y, node &n, edge &e) const override;
+  void graphicsViewResized(int w, int h) override;
+
 
   // methods called by interactors
   void setDataUnderPointerSelectFlag(const int x, const int y, const bool selectFlag);
@@ -187,8 +190,7 @@ private:
   void updateWithProgressBar();
   void updateWithoutProgressBar();
 
-  void addEmptyViewLabel();
-  void removeEmptyViewLabel();
+  void propertiesSelected(bool);
 
   void registerTriggers();
   void removeTriggers();
@@ -215,6 +217,8 @@ private:
   QAction *addSelectHighlightedElements;
   QAction *removeSelectHighlightedElements;
   QAction *resetHightlightedElements;
+
+  QGraphicsProxyWidget *noPropertyMsgBox;
 
   unsigned int dataUnderMousePointer;
   GlLayer *mainLayer;

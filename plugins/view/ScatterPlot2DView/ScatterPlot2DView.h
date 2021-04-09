@@ -31,6 +31,8 @@
 
 #include "../../utils/PluginNames.h"
 
+class QGraphicsProxyWidget;
+
 namespace tlp {
 
 /*@{*/
@@ -94,6 +96,7 @@ public:
   }
 
   QuickAccessBar *getQuickAccessBarImpl() override;
+  void graphicsViewResized(int w, int h) override;
 
   void setState(const DataSet &dataSet) override;
   DataSet state() const override;
@@ -165,11 +168,12 @@ private:
   void destroyOverviewsIfNeeded();
   void destroyOverviews();
   void cleanupGlScene();
-  void addEmptyViewLabel();
-  void removeEmptyViewLabel();
+  void propertiesSelected(bool);
 
   ViewGraphPropertiesSelectionWidget *propertiesSelectionWidget;
   ScatterPlot2DOptionsWidget *optionsWidget;
+
+  QGraphicsProxyWidget *noPropertyMsgBox;
 
   Graph *scatterPlotGraph, *emptyGraph;
   GlLayer *mainLayer;
