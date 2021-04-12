@@ -211,16 +211,16 @@ void GraphUpdatesRecorder::deleteDefaultValues(
 }
 
 void GraphUpdatesRecorder::recordEdgeContainer(
-    std::unordered_map<node, std::vector<edge>> &containers, GraphImpl *g, node n, edge e) {
+    std::unordered_map<node, std::vector<edge>> &containers, GraphImpl *g, node n, edge e, bool loop) {
   if (containers.find(n) == containers.end()) {
     auto itAdj = containers.emplace(n, g->storage.adj(n)).first;
     // if we got a valid edge, this means that we must record
     // the node adjacencies before that edge was added (see addEdge)
     if (e.isValid()) {
       // as the edge is the last added
-      // it must be at the last adj position
+      // it must be at the last adj position (two last if loop)
       auto &adj = itAdj->second;
-      auto size = adj.size() - 1;
+      auto size = adj.size() - (loop ? 2 : 1);
       assert(e == adj[size]);
       adj.resize(size);
     }
@@ -244,7 +244,10 @@ void GraphUpdatesRecorder::recordEdgeContainer(
         --nbAdded;
         if (e == gEdges[--lastAdded]) {
           ++adjAdded;
-          break;
+	  // check for loop
+	  if (i && (e == adj[i - 1]))
+	    ++adjAdded, --i;
+	  break;
         }
       }
       if (nbAdded == 0)
@@ -984,8 +987,10 @@ void GraphUpdatesRecorder::addEdge(Graph *g, edge e) {
     auto eEnds = g->ends(e);
     addedEdgesEnds.emplace(e, eEnds);
     // record source & target old adjacencies
-    recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), eEnds.first, e);
-    recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), eEnds.second, e);
+    bool loop = eEnds.first == eEnds.second;
+    recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), eEnds.first, e, loop);
+    if (!loop)
+      recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), eEnds.second, e);
   }
 
   // we need to backup properties values of the newly added edge

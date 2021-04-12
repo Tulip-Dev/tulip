@@ -143,7 +143,7 @@ class GraphUpdatesRecorder : public Observable {
   void deleteDefaultValues(std::unordered_map<PropertyInterface *, DataMem *> &values);
   // record of a node's edges container before/after modification
   void recordEdgeContainer(std::unordered_map<node, std::vector<edge>> &, GraphImpl *, node,
-                           edge e = edge());
+                           edge e = edge(), bool loop = false);
   void recordEdgeContainer(std::unordered_map<node, std::vector<edge>> &, GraphImpl *, node,
                            const std::vector<edge> &, unsigned int);
   // remove an edge from a node's edges container

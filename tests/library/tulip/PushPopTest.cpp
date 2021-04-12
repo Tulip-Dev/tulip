@@ -49,7 +49,7 @@ void PushPopTest::testAddDel() {
 
   edge e0 = graph->addEdge(n0, n1);
 
-  graph->push();
+  graph->push(); // e0 = n0 => n1
   node n2 = graph->addNode();
   node n3 = graph->addNode();
 
@@ -143,6 +143,37 @@ void PushPopTest::testAddDel() {
   CPPUNIT_ASSERT(!graph->isElement(e1));
   CPPUNIT_ASSERT(!graph->isElement(n2));
   CPPUNIT_ASSERT(graph->isElement(n3));
+
+  graph->pop();
+  CPPUNIT_ASSERT(!graph->isElement(e1));
+  CPPUNIT_ASSERT(graph->deg(n0) == 1);
+
+  graph->push();
+  e1 = graph->addEdge(n0, n0);
+  CPPUNIT_ASSERT(graph->isElement(e1));
+  CPPUNIT_ASSERT(graph->deg(n0) == 3);
+
+  graph->pop();
+  CPPUNIT_ASSERT(!graph->isElement(e1));
+  CPPUNIT_ASSERT(graph->deg(n0) == 1);
+
+  graph->unpop();
+  CPPUNIT_ASSERT(graph->isElement(e1));
+  CPPUNIT_ASSERT(graph->deg(n0) == 3);
+
+  graph->pop();
+  graph->push();
+  graph->addEdges({{n0, n0}, {n1, n1}});
+  CPPUNIT_ASSERT(graph->deg(n0) == 3);
+  CPPUNIT_ASSERT(graph->deg(n1) == 3);
+
+  graph->pop();
+  CPPUNIT_ASSERT(graph->deg(n0) == 1);
+  CPPUNIT_ASSERT(graph->deg(n1) == 1);
+
+  graph->unpop();
+  CPPUNIT_ASSERT(graph->deg(n0) == 3);
+  CPPUNIT_ASSERT(graph->deg(n1) == 3);
 }
 
 //==========================================================
