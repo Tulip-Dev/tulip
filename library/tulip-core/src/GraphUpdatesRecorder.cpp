@@ -211,7 +211,8 @@ void GraphUpdatesRecorder::deleteDefaultValues(
 }
 
 void GraphUpdatesRecorder::recordEdgeContainer(
-    std::unordered_map<node, std::vector<edge>> &containers, GraphImpl *g, node n, edge e, bool loop) {
+    std::unordered_map<node, std::vector<edge>> &containers, GraphImpl *g, node n, edge e,
+    bool loop) {
   if (containers.find(n) == containers.end()) {
     auto itAdj = containers.emplace(n, g->storage.adj(n)).first;
     // if we got a valid edge, this means that we must record
@@ -244,10 +245,10 @@ void GraphUpdatesRecorder::recordEdgeContainer(
         --nbAdded;
         if (e == gEdges[--lastAdded]) {
           ++adjAdded;
-	  // check for loop
-	  if (i && (e == adj[i - 1]))
-	    ++adjAdded, --i;
-	  break;
+          // check for loop
+          if (i && (e == adj[i - 1]))
+            ++adjAdded, --i;
+          break;
         }
       }
       if (nbAdded == 0)
