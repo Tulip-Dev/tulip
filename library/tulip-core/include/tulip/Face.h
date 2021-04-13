@@ -24,7 +24,7 @@
 #include <tulip/Node.h>
 
 namespace tlp {
-  typedef node Face;
+typedef node Face;
 } // namespace tlp
 
 #endif

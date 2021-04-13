@@ -147,8 +147,8 @@ void Ordering::updateContourLeftRight(node pred, node n, edge e, node last) {
  * update is_selectable_visited and is_selectable
  */
 void Ordering::updateNewSelectableNodes(node node_f, node no_tmp2, edge, node node_last,
-                                        const vector<Face> &v_faces, bool one_face, bool was_visited,
-                                        bool selection_face) {
+                                        const vector<Face> &v_faces, bool one_face,
+                                        bool was_visited, bool selection_face) {
   MutableContainer<bool> tried;
   tried.setAll(false);
   node n = node_f;

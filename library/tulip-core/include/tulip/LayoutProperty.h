@@ -293,11 +293,13 @@ public:
   // unsigned int crossingNumber() const;
 
   // redefinition of some AbstractProperty methods
-  void setNodeValue(const node, tlp::StoredType<tlp::PointType::RealType>::ReturnedConstValue v) override;
+  void setNodeValue(const node,
+                    tlp::StoredType<tlp::PointType::RealType>::ReturnedConstValue v) override;
   void setAllNodeValue(tlp::StoredType<tlp::PointType::RealType>::ReturnedConstValue v) override;
   void setValueToGraphNodes(tlp::StoredType<tlp::PointType::RealType>::ReturnedConstValue v,
                             const Graph *graph) override;
-  void setEdgeValue(const edge, tlp::StoredType<tlp::LineType::RealType>::ReturnedConstValue v) override;
+  void setEdgeValue(const edge,
+                    tlp::StoredType<tlp::LineType::RealType>::ReturnedConstValue v) override;
   void setAllEdgeValue(tlp::StoredType<tlp::LineType::RealType>::ReturnedConstValue v) override;
   void setValueToGraphEdges(tlp::StoredType<tlp::LineType::RealType>::ReturnedConstValue v,
                             const Graph *graph) override;
