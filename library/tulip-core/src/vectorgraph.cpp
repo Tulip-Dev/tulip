@@ -588,23 +588,37 @@ void VectorGraph::dump() const {
     tlp::debug() << endl;
   }
 }
+
+//=============================================================
+/**
+ * internal function to break the program and output debug information during
+ * integrity test.
+ */
+static void testCond(VectorGraph *v, const std::string &str, bool b) {
+  if (!b) {
+    tlp::debug() << str << flush << endl;
+    v->dump();
+    exit(1);
+  }
+}
+
 //=============================================================
 void VectorGraph::integrityTest() {
   double sumDeg = 0;
 
   for (unsigned int i = 0; i < numberOfNodes(); ++i)
-    testCond("nodesId in array :", _nodes.getPos(_nodes[i]) == i);
+    testCond(this, "nodesId in array :", _nodes.getPos(_nodes[i]) == i);
 
   for (unsigned int i = 0; i < numberOfEdges(); ++i)
-    testCond("edgesId in array :", _edges.getPos(_edges[i]) == i);
+    testCond(this, "edgesId in array :", _edges.getPos(_edges[i]) == i);
 
   set<edge> edgeFound;
   set<node> nodeFound;
 
   for (unsigned int i = 0; i < numberOfNodes(); ++i) {
-    testCond("edge adjn == node adje",
+    testCond(this, "edge adjn == node adje",
              _nData[_nodes[i]]._adjn.size() == _nData[_nodes[i]]._adje.size());
-    testCond("edge adjn == node adjt",
+    testCond(this, "edge adjn == node adjt",
              _nData[_nodes[i]]._adjn.size() == _nData[_nodes[i]]._adjt.size());
     unsigned int _indeg = 0;
     unsigned int _outdeg = 0;
@@ -612,7 +626,7 @@ void VectorGraph::integrityTest() {
     nodeFound.insert(n);
 
     for (unsigned int j = 0; j < _nData[n]._adjn.size(); ++j) {
-      testCond("opposite", opposite(_nData[n]._adje[j], _nodes[i]) == _nData[n]._adjn[j]);
+      testCond(this, "opposite", opposite(_nData[n]._adje[j], _nodes[i]) == _nData[n]._adjn[j]);
 
       if (!_nData[n]._adjt[j])
         ++_indeg;
@@ -623,15 +637,15 @@ void VectorGraph::integrityTest() {
       nodeFound.insert(_nData[n]._adjn[j]);
     }
 
-    testCond("_adjt in", _indeg == indeg(n));
-    testCond("_adjt out", _outdeg == outdeg(n));
+    testCond(this, "_adjt in", _indeg == indeg(n));
+    testCond(this, "_adjt out", _outdeg == outdeg(n));
 
     sumDeg += _nData[_nodes[i]]._adjn.size();
-    testCond("deg/in/out", _nData[n]._adjn.size() == outdeg(n) + indeg(n));
+    testCond(this, "deg/in/out", _nData[n]._adjn.size() == outdeg(n) + indeg(n));
   }
 
-  testCond("edges found", edgeFound.size() == _edges.size());
-  testCond("nodes found", nodeFound.size() == _nodes.size());
+  testCond(this, "edges found", edgeFound.size() == _edges.size());
+  testCond(this, "nodes found", nodeFound.size() == _nodes.size());
 
   // edge extremities pos test
   for (unsigned int i = 0; i < numberOfEdges(); ++i) {
@@ -640,25 +654,17 @@ void VectorGraph::integrityTest() {
     node tgt = target(e);
     unsigned int srcp = _eData[e]._endsPos.first;
     unsigned int tgtp = _eData[e]._endsPos.second;
-    testCond("p1 :", _nData[src]._adje[srcp] == e);
-    testCond("p2 :", _nData[tgt]._adje[tgtp] == e);
-    testCond("p3 :", _nData[src]._adjn[srcp] == tgt);
-    testCond("p4 :", _nData[tgt]._adjn[tgtp] == src);
-    testCond("p5 :", _nData[src]._adjt[srcp] == true);
-    testCond("p6 :", _nData[tgt]._adjt[tgtp] == false);
+    testCond(this, "p1 :", _nData[src]._adje[srcp] == e);
+    testCond(this, "p2 :", _nData[tgt]._adje[tgtp] == e);
+    testCond(this, "p3 :", _nData[src]._adjn[srcp] == tgt);
+    testCond(this, "p4 :", _nData[tgt]._adjn[tgtp] == src);
+    testCond(this, "p5 :", _nData[src]._adjt[srcp] == true);
+    testCond(this, "p6 :", _nData[tgt]._adjt[tgtp] == false);
   }
 
-  testCond("Nb edges", sumDeg == (numberOfEdges() * 2));
+  testCond(this, "Nb edges", sumDeg == (numberOfEdges() * 2));
 }
 
-//=======================================================
-void VectorGraph::testCond(string str, bool b) {
-  if (!b) {
-    tlp::debug() << str << flush << endl;
-    dump();
-    exit(1);
-  }
-}
 //=======================================================
 void VectorGraph::addNodeToValues(node n) {
   for (auto values : _nodeValues)

@@ -55,9 +55,9 @@ public:
   DEFINE_GET_CPP_CLASS_NAME;
 
   // redefinition of some AbstractProperty methods
-  void setNodeValue(const node n, tlp::StoredType<Size>::ReturnedConstValue v) override;
-  void setAllNodeValue(tlp::StoredType<Size>::ReturnedConstValue v) override;
-  void setValueToGraphNodes(tlp::StoredType<Size>::ReturnedConstValue v,
+  void setNodeValue(const node n, tlp::StoredType<tlp::SizeType::RealType>::ReturnedConstValue v) override;
+  void setAllNodeValue(tlp::StoredType<tlp::SizeType::RealType>::ReturnedConstValue v) override;
+  void setValueToGraphNodes(tlp::StoredType<tlp::SizeType::RealType>::ReturnedConstValue v,
                             const Graph *graph) override;
 
   int compare(const node n1, const node n2) const override;

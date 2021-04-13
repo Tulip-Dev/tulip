@@ -147,7 +147,7 @@ void Ordering::updateContourLeftRight(node pred, node n, edge e, node last) {
  * update is_selectable_visited and is_selectable
  */
 void Ordering::updateNewSelectableNodes(node node_f, node no_tmp2, edge, node node_last,
-                                        vector<Face> v_faces, bool one_face, bool was_visited,
+                                        const vector<Face> &v_faces, bool one_face, bool was_visited,
                                         bool selection_face) {
   MutableContainer<bool> tried;
   tried.setAll(false);
@@ -245,7 +245,7 @@ void Ordering::updateNewSelectableNodes(node node_f, node no_tmp2, edge, node no
 /**
  * update is_selectable_visted_face and is_selectable_face
  */
-void Ordering::updateSelectableFaces(vector<Face> v_faces) {
+void Ordering::updateSelectableFaces(const vector<Face> &v_faces) {
   Face derniere = Gp->getFaceContaining(v1[0], v1[1]);
 
   for (unsigned int m = 0; m < v_faces.size(); ++m) {
@@ -559,7 +559,7 @@ node Ordering::getLastOfP(Face f, node pred, node n, edge e) {
 /**
  * return the longest path of degree 2 on face fn from node fn[from]
  */
-vector<node> Ordering::getPathFrom(vector<node> fn, int from) {
+vector<node> Ordering::getPathFrom(const vector<node> &fn, int from) {
   vector<node> res;
   int i = from;
   int l = fn.size();
@@ -795,7 +795,7 @@ void Ordering::augment(Face f, node pred, node n, node pred_last, node last, int
 /**
  * select node n and update members
  */
-void Ordering::selectAndUpdate(node n) {
+void Ordering::selectAndUpdateNode(node n) {
 
   // update visitedNodes, contour, is_selectable and is_selectable_visited
   visitedNodes.set(n.id, false);
@@ -1079,7 +1079,7 @@ void Ordering::selectAndUpdate(node n) {
 /**
  * select face f and update members
  */
-void Ordering::selectAndUpdate(Face f) {
+void Ordering::selectAndUpdateFace(Face f) {
   int compteur = 0;
   node n;
   node pred;
@@ -1358,8 +1358,7 @@ Ordering::Ordering(PlanarConMap *G, PluginProgress *pluginProgress, int minProgr
     Iterator<unsigned int> *itn = is_selectable_visited.findAll(true);
 
     while (itn->hasNext()) {
-      n = node(itn->next());
-      selectAndUpdate(n);
+      selectAndUpdateNode(node(itn->next()));
 
       if (Gp->nbFaces() <= 2)
         break;
@@ -1377,8 +1376,7 @@ Ordering::Ordering(PlanarConMap *G, PluginProgress *pluginProgress, int minProgr
     bool selVisitedFace = false;
 
     for (unsigned int faceId : is_selectable_visited_face.findAll(true)) {
-      Face f = Face(faceId);
-      selectAndUpdate(f);
+      selectAndUpdateFace(Face(faceId));
       selVisitedFace = true;
       break;
     }
@@ -1389,9 +1387,8 @@ Ordering::Ordering(PlanarConMap *G, PluginProgress *pluginProgress, int minProgr
 
     if (!selVisitedFace) {
       for (unsigned int id : is_selectable.findAll(true)) {
-        n = node(id);
         selNode = true;
-        selectAndUpdate(n);
+        selectAndUpdateNode(node(id));
         break;
       }
     }
@@ -1403,8 +1400,7 @@ Ordering::Ordering(PlanarConMap *G, PluginProgress *pluginProgress, int minProgr
     if (!selNode && !selVisitedFace) {
 
       for (unsigned int faceId : is_selectable_face.findAll(true)) {
-        Face f(faceId);
-        selectAndUpdate(f);
+        selectAndUpdateFace(Face(faceId));
         selFace = true;
         break;
       }
@@ -1478,7 +1474,7 @@ Ordering::Ordering(PlanarConMap *G, PluginProgress *pluginProgress, int minProgr
 /**
  * initialize v1
  */
-void Ordering::init_v1(vector<node> fn) {
+void Ordering::init_v1(const vector<node> &fn) {
   int l = fn.size();
   int i = 0;
   int cpt2 = 0;

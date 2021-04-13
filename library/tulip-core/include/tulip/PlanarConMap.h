@@ -29,8 +29,6 @@
 
 namespace tlp {
 
-struct Face;
-
 /**
  * \brief interface for a topological graph
  */

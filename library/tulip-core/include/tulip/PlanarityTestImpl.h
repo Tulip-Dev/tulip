@@ -25,6 +25,7 @@
 #include <list>
 #include <vector>
 #include <unordered_map>
+#include <utility>
 
 #include <tulip/Edge.h>
 #include <tulip/MutableContainer.h>
@@ -52,7 +53,6 @@ private:
   void restore();
   edge edgeReversal(edge e);
   void makeBidirected(Graph *sG);
-  void swapNode(node &n1, node &n2);
   void findTerminalNodes(Graph *sG, node n, std::list<node> &listOfComponents,
                          std::map<node, std::list<node>> &terminalNodes);
   bool findObstruction(Graph *sG, node n, std::list<node> &terminalNodes);

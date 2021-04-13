@@ -81,15 +81,15 @@ private:
 
   node getLastOfQ(Face f, node prec, node n, edge e);
   node getLastOfP(Face f, node prec, node n, edge e);
-  std::vector<node> getPathFrom(std::vector<node> fn, int from);
+  std::vector<node> getPathFrom(const std::vector<node> &fn, int from);
   int infFaceSize();
 
   void updateOutAndVisitedFaces(Face f);
   void updateContourLeftRight(node prec, node n, edge e, node last);
   void updateNewSelectableNodes(node node_f, node no_tmp2, edge ed_tmp, node node_last,
-                                std::vector<Face> v_faces, bool one_face = false,
+                                const std::vector<Face> &v_faces, bool one_face = false,
                                 bool was_visited = false, bool selection_face = false);
-  void updateSelectableFaces(std::vector<Face> v_faces);
+  void updateSelectableFaces(const std::vector<Face> &v_faces);
 
   int seqp(Face f);
   void minMarkedf();
@@ -97,12 +97,12 @@ private:
 
   struct augmentableAndNodes_ getAugAndNodes(Face f);
   void augment(Face f, node prec, node n, node prec_last, node last, int nbNewFace, bool pair);
-  void selectAndUpdate(Face f);
-  void selectAndUpdate(node n);
+  void selectAndUpdateFace(Face f);
+  void selectAndUpdateNode(node n);
   bool isSelectable(node n);
 
   void init();
-  void init_v1(std::vector<node> fn);
+  void init_v1(const std::vector<node> &fn);
   void init_selectableNodes();
   void init_selectableFaces();
   void init_outv_oute();

@@ -48,7 +48,7 @@ public:
    * @param filename The file to parse.
    * @return void
    **/
-  void parse(std::string filename);
+  void parse(const std::string &filename);
   void parse(const unsigned char *data, int length);
 
   virtual void parseNull();

@@ -135,13 +135,13 @@ void PlanarityTestImpl::addPartOfBc(Graph *sG, node cNode, node n1, node n2, nod
 //=================================================================
 void PlanarityTestImpl::sortByLabelB(node &n1, node &n2, node &n3) {
   if (labelB.get(n2.id) < labelB.get(n1.id))
-    swapNode(n1, n2);
+    std::swap(n1, n2);
 
   if (labelB.get(n3.id) < labelB.get(n1.id))
-    swapNode(n1, n3);
+    std::swap(n1, n3);
 
   if (labelB.get(n3.id) < labelB.get(n2.id))
-    swapNode(n2, n3);
+    std::swap(n2, n3);
 }
 //=================================================================
 void PlanarityTestImpl::obstrEdgesPNode(Graph *sG, node p, node u) {
@@ -223,7 +223,7 @@ void PlanarityTestImpl::calcInfo3Terminals(node &t1, node &t2, node &t3, int &co
   min = dfsPosNum.get(q1.id);
 
   if (dfsPosNum.get(q2.id) < min) {
-    swapNode(k2, k3);
+    std::swap(k2, k3);
     min = dfsPosNum.get(q2.id);
   }
 
@@ -237,10 +237,10 @@ void PlanarityTestImpl::calcInfo3Terminals(node &t1, node &t2, node &t3, int &co
   // is min a terminal node?
   if (min == dfsPosNum.get(t1.id) || min == dfsPosNum.get(t2.id) || min == dfsPosNum.get(t3.id)) {
     if (dfsPosNum.get(k2.id) == min)
-      swapNode(k1, k2);
+      std::swap(k1, k2);
 
     if (dfsPosNum.get(k3.id) == min)
-      swapNode(k1, k3);
+      std::swap(k1, k3);
 
     assert(dfsPosNum.get(k1.id) == min);
     cNode = activeCNodeOf(true, k1); // dfspos_num[k1] == min;
@@ -252,7 +252,7 @@ void PlanarityTestImpl::calcInfo3Terminals(node &t1, node &t2, node &t3, int &co
       q = parent.get(cNode.id);
     else if (activeCNodeOf(true, k2) != cNode) {
       q = lastPNode(k2, cNode);
-      swapNode(k2, k3);
+      std::swap(k2, k3);
     } else
       q = lastPNode(k3, cNode);
 
@@ -298,7 +298,7 @@ void PlanarityTestImpl::obstructionEdgesT0(Graph *sG, node w, node t1, node t2, 
   int min = dfsPosNum.get(m1.id), max = dfsPosNum.get(m1.id);
 
   if (dfsPosNum.get(m2.id) < min) {
-    swapNode(t2, t3);
+    std::swap(t2, t3);
     min = dfsPosNum.get(m2.id);
   }
 
@@ -477,7 +477,7 @@ void PlanarityTestImpl::obstructionEdgesPossibleObstrConfirmed(Graph *sG, node w
   node w2 = nodeWithDfsPos.get(labelB.get(f.id));
 
   if (dfsPosNum.get(w2.id) < dfsPosNum.get(w1.id))
-    swapNode(w1, w2);
+    std::swap(w1, w2);
 
   assert(listEdgesUpwardT0(w, w2));
   assert(listEdgesUpwardT0(nodeLabelB.get(f.id), f));
@@ -565,7 +565,7 @@ void PlanarityTestImpl::obstructionEdgesCNodeCounter(Graph *sG, node cNode, node
   node w2 = nodeWithDfsPos.get(labelB.get(jr.id));
 
   if (dfsPosNum.get(w2.id) < dfsPosNum.get(w1.id))
-    swapNode(w1, w2);
+    std::swap(w1, w2);
 
   assert(listEdgesUpwardT0(parent.get(cNode.id), w2));
   assert(listEdgesUpwardT0(nodeLabelB.get(f.id), f));

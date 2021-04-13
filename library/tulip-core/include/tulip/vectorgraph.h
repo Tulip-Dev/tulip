@@ -717,13 +717,6 @@ private:
 
   //=======================================================
   /**
-   * internal function to break the program and output debug information during
-   * integrity test.
-   * @TODO hide that function in the .cpp file
-   */
-  void testCond(std::string str, bool b);
-  //=======================================================
-  /**
    * internal function to adjust size of node properties when graph is modified
    */
   void addNodeToValues(node n);

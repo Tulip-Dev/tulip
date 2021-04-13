@@ -48,7 +48,7 @@ ColorScale &ColorScale::operator=(const ColorScale &scale) {
 
 ColorScale::~ColorScale() {}
 
-void ColorScale::setColorScale(const std::vector<Color> colors, const bool gradientV) {
+void ColorScale::setColorScale(const std::vector<Color> &colors, const bool gradientV) {
   gradient = gradientV;
   colorMap.clear();
 

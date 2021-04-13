@@ -98,7 +98,7 @@ public:
    *
    * @param param a string value from the collection
    */
-  bool setCurrent(const std::string param);
+  bool setCurrent(const std::string &param);
 
   /**
    * Returns the index of the current selected string.

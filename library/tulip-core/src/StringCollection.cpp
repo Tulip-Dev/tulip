@@ -105,7 +105,7 @@ bool StringCollection::setCurrent(const unsigned int param) {
   return false;
 }
 
-bool StringCollection::setCurrent(const string param) {
+bool StringCollection::setCurrent(const string &param) {
   for (unsigned int i = 0; i < _data.size(); ++i) {
     if (_data.at(i) == param) {
       current = i;

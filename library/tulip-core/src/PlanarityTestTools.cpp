@@ -240,12 +240,6 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
     }
 }
 //=================================================================
-void PlanarityTestImpl::swapNode(node &n1, node &n2) {
-  node tmp = n1;
-  n1 = n2;
-  n2 = tmp;
-}
-//=================================================================
 bool PlanarityTestImpl::isCNode(node n) {
   return (n.isValid() && (dfsPosNum.get(n.id) < 0));
 }
@@ -474,7 +468,7 @@ node PlanarityTestImpl::lcaBetween(node n1, node n2, const MutableContainer<node
   }
 
   if (dfsPosNum.get(n1.id) > dfsPosNum.get(n2.id))
-    swapNode(n1, n2);
+    std::swap(n1, n2);
 
   list<node> nl;
 
@@ -541,7 +535,7 @@ void PlanarityTestImpl::calculateNewRBC(Graph *, node newCNode, node n, list<nod
     }
 
     if (dfsPosNum.get(aux1.id) > dfsPosNum.get(aux2.id))
-      swapNode(t1, t2);
+      std::swap(t1, t2);
 
     m = lcaBetweenTermNodes(t1, t2);
     node t12 = lastPNode(t1, m), t22 = lastPNode(t2, m);

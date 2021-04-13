@@ -242,7 +242,7 @@ void PlanarityTestImpl::calculatePartialEmbedding(Graph *sG, node w, node newCNo
 
     if (dfsPosNum.get(t1.id) > dfsPosNum.get(t2.id))
       // leda_swap(term1, term2);
-      swapNode(term1, term2);
+      std::swap(term1, term2);
 
     t1 = lastPNode(term1, m);
 

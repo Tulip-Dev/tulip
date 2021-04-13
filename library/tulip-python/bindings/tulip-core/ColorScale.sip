@@ -174,7 +174,7 @@ Clears the color scale.
 
 //==========================================================================================
 
-  virtual void setColorScale(const std::vector<tlp::Color> colors, const bool gradient = true);
+  virtual void setColorScale(const std::vector<tlp::Color> &colors, const bool gradient = true);
 %Docstring
 tlp.ColorScale.setColorScale(colors, gradient=True)
 

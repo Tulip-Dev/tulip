@@ -123,7 +123,7 @@ public:
    * @param gradient if set to true, color scale is a gradient
    *
    */
-  virtual void setColorScale(const std::vector<Color> colors, const bool gradient = true);
+  virtual void setColorScale(const std::vector<Color> &colors, const bool gradient = true);
 
   /**
    * @brief Adds a color to the color scale at specific position.

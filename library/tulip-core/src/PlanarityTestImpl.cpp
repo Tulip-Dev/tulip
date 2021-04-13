@@ -394,8 +394,8 @@ bool PlanarityTestImpl::findObstruction(Graph *sG, node n, list<node> &terminalN
 
           if (mm == t1 || mm == t2) {
             if (mm == t2) {
-              swapNode(t1, t2); // makes t1 == t12;
-              swapNode(t12, t22);
+              std::swap(t1, t2); // makes t1 == t12;
+              std::swap(t12, t22);
             }
           } else
             mm = NULL_NODE;

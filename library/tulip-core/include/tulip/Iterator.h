@@ -31,9 +31,11 @@
 namespace tlp {
 
 ///@cond DOXYGEN_HIDDEN
+#ifndef NDEBUG
 extern TLP_SCOPE void incrNumIterators();
 extern TLP_SCOPE void decrNumIterators();
 extern TLP_SCOPE int getNumIterators();
+#endif
 ///@endcond
 
 /**
