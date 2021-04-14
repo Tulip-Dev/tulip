@@ -122,7 +122,7 @@ private:
   Coord start, end;
   std::string selectedEntity;
   bool mouseButtonPressOnEdge;
-  bool belong(const Coord&, const Coord&, const Coord&, GlMainWidget *);
+  bool belong(const Coord &, const Coord &, const Coord &, GlMainWidget *);
   bool haveSelection(GlMainWidget *);
   void computeSrcTgtEntities(GlMainWidget *);
   bool computeBendsCircles(GlMainWidget *);

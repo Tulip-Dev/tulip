@@ -103,18 +103,18 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
         _operation = NONE_OP;
       } else {
         vector<SelectedEntity> selectedEntities;
-	bool entityIsSelected = glMainWidget->pickGlEntities(
+        bool entityIsSelected = glMainWidget->pickGlEntities(
             int(editPosition[0]) - 3, int(editPosition[1]) - 3, 6, 6, selectedEntities, layer);
 
         if (!entityIsSelected) {
           // We have click outside an entity
           _operation = NONE_OP;
         } else {
-	  for (const auto &entity : selectedEntities) {
-	    selectedEntity = circleString->findKey(entity.getSimpleEntity());
-	    if (!selectedEntity.empty())
-	      break;
-	  }
+          for (const auto &entity : selectedEntities) {
+            selectedEntity = circleString->findKey(entity.getSimpleEntity());
+            if (!selectedEntity.empty())
+              break;
+          }
 
           if (qMouseEv->modifiers() &
 #if defined(__APPLE__)
@@ -307,7 +307,8 @@ void MouseEdgeBendEditor::initProxies(GlMainWidget *glMainWidget) {
 }
 //========================================================================================
 // Does the point p belong to the segment [u,v]?
-bool MouseEdgeBendEditor::belong(const Coord &u, const Coord &v, const Coord &p, GlMainWidget *glMainWidget) {
+bool MouseEdgeBendEditor::belong(const Coord &u, const Coord &v, const Coord &p,
+                                 GlMainWidget *glMainWidget) {
   int W = glMainWidget->screenToViewport(glMainWidget->width());
   int H = glMainWidget->screenToViewport(glMainWidget->height());
   Coord m = glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(u);
@@ -327,8 +328,10 @@ void MouseEdgeBendEditor::mMouseTranslate(int newX, int newY, GlMainWidget *glMa
 
   Coord v0(0, 0, 0);
   Coord v1(editPosition[0] - newX, -(editPosition[1] - newY), 0);
-  v0 = glMainWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(glMainWidget->screenToViewport(v0));
-  v1 = glMainWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(glMainWidget->screenToViewport(v1));
+  v0 = glMainWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(
+      glMainWidget->screenToViewport(v0));
+  v1 = glMainWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(
+      glMainWidget->screenToViewport(v1));
 
   int i;
   if (IntegerType::fromString(i, selectedEntity)) {
@@ -345,10 +348,10 @@ void MouseEdgeBendEditor::mMouseTranslate(int newX, int newY, GlMainWidget *glMa
   } else {
     if (selectedEntity == "targetTriangle") {
       targetTriangle.translate(Coord(-glMainWidget->screenToViewport(editPosition[0] - newX),
-                                   glMainWidget->screenToViewport(editPosition[1] - newY), 0));
+                                     glMainWidget->screenToViewport(editPosition[1] - newY), 0));
     } else /* (selectedEntity == "sourceCircle") */ {
       sourceCircle.translate(Coord(-glMainWidget->screenToViewport(editPosition[0] - newX),
-				   glMainWidget->screenToViewport(editPosition[1] - newY), 0));
+                                   glMainWidget->screenToViewport(editPosition[1] - newY), 0));
     }
     glMainWidget->draw(false);
   }
