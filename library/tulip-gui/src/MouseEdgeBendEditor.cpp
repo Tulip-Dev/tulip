@@ -102,15 +102,19 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
         // which should intercept the event
         _operation = NONE_OP;
       } else {
-
-        bool entityIsSelected = glMainWidget->pickGlEntities(
-            int(editPosition[0]) - 3, int(editPosition[1]) - 3, 6, 6, select, layer);
+        vector<SelectedEntity> selectedEntities;
+	bool entityIsSelected = glMainWidget->pickGlEntities(
+            int(editPosition[0]) - 3, int(editPosition[1]) - 3, 6, 6, selectedEntities, layer);
 
         if (!entityIsSelected) {
           // We have click outside an entity
           _operation = NONE_OP;
         } else {
-          selectedEntity = circleString->findKey(select[0].getSimpleEntity());
+	  for (const auto &entity : selectedEntities) {
+	    selectedEntity = circleString->findKey(entity.getSimpleEntity());
+	    if (!selectedEntity.empty())
+	      break;
+	  }
 
           if (qMouseEv->modifiers() &
 #if defined(__APPLE__)
@@ -323,24 +327,13 @@ void MouseEdgeBendEditor::mMouseTranslate(int newX, int newY, GlMainWidget *glMa
 
   Coord v0(0, 0, 0);
   Coord v1(editPosition[0] - newX, -(editPosition[1] - newY), 0);
-  v0 = glMainWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(
-      glMainWidget->screenToViewport(v0));
-  v1 = glMainWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(
-      glMainWidget->screenToViewport(v1));
-  v1 -= v0;
+  v0 = glMainWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(glMainWidget->screenToViewport(v0));
+  v1 = glMainWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(glMainWidget->screenToViewport(v1));
 
-  if (selectedEntity == "targetTriangle") {
-    targetTriangle.translate(Coord(-glMainWidget->screenToViewport(editPosition[0] - newX),
-                                   glMainWidget->screenToViewport(editPosition[1] - newY), 0));
-    glMainWidget->draw(false);
-  } else if (selectedEntity == "sourceCircle") {
-    sourceCircle.translate(Coord(-glMainWidget->screenToViewport(editPosition[0] - newX),
-                                 glMainWidget->screenToViewport(editPosition[1] - newY), 0));
-    glMainWidget->draw(false);
-  } else {
-    int i;
-    IntegerType::fromString(i, selectedEntity);
-    coordinates[i] += v1;
+  int i;
+  if (IntegerType::fromString(i, selectedEntity)) {
+    coordinates[i] += v1 - v0;
+
     Observable::holdObservers();
 
     if (edgeSelected)
@@ -349,6 +342,15 @@ void MouseEdgeBendEditor::mMouseTranslate(int newX, int newY, GlMainWidget *glMa
       _coordsVectorProperty->setNodeValue(mNode, coordinates);
 
     Observable::unholdObservers();
+  } else {
+    if (selectedEntity == "targetTriangle") {
+      targetTriangle.translate(Coord(-glMainWidget->screenToViewport(editPosition[0] - newX),
+                                   glMainWidget->screenToViewport(editPosition[1] - newY), 0));
+    } else /* (selectedEntity == "sourceCircle") */ {
+      sourceCircle.translate(Coord(-glMainWidget->screenToViewport(editPosition[0] - newX),
+				   glMainWidget->screenToViewport(editPosition[1] - newY), 0));
+    }
+    glMainWidget->draw(false);
   }
 
   editPosition[0] = newX;
@@ -356,9 +358,8 @@ void MouseEdgeBendEditor::mMouseTranslate(int newX, int newY, GlMainWidget *glMa
 }
 //========================================================================================
 void MouseEdgeBendEditor::mMouseDelete() {
-  if (selectedEntity != "targetTriangle" && selectedEntity != "sourceCircle") {
-    int i;
-    IntegerType::fromString(i, selectedEntity);
+  int i;
+  if (IntegerType::fromString(i, selectedEntity)) {
     vector<Coord>::iterator CoordIt = coordinates.begin();
     vector<tlp::GlCircle>::iterator circleIt = circles.begin();
     int tmp = 0;
@@ -522,7 +523,6 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
 
   coordinates.clear();
   circles.clear();
-  select.clear();
 
   if (circleString)
     circleString->reset(false);

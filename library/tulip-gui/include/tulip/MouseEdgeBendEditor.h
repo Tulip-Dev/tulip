@@ -116,7 +116,6 @@ private:
   GlTriangle targetTriangle;
   GlCircle sourceCircle;
   GlComposite *circleString;
-  std::vector<SelectedEntity> select;
   bool edgeSelected;
   tlp::edge mEdge;
   node mNode;
