@@ -199,7 +199,7 @@ void MouseEdgeBuilder::clear() {
     glMainWidget->setCursor(QCursor());
 }
 
-void MouseEdgeBuilder::addLink(const node &source, const node &target) {
+void MouseEdgeBuilder::addLink(node source, node target) {
   assert(glMainWidget);
   Graph *g = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
 

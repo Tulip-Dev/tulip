@@ -47,7 +47,7 @@ protected:
    * @param source
    * @param dest
    */
-  virtual void addLink(const node &source, const node &dest);
+  virtual void addLink(node source, node dest);
   /**
    * @brief source gets the source node.
    * @return

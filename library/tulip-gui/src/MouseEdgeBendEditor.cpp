@@ -303,7 +303,7 @@ void MouseEdgeBendEditor::initProxies(GlMainWidget *glMainWidget) {
 }
 //========================================================================================
 // Does the point p belong to the segment [u,v]?
-bool MouseEdgeBendEditor::belong(Coord u, Coord v, Coord p, GlMainWidget *glMainWidget) {
+bool MouseEdgeBendEditor::belong(const Coord &u, const Coord &v, const Coord &p, GlMainWidget *glMainWidget) {
   int W = glMainWidget->screenToViewport(glMainWidget->width());
   int H = glMainWidget->screenToViewport(glMainWidget->height());
   Coord m = glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(u);
