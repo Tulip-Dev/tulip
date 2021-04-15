@@ -20,6 +20,8 @@
 #ifndef Tulip_GLSCENE_H
 #define Tulip_GLSCENE_H
 
+#include <climits>
+
 #include <tulip/tulipconf.h>
 #include <tulip/BoundingBox.h>
 #include <tulip/GlLODCalculator.h>
@@ -40,7 +42,7 @@ class GlGraphComposite;
  * After a selection, objects of SelectedEntity is returned
  * To use this object the first thing to do is to call getEntity type to know the type of Entity
  * After that you can :
- *   - Get the GlSimpleEnity pointer (getSimpleEntity())
+ *   - Get the GlSimpleEntity pointer (getSimpleEntity())
  *   - Get the id of node/edge and the graph associated (getComplexEntityId() and
  * getComplexEntityGraph())
  *
@@ -55,26 +57,29 @@ struct SelectedEntity {
   };
 
   SelectedEntity()
-      : simpleEntity(nullptr), complexEntityId(uint(-1)), entityType(UNKNOW_SELECTED),
-        complexEntityGraph(nullptr) {}
+    : simpleEntity(nullptr), complexEntityId(UINT_MAX), entityType(UNKNOW_SELECTED) {}
   SelectedEntity(GlSimpleEntity *entity)
-      : simpleEntity(entity), complexEntityId(uint(-1)), entityType(SIMPLE_ENTITY_SELECTED),
-        complexEntityGraph(nullptr) {}
+    : simpleEntity(entity), complexEntityId(UINT_MAX), entityType(SIMPLE_ENTITY_SELECTED)  {}
   SelectedEntity(Graph *graph, unsigned int id, SelectedEntityType type)
-      : simpleEntity(nullptr), complexEntityId(id), entityType(type), complexEntityGraph(graph) {}
+    : complexEntityGraph(graph), complexEntityId(id), entityType(type) {
+    assert((type == NODE_SELECTED) || (type == EDGE_SELECTED));
+  }
 
   GlSimpleEntity *getSimpleEntity() const {
-    assert(simpleEntity != nullptr);
+    assert((entityType == SIMPLE_ENTITY_SELECTED) &&
+	   (simpleEntity != nullptr));
     return simpleEntity;
   }
 
   unsigned int getComplexEntityId() const {
-    assert(complexEntityId != uint(-1));
+    assert((entityType != SIMPLE_ENTITY_SELECTED) &&
+	   (complexEntityId != UINT_MAX));
     return complexEntityId;
   }
 
   Graph *getComplexEntityGraph() const {
-    assert(complexEntityGraph != nullptr);
+    assert((entityType != SIMPLE_ENTITY_SELECTED) &&
+	   (complexEntityGraph != nullptr));
     return complexEntityGraph;
   }
 
@@ -82,46 +87,28 @@ struct SelectedEntity {
     return entityType;
   }
   /**
-   * @brief getNode is a convenience method to perform the check on the selected element type and
-   * return the corresponding node object. It's equivalent to
-   * @code
-   * if(getComplexEntityType()==NODE_SELECTED){
-   *    return node(getComplexEntityId())
-   * }
-   * @endcode
    * @return the selected node if the entity type is correct or an invalid node else.
    */
   node getNode() const {
-    if (entityType == NODE_SELECTED) {
-      return node(complexEntityId);
-    } else {
-      return node();
-    }
+    assert((entityType == NODE_SELECTED) || (complexEntityId == UINT_MAX));
+    return node(complexEntityId);
   }
 
   /**
-   * @brief getEdge is a convenience method to perform the check on the selected element type and
-   * return the corresponding edge object. It's equivalent to
-   * @code
-   * if(getComplexEntityType()==EDGE_SELECTED){
-   *    return edge(getComplexEntityId())
-   * }
-   * @endcode
    * @return the selected edge if the entity type is correct or an invalid edge else.
    */
   edge getEdge() const {
-    if (entityType == EDGE_SELECTED) {
-      return edge(complexEntityId);
-    } else {
-      return edge();
-    }
+    assert((entityType == EDGE_SELECTED) || (complexEntityId == UINT_MAX));
+    return edge(complexEntityId);
   }
 
 protected:
-  GlSimpleEntity *simpleEntity;
+  union {
+    GlSimpleEntity *simpleEntity;
+    Graph *complexEntityGraph;
+  };
   unsigned int complexEntityId;
   SelectedEntityType entityType;
-  Graph *complexEntityGraph;
 };
 
 /**
