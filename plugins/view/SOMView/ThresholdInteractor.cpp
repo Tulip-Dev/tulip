@@ -61,7 +61,6 @@ double ColorScaleSlider::getValue() {
 }
 
 ColorScaleSlider::~ColorScaleSlider() {
-  linkedScale->getGlColorScale()->getColorScale()->removeObserver(this);
   reset(true);
 }
 
@@ -362,7 +361,7 @@ bool ThresholdInteractor::eventFilter(QObject *widget, QEvent *event) {
 
       // assert(!finalSelectedEntities.empty());
 
-      if (!startDrag) {
+      if (!startDrag && mouvingSlider) {
         glMainWidget->setMouseTracking(true);
         startDrag = true;
         // mouvingSlider = *finalSelectedEntities.begin();
@@ -401,7 +400,7 @@ bool ThresholdInteractor::eventFilter(QObject *widget, QEvent *event) {
 
   if (event->type() == QEvent::MouseButtonRelease && startDrag) {
     SOMMap *som = somView->getSOM();
-    assert(mouvingSlider != nullptr);
+    assert(mouvingSlider);
     glMainWidget->setMouseTracking(false);
     startDrag = false;
     mouvingSlider->endShift();
