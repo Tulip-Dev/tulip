@@ -232,12 +232,16 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
         return false;
       }
     } else if (qMouseEv->buttons() == Qt::NoButton) {
-      SelectedEntity selectedEntity;
       GlMainWidget *g = static_cast<GlMainWidget *>(widget);
+      vector<SelectedEntity> selectedEntities;
 
-      if (g->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) &&
-          selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
-        g->setCursor(Qt::CrossCursor);
+      if (g->pickGlEntities(qMouseEv->x(), qMouseEv->y(), selectedEntities)) {
+        for (const auto &entity : selectedEntities) {
+          if (!circleString->findKey(entity.getSimpleEntity()).empty()) {
+            g->setCursor(Qt::CrossCursor);
+            break;
+          }
+        }
       } else {
         g->setCursor(Qt::ArrowCursor);
       }

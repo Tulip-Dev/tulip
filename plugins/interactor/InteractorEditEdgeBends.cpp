@@ -50,15 +50,15 @@ public:
     setConfigurationWidgetText(
         QString("<h3>Edit edge bends</h3>") + "<>Modify edge bends</u><br/><br/>" +
         "Select edge: <ul><li>use rectangle selection</li></ul>" +
-        "Translate bend: <ul><li><b>Mouse left</b> down on a selected bend + moves</li></ul>" +
-        "Change source node: <ul><li><b>Drag and drop circle on source node</li></ul>" +
-        "Change target node: <ul><li><b>Drag and drop triangle on target node</li></ul>" +
-        "Add bend: <ul><li><b>Double click with mouse left</b> click on the selected "
+        "Translate bend: <ul><li><b>Mouse left down</b> on a selected bend + moves</li></ul>" +
+        "Change source node: <ul><li><b>Drag and drop circle</b> on source node</li></ul>" +
+        "Change target node: <ul><li><b>Drag and drop triangle</b> on target node</li></ul>" +
+        "Add bend: <ul><li><b>Double mouse left click</b> on the selected "
         "edge</li></ul>" +
 #if !defined(__APPLE__)
-        "Delete bend: <ul><li><b>Ctrl + Mouse left</b> click on a selected bend</li></ul>"
+        "Delete bend: <ul><li><b>Ctrl + Mouse left click</b> on a selected bend</li></ul>"
 #else
-        "Delete bend: <ul><li><b>Alt + Mouse left</b> click on a selected bend</li></ul>"
+        "Delete bend: <ul><li><b>Alt + Mouse left click</b> on a selected bend</li></ul>"
 #endif
         + "<u>Navigation in the graph</u><br/><br/>" +
         "Translation: <ul><li><b>Arrow</b> keys</li></ul>" +
