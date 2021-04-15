@@ -57,29 +57,26 @@ struct SelectedEntity {
   };
 
   SelectedEntity()
-    : simpleEntity(nullptr), complexEntityId(UINT_MAX), entityType(UNKNOW_SELECTED) {}
+      : simpleEntity(nullptr), complexEntityId(UINT_MAX), entityType(UNKNOW_SELECTED) {}
   SelectedEntity(GlSimpleEntity *entity)
-    : simpleEntity(entity), complexEntityId(UINT_MAX), entityType(SIMPLE_ENTITY_SELECTED)  {}
+      : simpleEntity(entity), complexEntityId(UINT_MAX), entityType(SIMPLE_ENTITY_SELECTED) {}
   SelectedEntity(Graph *graph, unsigned int id, SelectedEntityType type)
-    : complexEntityGraph(graph), complexEntityId(id), entityType(type) {
+      : complexEntityGraph(graph), complexEntityId(id), entityType(type) {
     assert((type == NODE_SELECTED) || (type == EDGE_SELECTED));
   }
 
   GlSimpleEntity *getSimpleEntity() const {
-    assert((entityType == SIMPLE_ENTITY_SELECTED) &&
-	   (simpleEntity != nullptr));
+    assert((entityType == SIMPLE_ENTITY_SELECTED) && (simpleEntity != nullptr));
     return simpleEntity;
   }
 
   unsigned int getComplexEntityId() const {
-    assert((entityType != SIMPLE_ENTITY_SELECTED) &&
-	   (complexEntityId != UINT_MAX));
+    assert((entityType != SIMPLE_ENTITY_SELECTED) && (complexEntityId != UINT_MAX));
     return complexEntityId;
   }
 
   Graph *getComplexEntityGraph() const {
-    assert((entityType != SIMPLE_ENTITY_SELECTED) &&
-	   (complexEntityGraph != nullptr));
+    assert((entityType != SIMPLE_ENTITY_SELECTED) && (complexEntityGraph != nullptr));
     return complexEntityGraph;
   }
 
