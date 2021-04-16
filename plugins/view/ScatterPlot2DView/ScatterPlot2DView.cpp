@@ -27,6 +27,7 @@
 #include <tulip/GraphProperty.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/Perspective.h>
+#include <tulip/ViewGraphPropertiesSelectionWidget.h>
 
 #include <QApplication>
 #include <QMainWindow>
@@ -40,8 +41,6 @@
 #include "ScatterPlot2D.h"
 #include "ScatterPlot2DInteractors.h"
 #include "ScatterPlotQuickAccessBar.h"
-
-#include "../utils/ViewGraphPropertiesSelectionWidget.h"
 
 using namespace std;
 

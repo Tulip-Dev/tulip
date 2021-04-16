@@ -37,8 +37,7 @@
 #include <tulip/Interactor.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/Perspective.h>
-
-#include "../utils/ViewGraphPropertiesSelectionWidget.h"
+#include <tulip/ViewGraphPropertiesSelectionWidget.h>
 
 using namespace std;
 

@@ -96,6 +96,7 @@ SET(SRCS
   TulipFontIconDialog.cpp
   TulipFontIconEngine.cpp
   ViewActionsManager.cpp
+  ViewGraphPropertiesSelectionWidget.cpp
   ViewToolTipAndUrlManager.cpp
 )
 
@@ -155,6 +156,7 @@ QTX_WRAP_UI(UI_HEADERS
   ../designer/Workspace.ui
   ../designer/WorkspacePanel.ui
   ../designer/InteractorConfigWidget.ui
+  ../designer/ViewGraphPropertiesSelectionWidget.ui
 )
 
 QTX_WRAP_CPP(MOC_SRCS
@@ -223,6 +225,7 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/ShapeDialog.h
   ../include/tulip/ViewActionsManager.h
   ../include/tulip/ViewToolTipAndUrlManager.h
+  ../include/tulip/ViewGraphPropertiesSelectionWidget.h
 )
 
 QTX_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

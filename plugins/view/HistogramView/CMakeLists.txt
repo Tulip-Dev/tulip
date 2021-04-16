@@ -8,14 +8,12 @@ SET(LIB_SRCS
     Histogram.cpp
     HistogramViewNavigator.cpp
     HistogramInteractors.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.cpp
     HistoOptionsWidget.cpp
     SizeScaleConfigDialog.cpp
     GlyphScaleConfigDialog.cpp
 )
 
 QTX_WRAP_UI(LIB_UI_HEADERS
-   ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.ui
 	HistoStatsConfigWidget.ui
 	HistoOptionsWidget.ui
 	SizeScaleConfigDialog.ui
@@ -29,7 +27,6 @@ QTX_WRAP_CPP(LIB_MOC_SRCS
       SizeScaleConfigDialog.h
       GlyphScaleConfigDialog.h
       HistoStatsConfigWidget.h
-      ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.h
 )
 
 QTX_ADD_RESOURCES(LIB_RCC_SRCS

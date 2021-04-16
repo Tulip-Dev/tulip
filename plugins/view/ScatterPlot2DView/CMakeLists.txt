@@ -2,7 +2,6 @@ INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclu
 
 SET(LIB_SRCS
     ScatterPlot2DView.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.cpp
     ScatterPlot2D.cpp
     ScatterPlot2DViewNavigator.cpp
     ScatterPlotTrendLine.cpp
@@ -14,7 +13,6 @@ SET(LIB_SRCS
 )
 
 QTX_WRAP_UI(LIB_UI_HEADERS
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.ui
     ScatterPlot2DOptionsWidget.ui
     ScatterPlotCorrelCoeffSelectorOptionsWidget.ui
 )
@@ -23,8 +21,7 @@ QTX_WRAP_CPP(LIB_MOC_SRCS
     ScatterPlot2DView.h
     ScatterPlot2DOptionsWidget.h
     ScatterPlotCorrelCoeffSelectorOptionsWidget.h
-      ScatterPlotQuickAccessBar.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.h
+    ScatterPlotQuickAccessBar.h
 )
 
 QTX_ADD_RESOURCES(LIB_RCC_SRCS

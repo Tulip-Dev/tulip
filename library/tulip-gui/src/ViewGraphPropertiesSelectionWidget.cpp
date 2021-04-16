@@ -19,7 +19,7 @@
 
 #include <algorithm>
 
-#include "ViewGraphPropertiesSelectionWidget.h"
+#include <tulip/ViewGraphPropertiesSelectionWidget.h>
 #include "ui_ViewGraphPropertiesSelectionWidget.h"
 
 using namespace std;
@@ -41,7 +41,7 @@ void ViewGraphPropertiesSelectionWidget::enableEdgesButton(const bool enable) {
 }
 
 void ViewGraphPropertiesSelectionWidget::setWidgetParameters(
-    Graph *graph, vector<string> graphPropertiesTypesFilter) {
+    Graph *graph, const vector<string> &graphPropertiesTypesFilter) {
 
   bool notSameGraph = true;
 
@@ -96,7 +96,7 @@ void ViewGraphPropertiesSelectionWidget::setWidgetEnabled(const bool enabled) {
   setEnabled(enabled);
 }
 
-void ViewGraphPropertiesSelectionWidget::setSelectedProperties(vector<string> selectedProperties) {
+void ViewGraphPropertiesSelectionWidget::setSelectedProperties(const vector<string> &selectedProperties) {
   if (!graph)
     return;
 

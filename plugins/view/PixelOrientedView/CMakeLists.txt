@@ -6,7 +6,6 @@ SET(LIB_SRCS
     PixelOrientedViewNavigator.cpp
     PixelOrientedInteractors.cpp
     PixelOrientedOptionsWidget.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.cpp
     PixelOrientedViewQuickAccessBar.cpp
     POLIB/FishEyesScreen.cpp
     POLIB/FishEyesScreenFurnas.cpp
@@ -26,12 +25,10 @@ SET(LIB_SRCS
 )
 
 QTX_WRAP_UI(LIB_UI_HEADERS
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.ui
     PixelOrientedOptionsWidget.ui
 )
 
 QTX_WRAP_CPP(LIB_MOC_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.h
     PixelOrientedView.h
     PixelOrientedOptionsWidget.h
     PixelOrientedViewQuickAccessBar.h

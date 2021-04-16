@@ -21,13 +21,11 @@ SET(LIB_SRCS
       src/ParallelTools.cpp
       src/ParallelCoordsDrawConfigWidget.cpp
       src/ParallelCoordinatesViewQuickAccessbar.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.cpp
 )
 
 QTX_WRAP_UI(LIB_UI_HEADERS
     designer/ParallelCoordsDrawConfigWidget.ui
     designer/AxisSlidersOptions.ui
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.ui
 )
 
 QTX_WRAP_CPP(LIB_MOC_SRCS
@@ -36,7 +34,6 @@ QTX_WRAP_CPP(LIB_MOC_SRCS
       include/ParallelCoordsDrawConfigWidget.h
       include/ParallelCoordinatesViewQuickAccessbar.h
       include/ParallelCoordinatesInteractors.h
-      ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.h
 )
 
 QTX_ADD_RESOURCES(LIB_RCC_SRCS

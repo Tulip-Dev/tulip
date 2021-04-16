@@ -89,7 +89,7 @@ bool GraphPropertiesSelectionWidget::propertySelectable(const std::string &prope
   return selectProperty;
 }
 
-void GraphPropertiesSelectionWidget::setInputPropertiesList(vector<string> &inputPropertiesList) {
+void GraphPropertiesSelectionWidget::setInputPropertiesList(const vector<string> &inputPropertiesList) {
   vector<string> inputPropertiesListFiltered;
 
   for (unsigned int i = 0; i < inputPropertiesList.size(); ++i) {
@@ -101,7 +101,7 @@ void GraphPropertiesSelectionWidget::setInputPropertiesList(vector<string> &inpu
   setUnselectedStringsList(inputPropertiesListFiltered);
 }
 
-void GraphPropertiesSelectionWidget::setOutputPropertiesList(vector<string> &outputPropertiesList) {
+void GraphPropertiesSelectionWidget::setOutputPropertiesList(const vector<string> &outputPropertiesList) {
   vector<string> outputPropertiesListFiltered;
 
   for (unsigned int i = 0; i < outputPropertiesList.size(); ++i) {

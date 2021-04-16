@@ -27,6 +27,7 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/QuickAccessBar.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/ViewGraphPropertiesSelectionWidget.h>
 
 #include <QHelpEvent>
 #include <QApplication>
@@ -37,7 +38,6 @@
 
 #include "HistogramView.h"
 #include "HistogramInteractors.h"
-#include "../utils/ViewGraphPropertiesSelectionWidget.h"
 #include "HistoOptionsWidget.h"
 
 using namespace std;

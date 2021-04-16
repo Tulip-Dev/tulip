@@ -28,7 +28,6 @@
 #include <QPushButton>
 #include <QButtonGroup>
 
-#include <tulip/GraphPropertiesSelectionWidget.h>
 #include <tulip/ColorScalesManager.h>
 #include <tulip/PropertyTypes.h>
 #include <tulip/TlpQtTools.h>
@@ -159,13 +158,18 @@ void SOMPropertiesWidget::scalingMethodChange(QAbstractButton *button) {
 }
 
 void SOMPropertiesWidget::graphChanged(tlp::Graph *graph) {
+  vector<string> props;
+  // build a vector of double properties
+  for (auto prop : graph->getObjectProperties()) {
+    if (prop->getTypename() == "double") {
+      const string &propName = prop->getName();
+      if ((propName.find("view") != 0) || (propName == "viewMetric"))
+	props.push_back(propName);
+    }
+  }
 
-  vector<string> types;
-  types.push_back("double");
-  tlp::GraphPropertiesSelectionWidget s;
-  s.setWidgetParameters(graph, types);
   // Init the set of colors with all the possible properties.
-  gradientManager.init(s.getCompleteStringsList());
+  gradientManager.init(props);
 }
 
 tlp::ColorScale *SOMPropertiesWidget::getPropertyColorScale(const std::string &) {

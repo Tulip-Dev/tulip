@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef HISTODATACONFIGWIDGET_H_
-#define HISTODATACONFIGWIDGET_H_
+#ifndef VIEWGRAPHPROERTIESSELECTIONWIDGET_H_
+#define VIEWGRAPHPROERTIESSELECTIONWIDGET_H_
 
 #include <vector>
 #include <string>
@@ -33,7 +33,7 @@ class ViewGraphPropertiesSelectionWidgetData;
 
 namespace tlp {
 
-class ViewGraphPropertiesSelectionWidget : public QWidget, public Observable {
+class TLP_QT_SCOPE ViewGraphPropertiesSelectionWidget : public QWidget, public Observable {
 
   Q_OBJECT
 
@@ -41,11 +41,11 @@ public:
   ViewGraphPropertiesSelectionWidget(QWidget *parent = nullptr);
   ~ViewGraphPropertiesSelectionWidget() override;
 
-  void setWidgetParameters(Graph *graph, std::vector<std::string> graphPropertiesTypesFilter);
+  void setWidgetParameters(Graph *graph, const std::vector<std::string> &graphPropertiesTypesFilter);
   std::vector<std::string> getSelectedGraphProperties();
 
   void setWidgetEnabled(const bool enabled);
-  void setSelectedProperties(std::vector<std::string> selectedProperties);
+  void setSelectedProperties(const std::vector<std::string> &selectedProperties);
 
   ElementType getDataLocation() const;
   void setDataLocation(const ElementType location);
@@ -63,4 +63,4 @@ private:
 };
 } // namespace tlp
 
-#endif /* HISTODATACONFIGWIDGET_H_ */
+#endif /* VIEWGRAPHPROERTIESSELECTIONWIDGET_H_ */

@@ -34,12 +34,11 @@
 #include <tulip/tulipconf.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/Perspective.h>
+#include <tulip/ViewGraphPropertiesSelectionWidget.h>
 
 #include "PixelOrientedInteractors.h"
 #include "PixelOrientedView.h"
 #include "PixelOrientedViewQuickAccessBar.h"
-
-#include "../utils/ViewGraphPropertiesSelectionWidget.h"
 
 #include <QApplication>
 #include <QGraphicsView>

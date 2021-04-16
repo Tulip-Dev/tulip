@@ -85,7 +85,7 @@ public:
    * the input list
    * \param inputPropertiesList A vector containing input properties names
    */
-  void setInputPropertiesList(std::vector<std::string> &inputPropertiesList);
+  void setInputPropertiesList(const std::vector<std::string> &inputPropertiesList);
 
   /**
    * Method to set the output graph properties list
@@ -93,7 +93,7 @@ public:
    * the output list
    * \param outputPropertiesList A vector containing output properties names
    */
-  void setOutputPropertiesList(std::vector<std::string> &outputPropertiesList);
+  void setOutputPropertiesList(const std::vector<std::string> &outputPropertiesList);
 
   /**
    * Method which returns the names of the graph properties selected by the user

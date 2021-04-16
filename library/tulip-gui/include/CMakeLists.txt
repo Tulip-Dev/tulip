@@ -20,6 +20,7 @@ INSTALL(FILES
   tulip/TlpQtTools.h
   tulip/TulipProject.h
   tulip/View.h
+  tulip/ViewGraphPropertiesSelectionWidget.h
   tulip/ViewWidget.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
