@@ -41,7 +41,8 @@ public:
   ViewGraphPropertiesSelectionWidget(QWidget *parent = nullptr);
   ~ViewGraphPropertiesSelectionWidget() override;
 
-  void setWidgetParameters(Graph *graph, const std::vector<std::string> &graphPropertiesTypesFilter);
+  void setWidgetParameters(Graph *graph,
+                           const std::vector<std::string> &graphPropertiesTypesFilter);
   std::vector<std::string> getSelectedGraphProperties();
 
   void setWidgetEnabled(const bool enabled);

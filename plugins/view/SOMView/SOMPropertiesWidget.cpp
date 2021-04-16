@@ -164,7 +164,7 @@ void SOMPropertiesWidget::graphChanged(tlp::Graph *graph) {
     if (prop->getTypename() == "double") {
       const string &propName = prop->getName();
       if ((propName.find("view") != 0) || (propName == "viewMetric"))
-	props.push_back(propName);
+        props.push_back(propName);
     }
   }
 

@@ -96,7 +96,8 @@ void ViewGraphPropertiesSelectionWidget::setWidgetEnabled(const bool enabled) {
   setEnabled(enabled);
 }
 
-void ViewGraphPropertiesSelectionWidget::setSelectedProperties(const vector<string> &selectedProperties) {
+void ViewGraphPropertiesSelectionWidget::setSelectedProperties(
+    const vector<string> &selectedProperties) {
   if (!graph)
     return;
 
