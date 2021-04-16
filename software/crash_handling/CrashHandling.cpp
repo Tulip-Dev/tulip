@@ -36,7 +36,7 @@ using namespace std;
 
 static std::string TULIP_DUMP_FILE = "";
 
-void CrashHandling::setDumpPath(string s) {
+void CrashHandling::setDumpPath(const string &s) {
   TULIP_DUMP_FILE = s;
 }
 

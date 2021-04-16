@@ -33,7 +33,7 @@
 class CrashHandling {
 
 public:
-  static void setDumpPath(std::string);
+  static void setDumpPath(const std::string &);
 
   static void installCrashHandler();
 
