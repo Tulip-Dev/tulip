@@ -92,7 +92,7 @@ IF(HAVE_REENTRANT_QHULL)
 ENDIF(HAVE_REENTRANT_QHULL)
 INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${PROJECT_SOURCE_DIR} ${ZLIB_INCLUDE_DIR} ${YajlInclude} ${QhullInclude} ${GZStreamInclude} ${UTF8CppInclude})
 
-ADD_LIBRARY(${LibTulipCoreName} SHARED ${tulip_LIB_SRCS} ../include/tulip/TulipRelease.h)
+ADD_LIBRARY(${LibTulipCoreName} SHARED ${tulip_LIB_SRCS})
 TARGET_LINK_LIBRARIES(${LibTulipCoreName} ${GZStreamLibrary} ${YajlLibrary} ${QhullLibrary} ${CMAKE_DL_LIBS})
 IF(WIN32)
   IF(MSVC)
