@@ -123,11 +123,10 @@ jobs:
       addons:
         apt:
           # Python 3.6 from ppa:deadsnakes/ppa
-          sources:
-            - sourceline: "ppa:deadsnakes/ppa"
           # we use Qt 5.6.1 from ppa:kubuntu-ppa/backports
           # instead of default 5.5.1 package
           sources:
+            - sourceline: "ppa:deadsnakes/ppa"
             - sourceline: "ppa:kubuntu-ppa/backports"
           # install Tulip build dependencies
           packages:
