@@ -3,7 +3,7 @@
 #  - a "legacy" Tulip build using :
 #     * default system compiler (GCC 5.4 on Linux, clang from Xcode9.x on Mac OS)
 #     * Qt 5.6 on Linux, Qt 5.9 on MacOS
-#     * Python 2.7 on MacOS, Python 3.5 on Linux
+#     * Python 3.6 on linux and MacOS
 #  - a "modern" Tulip build using:
 #     * recent compiler (GCC 9.x on Linux, clang 10.x from MacPorts or Homebrew on MacOS)
 #     * Qt 5.15 on Linux and MacOS
@@ -40,18 +40,21 @@ jobs:
       cache: ccache
       addons:
         apt:
+          # Python 3.6 from ppa:deadsnakes/ppa
+          sources:
+            - sourceline: "ppa:deadsnakes/ppa"
           # install Tulip build dependencies
           packages:
             - cmake
             - ccache
             - ninja-build
             - libqhull-dev
-            - python3.5-dev
+            - python3.6-dev
             - libcppunit-dev
             - binutils-dev
       env:
-        # use Python 3.5
-        - PYTHON_EXECUTABLE=/usr/bin/python3.5
+        # use Python 3.6
+        - PYTHON_EXECUTABLE=/usr/bin/python3.6
       script:
         # create build directory
         - mkdir build && cd build
@@ -119,6 +122,9 @@ jobs:
         - xvfb
       addons:
         apt:
+          # Python 3.6 from ppa:deadsnakes/ppa
+          sources:
+            - sourceline: "ppa:deadsnakes/ppa"
           # we use Qt 5.6.1 from ppa:kubuntu-ppa/backports
           # instead of default 5.5.1 package
           sources:
@@ -131,7 +137,7 @@ jobs:
             - doxygen
             - graphviz
             - libqhull-dev
-            - python3.5-dev
+            - python3.6-dev
             - python-sphinx
             - libcppunit-dev
             - binutils-dev
@@ -143,8 +149,8 @@ jobs:
             - libjpeg-dev
             - libfreetype6-dev
       env:
-        # use Python 3.5
-        - PYTHON_EXECUTABLE=/usr/bin/python3.5
+        # use Python 3.6
+        - PYTHON_EXECUTABLE=/usr/bin/python3.6
       script:
         # create build directory
         - mkdir build && cd build
@@ -385,12 +391,16 @@ jobs:
         - ENV="MacOS default, AppleClang, MacPorts"
 
       script:
+        # get Python 3.6 and install it
+        - curl -LO https://www.python.org/ftp/python/3.6.8/python-3.6.8-macosx10.9.pkg
+        - sudo installer -store -pkg python-3.9.*.pkg -target /
         # setup build env
+        - export MACPORTS_CI_CCACHE=ON
+        - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.6/bin/python3
         - export TULIP_BUILD_CORE_ONLY=ON
         - export TULIP_BUILD_DOC=OFF
         - export TULIP_BUILD_TESTS=ON
-        - export MACPORTS_CI_CCACHE=ON
-        # launch macports build
+	# launch macports build
         - bash -xe ./bundlers/mac/macports_build.sh
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -412,14 +422,14 @@ jobs:
 
       script:
         # get Python 3.9 and install it
-        - curl -LO https://www.python.org/ftp/python/3.9.1/python-3.9.1-macosx10.9.pkg
+        - curl -LO https://www.python.org/ftp/python/3.9.4/python-3.9.4-macosx10.9.pkg
         - sudo installer -store -pkg python-3.9.*.pkg -target /
         # setup build env
         - export CLANG_COMPILER_VERSION=10
+        - export MACPORTS_CI_CCACHE=ON
         - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.9/bin/python3
         - export TULIP_BUILD_CORE_ONLY=ON
         - export TULIP_BUILD_TESTS=ON
-        - export MACPORTS_CI_CCACHE=ON
         # launch macports build
         - bash -xe ./bundlers/mac/macports_build.sh
 
@@ -456,7 +466,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm@9/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm@9/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm@9/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm@9/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python3 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
         #- ninja -j$(getconf _NPROCESSORS_ONLN) install || travis_terminate 1
@@ -493,10 +503,14 @@ jobs:
       env:
         - ENV="MacOS most recent, LLVM Clang, Homebrew"
       script:
+        # get Python 3.9 and install it
+        - curl -LO https://www.python.org/ftp/python/3.9.4/python-3.9.4-macosx10.9.pkg
+        - sudo installer -store -pkg python-3.9.*.pkg -target /
+        - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.9/bin/python3
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
         #- ninja -j$(getconf _NPROCESSORS_ONLN) install || travis_terminate 1
@@ -522,10 +536,14 @@ jobs:
         - ENV="MacOS default, AppleClang, MacPorts"
 
       script:
+        # get Python 3.6 and install it
+        - curl -LO https://www.python.org/ftp/python/3.6.8/python-3.6.8-macosx10.9.pkg
+        - sudo installer -store -pkg python-3.9.*.pkg -target /
         # setup build env
+        - export MACPORTS_CI_CCACHE=ON
+        - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.6/bin/python3
         - export TULIP_BUILD_DOC=ON
         - export TULIP_BUILD_TESTS=ON
-        - export MACPORTS_CI_CCACHE=ON
         # launch macports build
         - travis_wait bash -xe ./bundlers/mac/macports_build.sh
 
@@ -548,7 +566,7 @@ jobs:
 
       script:
         # get Python 3.9 and install it
-        - curl -LO https://www.python.org/ftp/python/3.9.1/python-3.9.1-macosx10.9.pkg
+        - curl -LO https://www.python.org/ftp/python/3.9.4/python-3.9.4-macosx10.9.pkg
         - sudo installer -store -pkg python-3.9.*.pkg -target /
         # setup build env
         - export CLANG_COMPILER_VERSION=10
@@ -597,7 +615,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm@9/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm@9/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DCMAKE_PREFIX_PATH=/usr/local/opt/qt -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm@9/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm@9/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python3 -DCMAKE_PREFIX_PATH=/usr/local/opt/qt -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
         #- ninja -j$(getconf _NPROCESSORS_ONLN) install || travis_terminate 1
@@ -639,13 +657,17 @@ jobs:
         - ENV="MacOS most recent, LLVM Clang, Homebrew"
 
       script:
+        # get Python 3.9 and install it
+        - curl -LO https://www.python.org/ftp/python/3.9.4/python-3.9.4-macosx10.9.pkg
+        - sudo installer -store -pkg python-3.9.*.pkg -target /
+        - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.9/bin/python3
         # workaround for reference to unknown /Applications/Xcode-beta.app
         # in bogus FindGLEW.cmake since cmake 3.15
         - sudo ln -s /Applications/Xcode.app /Applications/Xcode-beta.app
         # create build directory
         - mkdir build && cd build
         # configure Tulip build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=/usr/bin/python3 -DCMAKE_PREFIX_PATH=/usr/local/opt/qt -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DCMAKE_PREFIX_PATH=/usr/local/opt/qt -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
         #- ninja -j$(getconf _NPROCESSORS_ONLN) install || travis_terminate 1
