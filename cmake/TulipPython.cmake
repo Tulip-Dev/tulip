@@ -5,7 +5,7 @@ This should only be used when packaging Tulip for a Linux distribution or MSYS2.
 
 # After finding the Python interpreter, try to find if SIP and its dev tools are installed on the host system.
 # If not, compile the SIP version located in thirdparty.
-FIND_PACKAGE(PythonInterp REQUIRED)
+FIND_PACKAGE(PythonInterp 3.6 REQUIRED)
 
 EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} --version OUTPUT_VARIABLE PYTHON_VERSION_RAW ERROR_VARIABLE PYTHON_VERSION_RAW)
 STRING(REPLACE "\n" "" PYTHON_VERSION_RAW "${PYTHON_VERSION_RAW}")
@@ -21,22 +21,15 @@ import site
 import sys
 from distutils.sysconfig import get_python_lib
 py_version = str(sys.version_info[0]) + '.' + str(sys.version_info[1])
-if sys.version_info >= (2, 7):
-  for path in site.getsitepackages():
-    # check that we select a valid install path
-    if path.startswith('${CMAKE_INSTALL_PREFIX}') and py_version in path:
-      # avoid to install in /usr/local when CMAKE_INSTALL_PREFIX is /usr on debian
-      if '${CMAKE_INSTALL_PREFIX}' == '/usr' and '/usr/local' in path:
-        continue
-      print(path)
-      exit()
-  print(site.getusersitepackages())
-else:
-  path = get_python_lib(1)
+for path in site.getsitepackages():
+  # check that we select a valid install path
   if path.startswith('${CMAKE_INSTALL_PREFIX}') and py_version in path:
+    # avoid to install in /usr/local when CMAKE_INSTALL_PREFIX is /usr on debian
+    if '${CMAKE_INSTALL_PREFIX}' == '/usr' and '/usr/local' in path:
+      continue
     print(path)
     exit()
-  print(site.USER_SITE)
+print(site.getusersitepackages())
 "
                   OUTPUT_VARIABLE TulipPythonModulesInstallDir)
   STRING(REPLACE "\n" "" TulipPythonModulesInstallDir "${TulipPythonModulesInstallDir}")

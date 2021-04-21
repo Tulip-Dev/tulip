@@ -226,14 +226,9 @@ def mdicon_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
 # hack to include dynamically generated Tulip plugins documentation
 def source_read(app, docname, source):
     if docname == 'tulippluginsdocumentation':
-        if sys.version_info[0] == 2:
-            f = open('@CMAKE_CURRENT_BINARY_DIR@/tulippluginsdocumentation.rst',
-                     'r')
-            source[0] += f.read().decode('utf-8')
-        else:
-            f = open('@CMAKE_CURRENT_BINARY_DIR@/tulippluginsdocumentation.rst',
-                     'r', encoding='utf-8')
-            source[0] += f.read()
+        f = open('@CMAKE_CURRENT_BINARY_DIR@/tulippluginsdocumentation.rst',
+                 'r', encoding='utf-8')
+        source[0] += f.read()
 
 
 def setup(app):
