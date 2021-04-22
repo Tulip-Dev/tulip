@@ -31,6 +31,7 @@ sudo port -N install cmake $CLANG_COMPILER_PKG $CCACHE_PKG qhull
 
 # check for more dependencies
 if [ "$TRAVIS_BUILD_THIRDPARTY_ONLY" != "ON" ]; then
+  TRAVIS_BUILD_THIRD_PARTY_ONLY=OFF
 # install Tulip tests build dependencies
   if [ "$TULIP_BUILD_TESTS" == "ON" ]; then
     sudo port -N install pkgconfig cppunit
