@@ -32,8 +32,7 @@ static const char *paramHelp[] = {
     "This parameter defines the amount of nodes used to build the scale-free graph.",
 
     // k
-    "Number of edges added to each node in the initial ring lattice. Be careful that #nodes > k > "
-    "ln(#nodes)",
+    "Number of edges added to each node in the initial ring lattice. Be careful that #nodes > k > ln(#nodes)",
 
     // p
     "Probability in [0,1] to rewire an edge.",

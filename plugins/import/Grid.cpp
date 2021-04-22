@@ -35,8 +35,7 @@ static const char *paramHelp[] = {
     "Connectivity number of each node.",
 
     // tore
-    "If true, opposite nodes on each side of the grid are connected. In a 4 connectivity the "
-    "resulting object is a torus.",
+    "If true, opposite nodes on each side of the grid are connected. In a 4 connectivity the resulting object is a torus.",
 
     // Line spacing
     "Spacing between nodes."};
