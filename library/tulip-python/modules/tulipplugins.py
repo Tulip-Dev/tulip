@@ -20,9 +20,7 @@ in Python in the plugins database.
 
 import sys
 import traceback
-if sys.version_info[0] == 3:
-    from imp import reload # noqa
-
+from imp import reload # noqa
 from tulip import tlp # noqa
 
 pluginFactory = {}
@@ -37,10 +35,7 @@ def setTestMode(mode):
 
 def getCallingModuleName():
     import sys
-    if sys.version_info[0] == 3:
-        frames = list(sys._current_frames().values())
-    else:
-        frames = sys._current_frames().values()
+    frames = list(sys._current_frames().values())
     for i in range(len(frames)):
         f = frames[i]
         if f.f_globals['__name__'] == 'tulipplugins':

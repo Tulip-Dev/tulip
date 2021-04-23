@@ -956,11 +956,7 @@ void setAllNodeValue(SIP_PYOBJECT val);
 %MethodCode
   if (sipCpp->getProperty()) {
     PyObject *pyProp = sipConvertFromType(sipCpp->getProperty(), sipFindType("tlp::PropertyInterface"), NULL);
-  #if PY_MAJOR_VERSION >= 3
     PyObject *pName = PyUnicode_FromString("__getitem__");
-  #else
-    PyObject *pName = PyString_FromString("__getitem__");
-  #endif
     sipRes = PyObject_CallMethodObjArgs(pyProp, pName, a0Wrapper, NULL);
     Py_XDECREF(pName);
     Py_XDECREF(pyProp);
@@ -974,11 +970,7 @@ void setAllNodeValue(SIP_PYOBJECT val);
 %MethodCode
   if (sipCpp->getProperty()) {
     PyObject *pyProp = sipConvertFromType(sipCpp->getProperty(), sipFindType("tlp::PropertyInterface"), NULL);
-  #if PY_MAJOR_VERSION >= 3
     PyObject *pName = PyUnicode_FromString("__getitem__");
-  #else
-    PyObject *pName = PyString_FromString("__getitem__");
-  #endif
     sipRes = PyObject_CallMethodObjArgs(pyProp, pName, a0Wrapper, NULL);
     Py_XDECREF(pName);
     Py_XDECREF(pyProp);

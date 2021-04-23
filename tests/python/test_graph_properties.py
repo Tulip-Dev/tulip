@@ -191,11 +191,7 @@ class TestGraphProperties(unittest.TestCase):
         self.graph.delLocalProperty(self.prop_name)
         self.assertFalse(self.graph.existProperty(self.prop_name))
 
-        if sys.version_info >= (3,):
-            assertRegex = self.assertRaisesRegex
-        else:
-            assertRegex = self.assertRaisesRegexp
-        with assertRegex(
+        with self.assertRaisesRegex(
                 RuntimeError, 'wrapped C/C\\+\\+ object .* has been deleted'):
             self.prop.setAllEdgeValue(edge_default_value)
 

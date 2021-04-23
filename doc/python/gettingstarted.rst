@@ -256,10 +256,6 @@ at the shell prompt to perform that task::
     >>> from tulip import tlp
     >>> from tulipgui import tlpgui
 
-.. note::
-  If you have installed Tulip from a Mac OS bundle, the Tulip-Python modules were built against Python 2.7
-  and you need to use the same Python version in order to be able to import them.
-
 Customizing the Python environment
 ----------------------------------
 

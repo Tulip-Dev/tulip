@@ -82,18 +82,9 @@ bool setDataSetEntryFromPyObject(tlp::DataSet *dataSet, const std::string &key, 
   if (refDataType) {
     dataType = refDataType;
   }
-  if (dataType && dataType->getTypeName() == std::string(typeid(tlp::StringCollection).name()) &&
-#if PY_MAJOR_VERSION >= 3
-  PyUnicode_Check(value)) {
-#else
-  PyString_Check(value)) {
-#endif
+  if (dataType && (dataType->getTypeName() == std::string(typeid(tlp::StringCollection).name())) && PyUnicode_Check(value)) {
     tlp::StringCollection *sc = static_cast<tlp::StringCollection*>(dataType->value);
-#if PY_MAJOR_VERSION >= 3
     std::string entry(convertPythonUnicodeObjectToStdString(value));
-#else
-    std::string entry(PyString_AS_STRING(value));
-#endif
 
     std::vector<std::string> values = sc->getValues();
     if (std::find(values.begin(), values.end(), entry) != values.end()) {

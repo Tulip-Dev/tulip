@@ -3,9 +3,6 @@ IF(SIP_OK)
 
 IF(WIN32)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDLL_TULIP_PYTHON")
-ELSE(WIN32)
-  # to disable deprecated register warnings with Python 2.7.13 headers
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-register")
 ENDIF(WIN32)
 
 INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})

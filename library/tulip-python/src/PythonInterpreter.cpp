@@ -91,14 +91,12 @@ def printObjectClass(obj):
         print(type)
 )";
 
-#if PY_MAJOR_VERSION >= 3
 static QString convertPythonUnicodeObjectToQString(PyObject *pyUnicodeObj) {
   PyObject *utf8Str = PyUnicode_AsUTF8String(pyUnicodeObj);
   QString ret = QString::fromUtf8(PyBytes_AsString(utf8Str));
   decrefPyObject(utf8Str);
   return ret;
 }
-#endif
 
 static bool scriptPaused = false;
 static bool processQtEvents = false;
@@ -211,15 +209,9 @@ PythonInterpreter::PythonInterpreter()
   if (!_wasInit) {
 
     int argc = 1;
-#if PY_MAJOR_VERSION >= 3
     static const std::wstring argv0 = L"tulip";
     wchar_t *argv[1];
     argv[0] = const_cast<wchar_t *>(argv0.c_str());
-#else
-    static const std::string argv0 = "tulip";
-    char *argv[1];
-    argv[0] = const_cast<char *>(argv0.c_str());
-#endif
 
     Py_OptimizeFlag = 1;
     Py_NoSiteFlag = 1;
@@ -233,15 +225,9 @@ PythonInterpreter::PythonInterpreter()
     QString pythonHome = PythonVersionChecker::getPythonHome();
 
     if (!pythonHome.isEmpty()) {
-#if PY_MAJOR_VERSION >= 3
       static std::wstring pythonHomeWString = pythonHome.toStdWString();
       Py_SetPythonHome(const_cast<wchar_t *>(pythonHomeWString.c_str()));
-#else
-      static std::string pythonHomeString = QStringToTlpString(pythonHome);
-      Py_SetPythonHome(const_cast<char *>(pythonHomeString.c_str()));
-#endif
     }
-
 #endif
 
     // register Tulip builtin Python modules
@@ -262,33 +248,19 @@ PythonInterpreter::PythonInterpreter()
 
   importModule("sys");
 
-#if PY_MAJOR_VERSION >= 3
   PyObject *pName = PyUnicode_FromString("__main__");
-#else
-  PyObject *pName = PyString_FromString("__main__");
-#endif
   PyObject *pMainModule = PyImport_Import(pName);
   decrefPyObject(pName);
   PyObject *pMainDict = PyModule_GetDict(pMainModule);
   PyObject *pVersion = PyRun_String("str(sys.version_info[0])+\".\"+str(sys.version_info[1])",
                                     Py_eval_input, pMainDict, pMainDict);
 
-#if PY_MAJOR_VERSION >= 3
   _pythonVersion = convertPythonUnicodeObjectToQString(pVersion);
-#else
-  _pythonVersion = QString(PyString_AsString(pVersion));
-#endif
 
   // checking if a QApplication is instantiated before creating any QWidget
   // allow to avoid segfaults when trying to instantiate a plugin outside the Tulip GUI (for
   // instance, with tulip_check_pl)
   if (QApplication::instance() && !_wasInit) {
-
-#if PY_MAJOR_VERSION < 3
-    reloadModule("sys");
-    runString("sys.setdefaultencoding('utf-8')");
-#endif
-
 // hack for linux in order to be able to load dynamic python modules installed on the system (like
 // numpy, matplotlib and other cool stuffs)
 #ifndef WIN32
@@ -343,9 +315,7 @@ PythonInterpreter::PythonInterpreter()
       // and if the site module is not present on the host system
       // Disable output while trying to import the module to not confuse the user
       runString("import site");
-#if PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 3
       runString("site.main()");
-#endif
       runString("from tulip import tlp");
       runString("from tulipgui import tlpgui");
 
@@ -371,15 +341,9 @@ PythonInterpreter::PythonInterpreter()
     PyEval_SetTrace(tracefunc, nullptr);
 
 // disable exit and quit functions
-#if PY_MAJOR_VERSION >= 3
     runString("import builtins;"
               "builtins.exit = lambda *args: None;"
               "builtins.quit= lambda *args: None;");
-#else
-    runString("import __builtin__;"
-              "__builtin__.exit = lambda *args: None;"
-              "__builtin__.quit = lambda *args: None;");
-#endif
 
     runString("import sys;"
               "sys.exit = lambda *args: None");
@@ -464,11 +428,7 @@ bool PythonInterpreter::registerNewModuleFromString(const QString &moduleName,
 
 bool PythonInterpreter::functionExists(const QString &moduleName, const QString &functionName) {
   holdGIL();
-#if PY_MAJOR_VERSION >= 3
   PyObject *pName = PyUnicode_FromString(QStringToTlpString(moduleName).c_str());
-#else
-  PyObject *pName = PyString_FromString(QStringToTlpString(moduleName).c_str());
-#endif
   PyObject *pModule = PyImport_Import(pName);
   decrefPyObject(pName);
   PyObject *pDict = PyModule_GetDict(pModule);
@@ -502,11 +462,7 @@ bool PythonInterpreter::runString(const QString &pythonCode, const QString &scri
 
 PyObject *PythonInterpreter::evalPythonStatement(const QString &pythonStatement, bool singleInput) {
   holdGIL();
-#if PY_MAJOR_VERSION >= 3
   PyObject *pName = PyUnicode_FromString("__main__");
-#else
-  PyObject *pName = PyString_FromString("__main__");
-#endif
   PyObject *pMainModule = PyImport_Import(pName);
   decrefPyObject(pName);
   PyObject *pMainDict = PyModule_GetDict(pMainModule);
@@ -528,11 +484,7 @@ PyObject *PythonInterpreter::callPythonFunction(const QString &module, const QSt
                                                 const tlp::DataSet &parameters) {
   holdGIL();
   PyObject *ret = nullptr;
-#if PY_MAJOR_VERSION >= 3
   PyObject *pName = PyUnicode_FromString(QStringToTlpString(module).c_str());
-#else
-  PyObject *pName = PyString_FromString(QStringToTlpString(module).c_str());
-#endif
 
   PyObject *pModule = PyImport_Import(pName);
   decrefPyObject(pName);
@@ -625,11 +577,7 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
   scriptPaused = false;
 
 // Build the name object
-#if PY_MAJOR_VERSION >= 3
   PyObject *pName = PyUnicode_FromString(QStringToTlpString(module).c_str());
-#else
-  PyObject *pName = PyString_FromString(QStringToTlpString(module).c_str());
-#endif
   // Load the module object
   PyObject *pModule = PyImport_Import(pName);
   decrefPyObject(pName);
@@ -898,13 +846,7 @@ QVector<QString> PythonInterpreter::getImportedModulesList() {
   setOutputEnabled(false);
   setErrorOutputEnabled(false);
   consoleOuputString = "";
-#if PY_MAJOR_VERSION >= 3
-
   if (runString("import sys\nfor mod in sorted(sys.modules.keys()): print(mod)")) {
-#else
-
-  if (runString("import sys\nfor mod in sorted(sys.modules.keys()): print mod")) {
-#endif
     QStringList modulesList = consoleOuputString.split("\n");
 
     for (int i = 0; i < modulesList.count(); ++i) {
@@ -940,11 +882,7 @@ QVector<QString> PythonInterpreter::getBaseTypesForType(const QString &typeName)
 
   QString pythonCode;
 
-#if PY_MAJOR_VERSION >= 3
   pythonCode = QString("for base in ") + typeName + ".__bases__ : print(base)";
-#else
-  pythonCode = QString("for base in ") + typeName + ".__bases__ : print base";
-#endif
 
   if (runString(pythonCode)) {
     QStringList basesList = consoleOuputString.split("\n");
@@ -1079,10 +1017,6 @@ QString PythonInterpreter::readLineFromConsole() {
 
 void PythonInterpreter::clearTracebacks() {
   QString pythonCode = "import sys\n";
-#if PY_MAJOR_VERSION < 3
-  pythonCode += "sys.exc_clear()\n";
-  pythonCode += "sys.exc_traceback = None\n";
-#endif
   pythonCode += "sys.last_traceback = None\n";
   runString(pythonCode);
 }

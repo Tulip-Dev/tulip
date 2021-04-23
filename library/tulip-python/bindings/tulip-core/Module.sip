@@ -179,9 +179,7 @@ extern bool isValidGraphSelection(const tlp::Graph *graph, tlp::BooleanProperty 
 
 extern PyObject* evalPythonStatement(const std::string &pythonStatement);
 
-#if PY_MAJOR_VERSION >= 3
 extern std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj);
-#endif
 
 extern bool isTupleAndCanConvertToVec3fType(PyObject *pyObj);
 
@@ -297,21 +295,15 @@ bool isValidGraphSelection(const tlp::Graph *graph, tlp::BooleanProperty *select
   return true;
 }
 
-#if PY_MAJOR_VERSION >= 3
 std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
   PyObject *utf8Str = PyUnicode_AsUTF8String(pyUnicodeObj);
   std::string ret(PyBytes_AsString(utf8Str));
   Py_DECREF(utf8Str);
   return ret;
 }
-#endif
 
 PyObject* evalPythonStatement(const std::string &pythonStatement) {
-#if PY_MAJOR_VERSION >= 3
   PyObject *pName = PyUnicode_FromString("__main__");
-#else
-  PyObject *pName = PyString_FromString("__main__");
-#endif
   PyObject *pMainModule = PyImport_Import(pName);
   Py_XDECREF(pName);
   PyObject *pMainDict = PyModule_GetDict(pMainModule);
@@ -334,11 +326,7 @@ bool isTupleAndCanConvertToVec3fType(PyObject *pyObj) {
   for (SIP_SSIZE_T i = 0; i < PyTuple_GET_SIZE(pyObj); ++i) {
     PyObject *item = PyTuple_GET_ITEM(pyObj, i);
     bool canConvert = false;
-#if PY_MAJOR_VERSION >= 3
     if (!PyBool_Check(item) && PyLong_Check(item)) {
-#else
-    if (!PyBool_Check(item) && (PyLong_Check(item) || PyInt_Check(item))) {
-#endif
       canConvert = canConvert || true;
     }
     if (!PyBool_Check(item) && PyFloat_Check(item)) {

@@ -138,7 +138,6 @@ static PyMethodDef tulipUtilsMethods[] = {
     {NULL, NULL, 0, NULL} /* Sentinel */
 };
 
-#if PY_MAJOR_VERSION >= 3
 static struct PyModuleDef tulipUtilsModuleDef = {
     PyModuleDef_HEAD_INIT,
     "tuliputils",      /* m_name */
@@ -150,17 +149,12 @@ static struct PyModuleDef tulipUtilsModuleDef = {
     NULL,              /* m_clear */
     NULL,              /* m_free */
 };
-#endif
 
 // This is called via the PyImport_AppendInittab mechanism called
 // during interpreter initialization, to make the built-in tuliputils
 // module known to Python
 PyMODINIT_FUNC inittuliputils(void) {
-#if PY_MAJOR_VERSION >= 3
   return PyModule_Create(&tulipUtilsModuleDef);
-#else
-  Py_InitModule("tuliputils", tulipUtilsMethods);
-#endif
 }
 
 #ifdef __GNUC__

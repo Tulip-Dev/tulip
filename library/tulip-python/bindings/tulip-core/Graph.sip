@@ -211,23 +211,14 @@ tlp::DataSet *getDataSetFilledWithPropertiesValues(tlp::Graph *graph, unsigned i
 
 bool setPropertiesValuesFromDataSet(tlp::Graph *graph, const tlp::DataSet *dataSet, unsigned int eltId, bool nodeValues) {
   PyObject *graphWrapper = sipGetPyObject(graph, sipFindType("tlp::Graph"));
-#if PY_MAJOR_VERSION >= 3
   PyObject *pSetItem = PyUnicode_FromString("__setitem__");
   PyObject *pGetItem = PyUnicode_FromString("__getitem__");
-#else
-  PyObject *pSetItem = PyString_FromString("__setitem__");
-  PyObject *pGetItem = PyString_FromString("__getitem__");
-#endif
 
   bool ok = true;
 
   tlp::Observable::holdObservers();
   for(const std::pair<std::string, tlp::DataType*> &entry : dataSet->getValues()) {
-#if PY_MAJOR_VERSION >= 3
     PyObject *pPropName = PyUnicode_FromString(entry.first.c_str());
-#else
-    PyObject *pPropName = PyString_FromString(entry.first.c_str());
-#endif
     PyObject *pElement = NULL;
     if (nodeValues) {
       pElement = sipConvertFromNewType(new tlp::node(eltId), sipFindType("tlp::node"), Py_None);

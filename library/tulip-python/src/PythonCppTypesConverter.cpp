@@ -190,48 +190,18 @@ PyObject *convertBoolToPyObject(bool cppObject) {
 }
 
 bool convertPyObjectToLong(PyObject *pyObject, long &cppObject) {
-
-#if PY_MAJOR_VERSION >= 3
-
   if (PyLong_Check(pyObject)) {
     cppObject = PyLong_AsLong(pyObject);
     return true;
   }
-
-#else
-
-  if (PyLong_Check(pyObject)) {
-    cppObject = PyLong_AsLong(pyObject);
-    return true;
-  } else if (PyInt_Check(pyObject)) {
-    cppObject = PyInt_AsLong(pyObject);
-    return true;
-  }
-
-#endif
   return false;
 }
 
 bool convertPyObjectToUnsignedLong(PyObject *pyObject, unsigned long &cppObject) {
-
-#if PY_MAJOR_VERSION >= 3
-
   if (PyLong_Check(pyObject)) {
     cppObject = PyLong_AsUnsignedLong(pyObject);
     return true;
   }
-
-#else
-
-  if (PyLong_Check(pyObject)) {
-    cppObject = PyLong_AsUnsignedLong(pyObject);
-    return true;
-  } else if (PyInt_Check(pyObject)) {
-    cppObject = PyInt_AsLong(pyObject);
-    return true;
-  }
-
-#endif
   return false;
 }
 
@@ -435,32 +405,6 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
     return true;
   }
 
-#if PY_MAJOR_VERSION < 3
-
-  if (PyInt_CheckExact(pyObj) || PyLong_Check(pyObj)) {
-    long val = getCppObjectFromPyObject<long>(pyObj);
-
-    if (dataType && dataType->getTypeName() == std::string(typeid(int).name())) {
-      valSetter.setValue(int(val));
-    } else if (dataType && dataType->getTypeName() == std::string(typeid(unsigned int).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<unsigned int>(pyObj));
-    } else if (dataType && dataType->getTypeName() == std::string(typeid(long).name())) {
-      valSetter.setValue(val);
-    } else if (dataType && dataType->getTypeName() == std::string(typeid(unsigned long).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<unsigned long>(pyObj));
-    } else if (dataType && dataType->getTypeName() == std::string(typeid(float).name())) {
-      valSetter.setValue(float(val));
-    } else if (dataType && dataType->getTypeName() == std::string(typeid(double).name())) {
-      valSetter.setValue(double(val));
-    } else {
-      valSetter.setValue(int(val));
-    }
-
-    return true;
-  }
-
-#else
-
   if (PyLong_Check(pyObj)) {
     long val = getCppObjectFromPyObject<long>(pyObj);
 
@@ -482,8 +426,6 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
 
     return true;
   }
-
-#endif
 
   if (PyFloat_Check(pyObj)) {
     if (dataType && dataType->getTypeName() == std::string(typeid(float).name())) {

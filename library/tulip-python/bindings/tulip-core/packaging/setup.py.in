@@ -19,8 +19,7 @@ if platform.system() == 'Darwin' and len(sys.argv) > 1 \
 
     def getDyLibDependencies(dylib):
         otool = subprocess.check_output('otool -L %s' % dylib, shell=True)
-        if sys.version_info[0] == 3:
-            otool = otool.decode('utf-8')
+        otool = otool.decode('utf-8')
         L = otool.split('\n')[1:-1]
         L = map(lambda d: d[1:].split(' ')[0], L)
         L = filter(lambda d: '/usr/lib' not in d and
@@ -158,10 +157,7 @@ setup(
 
         'Programming Language :: C++',
         'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',

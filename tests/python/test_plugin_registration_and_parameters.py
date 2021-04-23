@@ -367,10 +367,7 @@ class TestPluginParameters(unittest.TestCase):
                          tlp.ColorScale(color_scale_default_value_dict))
 
         self.assertIn(int_param_name, plugin_default_params)
-        if sys.version_info >= (3,):
-            self.assertEqual(type(plugin_default_params[int_param_name]), int)
-        else:
-            self.assertEqual(type(plugin_default_params[int_param_name]), long) # noqa
+        self.assertEqual(type(plugin_default_params[int_param_name]), int)
         self.assertEqual(plugin_default_params[int_param_name],
                          int_param_default_value)
 

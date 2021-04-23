@@ -47,11 +47,7 @@ class Color {
       if (PyBool_Check(item)) {
         return 0;
       }
-#if PY_MAJOR_VERSION >= 3
       if (!PyLong_Check(item)) {
-#else
-      if (!PyLong_Check(item) && !PyInt_Check(item)) {
-#endif
         return 0;
       }
     }
@@ -71,30 +67,11 @@ class Color {
     unsigned char b = 0;
     unsigned char a = 255;
 
-  #if PY_MAJOR_VERSION >= 3
     r = uchar(PyLong_AsLong(PyTuple_GET_ITEM(sipPy, 0)));
     g = uchar(PyLong_AsLong(PyTuple_GET_ITEM(sipPy, 1)));
     b = uchar(PyLong_AsLong(PyTuple_GET_ITEM(sipPy, 2)));
     if (PyList_GET_SIZE(sipPy) > 3)
       a = uchar(PyLong_AsLong(PyTuple_GET_ITEM(sipPy, 3)));
-  #else
-
-    static struct {
-      unsigned char operator()(PyObject *item) const {
-        if (PyLong_Check(item)) {
-          return uchar(PyLong_AsLong(item));
-        } else {
-          return uchar(PyInt_AsLong(item));
-        }
-      }
-    } toUnsignedChar;
-
-    r = toUnsignedChar(PyTuple_GET_ITEM(sipPy, 0));
-    g = toUnsignedChar(PyTuple_GET_ITEM(sipPy, 1));
-    b = toUnsignedChar(PyTuple_GET_ITEM(sipPy, 2));
-    if (PyTuple_GET_SIZE(sipPy) > 3)
-      a = toUnsignedChar(PyTuple_GET_ITEM(sipPy, 3));
-  #endif
 
     *sipCppPtr = new tlp::Color(r, g, b, a);
   }
