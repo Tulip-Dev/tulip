@@ -34,10 +34,14 @@ static const char *paramHelp[] = {
     "This parameter defines the amount of edges used to build the graph.",
 
     // alpha
-    "This parameter defines the alpha parameter between [0,1]. This one is a percentage and describes the distribution of attractiveness; the model suggests about 1 - alpha of the individuals have very low attractiveness whereas the remaining alpha are approximately evenly distributed between low, medium, and high attractiveness",
+    "This parameter defines the alpha parameter between [0,1]. This one is a percentage and "
+    "describes the distribution of attractiveness; the model suggests about 1 - alpha of the "
+    "individuals have very low attractiveness whereas the remaining alpha are approximately evenly "
+    "distributed between low, medium, and high attractiveness",
 
     // beta
-    "This parameter defines the beta parameter between [0,1]. This parameter indicates the probability a person will have the desire to introduce someone."};
+    "This parameter defines the beta parameter between [0,1]. This parameter indicates the "
+    "probability a person will have the desire to introduce someone."};
 
 //=================================================================================
 

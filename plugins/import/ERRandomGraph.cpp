@@ -32,7 +32,8 @@ const char *paramHelp[] = {
     "Probability of having an edge between each pair of vertices in the graph.",
 
     // self loop
-    "Generate self loops (an edge with source and target on the same node) with the same probability",
+    "Generate self loops (an edge with source and target on the same node) with the same "
+    "probability",
 
     // directed
     "Generate a directed graph (arcs u->v and v->u have the same probability)"};

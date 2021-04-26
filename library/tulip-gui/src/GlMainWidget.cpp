@@ -58,7 +58,7 @@ class GlBufferBinder {
   QOpenGLFramebufferObject *glFrameBuf;
 
 public:
-  GlBufferBinder(QOpenGLFramebufferObject *glBuf)  {
+  GlBufferBinder(QOpenGLFramebufferObject *glBuf) {
     glFrameBuf = glBuf;
     glFrameBuf->bind();
   }

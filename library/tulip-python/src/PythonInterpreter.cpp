@@ -340,7 +340,7 @@ PythonInterpreter::PythonInterpreter()
 
     PyEval_SetTrace(tracefunc, nullptr);
 
-// disable exit and quit functions
+    // disable exit and quit functions
     runString("import builtins;"
               "builtins.exit = lambda *args: None;"
               "builtins.quit= lambda *args: None;");
@@ -576,7 +576,7 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
   bool ret = true;
   scriptPaused = false;
 
-// Build the name object
+  // Build the name object
   PyObject *pName = PyUnicode_FromString(QStringToTlpString(module).c_str());
   // Load the module object
   PyObject *pModule = PyImport_Import(pName);

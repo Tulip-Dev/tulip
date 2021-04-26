@@ -55,7 +55,8 @@ static const char *paramHelp[] = {
     "This parameter defines the minimum y-spacing between any two nodes.",
 
     // x node-node and edge-node spacing
-    "This parameter defines the minimum x-spacing between any two nodes or between a node and an edge.",
+    "This parameter defines the minimum x-spacing between any two nodes or between a node and an "
+    "edge.",
 
     // shape property
     "This parameter defines the property holding edges shapes."};

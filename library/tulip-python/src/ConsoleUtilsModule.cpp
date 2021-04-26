@@ -153,8 +153,7 @@ static PyMethodDef consoleutils_ConsoleOutput_methods[] = {
 };
 
 static PyTypeObject consoleutils_ConsoleOutputType = {
-    PyVarObject_HEAD_INIT(NULL, 0)
-        "consoleutils.ConsoleOutput",                                 /*tp_name*/
+    PyVarObject_HEAD_INIT(NULL, 0) "consoleutils.ConsoleOutput",      /*tp_name*/
     sizeof(consoleutils_ConsoleOutput),                               /*tp_basicsize*/
     0,                                                                /*tp_itemsize*/
     reinterpret_cast<destructor>(consoleutils_ConsoleOutput_dealloc), /*tp_dealloc*/
@@ -246,8 +245,7 @@ static PyMethodDef consoleutils_ConsoleInput_methods[] = {
 };
 
 static PyTypeObject consoleutils_ConsoleInputType = {
-    PyVarObject_HEAD_INIT(NULL, 0)
-        "consoleutils.ConsoleInput",                                 /*tp_name*/
+    PyVarObject_HEAD_INIT(NULL, 0) "consoleutils.ConsoleInput",      /*tp_name*/
     sizeof(consoleutils_ConsoleInput),                               /*tp_basicsize*/
     0,                                                               /*tp_itemsize*/
     reinterpret_cast<destructor>(consoleutils_ConsoleInput_dealloc), /*tp_dealloc*/

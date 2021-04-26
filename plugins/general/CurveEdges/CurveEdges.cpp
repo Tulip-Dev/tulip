@@ -66,7 +66,8 @@ static const char *paramHelp[] = {
     "The input layout of the graph.",
 
     // curve roundness
-    "Parameter for tweaking the curve roundness. The value range is from 0 to 1 with a maximum roundness at 0.5.",
+    "Parameter for tweaking the curve roundness. The value range is from 0 to 1 with a maximum "
+    "roundness at 0.5.",
 
     // curve type
     "The type of curve to compute (12 available: 6 quadratics and 6 cubics).",
