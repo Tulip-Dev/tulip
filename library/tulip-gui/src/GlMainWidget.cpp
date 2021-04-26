@@ -52,6 +52,27 @@ using namespace std;
 
 namespace tlp {
 
+#if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+// needed to fix OpenGL selection failure on MACOS since Qt 5.10
+class GlBufferBinder {
+  QOpenGLFramebufferObject *glFrameBuf;
+
+public:
+  GlBufferBinder(QOpenGLFramebufferObject *glBuf)  {
+    glFrameBuf = glBuf;
+    glFrameBuf->bind();
+  }
+
+  ~GlBufferBinder() {
+    glFrameBuf->release();
+  }
+};
+
+#define GL_BIND_BUFFER(glbuf) GlBufferBinder _glbb(glbuf)
+#else
+#define GL_BIND_BUFFER(glbuf)
+#endif
+
 bool GlMainWidget::inRendering = false;
 
 //==================================================
@@ -65,14 +86,14 @@ GlMainWidget::GlMainWidget(QWidget *parent, View *view)
   grabGesture(Qt::PinchGesture);
   grabGesture(Qt::PanGesture);
   grabGesture(Qt::SwipeGesture);
-  makeCurrent();
+  QOpenGLWidget::makeCurrent();
   QSurfaceFormat format;
   format.setSamples(OpenGlConfigManager::maxNumberOfSamples());
   format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
   setFormat(format);
   getScene()->setViewOrtho(TulipSettings::isViewOrtho());
   OpenGlConfigManager::initExtensions();
-  doneCurrent();
+  QOpenGLWidget::doneCurrent();
 }
 //==================================================
 GlMainWidget::~GlMainWidget() {
@@ -282,6 +303,7 @@ bool GlMainWidget::isCurrent() {
 bool GlMainWidget::pickGlEntities(const int x, const int y, const int width, const int height,
                                   std::vector<SelectedEntity> &pickedEntities, GlLayer *layer) {
   makeCurrent();
+  GL_BIND_BUFFER(glFrameBuf);
   return scene.selectEntities(
       static_cast<RenderingEntitiesFlag>(RenderingSimpleEntities | RenderingWithoutRemove),
       screenToViewport(x), screenToViewport(y), screenToViewport(width), screenToViewport(height),
@@ -298,6 +320,7 @@ void GlMainWidget::pickNodesEdges(const int x, const int y, const int width, con
                                   std::vector<SelectedEntity> &selectedEdges, GlLayer *layer,
                                   bool pickNodes, bool pickEdges) {
   makeCurrent();
+  GL_BIND_BUFFER(glFrameBuf);
 
   if (pickNodes) {
     scene.selectEntities(
@@ -317,6 +340,7 @@ void GlMainWidget::pickNodesEdges(const int x, const int y, const int width, con
 bool GlMainWidget::pickNodesEdges(const int x, const int y, SelectedEntity &selectedEntity,
                                   GlLayer *layer, bool pickNodes, bool pickEdges) {
   makeCurrent();
+  GL_BIND_BUFFER(glFrameBuf);
   vector<SelectedEntity> selectedEntities;
 
   if (pickNodes && scene.selectEntities(

@@ -278,6 +278,9 @@ QOpenGLContext *GlOffscreenRenderer::getOpenGLContext() {
     glContext->create();
     offscreenSurface->create();
     assert(glContext->isValid());
+    makeOpenGLContextCurrent();
+    OpenGlConfigManager::initExtensions();
+    doneOpenGLContextCurrent();
   }
   return glContext;
 }
