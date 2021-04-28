@@ -391,7 +391,7 @@ jobs:
         - export TULIP_BUILD_DOC=ON
         - export TULIP_BUILD_TESTS=ON
         # launch macports build
-        - travis_wait bash -xe ./bundlers/mac/macports_build.sh
+        - bash -xe ./bundlers/mac/macports_build.sh
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip complete macports build
@@ -421,7 +421,7 @@ jobs:
         - export TULIP_BUILD_GEOVIEW=OFF
         - export MACPORTS_CI_CCACHE=ON
         # launch macports build
-        - travis_wait bash -xe ./bundlers/mac/macports_build.sh
+        - bash -xe ./bundlers/mac/macports_build.sh
 
   #==============================================================================================================================================================
     # Tulip thirdparty Homebrew build stage
