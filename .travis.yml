@@ -123,11 +123,10 @@ jobs:
       addons:
         apt:
           # Python 3.6 from ppa:deadsnakes/ppa
-          # we use Qt 5.6.1 from ppa:kubuntu-ppa/backports
-          # instead of default 5.5.1 package
+          # Qt 5.6.3 from ppa:beineri/opt-qt563-xenial
           sources:
             - sourceline: "ppa:deadsnakes/ppa"
-            - sourceline: "ppa:kubuntu-ppa/backports"
+            - sourceline: "ppa:beineri/opt-qt563-xenial"
           # install Tulip build dependencies
           packages:
             - cmake
@@ -140,9 +139,9 @@ jobs:
             - python-sphinx
             - libcppunit-dev
             - binutils-dev
-            - qt5-default
-            - libqt5webkit5-dev
-            - libquazip5-dev
+            - qt56base
+            - qt56tools
+            - qt56webengine
             - libglew-dev
             - libpng-dev
             - libjpeg-dev
@@ -151,6 +150,8 @@ jobs:
         # use Python 3.6
         - PYTHON_EXECUTABLE=/usr/bin/python3.6
       script:
+        # setup qt56 envt
+        - source /opt/qt56/bin/qt56-env.sh
         # create build directory
         - mkdir build && cd build
         # configure Tulip complete build with cmake
