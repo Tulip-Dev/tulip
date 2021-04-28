@@ -860,8 +860,8 @@ enable/disable labels billboarding (always facing the camera).
 tlpgui.GlGraphRenderingParameters.setDisplayFilteringProperty(property)
 
 Sets the boolean property used to filter the rendering of graph elements. If sets to :const:`None`,
-the filtering is deactivated. If the value for a node/edge in that property is :const:`False`,
-it will not be displayed.
+the filtering is deactivated. If the value for a node/edge is :const:`False`, then
+it will be displayed.
 
 :param property: the boolean property used to filter the rendering of graph elements
 :type property: :class:`tulip.tlp.BooleanProperty`

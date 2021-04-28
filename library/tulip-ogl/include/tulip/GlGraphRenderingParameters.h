@@ -495,8 +495,8 @@ public:
   }
 
   /**
-   * @brief This property is use to filter nodes/edges display, for a node/edge if this property is
-   * false : the node/edge will not be displayed
+   * @brief This property is use to filter nodes/edges rendering. If this property is
+   * false, the node/edge will be rendered and displayed.
    *
    * @Warning : this property will not be saved in DataSet
    */
