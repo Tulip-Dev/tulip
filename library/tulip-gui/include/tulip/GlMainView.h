@@ -20,8 +20,8 @@
 #ifndef Tulip_GLMAINVIEW_H
 #define Tulip_GLMAINVIEW_H
 
-#include <tulip/ViewWidget.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/ViewWidget.h>
 
 class QGraphicsProxyWidget;
 class QAction;
@@ -40,22 +40,24 @@ class ViewActionsManager;
  *
  * @brief An abstract view that displays a GlMainWidget as its central widget.
  *
- * The GlMainView subclasses ViewWidget and always uses a GlMainWidget as the central widget of the
- panel. It also adds the following features:
+ * The GlMainView subclasses ViewWidget and always uses a GlMainWidget as the
+ central widget of the panel. It also adds the following features:
  * @list
  * @li An overview of the scene that can be toggled on or off.
  * @li Some configuration widgets that modify the rendering parameters.
- * @li A quick access bar widget that allows the user to quickly modify some of the most used
- rendering parameters and graph properties (nodes color, edges display, etc)
+ * @li A quick access bar widget that allows the user to quickly modify some of
+ the most used rendering parameters and graph properties (nodes color, edges
+ display, etc)
  * @li The possibility to make snapshots of the current scene
  * @endlist
  *
- * Subclassing GlMainView means you will only want to display graphs in a single GlMainWidget.
- Switching the central widget can only be achieved from the ViewWidget class.
+ * Subclassing GlMainView means you will only want to display graphs in a single
+ GlMainWidget. Switching the central widget can only be achieved from the
+ ViewWidget class.
  *
- * @warning It is strongly unadvised to re-implement methods already implemented into tlp::View or
- tlp::ViewWidget. If you have to add custom behavior to those method, make sure to call the
- upper-class methods first:
+ * @warning It is strongly unadvised to re-implement methods already implemented
+ into tlp::View or tlp::ViewWidget. If you have to add custom behavior to those
+ method, make sure to call the upper-class methods first:
  @code
  void MyView::setupWidget() { // Where MyView is a subclass of tlp::GlMainView
    GlMainView::setupWidget(); // call this first
@@ -108,19 +110,20 @@ public:
   tlp::DataSet state() const override;
 
   /** @brief Pick a node or an edge at a view position
-   *  First take a look at a node located at (x,y); if none is found, take a look at an edge
+   *  First take a look at a node located at (x,y); if none is found, take a
+   * look at an edge
    *  @param x the x coordinate of the position
    *  @param y the y coordinate of the position
-   *  @param n on return holds the node found under the (x,y) position, n.isValid() return false if
-   * none has been found
-   *  @param e on return holds the edge found under the (x,y) position, e.isValid() return false if
-   * none has been found
+   *  @param n on return holds the node found under the (x,y) position,
+   * n.isValid() return false if none has been found
+   *  @param e on return holds the edge found under the (x,y) position,
+   * e.isValid() return false if none has been found
    *  @param pickNode enable or disable the node picking
    *  @param pickEdge enable or disable the edge picking
    *  @return true if something has been found, false otherwise
    */
-  bool pickNodeEdge(const int x, const int y, tlp::node &n, tlp::edge &e, bool pickNode = true,
-                    bool pickEdge = true);
+  bool pickNodeEdge(const int x, const int y, tlp::node &n, tlp::edge &e,
+                    bool pickNode = true, bool pickEdge = true);
 
   /**
    * @brief Rotate the view camera by (x,y,z)
@@ -146,14 +149,16 @@ public:
    * @brief Return the 3D world position for the given view position
    */
   inline Coord viewToWorld(const Coord &vpos) const {
-    return getGlMainWidget()->getScene()->getGraphCamera().viewportTo3DWorld(vpos);
+    return getGlMainWidget()->getScene()->getGraphCamera().viewportTo3DWorld(
+        vpos);
   }
 
   /**
    * @brief Return the view position for the given 3D position
    */
   inline Coord worldToView(const Coord &wpos) const {
-    return getGlMainWidget()->getScene()->getGraphCamera().worldTo2DViewport(wpos);
+    return getGlMainWidget()->getScene()->getGraphCamera().worldTo2DViewport(
+        wpos);
   }
 
   /**
@@ -168,9 +173,7 @@ public:
    * @brief Zoom by step
    * @param step of zoom
    */
-  inline void zoom(int step) {
-    getGlMainWidget()->getScene()->zoom(step);
-  }
+  inline void zoom(int step) { getGlMainWidget()->getScene()->zoom(step); }
 
   /**
    * @brief Zoom by factor
@@ -183,12 +186,13 @@ public:
   /**
    * @brief Do a zoom and pan animation
    * @param boundingBox the bounding box in scene coordinates on which the view
-   * has to be zoomed and panned. If it is not valid, the scene bounding box will be used.
-   * At the end of the animation, the view will be zoomed and centered on the content of that
-   * bounding box.
+   * has to be zoomed and panned. If it is not valid, the scene bounding box
+   * will be used. At the end of the animation, the view will be zoomed and
+   * centered on the content of that bounding box.
    * @param duration the animation duration in msecs
    */
-  void zoomAndPanAnimation(const tlp::BoundingBox &boundingBox, const double duration = 1000.);
+  void zoomAndPanAnimation(const tlp::BoundingBox &boundingBox,
+                           const double duration = 1000.);
 
 public slots:
   /**
@@ -207,8 +211,9 @@ public slots:
   void refresh() override;
 
   /**
-   * @brief Force the overview to be redrawn. Since GlMainView already detects graph's
-   * modifications, this method should not be called manually to avoid extra rendering.
+   * @brief Force the overview to be redrawn. Since GlMainView already detects
+   * graph's modifications, this method should not be called manually to avoid
+   * extra rendering.
    */
   virtual void drawOverview(bool generatePixmap = true);
 
@@ -233,15 +238,18 @@ public slots:
   void setViewOrtho(bool);
 
   /**
-   * @brief Force the settings set in the configuration widgets to be re-applied.
+   * @brief Force the settings set in the configuration widgets to be
+   * re-applied.
    */
   void applySettings() override;
 
   void undoCallback() override;
 
-  static bool getNodeOrEdgeAtViewportPos(GlMainWidget *glw, int x, int y, node &n, edge &e);
+  static bool getNodeOrEdgeAtViewportPos(GlMainWidget *glw, int x, int y,
+                                         node &n, edge &e);
 
-  bool getNodeOrEdgeAtViewportPos(int x, int y, node &n, edge &e) const override {
+  bool getNodeOrEdgeAtViewportPos(int x, int y, node &n,
+                                  edge &e) const override {
     return getNodeOrEdgeAtViewportPos(_glMainWidget, x, y, n, e);
   }
 
@@ -257,7 +265,8 @@ protected slots:
 
 protected:
   void setupWidget() override;
-  void assignNewGlMainWidget(GlMainWidget *glMainWidget, bool deleteOldGlMainWidget = true);
+  void assignNewGlMainWidget(GlMainWidget *glMainWidget,
+                             bool deleteOldGlMainWidget = true);
   bool eventFilter(QObject *obj, QEvent *event) override;
 
   tlp::GlOverviewGraphicsItem *overviewItem() const;

@@ -20,15 +20,16 @@
 #ifndef SOMPREVIEWCOMPOSITE_H_
 #define SOMPREVIEWCOMPOSITE_H_
 
+#include "GlLabelledColorScale.h"
+#include "SOMMapElement.h"
+#include <SOMMap.h>
 #include <tulip/GlComposite.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlRect.h>
-#include "GlLabelledColorScale.h"
-#include <SOMMap.h>
-#include "SOMMapElement.h"
 /**
- * @brief GlComposite used to print SOM preview. Use a SOMMapElement to print the SOM and add other
- * information like property name or color scale and min and max value.
+ * @brief GlComposite used to print SOM preview. Use a SOMMapElement to print
+ * the SOM and add other information like property name or color scale and min
+ * and max value.
  */
 namespace tlp {
 
@@ -39,20 +40,21 @@ public:
    * @param position The bottom right corner of the preview.
    * @param size The size of the composite
    * @param propertyName The name of the displayed properties.
-   * @param colorProperty The property containing colors for each element in the grid.
+   * @param colorProperty The property containing colors for each element in the
+   *grid.
    * @param map The SOM grid.
    * @param colorScale The color scale to use in the preview.
    * @param minValue The minimum value label.
    * @param maxValue The maximum value label.
    **/
-  SOMPreviewComposite(tlp::Coord position, tlp::Size size, const std::string &propertyName,
-                      tlp::ColorProperty *colorProperty, SOMMap *map, tlp::ColorScale *colorScale,
-                      double minValue, double maxValue);
+  SOMPreviewComposite(tlp::Coord position, tlp::Size size,
+                      const std::string &propertyName,
+                      tlp::ColorProperty *colorProperty, SOMMap *map,
+                      tlp::ColorScale *colorScale, double minValue,
+                      double maxValue);
   ~SOMPreviewComposite() override;
 
-  inline std::string getPropertyName() const {
-    return propertyName;
-  }
+  inline std::string getPropertyName() const { return propertyName; }
 
   /**
    * Change the color of the frame.
@@ -61,7 +63,8 @@ public:
   void setFrameColor(tlp::Color color);
 
   /**
-   * Change the colors of the som representation with those in the given property;
+   * Change the colors of the som representation with those in the given
+   * property;
    * @param newColor The new colors.
    */
   void updateColors(ColorProperty *newColor);
@@ -72,11 +75,11 @@ public:
   bool isElement(GlEntity *entity);
 
 protected:
-  tlp::Size computeAspectRatio(unsigned int width, unsigned int height, float maxWidth,
-                               float maxHeight);
+  tlp::Size computeAspectRatio(unsigned int width, unsigned int height,
+                               float maxWidth, float maxHeight);
 
-  void buildMainComposite(const std::string &colorPropertyName, SOMMap *map, tlp::Coord topLeft,
-                          tlp::Size elementSize);
+  void buildMainComposite(const std::string &colorPropertyName, SOMMap *map,
+                          tlp::Coord topLeft, tlp::Size elementSize);
 
   tlp::GlLabel *label;
   tlp::GlRect *frame;

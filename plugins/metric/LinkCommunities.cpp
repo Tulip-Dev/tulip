@@ -19,9 +19,9 @@
 
 #include <set>
 #include <tulip/DoubleProperty.h>
+#include <tulip/ParallelTools.h>
 #include <tulip/vectorgraph.h>
 #include <tulip/vectorgraphproperty.h>
-#include <tulip/ParallelTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -29,7 +29,8 @@ using namespace tlp;
 /** \addtogroup clustering */
 /*@{*/
 /** \file
- * @brief This plugin is an implementation of a fuzzy clustering procedure. First introduced in:
+ * @brief This plugin is an implementation of a fuzzy clustering procedure.
+ *First introduced in:
  *
  * Ahn, Y.Y. and Bagrow, J.P. and Lehmann, S., \n
  * "Link communities reveal multiscale complexity in networks", \n
@@ -37,12 +38,12 @@ using namespace tlp;
  * pages 761--764, \n
  * 2010 \n
  *
- * The result of this procedure is saved as an edge metric: two edges share the same value
- * if they are part of the same group.
- * The result for a node shows the number of groups to which it belongs.
+ * The result of this procedure is saved as an edge metric: two edges share the
+ *same value if they are part of the same group. The result for a node shows the
+ *number of groups to which it belongs.
  *
- * @note To create subgraphs using the result of this algortihm use "Equal Value" with parameter
- *Type="edges".
+ * @note To create subgraphs using the result of this algortihm use "Equal
+ *Value" with parameter Type="edges".
  *
  * @todo Deal with directed graphs.
  *
@@ -73,18 +74,18 @@ private:
    **/
   void computeSimilarities(const std::vector<edge> &edges);
   /**
-   * @brief Compute similarity (Jaccard) between graph->edges()[source(e).id] and
-   *graph->edges()[target(e).id]
+   * @brief Compute similarity (Jaccard) between graph->edges()[source(e).id]
+   *and graph->edges()[target(e).id]
    **/
   double getSimilarity(tlp::edge e, const std::vector<edge> &edges);
   /**
-   * @brief Compute weighted (Tanimoto) similarity between graph->edges()[source(e).id] and
-   *graph->edges()[target(e).id]
+   * @brief Compute weighted (Tanimoto) similarity between
+   *graph->edges()[source(e).id] and graph->edges()[target(e).id]
    **/
   double getWeightedSimilarity(tlp::edge e, const std::vector<edge> &edges);
   /**
-   * @brief Perform #(step) single linkage clustering in order to find the partition
-   * which maximise the average density
+   * @brief Perform #(step) single linkage clustering in order to find the
+   *partition which maximise the average density
    **/
   double findBestThreshold(unsigned int, const std::vector<edge> &edges);
   /**
@@ -98,8 +99,8 @@ private:
    **/
   void setEdgeValues(double, bool, const std::vector<edge> &edges);
 
-  tlp::VectorGraph dual; // Dual Node -> Graph Edges; Dual Edge -> indicates that the linked Graph
-                         // Edges have a same end.
+  tlp::VectorGraph dual; // Dual Node -> Graph Edges; Dual Edge -> indicates
+                         // that the linked Graph Edges have a same end.
   tlp::MutableContainer<tlp::node> mapKeystone;
   tlp::EdgeProperty<double> similarity;
 
@@ -246,7 +247,8 @@ double LinkCommunities::getSimilarity(edge ee, const std::vector<edge> &edges) {
     return 0.0;
 }
 //==============================================================================================================
-double LinkCommunities::getWeightedSimilarity(tlp::edge ee, const std::vector<edge> &edges) {
+double LinkCommunities::getWeightedSimilarity(tlp::edge ee,
+                                              const std::vector<edge> &edges) {
   node key = mapKeystone.get(ee.id);
   auto eeEnds = dual.ends(ee);
   edge e1 = edges[eeEnds.first.id];
@@ -325,12 +327,11 @@ double LinkCommunities::getWeightedSimilarity(tlp::edge ee, const std::vector<ed
 // define a lock to protect allocation/free of dn_visited
 TLP_DEFINE_GLOBAL_LOCK(DN_VISITED);
 
-double LinkCommunities::computeAverageDensity(double threshold, const std::vector<edge> &edges) {
+double LinkCommunities::computeAverageDensity(double threshold,
+                                              const std::vector<edge> &edges) {
   double d = 0.0;
   NodeProperty<bool> dn_visited;
-  TLP_GLOBALLY_LOCK_SECTION(DN_VISITED) {
-    dual.alloc(dn_visited);
-  }
+  TLP_GLOBALLY_LOCK_SECTION(DN_VISITED) { dual.alloc(dn_visited); }
   TLP_GLOBALLY_UNLOCK_SECTION(DN_VISITED);
   dn_visited.setAll(false);
 
@@ -398,9 +399,7 @@ double LinkCommunities::computeAverageDensity(double threshold, const std::vecto
     }
   }
 
-  TLP_GLOBALLY_LOCK_SECTION(DN_VISITED) {
-    dual.free(dn_visited);
-  }
+  TLP_GLOBALLY_LOCK_SECTION(DN_VISITED) { dual.free(dn_visited); }
   TLP_GLOBALLY_UNLOCK_SECTION(DN_VISITED);
 
   return 2.0 * d / (graph->numberOfEdges());

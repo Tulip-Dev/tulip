@@ -31,19 +31,20 @@ using namespace tlp;
 /// An implementation of a radial drawing of trees.
 /**
  * This algorithm is inspired from
- * MoireGraphs: Radial Focus+Context Visualization and Interaction for Graphs with Visual Nodes
- * from T. J. Jankun-Kelly, Kwan-Liu Ma
- * published in IEEE Symposium on Information Visualization, INFOVIS pages 59--66 (2003)
+ * MoireGraphs: Radial Focus+Context Visualization and Interaction for Graphs
+ *with Visual Nodes from T. J. Jankun-Kelly, Kwan-Liu Ma published in IEEE
+ *Symposium on Information Visualization, INFOVIS pages 59--66 (2003)
  **/
 class TreeRadial : public LayoutAlgorithm {
 public:
-  PLUGININFORMATION("Tree Radial", "Patrick Mary", "14/05/2007",
-                    "Implements the radial tree layout algorithm first published as:<br/>"
-                    "<b>MoireGraphs: Radial Focus+Context "
-                    "Visualization and Interaction for Graphs with Visual Nodes</b> T. J. "
-                    "Jankun-Kelly, Kwan-Liu Ma. Proc. IEEE "
-                    "Symposium on Information Visualization, INFOVIS pages 59--66 (2003).",
-                    "1.0", "Tree")
+  PLUGININFORMATION(
+      "Tree Radial", "Patrick Mary", "14/05/2007",
+      "Implements the radial tree layout algorithm first published as:<br/>"
+      "<b>MoireGraphs: Radial Focus+Context "
+      "Visualization and Interaction for Graphs with Visual Nodes</b> T. J. "
+      "Jankun-Kelly, Kwan-Liu Ma. Proc. IEEE "
+      "Symposium on Information Visualization, INFOVIS pages 59--66 (2003).",
+      "1.0", "Tree")
   Graph *tree;
   vector<float> nRadii;
   vector<float> lRadii;
@@ -82,7 +83,8 @@ public:
     MutableContainer<bool> visited;
     visited.setAll(false);
     stack<dfsNodeRadiiStruct> dfsLevels;
-    dfsNodeRadiiStruct dfsParams(n, sizes->getNodeValue(n).getW() / 2, 0, tree->getOutNodes(n));
+    dfsNodeRadiiStruct dfsParams(n, sizes->getNodeValue(n).getW() / 2, 0,
+                                 tree->getOutNodes(n));
     dfsLevels.push(dfsParams);
 
     while (!dfsLevels.empty()) {
@@ -132,7 +134,8 @@ public:
       float lRadiusPrev = lRadius;
       lRadius += nRadii[i] + nRadii[i + 1] + lSpacing;
       // check if there is enough space for nodes of layer i + 1
-      float mRadius = (bfs[i + 1].size() * (nRadii[i + 1] + nSpacing)) / float(2 * M_PI);
+      float mRadius =
+          (bfs[i + 1].size() * (nRadii[i + 1] + nSpacing)) / float(2 * M_PI);
 
       if (mRadius > lRadius)
         lRadius = mRadius;
@@ -162,7 +165,8 @@ public:
     }
     if (depth > 0) {
       // compute the node angular spread
-      double nAngle = 2 * atan(sizes->getNodeValue(n).getW()/(2. * lRadii[depth]));
+      double nAngle = 2 * atan(sizes->getNodeValue(n).getW()/(2. *
+  lRadii[depth]));
       // check if it is not greater than the sum
       if (nAngle > cAngle)
         cAngle = nAngle;
@@ -182,11 +186,13 @@ public:
     unsigned int depth;
     Iterator<node> *neighbours;
 
-    dfsAngularSpreadStruct(node n = node(), unsigned int d = 0, Iterator<node> *it = nullptr)
+    dfsAngularSpreadStruct(node n = node(), unsigned int d = 0,
+                           Iterator<node> *it = nullptr)
         : current(n), cAngle(0), depth(d), neighbours(it) {}
   };
 
-  void dfsComputeAngularSpread(node n, SizeProperty *sizes, MutableContainer<double> &angles) {
+  void dfsComputeAngularSpread(node n, SizeProperty *sizes,
+                               MutableContainer<double> &angles) {
     // we dont use recursive call to avoid a possible stack overflow
     stack<dfsAngularSpreadStruct> dfsLevels;
     dfsAngularSpreadStruct dfsParams(n, 0, tree->getOutNodes(n));
@@ -213,7 +219,8 @@ public:
 
         if (depth > 0) {
           // compute the node angular spread
-          double nAngle = 2 * atan(sizes->getNodeValue(n).getW() / (2. * lRadii[depth]));
+          double nAngle =
+              2 * atan(sizes->getNodeValue(n).getW() / (2. * lRadii[depth]));
 
           // check if it is not greater than the sum
           if (nAngle > cAngle)
@@ -273,17 +280,20 @@ public:
     unsigned int depth;
     Iterator<node> *neighbours;
 
-    dfsDoLayoutStruct(node n = node(), double bAngle = 0, double eAngle = 0, double spread = 0,
-                      bool flag = false, unsigned int d = 0, Iterator<node> *it = nullptr)
-        : current(n), startAngle(bAngle), endAngle(eAngle), sAngle(eAngle - bAngle),
-          nSpread(spread), checkAngle(flag), depth(d), neighbours(it) {}
+    dfsDoLayoutStruct(node n = node(), double bAngle = 0, double eAngle = 0,
+                      double spread = 0, bool flag = false, unsigned int d = 0,
+                      Iterator<node> *it = nullptr)
+        : current(n), startAngle(bAngle), endAngle(eAngle),
+          sAngle(eAngle - bAngle), nSpread(spread), checkAngle(flag), depth(d),
+          neighbours(it) {}
   };
 
   void doLayout(node n, MutableContainer<double> &angles) {
     MutableContainer<bool> visited;
     visited.setAll(false);
     stack<dfsDoLayoutStruct> dfsLevels;
-    dfsDoLayoutStruct dfsParams(n, 0, 2 * M_PI, angles.get(n.id), false, 0, tree->getOutNodes(n));
+    dfsDoLayoutStruct dfsParams(n, 0, 2 * M_PI, angles.get(n.id), false, 0,
+                                tree->getOutNodes(n));
     dfsLevels.push(dfsParams);
 
     while (!dfsLevels.empty()) {
@@ -307,8 +317,8 @@ public:
         if (depth > 0) {
           // layout the node in the middle of the sector
           double nAngle = (startAngle + endAngle) / 2.0;
-          result->setNodeValue(
-              n, Coord(lRadii[depth] * float(cos(nAngle)), lRadii[depth] * float(sin(nAngle)), 0));
+          result->setNodeValue(n, Coord(lRadii[depth] * float(cos(nAngle)),
+                                        lRadii[depth] * float(sin(nAngle)), 0));
         } else
           result->setNodeValue(n, Coord(0, 0, 0));
 
@@ -339,7 +349,8 @@ public:
     }
   }
 
-  TreeRadial(const PluginContext *context) : LayoutAlgorithm(context), tree(nullptr) {
+  TreeRadial(const PluginContext *context)
+      : LayoutAlgorithm(context), tree(nullptr) {
     addNodeSizePropertyParameter(this);
     addSpacingParameters(this);
   }

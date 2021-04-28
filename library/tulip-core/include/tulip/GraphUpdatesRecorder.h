@@ -21,8 +21,8 @@
 #ifndef TLPGRAPHRECORDER_H
 #define TLPGRAPHRECORDER_H
 
-#include <string>
 #include <set>
+#include <string>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -31,8 +31,7 @@
 #include <tulip/MutableContainer.h>
 
 namespace std {
-template <>
-struct less<tlp::Graph *> {
+template <> struct less<tlp::Graph *> {
   size_t operator()(const tlp::Graph *g1, const tlp::Graph *g2) const {
     // the id order corresponds to the creation order
     // so when dealing with a set<Graph*> this will ensure that
@@ -102,10 +101,12 @@ class GraphUpdatesRecorder : public Observable {
   std::unordered_map<Graph *, DataSet> newAttributeValues;
 
   // one set of updated addNodes per property
-  std::unordered_map<PropertyInterface *, std::set<node>> updatedPropsAddedNodes;
+  std::unordered_map<PropertyInterface *, std::set<node>>
+      updatedPropsAddedNodes;
 
   // one set of updated addEdges per property
-  std::unordered_map<PropertyInterface *, std::set<edge>> updatedPropsAddedEdges;
+  std::unordered_map<PropertyInterface *, std::set<edge>>
+      updatedPropsAddedEdges;
 
   // the old default node value for each updated property
   std::unordered_map<PropertyInterface *, DataMem *> oldNodeDefaultValues;
@@ -123,7 +124,8 @@ class GraphUpdatesRecorder : public Observable {
     MutableContainer<bool> *recordedNodes;
     MutableContainer<bool> *recordedEdges;
 
-    RecordedValues(PropertyInterface *prop = nullptr, MutableContainer<bool> *rn = nullptr,
+    RecordedValues(PropertyInterface *prop = nullptr,
+                   MutableContainer<bool> *rn = nullptr,
                    MutableContainer<bool> *re = nullptr)
         : values(prop), recordedNodes(rn), recordedEdges(re) {}
   };
@@ -138,17 +140,21 @@ class GraphUpdatesRecorder : public Observable {
   // structures but not really 'deleted'
   void deleteDeletedObjects();
   // deletion of recorded values
-  void deleteValues(std::unordered_map<PropertyInterface *, RecordedValues> &values);
+  void
+  deleteValues(std::unordered_map<PropertyInterface *, RecordedValues> &values);
   // deletion of DataMem default values
-  void deleteDefaultValues(std::unordered_map<PropertyInterface *, DataMem *> &values);
+  void deleteDefaultValues(
+      std::unordered_map<PropertyInterface *, DataMem *> &values);
   // record of a node's edges container before/after modification
-  void recordEdgeContainer(std::unordered_map<node, std::vector<edge>> &, GraphImpl *, node,
-                           edge e = edge(), bool loop = false);
-  void recordEdgeContainer(std::unordered_map<node, std::vector<edge>> &, GraphImpl *, node,
-                           const std::vector<edge> &, unsigned int);
+  void recordEdgeContainer(std::unordered_map<node, std::vector<edge>> &,
+                           GraphImpl *, node, edge e = edge(),
+                           bool loop = false);
+  void recordEdgeContainer(std::unordered_map<node, std::vector<edge>> &,
+                           GraphImpl *, node, const std::vector<edge> &,
+                           unsigned int);
   // remove an edge from a node's edges container
-  void removeFromEdgeContainer(std::unordered_map<node, std::vector<edge>> &containers, edge e,
-                               node n);
+  void removeFromEdgeContainer(
+      std::unordered_map<node, std::vector<edge>> &containers, edge e, node n);
 
   void removeGraphData(Graph *);
 

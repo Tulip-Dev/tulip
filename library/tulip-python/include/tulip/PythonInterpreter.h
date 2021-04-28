@@ -25,13 +25,13 @@ struct _object;
 typedef _object PyObject;
 #endif
 
-#include <tulip/PythonCppTypesConverter.h>
 #include <tulip/Graph.h>
+#include <tulip/PythonCppTypesConverter.h>
 
 #include <QObject>
-#include <QVector>
 #include <QSet>
 #include <QString>
+#include <QVector>
 
 class QAbstractScrollArea;
 class QPlainTextEdit;
@@ -62,10 +62,8 @@ class TLP_PYTHON_SCOPE PythonInterpreter : public QObject {
 
   template <typename T, typename... Param>
   void buildParamDataSet(DataSet *ds, T a, Param... param);
-  template <typename T>
-  void buildParamDataSet(DataSet *ds, T a);
-  template <typename T>
-  void addParameter(DataSet *ds, T a);
+  template <typename T> void buildParamDataSet(DataSet *ds, T a);
+  template <typename T> void addParameter(DataSet *ds, T a);
 
 public:
   static const QString pythonPluginsPath;
@@ -81,32 +79,40 @@ public:
 
   bool importModule(const QString &moduleName);
 
-  bool registerNewModuleFromString(const QString &moduleName, const QString &moduleSrcCode);
+  bool registerNewModuleFromString(const QString &moduleName,
+                                   const QString &moduleSrcCode);
 
   bool runString(const QString &pyhtonCode, const QString &scriptFilePath = "");
 
-  bool runGraphScript(const QString &module, const QString &function, tlp::Graph *graph,
-                      const QString &scriptFilePath = "");
+  bool runGraphScript(const QString &module, const QString &function,
+                      tlp::Graph *graph, const QString &scriptFilePath = "");
 
   template <typename T>
   bool evalSingleStatementAndGetValue(const QString &pythonStatement, T &value);
 
-  bool callFunction(const QString &module, const QString &function, const tlp::DataSet &parameters);
+  bool callFunction(const QString &module, const QString &function,
+                    const tlp::DataSet &parameters);
 
   // use c++11 variadic template for more convenience
   template <typename RETURN_TYPE, typename... Param>
-  bool callFunctionWithParamsAndGetReturnValue(const QString &module, const QString &function,
-                                               RETURN_TYPE &returnValue, Param... param);
+  bool callFunctionWithParamsAndGetReturnValue(const QString &module,
+                                               const QString &function,
+                                               RETURN_TYPE &returnValue,
+                                               Param... param);
   template <typename... Param>
-  bool callFunctionWithParams(const QString &module, const QString &function, Param... param);
+  bool callFunctionWithParams(const QString &module, const QString &function,
+                              Param... param);
 
   template <typename RETURN_TYPE>
-  bool callFunctionAndGetReturnValue(const QString &module, const QString &function,
-                                     const tlp::DataSet &parameters, RETURN_TYPE &returnValue);
+  bool callFunctionAndGetReturnValue(const QString &module,
+                                     const QString &function,
+                                     const tlp::DataSet &parameters,
+                                     RETURN_TYPE &returnValue);
 
   bool functionExists(const QString &moduleName, const QString &functionName);
 
-  void addModuleSearchPath(const QString &path, const bool beforeOtherPaths = false);
+  void addModuleSearchPath(const QString &path,
+                           const bool beforeOtherPaths = false);
 
   void deleteModule(const QString &moduleName);
 
@@ -120,13 +126,9 @@ public:
 
   void setProcessQtEventsDuringScriptExecution(bool processQtEvents);
 
-  bool isRunningScript() const {
-    return _runningScript;
-  }
+  bool isRunningScript() const { return _runningScript; }
 
-  QString getPythonVersionStr() const {
-    return _pythonVersion;
-  }
+  QString getPythonVersionStr() const { return _pythonVersion; }
 
   QString getPythonFullVersionStr() const;
 
@@ -180,7 +182,8 @@ public:
   PyObject *callPythonFunction(const QString &module, const QString &function,
                                const tlp::DataSet &parameters);
 
-  PyObject *evalPythonStatement(const QString &pythonStatement, bool singleInput = false);
+  PyObject *evalPythonStatement(const QString &pythonStatement,
+                                bool singleInput = false);
 
   void clearTracebacks();
 

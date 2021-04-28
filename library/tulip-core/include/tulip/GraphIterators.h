@@ -31,7 +31,8 @@ class GraphView;
 
 //============================================================
 /// Out node iterator for GraphView
-class TLP_SCOPE OutNodesIterator : public FactorNodeIterator, public MemoryPool<OutNodesIterator> {
+class TLP_SCOPE OutNodesIterator : public FactorNodeIterator,
+                                   public MemoryPool<OutNodesIterator> {
 private:
   Iterator<edge> *it;
 #if !defined(NDEBUG) && !defined(_OPENMP)
@@ -45,7 +46,8 @@ public:
 };
 //============================================================
 /// In node iterator for GraphView
-class InNodesIterator : public FactorNodeIterator, public MemoryPool<InNodesIterator> {
+class InNodesIterator : public FactorNodeIterator,
+                        public MemoryPool<InNodesIterator> {
 private:
   Iterator<edge> *it;
 #if !defined(NDEBUG) && !defined(_OPENMP)
@@ -75,7 +77,8 @@ public:
 };
 //============================================================
 /// Out edge iterator for GraphView
-class TLP_SCOPE OutEdgesIterator : public FactorEdgeIterator, public MemoryPool<OutEdgesIterator> {
+class TLP_SCOPE OutEdgesIterator : public FactorEdgeIterator,
+                                   public MemoryPool<OutEdgesIterator> {
 private:
   Iterator<edge> *it;
   edge curEdge;
@@ -92,7 +95,8 @@ protected:
 };
 //============================================================
 /// In edge iterator for GraphView
-class TLP_SCOPE InEdgesIterator : public FactorEdgeIterator, public MemoryPool<InEdgesIterator> {
+class TLP_SCOPE InEdgesIterator : public FactorEdgeIterator,
+                                  public MemoryPool<InEdgesIterator> {
 private:
   Iterator<edge> *it;
   edge curEdge;

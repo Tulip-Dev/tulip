@@ -18,12 +18,12 @@
  */
 #include "tulip/ColorScaleButton.h"
 
-#include <QPainter>
-#include <QPaintEvent>
 #include <QApplication>
+#include <QPaintEvent>
+#include <QPainter>
 
-#include <tulip/TlpQtTools.h>
 #include <tulip/ColorScaleConfigDialog.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace tlp;
 
@@ -35,7 +35,8 @@ void ColorScaleButton::paintScale(QPainter *painter, const QRect &baseRect,
   rect.setWidth(rect.width() - 4);
   rect.setHeight(rect.height() - 4);
 
-  QLinearGradient grad(QPointF(rect.x(), rect.y()), QPointF(rect.x() + rect.width(), rect.y()));
+  QLinearGradient grad(QPointF(rect.x(), rect.y()),
+                       QPointF(rect.x() + rect.width(), rect.y()));
 
   for (const auto &it : colorScale.getColorMap())
     grad.setColorAt(it.first, colorToQColor(it.second));
@@ -50,9 +51,7 @@ ColorScaleButton::ColorScaleButton(ColorScale colorScale, QWidget *parent)
   connect(this, SIGNAL(clicked()), this, SLOT(editColorScale()));
 }
 
-const ColorScale &ColorScaleButton::colorScale() const {
-  return _colorScale;
-}
+const ColorScale &ColorScaleButton::colorScale() const { return _colorScale; }
 
 void ColorScaleButton::paintEvent(QPaintEvent *event) {
   QPushButton::paintEvent(event);
@@ -72,6 +71,4 @@ void ColorScaleButton::editColorScale(const ColorScale &cs) {
     _colorScale = cs;
 }
 
-void ColorScaleButton::editColorScale() {
-  editColorScale(_colorScale);
-}
+void ColorScaleButton::editColorScale() { editColorScale(_colorScale); }

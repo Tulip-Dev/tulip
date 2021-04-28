@@ -25,51 +25,50 @@
 
 #include <tulip/TlpQtTools.h>
 
-#include <ostream>
 #include <ios>
+#include <ostream>
 #include <unordered_map>
 
-#include <QDebug>
-#include <QColorDialog>
 #include <QAbstractButton>
-#include <QMessageBox>
-#include <QImage>
-#include <QEvent>
-#include <QMetaEnum>
 #include <QApplication>
+#include <QColorDialog>
+#include <QDebug>
 #include <QDir>
-#include <QApplication>
+#include <QEvent>
+#include <QImage>
+#include <QMessageBox>
+#include <QMetaEnum>
 #include <QStandardPaths>
 #if defined(__MINGW32__) && defined(TULIP_BUILD_PYTHON_COMPONENTS)
 #include <QSslSocket>
 #endif
 
-#include <tulip/DataSet.h>
-#include <tulip/TulipSettings.h>
-#include <tulip/Interactor.h>
-#include <tulip/View.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
+#include <tulip/DataSet.h>
 #include <tulip/DoubleProperty.h>
+#include <tulip/EdgeExtremityGlyphManager.h>
+#include <tulip/FileDownloader.h>
+#include <tulip/GlOffscreenRenderer.h>
+#include <tulip/GlTextureManager.h>
+#include <tulip/GlyphManager.h>
 #include <tulip/GraphProperty.h>
 #include <tulip/IntegerProperty.h>
+#include <tulip/Interactor.h>
 #include <tulip/LayoutProperty.h>
+#include <tulip/OpenGlConfigManager.h>
+#include <tulip/PluginLibraryLoader.h>
+#include <tulip/PluginLister.h>
+#include <tulip/PluginManager.h>
+#include <tulip/PythonVersionChecker.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
 #include <tulip/SystemDefinition.h>
 #include <tulip/TlpTools.h>
-#include <tulip/PluginLibraryLoader.h>
-#include <tulip/PluginLister.h>
-#include <tulip/PluginManager.h>
-#include <tulip/GlyphManager.h>
-#include <tulip/EdgeExtremityGlyphManager.h>
-#include <tulip/OpenGlConfigManager.h>
-#include <tulip/GlTextureManager.h>
-#include <tulip/TulipMetaTypes.h>
-#include <tulip/PythonVersionChecker.h>
-#include <tulip/FileDownloader.h>
 #include <tulip/TulipItemEditorCreators.h>
-#include <tulip/GlOffscreenRenderer.h>
+#include <tulip/TulipMetaTypes.h>
+#include <tulip/TulipSettings.h>
+#include <tulip/View.h>
 /**
  * For openDataSetDialog function : see OpenDataSet.cpp
  */
@@ -79,53 +78,81 @@ using namespace tlp;
 /**
  * Init property type to property label conversion map
  **/
-static unordered_map<string, QString> &buildPropertyTypeToPropertyTypeLabelMap() {
+static unordered_map<string, QString> &
+buildPropertyTypeToPropertyTypeLabelMap() {
   static unordered_map<string, QString> propertyTypeToPropertyTypeLabel;
-  propertyTypeToPropertyTypeLabel[BooleanProperty::propertyTypename] = QString("Boolean");
-  propertyTypeToPropertyTypeLabel[ColorProperty::propertyTypename] = QString("Color");
-  propertyTypeToPropertyTypeLabel[DoubleProperty::propertyTypename] = QString("Double");
-  propertyTypeToPropertyTypeLabel[GraphProperty::propertyTypename] = QString("Graph");
-  propertyTypeToPropertyTypeLabel[IntegerProperty::propertyTypename] = QString("Integer");
-  propertyTypeToPropertyTypeLabel[LayoutProperty::propertyTypename] = QString("Layout");
-  propertyTypeToPropertyTypeLabel[SizeProperty::propertyTypename] = QString("Size");
-  propertyTypeToPropertyTypeLabel[StringProperty::propertyTypename] = QString("String");
+  propertyTypeToPropertyTypeLabel[BooleanProperty::propertyTypename] =
+      QString("Boolean");
+  propertyTypeToPropertyTypeLabel[ColorProperty::propertyTypename] =
+      QString("Color");
+  propertyTypeToPropertyTypeLabel[DoubleProperty::propertyTypename] =
+      QString("Double");
+  propertyTypeToPropertyTypeLabel[GraphProperty::propertyTypename] =
+      QString("Graph");
+  propertyTypeToPropertyTypeLabel[IntegerProperty::propertyTypename] =
+      QString("Integer");
+  propertyTypeToPropertyTypeLabel[LayoutProperty::propertyTypename] =
+      QString("Layout");
+  propertyTypeToPropertyTypeLabel[SizeProperty::propertyTypename] =
+      QString("Size");
+  propertyTypeToPropertyTypeLabel[StringProperty::propertyTypename] =
+      QString("String");
   propertyTypeToPropertyTypeLabel[BooleanVectorProperty::propertyTypename] =
       QString("BooleanVector");
-  propertyTypeToPropertyTypeLabel[ColorVectorProperty::propertyTypename] = QString("ColorVector");
-  propertyTypeToPropertyTypeLabel[CoordVectorProperty::propertyTypename] = QString("CoordVector");
-  propertyTypeToPropertyTypeLabel[DoubleVectorProperty::propertyTypename] = QString("DoubleVector");
+  propertyTypeToPropertyTypeLabel[ColorVectorProperty::propertyTypename] =
+      QString("ColorVector");
+  propertyTypeToPropertyTypeLabel[CoordVectorProperty::propertyTypename] =
+      QString("CoordVector");
+  propertyTypeToPropertyTypeLabel[DoubleVectorProperty::propertyTypename] =
+      QString("DoubleVector");
   propertyTypeToPropertyTypeLabel[IntegerVectorProperty::propertyTypename] =
       QString("IntegerVector");
-  propertyTypeToPropertyTypeLabel[SizeVectorProperty::propertyTypename] = QString("SizeVector");
-  propertyTypeToPropertyTypeLabel[StringVectorProperty::propertyTypename] = QString("StringVector");
+  propertyTypeToPropertyTypeLabel[SizeVectorProperty::propertyTypename] =
+      QString("SizeVector");
+  propertyTypeToPropertyTypeLabel[StringVectorProperty::propertyTypename] =
+      QString("StringVector");
   return propertyTypeToPropertyTypeLabel;
 }
 
 // Property type to property label conversion map
-static const unordered_map<string, QString> &propertyTypeToPropertyTypeLabelMap =
-    buildPropertyTypeToPropertyTypeLabelMap();
+static const unordered_map<string, QString>
+    &propertyTypeToPropertyTypeLabelMap =
+        buildPropertyTypeToPropertyTypeLabelMap();
 /**
  * Init property type label to property type conversion map
  **/
 static map<QString, string> buildPropertyTypeLabelToPropertyTypeMap() {
   static map<QString, string> propertyTypeLabelToPropertyType;
-  propertyTypeLabelToPropertyType[QString("Boolean")] = BooleanProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("Color")] = ColorProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("Double")] = DoubleProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("Graph")] = GraphProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("Integer")] = IntegerProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("Layout")] = LayoutProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("Size")] = SizeProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("String")] = StringProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("Boolean")] =
+      BooleanProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("Color")] =
+      ColorProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("Double")] =
+      DoubleProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("Graph")] =
+      GraphProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("Integer")] =
+      IntegerProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("Layout")] =
+      LayoutProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("Size")] =
+      SizeProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("String")] =
+      StringProperty::propertyTypename;
   propertyTypeLabelToPropertyType[QString("BooleanVector")] =
       BooleanVectorProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("ColorVector")] = ColorVectorProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("CoordVector")] = CoordVectorProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("DoubleVector")] = DoubleVectorProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("ColorVector")] =
+      ColorVectorProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("CoordVector")] =
+      CoordVectorProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("DoubleVector")] =
+      DoubleVectorProperty::propertyTypename;
   propertyTypeLabelToPropertyType[QString("IntegerVector")] =
       IntegerVectorProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("SizeVector")] = SizeVectorProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("StringVector")] = StringVectorProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("SizeVector")] =
+      SizeVectorProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("StringVector")] =
+      StringVectorProperty::propertyTypename;
   return propertyTypeLabelToPropertyType;
 }
 // Property type label to property type conversion map
@@ -139,8 +166,10 @@ QDebug operator<<(QDebug str, const QEvent *ev) {
   str << "QEvent";
 
   if (ev) {
-    static int eventEnumIndex = QEvent::staticMetaObject.indexOfEnumerator("Type");
-    QString name = QEvent::staticMetaObject.enumerator(eventEnumIndex).valueToKey(ev->type());
+    static int eventEnumIndex =
+        QEvent::staticMetaObject.indexOfEnumerator("Type");
+    QString name = QEvent::staticMetaObject.enumerator(eventEnumIndex)
+                       .valueToKey(ev->type());
 
     if (!name.isEmpty()) {
       str << name;
@@ -155,10 +184,12 @@ QDebug operator<<(QDebug str, const QEvent *ev) {
 
 namespace tlp {
 
-bool getColorDialog(const QColor &color, QWidget *parent, const QString &title, QColor &result) {
+bool getColorDialog(const QColor &color, QWidget *parent, const QString &title,
+                    QColor &result) {
 
   QColor newColor = QColorDialog::getColor(
-      color, parent, title, QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);
+      color, parent, title,
+      QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);
 
   if (newColor.isValid()) {
     result = newColor;
@@ -169,7 +200,8 @@ bool getColorDialog(const QColor &color, QWidget *parent, const QString &title, 
 
 QString propertyTypeToPropertyTypeLabel(const string &typeName) {
   auto it = propertyTypeToPropertyTypeLabelMap.find(typeName);
-  return it != propertyTypeToPropertyTypeLabelMap.end() ? it->second : QString();
+  return it != propertyTypeToPropertyTypeLabelMap.end() ? it->second
+                                                        : QString();
 }
 
 string propertyTypeLabelToPropertyType(const QString &typeNameLabel) {
@@ -178,17 +210,16 @@ string propertyTypeLabelToPropertyType(const QString &typeNameLabel) {
 }
 
 QString getPluginPackageName(const QString &pluginName) {
-  return pluginName.simplified().remove(' ').toLower() + "-" + TULIP_VERSION + "-" + OS_PLATFORM +
-         OS_ARCHITECTURE + "-" + OS_COMPILER + ".zip";
+  return pluginName.simplified().remove(' ').toLower() + "-" + TULIP_VERSION +
+         "-" + OS_PLATFORM + OS_ARCHITECTURE + "-" + OS_COMPILER + ".zip";
 }
 
 QString getPluginLocalInstallationDir() {
-  return QStandardPaths::standardLocations(QStandardPaths::DataLocation).at(0) + "/plugins";
+  return QStandardPaths::standardLocations(QStandardPaths::DataLocation).at(0) +
+         "/plugins";
 }
 
-QString localPluginsPath() {
-  return getPluginLocalInstallationDir() + '/';
-}
+QString localPluginsPath() { return getPluginLocalInstallationDir() + '/'; }
 
 // we define a specific GlTextureLoader allowing to load a GlTexture
 // from a QImage
@@ -206,14 +237,15 @@ public:
       QByteArray imageData = fileDownloader.download(QUrl(qFilename));
 
       if (imageData.isEmpty()) {
-        tlp::error() << "Error when downloading texture from url " << filename.c_str() << std::endl;
+        tlp::error() << "Error when downloading texture from url "
+                     << filename.c_str() << std::endl;
         return false;
       } else {
         bool imageLoaded = image.loadFromData(imageData);
 
         if (!imageLoaded) {
-          tlp::error() << "Error when downloading texture from url " << filename.c_str()
-                       << std::endl;
+          tlp::error() << "Error when downloading texture from url "
+                       << filename.c_str() << std::endl;
           return false;
         }
       }
@@ -227,22 +259,26 @@ public:
 
       if (image.isNull()) {
         if (!imageFile.exists())
-          tlp::error() << "Error when loading texture, the file named \"" << filename.c_str()
-                       << "\" does not exist" << std::endl;
+          tlp::error() << "Error when loading texture, the file named \""
+                       << filename.c_str() << "\" does not exist" << std::endl;
         else
-          tlp::error() << "Error when loading texture from " << filename.c_str() << std::endl;
+          tlp::error() << "Error when loading texture from " << filename.c_str()
+                       << std::endl;
 
         return false;
       }
     }
 
-    // store icon preview of the loaded texture in the icon pool used by the Tulip spreadsheet view
+    // store icon preview of the loaded texture in the icon pool used by the
+    // Tulip spreadsheet view
     if (!image.isNull()) {
       addIconToPool(qFilename, QIcon(QPixmap::fromImage(image)));
     }
 
-    bool canUseMipmaps = OpenGlConfigManager::isExtensionSupported("GL_ARB_framebuffer_object") ||
-                         OpenGlConfigManager::isExtensionSupported("GL_EXT_framebuffer_object");
+    bool canUseMipmaps =
+        OpenGlConfigManager::isExtensionSupported(
+            "GL_ARB_framebuffer_object") ||
+        OpenGlConfigManager::isExtensionSupported("GL_EXT_framebuffer_object");
 
     unsigned int width = image.width();
     unsigned int height = image.height();
@@ -298,13 +334,14 @@ public:
 
       int glFmt = image.hasAlphaChannel() ? GL_RGBA : GL_RGB;
 
-      glTexImage2D(GL_TEXTURE_2D, 0, glFmt, width, height, 0, glFmt, GL_UNSIGNED_BYTE,
-                   image.constBits());
+      glTexImage2D(GL_TEXTURE_2D, 0, glFmt, width, height, 0, glFmt,
+                   GL_UNSIGNED_BYTE, image.constBits());
 
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
       if (canUseMipmaps) {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                        GL_LINEAR_MIPMAP_LINEAR);
         glGenerateMipmap(GL_TEXTURE_2D);
       } else {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -338,13 +375,14 @@ public:
         glTexture.id[i] = textureNum[i];
 
         int GLFmt = images[i].hasAlphaChannel() ? GL_RGBA : GL_RGB;
-        glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE,
-                     images[i].bits());
+        glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt,
+                     GL_UNSIGNED_BYTE, images[i].bits());
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         if (canUseMipmaps) {
-          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                          GL_LINEAR_MIPMAP_LINEAR);
           glGenerateMipmap(GL_TEXTURE_2D);
         } else {
           glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -393,11 +431,13 @@ void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
 #if defined(WIN32) && (_WIN32_WINNT >= 0x0502)
 
   // Python on windows can be installed for current user only.
-  // In that case, the Python dll is not located in system path but in the Python home directory.
-  // So add the Python home directory in the Dll search paths in order to be able to load plugins
-  // depending on Python.
+  // In that case, the Python dll is not located in system path but in the
+  // Python home directory. So add the Python home directory in the Dll search
+  // paths in order to be able to load plugins depending on Python.
   if (tlp::PythonVersionChecker::isPythonVersionMatching()) {
-    SetDllDirectory(tlp::QStringToTlpString(tlp::PythonVersionChecker::getPythonHome()).c_str());
+    SetDllDirectory(
+        tlp::QStringToTlpString(tlp::PythonVersionChecker::getPythonHome())
+            .c_str());
   }
 
 #endif

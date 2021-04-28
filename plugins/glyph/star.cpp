@@ -18,12 +18,12 @@
  */
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include <tulip/Size.h>
-#include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/GlStar.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/GlStar.h>
+#include <tulip/Glyph.h>
+#include <tulip/Size.h>
 #include <tulip/TulipViewSettings.h>
 
 using namespace std;
@@ -31,8 +31,9 @@ using namespace tlp;
 
 namespace tlp {
 
-static void drawStar(const Color &fillColor, const Color &borderColor, float borderWidth,
-                     const std::string &textureName, float lod) {
+static void drawStar(const Color &fillColor, const Color &borderColor,
+                     float borderWidth, const std::string &textureName,
+                     float lod) {
   static GlStar star(Coord(0, 0, 0), Size(.5, .5, 0), 5);
   star.setFillColor(fillColor);
 
@@ -58,8 +59,8 @@ static void drawStar(const Color &fillColor, const Color &borderColor, float bor
  */
 class Star : public Glyph {
 public:
-  GLYPHINFORMATION("2D - Star", "David Auber", "09/07/2002", "Textured Star", "1.0",
-                   NodeShape::Star)
+  GLYPHINFORMATION("2D - Star", "David Auber", "09/07/2002", "Textured Star",
+                   "1.0", NodeShape::Star)
   Star(const tlp::PluginContext *context = nullptr);
   ~Star() override;
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
@@ -80,24 +81,30 @@ void Star::draw(node n, float lod) {
 
   drawStar(glGraphInputData->getElementColor()->getNodeValue(n),
            glGraphInputData->getElementBorderColor()->getNodeValue(n),
-           glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod);
+           glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+           textureName, lod);
 }
 
 class EEStar : public EdgeExtremityGlyph {
 public:
   GLYPHINFORMATION("2D - Star extremity", "David Auber", "09/07/2002",
-                   "Textured Star for edge extremities", "1.0", EdgeExtremityShape::Star)
+                   "Textured Star for edge extremities", "1.0",
+                   EdgeExtremityShape::Star)
 
   EEStar(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
 
-  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) override {
-    string textureName = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor,
+            float lod) override {
+    string textureName =
+        edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
     if (!textureName.empty())
-      textureName = edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
+      textureName =
+          edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
 
     drawStar(glyphColor, borderColor,
-             edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), textureName, lod);
+             edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+             textureName, lod);
   }
 };
 PLUGIN(EEStar)

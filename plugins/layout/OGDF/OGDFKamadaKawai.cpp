@@ -52,13 +52,15 @@ static const char *paramHelp[] = {
 class OGDFKamadaKawai : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Kamada Kawai (OGDF)", "Karsten Klein", "12/11/2007",
-                    "Implements the Kamada-Kawai layout algorithm.<br/>It is a force-directed "
-                    "layout algorithm that tries to place vertices with a distance corresponding "
-                    "to their graph theoretic distance. ",
-                    "1.0", "Force Directed")
+  PLUGININFORMATION(
+      "Kamada Kawai (OGDF)", "Karsten Klein", "12/11/2007",
+      "Implements the Kamada-Kawai layout algorithm.<br/>It is a force-directed "
+      "layout algorithm that tries to place vertices with a distance corresponding "
+      "to their graph theoretic distance. ",
+      "1.0", "Force Directed")
   OGDFKamadaKawai(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, context ? new ogdf::SpringEmbedderKK() : nullptr) {
+      : OGDFLayoutPluginBase(context,
+                             context ? new ogdf::SpringEmbedderKK() : nullptr) {
     addInParameter<double>("stop tolerance", paramHelp[0], "0.001");
     addInParameter<bool>("used layout", paramHelp[1], "true");
     addInParameter<double>("zero length", paramHelp[2], "0");
@@ -70,7 +72,8 @@ public:
   ~OGDFKamadaKawai() override {}
 
   void beforeCall() override {
-    ogdf::SpringEmbedderKK *kamada = static_cast<ogdf::SpringEmbedderKK *>(ogdfLayoutAlgo);
+    ogdf::SpringEmbedderKK *kamada =
+        static_cast<ogdf::SpringEmbedderKK *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {
       double dval = 0;

@@ -17,9 +17,9 @@
  *
  */
 
+#include "InputSample.h"
 #include <algorithm>
 #include <random>
-#include "InputSample.h"
 
 using namespace std;
 using namespace tlp;
@@ -64,14 +64,16 @@ void InputSample::setGraph(tlp::Graph *graph) {
   initGraphObs();
 }
 
-void InputSample::setGraph(tlp::Graph *graph, const std::vector<std::string> &propertiesToListen) {
+void InputSample::setGraph(tlp::Graph *graph,
+                           const std::vector<std::string> &propertiesToListen) {
   clearGraphObs();
   setGraph(graph);
   setPropertiesToListen(propertiesToListen);
   initGraphObs();
 }
 
-void InputSample::buildPropertyVector(const std::vector<std::string> &propertiesToListen) {
+void InputSample::buildPropertyVector(
+    const std::vector<std::string> &propertiesToListen) {
   propertiesNameList.clear();
   propertiesList.clear();
   PropertyInterface *property;
@@ -97,7 +99,8 @@ void InputSample::buildPropertyVector(const std::vector<std::string> &properties
   }
 }
 
-void InputSample::setPropertiesToListen(const vector<string> &propertiesToListen) {
+void InputSample::setPropertiesToListen(
+    const vector<string> &propertiesToListen) {
   if (rootGraph) {
     clearPropertiesObs();
     buildPropertyVector(propertiesToListen);
@@ -169,7 +172,8 @@ const DynamicVector<double> &InputSample::getWeight(tlp::node n) {
 
   DynamicVector<double> vec;
 
-  if (/*!mWeightTab.getIfNotDefaultValue(n.id, vec)*/ mWeightTab.find(n.id) == mWeightTab.end()) {
+  if (/*!mWeightTab.getIfNotDefaultValue(n.id, vec)*/ mWeightTab.find(n.id) ==
+      mWeightTab.end()) {
     buildNodeVector(n);
   }
 
@@ -236,9 +240,10 @@ void InputSample::update(std::set<Observable *>::iterator begin,
 void InputSample::addNode(Graph *, const node n) {
   if (usingNormalizedValues) {
     for (unsigned int i = 0; i < propertiesList.size(); ++i) {
-      meanProperties[i] = (double(rootGraph->numberOfNodes() - 1) * meanProperties[i] +
-                           propertiesList[i]->getNodeDoubleValue(n)) /
-                          double(rootGraph->numberOfNodes());
+      meanProperties[i] =
+          (double(rootGraph->numberOfNodes() - 1) * meanProperties[i] +
+           propertiesList[i]->getNodeDoubleValue(n)) /
+          double(rootGraph->numberOfNodes());
       updateSDValue(i);
     }
   }
@@ -250,9 +255,10 @@ void InputSample::addNode(Graph *, const node n) {
 void InputSample::delNode(Graph *, const node n) {
   if (usingNormalizedValues) {
     for (unsigned int i = 0; i < propertiesList.size(); ++i) {
-      meanProperties[i] = (double(rootGraph->numberOfNodes() + 1) * meanProperties[i] -
-                           propertiesList[i]->getNodeDoubleValue(n)) /
-                          double(rootGraph->numberOfNodes());
+      meanProperties[i] =
+          (double(rootGraph->numberOfNodes() + 1) * meanProperties[i] -
+           propertiesList[i]->getNodeDoubleValue(n)) /
+          double(rootGraph->numberOfNodes());
       updateSDValue(i);
     }
   }
@@ -302,7 +308,8 @@ tlp::Iterator<tlp::node> *InputSample::getRandomNodeOrder() {
 
     std::shuffle(randomVector.begin(), randomVector.end(), g);
 
-    return new StlIterator<node, vector<node>::iterator>(randomVector.begin(), randomVector.end());
+    return new StlIterator<node, vector<node>::iterator>(randomVector.begin(),
+                                                         randomVector.end());
   } else
     return nullptr;
 }
@@ -388,7 +395,8 @@ void InputSample::setUsingNormalizedValues(bool norm) {
   }
 }
 
-unsigned InputSample::findIndexForProperty(const std::string &propertyName) const {
+unsigned
+InputSample::findIndexForProperty(const std::string &propertyName) const {
   for (unsigned int i = 0; i < propertiesNameList.size(); ++i) {
     if (propertiesNameList[i].compare(propertyName) == 0) {
       return i;

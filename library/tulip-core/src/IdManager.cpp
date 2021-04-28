@@ -16,9 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/IdManager.h>
-#include <climits>
 #include <cassert>
+#include <climits>
+#include <tulip/IdManager.h>
 using namespace std;
 
 namespace tlp {
@@ -106,6 +106,8 @@ ostream &tlp::operator<<(std::ostream &os, const tlp::IdManager &idM) {
   os << "Maximum index:" << idM.state.nextId - 1 << endl;
   os << "Size         :" << idM.state.freeIds.size() << endl;
   os << "Fragmentation:"
-     << double(idM.state.freeIds.size()) / (1 + idM.state.nextId - idM.state.firstId) << endl;
+     << double(idM.state.freeIds.size()) /
+            (1 + idM.state.nextId - idM.state.firstId)
+     << endl;
   return os;
 }

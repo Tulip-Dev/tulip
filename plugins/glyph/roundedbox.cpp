@@ -18,14 +18,14 @@
  */
 #include <GL/glew.h>
 
-#include <tulip/Glyph.h>
+#include <tulip/GlGraphInputData.h>
 #include <tulip/GlPolygon.h>
 #include <tulip/GlShaderProgram.h>
 #include <tulip/GlTextureManager.h>
-#include <tulip/GlGraphInputData.h>
 #include <tulip/GlTools.h>
-#include <tulip/TulipViewSettings.h>
+#include <tulip/Glyph.h>
 #include <tulip/ParallelTools.h>
+#include <tulip/TulipViewSettings.h>
 
 using namespace tlp;
 using namespace std;
@@ -163,16 +163,16 @@ const string roundedBoxOutlineGeometryShaderSrc =
 /// A 2D glyph.
 /**
  * This glyph draws a rounded box, meaning a rectangle with rounded corners.
- * The box is colored according to the "viewColor" property. It can also be outlined if
- * "viewBorderWidth" is greater than zero. The outline is colored according to the
- * "viewBorderColor" property. Last but not least, it can also be textured according
- * to the "viewTexture" property.
+ * The box is colored according to the "viewColor" property. It can also be
+ * outlined if "viewBorderWidth" is greater than zero. The outline is colored
+ * according to the "viewBorderColor" property. Last but not least, it can also
+ * be textured according to the "viewTexture" property.
  */
 
 class RoundedBox : public Glyph {
 public:
-  GLYPHINFORMATION("2D - Rounded Box", "Antoine LAMBERT", "02/11/2010", "Rounded Box", "1.0",
-                   NodeShape::RoundedBox)
+  GLYPHINFORMATION("2D - Rounded Box", "Antoine LAMBERT", "02/11/2010",
+                   "Rounded Box", "1.0", NodeShape::RoundedBox)
   RoundedBox(const tlp::PluginContext *context = nullptr);
   ~RoundedBox() override {}
   void draw(node n, float lod) override;
@@ -188,7 +188,8 @@ private:
   static Coord maxIncludeBBSquare;
 };
 
-static Coord computeCircleArcMidPoint(const Coord &start, const Coord &end, const Coord &center) {
+static Coord computeCircleArcMidPoint(const Coord &start, const Coord &end,
+                                      const Coord &center) {
   float radius = start.dist(center);
   float c = atan2(start[1] + end[1], start[0] + end[0]);
   return Coord(center.x() + radius * cos(c), center.y() + radius * sin(c));
@@ -199,8 +200,8 @@ Coord RoundedBox::minIncludeBBSquare;
 Coord RoundedBox::maxIncludeBBSquare;
 
 RoundedBox::RoundedBox(const tlp::PluginContext *context) : Glyph(context) {
-  minIncludeBBSquare =
-      computeCircleArcMidPoint(Coord(-0.25, -0.5), Coord(-0.5, -0.25), Coord(-0.25, -0.25));
+  minIncludeBBSquare = computeCircleArcMidPoint(
+      Coord(-0.25, -0.5), Coord(-0.5, -0.25), Coord(-0.25, -0.25));
   maxIncludeBBSquare = -minIncludeBBSquare;
 }
 
@@ -217,9 +218,9 @@ void RoundedBox::getIncludeBoundingBox(BoundingBox &boundingBox, node n) {
   } else {
     float radius = min(size[0] / 4, size[1] / 4);
     radius = min(radius / size[0], radius / size[1]);
-    boundingBox[0] =
-        computeCircleArcMidPoint(Coord(-0.5 + radius, -0.5), Coord(-0.5, -0.5 + radius),
-                                 Coord(-0.5 + radius, -0.5 + radius));
+    boundingBox[0] = computeCircleArcMidPoint(
+        Coord(-0.5 + radius, -0.5), Coord(-0.5, -0.5 + radius),
+        Coord(-0.5 + radius, -0.5 + radius));
     boundingBox[1] = -boundingBox[0];
   }
 }
@@ -275,7 +276,8 @@ GlPolygon *RoundedBox::createRoundedRect(const Size &size) {
   fillColors.push_back(Color(255, 255, 255));
   outlineColors.push_back(Color(0, 0, 0));
 
-  GlPolygon *ret = new GlPolygon(boxPoints, fillColors, outlineColors, true, true);
+  GlPolygon *ret =
+      new GlPolygon(boxPoints, fillColors, outlineColors, true, true);
   ret->setInvertYTexture(false);
 
   return ret;
@@ -283,37 +285,46 @@ GlPolygon *RoundedBox::createRoundedRect(const Size &size) {
 
 const float squareVerticesData[56] = {
     /* front face (vvttnnn) */
-    -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.5f,
-    0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+    -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+    0.0f, 1.0f, 0.5f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, -0.5f, 0.5f, 0.0f,
+    1.0f, 0.0f, 0.0f, 1.0f,
 
     /* back face (vvttnnn) */
-    -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.5f,
-    0.5f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f};
+    -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f,
+    0.0f, -1.0f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.5f, -0.5f, 0.0f,
+    0.0f, 0.0f, 0.0f, -1.0f};
 
-const float outlineVeticesData[8] = {-0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, -0.5f, -0.5f};
+const float outlineVeticesData[8] = {-0.5f, 0.5f,  0.5f,  0.5f,
+                                     0.5f,  -0.5f, -0.5f, -0.5f};
 
 void RoundedBox::draw(node n, float lod) {
 
   static GlShaderProgram *roundedBoxShader = nullptr;
   static GlShaderProgram *roundedBoxOutlineShader = nullptr;
 
-// don't use geometry shader rendering on MacOS as that feature does seem stable on that platform
+// don't use geometry shader rendering on MacOS as that feature does seem stable
+// on that platform
 #ifndef __APPLE__
-  static string glVendor((reinterpret_cast<const char *>(glGetString(GL_VENDOR))));
-  static bool glVendorOk =
-      (glVendor.find("NVIDIA") != string::npos) || (glVendor.find("ATI") != string::npos);
+  static string glVendor(
+      (reinterpret_cast<const char *>(glGetString(GL_VENDOR))));
+  static bool glVendorOk = (glVendor.find("NVIDIA") != string::npos) ||
+                           (glVendor.find("ATI") != string::npos);
 
-  if (roundedBoxShader == nullptr && glVendorOk && GlShaderProgram::shaderProgramsSupported() &&
+  if (roundedBoxShader == nullptr && glVendorOk &&
+      GlShaderProgram::shaderProgramsSupported() &&
       GlShaderProgram::geometryShaderSupported()) {
     roundedBoxShader = new GlShaderProgram();
-    roundedBoxShader->addShaderFromSourceCode(Fragment, roundedBoxFragmentShaderSrc);
+    roundedBoxShader->addShaderFromSourceCode(Fragment,
+                                              roundedBoxFragmentShaderSrc);
     roundedBoxShader->link();
     roundedBoxShader->printInfoLog();
 
     roundedBoxOutlineShader = new GlShaderProgram();
-    roundedBoxOutlineShader->addShaderFromSourceCode(Vertex, roundedBoxOutlineVertexShaderSrc);
-    roundedBoxOutlineShader->addGeometryShaderFromSourceCode(roundedBoxOutlineGeometryShaderSrc,
-                                                             GL_LINES_ADJACENCY_EXT, GL_LINE_STRIP);
+    roundedBoxOutlineShader->addShaderFromSourceCode(
+        Vertex, roundedBoxOutlineVertexShaderSrc);
+    roundedBoxOutlineShader->addGeometryShaderFromSourceCode(
+        roundedBoxOutlineGeometryShaderSrc, GL_LINES_ADJACENCY_EXT,
+        GL_LINE_STRIP);
     roundedBoxOutlineShader->link();
     roundedBoxOutlineShader->printInfoLog();
   }
@@ -322,12 +333,15 @@ void RoundedBox::draw(node n, float lod) {
 
   const Size &size = glGraphInputData->getElementSize()->getNodeValue(n);
 
-  float outlineWidth = glGraphInputData->getElementBorderWidth()->getNodeValue(n);
+  float outlineWidth =
+      glGraphInputData->getElementBorderWidth()->getNodeValue(n);
 
-  const string &texture = glGraphInputData->getElementTexture()->getNodeValue(n);
+  const string &texture =
+      glGraphInputData->getElementTexture()->getNodeValue(n);
 
   if (roundedBoxShader == nullptr || !roundedBoxShader->isLinked() ||
-      !roundedBoxOutlineShader->isLinked() || GlShaderProgram::getCurrentActiveShader()) {
+      !roundedBoxOutlineShader->isLinked() ||
+      GlShaderProgram::getCurrentActiveShader()) {
     if (roundedSquare == nullptr)
       initRoundedSquare();
 
@@ -338,7 +352,8 @@ void RoundedBox::draw(node n, float lod) {
     }
 
     polygon->setFillColor(glGraphInputData->getElementColor()->getNodeValue(n));
-    polygon->setOutlineColor(glGraphInputData->getElementBorderColor()->getNodeValue(n));
+    polygon->setOutlineColor(
+        glGraphInputData->getElementBorderColor()->getNodeValue(n));
     polygon->setOutlineSize(outlineWidth);
     polygon->setTextureName(texture);
     polygon->draw(lod, nullptr);

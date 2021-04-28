@@ -33,16 +33,13 @@ HeaderFrame::HeaderFrame(QWidget *parent)
   switchToLabel(_ui);
   connect(_ui->menusCombo, SIGNAL(currentIndexChanged(QString)), this,
           SIGNAL(menuChanged(QString)));
-  connect(_ui->expandButton, SIGNAL(toggled(bool)), this, SLOT(setExpanded(bool)));
+  connect(_ui->expandButton, SIGNAL(toggled(bool)), this,
+          SLOT(setExpanded(bool)));
 }
 
-HeaderFrame::~HeaderFrame() {
-  delete _ui;
-}
+HeaderFrame::~HeaderFrame() { delete _ui; }
 
-QString HeaderFrame::title() const {
-  return _ui->titleLabel->text();
-}
+QString HeaderFrame::title() const { return _ui->titleLabel->text(); }
 
 void HeaderFrame::setTitle(const QString &title) {
   _ui->titleLabel->setText(title);
@@ -80,13 +77,9 @@ bool HeaderFrame::isExpandable() const {
   return _ui->expandButton->isVisible();
 }
 
-void HeaderFrame::setExpandable(bool f) {
-  _ui->expandButton->setVisible(f);
-}
+void HeaderFrame::setExpandable(bool f) { _ui->expandButton->setVisible(f); }
 
-void HeaderFrame::expand(bool e) {
-  _ui->expandButton->setChecked(e);
-}
+void HeaderFrame::expand(bool e) { _ui->expandButton->setChecked(e); }
 
 void HeaderFrame::setExpanded(bool e) {
   _expanded = e;
@@ -122,18 +115,13 @@ void HeaderFrame::setExpanded(bool e) {
   emit expanded(e);
 }
 
-bool HeaderFrame::isExpanded() const {
-  return _expanded;
-}
+bool HeaderFrame::isExpanded() const { return _expanded; }
 
-QWidget *HeaderFrame::expandControl() const {
-  return _ui->expandButton;
-}
+QWidget *HeaderFrame::expandControl() const { return _ui->expandButton; }
 
-QWidget *HeaderFrame::mainFrame() const {
-  return _ui->mainFrame;
-}
+QWidget *HeaderFrame::mainFrame() const { return _ui->mainFrame; }
 
 void HeaderFrame::insertWidget(QWidget *w) {
-  _ui->horizontalLayout->insertWidget(_ui->horizontalLayout->indexOf(_ui->expandButton), w);
+  _ui->horizontalLayout->insertWidget(
+      _ui->horizontalLayout->indexOf(_ui->expandButton), w);
 }

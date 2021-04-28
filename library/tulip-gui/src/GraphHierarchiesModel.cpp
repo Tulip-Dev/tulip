@@ -18,30 +18,30 @@
  */
 #include "tulip/GraphHierarchiesModel.h"
 
-#include <QFont>
-#include <QSize>
+#include <QCryptographicHash>
 #include <QDebug>
+#include <QFont>
 #include <QMimeData>
 #include <QSet>
-#include <QCryptographicHash>
+#include <QSize>
 #include <QWidget>
 
-#include <tulip/TlpTools.h>
-#include <tulip/TulipMetaTypes.h>
-#include <tulip/Graph.h>
-#include <tulip/TulipProject.h>
-#include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/SizeProperty.h>
 #include <tulip/DoubleProperty.h>
-#include <tulip/TulipSettings.h>
-#include <tulip/TulipMimes.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
+#include <tulip/Graph.h>
 #include <tulip/GraphNeedsSavingObserver.h>
-#include <tulip/TlpQtTools.h>
+#include <tulip/IntegerProperty.h>
 #include <tulip/Perspective.h>
+#include <tulip/SizeProperty.h>
 #include <tulip/StableIterator.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/TlpTools.h>
+#include <tulip/TulipMetaTypes.h>
+#include <tulip/TulipMimes.h>
+#include <tulip/TulipProject.h>
+#include <tulip/TulipSettings.h>
 
 #include <fstream>
 
@@ -57,12 +57,14 @@ using namespace tlp;
 static QString GRAPHS_PATH("/graphs/");
 static QString TEXTURES_PATH("/textures/");
 
-static void copyTextureFileInProject(const QString &textureFilePath, tlp::TulipProject *project,
+static void copyTextureFileInProject(const QString &textureFilePath,
+                                     tlp::TulipProject *project,
                                      QStringList &projectTexturesFolders,
                                      QStringList &projectTexturesFiles) {
-  // We use QCryptographicHash to generate a MD5 sum for each value in the viewTexture property.
-  // Each texture is copied to the following project path : /textures/<md5_sum>/<texture filename> .
-  // It enables to copy textures with the same filename but located in different folders.
+  // We use QCryptographicHash to generate a MD5 sum for each value in the
+  // viewTexture property. Each texture is copied to the following project path
+  // : /textures/<md5_sum>/<texture filename> . It enables to copy textures with
+  // the same filename but located in different folders.
   QCryptographicHash hasher(QCryptographicHash::Md5);
   QFileInfo fileInfo(textureFilePath);
 
@@ -72,7 +74,8 @@ static void copyTextureFileInProject(const QString &textureFilePath, tlp::TulipP
     hasher.reset();
     hasher.addData(textureFilePath.toUtf8());
     // Compute texture folder and texture file path in the project
-    QString textureProjectFolder = TEXTURES_PATH + hasher.result().toHex() + "/";
+    QString textureProjectFolder =
+        TEXTURES_PATH + hasher.result().toHex() + "/";
     QString textureProjectFile = textureProjectFolder + fileInfo.fileName();
 
     if (!projectTexturesFiles.contains(textureProjectFile)) {
@@ -85,8 +88,8 @@ static void copyTextureFileInProject(const QString &textureFilePath, tlp::TulipP
       project->copy(fileInfo.absoluteFilePath(), textureProjectFile);
     } else {
       // The texture file has already been copied in the project,
-      // recopy the file as it may have changed and remove texture folder and project path
-      // from the lists of folders and files to remove afterwards
+      // recopy the file as it may have changed and remove texture folder and
+      // project path from the lists of folders and files to remove afterwards
       project->copy(fileInfo.absoluteFilePath(), textureProjectFile);
       projectTexturesFiles.removeAll(textureProjectFile);
       projectTexturesFolders.removeAll(textureProjectFolder);
@@ -94,9 +97,11 @@ static void copyTextureFileInProject(const QString &textureFilePath, tlp::TulipP
   }
 }
 
-// Method for copying nodes and edges textures in the project to make it portable across computers
+// Method for copying nodes and edges textures in the project to make it
+// portable across computers
 static void writeTextureFilesInProject(const QList<tlp::Graph *> &graphs,
-                                       tlp::TulipProject *project, tlp::PluginProgress *progress) {
+                                       tlp::TulipProject *project,
+                                       tlp::PluginProgress *progress) {
   if (progress) {
     progress->progress(0, 0);
     progress->setComment(
@@ -114,7 +119,8 @@ static void writeTextureFilesInProject(const QList<tlp::Graph *> &graphs,
 
   // gather list of texture file paths already present in the project
   for (const QString &textureFolder : projectTexturesFolders) {
-    for (const QString &textureFile : project->entryList(textureFolder, QDir::Files)) {
+    for (const QString &textureFile :
+         project->entryList(textureFolder, QDir::Files)) {
       projectTexturesFiles.append(textureFolder + "/" + textureFile);
     }
   }
@@ -122,23 +128,27 @@ static void writeTextureFilesInProject(const QList<tlp::Graph *> &graphs,
   for (auto g : graphs) {
     // Process the viewTexture default node value
     StringProperty *viewTexture = g->getProperty<StringProperty>("viewTexture");
-    copyTextureFileInProject(tlpStringToQString(viewTexture->getNodeDefaultValue()), project,
-                             projectTexturesFolders, projectTexturesFiles);
+    copyTextureFileInProject(
+        tlpStringToQString(viewTexture->getNodeDefaultValue()), project,
+        projectTexturesFolders, projectTexturesFiles);
 
     // Process the non default valuated nodes in the viewTexture property
     for (auto n : viewTexture->getNonDefaultValuatedNodes()) {
-      copyTextureFileInProject(tlpStringToQString(viewTexture->getNodeValue(n)), project,
-                               projectTexturesFolders, projectTexturesFiles);
+      copyTextureFileInProject(tlpStringToQString(viewTexture->getNodeValue(n)),
+                               project, projectTexturesFolders,
+                               projectTexturesFiles);
     }
 
     // Process the viewTexture default edge value
-    copyTextureFileInProject(tlpStringToQString(viewTexture->getEdgeDefaultValue()), project,
-                             projectTexturesFolders, projectTexturesFiles);
+    copyTextureFileInProject(
+        tlpStringToQString(viewTexture->getEdgeDefaultValue()), project,
+        projectTexturesFolders, projectTexturesFiles);
 
     // Process the non default valuated nodes in the viewTexture property
     for (auto e : viewTexture->getNonDefaultValuatedEdges()) {
-      copyTextureFileInProject(tlpStringToQString(viewTexture->getEdgeValue(e)), project,
-                               projectTexturesFolders, projectTexturesFiles);
+      copyTextureFileInProject(tlpStringToQString(viewTexture->getEdgeValue(e)),
+                               project, projectTexturesFolders,
+                               projectTexturesFiles);
     }
   }
 
@@ -153,20 +163,21 @@ static void writeTextureFilesInProject(const QList<tlp::Graph *> &graphs,
   }
 }
 
-// Method for restoring nodes and edges textures possibly bundled in the project if the original
-// texture files
-// are not present on the computer loading the project
-static void restoreTextureFilesFromProjectIfNeeded(tlp::Graph *g, tlp::TulipProject *project,
-                                                   tlp::PluginProgress *progress) {
+// Method for restoring nodes and edges textures possibly bundled in the project
+// if the original texture files are not present on the computer loading the
+// project
+static void restoreTextureFilesFromProjectIfNeeded(
+    tlp::Graph *g, tlp::TulipProject *project, tlp::PluginProgress *progress) {
   if (progress) {
     progress->progress(0, 0);
-    progress->setComment("Checking if texture files can be restored from project if needed ...");
+    progress->setComment(
+        "Checking if texture files can be restored from project if needed ...");
   }
 
-  // We use QCryptographicHash to generate a MD5 sum for each value in the viewTexture property.
-  // It enables to copy textures with the same filename but located in different folders.
-  // Each texture may have been copied to the following project path : /textures/<md5_sum>/<texture
-  // filename> .
+  // We use QCryptographicHash to generate a MD5 sum for each value in the
+  // viewTexture property. It enables to copy textures with the same filename
+  // but located in different folders. Each texture may have been copied to the
+  // following project path : /textures/<md5_sum>/<texture filename> .
   QCryptographicHash hasher(QCryptographicHash::Md5);
 
   StringProperty *viewTexture = g->getProperty<StringProperty>("viewTexture");
@@ -174,36 +185,42 @@ static void restoreTextureFilesFromProjectIfNeeded(tlp::Graph *g, tlp::TulipProj
   // Process the nodes first
 
   // Get the default node texture file
-  QString defaultNodeTextureFile(tlpStringToQString(viewTexture->getNodeDefaultValue()));
+  QString defaultNodeTextureFile(
+      tlpStringToQString(viewTexture->getNodeDefaultValue()));
   QFileInfo defaultNodeTextureFileInfo(defaultNodeTextureFile);
   // Backup non default valuated node values in the viewTexture property
   // as they will be removed by the possible call to setAllNodeValue afterwards
   QMap<node, QString> nonDefaultValuatedNodes;
 
   for (auto n : viewTexture->getNonDefaultValuatedNodes()) {
-    nonDefaultValuatedNodes[n] = tlpStringToQString(viewTexture->getNodeValue(n));
+    nonDefaultValuatedNodes[n] =
+        tlpStringToQString(viewTexture->getNodeValue(n));
   }
 
   // Generate a MD5 sum from the absolute texture file path
   hasher.reset();
   hasher.addData(defaultNodeTextureFile.toUtf8());
   // Compute texture file path in the project
-  QString textureProjectFile =
-      TEXTURES_PATH + hasher.result().toHex() + "/" + defaultNodeTextureFileInfo.fileName();
+  QString textureProjectFile = TEXTURES_PATH + hasher.result().toHex() + "/" +
+                               defaultNodeTextureFileInfo.fileName();
 
-  // If the original texture file is not present in the computer but is present in the project
-  // change the value of the default node texture path in the viewTexture property
-  if (!defaultNodeTextureFileInfo.exists() && project->exists(textureProjectFile)) {
-    viewTexture->setAllNodeValue(QStringToTlpString(project->toAbsolutePath(textureProjectFile)));
+  // If the original texture file is not present in the computer but is present
+  // in the project change the value of the default node texture path in the
+  // viewTexture property
+  if (!defaultNodeTextureFileInfo.exists() &&
+      project->exists(textureProjectFile)) {
+    viewTexture->setAllNodeValue(
+        QStringToTlpString(project->toAbsolutePath(textureProjectFile)));
   } else if (defaultNodeTextureFileInfo.exists()) {
-    viewTexture->setAllNodeValue(QStringToTlpString(defaultNodeTextureFileInfo.absoluteFilePath()));
+    viewTexture->setAllNodeValue(
+        QStringToTlpString(defaultNodeTextureFileInfo.absoluteFilePath()));
   } else if (defaultNodeTextureFile.startsWith("http")) {
     viewTexture->setAllNodeValue(QStringToTlpString(defaultNodeTextureFile));
   }
 
   // Iterate once again on non default valuated nodes
-  // Get a stable iterator on non default valuated nodes as their value can be reset to the
-  // default one by the possible call to setAllNodeValue
+  // Get a stable iterator on non default valuated nodes as their value can be
+  // reset to the default one by the possible call to setAllNodeValue
   for (auto n : stableIterator(viewTexture->getNonDefaultValuatedNodes())) {
     // Get the node texture file previously backuped
     const QString &textureFile = nonDefaultValuatedNodes[n];
@@ -215,12 +232,15 @@ static void restoreTextureFilesFromProjectIfNeeded(tlp::Graph *g, tlp::TulipProj
     QString textureProjectFile =
         TEXTURES_PATH + hasher.result().toHex() + "/" + fileInfo.fileName();
 
-    // If the original texture file is not present in the computer but is present in the project
-    // change the texture path for the node in the viewTexture property
+    // If the original texture file is not present in the computer but is
+    // present in the project change the texture path for the node in the
+    // viewTexture property
     if (!fileInfo.exists() && project->exists(textureProjectFile)) {
-      viewTexture->setNodeValue(n, QStringToTlpString(project->toAbsolutePath(textureProjectFile)));
+      viewTexture->setNodeValue(
+          n, QStringToTlpString(project->toAbsolutePath(textureProjectFile)));
     } else if (fileInfo.exists()) {
-      viewTexture->setNodeValue(n, QStringToTlpString(fileInfo.absoluteFilePath()));
+      viewTexture->setNodeValue(
+          n, QStringToTlpString(fileInfo.absoluteFilePath()));
     } else if (textureFile.startsWith("http")) {
       viewTexture->setNodeValue(n, QStringToTlpString(textureFile));
     }
@@ -229,36 +249,42 @@ static void restoreTextureFilesFromProjectIfNeeded(tlp::Graph *g, tlp::TulipProj
   // Apply the same process for edges
 
   // Get the default edge texture file
-  QString defaultEdgeTextureFile(tlpStringToQString(viewTexture->getEdgeDefaultValue()));
+  QString defaultEdgeTextureFile(
+      tlpStringToQString(viewTexture->getEdgeDefaultValue()));
   QFileInfo defaultEdgeTextureFileInfo(defaultEdgeTextureFile);
   // Backup non default valuated edge values in the viewTexture property
   // as they will be removed by the possible call to setAllEdgeValue afterwards
   QMap<edge, QString> nonDefaultValuatedEdges;
 
   for (auto e : viewTexture->getNonDefaultValuatedEdges()) {
-    nonDefaultValuatedEdges[e] = tlpStringToQString(viewTexture->getEdgeValue(e));
+    nonDefaultValuatedEdges[e] =
+        tlpStringToQString(viewTexture->getEdgeValue(e));
   }
 
   // Generate a MD5 sum from the absolute texture file path
   hasher.reset();
   hasher.addData(defaultEdgeTextureFile.toUtf8());
   // Compute texture file path in the project
-  textureProjectFile =
-      TEXTURES_PATH + hasher.result().toHex() + "/" + defaultEdgeTextureFileInfo.fileName();
+  textureProjectFile = TEXTURES_PATH + hasher.result().toHex() + "/" +
+                       defaultEdgeTextureFileInfo.fileName();
 
-  // If the original texture file is not present in the computer but is present in the project
-  // change the value of the default edge texture path in the viewTexture property
-  if (!defaultEdgeTextureFileInfo.exists() && project->exists(textureProjectFile)) {
-    viewTexture->setAllEdgeValue(QStringToTlpString(project->toAbsolutePath(textureProjectFile)));
+  // If the original texture file is not present in the computer but is present
+  // in the project change the value of the default edge texture path in the
+  // viewTexture property
+  if (!defaultEdgeTextureFileInfo.exists() &&
+      project->exists(textureProjectFile)) {
+    viewTexture->setAllEdgeValue(
+        QStringToTlpString(project->toAbsolutePath(textureProjectFile)));
   } else if (defaultEdgeTextureFileInfo.exists()) {
-    viewTexture->setAllEdgeValue(QStringToTlpString(defaultEdgeTextureFileInfo.absoluteFilePath()));
+    viewTexture->setAllEdgeValue(
+        QStringToTlpString(defaultEdgeTextureFileInfo.absoluteFilePath()));
   } else if (defaultEdgeTextureFile.startsWith("http")) {
     viewTexture->setAllEdgeValue(QStringToTlpString(defaultEdgeTextureFile));
   }
 
   // Iterate once again on non default valuated edges
-  // Get a stable iterator on non default valuated edges as their value can be reset to the default
-  // one by the possible call to setAllEdgeValue afterwards
+  // Get a stable iterator on non default valuated edges as their value can be
+  // reset to the default one by the possible call to setAllEdgeValue afterwards
   for (auto e : stableIterator(viewTexture->getNonDefaultValuatedEdges())) {
     // Get the node texture file previously backuped
     const QString &textureFile = nonDefaultValuatedEdges[e];
@@ -270,12 +296,15 @@ static void restoreTextureFilesFromProjectIfNeeded(tlp::Graph *g, tlp::TulipProj
     QString textureProjectFile =
         TEXTURES_PATH + hasher.result().toHex() + "/" + fileInfo.fileName();
 
-    // If the original texture file is not present in the computer but is present in the project
-    // change the texture path for the edge in the viewTexture property
+    // If the original texture file is not present in the computer but is
+    // present in the project change the texture path for the edge in the
+    // viewTexture property
     if (!fileInfo.exists() && project->exists(textureProjectFile)) {
-      viewTexture->setEdgeValue(e, QStringToTlpString(project->toAbsolutePath(textureProjectFile)));
+      viewTexture->setEdgeValue(
+          e, QStringToTlpString(project->toAbsolutePath(textureProjectFile)));
     } else if (fileInfo.exists()) {
-      viewTexture->setEdgeValue(e, QStringToTlpString(fileInfo.absoluteFilePath()));
+      viewTexture->setEdgeValue(
+          e, QStringToTlpString(fileInfo.absoluteFilePath()));
     } else if (textureFile.startsWith("http")) {
       viewTexture->setEdgeValue(e, QStringToTlpString(textureFile));
     }
@@ -293,9 +322,7 @@ GraphHierarchiesModel::GraphHierarchiesModel(const GraphHierarchiesModel &copy)
   _currentGraph = nullptr;
 }
 
-GraphHierarchiesModel::~GraphHierarchiesModel() {
-  qDeleteAll(_saveNeeded);
-}
+GraphHierarchiesModel::~GraphHierarchiesModel() { qDeleteAll(_saveNeeded); }
 
 // Cache related methods
 QModelIndex GraphHierarchiesModel::indexOf(const tlp::Graph *g) {
@@ -346,12 +373,13 @@ bool GraphHierarchiesModel::needsSaving() {
   return saveNeeded;
 }
 
-QMap<QString, tlp::Graph *> GraphHierarchiesModel::readProject(tlp::TulipProject *project,
-                                                               tlp::PluginProgress *progress) {
+QMap<QString, tlp::Graph *>
+GraphHierarchiesModel::readProject(tlp::TulipProject *project,
+                                   tlp::PluginProgress *progress) {
   QMap<QString, tlp::Graph *> rootIds;
 
-  for (const QString &entry :
-       project->entryList(GRAPHS_PATH, QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
+  for (const QString &entry : project->entryList(
+           GRAPHS_PATH, QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
     QString file = GRAPHS_PATH + entry + "/graph.tlp";
 
     if (!project->exists(file)) {
@@ -371,7 +399,8 @@ QMap<QString, tlp::Graph *> GraphHierarchiesModel::readProject(tlp::TulipProject
     } else {
       // failure when loading a graph
       // so delete already loaded graphs
-      for (QMap<QString, tlp::Graph *>::iterator it = rootIds.begin(); it != rootIds.end(); ++it) {
+      for (QMap<QString, tlp::Graph *>::iterator it = rootIds.begin();
+           it != rootIds.end(); ++it) {
         delete it.value();
       }
 
@@ -385,8 +414,9 @@ QMap<QString, tlp::Graph *> GraphHierarchiesModel::readProject(tlp::TulipProject
 
   return rootIds;
 }
-QMap<tlp::Graph *, QString> GraphHierarchiesModel::writeProject(tlp::TulipProject *project,
-                                                                tlp::PluginProgress *progress) {
+QMap<tlp::Graph *, QString>
+GraphHierarchiesModel::writeProject(tlp::TulipProject *project,
+                                    tlp::PluginProgress *progress) {
   QMap<tlp::Graph *, QString> rootIds;
 
   project->removeAllDir(GRAPHS_PATH);
@@ -400,11 +430,13 @@ QMap<tlp::Graph *, QString> GraphHierarchiesModel::writeProject(tlp::TulipProjec
     project->mkpath(folder);
 
     if (!TulipSettings::isUseTlpbFileFormat())
-      tlp::saveGraph(g, QStringToTlpString(project->toAbsolutePath(folder + "graph.tlp")),
-                     progress);
+      tlp::saveGraph(
+          g, QStringToTlpString(project->toAbsolutePath(folder + "graph.tlp")),
+          progress);
     else
-      tlp::saveGraph(g, QStringToTlpString(project->toAbsolutePath(folder + "graph.tlpb")),
-                     progress);
+      tlp::saveGraph(
+          g, QStringToTlpString(project->toAbsolutePath(folder + "graph.tlpb")),
+          progress);
   }
 
   writeTextureFilesInProject(_graphs, project, progress);
@@ -416,7 +448,8 @@ QMap<tlp::Graph *, QString> GraphHierarchiesModel::writeProject(tlp::TulipProjec
 }
 
 // Model related
-QModelIndex GraphHierarchiesModel::index(int row, int column, const QModelIndex &parent) const {
+QModelIndex GraphHierarchiesModel::index(int row, int column,
+                                         const QModelIndex &parent) const {
   if (row < 0)
     return QModelIndex();
 
@@ -477,11 +510,10 @@ int GraphHierarchiesModel::rowCount(const QModelIndex &parent) const {
   return parentGraph->numberOfSubGraphs();
 }
 
-int GraphHierarchiesModel::columnCount(const QModelIndex &) const {
-  return 4;
-}
+int GraphHierarchiesModel::columnCount(const QModelIndex &) const { return 4; }
 
-bool GraphHierarchiesModel::setData(const QModelIndex &index, const QVariant &value, int role) {
+bool GraphHierarchiesModel::setData(const QModelIndex &index,
+                                    const QVariant &value, int role) {
   if (index.column() == NAME_SECTION) {
     Graph *graph = static_cast<Graph *>(index.internalPointer());
     graph->setName(QStringToTlpString(value.toString()));
@@ -511,8 +543,9 @@ QVariant GraphHierarchiesModel::data(const QModelIndex &index, int role) const {
 
   else if (role == Qt::ToolTipRole) {
     auto selection = graph->getProperty<BooleanProperty>("viewSelection");
-    return QString("<table><tr><td><b>%1</b></td></tr><tr><td>Id = %2, Nodes = %3, Edges = "
-                   "%4, selected = %5 nodes , %6 edges</tr></td></table>")
+    return QString(
+               "<table><tr><td><b>%1</b></td></tr><tr><td>Id = %2, Nodes = %3, Edges = "
+               "%4, selected = %5 nodes , %6 edges</tr></td></table>")
         .arg(generateName(graph))
         .arg(graph->getId())
         .arg(graph->numberOfNodes())
@@ -522,7 +555,8 @@ QVariant GraphHierarchiesModel::data(const QModelIndex &index, int role) const {
   }
 
   else if (role == GraphRole) {
-    return QVariant::fromValue<Graph *>(static_cast<Graph *>(index.internalPointer()));
+    return QVariant::fromValue<Graph *>(
+        static_cast<Graph *>(index.internalPointer()));
   }
 
   else if (role == Qt::TextAlignmentRole && index.column() != NAME_SECTION)
@@ -543,7 +577,8 @@ QVariant GraphHierarchiesModel::data(const QModelIndex &index, int role) const {
   return QVariant();
 }
 
-QVariant GraphHierarchiesModel::headerData(int section, Qt::Orientation orientation,
+QVariant GraphHierarchiesModel::headerData(int section,
+                                           Qt::Orientation orientation,
                                            int role) const {
   if (orientation == Qt::Horizontal) {
     if (role == Qt::DisplayRole) {
@@ -573,7 +608,8 @@ Qt::ItemFlags GraphHierarchiesModel::flags(const QModelIndex &index) const {
   return result;
 }
 
-QMimeData *GraphHierarchiesModel::mimeData(const QModelIndexList &indexes) const {
+QMimeData *
+GraphHierarchiesModel::mimeData(const QModelIndexList &indexes) const {
   QSet<Graph *> graphs;
 
   for (const QModelIndex &index : indexes) {
@@ -585,8 +621,8 @@ QMimeData *GraphHierarchiesModel::mimeData(const QModelIndexList &indexes) const
 
   GraphMimeType *result = new GraphMimeType();
 
-  // every current implementation uses a single graph, so we do not have a graphmim with multiple
-  // graphs.
+  // every current implementation uses a single graph, so we do not have a
+  // graphmim with multiple graphs.
   for (auto g : graphs)
     result->setGraph(g);
 
@@ -639,9 +675,7 @@ void GraphHierarchiesModel::setCurrentGraph(tlp::Graph *g) {
   emit currentGraphChanged(g);
 }
 
-Graph *GraphHierarchiesModel::currentGraph() const {
-  return _currentGraph;
-}
+Graph *GraphHierarchiesModel::currentGraph() const { return _currentGraph; }
 
 void GraphHierarchiesModel::initIndexCache(tlp::Graph *root) {
   int i = 0;
@@ -651,7 +685,8 @@ void GraphHierarchiesModel::initIndexCache(tlp::Graph *root) {
   }
 }
 
-static void addListenerToWholeGraphHierarchy(Graph *root, Observable *listener) {
+static void addListenerToWholeGraphHierarchy(Graph *root,
+                                             Observable *listener) {
   for (auto sg : root->subGraphs()) {
     addListenerToWholeGraphHierarchy(sg, listener);
   }
@@ -671,7 +706,8 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
   beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
   _saveNeeded[g] = new GraphNeedsSavingObserver(
-      g, Perspective::instance() ? Perspective::instance()->mainWindow() : nullptr);
+      g, Perspective::instance() ? Perspective::instance()->mainWindow()
+                                 : nullptr);
 
   _graphs.push_back(g);
 
@@ -711,7 +747,8 @@ void GraphHierarchiesModel::removeGraph(tlp::Graph *g) {
 void GraphHierarchiesModel::treatEvent(const Event &e) {
   Graph *g = static_cast<tlp::Graph *>(e.sender());
 
-  if (e.type() == Event::TLP_DELETE && _graphs.contains(g)) { // A root graph has been deleted
+  if (e.type() == Event::TLP_DELETE &&
+      _graphs.contains(g)) { // A root graph has been deleted
     int pos = _graphs.indexOf(g);
     beginRemoveRows(QModelIndex(), pos, pos);
 
@@ -768,8 +805,8 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         sg->addObserver(this);
 
         // insert the parent graph in the graphs changed set
-        // in order to update associated tree views, displaying the graphs hierarchies,
-        // when the treatEvents method is called
+        // in order to update associated tree views, displaying the graphs
+        // hierarchies, when the treatEvents method is called
         _graphsChanged.insert(parentGraph);
 
       } else if (ge->getType() == GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH) {
@@ -807,8 +844,8 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         sg->removeObserver(this);
 
         // insert the parent graph in the graphs changed set
-        // in order to update associated tree views, displaying the graphs hierarchies,
-        // when the treatEvents method is called
+        // in order to update associated tree views, displaying the graphs
+        // hierarchies, when the treatEvents method is called
         _graphsChanged.insert(parentGraph);
 
         // remove the subgraph from the graphs changed set
@@ -829,7 +866,8 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
                  (ge->getType() == GraphEvent::TLP_AFTER_SET_ATTRIBUTE &&
                   ge->getAttributeName() == "name")) {
         const Graph *graph = ge->getGraph();
-        // row representing the graph in the associated tree views has to be updated
+        // row representing the graph in the associated tree views has to be
+        // updated
         _graphsChanged.insert(graph);
       }
     }
@@ -842,14 +880,15 @@ void GraphHierarchiesModel::treatEvents(const std::vector<tlp::Event> &) {
     return;
   }
 
-  // update the rows associated to modified graphs (number of subgraphs/nodes/edges has changed)
-  // in the associated tree views
+  // update the rows associated to modified graphs (number of
+  // subgraphs/nodes/edges has changed) in the associated tree views
 
   emit layoutAboutToBeChanged();
 
   for (auto graph : _graphsChanged) {
     QModelIndex graphIndex = indexOf(graph);
-    QModelIndex graphEdgesIndex = graphIndex.sibling(graphIndex.row(), EDGES_SECTION);
+    QModelIndex graphEdgesIndex =
+        graphIndex.sibling(graphIndex.row(), EDGES_SECTION);
     emit dataChanged(graphIndex, graphEdgesIndex);
   }
 

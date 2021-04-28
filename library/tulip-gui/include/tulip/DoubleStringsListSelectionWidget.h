@@ -31,27 +31,32 @@ class DoubleStringsListSelectionData;
 
 namespace tlp {
 
-class TLP_QT_SCOPE DoubleStringsListSelectionWidget : public QWidget,
-                                                      public StringsListSelectionWidgetInterface {
+class TLP_QT_SCOPE DoubleStringsListSelectionWidget
+    : public QWidget,
+      public StringsListSelectionWidgetInterface {
 
   Q_OBJECT
 
   Ui::DoubleStringsListSelectionData *_ui;
 
 public:
-  DoubleStringsListSelectionWidget(QWidget *parent = nullptr,
-                                   const unsigned int maxSelectedStringsListSize = 0);
+  DoubleStringsListSelectionWidget(
+      QWidget *parent = nullptr,
+      const unsigned int maxSelectedStringsListSize = 0);
   ~DoubleStringsListSelectionWidget() override;
 
-  void setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList) override;
+  void setUnselectedStringsList(
+      const std::vector<std::string> &unselectedStringsList) override;
 
-  void setSelectedStringsList(const std::vector<std::string> &selectedStringsList) override;
+  void setSelectedStringsList(
+      const std::vector<std::string> &selectedStringsList) override;
 
   void clearUnselectedStringsList() override;
 
   void clearSelectedStringsList() override;
 
-  void setMaxSelectedStringsListSize(const unsigned int maxSelectedStringsListSize) override;
+  void setMaxSelectedStringsListSize(
+      const unsigned int maxSelectedStringsListSize) override;
 
   std::vector<std::string> getSelectedStringsList() const override;
 
@@ -61,7 +66,8 @@ public:
 
   void unselectAllStrings() override;
 
-  void setUnselectedStringsListLabel(const std::string &unselectedStringsListLabel);
+  void
+  setUnselectedStringsListLabel(const std::string &unselectedStringsListLabel);
 
   void setSelectedStringsListLabel(const std::string &selectedStringsListLabel);
 

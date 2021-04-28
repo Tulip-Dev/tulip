@@ -16,18 +16,19 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/GraphTools.h>
-#include "TreeTools.h"
-#include "Orientation.h"
-#include "DatasetTools.h"
 #include "Dendrogram.h"
+#include "DatasetTools.h"
+#include "Orientation.h"
+#include "TreeTools.h"
+#include <tulip/GraphTools.h>
 using namespace std;
 using namespace tlp;
 
 PLUGIN(Dendrogram)
 
 //====================================================================
-Dendrogram::Dendrogram(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
+Dendrogram::Dendrogram(const tlp::PluginContext *context)
+    : LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addOrientationParameters(this);
   addSpacingParameters(this);
@@ -36,7 +37,8 @@ Dendrogram::Dendrogram(const tlp::PluginContext *context) : LayoutAlgorithm(cont
 //====================================================================
 Dendrogram::~Dendrogram() {}
 //====================================================================
-void Dendrogram::computeLevelHeights(tlp::Graph *tree, tlp::node n, unsigned int depth,
+void Dendrogram::computeLevelHeights(tlp::Graph *tree, tlp::node n,
+                                     unsigned int depth,
                                      OrientableSizeProxy *oriSize) {
   if (levelHeights.size() == depth)
     levelHeights.push_back(0);
@@ -104,7 +106,8 @@ bool Dendrogram::run() {
 }
 
 //====================================================================
-float Dendrogram::setAllNodesCoordX(tlp::node n, float rightMargin, OrientableLayout *oriLayout,
+float Dendrogram::setAllNodesCoordX(tlp::node n, float rightMargin,
+                                    OrientableLayout *oriLayout,
                                     OrientableSizeProxy *oriSize) {
   float leftMargin = rightMargin;
 
@@ -135,7 +138,8 @@ float Dendrogram::setAllNodesCoordX(tlp::node n, float rightMargin, OrientableLa
 }
 
 //====================================================================
-void Dendrogram::setAllNodesCoordY(OrientableLayout *oriLayout, OrientableSizeProxy *oriSize) {
+void Dendrogram::setAllNodesCoordY(OrientableLayout *oriLayout,
+                                   OrientableSizeProxy *oriSize) {
   float maxYLeaf = -FLT_MAX;
   setCoordY(root, maxYLeaf, oriLayout, oriSize);
 
@@ -151,12 +155,14 @@ void Dendrogram::setAllNodesCoordY(OrientableLayout *oriLayout, OrientableSizePr
 }
 
 //====================================================================
-float Dendrogram::computeFatherXPosition(tlp::node father, OrientableLayout *oriLayout) {
+float Dendrogram::computeFatherXPosition(tlp::node father,
+                                         OrientableLayout *oriLayout) {
   float minX = FLT_MAX;
   float maxX = -FLT_MAX;
 
   for (auto currentNode : tree->getOutNodes(father)) {
-    const float x = oriLayout->getNodeValue(currentNode).getX() + leftshift[currentNode];
+    const float x =
+        oriLayout->getNodeValue(currentNode).getX() + leftshift[currentNode];
     minX = min(minX, x);
     maxX = max(maxX, x);
   }
@@ -165,7 +171,8 @@ float Dendrogram::computeFatherXPosition(tlp::node father, OrientableLayout *ori
 }
 
 //====================================================================
-void Dendrogram::shiftAllNodes(tlp::node n, float shift, OrientableLayout *oriLayout) {
+void Dendrogram::shiftAllNodes(tlp::node n, float shift,
+                               OrientableLayout *oriLayout) {
   OrientableCoord coord = oriLayout->getNodeValue(n);
   shift += leftshift[n];
   float coordX = coord.getX();
@@ -185,7 +192,8 @@ inline void Dendrogram::setNodePosition(tlp::node n, float x, float y, float z,
 }
 
 //====================================================================
-void Dendrogram::setCoordY(tlp::node n, float &maxYLeaf, OrientableLayout *oriLayout,
+void Dendrogram::setCoordY(tlp::node n, float &maxYLeaf,
+                           OrientableLayout *oriLayout,
                            OrientableSizeProxy *oriSize) {
   if (tree->indeg(n) != 0) {
     node fatherNode = tree->getInNode(n, 1);

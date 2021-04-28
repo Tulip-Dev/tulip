@@ -32,8 +32,8 @@ class Plugin;
  *
  * @brief A callback class when loading plugins into Tulip
  *
- * This interface can be subclassed and passed to the tlp::PluginLibraryLoader to implement custom
- * event handling when loading plugins into Tulip
+ * This interface can be subclassed and passed to the tlp::PluginLibraryLoader
+ * to implement custom event handling when loading plugins into Tulip
  *
  * @see tlp::PluginLibraryLoader
  * @see tlp::PluginLoaderTxt
@@ -66,14 +66,16 @@ struct TLP_SCOPE PluginLoader {
    *
    * @see tlp::Dependency
    */
-  virtual void loaded(const Plugin *info, const std::list<Dependency> &dependencies) = 0;
+  virtual void loaded(const Plugin *info,
+                      const std::list<Dependency> &dependencies) = 0;
 
   /**
    * @brief Indicates that an error occurred when trying to load a file.
    * @param filename The absolute path of where the error occurred.
    * @param errormsg A human-readable error message.
    */
-  virtual void aborted(const std::string &filename, const std::string &errormsg) = 0;
+  virtual void aborted(const std::string &filename,
+                       const std::string &errormsg) = 0;
 
   /**
    * @brief Indicates that a file has finished being loaded

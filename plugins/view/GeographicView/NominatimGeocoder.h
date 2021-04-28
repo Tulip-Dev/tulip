@@ -38,7 +38,8 @@ public:
   NominatimGeocoder();
   ~NominatimGeocoder();
 
-  std::vector<NominatimGeocoderResult> getLatLngForAddress(const std::string &address);
+  std::vector<NominatimGeocoderResult>
+  getLatLngForAddress(const std::string &address);
 
 private:
   QNetworkAccessManager *_networkAccessManager;

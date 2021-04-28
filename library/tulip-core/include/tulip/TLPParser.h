@@ -21,9 +21,9 @@
 #ifndef TLPPARSER_H
 #define TLPPARSER_H
 
+#include <list>
 #include <sstream>
 #include <string>
-#include <list>
 
 namespace tlp {
 
@@ -83,8 +83,8 @@ struct TLPTokenParser {
 
   TLPToken nextToken(TLPValue &val, int &curPos) {
     val.str.erase();
-    bool endOfStream = false, strGet = false, slashMode = false, started = false, stop = false,
-         strComment = false;
+    bool endOfStream = false, strGet = false, slashMode = false,
+         started = false, stop = false, strComment = false;
     char ch;
 
     while ((!stop) && (endOfStream = !(is.get(ch).fail()))) {
@@ -305,64 +305,38 @@ struct TLPBuilder {
   virtual bool addString(const std::string &) = 0;
   virtual bool addStruct(const std::string &, TLPBuilder *&) = 0;
   virtual bool close() = 0;
-  virtual bool canRead() {
-    return false;
-  }
-  virtual bool read(std::istream &) {
-    return false;
-  }
+  virtual bool canRead() { return false; }
+  virtual bool read(std::istream &) { return false; }
 
   TLPParser *parser;
 };
 
 struct TLPTrue : public TLPBuilder {
-  bool addBool(const bool) override {
-    return true;
-  }
-  bool addInt(const int) override {
-    return true;
-  }
-  bool addRange(int, int) override {
-    return true;
-  }
-  bool addDouble(const double) override {
-    return true;
-  }
-  bool addString(const std::string &) override {
-    return true;
-  }
-  bool addStruct(const std::string & /*structName*/, TLPBuilder *&newBuilder) override {
+  bool addBool(const bool) override { return true; }
+  bool addInt(const int) override { return true; }
+  bool addRange(int, int) override { return true; }
+  bool addDouble(const double) override { return true; }
+  bool addString(const std::string &) override { return true; }
+  bool addStruct(const std::string & /*structName*/,
+                 TLPBuilder *&newBuilder) override {
     newBuilder = new TLPTrue();
     return true;
   }
-  bool close() override {
-    return true;
-  }
+  bool close() override { return true; }
 };
 
 struct TLPFalse : public TLPBuilder {
-  bool addBool(const bool) override {
-    return false;
-  }
-  bool addInt(const int) override {
-    return false;
-  }
-  bool addRange(int, int) override {
-    return false;
-  }
-  bool addDouble(const double) override {
-    return false;
-  }
-  bool addString(const std::string &) override {
-    return false;
-  }
-  bool addStruct(const std::string & /*structName*/, TLPBuilder *&newBuilder) override {
+  bool addBool(const bool) override { return false; }
+  bool addInt(const int) override { return false; }
+  bool addRange(int, int) override { return false; }
+  bool addDouble(const double) override { return false; }
+  bool addString(const std::string &) override { return false; }
+  bool addStruct(const std::string & /*structName*/,
+                 TLPBuilder *&newBuilder) override {
     newBuilder = new TLPFalse();
     return false;
   }
-  bool close() override {
-    return true;
-  }
+  bool close() override { return true; }
 };
 //=====================================================================================
 struct TLPParser {
@@ -374,10 +348,10 @@ struct TLPParser {
   int fileSize, curPos;
   bool displayComment;
 
-  TLPParser(std::istream &inputStream, TLPBuilder *builder, PluginProgress *pluginProgress,
-            int size, bool dispComment = false)
-      : inputStream(inputStream), pluginProgress(pluginProgress), fileSize(size), curPos(0),
-        displayComment(dispComment) {
+  TLPParser(std::istream &inputStream, TLPBuilder *builder,
+            PluginProgress *pluginProgress, int size, bool dispComment = false)
+      : inputStream(inputStream), pluginProgress(pluginProgress),
+        fileSize(size), curPos(0), displayComment(dispComment) {
     builderStack.push_front(builder);
     builder->parser = this;
   }
@@ -394,7 +368,8 @@ struct TLPParser {
 
   bool formatError(const std::string &value) {
     std::stringstream ess;
-    ess << "Error when parsing '" << value.c_str() << "' at line " << tokenParser->curLine + 1;
+    ess << "Error when parsing '" << value.c_str() << "' at line "
+        << tokenParser->curLine + 1;
 
     if (errno)
       ess << std::endl << strerror(errno);
@@ -411,7 +386,8 @@ struct TLPParser {
     TLPToken currentToken;
     TLPValue currentValue;
 
-    while ((currentToken = tokenParser->nextToken(currentValue, curPos)) != ENDOFSTREAM) {
+    while ((currentToken = tokenParser->nextToken(currentValue, curPos)) !=
+           ENDOFSTREAM) {
       if (curPos % 2000 == 1)
         if (pluginProgress->progress(curPos, fileSize) != TLP_CONTINUE)
           return pluginProgress->state() != TLP_CANCEL;
@@ -453,7 +429,8 @@ struct TLPParser {
 
       case RANGETOKEN:
 
-        if (!builderStack.front()->addRange(currentValue.range.first, currentValue.range.second))
+        if (!builderStack.front()->addRange(currentValue.range.first,
+                                            currentValue.range.second))
           return formatError(currentValue.str);
 
         break;
@@ -494,7 +471,8 @@ struct TLPParser {
       case COMMENTTOKEN:
 
         if (displayComment)
-          tlp::debug() << "Comment line:" << tokenParser->curLine << "->" << currentValue.str;
+          tlp::debug() << "Comment line:" << tokenParser->curLine << "->"
+                       << currentValue.str;
 
         break;
 

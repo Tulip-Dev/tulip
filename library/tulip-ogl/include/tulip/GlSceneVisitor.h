@@ -41,11 +41,10 @@ public:
   virtual void visit(GlEdge *) {}
   virtual void visit(GlLayer *) {}
   virtual void endOfVisit() {}
-  virtual void reserveMemoryForGraphElts(unsigned int /*nbNodes*/, unsigned int /*nbEdges*/) {}
+  virtual void reserveMemoryForGraphElts(unsigned int /*nbNodes*/,
+                                         unsigned int /*nbEdges*/) {}
 
-  bool isThreadSafe() {
-    return threadSafe;
-  }
+  bool isThreadSafe() { return threadSafe; }
 
 protected:
   bool threadSafe;

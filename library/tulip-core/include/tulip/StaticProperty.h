@@ -24,8 +24,7 @@
 #include <tulip/NumericProperty.h>
 
 namespace tlp {
-template <typename TYPE>
-class NodeStaticProperty : public std::vector<TYPE> {
+template <typename TYPE> class NodeStaticProperty : public std::vector<TYPE> {
   const Graph *graph;
 
 public:
@@ -36,7 +35,8 @@ public:
     this->resize(graph->numberOfNodes());
   }
 
-  inline typename std::vector<TYPE>::const_reference operator[](unsigned int i) const {
+  inline typename std::vector<TYPE>::const_reference
+  operator[](unsigned int i) const {
     return std::vector<TYPE>::operator[](i);
   }
 
@@ -53,18 +53,18 @@ public:
   }
 
   // get the stored value of a node
-  inline typename std::vector<TYPE>::const_reference getNodeValue(node n) const {
+  inline typename std::vector<TYPE>::const_reference
+  getNodeValue(node n) const {
     return (*this)[n];
   }
 
   // set the stored value of a node
-  inline void setNodeValue(node n, TYPE val) {
-    (*this)[n] = val;
-  }
+  inline void setNodeValue(node n, TYPE val) { (*this)[n] = val; }
 
   // set all to same values
   void setAll(const TYPE &val) {
-    TLP_PARALLEL_MAP_INDICES(graph->numberOfNodes(), [&](unsigned int i) { (*this)[i] = val; });
+    TLP_PARALLEL_MAP_INDICES(graph->numberOfNodes(),
+                             [&](unsigned int i) { (*this)[i] = val; });
   }
 
   // add a value for a newly created node
@@ -78,21 +78,23 @@ public:
   }
 
   // get values from a typed instance of PropertyInterface
-  template <typename PROP_PTR>
-  void copyFromProperty(PROP_PTR prop) {
-    TLP_PARALLEL_MAP_NODES_AND_INDICES(
-        graph, [&](const node n, unsigned int i) { (*this)[i] = prop->getNodeValue(n); });
+  template <typename PROP_PTR> void copyFromProperty(PROP_PTR prop) {
+    TLP_PARALLEL_MAP_NODES_AND_INDICES(graph,
+                                       [&](const node n, unsigned int i) {
+                                         (*this)[i] = prop->getNodeValue(n);
+                                       });
   }
 
   // get values from a NumericProperty
   void copyFromNumericProperty(const NumericProperty *prop) {
     TLP_PARALLEL_MAP_NODES_AND_INDICES(
-        graph, [&](const node n, unsigned int i) { (*this)[i] = prop->getNodeDoubleValue(n); });
+        graph, [&](const node n, unsigned int i) {
+          (*this)[i] = prop->getNodeDoubleValue(n);
+        });
   }
 
   // copy values into a typed typed instance of PropertyInterface
-  template <typename PROP_PTR>
-  void copyToProperty(PROP_PTR prop) {
+  template <typename PROP_PTR> void copyToProperty(PROP_PTR prop) {
     const std::vector<node> &nodes = graph->nodes();
     unsigned int nbNodes = nodes.size();
 
@@ -101,8 +103,7 @@ public:
   }
 };
 
-template <>
-class NodeStaticProperty<bool> : public std::vector<unsigned char> {
+template <> class NodeStaticProperty<bool> : public std::vector<unsigned char> {
   const Graph *graph;
 
 public:
@@ -113,9 +114,7 @@ public:
     this->resize(graph->numberOfNodes());
   }
 
-  inline const Graph *getGraph() const {
-    return graph;
-  }
+  inline const Graph *getGraph() const { return graph; }
 
   inline bool operator[](unsigned int i) const {
     return static_cast<bool>(std::vector<unsigned char>::operator[](i));
@@ -125,18 +124,14 @@ public:
     return std::vector<unsigned char>::operator[](i);
   }
 
-  inline bool operator[](node n) const {
-    return (*this)[graph->nodePos(n)];
-  }
+  inline bool operator[](node n) const { return (*this)[graph->nodePos(n)]; }
 
   inline std::vector<unsigned char>::reference operator[](node n) {
     return (*this)[graph->nodePos(n)];
   }
 
   // get the stored value of a node
-  inline bool getNodeValue(node n) const {
-    return (*this)[graph->nodePos(n)];
-  }
+  inline bool getNodeValue(node n) const { return (*this)[graph->nodePos(n)]; }
 
   // set the stored value of a node
   inline void setNodeValue(node n, bool val) {
@@ -145,7 +140,8 @@ public:
 
   // set all to same values
   void setAll(const bool &val) {
-    TLP_PARALLEL_MAP_INDICES(graph->numberOfNodes(), [&](unsigned int i) { (*this)[i] = val; });
+    TLP_PARALLEL_MAP_INDICES(graph->numberOfNodes(),
+                             [&](unsigned int i) { (*this)[i] = val; });
   }
 
   // add a value for a newly created node
@@ -159,15 +155,15 @@ public:
   }
 
   // get values from a typed instance of PropertyInterface
-  template <typename PROP_PTR>
-  void copyFromProperty(PROP_PTR prop) {
-    TLP_PARALLEL_MAP_NODES_AND_INDICES(
-        graph, [&](const node n, unsigned int i) { (*this)[i] = prop->getNodeValue(n); });
+  template <typename PROP_PTR> void copyFromProperty(PROP_PTR prop) {
+    TLP_PARALLEL_MAP_NODES_AND_INDICES(graph,
+                                       [&](const node n, unsigned int i) {
+                                         (*this)[i] = prop->getNodeValue(n);
+                                       });
   }
 
   // copy values into a typed instance of PropertyInterface
-  template <typename PROP_PTR>
-  void copyToProperty(PROP_PTR prop) {
+  template <typename PROP_PTR> void copyToProperty(PROP_PTR prop) {
     const std::vector<node> &nodes = graph->nodes();
     unsigned int nbNodes = nodes.size();
 
@@ -176,8 +172,7 @@ public:
   }
 };
 
-template <typename TYPE>
-class EdgeStaticProperty : public std::vector<TYPE> {
+template <typename TYPE> class EdgeStaticProperty : public std::vector<TYPE> {
   const Graph *graph;
 
 public:
@@ -188,11 +183,10 @@ public:
     this->resize(graph->numberOfEdges());
   }
 
-  inline const Graph *getGraph() const {
-    return graph;
-  }
+  inline const Graph *getGraph() const { return graph; }
 
-  inline typename std::vector<TYPE>::const_reference operator[](unsigned int i) const {
+  inline typename std::vector<TYPE>::const_reference
+  operator[](unsigned int i) const {
     return std::vector<TYPE>::operator[](i);
   }
 
@@ -209,17 +203,17 @@ public:
   }
 
   // get the stored value of a edge
-  inline typename std::vector<TYPE>::const_reference getEdgeValue(edge e) const {
+  inline typename std::vector<TYPE>::const_reference
+  getEdgeValue(edge e) const {
     return (*this)[e];
   }
 
   // set the stored value of a edge
-  inline void setEdgeValue(edge e, TYPE val) {
-    (*this)[e] = val;
-  }
+  inline void setEdgeValue(edge e, TYPE val) { (*this)[e] = val; }
 
   void setAll(const TYPE &val) {
-    TLP_PARALLEL_MAP_INDICES(graph->numberOfEdges(), [&](unsigned int i) { (*this)[i] = val; });
+    TLP_PARALLEL_MAP_INDICES(graph->numberOfEdges(),
+                             [&](unsigned int i) { (*this)[i] = val; });
   }
 
   // add a value for a newly created edge
@@ -233,21 +227,23 @@ public:
   }
 
   // get values from a typed instance of PropertyInterface
-  template <typename PROP_PTR>
-  void copyFromProperty(PROP_PTR prop) {
-    TLP_PARALLEL_MAP_EDGES_AND_INDICES(
-        graph, [&](const edge e, unsigned int i) { (*this)[i] = prop->getEdgeValue(e); });
+  template <typename PROP_PTR> void copyFromProperty(PROP_PTR prop) {
+    TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph,
+                                       [&](const edge e, unsigned int i) {
+                                         (*this)[i] = prop->getEdgeValue(e);
+                                       });
   }
 
   // get values from a NumericProperty
   void copyFromNumericProperty(const NumericProperty *prop) {
     TLP_PARALLEL_MAP_EDGES_AND_INDICES(
-        graph, [&](const edge e, unsigned int i) { (*this)[i] = prop->getEdgeDoubleValue(e); });
+        graph, [&](const edge e, unsigned int i) {
+          (*this)[i] = prop->getEdgeDoubleValue(e);
+        });
   }
 
   // copy values into a typed instance of PropertyInterface
-  template <typename PROP_PTR>
-  void copyToProperty(PROP_PTR prop) {
+  template <typename PROP_PTR> void copyToProperty(PROP_PTR prop) {
     const std::vector<edge> &edges = graph->edges();
     unsigned int nbEdges = edges.size();
 
@@ -256,8 +252,7 @@ public:
   }
 };
 
-template <>
-class EdgeStaticProperty<bool> : public std::vector<unsigned char> {
+template <> class EdgeStaticProperty<bool> : public std::vector<unsigned char> {
   const Graph *graph;
 
 public:
@@ -276,18 +271,14 @@ public:
     return std::vector<unsigned char>::operator[](i);
   }
 
-  inline bool operator[](edge e) const {
-    return (*this)[graph->edgePos(e)];
-  }
+  inline bool operator[](edge e) const { return (*this)[graph->edgePos(e)]; }
 
   inline std::vector<unsigned char>::reference operator[](edge e) {
     return (*this)[graph->edgePos(e)];
   }
 
   // get the stored value of a edge
-  inline bool getEdgeValue(edge e) const {
-    return (*this)[graph->edgePos(e)];
-  }
+  inline bool getEdgeValue(edge e) const { return (*this)[graph->edgePos(e)]; }
 
   // set the stored value of a edge
   inline void setEdgeValue(edge e, bool val) {
@@ -296,7 +287,8 @@ public:
 
   // set all to same values
   void setAll(const bool &val) {
-    TLP_PARALLEL_MAP_INDICES(graph->numberOfEdges(), [&](unsigned int i) { (*this)[i] = val; });
+    TLP_PARALLEL_MAP_INDICES(graph->numberOfEdges(),
+                             [&](unsigned int i) { (*this)[i] = val; });
   }
 
   // add a value for a newly created edge
@@ -310,15 +302,15 @@ public:
   }
 
   // get values from a typed instance of PropertyInterface
-  template <typename PROP_PTR>
-  void copyFromProperty(PROP_PTR prop) {
-    TLP_PARALLEL_MAP_EDGES_AND_INDICES(
-        graph, [&](const edge e, unsigned int i) { (*this)[i] = prop->getEdgeValue(e); });
+  template <typename PROP_PTR> void copyFromProperty(PROP_PTR prop) {
+    TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph,
+                                       [&](const edge e, unsigned int i) {
+                                         (*this)[i] = prop->getEdgeValue(e);
+                                       });
   }
 
   // copy values into a typed instance of PropertyInterface
-  template <typename PROP_PTR>
-  void copyToProperty(PROP_PTR prop) {
+  template <typename PROP_PTR> void copyToProperty(PROP_PTR prop) {
     const std::vector<edge> &edges = graph->edges();
     unsigned int nbEdges = edges.size();
 

@@ -20,27 +20,27 @@
 #ifndef _TLPTOOLS_H
 #define _TLPTOOLS_H
 
-#include <iostream>
 #include <climits>
+#include <iostream>
 #include <sys/types.h>
 #include <tulip/tulipconf.h>
 
 // The hash_combine function from the boost library
-// Call it repeatedly to incrementally create a hash value from several variables.
+// Call it repeatedly to incrementally create a hash value from several
+// variables.
 
 // Explanation of the formula from StackOverflow
-// (http://stackoverflow.com/questions/4948780/magic-numbers-in-boosthash-combine) :
-// The magic number 0x9e3779b9 = 2^32 / ((1 + sqrt(5)) / 2) is the reciprocal of the golden ratio.
-// It is supposed to be 32 random bits, where each is equally likely to be 0 or 1, and with no
-// simple correlation between the bits.
-// So including this number "randomly" changes each bit of the seed; as you say, this means that
-// consecutive values will be far apart.
-// Including the shifted versions of the old seed makes sure that, even if hash_value() has a fairly
+// (http://stackoverflow.com/questions/4948780/magic-numbers-in-boosthash-combine)
+// : The magic number 0x9e3779b9 = 2^32 / ((1 + sqrt(5)) / 2) is the reciprocal
+// of the golden ratio. It is supposed to be 32 random bits, where each is
+// equally likely to be 0 or 1, and with no simple correlation between the bits.
+// So including this number "randomly" changes each bit of the seed; as you say,
+// this means that consecutive values will be far apart. Including the shifted
+// versions of the old seed makes sure that, even if hash_value() has a fairly
 // small range of values,
 // differences will soon be spread across all the bits.
 namespace std {
-template <class T>
-inline void tlp_hash_combine(std::size_t &seed, const T &v) {
+template <class T> inline void tlp_hash_combine(std::size_t &seed, const T &v) {
   hash<T> hasher;
   seed ^= hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
 }
@@ -59,13 +59,15 @@ extern TLP_SCOPE bool TulipProgramExiting;
  *
  * @brief Initializes the Tulip library.
  * Looks for the Tulip plug-ins directory.
- * The plug-ins directory can be defined in different ways, given by order of prevalence :
+ * The plug-ins directory can be defined in different ways, given by order of
+ * prevalence :
  * 1. the TLP_DIR environment variable, if it has a value
  * 2. the appDirPath parameter, if it is not nullptr
- * 3. at that point, the Tulip paths will be retrieved from the path of the loaded Tulip shared
- * library
- *  (you must dispose of a standard Tulip installation for that feature to work).
- * 4. a fallback value of 'C:/Tulip/lib/' on windows, or '/usr/local/lib/' on Unix.
+ * 3. at that point, the Tulip paths will be retrieved from the path of the
+ * loaded Tulip shared library (you must dispose of a standard Tulip
+ * installation for that feature to work).
+ * 4. a fallback value of 'C:/Tulip/lib/' on windows, or '/usr/local/lib/' on
+ * Unix.
  */
 extern TLP_SCOPE void initTulipLib(const char *appDirPath = nullptr);
 
@@ -77,7 +79,8 @@ extern TLP_SCOPE void initTulipLib(const char *appDirPath = nullptr);
  * @param hideTlp a flag to indicate if the 'tlp::' prefix
  * @return string The demangled name of a Tulip C++ class.
  */
-TLP_SCOPE std::string demangleClassName(const char *className, bool hideTlp = false);
+TLP_SCOPE std::string demangleClassName(const char *className,
+                                        bool hideTlp = false);
 
 /**
  * @ingroup Plugins
@@ -98,7 +101,8 @@ inline std::string demangleTlpClassName(const char *className) {
  * @param open_mode The mode to open the file with. Defaults to std::ios::in.
  * @return istream gzipped input stream from a file.
  */
-TLP_SCOPE std::istream *getIgzstream(const std::string &name, int open_mode = std::ios::in);
+TLP_SCOPE std::istream *getIgzstream(const std::string &name,
+                                     int open_mode = std::ios::in);
 
 /**
  * @brief Returns an ostream to write to a gzipped file (uses gzstream lib).
@@ -108,7 +112,8 @@ TLP_SCOPE std::istream *getIgzstream(const std::string &name, int open_mode = st
  * @param open_mode The mode to open the file with. Defaults to std::ios::out.
  * @return ostream gzipped output stream to a file.
  */
-TLP_SCOPE std::ostream *getOgzstream(const std::string &name, int open_mode = std::ios::out);
+TLP_SCOPE std::ostream *getOgzstream(const std::string &name,
+                                     int open_mode = std::ios::out);
 
 /**
  * @brief Gives the value of the seed used for further initialization
@@ -132,8 +137,8 @@ TLP_SCOPE unsigned int getSeedOfRandomSequence();
 TLP_SCOPE void initRandomSequence();
 
 /**
- * @brief Returns a random integer in the range [0, max] if max is positive or in the range [max, 0]
- * if max is negative
+ * @brief Returns a random integer in the range [0, max] if max is positive or
+ * in the range [max, 0] if max is negative
  */
 TLP_SCOPE int randomInteger(int max);
 
@@ -150,32 +155,34 @@ TLP_SCOPE double randomDouble(double max = 1.0);
 /**
  * @brief returns if a path exists
  * @param pathname an utf-8 encoded string containing the path to check
- * @return true if a file or directory according pathname can be accessed, falseif not and errno is
- * set
+ * @return true if a file or directory according pathname can be accessed,
+ * falseif not and errno is set
  */
 TLP_SCOPE bool pathExist(const std::string &pathname);
 
 /**
- * @brief Cross-platform function to get an input file stream. Its purpose is to support
- * paths on windows platform containing non-ascii characters.
- * @param filename an utf-8 encoded string containing the path of the file to open for performing
- * input operations
- * @param open_mode the stream opening mode flags (bitwise combination of std::ios_base::openmode
- * constants).
+ * @brief Cross-platform function to get an input file stream. Its purpose is to
+ * support paths on windows platform containing non-ascii characters.
+ * @param filename an utf-8 encoded string containing the path of the file to
+ * open for performing input operations
+ * @param open_mode the stream opening mode flags (bitwise combination of
+ * std::ios_base::openmode constants).
  */
-TLP_SCOPE std::istream *getInputFileStream(const std::string &filename,
-                                           std::ios_base::openmode open_mode = std::ios::in);
+TLP_SCOPE std::istream *
+getInputFileStream(const std::string &filename,
+                   std::ios_base::openmode open_mode = std::ios::in);
 
 /**
- * @brief Cross-platform function to get an output file stream. Its purpose is to support
- * paths on windows platform containing non-ascii characters.
- * @param filename an utf-8 encoded string containing the path of the file to open for performing
- * output operations
- * @param open_mode the stream opening mode flags (bitwise combination of std::ios_base::openmode
- * constants).
+ * @brief Cross-platform function to get an output file stream. Its purpose is
+ * to support paths on windows platform containing non-ascii characters.
+ * @param filename an utf-8 encoded string containing the path of the file to
+ * open for performing output operations
+ * @param open_mode the stream opening mode flags (bitwise combination of
+ * std::ios_base::openmode constants).
  */
-TLP_SCOPE std::ostream *getOutputFileStream(const std::string &filename,
-                                            std::ios_base::openmode open_mode = std::ios::out);
+TLP_SCOPE std::ostream *
+getOutputFileStream(const std::string &filename,
+                    std::ios_base::openmode open_mode = std::ios::out);
 
 ///@cond DOXYGEN_HIDDEN
 // Gui test mode

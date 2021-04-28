@@ -19,14 +19,14 @@
 
 #include <vector>
 
+#include "../utils/PluginNames.h"
+#include "../utils/StandardInteractorPriority.h"
 #include <tulip/Interactor.h>
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseShowElementInfo.h>
-#include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/StringsListSelectionWidget.h>
-#include "../utils/StandardInteractorPriority.h"
-#include "../utils/PluginNames.h"
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -42,7 +42,8 @@ class InteractorGetInformation : public NodeLinkDiagramComponentInteractor {
     InteractorGetInformation *_interactor;
 
   public:
-    ConfigWidget(InteractorGetInformation *interactor) : _interactor(interactor) {}
+    ConfigWidget(InteractorGetInformation *interactor)
+        : _interactor(interactor) {}
 
     void hideEvent(QHideEvent *) override {
       _interactor->setVisibleProperties();
@@ -60,9 +61,9 @@ public:
    * Default constructor
    */
   InteractorGetInformation(const tlp::PluginContext *)
-      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png",
-                                           "Display node or edge properties",
-                                           StandardInteractorPriority::GetInformation) {}
+      : NodeLinkDiagramComponentInteractor(
+            ":/tulip/gui/icons/i_select.png", "Display node or edge properties",
+            StandardInteractorPriority::GetInformation) {}
 
   /**
    * Construct chain of responsibility
@@ -110,8 +111,8 @@ public:
     QLabel *label = new QLabel("Visible properties");
     label->setObjectName("label");
     verticalLayout->addWidget(label);
-    _propsList = new StringsListSelectionWidget(_configWidget,
-                                                StringsListSelectionWidget::NON_ORDERABLE_LIST, 0);
+    _propsList = new StringsListSelectionWidget(
+        _configWidget, StringsListSelectionWidget::NON_ORDERABLE_LIST, 0);
     verticalLayout->addWidget(_propsList);
 
     auto graph = view()->graph();
@@ -126,9 +127,7 @@ public:
     _propsList->setSelectedStringsList(stringsList);
   }
 
-  QWidget *configurationOptionsWidget() const override {
-    return _configWidget;
-  }
+  QWidget *configurationOptionsWidget() const override { return _configWidget; }
 
   bool isCompatible(const std::string &viewName) const override {
     return ((viewName == NodeLinkDiagramComponent::viewName) ||

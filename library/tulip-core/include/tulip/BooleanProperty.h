@@ -20,9 +20,9 @@
 #ifndef TULIP_SELECTION_H
 #define TULIP_SELECTION_H
 
-#include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
 #include <tulip/PropertyAlgorithm.h>
+#include <tulip/PropertyTypes.h>
 
 namespace tlp {
 
@@ -32,16 +32,16 @@ class PropertyContext;
  * @ingroup Graph
  * @brief A graph property that maps a boolean value to graph elements.
  */
-class TLP_SCOPE BooleanProperty : public AbstractProperty<tlp::BooleanType, tlp::BooleanType> {
+class TLP_SCOPE BooleanProperty
+    : public AbstractProperty<tlp::BooleanType, tlp::BooleanType> {
 public:
   BooleanProperty(Graph *g, const std::string &n = "")
       : AbstractProperty<BooleanType, BooleanType>(g, n) {}
   // PropertyInterface inherited methods
-  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
+  PropertyInterface *clonePrototype(Graph *,
+                                    const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const override {
-    return propertyTypename;
-  }
+  const std::string &getTypename() const override { return propertyTypename; }
   DEFINE_GET_CPP_CLASS_NAME;
 
   /**
@@ -54,14 +54,16 @@ public:
   /**
    * Reverses all the direction of edges of the visible graph
    * which are true in this BooleanProperty.
-   * * If sg is nullptr, the graph given when creating the property is considered.
+   * * If sg is nullptr, the graph given when creating the property is
+   * considered.
    */
   void reverseEdgeDirection(Graph *sg = nullptr);
 };
 
 /**
  * @ingroup Graph
- * @brief A graph property that maps a std::vector<bool> value to graph elements.
+ * @brief A graph property that maps a std::vector<bool> value to graph
+ * elements.
  */
 class TLP_SCOPE BooleanVectorProperty
     : public AbstractVectorProperty<tlp::BooleanVectorType, tlp::BooleanType> {
@@ -69,11 +71,10 @@ public:
   BooleanVectorProperty(Graph *g, const std::string &n = "")
       : AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>(g, n) {}
   // PropertyInterface inherited methods
-  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
+  PropertyInterface *clonePrototype(Graph *,
+                                    const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const override {
-    return propertyTypename;
-  }
+  const std::string &getTypename() const override { return propertyTypename; }
   DEFINE_GET_CPP_CLASS_NAME;
 };
 } // namespace tlp

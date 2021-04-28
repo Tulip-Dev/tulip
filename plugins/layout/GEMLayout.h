@@ -38,7 +38,8 @@ class NumericProperty;
  *  In R. Tamassia and I. Tollis (Eds), \n
  *  Graph Drawing'94, \n
  *  Volume 894 of Lecture Notes in Computer Science, Springer Verlag, 1995, \n
- *  doi: <a href=\"https://doi.org/10.1007/3-540-58950-3_393\">10.1007/3-540-58950-3_393</a>
+ *  doi: <a
+ * href=\"https://doi.org/10.1007/3-540-58950-3_393\">10.1007/3-540-58950-3_393</a>
  *
  *  <b>HISTORY</b>
  *
@@ -93,7 +94,8 @@ public:
   bool run() override;
 
 private:
-  tlp::Coord computeForces(unsigned int v, float shake, float gravity, bool testPlaced);
+  tlp::Coord computeForces(unsigned int v, float shake, float gravity,
+                           bool testPlaced);
 
   struct GEMparticule {
     tlp::node n;

@@ -20,8 +20,8 @@
 #ifndef COMPOSITE_H
 #define COMPOSITE_H
 
-#include <map>
 #include <list>
+#include <map>
 #include <string>
 
 #include <tulip/GlSimpleEntity.h>
@@ -41,8 +41,8 @@ class TLP_GL_SCOPE GlComposite : public GlSimpleEntity {
 public:
   /**
    * @brief Constructor
-   * @param deleteComponentsInDestructor if true : call delete on components when the GlComposite is
-   * delete
+   * @param deleteComponentsInDestructor if true : call delete on components
+   * when the GlComposite is delete
    */
   GlComposite(bool deleteComponentsInDestructor = true);
 
@@ -60,8 +60,8 @@ public:
   /**
    * @brief Add new entity with name : key.
    *
-   * The composite does not takes the entity's ownership, i.e. it is not its responsibility to
-   * delete it.
+   * The composite does not takes the entity's ownership, i.e. it is not its
+   * responsibility to delete it.
    */
   void addGlEntity(GlSimpleEntity *entity, const std::string &key);
   /**
@@ -126,7 +126,8 @@ public:
   /**
    * @brief Function to set data with inString (in XML format)
    */
-  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
+  void setWithXML(const std::string &inString,
+                  unsigned int &currentPosition) override;
 
   ///@cond DOXYGEN_HIDDEN
 
@@ -144,7 +145,8 @@ public:
         if (!composite && !entity->getBoundingBox().isValid()) {
           for (auto &itE : elements) {
             if (itE.second == entity) {
-              tlp::warning() << "Invalid bounding box for entity: " << itE.first << std::endl;
+              tlp::warning() << "Invalid bounding box for entity: " << itE.first
+                             << std::endl;
               assert(false);
             }
           }
@@ -183,7 +185,8 @@ public:
 protected:
   std::map<std::string, GlSimpleEntity *> elements;
   std::list<GlSimpleEntity *>
-      _sortedElements; // necessary to enable ordering of elements (for alpha blending)
+      _sortedElements; // necessary to enable ordering of elements (for alpha
+                       // blending)
   std::vector<GlLayer *> layerParents;
   bool deleteComponentsInDestructor;
 };

@@ -17,14 +17,15 @@
  *
  */
 
-#include <tulip/PropertiesCollection.h>
-#include <tulip/Graph.h>
 #include <algorithm>
+#include <tulip/Graph.h>
+#include <tulip/PropertiesCollection.h>
 
 using namespace std;
 using namespace tlp;
 
-PropertiesCollection::PropertiesCollection(const Graph *graph, bool selectViewProp) {
+PropertiesCollection::PropertiesCollection(const Graph *graph,
+                                           bool selectViewProp) {
   for (const string &propertyName : graph->getProperties()) {
     _props.push_back(propertyName);
     // all user defined properties are selected
@@ -35,7 +36,8 @@ PropertiesCollection::PropertiesCollection(const Graph *graph, bool selectViewPr
   std::sort(_selected.begin(), _selected.end());
 }
 
-bool PropertiesCollection::setSelected(const std::vector<std::string> &selected) {
+bool PropertiesCollection::setSelected(
+    const std::vector<std::string> &selected) {
   _selected.clear();
   _selected.reserve(selected.size());
   bool found = false;

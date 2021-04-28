@@ -43,10 +43,13 @@ const static char MakeSelectionGraph[] = "Make Selection a Graph";
 
 namespace InteractorName {
 const static char InteractorNavigation[] = "InteractorNavigation";
-const static char HistogramInteractorNavigation[] = "Histogram Navigation Interactor";
-const static char PixelOrientedInteractorNavigation[] = "PixelOriented Navigation Interactor";
+const static char HistogramInteractorNavigation[] =
+    "Histogram Navigation Interactor";
+const static char PixelOrientedInteractorNavigation[] =
+    "PixelOriented Navigation Interactor";
 const static char SOMViewNavigation[] = "SOM Navigation Interactor";
-const static char ScatterPlot2DInteractorNavigation[] = "ScatterPlot2D Navigation Interactor";
+const static char ScatterPlot2DInteractorNavigation[] =
+    "ScatterPlot2D Navigation Interactor";
 } // namespace InteractorName
 
 } // namespace tlp

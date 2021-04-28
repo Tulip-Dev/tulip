@@ -18,9 +18,9 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
+#include <QMap>
 #include <QNetworkAccessManager>
 #include <QUrl>
-#include <QMap>
 
 #include <tulip/tulipconf.h>
 

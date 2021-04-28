@@ -23,8 +23,8 @@
 #include <tulip/GlMainView.h>
 #include <tulip/MouseInteractors.h>
 
-#include <SOMAlgorithm.h>
 #include <InputSample.h>
+#include <SOMAlgorithm.h>
 
 #include "../../utils/PluginNames.h"
 
@@ -47,11 +47,12 @@ class SOMPropertiesWidget;
 /** \file
  *  \brief  Tulip self organizing map view
 
- * This view plug-in allows users to generate self organizing map (sometimes called Kohonen map)
- from graph data.
- * The model was first described as an artificial neural network by the Finnish professor Teuvo
- Kohonen.
- * This view is useful to visualize high-dimensional data in a low-dimensional representation.
+ * This view plug-in allows users to generate self organizing map (sometimes
+ called Kohonen map) from graph data.
+ * The model was first described as an artificial neural network by the Finnish
+ professor Teuvo Kohonen.
+ * This view is useful to visualize high-dimensional data in a low-dimensional
+ representation.
  *
  * Self organizing maps operate in two modes: training and mapping.
  * Training builds the map using input examples.
@@ -74,9 +75,7 @@ class SOMView : public GlMainView {
 public:
   SOMView(PluginContext *);
   ~SOMView() override;
-  std::string icon() const override {
-    return ":/som_view.png";
-  }
+  std::string icon() const override { return ":/som_view.png"; }
   void construct(QWidget *parent);
   void setState(const DataSet &dataSet) override;
   DataSet state() const override;
@@ -91,7 +90,8 @@ public:
 
   void createPicture(const std::string &pictureName, int width, int height);
 
-  bool createPicture(const std::string &pictureName, int width, int height, bool center);
+  bool createPicture(const std::string &pictureName, int width, int height,
+                     bool center);
 
   void update(std::set<tlp::Observable *>::iterator begin,
               std::set<tlp::Observable *>::iterator end);
@@ -109,36 +109,30 @@ public:
    * Return the name of the selected property
    * @return
    */
-  std::string getSelectedProperty() {
-    return selection;
-  }
+  std::string getSelectedProperty() { return selection; }
 
   /**
-   * Get the DoubleProperty pointer on the the current selected property. Return nullptr if no
-   * properties are selected.
+   * Get the DoubleProperty pointer on the the current selected property. Return
+   * nullptr if no properties are selected.
    * @return
    */
   NumericProperty *getSelectedPropertyValues();
 
   /**
-   * Return the ColorProperty pointer for the selected property. Return nullptr if no properties are
-   * selected.
+   * Return the ColorProperty pointer for the selected property. Return nullptr
+   * if no properties are selected.
    * @return
    */
   ColorProperty *getSelectedBaseSOMColors();
   /**
    * Returns the current SOMMap.
    **/
-  SOMMap *getSOM() {
-    return som;
-  }
+  SOMMap *getSOM() { return som; }
 
   /**
    * Return the input sample
    **/
-  InputSample &getInputSample() {
-    return inputSample;
-  }
+  InputSample &getInputSample() { return inputSample; }
 
   /**
    * Get the color scale of the main SOM.
@@ -157,8 +151,8 @@ public:
   }
 
   /**
-   * Add a mask on the som. All the nodes in the set will be printed with right color others will be
-   * printed in gray.
+   * Add a mask on the som. All the nodes in the set will be printed with right
+   * color others will be printed in gray.
    * @param mask
    */
   void setMask(const std::set<node> &mask);
@@ -167,13 +161,9 @@ public:
    * Get the current mask on the data.
    * @return The pointer on the som mask or nullptr if there is no mask.
    */
-  BooleanProperty *getMask() {
-    return mask;
-  }
+  BooleanProperty *getMask() { return mask; }
 
-  tlp::GlMainWidget *getMapWidget() {
-    return mapWidget;
-  }
+  tlp::GlMainWidget *getMapWidget() { return mapWidget; }
 
 public slots:
 
@@ -221,8 +211,8 @@ public slots:
    */
   void selectAllNodesInMask();
   /**
-   * Invert the mask selection. Set all the gray nodes to original colors and original colors to
-   * gray.
+   * Invert the mask selection. Set all the gray nodes to original colors and
+   * original colors to gray.
    */
   void invertMask();
 
@@ -237,8 +227,9 @@ private:
   void registerTriggers();
 
   /**
-   * Init the GlMainWidget object. At this time only init the previewWidget as the mapWidget is
-   * initialized when a new graph is given in the function changeMapViewGraph.
+   * Init the GlMainWidget object. At this time only init the previewWidget as
+   * the mapWidget is initialized when a new graph is given in the function
+   * changeMapViewGraph.
    */
   void initGlMainViews();
   /**
@@ -247,7 +238,8 @@ private:
   void initMenu();
 
   /**
-   * Function called when a new graph is set. Init the SOM view with the new Graph.
+   * Function called when a new graph is set. Init the SOM view with the new
+   * Graph.
    * @param graph The new graph.
    */
   void changeMapViewGraph(tlp::Graph *graph);
@@ -272,7 +264,8 @@ private:
    * @param y the y value.
    * @param result The vector with the previews at the current pos.
    */
-  void getPreviewsAtViewportCoord(int x, int y, std::vector<SOMPreviewComposite *> &result);
+  void getPreviewsAtViewportCoord(int x, int y,
+                                  std::vector<SOMPreviewComposite *> &result);
 
   /**
    * Draw the previews.
@@ -299,27 +292,29 @@ private:
   void clearSOMMapView();
 
   /**
-   * Function used to create and fill a ColorProperty corresponding to a NumericProperty in the SOM.
+   * Function used to create and fill a ColorProperty corresponding to a
+   * NumericProperty in the SOM.
    * @param propertyName the name of the property to compute.
    * @param minValue the smallest value in the double property.
    * @param maxValue the greatest value in the double property.
    * @return
    */
-  ColorProperty *computePropertyColor(const std::string &propertyName, double &minValue,
-                                      double &maxValue);
+  ColorProperty *computePropertyColor(const std::string &propertyName,
+                                      double &minValue, double &maxValue);
 
   /**
-   * Compute a ColorProperty object from a DoubleProperty in the SOM. Get the min and the max value
-   * of the SOM double property.
+   * Compute a ColorProperty object from a DoubleProperty in the SOM. Get the
+   * min and the max value of the SOM double property.
    * @param SOM the map.
    * @param property the property name.
    * @param colorScale the ColorScale used to compute the color.
    * @param result the color property containing the final color.
    */
-  void computeColor(SOMMap *som, tlp::NumericProperty *property, tlp::ColorScale &colorScale,
-                    tlp::ColorProperty *result);
+  void computeColor(SOMMap *som, tlp::NumericProperty *property,
+                    tlp::ColorScale &colorScale, tlp::ColorProperty *result);
 
-  void internalSwitchToDetailedMode(SOMPreviewComposite *preview, bool animation);
+  void internalSwitchToDetailedMode(SOMPreviewComposite *preview,
+                                    bool animation);
 
   void internalSwitchToPreviewMode(bool animation);
 
@@ -387,8 +382,8 @@ private slots:
 
   /**
    * Train the current SOM.
-   * Ask user for properties to use and for iteration number and call the training SOM process :
-   * initialization, training.
+   * Ask user for properties to use and for iteration number and call the
+   * training SOM process : initialization, training.
    */
   void computeSOMMap();
 

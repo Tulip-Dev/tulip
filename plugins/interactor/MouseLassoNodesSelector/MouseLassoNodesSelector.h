@@ -20,8 +20,8 @@
 #ifndef MOUSEFREEHANDSELECTOR_H
 #define MOUSEFREEHANDSELECTOR_H
 
-#include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/NodeLinkDiagramComponentInteractor.h>
 
 #include <vector>
 
@@ -33,14 +33,16 @@ namespace tlp {
 
  * This interactor plugin allow to select graph nodes with a lasso.
  * By defining a closed polygon with the mouse above the visualization,
- * all nodes under that polygon and edges connecting these nodes will be selected.
+ * all nodes under that polygon and edges connecting these nodes will be
+ selected.
  */
 class MouseLassoNodesSelectorInteractor
     : public NodeLinkDiagramComponentInteractor { /* GLInteractorComposite*/
 
 public:
-  PLUGININFORMATION("MouseLassoNodesSelectorInteractor", "Antoine Lambert", "19/06/2009",
-                    "Mouse Lasso Nodes Selector Interactor", "1.0", "Modification")
+  PLUGININFORMATION("MouseLassoNodesSelectorInteractor", "Antoine Lambert",
+                    "19/06/2009", "Mouse Lasso Nodes Selector Interactor",
+                    "1.0", "Modification")
 
   MouseLassoNodesSelectorInteractor(const tlp::PluginContext *);
 
@@ -49,7 +51,8 @@ public:
   bool isCompatible(const std::string &viewName) const override;
 };
 
-class MouseLassoNodesSelectorInteractorComponent : public GLInteractorComponent {
+class MouseLassoNodesSelectorInteractorComponent
+    : public GLInteractorComponent {
 
 public:
   MouseLassoNodesSelectorInteractorComponent();

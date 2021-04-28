@@ -38,12 +38,14 @@ static const char *paramHelp[] = {
 class OGDFBertaultLayout : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Bertault (OGDF)", "Smit Sanghavi", "29/05/2015",
-                    "Computes a force directed layout (Bertault Layout) for preserving the planar "
-                    "embedding in the graph.",
-                    "1.0", "Force Directed")
+  PLUGININFORMATION(
+      "Bertault (OGDF)", "Smit Sanghavi", "29/05/2015",
+      "Computes a force directed layout (Bertault Layout) for preserving the planar "
+      "embedding in the graph.",
+      "1.0", "Force Directed")
   OGDFBertaultLayout(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, context ? new ogdf::BertaultLayout() : nullptr) {
+      : OGDFLayoutPluginBase(context,
+                             context ? new ogdf::BertaultLayout() : nullptr) {
     addInParameter<bool>("impred", paramHelp[0], "false", false);
     addInParameter<int>("iterno", paramHelp[1], "20", false);
     addInParameter<double>("reqlength", paramHelp[2], "0.0", false);
@@ -51,7 +53,8 @@ public:
   ~OGDFBertaultLayout() override {}
 
   void beforeCall() override {
-    ogdf::BertaultLayout *bertault = static_cast<ogdf::BertaultLayout *>(ogdfLayoutAlgo);
+    ogdf::BertaultLayout *bertault =
+        static_cast<ogdf::BertaultLayout *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {
       bool bval = false;

@@ -18,8 +18,8 @@
  */
 #include "ClusterMetric.h"
 
-#include <tulip/StaticProperty.h>
 #include <tulip/GraphMeasure.h>
+#include <tulip/StaticProperty.h>
 
 PLUGIN(ClusterMetric)
 
@@ -30,11 +30,13 @@ static const char *paramHelp[] = {
     // depth
     "Maximal depth of a computed cluster."};
 //=================================================
-ClusterMetric::ClusterMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
+ClusterMetric::ClusterMetric(const tlp::PluginContext *context)
+    : DoubleAlgorithm(context) {
   addInParameter<unsigned int>("depth", paramHelp[0], "1");
 }
 //=================================================
-static double clusterGetEdgeValue(Graph *graph, tlp::NodeStaticProperty<double> &clusters,
+static double clusterGetEdgeValue(Graph *graph,
+                                  tlp::NodeStaticProperty<double> &clusters,
                                   const edge e) {
   auto eEnds = graph->ends(e);
   const double v1 = clusters.getNodeValue(eEnds.first);

@@ -21,30 +21,30 @@
 #include "tulip/InteractorConfigWidget.h"
 #include "ui_WorkspacePanel.h"
 
-#include <QGraphicsView>
-#include <QCloseEvent>
-#include <QPushButton>
 #include <QApplication>
+#include <QCloseEvent>
+#include <QDialogButtonBox>
 #include <QGraphicsProxyWidget>
 #include <QGraphicsRectItem>
-#include <QGraphicsSceneMouseEvent>
-#include <QTabWidget>
 #include <QGraphicsSceneContextMenuEvent>
-#include <QDialogButtonBox>
-#include <QVBoxLayout>
-#include <QScrollBar>
+#include <QGraphicsSceneMouseEvent>
+#include <QGraphicsView>
 #include <QPropertyAnimation>
+#include <QPushButton>
+#include <QScrollBar>
+#include <QTabWidget>
+#include <QVBoxLayout>
 
-#include <tulip/TulipMetaTypes.h>
-#include <tulip/ProcessingAnimationItem.h>
-#include <tulip/Interactor.h>
-#include <tulip/View.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphHierarchiesModel.h>
-#include <tulip/PluginLister.h>
-#include <tulip/TulipMimes.h>
-#include <tulip/TlpQtTools.h>
+#include <tulip/Interactor.h>
 #include <tulip/Perspective.h>
+#include <tulip/PluginLister.h>
+#include <tulip/ProcessingAnimationItem.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/TulipMetaTypes.h>
+#include <tulip/TulipMimes.h>
+#include <tulip/View.h>
 
 using namespace tlp;
 
@@ -54,21 +54,18 @@ class ProgressItem : public QGraphicsObject {
 
 public:
   ProgressItem(QGraphicsScene *parentScene) : QGraphicsObject() {
-    _animation = new ProcessingAnimationItem(QPixmap(":/tulip/gui/ui/process-working.png"),
-                                             QSize(64, 64), this);
+    _animation = new ProcessingAnimationItem(
+        QPixmap(":/tulip/gui/ui/process-working.png"), QSize(64, 64), this);
     _animation->setZValue(5);
     parentScene->addItem(_animation);
   }
 
-  ~ProgressItem() override {
-    delete _animation;
-  }
+  ~ProgressItem() override { delete _animation; }
 
-  QRectF boundingRect() const override {
-    return QRectF();
-  }
+  QRectF boundingRect() const override { return QRectF(); }
 
-  void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override {
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *,
+             QWidget *) override {
     painter->setPen(QColor(255, 255, 255));
     painter->setBrush(QColor(255, 255, 255, 170));
     painter->drawRect(scene()->sceneRect());
@@ -82,17 +79,17 @@ public:
 class CustomTabBar : public QTabBar {
 
 public:
-  CustomTabBar(QWidget *parent = 0) : QTabBar(parent) {
-    setDrawBase(false);
-  }
+  CustomTabBar(QWidget *parent = 0) : QTabBar(parent) { setDrawBase(false); }
 
 protected:
   QSize tabSizeHint(int index) const {
     int width = QTabBar::tabSizeHint(index).width();
 #if (QT_VERSION < QT_VERSION_CHECK(5, 11, 0))
-    return QSize(width, fontMetrics().width(tabText(index)) * 2 + iconSize().width());
+    return QSize(width,
+                 fontMetrics().width(tabText(index)) * 2 + iconSize().width());
 #else
-    return QSize(width, fontMetrics().horizontalAdvance(tabText(index)) * 2 + iconSize().width());
+    return QSize(width, fontMetrics().horizontalAdvance(tabText(index)) * 2 +
+                            iconSize().width());
 #endif
   }
 };
@@ -112,13 +109,15 @@ public:
 WorkspacePanel::WorkspacePanel(tlp::View *view, QWidget *parent)
     : QFrame(parent), _ui(new Ui::WorkspacePanel),
       _interactorConfigWidget(new InteractorConfigWidget(this)), _view(nullptr),
-      _overlayRect(nullptr), _viewConfigurationWidgets(nullptr), _viewConfigurationExpanded(false) {
+      _overlayRect(nullptr), _viewConfigurationWidgets(nullptr),
+      _viewConfigurationExpanded(false) {
   _ui->setupUi(this);
   _ui->actionClose->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   _ui->interactorsFrame->installEventFilter(this);
   _ui->dragHandle->setPanel(this);
   _ui->graphCombo->installEventFilter(this);
-  connect(_ui->linkButton, SIGNAL(toggled(bool)), this, SLOT(toggleSynchronization(bool)));
+  connect(_ui->linkButton, SIGNAL(toggled(bool)), this,
+          SLOT(toggleSynchronization(bool)));
   connect(_ui->closeButton, SIGNAL(clicked()), this, SLOT(close()));
   setView(view);
   setAttribute(Qt::WA_DeleteOnClose);
@@ -149,9 +148,7 @@ void WorkspacePanel::viewDestroyed() {
   deleteLater();
 }
 
-View *WorkspacePanel::view() const {
-  return _view;
-}
+View *WorkspacePanel::view() const { return _view; }
 
 QString WorkspacePanel::viewName() const {
   return tlp::tlpStringToQString(_view->name());
@@ -163,7 +160,8 @@ void WorkspacePanel::setView(tlp::View *view) {
 
   if (_view != nullptr) {
     disconnect(_view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
-    disconnect(_view, SIGNAL(graphSet(tlp::Graph *)), this, SLOT(viewGraphSet(tlp::Graph *)));
+    disconnect(_view, SIGNAL(graphSet(tlp::Graph *)), this,
+               SLOT(viewGraphSet(tlp::Graph *)));
     disconnect(_view, SIGNAL(drawNeeded()), this, SIGNAL(drawNeeded()));
     delete _view->graphicsView();
   }
@@ -173,7 +171,8 @@ void WorkspacePanel::setView(tlp::View *view) {
   _view = view;
 
   QList<Interactor *> compatibleInteractors;
-  QList<std::string> interactorNames = InteractorLister::compatibleInteractors(view->name());
+  QList<std::string> interactorNames =
+      InteractorLister::compatibleInteractors(view->name());
 
   for (const std::string &name : interactorNames) {
     compatibleInteractors << PluginLister::getPluginObject<Interactor>(name);
@@ -181,7 +180,8 @@ void WorkspacePanel::setView(tlp::View *view) {
 
   _view->setInteractors(compatibleInteractors);
   _ui->scrollArea->setVisible(!compatibleInteractors.empty());
-  _view->graphicsView()->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  _view->graphicsView()->setSizePolicy(QSizePolicy::Expanding,
+                                       QSizePolicy::Expanding);
   _view->graphicsView()->addAction(_ui->actionClose);
   layout()->addWidget(_view->graphicsView());
   refreshInteractorsToolbar();
@@ -190,9 +190,11 @@ void WorkspacePanel::setView(tlp::View *view) {
     setCurrentInteractor(compatibleInteractors[0]);
 
   connect(_view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
-  connect(_view, SIGNAL(graphSet(tlp::Graph *)), this, SLOT(viewGraphSet(tlp::Graph *)));
+  connect(_view, SIGNAL(graphSet(tlp::Graph *)), this,
+          SLOT(viewGraphSet(tlp::Graph *)));
   connect(_view, SIGNAL(drawNeeded()), this, SIGNAL(drawNeeded()));
-  connect(_view, SIGNAL(interactorsChanged()), this, SLOT(refreshInteractorsToolbar()));
+  connect(_view, SIGNAL(interactorsChanged()), this,
+          SLOT(refreshInteractorsToolbar()));
   _view->graphicsView()->scene()->installEventFilter(this);
 
   if (!_view->configurationWidgets().empty()) {
@@ -301,14 +303,13 @@ QTabBar::close-button:!selected:hover {
 }
 
 // Workaround to avoid a Qt5 bug :
-// After the panels containing QGraphicsView objects were rearranged in the workspace,
-// some events were no more sent to the QGraphicsWidget objects embedded in the asoociated
-// QGraphicScene objects.
-// Those events are necessary for important parts of the view GUI (context menu, keyboard focus) to
-// work correctly.
-// So add a hack that, each time a view is shown, creates a new QGraphicsScene object
-// and refill it with QGraphicsItem objects contained in the previous one.
-// Seems to be the only way to workaround that issue.
+// After the panels containing QGraphicsView objects were rearranged in the
+// workspace, some events were no more sent to the QGraphicsWidget objects
+// embedded in the asoociated QGraphicScene objects. Those events are necessary
+// for important parts of the view GUI (context menu, keyboard focus) to work
+// correctly. So add a hack that, each time a view is shown, creates a new
+// QGraphicsScene object and refill it with QGraphicsItem objects contained in
+// the previous one. Seems to be the only way to workaround that issue.
 void WorkspacePanel::showEvent(QShowEvent *event) {
   QFrame::showEvent(event);
 
@@ -362,16 +363,20 @@ void WorkspacePanel::closeEvent(QCloseEvent *event) {
 bool WorkspacePanel::eventFilter(QObject *obj, QEvent *ev) {
   if (_view != nullptr) {
     if (ev->type() == QEvent::GraphicsSceneContextMenu) {
-      return _view->showContextMenu(QCursor::pos(),
-                                    static_cast<QGraphicsSceneContextMenuEvent *>(ev)->scenePos());
+      return _view->showContextMenu(
+          QCursor::pos(),
+          static_cast<QGraphicsSceneContextMenuEvent *>(ev)->scenePos());
     } else if (_viewConfigurationWidgets != nullptr &&
-               _view->configurationWidgets().contains(qobject_cast<QWidget *>(obj)))
+               _view->configurationWidgets().contains(
+                   qobject_cast<QWidget *>(obj)))
       return true;
 
-    else if (ev->type() == QEvent::MouseButtonPress && !_viewConfigurationExpanded &&
+    else if (ev->type() == QEvent::MouseButtonPress &&
+             !_viewConfigurationExpanded &&
              qobject_cast<QTabBar *>(obj) != nullptr) {
       setConfigurationTabExpanded(true);
-    } else if (ev->type() == QEvent::Wheel && qobject_cast<QTabBar *>(obj) != nullptr) {
+    } else if (ev->type() == QEvent::Wheel &&
+               qobject_cast<QTabBar *>(obj) != nullptr) {
       return true;
     }
   }
@@ -401,9 +406,10 @@ void WorkspacePanel::setCurrentInteractor(tlp::Interactor *i) {
   _ui->currentInteractorButton->setIcon(i->action()->icon());
   _ui->currentInteractorButton->setToolTip(
       QString("Active tool:<br/><b>") + i->action()->text() +
-      QString(_view->currentInteractor()->configurationWidget()
-                  ? "</b><br/><i>click to show/hide its configuration panel.</i>"
-                  : "</b>"));
+      QString(
+          _view->currentInteractor()->configurationWidget()
+              ? "</b><br/><i>click to show/hide its configuration panel.</i>"
+              : "</b>"));
   _view->graphicsView()->setFocus();
 }
 
@@ -477,7 +483,8 @@ void WorkspacePanel::refreshInteractorsToolbar() {
       interactorsLayout->addWidget(button);
       button->setEnabled(i->action()->isEnabled());
       connect(button, SIGNAL(clicked()), i->action(), SLOT(trigger()));
-      connect(i->action(), SIGNAL(triggered()), this, SLOT(interactorActionTriggered()));
+      connect(i->action(), SIGNAL(triggered()), this,
+              SLOT(interactorActionTriggered()));
       connect(i->action(), SIGNAL(changed()), this, SLOT(actionChanged()));
       _actionTriggers[i->action()] = button;
     }
@@ -498,7 +505,8 @@ void WorkspacePanel::actionChanged() {
 
 void WorkspacePanel::scrollInteractorsRight() {
   QScrollBar *scrollBar = _ui->scrollArea->horizontalScrollBar();
-  scrollBar->setSliderPosition(scrollBar->sliderPosition() + scrollBar->singleStep());
+  scrollBar->setSliderPosition(scrollBar->sliderPosition() +
+                               scrollBar->singleStep());
   if (scrollBar->sliderPosition() == scrollBar->maximum())
     _ui->interactorsRight->setEnabled(false);
   if (scrollBar->sliderPosition() > scrollBar->minimum())
@@ -507,7 +515,8 @@ void WorkspacePanel::scrollInteractorsRight() {
 
 void WorkspacePanel::scrollInteractorsLeft() {
   QScrollBar *scrollBar = _ui->scrollArea->horizontalScrollBar();
-  scrollBar->setSliderPosition(scrollBar->sliderPosition() - scrollBar->singleStep());
+  scrollBar->setSliderPosition(scrollBar->sliderPosition() -
+                               scrollBar->singleStep());
   if (scrollBar->sliderPosition() < scrollBar->maximum())
     _ui->interactorsRight->setEnabled(true);
   if (scrollBar->sliderPosition() == scrollBar->minimum())
@@ -516,18 +525,22 @@ void WorkspacePanel::scrollInteractorsLeft() {
 
 void WorkspacePanel::resetInteractorsScrollButtonsVisibility() {
   QScrollBar *scrollBar = _ui->scrollArea->horizontalScrollBar();
-  bool interactorScrollBtnVisible = scrollBar->minimum() != scrollBar->maximum();
+  bool interactorScrollBtnVisible =
+      scrollBar->minimum() != scrollBar->maximum();
   _ui->interactorsLeft->setVisible(interactorScrollBtnVisible);
   _ui->interactorsRight->setVisible(interactorScrollBtnVisible);
   if (interactorScrollBtnVisible) {
-    _ui->interactorsRight->setEnabled(scrollBar->sliderPosition() != scrollBar->maximum());
-    _ui->interactorsLeft->setEnabled(scrollBar->sliderPosition() != scrollBar->minimum());
+    _ui->interactorsRight->setEnabled(scrollBar->sliderPosition() !=
+                                      scrollBar->maximum());
+    _ui->interactorsLeft->setEnabled(scrollBar->sliderPosition() !=
+                                     scrollBar->minimum());
   }
 }
 
 void WorkspacePanel::setGraphsModel(tlp::GraphHierarchiesModel *model) {
   _ui->graphCombo->setModel(model);
-  connect(_ui->graphCombo, SIGNAL(currentItemChanged()), this, SLOT(graphComboIndexChanged()));
+  connect(_ui->graphCombo, SIGNAL(currentItemChanged()), this,
+          SLOT(graphComboIndexChanged()));
 }
 
 void WorkspacePanel::viewGraphSet(tlp::Graph *g) {
@@ -535,8 +548,8 @@ void WorkspacePanel::viewGraphSet(tlp::Graph *g) {
 #ifndef NDEBUG
 
   if (g) {
-    qDebug() << "Setting graph " << tlp::tlpStringToQString(g->getName()) << " for panel "
-             << windowTitle();
+    qDebug() << "Setting graph " << tlp::tlpStringToQString(g->getName())
+             << " for panel " << windowTitle();
   }
 
 #endif // NDEBUG
@@ -552,13 +565,15 @@ void WorkspacePanel::viewGraphSet(tlp::Graph *g) {
 }
 
 void WorkspacePanel::graphComboIndexChanged() {
-  tlp::Graph *g = _ui->graphCombo->model()
-                      ->data(_ui->graphCombo->selectedIndex(), TulipModel::GraphRole)
-                      .value<tlp::Graph *>();
+  tlp::Graph *g =
+      _ui->graphCombo->model()
+          ->data(_ui->graphCombo->selectedIndex(), TulipModel::GraphRole)
+          .value<tlp::Graph *>();
 #ifndef NDEBUG
 
   if (g != nullptr) {
-    qDebug() << "selecting graph " << tlp::tlpStringToQString(g->getName()) << " in view";
+    qDebug() << "selecting graph " << tlp::tlpStringToQString(g->getName())
+             << " in view";
   }
 
 #endif /* NDEBUG */
@@ -581,8 +596,10 @@ void WorkspacePanel::resizeEvent(QResizeEvent *ev) {
 void WorkspacePanel::setConfigurationTabExpanded(bool expanded, bool animate) {
 
   if (_view != nullptr) {
-    _viewConfigurationWidgets->setMinimumHeight(_view->graphicsView()->height());
-    _viewConfigurationWidgets->setMaximumHeight(_view->graphicsView()->height());
+    _viewConfigurationWidgets->setMinimumHeight(
+        _view->graphicsView()->height());
+    _viewConfigurationWidgets->setMaximumHeight(
+        _view->graphicsView()->height());
     _viewConfigurationWidgets->setMaximumWidth(_view->graphicsView()->width());
   }
 
@@ -592,8 +609,8 @@ void WorkspacePanel::setConfigurationTabExpanded(bool expanded, bool animate) {
     return;
 
   if (animate) {
-    QPropertyAnimation *anim =
-        new QPropertyAnimation(_viewConfigurationWidgets, "pos", _viewConfigurationWidgets);
+    QPropertyAnimation *anim = new QPropertyAnimation(
+        _viewConfigurationWidgets, "pos", _viewConfigurationWidgets);
     anim->setDuration(250);
     anim->setStartValue(_viewConfigurationWidgets->pos());
     anim->setEndValue(newPos);
@@ -615,9 +632,11 @@ QPointF WorkspacePanel::configurationTabPosition(bool expanded) const {
   if (expanded)
     return QPointF(width() - _viewConfigurationWidgets->size().width(), 10);
   else {
-    QTabWidget *tabWidget = static_cast<QTabWidget *>(_viewConfigurationWidgets->widget());
+    QTabWidget *tabWidget =
+        static_cast<QTabWidget *>(_viewConfigurationWidgets->widget());
     int tabWidth = (tabWidget != nullptr)
-                       ? (_viewConfigurationWidgets->size().width() - tabWidget->widget(0)->width())
+                       ? (_viewConfigurationWidgets->size().width() -
+                          tabWidget->widget(0)->width())
                        : 0;
     return QPointF(width() - tabWidth, 10);
   }
@@ -676,7 +695,8 @@ void WorkspacePanel::dragLeaveEvent(QDragLeaveEvent *) {
   setOverlayMode(false);
 }
 
-bool WorkspacePanel::handleDragEnterEvent(QEvent *e, const QMimeData *mimedata) {
+bool WorkspacePanel::handleDragEnterEvent(QEvent *e,
+                                          const QMimeData *mimedata) {
   if (dynamic_cast<const GraphMimeType *>(mimedata) != nullptr ||
       dynamic_cast<const PanelMimeType *>(mimedata) != nullptr ||
       dynamic_cast<const AlgorithmMimeType *>(mimedata) != nullptr) {
@@ -689,9 +709,12 @@ bool WorkspacePanel::handleDragEnterEvent(QEvent *e, const QMimeData *mimedata) 
 }
 
 bool WorkspacePanel::handleDropEvent(const QMimeData *mimedata) {
-  const GraphMimeType *graphMime = dynamic_cast<const GraphMimeType *>(mimedata);
-  const PanelMimeType *panelMime = dynamic_cast<const PanelMimeType *>(mimedata);
-  const AlgorithmMimeType *algorithmMime = dynamic_cast<const AlgorithmMimeType *>(mimedata);
+  const GraphMimeType *graphMime =
+      dynamic_cast<const GraphMimeType *>(mimedata);
+  const PanelMimeType *panelMime =
+      dynamic_cast<const PanelMimeType *>(mimedata);
+  const AlgorithmMimeType *algorithmMime =
+      dynamic_cast<const AlgorithmMimeType *>(mimedata);
 
   if (graphMime != nullptr && graphMime->graph()) {
     viewGraphSet(graphMime->graph());
@@ -705,7 +728,8 @@ bool WorkspacePanel::handleDropEvent(const QMimeData *mimedata) {
   }
 
   setOverlayMode(false);
-  return graphMime != nullptr || panelMime != nullptr || algorithmMime != nullptr;
+  return graphMime != nullptr || panelMime != nullptr ||
+         algorithmMime != nullptr;
 }
 
 bool WorkspacePanel::isGraphSynchronized() const {
@@ -715,16 +739,18 @@ bool WorkspacePanel::isGraphSynchronized() const {
 void WorkspacePanel::toggleSynchronization(bool f) {
   if (f) {
     _ui->linkButton->setIcon(QIcon(":/tulip/gui/icons/16/link.png"));
-    _ui->linkButton->setToolTip("Click here to disable the synchronization with the Graphs "
-                                "panel.\nWhen synchronization is enabled, the current graph of the "
-                                "Graphs panel,\nbecomes the current one in the workspace active "
-                                "panel.");
+    _ui->linkButton->setToolTip(
+        "Click here to disable the synchronization with the Graphs "
+        "panel.\nWhen synchronization is enabled, the current graph of the "
+        "Graphs panel,\nbecomes the current one in the workspace active "
+        "panel.");
   } else {
     _ui->linkButton->setIcon(QIcon(":/tulip/gui/icons/16/unlink.png"));
-    _ui->linkButton->setToolTip("Click here to enable the synchronization with the Graphs "
-                                "panel.\nWhen synchronization is enabled, the current graph of the "
-                                "Graphs panel,\nbecomes the current one in the workspace active "
-                                "panel.");
+    _ui->linkButton->setToolTip(
+        "Click here to enable the synchronization with the Graphs "
+        "panel.\nWhen synchronization is enabled, the current graph of the "
+        "Graphs panel,\nbecomes the current one in the workspace active "
+        "panel.");
   }
 
   emit changeGraphSynchronization(f);

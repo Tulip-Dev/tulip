@@ -17,8 +17,8 @@
  *
  */
 
-#include <tulip/TulipPluginHeaders.h>
 #include <tulip/GraphParallelTools.h>
+#include <tulip/TulipPluginHeaders.h>
 
 using namespace std;
 using namespace tlp;
@@ -120,22 +120,25 @@ public:
 
     for (unsigned int k = 0; k < kMax + 1; ++k) {
       if (!weight) {
-        TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
-          double n_sum = 0;
-          for (auto nin : getNodes(graph, n))
-            n_sum += pr.getNodeValue(nin) / deg.getNodeValue(nin);
-          next_pr[i] = one_minus_d + d * n_sum;
-        });
+        TLP_PARALLEL_MAP_NODES_AND_INDICES(
+            graph, [&](const node n, unsigned int i) {
+              double n_sum = 0;
+              for (auto nin : getNodes(graph, n))
+                n_sum += pr.getNodeValue(nin) / deg.getNodeValue(nin);
+              next_pr[i] = one_minus_d + d * n_sum;
+            });
       } else {
-        TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
-          double n_sum = 0;
-          for (auto e : getEdges(graph, n)) {
-            node nin = graph->opposite(e, n);
-            if (deg.getNodeValue(nin) > 0)
-              n_sum += weight->getEdgeDoubleValue(e) * pr.getNodeValue(nin) / deg.getNodeValue(nin);
-          }
-          next_pr[i] = one_minus_d + d * n_sum;
-        });
+        TLP_PARALLEL_MAP_NODES_AND_INDICES(
+            graph, [&](const node n, unsigned int i) {
+              double n_sum = 0;
+              for (auto e : getEdges(graph, n)) {
+                node nin = graph->opposite(e, n);
+                if (deg.getNodeValue(nin) > 0)
+                  n_sum += weight->getEdgeDoubleValue(e) *
+                           pr.getNodeValue(nin) / deg.getNodeValue(nin);
+              }
+              next_pr[i] = one_minus_d + d * n_sum;
+            });
       }
 
       // swap pr and next_pr

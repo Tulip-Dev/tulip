@@ -61,8 +61,8 @@ public:
   }
 
   /**
-   * @brief Gets the extensions of the gzipped file formats this plugin can import.
-   * e.g. a TLP import would return 'tlp.gz and tlpz'.
+   * @brief Gets the extensions of the gzipped file formats this plugin can
+   *import. e.g. a TLP import would return 'tlp.gz and tlpz'.
    *
    * @since Tulip 5.0
    *
@@ -73,7 +73,8 @@ public:
   }
 
   /**
-   * @brief Gets all the extensions (normal and gzipped) of the file formats this plugin can import.
+   * @brief Gets all the extensions (normal and gzipped) of the file formats
+   *this plugin can import.
    *
    * @since Tulip 5.0
    *
@@ -86,9 +87,7 @@ public:
     return ext;
   }
 
-  std::string category() const override {
-    return IMPORT_CATEGORY;
-  }
+  std::string category() const override { return IMPORT_CATEGORY; }
 
   std::string icon() const override {
     return ":/tulip/gui/icons/64/document-import.png";

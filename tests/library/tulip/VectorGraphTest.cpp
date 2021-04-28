@@ -1,9 +1,9 @@
 #include <cassert>
-#include <iomanip>
 #include <fstream>
-#include <tulip/vectorgraph.h>
+#include <iomanip>
 #include <tulip/Iterator.h>
 #include <tulip/ParallelTools.h>
+#include <tulip/vectorgraph.h>
 
 #include "CppUnitIncludes.h"
 
@@ -109,7 +109,8 @@ static void checkCreatedGraph(bool nodesOnly = false) {
     if (i < NB_NODES - 1) {
       CPPUNIT_ASSERT(ends.second == nodes[i + 1]);
       CPPUNIT_ASSERT(graph.existEdge(nodes[i], nodes[i + 1], true) == edges[i]);
-      CPPUNIT_ASSERT(graph.existEdge(nodes[i + 1], nodes[i], false) == edges[i]);
+      CPPUNIT_ASSERT(graph.existEdge(nodes[i + 1], nodes[i], false) ==
+                     edges[i]);
     } else {
       CPPUNIT_ASSERT(ends.second == nodes[0]);
       CPPUNIT_ASSERT(graph.existEdge(nodes[i], nodes[0], true) == edges[i]);
@@ -493,8 +494,9 @@ void VectorGraphTest::testAddDelEdges() {
   // swap order of nodes[0] edges
   std::sort(edges.begin(), edges.end(), std::greater<edge>());
   // check edge ordering
-  TLP_PARALLEL_MAP_INDICES(NB_NODES - 2,
-                           [&](unsigned int i) { CPPUNIT_ASSERT(edges[i] > edges[i + 1]); });
+  TLP_PARALLEL_MAP_INDICES(NB_NODES - 2, [&](unsigned int i) {
+    CPPUNIT_ASSERT(edges[i] > edges[i + 1]);
+  });
   // swap edges of nodes[0]
   graph.setEdgeOrder(nodes[0], edges);
 
@@ -508,8 +510,10 @@ void VectorGraphTest::testAddDelEdges() {
     std::pair<node, node> ends = graph.ends(e);
     CPPUNIT_ASSERT(ends.first == nodes[0]);
     CPPUNIT_ASSERT(ends.second == nodes[NB_NODES - i - 1]);
-    CPPUNIT_ASSERT(graph.existEdge(nodes[0], nodes[NB_NODES - i - 1], true) == e);
-    CPPUNIT_ASSERT(graph.existEdge(nodes[NB_NODES - i - 1], nodes[0], false) == e);
+    CPPUNIT_ASSERT(graph.existEdge(nodes[0], nodes[NB_NODES - i - 1], true) ==
+                   e);
+    CPPUNIT_ASSERT(graph.existEdge(nodes[NB_NODES - i - 1], nodes[0], false) ==
+                   e);
     // check edge source
     CPPUNIT_ASSERT(graph.source(e) == nodes[0]);
     // check edge target
@@ -723,14 +727,18 @@ void VectorGraphTest::testMoreSetEnds() {
     CPPUNIT_ASSERT(ends.second == nodes[NB_NODES - i - 1]);
     if (i < NB_NODES - 1) {
       CPPUNIT_ASSERT(ends.first == nodes[NB_NODES - i - 2]);
-      CPPUNIT_ASSERT(graph.existEdge(nodes[NB_NODES - i - 2], nodes[NB_NODES - i - 1], true) ==
-                     edges[i]);
-      CPPUNIT_ASSERT(graph.existEdge(nodes[NB_NODES - i - 1], nodes[NB_NODES - i - 2], false) ==
-                     edges[i]);
+      CPPUNIT_ASSERT(graph.existEdge(nodes[NB_NODES - i - 2],
+                                     nodes[NB_NODES - i - 1],
+                                     true) == edges[i]);
+      CPPUNIT_ASSERT(graph.existEdge(nodes[NB_NODES - i - 1],
+                                     nodes[NB_NODES - i - 2],
+                                     false) == edges[i]);
     } else {
       CPPUNIT_ASSERT(ends.first == nodes[NB_NODES - 1]);
-      CPPUNIT_ASSERT(graph.existEdge(nodes[NB_NODES - 1], nodes[0], true) == edges[i]);
-      CPPUNIT_ASSERT(graph.existEdge(nodes[0], nodes[NB_NODES - 1], false) == edges[i]);
+      CPPUNIT_ASSERT(graph.existEdge(nodes[NB_NODES - 1], nodes[0], true) ==
+                     edges[i]);
+      CPPUNIT_ASSERT(graph.existEdge(nodes[0], nodes[NB_NODES - 1], false) ==
+                     edges[i]);
     }
     // check edge target
     CPPUNIT_ASSERT(graph.target(edges[i]) == nodes[NB_NODES - i - 1]);
@@ -741,8 +749,10 @@ void VectorGraphTest::testMoreSetEnds() {
       CPPUNIT_ASSERT(graph.source(edges[i]) == nodes[NB_NODES - 1]);
     // check opposite
     if (i < NB_NODES - 1) {
-      CPPUNIT_ASSERT(graph.opposite(edges[i], nodes[NB_NODES - i - 1]) == nodes[NB_NODES - i - 2]);
-      CPPUNIT_ASSERT(graph.opposite(edges[i], nodes[NB_NODES - i - 2]) == nodes[NB_NODES - i - 1]);
+      CPPUNIT_ASSERT(graph.opposite(edges[i], nodes[NB_NODES - i - 1]) ==
+                     nodes[NB_NODES - i - 2]);
+      CPPUNIT_ASSERT(graph.opposite(edges[i], nodes[NB_NODES - i - 2]) ==
+                     nodes[NB_NODES - i - 1]);
     } else {
       CPPUNIT_ASSERT(graph.opposite(edges[i], nodes[NB_NODES - 1]) == nodes[0]);
       CPPUNIT_ASSERT(graph.opposite(edges[i], nodes[0]) == nodes[NB_NODES - 1]);

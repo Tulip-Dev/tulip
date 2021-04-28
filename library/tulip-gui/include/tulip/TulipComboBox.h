@@ -21,8 +21,8 @@
 #ifndef TULIPCOMBOBOX_H
 #define TULIPCOMBOBOX_H
 
-#include <tulip/tulipconf.h>
 #include <QComboBox>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
 

@@ -58,7 +58,8 @@ void addSpacingParameters(LayoutAlgorithm *pLayout) {
   pLayout->addInParameter<float>("layer spacing", paramHelp[2], "64.");
   pLayout->addInParameter<float>("node spacing", paramHelp[3], "18.");
 }
-void getSpacingParameters(DataSet *dataSet, float &nodeSpacing, float &layerSpacing) {
+void getSpacingParameters(DataSet *dataSet, float &nodeSpacing,
+                          float &layerSpacing) {
   layerSpacing = 64.;
   nodeSpacing = 18.;
 
@@ -70,9 +71,11 @@ void getSpacingParameters(DataSet *dataSet, float &nodeSpacing, float &layerSpac
 //====================================================================
 void addNodeSizePropertyParameter(LayoutAlgorithm *pLayout, bool inout) {
   if (inout)
-    pLayout->addInOutParameter<SizeProperty>("node size", paramHelp[4], "viewSize");
+    pLayout->addInOutParameter<SizeProperty>("node size", paramHelp[4],
+                                             "viewSize");
   else
-    pLayout->addInParameter<SizeProperty>("node size", paramHelp[4], "viewSize");
+    pLayout->addInParameter<SizeProperty>("node size", paramHelp[4],
+                                          "viewSize");
 }
 
 bool getNodeSizePropertyParameter(DataSet *dataSet, SizeProperty *&sizes) {

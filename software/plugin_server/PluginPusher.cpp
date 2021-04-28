@@ -33,7 +33,8 @@ void uploadfolder(const QString &origin, WebDavManager &manager) {
 
   QDir originDir(origin);
 
-  for (const QString &element : originDir.entryList(QDir::Files | QDir::NoSymLinks)) {
+  for (const QString &element :
+       originDir.entryList(QDir::Files | QDir::NoSymLinks)) {
     QFile file(originDir.canonicalPath() + "/" + element);
     bool opened = file.open(QIODevice::ReadOnly);
 
@@ -45,16 +46,17 @@ void uploadfolder(const QString &origin, WebDavManager &manager) {
     }
   }
 
-  for (const QString &element :
-       originDir.entryList(QDir::Dirs | QDir::NoSymLinks | QDir::NoDotAndDotDot)) {
+  for (const QString &element : originDir.entryList(
+           QDir::Dirs | QDir::NoSymLinks | QDir::NoDotAndDotDot)) {
     uploadfolder(origin + "/" + element, manager);
   }
 }
 
 int main(int argc, char **argv) {
   if (argc < 4) {
-    std::cout << "pushPlugin pluginsPath serverURL base64EncodedCredentials [destinationPath]"
-              << std::endl;
+    std::cout
+        << "pushPlugin pluginsPath serverURL base64EncodedCredentials [destinationPath]"
+        << std::endl;
     cout << "destinationPath defaults to pluginsPath" << endl;
     exit(0);
   }
@@ -85,8 +87,8 @@ int main(int argc, char **argv) {
   QString location = "http://www." + serverURL + destinationPath;
 
   QNetworkAccessManager networkManager;
-  QNetworkReply *reply =
-      networkManager.get(QNetworkRequest(QUrl(location + "/serverDescription.xml")));
+  QNetworkReply *reply = networkManager.get(
+      QNetworkRequest(QUrl(location + "/serverDescription.xml")));
 
   while (!reply->isFinished()) {
     QCoreApplication::processEvents();
@@ -120,10 +122,11 @@ int main(int argc, char **argv) {
 
       if (!pluginList.contains(pluginName)) {
         localDocument.documentElement().appendChild(currentNode);
-        std::cout << "keeping remote plugin: " << tlp::QStringToTlpString(pluginName) << std::endl;
+        std::cout << "keeping remote plugin: "
+                  << tlp::QStringToTlpString(pluginName) << std::endl;
       } else {
-        std::cout << "discarding remote plugin: " << tlp::QStringToTlpString(pluginName)
-                  << std::endl;
+        std::cout << "discarding remote plugin: "
+                  << tlp::QStringToTlpString(pluginName) << std::endl;
       }
     }
   }

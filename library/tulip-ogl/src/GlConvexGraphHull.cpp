@@ -18,10 +18,10 @@
  */
 #include <tulip/GlConvexGraphHull.h>
 
-#include <tulip/Graph.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/GlComplexPolygon.h>
 #include <tulip/GlComposite.h>
+#include <tulip/Graph.h>
 using namespace std;
 
 namespace tlp {
@@ -45,20 +45,21 @@ void GlConvexGraphHullsComposite::setHullsTextureActivation(bool flag) {
 
 int GlConvexGraphHull::bezierValue = 1;
 
-GlConvexGraphHull::GlConvexGraphHull(GlConvexGraphHullsComposite *parent, const std::string &name,
-                                     const tlp::Color &fcolor, const std::string &tex, Graph *graph,
+GlConvexGraphHull::GlConvexGraphHull(GlConvexGraphHullsComposite *parent,
+                                     const std::string &name,
+                                     const tlp::Color &fcolor,
+                                     const std::string &tex, Graph *graph,
                                      LayoutProperty *layout, SizeProperty *size,
                                      DoubleProperty *rotation)
-    : _parent(parent), _name(name), _fcolor(fcolor), _tex(tex), _polygon(nullptr), graph(graph),
-      _layout(layout), _size(size), _rotation(rotation) {
+    : _parent(parent), _name(name), _fcolor(fcolor), _tex(tex),
+      _polygon(nullptr), graph(graph), _layout(layout), _size(size),
+      _rotation(rotation) {
   assert(graph);
 
   updateHull();
 }
 
-GlConvexGraphHull::~GlConvexGraphHull() {
-  delete _polygon;
-}
+GlConvexGraphHull::~GlConvexGraphHull() { delete _polygon; }
 
 void GlConvexGraphHull::updateHull(LayoutProperty *layout, SizeProperty *size,
                                    DoubleProperty *rotation) {
@@ -80,8 +81,9 @@ void GlConvexGraphHull::updateHull(LayoutProperty *layout, SizeProperty *size,
     _rotation = rotation;
 
   if (graph->isEmpty() == false) {
-    _polygon = new GlComplexPolygon(computeConvexHull(graph, _layout, _size, _rotation, nullptr),
-                                    _fcolor, GlConvexGraphHull::bezierValue, _tex, false);
+    _polygon = new GlComplexPolygon(
+        computeConvexHull(graph, _layout, _size, _rotation, nullptr), _fcolor,
+        GlConvexGraphHull::bezierValue, _tex, false);
     _polygon->setVisible(visible);
     _parent->addGlEntity(_polygon, _name);
   }

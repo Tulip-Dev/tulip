@@ -26,16 +26,13 @@ class TimeDecreasingFunctionSimple : public TimeDecreasingFunction {
 public:
   TimeDecreasingFunctionSimple(double initialCoef);
   ~TimeDecreasingFunctionSimple() override;
-  double computeCurrentTimeRate(unsigned int currentIteration, unsigned int maxIteration,
+  double computeCurrentTimeRate(unsigned int currentIteration,
+                                unsigned int maxIteration,
                                 unsigned int inputSampleSize) override;
 
-  double getInitialCoefficient() {
-    return initialCoef;
-  }
+  double getInitialCoefficient() { return initialCoef; }
 
-  void setInitialCoefficient(double coef) {
-    initialCoef = coef;
-  }
+  void setInitialCoefficient(double coef) { initialCoef = coef; }
 
 protected:
   double initialCoef;

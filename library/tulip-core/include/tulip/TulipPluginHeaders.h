@@ -22,29 +22,29 @@
 #ifndef TULIP_PLUGIN_HEADERS_H
 #define TULIP_PLUGIN_HEADERS_H
 
-#include <tulip/DoubleProperty.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/StringProperty.h>
+#include <tulip/AcyclicTest.h>
 #include <tulip/Algorithm.h>
-#include <tulip/PropertyAlgorithm.h>
-#include <tulip/ImportModule.h>
-#include <tulip/ExportModule.h>
-#include <tulip/SizeProperty.h>
+#include <tulip/BiconnectedTest.h>
+#include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/IntegerProperty.h>
+#include <tulip/ConnectedTest.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/ExportModule.h>
 #include <tulip/GraphMeasure.h>
 #include <tulip/GraphTools.h>
-#include <tulip/AcyclicTest.h>
-#include <tulip/BiconnectedTest.h>
-#include <tulip/ConnectedTest.h>
+#include <tulip/ImportModule.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
 #include <tulip/PlanarityTest.h>
-#include <tulip/SimpleTest.h>
-#include <tulip/TreeTest.h>
-#include <tulip/StringCollection.h>
-#include <tulip/TlpTools.h>
-#include <tulip/StaticProperty.h>
 #include <tulip/PluginLister.h>
+#include <tulip/PropertyAlgorithm.h>
+#include <tulip/SimpleTest.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StaticProperty.h>
+#include <tulip/StringCollection.h>
+#include <tulip/StringProperty.h>
+#include <tulip/TlpTools.h>
+#include <tulip/TreeTest.h>
 
 #endif // TULIP_PLUGIN_HEADERS_H
 

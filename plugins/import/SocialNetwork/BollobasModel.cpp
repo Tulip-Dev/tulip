@@ -17,10 +17,10 @@
  *
  */
 
-#include <tulip/ImportModule.h>
-#include <tulip/TlpTools.h>
-#include <tulip/PluginProgress.h>
 #include <tulip/Graph.h>
+#include <tulip/ImportModule.h>
+#include <tulip/PluginProgress.h>
+#include <tulip/TlpTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -41,16 +41,18 @@ static const char *paramHelp[] = {
  * RSA: Random Structures & Algorithms, 18, 279 (2001)
  *
  * first implemented by :
- * Vladimir Batagelj and Ulrik Brandes. Efficient Generation of Large Random Networks, 2005.
+ * Vladimir Batagelj and Ulrik Brandes. Efficient Generation of Large Random
+ * Networks, 2005.
  *
  */
 struct BollobasModel : public ImportModule {
-  PLUGININFORMATION("Bollobas et al. Model", "Arnaud Sallaberry", "21/02/2011",
-                    "Randomly generates a scale-free graph using the model described in<br/>B. "
-                    "Bollobas, O.M Riordan, J. Spencer and G. Tusnady.<br/><b>The Degree Sequence "
-                    "of a Scale-Free Random Graph Process.</b><br/>RSA: Random Structures & "
-                    "Algorithms, 18, 279 (2001)",
-                    "1.1", "Social network")
+  PLUGININFORMATION(
+      "Bollobas et al. Model", "Arnaud Sallaberry", "21/02/2011",
+      "Randomly generates a scale-free graph using the model described in<br/>B. "
+      "Bollobas, O.M Riordan, J. Spencer and G. Tusnady.<br/><b>The Degree Sequence "
+      "of a Scale-Free Random Graph Process.</b><br/>RSA: Random Structures & "
+      "Algorithms, 18, 279 (2001)",
+      "1.1", "Social network")
 
   BollobasModel(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "2000");
@@ -68,7 +70,8 @@ struct BollobasModel : public ImportModule {
 
     // check arguments
     if (d > n) {
-      pluginProgress->setError("The minimum degree cannot be greater than the number of nodes.");
+      pluginProgress->setError(
+          "The minimum degree cannot be greater than the number of nodes.");
       return false;
     }
 

@@ -97,8 +97,9 @@ OGDFGemFrick::OGDFGemFrick(const tlp::PluginContext *context)
   addInParameter<double>("oscillation angle", paramHelp[7], "1.57079633");
   addInParameter<double>("rotation sensitivity", paramHelp[8], "0.01");
   addInParameter<double>("oscillation sensitivity", paramHelp[9], "0.3");
-  addInParameter<StringCollection>(ELT_ATTRACTIONFORMULA, paramHelp[10], ELT_ATTRACTIONFORMULALIST,
-                                   true, "Fruchterman/Reingold <br> GEM");
+  addInParameter<StringCollection>(ELT_ATTRACTIONFORMULA, paramHelp[10],
+                                   ELT_ATTRACTIONFORMULALIST, true,
+                                   "Fruchterman/Reingold <br> GEM");
   addInParameter<double>("minDistCC", paramHelp[11], "20");
   addInParameter<double>("pageRatio", paramHelp[12], "1.0");
 }

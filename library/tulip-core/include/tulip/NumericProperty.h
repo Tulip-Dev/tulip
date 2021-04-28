@@ -113,56 +113,68 @@ public:
   virtual NumericProperty *copyProperty(Graph *graph) = 0;
 
   /**
-   * @brief Gets an iterator sorting nodes according to their values in that numeric property.
+   * @brief Gets an iterator sorting nodes according to their values in that
+   *numeric property.
    * @since Tulip 4.8
-   * @param sg If provided, returns an iterator on the subset of nodes defined by that subgraph.
+   * @param sg If provided, returns an iterator on the subset of nodes defined
+   *by that subgraph.
    * @return An iterator over graph nodes.
    **/
-  virtual Iterator<node> *getSortedNodes(const Graph *sg = nullptr, bool ascendingOrder = true);
+  virtual Iterator<node> *getSortedNodes(const Graph *sg = nullptr,
+                                         bool ascendingOrder = true);
 
   /**
-   * @brief Gets an iterator sorting edges according to their values in that numeric property.
-   * @since Tulip 4.8
-   * @param sg If provided, returns an iterator on the subset of edges defined by that subgraph.
-   * @param ascendingOrder defines the sort ordering (ascending or descending).
-   * @return An iterator over graph edges.
-   **/
-  virtual Iterator<edge> *getSortedEdges(const Graph *sg = nullptr, bool ascendingOrder = true);
-
-  /**
-   * @brief Gets an iterator sorting edges according to the values of their source nodes in that
+   * @brief Gets an iterator sorting edges according to their values in that
    *numeric property.
    * @since Tulip 4.8
-   * @param sg If provided, returns an iterator on the subset of edges defined by that subgraph.
+   * @param sg If provided, returns an iterator on the subset of edges defined
+   *by that subgraph.
    * @param ascendingOrder defines the sort ordering (ascending or descending).
    * @return An iterator over graph edges.
    **/
-  virtual Iterator<edge> *getSortedEdgesBySourceValue(const Graph *sg = nullptr,
-                                                      bool ascendingOrder = true);
+  virtual Iterator<edge> *getSortedEdges(const Graph *sg = nullptr,
+                                         bool ascendingOrder = true);
 
   /**
-   * @brief Gets an iterator sorting edges according to the values of their target nodes in that
-   *numeric property.
+   * @brief Gets an iterator sorting edges according to the values of their
+   *source nodes in that numeric property.
    * @since Tulip 4.8
-   * @param sg If provided, returns an iterator on the subset of edges defined by that subgraph.
+   * @param sg If provided, returns an iterator on the subset of edges defined
+   *by that subgraph.
    * @param ascendingOrder defines the sort ordering (ascending or descending).
    * @return An iterator over graph edges.
    **/
-  virtual Iterator<edge> *getSortedEdgesByTargetValue(const Graph *sg = nullptr,
-                                                      bool ascendingOrder = true);
+  virtual Iterator<edge> *
+  getSortedEdgesBySourceValue(const Graph *sg = nullptr,
+                              bool ascendingOrder = true);
 
   /**
-   * @brief Gets an iterator sorting edges according to the values of their extremities in that
-   *numeric property.
-   * Vectors of two numbers (first element being the source node value, second one the target node
-   *value) are compared in that case.
+   * @brief Gets an iterator sorting edges according to the values of their
+   *target nodes in that numeric property.
    * @since Tulip 4.8
-   * @param sg If provided, returns an iterator on the subset of edges defined by that subgraph.
+   * @param sg If provided, returns an iterator on the subset of edges defined
+   *by that subgraph.
    * @param ascendingOrder defines the sort ordering (ascending or descending).
    * @return An iterator over graph edges.
    **/
-  virtual Iterator<edge> *getSortedEdgesByExtremitiesValues(const Graph *sg = nullptr,
-                                                            bool ascendingOrder = true);
+  virtual Iterator<edge> *
+  getSortedEdgesByTargetValue(const Graph *sg = nullptr,
+                              bool ascendingOrder = true);
+
+  /**
+   * @brief Gets an iterator sorting edges according to the values of their
+   *extremities in that numeric property. Vectors of two numbers (first element
+   *being the source node value, second one the target node value) are compared
+   *in that case.
+   * @since Tulip 4.8
+   * @param sg If provided, returns an iterator on the subset of edges defined
+   *by that subgraph.
+   * @param ascendingOrder defines the sort ordering (ascending or descending).
+   * @return An iterator over graph edges.
+   **/
+  virtual Iterator<edge> *
+  getSortedEdgesByExtremitiesValues(const Graph *sg = nullptr,
+                                    bool ascendingOrder = true);
 };
 } // namespace tlp
 

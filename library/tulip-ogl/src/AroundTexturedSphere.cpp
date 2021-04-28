@@ -16,27 +16,31 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <tulip/AroundTexturedSphere.h>
 #include <tulip/BoundingBox.h>
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include <tulip/TlpTools.h>
-#include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlRect.h>
 #include <tulip/GlSphere.h>
-#include <tulip/AroundTexturedSphere.h>
+#include <tulip/TlpTools.h>
 
 using namespace std;
 using namespace tlp;
 
-void AroundTexturedSphere::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
+void AroundTexturedSphere::getIncludeBoundingBox(BoundingBox &boundingBox,
+                                                 node) {
   boundingBox[0] = Coord(-0.35f, -0.35f, -0.35f);
   boundingBox[1] = Coord(0.35f, 0.35f, 0.35f);
 }
 
-void AroundTexturedSphere::drawGlyph(const Color &glyphColor, const Size &glyphSize,
-                                     const string &texture, const string &texturePath,
-                                     const string &aroundTextureFile, unsigned char alpha) {
+void AroundTexturedSphere::drawGlyph(const Color &glyphColor,
+                                     const Size &glyphSize,
+                                     const string &texture,
+                                     const string &texturePath,
+                                     const string &aroundTextureFile,
+                                     unsigned char alpha) {
   // draw a sphere
   static GlSphere sphere(Coord(0, 0, 0), 0.5);
   sphere.setColor(glyphColor);
@@ -44,7 +48,8 @@ void AroundTexturedSphere::drawGlyph(const Color &glyphColor, const Size &glyphS
   sphere.draw(0, nullptr);
 
   // draw a texture in the screen plane around the sphere
-  static GlRect rect(Coord(0, 0, 0), 2., 2, Color(0, 0, 0, 255), Color(0, 0, 0, 255));
+  static GlRect rect(Coord(0, 0, 0), 2., 2, Color(0, 0, 0, 255),
+                     Color(0, 0, 0, 255));
   rect.setOutlineMode(false);
 
   rect.setTextureName(TulipBitmapDir + aroundTextureFile);

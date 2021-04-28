@@ -20,8 +20,8 @@
 #ifndef TULIPMAINWINDOW_H
 #define TULIPMAINWINDOW_H
 
-#include <QMainWindow>
 #include <QDialog>
+#include <QMainWindow>
 #include <QSystemTrayIcon>
 #include <QVariant>
 
@@ -35,9 +35,9 @@ class PluginsCenter;
 class QLabel;
 
 /**
-  @brief The window used in the tulip_app process to display the Welcome, plugins center and getting
-  help screens.
-  This class is basically a controller for the 3 underleying screens that manage their own logic.
+  @brief The window used in the tulip_app process to display the Welcome,
+  plugins center and getting help screens. This class is basically a controller
+  for the 3 underleying screens that manage their own logic.
   */
 class TulipMainWindow : public QMainWindow {
   Q_OBJECT
@@ -61,7 +61,8 @@ public:
 
 public slots:
   void pluginErrorMessage(const QString &message);
-  void showTrayMessage(const QString &title, const QString &message, uint icon, uint duration);
+  void showTrayMessage(const QString &title, const QString &message, uint icon,
+                       uint duration);
   void showErrorMessage(const QString &title, const QString &message);
 
   void createPerspective(const QString &name);

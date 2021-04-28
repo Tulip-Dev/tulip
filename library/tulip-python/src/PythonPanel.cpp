@@ -23,17 +23,19 @@
 #include "ui_PythonPanel.h"
 
 #include <tulip/GraphHierarchiesModel.h>
-#include <tulip/TulipMimes.h>
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/TulipMimes.h>
 
 static const QString setCurrentGraphFunction = "graph = None\n"
                                                "def setCurrentGraph(g):\n"
                                                "	global graph\n"
                                                "	graph = g\n";
 
-PythonPanel::PythonPanel(QWidget *parent) : QWidget(parent), _ui(new Ui::PythonPanel) {
+PythonPanel::PythonPanel(QWidget *parent)
+    : QWidget(parent), _ui(new Ui::PythonPanel) {
   _ui->setupUi(this);
-  connect(_ui->graphCombo, SIGNAL(currentItemChanged()), this, SLOT(graphComboIndexChanged()));
+  connect(_ui->graphCombo, SIGNAL(currentItemChanged()), this,
+          SLOT(graphComboIndexChanged()));
   tlp::PythonInterpreter::getInstance()->runString(setCurrentGraphFunction);
   connect(_ui->pythonShellWidget, SIGNAL(beginCurrentLinesExecution()), this,
           SLOT(beginCurrentLinesExecution()));
@@ -41,32 +43,29 @@ PythonPanel::PythonPanel(QWidget *parent) : QWidget(parent), _ui(new Ui::PythonP
           SLOT(endCurrentLinesExecution()));
 }
 
-PythonPanel::~PythonPanel() {
-  delete _ui;
-}
+PythonPanel::~PythonPanel() { delete _ui; }
 
 void PythonPanel::setModel(tlp::GraphHierarchiesModel *model) {
   _ui->graphCombo->setModel(model);
 }
 
-void PythonPanel::decreaseFontSize() {
-  _ui->pythonShellWidget->zoomOut();
-}
+void PythonPanel::decreaseFontSize() { _ui->pythonShellWidget->zoomOut(); }
 
-void PythonPanel::increaseFontSize() {
-  _ui->pythonShellWidget->zoomIn();
-}
+void PythonPanel::increaseFontSize() { _ui->pythonShellWidget->zoomIn(); }
 
 void PythonPanel::graphComboIndexChanged() {
-  tlp::Graph *g = _ui->graphCombo->model()
-                      ->data(_ui->graphCombo->selectedIndex(), tlp::TulipModel::GraphRole)
-                      .value<tlp::Graph *>();
-  tlp::PythonInterpreter::getInstance()->runGraphScript("__main__", "setCurrentGraph", g);
+  tlp::Graph *g =
+      _ui->graphCombo->model()
+          ->data(_ui->graphCombo->selectedIndex(), tlp::TulipModel::GraphRole)
+          .value<tlp::Graph *>();
+  tlp::PythonInterpreter::getInstance()->runGraphScript("__main__",
+                                                        "setCurrentGraph", g);
   _ui->pythonShellWidget->getAutoCompletionDb()->setGraph(g);
 }
 
 void PythonPanel::dragEnterEvent(QDragEnterEvent *dragEv) {
-  const tlp::GraphMimeType *mimeType = dynamic_cast<const tlp::GraphMimeType *>(dragEv->mimeData());
+  const tlp::GraphMimeType *mimeType =
+      dynamic_cast<const tlp::GraphMimeType *>(dragEv->mimeData());
 
   if (mimeType != nullptr) {
     dragEv->accept();
@@ -74,7 +73,8 @@ void PythonPanel::dragEnterEvent(QDragEnterEvent *dragEv) {
 }
 
 void PythonPanel::dropEvent(QDropEvent *dropEv) {
-  const tlp::GraphMimeType *mimeType = dynamic_cast<const tlp::GraphMimeType *>(dropEv->mimeData());
+  const tlp::GraphMimeType *mimeType =
+      dynamic_cast<const tlp::GraphMimeType *>(dropEv->mimeData());
 
   if (mimeType != nullptr) {
     tlp::GraphHierarchiesModel *model =
@@ -90,9 +90,10 @@ void PythonPanel::dropEvent(QDropEvent *dropEv) {
 }
 
 void PythonPanel::beginCurrentLinesExecution() {
-  tlp::Graph *g = _ui->graphCombo->model()
-                      ->data(_ui->graphCombo->selectedIndex(), tlp::TulipModel::GraphRole)
-                      .value<tlp::Graph *>();
+  tlp::Graph *g =
+      _ui->graphCombo->model()
+          ->data(_ui->graphCombo->selectedIndex(), tlp::TulipModel::GraphRole)
+          .value<tlp::Graph *>();
 
   // undo/redo management
   if (g)
@@ -100,9 +101,10 @@ void PythonPanel::beginCurrentLinesExecution() {
 }
 
 void PythonPanel::endCurrentLinesExecution() {
-  tlp::Graph *g = _ui->graphCombo->model()
-                      ->data(_ui->graphCombo->selectedIndex(), tlp::TulipModel::GraphRole)
-                      .value<tlp::Graph *>();
+  tlp::Graph *g =
+      _ui->graphCombo->model()
+          ->data(_ui->graphCombo->selectedIndex(), tlp::TulipModel::GraphRole)
+          .value<tlp::Graph *>();
   // undo/redo management
   g->popIfNoUpdates();
 }

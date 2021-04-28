@@ -23,11 +23,13 @@ PLUGIN(StrengthMetric)
 using namespace std;
 using namespace tlp;
 
-StrengthMetric::StrengthMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {}
+StrengthMetric::StrengthMetric(const tlp::PluginContext *context)
+    : DoubleAlgorithm(context) {}
 
 StrengthMetric::~StrengthMetric() {}
 //=============================================================
-double StrengthMetric::e(std::unordered_set<tlp::node> &U, std::unordered_set<tlp::node> &V) {
+double StrengthMetric::e(std::unordered_set<tlp::node> &U,
+                         std::unordered_set<tlp::node> &V) {
   std::unordered_set<node>::const_iterator itU;
   double result = 0;
   std::unordered_set<node> *A, *B;
@@ -64,7 +66,8 @@ double StrengthMetric::e(const std::unordered_set<tlp::node> &U) {
   return result / 2.0;
 }
 //=============================================================
-double StrengthMetric::s(std::unordered_set<tlp::node> &U, std::unordered_set<tlp::node> &V) {
+double StrengthMetric::s(std::unordered_set<tlp::node> &U,
+                         std::unordered_set<tlp::node> &V) {
   if ((U.empty()) || (V.empty()))
     return 0;
 
@@ -134,7 +137,8 @@ double StrengthMetric::getEdgeValue(const tlp::edge ee) {
   double norm3 = double((Wuv.size() + Mv.size() + Mu.size()));
 
   double gamma4 = (e(Mu, Wuv) + e(Mv, Wuv) + e(Mu, Mv) + e(Wuv));
-  double norm4 = (double(Mu.size() * Wuv.size() + Mv.size() * Wuv.size() + Mu.size() * Mv.size()) +
+  double norm4 = (double(Mu.size() * Wuv.size() + Mv.size() * Wuv.size() +
+                         Mu.size() * Mv.size()) +
                   double(Wuv.size() * (Wuv.size() - 1)) / 2.0);
 
   double norm = norm3 + norm4;

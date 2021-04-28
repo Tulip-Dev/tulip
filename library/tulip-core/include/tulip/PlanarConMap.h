@@ -21,8 +21,8 @@
 #ifndef Tulip_PlanarConMap_H
 #define Tulip_PlanarConMap_H
 
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
 #include <tulip/Face.h>
 #include <tulip/GraphDecorator.h>
@@ -33,12 +33,12 @@ namespace tlp {
  * \brief interface for a topological graph
  */
 /**
- * The class PlanarConMap is an interface for map in the Tulip Library. This only
- * considers connected planar map, moreover the graph must be simple.
- * After, its initialization, if modifications, such as additions or deletions of
- * edges or/and nodes, are made on the supergraph, the map will not be
- * valid any more. In this case, one can calls update() function to update the map
- * but it completely compute the map.
+ * The class PlanarConMap is an interface for map in the Tulip Library. This
+ * only considers connected planar map, moreover the graph must be simple.
+ * After, its initialization, if modifications, such as additions or deletions
+ * of edges or/and nodes, are made on the supergraph, the map will not be valid
+ * any more. In this case, one can calls update() function to update the map but
+ * it completely compute the map.
  */
 
 class TLP_SCOPE PlanarConMap : public GraphDecorator {
@@ -67,7 +67,8 @@ public:
   void clear() override;
 
   /** Update the map : this recompute completely the map.
-   * To do when an operation on one of the super-graphs of the map has been done.
+   * To do when an operation on one of the super-graphs of the map has been
+   * done.
    */
   void update();
 
@@ -75,17 +76,16 @@ public:
   // Modification of the graph structure
   //==============================================================================
   /**
-   * Add and return an edge between two node u and v in the map. This edge is added in
-   * face f, and e1 and e2 will be predecessor of respectively v and w in the
-   * cycles around v and w. The new face is put into new_face.
-   * This edge is also added in all the super-graph of the map to maintain
-   * the subgraph relation between graphs.
-   * Warning, the edge must be element of the graph hierarchy, thus it must be
-   * element of the root graph.
-   * Warning : One can't add an existing edge to the root graph
+   * Add and return an edge between two node u and v in the map. This edge is
+   * added in face f, and e1 and e2 will be predecessor of respectively v and w
+   * in the cycles around v and w. The new face is put into new_face. This edge
+   * is also added in all the super-graph of the map to maintain the subgraph
+   * relation between graphs. Warning, the edge must be element of the graph
+   * hierarchy, thus it must be element of the root graph. Warning : One can't
+   * add an existing edge to the root graph
    */
-  edge addEdgeMap(const node v, const node w, Face f, const edge e1, const edge e2,
-                  Face new_face = Face());
+  edge addEdgeMap(const node v, const node w, Face f, const edge e1,
+                  const edge e2, Face new_face = Face());
 
   /** Split the face by adding an edge between the two nodes and return the
    * new face. Possibility to specify which will be the new face, by giving a
@@ -125,7 +125,8 @@ public:
   //================================================================================
   /// Return the edge which is the succcessor of an edge in the cycle of a node.
   edge succCycleEdge(const edge, const node) const;
-  /// Return the edge which is the predecessor of an edge in the cycle of a node.
+  /// Return the edge which is the predecessor of an edge in the cycle of a
+  /// node.
   edge predCycleEdge(const edge, const node) const;
   /// Return the node which is the succcessor of a node in the cycle of a node.
   node succCycleNode(const node, const node) const;
@@ -158,8 +159,8 @@ private:
   /**
    * Delete the edge in the map. The new face can be put into a specified face,
    * otherwise, one of the two adjacent faces will be updated.
-   * Warning, the edge must not be an isthm of the map, otherwise the map will be deconnected
-   * and so won't be valid any more.
+   * Warning, the edge must not be an isthm of the map, otherwise the map will
+   * be deconnected and so won't be valid any more.
    */
   void delEdgeMap(edge, Face = Face());
 

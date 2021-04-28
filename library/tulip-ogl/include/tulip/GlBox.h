@@ -23,8 +23,8 @@
 #include <tulip/OpenGlIncludes.h>
 
 #include <tulip/Color.h>
-#include <tulip/Size.h>
 #include <tulip/GlSimpleEntity.h>
+#include <tulip/Size.h>
 
 namespace tlp {
 
@@ -51,9 +51,9 @@ public:
    * @param outlined outline the box ?
    * @param outlineSize The size of the outline
    */
-  GlBox(const Coord &position, const Size &size, const Color &fillColor, const Color &outlineColor,
-        bool filled = true, bool outlined = true, const std::string &textureName = "",
-        float outlineSize = 1.);
+  GlBox(const Coord &position, const Size &size, const Color &fillColor,
+        const Color &outlineColor, bool filled = true, bool outlined = true,
+        const std::string &textureName = "", float outlineSize = 1.);
 
   /**
    * @brief Destructor.
@@ -65,8 +65,9 @@ public:
   /**
    * @brief Draw a GlBox
    */
-  static void draw(const Color &fillColor, const Color &outlineColor, float outlineWidth,
-                   const std::string &textureName, float lod);
+  static void draw(const Color &fillColor, const Color &outlineColor,
+                   float outlineWidth, const std::string &textureName,
+                   float lod);
 
   static Coord getAnchor(const Coord &vector);
 
@@ -143,7 +144,8 @@ public:
   /**
    * @brief Function to set data with inString (in XML format)
    */
-  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
+  void setWithXML(const std::string &inString,
+                  unsigned int &currentPosition) override;
 
 protected:
   virtual void clearGenerated();

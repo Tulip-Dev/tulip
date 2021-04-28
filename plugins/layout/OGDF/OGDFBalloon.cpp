@@ -39,7 +39,8 @@ public:
       "Cone Trees</b> by Carriere and Kazman. ",
       "1.4", "Hierarchical")
   OGDFBalloon(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, context ? new ogdf::ComponentSplitterLayout() : nullptr) {
+      : OGDFLayoutPluginBase(
+            context, context ? new ogdf::ComponentSplitterLayout() : nullptr) {
     addInParameter<bool>("Even angles", paramHelp[0], "false", false);
   }
 

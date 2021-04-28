@@ -22,12 +22,12 @@
 #include "DataSetTest.h"
 
 #include <string>
-#include <tulip/Graph.h>
-#include <tulip/DataSet.h>
-#include <tulip/StringCollection.h>
-#include <tulip/Coord.h>
-#include <tulip/Size.h>
 #include <tulip/Color.h>
+#include <tulip/Coord.h>
+#include <tulip/DataSet.h>
+#include <tulip/Graph.h>
+#include <tulip/Size.h>
+#include <tulip/StringCollection.h>
 
 using namespace std;
 using namespace tlp;
@@ -105,21 +105,13 @@ struct Struct {
     return *this;
   }
 
-  Struct() {
-    ++nbInstances;
-  }
+  Struct() { ++nbInstances; }
 
-  Struct(const std::string &val) : value(val) {
-    ++nbInstances;
-  }
+  Struct(const std::string &val) : value(val) { ++nbInstances; }
 
-  ~Struct() {
-    --nbInstances;
-  }
+  ~Struct() { --nbInstances; }
 
-  Struct(const Struct &st) : value(st.value) {
-    ++nbInstances;
-  }
+  Struct(const Struct &st) : value(st.value) { ++nbInstances; }
 };
 
 unsigned int Struct::nbInstances = 0;

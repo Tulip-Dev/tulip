@@ -29,8 +29,8 @@
 #pragma GCC diagnostic pop
 #endif
 
-#include <tulip/TulipFontAwesome.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TulipFontAwesome.h>
 
 #include <utf8.h>
 
@@ -55,7 +55,8 @@ static void clearFtFaces() {
   ftFaces.clear();
 }
 
-static bool codePointExists(const std::string &fontFile, unsigned int codePoint) {
+static bool codePointExists(const std::string &fontFile,
+                            unsigned int codePoint) {
   const FT_Library *library = FTLibrary::Instance().GetLibrary();
   FT_Face *face;
 
@@ -129,19 +130,25 @@ static void addIconCodePoint(const string &iconName, unsigned int codePoint) {
 std::string TulipFontAwesome::getTTFLocation(const std::string &iconName) {
   if (iconCodePoint.empty())
     initIconCodePoints();
-  return string(tlp::TulipBitmapDir).append(iconFile[iconName.c_str()]).append(".ttf");
+  return string(tlp::TulipBitmapDir)
+      .append(iconFile[iconName.c_str()])
+      .append(".ttf");
 }
 
 std::string TulipFontAwesome::getWOFFLocation(const std::string &iconName) {
   if (iconCodePoint.empty())
     initIconCodePoints();
-  return string(tlp::TulipBitmapDir).append(iconFile[iconName.c_str()]).append(".woff");
+  return string(tlp::TulipBitmapDir)
+      .append(iconFile[iconName.c_str()])
+      .append(".woff");
 }
 
 std::string TulipFontAwesome::getWOFF2Location(const std::string &iconName) {
   if (iconCodePoint.empty())
     initIconCodePoints();
-  return string(tlp::TulipBitmapDir).append(iconFile[iconName.c_str()]).append(".woff2");
+  return string(tlp::TulipBitmapDir)
+      .append(iconFile[iconName.c_str()])
+      .append(".woff2");
 }
 
 bool TulipFontAwesome::isIconSupported(const std::string &iconName) {

@@ -37,23 +37,24 @@
  * NOTES:
  *
  * This work on general graphs.
- * Let n be the number of nodes, the algorithm complexity is in O(n). If the search_cycle is
- * enabled,
- * the complexity is exponential (NP-Complete problem !).
+ * Let n be the number of nodes, the algorithm complexity is in O(n). If the
+ * search_cycle is enabled, the complexity is exponential (NP-Complete problem
+ * !).
  *
  * AUTHORS:
  *
- * David Auber and Romain Bourqui University of Bordeaux France: Email:auber@labri.fr
- * Daniel Archambault The University of British Columbia:
+ * David Auber and Romain Bourqui University of Bordeaux France:
+ * Email:auber@labri.fr Daniel Archambault The University of British Columbia:
  * Email:  archam@cs.ubc.ca
  */
 class Circular : public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATION("Circular", "David Auber/ Daniel Archambault", "25/11/2004",
-                    "Implements a circular layout that takes node size into account.<br>"
-                    "It manages size of nodes and use a standard dfs for ordering nodes or search "
-                    "the maximum length cycle.",
-                    "1.1", "Basic")
+  PLUGININFORMATION(
+      "Circular", "David Auber/ Daniel Archambault", "25/11/2004",
+      "Implements a circular layout that takes node size into account.<br>"
+      "It manages size of nodes and use a standard dfs for ordering nodes or search "
+      "the maximum length cycle.",
+      "1.1", "Basic")
   Circular(const tlp::PluginContext *context);
   bool run() override;
 };

@@ -19,21 +19,23 @@
 
 #include "ZoomUtils.h"
 
-#include <tulip/QtGlSceneZoomAndPanAnimator.h>
-#include <tulip/GlMainWidget.h>
 #include <tulip/Camera.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/QtGlSceneZoomAndPanAnimator.h>
 
 using namespace std;
 
 namespace tlp {
 void zoomOnScreenRegion(GlMainWidget *glWidget, const BoundingBox &boundingBox,
-                        const bool optimalPath, const double velocity, const double p) {
-  QtGlSceneZoomAndPanAnimator animator(glWidget, boundingBox, 1000, "Main", optimalPath, velocity,
-                                       p);
+                        const bool optimalPath, const double velocity,
+                        const double p) {
+  QtGlSceneZoomAndPanAnimator animator(glWidget, boundingBox, 1000, "Main",
+                                       optimalPath, velocity, p);
   animator.animateZoomAndPan();
 }
 
-void zoomOnScreenRegionWithoutAnimation(GlMainWidget *glWidget, const BoundingBox &boundingBox) {
+void zoomOnScreenRegionWithoutAnimation(GlMainWidget *glWidget,
+                                        const BoundingBox &boundingBox) {
   Camera &camera = glWidget->getScene()->getGraphCamera();
   Coord &&bbScreenFirst = camera.worldTo2DViewport(boundingBox[0]);
   Coord &&bbScreenSecond = camera.worldTo2DViewport(boundingBox[1]);

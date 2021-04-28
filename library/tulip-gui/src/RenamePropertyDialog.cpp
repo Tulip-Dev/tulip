@@ -17,14 +17,15 @@
  *
  */
 
-#include <QMessageBox>
 #include <QInputDialog>
+#include <QMessageBox>
 
+#include <tulip/Graph.h>
 #include <tulip/RenamePropertyDialog.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/Graph.h>
 
-bool tlp::RenamePropertyDialog::renameProperty(tlp::PropertyInterface *prop, QWidget *parent) {
+bool tlp::RenamePropertyDialog::renameProperty(tlp::PropertyInterface *prop,
+                                               QWidget *parent) {
   if (prop == nullptr) {
     QMessageBox::critical(parent, "Renaming error", "The property is nullptr");
     return false;
@@ -35,8 +36,10 @@ bool tlp::RenamePropertyDialog::renameProperty(tlp::PropertyInterface *prop, QWi
   while (!valid) {
     QString errorMsg;
     QString pName = QInputDialog::getText(
-        parent, "Renaming property '" + tlp::tlpStringToQString(prop->getName()) + "'",
-        "New name: ", QLineEdit::Normal, tlpStringToQString(prop->getName()), &valid);
+        parent,
+        "Renaming property '" + tlp::tlpStringToQString(prop->getName()) + "'",
+        "New name: ", QLineEdit::Normal, tlpStringToQString(prop->getName()),
+        &valid);
 
     if (!valid)
       return false;
@@ -49,8 +52,8 @@ bool tlp::RenamePropertyDialog::renameProperty(tlp::PropertyInterface *prop, QWi
       errorMsg = "Cannot rename a property with an empty name";
     } else if (prop->getGraph()->existLocalProperty(propertyName)) {
       valid = false;
-      errorMsg =
-          "A local property named '" + tlpStringToQString(propertyName) + "'\n already exists";
+      errorMsg = "A local property named '" + tlpStringToQString(propertyName) +
+                 "'\n already exists";
     }
 
     if (valid) {

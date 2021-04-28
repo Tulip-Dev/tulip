@@ -19,8 +19,8 @@
 #include <list>
 #include <unordered_map>
 
-#include <tulip/GlyphManager.h>
 #include <tulip/Glyph.h>
+#include <tulip/GlyphManager.h>
 #include <tulip/PluginLister.h>
 
 //====================================================
@@ -66,7 +66,8 @@ void GlyphManager::loadGlyphPlugins() {
   }
 }
 
-void GlyphManager::initGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
+void GlyphManager::initGlyphList(Graph **graph,
+                                 GlGraphInputData *glGraphInputData,
                                  MutableContainer<Glyph *> &glyphs) {
   // first destroy current default glyph
   Glyph *defaultGlyph = glyphs.getDefault();
@@ -76,7 +77,8 @@ void GlyphManager::initGlyphList(Graph **graph, GlGraphInputData *glGraphInputDa
 
   // then set a new one
   GlyphContext gc = GlyphContext(graph, glGraphInputData);
-  glyphs.setAll(PluginLister::getPluginObject<Glyph>("3D - Cube OutLined", &gc));
+  glyphs.setAll(
+      PluginLister::getPluginObject<Glyph>("3D - Cube OutLined", &gc));
 
   for (const std::string &glyphName : glyphList) {
     Glyph *newGlyph = PluginLister::getPluginObject<Glyph>(glyphName, &gc);
@@ -84,7 +86,8 @@ void GlyphManager::initGlyphList(Graph **graph, GlGraphInputData *glGraphInputDa
   }
 }
 
-void GlyphManager::clearGlyphList(Graph **, GlGraphInputData *, MutableContainer<Glyph *> &glyphs) {
+void GlyphManager::clearGlyphList(Graph **, GlGraphInputData *,
+                                  MutableContainer<Glyph *> &glyphs) {
 
   for (const std::string &glyphName : glyphList) {
     delete glyphs.get(PluginLister::pluginInformation(glyphName).id());

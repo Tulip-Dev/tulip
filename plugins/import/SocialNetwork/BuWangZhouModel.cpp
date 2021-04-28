@@ -17,10 +17,10 @@
  *
  */
 
-#include <tulip/ImportModule.h>
-#include <tulip/TlpTools.h>
-#include <tulip/PluginProgress.h>
 #include <tulip/Graph.h>
+#include <tulip/ImportModule.h>
+#include <tulip/PluginProgress.h>
+#include <tulip/TlpTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -48,11 +48,12 @@ static const char *paramHelp[] = {
  */
 class BuWangZhouModel : public ImportModule {
 public:
-  PLUGININFORMATION("Bu Wang Zhou Model", "sallaberry", "20/06/2011",
-                    "Randomly generates a scale-free graph unsing the model described "
-                    "in<br/>Shouliang Bu, Bing-Hong Wang, Tao Zhou.<br/><b>Gaining scale-free and "
-                    "high clustering complex networks.</b><br/>Physica A, 374, 864--868, 2007.",
-                    "1.0", "Social network")
+  PLUGININFORMATION(
+      "Bu Wang Zhou Model", "sallaberry", "20/06/2011",
+      "Randomly generates a scale-free graph unsing the model described "
+      "in<br/>Shouliang Bu, Bing-Hong Wang, Tao Zhou.<br/><b>Gaining scale-free and "
+      "high clustering complex networks.</b><br/>Physica A, 374, 864--868, 2007.",
+      "1.0", "Social network")
   BuWangZhouModel(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "200");
     addInParameter<unsigned int>("types of nodes", paramHelp[1], "3");
@@ -83,8 +84,8 @@ public:
     vector<vector<node>> nodes(types_of_nodes);
     graph->reserveNodes(nb_nodes);
 
-    // In the paper, there are 3 types starting from a triangle without telling if the whole graph
-    // or a cycle has to be taken into account.
+    // In the paper, there are 3 types starting from a triangle without telling
+    // if the whole graph or a cycle has to be taken into account.
     for (unsigned int i = 0; i < types_of_nodes; ++i) {
       nodes[i].push_back(graph->addNode());
 
@@ -112,7 +113,8 @@ public:
         k_sum = 0;
         pr_sum = 0;
 
-        for (random_node = 0; random_node < nodes[random_type].size(); random_node++)
+        for (random_node = 0; random_node < nodes[random_type].size();
+             random_node++)
           k_sum += graph->deg(nodes[random_type][random_node]);
 
         pr = tlp::randomDouble();
@@ -123,11 +125,13 @@ public:
           random_node++;
         }
 
-        graph->addEdge(nodes[i % types_of_nodes].back(), nodes[random_type][random_node]);
+        graph->addEdge(nodes[i % types_of_nodes].back(),
+                       nodes[random_type][random_node]);
       }
 
       if (i % 100 == 0) {
-        if (pluginProgress->progress(i, nb_nodes - types_of_nodes) != TLP_CONTINUE)
+        if (pluginProgress->progress(i, nb_nodes - types_of_nodes) !=
+            TLP_CONTINUE)
           return pluginProgress->state() != TLP_CANCEL;
       }
     }

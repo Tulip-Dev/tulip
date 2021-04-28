@@ -26,13 +26,14 @@ const string ColorVectorProperty::propertyTypename = "vector<color>";
 
 class ViewColorCalculator : public AbstractColorProperty::MetaValueCalculator {
 public:
-  void computeMetaValue(AbstractColorProperty *color, node mN, Graph *, Graph *) override {
+  void computeMetaValue(AbstractColorProperty *color, node mN, Graph *,
+                        Graph *) override {
     // meta node color is half opaque white
     color->setNodeValue(mN, Color(255, 255, 255, 127));
   }
 
-  void computeMetaValue(AbstractColorProperty *color, edge mE, Iterator<edge> *itE,
-                        Graph *) override {
+  void computeMetaValue(AbstractColorProperty *color, edge mE,
+                        Iterator<edge> *itE, Graph *) override {
     // meta edge color is the color of the first underlying edge
     color->setEdgeValue(mE, color->getEdgeValue(itE->next()));
   }
@@ -42,35 +43,40 @@ public:
 static ViewColorCalculator vColorCalc;
 
 // Comparison of colors using hsv color space
-// Return 0 if the colors are equal otherwise return -1 if the first object is lower than the second
-// and 1 if the first object is greater than the second.
+// Return 0 if the colors are equal otherwise return -1 if the first object is
+// lower than the second and 1 if the first object is greater than the second.
 static int compareHSVValues(const Color &c1, const Color &c2);
 
 //=================================================================================
-ColorProperty::ColorProperty(Graph *g, const std::string &n) : AbstractColorProperty(g, n) {
+ColorProperty::ColorProperty(Graph *g, const std::string &n)
+    : AbstractColorProperty(g, n) {
   if (n == "viewColor") {
     setMetaValueCalculator(&vColorCalc);
   }
 }
 //=================================================================================
-PropertyInterface *ColorProperty::clonePrototype(Graph *g, const std::string &n) const {
+PropertyInterface *ColorProperty::clonePrototype(Graph *g,
+                                                 const std::string &n) const {
   if (!g)
     return nullptr;
 
   // allow to get an unregistered property (empty name)
-  ColorProperty *p = n.empty() ? new ColorProperty(g) : g->getLocalProperty<ColorProperty>(n);
+  ColorProperty *p =
+      n.empty() ? new ColorProperty(g) : g->getLocalProperty<ColorProperty>(n);
   p->setAllNodeValue(getNodeDefaultValue());
   p->setAllEdgeValue(getEdgeDefaultValue());
   return p;
 }
 //=================================================================================
-PropertyInterface *ColorVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
+PropertyInterface *
+ColorVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
     return nullptr;
 
   // allow to get an unregistered property (empty name)
-  ColorVectorProperty *p =
-      n.empty() ? new ColorVectorProperty(g) : g->getLocalProperty<ColorVectorProperty>(n);
+  ColorVectorProperty *p = n.empty()
+                               ? new ColorVectorProperty(g)
+                               : g->getLocalProperty<ColorVectorProperty>(n);
   p->setAllNodeValue(getNodeDefaultValue());
   p->setAllEdgeValue(getEdgeDefaultValue());
   return p;

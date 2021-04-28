@@ -37,17 +37,11 @@ class OutputPanelButton : public QPushButton {
 public:
   explicit OutputPanelButton(QWidget *parent = nullptr);
 
-  int number() const {
-    return _number;
-  }
+  int number() const { return _number; }
 
-  QString title() const {
-    return _title;
-  }
+  QString title() const { return _title; }
 
-  QColor glowColor() const {
-    return _glowColor;
-  }
+  QColor glowColor() const { return _glowColor; }
 
   QSize sizeHint() const override;
 
@@ -55,13 +49,9 @@ protected:
   void paintEvent(QPaintEvent *) override;
 
 public slots:
-  void setNumber(int number) {
-    _number = number;
-  }
+  void setNumber(int number) { _number = number; }
 
-  void setTitle(QString title) {
-    _title = title;
-  }
+  void setTitle(QString title) { _title = title; }
 
   void setGlowColor(const QColor &color);
 

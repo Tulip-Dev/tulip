@@ -19,8 +19,8 @@
 #ifndef TREETOOLS_H
 #define TREETOOLS_H
 
-#include <tulip/Node.h>
 #include <tulip/LayoutProperty.h>
+#include <tulip/Node.h>
 #include <tulip/SizeProperty.h>
 
 namespace tlp {

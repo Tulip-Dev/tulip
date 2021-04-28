@@ -35,12 +35,13 @@ class Graph;
 /**
  * @see Observable
  *
- * @brief The GraphNeedsSavingObserver class will observe a graph and tells if it has been modified.
+ * @brief The GraphNeedsSavingObserver class will observe a graph and tells if
+ * it has been modified.
  *
  * @li The constructor. Observe the graph given in parameter for modification
  * @li needsSaving. Returns true is the graph has been modified
- * @li saved. The graph has been saved, and the status of the class must be reset. needsSaving will
- * return false if called after saved().
+ * @li saved. The graph has been saved, and the status of the class must be
+ * reset. needsSaving will return false if called after saved().
  * @li savingNeeded. Signal send when the status of the graph evolves.
  *
  */
@@ -64,14 +65,15 @@ public:
   GraphNeedsSavingObserver(Graph *graph, QMainWindow *mainWindow = nullptr);
 
   /**
-   * @brief saved If the graph has been saved, one has to call this method to reset the status of
-   * the graph (it does not need to be saved).
-   * to indicate that the graph does not need to be saved until a new modification.
+   * @brief saved If the graph has been saved, one has to call this method to
+   * reset the status of the graph (it does not need to be saved). to indicate
+   * that the graph does not need to be saved until a new modification.
    */
   void saved();
 
   /**
-   * @brief needsSaving Indicates if the graph has been modified, and thus needs to be saved.
+   * @brief needsSaving Indicates if the graph has been modified, and thus needs
+   * to be saved.
    *
    * @return true if the graph needs to be saved, false otherwise.
    */
@@ -79,8 +81,8 @@ public:
 
   /**
    *
-   * @brief forceToSave Even if there is no modification on the graph, this method can be used to
-   * force to save the graph.
+   * @brief forceToSave Even if there is no modification on the graph, this
+   * method can be used to force to save the graph.
    */
   void forceToSave();
 
@@ -91,8 +93,8 @@ protected:
    * @see Observable
    * @see Observable::treatEvents(const std::vector<Event>&)
    *
-   * @brief treatEvents This function is called when events are sent to Observers, and Observers
-   * only.
+   * @brief treatEvents This function is called when events are sent to
+   * Observers, and Observers only.
    *
    * @param events The events that happened since the last unHoldObservers().
    */
@@ -101,8 +103,8 @@ protected:
 signals:
 
   /**
-   * @brief savingNeeded This signal is sent when the graph needs to be saved (it has been
-   * modified).
+   * @brief savingNeeded This signal is sent when the graph needs to be saved
+   * (it has been modified).
    */
 
   void savingNeeded();

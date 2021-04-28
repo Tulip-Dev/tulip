@@ -25,9 +25,9 @@
 #include <tulip/SystemDefinition.h>
 #include <tulip/TulipRelease.h>
 
-#include <iostream>
-#include <fstream>
 #include <cstring>
+#include <fstream>
+#include <iostream>
 
 #include "CrashHandling.h"
 #include "StackWalker.h"
@@ -36,9 +36,7 @@ using namespace std;
 
 static std::string TULIP_DUMP_FILE = "";
 
-void CrashHandling::setDumpPath(const string &s) {
-  TULIP_DUMP_FILE = s;
-}
+void CrashHandling::setDumpPath(const string &s) { TULIP_DUMP_FILE = s; }
 
 #ifdef _MSC_VER
 
@@ -108,22 +106,27 @@ typedef struct _sig_ucontext {
 
 void dumpStack(int sig, siginfo_t *, void *ucontext) {
 
-  // Get the address at the time the signal was raised from the EIP (x86) or RIP (x86_64)
+  // Get the address at the time the signal was raised from the EIP (x86) or RIP
+  // (x86_64)
 
 #ifndef __APPLE__
 
   sig_ucontext_t *uc = reinterpret_cast<sig_ucontext_t *>(ucontext);
 #if defined(__i386__)
 #ifdef __FreeBSD__
-  void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.mc_eip); // x86 specific;
+  void *callerAddress =
+      reinterpret_cast<void *>(uc->uc_mcontext.mc_eip); // x86 specific;
 #else
-  void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.eip); // x86 specific;
+  void *callerAddress =
+      reinterpret_cast<void *>(uc->uc_mcontext.eip); // x86 specific;
 #endif
 #else
 #ifdef __FreeBSD__
-  void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.mc_rip); // x86_64 specific;
+  void *callerAddress =
+      reinterpret_cast<void *>(uc->uc_mcontext.mc_rip); // x86_64 specific;
 #else
-  void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.rip); // x86_64 specific;
+  void *callerAddress =
+      reinterpret_cast<void *>(uc->uc_mcontext.rip); // x86_64 specific;
 #endif
 #endif
 

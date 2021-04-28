@@ -19,9 +19,9 @@
 #include <atomic>
 
 #include <tulip/ConnectedTest.h>
-#include <tulip/StaticProperty.h>
 #include <tulip/GraphMeasure.h>
 #include <tulip/GraphParallelTools.h>
+#include <tulip/StaticProperty.h>
 
 #include "Eccentricity.h"
 
@@ -54,7 +54,8 @@ EccentricityMetric::EccentricityMetric(const tlp::PluginContext *context)
   addInParameter<bool>("norm", paramHelp[1], "true");
   addInParameter<bool>("directed", paramHelp[2], "false");
   addInParameter<NumericProperty *>("weight", paramHelp[3], "", false);
-  addOutParameter<double>("graph diameter", "The computed diameter (-1 if not computed)", "-1");
+  addOutParameter<double>("graph diameter",
+                          "The computed diameter (-1 if not computed)", "-1");
 }
 //====================================================================
 EccentricityMetric::~EccentricityMetric() {}
@@ -63,7 +64,8 @@ double EccentricityMetric::compute(unsigned int nPos) {
 
   NodeStaticProperty<double> distance(graph);
   distance.setAll(0);
-  double val = tlp::maxDistance(graph, nPos, distance, weight, directed ? DIRECTED : UNDIRECTED);
+  double val = tlp::maxDistance(graph, nPos, distance, weight,
+                                directed ? DIRECTED : UNDIRECTED);
 
   if (!allPaths)
     return val;
@@ -126,7 +128,8 @@ bool EccentricityMetric::run() {
       return;
 
     if (ThreadManager::getThreadNumber() == 0) {
-      if (pluginProgress->progress(i, nbNodes / ThreadManager::getNumberOfThreads()) !=
+      if (pluginProgress->progress(
+              i, nbNodes / ThreadManager::getNumberOfThreads()) !=
           TLP_CONTINUE) {
         stopfor = true;
       }

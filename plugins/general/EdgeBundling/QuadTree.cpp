@@ -17,17 +17,18 @@
  *
  */
 
-#include <tulip/MutableContainer.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/SizeProperty.h>
 #include <tulip/DoubleProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/MutableContainer.h>
+#include <tulip/SizeProperty.h>
 #include <tulip/TulipException.h>
 
 #include "QuadTree.h"
 using namespace tlp;
 using namespace std;
 
-void QuadTreeBundle::compute(Graph *g, double splitRatio, tlp::LayoutProperty *layout,
+void QuadTreeBundle::compute(Graph *g, double splitRatio,
+                             tlp::LayoutProperty *layout,
                              tlp::SizeProperty *size) {
   QuadTreeBundle tmp;
   tmp.splitRatio = splitRatio;
@@ -72,11 +73,13 @@ bool QuadTreeBundle::isIn(const Coord &p, const Coord &a, const Coord &b) {
   return true;
 }
 //=====================================
-void QuadTreeBundle::elmentSplitting(const Coord &a, const Coord &b, const vector<node> &input,
+void QuadTreeBundle::elmentSplitting(const Coord &a, const Coord &b,
+                                     const vector<node> &input,
                                      vector<node> &in, vector<node> &out) {
   if (!((a[0] < b[0]) && (a[1] < b[1])))
-    throw TulipException("2 nodes have the same position.\nTry to apply the \"Fast Overlap "
-                         "Removal\" algorithm before.");
+    throw TulipException(
+        "2 nodes have the same position.\nTry to apply the \"Fast Overlap "
+        "Removal\" algorithm before.");
 
   in.clear();
   out.clear();
@@ -94,8 +97,8 @@ void QuadTreeBundle::elmentSplitting(const Coord &a, const Coord &b, const vecto
 
 static int iii = 0;
 
-void QuadTreeBundle::recQuad(const node a, const node b, const node c, const node d,
-                             const vector<node> &input) {
+void QuadTreeBundle::recQuad(const node a, const node b, const node c,
+                             const node d, const vector<node> &input) {
 
   const Coord &cA = layout->getNodeValue(a);
   const Coord &cC = layout->getNodeValue(c);
@@ -107,7 +110,8 @@ void QuadTreeBundle::recQuad(const node a, const node b, const node c, const nod
   //    return;
   //  }
   //
-  //  if (input.size() == 1) { // && (cA - cC).norm() < (minSize/(splitRatio * 2.)) ) {
+  //  if (input.size() == 1) { // && (cA - cC).norm() < (minSize/(splitRatio
+  //  * 2.)) ) {
   //    graph->addEdge(input[0], a);
   //    graph->addEdge(input[0], b);
   //    graph->addEdge(input[0], c);
@@ -121,7 +125,8 @@ void QuadTreeBundle::recQuad(const node a, const node b, const node c, const nod
     return;
   }
 
-  if ((input.size() == 1) && (cA - cC).norm() < (minSize / (splitRatio * 2.f))) {
+  if ((input.size() == 1) &&
+      (cA - cC).norm() < (minSize / (splitRatio * 2.f))) {
     return;
   }
 

@@ -19,8 +19,7 @@
 
 #ifndef DYNAMICVECTOR_H_
 #define DYNAMICVECTOR_H_
-template <class T>
-class DynamicVector {
+template <class T> class DynamicVector {
 public:
   DynamicVector() : array(nullptr), size(0) {}
 
@@ -33,9 +32,7 @@ public:
     }
   }
 
-  DynamicVector(unsigned int size) : size(size) {
-    array = new T[size];
-  }
+  DynamicVector(unsigned int size) : size(size) { array = new T[size]; }
   virtual ~DynamicVector() {
     if (size != 0)
       delete[] array;
@@ -72,9 +69,7 @@ public:
   inline T dist(const DynamicVector<T> &) const;
   inline T dotProduct(const DynamicVector<T> &) const;
 
-  inline unsigned int getSize() const {
-    return size;
-  }
+  inline unsigned int getSize() const { return size; }
 
 protected:
   T *array;

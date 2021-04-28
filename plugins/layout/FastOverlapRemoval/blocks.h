@@ -20,8 +20,8 @@
 #define LOGFILE "cRectangleOverlap.log"
 #endif
 
-#include <set>
 #include <list>
+#include <set>
 
 namespace vpsc {
 class Block;

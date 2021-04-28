@@ -18,8 +18,8 @@
  */
 
 #include "GeographicViewConfigWidget.h"
-#include "ui_GeographicViewConfigWidget.h"
 #include "GeographicView.h"
+#include "ui_GeographicViewConfigWidget.h"
 
 #include <QFileDialog>
 #include <QMainWindow>
@@ -32,35 +32,36 @@ using namespace std;
 using namespace tlp;
 
 GeographicViewConfigWidget::GeographicViewConfigWidget(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::GeographicViewConfigWidgetData), _oldPolyFileType(None),
-      _oldFileLoaded("") {
+    : QWidget(parent), _ui(new Ui::GeographicViewConfigWidgetData),
+      _oldPolyFileType(None), _oldFileLoaded("") {
   _ui->setupUi(this);
 }
 
-GeographicViewConfigWidget::~GeographicViewConfigWidget() {
-  delete _ui;
-}
+GeographicViewConfigWidget::~GeographicViewConfigWidget() { delete _ui; }
 
 void GeographicViewConfigWidget::openCsvFileBrowser() {
-  _ui->csvFile->setText(
-      QFileDialog::getOpenFileName(Perspective::instance()->mainWindow()->centralWidget(),
-                                   "Open csv file", "./", "cvs file (*.*)"));
+  _ui->csvFile->setText(QFileDialog::getOpenFileName(
+      Perspective::instance()->mainWindow()->centralWidget(), "Open csv file",
+      "./", "cvs file (*.*)"));
 }
 
 void GeographicViewConfigWidget::openPolyFileBrowser() {
-  _ui->polyFile->setText(
-      QFileDialog::getOpenFileName(Perspective::instance()->mainWindow()->centralWidget(),
-                                   "Open .poly file", "./", "Poly file (*.poly)"));
+  _ui->polyFile->setText(QFileDialog::getOpenFileName(
+      Perspective::instance()->mainWindow()->centralWidget(), "Open .poly file",
+      "./", "Poly file (*.poly)"));
 }
 
 void GeographicViewConfigWidget::openCsvHelp() {
-  QMessageBox::about(Perspective::instance()->mainWindow()->centralWidget(), "Map csv file format",
-                     "If you want to import a csv file into this view, your file must be in the "
-                     "format:\nid\tlng\tlat\nid\tlng\tlat\n...\nwith id: id of the polygon");
+  QMessageBox::about(
+      Perspective::instance()->mainWindow()->centralWidget(),
+      "Map csv file format",
+      "If you want to import a csv file into this view, your file must be in the "
+      "format:\nid\tlng\tlat\nid\tlng\tlat\n...\nwith id: id of the polygon");
 }
 
 void GeographicViewConfigWidget::openPolyHelp() {
-  QMessageBox::about(Perspective::instance()->mainWindow()->centralWidget(), "Map poly files",
+  QMessageBox::about(Perspective::instance()->mainWindow()->centralWidget(),
+                     "Map poly files",
                      ".poly files format are an open street map "
                      "format.\nYou can download .poly file on "
                      ":\nhttp://downloads.cloudmade.com/");
@@ -83,7 +84,8 @@ It can be:
 }
 
 void GeographicViewConfigWidget::openTilesAttributionHelp() {
-  QMessageBox::about(Perspective::instance()->mainWindow()->centralWidget(), "Tiles attribution",
+  QMessageBox::about(Perspective::instance()->mainWindow()->centralWidget(),
+                     "Tiles attribution",
                      R"(
 <p>If you need to publish some images produced by the
  <b>Geographic View</b>, these images must display the tiles
@@ -105,7 +107,8 @@ bool GeographicViewConfigWidget::useSharedSizeProperty() const {
   return _ui->sizeCheckBox->isChecked();
 }
 
-GeographicViewConfigWidget::PolyFileType GeographicViewConfigWidget::polyFileType() const {
+GeographicViewConfigWidget::PolyFileType
+GeographicViewConfigWidget::polyFileType() const {
   _ui->mapToPolygon->setEnabled(false);
 
   if (_ui->useDefaultShape->isChecked())
@@ -256,7 +259,8 @@ DataSet GeographicViewConfigWidget::state() const {
   data.set("useSharedSize", useSharedSizeProperty());
   data.set("useSharedShape", useSharedShapeProperty());
   data.set("customTileLayerUrl", QStringToTlpString(getCustomTileLayerUrl()));
-  data.set("customTilesAttribution", QStringToTlpString(getCustomTilesAttribution()));
+  data.set("customTilesAttribution",
+           QStringToTlpString(getCustomTilesAttribution()));
   return data;
 }
 

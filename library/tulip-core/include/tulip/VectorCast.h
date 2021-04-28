@@ -26,7 +26,8 @@
 #include <cassert>
 #include <tulip/Vector.h>
 
-#define TEMPLATEVECTORCAST template <typename Obj, unsigned int SIZE, typename TYPE>
+#define TEMPLATEVECTORCAST                                                     \
+  template <typename Obj, unsigned int SIZE, typename TYPE>
 
 #define VECTORCAST tlp::VectorCast<Obj, SIZE, TYPE>
 
@@ -47,7 +48,8 @@ TEMPLATEVECTORCAST
 class TLP_SCOPE VectorCast : public Vector<Obj, SIZE> {
 public:
   VectorCast() {}
-  inline explicit VectorCast(const tlp::Vector<float, 3> &v) : Vector<Obj, SIZE>(v) {}
+  inline explicit VectorCast(const tlp::Vector<float, 3> &v)
+      : Vector<Obj, SIZE>(v) {}
 
   inline TYPE &operator*=(const Obj obj) {
     return (TYPE &)this->Vector<Obj, SIZE>::operator*=(obj);
@@ -83,27 +85,19 @@ public:
   inline TYPE operator*(const Vector<Obj, SIZE> &v) const {
     return VECTORCAST(*this) *= v;
   }
-  inline TYPE operator*(const Obj v) const {
-    return VECTORCAST(*this) *= v;
-  }
+  inline TYPE operator*(const Obj v) const { return VECTORCAST(*this) *= v; }
   inline TYPE operator+(const Vector<Obj, SIZE> &v) const {
     return VECTORCAST(*this) += v;
   }
-  inline TYPE operator+(const Obj v) const {
-    return VECTORCAST(*this) += v;
-  }
+  inline TYPE operator+(const Obj v) const { return VECTORCAST(*this) += v; }
   inline TYPE operator-(const Vector<Obj, SIZE> &v) const {
     return VECTORCAST(*this) -= v;
   }
-  inline TYPE operator-(const Obj v) const {
-    return VECTORCAST(*this) -= v;
-  }
+  inline TYPE operator-(const Obj v) const { return VECTORCAST(*this) -= v; }
   inline TYPE operator/(const Vector<Obj, SIZE> &v) const {
     return VECTORCAST(*this) /= v;
   }
-  inline TYPE operator/(const Obj v) const {
-    return VECTORCAST(*this) /= v;
-  }
+  inline TYPE operator/(const Obj v) const { return VECTORCAST(*this) /= v; }
   inline TYPE operator^(const Vector<Obj, SIZE> &v) const {
     return VECTORCAST(*this) ^= v;
   }

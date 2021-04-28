@@ -17,8 +17,8 @@
  *
  */
 
-#include <tulip/PlanarityTestImpl.h>
 #include <tulip/Graph.h>
+#include <tulip/PlanarityTestImpl.h>
 
 using namespace std;
 using namespace tlp;
@@ -48,7 +48,8 @@ bool PlanarityTestImpl::listEdgesUpwardT0(node n1, node n2) {
  * - embed_list[cnode] is an embedding of the 2-connected component represented
  *   by "cnode" with "RBC[cnode] contained in the boundary".
  */
-void PlanarityTestImpl::extractBoundaryCycle(Graph *sG, node cNode, list<edge> &listEdges) {
+void PlanarityTestImpl::extractBoundaryCycle(Graph *sG, node cNode,
+                                             list<edge> &listEdges) {
   assert(embedList[cNode].size() != 0);
   unordered_map<node, list<edge>> el;
   BmdListIt<edge> it(embedList[cNode]);
@@ -85,7 +86,8 @@ void PlanarityTestImpl::obstrEdgesTerminal(Graph *G, node w, node t, node u) {
   assert((listEdgesUpwardT0(nodeLabelB.get(t.id), mm)));
   assert(listEdgesUpwardT0(neighborWTerminal.get(t.id), mm));
   assert(listEdgesUpwardT0(mm, u));
-  edge e = G->existEdge(nodeLabelB.get(t.id), nodeWithDfsPos.get(labelB.get(t.id)));
+  edge e =
+      G->existEdge(nodeLabelB.get(t.id), nodeWithDfsPos.get(labelB.get(t.id)));
   assert(e.isValid());
   obstructionEdges.push_back(e);
   e = G->existEdge(neighborWTerminal.get(t.id), w);
@@ -94,10 +96,11 @@ void PlanarityTestImpl::obstrEdgesTerminal(Graph *G, node w, node t, node u) {
 }
 //=================================================================
 /*
- * Adds part of the boundary cycle of "cnode" that contains w1 and doesn't contain
- * path between w2 and w3 to "el".
+ * Adds part of the boundary cycle of "cnode" that contains w1 and doesn't
+ * contain path between w2 and w3 to "el".
  */
-void PlanarityTestImpl::addPartOfBc(Graph *sG, node cNode, node n1, node n2, node n3) {
+void PlanarityTestImpl::addPartOfBc(Graph *sG, node cNode, node n1, node n2,
+                                    node n3) {
   list<edge> bc, el1, el2;
   extractBoundaryCycle(sG, cNode, bc);
   bool flag = false;
@@ -147,12 +150,14 @@ void PlanarityTestImpl::sortByLabelB(node &n1, node &n2, node &n3) {
 void PlanarityTestImpl::obstrEdgesPNode(Graph *sG, node p, node u) {
   (void)u; // fixes unused aprameter in release builds
   assert(listEdgesUpwardT0(nodeLabelB.get(p.id), u));
-  edge e = sG->existEdge(nodeLabelB.get(p.id), nodeWithDfsPos.get(labelB.get(p.id)));
+  edge e =
+      sG->existEdge(nodeLabelB.get(p.id), nodeWithDfsPos.get(labelB.get(p.id)));
   assert(e.isValid());
   obstructionEdges.push_back(e);
 }
 //=================================================================
-void PlanarityTestImpl::calcInfo3Terminals(node &t1, node &t2, node &t3, int &countMin, int &countF,
+void PlanarityTestImpl::calcInfo3Terminals(node &t1, node &t2, node &t3,
+                                           int &countMin, int &countF,
                                            node &cNode, node &q) {
   countMin = countF = 0;
   int min = labelB.get(t1.id);
@@ -235,7 +240,8 @@ void PlanarityTestImpl::calcInfo3Terminals(node &t1, node &t2, node &t3, int &co
   }
 
   // is min a terminal node?
-  if (min == dfsPosNum.get(t1.id) || min == dfsPosNum.get(t2.id) || min == dfsPosNum.get(t3.id)) {
+  if (min == dfsPosNum.get(t1.id) || min == dfsPosNum.get(t2.id) ||
+      min == dfsPosNum.get(t3.id)) {
     if (dfsPosNum.get(k2.id) == min)
       std::swap(k1, k2);
 
@@ -270,7 +276,8 @@ void PlanarityTestImpl::calcInfo3Terminals(node &t1, node &t2, node &t3, int &co
  * - t1, t2 and t3 are terminal nodes;
  * - if parent_cnode != nil then t3 == nil.
  */
-void PlanarityTestImpl::obstructionEdgesT0(Graph *sG, node w, node t1, node t2, node t3, node v) {
+void PlanarityTestImpl::obstructionEdgesT0(Graph *sG, node w, node t1, node t2,
+                                           node t3, node v) {
   if (t3 == NULL_NODE)
     t3 = v;
 
@@ -345,8 +352,8 @@ void PlanarityTestImpl::obstructionEdgesT0(Graph *sG, node w, node t1, node t2, 
 //  *   label_b[v] > dfspos_num[w] and v is not a descendant of cnode;
 //  * - cnode is part of a K_{3,3} obstruction.
 //  */
-void PlanarityTestImpl::obstructionEdgesCountMin1(Graph *sG, node n, node cNode, node t1, node t2,
-                                                  node t3) {
+void PlanarityTestImpl::obstructionEdgesCountMin1(Graph *sG, node n, node cNode,
+                                                  node t1, node t2, node t3) {
   if (t3 == NULL_NODE)
     t3 = parent.get(cNode.id);
 
@@ -354,7 +361,8 @@ void PlanarityTestImpl::obstructionEdgesCountMin1(Graph *sG, node n, node cNode,
   assert(listEdgesUpwardT0(n, nodeWithDfsPos.get(labelB.get(t3.id))));
   addPartOfBc(sG, cNode, t1, t2, t3);
   assert(listEdgesUpwardT0(nodeLabelB.get(t1.id), t1));
-  edge e = sG->existEdge(nodeLabelB.get(t1.id), nodeWithDfsPos.get(labelB.get(t1.id)));
+  edge e = sG->existEdge(nodeLabelB.get(t1.id),
+                         nodeWithDfsPos.get(labelB.get(t1.id)));
   assert(e.isValid());
   obstructionEdges.push_back(e);
 
@@ -380,7 +388,8 @@ void PlanarityTestImpl::obstructionEdgesCountMin1(Graph *sG, node n, node cNode,
 //  *   label_b[v] > dfspos_num[w] and v is not a descendant of cnode;
 //  * - cnode is part of a K_{3,3} obstruction.
 //  */
-void PlanarityTestImpl::obstructionEdgesCountMin23(Graph *sG, node n, node cNode, node t1, node t2,
+void PlanarityTestImpl::obstructionEdgesCountMin23(Graph *sG, node n,
+                                                   node cNode, node t1, node t2,
                                                    node t3, node q, node v) {
   node n1 = t1, n2 = t2, n3 = t3;
 
@@ -422,8 +431,8 @@ void PlanarityTestImpl::obstructionEdgesCountMin23(Graph *sG, node n, node cNode
 //   assert(listEdgesUpwardT0(neighborWTerminal.get(t.id), uu));
 
 //   addPartOfBc(sG, t, parent.get(t.id), u, uu);
-//   edge e = sG->existEdge(nodeLabelB.get(t.id), nodeWithDfsPos.get(labelB.get(t.id)));
-//   assert(e.isValid());
+//   edge e = sG->existEdge(nodeLabelB.get(t.id),
+//   nodeWithDfsPos.get(labelB.get(t.id))); assert(e.isValid());
 //   obstructionEdges.push_back(e);
 //   e = sG->existEdge(neighborWTerminal.get(t.id), w);
 //   assert(e.isValid());
@@ -435,8 +444,8 @@ void PlanarityTestImpl::obstructionEdgesCountMin23(Graph *sG, node n, node cNode
 //  * - t1, t2 and t3 are (p-nodes) terminals in the same c-node;
 //  * - cnode is part of a K_5 obstruction.
 // */
-void PlanarityTestImpl::obstructionEdgesK5(Graph *sG, node w, node cNode, node t1, node t2,
-                                           node t3) {
+void PlanarityTestImpl::obstructionEdgesK5(Graph *sG, node w, node cNode,
+                                           node t1, node t2, node t3) {
   if (t3 == NULL_NODE)
     t3 = parent.get(cNode.id);
 
@@ -458,7 +467,9 @@ void PlanarityTestImpl::obstructionEdgesK5(Graph *sG, node w, node cNode, node t
     obstrEdgesPNode(sG, parent.get(cNode.id), w);
 }
 // //=================================================================
-void PlanarityTestImpl::obstructionEdgesPossibleObstrConfirmed(Graph *sG, node w, node t, node v) {
+void PlanarityTestImpl::obstructionEdgesPossibleObstrConfirmed(Graph *sG,
+                                                               node w, node t,
+                                                               node v) {
   node cNode = cNodeOfPossibleK33Obstruction;
   node f = obstructionNodes.front();
   obstructionNodes.pop_front();
@@ -490,7 +501,8 @@ void PlanarityTestImpl::obstructionEdgesPossibleObstrConfirmed(Graph *sG, node w
   assert(listEdgesUpwardT0(parent.get(cNode.id), m));
   assert(listEdgesUpwardT0(nodeLabelB.get(v.id), m));
 
-  edge e = sG->existEdge(nodeLabelB.get(v.id), nodeWithDfsPos.get(labelB.get(v.id)));
+  edge e =
+      sG->existEdge(nodeLabelB.get(v.id), nodeWithDfsPos.get(labelB.get(v.id)));
   assert(e.isValid());
 
   obstructionEdges.push_back(e);
@@ -513,11 +525,12 @@ void PlanarityTestImpl::obstructionEdgesPossibleObstrConfirmed(Graph *sG, node w
 /*
  * K33
  * Pre-conditions:
- * - for i = 1, 2, if t_i is not nil, then it is a terminal node that is descendant
- * of cnode.
+ * - for i = 1, 2, if t_i is not nil, then it is a terminal node that is
+ * descendant of cnode.
  */
-void PlanarityTestImpl::obstructionEdgesCNodeCounter(Graph *sG, node cNode, node w, node jl,
-                                                     node jr, node t1, node t2) {
+void PlanarityTestImpl::obstructionEdgesCNodeCounter(Graph *sG, node cNode,
+                                                     node w, node jl, node jr,
+                                                     node t1, node t2) {
   //  tlp::debug() << __PRETTY_FUNCTION__ << endl;
   // seachs for a node f in RBC[cNode] between jl and jr s.t.
   // f has a descendant that is a neighbor of w in G;
@@ -537,7 +550,8 @@ void PlanarityTestImpl::obstructionEdgesCNodeCounter(Graph *sG, node cNode, node
 
     if (v == jl || v == jr)
       flag = true;
-    else if (flag && (v == t12 || v == t22 || labelB.get(v.id) == dfsPosNum.get(w.id))) {
+    else if (flag && (v == t12 || v == t22 ||
+                      labelB.get(v.id) == dfsPosNum.get(w.id))) {
       f = v;
       break;
     }
@@ -550,9 +564,11 @@ void PlanarityTestImpl::obstructionEdgesCNodeCounter(Graph *sG, node cNode, node
 
   //#ifdef _DEBUG_MODE_
   // if (f == NULL_NODE) {
-  //     tlp::debug() << "-> Program terminated! (obstruction_edges_cnode_counter-01)";
+  //     tlp::debug() << "-> Program terminated!
+  //     (obstruction_edges_cnode_counter-01)";
   //     tlp::debug()<<"obstruction_edges_cnode_counter:\n";
-  //     tlp::debug()<<"  cnode="<<dfsPosNum.get(cNode.id)<<",f="<<dfsPosNum.get(f.id);
+  //     tlp::debug()<<"
+  //     cnode="<<dfsPosNum.get(cNode.id)<<",f="<<dfsPosNum.get(f.id);
   //     tlp::debug()<<"\n
   //     jl="<<dfsPosNum.get(jl.id)<<",b="<<labelB.get(jl.id)<<",nl="<<dfsPosNum.get(nodeLabelB.get(jl.id).id);
   //     tlp::debug()<<"\n
@@ -574,10 +590,12 @@ void PlanarityTestImpl::obstructionEdgesCNodeCounter(Graph *sG, node cNode, node
   edge e = sG->existEdge(nodeLabelB.get(f.id), w);
   assert(e.isValid());
   obstructionEdges.push_back(e);
-  e = sG->existEdge(nodeLabelB.get(jl.id), nodeWithDfsPos.get(labelB.get(jl.id)));
+  e = sG->existEdge(nodeLabelB.get(jl.id),
+                    nodeWithDfsPos.get(labelB.get(jl.id)));
   assert(e.isValid());
   obstructionEdges.push_back(e);
-  e = sG->existEdge(nodeLabelB.get(jr.id), nodeWithDfsPos.get(labelB.get(jr.id)));
+  e = sG->existEdge(nodeLabelB.get(jr.id),
+                    nodeWithDfsPos.get(labelB.get(jr.id)));
   assert(e.isValid());
   obstructionEdges.push_back(e);
   extractBoundaryCycle(sG, cNode, obstructionEdges);

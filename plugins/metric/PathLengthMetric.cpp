@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <stack>
 #include "PathLengthMetric.h"
+#include <stack>
 
 PLUGIN(PathLengthMetric)
 
@@ -25,7 +25,8 @@ using namespace std;
 using namespace tlp;
 
 //=======================================
-PathLengthMetric::PathLengthMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
+PathLengthMetric::PathLengthMetric(const tlp::PluginContext *context)
+    : DoubleAlgorithm(context) {
   // Leaf metric needed
   addDependency("Leaf", "1.0");
 }
@@ -36,7 +37,8 @@ struct dfsStruct {
   Iterator<node> *outNodes;
   double res;
 
-  dfsStruct(node n, Iterator<node> *nodes) : current(n), outNodes(nodes), res(0.0) {}
+  dfsStruct(node n, Iterator<node> *nodes)
+      : current(n), outNodes(nodes), res(0.0) {}
 };
 //=======================================
 // original recursive algorithm
@@ -52,7 +54,8 @@ struct dfsStruct {
     return res;
   }*/
 //=======================================================================
-double PathLengthMetric::getNodeValue(tlp::node current, tlp::DoubleProperty *leafMetric) {
+double PathLengthMetric::getNodeValue(tlp::node current,
+                                      tlp::DoubleProperty *leafMetric) {
   if (graph->outdeg(current) == 0)
     return 0.0;
 

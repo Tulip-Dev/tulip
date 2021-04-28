@@ -21,7 +21,8 @@
 
 namespace pocore {
 
-PixelOrientedMediator::PixelOrientedMediator(LayoutFunction *layout, ColorFunction *color)
+PixelOrientedMediator::PixelOrientedMediator(LayoutFunction *layout,
+                                             ColorFunction *color)
     : layout(layout), color(color), trans1(new FishEyesScreen()),
       trans2(new UniformDeformationScreen()), centerItem(uint(-1)) {
   zoom = 1.0;
@@ -55,7 +56,8 @@ Vec2i PixelOrientedMediator::sceneToScreen(const pocore::Vec2i &p) {
   return result;
 }
 
-void PixelOrientedMediator::setScreenFunctionsParameters(double zoom, double translationX,
+void PixelOrientedMediator::setScreenFunctionsParameters(double zoom,
+                                                         double translationX,
                                                          double translationY,
                                                          double fishEyeRadius) {
   trans2->setZoom(zoom);
@@ -71,7 +73,8 @@ unsigned int PixelOrientedMediator::getRankForPixelPos(Vec2i pos) {
   return layout->unproject(fPosI);
 }
 
-RGBA PixelOrientedMediator::getColorForPixelAtPos(Vec2i pos, DimensionBase *data,
+RGBA PixelOrientedMediator::getColorForPixelAtPos(Vec2i pos,
+                                                  DimensionBase *data,
                                                   bool withFishEye) {
   RGBA backgroundColor;
   backgroundColor.fill(255);
@@ -84,7 +87,8 @@ RGBA PixelOrientedMediator::getColorForPixelAtPos(Vec2i pos, DimensionBase *data
   unsigned int rank = layout->unproject(fPosI);
 
   if (rank < data->numberOfItems()) {
-    RGBA curColor = color->getColor(data->getItemValueAtRank(rank), data->getItemIdAtRank(rank));
+    RGBA curColor = color->getColor(data->getItemValueAtRank(rank),
+                                    data->getItemIdAtRank(rank));
 
     if (withFishEye) {
       Vec2f fPosIf;

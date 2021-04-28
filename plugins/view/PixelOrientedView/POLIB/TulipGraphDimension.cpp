@@ -19,11 +19,11 @@
 
 #include "TulipGraphDimension.h"
 
+#include <tulip/ConcatIterator.h>
+#include <tulip/ConversionIterator.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/StringProperty.h>
-#include <tulip/ConversionIterator.h>
-#include <tulip/ConcatIterator.h>
 
 #include <set>
 
@@ -77,14 +77,15 @@ double TulipGraphDimension::getNodeValue(const node n) const {
 }
 
 /* not used
-std::string TulipGraphDimension::getItemLabelAtRank(const unsigned int rank) const {
-  node n = nodeSorter->getNodeAtRankForProperty(rank, dimName);
-  string label = graph->getProperty<StringProperty>("viewLabel")->getNodeValue(n);
-  return label;
+std::string TulipGraphDimension::getItemLabelAtRank(const unsigned int rank)
+const { node n = nodeSorter->getNodeAtRankForProperty(rank, dimName); string
+label = graph->getProperty<StringProperty>("viewLabel")->getNodeValue(n); return
+label;
 }
 
 std::string TulipGraphDimension::getItemLabel(const unsigned int itemId) const {
-  string label = graph->getProperty<StringProperty>("viewLabel")->getNodeValue(node(itemId));
+  string label =
+graph->getProperty<StringProperty>("viewLabel")->getNodeValue(node(itemId));
   return label;
 }
 */
@@ -140,9 +141,11 @@ double TulipGraphDimension::maxValue() const {
   }
 }
 
-vector<unsigned int> TulipGraphDimension::links(const unsigned int itemId) const {
+vector<unsigned int>
+TulipGraphDimension::links(const unsigned int itemId) const {
   return iteratorVector(conversionIterator<unsigned int>(
-      concatIterator(graph->getInNodes(node(itemId)), graph->getOutNodes(node(itemId))),
+      concatIterator(graph->getInNodes(node(itemId)),
+                     graph->getOutNodes(node(itemId))),
       [](node n) { return n.id; }));
 }
 } // namespace pocore

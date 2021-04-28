@@ -1,16 +1,16 @@
-#include <tulip/PluginLoaderTxt.h>
-#include <tulip/PluginLibraryLoader.h>
-#include <tulip/GlMainWidget.h>
-#include <tulip/MouseInteractors.h>
-#include <tulip/TlpQtTools.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/StringProperty.h>
 #include <tulip/DoubleProperty.h>
-#include <tulip/IntegerProperty.h>
-#include <tulip/TulipViewSettings.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/MouseInteractors.h>
+#include <tulip/PluginLibraryLoader.h>
+#include <tulip/PluginLoaderTxt.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/TulipViewSettings.h>
 
 #include <QApplication>
 #include <QString>
@@ -37,7 +37,8 @@ Graph *createCompleteTree(int depth, int degree) {
   return graph;
 }
 
-// That function sets some visual properties on a complete tree whose depth equals 5
+// That function sets some visual properties on a complete tree whose depth
+// equals 5
 void setTreeVisualProperties(Graph *tree) {
 
   // First compute a layout, we use the Bubble Tree algorithm
@@ -56,10 +57,12 @@ void setTreeVisualProperties(Graph *tree) {
   }
 
   // Add a border to the nodes, keep the default color who is black
-  DoubleProperty *viewBorderWidth = tree->getProperty<DoubleProperty>("viewBorderWidth");
+  DoubleProperty *viewBorderWidth =
+      tree->getProperty<DoubleProperty>("viewBorderWidth");
   viewBorderWidth->setAllNodeValue(1);
 
-  // Build some maps to set shapes and colors according to the dag level of a node
+  // Build some maps to set shapes and colors according to the dag level of a
+  // node
   std::vector<int> glyphsMap;
   glyphsMap.push_back(tlp::NodeShape::Square);
   glyphsMap.push_back(tlp::NodeShape::Circle);
@@ -106,9 +109,9 @@ void setGraphRenderingParameters(GlGraphComposite *glGraphComposite) {
 
 int main(int argc, char **argv) {
 
-  // A QApplication must always be declared at the beginning of the main function if you intend to
-  // use the tulip-gui library
-  // This must be done before calling tlp::initTulipSoftware()
+  // A QApplication must always be declared at the beginning of the main
+  // function if you intend to use the tulip-gui library This must be done
+  // before calling tlp::initTulipSoftware()
   QApplication app(argc, argv);
 
   // Initialize the library and load all plugins
@@ -126,8 +129,8 @@ int main(int argc, char **argv) {
     }
     g = tlp::loadGraph(QStringToTlpString(filename));
   } else {
-    // If no arguments were given to the command, create a complete tree of depth 5
-    // and degree 2 for demo purpose
+    // If no arguments were given to the command, create a complete tree of
+    // depth 5 and degree 2 for demo purpose
     g = createCompleteTree(5, 2);
     // Set some visual properties in order to visualize the tree
     setTreeVisualProperties(g);
@@ -148,8 +151,8 @@ int main(int argc, char **argv) {
   // Display the widget
   mainWidget->show();
 
-  // Flush event loop in order to let paint events pass through in order for the scene to be
-  // initialized.
+  // Flush event loop in order to let paint events pass through in order for the
+  // scene to be initialized.
   QApplication::processEvents();
 
   // Center the camera and draw the graph

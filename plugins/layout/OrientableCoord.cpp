@@ -17,17 +17,18 @@
  *
  */
 
-#include "OrientableLayout.h"
 #include "OrientableCoord.h"
+#include "OrientableLayout.h"
 
 //====================================================================
-OrientableCoord::OrientableCoord(OrientableLayout *fatherParam, const float x, const float y,
-                                 const float z)
+OrientableCoord::OrientableCoord(OrientableLayout *fatherParam, const float x,
+                                 const float y, const float z)
     : father(fatherParam) {
   set(x, y, z);
 }
 //====================================================================
-OrientableCoord::OrientableCoord(OrientableLayout *fatherParam, const tlp::Coord &v)
+OrientableCoord::OrientableCoord(OrientableLayout *fatherParam,
+                                 const tlp::Coord &v)
     : father(fatherParam) {
   set(v);
 }
@@ -44,51 +45,27 @@ void OrientableCoord::set(const tlp::Coord &coord) {
   tlp::Coord::setZ(coord.getZ());
 }
 //====================================================================
-void OrientableCoord::setX(float x) {
-  (this->*(father->writeX))(x);
-}
+void OrientableCoord::setX(float x) { (this->*(father->writeX))(x); }
 //====================================================================
-void OrientableCoord::setY(float y) {
-  (this->*(father->writeY))(y);
-}
+void OrientableCoord::setY(float y) { (this->*(father->writeY))(y); }
 //====================================================================
-void OrientableCoord::setZ(float z) {
-  (this->*(father->writeZ))(z);
-}
+void OrientableCoord::setZ(float z) { (this->*(father->writeZ))(z); }
 //====================================================================
-float OrientableCoord::getX() const {
-  return (this->*(father->readX))();
-}
+float OrientableCoord::getX() const { return (this->*(father->readX))(); }
 //====================================================================
-float OrientableCoord::getY() const {
-  return (this->*(father->readY))();
-}
+float OrientableCoord::getY() const { return (this->*(father->readY))(); }
 //====================================================================
-float OrientableCoord::getZ() const {
-  return (this->*(father->readZ))();
-}
+float OrientableCoord::getZ() const { return (this->*(father->readZ))(); }
 //====================================================================
-void OrientableCoord::setInvertedX(float x) {
-  tlp::Coord::setX(-x);
-}
+void OrientableCoord::setInvertedX(float x) { tlp::Coord::setX(-x); }
 //====================================================================
-void OrientableCoord::setInvertedY(float y) {
-  tlp::Coord::setY(-y);
-}
+void OrientableCoord::setInvertedY(float y) { tlp::Coord::setY(-y); }
 //====================================================================
-void OrientableCoord::setInvertedZ(float z) {
-  tlp::Coord::setZ(-z);
-}
+void OrientableCoord::setInvertedZ(float z) { tlp::Coord::setZ(-z); }
 //====================================================================
-float OrientableCoord::getInvertedX() const {
-  return -tlp::Coord::getX();
-}
+float OrientableCoord::getInvertedX() const { return -tlp::Coord::getX(); }
 //====================================================================
-float OrientableCoord::getInvertedY() const {
-  return -tlp::Coord::getY();
-}
+float OrientableCoord::getInvertedY() const { return -tlp::Coord::getY(); }
 //====================================================================
-float OrientableCoord::getInvertedZ() const {
-  return -tlp::Coord::getZ();
-}
+float OrientableCoord::getInvertedZ() const { return -tlp::Coord::getZ(); }
 //====================================================================

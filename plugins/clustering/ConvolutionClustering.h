@@ -23,8 +23,8 @@
 
 #include <tulip/TulipPluginHeaders.h>
 
-/** This plugin allow the discretization and the filtering of the distribution of
- * a node metric using convolution.
+/** This plugin allow the discretization and the filtering of the distribution
+ * of a node metric using convolution.
  *
  * A detailed usage of this procedure is detailed in:
  *

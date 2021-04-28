@@ -17,23 +17,19 @@
  *
  */
 
-#include <tulip/tulipconf.h>
 #include <tulip/TulipRelease.h>
+#include <tulip/tulipconf.h>
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
 using namespace std;
 
 static std::ostream *debugStream = nullptr;
 static bool warningAllowed = true;
 
-std::ostream &tlp::debug() {
-  return debugStream ? *debugStream : std::cout;
-}
-void tlp::setDebugOutput(std::ostream &os) {
-  debugStream = &os;
-}
+std::ostream &tlp::debug() { return debugStream ? *debugStream : std::cout; }
+void tlp::setDebugOutput(std::ostream &os) { debugStream = &os; }
 
 static std::ostream *warningStream = nullptr;
 std::ostream &tlp::warning() {
@@ -52,21 +48,11 @@ void tlp::setWarningOutput(std::ostream &os) {
   warningStream = &os;
   warningAllowed = true;
 }
-void tlp::enableWarningOutput(bool flag) {
-  warningAllowed = flag;
-}
-bool tlp::isWarningOutputEnabled() {
-  return warningAllowed;
-}
+void tlp::enableWarningOutput(bool flag) { warningAllowed = flag; }
+bool tlp::isWarningOutputEnabled() { return warningAllowed; }
 
 static std::ostream *errorStream = nullptr;
-std::ostream &tlp::error() {
-  return errorStream ? *errorStream : std::cerr;
-}
-void tlp::setErrorOutput(std::ostream &os) {
-  errorStream = &os;
-}
+std::ostream &tlp::error() { return errorStream ? *errorStream : std::cerr; }
+void tlp::setErrorOutput(std::ostream &os) { errorStream = &os; }
 
-std::string tlp::getTulipVersion() {
-  return TULIP_VERSION;
-}
+std::string tlp::getTulipVersion() { return TULIP_VERSION; }

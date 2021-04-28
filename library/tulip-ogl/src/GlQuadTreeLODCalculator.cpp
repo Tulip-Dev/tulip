@@ -20,27 +20,27 @@
 
 #include <tulip/GlQuadTreeLODCalculator.h>
 
-#include <tulip/Matrix.h>
-#include <tulip/QuadTree.h>
-#include <tulip/GlGraphInputData.h>
 #include <tulip/Camera.h>
-#include <tulip/GlEntity.h>
-#include <tulip/GlTools.h>
-#include <tulip/GlScene.h>
-#include <tulip/GlNode.h>
 #include <tulip/GlEdge.h>
+#include <tulip/GlEntity.h>
+#include <tulip/GlGraphInputData.h>
+#include <tulip/GlNode.h>
+#include <tulip/GlScene.h>
 #include <tulip/GlSceneObserver.h>
+#include <tulip/GlTools.h>
+#include <tulip/Matrix.h>
 #include <tulip/ParallelTools.h>
+#include <tulip/QuadTree.h>
 
 using namespace std;
 
 namespace tlp {
 
-/*BoundingBox computeNewBoundingBox(const BoundingBox &box, const Coord &centerScene, double aX,
-                                  double aY) {
-  // compute a new bounding box : this bounding box is the rotation of the old bounding box
-  Coord &&size = (box[1] - box[0]) / 2.f;
-  Coord &&center = box[0] + size;
+/*BoundingBox computeNewBoundingBox(const BoundingBox &box, const Coord
+  &centerScene, double aX, double aY) {
+  // compute a new bounding box : this bounding box is the rotation of the old
+  bounding box Coord &&size = (box[1] - box[0]) / 2.f; Coord &&center = box[0] +
+  size;
   // size = Coord(size.norm(),size.norm(),size.norm());
   size.fill(size.norm());
   center[0] = centerScene[0] + (cos(aY) * (center[0] - centerScene[0]));
@@ -53,7 +53,8 @@ GlQuadTreeLODCalculator::GlQuadTreeLODCalculator()
     : haveToCompute(true), haveToInitObservers(true),
       seBBIndex(2 * ThreadManager::getNumberOfThreads()),
       eBBOffset(ThreadManager::getNumberOfThreads()), currentGraph(nullptr),
-      layoutProperty(nullptr), sizeProperty(nullptr), selectionProperty(nullptr) {
+      layoutProperty(nullptr), sizeProperty(nullptr),
+      selectionProperty(nullptr) {
   threadSafe = true;
   // we have to deal with
   // ThreadManager::getNumberOfThreads() bounding boxes for nodes
@@ -84,7 +85,8 @@ void GlQuadTreeLODCalculator::setScene(GlScene &scene) {
   GlLODCalculator::setScene(scene);
 }
 
-void GlQuadTreeLODCalculator::setInputData(const GlGraphInputData *newInputData) {
+void GlQuadTreeLODCalculator::setInputData(
+    const GlGraphInputData *newInputData) {
   setHaveToCompute();
 
   if (newInputData == nullptr) {
@@ -122,7 +124,8 @@ bool GlQuadTreeLODCalculator::needEntities() {
     return true;
   }
 
-  // Check if a camera have changed (diff between old backup camera and current camera)
+  // Check if a camera have changed (diff between old backup camera and current
+  // camera)
   for (auto &it : layerToCamera) {
     if (it.first->getCamera().is3D()) {
       Camera &camera = it.first->getCamera();
@@ -148,7 +151,8 @@ bool GlQuadTreeLODCalculator::needEntities() {
     GlGraphRenderingParameters *newParameters = inputData->parameters;
 
     if (oldParameters.isDisplayEdges() != newParameters->isDisplayEdges() ||
-        oldParameters.isDisplayMetaNodes() != newParameters->isDisplayMetaNodes() ||
+        oldParameters.isDisplayMetaNodes() !=
+            newParameters->isDisplayMetaNodes() ||
         oldParameters.isDisplayNodes() != newParameters->isDisplayNodes() ||
         oldParameters.isViewNodeLabel() != newParameters->isViewNodeLabel() ||
         oldParameters.isViewEdgeLabel() != newParameters->isViewEdgeLabel() ||
@@ -162,12 +166,10 @@ bool GlQuadTreeLODCalculator::needEntities() {
   return false;
 }
 
-void GlQuadTreeLODCalculator::setNeedEntities(bool) {
-  setHaveToCompute();
-}
+void GlQuadTreeLODCalculator::setNeedEntities(bool) { setHaveToCompute(); }
 
-void GlQuadTreeLODCalculator::addSimpleEntityBoundingBox(GlSimpleEntity *entity,
-                                                         const BoundingBox &bb) {
+void GlQuadTreeLODCalculator::addSimpleEntityBoundingBox(
+    GlSimpleEntity *entity, const BoundingBox &bb) {
   // same check as in GlCPULODCalculator::addSimpleEntityBoundingBox
   if (bb[0][0] != numeric_limits<float>::min()) {
     bbs[seBBIndex].expand(bb, noBBCheck[seBBIndex]);
@@ -176,7 +178,8 @@ void GlQuadTreeLODCalculator::addSimpleEntityBoundingBox(GlSimpleEntity *entity,
   currentLayerLODUnit->simpleEntitiesLODVector.emplace_back(entity, bb);
 }
 
-void GlQuadTreeLODCalculator::addEdgeBoundingBox(unsigned int id, unsigned int pos,
+void GlQuadTreeLODCalculator::addEdgeBoundingBox(unsigned int id,
+                                                 unsigned int pos,
                                                  const BoundingBox &bb) {
   auto ti = eBBOffset + ThreadManager::getThreadNumber();
   bbs[ti].expand(bb, noBBCheck[ti]);
@@ -218,7 +221,8 @@ void GlQuadTreeLODCalculator::compute(const Vector<int, 4> &globalViewport,
     entitiesQuadTree.clear();
 
     quadTreesVectorPosition = 0;
-    const vector<pair<std::string, GlLayer *>> &layersVector = glScene->getLayersList();
+    const vector<pair<std::string, GlLayer *>> &layersVector =
+        glScene->getLayersList();
 
     cameras.reserve(layersLODVector.size());
 
@@ -247,9 +251,10 @@ void GlQuadTreeLODCalculator::compute(const Vector<int, 4> &globalViewport,
 
       if (camera->is3D()) {
         currentCamera = camera;
-        eye = camera->getEyes() +
-              (camera->getEyes() - camera->getCenter()) / float(camera->getZoomFactor());
-        computeFor3DCamera(&it, eye, transformMatrix, globalViewport, currentViewport);
+        eye = camera->getEyes() + (camera->getEyes() - camera->getCenter()) /
+                                      float(camera->getZoomFactor());
+        computeFor3DCamera(&it, eye, transformMatrix, globalViewport,
+                           currentViewport);
         quadTreesVectorPosition++;
       } else {
         simpleEntities.emplace_back(it.simpleEntitiesLODVector);
@@ -283,12 +288,14 @@ void GlQuadTreeLODCalculator::compute(const Vector<int, 4> &globalViewport,
 
       if (camera->is3D()) {
         currentCamera = camera;
-        eye = camera->getEyes() +
-              (camera->getEyes() - camera->getCenter()) / float(camera->getZoomFactor());
-        computeFor3DCamera(layerLODUnit, eye, transformMatrix, globalViewport, currentViewport);
+        eye = camera->getEyes() + (camera->getEyes() - camera->getCenter()) /
+                                      float(camera->getZoomFactor());
+        computeFor3DCamera(layerLODUnit, eye, transformMatrix, globalViewport,
+                           currentViewport);
         quadTreesVectorPosition++;
       } else {
-        layerLODUnit->simpleEntitiesLODVector = simpleEntities[simpleEntitiesVectorPosition];
+        layerLODUnit->simpleEntitiesLODVector =
+            simpleEntities[simpleEntitiesVectorPosition];
         computeFor2DCamera(layerLODUnit, globalViewport, currentViewport);
         simpleEntitiesVectorPosition++;
       }
@@ -296,10 +303,11 @@ void GlQuadTreeLODCalculator::compute(const Vector<int, 4> &globalViewport,
   }
 }
 
-void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, const Coord &eye,
-                                                 const Matrix<float, 4> &transformMatrix,
-                                                 const Vector<int, 4> &globalViewport,
-                                                 const Vector<int, 4> &currentViewport) {
+void GlQuadTreeLODCalculator::computeFor3DCamera(
+    LayerLODUnit *layerLODUnit, const Coord &eye,
+    const Matrix<float, 4> &transformMatrix,
+    const Vector<int, 4> &globalViewport,
+    const Vector<int, 4> &currentViewport) {
 
   // aX,aY : rotation on the camera in x and y
   Coord &&eyeCenter = currentCamera->getCenter() - currentCamera->getEyes();
@@ -309,7 +317,8 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
   if (haveToCompute) {
     // Create quadtrees
     if (noBBCheck[seBBIndex]) // is bb for simple entities valid
-      entitiesQuadTree.push_back(new QuadTreeNode<GlSimpleEntity *>(bbs[seBBIndex]));
+      entitiesQuadTree.push_back(
+          new QuadTreeNode<GlSimpleEntity *>(bbs[seBBIndex]));
     else
       entitiesQuadTree.push_back(nullptr);
 
@@ -329,7 +338,8 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
           bb.expand(bbs[i], true);
       }
 
-      nodesQuadTree.push_back(new QuadTreeNode<std::pair<unsigned int, unsigned int>>(bb));
+      nodesQuadTree.push_back(
+          new QuadTreeNode<std::pair<unsigned int, unsigned int>>(bb));
     } else {
       nodesQuadTree.push_back(nullptr);
     }
@@ -350,7 +360,8 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
           bb.expand(bbs[i], true);
       }
 
-      edgesQuadTree.push_back(new QuadTreeNode<std::pair<unsigned int, unsigned int>>(bb));
+      edgesQuadTree.push_back(
+          new QuadTreeNode<std::pair<unsigned int, unsigned int>>(bb));
     } else {
       edgesQuadTree.push_back(nullptr);
     }
@@ -362,28 +373,30 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
     auto thrdF1 = [&]() {
       for (size_t i = 0; i < nbSimples; ++i) {
         const auto &entity = layerLODUnit->simpleEntitiesLODVector[i];
-        entitiesQuadTree[quadTreesVectorPosition]->insert(entity.boundingBox, entity.entity);
+        entitiesQuadTree[quadTreesVectorPosition]->insert(entity.boundingBox,
+                                                          entity.entity);
       }
     };
     auto thrdF2 = [&]() {
       for (size_t i = 0; i < nbNodes; ++i) {
         const auto &entity = layerLODUnit->nodesLODVector[i];
-        nodesQuadTree[quadTreesVectorPosition]->insert(entity.boundingBox,
-                                                       std::make_pair(entity.id, entity.pos));
+        nodesQuadTree[quadTreesVectorPosition]->insert(
+            entity.boundingBox, std::make_pair(entity.id, entity.pos));
       }
     };
     auto thrdF3 = [&]() {
       for (size_t i = 0; i < nbEdges; ++i) {
-        // This code is here to expand edge bounding box when we have an edge with direction
-        // (0,0,x)
+        // This code is here to expand edge bounding box when we have an edge
+        // with direction (0,0,x)
         auto &entity = layerLODUnit->edgesLODVector[i];
         if (entity.boundingBox[0][0] == entity.boundingBox[1][0] &&
             entity.boundingBox[0][1] == entity.boundingBox[1][1]) {
-          entity.boundingBox.expand(entity.boundingBox[1] + Coord(0.01f, 0.01f, 0));
+          entity.boundingBox.expand(entity.boundingBox[1] +
+                                    Coord(0.01f, 0.01f, 0));
         }
 
-        edgesQuadTree[quadTreesVectorPosition]->insert(entity.boundingBox,
-                                                       std::make_pair(entity.id, entity.pos));
+        edgesQuadTree[quadTreesVectorPosition]->insert(
+            entity.boundingBox, std::make_pair(entity.id, entity.pos));
       }
     };
     TLP_PARALLEL_SECTIONS(thrdF1, thrdF2, thrdF3);
@@ -398,20 +411,25 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
   Coord &&pSrc = projectPoint(Coord(0, 0, 0), transformMatrix, globalViewport);
 
   Vector<int, 4> transformedViewport = currentViewport;
-  transformedViewport[1] = globalViewport[3] - (currentViewport[1] + currentViewport[3]);
+  transformedViewport[1] =
+      globalViewport[3] - (currentViewport[1] + currentViewport[3]);
 
   // Project camera bondinx box to know visible part of the quadtree
   pSrc[0] = transformedViewport[0];
-  pSrc[1] =
-      (globalViewport[1] + globalViewport[3]) - (transformedViewport[1] + transformedViewport[3]);
+  pSrc[1] = (globalViewport[1] + globalViewport[3]) -
+            (transformedViewport[1] + transformedViewport[3]);
   BoundingBox cameraBoundingBox;
-  cameraBoundingBox.init(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
+  cameraBoundingBox.init(
+      unprojectPoint(pSrc, invTransformMatrix, globalViewport));
   pSrc[1] = transformedViewport[1] + transformedViewport[3];
-  cameraBoundingBox.expand(unprojectPoint(pSrc, invTransformMatrix, globalViewport), true);
+  cameraBoundingBox.expand(
+      unprojectPoint(pSrc, invTransformMatrix, globalViewport), true);
   pSrc[0] = transformedViewport[0] + transformedViewport[2];
-  cameraBoundingBox.expand(unprojectPoint(pSrc, invTransformMatrix, globalViewport), true);
+  cameraBoundingBox.expand(
+      unprojectPoint(pSrc, invTransformMatrix, globalViewport), true);
   pSrc[1] = transformedViewport[1];
-  cameraBoundingBox.expand(unprojectPoint(pSrc, invTransformMatrix, globalViewport), true);
+  cameraBoundingBox.expand(
+      unprojectPoint(pSrc, invTransformMatrix, globalViewport), true);
 
   int ratio;
 
@@ -467,7 +485,8 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
       if (quadTree) {
         if (aX == 0 && aY == 0) {
           if ((renderingEntitiesFlag & RenderingWithoutRemove) == 0)
-            quadTree->getElementsWithRatio(cameraBoundingBox, resEntities, ratio);
+            quadTree->getElementsWithRatio(cameraBoundingBox, resEntities,
+                                           ratio);
           else
             quadTree->getElements(cameraBoundingBox, resEntities);
         } else {
@@ -477,24 +496,26 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
     }
     size_t nbRes = resEntities.size();
     for (size_t i = 0; i < nbRes; ++i) {
-      layerLODUnit->simpleEntitiesLODVector.emplace_back(resEntities[i],
-                                                         resEntities[i]->getBoundingBox());
+      layerLODUnit->simpleEntitiesLODVector.emplace_back(
+          resEntities[i], resEntities[i]->getBoundingBox());
     }
   };
   TLP_PARALLEL_SECTIONS(thrdF1, thrdF2, thrdF3);
   TLP_PARALLEL_MAP_INDICES(resNodes.size(), [&](unsigned int i) {
     const auto &res = resNodes[i];
     GlNode glNode(res.first, res.second);
-    layerLODUnit->nodesLODVector[i].init(res.first, res.second, glNode.getBoundingBox(inputData));
+    layerLODUnit->nodesLODVector[i].init(res.first, res.second,
+                                         glNode.getBoundingBox(inputData));
   });
   TLP_PARALLEL_MAP_INDICES(resEdges.size(), [&](unsigned int i) {
     const auto &res = resEdges[i];
     GlEdge glEdge(res.first, res.second);
-    layerLODUnit->edgesLODVector[i].init(res.first, res.second, glEdge.getBoundingBox(inputData));
+    layerLODUnit->edgesLODVector[i].init(res.first, res.second,
+                                         glEdge.getBoundingBox(inputData));
   });
 
-  GlCPULODCalculator::computeFor3DCamera(layerLODUnit, eye, transformMatrix, globalViewport,
-                                         currentViewport);
+  GlCPULODCalculator::computeFor3DCamera(layerLODUnit, eye, transformMatrix,
+                                         globalViewport, currentViewport);
 }
 
 void GlQuadTreeLODCalculator::removeObservers() {
@@ -551,7 +572,8 @@ void GlQuadTreeLODCalculator::addObservers() {
 }
 
 void GlQuadTreeLODCalculator::update(PropertyInterface *property) {
-  if (property == inputData->getElementLayout() || property == inputData->getElementSize() ||
+  if (property == inputData->getElementLayout() ||
+      property == inputData->getElementSize() ||
       property == inputData->getElementSelected())
     setHaveToCompute();
 }
@@ -577,7 +599,8 @@ void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
       const PropertyInterface *property =
           inputData->getGraph()->getProperty(graphEvent->getPropertyName());
 
-      if (property == inputData->getElementLayout() || property == inputData->getElementSize()) {
+      if (property == inputData->getElementLayout() ||
+          property == inputData->getElementSize()) {
         setHaveToCompute();
         removeObservers();
         addObservers();
@@ -590,7 +613,8 @@ void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
       break;
     }
   } else if (typeid(ev) == typeid(PropertyEvent)) {
-    const PropertyEvent *propertyEvent = static_cast<const PropertyEvent *>(&ev);
+    const PropertyEvent *propertyEvent =
+        static_cast<const PropertyEvent *>(&ev);
     PropertyInterface *property = propertyEvent->getProperty();
 
     switch (propertyEvent->getType()) {

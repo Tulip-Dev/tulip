@@ -24,11 +24,11 @@
 
 #include <tulip/tulipconf.h>
 
-#include <QObject>
 #include <QByteArray>
 #include <QNetworkAccessManager>
-#include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QObject>
 
 namespace tlp {
 

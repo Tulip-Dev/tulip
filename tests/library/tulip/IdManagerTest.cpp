@@ -35,7 +35,8 @@ void IdManagerTest::testFragmentation() {
     idManager->free(i);
   }
 
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(99), idManager->state.freeIds.size());
+  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(99),
+                       idManager->state.freeIds.size());
   idManager->free(0);
   CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), idManager->state.freeIds.size());
 
@@ -43,9 +44,11 @@ void IdManagerTest::testFragmentation() {
     idManager->free(i);
   }
 
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(99), idManager->state.freeIds.size());
+  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(99),
+                       idManager->state.freeIds.size());
   idManager->free(999);
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(100), idManager->state.freeIds.size());
+  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(100),
+                       idManager->state.freeIds.size());
 }
 //==========================================================
 void IdManagerTest::testGetFree() {

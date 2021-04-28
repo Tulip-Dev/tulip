@@ -17,8 +17,8 @@
  *
  */
 
-#include <string>
 #include <iostream>
+#include <string>
 
 #include "IntegerPropertyMinMaxUptodateTest.h"
 
@@ -42,33 +42,37 @@ void IntegerPropertyMinMaxUpdateTest::setUp() {
   graph = newGraph();
   graph->getLocalProperty<IntegerProperty>(integerPropertyName);
   n1 = graph->addNode();
-  graph->getLocalProperty<IntegerProperty>(integerPropertyName)->setNodeValue(n1, originalMin);
+  graph->getLocalProperty<IntegerProperty>(integerPropertyName)
+      ->setNodeValue(n1, originalMin);
 
   n2 = graph->addNode();
-  graph->getLocalProperty<IntegerProperty>(integerPropertyName)->setNodeValue(n2, 6);
+  graph->getLocalProperty<IntegerProperty>(integerPropertyName)
+      ->setNodeValue(n2, 6);
 
   n3 = graph->addNode();
-  graph->getLocalProperty<IntegerProperty>(integerPropertyName)->setNodeValue(n3, 7);
+  graph->getLocalProperty<IntegerProperty>(integerPropertyName)
+      ->setNodeValue(n3, 7);
 
   n4 = graph->addNode();
-  graph->getLocalProperty<IntegerProperty>(integerPropertyName)->setNodeValue(n4, originalMax);
+  graph->getLocalProperty<IntegerProperty>(integerPropertyName)
+      ->setNodeValue(n4, originalMax);
 }
 
-void IntegerPropertyMinMaxUpdateTest::tearDown() {
-  delete graph;
-}
+void IntegerPropertyMinMaxUpdateTest::tearDown() { delete graph; }
 
 void IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMinUpdate() {
-  IntegerProperty *integerProperty = graph->getProperty<IntegerProperty>(integerPropertyName);
+  IntegerProperty *integerProperty =
+      graph->getProperty<IntegerProperty>(integerPropertyName);
   int minNode;
 
   minNode = integerProperty->getNodeMin();
-  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty min value before update", originalMin,
-                               minNode);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty min value before update",
+                               originalMin, minNode);
 
   integerProperty->setNodeValue(n1, newMin);
   minNode = integerProperty->getNodeMin();
-  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty min value after update", newMin, minNode);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty min value after update",
+                               newMin, minNode);
 
   Graph *subGraph = graph->addSubGraph();
   node n2 = subGraph->addNode();
@@ -87,16 +91,19 @@ void IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMinUpdate() {
 }
 
 void IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMaxUpdate() {
-  IntegerProperty *integerProperty = graph->getProperty<IntegerProperty>(integerPropertyName);
+  IntegerProperty *integerProperty =
+      graph->getProperty<IntegerProperty>(integerPropertyName);
   int maxNode;
 
   maxNode = integerProperty->getNodeMax();
-  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty max value before update", originalMax,
-                               maxNode);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty max value before update",
+                               originalMax, maxNode);
 
   integerProperty->setNodeValue(n4, newMax);
-  maxNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)->getNodeMax();
-  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty max value after update", newMax, maxNode);
+  maxNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)
+                ->getNodeMax();
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty max value after update",
+                               newMax, maxNode);
 
   Graph *subGraph = graph->addSubGraph();
   node n2 = subGraph->addNode();
@@ -117,25 +124,31 @@ void IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMaxUpdate() {
 void IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMinUpdateFromString() {
   int minNode;
 
-  minNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)->getNodeMin();
-  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty min value before update", originalMin,
-                               minNode);
+  minNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)
+                ->getNodeMin();
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty min value before update",
+                               originalMin, minNode);
 
   graph->getLocalProperty<IntegerProperty>(integerPropertyName)
       ->setNodeStringValue(n1, newStringMin);
-  minNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)->getNodeMin();
-  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty min value after update", newMin, minNode);
+  minNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)
+                ->getNodeMin();
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty min value after update",
+                               newMin, minNode);
 }
 
 void IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMaxUpdateFromString() {
   int maxNode;
 
-  maxNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)->getNodeMax();
-  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty max value before update", originalMax,
-                               maxNode);
+  maxNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)
+                ->getNodeMax();
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty max value before update",
+                               originalMax, maxNode);
 
   graph->getLocalProperty<IntegerProperty>(integerPropertyName)
       ->setNodeStringValue(n4, newStringMax);
-  maxNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)->getNodeMax();
-  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty max value after update", newMax, maxNode);
+  maxNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)
+                ->getNodeMax();
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty max value after update",
+                               newMax, maxNode);
 }

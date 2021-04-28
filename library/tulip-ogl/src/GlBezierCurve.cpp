@@ -60,31 +60,35 @@ namespace tlp {
 GlBezierCurve::GlBezierCurve()
     : AbstractGlCurve("bezier vertex shader", bezierSpecificVertexShaderSrc) {}
 
-GlBezierCurve::GlBezierCurve(const vector<Coord> &controlPoints, const Color &startColor,
-                             const Color &endColor, const float &startSize, const float &endSize,
+GlBezierCurve::GlBezierCurve(const vector<Coord> &controlPoints,
+                             const Color &startColor, const Color &endColor,
+                             const float &startSize, const float &endSize,
                              const unsigned int nbCurvePoints)
-    : AbstractGlCurve("bezier vertex shader", bezierSpecificVertexShaderSrc, controlPoints,
-                      startColor, endColor, startSize, endSize, nbCurvePoints) {}
+    : AbstractGlCurve("bezier vertex shader", bezierSpecificVertexShaderSrc,
+                      controlPoints, startColor, endColor, startSize, endSize,
+                      nbCurvePoints) {}
 
 GlBezierCurve::~GlBezierCurve() {}
 
-void GlBezierCurve::computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints,
-                                            std::vector<Coord> &curvePoints,
-                                            unsigned int nbCurvePoints) {
+void GlBezierCurve::computeCurvePointsOnCPU(
+    const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints,
+    unsigned int nbCurvePoints) {
   computeBezierPoints(controlPoints, curvePoints, nbCurvePoints);
 }
 
-Coord GlBezierCurve::computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t) {
+Coord GlBezierCurve::computeCurvePointOnCPU(
+    const std::vector<Coord> &controlPoints, float t) {
   return computeBezierPoint(controlPoints, t);
 }
 
-void GlBezierCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &startColor,
-                              const Color &endColor, const float startSize, const float endSize,
+void GlBezierCurve::drawCurve(std::vector<Coord> &controlPoints,
+                              const Color &startColor, const Color &endColor,
+                              const float startSize, const float endSize,
                               const unsigned int nbCurvePoints) {
 
   if (controlPoints.size() <= CONTROL_POINTS_LIMIT) {
-    AbstractGlCurve::drawCurve(controlPoints, startColor, endColor, startSize, endSize,
-                               nbCurvePoints);
+    AbstractGlCurve::drawCurve(controlPoints, startColor, endColor, startSize,
+                               endSize, nbCurvePoints);
   } else {
 
     static GlCatmullRomCurve curve;
@@ -98,7 +102,8 @@ void GlBezierCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &st
     curve.setTexture(texture);
     curve.setBillboardCurve(billboardCurve);
     curve.setLookDir(lookDir);
-    curve.drawCurve(curvePoints, startColor, endColor, startSize, endSize, nbCurvePoints);
+    curve.drawCurve(curvePoints, startColor, endColor, startSize, endSize,
+                    nbCurvePoints);
   }
 }
 } // namespace tlp

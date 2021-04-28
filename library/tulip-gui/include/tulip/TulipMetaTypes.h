@@ -21,29 +21,29 @@
 #ifndef TULIPMETATYPES_H
 #define TULIPMETATYPES_H
 
-#include <QVector>
 #include <QStringList>
 #include <QVariant>
+#include <QVector>
 
-#include <tulip/DataSet.h>
-#include <tulip/Graph.h>
-#include <tulip/Color.h>
-#include <tulip/Coord.h>
-#include <tulip/Size.h>
 #include <tulip/BooleanProperty.h>
-#include <tulip/DoubleProperty.h>
+#include <tulip/Color.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/StringProperty.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/GraphProperty.h>
-#include <tulip/IntegerProperty.h>
 #include <tulip/ColorScale.h>
+#include <tulip/Coord.h>
+#include <tulip/DataSet.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/GlLabel.h>
-#include <tulip/TulipFont.h>
+#include <tulip/Graph.h>
+#include <tulip/GraphProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
 #include <tulip/PropertiesCollection.h>
+#include <tulip/Size.h>
+#include <tulip/SizeProperty.h>
 #include <tulip/StringCollection.h>
+#include <tulip/StringProperty.h>
+#include <tulip/TulipFont.h>
 #include <tulip/TulipViewSettings.h>
 
 // Helper class for filesystem types handling
@@ -51,7 +51,8 @@ struct TulipFileDescriptor {
   enum FileType { File, Directory };
 
   TulipFileDescriptor() {}
-  TulipFileDescriptor(const QString &absolutePath, FileType fileType, bool existing = true)
+  TulipFileDescriptor(const QString &absolutePath, FileType fileType,
+                      bool existing = true)
       : absolutePath(absolutePath), type(fileType), mustExist(existing) {}
   TulipFileDescriptor(const TulipFileDescriptor &d) {
     absolutePath = d.absolutePath;
@@ -150,8 +151,7 @@ namespace tlp {
 class TLP_QT_SCOPE TulipMetaTypes {
   TulipMetaTypes() {}
 
-  template <typename T>
-  inline static QVariant typedVariant(tlp::DataType *dm) {
+  template <typename T> inline static QVariant typedVariant(tlp::DataType *dm) {
     T result;
 
     if (dm)
@@ -162,7 +162,8 @@ class TLP_QT_SCOPE TulipMetaTypes {
 
 public:
   static tlp::DataType *qVariantToDataType(const QVariant &);
-  static QVariant dataTypeToQvariant(tlp::DataType *, const std::string &paramName);
+  static QVariant dataTypeToQvariant(tlp::DataType *,
+                                     const std::string &paramName);
 };
 
 class TLP_QT_SCOPE QStringListType : public TypeInterface<QStringList> {

@@ -18,13 +18,13 @@
  */
 #include "FormPost.h"
 
-#include <tulip/TlpTools.h>
-#include <QFile>
 #include <QDateTime>
-#include <QVariant>
+#include <QFile>
 #include <QNetworkAccessManager>
-#include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QVariant>
+#include <tulip/TlpTools.h>
 
 FormPost::FormPost() : QObject() {
   _userAgent = "";
@@ -32,25 +32,15 @@ FormPost::FormPost() : QObject() {
   _referer = "";
 }
 
-QString FormPost::userAgent() {
-  return _userAgent;
-}
+QString FormPost::userAgent() { return _userAgent; }
 
-void FormPost::setUserAgent(QString agent) {
-  _userAgent = agent;
-}
+void FormPost::setUserAgent(QString agent) { _userAgent = agent; }
 
-QString FormPost::referer() {
-  return _referer;
-}
+QString FormPost::referer() { return _referer; }
 
-void FormPost::setReferer(QString ref) {
-  _referer = ref;
-}
+void FormPost::setReferer(QString ref) { _referer = ref; }
 
-QString FormPost::encoding() {
-  return _encoding;
-}
+QString FormPost::encoding() { return _encoding; }
 
 void FormPost::setEncoding(QString enc) {
   if (enc == "utf-8" || enc == "ascii") {
@@ -71,7 +61,8 @@ void FormPost::addField(QString name, QString value) {
   _fieldValues.append(value);
 }
 
-void FormPost::addFile(QString fieldName, QByteArray file, QString name, QString mime) {
+void FormPost::addFile(QString fieldName, QByteArray file, QString name,
+                       QString mime) {
   files.append(file);
   _fileFieldNames.append(fieldName);
   _fileNames.append(name);
@@ -105,8 +96,8 @@ QNetworkReply *FormPost::postData(QString url) {
   QString crlf = "\r\n";
   tlp::setSeedOfRandomSequence(QDateTime::currentDateTime().toTime_t());
   tlp::initRandomSequence();
-  QString b =
-      QVariant(rand()).toString() + QVariant(rand()).toString() + QVariant(rand()).toString();
+  QString b = QVariant(rand()).toString() + QVariant(rand()).toString() +
+              QVariant(rand()).toString();
   QString boundary = "---------------------------" + b;
   QString endBoundary = crlf + "--" + boundary + "--" + crlf;
   QString contentType = "multipart/form-data; boundary=" + boundary;
@@ -124,7 +115,8 @@ QNetworkReply *FormPost::postData(QString url) {
       first = false;
     }
 
-    send.append(QString("Content-Disposition: form-data; name=\"" + _fieldNames.at(i) + "\"" + crlf)
+    send.append(QString("Content-Disposition: form-data; name=\"" +
+                        _fieldNames.at(i) + "\"" + crlf)
                     .toLatin1());
 
     if (_encoding == "utf-8")
@@ -136,10 +128,12 @@ QNetworkReply *FormPost::postData(QString url) {
 
   for (int i = 0; i < files.size(); i++) {
     send.append(bond);
-    send.append(QString("Content-Disposition: form-data; name=\"" + _fileFieldNames.at(i) +
-                        "\"; filename=\"" + _fileNames.at(i) + "\"" + crlf)
+    send.append(QString("Content-Disposition: form-data; name=\"" +
+                        _fileFieldNames.at(i) + "\"; filename=\"" +
+                        _fileNames.at(i) + "\"" + crlf)
                     .toLatin1());
-    send.append(QString("Content-Type: " + _fileMimes.at(i) + crlf + crlf).toLatin1());
+    send.append(
+        QString("Content-Type: " + _fileMimes.at(i) + crlf + crlf).toLatin1());
     send.append(files.at(i));
   }
 
@@ -153,7 +147,8 @@ QNetworkReply *FormPost::postData(QString url) {
   files.clear();
 
   QNetworkAccessManager *http = new QNetworkAccessManager(this);
-  connect(http, SIGNAL(finished(QNetworkReply *)), this, SLOT(readData(QNetworkReply *)));
+  connect(http, SIGNAL(finished(QNetworkReply *)), this,
+          SLOT(readData(QNetworkReply *)));
   QNetworkRequest request;
   request.setRawHeader("Host", host.toLatin1());
 
@@ -164,16 +159,13 @@ QNetworkReply *FormPost::postData(QString url) {
     request.setRawHeader("Referer", _referer.toLatin1());
 
   request.setHeader(QNetworkRequest::ContentTypeHeader, contentType.toLatin1());
-  request.setHeader(QNetworkRequest::ContentLengthHeader, QVariant(send.size()).toString());
+  request.setHeader(QNetworkRequest::ContentLengthHeader,
+                    QVariant(send.size()).toString());
   request.setUrl(QUrl(url));
   QNetworkReply *reply = http->post(request, send);
   return reply;
 }
 
-void FormPost::readData(QNetworkReply *r) {
-  _data = r->readAll();
-}
+void FormPost::readData(QNetworkReply *r) { _data = r->readAll(); }
 
-QByteArray FormPost::response() {
-  return _data;
-}
+QByteArray FormPost::response() { return _data; }

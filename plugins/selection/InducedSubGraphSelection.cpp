@@ -33,11 +33,13 @@ static const char *paramHelp[] = {
     "If true, source and target nodes of selected edges will also be added in the input set of "
     "nodes."};
 //=================================================================================
-InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PluginContext *context)
+InducedSubGraphSelection::InducedSubGraphSelection(
+    const tlp::PluginContext *context)
     : BooleanAlgorithm(context) {
   addInParameter<BooleanProperty>("Nodes", paramHelp[0], "viewSelection");
   addInParameter<bool>("Use edges", paramHelp[1], "false");
-  addOutParameter<unsigned int>("#edges selected", "The number of newly selected edges");
+  addOutParameter<unsigned int>("#edges selected",
+                                "The number of newly selected edges");
   // old name
   declareDeprecatedName("Induced Sub-Graph");
 }
@@ -54,17 +56,19 @@ bool InducedSubGraphSelection::run() {
   if (entrySelection == nullptr)
     entrySelection = graph->getProperty<BooleanProperty>("viewSelection");
 
-  // as the input selection property and the result property can be the same one,
-  // if needed, use a stable iterator to keep a copy of the input selected nodes as all values
-  // of the result property are reset to false below
+  // as the input selection property and the result property can be the same
+  // one, if needed, use a stable iterator to keep a copy of the input selected
+  // nodes as all values of the result property are reset to false below
   // deletion is done by the for loop
-  Iterator<node> *itN = (result == entrySelection)
-                            ? stableIterator(entrySelection->getNodesEqualTo(true))
-                            : entrySelection->getNodesEqualTo(true);
+  Iterator<node> *itN =
+      (result == entrySelection)
+          ? stableIterator(entrySelection->getNodesEqualTo(true))
+          : entrySelection->getNodesEqualTo(true);
 
-  Iterator<edge> *itE = (result == entrySelection)
-                            ? stableIterator(entrySelection->getEdgesEqualTo(true))
-                            : entrySelection->getEdgesEqualTo(true);
+  Iterator<edge> *itE =
+      (result == entrySelection)
+          ? stableIterator(entrySelection->getEdgesEqualTo(true))
+          : entrySelection->getEdgesEqualTo(true);
 
   result->setAllNodeValue(false);
   result->setAllEdgeValue(false);

@@ -21,11 +21,11 @@
 #ifndef Tulip_SUPERGRAPHVIEW_H
 #define Tulip_SUPERGRAPHVIEW_H
 
-#include <vector>
 #include <tulip/GraphAbstract.h>
 #include <tulip/GraphImpl.h>
-#include <tulip/MutableContainer.h>
 #include <tulip/IdManager.h>
+#include <tulip/MutableContainer.h>
+#include <vector>
 
 namespace tlp {
 // used for node management
@@ -33,12 +33,8 @@ struct SGraphNodeData {
   unsigned int outDegree;
   unsigned int inDegree;
   SGraphNodeData() : outDegree(0), inDegree(0) {}
-  inline void outDegreeAdd(int i) {
-    outDegree += i;
-  }
-  inline void inDegreeAdd(int i) {
-    inDegree += i;
-  }
+  inline void outDegreeAdd(int i) { outDegree += i; }
+  inline void inDegreeAdd(int i) { inDegree += i; }
 };
 
 typedef SGraphNodeData *SGraphNodeDataPtr;
@@ -86,13 +82,10 @@ public:
   inline bool isElement(const edge e) const override {
     return _edges.isElement(e);
   }
-  edge existEdge(const node source, const node target, bool directed) const override;
-  inline unsigned int numberOfNodes() const override {
-    return _nodes.size();
-  }
-  inline unsigned int numberOfEdges() const override {
-    return _edges.size();
-  }
+  edge existEdge(const node source, const node target,
+                 bool directed) const override;
+  inline unsigned int numberOfNodes() const override { return _nodes.size(); }
+  inline unsigned int numberOfEdges() const override { return _edges.size(); }
   //=========================================================================
   inline unsigned int deg(const node n) const override {
     assert(isElement(n));
@@ -125,7 +118,8 @@ public:
   inline const std::pair<node, node> &ends(const edge e) const override {
     return getRootImpl()->ends(e);
   }
-  inline void setEnds(const edge e, const node newSrc, const node newTgt) override {
+  inline void setEnds(const edge e, const node newSrc,
+                      const node newTgt) override {
     assert(isElement(e));
     getRootImpl()->setEnds(e, newSrc, newTgt);
   }
@@ -137,9 +131,7 @@ public:
     getRootImpl()->reverse(e);
   }
   //=========================================================================
-  inline const std::vector<node> &nodes() const override {
-    return _nodes;
-  }
+  inline const std::vector<node> &nodes() const override { return _nodes; }
   inline unsigned int nodePos(const node n) const override {
     return _nodes.getPos(n);
   }
@@ -147,9 +139,7 @@ public:
   Iterator<node> *getInNodes(const node) const override;
   Iterator<node> *getOutNodes(const node) const override;
   Iterator<node> *getInOutNodes(const node) const override;
-  inline const std::vector<edge> &edges() const override {
-    return _edges;
-  }
+  inline const std::vector<edge> &edges() const override { return _edges; }
   inline unsigned int edgePos(const edge e) const override {
     return _edges.getPos(e);
   }
@@ -177,7 +167,8 @@ public:
   //=========================================================================
   // updates management
   void push(bool unpopAllowed = true,
-            std::vector<PropertyInterface *> *propertiesToPreserveOnPop = nullptr) override;
+            std::vector<PropertyInterface *> *propertiesToPreserveOnPop =
+                nullptr) override;
   void pop(bool unpopAllowed = true) override;
   void popIfNoUpdates() override;
   void unpop() override;
@@ -203,7 +194,8 @@ private:
   SGraphIdContainer<edge> _edges;
   edge addEdgeInternal(edge);
   void reverseInternal(const edge, const node src, const node tgt);
-  void setEndsInternal(const edge, node src, node tgt, const node newSrc, const node newTgt);
+  void setEndsInternal(const edge, node src, node tgt, const node newSrc,
+                       const node newTgt);
   void addNodesInternal(unsigned int nbAdded, const std::vector<node> *nodes);
   void addEdgesInternal(unsigned int nbAdded, const std::vector<edge> *edges,
                         const std::vector<std::pair<node, node>> &ends);

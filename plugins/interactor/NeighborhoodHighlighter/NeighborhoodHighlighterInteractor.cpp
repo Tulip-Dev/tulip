@@ -17,32 +17,32 @@
  *
  */
 
+#include <QApplication>
 #include <QCursor>
 #include <QEvent>
-#include <QThread>
-#include <QApplication>
-#include <QTimeLine>
 #include <QMouseEvent>
+#include <QThread>
+#include <QTimeLine>
 
-#include <tulip/TulipPluginHeaders.h>
-#include <tulip/MouseInteractors.h>
-#include <tulip/GlMainWidget.h>
-#include <tulip/GlMainView.h>
-#include <tulip/GlCircle.h>
-#include <tulip/OcclusionTest.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
+#include <tulip/GlCircle.h>
+#include <tulip/GlEdge.h>
+#include <tulip/GlGraphStaticData.h>
+#include <tulip/GlLayer.h>
+#include <tulip/GlMainView.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/GlNode.h>
 #include <tulip/GlRect.h>
 #include <tulip/GlTextureManager.h>
-#include <tulip/GlGraphStaticData.h>
-#include <tulip/Rectangle.h>
-#include <tulip/QtGlSceneZoomAndPanAnimator.h>
-#include <tulip/GlNode.h>
-#include <tulip/GlEdge.h>
+#include <tulip/MouseInteractors.h>
 #include <tulip/NodeLinkDiagramComponent.h>
-#include <tulip/GlLayer.h>
+#include <tulip/OcclusionTest.h>
+#include <tulip/QtGlSceneZoomAndPanAnimator.h>
+#include <tulip/Rectangle.h>
+#include <tulip/TulipPluginHeaders.h>
 
-#include "NeighborhoodHighlighterInteractor.h"
 #include "../../utils/PluginNames.h"
+#include "NeighborhoodHighlighterInteractor.h"
 
 #include <algorithm>
 
@@ -54,16 +54,18 @@ class GraphLayoutMorphing : public AdditionalGlSceneAnimation {
 
 public:
   ~GraphLayoutMorphing() override {}
-  GraphLayoutMorphing(Graph *graph, LayoutProperty *srcLayout, LayoutProperty *destLayout,
-                      LayoutProperty *viewLayout)
-      : graph(graph), srcLayout(srcLayout), destLayout(destLayout), viewLayout(viewLayout) {}
+  GraphLayoutMorphing(Graph *graph, LayoutProperty *srcLayout,
+                      LayoutProperty *destLayout, LayoutProperty *viewLayout)
+      : graph(graph), srcLayout(srcLayout), destLayout(destLayout),
+        viewLayout(viewLayout) {}
 
   void animationStep(int animationStep) override {
     for (auto n : graph->nodes()) {
       const Coord &startPos = srcLayout->getNodeValue(n);
       const Coord &endPos = destLayout->getNodeValue(n);
-      viewLayout->setNodeValue(
-          n, startPos + (animationStep / float(nbAnimationSteps) * (endPos - startPos)));
+      viewLayout->setNodeValue(n, startPos +
+                                      (animationStep / float(nbAnimationSteps) *
+                                       (endPos - startPos)));
     }
 
     for (auto e : graph->edges()) {
@@ -73,8 +75,9 @@ public:
       newBends.reserve(destBends.size());
 
       for (size_t i = 0; i < destBends.size(); ++i) {
-        newBends.push_back(
-            srcBends[i] + (animationStep / float(nbAnimationSteps) * (destBends[i] - srcBends[i])));
+        newBends.push_back(srcBends[i] +
+                           (animationStep / float(nbAnimationSteps) *
+                            (destBends[i] - srcBends[i])));
       }
 
       viewLayout->setEdgeValue(e, newBends);
@@ -86,7 +89,8 @@ private:
   LayoutProperty *srcLayout, *destLayout, *viewLayout;
 };
 
-class NeighborNodesEdgeLengthOrdering : public binary_function<node, node, bool> {
+class NeighborNodesEdgeLengthOrdering
+    : public binary_function<node, node, bool> {
 
 public:
   NeighborNodesEdgeLengthOrdering(node centralNode, LayoutProperty *layout)
@@ -110,8 +114,10 @@ class MouseEventDiscardFilter : public QObject {
 
 public:
   bool eventFilter(QObject *, QEvent *event) override {
-    if (event->type() == QEvent::MouseMove || event->type() == QEvent::MouseButtonDblClick ||
-        event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonRelease) {
+    if (event->type() == QEvent::MouseMove ||
+        event->type() == QEvent::MouseButtonDblClick ||
+        event->type() == QEvent::MouseButtonPress ||
+        event->type() == QEvent::MouseButtonRelease) {
       return true;
     }
 
@@ -123,7 +129,8 @@ const unsigned char maxCircleAlphaValue = 200;
 
 PLUGIN(NeighborhoodHighlighterInteractor)
 
-NeighborhoodHighlighterInteractor::NeighborhoodHighlighterInteractor(const PluginContext *)
+NeighborhoodHighlighterInteractor::NeighborhoodHighlighterInteractor(
+    const PluginContext *)
     : GLInteractorComposite(QIcon(":/i_neighborhood_highlighter.png"),
                             "Highlight node neighborhood"),
       configWidget(nullptr) {}
@@ -132,7 +139,8 @@ NeighborhoodHighlighterInteractor::~NeighborhoodHighlighterInteractor() {
   delete configWidget;
 }
 
-bool NeighborhoodHighlighterInteractor::isCompatible(const std::string &viewName) const {
+bool NeighborhoodHighlighterInteractor::isCompatible(
+    const std::string &viewName) const {
   return ((viewName == NodeLinkDiagramComponent::viewName) ||
           (viewName == ViewName::HistogramViewName)
           // Interactor does not work
@@ -144,29 +152,34 @@ void NeighborhoodHighlighterInteractor::construct() {
   configWidget = new NeighborhoodHighlighterConfigWidget();
 
   push_back(new MouseNKeysNavigator(false));
-  NeighborhoodHighlighter *neighborhoodHighlighter = new NeighborhoodHighlighter();
+  NeighborhoodHighlighter *neighborhoodHighlighter =
+      new NeighborhoodHighlighter();
   neighborhoodHighlighter->setConfigWidget(configWidget);
   push_back(neighborhoodHighlighter);
 }
 
 NeighborhoodHighlighter::NeighborhoodHighlighter()
-    : originalGraph(nullptr), originalGlGraphComposite(nullptr), neighborhoodGraph(nullptr),
-      glNeighborhoodGraph(nullptr), neighborhoodGraphLayout(nullptr),
-      neighborhoodGraphCircleLayout(nullptr), neighborhoodGraphOriginalLayout(nullptr),
+    : originalGraph(nullptr), originalGlGraphComposite(nullptr),
+      neighborhoodGraph(nullptr), glNeighborhoodGraph(nullptr),
+      neighborhoodGraphLayout(nullptr), neighborhoodGraphCircleLayout(nullptr),
+      neighborhoodGraphOriginalLayout(nullptr),
       neighborhoodGraphColors(nullptr), neighborhoodGraphBackupColors(nullptr),
-      centralNodeLocked(false), circleLayoutSet(false), glWidget(nullptr), neighborhoodDist(1),
-      configWidget(nullptr), circleAlphaValue(maxCircleAlphaValue), startAlpha(0), endAlpha(255),
+      centralNodeLocked(false), circleLayoutSet(false), glWidget(nullptr),
+      neighborhoodDist(1), configWidget(nullptr),
+      circleAlphaValue(maxCircleAlphaValue), startAlpha(0), endAlpha(255),
       nbAnimSteps(0) {}
 
 NeighborhoodHighlighter::NeighborhoodHighlighter(
     const NeighborhoodHighlighter &neighborhoodHighlighter)
-    : neighborhoodGraph(nullptr), glNeighborhoodGraph(nullptr), neighborhoodGraphLayout(nullptr),
-      neighborhoodGraphCircleLayout(nullptr), neighborhoodGraphOriginalLayout(nullptr),
+    : neighborhoodGraph(nullptr), glNeighborhoodGraph(nullptr),
+      neighborhoodGraphLayout(nullptr), neighborhoodGraphCircleLayout(nullptr),
+      neighborhoodGraphOriginalLayout(nullptr),
       neighborhoodGraphColors(nullptr), neighborhoodGraphBackupColors(nullptr),
       centralNodeLocked(false), circleLayoutSet(false), neighborhoodDist(1),
       circleAlphaValue(maxCircleAlphaValue) {
   configWidget = neighborhoodHighlighter.configWidget;
-  connect(configWidget, SIGNAL(updateNeighborhoodGraph()), this, SLOT(updateNeighborhoodGraph()));
+  connect(configWidget, SIGNAL(updateNeighborhoodGraph()), this,
+          SLOT(updateNeighborhoodGraph()));
 }
 
 NeighborhoodHighlighter::~NeighborhoodHighlighter() {
@@ -216,7 +229,8 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
 #endif
     if (selectInAugmentedDisplayGraph(wePos.x(), wePos.y(), selectedEntity) &&
         selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
-      if (selectedEntity.getComplexEntityId() == neighborhoodGraphCentralNode.id) {
+      if (selectedEntity.getComplexEntityId() ==
+          neighborhoodGraphCentralNode.id) {
         auto delta = we->angleDelta();
         int numSteps = (delta.x() ? delta.x() : delta.y()) / 120;
         neighborhoodDist += numSteps;
@@ -239,7 +253,8 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
     QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
 
     if (!centralNodeLocked) {
-      node tmpNode = selectNodeInOriginalGraph(glWidget, qMouseEv->x(), qMouseEv->y());
+      node tmpNode =
+          selectNodeInOriginalGraph(glWidget, qMouseEv->x(), qMouseEv->y());
 
       if (tmpNode != selectedNode) {
         buildNeighborhoodGraph(tmpNode, originalGraph);
@@ -252,14 +267,16 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
     } else {
       neighborhoodGraphColors->copy(neighborhoodGraphBackupColors);
 
-      if (selectInAugmentedDisplayGraph(qMouseEv->x(), qMouseEv->y(), selectedEntity) &&
+      if (selectInAugmentedDisplayGraph(qMouseEv->x(), qMouseEv->y(),
+                                        selectedEntity) &&
           selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
-        if (selectedEntity.getComplexEntityId() != neighborhoodGraphCentralNode.id) {
-          neighborhoodGraphColors->setNodeValue(node(selectedEntity.getComplexEntityId()),
-                                                Color(0, 255, 0));
+        if (selectedEntity.getComplexEntityId() !=
+            neighborhoodGraphCentralNode.id) {
+          neighborhoodGraphColors->setNodeValue(
+              node(selectedEntity.getComplexEntityId()), Color(0, 255, 0));
         } else {
-          neighborhoodGraphColors->setNodeValue(node(selectedEntity.getComplexEntityId()),
-                                                Color(0, 0, 255));
+          neighborhoodGraphColors->setNodeValue(
+              node(selectedEntity.getComplexEntityId()), Color(0, 0, 255));
         }
       }
 
@@ -278,14 +295,15 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
              static_cast<QMouseEvent *>(e)->buttons() == Qt::LeftButton) {
     if (neighborhoodGraphCentralNode.isValid() && !centralNodeLocked) {
       centralNodeLocked = true;
-    } else if (neighborhoodGraphCentralNode.isValid() && centralNodeLocked && !circleLayoutSet &&
-               selectedNeighborNode.isValid() &&
-               selectedNeighborNode == neighborhoodGraphCentralNode && neighborhoodDist == 1) {
+    } else if (neighborhoodGraphCentralNode.isValid() && centralNodeLocked &&
+               !circleLayoutSet && selectedNeighborNode.isValid() &&
+               selectedNeighborNode == neighborhoodGraphCentralNode &&
+               neighborhoodDist == 1) {
       computeNeighborhoodGraphCircleLayout();
       computeNeighborhoodGraphBoundingBoxes();
-      GraphLayoutMorphing *layoutMorphing =
-          new GraphLayoutMorphing(neighborhoodGraph, neighborhoodGraphOriginalLayout,
-                                  neighborhoodGraphCircleLayout, neighborhoodGraphLayout);
+      GraphLayoutMorphing *layoutMorphing = new GraphLayoutMorphing(
+          neighborhoodGraph, neighborhoodGraphOriginalLayout,
+          neighborhoodGraphCircleLayout, neighborhoodGraphLayout);
       performZoomAndPan(neighborhoodGraphCircleLayoutBB, layoutMorphing);
       delete layoutMorphing;
       circleLayoutSet = true;
@@ -300,9 +318,9 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
     } else if (selectedNeighborNode.isValid()) {
       if (circleLayoutSet) {
         if (selectedNeighborNode == neighborhoodGraphCentralNode) {
-          GraphLayoutMorphing *layoutMorphing =
-              new GraphLayoutMorphing(neighborhoodGraph, neighborhoodGraphCircleLayout,
-                                      neighborhoodGraphOriginalLayout, neighborhoodGraphLayout);
+          GraphLayoutMorphing *layoutMorphing = new GraphLayoutMorphing(
+              neighborhoodGraph, neighborhoodGraphCircleLayout,
+              neighborhoodGraphOriginalLayout, neighborhoodGraphLayout);
           performZoomAndPan(neighborhoodGraphOriginalLayoutBB, layoutMorphing);
           delete layoutMorphing;
           circleLayoutSet = false;
@@ -323,9 +341,9 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
           computeNeighborhoodGraphCircleLayout();
           computeNeighborhoodGraphBoundingBoxes();
           *neighborhoodGraphLayout = *neighborhoodGraphCircleLayout;
-          GraphLayoutMorphing *layoutMorphing =
-              new GraphLayoutMorphing(neighborhoodGraph, neighborhoodGraphCircleLayout,
-                                      neighborhoodGraphOriginalLayout, neighborhoodGraphLayout);
+          GraphLayoutMorphing *layoutMorphing = new GraphLayoutMorphing(
+              neighborhoodGraph, neighborhoodGraphCircleLayout,
+              neighborhoodGraphOriginalLayout, neighborhoodGraphLayout);
           performZoomAndPan(destBB, layoutMorphing);
           delete layoutMorphing;
 
@@ -341,9 +359,9 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
             morphCircleAlpha(0, maxCircleAlphaValue);
           }
 
-          layoutMorphing =
-              new GraphLayoutMorphing(neighborhoodGraph, neighborhoodGraphOriginalLayout,
-                                      neighborhoodGraphCircleLayout, neighborhoodGraphLayout);
+          layoutMorphing = new GraphLayoutMorphing(
+              neighborhoodGraph, neighborhoodGraphOriginalLayout,
+              neighborhoodGraphCircleLayout, neighborhoodGraphLayout);
           performZoomAndPan(neighborhoodGraphCircleLayoutBB, layoutMorphing);
           delete layoutMorphing;
         }
@@ -368,14 +386,17 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
 
   return false;
 }
-node NeighborhoodHighlighter::selectNodeInOriginalGraph(GlMainWidget *glWidget, int x, int y) {
+node NeighborhoodHighlighter::selectNodeInOriginalGraph(GlMainWidget *glWidget,
+                                                        int x, int y) {
   node n;
   glWidget->makeCurrent();
   vector<SelectedEntity> selectedElements;
   glWidget->getScene()->selectEntities(
-      static_cast<RenderingEntitiesFlag>(RenderingNodes | RenderingWithoutRemove),
+      static_cast<RenderingEntitiesFlag>(RenderingNodes |
+                                         RenderingWithoutRemove),
       glWidget->screenToViewport(x - 1), glWidget->screenToViewport(y - 1),
-      glWidget->screenToViewport(3), glWidget->screenToViewport(3), nullptr, selectedElements);
+      glWidget->screenToViewport(3), glWidget->screenToViewport(3), nullptr,
+      selectedElements);
 
   if (!selectedElements.empty()) {
     n = selectedElements[0].getNode();
@@ -384,10 +405,11 @@ node NeighborhoodHighlighter::selectNodeInOriginalGraph(GlMainWidget *glWidget, 
   return n;
 }
 
-bool NeighborhoodHighlighter::selectInAugmentedDisplayGraph(const int x, const int y,
-                                                            SelectedEntity &selectedEntity) {
+bool NeighborhoodHighlighter::selectInAugmentedDisplayGraph(
+    const int x, const int y, SelectedEntity &selectedEntity) {
   GlLayer *l = glWidget->getScene()->getLayer("Main");
-  GlGraphComposite *graphComposite = static_cast<GlGraphComposite *>(l->findGlEntity("graph"));
+  GlGraphComposite *graphComposite =
+      static_cast<GlGraphComposite *>(l->findGlEntity("graph"));
   l->deleteGlEntity("graph");
   l->addGlEntity(glNeighborhoodGraph, "graph");
   bool ret = glWidget->pickNodesEdges(x, y, selectedEntity);
@@ -396,8 +418,9 @@ bool NeighborhoodHighlighter::selectInAugmentedDisplayGraph(const int x, const i
   return ret;
 }
 
-void NeighborhoodHighlighter::performZoomAndPan(const BoundingBox &destBB,
-                                                AdditionalGlSceneAnimation *additionalAnimation) {
+void NeighborhoodHighlighter::performZoomAndPan(
+    const BoundingBox &destBB,
+    AdditionalGlSceneAnimation *additionalAnimation) {
   MouseEventDiscardFilter medf;
   glWidget->installEventFilter(&medf);
   QtGlSceneZoomAndPanAnimator sceneZoomAndPan(glWidget, destBB);
@@ -459,18 +482,23 @@ void NeighborhoodHighlighter::buildNeighborhoodGraph(node n, Graph *g) {
 
 void NeighborhoodHighlighter::updateNeighborhoodGraphLayoutAndColors() {
   if (originalGlGraphComposite != nullptr) {
-    GlGraphInputData *originalInputData = originalGlGraphComposite->getInputData();
+    GlGraphInputData *originalInputData =
+        originalGlGraphComposite->getInputData();
     LayoutProperty *origGraphLayout = originalInputData->getElementLayout();
     ColorProperty *origGraphColors = originalInputData->getElementColor();
 
     for (auto n2 : neighborhoodGraph->nodes()) {
-      neighborhoodGraphOriginalLayout->setNodeValue(n2, origGraphLayout->getNodeValue(n2));
-      neighborhoodGraphBackupColors->setNodeValue(n2, origGraphColors->getNodeValue(n2));
+      neighborhoodGraphOriginalLayout->setNodeValue(
+          n2, origGraphLayout->getNodeValue(n2));
+      neighborhoodGraphBackupColors->setNodeValue(
+          n2, origGraphColors->getNodeValue(n2));
     }
 
     for (auto e : neighborhoodGraph->edges()) {
-      neighborhoodGraphOriginalLayout->setEdgeValue(e, origGraphLayout->getEdgeValue(e));
-      neighborhoodGraphBackupColors->setEdgeValue(e, origGraphColors->getEdgeValue(e));
+      neighborhoodGraphOriginalLayout->setEdgeValue(
+          e, origGraphLayout->getEdgeValue(e));
+      neighborhoodGraphBackupColors->setEdgeValue(
+          e, origGraphColors->getEdgeValue(e));
     }
 
     neighborhoodGraphLayout->copy(neighborhoodGraphOriginalLayout);
@@ -479,26 +507,39 @@ void NeighborhoodHighlighter::updateNeighborhoodGraphLayoutAndColors() {
 }
 
 void NeighborhoodHighlighter::updateGlNeighborhoodGraph() {
-  GlGraphInputData *originalInputData = originalGlGraphComposite->getInputData();
+  GlGraphInputData *originalInputData =
+      originalGlGraphComposite->getInputData();
   glNeighborhoodGraph = new GlGraphComposite(neighborhoodGraph);
-  GlGraphInputData *glNeighborhoodGraphInputData = glNeighborhoodGraph->getInputData();
-  glNeighborhoodGraphInputData->setElementBorderColor(originalInputData->getElementBorderColor());
-  glNeighborhoodGraphInputData->setElementBorderWidth(originalInputData->getElementBorderWidth());
+  GlGraphInputData *glNeighborhoodGraphInputData =
+      glNeighborhoodGraph->getInputData();
+  glNeighborhoodGraphInputData->setElementBorderColor(
+      originalInputData->getElementBorderColor());
+  glNeighborhoodGraphInputData->setElementBorderWidth(
+      originalInputData->getElementBorderWidth());
   glNeighborhoodGraphInputData->setElementColor(neighborhoodGraphColors);
-  glNeighborhoodGraphInputData->setElementLabel(originalInputData->getElementLabel());
-  glNeighborhoodGraphInputData->setElementLabelColor(originalInputData->getElementLabelColor());
+  glNeighborhoodGraphInputData->setElementLabel(
+      originalInputData->getElementLabel());
+  glNeighborhoodGraphInputData->setElementLabelColor(
+      originalInputData->getElementLabelColor());
   glNeighborhoodGraphInputData->setElementLabelBorderColor(
       originalInputData->getElementLabelBorderColor());
   glNeighborhoodGraphInputData->setElementLabelPosition(
       originalInputData->getElementLabelPosition());
   glNeighborhoodGraphInputData->setElementLayout(neighborhoodGraphLayout);
-  glNeighborhoodGraphInputData->setElementRotation(originalInputData->getElementRotation());
-  glNeighborhoodGraphInputData->setElementSelected(originalInputData->getElementSelected());
-  glNeighborhoodGraphInputData->setElementShape(originalInputData->getElementShape());
-  glNeighborhoodGraphInputData->setElementSize(originalInputData->getElementSize());
-  glNeighborhoodGraphInputData->setElementTexture(originalInputData->getElementTexture());
-  glNeighborhoodGraphInputData->setElementFont(originalInputData->getElementFont());
-  glNeighborhoodGraphInputData->setElementFontSize(originalInputData->getElementFontSize());
+  glNeighborhoodGraphInputData->setElementRotation(
+      originalInputData->getElementRotation());
+  glNeighborhoodGraphInputData->setElementSelected(
+      originalInputData->getElementSelected());
+  glNeighborhoodGraphInputData->setElementShape(
+      originalInputData->getElementShape());
+  glNeighborhoodGraphInputData->setElementSize(
+      originalInputData->getElementSize());
+  glNeighborhoodGraphInputData->setElementTexture(
+      originalInputData->getElementTexture());
+  glNeighborhoodGraphInputData->setElementFont(
+      originalInputData->getElementFont());
+  glNeighborhoodGraphInputData->setElementFontSize(
+      originalInputData->getElementFontSize());
   glNeighborhoodGraphInputData->setElementSrcAnchorShape(
       originalInputData->getElementSrcAnchorShape());
   glNeighborhoodGraphInputData->setElementSrcAnchorSize(
@@ -517,10 +558,12 @@ void NeighborhoodHighlighter::updateNeighborhoodGraph() {
 }
 
 void NeighborhoodHighlighter::computeNeighborhoodGraphBoundingBoxes() {
-  Coord centralNodeCoord =
-      neighborhoodGraphOriginalLayout->getNodeValue(neighborhoodGraphCentralNode);
-  float originalLayoutRadius = computeNeighborhoodGraphRadius(neighborhoodGraphOriginalLayout);
-  float circleLayoutRadius = computeNeighborhoodGraphRadius(neighborhoodGraphCircleLayout);
+  Coord centralNodeCoord = neighborhoodGraphOriginalLayout->getNodeValue(
+      neighborhoodGraphCentralNode);
+  float originalLayoutRadius =
+      computeNeighborhoodGraphRadius(neighborhoodGraphOriginalLayout);
+  float circleLayoutRadius =
+      computeNeighborhoodGraphRadius(neighborhoodGraphCircleLayout);
   neighborhoodGraphOriginalLayoutBB[0] =
       centralNodeCoord - Coord(originalLayoutRadius, originalLayoutRadius);
   neighborhoodGraphOriginalLayoutBB[1] =
@@ -533,10 +576,13 @@ void NeighborhoodHighlighter::computeNeighborhoodGraphBoundingBoxes() {
 
 void NeighborhoodHighlighter::computeNeighborhoodGraphCircleLayout() {
 
-  Size centralNodeSize = originalGlGraphComposite->getInputData()->getElementSize()->getNodeValue(
-      neighborhoodGraphCentralNode);
-  Coord centralNodeCoord = neighborhoodGraphLayout->getNodeValue(neighborhoodGraphCentralNode);
-  neighborhoodGraphCircleLayout->setNodeValue(neighborhoodGraphCentralNode, centralNodeCoord);
+  Size centralNodeSize =
+      originalGlGraphComposite->getInputData()->getElementSize()->getNodeValue(
+          neighborhoodGraphCentralNode);
+  Coord centralNodeCoord =
+      neighborhoodGraphLayout->getNodeValue(neighborhoodGraphCentralNode);
+  neighborhoodGraphCircleLayout->setNodeValue(neighborhoodGraphCentralNode,
+                                              centralNodeCoord);
 
   vector<node> neighborsNodes;
   for (auto n : neighborhoodGraph->nodes()) {
@@ -546,45 +592,54 @@ void NeighborhoodHighlighter::computeNeighborhoodGraphCircleLayout() {
   }
 
   sort(neighborsNodes.begin(), neighborsNodes.end(),
-       NeighborNodesEdgeLengthOrdering(neighborhoodGraphCentralNode, neighborhoodGraphLayout));
+       NeighborNodesEdgeLengthOrdering(neighborhoodGraphCentralNode,
+                                       neighborhoodGraphLayout));
 
-  BoundingBox centralNodeBB(Coord(centralNodeCoord.getX() - centralNodeSize.getW() / 2,
-                                  centralNodeCoord.getY() - centralNodeSize.getH() / 2, 0),
-                            Coord(centralNodeCoord.getX() + centralNodeSize.getW() / 2,
-                                  centralNodeCoord.getY() + centralNodeSize.getH() / 2, 0));
+  BoundingBox centralNodeBB(
+      Coord(centralNodeCoord.getX() - centralNodeSize.getW() / 2,
+            centralNodeCoord.getY() - centralNodeSize.getH() / 2, 0),
+      Coord(centralNodeCoord.getX() + centralNodeSize.getW() / 2,
+            centralNodeCoord.getY() + centralNodeSize.getH() / 2, 0));
   vector<BoundingBox> neighborhoodNodesNewLayoutBB;
   neighborhoodNodesNewLayoutBB.resize(neighborsNodes.size());
 
   for (size_t i = 0; i < neighborsNodes.size(); ++i) {
 
-    Size neighborNodeSize =
-        originalGlGraphComposite->getInputData()->getElementSize()->getNodeValue(neighborsNodes[i]);
-    Coord neighborNodeCoord = neighborhoodGraphLayout->getNodeValue(neighborsNodes[i]);
+    Size neighborNodeSize = originalGlGraphComposite->getInputData()
+                                ->getElementSize()
+                                ->getNodeValue(neighborsNodes[i]);
+    Coord neighborNodeCoord =
+        neighborhoodGraphLayout->getNodeValue(neighborsNodes[i]);
     float edgeLength = centralNodeCoord.dist(neighborNodeCoord);
 
     bool nodePosOk = false;
     unsigned int j = 1;
 
     while (!nodePosOk) {
-      float ratio = ((centralNodeSize.getW() / 2) + j++ * neighborNodeSize.getW()) / edgeLength;
-      Coord newNodeCoord = centralNodeCoord + ratio * (neighborNodeCoord - centralNodeCoord);
-      neighborhoodNodesNewLayoutBB[i] =
-          BoundingBox(Coord(newNodeCoord.getX() - neighborNodeSize.getW() / 2,
-                            newNodeCoord.getY() - neighborNodeSize.getH() / 2, 0),
-                      Coord(newNodeCoord.getX() + neighborNodeSize.getW() / 2,
-                            newNodeCoord.getY() + neighborNodeSize.getH() / 2, 0));
+      float ratio =
+          ((centralNodeSize.getW() / 2) + j++ * neighborNodeSize.getW()) /
+          edgeLength;
+      Coord newNodeCoord =
+          centralNodeCoord + ratio * (neighborNodeCoord - centralNodeCoord);
+      neighborhoodNodesNewLayoutBB[i] = BoundingBox(
+          Coord(newNodeCoord.getX() - neighborNodeSize.getW() / 2,
+                newNodeCoord.getY() - neighborNodeSize.getH() / 2, 0),
+          Coord(newNodeCoord.getX() + neighborNodeSize.getW() / 2,
+                newNodeCoord.getY() + neighborNodeSize.getH() / 2, 0));
       nodePosOk = true;
 
       if (i > 0) {
         for (unsigned int k = 0; k < i; ++k) {
           nodePosOk = nodePosOk &&
-                      !neighborhoodNodesNewLayoutBB[i].intersect(neighborhoodNodesNewLayoutBB[k]) &&
+                      !neighborhoodNodesNewLayoutBB[i].intersect(
+                          neighborhoodNodesNewLayoutBB[k]) &&
                       !neighborhoodNodesNewLayoutBB[i].intersect(centralNodeBB);
         }
       }
 
       if (nodePosOk) {
-        neighborhoodGraphCircleLayout->setNodeValue(neighborsNodes[i], newNodeCoord);
+        neighborhoodGraphCircleLayout->setNodeValue(neighborsNodes[i],
+                                                    newNodeCoord);
       }
     }
   }
@@ -598,25 +653,28 @@ void NeighborhoodHighlighter::computeNeighborhoodGraphCircleLayout() {
       Coord srcNodeCoord = neighborhoodGraphCircleLayout->getNodeValue(srcNode);
       finalBendsCoord = circleCenter + (srcNodeCoord - circleCenter) / 2.f;
     } else {
-      Coord tgtNodeCoord = neighborhoodGraphCircleLayout->getNodeValue(eEnds.second);
+      Coord tgtNodeCoord =
+          neighborhoodGraphCircleLayout->getNodeValue(eEnds.second);
       finalBendsCoord = circleCenter + (tgtNodeCoord - circleCenter) / 2.f;
     }
 
     const vector<Coord> &edgesBends = neighborhoodGraphLayout->getEdgeValue(e);
 
-    neighborhoodGraphCircleLayout->setEdgeValue(e,
-                                                vector<Coord>(edgesBends.size(), finalBendsCoord));
+    neighborhoodGraphCircleLayout->setEdgeValue(
+        e, vector<Coord>(edgesBends.size(), finalBendsCoord));
   }
 }
 
-void NeighborhoodHighlighter::morphCircleAlpha(unsigned char startA, unsigned endA,
+void NeighborhoodHighlighter::morphCircleAlpha(unsigned char startA,
+                                               unsigned endA,
                                                int nbAnimationSteps) {
   startAlpha = startA;
   endAlpha = endA;
   nbAnimSteps = nbAnimationSteps;
   QTimeLine timeLine(500);
   timeLine.setFrameRange(0, nbAnimSteps);
-  connect(&timeLine, SIGNAL(frameChanged(int)), this, SLOT(morphCircleAlphaAnimStep(int)));
+  connect(&timeLine, SIGNAL(frameChanged(int)), this,
+          SLOT(morphCircleAlphaAnimStep(int)));
   timeLine.start();
 
   while (timeLine.state() != QTimeLine::NotRunning) {
@@ -625,7 +683,8 @@ void NeighborhoodHighlighter::morphCircleAlpha(unsigned char startA, unsigned en
 }
 
 void NeighborhoodHighlighter::morphCircleAlphaAnimStep(int animStep) {
-  circleAlphaValue = uchar(startAlpha + animStep / float(nbAnimSteps) * (endAlpha - startAlpha));
+  circleAlphaValue = uchar(startAlpha + animStep / float(nbAnimSteps) *
+                                            (endAlpha - startAlpha));
   glWidget->redraw();
 }
 
@@ -637,8 +696,9 @@ float NeighborhoodHighlighter::computeNeighborhoodGraphRadius(
       neighborhoodGraphLayoutProp->getNodeValue(neighborhoodGraphCentralNode);
   for (auto n : neighborhoodGraph->nodes()) {
     const Coord &nodeCoord = neighborhoodGraphLayoutProp->getNodeValue(n);
-    const Size &nodeSize =
-        originalGlGraphComposite->getInputData()->getElementSize()->getNodeValue(n);
+    const Size &nodeSize = originalGlGraphComposite->getInputData()
+                               ->getElementSize()
+                               ->getNodeValue(n);
     float dist = centralNodeCoord.dist(nodeCoord) + nodeSize.getW();
 
     if (dist > radius) {
@@ -649,7 +709,8 @@ float NeighborhoodHighlighter::computeNeighborhoodGraphRadius(
 }
 
 void NeighborhoodHighlighter::checkIfGraphHasChanged() {
-  if (glWidget->getScene()->getGlGraphComposite()->getGraph() != originalGraph) {
+  if (glWidget->getScene()->getGlGraphComposite()->getGraph() !=
+      originalGraph) {
     neighborhoodGraphCentralNode = node();
     centralNodeLocked = false;
     circleLayoutSet = false;
@@ -663,7 +724,8 @@ bool NeighborhoodHighlighter::draw(GlMainWidget *glMainWidget) {
 
   checkIfGraphHasChanged();
 
-  if (neighborhoodGraphCentralNode.isValid() && glNeighborhoodGraph != nullptr) {
+  if (neighborhoodGraphCentralNode.isValid() &&
+      glNeighborhoodGraph != nullptr) {
 
     Camera &camera = glMainWidget->getScene()->getLayer("Main")->getCamera();
     camera.initGl();
@@ -685,16 +747,18 @@ bool NeighborhoodHighlighter::draw(GlMainWidget *glMainWidget) {
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_LIGHTING);
 
-    GlCircle circle(circleCenter, computeNeighborhoodGraphRadius(neighborhoodGraphLayout),
-                    Color(0, 0, 0, circleAlphaValue), Color(255, 255, 255, circleAlphaValue), true,
-                    true, 0.0, 60);
+    GlCircle circle(
+        circleCenter, computeNeighborhoodGraphRadius(neighborhoodGraphLayout),
+        Color(0, 0, 0, circleAlphaValue),
+        Color(255, 255, 255, circleAlphaValue), true, true, 0.0, 60);
     circle.draw(0, nullptr);
 
     GlGraphRenderingParameters renderingParameters =
         glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
     renderingParameters.setNodesStencil(1);
     renderingParameters.setNodesLabelStencil(1);
-    renderingParameters.setDisplayEdges(configWidget->isdisplayEdgesCBChecked());
+    renderingParameters.setDisplayEdges(
+        configWidget->isdisplayEdgesCBChecked());
     glNeighborhoodGraph->setRenderingParameters(renderingParameters);
     glNeighborhoodGraph->draw(10, &camera);
   }

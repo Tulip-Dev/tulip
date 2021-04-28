@@ -17,18 +17,19 @@
  *
  */
 #include <tulip/BoundingBox.h>
+#include <tulip/Coord.h>
+#include <tulip/GlRect.h>
+#include <tulip/Glyph.h>
 #include <tulip/Node.h>
 #include <tulip/Size.h>
-#include <tulip/Coord.h>
-#include <tulip/Glyph.h>
-#include <tulip/GlRect.h>
 
 using namespace tlp;
 using namespace std;
 
 Glyph::Glyph(const tlp::PluginContext *context) : glGraphInputData(nullptr) {
   if (context != nullptr) {
-    const GlyphContext *glyphContext = static_cast<const GlyphContext *>(context);
+    const GlyphContext *glyphContext =
+        static_cast<const GlyphContext *>(context);
     glGraphInputData = glyphContext->glGraphInputData;
   }
 }
@@ -47,8 +48,8 @@ void Glyph::getTextBoundingBox(BoundingBox &boundingBox, node n) {
 }
 
 //=============================================
-Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from, const Size &scale,
-                       const double zRotation) const {
+Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from,
+                       const Size &scale, const double zRotation) const {
   Coord &&anchor = from - nodeCenter;
 
   if (anchor.getX() == 0.0f && anchor.getY() == 0.0f)
@@ -94,12 +95,14 @@ Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from, const Size &s
 //=================================================================
 Coord Glyph::getAnchor(const Coord &vector) const {
   Coord anchor(vector);
-  /* anchor must be on the surface of a sphere centered on nodecenter, radius is 0.5 */
+  /* anchor must be on the surface of a sphere centered on nodecenter, radius is
+   * 0.5 */
   anchor *= 0.5f / anchor.norm();
   return anchor;
 }
 //=================================================================
-void Glyph::drawRectInScreenPlane(GlRect &rect, const Size &size, bool disableMasks) {
+void Glyph::drawRectInScreenPlane(GlRect &rect, const Size &size,
+                                  bool disableMasks) {
   // setup rect orientation to ensure it is drawn is the screen plane
   float mdlM[16];
   glGetFloatv(GL_MODELVIEW_MATRIX, mdlM);

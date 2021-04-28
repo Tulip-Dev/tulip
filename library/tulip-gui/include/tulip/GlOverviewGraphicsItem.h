@@ -21,12 +21,12 @@
 #ifndef GLOVERVIEWGRAPHICSITEM_H
 #define GLOVERVIEWGRAPHICSITEM_H
 
-#include <tulip/tulipconf.h>
 #include <tulip/Camera.h>
 #include <tulip/Color.h>
+#include <tulip/tulipconf.h>
 
-#include <QGraphicsPixmapItem>
 #include <QGraphicsPathItem>
+#include <QGraphicsPixmapItem>
 
 #include <set>
 
@@ -35,7 +35,8 @@ namespace tlp {
 class GlMainView;
 class GlScene;
 
-class TLP_QT_SCOPE GlOverviewGraphicsItem : public QObject, public QGraphicsRectItem {
+class TLP_QT_SCOPE GlOverviewGraphicsItem : public QObject,
+                                            public QGraphicsRectItem {
 
   Q_OBJECT
 
@@ -44,20 +45,12 @@ public:
   ~GlOverviewGraphicsItem() override;
 
   void setSize(unsigned int width, unsigned int height);
-  inline unsigned int getWidth() {
-    return width;
-  }
-  inline unsigned int getHeight() {
-    return height;
-  }
+  inline unsigned int getWidth() { return width; }
+  inline unsigned int getHeight() { return height; }
 
-  void setFrameColor(const Color &color) {
-    _frameColor = color;
-  }
+  void setFrameColor(const Color &color) { _frameColor = color; }
 
-  void setFrameWidth(int width) {
-    _frameWidth = width;
-  }
+  void setFrameWidth(int width) { _frameWidth = width; }
 
   void setLayerVisible(const std::string &name, bool visible);
 

@@ -29,8 +29,9 @@
 namespace tlp {
 
 /**
- * This class represents a list of selectable string entries that can be used as plugin parameter.
- * The list will appear as a combo box in the Plugin Parameter Dialog from the Tulip GUI.
+ * This class represents a list of selectable string entries that can be used as
+ * plugin parameter. The list will appear as a combo box in the Plugin Parameter
+ * Dialog from the Tulip GUI.
  */
 class TLP_SCOPE StringCollection {
 
@@ -53,8 +54,9 @@ public:
   /**
    * Initializes a string collection from a semicolon separated values string.
    *
-   * @param param  a semicolon separated values string ("entry1;...;entryN"). If an entry need to
-   * contain a semicolon, you have to escape it the following way : \; .
+   * @param param  a semicolon separated values string ("entry1;...;entryN"). If
+   * an entry need to contain a semicolon, you have to escape it the following
+   * way : \; .
    */
   explicit StringCollection(const std::string &param);
 
@@ -64,7 +66,8 @@ public:
    * @param vectorParam a vector of strings entries for the string collection
    * @param currentParam the index of the current selected string in the vector
    */
-  StringCollection(const std::vector<std::string> &vectorParam, const int currentParam);
+  StringCollection(const std::vector<std::string> &vectorParam,
+                   const int currentParam);
 
   /**
    * Initializes a string collection with strings stored in a vector.
@@ -72,7 +75,8 @@ public:
    * @param vectorParam a vector of strings entries for the string collection
    * @param currentString the current selected string value from the vector
    */
-  StringCollection(const std::vector<std::string> &vectorParam, const std::string &currentString);
+  StringCollection(const std::vector<std::string> &vectorParam,
+                   const std::string &currentString);
 
   /**
    * Returns all the selectable string entries.
@@ -110,9 +114,7 @@ public:
    *
    * @param element the string to add to the collection
    */
-  void push_back(const std::string &element) {
-    _data.push_back(element);
-  }
+  void push_back(const std::string &element) { _data.push_back(element); }
 
   /**
    * Concatenete a string collection to the current collection
@@ -125,38 +127,26 @@ public:
   /**
    * Returns true if the collection is empty.
    */
-  inline bool empty() const {
-    return _data.empty();
-  }
+  inline bool empty() const { return _data.empty(); }
   /**
    * @brief clear the content of the collection.
    */
-  void clear() {
-    _data.clear();
-  }
+  void clear() { _data.clear(); }
 
   /**
    * Returns the string element at a certain index in the collection.
    *
    * @param index a valid index in the collection
    */
-  inline std::string at(const size_t index) const {
-    return _data.at(index);
-  }
+  inline std::string at(const size_t index) const { return _data.at(index); }
 
   /**
    * Returns the number of strings in the collection.
    */
-  inline size_t size() const {
-    return _data.size();
-  }
+  inline size_t size() const { return _data.size(); }
 
-  inline std::string operator[](const unsigned int i) const {
-    return _data[i];
-  }
-  inline std::string &operator[](const unsigned int i) {
-    return _data[i];
-  }
+  inline std::string operator[](const unsigned int i) const { return _data[i]; }
+  inline std::string &operator[](const unsigned int i) { return _data[i]; }
 };
 } // namespace tlp
 #endif

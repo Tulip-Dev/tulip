@@ -22,9 +22,9 @@
 
 #include <unordered_map>
 
-#include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
 #include <tulip/PropertyAlgorithm.h>
+#include <tulip/PropertyTypes.h>
 
 namespace tlp {
 
@@ -47,19 +47,21 @@ public:
   void scale(const tlp::Vector<float, 3> &, Iterator<node> *, Iterator<edge> *);
 
   // redefinition of some PropertyInterface methods
-  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
+  PropertyInterface *clonePrototype(Graph *,
+                                    const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const override {
-    return propertyTypename;
-  }
+  const std::string &getTypename() const override { return propertyTypename; }
   DEFINE_GET_CPP_CLASS_NAME;
 
   // redefinition of some AbstractProperty methods
-  void setNodeValue(const node n,
-                    tlp::StoredType<tlp::SizeType::RealType>::ReturnedConstValue v) override;
-  void setAllNodeValue(tlp::StoredType<tlp::SizeType::RealType>::ReturnedConstValue v) override;
-  void setValueToGraphNodes(tlp::StoredType<tlp::SizeType::RealType>::ReturnedConstValue v,
-                            const Graph *graph) override;
+  void setNodeValue(
+      const node n,
+      tlp::StoredType<tlp::SizeType::RealType>::ReturnedConstValue v) override;
+  void setAllNodeValue(
+      tlp::StoredType<tlp::SizeType::RealType>::ReturnedConstValue v) override;
+  void setValueToGraphNodes(
+      tlp::StoredType<tlp::SizeType::RealType>::ReturnedConstValue v,
+      const Graph *graph) override;
 
   int compare(const node n1, const node n2) const override;
 
@@ -74,7 +76,8 @@ private:
 
 /**
  * @ingroup Graph
- * @brief A graph property that maps a std::vector<tlp::Size> value to graph elements.
+ * @brief A graph property that maps a std::vector<tlp::Size> value to graph
+ * elements.
  */
 class TLP_SCOPE SizeVectorProperty
     : public AbstractVectorProperty<tlp::SizeVectorType, tlp::SizeType> {
@@ -83,11 +86,10 @@ public:
       : AbstractVectorProperty<SizeVectorType, SizeType>(g, n) {}
 
   // redefinition of some PropertyInterface methods
-  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
+  PropertyInterface *clonePrototype(Graph *,
+                                    const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const override {
-    return propertyTypename;
-  }
+  const std::string &getTypename() const override { return propertyTypename; }
   DEFINE_GET_CPP_CLASS_NAME;
 };
 } // namespace tlp

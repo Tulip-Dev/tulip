@@ -26,11 +26,10 @@ using namespace tlp;
 //=============================================================================================
 // This is the original dfs recursive implementation
 // I don't remove it because it corresponds to the original algorithm
-/*static void bicoTestAndLabeling(const Graph & graph,node v, MutableContainer<int>& compnum,
-                    MutableContainer<int>& dfsnum, MutableContainer<int>& lowpt,
-                    MutableContainer<node>& father,stack<node>& current,
-                    int& count1,int& count2) {
-  lowpt.set(v.id, dfsnum.get(v.id));
+/*static void bicoTestAndLabeling(const Graph & graph,node v,
+MutableContainer<int>& compnum, MutableContainer<int>& dfsnum,
+MutableContainer<int>& lowpt, MutableContainer<node>& father,stack<node>&
+current, int& count1,int& count2) { lowpt.set(v.id, dfsnum.get(v.id));
   Iterator<edge> *it = graph.getInOutEdges(v);
   while(it->hasNext()) {
     edge e = it->next();
@@ -46,7 +45,8 @@ using namespace tlp;
       lowpt.set(v.id, std::min(lowpt.get(v.id), dfsnum.get(w.id)));
   } delete it;
   node w;
-  if (father.get(v.id) != node(UINT_MAX) && (lowpt.get(v.id) == dfsnum.get(father.get(v.id).id) ) )
+  if (father.get(v.id) != node(UINT_MAX) && (lowpt.get(v.id) ==
+dfsnum.get(father.get(v.id).id) ) )
   {
     do {
       w = current.top();
@@ -55,10 +55,8 @@ using namespace tlp;
       edge e;
       while(it->hasNext()) {
         edge e = it->next();
-        if (dfsnum.get(w.id) > dfsnum.get(graph.opposite(e,w).id) ) compnum.set(e.id, count2);
-      } delete it;
-    } while (w != v);
-    count2++;
+        if (dfsnum.get(w.id) > dfsnum.get(graph.opposite(e,w).id) )
+compnum.set(e.id, count2); } delete it; } while (w != v); count2++;
   }
 }*/
 // simple structure to implement
@@ -68,13 +66,15 @@ struct dfsBicoTestStruct {
   node opp;
   Iterator<edge> *ite;
 
-  dfsBicoTestStruct(node n, node o, Iterator<edge> *it) : v(n), opp(o), ite(it) {}
+  dfsBicoTestStruct(node n, node o, Iterator<edge> *it)
+      : v(n), opp(o), ite(it) {}
 };
 // dfs biconnected component loop
-static void bicoTestAndLabeling(const Graph &graph, node v, MutableContainer<int> &compnum,
-                                MutableContainer<int> &dfsnum, MutableContainer<int> &lowpt,
-                                MutableContainer<node> &father, stack<node> &current, int &count1,
-                                int &count2) {
+static void
+bicoTestAndLabeling(const Graph &graph, node v, MutableContainer<int> &compnum,
+                    MutableContainer<int> &dfsnum, MutableContainer<int> &lowpt,
+                    MutableContainer<node> &father, stack<node> &current,
+                    int &count1, int &count2) {
   Iterator<edge> *it = graph.getInOutEdges(v);
   stack<dfsBicoTestStruct> dfsLevels;
   dfsBicoTestStruct dfsParams(v, node(), it);
@@ -109,7 +109,8 @@ static void bicoTestAndLabeling(const Graph &graph, node v, MutableContainer<int
       if (opp.isValid())
         lowpt.set(opp.id, std::min(lowpt.get(opp.id), lowpt.get(v.id)));
 
-      if (father.get(v.id).isValid() && (lowpt.get(v.id) == dfsnum.get(father.get(v.id).id))) {
+      if (father.get(v.id).isValid() &&
+          (lowpt.get(v.id) == dfsnum.get(father.get(v.id).id))) {
         node w;
 
         do {
@@ -166,7 +167,8 @@ int biconnectedComponents(const Graph &graph, MutableContainer<int> &compnum) {
         num_isolated++;
       } else {
         current.push(v);
-        bicoTestAndLabeling(graph, v, compnum, dfsnum, lowpt, father, current, count1, count2);
+        bicoTestAndLabeling(graph, v, compnum, dfsnum, lowpt, father, current,
+                            count1, count2);
         current.pop();
       }
     }
@@ -179,17 +181,19 @@ int biconnectedComponents(const Graph &graph, MutableContainer<int> &compnum) {
 
 /** \addtogroup metric */
 
-/** This plugin is an implementation of a biconnected component decomposition algorithm. It assigns
- *  the same value to all the edges in the same component.
+/** This plugin is an implementation of a biconnected component decomposition
+ * algorithm. It assigns the same value to all the edges in the same component.
  *
  */
 class BiconnectedComponent : public DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Biconnected Component", "David Auber", "03/01/2005",
-                    "Implements a biconnected component decomposition."
-                    "It assigns the same value to all the edges in the same component.",
-                    "1.0", "Component")
-  BiconnectedComponent(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
+  PLUGININFORMATION(
+      "Biconnected Component", "David Auber", "03/01/2005",
+      "Implements a biconnected component decomposition."
+      "It assigns the same value to all the edges in the same component.",
+      "1.0", "Component")
+  BiconnectedComponent(const tlp::PluginContext *context)
+      : DoubleAlgorithm(context) {
     addOutParameter<unsigned int>("#biconnected components",
                                   "Number of biconnected components found");
   }

@@ -37,14 +37,12 @@
 
 // Node and forward declaration because g++ does
 // not understand nested classes.
-template <class T>
-class PairingHeap;
+template <class T> class PairingHeap;
 
 template <class T>
 std::ostream &operator<<(std::ostream &os, const PairingHeap<T> &b);
 
-template <class T>
-class PairNode {
+template <class T> class PairNode {
   friend std::ostream &operator<<<T>(std::ostream &os, const PairingHeap<T> &b);
   T element;
   PairNode *leftChild;
@@ -52,18 +50,17 @@ class PairNode {
   PairNode *prev;
 
   PairNode(const T &theElement)
-      : element(theElement), leftChild(nullptr), nextSibling(nullptr), prev(nullptr) {}
+      : element(theElement), leftChild(nullptr), nextSibling(nullptr),
+        prev(nullptr) {}
   friend class PairingHeap<T>;
 };
 
-template <class T>
-class Comparator {
+template <class T> class Comparator {
 public:
   virtual bool isLessThan(T const &lhs, T const &rhs) const = 0;
 };
 
-template <class T>
-class PairingHeap {
+template <class T> class PairingHeap {
   friend std::ostream &operator<<<T>(std::ostream &os, const PairingHeap<T> &b);
 
 public:

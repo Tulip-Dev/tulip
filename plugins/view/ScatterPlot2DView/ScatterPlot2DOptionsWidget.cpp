@@ -17,9 +17,9 @@
  *
  */
 
-#include <QPainter>
 #include <QLinearGradient>
 #include <QMainWindow>
+#include <QPainter>
 
 #include "ScatterPlot2DOptionsWidget.h"
 #include "ui_ScatterPlot2DOptionsWidget.h"
@@ -29,7 +29,8 @@
 namespace tlp {
 
 ScatterPlot2DOptionsWidget::ScatterPlot2DOptionsWidget(QWidget *parent)
-    : QWidget(parent), oldValuesInitialized(false), _ui(new Ui::ScatterPlot2DOptionsWidgetData) {
+    : QWidget(parent), oldValuesInitialized(false),
+      _ui(new Ui::ScatterPlot2DOptionsWidgetData) {
   _ui->setupUi(this);
   _ui->backColorButton->setDialogTitle("Choose the background color");
   _ui->minusOneColorButton->setDialogTitle("Choose the color for -1");
@@ -40,20 +41,23 @@ ScatterPlot2DOptionsWidget::ScatterPlot2DOptionsWidget(QWidget *parent)
   setButtonColor(_ui->zeroColorButton, Color(255, 255, 255));
   setButtonColor(_ui->oneColorButton, Color(0, 255, 0));
   updateColorScale();
-  connect(_ui->minusOneColorButton, SIGNAL(clicked()), this, SLOT(updateColorScale()));
-  connect(_ui->zeroColorButton, SIGNAL(clicked()), this, SLOT(updateColorScale()));
-  connect(_ui->oneColorButton, SIGNAL(clicked()), this, SLOT(updateColorScale()));
+  connect(_ui->minusOneColorButton, SIGNAL(clicked()), this,
+          SLOT(updateColorScale()));
+  connect(_ui->zeroColorButton, SIGNAL(clicked()), this,
+          SLOT(updateColorScale()));
+  connect(_ui->oneColorButton, SIGNAL(clicked()), this,
+          SLOT(updateColorScale()));
   connect(_ui->minSizeSpinBox, SIGNAL(valueChanged(int)), this,
           SLOT(minSizeSpinBoxValueChanged(int)));
   connect(_ui->maxSizeSpinBox, SIGNAL(valueChanged(int)), this,
           SLOT(maxSizeSpinBoxValueChanged(int)));
-  connect(_ui->useXScaleCheckBox, SIGNAL(toggled(bool)), this, SLOT(pressXScaleCheckBox(bool)));
-  connect(_ui->useYScaleCheckBox, SIGNAL(toggled(bool)), this, SLOT(pressYScaleCheckBox(bool)));
+  connect(_ui->useXScaleCheckBox, SIGNAL(toggled(bool)), this,
+          SLOT(pressXScaleCheckBox(bool)));
+  connect(_ui->useYScaleCheckBox, SIGNAL(toggled(bool)), this,
+          SLOT(pressYScaleCheckBox(bool)));
 }
 
-ScatterPlot2DOptionsWidget::~ScatterPlot2DOptionsWidget() {
-  delete _ui;
-}
+ScatterPlot2DOptionsWidget::~ScatterPlot2DOptionsWidget() { delete _ui; }
 
 void ScatterPlot2DOptionsWidget::setWidgetEnabled(const bool enabled) {
   _ui->xAxisFrame->setEnabled(enabled);
@@ -80,7 +84,8 @@ void ScatterPlot2DOptionsWidget::setBackgroundColor(const Color &color) {
   _ui->backColorButton->setTulipColor(color);
 }
 
-void ScatterPlot2DOptionsWidget::setButtonColor(ColorButton *button, const Color &color) {
+void ScatterPlot2DOptionsWidget::setButtonColor(ColorButton *button,
+                                                const Color &color) {
   button->setTulipColor(color);
 }
 
@@ -119,24 +124,30 @@ void ScatterPlot2DOptionsWidget::useCustomYAxisScale(const bool value) {
 }
 
 std::pair<double, double> ScatterPlot2DOptionsWidget::getXAxisScale() const {
-  return std::make_pair(_ui->useXMinSpinBox->value(), _ui->useXMaxSpinBox->value());
+  return std::make_pair(_ui->useXMinSpinBox->value(),
+                        _ui->useXMaxSpinBox->value());
 }
-void ScatterPlot2DOptionsWidget::setXAxisScale(const std::pair<double, double> &value) {
+void ScatterPlot2DOptionsWidget::setXAxisScale(
+    const std::pair<double, double> &value) {
   _ui->useXMinSpinBox->setValue(value.first);
   _ui->useXMaxSpinBox->setValue(value.second);
 }
 std::pair<double, double> ScatterPlot2DOptionsWidget::getYAxisScale() const {
-  return std::make_pair(_ui->useYMinSpinBox->value(), _ui->useYMaxSpinBox->value());
+  return std::make_pair(_ui->useYMinSpinBox->value(),
+                        _ui->useYMaxSpinBox->value());
 }
-void ScatterPlot2DOptionsWidget::setYAxisScale(const std::pair<double, double> &value) {
+void ScatterPlot2DOptionsWidget::setYAxisScale(
+    const std::pair<double, double> &value) {
   _ui->useYMinSpinBox->setValue(value.first);
   _ui->useYMaxSpinBox->setValue(value.second);
 }
 
-void ScatterPlot2DOptionsWidget::setInitXAxisScale(const std::pair<double, double> &value) {
+void ScatterPlot2DOptionsWidget::setInitXAxisScale(
+    const std::pair<double, double> &value) {
   initXAxisScale = value;
 }
-void ScatterPlot2DOptionsWidget::setInitYAxisScale(const std::pair<double, double> &value) {
+void ScatterPlot2DOptionsWidget::setInitYAxisScale(
+    const std::pair<double, double> &value) {
   initYAxisScale = value;
 }
 
@@ -183,15 +194,13 @@ void ScatterPlot2DOptionsWidget::updateColorScale() {
   qLinearGradient.setColorAt(0, _ui->minusOneColorButton->color());
   qLinearGradient.setColorAt(1. / 2., _ui->zeroColorButton->color());
   qLinearGradient.setColorAt(1, _ui->oneColorButton->color());
-  painter.fillRect(0, 0, _ui->colorScaleLabel->width(), _ui->colorScaleLabel->height(),
-                   qLinearGradient);
+  painter.fillRect(0, 0, _ui->colorScaleLabel->width(),
+                   _ui->colorScaleLabel->height(), qLinearGradient);
   painter.end();
   _ui->colorScaleLabel->setPixmap(pixmap);
 }
 
-void ScatterPlot2DOptionsWidget::showEvent(QShowEvent *) {
-  updateColorScale();
-}
+void ScatterPlot2DOptionsWidget::showEvent(QShowEvent *) { updateColorScale(); }
 
 bool ScatterPlot2DOptionsWidget::displayNodeLabels() const {
   return _ui->showLabelCB->isChecked();
@@ -245,10 +254,13 @@ bool ScatterPlot2DOptionsWidget::configurationChanged() {
 
     if (oldUniformBackground != uniformBackground() ||
         oldUniformBackgroundColor != getBackgroundColor() ||
-        oldMinusOneColor != getMinusOneColor() || oldZeroColor != getZeroColor() ||
-        oldOneColor != getOneColor() || oldMinSizeMapping != getMinSizeMapping() ||
-        oldMaxSizeMapping != getMaxSizeMapping() || oldDisplayGraphEdges != displayGraphEdges() ||
-        oldDisplayNodeLabels != displayNodeLabels() || oldlabelscaled != displayScaleLabels() ||
+        oldMinusOneColor != getMinusOneColor() ||
+        oldZeroColor != getZeroColor() || oldOneColor != getOneColor() ||
+        oldMinSizeMapping != getMinSizeMapping() ||
+        oldMaxSizeMapping != getMaxSizeMapping() ||
+        oldDisplayGraphEdges != displayGraphEdges() ||
+        oldDisplayNodeLabels != displayNodeLabels() ||
+        oldlabelscaled != displayScaleLabels() ||
         oldUseCustomXAxisScale != useCustomXAxisScale() ||
         oldUseCustomYAxisScale != useCustomYAxisScale()) {
       confChanged = true;

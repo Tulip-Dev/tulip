@@ -18,32 +18,32 @@
  */
 #include "ui_GridOptionsWidget.h"
 
-#include <QGraphicsView>
 #include <QActionGroup>
 #include <QDialog>
+#include <QGraphicsView>
 #include <QMenu>
 #include <QString>
 
-#include <tulip/GlMetaNodeRenderer.h>
-#include <tulip/GlGrid.h>
 #include <tulip/DrawingTools.h>
-#include <tulip/TulipItemDelegate.h>
-#include <tulip/ParameterListModel.h>
-#include <tulip/GlMainWidget.h>
+#include <tulip/Gl2DRect.h>
+#include <tulip/GlCompositeHierarchyManager.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlGraphInputData.h>
-#include <tulip/Gl2DRect.h>
-#include <tulip/GlVertexArrayManager.h>
+#include <tulip/GlGrid.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/GlMetaNodeRenderer.h>
 #include <tulip/GlOverviewGraphicsItem.h>
-#include <tulip/Interactor.h>
-#include <tulip/TulipMetaTypes.h>
-#include <tulip/QtGlSceneZoomAndPanAnimator.h>
-#include <tulip/GlCompositeHierarchyManager.h>
-#include <tulip/TlpTools.h>
-#include <tulip/TlpQtTools.h>
-#include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/GlVertexArrayManager.h>
 #include <tulip/GraphModel.h>
+#include <tulip/Interactor.h>
+#include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/NumericProperty.h>
+#include <tulip/ParameterListModel.h>
+#include <tulip/QtGlSceneZoomAndPanAnimator.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/TlpTools.h>
+#include <tulip/TulipItemDelegate.h>
+#include <tulip/TulipMetaTypes.h>
 
 using namespace tlp;
 using namespace std;
@@ -51,8 +51,8 @@ using namespace std;
 const string NodeLinkDiagramComponent::viewName("Node Link Diagram view");
 
 NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext *)
-    : GlMainView(true), _grid(nullptr), _gridOptions(nullptr), manager(nullptr), _hasHulls(false),
-      grid_ui(nullptr) {}
+    : GlMainView(true), _grid(nullptr), _gridOptions(nullptr), manager(nullptr),
+      _hasHulls(false), grid_ui(nullptr) {}
 
 NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
   if (grid_ui)
@@ -70,9 +70,9 @@ void NodeLinkDiagramComponent::updateGrid() {
   if (_gridOptions == nullptr)
     return;
 
-  DataSet gridData =
-      static_cast<ParameterListModel *>(_gridOptions->findChild<QTableView *>()->model())
-          ->parametersValues();
+  DataSet gridData = static_cast<ParameterListModel *>(
+                         _gridOptions->findChild<QTableView *>()->model())
+                         ->parametersValues();
   StringCollection gridMode;
   gridData.get<StringCollection>("Grid mode", gridMode);
   int mode = gridMode.getCurrent();
@@ -93,9 +93,9 @@ void NodeLinkDiagramComponent::updateGrid() {
 
   GlGraphInputData *inputData =
       getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData();
-  BoundingBox graphBB =
-      computeBoundingBox(graph(), inputData->getElementLayout(), inputData->getElementSize(),
-                         inputData->getElementRotation());
+  BoundingBox graphBB = computeBoundingBox(
+      graph(), inputData->getElementLayout(), inputData->getElementSize(),
+      inputData->getElementRotation());
   Coord bottomLeft = Coord(graphBB[0] - margins);
   Coord topRight = Coord(graphBB[1] + margins);
 
@@ -110,8 +110,8 @@ void NodeLinkDiagramComponent::updateGrid() {
   displays[2] = onZ;
 
   _grid = new GlGrid(bottomLeft, topRight, gridSize, gridColor, displays);
-  getGlMainWidget()->getScene()->getLayer("Main")->addGlEntity(_grid,
-                                                               "Node Link Diagram Component grid");
+  getGlMainWidget()->getScene()->getLayer("Main")->addGlEntity(
+      _grid, "Node Link Diagram Component grid");
 }
 
 void NodeLinkDiagramComponent::draw() {
@@ -137,12 +137,14 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet &data) {
 }
 
 void NodeLinkDiagramComponent::graphChanged(tlp::Graph *graph) {
-  GlGraphComposite *composite = getGlMainWidget()->getScene()->getGlGraphComposite();
+  GlGraphComposite *composite =
+      getGlMainWidget()->getScene()->getGlGraphComposite();
   Graph *oldGraph = composite ? composite->getGraph() : nullptr;
   loadGraphOnScene(graph);
   registerTriggers();
 
-  if (oldGraph == nullptr || graph == nullptr || (oldGraph->getRoot() != graph->getRoot()) ||
+  if (oldGraph == nullptr || graph == nullptr ||
+      (oldGraph->getRoot() != graph->getRoot()) ||
       getGlMainWidget()->keepScenePointOfViewOnSubgraphChanging() == false)
     centerView();
 
@@ -158,7 +160,8 @@ tlp::DataSet NodeLinkDiagramComponent::state() const {
   return data;
 }
 
-void NodeLinkDiagramComponent::initRenderingParameters(GlGraphRenderingParameters *rp) {
+void NodeLinkDiagramComponent::initRenderingParameters(
+    GlGraphRenderingParameters *rp) {
   rp->setViewNodeLabel(true);
   rp->setEdgeColorInterpolate(false);
   rp->setNodesStencil(0x0002);
@@ -192,7 +195,8 @@ void NodeLinkDiagramComponent::createScene(Graph *graph, DataSet dataSet) {
     backgroundLayer->set2DMode();
     foregroundLayer->set2DMode();
     std::string dir = TulipBitmapDir;
-    Gl2DRect *labri = new Gl2DRect(35., 5., 49., 80., dir + "logolabri.jpg", false, false);
+    Gl2DRect *labri =
+        new Gl2DRect(35., 5., 49., 80., dir + "logolabri.jpg", false, false);
     labri->setStencil(1);
     labri->setVisible(false);
     labri->setInvertYTexture(true);
@@ -226,13 +230,16 @@ void NodeLinkDiagramComponent::createScene(Graph *graph, DataSet dataSet) {
   if (dataSet.exists("Display")) {
     DataSet renderingParameters;
     dataSet.get("Display", renderingParameters);
-    GlGraphRenderingParameters rp = scene->getGlGraphComposite()->getRenderingParameters();
+    GlGraphRenderingParameters rp =
+        scene->getGlGraphComposite()->getRenderingParameters();
     rp.setParameters(renderingParameters);
 
     string s;
 
-    if (renderingParameters.get("elementsOrderingPropertyName", s) && !s.empty()) {
-      rp.setElementOrderingProperty(dynamic_cast<tlp::NumericProperty *>(graph->getProperty(s)));
+    if (renderingParameters.get("elementsOrderingPropertyName", s) &&
+        !s.empty()) {
+      rp.setElementOrderingProperty(
+          dynamic_cast<tlp::NumericProperty *>(graph->getProperty(s)));
     }
 
     scene->getGlGraphComposite()->setRenderingParameters(rp);
@@ -253,7 +260,9 @@ void NodeLinkDiagramComponent::createScene(Graph *graph, DataSet dataSet) {
 DataSet NodeLinkDiagramComponent::sceneData() const {
   GlScene *scene = getGlMainWidget()->getScene();
   DataSet outDataSet = GlMainView::state();
-  outDataSet.set("Display", scene->getGlGraphComposite()->getRenderingParameters().getParameters());
+  outDataSet.set(
+      "Display",
+      scene->getGlGraphComposite()->getRenderingParameters().getParameters());
   std::string out;
   scene->getXML(out);
   size_t pos = out.find(TulipBitmapDir);
@@ -283,8 +292,8 @@ void NodeLinkDiagramComponent::loadGraphOnScene(Graph *graph) {
   if (_hasHulls)
     manager->setGraph(graph);
 
-  GlGraphComposite *oldGraphComposite =
-      static_cast<GlGraphComposite *>(scene->getLayer("Main")->findGlEntity("graph"));
+  GlGraphComposite *oldGraphComposite = static_cast<GlGraphComposite *>(
+      scene->getLayer("Main")->findGlEntity("graph"));
 
   if (!oldGraphComposite) {
     createScene(graph, DataSet());
@@ -292,8 +301,10 @@ void NodeLinkDiagramComponent::loadGraphOnScene(Graph *graph) {
     return;
   }
 
-  GlGraphRenderingParameters param = oldGraphComposite->getRenderingParameters();
-  GlMetaNodeRenderer *metaNodeRenderer = oldGraphComposite->getInputData()->getMetaNodeRenderer();
+  GlGraphRenderingParameters param =
+      oldGraphComposite->getRenderingParameters();
+  GlMetaNodeRenderer *metaNodeRenderer =
+      oldGraphComposite->getInputData()->getMetaNodeRenderer();
   // prevent deletion of MetaNodeRenderer when deleting oldGraphComposite
   oldGraphComposite->getInputData()->setMetaNodeRenderer(nullptr, false);
   GlGraphComposite *graphComposite = new GlGraphComposite(graph);
@@ -325,9 +336,13 @@ void NodeLinkDiagramComponent::registerTriggers() {
   if (graph() == nullptr)
     return;
 
-  addRedrawTrigger(getGlMainWidget()->getScene()->getGlGraphComposite()->getGraph());
-  const auto &properties =
-      getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->properties();
+  addRedrawTrigger(
+      getGlMainWidget()->getScene()->getGlGraphComposite()->getGraph());
+  const auto &properties = getGlMainWidget()
+                               ->getScene()
+                               ->getGlGraphComposite()
+                               ->getInputData()
+                               ->properties();
 
   for (auto prop : properties) {
     addRedrawTrigger(prop);
@@ -346,21 +361,23 @@ void NodeLinkDiagramComponent::setZOrdering(bool f) {
 void NodeLinkDiagramComponent::showGridControl() {
   if (!_gridOptions) {
     ParameterDescriptionList gridParameters;
-    gridParameters.add<StringCollection>("Grid mode", "", "No grid;Space divisions;Fixed size",
-                                         true);
+    gridParameters.add<StringCollection>(
+        "Grid mode", "", "No grid;Space divisions;Fixed size", true);
     gridParameters.add<Size>("Grid size", "", "(1,1,1)", false);
     gridParameters.add<Size>("Margins", "", "(0.5,0.5,0.5)", false);
     gridParameters.add<Color>("Grid color", "", "(0,0,0,255)", false);
     gridParameters.add<bool>("X grid", "", "true", false);
     gridParameters.add<bool>("Y grid", "", "true", false);
     gridParameters.add<bool>("Z grid", "", "true", false);
-    ParameterListModel *model = new ParameterListModel(gridParameters, nullptr, this);
+    ParameterListModel *model =
+        new ParameterListModel(gridParameters, nullptr, this);
 
     grid_ui = new Ui::GridOptionsWidget;
     _gridOptions = new QDialog(graphicsView());
     grid_ui->setupUi(_gridOptions);
     grid_ui->tableView->setModel(model);
-    grid_ui->tableView->setItemDelegate(new TulipItemDelegate(grid_ui->tableView));
+    grid_ui->tableView->setItemDelegate(
+        new TulipItemDelegate(grid_ui->tableView));
   }
   if (_gridOptions->exec() == QDialog::Rejected)
     return;
@@ -377,7 +394,8 @@ void NodeLinkDiagramComponent::requestChangeGraph(Graph *graph) {
   draw();
 }
 
-void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point) {
+void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu,
+                                               const QPointF &point) {
 
   // Check if a node/edge is under the mouse pointer
   bool result;
@@ -400,100 +418,123 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
     if (isNode) {
       action = selectMenu->addAction("node", this, SLOT(selectItem()));
       action->setToolTip(QString("Select the node #") + sId);
-      action = selectMenu->addAction("predecessor nodes", this, SLOT(selectInNodes()));
+      action = selectMenu->addAction("predecessor nodes", this,
+                                     SLOT(selectInNodes()));
       action->setToolTip(QString("Select the predecessors of node #") + sId);
-      action = selectMenu->addAction("successor nodes", this, SLOT(selectOutNodes()));
+      action = selectMenu->addAction("successor nodes", this,
+                                     SLOT(selectOutNodes()));
       action->setToolTip(QString("Select the sucessors of node #") + sId);
-      action = selectMenu->addAction("input edges", this, SLOT(selectInEdges()));
+      action =
+          selectMenu->addAction("input edges", this, SLOT(selectInEdges()));
       action->setToolTip(QString("Select the input edges of node #") + sId);
-      action = selectMenu->addAction("output edges", this, SLOT(selectOutEdges()));
+      action =
+          selectMenu->addAction("output edges", this, SLOT(selectOutEdges()));
       action->setToolTip(QString("Select the output edges of node #") + sId);
-      action = selectMenu->addAction("node and all its neighbour nodes (including edges)", this,
-                                     SLOT(selectNodeAndAllNeighbourNodesAndEdges()));
+      action = selectMenu->addAction(
+          "node and all its neighbour nodes (including edges)", this,
+          SLOT(selectNodeAndAllNeighbourNodesAndEdges()));
       action->setToolTip(QString("Select the node #") + sId +
                          " and its neighbours and adjacent edges");
     } else {
       action = selectMenu->addAction("edge", this, SLOT(selectItem()));
       action->setToolTip(QString("Select the edge #") + sId);
-      action = selectMenu->addAction("edge extremities", this, SLOT(selectExtremities()));
-      action->setToolTip(QString("Select the source and target nodes of edge #") + sId);
-      action =
-          selectMenu->addAction("edge and its extremities", this, SLOT(selectEdgeAndExtremities()));
-      action->setToolTip(QString("Select the edge #") + sId + " and its source and target nodes");
+      action = selectMenu->addAction("edge extremities", this,
+                                     SLOT(selectExtremities()));
+      action->setToolTip(
+          QString("Select the source and target nodes of edge #") + sId);
+      action = selectMenu->addAction("edge and its extremities", this,
+                                     SLOT(selectEdgeAndExtremities()));
+      action->setToolTip(QString("Select the edge #") + sId +
+                         " and its source and target nodes");
     }
 
     QMenu *addToSelectionMenu = menu->addMenu("Add to selection");
 
     if (isNode) {
-      action = addToSelectionMenu->addAction("node", this, SLOT(addItemToSelection()));
-      action->setToolTip(QString("Add the node #") + sId + " to the current selection");
-      action =
-          addToSelectionMenu->addAction("predecessor nodes", this, SLOT(addInNodesToSelection()));
+      action = addToSelectionMenu->addAction("node", this,
+                                             SLOT(addItemToSelection()));
+      action->setToolTip(QString("Add the node #") + sId +
+                         " to the current selection");
+      action = addToSelectionMenu->addAction("predecessor nodes", this,
+                                             SLOT(addInNodesToSelection()));
       action->setToolTip(QString("Add the predecessors of node #") + sId +
                          " to the current selection");
-      action =
-          addToSelectionMenu->addAction("successor nodes", this, SLOT(addOutNodesToSelection()));
+      action = addToSelectionMenu->addAction("successor nodes", this,
+                                             SLOT(addOutNodesToSelection()));
       action->setToolTip(QString("Add the sucessors of node #") + sId +
                          " to the current selection");
-      action = addToSelectionMenu->addAction("input edges", this, SLOT(addInEdgesToSelection()));
+      action = addToSelectionMenu->addAction("input edges", this,
+                                             SLOT(addInEdgesToSelection()));
       action->setToolTip(QString("Add the input edges of node #") + sId +
                          " to the current selection");
-      action = addToSelectionMenu->addAction("output edges", this, SLOT(addOutEdgesToSelection()));
+      action = addToSelectionMenu->addAction("output edges", this,
+                                             SLOT(addOutEdgesToSelection()));
       action->setToolTip(QString("Add the output edges of node #") + sId +
                          " to the current selection");
       action = addToSelectionMenu->addAction(
           tr("node and all its neighbour nodes (including edges)"), this,
           SLOT(addNodeAndAllNeighbourNodesAndEdgesToSelection()));
-      action->setToolTip(QString("Add the node #") + sId +
-                         "and its neighbours and adjacent edges to the current selection");
+      action->setToolTip(
+          QString("Add the node #") + sId +
+          "and its neighbours and adjacent edges to the current selection");
     } else {
-      action = addToSelectionMenu->addAction("edge", this, SLOT(addItemToSelection()));
-      action->setToolTip(QString("Add the edge #") + sId + " to the current selection");
+      action = addToSelectionMenu->addAction("edge", this,
+                                             SLOT(addItemToSelection()));
+      action->setToolTip(QString("Add the edge #") + sId +
+                         " to the current selection");
       action = addToSelectionMenu->addAction("edge extremities", this,
                                              SLOT(addExtremitiesToSelection()));
-      action->setToolTip(QString("Add the source and target nodes of edge #") + sId +
-                         " to the current selection");
-      action = addToSelectionMenu->addAction("edge and its extremities", this,
-                                             SLOT(addEdgeAndExtremitiesToSelection()));
-      action->setToolTip(QString("Add the edge #") + sId +
-                         "and its  source and target nodes to the current selection");
+      action->setToolTip(QString("Add the source and target nodes of edge #") +
+                         sId + " to the current selection");
+      action = addToSelectionMenu->addAction(
+          "edge and its extremities", this,
+          SLOT(addEdgeAndExtremitiesToSelection()));
+      action->setToolTip(
+          QString("Add the edge #") + sId +
+          "and its  source and target nodes to the current selection");
     }
 
     QMenu *removeFromSelectionMenu = menu->addMenu("Remove from selection");
 
     if (isNode) {
-      action = removeFromSelectionMenu->addAction("node", this, SLOT(removeItemFromSelection()));
-      action->setToolTip(QString("Remove the node #") + sId + " from the current selection");
-      action = removeFromSelectionMenu->addAction("predecessor nodes", this,
-                                                  SLOT(removeInNodesFromSelection()));
+      action = removeFromSelectionMenu->addAction(
+          "node", this, SLOT(removeItemFromSelection()));
+      action->setToolTip(QString("Remove the node #") + sId +
+                         " from the current selection");
+      action = removeFromSelectionMenu->addAction(
+          "predecessor nodes", this, SLOT(removeInNodesFromSelection()));
       action->setToolTip(QString("Remove the predecessors of node #") + sId +
                          " from the current selection");
-      action = removeFromSelectionMenu->addAction("successor nodes", this,
-                                                  SLOT(removeOutNodesFromSelection()));
+      action = removeFromSelectionMenu->addAction(
+          "successor nodes", this, SLOT(removeOutNodesFromSelection()));
       action->setToolTip(QString("Remove the successors of node #") + sId +
                          " from the current selection");
-      action = removeFromSelectionMenu->addAction("input edges", this,
-                                                  SLOT(removeInEdgesFromSelection()));
+      action = removeFromSelectionMenu->addAction(
+          "input edges", this, SLOT(removeInEdgesFromSelection()));
       action->setToolTip(QString("Remove the input edges of node #") + sId +
                          " from the current selection");
-      action = removeFromSelectionMenu->addAction("output edges", this,
-                                                  SLOT(removeOutEdgesFromSelection()));
+      action = removeFromSelectionMenu->addAction(
+          "output edges", this, SLOT(removeOutEdgesFromSelection()));
       action->setToolTip(QString("Remove the output edges of node #") + sId +
                          " from the current selection");
       action = removeFromSelectionMenu->addAction(
           "node and its neighbourhood", this,
           SLOT(removeNodeAndAllNeighbourNodesAndEdgesFromSelection()));
-      action->setToolTip(QString("Remove the node and the adjacent nodes of node #") + sId +
-                         " from the current selection");
+      action->setToolTip(
+          QString("Remove the node and the adjacent nodes of node #") + sId +
+          " from the current selection");
     } else {
-      action = removeFromSelectionMenu->addAction("edge", this, SLOT(removeItemFromSelection()));
-      action->setToolTip(QString("Remove the edge #") + sId + " from the current selection");
-      action = removeFromSelectionMenu->addAction("edge extremities", this,
-                                                  SLOT(removeExtremitiesFromSelection()));
+      action = removeFromSelectionMenu->addAction(
+          "edge", this, SLOT(removeItemFromSelection()));
+      action->setToolTip(QString("Remove the edge #") + sId +
+                         " from the current selection");
+      action = removeFromSelectionMenu->addAction(
+          "edge extremities", this, SLOT(removeExtremitiesFromSelection()));
       action->setToolTip(QString("Remove the extremities of edge #") + sId +
                          " from the current selection");
-      action = removeFromSelectionMenu->addAction("edge and its extremities", this,
-                                                  SLOT(removeEdgeAndExtremitiesFromSelection()));
+      action = removeFromSelectionMenu->addAction(
+          "edge and its extremities", this,
+          SLOT(removeEdgeAndExtremitiesFromSelection()));
       action->setToolTip(QString("Remove the edge #") + sId +
                          " and its extremities from the current selection");
     }
@@ -501,57 +542,82 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
     QMenu *toggleMenu = menu->addMenu("Toggle selection of");
 
     if (isNode) {
-      action = toggleMenu->addAction("node", this, SLOT(addRemoveItemToSelection()));
-      action->setToolTip(QString("Invert the selection of the node #") + sId);
       action =
-          toggleMenu->addAction("predecessor nodes", this, SLOT(addRemoveInNodesToSelection()));
-      action->setToolTip(QString("Invert the selection of the predecessors of the node #") + sId);
-      action = toggleMenu->addAction("successor nodes", this, SLOT(addRemoveOutNodesToSelection()));
-      action->setToolTip(QString("Invert the selection of the successors of the node #") + sId);
-      action = toggleMenu->addAction("input edges", this, SLOT(addRemoveInEdgesToSelection()));
-      action->setToolTip(QString("Invert the selection of the input edges of the node #") + sId);
-      action = toggleMenu->addAction("output edges", this, SLOT(addRemoveOutEdgesToSelection()));
-      action->setToolTip(QString("Invert the selection of the output edges of the node #") + sId);
-      action = toggleMenu->addAction("node and all its neighbour nodes (including edges)", this,
-                                     SLOT(addRemoveNodeAndAllNeighbourNodesAndEdges()));
+          toggleMenu->addAction("node", this, SLOT(addRemoveItemToSelection()));
+      action->setToolTip(QString("Invert the selection of the node #") + sId);
+      action = toggleMenu->addAction("predecessor nodes", this,
+                                     SLOT(addRemoveInNodesToSelection()));
+      action->setToolTip(
+          QString("Invert the selection of the predecessors of the node #") +
+          sId);
+      action = toggleMenu->addAction("successor nodes", this,
+                                     SLOT(addRemoveOutNodesToSelection()));
+      action->setToolTip(
+          QString("Invert the selection of the successors of the node #") +
+          sId);
+      action = toggleMenu->addAction("input edges", this,
+                                     SLOT(addRemoveInEdgesToSelection()));
+      action->setToolTip(
+          QString("Invert the selection of the input edges of the node #") +
+          sId);
+      action = toggleMenu->addAction("output edges", this,
+                                     SLOT(addRemoveOutEdgesToSelection()));
+      action->setToolTip(
+          QString("Invert the selection of the output edges of the node #") +
+          sId);
+      action = toggleMenu->addAction(
+          "node and all its neighbour nodes (including edges)", this,
+          SLOT(addRemoveNodeAndAllNeighbourNodesAndEdges()));
       action->setToolTip(QString("Invert the selection of the node #") + sId +
                          "and its neighbours and adjacent edges");
     } else {
-      action = toggleMenu->addAction("edge", this, SLOT(addRemoveItemToSelection()));
-      action->setToolTip(QString("Invert the selection of the edge #") + sId);
       action =
-          toggleMenu->addAction("edge extremities", this, SLOT(addRemoveExtremitiesToSelection()));
+          toggleMenu->addAction("edge", this, SLOT(addRemoveItemToSelection()));
+      action->setToolTip(QString("Invert the selection of the edge #") + sId);
+      action = toggleMenu->addAction("edge extremities", this,
+                                     SLOT(addRemoveExtremitiesToSelection()));
       action->setToolTip(
-          QString("Invert the selection of the source and target nodes of the edge #") + sId);
-      action = toggleMenu->addAction("edge and its extremities", this,
-                                     SLOT(addRemoveEdgeAndExtremitiesToSelection()));
+          QString(
+              "Invert the selection of the source and target nodes of the edge #") +
+          sId);
+      action =
+          toggleMenu->addAction("edge and its extremities", this,
+                                SLOT(addRemoveEdgeAndExtremitiesToSelection()));
       action->setToolTip(QString("Invert the selection of the edge #") + sId +
                          " and its source and target nodes");
     }
 
     action = menu->addAction("Delete", this, SLOT(deleteItem()));
-    action->setToolTip(QString("Delete the ") + (isNode ? "node #" : "edge #") + sId);
+    action->setToolTip(QString("Delete the ") + (isNode ? "node #" : "edge #") +
+                       sId);
 
     QMenu *updateMenu = menu->addMenu("Edit");
     action = updateMenu->addAction("Color", this, SLOT(editColor()));
-    action->setToolTip(QString("Display a dialog box to update the color of the ") +
-                       (isNode ? "node #" : "edge #") + sId);
+    action->setToolTip(
+        QString("Display a dialog box to update the color of the ") +
+        (isNode ? "node #" : "edge #") + sId);
     action = updateMenu->addAction("Label", this, SLOT(editLabel()));
-    action->setToolTip(QString("Display a dialog box to update the label of the ") +
-                       (isNode ? "node #" : "edge #") + sId);
+    action->setToolTip(
+        QString("Display a dialog box to update the label of the ") +
+        (isNode ? "node #" : "edge #") + sId);
     action = updateMenu->addAction("Shape", this, SLOT(editShape()));
-    action->setToolTip(QString("Display a dialog box to update the shape of the ") +
-                       (isNode ? "node #" : "edge #") + sId);
+    action->setToolTip(
+        QString("Display a dialog box to update the shape of the ") +
+        (isNode ? "node #" : "edge #") + sId);
     action = updateMenu->addAction("Size", this, SLOT(editSize()));
-    action->setToolTip(QString("Display a dialog box to update the size of the ") +
-                       (isNode ? "node #" : "edge #") + sId);
+    action->setToolTip(
+        QString("Display a dialog box to update the size of the ") +
+        (isNode ? "node #" : "edge #") + sId);
 
     if (isNode) {
-      Graph *metaGraph = graph()->getNodeMetaInfo(node(entity.getComplexEntityId()));
+      Graph *metaGraph =
+          graph()->getNodeMetaInfo(node(entity.getComplexEntityId()));
 
       if (metaGraph) {
         action = menu->addAction("Go inside", this, SLOT(goInsideItem()));
-        action->setToolTip(QString("Display the subgraph represented by the meta-node #") + sId);
+        action->setToolTip(
+            QString("Display the subgraph represented by the meta-node #") +
+            sId);
         menu->addAction("Ungroup", this, SLOT(ungroupItem()));
         action->setToolTip(QString("Replace the meta-node #") + sId +
                            " by the subgraph it represents");
@@ -564,8 +630,8 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
     GlMainView::fillContextMenu(menu, point);
 
     QAction *action = menu->addAction("Use Z ordering");
-    action->setToolTip(
-        QString("The graph elements are displayed according the ordering of their z coordinate"));
+    action->setToolTip(QString(
+        "The graph elements are displayed according the ordering of their z coordinate"));
     action->setCheckable(true);
     action->setChecked(getGlMainWidget()
                            ->getScene()
@@ -573,14 +639,18 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
                            ->getRenderingParametersPointer()
                            ->isElementZOrdered());
     connect(action, SIGNAL(triggered(bool)), this, SLOT(setZOrdering(bool)));
-    action = menu->addAction("Grid display parameters", this, SLOT(showGridControl()));
+    action = menu->addAction("Grid display parameters", this,
+                             SLOT(showGridControl()));
     action->setToolTip(QString("Display the grid setup wizard"));
   }
 }
 
-void NodeLinkDiagramComponent::addRemoveItemToSelection(bool pushGraph, bool toggleSelection,
-                                                        bool selectValue, bool resetSelection) {
-  BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+void NodeLinkDiagramComponent::addRemoveItemToSelection(bool pushGraph,
+                                                        bool toggleSelection,
+                                                        bool selectValue,
+                                                        bool resetSelection) {
+  BooleanProperty *elementSelected =
+      graph()->getProperty<BooleanProperty>("viewSelection");
 
   if (pushGraph) {
     graph()->push();
@@ -594,15 +664,21 @@ void NodeLinkDiagramComponent::addRemoveItemToSelection(bool pushGraph, bool tog
   // selection add/remove graph item
   if (isNode)
     elementSelected->setNodeValue(
-        node(itemId), toggleSelection ? !elementSelected->getNodeValue(node(itemId)) : selectValue);
+        node(itemId), toggleSelection
+                          ? !elementSelected->getNodeValue(node(itemId))
+                          : selectValue);
   else
     elementSelected->setEdgeValue(
-        edge(itemId), toggleSelection ? !elementSelected->getEdgeValue(edge(itemId)) : selectValue);
+        edge(itemId), toggleSelection
+                          ? !elementSelected->getEdgeValue(edge(itemId))
+                          : selectValue);
 }
 
-void NodeLinkDiagramComponent::addRemoveInNodesToSelection(bool pushGraph, bool toggleSelection,
-                                                           bool selectValue, bool resetSelection) {
-  BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+void NodeLinkDiagramComponent::addRemoveInNodesToSelection(
+    bool pushGraph, bool toggleSelection, bool selectValue,
+    bool resetSelection) {
+  BooleanProperty *elementSelected =
+      graph()->getProperty<BooleanProperty>("viewSelection");
 
   if (pushGraph) {
     graph()->push();
@@ -616,16 +692,19 @@ void NodeLinkDiagramComponent::addRemoveInNodesToSelection(bool pushGraph, bool 
   MutableContainer<bool> inNodes;
   for (auto neigh : graph()->getInNodes(node(itemId))) {
     if (inNodes.get(neigh.id) == false) {
-      elementSelected->setNodeValue(neigh, toggleSelection ? !elementSelected->getNodeValue(neigh)
-                                                           : selectValue);
+      elementSelected->setNodeValue(
+          neigh, toggleSelection ? !elementSelected->getNodeValue(neigh)
+                                 : selectValue);
       inNodes.set(neigh.id, true);
     }
   }
 }
 
-void NodeLinkDiagramComponent::addRemoveOutNodesToSelection(bool pushGraph, bool toggleSelection,
-                                                            bool selectValue, bool resetSelection) {
-  BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+void NodeLinkDiagramComponent::addRemoveOutNodesToSelection(
+    bool pushGraph, bool toggleSelection, bool selectValue,
+    bool resetSelection) {
+  BooleanProperty *elementSelected =
+      graph()->getProperty<BooleanProperty>("viewSelection");
 
   if (pushGraph) {
     graph()->push();
@@ -639,16 +718,19 @@ void NodeLinkDiagramComponent::addRemoveOutNodesToSelection(bool pushGraph, bool
   MutableContainer<bool> outNodes;
   for (auto neigh : graph()->getOutNodes(node(itemId))) {
     if (outNodes.get(neigh.id) == false) {
-      elementSelected->setNodeValue(neigh, toggleSelection ? !elementSelected->getNodeValue(neigh)
-                                                           : selectValue);
+      elementSelected->setNodeValue(
+          neigh, toggleSelection ? !elementSelected->getNodeValue(neigh)
+                                 : selectValue);
       outNodes.set(neigh.id, true);
     }
   }
 }
 
-void NodeLinkDiagramComponent::addRemoveInEdgesToSelection(bool pushGraph, bool toggleSelection,
-                                                           bool selectValue, bool resetSelection) {
-  BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+void NodeLinkDiagramComponent::addRemoveInEdgesToSelection(
+    bool pushGraph, bool toggleSelection, bool selectValue,
+    bool resetSelection) {
+  BooleanProperty *elementSelected =
+      graph()->getProperty<BooleanProperty>("viewSelection");
 
   if (pushGraph) {
     graph()->push();
@@ -660,14 +742,16 @@ void NodeLinkDiagramComponent::addRemoveInEdgesToSelection(bool pushGraph, bool 
   }
 
   for (auto e : graph()->getInEdges(node(itemId))) {
-    elementSelected->setEdgeValue(e, toggleSelection ? !elementSelected->getEdgeValue(e)
-                                                     : selectValue);
+    elementSelected->setEdgeValue(
+        e, toggleSelection ? !elementSelected->getEdgeValue(e) : selectValue);
   }
 }
 
-void NodeLinkDiagramComponent::addRemoveOutEdgesToSelection(bool pushGraph, bool toggleSelection,
-                                                            bool selectValue, bool resetSelection) {
-  BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+void NodeLinkDiagramComponent::addRemoveOutEdgesToSelection(
+    bool pushGraph, bool toggleSelection, bool selectValue,
+    bool resetSelection) {
+  BooleanProperty *elementSelected =
+      graph()->getProperty<BooleanProperty>("viewSelection");
 
   if (pushGraph) {
     graph()->push();
@@ -679,14 +763,13 @@ void NodeLinkDiagramComponent::addRemoveOutEdgesToSelection(bool pushGraph, bool
   }
 
   for (auto e : graph()->getOutEdges(node(itemId))) {
-    elementSelected->setEdgeValue(e, toggleSelection ? !elementSelected->getEdgeValue(e)
-                                                     : selectValue);
+    elementSelected->setEdgeValue(
+        e, toggleSelection ? !elementSelected->getEdgeValue(e) : selectValue);
   }
 }
 
-void NodeLinkDiagramComponent::addRemoveNodeAndAllNeighbourNodesAndEdges(bool toggleSelection,
-                                                                         bool selectValue,
-                                                                         bool resetSelection) {
+void NodeLinkDiagramComponent::addRemoveNodeAndAllNeighbourNodesAndEdges(
+    bool toggleSelection, bool selectValue, bool resetSelection) {
   graph()->push();
   addRemoveItemToSelection(false, toggleSelection, selectValue, resetSelection);
   addRemoveInEdgesToSelection(false, toggleSelection, selectValue);
@@ -695,10 +778,11 @@ void NodeLinkDiagramComponent::addRemoveNodeAndAllNeighbourNodesAndEdges(bool to
   addRemoveOutNodesToSelection(false, toggleSelection, selectValue);
 }
 
-void NodeLinkDiagramComponent::addRemoveExtremitiesToSelection(bool pushGraph, bool toggleSelection,
-                                                               bool selectValue,
-                                                               bool resetSelection) {
-  BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+void NodeLinkDiagramComponent::addRemoveExtremitiesToSelection(
+    bool pushGraph, bool toggleSelection, bool selectValue,
+    bool resetSelection) {
+  BooleanProperty *elementSelected =
+      graph()->getProperty<BooleanProperty>("viewSelection");
 
   if (pushGraph) {
     graph()->push();
@@ -711,18 +795,18 @@ void NodeLinkDiagramComponent::addRemoveExtremitiesToSelection(bool pushGraph, b
 
   node src = graph()->source(edge(itemId));
   node tgt = graph()->target(edge(itemId));
-  elementSelected->setNodeValue(src, toggleSelection ? !elementSelected->getNodeValue(src)
-                                                     : selectValue);
+  elementSelected->setNodeValue(
+      src, toggleSelection ? !elementSelected->getNodeValue(src) : selectValue);
 
   if (src != tgt) {
-    elementSelected->setNodeValue(tgt, toggleSelection ? !elementSelected->getNodeValue(tgt)
-                                                       : selectValue);
+    elementSelected->setNodeValue(tgt, toggleSelection
+                                           ? !elementSelected->getNodeValue(tgt)
+                                           : selectValue);
   }
 }
 
-void NodeLinkDiagramComponent::addRemoveEdgeAndExtremitiesToSelection(bool toggleSelection,
-                                                                      bool selectValue,
-                                                                      bool resetSelection) {
+void NodeLinkDiagramComponent::addRemoveEdgeAndExtremitiesToSelection(
+    bool toggleSelection, bool selectValue, bool resetSelection) {
   graph()->push();
   addRemoveItemToSelection(false, toggleSelection, selectValue, resetSelection);
   addRemoveExtremitiesToSelection(false, toggleSelection, selectValue);
@@ -780,7 +864,8 @@ void NodeLinkDiagramComponent::addOutEdgesToSelection(bool pushGraph) {
   addRemoveOutEdgesToSelection(pushGraph, false, true);
 }
 
-void NodeLinkDiagramComponent::addNodeAndAllNeighbourNodesAndEdgesToSelection() {
+void NodeLinkDiagramComponent::
+    addNodeAndAllNeighbourNodesAndEdgesToSelection() {
   addRemoveNodeAndAllNeighbourNodesAndEdges(false, true);
 }
 
@@ -812,7 +897,8 @@ void NodeLinkDiagramComponent::removeOutEdgesFromSelection(bool pushGraph) {
   addRemoveOutEdgesToSelection(pushGraph, false, false);
 }
 
-void NodeLinkDiagramComponent::removeNodeAndAllNeighbourNodesAndEdgesFromSelection() {
+void NodeLinkDiagramComponent::
+    removeNodeAndAllNeighbourNodesAndEdgesFromSelection() {
   addRemoveNodeAndAllNeighbourNodesAndEdges(false, false);
 }
 
@@ -835,8 +921,8 @@ void NodeLinkDiagramComponent::deleteItem() {
 
 void NodeLinkDiagramComponent::editValue(PropertyInterface *pi) {
   TulipItemDelegate tid(getGlMainWidget());
-  QVariant val = TulipItemDelegate::showEditorDialog(isNode ? NODE : EDGE, pi, graph(), &tid,
-                                                     getGlMainWidget(), itemId);
+  QVariant val = TulipItemDelegate::showEditorDialog(
+      isNode ? NODE : EDGE, pi, graph(), &tid, getGlMainWidget(), itemId);
 
   // Check if edition has been cancelled
   if (!val.isValid())
@@ -853,22 +939,35 @@ void NodeLinkDiagramComponent::editValue(PropertyInterface *pi) {
 }
 
 void NodeLinkDiagramComponent::editColor() {
-  editValue(
-      getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementColor());
+  editValue(getGlMainWidget()
+                ->getScene()
+                ->getGlGraphComposite()
+                ->getInputData()
+                ->getElementColor());
 }
 
 void NodeLinkDiagramComponent::editLabel() {
-  editValue(
-      getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLabel());
+  editValue(getGlMainWidget()
+                ->getScene()
+                ->getGlGraphComposite()
+                ->getInputData()
+                ->getElementLabel());
 }
 
 void NodeLinkDiagramComponent::editShape() {
-  editValue(
-      getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementShape());
+  editValue(getGlMainWidget()
+                ->getScene()
+                ->getGlGraphComposite()
+                ->getInputData()
+                ->getElementShape());
 }
 
 void NodeLinkDiagramComponent::editSize() {
-  editValue(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementSize());
+  editValue(getGlMainWidget()
+                ->getScene()
+                ->getGlGraphComposite()
+                ->getInputData()
+                ->getElementSize());
 }
 
 const Camera &NodeLinkDiagramComponent::goInsideItem(node meta) {
@@ -898,9 +997,7 @@ const Camera &NodeLinkDiagramComponent::goInsideItem(node meta) {
   return getGlMainWidget()->getScene()->getLayer("Main")->getCamera();
 }
 
-void NodeLinkDiagramComponent::goInsideItem() {
-  goInsideItem(node(itemId));
-}
+void NodeLinkDiagramComponent::goInsideItem() { goInsideItem(node(itemId)); }
 
 void NodeLinkDiagramComponent::ungroupItem() {
   graph()->push();
@@ -917,20 +1014,19 @@ void NodeLinkDiagramComponent::useHulls(bool hasHulls) {
     GlScene *scene = getGlMainWidget()->getScene();
 
     manager = new GlCompositeHierarchyManager(
-        scene->getGlGraphComposite()->getInputData()->getGraph(), scene->getLayer("Main"), "Hulls",
+        scene->getGlGraphComposite()->getInputData()->getGraph(),
+        scene->getLayer("Main"), "Hulls",
         scene->getGlGraphComposite()->getInputData()->getElementLayout(),
         scene->getGlGraphComposite()->getInputData()->getElementSize(),
         scene->getGlGraphComposite()->getInputData()->getElementRotation());
-    // Now we remove and add GlGraphComposite to be sure of the order (first Hulls and after
-    // GraphComposite)
-    // This code doesn't affect the behavior of tulip but the tlp file is modified
+    // Now we remove and add GlGraphComposite to be sure of the order (first
+    // Hulls and after GraphComposite) This code doesn't affect the behavior of
+    // tulip but the tlp file is modified
     scene->getLayer("Main")->deleteGlEntity(scene->getGlGraphComposite());
     scene->getLayer("Main")->addGlEntity(scene->getGlGraphComposite(), "graph");
   }
 }
 
-bool NodeLinkDiagramComponent::hasHulls() const {
-  return _hasHulls;
-}
+bool NodeLinkDiagramComponent::hasHulls() const { return _hasHulls; }
 
 PLUGIN(NodeLinkDiagramComponent)

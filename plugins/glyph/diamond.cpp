@@ -17,13 +17,13 @@
  *
  */
 #include <tulip/Color.h>
-#include <tulip/Size.h>
 #include <tulip/Coord.h>
-#include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/GlRegularPolygon.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/GlRegularPolygon.h>
+#include <tulip/Glyph.h>
+#include <tulip/Size.h>
 #include <tulip/TulipViewSettings.h>
 
 using namespace std;
@@ -31,8 +31,9 @@ using namespace tlp;
 
 namespace tlp {
 
-static void drawDiamond(const Color &fillColor, const Color &borderColor, float borderWidth,
-                        const std::string &textureName, float lod, bool mode) {
+static void drawDiamond(const Color &fillColor, const Color &borderColor,
+                        float borderWidth, const std::string &textureName,
+                        float lod, bool mode) {
   static GlRegularPolygon diamond(Coord(0, 0, 0), Size(.5, .5, 0), 4);
   diamond.setLightingMode(mode);
   diamond.setFillColor(fillColor);
@@ -59,8 +60,8 @@ static void drawDiamond(const Color &fillColor, const Color &borderColor, float 
  */
 class Diamond : public Glyph {
 public:
-  GLYPHINFORMATION("2D - Diamond", "Patrick Mary", "23/06/2011", "Textured Diamond", "1.0",
-                   NodeShape::Diamond)
+  GLYPHINFORMATION("2D - Diamond", "Patrick Mary", "23/06/2011",
+                   "Textured Diamond", "1.0", NodeShape::Diamond)
   Diamond(const tlp::PluginContext *context = nullptr);
   ~Diamond() override;
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
@@ -82,7 +83,8 @@ void Diamond::draw(node n, float lod) {
 
   drawDiamond(glGraphInputData->getElementColor()->getNodeValue(n),
               glGraphInputData->getElementBorderColor()->getNodeValue(n),
-              glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod, true);
+              glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+              textureName, lod, true);
 }
 Coord Diamond::getAnchor(const Coord &vector) const {
   Coord v(vector);
@@ -117,19 +119,24 @@ Coord Diamond::getAnchor(const Coord &vector) const {
 class EEDiamond : public EdgeExtremityGlyph {
 public:
   GLYPHINFORMATION("2D - Diamond extremity", "Patrick Mary", "23/06/2011",
-                   "Textured Diamond for edge extremities", "1.0", EdgeExtremityShape::Diamond)
+                   "Textured Diamond for edge extremities", "1.0",
+                   EdgeExtremityShape::Diamond)
 
   EEDiamond(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
 
-  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) override {
-    string textureName = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor,
+            float lod) override {
+    string textureName =
+        edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
     if (!textureName.empty())
-      textureName = edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
+      textureName =
+          edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
 
-    drawDiamond(glyphColor, borderColor,
-                edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), textureName, lod,
-                false);
+    drawDiamond(
+        glyphColor, borderColor,
+        edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+        textureName, lod, false);
   }
 };
 

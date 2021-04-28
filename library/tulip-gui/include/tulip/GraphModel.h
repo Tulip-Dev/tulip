@@ -21,9 +21,9 @@
 #ifndef GRAPHMODEL_H
 #define GRAPHMODEL_H
 
-#include <QVector>
 #include <QSet>
 #include <QSortFilterProxyModel>
+#include <QVector>
 
 #include <tulip/Edge.h>
 #include <tulip/Observable.h>
@@ -41,12 +41,14 @@ public:
   static QVariant nodeDefaultValue(tlp::PropertyInterface *);
   static bool setNodeValue(unsigned int, tlp::PropertyInterface *, QVariant);
   static bool setNodeDefaultValue(tlp::PropertyInterface *, QVariant);
-  static bool setAllNodeValue(tlp::PropertyInterface *, QVariant, Graph *graph = nullptr);
+  static bool setAllNodeValue(tlp::PropertyInterface *, QVariant,
+                              Graph *graph = nullptr);
   static QVariant edgeValue(unsigned int, tlp::PropertyInterface *);
   static QVariant edgeDefaultValue(tlp::PropertyInterface *);
   static bool setEdgeValue(unsigned int, tlp::PropertyInterface *, QVariant);
   static bool setEdgeDefaultValue(tlp::PropertyInterface *, QVariant);
-  static bool setAllEdgeValue(tlp::PropertyInterface *, QVariant, Graph *graph = nullptr);
+  static bool setAllEdgeValue(tlp::PropertyInterface *, QVariant,
+                              Graph *graph = nullptr);
 
   explicit GraphModel(QObject *parent = nullptr);
 
@@ -59,16 +61,21 @@ public:
   QModelIndex parent(const QModelIndex &child) const override;
   Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-  QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
-  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
-  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-  bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+  QVariant headerData(int section, Qt::Orientation orientation,
+                      int role) const override;
+  QModelIndex index(int row, int column,
+                    const QModelIndex &parent = QModelIndex()) const override;
+  QVariant data(const QModelIndex &index,
+                int role = Qt::DisplayRole) const override;
+  bool setData(const QModelIndex &index, const QVariant &value,
+               int role) override;
 
   void treatEvent(const tlp::Event &) override;
   void treatEvents(const std::vector<tlp::Event> &) override;
 
   unsigned int elementAt(int) const;
-  virtual bool lessThan(unsigned int, unsigned int, tlp::PropertyInterface *) const = 0;
+  virtual bool lessThan(unsigned int, unsigned int,
+                        tlp::PropertyInterface *) const = 0;
   virtual QString stringValue(unsigned int, tlp::PropertyInterface *) const = 0;
   virtual QVariant value(unsigned int, tlp::PropertyInterface *) const = 0;
   virtual bool isNode() const = 0;
@@ -80,11 +87,13 @@ protected:
   QVector<PropertyInterface *> _properties;
   QSet<PropertyInterface *> _propertiesModified;
 
-  virtual bool setValue(unsigned int, tlp::PropertyInterface *, QVariant) const = 0;
+  virtual bool setValue(unsigned int, tlp::PropertyInterface *,
+                        QVariant) const = 0;
   void addRemoveRowsSequence(QVector<unsigned int> &rowsSequence, bool add);
 };
 
-class TLP_QT_SCOPE GraphSortFilterProxyModel : public QSortFilterProxyModel, public Observable {
+class TLP_QT_SCOPE GraphSortFilterProxyModel : public QSortFilterProxyModel,
+                                               public Observable {
   QVector<PropertyInterface *> _properties;
   BooleanProperty *_filterProperty;
 
@@ -95,8 +104,10 @@ public:
   void setSelectedOnly(bool);
   void setProperties(QVector<PropertyInterface *>);
 
-  bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
-  bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+  bool lessThan(const QModelIndex &left,
+                const QModelIndex &right) const override;
+  bool filterAcceptsRow(int sourceRow,
+                        const QModelIndex &sourceParent) const override;
 
   void treatEvent(const tlp::Event &) override;
 
@@ -110,19 +121,20 @@ public:
 
   void treatEvent(const tlp::Event &) override;
   void treatEvents(const std::vector<tlp::Event> &) override;
-  bool lessThan(unsigned int, unsigned int, tlp::PropertyInterface *) const override;
+  bool lessThan(unsigned int, unsigned int,
+                tlp::PropertyInterface *) const override;
   QString stringValue(unsigned int, tlp::PropertyInterface *) const override;
   QVariant value(unsigned int, tlp::PropertyInterface *) const override;
-  QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+  QVariant headerData(int section, Qt::Orientation orientation,
+                      int role) const override;
 
-  bool isNode() const override {
-    return true;
-  }
+  bool isNode() const override { return true; }
 
   static QString getNodeTooltip(Graph *graph, node n);
 
 protected:
-  bool setValue(unsigned int, tlp::PropertyInterface *, QVariant) const override;
+  bool setValue(unsigned int, tlp::PropertyInterface *,
+                QVariant) const override;
 
 private:
   bool _nodesAdded;
@@ -135,19 +147,20 @@ public:
   void setGraph(Graph *) override;
   void treatEvent(const tlp::Event &) override;
   void treatEvents(const std::vector<tlp::Event> &) override;
-  bool lessThan(unsigned int, unsigned int, tlp::PropertyInterface *) const override;
+  bool lessThan(unsigned int, unsigned int,
+                tlp::PropertyInterface *) const override;
   QString stringValue(unsigned int, tlp::PropertyInterface *) const override;
   QVariant value(unsigned int, tlp::PropertyInterface *) const override;
-  QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+  QVariant headerData(int section, Qt::Orientation orientation,
+                      int role) const override;
 
-  bool isNode() const override {
-    return false;
-  }
+  bool isNode() const override { return false; }
 
   static QString getEdgeTooltip(Graph *graph, edge e);
 
 protected:
-  bool setValue(unsigned int, tlp::PropertyInterface *, QVariant) const override;
+  bool setValue(unsigned int, tlp::PropertyInterface *,
+                QVariant) const override;
 
 private:
   bool _edgesAdded;

@@ -19,10 +19,10 @@
 #ifndef ORIENTABLESIZEPROXY_H
 #define ORIENTABLESIZEPROXY_H
 
-#include <vector>
-#include <tulip/SizeProperty.h>
 #include "OrientableConstants.h"
 #include "OrientableSize.h"
+#include <tulip/SizeProperty.h>
+#include <vector>
 
 class OrientableSizeProxy {
   friend class OrientableSize;
@@ -31,9 +31,11 @@ public:
   typedef OrientableSize PointType;
   typedef OrientableSize LineType;
 
-  OrientableSizeProxy(tlp::SizeProperty *sizesProxy, orientationType mask = ORI_DEFAULT);
+  OrientableSizeProxy(tlp::SizeProperty *sizesProxy,
+                      orientationType mask = ORI_DEFAULT);
 
-  OrientableSize createSize(const float width = 0, const float height = 0, const float depth = 0);
+  OrientableSize createSize(const float width = 0, const float height = 0,
+                            const float depth = 0);
   OrientableSize createSize(const tlp::Size &v);
 
   void setOrientation(orientationType mask);

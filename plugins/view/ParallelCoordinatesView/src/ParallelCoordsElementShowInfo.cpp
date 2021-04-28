@@ -24,8 +24,10 @@ using namespace std;
 
 namespace tlp {
 
-bool ParallelCoordsElementShowInfo::pick(int x, int y, SelectedEntity &selectedEntity) {
-  ParallelCoordinatesView *parallelView = static_cast<ParallelCoordinatesView *>(view());
+bool ParallelCoordsElementShowInfo::pick(int x, int y,
+                                         SelectedEntity &selectedEntity) {
+  ParallelCoordinatesView *parallelView =
+      static_cast<ParallelCoordinatesView *>(view());
   return parallelView->getDataUnderPointerProperties(x, y, selectedEntity);
 }
 } // namespace tlp

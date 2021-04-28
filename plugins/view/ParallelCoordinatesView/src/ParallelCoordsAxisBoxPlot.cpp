@@ -17,16 +17,16 @@
  *
  */
 
-#include <tulip/GlPolygon.h>
 #include <tulip/GlLabel.h>
-#include <tulip/GlQuad.h>
 #include <tulip/GlLines.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/GlPolygon.h>
+#include <tulip/GlQuad.h>
 
 #include "ParallelCoordinatesView.h"
+#include "ParallelCoordsAxisBoxPlot.h"
 #include "ParallelTools.h"
 #include "QuantitativeParallelAxis.h"
-#include "ParallelCoordsAxisBoxPlot.h"
 
 #include <QMouseEvent>
 
@@ -37,8 +37,8 @@ namespace tlp {
 const Color lightBlue(0, 217, 255, 100);
 const Color darkBlue(0, 0, 255, 255);
 
-GlAxisBoxPlot::GlAxisBoxPlot(QuantitativeParallelAxis *axis, const Color &fillColor,
-                             const Color &outlineColor)
+GlAxisBoxPlot::GlAxisBoxPlot(QuantitativeParallelAxis *axis,
+                             const Color &fillColor, const Color &outlineColor)
     : axis(axis), boxWidth(5 * axis->getAxisGradsWidth()), fillColor(fillColor),
       outlineColor(outlineColor), highlightRangeLowBound(nullptr),
       highlightRangeHighBound(nullptr) {}
@@ -61,38 +61,47 @@ void GlAxisBoxPlot::draw(float lod, Camera *camera) {
   Coord interQuartileRangeBoxCoords[4];
 
   if (axis->hasAscendingOrder()) {
-    boundingBox.expand(
-        Coord(bottomOutlierCoord.getX() - boxWidth / 2.0f, bottomOutlierCoord.getY(), 0.0f));
-    boundingBox.expand(
-        Coord(topOutlierCoord.getX() + boxWidth / 2.0f, topOutlierCoord.getY(), 0.0f));
+    boundingBox.expand(Coord(bottomOutlierCoord.getX() - boxWidth / 2.0f,
+                             bottomOutlierCoord.getY(), 0.0f));
+    boundingBox.expand(Coord(topOutlierCoord.getX() + boxWidth / 2.0f,
+                             topOutlierCoord.getY(), 0.0f));
 
     interQuartileRangeBoxCoords[0] =
-        Coord(thirdQuartileCoord.getX() - boxWidth / 2.0f, thirdQuartileCoord.getY(), 0.0f);
+        Coord(thirdQuartileCoord.getX() - boxWidth / 2.0f,
+              thirdQuartileCoord.getY(), 0.0f);
     interQuartileRangeBoxCoords[1] =
-        Coord(thirdQuartileCoord.getX() + boxWidth / 2.0f, thirdQuartileCoord.getY(), 0.0f);
+        Coord(thirdQuartileCoord.getX() + boxWidth / 2.0f,
+              thirdQuartileCoord.getY(), 0.0f);
     interQuartileRangeBoxCoords[2] =
-        Coord(firstQuartileCoord.getX() + boxWidth / 2.0f, firstQuartileCoord.getY(), 0.0f);
+        Coord(firstQuartileCoord.getX() + boxWidth / 2.0f,
+              firstQuartileCoord.getY(), 0.0f);
     interQuartileRangeBoxCoords[3] =
-        Coord(firstQuartileCoord.getX() - boxWidth / 2.0f, firstQuartileCoord.getY(), 0.0f);
+        Coord(firstQuartileCoord.getX() - boxWidth / 2.0f,
+              firstQuartileCoord.getY(), 0.0f);
   } else {
-    boundingBox.expand(
-        Coord(topOutlierCoord.getX() - boxWidth / 2.0f, topOutlierCoord.getY(), 0.0f));
-    boundingBox.expand(
-        Coord(bottomOutlierCoord.getX() + boxWidth / 2.0f, bottomOutlierCoord.getY(), 0.0f));
+    boundingBox.expand(Coord(topOutlierCoord.getX() - boxWidth / 2.0f,
+                             topOutlierCoord.getY(), 0.0f));
+    boundingBox.expand(Coord(bottomOutlierCoord.getX() + boxWidth / 2.0f,
+                             bottomOutlierCoord.getY(), 0.0f));
 
     interQuartileRangeBoxCoords[0] =
-        Coord(firstQuartileCoord.getX() - boxWidth / 2.0f, firstQuartileCoord.getY(), 0.0f);
+        Coord(firstQuartileCoord.getX() - boxWidth / 2.0f,
+              firstQuartileCoord.getY(), 0.0f);
     interQuartileRangeBoxCoords[1] =
-        Coord(firstQuartileCoord.getX() + boxWidth / 2.0f, firstQuartileCoord.getY(), 0.0f);
+        Coord(firstQuartileCoord.getX() + boxWidth / 2.0f,
+              firstQuartileCoord.getY(), 0.0f);
     interQuartileRangeBoxCoords[2] =
-        Coord(thirdQuartileCoord.getX() + boxWidth / 2.0f, thirdQuartileCoord.getY(), 0.0f);
+        Coord(thirdQuartileCoord.getX() + boxWidth / 2.0f,
+              thirdQuartileCoord.getY(), 0.0f);
     interQuartileRangeBoxCoords[3] =
-        Coord(thirdQuartileCoord.getX() - boxWidth / 2.0f, thirdQuartileCoord.getY(), 0.0f);
+        Coord(thirdQuartileCoord.getX() - boxWidth / 2.0f,
+              thirdQuartileCoord.getY(), 0.0f);
   }
 
-  GlQuad interQuartileRangeBox(interQuartileRangeBoxCoords[0], interQuartileRangeBoxCoords[1],
-                               interQuartileRangeBoxCoords[2], interQuartileRangeBoxCoords[3],
-                               fillColor);
+  GlQuad interQuartileRangeBox(interQuartileRangeBoxCoords[0],
+                               interQuartileRangeBoxCoords[1],
+                               interQuartileRangeBoxCoords[2],
+                               interQuartileRangeBoxCoords[3], fillColor);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
   glEnable(GL_LIGHTING);
@@ -102,29 +111,34 @@ void GlAxisBoxPlot::draw(float lod, Camera *camera) {
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  GlLines::glDrawLine(interQuartileRangeBoxCoords[0], interQuartileRangeBoxCoords[1], 2,
-                      GlLines::TLP_PLAIN, outlineColor, outlineColor);
-  GlLines::glDrawLine(interQuartileRangeBoxCoords[1], interQuartileRangeBoxCoords[2], 2,
-                      GlLines::TLP_PLAIN, outlineColor, outlineColor);
-  GlLines::glDrawLine(interQuartileRangeBoxCoords[2], interQuartileRangeBoxCoords[3], 2,
-                      GlLines::TLP_PLAIN, outlineColor, outlineColor);
-  GlLines::glDrawLine(interQuartileRangeBoxCoords[3], interQuartileRangeBoxCoords[0], 2,
-                      GlLines::TLP_PLAIN, outlineColor, outlineColor);
+  GlLines::glDrawLine(interQuartileRangeBoxCoords[0],
+                      interQuartileRangeBoxCoords[1], 2, GlLines::TLP_PLAIN,
+                      outlineColor, outlineColor);
+  GlLines::glDrawLine(interQuartileRangeBoxCoords[1],
+                      interQuartileRangeBoxCoords[2], 2, GlLines::TLP_PLAIN,
+                      outlineColor, outlineColor);
+  GlLines::glDrawLine(interQuartileRangeBoxCoords[2],
+                      interQuartileRangeBoxCoords[3], 2, GlLines::TLP_PLAIN,
+                      outlineColor, outlineColor);
+  GlLines::glDrawLine(interQuartileRangeBoxCoords[3],
+                      interQuartileRangeBoxCoords[0], 2, GlLines::TLP_PLAIN,
+                      outlineColor, outlineColor);
 
-  GlLines::glDrawLine(bottomOutlierCoord + Coord(-(boxWidth / 2.0f), 0.0f, 0.0f),
-                      bottomOutlierCoord + Coord(boxWidth / 2.0f, 0.0f, 0.0f), 2,
-                      GlLines::TLP_PLAIN, outlineColor, outlineColor);
+  GlLines::glDrawLine(bottomOutlierCoord +
+                          Coord(-(boxWidth / 2.0f), 0.0f, 0.0f),
+                      bottomOutlierCoord + Coord(boxWidth / 2.0f, 0.0f, 0.0f),
+                      2, GlLines::TLP_PLAIN, outlineColor, outlineColor);
   GlLines::glDrawLine(medianCoord + Coord(-(boxWidth / 2.0f), 0.0f, 0.0f),
-                      medianCoord + Coord(boxWidth / 2.0f, 0.0f, 0.0f), 2, GlLines::TLP_PLAIN,
-                      outlineColor, outlineColor);
+                      medianCoord + Coord(boxWidth / 2.0f, 0.0f, 0.0f), 2,
+                      GlLines::TLP_PLAIN, outlineColor, outlineColor);
   GlLines::glDrawLine(topOutlierCoord + Coord(-(boxWidth / 2.0f), 0.0f, 0.0f),
-                      topOutlierCoord + Coord(boxWidth / 2.0f, 0.0f, 0.0f), 2, GlLines::TLP_PLAIN,
-                      outlineColor, outlineColor);
+                      topOutlierCoord + Coord(boxWidth / 2.0f, 0.0f, 0.0f), 2,
+                      GlLines::TLP_PLAIN, outlineColor, outlineColor);
 
-  GlLines::glDrawLine(bottomOutlierCoord, firstQuartileCoord, 2, GlLines::TLP_DASHED, outlineColor,
-                      outlineColor);
-  GlLines::glDrawLine(thirdQuartileCoord, topOutlierCoord, 2, GlLines::TLP_DASHED, outlineColor,
-                      outlineColor);
+  GlLines::glDrawLine(bottomOutlierCoord, firstQuartileCoord, 2,
+                      GlLines::TLP_DASHED, outlineColor, outlineColor);
+  GlLines::glDrawLine(thirdQuartileCoord, topOutlierCoord, 2,
+                      GlLines::TLP_DASHED, outlineColor, outlineColor);
   glDisable(GL_BLEND);
 
   drawLabel(bottomOutlierCoord, axis->getBottomOutlierStringValue(), camera);
@@ -134,18 +148,20 @@ void GlAxisBoxPlot::draw(float lod, Camera *camera) {
   drawLabel(topOutlierCoord, axis->getTopOutlierStringValue(), camera);
 
   if (highlightRangeLowBound != nullptr && highlightRangeHighBound != nullptr) {
-    Coord highlightBoxCoords[4] = {Coord(highlightRangeHighBound->getX() - boxWidth / 2.0f,
-                                         highlightRangeHighBound->getY(), 0.0f),
-                                   Coord(highlightRangeHighBound->getX() + boxWidth / 2.0f,
-                                         highlightRangeHighBound->getY(), 0.0f),
-                                   Coord(highlightRangeLowBound->getX() + boxWidth / 2.0f,
-                                         highlightRangeLowBound->getY(), 0.0f),
-                                   Coord(highlightRangeLowBound->getX() - boxWidth / 2.0f,
-                                         highlightRangeLowBound->getY(), 0.0f)};
+    Coord highlightBoxCoords[4] = {
+        Coord(highlightRangeHighBound->getX() - boxWidth / 2.0f,
+              highlightRangeHighBound->getY(), 0.0f),
+        Coord(highlightRangeHighBound->getX() + boxWidth / 2.0f,
+              highlightRangeHighBound->getY(), 0.0f),
+        Coord(highlightRangeLowBound->getX() + boxWidth / 2.0f,
+              highlightRangeLowBound->getY(), 0.0f),
+        Coord(highlightRangeLowBound->getX() - boxWidth / 2.0f,
+              highlightRangeLowBound->getY(), 0.0f)};
     Color outlineColorTranslucent(outlineColor);
     outlineColorTranslucent.setA(10);
-    GlQuad highlightBox(highlightBoxCoords[0], highlightBoxCoords[1], highlightBoxCoords[2],
-                        highlightBoxCoords[3], outlineColorTranslucent);
+    GlQuad highlightBox(highlightBoxCoords[0], highlightBoxCoords[1],
+                        highlightBoxCoords[2], highlightBoxCoords[3],
+                        outlineColorTranslucent);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
     glEnable(GL_LIGHTING);
@@ -175,7 +191,8 @@ void GlAxisBoxPlot::setHighlightRangeIfAny(Coord sceneCoords) {
     } else if (sceneCoords.getY() < thirdQuartileCoord.getY() &&
                sceneCoords.getY() >
                    (medianCoord.getY() +
-                    (1.0f / 3.0f) * (thirdQuartileCoord.getY() - medianCoord.getY())) &&
+                    (1.0f / 3.0f) *
+                        (thirdQuartileCoord.getY() - medianCoord.getY())) &&
                sceneCoords.getX() > (medianCoord.getX() - (boxWidth / 2.0f)) &&
                sceneCoords.getX() < (medianCoord.getX() + (boxWidth / 2.0f))) {
 
@@ -185,10 +202,12 @@ void GlAxisBoxPlot::setHighlightRangeIfAny(Coord sceneCoords) {
 
     } else if (sceneCoords.getY() >
                    (medianCoord.getY() -
-                    (1.0f / 3.0f) * (medianCoord.getY() - firstQuartileCoord.getY())) &&
+                    (1.0f / 3.0f) *
+                        (medianCoord.getY() - firstQuartileCoord.getY())) &&
                sceneCoords.getY() <
                    (medianCoord.getY() +
-                    (1.0f / 3.0f) * (thirdQuartileCoord.getY() - medianCoord.getY())) &&
+                    (1.0f / 3.0f) *
+                        (thirdQuartileCoord.getY() - medianCoord.getY())) &&
                sceneCoords.getX() > (medianCoord.getX() - (boxWidth / 2.0f)) &&
                sceneCoords.getX() < (medianCoord.getX() + (boxWidth / 2.0f))) {
 
@@ -199,7 +218,8 @@ void GlAxisBoxPlot::setHighlightRangeIfAny(Coord sceneCoords) {
     } else if (sceneCoords.getY() > firstQuartileCoord.getY() &&
                sceneCoords.getY() <
                    (medianCoord.getY() -
-                    (1.0f / 3.0f) * (medianCoord.getY() - firstQuartileCoord.getY())) &&
+                    (1.0f / 3.0f) *
+                        (medianCoord.getY() - firstQuartileCoord.getY())) &&
                sceneCoords.getX() > (medianCoord.getX() - (boxWidth / 2.0f)) &&
                sceneCoords.getX() < (medianCoord.getX() + (boxWidth / 2.0f))) {
       highlightRangeLowBound = &firstQuartileCoord;
@@ -232,7 +252,8 @@ void GlAxisBoxPlot::setHighlightRangeIfAny(Coord sceneCoords) {
     } else if (sceneCoords.getY() > thirdQuartileCoord.getY() &&
                sceneCoords.getY() <
                    (medianCoord.getY() +
-                    (1.0f / 3.0f) * (thirdQuartileCoord.getY() - medianCoord.getY())) &&
+                    (1.0f / 3.0f) *
+                        (thirdQuartileCoord.getY() - medianCoord.getY())) &&
                sceneCoords.getX() > (medianCoord.getX() - (boxWidth / 2.0f)) &&
                sceneCoords.getX() < (medianCoord.getX() + (boxWidth / 2.0f))) {
 
@@ -242,10 +263,12 @@ void GlAxisBoxPlot::setHighlightRangeIfAny(Coord sceneCoords) {
 
     } else if (sceneCoords.getY() <
                    (medianCoord.getY() -
-                    (1.0f / 3.0f) * (medianCoord.getY() - firstQuartileCoord.getY())) &&
+                    (1.0f / 3.0f) *
+                        (medianCoord.getY() - firstQuartileCoord.getY())) &&
                sceneCoords.getY() >
                    (medianCoord.getY() +
-                    (1.0f / 3.0f) * (thirdQuartileCoord.getY() - medianCoord.getY())) &&
+                    (1.0f / 3.0f) *
+                        (thirdQuartileCoord.getY() - medianCoord.getY())) &&
                sceneCoords.getX() > (medianCoord.getX() - (boxWidth / 2.0f)) &&
                sceneCoords.getX() < (medianCoord.getX() + (boxWidth / 2.0f))) {
 
@@ -256,7 +279,8 @@ void GlAxisBoxPlot::setHighlightRangeIfAny(Coord sceneCoords) {
     } else if (sceneCoords.getY() < firstQuartileCoord.getY() &&
                sceneCoords.getY() >
                    (medianCoord.getY() -
-                    (1.0f / 3.0f) * (medianCoord.getY() - firstQuartileCoord.getY())) &&
+                    (1.0f / 3.0f) *
+                        (medianCoord.getY() - firstQuartileCoord.getY())) &&
                sceneCoords.getX() > (medianCoord.getX() - (boxWidth / 2.0f)) &&
                sceneCoords.getX() < (medianCoord.getX() + (boxWidth / 2.0f))) {
 
@@ -281,7 +305,8 @@ void GlAxisBoxPlot::setHighlightRangeIfAny(Coord sceneCoords) {
   }
 }
 
-void GlAxisBoxPlot::drawLabel(const Coord &position, const string &labelName, Camera *camera) {
+void GlAxisBoxPlot::drawLabel(const Coord &position, const string &labelName,
+                              Camera *camera) {
   float labelHeight = axis->getLabelHeight();
 
   float heightRef;
@@ -303,18 +328,18 @@ void GlAxisBoxPlot::drawLabel(const Coord &position, const string &labelName, Ca
   }
 
   GlLabel labelToDraw(
-      Coord(position.getX() - boxWidth / 2.0f - labelWidth / 2.0f, position.getY(), 0.0f),
+      Coord(position.getX() - boxWidth / 2.0f - labelWidth / 2.0f,
+            position.getY(), 0.0f),
       Size(labelWidth, labelHeight), outlineColor);
   labelToDraw.setText(labelName);
   labelToDraw.draw(0, camera);
 }
 
 ParallelCoordsAxisBoxPlot::ParallelCoordsAxisBoxPlot()
-    : parallelView(nullptr), currentGraph(nullptr), selectedAxis(nullptr), lastNbAxis(0) {}
+    : parallelView(nullptr), currentGraph(nullptr), selectedAxis(nullptr),
+      lastNbAxis(0) {}
 
-ParallelCoordsAxisBoxPlot::~ParallelCoordsAxisBoxPlot() {
-  deleteGlAxisPlot();
-}
+ParallelCoordsAxisBoxPlot::~ParallelCoordsAxisBoxPlot() { deleteGlAxisPlot(); }
 
 void ParallelCoordsAxisBoxPlot::viewChanged(View *view) {
   if (view == nullptr) {
@@ -353,13 +378,16 @@ void ParallelCoordsAxisBoxPlot::initOrUpdateBoxPlots() {
   currentGraph = parallelView->getGraphProxy()->getGraph();
 }
 
-void ParallelCoordsAxisBoxPlot::buildGlAxisPlot(const vector<ParallelAxis *> &currentAxis) {
+void ParallelCoordsAxisBoxPlot::buildGlAxisPlot(
+    const vector<ParallelAxis *> &currentAxis) {
   for (auto pa : currentAxis) {
     if (dynamic_cast<QuantitativeParallelAxis *>(pa)) {
-      QuantitativeParallelAxis *quantitativeAxis = static_cast<QuantitativeParallelAxis *>(pa);
+      QuantitativeParallelAxis *quantitativeAxis =
+          static_cast<QuantitativeParallelAxis *>(pa);
 
       if (quantitativeAxis->getMedianStringValue() != "KO")
-        axisBoxPlotMap[quantitativeAxis] = new GlAxisBoxPlot(quantitativeAxis, lightBlue, darkBlue);
+        axisBoxPlotMap[quantitativeAxis] =
+            new GlAxisBoxPlot(quantitativeAxis, lightBlue, darkBlue);
     }
   }
 }
@@ -388,14 +416,17 @@ bool ParallelCoordsAxisBoxPlot::eventFilter(QObject *widget, QEvent *e) {
     int x = glWidget->width() - me->x();
     int y = me->y();
     Coord screenCoords(x, y, 0.0f);
-    Coord sceneCoords(glWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(
-        glWidget->screenToViewport(screenCoords)));
+    Coord sceneCoords(
+        glWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(
+            glWidget->screenToViewport(screenCoords)));
     selectedAxis = parallelView->getAxisUnderPointer(me->x(), me->y());
 
     if (selectedAxis != nullptr) {
-      QuantitativeParallelAxis *qaxis = dynamic_cast<QuantitativeParallelAxis *>(selectedAxis);
+      QuantitativeParallelAxis *qaxis =
+          dynamic_cast<QuantitativeParallelAxis *>(selectedAxis);
       if (qaxis && axisBoxPlotMap.find(qaxis) != axisBoxPlotMap.end()) {
-        if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
+        if (parallelView->getLayoutType() ==
+            ParallelCoordinatesDrawing::CIRCULAR) {
           rotateVector(sceneCoords, -(selectedAxis->getRotationAngle()), Z_ROT);
         }
         axisBoxPlotMap[qaxis]->setHighlightRangeIfAny(sceneCoords);
@@ -411,11 +442,12 @@ bool ParallelCoordsAxisBoxPlot::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if (e->type() == QEvent::MouseButtonRelease) {
-    if (selectedAxis != nullptr && dynamic_cast<QuantitativeParallelAxis *>(selectedAxis)) {
+    if (selectedAxis != nullptr &&
+        dynamic_cast<QuantitativeParallelAxis *>(selectedAxis)) {
       Observable::holdObservers();
 
-      if (axisBoxPlotMap.find(static_cast<QuantitativeParallelAxis *>(selectedAxis)) !=
-          axisBoxPlotMap.end())
+      if (axisBoxPlotMap.find(static_cast<QuantitativeParallelAxis *>(
+              selectedAxis)) != axisBoxPlotMap.end())
         parallelView->highlightDataInAxisBoxPlotRange(
             static_cast<QuantitativeParallelAxis *>(selectedAxis));
 

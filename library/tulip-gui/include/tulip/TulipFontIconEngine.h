@@ -21,11 +21,11 @@
 #ifndef TULIPFONTICONENGINE_H
 #define TULIPFONTICONENGINE_H
 
+#include <QFont>
 #include <QIconEngine>
 #include <QPixmap>
-#include <QFont>
-#include <tulip/tulipconf.h>
 #include <tulip/TulipSettings.h>
+#include <tulip/tulipconf.h>
 
 class TLP_QT_SCOPE TulipFontIconEngine : public QIconEngine {
   QString iconQString;
@@ -44,9 +44,11 @@ public:
     return new TulipFontIconEngine(*this);
   }
 
-  void paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, QIcon::State state) override;
+  void paint(QPainter *painter, const QRect &rect, QIcon::Mode mode,
+             QIcon::State state) override;
 
-  QPixmap pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state) override;
+  QPixmap pixmap(const QSize &size, QIcon::Mode mode,
+                 QIcon::State state) override;
 
   static inline QIcon icon(const char *iconName, bool darkMode = false) {
     return QIcon(new TulipFontIconEngine(std::string(iconName), darkMode));
@@ -61,14 +63,18 @@ public:
   }
 
   static inline QPixmap pixmap(const std::string &iconName, unsigned int height,
-                               QIcon::Mode mode = QIcon::Normal, QIcon::State state = QIcon::On) {
-    return TulipFontIconEngine(iconName, tlp::TulipSettings::isDisplayInDarkMode())
+                               QIcon::Mode mode = QIcon::Normal,
+                               QIcon::State state = QIcon::On) {
+    return TulipFontIconEngine(iconName,
+                               tlp::TulipSettings::isDisplayInDarkMode())
         .pixmap(QSize(height, height), mode, state);
   }
 
   static inline QPixmap pixmap(const QString &iconName, unsigned int height,
-                               QIcon::Mode mode = QIcon::Normal, QIcon::State state = QIcon::On) {
-    return TulipFontIconEngine(iconName, tlp::TulipSettings::isDisplayInDarkMode())
+                               QIcon::Mode mode = QIcon::Normal,
+                               QIcon::State state = QIcon::On) {
+    return TulipFontIconEngine(iconName,
+                               tlp::TulipSettings::isDisplayInDarkMode())
         .pixmap(QSize(height, height), mode, state);
   }
 };

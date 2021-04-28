@@ -24,39 +24,26 @@
 #include <iostream>
 
 namespace tlp {
-template <typename T>
-class TypeInterface {
+template <typename T> class TypeInterface {
 public:
   typedef T RealType;
-  static RealType undefinedValue() {
-    return T();
-  }
-  static RealType defaultValue() {
-    return T();
-  }
+  static RealType undefinedValue() { return T(); }
+  static RealType defaultValue() { return T(); }
 
-  static unsigned int valueSize() {
-    return sizeof(T);
-  }
+  static unsigned int valueSize() { return sizeof(T); }
 
   static void write(std::ostream &, const RealType &) {}
   static void writeb(std::ostream &oss, const RealType &v) {
     oss.write(reinterpret_cast<const char *>(&v), sizeof(v));
   }
 
-  static bool read(std::istream &, RealType &) {
-    return false;
-  }
+  static bool read(std::istream &, RealType &) { return false; }
   static bool readb(std::istream &iss, RealType &v) {
     return bool(iss.read(reinterpret_cast<char *>(&v), sizeof(v)));
   }
 
-  static std::string toString(const RealType &) {
-    return "";
-  }
-  static bool fromString(RealType &, const std::string &) {
-    return false;
-  }
+  static std::string toString(const RealType &) { return ""; }
+  static bool fromString(RealType &, const std::string &) { return false; }
 };
 } // namespace tlp
 

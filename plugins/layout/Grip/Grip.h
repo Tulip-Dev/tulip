@@ -19,9 +19,9 @@
 #ifndef GRIP_H
 #define GRIP_H
 
+#include "MISFiltering.h"
 #include <tulip/LayoutProperty.h>
 #include <unordered_map>
-#include "MISFiltering.h"
 
 /*@{*/
 /** \file
@@ -76,7 +76,8 @@ private:
 
   void seeLayout(unsigned int);
 
-  unsigned int rounds(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int);
+  unsigned int rounds(unsigned int, unsigned int, unsigned int, unsigned int,
+                      unsigned int);
   void set_nbr_size();
   float sched(int, int, int, int, int);
 

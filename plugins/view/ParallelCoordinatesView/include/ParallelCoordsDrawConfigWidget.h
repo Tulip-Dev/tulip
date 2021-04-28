@@ -22,8 +22,8 @@
 
 #include <QWidget>
 
-#include <tulip/Size.h>
 #include <tulip/Color.h>
+#include <tulip/Size.h>
 
 namespace Ui {
 class ParallelCoordsDrawConfigWidgetData;

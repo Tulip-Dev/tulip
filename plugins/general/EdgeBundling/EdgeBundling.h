@@ -19,49 +19,50 @@
 #ifndef EDGE_BUNDLING_H
 #define EDGE_BUNDLING_H
 #include <climits>
-#include <vector>
-#include <tulip/TulipPluginHeaders.h>
 #include <tulip/LayoutProperty.h>
+#include <tulip/TulipPluginHeaders.h>
+#include <vector>
 
 /** \addtogroup selection */
 /*@{*/
 
 /**
- * This plugin is an implementation of the intuitive Edge Bundling technique published in :
- * "Winding Roads: Routing edges into bundles"
- * Antoine Lambert, Romain Bourqui and David Auber
- * Computer Graphics Forum special issue on 12th Eurographics/IEEE-VGTC Symposium on Visualization,
- * June 2010, pages 853-862,
+ * This plugin is an implementation of the intuitive Edge Bundling technique
+ * published in : "Winding Roads: Routing edges into bundles" Antoine Lambert,
+ * Romain Bourqui and David Auber Computer Graphics Forum special issue on 12th
+ * Eurographics/IEEE-VGTC Symposium on Visualization, June 2010, pages 853-862,
  * doi: 10.1111/j.1467-8659.2009.01700.x
  *
- * Visualizations of large graphs usually suffer from visual clutter due to a large amount of edge
- * crossings and node-edge overlaps.
- * Edge bundling is a technique aiming to reduce such clutter by routing edges and grouping them
+ * Visualizations of large graphs usually suffer from visual clutter due to a
+ * large amount of edge crossings and node-edge overlaps. Edge bundling is a
+ * technique aiming to reduce such clutter by routing edges and grouping them
  * into bundles.
- * It also helps to uncover high level edge patterns to show how information flows between different
- * region of a graph.
+ * It also helps to uncover high level edge patterns to show how information
+ * flows between different region of a graph.
  *
- * To apply this edge bundling technique, all nodes must have different positions.
- * If you encounter some crashes, try to apply the "Fast Overlap Removal" plugin before
- * executing this edge bundling plugin.
+ * To apply this edge bundling technique, all nodes must have different
+ * positions. If you encounter some crashes, try to apply the "Fast Overlap
+ * Removal" plugin before executing this edge bundling plugin.
  *
- *  \author David Auber, Romain Bourqui, Antoine Lambert, LaBRI University Bordeaux I France:
- *   auber@labri.fr
+ *  \author David Auber, Romain Bourqui, Antoine Lambert, LaBRI University
+ * Bordeaux I France: auber@labri.fr
  */
 class EdgeBundling : public tlp::Algorithm {
 public:
   EdgeBundling(const tlp::PluginContext *);
-  PLUGININFORMATION("Edge bundling", "David Auber/ Romain Bourqui / Antoine Lambert", "2010-...",
-                    "Edges routing algorithm, implementing the intuitive Edge Bundling technique "
-                    "published as:<br/>"
-                    "<b>Winding Roads: Routing edges into bundles</b><br>,"
-                    "Antoine Lambert, Romain Bourqui and David Auber, "
-                    "Computer Graphics Forum special issue on 12th Eurographics/IEEE-VGTC "
-                    "Symposium on Visualization, "
-                    "pages 853-862 (2010), doi: <a "
-                    "href=\"https://doi.org/10.1111/j.1467-8659.2009.01700.x\">10.1111/"
-                    "j.1467-8659.2009.01700.x</a>",
-                    "1.4", "")
+  PLUGININFORMATION(
+      "Edge bundling", "David Auber/ Romain Bourqui / Antoine Lambert",
+      "2010-...",
+      "Edges routing algorithm, implementing the intuitive Edge Bundling technique "
+      "published as:<br/>"
+      "<b>Winding Roads: Routing edges into bundles</b><br>,"
+      "Antoine Lambert, Romain Bourqui and David Auber, "
+      "Computer Graphics Forum special issue on 12th Eurographics/IEEE-VGTC "
+      "Symposium on Visualization, "
+      "pages 853-862 (2010), doi: <a "
+      "href=\"https://doi.org/10.1111/j.1467-8659.2009.01700.x\">10.1111/"
+      "j.1467-8659.2009.01700.x</a>",
+      "1.4", "")
   bool run() override;
 
 private:

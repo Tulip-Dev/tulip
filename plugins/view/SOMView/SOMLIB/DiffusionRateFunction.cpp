@@ -19,18 +19,18 @@
 
 #include "DiffusionRateFunction.h"
 
-DiffusionRateFunction::DiffusionRateFunction(TimeDecreasingFunction *decreasingFunction)
+DiffusionRateFunction::DiffusionRateFunction(
+    TimeDecreasingFunction *decreasingFunction)
     : timeFunction(decreasingFunction) {}
 
-DiffusionRateFunction::~DiffusionRateFunction() {
-  delete timeFunction;
-}
+DiffusionRateFunction::~DiffusionRateFunction() { delete timeFunction; }
 
 TimeDecreasingFunction *DiffusionRateFunction::getTimeDecreasingFunction() {
   return timeFunction;
 }
 
-void DiffusionRateFunction::setTimeDecreasingFunction(TimeDecreasingFunction *timeFunction) {
+void DiffusionRateFunction::setTimeDecreasingFunction(
+    TimeDecreasingFunction *timeFunction) {
   if (this->timeFunction) {
     delete this->timeFunction;
   }

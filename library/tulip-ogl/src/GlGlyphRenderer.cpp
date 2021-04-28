@@ -16,13 +16,13 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/GlBox.h>
 #include <tulip/GlGlyphRenderer.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlShaderProgram.h>
 #include <tulip/Glyph.h>
-#include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/GlBox.h>
 
 using namespace std;
 
@@ -95,26 +95,29 @@ void GlGlyphRenderer::startRendering() {
     _glyphShader->printInfoLog();
   }
 
-  if (_glyphShader && _glyphShader->isLinked() && !GlShaderProgram::getCurrentActiveShader()) {
+  if (_glyphShader && _glyphShader->isLinked() &&
+      !GlShaderProgram::getCurrentActiveShader()) {
     _renderingStarted = true;
   }
 }
 
-bool GlGlyphRenderer::renderingHasStarted() {
-  return _renderingStarted;
+bool GlGlyphRenderer::renderingHasStarted() { return _renderingStarted; }
+
+void GlGlyphRenderer::addNodeGlyphRendering(Glyph *glyph, node n, float lod,
+                                            const Coord &nodePos,
+                                            const Size &nodeSize, float nodeRot,
+                                            bool selected) {
+  _nodeGlyphsToRender.emplace_back(glyph, n, lod, nodePos, nodeSize, nodeRot,
+                                   selected);
 }
 
-void GlGlyphRenderer::addNodeGlyphRendering(Glyph *glyph, node n, float lod, const Coord &nodePos,
-                                            const Size &nodeSize, float nodeRot, bool selected) {
-  _nodeGlyphsToRender.emplace_back(glyph, n, lod, nodePos, nodeSize, nodeRot, selected);
-}
-
-void GlGlyphRenderer::addEdgeExtremityGlyphRendering(EdgeExtremityGlyph *glyph, edge e, node source,
-                                                     Color glyphColor, Color glyphBorderColor,
-                                                     float lod, Coord beginAnchor, Coord srcAnchor,
-                                                     Size size, bool selected) {
-  _edgeExtremityGlyphsToRender.emplace_back(glyph, e, source, glyphColor, glyphBorderColor, lod,
-                                            beginAnchor, srcAnchor, size, selected);
+void GlGlyphRenderer::addEdgeExtremityGlyphRendering(
+    EdgeExtremityGlyph *glyph, edge e, node source, Color glyphColor,
+    Color glyphBorderColor, float lod, Coord beginAnchor, Coord srcAnchor,
+    Size size, bool selected) {
+  _edgeExtremityGlyphsToRender.emplace_back(glyph, e, source, glyphColor,
+                                            glyphBorderColor, lod, beginAnchor,
+                                            srcAnchor, size, selected);
 }
 
 void GlGlyphRenderer::endRendering() {
@@ -123,8 +126,9 @@ void GlGlyphRenderer::endRendering() {
     return;
 
   if (!_selectionBox) {
-    _selectionBox = new GlBox(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 255, 255),
-                              Color(0, 255, 0, 255), false, true);
+    _selectionBox =
+        new GlBox(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 255, 255),
+                  Color(0, 255, 0, 255), false, true);
     _selectionBox->setOutlineSize(3);
   }
 
@@ -136,9 +140,11 @@ void GlGlyphRenderer::endRendering() {
     const NodeGlyphData &glyphData = _nodeGlyphsToRender[i];
 
     if (glyphData.selected) {
-      glStencilFunc(GL_LEQUAL, _inputData->parameters->getSelectedNodesStencil(), 0xFFFF);
+      glStencilFunc(GL_LEQUAL,
+                    _inputData->parameters->getSelectedNodesStencil(), 0xFFFF);
     } else {
-      glStencilFunc(GL_LEQUAL, _inputData->parameters->getNodesStencil(), 0xFFFF);
+      glStencilFunc(GL_LEQUAL, _inputData->parameters->getNodesStencil(),
+                    0xFFFF);
     }
 
     _glyphShader->setUniformVec3Float("pos", glyphData.nodePos);
@@ -147,7 +153,8 @@ void GlGlyphRenderer::endRendering() {
     _glyphShader->setUniformFloat("rotAngle", glyphData.nodeRot);
 
     if (glyphData.selected) {
-      _selectionBox->setStencil(_inputData->parameters->getSelectedNodesStencil() - 1);
+      _selectionBox->setStencil(
+          _inputData->parameters->getSelectedNodesStencil() - 1);
       _selectionBox->setOutlineColor(colorSelect);
       _selectionBox->draw(10, nullptr);
     }
@@ -159,9 +166,11 @@ void GlGlyphRenderer::endRendering() {
     const EdgeExtremityGlyphData &glyphData = _edgeExtremityGlyphsToRender[i];
 
     if (glyphData.selected) {
-      glStencilFunc(GL_LEQUAL, _inputData->parameters->getSelectedEdgesStencil(), 0xFFFF);
+      glStencilFunc(GL_LEQUAL,
+                    _inputData->parameters->getSelectedEdgesStencil(), 0xFFFF);
     } else {
-      glStencilFunc(GL_LEQUAL, _inputData->parameters->getEdgesStencil(), 0xFFFF);
+      glStencilFunc(GL_LEQUAL, _inputData->parameters->getEdgesStencil(),
+                    0xFFFF);
     }
 
     Coord &&dir = glyphData.srcAnchor - glyphData.beginAnchor;
@@ -176,10 +185,12 @@ void GlGlyphRenderer::endRendering() {
       cross /= cross.norm();
     }
 
-    _glyphShader->setUniformVec3Float("pos", glyphData.srcAnchor - glyphData.size / 2.f * dir);
+    _glyphShader->setUniformVec3Float("pos", glyphData.srcAnchor -
+                                                 glyphData.size / 2.f * dir);
     _glyphShader->setUniformVec3Float("size", glyphData.size);
     _glyphShader->setUniformVec3Float("rotVector", cross);
-    _glyphShader->setUniformFloat("rotAngle", -acos(dir.dotProduct(Coord(1, 0, 0))));
+    _glyphShader->setUniformFloat("rotAngle",
+                                  -acos(dir.dotProduct(Coord(1, 0, 0))));
     glyphData.glyph->draw(glyphData.e, glyphData.source, glyphData.glyphColor,
                           glyphData.glyphBorderColor, glyphData.lod);
   }

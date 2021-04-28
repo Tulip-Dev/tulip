@@ -17,15 +17,15 @@
  *
  */
 
-#include <tulip/TulipPluginHeaders.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/TulipPluginHeaders.h>
 #include <tulip/TulipViewSettings.h>
 
-#include <QStack>
-#include <QPair>
+#include <QDateTime>
 #include <QDir>
 #include <QFileInfo>
-#include <QDateTime>
+#include <QPair>
+#include <QStack>
 
 using namespace tlp;
 
@@ -51,52 +51,58 @@ static const char *paramHelp[] = {
     // symlinks
     "If true, follow symlinks on Unix (including Mac OS X) or .lnk file on Windows."};
 
-static const char *commonTextFilesExtArray[] = {"log", "msg", "odt", "pages", "rtf", "json",
-                                                "tex", "txt", "wpd", "wps",   "srt", "nfo"};
+static const char *commonTextFilesExtArray[] = {"log", "msg",  "odt", "pages",
+                                                "rtf", "json", "tex", "txt",
+                                                "wpd", "wps",  "srt", "nfo"};
 static const std::vector<std::string> commonTextFilesExt(
     commonTextFilesExtArray,
-    commonTextFilesExtArray + sizeof(commonTextFilesExtArray) / sizeof(commonTextFilesExtArray[0]));
+    commonTextFilesExtArray +
+        sizeof(commonTextFilesExtArray) / sizeof(commonTextFilesExtArray[0]));
 
-static const char *commonAudioFilesExtArray[] = {"aif", "iff", "m3u", "m4a", "mid", "mp3",
-                                                 "mpa", "ogg", "ra",  "wav", "wma", "flac"};
-static const std::vector<std::string>
-    commonAudioFilesExt(commonAudioFilesExtArray,
-                        commonAudioFilesExtArray +
-                            sizeof(commonAudioFilesExtArray) / sizeof(commonAudioFilesExtArray[0]));
+static const char *commonAudioFilesExtArray[] = {"aif", "iff", "m3u", "m4a",
+                                                 "mid", "mp3", "mpa", "ogg",
+                                                 "ra",  "wav", "wma", "flac"};
+static const std::vector<std::string> commonAudioFilesExt(
+    commonAudioFilesExtArray,
+    commonAudioFilesExtArray +
+        sizeof(commonAudioFilesExtArray) / sizeof(commonAudioFilesExtArray[0]));
 
-static const char *commonVideoFilesExtArray[] = {"3g2", "3gp", "asf", "asx", "avi",
-                                                 "flv", "m4v", "mkv", "mov", "mp4",
-                                                 "mpg", "rm",  "swf", "vob", "wmv"};
-static const std::vector<std::string>
-    commonVideoFilesExt(commonVideoFilesExtArray,
-                        commonVideoFilesExtArray +
-                            sizeof(commonVideoFilesExtArray) / sizeof(commonVideoFilesExtArray[0]));
+static const char *commonVideoFilesExtArray[] = {
+    "3g2", "3gp", "asf", "asx", "avi", "flv", "m4v", "mkv",
+    "mov", "mp4", "mpg", "rm",  "swf", "vob", "wmv"};
+static const std::vector<std::string> commonVideoFilesExt(
+    commonVideoFilesExtArray,
+    commonVideoFilesExtArray +
+        sizeof(commonVideoFilesExtArray) / sizeof(commonVideoFilesExtArray[0]));
 
-static const char *commonImageFilesExtArray[] = {"bmp", "dds",      "gif", "jpg", "jpeg", "png",
-                                                 "psd", "pspimage", "tga", "thm", "tif",  "tiff",
-                                                 "yuv", "ai",       "eps", "ps",  "svg"};
-static const std::vector<std::string>
-    commonImageFilesExt(commonImageFilesExtArray,
-                        commonImageFilesExtArray +
-                            sizeof(commonImageFilesExtArray) / sizeof(commonImageFilesExtArray[0]));
+static const char *commonImageFilesExtArray[] = {
+    "bmp", "dds", "gif",  "jpg", "jpeg", "png", "psd", "pspimage", "tga",
+    "thm", "tif", "tiff", "yuv", "ai",   "eps", "ps",  "svg"};
+static const std::vector<std::string> commonImageFilesExt(
+    commonImageFilesExtArray,
+    commonImageFilesExtArray +
+        sizeof(commonImageFilesExtArray) / sizeof(commonImageFilesExtArray[0]));
 
 static const char *commonArchiveFilesExtArray[] = {
-    "7z", "cbr", "deb", "gz", "pkg", "rar", "rpm", "sitx", "tar", "zip", "zipx", "bz2", "lzma"};
-static const std::vector<std::string>
-    commonArchiveFilesExt(commonArchiveFilesExtArray,
-                          commonArchiveFilesExtArray + sizeof(commonArchiveFilesExtArray) /
-                                                           sizeof(commonArchiveFilesExtArray[0]));
+    "7z",   "cbr", "deb", "gz",   "pkg", "rar", "rpm",
+    "sitx", "tar", "zip", "zipx", "bz2", "lzma"};
+static const std::vector<std::string> commonArchiveFilesExt(
+    commonArchiveFilesExtArray,
+    commonArchiveFilesExtArray + sizeof(commonArchiveFilesExtArray) /
+                                     sizeof(commonArchiveFilesExtArray[0]));
 
 static const char *commonDevFilesExtArray[] = {
-    "c",       "cc",        "class", "cpp", "cs",   "dtd", "fla", "h",   "hh",
-    "hpp",     "java",      "lua",   "m",   "pl",   "py",  "sh",  "sln", "swift",
-    "vcxproj", "xcodeproj", "css",   "js",  "html", "xml", "htm", "php", "xhtml"};
-static const std::vector<std::string> commonDevFilesExt(commonDevFilesExtArray,
-                                                        commonDevFilesExtArray +
-                                                            sizeof(commonDevFilesExtArray) /
-                                                                sizeof(commonDevFilesExtArray[0]));
+    "c",  "cc",   "class", "cpp",   "cs",      "dtd",       "fla",
+    "h",  "hh",   "hpp",   "java",  "lua",     "m",         "pl",
+    "py", "sh",   "sln",   "swift", "vcxproj", "xcodeproj", "css",
+    "js", "html", "xml",   "htm",   "php",     "xhtml"};
+static const std::vector<std::string> commonDevFilesExt(
+    commonDevFilesExtArray,
+    commonDevFilesExtArray +
+        sizeof(commonDevFilesExtArray) / sizeof(commonDevFilesExtArray[0]));
 
-static tlp::DataSet getDefaultAlgorithmParameters(const std::string &algoName, tlp::Graph *graph) {
+static tlp::DataSet getDefaultAlgorithmParameters(const std::string &algoName,
+                                                  tlp::Graph *graph) {
   tlp::DataSet result;
   const tlp::ParameterDescriptionList &parameters =
       tlp::PluginLister::getPluginParameters(algoName);
@@ -113,21 +119,25 @@ static tlp::DataSet getDefaultAlgorithmParameters(const std::string &algoName, t
 class FileSystem : public tlp::ImportModule {
 public:
   PLUGININFORMATION("File System Directory", "Auber", "16/12/2002",
-                    "Imports a tree representation of a file system directory.", "2.2", "Misc")
+                    "Imports a tree representation of a file system directory.",
+                    "2.2", "Misc")
   FileSystem(tlp::PluginContext *context)
-      : ImportModule(context), _absolutePaths(nullptr), _baseNames(nullptr), _createdDates(nullptr),
-        _fileNames(nullptr), _isDir(nullptr), _isExecutable(nullptr), _isReadable(nullptr),
-        _isSymlink(nullptr), _isWritable(nullptr), _lastModifiedDates(nullptr),
-        _lastReadDates(nullptr), _owners(nullptr), _permissions(nullptr), _suffixes(nullptr),
-        _sizes(nullptr), _fontIcon(nullptr), _useIcons(true), _treeLayout(true),
-        dirColor(255, 255, 127, 128) {
+      : ImportModule(context), _absolutePaths(nullptr), _baseNames(nullptr),
+        _createdDates(nullptr), _fileNames(nullptr), _isDir(nullptr),
+        _isExecutable(nullptr), _isReadable(nullptr), _isSymlink(nullptr),
+        _isWritable(nullptr), _lastModifiedDates(nullptr),
+        _lastReadDates(nullptr), _owners(nullptr), _permissions(nullptr),
+        _suffixes(nullptr), _sizes(nullptr), _fontIcon(nullptr),
+        _useIcons(true), _treeLayout(true), dirColor(255, 255, 127, 128) {
     addInParameter<std::string>("dir::directory", paramHelp[0], "");
     addInParameter<bool>("include hidden files", paramHelp[5], "true");
     addInParameter<bool>("follow symlinks", paramHelp[6], "true");
     addInParameter<bool>("icons", paramHelp[1], "true");
     addInParameter<bool>("tree layout", paramHelp[2], "true");
-    addInParameter<tlp::Color>("directory color", paramHelp[3], "(255, 255, 127, 255)");
-    addInParameter<tlp::Color>("other color", paramHelp[4], "(85, 170, 255, 255)");
+    addInParameter<tlp::Color>("directory color", paramHelp[3],
+                               "(255, 255, 127, 255)");
+    addInParameter<tlp::Color>("other color", paramHelp[4],
+                               "(85, 170, 255, 255)");
   }
 
   bool importGraph() override {
@@ -151,8 +161,8 @@ public:
     if (!rootInfo.exists()) {
 #ifndef NDEBUG
       tlp::warning() << "Provided directory "
-                     << tlp::QStringToTlpString(rootInfo.absoluteFilePath()) << " does not exist."
-                     << std::endl;
+                     << tlp::QStringToTlpString(rootInfo.absoluteFilePath())
+                     << " does not exist." << std::endl;
 #endif
       return false;
     }
@@ -166,7 +176,8 @@ public:
     _isReadable = graph->getProperty<tlp::BooleanProperty>("Is readable");
     _isSymlink = graph->getProperty<tlp::BooleanProperty>("Is symbolic link");
     _isWritable = graph->getProperty<tlp::BooleanProperty>("Is writable");
-    _lastModifiedDates = graph->getProperty<tlp::StringProperty>("Last modification date");
+    _lastModifiedDates =
+        graph->getProperty<tlp::StringProperty>("Last modification date");
     _lastReadDates = graph->getProperty<tlp::StringProperty>("Last read date");
     _owners = graph->getProperty<tlp::StringProperty>("Owner");
     _permissions = graph->getProperty<tlp::IntegerProperty>("Permission ID");
@@ -175,12 +186,14 @@ public:
     _fontIcon = graph->getProperty<tlp::StringProperty>("viewIcon");
 
     if (_useIcons) {
-      tlp::IntegerProperty *viewShape = graph->getProperty<tlp::IntegerProperty>("viewShape");
+      tlp::IntegerProperty *viewShape =
+          graph->getProperty<tlp::IntegerProperty>("viewShape");
       viewShape->setAllNodeValue(tlp::NodeShape::Icon);
       _fontIcon->setAllNodeValue("fa-file-o");
     }
 
-    tlp::ColorProperty *viewColor = graph->getProperty<tlp::ColorProperty>("viewColor");
+    tlp::ColorProperty *viewColor =
+        graph->getProperty<tlp::ColorProperty>("viewColor");
     viewColor->setAllNodeValue(otherColor);
 
     tlp::node rootNode = addFileNode(rootInfo, graph);
@@ -189,7 +202,8 @@ public:
       return true;
 
     QStack<QPair<QString, tlp::node>> fsStack;
-    fsStack.push(QPair<QString, tlp::node>(rootInfo.absoluteFilePath(), rootNode));
+    fsStack.push(
+        QPair<QString, tlp::node>(rootInfo.absoluteFilePath(), rootNode));
 
     while (!fsStack.empty()) {
       QPair<QString, tlp::node> elem = fsStack.pop();
@@ -206,11 +220,13 @@ public:
 
       int i = 0;
 
-      pluginProgress->setComment("Reading contents of " +
-                                 tlp::QStringToTlpString(currentDir.absolutePath()));
+      pluginProgress->setComment(
+          "Reading contents of " +
+          tlp::QStringToTlpString(currentDir.absolutePath()));
       pluginProgress->progress(i, entries.count());
 
-      for (QFileInfoList::iterator it = entries.begin(); it != entries.end(); ++it) {
+      for (QFileInfoList::iterator it = entries.begin(); it != entries.end();
+           ++it) {
         QFileInfo fileInfo(*it);
 
         // consider files starting with a dot as hidden (for windows platform)
@@ -222,7 +238,8 @@ public:
         graph->addEdge(parentNode, fileNode);
 
         if (fileInfo.isDir() && (!fileInfo.isSymLink() || symlinks))
-          fsStack.push_back(QPair<QString, tlp::node>(fileInfo.absoluteFilePath(), fileNode));
+          fsStack.push_back(
+              QPair<QString, tlp::node>(fileInfo.absoluteFilePath(), fileNode));
 
         if ((++i % 100) == 0)
           pluginProgress->progress(i, entries.count());
@@ -237,16 +254,19 @@ public:
       }
     }
 
-    tlp::StringProperty *viewLabel = graph->getProperty<tlp::StringProperty>("viewLabel");
+    tlp::StringProperty *viewLabel =
+        graph->getProperty<tlp::StringProperty>("viewLabel");
     viewLabel->copy(_fileNames);
 
     if (_treeLayout) {
       const std::string algoName = "Bubble Tree";
-      tlp::DataSet defaultParameters = getDefaultAlgorithmParameters(algoName, graph);
+      tlp::DataSet defaultParameters =
+          getDefaultAlgorithmParameters(algoName, graph);
       std::string errMsg;
-      tlp::LayoutProperty *viewLayout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
-      graph->applyPropertyAlgorithm(algoName, viewLayout, errMsg, &defaultParameters,
-                                    pluginProgress);
+      tlp::LayoutProperty *viewLayout =
+          graph->getProperty<tlp::LayoutProperty>("viewLayout");
+      graph->applyPropertyAlgorithm(algoName, viewLayout, errMsg,
+                                    &defaultParameters, pluginProgress);
     }
 
     return true;
@@ -255,12 +275,15 @@ public:
 private:
   tlp::node addFileNode(const QFileInfo &info, tlp::Graph *g) {
     tlp::node n = g->addNode();
-    _absolutePaths->setNodeValue(n, tlp::QStringToTlpString(info.absoluteFilePath()));
+    _absolutePaths->setNodeValue(
+        n, tlp::QStringToTlpString(info.absoluteFilePath()));
     _baseNames->setNodeValue(n, tlp::QStringToTlpString(info.baseName()));
 #if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
-    _createdDates->setNodeValue(n, tlp::QStringToTlpString(info.created().toString()));
+    _createdDates->setNodeValue(
+        n, tlp::QStringToTlpString(info.created().toString()));
 #else
-    _createdDates->setNodeValue(n, tlp::QStringToTlpString(info.birthTime().toString()));
+    _createdDates->setNodeValue(
+        n, tlp::QStringToTlpString(info.birthTime().toString()));
 #endif
     _fileNames->setNodeValue(n, tlp::QStringToTlpString(info.fileName()));
     _isDir->setNodeValue(n, info.isDir());
@@ -268,8 +291,10 @@ private:
     _isReadable->setNodeValue(n, info.isReadable());
     _isSymlink->setNodeValue(n, info.isSymLink());
     _isWritable->setNodeValue(n, info.isWritable());
-    _lastModifiedDates->setNodeValue(n, tlp::QStringToTlpString(info.lastModified().toString()));
-    _lastReadDates->setNodeValue(n, tlp::QStringToTlpString(info.lastRead().toString()));
+    _lastModifiedDates->setNodeValue(
+        n, tlp::QStringToTlpString(info.lastModified().toString()));
+    _lastReadDates->setNodeValue(
+        n, tlp::QStringToTlpString(info.lastRead().toString()));
     _owners->setNodeValue(n, tlp::QStringToTlpString(info.owner()));
     _permissions->setNodeValue(n, int(info.permissions()));
     _suffixes->setNodeValue(n, tlp::QStringToTlpString(info.suffix()));
@@ -280,25 +305,30 @@ private:
 
       if (info.isDir()) {
         _fontIcon->setNodeValue(n, "fa-folder-o");
-        tlp::ColorProperty *viewColor = graph->getProperty<tlp::ColorProperty>("viewColor");
+        tlp::ColorProperty *viewColor =
+            graph->getProperty<tlp::ColorProperty>("viewColor");
         viewColor->setNodeValue(n, dirColor);
-      } else if (std::find(commonTextFilesExt.begin(), commonTextFilesExt.end(), extension) !=
-                 commonTextFilesExt.end()) {
+      } else if (std::find(commonTextFilesExt.begin(), commonTextFilesExt.end(),
+                           extension) != commonTextFilesExt.end()) {
         _fontIcon->setNodeValue(n, "fa-file-text-o");
-      } else if (std::find(commonArchiveFilesExt.begin(), commonArchiveFilesExt.end(), extension) !=
-                 commonArchiveFilesExt.end()) {
+      } else if (std::find(commonArchiveFilesExt.begin(),
+                           commonArchiveFilesExt.end(),
+                           extension) != commonArchiveFilesExt.end()) {
         _fontIcon->setNodeValue(n, "fa-file-archive-o");
-      } else if (std::find(commonAudioFilesExt.begin(), commonAudioFilesExt.end(), extension) !=
-                 commonAudioFilesExt.end()) {
+      } else if (std::find(commonAudioFilesExt.begin(),
+                           commonAudioFilesExt.end(),
+                           extension) != commonAudioFilesExt.end()) {
         _fontIcon->setNodeValue(n, "fa-file-audio-o");
-      } else if (std::find(commonImageFilesExt.begin(), commonImageFilesExt.end(), extension) !=
-                 commonImageFilesExt.end()) {
+      } else if (std::find(commonImageFilesExt.begin(),
+                           commonImageFilesExt.end(),
+                           extension) != commonImageFilesExt.end()) {
         _fontIcon->setNodeValue(n, "fa-file-image-o");
-      } else if (std::find(commonVideoFilesExt.begin(), commonVideoFilesExt.end(), extension) !=
-                 commonVideoFilesExt.end()) {
+      } else if (std::find(commonVideoFilesExt.begin(),
+                           commonVideoFilesExt.end(),
+                           extension) != commonVideoFilesExt.end()) {
         _fontIcon->setNodeValue(n, "fa-file-video-o");
-      } else if (std::find(commonDevFilesExt.begin(), commonDevFilesExt.end(), extension) !=
-                 commonDevFilesExt.end()) {
+      } else if (std::find(commonDevFilesExt.begin(), commonDevFilesExt.end(),
+                           extension) != commonDevFilesExt.end()) {
         _fontIcon->setNodeValue(n, "file-file-code-o");
       } else if (extension == "pdf") {
         _fontIcon->setNodeValue(n, "file-file-pdf-o");

@@ -17,27 +17,27 @@
  *
  */
 
-#include "tulip/PythonInterpreter.h"
 #include "tulip/PythonCodeEditor.h"
-#include "tulip/PythonCodeHighlighter.h"
 #include "tulip/ParenMatcherHighlighter.h"
+#include "tulip/PythonCodeHighlighter.h"
+#include "tulip/PythonInterpreter.h"
 
 #include <tulip/Perspective.h>
 #include <tulip/TulipSettings.h>
 
-#include <QTextStream>
-#include <QPainter>
-#include <QTextBlock>
 #include <QApplication>
-#include <QMainWindow>
-#include <QToolTip>
-#include <QScrollBar>
-#include <QMessageBox>
-#include <QMimeData>
 #include <QDesktopWidget>
 #include <QFileInfo>
-#include <QScreen>
+#include <QMainWindow>
+#include <QMessageBox>
+#include <QMimeData>
+#include <QPainter>
 #include <QPushButton>
+#include <QScreen>
+#include <QScrollBar>
+#include <QTextBlock>
+#include <QTextStream>
+#include <QToolTip>
 
 #include "ui_FindReplaceDialog.h"
 
@@ -63,7 +63,8 @@ public:
 
 static GrabKeyboardFocusEventFilter keyboardFocusEventFilter;
 
-static char sepChar[] = {' ', '\t', '=', '(', '[', '{', ',', '*', '+', '/', '^', '-', 0};
+static char sepChar[] = {' ', '\t', '=', '(', '[', '{', ',',
+                         '*', '+',  '/', '^', '-', 0};
 
 namespace tlp {
 
@@ -89,7 +90,8 @@ private:
 
 AutoCompletionList::AutoCompletionList() : QListWidget(), _codeEditor(nullptr) {
 #if defined(__APPLE__)
-  setWindowFlags(static_cast<Qt::WindowFlags>(Qt::Popup | Qt::FramelessWindowHint));
+  setWindowFlags(
+      static_cast<Qt::WindowFlags>(Qt::Popup | Qt::FramelessWindowHint));
 #else
   setWindowFlags(static_cast<Qt::WindowFlags>(Qt::ToolTip));
 #endif
@@ -99,26 +101,29 @@ AutoCompletionList::AutoCompletionList() : QListWidget(), _codeEditor(nullptr) {
   installEventFilter(&keyboardFocusEventFilter);
   _activated = false;
   _wasActivated = false;
-  setToolTip("Use up and down arrow keys to navigate through the list (or use the mouse wheel).\n"
-             "Hit Enter key to insert the current selected item (or double click on it).\n"
-             "Hit Escape key to cancel the autocompletion list and hide it.");
+  setToolTip(
+      "Use up and down arrow keys to navigate through the list (or use the mouse wheel).\n"
+      "Hit Enter key to insert the current selected item (or double click on it).\n"
+      "Hit Escape key to cancel the autocompletion list and hide it.");
 }
 
 void AutoCompletionList::keyPressEvent(QKeyEvent *e) {
   if (e->key() == Qt::Key_Escape) {
     e->accept();
     close();
-  } else if (e->key() == Qt::Key_Down || e->key() == Qt::Key_Up || e->key() == Qt::Key_Home ||
-             e->key() == Qt::Key_End || e->key() == Qt::Key_PageUp ||
-             e->key() == Qt::Key_PageDown) {
+  } else if (e->key() == Qt::Key_Down || e->key() == Qt::Key_Up ||
+             e->key() == Qt::Key_Home || e->key() == Qt::Key_End ||
+             e->key() == Qt::Key_PageUp || e->key() == Qt::Key_PageDown) {
     QListWidget::keyPressEvent(e);
   } else if (e->key() == Qt::Key_Left) {
     if (horizontalScrollBar()) {
-      horizontalScrollBar()->setSliderPosition(horizontalScrollBar()->sliderPosition() - 2);
+      horizontalScrollBar()->setSliderPosition(
+          horizontalScrollBar()->sliderPosition() - 2);
     }
   } else if (e->key() == Qt::Key_Right) {
     if (horizontalScrollBar()) {
-      horizontalScrollBar()->setSliderPosition(horizontalScrollBar()->sliderPosition() + 2);
+      horizontalScrollBar()->setSliderPosition(
+          horizontalScrollBar()->sliderPosition() + 2);
     }
   } else if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return) {
     e->accept();
@@ -161,7 +166,8 @@ void AutoCompletionList::insertSelectedItem() {
           break;
       }
 
-      cursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, start - end);
+      cursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor,
+                          start - end);
       cursor.removeSelectedText();
     }
 
@@ -181,7 +187,8 @@ void AutoCompletionList::insertSelectedItem() {
     if (!type.isEmpty()) {
       QVector<QString> types;
       types.push_back(type);
-      QVector<QString> baseTypes = PythonInterpreter::getInstance()->getBaseTypesForType(type);
+      QVector<QString> baseTypes =
+          PythonInterpreter::getInstance()->getBaseTypesForType(type);
 
       for (int i = 0; i < baseTypes.size(); ++i) {
         types.push_back(baseTypes[i]);
@@ -192,12 +199,14 @@ void AutoCompletionList::insertSelectedItem() {
 
         if (APIDataBase::getInstance()->functionExists(funcName)) {
           QVector<QVector<QString>> params =
-              APIDataBase::getInstance()->getParamTypesForMethodOrFunction(funcName);
+              APIDataBase::getInstance()->getParamTypesForMethodOrFunction(
+                  funcName);
 
           if (params.count() > 1 || params[0].count() > 0) {
             if (text.indexOf("class ") == -1)
-              qApp->sendEvent(_codeEditor, new QKeyEvent(QEvent::KeyPress, Qt::Key_ParenLeft,
-                                                         Qt::NoModifier, "("));
+              qApp->sendEvent(_codeEditor,
+                              new QKeyEvent(QEvent::KeyPress, Qt::Key_ParenLeft,
+                                            Qt::NoModifier, "("));
           } else {
             cursor.insertText("()");
           }
@@ -231,15 +240,17 @@ void AutoCompletionList::setCodeEditor(PythonCodeEditor *parent) {
 }
 
 bool AutoCompletionList::eventFilter(QObject *obj, QEvent *event) {
-  if (_codeEditor == nullptr || (obj != _codeEditor && obj != _codeEditor->mainWindow())) {
+  if (_codeEditor == nullptr ||
+      (obj != _codeEditor && obj != _codeEditor->mainWindow())) {
     return false;
   }
 
-  if (!_wasActivated &&
-      (event->type() == QEvent::WindowDeactivate || event->type() == QEvent::Hide)) {
+  if (!_wasActivated && (event->type() == QEvent::WindowDeactivate ||
+                         event->type() == QEvent::Hide)) {
     _wasActivated = _activated;
     hide();
-  } else if (event->type() == QEvent::WindowActivate || event->type() == QEvent::Show) {
+  } else if (event->type() == QEvent::WindowActivate ||
+             event->type() == QEvent::Show) {
     if (_wasActivated) {
       show();
       _wasActivated = false;
@@ -253,15 +264,16 @@ bool AutoCompletionList::eventFilter(QObject *obj, QEvent *event) {
 }
 
 FindReplaceDialog::FindReplaceDialog(QPlainTextEdit *editor, QWidget *parent)
-    : QDialog(parent,
-              static_cast<Qt::WindowFlags>(Qt::Tool | Qt::CustomizeWindowHint |
-                                           Qt::WindowTitleHint | Qt::WindowCloseButtonHint)),
+    : QDialog(parent, static_cast<Qt::WindowFlags>(
+                          Qt::Tool | Qt::CustomizeWindowHint |
+                          Qt::WindowTitleHint | Qt::WindowCloseButtonHint)),
       _ui(new Ui::FindReplaceDialogData), _editor(editor) {
   _ui->setupUi(this);
   _findButton = _ui->buttonBox->button(QDialogButtonBox::Reset);
   _findButton->setText("Find");
   connect(_findButton, SIGNAL(clicked()), this, SLOT(doFind()));
-  _replaceFindButton = _ui->buttonBox->button(QDialogButtonBox::RestoreDefaults);
+  _replaceFindButton =
+      _ui->buttonBox->button(QDialogButtonBox::RestoreDefaults);
   _replaceFindButton->setText("Replace/Find");
   connect(_replaceFindButton, SIGNAL(clicked()), this, SLOT(doReplaceFind()));
   _replaceButton = _ui->buttonBox->button(QDialogButtonBox::Ignore);
@@ -272,16 +284,19 @@ FindReplaceDialog::FindReplaceDialog(QPlainTextEdit *editor, QWidget *parent)
   _replaceAllButton->setText("Replace All");
   connect(_ui->backwardCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
   connect(_ui->regexpCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
-  connect(_ui->regexpCB, SIGNAL(toggled(bool)), this, SLOT(regexpToggled(bool)));
-  connect(_ui->wholeWordCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
-  connect(_ui->wrapSearchCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
-  connect(_ui->caseSensitiveCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
-  connect(_ui->textToFind, SIGNAL(textChanged(const QString &)), this, SLOT(textToFindChanged()));
+  connect(_ui->regexpCB, SIGNAL(toggled(bool)), this,
+          SLOT(regexpToggled(bool)));
+  connect(_ui->wholeWordCB, SIGNAL(toggled(bool)), this,
+          SLOT(setResetSearch()));
+  connect(_ui->wrapSearchCB, SIGNAL(toggled(bool)), this,
+          SLOT(setResetSearch()));
+  connect(_ui->caseSensitiveCB, SIGNAL(toggled(bool)), this,
+          SLOT(setResetSearch()));
+  connect(_ui->textToFind, SIGNAL(textChanged(const QString &)), this,
+          SLOT(textToFindChanged()));
 }
 
-FindReplaceDialog::~FindReplaceDialog() {
-  delete _ui;
-}
+FindReplaceDialog::~FindReplaceDialog() { delete _ui; }
 
 void FindReplaceDialog::setTextToFind(const QString &text) {
   _ui->textToFind->setText(text);
@@ -349,7 +364,8 @@ bool FindReplaceDialog::doFind() {
   if (!_ui->regexpCB->isChecked()) {
     sel = _editor->document()->find(text, _editor->textCursor(), findFlags);
   } else {
-    sel = _editor->document()->find(QRegExp(text), _editor->textCursor(), findFlags);
+    sel = _editor->document()->find(QRegExp(text), _editor->textCursor(),
+                                    findFlags);
   }
 
   bool ret = !sel.isNull();
@@ -436,7 +452,8 @@ void FindReplaceDialog::doReplaceAll() {
         break;
     }
 
-    _ui->searchStatusLabel->setText(QString::number(nbReplacements) + QString(" matches replaced"));
+    _ui->searchStatusLabel->setText(QString::number(nbReplacements) +
+                                    QString(" matches replaced"));
     _resetSearch = true;
   } else {
     setSearchResult(ret);
@@ -447,7 +464,8 @@ AutoCompletionList *PythonCodeEditor::_autoCompletionList = nullptr;
 AutoCompletionDataBase *PythonCodeEditor::_autoCompletionDb = nullptr;
 
 PythonCodeEditor::PythonCodeEditor(QWidget *parent)
-    : QPlainTextEdit(parent), _highlighter(nullptr), _tooltipActive(false), _indentPattern(4, ' ') {
+    : QPlainTextEdit(parent), _highlighter(nullptr), _tooltipActive(false),
+      _indentPattern(4, ' ') {
   installEventFilter(&keyboardFocusEventFilter);
   setAutoIndentation(true);
   setIndentationGuides(true);
@@ -511,11 +529,14 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent)
 
   _findReplaceDialog = nullptr;
 
-  connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth()));
+  connect(this, SIGNAL(blockCountChanged(int)), this,
+          SLOT(updateLineNumberAreaWidth()));
   connect(this, SIGNAL(updateRequest(const QRect &, int)), this,
           SLOT(updateLineNumberArea(const QRect &, int)));
-  connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(resetExtraSelections()));
-  connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
+  connect(this, SIGNAL(cursorPositionChanged()), this,
+          SLOT(resetExtraSelections()));
+  connect(this, SIGNAL(cursorPositionChanged()), this,
+          SLOT(highlightCurrentLine()));
   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightErrors()));
   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(matchParens()));
   connect(this, SIGNAL(textChanged()), this, SLOT(updateAutoCompletionList()));
@@ -573,7 +594,8 @@ void PythonCodeEditor::updateLineNumberArea(const QRect &rect, int dy) {
   if (dy)
     _lineNumberArea->scroll(0, dy);
   else
-    _lineNumberArea->update(0, rect.y(), _lineNumberArea->width(), rect.height());
+    _lineNumberArea->update(0, rect.y(), _lineNumberArea->width(),
+                            rect.height());
 
   if (rect.contains(viewport()->rect()))
     updateLineNumberAreaWidth();
@@ -582,7 +604,8 @@ void PythonCodeEditor::updateLineNumberArea(const QRect &rect, int dy) {
 void PythonCodeEditor::resizeEvent(QResizeEvent *e) {
   QPlainTextEdit::resizeEvent(e);
   QRect cr = contentsRect();
-  _lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
+  _lineNumberArea->setGeometry(
+      QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
 }
 
 void PythonCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event) {
@@ -657,8 +680,10 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
 
   if (isTooltipActive()) {
     QTextBlock tooltipBlock = document()->findBlockByNumber(_toolTipPos.x());
-    int top = int(blockBoundingGeometry(tooltipBlock).translated(contentOffset()).top());
-    int left = int(blockBoundingGeometry(tooltipBlock).translated(contentOffset()).left());
+    int top = int(
+        blockBoundingGeometry(tooltipBlock).translated(contentOffset()).top());
+    int left = int(
+        blockBoundingGeometry(tooltipBlock).translated(contentOffset()).left());
     int bottom = top + int(blockBoundingRect(tooltipBlock).height());
     QString blockText = tooltipBlock.text();
 
@@ -746,13 +771,15 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
   }
 }
 
-static int matchLeftParenthesis(const QTextBlock &block, const std::pair<char, char> &parens,
+static int matchLeftParenthesis(const QTextBlock &block,
+                                const std::pair<char, char> &parens,
                                 int dataStartIndex, int dec = 0) {
   if (!block.isValid()) {
     return -1;
   }
 
-  ParenInfoTextBlockData *data = static_cast<ParenInfoTextBlockData *>(block.userData());
+  ParenInfoTextBlockData *data =
+      static_cast<ParenInfoTextBlockData *>(block.userData());
   QVector<ParenInfo> info = data->parens();
 
   for (int i = dataStartIndex; i < info.size(); ++i) {
@@ -769,13 +796,15 @@ static int matchLeftParenthesis(const QTextBlock &block, const std::pair<char, c
   return matchLeftParenthesis(block.next(), parens, 0, dec);
 }
 
-static int matchRightParenthesis(const QTextBlock &block, const std::pair<char, char> &parens,
+static int matchRightParenthesis(const QTextBlock &block,
+                                 const std::pair<char, char> &parens,
                                  int dataStartIndex, int dec = 0) {
   if (!block.isValid()) {
     return -1;
   }
 
-  ParenInfoTextBlockData *data = static_cast<ParenInfoTextBlockData *>(block.userData());
+  ParenInfoTextBlockData *data =
+      static_cast<ParenInfoTextBlockData *>(block.userData());
   QVector<ParenInfo> info = data->parens();
 
   int startIdx = (dataStartIndex == -1) ? info.size() - 1 : dataStartIndex;
@@ -814,11 +843,14 @@ void PythonCodeEditor::matchParens() {
         int match = -1;
 
         if (pinfo.character == ')') {
-          match = matchRightParenthesis(textCursor().block(), std::make_pair('(', ')'), i, -1);
+          match = matchRightParenthesis(textCursor().block(),
+                                        std::make_pair('(', ')'), i, -1);
         } else if (pinfo.character == ']') {
-          match = matchRightParenthesis(textCursor().block(), std::make_pair('[', ']'), i, -1);
+          match = matchRightParenthesis(textCursor().block(),
+                                        std::make_pair('[', ']'), i, -1);
         } else if (pinfo.character == '}') {
-          match = matchRightParenthesis(textCursor().block(), std::make_pair('{', '}'), i, -1);
+          match = matchRightParenthesis(textCursor().block(),
+                                        std::make_pair('{', '}'), i, -1);
         }
 
         if (match != -1) {
@@ -832,11 +864,14 @@ void PythonCodeEditor::matchParens() {
         int match = -1;
 
         if (pinfo.character == ')') {
-          match = matchRightParenthesis(textCursor().block(), std::make_pair('(', ')'), i, -1);
+          match = matchRightParenthesis(textCursor().block(),
+                                        std::make_pair('(', ')'), i, -1);
         } else if (pinfo.character == ']') {
-          match = matchRightParenthesis(textCursor().block(), std::make_pair('[', ']'), i, -1);
+          match = matchRightParenthesis(textCursor().block(),
+                                        std::make_pair('[', ']'), i, -1);
         } else if (pinfo.character == '}') {
-          match = matchRightParenthesis(textCursor().block(), std::make_pair('{', '}'), i, -1);
+          match = matchRightParenthesis(textCursor().block(),
+                                        std::make_pair('{', '}'), i, -1);
         }
 
         if (match != -1) {
@@ -850,11 +885,14 @@ void PythonCodeEditor::matchParens() {
         int match = -1;
 
         if (pinfo.character == '(') {
-          match = matchLeftParenthesis(textCursor().block(), std::make_pair('(', ')'), i + 1);
+          match = matchLeftParenthesis(textCursor().block(),
+                                       std::make_pair('(', ')'), i + 1);
         } else if (pinfo.character == '[') {
-          match = matchLeftParenthesis(textCursor().block(), std::make_pair('[', ']'), i + 1);
+          match = matchLeftParenthesis(textCursor().block(),
+                                       std::make_pair('[', ']'), i + 1);
         } else if (pinfo.character == '{') {
-          match = matchLeftParenthesis(textCursor().block(), std::make_pair('{', '}'), i + 1);
+          match = matchLeftParenthesis(textCursor().block(),
+                                       std::make_pair('{', '}'), i + 1);
         }
 
         if (match != -1) {
@@ -868,11 +906,14 @@ void PythonCodeEditor::matchParens() {
         int match = -1;
 
         if (pinfo.character == '(') {
-          match = matchLeftParenthesis(textCursor().block(), std::make_pair('(', ')'), i + 1);
+          match = matchLeftParenthesis(textCursor().block(),
+                                       std::make_pair('(', ')'), i + 1);
         } else if (pinfo.character == '[') {
-          match = matchLeftParenthesis(textCursor().block(), std::make_pair('[', ']'), i + 1);
+          match = matchLeftParenthesis(textCursor().block(),
+                                       std::make_pair('[', ']'), i + 1);
         } else if (pinfo.character == '{') {
-          match = matchLeftParenthesis(textCursor().block(), std::make_pair('{', '}'), i + 1);
+          match = matchLeftParenthesis(textCursor().block(),
+                                       std::make_pair('{', '}'), i + 1);
         }
 
         if (match != -1) {
@@ -916,8 +957,10 @@ void PythonCodeEditor::highlightSelection() {
     QTextDocument::FindFlags findFlags;
     findFlags |= QTextDocument::FindCaseSensitively;
     findFlags |= QTextDocument::FindWholeWords;
-    QTextCursor cursor = document()->find(text, QTextCursor(document()->begin()), findFlags);
-    QColor lineColor = QColor(_darkBackground ? "#D0D0D0" : "#D8D8D8").darker(110);
+    QTextCursor cursor =
+        document()->find(text, QTextCursor(document()->begin()), findFlags);
+    QColor lineColor =
+        QColor(_darkBackground ? "#D0D0D0" : "#D8D8D8").darker(110);
 
     while (!cursor.isNull()) {
       QTextEdit::ExtraSelection selection;
@@ -986,14 +1029,16 @@ void PythonCodeEditor::keyPressEvent(QKeyEvent *e) {
   Qt::KeyboardModifiers modifier = Qt::ControlModifier;
 #endif
 
-  QString textBeforeCursor =
-      textCursor().block().text().mid(0, textCursor().position() - textCursor().block().position());
-  QString textAfterCursor =
-      textCursor().block().text().mid(textCursor().position() - textCursor().block().position());
+  QString textBeforeCursor = textCursor().block().text().mid(
+      0, textCursor().position() - textCursor().block().position());
+  QString textAfterCursor = textCursor().block().text().mid(
+      textCursor().position() - textCursor().block().position());
 
-  if (commentShortcutsActivated() && e->modifiers() == modifier && e->key() == Qt::Key_D) {
+  if (commentShortcutsActivated() && e->modifiers() == modifier &&
+      e->key() == Qt::Key_D) {
     commentSelectedCode();
-  } else if (commentShortcutsActivated() && e->modifiers() == (modifier | Qt::ShiftModifier) &&
+  } else if (commentShortcutsActivated() &&
+             e->modifiers() == (modifier | Qt::ShiftModifier) &&
              e->key() == Qt::Key_D) {
     uncommentSelectedCode();
   } else if (commentShortcutsActivated() && e->modifiers() == modifier &&
@@ -1004,17 +1049,22 @@ void PythonCodeEditor::keyPressEvent(QKeyEvent *e) {
       commentSelectedCode();
     }
   } else if (indentShortcutsActivated() &&
-             ((e->modifiers() == modifier && e->key() == Qt::Key_I) || e->key() == Qt::Key_Tab)) {
+             ((e->modifiers() == modifier && e->key() == Qt::Key_I) ||
+              e->key() == Qt::Key_Tab)) {
     indentSelectedCode();
   } else if (indentShortcutsActivated() &&
-             ((e->modifiers() == (modifier | Qt::ShiftModifier) && e->key() == Qt::Key_I) ||
+             ((e->modifiers() == (modifier | Qt::ShiftModifier) &&
+               e->key() == Qt::Key_I) ||
               e->key() == Qt::Key_Backtab)) {
     unindentSelectedCode();
-  } else if (findReplaceActivated() && e->modifiers() == modifier && e->key() == Qt::Key_F) {
+  } else if (findReplaceActivated() && e->modifiers() == modifier &&
+             e->key() == Qt::Key_F) {
     showFindDialog(textCursor().selectedText(), true);
-  } else if (findReplaceActivated() && e->modifiers() == modifier && e->key() == Qt::Key_R) {
+  } else if (findReplaceActivated() && e->modifiers() == modifier &&
+             e->key() == Qt::Key_R) {
     showFindDialog(textCursor().selectedText(), false);
-  } else if ((e->key() == Qt::Key_Space && e->modifiers() == modifier) || e->text() == ".") {
+  } else if ((e->key() == Qt::Key_Space && e->modifiers() == modifier) ||
+             e->text() == ".") {
     if (e->text() == ".")
       QPlainTextEdit::keyPressEvent(e);
 
@@ -1059,7 +1109,8 @@ void PythonCodeEditor::keyPressEvent(QKeyEvent *e) {
     QPlainTextEdit::keyPressEvent(e);
 
     // fix char format when inserting a new first line
-    if (textCursor().block().blockNumber() == 0 && textCursor().position() == 0) {
+    if (textCursor().block().blockNumber() == 0 &&
+        textCursor().position() == 0) {
       QTextCharFormat format = currentCharFormat();
       format.setFont(_currentFont);
       setCurrentCharFormat(format);
@@ -1110,13 +1161,15 @@ void PythonCodeEditor::keyPressEvent(QKeyEvent *e) {
 
       if (cleanContext.indexOf(".") != -1) {
         type = _autoCompletionDb->findTypeForExpr(
-            cleanContext.mid(0, cleanContext.lastIndexOf('.')), getEditedFunctionName());
-        funcName =
-            cleanContext.mid(cleanContext.lastIndexOf('.') + 1,
-                             cleanContext.lastIndexOf('(') - cleanContext.lastIndexOf('.') - 1);
+            cleanContext.mid(0, cleanContext.lastIndexOf('.')),
+            getEditedFunctionName());
+        funcName = cleanContext.mid(cleanContext.lastIndexOf('.') + 1,
+                                    cleanContext.lastIndexOf('(') -
+                                        cleanContext.lastIndexOf('.') - 1);
       } else {
         type = _autoCompletionDb->findTypeForExpr(
-            cleanContext.mid(0, cleanContext.lastIndexOf('(')), getEditedFunctionName());
+            cleanContext.mid(0, cleanContext.lastIndexOf('(')),
+            getEditedFunctionName());
 
         if (type.lastIndexOf(".") != -1) {
           funcName = type.mid(type.lastIndexOf('.') + 1);
@@ -1128,7 +1181,8 @@ void PythonCodeEditor::keyPressEvent(QKeyEvent *e) {
 
         QVector<QVector<QString>> params =
             _autoCompletionDb->getParamTypesForMethodOrFunction(type, funcName);
-        QString retType = _autoCompletionDb->getReturnTypeForMethodOrFunction(type, funcName);
+        QString retType =
+            _autoCompletionDb->getReturnTypeForMethodOrFunction(type, funcName);
 
         if (!retType.isEmpty()) {
           retType = " -> " + retType;
@@ -1168,7 +1222,8 @@ void PythonCodeEditor::keyPressEvent(QKeyEvent *e) {
         }
 
         _toolTipFunc = funcName;
-        showTooltip(textCursor().blockNumber(), textBeforeCursor.indexOf(funcName), toolTipTxt);
+        showTooltip(textCursor().blockNumber(),
+                    textBeforeCursor.indexOf(funcName), toolTipTxt);
       }
     } else if (e->text() == ")") {
       hideTooltip();
@@ -1215,11 +1270,11 @@ void PythonCodeEditor::analyseScriptCode(const bool wholeText) {
   }
 
   if (!wholeText) {
-    _autoCompletionDb->analyseCurrentScriptCode(toPlainText(), textCursor().blockNumber(),
-                                                _shellWidget, moduleName);
+    _autoCompletionDb->analyseCurrentScriptCode(
+        toPlainText(), textCursor().blockNumber(), _shellWidget, moduleName);
   } else {
-    _autoCompletionDb->analyseCurrentScriptCode(toPlainText(), document()->blockCount(),
-                                                _shellWidget, moduleName);
+    _autoCompletionDb->analyseCurrentScriptCode(
+        toPlainText(), document()->blockCount(), _shellWidget, moduleName);
   }
 }
 
@@ -1238,17 +1293,22 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
   if (!_autoCompletionList->isVisible())
     return;
 
-  int left = int(blockBoundingGeometry(textCursor().block()).translated(contentOffset()).left());
-  int top = int(blockBoundingGeometry(textCursor().block()).translated(contentOffset()).top());
+  int left = int(blockBoundingGeometry(textCursor().block())
+                     .translated(contentOffset())
+                     .left());
+  int top = int(blockBoundingGeometry(textCursor().block())
+                    .translated(contentOffset())
+                    .top());
   int bottom = top + int(blockBoundingRect(textCursor().block()).height());
-  QString textBeforeCursor =
-      textCursor().block().text().mid(0, textCursor().position() - textCursor().block().position());
+  QString textBeforeCursor = textCursor().block().text().mid(
+      0, textCursor().position() - textCursor().block().position());
   int pos = lineNumberAreaWidth() + left + 1;
   int stop = 0;
 
   for (int i = textBeforeCursor.length(); i >= 0; --i) {
-    if (textBeforeCursor[i] == '\t' || textBeforeCursor[i] == ' ' || textBeforeCursor[i] == '.' ||
-        textBeforeCursor[i] == '(' || textBeforeCursor[i] == '[') {
+    if (textBeforeCursor[i] == '\t' || textBeforeCursor[i] == ' ' ||
+        textBeforeCursor[i] == '.' || textBeforeCursor[i] == '(' ||
+        textBeforeCursor[i] == '[') {
       stop = i + 1;
       break;
     }
@@ -1264,7 +1324,8 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
 
   if (mapToGlobal(QPoint(0, bottom + _autoCompletionList->height())).y() >
       QApplication::primaryScreen()->geometry().height())
-    _autoCompletionList->move(mapToGlobal(QPoint(pos, top - _autoCompletionList->height())));
+    _autoCompletionList->move(
+        mapToGlobal(QPoint(pos, top - _autoCompletionList->height())));
   else
     _autoCompletionList->move(mapToGlobal(QPoint(pos, bottom)));
 }
@@ -1276,8 +1337,8 @@ void PythonCodeEditor::updateAutoCompletionList(bool dotContext) {
 
   updateAutoCompletionListPosition();
 
-  QString textBeforeCursor =
-      textCursor().block().text().mid(0, textCursor().position() - textCursor().block().position());
+  QString textBeforeCursor = textCursor().block().text().mid(
+      0, textCursor().position() - textCursor().block().position());
 
   _autoCompletionList->clear();
 
@@ -1309,8 +1370,8 @@ QString PythonCodeEditor::getEditedFunctionName() const {
 
   QTextBlock block = textCursor().block();
   QString currentLine = block.text();
-  QString textBeforeCursor =
-      textCursor().block().text().mid(0, textCursor().position() - textCursor().block().position());
+  QString textBeforeCursor = textCursor().block().text().mid(
+      0, textCursor().position() - textCursor().block().position());
 
   if (textBeforeCursor.startsWith("\t") || textBeforeCursor.startsWith(" ")) {
     while (1) {
@@ -1320,7 +1381,8 @@ QString PythonCodeEditor::getEditedFunctionName() const {
       if (currentLine.startsWith('#') || currentLine.isEmpty())
         continue;
 
-      if (funcName == "global" && funcRegexp.indexIn(currentLine.trimmed()) != -1) {
+      if (funcName == "global" &&
+          funcRegexp.indexIn(currentLine.trimmed()) != -1) {
         funcName = currentLine.trimmed();
         funcName = funcName.mid(4, funcName.indexOf('(') - 4);
 
@@ -1344,7 +1406,8 @@ QString PythonCodeEditor::getEditedFunctionName() const {
         if (!(block.previous().text().trimmed().right(1) == "\\") &&
             !(currentLine.indexOf("\"\"\"") != -1 &&
               block.previous().text().indexOf("\"\"\"") != -1) &&
-            !(currentLine.indexOf("'''") != -1 && block.previous().text().indexOf("'''") != -1)) {
+            !(currentLine.indexOf("'''") != -1 &&
+              block.previous().text().indexOf("'''") != -1)) {
           break;
         }
       }
@@ -1373,10 +1436,12 @@ void PythonCodeEditor::getCursorPosition(int &line, int &col) const {
   col = textCursor().position() - textCursor().block().position();
 }
 
-void PythonCodeEditor::setSelection(int startLine, int startCol, int endLine, int endCol) {
+void PythonCodeEditor::setSelection(int startLine, int startCol, int endLine,
+                                    int endCol) {
   setCursorPosition(endLine, endCol);
   QTextCursor cursor = textCursor();
-  cursor.setPosition(document()->findBlockByNumber(startLine).position() + startCol,
+  cursor.setPosition(document()->findBlockByNumber(startLine).position() +
+                         startCol,
                      QTextCursor::KeepAnchor);
   setTextCursor(cursor);
 }
@@ -1396,9 +1461,7 @@ void PythonCodeEditor::removeSelectedText() {
   textCursor().removeSelectedText();
 }
 
-int PythonCodeEditor::lines() const {
-  return document()->blockCount();
-}
+int PythonCodeEditor::lines() const { return document()->blockCount(); }
 
 int PythonCodeEditor::lineLength(int lineNumber) const {
   return document()->findBlockByNumber(lineNumber).text().length();
@@ -1433,9 +1496,7 @@ void PythonCodeEditor::hideTooltip() {
   viewport()->update();
 }
 
-bool PythonCodeEditor::isTooltipActive() const {
-  return _tooltipActive;
-}
+bool PythonCodeEditor::isTooltipActive() const { return _tooltipActive; }
 
 bool PythonCodeEditor::selectedLinesCommented() const {
   int lineFrom = 0;
@@ -1526,7 +1587,8 @@ void PythonCodeEditor::uncommentSelectedCode() {
       if (lineTxt[j].isSpace()) {
         continue;
       } else {
-        setSelection(currentCursor.blockNumber(), j, currentCursor.blockNumber(), j + 1);
+        setSelection(currentCursor.blockNumber(), j,
+                     currentCursor.blockNumber(), j + 1);
         break;
       }
     }
@@ -1599,7 +1661,8 @@ void PythonCodeEditor::unindentSelectedCode() {
     if (selectedText() == _indentPattern) {
       removeSelectedText();
     } else {
-      setSelection(currentCursor.blockNumber(), 0, currentCursor.blockNumber(), 1);
+      setSelection(currentCursor.blockNumber(), 0, currentCursor.blockNumber(),
+                   1);
 
       if (selectedText() == " ") {
         removeSelectedText();
@@ -1660,11 +1723,12 @@ bool PythonCodeEditor::loadCodeFromFile(const QString &filePath) {
 
   if (filePath == getFileName() && !toPlainText().isEmpty()) {
     if (scriptCode != getCleanCode() &&
-        QMessageBox::question(QApplication::activeWindow(), "File changed on disk",
-                              QString("The file ") + filePath +
-                                  " has been modified by another editor. Do you want to reload it?",
-                              QMessageBox::Yes | QMessageBox::No,
-                              QMessageBox::Yes) == QMessageBox::Yes) {
+        QMessageBox::question(
+            QApplication::activeWindow(), "File changed on disk",
+            QString("The file ") + filePath +
+                " has been modified by another editor. Do you want to reload it?",
+            QMessageBox::Yes | QMessageBox::No,
+            QMessageBox::Yes) == QMessageBox::Yes) {
       setPlainText(scriptCode);
     } else {
       return false;

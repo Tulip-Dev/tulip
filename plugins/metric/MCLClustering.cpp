@@ -17,13 +17,13 @@
  *
  */
 #include <algorithm>
+#include <queue>
 #include <sstream>
 #include <string>
-#include <queue>
 #include <tulip/DoubleProperty.h>
 #include <tulip/Graph.h>
-#include <tulip/TlpTools.h>
 #include <tulip/GraphMeasure.h>
+#include <tulip/TlpTools.h>
 #include <tulip/vectorgraph.h>
 
 using namespace tlp;
@@ -99,7 +99,8 @@ void MCLClustering::power(node n) {
           if (ne.isValid())
             outW[ne] += v2;
           else {
-            std::unordered_map<node, double>::iterator it = newTargets.find(tgt);
+            std::unordered_map<node, double>::iterator it =
+                newTargets.find(tgt);
 
             if (it != newTargets.end())
               // newTargets[tgt] += v2;
@@ -112,8 +113,8 @@ void MCLClustering::power(node n) {
     }
   }
 
-  for (std::unordered_map<node, double>::iterator it = newTargets.begin(); it != newTargets.end();
-       ++it) {
+  for (std::unordered_map<node, double>::iterator it = newTargets.begin();
+       it != newTargets.end(); ++it) {
     edge ne;
     ne = g.addEdge(n, it->first);
     inW[ne] = 0.;
@@ -122,7 +123,8 @@ void MCLClustering::power(node n) {
 }
 //==================================================
 struct pvectCmp {
-  bool operator()(const std::pair<double, edge> &p1, const std::pair<double, edge> &p2) {
+  bool operator()(const std::pair<double, edge> &p1,
+                  const std::pair<double, edge> &p2) {
     return p1.first < p2.first;
   }
 };

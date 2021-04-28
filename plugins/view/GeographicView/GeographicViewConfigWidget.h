@@ -71,9 +71,7 @@ public slots:
   void openTileServerUrlHelp();
   void openTilesAttributionHelp();
 
-  void mapToPolygonSlot() {
-    emit mapToPolygonSignal();
-  }
+  void mapToPolygonSlot() { emit mapToPolygonSignal(); }
 
 protected:
   PolyFileType _oldPolyFileType;

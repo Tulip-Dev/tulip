@@ -19,19 +19,19 @@
 #include "tulip/TulipItemDelegate.h"
 
 #include <QDebug>
-#include <QEvent>
 #include <QDialog>
-#include <QVBoxLayout>
 #include <QDialogButtonBox>
-#include <QMainWindow>
+#include <QEvent>
 #include <QLabel>
+#include <QMainWindow>
 #include <QTableView>
+#include <QVBoxLayout>
 
-#include <tulip/TulipModel.h>
-#include <tulip/TulipMetaTypes.h>
-#include <tulip/TulipItemEditorCreators.h>
 #include <tulip/GraphModel.h>
 #include <tulip/Perspective.h>
+#include <tulip/TulipItemEditorCreators.h>
+#include <tulip/TulipMetaTypes.h>
+#include <tulip/TulipModel.h>
 
 using namespace tlp;
 
@@ -40,7 +40,8 @@ TulipItemDelegate::TulipItemDelegate(QObject *parent)
       _currentMonitoredCombo(nullptr) {
   registerCreator<bool>(new BooleanEditorCreator);
   registerCreator<int>(new NumberEditorCreator<tlp::IntegerType>);
-  registerCreator<unsigned int>(new NumberEditorCreator<tlp::UnsignedIntegerType>);
+  registerCreator<unsigned int>(
+      new NumberEditorCreator<tlp::UnsignedIntegerType>);
   registerCreator<long>(new NumberEditorCreator<tlp::LongType>);
   registerCreator<double>(new NumberEditorCreator<tlp::DoubleType>);
   registerCreator<float>(new NumberEditorCreator<tlp::FloatType>);
@@ -49,43 +50,58 @@ TulipItemDelegate::TulipItemDelegate(QObject *parent)
   registerCreator<QStringList>(new QStringListEditorCreator);
   registerCreator<tlp::Color>(new ColorEditorCreator);
   registerCreator<tlp::Coord>(new CoordEditorCreator);
-  registerCreator<tlp::BooleanProperty *>(new PropertyEditorCreator<tlp::BooleanProperty>);
-  registerCreator<tlp::DoubleProperty *>(new PropertyEditorCreator<tlp::DoubleProperty>);
-  registerCreator<tlp::LayoutProperty *>(new PropertyEditorCreator<tlp::LayoutProperty>);
-  registerCreator<tlp::StringProperty *>(new PropertyEditorCreator<tlp::StringProperty>);
-  registerCreator<tlp::IntegerProperty *>(new PropertyEditorCreator<tlp::IntegerProperty>);
-  registerCreator<tlp::SizeProperty *>(new PropertyEditorCreator<tlp::SizeProperty>);
-  registerCreator<tlp::ColorProperty *>(new PropertyEditorCreator<tlp::ColorProperty>);
+  registerCreator<tlp::BooleanProperty *>(
+      new PropertyEditorCreator<tlp::BooleanProperty>);
+  registerCreator<tlp::DoubleProperty *>(
+      new PropertyEditorCreator<tlp::DoubleProperty>);
+  registerCreator<tlp::LayoutProperty *>(
+      new PropertyEditorCreator<tlp::LayoutProperty>);
+  registerCreator<tlp::StringProperty *>(
+      new PropertyEditorCreator<tlp::StringProperty>);
+  registerCreator<tlp::IntegerProperty *>(
+      new PropertyEditorCreator<tlp::IntegerProperty>);
+  registerCreator<tlp::SizeProperty *>(
+      new PropertyEditorCreator<tlp::SizeProperty>);
+  registerCreator<tlp::ColorProperty *>(
+      new PropertyEditorCreator<tlp::ColorProperty>);
   registerCreator<tlp::BooleanVectorProperty *>(
       new PropertyEditorCreator<tlp::BooleanVectorProperty>);
   registerCreator<tlp::DoubleVectorProperty *>(
       new PropertyEditorCreator<tlp::DoubleVectorProperty>);
-  registerCreator<tlp::CoordVectorProperty *>(new PropertyEditorCreator<tlp::CoordVectorProperty>);
+  registerCreator<tlp::CoordVectorProperty *>(
+      new PropertyEditorCreator<tlp::CoordVectorProperty>);
   registerCreator<tlp::StringVectorProperty *>(
       new PropertyEditorCreator<tlp::StringVectorProperty>);
   registerCreator<tlp::IntegerVectorProperty *>(
       new PropertyEditorCreator<tlp::IntegerVectorProperty>);
-  registerCreator<tlp::SizeVectorProperty *>(new PropertyEditorCreator<tlp::SizeVectorProperty>);
-  registerCreator<tlp::ColorVectorProperty *>(new PropertyEditorCreator<tlp::ColorVectorProperty>);
+  registerCreator<tlp::SizeVectorProperty *>(
+      new PropertyEditorCreator<tlp::SizeVectorProperty>);
+  registerCreator<tlp::ColorVectorProperty *>(
+      new PropertyEditorCreator<tlp::ColorVectorProperty>);
   registerCreator<tlp::PropertyInterface *>(new PropertyInterfaceEditorCreator);
-  registerCreator<tlp::NumericProperty *>(new PropertyEditorCreator<tlp::NumericProperty>);
+  registerCreator<tlp::NumericProperty *>(
+      new PropertyEditorCreator<tlp::NumericProperty>);
   registerCreator<tlp::ColorScale>(new ColorScaleEditorCreator);
   registerCreator<tlp::StringCollection>(new StringCollectionEditorCreator);
-  registerCreator<tlp::PropertiesCollection>(new PropertiesCollectionEditorCreator);
+  registerCreator<tlp::PropertiesCollection>(
+      new PropertiesCollectionEditorCreator);
   registerCreator<TextureFile>(new TextureFileEditorCreator);
   registerCreator<TulipFileDescriptor>(new TulipFileDescriptorEditorCreator);
   registerCreator<NodeShape::NodeShapes>(new NodeShapeEditorCreator);
   registerCreator<EdgeShape::EdgeShapes>(new EdgeShapeEditorCreator);
-  registerCreator<EdgeExtremityShape::EdgeExtremityShapes>(new EdgeExtremityShapeEditorCreator);
+  registerCreator<EdgeExtremityShape::EdgeExtremityShapes>(
+      new EdgeExtremityShapeEditorCreator);
   // registerCreator<std::vector<bool> >(new VectorEditorCreator<bool>);
   registerCreator<QVector<bool>>(new QVectorBoolEditorCreator);
   registerCreator<std::vector<Color>>(new VectorEditorCreator<Color>);
   registerCreator<std::vector<Coord>>(new VectorEditorCreator<Coord>);
   registerCreator<std::vector<double>>(new VectorEditorCreator<double>);
   registerCreator<std::vector<int>>(new VectorEditorCreator<int>);
-  registerCreator<std::vector<std::string>>(new VectorEditorCreator<std::string>);
+  registerCreator<std::vector<std::string>>(
+      new VectorEditorCreator<std::string>);
   registerCreator<TulipFont>(new TulipFontEditorCreator);
-  registerCreator<LabelPosition::LabelPositions>(new TulipLabelPositionEditorCreator);
+  registerCreator<LabelPosition::LabelPositions>(
+      new TulipLabelPositionEditorCreator);
   registerCreator<Graph *>(new GraphEditorCreator);
   registerCreator<std::set<tlp::edge>>(new EdgeSetEditorCreator);
   registerCreator<TulipFontIcon>(new TulipFontIconCreator);
@@ -107,7 +123,8 @@ tlp::TulipItemEditorCreator *TulipItemDelegate::creator(int typeId) const {
   return _creators[typeId];
 }
 
-QWidget *TulipItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
+QWidget *TulipItemDelegate::createEditor(QWidget *parent,
+                                         const QStyleOptionViewItem &option,
                                          const QModelIndex &index) const {
   QVariant v = index.model()->data(index);
   TulipItemEditorCreator *c = creator(v.userType());
@@ -116,13 +133,15 @@ QWidget *TulipItemDelegate::createEditor(QWidget *parent, const QStyleOptionView
     return QStyledItemDelegate::createEditor(parent, option, index);
   }
 
-  PropertyInterface *pi = index.data(TulipModel::PropertyRole).value<PropertyInterface *>();
+  PropertyInterface *pi =
+      index.data(TulipModel::PropertyRole).value<PropertyInterface *>();
   c->setPropertyToEdit(pi);
   QWidget *w = c->createWidget(parent);
   return w;
 }
 
-QString TulipItemDelegate::displayText(const QVariant &value, const QLocale &locale) const {
+QString TulipItemDelegate::displayText(const QVariant &value,
+                                       const QLocale &locale) const {
   if (value.type() == QVariant::String)
     return value.toString();
 
@@ -155,9 +174,11 @@ QSize TulipItemDelegate::sizeHint(const QStyleOptionViewItem &option,
   return QStyledItemDelegate::sizeHint(option, index);
 }
 
-void TulipItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
+void TulipItemDelegate::paint(QPainter *painter,
+                              const QStyleOptionViewItem &option,
                               const QModelIndex &index) const {
-  QVariant bgColor = index.data(Qt::BackgroundRole), fgColor = index.data(Qt::ForegroundRole);
+  QVariant bgColor = index.data(Qt::BackgroundRole),
+           fgColor = index.data(Qt::ForegroundRole);
 
   if (bgColor.isValid() && bgColor.type() == QVariant::Color)
     painter->setBrush(bgColor.value<QColor>());
@@ -179,10 +200,12 @@ void TulipItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 
   if (!v.isValid()) {
 #ifndef NDEBUG
-    qWarning() << "Value for row("
-               << index.model()->headerData(index.row(), Qt::Vertical).toString() << ") - column("
-               << index.model()->headerData(index.column(), Qt::Horizontal).toString()
-               << ") is invalid";
+    qWarning()
+        << "Value for row("
+        << index.model()->headerData(index.row(), Qt::Vertical).toString()
+        << ") - column("
+        << index.model()->headerData(index.column(), Qt::Horizontal).toString()
+        << ") is invalid";
 #endif
     return;
   }
@@ -196,7 +219,8 @@ void TulipItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
     QStyledItemDelegate::paint(painter, option, index);
 }
 
-void TulipItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
+void TulipItemDelegate::setEditorData(QWidget *editor,
+                                      const QModelIndex &index) const {
   QVariant data = index.data();
   tlp::Graph *g = index.data(TulipModel::GraphRole).value<tlp::Graph *>();
   bool isMandatory = true;
@@ -226,7 +250,8 @@ void TulipItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 }
 
 bool TulipItemDelegate::eventFilter(QObject *object, QEvent *event) {
-  if (event->type() == QEvent::FocusOut && dynamic_cast<QComboBox *>(object) != nullptr) {
+  if (event->type() == QEvent::FocusOut &&
+      dynamic_cast<QComboBox *>(object) != nullptr) {
     return true;
   } else if (event->type() == QEvent::ChildAdded) {
     QChildEvent *childEv = static_cast<QChildEvent *>(event);
@@ -239,7 +264,8 @@ bool TulipItemDelegate::eventFilter(QObject *object, QEvent *event) {
       connect(_currentMonitoredCombo, SIGNAL(currentIndexChanged(int)), this,
               SLOT(comboDataChanged()));
     }
-  } else if (object == _currentMonitoredChild && event->type() == QEvent::Hide) {
+  } else if (object == _currentMonitoredChild &&
+             event->type() == QEvent::Hide) {
     _currentMonitoredChild->removeEventFilter(this);
     _currentMonitoredChild = nullptr;
     emit commitData(_currentMonitoredCombo);
@@ -255,9 +281,9 @@ void TulipItemDelegate::comboDataChanged() {
   emit commitData(static_cast<QWidget *>(sender()));
 }
 
-QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType, tlp::PropertyInterface *pi,
-                                             tlp::Graph *g, TulipItemDelegate *delegate,
-                                             QWidget *dialogParent, unsigned int id) {
+QVariant TulipItemDelegate::showEditorDialog(
+    tlp::ElementType elType, tlp::PropertyInterface *pi, tlp::Graph *g,
+    TulipItemDelegate *delegate, QWidget *dialogParent, unsigned int id) {
   QVariant value;
   bool valid;
   if (elType == tlp::NODE) {
@@ -289,8 +315,9 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType, tlp::Prope
   QDialog *dlg = dynamic_cast<QDialog *>(w);
 
   if (dlg == nullptr) {
-    QString title(
-        QString("Set %1 %2").arg(elType == NODE ? "node" : "edge").arg(valid ? "value" : "values"));
+    QString title(QString("Set %1 %2")
+                      .arg(elType == NODE ? "node" : "edge")
+                      .arg(valid ? "value" : "values"));
     bool displayPropertyName = true;
     // adjust dialog title for some view properties
     if (pi->getName() == "viewShape" && elType == EDGE) {
@@ -307,8 +334,8 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType, tlp::Prope
       layout->addWidget(new QLabel(pi->getName().c_str()));
     }
     layout->addWidget(w);
-    QDialogButtonBox *buttonBox =
-        new QDialogButtonBox(QDialogButtonBox::Cancel | QDialogButtonBox::Ok, Qt::Horizontal);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+        QDialogButtonBox::Cancel | QDialogButtonBox::Ok, Qt::Horizontal);
     layout->addWidget(buttonBox);
     QWidget::setTabOrder(w, buttonBox);
     QObject::connect(buttonBox, SIGNAL(accepted()), dlg, SLOT(accept()));

@@ -38,9 +38,8 @@ struct greaterRadius {
   }
 };
 
-double
-BubbleTree::computeRelativePosition(tlp::node n,
-                                    NodeStaticProperty<Vector<double, 5>> &relativePosition) {
+double BubbleTree::computeRelativePosition(
+    tlp::node n, NodeStaticProperty<Vector<double, 5>> &relativePosition) {
 
   Size tmpSizeFather = nodeSize->getNodeValue(n);
   tmpSizeFather[2] = 0.; // remove z-coordinates because the drawing is 2D
@@ -188,7 +187,8 @@ BubbleTree::computeRelativePosition(tlp::node n,
   Circled circleH = tlp::enclosingCircle(circles);
   rPos[2] = -circleH[0];
   rPos[3] = -circleH[1];
-  rPos[4] = sqrt(circleH.radius * circleH.radius - circleH[1] * circleH[1]) - fabs(circleH[0]);
+  rPos[4] = sqrt(circleH.radius * circleH.radius - circleH[1] * circleH[1]) -
+            fabs(circleH[0]);
   /*
    * Set relative position of all children
    * according to the center of the enclosing circle
@@ -205,13 +205,15 @@ BubbleTree::computeRelativePosition(tlp::node n,
   return circleH.radius;
 }
 
-void BubbleTree::calcLayout2(tlp::node n, tlp::Vector<double, 5> &nrPos,
-                             NodeStaticProperty<Vector<double, 5>> &relativePosition,
-                             const tlp::Vector<double, 3> &enclosingCircleCenter,
-                             const tlp::Vector<double, 3> &originNodePosition) {
+void BubbleTree::calcLayout2(
+    tlp::node n, tlp::Vector<double, 5> &nrPos,
+    NodeStaticProperty<Vector<double, 5>> &relativePosition,
+    const tlp::Vector<double, 3> &enclosingCircleCenter,
+    const tlp::Vector<double, 3> &originNodePosition) {
   /*
    * Make rotation around the center of the enclosing circle in order to align :
-   * the virtual node, the enclosing circle' center and the grand father of the node.
+   * the virtual node, the enclosing circle' center and the grand father of the
+   * node.
    */
   Vector<double, 3> bend, zeta, zetaOriginal;
   bend.fill(0.);
@@ -280,13 +282,15 @@ void BubbleTree::calcLayout2(tlp::node n, tlp::Vector<double, 5> &nrPos,
     newpos[2] = 0.;
     newpos = rot1 * newpos[0] + rot2 * newpos[1];
     newpos += enclosingCircleCenter;
-    calcLayout2(itn, rPos, relativePosition, newpos, enclosingCircleCenter + zeta);
+    calcLayout2(itn, rPos, relativePosition, newpos,
+                enclosingCircleCenter + zeta);
   }
 
   delete it;
 }
 
-void BubbleTree::calcLayout(tlp::node n, NodeStaticProperty<Vector<double, 5>> &relativePosition) {
+void BubbleTree::calcLayout(
+    tlp::node n, NodeStaticProperty<Vector<double, 5>> &relativePosition) {
   /*
    * Make the recursive call, to place the children of n.
    */
@@ -318,7 +322,8 @@ static const char *paramHelp[] = {
     "This parameter enables to choose the complexity of the algorithm."
     "If true, the complexity is O(n.log(n)), if false it is O(n)."};
 
-BubbleTree::BubbleTree(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
+BubbleTree::BubbleTree(const tlp::PluginContext *context)
+    : LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addInParameter<bool>("complexity", paramHelp[0], "true");
   addDependency("Connected Component Packing", "1.0");
@@ -352,8 +357,8 @@ bool BubbleTree::run() {
     LayoutProperty tmpLayout(graph);
     DataSet tmpdataSet;
     tmpdataSet.set("coordinates", result);
-    graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout, err, &tmpdataSet,
-                                  pluginProgress);
+    graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout,
+                                  err, &tmpdataSet, pluginProgress);
     *result = tmpLayout;
     return true;
   }
@@ -377,7 +382,8 @@ bool BubbleTree::run() {
 
   if (graph->numberOfNodes() == 3 && graph->numberOfEdges() == 3) {
     string err;
-    graph->applyPropertyAlgorithm("Circular", result, err, nullptr, pluginProgress);
+    graph->applyPropertyAlgorithm("Circular", result, err, nullptr,
+                                  pluginProgress);
     return true;
   }
 

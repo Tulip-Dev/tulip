@@ -17,9 +17,8 @@
  *
  */
 
-// This implementation of HSI Color Space is from the following paper : "Issues in Visualizing Large
-// Databases"
-// D. A. Keim, H.-P. Kriegel
+// This implementation of HSI Color Space is from the following paper : "Issues
+// in Visualizing Large Databases" D. A. Keim, H.-P. Kriegel
 
 #ifndef HSI_H_
 #define HSI_H_

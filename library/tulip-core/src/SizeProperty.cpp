@@ -18,19 +18,21 @@
  */
 
 #include <cfloat>
-#include <tulip/SizeProperty.h>
-#include <tulip/Observable.h>
 #include <tulip/BoundingBox.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/DoubleProperty.h>
+#include <tulip/Observable.h>
+#include <tulip/SizeProperty.h>
 
 using namespace std;
 using namespace tlp;
 
-class SizeMetaValueCalculator : public AbstractSizeProperty::MetaValueCalculator {
+class SizeMetaValueCalculator
+    : public AbstractSizeProperty::MetaValueCalculator {
 public:
-  void computeMetaValue(AbstractSizeProperty *prop, node mN, Graph *sg, Graph *) override {
+  void computeMetaValue(AbstractSizeProperty *prop, node mN, Graph *sg,
+                        Graph *) override {
     // nothing to do if the subgraph is not linked to the property graph
     if (sg != prop->getGraph() && !prop->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
@@ -49,9 +51,10 @@ public:
 
     if (prop->getName() == "viewSize") {
       // set meta node size as the enclosed subgraph bounding box
-      BoundingBox box = tlp::computeBoundingBox(sg, sg->getProperty<LayoutProperty>("viewLayout"),
-                                                sg->getProperty<SizeProperty>("viewSize"),
-                                                sg->getProperty<DoubleProperty>("viewRotation"));
+      BoundingBox box = tlp::computeBoundingBox(
+          sg, sg->getProperty<LayoutProperty>("viewLayout"),
+          sg->getProperty<SizeProperty>("viewSize"),
+          sg->getProperty<DoubleProperty>("viewRotation"));
 
       prop->setNodeValue(mN, Size(box.width(), box.height(), box.depth()));
     } else
@@ -74,7 +77,8 @@ SizeProperty::SizeProperty(Graph *sg, const std::string &n)
   setMetaValueCalculator(&mvSizeCalculator);
 }
 //====================================================================
-void SizeProperty::scale(const tlp::Vector<float, 3> &v, Iterator<node> *itN, Iterator<edge> *itE) {
+void SizeProperty::scale(const tlp::Vector<float, 3> &v, Iterator<node> *itN,
+                         Iterator<edge> *itE) {
   Observable::holdObservers();
 
   while (itN->hasNext()) {
@@ -164,7 +168,8 @@ void SizeProperty::resetMinMax() {
   max.clear();
 }
 //=================================================================================
-void SizeProperty::setNodeValue(const node n, tlp::StoredType<Size>::ReturnedConstValue v) {
+void SizeProperty::setNodeValue(const node n,
+                                tlp::StoredType<Size>::ReturnedConstValue v) {
   std::unordered_map<unsigned int, bool>::const_iterator it = minMaxOk.begin();
 
   if (it != minMaxOk.end()) {
@@ -189,23 +194,26 @@ void SizeProperty::setNodeValue(const node n, tlp::StoredType<Size>::ReturnedCon
   AbstractSizeProperty::setNodeValue(n, v);
 }
 //=================================================================================
-void SizeProperty::setAllNodeValue(tlp::StoredType<Size>::ReturnedConstValue v) {
+void SizeProperty::setAllNodeValue(
+    tlp::StoredType<Size>::ReturnedConstValue v) {
   resetMinMax();
   AbstractSizeProperty::setAllNodeValue(v);
 }
 //=================================================================================
-void SizeProperty::setValueToGraphNodes(tlp::StoredType<Size>::ReturnedConstValue v,
-                                        const Graph *graph) {
+void SizeProperty::setValueToGraphNodes(
+    tlp::StoredType<Size>::ReturnedConstValue v, const Graph *graph) {
   resetMinMax();
   AbstractSizeProperty::setValueToGraphNodes(v, graph);
 }
 //=============================================================================
-PropertyInterface *SizeProperty::clonePrototype(Graph *g, const std::string &n) const {
+PropertyInterface *SizeProperty::clonePrototype(Graph *g,
+                                                const std::string &n) const {
   if (!g)
     return nullptr;
 
   // allow to get an unregistered property (empty name)
-  SizeProperty *p = n.empty() ? new SizeProperty(g) : g->getLocalProperty<SizeProperty>(n);
+  SizeProperty *p =
+      n.empty() ? new SizeProperty(g) : g->getLocalProperty<SizeProperty>(n);
   p->setAllNodeValue(getNodeDefaultValue());
   p->setAllEdgeValue(getEdgeDefaultValue());
   return p;
@@ -220,13 +228,15 @@ int SizeProperty::compare(const node n1, const node n2) const {
 }
 
 //=============================================================================
-PropertyInterface *SizeVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
+PropertyInterface *
+SizeVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
     return nullptr;
 
   // allow to get an unregistered property (empty name)
-  SizeVectorProperty *p =
-      n.empty() ? new SizeVectorProperty(g) : g->getLocalProperty<SizeVectorProperty>(n);
+  SizeVectorProperty *p = n.empty()
+                              ? new SizeVectorProperty(g)
+                              : g->getLocalProperty<SizeVectorProperty>(n);
   p->setAllNodeValue(getNodeDefaultValue());
   p->setAllEdgeValue(getEdgeDefaultValue());
   return p;

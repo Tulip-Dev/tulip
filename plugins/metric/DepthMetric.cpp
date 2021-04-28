@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <stack>
 #include "DepthMetric.h"
+#include <stack>
 
 #include <tulip/AcyclicTest.h>
 
@@ -122,7 +122,8 @@ double DepthMetric::getNodeValue(tlp::node current) {
     current = dfsParams.current;
     outEdges = dfsParams.outEdges;
     // update current maxDepth
-    dfsParams.maxDepth = std::max(dfsParams.maxDepth, maxDepth + dfsParams.edgeValue);
+    dfsParams.maxDepth =
+        std::max(dfsParams.maxDepth, maxDepth + dfsParams.edgeValue);
     maxDepth = dfsParams.maxDepth;
   }
 

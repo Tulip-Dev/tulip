@@ -21,8 +21,8 @@
 #ifndef TULIP_BASICITERATORS_H
 #define TULIP_BASICITERATORS_H
 #include <tulip/Iterator.h>
-#include <tulip/memorypool.h>
 #include <tulip/MutableContainer.h>
+#include <tulip/memorypool.h>
 
 namespace tlp {
 
@@ -46,7 +46,8 @@ protected:
   void disableListening(const Graph *sg);
 
 public:
-  FactorNodeIterator(const Graph *sg) : _parentGraph(sg->getSuperGraph()), ito(nullptr) {}
+  FactorNodeIterator(const Graph *sg)
+      : _parentGraph(sg->getSuperGraph()), ito(nullptr) {}
 };
 
 class TLP_SCOPE FactorEdgeIterator : public EdgeIterator {
@@ -57,7 +58,8 @@ protected:
   void disableListening(const Graph *sg);
 
 public:
-  FactorEdgeIterator(const Graph *sg) : _parentGraph(sg->getSuperGraph()), ito(nullptr) {}
+  FactorEdgeIterator(const Graph *sg)
+      : _parentGraph(sg->getSuperGraph()), ito(nullptr) {}
 };
 //============================================================
 /// Subgraph node iterator
@@ -87,8 +89,9 @@ protected:
   }
 
 public:
-  SGraphNodeIterator(const Graph *sG, const MutableContainer<VALUE_TYPE> &filter,
-                     typename tlp::StoredType<VALUE_TYPE>::ReturnedConstValue val)
+  SGraphNodeIterator(
+      const Graph *sG, const MutableContainer<VALUE_TYPE> &filter,
+      typename tlp::StoredType<VALUE_TYPE>::ReturnedConstValue val)
       : FactorNodeIterator(sG), sg(sG), value(val), _filter(filter) {
     enableListening(sg);
     it = sg->getNodes();
@@ -110,9 +113,7 @@ public:
     return tmp;
   }
 
-  bool hasNext() override {
-    return (curNode.isValid());
-  }
+  bool hasNext() override { return (curNode.isValid()); }
 };
 
 //=============================================================
@@ -141,17 +142,16 @@ protected:
   }
 
 public:
-  SGraphEdgeIterator(const Graph *sG, const MutableContainer<VALUE_TYPE> &filter,
-                     typename tlp::StoredType<VALUE_TYPE>::ReturnedConstValue val)
+  SGraphEdgeIterator(
+      const Graph *sG, const MutableContainer<VALUE_TYPE> &filter,
+      typename tlp::StoredType<VALUE_TYPE>::ReturnedConstValue val)
       : FactorEdgeIterator(sG), sg(sG), value(val), _filter(filter) {
     it = sg->getEdges();
     // anticipate first iteration
     prepareNext();
   }
 
-  ~SGraphEdgeIterator() override {
-    delete it;
-  }
+  ~SGraphEdgeIterator() override { delete it; }
 
   edge next() override {
     assert(curEdge.isValid());
@@ -162,9 +162,7 @@ public:
     return tmp;
   }
 
-  bool hasNext() override {
-    return (curEdge.isValid());
-  }
+  bool hasNext() override { return (curEdge.isValid()); }
 };
 } // namespace tlp
 #endif

@@ -18,27 +18,27 @@
  */
 #include <ogdf/basic/internal/config.h>
 #include <tulip/AboutTulipPage.h>
-#include <tulip/TlpTools.h>
-#include <tulip/TlpQtTools.h>
 #include <tulip/GlMainWidget.h>
-#include <tulip/TulipRelease.h>
+#include <tulip/GlOffscreenRenderer.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/PythonVersionChecker.h>
-#include <tulip/GlOffscreenRenderer.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/TlpTools.h>
 #include <tulip/TulipFontAwesome.h>
 #include <tulip/TulipMaterialDesignIcons.h>
+#include <tulip/TulipRelease.h>
 
 #include "ui_AboutTulipPage.h"
 
-#include <QFile>
-#include <QDir>
-#include <QTextStream>
 #include <QDesktopServices>
-#include <QUrl>
-#include <QOpenGLContext>
+#include <QDir>
+#include <QFile>
 #include <QNetworkAccessManager>
-#include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QOpenGLContext>
+#include <QTextStream>
+#include <QUrl>
 #include <QXmlStreamReader>
 
 namespace tlp {
@@ -63,23 +63,28 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
   QString git_rev(getTulipGitRevision());
 
   if (!git_rev.isEmpty())
-    title += "<br/>(Git commit: <a href=\"" + TulipRepoUrl + "/commit/" + git_rev + "\">" +
-             "<span style=\"color: #0d47f1;\">" + git_rev.mid(0, 7) + "</span></a>)";
+    title += "<br/>(Git commit: <a href=\"" + TulipRepoUrl + "/commit/" +
+             git_rev + "\">" + "<span style=\"color: #0d47f1;\">" +
+             git_rev.mid(0, 7) + "</span></a>)";
 
-  _ui->logolabel->setPixmap(QPixmap(tlpStringToQString(TulipBitmapDir + "/welcomelogo.bmp")));
+  _ui->logolabel->setPixmap(
+      QPixmap(tlpStringToQString(TulipBitmapDir + "/welcomelogo.bmp")));
   _ui->TulipLabel->setText(
       "<html>"
       "  <head/>"
       "  <body>"
       "    <p align=\"center\"><span style=\" font-size:18pt; font-weight:600;\">" +
       title + "</span></p>" +
-      (!git_rev.isEmpty() ? (QString("    <p align=\"center\"><a href=\"") + TulipRepoUrl + "\">" +
-                             "<span style=\"color: #0d47f1;\">" + TulipRepoUrl + "</span></a></p>")
-                          : QString()) +
+      (!git_rev.isEmpty()
+           ? (QString("    <p align=\"center\"><a href=\"") + TulipRepoUrl +
+              "\">" + "<span style=\"color: #0d47f1;\">" + TulipRepoUrl +
+              "</span></a></p>")
+           : QString()) +
       "  </body>"
       "</html>");
 
-  bool openGL_OK = GlOffscreenRenderer::getInstance()->getOpenGLContext()->isValid();
+  bool openGL_OK =
+      GlOffscreenRenderer::getInstance()->getOpenGLContext()->isValid();
 
   if (openGL_OK)
     GlOffscreenRenderer::getInstance()->makeOpenGLContextCurrent();
@@ -93,10 +98,10 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       "</li>"
       "<li><a href=\"https://www.opengl.org\"><span style=\"color: #0d47f1;\">"
       "<b>OpenGL</b></span></a> " +
-      (openGL_OK ? QString::number(OpenGlConfigManager::getOpenGLVersion()) : QString("?.?")) +
-      " (from vendor " +
-      (openGL_OK ? tlpStringToQString(OpenGlConfigManager::getOpenGLVendor())
-                 : QString("unknown")) +
+      (openGL_OK ? QString::number(OpenGlConfigManager::getOpenGLVersion()) :
+QString("?.?")) + " (from vendor " + (openGL_OK ?
+tlpStringToQString(OpenGlConfigManager::getOpenGLVendor()) : QString("unknown"))
++
       ") </li>"
       "<li><a href=\"http://ogdf.net/\"><span style=\"color: #0d47f1;\">"
       "<b>OGDF</b></span></a> v" + OGDF_VERSION + "</li>"
@@ -104,8 +109,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       "<li><a href=\"https://www.python.org\"><span style=\"color: #0d47f1;\">"
       "<b> Python </b></span></a> " + PythonVersionChecker::compiledVersion() +
       "</li>"
-      "<li> <a href=\"https://www.riverbankcomputing.com/software/sip\"><span style=\"color:
-#0d47f1;\">"
+      "<li> <a href=\"https://www.riverbankcomputing.com/software/sip\"><span
+style=\"color: #0d47f1;\">"
       "<b>SIP</b></span></a> " + getSipVersion() + "</li>"
 #endif
       "</ul>"
@@ -119,7 +124,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       ": <a href=\"https://www.qt.io\"><span style=\"color: "
       "#0d47f1;\">www.qt.io</span></a></li>"
       "  <li> <b> OpenGL </b> " +
-      (openGL_OK ? QString::number(OpenGlConfigManager::getOpenGLVersion()) : QString("?.?")) +
+      (openGL_OK ? QString::number(OpenGlConfigManager::getOpenGLVersion())
+                 : QString("?.?")) +
       ": <a href=\"https://www.opengl.org\"><span style=\"color: "
       "#0d47f1;\">www.opengl.org</span></a> </li>"
       "<li><b>OGDF</b> v" +
@@ -166,15 +172,19 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
   // Fetch RSS
   _ui->rssScroll->setVisible(false);
   QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-  connect(manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(rssReply(QNetworkReply *)));
+  connect(manager, SIGNAL(finished(QNetworkReply *)), this,
+          SLOT(rssReply(QNetworkReply *)));
   manager->get(QNetworkRequest(QUrl(RSS_URL)));
 
   QPixmap qp(QString((TulipBitmapDir + "/samplePictures/1221.png").c_str()));
-  _ui->sample_1221->setPixmap(qp.scaled(230, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+  _ui->sample_1221->setPixmap(
+      qp.scaled(230, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
   qp = QPixmap(QString((TulipBitmapDir + "/samplePictures/1861.jpg").c_str()));
-  _ui->sample_1861->setPixmap(qp.scaled(230, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+  _ui->sample_1861->setPixmap(
+      qp.scaled(230, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
   qp = QPixmap(QString((TulipBitmapDir + "/samplePictures/1531.png").c_str()));
-  _ui->sample_1531->setPixmap(qp.scaled(230, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+  _ui->sample_1531->setPixmap(
+      qp.scaled(230, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
   QFile authorsFile(tlpStringToQString(TulipShareDir + "AUTHORS"));
   QFile licenseFile(tlpStringToQString(TulipShareDir + "COPYING.LESSER"));
@@ -192,9 +202,7 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
   }
 }
 
-AboutTulipPage::~AboutTulipPage() {
-  delete _ui;
-}
+AboutTulipPage::~AboutTulipPage() { delete _ui; }
 
 void AboutTulipPage::openUrlInBrowser(const QString &url) {
   QDesktopServices::openUrl(QUrl(url));
@@ -219,7 +227,8 @@ void AboutTulipPage::rssReply(QNetworkReply *reply) {
         _ui->rssScroll->setVisible(true);
         QXmlStreamReader::TokenType p(xmlReader.readNext());
 
-        while (xmlReader.name() != "item" && p != QXmlStreamReader::EndElement) {
+        while (xmlReader.name() != "item" &&
+               p != QXmlStreamReader::EndElement) {
           xmlReader.readNextStartElement();
 
           if (xmlReader.name() == "title")

@@ -34,12 +34,8 @@ public:
   ~HistogramViewNavigator() override;
 
   bool eventFilter(QObject *, QEvent *) override;
-  bool draw(GlMainWidget *) override {
-    return false;
-  }
-  bool compute(GlMainWidget *) override {
-    return false;
-  }
+  bool draw(GlMainWidget *) override { return false; }
+  bool compute(GlMainWidget *) override { return false; }
   void viewChanged(View *view) override;
 
 private:

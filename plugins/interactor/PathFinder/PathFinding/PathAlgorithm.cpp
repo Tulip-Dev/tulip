@@ -21,10 +21,10 @@
 
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
-#include <tulip/MutableContainer.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphParallelTools.h>
 #include <tulip/GraphTools.h>
+#include <tulip/MutableContainer.h>
 
 #include "DFS/DFS.h"
 
@@ -33,7 +33,8 @@
 using namespace tlp;
 using namespace std;
 
-double computePathLength(BooleanProperty *result, EdgeStaticProperty<double> &weights) {
+double computePathLength(BooleanProperty *result,
+                         EdgeStaticProperty<double> &weights) {
   double retVal(0);
   Graph *graph(result->getGraph());
   auto ite = result->getNonDefaultValuatedEdges(graph);
@@ -44,8 +45,9 @@ double computePathLength(BooleanProperty *result, EdgeStaticProperty<double> &we
   return retVal;
 }
 
-bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation edgesOrientation,
-                                node src, node tgt, BooleanProperty *result,
+bool PathAlgorithm::computePath(Graph *graph, PathType pathType,
+                                EdgeOrientation edgesOrientation, node src,
+                                node tgt, BooleanProperty *result,
                                 DoubleProperty *weights, double tolerance) {
 #ifndef NDEBUG
   assert(graph);

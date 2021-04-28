@@ -22,9 +22,9 @@
 #include "ExpandableGroupBox.h"
 
 #include <QDropEvent>
+#include <QMenu>
 #include <QPainter>
 #include <QToolButton>
-#include <QMenu>
 
 #include <tulip/TulipMimes.h>
 #include <tulip/TulipSettings.h>
@@ -32,15 +32,17 @@
 struct FavoriteBox : public ExpandableGroupBox {
   bool _droppingFavorite;
 
-  explicit FavoriteBox(QWidget *parent = nullptr, const QString &title = QString())
+  explicit FavoriteBox(QWidget *parent = nullptr,
+                       const QString &title = QString())
       : ExpandableGroupBox(parent, title), _droppingFavorite(false) {}
 
 protected:
   void paintEvent(QPaintEvent *event) override {
     ExpandableGroupBox::paintEvent(event);
     QPainter painter(this);
-    QPixmap px((_droppingFavorite ? ":/tulip/graphperspective/icons/16/favorite.png"
-                                  : ":/tulip/graphperspective/icons/16/favorite-empty.png"));
+    QPixmap px((_droppingFavorite
+                    ? ":/tulip/graphperspective/icons/16/favorite.png"
+                    : ":/tulip/graphperspective/icons/16/favorite-empty.png"));
     painter.drawPixmap(20, 0, px);
   }
 };
@@ -61,7 +63,8 @@ static ExpandableGroupBox *createGroupBox(QString name, bool root = false) {
   return groupBox;
 }
 
-void AlgorithmRunner::buildTreeUi(QWidget *w, PluginModel<tlp::Algorithm> *model,
+void AlgorithmRunner::buildTreeUi(QWidget *w,
+                                  PluginModel<tlp::Algorithm> *model,
                                   const QModelIndex &parent, bool root) {
   for (int i = 0; i < model->rowCount(parent); ++i) {
     QModelIndex index = model->index(i, 0, parent);
@@ -72,7 +75,8 @@ void AlgorithmRunner::buildTreeUi(QWidget *w, PluginModel<tlp::Algorithm> *model
       w->layout()->addWidget(groupBox);
       buildTreeUi(groupBox->widget(), model, index);
     } else {
-      AlgorithmRunnerItem *item = new AlgorithmRunnerItem(name, _darkBackground);
+      AlgorithmRunnerItem *item =
+          new AlgorithmRunnerItem(name, _darkBackground);
       QObject::connect(this, SIGNAL(setStoreResultAsLocal(bool)), item,
                        SLOT(setStoreResultAsLocal(bool)));
       w->layout()->addWidget(item);
@@ -82,7 +86,8 @@ void AlgorithmRunner::buildTreeUi(QWidget *w, PluginModel<tlp::Algorithm> *model
 
 void AlgorithmRunner::insertItem(QWidget *w, const QString &name) {
 
-  const Plugin &plugin = PluginLister::pluginInformation(QStringToTlpString(name));
+  const Plugin &plugin =
+      PluginLister::pluginInformation(QStringToTlpString(name));
   QString category = plugin.category().c_str();
   QString group = plugin.group().c_str();
 
@@ -112,12 +117,13 @@ void AlgorithmRunner::insertItem(QWidget *w, const QString &name) {
       groupBox = categoryBox;
     else {
       groupBox = createGroupBox(group);
-      QVBoxLayout *categoryLayout = static_cast<QVBoxLayout *>(categoryBox->widget()->layout());
+      QVBoxLayout *categoryLayout =
+          static_cast<QVBoxLayout *>(categoryBox->widget()->layout());
       int index = 0;
 
       while (index < categoryLayout->count()) {
-        ExpandableGroupBox *gb =
-            dynamic_cast<ExpandableGroupBox *>(categoryLayout->itemAt(index)->widget());
+        ExpandableGroupBox *gb = dynamic_cast<ExpandableGroupBox *>(
+            categoryLayout->itemAt(index)->widget());
 
         if (gb && group < gb->title()) {
           break;
@@ -134,12 +140,13 @@ void AlgorithmRunner::insertItem(QWidget *w, const QString &name) {
   QObject::connect(this, SIGNAL(setStoreResultAsLocal(bool)), item,
                    SLOT(setStoreResultAsLocal(bool)));
   QObject::connect(item, SIGNAL(favorized(bool)), this, SLOT(favorized(bool)));
-  QVBoxLayout *groupLayout = static_cast<QVBoxLayout *>(groupBox->widget()->layout());
+  QVBoxLayout *groupLayout =
+      static_cast<QVBoxLayout *>(groupBox->widget()->layout());
   int index = 0;
 
   while (index < groupLayout->count()) {
-    AlgorithmRunnerItem *i =
-        dynamic_cast<AlgorithmRunnerItem *>(groupLayout->itemAt(index)->widget());
+    AlgorithmRunnerItem *i = dynamic_cast<AlgorithmRunnerItem *>(
+        groupLayout->itemAt(index)->widget());
 
     if (i && name < i->name()) {
       break;
@@ -164,12 +171,14 @@ void AlgorithmRunner::refreshTreeUi(QWidget *w) {
   }
 
   for (auto gb : w->findChildren<ExpandableGroupBox *>()) {
-    if (!gb->property("root").toBool() && gb->findChildren<AlgorithmRunnerItem *>().empty()) {
+    if (!gb->property("root").toBool() &&
+        gb->findChildren<AlgorithmRunnerItem *>().empty()) {
       delete gb;
     }
   }
 
-  std::list<std::string> installedPlugins = PluginLister::availablePlugins<tlp::Algorithm>();
+  std::list<std::string> installedPlugins =
+      PluginLister::availablePlugins<tlp::Algorithm>();
 
   for (const auto &name : installedPlugins) {
     if (!visibleItems.contains(name.c_str())) {
@@ -181,13 +190,15 @@ void AlgorithmRunner::refreshTreeUi(QWidget *w) {
 AlgorithmRunner::AlgorithmRunner(QWidget *parent)
     : QWidget(parent), _ui(new Ui::AlgorithmRunner), _graph(nullptr) {
   _ui->setupUi(this);
-  _darkBackground = _ui->contents->palette().color(backgroundRole()) != QColor(255, 255, 255);
+  _darkBackground =
+      _ui->contents->palette().color(backgroundRole()) != QColor(255, 255, 255);
   if (_darkBackground) {
     // set style sheets according to contents background color
     auto ass = _ui->algorithmList->styleSheet();
     ass.replace(QString("black"), QString("white"));
     _ui->algorithmList->setStyleSheet(ass);
-    _ui->favoritesBox->setStyleSheet(ass.append(_ui->favoritesBox->styleSheet()));
+    _ui->favoritesBox->setStyleSheet(
+        ass.append(_ui->favoritesBox->styleSheet()));
   }
   _ui->favoritesBox->setWidget(new QWidget());
   _ui->favoritesBox->widget()->setAcceptDrops(true);
@@ -201,7 +212,8 @@ AlgorithmRunner::AlgorithmRunner(QWidget *parent)
   _storeResultAsLocalButton = new QToolButton(_ui->header);
   _storeResultAsLocalButton->setMaximumSize(25, 25);
   _storeResultAsLocalButton->setMinimumSize(25, 25);
-  _storeResultAsLocalButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/hierarchy_add.png"));
+  _storeResultAsLocalButton->setIcon(
+      QIcon(":/tulip/graphperspective/icons/16/hierarchy_add.png"));
   _storeResultAsLocalButton->setIconSize(QSize(22, 22));
   _storeResultAsLocalButton->setToolTip(
       "Choose the storage policy for the result of property "
@@ -211,9 +223,9 @@ AlgorithmRunner::AlgorithmRunner(QWidget *parent)
       "the ascendant hierarchy (inherited or local).");
   _ui->header->mainFrame()->layout()->addWidget(_storeResultAsLocalButton);
   QMenu *resultMenu = new QMenu(this);
-  _resultAsLocalPropAction =
-      resultMenu->addAction(QIcon(":/tulip/graphperspective/icons/16/hierarchy_add.png"),
-                            QString("Always store result in a local property of the graph"));
+  _resultAsLocalPropAction = resultMenu->addAction(
+      QIcon(":/tulip/graphperspective/icons/16/hierarchy_add.png"),
+      QString("Always store result in a local property of the graph"));
   _resultAsLocalPropAction->setIconVisibleInMenu(true);
   _resultAsLocalPropAction->setCheckable(true);
   QAction *resultAsPredefinedPropAction = resultMenu->addAction(
@@ -227,7 +239,8 @@ AlgorithmRunner::AlgorithmRunner(QWidget *parent)
   _resultAsLocalPropAction->setChecked(true);
   _storeResultAsLocalButton->setMenu(resultMenu);
   _storeResultAsLocalButton->setPopupMode(QToolButton::InstantPopup);
-  connect(resultMenu, SIGNAL(triggered(QAction *)), this, SLOT(setStoreResultAsLocal(QAction *)));
+  connect(resultMenu, SIGNAL(triggered(QAction *)), this,
+          SLOT(setStoreResultAsLocal(QAction *)));
 
   PluginModel<tlp::Algorithm> model;
   buildTreeUi(_ui->contents, &model, QModelIndex(), true);
@@ -245,9 +258,7 @@ AlgorithmRunner::AlgorithmRunner(QWidget *parent)
   connect(_ui->header, SIGNAL(expanded(bool)), this, SLOT(expanded(bool)));
 }
 
-AlgorithmRunner::~AlgorithmRunner() {
-  delete _ui;
-}
+AlgorithmRunner::~AlgorithmRunner() { delete _ui; }
 
 void AlgorithmRunner::setGraph(Graph *g) {
   _ui->contents->setEnabled(g != nullptr);
@@ -280,8 +291,7 @@ void AlgorithmRunner::favorized(bool f) {
 }
 
 // A not recursive implementation of QObject::findChildren
-template <typename T>
-QList<T> childrenObj(QObject *obj) {
+template <typename T> QList<T> childrenObj(QObject *obj) {
   QList<T> result;
 
   for (auto o : obj->children()) {
@@ -294,8 +304,10 @@ QList<T> childrenObj(QObject *obj) {
   return result;
 }
 bool filterGroup(ExpandableGroupBox *group, QString filter) {
-  QList<ExpandableGroupBox *> subGroups = childrenObj<ExpandableGroupBox *>(group->widget());
-  QList<AlgorithmRunnerItem *> subItems = childrenObj<AlgorithmRunnerItem *>(group->widget());
+  QList<ExpandableGroupBox *> subGroups =
+      childrenObj<ExpandableGroupBox *>(group->widget());
+  QList<AlgorithmRunnerItem *> subItems =
+      childrenObj<AlgorithmRunnerItem *>(group->widget());
 
   if (group->title().contains(filter, Qt::CaseInsensitive)) {
     group->show();
@@ -337,16 +349,19 @@ void AlgorithmRunner::setFilter(QString filter) {
 }
 
 bool AlgorithmRunner::eventFilter(QObject *obj, QEvent *ev) {
-  bool draggableObject = obj == _ui->favoritesBox->widget() ||
-                         _favorites.contains(dynamic_cast<AlgorithmRunnerItem *>(obj));
+  bool draggableObject =
+      obj == _ui->favoritesBox->widget() ||
+      _favorites.contains(dynamic_cast<AlgorithmRunnerItem *>(obj));
 
   if (ev->type() == QEvent::Paint) {
     if (obj == _ui->favoritesBox->widget() && _favorites.empty()) {
       QPainter painter(_ui->favoritesBox->widget());
-      QPixmap px((_ui->favoritesBox->_droppingFavorite
-                      ? ":/tulip/graphperspective/icons/32/favorite.png"
-                      : ":/tulip/graphperspective/icons/32/favorite-empty.png"));
-      painter.drawPixmap(_ui->favoritesBox->widget()->width() - px.width() - 8, 8, px);
+      QPixmap px(
+          (_ui->favoritesBox->_droppingFavorite
+               ? ":/tulip/graphperspective/icons/32/favorite.png"
+               : ":/tulip/graphperspective/icons/32/favorite-empty.png"));
+      painter.drawPixmap(_ui->favoritesBox->widget()->width() - px.width() - 8,
+                         8, px);
       QFont f;
       f.setItalic(true);
       painter.setFont(f);
@@ -356,15 +371,18 @@ bool AlgorithmRunner::eventFilter(QObject *obj, QEvent *ev) {
         bColor = QColor(157, 157, 157);
       painter.setBrush(bColor);
       painter.setPen(bColor);
-      painter.drawText(0, 8 + (px.height() - 12) / 2, _ui->favoritesBox->widget()->width(), 65535,
+      painter.drawText(0, 8 + (px.height() - 12) / 2,
+                       _ui->favoritesBox->widget()->width(), 65535,
                        /*Qt::AlignHCenter | Qt::AlignTop |*/ Qt::TextWordWrap,
                        "Put your favorite algorithms here");
     }
-  } else if ((ev->type() == QEvent::DragEnter || ev->type() == QEvent::DragMove) &&
+  } else if ((ev->type() == QEvent::DragEnter ||
+              ev->type() == QEvent::DragMove) &&
              draggableObject) {
     QDropEvent *dropEv = static_cast<QDropEvent *>(ev);
 
-    if (dynamic_cast<const AlgorithmMimeType *>(dropEv->mimeData()) != nullptr) {
+    if (dynamic_cast<const AlgorithmMimeType *>(dropEv->mimeData()) !=
+        nullptr) {
       _ui->favoritesBox->_droppingFavorite = true;
       ev->accept();
       _ui->favoritesBox->repaint();
@@ -376,7 +394,8 @@ bool AlgorithmRunner::eventFilter(QObject *obj, QEvent *ev) {
     _ui->favoritesBox->repaint();
   } else if (ev->type() == QEvent::Drop && draggableObject) {
     QDropEvent *dropEv = static_cast<QDropEvent *>(ev);
-    const AlgorithmMimeType *mime = dynamic_cast<const AlgorithmMimeType *>(dropEv->mimeData());
+    const AlgorithmMimeType *mime =
+        dynamic_cast<const AlgorithmMimeType *>(dropEv->mimeData());
 
     if (mime != nullptr)
       addFavorite(mime->algorithm(), mime->params());
@@ -431,7 +450,8 @@ void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
   item->setFavorite(true);
   int itemPos = 0;
 
-  for (auto i : _ui->favoritesBox->widget()->findChildren<AlgorithmRunnerItem *>()) {
+  for (auto i :
+       _ui->favoritesBox->widget()->findChildren<AlgorithmRunnerItem *>()) {
     if (i->name() > item->name()) {
       break;
     }
@@ -439,7 +459,8 @@ void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
     ++itemPos;
   }
 
-  static_cast<QBoxLayout *>(_ui->favoritesBox->widget()->layout())->insertWidget(itemPos, item);
+  static_cast<QBoxLayout *>(_ui->favoritesBox->widget()->layout())
+      ->insertWidget(itemPos, item);
 
   _favorites += item;
 

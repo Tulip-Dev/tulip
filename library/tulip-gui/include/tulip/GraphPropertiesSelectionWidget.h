@@ -28,72 +28,78 @@ namespace tlp {
 class Graph;
 /** \brief A widget which allows the user to select a subset of graph properties
  *
- *  This widget allows the user to select a subset of graph properties. The properties
- *  to select can be filtered according to their datatypes.
+ *  This widget allows the user to select a subset of graph properties. The
+ * properties to select can be filtered according to their datatypes.
  */
-class TLP_QT_SCOPE GraphPropertiesSelectionWidget : public StringsListSelectionWidget {
+class TLP_QT_SCOPE GraphPropertiesSelectionWidget
+    : public StringsListSelectionWidget {
 
 public:
   /**
    * Default Constructor (useful for qt designer)
    */
-  GraphPropertiesSelectionWidget(QWidget *parent = nullptr,
-                                 const StringsListSelectionWidget::ListType &listType =
-                                     StringsListSelectionWidget::SIMPLE_LIST,
-                                 const unsigned int maxNbSelectedProperties = 0);
+  GraphPropertiesSelectionWidget(
+      QWidget *parent = nullptr,
+      const StringsListSelectionWidget::ListType &listType =
+          StringsListSelectionWidget::SIMPLE_LIST,
+      const unsigned int maxNbSelectedProperties = 0);
 
   /**
-   *  Constructor which creates a GraphPropertiesSelectionWidget for a given graph
+   *  Constructor which creates a GraphPropertiesSelectionWidget for a given
+   * graph
    *
    *  \param graph The graph on which we want to select properties
-   *  \param propertiesType To select properties with particular datatypes, fill a vector of string
-   * with the wanted datatypes name and passed it as parameter of this constructor. The datatypes
-   * name must be the same as those returned by the getTypename method of the PropertyInterface
-   * class (e.g. "int", "double", "string"). If the vector is empty, there is no restriction on
-   * property datatypes.
-   *  \param includeViewProperties If true, the view properties (e.g. "viewLabel", "viewMetric")
-   * will be selectable
+   *  \param propertiesType To select properties with particular datatypes, fill
+   * a vector of string with the wanted datatypes name and passed it as
+   * parameter of this constructor. The datatypes name must be the same as those
+   * returned by the getTypename method of the PropertyInterface class (e.g.
+   * "int", "double", "string"). If the vector is empty, there is no restriction
+   * on property datatypes. \param includeViewProperties If true, the view
+   * properties (e.g. "viewLabel", "viewMetric") will be selectable
    */
   GraphPropertiesSelectionWidget(
       Graph *graph, QWidget *parent = nullptr,
       const StringsListSelectionWidget::ListType &listType =
           StringsListSelectionWidget::SIMPLE_LIST,
       const unsigned int maxNbSelectedProperties = 0,
-      const std::vector<std::string> &propertiesTypes = std::vector<std::string>(),
+      const std::vector<std::string> &propertiesTypes =
+          std::vector<std::string>(),
       const bool includeViewProperties = false);
 
   /**
    * Method to set the widget parameters
    *
    * \param graph The graph on which we want to select properties
-   * \param propertiesType To select properties with particular datatypes, fill a vector of string
-   * with the wanted datatypes name and passed it as parameter of this constructor. The datatypes
-   * name must be the same as those returned by the getTypename method of the PropertyInterface
-   * class (e.g. "int", "double", "string"). If the vector is empty, there is no restriction on
-   * property datatypes.
-   * \param includeViewProperties If true, the view properties (e.g. "viewLabel", "viewMetric") will
-   * be selectable
+   * \param propertiesType To select properties with particular datatypes, fill
+   * a vector of string with the wanted datatypes name and passed it as
+   * parameter of this constructor. The datatypes name must be the same as those
+   * returned by the getTypename method of the PropertyInterface class (e.g.
+   * "int", "double", "string"). If the vector is empty, there is no restriction
+   * on property datatypes. \param includeViewProperties If true, the view
+   * properties (e.g. "viewLabel", "viewMetric") will be selectable
    */
-  void
-  setWidgetParameters(Graph *graph,
-                      const std::vector<std::string> &propertiesTypes = std::vector<std::string>(),
-                      const bool includeViewProperties = false);
+  void setWidgetParameters(Graph *graph,
+                           const std::vector<std::string> &propertiesTypes =
+                               std::vector<std::string>(),
+                           const bool includeViewProperties = false);
 
   /**
    * Method to set the input graph properties list
-   * If there is datatypes restriction, the types of properties are checked before inserting them in
-   * the input list
-   * \param inputPropertiesList A vector containing input properties names
+   * If there is datatypes restriction, the types of properties are checked
+   * before inserting them in the input list \param inputPropertiesList A vector
+   * containing input properties names
    */
-  void setInputPropertiesList(const std::vector<std::string> &inputPropertiesList);
+  void
+  setInputPropertiesList(const std::vector<std::string> &inputPropertiesList);
 
   /**
    * Method to set the output graph properties list
-   * If there is datatypes restriction, the types of properties are checked before inserting them in
-   * the output list
-   * \param outputPropertiesList A vector containing output properties names
+   * If there is datatypes restriction, the types of properties are checked
+   * before inserting them in the output list \param outputPropertiesList A
+   * vector containing output properties names
    */
-  void setOutputPropertiesList(const std::vector<std::string> &outputPropertiesList);
+  void
+  setOutputPropertiesList(const std::vector<std::string> &outputPropertiesList);
 
   /**
    * Method which returns the names of the graph properties selected by the user

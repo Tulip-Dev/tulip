@@ -36,12 +36,15 @@ static const char *paramHelp[] = {
 class OGDFFastMultipoleMultiLevelEmbedder : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Fast Multipole Multilevel Embedder (OGDF)", "Martin Gronemann", "12/11/2007",
-                    "The FMME layout algorithm is a variant of multilevel, force-directed layout, "
-                    "which utilizes various tools to speed up the computation.",
-                    "1.1", "Multilevel")
+  PLUGININFORMATION(
+      "Fast Multipole Multilevel Embedder (OGDF)", "Martin Gronemann",
+      "12/11/2007",
+      "The FMME layout algorithm is a variant of multilevel, force-directed layout, "
+      "which utilizes various tools to speed up the computation.",
+      "1.1", "Multilevel")
   OGDFFastMultipoleMultiLevelEmbedder(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, context ? new ogdf::ComponentSplitterLayout() : nullptr) {
+      : OGDFLayoutPluginBase(
+            context, context ? new ogdf::ComponentSplitterLayout() : nullptr) {
     addInParameter<int>("number of threads", paramHelp[0], "2");
     addInParameter<int>("multilevel nodes bound", paramHelp[1], "10");
   }
@@ -50,8 +53,10 @@ public:
 
     ogdf::ComponentSplitterLayout *csl =
         static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
-    // ComponentSplitterLayout takes ownership of the FastMultipoleMultilevelEmbedder instance
-    FastMultipoleMultilevelEmbedder *fmme = new FastMultipoleMultilevelEmbedder();
+    // ComponentSplitterLayout takes ownership of the
+    // FastMultipoleMultilevelEmbedder instance
+    FastMultipoleMultilevelEmbedder *fmme =
+        new FastMultipoleMultilevelEmbedder();
     csl->setLayoutModule(fmme);
 
     if (dataSet != nullptr) {
@@ -64,7 +69,8 @@ public:
         fmme->multilevelUntilNumNodesAreLess(ival);
     }
 
-    // ensure the input graph is simple as the layout failed in non multi-threaded mode otherwise
+    // ensure the input graph is simple as the layout failed in non
+    // multi-threaded mode otherwise
     //  ogdf::makeSimple(tlpToOGDF->getOGDFGraph());
   }
 };

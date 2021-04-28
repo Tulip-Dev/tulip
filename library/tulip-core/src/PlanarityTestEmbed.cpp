@@ -17,15 +17,16 @@
  *
  */
 
-#include <tulip/PlanarityTestImpl.h>
-#include <tulip/MapIterator.h>
-#include <tulip/StableIterator.h>
 #include <tulip/Graph.h>
+#include <tulip/MapIterator.h>
+#include <tulip/PlanarityTestImpl.h>
+#include <tulip/StableIterator.h>
 
 using namespace std;
 using namespace tlp;
 
-void sortEdges(Graph *graph, const vector<edge> &order, unordered_map<edge, edge> &rev) {
+void sortEdges(Graph *graph, const vector<edge> &order,
+               unordered_map<edge, edge> &rev) {
   map<node, vector<edge>> graphMap;
 
   for (auto e : order) {
@@ -185,7 +186,8 @@ void PlanarityTestImpl::embedRoot(Graph *sG, int n) {
  * - for all nodes u in T_w, has_back_edge[u] == false;
  * - T_w is biconnected.
  */
-void PlanarityTestImpl::calculatePartialEmbedding(Graph *sG, node w, node newCNode,
+void PlanarityTestImpl::calculatePartialEmbedding(Graph *sG, node w,
+                                                  node newCNode,
                                                   list<edge> &listBackEdges,
                                                   list<node> &terminalNodes) {
   list<node> traversedNodes, listRepresentants;
@@ -200,13 +202,15 @@ void PlanarityTestImpl::calculatePartialEmbedding(Graph *sG, node w, node newCNo
     // marks as VISITED all nodes in the boundary cycle;
     markPathInT(term, w, backEdgeRepresentant, traversedNodes);
     // map<node, list<edge> > bEdgesRepres;
-    map<node, list<edge>> &&bEdgesRepres = groupBackEdgesByRepr(
-        sG, listBackEdges, backEdgeRepresentant, traversedNodes, listRepresentants);
+    map<node, list<edge>> &&bEdgesRepres =
+        groupBackEdgesByRepr(sG, listBackEdges, backEdgeRepresentant,
+                             traversedNodes, listRepresentants);
     //    if (embedList.find(newCNode)==embedList.end())
     //    embedList[newCNode] = new BmdList<edge>();*/
     //    BmdList<edge>* tmp1 = embedList[newCNode];
     list<node> &&toEmbedLater =
-        embedUpwardT(true, term, w, sG, w, bEdgesRepres, traversedNodes, embedList[newCNode]);
+        embedUpwardT(true, term, w, sG, w, bEdgesRepres, traversedNodes,
+                     embedList[newCNode]);
 
     // embeds all nodes in to_embed_later;
     for (auto it = toEmbedLater.begin(); it != toEmbedLater.end(); ++it) {
@@ -228,7 +232,8 @@ void PlanarityTestImpl::calculatePartialEmbedding(Graph *sG, node w, node newCNo
         //    term1 = terminal_nodes.contents(terminal_nodes.first()),
         //    term2 = terminal_nodes.contents(terminal_nodes.last()),
         term1 = terminalNodes.front(),
-        term2 = terminalNodes.back(), t1 = term1, t2 = term2, m = lcaBetweenTermNodes(t1, t2);
+        term2 = terminalNodes.back(), t1 = term1, t2 = term2,
+        m = lcaBetweenTermNodes(t1, t2);
 
     // makes term1 with lowest dfspos_num
     // (as in calculate_new_RBC);
@@ -250,13 +255,16 @@ void PlanarityTestImpl::calculatePartialEmbedding(Graph *sG, node w, node newCNo
     markPathInT(term1, t1, backEdgeRepresentant, traversedNodes);
 
     // MutableContainer<list<edge>* > *bEdgesRepres;
-    map<node, list<edge>> &&bEdgesRepres = groupBackEdgesByRepr(
-        sG, listBackEdges, backEdgeRepresentant, traversedNodes, listRepresentants);
+    map<node, list<edge>> &&bEdgesRepres =
+        groupBackEdgesByRepr(sG, listBackEdges, backEdgeRepresentant,
+                             traversedNodes, listRepresentants);
     list<node> &&toEmbedLater =
-        embedUpwardT(true, term2, w, sG, w, bEdgesRepres, traversedNodes, embedList[newCNode]);
+        embedUpwardT(true, term2, w, sG, w, bEdgesRepres, traversedNodes,
+                     embedList[newCNode]);
 
     for (auto it = toEmbedLater.begin(); it != toEmbedLater.end(); ++it) {
-      embedBackEdges(true, sG, *it, traversedNodes, bEdgesRepres[*it], embedList[newCNode]);
+      embedBackEdges(true, sG, *it, traversedNodes, bEdgesRepres[*it],
+                     embedList[newCNode]);
     }
 
     if (t1 != m) {
@@ -298,7 +306,8 @@ void PlanarityTestImpl::calculatePartialEmbedding(Graph *sG, node w, node newCNo
  * initializes backedge_representant[u] = u,
  * marks u as VISITED and appends u to list traversed_nodes.
  */
-void PlanarityTestImpl::markPathInT(node t, node w, map<node, node> &backEdgeRepresentant,
+void PlanarityTestImpl::markPathInT(node t, node w,
+                                    map<node, node> &backEdgeRepresentant,
                                     list<node> &traversedNodes) {
   state.set(w.id, VISITED);
   backEdgeRepresentant[w] = w;
@@ -322,10 +331,9 @@ void PlanarityTestImpl::markPathInT(node t, node w, map<node, node> &backEdgeRep
  * Precondition:
  * - for all nodes u in T_w, has_back_edge[u] == false.
  */
-map<node, list<edge>> PlanarityTestImpl::groupBackEdgesByRepr(Graph *sG, list<edge> &listBackEdges,
-                                                              map<node, node> &backEdgeRepresentant,
-                                                              list<node> &traversedNodes,
-                                                              list<node> &listRepresentants) {
+map<node, list<edge>> PlanarityTestImpl::groupBackEdgesByRepr(
+    Graph *sG, list<edge> &listBackEdges, map<node, node> &backEdgeRepresentant,
+    list<node> &traversedNodes, list<node> &listRepresentants) {
   list<node> nl;
 
   // forall(e, listBackEdges)
@@ -402,11 +410,12 @@ map<node, list<edge>> PlanarityTestImpl::groupBackEdgesByRepr(Graph *sG, list<ed
  * Returns an ordered list of all representants to be embedded later
  * (see add_old_cnode_to_embedding).
  * Precondition:
- * - if u is a node in P' and e is a back-edge with representant u then e is in list
- *   b_edges_repres[u].
+ * - if u is a node in P' and e is a back-edge with representant u then e is in
+ * list b_edges_repres[u].
  */
-list<node> PlanarityTestImpl::embedUpwardT(bool embBackEdgesOutW, node t1, node t2, Graph *sG,
-                                           node w, map<node, list<edge>> &bEdgesRepres,
+list<node> PlanarityTestImpl::embedUpwardT(bool embBackEdgesOutW, node t1,
+                                           node t2, Graph *sG, node w,
+                                           map<node, list<edge>> &bEdgesRepres,
                                            list<node> &traversedNodes,
                                            tlp::BmdList<edge> &embList) {
   list<node> toEmbedLater;
@@ -415,8 +424,8 @@ list<node> PlanarityTestImpl::embedUpwardT(bool embBackEdgesOutW, node t1, node 
   while (predU != t2) {
     if (isCNode(u)) {
       node f = predU, oldCNode = activeCNodeOf(false, u);
-      addOldCNodeToEmbedding(embBackEdgesOutW, sG, w, oldCNode, f, bEdgesRepres, traversedNodes,
-                             toEmbedLater, embList);
+      addOldCNodeToEmbedding(embBackEdgesOutW, sG, w, oldCNode, f, bEdgesRepres,
+                             traversedNodes, toEmbedLater, embList);
       u = parent.get(oldCNode.id);
 
       if (u == t2)
@@ -434,7 +443,8 @@ list<node> PlanarityTestImpl::embedUpwardT(bool embBackEdgesOutW, node t1, node 
     }
 
     if (hasBackEdge.get(u.id) && u != t2)
-      embedBackEdges(embBackEdgesOutW, sG, u, traversedNodes, bEdgesRepres[u], embList);
+      embedBackEdges(embBackEdgesOutW, sG, u, traversedNodes, bEdgesRepres[u],
+                     embList);
 
     predU = u;
     u = parent.get(u.id);
@@ -445,24 +455,22 @@ list<node> PlanarityTestImpl::embedUpwardT(bool embBackEdgesOutW, node t1, node 
 //=================================================================
 /*
  * Moves embedding of oldCNode to embList - note that oldCNode may
- * flip - and embeds all edges in path from w (starting with a back-edge from w) and
- * ending in a node in RBC[oldCNode].
- * All representants to be embedded later is ordered and inserted in toEmbedLater.
- * emb_back_edges_out_w is false only in case of 2 terminal
- * nodes, for one of the two terminals (see calculate_partial_embedding).
- * Preconditions:
- * - for a back-edge e, if u is representant of source(e) and  u in RBC[oldCNode],
- *   then e is in list b_edges_repres[u];
+ * flip - and embeds all edges in path from w (starting with a back-edge from w)
+ * and ending in a node in RBC[oldCNode]. All representants to be embedded later
+ * is ordered and inserted in toEmbedLater. emb_back_edges_out_w is false only
+ * in case of 2 terminal nodes, for one of the two terminals (see
+ * calculate_partial_embedding). Preconditions:
+ * - for a back-edge e, if u is representant of source(e) and  u in
+ * RBC[oldCNode], then e is in list b_edges_repres[u];
  * - the first element in list RBC[oldCNode] is parent[oldCNode];
- * - if u != nil then u is a node in RBC[oldCNode] s.t. label_b[u] > dfspos_num[w]
- *   and there exists a path from u to w that doesn't contain any node in the
- *   2-connected component represented by oldCNode, except u.
+ * - if u != nil then u is a node in RBC[oldCNode] s.t. label_b[u] >
+ * dfspos_num[w] and there exists a path from u to w that doesn't contain any
+ * node in the 2-connected component represented by oldCNode, except u.
  */
-void PlanarityTestImpl::addOldCNodeToEmbedding(bool embBackEdgesOutW, Graph *sG, node w,
-                                               node oldCNode, node u,
-                                               map<node, list<edge>> &bEdgesRepres,
-                                               list<node> &traversedNodes, list<node> &toEmbedLater,
-                                               tlp::BmdList<edge> &embList) {
+void PlanarityTestImpl::addOldCNodeToEmbedding(
+    bool embBackEdgesOutW, Graph *sG, node w, node oldCNode, node u,
+    map<node, list<edge>> &bEdgesRepres, list<node> &traversedNodes,
+    list<node> &toEmbedLater, tlp::BmdList<edge> &embList) {
 
   BmdLink<node> *it = RBC[oldCNode].firstItem();
   BmdLink<node> *itl = RBC[oldCNode].cyclicPred(it, nullptr);
@@ -504,8 +512,8 @@ void PlanarityTestImpl::addOldCNodeToEmbedding(bool embBackEdgesOutW, Graph *sG,
 
   // checks if need to flip oldCNode;
   // u == nil when oldCNode is a terminal node;
-  bool flipped =
-      ((!listNodesL.empty() && (jl == u || u == NULL_NODE)) || (jr != u && u != NULL_NODE));
+  bool flipped = ((!listNodesL.empty() && (jl == u || u == NULL_NODE)) ||
+                  (jr != u && u != NULL_NODE));
 
   if (flipped)
     listNodesL.swap(listNodesR);
@@ -516,7 +524,8 @@ void PlanarityTestImpl::addOldCNodeToEmbedding(bool embBackEdgesOutW, Graph *sG,
 
   // forall(t, listNodesR)
   for (auto t : listNodesR)
-    embedBackEdges(embBackEdgesOutW, sG, t, traversedNodes, bEdgesRepres[t], embList);
+    embedBackEdges(embBackEdgesOutW, sG, t, traversedNodes, bEdgesRepres[t],
+                   embList);
 
   if (flipped)
     embedList[oldCNode].reverse();
@@ -536,8 +545,9 @@ void PlanarityTestImpl::addOldCNodeToEmbedding(bool embBackEdgesOutW, Graph *sG,
  * emb_back_edges_out_w is false only in case of 2 terminal
  * nodes, for one of the two terminals (see calculate_partial_embedding).
  */
-void PlanarityTestImpl::embedBackEdges(bool embBackEdgesOutW, Graph *sG, node repr,
-                                       list<node> &traversedNodes, list<edge> &listBackEdges,
+void PlanarityTestImpl::embedBackEdges(bool embBackEdgesOutW, Graph *sG,
+                                       node repr, list<node> &traversedNodes,
+                                       list<edge> &listBackEdges,
                                        tlp::BmdList<edge> &embList) {
   if (listBackEdges.empty())
     return;
@@ -597,10 +607,11 @@ void PlanarityTestImpl::embedBackEdges(bool embBackEdgesOutW, Graph *sG, node re
 }
 //=================================================================
 /*
- * Sorts all back-edges with representant repr by depth first search traversal in
- * (T_repr - P), denoted as T_v^*.
+ * Sorts all back-edges with representant repr by depth first search traversal
+ * in (T_repr - P), denoted as T_v^*.
  */
-int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG, node, node repr, list<edge> &listBackEdges,
+int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG, node, node repr,
+                                          list<edge> &listBackEdges,
                                           vector<edge> &backEdge) {
   // constructs a DFS tree of T_v^* to sort back-edges to embed;
   Graph *D = tlp::newGraph();
@@ -689,8 +700,8 @@ int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG, node, node repr, list<edge>
     node v = sG->source(e);
     //     tlp::debug() << v.id << endl;
     //     tlp::debug() << "nodeInD[v].id = " << nodeInD.get(v.id).id << endl;
-    //     tlp::debug() << "dfsPos.get(nodeInD[v].id) = " << dfsPos.get(nodeInD.get(v.id).id) <<
-    //     endl;
+    //     tlp::debug() << "dfsPos.get(nodeInD[v].id) = " <<
+    //     dfsPos.get(nodeInD.get(v.id).id) << endl;
     backEdge[dfsPos.get(nodeInD[v].id)] = e;
   }
 

@@ -16,20 +16,20 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <QApplication>
+#include <QComboBox>
 #include <QGraphicsProxyWidget>
 #include <QGraphicsView>
-#include <QApplication>
 #include <QMenu>
-#include <QComboBox>
 #include <QPushButton>
 
-#include <tulip/DoubleProperty.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/CaptionItem.h>
 #include <tulip/CaptionGraphicsItem.h>
 #include <tulip/CaptionGraphicsSubItems.h>
-#include <tulip/View.h>
+#include <tulip/CaptionItem.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/View.h>
 
 using namespace std;
 
@@ -37,7 +37,8 @@ namespace tlp {
 
 CaptionGraphicsItem::CaptionGraphicsItem(View *view) : _view(view) {
 
-  _rondedRectItem = new CaptionGraphicsBackgroundItem(QRect(QPoint(0, 0), QSize(130, 260)));
+  _rondedRectItem =
+      new CaptionGraphicsBackgroundItem(QRect(QPoint(0, 0), QSize(130, 260)));
   _rondedRectItem->setBrush(QBrush(QColor(255, 255, 255, 180)));
   connect(_rondedRectItem, SIGNAL(filterChanged(float, float)), this,
           SLOT(filterChangedSlot(float, float)));
@@ -53,9 +54,7 @@ CaptionGraphicsItem::CaptionGraphicsItem(View *view) : _view(view) {
           SLOT(selectPropertyButtonClicked()));
 }
 
-void CaptionGraphicsItem::loadConfiguration() {
-  constructConfigWidget();
-}
+void CaptionGraphicsItem::loadConfiguration() { constructConfigWidget(); }
 
 void CaptionGraphicsItem::setType(unsigned int type) {
   if (type == 1 || type == 2)
@@ -68,16 +67,18 @@ void CaptionGraphicsItem::setType(unsigned int type) {
 
 void CaptionGraphicsItem::generateColorCaption(const QGradient &activeGradient,
                                                const QGradient &hideGradient,
-                                               const string &propertyName, double minValue,
+                                               const string &propertyName,
+                                               double minValue,
                                                double maxValue) {
-  _rondedRectItem->generateColorCaption(activeGradient, hideGradient, propertyName, minValue,
-                                        maxValue);
+  _rondedRectItem->generateColorCaption(activeGradient, hideGradient,
+                                        propertyName, minValue, maxValue);
 }
 
 void CaptionGraphicsItem::generateSizeCaption(
-    const vector<pair<double, float>> &metricToSizeFilteredList, const string &propertyName,
-    double minValue, double maxValue) {
-  _rondedRectItem->generateSizeCaption(metricToSizeFilteredList, propertyName, minValue, maxValue);
+    const vector<pair<double, float>> &metricToSizeFilteredList,
+    const string &propertyName, double minValue, double maxValue) {
+  _rondedRectItem->generateSizeCaption(metricToSizeFilteredList, propertyName,
+                                       minValue, maxValue);
 }
 
 void CaptionGraphicsItem::constructConfigWidget() {
@@ -136,28 +137,34 @@ void CaptionGraphicsItem::selectPropertyButtonClicked() {
     if (_view->graph()->getProperty(piName)->getTypename() != "double")
       continue;
 
-    QAction *action = menu.addAction(piName.c_str(), this, SLOT(propertySelectedSlot()));
+    QAction *action =
+        menu.addAction(piName.c_str(), this, SLOT(propertySelectedSlot()));
 
     if (_confPropertySelectionWidget->text() == QString(piName.c_str()))
       menu.setActiveAction(action);
   }
   // set a combo like stylesheet
   QPalette palette = QComboBox().palette();
-  menu.setStyleSheet(QString("QMenu::item {color: %1; background-color: %2;} QMenu::item:selected "
-                             "{color: %3; background-color: %4}")
-                         .arg(palette.color(QPalette::Active, QPalette::Text).name())
-                         .arg(palette.color(QPalette::Active, QPalette::Base).name())
-                         .arg(palette.color(QPalette::Active, QPalette::HighlightedText).name())
-                         .arg(palette.color(QPalette::Active, QPalette::Highlight).name()));
+  menu.setStyleSheet(
+      QString(
+          "QMenu::item {color: %1; background-color: %2;} QMenu::item:selected "
+          "{color: %3; background-color: %4}")
+          .arg(palette.color(QPalette::Active, QPalette::Text).name())
+          .arg(palette.color(QPalette::Active, QPalette::Base).name())
+          .arg(
+              palette.color(QPalette::Active, QPalette::HighlightedText).name())
+          .arg(palette.color(QPalette::Active, QPalette::Highlight).name()));
 
   // compute a combo like position
   // to popup the menu
   QWidget *pViewport = QApplication::widgetAt(QCursor::pos());
   QWidget *pView = pViewport->parentWidget();
   QGraphicsView *pGraphicsView = qobject_cast<QGraphicsView *>(pView);
-  QPoint popupPos =
-      pGraphicsView->mapToGlobal(pGraphicsView->mapFromScene(_confPropertySelectionItem->mapToScene(
-          _confPropertySelectionItem->subWidgetRect(_confPropertySelectionWidget).bottomLeft())));
+  QPoint popupPos = pGraphicsView->mapToGlobal(
+      pGraphicsView->mapFromScene(_confPropertySelectionItem->mapToScene(
+          _confPropertySelectionItem
+              ->subWidgetRect(_confPropertySelectionWidget)
+              .bottomLeft())));
 
   menu.exec(popupPos);
 }
@@ -169,7 +176,8 @@ void CaptionGraphicsItem::propertySelectedSlot() {
   emit selectedPropertyChanged(QStringToTlpString(action->text()));
 }
 
-QString CaptionGraphicsItem::wrappedPropName(const QString &originalName) const {
+QString
+CaptionGraphicsItem::wrappedPropName(const QString &originalName) const {
   return originalName;
 }
 } // namespace tlp

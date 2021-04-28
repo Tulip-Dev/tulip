@@ -26,24 +26,23 @@
 #pragma GCC diagnostic pop
 #endif
 
-#include <tulip/GlLabel.h>
-#include <tulip/Coord.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/StringProperty.h>
 #include <tulip/BooleanProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/GlTools.h>
-#include <tulip/GlyphManager.h>
-#include <tulip/OcclusionTest.h>
-#include <tulip/OcclusionTest.h>
+#include <tulip/Coord.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/GlLabel.h>
 #include <tulip/GlTextureManager.h>
+#include <tulip/GlTools.h>
 #include <tulip/GlXMLTools.h>
+#include <tulip/GlyphManager.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/OcclusionTest.h>
+#include <tulip/ParallelTools.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TulipViewSettings.h>
-#include <tulip/ParallelTools.h>
 
 using namespace std;
 
@@ -54,7 +53,8 @@ static std::unordered_map<std::string, FTPolygonFont *> PolygonFonts;
 static std::unordered_map<std::string, FTGLOutlineFont *> OutlineFonts;
 
 static FTPolygonFont *getPolygonFont(const std::string &name) {
-  std::unordered_map<std::string, FTPolygonFont *>::iterator itf = PolygonFonts.find(name);
+  std::unordered_map<std::string, FTPolygonFont *>::iterator itf =
+      PolygonFonts.find(name);
 
   if (itf != PolygonFonts.end())
     return itf->second;
@@ -63,7 +63,8 @@ static FTPolygonFont *getPolygonFont(const std::string &name) {
 }
 
 static FTGLOutlineFont *getOutlineFont(const std::string &name) {
-  std::unordered_map<std::string, FTGLOutlineFont *>::iterator itf = OutlineFonts.find(name);
+  std::unordered_map<std::string, FTGLOutlineFont *>::iterator itf =
+      OutlineFonts.find(name);
 
   if (itf != OutlineFonts.end())
     return itf->second;
@@ -71,8 +72,8 @@ static FTGLOutlineFont *getOutlineFont(const std::string &name) {
   return OutlineFonts[name] = new FTGLOutlineFont(name.c_str());
 }
 
-static void initTulipFont(std::string &fontName, FTGLPolygonFont *&font, FTOutlineFont *&borderFont,
-                          int &fontSize) {
+static void initTulipFont(std::string &fontName, FTGLPolygonFont *&font,
+                          FTOutlineFont *&borderFont, int &fontSize) {
   TLP_LOCK_SECTION(init_tulip_font) {
     fontName = TulipBitmapDir + "font.ttf";
     font = getPolygonFont(fontName);
@@ -80,8 +81,8 @@ static void initTulipFont(std::string &fontName, FTGLPolygonFont *&font, FTOutli
     if (font->Error() == 0) // no error
       borderFont = getOutlineFont(fontName);
     else
-      tlp::error() << "Error when loading font file (" << fontName << ") for rendering labels"
-                   << endl;
+      tlp::error() << "Error when loading font file (" << fontName
+                   << ") for rendering labels" << endl;
 
     fontSize = 20;
   }
@@ -90,12 +91,11 @@ static void initTulipFont(std::string &fontName, FTGLPolygonFont *&font, FTOutli
 
 static const int SpaceBetweenLine = 5;
 
-GlLabel::GlLabel() : leftAlign(false), oldCamera(nullptr) {
-  init();
-}
-GlLabel::GlLabel(const Coord &centerPosition, const Size &size, Color fontColor, bool leftAlign)
-    : centerPosition(centerPosition), size(size), color(fontColor), leftAlign(leftAlign),
-      oldCamera(nullptr) {
+GlLabel::GlLabel() : leftAlign(false), oldCamera(nullptr) { init(); }
+GlLabel::GlLabel(const Coord &centerPosition, const Size &size, Color fontColor,
+                 bool leftAlign)
+    : centerPosition(centerPosition), size(size), color(fontColor),
+      leftAlign(leftAlign), oldCamera(nullptr) {
   init();
 }
 
@@ -179,7 +179,8 @@ void GlLabel::setText(const string &text) {
 //============================================================
 BoundingBox GlLabel::getBoundingBox() {
   if (!leftAlign)
-    return BoundingBox(centerPosition - size / 2.f, centerPosition + size / 2.f);
+    return BoundingBox(centerPosition - size / 2.f,
+                       centerPosition + size / 2.f);
   else
     return BoundingBox(centerPosition - Coord(0, size[1] / 2.f, 0),
                        centerPosition + Coord(size[0], size[1] / 2.f, 0));
@@ -208,7 +209,8 @@ void GlLabel::setFontName(const std::string &name) {
     if (fontName.empty())
       tlp::warning() << "Error in font loading: no font name" << endl;
     else
-      tlp::warning() << "Error in font loading: " << fontName << " cannot be loaded" << endl;
+      tlp::warning() << "Error in font loading: " << fontName
+                     << " cannot be loaded" << endl;
 
     font = getPolygonFont((TulipBitmapDir + "font.ttf"));
     borderFont = getOutlineFont((TulipBitmapDir + "font.ttf"));
@@ -266,10 +268,12 @@ void GlLabel::draw(float, Camera *camera) {
     glPushMatrix();
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
-    Coord &&test =
-        camera->viewportTo3DWorld(Coord(1, 1, 1)) - camera->viewportTo3DWorld(Coord(0, 0, 0));
+    Coord &&test = camera->viewportTo3DWorld(Coord(1, 1, 1)) -
+                   camera->viewportTo3DWorld(Coord(0, 0, 0));
     test /= test.norm();
-    lod = (camera->worldTo2DViewport(test) - camera->worldTo2DViewport(Coord(0, 0, 0))).norm();
+    lod = (camera->worldTo2DViewport(test) -
+           camera->worldTo2DViewport(Coord(0, 0, 0)))
+              .norm();
     oldLod = lod;
     oldCamera = *camera;
     oldViewport = camera->getViewport();
@@ -377,7 +381,8 @@ void GlLabel::draw(float, Camera *camera) {
       break;
     }
 
-    Size occlusionSize(wModified * scaleToApply / 2., hModified * scaleToApply / 2., 0);
+    Size occlusionSize(wModified * scaleToApply / 2.,
+                       hModified * scaleToApply / 2., 0);
 
     float angle = M_PI * zRot / 180;
 
@@ -387,7 +392,8 @@ void GlLabel::draw(float, Camera *camera) {
       float size1Cos = occlusionSize[1] * cos(angle);
       float size1Sin = occlusionSize[1] * sin(angle);
       BoundingBox tmpBB(Coord(size0Cos - size1Sin, size0Sin + size1Cos, 0),
-                        Coord(size0Cos + size1Sin, size0Sin - size1Cos, 0), true);
+                        Coord(size0Cos + size1Sin, size0Sin - size1Cos, 0),
+                        true);
       tmpBB.expand(Coord(-size0Cos + size1Sin, -size0Sin - size1Cos, 0), true);
       tmpBB.expand(Coord(-size0Cos - size1Sin, -size0Sin + size1Cos, 0), true);
 
@@ -395,54 +401,61 @@ void GlLabel::draw(float, Camera *camera) {
       occlusionSize[1] = tmpBB[1][1];
     }
 
-    baseCoord[0] +=
-        translationAfterRotation[0] * cos(angle) - translationAfterRotation[1] * sin(angle);
-    baseCoord[1] +=
-        translationAfterRotation[0] * sin(angle) + translationAfterRotation[1] * cos(angle);
+    baseCoord[0] += translationAfterRotation[0] * cos(angle) -
+                    translationAfterRotation[1] * sin(angle);
+    baseCoord[1] += translationAfterRotation[0] * sin(angle) +
+                    translationAfterRotation[1] * cos(angle);
 
     Matrix<float, 4> modelviewMatrix, projectionMatrix, transformMatrix;
 
-    glGetFloatv(GL_MODELVIEW_MATRIX, reinterpret_cast<GLfloat *>(&modelviewMatrix));
-    glGetFloatv(GL_PROJECTION_MATRIX, reinterpret_cast<GLfloat *>(&projectionMatrix));
+    glGetFloatv(GL_MODELVIEW_MATRIX,
+                reinterpret_cast<GLfloat *>(&modelviewMatrix));
+    glGetFloatv(GL_PROJECTION_MATRIX,
+                reinterpret_cast<GLfloat *>(&projectionMatrix));
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
     glMultMatrixf(reinterpret_cast<GLfloat *>(&projectionMatrix));
     glMultMatrixf(reinterpret_cast<GLfloat *>(&modelviewMatrix));
-    glGetFloatv(GL_MODELVIEW_MATRIX, reinterpret_cast<GLfloat *>(&transformMatrix));
+    glGetFloatv(GL_MODELVIEW_MATRIX,
+                reinterpret_cast<GLfloat *>(&transformMatrix));
     glPopMatrix();
 
-    BoundingBox bbTmp(
-        Coord(baseCoord[0] + occlusionSize[0], baseCoord[1] + occlusionSize[1], baseCoord[2]),
-        Coord(baseCoord[0] + occlusionSize[0], baseCoord[1] - occlusionSize[1], baseCoord[2]),
-        true);
-    bbTmp.expand(
-        Coord(baseCoord[0] - occlusionSize[0], baseCoord[1] - occlusionSize[1], baseCoord[2]),
-        true);
-    bbTmp.expand(
-        Coord(baseCoord[0] - occlusionSize[0], baseCoord[1] + occlusionSize[1], baseCoord[2]),
-        true);
+    BoundingBox bbTmp(Coord(baseCoord[0] + occlusionSize[0],
+                            baseCoord[1] + occlusionSize[1], baseCoord[2]),
+                      Coord(baseCoord[0] + occlusionSize[0],
+                            baseCoord[1] - occlusionSize[1], baseCoord[2]),
+                      true);
+    bbTmp.expand(Coord(baseCoord[0] - occlusionSize[0],
+                       baseCoord[1] - occlusionSize[1], baseCoord[2]),
+                 true);
+    bbTmp.expand(Coord(baseCoord[0] - occlusionSize[0],
+                       baseCoord[1] + occlusionSize[1], baseCoord[2]),
+                 true);
 
-    BoundingBox labelBoundingBox(projectPoint(Coord(baseCoord[0] + occlusionSize[0],
-                                                    baseCoord[1] + occlusionSize[1], baseCoord[2]),
-                                              transformMatrix, camera->getViewport()),
-                                 projectPoint(Coord(baseCoord[0] + occlusionSize[0],
-                                                    baseCoord[1] - occlusionSize[1], baseCoord[2]),
-                                              transformMatrix, camera->getViewport()),
-                                 true);
-    labelBoundingBox.expand(projectPoint(Coord(baseCoord[0] - occlusionSize[0],
-                                               baseCoord[1] - occlusionSize[1], baseCoord[2]),
-                                         transformMatrix, camera->getViewport()),
-                            true);
-    labelBoundingBox.expand(projectPoint(Coord(baseCoord[0] - occlusionSize[0],
-                                               baseCoord[1] + occlusionSize[1], baseCoord[2]),
-                                         transformMatrix, camera->getViewport()),
-                            true);
+    BoundingBox labelBoundingBox(
+        projectPoint(Coord(baseCoord[0] + occlusionSize[0],
+                           baseCoord[1] + occlusionSize[1], baseCoord[2]),
+                     transformMatrix, camera->getViewport()),
+        projectPoint(Coord(baseCoord[0] + occlusionSize[0],
+                           baseCoord[1] - occlusionSize[1], baseCoord[2]),
+                     transformMatrix, camera->getViewport()),
+        true);
+    labelBoundingBox.expand(
+        projectPoint(Coord(baseCoord[0] - occlusionSize[0],
+                           baseCoord[1] - occlusionSize[1], baseCoord[2]),
+                     transformMatrix, camera->getViewport()),
+        true);
+    labelBoundingBox.expand(
+        projectPoint(Coord(baseCoord[0] - occlusionSize[0],
+                           baseCoord[1] + occlusionSize[1], baseCoord[2]),
+                     transformMatrix, camera->getViewport()),
+        true);
 
     if (!occlusionTester->addRectangle(
-            RectangleInt2D(labelBoundingBox[0][0], labelBoundingBox[0][1], labelBoundingBox[1][0],
-                           labelBoundingBox[1][1]))) {
+            RectangleInt2D(labelBoundingBox[0][0], labelBoundingBox[0][1],
+                           labelBoundingBox[1][0], labelBoundingBox[1][1]))) {
       glPopAttrib();
       return;
     }
@@ -495,58 +508,71 @@ void GlLabel::draw(float, Camera *camera) {
 
     Matrix<float, 4> modelviewMatrix, projectionMatrix, transformMatrix;
 
-    glGetFloatv(GL_MODELVIEW_MATRIX, reinterpret_cast<GLfloat *>(&modelviewMatrix));
-    glGetFloatv(GL_PROJECTION_MATRIX, reinterpret_cast<GLfloat *>(&projectionMatrix));
+    glGetFloatv(GL_MODELVIEW_MATRIX,
+                reinterpret_cast<GLfloat *>(&modelviewMatrix));
+    glGetFloatv(GL_PROJECTION_MATRIX,
+                reinterpret_cast<GLfloat *>(&projectionMatrix));
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
     glMultMatrixf(reinterpret_cast<GLfloat *>(&projectionMatrix));
     glMultMatrixf(reinterpret_cast<GLfloat *>(&modelviewMatrix));
-    glGetFloatv(GL_MODELVIEW_MATRIX, reinterpret_cast<GLfloat *>(&transformMatrix));
+    glGetFloatv(GL_MODELVIEW_MATRIX,
+                reinterpret_cast<GLfloat *>(&transformMatrix));
     glPopMatrix();
 
     MatrixGL invTransformMatrix(transformMatrix);
     invTransformMatrix.inverse();
 
-    Coord &&baseCenter = projectPoint(centerPosition, transformMatrix, camera->getViewport());
-    baseCenter = unprojectPoint(baseCenter, invTransformMatrix, camera->getViewport());
+    Coord &&baseCenter =
+        projectPoint(centerPosition, transformMatrix, camera->getViewport());
+    baseCenter =
+        unprojectPoint(baseCenter, invTransformMatrix, camera->getViewport());
 
     BoundingBox billboardedBB(
-        projectPoint(centerPosition + Coord(sizeForOutAlign[0] / 2., sizeForOutAlign[1] / 2.,
+        projectPoint(centerPosition + Coord(sizeForOutAlign[0] / 2.,
+                                            sizeForOutAlign[1] / 2.,
                                             sizeForOutAlign[2] / 2.),
                      transformMatrix, camera->getViewport()),
-        projectPoint(centerPosition + Coord(-sizeForOutAlign[0] / 2., sizeForOutAlign[1] / 2.,
-                                            sizeForOutAlign[2] / 2.),
-                     transformMatrix, camera->getViewport()),
-        true);
-    billboardedBB.expand(
-        projectPoint(centerPosition + Coord(sizeForOutAlign[0] / 2., -sizeForOutAlign[1] / 2.,
+        projectPoint(centerPosition + Coord(-sizeForOutAlign[0] / 2.,
+                                            sizeForOutAlign[1] / 2.,
                                             sizeForOutAlign[2] / 2.),
                      transformMatrix, camera->getViewport()),
         true);
     billboardedBB.expand(
-        projectPoint(centerPosition + Coord(-sizeForOutAlign[0] / 2., -sizeForOutAlign[1] / 2.,
+        projectPoint(centerPosition + Coord(sizeForOutAlign[0] / 2.,
+                                            -sizeForOutAlign[1] / 2.,
                                             sizeForOutAlign[2] / 2.),
                      transformMatrix, camera->getViewport()),
         true);
     billboardedBB.expand(
-        projectPoint(centerPosition + Coord(sizeForOutAlign[0] / 2., sizeForOutAlign[1] / 2.,
+        projectPoint(centerPosition + Coord(-sizeForOutAlign[0] / 2.,
+                                            -sizeForOutAlign[1] / 2.,
+                                            sizeForOutAlign[2] / 2.),
+                     transformMatrix, camera->getViewport()),
+        true);
+    billboardedBB.expand(
+        projectPoint(centerPosition + Coord(sizeForOutAlign[0] / 2.,
+                                            sizeForOutAlign[1] / 2.,
                                             -sizeForOutAlign[2] / 2.),
                      transformMatrix, camera->getViewport()),
         true);
     billboardedBB.expand(
-        projectPoint(centerPosition + Coord(-sizeForOutAlign[0] / 2., sizeForOutAlign[1] / 2.,
+        projectPoint(centerPosition + Coord(-sizeForOutAlign[0] / 2.,
+                                            sizeForOutAlign[1] / 2.,
                                             -sizeForOutAlign[2] / 2.),
                      transformMatrix, camera->getViewport()),
         true);
     billboardedBB.expand(
-        projectPoint(centerPosition + Coord(sizeForOutAlign[0] / 2., -sizeForOutAlign[1] / 2.,
+        projectPoint(centerPosition + Coord(sizeForOutAlign[0] / 2.,
+                                            -sizeForOutAlign[1] / 2.,
                                             -sizeForOutAlign[2] / 2.),
                      transformMatrix, camera->getViewport()),
         true);
     billboardedBB.expand(
-        projectPoint(centerPosition + Coord(-sizeForOutAlign[0] / 2., -sizeForOutAlign[1] / 2.,
+        projectPoint(centerPosition + Coord(-sizeForOutAlign[0] / 2.,
+                                            -sizeForOutAlign[1] / 2.,
                                             -sizeForOutAlign[2] / 2.),
                      transformMatrix, camera->getViewport()),
         true);
@@ -557,28 +583,32 @@ void GlLabel::draw(float, Camera *camera) {
 
     case LabelPosition::Left:
       billboardedTranlation =
-          unprojectPoint(billboardedBB.center() + Coord(-billboardedBB.width() / 2., 0, 0),
+          unprojectPoint(billboardedBB.center() +
+                             Coord(-billboardedBB.width() / 2., 0, 0),
                          invTransformMatrix, camera->getViewport()) -
           baseCenter;
       break;
 
     case LabelPosition::Right:
       billboardedTranlation =
-          unprojectPoint(billboardedBB.center() + Coord(billboardedBB.width() / 2., 0, 0),
+          unprojectPoint(billboardedBB.center() +
+                             Coord(billboardedBB.width() / 2., 0, 0),
                          invTransformMatrix, camera->getViewport()) -
           baseCenter;
       break;
 
     case LabelPosition::Top:
       billboardedTranlation =
-          unprojectPoint(billboardedBB.center() + Coord(0, billboardedBB.height() / 2., 0),
+          unprojectPoint(billboardedBB.center() +
+                             Coord(0, billboardedBB.height() / 2., 0),
                          invTransformMatrix, camera->getViewport()) -
           baseCenter;
       break;
 
     case LabelPosition::Bottom:
       billboardedTranlation =
-          unprojectPoint(billboardedBB.center() + Coord(0, -billboardedBB.height() / 2., 0),
+          unprojectPoint(billboardedBB.center() +
+                             Coord(0, -billboardedBB.height() / 2., 0),
                          invTransformMatrix, camera->getViewport()) -
           baseCenter;
       break;
@@ -587,7 +617,8 @@ void GlLabel::draw(float, Camera *camera) {
       break;
     }
 
-    glTranslatef(billboardedTranlation[0], billboardedTranlation[1], billboardedTranlation[2]);
+    glTranslatef(billboardedTranlation[0], billboardedTranlation[1],
+                 billboardedTranlation[2]);
 
     // Billboard computation
     float mdlM[16];
@@ -643,7 +674,8 @@ void GlLabel::draw(float, Camera *camera) {
     if (outlineColor.getA() == 0 || outlineSize == 0)
       setMaterial(Color(color[0], color[1], color[2], color[3]));
     else
-      setMaterial(Color(outlineColor[0], outlineColor[1], outlineColor[2], outlineColor[3]));
+      setMaterial(Color(outlineColor[0], outlineColor[1], outlineColor[2],
+                        outlineColor[3]));
 
     glBegin(GL_LINES);
     glVertex3f(-w / 2. + wAlign, hAlign, 0);
@@ -706,11 +738,14 @@ void GlLabel::draw(float, Camera *camera) {
     for (const string &s : textVector) {
       font->BBox(s.c_str(), x1, y1, z1, x2, y2, z2);
 
-      FTPoint shift(-(textBoundingBox[1][0] - textBoundingBox[0][0]) / 2. - x1 +
-                        ((textBoundingBox[1][0] - textBoundingBox[0][0]) - (*itW)) * xAlignFactor +
-                        (textBoundingBox[1][0] - textBoundingBox[0][0]) * xShiftFactor,
-                    -textBoundingBox[1][1] + (textBoundingBox[1][1] - textBoundingBox[0][1]) / 2. +
-                        yShift + (textBoundingBox[1][1] - textBoundingBox[0][1]) * yShiftFactor);
+      FTPoint shift(
+          -(textBoundingBox[1][0] - textBoundingBox[0][0]) / 2. - x1 +
+              ((textBoundingBox[1][0] - textBoundingBox[0][0]) - (*itW)) *
+                  xAlignFactor +
+              (textBoundingBox[1][0] - textBoundingBox[0][0]) * xShiftFactor,
+          -textBoundingBox[1][1] +
+              (textBoundingBox[1][1] - textBoundingBox[0][1]) / 2. + yShift +
+              (textBoundingBox[1][1] - textBoundingBox[0][1]) * yShiftFactor);
 
       if (!textureName.empty())
         GlTextureManager::activateTexture(textureName);
@@ -743,9 +778,7 @@ void GlLabel::draw(float, Camera *camera) {
   glPopAttrib();
 }
 //===========================================================
-void GlLabel::translate(const Coord &mouvement) {
-  centerPosition += mouvement;
-}
+void GlLabel::translate(const Coord &mouvement) { centerPosition += mouvement; }
 //===========================================================
 void GlLabel::rotate(float xRot, float yRot, float zRot) {
   this->xRot = xRot;
@@ -761,7 +794,8 @@ void GlLabel::getXML(string &outString) {
   GlXMLTools::getXML(outString, "renderingMode", renderingMode);
   GlXMLTools::getXML(outString, "fontName", fontName);
   GlXMLTools::getXML(outString, "centerPosition", centerPosition);
-  GlXMLTools::getXML(outString, "translationAfterRotation", translationAfterRotation);
+  GlXMLTools::getXML(outString, "translationAfterRotation",
+                     translationAfterRotation);
   GlXMLTools::getXML(outString, "size", size);
   GlXMLTools::getXML(outString, "color", color);
   GlXMLTools::getXML(outString, "alignment", alignment);
@@ -779,27 +813,33 @@ void GlLabel::getXML(string &outString) {
   GlXMLTools::getXML(outString, "textureName", textureName);
 }
 //============================================================
-void GlLabel::setWithXML(const string &inString, unsigned int &currentPosition) {
+void GlLabel::setWithXML(const string &inString,
+                         unsigned int &currentPosition) {
 
   GlXMLTools::setWithXML(inString, currentPosition, "text", text);
-  GlXMLTools::setWithXML(inString, currentPosition, "renderingMode", renderingMode);
+  GlXMLTools::setWithXML(inString, currentPosition, "renderingMode",
+                         renderingMode);
   GlXMLTools::setWithXML(inString, currentPosition, "fontName", fontName);
-  GlXMLTools::setWithXML(inString, currentPosition, "centerPosition", centerPosition);
+  GlXMLTools::setWithXML(inString, currentPosition, "centerPosition",
+                         centerPosition);
   GlXMLTools::setWithXML(inString, currentPosition, "translationAfterRotation",
                          translationAfterRotation);
   GlXMLTools::setWithXML(inString, currentPosition, "size", size);
   GlXMLTools::setWithXML(inString, currentPosition, "color", color);
   GlXMLTools::setWithXML(inString, currentPosition, "alignment", alignment);
   GlXMLTools::setWithXML(inString, currentPosition, "scaleToSize", scaleToSize);
-  GlXMLTools::setWithXML(inString, currentPosition, "useMinMaxSize", useMinMaxSize);
+  GlXMLTools::setWithXML(inString, currentPosition, "useMinMaxSize",
+                         useMinMaxSize);
   GlXMLTools::setWithXML(inString, currentPosition, "minSize", minSize);
   GlXMLTools::setWithXML(inString, currentPosition, "maxSize", maxSize);
-  GlXMLTools::setWithXML(inString, currentPosition, "depthTestEnabled", depthTestEnabled);
+  GlXMLTools::setWithXML(inString, currentPosition, "depthTestEnabled",
+                         depthTestEnabled);
   GlXMLTools::setWithXML(inString, currentPosition, "leftAlign", leftAlign);
   GlXMLTools::setWithXML(inString, currentPosition, "xRot", xRot);
   GlXMLTools::setWithXML(inString, currentPosition, "yRot", yRot);
   GlXMLTools::setWithXML(inString, currentPosition, "zRot", zRot);
-  GlXMLTools::setWithXML(inString, currentPosition, "outlineColor", outlineColor);
+  GlXMLTools::setWithXML(inString, currentPosition, "outlineColor",
+                         outlineColor);
   GlXMLTools::setWithXML(inString, currentPosition, "outlineSize", outlineSize);
   GlXMLTools::setWithXML(inString, currentPosition, "textureName", textureName);
 }

@@ -23,9 +23,7 @@
 
 ParenInfoTextBlockData::ParenInfoTextBlockData() {}
 
-QVector<ParenInfo> ParenInfoTextBlockData::parens() {
-  return _parenInfo;
-}
+QVector<ParenInfo> ParenInfoTextBlockData::parens() { return _parenInfo; }
 
 void ParenInfoTextBlockData::insert(const ParenInfo &parenInfo) {
   _parenInfo.append(parenInfo);
@@ -59,7 +57,8 @@ void ParenMatcherHighlighter::highlightBlock(const QString &text) {
       modifiedText[i] = ' ';
     }
 
-    pos = dblQuotesRegexp.indexIn(modifiedText, pos + dblQuotesRegexp.matchedLength());
+    pos = dblQuotesRegexp.indexIn(modifiedText,
+                                  pos + dblQuotesRegexp.matchedLength());
   }
 
   pos = simpleQuotesRegexp.indexIn(modifiedText);
@@ -69,7 +68,8 @@ void ParenMatcherHighlighter::highlightBlock(const QString &text) {
       modifiedText[i] = ' ';
     }
 
-    pos = simpleQuotesRegexp.indexIn(modifiedText, pos + simpleQuotesRegexp.matchedLength());
+    pos = simpleQuotesRegexp.indexIn(modifiedText,
+                                     pos + simpleQuotesRegexp.matchedLength());
   }
 
   for (int i = 0; i < _leftParensToMatch.size(); ++i) {

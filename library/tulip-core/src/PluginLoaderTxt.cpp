@@ -18,8 +18,8 @@
  */
 
 #include <iostream>
-#include <tulip/PluginLoaderTxt.h>
 #include <tulip/Plugin.h>
+#include <tulip/PluginLoaderTxt.h>
 
 using namespace std;
 using namespace tlp;
@@ -34,8 +34,10 @@ void PluginLoaderTxt::loading(const string &filename) {
   std::cout << "loading file: " << filename << endl;
 }
 
-void PluginLoaderTxt::loaded(const Plugin *info, const std::list<Dependency> &deps) {
-  std::cout << "Plug-in " << info->name() << " loaded, Author: " << info->author()
+void PluginLoaderTxt::loaded(const Plugin *info,
+                             const std::list<Dependency> &deps) {
+  std::cout << "Plug-in " << info->name()
+            << " loaded, Author: " << info->author()
             << ", Date: " << info->date() << ", Release: " << info->release()
             << ", Tulip Version: " << info->tulipRelease() << endl;
 
@@ -52,7 +54,8 @@ void PluginLoaderTxt::loaded(const Plugin *info, const std::list<Dependency> &de
 }
 
 void PluginLoaderTxt::aborted(const string &filename, const string &erreurmsg) {
-  std::cout << "Aborted loading of " << filename << " Error:" << erreurmsg << endl;
+  std::cout << "Aborted loading of " << filename << " Error:" << erreurmsg
+            << endl;
 }
 
 void PluginLoaderTxt::finished(bool state, const string &msg) {

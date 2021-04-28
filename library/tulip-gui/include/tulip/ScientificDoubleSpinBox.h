@@ -34,9 +34,8 @@
 namespace tlp {
 
 /**
- * @brief Utility class used to validate that a QString contains a valid representation of a
- * floating point number
- * including scientific notation
+ * @brief Utility class used to validate that a QString contains a valid
+ * representation of a floating point number including scientific notation
  *
  * @since Tulip 5.0
  */
@@ -49,7 +48,8 @@ public:
 };
 
 /**
- * @brief Utility class implementing a QDoubleSpinBox supporting scientific notation
+ * @brief Utility class implementing a QDoubleSpinBox supporting scientific
+ * notation
  *
  * @since Tulip 5.0
  */

@@ -18,10 +18,10 @@
  */
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include <tulip/Glyph.h>
-#include <tulip/GlRect.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/GlRect.h>
+#include <tulip/Glyph.h>
 #include <tulip/TulipViewSettings.h>
 
 using namespace std;
@@ -41,8 +41,8 @@ namespace tlp {
  */
 class Billboard : public NoShaderGlyph {
 public:
-  GLYPHINFORMATION("2D - Billboard", "Gerald Gainant", "08/03/2004", "Textured billboard", "1.0",
-                   NodeShape::Billboard)
+  GLYPHINFORMATION("2D - Billboard", "Gerald Gainant", "08/03/2004",
+                   "Textured billboard", "1.0", NodeShape::Billboard)
   Billboard(const tlp::PluginContext *context = nullptr);
   ~Billboard() override;
   void draw(node n, float lod) override;
@@ -52,12 +52,14 @@ public:
 PLUGIN(Billboard)
 
 //===================================================================================
-Billboard::Billboard(const tlp::PluginContext *context) : NoShaderGlyph(context) {}
+Billboard::Billboard(const tlp::PluginContext *context)
+    : NoShaderGlyph(context) {}
 //========================================================
 Billboard::~Billboard() {}
 //========================================================
 void Billboard::draw(node n, float) {
-  static GlRect rect(Coord(0, 0, 0), 1., 1., Color(0, 0, 0, 255), Color(0, 0, 0, 255));
+  static GlRect rect(Coord(0, 0, 0), 1., 1., Color(0, 0, 0, 255),
+                     Color(0, 0, 0, 255));
 
   rect.setFillColor(glGraphInputData->getElementColor()->getNodeValue(n));
 
@@ -70,11 +72,13 @@ void Billboard::draw(node n, float) {
     rect.setTextureName("");
   }
 
-  double borderWidth = glGraphInputData->getElementBorderWidth()->getNodeValue(n);
+  double borderWidth =
+      glGraphInputData->getElementBorderWidth()->getNodeValue(n);
 
   if (borderWidth > 0) {
     rect.setOutlineMode(true);
-    rect.setOutlineColor(glGraphInputData->getElementBorderColor()->getNodeValue(n));
+    rect.setOutlineColor(
+        glGraphInputData->getElementBorderColor()->getNodeValue(n));
     rect.setOutlineSize(borderWidth);
   } else {
     rect.setOutlineMode(false);

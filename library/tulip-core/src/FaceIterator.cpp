@@ -27,25 +27,19 @@ using namespace tlp;
 //============================================================
 // Iterator for Face : FaceIterator
 //============================================================
-FaceIterator::FaceIterator(PlanarConMap *m) : i(0), mgraph(m) {
-  assert(m);
-}
+FaceIterator::FaceIterator(PlanarConMap *m) : i(0), mgraph(m) { assert(m); }
 
 //============================================================
 /**
  * return the next element
  */
-Face FaceIterator::next() {
-  return mgraph->faces[i++];
-}
+Face FaceIterator::next() { return mgraph->faces[i++]; }
 
 //============================================================
 /**
  * test if there's a next element
  */
-bool FaceIterator::hasNext() {
-  return (i != mgraph->faces.size());
-}
+bool FaceIterator::hasNext() { return (i != mgraph->faces.size()); }
 
 //============================================================
 // Iterator for Face : FaceAdjIterator
@@ -120,17 +114,13 @@ FaceAdjIterator::FaceAdjIterator(PlanarConMap *m, const node n) : i(0) {
 /**
  * return the next element
  */
-Face FaceAdjIterator::next() {
-  return facesAdj[i++];
-}
+Face FaceAdjIterator::next() { return facesAdj[i++]; }
 
 //============================================================
 /**
  * test if there's a next element
  */
-bool FaceAdjIterator::hasNext() {
-  return (i != facesAdj.size());
-}
+bool FaceAdjIterator::hasNext() { return (i != facesAdj.size()); }
 
 //============================================================
 // NodeFaceIterator
@@ -168,35 +158,28 @@ NodeFaceIterator::NodeFaceIterator(PlanarConMap *m, const Face face) : i(0) {
 /**
  * return the next element
  */
-node NodeFaceIterator::next() {
-  return nodes[i++];
-}
+node NodeFaceIterator::next() { return nodes[i++]; }
 
 //============================================================
 /**
  * test if there's a next element
  */
-bool NodeFaceIterator::hasNext() {
-  return (i != nodes.size());
-}
+bool NodeFaceIterator::hasNext() { return (i != nodes.size()); }
 
 //============================================================
 // EdgeFaceIterator
 //============================================================
-EdgeFaceIterator::EdgeFaceIterator(PlanarConMap *m, const Face f) : ve(m->facesEdges[f]), i(0) {}
+EdgeFaceIterator::EdgeFaceIterator(PlanarConMap *m, const Face f)
+    : ve(m->facesEdges[f]), i(0) {}
 
 //============================================================
 /**
  * return the next element
  */
-edge EdgeFaceIterator::next() {
-  return ve[i++];
-}
+edge EdgeFaceIterator::next() { return ve[i++]; }
 
 //============================================================
 /**
  * test if there's a next element
  */
-bool EdgeFaceIterator::hasNext() {
-  return (i != ve.size());
-}
+bool EdgeFaceIterator::hasNext() { return (i != ve.size()); }

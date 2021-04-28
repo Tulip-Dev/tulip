@@ -19,16 +19,17 @@
 
 #include <algorithm>
 
-#include <tulip/ViewGraphPropertiesSelectionWidget.h>
 #include "ui_ViewGraphPropertiesSelectionWidget.h"
+#include <tulip/ViewGraphPropertiesSelectionWidget.h>
 
 using namespace std;
 
 namespace tlp {
 
-ViewGraphPropertiesSelectionWidget::ViewGraphPropertiesSelectionWidget(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::ViewGraphPropertiesSelectionWidgetData), graph(nullptr),
-      lastDataLocation(NODE) {
+ViewGraphPropertiesSelectionWidget::ViewGraphPropertiesSelectionWidget(
+    QWidget *parent)
+    : QWidget(parent), _ui(new Ui::ViewGraphPropertiesSelectionWidgetData),
+      graph(nullptr), lastDataLocation(NODE) {
   _ui->setupUi(this);
 }
 
@@ -61,7 +62,8 @@ void ViewGraphPropertiesSelectionWidget::setWidgetParameters(
   vector<string> &&lastSelectedProperties = getSelectedGraphProperties();
 
   _ui->graphPropertiesSelectionWidget->clearLists();
-  _ui->graphPropertiesSelectionWidget->setWidgetParameters(graph, graphPropertiesTypesFilter);
+  _ui->graphPropertiesSelectionWidget->setWidgetParameters(
+      graph, graphPropertiesTypesFilter);
 
   if (!lastSelectedProperties.empty() && graph) {
     vector<string> stringList;
@@ -77,8 +79,9 @@ void ViewGraphPropertiesSelectionWidget::setWidgetParameters(
     stringList.clear();
     for (const string &propertyName : graph->getProperties()) {
       if (graph->existProperty(propertyName) &&
-          std::find(lastSelectedProperties.begin(), lastSelectedProperties.end(), propertyName) ==
-              lastSelectedProperties.end()) {
+          std::find(lastSelectedProperties.begin(),
+                    lastSelectedProperties.end(),
+                    propertyName) == lastSelectedProperties.end()) {
         stringList.push_back(propertyName);
       }
     }
@@ -88,7 +91,8 @@ void ViewGraphPropertiesSelectionWidget::setWidgetParameters(
   }
 }
 
-vector<string> ViewGraphPropertiesSelectionWidget::getSelectedGraphProperties() {
+vector<string>
+ViewGraphPropertiesSelectionWidget::getSelectedGraphProperties() {
   return _ui->graphPropertiesSelectionWidget->getSelectedProperties();
 }
 
@@ -108,8 +112,8 @@ void ViewGraphPropertiesSelectionWidget::setSelectedProperties(
 
   for (auto prop : graph->getObjectProperties()) {
     const auto &pName = prop->getName();
-    if (std::find(selectedProperties.begin(), selectedProperties.end(), pName) !=
-        selectedProperties.end()) {
+    if (std::find(selectedProperties.begin(), selectedProperties.end(),
+                  pName) != selectedProperties.end()) {
       finalStringList.push_back(selectedPropertiesCopy.front());
       selectedPropertiesCopy.erase(remove(selectedPropertiesCopy.begin(),
                                           selectedPropertiesCopy.end(),
@@ -121,7 +125,8 @@ void ViewGraphPropertiesSelectionWidget::setSelectedProperties(
   }
 
   _ui->graphPropertiesSelectionWidget->setInputPropertiesList(finalStringList);
-  _ui->graphPropertiesSelectionWidget->setOutputPropertiesList(selectedProperties);
+  _ui->graphPropertiesSelectionWidget->setOutputPropertiesList(
+      selectedProperties);
 }
 
 ElementType ViewGraphPropertiesSelectionWidget::getDataLocation() const {
@@ -132,7 +137,8 @@ ElementType ViewGraphPropertiesSelectionWidget::getDataLocation() const {
   }
 }
 
-void ViewGraphPropertiesSelectionWidget::setDataLocation(const ElementType location) {
+void ViewGraphPropertiesSelectionWidget::setDataLocation(
+    const ElementType location) {
   if (location == NODE) {
     _ui->edgesButton->setChecked(false);
     _ui->nodesButton->setChecked(true);

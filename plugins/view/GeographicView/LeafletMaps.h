@@ -54,9 +54,7 @@ class JsCallback : public QObject {
   Q_OBJECT
 
 public:
-  JsCallback(QVariant *ret) : _ret(ret) {
-    _lastCreatedInstance = this;
-  }
+  JsCallback(QVariant *ret) : _ret(ret) { _lastCreatedInstance = this; }
 
   JsCallback(const JsCallback &jscb) : QObject() {
     _ret = jscb._ret;
@@ -97,9 +95,7 @@ class LeafletMaps : public QWEBVIEW {
 
 #if defined QT_HAS_WEBENGINE
   MapRefresher *mapRefresher;
-  ~LeafletMaps() {
-    delete mapRefresher;
-  }
+  ~LeafletMaps() { delete mapRefresher; }
 #endif
 
 public:
@@ -121,12 +117,11 @@ public:
 
   std::pair<double, double> getLatLngForPixelPosOnScreen(int x, int y);
 
-  bool pageInit() const {
-    return init;
-  }
+  bool pageInit() const { return init; }
 
-  void setMapBounds(Graph *graph,
-                    const std::unordered_map<node, std::pair<double, double>> &nodesLatLngs);
+  void setMapBounds(
+      Graph *graph,
+      const std::unordered_map<node, std::pair<double, double>> &nodesLatLngs);
 
   void switchToBaseLayer(const char *layerName);
 

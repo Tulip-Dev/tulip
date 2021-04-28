@@ -28,8 +28,6 @@ public:
 
   EmptyGraphImport(const tlp::PluginContext *context) : ImportModule(context) {}
 
-  bool importGraph() override {
-    return true;
-  }
+  bool importGraph() override { return true; }
 };
 PLUGIN(EmptyGraphImport)

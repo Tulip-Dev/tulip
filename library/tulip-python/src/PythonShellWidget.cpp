@@ -19,15 +19,15 @@
 
 #include "tulip/PythonInterpreter.h"
 
-#include <QRegExp>
 #include <QKeyEvent>
+#include <QRegExp>
 
-#include <tulip/TlpTools.h>
 #include <tulip/Observable.h>
+#include <tulip/TlpTools.h>
 
-#include "tulip/PythonShellWidget.h"
-#include "tulip/PythonCodeHighlighter.h"
 #include "tulip/ParenMatcherHighlighter.h"
+#include "tulip/PythonCodeHighlighter.h"
+#include "tulip/PythonShellWidget.h"
 
 using namespace tlp;
 
@@ -37,7 +37,8 @@ static QString ps1 = ">>> ";
 static QString ps2 = "... ";
 
 static QString rtrim(const QString &s) {
-  for (int lastNonSpaceIdx = s.length() - 1; lastNonSpaceIdx != -1; --lastNonSpaceIdx) {
+  for (int lastNonSpaceIdx = s.length() - 1; lastNonSpaceIdx != -1;
+       --lastNonSpaceIdx) {
     if (!s.at(lastNonSpaceIdx).isSpace())
       return s.left(lastNonSpaceIdx + 1);
   }
@@ -46,7 +47,8 @@ static QString rtrim(const QString &s) {
 }
 
 static QString ltrim(const QString &s) {
-  for (int firstNonSpaceIdx = 0; firstNonSpaceIdx < s.length(); ++firstNonSpaceIdx) {
+  for (int firstNonSpaceIdx = 0; firstNonSpaceIdx < s.length();
+       ++firstNonSpaceIdx) {
     if (!s.at(firstNonSpaceIdx).isSpace())
       return s.right(s.length() - firstNonSpaceIdx);
   }
@@ -54,7 +56,8 @@ static QString ltrim(const QString &s) {
   return "";
 }
 
-PythonShellWidget::PythonShellWidget(QWidget *parent, bool showBanner) : PythonCodeEditor(parent) {
+PythonShellWidget::PythonShellWidget(QWidget *parent, bool showBanner)
+    : PythonCodeEditor(parent) {
   setAutoIndentation(false);
   setIndentationGuides(false);
   setHighlightEditedLine(false);
@@ -135,7 +138,8 @@ void PythonShellWidget::keyPressEvent(QKeyEvent *e) {
       setSelection(lines() - 1, 0, lines() - 1, lineLength(lines() - 1));
       removeSelectedText();
 
-      if (_currentHistoryPos < int(_history.size() - 1) && _history.size() > 0) {
+      if (_currentHistoryPos < int(_history.size() - 1) &&
+          _history.size() > 0) {
         ++_currentHistoryPos;
         insert(_currentPs + _history[_currentHistoryPos]);
       } else {
@@ -168,9 +172,11 @@ void PythonShellWidget::keyPressEvent(QKeyEvent *e) {
     }
   } else if (key == Qt::Key_A && e->modifiers() == Qt::ControlModifier) {
     if (isCursorOnLastLine()) {
-      setSelection(lines() - 1, _currentPs.length(), lines() - 1, lineLength(lines() - 1));
+      setSelection(lines() - 1, _currentPs.length(), lines() - 1,
+                   lineLength(lines() - 1));
     }
-  } else if ((key == Qt::Key_Enter || key == Qt::Key_Return) && e->modifiers() == Qt::NoModifier) {
+  } else if ((key == Qt::Key_Enter || key == Qt::Key_Return) &&
+             e->modifiers() == Qt::NoModifier) {
     if (isCursorOnLastLine()) {
       if (!line.isEmpty()) {
         _currentCodeLines += (line + "\n");
@@ -197,7 +203,8 @@ void PythonShellWidget::keyPressEvent(QKeyEvent *e) {
       }
     }
   } else if (key != Qt::Key_Delete && txt.length() > 0 && txt >= " " &&
-             e->modifiers() == Qt::NoModifier && e->text() != "(" && e->text() != ")") {
+             e->modifiers() == Qt::NoModifier && e->text() != "(" &&
+             e->text() != ")") {
     if (isCursorOnLastLine()) {
       insert(txt);
     } else {
@@ -216,13 +223,16 @@ void PythonShellWidget::executeCurrentLines() {
 
   tlp::Observable::holdObservers();
   PythonInterpreter::getInstance()->setConsoleWidget(this);
-  PythonInterpreter::getInstance()->setProcessQtEventsDuringScriptExecution(true);
+  PythonInterpreter::getInstance()->setProcessQtEventsDuringScriptExecution(
+      true);
   // eval the input statement in 'single input mode'
-  PythonInterpreter::getInstance()->evalPythonStatement(_currentCodeLines, true);
+  PythonInterpreter::getInstance()->evalPythonStatement(_currentCodeLines,
+                                                        true);
   // flush stdout as every input that does not eval to 'None' is printed to it
   PythonInterpreter::getInstance()->runString("sys.stdout.flush()");
   _currentCodeLines = "";
-  PythonInterpreter::getInstance()->setProcessQtEventsDuringScriptExecution(false);
+  PythonInterpreter::getInstance()->setProcessQtEventsDuringScriptExecution(
+      false);
   PythonInterpreter::getInstance()->resetConsoleWidget();
   PythonInterpreter::getInstance()->setDefaultSIGINTHandler();
   tlp::Observable::unholdObservers();
@@ -232,9 +242,7 @@ void PythonShellWidget::executeCurrentLines() {
   insert("", true);
 }
 
-void PythonShellWidget::showEvent(QShowEvent *) {
-  setFocus();
-}
+void PythonShellWidget::showEvent(QShowEvent *) { setFocus(); }
 
 void PythonShellWidget::updateAutoCompletionList(bool) {
   if (!_autoCompletionList->isVisible())
@@ -245,7 +253,8 @@ void PythonShellWidget::updateAutoCompletionList(bool) {
   QString lineNotTrimmed = textCursor().block().text().mid(_currentPs.length());
   QString line = rtrim(textCursor().block().text()).mid(_currentPs.length());
 
-  if (!lineNotTrimmed.isEmpty() && lineNotTrimmed[lineNotTrimmed.length() - 1] != ' ' &&
+  if (!lineNotTrimmed.isEmpty() &&
+      lineNotTrimmed[lineNotTrimmed.length() - 1] != ' ' &&
       lineNotTrimmed[lineNotTrimmed.length() - 1] != '\t') {
     QStringList context = ltrim(line).split(".");
 
@@ -269,7 +278,8 @@ void PythonShellWidget::updateAutoCompletionList(bool) {
 
     if (context.size() == 2) {
       QVector<QString> dynamicAutoCompletionList =
-          PythonInterpreter::getInstance()->getObjectDictEntries(context[0], context[1]);
+          PythonInterpreter::getInstance()->getObjectDictEntries(context[0],
+                                                                 context[1]);
 
       for (int i = 0; i < dynamicAutoCompletionList.size(); ++i) {
         QString entry = dynamicAutoCompletionList[i];

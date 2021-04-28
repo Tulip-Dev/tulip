@@ -17,26 +17,27 @@
  *
  */
 
+#include <tulip/GraphElementModel.h>
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseShowElementInfo.h>
-#include <tulip/GraphElementModel.h>
 
-#include "ScatterPlot2DInteractors.h"
-#include "ScatterPlot2DViewNavigator.h"
-#include "ScatterPlotTrendLine.h"
-#include "ScatterPlotCorrelCoeffSelector.h"
-#include "ScatterPlot2DView.h"
 #include "ScatterPlot2D.h"
+#include "ScatterPlot2DInteractors.h"
+#include "ScatterPlot2DView.h"
+#include "ScatterPlot2DViewNavigator.h"
+#include "ScatterPlotCorrelCoeffSelector.h"
 #include "ScatterPlotCorrelCoeffSelectorOptionsWidget.h"
+#include "ScatterPlotTrendLine.h"
 
-#include "../../utils/StandardInteractorPriority.h"
 #include "../../utils/PluginNames.h"
+#include "../../utils/StandardInteractorPriority.h"
 
 using namespace std;
 
 namespace tlp {
 
-ScatterPlot2DInteractor::ScatterPlot2DInteractor(const QString &iconPath, const QString &text,
+ScatterPlot2DInteractor::ScatterPlot2DInteractor(const QString &iconPath,
+                                                 const QString &text,
                                                  const unsigned int priority)
     : NodeLinkDiagramComponentInteractor(iconPath, text, priority) {}
 
@@ -49,8 +50,10 @@ PLUGIN(ScatterPlot2DInteractorTrendLine)
 PLUGIN(ScatterPlot2DInteractorCorrelCoeffSelector)
 PLUGIN(ScatterPlot2DInteractorGetInformation)
 
-ScatterPlot2DInteractorNavigation::ScatterPlot2DInteractorNavigation(const tlp::PluginContext *)
-    : ScatterPlot2DInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view",
+ScatterPlot2DInteractorNavigation::ScatterPlot2DInteractorNavigation(
+    const tlp::PluginContext *)
+    : ScatterPlot2DInteractor(":/tulip/gui/icons/i_navigation.png",
+                              "Navigate in view",
                               StandardInteractorPriority::Navigation) {}
 
 void ScatterPlot2DInteractorNavigation::construct() {
@@ -66,15 +69,18 @@ void ScatterPlot2DInteractorNavigation::construct() {
       "view.</p>" +
       "<p>Otherwise, this interactor offers the same functionnalities as the one in the \"Node "
       "Link Diagram view\". The commands are described below:</p>" +
-      "<b>Ctrl + Mouse up/down</b>: zoom<br>" + "<b>Ctrl + Mouse left/right</b>: z rotation<br>" +
+      "<b>Ctrl + Mouse up/down</b>: zoom<br>" +
+      "<b>Ctrl + Mouse left/right</b>: z rotation<br>" +
       "<b>Shift + Mouse</b>: rotation<br>" + "<b>Key up/down</b>: up/down<br>" +
-      "<b>Key left/right</b>: left/right<br>" + "<b>Key page up/down</b>: zoom<br>" +
-      "<b>Key insert</b>: rotate<br>" + "</body>" + "</html>");
+      "<b>Key left/right</b>: left/right<br>" +
+      "<b>Key page up/down</b>: zoom<br>" + "<b>Key insert</b>: rotate<br>" +
+      "</body>" + "</html>");
   push_back(new ScatterPlot2DViewNavigator);
   push_back(new MouseNKeysNavigator);
 }
 
-ScatterPlot2DInteractorTrendLine::ScatterPlot2DInteractorTrendLine(const PluginContext *)
+ScatterPlot2DInteractorTrendLine::ScatterPlot2DInteractorTrendLine(
+    const PluginContext *)
     : ScatterPlot2DInteractor(":/i_scatter_trendline.png", "Trend line",
                               StandardInteractorPriority::ViewInteractor1) {}
 
@@ -83,9 +89,10 @@ void ScatterPlot2DInteractorTrendLine::construct() {
   push_back(new MousePanNZoomNavigator);
 }
 
-ScatterPlot2DInteractorCorrelCoeffSelector::ScatterPlot2DInteractorCorrelCoeffSelector(
-    const tlp::PluginContext *)
-    : ScatterPlot2DInteractor(":/tulip/gui/icons/i_magic.png", "Correlation Coefficient Selector",
+ScatterPlot2DInteractorCorrelCoeffSelector::
+    ScatterPlot2DInteractorCorrelCoeffSelector(const tlp::PluginContext *)
+    : ScatterPlot2DInteractor(":/tulip/gui/icons/i_magic.png",
+                              "Correlation Coefficient Selector",
                               StandardInteractorPriority::ViewInteractor2),
       optionsWidget(nullptr) {}
 
@@ -95,11 +102,13 @@ void ScatterPlot2DInteractorCorrelCoeffSelector::construct() {
   push_back(new MousePanNZoomNavigator);
 }
 
-ScatterPlot2DInteractorCorrelCoeffSelector::~ScatterPlot2DInteractorCorrelCoeffSelector() {
+ScatterPlot2DInteractorCorrelCoeffSelector::
+    ~ScatterPlot2DInteractorCorrelCoeffSelector() {
   delete optionsWidget;
 }
 
-QWidget *ScatterPlot2DInteractorCorrelCoeffSelector::configurationWidget() const {
+QWidget *
+ScatterPlot2DInteractorCorrelCoeffSelector::configurationWidget() const {
   return optionsWidget;
 }
 
@@ -110,7 +119,8 @@ class ScatterPlot2DMouseShowElementInfo : public MouseShowElementInfo {
   ScatterPlot2DView *scp2DView;
 
 public:
-  ScatterPlot2DMouseShowElementInfo() : MouseShowElementInfo(), scp2DView(nullptr) {}
+  ScatterPlot2DMouseShowElementInfo()
+      : MouseShowElementInfo(), scp2DView(nullptr) {}
   ~ScatterPlot2DMouseShowElementInfo() override {}
 
   void viewChanged(View *v) override {
@@ -120,13 +130,15 @@ public:
 
 protected:
   /**
-   * @brief buildModel create and returns the model to visualize edit elements parameters.
+   * @brief buildModel create and returns the model to visualize edit elements
+   * parameters.
    * @param elementType the type of the element can be NODE or EDGE
    * @param elementId elementId the id of the element
    * @param parent the parent for the model creation.
    * @return
    */
-  QAbstractItemModel *buildModel(ElementType elementType, unsigned int elementId,
+  QAbstractItemModel *buildModel(ElementType elementType,
+                                 unsigned int elementId,
                                  QObject *parent) const override {
     if (scp2DView->getDataLocation() == EDGE) {
       elementId = scp2DView->getMappedId(elementId);
@@ -142,7 +154,8 @@ protected:
    * @param elementId the id of the element
    * @return
    */
-  QString elementName(ElementType elementType, unsigned int elementId) const override {
+  QString elementName(ElementType elementType,
+                      unsigned int elementId) const override {
     if (scp2DView->getDataLocation() == EDGE) {
       elementId = scp2DView->getMappedId(elementId);
       return QString("Edge") + " #" + QString::number(elementId);
@@ -154,20 +167,22 @@ protected:
 
 ScatterPlot2DInteractorGetInformation::ScatterPlot2DInteractorGetInformation(
     const tlp::PluginContext *)
-    : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png",
-                                         "Display node or edge properties",
-                                         StandardInteractorPriority::GetInformation) {}
+    : NodeLinkDiagramComponentInteractor(
+          ":/tulip/gui/icons/i_select.png", "Display node or edge properties",
+          StandardInteractorPriority::GetInformation) {}
 
 void ScatterPlot2DInteractorGetInformation::construct() {
-  setConfigurationWidgetText(QString("<h3>Display node or edge properties</h3>") +
-                             "<b>Mouse left click</b> on an element to display its "
-                             "properties.<br/>then <b>Mouse left click</b> on a row to edit the "
-                             "corresponding value.");
+  setConfigurationWidgetText(
+      QString("<h3>Display node or edge properties</h3>") +
+      "<b>Mouse left click</b> on an element to display its "
+      "properties.<br/>then <b>Mouse left click</b> on a row to edit the "
+      "corresponding value.");
   push_back(new MousePanNZoomNavigator);
   push_back(new ScatterPlot2DMouseShowElementInfo);
 }
 
-bool ScatterPlot2DInteractorGetInformation::isCompatible(const std::string &viewName) const {
+bool ScatterPlot2DInteractorGetInformation::isCompatible(
+    const std::string &viewName) const {
   return (viewName == ViewName::ScatterPlot2DViewName);
 }
 } // namespace tlp

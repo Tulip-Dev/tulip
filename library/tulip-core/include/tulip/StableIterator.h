@@ -20,9 +20,9 @@
 #ifndef TULIP_STABLEITERATOR_H
 #define TULIP_STABLEITERATOR_H
 
-#include <vector>
-#include <cstdlib>
 #include <algorithm>
+#include <cstdlib>
+#include <vector>
 
 #include <tulip/Iterator.h>
 #include <tulip/StlIterator.h>
@@ -34,17 +34,18 @@ namespace tlp {
  * @ingroup Iterators
  * @brief Stores the elements of an iterator and iterates a copy.
  *
- * This Iterator stores all the elements accessible by another Iterator into an internal data
- * structure (created at the construction), and then uses this structure for the iteration.
- * Iteration order is the same.
+ * This Iterator stores all the elements accessible by another Iterator into an
+ *internal data structure (created at the construction), and then uses this
+ *structure for the iteration. Iteration order is the same.
  *
- * @warning By default StableIterator takes ownership of the iterator given in parameter, (ie,
- * delete will be called on the input iterator). The deletion takes place when constructing the
- *StableIterator.
+ * @warning By default StableIterator takes ownership of the iterator given in
+ *parameter, (ie, delete will be called on the input iterator). The deletion
+ *takes place when constructing the StableIterator.
  *
- * This class is really useful when one needs to modify the graph during an iteration. For
- * instance the following code remove all nodes that match the function myfunc().
- * Using standard iterators for that operation is not possible since we modify the graph.
+ * This class is really useful when one needs to modify the graph during an
+ *iteration. For instance the following code remove all nodes that match the
+ *function myfunc(). Using standard iterators for that operation is not possible
+ *since we modify the graph.
  *
  * @code
  * StableIterator<node> it(graph->getNodes());
@@ -56,21 +57,21 @@ namespace tlp {
  * @endcode
  *
  **/
-template <typename T>
-struct StableIterator : public Iterator<T> {
+template <typename T> struct StableIterator : public Iterator<T> {
   //=============================
   /**
-   * @brief Creates a stable Iterator, that allows to delete elements from a graph while iterating
-   *on them.
+   * @brief Creates a stable Iterator, that allows to delete elements from a
+   *graph while iterating on them.
    *
-   * @param inputIterator Input Iterator, which defines the sequence on which this Iterator will
-   *iterate.
-   * @param nbElements The number of elements the iteration will take place on. Defaults to 0.
-   * @param deleteIterator Whether or not to delete the Iterator given as first parameter. Defaults
-   *to true.
+   * @param inputIterator Input Iterator, which defines the sequence on which
+   *this Iterator will iterate.
+   * @param nbElements The number of elements the iteration will take place on.
+   *Defaults to 0.
+   * @param deleteIterator Whether or not to delete the Iterator given as first
+   *parameter. Defaults to true.
    **/
-  StableIterator(Iterator<T> *inputIterator, size_t nbElements = 0, bool deleteIterator = true,
-                 bool sortCopy = false) {
+  StableIterator(Iterator<T> *inputIterator, size_t nbElements = 0,
+                 bool deleteIterator = true, bool sortCopy = false) {
     sequenceCopy.reserve(nbElements);
 
     for (; inputIterator->hasNext();) {
@@ -94,19 +95,16 @@ struct StableIterator : public Iterator<T> {
     return tmp;
   }
   //=============================
-  bool hasNext() {
-    return (copyIterator != sequenceCopy.end());
-  }
+  bool hasNext() { return (copyIterator != sequenceCopy.end()); }
   //=============================
 
   /**
-   * @brief Restarts the iteration by moving the Iterator to the beginning of the sequence.
+   * @brief Restarts the iteration by moving the Iterator to the beginning of
+   *the sequence.
    *
    * @return void
    **/
-  void restart() {
-    copyIterator = sequenceCopy.begin();
-  }
+  void restart() { copyIterator = sequenceCopy.begin(); }
   //=============================
 protected:
   /**
@@ -132,27 +130,29 @@ protected:
  * @param it a Tulip Iterator
  * @return a StableIterator
  **/
-template <class T>
-inline StableIterator<T> *stableIterator(Iterator<T> *it) {
+template <class T> inline StableIterator<T> *stableIterator(Iterator<T> *it) {
   return new StableIterator<T>(it);
 }
 
 /**
- * @brief Convenient function for creating a StableIterator from a STL container.
+ * @brief Convenient function for creating a StableIterator from a STL
+ *container.
  * @ingroup Iterators
  *
  * @since Tulip 5.2
  *
- * Creates a StableIterator from a STL container (std::list, std::vector, std::set, std::map, ...).
+ * Creates a StableIterator from a STL container (std::list, std::vector,
+ *std::set, std::map, ...).
  *
  * @param stlContainer any STL container
  * @return a StableIterator
  **/
 template <typename Container>
 typename std::enable_if<has_const_iterator<Container>::value,
-                        StableIterator<typename Container::value_type>
-                            *>::type inline stableIterator(const Container &stlContainer) {
-  return new StableIterator<typename Container::value_type>(stlIterator(stlContainer));
+                        StableIterator<typename Container::value_type> *>::
+    type inline stableIterator(const Container &stlContainer) {
+  return new StableIterator<typename Container::value_type>(
+      stlIterator(stlContainer));
 }
 } // namespace tlp
 #endif

@@ -23,9 +23,9 @@
 
 #include <tulip/PluginProgress.h>
 
+#include <QDialog>
 #include <QTime>
 #include <QWidget>
-#include <QDialog>
 
 namespace Ui {
 class SimplePluginProgressWidgetData;
@@ -35,7 +35,8 @@ class QCloseEvent;
 
 namespace tlp {
 
-class TLP_QT_SCOPE SimplePluginProgressWidget : public QWidget, public tlp::PluginProgress {
+class TLP_QT_SCOPE SimplePluginProgressWidget : public QWidget,
+                                                public tlp::PluginProgress {
   Q_OBJECT
   Ui::SimplePluginProgressWidgetData *_ui;
 
@@ -83,7 +84,8 @@ protected slots:
   void stopClicked();
 };
 
-class TLP_QT_SCOPE SimplePluginProgressDialog : public QDialog, public tlp::PluginProgress {
+class TLP_QT_SCOPE SimplePluginProgressDialog : public QDialog,
+                                                public tlp::PluginProgress {
   Q_OBJECT
 public:
   explicit SimplePluginProgressDialog(QWidget *parent = nullptr);

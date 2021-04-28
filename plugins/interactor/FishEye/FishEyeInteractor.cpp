@@ -19,19 +19,19 @@
 
 #include <GL/glew.h>
 
-#include "FishEyeInteractor.h"
-#include "FishEyeConfigWidget.h"
 #include "../../utils/PluginNames.h"
+#include "FishEyeConfigWidget.h"
+#include "FishEyeInteractor.h"
 
 #include <QMouseEvent>
 
-#include <tulip/TulipPluginHeaders.h>
-#include <tulip/MouseInteractors.h>
-#include <tulip/GlMainView.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
-#include <tulip/GlShaderProgram.h>
+#include <tulip/GlMainView.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/GlShaderProgram.h>
+#include <tulip/MouseInteractors.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/TulipPluginHeaders.h>
 
 using namespace std;
 using namespace tlp;
@@ -76,7 +76,8 @@ string fisheyeVertexProgram =
 // clang-format on
 
 FishEyeInteractor::FishEyeInteractor(const PluginContext *)
-    : GLInteractorComposite(QIcon(":/i_fisheye.png"), "Fisheye"), fisheyeConfigWidget(nullptr) {}
+    : GLInteractorComposite(QIcon(":/i_fisheye.png"), "Fisheye"),
+      fisheyeConfigWidget(nullptr) {}
 
 void FishEyeInteractor::construct() {
   fisheyeConfigWidget = new FishEyeConfigWidget();
@@ -88,19 +89,16 @@ void FishEyeInteractor::construct() {
 
 bool FishEyeInteractor::isCompatible(const std::string &viewName) const {
   return ((viewName == NodeLinkDiagramComponent::viewName) ||
-          (viewName == ViewName::HistogramViewName) || (viewName == ViewName::MatrixViewName) ||
+          (viewName == ViewName::HistogramViewName) ||
+          (viewName == ViewName::MatrixViewName) ||
           (viewName == ViewName::ParallelCoordinatesViewName) ||
           (viewName == ViewName::PixelOrientedViewName) ||
           (viewName == ViewName::ScatterPlot2DViewName));
 }
 
-void FishEyeInteractor::uninstall() {
-  InteractorComposite::uninstall();
-}
+void FishEyeInteractor::uninstall() { InteractorComposite::uninstall(); }
 
-FishEyeInteractor::~FishEyeInteractor() {
-  delete fisheyeConfigWidget;
-}
+FishEyeInteractor::~FishEyeInteractor() { delete fisheyeConfigWidget; }
 
 QWidget *FishEyeInteractor::configurationWidget() const {
   return fisheyeConfigWidget;
@@ -110,7 +108,8 @@ PLUGIN(FishEyeInteractor)
 
 GlShaderProgram *FishEyeInteractorComponent::fisheyeShader(nullptr);
 
-FishEyeInteractorComponent::FishEyeInteractorComponent(FishEyeConfigWidget *configWidget)
+FishEyeInteractorComponent::FishEyeInteractorComponent(
+    FishEyeConfigWidget *configWidget)
     : configWidget(configWidget), activateFishEye(false) {}
 
 FishEyeInteractorComponent::FishEyeInteractorComponent(
@@ -133,7 +132,8 @@ void FishEyeInteractorComponent::viewChanged(View *view) {
   }
 
   if (configWidget->getFishEyeRadius() == 0.) {
-    configWidget->setFishEyeRadius(glWidget->getScene()->getGraphCamera().getSceneRadius() / 4.);
+    configWidget->setFishEyeRadius(
+        glWidget->getScene()->getGraphCamera().getSceneRadius() / 4.);
     configWidget->setFishEyeHeight(4.);
   }
 }
@@ -152,7 +152,8 @@ bool FishEyeInteractorComponent::eventFilter(QObject *obj, QEvent *e) {
     float x = glWidget->width() - me->x();
     float y = me->y();
     Coord screenCoords(x, y, 0);
-    fisheyeCenter = camera->viewportTo3DWorld(glWidget->screenToViewport(screenCoords));
+    fisheyeCenter =
+        camera->viewportTo3DWorld(glWidget->screenToViewport(screenCoords));
     glWidget->redraw();
     return true;
   } else if (e->type() == QEvent::Wheel) {
@@ -164,14 +165,15 @@ bool FishEyeInteractorComponent::eventFilter(QObject *obj, QEvent *e) {
     if (vDelta != 0) {
       activateFishEye = true;
       if (wheelEvent->modifiers() == Qt::ControlModifier) {
-        configWidget->setFishEyeRadius(configWidget->getFishEyeRadius() +
-                                       configWidget->getFishEyeRadiusIncrementStep() *
-                                           (vDelta / 120));
+        configWidget->setFishEyeRadius(
+            configWidget->getFishEyeRadius() +
+            configWidget->getFishEyeRadiusIncrementStep() * (vDelta / 120));
         glWidget->redraw();
         return true;
       } else if (wheelEvent->modifiers() == Qt::ShiftModifier) {
-        float newHeight = configWidget->getFishEyeHeight() +
-                          configWidget->getFishEyeHeightIncrementStep() * (vDelta / 120);
+        float newHeight =
+            configWidget->getFishEyeHeight() +
+            configWidget->getFishEyeHeightIncrementStep() * (vDelta / 120);
 
         if (newHeight < 0) {
           newHeight = 0;
@@ -196,7 +198,8 @@ bool FishEyeInteractorComponent::draw(GlMainWidget *glWidget) {
     fisheyeShader->link();
   }
 
-  if (activateFishEye && fisheyeShader != nullptr && fisheyeShader->isLinked()) {
+  if (activateFishEye && fisheyeShader != nullptr &&
+      fisheyeShader->isLinked()) {
     fisheyeShader->activate();
 
     Matrix<float, 4> modelViewMatrix;

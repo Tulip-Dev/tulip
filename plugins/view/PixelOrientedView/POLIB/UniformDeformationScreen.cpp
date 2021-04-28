@@ -21,7 +21,8 @@
 
 namespace pocore {
 
-UniformDeformationScreen::UniformDeformationScreen() : _tx(0), _ty(0), _zoom(1) {
+UniformDeformationScreen::UniformDeformationScreen()
+    : _tx(0), _ty(0), _zoom(1) {
   updateMatrix();
 }
 //=======================================================
@@ -65,9 +66,7 @@ void UniformDeformationScreen::setZoom(double zoom) {
   updateMatrix();
 }
 //=======================================================
-double UniformDeformationScreen::getZoom() {
-  return _zoom;
-}
+double UniformDeformationScreen::getZoom() { return _zoom; }
 //=======================================================
 void UniformDeformationScreen::updateMatrix() {
   tlp::Matrix<double, 3> tmp;

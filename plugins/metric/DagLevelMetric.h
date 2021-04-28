@@ -30,7 +30,8 @@
 class DagLevelMetric : public tlp::DoubleAlgorithm {
 public:
   PLUGININFORMATION("Dag Level", "David Auber", "10/03/2000",
-                    "Implements a DAG layer decomposition.", "1.0", "Hierarchical")
+                    "Implements a DAG layer decomposition.", "1.0",
+                    "Hierarchical")
   DagLevelMetric(const tlp::PluginContext *context);
   ~DagLevelMetric() override;
   bool run() override;

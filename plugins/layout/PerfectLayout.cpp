@@ -17,8 +17,8 @@
  *
  */
 
-#include <tulip/PropertyAlgorithm.h>
 #include <tulip/LayoutProperty.h>
+#include <tulip/PropertyAlgorithm.h>
 
 static const char *paramHelp[] = {
     // layout
@@ -30,10 +30,12 @@ static const char *paramHelp[] = {
 class PerfectLayout : public tlp::LayoutAlgorithm {
 public:
   PLUGININFORMATION("Perfect aspect ratio", "Tulip team", "09/19/2010",
-                    "Scales the graph layout to get an aspect ratio of 1.", "1.1", "")
+                    "Scales the graph layout to get an aspect ratio of 1.",
+                    "1.1", "")
 
   PerfectLayout(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
-    addInParameter<tlp::LayoutProperty>("layout", paramHelp[0], "viewLayout", false);
+    addInParameter<tlp::LayoutProperty>("layout", paramHelp[0], "viewLayout",
+                                        false);
     addInParameter<bool>("Subgraph only", paramHelp[1], "false");
   }
   bool run() override {

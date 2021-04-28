@@ -20,11 +20,11 @@
 #ifndef GEOGRAPHIC_VIEW_INTERACTORS_H
 #define GEOGRAPHIC_VIEW_INTERACTORS_H
 
+#include "GeographicView.h"
+#include <QCursor>
 #include <tulip/GLInteractor.h>
 #include <tulip/MouseInteractors.h>
-#include "GeographicView.h"
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
-#include <QCursor>
 
 namespace tlp {
 
@@ -43,13 +43,9 @@ public:
   ~GeographicViewNavigator() override;
 
   bool eventFilter(QObject *, QEvent *) override;
-  bool draw(GlMainWidget *) {
-    return false;
-  }
+  bool draw(GlMainWidget *) { return false; }
 
-  bool compute(GlMainWidget *) {
-    return false;
-  }
+  bool compute(GlMainWidget *) { return false; }
   void viewChanged(View *) override;
 
 protected:
@@ -60,8 +56,9 @@ protected:
 class GeographicViewInteractorNavigation : public GeographicViewInteractor {
 
 public:
-  PLUGININFORMATION("InteractorNavigationGeographicView", "Tulip Team", "01/04/2009",
-                    "Geographic View Navigation Interactor", "1.0", "Navigation")
+  PLUGININFORMATION("InteractorNavigationGeographicView", "Tulip Team",
+                    "01/04/2009", "Geographic View Navigation Interactor",
+                    "1.0", "Navigation")
 
   GeographicViewInteractorNavigation(const PluginContext *);
 
@@ -74,8 +71,9 @@ public:
 class GeographicViewInteractorSelection : public GeographicViewInteractor {
 
 public:
-  PLUGININFORMATION("InteractorSelectionGeographicView", "Tulip Team", "01/12/2018",
-                    "Geographic View Selection Interactor", "1.0", "Selection")
+  PLUGININFORMATION("InteractorSelectionGeographicView", "Tulip Team",
+                    "01/12/2018", "Geographic View Selection Interactor", "1.0",
+                    "Selection")
 
   GeographicViewInteractorSelection(const PluginContext *);
 
@@ -88,11 +86,13 @@ public:
   unsigned int priority() const override;
 };
 
-class GeographicViewInteractorSelectionEditor : public GeographicViewInteractor {
+class GeographicViewInteractorSelectionEditor
+    : public GeographicViewInteractor {
 
 public:
-  PLUGININFORMATION("InteractorSelectionEditorGeographicView", "Tulip Team", "01/12/2018",
-                    "Geographic View Selection Editor Interactor", "1.0", "Selection")
+  PLUGININFORMATION("InteractorSelectionEditorGeographicView", "Tulip Team",
+                    "01/12/2018", "Geographic View Selection Editor Interactor",
+                    "1.0", "Selection")
 
   GeographicViewInteractorSelectionEditor(const PluginContext *);
 
@@ -105,11 +105,13 @@ public:
   unsigned int priority() const override;
 };
 
-class GeographicViewInteractorAddEdges : public NodeLinkDiagramComponentInteractor {
+class GeographicViewInteractorAddEdges
+    : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATION("InteractorAddEdgesGeographicView", "Tulip Team", "02/06/2017",
-                    "Geographic View Add Edges Interactor", "1.0", "Modification")
+  PLUGININFORMATION("InteractorAddEdgesGeographicView", "Tulip Team",
+                    "02/06/2017", "Geographic View Add Edges Interactor", "1.0",
+                    "Modification")
 
   GeographicViewInteractorAddEdges(const PluginContext *);
 
@@ -120,11 +122,13 @@ public:
   bool isCompatible(const std::string &viewName) const override;
 };
 
-class GeographicViewInteractorEditEdgeBends : public NodeLinkDiagramComponentInteractor {
+class GeographicViewInteractorEditEdgeBends
+    : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATION("InteractorEditEdgeBendsGeographicView", "Tulip Team", "02/06/2017",
-                    "Geographic View Edit Edge Bends Interactor", "1.0", "Modification")
+  PLUGININFORMATION("InteractorEditEdgeBendsGeographicView", "Tulip Team",
+                    "02/06/2017", "Geographic View Edit Edge Bends Interactor",
+                    "1.0", "Modification")
 
   GeographicViewInteractorEditEdgeBends(const PluginContext *);
 

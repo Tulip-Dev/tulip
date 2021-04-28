@@ -17,15 +17,15 @@
  *
  */
 
-#include <tulip/Graph.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/StableIterator.h>
-#include <tulip/FilterIterator.h>
-#include <tulip/SortIterator.h>
-#include <tulip/UniqueIterator.h>
-#include <tulip/ConversionIterator.h>
 #include <tulip/ConcatIterator.h>
+#include <tulip/ConversionIterator.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/FilterIterator.h>
+#include <tulip/Graph.h>
+#include <tulip/SortIterator.h>
+#include <tulip/StableIterator.h>
 #include <tulip/StlIterator.h>
+#include <tulip/UniqueIterator.h>
 
 #include <set>
 
@@ -44,25 +44,26 @@ void IteratorTest::setUp() {
   }
 }
 
-void IteratorTest::tearDown() {
-  delete graph;
-}
+void IteratorTest::tearDown() { delete graph; }
 
 void IteratorTest::testIterator() {
   std::set<tlp::node> nodesSet;
   for (tlp::node n : graph->getNodes()) {
     nodesSet.insert(n);
   }
-  CPPUNIT_ASSERT_EQUAL(numberOfNodes, static_cast<unsigned int>(nodesSet.size()));
+  CPPUNIT_ASSERT_EQUAL(numberOfNodes,
+                       static_cast<unsigned int>(nodesSet.size()));
 }
 
 void IteratorTest::testFilterIterator() {
   std::set<tlp::node> nodesSet;
   for (tlp::node n :
-       tlp::filterIterator(graph->getNodes(), [](const tlp::node &n) { return n.id % 2 == 0; })) {
+       tlp::filterIterator(graph->getNodes(),
+                           [](const tlp::node &n) { return n.id % 2 == 0; })) {
     nodesSet.insert(n);
   }
-  CPPUNIT_ASSERT_EQUAL(numberOfNodes / 2, static_cast<unsigned int>(nodesSet.size()));
+  CPPUNIT_ASSERT_EQUAL(numberOfNodes / 2,
+                       static_cast<unsigned int>(nodesSet.size()));
 }
 
 void IteratorTest::testSortIterator() {
@@ -107,7 +108,8 @@ void IteratorTest::testConversionIterator() {
   std::vector<int> inputVec = {1, 2, 3, 4};
 
   std::vector<std::string> convertedVec;
-  for (const std::string &s : tlp::conversionIterator<std::string>(inputVec, intToStr)) {
+  for (const std::string &s :
+       tlp::conversionIterator<std::string>(inputVec, intToStr)) {
     convertedVec.push_back(s);
   }
   std::vector<std::string> expected = {"1", "2", "3", "4"};
@@ -121,8 +123,8 @@ void IteratorTest::testConcatIterator() {
   std::vector<std::string> inputVec2 = {"d", "e", "f"};
 
   std::vector<std::string> concatVec;
-  for (const std::string &s :
-       tlp::concatIterator(tlp::stlIterator(inputVec1), tlp::stlIterator(inputVec2))) {
+  for (const std::string &s : tlp::concatIterator(
+           tlp::stlIterator(inputVec1), tlp::stlIterator(inputVec2))) {
     concatVec.push_back(s);
   }
 
@@ -145,12 +147,14 @@ void IteratorTest::testStableIterator() {
 }
 
 void IteratorTest::testIteratorCount() {
-  CPPUNIT_ASSERT_EQUAL(graph->numberOfNodes(), tlp::iteratorCount(graph->getNodes()));
+  CPPUNIT_ASSERT_EQUAL(graph->numberOfNodes(),
+                       tlp::iteratorCount(graph->getNodes()));
 }
 
 void IteratorTest::testIteratorMap() {
-  tlp::iteratorMap(graph->getNodes(),
-                   [this](const tlp::node &n) { idMetric->setNodeValue(n, n.id + 1); });
+  tlp::iteratorMap(graph->getNodes(), [this](const tlp::node &n) {
+    idMetric->setNodeValue(n, n.id + 1);
+  });
   for (tlp::node n : graph->getNodes()) {
     CPPUNIT_ASSERT_EQUAL(n.id + 1.0, idMetric->getNodeValue(n));
   }
@@ -162,7 +166,8 @@ void IteratorTest::testIteratorReduce() {
     refVal += n.id;
   }
   unsigned int val = tlp::iteratorReduce(
-      graph->getNodes(), 0u, [](unsigned int curVal, const tlp::node &n) { return curVal + n.id; });
+      graph->getNodes(), 0u,
+      [](unsigned int curVal, const tlp::node &n) { return curVal + n.id; });
   CPPUNIT_ASSERT_EQUAL(refVal, val);
 }
 

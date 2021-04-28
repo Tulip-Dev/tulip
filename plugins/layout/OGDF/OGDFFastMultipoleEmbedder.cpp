@@ -48,13 +48,15 @@ static const char *paramHelp[] = {
 class OGDFFastMultipoleEmbedder : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Fast Multipole Embedder (OGDF)", "Martin Gronemann", "12/11/2007",
-                    "Implements the fast multipole embedder layout algorithm of Martin Gronemann. "
-                    "It uses the same repulsive forces as FM³ of Hachul and Jünger, but slightly "
-                    "modified attractive forces.",
-                    "1.0", "Force Directed")
+  PLUGININFORMATION(
+      "Fast Multipole Embedder (OGDF)", "Martin Gronemann", "12/11/2007",
+      "Implements the fast multipole embedder layout algorithm of Martin Gronemann. "
+      "It uses the same repulsive forces as FM³ of Hachul and Jünger, but slightly "
+      "modified attractive forces.",
+      "1.0", "Force Directed")
   OGDFFastMultipoleEmbedder(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, context ? new ogdf::ComponentSplitterLayout() : nullptr) {
+      : OGDFLayoutPluginBase(
+            context, context ? new ogdf::ComponentSplitterLayout() : nullptr) {
     addInParameter<int>("number of iterations", paramHelp[0], "100");
     addInParameter<int>("number of coefficients", paramHelp[1], "5");
     addInParameter<bool>("randomize layout", paramHelp[2], "true");
@@ -65,8 +67,10 @@ public:
 
   void beforeCall() override {
 
-    ComponentSplitterLayout *csl = static_cast<ComponentSplitterLayout *>(ogdfLayoutAlgo);
-    // ComponentSplitterLayout takes ownership of the FastMultipoleEmbedder instance
+    ComponentSplitterLayout *csl =
+        static_cast<ComponentSplitterLayout *>(ogdfLayoutAlgo);
+    // ComponentSplitterLayout takes ownership of the FastMultipoleEmbedder
+    // instance
     FastMultipoleEmbedder *fme = new FastMultipoleEmbedder();
     csl->setLayoutModule(fme);
 
@@ -94,7 +98,8 @@ public:
         fme->setRandomize(bval);
     }
 
-    // ensure the input graph is simple as the layout failed in non multi-threaded mode otherwise
+    // ensure the input graph is simple as the layout failed in non
+    // multi-threaded mode otherwise
     // ogdf::makeSimple(tlpToOGDF->getOGDFGraph());
   }
 };

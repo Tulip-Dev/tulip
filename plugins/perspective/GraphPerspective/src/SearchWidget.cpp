@@ -20,22 +20,22 @@
 #include "SearchWidget.h"
 #include "ui_SearchWidget.h"
 
-#include <tulip/GraphHierarchiesModel.h>
-#include <tulip/GraphPropertiesModel.h>
 #include <tulip/BooleanProperty.h>
-#include <tulip/GraphTableItemDelegate.h>
-#include <tulip/GraphModel.h>
 #include <tulip/DoubleProperty.h>
-#include <tulip/TulipMimes.h>
-#include <tulip/StringProperty.h>
-#include <tulip/TulipMetaTypes.h>
-#include <tulip/TlpQtTools.h>
+#include <tulip/GraphHierarchiesModel.h>
+#include <tulip/GraphModel.h>
+#include <tulip/GraphPropertiesModel.h>
+#include <tulip/GraphTableItemDelegate.h>
 #include <tulip/Perspective.h>
+#include <tulip/StringProperty.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/TulipMetaTypes.h>
+#include <tulip/TulipMimes.h>
 
 #include <QDebug>
-#include <QStandardItemModel>
 #include <QDragEnterEvent>
 #include <QRegExp>
+#include <QStandardItemModel>
 
 using namespace tlp;
 using namespace std;
@@ -47,7 +47,8 @@ protected:
 
 public:
   virtual ~SearchOperator() {}
-  virtual void setProperties(tlp::PropertyInterface *a, tlp::PropertyInterface *b) {
+  virtual void setProperties(tlp::PropertyInterface *a,
+                             tlp::PropertyInterface *b) {
     _a = a;
     _b = b;
   }
@@ -72,17 +73,19 @@ public:
   }
 };
 
-#define STRING_CMP(NAME, CMP)                                                                      \
-  class NAME : public SearchOperator {                                                             \
-  public:                                                                                          \
-    bool compare(node n) override {                                                                \
-      QString a(_a->getNodeStringValue(n).c_str()), b(_b->getNodeStringValue(n).c_str());          \
-      return CMP;                                                                                  \
-    }                                                                                              \
-    bool compare(edge e) override {                                                                \
-      QString a(_a->getEdgeStringValue(e).c_str()), b(_b->getEdgeStringValue(e).c_str());          \
-      return CMP;                                                                                  \
-    }                                                                                              \
+#define STRING_CMP(NAME, CMP)                                                  \
+  class NAME : public SearchOperator {                                         \
+  public:                                                                      \
+    bool compare(node n) override {                                            \
+      QString a(_a->getNodeStringValue(n).c_str()),                            \
+          b(_b->getNodeStringValue(n).c_str());                                \
+      return CMP;                                                              \
+    }                                                                          \
+    bool compare(edge e) override {                                            \
+      QString a(_a->getEdgeStringValue(e).c_str()),                            \
+          b(_b->getEdgeStringValue(e).c_str());                                \
+      return CMP;                                                              \
+    }                                                                          \
   };
 
 STRING_CMP(StringEqualsOperator, a == b)
@@ -91,7 +94,8 @@ STRING_CMP(StartsWithOperator, a.startsWith(b))
 STRING_CMP(EndsWithOperator, a.endsWith(b))
 STRING_CMP(ContainsOperator, a.contains(b))
 STRING_CMP(NoCaseStringEqualsOperator, a.compare(b, Qt::CaseInsensitive) == 0)
-STRING_CMP(NoCaseStringDifferentOperator, a.compare(b, Qt::CaseInsensitive) != 0)
+STRING_CMP(NoCaseStringDifferentOperator,
+           a.compare(b, Qt::CaseInsensitive) != 0)
 STRING_CMP(NoCaseStartsWithOperator, a.startsWith(b, Qt::CaseInsensitive))
 STRING_CMP(NoCaseEndsWithOperator, a.endsWith(b, Qt::CaseInsensitive))
 STRING_CMP(NoCaseContainsOperator, a.contains(b, Qt::CaseInsensitive))
@@ -177,15 +181,17 @@ public:
   }
 };
 
-#define NUM_CMP(NAME, CMP)                                                                         \
-  class NAME : public NumericSearchOperator {                                                      \
-  public:                                                                                          \
-    bool compare(node n) override {                                                                \
-      return _numericA->getNodeDoubleValue(n) CMP _numericB->getNodeDoubleValue(n);                \
-    }                                                                                              \
-    bool compare(edge e) override {                                                                \
-      return _numericA->getEdgeDoubleValue(e) CMP _numericB->getEdgeDoubleValue(e);                \
-    }                                                                                              \
+#define NUM_CMP(NAME, CMP)                                                     \
+  class NAME : public NumericSearchOperator {                                  \
+  public:                                                                      \
+    bool compare(node n) override {                                            \
+      return _numericA->getNodeDoubleValue(n)                                  \
+          CMP _numericB->getNodeDoubleValue(n);                                \
+    }                                                                          \
+    bool compare(edge e) override {                                            \
+      return _numericA->getEdgeDoubleValue(e)                                  \
+          CMP _numericB->getEdgeDoubleValue(e);                                \
+    }                                                                          \
   };
 
 NUM_CMP(DoubleEqualsOperator, ==)
@@ -201,17 +207,11 @@ class ConstStringProperty : public StringProperty {
 public:
   ConstStringProperty(Graph *g) : StringProperty(g) {}
 
-  void setConstValue(const std::string &val) {
-    _val = val;
-  }
+  void setConstValue(const std::string &val) { _val = val; }
 
-  std::string getNodeStringValue(const node) const override {
-    return _val;
-  }
+  std::string getNodeStringValue(const node) const override { return _val; }
 
-  std::string getEdgeStringValue(const edge) const override {
-    return _val;
-  }
+  std::string getEdgeStringValue(const edge) const override { return _val; }
 };
 
 class ConstDoubleProperty : public DoubleProperty {
@@ -220,17 +220,11 @@ class ConstDoubleProperty : public DoubleProperty {
 public:
   ConstDoubleProperty(Graph *g) : DoubleProperty(g) {}
 
-  void setConstValue(double val) {
-    _val = val;
-  }
+  void setConstValue(double val) { _val = val; }
 
-  double getNodeDoubleValue(const node) const override {
-    return _val;
-  }
+  double getNodeDoubleValue(const node) const override { return _val; }
 
-  double getEdgeDoubleValue(const edge) const override {
-    return _val;
-  }
+  double getEdgeDoubleValue(const edge) const override { return _val; }
 };
 
 SearchWidget::SearchWidget(QWidget *parent)
@@ -240,27 +234,35 @@ SearchWidget::SearchWidget(QWidget *parent)
   _ui->tableWidget->setItemDelegate(new TulipItemDelegate(_ui->tableWidget));
 
   NUMERIC_OPERATORS << new DoubleEqualsOperator << new DoubleDifferentOperator
-                    << new GreaterOperator << new GreaterEqualOperator << new LesserOperator
-                    << new LesserEqualOperator << new StartsWithOperator << new EndsWithOperator
-                    << new ContainsOperator << new MatchesOperator << new IsLikeOperator;
+                    << new GreaterOperator << new GreaterEqualOperator
+                    << new LesserOperator << new LesserEqualOperator
+                    << new StartsWithOperator << new EndsWithOperator
+                    << new ContainsOperator << new MatchesOperator
+                    << new IsLikeOperator;
 
-  STRING_OPERATORS << new StringEqualsOperator << new StringDifferentOperator << nullptr << nullptr
-                   << nullptr << nullptr << new StartsWithOperator << new EndsWithOperator
-                   << new ContainsOperator << new MatchesOperator << new IsLikeOperator;
+  STRING_OPERATORS << new StringEqualsOperator << new StringDifferentOperator
+                   << nullptr << nullptr << nullptr << nullptr
+                   << new StartsWithOperator << new EndsWithOperator
+                   << new ContainsOperator << new MatchesOperator
+                   << new IsLikeOperator;
 
-  NOCASE_STRING_OPERATORS << new NoCaseStringEqualsOperator << new NoCaseStringDifferentOperator
-                          << nullptr << nullptr << nullptr << nullptr
-                          << new NoCaseStartsWithOperator << new NoCaseEndsWithOperator
-                          << new NoCaseContainsOperator << new NoCaseMatchesOperator
+  NOCASE_STRING_OPERATORS << new NoCaseStringEqualsOperator
+                          << new NoCaseStringDifferentOperator << nullptr
+                          << nullptr << nullptr << nullptr
+                          << new NoCaseStartsWithOperator
+                          << new NoCaseEndsWithOperator
+                          << new NoCaseContainsOperator
+                          << new NoCaseMatchesOperator
                           << new NoCaseIsLikeOperator;
 
-  _ui->resultsStorageCombo->setModel(
-      new GraphPropertiesModel<BooleanProperty>(nullptr, false, _ui->resultsStorageCombo));
-  _ui->searchTermACombo->setModel(
-      new GraphPropertiesModel<PropertyInterface>(nullptr, false, _ui->searchTermACombo));
+  _ui->resultsStorageCombo->setModel(new GraphPropertiesModel<BooleanProperty>(
+      nullptr, false, _ui->resultsStorageCombo));
+  _ui->searchTermACombo->setModel(new GraphPropertiesModel<PropertyInterface>(
+      nullptr, false, _ui->searchTermACombo));
   _ui->searchTermBCombo->setModel(new GraphPropertiesModel<PropertyInterface>(
       "Custom value", nullptr, false, _ui->searchTermBCombo));
-  connect(_ui->graphCombo, SIGNAL(currentItemChanged()), this, SLOT(graphIndexChanged()));
+  connect(_ui->graphCombo, SIGNAL(currentItemChanged()), this,
+          SLOT(graphIndexChanged()));
   connect(_ui->selectionModeCombo, SIGNAL(currentIndexChanged(int)), this,
           SLOT(selectionModeChanged(int)));
 }
@@ -311,8 +313,8 @@ void searchForIndex(QComboBox *combo, const QString &s) {
 
 void SearchWidget::setGraph(Graph *g) {
   if (g != nullptr) {
-    // Force creation of viewSelection to ensure we have at least one boolean property existing in
-    // the graph
+    // Force creation of viewSelection to ensure we have at least one boolean
+    // property existing in the graph
     g->getProperty<BooleanProperty>("viewSelection");
   }
 
@@ -338,12 +340,12 @@ void SearchWidget::setGraph(Graph *g) {
     oldTermBName = _ui->searchTermBCombo->currentText();
   }
 
-  _ui->resultsStorageCombo->setModel(
-      new GraphPropertiesModel<BooleanProperty>(g, false, _ui->resultsStorageCombo));
-  _ui->searchTermACombo->setModel(
-      new GraphPropertiesModel<PropertyInterface>(g, false, _ui->searchTermACombo));
-  _ui->searchTermBCombo->setModel(
-      new GraphPropertiesModel<PropertyInterface>("Custom value", g, false, _ui->searchTermBCombo));
+  _ui->resultsStorageCombo->setModel(new GraphPropertiesModel<BooleanProperty>(
+      g, false, _ui->resultsStorageCombo));
+  _ui->searchTermACombo->setModel(new GraphPropertiesModel<PropertyInterface>(
+      g, false, _ui->searchTermACombo));
+  _ui->searchTermBCombo->setModel(new GraphPropertiesModel<PropertyInterface>(
+      "Custom value", g, false, _ui->searchTermBCombo));
 
   if (!oldStorageName.isEmpty())
     searchForIndex(_ui->resultsStorageCombo, oldStorageName);
@@ -382,12 +384,13 @@ void SearchWidget::search() {
 
     if (isNumericComparison()) {
       ConstDoubleProperty *doubleProp = new ConstDoubleProperty(_graph);
-      doubleProp->setConstValue(_ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toDouble());
+      doubleProp->setConstValue(
+          _ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toDouble());
       b = doubleProp;
     } else {
       ConstStringProperty *stringProp = new ConstStringProperty(_graph);
-      DataType *tulipData =
-          TulipMetaTypes::qVariantToDataType(_ui->tableWidget->item(0, 0)->data(Qt::DisplayRole));
+      DataType *tulipData = TulipMetaTypes::qVariantToDataType(
+          _ui->tableWidget->item(0, 0)->data(Qt::DisplayRole));
 
       if (tulipData == nullptr) {
         qCritical() << "could not convert this type correctly "
@@ -399,10 +402,12 @@ void SearchWidget::search() {
 #endif
       }
 
-      DataTypeSerializer *serializer = DataSet::typenameToSerializer(tulipData->getTypeName());
+      DataTypeSerializer *serializer =
+          DataSet::typenameToSerializer(tulipData->getTypeName());
 
       if (serializer == nullptr) {
-        qCritical() << "no type serializer found for \"" << tulipData->getTypeName().c_str()
+        qCritical() << "no type serializer found for \""
+                    << tulipData->getTypeName().c_str()
                     << "\", please report this as a bug";
 #ifdef NDEBUG
         delete stringProp;
@@ -414,7 +419,8 @@ void SearchWidget::search() {
       serializer->writeData(temp, tulipData);
       QString serializedValue = temp.str().c_str();
 
-      // Tulip serializers add quotes around the serialized value, remove them for comparison
+      // Tulip serializers add quotes around the serialized value, remove them
+      // for comparison
       if (serializedValue.startsWith('"') && serializedValue.endsWith('"')) {
         serializedValue = serializedValue.mid(1, serializedValue.length() - 2);
       }
@@ -432,21 +438,24 @@ void SearchWidget::search() {
   bool onEdges = scopeIndex == 0 || scopeIndex == 2;
   BooleanProperty *result = op->run(_graph, onNodes, onEdges);
 
-  PropertyInterface *outputInterface = _ui->resultsStorageCombo->model()
-                                           ->data(_ui->resultsStorageCombo->model()->index(
-                                                      _ui->resultsStorageCombo->currentIndex(), 0),
-                                                  TulipModel::PropertyRole)
-                                           .value<PropertyInterface *>();
+  PropertyInterface *outputInterface =
+      _ui->resultsStorageCombo->model()
+          ->data(_ui->resultsStorageCombo->model()->index(
+                     _ui->resultsStorageCombo->currentIndex(), 0),
+                 TulipModel::PropertyRole)
+          .value<PropertyInterface *>();
   BooleanProperty *output = static_cast<BooleanProperty *>(outputInterface);
 
   QString searchOpDescription;
   unsigned int resultsCountNodes = result->numberOfNonDefaultValuatedNodes(),
                resultsCountEdges = result->numberOfNonDefaultValuatedEdges();
 
-  if (_ui->selectionModeCombo->currentIndex() == 0) { // replace current selection
+  if (_ui->selectionModeCombo->currentIndex() ==
+      0) { // replace current selection
     output->copy(result);
     searchOpDescription = "found";
-  } else if (_ui->selectionModeCombo->currentIndex() == 1) { // add to current selection
+  } else if (_ui->selectionModeCombo->currentIndex() ==
+             1) { // add to current selection
     if (onNodes) {
       auto it = result->getNonDefaultValuatedNodes();
       while (it->hasNext()) {
@@ -464,7 +473,8 @@ void SearchWidget::search() {
     }
 
     searchOpDescription = "added to selection";
-  } else if (_ui->selectionModeCombo->currentIndex() == 2) { // remove from current selection
+  } else if (_ui->selectionModeCombo->currentIndex() ==
+             2) { // remove from current selection
     if (onNodes) {
       auto it = result->getNonDefaultValuatedNodes();
       while (it->hasNext()) {
@@ -495,35 +505,37 @@ void SearchWidget::search() {
   delete result;
 
   if (onNodes && !onEdges)
-    _ui->resultsCountLabel->setText(QString::number(resultsCountNodes) + " node(s) " +
-                                    searchOpDescription);
+    _ui->resultsCountLabel->setText(QString::number(resultsCountNodes) +
+                                    " node(s) " + searchOpDescription);
   else if (!onNodes && onEdges)
-    _ui->resultsCountLabel->setText(QString::number(resultsCountEdges) + " edge(s) " +
-                                    searchOpDescription);
+    _ui->resultsCountLabel->setText(QString::number(resultsCountEdges) +
+                                    " edge(s) " + searchOpDescription);
   else
-    _ui->resultsCountLabel->setText(QString::number(resultsCountNodes) + " node(s) and " +
-                                    QString::number(resultsCountEdges) + " edge(s) " +
-                                    searchOpDescription);
+    _ui->resultsCountLabel->setText(
+        QString::number(resultsCountNodes) + " node(s) and " +
+        QString::number(resultsCountEdges) + " edge(s) " + searchOpDescription);
 
   // display in the status bar too
   Perspective::showStatusMessage(_ui->resultsCountLabel->text());
 }
 
 void SearchWidget::graphIndexChanged() {
-  tlp::Graph *g = _ui->graphCombo->model()
-                      ->data(_ui->graphCombo->selectedIndex(), TulipModel::GraphRole)
-                      .value<tlp::Graph *>();
+  tlp::Graph *g =
+      _ui->graphCombo->model()
+          ->data(_ui->graphCombo->selectedIndex(), TulipModel::GraphRole)
+          .value<tlp::Graph *>();
   setGraph(g);
 }
 
 void SearchWidget::termAChanged() {
   tlp::PropertyInterface *prop = term(_ui->searchTermACombo);
 
-  // isHidden checks if the widget was set hidden; using isVisible would check if the widget is
-  // currently displayed
+  // isHidden checks if the widget was set hidden; using isVisible would check
+  // if the widget is currently displayed
   if (!_ui->tableWidget->isHidden()) {
     updateEditorWidget();
-    updateOperators(prop, _ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toString());
+    updateOperators(
+        prop, _ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toString());
   } else {
     updateOperators(prop, term(_ui->searchTermBCombo));
   }
@@ -537,14 +549,17 @@ void SearchWidget::termBChanged() {
   } else {
     _ui->tableWidget->show();
     updateEditorWidget();
-    updateOperators(term(_ui->searchTermACombo),
-                    _ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toString());
+    updateOperators(
+        term(_ui->searchTermACombo),
+        _ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toString());
   }
 }
 
-void SearchWidget::updateOperators(tlp::PropertyInterface *a, tlp::PropertyInterface *b) {
-  setNumericOperatorsEnabled(dynamic_cast<tlp::NumericProperty *>(a) != nullptr &&
-                             dynamic_cast<tlp::NumericProperty *>(b) != nullptr);
+void SearchWidget::updateOperators(tlp::PropertyInterface *a,
+                                   tlp::PropertyInterface *b) {
+  setNumericOperatorsEnabled(
+      dynamic_cast<tlp::NumericProperty *>(a) != nullptr &&
+      dynamic_cast<tlp::NumericProperty *>(b) != nullptr);
 }
 
 void SearchWidget::updateOperators(PropertyInterface *a, const QString &b) {
@@ -555,13 +570,16 @@ void SearchWidget::updateOperators(PropertyInterface *a, const QString &b) {
   else
     b.toDouble(&isCustomValueDouble);
 
-  setNumericOperatorsEnabled(dynamic_cast<tlp::NumericProperty *>(a) != nullptr &&
+  setNumericOperatorsEnabled(dynamic_cast<tlp::NumericProperty *>(a) !=
+                                 nullptr &&
                              isCustomValueDouble);
 }
 
 void SearchWidget::setNumericOperatorsEnabled(bool e) {
   for (int i = 2; i <= 5; ++i) {
-    static_cast<QStandardItemModel *>(_ui->operatorCombo->model())->item(i)->setEnabled(e);
+    static_cast<QStandardItemModel *>(_ui->operatorCombo->model())
+        ->item(i)
+        ->setEnabled(e);
 
     if (_ui->operatorCombo->currentIndex() == i && !e)
       _ui->operatorCombo->setCurrentIndex(0);
@@ -589,7 +607,8 @@ void SearchWidget::updateEditorWidget() {
 }
 
 void SearchWidget::dragEnterEvent(QDragEnterEvent *dragEv) {
-  const GraphMimeType *mimeType = dynamic_cast<const GraphMimeType *>(dragEv->mimeData());
+  const GraphMimeType *mimeType =
+      dynamic_cast<const GraphMimeType *>(dragEv->mimeData());
 
   if (mimeType != nullptr) {
     dragEv->accept();
@@ -597,7 +616,8 @@ void SearchWidget::dragEnterEvent(QDragEnterEvent *dragEv) {
 }
 
 void SearchWidget::dropEvent(QDropEvent *dropEv) {
-  const GraphMimeType *mimeType = dynamic_cast<const GraphMimeType *>(dropEv->mimeData());
+  const GraphMimeType *mimeType =
+      dynamic_cast<const GraphMimeType *>(dropEv->mimeData());
 
   if (mimeType != nullptr) {
     currentGraphChanged(mimeType->graph());
@@ -608,7 +628,8 @@ void SearchWidget::dropEvent(QDropEvent *dropEv) {
 PropertyInterface *SearchWidget::term(QComboBox *combo) {
   GraphPropertiesModel<PropertyInterface> *model =
       static_cast<GraphPropertiesModel<PropertyInterface> *>(combo->model());
-  return model->data(model->index(combo->currentIndex(), 0), TulipModel::PropertyRole)
+  return model
+      ->data(model->index(combo->currentIndex(), 0), TulipModel::PropertyRole)
       .value<PropertyInterface *>();
 }
 
@@ -626,5 +647,7 @@ SearchOperator *SearchWidget::searchOperator() {
 }
 
 bool SearchWidget::isNumericComparison() {
-  return static_cast<QStandardItemModel *>(_ui->operatorCombo->model())->item(2)->isEnabled();
+  return static_cast<QStandardItemModel *>(_ui->operatorCombo->model())
+      ->item(2)
+      ->isEnabled();
 }

@@ -21,8 +21,8 @@
 
 #include <tulip/TreeViewComboBox.h>
 
-#include <QWidget>
 #include <QModelIndex>
+#include <QWidget>
 #include <tulip/Observable.h>
 
 class QAbstractButton;

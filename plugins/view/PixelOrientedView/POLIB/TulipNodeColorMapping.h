@@ -20,8 +20,8 @@
 #ifndef TULIPNODECOLORMAPPING_H_
 #define TULIPNODECOLORMAPPING_H_
 
-#include <tulip/Graph.h>
 #include <string>
+#include <tulip/Graph.h>
 
 #include "ColorFunction.h"
 #include "potypes.h"

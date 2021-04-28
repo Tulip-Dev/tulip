@@ -20,8 +20,8 @@
 #ifndef HISTOGRAMINTERACTORS_H_
 #define HISTOGRAMINTERACTORS_H_
 
-#include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include "../../utils/PluginNames.h"
+#include <tulip/NodeLinkDiagramComponentInteractor.h>
 
 namespace tlp {
 
@@ -40,8 +40,9 @@ public:
 class HistogramInteractorNavigation : public HistogramInteractor {
 
 public:
-  PLUGININFORMATION(InteractorName::HistogramInteractorNavigation, "Tulip Team", "02/04/2009",
-                    "Histogram Navigation Interactor", "1.0", "Navigation")
+  PLUGININFORMATION(InteractorName::HistogramInteractorNavigation, "Tulip Team",
+                    "02/04/2009", "Histogram Navigation Interactor", "1.0",
+                    "Navigation")
 
   HistogramInteractorNavigation(const PluginContext *);
 
@@ -51,8 +52,9 @@ public:
 class HistogramInteractorMetricMapping : public HistogramInteractor {
 
 public:
-  PLUGININFORMATION("HistogramInteractorColorMapping", "Tulip Team", "02/04/2009",
-                    "Histogram Color Mapping Interactor", "1.0", "Information")
+  PLUGININFORMATION("HistogramInteractorColorMapping", "Tulip Team",
+                    "02/04/2009", "Histogram Color Mapping Interactor", "1.0",
+                    "Information")
 
   HistogramInteractorMetricMapping(const PluginContext *);
 
@@ -80,10 +82,12 @@ private:
 /**
  *  \brief interactor to get information about an element of the graph
  */
-class HistogramInteractorGetInformation : public NodeLinkDiagramComponentInteractor {
+class HistogramInteractorGetInformation
+    : public NodeLinkDiagramComponentInteractor {
 public:
-  PLUGININFORMATION("HistogramInteractorGetInformation", "Tulip Team", "18/06/2015",
-                    "Get Information Interactor", "1.0", "Information")
+  PLUGININFORMATION("HistogramInteractorGetInformation", "Tulip Team",
+                    "18/06/2015", "Get Information Interactor", "1.0",
+                    "Information")
   /**
    * Default constructor
    */

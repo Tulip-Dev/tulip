@@ -21,9 +21,9 @@
 #ifndef STRINGEDITOR_H
 #define STRINGEDITOR_H
 
+#include <QDialog>
 #include <QString>
 #include <QTextEdit>
-#include <QDialog>
 
 #include <tulip/tulipconf.h>
 

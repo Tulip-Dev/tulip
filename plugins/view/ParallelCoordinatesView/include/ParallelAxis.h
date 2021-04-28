@@ -22,8 +22,8 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include <tulip/GlSimpleEntity.h>
 #include <tulip/GlAxis.h>
+#include <tulip/GlSimpleEntity.h>
 
 #include <set>
 
@@ -37,9 +37,7 @@ public:
   ~ParallelAxis() override;
 
   BoundingBox getBoundingBox() override;
-  void setStencil(int stencil) override {
-    glAxis->setStencil(stencil);
-  }
+  void setStencil(int stencil) override { glAxis->setStencil(stencil); }
   void draw(float lod, Camera *camera) override;
   void translate(const Coord &c) override;
   void getXML(std::string &) override {}
@@ -52,25 +50,13 @@ public:
   void setBaseCoord(const Coord &baseCoord);
   const Coord &getBaseCoord() const;
   Coord getTopCoord() const;
-  std::string getAxisName() const {
-    return glAxis->getAxisName();
-  }
-  float getAxisHeight() const {
-    return glAxis->getAxisLength();
-  }
-  float getAxisGradsWidth() {
-    return glAxis->getAxisGradsWidth();
-  }
-  float getLabelHeight() {
-    return glAxis->getLabelHeight();
-  }
+  std::string getAxisName() const { return glAxis->getAxisName(); }
+  float getAxisHeight() const { return glAxis->getAxisLength(); }
+  float getAxisGradsWidth() { return glAxis->getAxisGradsWidth(); }
+  float getLabelHeight() { return glAxis->getLabelHeight(); }
   void setAxisHeight(const float axisHeight);
-  Color getAxisColor() const {
-    return glAxis->getAxisColor();
-  }
-  void setAxisColor(const Color &axisColor) {
-    glAxis->setAxisColor(axisColor);
-  }
+  Color getAxisColor() const { return glAxis->getAxisColor(); }
+  void setAxisColor(const Color &axisColor) { glAxis->setAxisColor(axisColor); }
   void setMaxCaptionWidth(const float maxCaptionWidth) {
     glAxis->setMaxCaptionWidth(maxCaptionWidth / 2);
   }
@@ -79,18 +65,12 @@ public:
   void setSlidersActivated(const bool slidersActivated) {
     this->slidersActivated = slidersActivated;
   }
-  bool isSlidersActivated() {
-    return slidersActivated;
-  }
-  Coord getTopSliderCoord() {
-    return topSliderCoord;
-  }
+  bool isSlidersActivated() { return slidersActivated; }
+  Coord getTopSliderCoord() { return topSliderCoord; }
   void setTopSliderCoord(const Coord &topSliderCoord) {
     this->topSliderCoord = topSliderCoord;
   }
-  Coord getBottomSliderCoord() {
-    return bottomSliderCoord;
-  }
+  Coord getBottomSliderCoord() { return bottomSliderCoord; }
   void setBottomSliderCoord(const Coord &bottomSliderCoord) {
     this->bottomSliderCoord = bottomSliderCoord;
   }
@@ -99,28 +79,24 @@ public:
   virtual std::string getBottomSliderTextValue() = 0;
   void resetSlidersPosition();
 
-  void setHidden(const bool hidden) {
-    this->hidden = hidden;
-  }
-  bool isHidden() const {
-    return hidden;
-  }
+  void setHidden(const bool hidden) { this->hidden = hidden; }
+  bool isHidden() const { return hidden; }
 
   virtual const std::set<unsigned int> &getDataInSlidersRange() = 0;
-  virtual void updateSlidersWithDataSubset(const std::set<unsigned int> &dataSubset) = 0;
+  virtual void
+  updateSlidersWithDataSubset(const std::set<unsigned int> &dataSubset) = 0;
 
   void enableTrickForSelection();
   void disableTrickForSelection();
 
   void setRotationAngle(const float rotationAngle);
-  float getRotationAngle() const {
-    return rotationAngle;
-  }
+  float getRotationAngle() const { return rotationAngle; }
   Array<Coord, 4> getBoundingPolygonCoords() const;
 
 protected:
-  ParallelAxis(GlAxis *glAxis, const float axisAreaWidth, const float rotationAngle,
-               const GlAxis::CaptionLabelPosition captionPosition = GlAxis::BELOW);
+  ParallelAxis(
+      GlAxis *glAxis, const float axisAreaWidth, const float rotationAngle,
+      const GlAxis::CaptionLabelPosition captionPosition = GlAxis::BELOW);
 
   GlAxis *glAxis;
   GlRect *emptyRect;

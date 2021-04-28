@@ -20,7 +20,8 @@
 TLP_PYTHON_SCOPE void decrefPyObject(PyObject *obj);
 
 template <typename T>
-bool PythonInterpreter::evalSingleStatementAndGetValue(const QString &pythonStatement, T &value) {
+bool PythonInterpreter::evalSingleStatementAndGetValue(
+    const QString &pythonStatement, T &value) {
   holdGIL();
 
   PyObject *ret = evalPythonStatement(pythonStatement);
@@ -40,17 +41,17 @@ bool PythonInterpreter::evalSingleStatementAndGetValue(const QString &pythonStat
 
 // use c++11 variadic template for more convenience
 template <typename RETURN_TYPE, typename... Param>
-bool PythonInterpreter::callFunctionWithParamsAndGetReturnValue(const QString &module,
-                                                                const QString &function,
-                                                                RETURN_TYPE &returnValue,
-                                                                Param... param) {
+bool PythonInterpreter::callFunctionWithParamsAndGetReturnValue(
+    const QString &module, const QString &function, RETURN_TYPE &returnValue,
+    Param... param) {
   tlp::DataSet ds;
   buildParamDataSet(&ds, param...);
   return callFunctionAndGetReturnValue(module, function, ds, returnValue);
 }
 
 template <typename... Param>
-bool PythonInterpreter::callFunctionWithParams(const QString &module, const QString &function,
+bool PythonInterpreter::callFunctionWithParams(const QString &module,
+                                               const QString &function,
                                                Param... param) {
   tlp::DataSet ds;
   buildParamDataSet(&ds, param...);
@@ -68,18 +69,16 @@ void PythonInterpreter::buildParamDataSet(DataSet *ds, T a) {
   addParameter(ds, a);
 }
 
-template <typename T>
-void PythonInterpreter::addParameter(DataSet *ds, T a) {
+template <typename T> void PythonInterpreter::addParameter(DataSet *ds, T a) {
   std::string st("param_");
   st += std::to_string(ds->size() + 1);
   ds->set(st, a);
 }
 
 template <typename RETURN_TYPE>
-bool PythonInterpreter::callFunctionAndGetReturnValue(const QString &module,
-                                                      const QString &function,
-                                                      const tlp::DataSet &parameters,
-                                                      RETURN_TYPE &returnValue) {
+bool PythonInterpreter::callFunctionAndGetReturnValue(
+    const QString &module, const QString &function,
+    const tlp::DataSet &parameters, RETURN_TYPE &returnValue) {
   holdGIL();
   bool ok = false;
   PyObject *ret = callPythonFunction(module, function, parameters);

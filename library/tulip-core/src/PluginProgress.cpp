@@ -23,9 +23,7 @@ using namespace tlp;
 
 PluginProgress::PluginProgress() : _previewHandler(nullptr) {}
 
-PluginProgress::~PluginProgress() {
-  delete _previewHandler;
-}
+PluginProgress::~PluginProgress() { delete _previewHandler; }
 
 void PluginProgress::setPreviewHandler(ProgressPreviewHandler *handler) {
   delete _previewHandler;

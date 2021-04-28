@@ -21,8 +21,8 @@
 #ifndef _GLQUAD_H
 #define _GLQUAD_H
 
-#include <tulip/Coord.h>
 #include <tulip/Color.h>
+#include <tulip/Coord.h>
 
 #include <tulip/GlPolygon.h>
 
@@ -44,20 +44,23 @@ public:
   /**
    * Constructor
    *
-   * Initializes a quadrilateral with 4 points winding in clockwise order and a single color.
+   * Initializes a quadrilateral with 4 points winding in clockwise order and a
+   * single color.
    *
    * \param p1 the first quad vertex
    * \param p2 the second quad vertex
    * \param p3 the third quad vertex
    * \param p4 the fourth quad vertex
-   * \param color A single color indicating the color for every point of the quadrilateral.
+   * \param color A single color indicating the color for every point of the
+   * quadrilateral.
    */
-  GlQuad(const Coord &p1, const Coord &p2, const Coord &p3, const Coord &p4, const Color &color);
+  GlQuad(const Coord &p1, const Coord &p2, const Coord &p3, const Coord &p4,
+         const Color &color);
 
   /* Constructor
    *
-   * Initializes a quadrilateral with 4 points winding in clockwise order and a color attached to
-   * each point.
+   * Initializes a quadrilateral with 4 points winding in clockwise order and a
+   * color attached to each point.
    *
    * \param p1 the first quad vertex
    * \param p2 the second quad vertex
@@ -68,8 +71,8 @@ public:
    * \param c3 the color of the third quad vertex
    * \param c4 the color of the fourth quad vertex
    */
-  GlQuad(const Coord &p1, const Coord &p2, const Coord &p3, const Coord &p4, const Color &c1,
-         const Color &c2, const Color &c3, const Color &c4);
+  GlQuad(const Coord &p1, const Coord &p2, const Coord &p3, const Coord &p4,
+         const Color &c1, const Color &c2, const Color &c3, const Color &c4);
 
   /**
    * Destructor
@@ -113,7 +116,8 @@ public:
   /**
    * Function to set data with inString (in XML format)
    */
-  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
+  void setWithXML(const std::string &inString,
+                  unsigned int &currentPosition) override;
 };
 } // namespace tlp
 #endif

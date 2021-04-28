@@ -17,10 +17,10 @@
  *
  */
 
-#include <tulip/ImportModule.h>
-#include <tulip/TlpTools.h>
-#include <tulip/PluginProgress.h>
 #include <tulip/Graph.h>
+#include <tulip/ImportModule.h>
+#include <tulip/PluginProgress.h>
+#include <tulip/TlpTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -34,17 +34,18 @@ static const char *paramHelp[] = {
  * This plugin is an implementation of the model
  * described in
  * J.-G. Liu, Y.-Z. Dang, and Z. tuo Wang.
- * Multistage random growing small-world networks with power-law degree distribution.
- * Chinese Phys. Lett., 23(3):746, Oct. 31 2005.
+ * Multistage random growing small-world networks with power-law degree
+ * distribution. Chinese Phys. Lett., 23(3):746, Oct. 31 2005.
  *
  */
 struct LiuEtAl : public ImportModule {
-  PLUGININFORMATION("Liu et al. model", "Arnaud Sallaberry", "20/06/2011",
-                    "Randomly generates a small world graph using the model described in<br/>J.-G. "
-                    "Liu, Y.-Z. Dang, and Z. tuo Wang.<br/><b>Multistage random growing "
-                    "small-world networks with power-law degree distribution.</b><br/>Chinese "
-                    "Phys. Lett., 23(3):746, Oct. 31 2005.",
-                    "1.0", "Social network")
+  PLUGININFORMATION(
+      "Liu et al. model", "Arnaud Sallaberry", "20/06/2011",
+      "Randomly generates a small world graph using the model described in<br/>J.-G. "
+      "Liu, Y.-Z. Dang, and Z. tuo Wang.<br/><b>Multistage random growing "
+      "small-world networks with power-law degree distribution.</b><br/>Chinese "
+      "Phys. Lett., 23(3):746, Oct. 31 2005.",
+      "1.0", "Social network")
 
   LiuEtAl(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "300");

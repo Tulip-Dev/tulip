@@ -16,19 +16,17 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <QString>
 #include <QFile>
+#include <QString>
 #include <QTextStream>
 
-#include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/TlpTools.h>
 
 namespace tlp {
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-QString getSipVersion() {
-  return SIP_VERSION;
-}
+QString getSipVersion() { return SIP_VERSION; }
 #endif
 
 QString getTulipGitRevision() {

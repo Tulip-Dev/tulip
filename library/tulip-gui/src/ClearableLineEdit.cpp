@@ -46,7 +46,8 @@ void ClearableLineEdit::paintEvent(QPaintEvent *ev) {
 
 QRect ClearableLineEdit::pixmapRect() {
   initPixmap();
-  QRect pixmapRect(width() - CLEAR_PIXMAP->width() - 5, height() / 2 - CLEAR_PIXMAP->height() / 2,
+  QRect pixmapRect(width() - CLEAR_PIXMAP->width() - 5,
+                   height() / 2 - CLEAR_PIXMAP->height() / 2,
                    CLEAR_PIXMAP->width(), CLEAR_PIXMAP->height());
   return pixmapRect;
 }

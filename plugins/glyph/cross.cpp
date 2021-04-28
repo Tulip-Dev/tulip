@@ -20,12 +20,12 @@
 
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include <tulip/Size.h>
-#include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/GlComplexPolygon.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/Glyph.h>
+#include <tulip/Size.h>
 #include <tulip/TulipViewSettings.h>
 
 using namespace std;
@@ -53,8 +53,8 @@ static void initCross() {
     cross = new GlComplexPolygon(points, Color());
   }
 }
-void drawCross(const Color &fillColor, const Color &borderColor, float borderWidth,
-               const std::string &textureName, float lod) {
+void drawCross(const Color &fillColor, const Color &borderColor,
+               float borderWidth, const std::string &textureName, float lod) {
 
   cross->setFillColor(fillColor);
 
@@ -80,8 +80,8 @@ void drawCross(const Color &fillColor, const Color &borderColor, float borderWid
  */
 class Cross : public Glyph {
 public:
-  GLYPHINFORMATION("2D - Cross", "Patrick Mary", "23/06/2011", "Textured Cross", "1.0",
-                   NodeShape::Cross)
+  GLYPHINFORMATION("2D - Cross", "Patrick Mary", "23/06/2011", "Textured Cross",
+                   "1.0", NodeShape::Cross)
   Cross(const tlp::PluginContext *context = nullptr);
   ~Cross() override;
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
@@ -118,7 +118,8 @@ void Cross::draw(node n, float lod) {
 
   drawCross(glGraphInputData->getElementColor()->getNodeValue(n),
             glGraphInputData->getElementBorderColor()->getNodeValue(n),
-            glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod);
+            glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+            textureName, lod);
 }
 Coord Cross::getAnchor(const Coord &vector) const {
   Coord v(vector);
@@ -153,20 +154,25 @@ Coord Cross::getAnchor(const Coord &vector) const {
 class EECross : public EdgeExtremityGlyph {
 public:
   GLYPHINFORMATION("2D - Cross extremity", "Patrick Mary", "23/06/2011",
-                   "Textured Cross for edge extremities", "1.0", EdgeExtremityShape::Cross)
+                   "Textured Cross for edge extremities", "1.0",
+                   EdgeExtremityShape::Cross)
 
   EECross(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {
     initCross();
   }
 
-  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) override {
-    string textureName = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor,
+            float lod) override {
+    string textureName =
+        edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
     if (!textureName.empty())
-      textureName = edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
+      textureName =
+          edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
 
     drawCross(glyphColor, borderColor,
-              edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), textureName, lod);
+              edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+              textureName, lod);
   }
 };
 PLUGIN(EECross)

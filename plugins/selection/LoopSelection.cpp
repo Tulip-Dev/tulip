@@ -23,8 +23,10 @@ PLUGIN(LoopSelection)
 using namespace std;
 using namespace tlp;
 
-LoopSelection::LoopSelection(const tlp::PluginContext *context) : BooleanAlgorithm(context) {
-  addOutParameter<unsigned int>("#edges selected", "The number of loops selected");
+LoopSelection::LoopSelection(const tlp::PluginContext *context)
+    : BooleanAlgorithm(context) {
+  addOutParameter<unsigned int>("#edges selected",
+                                "The number of loops selected");
 }
 //============================================
 bool LoopSelection::run() {
@@ -39,7 +41,8 @@ bool LoopSelection::run() {
 
   // output some useful information
   if (dataSet != nullptr) {
-    dataSet->set("#edges selected", result->numberOfNonDefaultValuatedEdges(graph));
+    dataSet->set("#edges selected",
+                 result->numberOfNonDefaultValuatedEdges(graph));
   }
 
   return true;

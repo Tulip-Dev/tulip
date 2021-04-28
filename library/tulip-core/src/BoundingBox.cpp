@@ -17,16 +17,16 @@
  *
  */
 
-#include <utility>
 #include <limits>
+#include <utility>
 
 #include <tulip/BoundingBox.h>
 
 #define THIS_INITED (memcmp(this, &_invalidBB, sizeof(_invalidBB)) != 0)
 #define BB_INITED(bb) (memcmp(&bb, &_invalidBB, sizeof(_invalidBB)) != 0)
 
-static bool getIntersection(float fDst1, float fDst2, const tlp::Vec3f &p1, const tlp::Vec3f &p2,
-                            tlp::Vec3f &hit) {
+static bool getIntersection(float fDst1, float fDst2, const tlp::Vec3f &p1,
+                            const tlp::Vec3f &p2, tlp::Vec3f &hit) {
   if ((fDst1 * fDst2) >= 0.0f)
     return false;
 
@@ -39,7 +39,8 @@ static bool getIntersection(float fDst1, float fDst2, const tlp::Vec3f &p1, cons
 
 namespace tlp {
 
-static std::array<std::array<float, 3>, 2> _invalidBB{{{{1, 1, 1}}, {{-1, -1, -1}}}};
+static std::array<std::array<float, 3>, 2> _invalidBB{
+    {{{1, 1, 1}}, {{-1, -1, -1}}}};
 
 BoundingBox::BoundingBox() {
   // set as invalid
@@ -53,7 +54,8 @@ void BoundingBox::clear() {
   assert(!isValid());
 }
 
-BoundingBox::BoundingBox(const tlp::Vec3f &min, const tlp::Vec3f &max, bool compute) {
+BoundingBox::BoundingBox(const tlp::Vec3f &min, const tlp::Vec3f &max,
+                         bool compute) {
   if (compute)
     tlp::minMaxVectors(min, max, (*this)[0], (*this)[1]);
   else {
@@ -103,15 +105,17 @@ bool BoundingBox::isValid() const {
 bool BoundingBox::contains(const tlp::Vec3f &coord, bool noCheck) const {
   if (noCheck || THIS_INITED) {
     assert(isValid());
-    return (coord[0] >= (*this)[0][0] && coord[1] >= (*this)[0][1] && coord[2] >= (*this)[0][2]) &&
-           (coord[0] <= (*this)[1][0] && coord[1] <= (*this)[1][1] && coord[2] <= (*this)[1][2]);
+    return (coord[0] >= (*this)[0][0] && coord[1] >= (*this)[0][1] &&
+            coord[2] >= (*this)[0][2]) &&
+           (coord[0] <= (*this)[1][0] && coord[1] <= (*this)[1][1] &&
+            coord[2] <= (*this)[1][2]);
   }
   return false;
 }
 
 bool BoundingBox::contains(const tlp::BoundingBox &boundingBox) const {
-  return THIS_INITED && BB_INITED(boundingBox) && contains(boundingBox[0], true) &&
-         contains(boundingBox[1], true);
+  return THIS_INITED && BB_INITED(boundingBox) &&
+         contains(boundingBox[0], true) && contains(boundingBox[1], true);
 }
 
 bool BoundingBox::intersect(const tlp::BoundingBox &boundingBox) const {
@@ -163,29 +167,30 @@ bool BoundingBox::intersect(const Vec3f &segStart, const Vec3f &segEnd) const {
   if (segEnd[2] > (*this)[1][2] && segStart[2] > (*this)[1][2])
     return false;
 
-  if (segStart[0] > (*this)[0][0] && segStart[0] < (*this)[1][0] && segStart[1] > (*this)[0][1] &&
-      segStart[1] < (*this)[1][1] && segStart[2] > (*this)[0][2] && segStart[2] < (*this)[1][2])
+  if (segStart[0] > (*this)[0][0] && segStart[0] < (*this)[1][0] &&
+      segStart[1] > (*this)[0][1] && segStart[1] < (*this)[1][1] &&
+      segStart[2] > (*this)[0][2] && segStart[2] < (*this)[1][2])
     return true;
 
   Vec3f hit;
 
-  if ((getIntersection(segStart[0] - (*this)[0][0], segEnd[0] - (*this)[0][0], segStart, segEnd,
-                       hit) &&
+  if ((getIntersection(segStart[0] - (*this)[0][0], segEnd[0] - (*this)[0][0],
+                       segStart, segEnd, hit) &&
        contains(hit, true)) ||
-      (getIntersection(segStart[1] - (*this)[0][1], segEnd[1] - (*this)[0][1], segStart, segEnd,
-                       hit) &&
+      (getIntersection(segStart[1] - (*this)[0][1], segEnd[1] - (*this)[0][1],
+                       segStart, segEnd, hit) &&
        contains(hit, true)) ||
-      (getIntersection(segStart[2] - (*this)[0][2], segEnd[2] - (*this)[0][2], segStart, segEnd,
-                       hit) &&
+      (getIntersection(segStart[2] - (*this)[0][2], segEnd[2] - (*this)[0][2],
+                       segStart, segEnd, hit) &&
        contains(hit, true)) ||
-      (getIntersection(segStart[0] - (*this)[1][0], segEnd[0] - (*this)[1][0], segStart, segEnd,
-                       hit) &&
+      (getIntersection(segStart[0] - (*this)[1][0], segEnd[0] - (*this)[1][0],
+                       segStart, segEnd, hit) &&
        contains(hit, true)) ||
-      (getIntersection(segStart[1] - (*this)[1][1], segEnd[1] - (*this)[1][1], segStart, segEnd,
-                       hit) &&
+      (getIntersection(segStart[1] - (*this)[1][1], segEnd[1] - (*this)[1][1],
+                       segStart, segEnd, hit) &&
        contains(hit, true)) ||
-      (getIntersection(segStart[2] - (*this)[1][2], segEnd[2] - (*this)[1][2], segStart, segEnd,
-                       hit) &&
+      (getIntersection(segStart[2] - (*this)[1][2], segEnd[2] - (*this)[1][2],
+                       segStart, segEnd, hit) &&
        contains(hit, true)))
     return true;
 

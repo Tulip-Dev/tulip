@@ -40,7 +40,8 @@ struct edge;
 class TLP_SCOPE SimpleTest {
 public:
   /**
-   * @brief Checks if the graph is simple (i.e. it contains no self loops or parallel edges).
+   * @brief Checks if the graph is simple (i.e. it contains no self loops or
+   *parallel edges).
    *
    * @param graph The graph to check.
    * @param directed Whether the graph shall be considered directed or not.
@@ -53,33 +54,38 @@ public:
    * The removed edges are stored in the removed vector.
    */
   /**
-   * @brief Makes the graph simple, by removing self loops and parallel edges if any.
+   * @brief Makes the graph simple, by removing self loops and parallel edges if
+   *any.
    *
    * @param graph The graph to make simple.
    * @param removed The edges that were removed to make the graph simple.
    * @param directed Whether the graph shall be considered directed or not.
    * @return void
    **/
-  static void makeSimple(Graph *graph, std::vector<edge> &removed, const bool directed = false);
+  static void makeSimple(Graph *graph, std::vector<edge> &removed,
+                         const bool directed = false);
 
   /**
-   * Performs simple test and stores found parallel edges in the multipleEdges vector
-   * and found self loops in the loops vector.
-   * Returns true if the graph is simple, false otherwise.
+   * Performs simple test and stores found parallel edges in the multipleEdges
+   * vector and found self loops in the loops vector. Returns true if the graph
+   * is simple, false otherwise.
    */
   /**
-   * @brief Checks if the graph is simple, and stores parallel edges and self loops in different
-   *vectors.
+   * @brief Checks if the graph is simple, and stores parallel edges and self
+   *loops in different vectors.
    *
    * @param graph The graph to check for simplicity.
-   * @param multipleEdges The parallel edges that need to be removed to make the graph simple.
-   *Defaults to 0.
-   * @param loops The self loops that need to be removed to make the graph simple. Defaults to 0.
+   * @param multipleEdges The parallel edges that need to be removed to make the
+   *graph simple. Defaults to 0.
+   * @param loops The self loops that need to be removed to make the graph
+   *simple. Defaults to 0.
    * @param directed Whether the graph shall be considered directed or not.
    * @return bool True if the graph is simple, false otherwise.
    **/
-  static bool simpleTest(const Graph *graph, std::vector<edge> *multipleEdges = nullptr,
-                         std::vector<edge> *loops = nullptr, const bool directed = false);
+  static bool simpleTest(const Graph *graph,
+                         std::vector<edge> *multipleEdges = nullptr,
+                         std::vector<edge> *loops = nullptr,
+                         const bool directed = false);
 };
 } // namespace tlp
 #endif

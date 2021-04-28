@@ -17,8 +17,8 @@
  *
  */
 
-#include <ogdf/energybased/NodeRespecterLayout.h>
 #include <ogdf/basic/Math.h>
+#include <ogdf/energybased/NodeRespecterLayout.h>
 
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
 
@@ -110,32 +110,42 @@ public:
       "Energy-Based Layout Algorithms for Graphs with Large Nodes. University of Osnabrueck, 2017",
       "1.0", "Force Directed")
   OGDFNodeRespecter(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, context ? new ogdf::NodeRespecterLayout() : nullptr) {
-    addInParameter<bool>("random initial placement", paramHelp[0], "true", false);
-    addInParameter<StringCollection>(ELT_POSTPROCESSING, paramHelp[1], ELT_POSTPROCESSINGLIST,
-                                     false, postProcesingValuesDescription);
-    addInParameter<double>("Bends Normalization Angle", paramHelp[2], to_string(Math::pi), false);
+      : OGDFLayoutPluginBase(context, context ? new ogdf::NodeRespecterLayout()
+                                              : nullptr) {
+    addInParameter<bool>("random initial placement", paramHelp[0], "true",
+                         false);
+    addInParameter<StringCollection>(ELT_POSTPROCESSING, paramHelp[1],
+                                     ELT_POSTPROCESSINGLIST, false,
+                                     postProcesingValuesDescription);
+    addInParameter<double>("Bends Normalization Angle", paramHelp[2],
+                           to_string(Math::pi), false);
     addInParameter<int>("number of iterations", paramHelp[3], "30000", false);
     addInParameter<double>("Minimal Temperature", paramHelp[4], "1.0", false);
     addInParameter<double>("Initial Temperature", paramHelp[5], "10.0", false);
     addInParameter<double>("Temperature Decrease", paramHelp[6], "0.0", false);
     addInParameter<double>("Gravitation", paramHelp[7], "0.0625", false);
-    addInParameter<double>("Oscillation Angle", paramHelp[8], to_string(Math::pi_2), false);
+    addInParameter<double>("Oscillation Angle", paramHelp[8],
+                           to_string(Math::pi_2), false);
     addInParameter<double>("Desired Minimal Edge Length", paramHelp[9],
-                           to_string(LayoutStandards::defaultNodeSeparation()), false);
+                           to_string(LayoutStandards::defaultNodeSeparation()),
+                           false);
     addInParameter<int>("Init Dummies Per Edge", paramHelp[10], "1", false);
     addInParameter<int>("Maximal Dummies Per Edge", paramHelp[11], "3", false);
-    addInParameter<double>("Dummy Insertion Threshold", paramHelp[12], "5", false);
+    addInParameter<double>("Dummy Insertion Threshold", paramHelp[12], "5",
+                           false);
     addInParameter<double>("Maximum Disturbance", paramHelp[13], "0", false);
-    addInParameter<double>("Repulsion Distance", paramHelp[14],
-                           to_string(2 * LayoutStandards::defaultNodeSeparation()), false);
+    addInParameter<double>(
+        "Repulsion Distance", paramHelp[14],
+        to_string(2 * LayoutStandards::defaultNodeSeparation()), false);
     addInParameter<double>("Min Distance CC", paramHelp[15],
-                           to_string(LayoutStandards::defaultCCSeparation()), false);
+                           to_string(LayoutStandards::defaultCCSeparation()),
+                           false);
     addInParameter<double>("Page Ratio", paramHelp[16], "1.0", false);
   }
 
   void beforeCall() override {
-    ogdf::NodeRespecterLayout *npl = static_cast<ogdf::NodeRespecterLayout *>(ogdfLayoutAlgo);
+    ogdf::NodeRespecterLayout *npl =
+        static_cast<ogdf::NodeRespecterLayout *>(ogdfLayoutAlgo);
     if (dataSet != nullptr) {
       double dval = 0;
       int ival = 0;
@@ -149,9 +159,11 @@ public:
         if (stringCollection.getCurrent() == ELT_POSTPROCESSINGNONE) {
           npl->setPostProcessing(NodeRespecterLayout::PostProcessingMode::None);
         } else if (stringCollection.getCurrent() == ELT_POSTPROCESSINGKEEP) {
-          npl->setPostProcessing(NodeRespecterLayout::PostProcessingMode::KeepMultiEdgeBends);
+          npl->setPostProcessing(
+              NodeRespecterLayout::PostProcessingMode::KeepMultiEdgeBends);
         } else {
-          npl->setPostProcessing(NodeRespecterLayout::PostProcessingMode::Complete);
+          npl->setPostProcessing(
+              NodeRespecterLayout::PostProcessingMode::Complete);
         }
       }
 

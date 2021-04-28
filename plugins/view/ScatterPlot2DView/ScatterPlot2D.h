@@ -20,8 +20,8 @@
 #ifndef SCATTERPLOTOVERVIEW_H_
 #define SCATTERPLOTOVERVIEW_H_
 
-#include <tulip/GlComposite.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
+#include <tulip/GlComposite.h>
 #include <tulip/Graph.h>
 
 namespace tlp {
@@ -40,92 +40,60 @@ const std::string backgroundTextureId = ":/background_texture.png";
 class ScatterPlot2D : public GlComposite {
 
 public:
-  ScatterPlot2D(Graph *graph, Graph *edgeGraph, std::unordered_map<node, edge> &nodeMap,
-                const std::string &xDim, const std::string &yDim, const ElementType &dataLocation,
-                Coord blCorner, unsigned int size, const Color &backgroundColor,
+  ScatterPlot2D(Graph *graph, Graph *edgeGraph,
+                std::unordered_map<node, edge> &nodeMap,
+                const std::string &xDim, const std::string &yDim,
+                const ElementType &dataLocation, Coord blCorner,
+                unsigned int size, const Color &backgroundColor,
                 const Color &foregroundColor);
   ~ScatterPlot2D() override;
 
   void setBLCorner(const Coord &blCorner);
   void setUniformBackgroundColor(const Color &backgroundColor);
-  void mapBackgroundColorToCorrelCoeff(const bool mapBackgroundColor, const Color &minusOneColor,
-                                       const Color &zeroColor, const Color &oneColor);
+  void mapBackgroundColorToCorrelCoeff(const bool mapBackgroundColor,
+                                       const Color &minusOneColor,
+                                       const Color &zeroColor,
+                                       const Color &oneColor);
   void setForegroundColor(const Color &foregroundColor);
 
-  const Color &getBackgroundColor() const {
-    return backgroundColor;
-  }
+  const Color &getBackgroundColor() const { return backgroundColor; }
 
   void generateOverview(LayoutProperty *reverseLayout = nullptr);
-  bool overviewGenerated() const {
-    return overviewGen;
-  }
+  bool overviewGenerated() const { return overviewGen; }
 
-  const std::string &getXDim() const {
-    return xDim;
-  }
-  const std::string &getYDim() const {
-    return yDim;
-  }
+  const std::string &getXDim() const { return xDim; }
+  const std::string &getYDim() const { return yDim; }
   Coord getOverviewCenter() const;
-  float getOverviewSize() const {
-    return float(size);
-  }
-  LayoutProperty *getScatterPlotLayout() const {
-    return scatterLayout;
-  }
-  GlQuantitativeAxis *getXAxis() const {
-    return xAxis;
-  }
-  GlQuantitativeAxis *getYAxis() const {
-    return yAxis;
-  }
+  float getOverviewSize() const { return float(size); }
+  LayoutProperty *getScatterPlotLayout() const { return scatterLayout; }
+  GlQuantitativeAxis *getXAxis() const { return xAxis; }
+  GlQuantitativeAxis *getYAxis() const { return yAxis; }
 
-  bool getXAxisScaleDefined() const {
-    return xAxisScaleDefined;
-  }
-  void setXAxisScaleDefined(const bool value) {
-    xAxisScaleDefined = value;
-  }
-  bool getYAxisScaleDefined() const {
-    return yAxisScaleDefined;
-  }
-  void setYAxisScaleDefined(const bool value) {
-    yAxisScaleDefined = value;
-  }
-  std::pair<double, double> getXAxisScale() const {
-    return xAxisScale;
-  }
+  bool getXAxisScaleDefined() const { return xAxisScaleDefined; }
+  void setXAxisScaleDefined(const bool value) { xAxisScaleDefined = value; }
+  bool getYAxisScaleDefined() const { return yAxisScaleDefined; }
+  void setYAxisScaleDefined(const bool value) { yAxisScaleDefined = value; }
+  std::pair<double, double> getXAxisScale() const { return xAxisScale; }
   void setXAxisScale(const std::pair<double, double> &value) {
     xAxisScale = value;
   }
-  std::pair<double, double> getYAxisScale() const {
-    return yAxisScale;
-  }
+  std::pair<double, double> getYAxisScale() const { return yAxisScale; }
   void setYAxisScale(const std::pair<double, double> &value) {
     yAxisScale = value;
   }
 
-  std::pair<double, double> getInitXAxisScale() const {
-    return initXAxisScale;
-  }
+  std::pair<double, double> getInitXAxisScale() const { return initXAxisScale; }
   void setInitXAxisScale(const std::pair<double, double> &value) {
     initXAxisScale = value;
   }
-  std::pair<double, double> getInitYAxisScale() const {
-    return initYAxisScale;
-  }
+  std::pair<double, double> getInitYAxisScale() const { return initYAxisScale; }
   void setInitYAxisScale(const std::pair<double, double> &value) {
     initYAxisScale = value;
   }
 
-  double getCorrelationCoefficient() const {
-    return correlationCoeff;
-  }
+  double getCorrelationCoefficient() const { return correlationCoeff; }
 
-  GlGraphComposite *getGlGraphComposite() const {
-    return glGraphComposite;
-  }
+  GlGraphComposite *getGlGraphComposite() const { return glGraphComposite; }
   void setDisplayGraphEdges(const bool displayGraphEdges) {
     displayEdges = displayGraphEdges;
   }
@@ -134,9 +102,7 @@ public:
     displaylabels = displayNodelabels;
   }
 
-  void setLabelsScaled(const bool scalelabel) {
-    scale = scalelabel;
-  }
+  void setLabelsScaled(const bool scalelabel) { scale = scalelabel; }
 
   void setDataLocation(const ElementType &dataLocation);
 

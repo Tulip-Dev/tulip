@@ -23,8 +23,8 @@
 
 #include <QObject>
 
-#include <vector>
 #include <string>
+#include <vector>
 
 class QGradient;
 class QGraphicsProxyWidget;
@@ -49,11 +49,14 @@ public:
 
   void loadConfiguration();
 
-  void generateColorCaption(const QGradient &activeGradient, const QGradient &hideGradient,
-                            const std::string &propertyName, double minValue, double maxValue);
+  void generateColorCaption(const QGradient &activeGradient,
+                            const QGradient &hideGradient,
+                            const std::string &propertyName, double minValue,
+                            double maxValue);
 
-  void generateSizeCaption(const std::vector<std::pair<double, float>> &metricToSizeFilteredList,
-                           const std::string &propertyName, double minValue, double maxValue);
+  void generateSizeCaption(
+      const std::vector<std::pair<double, float>> &metricToSizeFilteredList,
+      const std::string &propertyName, double minValue, double maxValue);
 
   CaptionGraphicsBackgroundItem *getCaptionItem() const {
     return _rondedRectItem;

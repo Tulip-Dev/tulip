@@ -20,8 +20,8 @@
 #ifndef VIEWGRAPHPROERTIESSELECTIONWIDGET_H_
 #define VIEWGRAPHPROERTIESSELECTIONWIDGET_H_
 
-#include <vector>
 #include <string>
+#include <vector>
 
 #include <QWidget>
 
@@ -33,7 +33,8 @@ class ViewGraphPropertiesSelectionWidgetData;
 
 namespace tlp {
 
-class TLP_QT_SCOPE ViewGraphPropertiesSelectionWidget : public QWidget, public Observable {
+class TLP_QT_SCOPE ViewGraphPropertiesSelectionWidget : public QWidget,
+                                                        public Observable {
 
   Q_OBJECT
 
@@ -41,12 +42,13 @@ public:
   ViewGraphPropertiesSelectionWidget(QWidget *parent = nullptr);
   ~ViewGraphPropertiesSelectionWidget() override;
 
-  void setWidgetParameters(Graph *graph,
-                           const std::vector<std::string> &graphPropertiesTypesFilter);
+  void setWidgetParameters(
+      Graph *graph, const std::vector<std::string> &graphPropertiesTypesFilter);
   std::vector<std::string> getSelectedGraphProperties();
 
   void setWidgetEnabled(const bool enabled);
-  void setSelectedProperties(const std::vector<std::string> &selectedProperties);
+  void
+  setSelectedProperties(const std::vector<std::string> &selectedProperties);
 
   ElementType getDataLocation() const;
   void setDataLocation(const ElementType location);

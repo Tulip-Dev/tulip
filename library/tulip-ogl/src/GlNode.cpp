@@ -21,23 +21,23 @@
 
 #include <tulip/GlNode.h>
 
-#include <tulip/Coord.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/StringProperty.h>
 #include <tulip/BooleanProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/GlMetaNodeRenderer.h>
-#include <tulip/GlGraphInputData.h>
-#include <tulip/Glyph.h>
-#include <tulip/GlTools.h>
-#include <tulip/GlSceneVisitor.h>
-#include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/GlTextureManager.h>
-#include <tulip/GlVertexArrayManager.h>
+#include <tulip/Coord.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/GlGlyphRenderer.h>
+#include <tulip/GlGraphInputData.h>
+#include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/GlMetaNodeRenderer.h>
+#include <tulip/GlSceneVisitor.h>
+#include <tulip/GlTextureManager.h>
+#include <tulip/GlTools.h>
+#include <tulip/GlVertexArrayManager.h>
+#include <tulip/Glyph.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
 #include <tulip/TulipViewSettings.h>
 
 //====================================================
@@ -74,14 +74,14 @@ BoundingBox GlNode::getBoundingBox(const GlGraphInputData *data) {
     Coord tmp2(tmp1[0], -tmp1[1], tmp1[2]);
     Coord tmp3(-tmp1[0], -tmp1[1], -tmp1[2]);
     Coord tmp4(-tmp1[0], tmp1[1], -tmp1[2]);
-    tmp1.set(tmp1[0] * cosAngle - tmp1[1] * sinAngle, tmp1[0] * sinAngle + tmp1[1] * cosAngle,
-             tmp1[2]);
-    tmp2.set(tmp2[0] * cosAngle - tmp2[1] * sinAngle, tmp2[0] * sinAngle + tmp2[1] * cosAngle,
-             tmp2[2]);
-    tmp3.set(tmp3[0] * cosAngle - tmp3[1] * sinAngle, tmp3[0] * sinAngle + tmp3[1] * cosAngle,
-             tmp3[2]);
-    tmp4.set(tmp4[0] * cosAngle - tmp4[1] * sinAngle, tmp4[0] * sinAngle + tmp4[1] * cosAngle,
-             tmp4[2]);
+    tmp1.set(tmp1[0] * cosAngle - tmp1[1] * sinAngle,
+             tmp1[0] * sinAngle + tmp1[1] * cosAngle, tmp1[2]);
+    tmp2.set(tmp2[0] * cosAngle - tmp2[1] * sinAngle,
+             tmp2[0] * sinAngle + tmp2[1] * cosAngle, tmp2[2]);
+    tmp3.set(tmp3[0] * cosAngle - tmp3[1] * sinAngle,
+             tmp3[0] * sinAngle + tmp3[1] * cosAngle, tmp3[2]);
+    tmp4.set(tmp4[0] * cosAngle - tmp4[1] * sinAngle,
+             tmp4[0] * sinAngle + tmp4[1] * cosAngle, tmp4[2]);
 
     BoundingBox bb(coord + tmp1, coord + tmp2, true);
     bb.expand(coord + tmp3, true);
@@ -103,9 +103,11 @@ void GlNode::draw(float lod, const GlGraphInputData *data, Camera *camera) {
     data->getMetaNodeRenderer()->render(n, lod, camera);
   }
 
-  GlTextureManager::setAnimationFrame(data->getElementAnimationFrame()->getNodeValue(n));
+  GlTextureManager::setAnimationFrame(
+      data->getElementAnimationFrame()->getNodeValue(n));
 
-  if (lod < LOD_MIN_TRESHOLD) { // less than four pixel on screen, we use points instead of glyphs
+  if (lod < LOD_MIN_TRESHOLD) { // less than four pixel on screen, we use points
+                                // instead of glyphs
     if (lod < 1)
       lod = 1;
 
@@ -130,23 +132,27 @@ void GlNode::draw(float lod, const GlGraphInputData *data, Camera *camera) {
   if (!data->parameters->isDisplayNodes())
     return;
 
-  // If node size in z is equal to 0 we have to scale with FLT_EPSILON to preserve normal
-  // (because if we do a scale of (x,y,0) and if we have a normal like (0,0,1) the new normal after
-  // scale will be (0,0,0) and we will have light problem)
+  // If node size in z is equal to 0 we have to scale with FLT_EPSILON to
+  // preserve normal (because if we do a scale of (x,y,0) and if we have a
+  // normal like (0,0,1) the new normal after scale will be (0,0,0) and we will
+  // have light problem)
   Size nodeSize(size);
   if (nodeSize[2] == 0)
     nodeSize[2] = FLT_EPSILON;
 
   auto *glyphObj = data->glyphs.get(glyph);
   // Some glyphs can not benefit from the shader rendering optimization
-  // due to the use of quadrics or modelview matrix modification or lighting effect
-  if (data->getGlGlyphRenderer()->renderingHasStarted() && glyphObj->shaderSupported()) {
-    data->getGlGlyphRenderer()->addNodeGlyphRendering(glyphObj, n, lod, coord, nodeSize, rot,
-                                                      selected);
+  // due to the use of quadrics or modelview matrix modification or lighting
+  // effect
+  if (data->getGlGlyphRenderer()->renderingHasStarted() &&
+      glyphObj->shaderSupported()) {
+    data->getGlGlyphRenderer()->addNodeGlyphRendering(glyphObj, n, lod, coord,
+                                                      nodeSize, rot, selected);
   } else {
 
     if (selected) {
-      glStencilFunc(GL_LEQUAL, data->parameters->getSelectedNodesStencil(), 0xFFFF);
+      glStencilFunc(GL_LEQUAL, data->parameters->getSelectedNodesStencil(),
+                    0xFFFF);
     } else {
       glStencilFunc(GL_LEQUAL, data->parameters->getNodesStencil(), 0xFFFF);
     }
@@ -172,7 +178,8 @@ void GlNode::draw(float lod, const GlGraphInputData *data, Camera *camera) {
   GlTextureManager::setAnimationFrame(0);
 }
 
-void GlNode::drawLabel(GlLabel &label, OcclusionTest *test, const GlGraphInputData *data, float lod,
+void GlNode::drawLabel(GlLabel &label, OcclusionTest *test,
+                       const GlGraphInputData *data, float lod,
                        Camera *camera) {
   init(data);
   node n(id);
@@ -182,14 +189,17 @@ void GlNode::drawLabel(GlLabel &label, OcclusionTest *test, const GlGraphInputDa
     return;
 
   // Color of the label : selected or not
-  const Color &fontColor = selected ? data->parameters->getSelectionColor()
-                                    : data->getElementLabelColor()->getNodeValue(n);
-  const Color &fontBorderColor = selected ? data->parameters->getSelectionColor()
-                                          : data->getElementLabelBorderColor()->getNodeValue(n);
+  const Color &fontColor = selected
+                               ? data->parameters->getSelectionColor()
+                               : data->getElementLabelColor()->getNodeValue(n);
+  const Color &fontBorderColor =
+      selected ? data->parameters->getSelectionColor()
+               : data->getElementLabelBorderColor()->getNodeValue(n);
   float fontBorderWidth = data->getElementLabelBorderWidth()->getNodeValue(n);
 
   // If we have transparent label : return
-  if (fontColor.getA() == 0 && (fontBorderColor.getA() == 0 || fontBorderWidth == 0))
+  if (fontColor.getA() == 0 &&
+      (fontBorderColor.getA() == 0 || fontBorderWidth == 0))
     return;
 
   // Node text
@@ -218,7 +228,8 @@ void GlNode::drawLabel(GlLabel &label, OcclusionTest *test, const GlGraphInputDa
   Coord &&centerBB = includeBB.center();
   Vec3f &&sizeBB = includeBB[1] - includeBB[0];
 
-  label.setFontNameSizeAndColor(data->getElementFont()->getNodeValue(n), fontSize, fontColor);
+  label.setFontNameSizeAndColor(data->getElementFont()->getNodeValue(n),
+                                fontSize, fontColor);
   label.setOutlineColor(fontBorderColor);
   label.setOutlineSize(fontBorderWidth);
   label.setText(tmp);

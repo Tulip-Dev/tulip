@@ -18,10 +18,10 @@
  */
 #include <QFileDialog>
 
-#include <tulip/TlpTools.h>
+#include <tulip/Perspective.h>
 #include <tulip/TextureFileDialog.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/Perspective.h>
+#include <tulip/TlpTools.h>
 
 using namespace tlp;
 
@@ -31,9 +31,7 @@ TextureFileDialog::TextureFileDialog(QWidget *parent)
   connect(ui->chooseFileOrDirButton, SIGNAL(clicked()), this, SLOT(browse()));
 }
 
-TextureFileDialog::~TextureFileDialog() {
-  delete ui;
-}
+TextureFileDialog::~TextureFileDialog() { delete ui; }
 
 void TextureFileDialog::done(int res) {
   if (res) {
@@ -64,8 +62,9 @@ void TextureFileDialog::setData(const TextureFile &tf) {
 }
 
 void TextureFileDialog::browse() {
-  QString result = QFileDialog::getOpenFileName(parentWidget(), "Choose a texture file",
-                                                _data.texturePath, "Images (*.jpg *.jpeg *.png)");
+  QString result = QFileDialog::getOpenFileName(
+      parentWidget(), "Choose a texture file", _data.texturePath,
+      "Images (*.jpg *.jpeg *.png)");
 
   if (!result.isEmpty())
     ui->fileOrDirLineEdit->setText(result);

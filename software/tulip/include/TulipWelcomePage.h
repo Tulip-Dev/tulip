@@ -32,8 +32,8 @@ class QNetworkReply;
 
 /**
   @brief The widget containing the Welcome screen in tulip_app.
-  This widget will allow a user to select an installed perspective, read latest news from the Tulip
-  website, and display startup tips.
+  This widget will allow a user to select an installed perspective, read latest
+  news from the Tulip website, and display startup tips.
   */
 class TulipWelcomePage : public QWidget {
   Q_OBJECT

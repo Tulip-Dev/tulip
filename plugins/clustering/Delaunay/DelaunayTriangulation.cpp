@@ -17,15 +17,17 @@
  *
  */
 
-#include <tulip/TulipPluginHeaders.h>
 #include <tulip/Delaunay.h>
 #include <tulip/ParallelTools.h>
+#include <tulip/TulipPluginHeaders.h>
 
 using namespace std;
 
-static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs, bool originalClone) {
+static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs,
+                                  bool originalClone) {
   tlp::NodeStaticProperty<tlp::Coord> points(graph);
-  points.copyFromProperty(graph->getProperty<tlp::LayoutProperty>("viewLayout"));
+  points.copyFromProperty(
+      graph->getProperty<tlp::LayoutProperty>("viewLayout"));
 
   vector<pair<unsigned int, unsigned int>> edges;
   vector<vector<unsigned int>> simplices;
@@ -47,8 +49,9 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs, bo
     if (simplicesSubGraphs) {
       for (size_t i = 0; i < simplices.size(); ++i) {
         vector<tlp::node> sNodes(simplices[i].size());
-        tlp::TLP_PARALLEL_MAP_INDICES(sNodes.size(),
-                                      [&](unsigned int j) { sNodes[j] = nodes[simplices[i][j]]; });
+        tlp::TLP_PARALLEL_MAP_INDICES(sNodes.size(), [&](unsigned int j) {
+          sNodes[j] = nodes[simplices[i][j]];
+        });
 
         ostringstream oss;
         oss << (simplices[i].size() == 3 ? "triangle " : "tetrahedron ") << i;
@@ -76,11 +79,12 @@ public:
     addInParameter<bool>("original clone", paramHelp[1], "true");
   }
 
-  PLUGININFORMATION("Delaunay triangulation", "Antoine Lambert", "",
-                    "Performs a Delaunay triangulation, in considering the positions of the graph "
-                    "nodes as a set of points. The building of simplices (triangles in 2D or "
-                    "tetrahedrons in 3D) consists in adding edges between adjacent nodes.",
-                    "1.1", "Triangulation")
+  PLUGININFORMATION(
+      "Delaunay triangulation", "Antoine Lambert", "",
+      "Performs a Delaunay triangulation, in considering the positions of the graph "
+      "nodes as a set of points. The building of simplices (triangles in 2D or "
+      "tetrahedrons in 3D) consists in adding edges between adjacent nodes.",
+      "1.1", "Triangulation")
 
   bool run() override {
     if (graph->isEmpty())

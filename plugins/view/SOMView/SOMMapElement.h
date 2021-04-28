@@ -22,16 +22,16 @@
 
 #include <unordered_map>
 
-#include <tulip/GlComposite.h>
-#include <tulip/Size.h>
 #include <tulip/Coord.h>
+#include <tulip/GlComposite.h>
 #include <tulip/Node.h>
+#include <tulip/Size.h>
 
 /**
  * @brief GlComposite used to visualize a SOM.
- * GlComposite used to visualize a SOM. This object take a SOM and the the ColorProperty defining
- * the color of each node of the map and print them.
- * If the SOM is hexagonal kind print hexagonal glyph else print square.
+ * GlComposite used to visualize a SOM. This object take a SOM and the the
+ * ColorProperty defining the color of each node of the map and print them. If
+ * the SOM is hexagonal kind print hexagonal glyph else print square.
  */
 namespace tlp {
 
@@ -40,7 +40,8 @@ class ColorProperty;
 
 class SOMMapElement : public tlp::GlComposite {
 public:
-  SOMMapElement(Coord position, Size size, SOMMap *map, ColorProperty *colorProperty);
+  SOMMapElement(Coord position, Size size, SOMMap *map,
+                ColorProperty *colorProperty);
   ~SOMMapElement() override;
 
   tlp::Coord getTopLeftPositionForElement(unsigned int x, unsigned int y);
@@ -54,7 +55,8 @@ public:
   void setData(SOMMap *map, ColorProperty *cp);
 
   /**
-   * Change the colors of the som representation with those in the given property;
+   * Change the colors of the som representation with those in the given
+   * property;
    * @param newColor The new colors.
    */
   void updateColors(ColorProperty *newColor);
@@ -62,7 +64,8 @@ public:
 protected:
   void computeNodeAreaSize();
 
-  float computeMaximizedRadiusForHexagone(unsigned int width, unsigned int height, Size &size);
+  float computeMaximizedRadiusForHexagone(unsigned int width,
+                                          unsigned int height, Size &size);
 
   void buildMainComposite(Coord topLeft, Size elementSize, SOMMap *map);
 

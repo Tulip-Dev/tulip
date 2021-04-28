@@ -34,14 +34,13 @@ class MouseMagnifyingGlassInteractorComponent : public GLInteractorComponent {
 public:
   MouseMagnifyingGlassInteractorComponent();
   MouseMagnifyingGlassInteractorComponent(
-      const MouseMagnifyingGlassInteractorComponent &mouseMagnifyingGlassInteractorComponent);
+      const MouseMagnifyingGlassInteractorComponent
+          &mouseMagnifyingGlassInteractorComponent);
   ~MouseMagnifyingGlassInteractorComponent() override;
 
   bool eventFilter(QObject *widget, QEvent *e) override;
 
-  bool compute(GlMainWidget *) override {
-    return false;
-  }
+  bool compute(GlMainWidget *) override { return false; }
 
   bool draw(GlMainWidget *glWidget) override;
 
@@ -66,7 +65,8 @@ private:
  *  \brief  Tulip Magnifying Glass Interactor
 
  * This interactor plugin provides a magnifying glass tool for all Tulip views.
- * It allows to zoom on a particular area of a visualization with the help of a lens
+ * It allows to zoom on a particular area of a visualization with the help of a
+ lens
  * without having to modify the global zoom level.
  *
  *
@@ -74,8 +74,10 @@ private:
 class MouseMagnifyingGlassInteractor : public GLInteractorComposite {
 
 public:
-  PLUGININFORMATION("MouseMagnifyingGlassInteractor", "Antoine Lambert", "19/06/2009",
-                    "Mouse Magnifying Glass Interactor Interactor", "1.0", "Visualization")
+  PLUGININFORMATION("MouseMagnifyingGlassInteractor", "Antoine Lambert",
+                    "19/06/2009",
+                    "Mouse Magnifying Glass Interactor Interactor", "1.0",
+                    "Visualization")
 
   MouseMagnifyingGlassInteractor(const tlp::PluginContext *);
 
@@ -84,9 +86,7 @@ public:
   unsigned int priority() const override {
     return StandardInteractorPriority::MagnifyingGlass;
   }
-  QWidget *configurationWidget() const override {
-    return nullptr;
-  }
+  QWidget *configurationWidget() const override { return nullptr; }
 
   bool isCompatible(const std::string &viewName) const override;
 };

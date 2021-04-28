@@ -21,9 +21,9 @@
 #ifndef GRAPHPROPERTIESMODEL_H
 #define GRAPHPROPERTIESMODEL_H
 
-#include <tulip/TulipModel.h>
-#include <tulip/Observable.h>
 #include <tulip/Graph.h>
+#include <tulip/Observable.h>
+#include <tulip/TulipModel.h>
 
 #include <QFont>
 #include <QIcon>
@@ -46,16 +46,15 @@ class GraphPropertiesModel : public tlp::TulipModel, public tlp::Observable {
 public:
   explicit GraphPropertiesModel(tlp::Graph *graph, bool checkable = false,
                                 QObject *parent = nullptr);
-  explicit GraphPropertiesModel(QString placeholder, tlp::Graph *graph, bool checkable = false,
+  explicit GraphPropertiesModel(QString placeholder, tlp::Graph *graph,
+                                bool checkable = false,
                                 QObject *parent = nullptr);
   ~GraphPropertiesModel() override {
     if (_graph != nullptr)
       _graph->removeListener(this);
   }
 
-  tlp::Graph *graph() const {
-    return _graph;
-  }
+  tlp::Graph *graph() const { return _graph; }
 
   void setGraph(tlp::Graph *graph) {
     if (_graph == graph)
@@ -75,18 +74,20 @@ public:
     endResetModel();
   }
 
-  QSet<PROPTYPE *> checkedProperties() const {
-    return _checkedProperties;
-  }
+  QSet<PROPTYPE *> checkedProperties() const { return _checkedProperties; }
 
   // Methods re-implemented from QAbstractItemModel
-  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+  QModelIndex index(int row, int column,
+                    const QModelIndex &parent = QModelIndex()) const override;
   QModelIndex parent(const QModelIndex &child) const override;
   int rowCount(const QModelIndex &parent = QModelIndex()) const override;
   int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-  QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
-  bool setData(const QModelIndex &quiindex, const QVariant &value, int role) override;
+  QVariant data(const QModelIndex &index,
+                int role = Qt::DisplayRole) const override;
+  QVariant headerData(int section, Qt::Orientation orientation,
+                      int role) const override;
+  bool setData(const QModelIndex &quiindex, const QVariant &value,
+               int role) override;
 
   // Methods inherited from the observable system
   void treatEvent(const tlp::Event &evt) override {
@@ -107,9 +108,11 @@ public:
       return;
 
     if (graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY ||
-        graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY) {
+        graphEvent->getType() ==
+            GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY) {
 
-      PROPTYPE *prop = dynamic_cast<PROPTYPE *>(_graph->getProperty(graphEvent->getPropertyName()));
+      PROPTYPE *prop = dynamic_cast<PROPTYPE *>(
+          _graph->getProperty(graphEvent->getPropertyName()));
 
       if (prop != nullptr) {
         int row = rowOf(prop);
@@ -120,15 +123,19 @@ public:
           _checkedProperties.remove(prop);
         }
       }
-    } else if (graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY ||
-               graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY) {
+    } else if (graphEvent->getType() ==
+                   GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY ||
+               graphEvent->getType() ==
+                   GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY) {
       if (_removingRows) {
         endRemoveRows();
         _removingRows = false;
       }
     } else if (graphEvent->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY ||
-               graphEvent->getType() == GraphEvent::TLP_ADD_INHERITED_PROPERTY) {
-      PROPTYPE *prop = dynamic_cast<PROPTYPE *>(_graph->getProperty(graphEvent->getPropertyName()));
+               graphEvent->getType() ==
+                   GraphEvent::TLP_ADD_INHERITED_PROPERTY) {
+      PROPTYPE *prop = dynamic_cast<PROPTYPE *>(
+          _graph->getProperty(graphEvent->getPropertyName()));
 
       if (prop != nullptr) {
         rebuildCache();
@@ -139,10 +146,12 @@ public:
           endInsertRows();
         }
       }
-    } else if (graphEvent->getType() == GraphEvent::TLP_AFTER_RENAME_LOCAL_PROPERTY) {
+    } else if (graphEvent->getType() ==
+               GraphEvent::TLP_AFTER_RENAME_LOCAL_PROPERTY) {
       // force any needed sorting
       emit layoutAboutToBeChanged();
-      changePersistentIndex(createIndex(0, 0), createIndex(_properties.size() - 1, 0));
+      changePersistentIndex(createIndex(0, 0),
+                            createIndex(_properties.size() - 1, 0));
       emit layoutChanged();
     }
   }

@@ -36,19 +36,20 @@ PathFinderConfigurationWidget::PathFinderConfigurationWidget(QWidget *parent)
           SIGNAL(setEdgeOrientation(const QString &)));
   connect(_ui->pathsTypeCombo, SIGNAL(activated(const QString &)), this,
           SIGNAL(setPathsType(const QString &)));
-  connect(_ui->toleranceCheck, SIGNAL(clicked(bool)), this, SIGNAL(activateTolerance(bool)));
-  connect(_ui->toleranceSpin, SIGNAL(valueChanged(int)), this, SIGNAL(setTolerance(int)));
+  connect(_ui->toleranceCheck, SIGNAL(clicked(bool)), this,
+          SIGNAL(activateTolerance(bool)));
+  connect(_ui->toleranceSpin, SIGNAL(valueChanged(int)), this,
+          SIGNAL(setTolerance(int)));
 }
 
-PathFinderConfigurationWidget::~PathFinderConfigurationWidget() {
-  delete _ui;
-}
+PathFinderConfigurationWidget::~PathFinderConfigurationWidget() { delete _ui; }
 
 void PathFinderConfigurationWidget::addweightComboItem(const QString &s) {
   _ui->weightCombo->addItem(s);
 }
 
-void PathFinderConfigurationWidget::addedgeOrientationComboItem(const QString &s) {
+void PathFinderConfigurationWidget::addedgeOrientationComboItem(
+    const QString &s) {
   _ui->edgeOrientationCombo->addItem(s);
 }
 
@@ -60,15 +61,18 @@ void PathFinderConfigurationWidget::setCurrentweightComboIndex(const int i) {
   _ui->weightCombo->setCurrentIndex(i);
 }
 
-int PathFinderConfigurationWidget::weightComboFindText(const QString &text) const {
+int PathFinderConfigurationWidget::weightComboFindText(
+    const QString &text) const {
   return _ui->weightCombo->findText(text);
 }
 
-void PathFinderConfigurationWidget::setCurrentedgeOrientationComboIndex(const int i) {
+void PathFinderConfigurationWidget::setCurrentedgeOrientationComboIndex(
+    const int i) {
   _ui->edgeOrientationCombo->setCurrentIndex(i);
 }
 
-int PathFinderConfigurationWidget::edgeOrientationComboFindText(const QString &text) const {
+int PathFinderConfigurationWidget::edgeOrientationComboFindText(
+    const QString &text) const {
   return _ui->edgeOrientationCombo->findText(text);
 }
 
@@ -80,7 +84,8 @@ void PathFinderConfigurationWidget::setToleranceSpinValue(const int val) {
   _ui->toleranceSpin->setValue(val);
 }
 
-void PathFinderConfigurationWidget::highlightersLabelDisabled(const bool disable) {
+void PathFinderConfigurationWidget::highlightersLabelDisabled(
+    const bool disable) {
   _ui->highlightersLabel->setDisabled(disable);
 }
 

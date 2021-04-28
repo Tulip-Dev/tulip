@@ -17,14 +17,15 @@
  *
  */
 
-#if defined(__GNUC__) && __GNUC__ >= 4 &&                                                          \
-    ((__GNUC_MINOR__ == 2 && __GNUC_PATCHLEVEL__ >= 1) || (__GNUC_MINOR__ >= 3))
+#if defined(__GNUC__) && __GNUC__ >= 4 &&                                      \
+    ((__GNUC_MINOR__ == 2 && __GNUC_PATCHLEVEL__ >= 1) ||                      \
+     (__GNUC_MINOR__ >= 3))
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif
 
 #include <tulip/Graph.h>
-#include <tulip/PlanarityTestImpl.h>
 #include <tulip/MutableContainer.h>
+#include <tulip/PlanarityTestImpl.h>
 #include <tulip/StableIterator.h>
 
 using namespace std;
@@ -59,10 +60,11 @@ bool PlanarityTestImpl::isPlanar(bool embedsg) {
     for (auto comp : listOfComponents) {
       if (terminalNodes[comp].size() > 0) {
         // creates a new c-node to represent current component;
-        //  tlp::warning() << "  *terminal nodes for w = " << dfsPosNum.get(n1.id) << ":\n";
-        //  tlp::warning() << "    in component (" << dfsPosNum.get(comp.id) << "): ";
-        //  for (list<node>::iterator it2= terminalNodes[comp].begin();
-        //  it2!=terminalNodes[comp].end(); ++it2)
+        //  tlp::warning() << "  *terminal nodes for w = " <<
+        //  dfsPosNum.get(n1.id) << ":\n"; tlp::warning() << "    in component
+        //  (" << dfsPosNum.get(comp.id) << "): "; for (list<node>::iterator
+        //  it2= terminalNodes[comp].begin(); it2!=terminalNodes[comp].end();
+        //  ++it2)
         //    tlp::warning() << dfsPosNum.get(it2->id) << ",";
         node newCNode = sg->addNode();
         dfsPosNum.set(newCNode.id, -(++totalCNodes)); // marks as c-node;
@@ -75,7 +77,8 @@ bool PlanarityTestImpl::isPlanar(bool embedsg) {
 
         // else, calculates partial embedding of G;
         if (embed) {
-          calculatePartialEmbedding(sg, n1, newCNode, listBackEdges[comp], terminalNodes[comp]);
+          calculatePartialEmbedding(sg, n1, newCNode, listBackEdges[comp],
+                                    terminalNodes[comp]);
         }
 
         // calculates RBC, label_b, etc, for new c-node;
@@ -98,7 +101,8 @@ bool PlanarityTestImpl::isPlanar(bool embedsg) {
       sg->delNode(n2, true);
   }
 
-  //  tlp::debug() << "Le sge est " << (planar ? "planaire" : "non planaire") << endl;
+  //  tlp::debug() << "Le sge est " << (planar ? "planaire" : "non planaire") <<
+  //  endl;
   restore();
 //  displayMap(sg);
 #ifndef NDEBUG
@@ -164,11 +168,13 @@ void PlanarityTestImpl::init() {
   makeBidirected(sg);
 }
 //=================================================================
-void PlanarityTestImpl::findTerminalNodes(Graph *sG, node n, list<node> &listOfComponents,
-                                          map<node, list<node>> &terminalNodes) {
+void PlanarityTestImpl::findTerminalNodes(
+    Graph *sG, node n, list<node> &listOfComponents,
+    map<node, list<node>> &terminalNodes) {
   // to remove an element from list terminal_nodes in constant time;
   // map<node, list_item> terminal_nodes_item;
-  map<node, node> terminalNodesItem; //!!!! attention normalement list item pour l'efficacite
+  map<node, node> terminalNodesItem; //!!!! attention normalement list item pour
+                                     //!l'efficacite
   map<node, node> componentOf;
   list<node> traversedNodes; // to restore state[u] for all traversed node u;
   list<edge> listEdges;
@@ -192,7 +198,8 @@ void PlanarityTestImpl::findTerminalNodes(Graph *sG, node n, list<node> &listOfC
       node terminalNode = NULL_NODE;
 
       // looks for a terminal node, upward in T;
-      while (state.get(target.id) != VISITED && state.get(target.id) != TERMINAL) {
+      while (state.get(target.id) != VISITED &&
+             state.get(target.id) != TERMINAL) {
 
         //  tlp::warning() << dfsPosNum.get(target.id) << "(" <<
         //  dfsPosNum.get(parent.get(target.id).id) << "), ";
@@ -205,7 +212,8 @@ void PlanarityTestImpl::findTerminalNodes(Graph *sG, node n, list<node> &listOfC
         }
 
         // is target a candidate for a terminal node?
-        if (terminalNode == NULL_NODE && labelB.get(target.id) > dfsPosNum.get(n.id)) {
+        if (terminalNode == NULL_NODE &&
+            labelB.get(target.id) > dfsPosNum.get(n.id)) {
           state.set(target.id, TERMINAL);
           terminalNode = target;
         } else
@@ -265,7 +273,8 @@ void PlanarityTestImpl::findTerminalNodes(Graph *sG, node n, list<node> &listOfC
     state.set(n.id, NOT_VISITED);
 }
 //=================================================================
-bool PlanarityTestImpl::findObstruction(Graph *sG, node n, list<node> &terminalNodes) {
+bool PlanarityTestImpl::findObstruction(Graph *sG, node n,
+                                        list<node> &terminalNodes) {
   cNodeOfPossibleK33Obstruction = NULL_NODE; // reset global variable;
 
   switch (terminalNodes.size()) {
@@ -277,7 +286,8 @@ bool PlanarityTestImpl::findObstruction(Graph *sG, node n, list<node> &terminalN
     }
 
     if (cNodeOfPossibleK33Obstruction != NULL_NODE) {
-      node v = findNodeWithLabelBGreaterThanDfsN(false, sG, n, cNodeOfPossibleK33Obstruction);
+      node v = findNodeWithLabelBGreaterThanDfsN(false, sG, n,
+                                                 cNodeOfPossibleK33Obstruction);
 
       if (v != NULL_NODE) {
         if (embed)
@@ -401,7 +411,8 @@ bool PlanarityTestImpl::findObstruction(Graph *sG, node n, list<node> &terminalN
             mm = NULL_NODE;
         }
 
-        if (t1 == t12 && t2 == t22 && countMin >= 2 && vv == parent.get(m.id)) // m is c-node;
+        if (t1 == t12 && t2 == t22 && countMin >= 2 &&
+            vv == parent.get(m.id)) // m is c-node;
           obstructionEdgesK5(sG, n, m, t1, t2, NULL_NODE);
         else if (mm != NULL_NODE) { // m is c-node;
           if (t2 != t22 || vv != parent.get(m.id)) {
@@ -445,7 +456,8 @@ bool PlanarityTestImpl::findObstruction(Graph *sG, node n, list<node> &terminalN
       else if (countF == 3)
         obstructionEdgesCountMin1(sG, n, cNode, t1, t2, t3); // bcycle;
       else if (cNode != NULL_NODE)
-        obstructionEdgesCountMin23(sG, n, cNode, t1, t2, t3, q, NULL_NODE); // bcycle;
+        obstructionEdgesCountMin23(sG, n, cNode, t1, t2, t3, q,
+                                   NULL_NODE); // bcycle;
       else
         obstructionEdgesT0(sG, n, t1, t2, t3, NULL_NODE); // T0;
     }
@@ -472,7 +484,8 @@ void PlanarityTestImpl::setInfoForNewCNode(Graph *sG, node n, node newCNode,
   counter.set(newCNode.id, 0);
   calculateNewRBC(sG, newCNode, n, terminalNodes);
 
-  if (lastNodeInQLinha != NULL_NODE) { // see find_node_with_label_b_greater_than_dfs_n;
+  if (lastNodeInQLinha !=
+      NULL_NODE) { // see find_node_with_label_b_greater_than_dfs_n;
     parent.set(lastNodeInQLinha.id, newCNode);
     lastNodeInQLinha = NULL_NODE; // resets global variable;
   }

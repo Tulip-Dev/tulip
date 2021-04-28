@@ -39,8 +39,8 @@ class TLP_QT_SCOPE RangeSlider : public QSlider {
   Q_OBJECT
   Q_PROPERTY(int lowerValue READ lowerValue WRITE setLowerValue)
   Q_PROPERTY(int upperValue READ upperValue WRITE setUpperValue)
-  Q_PROPERTY(
-      HandleMovementMode handleMovementMode READ handleMovementMode WRITE setHandleMovementMode)
+  Q_PROPERTY(HandleMovementMode handleMovementMode READ handleMovementMode WRITE
+                 setHandleMovementMode)
   Q_ENUMS(HandleMovementMode)
 
 public:
@@ -88,16 +88,17 @@ private:
   Q_PROPERTY(int lowerPosition READ lowerPosition WRITE setLowerPosition)
   Q_PROPERTY(int upperPosition READ upperPosition WRITE setUpperPosition)
 
-  void initStyleOption(QStyleOptionSlider *option, RangeHandle handle = UpperHandle) const;
+  void initStyleOption(QStyleOptionSlider *option,
+                       RangeHandle handle = UpperHandle) const;
   int pick(const QPoint &pt) const {
     return orientation() == Qt::Horizontal ? pt.x() : pt.y();
   }
   int pixelPosToRangeValue(int pos) const;
-  void handleMousePress(const QPoint &pos, QStyle::SubControl &control, int value,
-                        RangeHandle handle);
+  void handleMousePress(const QPoint &pos, QStyle::SubControl &control,
+                        int value, RangeHandle handle);
   void drawHandle(QStylePainter *painter, RangeHandle handle) const;
-  void setupPainter(QPainter *painter, Qt::Orientation orientation, qreal x1, qreal y1, qreal x2,
-                    qreal y2) const;
+  void setupPainter(QPainter *painter, Qt::Orientation orientation, qreal x1,
+                    qreal y1, qreal x2, qreal y2) const;
   void drawRange(QStylePainter *painter, const QRect &rect) const;
   void triggerAction(QAbstractSlider::SliderAction action, bool main);
   void swapControls();

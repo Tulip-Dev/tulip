@@ -19,20 +19,20 @@
 
 #include "GeographicViewShowElementInfo.h"
 
-#include "ui_ElementInformationWidget.h"
-#include "GeographicViewInteractors.h"
-#include "../../utils/StandardInteractorPriority.h"
 #include "../../utils/PluginNames.h"
+#include "../../utils/StandardInteractorPriority.h"
+#include "GeographicViewInteractors.h"
+#include "ui_ElementInformationWidget.h"
 
+#include <tulip/GlComplexPolygon.h>
+#include <tulip/GlSimpleEntityItemModel.h>
+#include <tulip/GraphElementModel.h>
 #include <tulip/MouseInteractors.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/TulipItemDelegate.h>
-#include <tulip/GraphElementModel.h>
-#include <tulip/GlSimpleEntityItemModel.h>
-#include <tulip/GlComplexPolygon.h>
 
-#include <QPropertyAnimation>
 #include <QLayout>
+#include <QPropertyAnimation>
 #include <QStringList>
 #include <QVariantList>
 
@@ -43,7 +43,8 @@ using namespace tlp;
 // of some GlComplexPolygon rendering properties
 class tlp::GlComplexPolygonItemEditor : public GlSimpleEntityItemEditor {
 public:
-  GlComplexPolygonItemEditor(GlComplexPolygon *poly) : GlSimpleEntityItemEditor(poly) {}
+  GlComplexPolygonItemEditor(GlComplexPolygon *poly)
+      : GlSimpleEntityItemEditor(poly) {}
 
   // redefined inherited methods from GlSimpleEntityItemEditor
   QStringList propertiesNames() const override {
@@ -52,39 +53,45 @@ public:
   }
 
   QVariantList propertiesQVariant() const override {
-    return QVariantList() << QVariant::fromValue<Color>(
-                                 static_cast<GlComplexPolygon *>(entity)->getFillColor())
-                          << QVariant::fromValue<Color>(
-                                 static_cast<GlComplexPolygon *>(entity)->getOutlineColor());
+    return QVariantList()
+           << QVariant::fromValue<Color>(
+                  static_cast<GlComplexPolygon *>(entity)->getFillColor())
+           << QVariant::fromValue<Color>(
+                  static_cast<GlComplexPolygon *>(entity)->getOutlineColor());
   }
 
   void setProperty(const QString &name, const QVariant &value) override {
     if (name == "fillColor")
-      static_cast<GlComplexPolygon *>(entity)->setFillColor(value.value<Color>());
+      static_cast<GlComplexPolygon *>(entity)->setFillColor(
+          value.value<Color>());
     else if (name == "outlineColor")
-      static_cast<GlComplexPolygon *>(entity)->setOutlineColor(value.value<Color>());
+      static_cast<GlComplexPolygon *>(entity)->setOutlineColor(
+          value.value<Color>());
   }
 };
 
-class GeographicViewInteractorGetInformation : public NodeLinkDiagramComponentInteractor {
+class GeographicViewInteractorGetInformation
+    : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATION("GeographicViewInteractorGetInformation", "Tulip Team", "06/2012",
-                    "Geographic View Get Information Interactor", "1.0", "Information")
+  PLUGININFORMATION("GeographicViewInteractorGetInformation", "Tulip Team",
+                    "06/2012", "Geographic View Get Information Interactor",
+                    "1.0", "Information")
   /**
    * Default constructor
    */
   GeographicViewInteractorGetInformation(const tlp::PluginContext *)
-      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png",
-                                           "Get information on nodes/edges",
-                                           StandardInteractorPriority::GetInformation) {}
+      : NodeLinkDiagramComponentInteractor(
+            ":/tulip/gui/icons/i_select.png", "Get information on nodes/edges",
+            StandardInteractorPriority::GetInformation) {}
 
   /**
    * Construct chain of responsibility
    */
   void construct() override {
-    setConfigurationWidgetText(QString("<h3>Get information interactor</h3>") +
-                               "<b>Mouse left</b> click on an element to display its properties");
+    setConfigurationWidgetText(
+        QString("<h3>Get information interactor</h3>") +
+        "<b>Mouse left</b> click on an element to display its properties");
     push_back(new GeographicViewNavigator);
     push_back(new GeographicViewShowElementInfo);
   }
@@ -96,7 +103,8 @@ public:
 
 PLUGIN(GeographicViewInteractorGetInformation)
 
-GeographicViewShowElementInfo::GeographicViewShowElementInfo() : _editor(nullptr) {
+GeographicViewShowElementInfo::GeographicViewShowElementInfo()
+    : _editor(nullptr) {
   Ui::ElementInformationWidget ui;
   _informationWidget = new QWidget();
   _informationWidget->installEventFilter(this);
@@ -149,13 +157,16 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
 
     if (e->type() == QEvent::MouseMove) {
       if (pick(qMouseEv->x(), qMouseEv->y(), selectedEntity)) {
-        geoView->getGeographicViewGraphicsView()->getGlMainWidget()->setCursor(Qt::WhatsThisCursor);
+        geoView->getGeographicViewGraphicsView()->getGlMainWidget()->setCursor(
+            Qt::WhatsThisCursor);
       } else {
-        geoView->getGeographicViewGraphicsView()->getGlMainWidget()->setCursor(QCursor());
+        geoView->getGeographicViewGraphicsView()->getGlMainWidget()->setCursor(
+            QCursor());
       }
 
       return false;
-    } else if (e->type() == QEvent::MouseButtonPress && qMouseEv->button() == Qt::LeftButton) {
+    } else if (e->type() == QEvent::MouseButtonPress &&
+               qMouseEv->button() == Qt::LeftButton) {
       if (_informationWidgetItem->isVisible()) {
         // Hide widget if we click outside it
         _informationWidgetItem->setVisible(false);
@@ -171,18 +182,22 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
 
             QLabel *title = _informationWidget->findChild<QLabel *>();
 
-            if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
+            if (selectedEntity.getEntityType() ==
+                SelectedEntity::NODE_SELECTED) {
               title->setText("Node");
               tableView()->setModel(new GraphNodeElementModel(
-                  _view->graph(), selectedEntity.getComplexEntityId(), _informationWidget));
+                  _view->graph(), selectedEntity.getComplexEntityId(),
+                  _informationWidget));
             } else {
               title->setText("Edge");
               tableView()->setModel(new GraphEdgeElementModel(
-                  _view->graph(), selectedEntity.getComplexEntityId(), _informationWidget));
+                  _view->graph(), selectedEntity.getComplexEntityId(),
+                  _informationWidget));
             }
 
-            title->setText(title->text() + " #" +
-                           QString::number(selectedEntity.getComplexEntityId()));
+            title->setText(
+                title->text() + " #" +
+                QString::number(selectedEntity.getComplexEntityId()));
 
             QPoint position = qMouseEv->pos();
 
@@ -205,10 +220,11 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
             animation->start();
 
             return true;
-          } else if (selectedEntity.getEntityType() == SelectedEntity::SIMPLE_ENTITY_SELECTED) {
+          } else if (selectedEntity.getEntityType() ==
+                     SelectedEntity::SIMPLE_ENTITY_SELECTED) {
 
-            GlComplexPolygon *polygon =
-                dynamic_cast<GlComplexPolygon *>(selectedEntity.getSimpleEntity());
+            GlComplexPolygon *polygon = dynamic_cast<GlComplexPolygon *>(
+                selectedEntity.getSimpleEntity());
 
             if (!polygon)
               return false;
@@ -224,20 +240,24 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
 
             _editor = new GlComplexPolygonItemEditor(polygon);
 
-            tableView()->setModel(new GlSimpleEntityItemModel(_editor, _informationWidget));
-            int size = title->height() + _informationWidget->layout()->spacing() +
-                       tableView()->rowHeight(0) + tableView()->rowHeight(1) + 10;
+            tableView()->setModel(
+                new GlSimpleEntityItemModel(_editor, _informationWidget));
+            int size =
+                title->height() + _informationWidget->layout()->spacing() +
+                tableView()->rowHeight(0) + tableView()->rowHeight(1) + 10;
             _informationWidget->setMaximumHeight(size);
 
             QPoint position = qMouseEv->pos();
 
             if (position.x() + _informationWidgetItem->rect().width() >
                 _view->graphicsView()->sceneRect().width())
-              position.setX(qMouseEv->pos().x() - _informationWidgetItem->rect().width());
+              position.setX(qMouseEv->pos().x() -
+                            _informationWidgetItem->rect().width());
 
             if (position.y() + _informationWidgetItem->rect().height() >
                 _view->graphicsView()->sceneRect().height())
-              position.setY(qMouseEv->pos().y() - _informationWidgetItem->rect().height());
+              position.setY(qMouseEv->pos().y() -
+                            _informationWidgetItem->rect().height());
 
             _informationWidgetItem->setPos(position);
             QPropertyAnimation *animation =
@@ -257,17 +277,20 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
   return false;
 }
 
-bool GeographicViewShowElementInfo::pick(int x, int y, SelectedEntity &selectedEntity) {
+bool GeographicViewShowElementInfo::pick(int x, int y,
+                                         SelectedEntity &selectedEntity) {
   GeographicView *geoView = static_cast<GeographicView *>(view());
 
-  if (geoView->getGeographicViewGraphicsView()->getGlMainWidget()->pickNodesEdges(x, y,
-                                                                                  selectedEntity))
+  if (geoView->getGeographicViewGraphicsView()
+          ->getGlMainWidget()
+          ->pickNodesEdges(x, y, selectedEntity))
     return true;
 
   vector<SelectedEntity> selectedEntities;
 
-  if (geoView->getGeographicViewGraphicsView()->getGlMainWidget()->pickGlEntities(
-          x, y, selectedEntities)) {
+  if (geoView->getGeographicViewGraphicsView()
+          ->getGlMainWidget()
+          ->pickGlEntities(x, y, selectedEntities)) {
     selectedEntity = selectedEntities[0];
     return true;
   }
@@ -283,6 +306,8 @@ void GeographicViewShowElementInfo::viewChanged(View *view) {
 
   GeographicView *geoView = static_cast<GeographicView *>(view);
   _view = geoView;
-  connect(_view, SIGNAL(graphSet(tlp::Graph *)), _informationWidgetItem, SLOT(close()));
-  _view->getGeographicViewGraphicsView()->scene()->addItem(_informationWidgetItem);
+  connect(_view, SIGNAL(graphSet(tlp::Graph *)), _informationWidgetItem,
+          SLOT(close()));
+  _view->getGeographicViewGraphicsView()->scene()->addItem(
+      _informationWidgetItem);
 }

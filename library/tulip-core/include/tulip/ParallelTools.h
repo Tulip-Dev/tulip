@@ -52,8 +52,8 @@ struct omp_lock_t;
 #else
 
 // OpenMP no available use C++11 threads
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 #include <mutex>
 #include <thread>
 
@@ -86,7 +86,8 @@ class TLP_SCOPE ThreadManager {
   // create a thread dedicated to the execution of a function
   // used to iterate between begin and end indices
   template <typename runFunction>
-  static inline std::thread *launchThread(const runFunction &f, uint begin, uint end) {
+  static inline std::thread *launchThread(const runFunction &f, uint begin,
+                                          uint end) {
     auto thrdFunction = [&](uint begin, uint end) {
       allocateThreadNumber();
       f(begin, end);
@@ -120,7 +121,8 @@ public:
   static unsigned int getNumberOfProcs();
 
   /**
-   * Returns the number of threads used by default in subsequent OpenMP parallel sections.
+   * Returns the number of threads used by default in subsequent OpenMP parallel
+   * sections.
    */
   static unsigned int getNumberOfThreads();
 
@@ -141,13 +143,15 @@ public:
    * between 0 and maxId
    */
   template <typename ThreadFunction>
-  static inline void iterate(size_t maxId, const ThreadFunction &threadFunction) {
+  static inline void iterate(size_t maxId,
+                             const ThreadFunction &threadFunction) {
 #ifndef TLP_NO_THREADS
     if (maxId == 0)
       return;
 
     // compute the size of range indices for each thread
-    size_t nbPerThread = maxId == 1 ? 1 : std::max(maxId / (maxNumberOfThreads - 1), size_t(2));
+    size_t nbPerThread =
+        maxId == 1 ? 1 : std::max(maxId / (maxNumberOfThreads - 1), size_t(2));
     // begin and end indices of thread partition
     size_t begin = 0, end = nbPerThread;
     maxId -= end - begin;
@@ -189,8 +193,9 @@ public:
 
 #ifdef __APPLE__
 
-// In order to workaround an odd phenomenon on some MacOS runtimes when an application
-// shutdowns, use OpenMP C API to declare critical sections instead of directives.
+// In order to workaround an odd phenomenon on some MacOS runtimes when an
+// application shutdowns, use OpenMP C API to declare critical sections instead
+// of directives.
 // https://www.imagemagick.org/discourse-server/viewtopic.php?f=3&t=29031&start=15#p129707
 // gives more details about the issue
 
@@ -205,8 +210,8 @@ private:
   omp_lock_t *_lock;
 };
 
-#define TLP_LOCK_SECTION(mtx)                                                                      \
-  static tlp::OpenMPLock mtx;                                                                      \
+#define TLP_LOCK_SECTION(mtx)                                                  \
+  static tlp::OpenMPLock mtx;                                                  \
   mtx.lock();
 #define TLP_UNLOCK_SECTION(mtx) mtx.unlock();
 #define TLP_DECLARE_GLOBAL_LOCK(mtx) extern tlp::OpenMPLock mtx
@@ -227,8 +232,8 @@ private:
 
 #else
 
-#define TLP_LOCK_SECTION(mtx)                                                                      \
-  static std::mutex mtx;                                                                           \
+#define TLP_LOCK_SECTION(mtx)                                                  \
+  static std::mutex mtx;                                                       \
   mtx.lock();
 #define TLP_UNLOCK_SECTION(mtx) mtx.unlock()
 #define TLP_DECLARE_GLOBAL_LOCK(mtx) extern std::mutex mtx
@@ -263,7 +268,8 @@ private:
  * @since Tulip 5.2
  *
  * @param maxIdx the upper bound exclusive of the indices range
- * @param idxFunction callable object (e.g. lambda function) taking an unsigned integer as parameter
+ * @param idxFunction callable object (e.g. lambda function) taking an unsigned
+ * integer as parameter
  *
  * Example of use:
  *
@@ -282,7 +288,8 @@ private:
  * @endcode
  */
 template <typename IdxFunction>
-void inline TLP_PARALLEL_MAP_INDICES(size_t maxIdx, const IdxFunction &idxFunction) {
+void inline TLP_PARALLEL_MAP_INDICES(size_t maxIdx,
+                                     const IdxFunction &idxFunction) {
 #ifdef _OPENMP
   OMP(parallel for)
   for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(maxIdx); ++i) {
@@ -319,8 +326,8 @@ void inline TLP_PARALLEL_MAP_VECTOR(const std::vector<EltType> &vect,
 }
 
 template <typename EltType, typename IdxFunction>
-void inline TLP_PARALLEL_MAP_VECTOR_AND_INDICES(const std::vector<EltType> &vect,
-                                                const IdxFunction &idxFunction) {
+void inline TLP_PARALLEL_MAP_VECTOR_AND_INDICES(
+    const std::vector<EltType> &vect, const IdxFunction &idxFunction) {
 #ifdef _OPENMP
   auto maxIdx = vect.size();
   OMP(parallel for)
@@ -344,13 +351,9 @@ void inline TLP_PARALLEL_SECTIONS(const F1 &f1, const F2 &f2) {
 #ifdef _OPENMP
   OMP(parallel) {
     OMP(sections nowait) {
-      OMP(section) {
-        f1();
-      }
+      OMP(section) { f1(); }
     }
-    OMP(master) {
-      f2();
-    }
+    OMP(master) { f2(); }
   }
 #else
   auto thrd = ThreadManager::launchThread(f1);
@@ -370,16 +373,10 @@ void inline TLP_PARALLEL_SECTIONS(const F1 &f1, const F2 &f2, const F3 &f3) {
 #ifdef _OPENMP
   OMP(parallel) {
     OMP(sections nowait) {
-      OMP(section) {
-        f1();
-      }
-      OMP(section) {
-        f2();
-      }
+      OMP(section) { f1(); }
+      OMP(section) { f2(); }
     }
-    OMP(master) {
-      f3();
-    }
+    OMP(master) { f3(); }
   }
 #else
   auto thrd1 = ThreadManager::launchThread(f1);
@@ -398,24 +395,17 @@ void inline TLP_PARALLEL_SECTIONS(const F1 &f1, const F2 &f2, const F3 &f3) {
 }
 
 template <typename F1, typename F2, typename F3, typename F4>
-void inline TLP_PARALLEL_SECTIONS(const F1 &f1, const F2 &f2, const F3 &f3, const F4 &f4) {
+void inline TLP_PARALLEL_SECTIONS(const F1 &f1, const F2 &f2, const F3 &f3,
+                                  const F4 &f4) {
 #ifndef TLP_NO_THREADS
 #ifdef _OPENMP
   OMP(parallel) {
     OMP(sections nowait) {
-      OMP(section) {
-        f1();
-      }
-      OMP(section) {
-        f2();
-      }
-      OMP(section) {
-        f3();
-      }
+      OMP(section) { f1(); }
+      OMP(section) { f2(); }
+      OMP(section) { f3(); }
     }
-    OMP(master) {
-      f4();
-    }
+    OMP(master) { f4(); }
   }
 #else
   auto thrd1 = ThreadManager::launchThread(f1);

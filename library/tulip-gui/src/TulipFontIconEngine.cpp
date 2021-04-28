@@ -16,9 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/TulipIconicFont.h"
 #include "tulip/TulipFontIconEngine.h"
 #include "tulip/TlpQtTools.h"
+#include "tulip/TulipIconicFont.h"
 
 #include <QFile>
 #include <QFontDatabase>
@@ -38,9 +38,11 @@ QFont &TulipFontIconEngine::init(const std::string &iconName) {
   auto &&fontFile = TulipIconicFont::getTTFLocation(iconName);
   if (qFonts.find(fontFile) == qFonts.end()) {
     // load the font file
-    auto fontId = QFontDatabase::addApplicationFont(tlpStringToQString(fontFile));
+    auto fontId =
+        QFontDatabase::addApplicationFont(tlpStringToQString(fontFile));
     if (fontId == -1) {
-      qDebug() << "Error when loading font file " << tlpStringToQString(fontFile);
+      qDebug() << "Error when loading font file "
+               << tlpStringToQString(fontFile);
       return nullFont;
     }
 
@@ -48,7 +50,8 @@ QFont &TulipFontIconEngine::init(const std::string &iconName) {
     if (!fontFamilies.empty()) {
       qFonts.emplace(fontFile, fontFamilies.at(0));
     } else {
-      qDebug() << "No data found when loading file" << tlpStringToQString(fontFile);
+      qDebug() << "No data found when loading file"
+               << tlpStringToQString(fontFile);
       return nullFont;
     }
   }
@@ -61,8 +64,8 @@ TulipFontIconEngine::TulipFontIconEngine(const std::string &iconName, bool dm)
 TulipFontIconEngine::TulipFontIconEngine(const QString &iconName, bool dm)
     : font(init(QStringToTlpString(iconName))), darkMode(dm) {}
 
-void TulipFontIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mode mode,
-                                QIcon::State) {
+void TulipFontIconEngine::paint(QPainter *painter, const QRect &rect,
+                                QIcon::Mode mode, QIcon::State) {
   painter->save();
 
   // set the correct color
@@ -82,12 +85,14 @@ void TulipFontIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mod
   // set the font
   painter->setFont(font);
 
-  painter->drawText(rect, iconQString, QTextOption(Qt::AlignCenter | Qt::AlignVCenter));
+  painter->drawText(rect, iconQString,
+                    QTextOption(Qt::AlignCenter | Qt::AlignVCenter));
 
   painter->restore();
 }
 
-QPixmap TulipFontIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state) {
+QPixmap TulipFontIconEngine::pixmap(const QSize &size, QIcon::Mode mode,
+                                    QIcon::State state) {
   QPixmap pm(size);
   pm.fill(Qt::transparent); // we need transparency
   QPainter painter(&pm);

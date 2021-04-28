@@ -70,8 +70,7 @@ extern TLP_SCOPE int getNumIterators();
  * delete nodesIt;
  * @endcode
  **/
-template <typename T>
-struct Iterator {
+template <typename T> struct Iterator {
   ///
   Iterator() {
 #ifndef NDEBUG
@@ -137,13 +136,9 @@ private:
   };
 
 public:
-  inline iterator_t begin() {
-    return iterator_t(this, iterator_t::Begin);
-  }
+  inline iterator_t begin() { return iterator_t(this, iterator_t::Begin); }
 
-  inline iterator_t end() {
-    return iterator_t(this);
-  }
+  inline iterator_t end() { return iterator_t(this); }
 };
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
@@ -154,8 +149,7 @@ inline auto begin(Iterator<T> *it) -> decltype(it->begin()) {
   return it->begin();
 }
 
-template <typename T>
-inline auto end(Iterator<T> *it) -> decltype(it->end()) {
+template <typename T> inline auto end(Iterator<T> *it) -> decltype(it->end()) {
   return it->end();
 }
 #endif
@@ -173,8 +167,7 @@ inline auto end(Iterator<T> *it) -> decltype(it->end()) {
  *
  * @return The number of iterated elements
  **/
-template <typename T>
-inline unsigned int iteratorCount(Iterator<T> *it) {
+template <typename T> inline unsigned int iteratorCount(Iterator<T> *it) {
   unsigned int count = 0;
   while (it->hasNext()) {
     ++count;
@@ -225,8 +218,7 @@ inline bool iteratorCountCheck(Iterator<T> *it, unsigned int minNbElements) {
  *
  * @return true if the iterator is empty
  **/
-template <typename T>
-inline bool iteratorEmpty(Iterator<T> *it) {
+template <typename T> inline bool iteratorEmpty(Iterator<T> *it) {
   return !iteratorCountCheck(it, 1);
 }
 
@@ -240,8 +232,8 @@ inline bool iteratorEmpty(Iterator<T> *it) {
  * That function takes ownership of the iterator and will delete it.
  *
  * @param it a Tulip iterator
- * @param mapFunction functor or lambda function taking one parameter of the same type of the
- *iterated elements
+ * @param mapFunction functor or lambda function taking one parameter of the
+ *same type of the iterated elements
  *
  *
  **/
@@ -269,9 +261,9 @@ inline void iteratorMap(Iterator<T> *it, MapFunction &&mapFunction) {
  *
  * @param it a Tulip iterator
  * @param initVal initial value of the reduced result
- * @param reduceFunction functor or lambda function taking two parameters : first one being the
- *current reduced value,
- * second one being the current iterated element and returning intermediate reduced value
+ * @param reduceFunction functor or lambda function taking two parameters :
+ *first one being the current reduced value, second one being the current
+ *iterated element and returning intermediate reduced value
  *
  * @return the reduced value from the iterated elements
  *
@@ -305,8 +297,7 @@ inline reduceType iteratorReduce(Iterator<T> *it, const reduceType &initVal,
  *
  * @return a std::list filled with iterated elements
  **/
-template <typename T>
-inline std::list<T> iteratorList(Iterator<T> *it) {
+template <typename T> inline std::list<T> iteratorList(Iterator<T> *it) {
   std::list<T> ret;
   while (it->hasNext()) {
     ret.emplace_back(std::move(it->next()));
@@ -328,8 +319,7 @@ inline std::list<T> iteratorList(Iterator<T> *it) {
  *
  * @return a std::vector filled with iterated elements
  **/
-template <typename T>
-inline std::vector<T> iteratorVector(Iterator<T> *it) {
+template <typename T> inline std::vector<T> iteratorVector(Iterator<T> *it) {
   std::vector<T> ret;
   while (it->hasNext()) {
     ret.emplace_back(std::move(it->next()));
@@ -351,8 +341,7 @@ inline std::vector<T> iteratorVector(Iterator<T> *it) {
  *
  * @return a std::set filled with iterated elements
  **/
-template <typename T>
-inline std::set<T> iteratorSet(Iterator<T> *it) {
+template <typename T> inline std::set<T> iteratorSet(Iterator<T> *it) {
   std::set<T> ret;
   while (it->hasNext()) {
     ret.emplace(std::move(it->next()));
@@ -362,19 +351,12 @@ inline std::set<T> iteratorSet(Iterator<T> *it) {
 }
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
-template <typename TYPE>
-class UINTIterator : public Iterator<TYPE> {
+template <typename TYPE> class UINTIterator : public Iterator<TYPE> {
 public:
   UINTIterator(Iterator<unsigned int> *it) : it(it) {}
-  ~UINTIterator() override {
-    delete it;
-  }
-  bool hasNext() override {
-    return it->hasNext();
-  }
-  TYPE next() override {
-    return TYPE(it->next());
-  }
+  ~UINTIterator() override { delete it; }
+  bool hasNext() override { return it->hasNext(); }
+  TYPE next() override { return TYPE(it->next()); }
 
 private:
   Iterator<unsigned int> *it;

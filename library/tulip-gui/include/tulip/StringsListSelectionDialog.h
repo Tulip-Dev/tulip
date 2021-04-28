@@ -23,8 +23,8 @@
 
 #include <QDialog>
 
-#include <tulip/tulipconf.h>
 #include <tulip/StringsListSelectionWidget.h>
+#include <tulip/tulipconf.h>
 
 namespace Ui {
 class StringsListSelectionDialog;
@@ -41,8 +41,8 @@ namespace tlp {
  * QWidget* parent;
  * vector<string> listOfStrings; // must be initialized
  * vector<string> selectedStrings;
- * bool choosen = StringsListSelectionDialog::choose(title, parent, listOfStrings,
- *selectedStrings);
+ * bool choosen = StringsListSelectionDialog::choose(title, parent,
+ *listOfStrings, selectedStrings);
  * @endcode
  *
  *
@@ -58,7 +58,8 @@ public:
 
   /**
    * set the look of the widget
-   * \param listType this parameter defines the widget's look (see class description)
+   * \param listType this parameter defines the widget's look (see class
+   * description)
    */
   void setListType(const StringsListSelectionWidget::ListType listType);
 
@@ -82,7 +83,8 @@ public:
    * Method which sets the label text value of the unselected strings list
    * (this method does nothing if listType = SIMPLE_LIST)
    */
-  void setUnselectedStringsListLabel(const std::string &unselectedStringsListLabel);
+  void
+  setUnselectedStringsListLabel(const std::string &unselectedStringsListLabel);
 
   /**
    * Method which sets the label text value of the selected strings list
@@ -93,13 +95,14 @@ public:
   /**
    * @brief Constructs a strings list selection dialog with the given parent.
    * \param parent the widget's parent
-   * \param listType this parameter defines the widget's look (see class description)
-   * \param maxSelectedStringsListSize the maximum number of strings that can be selected (if 0, no
-   *size restriction)
+   * \param listType this parameter defines the widget's look (see class
+   *description) \param maxSelectedStringsListSize the maximum number of strings
+   *that can be selected (if 0, no size restriction)
    **/
   explicit StringsListSelectionDialog(
       QString title, QWidget *parent = nullptr,
-      const StringsListSelectionWidget::ListType listType = StringsListSelectionWidget::SIMPLE_LIST,
+      const StringsListSelectionWidget::ListType listType =
+          StringsListSelectionWidget::SIMPLE_LIST,
       const unsigned int maxSelectedStringsListSize = 0);
   ~StringsListSelectionDialog() override;
 
@@ -110,16 +113,18 @@ public:
    *
    * @param title the string to display in the dialog title bar,
    * @param strList the list of strings to choose,
-   * @param selList on input it indicates the already selected strings, then on output the user
-   *selected strings,
+   * @param selList on input it indicates the already selected strings, then on
+   *output the user selected strings,
    * @param listType the type of display for the strings to choose,
-   * @param maxSize the maximum number of strings to select. 0 means this number is not limited.
+   * @param maxSize the maximum number of strings to select. 0 means this number
+   *is not limited.
    **/
-  static bool choose(
-      QString title, const std::vector<std::string> &strList, std::vector<std::string> &selList,
-      QWidget *parent = nullptr,
-      const StringsListSelectionWidget::ListType listType = StringsListSelectionWidget::SIMPLE_LIST,
-      const unsigned int maxSize = 0);
+  static bool choose(QString title, const std::vector<std::string> &strList,
+                     std::vector<std::string> &selList,
+                     QWidget *parent = nullptr,
+                     const StringsListSelectionWidget::ListType listType =
+                         StringsListSelectionWidget::SIMPLE_LIST,
+                     const unsigned int maxSize = 0);
 
 private:
   Ui::StringsListSelectionDialog *ui;

@@ -17,8 +17,8 @@
  *
  */
 #include <tulip/DoubleProperty.h>
-#include <tulip/StringCollection.h>
 #include <tulip/GraphMeasure.h>
+#include <tulip/StringCollection.h>
 
 #include <climits>
 
@@ -45,11 +45,11 @@ using namespace tlp;
  *
  * C. Giatsidis, D. Thilikos, M. Vazirgiannis, \n
  * "Evaluating cooperation in communities with the k-core structure",\n
- * "Proceedings of the 2011 International Conference on Advances in Social Networks Analysis and
- * Mining (ASONAM)",\n
- * "2011"
+ * "Proceedings of the 2011 International Conference on Advances in Social
+ * Networks Analysis and Mining (ASONAM)",\n "2011"
  *
- * \note Use the default parameters to compute simple K-Cores (undirected and unweighted)
+ * \note Use the default parameters to compute simple K-Cores (undirected and
+ * unweighted)
  *
  *  <b>HISTORY</b>
  *
@@ -94,8 +94,8 @@ static const char *paramHelp[] = {
 #define OUT 2
 //========================================================================================
 KCores::KCores(const PluginContext *context) : DoubleAlgorithm(context) {
-  addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES, true,
-                                   "InOut <br> In <br> Out");
+  addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES,
+                                   true, "InOut <br> In <br> Out");
   addInParameter<NumericProperty *>("metric", paramHelp[1], "", false);
 }
 //========================================================================================

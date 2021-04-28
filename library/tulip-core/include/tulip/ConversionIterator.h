@@ -28,9 +28,11 @@ namespace tlp {
 /**
  * @class ConversionIterator
  * @ingroup Iterators
- * @brief Iterator that enables to convert an Iterator of type TYPEIN to an Iterator of type TYPEOUT
+ * @brief Iterator that enables to convert an Iterator of type TYPEIN to an
+ *Iterator of type TYPEOUT
  * @param it the iterator that should be converted
- * @param convFunctor the functor or lamnda function that enables to convert TYPEIN to TYPEOUT
+ * @param convFunctor the functor or lamnda function that enables to convert
+ *TYPEIN to TYPEOUT
  *
  * The functor function should have the following form:
  * @code
@@ -46,15 +48,9 @@ class ConversionIterator : public Iterator<TYPEOUT> {
 public:
   ConversionIterator(Iterator<TYPEIN> *it, ConversionFunc convFunctor)
       : _it(it), _convFunctor(convFunctor) {}
-  ~ConversionIterator() {
-    delete _it;
-  }
-  inline bool hasNext() {
-    return _it->hasNext();
-  }
-  inline TYPEOUT next() {
-    return _convFunctor(_it->next());
-  }
+  ~ConversionIterator() { delete _it; }
+  inline bool hasNext() { return _it->hasNext(); }
+  inline TYPEOUT next() { return _convFunctor(_it->next()); }
 
 private:
   tlp::Iterator<TYPEIN> *_it;
@@ -68,8 +64,9 @@ private:
  * @see ConversionIterator
  **/
 template <typename TIN, typename TOUT, typename ConversionFunc>
-class MPConversionIterator : public ConversionIterator<TIN, TOUT, ConversionFunc>,
-                             public MemoryPool<MPConversionIterator<TIN, TOUT, ConversionFunc>> {
+class MPConversionIterator
+    : public ConversionIterator<TIN, TOUT, ConversionFunc>,
+      public MemoryPool<MPConversionIterator<TIN, TOUT, ConversionFunc>> {
 public:
   MPConversionIterator(Iterator<TIN> *it, ConversionFunc convFunctor)
       : ConversionIterator<TIN, TOUT, ConversionFunc>(it, convFunctor) {}
@@ -85,40 +82,46 @@ public:
  * The returned Iterator takes ownership of the one provided as parameter.
  *
  * @param it a Tulip Iterator
- * @param convFunc functor or lambda function converting a value of type TYPEIN to type TYPEOUT
+ * @param convFunc functor or lambda function converting a value of type TYPEIN
+ *to type TYPEOUT
  *
  * @return a ConversionIterator
  *
  **/
 template <typename TOUT, typename ConversionFunc, typename TIN>
-inline ConversionIterator<TIN, TOUT, ConversionFunc> *conversionIterator(tlp::Iterator<TIN> *it,
-                                                                         ConversionFunc convFunc) {
+inline ConversionIterator<TIN, TOUT, ConversionFunc> *
+conversionIterator(tlp::Iterator<TIN> *it, ConversionFunc convFunc) {
   return new MPConversionIterator<TIN, TOUT, ConversionFunc>(it, convFunc);
 }
 
 /**
- * @brief Convenient function for creating a ConversionIterator from a STL container.
+ * @brief Convenient function for creating a ConversionIterator from a STL
+ *container.
  * @ingroup Iterators
  *
  * @since Tulip 5.2
  *
- * Creates a ConversionIterator from a STL container (std::list, std::vector, std::set, std::map,
+ * Creates a ConversionIterator from a STL container (std::list, std::vector,
+ *std::set, std::map,
  *...)
  * and a conversion function.
  *
  * @param stlContainer any STL container
- * @param convFunc functor or lambda function converting a value from the container to type TYPEOUT
+ * @param convFunc functor or lambda function converting a value from the
+ *container to type TYPEOUT
  *
  * @return a ConversionIterator
  *
  **/
 template <typename TOUT, typename ConversionFunc, typename Container>
-typename std::enable_if<has_const_iterator<Container>::value,
-                        ConversionIterator<typename Container::value_type, TOUT, ConversionFunc>
-                            *>::type inline conversionIterator(const Container &stlContainer,
-                                                               ConversionFunc convFunc) {
-  return new MPConversionIterator<typename Container::value_type, TOUT, ConversionFunc>(
-      stlIterator(stlContainer), convFunc);
+typename std::enable_if<
+    has_const_iterator<Container>::value,
+    ConversionIterator<typename Container::value_type, TOUT, ConversionFunc>
+        *>::type inline conversionIterator(const Container &stlContainer,
+                                           ConversionFunc convFunc) {
+  return new MPConversionIterator<typename Container::value_type, TOUT,
+                                  ConversionFunc>(stlIterator(stlContainer),
+                                                  convFunc);
 }
 } // namespace tlp
 #endif // CONVERSIONITERATOR_H

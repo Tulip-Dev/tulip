@@ -18,22 +18,25 @@
 #include "PixelOrientedViewQuickAccessBar.h"
 #include "PixelOrientedOptionsWidget.h"
 
-#include <tulip/TlpQtTools.h>
 #include <tulip/ColorButton.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QPushButton>
 
 namespace tlp {
 
-PixelOrientedViewQuickAccessBar::PixelOrientedViewQuickAccessBar(PixelOrientedOptionsWidget *opt,
-                                                                 QWidget *parent)
-    : QuickAccessBarImpl(nullptr,
-                         QuickAccessBarImpl::QuickAccessButtons(
-                             QuickAccessBarImpl::SCREENSHOT | QuickAccessBarImpl::BACKGROUNDCOLOR |
-                             QuickAccessBarImpl::SHOWLABELS | QuickAccessBarImpl::NODEBORDERCOLOR |
-                             QuickAccessBarImpl::NODECOLOR | QuickAccessBarImpl::LABELSSCALED |
-                             QuickAccessBarImpl::LABELCOLOR | QuickAccessBarImpl::NODESHAPE),
-                         parent),
+PixelOrientedViewQuickAccessBar::PixelOrientedViewQuickAccessBar(
+    PixelOrientedOptionsWidget *opt, QWidget *parent)
+    : QuickAccessBarImpl(
+          nullptr,
+          QuickAccessBarImpl::QuickAccessButtons(
+              QuickAccessBarImpl::SCREENSHOT |
+              QuickAccessBarImpl::BACKGROUNDCOLOR |
+              QuickAccessBarImpl::SHOWLABELS |
+              QuickAccessBarImpl::NODEBORDERCOLOR |
+              QuickAccessBarImpl::NODECOLOR | QuickAccessBarImpl::LABELSSCALED |
+              QuickAccessBarImpl::LABELCOLOR | QuickAccessBarImpl::NODESHAPE),
+          parent),
       _optionsWidget(opt) {}
 
 void PixelOrientedViewQuickAccessBar::reset() {

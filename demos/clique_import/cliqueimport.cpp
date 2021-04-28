@@ -6,7 +6,8 @@ using namespace std;
 
 class CliqueImport : public tlp::ImportModule {
 public:
-  PLUGININFORMATION("Clique", "Tulip Team", "05/10/2012", "Clique Import Plugin", "1.0", "Graph")
+  PLUGININFORMATION("Clique", "Tulip Team", "05/10/2012",
+                    "Clique Import Plugin", "1.0", "Graph")
   CliqueImport(tlp::PluginContext *context);
   ~CliqueImport();
   bool importGraph();
@@ -14,15 +15,17 @@ public:
 
 PLUGIN(CliqueImport)
 
-// a description of the parameter, that will appear in the GUI to explain how the parameter
-// influences the plugin.
+// a description of the parameter, that will appear in the GUI to explain how
+// the parameter influences the plugin.
 const char *nodeCountDescription = "How many nodes the clique will contain";
 
-CliqueImport::CliqueImport(tlp::PluginContext *context) : ImportModule(context) {
+CliqueImport::CliqueImport(tlp::PluginContext *context)
+    : ImportModule(context) {
   // how many nodes we want in our clique
   addInParameter<unsigned int>("nodeCount", nodeCountDescription, "5");
 
-  // depend on the circular layout, as it is the most obvious choice to draw a clique
+  // depend on the circular layout, as it is the most obvious choice to draw a
+  // clique
   addDependency("Circular", "1.1");
 }
 
@@ -39,8 +42,9 @@ bool CliqueImport::importGraph() {
   }
 
   /*
-   * This could be done more efficiently by using a vector of nodes and iterating over the indices,
-   * but we don't really care about performances in this case, do we ?
+   * This could be done more efficiently by using a vector of nodes and
+   * iterating over the indices, but we don't really care about performances in
+   * this case, do we ?
    */
 
   // double iteration over the graph's nodes.
@@ -52,7 +56,8 @@ bool CliqueImport::importGraph() {
     }
   }
 
-  // apply the circular algorithm on the clique to make it look good (at least better than 'Random')
+  // apply the circular algorithm on the clique to make it look good (at least
+  // better than 'Random')
   LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
   string message;
   graph->applyPropertyAlgorithm("Circular", layout, message);

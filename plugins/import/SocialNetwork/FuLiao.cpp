@@ -17,10 +17,10 @@
  *
  */
 
-#include <tulip/ImportModule.h>
-#include <tulip/TlpTools.h>
-#include <tulip/PluginProgress.h>
 #include <tulip/Graph.h>
+#include <tulip/ImportModule.h>
+#include <tulip/PluginProgress.h>
+#include <tulip/TlpTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -45,11 +45,12 @@ const char *paramHelp[] = {
  *
  */
 struct FuLiao : public ImportModule {
-  PLUGININFORMATION("Fu and Liao Model", "Arnaud Sallaberry", "21/02/2011",
-                    "Randomly generates a scale-free graph using<br/>Peihua Fu and Kun "
-                    "Liao.<br/><b>An evolving scale-free network with large clustering "
-                    "coefficient.</b><br/>In ICARCV, pp. 1-4. IEEE, (2006).",
-                    "1.0", "Social network")
+  PLUGININFORMATION(
+      "Fu and Liao Model", "Arnaud Sallaberry", "21/02/2011",
+      "Randomly generates a scale-free graph using<br/>Peihua Fu and Kun "
+      "Liao.<br/><b>An evolving scale-free network with large clustering "
+      "coefficient.</b><br/>In ICARCV, pp. 1-4. IEEE, (2006).",
+      "1.0", "Social network")
 
   FuLiao(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "300");
@@ -70,7 +71,8 @@ struct FuLiao : public ImportModule {
 
     // check arguments
     if (d < 0 || d > 1) {
-      pluginProgress->setError("delta is not a probability,\nit is not between [0, 1].");
+      pluginProgress->setError(
+          "delta is not a probability,\nit is not between [0, 1].");
       return false;
     }
 
@@ -144,7 +146,8 @@ struct FuLiao : public ImportModule {
                 h++;
               }
             }
-            pr_sum = pr_sum + (1.0 - d) * graph->deg(nodes[rn]) / (k_sum + j) + d * (h / h_sum);
+            pr_sum = pr_sum + (1.0 - d) * graph->deg(nodes[rn]) / (k_sum + j) +
+                     d * (h / h_sum);
           }
 
           ++rn;

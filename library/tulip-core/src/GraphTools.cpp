@@ -18,26 +18,26 @@
  */
 
 #include <algorithm>
+#include <cmath>
 #include <queue>
 #include <stack>
-#include <cmath>
 
-#include <unordered_map>
-#include <tulip/GraphTools.h>
-#include <tulip/GraphMeasure.h>
 #include <tulip/AcyclicTest.h>
-#include <tulip/TreeTest.h>
-#include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/IntegerProperty.h>
-#include <tulip/NumericProperty.h>
 #include <tulip/ConnectedTest.h>
+#include <tulip/Dijkstra.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/Graph.h>
+#include <tulip/GraphMeasure.h>
+#include <tulip/GraphParallelTools.h>
+#include <tulip/GraphTools.h>
+#include <tulip/IntegerProperty.h>
 #include <tulip/MutableContainer.h>
+#include <tulip/NumericProperty.h>
 #include <tulip/Ordering.h>
 #include <tulip/PlanarConMap.h>
-#include <tulip/GraphParallelTools.h>
-#include <tulip/Dijkstra.h>
+#include <tulip/TreeTest.h>
+#include <unordered_map>
 
 using namespace std;
 
@@ -92,7 +92,8 @@ EdgesIteratorFn getEdgesIterator(EDGE_TYPE direction) {
 
 //======================================================================
 void makeProperDag(Graph *graph, list<node> &addedNodes,
-                   std::unordered_map<edge, edge> &replacedEdges, IntegerProperty *edgeLength) {
+                   std::unordered_map<edge, edge> &replacedEdges,
+                   IntegerProperty *edgeLength) {
   if (TreeTest::isTree(graph))
     return;
 
@@ -137,7 +138,8 @@ void makeProperDag(Graph *graph, list<node> &addedNodes,
     }
   }
 
-  for (std::unordered_map<edge, edge>::const_iterator it = replacedEdges.begin();
+  for (std::unordered_map<edge, edge>::const_iterator it =
+           replacedEdges.begin();
        it != replacedEdges.end(); ++it)
     graph->delEdge((*it).first);
 
@@ -159,7 +161,8 @@ node makeSimpleSource(Graph *graph) {
   return startNode;
 }
 //======================================================================
-vector<vector<node>> computeCanonicalOrdering(PlanarConMap *carte, std::vector<edge> *dummyEdges,
+vector<vector<node>> computeCanonicalOrdering(PlanarConMap *carte,
+                                              std::vector<edge> *dummyEdges,
                                               PluginProgress *pluginProgress) {
   Ordering o(carte, pluginProgress, 0, 100, 100); // feedback (0% -> 100%)
 
@@ -291,7 +294,8 @@ void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty,
   const std::vector<node> &nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
 
-  unsigned int nbSelectedNodes = selectionProperty->numberOfNonDefaultValuatedNodes();
+  unsigned int nbSelectedNodes =
+      selectionProperty->numberOfNonDefaultValuatedNodes();
 
   // get previously selected nodes
   if (nbSelectedNodes) {
@@ -340,7 +344,8 @@ void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty,
           ++edgeCount;
 
           if (edgeCount == 200) {
-            if (pluginProgress->progress(nbSelectedNodes * 100 / graph->numberOfNodes(), 100) !=
+            if (pluginProgress->progress(
+                    nbSelectedNodes * 100 / graph->numberOfNodes(), 100) !=
                 TLP_CONTINUE) {
               return;
             }
@@ -394,7 +399,8 @@ void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty,
   edgeSel.copyToProperty(selectionProperty);
 }
 //======================================================================
-void selectSpanningTree(Graph *graph, BooleanProperty *selection, PluginProgress *pluginProgress) {
+void selectSpanningTree(Graph *graph, BooleanProperty *selection,
+                        PluginProgress *pluginProgress) {
   assert(ConnectedTest::isConnected(graph));
   selection->setAllNodeValue(false);
   selection->setAllEdgeValue(false);
@@ -426,7 +432,8 @@ void selectSpanningTree(Graph *graph, BooleanProperty *selection, PluginProgress
             ++edgeCount;
 
             if (edgeCount % 200 == 0) {
-              if (pluginProgress->progress(edgeCount, graph->numberOfEdges()) != TLP_CONTINUE)
+              if (pluginProgress->progress(edgeCount, graph->numberOfEdges()) !=
+                  TLP_CONTINUE)
                 return;
             }
           }
@@ -452,7 +459,8 @@ struct ltEdge {
 };
 
 void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selection,
-                               NumericProperty *edgeWeight, PluginProgress *pluginProgress) {
+                               NumericProperty *edgeWeight,
+                               PluginProgress *pluginProgress) {
   assert(ConnectedTest::isConnected(graph));
 
   if (!edgeWeight)
@@ -488,7 +496,8 @@ void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selection,
     for (; iE < nbEdges; ++iE) {
       auto curEnds = graph->ends(cur = sortedEdges[iE]);
 
-      if ((srcClass = classes[curEnds.first]) != (tgtClass = classes[curEnds.second]))
+      if ((srcClass = classes[curEnds.first]) !=
+          (tgtClass = classes[curEnds.second]))
         break;
     }
 
@@ -499,7 +508,8 @@ void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selection,
       ++edgeCount;
 
       if (edgeCount == 200) {
-        if (pluginProgress->progress((maxCount - numClasses) * 100 / maxCount, 100) != TLP_CONTINUE)
+        if (pluginProgress->progress((maxCount - numClasses) * 100 / maxCount,
+                                     100) != TLP_CONTINUE)
           return;
 
         edgeCount = 0;
@@ -646,8 +656,10 @@ void dfs(const Graph *graph, std::vector<node> &visitedNodes) {
   }
 }
 //==================================================
-void buildNodesUniformQuantification(const Graph *graph, const NumericProperty *prop,
-                                     unsigned int k, std::map<double, int> &nodeMapping) {
+void buildNodesUniformQuantification(const Graph *graph,
+                                     const NumericProperty *prop,
+                                     unsigned int k,
+                                     std::map<double, int> &nodeMapping) {
   // build the histogram of node values
   map<double, int> histogram;
   const std::vector<node> &nodes = graph->nodes();
@@ -678,8 +690,10 @@ void buildNodesUniformQuantification(const Graph *graph, const NumericProperty *
   }
 }
 //==================================================
-void buildEdgesUniformQuantification(const Graph *graph, const NumericProperty *prop,
-                                     unsigned int k, std::map<double, int> &edgeMapping) {
+void buildEdgesUniformQuantification(const Graph *graph,
+                                     const NumericProperty *prop,
+                                     unsigned int k,
+                                     std::map<double, int> &edgeMapping) {
   // build the histogram of edges values
   map<double, int> histogram;
   for (auto e : graph->edges()) {
@@ -707,7 +721,8 @@ void buildEdgesUniformQuantification(const Graph *graph, const NumericProperty *
   }
 }
 
-unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool *test) {
+unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection,
+                            bool *test) {
   Observable::holdObservers();
   unsigned added = 0;
   for (auto e : selection->getEdgesEqualTo(true, graph)) {
@@ -715,8 +730,9 @@ unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool
 
     if (!selection->getNodeValue(ends.first)) {
 #ifndef NDEBUG
-      tlp::debug() << "[Make selection a graph] node #" << ends.first.id << " source of edge #"
-                   << e.id << " automatically added to selection.";
+      tlp::debug() << "[Make selection a graph] node #" << ends.first.id
+                   << " source of edge #" << e.id
+                   << " automatically added to selection.";
 #endif
       selection->setNodeValue(ends.first, true);
       added++;
@@ -729,8 +745,9 @@ unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool
 
     if (!selection->getNodeValue(ends.second)) {
 #ifndef NDEBUG
-      tlp::debug() << "[Make selection a graph] node #" << ends.second.id << " target of edge #"
-                   << e.id << " automatically added to selection.";
+      tlp::debug() << "[Make selection a graph] node #" << ends.second.id
+                   << " target of edge #" << e.id
+                   << " automatically added to selection.";
 #endif
       selection->setNodeValue(ends.second, true);
       added++;
@@ -751,8 +768,10 @@ unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool
 
 #define SMALLEST_WEIGHT 1.E-6
 
-bool selectShortestPaths(const Graph *const graph, node src, node tgt, ShortestPathType pathType,
-                         const DoubleProperty *const weights, BooleanProperty *result) {
+bool selectShortestPaths(const Graph *const graph, node src, node tgt,
+                         ShortestPathType pathType,
+                         const DoubleProperty *const weights,
+                         BooleanProperty *result) {
   EDGE_TYPE direction;
 
   switch (pathType) {
@@ -791,8 +810,8 @@ bool selectShortestPaths(const Graph *const graph, node src, node tgt, ShortestP
 }
 
 void markReachableNodes(const Graph *graph, const node startNode,
-                        std::unordered_map<node, bool> &result, unsigned int maxDistance,
-                        EDGE_TYPE direction) {
+                        std::unordered_map<node, bool> &result,
+                        unsigned int maxDistance, EDGE_TYPE direction) {
   deque<node> fifo;
   MutableContainer<bool> visited;
   MutableContainer<unsigned int> distance;
@@ -822,11 +841,15 @@ void markReachableNodes(const Graph *graph, const node startNode,
   }
 }
 
-void computeDijkstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
-                     NodeStaticProperty<double> &nodeDistance, EDGE_TYPE direction,
-                     unordered_map<node, std::list<node>> &ancestors, std::stack<node> *queueNodes,
+void computeDijkstra(const Graph *const graph, node src,
+                     const EdgeStaticProperty<double> &weights,
+                     NodeStaticProperty<double> &nodeDistance,
+                     EDGE_TYPE direction,
+                     unordered_map<node, std::list<node>> &ancestors,
+                     std::stack<node> *queueNodes,
                      MutableContainer<int> *numberOfPaths) {
-  Dijkstra dijkstra(graph, src, weights, nodeDistance, direction, queueNodes, numberOfPaths);
+  Dijkstra dijkstra(graph, src, weights, nodeDistance, direction, queueNodes,
+                    numberOfPaths);
   dijkstra.ancestors(ancestors);
 }
 

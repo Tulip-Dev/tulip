@@ -32,7 +32,8 @@ static const char *paramHelp[] = {
     "If true, search first for the maximum length cycle (be careful, this problem is NP-Complete). "
     "If false, nodes are ordered using a depth first search."};
 
-Circular::Circular(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
+Circular::Circular(const tlp::PluginContext *context)
+    : LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addInParameter<bool>("search cycle", paramHelp[0], "false");
 }
@@ -51,9 +52,9 @@ static vector<node> extractCycle(node n, deque<node> &st) {
   return result;
 }
 //===============================================================================
-static void dfs(node n, const Graph *sg, deque<node> &st, vector<node> &maxCycle,
-                MutableContainer<bool> &flag, unsigned int &nbCalls,
-                PluginProgress *pluginProgress) {
+static void dfs(node n, const Graph *sg, deque<node> &st,
+                vector<node> &maxCycle, MutableContainer<bool> &flag,
+                unsigned int &nbCalls, PluginProgress *pluginProgress) {
   {
     // to enable stop of the recursion
     ++nbCalls;
@@ -190,7 +191,8 @@ bool Circular::run() {
       // compute the radius to ensure non overlap.  If adjustment to
       // ensure no angle greater than pi done, detect it.
       double nodeRad = computeRadius(nodeSize->getNodeValue(n));
-      double halfAngle = (nodeRad / sumOfRad) * ((angleAdjust) ? M_PI / 2.0 : M_PI);
+      double halfAngle =
+          (nodeRad / sumOfRad) * ((angleAdjust) ? M_PI / 2.0 : M_PI);
       double rayon = nodeRad / sin(halfAngle);
 
       // if this node was the node that took up more than half the circle,

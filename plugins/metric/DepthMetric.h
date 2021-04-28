@@ -23,19 +23,20 @@
 
 /** \addtogroup metric */
 
-/** This plugins compute for each node n, the maximum path-length between n and the other nodes.
- *  The graph must be acyclic.
+/** This plugins compute for each node n, the maximum path-length between n and
+ * the other nodes. The graph must be acyclic.
  *
  *  \note This algorithm works on general graphs.
  *
  */
 class DepthMetric : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Depth", "David Auber", "15/02/2001",
-                    "For each node n on an acyclic graph,"
-                    "it computes the maximum path length between n and the other node."
-                    "<br><b>The graph must be acyclic</b>.",
-                    "1.1", "Hierarchical")
+  PLUGININFORMATION(
+      "Depth", "David Auber", "15/02/2001",
+      "For each node n on an acyclic graph,"
+      "it computes the maximum path length between n and the other node."
+      "<br><b>The graph must be acyclic</b>.",
+      "1.1", "Hierarchical")
   DepthMetric(const tlp::PluginContext *context);
   bool run() override;
   bool check(std::string &) override;

@@ -33,9 +33,9 @@
 /*Taken from
  * https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/commit/3d708a5bfa8961cc37671bc3226976dfc9ba50ad*/
 /* The glext.h guard was renamed in 2018, but some software which
- * includes their own copy of the GL headers (such as qt (at least version 5.11.3)) might have
- * older version which use the old guard. This would result in the
- * header being included again (and symbols redefined).
+ * includes their own copy of the GL headers (such as qt (at least
+ * version 5.11.3)) might have older version which use the old guard. This would
+ * result in the header being included again (and symbols redefined).
  *
  * To avoid this, we define the "old" guard if the "new" guard is
  * defined.*/

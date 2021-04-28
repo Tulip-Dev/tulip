@@ -39,7 +39,8 @@ class TLP_PYTHON_SCOPE PythonShellWidget : public PythonCodeEditor {
   int _currentHistoryPos;
 
 public:
-  explicit PythonShellWidget(QWidget *parent = nullptr, bool showBanner = false);
+  explicit PythonShellWidget(QWidget *parent = nullptr,
+                             bool showBanner = false);
 
 signals:
 

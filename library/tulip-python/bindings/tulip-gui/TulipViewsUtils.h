@@ -25,9 +25,9 @@
 #include <QMainWindow>
 
 #include <tulip/Graph.h>
+#include <tulip/GraphHierarchiesModel.h>
 #include <tulip/Observable.h>
 #include <tulip/View.h>
-#include <tulip/GraphHierarchiesModel.h>
 #include <tulip/Workspace.h>
 #include <tulip/WorkspacePanel.h>
 
@@ -57,7 +57,8 @@ public:
   std::vector<tlp::View *> getOpenedViewsWithName(const std::string &viewName);
 
   tlp::View *addView(const std::string &viewName, tlp::Graph *graph,
-                     const tlp::DataSet &dataSet = tlp::DataSet(), bool show = true);
+                     const tlp::DataSet &dataSet = tlp::DataSet(),
+                     bool show = true);
 
   void closeView(tlp::View *view);
 
@@ -75,9 +76,7 @@ public:
 
   void setViewPos(tlp::View *view, int x, int y);
 
-  tlp::GraphHierarchiesModel *graphModel() const {
-    return model;
-  }
+  tlp::GraphHierarchiesModel *graphModel() const { return model; }
 
   tlp::Workspace *tlpWorkspace();
 

@@ -25,8 +25,8 @@
 #include <string>
 #include <vector>
 
-#include <tulip/TulipModel.h>
 #include <tulip/GraphModel.h>
+#include <tulip/TulipModel.h>
 
 #include <QVector>
 
@@ -41,9 +41,12 @@ public:
   int columnCount(const QModelIndex &parent = QModelIndex()) const override;
   QModelIndex parent(const QModelIndex &child) const override;
 
-  QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
-  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
-  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+  QVariant headerData(int section, Qt::Orientation orientation,
+                      int role) const override;
+  QModelIndex index(int row, int column,
+                    const QModelIndex &parent = QModelIndex()) const override;
+  QVariant data(const QModelIndex &index,
+                int role = Qt::DisplayRole) const override;
 
   virtual QString headerText(unsigned int id) const = 0;
   virtual QVariant value(unsigned int id, PropertyInterface *prop) const = 0;
@@ -69,7 +72,8 @@ protected:
 class TLP_QT_SCOPE GraphNodeElementModel : public GraphElementModel {
 
 public:
-  GraphNodeElementModel(Graph *graph, unsigned int id, QObject *parent = nullptr)
+  GraphNodeElementModel(Graph *graph, unsigned int id,
+                        QObject *parent = nullptr)
       : GraphElementModel(graph, id, parent) {}
 
   QString headerText(unsigned int id) const override {
@@ -80,13 +84,15 @@ public:
     return GraphModel::nodeValue(id, prop);
   }
 
-  bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+  bool setData(const QModelIndex &index, const QVariant &value,
+               int role) override;
 };
 
 class TLP_QT_SCOPE GraphEdgeElementModel : public GraphElementModel {
 
 public:
-  GraphEdgeElementModel(Graph *graph, unsigned int id, QObject *parent = nullptr)
+  GraphEdgeElementModel(Graph *graph, unsigned int id,
+                        QObject *parent = nullptr)
       : GraphElementModel(graph, id, parent) {}
 
   QString headerText(unsigned int id) const override {
@@ -97,7 +103,8 @@ public:
     return GraphModel::edgeValue(id, prop);
   }
 
-  bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+  bool setData(const QModelIndex &index, const QVariant &value,
+               int role) override;
 };
 } // namespace tlp
 

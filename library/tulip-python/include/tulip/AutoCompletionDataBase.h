@@ -20,12 +20,12 @@
 #ifndef AUTOCOMPLETIONDATABASE_H_
 #define AUTOCOMPLETIONDATABASE_H_
 
-#include <QString>
-#include <QSet>
 #include <QHash>
+#include <QSet>
+#include <QString>
 
-#include <tulip/Graph.h>
 #include <tulip/APIDataBase.h>
+#include <tulip/Graph.h>
 
 namespace tlp {
 
@@ -33,13 +33,17 @@ class TLP_PYTHON_SCOPE AutoCompletionDataBase {
 
   QSet<QString> getSubGraphsListIfContext(const QString &context,
                                           const QString &editedFunction) const;
-  QSet<QString> getGraphPropertiesListIfContext(const QString &context,
-                                                const QString &editedFunction) const;
-  QSet<QString> getPluginParametersListIfContext(const QString &context,
-                                                 const QString &editedFunction) const;
-  QString getClassAttributeType(const QString &className, const QString &classAttribute) const;
-  QSet<QString> getGraphsAttributesListIfContext(const QString &context,
-                                                 const QString &editedFunction) const;
+  QSet<QString>
+  getGraphPropertiesListIfContext(const QString &context,
+                                  const QString &editedFunction) const;
+  QSet<QString>
+  getPluginParametersListIfContext(const QString &context,
+                                   const QString &editedFunction) const;
+  QString getClassAttributeType(const QString &className,
+                                const QString &classAttribute) const;
+  QSet<QString>
+  getGraphsAttributesListIfContext(const QString &context,
+                                   const QString &editedFunction) const;
 
   tlp::Graph *_graph;
   APIDataBase *_apiDb;
@@ -57,9 +61,7 @@ class TLP_PYTHON_SCOPE AutoCompletionDataBase {
 public:
   AutoCompletionDataBase(APIDataBase *_apiDb = nullptr);
 
-  void setGraph(tlp::Graph *graph) {
-    _graph = graph;
-  }
+  void setGraph(tlp::Graph *graph) { _graph = graph; }
 
   void analyseCurrentScriptCode(const QString &code, const int currentLine,
                                 const bool interactiveSession = false,
@@ -69,16 +71,16 @@ public:
                                                 const QString &editedFunction,
                                                 bool dotContext = false);
 
-  QString getLastFoundType() const {
-    return _lastFoundType;
-  }
+  QString getLastFoundType() const { return _lastFoundType; }
 
   QString findTypeForExpr(const QString &expr, const QString &funcName) const;
 
-  QVector<QVector<QString>> getParamTypesForMethodOrFunction(const QString &type,
-                                                             const QString &funcName) const;
+  QVector<QVector<QString>>
+  getParamTypesForMethodOrFunction(const QString &type,
+                                   const QString &funcName) const;
 
-  QString getReturnTypeForMethodOrFunction(const QString &type, const QString &funcName) const;
+  QString getReturnTypeForMethodOrFunction(const QString &type,
+                                           const QString &funcName) const;
 
   QSet<QString> getAllDictForType(const QString &type, const QString &prefix,
                                   const bool root = true) const;

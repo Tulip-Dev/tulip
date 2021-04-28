@@ -21,21 +21,21 @@
 #ifndef CONSOLE_UTILS
 #define CONSOLE_UTILS
 
-#include <iostream>
-#include <string>
-#include <cstdlib>
 #include <cstdio>
+#include <cstdlib>
+#include <iostream>
 #include <map>
+#include <string>
 
 #ifdef WIN32
-#include <windows.h>
 #include <io.h>
+#include <windows.h>
 #endif
 
 #if defined(__unix__) || defined(__APPLE__)
 
-#include <termios.h>
 #include <sys/ioctl.h>
+#include <termios.h>
 #include <unistd.h>
 
 static struct termios stored_settings;
@@ -161,7 +161,8 @@ public:
 
 static std::map<TextColor, std::string> initAnsiFgColors() {
   const char *colorterm = getenv("COLORTERM");
-  bool rxvt = colorterm && std::string(colorterm).find("rxvt") != std::string::npos;
+  bool rxvt =
+      colorterm && std::string(colorterm).find("rxvt") != std::string::npos;
   std::map<TextColor, std::string> ret;
   ret[BLACK] = "30";
   ret[RED] = "31";
@@ -184,7 +185,8 @@ static std::map<TextColor, std::string> initAnsiFgColors() {
 
 static std::map<TextColor, std::string> initAnsiBgColors() {
   const char *colorterm = getenv("COLORTERM");
-  bool rxvt = colorterm && std::string(colorterm).find("rxvt") != std::string::npos;
+  bool rxvt =
+      colorterm && std::string(colorterm).find("rxvt") != std::string::npos;
   std::map<TextColor, std::string> ret;
   ret[BLACK] = "40";
   ret[RED] = "41";
@@ -226,7 +228,8 @@ static std::map<TextColor, int> initCrtFgColors() {
   ret[LIGHT_BLUE] = FOREGROUND_BLUE | FOREGROUND_INTENSITY;
   ret[LIGHT_MAGENTA] = FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY;
   ret[LIGHT_CYAN] = FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
-  ret[WHITE] = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
+  ret[WHITE] = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE |
+               FOREGROUND_INTENSITY;
   return ret;
 }
 
@@ -247,7 +250,8 @@ static std::map<TextColor, int> initCrtBgColors() {
   ret[LIGHT_BLUE] = BACKGROUND_BLUE | BACKGROUND_INTENSITY;
   ret[LIGHT_MAGENTA] = BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY;
   ret[LIGHT_CYAN] = BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY;
-  ret[WHITE] = BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY;
+  ret[WHITE] = BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE |
+               BACKGROUND_INTENSITY;
   return ret;
 }
 
@@ -255,16 +259,16 @@ static WORD getCurrentBgColor() {
   HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
   CONSOLE_SCREEN_BUFFER_INFO info;
   GetConsoleScreenBufferInfo(hStdout, &info);
-  return info.wAttributes &
-         (BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY);
+  return info.wAttributes & (BACKGROUND_RED | BACKGROUND_GREEN |
+                             BACKGROUND_BLUE | BACKGROUND_INTENSITY);
 }
 
 static WORD getCurrentFgColor() {
   HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
   CONSOLE_SCREEN_BUFFER_INFO info;
   GetConsoleScreenBufferInfo(hStdout, &info);
-  return info.wAttributes &
-         (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+  return info.wAttributes & (FOREGROUND_RED | FOREGROUND_GREEN |
+                             FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 }
 static std::map<TextColor, int> crtFgColors = initCrtFgColors();
 static std::map<TextColor, int> crtBgColors = initCrtBgColors();
@@ -279,32 +283,34 @@ static void escapeAnsiCode(std::ostream &os, const std::string &ansiCode,
   if ((&os == &std::cout && !stdOutNoAnsiEscapes && isatty(fileno(stdout))) ||
       (&os == &std::cerr && !stdErrNoAnsiEscapes && isatty(fileno(stderr))))
 #else
-  if ((&os == &std::cout && !stdOutNoAnsiEscapes) || (&os == &std::cerr && !stdErrNoAnsiEscapes))
+  if ((&os == &std::cout && !stdOutNoAnsiEscapes) ||
+      (&os == &std::cerr && !stdErrNoAnsiEscapes))
 #endif
     os << "\x1b[" << ansiCode << endEscape;
 }
 
 /*
   This set of stream manipulation operators allow to produce
-  a colored console output. Except for windows console application (based on cmd.exe),
-  the colors are activated through ANSI escape sequences. The writing of these sequences
-  can be disabled by setting the STDOUT_N0_ANSI_ESCAPES and STDERR_N0_ANSI_ESCAPES
-  environment variables (for instance, when working with a terminal who does not understand
-  these sequences).
+  a colored console output. Except for windows console application (based on
+  cmd.exe), the colors are activated through ANSI escape sequences. The writing
+  of these sequences can be disabled by setting the STDOUT_N0_ANSI_ESCAPES and
+  STDERR_N0_ANSI_ESCAPES environment variables (for instance, when working with
+  a terminal who does not understand these sequences).
 
   Below is an example on how to use it :
 
   // Output a bold text colored in red on a white background
-  std::cout << setTextEffect(BOLD) << setTextColor(RED) << setTextBackgroundColor(WHITE) << "Hello
-  World!" << std::endl;
+  std::cout << setTextEffect(BOLD) << setTextColor(RED) <<
+  setTextBackgroundColor(WHITE) << "Hello World!" << std::endl;
 
   // Reset the text colors to the default ones
   std::cout << defaultTextColor;
 
-  // You can also use some predefined color schemes (only affects text color) : black, white, red,
-  green,
-  // blue, yellow, white, cyan, magenta, darkGray, lightGray, lightRed, lightGreen, ...
-  std::cout << red << "Hello " << blue << World !!" << defaulTextColor << std::endl;
+  // You can also use some predefined color schemes (only affects text color) :
+  black, white, red, green,
+  // blue, yellow, white, cyan, magenta, darkGray, lightGray, lightRed,
+  lightGreen, ... std::cout << red << "Hello " << blue << World !!" <<
+  defaulTextColor << std::endl;
 
  */
 
@@ -316,7 +322,8 @@ inline std::ostream &defaultTextColor(std::ostream &s) {
     escapeAnsiCode(s, "49");
 #else
     // on windows, if the TERM environment variable is not defined
-    // it means that the shell used is cmd.exe, whose does not understand ANSI escape sequences
+    // it means that the shell used is cmd.exe, whose does not understand ANSI
+    // escape sequences
     static const char *term = getenv("TERM");
 
     if (term && std::string(term) != "cygwin") {
@@ -334,20 +341,23 @@ inline std::ostream &defaultTextColor(std::ostream &s) {
   return s;
 }
 
-inline std::ostream &operator<<(std::ostream &s, const TextFgColorSetup &tgfcs) {
+inline std::ostream &operator<<(std::ostream &s,
+                                const TextFgColorSetup &tgfcs) {
   if (&s == &std::cout || &s == &std::cerr) {
 #ifndef WIN32
     escapeAnsiCode(s, ansiFgColors[tgfcs.color]);
 #else
     // on windows, if the TERM environment variable is not defined
-    // it means that the shell used is cmd.exe, whose does not understand ANSI escape sequences
+    // it means that the shell used is cmd.exe, whose does not understand ANSI
+    // escape sequences
     static const char *term = getenv("TERM");
 
     if (term && std::string(term) != "cygwin") {
       escapeAnsiCode(s, ansiFgColors[tgfcs.color]);
     } else {
       HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-      SetConsoleTextAttribute(hStdout, crtFgColors[tgfcs.color] | getCurrentBgColor());
+      SetConsoleTextAttribute(hStdout,
+                              crtFgColors[tgfcs.color] | getCurrentBgColor());
     }
 
 #endif
@@ -356,20 +366,23 @@ inline std::ostream &operator<<(std::ostream &s, const TextFgColorSetup &tgfcs) 
   return s;
 }
 
-inline std::ostream &operator<<(std::ostream &s, const TextBgColorSetup &tbgcs) {
+inline std::ostream &operator<<(std::ostream &s,
+                                const TextBgColorSetup &tbgcs) {
   if (&s == &std::cout || &s == &std::cerr) {
 #ifndef WIN32
     escapeAnsiCode(s, ansiBgColors[tbgcs.color]);
 #else
     // on windows, if the TERM environment variable is not defined
-    // it means that the shell used is cmd.exe, whose does not understand ANSI escape sequences
+    // it means that the shell used is cmd.exe, whose does not understand ANSI
+    // escape sequences
     static const char *term = getenv("TERM");
 
     if (term && std::string(term) != "cygwin") {
       escapeAnsiCode(s, ansiBgColors[tbgcs.color]);
     } else {
       HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-      SetConsoleTextAttribute(hStdout, getCurrentFgColor() | crtBgColors[tbgcs.color]);
+      SetConsoleTextAttribute(hStdout,
+                              getCurrentFgColor() | crtBgColors[tbgcs.color]);
     }
 
 #endif
@@ -421,45 +434,31 @@ inline TextEffectSetup setTextEffect(int effect) {
   return TextEffectSetup(effect);
 }
 
-inline std::ostream &bold(std::ostream &s) {
-  return s << setTextEffect(BOLD);
-}
+inline std::ostream &bold(std::ostream &s) { return s << setTextEffect(BOLD); }
 
 inline std::ostream &underlined(std::ostream &s) {
   return s << setTextEffect(UNDERLINED);
 }
 
-inline std::ostream &red(std::ostream &s) {
-  return s << setTextColor(RED);
-}
+inline std::ostream &red(std::ostream &s) { return s << setTextColor(RED); }
 
-inline std::ostream &green(std::ostream &s) {
-  return s << setTextColor(GREEN);
-}
+inline std::ostream &green(std::ostream &s) { return s << setTextColor(GREEN); }
 
-inline std::ostream &blue(std::ostream &s) {
-  return s << setTextColor(BLUE);
-}
+inline std::ostream &blue(std::ostream &s) { return s << setTextColor(BLUE); }
 
 inline std::ostream &yellow(std::ostream &s) {
   return s << setTextColor(YELLOW);
 }
 
-inline std::ostream &white(std::ostream &s) {
-  return s << setTextColor(WHITE);
-}
+inline std::ostream &white(std::ostream &s) { return s << setTextColor(WHITE); }
 
-inline std::ostream &black(std::ostream &s) {
-  return s << setTextColor(BLACK);
-}
+inline std::ostream &black(std::ostream &s) { return s << setTextColor(BLACK); }
 
 inline std::ostream &magenta(std::ostream &s) {
   return s << setTextColor(MAGENTA);
 }
 
-inline std::ostream &cyan(std::ostream &s) {
-  return s << setTextColor(CYAN);
-}
+inline std::ostream &cyan(std::ostream &s) { return s << setTextColor(CYAN); }
 
 inline std::ostream &lightRed(std::ostream &s) {
   return s << setTextColor(LIGHT_RED);

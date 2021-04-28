@@ -16,26 +16,26 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <iostream>
-#include <fstream>
-#include <string>
 #include <cctype>
+#include <fstream>
+#include <iostream>
+#include <string>
 #include <unordered_map>
 
+#include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/ImportModule.h>
-#include <tulip/TulipViewSettings.h>
-#include <tulip/TlpQtTools.h>
-#include <tulip/StableIterator.h>
+#include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
-#include <tulip/ColorProperty.h>
+#include <tulip/StableIterator.h>
 #include <tulip/StringProperty.h>
-#include <tulip/IntegerProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/BooleanProperty.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/TulipViewSettings.h>
 
-#include <QXmlStreamReader>
 #include <QFile>
+#include <QXmlStreamReader>
 
 using namespace tlp;
 using namespace std;
@@ -43,8 +43,8 @@ using namespace std;
 /** \file
  *  \brief - Import GEXF format graph file.
  * This plugin imports a graph from a file in GEXF format,<br/>
- * as it is described in the XML Schema 1.2draft (http://gexf.net/format/schema.html). Dynamic mode
- * is not yet supported.
+ * as it is described in the XML Schema 1.2draft
+ * (http://gexf.net/format/schema.html). Dynamic mode is not yet supported.
  *  <b>HISTORY</b>
  *
  *  - 04/06/2012 Version 1.0: Initial release
@@ -64,16 +64,18 @@ static const char *paramHelp[] = {
 class GEXFImport : public ImportModule {
 
 public:
-  PLUGININFORMATION("GEXF", "Antoine LAMBERT", "05/05/2010",
-                    "<p>Supported extensions: gexf</p><p>Imports a new graph from a file in the "
-                    "GEXF input format<br/>as it is described in the XML Schema 1.2 draft<br/>"
-                    "(<a "
-                    "href=\"http://gexf.net/format/schema.html\">http://gexf.net/format/"
-                    "schema.html</a>).</p><p>Warning: dynamic mode is not supported.</p>",
-                    "1.0", "File")
+  PLUGININFORMATION(
+      "GEXF", "Antoine LAMBERT", "05/05/2010",
+      "<p>Supported extensions: gexf</p><p>Imports a new graph from a file in the "
+      "GEXF input format<br/>as it is described in the XML Schema 1.2 draft<br/>"
+      "(<a "
+      "href=\"http://gexf.net/format/schema.html\">http://gexf.net/format/"
+      "schema.html</a>).</p><p>Warning: dynamic mode is not supported.</p>",
+      "1.0", "File")
   GEXFImport(const PluginContext *context)
-      : ImportModule(context), viewLayout(nullptr), viewSize(nullptr), viewColor(nullptr),
-        viewLabel(nullptr), viewShape(nullptr), nodesHaveCoordinates(false) {
+      : ImportModule(context), viewLayout(nullptr), viewSize(nullptr),
+        viewColor(nullptr), viewLabel(nullptr), viewShape(nullptr),
+        nodesHaveCoordinates(false) {
     // add a file parameter for the plugin
     addInParameter<string>("file::filename", paramHelp[0], "");
     addInParameter<bool>("Curved edges", paramHelp[1], "false");
@@ -106,7 +108,8 @@ public:
       return false;
     }
 
-    // get Tulip visual attributes properties associated to the empty graph we want to fill
+    // get Tulip visual attributes properties associated to the empty graph we
+    // want to fill
     viewLayout = graph->getProperty<LayoutProperty>("viewLayout");
     viewLabel = graph->getProperty<StringProperty>("viewLabel");
     viewSize = graph->getProperty<SizeProperty>("viewSize");
@@ -132,7 +135,8 @@ public:
       if (xmlReader.readNextStartElement()) {
         // only static graph are supported
         if (xmlReader.name() == "graph") {
-          string mode = QStringToTlpString(xmlReader.attributes().value("mode").toString());
+          string mode = QStringToTlpString(
+              xmlReader.attributes().value("mode").toString());
 
           if (mode == "dynamic") {
             pluginProgress->setError("dynamic graph is not yet supported");
@@ -183,8 +187,8 @@ public:
     return true;
   }
 
-  // Create a set of Tulip Properties from the attributes declared in the GEXF file
-  // according to data types
+  // Create a set of Tulip Properties from the attributes declared in the GEXF
+  // file according to data types
   void createPropertiesFromAttributes(QXmlStreamReader &xmlReader) {
     bool nodeProperties = xmlReader.attributes().value("class") == "node";
     unordered_map<string, PropertyInterface *> &propertiesMap =
@@ -193,20 +197,28 @@ public:
     while (!(xmlReader.isEndElement() && xmlReader.name() == "attributes")) {
       xmlReader.readNext();
 
-      // create a Tulip property and store mapping between attribute id and property
+      // create a Tulip property and store mapping between attribute id and
+      // property
       if (xmlReader.isStartElement() && xmlReader.name() == "attribute") {
-        string attributeId = QStringToTlpString(xmlReader.attributes().value("id").toString());
-        string attributeName = QStringToTlpString(xmlReader.attributes().value("title").toString());
-        string attributeType = QStringToTlpString(xmlReader.attributes().value("type").toString());
+        string attributeId =
+            QStringToTlpString(xmlReader.attributes().value("id").toString());
+        string attributeName = QStringToTlpString(
+            xmlReader.attributes().value("title").toString());
+        string attributeType =
+            QStringToTlpString(xmlReader.attributes().value("type").toString());
 
         if (attributeType == "string") {
-          propertiesMap[attributeId] = graph->getProperty<StringProperty>(attributeName);
+          propertiesMap[attributeId] =
+              graph->getProperty<StringProperty>(attributeName);
         } else if (attributeType == "float" || attributeType == "double") {
-          propertiesMap[attributeId] = graph->getProperty<DoubleProperty>(attributeName);
+          propertiesMap[attributeId] =
+              graph->getProperty<DoubleProperty>(attributeName);
         } else if (attributeType == "integer") {
-          propertiesMap[attributeId] = graph->getProperty<IntegerProperty>(attributeName);
+          propertiesMap[attributeId] =
+              graph->getProperty<IntegerProperty>(attributeName);
         } else if (attributeType == "boolean") {
-          propertiesMap[attributeId] = graph->getProperty<BooleanProperty>(attributeName);
+          propertiesMap[attributeId] =
+              graph->getProperty<BooleanProperty>(attributeName);
         }
       }
     }
@@ -267,7 +279,8 @@ public:
   // Parse node data
   void parseNode(QXmlStreamReader &xmlReader, Graph *g) {
     node n;
-    string nodeId = QStringToTlpString(xmlReader.attributes().value("id").toString());
+    string nodeId =
+        QStringToTlpString(xmlReader.attributes().value("id").toString());
 
     if (nodesMap.find(nodeId) == nodesMap.end()) {
       // if needed, add a node in the graph we are building
@@ -279,13 +292,15 @@ public:
 
     // parse node label
     if (xmlReader.attributes().hasAttribute("label")) {
-      string nodeLabel = QStringToTlpString(xmlReader.attributes().value("label").toString());
+      string nodeLabel =
+          QStringToTlpString(xmlReader.attributes().value("label").toString());
       viewLabel->setNodeValue(n, nodeLabel);
     }
 
     // parse node pid
     if (xmlReader.attributes().hasAttribute("pid")) {
-      string pid = QStringToTlpString(xmlReader.attributes().value("pid").toString());
+      string pid =
+          QStringToTlpString(xmlReader.attributes().value("pid").toString());
 
       if (g == graph)
         g = addInParent(n, pid);
@@ -298,7 +313,8 @@ public:
 
     while (!(xmlReader.isEndElement() && xmlReader.name() == "node")) {
       // parse node color
-      if (xmlReader.isStartElement() && xmlReader.qualifiedName() == "viz:color") {
+      if (xmlReader.isStartElement() &&
+          xmlReader.qualifiedName() == "viz:color") {
         unsigned int r = xmlReader.attributes().value("r").toString().toUInt();
         unsigned int g = xmlReader.attributes().value("g").toString().toUInt();
         unsigned int b = xmlReader.attributes().value("b").toString().toUInt();
@@ -308,10 +324,12 @@ public:
           a = xmlReader.attributes().value("a").toString().toFloat();
         }
 
-        viewColor->setNodeValue(n, Color(uchar(r), uchar(g), uchar(b), uchar(a * 255)));
+        viewColor->setNodeValue(
+            n, Color(uchar(r), uchar(g), uchar(b), uchar(a * 255)));
       }
       // parse node coordinates
-      else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == "viz:position") {
+      else if (xmlReader.isStartElement() &&
+               xmlReader.qualifiedName() == "viz:position") {
         nodesHaveCoordinates = true;
         float x = xmlReader.attributes().value("x").toString().toFloat();
         float y = xmlReader.attributes().value("y").toString().toFloat();
@@ -319,29 +337,35 @@ public:
         viewLayout->setNodeValue(n, Coord(x, y, z));
       }
       // parse node size
-      else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == "viz:size") {
+      else if (xmlReader.isStartElement() &&
+               xmlReader.qualifiedName() == "viz:size") {
         float size = xmlReader.attributes().value("value").toString().toFloat();
         viewSize->setNodeValue(n, Size(size, size, size));
       }
       // parse node attributes
-      else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == "attvalue") {
+      else if (xmlReader.isStartElement() &&
+               xmlReader.qualifiedName() == "attvalue") {
         string attributeId = "";
 
         if (xmlReader.attributes().hasAttribute("id")) {
-          attributeId = QStringToTlpString(xmlReader.attributes().value("id").toString());
+          attributeId =
+              QStringToTlpString(xmlReader.attributes().value("id").toString());
         } else if (xmlReader.attributes().hasAttribute("for")) {
-          attributeId = QStringToTlpString(xmlReader.attributes().value("for").toString());
+          attributeId = QStringToTlpString(
+              xmlReader.attributes().value("for").toString());
         }
 
-        string attributeStrValue =
-            QStringToTlpString(xmlReader.attributes().value("value").toString());
+        string attributeStrValue = QStringToTlpString(
+            xmlReader.attributes().value("value").toString());
 
         if (nodePropertiesMap.find(attributeId) != nodePropertiesMap.end()) {
-          nodePropertiesMap[attributeId]->setNodeStringValue(n, attributeStrValue);
+          nodePropertiesMap[attributeId]->setNodeStringValue(n,
+                                                             attributeStrValue);
         }
       }
       // check for subgraph
-      else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == "nodes") {
+      else if (xmlReader.isStartElement() &&
+               xmlReader.qualifiedName() == "nodes") {
         Graph *sg = nodeToSubgraph.get(n.id);
 
         if (sg == nullptr) {
@@ -355,22 +379,26 @@ public:
 
         // create its nodes
         createNodes(xmlReader, sg);
-      } else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == "edges") {
+      } else if (xmlReader.isStartElement() &&
+                 xmlReader.qualifiedName() == "edges") {
         // create its edges
         createEdges(xmlReader);
-      } else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == "parents") {
+      } else if (xmlReader.isStartElement() &&
+                 xmlReader.qualifiedName() == "parents") {
         while (!(xmlReader.isEndElement() && xmlReader.name() == "parents")) {
           xmlReader.readNext();
 
           // must be a parent
           if (xmlReader.isStartElement() && xmlReader.name() == "parent") {
-            string pid = QStringToTlpString(xmlReader.attributes().value("for").toString());
+            string pid = QStringToTlpString(
+                xmlReader.attributes().value("for").toString());
 
             if (g == graph) {
               g = addInParent(n, pid);
             } else
               cerr << "multiple parents are not supported: " << pid.c_str()
-                   << " will be not added as parent of " << nodeId.c_str() << endl;
+                   << " will be not added as parent of " << nodeId.c_str()
+                   << endl;
           }
         }
       }
@@ -382,8 +410,10 @@ public:
   // Parse edge data
   void parseEdge(QXmlStreamReader &xmlReader) {
     // parse the source node id and target node id
-    string srcId = QStringToTlpString(xmlReader.attributes().value("source").toString());
-    string tgtId = QStringToTlpString(xmlReader.attributes().value("target").toString());
+    string srcId =
+        QStringToTlpString(xmlReader.attributes().value("source").toString());
+    string tgtId =
+        QStringToTlpString(xmlReader.attributes().value("target").toString());
 
     // Check if nodes have been parsed
     if (!nodesMap.empty()) {
@@ -391,7 +421,8 @@ public:
       edge e = graph->addEdge(nodesMap[srcId], nodesMap[tgtId]);
 
       if (xmlReader.attributes().hasAttribute("label")) {
-        string edgeLabel = QStringToTlpString(xmlReader.attributes().value("label").toString());
+        string edgeLabel = QStringToTlpString(
+            xmlReader.attributes().value("label").toString());
         viewLabel->setEdgeValue(e, edgeLabel);
       }
 
@@ -399,27 +430,32 @@ public:
 
       while (!(xmlReader.isEndElement() && xmlReader.name() == "edge")) {
         // parse edge attribute
-        if (xmlReader.isStartElement() && xmlReader.qualifiedName() == "attvalue") {
+        if (xmlReader.isStartElement() &&
+            xmlReader.qualifiedName() == "attvalue") {
           string attributeId = "";
 
           if (xmlReader.attributes().hasAttribute("id")) {
-            attributeId = QStringToTlpString(xmlReader.attributes().value("id").toString());
+            attributeId = QStringToTlpString(
+                xmlReader.attributes().value("id").toString());
           } else if (xmlReader.attributes().hasAttribute("for")) {
-            attributeId = QStringToTlpString(xmlReader.attributes().value("for").toString());
+            attributeId = QStringToTlpString(
+                xmlReader.attributes().value("for").toString());
           }
 
-          string attributeStrValue =
-              QStringToTlpString(xmlReader.attributes().value("value").toString());
+          string attributeStrValue = QStringToTlpString(
+              xmlReader.attributes().value("value").toString());
 
           if (edgePropertiesMap.find(attributeId) != edgePropertiesMap.end()) {
-            edgePropertiesMap[attributeId]->setEdgeStringValue(e, attributeStrValue);
+            edgePropertiesMap[attributeId]->setEdgeStringValue(
+                e, attributeStrValue);
           }
         }
 
         xmlReader.readNext();
       }
 
-      // Store edge extremities information to add them to the graph once nodes will be parsed
+      // Store edge extremities information to add them to the graph once nodes
+      // will be parsed
     } else {
       edgesTmp.emplace_back(srcId, tgtId);
     }
@@ -509,12 +545,14 @@ public:
             if (eEnds.first == n) {
               graph->setEnds(e, mn, eEnds.second);
 
-              if ((sg != quotientGraph) && quotientGraph->isElement(eEnds.second))
+              if ((sg != quotientGraph) &&
+                  quotientGraph->isElement(eEnds.second))
                 quotientGraph->addEdge(e);
             } else {
               graph->setEnds(e, eEnds.first, mn);
 
-              if ((sg != quotientGraph) && quotientGraph->isElement(eEnds.first))
+              if ((sg != quotientGraph) &&
+                  quotientGraph->isElement(eEnds.first))
                 quotientGraph->addEdge(e);
             }
           }
@@ -550,7 +588,8 @@ public:
       p2 += tgtCoord;
       p2 += normal;
 
-      // Set the second and third Cubic Bézier curve control points as edge bends
+      // Set the second and third Cubic Bézier curve control points as edge
+      // bends
       viewLayout->setEdgeValue(e, vector<Coord>{{p1, p2}});
     }
   }
@@ -563,7 +602,8 @@ private:
   // map associating GEXF node id to Tulip node
   unordered_map<string, node> nodesMap;
 
-  // vector to store edge information in case edges are declared before nodes in GEXF file
+  // vector to store edge information in case edges are declared before nodes in
+  // GEXF file
   vector<pair<string, string>> edgesTmp;
 
   // Visual attributes properties pointers to the graph we are building
@@ -579,6 +619,7 @@ private:
   bool nodesHaveCoordinates;
 };
 
-// Macro for declaring import plugin in Tulip, it will then be accessible since the File -> Import
+// Macro for declaring import plugin in Tulip, it will then be accessible since
+// the File -> Import
 // -> File menu entry in Tulip
 PLUGIN(GEXFImport)

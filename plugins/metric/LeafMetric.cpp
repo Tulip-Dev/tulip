@@ -28,7 +28,8 @@ using namespace std;
 using namespace tlp;
 
 //=======================================================================
-LeafMetric::LeafMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {}
+LeafMetric::LeafMetric(const tlp::PluginContext *context)
+    : DoubleAlgorithm(context) {}
 
 // structure below is used to implement dfs loop
 struct dfsLeafStruct {
@@ -36,7 +37,8 @@ struct dfsLeafStruct {
   Iterator<node> *outNodes;
   double res;
 
-  dfsLeafStruct(node n, Iterator<node> *nodes) : current(n), outNodes(nodes), res(0.0) {}
+  dfsLeafStruct(node n, Iterator<node> *nodes)
+      : current(n), outNodes(nodes), res(0.0) {}
 };
 //=======================================================================
 // original recursive algorithm

@@ -18,11 +18,11 @@
  */
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/GlBox.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/Glyph.h>
 #include <tulip/TulipViewSettings.h>
 
 using namespace std;
@@ -39,8 +39,8 @@ namespace tlp {
  */
 class Cube : public NoShaderGlyph {
 public:
-  GLYPHINFORMATION("3D - Cube", "Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0",
-                   NodeShape::Cube)
+  GLYPHINFORMATION("3D - Cube", "Bertrand Mathieu", "09/07/2002",
+                   "Textured cube", "1.0", NodeShape::Cube)
   Cube(const tlp::PluginContext *context = nullptr);
   ~Cube() override;
   void draw(node n, float lod) override;
@@ -58,7 +58,8 @@ void Cube::draw(node n, float lod) {
 
   GlBox::draw(glGraphInputData->getElementColor()->getNodeValue(n),
               glGraphInputData->getElementColor()->getNodeValue(n),
-              glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod);
+              glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+              textureName, lod);
 }
 Coord Cube::getAnchor(const Coord &vector) const {
   return GlBox::getAnchor(vector);
@@ -67,19 +68,24 @@ Coord Cube::getAnchor(const Coord &vector) const {
 class EECube : public EdgeExtremityGlyph {
 public:
   GLYPHINFORMATION("3D - Cube extremity", "Bertrand Mathieu", "09/07/2002",
-                   "Textured cube for edge extremities", "1.0", EdgeExtremityShape::Cube)
+                   "Textured cube for edge extremities", "1.0",
+                   EdgeExtremityShape::Cube)
 
   EECube(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
 
-  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) override {
-    string textureName = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor,
+            float lod) override {
+    string textureName =
+        edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
     if (!textureName.empty())
-      textureName = textureName + edgeExtGlGraphInputData->parameters->getTexturePath();
+      textureName =
+          textureName + edgeExtGlGraphInputData->parameters->getTexturePath();
 
     glEnable(GL_LIGHTING);
-    GlBox::draw(glyphColor, borderColor,
-                edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), textureName,
-                lod);
+    GlBox::draw(
+        glyphColor, borderColor,
+        edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+        textureName, lod);
     glDisable(GL_LIGHTING);
   }
 };

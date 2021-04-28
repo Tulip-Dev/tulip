@@ -19,30 +19,29 @@
 
 #include "tulip/QuickAccessBar.h"
 
-#include <QFontDatabase>
+#include <QApplication>
 #include <QComboBox>
 #include <QDebug>
+#include <QFontDatabase>
+#include <QGraphicsView>
 #include <QListView>
 #include <QMainWindow>
 #include <QMouseEvent>
-#include <QApplication>
-#include <QGraphicsView>
 
-#include <tulip/GraphPropertiesModel.h>
-#include <tulip/GraphModel.h>
-#include <tulip/TulipFontDialog.h>
+#include <tulip/CaptionGraphicsSubItems.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/GlGraphComposite.h>
-#include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/TlpQtTools.h>
-#include <tulip/GlMainWidget.h>
-#include <tulip/GlMainView.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/GlMainView.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/GraphModel.h>
+#include <tulip/GraphPropertiesModel.h>
 #include <tulip/Perspective.h>
 #include <tulip/SnapshotDialog.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/TulipFontDialog.h>
 #include <tulip/TulipItemDelegate.h>
-#include <tulip/CaptionGraphicsSubItems.h>
-#include <tulip/Perspective.h>
 
 using namespace tlp;
 
@@ -50,7 +49,8 @@ class TopPopupComboBox : public QComboBox {
   QListView *_view;
 
 public:
-  TopPopupComboBox(QWidget *parent = nullptr) : QComboBox(parent), _view(nullptr) {}
+  TopPopupComboBox(QWidget *parent = nullptr)
+      : QComboBox(parent), _view(nullptr) {}
 
   bool eventFilter(QObject *, QEvent *ev) override {
     if (ev->type() == QEvent::MouseButtonPress) {
@@ -92,7 +92,8 @@ public:
   }
 };
 
-QuickAccessBar::QuickAccessBar(QWidget *parent) : QWidget(parent), _mainView(nullptr) {}
+QuickAccessBar::QuickAccessBar(QWidget *parent)
+    : QWidget(parent), _mainView(nullptr) {}
 
 #include "ui_QuickAccessBar.h"
 
@@ -121,8 +122,10 @@ QPushButton *QuickAccessBarImpl::showColorInterpolation() {
 }
 
 QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem,
-                                       QuickAccessButtons buttons, QWidget *parent)
-    : QuickAccessBar(parent), _ui(new Ui::QuickAccessBar), _quickAccessBarItem(quickAccessBarItem),
+                                       QuickAccessButtons buttons,
+                                       QWidget *parent)
+    : QuickAccessBar(parent), _ui(new Ui::QuickAccessBar),
+      _quickAccessBarItem(quickAccessBarItem),
       delegate(new TulipItemDelegate(this)), _oldFontScale(1), _oldNodeScale(1),
       _captionsInitialized(false) {
   QString ss = Perspective::styleSheet();
@@ -132,9 +135,12 @@ QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem,
   _ui->backgroundColorButton->setDialogTitle("Choose the background color");
   _ui->nodeColorButton->setDialogTitle("Choose the node's default color");
   _ui->edgeColorButton->setDialogTitle("Choose the edge's default color");
-  _ui->nodeBorderColorButton->setDialogTitle("Choose the default color for the border of nodes");
-  _ui->edgeBorderColorButton->setDialogTitle("Choose the default color for the border of edges");
-  _ui->labelColorButton->setDialogTitle("Choose the default color for the label of nodes or edges");
+  _ui->nodeBorderColorButton->setDialogTitle(
+      "Choose the default color for the border of nodes");
+  _ui->edgeBorderColorButton->setDialogTitle(
+      "Choose the default color for the border of edges");
+  _ui->labelColorButton->setDialogTitle(
+      "Choose the default color for the label of nodes or edges");
 
   if (buttons.testFlag(ALLBUTTONS))
     return;
@@ -210,14 +216,17 @@ QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem,
 }
 
 void QuickAccessBarImpl::addButtonAtEnd(QAbstractButton *button) {
-  QLayoutItem *spacer = _ui->horizontalLayout->itemAt(_ui->horizontalLayout->count() - 1);
+  QLayoutItem *spacer =
+      _ui->horizontalLayout->itemAt(_ui->horizontalLayout->count() - 1);
   _ui->horizontalLayout->removeItem(spacer);
   _ui->horizontalLayout->addWidget(button);
   _ui->horizontalLayout->addItem(spacer);
 }
 
-void QuickAccessBarImpl::addButtonsAtEnd(const QVector<QAbstractButton *> &buttonvect) {
-  QLayoutItem *spacer = _ui->horizontalLayout->itemAt(_ui->horizontalLayout->count() - 1);
+void QuickAccessBarImpl::addButtonsAtEnd(
+    const QVector<QAbstractButton *> &buttonvect) {
+  QLayoutItem *spacer =
+      _ui->horizontalLayout->itemAt(_ui->horizontalLayout->count() - 1);
   _ui->horizontalLayout->removeItem(spacer);
 
   for (auto b : buttonvect) {
@@ -231,7 +240,8 @@ void QuickAccessBarImpl::addSeparator() {
   QFrame *sep = new QFrame(this);
   sep->setFrameShape(QFrame::VLine);
   sep->setFrameShadow(QFrame::Sunken);
-  QLayoutItem *spacer = _ui->horizontalLayout->itemAt(_ui->horizontalLayout->count() - 1);
+  QLayoutItem *spacer =
+      _ui->horizontalLayout->itemAt(_ui->horizontalLayout->count() - 1);
   _ui->horizontalLayout->removeItem(spacer);
   _ui->horizontalLayout->addWidget(sep);
   _ui->horizontalLayout->addItem(spacer);
@@ -257,8 +267,10 @@ void QuickAccessBarImpl::reset() {
   _resetting = true;
 
   _ui->backgroundColorButton->setTulipColor(scene()->getBackgroundColor());
-  _ui->colorInterpolationToggle->setChecked(renderingParameters()->isEdgeColorInterpolate());
-  _ui->sizeInterpolationToggle->setChecked(renderingParameters()->isEdgeSizeInterpolate());
+  _ui->colorInterpolationToggle->setChecked(
+      renderingParameters()->isEdgeColorInterpolate());
+  _ui->sizeInterpolationToggle->setChecked(
+      renderingParameters()->isEdgeSizeInterpolate());
   _ui->showEdgesToggle->setChecked(renderingParameters()->isDisplayEdges());
   _ui->showNodesToggle->setChecked(renderingParameters()->isDisplayNodes());
   _ui->showLabelsToggle->setChecked(renderingParameters()->isViewNodeLabel());
@@ -308,12 +320,18 @@ void QuickAccessBarImpl::showHideCaption(CaptionItem::CaptionType captionType) {
     _captions[3]->captionGraphicsItem()->setVisible(false);
 
     for (size_t i = 0; i < 4; i++) {
-      connect(_captions[i]->captionGraphicsItem(), SIGNAL(interactionsActivated()),
-              _captions[(i + 1) % 4]->captionGraphicsItem(), SLOT(removeInteractions()));
-      connect(_captions[i]->captionGraphicsItem(), SIGNAL(interactionsActivated()),
-              _captions[(i + 2) % 4]->captionGraphicsItem(), SLOT(removeInteractions()));
-      connect(_captions[i]->captionGraphicsItem(), SIGNAL(interactionsActivated()),
-              _captions[(i + 3) % 4]->captionGraphicsItem(), SLOT(removeInteractions()));
+      connect(_captions[i]->captionGraphicsItem(),
+              SIGNAL(interactionsActivated()),
+              _captions[(i + 1) % 4]->captionGraphicsItem(),
+              SLOT(removeInteractions()));
+      connect(_captions[i]->captionGraphicsItem(),
+              SIGNAL(interactionsActivated()),
+              _captions[(i + 2) % 4]->captionGraphicsItem(),
+              SLOT(removeInteractions()));
+      connect(_captions[i]->captionGraphicsItem(),
+              SIGNAL(interactionsActivated()),
+              _captions[(i + 3) % 4]->captionGraphicsItem(),
+              SLOT(removeInteractions()));
       connect(_captions[i], SIGNAL(filtering(bool)), _captions[(i + 1) % 4],
               SLOT(removeObservation(bool)));
       connect(_captions[i], SIGNAL(filtering(bool)), _captions[(i + 2) % 4],
@@ -339,7 +357,8 @@ void QuickAccessBarImpl::showHideCaption(CaptionItem::CaptionType captionType) {
 
   for (size_t i = 0; i < 4; i++) {
     if (_captions[i]->captionGraphicsItem()->isVisible()) {
-      _captions[i]->captionGraphicsItem()->setPos(QPoint(numberVisible * 130, -260));
+      _captions[i]->captionGraphicsItem()->setPos(
+          QPoint(numberVisible * 130, -260));
       numberVisible++;
     }
   }
@@ -414,7 +433,8 @@ void QuickAccessBarImpl::setLabelColor(const QColor &c) {
   emit settingsChanged();
 }
 
-void QuickAccessBarImpl::setAllColorValues(unsigned int eltType, ColorProperty *prop,
+void QuickAccessBarImpl::setAllColorValues(unsigned int eltType,
+                                           ColorProperty *prop,
                                            const Color &color) {
   BooleanProperty *selected = inputData()->getElementSelected();
   bool hasSelected = false;
@@ -455,17 +475,20 @@ void QuickAccessBarImpl::setEdgeColor(const QColor &c) {
 }
 
 void QuickAccessBarImpl::setNodeBorderColor(const QColor &c) {
-  setAllColorValues(NODE, inputData()->getElementBorderColor(), QColorToColor(c));
+  setAllColorValues(NODE, inputData()->getElementBorderColor(),
+                    QColorToColor(c));
 }
 
 void QuickAccessBarImpl::setEdgeBorderColor(const QColor &c) {
-  setAllColorValues(EDGE, inputData()->getElementBorderColor(), QColorToColor(c));
+  setAllColorValues(EDGE, inputData()->getElementBorderColor(),
+                    QColorToColor(c));
 }
 
-void QuickAccessBarImpl::setAllValues(unsigned int eltType, PropertyInterface *prop) {
-  QVariant val = TulipItemDelegate::showEditorDialog(static_cast<tlp::ElementType>(eltType), prop,
-                                                     _mainView->graph(), delegate,
-                                                     _mainView->graphicsView()->window());
+void QuickAccessBarImpl::setAllValues(unsigned int eltType,
+                                      PropertyInterface *prop) {
+  QVariant val = TulipItemDelegate::showEditorDialog(
+      static_cast<tlp::ElementType>(eltType), prop, _mainView->graph(),
+      delegate, _mainView->graphicsView()->window());
 
   // Check if edition has been cancelled
   if (!val.isValid())
@@ -567,7 +590,8 @@ GlScene *QuickAccessBar::scene() const {
 
 void QuickAccessBarImpl::selectFont() {
   TulipFontDialog dlg(_mainView->graphicsView()->window());
-  dlg.selectFont(TulipFont::fromFile(inputData()->getElementFont()->getNodeDefaultValue().c_str()));
+  dlg.selectFont(TulipFont::fromFile(
+      inputData()->getElementFont()->getNodeDefaultValue().c_str()));
 
   if (dlg.exec() != QDialog::Accepted || !dlg.font().exists())
     return;
@@ -576,8 +600,10 @@ void QuickAccessBarImpl::selectFont() {
 
   Observable::holdObservers();
 
-  inputData()->getElementFont()->setAllNodeValue(QStringToTlpString(dlg.font().fontFile()));
-  inputData()->getElementFont()->setAllEdgeValue(QStringToTlpString(dlg.font().fontFile()));
+  inputData()->getElementFont()->setAllNodeValue(
+      QStringToTlpString(dlg.font().fontFile()));
+  inputData()->getElementFont()->setAllEdgeValue(
+      QStringToTlpString(dlg.font().fontFile()));
   inputData()->getElementFontSize()->setAllNodeValue(dlg.fontSize());
   inputData()->getElementFontSize()->setAllEdgeValue(dlg.fontSize());
 
@@ -588,9 +614,11 @@ void QuickAccessBarImpl::selectFont() {
 }
 
 void QuickAccessBarImpl::updateFontButtonStyle() {
-  QString fontFile = inputData()->getElementFont()->getNodeDefaultValue().c_str();
+  QString fontFile =
+      inputData()->getElementFont()->getNodeDefaultValue().c_str();
   TulipFont selectedFont = TulipFont::fromFile(fontFile);
-  _ui->fontButton->setStyleSheet("font-family: " + selectedFont.fontFamily() + "; " +
-                                 (selectedFont.isItalic() ? "font-style: italic; " : "") +
-                                 (selectedFont.isBold() ? "font-weight: bold; " : ""));
+  _ui->fontButton->setStyleSheet(
+      "font-family: " + selectedFont.fontFamily() + "; " +
+      (selectedFont.isItalic() ? "font-style: italic; " : "") +
+      (selectedFont.isBold() ? "font-weight: bold; " : ""));
 }

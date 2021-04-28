@@ -22,8 +22,8 @@
 #define _EXPORTMODULE_H
 
 #include <iostream>
-#include <tulip/Plugin.h>
 #include <tulip/Algorithm.h>
+#include <tulip/Plugin.h>
 
 namespace tlp {
 
@@ -51,9 +51,7 @@ public:
 
   ~ExportModule() override {}
 
-  std::string category() const override {
-    return EXPORT_CATEGORY;
-  }
+  std::string category() const override { return EXPORT_CATEGORY; }
 
   std::string icon() const override {
     return ":/tulip/gui/icons/64/document-export.png";
@@ -68,8 +66,8 @@ public:
   virtual std::string fileExtension() const = 0;
 
   /**
-   * @brief Gets a list of the extensions file format when compressed with gzip this export plugin
-   *saves to.
+   * @brief Gets a list of the extensions file format when compressed with gzip
+   *this export plugin saves to.
    *
    * @since Tulip 5.0
    *
@@ -80,8 +78,8 @@ public:
   }
 
   /**
-   * @brief Gets a list of all extensions file format (normal and gzipped) this export plugin saves
-   * to.
+   * @brief Gets a list of all extensions file format (normal and gzipped) this
+   * export plugin saves to.
    *
    * @since Tulip 5.0
    *

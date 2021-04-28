@@ -19,8 +19,8 @@
 #ifndef LinLogLayout_H
 #define LinLogLayout_H
 
-#include <tulip/TulipPluginHeaders.h>
 #include "OctTree.h"
+#include <tulip/TulipPluginHeaders.h>
 
 namespace tlp {
 
@@ -28,8 +28,9 @@ class LinLogLayout {
 
 public:
   LinLogLayout(tlp::Graph *_graph, tlp::PluginProgress *pluginProgress);
-  bool initAlgo(tlp::LayoutProperty *_layoutResult, tlp::NumericProperty *_weight,
-                double _attrExponent, double _repuExponent, double _gravFactor,
+  bool initAlgo(tlp::LayoutProperty *_layoutResult,
+                tlp::NumericProperty *_weight, double _attrExponent,
+                double _repuExponent, double _gravFactor,
                 unsigned int _max_iter, bool _is3D, bool _useOctTree,
                 tlp::BooleanProperty *_skipNodes);
 

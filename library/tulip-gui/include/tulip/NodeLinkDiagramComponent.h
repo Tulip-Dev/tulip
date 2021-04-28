@@ -21,8 +21,8 @@
 #ifndef _Tulip_NODELINKDIAGRAMCOMPONENT_H
 #define _Tulip_NODELINKDIAGRAMCOMPONENT_H
 
-#include <tulip/GlMainView.h>
 #include <tulip/Camera.h>
+#include <tulip/GlMainView.h>
 
 namespace Ui {
 class GridOptionsWidget;
@@ -53,13 +53,14 @@ class TLP_QT_SCOPE NodeLinkDiagramComponent : public tlp::GlMainView {
 
 public:
   static const std::string viewName;
-  PLUGININFORMATION(NodeLinkDiagramComponent::viewName, "Tulip Team", "16/04/2008",
-                    "The Node Link Diagram view is the standard representation of relational data, "
-                    "where entities are represented as nodes, and their relation as edges.<br>"
-                    "This view allows you to change the glyph used to represent nodes (e.g. "
-                    "square, round, cross, ...), as well as the shape of the arrows indicating the "
-                    "direction of the relationship.",
-                    "1.0", "relational")
+  PLUGININFORMATION(
+      NodeLinkDiagramComponent::viewName, "Tulip Team", "16/04/2008",
+      "The Node Link Diagram view is the standard representation of relational data, "
+      "where entities are represented as nodes, and their relation as edges.<br>"
+      "This view allows you to change the glyph used to represent nodes (e.g. "
+      "square, round, cross, ...), as well as the shape of the arrows indicating the "
+      "direction of the relationship.",
+      "1.0", "relational")
 
   NodeLinkDiagramComponent(const tlp::PluginContext *context = nullptr);
   ~NodeLinkDiagramComponent() override;
@@ -90,22 +91,35 @@ protected slots:
   void showGridControl();
   void fillContextMenu(QMenu *menu, const QPointF &point) override;
 
-  void addRemoveItemToSelection(bool pushGraph = true, bool toggleSelection = true,
-                                bool selectValue = false, bool resetSelection = false);
-  void addRemoveInNodesToSelection(bool pushGraph = true, bool toggleSelection = true,
-                                   bool selectValue = false, bool resetSelection = false);
-  void addRemoveOutNodesToSelection(bool pushGraph = true, bool toggleSelection = true,
-                                    bool selectValue = false, bool resetSelection = false);
-  void addRemoveInEdgesToSelection(bool pushGraph = true, bool toggleSelection = true,
-                                   bool selectValue = false, bool resetSelection = false);
-  void addRemoveOutEdgesToSelection(bool pushGraph = true, bool toggleSelection = true,
-                                    bool selectValue = false, bool resetSelection = false);
+  void addRemoveItemToSelection(bool pushGraph = true,
+                                bool toggleSelection = true,
+                                bool selectValue = false,
+                                bool resetSelection = false);
+  void addRemoveInNodesToSelection(bool pushGraph = true,
+                                   bool toggleSelection = true,
+                                   bool selectValue = false,
+                                   bool resetSelection = false);
+  void addRemoveOutNodesToSelection(bool pushGraph = true,
+                                    bool toggleSelection = true,
+                                    bool selectValue = false,
+                                    bool resetSelection = false);
+  void addRemoveInEdgesToSelection(bool pushGraph = true,
+                                   bool toggleSelection = true,
+                                   bool selectValue = false,
+                                   bool resetSelection = false);
+  void addRemoveOutEdgesToSelection(bool pushGraph = true,
+                                    bool toggleSelection = true,
+                                    bool selectValue = false,
+                                    bool resetSelection = false);
   void addRemoveNodeAndAllNeighbourNodesAndEdges(bool toggleSelection = true,
                                                  bool selectValue = false,
                                                  bool resetSelection = false);
-  void addRemoveExtremitiesToSelection(bool pushGraph = true, bool toggleSelection = true,
-                                       bool selectValue = false, bool resetSelection = false);
-  void addRemoveEdgeAndExtremitiesToSelection(bool toggleSelection = true, bool selectValue = false,
+  void addRemoveExtremitiesToSelection(bool pushGraph = true,
+                                       bool toggleSelection = true,
+                                       bool selectValue = false,
+                                       bool resetSelection = false);
+  void addRemoveEdgeAndExtremitiesToSelection(bool toggleSelection = true,
+                                              bool selectValue = false,
                                               bool resetSelection = false);
 
   void selectItem();

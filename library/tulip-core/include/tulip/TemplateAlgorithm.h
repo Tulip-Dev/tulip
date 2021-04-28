@@ -37,25 +37,23 @@ static const std::string PROPERTY_ALGORITHM_CATEGORY = "Property";
 class TLP_SCOPE PropertyAlgorithm : public tlp::Algorithm {
 public:
   PropertyAlgorithm(const tlp::PluginContext *context) : Algorithm(context) {}
-  std::string category() const override {
-    return PROPERTY_ALGORITHM_CATEGORY;
-  }
+  std::string category() const override { return PROPERTY_ALGORITHM_CATEGORY; }
 };
 
 /**
  * @ingroup Plugins
- * @brief The TemplateAlgorithm class describes a plugin that can operate on a single graph's
- * property.
- * @param Property The property template arguments gives the type of the property the algorithm
- * operates on.
+ * @brief The TemplateAlgorithm class describes a plugin that can operate on a
+ * single graph's property.
+ * @param Property The property template arguments gives the type of the
+ * property the algorithm operates on.
  *
- * A TemplateAlgorithm takes a graph as input (plus additional parameters defined via
- * tlp::WithParameter) and outputs its results in a tlp::PropertyInterface subclass.
- * The output property is defined as an output parameter named "result" and as a class member called
- * result.
+ * A TemplateAlgorithm takes a graph as input (plus additional parameters
+ * defined via tlp::WithParameter) and outputs its results in a
+ * tlp::PropertyInterface subclass. The output property is defined as an output
+ * parameter named "result" and as a class member called result.
  *
- * @warning Subclassing TemplateAlgorithm is not recommended since template specifications are
- * available for every Tulip property types.
+ * @warning Subclassing TemplateAlgorithm is not recommended since template
+ * specifications are available for every Tulip property types.
  *
  * @see tlp::BooleanAlgorithm
  * @see tlp::StringAlgorithm

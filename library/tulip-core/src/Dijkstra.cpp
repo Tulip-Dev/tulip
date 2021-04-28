@@ -24,9 +24,10 @@ using namespace tlp;
 using namespace std;
 
 //============================================================
-Dijkstra::Dijkstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
-                   NodeStaticProperty<double> &nd, EDGE_TYPE direction, std::stack<node> *qN,
-                   MutableContainer<int> *nP)
+Dijkstra::Dijkstra(const Graph *const graph, node src,
+                   const EdgeStaticProperty<double> &weights,
+                   NodeStaticProperty<double> &nd, EDGE_TYPE direction,
+                   std::stack<node> *qN, MutableContainer<int> *nP)
     : nodeDistance(nd), queueNodes(qN), numberOfPaths(nP) {
   assert(src.isValid());
   this->graph = graph;
@@ -62,7 +63,8 @@ Dijkstra::Dijkstra(const Graph *const graph, node src, const EdgeStaticProperty<
 
   while (!dijkstraTable.empty()) {
     // select the first element in the list the one with min value
-    set<DijkstraElement *, LessDijkstraElement>::iterator it = dijkstraTable.begin();
+    set<DijkstraElement *, LessDijkstraElement>::iterator it =
+        dijkstraTable.begin();
     DijkstraElement &u = *(*it);
     dijkstraTable.erase(it);
     if (queueNodes)
@@ -74,10 +76,12 @@ Dijkstra::Dijkstra(const Graph *const graph, node src, const EdgeStaticProperty<
       double eWeight = weights.getEdgeValue(e);
       assert(eWeight > 0);
 
-      if (fabs((u.dist + eWeight) - dEle->dist) < 1E-9) { // path of the same length
+      if (fabs((u.dist + eWeight) - dEle->dist) <
+          1E-9) { // path of the same length
         dEle->usedEdge.push_back(e);
         if (numberOfPaths)
-          numberOfPaths->set(v.id, numberOfPaths->get(v.id) + numberOfPaths->get(u.n.id));
+          numberOfPaths->set(v.id, numberOfPaths->get(v.id) +
+                                       numberOfPaths->get(u.n.id));
       } else if ((u.dist + eWeight) < dEle->dist) {
         // we find a node closer with that path
         dEle->usedEdge.clear();

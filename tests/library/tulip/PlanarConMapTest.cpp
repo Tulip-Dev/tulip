@@ -145,8 +145,8 @@ void PlanarConMapTest::testAddEdgeMap() {
     CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 1 AddEdgeMap cycle ", cycles[i], tmp);
   }
 
-  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 1 AddEdgeMap dispositif decorateur ", graph->numberOfEdges(),
-                               carte->numberOfEdges());
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 1 AddEdgeMap dispositif decorateur ",
+                               graph->numberOfEdges(), carte->numberOfEdges());
 
   /* test 2 */
   build2();
@@ -184,8 +184,8 @@ void PlanarConMapTest::testAddEdgeMap() {
     CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 2 AddEdgeMap cycle ", cycles2[i], tmp);
   }
 
-  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 2 AddEdgeMap dispositif decorateur ", graph->numberOfEdges(),
-                               carte->numberOfEdges());
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 2 AddEdgeMap dispositif decorateur ",
+                               graph->numberOfEdges(), carte->numberOfEdges());
 
   /* test 3 */
   build4();
@@ -250,8 +250,8 @@ void PlanarConMapTest::testAddEdgeMap() {
     CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 3 AddEdgeMap cycle ", cycles3[i], tmp);
   }
 
-  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 3 AddEdgeMap dispositif decorateur ", graph->numberOfEdges(),
-                               carte->numberOfEdges());
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 3 AddEdgeMap dispositif decorateur ",
+                               graph->numberOfEdges(), carte->numberOfEdges());
 }
 
 //============================================================
@@ -293,8 +293,8 @@ void PlanarConMapTest::testDelEdgeMap() {
     CPPUNIT_ASSERT_EQUAL_MESSAGE(" test DelEdgeMap cycle ", cycles[i], tmp);
   }
 
-  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test AddEdgeMap dispositif decorateur ", graph->numberOfEdges(),
-                               carte->numberOfEdges());
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test AddEdgeMap dispositif decorateur ",
+                               graph->numberOfEdges(), carte->numberOfEdges());
   carte->clear();
 }
 
@@ -356,8 +356,8 @@ void PlanarConMapTest::testMergeFaces() {
     CPPUNIT_ASSERT_EQUAL_MESSAGE(" test DelEdgeMap cycle ", tmp, cycles[i]);
   }
 
-  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test AddEdgeMap dispositif decorateur ", carte->numberOfEdges(),
-                               graph->numberOfEdges());
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test AddEdgeMap dispositif decorateur ",
+                               carte->numberOfEdges(), graph->numberOfEdges());
   carte->clear();
 }
 //============================================================
@@ -369,8 +369,9 @@ void PlanarConMapTest::testSplitFace() {
   f1 = carte->faces[0];
   f2 = carte->faces[1];
   Face f3 = carte->splitFace(f1, nodes[0], nodes[2]);
-  edge e = carte->existEdge(nodes[0], nodes[2]).isValid() ? carte->existEdge(nodes[0], nodes[2])
-                                                          : carte->existEdge(nodes[2], nodes[0]);
+  edge e = carte->existEdge(nodes[0], nodes[2]).isValid()
+               ? carte->existEdge(nodes[0], nodes[2])
+               : carte->existEdge(nodes[2], nodes[0]);
   vector<vector<edge>> cycles(5);
   cycles[0].push_back(edges[1]);
   cycles[1].push_back(edges[2]);
@@ -400,26 +401,29 @@ void PlanarConMapTest::testSplitFace() {
     CPPUNIT_ASSERT_EQUAL_MESSAGE(" test AddEdgeMap cycle ", tmp, cycles[i]);
   }
 
-  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test AddEdgeMap dispositif decorateur ", graph->numberOfEdges(),
-                               carte->numberOfEdges());
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test AddEdgeMap dispositif decorateur ",
+                               graph->numberOfEdges(), carte->numberOfEdges());
 
   /* test 2 */
   build4();
   //  qDebug() << carte<< endl;
   f1 = carte->faces[0];
   f2 = carte->splitFace(f1, nodes[2], nodes[7]);
-  e = carte->existEdge(nodes[2], nodes[7]).isValid() ? carte->existEdge(nodes[2], nodes[7])
-                                                     : carte->existEdge(nodes[7], nodes[2]);
+  e = carte->existEdge(nodes[2], nodes[7]).isValid()
+          ? carte->existEdge(nodes[2], nodes[7])
+          : carte->existEdge(nodes[7], nodes[2]);
   edges.push_back(e);
   //  qDebug() << carte<< endl;
   f3 = carte->splitFace(f2, nodes[1], nodes[5]);
-  e = carte->existEdge(nodes[1], nodes[5]).isValid() ? carte->existEdge(nodes[1], nodes[5])
-                                                     : carte->existEdge(nodes[5], nodes[1]);
+  e = carte->existEdge(nodes[1], nodes[5]).isValid()
+          ? carte->existEdge(nodes[1], nodes[5])
+          : carte->existEdge(nodes[5], nodes[1]);
   edges.push_back(e);
   //  qDebug() << carte<< endl;
   Face f4 = carte->splitFace(f3, nodes[1], nodes[4]);
-  e = carte->existEdge(nodes[1], nodes[4]).isValid() ? carte->existEdge(nodes[1], nodes[4])
-                                                     : carte->existEdge(nodes[4], nodes[1]);
+  e = carte->existEdge(nodes[1], nodes[4]).isValid()
+          ? carte->existEdge(nodes[1], nodes[4])
+          : carte->existEdge(nodes[4], nodes[1]);
   edges.push_back(e);
   //  qDebug() << carte<< endl;
   vector<vector<edge>> cycles3(4);
@@ -471,11 +475,13 @@ void PlanarConMapTest::testSplitFace() {
       tmp.push_back(e_tmp);
     }
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 2 AddEdgeMap cycle ", tmp == cycles3[i]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 2 AddEdgeMap cycle ",
+                                 tmp == cycles3[i]);
   }
 
   CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 2 AddEdgeMap dispositif decorateur ",
-                               carte->numberOfEdges() == graph->numberOfEdges());
+                               carte->numberOfEdges() ==
+                                   graph->numberOfEdges());
 }
 
 //============================================================
@@ -499,7 +505,8 @@ void PlanarConMapTest::testSuccCycleEdge() {
   do {
     e = carte->succCycleEdge(e, nodes[0]);
     i++;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(string(" test SuccCycleEdge cycle "), cycles[i], e);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(string(" test SuccCycleEdge cycle "),
+                                 cycles[i], e);
   } while (e != edges[0] && i < 4);
 
   carte->clear();
@@ -526,7 +533,8 @@ void PlanarConMapTest::testPrecCycleEdge() {
   do {
     e = carte->predCycleEdge(e, nodes[0]);
     i++;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(string(" test predCycleEdge cycle "), cycles[i], e);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(string(" test predCycleEdge cycle "),
+                                 cycles[i], e);
   } while ((e != edges[0]) && (i < 4));
 
   carte->clear();

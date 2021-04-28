@@ -19,44 +19,24 @@ class Rectangle {
   friend std::ostream &operator<<(std::ostream &os, const Rectangle &r);
 
 public:
-  Rectangle(double x = 0, double X = 0, double y = 0, double Y = 0, double xBorder = 0,
-            double yBorder = 0);
-  double getMaxX() const {
-    return maxX + xBorder;
-  }
-  double getMaxY() const {
-    return maxY + yBorder;
-  }
-  double getMinX() const {
-    return minX;
-  }
-  double getMinY() const {
-    return minY;
-  }
+  Rectangle(double x = 0, double X = 0, double y = 0, double Y = 0,
+            double xBorder = 0, double yBorder = 0);
+  double getMaxX() const { return maxX + xBorder; }
+  double getMaxY() const { return maxY + yBorder; }
+  double getMinX() const { return minX; }
+  double getMinY() const { return minY; }
   double getMinD(unsigned const d) const {
     return (d == 0 ? getMinX() : getMinY());
   }
   double getMaxD(unsigned const d) const {
     return (d == 0 ? getMaxX() : getMaxY());
   }
-  double getCentreX() const {
-    return minX + width() / 2.0;
-  }
-  double getCentreY() const {
-    return minY + height() / 2.0;
-  }
-  double width() const {
-    return getMaxX() - minX;
-  }
-  double height() const {
-    return getMaxY() - minY;
-  }
-  void moveCentreX(double x) {
-    moveMinX(x - width() / 2.0);
-  }
-  void moveCentreY(double y) {
-    moveMinY(y - height() / 2.0);
-  }
+  double getCentreX() const { return minX + width() / 2.0; }
+  double getCentreY() const { return minY + height() / 2.0; }
+  double width() const { return getMaxX() - minX; }
+  double height() const { return getMaxY() - minY; }
+  void moveCentreX(double x) { moveMinX(x - width() / 2.0); }
+  void moveCentreY(double y) { moveMinY(y - height() / 2.0); }
   void moveMinX(double x) {
     maxX = x + width() - xBorder;
     minX = x;
@@ -115,9 +95,7 @@ public:
     events = new Event *[2 * n];
   }
 
-  ~ConstraintsGenerator() {
-    delete[] events;
-  }
+  ~ConstraintsGenerator() { delete[] events; }
 
   // returns number of constraints generated
   int generateXConstraints(Rectangle rs[], Variable vars[], Constraint **&cs,

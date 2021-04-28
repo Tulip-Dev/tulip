@@ -13,8 +13,8 @@
 #ifndef SEEN_REMOVEOVERLAP_CONSTRAINT_H
 #define SEEN_REMOVEOVERLAP_CONSTRAINT_H
 
-#include <iostream>
 #include "variable.h"
+#include <iostream>
 namespace vpsc {
 
 class Constraint {
@@ -25,7 +25,8 @@ public:
   Variable *right;
   double gap;
   double lm;
-  Constraint(Variable *left, Variable *right, double gap, bool equality = false);
+  Constraint(Variable *left, Variable *right, double gap,
+             bool equality = false);
   ~Constraint();
   inline double slack() const {
     return right->position() - gap - left->position();
@@ -35,13 +36,16 @@ public:
   bool visited;
   bool equality;
 };
-#include <cfloat>
 #include "block.h"
-static inline bool compareConstraints(Constraint *const &l, Constraint *const &r) {
-  double const sl = l->left->block->timeStamp > l->timeStamp || l->left->block == l->right->block
+#include <cfloat>
+static inline bool compareConstraints(Constraint *const &l,
+                                      Constraint *const &r) {
+  double const sl = l->left->block->timeStamp > l->timeStamp ||
+                            l->left->block == l->right->block
                         ? -DBL_MAX
                         : l->slack();
-  double const sr = r->left->block->timeStamp > r->timeStamp || r->left->block == r->right->block
+  double const sr = r->left->block->timeStamp > r->timeStamp ||
+                            r->left->block == r->right->block
                         ? -DBL_MAX
                         : r->slack();
 

@@ -23,8 +23,8 @@
 
 #include <tulip/tulipconf.h>
 
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace tlp {
 
@@ -33,15 +33,18 @@ class TLP_QT_SCOPE StringsListSelectionWidgetInterface {
 public:
   virtual ~StringsListSelectionWidgetInterface() {}
 
-  virtual void setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList) = 0;
+  virtual void setUnselectedStringsList(
+      const std::vector<std::string> &unselectedStringsList) = 0;
 
-  virtual void setSelectedStringsList(const std::vector<std::string> &selectedStringsList) = 0;
+  virtual void setSelectedStringsList(
+      const std::vector<std::string> &selectedStringsList) = 0;
 
   virtual void clearUnselectedStringsList() = 0;
 
   virtual void clearSelectedStringsList() = 0;
 
-  virtual void setMaxSelectedStringsListSize(const unsigned int maxSelectedStringsListSize) = 0;
+  virtual void setMaxSelectedStringsListSize(
+      const unsigned int maxSelectedStringsListSize) = 0;
 
   virtual std::vector<std::string> getSelectedStringsList() const = 0;
 

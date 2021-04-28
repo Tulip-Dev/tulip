@@ -21,9 +21,9 @@
 #define TULIP_ACYCLICITY_TEST_H
 #include <vector>
 
-#include <tulip/tulipconf.h>
-#include <tulip/Node.h>
 #include <tulip/Edge.h>
+#include <tulip/Node.h>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
 
@@ -38,7 +38,8 @@ class Graph;
  *
  * These are stores here, along with the old self looping edge.
  *
- * From Wikipedia: "A directed acyclic graph (DAG), is a directed graph with no directed cycles."
+ * From Wikipedia: "A directed acyclic graph (DAG), is a directed graph with no
+ *directed cycles."
  **/
 struct SelfLoops {
 public:
@@ -53,9 +54,9 @@ public:
  *
  * @brief This class provides tests for acyclicity on a graph.
  * Results are cached in a map of graphs and result.
- * This class observes the graphs that have been tested to remove the result from this graph if it
- *is modified.
- * This forces the use of the singleton pattern instead of simply using static functions/members.
+ * This class observes the graphs that have been tested to remove the result
+ *from this graph if it is modified. This forces the use of the singleton
+ *pattern instead of simply using static functions/members.
  **/
 class TLP_SCOPE AcyclicTest {
 public:
@@ -73,7 +74,8 @@ public:
    *
    * @param graph The graph to make acyclic.
    * @param reversed The edges that were reversed during the process.
-   * @param selfLoops Sets of two nodes and three edges that were added instead of self loops.
+   * @param selfLoops Sets of two nodes and three edges that were added instead
+   *of self loops.
    * @return void
    **/
   static void makeAcyclic(Graph *graph, std::vector<edge> &reversed,
@@ -81,15 +83,16 @@ public:
 
   /**
    * @brief Returns whether the graph is acyclic.
-   * Collection of obstruction edges takes a bit of time, as iteration over the graph must continue
-   *even when it has been found cyclic.
+   * Collection of obstruction edges takes a bit of time, as iteration over the
+   *graph must continue even when it has been found cyclic.
    *
    * @param graph the graph to test for acyclicity
-   * @param obstructionEdges If not null, will be filled with edges that cause the graph to be
-   *cyclic. Defaults to 0.
+   * @param obstructionEdges If not null, will be filled with edges that cause
+   *the graph to be cyclic. Defaults to 0.
    * @return bool
    **/
-  static bool acyclicTest(const Graph *graph, std::vector<edge> *obstructionEdges = nullptr);
+  static bool acyclicTest(const Graph *graph,
+                          std::vector<edge> *obstructionEdges = nullptr);
 };
 } // namespace tlp
 

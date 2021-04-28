@@ -18,8 +18,8 @@
  */
 
 #include <cstring>
-#include <tulip/TulipMaterialDesignIcons.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TulipMaterialDesignIcons.h>
 
 #include <utf8.h>
 
@@ -38,7 +38,8 @@ struct cmpCharPtr {
 static map<const char *, unsigned int, cmpCharPtr> iconCodePoint;
 static vector<std::string> iconsNames;
 
-static inline void addIconCodePoint(const char *iconName, unsigned int codePoint) {
+static inline void addIconCodePoint(const char *iconName,
+                                    unsigned int codePoint) {
   iconCodePoint[iconName] = codePoint;
 }
 
@@ -54,7 +55,8 @@ std::string TulipMaterialDesignIcons::getWOFFLocation() {
 }
 
 std::string TulipMaterialDesignIcons::getWOFF2Location() {
-  return string(tlp::TulipBitmapDir).append("materialdesignicons-webfont.woff2");
+  return string(tlp::TulipBitmapDir)
+      .append("materialdesignicons-webfont.woff2");
 }
 
 bool TulipMaterialDesignIcons::isIconSupported(const std::string &iconName) {
@@ -73,7 +75,8 @@ const vector<std::string> &TulipMaterialDesignIcons::getSupportedIcons() {
   return iconsNames;
 }
 
-unsigned int TulipMaterialDesignIcons::getIconCodePoint(const std::string &iconName) {
+unsigned int
+TulipMaterialDesignIcons::getIconCodePoint(const std::string &iconName) {
   if (iconCodePoint.empty()) {
     initIconCodePoints();
   }
@@ -90,7 +93,8 @@ std::string TulipMaterialDesignIcons::getIconFamily(const std::string &) {
   return "materialdesignicons";
 }
 
-std::string TulipMaterialDesignIcons::getIconUtf8String(const std::string &iconName) {
+std::string
+TulipMaterialDesignIcons::getIconUtf8String(const std::string &iconName) {
   if (iconCodePoint.empty()) {
     initIconCodePoints();
   }

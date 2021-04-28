@@ -20,14 +20,14 @@
 #ifndef SOMPROPERTIESWIDGET_H_
 #define SOMPROPERTIESWIDGET_H_
 
-#include <tulip/Observable.h>
 #include <tulip/DataSet.h>
+#include <tulip/Observable.h>
 
-#include <QWidget>
 #include <QList>
+#include <QWidget>
 
-#include "GradientManager.h"
 #include "ComputeSOMWidget.h"
+#include "GradientManager.h"
 
 namespace Ui {
 class SOMPropertiesWidget;
@@ -66,9 +66,7 @@ public:
   bool getAutoMapping() const;
   bool getLinkColor() const;
 
-  ColorScale *getDefaultColorScale() const {
-    return defaultScale;
-  }
+  ColorScale *getDefaultColorScale() const { return defaultScale; }
 
   ColorScale *getPropertyColorScale(const std::string &propertyName);
   void clearpropertiesConfigurationWidget();
@@ -95,7 +93,8 @@ public:
 
   /**
    * @brief Store the configuration widget data properties.
-   * Function called during getData function to store the state of the configuration widget.
+   * Function called during getData function to store the state of the
+   * configuration widget.
    * @return The dataset containing the configuration state.
    */
   DataSet getData() const;

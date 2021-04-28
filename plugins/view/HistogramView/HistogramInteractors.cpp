@@ -17,23 +17,24 @@
  *
  */
 
+#include <tulip/GraphElementModel.h>
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseShowElementInfo.h>
-#include <tulip/GraphElementModel.h>
 
+#include "HistoStatsConfigWidget.h"
+#include "HistogramInteractors.h"
 #include "HistogramMetricMapping.h"
 #include "HistogramStatistics.h"
-#include "HistogramInteractors.h"
-#include "HistogramViewNavigator.h"
-#include "HistoStatsConfigWidget.h"
 #include "HistogramView.h"
+#include "HistogramViewNavigator.h"
 
-#include "../../utils/StandardInteractorPriority.h"
 #include "../../utils/PluginNames.h"
+#include "../../utils/StandardInteractorPriority.h"
 
 namespace tlp {
 
-HistogramInteractor::HistogramInteractor(const QString &iconPath, const QString &text,
+HistogramInteractor::HistogramInteractor(const QString &iconPath,
+                                         const QString &text,
                                          const unsigned int priority)
     : NodeLinkDiagramComponentInteractor(iconPath, text, priority) {}
 
@@ -46,13 +47,16 @@ PLUGIN(HistogramInteractorMetricMapping)
 PLUGIN(HistogramInteractorStatistics)
 PLUGIN(HistogramInteractorGetInformation)
 
-HistogramInteractorNavigation::HistogramInteractorNavigation(const PluginContext *)
-    : HistogramInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view",
+HistogramInteractorNavigation::HistogramInteractorNavigation(
+    const PluginContext *)
+    : HistogramInteractor(":/tulip/gui/icons/i_navigation.png",
+                          "Navigate in view",
                           StandardInteractorPriority::Navigation) {}
 
 void HistogramInteractorNavigation::construct() {
   setConfigurationWidgetText(
-      QString("<html><head><title></title></head><body><h3>View navigation interactor</h3>") +
+      QString(
+          "<html><head><title></title></head><body><h3>View navigation interactor</h3>") +
       "<p>This interactor allows to navigate in the histogram view.</p>" +
       "<p>When there is more than one graph properties selected, the corresponding histograms "
       "previews are generated and displayed in a matrix form. By <b>double clicking on an "
@@ -62,21 +66,25 @@ void HistogramInteractorNavigation::construct() {
       "the view.</p>" +
       "<p>Otherwise, this interactor offers the same functionnalities as the one in the \"Node "
       "Link Diagram view\". The commands are described below:</p>" +
-      "<b>Ctrl + Mouse up/down</b>: zoom<br>" + "<b>Ctrl + Mouse left/right</b>: z rotation<br>" +
+      "<b>Ctrl + Mouse up/down</b>: zoom<br>" +
+      "<b>Ctrl + Mouse left/right</b>: z rotation<br>" +
       "<b>Shift + Mouse</b>: rotation<br>" + "<b>Key up/down</b>: up/down<br>" +
-      "<b>Key left/right</b>: left/right<br>" + "<b>Key page up/down</b>: zoom<br>" +
-      "<b>Key insert</b>: rotate<br>" + "</body></html>");
+      "<b>Key left/right</b>: left/right<br>" +
+      "<b>Key page up/down</b>: zoom<br>" + "<b>Key insert</b>: rotate<br>" +
+      "</body></html>");
   push_back(new HistogramViewNavigator);
   push_back(new MouseNKeysNavigator);
 }
 
-HistogramInteractorMetricMapping::HistogramInteractorMetricMapping(const PluginContext *)
+HistogramInteractorMetricMapping::HistogramInteractorMetricMapping(
+    const PluginContext *)
     : HistogramInteractor(":/i_histo_color_mapping.png", "Metric Mapping",
                           StandardInteractorPriority::ViewInteractor1) {}
 
 void HistogramInteractorMetricMapping::construct() {
   setConfigurationWidgetText(
-      QString("<html><head><title></title></head><body>") + "<h3>Metric mapping interactor</h3>" +
+      QString("<html><head><title></title></head><body>") +
+      "<h3>Metric mapping interactor</h3>" +
       "<p>This interactor allows to perform a metric mapping on nodes colors, nodes borders "
       "colors, nodes sizes, nodes borders widths or nodes glyphs in a visual way.</p>" +
       "<p>To select the mapping type, do a right click on the scale located at the left of the "
@@ -146,7 +154,8 @@ void HistogramInteractorMetricMapping::construct() {
   push_back(new MousePanNZoomNavigator);
 }
 
-HistogramInteractorStatistics::HistogramInteractorStatistics(const PluginContext *)
+HistogramInteractorStatistics::HistogramInteractorStatistics(
+    const PluginContext *)
     : HistogramInteractor(":/i_histo_statistics.png", "Statistics",
                           StandardInteractorPriority::ViewInteractor2),
       histoStatsConfigWidget(nullptr), histoStatistics(nullptr) {}
@@ -190,13 +199,15 @@ public:
 
 protected:
   /**
-   * @brief buildModel create and returns the model to visualize edit elements parameters.
+   * @brief buildModel create and returns the model to visualize edit elements
+   * parameters.
    * @param elementType the type of the element can be NODE or EDGE
    * @param elementId elementId the id of the element
    * @param parent the parent for the model creation.
    * @return
    */
-  QAbstractItemModel *buildModel(ElementType elementType, unsigned int elementId,
+  QAbstractItemModel *buildModel(ElementType elementType,
+                                 unsigned int elementId,
                                  QObject *parent) const override {
     if (hView->getDataLocation() == EDGE) {
       elementId = hView->getMappedId(elementId);
@@ -212,7 +223,8 @@ protected:
    * @param elementId the id of the element
    * @return
    */
-  QString elementName(ElementType elementType, unsigned int elementId) const override {
+  QString elementName(ElementType elementType,
+                      unsigned int elementId) const override {
     if (hView->getDataLocation() == EDGE) {
       elementId = hView->getMappedId(elementId);
       return QString("Edge") + " #" + QString::number(elementId);
@@ -222,21 +234,24 @@ protected:
   }
 };
 
-HistogramInteractorGetInformation::HistogramInteractorGetInformation(const tlp::PluginContext *)
-    : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png",
-                                         "Display node or edge properties",
-                                         StandardInteractorPriority::GetInformation) {}
+HistogramInteractorGetInformation::HistogramInteractorGetInformation(
+    const tlp::PluginContext *)
+    : NodeLinkDiagramComponentInteractor(
+          ":/tulip/gui/icons/i_select.png", "Display node or edge properties",
+          StandardInteractorPriority::GetInformation) {}
 
 void HistogramInteractorGetInformation::construct() {
-  setConfigurationWidgetText(QString("<h3>Display node or edge properties</h3>") +
-                             "<b>Mouse left click</b> on an element to display its "
-                             "properties.<br/>then <b>Mouse left click</b> on a row to edit the "
-                             "corresponding value.");
+  setConfigurationWidgetText(
+      QString("<h3>Display node or edge properties</h3>") +
+      "<b>Mouse left click</b> on an element to display its "
+      "properties.<br/>then <b>Mouse left click</b> on a row to edit the "
+      "corresponding value.");
   push_back(new MousePanNZoomNavigator);
   push_back(new HistogramMouseShowElementInfo);
 }
 
-bool HistogramInteractorGetInformation::isCompatible(const std::string &viewName) const {
+bool HistogramInteractorGetInformation::isCompatible(
+    const std::string &viewName) const {
   return (viewName == ViewName::HistogramViewName);
 }
 } // namespace tlp

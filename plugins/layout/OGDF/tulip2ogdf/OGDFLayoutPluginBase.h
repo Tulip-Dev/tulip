@@ -21,11 +21,11 @@
 #ifndef OGDF_LAYOUT_PLUGIN_BASE
 #define OGDF_LAYOUT_PLUGIN_BASE
 
-#include <tulip/TulipPluginHeaders.h>
 #include <tulip/PropertyAlgorithm.h>
+#include <tulip/TulipPluginHeaders.h>
 
-#include <ogdf/basic/Graph_d.h>
 #include <ogdf/basic/GraphAttributes.h>
+#include <ogdf/basic/Graph_d.h>
 #include <ogdf/basic/LayoutModule.h>
 
 #include "TulipToOGDF.h"
@@ -34,7 +34,8 @@ namespace tlp {
 
 class OGDFLayoutPluginBase : public tlp::LayoutAlgorithm {
 public:
-  OGDFLayoutPluginBase(const tlp::PluginContext *context, ogdf::LayoutModule *ogdfLayoutAlgo);
+  OGDFLayoutPluginBase(const tlp::PluginContext *context,
+                       ogdf::LayoutModule *ogdfLayoutAlgo);
   ~OGDFLayoutPluginBase() override;
 
   bool run() override;

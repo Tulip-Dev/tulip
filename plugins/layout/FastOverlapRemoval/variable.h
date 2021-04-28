@@ -10,9 +10,9 @@
 #ifndef SEEN_REMOVEOVERLAP_VARIABLE_H
 #define SEEN_REMOVEOVERLAP_VARIABLE_H
 
-#include <vector>
-#include <iostream>
 #include "block.h"
+#include <iostream>
+#include <vector>
 
 namespace vpsc {
 
@@ -31,19 +31,16 @@ public:
   Constraints out;
   char *toString();
   inline Variable(const double desiredPos = 0, const double weight = 1)
-      : desiredPosition(desiredPos), weight(weight), offset(0), block(nullptr), visited(false) {}
-  inline double position() const {
-    return block->posn + offset;
-  }
+      : desiredPosition(desiredPos), weight(weight), offset(0), block(nullptr),
+        visited(false) {}
+  inline double position() const { return block->posn + offset; }
   // double position() const;
   ~Variable(void) {
     in.clear();
     out.clear();
   }
 
-  size_t id() const {
-    return reinterpret_cast<size_t>(this);
-  }
+  size_t id() const { return reinterpret_cast<size_t>(this); }
 };
 } // namespace vpsc
 #endif // SEEN_REMOVEOVERLAP_VARIABLE_H

@@ -41,13 +41,14 @@
 
 class FastOverlapRemoval : public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATION("Fast Overlap Removal", "Daniel Archambault", "08/12/2006",
-                    "Implements a layout algorithm removing nodes overlap first published as:<br/>"
-                    "<b>Fast Node Overlap Removal</b>, Tim Dwyer, Kim Marriot, Peter J. Stuckey, "
-                    "Graph Drawing 2005, "
-                    "Vol. 3843 (2006), pp. 153-164, doi: <a "
-                    "href=\"https://doi.org/10.1007/11618058_15\">10.1007/11618058_15</a>",
-                    "1.3", "Misc")
+  PLUGININFORMATION(
+      "Fast Overlap Removal", "Daniel Archambault", "08/12/2006",
+      "Implements a layout algorithm removing nodes overlap first published as:<br/>"
+      "<b>Fast Node Overlap Removal</b>, Tim Dwyer, Kim Marriot, Peter J. Stuckey, "
+      "Graph Drawing 2005, "
+      "Vol. 3843 (2006), pp. 153-164, doi: <a "
+      "href=\"https://doi.org/10.1007/11618058_15\">10.1007/11618058_15</a>",
+      "1.3", "Misc")
 
   FastOverlapRemoval(const tlp::PluginContext *context);
   inline ~FastOverlapRemoval() override {}

@@ -20,9 +20,9 @@
 #ifndef HISTOGRAMSTATISTICS_H_
 #define HISTOGRAMSTATISTICS_H_
 
-#include <tulip/GLInteractor.h>
-#include <tulip/Coord.h>
 #include <map>
+#include <tulip/Coord.h>
+#include <tulip/GLInteractor.h>
 
 #include <QString>
 

@@ -16,18 +16,19 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <tulip/GlEdge.h>
+#include <tulip/GlLODCalculator.h>
+#include <tulip/GlLayer.h>
+#include <tulip/GlNode.h>
 #include <tulip/GlSelectSceneVisitor.h>
 #include <tulip/GlSimpleEntity.h>
-#include <tulip/GlNode.h>
-#include <tulip/GlEdge.h>
-#include <tulip/GlLayer.h>
-#include <tulip/GlLODCalculator.h>
 
 using namespace std;
 
 namespace tlp {
 
-GlSelectSceneVisitor::GlSelectSceneVisitor(SelectionFlag flag, GlGraphInputData *inputData,
+GlSelectSceneVisitor::GlSelectSceneVisitor(SelectionFlag flag,
+                                           GlGraphInputData *inputData,
                                            GlLODCalculator *calculator)
     : selectionFlag(flag), inputData(inputData), calculator(calculator) {}
 
@@ -38,12 +39,14 @@ void GlSelectSceneVisitor::visit(GlSimpleEntity *entity) {
 
 void GlSelectSceneVisitor::visit(GlNode *glNode) {
   if (selectionFlag == SelectNodes)
-    calculator->addNodeBoundingBox(glNode->id, glNode->pos, glNode->getBoundingBox(inputData));
+    calculator->addNodeBoundingBox(glNode->id, glNode->pos,
+                                   glNode->getBoundingBox(inputData));
 }
 
 void GlSelectSceneVisitor::visit(GlEdge *glEdge) {
   if (selectionFlag == SelectEdges)
-    calculator->addEdgeBoundingBox(glEdge->id, glEdge->pos, glEdge->getBoundingBox(inputData));
+    calculator->addEdgeBoundingBox(glEdge->id, glEdge->pos,
+                                   glEdge->getBoundingBox(inputData));
 }
 
 void GlSelectSceneVisitor::visit(GlLayer *layer) {

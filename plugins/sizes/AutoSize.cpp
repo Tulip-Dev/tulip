@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/TulipPluginHeaders.h>
 #include <cmath>
+#include <tulip/TulipPluginHeaders.h>
 
 using namespace tlp;
 
@@ -25,18 +25,19 @@ using namespace tlp;
 
 /// AutoSize.cpp - Compute size in order to prevent node-node overlapping
 /**
- * This plugin compute the size of nodes and edges such that node-node overlapping does not exist
- * (if it is possible).
- * and edge sizes are proportional to node sizes.
+ * This plugin compute the size of nodes and edges such that node-node
+ * overlapping does not exist (if it is possible). and edge sizes are
+ * proportional to node sizes.
  *
  *  \author David Auber Bordeaux University France: Email:auber@labri.fr
  */
 class AutoSize : public SizeAlgorithm {
 public:
-  PLUGININFORMATION("Auto Sizing", "Auber", "04/05/2001",
-                    "Resize the nodes and edges of a graph so that the graph gets easy to read. "
-                    "The size of a node will depend on the number of its sons.",
-                    "1.0", "Size")
+  PLUGININFORMATION(
+      "Auto Sizing", "Auber", "04/05/2001",
+      "Resize the nodes and edges of a graph so that the graph gets easy to read. "
+      "The size of a node will depend on the number of its sons.",
+      "1.0", "Size")
   AutoSize(const tlp::PluginContext *context) : SizeAlgorithm(context) {}
 
   bool run() override {
@@ -51,7 +52,8 @@ public:
 
 private:
   Size getNodeValue(const node n) {
-    LayoutProperty *entryLayout = graph->getProperty<LayoutProperty>("viewLayout");
+    LayoutProperty *entryLayout =
+        graph->getProperty<LayoutProperty>("viewLayout");
     SizeProperty *entrySize = graph->getProperty<SizeProperty>("viewSize");
 
     // Compute the minimal distance to one neighbour.
@@ -61,9 +63,10 @@ private:
     for (auto neigh : graph->nodes()) {
       if (neigh != n) {
         const Coord tmp2(entryLayout->getNodeValue(neigh));
-        double tmpDist = sqrt((tmp1.getX() - tmp2.getX()) * (tmp1.getX() - tmp2.getX()) +
-                              (tmp1.getY() - tmp2.getY()) * (tmp1.getY() - tmp2.getY()) +
-                              (tmp1.getZ() - tmp2.getZ()) * (tmp1.getZ() - tmp2.getZ()));
+        double tmpDist =
+            sqrt((tmp1.getX() - tmp2.getX()) * (tmp1.getX() - tmp2.getX()) +
+                 (tmp1.getY() - tmp2.getY()) * (tmp1.getY() - tmp2.getY()) +
+                 (tmp1.getZ() - tmp2.getZ()) * (tmp1.getZ() - tmp2.getZ()));
 
         dist = std::min(dist, tmpDist);
       }

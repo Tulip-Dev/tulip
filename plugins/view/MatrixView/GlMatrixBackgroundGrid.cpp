@@ -19,8 +19,8 @@
 
 #include "GlMatrixBackgroundGrid.h"
 
-#include <tulip/Graph.h>
 #include <tulip/GlLine.h>
+#include <tulip/Graph.h>
 
 #include "MatrixView.h"
 
@@ -28,7 +28,8 @@ using namespace std;
 
 namespace tlp {
 
-GlMatrixBackgroundGrid::GlMatrixBackgroundGrid(MatrixView *view) : _view(view) {}
+GlMatrixBackgroundGrid::GlMatrixBackgroundGrid(MatrixView *view)
+    : _view(view) {}
 
 BoundingBox GlMatrixBackgroundGrid::getBoundingBox() {
   int N = _view->graph()->numberOfNodes();
@@ -41,12 +42,15 @@ BoundingBox GlMatrixBackgroundGrid::getBoundingBox() {
 void GlMatrixBackgroundGrid::draw(float lod, tlp::Camera *camera) {
   Vector<int, 4> viewPort = camera->getViewport();
 
-  Coord topLeft(camera->viewportTo3DWorld(Coord(viewPort[0] + viewPort[2], viewPort[1], 0))),
-      bottomRight(camera->viewportTo3DWorld(Coord(viewPort[0], viewPort[1] + viewPort[3], 0)));
+  Coord topLeft(camera->viewportTo3DWorld(
+      Coord(viewPort[0] + viewPort[2], viewPort[1], 0))),
+      bottomRight(camera->viewportTo3DWorld(
+          Coord(viewPort[0], viewPort[1] + viewPort[3], 0)));
 
   GridDisplayMode mode = _view->gridDisplayMode();
 
-  if (mode == SHOW_NEVER || (mode == SHOW_ON_ZOOM && abs(bottomRight[0] - topLeft[0]) > 50))
+  if (mode == SHOW_NEVER ||
+      (mode == SHOW_ON_ZOOM && abs(bottomRight[0] - topLeft[0]) > 50))
     return;
 
   int N = _view->graph()->numberOfNodes();

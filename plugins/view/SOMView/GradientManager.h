@@ -22,9 +22,9 @@
 
 #include <map>
 #include <string>
-#include <vector>
 #include <tulip/Color.h>
 #include <tulip/ColorScale.h>
+#include <vector>
 
 /**
  * @brief Object used to store ColorScale for different properties.

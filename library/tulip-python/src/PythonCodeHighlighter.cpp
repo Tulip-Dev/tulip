@@ -17,15 +17,16 @@
  *
  */
 
-#include "tulip/PythonInterpreter.h"
 #include "tulip/PythonCodeHighlighter.h"
 #include "tulip/APIDataBase.h"
+#include "tulip/PythonInterpreter.h"
 
 #include <QTextDocument>
 
 using namespace tlp;
 
-PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent, bool /*darkBackground*/)
+PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent,
+                                             bool /*darkBackground*/)
     : QSyntaxHighlighter(parent), _shellMode(false) {
 
   QTextCharFormat builtinFormat;
@@ -65,7 +66,8 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent, bool /*darkB
   int i = 0;
 
   while (PythonInterpreter::pythonKeywords[i]) {
-    keywordPatterns << "\\b" + QString(PythonInterpreter::pythonKeywords[i++]) + "\\b";
+    keywordPatterns << "\\b" + QString(PythonInterpreter::pythonKeywords[i++]) +
+                           "\\b";
   }
 
   QStringList specialCharsPatterns;
@@ -97,7 +99,8 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent, bool /*darkB
     builtinModName = "builtins";
   }
 
-  if (PythonInterpreter::getInstance()->runString(QString("import ") + builtinModName)) {
+  if (PythonInterpreter::getInstance()->runString(QString("import ") +
+                                                  builtinModName)) {
     QVector<QString> builtinDictContent =
         PythonInterpreter::getInstance()->getObjectDictEntries(builtinModName);
     QStringList builtinPatterns;
@@ -142,7 +145,8 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent, bool /*darkB
 void PythonCodeHighlighter::highlightBlock(const QString &text) {
 
   if (_shellMode) {
-    if (currentBlock().blockNumber() > 2 && !text.startsWith(">>>") && !text.startsWith("...")) {
+    if (currentBlock().blockNumber() > 2 && !text.startsWith(">>>") &&
+        !text.startsWith("...")) {
       return;
     }
   }
@@ -163,16 +167,18 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
   for (int i = 0; i < text.length(); ++i) {
     if (text[i] == '"' && (i == 0 || text[i - 1] != '\\')) {
       // don't treat multiline strings here (enclosed in """)
-      if ((i + 1) < text.length() && (i + 2) < text.length() && text[i + 1] == '"' &&
-          text[i + 2] == '"') {
+      if ((i + 1) < text.length() && (i + 2) < text.length() &&
+          text[i + 1] == '"' && text[i + 2] == '"') {
         continue;
       }
 
-      if ((i - 1) > 0 && (i + 1) < text.length() && text[i - 1] == '"' && text[i + 1] == '"') {
+      if ((i - 1) > 0 && (i + 1) < text.length() && text[i - 1] == '"' &&
+          text[i + 1] == '"') {
         continue;
       }
 
-      if ((i - 1) > 0 && (i - 2) > 0 && text[i - 1] == '"' && text[i - 2] == '"') {
+      if ((i - 1) > 0 && (i - 2) > 0 && text[i - 1] == '"' &&
+          text[i - 2] == '"') {
         continue;
       }
 
@@ -193,16 +199,18 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
   for (int i = 0; i < text.length(); ++i) {
     if (text[i] == '\'' && (i == 0 || text[i - 1] != '\\')) {
       // don't treat multiline strings here (enclosed in ''')
-      if ((i + 1) < text.length() && (i + 2) < text.length() && text[i + 1] == '\'' &&
-          text[i + 2] == '\'') {
+      if ((i + 1) < text.length() && (i + 2) < text.length() &&
+          text[i + 1] == '\'' && text[i + 2] == '\'') {
         continue;
       }
 
-      if ((i - 1) > 0 && (i + 1) < text.length() && text[i - 1] == '\'' && text[i + 1] == '\'') {
+      if ((i - 1) > 0 && (i + 1) < text.length() && text[i - 1] == '\'' &&
+          text[i + 1] == '\'') {
         continue;
       }
 
-      if ((i - 1) > 0 && (i - 2) > 0 && text[i - 1] == '\'' && text[i - 2] == '\'') {
+      if ((i - 1) > 0 && (i - 2) > 0 && text[i - 1] == '\'' &&
+          text[i - 2] == '\'') {
         continue;
       }
 
@@ -250,7 +258,8 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
   static QRegExp triDoubleQuote("\"\"\"");
 
   // highlight multi-line strings
-  bool isInMultilne = highlightMultilineString(text, triSingleQuote, 1, _quotationFormat);
+  bool isInMultilne =
+      highlightMultilineString(text, triSingleQuote, 1, _quotationFormat);
 
   if (!isInMultilne)
     highlightMultilineString(text, triDoubleQuote, 2, _quotationFormat);
@@ -288,9 +297,9 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
   }
 }
 
-bool PythonCodeHighlighter::highlightMultilineString(const QString &text, const QRegExp &delimiter,
-                                                     const int inState,
-                                                     const QTextCharFormat &style) {
+bool PythonCodeHighlighter::highlightMultilineString(
+    const QString &text, const QRegExp &delimiter, const int inState,
+    const QTextCharFormat &style) {
   int start = -1;
   int add = -1;
   int commentPos = -1;

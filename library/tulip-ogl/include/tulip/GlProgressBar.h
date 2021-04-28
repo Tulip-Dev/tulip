@@ -21,10 +21,10 @@
 #ifndef GLPROGRESSBAR_H_
 #define GLPROGRESSBAR_H_
 
-#include <tulip/GlComposite.h>
-#include <tulip/SimplePluginProgress.h>
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
+#include <tulip/GlComposite.h>
+#include <tulip/SimplePluginProgress.h>
 
 const std::string SLIDER_TEXTURE_NAME = "cylinderTexture.png";
 
@@ -32,19 +32,21 @@ namespace tlp {
 /**
  *  This class allows to display a progress bar in OpenGL
  */
-class TLP_GL_SCOPE GlProgressBar : public GlComposite, public SimplePluginProgress {
+class TLP_GL_SCOPE GlProgressBar : public GlComposite,
+                                   public SimplePluginProgress {
 
 public:
   /**
    * GlProgressBar constructor
-   * \param centerPosition the position of the center of the frame containing the progress bar
-   * \param width the width of the frame containing the progress bar
-   * \param height the height of the frame containing the progress bar
-   * \param progressBarColor the color of the progress bar
-   * \param commentColor the color of the comment and the frame
+   * \param centerPosition the position of the center of the frame containing
+   * the progress bar \param width the width of the frame containing the
+   * progress bar \param height the height of the frame containing the progress
+   * bar \param progressBarColor the color of the progress bar \param
+   * commentColor the color of the comment and the frame
    */
-  GlProgressBar(const Coord &centerPosition, const unsigned int width, const unsigned int height,
-                const Color &progressBarcolor, const Color &commentColor = Color(0, 0, 0));
+  GlProgressBar(const Coord &centerPosition, const unsigned int width,
+                const unsigned int height, const Color &progressBarcolor,
+                const Color &commentColor = Color(0, 0, 0));
 
   ~GlProgressBar() override;
 
@@ -52,9 +54,7 @@ public:
    * This method allow to set a comment message above the progress bar
    * \param msg the text of the comment to display
    */
-  void setComment(const std::string &msg) override {
-    comment = msg;
-  }
+  void setComment(const std::string &msg) override { comment = msg; }
 
 protected:
   void progress_handler(int step, int max_step) override;

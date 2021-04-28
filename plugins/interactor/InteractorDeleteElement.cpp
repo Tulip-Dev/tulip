@@ -17,10 +17,10 @@
  *
  */
 
-#include <tulip/MouseInteractors.h>
-#include <tulip/NodeLinkDiagramComponentInteractor.h>
-#include <tulip/NodeLinkDiagramComponent.h>
 #include "../utils/StandardInteractorPriority.h"
+#include <tulip/MouseInteractors.h>
+#include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/NodeLinkDiagramComponentInteractor.h>
 
 using namespace tlp;
 
@@ -36,8 +36,9 @@ public:
    * Default constructor
    */
   InteractorDeleteElement(const tlp::PluginContext *)
-      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_del.png", "Delete nodes or edges",
-                                           StandardInteractorPriority::DeleteElement) {}
+      : NodeLinkDiagramComponentInteractor(
+            ":/tulip/gui/icons/i_del.png", "Delete nodes or edges",
+            StandardInteractorPriority::DeleteElement) {}
 
   /**
    * Construct chain of responsibility

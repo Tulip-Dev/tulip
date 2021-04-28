@@ -21,12 +21,12 @@
 #ifndef GL_HCVXHULL_H
 #define GL_HCVXHULL_H
 
-#include <string>
 #include <map>
+#include <string>
 
 #include <tulip/DataSet.h>
-#include <tulip/Observable.h>
 #include <tulip/GlConvexGraphHull.h>
+#include <tulip/Observable.h>
 
 namespace tlp {
 
@@ -40,15 +40,17 @@ class GlLayer;
 
 /**
  * Create a GlComposite item for each and every graph and subgraph.
- * This class observes the graph to update said hierarchy when a subgraph is added or deleted.
+ * This class observes the graph to update said hierarchy when a subgraph is
+ * added or deleted.
  */
 class TLP_QT_SCOPE GlCompositeHierarchyManager : private Observable {
 
 public:
-  GlCompositeHierarchyManager(Graph *graph, GlLayer *layer, const std::string &layerName,
-                              LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation,
-                              bool visible = false, const std::string &namingProperty = "name",
-                              const std::string &subCompositeSuffix = " sub-hulls");
+  GlCompositeHierarchyManager(
+      Graph *graph, GlLayer *layer, const std::string &layerName,
+      LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation,
+      bool visible = false, const std::string &namingProperty = "name",
+      const std::string &subCompositeSuffix = " sub-hulls");
 
   void setGraph(tlp::Graph *graph);
   DataSet getData();
@@ -72,7 +74,8 @@ private:
   /**
    * Create the hierarchy of GlConvexGraphHull
    */
-  void buildComposite(tlp::Graph *current, tlp::GlConvexGraphHullsComposite *composite);
+  void buildComposite(tlp::Graph *current,
+                      tlp::GlConvexGraphHullsComposite *composite);
 
   Graph *_graph;
   GlLayer *_layer;
@@ -91,7 +94,8 @@ private:
   /**
    * This map contains the composite that contains the associated graph's hull.
    */
-  std::map<tlp::Graph *, std::pair<tlp::GlConvexGraphHullsComposite *, GlConvexGraphHull *>>
+  std::map<tlp::Graph *,
+           std::pair<tlp::GlConvexGraphHullsComposite *, GlConvexGraphHull *>>
       _graphsComposites;
 };
 } // namespace tlp

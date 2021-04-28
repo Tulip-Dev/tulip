@@ -18,11 +18,11 @@
  */
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/GlCircle.h>
-#include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/Glyph.h>
 #include <tulip/TulipViewSettings.h>
 
 using namespace std;
@@ -30,10 +30,11 @@ using namespace tlp;
 
 namespace tlp {
 
-static void drawCircle(const Color &fillColor, const Color &borderColor, float borderWidth,
-                       const std::string &textureName, float lod, bool mode) {
-  static GlCircle circle(Coord(0, 0, 0), 0.5, Color(0, 0, 0, 255), Color(0, 0, 0, 255), true, true,
-                         0., 30);
+static void drawCircle(const Color &fillColor, const Color &borderColor,
+                       float borderWidth, const std::string &textureName,
+                       float lod, bool mode) {
+  static GlCircle circle(Coord(0, 0, 0), 0.5, Color(0, 0, 0, 255),
+                         Color(0, 0, 0, 255), true, true, 0., 30);
   circle.setFillColor(fillColor);
   circle.setLightingMode(mode);
 
@@ -59,8 +60,8 @@ static void drawCircle(const Color &fillColor, const Color &borderColor, float b
  */
 class Circle : public Glyph {
 public:
-  GLYPHINFORMATION("2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1.1",
-                   NodeShape::Circle)
+  GLYPHINFORMATION("2D - Circle", "David Auber", "09/07/2002",
+                   "Textured Circle", "1.1", NodeShape::Circle)
   Circle(const tlp::PluginContext *context = nullptr);
   ~Circle() override;
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
@@ -81,24 +82,29 @@ void Circle::draw(node n, float lod) {
 
   drawCircle(Glyph::glGraphInputData->getElementColor()->getNodeValue(n),
              Glyph::glGraphInputData->getElementBorderColor()->getNodeValue(n),
-             Glyph::glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod,
-             true);
+             Glyph::glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+             textureName, lod, true);
 }
 
 class EECircle : public EdgeExtremityGlyph {
 public:
   GLYPHINFORMATION("2D - Circle extremity", "David Auber", "09/07/2002",
-                   "Textured Circle for edge extremities", "1.1", EdgeExtremityShape::Circle)
+                   "Textured Circle for edge extremities", "1.1",
+                   EdgeExtremityShape::Circle)
   EECircle(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
-  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) override {
-    string textureName = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor,
+            float lod) override {
+    string textureName =
+        edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
     if (!textureName.empty())
-      textureName = edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
+      textureName =
+          edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
 
-    drawCircle(glyphColor, borderColor,
-               edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), textureName, lod,
-               false);
+    drawCircle(
+        glyphColor, borderColor,
+        edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+        textureName, lod, false);
   }
 };
 

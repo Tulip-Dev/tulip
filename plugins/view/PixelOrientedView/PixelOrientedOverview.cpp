@@ -17,20 +17,19 @@
  *
  */
 
-#include <tulip/GlTextureManager.h>
 #include <tulip/Gl2DRect.h>
+#include <tulip/GlGraphComposite.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlOffscreenRenderer.h>
-#include <tulip/GlGraphComposite.h>
+#include <tulip/GlTextureManager.h>
 
 #include "PixelOrientedOverview.h"
 
 using namespace pocore;
 using namespace std;
 
-template <typename T>
-std::string getStringFromNumber(T number) {
+template <typename T> std::string getStringFromNumber(T number) {
   std::ostringstream oss;
   oss.precision(5);
   oss << number;
@@ -54,13 +53,14 @@ namespace tlp {
 
 int PixelOrientedOverview::overviewCpt(0);
 
-PixelOrientedOverview::PixelOrientedOverview(TulipGraphDimension *data,
-                                             PixelOrientedMediator *pixelOrientedMediator,
-                                             Coord blCornerPos, const std::string &dimName,
-                                             const Color &backgroundColor, const Color &textColor)
-    : data(data), pixelOrientedMediator(pixelOrientedMediator), blCornerPos(blCornerPos),
-      dimName(dimName), frame(nullptr), frame2(nullptr), overviewGen(false),
-      backgroundColor(backgroundColor), textColor(textColor) {
+PixelOrientedOverview::PixelOrientedOverview(
+    TulipGraphDimension *data, PixelOrientedMediator *pixelOrientedMediator,
+    Coord blCornerPos, const std::string &dimName, const Color &backgroundColor,
+    const Color &textColor)
+    : data(data), pixelOrientedMediator(pixelOrientedMediator),
+      blCornerPos(blCornerPos), dimName(dimName), frame(nullptr),
+      frame2(nullptr), overviewGen(false), backgroundColor(backgroundColor),
+      textColor(textColor) {
 
   if (this->dimName.empty()) {
     this->dimName = data->getDimensionName();
@@ -84,29 +84,33 @@ PixelOrientedOverview::PixelOrientedOverview(TulipGraphDimension *data,
   glGraphInputData->setElementLayout(pixelLayout);
   glGraphInputData->setElementSize(pixelSize);
 
-  frame = new GlRect(Coord(blCornerPos.getX() - 3, blCornerPos.getY() + height + 3),
-                     Coord(blCornerPos.getX() + width + 3, blCornerPos.getY() - 3), Color(0, 0, 0),
-                     Color(0, 0, 0), false, true);
+  frame =
+      new GlRect(Coord(blCornerPos.getX() - 3, blCornerPos.getY() + height + 3),
+                 Coord(blCornerPos.getX() + width + 3, blCornerPos.getY() - 3),
+                 Color(0, 0, 0), Color(0, 0, 0), false, true);
   addGlEntity(frame, dimName + "frame");
-  frame2 = new GlRect(Coord(blCornerPos.getX() - 4, blCornerPos.getY() + height + 4),
-                      Coord(blCornerPos.getX() + width + 4, blCornerPos.getY() - 4), Color(0, 0, 0),
-                      Color(0, 0, 0), false, true);
+  frame2 =
+      new GlRect(Coord(blCornerPos.getX() - 4, blCornerPos.getY() + height + 4),
+                 Coord(blCornerPos.getX() + width + 4, blCornerPos.getY() - 4),
+                 Color(0, 0, 0), Color(0, 0, 0), false, true);
   addGlEntity(frame2, dimName + "frame 2");
 
-  backgroundRect = new GlRect(Coord(blCornerPos.getX(), blCornerPos.getY() + height),
-                              Coord(blCornerPos.getX() + width, blCornerPos.getY()),
-                              Color(255, 255, 255), Color(255, 255, 255), true, false);
+  backgroundRect =
+      new GlRect(Coord(blCornerPos.getX(), blCornerPos.getY() + height),
+                 Coord(blCornerPos.getX() + width, blCornerPos.getY()),
+                 Color(255, 255, 255), Color(255, 255, 255), true, false);
   addGlEntity(backgroundRect, "background rect");
-  clickLabel = new GlLabel(Coord(blCornerPos.getX() + width / 2, blCornerPos.getY() + height / 2),
-                           Size(width, height / 4), Color(0, 0, 0));
+  clickLabel = new GlLabel(
+      Coord(blCornerPos.getX() + width / 2, blCornerPos.getY() + height / 2),
+      Size(width, height / 4), Color(0, 0, 0));
   clickLabel->setText("Double Click to generate overview");
   addGlEntity(clickLabel, "label");
 
   computeBoundingBox();
 
-  overviewLabel =
-      new GlLabel(Coord(blCornerPos.getX() + width / 2, blCornerPos.getY() - labelHeight / 2),
-                  Size(width, labelHeight), textColor);
+  overviewLabel = new GlLabel(Coord(blCornerPos.getX() + width / 2,
+                                    blCornerPos.getY() - labelHeight / 2),
+                              Size(width, labelHeight), textColor);
   overviewLabel->setText(dimName);
   addGlEntity(overviewLabel, "overview label");
 }
@@ -116,13 +120,15 @@ PixelOrientedOverview::~PixelOrientedOverview() {
   reset(true);
 }
 
-struct NodeCoordXOrdering : public binary_function<pair<node, Coord>, pair<node, Coord>, bool> {
+struct NodeCoordXOrdering
+    : public binary_function<pair<node, Coord>, pair<node, Coord>, bool> {
   bool operator()(pair<node, Coord> p1, pair<node, Coord> p2) {
     return p1.second.getX() < p2.second.getX();
   }
 };
 
-struct NodeCoordYOrdering : public binary_function<pair<node, Coord>, pair<node, Coord>, bool> {
+struct NodeCoordYOrdering
+    : public binary_function<pair<node, Coord>, pair<node, Coord>, bool> {
   bool operator()(pair<node, Coord> p1, pair<node, Coord> p2) {
     return p1.second.getY() > p2.second.getY();
   }
@@ -192,11 +198,13 @@ void PixelOrientedOverview::computePixelView() {
   GlTextureManager::registerExternalTexture(textureName, textureId);
 
   if (findGlEntity(dimName) == nullptr) {
-    addGlEntity(new Gl2DRect(blCornerPos.getY() + pixelOrientedMediator->getImageHeight(),
-                             blCornerPos.getY(), blCornerPos.getX(),
-                             blCornerPos.getX() + pixelOrientedMediator->getImageWidth(),
-                             textureName),
-                dimName);
+    addGlEntity(
+        new Gl2DRect(
+            blCornerPos.getY() + pixelOrientedMediator->getImageHeight(),
+            blCornerPos.getY(), blCornerPos.getX(),
+            blCornerPos.getX() + pixelOrientedMediator->getImageWidth(),
+            textureName),
+        dimName);
     addGlEntity(overviewLabel, "overview label");
     computeBoundingBox();
   }

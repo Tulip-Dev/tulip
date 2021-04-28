@@ -17,15 +17,15 @@
  *
  */
 #include <string>
-#include <tulip/PropertyTypes.h>
-#include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
+#include <tulip/Color.h>
+#include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
+#include <tulip/Graph.h>
 #include <tulip/GraphProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/Color.h>
-#include <tulip/ColorProperty.h>
+#include <tulip/PropertyTypes.h>
 #include <tulip/Size.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
@@ -38,28 +38,27 @@ using namespace tlp;
 
 bool DataType::isTulipProperty(const std::string &typeName) {
 #define ISPROP(T) typeName.compare(typeid(T).name()) == 0
-  return (ISPROP(tlp::BooleanProperty *) || ISPROP(tlp::BooleanVectorProperty *) ||
-          ISPROP(tlp::DoubleProperty *) || ISPROP(tlp::DoubleVectorProperty *) ||
-          ISPROP(tlp::LayoutProperty *) || ISPROP(tlp::CoordVectorProperty *) ||
-          ISPROP(tlp::StringProperty *) || ISPROP(tlp::StringVectorProperty *) ||
-          ISPROP(tlp::IntegerProperty *) || ISPROP(tlp::IntegerVectorProperty *) ||
-          ISPROP(tlp::SizeProperty *) || ISPROP(tlp::SizeVectorProperty *) ||
-          ISPROP(tlp::ColorProperty *) || ISPROP(tlp::ColorVectorProperty *) ||
-          ISPROP(tlp::NumericProperty *) || ISPROP(tlp::PropertyInterface *) ||
-          ISPROP(tlp::GraphProperty *) || ISPROP(tlp::BooleanProperty) ||
-          ISPROP(tlp::BooleanVectorProperty) || ISPROP(tlp::DoubleProperty) ||
-          ISPROP(tlp::DoubleVectorProperty) || ISPROP(tlp::LayoutProperty) ||
-          ISPROP(tlp::CoordVectorProperty) || ISPROP(tlp::StringProperty) ||
-          ISPROP(tlp::StringVectorProperty) || ISPROP(tlp::IntegerProperty) ||
-          ISPROP(tlp::IntegerVectorProperty) || ISPROP(tlp::SizeProperty) ||
-          ISPROP(tlp::SizeVectorProperty) || ISPROP(tlp::ColorProperty) ||
-          ISPROP(tlp::ColorVectorProperty) || ISPROP(tlp::NumericProperty) ||
-          ISPROP(tlp::PropertyInterface) || ISPROP(tlp::GraphProperty));
+  return (
+      ISPROP(tlp::BooleanProperty *) || ISPROP(tlp::BooleanVectorProperty *) ||
+      ISPROP(tlp::DoubleProperty *) || ISPROP(tlp::DoubleVectorProperty *) ||
+      ISPROP(tlp::LayoutProperty *) || ISPROP(tlp::CoordVectorProperty *) ||
+      ISPROP(tlp::StringProperty *) || ISPROP(tlp::StringVectorProperty *) ||
+      ISPROP(tlp::IntegerProperty *) || ISPROP(tlp::IntegerVectorProperty *) ||
+      ISPROP(tlp::SizeProperty *) || ISPROP(tlp::SizeVectorProperty *) ||
+      ISPROP(tlp::ColorProperty *) || ISPROP(tlp::ColorVectorProperty *) ||
+      ISPROP(tlp::NumericProperty *) || ISPROP(tlp::PropertyInterface *) ||
+      ISPROP(tlp::GraphProperty *) || ISPROP(tlp::BooleanProperty) ||
+      ISPROP(tlp::BooleanVectorProperty) || ISPROP(tlp::DoubleProperty) ||
+      ISPROP(tlp::DoubleVectorProperty) || ISPROP(tlp::LayoutProperty) ||
+      ISPROP(tlp::CoordVectorProperty) || ISPROP(tlp::StringProperty) ||
+      ISPROP(tlp::StringVectorProperty) || ISPROP(tlp::IntegerProperty) ||
+      ISPROP(tlp::IntegerVectorProperty) || ISPROP(tlp::SizeProperty) ||
+      ISPROP(tlp::SizeVectorProperty) || ISPROP(tlp::ColorProperty) ||
+      ISPROP(tlp::ColorVectorProperty) || ISPROP(tlp::NumericProperty) ||
+      ISPROP(tlp::PropertyInterface) || ISPROP(tlp::GraphProperty));
 }
 
-DataSet::DataSet(const DataSet &set) {
-  *this = set;
-}
+DataSet::DataSet(const DataSet &set) { *this = set; }
 
 DataSet &DataSet::operator=(const DataSet &set) {
   if (this != &set) {
@@ -137,20 +136,17 @@ void DataSet::setData(const std::string &str, const DataType *value) {
   data.emplace_back(str, val);
 }
 
-unsigned int DataSet::size() const {
-  return uint(data.size());
-}
+unsigned int DataSet::size() const { return uint(data.size()); }
 
-bool DataSet::empty() const {
-  return data.empty();
-}
+bool DataSet::empty() const { return data.empty(); }
 
 Iterator<pair<string, DataType *>> *DataSet::getValues() const {
   list<pair<string, DataType *>>::const_iterator begin = data.begin();
   list<pair<string, DataType *>>::const_iterator end = data.end();
 
-  return new StlIterator<pair<string, DataType *>, list<pair<string, DataType *>>::const_iterator>(
-      begin, end);
+  return new StlIterator<pair<string, DataType *>,
+                         list<pair<string, DataType *>>::const_iterator>(begin,
+                                                                         end);
 }
 
 // management of the serialization
@@ -159,36 +155,42 @@ Iterator<pair<string, DataType *>> *DataSet::getValues() const {
 DataTypeSerializerContainer DataSet::serializerContainer;
 
 // registering of a data type serializer
-void DataSet::registerDataTypeSerializer(const std::string &typeName, DataTypeSerializer *dts) {
+void DataSet::registerDataTypeSerializer(const std::string &typeName,
+                                         DataTypeSerializer *dts) {
 
 #ifndef NDEBUG
   std::unordered_map<std::string, DataTypeSerializer *>::iterator it =
       serializerContainer.tnTodts.find(typeName);
 
   if (it != serializerContainer.tnTodts.end())
-    tlp::warning() << "Warning: a data type serializer is already registered for type "
-                   << demangleClassName(typeName.c_str()).c_str() << std::endl;
+    tlp::warning()
+        << "Warning: a data type serializer is already registered for type "
+        << demangleClassName(typeName.c_str()).c_str() << std::endl;
 
   it = serializerContainer.otnTodts.find(dts->outputTypeName);
 
   if (it != serializerContainer.otnTodts.end())
-    tlp::warning() << "Warning: a data type serializer is already registered for read type "
-                   << dts->outputTypeName << std::endl;
+    tlp::warning()
+        << "Warning: a data type serializer is already registered for read type "
+        << dts->outputTypeName << std::endl;
 
 #endif
 
-  serializerContainer.tnTodts[typeName] = serializerContainer.otnTodts[dts->outputTypeName] = dts;
+  serializerContainer.tnTodts[typeName] =
+      serializerContainer.otnTodts[dts->outputTypeName] = dts;
 }
 
 // data write
-void DataSet::writeData(std::ostream &os, const std::string &prop, const DataType *dt) const {
+void DataSet::writeData(std::ostream &os, const std::string &prop,
+                        const DataType *dt) const {
   std::unordered_map<std::string, DataTypeSerializer *>::iterator it =
       serializerContainer.tnTodts.find(dt->getTypeName());
 
   if (it == serializerContainer.tnTodts.end()) {
 #ifndef EMSCRIPTEN
     tlp::warning() << "Write error: No data serializer found for type "
-                   << demangleClassName(dt->getTypeName().c_str()).c_str() << std::endl;
+                   << demangleClassName(dt->getTypeName().c_str()).c_str()
+                   << std::endl;
 #endif
     return;
   }
@@ -213,8 +215,8 @@ bool DataSet::readData(std::istream &is, const std::string &prop,
   auto it = serializerContainer.otnTodts.find(outputTypeName);
 
   if (it == serializerContainer.otnTodts.end()) {
-    tlp::warning() << "Read error: No data type serializer found for read type " << outputTypeName
-                   << std::endl;
+    tlp::warning() << "Read error: No data type serializer found for read type "
+                   << outputTypeName << std::endl;
     return false;
   }
 
@@ -338,7 +340,8 @@ DataTypeSerializer *DataSet::typenameToSerializer(const std::string &name) {
 string DataSet::toString() const {
   stringstream ss;
   for (const pair<string, DataType *> &p : getValues()) {
-    DataTypeSerializer *serializer = DataSet::typenameToSerializer(p.second->getTypeName());
+    DataTypeSerializer *serializer =
+        DataSet::typenameToSerializer(p.second->getTypeName());
 
     if (serializer) {
       ss << "'" << p.first << "'=";
@@ -346,7 +349,8 @@ string DataSet::toString() const {
       ss << " ";
     } else {
       if (p.second->isTulipProperty()) {
-        PropertyInterface *prop = *(static_cast<PropertyInterface **>(p.second->value));
+        PropertyInterface *prop =
+            *(static_cast<PropertyInterface **>(p.second->value));
         ss << "'" << p.first << "'=";
 
         if (prop)

@@ -20,14 +20,14 @@
 #ifndef PIXELORIENTEDDRAWING_H_
 #define PIXELORIENTEDDRAWING_H_
 
-#include "POLIB/TulipGraphDimension.h"
 #include "POLIB/PixelOrientedMediator.h"
+#include "POLIB/TulipGraphDimension.h"
 
-#include <tulip/GlGraphComposite.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
-#include <tulip/Graph.h>
-#include <tulip/GlRect.h>
+#include <tulip/GlGraphComposite.h>
 #include <tulip/GlLabel.h>
+#include <tulip/GlRect.h>
+#include <tulip/Graph.h>
 
 #include <string>
 
@@ -40,39 +40,25 @@ class PixelOrientedOverview : public GlComposite {
 
 public:
   PixelOrientedOverview(pocore::TulipGraphDimension *data,
-                        pocore::PixelOrientedMediator *pixelOrientedMediator, Coord blCornerPos,
-                        const std::string &dimName, const Color &backgroundColor,
-                        const Color &textColor);
+                        pocore::PixelOrientedMediator *pixelOrientedMediator,
+                        Coord blCornerPos, const std::string &dimName,
+                        const Color &backgroundColor, const Color &textColor);
 
   ~PixelOrientedOverview() override;
 
-  pocore::TulipGraphDimension *getData() const {
-    return data;
-  }
-  std::string getDimensionName() const {
-    return dimName;
-  }
-  LayoutProperty *getPixelViewLayout() const {
-    return pixelLayout;
-  }
-  SizeProperty *getPixelViewSize() const {
-    return pixelSize;
-  }
+  pocore::TulipGraphDimension *getData() const { return data; }
+  std::string getDimensionName() const { return dimName; }
+  LayoutProperty *getPixelViewLayout() const { return pixelLayout; }
+  SizeProperty *getPixelViewSize() const { return pixelSize; }
 
   void setBLCorner(const Coord &blCorner);
 
   void computePixelView();
 
-  bool overviewGenerated() const {
-    return overviewGen;
-  }
+  bool overviewGenerated() const { return overviewGen; }
 
-  void setBackgroundColor(const Color &color) {
-    backgroundColor = color;
-  }
-  void setTextColor(const Color &color) {
-    textColor = color;
-  }
+  void setBackgroundColor(const Color &color) { backgroundColor = color; }
+  void setTextColor(const Color &color) { textColor = color; }
 
 private:
   void computeBoundingBox() {

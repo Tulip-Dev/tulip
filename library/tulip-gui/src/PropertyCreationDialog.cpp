@@ -28,8 +28,9 @@
 using namespace tlp;
 
 PropertyCreationDialog::PropertyCreationDialog(QWidget *parent)
-    : QDialog(parent), ui(new Ui::PropertyCreationDialog), _createPropertyButton(nullptr),
-      _graph(nullptr), _createdProperty(nullptr) {
+    : QDialog(parent), ui(new Ui::PropertyCreationDialog),
+      _createPropertyButton(nullptr), _graph(nullptr),
+      _createdProperty(nullptr) {
   initGui();
 }
 
@@ -40,8 +41,8 @@ PropertyCreationDialog::PropertyCreationDialog(Graph *graph, QWidget *parent,
   initGui();
 
   if (!selectedType.empty()) {
-    int selectedIndex =
-        ui->propertyTypeComboBox->findText(propertyTypeToPropertyTypeLabel(selectedType));
+    int selectedIndex = ui->propertyTypeComboBox->findText(
+        propertyTypeToPropertyTypeLabel(selectedType));
 
     if (selectedIndex != -1)
       ui->propertyTypeComboBox->setCurrentIndex(selectedIndex);
@@ -67,16 +68,17 @@ void PropertyCreationDialog::initGui() {
   labels << propertyTypeToPropertyTypeLabel("vector<size>");
   labels << propertyTypeToPropertyTypeLabel("vector<string>");
   ui->propertyTypeComboBox->addItems(labels);
-  _createPropertyButton = ui->buttonBox->addButton(tr("Create"), QDialogButtonBox::AcceptRole);
-  ui->errorIconLabel->setPixmap(
-      QApplication::style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(16, 16));
-  connect(ui->propertyNameLineEdit, SIGNAL(textChanged(QString)), this, SLOT(checkValidity()));
+  _createPropertyButton =
+      ui->buttonBox->addButton(tr("Create"), QDialogButtonBox::AcceptRole);
+  ui->errorIconLabel->setPixmap(QApplication::style()
+                                    ->standardIcon(QStyle::SP_MessageBoxWarning)
+                                    .pixmap(16, 16));
+  connect(ui->propertyNameLineEdit, SIGNAL(textChanged(QString)), this,
+          SLOT(checkValidity()));
   checkValidity();
 }
 
-PropertyCreationDialog::~PropertyCreationDialog() {
-  delete ui;
-}
+PropertyCreationDialog::~PropertyCreationDialog() { delete ui; }
 
 void PropertyCreationDialog::setGraph(Graph *graph) {
   _graph = graph;
@@ -87,8 +89,9 @@ void PropertyCreationDialog::accept() {
   bool error = false;
 
   if (_graph == nullptr) {
-    QMessageBox::warning(this, "Failed to create property", "The parent graph is invalid",
-                         QMessageBox::Ok, QMessageBox::Ok);
+    QMessageBox::warning(this, "Failed to create property",
+                         "The parent graph is invalid", QMessageBox::Ok,
+                         QMessageBox::Ok);
     error = true;
   }
 
@@ -96,31 +99,34 @@ void PropertyCreationDialog::accept() {
 
   if (propertyName.isEmpty()) {
     QMessageBox::warning(this, "Failed to create property",
-                         "You cannot create a property with an empty name", QMessageBox::Ok,
-                         QMessageBox::Ok);
+                         "You cannot create a property with an empty name",
+                         QMessageBox::Ok, QMessageBox::Ok);
     error = true;
   }
 
   if (_graph->existLocalProperty(QStringToTlpString(propertyName))) {
     QMessageBox::warning(this, "Failed to create property",
-                         "A property with the same name already exists", QMessageBox::Ok,
-                         QMessageBox::Ok);
+                         "A property with the same name already exists",
+                         QMessageBox::Ok, QMessageBox::Ok);
     error = true;
   }
 
   if (!error) {
     _graph->push();
-    _createdProperty = _graph->getLocalProperty(
-        QStringToTlpString(propertyName),
-        propertyTypeLabelToPropertyType(ui->propertyTypeComboBox->currentText()));
+    _createdProperty =
+        _graph->getLocalProperty(QStringToTlpString(propertyName),
+                                 propertyTypeLabelToPropertyType(
+                                     ui->propertyTypeComboBox->currentText()));
   }
 
   QDialog::accept();
 }
 
-PropertyInterface *PropertyCreationDialog::createNewProperty(tlp::Graph *graph, QWidget *parent,
-                                                             const std::string &selectedType) {
-  PropertyCreationDialog *dialog = new PropertyCreationDialog(graph, parent, selectedType);
+PropertyInterface *
+PropertyCreationDialog::createNewProperty(tlp::Graph *graph, QWidget *parent,
+                                          const std::string &selectedType) {
+  PropertyCreationDialog *dialog =
+      new PropertyCreationDialog(graph, parent, selectedType);
   PropertyInterface *result = nullptr;
 
   if (dialog->exec() == QDialog::Accepted) {
@@ -140,7 +146,8 @@ void PropertyCreationDialog::checkValidity() {
     _createPropertyButton->setEnabled(false);
     return;
   } else if (propertyName.isEmpty()) {
-    ui->errorLabel->setText(tr("You cannot create a property with an empty name"));
+    ui->errorLabel->setText(
+        tr("You cannot create a property with an empty name"));
     _createPropertyButton->setEnabled(false);
     ui->errorNotificationWidget->setVisible(true);
     return;

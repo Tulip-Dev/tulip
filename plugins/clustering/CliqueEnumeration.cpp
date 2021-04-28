@@ -18,12 +18,12 @@
  */
 #include "CliqueEnumeration.h"
 
-#include <tulip/SimpleTest.h>
 #include <tulip/Graph.h>
+#include <tulip/SimpleTest.h>
 
-#include <sstream>
 #include <algorithm>
 #include <iterator>
+#include <sstream>
 #include <unordered_map>
 
 PLUGIN(CliqueEnumeration)
@@ -35,7 +35,8 @@ using namespace std;
 CliqueEnumeration::CliqueEnumeration(tlp::PluginContext *context)
     : Algorithm(context), minsize(0), cliqueid(0) {
   addInParameter<unsigned int>("minimum size", "Clique minimum size", "0");
-  addOutParameter<unsigned int>("#cliques created", "Number of cliques (subgraphs) created");
+  addOutParameter<unsigned int>("#cliques created",
+                                "Number of cliques (subgraphs) created");
 }
 
 //================================================================================
@@ -70,7 +71,8 @@ node CliqueEnumeration::choosePivot(const set<node> &C) {
 }
 
 //================================================================================
-void CliqueEnumeration::maxCliquePivot(set<node> &P, const vector<node> &R, set<node> &X) {
+void CliqueEnumeration::maxCliquePivot(set<node> &P, const vector<node> &R,
+                                       set<node> &X) {
 
   set<node> C(P);
   C.insert(X.begin(), X.end());
@@ -112,19 +114,16 @@ void CliqueEnumeration::maxCliquePivot(set<node> &P, const vector<node> &R, set<
 struct DegreeOrderingElem {
   DegreeOrderingElem() : deg(0) {}
   DegreeOrderingElem(tlp::node n, unsigned int deg) : n(n), deg(deg) {}
-  bool operator==(const DegreeOrderingElem &b) const {
-    return n == b.n;
-  }
-  bool operator!=(const DegreeOrderingElem &b) const {
-    return n != b.n;
-  }
+  bool operator==(const DegreeOrderingElem &b) const { return n == b.n; }
+  bool operator!=(const DegreeOrderingElem &b) const { return n != b.n; }
   tlp::node n;
   unsigned int deg;
 };
 
 //================================================================================
 struct LessDegreeOrdering {
-  bool operator()(const DegreeOrderingElem *u, const DegreeOrderingElem *v) const {
+  bool operator()(const DegreeOrderingElem *u,
+                  const DegreeOrderingElem *v) const {
     if (u->deg == v->deg)
       return u->n.id < v->n.id;
 

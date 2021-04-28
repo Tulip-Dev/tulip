@@ -21,15 +21,15 @@
 
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include <tulip/Glyph.h>
+#include <tulip/DrawingTools.h>
 #include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/GlTools.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlTextureManager.h>
-#include <tulip/TulipViewSettings.h>
-#include <tulip/DrawingTools.h>
+#include <tulip/GlTools.h>
+#include <tulip/Glyph.h>
 #include <tulip/OpenGlConfigManager.h>
+#include <tulip/TulipViewSettings.h>
 
 using namespace std;
 using namespace tlp;
@@ -45,12 +45,14 @@ static vector<unsigned int> buffers;
 static void drawCone() {
   if (coneVertices.empty()) {
     const unsigned int numberOfSides = 30;
-    coneVertices = computeRegularPolygon(numberOfSides, Coord(0, 0, -0.5), Size(0.5, 0.5));
+    coneVertices =
+        computeRegularPolygon(numberOfSides, Coord(0, 0, -0.5), Size(0.5, 0.5));
     coneVertices.push_back(Coord(0, 0, -0.5));
     coneVertices.push_back(Coord(0, 0, 0.5));
 
     for (size_t i = 0; i < coneVertices.size(); ++i) {
-      coneTexCoords.push_back(Vec2f(coneVertices[i][0] + 0.5, coneVertices[i][1] + 0.5));
+      coneTexCoords.push_back(
+          Vec2f(coneVertices[i][0] + 0.5, coneVertices[i][1] + 0.5));
     }
 
     for (unsigned int i = 0; i < numberOfSides - 1; ++i) {
@@ -79,17 +81,18 @@ static void drawCone() {
     glGenBuffers(4, &buffers[0]);
 
     glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-    glBufferData(GL_ARRAY_BUFFER, coneVertices.size() * 3 * sizeof(float), &coneVertices[0],
-                 GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, coneVertices.size() * 3 * sizeof(float),
+                 &coneVertices[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-    glBufferData(GL_ARRAY_BUFFER, coneNormals.size() * 3 * sizeof(float), &coneNormals[0],
-                 GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, coneNormals.size() * 3 * sizeof(float),
+                 &coneNormals[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
-    glBufferData(GL_ARRAY_BUFFER, coneTexCoords.size() * 2 * sizeof(float), &coneTexCoords[0],
-                 GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, coneTexCoords.size() * 2 * sizeof(float),
+                 &coneTexCoords[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, coneIndices.size() * sizeof(unsigned short),
-                 &coneIndices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+                 coneIndices.size() * sizeof(unsigned short), &coneIndices[0],
+                 GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
   }
 
@@ -107,7 +110,8 @@ static void drawCone() {
   glTexCoordPointer(2, GL_FLOAT, 0, BUFFER_OFFSET(0));
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
-  glDrawElements(GL_TRIANGLES, coneIndices.size(), GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));
+  glDrawElements(GL_TRIANGLES, coneIndices.size(), GL_UNSIGNED_SHORT,
+                 BUFFER_OFFSET(0));
 
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_NORMAL_ARRAY);
@@ -127,8 +131,8 @@ static void drawCone() {
  */
 class Cone : public NoShaderGlyph {
 public:
-  GLYPHINFORMATION("3D - Cone", "Bertrand Mathieu", "09/07/2002", "Textured cone", "1.0",
-                   NodeShape::Cone)
+  GLYPHINFORMATION("3D - Cone", "Bertrand Mathieu", "09/07/2002",
+                   "Textured cone", "1.0", NodeShape::Cone)
   Cone(const tlp::PluginContext *context = nullptr);
   ~Cone() override;
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
@@ -146,7 +150,8 @@ void Cone::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
 void Cone::draw(node n, float) {
 
   setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
-  const string &texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
+  const string &texFile =
+      glGraphInputData->getElementTexture()->getNodeValue(n);
 
   if (!texFile.empty()) {
     const string &texturePath = glGraphInputData->parameters->getTexturePath();
@@ -172,7 +177,8 @@ Coord Cone::getAnchor(const Coord &vector) const {
   y1 = 0;
   vx1 = sqrt(x * x + y * y);
   vy1 = z;
-  py = -1.0 * (vy1 * (vx0 / vy0 * y0 + x0 - x1) - vx1 * y1) / (vx1 - vy1 / vy0 * vx0);
+  py = -1.0 * (vy1 * (vx0 / vy0 * y0 + x0 - x1) - vx1 * y1) /
+       (vx1 - vy1 / vy0 * vx0);
   px = vx0 * (py - y0) / vy0 + x0;
 
   if (fabsf(py) > 0.5) {
@@ -193,20 +199,23 @@ Coord Cone::getAnchor(const Coord &vector) const {
 class EECone : public EdgeExtremityGlyph {
 public:
   GLYPHINFORMATION("3D - Cone extremity", "Bertrand Mathieu", "09/07/2002",
-                   "Textured cone for edge extremities", "1.0", EdgeExtremityShape::Cone)
+                   "Textured cone for edge extremities", "1.0",
+                   EdgeExtremityShape::Cone)
 
   EECone(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
   ~EECone() override {}
 
-  void draw(edge e, node /*n*/, const Color &glyphColor, const Color & /*borderColor*/,
-            float /*lod*/) override {
+  void draw(edge e, node /*n*/, const Color &glyphColor,
+            const Color & /*borderColor*/, float /*lod*/) override {
     glEnable(GL_LIGHTING);
     glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
     setMaterial(glyphColor);
-    const string &texFile = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+    const string &texFile =
+        edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
     if (!texFile.empty()) {
-      const string &texturePath = edgeExtGlGraphInputData->parameters->getTexturePath();
+      const string &texturePath =
+          edgeExtGlGraphInputData->parameters->getTexturePath();
       GlTextureManager::activateTexture(texturePath + texFile);
     }
 

@@ -28,11 +28,11 @@
 #include <tesselator.h>
 
 #include <tulip/GlComplexPolygon.h>
-#include <tulip/GlTools.h>
-#include <tulip/GlTextureManager.h>
-#include <tulip/ParametricCurves.h>
 #include <tulip/GlShaderProgram.h>
+#include <tulip/GlTextureManager.h>
+#include <tulip/GlTools.h>
 #include <tulip/GlXMLTools.h>
+#include <tulip/ParametricCurves.h>
 
 using namespace std;
 
@@ -246,7 +246,8 @@ const int nbFloatPerVertex = 5;
 
 namespace tlp {
 
-GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords, Color fcolor, int polygonEdgesType,
+GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords, Color fcolor,
+                                   int polygonEdgesType,
                                    const string &textureName, bool textured)
     : currentVector(-1), outlined(false), fillColor(fcolor), outlineSize(1),
       textureName(textureName), textured(textured), textureZoom(1.) {
@@ -254,18 +255,21 @@ GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords, Color fcolor, in
   runTesselation();
 }
 //=====================================================
-GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords, Color fcolor, Color ocolor,
-                                   int polygonEdgesType, const string &textureName, bool textured)
-    : currentVector(-1), outlined(true), fillColor(fcolor), outlineColor(ocolor), outlineSize(1),
-      textureName(textureName), textured(textured), textureZoom(1.) {
+GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords, Color fcolor,
+                                   Color ocolor, int polygonEdgesType,
+                                   const string &textureName, bool textured)
+    : currentVector(-1), outlined(true), fillColor(fcolor),
+      outlineColor(ocolor), outlineSize(1), textureName(textureName),
+      textured(textured), textureZoom(1.) {
   if (!coords.empty()) {
     createPolygon(coords, polygonEdgesType);
     runTesselation();
   }
 }
 //=====================================================
-GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord>> &coords, Color fcolor,
-                                   int polygonEdgesType, const string &textureName, bool textured)
+GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord>> &coords,
+                                   Color fcolor, int polygonEdgesType,
+                                   const string &textureName, bool textured)
     : currentVector(-1), outlined(false), fillColor(fcolor), outlineSize(1),
       textureName(textureName), textured(textured), textureZoom(1.) {
   for (size_t i = 0; i < coords.size(); ++i) {
@@ -275,10 +279,13 @@ GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord>> &coords, Color fc
   runTesselation();
 }
 //=====================================================
-GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord>> &coords, Color fcolor, Color ocolor,
-                                   int polygonEdgesType, const string &textureName, bool textured)
-    : currentVector(-1), outlined(true), fillColor(fcolor), outlineColor(ocolor), outlineSize(1),
-      textureName(textureName), textured(textured), textureZoom(1.) {
+GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord>> &coords,
+                                   Color fcolor, Color ocolor,
+                                   int polygonEdgesType,
+                                   const string &textureName, bool textured)
+    : currentVector(-1), outlined(true), fillColor(fcolor),
+      outlineColor(ocolor), outlineSize(1), textureName(textureName),
+      textured(textured), textureZoom(1.) {
   for (unsigned int i = 0; i < coords.size(); ++i) {
     createPolygon(coords[i], polygonEdgesType);
   }
@@ -286,7 +293,8 @@ GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord>> &coords, Color fc
   runTesselation();
 }
 //=====================================================
-void GlComplexPolygon::createPolygon(const vector<Coord> &coords, int polygonEdgesType) {
+void GlComplexPolygon::createPolygon(const vector<Coord> &coords,
+                                     int polygonEdgesType) {
   beginNewHole();
 
   if (polygonEdgesType == 1) {
@@ -328,13 +336,9 @@ void GlComplexPolygon::setOutlineMode(const bool outlined) {
   this->outlined = outlined;
 }
 //=====================================================
-void GlComplexPolygon::setOutlineSize(double size) {
-  outlineSize = size;
-}
+void GlComplexPolygon::setOutlineSize(double size) { outlineSize = size; }
 //=====================================================
-string GlComplexPolygon::getTextureName() {
-  return textureName;
-}
+string GlComplexPolygon::getTextureName() { return textureName; }
 //=====================================================
 void GlComplexPolygon::setTextureName(const string &name) {
   textureName = name;
@@ -377,7 +381,8 @@ void GlComplexPolygon::runTesselation() {
   // the tessellation will generate a set of polygons with maximum nvp vertices
   const int nvp = 6;
 
-  // run tessellation with the same default winding rule as in the GLU tessellator
+  // run tessellation with the same default winding rule as in the GLU
+  // tessellator
   if (tessTesselate(tess, TESS_WINDING_ODD, TESS_POLYGONS, nvp, 3, nullptr)) {
     const float *verts = tessGetVertices(tess);
     const int *elems = tessGetElements(tess);
@@ -396,16 +401,19 @@ void GlComplexPolygon::runTesselation() {
         Coord p(verts[idxx], verts[idxy], verts[idxz]);
         verticesTmp.emplace_back(p);
 
-        // if we did not encounter the vertex so far, add it in the verticesData vector
+        // if we did not encounter the vertex so far, add it in the verticesData
+        // vector
         if (vidx.find(p) == vidx.end()) {
           vidx[p] = verticesData.size() / nbFloatPerVertex;
           verticesData.push_back(p[0]); // x
           verticesData.push_back(p[1]); // y
           verticesData.push_back(p[2]); // z
-          verticesData.push_back(((p[0] - boundingBox[0][0]) / boundingBox.width()) /
-                                 textureZoom); // s
-          verticesData.push_back(((p[1] - boundingBox[0][1]) / boundingBox.height()) /
-                                 textureZoom); // t
+          verticesData.push_back(
+              ((p[0] - boundingBox[0][0]) / boundingBox.width()) /
+              textureZoom); // s
+          verticesData.push_back(
+              ((p[1] - boundingBox[0][1]) / boundingBox.height()) /
+              textureZoom); // t
         }
       }
 
@@ -424,9 +432,9 @@ void GlComplexPolygon::runTesselation() {
   tessDeleteTess(tess);
 }
 //=====================================================
-void GlComplexPolygon::activateQuadBorder(const float borderWidth, const Color &color,
-                                          const string &texture, const int position,
-                                          const float texCoordFactor, const int polygonId) {
+void GlComplexPolygon::activateQuadBorder(
+    const float borderWidth, const Color &color, const string &texture,
+    const int position, const float texCoordFactor, const int polygonId) {
   if (static_cast<size_t>(polygonId) < quadBorderActivated.size()) {
     quadBorderActivated[polygonId] = true;
     quadBorderWidth[polygonId] = borderWidth;
@@ -467,9 +475,12 @@ void GlComplexPolygon::draw(float, Camera *) {
 
   setMaterial(fillColor);
 
-  glVertexPointer(3, GL_FLOAT, nbFloatPerVertex * sizeof(GLfloat), &verticesData[0]);
-  glTexCoordPointer(2, GL_FLOAT, nbFloatPerVertex * sizeof(GLfloat), &verticesData[3]);
-  glDrawElements(GL_TRIANGLES, verticesIndices.size(), GL_UNSIGNED_INT, &verticesIndices[0]);
+  glVertexPointer(3, GL_FLOAT, nbFloatPerVertex * sizeof(GLfloat),
+                  &verticesData[0]);
+  glTexCoordPointer(2, GL_FLOAT, nbFloatPerVertex * sizeof(GLfloat),
+                    &verticesData[3]);
+  glDrawElements(GL_TRIANGLES, verticesIndices.size(), GL_UNSIGNED_INT,
+                 &verticesIndices[0]);
 
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
@@ -503,9 +514,11 @@ void GlComplexPolygon::draw(float, Camera *) {
 
         if (!outlineExtrusionShader) {
           outlineExtrusionShader = new GlShaderProgram();
-          outlineExtrusionShader->addShaderFromSourceCode(Vertex, outlineExtrusionVertexShaderSrc);
+          outlineExtrusionShader->addShaderFromSourceCode(
+              Vertex, outlineExtrusionVertexShaderSrc);
           outlineExtrusionShader->addGeometryShaderFromSourceCode(
-              outlineExtrusionGeometryShaderSrc, GL_LINES_ADJACENCY_EXT, GL_TRIANGLE_STRIP);
+              outlineExtrusionGeometryShaderSrc, GL_LINES_ADJACENCY_EXT,
+              GL_TRIANGLE_STRIP);
           outlineExtrusionShader->link();
           outlineExtrusionShader->printInfoLog();
         }
@@ -514,8 +527,8 @@ void GlComplexPolygon::draw(float, Camera *) {
 
           outlineExtrusionShader->activate();
 
-          GLint vertexPosLoc =
-              glGetAttribLocation(outlineExtrusionShader->getShaderProgramId(), "indice");
+          GLint vertexPosLoc = glGetAttribLocation(
+              outlineExtrusionShader->getShaderProgramId(), "indice");
           glEnableVertexAttribArray(vertexPosLoc);
 
           if (!(quadBorderTexture[v]).empty()) {
@@ -526,16 +539,21 @@ void GlComplexPolygon::draw(float, Camera *) {
           setMaterial(quadBorderColor[v]);
 
           glVertexPointer(3, GL_FLOAT, 3 * sizeof(GLfloat), &points[v][0]);
-          glVertexAttribPointer(vertexPosLoc, 1, GL_FLOAT, GL_FALSE, 1 * sizeof(float),
-                                &pointsIdx[v][0]);
+          glVertexAttribPointer(vertexPosLoc, 1, GL_FLOAT, GL_FALSE,
+                                1 * sizeof(float), &pointsIdx[v][0]);
 
-          outlineExtrusionShader->setUniformInt("outlinePos", quadBorderPosition[v]);
+          outlineExtrusionShader->setUniformInt("outlinePos",
+                                                quadBorderPosition[v]);
           outlineExtrusionShader->setUniformFloat("size", quadBorderWidth[v]);
           outlineExtrusionShader->setUniformInt("nbVertices", points[v].size());
-          outlineExtrusionShader->setUniformVec3Float("firstPoint", points[v][0]);
-          outlineExtrusionShader->setUniformVec3Float("secondPoint", points[v][1]);
-          outlineExtrusionShader->setUniformVec3Float("lastPoint", points[v][points[v].size() - 1]);
-          outlineExtrusionShader->setUniformFloat("texFactor", quadBorderTexFactor[v]);
+          outlineExtrusionShader->setUniformVec3Float("firstPoint",
+                                                      points[v][0]);
+          outlineExtrusionShader->setUniformVec3Float("secondPoint",
+                                                      points[v][1]);
+          outlineExtrusionShader->setUniformVec3Float(
+              "lastPoint", points[v][points[v].size() - 1]);
+          outlineExtrusionShader->setUniformFloat("texFactor",
+                                                  quadBorderTexFactor[v]);
 
           glDrawArrays(GL_LINE_STRIP_ADJACENCY_EXT, 0, points[v].size());
 
@@ -595,20 +613,24 @@ void GlComplexPolygon::getXMLOnlyData(string &outString) {
   GlXMLTools::getXML(outString, "textureName", textureName);
 }
 //============================================================
-void GlComplexPolygon::setWithXML(const string &inString, unsigned int &currentPosition) {
+void GlComplexPolygon::setWithXML(const string &inString,
+                                  unsigned int &currentPosition) {
 
   int numberOfVector;
-  GlXMLTools::setWithXML(inString, currentPosition, "numberOfVector", numberOfVector);
+  GlXMLTools::setWithXML(inString, currentPosition, "numberOfVector",
+                         numberOfVector);
 
   for (int i = 0; i < numberOfVector; ++i) {
     stringstream str;
     str << i;
     points.emplace_back();
-    GlXMLTools::setWithXML(inString, currentPosition, "points" + str.str(), points[i]);
+    GlXMLTools::setWithXML(inString, currentPosition, "points" + str.str(),
+                           points[i]);
   }
 
   GlXMLTools::setWithXML(inString, currentPosition, "fillColor", fillColor);
-  GlXMLTools::setWithXML(inString, currentPosition, "outlineColor", outlineColor);
+  GlXMLTools::setWithXML(inString, currentPosition, "outlineColor",
+                         outlineColor);
   GlXMLTools::setWithXML(inString, currentPosition, "outlined", outlined);
   GlXMLTools::setWithXML(inString, currentPosition, "outlineSize", outlineSize);
   GlXMLTools::setWithXML(inString, currentPosition, "textureName", textureName);

@@ -17,8 +17,8 @@
  *
  */
 #include <cstdio>
-#include <string>
 #include <iostream>
+#include <string>
 
 #include <tulip/TulipPluginHeaders.h>
 
@@ -40,13 +40,12 @@ public:
 };
 PLUGIN(Test)
 
-// this plugin is registered with the same identifier as the one above, it should not show up
+// this plugin is registered with the same identifier as the one above, it
+// should not show up
 class Test3 : public tlp::BooleanAlgorithm {
 public:
   PLUGININFORMATION("Test", "Jezequel", "03/11/2004", "0", "1.0", "")
   Test3(tlp::PluginContext *context) : tlp::BooleanAlgorithm(context) {}
-  bool run() override {
-    return false;
-  }
+  bool run() override { return false; }
 };
 PLUGIN(Test3)

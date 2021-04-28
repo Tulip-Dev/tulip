@@ -29,23 +29,25 @@ using namespace std;
 namespace tlp {
 
 HistoOptionsWidget::HistoOptionsWidget(QWidget *parent)
-    : QWidget(parent), oldValueInitialized(false), _ui(new Ui::HistoOptionsWidgetData) {
+    : QWidget(parent), oldValueInitialized(false),
+      _ui(new Ui::HistoOptionsWidgetData) {
   _ui->setupUi(this);
   _ui->backColorButton->setDialogTitle("Choose the background color");
   setBackgroundColor(Color(255, 255, 255));
-  connect(_ui->useXScaleCheckBox, SIGNAL(toggled(bool)), this, SLOT(pressXScaleCheckBox(bool)));
-  connect(_ui->useYScaleCheckBox, SIGNAL(toggled(bool)), this, SLOT(pressYScaleCheckBox(bool)));
+  connect(_ui->useXScaleCheckBox, SIGNAL(toggled(bool)), this,
+          SLOT(pressXScaleCheckBox(bool)));
+  connect(_ui->useYScaleCheckBox, SIGNAL(toggled(bool)), this,
+          SLOT(pressYScaleCheckBox(bool)));
 }
 
-HistoOptionsWidget::~HistoOptionsWidget() {
-  delete _ui;
-}
+HistoOptionsWidget::~HistoOptionsWidget() { delete _ui; }
 
 void HistoOptionsWidget::setWidgetEnabled(const bool enabled) {
   _ui->frame->setEnabled(enabled);
 }
 
-void HistoOptionsWidget::setNbOfHistogramBins(const unsigned int nbOfHistogramBins) {
+void HistoOptionsWidget::setNbOfHistogramBins(
+    const unsigned int nbOfHistogramBins) {
   _ui->nbHistoBins->setValue(nbOfHistogramBins);
 }
 
@@ -61,7 +63,8 @@ unsigned int HistoOptionsWidget::getNbXGraduations() {
   return _ui->nbXGraduations->value();
 }
 
-void HistoOptionsWidget::setYAxisIncrementStep(const unsigned int yAxisIncrementStep) {
+void HistoOptionsWidget::setYAxisIncrementStep(
+    const unsigned int yAxisIncrementStep) {
   _ui->YAxisIncrementStep->setValue(yAxisIncrementStep);
 }
 
@@ -69,7 +72,8 @@ unsigned int HistoOptionsWidget::getYAxisIncrementStep() {
   return _ui->YAxisIncrementStep->value();
 }
 
-void HistoOptionsWidget::setCumulativeFrequenciesHistogram(const bool cumulHisto) {
+void HistoOptionsWidget::setCumulativeFrequenciesHistogram(
+    const bool cumulHisto) {
   _ui->cumulFreqHisto->setChecked(cumulHisto);
 }
 
@@ -77,7 +81,8 @@ bool HistoOptionsWidget::cumulativeFrequenciesHisto() {
   return _ui->cumulFreqHisto->isChecked();
 }
 
-void HistoOptionsWidget::setUniformQuantification(const bool uniformQuantification) {
+void HistoOptionsWidget::setUniformQuantification(
+    const bool uniformQuantification) {
   _ui->uniformQuantificationCB->setChecked(uniformQuantification);
 }
 
@@ -131,17 +136,20 @@ void HistoOptionsWidget::setXAxisScale(const std::pair<double, double> &value) {
   _ui->useXMaxSpinBox->setValue(value.second);
 }
 std::pair<double, double> HistoOptionsWidget::getYAxisScale() const {
-  return std::make_pair(_ui->useYMinSpinBox->value(), _ui->useYMaxSpinBox->value());
+  return std::make_pair(_ui->useYMinSpinBox->value(),
+                        _ui->useYMaxSpinBox->value());
 }
 void HistoOptionsWidget::setYAxisScale(const std::pair<double, double> &value) {
   _ui->useYMinSpinBox->setValue(value.first);
   _ui->useYMaxSpinBox->setValue(value.second);
 }
 
-void HistoOptionsWidget::setInitXAxisScale(const std::pair<double, double> &value) {
+void HistoOptionsWidget::setInitXAxisScale(
+    const std::pair<double, double> &value) {
   initXAxisScale = value;
 }
-void HistoOptionsWidget::setInitYAxisScale(const std::pair<double, double> &value) {
+void HistoOptionsWidget::setInitYAxisScale(
+    const std::pair<double, double> &value) {
   initYAxisScale = value;
 }
 
@@ -210,8 +218,10 @@ bool HistoOptionsWidget::configurationChanged() {
         oldYAxisIncrementStep != getYAxisIncrementStep() ||
         oldCumulativeFrequenciesHistogram != cumulativeFrequenciesHisto() ||
         oldUniformQuantification != uniformQuantification() ||
-        oldXAxisLogScale != xAxisLogScaleSet() || oldYAxisLogScale != yAxisLogScaleSet() ||
-        oldBackgroundColor != getBackgroundColor() || oldShowGraphEdges != showGraphEdges() ||
+        oldXAxisLogScale != xAxisLogScaleSet() ||
+        oldYAxisLogScale != yAxisLogScaleSet() ||
+        oldBackgroundColor != getBackgroundColor() ||
+        oldShowGraphEdges != showGraphEdges() ||
         oldUseCustomXAxisScale != useCustomXAxisScale() ||
         oldUseCustomYAxisScale != useCustomYAxisScale()) {
       confChanged = true;

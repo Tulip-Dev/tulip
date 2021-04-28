@@ -41,11 +41,12 @@ public:
   CSVParserConfigurationWidget(QWidget *parent = nullptr);
   ~CSVParserConfigurationWidget() override;
   /**
-   * @brief Generate a csv parser in function of the parameters in the widget. User define the
-   *range of line to import.
-   * The user takes the ownership of the widget.
+   * @brief Generate a csv parser in function of the parameters in the widget.
+   *User define the range of line to import. The user takes the ownership of the
+   *widget.
    **/
-  CSVParser *buildParser(unsigned int firstLine = 0, unsigned int lastLine = UINT_MAX) const;
+  CSVParser *buildParser(unsigned int firstLine = 0,
+                         unsigned int lastLine = UINT_MAX) const;
 
   std::string getFile() const;
   bool isValid() const;

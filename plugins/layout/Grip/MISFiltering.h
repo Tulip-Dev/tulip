@@ -22,8 +22,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include <tulip/TulipPluginHeaders.h>
 #include <tulip/MutableContainer.h>
+#include <tulip/TulipPluginHeaders.h>
 
 class MISFiltering {
 
@@ -32,8 +32,8 @@ public:
   ~MISFiltering();
 
   void computeFiltering();
-  void getNearest(tlp::node, std::vector<tlp::node> &, std::vector<unsigned int> &, unsigned int,
-                  unsigned int = 3);
+  void getNearest(tlp::node, std::vector<tlp::node> &,
+                  std::vector<unsigned int> &, unsigned int, unsigned int = 3);
 
   std::vector<tlp::node> ordering;
   std::vector<unsigned int> index;

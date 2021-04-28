@@ -16,10 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <iostream>
-#include <string>
-#include <list>
 #include <cstring>
+#include <iostream>
+#include <list>
+#include <string>
 
 /*
   Il faut ajouter la gestion correcte des erreurs et cest nikel.
@@ -58,7 +58,8 @@ struct GMLTokenParser {
   GMLTokenParser(std::istream &i) : curLine(0), curChar(0), is(i) {}
   GMLToken nextToken(GMLValue &val) {
     val.str.erase();
-    bool endOfStream = false, strGet = false, slashMode = false, started = false, stop = false;
+    bool endOfStream = false, strGet = false, slashMode = false,
+         started = false, stop = false;
     char ch;
 
     while ((!stop) && (endOfStream = bool(is.get(ch)))) {
@@ -217,15 +218,9 @@ struct GMLBuilder {
 };
 
 struct GMLTrue : public GMLBuilder {
-  bool addBool(const std::string &, const bool) override {
-    return true;
-  }
-  bool addInt(const std::string &, const int) override {
-    return true;
-  }
-  bool addDouble(const std::string &, const double) override {
-    return true;
-  }
+  bool addBool(const std::string &, const bool) override { return true; }
+  bool addInt(const std::string &, const int) override { return true; }
+  bool addDouble(const std::string &, const double) override { return true; }
   bool addString(const std::string &, const std::string &) override {
     return true;
   }
@@ -233,21 +228,13 @@ struct GMLTrue : public GMLBuilder {
     newBuilder = new GMLTrue();
     return true;
   }
-  bool close() override {
-    return true;
-  }
+  bool close() override { return true; }
 };
 
 struct GMLFalse : public GMLBuilder {
-  bool addBool(const std::string &, const bool) override {
-    return false;
-  }
-  bool addInt(const std::string &, const int) override {
-    return false;
-  }
-  bool addDouble(const std::string &, const double) override {
-    return false;
-  }
+  bool addBool(const std::string &, const bool) override { return false; }
+  bool addInt(const std::string &, const int) override { return false; }
+  bool addDouble(const std::string &, const double) override { return false; }
   bool addString(const std::string &, const std::string &) override {
     return false;
   }
@@ -255,9 +242,7 @@ struct GMLFalse : public GMLBuilder {
     newBuilder = new GMLFalse();
     return false;
   }
-  bool close() override {
-    return true;
-  }
+  bool close() override { return true; }
 };
 
 struct GMLWriter : public GMLBuilder {
@@ -282,7 +267,8 @@ struct GMLWriter : public GMLBuilder {
               << "string::" << str << std::endl;
     return true;
   }
-  bool addStruct(const std::string &structName, GMLBuilder *&newBuilder) override {
+  bool addStruct(const std::string &structName,
+                 GMLBuilder *&newBuilder) override {
     std::cout << "struct::" << structName << std::endl;
     newBuilder = new GMLWriter();
     return true;
@@ -293,12 +279,12 @@ struct GMLWriter : public GMLBuilder {
   }
 };
 //=====================================================================================
-template <bool displayComment>
-struct GMLParser {
+template <bool displayComment> struct GMLParser {
   std::list<GMLBuilder *> builderStack;
   std::istream &inputStream;
 
-  GMLParser(std::istream &inputStream, GMLBuilder *builder) : inputStream(inputStream) {
+  GMLParser(std::istream &inputStream, GMLBuilder *builder)
+      : inputStream(inputStream) {
     builderStack.push_front(builder);
   }
   ~GMLParser() {
@@ -314,7 +300,8 @@ struct GMLParser {
     GMLValue currentValue;
     GMLValue nextValue;
 
-    while ((currentToken = tokenParser.nextToken(currentValue)) != ENDOFSTREAM) {
+    while ((currentToken = tokenParser.nextToken(currentValue)) !=
+           ENDOFSTREAM) {
       switch (currentToken) {
       case STRINGTOKEN:
         nextToken = tokenParser.nextToken(nextValue);
@@ -333,7 +320,8 @@ struct GMLParser {
 
         case BOOLTOKEN:
 
-          if (!builderStack.front()->addBool(currentValue.str, nextValue.boolean)) {
+          if (!builderStack.front()->addBool(currentValue.str,
+                                             nextValue.boolean)) {
             std::cerr << "Error parsing stream line:" << tokenParser.curLine
                       << " char: " << tokenParser.curChar << std::endl;
             return false;
@@ -343,7 +331,8 @@ struct GMLParser {
 
         case INTTOKEN:
 
-          if (!builderStack.front()->addInt(currentValue.str, nextValue.integer)) {
+          if (!builderStack.front()->addInt(currentValue.str,
+                                            nextValue.integer)) {
             std::cerr << "Error parsing stream line:" << tokenParser.curLine
                       << " char: " << tokenParser.curChar << std::endl;
             return false;
@@ -353,7 +342,8 @@ struct GMLParser {
 
         case DOUBLETOKEN:
 
-          if (!builderStack.front()->addDouble(currentValue.str, nextValue.real)) {
+          if (!builderStack.front()->addDouble(currentValue.str,
+                                               nextValue.real)) {
             std::cerr << "Error parsing stream line:" << tokenParser.curLine
                       << " char: " << tokenParser.curChar << std::endl;
             return false;
@@ -363,7 +353,8 @@ struct GMLParser {
 
         case STRINGTOKEN:
 
-          if (!builderStack.front()->addString(currentValue.str, nextValue.str)) {
+          if (!builderStack.front()->addString(currentValue.str,
+                                               nextValue.str)) {
             std::cerr << "Error parsing stream line:" << tokenParser.curLine
                       << " char: " << tokenParser.curChar << std::endl;
             return false;

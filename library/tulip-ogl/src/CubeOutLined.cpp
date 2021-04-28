@@ -16,10 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/Glyph.h>
 #include <tulip/GlBox.h>
-#include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/Glyph.h>
 #include <tulip/TulipViewSettings.h>
 
 using namespace std;
@@ -34,8 +34,8 @@ namespace tlp {
  */
 class CubeOutLined : public NoShaderGlyph {
 public:
-  GLYPHINFORMATION("3D - Cube OutLined", "David Auber", "09/07/2002", "Textured cubeOutLined",
-                   "1.0", NodeShape::CubeOutlined)
+  GLYPHINFORMATION("3D - Cube OutLined", "David Auber", "09/07/2002",
+                   "Textured cubeOutLined", "1.0", NodeShape::CubeOutlined)
   CubeOutLined(tlp::PluginContext *context);
   ~CubeOutLined() override;
   void draw(node n, float lod) override;
@@ -45,7 +45,8 @@ public:
 PLUGIN(CubeOutLined)
 
 //===================================================================================
-CubeOutLined::CubeOutLined(tlp::PluginContext *context) : NoShaderGlyph(context) {}
+CubeOutLined::CubeOutLined(tlp::PluginContext *context)
+    : NoShaderGlyph(context) {}
 
 CubeOutLined::~CubeOutLined() {}
 
@@ -57,7 +58,8 @@ void CubeOutLined::draw(node n, float lod) {
 
   GlBox::draw(glGraphInputData->getElementColor()->getNodeValue(n),
               glGraphInputData->getElementBorderColor()->getNodeValue(n),
-              glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod);
+              glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+              textureName, lod);
 }
 
 Coord CubeOutLined::getAnchor(const Coord &vector) const {

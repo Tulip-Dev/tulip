@@ -20,13 +20,13 @@
 #include "tulip/CSVParserConfigurationWidget.h"
 #include "ui_CSVParserConfigurationWidget.h"
 
-#include <QTextCodec>
 #include <QFileDialog>
 #include <QKeyEvent>
+#include <QTextCodec>
 
 #include <tulip/CSVParser.h>
-#include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/TlpTools.h>
 
 using namespace tlp;
 using namespace std;
@@ -39,25 +39,32 @@ CSVParserConfigurationWidget::CSVParserConfigurationWidget(QWidget *parent)
   // Fill the encoding combo box
   fillEncodingComboBox();
   // Set the default encoding to UTF8
-  ui->encodingComboBox->setCurrentIndex(ui->encodingComboBox->findText(QString("UTF-8")));
+  ui->encodingComboBox->setCurrentIndex(
+      ui->encodingComboBox->findText(QString("UTF-8")));
 
-  connect(ui->encodingComboBox, SIGNAL(currentIndexChanged(int)), this, SIGNAL(parserChanged()));
+  connect(ui->encodingComboBox, SIGNAL(currentIndexChanged(int)), this,
+          SIGNAL(parserChanged()));
 
   // Invert rows and column
-  connect(ui->switchRowColumnCheckBox, SIGNAL(stateChanged(int)), this, SIGNAL(parserChanged()));
+  connect(ui->switchRowColumnCheckBox, SIGNAL(stateChanged(int)), this,
+          SIGNAL(parserChanged()));
   // Ignore first lines
   connect(ui->ignoreFirstLinesCheckBox, SIGNAL(stateChanged(int)), this,
           SLOT(ignoreFirstLines(int)));
-  connect(ui->ignoreFirstLinesCheckBox, SIGNAL(stateChanged(int)), this, SIGNAL(parserChanged()));
-  connect(ui->nbOfIgnoredLinesSpinBox, SIGNAL(valueChanged(int)), this, SIGNAL(parserChanged()));
+  connect(ui->ignoreFirstLinesCheckBox, SIGNAL(stateChanged(int)), this,
+          SIGNAL(parserChanged()));
+  connect(ui->nbOfIgnoredLinesSpinBox, SIGNAL(valueChanged(int)), this,
+          SIGNAL(parserChanged()));
 
   // Separator and text delimiters.
   connect(ui->separatorComboBox, SIGNAL(currentIndexChanged(int)), this,
           SLOT(changeSeparator(int)));
   connect(ui->textDelimiterComboBox, SIGNAL(currentIndexChanged(int)), this,
           SIGNAL(parserChanged()));
-  connect(ui->mergesep, SIGNAL(stateChanged(int)), this, SIGNAL(parserChanged()));
-  connect(ui->othersep, SIGNAL(textEdited(const QString &)), this, SIGNAL(parserChanged()));
+  connect(ui->mergesep, SIGNAL(stateChanged(int)), this,
+          SIGNAL(parserChanged()));
+  connect(ui->othersep, SIGNAL(textEdited(const QString &)), this,
+          SIGNAL(parserChanged()));
   connect(ui->fileChooserPushButton, SIGNAL(clicked(bool)), this,
           SLOT(changeFileNameButtonPressed()));
 }
@@ -66,17 +73,17 @@ void CSVParserConfigurationWidget::initWithLastOpenedFile() {
   setFileToOpen(lastOpenedFile);
 }
 
-CSVParserConfigurationWidget::~CSVParserConfigurationWidget() {
-  delete ui;
-}
+CSVParserConfigurationWidget::~CSVParserConfigurationWidget() { delete ui; }
 
-CSVParser *CSVParserConfigurationWidget::buildParser(unsigned int firstLine,
-                                                     unsigned int lastLine) const {
+CSVParser *
+CSVParserConfigurationWidget::buildParser(unsigned int firstLine,
+                                          unsigned int lastLine) const {
   CSVParser *parser = nullptr;
 
   if (isValid()) {
-    parser = new CSVSimpleParser(getFile(), getSeparator(), getMergeSeparator(), getTextSeparator(),
-                                 getDecimalMark(), getEncoding(), firstLine, lastLine);
+    parser = new CSVSimpleParser(getFile(), getSeparator(), getMergeSeparator(),
+                                 getTextSeparator(), getDecimalMark(),
+                                 getEncoding(), firstLine, lastLine);
 
     if (invertMatrix()) {
       parser = new CSVInvertMatrixParser(parser);
@@ -91,7 +98,8 @@ void CSVParserConfigurationWidget::fillEncodingComboBox() {
   ui->encodingComboBox->clear();
   QStringList list;
 
-  for (QList<QByteArray>::const_iterator it = codecs.constBegin(); it != codecs.constEnd(); ++it) {
+  for (QList<QByteArray>::const_iterator it = codecs.constBegin();
+       it != codecs.constEnd(); ++it) {
     list.push_back(QString(*it));
   }
 
@@ -132,10 +140,14 @@ QString CSVParserConfigurationWidget::getSeparator() const {
 void CSVParserConfigurationWidget::changeFileNameButtonPressed() {
   QString fileName = QFileDialog::getOpenFileName(
       this, tr("Choose a CSV file"),
-      lastOpenedFile.isEmpty() ? QString() : QFileInfo(lastOpenedFile).absoluteDir().absolutePath(),
+      lastOpenedFile.isEmpty()
+          ? QString()
+          : QFileInfo(lastOpenedFile).absoluteDir().absolutePath(),
       tr("CSV files (*.csv);;Text files (*.txt);;All files (*)"),
       // ensure predictable behavior (needed by gui tests)
-      nullptr, inGuiTestingMode() ? QFileDialog::DontUseNativeDialog : QFileDialog::Options());
+      nullptr,
+      inGuiTestingMode() ? QFileDialog::DontUseNativeDialog
+                         : QFileDialog::Options());
   setFileToOpen(fileName);
 }
 
@@ -180,9 +192,7 @@ void CSVParserConfigurationWidget::setFileToOpen(const QString &fileToOpen) {
   }
 }
 
-void CSVParserConfigurationWidget::encodingChanged() {
-  emit parserChanged();
-}
+void CSVParserConfigurationWidget::encodingChanged() { emit parserChanged(); }
 
 string CSVParserConfigurationWidget::getFile() const {
   return QStringToTlpString(ui->fileLineEdit->text());
@@ -213,7 +223,9 @@ void CSVParserConfigurationWidget::ignoreFirstLines(int state) {
 }
 
 int CSVParserConfigurationWidget::getFirstLineIndex() const {
-  return ui->ignoreFirstLinesCheckBox->isChecked() ? ui->nbOfIgnoredLinesSpinBox->value() : 0;
+  return ui->ignoreFirstLinesCheckBox->isChecked()
+             ? ui->nbOfIgnoredLinesSpinBox->value()
+             : 0;
 }
 
 void CSVParserConfigurationWidget::setNbIgnoredLines(int nb) {

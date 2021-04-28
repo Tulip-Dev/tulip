@@ -19,9 +19,9 @@
 #include <cstdlib>
 
 #include "MutableContainerTest.h"
+#include <fstream>
 #include <tulip/Iterator.h>
 #include <tulip/TlpTools.h>
-#include <fstream>
 
 using namespace std;
 using namespace tlp;

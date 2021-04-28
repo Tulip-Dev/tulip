@@ -20,8 +20,8 @@
 #ifndef DIMENSION_BASE
 #define DIMENSION_BASE
 
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace pocore {
 struct DimensionBase {

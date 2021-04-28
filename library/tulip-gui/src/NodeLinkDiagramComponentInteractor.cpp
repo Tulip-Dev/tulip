@@ -18,18 +18,18 @@
  */
 
 #include <tulip/Interactor.h>
-#include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/NodeLinkDiagramComponentInteractor.h>
 
-#include <QLabel>
 #include <QIcon>
+#include <QLabel>
 
 using namespace tlp;
 
-NodeLinkDiagramComponentInteractor::NodeLinkDiagramComponentInteractor(const QString &iconPath,
-                                                                       const QString &text,
-                                                                       unsigned int priority)
-    : GLInteractorComposite(QIcon(iconPath), text), _label(new QLabel), _priority(priority) {
+NodeLinkDiagramComponentInteractor::NodeLinkDiagramComponentInteractor(
+    const QString &iconPath, const QString &text, unsigned int priority)
+    : GLInteractorComposite(QIcon(iconPath), text), _label(new QLabel),
+      _priority(priority) {
   Interactor::setupConfigWidget(_label);
   _label->setWordWrap(true);
   _label->setAlignment(Qt::AlignTop);
@@ -40,7 +40,8 @@ NodeLinkDiagramComponentInteractor::~NodeLinkDiagramComponentInteractor() {
   delete _label;
 }
 
-void NodeLinkDiagramComponentInteractor::setConfigurationWidgetText(const QString &text) {
+void NodeLinkDiagramComponentInteractor::setConfigurationWidgetText(
+    const QString &text) {
   _label->setText(text);
 }
 

@@ -23,8 +23,8 @@
 #include <tulip/tulipconf.h>
 
 #include <QDialog>
-#include <QString>
 #include <QIcon>
+#include <QString>
 
 namespace Ui {
 class TulipFontIconDialog;

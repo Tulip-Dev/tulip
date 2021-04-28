@@ -19,20 +19,20 @@
 
 #include "ParallelCoordinatesInteractors.h"
 
-#include <tulip/MouseInteractors.h>
 #include <tulip/Interactor.h>
+#include <tulip/MouseInteractors.h>
 
-#include "ParallelCoordsElementHighlighter.h"
-#include "ParallelCoordsAxisSwapper.h"
-#include "ParallelCoordsAxisSliders.h"
-#include "ParallelCoordsAxisBoxPlot.h"
-#include "ParallelCoordsElementsSelector.h"
-#include "ParallelCoordsElementShowInfo.h"
 #include "ParallelCoordinatesView.h"
+#include "ParallelCoordsAxisBoxPlot.h"
+#include "ParallelCoordsAxisSliders.h"
 #include "ParallelCoordsAxisSpacer.h"
+#include "ParallelCoordsAxisSwapper.h"
+#include "ParallelCoordsElementHighlighter.h"
+#include "ParallelCoordsElementShowInfo.h"
+#include "ParallelCoordsElementsSelector.h"
 
-#include "../../utils/StandardInteractorPriority.h"
 #include "../../utils/PluginNames.h"
+#include "../../utils/StandardInteractorPriority.h"
 
 #include <tulip/View.h>
 
@@ -41,9 +41,8 @@
 using namespace std;
 using namespace tlp;
 
-ParallelCoordinatesInteractor::ParallelCoordinatesInteractor(const QString &iconPath,
-                                                             const QString &text,
-                                                             const unsigned int priority)
+ParallelCoordinatesInteractor::ParallelCoordinatesInteractor(
+    const QString &iconPath, const QString &text, const unsigned int priority)
     : NodeLinkDiagramComponentInteractor(iconPath, text, priority) {}
 
 bool ParallelCoordinatesInteractor::isCompatible(const string &viewName) const {
@@ -58,9 +57,11 @@ PLUGIN(InteractorParallelCoordsSelection)
 PLUGIN(InteractorShowElementInfo)
 PLUGIN(InteractorAxisSpacer)
 
-InteractorParallelCoordsSelection::InteractorParallelCoordsSelection(const tlp::PluginContext *)
-    : ParallelCoordinatesInteractor(":/tulip/gui/icons/i_selection.png", "Select elements",
-                                    StandardInteractorPriority::RectangleSelection) {}
+InteractorParallelCoordsSelection::InteractorParallelCoordsSelection(
+    const tlp::PluginContext *)
+    : ParallelCoordinatesInteractor(
+          ":/tulip/gui/icons/i_selection.png", "Select elements",
+          StandardInteractorPriority::RectangleSelection) {}
 
 void InteractorParallelCoordsSelection::construct() {
   setConfigurationWidgetText(
@@ -87,8 +88,9 @@ void InteractorParallelCoordsSelection::construct() {
 }
 
 InteractorHighLighter::InteractorHighLighter(const tlp::PluginContext *)
-    : ParallelCoordinatesInteractor(":/i_element_highlighter.png", "Highlight elements",
-                                    StandardInteractorPriority::ViewInteractor1) {}
+    : ParallelCoordinatesInteractor(
+          ":/i_element_highlighter.png", "Highlight elements",
+          StandardInteractorPriority::ViewInteractor1) {}
 
 void InteractorHighLighter::construct() {
   setConfigurationWidgetText(
@@ -122,8 +124,9 @@ void InteractorHighLighter::construct() {
 }
 
 InteractorAxisSwapper::InteractorAxisSwapper(const tlp::PluginContext *)
-    : ParallelCoordinatesInteractor(":/i_axis_swapper.png", "Axis swapper",
-                                    StandardInteractorPriority::ViewInteractor2) {}
+    : ParallelCoordinatesInteractor(
+          ":/i_axis_swapper.png", "Axis swapper",
+          StandardInteractorPriority::ViewInteractor2) {}
 
 void InteractorAxisSwapper::construct() {
   setConfigurationWidgetText(
@@ -147,18 +150,15 @@ AxisSliderOptions::AxisSliderOptions(QWidget *parent)
   connect(_ui->resetButton, SIGNAL(clicked()), this, SIGNAL(resetSliders()));
 }
 
-AxisSliderOptions::~AxisSliderOptions() {
-  delete _ui;
-}
+AxisSliderOptions::~AxisSliderOptions() { delete _ui; }
 
 InteractorAxisSliders::InteractorAxisSliders(const tlp::PluginContext *)
-    : ParallelCoordinatesInteractor(":/i_axis_sliders.png", "Axis sliders",
-                                    StandardInteractorPriority::ViewInteractor3),
+    : ParallelCoordinatesInteractor(
+          ":/i_axis_sliders.png", "Axis sliders",
+          StandardInteractorPriority::ViewInteractor3),
       configwidget(nullptr) {}
 
-InteractorAxisSliders::~InteractorAxisSliders() {
-  delete configwidget;
-}
+InteractorAxisSliders::~InteractorAxisSliders() { delete configwidget; }
 
 void InteractorAxisSliders::construct() {
   setConfigurationWidgetText(
@@ -187,7 +187,8 @@ void InteractorAxisSliders::construct() {
       "properties.</p>" +
       "</body>" + "</html>");
   configwidget = new AxisSliderOptions();
-  connect(configwidget, SIGNAL(resetSliders()), view(), SLOT(resetHightlightedElementsSlot()));
+  connect(configwidget, SIGNAL(resetSliders()), view(),
+          SLOT(resetHightlightedElementsSlot()));
 
   push_back(new ParallelCoordsAxisSliders);
   push_back(new MousePanNZoomNavigator);
@@ -198,8 +199,9 @@ QWidget *InteractorAxisSliders::configurationOptionsWidget() const {
 }
 
 InteractorBoxPlot::InteractorBoxPlot(const tlp::PluginContext *)
-    : ParallelCoordinatesInteractor(":/i_axis_boxplot.png", "Axis box plot",
-                                    StandardInteractorPriority::ViewInteractor4) {}
+    : ParallelCoordinatesInteractor(
+          ":/i_axis_boxplot.png", "Axis box plot",
+          StandardInteractorPriority::ViewInteractor4) {}
 
 void InteractorBoxPlot::construct() {
   setConfigurationWidgetText(
@@ -219,7 +221,8 @@ void InteractorBoxPlot::construct() {
       "(spread) and skewness in the data, and identify outliers.</p>" +
       "<p>It is possible to <b>highlight data</b> included in the following <b>axis box plot "
       "range</b> :" +
-      "<ul>" + "<li>[Bottom Outlier, First Quartile]</li>" + "<li>[First Quartile, Median]</li>" +
+      "<ul>" + "<li>[Bottom Outlier, First Quartile]</li>" +
+      "<li>[First Quartile, Median]</li>" +
       "<li>[Median, Third Quartile]</li>" +
       "<li>[First Quartile, Third Quartile] (= interquartile range) </li>" +
       "<li>[Third Quartile, Top Outlier]</li>" + "</ul>" +
@@ -234,25 +237,27 @@ void InteractorBoxPlot::construct() {
 }
 
 InteractorShowElementInfo::InteractorShowElementInfo(const tlp::PluginContext *)
-    : ParallelCoordinatesInteractor(":/tulip/gui/icons/i_select.png",
-                                    "Get information on nodes/edges",
-                                    StandardInteractorPriority::GetInformation) {}
+    : ParallelCoordinatesInteractor(
+          ":/tulip/gui/icons/i_select.png", "Get information on nodes/edges",
+          StandardInteractorPriority::GetInformation) {}
 
 void InteractorShowElementInfo::construct() {
-  setConfigurationWidgetText(QString("<html>") + "<head>" + "<title></title>" + "</head>" +
-                             "<body>" + "<h3>Show element properties interactor</h3>" +
-                             "<p>This interactor allows to view the properties associated to an "
-                             "element by clicking on it. Tulip will display all available "
-                             "properties of that node/edge using the Element tab of the Graph "
-                             "Editor sub-window</p>" +
-                             "</body>" + "</html>");
+  setConfigurationWidgetText(
+      QString("<html>") + "<head>" + "<title></title>" + "</head>" + "<body>" +
+      "<h3>Show element properties interactor</h3>" +
+      "<p>This interactor allows to view the properties associated to an "
+      "element by clicking on it. Tulip will display all available "
+      "properties of that node/edge using the Element tab of the Graph "
+      "Editor sub-window</p>" +
+      "</body>" + "</html>");
   push_back(new ParallelCoordsElementShowInfo);
   push_back(new MousePanNZoomNavigator);
 }
 
 InteractorAxisSpacer::InteractorAxisSpacer(const tlp::PluginContext *)
-    : ParallelCoordinatesInteractor(":/i_axis_spacer.png", "Modify space between consecutive axis",
-                                    StandardInteractorPriority::ViewInteractor5) {}
+    : ParallelCoordinatesInteractor(
+          ":/i_axis_spacer.png", "Modify space between consecutive axis",
+          StandardInteractorPriority::ViewInteractor5) {}
 
 void InteractorAxisSpacer::construct() {
   setConfigurationWidgetText(

@@ -79,8 +79,9 @@ public slots:
 private:
   void clearObservers();
 
-  void generateGradients(const std::vector<std::pair<double, Color>> &metricToColorFiltered,
-                         QGradient &activeGradient, QGradient &hideGradient);
+  void generateGradients(
+      const std::vector<std::pair<double, Color>> &metricToColorFiltered,
+      QGradient &activeGradient, QGradient &hideGradient);
 
   View *view;
 

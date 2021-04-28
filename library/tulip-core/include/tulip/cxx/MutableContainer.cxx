@@ -19,21 +19,23 @@
 //===================================================================
 template <typename TYPE>
 tlp::MutableContainer<TYPE>::MutableContainer()
-    : vData(new std::deque<typename StoredType<TYPE>::Value>()), hData(nullptr), minIndex(UINT_MAX),
-      maxIndex(UINT_MAX), defaultValue(StoredType<TYPE>::defaultValue()), state(VECT),
+    : vData(new std::deque<typename StoredType<TYPE>::Value>()), hData(nullptr),
+      minIndex(UINT_MAX), maxIndex(UINT_MAX),
+      defaultValue(StoredType<TYPE>::defaultValue()), state(VECT),
       elementInserted(0),
       ratio(double(sizeof(typename tlp::StoredType<TYPE>::Value)) /
-            (3.0 * double(sizeof(void *)) + double(sizeof(typename tlp::StoredType<TYPE>::Value)))),
+            (3.0 * double(sizeof(void *)) +
+             double(sizeof(typename tlp::StoredType<TYPE>::Value)))),
       compressing(false) {}
 //===================================================================
-template <typename TYPE>
-tlp::MutableContainer<TYPE>::~MutableContainer() {
+template <typename TYPE> tlp::MutableContainer<TYPE>::~MutableContainer() {
   switch (state) {
   case VECT:
 
     if (StoredType<TYPE>::isPointer) {
       // delete stored values
-      typename std::deque<typename StoredType<TYPE>::Value>::const_iterator it = vData->begin();
+      typename std::deque<typename StoredType<TYPE>::Value>::const_iterator it =
+          vData->begin();
 
       while (it != vData->end()) {
         if ((*it) != defaultValue)
@@ -51,8 +53,9 @@ tlp::MutableContainer<TYPE>::~MutableContainer() {
 
     if (StoredType<TYPE>::isPointer) {
       // delete stored values
-      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::const_iterator
-          it = hData->begin();
+      typename std::unordered_map<
+          unsigned int, typename StoredType<TYPE>::Value>::const_iterator it =
+          hData->begin();
 
       while (it != hData->end()) {
         StoredType<TYPE>::destroy(it->second);
@@ -66,7 +69,8 @@ tlp::MutableContainer<TYPE>::~MutableContainer() {
 
   default:
     assert(false);
-    tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+    tlp::error() << __PRETTY_FUNCTION__
+                 << "unexpected state value (serious bug)" << std::endl;
     break;
   }
 
@@ -74,19 +78,22 @@ tlp::MutableContainer<TYPE>::~MutableContainer() {
 }
 //===================================================================
 template <typename TYPE>
-void tlp::MutableContainer<TYPE>::setDefault(typename StoredType<TYPE>::ReturnedConstValue value) {
+void tlp::MutableContainer<TYPE>::setDefault(
+    typename StoredType<TYPE>::ReturnedConstValue value) {
   StoredType<TYPE>::destroy(defaultValue);
   defaultValue = StoredType<TYPE>::clone(value);
 }
 //===================================================================
 template <typename TYPE>
-void tlp::MutableContainer<TYPE>::setAll(typename StoredType<TYPE>::ReturnedConstValue value) {
+void tlp::MutableContainer<TYPE>::setAll(
+    typename StoredType<TYPE>::ReturnedConstValue value) {
   switch (state) {
   case VECT:
 
     if (StoredType<TYPE>::isPointer) {
       // delete stored values
-      typename std::deque<typename StoredType<TYPE>::Value>::const_iterator it = vData->begin();
+      typename std::deque<typename StoredType<TYPE>::Value>::const_iterator it =
+          vData->begin();
 
       while (it != vData->end()) {
         if ((*it) != defaultValue)
@@ -103,8 +110,9 @@ void tlp::MutableContainer<TYPE>::setAll(typename StoredType<TYPE>::ReturnedCons
 
     if (StoredType<TYPE>::isPointer) {
       // delete stored values
-      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::const_iterator
-          it = hData->begin();
+      typename std::unordered_map<
+          unsigned int, typename StoredType<TYPE>::Value>::const_iterator it =
+          hData->begin();
 
       while (it != hData->end()) {
         StoredType<TYPE>::destroy(it->second);
@@ -119,7 +127,8 @@ void tlp::MutableContainer<TYPE>::setAll(typename StoredType<TYPE>::ReturnedCons
 
   default:
     assert(false);
-    tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+    tlp::error() << __PRETTY_FUNCTION__
+                 << "unexpected state value (serious bug)" << std::endl;
     break;
   }
 
@@ -134,9 +143,8 @@ void tlp::MutableContainer<TYPE>::setAll(typename StoredType<TYPE>::ReturnedCons
 // this method is private and used as is by GraphUpdatesRecorder class
 // it is also used to implement findAll
 template <typename TYPE>
-tlp::IteratorValue *
-tlp::MutableContainer<TYPE>::findAllValues(typename StoredType<TYPE>::ReturnedConstValue value,
-                                           bool equal) const {
+tlp::IteratorValue *tlp::MutableContainer<TYPE>::findAllValues(
+    typename StoredType<TYPE>::ReturnedConstValue value, bool equal) const {
   if (equal && StoredType<TYPE>::equal(defaultValue, value))
     // error
     return nullptr;
@@ -152,7 +160,8 @@ tlp::MutableContainer<TYPE>::findAllValues(typename StoredType<TYPE>::ReturnedCo
 
     default:
       assert(false);
-      tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+      tlp::error() << __PRETTY_FUNCTION__
+                   << "unexpected state value (serious bug)" << std::endl;
       return nullptr;
     }
   }
@@ -160,15 +169,14 @@ tlp::MutableContainer<TYPE>::findAllValues(typename StoredType<TYPE>::ReturnedCo
 //===================================================================
 // this method is visible for any class
 template <typename TYPE>
-tlp::Iterator<unsigned int> *
-tlp::MutableContainer<TYPE>::findAll(typename StoredType<TYPE>::ReturnedConstValue value,
-                                     bool equal) const {
+tlp::Iterator<unsigned int> *tlp::MutableContainer<TYPE>::findAll(
+    typename StoredType<TYPE>::ReturnedConstValue value, bool equal) const {
   return findAllValues(value, equal);
 }
 //===================================================================
 template <typename TYPE>
-void tlp::MutableContainer<TYPE>::vectset(const unsigned int i,
-                                          typename StoredType<TYPE>::Value value) {
+void tlp::MutableContainer<TYPE>::vectset(
+    const unsigned int i, typename StoredType<TYPE>::Value value) {
   if (minIndex == UINT_MAX) {
     minIndex = i;
     maxIndex = i;
@@ -208,9 +216,9 @@ void tlp::MutableContainer<TYPE>::vectset(const unsigned int i,
 }
 //===================================================================
 template <typename TYPE>
-void tlp::MutableContainer<TYPE>::set(const unsigned int i,
-                                      typename StoredType<TYPE>::ReturnedConstValue value,
-                                      bool forceDefaultValueRemoval) {
+void tlp::MutableContainer<TYPE>::set(
+    const unsigned int i, typename StoredType<TYPE>::ReturnedConstValue value,
+    bool forceDefaultValueRemoval) {
   // Test if after insertion we need to resize
   if (!compressing && !StoredType<TYPE>::equal(defaultValue, value)) {
     compressing = true;
@@ -237,7 +245,8 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i,
       return;
 
     case HASH: {
-      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
+      typename std::unordered_map<
+          unsigned int, typename StoredType<TYPE>::Value>::iterator it =
           hData->find(i);
 
       if (it != hData->end()) {
@@ -251,7 +260,8 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i,
 
     default:
       assert(false);
-      tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+      tlp::error() << __PRETTY_FUNCTION__
+                   << "unexpected state value (serious bug)" << std::endl;
       break;
     }
   } else {
@@ -265,7 +275,8 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i,
       return;
 
     case HASH: {
-      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
+      typename std::unordered_map<
+          unsigned int, typename StoredType<TYPE>::Value>::iterator it =
           hData->find(i);
 
       if (it != hData->end()) {
@@ -280,7 +291,8 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i,
 
     default:
       assert(false);
-      tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+      tlp::error() << __PRETTY_FUNCTION__
+                   << "unexpected state value (serious bug)" << std::endl;
       break;
     }
 
@@ -321,7 +333,8 @@ void tlp::MutableContainer<TYPE>::add(const unsigned int i, TYPE val) {
     }
 
     case HASH: {
-      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
+      typename std::unordered_map<
+          unsigned int, typename StoredType<TYPE>::Value>::iterator it =
           hData->find(i);
 
       if (it != hData->end()) {
@@ -341,7 +354,8 @@ void tlp::MutableContainer<TYPE>::add(const unsigned int i, TYPE val) {
 
     default:
       assert(false);
-      std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+      std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)"
+                << std::endl;
     }
   }
 
@@ -365,7 +379,8 @@ tlp::MutableContainer<TYPE>::get(const unsigned int i) const {
       return StoredType<TYPE>::get((*vData)[i - minIndex]);
 
   case HASH: {
-    typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
+    typename std::unordered_map<unsigned int,
+                                typename StoredType<TYPE>::Value>::iterator it =
         hData->find(i);
 
     if (it != hData->end())
@@ -376,7 +391,8 @@ tlp::MutableContainer<TYPE>::get(const unsigned int i) const {
 
   default:
     assert(false);
-    tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+    tlp::error() << __PRETTY_FUNCTION__
+                 << "unexpected state value (serious bug)" << std::endl;
     return StoredType<TYPE>::get(defaultValue);
     break;
   }
@@ -402,7 +418,8 @@ void tlp::MutableContainer<TYPE>::invertBooleanValue(const unsigned int i) {
     }
 
     case HASH: {
-      typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
+      typename std::unordered_map<
+          unsigned int, typename StoredType<TYPE>::Value>::iterator it =
           hData->find(i);
 
       if (it != hData->end()) {
@@ -417,7 +434,8 @@ void tlp::MutableContainer<TYPE>::invertBooleanValue(const unsigned int i) {
 
     default:
       assert(false);
-      tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+      tlp::error() << __PRETTY_FUNCTION__
+                   << "unexpected state value (serious bug)" << std::endl;
       break;
     }
   }
@@ -427,25 +445,29 @@ void tlp::MutableContainer<TYPE>::invertBooleanValue(const unsigned int i) {
 }
 //===================================================================
 template <typename TYPE>
-typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::getDefault() const {
+typename tlp::StoredType<TYPE>::ReturnedValue
+tlp::MutableContainer<TYPE>::getDefault() const {
   return StoredType<TYPE>::get(defaultValue);
 }
 //===================================================================
 template <typename TYPE>
-bool tlp::MutableContainer<TYPE>::hasNonDefaultValue(const unsigned int i) const {
+bool tlp::MutableContainer<TYPE>::hasNonDefaultValue(
+    const unsigned int i) const {
   if (!elementInserted)
     return false;
 
   switch (state) {
   case VECT:
-    return (i <= maxIndex && i >= minIndex && (((*vData)[i - minIndex]) != defaultValue));
+    return (i <= maxIndex && i >= minIndex &&
+            (((*vData)[i - minIndex]) != defaultValue));
 
   case HASH:
     return ((hData->find(i)) != hData->end());
 
   default:
     assert(false);
-    tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+    tlp::error() << __PRETTY_FUNCTION__
+                 << "unexpected state value (serious bug)" << std::endl;
     return false;
   }
 }
@@ -471,7 +493,8 @@ tlp::MutableContainer<TYPE>::get(const unsigned int i, bool &notDefault) const {
     }
 
   case HASH: {
-    typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
+    typename std::unordered_map<unsigned int,
+                                typename StoredType<TYPE>::Value>::iterator it =
         hData->find(i);
 
     if (it != hData->end()) {
@@ -486,7 +509,8 @@ tlp::MutableContainer<TYPE>::get(const unsigned int i, bool &notDefault) const {
   default:
     assert(false);
     notDefault = false;
-    tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+    tlp::error() << __PRETTY_FUNCTION__
+                 << "unexpected state value (serious bug)" << std::endl;
     return StoredType<TYPE>::get(defaultValue);
   }
 }
@@ -496,9 +520,10 @@ unsigned int tlp::MutableContainer<TYPE>::numberOfNonDefaultValues() const {
   return elementInserted;
 }
 //===================================================================
-template <typename TYPE>
-void tlp::MutableContainer<TYPE>::vecttohash() {
-  hData = new std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>(elementInserted);
+template <typename TYPE> void tlp::MutableContainer<TYPE>::vecttohash() {
+  hData =
+      new std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>(
+          elementInserted);
 
   unsigned int newMaxIndex = 0;
   unsigned int newMinIndex = UINT_MAX;
@@ -520,14 +545,14 @@ void tlp::MutableContainer<TYPE>::vecttohash() {
   state = HASH;
 }
 //===================================================================
-template <typename TYPE>
-void tlp::MutableContainer<TYPE>::hashtovect() {
+template <typename TYPE> void tlp::MutableContainer<TYPE>::hashtovect() {
   vData = new std::deque<typename StoredType<TYPE>::Value>();
   minIndex = UINT_MAX;
   maxIndex = UINT_MAX;
   elementInserted = 0;
   state = VECT;
-  typename std::unordered_map<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it;
+  typename std::unordered_map<
+      unsigned int, typename StoredType<TYPE>::Value>::const_iterator it;
 
   for (it = hData->begin(); it != hData->end(); ++it) {
     if (it->second != defaultValue)
@@ -565,7 +590,8 @@ void tlp::MutableContainer<TYPE>::compress(unsigned int min, unsigned int max,
 
   default:
     assert(false);
-    tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+    tlp::error() << __PRETTY_FUNCTION__
+                 << "unexpected state value (serious bug)" << std::endl;
     break;
   }
 }

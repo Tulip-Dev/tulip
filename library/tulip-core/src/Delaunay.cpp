@@ -17,15 +17,15 @@
  *
  */
 
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 
+#include <tulip/BoundingBox.h>
 #include <tulip/Delaunay.h>
-#include <tulip/Matrix.h>
+#include <tulip/DrawingTools.h>
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/BoundingBox.h>
-#include <tulip/DrawingTools.h>
+#include <tulip/Matrix.h>
 
 #ifdef __GNUC__
 #pragma GCC diagnostic push
@@ -65,11 +65,13 @@ static bool runQHull(int dim, vector<double> &points,
   qhT *qh = &qh_qh;
   QHULL_LIB_CHECK
   qh_zero(qh, stderr);
-  int qhullKo = qh_new_qhull(qh, dim, points.size() / dim, &points[0], false,
-                             const_cast<char *>(qhullCommand.c_str()), nullptr, stderr);
+  int qhullKo =
+      qh_new_qhull(qh, dim, points.size() / dim, &points[0], false,
+                   const_cast<char *>(qhullCommand.c_str()), nullptr, stderr);
 #else
-  int qhullKo = qh_new_qhull(dim, points.size() / dim, &points[0], false,
-                             const_cast<char *>(qhullCommand.c_str()), nullptr, stderr);
+  int qhullKo =
+      qh_new_qhull(dim, points.size() / dim, &points[0], false,
+                   const_cast<char *>(qhullCommand.c_str()), nullptr, stderr);
 #endif
 
   if (!qhullKo) {
@@ -86,8 +88,8 @@ static bool runQHull(int dim, vector<double> &points,
     facetT *facet = nullptr;
     vertexT *vertex = nullptr, **vertexp;
 
-    // iterate over generated simplices (triangles or tetrahedra) and get corresponding delaunay
-    // edges
+    // iterate over generated simplices (triangles or tetrahedra) and get
+    // corresponding delaunay edges
     FORALLfacets {
 
       if (!facet->upperdelaunay) {
@@ -205,8 +207,8 @@ static void normalize(Vec3f &v) {
 // B -- C
 // |    |
 // A -- D
-static vector<Coord> buildGrid(const Coord &A, const Coord &B, const Coord &C, const Coord &D,
-                               const float nbSubDiv = 10) {
+static vector<Coord> buildGrid(const Coord &A, const Coord &B, const Coord &C,
+                               const Coord &D, const float nbSubDiv = 10) {
   vector<Coord> ret;
 
   for (float i = 1; i < nbSubDiv - 1; ++i) {
@@ -223,7 +225,8 @@ static vector<Coord> buildGrid(const Coord &A, const Coord &B, const Coord &C, c
 
 //================================================================================================
 
-static tlp::Coord computeTriangleCircumscribedCenter(const tlp::Coord &A, const tlp::Coord &B,
+static tlp::Coord computeTriangleCircumscribedCenter(const tlp::Coord &A,
+                                                     const tlp::Coord &B,
                                                      const tlp::Coord &C) {
   Vec3ld Ad, Bd, Cd;
 
@@ -241,7 +244,8 @@ static tlp::Coord computeTriangleCircumscribedCenter(const tlp::Coord &A, const 
   long double axbnorm = axb.norm();
 
   if (axbnorm != 0) {
-    Vec3ld c = Cd + (((anorm * anorm * b) - (bnorm * bnorm * a)) ^ axb) / (2.0 * axbnorm * axbnorm);
+    Vec3ld c = Cd + (((anorm * anorm * b) - (bnorm * bnorm * a)) ^ axb) /
+                        (2.0 * axbnorm * axbnorm);
     return tlp::Coord(c[0], c[1], c[2]);
   } else {
     return (A + B + C) / 3.0f;
@@ -250,8 +254,10 @@ static tlp::Coord computeTriangleCircumscribedCenter(const tlp::Coord &A, const 
 
 //================================================================================================
 
-static tlp::Coord computeTetrahedronCircumscribedCenter(const tlp::Coord &A, const tlp::Coord &B,
-                                                        const tlp::Coord &C, const tlp::Coord &D) {
+static tlp::Coord computeTetrahedronCircumscribedCenter(const tlp::Coord &A,
+                                                        const tlp::Coord &B,
+                                                        const tlp::Coord &C,
+                                                        const tlp::Coord &D) {
 
   Vec3ld Ad, Bd, Cd, Dd;
 
@@ -281,9 +287,10 @@ static tlp::Coord computeTetrahedronCircumscribedCenter(const tlp::Coord &A, con
   long double det = m.determinant();
 
   if (det != 0) {
-    Vec3ld c = Ad + ((danorm * danorm * (ba ^ ca)) + (canorm * canorm * (da ^ ba)) +
-                     (banorm * banorm * (ca ^ da))) /
-                        (2.0 * det);
+    Vec3ld c =
+        Ad + ((danorm * danorm * (ba ^ ca)) + (canorm * canorm * (da ^ ba)) +
+              (banorm * banorm * (ca ^ da))) /
+                 (2.0 * det);
     return tlp::Coord(c[0], c[1], c[2]);
   } else {
     return (A + B + C + D) / 4.0f;
@@ -293,7 +300,8 @@ static tlp::Coord computeTetrahedronCircumscribedCenter(const tlp::Coord &A, con
 //================================================================================================
 
 struct Face {
-  Face(unsigned int n1 = UINT_MAX, unsigned int n2 = UINT_MAX, unsigned int n3 = UINT_MAX) {
+  Face(unsigned int n1 = UINT_MAX, unsigned int n2 = UINT_MAX,
+       unsigned int n3 = UINT_MAX) {
     sortedIndexes.reserve(3);
     sortedIndexes.push_back(n1);
     sortedIndexes.push_back(n2);
@@ -302,7 +310,8 @@ struct Face {
   }
 
   bool operator==(const Face &f) const {
-    return sortedIndexes[0] == f.sortedIndexes[0] && sortedIndexes[1] == f.sortedIndexes[1] &&
+    return sortedIndexes[0] == f.sortedIndexes[0] &&
+           sortedIndexes[1] == f.sortedIndexes[1] &&
            sortedIndexes[2] == f.sortedIndexes[2];
   }
 
@@ -326,8 +335,7 @@ struct Face {
 };
 
 namespace std {
-template <>
-struct hash<Face> {
+template <> struct hash<Face> {
   inline std::size_t operator()(const Face &f) const {
     size_t seed = 0;
     tlp_hash_combine(seed, f.sortedIndexes[0]);
@@ -342,7 +350,8 @@ struct hash<Face> {
 
 bool tlp::delaunayTriangulation(vector<Coord> &points,
                                 vector<pair<unsigned int, unsigned int>> &edges,
-                                vector<vector<unsigned int>> &simplices, bool voronoiMode) {
+                                vector<vector<unsigned int>> &simplices,
+                                bool voronoiMode) {
 
   vector<double> pointsQHull;
   BoundingBox bb;
@@ -368,8 +377,8 @@ bool tlp::delaunayTriangulation(vector<Coord> &points,
       pointsQHull.push_back(points[i].getZ());
     }
 
-    // If we compute a delaunay triangulation for then computing the dual voronoi diagram,
-    // enclose the layout in a cube whose each face is a grid.
+    // If we compute a delaunay triangulation for then computing the dual
+    // voronoi diagram, enclose the layout in a cube whose each face is a grid.
     // It ensures that each site will have an associated connected voronoi cell
     // meaning we don't have to deal with voronoi rays.
     if (voronoiMode) {
@@ -378,15 +387,23 @@ bool tlp::delaunayTriangulation(vector<Coord> &points,
       float newHeight = bb.height() * 1.2f;
       float newDepth = bb.depth() * 1.2f;
 
-      Coord p1 = Coord(bb.center()) + Coord(-newWidth / 2, -newHeight / 2, -newDepth / 2);
-      Coord p2 = Coord(bb.center()) + Coord(-newWidth / 2, newHeight / 2, -newDepth / 2);
-      Coord p3 = Coord(bb.center()) + Coord(newWidth / 2, newHeight / 2, -newDepth / 2);
-      Coord p4 = Coord(bb.center()) + Coord(newWidth / 2, -newHeight / 2, -newDepth / 2);
+      Coord p1 = Coord(bb.center()) +
+                 Coord(-newWidth / 2, -newHeight / 2, -newDepth / 2);
+      Coord p2 = Coord(bb.center()) +
+                 Coord(-newWidth / 2, newHeight / 2, -newDepth / 2);
+      Coord p3 = Coord(bb.center()) +
+                 Coord(newWidth / 2, newHeight / 2, -newDepth / 2);
+      Coord p4 = Coord(bb.center()) +
+                 Coord(newWidth / 2, -newHeight / 2, -newDepth / 2);
 
-      Coord p5 = Coord(bb.center()) + Coord(-newWidth / 2, -newHeight / 2, newDepth / 2);
-      Coord p6 = Coord(bb.center()) + Coord(-newWidth / 2, newHeight / 2, newDepth / 2);
-      Coord p7 = Coord(bb.center()) + Coord(newWidth / 2, newHeight / 2, newDepth / 2);
-      Coord p8 = Coord(bb.center()) + Coord(newWidth / 2, -newHeight / 2, newDepth / 2);
+      Coord p5 = Coord(bb.center()) +
+                 Coord(-newWidth / 2, -newHeight / 2, newDepth / 2);
+      Coord p6 = Coord(bb.center()) +
+                 Coord(-newWidth / 2, newHeight / 2, newDepth / 2);
+      Coord p7 =
+          Coord(bb.center()) + Coord(newWidth / 2, newHeight / 2, newDepth / 2);
+      Coord p8 = Coord(bb.center()) +
+                 Coord(newWidth / 2, -newHeight / 2, newDepth / 2);
 
       vector<Coord> mesh;
 
@@ -422,10 +439,10 @@ bool tlp::delaunayTriangulation(vector<Coord> &points,
       pointsQHull.push_back(p.getY());
     }
 
-    // If we compute a delaunay triangulation for then computing the dual voronoi diagram,
-    // enclose the layout in its convex hull.
-    // It ensures that each site will have an associated connected voronoi cell
-    // meaning we don't have to deal with voronoi rays.
+    // If we compute a delaunay triangulation for then computing the dual
+    // voronoi diagram, enclose the layout in its convex hull. It ensures that
+    // each site will have an associated connected voronoi cell meaning we don't
+    // have to deal with voronoi rays.
     if (voronoiMode) {
 
       vector<Coord> inputHullPoints;
@@ -443,13 +460,15 @@ bool tlp::delaunayTriangulation(vector<Coord> &points,
       for (size_t i = 0; i < hullPoints.size() - 1; ++i) {
         for (float j = 0; j < nbSubdiv - 1; ++j) {
           newHullPoints.push_back(hullPoints[i] +
-                                  (j / (nbSubdiv - 1)) * (hullPoints[i + 1] - hullPoints[i]));
+                                  (j / (nbSubdiv - 1)) *
+                                      (hullPoints[i + 1] - hullPoints[i]));
         }
       }
 
       for (float j = 0; j < nbSubdiv - 1; ++j) {
         newHullPoints.push_back(hullPoints.back() +
-                                (j / (nbSubdiv - 1)) * (hullPoints[0] - hullPoints.back()));
+                                (j / (nbSubdiv - 1)) *
+                                    (hullPoints[0] - hullPoints.back()));
       }
 
       hullPoints = newHullPoints;
@@ -477,17 +496,20 @@ static void addVoronoiEdge(VoronoiDiagram &voronoiDiagram, const Face &face,
   bool addEdge = false;
 
   if (face.sortedIndexes[0] < voronoiDiagram.nbSites()) {
-    voronoiDiagram.siteToCellEdges[face.sortedIndexes[0]].push_back(voronoiDiagram.edges.size());
+    voronoiDiagram.siteToCellEdges[face.sortedIndexes[0]].push_back(
+        voronoiDiagram.edges.size());
     addEdge = true;
   }
 
   if (face.sortedIndexes[1] < voronoiDiagram.nbSites()) {
-    voronoiDiagram.siteToCellEdges[face.sortedIndexes[1]].push_back(voronoiDiagram.edges.size());
+    voronoiDiagram.siteToCellEdges[face.sortedIndexes[1]].push_back(
+        voronoiDiagram.edges.size());
     addEdge = true;
   }
 
   if (face.size() > 2 && face.sortedIndexes[2] < voronoiDiagram.nbSites()) {
-    voronoiDiagram.siteToCellEdges[face.sortedIndexes[2]].push_back(voronoiDiagram.edges.size());
+    voronoiDiagram.siteToCellEdges[face.sortedIndexes[2]].push_back(
+        voronoiDiagram.edges.size());
     addEdge = true;
   }
 
@@ -507,8 +529,9 @@ bool tlp::voronoiDiagram(vector<Coord> &sites, VoronoiDiagram &voronoiDiagram) {
   voronoiDiagram.sites = sites;
   unsigned int nbSites = sites.size();
 
-  // compute the Delaunay triangulation (some dummy sites will be added in the sites vector
-  // in order to have a connected voronoi cell for each input sites)
+  // compute the Delaunay triangulation (some dummy sites will be added in the
+  // sites vector in order to have a connected voronoi cell for each input
+  // sites)
   bool ret = delaunayTriangulation(sites, edges, simplices, true);
 
   // now compute the dual voronoi diagram
@@ -546,11 +569,13 @@ bool tlp::voronoiDiagram(vector<Coord> &sites, VoronoiDiagram &voronoiDiagram) {
         }
       }
 
-      // only treats simplices which have at least one original site in its vertices
+      // only treats simplices which have at least one original site in its
+      // vertices
       if (!treatSimplex)
         continue;
 
-      // compute the circumscribed center of the simplex (triangle in 2d, tetrahedron in 3d)
+      // compute the circumscribed center of the simplex (triangle in 2d,
+      // tetrahedron in 3d)
       tlp::Coord circumCenterPos;
 
       if (simplices[i].size() == 3)
@@ -589,10 +614,12 @@ bool tlp::voronoiDiagram(vector<Coord> &sites, VoronoiDiagram &voronoiDiagram) {
         face4 = Face(simplices[i][0], simplices[i][1], simplices[i][3]);
       }
 
-      std::unordered_map<Face, unsigned int>::const_iterator it = faceToCircumCenter.find(face1);
+      std::unordered_map<Face, unsigned int>::const_iterator it =
+          faceToCircumCenter.find(face1);
 
       if (it != faceToCircumCenter.end()) {
-        VoronoiDiagram::Edge edge = make_pair(circumCenterIdx, faceToCircumCenter[face1]);
+        VoronoiDiagram::Edge edge =
+            make_pair(circumCenterIdx, faceToCircumCenter[face1]);
         addVoronoiEdge(voronoiDiagram, face1, edge);
       } else {
         faceToCircumCenter[face1] = circumCenterIdx;
@@ -601,7 +628,8 @@ bool tlp::voronoiDiagram(vector<Coord> &sites, VoronoiDiagram &voronoiDiagram) {
       it = faceToCircumCenter.find(face2);
 
       if (it != faceToCircumCenter.end()) {
-        VoronoiDiagram::Edge edge = make_pair(circumCenterIdx, faceToCircumCenter[face2]);
+        VoronoiDiagram::Edge edge =
+            make_pair(circumCenterIdx, faceToCircumCenter[face2]);
         addVoronoiEdge(voronoiDiagram, face2, edge);
       } else {
         faceToCircumCenter[face2] = circumCenterIdx;
@@ -610,7 +638,8 @@ bool tlp::voronoiDiagram(vector<Coord> &sites, VoronoiDiagram &voronoiDiagram) {
       it = faceToCircumCenter.find(face3);
 
       if (it != faceToCircumCenter.end()) {
-        VoronoiDiagram::Edge edge = make_pair(circumCenterIdx, faceToCircumCenter[face3]);
+        VoronoiDiagram::Edge edge =
+            make_pair(circumCenterIdx, faceToCircumCenter[face3]);
         addVoronoiEdge(voronoiDiagram, face3, edge);
       } else {
         faceToCircumCenter[face3] = circumCenterIdx;
@@ -622,7 +651,8 @@ bool tlp::voronoiDiagram(vector<Coord> &sites, VoronoiDiagram &voronoiDiagram) {
         it = faceToCircumCenter.find(face4);
 
         if (it != faceToCircumCenter.end()) {
-          VoronoiDiagram::Edge edge = make_pair(circumCenterIdx, faceToCircumCenter[face4]);
+          VoronoiDiagram::Edge edge =
+              make_pair(circumCenterIdx, faceToCircumCenter[face4]);
           addVoronoiEdge(voronoiDiagram, face4, edge);
         } else {
           faceToCircumCenter[face4] = circumCenterIdx;
@@ -635,7 +665,8 @@ bool tlp::voronoiDiagram(vector<Coord> &sites, VoronoiDiagram &voronoiDiagram) {
 
     for (unsigned int i = 0; i < nbSites; ++i) {
       VoronoiDiagram::Cell cell;
-      const vector<VoronoiDiagram::Edge> &voronoiEdges = voronoiDiagram.voronoiEdgesForSite(i);
+      const vector<VoronoiDiagram::Edge> &voronoiEdges =
+          voronoiDiagram.voronoiEdgesForSite(i);
 
       for (size_t j = 0; j < voronoiEdges.size(); ++j) {
         cell.insert(voronoiEdges[j].first);
@@ -647,7 +678,8 @@ bool tlp::voronoiDiagram(vector<Coord> &sites, VoronoiDiagram &voronoiDiagram) {
     }
   }
 
-  // restore the original sites vector (as the delaunay triangulation adds dummy sites)
+  // restore the original sites vector (as the delaunay triangulation adds dummy
+  // sites)
   sites.resize(nbSites);
   return ret;
 }

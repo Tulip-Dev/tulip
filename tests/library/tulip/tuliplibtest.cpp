@@ -20,12 +20,12 @@
 #include <cstdlib>
 #include <fstream>
 
-#include <cppunit/ui/text/TestRunner.h>
-#include <cppunit/XmlOutputter.h>
-#include <cppunit/TextOutputter.h>
-#include <cppunit/TestResultCollector.h>
 #include <cppunit/TestResult.h>
+#include <cppunit/TestResultCollector.h>
+#include <cppunit/TextOutputter.h>
+#include <cppunit/XmlOutputter.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
+#include <cppunit/ui/text/TestRunner.h>
 
 #include <tulip/TlpTools.h>
 

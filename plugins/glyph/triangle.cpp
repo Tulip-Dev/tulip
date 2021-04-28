@@ -18,11 +18,11 @@
  */
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include <tulip/Size.h>
-#include <tulip/Glyph.h>
-#include <tulip/GlTriangle.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/GlTriangle.h>
+#include <tulip/Glyph.h>
+#include <tulip/Size.h>
 #include <tulip/TulipViewSettings.h>
 
 using namespace std;
@@ -32,8 +32,8 @@ namespace tlp {
 
 class Triangle : public Glyph {
 public:
-  GLYPHINFORMATION("2D - Triangle", "David Auber", "09/07/2002", "Textured Triangle", "1.0",
-                   NodeShape::Triangle)
+  GLYPHINFORMATION("2D - Triangle", "David Auber", "09/07/2002",
+                   "Textured Triangle", "1.0", NodeShape::Triangle)
   Triangle(const tlp::PluginContext *context = nullptr);
   ~Triangle() override;
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
@@ -70,7 +70,8 @@ void Triangle::draw(node n, float lod) {
 
   if (lineWidth > 0) {
     triangle.setOutlineMode(true);
-    triangle.setOutlineColor(glGraphInputData->getElementBorderColor()->getNodeValue(n));
+    triangle.setOutlineColor(
+        glGraphInputData->getElementBorderColor()->getNodeValue(n));
     triangle.setOutlineSize(lineWidth);
   } else {
     triangle.setOutlineMode(false);

@@ -18,22 +18,22 @@
  */
 
 #include <algorithm>
-#include <iostream>
-#include <fstream>
+#include <cctype>
 #include <cstdlib>
 #include <cstring>
-#include <cctype>
+#include <fstream>
+#include <iostream>
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/TulipViewSettings.h>
 
+#include <xdkbibtex/author.h>
 #include <xdkbibtex/file.h>
 #include <xdkbibtex/formatter.h>
-#include <xdkbibtex/author.h>
 
 #if defined(_MSC_VER) && !defined(strtok_r)
 #define strtok_r strtok_s
 #endif
-#if defined(strtok_r) && defined(_WIN32) && defined(__GNUC__) &&                                   \
+#if defined(strtok_r) && defined(_WIN32) && defined(__GNUC__) &&               \
     ((__GNUC__ * 100 + __GNUC__MINOR) < 409)
 // in MINGW environment
 // strtok_r is declared in pthread.h instead of string.h
@@ -84,9 +84,7 @@ using namespace tlp;
 // latex special chars
 // and to replace them by the corresponding utf8 sequence
 static char *utf8seq;
-static char *seq(char cc[2]) {
-  return utf8seq = cc;
-}
+static char *seq(char cc[2]) { return utf8seq = cc; }
 static string &forceUtf8String(string &str) {
   char c3[2] = {'\303', ' '};
   char c4[2] = {'\304', ' '};
@@ -105,8 +103,8 @@ static string &forceUtf8String(string &str) {
     if ((str[i] > '\337') && (str[i] < '\360') && (i + 2) < str.size() &&
         // begin of a 3 chars utf8 sequence
         // skip next 2 chars if it is valid utf8
-        (uchar(str[i + 1]) > '\177') && (str[i + 1] < '\300') && (uchar(str[i + 2]) > '\177') &&
-        (str[i + 2] < '\300')) {
+        (uchar(str[i + 1]) > '\177') && (str[i + 1] < '\300') &&
+        (uchar(str[i + 2]) > '\177') && (str[i + 2] < '\300')) {
       i += 2;
       continue;
     }
@@ -1390,14 +1388,17 @@ static string &forceUtf8String(string &str) {
 class ImportBibTeX : public ImportModule {
 
 public:
-  PLUGININFORMATION("BibTeX", "Patrick Mary", "09/01/2014",
-                    "<p>Supported extensions: bib</p><p>Import a co-authorship graph from a BibTeX "
-                    "formatted file.</p>",
-                    "1.1", "File")
+  PLUGININFORMATION(
+      "BibTeX", "Patrick Mary", "09/01/2014",
+      "<p>Supported extensions: bib</p><p>Import a co-authorship graph from a BibTeX "
+      "formatted file.</p>",
+      "1.1", "File")
 
   ImportBibTeX(const tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<string>(
-        "file::filename", "This parameter indicates the pathname of the file(.bib) to import.", "");
+        "file::filename",
+        "This parameter indicates the pathname of the file(.bib) to import.",
+        "");
     addInParameter<StringCollection>(
         "Nodes to import",
         "The type of nodes to create: <b>Authors</b> (Create nodes for authors only, publications "
@@ -1450,25 +1451,34 @@ public:
     bool createPubliNodes = toImport != IMPORT_AUTHORS;
 
     // known properties to extract
-    StringProperty *keyProp = oneEdgePerPubli ? graph->getProperty<StringProperty>("key") : nullptr;
+    StringProperty *keyProp =
+        oneEdgePerPubli ? graph->getProperty<StringProperty>("key") : nullptr;
     StringProperty *typeProp =
         oneEdgePerPubli ? graph->getProperty<StringProperty>("type") : nullptr;
     IntegerProperty *yearProp =
         oneEdgePerPubli ? graph->getProperty<IntegerProperty>("year") : nullptr;
     BooleanProperty *fromLabriProp =
-        createAuthNodes ? graph->getProperty<BooleanProperty>("from LaBRI") : nullptr;
+        createAuthNodes ? graph->getProperty<BooleanProperty>("from LaBRI")
+                        : nullptr;
     IntegerVectorProperty *labriAuthorsProp =
-        createPubliNodes ? graph->getProperty<IntegerVectorProperty>("LaBRI authors") : nullptr;
+        createPubliNodes
+            ? graph->getProperty<IntegerVectorProperty>("LaBRI authors")
+            : nullptr;
     StringVectorProperty *labriTeamsProp =
-        createPubliNodes ? graph->getProperty<StringVectorProperty>("LaBRI teams") : nullptr;
+        createPubliNodes
+            ? graph->getProperty<StringVectorProperty>("LaBRI teams")
+            : nullptr;
     StringVectorProperty *authProp =
-        createPubliNodes ? graph->getProperty<StringVectorProperty>("authors") : nullptr;
+        createPubliNodes ? graph->getProperty<StringVectorProperty>("authors")
+                         : nullptr;
     StringProperty *authNameProp =
         createAuthNodes ? graph->getProperty<StringProperty>("name") : nullptr;
     StringProperty *labriTeamProp =
-        createAuthNodes ? graph->getProperty<StringProperty>("LaBRI team") : nullptr;
+        createAuthNodes ? graph->getProperty<StringProperty>("LaBRI team")
+                        : nullptr;
     IntegerProperty *countProp =
-        createAuthNodes ? graph->getProperty<IntegerProperty>("# publications") : nullptr;
+        createAuthNodes ? graph->getProperty<IntegerProperty>("# publications")
+                        : nullptr;
 
     // rendering properties
     ColorProperty *color = graph->getProperty<ColorProperty>("viewColor");
@@ -1477,7 +1487,8 @@ public:
 
     graph->getProperty<IntegerProperty>("viewLabelPosition")
         ->setAllNodeValue(LabelPosition::Bottom);
-    graph->getProperty<IntegerProperty>("viewShape")->setAllNodeValue(tlp::NodeShape::Icon);
+    graph->getProperty<IntegerProperty>("viewShape")
+        ->setAllNodeValue(tlp::NodeShape::Icon);
 
     std::unordered_map<std::string, node> authorsMap;
     std::unordered_map<std::string, bool> publisMap;
@@ -1524,7 +1535,8 @@ public:
           // setup key, type and year
           keyProp->setNodeValue(publi, key);
           std::string type;
-          std::transform(fe.type().begin(), fe.type().end(), type.begin(), ::tolower);
+          std::transform(fe.type().begin(), fe.type().end(), type.begin(),
+                         ::tolower);
           typeProp->setNodeValue(publi, type);
           yearProp->setNodeValue(publi, year);
           // set rendering properties
@@ -1542,8 +1554,8 @@ public:
             continue;
 
           const xdkbib::Field &field = fit.second;
-          bool isNumber =
-              !field.valueParts().empty() && (field.valueParts()[0].type() == xdkbib::Number);
+          bool isNumber = !field.valueParts().empty() &&
+                          (field.valueParts()[0].type() == xdkbib::Number);
           bool isAuthor = (pName == "author");
           PropertyInterface *prop = nullptr;
 
@@ -1610,7 +1622,9 @@ public:
 
             char *authorsPtr;
             unsigned int labriIndex =
-                labriAuthors ? (atoi(strtok_r(labriAuthors, " \n", &authorsPtr)) - 1) : 0;
+                labriAuthors
+                    ? (atoi(strtok_r(labriAuthors, " \n", &authorsPtr)) - 1)
+                    : 0;
             unsigned int teamIndex = 0;
             // add authors
             xdkbib::AuthorList authors;
@@ -1984,11 +1998,13 @@ public:
 
               node author;
               // check if the author already exists
-              std::unordered_map<std::string, node>::const_iterator itAuth = authorsMap.find(aKey);
+              std::unordered_map<std::string, node>::const_iterator itAuth =
+                  authorsMap.find(aKey);
 
               if (itAuth != authorsMap.end()) {
                 authorNodes.push_back(author = itAuth->second);
-                countProp->setNodeValue(author, countProp->getNodeValue(author) + 1);
+                countProp->setNodeValue(author,
+                                        countProp->getNodeValue(author) + 1);
               } else {
                 authorNodes.push_back(author = graph->addNode());
                 authorsMap[aKey] = author;
@@ -2026,8 +2042,9 @@ public:
             } else {
               // display a warning for publication without author
               if (authorNodes.empty()) {
-                tlp::warning() << "Warning: found the publication '" << key.c_str()
-                               << "' without author" << std::endl;
+                tlp::warning()
+                    << "Warning: found the publication '" << key.c_str()
+                    << "' without author" << std::endl;
                 // stop processing publication fields
                 break;
               }
@@ -2082,8 +2099,8 @@ public:
       }
     } catch (xdkbib::parsing_error &e) {
       stringstream sstr;
-      sstr << "BibTeX file parsing error at char " << e.column() << " of line " << e.line() << ": "
-           << e.what() << std::endl;
+      sstr << "BibTeX file parsing error at char " << e.column() << " of line "
+           << e.line() << ": " << e.what() << std::endl;
       tlp::error() << sstr.str();
       pluginProgress->setError(sstr.str());
     }
@@ -2107,9 +2124,9 @@ public:
         graph->delLocalProperty(fromLabriProp->getName());
 
       string err;
-      return graph->applyPropertyAlgorithm("FM^3 (OGDF)",
-                                           graph->getProperty<LayoutProperty>("viewLayout"), err,
-                                           nullptr, pluginProgress);
+      return graph->applyPropertyAlgorithm(
+          "FM^3 (OGDF)", graph->getProperty<LayoutProperty>("viewLayout"), err,
+          nullptr, pluginProgress);
     }
 
     return true;

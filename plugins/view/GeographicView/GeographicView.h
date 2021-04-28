@@ -20,12 +20,12 @@
 #ifndef GEOGRAPHIC_VIEW_H
 #define GEOGRAPHIC_VIEW_H
 
+#include <tulip/GlMainView.h>
+#include <tulip/Interactor.h>
 #include <tulip/OcclusionTest.h>
 #include <tulip/SceneConfigWidget.h>
 #include <tulip/SceneLayersConfigWidget.h>
-#include <tulip/Interactor.h>
 #include <tulip/View.h>
-#include <tulip/GlMainView.h>
 #include <tulip/ViewActionsManager.h>
 
 #include <QGraphicsItem>
@@ -34,9 +34,9 @@
 #include <map>
 
 #include "GeographicViewConfigWidget.h"
+#include "GeographicViewGraphicsView.h"
 #include "GeolocalisationConfigWidget.h"
 #include "LeafletMaps.h"
-#include "GeographicViewGraphicsView.h"
 
 #include "../../utils/PluginNames.h"
 
@@ -47,7 +47,8 @@ namespace tlp {
  *  \brief  Tulip Geographic View
 
  * This view plugin allows to visualize a geolocated Tulip graph on top of maps.
- * If geographic properties are attached to graph nodes (address or latitude/longitude), this
+ * If geographic properties are attached to graph nodes (address or
+ latitude/longitude), this
  * plugin uses them to layout the nodes on the map.
  *
  * An interactor for performing selection on graph elements is also bundled
@@ -60,7 +61,8 @@ class GeographicView : public View {
   Q_OBJECT
 
   PLUGININFORMATION(
-      ViewName::GeographicViewName, "Antoine Lambert and Morgan Mathiaut", "06/2012",
+      ViewName::GeographicViewName, "Antoine Lambert and Morgan Mathiaut",
+      "06/2012",
       "<p>The Geographic view allows to visualize a geolocated Tulip graph on top of "
       "maps or projected on a globe.</p>"
       "<p>If geographic properties are attached to graph nodes (address or "
@@ -102,9 +104,7 @@ public:
   void setState(const DataSet &dataSet) override;
   DataSet state() const override;
 
-  QGraphicsView *graphicsView() const override {
-    return geoViewGraphicsView;
-  }
+  QGraphicsView *graphicsView() const override { return geoViewGraphicsView; }
 
   QList<QWidget *> configurationWidgets() const override;
 
@@ -116,9 +116,7 @@ public:
 
   void registerTriggers();
 
-  ViewType viewType() {
-    return _viewType;
-  }
+  ViewType viewType() { return _viewType; }
 
   // inherited from View
   void centerView(bool) override {
@@ -130,9 +128,10 @@ public:
     return geoViewGraphicsView;
   }
 
-  bool getNodeOrEdgeAtViewportPos(int x, int y, node &n, edge &e) const override {
-    return GlMainView::getNodeOrEdgeAtViewportPos(geoViewGraphicsView->getGlMainWidget(), x, y, n,
-                                                  e);
+  bool getNodeOrEdgeAtViewportPos(int x, int y, node &n,
+                                  edge &e) const override {
+    return GlMainView::getNodeOrEdgeAtViewportPos(
+        geoViewGraphicsView->getGlMainWidget(), x, y, n, e);
   }
 
   GeographicViewConfigWidget *getConfigWidget() const {
@@ -159,9 +158,7 @@ public slots:
     i->install(geoViewGraphicsView->getGlMainWidget());
   }
 
-  void mapToPolygon() {
-    geoViewGraphicsView->mapToPolygon();
-  }
+  void mapToPolygon() { geoViewGraphicsView->mapToPolygon(); }
 
   void centerView();
   void centerOnNode();

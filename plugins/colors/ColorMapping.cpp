@@ -19,9 +19,9 @@
 #include <cmath>
 #include <limits>
 
+#include <tulip/ColorScale.h>
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/Vector.h>
-#include <tulip/ColorScale.h>
 
 #ifndef TULIP_BUILD_CORE_ONLY
 #include "DoubleStringsListRelationDialog.h"
@@ -99,22 +99,26 @@ private:
 public:
   PLUGININFORMATION(
       "Color Mapping", "Mathiaut", "16/09/2010",
-      "Colorizes the nodes or edges of a graph according to the values of a given property.", "2.2",
-      "")
+      "Colorizes the nodes or edges of a graph according to the values of a given property.",
+      "2.2", "")
   ColorMapping(const tlp::PluginContext *context)
       : ColorAlgorithm(context), entryMetric(nullptr), eltTypes(ELT_TYPES),
         maxInput(std::numeric_limits<double>::quiet_NaN()),
-        minInput(std::numeric_limits<double>::quiet_NaN()), overrideMaxInput(false),
-        overrideMinInput(false) {
-    addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES, true,
-                                     "linear <br> uniform <br> enumerated <br> logarithmic");
-    addInParameter<PropertyInterface *>("input property", paramHelp[1], "viewMetric");
-    addInParameter<StringCollection>(TARGET_TYPE, paramHelp[2], TARGET_TYPES, true,
-                                     "nodes <br> edges");
+        minInput(std::numeric_limits<double>::quiet_NaN()),
+        overrideMaxInput(false), overrideMinInput(false) {
+    addInParameter<StringCollection>(
+        ELT_TYPE, paramHelp[0], ELT_TYPES, true,
+        "linear <br> uniform <br> enumerated <br> logarithmic");
+    addInParameter<PropertyInterface *>("input property", paramHelp[1],
+                                        "viewMetric");
+    addInParameter<StringCollection>(TARGET_TYPE, paramHelp[2], TARGET_TYPES,
+                                     true, "nodes <br> edges");
     addInParameter<ColorScale>("color scale", paramHelp[3], "");
-    addInParameter<bool>("override minimum value", paramHelp[4], "false", false);
+    addInParameter<bool>("override minimum value", paramHelp[4], "false",
+                         false);
     addInParameter<double>("minimum value", paramHelp[5], "", false);
-    addInParameter<bool>("override maximum value", paramHelp[6], "false", false);
+    addInParameter<bool>("override maximum value", paramHelp[6], "false",
+                         false);
     addInParameter<double>("maximum value", paramHelp[7], "", false);
 
     // result needs to be an inout parameter
@@ -191,7 +195,8 @@ public:
       metricS = dynamic_cast<NumericProperty *>(metric);
 
     if (eltTypes.getCurrent() != ENUMERATED_ELT) {
-      if (eltTypes.getCurrent() == LINEAR_ELT || eltTypes.getCurrent() == LOGARITHMIC_ELT) {
+      if (eltTypes.getCurrent() == LINEAR_ELT ||
+          eltTypes.getCurrent() == LOGARITHMIC_ELT) {
         entryMetric = metricS;
       } else {
         NumericProperty *tmp = metricS->copyProperty(graph);
@@ -200,11 +205,14 @@ public:
       }
 
       // loop on nodes
-      if (targetType.getCurrent() == NODES_TARGET && graph->numberOfNodes() != 0) {
+      if (targetType.getCurrent() == NODES_TARGET &&
+          graph->numberOfNodes() != 0) {
         unsigned int maxIter = graph->numberOfNodes();
         unsigned int iter = 0;
-        double minN = overrideMinInput ? minInput : entryMetric->getNodeDoubleMin(graph);
-        double maxN = overrideMaxInput ? maxInput : entryMetric->getNodeDoubleMax(graph);
+        double minN =
+            overrideMinInput ? minInput : entryMetric->getNodeDoubleMin(graph);
+        double maxN =
+            overrideMaxInput ? maxInput : entryMetric->getNodeDoubleMax(graph);
 
         if (eltTypes.getCurrent() == LOGARITHMIC_ELT) {
           maxN = log(1 + maxN - minN);
@@ -219,7 +227,8 @@ public:
             result->setNodeValue(n, getColor(dd - minN, maxN - minN));
           }
 
-          if ((iter % 100 == 0) && (pluginProgress->progress(iter, maxIter) != TLP_CONTINUE)) {
+          if ((iter % 100 == 0) &&
+              (pluginProgress->progress(iter, maxIter) != TLP_CONTINUE)) {
             if (eltTypes.getCurrent() == UNIFORM_ELT)
               delete entryMetric;
 
@@ -231,12 +240,15 @@ public:
       }
 
       // loop on edges
-      if (targetType.getCurrent() == EDGES_TARGET && graph->numberOfEdges() != 0) {
+      if (targetType.getCurrent() == EDGES_TARGET &&
+          graph->numberOfEdges() != 0) {
         unsigned int maxIter = graph->numberOfEdges();
         unsigned int iter = 0;
 
-        double minE = overrideMinInput ? minInput : entryMetric->getEdgeDoubleMin(graph);
-        double maxE = overrideMaxInput ? maxInput : entryMetric->getEdgeDoubleMax(graph);
+        double minE =
+            overrideMinInput ? minInput : entryMetric->getEdgeDoubleMin(graph);
+        double maxE =
+            overrideMaxInput ? maxInput : entryMetric->getEdgeDoubleMax(graph);
 
         if (eltTypes.getCurrent() == LOGARITHMIC_ELT) {
           maxE = log(1 + maxE - minE);
@@ -251,7 +263,8 @@ public:
             result->setEdgeValue(e, getColor(dd - minE, maxE - minE));
           }
 
-          if ((iter % 100 == 0) && (pluginProgress->progress(iter, maxIter) != TLP_CONTINUE)) {
+          if ((iter % 100 == 0) &&
+              (pluginProgress->progress(iter, maxIter) != TLP_CONTINUE)) {
             if (eltTypes.getCurrent() == UNIFORM_ELT)
               delete entryMetric;
 
@@ -265,8 +278,9 @@ public:
       if (eltTypes.getCurrent() == UNIFORM_ELT)
         delete entryMetric;
     } else {
-      unsigned int maxIter = (targetType.getCurrent() == NODES_TARGET) ? graph->numberOfNodes()
-                                                                       : graph->numberOfEdges();
+      unsigned int maxIter = (targetType.getCurrent() == NODES_TARGET)
+                                 ? graph->numberOfNodes()
+                                 : graph->numberOfEdges();
       unsigned int iter = 0;
 
       for (const auto &it : enumeratedMappingResultVector) {
@@ -279,7 +293,8 @@ public:
             result->setEdgeValue(edge(id), it.second);
           }
 
-          if ((iter % 100 == 0) && (pluginProgress->progress(iter, maxIter) != TLP_CONTINUE)) {
+          if ((iter % 100 == 0) &&
+              (pluginProgress->progress(iter, maxIter) != TLP_CONTINUE)) {
             return pluginProgress->state() != TLP_CANCEL;
           }
 
@@ -361,7 +376,8 @@ public:
                   });
       }
 
-      DoubleStringsListRelationDialog dialog(enumeratedValues, enumeratedColors);
+      DoubleStringsListRelationDialog dialog(enumeratedValues,
+                                             enumeratedColors);
 
       if (!dialog.exec()) {
         errorMsg += "Cancelled by user";
@@ -376,8 +392,9 @@ public:
     } else {
       // check if input property is a NumericProperty
       if (!dynamic_cast<NumericProperty *>(metric)) {
-        errorMsg += "For a linear, logarithmic or uniform color mapping,\nthe input property must "
-                    "be a Double or Integer property";
+        errorMsg +=
+            "For a linear, logarithmic or uniform color mapping,\nthe input property must "
+            "be a Double or Integer property";
         return false;
       }
     }

@@ -19,9 +19,8 @@
 
 #include "LinearMappingColor.h"
 
-/*static void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v ) {
-  int i;
-  float f, p, q, t;
+/*static void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v
+  ) { int i; float f, p, q, t;
 
   if( s == 0 ) { // achromatic (grey)
     *r = *g = *b = v;
@@ -91,7 +90,8 @@ RGBA LinearMappingColor::getColor(const double &value, unsigned int) const {
   RGBA color;
 
   for (unsigned int i = 0; i < 3; ++i) {
-    color[i] = uchar(double(startColor[i]) + (double(endColor[i]) - double(startColor[i])) * ratio);
+    color[i] = uchar(double(startColor[i]) +
+                     (double(endColor[i]) - double(startColor[i])) * ratio);
   }
 
   color[3] = 255;

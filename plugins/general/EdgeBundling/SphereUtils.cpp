@@ -19,25 +19,26 @@
 
 #include "SphereUtils.h"
 
+#include <tulip/DoubleProperty.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/SizeProperty.h>
-#include <tulip/DoubleProperty.h>
 
 using namespace tlp;
 using namespace std;
 
 float centerOnOriginAndScale(Graph *graph, LayoutProperty *layout, float dist) {
   graph->getProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(0, 0, 0));
-  BoundingBox bb =
-      tlp::computeBoundingBox(graph, graph->getProperty<LayoutProperty>("viewLayout"),
-                              graph->getProperty<SizeProperty>("viewSize"),
-                              graph->getProperty<DoubleProperty>("viewRotation"), nullptr);
+  BoundingBox bb = tlp::computeBoundingBox(
+      graph, graph->getProperty<LayoutProperty>("viewLayout"),
+      graph->getProperty<SizeProperty>("viewSize"),
+      graph->getProperty<DoubleProperty>("viewRotation"), nullptr);
   Coord &&move_coord = (bb[0] + bb[1]) / (-2.f);
   layout->translate(move_coord, graph);
   float ray = (move_coord - bb[1]).norm();
   float scaleFactor = dist / ray;
   layout->scale(Coord(scaleFactor, scaleFactor, scaleFactor), graph);
-  graph->getProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(0.1f, 0.1f, 0.1f));
+  graph->getProperty<SizeProperty>("viewSize")
+      ->setAllNodeValue(Size(0.1f, 0.1f, 0.1f));
   return sqrt(ray * ray / 2.);
 }
 
@@ -82,7 +83,8 @@ void addSphereGraph(Graph *graph, double radius) {
     double teta = 5;
 
     while (teta < 180) {
-      layout->setNodeValue(graph->addNode(), getCoordFromPolar(radius, rho, teta));
+      layout->setNodeValue(graph->addNode(),
+                           getCoordFromPolar(radius, rho, teta));
       teta += 5.;
     }
 

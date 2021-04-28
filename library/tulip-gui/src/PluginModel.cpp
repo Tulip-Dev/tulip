@@ -22,7 +22,8 @@
 using namespace tlp;
 using namespace std;
 
-SimplePluginListModel::SimplePluginListModel(const std::list<std::string> &plugins, QObject *parent)
+SimplePluginListModel::SimplePluginListModel(
+    const std::list<std::string> &plugins, QObject *parent)
     : TulipModel(parent) {
   for (auto &s : plugins)
     _list.append(s);
@@ -40,13 +41,9 @@ string SimplePluginListModel::pluginName(const QModelIndex &idx) const {
   }
 }
 
-QList<std::string> SimplePluginListModel::plugins() const {
-  return _list;
-}
+QList<std::string> SimplePluginListModel::plugins() const { return _list; }
 
-int SimplePluginListModel::columnCount(const QModelIndex &) const {
-  return 1;
-}
+int SimplePluginListModel::columnCount(const QModelIndex &) const { return 1; }
 
 int SimplePluginListModel::rowCount(const QModelIndex &parent) const {
   if (parent.isValid())
@@ -59,7 +56,8 @@ QModelIndex SimplePluginListModel::parent(const QModelIndex &) const {
   return QModelIndex();
 }
 
-QModelIndex SimplePluginListModel::index(int row, int column, const QModelIndex &parent) const {
+QModelIndex SimplePluginListModel::index(int row, int column,
+                                         const QModelIndex &parent) const {
   if (parent.isValid())
     return QModelIndex();
 

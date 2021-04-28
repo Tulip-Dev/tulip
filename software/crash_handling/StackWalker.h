@@ -20,10 +20,10 @@
 #ifndef STACKWALKER_H_
 #define STACKWALKER_H_
 
-#include <iostream>
-#include <iomanip>
-#include <string>
 #include <cstdint>
+#include <iomanip>
+#include <iostream>
+#include <string>
 
 #include <tulip/ConsoleUtils.h>
 
@@ -44,9 +44,11 @@ public:
     printCallStack(std::cerr, maxDepth);
   }
 
-  virtual void printFrameInfo(std::ostream &os, unsigned int frameId, int64_t pcAddress,
-                              const std::string &moduleName, const std::string &funcName = "",
-                              int64_t symbolOffset = 0, const std::string &fileName = "",
+  virtual void printFrameInfo(std::ostream &os, unsigned int frameId,
+                              int64_t pcAddress, const std::string &moduleName,
+                              const std::string &funcName = "",
+                              int64_t symbolOffset = 0,
+                              const std::string &fileName = "",
                               unsigned int line = 0) {
 
     if (frameId % 2 == 0)
@@ -56,8 +58,9 @@ public:
 
     os << bold;
 
-    os << lightRed << std::dec << std::setfill('0') << "#" << std::setw(2) << frameId
-       << lightMagenta << " 0x" << std::hex << std::setw(16) << pcAddress << lightRed << " in ";
+    os << lightRed << std::dec << std::setfill('0') << "#" << std::setw(2)
+       << frameId << lightMagenta << " 0x" << std::hex << std::setw(16)
+       << pcAddress << lightRed << " in ";
 
     os << white;
 
@@ -72,7 +75,8 @@ public:
     }
 
     if (!fileName.empty()) {
-      os << lightRed << " at " << lightGreen << fileName << ":" << std::dec << lightYellow << line;
+      os << lightRed << " at " << lightGreen << fileName << ":" << std::dec
+         << lightYellow << line;
     }
 
     if (!moduleName.empty()) {
@@ -120,9 +124,7 @@ public:
 
   void printCallStack(std::ostream &os, unsigned int maxDepth = 50);
 
-  void setContext(LPCONTEXT context) {
-    this->context = context;
-  }
+  void setContext(LPCONTEXT context) { this->context = context; }
 
 private:
   LPCONTEXT context;
@@ -142,9 +144,7 @@ public:
   void setExtraSymbolsSearchPaths(const std::string &searchPaths) {
     extraSymbolsSearchPaths = searchPaths;
   }
-  void setContext(CONTEXT *context) {
-    this->context = context;
-  }
+  void setContext(CONTEXT *context) { this->context = context; }
 
 private:
   CONTEXT *context;

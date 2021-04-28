@@ -21,17 +21,17 @@
 #ifndef TULIP_PLANARITYIMPL_H
 #define TULIP_PLANARITYIMPL_H
 
-#include <map>
 #include <list>
-#include <vector>
+#include <map>
 #include <unordered_map>
 #include <utility>
+#include <vector>
 
+#include <tulip/BmdList.h>
 #include <tulip/Edge.h>
 #include <tulip/MutableContainer.h>
-#include <tulip/BmdList.h>
-#include <tulip/tulipconf.h>
 #include <tulip/Node.h>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
 class Graph;
@@ -56,14 +56,17 @@ private:
   void findTerminalNodes(Graph *sG, node n, std::list<node> &listOfComponents,
                          std::map<node, std::list<node>> &terminalNodes);
   bool findObstruction(Graph *sG, node n, std::list<node> &terminalNodes);
-  void setInfoForNewCNode(Graph *sG, node n, node newCNode, std::list<node> &terminalNodes);
+  void setInfoForNewCNode(Graph *sG, node n, node newCNode,
+                          std::list<node> &terminalNodes);
   node findActiveCNode(node, node, std::list<node> &);
   void preProcessing(Graph *);
-  tlp::BmdLink<node> *searchRBC(int, tlp::BmdLink<node> *, node, std::list<node> &);
+  tlp::BmdLink<node> *searchRBC(int, tlp::BmdLink<node> *, node,
+                                std::list<node> &);
   bool isT0Edge(Graph *, edge);
   bool isBackEdge(Graph *, edge);
   bool isCNode(node);
-  void sortNodesIncreasingOrder(Graph *, MutableContainer<int> &, std::vector<node> &);
+  void sortNodesIncreasingOrder(Graph *, MutableContainer<int> &,
+                                std::vector<node> &);
   node activeCNodeOf(bool, node);
   void addOldCNodeRBCToNewRBC(node, node, node, node, node, BmdList<node> &);
   void updateLabelB(node);
@@ -85,38 +88,49 @@ private:
   void addPartOfBc(Graph *sG, node cNode, node n1, node n2, node n3);
   void sortByLabelB(node &n1, node &n2, node &n3);
   void obstrEdgesPNode(Graph *sG, node p, node u);
-  void calcInfo3Terminals(node &t1, node &t2, node &t3, int &countMin, int &countF, node &cNode,
-                          node &q);
+  void calcInfo3Terminals(node &t1, node &t2, node &t3, int &countMin,
+                          int &countF, node &cNode, node &q);
   void obstructionEdgesT0(Graph *sG, node w, node t1, node t2, node t3, node v);
-  void obstructionEdgesCountMin1(Graph *sG, node n, node cNode, node t1, node t2, node t3);
-  void obstructionEdgesCountMin23(Graph *sG, node n, node cNode, node t1, node t2, node t3, node q,
-                                  node v);
+  void obstructionEdgesCountMin1(Graph *sG, node n, node cNode, node t1,
+                                 node t2, node t3);
+  void obstructionEdgesCountMin23(Graph *sG, node n, node cNode, node t1,
+                                  node t2, node t3, node q, node v);
   //   void obstrEdgesTermCNode(Graph *sG, node w, node t);
-  void obstructionEdgesK5(Graph *sG, node w, node cNode, node t1, node t2, node t3);
-  void obstructionEdgesPossibleObstrConfirmed(Graph *sG, node w, node t, node v);
-  void obstructionEdgesCNodeCounter(Graph *sG, node cNode, node w, node jl, node jr, node t1,
-                                    node t2);
+  void obstructionEdgesK5(Graph *sG, node w, node cNode, node t1, node t2,
+                          node t3);
+  void obstructionEdgesPossibleObstrConfirmed(Graph *sG, node w, node t,
+                                              node v);
+  void obstructionEdgesCNodeCounter(Graph *sG, node cNode, node w, node jl,
+                                    node jr, node t1, node t2);
 
   // functions PlanarityTestEmbed.cpp
   void embedRoot(Graph *sG, int n);
-  void calculatePartialEmbedding(Graph *sG, node w, node newCNode, std::list<edge> &listBackEdges,
+  void calculatePartialEmbedding(Graph *sG, node w, node newCNode,
+                                 std::list<edge> &listBackEdges,
                                  std::list<node> &terminalNodes);
   void markPathInT(node t, node w, std::map<node, node> &backEdgeRepresentant,
                    std::list<node> &traversedNodes);
-  std::map<node, std::list<edge>> groupBackEdgesByRepr(Graph *sG, std::list<edge> &listBackEdges,
-                                                       std::map<node, node> &backEdgeRepresentant,
-                                                       std::list<node> &traversedNodes,
-                                                       std::list<node> &listRepresentants);
-  std::list<node> embedUpwardT(bool embBackEdgesOutW, node t1, node t2, Graph *sG, node w,
+  std::map<node, std::list<edge>>
+  groupBackEdgesByRepr(Graph *sG, std::list<edge> &listBackEdges,
+                       std::map<node, node> &backEdgeRepresentant,
+                       std::list<node> &traversedNodes,
+                       std::list<node> &listRepresentants);
+  std::list<node> embedUpwardT(bool embBackEdgesOutW, node t1, node t2,
+                               Graph *sG, node w,
                                std::map<node, std::list<edge>> &bEdgesRepres,
-                               std::list<node> &traversedNodes, BmdList<edge> &embList);
-  void addOldCNodeToEmbedding(bool embBackEdgesOutW, Graph *sG, node w, node oldCNode, node u,
+                               std::list<node> &traversedNodes,
+                               BmdList<edge> &embList);
+  void addOldCNodeToEmbedding(bool embBackEdgesOutW, Graph *sG, node w,
+                              node oldCNode, node u,
                               std::map<node, std::list<edge>> &bEdgesRepres,
-                              std::list<node> &traversedNodes, std::list<node> &toEmbedLater,
+                              std::list<node> &traversedNodes,
+                              std::list<node> &toEmbedLater,
                               BmdList<edge> &embList);
-  void embedBackEdges(bool embBackEdgesOutW, Graph *sG, node repr, std::list<node> &traversedNodes,
+  void embedBackEdges(bool embBackEdgesOutW, Graph *sG, node repr,
+                      std::list<node> &traversedNodes,
                       std::list<edge> &listBackEdges, BmdList<edge> &embList);
-  int sortBackEdgesByDfs(Graph *sG, node w, node repr, std::list<edge> &listBackEdges,
+  int sortBackEdgesByDfs(Graph *sG, node w, node repr,
+                         std::list<edge> &listBackEdges,
                          std::vector<edge> &backEdge);
 
   //   void cleanPtrItem (node n,  tlp::BmdLink<node>* item);
@@ -200,7 +214,8 @@ private:
   MutableContainer<int> labelB;
 
   //   // for each node u in T, node_label_b[u] = v
-  //   // where v is a descendant of u in T and largest_neighbor[v] == label_b[u]
+  //   // where v is a descendant of u in T and largest_neighbor[v] ==
+  //   label_b[u]
   //   // (it helps to find an obstruction in G, if G is not planar);
   //   //node_map<node> nodeLabelB;
   MutableContainer<node> nodeLabelB;
@@ -214,7 +229,8 @@ private:
   //   //node_map<node> neighborWTerminal;
   MutableContainer<node> neighborWTerminal;
 
-  //   // to help search for terminal nodes and calculate an embedding of G if G is
+  //   // to help search for terminal nodes and calculate an embedding of G if G
+  //   is
   //   // planar (states: VISITED, NOT_VISITED, TERMINAL);
   //   //node_map<int> state;
   MutableContainer<int> state;

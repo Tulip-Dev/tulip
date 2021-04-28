@@ -23,22 +23,21 @@
 #include "ParallelTools.h"
 
 #include <tulip/GlNominativeAxis.h>
-#include <tulip/StringProperty.h>
 #include <tulip/Iterator.h>
+#include <tulip/StringProperty.h>
 
 using namespace std;
 
 namespace tlp {
 
-NominalParallelAxis::NominalParallelAxis(const Coord &base_coord, const float height,
-                                         const float axisAreaWidth,
-                                         ParallelCoordinatesGraphProxy *graph,
-                                         const std::string &propertyName, const Color &axisColor,
-                                         const float rotationAngle,
-                                         const GlAxis::CaptionLabelPosition captionPosition)
-    : ParallelAxis(
-          new GlNominativeAxis(propertyName, base_coord, height, GlAxis::VERTICAL_AXIS, axisColor),
-          axisAreaWidth, rotationAngle, captionPosition),
+NominalParallelAxis::NominalParallelAxis(
+    const Coord &base_coord, const float height, const float axisAreaWidth,
+    ParallelCoordinatesGraphProxy *graph, const std::string &propertyName,
+    const Color &axisColor, const float rotationAngle,
+    const GlAxis::CaptionLabelPosition captionPosition)
+    : ParallelAxis(new GlNominativeAxis(propertyName, base_coord, height,
+                                        GlAxis::VERTICAL_AXIS, axisColor),
+                   axisAreaWidth, rotationAngle, captionPosition),
       graphProxy(graph) {
   glNominativeAxis = static_cast<GlNominativeAxis *>(glAxis);
   setLabels();
@@ -51,7 +50,8 @@ void NominalParallelAxis::setLabels() {
 
   for (unsigned int dataId : graphProxy->getDataIterator()) {
     string labelName =
-        graphProxy->getPropertyValueForData<StringProperty, StringType>(getAxisName(), dataId);
+        graphProxy->getPropertyValueForData<StringProperty, StringType>(
+            getAxisName(), dataId);
 
     if (std::find(labels.begin(), labels.end(), labelName) == labels.end()) {
       labels.push_back(labelName);
@@ -62,13 +62,17 @@ void NominalParallelAxis::setLabels() {
     labelsOrder = labels;
   }
 
-  glNominativeAxis->setAxisGraduationsLabels(labelsOrder, GlAxis::RIGHT_OR_ABOVE);
+  glNominativeAxis->setAxisGraduationsLabels(labelsOrder,
+                                             GlAxis::RIGHT_OR_ABOVE);
 }
 
-Coord NominalParallelAxis::getPointCoordOnAxisForData(const unsigned int dataIdx) {
+Coord NominalParallelAxis::getPointCoordOnAxisForData(
+    const unsigned int dataIdx) {
   string propertyValue(
-      graphProxy->getPropertyValueForData<StringProperty, StringType>(getAxisName(), dataIdx));
-  Coord &&axisPointCoord = glNominativeAxis->getAxisPointCoordForValue(propertyValue);
+      graphProxy->getPropertyValueForData<StringProperty, StringType>(
+          getAxisName(), dataIdx));
+  Coord &&axisPointCoord =
+      glNominativeAxis->getAxisPointCoordForValue(propertyValue);
 
   if (rotationAngle != 0.0f) {
     rotateVector(axisPointCoord, rotationAngle, Z_ROT);
@@ -98,7 +102,8 @@ const set<unsigned int> &NominalParallelAxis::getDataInSlidersRange() {
 
   for (unsigned int dataId : graphProxy->getDataIterator()) {
     string labelName =
-        graphProxy->getPropertyValueForData<StringProperty, StringType>(getAxisName(), dataId);
+        graphProxy->getPropertyValueForData<StringProperty, StringType>(
+            getAxisName(), dataId);
 
     if (labelsInRange.find(labelName) != labelsInRange.end()) {
       dataSubset.insert(dataId);
@@ -108,7 +113,8 @@ const set<unsigned int> &NominalParallelAxis::getDataInSlidersRange() {
   return dataSubset;
 }
 
-void NominalParallelAxis::updateSlidersWithDataSubset(const set<unsigned int> &dataSubset) {
+void NominalParallelAxis::updateSlidersWithDataSubset(
+    const set<unsigned int> &dataSubset) {
   float rotAngleBak = rotationAngle;
   rotationAngle = 0.0f;
   Coord max(getBaseCoord());

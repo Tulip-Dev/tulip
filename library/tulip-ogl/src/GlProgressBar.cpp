@@ -16,14 +16,14 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/GlProgressBar.h>
-#include <tulip/GlPolygon.h>
 #include <tulip/GlLabel.h>
+#include <tulip/GlPolygon.h>
+#include <tulip/GlProgressBar.h>
 #include <tulip/GlQuad.h>
 #include <tulip/TlpTools.h>
 
-#include <vector>
 #include <sstream>
+#include <vector>
 
 using namespace std;
 
@@ -33,7 +33,8 @@ static const string PERCENT_ID = "percent label";
 
 namespace tlp {
 
-GlProgressBar::GlProgressBar(const Coord &centerPosition, const unsigned int width,
+GlProgressBar::GlProgressBar(const Coord &centerPosition,
+                             const unsigned int width,
                              const unsigned int height, const Color &pbColor,
                              const Color &commColor)
     : progressBarColor(pbColor), commentColor(commColor) {
@@ -60,7 +61,8 @@ GlProgressBar::GlProgressBar(const Coord &centerPosition, const unsigned int wid
   globalFrameColors.emplace_back(commentColor);
   globalFrameColors.emplace_back(commentColor);
 
-  addGlEntity(new GlPolygon(globalFrameCoords, globalFrameColors, globalFrameColors, false, true),
+  addGlEntity(new GlPolygon(globalFrameCoords, globalFrameColors,
+                            globalFrameColors, false, true),
               "global frame");
 
   progressBarMaxWidth = (4. / 5.) * width;
@@ -68,9 +70,11 @@ GlProgressBar::GlProgressBar(const Coord &centerPosition, const unsigned int wid
   commentWidth = (4. / 5.) * width;
   commentHeight = (4. / 5.) * (height / 2.);
 
-  progressBarTLCorner = Coord(centerPosition.getX() - ((2. / 5.) * width),
-                              centerPosition.getY() - ((1. / 10.) * (height / 2.)), 0);
-  commentLabelCenter = Coord(centerPosition.getX(), centerPosition.getY() + (height / 4.), 0);
+  progressBarTLCorner =
+      Coord(centerPosition.getX() - ((2. / 5.) * width),
+            centerPosition.getY() - ((1. / 10.) * (height / 2.)), 0);
+  commentLabelCenter =
+      Coord(centerPosition.getX(), centerPosition.getY() + (height / 4.), 0);
 
   Coord &&progressBarFrameVertice1 = progressBarTLCorner + Coord(-2, 2, 0);
   Coord &&progressBarFrameVertice2 =
@@ -94,14 +98,12 @@ GlProgressBar::GlProgressBar(const Coord &centerPosition, const unsigned int wid
   progressBarFrameColors.emplace_back(commentColor);
   progressBarFrameColors.emplace_back(commentColor);
 
-  addGlEntity(new GlPolygon(progressBarFrameCoords, progressBarFrameColors, progressBarFrameColors,
-                            false, true),
+  addGlEntity(new GlPolygon(progressBarFrameCoords, progressBarFrameColors,
+                            progressBarFrameColors, false, true),
               "progress bar frame");
 }
 
-GlProgressBar::~GlProgressBar() {
-  reset(true);
-}
+GlProgressBar::~GlProgressBar() { reset(true); }
 
 void GlProgressBar::progress_handler(int step, int max_step) {
   currentPercent = uint((step / double(max_step)) * 100);
@@ -136,18 +138,20 @@ void GlProgressBar::progress_handler(int step, int max_step) {
   progressBarCoords[2] = progressBarCoords[1] + Coord(0, -progressBarHeight, 0);
   progressBarCoords[3] = progressBarCoords[2] + Coord(-progressBarWidth, 0, 0);
   GlQuad *progressBarQuad =
-      new GlQuad(progressBarCoords[0], progressBarCoords[1], progressBarCoords[2],
-                 progressBarCoords[3], progressBarColor);
+      new GlQuad(progressBarCoords[0], progressBarCoords[1],
+                 progressBarCoords[2], progressBarCoords[3], progressBarColor);
   progressBarQuad->setTextureName(TulipBitmapDir + SLIDER_TEXTURE_NAME);
 
-  GlLabel *commentLabel =
-      new GlLabel(commentLabelCenter, Size(commentWidth, commentHeight, 0), commentColor);
+  GlLabel *commentLabel = new GlLabel(
+      commentLabelCenter, Size(commentWidth, commentHeight, 0), commentColor);
   commentLabel->setText(comment);
 
   GlLabel *percentLabel = new GlLabel(
       Coord(progressBarTLCorner.getX() + (progressBarMaxWidth / 2.),
             progressBarTLCorner.getY() - (progressBarHeight / 2.), 0),
-      Size(((1. / 10.) * progressBarMaxWidth), ((8. / 10.) * progressBarHeight), 0), commentColor);
+      Size(((1. / 10.) * progressBarMaxWidth), ((8. / 10.) * progressBarHeight),
+           0),
+      commentColor);
   stringstream str;
   str << currentPercent << " %";
   percentLabel->setText(str.str());

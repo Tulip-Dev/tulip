@@ -23,14 +23,14 @@
 
 #include <ogdf/basic/GraphAttributes.h>
 
+#include <tulip/Coord.h>
 #include <tulip/Graph.h>
 #include <tulip/NumericProperty.h>
 #include <tulip/StaticProperty.h>
-#include <tulip/Coord.h>
 
 #include <exception>
-#include <string>
 #include <iostream>
+#include <string>
 #include <vector>
 
 namespace tlp {

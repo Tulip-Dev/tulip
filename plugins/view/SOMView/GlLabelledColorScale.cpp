@@ -19,18 +19,20 @@
 
 #include "GlLabelledColorScale.h"
 
-#include <tulip/GlRect.h>
 #include <tulip/GlPolyQuad.h>
+#include <tulip/GlRect.h>
 
 #include <sstream>
 
 using namespace std;
 using namespace tlp;
 
-GlLabelledColorScale::GlLabelledColorScale(Coord position, Size size, ColorScale *colorScale,
-                                           double minValue, double maxValue, bool colorScaleAtTop)
-    : GlComposite(), position(position), size(size), minValue(minValue), maxValue(maxValue),
-      colorScaleAtTop(colorScaleAtTop) {
+GlLabelledColorScale::GlLabelledColorScale(Coord position, Size size,
+                                           ColorScale *colorScale,
+                                           double minValue, double maxValue,
+                                           bool colorScaleAtTop)
+    : GlComposite(), position(position), size(size), minValue(minValue),
+      maxValue(maxValue), colorScaleAtTop(colorScaleAtTop) {
 
   buildComposite(colorScale);
 }
@@ -48,40 +50,44 @@ void GlLabelledColorScale::buildComposite(ColorScale *colorScale) {
   if (colorScaleAtTop) {
     minValueLabelPosition.set(position.getX() + valueLabelSize.getW() / 2,
                               position.getY() + labelHeightSize / 2, 0);
-    maxValueLabelPosition.set((position.getX() + size.getW()) - valueLabelSize.getW() / 2,
+    maxValueLabelPosition.set((position.getX() + size.getW()) -
+                                  valueLabelSize.getW() / 2,
                               minValueLabelPosition.getY(), 0);
-    scalePosition.set(position.getX(), position.getY() + labelHeightSize + (scaleThickness / 2));
+    scalePosition.set(position.getX(),
+                      position.getY() + labelHeightSize + (scaleThickness / 2));
   } else {
-    minValueLabelPosition.set(position.getX() + valueLabelSize.getW() / 2,
-                              position.getY() + size.getH() - labelHeightSize / 2, 0);
-    maxValueLabelPosition.set((position.getX() + size.getW()) - valueLabelSize.getW() / 2,
+    minValueLabelPosition.set(
+        position.getX() + valueLabelSize.getW() / 2,
+        position.getY() + size.getH() - labelHeightSize / 2, 0);
+    maxValueLabelPosition.set((position.getX() + size.getW()) -
+                                  valueLabelSize.getW() / 2,
                               minValueLabelPosition.getY(), 0);
     scalePosition.set(position.getX(), position.getY() + (scaleThickness / 2));
   }
 
-  minLabel = new GlLabel(minValueLabelPosition, valueLabelSize, tlp::Color(0, 0, 0), true);
+  minLabel = new GlLabel(minValueLabelPosition, valueLabelSize,
+                         tlp::Color(0, 0, 0), true);
   ostringstream oss;
   oss << minValue;
   minLabel->setText(oss.str());
   addGlEntity(minLabel, "minLabel");
 
-  maxLabel = new GlLabel(maxValueLabelPosition, valueLabelSize, tlp::Color(0, 0, 0), true);
+  maxLabel = new GlLabel(maxValueLabelPosition, valueLabelSize,
+                         tlp::Color(0, 0, 0), true);
   oss.str("");
   oss << maxValue;
   maxLabel->setText(oss.str());
   addGlEntity(maxLabel, "maxLabel");
 
-  glColorScale = new GlColorScale(colorScale, scalePosition, scaleLength, scaleThickness,
-                                  GlColorScale::Horizontal);
+  glColorScale = new GlColorScale(colorScale, scalePosition, scaleLength,
+                                  scaleThickness, GlColorScale::Horizontal);
   glColorScale->getColorScalePolyQuad()->setOutlined(true);
   glColorScale->getColorScalePolyQuad()->setOutlineColor(Color(0, 0, 0));
 
   addGlEntity(glColorScale, "scale");
 }
 
-GlLabelledColorScale::~GlLabelledColorScale() {
-  reset(true);
-}
+GlLabelledColorScale::~GlLabelledColorScale() { reset(true); }
 
 void GlLabelledColorScale::setMinValue(double value) {
   ostringstream oss;
@@ -100,8 +106,9 @@ void GlLabelledColorScale::setColorScale(tlp::ColorScale *cs) {
   glColorScale->setColorScale(cs);
 }
 BoundingBox GlLabelledColorScale::getColorScaleBoundingBox() {
-  return BoundingBox(Coord(position.getX(), position.getY() + size.getH() * 0.5),
-                     Coord(position.getX() + size.getW(), position.getY() + size.getH()));
+  return BoundingBox(
+      Coord(position.getX(), position.getY() + size.getH() * 0.5),
+      Coord(position.getX() + size.getW(), position.getY() + size.getH()));
 }
 
 void GlLabelledColorScale::setPosition(tlp::Coord nPosition) {

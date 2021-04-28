@@ -18,10 +18,10 @@
  */
 #ifndef ORIENTABLELAYOUTINTERFACE_H
 #define ORIENTABLELAYOUTINTERFACE_H
-#include <vector>
-#include <tulip/LayoutProperty.h>
 #include "OrientableConstants.h"
 #include "OrientableCoord.h"
+#include <tulip/LayoutProperty.h>
+#include <vector>
 
 class OrientableLayoutInterface {
 public:
@@ -30,7 +30,8 @@ public:
 
   virtual ~OrientableLayoutInterface() {}
 
-  virtual OrientableCoord createCoord(const float x = 0, const float y = 0, const float z = 0) = 0;
+  virtual OrientableCoord createCoord(const float x = 0, const float y = 0,
+                                      const float z = 0) = 0;
   virtual OrientableCoord createCoord(const tlp::Coord &v) = 0;
 
   virtual void setOrientation(orientationType mask) = 0;

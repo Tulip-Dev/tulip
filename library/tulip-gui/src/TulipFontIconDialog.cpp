@@ -17,15 +17,15 @@
  *
  */
 
+#include <tulip/TlpQtTools.h>
+#include <tulip/TulipFontAwesome.h>
 #include <tulip/TulipFontIconDialog.h>
 #include <tulip/TulipFontIconEngine.h>
-#include <tulip/TulipFontAwesome.h>
 #include <tulip/TulipMaterialDesignIcons.h>
-#include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
 
-#include <QRegExp>
 #include <QDesktopServices>
+#include <QRegExp>
 #include <QUrl>
 
 #include "ui_TulipFontIconDialog.h"
@@ -50,8 +50,8 @@ TulipFontIconDialog::TulipFontIconDialog(QWidget *parent)
               "a> (v%2)</p>")
           .arg(TulipFontAwesome::getVersion().c_str())
           .arg(TulipMaterialDesignIcons::getVersion().c_str()));
-  connect(_ui->iconNameFilterLineEdit, SIGNAL(textChanged(const QString &)), this,
-          SLOT(updateIconList()));
+  connect(_ui->iconNameFilterLineEdit, SIGNAL(textChanged(const QString &)),
+          this, SLOT(updateIconList()));
   connect(_ui->iconsCreditLabel, SIGNAL(linkActivated(const QString &)), this,
           SLOT(openUrlInBrowser(const QString &)));
 
@@ -70,8 +70,8 @@ void TulipFontIconDialog::updateIconList() {
     QString iconName = tlpStringToQString(it);
 
     if (regexp.indexIn(iconName) != -1) {
-      _ui->iconListWidget->addItem(
-          new QListWidgetItem(TulipFontIconEngine::icon(it, darkMode), iconName));
+      _ui->iconListWidget->addItem(new QListWidgetItem(
+          TulipFontIconEngine::icon(it, darkMode), iconName));
     }
   }
 
@@ -81,8 +81,8 @@ void TulipFontIconDialog::updateIconList() {
     QString iconName = tlpStringToQString(it);
 
     if (regexp.indexIn(iconName) != -1) {
-      _ui->iconListWidget->addItem(
-          new QListWidgetItem(TulipFontIconEngine::icon(it, darkMode), iconName));
+      _ui->iconListWidget->addItem(new QListWidgetItem(
+          TulipFontIconEngine::icon(it, darkMode), iconName));
     }
   }
 
@@ -96,7 +96,8 @@ QString TulipFontIconDialog::getSelectedIconName() const {
 }
 
 void TulipFontIconDialog::setSelectedIconName(const QString &iconName) {
-  QList<QListWidgetItem *> items = _ui->iconListWidget->findItems(iconName, Qt::MatchExactly);
+  QList<QListWidgetItem *> items =
+      _ui->iconListWidget->findItems(iconName, Qt::MatchExactly);
 
   if (!items.isEmpty()) {
     _ui->iconListWidget->setCurrentItem(items.at(0));

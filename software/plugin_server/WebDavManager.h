@@ -22,35 +22,36 @@
 
 #include <iostream>
 
-#include <QObject>
 #include <QCoreApplication>
 #include <QNetworkAccessManager>
-#include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QObject>
 
 class QDomDocument;
 /**
  * @brief This class uploads files to a server using the WEBDAV protocol.
- * It is tailored for a very specific use and only supports authentified (https) mode.
+ * It is tailored for a very specific use and only supports authentified (https)
+ *mode.
  **/
 class WebDavManager : public QObject {
   Q_OBJECT
 public:
   /**
-   * @brief Creates a new manager to create folders and upload files on a remote webdav server.
-   * All operations take the url as base for where the operations take place, e.g. calling
-   *mkdir("foo") will create
-   * https://[host]/[url]/foo
+   * @brief Creates a new manager to create folders and upload files on a remote
+   *webdav server. All operations take the url as base for where the operations
+   *take place, e.g. calling mkdir("foo") will create https://[host]/[url]/foo
    *
-   * An easy way to encode your credentials in base64 is to fire up a python interpreter and type:
-   * import base64
-   * base64.b64encode("username:password")
+   * An easy way to encode your credentials in base64 is to fire up a python
+   *interpreter and type: import base64 base64.b64encode("username:password")
    *
    * @param host The host of the webdav server (e.g. webdav.labri.fr)
    * @param url The base URL where to upload the files (e.g. perso/huet)
-   * @param base64credentials The base64-encoded credentials : base64(username:password)
+   * @param base64credentials The base64-encoded credentials :
+   *base64(username:password)
    **/
-  WebDavManager(const QString &host, const QString &url, const QString &base64credentials);
+  WebDavManager(const QString &host, const QString &url,
+                const QString &base64credentials);
 
   /**
    * @brief Checks whether a folder already exists.
@@ -92,8 +93,9 @@ public slots:
 private:
   QUrl initUrl(const QString &dest);
 
-  QNetworkRequest initRequest(const QString &destination, QIODevice *data = nullptr,
-                              QVariant mimetype = QVariant("binary/octet-stream"));
+  QNetworkRequest
+  initRequest(const QString &destination, QIODevice *data = nullptr,
+              QVariant mimetype = QVariant("binary/octet-stream"));
 
   QString _host;
   QString _url;

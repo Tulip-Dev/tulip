@@ -28,7 +28,8 @@ class Graph;
 class ImportExportTest : public CppUnit::TestFixture {
 
 public:
-  ImportExportTest(const std::string &importAlgorithm, const std::string &exportAlgorithm);
+  ImportExportTest(const std::string &importAlgorithm,
+                   const std::string &exportAlgorithm);
   void setUp() override;
   void testgridImportExport();
   void testSubGraphsImportExport();
@@ -42,7 +43,8 @@ protected:
   void importExportGraph(tlp::Graph *original);
   void exportGraph(tlp::Graph *graph, const std::string &exportPluginName,
                    const std::string &filename);
-  tlp::Graph *importGraph(const std::string &importPluginName, const std::string &filename);
+  tlp::Graph *importGraph(const std::string &importPluginName,
+                          const std::string &filename);
 
   void testGraphsTopologiesAreEqual(tlp::Graph *first, tlp::Graph *second);
   void testGraphPropertiesAreEqual(tlp::Graph *first, tlp::Graph *second);

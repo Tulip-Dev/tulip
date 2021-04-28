@@ -17,22 +17,25 @@
  *
  */
 
-#include <tulip/SimpleTest.h>
-#include <tulip/GraphTest.h>
 #include <tulip/Edge.h>
+#include <tulip/GraphTest.h>
+#include <tulip/SimpleTest.h>
 
 class SimpleTest : public tlp::GraphTest {
 public:
-  PLUGININFORMATION("Simple", "Tulip team", "18/04/2012",
-                    "Tests whether a graph is simple or not.<br/>An undirected graph "
-                    "is simple if it has no loops and no more than one "
-                    "edge between any unordered pair of vertices. "
-                    "A directed graph is simple if has no loops and no more than one "
-                    "edge between any ordered pair of vertices.",
-                    "1.1", "Topological Test")
+  PLUGININFORMATION(
+      "Simple", "Tulip team", "18/04/2012",
+      "Tests whether a graph is simple or not.<br/>An undirected graph "
+      "is simple if it has no loops and no more than one "
+      "edge between any unordered pair of vertices. "
+      "A directed graph is simple if has no loops and no more than one "
+      "edge between any ordered pair of vertices.",
+      "1.1", "Topological Test")
   SimpleTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {
     addInParameter<bool>(
-        "directed", "Indicates if the graph should be considered as directed or not.", "false");
+        "directed",
+        "Indicates if the graph should be considered as directed or not.",
+        "false");
   }
 
   bool test() override {
@@ -47,16 +50,19 @@ PLUGIN(SimpleTest)
 
 class MakeSimple : public tlp::Algorithm {
 public:
-  PLUGININFORMATION("Make Simple", "Tulip team", "18/04/2012",
-                    "Makes a graph simple.<br/>An undirected graph "
-                    "is simple if it has no loops and no more than one "
-                    "edge between any unordered pair of vertices. "
-                    "A directed graph is simple if has no loops and no more than one "
-                    "edge between any ordered pair of vertices.",
-                    "1.1", "Topology Update")
+  PLUGININFORMATION(
+      "Make Simple", "Tulip team", "18/04/2012",
+      "Makes a graph simple.<br/>An undirected graph "
+      "is simple if it has no loops and no more than one "
+      "edge between any unordered pair of vertices. "
+      "A directed graph is simple if has no loops and no more than one "
+      "edge between any ordered pair of vertices.",
+      "1.1", "Topology Update")
   MakeSimple(const tlp::PluginContext *context) : tlp::Algorithm(context) {
     addInParameter<bool>(
-        "directed", "Indicates if the graph should be considered as directed or not.", "false");
+        "directed",
+        "Indicates if the graph should be considered as directed or not.",
+        "false");
   }
 
   bool run() override {

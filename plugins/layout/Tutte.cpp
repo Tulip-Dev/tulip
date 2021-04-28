@@ -16,10 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <set>
-#include <unordered_map>
-#include <tulip/TriconnectedTest.h>
 #include "Tutte.h"
+#include <set>
+#include <tulip/TriconnectedTest.h>
+#include <unordered_map>
 
 PLUGIN(Tutte)
 
@@ -115,8 +115,8 @@ bool Tutte::run() {
   gamma = 2 * M_PI / tmp.size();
 
   for (auto n : tmp) {
-    result->setNodeValue(
-        n, Coord(rayon * cos(gamma * i) + rayon * 2, rayon * sin(gamma * i) + rayon * 2, 0));
+    result->setNodeValue(n, Coord(rayon * cos(gamma * i) + rayon * 2,
+                                  rayon * sin(gamma * i) + rayon * 2, 0));
     i++;
   }
 
@@ -142,11 +142,13 @@ bool Tutte::run() {
 
       for (auto nn : graph->getInOutNodes(n)) {
         const Coord &tmpCoord2 = result->getNodeValue(nn);
-        tmpCoord.set(tmpCoord.getX() + tmpCoord2.getX(), tmpCoord.getY() + tmpCoord2.getY(), 0);
+        tmpCoord.set(tmpCoord.getX() + tmpCoord2.getX(),
+                     tmpCoord.getY() + tmpCoord2.getY(), 0);
         ++i;
       }
 
-      result->setNodeValue(n, Coord(tmpCoord.getX() / i, tmpCoord.getY() / i, 0));
+      result->setNodeValue(n,
+                           Coord(tmpCoord.getX() / i, tmpCoord.getY() / i, 0));
 
       if (fabs(baseCoord.getX() - tmpCoord.getX() / i) > 0.02)
         ok = true;

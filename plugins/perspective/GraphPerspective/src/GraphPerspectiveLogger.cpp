@@ -22,13 +22,13 @@
 #include "ui_GraphPerspectiveLogger.h"
 #include <iostream>
 
-#include <QKeyEvent>
 #include <QClipboard>
+#include <QHideEvent>
+#include <QKeyEvent>
 #include <QMenu>
 #include <QPushButton>
-#include <QShowEvent>
-#include <QHideEvent>
 #include <QShortcut>
+#include <QShowEvent>
 
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
@@ -36,8 +36,8 @@
 using namespace tlp;
 
 GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget *parent)
-    : QDialog(parent), _logType(QtDebugMsg), _ui(new Ui::GraphPerspectiveLogger),
-      _pythonOutput(false) {
+    : QDialog(parent), _logType(QtDebugMsg),
+      _ui(new Ui::GraphPerspectiveLogger), _pythonOutput(false) {
   _ui->setupUi(this);
   _ui->listWidget->installEventFilter(this);
   _ui->listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -49,38 +49,44 @@ GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget *parent)
   button->setToolTip("Remove all messages");
   connect(button, SIGNAL(clicked()), this, SLOT(clear()));
   _ui->buttonBox->addButton(button, QDialogButtonBox::ActionRole);
-  button = new QPushButton(QIcon(":/tulip/gui/icons/16/clipboard.png"), "Copy selection", this);
-  button->setToolTip(QString("Copy the selected messages into the clipboard [%1]")
-                         .arg(QKeySequence(QKeySequence::Copy).toString()));
+  button = new QPushButton(QIcon(":/tulip/gui/icons/16/clipboard.png"),
+                           "Copy selection", this);
+  button->setToolTip(
+      QString("Copy the selected messages into the clipboard [%1]")
+          .arg(QKeySequence(QKeySequence::Copy).toString()));
   connect(button, SIGNAL(clicked()), this, SLOT(copy()));
   _ui->buttonBox->addButton(button, QDialogButtonBox::ActionRole);
   button = new QPushButton("Remove selection", this);
-  button->setToolTip(
-      QString("Remove the selected messages [%1]").arg(QKeySequence(QKeySequence::Cut).toString()));
+  button->setToolTip(QString("Remove the selected messages [%1]")
+                         .arg(QKeySequence(QKeySequence::Cut).toString()));
   connect(button, SIGNAL(clicked()), this, SLOT(remove()));
   _ui->buttonBox->addButton(button, QDialogButtonBox::ActionRole);
   connect(_ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)), this,
           SLOT(showContextMenu(QPoint)));
-  _ui->buttonBox->button(QDialogButtonBox::Close)->setToolTip("Close this window");
+  _ui->buttonBox->button(QDialogButtonBox::Close)
+      ->setToolTip("Close this window");
   button = _ui->buttonBox->button(QDialogButtonBox::Reset);
   button->setToolTip("Remove all messages and close this window");
   connect(button, SIGNAL(clicked()), this, SLOT(clear()));
   connect(button, SIGNAL(clicked()), this, SLOT(hide()));
-  connect(_ui->anchoredCB, SIGNAL(toggled(bool)), this, SLOT(setAnchored(bool)));
+  connect(_ui->anchoredCB, SIGNAL(toggled(bool)), this,
+          SLOT(setAnchored(bool)));
   _ui->anchoredCB->setChecked(tlp::TulipSettings::loggerAnchored());
-  connect(_ui->decreaseFontSizeButton, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
-  connect(_ui->increaseFontSizeButton, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
+  connect(_ui->decreaseFontSizeButton, SIGNAL(clicked()), this,
+          SLOT(decreaseFontSize()));
+  connect(_ui->increaseFontSizeButton, SIGNAL(clicked()), this,
+          SLOT(increaseFontSize()));
   auto shortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Minus), this);
   connect(shortCut, SIGNAL(activated()), this, SLOT(decreaseFontSize()));
-  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton, "decrease font size", "-");
+  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton, "decrease font size",
+                              "-");
   shortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus), this);
   connect(shortCut, SIGNAL(activated()), this, SLOT(increaseFontSize()));
-  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton, "increase font size", "-");
+  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton, "increase font size",
+                              "-");
 }
 
-GraphPerspectiveLogger::~GraphPerspectiveLogger() {
-  delete _ui;
-}
+GraphPerspectiveLogger::~GraphPerspectiveLogger() { delete _ui; }
 
 GraphPerspectiveLogger::LogType GraphPerspectiveLogger::getLastLogType() const {
   if (_pythonOutput) {
@@ -105,21 +111,20 @@ GraphPerspectiveLogger::LogType GraphPerspectiveLogger::getLastLogType() const {
   return Info;
 }
 
-int GraphPerspectiveLogger::count() const {
-  return _ui->listWidget->count();
-}
+int GraphPerspectiveLogger::count() const { return _ui->listWidget->count(); }
 
 int GraphPerspectiveLogger::countByType(LogType logType) const {
   return _logCounts[logType];
 }
 
-void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, const QString &msg,
-                                 bool pyOutput) {
+void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &,
+                                 const QString &msg, bool pyOutput) {
   _logType = type;
   _pythonOutput = pyOutput;
 
   LogType lastLogType = getLastLogType();
-  auto item = new QListWidgetItem(QIcon(icon(lastLogType)), msg, nullptr, _logType);
+  auto item =
+      new QListWidgetItem(QIcon(icon(lastLogType)), msg, nullptr, _logType);
   _ui->listWidget->addItem(item);
   _ui->listWidget->scrollToItem(item);
   _logCounts[lastLogType] += 1;
@@ -264,10 +269,12 @@ void GraphPerspectiveLogger::setAnchored(bool anchored) {
 
 void GraphPerspectiveLogger::decreaseFontSize() {
   int fs = _ui->listWidget->font().pointSize();
-  _ui->listWidget->setStyleSheet(QString("QListView { font-size: %1pt; }").arg(fs - 1));
+  _ui->listWidget->setStyleSheet(
+      QString("QListView { font-size: %1pt; }").arg(fs - 1));
 }
 
 void GraphPerspectiveLogger::increaseFontSize() {
   int fs = _ui->listWidget->font().pointSize();
-  _ui->listWidget->setStyleSheet(QString("QListView { font-size: %1pt; }").arg(fs + 1));
+  _ui->listWidget->setStyleSheet(
+      QString("QListView { font-size: %1pt; }").arg(fs + 1));
 }

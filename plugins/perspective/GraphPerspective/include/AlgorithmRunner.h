@@ -21,8 +21,8 @@
 
 #include <QWidget>
 
-#include <tulip/PluginModel.h>
 #include <tulip/Algorithm.h>
+#include <tulip/PluginModel.h>
 
 #include "AlgorithmRunnerItem.h"
 
@@ -49,8 +49,8 @@ class AlgorithmRunner : public QWidget {
   QList<AlgorithmRunnerItem *> _favorites;
 
   void refreshTreeUi(QWidget *w);
-  void buildTreeUi(QWidget *w, tlp::PluginModel<tlp::Algorithm> *model, const QModelIndex &parent,
-                   bool root = false);
+  void buildTreeUi(QWidget *w, tlp::PluginModel<tlp::Algorithm> *model,
+                   const QModelIndex &parent, bool root = false);
   void insertItem(QWidget *w, const QString &name);
 
 public:
@@ -68,7 +68,8 @@ public slots:
 
 protected slots:
   void setFilter(QString);
-  void addFavorite(const QString &algName, const tlp::DataSet &data = tlp::DataSet());
+  void addFavorite(const QString &algName,
+                   const tlp::DataSet &data = tlp::DataSet());
   void removeFavorite(const QString &algName);
   void favorized(bool);
   void setStoreResultAsLocal(QAction *);

@@ -27,9 +27,12 @@ using namespace tlp;
 
 MultipleEdgeSelection::MultipleEdgeSelection(const tlp::PluginContext *context)
     : BooleanAlgorithm(context) {
-  addInParameter<bool>("directed",
-                       "Indicates if the graph should be considered as directed or not.", "false");
-  addOutParameter<unsigned int>("#edges selected", "The number of multiple edges selected");
+  addInParameter<bool>(
+      "directed",
+      "Indicates if the graph should be considered as directed or not.",
+      "false");
+  addOutParameter<unsigned int>("#edges selected",
+                                "The number of multiple edges selected");
 }
 
 bool MultipleEdgeSelection::run() {

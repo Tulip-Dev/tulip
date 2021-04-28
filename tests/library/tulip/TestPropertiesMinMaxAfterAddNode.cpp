@@ -26,13 +26,9 @@ CPPUNIT_TEST_SUITE_REGISTRATION(TestPropertiesMinMaxAfterAddNode);
 
 using namespace tlp;
 
-void TestPropertiesMinMaxAfterAddNode::setUp() {
-  graph = tlp::newGraph();
-}
+void TestPropertiesMinMaxAfterAddNode::setUp() { graph = tlp::newGraph(); }
 
-void TestPropertiesMinMaxAfterAddNode::tearDown() {
-  delete graph;
-}
+void TestPropertiesMinMaxAfterAddNode::tearDown() { delete graph; }
 
 void TestPropertiesMinMaxAfterAddNode::testDoublePropertyMinMaxAfterAddNode() {
   DoubleProperty *doubleProp = graph->getProperty<DoubleProperty>("doubleProp");
@@ -50,7 +46,8 @@ void TestPropertiesMinMaxAfterAddNode::testDoublePropertyMinMaxAfterAddNode() {
   CPPUNIT_ASSERT_EQUAL(d1, doubleProp->getNodeMin(graph));
   CPPUNIT_ASSERT_EQUAL(d2, doubleProp->getNodeMax(graph));
 
-  // add a new node, the value associated to doubleProp property is the default one 0
+  // add a new node, the value associated to doubleProp property is the default
+  // one 0
   graph->addNode();
 
   // min should be 0
@@ -74,7 +71,8 @@ void TestPropertiesMinMaxAfterAddNode::testIntegerPropertyMinMaxAfterAddNode() {
   CPPUNIT_ASSERT_EQUAL(i1, intProp->getNodeMin(graph));
   CPPUNIT_ASSERT_EQUAL(i2, intProp->getNodeMax(graph));
 
-  // add a new node, the value associated to doubleProp property is the default one 0
+  // add a new node, the value associated to doubleProp property is the default
+  // one 0
   graph->addNode();
 
   // min should be 0
@@ -97,7 +95,8 @@ void TestPropertiesMinMaxAfterAddNode::testLayoutPropertyMinMaxAfterAddNode() {
   CPPUNIT_ASSERT_EQUAL(firstNodePos, property->getMin(graph));
   CPPUNIT_ASSERT_EQUAL(secondNodePos, property->getMax(graph));
 
-  // add a new node, the value associated to the layout property is the default one 0
+  // add a new node, the value associated to the layout property is the default
+  // one 0
   graph->addNode();
 
   // min should be 0

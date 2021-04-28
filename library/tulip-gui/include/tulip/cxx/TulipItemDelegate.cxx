@@ -28,8 +28,7 @@ void TulipItemDelegate::registerCreator(tlp::TulipItemEditorCreator *c) {
   _creators[id] = c;
 }
 
-template <typename T>
-void TulipItemDelegate::unregisterCreator() {
+template <typename T> void TulipItemDelegate::unregisterCreator() {
   int id = qMetaTypeId<T>();
 
   if (_creators.contains(id)) {

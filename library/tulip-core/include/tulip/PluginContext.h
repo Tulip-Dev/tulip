@@ -31,12 +31,12 @@ class PluginProgress;
  * @ingroup Plugins
  * @brief Contains runtime parameters for a plugin.
  *
- * tlp::PluginContext is a data structure containing a set of parameters required by a plugin.
- * Each tlp::Plugin subclass has its associated tlp::PluginContext subclass that contains specific
- * parameters related to the Plugin.
- * For instance, the tlp::AlgorithmContext (related to tlp::Algorithm) contains the Graph on which
- * the algorithm should be run
- * In essence, you will never have to access to a plugin's context since the base class constructor
+ * tlp::PluginContext is a data structure containing a set of parameters
+ * required by a plugin. Each tlp::Plugin subclass has its associated
+ * tlp::PluginContext subclass that contains specific parameters related to the
+ * Plugin. For instance, the tlp::AlgorithmContext (related to tlp::Algorithm)
+ * contains the Graph on which the algorithm should be run In essence, you will
+ * never have to access to a plugin's context since the base class constructor
  * will copy its members into protected members of the plugin interface.
  */
 class PluginContext {
@@ -49,8 +49,8 @@ public:
  * @ingroup Plugins
  * @brief Parameters structure for a tlp::Algorithm
  *
- * This class contains data required for a tlp::Algorithm to run. Each of its member is copied into
- * a protected member at the object construction.
+ * This class contains data required for a tlp::Algorithm to run. Each of its
+ * member is copied into a protected member at the object construction.
  */
 class AlgorithmContext : public tlp::PluginContext {
 public:
@@ -67,8 +67,8 @@ public:
   DataSet *dataSet;
 
   /**
-   * @brief A progress handler to notify the user about the progress state of the algorithm when
-   * run.
+   * @brief A progress handler to notify the user about the progress state of
+   * the algorithm when run.
    * @see tlp::PluginProgress
    */
   PluginProgress *pluginProgress;

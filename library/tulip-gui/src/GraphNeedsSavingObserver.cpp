@@ -17,9 +17,9 @@
  *
  */
 
+#include <tulip/Graph.h>
 #include <tulip/GraphNeedsSavingObserver.h>
 #include <tulip/PropertyInterface.h>
-#include <tulip/Graph.h>
 
 #include <deque>
 
@@ -28,7 +28,8 @@
 using namespace tlp;
 using namespace std;
 
-GraphNeedsSavingObserver::GraphNeedsSavingObserver(Graph *graph, QMainWindow *mainWindow)
+GraphNeedsSavingObserver::GraphNeedsSavingObserver(Graph *graph,
+                                                   QMainWindow *mainWindow)
     : _needsSaving(false), _graph(graph), _mainWindow(mainWindow) {
   addObserver();
 }
@@ -47,9 +48,7 @@ void GraphNeedsSavingObserver::saved() {
     _mainWindow->setWindowModified(false);
 }
 
-bool GraphNeedsSavingObserver::needsSaving() const {
-  return _needsSaving;
-}
+bool GraphNeedsSavingObserver::needsSaving() const { return _needsSaving; }
 
 void GraphNeedsSavingObserver::forceToSave() {
   _needsSaving = true;
@@ -63,7 +62,8 @@ void GraphNeedsSavingObserver::forceToSave() {
 }
 
 /**
- * @brief Listen all the observable objects in the graph (subgraphs, properties).
+ * @brief Listen all the observable objects in the graph (subgraphs,
+ *properties).
  **/
 void GraphNeedsSavingObserver::addObserver() {
   deque<Graph *> toObserve;
@@ -87,7 +87,8 @@ void GraphNeedsSavingObserver::addObserver() {
 }
 
 /**
- * @brief  Stop listening all the observable objects in the graph (subgraphs, properties).
+ * @brief  Stop listening all the observable objects in the graph (subgraphs,
+ *properties).
  **/
 void GraphNeedsSavingObserver::removeObservers() {
   deque<Graph *> toUnobserve;

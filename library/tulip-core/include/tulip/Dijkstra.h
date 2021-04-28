@@ -21,24 +21,25 @@
 #ifndef DIJKSTRA_H
 #define DIJKSTRA_H
 
-#include <vector>
-#include <stack>
-#include <list>
-#include <unordered_map>
 #include <climits>
 #include <functional>
-#include <tulip/Graph.h>
+#include <list>
+#include <stack>
 #include <tulip/BooleanProperty.h>
-#include <tulip/StaticProperty.h>
-#include <tulip/MutableContainer.h>
+#include <tulip/Graph.h>
 #include <tulip/GraphTools.h>
+#include <tulip/MutableContainer.h>
+#include <tulip/StaticProperty.h>
+#include <unordered_map>
+#include <vector>
 
 namespace tlp {
 
 class Dijkstra {
 public:
   //============================================================
-  Dijkstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
+  Dijkstra(const Graph *const graph, node src,
+           const EdgeStaticProperty<double> &weights,
            NodeStaticProperty<double> &nodeDistance, EDGE_TYPE direction,
            std::stack<node> *qN = nullptr, MutableContainer<int> *nP = nullptr);
   //========================================================
@@ -55,12 +56,8 @@ private:
     DijkstraElement(const double dist = DBL_MAX, const node previous = node(),
                     const node n = node())
         : dist(dist), previous(previous), n(n) {}
-    bool operator==(const DijkstraElement &b) const {
-      return n == b.n;
-    }
-    bool operator!=(const DijkstraElement &b) const {
-      return n != b.n;
-    }
+    bool operator==(const DijkstraElement &b) const { return n == b.n; }
+    bool operator!=(const DijkstraElement &b) const { return n != b.n; }
     double dist;
     node previous;
     node n;
@@ -68,7 +65,8 @@ private:
   };
 
   struct LessDijkstraElement {
-    bool operator()(const DijkstraElement *const a, const DijkstraElement *const b) const {
+    bool operator()(const DijkstraElement *const a,
+                    const DijkstraElement *const b) const {
       if (fabs(a->dist - b->dist) > 1.E-9) {
         return (a->dist < b->dist);
       } else {

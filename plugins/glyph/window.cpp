@@ -20,12 +20,12 @@
 #define WINDOWGLYPH_H
 
 #include <tulip/Color.h>
-#include <tulip/Glyph.h>
+#include <tulip/GlGraphInputData.h>
+#include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlPolyQuad.h>
 #include <tulip/GlQuad.h>
-#include <tulip/GlGraphInputData.h>
-#include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/Glyph.h>
 #include <tulip/TulipViewSettings.h>
 
 using namespace tlp;
@@ -35,8 +35,8 @@ namespace tlp {
 
 class Window : public Glyph {
 public:
-  GLYPHINFORMATION("2D - Window", "David Auber", "28/05/2010", "Window with a title bar", "1.0",
-                   NodeShape::Window)
+  GLYPHINFORMATION("2D - Window", "David Auber", "28/05/2010",
+                   "Window with a title bar", "1.0", NodeShape::Window)
   Window(const tlp::PluginContext *context);
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
   void getTextBoundingBox(BoundingBox &boundingBox, node) override;
@@ -70,8 +70,9 @@ private:
 PLUGIN(Window)
 
 Window::Window(const tlp::PluginContext *context)
-    : Glyph(context), _rectColor(205, 205, 205, 255), _textColor(205, 205, 205, 255),
-      _borderWidth(0.02f), _border(TulipBitmapDir + "halfCylinderTexture.png") {
+    : Glyph(context), _rectColor(205, 205, 205, 255),
+      _textColor(205, 205, 205, 255), _borderWidth(0.02f),
+      _border(TulipBitmapDir + "halfCylinderTexture.png") {
 
   const float textheight = 0.05f;
 

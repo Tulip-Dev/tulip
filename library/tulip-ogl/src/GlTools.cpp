@@ -33,21 +33,21 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
-#include <FTVectoriser.h>
 #include <FTLibrary.h>
+#include <FTVectoriser.h>
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
 
-#include <tulip/Rectangle.h>
+#include <climits>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <tulip/BoundingBox.h>
 #include <tulip/GlTools.h>
 #include <tulip/Matrix.h>
-#include <tulip/BoundingBox.h>
+#include <tulip/Rectangle.h>
 #include <tulip/TulipException.h>
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <climits>
 #include <unordered_map>
 
 using namespace std;
@@ -125,7 +125,8 @@ static const struct glErrorStruct glErrorStructs[] = {
 const std::string &glGetErrorDescription(GLuint errorCode) {
   unsigned int i = 0;
 
-  while (glErrorStructs[i].code != errorCode && glErrorStructs[i].code != UINT_MAX)
+  while (glErrorStructs[i].code != errorCode &&
+         glErrorStructs[i].code != UINT_MAX)
     ++i;
 
   return glErrorStructs[i].description;
@@ -174,9 +175,7 @@ void setColor(const Color &c) {
   glColor4ubv(reinterpret_cast<const unsigned char *>(&c));
 }
 //====================================================
-void setColor(GLfloat *c) {
-  glColor4fv(c);
-}
+void setColor(GLfloat *c) { glColor4fv(c); }
 //====================================================
 void setMaterial(const Color &c) {
   float colorMat[4];
@@ -188,11 +187,10 @@ void setMaterial(const Color &c) {
   glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, colorMat);
 }
 //====================================================
-bool cameraIs3D() {
-  return glIsEnabled(GL_LIGHT0);
-}
+bool cameraIs3D() { return glIsEnabled(GL_LIGHT0); }
 //====================================================
-Coord projectPoint(const Coord &obj, const MatrixGL &transform, const Vector<int, 4> &viewport) {
+Coord projectPoint(const Coord &obj, const MatrixGL &transform,
+                   const Vector<int, 4> &viewport) {
   Vector<float, 4> point;
   point[0] = obj[0];
   point[1] = obj[1];
@@ -243,14 +241,18 @@ Coord unprojectPoint(const Coord &obj, const MatrixGL &invtransform,
   return result;
 }
 //====================================================
-GLfloat projectSize(const Coord &position, const Size &size, const MatrixGL &projectionMatrix,
-                    const MatrixGL &modelviewMatrix, const Vector<int, 4> &viewport) {
-  BoundingBox box(Coord(position - size / 2.f), Coord(position + size / 2.f), true);
+GLfloat projectSize(const Coord &position, const Size &size,
+                    const MatrixGL &projectionMatrix,
+                    const MatrixGL &modelviewMatrix,
+                    const Vector<int, 4> &viewport) {
+  BoundingBox box(Coord(position - size / 2.f), Coord(position + size / 2.f),
+                  true);
   return projectSize(box, projectionMatrix, modelviewMatrix, viewport);
 }
 //====================================================
 GLfloat projectSize(const BoundingBox &bb, const MatrixGL &projectionMatrix,
-                    const MatrixGL &modelviewMatrix, const Vector<int, 4> &viewport) {
+                    const MatrixGL &modelviewMatrix,
+                    const Vector<int, 4> &viewport) {
   Coord &&bbSize = bb[1] - bb[0];
   float nSize = bbSize.norm(); // Enclosing bounding box
 
@@ -348,8 +350,9 @@ float calculateAABBSize(const BoundingBox &bb, const Coord &eye,
   }
 
   bbTmp.getCompleteBB(src);
-  pos = ((eye[0] < src[0][0])) + ((eye[0] > src[6][0]) << 1) + ((eye[1] < src[0][1]) << 2) +
-        ((eye[1] > src[6][1]) << 3) + ((eye[2] < src[0][2]) << 4) + ((eye[2] > src[6][2]) << 5);
+  pos = ((eye[0] < src[0][0])) + ((eye[0] > src[6][0]) << 1) +
+        ((eye[1] < src[0][1]) << 2) + ((eye[1] > src[6][1]) << 3) +
+        ((eye[2] < src[0][2]) << 4) + ((eye[2] > src[6][2]) << 5);
   assert(pos <= 42);
 
   // If pos==0 : camera are inside the entity so we return a arbitrary lod
@@ -362,8 +365,10 @@ float calculateAABBSize(const BoundingBox &bb, const Coord &eye,
     return -1;
 
   for (int i = 0; i < num; i++) {
-    dst[i] = projectPoint(src[int(hullVertexTable[pos][i + 1])], transformMatrix, globalViewport);
-    dst[i][1] = globalViewport[1] + globalViewport[3] - (dst[i][1] - globalViewport[1]);
+    dst[i] = projectPoint(src[int(hullVertexTable[pos][i + 1])],
+                          transformMatrix, globalViewport);
+    dst[i][1] =
+        globalViewport[1] + globalViewport[3] - (dst[i][1] - globalViewport[1]);
   }
 
   bool inScreen = false;
@@ -396,8 +401,10 @@ float calculateAABBSize(const BoundingBox &bb, const Coord &eye,
         bbBox[3] = dst[i][1];
     }
 
-    if (bbBox[0] < currentViewport[0] + currentViewport[2] && bbBox[2] > currentViewport[0] &&
-        bbBox[1] < currentViewport[1] + currentViewport[3] && bbBox[3] > currentViewport[1]) {
+    if (bbBox[0] < currentViewport[0] + currentViewport[2] &&
+        bbBox[2] > currentViewport[0] &&
+        bbBox[1] < currentViewport[1] + currentViewport[3] &&
+        bbBox[3] > currentViewport[1]) {
       inScreen = true;
     }
   }
@@ -411,26 +418,31 @@ float calculateAABBSize(const BoundingBox &bb, const Coord &eye,
   }
 }
 //====================================================
-float calculate2DLod(const BoundingBox &bb, const Vector<int, 4> &, const Vector<int, 4> &) {
+float calculate2DLod(const BoundingBox &bb, const Vector<int, 4> &,
+                     const Vector<int, 4> &) {
   return (bb[1][0] - bb[0][0]) * (bb[1][1] - bb[0][1]);
 }
 //====================================================
 
-std::vector<Coord> computeNormals(const std::vector<Coord> &vertices,
-                                  const std::vector<unsigned short> &facesIndices) {
-  return computeNormals(vertices,
-                        std::vector<unsigned int>(facesIndices.begin(), facesIndices.end()));
+std::vector<Coord>
+computeNormals(const std::vector<Coord> &vertices,
+               const std::vector<unsigned short> &facesIndices) {
+  return computeNormals(
+      vertices,
+      std::vector<unsigned int>(facesIndices.begin(), facesIndices.end()));
 }
 
-std::vector<Coord> computeNormals(const std::vector<Coord> &vertices,
-                                  const std::vector<unsigned int> &facesIndices) {
+std::vector<Coord>
+computeNormals(const std::vector<Coord> &vertices,
+               const std::vector<unsigned int> &facesIndices) {
   assert(vertices.size() >= 3);
   assert(facesIndices.size() >= 3 && facesIndices.size() % 3 == 0);
   std::vector<Coord> normals;
   normals.resize(vertices.size(), Coord(0, 0, 0));
 
   for (size_t i = 0; i < facesIndices.size(); i += 3) {
-    const Coord &v1 = vertices[facesIndices[i]], &v2 = vertices[facesIndices[i + 1]],
+    const Coord &v1 = vertices[facesIndices[i]],
+                &v2 = vertices[facesIndices[i + 1]],
                 &v3 = vertices[facesIndices[i + 2]];
     Coord &&normal = (v2 - v1) ^ (v3 - v1);
 
@@ -459,8 +471,9 @@ std::vector<Coord> computeNormals(const std::vector<Coord> &vertices,
 #define DPI 72
 
 void tesselateFontIcon(const std::string &fontFile, unsigned int iconCodePoint,
-                       GLuint &renderingDataBuffer, GLuint &indicesBuffer, unsigned int &nbVertices,
-                       unsigned int &nbIndices, unsigned int &nbOutlineIndices,
+                       GLuint &renderingDataBuffer, GLuint &indicesBuffer,
+                       unsigned int &nbVertices, unsigned int &nbIndices,
+                       unsigned int &nbOutlineIndices,
                        BoundingBox &boundingBox) {
 
   const FT_Library *library = FTLibrary::Instance().GetLibrary();
@@ -559,13 +572,15 @@ void tesselateFontIcon(const std::string &fontFile, unsigned int iconCodePoint,
 
   for (size_t i = 0; i < vertices.size(); ++i) {
     if (meshBB.height() > meshBB.width()) {
-      vertices[i][0] = ((vertices[i][0] - minC[0]) / (maxC[0] - minC[0]) - 0.5) *
-                       (meshBB.width() / float(meshBB.height()));
+      vertices[i][0] =
+          ((vertices[i][0] - minC[0]) / (maxC[0] - minC[0]) - 0.5) *
+          (meshBB.width() / float(meshBB.height()));
       vertices[i][1] = ((vertices[i][1] - minC[1]) / (maxC[1] - minC[1])) - 0.5;
     } else {
       vertices[i][0] = ((vertices[i][0] - minC[0]) / (maxC[0] - minC[0])) - 0.5;
-      vertices[i][1] = (((vertices[i][1] - minC[1]) / (maxC[1] - minC[1])) - 0.5) *
-                       (meshBB.height() / float(meshBB.width()));
+      vertices[i][1] =
+          (((vertices[i][1] - minC[1]) / (maxC[1] - minC[1])) - 0.5) *
+          (meshBB.height() / float(meshBB.width()));
     }
 
     const tlp::Coord &v = vertices[i];
@@ -577,18 +592,23 @@ void tesselateFontIcon(const std::string &fontFile, unsigned int iconCodePoint,
   glGenBuffers(1, &indicesBuffer);
 
   glBindBuffer(GL_ARRAY_BUFFER, renderingDataBuffer);
-  glBufferData(GL_ARRAY_BUFFER, (vertices.size() * 3 + texCoords.size() * 2) * sizeof(float),
+  glBufferData(GL_ARRAY_BUFFER,
+               (vertices.size() * 3 + texCoords.size() * 2) * sizeof(float),
                nullptr, GL_STATIC_DRAW);
-  glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * 3 * sizeof(float), &vertices[0]);
+  glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * 3 * sizeof(float),
+                  &vertices[0]);
   glBufferSubData(GL_ARRAY_BUFFER, vertices.size() * 3 * sizeof(float),
                   texCoords.size() * 2 * sizeof(float), &texCoords[0]);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-               (indices.size() + outlineIndices.size()) * sizeof(unsigned short), nullptr,
-               GL_STATIC_DRAW);
-  glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indices.size() * sizeof(unsigned short), &indices[0]);
-  glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short),
-                  outlineIndices.size() * sizeof(unsigned short), &outlineIndices[0]);
+               (indices.size() + outlineIndices.size()) *
+                   sizeof(unsigned short),
+               nullptr, GL_STATIC_DRAW);
+  glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0,
+                  indices.size() * sizeof(unsigned short), &indices[0]);
+  glBufferSubData(
+      GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short),
+      outlineIndices.size() * sizeof(unsigned short), &outlineIndices[0]);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

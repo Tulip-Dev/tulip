@@ -35,12 +35,14 @@ void ParallelCoordsElementHighlighter::selectedEntitiesHandler(
 }
 
 void ParallelCoordsElementHighlighter::selectedEntitiesHandler(
-    ParallelCoordinatesView *parallelView, int x, int y, int w, int h, bool addToSelection) {
+    ParallelCoordinatesView *parallelView, int x, int y, int w, int h,
+    bool addToSelection) {
   parallelView->highlightDataInRegion(x, y, w, h, addToSelection);
 }
 
 ParallelCoordsElementHighlighter::~ParallelCoordsElementHighlighter() {
-  ParallelCoordinatesView *parallelView = static_cast<ParallelCoordinatesView *>(view());
+  ParallelCoordinatesView *parallelView =
+      static_cast<ParallelCoordinatesView *>(view());
 
   if (parallelView)
     parallelView->resetHighlightedElements();

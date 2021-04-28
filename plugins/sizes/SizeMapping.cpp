@@ -16,12 +16,12 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/PropertyAlgorithm.h>
-#include <tulip/StringCollection.h>
 #include <tulip/DoubleProperty.h>
+#include <tulip/ParallelTools.h>
+#include <tulip/PropertyAlgorithm.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StaticProperty.h>
-#include <tulip/ParallelTools.h>
+#include <tulip/StringCollection.h>
 
 using namespace std;
 using namespace tlp;
@@ -71,7 +71,8 @@ static const char *paramHelp[] = {
     "be."};
 
 // error msg for invalid range value
-static const string rangeSizeErrorMsg = "max size must be greater than min size";
+static const string rangeSizeErrorMsg =
+    "max size must be greater than min size";
 static const string rangeMetricErrorMsg = "All values are the same";
 static const string AREA_PROPORTIONAL = "Area Proportional";
 /** \addtogroup size */
@@ -95,11 +96,12 @@ class MetricSizeMapping : public SizeAlgorithm {
 public:
   PLUGININFORMATION(
       "Size Mapping", "Auber", "08/08/2003",
-      "Maps the size of the graph elements onto the values of a given numeric property.", "2.1",
-      "Size")
+      "Maps the size of the graph elements onto the values of a given numeric property.",
+      "2.1", "Size")
   MetricSizeMapping(const PluginContext *context)
-      : SizeAlgorithm(context), entryMetric(nullptr), entrySize(nullptr), xaxis(true), yaxis(true),
-        zaxis(true), linearType(true), min(1), max(10), range(0), shift(0) {
+      : SizeAlgorithm(context), entryMetric(nullptr), entrySize(nullptr),
+        xaxis(true), yaxis(true), zaxis(true), linearType(true), min(1),
+        max(10), range(0), shift(0) {
     addInParameter<NumericProperty *>("property", paramHelp[0], "viewMetric");
     addInParameter<SizeProperty>("input", paramHelp[1], "viewSize");
     addInParameter<bool>("width", paramHelp[2], "true");
@@ -107,10 +109,10 @@ public:
     addInParameter<bool>("depth", paramHelp[4], "false");
     addInParameter<double>("min size", paramHelp[5], "1");
     addInParameter<double>("max size", paramHelp[6], "10");
-    addInParameter<StringCollection>(MAPPING_TYPE, paramHelp[7], MAPPING_TYPES, true,
-                                     "linear <br/> uniform");
-    addInParameter<StringCollection>(TARGET_TYPE, paramHelp[8], TARGET_TYPES, true,
-                                     "nodes <br/> edges");
+    addInParameter<StringCollection>(MAPPING_TYPE, paramHelp[7], MAPPING_TYPES,
+                                     true, "linear <br/> uniform");
+    addInParameter<StringCollection>(TARGET_TYPE, paramHelp[8], TARGET_TYPES,
+                                     true, "nodes <br/> edges");
     addInParameter<StringCollection>("area proportional", paramHelp[9],
                                      "Area Proportional;Quadratic/Cubic", true,
                                      "Area Proportional <br/> Quadratic/Cubic");
@@ -166,9 +168,11 @@ public:
     }
 
     if (targetType.getCurrent() == NODES_TARGET)
-      range = entryMetric->getNodeDoubleMax(graph) - entryMetric->getNodeDoubleMin(graph);
+      range = entryMetric->getNodeDoubleMax(graph) -
+              entryMetric->getNodeDoubleMin(graph);
     else
-      range = entryMetric->getEdgeDoubleMax(graph) - entryMetric->getEdgeDoubleMin(graph);
+      range = entryMetric->getEdgeDoubleMax(graph) -
+              entryMetric->getEdgeDoubleMin(graph);
 
     if (range == 0) {
       errorMsg = rangeMetricErrorMsg;
@@ -209,11 +213,14 @@ public:
         double sizos = 0;
 
         if (proportional == AREA_PROPORTIONAL) {
-          const double power = 1.0 / (float(xaxis) + float(yaxis) + float(zaxis));
-          sizos =
-              min + pow((entryMetric->getNodeDoubleValue(n) - shift) * (max - min) / range, power);
+          const double power =
+              1.0 / (float(xaxis) + float(yaxis) + float(zaxis));
+          sizos = min + pow((entryMetric->getNodeDoubleValue(n) - shift) *
+                                (max - min) / range,
+                            power);
         } else {
-          sizos = min + (entryMetric->getNodeDoubleValue(n) - shift) * (max - min) / range;
+          sizos = min + (entryMetric->getNodeDoubleValue(n) - shift) *
+                            (max - min) / range;
         }
 
         if (xaxis)
@@ -232,7 +239,8 @@ public:
       EdgeStaticProperty<Size> edgeSize(graph);
 
       TLP_PARALLEL_MAP_EDGES(graph, [&](const edge &e) {
-        double sizos = min + (entryMetric->getEdgeDoubleValue(e) - shift) * (max - min) / range;
+        double sizos = min + (entryMetric->getEdgeDoubleValue(e) - shift) *
+                                 (max - min) / range;
         edgeSize[e][0] = float(sizos);
         edgeSize[e][1] = float(sizos);
       });

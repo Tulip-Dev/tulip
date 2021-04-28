@@ -17,14 +17,14 @@
  *
  */
 
+#include <tulip/MouseEdgeBuilder.h>
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseNodeBuilder.h>
-#include <tulip/MouseEdgeBuilder.h>
-#include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/NodeLinkDiagramComponentInteractor.h>
 
-#include "../utils/StandardInteractorPriority.h"
 #include "../utils/PluginNames.h"
+#include "../utils/StandardInteractorPriority.h"
 
 using namespace tlp;
 
@@ -34,14 +34,15 @@ using namespace tlp;
 class InteractorAddEdge : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATION("InteractorAddEdge", "Tulip Team", "01/04/2009", "Add nodes/edges Interactor",
-                    "1.0", "Modification")
+  PLUGININFORMATION("InteractorAddEdge", "Tulip Team", "01/04/2009",
+                    "Add nodes/edges Interactor", "1.0", "Modification")
   /**
    * Default constructor
    */
   InteractorAddEdge(const tlp::PluginContext *)
-      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_addedge.png", "Add nodes/edges",
-                                           StandardInteractorPriority::AddNodesOrEdges) {}
+      : NodeLinkDiagramComponentInteractor(
+            ":/tulip/gui/icons/i_addedge.png", "Add nodes/edges",
+            StandardInteractorPriority::AddNodesOrEdges) {}
 
   /**
    * Construct chain of responsibility
@@ -69,9 +70,7 @@ public:
     push_back(new MouseEdgeBuilder);
   }
 
-  QCursor cursor() const override {
-    return QCursor(Qt::PointingHandCursor);
-  }
+  QCursor cursor() const override { return QCursor(Qt::PointingHandCursor); }
 
   bool isCompatible(const std::string &viewName) const override {
     return (viewName == NodeLinkDiagramComponent::viewName);

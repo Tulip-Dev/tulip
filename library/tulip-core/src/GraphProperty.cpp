@@ -17,8 +17,9 @@
  *
  */
 
-#if defined(__GNUC__) && __GNUC__ >= 4 &&                                                          \
-    ((__GNUC_MINOR__ == 2 && __GNUC_PATCHLEVEL__ >= 1) || (__GNUC_MINOR__ >= 3))
+#if defined(__GNUC__) && __GNUC__ >= 4 &&                                      \
+    ((__GNUC_MINOR__ == 2 && __GNUC_PATCHLEVEL__ >= 1) ||                      \
+     (__GNUC_MINOR__ >= 3))
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif
 
@@ -49,7 +50,8 @@ GraphProperty::~GraphProperty() {
   }
 }
 //==============================
-void GraphProperty::setAllNodeValue(tlp::StoredType<GraphType::RealType>::ReturnedConstValue g) {
+void GraphProperty::setAllNodeValue(
+    tlp::StoredType<GraphType::RealType>::ReturnedConstValue g) {
   // remove all observed graphs if any
   for (auto n : getNonDefaultValuatedNodes()) {
     getNodeValue(n)->removeListener(this);
@@ -68,8 +70,9 @@ void GraphProperty::setAllNodeValue(tlp::StoredType<GraphType::RealType>::Return
     g->addListener(this);
 }
 //==============================
-void GraphProperty::setValueToGraphNodes(tlp::StoredType<GraphType::RealType>::ReturnedConstValue g,
-                                         const Graph *graph) {
+void GraphProperty::setValueToGraphNodes(
+    tlp::StoredType<GraphType::RealType>::ReturnedConstValue g,
+    const Graph *graph) {
   // remove all observed graphs if any
   for (auto n : getNonDefaultValuatedNodes(graph)) {
     getNodeValue(n)->removeListener(this);
@@ -88,8 +91,8 @@ void GraphProperty::setValueToGraphNodes(tlp::StoredType<GraphType::RealType>::R
     g->addListener(this);
 }
 //==============================
-void GraphProperty::setNodeValue(const node n,
-                                 tlp::StoredType<GraphType::RealType>::ReturnedConstValue sg) {
+void GraphProperty::setNodeValue(
+    const node n, tlp::StoredType<GraphType::RealType>::ReturnedConstValue sg) {
   // gestion désabonnement
   Graph *oldGraph = getNodeValue(n);
 
@@ -133,12 +136,14 @@ void GraphProperty::setNodeValue(const node n,
   }
 }
 //============================================================
-PropertyInterface *GraphProperty::clonePrototype(Graph *g, const std::string &n) const {
+PropertyInterface *GraphProperty::clonePrototype(Graph *g,
+                                                 const std::string &n) const {
   if (!g)
     return nullptr;
 
   // allow to get an unregistered property (empty name)
-  GraphProperty *p = n.empty() ? new GraphProperty(g) : g->getLocalProperty<GraphProperty>(n);
+  GraphProperty *p =
+      n.empty() ? new GraphProperty(g) : g->getLocalProperty<GraphProperty>(n);
 
   p->setAllNodeValue(getNodeDefaultValue());
   p->setAllEdgeValue(getEdgeDefaultValue());
@@ -151,10 +156,9 @@ bool GraphProperty::setNodeStringValue(const node, const std::string &) {
 }
 //=============================================================
 // disabled use setAllNodeValue instead
-bool GraphProperty::setAllNodeStringValue(const std::string &) {
-  return false;
-}
-bool GraphProperty::setStringValueToGraphNodes(const std::string &, const tlp::Graph *) {
+bool GraphProperty::setAllNodeStringValue(const std::string &) { return false; }
+bool GraphProperty::setStringValueToGraphNodes(const std::string &,
+                                               const tlp::Graph *) {
   return false;
 }
 //=============================================================
@@ -164,10 +168,9 @@ bool GraphProperty::setEdgeStringValue(const edge, const std::string &) {
 }
 //=============================================================
 // disabled use setAllEdgeValue instead
-bool GraphProperty::setAllEdgeStringValue(const std::string &) {
-  return false;
-}
-bool GraphProperty::setStringValueToGraphEdges(const std::string &, const tlp::Graph *) {
+bool GraphProperty::setAllEdgeStringValue(const std::string &) { return false; }
+bool GraphProperty::setStringValueToGraphEdges(const std::string &,
+                                               const tlp::Graph *) {
   return false;
 }
 //=============================================================
@@ -181,10 +184,11 @@ void GraphProperty::treatEvent(const Event &evt) {
     Graph *sg = static_cast<Graph *>(evt.sender());
 
 #ifndef NDEBUG
-    tlp::warning() << "Tulip Warning : A graph pointed by metanode(s) has been deleted, the "
-                      "metanode(s) pointer has been set to zero in order to prevent segmentation "
-                      "fault"
-                   << std::endl;
+    tlp::warning()
+        << "Tulip Warning : A graph pointed by metanode(s) has been deleted, the "
+           "metanode(s) pointer has been set to zero in order to prevent segmentation "
+           "fault"
+        << std::endl;
 #endif
 
     if (getNodeDefaultValue() == sg) {

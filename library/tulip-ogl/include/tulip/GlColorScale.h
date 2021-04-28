@@ -21,9 +21,9 @@
 #ifndef GLCOLORSCALE_H_
 #define GLCOLORSCALE_H_
 
-#include <tulip/Observable.h>
-#include <tulip/GlSimpleEntity.h>
 #include <tulip/Color.h>
+#include <tulip/GlSimpleEntity.h>
+#include <tulip/Observable.h>
 
 namespace tlp {
 
@@ -35,16 +35,18 @@ class TLP_GL_SCOPE GlColorScale : public GlSimpleEntity, public Observable {
 public:
   enum Orientation { Horizontal, Vertical };
 
-  GlColorScale(ColorScale *colorScale, const Coord &baseCoord, const float length,
-               const float thickness, Orientation orientation);
+  GlColorScale(ColorScale *colorScale, const Coord &baseCoord,
+               const float length, const float thickness,
+               Orientation orientation);
 
   ~GlColorScale() override;
 
   /**
    * @brief Compute the color corresponding to the position in the color scale.
-   * The orientation of the scale define the coordinate used to compute the color (if the
-   *orientation is horizontal use only the X coordinate).
-   * If the position is outside of the entity coordinates returns the nearest extremity value.
+   * The orientation of the scale define the coordinate used to compute the
+   *color (if the orientation is horizontal use only the X coordinate). If the
+   *position is outside of the entity coordinates returns the nearest extremity
+   *value.
    **/
   Color getColorAtPos(Coord pos);
 
@@ -52,27 +54,17 @@ public:
 
   void translate(const Coord &move) override;
 
-  Coord getBaseCoord() const {
-    return baseCoord;
-  }
+  Coord getBaseCoord() const { return baseCoord; }
 
-  float getThickness() const {
-    return thickness;
-  }
+  float getThickness() const { return thickness; }
 
-  float getLength() const {
-    return length;
-  }
+  float getLength() const { return length; }
 
-  GlPolyQuad *getColorScalePolyQuad() const {
-    return colorScalePolyQuad;
-  }
+  GlPolyQuad *getColorScalePolyQuad() const { return colorScalePolyQuad; }
 
   void setColorScale(ColorScale *scale);
 
-  ColorScale *getColorScale() {
-    return colorScale;
-  }
+  ColorScale *getColorScale() { return colorScale; }
 
   void getXML(std::string &) override {}
 

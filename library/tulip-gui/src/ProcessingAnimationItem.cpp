@@ -21,7 +21,8 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 
-ProcessingAnimationItem::ProcessingAnimationItem(const QPixmap &pixmap, const QSize &size,
+ProcessingAnimationItem::ProcessingAnimationItem(const QPixmap &pixmap,
+                                                 const QSize &size,
                                                  QGraphicsItem *parent)
     : QGraphicsPixmapItem(parent), _currentFrame(0), _brush(Qt::transparent) {
   for (int y = 0; y < pixmap.height(); y += size.height()) {
@@ -44,7 +45,8 @@ void ProcessingAnimationItem::animationTimeout() {
   update();
 }
 
-void ProcessingAnimationItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+void ProcessingAnimationItem::paint(QPainter *painter,
+                                    const QStyleOptionGraphicsItem *option,
                                     QWidget *widget) {
   painter->setBrush(_brush);
   painter->setPen(Qt::transparent);

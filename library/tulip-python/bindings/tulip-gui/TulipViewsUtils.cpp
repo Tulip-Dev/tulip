@@ -21,10 +21,10 @@
 
 #include <QApplication>
 
-#include <tulip/PluginLister.h>
-#include <tulip/WorkspacePanel.h>
 #include <tulip/GlMainView.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/PluginLister.h>
+#include <tulip/WorkspacePanel.h>
 
 #include "TulipViewsUtils.h"
 
@@ -41,7 +41,8 @@ std::vector<std::string> TulipViewsManager::getTulipViews() {
   std::vector<std::string> ret;
   std::list<std::string> views = PluginLister::availablePlugins<View>();
 
-  for (std::list<std::string>::iterator it = views.begin(); it != views.end(); ++it) {
+  for (std::list<std::string>::iterator it = views.begin(); it != views.end();
+       ++it) {
     if (*it != "Python Script view") {
       ret.push_back(*it);
     }
@@ -75,7 +76,8 @@ std::vector<tlp::View *> TulipViewsManager::getOpenedViews() {
   }
 }
 
-std::vector<tlp::View *> TulipViewsManager::getOpenedViewsWithName(const std::string &viewName) {
+std::vector<tlp::View *>
+TulipViewsManager::getOpenedViewsWithName(const std::string &viewName) {
   std::vector<tlp::View *> views = getOpenedViews();
   std::vector<tlp::View *> ret;
 
@@ -88,8 +90,9 @@ std::vector<tlp::View *> TulipViewsManager::getOpenedViewsWithName(const std::st
   return ret;
 }
 
-tlp::View *TulipViewsManager::addView(const std::string &viewName, tlp::Graph *graph,
-                                      const DataSet &dataSet, bool show) {
+tlp::View *TulipViewsManager::addView(const std::string &viewName,
+                                      tlp::Graph *graph, const DataSet &dataSet,
+                                      bool show) {
   tlp::Workspace *workspace = tlpWorkspace();
   tlp::View *view = PluginLister::getPluginObject<View>(viewName);
   view->setupUi();
@@ -119,7 +122,8 @@ tlp::View *TulipViewsManager::addView(const std::string &viewName, tlp::Graph *g
     QApplication::processEvents();
   }
 
-  connect(view, SIGNAL(destroyed(QObject *)), this, SLOT(viewDestroyed(QObject *)));
+  connect(view, SIGNAL(destroyed(QObject *)), this,
+          SLOT(viewDestroyed(QObject *)));
 
   return view;
 }
@@ -216,7 +220,8 @@ void TulipViewsManager::viewDestroyed(QObject *obj) {
   if (!workspace) {
     viewToWindow.erase(view);
     viewToPanel.erase(view);
-    openedViews.erase(std::remove(openedViews.begin(), openedViews.end(), view), openedViews.end());
+    openedViews.erase(std::remove(openedViews.begin(), openedViews.end(), view),
+                      openedViews.end());
   }
 }
 
@@ -227,7 +232,8 @@ void TulipViewsManager::setViewVisible(tlp::View *view, const bool visible) {
     if (visible) {
       viewToWindow[view] = new ViewMainWindow();
       viewToWindow[view]->setWindowTitle(
-          ("Tulip: " + view->name() + " - " + view->graph()->getName()).c_str());
+          ("Tulip: " + view->name() + " - " + view->graph()->getName())
+              .c_str());
       viewToWindow[view]->setCentralWidget(viewToPanel[view]);
       viewToWindow[view]->setVisible(true);
     } else {

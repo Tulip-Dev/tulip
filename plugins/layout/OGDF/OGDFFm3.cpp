@@ -19,8 +19,8 @@
 
 #include <tulip/StringCollection.h>
 
-#include <tulip2ogdf/OGDFLayoutPluginBase.h>
 #include <ogdf/energybased/FMMMLayout.h>
+#include <tulip2ogdf/OGDFLayoutPluginBase.h>
 
 using namespace std;
 
@@ -31,7 +31,8 @@ using namespace std;
 #define ELT_LANDSCAPE 2
 
 #define ELT_QUALITYVSSPEED "Quality vs Speed"
-#define ELT_QUALITYVSSPEEDLIST "BeautifulAndFast;NiceAndIncredibleSpeed;GorgeousAndEfficient"
+#define ELT_QUALITYVSSPEEDLIST                                                 \
+  "BeautifulAndFast;NiceAndIncredibleSpeed;GorgeousAndEfficient"
 #define ELT_BEAUTIFULANDFAST 0
 #define ELT_NICEANDINCREDIBLESPEED 1
 #define ELT_GORGEOUSANDEFFICIENT 2
@@ -59,7 +60,8 @@ using namespace std;
 #define ELT_DECREASINGWDTH 1
 
 #define ELT_GALAXYCHOICE "Galaxy Choice"
-#define ELT_GALAXYCHOICELIST "NonUniformProbLowerMass;NonUniformProbHigherMass;UniformProb"
+#define ELT_GALAXYCHOICELIST                                                   \
+  "NonUniformProbLowerMass;NonUniformProbHigherMass;UniformProb"
 #define ELT_NONUNIFORMPROBLOWERMASS 0
 #define ELT_NONUNIFORMPROBHIGHERMASS 1
 #define ELT_UNIFORMPROB 2
@@ -88,7 +90,7 @@ using namespace std;
 #define ELT_GRIDAPPROXIMATION 2
 
 #define ELT_INITIALPLACEMENTFORCES "Initial Placement Forces"
-#define ELT_INITIALPLACEMENTFORCESLIST                                                             \
+#define ELT_INITIALPLACEMENTFORCESLIST                                         \
   "Default;RandomRandIterNr;RandomTime;UniformGrid;KeepPositions"
 #define ELT_RANDOMRANDITERNR 1
 #define ELT_RANDOMTIME 2
@@ -177,9 +179,10 @@ static const char *paramHelp[] = {
     "Specifies how to calculate the smallest quadratic cell surrounding particles of a node in the "
     "reduced bucket quadtree."};
 
-static const char *pageFormatValuesDescription = "Portrait <i>(A4 portrait page)</i><br>"
-                                                 "Landscape <i>(A4 landscape page)</i><br>"
-                                                 "Square <i>(Square format)</i>";
+static const char *pageFormatValuesDescription =
+    "Portrait <i>(A4 portrait page)</i><br>"
+    "Landscape <i>(A4 landscape page)</i><br>"
+    "Square <i>(Square format)</i>";
 
 static const char *qualityVsSpeedValuesDescription =
     "GorgeousAndEfficient <i>(Best quality)</i><br>"
@@ -228,10 +231,11 @@ class OGDFFm3 : public OGDFLayoutPluginBase {
   tlp::StringCollection stringCollection;
 
 public:
-  PLUGININFORMATION("FM^3 (OGDF)", "Stephan Hachul", "09/11/2007",
-                    "Implements the FM³ layout algorithm by Hachul and Jünger. It is a multilevel, "
-                    "force-directed layout algorithm that can be applied to very large graphs.",
-                    "1.3", "Force Directed")
+  PLUGININFORMATION(
+      "FM^3 (OGDF)", "Stephan Hachul", "09/11/2007",
+      "Implements the FM³ layout algorithm by Hachul and Jünger. It is a multilevel, "
+      "force-directed layout algorithm that can be applied to very large graphs.",
+      "1.3", "Force Directed")
   OGDFFm3(const tlp::PluginContext *context);
   ~OGDFFm3() override;
   void beforeCall() override;
@@ -243,33 +247,42 @@ public:
 PLUGIN(OGDFFm3)
 
 OGDFFm3::OGDFFm3(const tlp::PluginContext *context)
-    : OGDFLayoutPluginBase(context, context ? new ogdf::FMMMLayout() : nullptr) {
-  addInParameter<NumericProperty *>("Edge Length Property", paramHelp[0], "viewMetric", false);
+    : OGDFLayoutPluginBase(context,
+                           context ? new ogdf::FMMMLayout() : nullptr) {
+  addInParameter<NumericProperty *>("Edge Length Property", paramHelp[0],
+                                    "viewMetric", false);
   addInParameter<SizeProperty>("Node Size", paramHelp[1], "viewSize", false);
   addInParameter<double>("Unit edge length", paramHelp[2], "10.0", false);
   addInParameter<bool>("New initial placement", paramHelp[3], "true");
   addInParameter<int>("Fixed iterations", paramHelp[4], "0");
   addInParameter<double>("Threshold", paramHelp[5], "0.01");
-  addInParameter<StringCollection>(ELT_PAGEFORMAT, paramHelp[6], ELT_PAGEFORMATLIST, true,
+  addInParameter<StringCollection>(ELT_PAGEFORMAT, paramHelp[6],
+                                   ELT_PAGEFORMATLIST, true,
                                    pageFormatValuesDescription);
-  addInParameter<StringCollection>(ELT_QUALITYVSSPEED, paramHelp[7], ELT_QUALITYVSSPEEDLIST, true,
+  addInParameter<StringCollection>(ELT_QUALITYVSSPEED, paramHelp[7],
+                                   ELT_QUALITYVSSPEEDLIST, true,
                                    qualityVsSpeedValuesDescription);
   addInParameter<StringCollection>(ELT_EDGELENGTHMEASUREMENT, paramHelp[8],
                                    ELT_EDGELENGTHMEASUREMENTLIST, true,
                                    edgeLengthMeasurementValuesDescription);
-  addInParameter<StringCollection>(ELT_ALLOWEDPOSITIONS, paramHelp[9], ELT_ALLOWEDPOSITIONSLIST,
-                                   true, "All<br> Integer <br> Exponent");
-  addInParameter<StringCollection>(ELT_TIPOVER, paramHelp[10], ELT_TIPOVERLIST, true,
-                                   "None<br> NoGrowingRow<br> Always");
-  addInParameter<StringCollection>(ELT_PRESORT, paramHelp[11], ELT_PRESORTLIST, true,
-                                   presortValuesDescription);
-  addInParameter<StringCollection>(ELT_GALAXYCHOICE, paramHelp[12], ELT_GALAXYCHOICELIST, true,
+  addInParameter<StringCollection>(ELT_ALLOWEDPOSITIONS, paramHelp[9],
+                                   ELT_ALLOWEDPOSITIONSLIST, true,
+                                   "All<br> Integer <br> Exponent");
+  addInParameter<StringCollection>(ELT_TIPOVER, paramHelp[10], ELT_TIPOVERLIST,
+                                   true, "None<br> NoGrowingRow<br> Always");
+  addInParameter<StringCollection>(ELT_PRESORT, paramHelp[11], ELT_PRESORTLIST,
+                                   true, presortValuesDescription);
+  addInParameter<StringCollection>(ELT_GALAXYCHOICE, paramHelp[12],
+                                   ELT_GALAXYCHOICELIST, true,
                                    galaxyChoiceValuesDescription);
-  addInParameter<StringCollection>(ELT_MAXITERCHANGE, paramHelp[13], ELT_MAXITERCHANGELIST, true,
+  addInParameter<StringCollection>(ELT_MAXITERCHANGE, paramHelp[13],
+                                   ELT_MAXITERCHANGELIST, true,
                                    maxIterChangeValuesDescription);
   addInParameter<StringCollection>(ELT_INITIALPLACEMENTMULT, paramHelp[14],
-                                   ELT_INITIALPLACEMENTMULTLIST, true, "Simple <br> Advanced");
-  addInParameter<StringCollection>(ELT_FORCEMODEL, paramHelp[15], ELT_FORCEMODELLIST, true,
+                                   ELT_INITIALPLACEMENTMULTLIST, true,
+                                   "Simple <br> Advanced");
+  addInParameter<StringCollection>(ELT_FORCEMODEL, paramHelp[15],
+                                   ELT_FORCEMODELLIST, true,
                                    forceModelValuesDescription);
   addInParameter<StringCollection>(ELT_REPULSIVEFORCEMETHOD, paramHelp[16],
                                    ELT_REPULSIVEFORCEMETHODLIST, true,
@@ -314,9 +327,11 @@ void OGDFFm3::beforeCall() {
 
     if (dataSet->get(ELT_QUALITYVSSPEED, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_NICEANDINCREDIBLESPEED) {
-        fmmm->qualityVersusSpeed(FMMMOptions::QualityVsSpeed::NiceAndIncredibleSpeed);
+        fmmm->qualityVersusSpeed(
+            FMMMOptions::QualityVsSpeed::NiceAndIncredibleSpeed);
       } else if (stringCollection.getCurrent() == ELT_GORGEOUSANDEFFICIENT) {
-        fmmm->qualityVersusSpeed(FMMMOptions::QualityVsSpeed::GorgeousAndEfficient);
+        fmmm->qualityVersusSpeed(
+            FMMMOptions::QualityVsSpeed::GorgeousAndEfficient);
       } else {
         fmmm->qualityVersusSpeed(FMMMOptions::QualityVsSpeed::BeautifulAndFast);
       }
@@ -341,9 +356,11 @@ void OGDFFm3::beforeCall() {
     }
 
     if (fmmm->newInitialPlacement())
-      fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::RandomTime);
+      fmmm->initialPlacementForces(
+          FMMMOptions::InitialPlacementForces::RandomTime);
     else
-      fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::RandomRandIterNr);
+      fmmm->initialPlacementForces(
+          FMMMOptions::InitialPlacementForces::RandomRandIterNr);
 
     switch (fmmm->qualityVersusSpeed()) {
     case FMMMOptions::QualityVsSpeed::GorgeousAndEfficient:
@@ -382,9 +399,11 @@ void OGDFFm3::beforeCall() {
 
     if (dataSet->get(ELT_EDGELENGTHMEASUREMENT, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_BOUNDINGCIRCLE) {
-        fmmm->edgeLengthMeasurement(FMMMOptions::EdgeLengthMeasurement::BoundingCircle);
+        fmmm->edgeLengthMeasurement(
+            FMMMOptions::EdgeLengthMeasurement::BoundingCircle);
       } else {
-        fmmm->edgeLengthMeasurement(FMMMOptions::EdgeLengthMeasurement::Midpoint);
+        fmmm->edgeLengthMeasurement(
+            FMMMOptions::EdgeLengthMeasurement::Midpoint);
       }
     }
 
@@ -458,11 +477,14 @@ void OGDFFm3::beforeCall() {
 
     if (dataSet->get(ELT_REPULSIVEFORCEMETHOD, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_EXACT) {
-        fmmm->repulsiveForcesCalculation(FMMMOptions::RepulsiveForcesMethod::Exact);
+        fmmm->repulsiveForcesCalculation(
+            FMMMOptions::RepulsiveForcesMethod::Exact);
       } else if (stringCollection.getCurrent() == ELT_GRIDAPPROXIMATION) {
-        fmmm->repulsiveForcesCalculation(FMMMOptions::RepulsiveForcesMethod::GridApproximation);
+        fmmm->repulsiveForcesCalculation(
+            FMMMOptions::RepulsiveForcesMethod::GridApproximation);
       } else {
-        fmmm->repulsiveForcesCalculation(FMMMOptions::RepulsiveForcesMethod::NMM);
+        fmmm->repulsiveForcesCalculation(
+            FMMMOptions::RepulsiveForcesMethod::NMM);
       }
     }
 
@@ -471,16 +493,20 @@ void OGDFFm3::beforeCall() {
       if (current != 0) {
         switch (current) {
         case ELT_UNIFORMGRID:
-          fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::UniformGrid);
+          fmmm->initialPlacementForces(
+              FMMMOptions::InitialPlacementForces::UniformGrid);
           break;
         case ELT_RANDOMTIME:
-          fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::RandomTime);
+          fmmm->initialPlacementForces(
+              FMMMOptions::InitialPlacementForces::RandomTime);
           break;
         case ELT_RANDOMRANDITERNR:
-          fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::RandomRandIterNr);
+          fmmm->initialPlacementForces(
+              FMMMOptions::InitialPlacementForces::RandomRandIterNr);
           break;
         case ELT_KEEPPOSITIONS:
-          fmmm->initialPlacementForces(FMMMOptions::InitialPlacementForces::KeepPositions);
+          fmmm->initialPlacementForces(
+              FMMMOptions::InitialPlacementForces::KeepPositions);
         default:
           break;
         }
@@ -489,9 +515,11 @@ void OGDFFm3::beforeCall() {
 
     if (dataSet->get(ELT_REDUCEDTREECONSTRCUCTION, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_SUBTREEBYSUBTREE) {
-        fmmm->nmTreeConstruction(FMMMOptions::ReducedTreeConstruction::SubtreeBySubtree);
+        fmmm->nmTreeConstruction(
+            FMMMOptions::ReducedTreeConstruction::SubtreeBySubtree);
       } else {
-        fmmm->nmTreeConstruction(FMMMOptions::ReducedTreeConstruction::PathByPath);
+        fmmm->nmTreeConstruction(
+            FMMMOptions::ReducedTreeConstruction::PathByPath);
       }
     }
 
@@ -518,7 +546,8 @@ void OGDFFm3::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) {
     unsigned int nbEdges = edges.size();
 
     for (unsigned int i = 0; i < nbEdges; ++i) {
-      edgeLength[tlpToOGDF->getOGDFGraphEdge(i)] = length->getEdgeDoubleValue(edges[i]);
+      edgeLength[tlpToOGDF->getOGDFGraphEdge(i)] =
+          length->getEdgeDoubleValue(edges[i]);
     }
 
     fmmm->call(gAttributes, edgeLength);

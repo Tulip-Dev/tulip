@@ -20,8 +20,8 @@
 
 #include <cmath>
 
-#include <tulip/GlTools.h>
 #include <tulip/GlScene.h>
+#include <tulip/GlTools.h>
 #include <tulip/GlXMLTools.h>
 
 #include <tulip/OpenGlIncludes.h>
@@ -30,16 +30,16 @@ using namespace std;
 
 namespace tlp {
 //====================================================
-Camera::Camera(GlScene *scene, Coord center, Coord eyes, Coord up, double zoomFactor,
-               double sceneRadius)
-    : matrixCoherent(false), center(center), eyes(eyes), up(up), zoomFactor(zoomFactor),
-      sceneRadius(sceneRadius), scene(scene), d3(true) {}
-//====================================================
-Camera::Camera(GlScene *scene, bool d3) : matrixCoherent(false), scene(scene), d3(d3) {}
-//====================================================
-Camera::~Camera() {
-  observableDeleted();
+Camera::Camera(GlScene *scene, Coord center, Coord eyes, Coord up,
+               double zoomFactor, double sceneRadius)
+    : matrixCoherent(false), center(center), eyes(eyes), up(up),
+      zoomFactor(zoomFactor), sceneRadius(sceneRadius), scene(scene), d3(true) {
 }
+//====================================================
+Camera::Camera(GlScene *scene, bool d3)
+    : matrixCoherent(false), scene(scene), d3(d3) {}
+//====================================================
+Camera::~Camera() { observableDeleted(); }
 //===================================================
 Camera &Camera::operator=(const Camera &camera) {
   matrixCoherent = false;
@@ -54,14 +54,13 @@ Camera &Camera::operator=(const Camera &camera) {
   return *this;
 }
 //===================================================
-void Camera::setScene(GlScene *scene) {
-  this->scene = scene;
-}
+void Camera::setScene(GlScene *scene) { this->scene = scene; }
 //===================================================
 BoundingBox Camera::getBoundingBox() const {
   const Vector<int, 4> &viewport = scene->getViewport();
   BoundingBox bb(viewportTo3DWorld(Coord(viewport[0], viewport[1], 0)),
-                 viewportTo3DWorld(Coord(viewport[0] + viewport[2], viewport[1] + viewport[3], 0)),
+                 viewportTo3DWorld(Coord(viewport[0] + viewport[2],
+                                         viewport[1] + viewport[3], 0)),
                  true);
   return bb;
 }
@@ -164,9 +163,12 @@ void Camera::initLight() {
   if (d3) {
     // set positional light for 3D camera
     eyes.get(pos[0], pos[1], pos[2]);
-    pos[0] = pos[0] + ((eyes[0] - center[0]) / zoomFactor) + (eyes[0] - center[0]) * 4;
-    pos[1] = pos[1] + ((eyes[1] - center[1]) / zoomFactor) + (eyes[1] - center[1]) * 4;
-    pos[2] = pos[2] + ((eyes[2] - center[2]) / zoomFactor) + (eyes[2] - center[2]) * 4;
+    pos[0] = pos[0] + ((eyes[0] - center[0]) / zoomFactor) +
+             (eyes[0] - center[0]) * 4;
+    pos[1] = pos[1] + ((eyes[1] - center[1]) / zoomFactor) +
+             (eyes[1] - center[1]) * 4;
+    pos[2] = pos[2] + ((eyes[2] - center[2]) / zoomFactor) +
+             (eyes[2] - center[2]) * 4;
     pos[3] = 1;
   } else {
     // set directional light for 2D camera
@@ -215,8 +217,9 @@ void Camera::initProjection(const Vector<int, 4> &viewport, bool reset) {
   if (valid && v1 != v2) {
     sceneBoundingBox.expand(eyes, valid);
     Coord &&diagCoord = sceneBoundingBox[1] - sceneBoundingBox[0];
-    double diag = 2 * sqrt(diagCoord[0] * diagCoord[0] + diagCoord[1] * diagCoord[1] +
-                           diagCoord[2] * diagCoord[2]);
+    double diag =
+        2 * sqrt(diagCoord[0] * diagCoord[0] + diagCoord[1] * diagCoord[1] +
+                 diagCoord[2] * diagCoord[2]);
     _near = -diag;
     _far = diag;
   } else {
@@ -229,18 +232,21 @@ void Camera::initProjection(const Vector<int, 4> &viewport, bool reset) {
 
     if (scene->isViewOrtho()) {
       if (ratio > 1)
-        glOrtho(-ratio * sceneRadius / 2.0 / zoomFactor, ratio * sceneRadius / 2.0 / zoomFactor,
-                -sceneRadius / 2.0 / zoomFactor, sceneRadius / 2.0 / zoomFactor, _near, _far);
+        glOrtho(-ratio * sceneRadius / 2.0 / zoomFactor,
+                ratio * sceneRadius / 2.0 / zoomFactor,
+                -sceneRadius / 2.0 / zoomFactor, sceneRadius / 2.0 / zoomFactor,
+                _near, _far);
       else
         glOrtho(-sceneRadius / 2.0 / zoomFactor, sceneRadius / 2.0 / zoomFactor,
                 1. / ratio * -sceneRadius / 2.0 / zoomFactor,
                 1. / ratio * sceneRadius / 2.0 / zoomFactor, _near, _far);
     } else {
       if (ratio > 1)
-        glFrustum(-ratio / 2.0 / zoomFactor, ratio / 2.0 / zoomFactor, -0.5 / zoomFactor,
-                  0.5 / zoomFactor, 1.0, sceneRadius * 2.0);
+        glFrustum(-ratio / 2.0 / zoomFactor, ratio / 2.0 / zoomFactor,
+                  -0.5 / zoomFactor, 0.5 / zoomFactor, 1.0, sceneRadius * 2.0);
       else
-        glFrustum(-0.5 / zoomFactor, 0.5 / zoomFactor, -1.0 / (ratio / 0.5 * zoomFactor),
+        glFrustum(-0.5 / zoomFactor, 0.5 / zoomFactor,
+                  -1.0 / (ratio / 0.5 * zoomFactor),
                   1.0 / (ratio / 0.5 * zoomFactor), 1.0, sceneRadius * 2.0);
     }
 
@@ -306,22 +312,26 @@ void Camera::initModelView() {
     glTranslatef(-eyes[0], -eyes[1], -eyes[2]);
   }
 
-  glGetFloatv(GL_MODELVIEW_MATRIX, reinterpret_cast<GLfloat *>(&modelviewMatrix));
-  glGetFloatv(GL_PROJECTION_MATRIX, reinterpret_cast<GLfloat *>(&projectionMatrix));
+  glGetFloatv(GL_MODELVIEW_MATRIX,
+              reinterpret_cast<GLfloat *>(&modelviewMatrix));
+  glGetFloatv(GL_PROJECTION_MATRIX,
+              reinterpret_cast<GLfloat *>(&projectionMatrix));
 
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();
   glMultMatrixf(reinterpret_cast<GLfloat *>(&projectionMatrix));
   glMultMatrixf(reinterpret_cast<GLfloat *>(&modelviewMatrix));
-  glGetFloatv(GL_MODELVIEW_MATRIX, reinterpret_cast<GLfloat *>(&transformMatrix));
+  glGetFloatv(GL_MODELVIEW_MATRIX,
+              reinterpret_cast<GLfloat *>(&transformMatrix));
   glPopMatrix();
   matrixCoherent = true;
 
   GL_TEST_ERROR();
 }
 //====================================================
-void Camera::setSceneRadius(double sceneRadius, const BoundingBox sceneBoundingBox) {
+void Camera::setSceneRadius(double sceneRadius,
+                            const BoundingBox sceneBoundingBox) {
   this->sceneRadius = sceneRadius;
   this->sceneBoundingBox = sceneBoundingBox;
   matrixCoherent = false;
@@ -365,7 +375,8 @@ void Camera::setUp(const Coord &up) {
     sendEvent(Event(*this, Event::TLP_MODIFICATION));
 }
 //====================================================
-void Camera::getProjAndMVMatrix(const Vector<int, 4> &viewport, Matrix<float, 4> &projectionMatrix,
+void Camera::getProjAndMVMatrix(const Vector<int, 4> &viewport,
+                                Matrix<float, 4> &projectionMatrix,
                                 Matrix<float, 4> &modelviewMatrix) const {
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
@@ -422,7 +433,8 @@ Coord Camera::worldTo2DViewport(const Coord &obj) const {
   const_cast<Camera *>(this)->initModelView();
 
   const Vector<int, 4> &viewport = scene->getViewport();
-  return projectPoint(obj, transformMatrix, viewport) - Coord(viewport[0], viewport[1]);
+  return projectPoint(obj, transformMatrix, viewport) -
+         Coord(viewport[0], viewport[1]);
 }
 //====================================================
 const Vector<int, 4> &Camera::getViewport() const {
@@ -439,8 +451,10 @@ void Camera::getXML(string &outString) {
   GlXMLTools::getXML(outString, "d3", d3);
 
   if (sceneBoundingBox.isValid()) {
-    GlXMLTools::getXML(outString, "sceneBoundingBox0", Coord(sceneBoundingBox[0]));
-    GlXMLTools::getXML(outString, "sceneBoundingBox1", Coord(sceneBoundingBox[1]));
+    GlXMLTools::getXML(outString, "sceneBoundingBox0",
+                       Coord(sceneBoundingBox[0]));
+    GlXMLTools::getXML(outString, "sceneBoundingBox1",
+                       Coord(sceneBoundingBox[1]));
   }
 
   GlXMLTools::endDataNode(outString);
@@ -459,13 +473,17 @@ void Camera::setWithXML(const string &inString, unsigned int &currentPosition) {
   GlXMLTools::setWithXML(inString, currentPosition, "sceneRadius", sceneRadius);
   GlXMLTools::setWithXML(inString, currentPosition, "d3", d3);
 
-  if (GlXMLTools::checkNextXMLtag(inString, currentPosition, "sceneBoundingBox0")) {
-    GlXMLTools::setWithXML(inString, currentPosition, "sceneBoundingBox0", bbTmp);
+  if (GlXMLTools::checkNextXMLtag(inString, currentPosition,
+                                  "sceneBoundingBox0")) {
+    GlXMLTools::setWithXML(inString, currentPosition, "sceneBoundingBox0",
+                           bbTmp);
     sceneBoundingBox.expand(bbTmp);
   }
 
-  if (GlXMLTools::checkNextXMLtag(inString, currentPosition, "sceneBoundingBox1")) {
-    GlXMLTools::setWithXML(inString, currentPosition, "sceneBoundingBox1", bbTmp);
+  if (GlXMLTools::checkNextXMLtag(inString, currentPosition,
+                                  "sceneBoundingBox1")) {
+    GlXMLTools::setWithXML(inString, currentPosition, "sceneBoundingBox1",
+                           bbTmp);
     sceneBoundingBox.expand(bbTmp);
   }
 

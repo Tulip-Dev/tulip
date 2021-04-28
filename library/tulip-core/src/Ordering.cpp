@@ -17,8 +17,8 @@
  *
  */
 
-#include <tulip/Ordering.h>
 #include <tulip/BiconnectedTest.h>
+#include <tulip/Ordering.h>
 #include <tulip/PlanarConMap.h>
 
 #include <cassert>
@@ -36,9 +36,7 @@ struct tlp::augmentableAndNodes_ {
 /**
  * A function that return the number of node of the infinite face
  */
-int Ordering::infFaceSize() {
-  return iteratorCount(contour.findAll(true));
-}
+int Ordering::infFaceSize() { return iteratorCount(contour.findAll(true)); }
 
 //==========================================================
 /**
@@ -146,9 +144,11 @@ void Ordering::updateContourLeftRight(node pred, node n, edge e, node last) {
 /**
  * update is_selectable_visited and is_selectable
  */
-void Ordering::updateNewSelectableNodes(node node_f, node no_tmp2, edge, node node_last,
-                                        const vector<Face> &v_faces, bool one_face,
-                                        bool was_visited, bool selection_face) {
+void Ordering::updateNewSelectableNodes(node node_f, node no_tmp2, edge,
+                                        node node_last,
+                                        const vector<Face> &v_faces,
+                                        bool one_face, bool was_visited,
+                                        bool selection_face) {
   MutableContainer<bool> tried;
   tried.setAll(false);
   node n = node_f;
@@ -185,7 +185,8 @@ void Ordering::updateNewSelectableNodes(node node_f, node no_tmp2, edge, node no
     if (tmp2 == node())
       tmp2 = node_f;
 
-    for (auto no_tmp : Gp->getFaceNodes(Gp->getFaceContaining(tmp2, node_last))) {
+    for (auto no_tmp :
+         Gp->getFaceNodes(Gp->getFaceContaining(tmp2, node_last))) {
 
       if (!tried.get(no_tmp.id)) {
         bool on_c = contour.get(no_tmp.id);
@@ -216,7 +217,8 @@ void Ordering::updateNewSelectableNodes(node node_f, node no_tmp2, edge, node no
       bool face_sel = false;
       Face f_tmp = v_faces[i];
 
-      if (is_selectable_face.get(f_tmp.id) || is_selectable_visited_face.get(f_tmp.id))
+      if (is_selectable_face.get(f_tmp.id) ||
+          is_selectable_visited_face.get(f_tmp.id))
         face_sel = true;
 
       if (face_sel)
@@ -227,8 +229,8 @@ void Ordering::updateNewSelectableNodes(node node_f, node no_tmp2, edge, node no
         }
       else {
         for (auto no_tmp : Gp->getFaceNodes(f_tmp)) {
-          if (!tried.get(no_tmp.id) &&
-              (is_selectable_visited.get(no_tmp.id) || is_selectable.get(no_tmp.id))) {
+          if (!tried.get(no_tmp.id) && (is_selectable_visited.get(no_tmp.id) ||
+                                        is_selectable.get(no_tmp.id))) {
             if (!isSelectable(no_tmp)) {
               is_selectable_visited.set(no_tmp.id, false);
               is_selectable.set(no_tmp.id, false);
@@ -581,8 +583,8 @@ vector<node> Ordering::getPathFrom(const vector<node> &fn, int from) {
 /**
  * augment the face f and update members
  */
-void Ordering::augment(Face f, node pred, node n, node pred_last, node last, int nbNewFace,
-                       bool pair) {
+void Ordering::augment(Face f, node pred, node n, node pred_last, node last,
+                       int nbNewFace, bool pair) {
   int nbTours = (pair ? nbNewFace : nbNewFace - 1);
   int right_ov = 1, left_ov = 1, right_oe = 0, left_oe = 0;
   bool visited = false;
@@ -739,7 +741,8 @@ void Ordering::augment(Face f, node pred, node n, node pred_last, node last, int
   // update markedFaces
   unsigned int taille = newFaces.size();
 
-  if (pair && ((left_ov == 2 && left_oe == 1) || (left_ov == 1 && left_oe == 0))) {
+  if (pair &&
+      ((left_ov == 2 && left_oe == 1) || (left_ov == 1 && left_oe == 0))) {
     for (unsigned int i = 0; i < taille - 1; ++i)
       markedFaces.set((newFaces[i]).id, true);
 
@@ -752,7 +755,8 @@ void Ordering::augment(Face f, node pred, node n, node pred_last, node last, int
     setMinMarkedFace(newFaces[newFaces.size() - 1]);
   }
 
-  // update of is_selectable_visited_face, is_selectable_face, is_selectable and is_selectable
+  // update of is_selectable_visited_face, is_selectable_face, is_selectable and
+  // is_selectable
   if (pair && left_ov == 2 && left_oe == 1) {
     if (isSelectable(n_n)) {
       if (visitedNodes.get(n_n.id))
@@ -1072,7 +1076,8 @@ void Ordering::selectAndUpdateNode(node n) {
   updateSelectableFaces(v_face);
 
   // update of is_selectable and is_selectable_visited
-  updateNewSelectableNodes(node_f, no_tmp2, ed_tmp, node_last, v_face, one_face);
+  updateNewSelectableNodes(node_f, no_tmp2, ed_tmp, node_last, v_face,
+                           one_face);
 }
 
 //==========================================================
@@ -1120,8 +1125,8 @@ void Ordering::selectAndUpdateFace(Face f) {
   bool was_visited = visitedFaces.get(f.id);
   int suppNodes = 1;
 
-  // update is_selectable_visited_face, is_selectable_face, visitedNodes, contour, outv, oute,
-  // visitedFaces and seqP
+  // update is_selectable_visited_face, is_selectable_face, visitedNodes,
+  // contour, outv, oute, visitedFaces and seqP
   is_selectable_visited_face.set(f.id, false);
   is_selectable_face.set(f.id, false);
   visitedNodes.set(n2.id, false);
@@ -1260,7 +1265,8 @@ void Ordering::selectAndUpdateFace(Face f) {
   updateSelectableFaces(v_face);
 
   // update of is_selectable and is_selectable_visited
-  updateNewSelectableNodes(pred, no_tmp2, ed_tmp, n2, v_face, one_face, was_visited, true);
+  updateNewSelectableNodes(pred, no_tmp2, ed_tmp, n2, v_face, one_face,
+                           was_visited, true);
 
   // update minMarkedFace
   if (min_markded_face)
@@ -1307,8 +1313,10 @@ bool Ordering::isSelectable(node n) {
         if (!e2.isValid())
           e2 = Gp->existEdge(n, n_succCont);
 
-        if ((Gp->containNode(faces, n_succCont) && !(Gp->containEdge(faces, e2))) ||
-            (Gp->containNode(faces, n_predCont) && !(Gp->containEdge(faces, e1)))) {
+        if ((Gp->containNode(faces, n_succCont) &&
+             !(Gp->containEdge(faces, e2))) ||
+            (Gp->containNode(faces, n_predCont) &&
+             !(Gp->containEdge(faces, e1)))) {
           int seq = seqP.get((faces).id);
 
           if (faces == derniere) {
@@ -1329,11 +1337,12 @@ bool Ordering::isSelectable(node n) {
 }
 
 //==========================================================
-Ordering::Ordering(PlanarConMap *G, PluginProgress *pluginProgress, int minProgress,
-                   int deltaProgress, int maxProgress)
-    : Gp(computePlanarConMap(G->addCloneSubGraph())), oute(), outv(), visitedNodes(),
-      visitedFaces(), seqP(), isOuterFace(), contour(), is_selectable(), is_selectable_visited(),
-      is_selectable_face(), is_selectable_visited_face(), left(), right() {
+Ordering::Ordering(PlanarConMap *G, PluginProgress *pluginProgress,
+                   int minProgress, int deltaProgress, int maxProgress)
+    : Gp(computePlanarConMap(G->addCloneSubGraph())), oute(), outv(),
+      visitedNodes(), visitedFaces(), seqP(), isOuterFace(), contour(),
+      is_selectable(), is_selectable_visited(), is_selectable_face(),
+      is_selectable_visited_face(), left(), right() {
   assert(BiconnectedTest::isBiconnected(G));
   assert(BiconnectedTest::isBiconnected(Gp));
   init();
@@ -1350,8 +1359,9 @@ Ordering::Ordering(PlanarConMap *G, PluginProgress *pluginProgress, int minProgr
 
     // give some feedback
     if (pluginProgress &&
-        (pluginProgress->progress(minProgress + (deltaProgress * (nbMax - nbTours)) / nbMax,
-                                  maxProgress) != TLP_CONTINUE))
+        (pluginProgress->progress(
+             minProgress + (deltaProgress * (nbMax - nbTours)) / nbMax,
+             maxProgress) != TLP_CONTINUE))
       return;
 
     // search for a visited node that can be selected
@@ -1381,8 +1391,8 @@ Ordering::Ordering(PlanarConMap *G, PluginProgress *pluginProgress, int minProgr
       break;
     }
 
-    // search for a non-visited and selectable node, occur when no visited node or face has beeen
-    // selected
+    // search for a non-visited and selectable node, occur when no visited node
+    // or face has beeen selected
     bool selNode = false;
 
     if (!selVisitedFace) {
@@ -1393,8 +1403,8 @@ Ordering::Ordering(PlanarConMap *G, PluginProgress *pluginProgress, int minProgr
       }
     }
 
-    // search for a non-visited selectable face, occur when no node or visited face has been
-    // selected
+    // search for a non-visited selectable face, occur when no node or visited
+    // face has been selected
     bool selFace = false;
 
     if (!selNode && !selVisitedFace) {
@@ -1406,7 +1416,8 @@ Ordering::Ordering(PlanarConMap *G, PluginProgress *pluginProgress, int minProgr
       }
     }
 
-    // search for a face to augment, occur when no node or face has been selected
+    // search for a face to augment, occur when no node or face has been
+    // selected
     if (!selNode && !selVisitedFace && !selFace) {
 
       for (const Face &fac : Gp->getFaces()) {
@@ -1437,7 +1448,8 @@ Ordering::Ordering(PlanarConMap *G, PluginProgress *pluginProgress, int minProgr
           struct augmentableAndNodes_ res = getAugAndNodes(fac);
 
           if (!existMarkedF || res.augmentable) {
-            augment(fac, res.Nodes[0], res.Nodes[1], res.Nodes[2], res.Nodes[3], nbNewFace, pair);
+            augment(fac, res.Nodes[0], res.Nodes[1], res.Nodes[2], res.Nodes[3],
+                    nbNewFace, pair);
             break;
           }
         }
@@ -1695,6 +1707,4 @@ void Ordering::init() {
 }
 
 //==========================================================
-Ordering::~Ordering() {
-  delete Gp;
-}
+Ordering::~Ordering() { delete Gp; }

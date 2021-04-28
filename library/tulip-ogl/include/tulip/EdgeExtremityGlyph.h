@@ -21,12 +21,12 @@
 #ifndef EDGEEXTREMITYGLYPH_H_
 #define EDGEEXTREMITYGLYPH_H_
 
-#include <tulip/Edge.h>
-#include <tulip/Node.h>
-#include <tulip/Size.h>
 #include <tulip/Coord.h>
+#include <tulip/Edge.h>
 #include <tulip/Matrix.h>
+#include <tulip/Node.h>
 #include <tulip/Plugin.h>
+#include <tulip/Size.h>
 
 namespace tlp {
 
@@ -39,21 +39,23 @@ class GlGraphInputData;
 
 class TLP_GL_SCOPE EdgeExtremityGlyph : public Plugin {
 public:
-  std::string category() const override {
-    return EEGLYPH_CATEGORY;
-  }
+  std::string category() const override { return EEGLYPH_CATEGORY; }
   std::string icon() const override {
     return ":/tulip/gui/icons/32/plugin_glyph.png";
   }
 
   EdgeExtremityGlyph(const tlp::PluginContext *context);
   ~EdgeExtremityGlyph() override;
-  virtual void draw(edge e, node n, const Color &glyphColor, const Color &borderColor,
-                    float lod) = 0;
-  void get2DTransformationMatrix(const Coord &src, const Coord &dest, const Size &glyphSize,
-                                 MatrixGL &transformationMatrix, MatrixGL &scalingMatrix);
-  void get3DTransformationMatrix(const Coord &src, const Coord &dest, const Size &glyphSize,
-                                 MatrixGL &transformationMatrix, MatrixGL &scalingMatrix);
+  virtual void draw(edge e, node n, const Color &glyphColor,
+                    const Color &borderColor, float lod) = 0;
+  void get2DTransformationMatrix(const Coord &src, const Coord &dest,
+                                 const Size &glyphSize,
+                                 MatrixGL &transformationMatrix,
+                                 MatrixGL &scalingMatrix);
+  void get3DTransformationMatrix(const Coord &src, const Coord &dest,
+                                 const Size &glyphSize,
+                                 MatrixGL &transformationMatrix,
+                                 MatrixGL &scalingMatrix);
 
 protected:
   GlGraphInputData *edgeExtGlGraphInputData;

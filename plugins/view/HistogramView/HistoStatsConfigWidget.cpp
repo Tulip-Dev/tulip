@@ -27,12 +27,11 @@ namespace tlp {
 HistoStatsConfigWidget::HistoStatsConfigWidget(QWidget *parent)
     : QWidget(parent), _ui(new Ui::HistoStatsConfigWidget) {
   _ui->setupUi(this);
-  connect(_ui->applyButton, SIGNAL(clicked()), this, SIGNAL(computeAndDrawInteractor()));
+  connect(_ui->applyButton, SIGNAL(clicked()), this,
+          SIGNAL(computeAndDrawInteractor()));
 }
 
-HistoStatsConfigWidget::~HistoStatsConfigWidget() {
-  delete _ui;
-}
+HistoStatsConfigWidget::~HistoStatsConfigWidget() { delete _ui; }
 
 double HistoStatsConfigWidget::getSampleStep() const {
   return _ui->sampleStepSB->value();
@@ -66,7 +65,8 @@ double HistoStatsConfigWidget::getSelectionUpperBound() const {
   return getBoundFromString(_ui->upperBoundCB->currentText());
 }
 
-void HistoStatsConfigWidget::setMinMaxMeanAndSd(double min, double max, double mean,
+void HistoStatsConfigWidget::setMinMaxMeanAndSd(double min, double max,
+                                                double mean,
                                                 double standardDeviation) {
   bool changed = false;
 

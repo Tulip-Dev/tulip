@@ -18,23 +18,23 @@
  */
 
 #include "ThresholdInteractor.h"
-#include "SOMView.h"
 #include "GlLabelledColorScale.h"
+#include "SOMView.h"
 #include <SOMMap.h>
 
-#include <tulip/GlLabel.h>
-#include <tulip/GlBoundingBoxSceneVisitor.h>
-#include <tulip/GlTextureManager.h>
+#include <tulip/BooleanProperty.h>
 #include <tulip/ColorScale.h>
-#include <tulip/GlQuad.h>
-#include <tulip/GlRect.h>
+#include <tulip/GlBoundingBoxSceneVisitor.h>
+#include <tulip/GlLabel.h>
 #include <tulip/GlLayer.h>
 #include <tulip/GlMainWidget.h>
-#include <tulip/BooleanProperty.h>
+#include <tulip/GlQuad.h>
+#include <tulip/GlRect.h>
+#include <tulip/GlTextureManager.h>
 
-#include <QToolTip>
 #include <QMouseEvent>
 #include <QPicture>
+#include <QToolTip>
 
 #include <cstdint>
 
@@ -47,9 +47,11 @@ void drawComposite(GlComposite *composite, float lod, Camera *camera) {
   }
 }
 
-ColorScaleSlider::ColorScaleSlider(SliderWay way, Size size, GlLabelledColorScale *colorScale,
+ColorScaleSlider::ColorScaleSlider(SliderWay way, Size size,
+                                   GlLabelledColorScale *colorScale,
                                    const string &textureName)
-    : way(way), size(size), linkedSlider(nullptr), linkedScale(colorScale), currentShift(0) {
+    : way(way), size(size), linkedSlider(nullptr), linkedScale(colorScale),
+      currentShift(0) {
 
   buildComposite(textureName);
   linkedScale->getGlColorScale()->getColorScale()->addObserver(this);
@@ -57,22 +59,23 @@ ColorScaleSlider::ColorScaleSlider(SliderWay way, Size size, GlLabelledColorScal
 
 double ColorScaleSlider::getValue() {
   return linkedScale->getMinValue() +
-         currentShift * (linkedScale->getMaxValue() - linkedScale->getMinValue());
+         currentShift *
+             (linkedScale->getMaxValue() - linkedScale->getMinValue());
 }
 
-ColorScaleSlider::~ColorScaleSlider() {
-  reset(true);
-}
+ColorScaleSlider::~ColorScaleSlider() { reset(true); }
 
 void ColorScaleSlider::buildComposite(const std::string &textureName) {
   ostringstream oss;
   const Coord &colorScaleCoord = linkedScale->getGlColorScale()->getBaseCoord();
-  float Ypos = colorScaleCoord.getY() - linkedScale->getGlColorScale()->getThickness() * .5;
+  float Ypos = colorScaleCoord.getY() -
+               linkedScale->getGlColorScale()->getThickness() * .5;
 
   if (way == ToLeft) {
     oss << linkedScale->getMaxValue();
-    position.set(colorScaleCoord.getX() + linkedScale->getGlColorScale()->getLength(), Ypos,
-                 colorScaleCoord.getZ());
+    position.set(colorScaleCoord.getX() +
+                     linkedScale->getGlColorScale()->getLength(),
+                 Ypos, colorScaleCoord.getZ());
     currentShift = 1;
   } else {
     oss << linkedScale->getMinValue();
@@ -84,18 +87,22 @@ void ColorScaleSlider::buildComposite(const std::string &textureName) {
 
   Size labelSize(size.getW(), size.getH());
   vector<Color> fillColors;
-  fillColors.insert(fillColors.begin(), 3, linkedScale->getGlColorScale()->getColorAtPos(position));
+  fillColors.insert(fillColors.begin(), 3,
+                    linkedScale->getGlColorScale()->getColorAtPos(position));
 
   vector<Coord> points;
   points.push_back(position);
-  points.push_back(Coord(position.getX() - (size.getW() * 0.5), position.getY() - arrowLen));
-  points.push_back(Coord(position.getX() + (size.getW() * 0.5), position.getY() - arrowLen));
+  points.push_back(
+      Coord(position.getX() - (size.getW() * 0.5), position.getY() - arrowLen));
+  points.push_back(
+      Coord(position.getX() + (size.getW() * 0.5), position.getY() - arrowLen));
 
   Coord p1(points[2].getX(), position.getY() - size.getH(), 0);
   Coord p2(points[1].getX(), position.getY() - size.getH(), 0);
 
   rect = new GlQuad(p1, p2, points[1], points[2], Color(255, 255, 255));
-  Coord labelPosition(position.getX(), p1.getY() + (points[1].getY() - p1.getY()) * 0.5);
+  Coord labelPosition(position.getX(),
+                      p1.getY() + (points[1].getY() - p1.getY()) * 0.5);
   rect->setTextureName(textureName);
   arrow = new GlPolygon(points, fillColors, fillColors, true, false);
   addGlEntity(arrow, "arrow");
@@ -137,9 +144,7 @@ void ColorScaleSlider::computeBoundingBox() {
   boundingBox = visitor.getBoundingBox();
 }
 
-void ColorScaleSlider::setColor(Color c) {
-  arrow->setFillColor(c);
-}
+void ColorScaleSlider::setColor(Color c) { arrow->setFillColor(c); }
 
 float ColorScaleSlider::getLeftBound() {
   if (way == ToRight || linkedSlider == nullptr)
@@ -155,7 +160,8 @@ float ColorScaleSlider::getRightBound() {
 }
 
 void ColorScaleSlider::setValue(double value) {
-  if (value >= linkedScale->getMinValue() && value <= linkedScale->getMaxValue()) {
+  if (value >= linkedScale->getMinValue() &&
+      value <= linkedScale->getMaxValue()) {
     currentShift = (value - linkedScale->getMinValue()) /
                    (linkedScale->getMaxValue() - linkedScale->getMinValue());
     updatePosition();
@@ -176,7 +182,8 @@ void ColorScaleSlider::shift(float shift) {
 }
 
 void ColorScaleSlider::updatePosition() {
-  float xPos = linkedScale->getPosition().getX() + currentShift * linkedScale->getSize().getW();
+  float xPos = linkedScale->getPosition().getX() +
+               currentShift * linkedScale->getSize().getW();
   float xShift = xPos - position.getX();
 
   if (xShift != 0) {
@@ -201,24 +208,24 @@ void ColorScaleSlider::draw(float lod, Camera *camera) {
   label->draw(lod, camera);
 }
 
-void ColorScaleSlider::update(std::set<Observable *>::iterator, std::set<Observable *>::iterator) {
-  float xPos = linkedScale->getPosition().getX() + currentShift * linkedScale->getSize().getW();
+void ColorScaleSlider::update(std::set<Observable *>::iterator,
+                              std::set<Observable *>::iterator) {
+  float xPos = linkedScale->getPosition().getX() +
+               currentShift * linkedScale->getSize().getW();
   setColor(linkedScale->getGlColorScale()->getColorAtPos(Coord(xPos, 0, 0)));
 }
 void ColorScaleSlider::observableDestroyed(Observable *) {}
 
-SliderBar::SliderBar(ColorScaleSlider *left, ColorScaleSlider *right, const string &textureName)
-    : GlSimpleEntity(), left(left), right(right), texture(textureName), isVisible(false) {}
+SliderBar::SliderBar(ColorScaleSlider *left, ColorScaleSlider *right,
+                     const string &textureName)
+    : GlSimpleEntity(), left(left), right(right), texture(textureName),
+      isVisible(false) {}
 
 SliderBar::~SliderBar() {}
 
-float SliderBar::getLeftBound() {
-  return left->getLeftBound();
-}
+float SliderBar::getLeftBound() { return left->getLeftBound(); }
 
-float SliderBar::getRightBound() {
-  return right->getRightBound();
-}
+float SliderBar::getRightBound() { return right->getRightBound(); }
 
 void SliderBar::beginShift() {
   isVisible = true;
@@ -254,12 +261,15 @@ void SliderBar::draw(float lod, tlp::Camera *camera) {
   const Coord &rPos = right->getBasePosition();
   const Size &rSize = right->getSize();
 
-  Coord topLeft(lPos.getX() + lSize.getW() * 0.5, lPos.getY() - lSize.getH(), lPos.getZ());
-  Coord bottomRight(rPos.getX() - rSize.getW() * .5, rPos.getY() - rSize.getH() * .25, rPos.getZ());
+  Coord topLeft(lPos.getX() + lSize.getW() * 0.5, lPos.getY() - lSize.getH(),
+                lPos.getZ());
+  Coord bottomRight(rPos.getX() - rSize.getW() * .5,
+                    rPos.getY() - rSize.getH() * .25, rPos.getZ());
 
   // Sliders are overlapping don't draw the slider bar
   if (bottomRight.getX() - topLeft.getX() > 0) {
-    GlRect rect(topLeft, bottomRight, Color(255, 255, 255), Color(255, 255, 255));
+    GlRect rect(topLeft, bottomRight, Color(255, 255, 255),
+                Color(255, 255, 255));
 
     if (isVisible) {
       rect.setTextureName(texture);
@@ -278,8 +288,9 @@ void SliderBar::draw(float lod, tlp::Camera *camera) {
 }
 
 ThresholdInteractor::ThresholdInteractor()
-    : layer(new GlLayer("Threshold")), mouvingSlider(nullptr), rSlider(nullptr), lSlider(nullptr),
-      bar(nullptr), startDrag(false), XPosCursor(0), textureName(":/sliderTexture.png") {}
+    : layer(new GlLayer("Threshold")), mouvingSlider(nullptr), rSlider(nullptr),
+      lSlider(nullptr), bar(nullptr), startDrag(false), XPosCursor(0),
+      textureName(":/sliderTexture.png") {}
 
 ThresholdInteractor::~ThresholdInteractor() {
   layer->getComposite()->reset(true);
@@ -316,7 +327,8 @@ bool ThresholdInteractor::eventFilter(QObject *widget, QEvent *event) {
 
   QMouseEvent *me = static_cast<QMouseEvent *>(event);
 
-  if (event->type() == QEvent::MouseButtonPress && me->button() == Qt::LeftButton) {
+  if (event->type() == QEvent::MouseButtonPress &&
+      me->button() == Qt::LeftButton) {
 
     vector<SelectedEntity> selectedEntities;
     // set<Slider*> finalSelectedEntities;
@@ -324,7 +336,8 @@ bool ThresholdInteractor::eventFilter(QObject *widget, QEvent *event) {
     // Update Camera for selection
     layer->set2DMode();
     glMainWidget->getScene()->addExistingLayer(layer);
-    glMainWidget->getScene()->selectEntities(RenderingSimpleEntities, me->x(), me->y(), 0, 0, layer,
+    glMainWidget->getScene()->selectEntities(RenderingSimpleEntities, me->x(),
+                                             me->y(), 0, 0, layer,
                                              selectedEntities);
     glMainWidget->getScene()->removeLayer(layer, false);
 
@@ -334,9 +347,11 @@ bool ThresholdInteractor::eventFilter(QObject *widget, QEvent *event) {
 
       for (auto &itPE : selectedEntities) {
         for (auto &itDisplay : displays) {
-          GlComposite *composite = dynamic_cast<GlComposite *>(itDisplay.second);
+          GlComposite *composite =
+              dynamic_cast<GlComposite *>(itDisplay.second);
 
-          if (composite && !composite->findKey(itPE.getSimpleEntity()).empty()) {
+          if (composite &&
+              !composite->findKey(itPE.getSimpleEntity()).empty()) {
 
             Slider *slider = dynamic_cast<Slider *>(composite);
 
@@ -391,7 +406,8 @@ bool ThresholdInteractor::eventFilter(QObject *widget, QEvent *event) {
         return true;
       }
 
-      mouvingSlider->shift(xShift / (colorScale->getGlColorScale()->getLength()));
+      mouvingSlider->shift(xShift /
+                           (colorScale->getGlColorScale()->getLength()));
       somView->refresh();
     }
 
@@ -414,7 +430,8 @@ bool ThresholdInteractor::eventFilter(QObject *widget, QEvent *event) {
 
     if (me->modifiers() == systMod) {
       if (somView->getMask())
-        performSelection(somView, somView->getMask()->getNodesEqualTo(true, som));
+        performSelection(somView,
+                         somView->getMask()->getNodesEqualTo(true, som));
       else
         performSelection(somView, som->getNodes());
     } else
@@ -427,23 +444,28 @@ bool ThresholdInteractor::eventFilter(QObject *widget, QEvent *event) {
   return false;
 }
 
-void ThresholdInteractor::performSelection(SOMView *view, tlp::Iterator<node> *it) {
-  BooleanProperty *selection = view->graph()->getProperty<BooleanProperty>("viewSelection");
+void ThresholdInteractor::performSelection(SOMView *view,
+                                           tlp::Iterator<node> *it) {
+  BooleanProperty *selection =
+      view->graph()->getProperty<BooleanProperty>("viewSelection");
   set<node> mask;
   unordered_map<node, set<node>> &mappingTab = view->getMappingTab();
   Observable::holdObservers();
   selection->setAllNodeValue(false);
 
-  // If we are using normalized values we display unnormalized values, to compare them we need to
-  // renormalize them
+  // If we are using normalized values we display unnormalized values, to
+  // compare them we need to renormalize them
   InputSample &inputSample = view->getInputSample();
-  unsigned int propertyIndex = inputSample.findIndexForProperty(view->getSelectedProperty());
-  double rightSliderRealValue = inputSample.isUsingNormalizedValues()
-                                    ? inputSample.normalize(rSlider->getValue(), propertyIndex)
-                                    : rSlider->getValue();
-  double leftSliderRealValue = inputSample.isUsingNormalizedValues()
-                                   ? inputSample.normalize(lSlider->getValue(), propertyIndex)
-                                   : lSlider->getValue();
+  unsigned int propertyIndex =
+      inputSample.findIndexForProperty(view->getSelectedProperty());
+  double rightSliderRealValue =
+      inputSample.isUsingNormalizedValues()
+          ? inputSample.normalize(rSlider->getValue(), propertyIndex)
+          : rSlider->getValue();
+  double leftSliderRealValue =
+      inputSample.isUsingNormalizedValues()
+          ? inputSample.normalize(lSlider->getValue(), propertyIndex)
+          : lSlider->getValue();
 
   for (auto n : it) {
     double nodeValue = currentProperty->getNodeDoubleValue(n);
@@ -476,7 +498,8 @@ bool ThresholdInteractor::screenSizeChanged(SOMView *somView) {
   return false;
 }
 
-void ThresholdInteractor::propertyChanged(SOMView *somView, const string &propertyName,
+void ThresholdInteractor::propertyChanged(SOMView *somView,
+                                          const string &propertyName,
                                           NumericProperty *newProperty) {
   EditColorScaleInteractor::propertyChanged(somView, propertyName, newProperty);
 
@@ -517,30 +540,37 @@ void ThresholdInteractor::buildSliders(SOMView *somView) {
   }
 
   InputSample &inputSample = somView->getInputSample();
-  unsigned int propertyIndex = inputSample.findIndexForProperty(somView->getSelectedProperty());
+  unsigned int propertyIndex =
+      inputSample.findIndexForProperty(somView->getSelectedProperty());
 
   if (textureName.empty())
     generateSliderTexture();
 
-  lSlider = new ColorScaleSlider(ColorScaleSlider::ToRight, sliderSize, colorScale, textureName);
+  lSlider = new ColorScaleSlider(ColorScaleSlider::ToRight, sliderSize,
+                                 colorScale, textureName);
 
   if (intervalMinValue != minValue) {
-    // If we use normalized values we need to translate them to unnormalized for user comprehension
-    double intervalMinDisplayValue = inputSample.isUsingNormalizedValues()
-                                         ? inputSample.unnormalize(intervalMinValue, propertyIndex)
-                                         : intervalMinValue;
+    // If we use normalized values we need to translate them to unnormalized for
+    // user comprehension
+    double intervalMinDisplayValue =
+        inputSample.isUsingNormalizedValues()
+            ? inputSample.unnormalize(intervalMinValue, propertyIndex)
+            : intervalMinValue;
     lSlider->setValue(intervalMinDisplayValue);
   }
 
   layer->addGlEntity(lSlider, "Left");
 
-  rSlider = new ColorScaleSlider(ColorScaleSlider::ToLeft, sliderSize, colorScale, textureName);
+  rSlider = new ColorScaleSlider(ColorScaleSlider::ToLeft, sliderSize,
+                                 colorScale, textureName);
 
   if (intervalMaxValue != maxValue) {
-    // If we use normalized values we need to translate them to unnormalized for user comprehension
-    double intervalMaxDisplayValue = inputSample.isUsingNormalizedValues()
-                                         ? inputSample.unnormalize(intervalMaxValue, propertyIndex)
-                                         : intervalMaxValue;
+    // If we use normalized values we need to translate them to unnormalized for
+    // user comprehension
+    double intervalMaxDisplayValue =
+        inputSample.isUsingNormalizedValues()
+            ? inputSample.unnormalize(intervalMaxValue, propertyIndex)
+            : intervalMaxValue;
     rSlider->setValue(intervalMaxDisplayValue);
   }
 

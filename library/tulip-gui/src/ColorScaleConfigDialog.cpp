@@ -19,17 +19,17 @@
 
 #include <QFileDialog>
 #include <QHeaderView>
-#include <QLinearGradient>
-#include <QPainter>
-#include <QMessageBox>
 #include <QInputDialog>
+#include <QLinearGradient>
+#include <QMessageBox>
+#include <QPainter>
 
 #include <algorithm>
 #include <vector>
 
-#include <tulip/TlpQtTools.h>
 #include <tulip/ColorScaleConfigDialog.h>
 #include <tulip/ColorScalesManager.h>
+#include <tulip/TlpQtTools.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TulipSettings.h>
 
@@ -41,7 +41,8 @@ namespace tlp {
 
 map<QString, vector<Color>> ColorScaleConfigDialog::tulipImageColorScales;
 
-ColorScaleConfigDialog::ColorScaleConfigDialog(const ColorScale &colorScale, QWidget *parent)
+ColorScaleConfigDialog::ColorScaleConfigDialog(const ColorScale &colorScale,
+                                               QWidget *parent)
     : QDialog(parent), _ui(new Ui::ColorScaleDialog), colorScale(colorScale) {
   _ui->setupUi(this);
   _ui->colorsTable->setColumnWidth(0, _ui->colorsTable->width());
@@ -53,24 +54,35 @@ ColorScaleConfigDialog::ColorScaleConfigDialog(const ColorScale &colorScale, QWi
   _ui->savedGradientPreview->setAutoFillBackground(true);
   _ui->userGradientPreview->setAutoFillBackground(true);
   connect(_ui->savedColorScalesList,
-          SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this,
-          SLOT(displaySavedGradientPreview()));
-  connect(_ui->savedColorScalesList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this,
+          SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
+          this, SLOT(displaySavedGradientPreview()));
+  connect(_ui->savedColorScalesList,
+          SIGNAL(itemDoubleClicked(QListWidgetItem *)), this,
           SLOT(reeditSaveColorScale(QListWidgetItem *)));
-  connect(_ui->nbColors, SIGNAL(valueChanged(int)), this, SLOT(nbColorsValueChanged(int)));
+  connect(_ui->nbColors, SIGNAL(valueChanged(int)), this,
+          SLOT(nbColorsValueChanged(int)));
   connect(_ui->colorsTable, SIGNAL(itemDoubleClicked(QTableWidgetItem *)), this,
           SLOT(colorTableItemDoubleClicked(QTableWidgetItem *)));
-  connect(_ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(displaySavedGradientPreview()));
-  connect(_ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(displayUserGradientPreview()));
-  connect(_ui->gradientCB, SIGNAL(clicked()), this, SLOT(displayUserGradientPreview()));
-  connect(_ui->saveColorScaleButton, SIGNAL(clicked()), this, SLOT(saveCurrentColorScale()));
-  connect(_ui->deleteColorScaleButton, SIGNAL(clicked()), this, SLOT(deleteSavedColorScale()));
-  connect(_ui->importFromImgButton, SIGNAL(clicked()), this, SLOT(importColorScaleFromImageFile()));
+  connect(_ui->tabWidget, SIGNAL(currentChanged(int)), this,
+          SLOT(displaySavedGradientPreview()));
+  connect(_ui->tabWidget, SIGNAL(currentChanged(int)), this,
+          SLOT(displayUserGradientPreview()));
+  connect(_ui->gradientCB, SIGNAL(clicked()), this,
+          SLOT(displayUserGradientPreview()));
+  connect(_ui->saveColorScaleButton, SIGNAL(clicked()), this,
+          SLOT(saveCurrentColorScale()));
+  connect(_ui->deleteColorScaleButton, SIGNAL(clicked()), this,
+          SLOT(deleteSavedColorScale()));
+  connect(_ui->importFromImgButton, SIGNAL(clicked()), this,
+          SLOT(importColorScaleFromImageFile()));
   connect(_ui->importFromPredefinedCSButton, SIGNAL(clicked()), this,
           SLOT(importColorScaleFromColorScaleFile()));
-  connect(_ui->invertColorScaleButton, SIGNAL(clicked()), this, SLOT(invertEditedColorScale()));
-  connect(_ui->globalAlphaCB, SIGNAL(toggled(bool)), _ui->globalAlphaSB, SLOT(setEnabled(bool)));
-  connect(_ui->globalAlphaCB, SIGNAL(toggled(bool)), this, SLOT(applyGlobalAlphaToColorScale()));
+  connect(_ui->invertColorScaleButton, SIGNAL(clicked()), this,
+          SLOT(invertEditedColorScale()));
+  connect(_ui->globalAlphaCB, SIGNAL(toggled(bool)), _ui->globalAlphaSB,
+          SLOT(setEnabled(bool)));
+  connect(_ui->globalAlphaCB, SIGNAL(toggled(bool)), this,
+          SLOT(applyGlobalAlphaToColorScale()));
   connect(_ui->globalAlphaSB, SIGNAL(valueChanged(int)), this,
           SLOT(applyGlobalAlphaToColorScale()));
 
@@ -82,23 +94,25 @@ ColorScaleConfigDialog::ColorScaleConfigDialog(const ColorScale &colorScale, QWi
   setColorScale(colorScale);
 }
 
-ColorScaleConfigDialog::~ColorScaleConfigDialog() {
-  delete _ui;
-}
+ColorScaleConfigDialog::~ColorScaleConfigDialog() { delete _ui; }
 
 void ColorScaleConfigDialog::accept() {
   vector<Color> colors;
   bool gradient = true;
 
   if (_ui->tabWidget->currentIndex() == 1) {
-    if (_ui->savedColorScalesList->count() > 0 && _ui->savedColorScalesList->currentItem()) {
-      QString savedColorScaleId = _ui->savedColorScalesList->currentItem()->text();
+    if (_ui->savedColorScalesList->count() > 0 &&
+        _ui->savedColorScalesList->currentItem()) {
+      QString savedColorScaleId =
+          _ui->savedColorScalesList->currentItem()->text();
 
-      if (tulipImageColorScales.find(savedColorScaleId) != tulipImageColorScales.end()) {
+      if (tulipImageColorScales.find(savedColorScaleId) !=
+          tulipImageColorScales.end()) {
         colors = tulipImageColorScales[savedColorScaleId];
       } else {
         TulipSettings::instance().beginGroup("ColorScales");
-        QList<QVariant> colorsVector = TulipSettings::instance().value(savedColorScaleId).toList();
+        QList<QVariant> colorsVector =
+            TulipSettings::instance().value(savedColorScaleId).toList();
         QString gradientScaleId = savedColorScaleId + "_gradient?";
         gradient = TulipSettings::instance().value(gradientScaleId).toBool();
         TulipSettings::instance().endGroup();
@@ -118,7 +132,8 @@ void ColorScaleConfigDialog::accept() {
     colors.reserve(_ui->colorsTable->rowCount());
     for (int i = 0; i < _ui->colorsTable->rowCount(); ++i) {
       QColor itemColor = _ui->colorsTable->item(i, 0)->background().color();
-      colors.emplace_back(itemColor.red(), itemColor.green(), itemColor.blue(), itemColor.alpha());
+      colors.emplace_back(itemColor.red(), itemColor.green(), itemColor.blue(),
+                          itemColor.alpha());
     }
 
     std::reverse(colors.begin(), colors.end());
@@ -134,7 +149,8 @@ void ColorScaleConfigDialog::accept() {
   QDialog::accept();
 }
 
-vector<Color> ColorScaleConfigDialog::getColorScaleFromImageFile(const QString &imageFilePath) {
+vector<Color> ColorScaleConfigDialog::getColorScaleFromImageFile(
+    const QString &imageFilePath) {
   QImage gradientImage(imageFilePath);
   unsigned int imageHeight = gradientImage.height();
 
@@ -144,7 +160,8 @@ vector<Color> ColorScaleConfigDialog::getColorScaleFromImageFile(const QString &
     step = 10;
 
   vector<Color> colors;
-  colors.reserve(imageHeight % step ? imageHeight / step : imageHeight / step + 1);
+  colors.reserve(imageHeight % step ? imageHeight / step
+                                    : imageHeight / step + 1);
   for (unsigned int i = 0; i < imageHeight; i += step) {
     QRgb pixelValue = gradientImage.pixel(0, i);
     colors.emplace_back(qRed(pixelValue), qGreen(pixelValue), qBlue(pixelValue),
@@ -161,12 +178,14 @@ vector<Color> ColorScaleConfigDialog::getColorScaleFromImageFile(const QString &
   return colors;
 }
 
-ColorScale ColorScaleConfigDialog::getColorScaleFromImageFile(const std::string &imageFilePath,
-                                                              bool gradient) {
-  return ColorScale(getColorScaleFromImageFile(tlpStringToQString(imageFilePath)), gradient);
+ColorScale ColorScaleConfigDialog::getColorScaleFromImageFile(
+    const std::string &imageFilePath, bool gradient) {
+  return ColorScale(
+      getColorScaleFromImageFile(tlpStringToQString(imageFilePath)), gradient);
 }
 
-void ColorScaleConfigDialog::loadImageColorScalesFromDir(const QString &colorScalesDir) {
+void ColorScaleConfigDialog::loadImageColorScalesFromDir(
+    const QString &colorScalesDir) {
   QFileInfo colorscaleDirectory(colorScalesDir);
 
   if (colorscaleDirectory.exists() && colorscaleDirectory.isDir()) {
@@ -188,12 +207,15 @@ void ColorScaleConfigDialog::loadImageColorScalesFromDir(const QString &colorSca
 }
 
 void ColorScaleConfigDialog::loadTulipImageColorScales() {
-  loadImageColorScalesFromDir(tlpStringToQString(TulipBitmapDir) + "colorscales");
+  loadImageColorScalesFromDir(tlpStringToQString(TulipBitmapDir) +
+                              "colorscales");
 }
 
-void ColorScaleConfigDialog::importColorScaleFromFile(const QString &currentDir) {
-  QString imageFilePath = QFileDialog::getOpenFileName(this, tr("Open Image File"), currentDir,
-                                                       tr("Image Files (*.png *.jpg *.bmp)"));
+void ColorScaleConfigDialog::importColorScaleFromFile(
+    const QString &currentDir) {
+  QString imageFilePath =
+      QFileDialog::getOpenFileName(this, tr("Open Image File"), currentDir,
+                                   tr("Image Files (*.png *.jpg *.bmp)"));
 
   if (imageFilePath.isEmpty())
     return;
@@ -208,7 +230,8 @@ void ColorScaleConfigDialog::importColorScaleFromFile(const QString &currentDir)
 }
 
 void ColorScaleConfigDialog::importColorScaleFromColorScaleFile() {
-  importColorScaleFromFile(QString((tlp::TulipBitmapDir + '/' + "colorscales").c_str()));
+  importColorScaleFromFile(
+      QString((tlp::TulipBitmapDir + '/' + "colorscales").c_str()));
 }
 
 void ColorScaleConfigDialog::importColorScaleFromImageFile() {
@@ -221,21 +244,26 @@ void ColorScaleConfigDialog::pressButtonBrowse() {
 }
 
 void ColorScaleConfigDialog::displaySavedGradientPreview() {
-  if (_ui->savedColorScalesList->count() > 0 && _ui->savedColorScalesList->currentItem()) {
+  if (_ui->savedColorScalesList->count() > 0 &&
+      _ui->savedColorScalesList->currentItem()) {
     QList<QColor> colorsList;
-    QString savedColorScaleId = _ui->savedColorScalesList->currentItem()->text();
+    QString savedColorScaleId =
+        _ui->savedColorScalesList->currentItem()->text();
     bool gradient = true;
 
-    if (tulipImageColorScales.find(savedColorScaleId) != tulipImageColorScales.end()) {
+    if (tulipImageColorScales.find(savedColorScaleId) !=
+        tulipImageColorScales.end()) {
       vector<Color> colors = tulipImageColorScales[savedColorScaleId];
       std::reverse(colors.begin(), colors.end());
 
       for (size_t i = 0; i < colors.size(); ++i) {
-        colorsList.push_back(QColor(colors[i][0], colors[i][1], colors[i][2], colors[i][3]));
+        colorsList.push_back(
+            QColor(colors[i][0], colors[i][1], colors[i][2], colors[i][3]));
       }
     } else {
       TulipSettings::instance().beginGroup("ColorScales");
-      QList<QVariant> colorsListv = TulipSettings::instance().value(savedColorScaleId).toList();
+      QList<QVariant> colorsListv =
+          TulipSettings::instance().value(savedColorScaleId).toList();
       QString gradientScaleId = savedColorScaleId + "_gradient?";
       gradient = TulipSettings::instance().value(gradientScaleId).toBool();
       TulipSettings::instance().endGroup();
@@ -257,7 +285,8 @@ void ColorScaleConfigDialog::displayUserGradientPreview() {
     colorsVector.push_back(_ui->colorsTable->item(i, 0)->background().color());
   }
 
-  displayGradientPreview(colorsVector, _ui->gradientCB->isChecked(), _ui->userGradientPreview);
+  displayGradientPreview(colorsVector, _ui->gradientCB->isChecked(),
+                         _ui->userGradientPreview);
 }
 
 void ColorScaleConfigDialog::invertEditedColorScale() {
@@ -279,15 +308,16 @@ static qreal clamp(qreal f, qreal minVal, qreal maxVal) {
   return min(max(f, minVal), maxVal);
 }
 
-void ColorScaleConfigDialog::displayGradientPreview(const QList<QColor> &colorsVector,
-                                                    bool gradient, QLabel *displayLabel) {
+void ColorScaleConfigDialog::displayGradientPreview(
+    const QList<QColor> &colorsVector, bool gradient, QLabel *displayLabel) {
   QPixmap pixmap(displayLabel->width(), displayLabel->height());
   pixmap.fill(Qt::transparent);
   QPainter painter;
   painter.begin(&pixmap);
 
   if (gradient) {
-    QLinearGradient qLinearGradient(displayLabel->width() / 2, 0, displayLabel->width() / 2,
+    QLinearGradient qLinearGradient(displayLabel->width() / 2, 0,
+                                    displayLabel->width() / 2,
                                     displayLabel->height() - 1);
     qreal increment = 1.0 / (colorsVector.size() - 1);
     qreal relPos = 0;
@@ -297,18 +327,20 @@ void ColorScaleConfigDialog::displayGradientPreview(const QList<QColor> &colorsV
       relPos += increment;
     }
 
-    painter.fillRect(0, 0, displayLabel->width(), displayLabel->height(), qLinearGradient);
+    painter.fillRect(0, 0, displayLabel->width(), displayLabel->height(),
+                     qLinearGradient);
   } else {
     float rectHeight = displayLabel->height() / colorsVector.size();
 
     for (int i = 0; i < colorsVector.size(); ++i) {
-      painter.fillRect(0, i * rectHeight, displayLabel->width(), (i + 1) * rectHeight,
-                       QBrush(colorsVector.at(i)));
+      painter.fillRect(0, i * rectHeight, displayLabel->width(),
+                       (i + 1) * rectHeight, QBrush(colorsVector.at(i)));
     }
   }
 
   painter.end();
-  displayLabel->setPixmap(pixmap.scaled(displayLabel->width(), displayLabel->height()));
+  displayLabel->setPixmap(
+      pixmap.scaled(displayLabel->width(), displayLabel->height()));
 }
 
 void ColorScaleConfigDialog::nbColorsValueChanged(int value) {
@@ -333,7 +365,8 @@ void ColorScaleConfigDialog::nbColorsValueChanged(int value) {
   displayUserGradientPreview();
 }
 
-void ColorScaleConfigDialog::colorTableItemDoubleClicked(QTableWidgetItem *item) {
+void ColorScaleConfigDialog::colorTableItemDoubleClicked(
+    QTableWidgetItem *item) {
   QColor itemBgColor = item->background().color();
   QColor newColor;
 
@@ -351,14 +384,16 @@ void ColorScaleConfigDialog::saveCurrentColorScale() {
   TulipSettings::instance().beginGroup("ColorScales");
   QStringList savedColorScalesList = TulipSettings::instance().childKeys();
   bool ok;
-  QString text = QInputDialog::getText(this, tr("Color scale saving"),
-                                       tr("Enter a name for this color scale : "),
-                                       QLineEdit::Normal, "unnamed", &ok);
+  QString text =
+      QInputDialog::getText(this, tr("Color scale saving"),
+                            tr("Enter a name for this color scale : "),
+                            QLineEdit::Normal, "unnamed", &ok);
 
   if (ok && !text.isEmpty()) {
     if (savedColorScalesList.contains(text)) {
-      QString question = "There is already a color scale saved under the name " + text +
-                         ". Do you want to overwrite it?";
+      QString question =
+          "There is already a color scale saved under the name " + text +
+          ". Do you want to overwrite it?";
 
       if (QMessageBox::question(this, "Color scale saving", question,
                                 QMessageBox::Yes | QMessageBox::No,
@@ -370,12 +405,14 @@ void ColorScaleConfigDialog::saveCurrentColorScale() {
     QList<QVariant> colorsVector;
 
     for (int i = 0; i < _ui->colorsTable->rowCount(); ++i) {
-      colorsVector.push_back(QVariant(_ui->colorsTable->item(i, 0)->background().color()));
+      colorsVector.push_back(
+          QVariant(_ui->colorsTable->item(i, 0)->background().color()));
     }
 
     TulipSettings::instance().setValue(text, colorsVector);
     QString gradientId = text + "_gradient?";
-    TulipSettings::instance().setValue(gradientId, _ui->gradientCB->isChecked());
+    TulipSettings::instance().setValue(gradientId,
+                                       _ui->gradientCB->isChecked());
   }
 
   TulipSettings::instance().endGroup();
@@ -383,12 +420,16 @@ void ColorScaleConfigDialog::saveCurrentColorScale() {
 }
 
 void ColorScaleConfigDialog::deleteSavedColorScale() {
-  if (_ui->savedColorScalesList->count() > 0 && _ui->savedColorScalesList->currentItem()) {
-    QString savedColorScaleId = _ui->savedColorScalesList->currentItem()->text();
+  if (_ui->savedColorScalesList->count() > 0 &&
+      _ui->savedColorScalesList->currentItem()) {
+    QString savedColorScaleId =
+        _ui->savedColorScalesList->currentItem()->text();
 
-    if (QMessageBox::question(
-            this, "Color scale deleting", "Delete saved color scale " + savedColorScaleId + "?",
-            QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) != QMessageBox::Yes) {
+    if (QMessageBox::question(this, "Color scale deleting",
+                              "Delete saved color scale " + savedColorScaleId +
+                                  "?",
+                              QMessageBox::Yes | QMessageBox::No,
+                              QMessageBox::Yes) != QMessageBox::Yes) {
       return;
     }
 
@@ -403,7 +444,8 @@ void ColorScaleConfigDialog::deleteSavedColorScale() {
 void ColorScaleConfigDialog::loadUserSavedColorScales() {
   _ui->savedColorScalesList->clear();
 
-  map<QString, vector<Color>>::const_iterator it = tulipImageColorScales.begin();
+  map<QString, vector<Color>>::const_iterator it =
+      tulipImageColorScales.begin();
 
   for (; it != tulipImageColorScales.end(); ++it) {
     _ui->savedColorScalesList->addItem(it->first);
@@ -432,16 +474,19 @@ void ColorScaleConfigDialog::showEvent(QShowEvent *) {
   _ui->colorsTable->setColumnWidth(0, _ui->colorsTable->width());
 }
 
-void ColorScaleConfigDialog::reeditSaveColorScale(QListWidgetItem *savedColorScaleItem) {
+void ColorScaleConfigDialog::reeditSaveColorScale(
+    QListWidgetItem *savedColorScaleItem) {
   QString savedColorScaleId = savedColorScaleItem->text();
   vector<Color> colorsList;
   bool gradient = true;
 
-  if (tulipImageColorScales.find(savedColorScaleId) != tulipImageColorScales.end()) {
+  if (tulipImageColorScales.find(savedColorScaleId) !=
+      tulipImageColorScales.end()) {
     colorsList = tulipImageColorScales[savedColorScaleId];
   } else {
     TulipSettings::instance().beginGroup("ColorScales");
-    QList<QVariant> colorsListv = TulipSettings::instance().value(savedColorScaleId).toList();
+    QList<QVariant> colorsListv =
+        TulipSettings::instance().value(savedColorScaleId).toList();
     QString gradientScaleId = savedColorScaleId + "_gradient?";
     gradient = TulipSettings::instance().value(gradientScaleId).toBool();
     TulipSettings::instance().endGroup();
@@ -449,7 +494,8 @@ void ColorScaleConfigDialog::reeditSaveColorScale(QListWidgetItem *savedColorSca
     colorsList.reserve(colorsListv.size());
     for (int i = 0; i < colorsListv.size(); ++i) {
       QColor color = colorsListv.at(i).value<QColor>();
-      colorsList.emplace_back(color.red(), color.green(), color.blue(), color.alpha());
+      colorsList.emplace_back(color.red(), color.green(), color.blue(),
+                              color.alpha());
     }
 
     reverse(colorsList.begin(), colorsList.end());
@@ -464,7 +510,8 @@ void ColorScaleConfigDialog::setColorScale(const ColorScale &colorScale) {
     for (int row = 0; row < _ui->savedColorScalesList->count(); ++row) {
       QListWidgetItem *item = _ui->savedColorScalesList->item(row);
 
-      if (tulipImageColorScales.find(item->text()) != tulipImageColorScales.end() &&
+      if (tulipImageColorScales.find(item->text()) !=
+              tulipImageColorScales.end() &&
           colorScale == tulipImageColorScales[item->text()]) {
         // colorScale is a predefined one
         // so select it in the list view
@@ -472,7 +519,8 @@ void ColorScaleConfigDialog::setColorScale(const ColorScale &colorScale) {
       }
     }
 
-    disconnect(_ui->nbColors, SIGNAL(valueChanged(int)), this, SLOT(nbColorsValueChanged(int)));
+    disconnect(_ui->nbColors, SIGNAL(valueChanged(int)), this,
+               SLOT(nbColorsValueChanged(int)));
 
     _ui->colorsTable->clear();
     _ui->colorsTable->setRowCount(0);
@@ -496,8 +544,8 @@ void ColorScaleConfigDialog::setColorScale(const ColorScale &colorScale) {
     for (auto it = colorMap.begin(); it != colorMap.end();) {
       QTableWidgetItem *item = new QTableWidgetItem();
       item->setFlags(Qt::ItemIsEnabled);
-      item->setBackground(QBrush(
-          QColor(it->second.getR(), it->second.getG(), it->second.getB(), it->second.getA())));
+      item->setBackground(QBrush(QColor(it->second.getR(), it->second.getG(),
+                                        it->second.getB(), it->second.getA())));
       _ui->colorsTable->setItem(row, 0, item);
       --row;
 
@@ -509,7 +557,8 @@ void ColorScaleConfigDialog::setColorScale(const ColorScale &colorScale) {
       }
     }
 
-    connect(_ui->nbColors, SIGNAL(valueChanged(int)), this, SLOT(nbColorsValueChanged(int)));
+    connect(_ui->nbColors, SIGNAL(valueChanged(int)), this,
+            SLOT(nbColorsValueChanged(int)));
     _ui->tabWidget->setCurrentIndex(0);
     applyGlobalAlphaToColorScale();
   } else

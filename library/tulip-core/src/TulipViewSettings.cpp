@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/TulipViewSettings.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TulipViewSettings.h>
 
 namespace tlp {
 
@@ -43,9 +43,7 @@ static Size _defaultEdgeExtremityTgtSize(Size(1, 1, 0));
 static std::string _defaultFontFile;
 static int _defaultFontSize(18);
 
-TulipViewSettings &TulipViewSettings::instance() {
-  return _instance;
-}
+TulipViewSettings &TulipViewSettings::instance() { return _instance; }
 
 Color TulipViewSettings::defaultColor(ElementType elem) {
   if (elem == NODE) {
@@ -76,7 +74,8 @@ Color TulipViewSettings::defaultBorderColor(ElementType elem) {
   }
 }
 
-void TulipViewSettings::setDefaultBorderColor(ElementType elem, const Color &color) {
+void TulipViewSettings::setDefaultBorderColor(ElementType elem,
+                                              const Color &color) {
   if (elem == NODE) {
     _defaultNodeBorderColor = color;
   } else {
@@ -92,7 +91,8 @@ float TulipViewSettings::defaultBorderWidth(ElementType elem) {
   }
 }
 
-void TulipViewSettings::setdefaultBorderWidth(ElementType elem, float borderWidth) {
+void TulipViewSettings::setdefaultBorderWidth(ElementType elem,
+                                              float borderWidth) {
   if (elem == NODE) {
     _defaultNodeBorderWidth = borderWidth;
   } else {
@@ -100,9 +100,7 @@ void TulipViewSettings::setdefaultBorderWidth(ElementType elem, float borderWidt
   }
 }
 
-Color TulipViewSettings::defaultLabelColor() {
-  return _defaultLabelColor;
-}
+Color TulipViewSettings::defaultLabelColor() { return _defaultLabelColor; }
 
 void TulipViewSettings::setDefaultLabelColor(const Color &color) {
   if (color == _defaultLabelColor)
@@ -135,9 +133,7 @@ TulipViewSettings::labelmap TulipViewSettings::POSITION_LABEL_MAP = {
     {LabelPosition::Left, "Left"},
     {LabelPosition::Right, "Right"}};
 
-int TulipViewSettings::defaultLabelPosition() {
-  return _defaultLabelPosition;
-}
+int TulipViewSettings::defaultLabelPosition() { return _defaultLabelPosition; }
 
 void TulipViewSettings::setDefaultLabelPosition(int position) {
   _defaultLabelPosition = position;
@@ -229,9 +225,7 @@ void TulipViewSettings::setDefaultFontFile(const std::string &fontFile) {
   _defaultFontFile = fontFile;
 }
 
-int TulipViewSettings::defaultFontSize() {
-  return _defaultFontSize;
-}
+int TulipViewSettings::defaultFontSize() { return _defaultFontSize; }
 
 void TulipViewSettings::setDefaultFontSize(int fontSize) {
   _defaultFontSize = fontSize;

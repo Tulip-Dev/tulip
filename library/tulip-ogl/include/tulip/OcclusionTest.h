@@ -35,16 +35,15 @@ typedef Rectangle<int> RectangleInt2D;
  *
  * That class enables to store a set of non overlapping 2D AABB.
  *
- * @todo Use the Tulip quadtree to store AABB and thus speedup testRectangle function
+ * @todo Use the Tulip quadtree to store AABB and thus speedup testRectangle
+ * function
  */
 struct TLP_GL_SCOPE OcclusionTest {
   std::vector<RectangleInt2D> data;
   /**
    * Remove all 2D AABB previously added.
    */
-  void clear() {
-    data.clear();
-  }
+  void clear() { data.clear(); }
   /**
    * Add a new 2D AABB to the set of non overlapping AABB
    * if that AABB intersect with AABB already inserted,
@@ -67,7 +66,8 @@ struct TLP_GL_SCOPE OcclusionTest {
    * @return true if the AABB intersect else false.
    */
   bool testRectangle(const RectangleInt2D &rec) {
-    for (std::vector<RectangleInt2D>::const_iterator it = data.begin(); it != data.end(); ++it) {
+    for (std::vector<RectangleInt2D>::const_iterator it = data.begin();
+         it != data.end(); ++it) {
       if (rec.intersect(*it))
         return true;
     }

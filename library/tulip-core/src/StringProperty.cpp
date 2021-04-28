@@ -17,9 +17,9 @@
  *
  */
 
+#include <tulip/DoubleProperty.h>
 #include <tulip/Graph.h>
 #include <tulip/StringProperty.h>
-#include <tulip/DoubleProperty.h>
 
 using namespace std;
 using namespace tlp;
@@ -31,7 +31,8 @@ const string StringVectorProperty::propertyTypename = "vector<string>";
 class ViewLabelCalculator : public AbstractStringProperty::MetaValueCalculator {
 public:
   // set the meta node label to label of viewMetric max corresponding node
-  void computeMetaValue(AbstractStringProperty *label, node mN, Graph *sg, Graph *) override {
+  void computeMetaValue(AbstractStringProperty *label, node mN, Graph *sg,
+                        Graph *) override {
     // nothing to do if viewMetric does not exist
     if (!sg->existProperty("viewMetric"))
       return;
@@ -58,18 +59,21 @@ public:
 static ViewLabelCalculator vLabelCalc;
 
 //=================================================================================
-StringProperty::StringProperty(Graph *g, const std::string &n) : AbstractStringProperty(g, n) {
+StringProperty::StringProperty(Graph *g, const std::string &n)
+    : AbstractStringProperty(g, n) {
   if (n == "viewLabel") {
     setMetaValueCalculator(&vLabelCalc);
   }
 }
 //=================================================================================
-PropertyInterface *StringProperty::clonePrototype(Graph *g, const std::string &n) const {
+PropertyInterface *StringProperty::clonePrototype(Graph *g,
+                                                  const std::string &n) const {
   if (!g)
     return nullptr;
 
   // allow to get an unregistered property (empty name)
-  StringProperty *p = n.empty() ? new StringProperty(g) : g->getLocalProperty<StringProperty>(n);
+  StringProperty *p = n.empty() ? new StringProperty(g)
+                                : g->getLocalProperty<StringProperty>(n);
   p->setAllNodeValue(getNodeDefaultValue());
   p->setAllEdgeValue(getEdgeDefaultValue());
   return p;
@@ -83,13 +87,15 @@ int StringProperty::compare(const edge e1, const edge e2) const {
   return getEdgeValue(e1).compare(getEdgeValue(e2));
 }
 //=================================================================================
-PropertyInterface *StringVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
+PropertyInterface *
+StringVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
     return nullptr;
 
   // allow to get an unregistered property (empty name)
-  StringVectorProperty *p =
-      n.empty() ? new StringVectorProperty(g) : g->getLocalProperty<StringVectorProperty>(n);
+  StringVectorProperty *p = n.empty()
+                                ? new StringVectorProperty(g)
+                                : g->getLocalProperty<StringVectorProperty>(n);
   p->setAllNodeValue(getNodeDefaultValue());
   p->setAllEdgeValue(getEdgeDefaultValue());
   return p;

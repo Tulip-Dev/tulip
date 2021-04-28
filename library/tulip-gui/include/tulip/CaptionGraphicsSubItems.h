@@ -79,7 +79,8 @@ class MovableRectItem : public QObject, public QGraphicsRectItem {
   Q_OBJECT
 
 public:
-  MovableRectItem(const QRectF &rect, const QRectF &size, SelectionArrowItem *topCircle,
+  MovableRectItem(const QRectF &rect, const QRectF &size,
+                  SelectionArrowItem *topCircle,
                   SelectionArrowItem *bottomCircle);
 
   void setInternalRect(const QRectF &rect);
@@ -104,11 +105,13 @@ class MovablePathItem : public QObject, public QGraphicsPathItem {
 
 public:
   MovablePathItem(const QRectF &rect, QGraphicsPathItem *topPathItem,
-                  QGraphicsPathItem *bottomPathItem, SelectionArrowItem *topCircle,
+                  QGraphicsPathItem *bottomPathItem,
+                  SelectionArrowItem *topCircle,
                   SelectionArrowItem *bottomCircle);
 
-  void setDataToPath(const std::vector<std::pair<double, float>> &metricToSizeFilteredList,
-                     double minMetric, double maxMetric);
+  void setDataToPath(
+      const std::vector<std::pair<double, float>> &metricToSizeFilteredList,
+      double minMetric, double maxMetric);
 
   void setRect(const QRectF &rect);
 
@@ -140,11 +143,14 @@ class CaptionGraphicsBackgroundItem : public QObject, public QGraphicsRectItem {
 public:
   CaptionGraphicsBackgroundItem(const QRect &rect);
 
-  void generateColorCaption(const QGradient &activeGradient, const QGradient &hideGradient,
-                            const std::string &propertyName, double minValue, double maxValue);
+  void generateColorCaption(const QGradient &activeGradient,
+                            const QGradient &hideGradient,
+                            const std::string &propertyName, double minValue,
+                            double maxValue);
 
-  void generateSizeCaption(const std::vector<std::pair<double, float>> &metricToSizeFilteredList,
-                           const std::string &propertyName, double minValue, double maxValue);
+  void generateSizeCaption(
+      const std::vector<std::pair<double, float>> &metricToSizeFilteredList,
+      const std::string &propertyName, double minValue, double maxValue);
 
 public slots:
 

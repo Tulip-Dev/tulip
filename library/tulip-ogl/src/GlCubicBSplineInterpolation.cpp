@@ -22,13 +22,12 @@ using namespace std;
 
 namespace tlp {
 
-GlCubicBSplineInterpolation::GlCubicBSplineInterpolation(const vector<Coord> &pointsToInterpolate,
-                                                         const Color &startColor,
-                                                         const Color &endColor,
-                                                         const float startSize, const float endSize,
-                                                         const unsigned int nbCurvePoints)
-    : GlOpenUniformCubicBSpline(vector<Coord>(), startColor, endColor, startSize, endSize,
-                                nbCurvePoints) {
+GlCubicBSplineInterpolation::GlCubicBSplineInterpolation(
+    const vector<Coord> &pointsToInterpolate, const Color &startColor,
+    const Color &endColor, const float startSize, const float endSize,
+    const unsigned int nbCurvePoints)
+    : GlOpenUniformCubicBSpline(vector<Coord>(), startColor, endColor,
+                                startSize, endSize, nbCurvePoints) {
   constructInterpolatingCubicBSpline(pointsToInterpolate);
   for (size_t i = 0; i < controlPoints.size(); ++i) {
     boundingBox.expand(controlPoints[i]);
@@ -41,15 +40,18 @@ void GlCubicBSplineInterpolation::constructInterpolatingCubicBSpline(
   vector<float> Bi(pointsToInterpolate.size());
   vector<Coord> di(pointsToInterpolate.size());
   di[0] = (pointsToInterpolate[1] - pointsToInterpolate[0]) / 3.0f;
-  di[pointsToInterpolate.size() - 1] = (pointsToInterpolate[pointsToInterpolate.size() - 1] -
-                                        pointsToInterpolate[pointsToInterpolate.size() - 2]) /
-                                       3.0f;
+  di[pointsToInterpolate.size() - 1] =
+      (pointsToInterpolate[pointsToInterpolate.size() - 1] -
+       pointsToInterpolate[pointsToInterpolate.size() - 2]) /
+      3.0f;
   Bi[1] = -0.25f;
   Ai[1] = (pointsToInterpolate[2] - pointsToInterpolate[0] - di[0]) / 4.0f;
 
   for (size_t i = 2; i < pointsToInterpolate.size() - 1; ++i) {
     Bi[i] = -1.0f / (4.0f + Bi[i - 1]);
-    Ai[i] = Coord(-(pointsToInterpolate[i + 1] - pointsToInterpolate[i - 1] - Ai[i - 1]) * Bi[i]);
+    Ai[i] = Coord(
+        -(pointsToInterpolate[i + 1] - pointsToInterpolate[i - 1] - Ai[i - 1]) *
+        Bi[i]);
   }
 
   for (size_t i = pointsToInterpolate.size() - 2; i > 0; --i) {
@@ -66,8 +68,10 @@ void GlCubicBSplineInterpolation::constructInterpolatingCubicBSpline(
     controlPoints.emplace_back(pointsToInterpolate[i] + di[i]);
   }
 
-  controlPoints.emplace_back(pointsToInterpolate[pointsToInterpolate.size() - 1] -
-                             di[pointsToInterpolate.size() - 1]);
-  controlPoints.emplace_back(pointsToInterpolate[pointsToInterpolate.size() - 1]);
+  controlPoints.emplace_back(
+      pointsToInterpolate[pointsToInterpolate.size() - 1] -
+      di[pointsToInterpolate.size() - 1]);
+  controlPoints.emplace_back(
+      pointsToInterpolate[pointsToInterpolate.size() - 1]);
 }
 } // namespace tlp

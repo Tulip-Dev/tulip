@@ -20,7 +20,8 @@
 
 using namespace tlp;
 
-GLInteractorComposite::GLInteractorComposite(const QIcon &icon, const QString &text)
+GLInteractorComposite::GLInteractorComposite(const QIcon &icon,
+                                             const QString &text)
     : InteractorComposite(icon, text) {}
 
 void GLInteractorComposite::draw(tlp::GlMainWidget *w) {

@@ -19,26 +19,29 @@
 
 #include "tulip/SceneConfigWidget.h"
 
+#include <QApplication>
 #include <QDebug>
 #include <QMainWindow>
-#include <QApplication>
 
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/GraphPropertiesModel.h>
 #include <tulip/Perspective.h>
 #include <tulip/TulipSettings.h>
-#include <tulip/GraphPropertiesModel.h>
 
 #include "ui_SceneConfigWidget.h"
 
 using namespace tlp;
 
 SceneConfigWidget::SceneConfigWidget(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::SceneConfigWidget), _glMainWidget(nullptr), _resetting(false) {
+    : QWidget(parent), _ui(new Ui::SceneConfigWidget), _glMainWidget(nullptr),
+      _resetting(false) {
   _ui->setupUi(this);
 
-  connect(_ui->dynamicFontSizeRB, SIGNAL(toggled(bool)), this, SLOT(dynamicFontRBToggled(bool)));
-  _ui->selectionColorButton->setDialogTitle("Choose the color of selected nodes or edges");
+  connect(_ui->dynamicFontSizeRB, SIGNAL(toggled(bool)), this,
+          SLOT(dynamicFontRBToggled(bool)));
+  _ui->selectionColorButton->setDialogTitle(
+      "Choose the color of selected nodes or edges");
   _ui->backgroundColorButton->setDialogTitle("Choose the background color");
   _ui->labelsDisabledLabel->installEventFilter(this);
   _ui->labelsNoOverlapLabel->installEventFilter(this);
@@ -52,8 +55,10 @@ SceneConfigWidget::~SceneConfigWidget() {
 
 void SceneConfigWidget::setGlMainWidget(tlp::GlMainWidget *glMainWidget) {
   if (_glMainWidget != nullptr) {
-    disconnect(_glMainWidget, SIGNAL(graphChanged()), this, SLOT(resetChanges()));
-    disconnect(_glMainWidget, SIGNAL(viewDrawn(GlMainWidget *, bool)), this, SLOT(resetChanges()));
+    disconnect(_glMainWidget, SIGNAL(graphChanged()), this,
+               SLOT(resetChanges()));
+    disconnect(_glMainWidget, SIGNAL(viewDrawn(GlMainWidget *, bool)), this,
+               SLOT(resetChanges()));
   }
 
   _glMainWidget = glMainWidget;
@@ -63,7 +68,8 @@ void SceneConfigWidget::setGlMainWidget(tlp::GlMainWidget *glMainWidget) {
     // we assume that if an outside action causes an update of one
     // of the rendering parameters managed in this widget, necessarily
     // a call to _glMainWidget->draw will follow
-    connect(_glMainWidget, SIGNAL(viewDrawn(GlMainWidget *, bool)), this, SLOT(resetChanges()));
+    connect(_glMainWidget, SIGNAL(viewDrawn(GlMainWidget *, bool)), this,
+            SLOT(resetChanges()));
   }
 
   resetChanges();
@@ -74,13 +80,16 @@ void SceneConfigWidget::resetChanges() {
 
   _ui->scrollArea->setEnabled(_glMainWidget != nullptr);
 
-  if (_glMainWidget == nullptr || _glMainWidget->getScene()->getGlGraphComposite() == nullptr ||
+  if (_glMainWidget == nullptr ||
+      _glMainWidget->getScene()->getGlGraphComposite() == nullptr ||
       _glMainWidget->getScene()->getGlGraphComposite()->getGraph() == nullptr)
     return;
 
   Graph *graph = _glMainWidget->getScene()->getGlGraphComposite()->getGraph();
   GlGraphRenderingParameters *renderingParameters =
-      _glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer();
+      _glMainWidget->getScene()
+          ->getGlGraphComposite()
+          ->getRenderingParametersPointer();
 
   // NODES
   delete _ui->labelsOrderingCombo->model();
@@ -94,26 +103,35 @@ void SceneConfigWidget::resetChanges() {
     _ui->labelsOrderingCombo->setCurrentIndex(
         model->rowOf(renderingParameters->getElementOrderingProperty()));
 
-  _ui->descendingCB->setChecked(renderingParameters->isElementOrderedDescending());
+  _ui->descendingCB->setChecked(
+      renderingParameters->isElementOrderedDescending());
 
   _ui->labelsFitCheck->setChecked(renderingParameters->isLabelScaled());
-  _ui->labelsBillboardedCheck->setChecked(renderingParameters->getLabelsAreBillboarded());
+  _ui->labelsBillboardedCheck->setChecked(
+      renderingParameters->getLabelsAreBillboarded());
   _ui->fixedFontSizeRB->setChecked(renderingParameters->isLabelFixedFontSize());
-  _ui->dynamicFontSizeRB->setChecked(!renderingParameters->isLabelFixedFontSize());
+  _ui->dynamicFontSizeRB->setChecked(
+      !renderingParameters->isLabelFixedFontSize());
   _ui->labelsDensitySlider->setValue(renderingParameters->getLabelsDensity());
-  _ui->labelSizesRangeSlider->setLowerValue(renderingParameters->getMinSizeOfLabel());
-  _ui->labelSizesRangeSlider->setUpperValue(renderingParameters->getMaxSizeOfLabel());
+  _ui->labelSizesRangeSlider->setLowerValue(
+      renderingParameters->getMinSizeOfLabel());
+  _ui->labelSizesRangeSlider->setUpperValue(
+      renderingParameters->getMaxSizeOfLabel());
 
   // EDGES
   _ui->edges3DCheck->setChecked(renderingParameters->isEdge3D());
   _ui->edgesArrowCheck->setChecked(renderingParameters->isViewArrow());
-  _ui->edgesColorInterpolationCheck->setChecked(renderingParameters->isEdgeColorInterpolate());
-  _ui->edgesSizeInterpolationCheck->setChecked(renderingParameters->isEdgeSizeInterpolate());
+  _ui->edgesColorInterpolationCheck->setChecked(
+      renderingParameters->isEdgeColorInterpolate());
+  _ui->edgesSizeInterpolationCheck->setChecked(
+      renderingParameters->isEdgeSizeInterpolate());
   _ui->edgesFrontCheck->setChecked(renderingParameters->isEdgeFrontDisplay());
 
   // COLORS
-  _ui->backgroundColorButton->setTulipColor(_glMainWidget->getScene()->getBackgroundColor());
-  _ui->selectionColorButton->setTulipColor(renderingParameters->getSelectionColor());
+  _ui->backgroundColorButton->setTulipColor(
+      _glMainWidget->getScene()->getBackgroundColor());
+  _ui->selectionColorButton->setTulipColor(
+      renderingParameters->getSelectionColor());
 
   // PROJECTION
   if (_glMainWidget->getScene()->isViewOrtho())
@@ -155,45 +173,58 @@ void SceneConfigWidget::applySettings() {
     return;
 
   GlGraphRenderingParameters *renderingParameters =
-      _glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer();
+      _glMainWidget->getScene()
+          ->getGlGraphComposite()
+          ->getRenderingParametersPointer();
 
   // NODES
   if (_ui->labelsOrderingCombo->currentIndex() == 0)
     renderingParameters->setElementOrderingProperty(nullptr);
   else {
     GraphPropertiesModel<NumericProperty> *model =
-        static_cast<GraphPropertiesModel<NumericProperty> *>(_ui->labelsOrderingCombo->model());
+        static_cast<GraphPropertiesModel<NumericProperty> *>(
+            _ui->labelsOrderingCombo->model());
     renderingParameters->setElementOrderingProperty(
-        dynamic_cast<NumericProperty *>(model->index(_ui->labelsOrderingCombo->currentIndex(), 0)
-                                            .data(TulipModel::PropertyRole)
-                                            .value<PropertyInterface *>()));
+        dynamic_cast<NumericProperty *>(
+            model->index(_ui->labelsOrderingCombo->currentIndex(), 0)
+                .data(TulipModel::PropertyRole)
+                .value<PropertyInterface *>()));
   }
 
-  renderingParameters->setElementOrderedDescending(_ui->descendingCB->isChecked());
+  renderingParameters->setElementOrderedDescending(
+      _ui->descendingCB->isChecked());
 
   renderingParameters->setLabelScaled(_ui->labelsFitCheck->isChecked());
-  renderingParameters->setLabelsAreBillboarded(_ui->labelsBillboardedCheck->isChecked());
+  renderingParameters->setLabelsAreBillboarded(
+      _ui->labelsBillboardedCheck->isChecked());
   renderingParameters->setLabelFixedFontSize(_ui->fixedFontSizeRB->isChecked());
   renderingParameters->setLabelsDensity(_ui->labelsDensitySlider->value());
-  renderingParameters->setMinSizeOfLabel(_ui->labelSizesRangeSlider->lowerValue());
-  renderingParameters->setMaxSizeOfLabel(_ui->labelSizesRangeSlider->upperValue());
+  renderingParameters->setMinSizeOfLabel(
+      _ui->labelSizesRangeSlider->lowerValue());
+  renderingParameters->setMaxSizeOfLabel(
+      _ui->labelSizesRangeSlider->upperValue());
 
   // EDGES
   renderingParameters->setEdge3D(_ui->edges3DCheck->isChecked());
   renderingParameters->setViewArrow(_ui->edgesArrowCheck->isChecked());
-  renderingParameters->setEdgeColorInterpolate(_ui->edgesColorInterpolationCheck->isChecked());
-  renderingParameters->setEdgeSizeInterpolate(_ui->edgesSizeInterpolationCheck->isChecked());
+  renderingParameters->setEdgeColorInterpolate(
+      _ui->edgesColorInterpolationCheck->isChecked());
+  renderingParameters->setEdgeSizeInterpolate(
+      _ui->edgesSizeInterpolationCheck->isChecked());
   renderingParameters->setEdgeFrontDisplay(_ui->edgesFrontCheck->isChecked());
 
   // COLORS
-  renderingParameters->setSelectionColor(_ui->selectionColorButton->tulipColor());
-  _glMainWidget->getScene()->setBackgroundColor(_ui->backgroundColorButton->tulipColor());
+  renderingParameters->setSelectionColor(
+      _ui->selectionColorButton->tulipColor());
+  _glMainWidget->getScene()->setBackgroundColor(
+      _ui->backgroundColorButton->tulipColor());
 
   // PROJECTION
   _glMainWidget->getScene()->setViewOrtho(_ui->orthoRadioButton->isChecked());
 
   // GRAPH CHANGINS
-  _glMainWidget->setKeepScenePointOfViewOnSubgraphChanging(_ui->keepSceneRadioButton->isChecked());
+  _glMainWidget->setKeepScenePointOfViewOnSubgraphChanging(
+      _ui->keepSceneRadioButton->isChecked());
 
   _glMainWidget->draw();
   emit settingsApplied();

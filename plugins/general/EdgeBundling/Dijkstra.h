@@ -20,16 +20,16 @@
 #ifndef DIJKSTRA_H
 #define DIJKSTRA_H
 
-#include <vector>
-#include <set>
 #include <climits>
+#include <set>
 #include <tulip/Graph.h>
-#include <tulip/MutableContainer.h>
-#include <tulip/Vector.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/StaticProperty.h>
-#include <tulip/vectorgraph.h>
+#include <tulip/MutableContainer.h>
 #include <tulip/ParallelTools.h>
+#include <tulip/StaticProperty.h>
+#include <tulip/Vector.h>
+#include <tulip/vectorgraph.h>
+#include <vector>
 
 // we need a lock to protect the allocation/free
 // of needed VectorGraph properties
@@ -84,7 +84,8 @@ public:
 
     for (auto e : src->edges()) {
       auto eEnds = src->ends(e);
-      tlp::edge tmp = graph.addEdge(ntlp2dik.get(eEnds.first), ntlp2dik.get(eEnds.second));
+      tlp::edge tmp =
+          graph.addEdge(ntlp2dik.get(eEnds.first), ntlp2dik.get(eEnds.second));
       etlp2dik.set(e, tmp);
       edik2tlp[tmp] = e;
     }
@@ -100,16 +101,13 @@ public:
   //=============================================================
 private:
   struct DijkstraElement {
-    DijkstraElement(const double dist = DBL_MAX, const tlp::node previous = tlp::node(),
+    DijkstraElement(const double dist = DBL_MAX,
+                    const tlp::node previous = tlp::node(),
                     const tlp::node n = tlp::node())
         : dist(dist), previous(previous), n(n) {}
     //=========================================================
-    bool operator==(const DijkstraElement &b) const {
-      return n == b.n;
-    }
-    bool operator!=(const DijkstraElement &b) const {
-      return n != b.n;
-    }
+    bool operator==(const DijkstraElement &b) const { return n == b.n; }
+    bool operator!=(const DijkstraElement &b) const { return n != b.n; }
     double dist;
     tlp::node previous;
     tlp::node n;
@@ -117,7 +115,8 @@ private:
   };
 
   struct LessDijkstraElement {
-    bool operator()(const DijkstraElement *const a, const DijkstraElement *const b) const {
+    bool operator()(const DijkstraElement *const a,
+                    const DijkstraElement *const b) const {
       if (fabs(a->dist - b->dist) > 1.E-9) {
         return (a->dist < b->dist);
       } else {

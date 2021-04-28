@@ -17,9 +17,9 @@
  *
  */
 
-#include <tulip/GlSceneZoomAndPan.h>
-#include <tulip/GlScene.h>
 #include <tulip/Camera.h>
+#include <tulip/GlScene.h>
+#include <tulip/GlSceneZoomAndPan.h>
 
 #include <algorithm>
 
@@ -27,18 +27,21 @@ using namespace std;
 
 namespace tlp {
 
-GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundingBox,
-                                     const std::string &layerName, const int nbAnimationSteps,
+GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene,
+                                     const BoundingBox &boundingBox,
+                                     const std::string &layerName,
+                                     const int nbAnimationSteps,
                                      const bool optimalPath, const double p)
-    : camera(glScene->getLayer(layerName)->getCamera()), viewport(glScene->getViewport()),
-      nbAnimationSteps(nbAnimationSteps), optimalPath(optimalPath), p(p),
-      camCenterStart(camera.getCenter()), camCenterEnd(Coord(boundingBox.center())),
-      additionalAnimation(nullptr) {
+    : camera(glScene->getLayer(layerName)->getCamera()),
+      viewport(glScene->getViewport()), nbAnimationSteps(nbAnimationSteps),
+      optimalPath(optimalPath), p(p), camCenterStart(camera.getCenter()),
+      camCenterEnd(Coord(boundingBox.center())), additionalAnimation(nullptr) {
 
   camCenterEnd[2] = camCenterStart[2];
 
   Coord &&blScene = camera.viewportTo3DWorld(Coord(0, 0, 0));
-  Coord &&trScene = camera.viewportTo3DWorld(Coord(viewport[2], viewport[3], 0));
+  Coord &&trScene =
+      camera.viewportTo3DWorld(Coord(viewport[2], viewport[3], 0));
 
   BoundingBox sceneBB(blScene, trScene, true);
 
@@ -63,8 +66,10 @@ GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundi
 
   if (optimalPath) {
     if (u0 != u1) {
-      b0 = (w1 * w1 - w0 * w0 + p * p * p * p * u1 * u1) / (2 * w0 * p * p * u1);
-      b1 = (w1 * w1 - w0 * w0 - p * p * p * p * u1 * u1) / (2 * w1 * p * p * u1);
+      b0 =
+          (w1 * w1 - w0 * w0 + p * p * p * p * u1 * u1) / (2 * w0 * p * p * u1);
+      b1 =
+          (w1 * w1 - w0 * w0 - p * p * p * p * u1 * u1) / (2 * w1 * p * p * u1);
       r0 = log(-b0 + sqrt(b0 * b0 + 1));
       r1 = log(-b1 + sqrt(b1 * b1 + 1));
 
@@ -103,7 +108,8 @@ void GlSceneZoomAndPan::zoomAndPanAnimationStep(int animationStep) {
 
     if (optimalPath) {
       if (u0 != u1) {
-        u = w0 / (p * p) * cosh(r0) * tanh(p * s + r0) - w0 / (p * p) * sinh(r0) + u0;
+        u = w0 / (p * p) * cosh(r0) * tanh(p * s + r0) -
+            w0 / (p * p) * sinh(r0) + u0;
         w = w0 * cosh(r0) / cosh(p * s + r0);
         f = u / u1;
       } else {
@@ -130,16 +136,20 @@ void GlSceneZoomAndPan::zoomAndPanAnimationStep(int animationStep) {
       }
     }
 
-    camera.setCenter(camCenterStart + (camCenterEnd - camCenterStart) * float(f));
+    camera.setCenter(camCenterStart +
+                     (camCenterEnd - camCenterStart) * float(f));
     camera.setEyes(Coord(0, 0, camera.getSceneRadius()));
     camera.setEyes(camera.getEyes() + camera.getCenter());
     camera.setUp(Coord(0, 1., 0));
 
-    Coord &&bbViewportFirst = camera.worldTo2DViewport(camera.getCenter() - Coord(w / 2, w / 2, 0));
+    Coord &&bbViewportFirst =
+        camera.worldTo2DViewport(camera.getCenter() - Coord(w / 2, w / 2, 0));
     Coord &&bbViewportSecond =
         camera.worldTo2DViewport(camera.getCenter() + Coord(w / 2, w / 2, 0));
-    float bbWidthViewport = abs(bbViewportSecond.getX() - bbViewportFirst.getX());
-    float bbHeightViewport = abs(bbViewportSecond.getY() - bbViewportFirst.getY());
+    float bbWidthViewport =
+        abs(bbViewportSecond.getX() - bbViewportFirst.getX());
+    float bbHeightViewport =
+        abs(bbViewportSecond.getY() - bbViewportFirst.getY());
     double newZoomFactor = 0.0;
 
     float aspectRatio = viewport[2] / float(viewport[3]);

@@ -31,9 +31,7 @@ FishEyeConfigWidget::FishEyeConfigWidget(QWidget *parent)
   _ui->setupUi(this);
 }
 
-FishEyeConfigWidget::~FishEyeConfigWidget() {
-  delete _ui;
-}
+FishEyeConfigWidget::~FishEyeConfigWidget() { delete _ui; }
 
 int FishEyeConfigWidget::getFishEyeType() const {
   if (_ui->furnasFisheyeRb->isChecked()) {

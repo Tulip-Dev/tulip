@@ -18,9 +18,9 @@
  */
 #include "Kruskal.h"
 
-#include <tulip/GraphTools.h>
 #include <tulip/ConnectedTest.h>
 #include <tulip/DoubleProperty.h>
+#include <tulip/GraphTools.h>
 
 PLUGIN(Kruskal)
 
@@ -31,9 +31,11 @@ static const char *paramHelp[] = {
     // edge weight
     "Metric containing the edge weights."};
 //======================================================
-Kruskal::Kruskal(const tlp::PluginContext *context) : BooleanAlgorithm(context) {
+Kruskal::Kruskal(const tlp::PluginContext *context)
+    : BooleanAlgorithm(context) {
   addInParameter<NumericProperty *>("edge weight", paramHelp[0], "viewMetric");
-  addOutParameter<unsigned int>("#edges selected", "The number of newly selected edges");
+  addOutParameter<unsigned int>("#edges selected",
+                                "The number of newly selected edges");
 }
 
 //======================================================

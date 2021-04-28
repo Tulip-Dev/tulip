@@ -21,13 +21,13 @@
 #ifndef TULIPITEMEDITORCREATORS_H
 #define TULIPITEMEDITORCREATORS_H
 
-#include <tulip/tulipconf.h>
 #include <tulip/PropertyTypes.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/tulipconf.h>
 
-#include <QVariant>
 #include <QSize>
+#include <QVariant>
 
 class QWidget;
 class QPainter;
@@ -44,11 +44,10 @@ public:
   virtual QWidget *createWidget(QWidget *) const = 0;
   virtual bool paint(QPainter *, const QStyleOptionViewItem &, const QVariant &,
                      const QModelIndex &) const;
-  virtual QString displayText(const QVariant &) const {
-    return "";
-  }
+  virtual QString displayText(const QVariant &) const { return ""; }
 
-  virtual QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
+  virtual QSize sizeHint(const QStyleOptionViewItem &,
+                         const QModelIndex &) const;
 
   virtual void setEditorData(QWidget *, const QVariant &, bool isMandatory,
                              tlp::Graph *g = nullptr) = 0;
@@ -95,7 +94,8 @@ public:
   QWidget *createWidget(QWidget *) const override;
   void setEditorData(QWidget *, const QVariant &, bool, tlp::Graph *) override;
   QVariant editorData(QWidget *, tlp::Graph *) override;
-  QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const override;
+  QSize sizeHint(const QStyleOptionViewItem &,
+                 const QModelIndex &) const override;
   bool paint(QPainter *, const QStyleOptionViewItem &, const QVariant &,
              const QModelIndex &) const override;
 };
@@ -108,7 +108,8 @@ public:
   QString displayText(const QVariant &) const override;
 };
 
-class TLP_QT_SCOPE CoordEditorCreator : public StringDisplayEditorCreator<tlp::PointType> {
+class TLP_QT_SCOPE CoordEditorCreator
+    : public StringDisplayEditorCreator<tlp::PointType> {
   bool editSize;
 
 public:
@@ -128,7 +129,8 @@ public:
   QString displayText(const QVariant &) const override;
 };
 
-class TLP_QT_SCOPE PropertyInterfaceEditorCreator : public tlp::TulipItemEditorCreator {
+class TLP_QT_SCOPE PropertyInterfaceEditorCreator
+    : public tlp::TulipItemEditorCreator {
 public:
   QWidget *createWidget(QWidget *) const override;
   void setEditorData(QWidget *, const QVariant &, bool, tlp::Graph *) override;
@@ -136,7 +138,8 @@ public:
   QString displayText(const QVariant &) const override;
 };
 
-class TLP_QT_SCOPE NumericPropertyEditorCreator : public tlp::TulipItemEditorCreator {
+class TLP_QT_SCOPE NumericPropertyEditorCreator
+    : public tlp::TulipItemEditorCreator {
 public:
   QWidget *createWidget(QWidget *) const override;
   void setEditorData(QWidget *, const QVariant &, bool, tlp::Graph *) override;
@@ -144,7 +147,8 @@ public:
   QString displayText(const QVariant &) const override;
 };
 
-class TLP_QT_SCOPE ColorScaleEditorCreator : public tlp::TulipItemEditorCreator {
+class TLP_QT_SCOPE ColorScaleEditorCreator
+    : public tlp::TulipItemEditorCreator {
 public:
   QWidget *createWidget(QWidget *) const override;
   bool paint(QPainter *, const QStyleOptionViewItem &, const QVariant &,
@@ -153,7 +157,8 @@ public:
   QVariant editorData(QWidget *, tlp::Graph *) override;
 };
 
-class TLP_QT_SCOPE StringCollectionEditorCreator : public tlp::TulipItemEditorCreator {
+class TLP_QT_SCOPE StringCollectionEditorCreator
+    : public tlp::TulipItemEditorCreator {
 public:
   QWidget *createWidget(QWidget *) const override;
   void setEditorData(QWidget *, const QVariant &, bool, tlp::Graph *) override;
@@ -161,7 +166,8 @@ public:
   QString displayText(const QVariant &) const override;
 };
 
-class TLP_QT_SCOPE PropertiesCollectionEditorCreator : public tlp::TulipItemEditorCreator {
+class TLP_QT_SCOPE PropertiesCollectionEditorCreator
+    : public tlp::TulipItemEditorCreator {
 public:
   QWidget *createWidget(QWidget *) const override;
   void setEditorData(QWidget *, const QVariant &, bool, tlp::Graph *) override;
@@ -169,24 +175,28 @@ public:
   QString displayText(const QVariant &) const override;
 };
 
-class TLP_QT_SCOPE TulipFileDescriptorEditorCreator : public tlp::TulipItemEditorCreator {
+class TLP_QT_SCOPE TulipFileDescriptorEditorCreator
+    : public tlp::TulipItemEditorCreator {
 public:
   QWidget *createWidget(QWidget *) const override;
   void setEditorData(QWidget *, const QVariant &, bool, tlp::Graph *) override;
   QVariant editorData(QWidget *, tlp::Graph *) override;
   bool paint(QPainter *, const QStyleOptionViewItem &, const QVariant &,
              const QModelIndex &) const override;
-  QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const override;
+  QSize sizeHint(const QStyleOptionViewItem &,
+                 const QModelIndex &) const override;
 };
 
-class TLP_QT_SCOPE TextureFileEditorCreator : public tlp::TulipItemEditorCreator {
+class TLP_QT_SCOPE TextureFileEditorCreator
+    : public tlp::TulipItemEditorCreator {
 public:
   QWidget *createWidget(QWidget *) const override;
   void setEditorData(QWidget *, const QVariant &, bool, tlp::Graph *) override;
   QVariant editorData(QWidget *, tlp::Graph *) override;
   bool paint(QPainter *, const QStyleOptionViewItem &, const QVariant &,
              const QModelIndex &index) const override;
-  QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const override;
+  QSize sizeHint(const QStyleOptionViewItem &,
+                 const QModelIndex &) const override;
 };
 
 class TLP_QT_SCOPE TulipFontIconCreator : public tlp::TulipItemEditorCreator {
@@ -196,7 +206,8 @@ public:
   QVariant editorData(QWidget *, tlp::Graph *) override;
   bool paint(QPainter *, const QStyleOptionViewItem &, const QVariant &,
              const QModelIndex &) const override;
-  QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const override;
+  QSize sizeHint(const QStyleOptionViewItem &,
+                 const QModelIndex &) const override;
   QString displayText(const QVariant &) const override;
 };
 
@@ -208,10 +219,12 @@ public:
   QString displayText(const QVariant &) const override;
   bool paint(QPainter *, const QStyleOptionViewItem &, const QVariant &,
              const QModelIndex &index) const override;
-  QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const override;
+  QSize sizeHint(const QStyleOptionViewItem &,
+                 const QModelIndex &) const override;
 };
 
-class TLP_QT_SCOPE EdgeExtremityShapeEditorCreator : public tlp::TulipItemEditorCreator {
+class TLP_QT_SCOPE EdgeExtremityShapeEditorCreator
+    : public tlp::TulipItemEditorCreator {
 public:
   QWidget *createWidget(QWidget *) const override;
   void setEditorData(QWidget *, const QVariant &, bool, tlp::Graph *) override;
@@ -219,7 +232,8 @@ public:
   QString displayText(const QVariant &) const override;
   bool paint(QPainter *, const QStyleOptionViewItem &, const QVariant &,
              const QModelIndex &index) const override;
-  QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const override;
+  QSize sizeHint(const QStyleOptionViewItem &,
+                 const QModelIndex &) const override;
 };
 
 class TLP_QT_SCOPE EdgeShapeEditorCreator : public tlp::TulipItemEditorCreator {
@@ -234,7 +248,8 @@ template <typename ElementType>
 class VectorEditorCreator : public tlp::TulipItemEditorCreator {
 public:
   QWidget *createWidget(QWidget *parent) const override;
-  void setEditorData(QWidget *editor, const QVariant &data, bool, tlp::Graph *) override;
+  void setEditorData(QWidget *editor, const QVariant &data, bool,
+                     tlp::Graph *) override;
   QVariant editorData(QWidget *editor, tlp::Graph *) override;
   QString displayText(const QVariant &data) const override;
 };
@@ -242,23 +257,27 @@ public:
 class QVectorBoolEditorCreator : public tlp::TulipItemEditorCreator {
 public:
   QWidget *createWidget(QWidget *parent) const override;
-  void setEditorData(QWidget *editor, const QVariant &data, bool, tlp::Graph *) override;
+  void setEditorData(QWidget *editor, const QVariant &data, bool,
+                     tlp::Graph *) override;
   QVariant editorData(QWidget *editor, tlp::Graph *) override;
   QString displayText(const QVariant &data) const override;
 };
 
-struct TLP_QT_SCOPE TulipFontEditorCreator : public tlp::TulipItemEditorCreator {
+struct TLP_QT_SCOPE TulipFontEditorCreator
+    : public tlp::TulipItemEditorCreator {
   QWidget *createWidget(QWidget *) const override;
   void setEditorData(QWidget *, const QVariant &, bool, tlp::Graph *) override;
   QVariant editorData(QWidget *, tlp::Graph *) override;
   QString displayText(const QVariant &) const override;
 };
 
-class TLP_QT_SCOPE TulipLabelPositionEditorCreator : public tlp::TulipItemEditorCreator {
+class TLP_QT_SCOPE TulipLabelPositionEditorCreator
+    : public tlp::TulipItemEditorCreator {
 
 public:
   QWidget *createWidget(QWidget *) const override;
-  void setEditorData(QWidget *w, const QVariant &var, bool, tlp::Graph *) override;
+  void setEditorData(QWidget *w, const QVariant &var, bool,
+                     tlp::Graph *) override;
   QVariant editorData(QWidget *, tlp::Graph *) override;
   QString displayText(const QVariant &) const override;
 };
@@ -266,7 +285,8 @@ public:
 class TLP_QT_SCOPE GraphEditorCreator : public tlp::TulipItemEditorCreator {
 public:
   QWidget *createWidget(QWidget *parent) const override;
-  void setEditorData(QWidget *w, const QVariant &var, bool, tlp::Graph *) override;
+  void setEditorData(QWidget *w, const QVariant &var, bool,
+                     tlp::Graph *) override;
   QVariant editorData(QWidget *, tlp::Graph *) override;
   QString displayText(const QVariant &) const override;
 };
@@ -274,7 +294,8 @@ public:
 class TLP_QT_SCOPE EdgeSetEditorCreator : public tlp::TulipItemEditorCreator {
 public:
   QWidget *createWidget(QWidget *parent) const override;
-  void setEditorData(QWidget *w, const QVariant &var, bool, tlp::Graph *) override;
+  void setEditorData(QWidget *w, const QVariant &var, bool,
+                     tlp::Graph *) override;
   QVariant editorData(QWidget *, tlp::Graph *) override;
   QString displayText(const QVariant &) const override;
 };
@@ -282,7 +303,8 @@ public:
 class TLP_QT_SCOPE QStringEditorCreator : public tlp::TulipItemEditorCreator {
 public:
   QWidget *createWidget(QWidget *parent) const override;
-  void setEditorData(QWidget *w, const QVariant &var, bool, tlp::Graph *) override;
+  void setEditorData(QWidget *w, const QVariant &var, bool,
+                     tlp::Graph *) override;
   QVariant editorData(QWidget *, tlp::Graph *) override;
   QString displayText(const QVariant &) const override;
   void setPropertyToEdit(tlp::PropertyInterface *prop) override;
@@ -293,15 +315,18 @@ protected:
 
 class TLP_QT_SCOPE StdStringEditorCreator : public QStringEditorCreator {
 public:
-  void setEditorData(QWidget *w, const QVariant &var, bool, tlp::Graph *) override;
+  void setEditorData(QWidget *w, const QVariant &var, bool,
+                     tlp::Graph *) override;
   QVariant editorData(QWidget *, tlp::Graph *) override;
   QString displayText(const QVariant &) const override;
 };
 
-class TLP_QT_SCOPE QStringListEditorCreator : public tlp::TulipItemEditorCreator {
+class TLP_QT_SCOPE QStringListEditorCreator
+    : public tlp::TulipItemEditorCreator {
 public:
   QWidget *createWidget(QWidget *parent) const override;
-  void setEditorData(QWidget *w, const QVariant &var, bool, tlp::Graph *) override;
+  void setEditorData(QWidget *w, const QVariant &var, bool,
+                     tlp::Graph *) override;
   QVariant editorData(QWidget *, tlp::Graph *) override;
   QString displayText(const QVariant &) const override;
 };
@@ -314,7 +339,8 @@ template class tlp::StringDisplayEditorCreator<tlp::PointType>;
 template class tlp::StringDisplayEditorCreator<tlp::SizeType>;
 #endif
 
-inline QString &truncateText(QString &text, const QString &trailingChars = " ...",
+inline QString &truncateText(QString &text,
+                             const QString &trailingChars = " ...",
                              int maxChars = 45) {
   if (text.size() > maxChars) {
     text.truncate(maxChars - trailingChars.length());

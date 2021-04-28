@@ -57,35 +57,42 @@ class OGDFDavidsonHarel : public OGDFLayoutPluginBase {
   tlp::StringCollection speed;
 
 public:
-  PLUGININFORMATION("Davidson Harel (OGDF)", "Rene Weiskircher", "12/11/2007",
-                    "Implements the Davidson-Harel layout algorithm which uses simulated annealing "
-                    "to find a layout of minimal energy.<br/>Due to this approach, the algorithm "
-                    "can only handle graphs of rather limited size.<br/>It is based on the "
-                    "following publication:<br/><b>Drawing Graphs Nicely Using Simulated "
-                    "Annealing</b>, Ron Davidson, David Harel,  ACM Transactions on Graphics "
-                    "15(4), pp. 301-331, 1996.",
-                    "1.3", "Force Directed")
+  PLUGININFORMATION(
+      "Davidson Harel (OGDF)", "Rene Weiskircher", "12/11/2007",
+      "Implements the Davidson-Harel layout algorithm which uses simulated annealing "
+      "to find a layout of minimal energy.<br/>Due to this approach, the algorithm "
+      "can only handle graphs of rather limited size.<br/>It is based on the "
+      "following publication:<br/><b>Drawing Graphs Nicely Using Simulated "
+      "Annealing</b>, Ron Davidson, David Harel,  ACM Transactions on Graphics "
+      "15(4), pp. 301-331, 1996.",
+      "1.3", "Force Directed")
   OGDFDavidsonHarel(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, context ? new ogdf::DavidsonHarelLayout() : nullptr) {
-    addInParameter<StringCollection>(ELT_SETTINGS, paramHelp[0], ELT_SETTINGSLIST, true,
+      : OGDFLayoutPluginBase(context, context ? new ogdf::DavidsonHarelLayout()
+                                              : nullptr) {
+    addInParameter<StringCollection>(ELT_SETTINGS, paramHelp[0],
+                                     ELT_SETTINGSLIST, true,
                                      "Standard <br> Repulse <br> Planar");
-    addInParameter<StringCollection>(ELT_SPEED, paramHelp[1], ELT_SPEEDLIST, true,
-                                     "Fast <br> Medium <br> HQ");
+    addInParameter<StringCollection>(ELT_SPEED, paramHelp[1], ELT_SPEEDLIST,
+                                     true, "Fast <br> Medium <br> HQ");
     addInParameter<double>("preferredEdgeLength", paramHelp[2], "0.0");
-    addInParameter<double>("preferredEdgeLengthMultiplier", paramHelp[3], "2.0");
+    addInParameter<double>("preferredEdgeLengthMultiplier", paramHelp[3],
+                           "2.0");
   }
 
   void beforeCall() override {
-    ogdf::DavidsonHarelLayout *davidson = static_cast<ogdf::DavidsonHarelLayout *>(ogdfLayoutAlgo);
+    ogdf::DavidsonHarelLayout *davidson =
+        static_cast<ogdf::DavidsonHarelLayout *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {
       settings.setCurrent(0);
 
       if (dataSet->get(ELT_SETTINGS, settings)) {
         if (settings.getCurrent() == STANDARD_ELT) {
-          davidson->fixSettings(DavidsonHarelLayout::SettingsParameter::Standard);
+          davidson->fixSettings(
+              DavidsonHarelLayout::SettingsParameter::Standard);
         } else if (settings.getCurrent() == REPULSE_ELT) {
-          davidson->fixSettings(DavidsonHarelLayout::SettingsParameter::Repulse);
+          davidson->fixSettings(
+              DavidsonHarelLayout::SettingsParameter::Repulse);
         } else {
           davidson->fixSettings(DavidsonHarelLayout::SettingsParameter::Planar);
         }

@@ -17,9 +17,9 @@
  *
  */
 
-#include <tulip/GlTools.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlRect.h>
+#include <tulip/GlTools.h>
 
 #include "ParallelAxis.h"
 #include "ParallelTools.h"
@@ -44,7 +44,8 @@ void drawComposite(GlComposite *composite, float lod, Camera *camera) {
   }
 }
 
-ParallelAxis::ParallelAxis(GlAxis *glAxis, const float axisAreaWidth, const float rotationAngle,
+ParallelAxis::ParallelAxis(GlAxis *glAxis, const float axisAreaWidth,
+                           const float rotationAngle,
                            const GlAxis::CaptionLabelPosition captionPosition)
     : glAxis(glAxis), axisAreaWidth(axisAreaWidth), slidersActivated(false),
       rotationAngle(rotationAngle), hidden(false) {
@@ -53,33 +54,35 @@ ParallelAxis::ParallelAxis(GlAxis *glAxis, const float axisAreaWidth, const floa
                      glAxis->getAxisLength() / 18.0f);
   glAxis->updateAxis();
   BoundingBox axisBB(glAxis->getBoundingBox());
-  emptyRect = new GlRect(Coord(axisBB[0][0], axisBB[1][1] + glAxis->getAxisLength() / 10.0f),
-                         Coord(axisBB[1][0], axisBB[0][1] - glAxis->getAxisLength() / 15.0f),
-                         Color(0, 0, 0, 0), Color(0, 0, 0, 0), true, false);
+  emptyRect = new GlRect(
+      Coord(axisBB[0][0], axisBB[1][1] + glAxis->getAxisLength() / 10.0f),
+      Coord(axisBB[1][0], axisBB[0][1] - glAxis->getAxisLength() / 15.0f),
+      Color(0, 0, 0, 0), Color(0, 0, 0, 0), true, false);
   enableTrickForSelection();
   glAxis->updateAxis();
   resetSlidersPosition();
 }
 
-ParallelAxis::~ParallelAxis() {
-  delete glAxis;
-}
+ParallelAxis::~ParallelAxis() { delete glAxis; }
 
 void ParallelAxis::setAxisHeight(const float height) {
   float resizeFactor = height / getAxisHeight();
   glAxis->setAxisLength(height);
   const Coord &baseCoord = glAxis->getAxisBaseCoord();
   bottomSliderCoord =
-      baseCoord + Coord(0.0f, (bottomSliderCoord.getY() - baseCoord.getY()) * resizeFactor);
+      baseCoord +
+      Coord(0.0f, (bottomSliderCoord.getY() - baseCoord.getY()) * resizeFactor);
   topSliderCoord =
-      baseCoord + Coord(0.0f, (topSliderCoord.getY() - baseCoord.getY()) * resizeFactor);
+      baseCoord +
+      Coord(0.0f, (topSliderCoord.getY() - baseCoord.getY()) * resizeFactor);
 }
 
 void ParallelAxis::setRotationAngle(const float rotationAngle) {
   this->rotationAngle = rotationAngle;
 }
 
-void ParallelAxis::setCaptionPosition(const GlAxis::CaptionLabelPosition captionPosition) {
+void ParallelAxis::setCaptionPosition(
+    const GlAxis::CaptionLabelPosition captionPosition) {
   glAxis->addCaption(captionPosition, 20.0f, true, axisAreaWidth / 2.0f,
                      glAxis->getAxisLength() / 18.0f);
   glAxis->updateAxis();
@@ -105,7 +108,8 @@ void ParallelAxis::draw(float lod, Camera *camera) {
 
     if (axisCaptionComposite != nullptr) {
       string captionLabelId = glAxis->getAxisName() + " axis caption";
-      captionLabel = dynamic_cast<GlLabel *>(axisCaptionComposite->findGlEntity(captionLabelId));
+      captionLabel = dynamic_cast<GlLabel *>(
+          axisCaptionComposite->findGlEntity(captionLabelId));
     }
 
     if (captionLabel != nullptr) {
@@ -124,9 +128,7 @@ void ParallelAxis::draw(float lod, Camera *camera) {
   }
 }
 
-void ParallelAxis::redraw() {
-  glAxis->updateAxis();
-}
+void ParallelAxis::redraw() { glAxis->updateAxis(); }
 
 void ParallelAxis::resetSlidersPosition() {
   const Coord &baseCoord = glAxis->getAxisBaseCoord();

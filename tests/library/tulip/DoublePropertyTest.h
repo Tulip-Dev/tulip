@@ -20,8 +20,8 @@
 #ifndef DOUBLEPROPERTYTEST_H_
 #define DOUBLEPROPERTYTEST_H_
 
-#include <tulip/Graph.h>
 #include <tulip/DoubleProperty.h>
+#include <tulip/Graph.h>
 
 #include "CppUnitIncludes.h"
 

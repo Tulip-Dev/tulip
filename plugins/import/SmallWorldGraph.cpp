@@ -16,9 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <ctime>
-#include <cmath>
 #include <climits>
+#include <cmath>
+#include <ctime>
 #include <tulip/TulipPluginHeaders.h>
 
 using namespace std;
@@ -72,24 +72,27 @@ public:
 
     if (nbNodes == 0) {
       if (pluginProgress)
-        pluginProgress->setError(string("Error: the number of nodes cannot be null"));
+        pluginProgress->setError(
+            string("Error: the number of nodes cannot be null"));
 
       return false;
     }
 
     if (avgDegree == 0) {
       if (pluginProgress)
-        pluginProgress->setError(string("Error: the average degree cannot be null"));
+        pluginProgress->setError(
+            string("Error: the average degree cannot be null"));
 
       return false;
     }
 
-    double maxDistance =
-        sqrt(double(avgDegree) * double(WIDTH) * double(HEIGHT) / (double(nbNodes) * M_PI));
+    double maxDistance = sqrt(double(avgDegree) * double(WIDTH) *
+                              double(HEIGHT) / (double(nbNodes) * M_PI));
     // initialize a random sequence according the given seed
     tlp::initRandomSequence();
 
-    LayoutProperty *newLayout = graph->getLocalProperty<LayoutProperty>("viewLayout");
+    LayoutProperty *newLayout =
+        graph->getLocalProperty<LayoutProperty>("viewLayout");
 
     pluginProgress->showPreview(false);
 
@@ -99,8 +102,8 @@ public:
     const vector<node> &nodes = graph->nodes();
 
     for (auto n : nodes) {
-      newLayout->setNodeValue(n,
-                              Coord(float(randomInteger(WIDTH)), float(randomInteger(HEIGHT)), 0));
+      newLayout->setNodeValue(n, Coord(float(randomInteger(WIDTH)),
+                                       float(randomInteger(HEIGHT)), 0));
     }
 
     // double minSize = DBL_MAX;
@@ -110,8 +113,8 @@ public:
 
       for (unsigned int j = i + 1; j < nbNodes; ++j) {
         if (i != j) {
-          double distance =
-              newLayout->getNodeValue(nodes[i]).dist(newLayout->getNodeValue(nodes[j]));
+          double distance = newLayout->getNodeValue(nodes[i]).dist(
+              newLayout->getNodeValue(nodes[j]));
           // minSize = std::min(distance, minSize);
 
           // newSize->setAllNodeValue(Size(minSize/2.0, minSize/2.0, 1));
@@ -128,7 +131,8 @@ public:
         }
       }
 
-      if (((i % 100) == 0) && (pluginProgress->progress(i, nbNodes - 1) != TLP_CONTINUE))
+      if (((i % 100) == 0) &&
+          (pluginProgress->progress(i, nbNodes - 1) != TLP_CONTINUE))
         break;
     }
 

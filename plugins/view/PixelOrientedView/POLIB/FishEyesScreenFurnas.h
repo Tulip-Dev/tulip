@@ -19,8 +19,8 @@
 
 #ifndef FISHEYESSCREENFURNAS_H
 #define FISHEYESSCREENFURNAS_H
-#include <string>
 #include "ScreenFunction.h"
+#include <string>
 
 namespace pocore {
 

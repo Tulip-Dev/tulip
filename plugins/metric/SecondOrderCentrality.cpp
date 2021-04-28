@@ -17,10 +17,10 @@
  *
  */
 
+#include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/StaticProperty.h>
-#include <tulip/BooleanProperty.h>
 #include <tulip/TlpTools.h>
 
 #include <algorithm>
@@ -37,12 +37,12 @@ using namespace tlp;
  * This plugin is an implementation of the Second Order centrality measure
  * first published as:
  *
- * Kermarrec, A.-M., et al. (2011). "Second order centrality: Distributed assessment of nodes
- * criticity in complex networks." Computer Communications 34(5): 619-628. doi:
- * https://dx.doi.org/10.1016/j.comcom.2010.06.007.
+ * Kermarrec, A.-M., et al. (2011). "Second order centrality: Distributed
+ *assessment of nodes criticity in complex networks." Computer Communications
+ *34(5): 619-628. doi: https://dx.doi.org/10.1016/j.comcom.2010.06.007.
  *
- * This algorithm computes the standard deviation of the return time on each node of
- * a random walker. Central nodes are those with the lower values.
+ * This algorithm computes the standard deviation of the return time on each
+ *node of a random walker. Central nodes are those with the lower values.
  *
  * \author Bruno Pinaud, LaBRI
  *
@@ -65,7 +65,8 @@ public:
   SecondOrderCentrality(const tlp::PluginContext *);
   bool run() override;
   bool check(string &err) override;
-  bool randomWalk(NodeStaticProperty<vector<int>> &tickVector, const unsigned &maxNbSteps);
+  bool randomWalk(NodeStaticProperty<vector<int>> &tickVector,
+                  const unsigned &maxNbSteps);
   node getRandomNeighbor(const node n);
 };
 
@@ -83,7 +84,8 @@ static const char *paramHelp[] = {
 
 SecondOrderCentrality::SecondOrderCentrality(const tlp::PluginContext *context)
     : DoubleAlgorithm(context) {
-  addInParameter<BooleanProperty>("Selection", paramHelp[0], "viewSelection", false);
+  addInParameter<BooleanProperty>("Selection", paramHelp[0], "viewSelection",
+                                  false);
   addInParameter<bool>("Debug mode", paramHelp[1], "false");
 }
 
@@ -103,14 +105,15 @@ node SecondOrderCentrality::getRandomNeighbor(const node n) {
   return neigh;
 }
 
-bool SecondOrderCentrality::randomWalk(NodeStaticProperty<vector<int>> &tickVector,
-                                       const unsigned &maxNbSteps) {
+bool SecondOrderCentrality::randomWalk(
+    NodeStaticProperty<vector<int>> &tickVector, const unsigned &maxNbSteps) {
   unsigned tick = 0, nbSteps = 0;
   node activeNode, previousNode;
 
   // Start: finds a node that has viewSelection to True.
   // if None, selects a node at random
-  BooleanProperty *viewSelection = graph->getProperty<BooleanProperty>("viewSelection");
+  BooleanProperty *viewSelection =
+      graph->getProperty<BooleanProperty>("viewSelection");
   if (dataSet != nullptr) {
     dataSet->get("Selection", viewSelection);
   }
@@ -129,10 +132,11 @@ bool SecondOrderCentrality::randomWalk(NodeStaticProperty<vector<int>> &tickVect
 
   // start random walk
   while (tick < maxNbSteps) {
-    // select neighbors of the active node at random following the Metropolis-Gibbs algorithm to
-    // ensure an equiprobabilistic choice
+    // select neighbors of the active node at random following the
+    // Metropolis-Gibbs algorithm to ensure an equiprobabilistic choice
     node neigh(getRandomNeighbor(activeNode));
-    double ratio = graph->deg(activeNode) / static_cast<double>(graph->deg(neigh));
+    double ratio =
+        graph->deg(activeNode) / static_cast<double>(graph->deg(neigh));
     if (randomDouble() < ratio)
       activeNode = neigh;
 
@@ -143,7 +147,8 @@ bool SecondOrderCentrality::randomWalk(NodeStaticProperty<vector<int>> &tickVect
     }
     nbSteps++;
     unsigned progress((nbSteps + 1) % 1000);
-    if (pluginProgress && progress == 0 && pluginProgress->state() == TLP_CONTINUE) {
+    if (pluginProgress && progress == 0 &&
+        pluginProgress->state() == TLP_CONTINUE) {
       pluginProgress->progress(progress, maxNbSteps);
     }
     if (pluginProgress && pluginProgress->state() != TLP_CONTINUE) {
@@ -186,14 +191,16 @@ bool SecondOrderCentrality::run() {
   }
   NodeStaticProperty<double> res(graph);
   TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned i) {
-    // compute mean and std dev of the return time (difference between two ticks)
+    // compute mean and std dev of the return time (difference between two
+    // ticks)
     const vector<int> &tickvectorn = tickVector[n];
     // compute value only if the node has been visited at least 3 times
     if (tickvectorn.size() >= 3) {
       vector<int> val;
       // compute return time (difference between two consecutive ticks)
-      std::transform(tickvectorn.begin() + 1, tickvectorn.end(), tickvectorn.begin(),
-                     std::back_inserter(val), [](const int a, const int b) { return a - b; });
+      std::transform(tickvectorn.begin() + 1, tickvectorn.end(),
+                     tickvectorn.begin(), std::back_inserter(val),
+                     [](const int a, const int b) { return a - b; });
       // mean of the return time
       auto mean = accumulate(val.begin(), val.end(), 0) / val.size();
 
@@ -213,7 +220,8 @@ bool SecondOrderCentrality::run() {
   if (dataSet != nullptr)
     dataSet->get("Debug mode", debug);
   if (debug) {
-    IntegerVectorProperty *tickprop = graph->getProperty<IntegerVectorProperty>("tickVector");
+    IntegerVectorProperty *tickprop =
+        graph->getProperty<IntegerVectorProperty>("tickVector");
     tickVector.copyToProperty(tickprop);
   }
 

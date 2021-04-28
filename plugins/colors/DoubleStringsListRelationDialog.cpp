@@ -20,8 +20,8 @@
 #include "DoubleStringsListRelationDialog.h"
 #include "ui_DoubleStringsListRelationDialog.h"
 
-#include <tulip/TlpQtTools.h>
 #include <tulip/ColorScale.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QScrollBar>
 
@@ -30,8 +30,8 @@ using namespace std;
 namespace tlp {
 
 DoubleStringsListRelationDialog::DoubleStringsListRelationDialog(
-    const std::vector<std::string> &firstValues, const std::vector<Color> &secondValues,
-    QWidget *parent)
+    const std::vector<std::string> &firstValues,
+    const std::vector<Color> &secondValues, QWidget *parent)
     : QDialog(parent), _ui(new Ui::DoubleStringsListRelationDialogData),
       lastNonInterpolateValues(secondValues) {
   _ui->setupUi(this);
@@ -48,12 +48,14 @@ DoubleStringsListRelationDialog::DoubleStringsListRelationDialog(
 
   connect(_ui->upButton, SIGNAL(clicked()), this, SLOT(upButtonClicked()));
   connect(_ui->downButton, SIGNAL(clicked()), this, SLOT(downButtonClicked()));
-  connect(_ui->upButtonColor, SIGNAL(clicked()), this, SLOT(upButtonColorClicked()));
-  connect(_ui->downButtonColor, SIGNAL(clicked()), this, SLOT(downButtonColorClicked()));
-  connect(_ui->firstListWidget->verticalScrollBar(), SIGNAL(valueChanged(int)), this,
-          SLOT(scrollBarValueChanged(int)));
-  connect(_ui->secondListWidget->verticalScrollBar(), SIGNAL(valueChanged(int)), this,
-          SLOT(scrollBarValueChanged(int)));
+  connect(_ui->upButtonColor, SIGNAL(clicked()), this,
+          SLOT(upButtonColorClicked()));
+  connect(_ui->downButtonColor, SIGNAL(clicked()), this,
+          SLOT(downButtonColorClicked()));
+  connect(_ui->firstListWidget->verticalScrollBar(), SIGNAL(valueChanged(int)),
+          this, SLOT(scrollBarValueChanged(int)));
+  connect(_ui->secondListWidget->verticalScrollBar(), SIGNAL(valueChanged(int)),
+          this, SLOT(scrollBarValueChanged(int)));
   connect(_ui->interpolateColorsCheckBox, SIGNAL(stateChanged(int)), this,
           SLOT(interpolateCheckBoxChange(int)));
 }
@@ -64,11 +66,13 @@ DoubleStringsListRelationDialog::~DoubleStringsListRelationDialog() {
 
 void DoubleStringsListRelationDialog::getResult(
     std::vector<std::pair<std::string, Color>> &result) {
-  for (int i = 0; (i < _ui->firstListWidget->count()) && (i < _ui->secondListWidget->count());
+  for (int i = 0; (i < _ui->firstListWidget->count()) &&
+                  (i < _ui->secondListWidget->count());
        ++i) {
     QColor color = _ui->secondListWidget->item(i)->background().color();
-    result.push_back(pair<string, Color>(QStringToTlpString(_ui->firstListWidget->item(i)->text()),
-                                         QColorToColor(color)));
+    result.push_back(pair<string, Color>(
+        QStringToTlpString(_ui->firstListWidget->item(i)->text()),
+        QColorToColor(color)));
   }
 }
 
@@ -132,7 +136,8 @@ void DoubleStringsListRelationDialog::interpolateCheckBoxChange(int state) {
     _ui->secondListWidget->clear();
     for (auto &color : lastNonInterpolateValues) {
       QListWidgetItem *item = new QListWidgetItem;
-      item->setBackground(QBrush(QColor(color[0], color[1], color[2], color[3])));
+      item->setBackground(
+          QBrush(QColor(color[0], color[1], color[2], color[3])));
       _ui->secondListWidget->addItem(item);
     }
   } else {

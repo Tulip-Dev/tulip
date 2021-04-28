@@ -21,8 +21,8 @@
 
 #include <QModelIndex>
 #include <QPoint>
-#include <tulip/Perspective.h>
 #include <tulip/Observable.h>
+#include <tulip/Perspective.h>
 
 class QAction;
 class QHeaderView;
@@ -69,10 +69,11 @@ class GraphPerspective : public tlp::Perspective, tlp::Observable {
 public:
   GraphPerspectiveLogger *_logger;
 
-  PLUGININFORMATION("Tulip", "Tulip Team", "2011/07/11",
-                    "Analyze several graphs/subgraphs hierarchies\n(designed to import/explore "
-                    "data from various graph or csv file formats)",
-                    "1.0", "")
+  PLUGININFORMATION(
+      "Tulip", "Tulip Team", "2011/07/11",
+      "Analyze several graphs/subgraphs hierarchies\n(designed to import/explore "
+      "data from various graph or csv file formats)",
+      "1.0", "")
   std::string icon() const override {
     return ":/tulip/graphperspective/icons/32/desktop.png";
   }
@@ -88,7 +89,8 @@ public:
 
   void treatEvent(const tlp::Event &) override;
 
-  void logMessage(QtMsgType, const QMessageLogContext &, const QString &) override;
+  void logMessage(QtMsgType, const QMessageLogContext &,
+                  const QString &) override;
 
   bool terminated() override;
 
@@ -109,14 +111,15 @@ public slots:
   void showPythonDocumentation();
 
   void redrawPanels(bool center = false) override;
-  void centerPanelsForGraph(tlp::Graph *, bool graphChanged, bool onlyGlMainView);
+  void centerPanelsForGraph(tlp::Graph *, bool graphChanged,
+                            bool onlyGlMainView);
   void centerPanelsForGraph(tlp::Graph *g) override {
     centerPanelsForGraph(g, false, false);
   }
   void closePanelsForGraph(tlp::Graph *g = nullptr);
-  bool
-  setGlMainViewPropertiesForGraph(tlp::Graph *g,
-                                  const std::map<std::string, tlp::PropertyInterface *> &propsMap);
+  bool setGlMainViewPropertiesForGraph(
+      tlp::Graph *g,
+      const std::map<std::string, tlp::PropertyInterface *> &propsMap);
   void showSearchDialog(bool = true);
   void openPreferences();
 

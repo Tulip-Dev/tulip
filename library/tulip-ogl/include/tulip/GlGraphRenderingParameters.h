@@ -31,7 +31,8 @@ class BooleanProperty;
 
 /**
  * @ingroup OpenGL
- * @brief That class defines all the parameters used by GlGraphComposite to render a graph
+ * @brief That class defines all the parameters used by GlGraphComposite to
+ * render a graph
  *
  * @see GlGraphComposite
  */
@@ -133,7 +134,8 @@ public:
   bool isEdgeFrontDisplay() const;
 
   /**
-   * @brief Return the type of fonts used in the renderer(0=3D,1=bitmap,2=texture)
+   * @brief Return the type of fonts used in the
+   * renderer(0=3D,1=bitmap,2=texture)
    */
   unsigned int getFontsType() const;
 
@@ -163,7 +165,8 @@ public:
   std::string getFontsPath() const;
 
   /**
-   * @brief If true and if labels are activated label inside meta nodes will be displayed
+   * @brief If true and if labels are activated label inside meta nodes will be
+   * displayed
    */
   void setViewMetaLabel(const bool state);
 
@@ -205,11 +208,10 @@ public:
   /**
    * @brief set stencil number for selected nodes
    *
-   * Stencil is an OpenGl system to ensure that other entity can't be displayed above this entity.
-   * It's a "guaranteed visibility" system.
-   * A small number causes a guaranteed visibility
-   * Default value in Tulip is 0xFFFF (greater integer)
-   * And when we have stencil on entity value is 0x2
+   * Stencil is an OpenGl system to ensure that other entity can't be displayed
+   * above this entity. It's a "guaranteed visibility" system. A small number
+   * causes a guaranteed visibility Default value in Tulip is 0xFFFF (greater
+   * integer) And when we have stencil on entity value is 0x2
    */
   void setSelectedNodesStencil(const int stencil);
 
@@ -221,7 +223,8 @@ public:
   /**
    * @brief set stencil number for selected meta-nodes
    *
-   * See setSelectedNodesStencil() documentation for more details on stencil number
+   * See setSelectedNodesStencil() documentation for more details on stencil
+   * number
    */
   void setSelectedMetaNodesStencil(const int stencil);
 
@@ -233,7 +236,8 @@ public:
   /**
    * @brief set stencil number for selected edges
    *
-   * See setSelectedNodesStencil() documentation for more details on stencil number
+   * See setSelectedNodesStencil() documentation for more details on stencil
+   * number
    */
   void setSelectedEdgesStencil(const int stencil);
 
@@ -245,7 +249,8 @@ public:
   /**
    * @brief set stencil number for nodes
    *
-   * See setSelectedNodesStencil() documentation for more details on stencil number
+   * See setSelectedNodesStencil() documentation for more details on stencil
+   * number
    */
   void setNodesStencil(const int stencil);
 
@@ -257,7 +262,8 @@ public:
   /**
    * @brief set stencil number for meta-nodes
    *
-   * See setSelectedNodesStencil() documentation for more details on stencil number
+   * See setSelectedNodesStencil() documentation for more details on stencil
+   * number
    */
   void setMetaNodesStencil(const int stencil);
 
@@ -269,7 +275,8 @@ public:
   /**
    * @brief set stencil number for edges
    *
-   * See setSelectedNodesStencil() documentation for more details on stencil number
+   * See setSelectedNodesStencil() documentation for more details on stencil
+   * number
    */
   void setEdgesStencil(const int stencil);
 
@@ -281,7 +288,8 @@ public:
   /**
    * @brief set stencil number for nodes label
    *
-   * See setSelectedNodesStencil() documentation for more details on stencil number
+   * See setSelectedNodesStencil() documentation for more details on stencil
+   * number
    */
   void setNodesLabelStencil(const int stencil);
 
@@ -293,7 +301,8 @@ public:
   /**
    * @brief set stencil number for meta-nodes label
    *
-   * See setSelectedNodesStencil() documentation for more details on stencil number
+   * See setSelectedNodesStencil() documentation for more details on stencil
+   * number
    */
   void setMetaNodesLabelStencil(const int stencil);
 
@@ -305,7 +314,8 @@ public:
   /**
    * @brief set stencil number for edges label
    *
-   * See setSelectedNodesStencil() documentation for more details on stencil number
+   * See setSelectedNodesStencil() documentation for more details on stencil
+   * number
    */
   void setEdgesLabelStencil(const int stencil);
 
@@ -315,8 +325,8 @@ public:
   int getEdgesLabelStencil() const;
 
   /**
-   * @brief If true node and edges are ordered according to the element ordering property (default
-   * to viewMetric)
+   * @brief If true node and edges are ordered according to the element ordering
+   * property (default to viewMetric)
    */
   void setElementOrdered(const bool state);
 
@@ -326,16 +336,16 @@ public:
   bool isElementOrdered() const;
 
   /**
-   * @brief If true (default value) nodes and edges are sorted in descending order according to the
-   * element ordering property (default to viewMetric)
+   * @brief If true (default value) nodes and edges are sorted in descending
+   * order according to the element ordering property (default to viewMetric)
    *
    * @since Tulip 4.8
    */
   void setElementOrderedDescending(const bool state);
 
   /**
-   * @brief Returns true if the nodes and edges are sorted in descending order when the element
-   * ordering is activated
+   * @brief Returns true if the nodes and edges are sorted in descending order
+   * when the element ordering is activated
    *
    * @since Tulip 4.8
    */
@@ -350,16 +360,16 @@ public:
   void setElementOrderingProperty(tlp::NumericProperty *property);
 
   /**
-   * @brief Gets the property used for element ordering. Setting it to nullptr will use viewMetric
-   *if
-   *the ordering is enabled.
+   * @brief Gets the property used for element ordering. Setting it to nullptr
+   *will use viewMetric if the ordering is enabled.
    *
    * @return :NumericProperty* The Property currently used.
    **/
   tlp::NumericProperty *getElementOrderingProperty() const;
 
   /**
-   * @brief If true node and edges are ordered according to the distance with camera
+   * @brief If true node and edges are ordered according to the distance with
+   * camera
    */
   void setElementZOrdered(const bool state);
 
@@ -379,7 +389,8 @@ public:
   bool isEdge3D() const;
 
   /**
-   * @brief Get the size of the border that is added to any label when using bitmap fonts.
+   * @brief Get the size of the border that is added to any label when using
+   * bitmap fonts.
    *
    * @deprecated Use getLabelsDensity instead
    */
@@ -427,12 +438,14 @@ public:
   void setLabelScaled(bool state);
 
   /**
-   * @brief return if labels are rendered with a fixed font size (dynamic size otherwise)
+   * @brief return if labels are rendered with a fixed font size (dynamic size
+   * otherwise)
    */
   bool isLabelFixedFontSize() const;
 
   /**
-   * Set if labels must be rendered with a fixed font size (dynamic size otherwise)
+   * Set if labels must be rendered with a fixed font size (dynamic size
+   * otherwise)
    */
   void setLabelFixedFontSize(bool state);
 
@@ -457,35 +470,33 @@ public:
   void setLabelsDensity(int density);
 
   /**
-   * @brief return min size of label : this min size is only used if labels are not scaled and are
-   * not rendered with a fixed font size
+   * @brief return min size of label : this min size is only used if labels are
+   * not scaled and are not rendered with a fixed font size
    */
   int getMinSizeOfLabel() const;
 
   /**
-   * @brief Set min size of label : this min size is only used if labels are not scaled and are not
-   * rendered with a fixed font size
+   * @brief Set min size of label : this min size is only used if labels are not
+   * scaled and are not rendered with a fixed font size
    */
   void setMinSizeOfLabel(int size);
 
   /**
-   * @brief return max size of label : this max size is only used if labels are not scaled and are
-   * not rendered with a fixed font size
+   * @brief return max size of label : this max size is only used if labels are
+   * not scaled and are not rendered with a fixed font size
    */
   int getMaxSizeOfLabel() const;
 
   /**
-   * @brief Set max size of label : this max size is only used if labels are not scaled and are not
-   * rendered with a fixed font size
+   * @brief Set max size of label : this max size is only used if labels are not
+   * scaled and are not rendered with a fixed font size
    */
   void setMaxSizeOfLabel(int size);
 
   /**
    * @brief return if labels are billboarded
    */
-  bool getLabelsAreBillboarded() const {
-    return _labelsAreBillboarded;
-  }
+  bool getLabelsAreBillboarded() const { return _labelsAreBillboarded; }
 
   /**
    * @brief Set if labels are billboarded
@@ -495,8 +506,8 @@ public:
   }
 
   /**
-   * @brief This property is use to filter nodes/edges rendering. If this property is
-   * false, the node/edge will be rendered and displayed.
+   * @brief This property is use to filter nodes/edges rendering. If this
+   * property is false, the node/edge will be rendered and displayed.
    *
    * @Warning : this property will not be saved in DataSet
    */

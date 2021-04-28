@@ -30,15 +30,14 @@ using namespace std;
 using namespace tlp;
 
 PixelOrientedOptionsWidget::PixelOrientedOptionsWidget(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::PixelOrientedOptionsWidgetData), oldValuesInitialized(false) {
+    : QWidget(parent), _ui(new Ui::PixelOrientedOptionsWidgetData),
+      oldValuesInitialized(false) {
   _ui->setupUi(this);
   _ui->backColorButton->setDialogTitle("Choose the background color");
   setBackgroundColor(Color(255, 255, 255));
 }
 
-PixelOrientedOptionsWidget::~PixelOrientedOptionsWidget() {
-  delete _ui;
-}
+PixelOrientedOptionsWidget::~PixelOrientedOptionsWidget() { delete _ui; }
 
 Color PixelOrientedOptionsWidget::getBackgroundColor() const {
   return _ui->backColorButton->tulipColor();
@@ -64,7 +63,8 @@ bool PixelOrientedOptionsWidget::configurationChanged() {
   bool confChanged = false;
 
   if (oldValuesInitialized) {
-    if (oldBackgroundColor != getBackgroundColor() || oldLayoutType != getLayoutType()) {
+    if (oldBackgroundColor != getBackgroundColor() ||
+        oldLayoutType != getLayoutType()) {
       confChanged = true;
     }
   } else {

@@ -20,12 +20,12 @@
 #ifndef PROPERTY_INTERFACE_H
 #define PROPERTY_INTERFACE_H
 
-#include <string>
-#include <iostream>
 #include <functional>
+#include <iostream>
+#include <string>
 
-#include <tulip/tulipconf.h>
 #include <tulip/Observable.h>
+#include <tulip/tulipconf.h>
 //#include <tulip/Node.h>
 #include <tulip/Edge.h>
 #include <tulip/TlpTools.h>
@@ -36,26 +36,25 @@ struct DataMem;
 struct node;
 
 class Graph;
-template <class itType>
-struct Iterator;
+template <class itType> struct Iterator;
 
 //=============================================================
 /**
  * @ingroup Graph
  * @brief PropertyInterface describes the interface of a graph property.
  *
- * The intent of a property is to hold a value for each node and edge (e.g. the degree of the
- * nodes).
+ * The intent of a property is to hold a value for each node and edge (e.g. the
+ * degree of the nodes).
  *
  * A property can be used in two different ways :
- * Either it is attached to a graph; and in this case creating and deleting the property is handled
- * by the graph
+ * Either it is attached to a graph; and in this case creating and deleting the
+ * property is handled by the graph
  * (@see Graph::getProperty()).
  *
- * Either is is detached from a graph, and you have to handle creation and deletion yourself.
- * This is most useful for some algorithms that need a temporary property, but do not want the
- * property to appear on the graph
- * after the computation.
+ * Either is is detached from a graph, and you have to handle creation and
+ * deletion yourself. This is most useful for some algorithms that need a
+ * temporary property, but do not want the property to appear on the graph after
+ * the computation.
  */
 class TLP_SCOPE PropertyInterface : public Observable {
   friend class PropertyManager;
@@ -84,49 +83,54 @@ public:
   virtual void erase(const edge) = 0;
 
   /**
-   * @brief Copies the value of a node in another property to a node in this property.
+   * @brief Copies the value of a node in another property to a node in this
+   * property.
    * @param destination The node whose value will be set.
    * @param source The node whose value to copy.
    * @param property The property from which to copy the source node value.
-   * @param ifNotDefault If true, the copy will only be performed if the source node's value is not
-   * the default value.
+   * @param ifNotDefault If true, the copy will only be performed if the source
+   * node's value is not the default value.
    * @return True if the copy was performed, false otherwise.
    */
-  virtual bool copy(const node destination, const node source, PropertyInterface *property,
-                    bool ifNotDefault = false) = 0;
+  virtual bool copy(const node destination, const node source,
+                    PropertyInterface *property, bool ifNotDefault = false) = 0;
   /**
-   * @brief Copies the value of an edge in another property to an edge in this property.
+   * @brief Copies the value of an edge in another property to an edge in this
+   * property.
    * @param destination The edge whose value will be set.
    * @param source The edge whose value to copy.
    * @param property The property from which to copy the source edge value.
-   * @param ifNotDefault If true, the copy will only be performed if the source edge's value is not
-   * the default value.
+   * @param ifNotDefault If true, the copy will only be performed if the source
+   * edge's value is not the default value.
    * @return True if the copy was performed, false otherwise.
    */
-  virtual bool copy(const edge destination, const edge source, PropertyInterface *property,
-                    bool ifNotDefault = false) = 0;
+  virtual bool copy(const edge destination, const edge source,
+                    PropertyInterface *property, bool ifNotDefault = false) = 0;
 
   /**
    * @brief Copies the values of the source property to this property.
    * @param source The property from which to copy values.
-   * @warning Be careful when using this method, if you are interested by observing the updates of
-   * the values of the current property, because no event is sent for nodes/edges whose value is the
-   * default value of the source property.
+   * @warning Be careful when using this method, if you are interested by
+   * observing the updates of the values of the current property, because no
+   * event is sent for nodes/edges whose value is the default value of the
+   * source property.
    */
   virtual void copy(PropertyInterface *source) = 0;
 
   /**
-   * @brief Creates a property of the same type (e.g. tlp::DoubleProperty) in the graph.
-   * The new property will not contain a copy of this property's values.
+   * @brief Creates a property of the same type (e.g. tlp::DoubleProperty) in
+   * the graph. The new property will not contain a copy of this property's
+   * values.
    * @param graph The Graph in which to create the new property.
    * @param name The name of the new property.
    * @return The newly created property.
    */
-  virtual PropertyInterface *clonePrototype(Graph *graph, const std::string &name) const = 0;
+  virtual PropertyInterface *clonePrototype(Graph *graph,
+                                            const std::string &name) const = 0;
 
   /**
-   * @brief Gets a string describing the type of the property value (e.g. "graph", "double",
-   * "layout", "string", "integer", "color", "size").
+   * @brief Gets a string describing the type of the property value (e.g.
+   * "graph", "double", "layout", "string", "integer", "color", "size").
    * @return The name of this property's type.
    */
   virtual const std::string &getTypename() const = 0;
@@ -141,14 +145,14 @@ public:
 ///@cond DOXYGEN_HIDDEN
 // the following macro gives a generic definition of getCppClassName()
 // it is used when declaring PropertyInterface subclasses
-#define DEFINE_GET_CPP_CLASS_NAME                                                                  \
-  const std::string &getCppClassName() const override {                                            \
-    static std::string className;                                                                  \
-    if (className.empty()) {                                                                       \
-      std::string dcn(demangleClassName(typeid(this).name(), false));                              \
-      className = dcn.substr(0, dcn.find(' '));                                                    \
-    }                                                                                              \
-    return className;                                                                              \
+#define DEFINE_GET_CPP_CLASS_NAME                                              \
+  const std::string &getCppClassName() const override {                        \
+    static std::string className;                                              \
+    if (className.empty()) {                                                   \
+      std::string dcn(demangleClassName(typeid(this).name(), false));          \
+      className = dcn.substr(0, dcn.find(' '));                                \
+    }                                                                          \
+    return className;                                                          \
   }
   ///@endcond
 
@@ -156,9 +160,7 @@ public:
    * @brief Gets the name of the property (e.g. viewLayout).
    * @return The name of this property.
    */
-  const std::string &getName() const {
-    return name;
-  }
+  const std::string &getName() const { return name; }
 
   /**
    * @brief Rename a property
@@ -173,8 +175,8 @@ public:
    * This is an internal function and its behavior can change.
    * DO NOT USE UNLESS YOU KNOW WHAT YOU ARE DOING.
    *
-   * Be wary that is might be a different graph that the one you used to get this property.
-   * For instance:
+   * Be wary that is might be a different graph that the one you used to get
+   * this property. For instance:
    * @code
    * Graph* g = tlp::newGraph();
    * Graph*sub = g->addCloneSubGraph();
@@ -191,9 +193,7 @@ public:
    * @return The Graph this property is local to.
    * @endcond
    */
-  tlp::Graph *getGraph() const {
-    return graph;
-  }
+  tlp::Graph *getGraph() const { return graph; }
 
   /**
    * @brief Gets a string representation of the node value.
@@ -213,8 +213,8 @@ public:
    * @brief Sets a new value on the node, represented by the string parameter.
    * @param n The node on which to set the new value.
    * @param value A string representing the value to set on the node.
-   * @return Whether the string was a correct representation for this property's type. If not, the
-   * value is not set.
+   * @return Whether the string was a correct representation for this property's
+   * type. If not, the value is not set.
    */
   virtual bool setNodeStringValue(const node n, const std::string &value) = 0;
 
@@ -222,8 +222,8 @@ public:
    * @brief Sets a new value on the edge, represented by the string parameter.
    * @param e The edge on which to set value on.
    * @param value A string representing the value to set on the edge.
-   * @return Whether the string was a correct representation for this property's type. If not, the
-   * value is not set.
+   * @return Whether the string was a correct representation for this property's
+   * type. If not, the value is not set.
    */
   virtual bool setEdgeStringValue(const edge e, const std::string &value) = 0;
 
@@ -240,119 +240,125 @@ public:
   virtual std::string getEdgeDefaultStringValue() const = 0;
 
   /**
-   * @brief Sets the value assigned as the default one to the future added nodes from a string
-   * representation.
+   * @brief Sets the value assigned as the default one to the future added nodes
+   * from a string representation.
    *
    * @since Tulip 5.0
    *
-   * @param value A string representing the new value to set on future added nodes.
+   * @param value A string representing the new value to set on future added
+   * nodes.
    *
-   * @return Whether the given string was a correct representation for this property's type. If not,
-   * the default value is not set.
+   * @return Whether the given string was a correct representation for this
+   * property's type. If not, the default value is not set.
    */
   virtual bool setNodeDefaultStringValue(const std::string &value) = 0;
 
   /**
-   * @brief Sets all the nodes value to the value represented by the string. For some types, some
-   * parsing will be necessary (e.g. LayoutProperty).
-   * All previous values are lost and the represented value is assigned as the default one to the
-   * future added nodes.
+   * @brief Sets all the nodes value to the value represented by the string. For
+   * some types, some parsing will be necessary (e.g. LayoutProperty). All
+   * previous values are lost and the represented value is assigned as the
+   * default one to the future added nodes.
    *
    * @param value A string representing the new value to set on all the nodes.
    *
-   * @return Whether the given string was a correct representation for this property's type. If not,
-   * the values are not set.
+   * @return Whether the given string was a correct representation for this
+   * property's type. If not, the values are not set.
    */
   virtual bool setAllNodeStringValue(const std::string &value) = 0;
 
   /**
-   * @brief Sets all the nodes value to the value represented by the string for a graph. For some
-   * types, some parsing will be necessary (e.g. LayoutProperty).
-   * Only the nodes from that graph will have their value modified in the property
-   * and the default node value will not be modified.
+   * @brief Sets all the nodes value to the value represented by the string for
+   * a graph. For some types, some parsing will be necessary (e.g.
+   * LayoutProperty). Only the nodes from that graph will have their value
+   * modified in the property and the default node value will not be modified.
    *
    * @since Tulip 5.0
    *
    * @param value A string representing the new value to set on all the nodes.
    * @param graph A graph that defines the set of nodes.
    *
-   * @warning If the provided graph is not a descendant of the one associated to that property
-   * (including itself), no node value will be modified in it.
+   * @warning If the provided graph is not a descendant of the one associated to
+   * that property (including itself), no node value will be modified in it.
    *
-   * @return Whether the given string was a correct representation for this property's type. If not,
-   * the values are not set.
+   * @return Whether the given string was a correct representation for this
+   * property's type. If not, the values are not set.
    */
-  virtual bool setStringValueToGraphNodes(const std::string &value, const Graph *graph) = 0;
+  virtual bool setStringValueToGraphNodes(const std::string &value,
+                                          const Graph *graph) = 0;
 
   /**
-   * @brief Sets the value assigned as the default one to the future added edges from a string
-   * representation.
+   * @brief Sets the value assigned as the default one to the future added edges
+   * from a string representation.
    *
    * @since Tulip 5.0
    *
-   * @param value A string representing the new value to set on future added edges.
+   * @param value A string representing the new value to set on future added
+   * edges.
    *
-   * @return Whether the given string was a correct representation for this property's type. If not,
-   * the default value is not set.
+   * @return Whether the given string was a correct representation for this
+   * property's type. If not, the default value is not set.
    */
   virtual bool setEdgeDefaultStringValue(const std::string &value) = 0;
 
   /**
-   * @brief Sets all the edges value to the value represented by the string. For some types, some
-   * parsing will be necessary (e.g. LayoutProperty).
-   * All previous values are lost and the represented value is assigned as the default one to the
-   * future added edges.
+   * @brief Sets all the edges value to the value represented by the string. For
+   * some types, some parsing will be necessary (e.g. LayoutProperty). All
+   * previous values are lost and the represented value is assigned as the
+   * default one to the future added edges.
    *
    * @param value A string representing the new value to set on all the edges.
    *
-   * @return Whether the given string was a correct representation for this property's type. If not,
-   * the values are not set.
+   * @return Whether the given string was a correct representation for this
+   * property's type. If not, the values are not set.
    */
   virtual bool setAllEdgeStringValue(const std::string &value) = 0;
 
   /**
-   * @brief Sets all the edges value to the value represented by the string for a graph. For some
-   * types, some parsing will be necessary (e.g. LayoutProperty).
-   * Only the edges from that graph will have their value modified in the property
-   * and the default edge value will not be modified.
+   * @brief Sets all the edges value to the value represented by the string for
+   * a graph. For some types, some parsing will be necessary (e.g.
+   * LayoutProperty). Only the edges from that graph will have their value
+   * modified in the property and the default edge value will not be modified.
    *
    * @since Tulip 5.0
    *
    * @param value A string representing the new value to set on all the edges.
    * @param graph A graph that defines the set of edges.
    *
-   * @warning If the provided graph is not a descendant of the one associated to that property
-   * (including itself), no edge value will be modified in it.
+   * @warning If the provided graph is not a descendant of the one associated to
+   * that property (including itself), no edge value will be modified in it.
    *
-   * @return Whether the given string was a correct representation for this property's type. If not,
-   * the values are not set.
+   * @return Whether the given string was a correct representation for this
+   * property's type. If not, the values are not set.
    */
-  virtual bool setStringValueToGraphEdges(const std::string &value, const Graph *graph) = 0;
+  virtual bool setStringValueToGraphEdges(const std::string &value,
+                                          const Graph *graph) = 0;
 
   /**
-   * @brief Gets a pointer to the tlp::DataMem structure that contains the node default value.
+   * @brief Gets a pointer to the tlp::DataMem structure that contains the node
+   * default value.
    * @return The DataMem structure containing the node default value.
    * @warning The ownership of this pointer is given to the caller.
    */
   virtual DataMem *getNodeDefaultDataMemValue() const = 0;
 
   /**
-   * @brief Gets a pointer to the tlp::DataMem structure that contains the edge default value.
+   * @brief Gets a pointer to the tlp::DataMem structure that contains the edge
+   * default value.
    * @return The DataMem structure containing the edge default value.
    * @warning The ownership of this pointer is given to the caller.
    */
   virtual DataMem *getEdgeDefaultDataMemValue() const = 0;
 
   /**
-   * @brief Sets all the nodes value to the value contained in the given DataMem structure.
-   * All previous values are lost.
+   * @brief Sets all the nodes value to the value contained in the given DataMem
+   * structure. All previous values are lost.
    * @param value The value to set on all the nodes.
    */
   virtual void setAllNodeDataMemValue(const DataMem *value) = 0;
 
   /**
-   * @brief Sets all the edges value to the value contained in the given DataMem structure.
-   * All previous values are lost.
+   * @brief Sets all the edges value to the value contained in the given DataMem
+   * structure. All previous values are lost.
    * @param value The value to set on all the edges.
    */
   virtual void setAllEdgeDataMemValue(const DataMem *v) = 0;
@@ -376,7 +382,8 @@ public:
   virtual DataMem *getEdgeDataMemValue(const edge e) const = 0;
 
   /**
-   * @brief Returns the value in a DataMem if it is not default, otherwise returns nullptr.
+   * @brief Returns the value in a DataMem if it is not default, otherwise
+   * returns nullptr.
    * @param n The node to get the value of.
    * @return The value of the node if it is not default, or nullptr.
    *
@@ -385,7 +392,8 @@ public:
   virtual DataMem *getNonDefaultDataMemValue(const node n) const = 0;
 
   /**
-   * @brief Returns the value in a DataMem if it is not default, otherwise returns nullptr.
+   * @brief Returns the value in a DataMem if it is not default, otherwise
+   * returns nullptr.
    * @param e The edge to get the value of.
    * @return The value of the edge if it is not default, or nullptr.
    *
@@ -409,17 +417,19 @@ public:
 
   /**
    * @brief Gets an Iterator on all non-default valuated nodes.
-   * When given a Graph as parameter, only nodes belonging to this graph are iterated over.
+   * When given a Graph as parameter, only nodes belonging to this graph are
+   * iterated over.
    * @return An Iterator over nodes whose value is not default.
    *
    * @warning The ownership of the iterator is given to the caller.
    */
-  virtual tlp::Iterator<node> *getNonDefaultValuatedNodes(const Graph * = nullptr) const = 0;
+  virtual tlp::Iterator<node> *
+  getNonDefaultValuatedNodes(const Graph * = nullptr) const = 0;
 
   /**
    * @brief Returns whether the property has nodes with a non default value.
-   * When given a Graph as parameter, only the nodes with a non default value belonging to
-   * this graph are taken into account.
+   * When given a Graph as parameter, only the nodes with a non default value
+   * belonging to this graph are taken into account.
    * @return false if all nodes has the default value, true if not.
    *
    */
@@ -427,26 +437,29 @@ public:
 
   /**
    * @brief Returns the number of nodes with a non default value.
-   * When given a Graph as parameter, only the number of nodes with a non default value belonging to
-   * this graph is returned.
+   * When given a Graph as parameter, only the number of nodes with a non
+   * default value belonging to this graph is returned.
    * @return the number of nodes with a non default value.
    *
    */
-  virtual unsigned int numberOfNonDefaultValuatedNodes(const Graph * = nullptr) const = 0;
+  virtual unsigned int
+  numberOfNonDefaultValuatedNodes(const Graph * = nullptr) const = 0;
 
   /**
    * @brief Gets an Iterator on all non-default valuated edges.
-   * When given a Graph as parameter, only edges belonging to this graph are iterated over.
+   * When given a Graph as parameter, only edges belonging to this graph are
+   * iterated over.
    * @return An Iterator over edges whose value is not default.
    *
    * @warning The ownership of the iterator is given to the caller.
    */
-  virtual tlp::Iterator<edge> *getNonDefaultValuatedEdges(const Graph * = nullptr) const = 0;
+  virtual tlp::Iterator<edge> *
+  getNonDefaultValuatedEdges(const Graph * = nullptr) const = 0;
 
   /**
    * @brief Returns whether the property has edges with a non default value.
-   * When given a Graph as parameter, only the edges with a non default value belonging to
-   * this graph are taken into account.
+   * When given a Graph as parameter, only the edges with a non default value
+   * belonging to this graph are taken into account.
    * @return false if all edges has the default value, true if not.
    *
    */
@@ -457,7 +470,8 @@ public:
    * @return the number of edges with a non default value.
    *
    */
-  virtual unsigned int numberOfNonDefaultValuatedEdges(const Graph * = nullptr) const = 0;
+  virtual unsigned int
+  numberOfNonDefaultValuatedEdges(const Graph * = nullptr) const = 0;
 
   /**
    * @brief Returns the size in bytes of a node's value.
@@ -529,7 +543,8 @@ public:
    * @param subgraph The subgraph pointed by the metanode.
    * @param metaGraph The graph who owns the meta node.
    */
-  virtual void computeMetaValue(node metaNode, Graph *subgraph, Graph *metaGraph) = 0;
+  virtual void computeMetaValue(node metaNode, Graph *subgraph,
+                                Graph *metaGraph) = 0;
 
   /**
    * @brief Sets the value of the metaedge to a computed value.
@@ -537,7 +552,8 @@ public:
    * @param it The edges represented by the meta edge.
    * @param metaGraph The graph who owns the meta edge.
    */
-  virtual void computeMetaValue(edge metaEdge, tlp::Iterator<edge> *it, Graph *metaGraph) = 0;
+  virtual void computeMetaValue(edge metaEdge, tlp::Iterator<edge> *it,
+                                Graph *metaGraph) = 0;
 
   /**
    * @brief Base class for computing values on meta nodes and edges.
@@ -551,16 +567,15 @@ public:
    * @brief Gets the MetaValueCalculator of this property.
    * @return The MetaValueCalculator of this property
    */
-  MetaValueCalculator *getMetaValueCalculator() {
-    return metaValueCalculator;
-  }
+  MetaValueCalculator *getMetaValueCalculator() { return metaValueCalculator; }
 
   /**
    * @brief Sets the Calculator for meta nodes and edges.
-   * @param calculator The object containing the logic for computing the meta values for the nodes
-   * and edges.
+   * @param calculator The object containing the logic for computing the meta
+   * values for the nodes and edges.
    *
-   * @warning The ownership of the MetaValueCalculator is not taken by the property.
+   * @warning The ownership of the MetaValueCalculator is not taken by the
+   * property.
    */
   virtual void setMetaValueCalculator(MetaValueCalculator *calculator) {
     metaValueCalculator = calculator;
@@ -570,8 +585,8 @@ public:
    * @brief Compares the value this property holds for the two given nodes.
    * @param n1 The first node to compare the value of.
    * @param n2 The second node to compare the value of.
-   * @return 0 if the values are identical, a positive value if n1 is greater than n2, and a
-   * negative value if n1 is less than n2.
+   * @return 0 if the values are identical, a positive value if n1 is greater
+   * than n2, and a negative value if n1 is less than n2.
    */
   virtual int compare(const node n1, const node n2) const = 0;
 
@@ -579,8 +594,8 @@ public:
    * @brief Compares the value this property holds for the two given edges.
    * @param e1 The first edge to compare the value of.
    * @param e2 The second edge to compare the value of.
-   * @return 0 if the values are identical, a positive value if e1 is greater than e2, and a
-   * negative value if e1 is less than e2.
+   * @return 0 if the values are identical, a positive value if e1 is greater
+   * than e2, and a negative value if e1 is less than e2.
    */
   virtual int compare(const edge e1, const edge e2) const = 0;
 
@@ -602,8 +617,8 @@ protected:
 
 /**
  * @ingroup Graph
- * @brief VectorPropertyInterface describes the interface of a graph property whose holded value is
- * a vector (std::vector)
+ * @brief VectorPropertyInterface describes the interface of a graph property
+ * whose holded value is a vector (std::vector)
  *
  */
 class TLP_SCOPE VectorPropertyInterface : public PropertyInterface {
@@ -614,76 +629,102 @@ public:
 
   /**
    * @brief split an input string into a vector of strings
-   * @param str A string listing the elements of the vector to set on a node/edge.
+   * @param str A string listing the elements of the vector to set on a
+   * node/edge.
    * @param vect An output vector containing the string elements
-   * @param openChar an optional character opening the list of elements. Default value is '('; when
-   * set to '\0' it indicates that there is no opening character.
-   * @param sepChar an optional character separing the elements of the list. Default value is ','.
-   * @param closeChar an optional character closing the list of elements. Default value is ')'; when
-   * set to '\0' it indicates that there is no opening character.
-   * @return Whether the string was a correct representation for this property's type.
+   * @param openChar an optional character opening the list of elements. Default
+   * value is '('; when set to '\0' it indicates that there is no opening
+   * character.
+   * @param sepChar an optional character separing the elements of the list.
+   * Default value is ','.
+   * @param closeChar an optional character closing the list of elements.
+   * Default value is ')'; when set to '\0' it indicates that there is no
+   * opening character.
+   * @return Whether the string was a correct representation for this property's
+   * type.
    */
-  virtual bool tokenize(const std::string &str, std::vector<std::string> &vect, char openChar = '(',
-                        char sepChar = ',', char closeChar = ')') = 0;
+  virtual bool tokenize(const std::string &str, std::vector<std::string> &vect,
+                        char openChar = '(', char sepChar = ',',
+                        char closeChar = ')') = 0;
 
   /**
-   * @brief Sets a new vector represented by the vector of string parameter as the node value.
+   * @brief Sets a new vector represented by the vector of string parameter as
+   * the node value.
    * @param n The node on which to set the new value.
-   * @param values A vector of strings listing the string representations of elements of the vector
-   * to set on the node.
-   * @return Whether the vector was a correct representation for this property's type. If not, the
-   * value is not set.
+   * @param values A vector of strings listing the string representations of
+   * elements of the vector to set on the node.
+   * @return Whether the vector was a correct representation for this property's
+   * type. If not, the value is not set.
    */
-  virtual bool setNodeStringValueAsVector(const node n, const std::vector<std::string> &values) = 0;
+  virtual bool
+  setNodeStringValueAsVector(const node n,
+                             const std::vector<std::string> &values) = 0;
 
   /**
-   * @brief Sets a new vector represented by the vector of string parameter as the edge value.
+   * @brief Sets a new vector represented by the vector of string parameter as
+   * the edge value.
    * @param e The edge on which to set the new value.
-   * @param values A vector of strings listing the string representations of elements of the vector
-   * to set on the edge.
-   * @return Whether the vector was a correct representation for this property's type. If not, the
-   * value is not set.
+   * @param values A vector of strings listing the string representations of
+   * elements of the vector to set on the edge.
+   * @return Whether the vector was a correct representation for this property's
+   * type. If not, the value is not set.
    */
-  virtual bool setEdgeStringValueAsVector(const edge e, const std::vector<std::string> &values) = 0;
+  virtual bool
+  setEdgeStringValueAsVector(const edge e,
+                             const std::vector<std::string> &values) = 0;
 
   /**
-   * @brief Sets a new vector represented by the string parameter as the node value.
+   * @brief Sets a new vector represented by the string parameter as the node
+   * value.
    * @param n The node on which to set the new value.
-   * @param value A string listing the elements of the vector to set on the node.
-   * @param openChar an optional character opening the list of elements. Default value is '('; when
-   * set to '\0' it indicates that there is no opening character.
-   * @param sepChar an optional character separing the elements of the list. Default value is ','.
-   * @param closeChar an optional character closing the list of elements. Default value is ')'; when
-   * set to '\0' it indicates that there is no opening character.
-   * @return Whether the string was a correct representation for this property's type. If not, the
-   * value is not set.
+   * @param value A string listing the elements of the vector to set on the
+   * node.
+   * @param openChar an optional character opening the list of elements. Default
+   * value is '('; when set to '\0' it indicates that there is no opening
+   * character.
+   * @param sepChar an optional character separing the elements of the list.
+   * Default value is ','.
+   * @param closeChar an optional character closing the list of elements.
+   * Default value is ')'; when set to '\0' it indicates that there is no
+   * opening character.
+   * @return Whether the string was a correct representation for this property's
+   * type. If not, the value is not set.
    */
-  virtual bool setNodeStringValueAsVector(const node n, const std::string &value,
-                                          char openChar = '(', char sepChar = ',',
+  virtual bool setNodeStringValueAsVector(const node n,
+                                          const std::string &value,
+                                          char openChar = '(',
+                                          char sepChar = ',',
                                           char closeChar = ')') = 0;
 
   /**
-   * @brief Sets a new vector represented by the string parameter as the edge value.
+   * @brief Sets a new vector represented by the string parameter as the edge
+   * value.
    * @param e The edge on which to set value on.
-   * @param value A string listing the elements of the vector to set on the edge.
-   * @param openChar an optional character opening the list of elements. Default value is '('; when
-   * set to '\0' it indicates that there is no opening character.
-   * @param sepChar an optional character separing the elements of the list. Default value is ','.
-   * @param closeChar an optional character closing the list of elements. Default value is ')'; when
-   * set to '\0' it indicates that there is no opening character.
-   * @return Whether the string was a correct representation for this property's type. If not, the
-   * value is not set.
+   * @param value A string listing the elements of the vector to set on the
+   * edge.
+   * @param openChar an optional character opening the list of elements. Default
+   * value is '('; when set to '\0' it indicates that there is no opening
+   * character.
+   * @param sepChar an optional character separing the elements of the list.
+   * Default value is ','.
+   * @param closeChar an optional character closing the list of elements.
+   * Default value is ')'; when set to '\0' it indicates that there is no
+   * opening character.
+   * @return Whether the string was a correct representation for this property's
+   * type. If not, the value is not set.
    */
-  virtual bool setEdgeStringValueAsVector(const edge e, const std::string &value,
-                                          char openChar = '(', char sepChar = ',',
+  virtual bool setEdgeStringValueAsVector(const edge e,
+                                          const std::string &value,
+                                          char openChar = '(',
+                                          char sepChar = ',',
                                           char closeChar = ')') = 0;
 };
 
 /**
  * @ingroup Observation
  * @brief Contains additional information about events on a property,
- * such as the property it happened on, the node/edge eventually concerned and such.
- * It also contains the detailed type of the event.
+ * such as the property it happened on, the node/edge eventually concerned and
+ * such. It also contains the detailed type of the event.
  */
 class TLP_SCOPE PropertyEvent : public Event {
 public:
@@ -700,7 +741,8 @@ public:
     TLP_AFTER_SET_EDGE_VALUE
   };
   PropertyEvent(const PropertyInterface &prop, PropertyEventType propEvtType,
-                Event::EventType evtType = Event::TLP_MODIFICATION, unsigned int id = UINT_MAX)
+                Event::EventType evtType = Event::TLP_MODIFICATION,
+                unsigned int id = UINT_MAX)
       : Event(prop, evtType), evtType(propEvtType), eltId(id) {}
 
   PropertyInterface *getProperty() const {
@@ -717,9 +759,7 @@ public:
     return edge(eltId);
   }
 
-  PropertyEventType getType() const {
-    return evtType;
-  }
+  PropertyEventType getType() const { return evtType; }
 
 protected:
   PropertyEventType evtType;
@@ -728,23 +768,19 @@ protected:
 } // namespace tlp
 
 //================================================================================
-// these functions allow to use tlp::PropertyInterface as a key in a hash-based data structure (e.g.
-// hashmap).
+// these functions allow to use tlp::PropertyInterface as a key in a hash-based
+// data structure (e.g. hashmap).
 //================================================================================
 
 ///@cond DOXYGEN_HIDDEN
 namespace std {
-template <>
-struct TLP_SCOPE hash<const tlp::PropertyInterface *> {
+template <> struct TLP_SCOPE hash<const tlp::PropertyInterface *> {
   size_t operator()(const tlp::PropertyInterface *prop) const {
     return size_t(prop);
   }
 };
-template <>
-struct TLP_SCOPE hash<tlp::PropertyInterface *> {
-  size_t operator()(tlp::PropertyInterface *prop) const {
-    return size_t(prop);
-  }
+template <> struct TLP_SCOPE hash<tlp::PropertyInterface *> {
+  size_t operator()(tlp::PropertyInterface *prop) const { return size_t(prop); }
 };
 } // namespace std
 ///@endcond

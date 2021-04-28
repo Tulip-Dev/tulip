@@ -34,8 +34,8 @@ namespace tlp {
  * @since Tulip 4.10
  *
  * That static class aims to facilitate working with Tulip color scales.
- * It allows to easily retrieve Tulip predefined ones but also to register new ones
- * in a persistent database for further reuse.
+ * It allows to easily retrieve Tulip predefined ones but also to register new
+ * ones in a persistent database for further reuse.
  *
  */
 class TLP_QT_SCOPE ColorScalesManager {
@@ -56,17 +56,19 @@ public:
   static tlp::ColorScale getColorScale(const std::string &colorScaleName);
 
   /**
-   * @brief Registers a color scale in the persistent database for further reuse.
+   * @brief Registers a color scale in the persistent database for further
+   * reuse.
    *
-   * @warning If there is already a color scale registered with such a name, it will not be
-   * overwritten.
+   * @warning If there is already a color scale registered with such a name, it
+   * will not be overwritten.
    *
    */
   static void registerColorScale(const std::string &colorScaleName,
                                  const tlp::ColorScale &colorScale);
 
   /**
-   * @brief Removes the color scale registered with the provided name from the persistent database.
+   * @brief Removes the color scale registered with the provided name from the
+   * persistent database.
    *
    */
   static void removeColorScale(const std::string &colorScaleName);

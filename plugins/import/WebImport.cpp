@@ -16,13 +16,13 @@
  * See the GNU General Public License for more details.
  *
  */
+#include "WebImport.h"
 #include <iostream>
 #include <qapplication.h>
 #include <qtimer.h>
-#include <tulip/TulipPluginHeaders.h>
 #include <tulip/DownloadManager.h>
 #include <tulip/TlpQtTools.h>
-#include "WebImport.h"
+#include <tulip/TulipPluginHeaders.h>
 
 using namespace std;
 using namespace tlp;
@@ -41,42 +41,30 @@ public:
   bool load();
   void clear();
   bool isHtmlPage();
-  bool is_http() const {
-    return !http_prefix.empty();
-  }
+  bool is_http() const { return !http_prefix.empty(); }
   UrlElement parseUrl(const std::string &href);
   void setUrl(const std::string &);
-  std::string getUrl() const {
-    return clean_url.size() ? clean_url : url;
-  }
+  std::string getUrl() const { return clean_url.size() ? clean_url : url; }
 
 private:
   void fill(std::string &result);
-  bool siteconnect(const std::string &server, const std::string &url, bool headonly);
+  bool siteconnect(const std::string &server, const std::string &url,
+                   bool headonly);
 
 private:
   HttpContext *context;
 
 public:
-  bool isValid() {
-    return !server.empty();
-  }
+  bool isValid() { return !server.empty(); }
 
-  bool isRedirected() {
-    return context && context->redirected;
-  }
+  bool isRedirected() { return context && context->redirected; }
 
-  UrlElement getRedirection() {
-    return parseUrl(context->data);
-  }
-  int getCode() {
-    return context->code;
-  }
+  UrlElement getRedirection() { return parseUrl(context->data); }
+  int getCode() { return context->code; }
 };
 
 namespace std {
-template <>
-struct less<UrlElement> {
+template <> struct less<UrlElement> {
   bool operator()(const UrlElement &lhs, const UrlElement &rhs) const {
     if (lhs.server.compare(rhs.server) < 0)
       return true;
@@ -90,7 +78,8 @@ struct less<UrlElement> {
 } // namespace std
 
 HttpContext::HttpContext()
-    : status(false), code(-1), reply(nullptr), processed(false), redirected(false), isHtml(false) {}
+    : status(false), code(-1), reply(nullptr), processed(false),
+      redirected(false), isHtml(false) {}
 
 HttpContext::~HttpContext() {
   if (reply) {
@@ -147,7 +136,8 @@ void HttpContext::headerReceived() {
       else if ((code > 299) && (code < 305 || code == 307)) {
         /* redirection codes */
         redirected = true;
-        QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+        QVariant redirectionTarget =
+            reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
 
         if (!redirectionTarget.isNull())
           data = QStringToTlpString(redirectionTarget.toUrl().toString());
@@ -164,8 +154,8 @@ void HttpContext::headerReceived() {
 
     /* normal codes */
     value = reply->header(QNetworkRequest::ContentTypeHeader);
-    status = isHtml =
-        (value.canConvert<QString>() && value.toString().contains(QString("text/html")));
+    status = isHtml = (value.canConvert<QString>() &&
+                       value.toString().contains(QString("text/html")));
     reply->close();
     reply->deleteLater();
     reply = nullptr;
@@ -187,8 +177,8 @@ void HttpContext::setTimer(QTimer *timer) {
 
 UrlElement::UrlElement() : http_prefix("http://"), data(""), context(nullptr) {}
 UrlElement::UrlElement(const UrlElement &c)
-    : http_prefix(c.http_prefix), data(""), server(c.server), url(c.url), clean_url(c.clean_url),
-      context(nullptr) {}
+    : http_prefix(c.http_prefix), data(""), server(c.server), url(c.url),
+      clean_url(c.clean_url), context(nullptr) {}
 
 void UrlElement::setUrl(const std::string &theUrl) {
   url = theUrl;
@@ -200,9 +190,7 @@ void UrlElement::setUrl(const std::string &theUrl) {
     clean_url.clear();
 }
 
-void UrlElement::fill(std::string &result) {
-  result += context->data;
-}
+void UrlElement::fill(std::string &result) { result += context->data; }
 
 void UrlElement::clear() {
   if (context) {
@@ -222,8 +210,9 @@ bool UrlElement::load() {
 }
 
 static const char *not_html_extensions[] = {
-    ".bmp", ".css", ".doc", ".ico", ".exe", ".gif", ".gz",  ".js", ".jpeg", ".jpg", ".pdf",
-    ".png", ".ps",  ".rss", ".tar", ".tgz", ".wav", ".zip", ".z",  nullptr /* must be the last */
+    ".bmp", ".css",  ".doc", ".ico", ".exe", ".gif", ".gz",
+    ".js",  ".jpeg", ".jpg", ".pdf", ".png", ".ps",  ".rss",
+    ".tar", ".tgz",  ".wav", ".zip", ".z",   nullptr /* must be the last */
 };
 
 bool UrlElement::isHtmlPage() {
@@ -243,7 +232,8 @@ bool UrlElement::isHtmlPage() {
   return context->isHtml;
 }
 
-bool UrlElement::siteconnect(const std::string &server, const std::string &path, bool headonly) {
+bool UrlElement::siteconnect(const std::string &server, const std::string &path,
+                             bool headonly) {
   // check that we actually got data..
   if (server.empty())
     return false;
@@ -281,7 +271,8 @@ bool UrlElement::siteconnect(const std::string &server, const std::string &path,
 } /* end, siteconnect */
 
 static const char *rejected_protocols[] = {
-    "ftp:", "gopher:", "sftp:", "javascript:", "mms:", "mailto:", nullptr /* must be the last */
+    "ftp:", "gopher:", "sftp:", "javascript:",
+    "mms:", "mailto:", nullptr /* must be the last */
 };
 
 UrlElement UrlElement::parseUrl(const std::string &href) {
@@ -331,7 +322,8 @@ UrlElement UrlElement::parseUrl(const std::string &href) {
     newUrl.server = hostname;
     newUrl.setUrl(href.substr(endhost));
   } else {
-    size_t querystart = lowercase.find_first_of("#", pos); /* previously ?#  instead of # */
+    size_t querystart =
+        lowercase.find_first_of("#", pos); /* previously ?#  instead of # */
 
     if (querystart != string::npos)
       len = querystart;
@@ -430,9 +422,10 @@ static const char *paramHelp[] = {
     "This parameter indicates the color used to display redirections."};
 
 struct WebImport : public ImportModule {
-  PLUGININFORMATION("Web Site", "Auber", "15/11/2004",
-                    "Imports a new graph from Web site structure (one node per page).", "1.1",
-                    "Misc")
+  PLUGININFORMATION(
+      "Web Site", "Auber", "15/11/2004",
+      "Imports a new graph from Web site structure (one node per page).", "1.1",
+      "Misc")
 
   std::deque<UrlElement> toVisit;
   std::set<UrlElement> visited;
@@ -447,7 +440,8 @@ struct WebImport : public ImportModule {
 
   WebImport(tlp::PluginContext *context)
       : ImportModule(context), labels(nullptr), urls(nullptr), colors(nullptr),
-        redirectionColor(nullptr), maxSize(1000), visitOther(false), extractNonHttp(true) {
+        redirectionColor(nullptr), maxSize(1000), visitOther(false),
+        extractNonHttp(true) {
     addInParameter<string>("server", paramHelp[0], "www.labri.fr");
     addInParameter<string>("web page", paramHelp[1], "");
     addInParameter<int>("max size", paramHelp[2], "1000");
@@ -456,7 +450,8 @@ struct WebImport : public ImportModule {
     addInParameter<bool>("compute layout", paramHelp[5], "true");
     addInParameter<Color>("page color", paramHelp[6], "(240, 0, 120, 128)");
     addInParameter<Color>("link color", paramHelp[7], "(96,96,191,128)");
-    addInParameter<Color>("redirection color", paramHelp[8], "(191,175,96,128)");
+    addInParameter<Color>("redirection color", paramHelp[8],
+                          "(191,175,96,128)");
     addDependency("FM^3 (OGDF)", "1.2");
   }
 
@@ -534,8 +529,8 @@ struct WebImport : public ImportModule {
   }
 
   //========================================================
-  bool addEdge(const UrlElement &source, const UrlElement &target, const char *type,
-               const Color *color) {
+  bool addEdge(const UrlElement &source, const UrlElement &target,
+               const char *type, const Color *color) {
     node sNode, tNode;
     bool sAdded = addNode(source, sNode);
     bool tAdded = addNode(target, tNode);
@@ -545,7 +540,8 @@ struct WebImport : public ImportModule {
     if (!sNode.isValid() || !tNode.isValid())
       return false;
 
-    if (sAdded || tAdded || ((sNode != tNode) && !graph->existEdge(sNode, tNode).isValid())) {
+    if (sAdded || tAdded ||
+        ((sNode != tNode) && !graph->existEdge(sNode, tNode).isValid())) {
       edge e = graph->addEdge(sNode, tNode);
 
       if (type)
@@ -573,7 +569,8 @@ struct WebImport : public ImportModule {
     return false;
   }
   //========================================================
-  void findAndTreatUrls(const string &lowercase, const string &balise, UrlElement &url) {
+  void findAndTreatUrls(const string &lowercase, const string &balise,
+                        UrlElement &url) {
     size_t llen = lowercase.length();
     size_t len = llen;
 
@@ -588,7 +585,8 @@ struct WebImport : public ImportModule {
         char c = '=';
 
         for (; start < llen; start++) {
-          if (lowercase[start] == c || ((c == '"') && lowercase[start] == '\'')) {
+          if (lowercase[start] == c ||
+              ((c == '"') && lowercase[start] == '\'')) {
             // found =
             if (c == '=') {
               // now looking for "
@@ -667,14 +665,17 @@ struct WebImport : public ImportModule {
         unsigned int nbNodes = graph->numberOfNodes();
 
         if (pluginProgress && ((nbNodes % step) == 0)) {
-          pluginProgress->setComment(string("Visiting ") + urlDecode(url.server + url.url));
+          pluginProgress->setComment(string("Visiting ") +
+                                     urlDecode(url.server + url.url));
 
           if (pluginProgress->progress(nbNodes, maxSize) != TLP_CONTINUE)
             return pluginProgress->state() != TLP_CANCEL;
         }
 
 #ifndef NDEBUG
-        tlp::warning() << "Visiting: " << url.server << url.url << " ..." << std::endl << flush;
+        tlp::warning() << "Visiting: " << url.server << url.url << " ..."
+                       << std::endl
+                       << flush;
 #endif
 
         if (url.isRedirected()) {
@@ -683,11 +684,13 @@ struct WebImport : public ImportModule {
           if (redirection.isValid()) {
 #ifndef NDEBUG
             tlp::warning() << endl
-                           << "redirected to " << redirection.server << redirection.url << endl;
+                           << "redirected to " << redirection.server
+                           << redirection.url << endl;
 #endif
 
             if (addEdge(url, redirection, "redirection", redirectionColor))
-              addUrl(redirection, visitOther || redirection.server == url.server);
+              addUrl(redirection,
+                     visitOther || redirection.server == url.server);
           } else
             tlp::warning() << endl << "invalid redirection" << endl;
         } else {
@@ -702,7 +705,8 @@ struct WebImport : public ImportModule {
 
 #ifndef NDEBUG
       else
-        tlp::warning() << "Omitting : " << url.server << url.url << " ==> [not html]" << endl;
+        tlp::warning() << "Omitting : " << url.server << url.url
+                       << " ==> [not html]" << endl;
 
 #endif
     }
@@ -771,8 +775,8 @@ struct WebImport : public ImportModule {
     if (!mySite.load()) {
       if (pluginProgress) {
         stringstream sstr;
-        sstr << "Unable to access http://" << mySite.server << mySite.url << " (ERROR "
-             << mySite.getCode() << ')';
+        sstr << "Unable to access http://" << mySite.server << mySite.url
+             << " (ERROR " << mySite.getCode() << ')';
         pluginProgress->setError(sstr.str());
       }
 
@@ -785,7 +789,8 @@ struct WebImport : public ImportModule {
 
     if (pluginProgress) {
       pluginProgress->showPreview(false);
-      pluginProgress->setComment(std::string("Visiting ") + mySite.server + mySite.url);
+      pluginProgress->setComment(std::string("Visiting ") + mySite.server +
+                                 mySite.url);
     }
 
     if (!start())
@@ -796,7 +801,8 @@ struct WebImport : public ImportModule {
       string errMsg;
       // apply FM³
       LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
-      return graph->applyPropertyAlgorithm("FM^3 (OGDF)", layout, errMsg, nullptr, pluginProgress);
+      return graph->applyPropertyAlgorithm("FM^3 (OGDF)", layout, errMsg,
+                                           nullptr, pluginProgress);
     }
 
     return true;

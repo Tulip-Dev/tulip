@@ -30,10 +30,12 @@ namespace tlp {
 
 ConvolutionClustering::ConvolutionClustering(PluginContext *context)
     : DoubleAlgorithm(context), metric(nullptr) {
-  addInParameter<NumericProperty *>("metric", paramHelp[0], "viewMetric", false);
+  addInParameter<NumericProperty *>("metric", paramHelp[0], "viewMetric",
+                                    false);
 }
 
-// convolution function, build a triangular function center in 0 with a width width and a
+// convolution function, build a triangular function center in 0 with a width
+// width and a
 double g(int k, double width, double amplitude) {
   double slope = amplitude / width;
 
@@ -43,7 +45,8 @@ double g(int k, double width, double amplitude) {
     if (k < 0)
       return k * slope + amplitude; // partie croissante du signal triangulaire
     else
-      return -k * slope + amplitude; // partie décroissante du signal triangulaire
+      return -k * slope +
+             amplitude; // partie décroissante du signal triangulaire
   }
 }
 //================================================================================
@@ -56,13 +59,15 @@ int getInterval(int d, const vector<int> &ranges) {
   return ranges.size() - 2;
 }
 //================================================================================
-void ConvolutionClustering::setParameters(int histosize, int threshold, int width) {
+void ConvolutionClustering::setParameters(int histosize, int threshold,
+                                          int width) {
   this->histosize = histosize;
   this->threshold = threshold;
   this->width = width;
 }
 //================================================================================
-void ConvolutionClustering::getParameters(int &histosize, int &threshold, int &width) {
+void ConvolutionClustering::getParameters(int &histosize, int &threshold,
+                                          int &width) {
   histosize = this->histosize;
   threshold = this->threshold;
   width = this->width;
@@ -139,7 +144,8 @@ void ConvolutionClustering::autoSetParameter() {
     lastValue = (*itMap).first;
   }
 
-  histosize = int((metric->getNodeDoubleMax() - metric->getNodeDoubleMin()) / deltaXMin);
+  histosize = int((metric->getNodeDoubleMax() - metric->getNodeDoubleMin()) /
+                  deltaXMin);
 
   if (histosize > 16384)
     histosize = 16384; // histosize = histosize <? 16384;
@@ -153,7 +159,8 @@ void ConvolutionClustering::autoSetParameter() {
   // width=(int)(deltaXMax*histosize/(metric->getNodeMax()-metric->getNodeMin()));
   // width=(int)(deltaXMin*histosize/(metric->getNodeMax()-metric->getNodeMin()));
   deltaSum /= histo.size();
-  width = int(deltaSum * histosize / (metric->getNodeDoubleMax() - metric->getNodeDoubleMin()));
+  width = int(deltaSum * histosize /
+              (metric->getNodeDoubleMax() - metric->getNodeDoubleMin()));
   //===============================================================================
   // Find good threshold
   // make the average of all local minimum
@@ -191,7 +198,8 @@ vector<double> *ConvolutionClustering::getHistogram() {
   double maxMinRange = metric->getNodeDoubleMax() - minVal;
 
   for (auto n : graph->nodes()) {
-    int tmp = int((metric->getNodeDoubleValue(n) - minVal) * histosize / maxMinRange);
+    int tmp =
+        int((metric->getNodeDoubleValue(n) - minVal) * histosize / maxMinRange);
 
     if (histogramOfValues.find(tmp) == histogramOfValues.end())
       histogramOfValues[tmp] = 1;
@@ -209,7 +217,8 @@ vector<double> *ConvolutionClustering::getHistogram() {
 
   map<int, int>::iterator itMap;
 
-  for (itMap = histogramOfValues.begin(); itMap != histogramOfValues.end(); ++itMap) {
+  for (itMap = histogramOfValues.begin(); itMap != histogramOfValues.end();
+       ++itMap) {
     double value = itMap->second;
     int index = itMap->first;
 
@@ -226,8 +235,9 @@ void ConvolutionClustering::getClusters(const std::vector<int> &ranges) {
   double minVal = metric->getNodeDoubleMin();
   double maxMinRange = metric->getNodeDoubleMax() - minVal;
   for (auto n : graph->nodes()) {
-    int tmp = getInterval(int((metric->getNodeDoubleValue(n) - minVal) * histosize / maxMinRange),
-                          ranges);
+    int tmp = getInterval(
+        int((metric->getNodeDoubleValue(n) - minVal) * histosize / maxMinRange),
+        ranges);
     result->setNodeValue(n, tmp);
   }
 }

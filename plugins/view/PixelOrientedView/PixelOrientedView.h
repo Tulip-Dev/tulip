@@ -24,21 +24,21 @@
 
 #include <QWidget>
 
-#include "POLIB/potypes.h"
+#include "POLIB/HSIColorMapping.h"
+#include "POLIB/HilbertLayout.h"
+#include "POLIB/LinearMappingColor.h"
+#include "POLIB/PixelOrientedMediator.h"
 #include "POLIB/SpiralLayout.h"
 #include "POLIB/SquareLayout.h"
-#include "POLIB/ZOrderLayout.h"
-#include "POLIB/HilbertLayout.h"
-#include "POLIB/TulipNodeColorMapping.h"
-#include "POLIB/HSIColorMapping.h"
-#include "POLIB/PixelOrientedMediator.h"
-#include "POLIB/LinearMappingColor.h"
 #include "POLIB/TulipGraphDimension.h"
+#include "POLIB/TulipNodeColorMapping.h"
+#include "POLIB/ZOrderLayout.h"
+#include "POLIB/potypes.h"
 
 #include "../../utils/PluginNames.h"
 
-#include "PixelOrientedOverview.h"
 #include "PixelOrientedOptionsWidget.h"
+#include "PixelOrientedOverview.h"
 
 class QGraphicsProxyWidget;
 
@@ -51,15 +51,17 @@ class PixelOrientedViewQuickAccessBar;
 /** \file
  *  \brief  Tulip Pixel Oriented View
 
- * This view plugin allows to visualize graph properties using pixel oriented visualization
- techniques.
- * This type of visualization aims to use each pixel of the display to visualize one data value
+ * This view plugin allows to visualize graph properties using pixel oriented
+ visualization techniques.
+ * This type of visualization aims to use each pixel of the display to visualize
+ one data value
  * and therefore allow the visualization of the largest amount of data possible.
- * Pixels are mapped so that neighbor pixels in the data are placed close to each other on the
- screen.
- * The technique uses a linear order on data elements (graph nodes), inferred from a selected
- property,
- * which can be seen as a map from the data space onto a line segment. The mapping onto a 2D portion
+ * Pixels are mapped so that neighbor pixels in the data are placed close to
+ each other on the screen.
+ * The technique uses a linear order on data elements (graph nodes), inferred
+ from a selected property,
+ * which can be seen as a map from the data space onto a line segment. The
+ mapping onto a 2D portion
  * of the plane then uses a “space-filling curve”.
  *
  *
@@ -74,41 +76,36 @@ class PixelOrientedView : public GlMainView {
   void registerTriggers();
 
 public:
-  PLUGININFORMATION(ViewName::PixelOrientedViewName, "Antoine Lambert", "12/2008",
-                    "<p>The Pixel Oriented view allows to visualize graph properties using pixel "
-                    "oriented visualization techniques.</p>"
-                    "<p>This type of visualization aims to use each pixel of the display to "
-                    "visualize one data value and therefore allows the visualization of the "
-                    "largest amount of data possible. "
-                    "Pixels are mapped so that neighbor pixels in the data are placed close to "
-                    "each other on the screen.</p>"
-                    "<p>The technique uses a linear order on data elements (graph nodes), inferred "
-                    "from a selected property, which can be seen as a map from the data space onto "
-                    "a line segment. The mapping onto a 2D portion of the plane then uses a "
-                    "\"space-filling curve\"</p>",
-                    "1.0", "View")
+  PLUGININFORMATION(
+      ViewName::PixelOrientedViewName, "Antoine Lambert", "12/2008",
+      "<p>The Pixel Oriented view allows to visualize graph properties using pixel "
+      "oriented visualization techniques.</p>"
+      "<p>This type of visualization aims to use each pixel of the display to "
+      "visualize one data value and therefore allows the visualization of the "
+      "largest amount of data possible. "
+      "Pixels are mapped so that neighbor pixels in the data are placed close to "
+      "each other on the screen.</p>"
+      "<p>The technique uses a linear order on data elements (graph nodes), inferred "
+      "from a selected property, which can be seen as a map from the data space onto "
+      "a line segment. The mapping onto a 2D portion of the plane then uses a "
+      "\"space-filling curve\"</p>",
+      "1.0", "View")
 
   PixelOrientedView(const PluginContext *);
   ~PixelOrientedView() override;
-  std::string icon() const override {
-    return ":/pixel_oriented_view.png";
-  }
+  std::string icon() const override { return ":/pixel_oriented_view.png"; }
   QuickAccessBar *getQuickAccessBarImpl() override;
   void setState(const DataSet &dataSet) override;
   DataSet state() const override;
   void graphicsViewResized(int w, int h) override;
-  Graph *getPixelOrientedGraph() {
-    return pixelOrientedGraph;
-  }
+  Graph *getPixelOrientedGraph() { return pixelOrientedGraph; }
   QList<QWidget *> configurationWidgets() const override;
   void interactorsInstalled(const QList<tlp::Interactor *> &) override;
 
   void toggleInteractors(const bool activate);
 
   std::vector<PixelOrientedOverview *> getOverviews();
-  bool smallMultiplesViewSet() const {
-    return smallMultiplesView;
-  }
+  bool smallMultiplesViewSet() const { return smallMultiplesView; }
   void switchFromSmallMultiplesToDetailView(PixelOrientedOverview *scatterPlot);
   void switchFromDetailViewToSmallMultiples();
   BoundingBox getSmallMultiplesViewBoundingBox();

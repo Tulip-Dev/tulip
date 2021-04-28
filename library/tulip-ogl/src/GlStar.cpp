@@ -24,10 +24,12 @@ using namespace std;
 
 namespace tlp {
 
-GlStar::GlStar(const Coord &position, const Size &size, unsigned int numberOfStarPoints,
-               const Color &fillColor, const Color &outlineColor, bool outlined,
+GlStar::GlStar(const Coord &position, const Size &size,
+               unsigned int numberOfStarPoints, const Color &fillColor,
+               const Color &outlineColor, bool outlined,
                const string &textureName, float outlineSize)
-    : GlComplexPolygon(vector<Coord>(), fillColor, outlineColor, 0, textureName),
+    : GlComplexPolygon(vector<Coord>(), fillColor, outlineColor, 0,
+                       textureName),
       position(position), size(size), numberOfStarPoints(numberOfStarPoints) {
   setFillColor(fillColor);
   setOutlineColor(outlineColor);
@@ -39,9 +41,7 @@ GlStar::GlStar(const Coord &position, const Size &size, unsigned int numberOfSta
 //=====================================================
 GlStar::~GlStar() {}
 //=====================================================
-unsigned int GlStar::getNumberOfStarPoints() {
-  return numberOfStarPoints;
-}
+unsigned int GlStar::getNumberOfStarPoints() { return numberOfStarPoints; }
 //=====================================================
 void GlStar::computeStar() {
   BoundingBox box;
@@ -60,12 +60,12 @@ void GlStar::computeStar() {
   }
 
   for (auto &coord : points) {
-    coord[0] =
-        position[0] +
-        ((coord[0] - ((box[1][0] + box[0][0]) / 2.)) / ((box[1][0] - box[0][0]) / 2.)) * size[0];
-    coord[1] =
-        position[1] +
-        ((coord[1] - ((box[1][1] + box[0][1]) / 2.)) / ((box[1][1] - box[0][1]) / 2.)) * size[1];
+    coord[0] = position[0] + ((coord[0] - ((box[1][0] + box[0][0]) / 2.)) /
+                              ((box[1][0] - box[0][0]) / 2.)) *
+                                 size[0];
+    coord[1] = position[1] + ((coord[1] - ((box[1][1] + box[0][1]) / 2.)) /
+                              ((box[1][1] - box[0][1]) / 2.)) *
+                                 size[1];
   }
 
   boundingBox.init(position + size / 2.f);

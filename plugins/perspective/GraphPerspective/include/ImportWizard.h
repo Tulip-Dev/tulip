@@ -19,8 +19,8 @@
 #ifndef IMPORTWIZARD_H
 #define IMPORTWIZARD_H
 
-#include <QWizard>
 #include <QModelIndex>
+#include <QWizard>
 #include <tulip/WithParameter.h>
 
 namespace Ui {

@@ -25,8 +25,8 @@
 #include <set>
 #include <string>
 
-#include <tulip/Observable.h>
 #include <tulip/Graph.h>
+#include <tulip/Observable.h>
 
 namespace tlp {
 class IntegerVectorProperty;
@@ -35,14 +35,15 @@ class IntegerProperty;
 
 class PropertyValuesDispatcher : public Observable {
 public:
-  PropertyValuesDispatcher(tlp::Graph *source, tlp::Graph *target,
-                           const std::set<std::string> &sourceToTargetProperties,
-                           const std::set<std::string> &targetToSourceProperties,
-                           tlp::IntegerVectorProperty *_graphEntitiesToDisplayedNodes,
-                           tlp::BooleanProperty *_displayedNodesAreNodes,
-                           tlp::IntegerProperty *displayedNodesToGraphEntities,
-                           tlp::IntegerProperty *displayedEdgesToGraphEdges,
-                           QHash<tlp::edge, tlp::edge> &edgesMap);
+  PropertyValuesDispatcher(
+      tlp::Graph *source, tlp::Graph *target,
+      const std::set<std::string> &sourceToTargetProperties,
+      const std::set<std::string> &targetToSourceProperties,
+      tlp::IntegerVectorProperty *_graphEntitiesToDisplayedNodes,
+      tlp::BooleanProperty *_displayedNodesAreNodes,
+      tlp::IntegerProperty *displayedNodesToGraphEntities,
+      tlp::IntegerProperty *displayedEdgesToGraphEdges,
+      QHash<tlp::edge, tlp::edge> &edgesMap);
   void afterSetNodeValue(tlp::PropertyInterface *, const tlp::node);
   void afterSetEdgeValue(tlp::PropertyInterface *, const tlp::edge);
   void afterSetAllNodeValue(tlp::PropertyInterface *);

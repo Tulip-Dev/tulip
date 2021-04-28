@@ -24,11 +24,11 @@
 
 #include "EditColorScaleInteractor.h"
 
+#include <tulip/Color.h>
+#include <tulip/Coord.h>
 #include <tulip/GlComposite.h>
 #include <tulip/Observable.h>
 #include <tulip/Size.h>
-#include <tulip/Color.h>
-#include <tulip/Coord.h>
 
 #include <QMutex>
 
@@ -58,31 +58,22 @@ public:
   ~ColorScaleSlider() override;
   void draw(float lod, tlp::Camera *camera) override;
   void setColor(Color c);
-  Coord getBasePosition() {
-    return position;
-  }
-  Size getSize() {
-    return size;
-  }
-  SliderWay getWay() {
-    return way;
-  }
+  Coord getBasePosition() { return position; }
+  Size getSize() { return size; }
+  SliderWay getWay() { return way; }
   void setLinkedSlider(ColorScaleSlider *linkedSlider);
-  ColorScaleSlider *getLinkedSlider() {
-    return linkedSlider;
-  }
+  ColorScaleSlider *getLinkedSlider() { return linkedSlider; }
   float getLeftBound() override;
   float getRightBound() override;
   void beginShift() override;
   void shift(float shift) override;
   void endShift() override;
   double getValue();
-  float getCurrentShift() const {
-    return currentShift;
-  }
+  float getCurrentShift() const { return currentShift; }
 
   void setValue(double value);
-  void update(std::set<Observable *>::iterator begin, std::set<Observable *>::iterator end);
+  void update(std::set<Observable *>::iterator begin,
+              std::set<Observable *>::iterator end);
   void observableDestroyed(Observable *);
 
 protected:
@@ -104,7 +95,8 @@ protected:
 class SliderBar : public Slider, public tlp::GlSimpleEntity {
 
 public:
-  SliderBar(ColorScaleSlider *left, ColorScaleSlider *right, const std::string &textureName);
+  SliderBar(ColorScaleSlider *left, ColorScaleSlider *right,
+            const std::string &textureName);
   ~SliderBar() override;
   float getLeftBound() override;
   float getRightBound() override;

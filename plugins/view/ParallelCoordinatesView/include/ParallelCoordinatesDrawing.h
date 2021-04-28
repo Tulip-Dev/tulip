@@ -22,11 +22,11 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
+#include <tulip/Color.h>
 #include <tulip/GlComposite.h>
+#include <tulip/Graph.h>
 #include <tulip/Observable.h>
 #include <tulip/Size.h>
-#include <tulip/Color.h>
-#include <tulip/Graph.h>
 
 class QProgressDialog;
 
@@ -47,13 +47,18 @@ class ParallelCoordinatesDrawing : public GlComposite, public Observable {
 public:
   enum LayoutType { PARALLEL = 0, CIRCULAR };
 
-  enum LinesType { STRAIGHT = 0, CATMULL_ROM_SPLINE, CUBIC_BSPLINE_INTERPOLATION };
+  enum LinesType {
+    STRAIGHT = 0,
+    CATMULL_ROM_SPLINE,
+    CUBIC_BSPLINE_INTERPOLATION
+  };
 
   enum LinesThickness { THICK = 0, THIN };
 
   enum HighlightedEltsSetOp { NONE = 0, INTERSECTION, UNION };
 
-  ParallelCoordinatesDrawing(ParallelCoordinatesGraphProxy *graphProxy, Graph *axisPointsGraph);
+  ParallelCoordinatesDrawing(ParallelCoordinatesGraphProxy *graphProxy,
+                             Graph *axisPointsGraph);
 
   ~ParallelCoordinatesDrawing() override;
 
@@ -93,20 +98,17 @@ public:
   void setLayoutType(const LayoutType layoutType) {
     this->layoutType = layoutType;
   }
-  void setLinesType(const LinesType linesType) {
-    this->linesType = linesType;
-  }
+  void setLinesType(const LinesType linesType) { this->linesType = linesType; }
   void setLinesThickness(const LinesThickness linesThickness) {
     this->linesThickness = linesThickness;
   }
   std::vector<ParallelAxis *> getAllAxis();
 
-  void resetAxisLayoutNextUpdate() {
-    resetAxisLayout = true;
-  }
+  void resetAxisLayoutNextUpdate() { resetAxisLayout = true; }
   void update(GlMainWidget *glWidget, bool progressBar);
-  void updateWithAxisSlidersRange(ParallelAxis *axis,
-                                  HighlightedEltsSetOp highlightedEltsSetOp = NONE);
+  void
+  updateWithAxisSlidersRange(ParallelAxis *axis,
+                             HighlightedEltsSetOp highlightedEltsSetOp = NONE);
 
   void resetAxisSlidersPosition();
 

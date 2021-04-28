@@ -22,19 +22,19 @@
 #include "tulip/SnapshotDialog.h"
 #include "ui_SnapshotDialog.h"
 
-#include <QLabel>
+#include <QClipboard>
 #include <QEvent>
-#include <QMessageBox>
-#include <QImageWriter>
 #include <QFileDialog>
 #include <QGraphicsItem>
-#include <QClipboard>
 #include <QGraphicsScene>
+#include <QImageWriter>
+#include <QLabel>
+#include <QMessageBox>
 #include <QPixmap>
 #include <QPushButton>
 
-#include <tulip/View.h>
 #include <tulip/GlOffscreenRenderer.h>
+#include <tulip/View.h>
 
 using namespace std;
 
@@ -47,9 +47,7 @@ public:
     setPixmap(QPixmap(":/tulip/gui/icons/i_locked.png"));
   }
 
-  bool isLocked() const {
-    return locked || alwaysLocked;
-  }
+  bool isLocked() const { return locked || alwaysLocked; }
 
   void setAlwaysLocked(bool alwaysLocked) {
     this->alwaysLocked = alwaysLocked;
@@ -90,15 +88,19 @@ SnapshotDialog::SnapshotDialog(const View *v, QWidget *parent)
   glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
   GlOffscreenRenderer::getInstance()->doneOpenGLContextCurrent();
 
-  // restrict snapshot width and height to the half of the GL_MAX_TEXTURE_SIZE value
+  // restrict snapshot width and height to the half of the GL_MAX_TEXTURE_SIZE
+  // value
   ui->widthSpinBox->setMaximum(maxTextureSize / 2);
   ui->heightSpinBox->setMaximum(maxTextureSize / 2);
 
   ui->widthSpinBox->setValue(view->centralItem()->scene()->sceneRect().width());
-  ui->heightSpinBox->setValue(view->centralItem()->scene()->sceneRect().height());
+  ui->heightSpinBox->setValue(
+      view->centralItem()->scene()->sceneRect().height());
 
-  connect(ui->widthSpinBox, SIGNAL(valueChanged(int)), this, SLOT(widthSpinBoxValueChanged(int)));
-  connect(ui->heightSpinBox, SIGNAL(valueChanged(int)), this, SLOT(heightSpinBoxValueChanged(int)));
+  connect(ui->widthSpinBox, SIGNAL(valueChanged(int)), this,
+          SLOT(widthSpinBoxValueChanged(int)));
+  connect(ui->heightSpinBox, SIGNAL(valueChanged(int)), this,
+          SLOT(heightSpinBoxValueChanged(int)));
 
   QPushButton *copyButton = ui->buttonBox->button(QDialogButtonBox::Apply);
   copyButton->setText("&Copy to clipboard");
@@ -108,38 +110,38 @@ SnapshotDialog::SnapshotDialog(const View *v, QWidget *parent)
 
   lockLabel = new LockLabel();
   ui->horizontalLayout_5->insertWidget(2, lockLabel);
-  ui->horizontalLayout_5->setAlignment(lockLabel, Qt::AlignLeft | Qt::AlignVCenter);
+  ui->horizontalLayout_5->setAlignment(lockLabel,
+                                       Qt::AlignLeft | Qt::AlignVCenter);
 }
 
 void SnapshotDialog::clicked(QAbstractButton *b) {
   if (ui->buttonBox->buttonRole(b) == QDialogButtonBox::ResetRole) {
-    ui->widthSpinBox->setValue(view->centralItem()->scene()->sceneRect().width());
-    ui->heightSpinBox->setValue(view->centralItem()->scene()->sceneRect().height());
+    ui->widthSpinBox->setValue(
+        view->centralItem()->scene()->sceneRect().width());
+    ui->heightSpinBox->setValue(
+        view->centralItem()->scene()->sceneRect().height());
     ui->qualitySpinBox->setValue(100);
   }
 
   if (ui->buttonBox->buttonRole(b) == QDialogButtonBox::ActionRole) {
-    QPixmap pixmap = view->snapshot(QSize(ui->widthSpinBox->value(), ui->heightSpinBox->value()));
+    QPixmap pixmap = view->snapshot(
+        QSize(ui->widthSpinBox->value(), ui->heightSpinBox->value()));
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setPixmap(pixmap);
   }
 }
 
-SnapshotDialog::~SnapshotDialog() {
-  delete ui;
-}
+SnapshotDialog::~SnapshotDialog() { delete ui; }
 
-void SnapshotDialog::resizeEvent(QResizeEvent *) {
-  sizeSpinBoxValueChanged();
-}
+void SnapshotDialog::resizeEvent(QResizeEvent *) { sizeSpinBoxValueChanged(); }
 
 static const QString default_filter("png");
 
 void SnapshotDialog::accept() {
   QString formatedFormatList;
 
-  // Put the default save format as the first choice (selectedFilter not supported under MacOSX and
-  // some Linux window managers)
+  // Put the default save format as the first choice (selectedFilter not
+  // supported under MacOSX and some Linux window managers)
   for (QString ext : QImageWriter::supportedImageFormats()) {
     ext = ext.toLower();
 
@@ -153,15 +155,16 @@ void SnapshotDialog::accept() {
   // remove last ;;
   formatedFormatList.resize(formatedFormatList.size() - 2);
 
-  QString fileName = QFileDialog::getSaveFileName(this, tr("Save image as..."), QString(),
-                                                  formatedFormatList, &selectedFilter
+  QString fileName =
+      QFileDialog::getSaveFileName(this, tr("Save image as..."), QString(),
+                                   formatedFormatList, &selectedFilter
 // on MacOSX selectedFilter is ignored by the
 // native dialog
 #ifdef __APPLE__
-                                                  ,
-                                                  QFileDialog::DontUseNativeDialog
+                                   ,
+                                   QFileDialog::DontUseNativeDialog
 #endif
-  );
+      );
 
   if (fileName.isEmpty())
     return;
@@ -174,7 +177,8 @@ void SnapshotDialog::accept() {
 
   this->setEnabled(false);
 
-  QPixmap pixmap = view->snapshot(QSize(ui->widthSpinBox->value(), ui->heightSpinBox->value()));
+  QPixmap pixmap = view->snapshot(
+      QSize(ui->widthSpinBox->value(), ui->heightSpinBox->value()));
 
   if (!pixmap.save(fileName, nullptr, ui->qualitySpinBox->value())) {
     QMessageBox::critical(this, "Snapshot cannot be saved",
@@ -221,16 +225,18 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
     return;
   }
 
-  float imageRatio = float(ui->widthSpinBox->value()) / float(ui->heightSpinBox->value());
+  float imageRatio =
+      float(ui->widthSpinBox->value()) / float(ui->heightSpinBox->value());
 
   if (imageRatio != ratio) {
     // regenerate preview pixmap only if the aspect ratio changed
     QPixmap pixmap;
 
-    pixmap =
-        view->snapshot(QSize((view->centralItem()->scene()->sceneRect().height() - 2) * imageRatio,
-                             view->centralItem()->scene()->sceneRect().height() - 2));
-    ratio = float(ui->widthSpinBox->value()) / float(ui->heightSpinBox->value());
+    pixmap = view->snapshot(QSize(
+        (view->centralItem()->scene()->sceneRect().height() - 2) * imageRatio,
+        view->centralItem()->scene()->sceneRect().height() - 2));
+    ratio =
+        float(ui->widthSpinBox->value()) / float(ui->heightSpinBox->value());
     ui->snapshotLabel->setPixmap(pixmap);
   }
   // resize snapshotLabel
@@ -247,7 +253,8 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
   ui->snapshotLabel->move(sSize.width() / 2, sSize.height() / 2);
 }
 
-void SnapshotDialog::setSnapshotHasViewSizeRatio(bool snapshotHasViewSizeRatio) {
+void SnapshotDialog::setSnapshotHasViewSizeRatio(
+    bool snapshotHasViewSizeRatio) {
   lockLabel->setAlwaysLocked(snapshotHasViewSizeRatio);
 }
 } // namespace tlp

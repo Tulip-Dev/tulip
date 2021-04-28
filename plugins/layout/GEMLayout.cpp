@@ -19,13 +19,14 @@
 
 #include "GEMLayout.h"
 
-#include <tulip/NumericProperty.h>
-#include <tulip/GraphTools.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ConnectedTest.h>
+#include <tulip/GraphTools.h>
+#include <tulip/NumericProperty.h>
 
 // An implementation of the GEM3D layout algorithm, based on
-// code by Arne Frick placed in the public domain.  See GEMLayout.h for further details.
+// code by Arne Frick placed in the public domain.  See GEMLayout.h for further
+// details.
 
 using namespace std;
 using namespace tlp;
@@ -84,13 +85,16 @@ static const float ASHAKEDEF = 0.3f;
 PLUGIN(GEMLayout)
 
 GEMLayout::GEMLayout(const tlp::PluginContext *context)
-    : LayoutAlgorithm(context), Iteration(0), _temperature(0), _maxtemp(0), _oscillation(0),
-      _rotation(0), i_maxtemp(IMAXTEMPDEF), a_maxtemp(AMAXTEMPDEF), i_starttemp(ISTARTTEMPDEF),
-      a_starttemp(ASTARTTEMPDEF), i_finaltemp(IFINALTEMPDEF), a_finaltemp(AFINALTEMPDEF),
-      i_maxiter(IMAXITERDEF), a_maxiter(AMAXITERDEF), i_gravity(IGRAVITYDEF),
-      a_gravity(AGRAVITYDEF), i_oscillation(IOSCILLATIONDEF), a_oscillation(AOSCILLATIONDEF),
-      i_rotation(IROTATIONDEF), a_rotation(AROTATIONDEF), i_shake(ISHAKEDEF), a_shake(ASHAKEDEF),
-      _dim(2), _nbNodes(0), _useLength(false), metric(nullptr), fixedNodes(nullptr), max_iter(0) {
+    : LayoutAlgorithm(context), Iteration(0), _temperature(0), _maxtemp(0),
+      _oscillation(0), _rotation(0), i_maxtemp(IMAXTEMPDEF),
+      a_maxtemp(AMAXTEMPDEF), i_starttemp(ISTARTTEMPDEF),
+      a_starttemp(ASTARTTEMPDEF), i_finaltemp(IFINALTEMPDEF),
+      a_finaltemp(AFINALTEMPDEF), i_maxiter(IMAXITERDEF),
+      a_maxiter(AMAXITERDEF), i_gravity(IGRAVITYDEF), a_gravity(AGRAVITYDEF),
+      i_oscillation(IOSCILLATIONDEF), a_oscillation(AOSCILLATIONDEF),
+      i_rotation(IROTATIONDEF), a_rotation(AROTATIONDEF), i_shake(ISHAKEDEF),
+      a_shake(ASHAKEDEF), _dim(2), _nbNodes(0), _useLength(false),
+      metric(nullptr), fixedNodes(nullptr), max_iter(0) {
   addInParameter<bool>("3D layout", paramHelp[0], "false");
   addInParameter<NumericProperty *>("edge length", paramHelp[1], "", false);
   addInParameter<LayoutProperty>("initial layout", paramHelp[2], "", false);
@@ -132,7 +136,8 @@ void GEMLayout::updateLayout() {
  * if testPlaced is equal to true, only already placed nodes
  * are considered
  */
-Coord GEMLayout::computeForces(unsigned int v, float shake, float gravity, bool testPlaced) {
+Coord GEMLayout::computeForces(unsigned int v, float shake, float gravity,
+                               bool testPlaced) {
   Coord force;
   Coord vPos = _particules[v].pos;
   float vMass = _particules[v].mass;
@@ -157,7 +162,8 @@ Coord GEMLayout::computeForces(unsigned int v, float shake, float gravity, bool 
 
   // repulsive forces (magnetic)
   for (unsigned int u = 0; u < _nbNodes; ++u) {
-    if (!testPlaced || _particules[u].in > 0) { // test whether the node is already placed
+    if (!testPlaced ||
+        _particules[u].in > 0) { // test whether the node is already placed
       Coord d(vPos - _particules[u].pos);
       float n = d[0] * d[0] + d[1] * d[1] + d[2] * d[2]; // d.norm() * d.norm();
 
@@ -337,11 +343,13 @@ void GEMLayout::arrange() {
   _oscillation = a_oscillation;
   _rotation = a_rotation;
   _maxtemp = a_maxtemp;
-  stop_temperature = float(a_finaltemp * a_finaltemp * maxEdgeLength * _nbNodes);
+  stop_temperature =
+      float(a_finaltemp * a_finaltemp * maxEdgeLength * _nbNodes);
   Iteration = 0;
 
   while (_temperature > stop_temperature && Iteration < max_iter) {
-    //    tlp::warning() << "t°:"<< _temperature << "/" << stop_temperature << " it:" << Iteration
+    //    tlp::warning() << "t°:"<< _temperature << "/" << stop_temperature << "
+    //    it:" << Iteration
     //    << endl;
     if (pluginProgress->progress(Iteration, max_iter / 2) != TLP_CONTINUE)
       return;
@@ -378,8 +386,8 @@ bool GEMLayout::run() {
     LayoutProperty tmpLayout(graph);
     DataSet ds;
     ds.set("coordinates", result);
-    graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout, err, &ds,
-                                  pluginProgress);
+    graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout,
+                                  err, &ds, pluginProgress);
     *result = tmpLayout;
     return true;
   }

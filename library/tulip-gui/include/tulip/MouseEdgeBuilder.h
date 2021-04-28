@@ -21,17 +21,18 @@
 #ifndef MOUSEADDEDGE_H
 #define MOUSEADDEDGE_H
 
-#include <vector>
 #include <tulip/Coord.h>
 #include <tulip/GLInteractor.h>
 #include <tulip/Observable.h>
+#include <vector>
 
 namespace tlp {
 class Graph;
 class LayoutProperty;
 class GlMainWidget;
 
-class TLP_QT_SCOPE MouseEdgeBuilder : public GLInteractorComponent, public Observable {
+class TLP_QT_SCOPE MouseEdgeBuilder : public GLInteractorComponent,
+                                      public Observable {
 private:
   node _source;
   bool _started;
@@ -43,7 +44,8 @@ private:
 
 protected:
   /**
-   * @brief addLink Adds a link between a source and destination nodes. Adds an edge by default
+   * @brief addLink Adds a link between a source and destination nodes. Adds an
+   * edge by default
    * @param source
    * @param dest
    */
@@ -52,23 +54,17 @@ protected:
    * @brief source gets the source node.
    * @return
    */
-  node source() const {
-    return _source;
-  }
+  node source() const { return _source; }
   /**
    * @brief bends returns the bends list.
    * @return
    */
-  const std::vector<Coord> &bends() const {
-    return _bends;
-  }
+  const std::vector<Coord> &bends() const { return _bends; }
   /**
    * @brief setBends updates the bends list.
    * @param bends
    */
-  void setBends(const std::vector<Coord> &bends) {
-    _bends = bends;
-  }
+  void setBends(const std::vector<Coord> &bends) { _bends = bends; }
 
 public:
   MouseEdgeBuilder();

@@ -29,13 +29,11 @@ using namespace std;
 using namespace tlp;
 
 //===============================================================
-float sqr(float x) {
-  return x * x;
-}
+float sqr(float x) { return x * x; }
 //===============================================================
 float minRadius(float radius1, float alpha1, float radius2, float alpha2) {
-  return sqrt(sqr(radius1 + radius2) /
-              (sqr(cos(alpha1) - cos(alpha2)) + sqr(sin(alpha1) - sin(alpha2))));
+  return sqrt(sqr(radius1 + radius2) / (sqr(cos(alpha1) - cos(alpha2)) +
+                                        sqr(sin(alpha1) - sin(alpha2))));
 }
 //===============================================================
 void ConeTreeExtended::computeLayerSize(tlp::node n, unsigned int level) {
@@ -56,13 +54,15 @@ void ConeTreeExtended::computeYCoodinates(tlp::node root) {
   yCoordinates[0] = 0;
 
   for (unsigned int i = 1; i < levelSize.size(); ++i) {
-    yCoordinates[i] =
-        yCoordinates[i - 1] + levelSize[i] / 2.0f + levelSize[i - 1] / 2.0f + spaceBetweenLevels;
+    yCoordinates[i] = yCoordinates[i - 1] + levelSize[i] / 2.0f +
+                      levelSize[i - 1] / 2.0f + spaceBetweenLevels;
   }
 }
 //===============================================================
-double ConeTreeExtended::treePlace3D(tlp::node n, std::unordered_map<tlp::node, double> *posRelX,
-                                     std::unordered_map<tlp::node, double> *posRelY) {
+double
+ConeTreeExtended::treePlace3D(tlp::node n,
+                              std::unordered_map<tlp::node, double> *posRelX,
+                              std::unordered_map<tlp::node, double> *posRelY) {
   (*posRelX)[n] = 0;
   (*posRelY)[n] = 0;
 
@@ -112,8 +112,9 @@ double ConeTreeExtended::treePlace3D(tlp::node n, std::unordered_map<tlp::node, 
 
   for (unsigned int i = 0; i < subCircleRadius.size() - 1; ++i) {
     for (unsigned int j = i + 1; j < subCircleRadius.size(); ++j) {
-      newRadius = std::max(newRadius, minRadius(float(subCircleRadius[i]), float(vangles[i]),
-                                                float(subCircleRadius[j]), float(vangles[j])));
+      newRadius = std::max(
+          newRadius, minRadius(float(subCircleRadius[i]), float(vangles[i]),
+                               float(subCircleRadius[j]), float(vangles[j])));
     }
   }
 
@@ -144,11 +145,13 @@ double ConeTreeExtended::treePlace3D(tlp::node n, std::unordered_map<tlp::node, 
   return circleH.radius;
 }
 //===============================================================
-void ConeTreeExtended::calcLayout(tlp::node n, std::unordered_map<tlp::node, double> *px,
-                                  std::unordered_map<tlp::node, double> *py, double x, double y,
-                                  int level) {
-  result->setNodeValue(
-      n, Coord(float(x + (*px)[n]), -float(yCoordinates[level]), float(y + (*py)[n])));
+void ConeTreeExtended::calcLayout(tlp::node n,
+                                  std::unordered_map<tlp::node, double> *px,
+                                  std::unordered_map<tlp::node, double> *py,
+                                  double x, double y, int level) {
+  result->setNodeValue(n,
+                       Coord(float(x + (*px)[n]), -float(yCoordinates[level]),
+                             float(y + (*py)[n])));
   for (auto itn : tree->getOutNodes(n)) {
     calcLayout(itn, px, py, x + (*px)[n], y + (*py)[n], level + 1);
   }
@@ -165,8 +168,8 @@ static const char *paramHelp[] = {
 ConeTreeExtended::ConeTreeExtended(const tlp::PluginContext *context)
     : LayoutAlgorithm(context), spaceBetweenLevels(10) {
   addNodeSizePropertyParameter(this);
-  addInParameter<StringCollection>("orientation", paramHelp[0], ORIENTATION, true,
-                                   "vertical <br> horizontal");
+  addInParameter<StringCollection>("orientation", paramHelp[0], ORIENTATION,
+                                   true, "vertical <br> horizontal");
   addInParameter<float>("space between levels", paramHelp[1], "1.0");
 }
 //===============================================================

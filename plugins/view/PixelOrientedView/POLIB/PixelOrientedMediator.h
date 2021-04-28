@@ -20,13 +20,13 @@
 #ifndef PIXELORIENTEDALGORITHMS_H_
 #define PIXELORIENTEDALGORITHMS_H_
 
-#include "UniformDeformationScreen.h"
-#include "FishEyesScreen.h"
-#include "SpiralLayout.h"
-#include "HSIColorMapping.h"
-#include "potypes.h"
 #include "ColorFunction.h"
 #include "DimensionBase.h"
+#include "FishEyesScreen.h"
+#include "HSIColorMapping.h"
+#include "SpiralLayout.h"
+#include "UniformDeformationScreen.h"
+#include "potypes.h"
 
 #include <map>
 
@@ -40,48 +40,31 @@ public:
 
   ~PixelOrientedMediator();
 
-  void setLayoutFunction(LayoutFunction *layout) {
-    this->layout = layout;
-  }
-  LayoutFunction *getLayoutFunction() {
-    return layout;
-  }
+  void setLayoutFunction(LayoutFunction *layout) { this->layout = layout; }
+  LayoutFunction *getLayoutFunction() { return layout; }
 
-  void setColorFunction(ColorFunction *color) {
-    this->color = color;
-  }
-  ColorFunction *getColorFunction() {
-    return color;
-  }
+  void setColorFunction(ColorFunction *color) { this->color = color; }
+  ColorFunction *getColorFunction() { return color; }
 
   void setImageSize(unsigned int width, unsigned int height) {
     imageSize[0] = width;
     imageSize[1] = height;
   }
-  unsigned int getImageWidth() const {
-    return imageSize[0];
-  }
-  unsigned int getImageHeight() const {
-    return imageSize[1];
-  }
+  unsigned int getImageWidth() const { return imageSize[0]; }
+  unsigned int getImageHeight() const { return imageSize[1]; }
 
-  void setScreenFunctionsParameters(double zoom, double translationX, double translationY,
-                                    double fishEyeRadius);
-  unsigned int getCenterItem() const {
-    return centerItem;
-  }
+  void setScreenFunctionsParameters(double zoom, double translationX,
+                                    double translationY, double fishEyeRadius);
+  unsigned int getCenterItem() const { return centerItem; }
   void setCenterItem(const unsigned int centerItem) {
     this->centerItem = centerItem;
   }
 
-  Vec2i getFishEyeTranslationVector() const {
-    return fishTranslation;
-  }
-  Vec2f getFishEyeCenter() const {
-    return fishCenter;
-  }
+  Vec2i getFishEyeTranslationVector() const { return fishTranslation; }
+  Vec2f getFishEyeCenter() const { return fishCenter; }
 
-  RGBA getColorForPixelAtPos(Vec2i pos, DimensionBase *data, bool withFishEye = false);
+  RGBA getColorForPixelAtPos(Vec2i pos, DimensionBase *data,
+                             bool withFishEye = false);
   unsigned int getRankForPixelPos(Vec2i pos);
   Vec2i getPixelPosForRank(const unsigned int rank);
 

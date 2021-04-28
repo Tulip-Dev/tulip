@@ -24,8 +24,8 @@
 
 #include <tulip/Color.h>
 
-#include <QWidget>
 #include <QObject>
+#include <QWidget>
 
 namespace Ui {
 class EnclosingCircleConfigurationData;
@@ -40,7 +40,8 @@ class EnclosingCircleConfigurationWidget : public QWidget {
   Ui::EnclosingCircleConfigurationData *_ui;
 
 public:
-  EnclosingCircleConfigurationWidget(Color &circleColor, QWidget *parent = nullptr);
+  EnclosingCircleConfigurationWidget(Color &circleColor,
+                                     QWidget *parent = nullptr);
   ~EnclosingCircleConfigurationWidget() override;
 
   void circleColorBtnDisabled(const bool disabled);
@@ -62,8 +63,9 @@ class EnclosingCircleHighlighter : public QObject, public PathHighlighter {
 public:
   EnclosingCircleHighlighter();
   ~EnclosingCircleHighlighter() override;
-  void highlight(const PathFinder *parent, GlMainWidget *glMainWidget, BooleanProperty *selection,
-                 tlp::node src, tlp::node tgt) override;
+  void highlight(const PathFinder *parent, GlMainWidget *glMainWidget,
+                 BooleanProperty *selection, tlp::node src,
+                 tlp::node tgt) override;
   void draw(GlMainWidget *glMainWidget) override;
   bool isConfigurable() const override;
   QWidget *getConfigurationWidget() override;

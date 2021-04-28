@@ -22,8 +22,8 @@
 #define GLCONVEXGRAPHHULL_H_
 
 #include <tulip/Color.h>
-#include <tulip/tulipconf.h>
 #include <tulip/GlComposite.h>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
 
@@ -44,23 +44,21 @@ class TLP_GL_SCOPE GlConvexGraphHullsComposite : public GlComposite {
 public:
   GlConvexGraphHullsComposite() : textured(false) {}
 
-  bool hullsTextureActivation() {
-    return textured;
-  }
+  bool hullsTextureActivation() { return textured; }
   void setHullsTextureActivation(bool);
 };
 
 /**
  * @brief This class draws a convex hull around a graph.
  *
- * Given a graph, this class computes the various control points of a convex hull that embraces the
- * nodes and edges present into the graph.
- * If this entity is translated using the translate method, every element of the linked graph will
- * be translated as well.
+ * Given a graph, this class computes the various control points of a convex
+ * hull that embraces the nodes and edges present into the graph. If this entity
+ * is translated using the translate method, every element of the linked graph
+ * will be translated as well.
  *
- * @warning The graph or any of the properties linked to a GlConvexGraphHull should never be deleted
- * before the entity. Such a thing should be
- * reported to the user in debug mode, raising an assertion.
+ * @warning The graph or any of the properties linked to a GlConvexGraphHull
+ * should never be deleted before the entity. Such a thing should be reported to
+ * the user in debug mode, raising an assertion.
  */
 class TLP_GL_SCOPE GlConvexGraphHull {
 public:
@@ -75,16 +73,19 @@ public:
    * @param size The property defining the graph's elements' sizes.
    * @param rotation The property defining the graph's elements' rotation.
    **/
-  GlConvexGraphHull(GlConvexGraphHullsComposite *parent, const std::string &name,
-                    const tlp::Color &fcolor, const std::string &texName, Graph *graph,
-                    LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation);
+  GlConvexGraphHull(GlConvexGraphHullsComposite *parent,
+                    const std::string &name, const tlp::Color &fcolor,
+                    const std::string &texName, Graph *graph,
+                    LayoutProperty *layout, SizeProperty *size,
+                    DoubleProperty *rotation);
 
   ~GlConvexGraphHull();
 
   /**
    * Recomputes the whole Hull
    */
-  void updateHull(LayoutProperty *layout = nullptr, SizeProperty *size = nullptr,
+  void updateHull(LayoutProperty *layout = nullptr,
+                  SizeProperty *size = nullptr,
                   DoubleProperty *rotation = nullptr);
 
   void setVisible(bool visible);

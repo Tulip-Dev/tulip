@@ -18,8 +18,8 @@
  */
 #ifndef _STRENGTHMETRIC_H
 #define _STRENGTHMETRIC_H
-#include <unordered_set>
 #include <tulip/TulipPluginHeaders.h>
+#include <unordered_set>
 
 /** \addtogroup metric */
 

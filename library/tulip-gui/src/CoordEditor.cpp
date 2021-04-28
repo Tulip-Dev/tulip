@@ -48,13 +48,9 @@ CoordEditor::CoordEditor(QWidget *parent, bool editSize)
   setModal(true);
 }
 
-CoordEditor::~CoordEditor() {
-  delete ui;
-}
+CoordEditor::~CoordEditor() { delete ui; }
 
-Coord CoordEditor::coord() const {
-  return currentCoord;
-}
+Coord CoordEditor::coord() const { return currentCoord; }
 void CoordEditor::setCoord(const Coord &coord) {
   currentCoord = coord;
   blockSignals(true);
@@ -66,13 +62,15 @@ void CoordEditor::setCoord(const Coord &coord) {
 }
 
 void CoordEditor::coordUpdated() {
-  currentCoord = Coord(float(ui->xSP->value()), float(ui->ySP->value()), float(ui->zSP->value()));
+  currentCoord = Coord(float(ui->xSP->value()), float(ui->ySP->value()),
+                       float(ui->zSP->value()));
   emit(coordChanged(coord()));
 }
 
 void CoordEditor::done(int r) {
   if (r == QDialog::Accepted)
-    currentCoord = Coord(float(ui->xSP->value()), float(ui->ySP->value()), float(ui->zSP->value()));
+    currentCoord = Coord(float(ui->xSP->value()), float(ui->ySP->value()),
+                         float(ui->zSP->value()));
 
   QDialog::done(r);
 }

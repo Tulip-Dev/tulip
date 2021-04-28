@@ -18,10 +18,10 @@
  */
 #include "MISFiltering.h"
 #include "Distances.h"
-#include <ctime>
 #include <cmath>
-#include <tulip/TlpTools.h>
+#include <ctime>
 #include <tulip/StableIterator.h>
+#include <tulip/TlpTools.h>
 
 using namespace tlp;
 using namespace std;
@@ -186,7 +186,8 @@ void MISFiltering::updateVectors() {
   }
 }
 //========================================
-void MISFiltering::getNearest(node n, vector<node> &neighbors, vector<unsigned int> &neighbors_dist,
+void MISFiltering::getNearest(node n, vector<node> &neighbors,
+                              vector<unsigned int> &neighbors_dist,
                               unsigned int level, unsigned int nbNeighbors) {
   vector<node> nextNodes;
   MutableContainer<bool> alreadyTreated;

@@ -24,11 +24,11 @@
 
 namespace tlp {
 
-template <typename T, size_t N>
-using Array = std::array<T, N>;
+template <typename T, size_t N> using Array = std::array<T, N>;
 
 /**
- * @brief operator << stream operator to easily print an array, or save it to a file.
+ * @brief operator << stream operator to easily print an array, or save it to a
+ * file.
  * @param os The stream to output to.
  * @param array The array to output.
  * @return The stream to output to, to chain calls.

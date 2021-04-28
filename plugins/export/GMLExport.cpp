@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 
 #include <tulip/TulipPluginHeaders.h>
 
@@ -54,16 +54,15 @@ void printSize(ostream &os, const Size &v) {
  */
 class GMLExport : public tlp::ExportModule {
 public:
-  PLUGININFORMATION("GML Export", "Auber David", "31/07/2001",
-                    "<p>Supported extensions: gml</p><p>Exports a Tulip graph in a file using the "
-                    "GML format (used by Graphlet).<br/>See: "
-                    "<a "
-                    "href=\"http://www.infosun.fim.uni-passau.de/Graphlet/GML/\">http://"
-                    "www.infosun.fim.uni-passau.de/Graphlet/GML/</a> for details.</p>",
-                    "1.0", "File")
-  std::string fileExtension() const override {
-    return "gml";
-  }
+  PLUGININFORMATION(
+      "GML Export", "Auber David", "31/07/2001",
+      "<p>Supported extensions: gml</p><p>Exports a Tulip graph in a file using the "
+      "GML format (used by Graphlet).<br/>See: "
+      "<a "
+      "href=\"http://www.infosun.fim.uni-passau.de/Graphlet/GML/\">http://"
+      "www.infosun.fim.uni-passau.de/Graphlet/GML/</a> for details.</p>",
+      "1.0", "File")
+  std::string fileExtension() const override { return "gml"; }
 
   GMLExport(tlp::PluginContext *context) : tlp::ExportModule(context) {}
 
@@ -105,14 +104,18 @@ public:
       printSize(os, sizes->getNodeValue(n));
       os << "type \"rectangle\"" << endl;
       os << "width 0.12" << endl;
-      os << "fill \"#" << hex << setfill('0') << setw(2) << int(colors->getNodeValue(n).getR())
-         << hex << setfill('0') << setw(2) << int(colors->getNodeValue(n).getG()) << hex
-         << setfill('0') << setw(2) << int(colors->getNodeValue(n).getB()) << "\"" << endl;
+      os << "fill \"#" << hex << setfill('0') << setw(2)
+         << int(colors->getNodeValue(n).getR()) << hex << setfill('0')
+         << setw(2) << int(colors->getNodeValue(n).getG()) << hex
+         << setfill('0') << setw(2) << int(colors->getNodeValue(n).getB())
+         << "\"" << endl;
 
       //      os << "outline \"#"<< hex << setfill('0') << setw(2)
       //      <<(int)colors->getNodeValue(n).getR()
-      //         << hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(n).getG()
-      //         << hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(n).getB() <<
+      //         << hex << setfill('0') << setw(2)
+      //         <<(int)colors->getNodeValue(n).getG()
+      //         << hex << setfill('0') << setw(2)
+      //         <<(int)colors->getNodeValue(n).getB() <<
       //         "\""<< endl;
 
       os << "outline \"#000000\"" << endl;

@@ -46,7 +46,8 @@ struct TLP_QT_SCOPE PluginVersionInformation {
 
   PluginVersionInformation();
   PluginVersionInformation(const PluginVersionInformation &copy);
-  PluginVersionInformation &operator=(const PluginVersionInformation &) = default;
+  PluginVersionInformation &
+  operator=(const PluginVersionInformation &) = default;
 };
 
 struct TLP_QT_SCOPE PluginInformation {
@@ -80,12 +81,13 @@ public:
   static void removeRemoteLocation(const QString &location);
   static QStringList remoteLocations();
 
-  static PluginInformationList listPlugins(PluginLocations locations,
-                                           const QString &nameFilter = QString(),
-                                           const QString &categoryFilter = QString());
+  static PluginInformationList
+  listPlugins(PluginLocations locations, const QString &nameFilter = QString(),
+              const QString &categoryFilter = QString());
 
   static void markForRemoval(const QString &plugin);
-  static void markForInstallation(const QString &plugin, QObject *recv, const char *progressSlot);
+  static void markForInstallation(const QString &plugin, QObject *recv,
+                                  const char *progressSlot);
 
   static QStringList markedForInstallation();
   static QStringList markedForRemoval();

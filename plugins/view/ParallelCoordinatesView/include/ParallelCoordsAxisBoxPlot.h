@@ -22,9 +22,9 @@
 
 #include <string>
 
-#include <tulip/GlSimpleEntity.h>
-#include <tulip/GLInteractor.h>
 #include <tulip/Color.h>
+#include <tulip/GLInteractor.h>
+#include <tulip/GlSimpleEntity.h>
 
 namespace tlp {
 
@@ -33,7 +33,8 @@ class QuantitativeParallelAxis;
 class GlAxisBoxPlot : public GlSimpleEntity {
 
 public:
-  GlAxisBoxPlot(QuantitativeParallelAxis *axis, const Color &fillColor, const Color &outlineColor);
+  GlAxisBoxPlot(QuantitativeParallelAxis *axis, const Color &fillColor,
+                const Color &outlineColor);
   ~GlAxisBoxPlot() override {}
 
   void draw(float lod, Camera *camera) override;
@@ -45,7 +46,8 @@ public:
   void setHighlightRangeIfAny(Coord sceneCoords);
 
 private:
-  void drawLabel(const Coord &position, const std::string &labelName, Camera *camera);
+  void drawLabel(const Coord &position, const std::string &labelName,
+                 Camera *camera);
 
   QuantitativeParallelAxis *axis;
   Coord bottomOutlierCoord;

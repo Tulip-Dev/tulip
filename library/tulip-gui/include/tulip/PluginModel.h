@@ -23,13 +23,13 @@
 
 #include <algorithm>
 
-#include <QIcon>
 #include <QFont>
+#include <QIcon>
 #include <QWidget>
 
-#include <tulip/TulipModel.h>
-#include <tulip/TlpQtTools.h>
 #include <tulip/PluginLister.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/TulipModel.h>
 
 #include <string>
 
@@ -42,25 +42,25 @@ private:
   QList<std::string> _list;
 
 public:
-  SimplePluginListModel(const std::list<std::string> &plugins, QObject *parent = nullptr);
+  SimplePluginListModel(const std::list<std::string> &plugins,
+                        QObject *parent = nullptr);
   ~SimplePluginListModel() override;
   int columnCount(const QModelIndex & = QModelIndex()) const override;
   int rowCount(const QModelIndex &parent = QModelIndex()) const override;
   QModelIndex parent(const QModelIndex &) const override;
-  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
-  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+  QModelIndex index(int row, int column,
+                    const QModelIndex &parent = QModelIndex()) const override;
+  QVariant data(const QModelIndex &index,
+                int role = Qt::DisplayRole) const override;
   QList<std::string> plugins() const;
   std::string pluginName(const QModelIndex &index) const;
 };
 
-template <typename PLUGIN>
-class PluginModel : public tlp::TulipModel {
+template <typename PLUGIN> class PluginModel : public tlp::TulipModel {
   struct TreeItem {
     TreeItem(QString name, QString info = "", TreeItem *parent = nullptr)
         : name(name), info(info), parent(parent) {}
-    virtual ~TreeItem() {
-      qDeleteAll(children);
-    }
+    virtual ~TreeItem() { qDeleteAll(children); }
     TreeItem *addChild(QString name, QString info = "") {
       TreeItem *result = new TreeItem(name, info, this);
       children.push_back(result);
@@ -81,7 +81,8 @@ class PluginModel : public tlp::TulipModel {
     QMap<QString, QMap<QString, QStringList>> pluginTree;
     std::list<std::string> plugins = PluginLister::availablePlugins<PLUGIN>();
 
-    for (std::list<std::string>::iterator it = plugins.begin(); it != plugins.end(); ++it) {
+    for (std::list<std::string>::iterator it = plugins.begin();
+         it != plugins.end(); ++it) {
       std::string name = *it;
       const Plugin &plugin = PluginLister::pluginInformation(name);
       pluginTree[tlp::tlpStringToQString(plugin.category())]
@@ -99,10 +100,12 @@ class PluginModel : public tlp::TulipModel {
           groupItem = catItem->addChild(group);
 
         // sort in case insensitive alphabetic order
-        std::sort(pluginTree[cat][group].begin(), pluginTree[cat][group].end(), QStringCaseCmp);
+        std::sort(pluginTree[cat][group].begin(), pluginTree[cat][group].end(),
+                  QStringCaseCmp);
 
         for (const QString &alg : pluginTree[cat][group]) {
-          const Plugin &plugin = PluginLister::pluginInformation(tlp::QStringToTlpString(alg));
+          const Plugin &plugin =
+              PluginLister::pluginInformation(tlp::QStringToTlpString(alg));
           std::string info = plugin.info();
 
           // set info only if they contain more than one word
@@ -130,12 +133,11 @@ class PluginModel : public tlp::TulipModel {
   }
 
 public:
-  explicit PluginModel(QObject *parent = nullptr) : TulipModel(parent), _root(nullptr) {
+  explicit PluginModel(QObject *parent = nullptr)
+      : TulipModel(parent), _root(nullptr) {
     buildTree();
   }
-  ~PluginModel() override {
-    delete _root;
-  }
+  ~PluginModel() override { delete _root; }
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const override {
     TreeItem *item = _root;
@@ -164,7 +166,8 @@ public:
     return createIndex(row, child.column(), childItem->parent);
   }
 
-  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override {
+  QModelIndex index(int row, int column,
+                    const QModelIndex &parent = QModelIndex()) const override {
     TreeItem *parentItem = _root;
 
     if (parent.isValid()) {
@@ -177,7 +180,8 @@ public:
     return createIndex(row, column, parentItem->children[row]);
   }
 
-  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override {
+  QVariant data(const QModelIndex &index,
+                int role = Qt::DisplayRole) const override {
     TreeItem *item = static_cast<TreeItem *>(index.internalPointer());
 
     if (role == Qt::DisplayRole)
@@ -186,7 +190,8 @@ public:
       if (item->info.isEmpty())
         return item->name;
       else
-        return QString("<table><tr><td><b>%1</b></td></tr><tr><td><i>%2</i></td></tr></table>")
+        return QString(
+                   "<table><tr><td><b>%1</b></td></tr><tr><td><i>%2</i></td></tr></table>")
             .arg(item->name)
             .arg(item->info);
     } else if (role == Qt::FontRole && !index.parent().parent().isValid()) {
@@ -198,9 +203,10 @@ public:
       f.setBold(true);
       return f;
     } else if (role == Qt::DecorationRole && item->children.isEmpty() &&
-               tlp::PluginLister::pluginExists(tlp::QStringToTlpString(item->name))) {
-      const tlp::Plugin &p =
-          tlp::PluginLister::pluginInformation(tlp::QStringToTlpString(item->name));
+               tlp::PluginLister::pluginExists(
+                   tlp::QStringToTlpString(item->name))) {
+      const tlp::Plugin &p = tlp::PluginLister::pluginInformation(
+          tlp::QStringToTlpString(item->name));
       QIcon icon(tlp::tlpStringToQString(p.icon()));
       return icon;
     }
@@ -214,7 +220,8 @@ public:
     if (index.isValid()) {
       TreeItem *item = static_cast<TreeItem *>(index.internalPointer());
 
-      if (!PluginLister::pluginExists<PLUGIN>(tlp::QStringToTlpString(item->name)))
+      if (!PluginLister::pluginExists<PLUGIN>(
+              tlp::QStringToTlpString(item->name)))
         result = Qt::ItemIsEnabled;
     }
 

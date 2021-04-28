@@ -17,17 +17,18 @@
  *
  */
 #include <tulip/ParameterListModel.h>
-#include <tulip/TulipMetaTypes.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/TulipMetaTypes.h>
 
 #include <QColor>
-#include <QModelIndex>
 #include <QIcon>
+#include <QModelIndex>
 
 namespace tlp {
 
-ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &params,
-                                       tlp::Graph *graph, QObject *parent, bool showIcons)
+ParameterListModel::ParameterListModel(
+    const tlp::ParameterDescriptionList &params, tlp::Graph *graph,
+    QObject *parent, bool showIcons)
     : TulipModel(parent), _graph(graph), _showIcons(showIcons) {
   std::vector<ParameterDescription> outParams;
   // first add in parameters
@@ -47,7 +48,8 @@ ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &para
   params.buildDefaultDataSet(_data, graph);
 }
 
-QModelIndex ParameterListModel::index(int row, int column, const QModelIndex &) const {
+QModelIndex ParameterListModel::index(int row, int column,
+                                      const QModelIndex &) const {
   return createIndex(row, column);
 }
 
@@ -59,9 +61,7 @@ int ParameterListModel::rowCount(const QModelIndex &) const {
   return _params.size();
 }
 
-int ParameterListModel::columnCount(const QModelIndex &) const {
-  return 1;
-}
+int ParameterListModel::columnCount(const QModelIndex &) const { return 1; }
 
 QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
   if (role == GraphRole)
@@ -84,7 +84,8 @@ QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
     if (!dataType)
       return info.getTypeName().c_str();
 
-    QVariant result = TulipMetaTypes::dataTypeToQvariant(dataType, info.getName());
+    QVariant result =
+        TulipMetaTypes::dataTypeToQvariant(dataType, info.getName());
     delete dataType;
     return result;
   } else if (role == MandatoryRole) {
@@ -94,7 +95,9 @@ QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
   return QVariant();
 }
 
-QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation, int role) const {
+QVariant ParameterListModel::headerData(int section,
+                                        Qt::Orientation orientation,
+                                        int role) const {
 
   if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
     if (section == 0)
@@ -149,7 +152,8 @@ Qt::ItemFlags ParameterListModel::flags(const QModelIndex &index) const {
   return result;
 }
 
-bool ParameterListModel::setData(const QModelIndex &index, const QVariant &value, int role) {
+bool ParameterListModel::setData(const QModelIndex &index,
+                                 const QVariant &value, int role) {
   if (role == Qt::EditRole) {
     const ParameterDescription &info = _params[index.row()];
 
@@ -164,9 +168,7 @@ bool ParameterListModel::setData(const QModelIndex &index, const QVariant &value
   return QAbstractItemModel::setData(index, value, role);
 }
 
-DataSet ParameterListModel::parametersValues() const {
-  return _data;
-}
+DataSet ParameterListModel::parametersValues() const { return _data; }
 
 void ParameterListModel::setParametersValues(const DataSet &data) {
   _data = data;

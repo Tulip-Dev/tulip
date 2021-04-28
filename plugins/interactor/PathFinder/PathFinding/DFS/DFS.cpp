@@ -27,8 +27,8 @@ using namespace tlp;
 using namespace std;
 
 DFS::DFS(Graph *graph, BooleanProperty *result, node tgt,
-         const EdgeStaticProperty<double> &eWeights, EdgeOrientation edgesOrientation,
-         double maxDist)
+         const EdgeStaticProperty<double> &eWeights,
+         EdgeOrientation edgesOrientation, double maxDist)
     : graph(graph), result(result), tgt(tgt), weights(eWeights), currentDist(0),
       edgesOrientation(edgesOrientation), maxDist(maxDist) {
 #ifndef NDEBUG
@@ -46,11 +46,13 @@ bool DFS::searchPaths(node src) {
   return computeSearchPaths(src, &visitable, &dists);
 }
 
-bool DFS::computeSearchPaths(node src, BooleanProperty *visitable, DoubleProperty *dists) {
+bool DFS::computeSearchPaths(node src, BooleanProperty *visitable,
+                             DoubleProperty *dists) {
   if (!visitable->getNodeValue(src))
     return false;
 
-  if (dists->getNodeValue(src) != DBL_MAX && currentDist + dists->getNodeValue(src) > maxDist)
+  if (dists->getNodeValue(src) != DBL_MAX &&
+      currentDist + dists->getNodeValue(src) > maxDist)
     return false;
 
   if (currentDist > maxDist)
@@ -64,7 +66,8 @@ bool DFS::computeSearchPaths(node src, BooleanProperty *visitable, DoublePropert
 
     node nd(src);
 
-    for (vector<edge>::reverse_iterator it = path.rbegin(); it != path.rend(); ++it) {
+    for (vector<edge>::reverse_iterator it = path.rbegin(); it != path.rend();
+         ++it) {
       edge e(*it);
       node opposite(graph->opposite(e, nd));
       result->setEdgeValue(e, true);

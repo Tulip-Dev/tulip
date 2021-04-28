@@ -18,8 +18,8 @@
  */
 #include "navigabletableview.h"
 
-#include <QKeyEvent>
 #include <QHeaderView>
+#include <QKeyEvent>
 
 #include <iostream>
 
@@ -56,7 +56,8 @@ int NavigableTableView::sizeHintForRow(int row) const {
       continue;
 
     QModelIndex index = model()->index(row, column);
-    hint = qMax(hint, itemDelegate(index)->sizeHint(viewOptions(), index).height());
+    hint = qMax(hint,
+                itemDelegate(index)->sizeHint(viewOptions(), index).height());
   }
 
   return hint;
@@ -80,7 +81,8 @@ int NavigableTableView::sizeHintForColumn(int col) const {
 
   for (int row = top; row <= bottom; ++row) {
     QModelIndex index = model()->index(row, col);
-    hint = qMax(hint, itemDelegate(index)->sizeHint(viewOptions(), index).width());
+    hint =
+        qMax(hint, itemDelegate(index)->sizeHint(viewOptions(), index).width());
   }
 
   return hint;

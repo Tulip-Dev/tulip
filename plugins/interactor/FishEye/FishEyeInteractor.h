@@ -20,8 +20,8 @@
 #ifndef FISHEYEINTERACTOR_H_
 #define FISHEYEINTERACTOR_H_
 
-#include <tulip/GLInteractor.h>
 #include <tulip/Coord.h>
+#include <tulip/GLInteractor.h>
 
 #include "../../utils/StandardInteractorPriority.h"
 
@@ -34,13 +34,12 @@ class FishEyeInteractorComponent : public GLInteractorComponent {
 
 public:
   FishEyeInteractorComponent(FishEyeConfigWidget *configWidget);
-  FishEyeInteractorComponent(const FishEyeInteractorComponent &fisheyeInteractorComponent);
+  FishEyeInteractorComponent(
+      const FishEyeInteractorComponent &fisheyeInteractorComponent);
 
   bool eventFilter(QObject *widget, QEvent *e) override;
 
-  bool compute(GlMainWidget *) override {
-    return false;
-  }
+  bool compute(GlMainWidget *) override { return false; }
 
   void viewChanged(View *view) override;
 
@@ -57,19 +56,22 @@ private:
 /** \file
  *  \brief  Tulip Fisheye Interactor
 
- * This interactor plugin allow to perform a fisheye distortion effect on Tulip views.
- * It allows to gain focus on a certain area of a visualization by magnifying it without losing
+ * This interactor plugin allow to perform a fisheye distortion effect on Tulip
+ views.
+ * It allows to gain focus on a certain area of a visualization by magnifying it
+ without losing
  * the context.
  *
- * Your graphic card must support shader programs otherwise the plugin won't work.
+ * Your graphic card must support shader programs otherwise the plugin won't
+ work.
  *
  *
  */
 class FishEyeInteractor : public GLInteractorComposite {
 
 public:
-  PLUGININFORMATION("FishEyeInteractor", "Antoine Lambert", "29/05/2009", "FishEye Interactor",
-                    "1.0", "Visualization")
+  PLUGININFORMATION("FishEyeInteractor", "Antoine Lambert", "29/05/2009",
+                    "FishEye Interactor", "1.0", "Visualization")
 
   FishEyeInteractor(const PluginContext *);
   ~FishEyeInteractor() override;

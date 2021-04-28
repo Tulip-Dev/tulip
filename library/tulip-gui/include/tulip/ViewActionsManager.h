@@ -21,12 +21,12 @@
 #ifndef VIEW_ACTIONS_MANAGER_H
 #define VIEW_ACTIONS_MANAGER_H
 
-#include <QMenu>
 #include <QAction>
+#include <QMenu>
 
-#include <tulip/View.h>
 #include <tulip/DataSet.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/View.h>
 
 namespace tlp {
 class TLP_QT_SCOPE ViewActionsManager : public QObject {

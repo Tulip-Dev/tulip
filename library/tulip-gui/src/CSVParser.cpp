@@ -20,12 +20,12 @@
 #include <QTextCodec>
 
 #include <tulip/CSVParser.h>
-#include <tulip/TlpTools.h>
-#include <tulip/TlpQtTools.h>
 #include <tulip/PluginProgress.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/TlpTools.h>
 
-#include <fstream>
 #include <cassert>
+#include <fstream>
 #include <locale>
 
 using namespace std;
@@ -33,22 +33,24 @@ using namespace tlp;
 
 const string defaultRejectedChars = " \r\n";
 const string spaceChars = " \t";
-CSVSimpleParser::CSVSimpleParser(const string &fileName, const QString &separator,
-                                 const bool mergesep, char textDelimiter, char decimalMark,
-                                 const string &fileEncoding, unsigned int firstLine,
-                                 unsigned int lastLine)
+CSVSimpleParser::CSVSimpleParser(const string &fileName,
+                                 const QString &separator, const bool mergesep,
+                                 char textDelimiter, char decimalMark,
+                                 const string &fileEncoding,
+                                 unsigned int firstLine, unsigned int lastLine)
     : _fileName(fileName), _separator(separator), _textDelimiter(textDelimiter),
-      _decimalMark(decimalMark), _fileEncoding(fileEncoding), _firstLine(firstLine),
-      _lastLine(lastLine), _mergesep(mergesep) {}
+      _decimalMark(decimalMark), _fileEncoding(fileEncoding),
+      _firstLine(firstLine), _lastLine(lastLine), _mergesep(mergesep) {}
 
 CSVSimpleParser::~CSVSimpleParser() {}
 
-string CSVSimpleParser::convertStringEncoding(const std::string &toConvert, QTextCodec *encoder) {
+string CSVSimpleParser::convertStringEncoding(const std::string &toConvert,
+                                              QTextCodec *encoder) {
   return QStringToTlpString(encoder->toUnicode(toConvert.c_str()));
 }
 
-bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress,
-                            bool firstLineOnly) {
+bool CSVSimpleParser::parse(CSVContentHandler *handler,
+                            PluginProgress *progress, bool firstLineOnly) {
   if (!handler) {
     return false;
   }
@@ -58,7 +60,8 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
   if (!result)
     return result;
 
-  istream *csvFile = tlp::getInputFileStream(_fileName.c_str(), ifstream::in | ifstream::binary);
+  istream *csvFile = tlp::getInputFileStream(_fileName.c_str(),
+                                             ifstream::in | ifstream::binary);
 
   if (*csvFile) {
     // Real row number used to
@@ -80,8 +83,8 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
 
     if (codec == nullptr) {
       qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__
-                 << " Cannot found the conversion codec to convert from " << _fileEncoding
-                 << " string will be treated as utf8.";
+                 << " Cannot found the conversion codec to convert from "
+                 << _fileEncoding << " string will be treated as utf8.";
       codec = QTextCodec::codecForName("UTF-8");
     }
 
@@ -93,7 +96,8 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
     std::locale prevLocale;
 
     if (decimalMark() == ',') {
-      std::locale loc = std::locale().combine<std::numpunct<char>>(std::locale("fr_FR.UTF8"));
+      std::locale loc =
+          std::locale().combine<std::numpunct<char>>(std::locale("fr_FR.UTF8"));
       std::locale::global(loc);
     }
 
@@ -196,8 +200,9 @@ bool CSVSimpleParser::multiplatformgetline(istream &is, string &str) {
   return true;
 }
 
-void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const QString &delimiters,
-                               const bool mergedelim, char textDelim, unsigned int) {
+void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens,
+                               const QString &delimiters, const bool mergedelim,
+                               char textDelim, unsigned int) {
   // Skip delimiters at beginning.
   string::size_type lastPos = 0;
   string::size_type pos = 0;
@@ -210,7 +215,8 @@ void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const 
     assert(pos != string::npos);
     assert(pos < str.size());
 
-    while (pos < str.length() && ((str[pos] != delim[0]) || (str.find(delim, pos) != pos))) {
+    while (pos < str.length() &&
+           ((str[pos] != delim[0]) || (str.find(delim, pos) != pos))) {
       if (str[pos] == textDelim) {
         do {
           pos += 1;
@@ -225,7 +231,8 @@ void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const 
 
     // if merge delimiter, skip the next char if it is a delimiter
     if (mergedelim) {
-      while ((pos < str.length() - delim.size()) && (str.substr(pos + 1, delim.length()) == delim))
+      while ((pos < str.length() - delim.size()) &&
+             (str.substr(pos + 1, delim.length()) == delim))
         pos += delim.length();
     }
 
@@ -262,7 +269,8 @@ string CSVSimpleParser::treatToken(const string &token, int, int) {
   string::size_type beginPos = currentToken.find_first_of(spaceChars);
 
   while (beginPos != string::npos) {
-    string::size_type endPos = currentToken.find_first_not_of(spaceChars, beginPos);
+    string::size_type endPos =
+        currentToken.find_first_not_of(spaceChars, beginPos);
 
     if (beginPos == 0) {
       // erase space chars at the beginning
@@ -321,13 +329,13 @@ string CSVSimpleParser::removeQuotesIfAny(string &s) {
   return s;
 }
 
-CSVInvertMatrixParser::CSVInvertMatrixParser(CSVParser *parser) : parser(parser) {}
+CSVInvertMatrixParser::CSVInvertMatrixParser(CSVParser *parser)
+    : parser(parser) {}
 
-CSVInvertMatrixParser::~CSVInvertMatrixParser() {
-  delete parser;
-}
+CSVInvertMatrixParser::~CSVInvertMatrixParser() { delete parser; }
 
-bool CSVInvertMatrixParser::parse(CSVContentHandler *handler, PluginProgress *progress, bool) {
+bool CSVInvertMatrixParser::parse(CSVContentHandler *handler,
+                                  PluginProgress *progress, bool) {
   this->handler = handler;
   return parser->parse(this, progress);
 }
@@ -337,7 +345,8 @@ bool CSVInvertMatrixParser::begin() {
   return true;
 }
 
-bool CSVInvertMatrixParser::line(unsigned int, const std::vector<std::string> &lineTokens) {
+bool CSVInvertMatrixParser::line(unsigned int,
+                                 const std::vector<std::string> &lineTokens) {
   maxLineSize = max(maxLineSize, uint(lineTokens.size()));
   columns.push_back(lineTokens);
   return true;

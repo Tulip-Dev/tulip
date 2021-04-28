@@ -23,10 +23,10 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include <tulip/Plugin.h>
-#include <tulip/Size.h>
 #include <tulip/Coord.h>
+#include <tulip/Plugin.h>
 #include <tulip/PluginContext.h>
+#include <tulip/Size.h>
 
 namespace tlp {
 
@@ -42,7 +42,8 @@ class GlyphContext : public PluginContext {
 public:
   GlGraphInputData *glGraphInputData;
   ///
-  GlyphContext(Graph ** = nullptr, GlGraphInputData *glGraphInputData = nullptr, int = 5, int = 5)
+  GlyphContext(Graph ** = nullptr, GlGraphInputData *glGraphInputData = nullptr,
+               int = 5, int = 5)
       : glGraphInputData(glGraphInputData) {}
   ///
   ~GlyphContext() override {}
@@ -50,9 +51,7 @@ public:
 //==========================================================
 class TLP_GL_SCOPE Glyph : public tlp::Plugin {
 public:
-  std::string category() const override {
-    return GLYPH_CATEGORY;
-  }
+  std::string category() const override { return GLYPH_CATEGORY; }
   std::string icon() const override {
     return ":/tulip/gui/icons/32/plugin_glyph.png";
   }
@@ -60,9 +59,7 @@ public:
   Glyph(const tlp::PluginContext *context);
   ~Glyph() override;
 
-  virtual std::string getGroup() const {
-    return "";
-  }
+  virtual std::string getGroup() const { return ""; }
 
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
 
@@ -71,31 +68,28 @@ public:
   virtual void draw(node, float) = 0;
   /*
    * return a point where an edge coming from "from" can be attached
-   * by default, the point will be on the surface of the largest sphere contained
-   * inside the unit cube (before scaling).
+   * by default, the point will be on the surface of the largest sphere
+   * contained inside the unit cube (before scaling).
    */
-  virtual Coord getAnchor(const Coord &nodeCenter, const Coord &from, const Size &scale,
-                          const double zRotation) const;
+  virtual Coord getAnchor(const Coord &nodeCenter, const Coord &from,
+                          const Size &scale, const double zRotation) const;
 
   /**
-   * Return if the Glyph render its label (return true) or if GlNode have to render label (return
-   * false)
+   * Return if the Glyph render its label (return true) or if GlNode have to
+   * render label (return false)
    */
-  virtual bool renderLabel() {
-    return false;
-  }
+  virtual bool renderLabel() { return false; }
 
   /**
    * Return if the Glyph supports shader rendering optimization (see GlNode.cpp)
    */
-  virtual bool shaderSupported() const {
-    return true;
-  }
+  virtual bool shaderSupported() const { return true; }
 
   /**
    * draw a preconfigured GlRect in the screen plane
    */
-  static void drawRectInScreenPlane(GlRect &rect, const Size &size, bool disableMasks);
+  static void drawRectInScreenPlane(GlRect &rect, const Size &size,
+                                    bool disableMasks);
 
   GlGraphInputData *glGraphInputData;
 
@@ -104,9 +98,9 @@ protected:
    * called by public method getAnchor to actually compute the anchor point
    * vector is coordinate of the point to anchor to, relative to nodecenter
    * glyph size is (1,1,1)
-   * this is the method to redefine for each glyph where the default 'getAnchor' method
-   * is inapropriated
-   * Returned value is a vector to be applied to 'nodeCenter' in the public method
+   * this is the method to redefine for each glyph where the default 'getAnchor'
+   * method is inapropriated Returned value is a vector to be applied to
+   * 'nodeCenter' in the public method
    */
   virtual Coord getAnchor(const Coord &vector) const;
 };
@@ -114,17 +108,13 @@ protected:
 class TLP_GL_SCOPE NoShaderGlyph : public Glyph {
 public:
   NoShaderGlyph(const tlp::PluginContext *context = nullptr) : Glyph(context) {}
-  bool shaderSupported() const override {
-    return false;
-  }
+  bool shaderSupported() const override { return false; }
 };
 } // namespace tlp
 
-#define GLYPHINFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, ID)                                    \
-  PLUGININFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, "")                                         \
-  int id() const override {                                                                        \
-    return ID;                                                                                     \
-  }
+#define GLYPHINFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, ID)                \
+  PLUGININFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, "")                     \
+  int id() const override { return ID; }
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 

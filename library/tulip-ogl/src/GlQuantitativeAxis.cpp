@@ -21,8 +21,8 @@
 #include <tulip/GlPolygon.h>
 #include <tulip/GlTriangle.h>
 
-#include <sstream>
 #include <algorithm>
+#include <sstream>
 
 #include <tulip/GlQuantitativeAxis.h>
 
@@ -38,23 +38,21 @@ using namespace std;
 
 namespace tlp {
 
-GlQuantitativeAxis::GlQuantitativeAxis(const std::string &axisName, const Coord &axisBaseCoord,
-                                       const float axisLength,
-                                       const AxisOrientation &axisOrientation,
-                                       const Color &axisColor, const bool addArrow,
-                                       const bool ascendingOrder)
+GlQuantitativeAxis::GlQuantitativeAxis(
+    const std::string &axisName, const Coord &axisBaseCoord,
+    const float axisLength, const AxisOrientation &axisOrientation,
+    const Color &axisColor, const bool addArrow, const bool ascendingOrder)
     : GlAxis(axisName, axisBaseCoord, axisLength, axisOrientation, axisColor),
-      ascendingOrder(ascendingOrder), addArrow(addArrow), logScale(false), logBase(10),
-      integerScale(false), incrementStep(0), minMaxSet(false) {
+      ascendingOrder(ascendingOrder), addArrow(addArrow), logScale(false),
+      logBase(10), integerScale(false), incrementStep(0), minMaxSet(false) {
   if (addArrow) {
     addArrowDrawing();
   }
 }
 
-void GlQuantitativeAxis::setAxisParameters(const double minV, const double maxV,
-                                           const unsigned int nbGrads,
-                                           const LabelPosition &axisGradsLabelsPos,
-                                           const bool firstLabel) {
+void GlQuantitativeAxis::setAxisParameters(
+    const double minV, const double maxV, const unsigned int nbGrads,
+    const LabelPosition &axisGradsLabelsPos, const bool firstLabel) {
   integerScale = false;
   min = minV;
   max = maxV;
@@ -69,10 +67,10 @@ void GlQuantitativeAxis::setAxisParameters(const double minV, const double maxV,
   minMaxSet = true;
 }
 
-void GlQuantitativeAxis::setAxisParameters(const long long minV, const long long maxV,
-                                           const unsigned long long incrementStepV,
-                                           const LabelPosition &axisGradsLabelsPos,
-                                           const bool firstLabel) {
+void GlQuantitativeAxis::setAxisParameters(
+    const long long minV, const long long maxV,
+    const unsigned long long incrementStepV,
+    const LabelPosition &axisGradsLabelsPos, const bool firstLabel) {
   integerScale = true;
   min = minV;
   long long maxVCp = maxV;
@@ -273,13 +271,16 @@ void GlQuantitativeAxis::addArrowDrawing() {
   if (axisOrientation == HORIZONTAL_AXIS) {
     if (ascendingOrder) {
       arrowEndCoord =
-          Coord(axisBaseCoord.getX() + axisLength + axisExtensionLength, axisBaseCoord.getY());
+          Coord(axisBaseCoord.getX() + axisLength + axisExtensionLength,
+                axisBaseCoord.getY());
       arrowOrientation = 0.0;
-      arrowLine->addPoint(Coord(axisBaseCoord.getX() + axisLength, axisBaseCoord.getY()),
-                          axisColor);
+      arrowLine->addPoint(
+          Coord(axisBaseCoord.getX() + axisLength, axisBaseCoord.getY()),
+          axisColor);
       arrowLine->addPoint(arrowEndCoord, axisColor);
     } else {
-      arrowEndCoord = Coord(axisBaseCoord.getX() - axisExtensionLength, axisBaseCoord.getY());
+      arrowEndCoord = Coord(axisBaseCoord.getX() - axisExtensionLength,
+                            axisBaseCoord.getY());
       arrowOrientation = pi;
       arrowLine->addPoint(axisBaseCoord, axisColor);
       arrowLine->addPoint(arrowEndCoord, axisColor);
@@ -289,20 +290,24 @@ void GlQuantitativeAxis::addArrowDrawing() {
 
     if (ascendingOrder) {
       arrowEndCoord =
-          Coord(axisBaseCoord.getX(), axisBaseCoord.getY() + axisLength + axisExtensionLength);
+          Coord(axisBaseCoord.getX(),
+                axisBaseCoord.getY() + axisLength + axisExtensionLength);
       arrowOrientation = 1. / 2. * pi;
-      arrowLine->addPoint(Coord(axisBaseCoord.getX(), axisBaseCoord.getY() + axisLength),
-                          axisColor);
+      arrowLine->addPoint(
+          Coord(axisBaseCoord.getX(), axisBaseCoord.getY() + axisLength),
+          axisColor);
       arrowLine->addPoint(arrowEndCoord, axisColor);
     } else {
-      arrowEndCoord = Coord(axisBaseCoord.getX(), axisBaseCoord.getY() - axisExtensionLength);
+      arrowEndCoord = Coord(axisBaseCoord.getX(),
+                            axisBaseCoord.getY() - axisExtensionLength);
       arrowOrientation = -1. / 2. * pi;
       arrowLine->addPoint(axisBaseCoord, axisColor);
       arrowLine->addPoint(arrowEndCoord, axisColor);
     }
   }
 
-  arrow = new GlTriangle(arrowEndCoord, arrowSize, axisColor, axisColor, true, true);
+  arrow = new GlTriangle(arrowEndCoord, arrowSize, axisColor, axisColor, true,
+                         true);
   arrow->setStartAngle(arrowOrientation);
   arrow->setStencil(1);
 

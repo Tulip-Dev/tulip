@@ -16,22 +16,22 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/GraphUpdatesRecorder.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphImpl.h>
+#include <tulip/GraphUpdatesRecorder.h>
 
 using namespace std;
 using namespace tlp;
 
-GraphUpdatesRecorder::GraphUpdatesRecorder(bool allowRestart,
-                                           const GraphStorageIdsMemento *prevIdsMemento)
+GraphUpdatesRecorder::GraphUpdatesRecorder(
+    bool allowRestart, const GraphStorageIdsMemento *prevIdsMemento)
     :
 #if !defined(NDEBUG)
       recordingStopped(true),
 #endif
-      updatesReverted(false), restartAllowed(allowRestart), newValuesRecorded(false),
-      oldIdsStateRecorded(prevIdsMemento == nullptr), oldIdsState(prevIdsMemento),
-      newIdsState(nullptr) {
+      updatesReverted(false), restartAllowed(allowRestart),
+      newValuesRecorded(false), oldIdsStateRecorded(prevIdsMemento == nullptr),
+      oldIdsState(prevIdsMemento), newIdsState(nullptr) {
 }
 
 GraphUpdatesRecorder::~GraphUpdatesRecorder() {
@@ -87,7 +87,8 @@ void GraphUpdatesRecorder::treatEvent(const Event &ev) {
     case GraphEvent::TLP_ADD_NODES: {
       const std::vector<node> &nodes = graph->nodes();
 
-      for (unsigned int i = nodes.size() - gEvt->getNumberOfNodes(); i < nodes.size(); ++i)
+      for (unsigned int i = nodes.size() - gEvt->getNumberOfNodes();
+           i < nodes.size(); ++i)
         addNode(graph, nodes[i]);
 
       break;
@@ -211,8 +212,8 @@ void GraphUpdatesRecorder::deleteDefaultValues(
 }
 
 void GraphUpdatesRecorder::recordEdgeContainer(
-    std::unordered_map<node, std::vector<edge>> &containers, GraphImpl *g, node n, edge e,
-    bool loop) {
+    std::unordered_map<node, std::vector<edge>> &containers, GraphImpl *g,
+    node n, edge e, bool loop) {
   if (containers.find(n) == containers.end()) {
     auto itAdj = containers.emplace(n, g->storage.adj(n)).first;
     // if we got a valid edge, this means that we must record
@@ -229,8 +230,8 @@ void GraphUpdatesRecorder::recordEdgeContainer(
 }
 
 void GraphUpdatesRecorder::recordEdgeContainer(
-    std::unordered_map<node, std::vector<edge>> &containers, GraphImpl *g, node n,
-    const vector<edge> &gEdges, unsigned int nbAdded) {
+    std::unordered_map<node, std::vector<edge>> &containers, GraphImpl *g,
+    node n, const vector<edge> &gEdges, unsigned int nbAdded) {
   if (containers.find(n) == containers.end()) {
     auto &adj = containers.emplace(n, g->storage.adj(n)).first->second;
     // we must ensure that the last edges added in gEdges
@@ -318,7 +319,8 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl *g) {
     for (const auto &itov : oldValues) {
       PropertyInterface *p = itov.first;
 
-      if (itov.second.recordedNodes && (oldNodeDefaultValues.find(p) == oldNodeDefaultValues.end()))
+      if (itov.second.recordedNodes &&
+          (oldNodeDefaultValues.find(p) == oldNodeDefaultValues.end()))
         recordNewNodeValues(p);
     }
 
@@ -370,7 +372,8 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl *g) {
     for (const auto &itov : oldValues) {
       PropertyInterface *p = itov.first;
 
-      if (itov.second.recordedEdges && (oldEdgeDefaultValues.find(p) == oldEdgeDefaultValues.end()))
+      if (itov.second.recordedEdges &&
+          (oldEdgeDefaultValues.find(p) == oldEdgeDefaultValues.end()))
         recordNewEdgeValues(p);
     }
 
@@ -628,7 +631,8 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
   }
 
   // loop on subGraphsToDel
-  std::list<std::pair<Graph *, Graph *>> &subGraphsToDel = undo ? addedSubGraphs : deletedSubGraphs;
+  std::list<std::pair<Graph *, Graph *>> &subGraphsToDel =
+      undo ? addedSubGraphs : deletedSubGraphs;
 
   for (const auto &its : subGraphsToDel) {
     Graph *g = its.first;
@@ -679,7 +683,8 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
   }
 
   // loop on subGraphsToAdd
-  std::list<std::pair<Graph *, Graph *>> &subGraphsToAdd = undo ? deletedSubGraphs : addedSubGraphs;
+  std::list<std::pair<Graph *, Graph *>> &subGraphsToAdd =
+      undo ? deletedSubGraphs : addedSubGraphs;
 
   for (const auto &its : subGraphsToAdd) {
     Graph *g = its.first;
@@ -728,8 +733,10 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
   }
 
   // loop on edgesEnds
-  std::unordered_map<edge, pair<node, node>> &updatedEdgesEnds = undo ? oldEdgesEnds : newEdgesEnds;
-  std::unordered_map<edge, pair<node, node>>::const_iterator itee = updatedEdgesEnds.begin();
+  std::unordered_map<edge, pair<node, node>> &updatedEdgesEnds =
+      undo ? oldEdgesEnds : newEdgesEnds;
+  std::unordered_map<edge, pair<node, node>>::const_iterator itee =
+      updatedEdgesEnds.begin();
 
   while (itee != updatedEdgesEnds.end()) {
     g->setEnds(itee->first, itee->second.first, itee->second.second);
@@ -737,7 +744,8 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
   }
 
   // loop on containers
-  std::unordered_map<node, std::vector<edge>> &containers = undo ? oldContainers : newContainers;
+  std::unordered_map<node, std::vector<edge>> &containers =
+      undo ? oldContainers : newContainers;
   for (auto itc = containers.begin(); itc != containers.end(); ++itc) {
     node n(itc->first);
     // n may have been deleted as a previously added node
@@ -746,7 +754,8 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
   }
 
   // loop on edgesToAdd
-  std::map<Graph *, unordered_set<edge>> &edgesToAdd = undo ? graphDeletedEdges : graphAddedEdges;
+  std::map<Graph *, unordered_set<edge>> &edgesToAdd =
+      undo ? graphDeletedEdges : graphAddedEdges;
   std::unordered_map<edge, std::pair<node, node>> &edgesEnds =
       undo ? deletedEdgesEnds : addedEdgesEnds;
 
@@ -760,8 +769,8 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
         auto eEnds = itEnds->second;
         g->restoreEdge(e, eEnds.first, eEnds.second);
       } else {
-        // restoration of an edge in a subgraph that was already an element of the root graph
-        // (i.e., not a newly added edge)
+        // restoration of an edge in a subgraph that was already an element of
+        // the root graph (i.e., not a newly added edge)
         g->restoreEdge(e, g->getRoot()->source(e), g->getRoot()->target(e));
       }
     }
@@ -809,7 +818,8 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
   }
 
   // loop on recorded values
-  std::unordered_map<PropertyInterface *, RecordedValues> &rvalues = undo ? oldValues : newValues;
+  std::unordered_map<PropertyInterface *, RecordedValues> &rvalues =
+      undo ? oldValues : newValues;
 
   for (const auto &itrv : rvalues) {
     PropertyInterface *prop = itrv.first;
@@ -817,7 +827,8 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
 
     if (itrv.second.recordedNodes) {
 
-      for (unsigned int id : itrv.second.recordedNodes->findAllValues(false, false)) {
+      for (unsigned int id :
+           itrv.second.recordedNodes->findAllValues(false, false)) {
         node n(id);
         prop->copy(n, n, nv);
       }
@@ -825,7 +836,8 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
 
     if (itrv.second.recordedEdges) {
 
-      for (unsigned int id : itrv.second.recordedEdges->findAllValues(false, false)) {
+      for (unsigned int id :
+           itrv.second.recordedEdges->findAllValues(false, false)) {
         edge e(id);
         prop->copy(e, e, nv);
       }
@@ -833,7 +845,8 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
   }
 
   // loop on attribute values to restore
-  std::unordered_map<Graph *, DataSet> &attValues = undo ? oldAttributeValues : newAttributeValues;
+  std::unordered_map<Graph *, DataSet> &attValues =
+      undo ? oldAttributeValues : newAttributeValues;
 
   for (const auto &itav : attValues) {
     Graph *g = itav.first;
@@ -935,7 +948,8 @@ bool GraphUpdatesRecorder::dontObserveProperty(PropertyInterface *prop) {
       Graph *g = prop->getGraph();
       const auto it = addedProperties.find(g);
 
-      if (it != addedProperties.end() && (it->second.find(prop) != it->second.end()))
+      if (it != addedProperties.end() &&
+          (it->second.find(prop) != it->second.end()))
         // the property is no longer recorded
         it->second.erase(prop);
 
@@ -946,14 +960,17 @@ bool GraphUpdatesRecorder::dontObserveProperty(PropertyInterface *prop) {
   return false;
 }
 
-bool GraphUpdatesRecorder::isAddedOrDeletedProperty(Graph *g, PropertyInterface *prop) {
+bool GraphUpdatesRecorder::isAddedOrDeletedProperty(Graph *g,
+                                                    PropertyInterface *prop) {
   auto it = addedProperties.find(g);
 
-  if (it != addedProperties.end() && (it->second.find(prop) != it->second.end()))
+  if (it != addedProperties.end() &&
+      (it->second.find(prop) != it->second.end()))
     return true;
 
   it = deletedProperties.find(g);
-  return it != deletedProperties.end() && (it->second.find(prop) != it->second.end());
+  return it != deletedProperties.end() &&
+         (it->second.find(prop) != it->second.end());
 }
 
 void GraphUpdatesRecorder::addNode(Graph *g, node n) {
@@ -969,8 +986,8 @@ void GraphUpdatesRecorder::addNode(Graph *g, node n) {
   }
 
   // we need to backup properties values of the newly added node
-  // in order to restore them when reading the node through the tlp::Graph::unpop() method
-  // as the default properties values might change
+  // in order to restore them when reading the node through the
+  // tlp::Graph::unpop() method as the default properties values might change
   for (PropertyInterface *prop : g->getLocalObjectProperties()) {
     beforeSetNodeValue(prop, n);
   }
@@ -989,14 +1006,16 @@ void GraphUpdatesRecorder::addEdge(Graph *g, edge e) {
     addedEdgesEnds.emplace(e, eEnds);
     // record source & target old adjacencies
     bool loop = eEnds.first == eEnds.second;
-    recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), eEnds.first, e, loop);
+    recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), eEnds.first,
+                        e, loop);
     if (!loop)
-      recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), eEnds.second, e);
+      recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g),
+                          eEnds.second, e);
   }
 
   // we need to backup properties values of the newly added edge
-  // in order to restore them when reading the node through the tlp::Graph::unpop() method
-  // as the default properties values can change
+  // in order to restore them when reading the node through the
+  // tlp::Graph::unpop() method as the default properties values can change
   for (PropertyInterface *prop : g->getLocalObjectProperties()) {
     beforeSetEdgeValue(prop, e);
   }
@@ -1020,14 +1039,15 @@ void GraphUpdatesRecorder::addEdges(Graph *g, unsigned int nbAdded) {
       auto eEnds = g->ends(e);
       addedEdgesEnds.emplace(e, eEnds);
       // record source & target old adjacencies
-      recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), eEnds.first, gEdges, nbAdded);
-      recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), eEnds.second, gEdges,
-                          nbAdded);
+      recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g),
+                          eEnds.first, gEdges, nbAdded);
+      recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g),
+                          eEnds.second, gEdges, nbAdded);
     }
 
     // we need to backup properties values of the newly added edge
-    // in order to restore them when reading the node through the tlp::Graph::unpop() method
-    // as the default properties values can change
+    // in order to restore them when reading the node through the
+    // tlp::Graph::unpop() method as the default properties values can change
     for (PropertyInterface *prop : g->getLocalObjectProperties()) {
       beforeSetEdgeValue(prop, e);
     }
@@ -1130,7 +1150,8 @@ void GraphUpdatesRecorder::delEdge(Graph *g, edge e) {
         if (ite == oldEdgesEnds.end())
           deletedEdgesEnds.emplace(e, eEnds);
         else {
-          deletedEdgesEnds.emplace(e, std::make_pair(ite->second.first, ite->second.second));
+          deletedEdgesEnds.emplace(
+              e, std::make_pair(ite->second.first, ite->second.second));
           // remove from oldEdgesEnds
           oldEdgesEnds.erase(ite);
           // remove from newEdgesEnds
@@ -1157,8 +1178,10 @@ void GraphUpdatesRecorder::delEdge(Graph *g, edge e) {
 
   if (g == g->getRoot()) {
     // record source & target old containers
-    recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), eEnds.first);
-    recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), eEnds.second);
+    recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g),
+                        eEnds.first);
+    recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g),
+                        eEnds.second);
   }
 }
 
@@ -1190,8 +1213,10 @@ void GraphUpdatesRecorder::reverseEdge(Graph *g, edge e) {
         revertedEdges.insert(e);
         // record source & target old containers
         const pair<node, node> &eEnds = g->ends(e);
-        recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), eEnds.first);
-        recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), eEnds.second);
+        recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g),
+                            eEnds.first);
+        recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g),
+                            eEnds.second);
       }
     }
   }
@@ -1213,8 +1238,10 @@ void GraphUpdatesRecorder::beforeSetEnds(Graph *g, edge e) {
       ends.second = tgt;
     } else {
       // record source & target old containers
-      recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), ends.first);
-      recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), ends.second);
+      recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g),
+                          ends.first);
+      recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g),
+                          ends.second);
     }
 
     // add e old ends in oldEdgesEnds
@@ -1327,7 +1354,8 @@ void GraphUpdatesRecorder::delLocalProperty(Graph *g, const string &name) {
   auto it = addedProperties.find(g);
 
   // remove p from addedProperties if it is a newly added one
-  if (it != addedProperties.end() && (it->second.find(prop) != it->second.end())) {
+  if (it != addedProperties.end() &&
+      (it->second.find(prop) != it->second.end())) {
     // the property is no longer recorded
     it->second.erase(prop);
     // remove from renamed properties
@@ -1359,7 +1387,8 @@ void GraphUpdatesRecorder::propertyRenamed(PropertyInterface *prop) {
   const auto it = addedProperties.find(prop->getGraph());
 
   // remove p from addedProperties if it is a newly added one
-  if (it != addedProperties.end() && (it->second.find(prop) != it->second.end())) {
+  if (it != addedProperties.end() &&
+      (it->second.find(prop) != it->second.end())) {
     return;
   } else {
     if (renamedProperties.find(prop) == renamedProperties.end())
@@ -1475,7 +1504,8 @@ void GraphUpdatesRecorder::beforeSetAllEdgeValue(PropertyInterface *p) {
   }
 }
 
-void GraphUpdatesRecorder::beforeSetAttribute(Graph *g, const std::string &name) {
+void GraphUpdatesRecorder::beforeSetAttribute(Graph *g,
+                                              const std::string &name) {
   const auto it = oldAttributeValues.find(g);
 
   if (it != oldAttributeValues.end() && it->second.exists(name))

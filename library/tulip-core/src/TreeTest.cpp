@@ -17,12 +17,12 @@
  *
  */
 #include <stack>
-#include <tulip/Graph.h>
-#include <tulip/ConnectedTest.h>
-#include <tulip/TreeTest.h>
 #include <tulip/AcyclicTest.h>
-#include <tulip/GraphTools.h>
 #include <tulip/BooleanProperty.h>
+#include <tulip/ConnectedTest.h>
+#include <tulip/Graph.h>
+#include <tulip/GraphTools.h>
+#include <tulip/TreeTest.h>
 
 using namespace std;
 using namespace tlp;
@@ -30,11 +30,13 @@ using namespace tlp;
 //=================================================================
 class TreeTestListener : public Observable {
 public:
-  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
+  // override of Observable::treatEvent to remove the cached result for a graph
+  // if it is modified.
   void treatEvent(const Event &) override;
 
   /**
-   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the map.
+   * @brief Stored results for graphs. When a graph is updated, its entry is
+   *removed from the map.
    **/
   std::unordered_map<const Graph *, bool> resultsBuffer;
 };
@@ -103,8 +105,9 @@ bool TreeTest::isTree(const tlp::Graph *graph) {
 // if the graph was undirected, there would be no cycle
 bool TreeTest::isFreeTree(const tlp::Graph *graph) {
   auto nbNodes = graph->numberOfNodes();
-  return (nbNodes && (graph->numberOfEdges() == nbNodes - 1)) ? ConnectedTest::isConnected(graph)
-                                                              : false;
+  return (nbNodes && (graph->numberOfEdges() == nbNodes - 1))
+             ? ConnectedTest::isConnected(graph)
+             : false;
 }
 //====================================================================
 // simple structure to implement
@@ -120,9 +123,11 @@ struct dfsMakeRootedTreeStruct {
 
 // given that a graph is topologically a tree, The function turns graph
 // into a directed tree.
-static void makeRootedTree(Graph *graph, node curRoot, vector<edge> *reversedEdges) {
+static void makeRootedTree(Graph *graph, node curRoot,
+                           vector<edge> *reversedEdges) {
   stack<dfsMakeRootedTreeStruct> dfsLevels;
-  dfsMakeRootedTreeStruct curParams(curRoot, curRoot, graph->getInOutEdges(curRoot));
+  dfsMakeRootedTreeStruct curParams(curRoot, curRoot,
+                                    graph->getInOutEdges(curRoot));
   dfsLevels.push(curParams);
 
   // dfs loop
@@ -168,7 +173,9 @@ void TreeTest::makeRootedTree(Graph *graph, node root) {
   instance.resultsBuffer.erase(graph);
 
   if (!graph->isElement(root)) {
-    tlp::warning() << "makeRootedTree:  Passed root is not an element of the graph" << endl;
+    tlp::warning()
+        << "makeRootedTree:  Passed root is not an element of the graph"
+        << endl;
     return;
   } // end if
 
@@ -232,8 +239,8 @@ static Graph *computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
     if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
       return nullptr;
 
-    return computeTreeInternal(gClone->addSubGraph(&treeSelection), rGraph, true, pluginProgress,
-                               reversedEdges);
+    return computeTreeInternal(gClone->addSubGraph(&treeSelection), rGraph,
+                               true, pluginProgress, reversedEdges);
   }
 
   // graph is not connected
@@ -260,7 +267,8 @@ static Graph *computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
     // to our main tree
     // and connect the main root to each
     // subtree root
-    Graph *sTree = computeTreeInternal(gConn, rGraph, true, pluginProgress, reversedEdges);
+    Graph *sTree =
+        computeTreeInternal(gConn, rGraph, true, pluginProgress, reversedEdges);
 
     if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
       return nullptr;
@@ -278,7 +286,8 @@ static Graph *computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
 }
 
 // the documented functions
-Graph *TreeTest::computeTree(tlp::Graph *graph, PluginProgress *pluginProgress) {
+Graph *TreeTest::computeTree(tlp::Graph *graph,
+                             PluginProgress *pluginProgress) {
   return computeTreeInternal(graph, nullptr, false, pluginProgress);
 }
 

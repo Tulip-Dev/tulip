@@ -17,21 +17,22 @@
  *
  */
 
-#include <tulip/InteractorConfigWidget.h>
 #include "ui_InteractorConfigWidget.h"
+#include <tulip/InteractorConfigWidget.h>
 
-#include <QScrollArea>
-#include <QLabel>
 #include <QHideEvent>
+#include <QLabel>
+#include <QScrollArea>
 #include <QShowEvent>
 
-#include <tulip/TlpQtTools.h>
 #include <tulip/Interactor.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace tlp;
 
 InteractorConfigWidget::InteractorConfigWidget(QWidget *parent)
-    : QDialog(parent), _ui(new Ui::InteractorConfigWidget), _interactor(nullptr) {
+    : QDialog(parent), _ui(new Ui::InteractorConfigWidget),
+      _interactor(nullptr) {
   _ui->setupUi(this);
   resize(500, 600);
 }
@@ -52,7 +53,8 @@ bool InteractorConfigWidget::setWidgets(Interactor *interactor) {
   _ui->interactorConfigWidgetOptions->takeWidget();
 
   QWidget *oldConfig(interactor->configurationWidget());
-  // if old config is present and is only a QLabel => Documentation tab, else Options tab
+  // if old config is present and is only a QLabel => Documentation tab, else
+  // Options tab
   QWidget *DocWidget = nullptr;
   QWidget *OptionsWidget = nullptr;
   if (oldConfig != nullptr) {
@@ -74,7 +76,8 @@ bool InteractorConfigWidget::setWidgets(Interactor *interactor) {
 
     if (DocWidget != nullptr) {
       _ui->interactorConfigWidgetDoc->setWidget(DocWidget);
-      _ui->tabWidget->setTabEnabled(0, true); // in case it was previously set to false
+      _ui->tabWidget->setTabEnabled(
+          0, true); // in case it was previously set to false
       if (OptionsWidget != nullptr) {
         auto idx = lastIndex.find(interactor->info());
         if (idx != lastIndex.end())
@@ -91,7 +94,8 @@ bool InteractorConfigWidget::setWidgets(Interactor *interactor) {
 
     if (OptionsWidget != nullptr) {
       _ui->interactorConfigWidgetOptions->setWidget(OptionsWidget);
-      _ui->tabWidget->setTabEnabled(1, true); // in case it was previously set to false
+      _ui->tabWidget->setTabEnabled(
+          1, true); // in case it was previously set to false
     } else
       _ui->tabWidget->setTabEnabled(1, false);
 

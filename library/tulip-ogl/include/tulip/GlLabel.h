@@ -20,11 +20,11 @@
 #ifndef Tulip_GLLABEL_H
 #define Tulip_GLLABEL_H
 
-#include <tulip/Coord.h>
-#include <tulip/Color.h>
-#include <tulip/Size.h>
 #include <tulip/Camera.h>
+#include <tulip/Color.h>
+#include <tulip/Coord.h>
 #include <tulip/GlSimpleEntity.h>
+#include <tulip/Size.h>
 
 class FTGLPolygonFont;
 class FTOutlineFont;
@@ -64,7 +64,8 @@ public:
    * @param fontColor color of the label
    * @param leftAlign true if you want a left align label
    */
-  GlLabel(const Coord &centerPosition, const Size &size, Color fontColor, bool leftAlign = false);
+  GlLabel(const Coord &centerPosition, const Size &size, Color fontColor,
+          bool leftAlign = false);
 
   /**
    * @brief Destructor
@@ -80,30 +81,22 @@ public:
    * @brief getText gets the text of this label.
    * @return The text of this label.
    */
-  const std::string &getText() const {
-    return text;
-  }
+  const std::string &getText() const { return text; }
 
   /**
    * @brief Set the position used to render the label
    */
-  void setPosition(const Coord &position) {
-    centerPosition = position;
-  }
+  void setPosition(const Coord &position) { centerPosition = position; }
 
   /**
    * @brief Set the position used to render the label
    */
-  void setPosition(float x, float y, float z) {
-    centerPosition.set(x, y, z);
-  }
+  void setPosition(float x, float y, float z) { centerPosition.set(x, y, z); }
 
   /**
    * @brief Return the position of the label
    */
-  const Coord &getPosition() const {
-    return centerPosition;
-  }
+  const Coord &getPosition() const { return centerPosition; }
 
   ///@cond DOXYGEN_HIDDEN
 
@@ -124,16 +117,15 @@ public:
   ///@endcond
 
   /**
-   * @brief Set the alignment of the label : LabelPosition::Center, LabelPosition::Top,
-   * LabelPosition::Bottom, LabelPosition::Left, LabelPosition::Right
-   * This function is useful when you have an entity : you specify the size of the position of this
-   * entity and you tell that you want a label outside this entity
+   * @brief Set the alignment of the label : LabelPosition::Center,
+   * LabelPosition::Top, LabelPosition::Bottom, LabelPosition::Left,
+   * LabelPosition::Right This function is useful when you have an entity : you
+   * specify the size of the position of this entity and you tell that you want
+   * a label outside this entity
    * @see LabelPosition
    * @see setSizeOfOutAlign
    */
-  void setAlignment(int alignment) {
-    this->alignment = alignment;
-  }
+  void setAlignment(int alignment) { this->alignment = alignment; }
 
   /**
    * @brief Return the bounding box of the label
@@ -141,25 +133,20 @@ public:
   BoundingBox getBoundingBox() override;
 
   /**
-   * @brief Return the bounding box of the text of the label after transformations
+   * @brief Return the bounding box of the text of the label after
+   * transformations
    */
-  const BoundingBox &getTextBoundingBox() {
-    return textBoundingBox;
-  }
+  const BoundingBox &getTextBoundingBox() { return textBoundingBox; }
 
   /**
    * @brief Set the size of the label
    */
-  void setSize(const Size &size) {
-    this->sizeForOutAlign = this->size = size;
-  }
+  void setSize(const Size &size) { this->sizeForOutAlign = this->size = size; }
 
   /**
    * @brief return the size of the text
    */
-  const Size &getSize() const {
-    return size;
-  }
+  const Size &getSize() const { return size; }
 
   /**
    * @brief Set the size for alignment outside (left/right/top/bottom)
@@ -169,49 +156,38 @@ public:
    *
    * @Warning : this size is reinit when you call setSize
    */
-  void setSizeForOutAlign(const Size &size) {
-    sizeForOutAlign = size;
-  }
+  void setSizeForOutAlign(const Size &size) { sizeForOutAlign = size; }
 
   /**
    * @brief return the size for alignment outside (left/right/top/bottom)
    * @see setAlignment
    */
-  const Size &getSizeForOutAlign() const {
-    return sizeForOutAlign;
-  }
+  const Size &getSizeForOutAlign() const { return sizeForOutAlign; }
 
   /**
    * @brief Set color of label
    */
-  void setColor(const Color &color) {
-    this->color = color;
-  }
+  void setColor(const Color &color) { this->color = color; }
 
   /**
    * @brief Get color use to render the label
    */
-  const Color &getColor() const {
-    return color;
-  }
+  const Color &getColor() const { return color; }
 
   /**
-   * @brief Enable/disable the OpenGL depth test for the label (default depth test is enable)
+   * @brief Enable/disable the OpenGL depth test for the label (default depth
+   * test is enable)
    */
-  void enableDepthTest(bool state) {
-    depthTestEnabled = state;
-  }
+  void enableDepthTest(bool state) { depthTestEnabled = state; }
 
   /**
    * @brief Enable/disable if label is scaled to size
    */
-  void setScaleToSize(bool state) {
-    scaleToSize = state;
-  }
+  void setScaleToSize(bool state) { scaleToSize = state; }
 
   /**
-   * @brief Set the stencil and draw the Label, this function is useful when we directly call draw
-   * without tulip engine
+   * @brief Set the stencil and draw the Label, this function is useful when we
+   * directly call draw without tulip engine
    */
   void drawWithStencil(float lod, Camera *camera = nullptr);
 
@@ -243,7 +219,8 @@ public:
   /**
    * @brief Function to set data with inString (in XML format)
    */
-  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
+  void setWithXML(const std::string &inString,
+                  unsigned int &currentPosition) override;
 
   /**
    * @brief Switch to bold font
@@ -263,29 +240,27 @@ public:
   /**
    * @brief Change font name, size and color of the text
    */
-  void setFontNameSizeAndColor(const std::string &name, const int &size, const Color &color);
+  void setFontNameSizeAndColor(const std::string &name, const int &size,
+                               const Color &color);
 
   ///@cond DOXYGEN_HIDDEN
   /**
    * @brief This parameters is not used
    */
-  void setRenderingMode(int mode) {
-    renderingMode = mode;
-  }
+  void setRenderingMode(int mode) { renderingMode = mode; }
   ///@endcond
 
   /**
    * @brief Set the occlusion tester
    * If occlusionTester is nullptr : deactivate occlusion test
    */
-  void setOcclusionTester(OcclusionTest *tester) {
-    occlusionTester = tester;
-  }
+  void setOcclusionTester(OcclusionTest *tester) { occlusionTester = tester; }
 
   /**
    * @brief Set if the label is optimized with the lod
    */
-  void setUseLODOptimisation(bool state, const BoundingBox &bb = BoundingBox()) {
+  void setUseLODOptimisation(bool state,
+                             const BoundingBox &bb = BoundingBox()) {
     useLOD = state;
     lodBoundingBox = bb;
   }
@@ -293,9 +268,7 @@ public:
   /**
    * @brief Return if the label is otimized with the lod
    */
-  bool getUseLODOptimisation() const {
-    return useLOD;
-  }
+  bool getUseLODOptimisation() const { return useLOD; }
 
   /**
    * @brief Set labels density of occlusion test
@@ -318,125 +291,95 @@ public:
    * @brief Return label density of occlusion test
    * This density will be in interval -100 100
    */
-  int getLabelDensity() const {
-    return labelsDensity;
-  }
+  int getLabelDensity() const { return labelsDensity; }
 
   /**
-   * @brief Set min screen size (in pixel) of the label : this size is used in not scaled mode
+   * @brief Set min screen size (in pixel) of the label : this size is used in
+   * not scaled mode
    * @see setUseMinMaxSize
    */
-  void setMinSize(int size) {
-    minSize = size;
-  }
+  void setMinSize(int size) { minSize = size; }
 
   /**
-   * @brief Get min screen size (in pixel) of the label : this size is used in not scaled mode
+   * @brief Get min screen size (in pixel) of the label : this size is used in
+   * not scaled mode
    * @see setUseMinMaxSize
    */
-  int getMinSize() const {
-    return minSize;
-  }
+  int getMinSize() const { return minSize; }
 
   /**
-   * @brief Set max screen size (in pixel) of the label : this size is used in not scaled mode
+   * @brief Set max screen size (in pixel) of the label : this size is used in
+   * not scaled mode
    * @see setUseMinMaxSize
    */
-  void setMaxSize(int size) {
-    maxSize = size;
-  }
+  void setMaxSize(int size) { maxSize = size; }
 
   /**
-   * @brief Get max screen size (in pixel) of the label : this size is used in not scaled mode
+   * @brief Get max screen size (in pixel) of the label : this size is used in
+   * not scaled mode
    * @see setUseMinMaxSize
    */
-  int getMaxSize() const {
-    return maxSize;
-  }
+  int getMaxSize() const { return maxSize; }
 
   /**
    * @brief Set if the label use min/max screen size in not scaled mode
    */
-  void setUseMinMaxSize(bool state) {
-    useMinMaxSize = state;
-  }
+  void setUseMinMaxSize(bool state) { useMinMaxSize = state; }
 
   /**
    * @brief Return if the label using min/max screen size in not scaled mode
    */
-  bool isUsingMinMaxSize() const {
-    return useMinMaxSize;
-  }
+  bool isUsingMinMaxSize() const { return useMinMaxSize; }
 
   /**
    * @brief Return the font size
    */
-  int getFontSize() const {
-    return fontSize;
-  }
+  int getFontSize() const { return fontSize; }
 
   /**
    * @brief Sets the font size used when rendering the label.
    */
-  void setFontSize(int size) {
-    fontSize = size;
-  }
+  void setFontSize(int size) { fontSize = size; }
 
   /**
    * @brief Return the outline color
    */
-  const Color &getOutlineColor() const {
-    return outlineColor;
-  }
+  const Color &getOutlineColor() const { return outlineColor; }
 
   /**
    * @brief Sets the outline color used when rendering the label.
    */
-  void setOutlineColor(const Color &color) {
-    outlineColor = color;
-  }
+  void setOutlineColor(const Color &color) { outlineColor = color; }
 
   /**
    * @brief Return the outline size
    */
-  float getOutlineSize() const {
-    return outlineSize;
-  }
+  float getOutlineSize() const { return outlineSize; }
 
   /**
    * @brief Sets the outline size used when rendering the label.
    */
-  void setOutlineSize(float size) {
-    outlineSize = size;
-  }
+  void setOutlineSize(float size) { outlineSize = size; }
 
   /**
    * @brief Return the texture name used to render the label
    */
-  const std::string &getTextureName() const {
-    return textureName;
-  }
+  const std::string &getTextureName() const { return textureName; }
 
   /**
    * @brief Sets the texture name used when rendering the label.
    */
-  void setTextureName(const std::string &name) {
-    textureName = name;
-  }
+  void setTextureName(const std::string &name) { textureName = name; }
 
   /**
    * @brief Return if the label is billboarded
    */
-  bool isBillboarded() const {
-    return billboarded;
-  }
+  bool isBillboarded() const { return billboarded; }
 
   /**
    * @brief Set if the label is billboarded
    */
-  void setBillboarded(bool billboarded) {
-    this->billboarded = billboarded;
-  }
+  void setBillboarded(bool billboarded) { this->billboarded = billboarded; }
 
 private:
   std::string text;

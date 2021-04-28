@@ -22,12 +22,12 @@
 
 #include <climits>
 
-#include <tulip/tulipconf.h>
 #include <tulip/BoundingBox.h>
+#include <tulip/Color.h>
 #include <tulip/GlLODCalculator.h>
 #include <tulip/GlLayer.h>
-#include <tulip/Color.h>
 #include <tulip/Observable.h>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
 
@@ -40,11 +40,11 @@ class GlGraphComposite;
  * @brief Structure to store selected entities
  *
  * After a selection, objects of SelectedEntity is returned
- * To use this object the first thing to do is to call getEntity type to know the type of Entity
- * After that you can :
+ * To use this object the first thing to do is to call getEntity type to know
+ * the type of Entity After that you can :
  *   - Get the GlSimpleEntity pointer (getSimpleEntity())
- *   - Get the id of node/edge and the graph associated (getComplexEntityId() and
- * getComplexEntityGraph())
+ *   - Get the id of node/edge and the graph associated (getComplexEntityId()
+ * and getComplexEntityGraph())
  *
  */
 struct SelectedEntity {
@@ -57,9 +57,11 @@ struct SelectedEntity {
   };
 
   SelectedEntity()
-      : simpleEntity(nullptr), complexEntityId(UINT_MAX), entityType(UNKNOW_SELECTED) {}
+      : simpleEntity(nullptr), complexEntityId(UINT_MAX),
+        entityType(UNKNOW_SELECTED) {}
   SelectedEntity(GlSimpleEntity *entity)
-      : simpleEntity(entity), complexEntityId(UINT_MAX), entityType(SIMPLE_ENTITY_SELECTED) {}
+      : simpleEntity(entity), complexEntityId(UINT_MAX),
+        entityType(SIMPLE_ENTITY_SELECTED) {}
   SelectedEntity(Graph *graph, unsigned int id, SelectedEntityType type)
       : complexEntityGraph(graph), complexEntityId(id), entityType(type) {
     assert((type == NODE_SELECTED) || (type == EDGE_SELECTED));
@@ -71,20 +73,21 @@ struct SelectedEntity {
   }
 
   unsigned int getComplexEntityId() const {
-    assert((entityType != SIMPLE_ENTITY_SELECTED) && (complexEntityId != UINT_MAX));
+    assert((entityType != SIMPLE_ENTITY_SELECTED) &&
+           (complexEntityId != UINT_MAX));
     return complexEntityId;
   }
 
   Graph *getComplexEntityGraph() const {
-    assert((entityType != SIMPLE_ENTITY_SELECTED) && (complexEntityGraph != nullptr));
+    assert((entityType != SIMPLE_ENTITY_SELECTED) &&
+           (complexEntityGraph != nullptr));
     return complexEntityGraph;
   }
 
-  SelectedEntityType getEntityType() const {
-    return entityType;
-  }
+  SelectedEntityType getEntityType() const { return entityType; }
   /**
-   * @return the selected node if the entity type is correct or an invalid node else.
+   * @return the selected node if the entity type is correct or an invalid node
+   * else.
    */
   node getNode() const {
     assert((entityType == NODE_SELECTED) || (complexEntityId == UINT_MAX));
@@ -92,7 +95,8 @@ struct SelectedEntity {
   }
 
   /**
-   * @return the selected edge if the entity type is correct or an invalid edge else.
+   * @return the selected edge if the entity type is correct or an invalid edge
+   * else.
    */
   edge getEdge() const {
     assert((entityType == EDGE_SELECTED) || (complexEntityId == UINT_MAX));
@@ -115,10 +119,10 @@ protected:
  * The GlScene class is the core of the tulip rendering system
  * This class is used to render entities and graph in OpenGL
  *
- * If you want to render entities and graph, you have to use GlLayer system. You just have to create
- * GlLayer and add GlEntity in.
- * If you create more than one GlLayer, layers are rendered one after one, so the first GlLayer
- * added is rendered in first.
+ * If you want to render entities and graph, you have to use GlLayer system. You
+ * just have to create GlLayer and add GlEntity in. If you create more than one
+ * GlLayer, layers are rendered one after one, so the first GlLayer added is
+ * rendered in first.
  * @see GlLayer
  * @see GlSimpleEntity
  *
@@ -138,17 +142,18 @@ protected:
  * glScene.draw();
  * \endcode
  *
- * If you want to create a widget with a visualisation is better to use GlMainWidget class (this
- * class use a GlScene inside)
+ * If you want to create a widget with a visualisation is better to use
+ * GlMainWidget class (this class use a GlScene inside)
  */
 class TLP_GL_SCOPE GlScene : public Observable {
 
 public:
   /** \brief Constructor
    * Default scene is empty
-   * @param calculator By default GlScene use a GlCPULODCalculator to compute LOD but you can change
-   * this default lod calculator, to do that : put your calculator in constructor parameters
-   * Available calculators are : GlCPULODCalculator and GlQuadTreeLODCalculator
+   * @param calculator By default GlScene use a GlCPULODCalculator to compute
+   * LOD but you can change this default lod calculator, to do that : put your
+   * calculator in constructor parameters Available calculators are :
+   * GlCPULODCalculator and GlQuadTreeLODCalculator
    */
   GlScene(GlLODCalculator *calculator = nullptr);
 
@@ -162,8 +167,8 @@ public:
 
   /**
    * @brief Draw the scene
-   * This function is the most important function of GlScene. If you want to render a scene into an
-   * OpenGL widget : call this function
+   * This function is the most important function of GlScene. If you want to
+   * render a scene into an OpenGL widget : call this function
    */
   void draw();
 
@@ -179,28 +184,31 @@ public:
    * @param height request height
    * @param center the result center will be stored in (if center != nullptr)
    * @param eye the result eye will be stored in (if eye != nullptr)
-   * @param sceneRadius the result sceneRadius will be stored in (if sceneRadius != nullptr)
-   * @param xWhiteFactor the white part on x borders (left and right), the computed empty space size
-   * will be stored in (if xWhiteFactor != nullptr)
-   * @param yWhiteFactor the white part on y borders (top and bottom), the computed empty space size
-   * will be stored in (if yWhiteFactor != nullptr)
-   * @param sceneBoundingBox the computed sceneBoundingBox will be stored in (if sceneBoundingBox !=
-   * nullptr)
-   * @param zoomFactor the computed zoomFactor will be stored in (if zoomFactor != nullptr)
+   * @param sceneRadius the result sceneRadius will be stored in (if sceneRadius
+   * != nullptr)
+   * @param xWhiteFactor the white part on x borders (left and right), the
+   * computed empty space size will be stored in (if xWhiteFactor != nullptr)
+   * @param yWhiteFactor the white part on y borders (top and bottom), the
+   * computed empty space size will be stored in (if yWhiteFactor != nullptr)
+   * @param sceneBoundingBox the computed sceneBoundingBox will be stored in (if
+   * sceneBoundingBox != nullptr)
+   * @param zoomFactor the computed zoomFactor will be stored in (if zoomFactor
+   * != nullptr)
    */
-  void computeAdjustSceneToSize(int width, int height, Coord *center, Coord *eye,
-                                float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor,
+  void computeAdjustSceneToSize(int width, int height, Coord *center,
+                                Coord *eye, float *sceneRadius,
+                                float *xWhiteFactor, float *yWhiteFactor,
                                 BoundingBox *sceneBoundingBox = nullptr,
                                 float *zoomFactor = nullptr);
 
   // use computeAdjustSceneToSize instead
-  _DEPRECATED void computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye,
-                                           float *sceneRadius, float *xWhiteFactor,
-                                           float *yWhiteFactor,
-                                           BoundingBox *sceneBoundingBox = nullptr,
-                                           float *zoomFactor = nullptr) {
-    computeAdjustSceneToSize(width, height, center, eye, sceneRadius, xWhiteFactor, yWhiteFactor,
-                             sceneBoundingBox, zoomFactor);
+  _DEPRECATED void computeAjustSceneToSize(
+      int width, int height, Coord *center, Coord *eye, float *sceneRadius,
+      float *xWhiteFactor, float *yWhiteFactor,
+      BoundingBox *sceneBoundingBox = nullptr, float *zoomFactor = nullptr) {
+    computeAdjustSceneToSize(width, height, center, eye, sceneRadius,
+                             xWhiteFactor, yWhiteFactor, sceneBoundingBox,
+                             zoomFactor);
   }
 
   /**
@@ -236,9 +244,7 @@ public:
    * @brief Zoom by step
    * @param step of zoom
    */
-  void zoom(int step) {
-    zoomFactor(powf(1.1f, step));
-  }
+  void zoom(int step) { zoomFactor(powf(1.1f, step)); }
 
   /**
    * @brief Translate camera by (x,y,z)
@@ -260,7 +266,8 @@ public:
 
   /**
    * @brief Select entities in scene
-   * @param type Entities type to select (SelectSimpleEntities,SelectNodes,SelectEdges)
+   * @param type Entities type to select
+   * (SelectSimpleEntities,SelectNodes,SelectEdges)
    * @param x screen coordinates
    * @param y screen coordinates
    * @param h height in screen coordinates
@@ -268,7 +275,8 @@ public:
    * @param layer where the selection will be performed
    * @param selectedEntities the result of the selection is stored on it
    */
-  bool selectEntities(RenderingEntitiesFlag type, int x, int y, int h, int w, GlLayer *layer,
+  bool selectEntities(RenderingEntitiesFlag type, int x, int y, int h, int w,
+                      GlLayer *layer,
                       std::vector<SelectedEntity> &selectedEntities);
 
   /**
@@ -278,15 +286,15 @@ public:
 
   /**
    * @brief Set the viewport of the scene with a vector
-   * The viewport must be in many case the size of the widget containing the scene
+   * The viewport must be in many case the size of the widget containing the
+   * scene
    */
-  void setViewport(Vector<int, 4> &newViewport) {
-    viewport = newViewport;
-  }
+  void setViewport(Vector<int, 4> &newViewport) { viewport = newViewport; }
 
   /**
    * @brief Set the viewport of the scene with 4 int
-   * The viewport must be in many case the size of the widget containing the scene
+   * The viewport must be in many case the size of the widget containing the
+   * scene
    */
   void setViewport(int x, int y, int width, int height) {
     viewport[0] = x;
@@ -297,39 +305,30 @@ public:
 
   /**
    * @brief Get the viewport of the scene
-   * The viewport will be in many case the size of the widget containing the scene
+   * The viewport will be in many case the size of the widget containing the
+   * scene
    */
-  const Vector<int, 4> &getViewport() const {
-    return viewport;
-  }
+  const Vector<int, 4> &getViewport() const { return viewport; }
 
   /**
    * @brief Set the background color of the scene
    */
-  void setBackgroundColor(const Color &color) {
-    backgroundColor = color;
-  }
+  void setBackgroundColor(const Color &color) { backgroundColor = color; }
 
   /**
    * @brief Get the background color of the scene
    */
-  Color getBackgroundColor() const {
-    return backgroundColor;
-  }
+  Color getBackgroundColor() const { return backgroundColor; }
 
   /**
    * @brief Set if scene is render in orthogonal mode
    */
-  void setViewOrtho(bool viewOrtho) {
-    this->viewOrtho = viewOrtho;
-  }
+  void setViewOrtho(bool viewOrtho) { this->viewOrtho = viewOrtho; }
 
   /**
    * @brief Scene is render in orthogonal mode ?
    */
-  bool isViewOrtho() {
-    return viewOrtho;
-  }
+  bool isViewOrtho() { return viewOrtho; }
 
   /**
    * @brief Create a layer with the given name in the scene
@@ -340,22 +339,22 @@ public:
   GlLayer *createLayer(const std::string &name);
 
   /**
-   * @brief Create a layer with the given name in the scene just before layer with given name
-   * This layer is added to the layers list
-   * Return nullptr if the layer with beforeLayerWithName is not find
-   * Now the scene have the ownership of this GlLayer
-   * so you don't have to delete this GlLayer
+   * @brief Create a layer with the given name in the scene just before layer
+   * with given name This layer is added to the layers list Return nullptr if
+   * the layer with beforeLayerWithName is not find Now the scene have the
+   * ownership of this GlLayer so you don't have to delete this GlLayer
    */
-  GlLayer *createLayerBefore(const std::string &layerName, const std::string &beforeLayerWithName);
+  GlLayer *createLayerBefore(const std::string &layerName,
+                             const std::string &beforeLayerWithName);
 
   /**
-   * @brief Create a layer with the given name in the scene just after layer with given name
-   * This layer is added to the layers list
-   * Return nullptr if the layer with beforeLayerWithName is not find
-   * Now the scene have the ownership of this GlLayer
-   * so you don't have to delete this GlLayer
+   * @brief Create a layer with the given name in the scene just after layer
+   * with given name This layer is added to the layers list Return nullptr if
+   * the layer with beforeLayerWithName is not find Now the scene have the
+   * ownership of this GlLayer so you don't have to delete this GlLayer
    */
-  GlLayer *createLayerAfter(const std::string &layerName, const std::string &afterLayerWithName);
+  GlLayer *createLayerAfter(const std::string &layerName,
+                            const std::string &afterLayerWithName);
 
   /**
    * @brief Add an existing layer in the scene
@@ -370,7 +369,8 @@ public:
    * Now the scene have the ownership of this GlLayer
    * so you don't have to delete this GlLayer
    */
-  bool addExistingLayerBefore(GlLayer *layer, const std::string &beforeLayerWithName);
+  bool addExistingLayerBefore(GlLayer *layer,
+                              const std::string &beforeLayerWithName);
 
   /**
    * @brief Add an existing layer in the scene just after layer with given name
@@ -378,7 +378,8 @@ public:
    * Now the scene have the ownership of this GlLayer
    * so you don't have to delete this GlLayer
    */
-  bool addExistingLayerAfter(GlLayer *layer, const std::string &afterLayerWithName);
+  bool addExistingLayerAfter(GlLayer *layer,
+                             const std::string &afterLayerWithName);
 
   /**
    * @brief Return the layer with name : name
@@ -389,16 +390,16 @@ public:
   /**
    * @brief Remove the layer with name
    * This GlLayer is automatically deleted
-   * If you want to keep this GlLayer you can put false to deleteLayer parameters
-   * but after that you have the ownership of the GlLayer
+   * If you want to keep this GlLayer you can put false to deleteLayer
+   * parameters but after that you have the ownership of the GlLayer
    */
   void removeLayer(const std::string &name, bool deleteLayer = true);
 
   /**
    * @brief Remove the layer with name
    * This GlLayer is automatically deleted
-   * If you want to keep this GlLayer you can put false to deleteLayer parameters
-   * but after that you have the ownership of the GlLayer
+   * If you want to keep this GlLayer you can put false to deleteLayer
+   * parameters but after that you have the ownership of the GlLayer
    */
   void removeLayer(GlLayer *layer, bool deleteLayer = true);
 
@@ -421,12 +422,14 @@ public:
   }
 
   /**
-   * @brief Get XML description of the scene and children and store it in out string
+   * @brief Get XML description of the scene and children and store it in out
+   * string
    */
   void getXML(std::string &out);
 
   /**
-   * @brief Get XML description of cameras of the scene and store it in out string
+   * @brief Get XML description of cameras of the scene and store it in out
+   * string
    */
   void getXMLOnlyForCameras(std::string &out);
 
@@ -438,9 +441,7 @@ public:
   /**
    * @brief Return lod calculator used to render this scene
    */
-  GlLODCalculator *getCalculator() {
-    return lodCalculator;
-  }
+  GlLODCalculator *getCalculator() { return lodCalculator; }
 
   /**
    * @brief Set a new lod calculator used to render this scene
@@ -452,28 +453,24 @@ public:
 
   /**
    * @brief Return the bounding box of the scene (in 3D coordinates)
-   * \warning This bounding box is computed in rendering, so if you add an entity in a layer the
-   * bounding box includes this entity if a draw is called
+   * \warning This bounding box is computed in rendering, so if you add an
+   * entity in a layer the bounding box includes this entity if a draw is called
    */
   BoundingBox getBoundingBox();
 
   /**
    * @brief Return the current GlGraphComposite used by the scene
    */
-  GlGraphComposite *getGlGraphComposite() {
-    return glGraphComposite;
-  }
+  GlGraphComposite *getGlGraphComposite() { return glGraphComposite; }
 
   /**
    * @brief Return the layer containing the current GlGraphComposite
    */
-  GlLayer *getGraphLayer() {
-    return graphLayer;
-  }
+  GlLayer *getGraphLayer() { return graphLayer; }
 
   /**
-   * @brief By default the most important layer is the layer where the graph is visualized
-   * This function return the camera of this layer
+   * @brief By default the most important layer is the layer where the graph is
+   * visualized This function return the camera of this layer
    */
   Camera &getGraphCamera() {
     assert(graphLayer != nullptr);
@@ -481,8 +478,8 @@ public:
   }
 
   /**
-   * @brief By default the most important layer is the layer where the graph is visualized
-   * This function set the camera of this layer
+   * @brief By default the most important layer is the layer where the graph is
+   * visualized This function set the camera of this layer
    */
   void setGraphCamera(Camera *camera) {
     assert(graphLayer != nullptr);
@@ -492,30 +489,22 @@ public:
   /**
    * @brief Set if OpenGL buffer will be cleared at draw
    */
-  void setClearBufferAtDraw(bool clear) {
-    clearBufferAtDraw = clear;
-  }
+  void setClearBufferAtDraw(bool clear) { clearBufferAtDraw = clear; }
 
   /**
    * @brief If false, color buffer will not be cleared before drawing the scene.
    */
-  bool getClearBufferAtDraw() const {
-    return clearBufferAtDraw;
-  }
+  bool getClearBufferAtDraw() const { return clearBufferAtDraw; }
 
   /**
    * @brief Set if OpenGL depth buffer will be cleared at draw
    */
-  void setClearDepthBufferAtDraw(bool clear) {
-    clearDepthBufferAtDraw = clear;
-  }
+  void setClearDepthBufferAtDraw(bool clear) { clearDepthBufferAtDraw = clear; }
 
   /**
    * @brief If false, depth buffer will not be cleared before drawing the scene.
    */
-  bool getClearDepthBufferAtDraw() const {
-    return clearDepthBufferAtDraw;
-  }
+  bool getClearDepthBufferAtDraw() const { return clearDepthBufferAtDraw; }
 
   /**
    * @brief Set if OpenGL stencil buffer will be cleared at draw
@@ -527,9 +516,7 @@ public:
   /**
    * @brief If false, color buffer will not be cleared before drawing the scene.
    */
-  bool getClearStencilBufferAtDraw() const {
-    return clearStencilBufferAtDraw;
-  }
+  bool getClearStencilBufferAtDraw() const { return clearStencilBufferAtDraw; }
 
 private:
   std::vector<std::pair<std::string, GlLayer *>> layersList;
@@ -554,21 +541,22 @@ public:
 
   /**
    * @brief You don't have to call this function
-   * This function is automatically called when a GlGraphComposite is added in a layer in the scene
-   * You don't have to call this function
+   * This function is automatically called when a GlGraphComposite is added in a
+   * layer in the scene You don't have to call this function
    */
   void glGraphCompositeAdded(GlLayer *layer, GlGraphComposite *composite);
 
   /**
    * @brief You don't have to call this function
-   * This function is automatically called when a GlGraphComposite is added in a layer in the scene
-   * You don't have to call this function
+   * This function is automatically called when a GlGraphComposite is added in a
+   * layer in the scene You don't have to call this function
    */
   void glGraphCompositeRemoved(GlLayer *layer, GlGraphComposite *composite);
 
   /**
    * @brief You don't have to call this function
-   * This function is called by GlLayer and GlComposite to send layer modification event
+   * This function is called by GlLayer and GlComposite to send layer
+   * modification event
    */
   void notifyModifyLayer(const std::string &name, GlLayer *layer);
 

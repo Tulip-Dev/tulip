@@ -21,11 +21,11 @@
 #ifndef CSVDATALOADER_H_
 #define CSVDATALOADER_H_
 
-#include <tulip/tulipconf.h>
 #include <tulip/CSVContentHandler.h>
+#include <tulip/tulipconf.h>
 
-#include <vector>
 #include <climits>
+#include <vector>
 
 #include <QString>
 
@@ -44,25 +44,24 @@ class TLP_QT_SCOPE CSVParser {
 public:
   virtual ~CSVParser() {}
 
-  virtual char decimalMark() const {
-    return '.';
-  }
+  virtual char decimalMark() const { return '.'; }
   /**
    * @brief Parse the data and send the tokens found to the CSVContentHandler.
    *
    * Notify the progression of the parsing with the progress object.
    **/
-  virtual bool parse(CSVContentHandler *handler, tlp::PluginProgress *progress = nullptr,
+  virtual bool parse(CSVContentHandler *handler,
+                     tlp::PluginProgress *progress = nullptr,
                      bool firstLineOnly = false) = 0;
 };
 
 /**
- * @brief Parse a csv data and send each tokens to the given CSVContentHandler object.
+ * @brief Parse a csv data and send each tokens to the given CSVContentHandler
+ *object.
  *
- * Parse a csv data and send each tokens to the given CSVContentHandler object. Get each line of the
- *file in the given range and parse them. This object skip empty lines.
- * Send the found tokens to the CSVContentHandler interface.
- * \code
+ * Parse a csv data and send each tokens to the given CSVContentHandler object.
+ *Get each line of the file in the given range and parse them. This object skip
+ *empty lines. Send the found tokens to the CSVContentHandler interface. \code
  * CSVParser parser(fileName,";","\"","UTF-8",true);
  * \/\/Automatically remove quotes.
  * CSVContentHandler * handler ;
@@ -75,59 +74,52 @@ public:
    * @brief Construct a csv simple file parser.
    * @param filename The path to the file to import.
    * @param separator The separator to use.
-   * @param textDelimiter If a token is sourrounded by this character we ignore all the separators
-   *found in this token. Useful if a token contains the separator.
+   * @param textDelimiter If a token is sourrounded by this character we ignore
+   *all the separators found in this token. Useful if a token contains the
+   *separator.
    * @param firstLine The number of the first line to read. The first line is 0.
    * @param lastLine The number of the last line to read.
    **/
   CSVSimpleParser(const std::string &fileName, const QString &separator = ";",
-                  const bool mergesep = false, char textDelimiter = '"', char delimiterMark = '.',
+                  const bool mergesep = false, char textDelimiter = '"',
+                  char delimiterMark = '.',
                   const std::string &fileEncoding = std::string("UTF-8"),
                   unsigned int firstLine = 0, unsigned int lastLine = UINT_MAX);
 
   ~CSVSimpleParser() override;
 
-  inline std::string fileName() const {
-    return _fileName;
-  }
-  inline void setFileName(const std::string &fileName) {
-    _fileName = fileName;
-  }
+  inline std::string fileName() const { return _fileName; }
+  inline void setFileName(const std::string &fileName) { _fileName = fileName; }
 
-  inline char textDelimiter() const {
-    return _textDelimiter;
-  }
+  inline char textDelimiter() const { return _textDelimiter; }
 
-  char decimalMark() const override {
-    return _decimalMark;
-  }
+  char decimalMark() const override { return _decimalMark; }
 
-  inline void setTextDelimiter(char delimiter) {
-    _textDelimiter = delimiter;
-  }
+  inline void setTextDelimiter(char delimiter) { _textDelimiter = delimiter; }
 
-  inline std::string fileEncoding() const {
-    return _fileEncoding;
-  }
+  inline std::string fileEncoding() const { return _fileEncoding; }
 
   inline void setFileEncoding(const std::string &fileEncoding) {
     _fileEncoding = fileEncoding;
   }
 
-  bool parse(CSVContentHandler *handler, tlp::PluginProgress *progress = nullptr,
+  bool parse(CSVContentHandler *handler,
+             tlp::PluginProgress *progress = nullptr,
              bool firstLineOnly = false) override;
 
 protected:
   virtual std::string treatToken(const std::string &token, int row, int column);
 
 private:
-  void tokenize(const std::string &str, std::vector<std::string> &tokens, const QString &delimiters,
-                const bool mergedelim, char _textDelimiter, unsigned int numberOfCol);
-  std::string convertStringEncoding(const std::string &toConvert, QTextCodec *encoder);
+  void tokenize(const std::string &str, std::vector<std::string> &tokens,
+                const QString &delimiters, const bool mergedelim,
+                char _textDelimiter, unsigned int numberOfCol);
+  std::string convertStringEncoding(const std::string &toConvert,
+                                    QTextCodec *encoder);
 
   /**
-   * @brief Function to extract a line from a istream. Can handle Linux,Mac and Windows end of line
-   *pattern.
+   * @brief Function to extract a line from a istream. Can handle Linux,Mac and
+   *Windows end of line pattern.
    **/
   bool multiplatformgetline(std::istream &is, std::string &str);
 
@@ -143,22 +135,24 @@ private:
 };
 
 /**
- *@brief CSV parser used to invert the token matrix in order to treat rows as columns.
+ *@brief CSV parser used to invert the token matrix in order to treat rows as
+ *columns.
  **/
-class TLP_QT_SCOPE CSVInvertMatrixParser : public tlp::CSVParser, public tlp::CSVContentHandler {
+class TLP_QT_SCOPE CSVInvertMatrixParser : public tlp::CSVParser,
+                                           public tlp::CSVContentHandler {
 public:
   CSVInvertMatrixParser(CSVParser *parser);
   ~CSVInvertMatrixParser() override;
 
-  char decimalMark() const override {
-    return parser->decimalMark();
-  }
+  char decimalMark() const override { return parser->decimalMark(); }
 
-  bool parse(CSVContentHandler *handler, tlp::PluginProgress *progress = nullptr,
+  bool parse(CSVContentHandler *handler,
+             tlp::PluginProgress *progress = nullptr,
              bool firstLineOnly = false) override;
 
   bool begin() override;
-  bool line(unsigned int row, const std::vector<std::string> &lineTokens) override;
+  bool line(unsigned int row,
+            const std::vector<std::string> &lineTokens) override;
   bool end(unsigned int rowNumber, unsigned int columnNumber) override;
 
 private:

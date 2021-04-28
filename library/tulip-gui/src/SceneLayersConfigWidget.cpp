@@ -27,21 +27,24 @@
 using namespace tlp;
 
 SceneLayersConfigWidget::SceneLayersConfigWidget(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::SceneLayersConfigWidget), _glMainWidget(nullptr) {
+    : QWidget(parent), _ui(new Ui::SceneLayersConfigWidget),
+      _glMainWidget(nullptr) {
   _ui->setupUi(this);
 }
 
-SceneLayersConfigWidget::~SceneLayersConfigWidget() {
-  delete _ui;
-}
+SceneLayersConfigWidget::~SceneLayersConfigWidget() { delete _ui; }
 
 void SceneLayersConfigWidget::setGlMainWidget(GlMainWidget *glMainWidget) {
   _glMainWidget = glMainWidget;
-  SceneLayersModel *model = new SceneLayersModel(_glMainWidget->getScene(), _ui->treeView);
+  SceneLayersModel *model =
+      new SceneLayersModel(_glMainWidget->getScene(), _ui->treeView);
   _ui->treeView->setModel(model);
-  connect(model, SIGNAL(drawNeeded(tlp::GlScene *)), this, SIGNAL(drawNeeded()));
-  connect(_ui->treeView, SIGNAL(collapsed(const QModelIndex &)), this, SLOT(resizeFirstColumn()));
-  connect(_ui->treeView, SIGNAL(expanded(const QModelIndex &)), this, SLOT(resizeFirstColumn()));
+  connect(model, SIGNAL(drawNeeded(tlp::GlScene *)), this,
+          SIGNAL(drawNeeded()));
+  connect(_ui->treeView, SIGNAL(collapsed(const QModelIndex &)), this,
+          SLOT(resizeFirstColumn()));
+  connect(_ui->treeView, SIGNAL(expanded(const QModelIndex &)), this,
+          SLOT(resizeFirstColumn()));
   _ui->treeView->setColumnWidth(0, 110);
 }
 

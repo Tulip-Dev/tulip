@@ -17,14 +17,14 @@
  *
  */
 
+#include <tulip/MouseEdgeBendEditor.h>
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseSelector.h>
-#include <tulip/MouseEdgeBendEditor.h>
-#include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/NodeLinkDiagramComponentInteractor.h>
 
-#include "../utils/StandardInteractorPriority.h"
 #include "../utils/PluginNames.h"
+#include "../utils/StandardInteractorPriority.h"
 
 using namespace tlp;
 
@@ -40,15 +40,17 @@ public:
    * Default constructor
    */
   InteractorEditEdgeBends(const tlp::PluginContext *)
-      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_bends.png", "Edit edge bends",
-                                           StandardInteractorPriority::EditEdgeBends) {}
+      : NodeLinkDiagramComponentInteractor(
+            ":/tulip/gui/icons/i_bends.png", "Edit edge bends",
+            StandardInteractorPriority::EditEdgeBends) {}
 
   /**
    * Construct chain of responsibility
    */
   void construct() override {
     setConfigurationWidgetText(
-        QString("<h3>Edit edge bends</h3>") + "<>Modify edge bends</u><br/><br/>" +
+        QString("<h3>Edit edge bends</h3>") +
+        "<>Modify edge bends</u><br/><br/>" +
         "Select edge: <ul><li>use rectangle selection</li></ul>" +
         "Translate bend: <ul><li><b>Mouse left down</b> on a selected bend + moves</li></ul>" +
         "Change source node: <ul><li><b>Drag and drop circle</b> on source node</li></ul>" +
@@ -71,7 +73,8 @@ public:
 #endif
     );
     push_back(new MouseNKeysNavigator(false));
-    push_back(new MouseSelector(Qt::LeftButton, Qt::NoModifier, MouseSelector::EdgesOnly));
+    push_back(new MouseSelector(Qt::LeftButton, Qt::NoModifier,
+                                MouseSelector::EdgesOnly));
     push_back(new MouseEdgeBendEditor);
   }
 

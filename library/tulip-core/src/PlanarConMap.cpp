@@ -20,13 +20,13 @@
 #include <algorithm>
 
 #include <tulip/ConnectedTest.h>
+#include <tulip/Face.h>
+#include <tulip/FaceIterator.h>
+#include <tulip/MapIterator.h>
+#include <tulip/MutableContainer.h>
+#include <tulip/PlanarConMap.h>
 #include <tulip/PlanarityTest.h>
 #include <tulip/SimpleTest.h>
-#include <tulip/MutableContainer.h>
-#include <tulip/MapIterator.h>
-#include <tulip/FaceIterator.h>
-#include <tulip/Face.h>
-#include <tulip/PlanarConMap.h>
 #include <tulip/TreeTest.h>
 
 using namespace std;
@@ -35,14 +35,16 @@ using namespace tlp;
 //============================================================
 // PlanarConMap
 //============================================================
-PlanarConMap::PlanarConMap(Graph *s) : GraphDecorator(s), facesEdges(), edgesFaces() {
+PlanarConMap::PlanarConMap(Graph *s)
+    : GraphDecorator(s), facesEdges(), edgesFaces() {
   assert(SimpleTest::isSimple(s));
   assert(ConnectedTest::isConnected(s));
   assert(PlanarityTest::isPlanar(s) || s->isEmpty());
 
   faceId = 0;
 
-  if (!TreeTest::isFreeTree(s)) { // all map of trees are valid (do not change the existing order)
+  if (!TreeTest::isFreeTree(
+          s)) { // all map of trees are valid (do not change the existing order)
     if (!PlanarityTest::isPlanarEmbedding(s)) {
       PlanarityTest::planarEmbedding(s);
     }
@@ -61,8 +63,8 @@ void PlanarConMap::clear() {
 }
 
 //============================================================
-edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1, const edge e2,
-                              Face new_face) {
+edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
+                              const edge e2, Face new_face) {
   assert(e1 != e2);
   assert(isElement(v) && isElement(w));
   assert(isElement(e1) && isElement(e2));
@@ -71,7 +73,8 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   assert(source(e1) == v || target(e1) == v);
   assert(source(e2) == w || target(e2) == w);
   assert(containEdge(f, e1) && containEdge(f, e2));
-  assert(containEdge(f, succCycleEdge(e1, v)) && containEdge(f, succCycleEdge(e2, w)));
+  assert(containEdge(f, succCycleEdge(e1, v)) &&
+         containEdge(f, succCycleEdge(e2, w)));
 
   if (new_face == Face())
     new_face = Face(faceId++);
@@ -174,7 +177,8 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
     i = (i + 1) % nb_edges;
   }
 
-  while (nb_added != nb_edges && !(e_tmp == succ1 && nbAdjFace.get(e_tmp.id) == 2)) {
+  while (nb_added != nb_edges &&
+         !(e_tmp == succ1 && nbAdjFace.get(e_tmp.id) == 2)) {
     v_edges2.push_back(e_tmp);
     nbAdjFace.set(e_tmp.id, nbAdjFace.get(e_tmp.id) + 1);
     isInVe2.set(e_tmp.id, true);
@@ -192,7 +196,8 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   v_edges2.push_back(e);
   isInVe2.set(e.id, true);
 
-  // initialize and update the list of faces and the two new faces adajcent edges
+  // initialize and update the list of faces and the two new faces adajcent
+  // edges
   facesEdges.emplace(new_face, v_edges1);
   facesEdges[f] = v_edges2;
   faces.push_back(new_face);
@@ -230,7 +235,8 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
 
 //============================================================
 void PlanarConMap::delEdgeMap(edge e, Face f) {
-  assert((edgesFaces[e][0] != edgesFaces[e][1]) || deg(source(e)) == 1 || deg(target(e)) == 1);
+  assert((edgesFaces[e][0] != edgesFaces[e][1]) || deg(source(e)) == 1 ||
+         deg(target(e)) == 1);
 
   if (f == Face())
     f = edgesFaces[e][0];
@@ -256,7 +262,8 @@ void PlanarConMap::delEdgeMap(edge e, Face f) {
       unsigned int nb_edges = facesEdges[f1].size();
       bool found = false;
 
-      for (unsigned int i = 0; v_edges.size() < nb_edges - 2; i = (i + 1) % nb_edges) {
+      for (unsigned int i = 0; v_edges.size() < nb_edges - 2;
+           i = (i + 1) % nb_edges) {
         edge e_tmp = facesEdges[f1][i];
 
         if (e_tmp == e)
@@ -289,7 +296,8 @@ void PlanarConMap::delEdgeMap(edge e, Face f) {
     unsigned int nb_edges = facesEdges[f1].size();
     bool found = false;
 
-    for (unsigned int i = 0; v_edges.size() < nb_edges - 1; i = (i + 1) % nb_edges) {
+    for (unsigned int i = 0; v_edges.size() < nb_edges - 1;
+         i = (i + 1) % nb_edges) {
       edge e_tmp = facesEdges[f1][i];
 
       if (e_tmp == e)
@@ -579,8 +587,8 @@ void PlanarConMap::computeFaces() {
 
           n_tmp = n;
 
-          // Search for the other edges and nodes of the face lf and compute/update the list of
-          // adjacents faces of those edges/nodes
+          // Search for the other edges and nodes of the face lf and
+          // compute/update the list of adjacents faces of those edges/nodes
           do {
             considered.set(e1.id, considered.get(e1.id) + 1);
             EdgeMapIterator it_e(graph_component, e1, n);
@@ -619,9 +627,7 @@ void PlanarConMap::computeFaces() {
 }
 
 //============================================================
-unsigned int PlanarConMap::nbFaces() {
-  return faces.size();
-}
+unsigned int PlanarConMap::nbFaces() { return faces.size(); }
 
 //============================================================
 unsigned int PlanarConMap::nbFacesNodes(const Face f) {
@@ -634,9 +640,7 @@ unsigned int PlanarConMap::nbFacesEdges(const Face f) {
 }
 
 //============================================================
-Iterator<Face> *PlanarConMap::getFaces() {
-  return new FaceIterator(this);
-}
+Iterator<Face> *PlanarConMap::getFaces() { return new FaceIterator(this); }
 
 //============================================================
 Iterator<Face> *PlanarConMap::getFacesAdj(const node n) {
@@ -835,7 +839,8 @@ void PlanarConMap::mergeFaces(Face f, Face g) {
       toDel.push_back(ve[i]);
 
   assert(!toDel.empty());
-  assert(toDel.size() != facesEdges[g].size() && toDel.size() != facesEdges[f].size());
+  assert(toDel.size() != facesEdges[g].size() &&
+         toDel.size() != facesEdges[f].size());
 
   // Search for the first edge to delete on vector toDel
   unsigned int cpt = 0;
@@ -850,7 +855,8 @@ void PlanarConMap::mergeFaces(Face f, Face g) {
   delEdgeMap(toDel[cpt], f);
   cpt = (cpt + 1) % toDel.size();
 
-  for (unsigned int i = 1; i < toDel.size(); ++i, cpt = (cpt + 1) % toDel.size()) {
+  for (unsigned int i = 1; i < toDel.size();
+       ++i, cpt = (cpt + 1) % toDel.size()) {
     edge e = toDel[cpt];
     auto eEnds = ends(e);
 
@@ -974,5 +980,6 @@ ostream &operator<<(ostream &os, PlanarConMap *sp) {
 }
 
 tlp::PlanarConMap *tlp::computePlanarConMap(tlp::Graph *graph) {
-  return (graph && ConnectedTest::isConnected(graph)) ? new PlanarConMap(graph) : nullptr;
+  return (graph && ConnectedTest::isConnected(graph)) ? new PlanarConMap(graph)
+                                                      : nullptr;
 }

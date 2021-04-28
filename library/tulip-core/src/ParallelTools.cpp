@@ -103,8 +103,8 @@ static OpenMPDefaultOptions openMpDefaultOptions;
 #else
 
 #include <condition_variable>
-#include <unordered_map>
 #include <tulip/IdManager.h>
+#include <unordered_map>
 
 #endif
 
@@ -116,7 +116,8 @@ namespace tlp {
 #ifdef _OPENMP
 unsigned int tlp::ThreadManager::maxNumberOfThreads(omp_get_num_procs());
 #else
-unsigned int ThreadManager::maxNumberOfThreads(std::thread::hardware_concurrency());
+unsigned int
+    ThreadManager::maxNumberOfThreads(std::thread::hardware_concurrency());
 #endif
 #else
 unsigned int ThreadManager::maxNumberOfThreads(1);
@@ -134,9 +135,7 @@ unsigned int ThreadManager::getNumberOfProcs() {
 #endif
 }
 
-unsigned int ThreadManager::getNumberOfThreads() {
-  return maxNumberOfThreads;
-}
+unsigned int ThreadManager::getNumberOfThreads() { return maxNumberOfThreads; }
 
 void ThreadManager::setNumberOfThreads(unsigned int nbThreads) {
 #ifndef TLP_NO_THREADS

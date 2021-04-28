@@ -37,12 +37,16 @@ class TLP_GL_SCOPE AroundTexturedSphere : public NoShaderGlyph {
 
 public:
   AroundTexturedSphere(const tlp::PluginContext *context = nullptr,
-                       const std::string &aroundTextureFile = "", unsigned char alphaVal = 255)
-      : NoShaderGlyph(context), textureFile(aroundTextureFile), alpha(alphaVal) {}
+                       const std::string &aroundTextureFile = "",
+                       unsigned char alphaVal = 255)
+      : NoShaderGlyph(context), textureFile(aroundTextureFile),
+        alpha(alphaVal) {}
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
   void draw(node n, float) override;
-  static void drawGlyph(const Color &glyphColor, const Size &glyphSize, const std::string &texture,
-                        const std::string &texturePath, const std::string &aroundTextureFile,
+  static void drawGlyph(const Color &glyphColor, const Size &glyphSize,
+                        const std::string &texture,
+                        const std::string &texturePath,
+                        const std::string &aroundTextureFile,
                         unsigned char alpha = 255);
 };
 } // end of namespace tlp

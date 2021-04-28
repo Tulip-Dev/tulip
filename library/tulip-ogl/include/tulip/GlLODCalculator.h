@@ -26,11 +26,11 @@
 #include <vector>
 
 #include <tulip/BoundingBox.h>
-#include <tulip/GlSceneVisitor.h>
-#include <tulip/GlSimpleEntity.h>
-#include <tulip/GlNode.h>
 #include <tulip/GlEdge.h>
 #include <tulip/GlLayer.h>
+#include <tulip/GlNode.h>
+#include <tulip/GlSceneVisitor.h>
+#include <tulip/GlSimpleEntity.h>
 
 namespace tlp {
 
@@ -50,14 +50,16 @@ enum RenderingEntitiesFlag {
 
 struct EntityLODUnit {
   EntityLODUnit() : lod(-1) {}
-  EntityLODUnit(const BoundingBox &boundingBox) : boundingBox(boundingBox), lod(-1) {}
+  EntityLODUnit(const BoundingBox &boundingBox)
+      : boundingBox(boundingBox), lod(-1) {}
   BoundingBox boundingBox;
   float lod;
 };
 
 // struct to store simple entity lod
 struct SimpleEntityLODUnit : public EntityLODUnit {
-  SimpleEntityLODUnit(GlSimpleEntity *entity = nullptr) : EntityLODUnit(), entity(entity) {}
+  SimpleEntityLODUnit(GlSimpleEntity *entity = nullptr)
+      : EntityLODUnit(), entity(entity) {}
   SimpleEntityLODUnit(GlSimpleEntity *entity, const BoundingBox &boundingBox)
       : EntityLODUnit(boundingBox), entity(entity) {}
   GlSimpleEntity *entity;
@@ -72,7 +74,8 @@ struct SimpleEntityLODUnit : public EntityLODUnit {
 struct ComplexEntityLODUnit : public EntityLODUnit {
   ComplexEntityLODUnit(unsigned int id = UINT_MAX, unsigned int pos = UINT_MAX)
       : EntityLODUnit(), id(id), pos(pos) {}
-  ComplexEntityLODUnit(unsigned int id, unsigned int pos, const BoundingBox &boundingBox)
+  ComplexEntityLODUnit(unsigned int id, unsigned int pos,
+                       const BoundingBox &boundingBox)
       : EntityLODUnit(boundingBox), id(id), pos(pos) {}
 
   void init(unsigned int i, unsigned int p, const BoundingBox &bb) {
@@ -100,7 +103,8 @@ typedef std::vector<LayerLODUnit> LayersLODVector;
 class TLP_GL_SCOPE GlLODCalculator : public GlSceneVisitor {
 
 public:
-  GlLODCalculator() : glScene(nullptr), inputData(nullptr), attachedLODCalculator(nullptr) {}
+  GlLODCalculator()
+      : glScene(nullptr), inputData(nullptr), attachedLODCalculator(nullptr) {}
   virtual ~GlLODCalculator() {}
   virtual GlLODCalculator *clone() = 0;
 
@@ -115,31 +119,30 @@ public:
    * Visit a node
    */
   void visit(GlNode *glNode) override {
-    addNodeBoundingBox(glNode->id, glNode->pos, glNode->getBoundingBox(inputData));
+    addNodeBoundingBox(glNode->id, glNode->pos,
+                       glNode->getBoundingBox(inputData));
   }
   /**
    * Visit an Edge
    */
   void visit(GlEdge *glEdge) override {
-    addEdgeBoundingBox(glEdge->id, glEdge->pos, glEdge->getBoundingBox(inputData));
+    addEdgeBoundingBox(glEdge->id, glEdge->pos,
+                       glEdge->getBoundingBox(inputData));
   }
   /**
    * Visit a layer
    */
-  void visit(GlLayer *layer) override {
-    beginNewCamera(&layer->getCamera());
-  }
+  void visit(GlLayer *layer) override { beginNewCamera(&layer->getCamera()); }
 
   /**
    * Reserve memory to store nodes and edges LOD
    */
-  void reserveMemoryForGraphElts(unsigned int /*nbNodes*/, unsigned int /*nbEdges*/) override {}
+  void reserveMemoryForGraphElts(unsigned int /*nbNodes*/,
+                                 unsigned int /*nbEdges*/) override {}
   /**
    * Set scene use by this LOD calculator
    */
-  virtual void setScene(GlScene &scene) {
-    glScene = &scene;
-  }
+  virtual void setScene(GlScene &scene) { glScene = &scene; }
 
   /**
    * Set input data use to render
@@ -159,9 +162,7 @@ public:
   /**
    * Return if the LODCalculator need to have entities to compute
    */
-  virtual bool needEntities() {
-    return true;
-  }
+  virtual bool needEntities() { return true; }
   /**
    * Set if the LODCalculator need to have entities to compute
    */
@@ -173,15 +174,18 @@ public:
   /**
    * Record a new simple entity in current camera context
    */
-  virtual void addSimpleEntityBoundingBox(GlSimpleEntity *entity, const BoundingBox &bb) = 0;
+  virtual void addSimpleEntityBoundingBox(GlSimpleEntity *entity,
+                                          const BoundingBox &bb) = 0;
   /**
    * Record a new node in current camera context
    */
-  virtual void addNodeBoundingBox(unsigned int id, unsigned int pos, const BoundingBox &bb) = 0;
+  virtual void addNodeBoundingBox(unsigned int id, unsigned int pos,
+                                  const BoundingBox &bb) = 0;
   /**
    * Record a new edge in current camera context
    */
-  virtual void addEdgeBoundingBox(unsigned int id, unsigned int pos, const BoundingBox &bb) = 0;
+  virtual void addEdgeBoundingBox(unsigned int id, unsigned int pos,
+                                  const BoundingBox &bb) = 0;
 
   /**
    * Compute all lod
@@ -192,16 +196,12 @@ public:
   /**
    * Return a pointer on LOD result
    */
-  LayersLODVector &getResult() {
-    return layersLODVector;
-  }
+  LayersLODVector &getResult() { return layersLODVector; }
 
   /**
    * Clear class data
    */
-  virtual void clear() {
-    layersLODVector.clear();
-  }
+  virtual void clear() { layersLODVector.clear(); }
 
   virtual BoundingBox getSceneBoundingBox() = 0;
 

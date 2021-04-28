@@ -17,14 +17,14 @@
  *
  */
 
-#include <tulip/GlLine.h>
 #include <tulip/Camera.h>
+#include <tulip/GlLine.h>
 #include <tulip/GlMainWidget.h>
 
-#include "ParallelCoordsAxisSpacer.h"
-#include "ParallelTools.h"
 #include "ParallelAxis.h"
 #include "ParallelCoordinatesView.h"
+#include "ParallelCoordsAxisSpacer.h"
+#include "ParallelTools.h"
 
 #include <QCursor>
 #include <QMouseEvent>
@@ -34,7 +34,8 @@ using namespace std;
 namespace tlp {
 
 ParallelCoordsAxisSpacer::ParallelCoordsAxisSpacer()
-    : parallelView(nullptr), selectedAxis(nullptr), x(0), y(0), dragStarted(false) {}
+    : parallelView(nullptr), selectedAxis(nullptr), x(0), y(0),
+      dragStarted(false) {}
 
 bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
 
@@ -48,17 +49,20 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
       vector<ParallelAxis *> allAxis(parallelView->getAllAxis());
 
       if (selectedAxis == allAxis[0] && allAxis.size() > 1) {
-        if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
+        if (parallelView->getLayoutType() ==
+            ParallelCoordinatesDrawing::CIRCULAR) {
           neighborsAxis = make_pair(allAxis[allAxis.size() - 1], allAxis[1]);
         } else {
-          neighborsAxis = make_pair(static_cast<ParallelAxis *>(nullptr), allAxis[1]);
+          neighborsAxis =
+              make_pair(static_cast<ParallelAxis *>(nullptr), allAxis[1]);
         }
       } else if (selectedAxis == allAxis[allAxis.size() - 1]) {
-        if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
+        if (parallelView->getLayoutType() ==
+            ParallelCoordinatesDrawing::CIRCULAR) {
           neighborsAxis = make_pair(allAxis[allAxis.size() - 2], allAxis[0]);
         } else {
-          neighborsAxis =
-              make_pair(allAxis[allAxis.size() - 2], static_cast<ParallelAxis *>(nullptr));
+          neighborsAxis = make_pair(allAxis[allAxis.size() - 2],
+                                    static_cast<ParallelAxis *>(nullptr));
         }
       }
 
@@ -73,12 +77,14 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
       x = glWidget->width() - me->x();
       y = me->y();
       Coord screenCoords(x, y, 0.0f);
-      Coord sceneCoords(glWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(
-          glWidget->screenToViewport(screenCoords)));
+      Coord sceneCoords(
+          glWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(
+              glWidget->screenToViewport(screenCoords)));
 
-      if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
-        float rotAngle = computeABACAngleWithAlKashi(Coord(0.0f, 0.0f, 0.0f),
-                                                     Coord(0.0f, 50.0f, 0.0f), sceneCoords);
+      if (parallelView->getLayoutType() ==
+          ParallelCoordinatesDrawing::CIRCULAR) {
+        float rotAngle = computeABACAngleWithAlKashi(
+            Coord(0.0f, 0.0f, 0.0f), Coord(0.0f, 50.0f, 0.0f), sceneCoords);
         float rotAngleLeft = neighborsAxis.first->getRotationAngle();
 
         if (rotAngleLeft <= 0.0f) {
@@ -92,20 +98,24 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
         }
 
         if (sceneCoords.getX() < 0.0f) {
-          if (((rotAngleRight > rotAngleLeft) && (rotAngle > 0.0f && rotAngle < rotAngleLeft)) ||
+          if (((rotAngleRight > rotAngleLeft) &&
+               (rotAngle > 0.0f && rotAngle < rotAngleLeft)) ||
               (rotAngle > rotAngleRight && rotAngle < rotAngleLeft)) {
             selectedAxis->setRotationAngle(rotAngle);
           }
         } else {
-          if (((rotAngleRight > rotAngleLeft) && (-rotAngle + 360.0f) > rotAngleRight &&
+          if (((rotAngleRight > rotAngleLeft) &&
+               (-rotAngle + 360.0f) > rotAngleRight &&
                (-rotAngle + 360.0f) < 360.0f) ||
-              ((-rotAngle + 360.0f) > rotAngleRight && (-rotAngle + 360.0f) < rotAngleLeft)) {
+              ((-rotAngle + 360.0f) > rotAngleRight &&
+               (-rotAngle + 360.0f) < rotAngleLeft)) {
             selectedAxis->setRotationAngle(-rotAngle);
           }
         }
       } else {
-        Coord translationVector(sceneCoords.getX() - selectedAxis->getBaseCoord().getX(), 0.0f,
-                                0.0f);
+        Coord translationVector(sceneCoords.getX() -
+                                    selectedAxis->getBaseCoord().getX(),
+                                0.0f, 0.0f);
         BoundingBox axisBB(selectedAxis->getBoundingBox());
         axisBB.translate(translationVector);
 
@@ -121,14 +131,16 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
     }
 
     return true;
-  } else if (e->type() == QEvent::MouseButtonPress && me->button() == Qt::LeftButton) {
+  } else if (e->type() == QEvent::MouseButtonPress &&
+             me->button() == Qt::LeftButton) {
     if (selectedAxis != nullptr && !dragStarted) {
       dragStarted = true;
     }
 
     return true;
 
-  } else if (e->type() == QEvent::MouseButtonRelease && me->button() == Qt::LeftButton) {
+  } else if (e->type() == QEvent::MouseButtonRelease &&
+             me->button() == Qt::LeftButton) {
     if (selectedAxis != nullptr && dragStarted) {
       dragStarted = false;
       selectedAxis = nullptr;

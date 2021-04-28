@@ -21,9 +21,9 @@
 #ifndef WORKSPACE_H
 #define WORKSPACE_H
 
-#include <QWidget>
 #include <QMap>
 #include <QVector>
+#include <QWidget>
 
 #include <tulip/tulipconf.h>
 
@@ -69,9 +69,7 @@ public:
   ~Workspace() override;
 
   int addPanel(tlp::View *);
-  inline bool empty() const {
-    return _panels.empty();
-  }
+  inline bool empty() const { return _panels.empty(); }
   QList<tlp::View *> panels() const;
 
 public slots:
@@ -105,8 +103,10 @@ public slots:
   void setModel(tlp::GraphHierarchiesModel *);
   tlp::GraphHierarchiesModel *graphModel() const;
 
-  void writeProject(tlp::TulipProject *, QMap<tlp::Graph *, QString>, tlp::PluginProgress *);
-  void readProject(tlp::TulipProject *, QMap<QString, tlp::Graph *>, tlp::PluginProgress *);
+  void writeProject(tlp::TulipProject *, QMap<tlp::Graph *, QString>,
+                    tlp::PluginProgress *);
+  void readProject(tlp::TulipProject *, QMap<QString, tlp::Graph *>,
+                   tlp::PluginProgress *);
 
   void setPageCountLabel(QLabel *l);
 

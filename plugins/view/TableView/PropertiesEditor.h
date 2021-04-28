@@ -20,10 +20,10 @@
 #ifndef PROPERTIESEDITOR_H
 #define PROPERTIESEDITOR_H
 
-#include <QWidget>
-#include <QModelIndex>
 #include <QLineEdit>
+#include <QModelIndex>
 #include <QPushButton>
+#include <QWidget>
 
 #include <tulip/GraphPropertiesModel.h>
 #include <tulip/PropertyInterface.h>
@@ -58,9 +58,7 @@ public:
   ~PropertiesEditor() override;
 
   void setGraph(tlp::Graph *g);
-  tlp::Graph *getGraph() {
-    return _graph;
-  }
+  tlp::Graph *getGraph() { return _graph; }
   QSet<tlp::PropertyInterface *> visibleProperties() const;
 
   void setPropertyChecked(int index, bool state);
@@ -68,7 +66,8 @@ public:
   void setCaseSensitive(Qt::CaseSensitivity cs);
   QLineEdit *getPropertiesFilterEdit();
   QPushButton *getPropertiesMatchButton();
-  void toLabels(tlp::PropertyInterface *prop, bool nodes, bool edges, bool selectedOnly = false);
+  void toLabels(tlp::PropertyInterface *prop, bool nodes, bool edges,
+                bool selectedOnly = false);
   bool setAllValues(tlp::PropertyInterface *prop, bool nodes, bool selectedOnly,
                     bool graphOnly = false);
   void setDefaultValue(tlp::PropertyInterface *prop, bool nodes);
@@ -98,8 +97,10 @@ protected slots:
   void setPropsVisibility(int);
   void setPropsNotVisibleExcept();
   void showVisualProperties(bool);
-  void displayedPropertiesInserted(const QModelIndex &parent, int start, int end);
-  void displayedPropertiesRemoved(const QModelIndex &parent, int start, int end);
+  void displayedPropertiesInserted(const QModelIndex &parent, int start,
+                                   int end);
+  void displayedPropertiesRemoved(const QModelIndex &parent, int start,
+                                  int end);
   void setPropertiesFilter(QString filter);
   void setMatchProperty();
 };

@@ -21,19 +21,18 @@
 #ifndef PROPERTYWRAPPER_H
 #define PROPERTYWRAPPER_H
 
+#include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/StringProperty.h>
 #include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
 
 /**
  * @brief simple implementation of the copy-on-write idiom.
  */
-template <typename PROPERTYTYPE, typename Type>
-class ValueWrapper {
+template <typename PROPERTYTYPE, typename Type> class ValueWrapper {
 public:
   ValueWrapper(PROPERTYTYPE *prop, tlp::node n) : _prop(prop), _n(n) {}
 
@@ -79,53 +78,39 @@ private:
   tlp::edge _e;
 };
 
-template <typename PROPERTYTYPE, typename Type>
-class PropertyWrapper {
+template <typename PROPERTYTYPE, typename Type> class PropertyWrapper {
 public:
   PropertyWrapper(tlp::PropertyInterface *internal) {
     PROPERTYTYPE *castedInternal = dynamic_cast<PROPERTYTYPE *>(internal);
 
     if (castedInternal == nullptr) {
       tlp::error() << "error: could not convert tulip property to "
-                   << tlp::demangleTlpClassName(typeid(PROPERTYTYPE).name()) << std::endl;
+                   << tlp::demangleTlpClassName(typeid(PROPERTYTYPE).name())
+                   << std::endl;
     }
 
     _internal = castedInternal;
   }
   PropertyWrapper() : _internal(nullptr) {}
 
-  bool isValid() const {
-    return _internal != nullptr;
-  }
+  bool isValid() const { return _internal != nullptr; }
 
-  void setAllNodeValue(Type value) {
-    _internal->setAllNodeValue(value);
-  }
+  void setAllNodeValue(Type value) { _internal->setAllNodeValue(value); }
 
-  void setAllEdgeValue(Type value) {
-    _internal->setAllEdgeValue(value);
-  }
+  void setAllEdgeValue(Type value) { _internal->setAllEdgeValue(value); }
 
-  Type getNodeValue(tlp::node n) const {
-    return _internal->getNodeValue(n);
-  }
+  Type getNodeValue(tlp::node n) const { return _internal->getNodeValue(n); }
   void setNodeValue(tlp::node n, Type value) {
     _internal->setNodeValue(n, value);
   }
 
-  Type getEdgeValue(tlp::edge e) const {
-    return _internal->getEdgeValue(e);
-  }
+  Type getEdgeValue(tlp::edge e) const { return _internal->getEdgeValue(e); }
   void setEdgeValue(tlp::edge e, Type value) {
     _internal->setEdgeValue(e, value);
   }
 
-  Type operator[](tlp::node n) const {
-    return _internal->getNodeValue(n);
-  }
-  Type operator[](tlp::edge e) const {
-    return _internal->getEdgeValue(e);
-  }
+  Type operator[](tlp::node n) const { return _internal->getNodeValue(n); }
+  Type operator[](tlp::edge e) const { return _internal->getEdgeValue(e); }
   ValueWrapper<PROPERTYTYPE, Type> operator[](tlp::node n) {
     return ValueWrapper<PROPERTYTYPE, Type>(_internal, n);
   }
@@ -134,13 +119,9 @@ public:
     return ValueWrapper<PROPERTYTYPE, Type>(_internal, e);
   }
 
-  PROPERTYTYPE *internal() const {
-    return _internal;
-  }
+  PROPERTYTYPE *internal() const { return _internal; }
 
-  operator PROPERTYTYPE *() {
-    return _internal;
-  }
+  operator PROPERTYTYPE *() { return _internal; }
 
 private:
   PROPERTYTYPE *_internal;
@@ -186,24 +167,19 @@ public:
 
     if (castedInternal == nullptr) {
       tlp::error() << "error: could not convert tulip property to "
-                   << tlp::demangleTlpClassName(typeid(PROPERTYTYPE).name()) << std::endl;
+                   << tlp::demangleTlpClassName(typeid(PROPERTYTYPE).name())
+                   << std::endl;
     }
 
     _internal = castedInternal;
   }
   ComplexPropertyWrapper() : _internal(nullptr) {}
 
-  bool isValid() const {
-    return _internal != nullptr;
-  }
+  bool isValid() const { return _internal != nullptr; }
 
-  void setAllNodeValue(NodeType value) {
-    _internal->setAllNodeValue(value);
-  }
+  void setAllNodeValue(NodeType value) { _internal->setAllNodeValue(value); }
 
-  void setAllEdgeValue(EdgeType value) {
-    _internal->setAllEdgeValue(value);
-  }
+  void setAllEdgeValue(EdgeType value) { _internal->setAllEdgeValue(value); }
 
   NodeType getNodeValue(tlp::node n) const {
     return _internal->getNodeValue(n);
@@ -219,25 +195,21 @@ public:
     _internal->setEdgeValue(e, value);
   }
 
-  NodeType operator[](tlp::node n) const {
-    return _internal->getNodeValue(n);
-  }
-  EdgeType operator[](tlp::edge e) const {
-    return _internal->getEdgeValue(e);
-  }
-  ComplexValueWrapper<PROPERTYTYPE, NodeType, EdgeType> operator[](tlp::node n) {
+  NodeType operator[](tlp::node n) const { return _internal->getNodeValue(n); }
+  EdgeType operator[](tlp::edge e) const { return _internal->getEdgeValue(e); }
+  ComplexValueWrapper<PROPERTYTYPE, NodeType, EdgeType>
+  operator[](tlp::node n) {
     return ComplexValueWrapper<PROPERTYTYPE, NodeType, EdgeType>(_internal, n);
   }
 
-  ComplexValueWrapper<PROPERTYTYPE, NodeType, EdgeType> operator[](tlp::edge e) {
+  ComplexValueWrapper<PROPERTYTYPE, NodeType, EdgeType>
+  operator[](tlp::edge e) {
     return ComplexValueWrapper<PROPERTYTYPE, NodeType, EdgeType>(_internal, e);
   }
 
   PROPERTYTYPE *internal() const;
 
-  operator PROPERTYTYPE *() {
-    return _internal;
-  }
+  operator PROPERTYTYPE *() { return _internal; }
 
 private:
   PROPERTYTYPE *_internal;

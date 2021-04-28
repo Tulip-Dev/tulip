@@ -35,10 +35,9 @@ class QNetworkReply;
 namespace tlp {
 
 /**
-  @brief The "About us/Getting help" screen displayed in the Tulip app startup window.
-  This widget is mainly meant to provide links to the user and developer documentations, direct user
-  to Tulip forums
-  and provide basic offline support.
+  @brief The "About us/Getting help" screen displayed in the Tulip app startup
+  window. This widget is mainly meant to provide links to the user and developer
+  documentations, direct user to Tulip forums and provide basic offline support.
   */
 class TLP_QT_SCOPE AboutTulipPage : public QWidget {
   Q_OBJECT

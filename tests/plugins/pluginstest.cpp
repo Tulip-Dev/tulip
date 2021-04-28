@@ -17,14 +17,14 @@
  *
  */
 
-#include <iostream>
-#include <cstdlib>
-#include <cppunit/ui/text/TestRunner.h>
-#include <cppunit/XmlOutputter.h>
-#include <cppunit/TextOutputter.h>
-#include <cppunit/TestResultCollector.h>
 #include <cppunit/TestResult.h>
+#include <cppunit/TestResultCollector.h>
+#include <cppunit/TextOutputter.h>
+#include <cppunit/XmlOutputter.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
+#include <cppunit/ui/text/TestRunner.h>
+#include <cstdlib>
+#include <iostream>
 #include <tulip/TlpTools.h>
 #ifndef NDEBUG
 #include <tulip/PluginLoaderTxt.h>
@@ -55,7 +55,8 @@ int main(int /* arg */, char ** /* argv */) {
   loadTulipPluginsFromDir(tulipBuildDir + "/plugins/export", pLoader);
   loadTulipPluginsFromDir(tulipBuildDir + "/plugins/import", pLoader);
   loadTulipPluginsFromDir(tulipBuildDir + "/plugins/layout", pLoader);
-  loadTulipPluginsFromDir(tulipBuildDir + "/plugins/layout/FastOverlapRemoval", pLoader);
+  loadTulipPluginsFromDir(tulipBuildDir + "/plugins/layout/FastOverlapRemoval",
+                          pLoader);
   loadTulipPluginsFromDir(tulipBuildDir + "/plugins/metric", pLoader);
   loadTulipPluginsFromDir(tulipBuildDir + "/plugins/selection", pLoader);
   loadTulipPluginsFromDir(tulipBuildDir + "/plugins/sizes", pLoader);

@@ -16,20 +16,20 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/WithParameter.h>
-#include <tulip/DataSet.h>
-#include <tulip/PropertyTypes.h>
 #include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/ColorScale.h>
+#include <tulip/DataSet.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/ColorProperty.h>
+#include <tulip/PropertyTypes.h>
 #include <tulip/SizeProperty.h>
-#include <tulip/StringProperty.h>
 #include <tulip/StlIterator.h>
-#include <tulip/ColorScale.h>
 #include <tulip/StringCollection.h>
+#include <tulip/StringProperty.h>
 #include <tulip/TlpTools.h>
+#include <tulip/WithParameter.h>
 
 using namespace tlp;
 using namespace std;
@@ -86,12 +86,14 @@ static string getParameterTypename(const string &name, const string &typeId) {
 }
 
 string ParameterDescriptionList::generateParameterHTMLDocumentation(
-    const string &name, const string &help, const string &type, const string &defaultValue,
-    const string &valuesDescription, const ParameterDirection &direction) {
+    const string &name, const string &help, const string &type,
+    const string &defaultValue, const string &valuesDescription,
+    const ParameterDirection &direction) {
 
   static string htmlDocheader = HTML_HELP_OPEN();
 
-  // for backward compatibility for external plugins using the old plugin parameters doc system
+  // for backward compatibility for external plugins using the old plugin
+  // parameters doc system
   if (help.substr(0, htmlDocheader.size()) == htmlDocheader) {
     return help;
   }
@@ -107,7 +109,8 @@ string ParameterDescriptionList::generateParameterHTMLDocumentation(
     if (type != typeid(tlp::StringCollection).name()) {
       doc += html_help_def(DEFAULT_SECTION, defaultValue);
     } else {
-      doc += html_help_def(DEFAULT_SECTION, defaultValue.substr(0, defaultValue.find(";")));
+      doc += html_help_def(DEFAULT_SECTION,
+                           defaultValue.substr(0, defaultValue.find(";")));
     }
   }
 
@@ -133,12 +136,15 @@ const ParameterDescriptionList &tlp::WithParameter::getParameters() const {
   return parameters;
 }
 
-Iterator<ParameterDescription> *ParameterDescriptionList::getParameters() const {
-  return new StlIterator<ParameterDescription, vector<ParameterDescription>::const_iterator>(
+Iterator<ParameterDescription> *
+ParameterDescriptionList::getParameters() const {
+  return new StlIterator<ParameterDescription,
+                         vector<ParameterDescription>::const_iterator>(
       parameters.begin(), parameters.end());
 }
 
-ParameterDescription *ParameterDescriptionList::getParameter(const string &name) {
+ParameterDescription *
+ParameterDescriptionList::getParameter(const string &name) {
   for (unsigned int i = 0; i < parameters.size(); ++i) {
     if (name == parameters[i].getName())
       return &parameters[i];
@@ -151,32 +157,40 @@ ParameterDescription *ParameterDescriptionList::getParameter(const string &name)
   return nullptr;
 }
 
-const string &ParameterDescriptionList::getDefaultValue(const string &name) const {
-  return const_cast<ParameterDescriptionList *>(this)->getParameter(name)->getDefaultValue();
+const string &
+ParameterDescriptionList::getDefaultValue(const string &name) const {
+  return const_cast<ParameterDescriptionList *>(this)
+      ->getParameter(name)
+      ->getDefaultValue();
 }
 
-void ParameterDescriptionList::setDefaultValue(const string &name, const string &val) {
+void ParameterDescriptionList::setDefaultValue(const string &name,
+                                               const string &val) {
   getParameter(name)->setDefaultValue(val);
 }
 
-void ParameterDescriptionList::setDirection(const string &name, ParameterDirection direction) {
+void ParameterDescriptionList::setDirection(const string &name,
+                                            ParameterDirection direction) {
   getParameter(name)->setDirection(direction);
 }
 
 bool ParameterDescriptionList::isMandatory(const string &name) const {
-  return const_cast<ParameterDescriptionList *>(this)->getParameter(name)->isMandatory();
+  return const_cast<ParameterDescriptionList *>(this)
+      ->getParameter(name)
+      ->isMandatory();
 }
 
-#define CHECK_PROPERTY(T)                                                                          \
-  if (type.compare(typeid(T).name()) == 0) {                                                       \
-    if (!g || defaultValue.empty() || !g->existProperty(defaultValue))                             \
-      dataSet.set(name, static_cast<T *>(nullptr));                                                \
-    else                                                                                           \
-      dataSet.set(name, static_cast<T *>(g->getProperty<T>(defaultValue)));                        \
-    continue;                                                                                      \
+#define CHECK_PROPERTY(T)                                                      \
+  if (type.compare(typeid(T).name()) == 0) {                                   \
+    if (!g || defaultValue.empty() || !g->existProperty(defaultValue))         \
+      dataSet.set(name, static_cast<T *>(nullptr));                            \
+    else                                                                       \
+      dataSet.set(name, static_cast<T *>(g->getProperty<T>(defaultValue)));    \
+    continue;                                                                  \
   }
 
-void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) const {
+void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet,
+                                                   Graph *g) const {
   for (const ParameterDescription &param : getParameters()) {
     const string &name = param.getName();
     const string &type = param.getTypeName();
@@ -190,7 +204,8 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
 
       if (!result)
         tlp::error() << "Unable to parse \"" << defaultValue.c_str()
-                     << "\" as a default value for parameter \"" << name.c_str() << "\"" << endl;
+                     << "\" as a default value for parameter \"" << name.c_str()
+                     << "\"" << endl;
 
       assert(result);
       continue;
@@ -241,8 +256,8 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
         dataSet.set(name, static_cast<PropertyInterface *>(nullptr));
       else {
         if (!g->existProperty(defaultValue)) {
-          tlp::error() << "Property '" << defaultValue.c_str() << "' not found for parameter '"
-                       << name.c_str() << endl;
+          tlp::error() << "Property '" << defaultValue.c_str()
+                       << "' not found for parameter '" << name.c_str() << endl;
           dataSet.set(name, static_cast<PropertyInterface *>(nullptr));
         } else
           dataSet.set(name, g->getProperty(defaultValue));

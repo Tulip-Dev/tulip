@@ -34,7 +34,8 @@ class PluginInformationListItem : public QWidget {
   tlp::PluginInformation _info;
 
 public:
-  explicit PluginInformationListItem(tlp::PluginInformation, QWidget *parent = nullptr);
+  explicit PluginInformationListItem(tlp::PluginInformation,
+                                     QWidget *parent = nullptr);
   ~PluginInformationListItem() override;
   QWidget *description();
 

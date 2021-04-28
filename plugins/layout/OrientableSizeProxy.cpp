@@ -21,7 +21,8 @@
 using namespace tlp;
 
 //====================================================================
-OrientableSizeProxy::OrientableSizeProxy(tlp::SizeProperty *sizesProxyParam, orientationType mask)
+OrientableSizeProxy::OrientableSizeProxy(tlp::SizeProperty *sizesProxyParam,
+                                         orientationType mask)
     : sizesProxy(sizesProxyParam) {
   setOrientation(mask);
 }
@@ -44,7 +45,8 @@ void OrientableSizeProxy::setOrientation(orientationType mask) {
 }
 
 //====================================================================
-OrientableSize OrientableSizeProxy::createSize(const float width, const float height,
+OrientableSize OrientableSizeProxy::createSize(const float width,
+                                               const float height,
                                                const float depth) {
   return OrientableSize(this, width, height, depth);
 }
@@ -65,7 +67,8 @@ void OrientableSizeProxy::setNodeValue(tlp::node n, const PointType &v) {
 }
 
 //====================================================================
-OrientableSizeProxy::PointType OrientableSizeProxy::getNodeValue(const tlp::node n) {
+OrientableSizeProxy::PointType
+OrientableSizeProxy::getNodeValue(const tlp::node n) {
   return OrientableSize(this, sizesProxy->getNodeValue(n));
 }
 
@@ -85,7 +88,8 @@ void OrientableSizeProxy::setEdgeValue(const tlp::edge e, const LineType &v) {
 }
 
 //====================================================================
-OrientableSizeProxy::LineType OrientableSizeProxy::getEdgeValue(const tlp::edge e) {
+OrientableSizeProxy::LineType
+OrientableSizeProxy::getEdgeValue(const tlp::edge e) {
   return OrientableSize(this, sizesProxy->getEdgeValue(e));
 }
 

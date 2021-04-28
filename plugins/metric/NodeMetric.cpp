@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <stack>
 #include "NodeMetric.h"
+#include <stack>
 
 #include <tulip/AcyclicTest.h>
 
@@ -27,7 +27,8 @@ using namespace std;
 using namespace tlp;
 
 //====================================================================
-NodeMetric::NodeMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {}
+NodeMetric::NodeMetric(const tlp::PluginContext *context)
+    : DoubleAlgorithm(context) {}
 
 // structure below is used to implement dfs loop
 struct dfsStruct {
@@ -35,7 +36,8 @@ struct dfsStruct {
   Iterator<node> *outNodes;
   double res;
 
-  dfsStruct(node n, Iterator<node> *nodes) : current(n), outNodes(nodes), res(1.0) {}
+  dfsStruct(node n, Iterator<node> *nodes)
+      : current(n), outNodes(nodes), res(1.0) {}
 };
 //=======================================================================
 // original recursive algorithm

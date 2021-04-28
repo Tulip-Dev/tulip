@@ -16,16 +16,17 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/GraphStorage.h>
 #include <tulip/Graph.h>
-#include <tulip/memorypool.h>
+#include <tulip/GraphStorage.h>
 #include <tulip/MutableContainer.h>
+#include <tulip/memorypool.h>
 
 using namespace tlp;
 
-#define VECT_SET_SIZE(v, t, sz) reinterpret_cast<t **>(v)[1] = reinterpret_cast<t **>(v)[0] + sz
-#define VECT_INC_SIZE(v, t, sz)                                                                    \
-  (*v).reserve(sz);                                                                                \
+#define VECT_SET_SIZE(v, t, sz)                                                \
+  reinterpret_cast<t **>(v)[1] = reinterpret_cast<t **>(v)[0] + sz
+#define VECT_INC_SIZE(v, t, sz)                                                \
+  (*v).reserve(sz);                                                            \
   VECT_SET_SIZE(v, t, sz)
 
 //=======================================================
@@ -115,13 +116,12 @@ void GraphStorage::restoreIdsMemento(const GraphStorageIdsMemento *memento) {
 // the get*Nodes & get*Edges methods
 
 // define a class to iterate on graph storage edges
-struct EdgeContainerIterator : public Iterator<edge>, public MemoryPool<EdgeContainerIterator> {
+struct EdgeContainerIterator : public Iterator<edge>,
+                               public MemoryPool<EdgeContainerIterator> {
   std::vector<edge>::iterator it, itEnd;
   EdgeContainerIterator(std::vector<edge> &v) : it(v.begin()), itEnd(v.end()) {}
   ~EdgeContainerIterator() override {}
-  bool hasNext() override {
-    return (it != itEnd);
-  }
+  bool hasNext() override { return (it != itEnd); }
   edge next() override {
     assert(hasNext());
     edge tmp = (*it);
@@ -140,8 +140,9 @@ enum IO_TYPE { IO_IN = 0, IO_OUT = 1, IO_INOUT = 2 };
 
 // define a template class to iterate on in or out edges of a given node
 template <IO_TYPE io_type>
-struct IOEdgeContainerIterator : public Iterator<edge>,
-                                 public MemoryPool<IOEdgeContainerIterator<io_type>> {
+struct IOEdgeContainerIterator
+    : public Iterator<edge>,
+      public MemoryPool<IOEdgeContainerIterator<io_type>> {
   node n;
   edge curEdge;
   MutableContainer<bool> loops;
@@ -153,12 +154,14 @@ struct IOEdgeContainerIterator : public Iterator<edge>,
       curEdge = *it;
       // note that io_type value may only be IO_IN which is null
       // or IO_OUT which is define to 1
-      node curNode = io_type != IO_IN ? edges[curEdge.id].first : edges[curEdge.id].second;
+      node curNode =
+          io_type != IO_IN ? edges[curEdge.id].first : edges[curEdge.id].second;
 
       if (curNode != n)
         continue;
 
-      curNode = io_type != IO_IN ? edges[curEdge.id].second : edges[curEdge.id].first;
+      curNode =
+          io_type != IO_IN ? edges[curEdge.id].second : edges[curEdge.id].first;
 
       if (curNode == n) {
         if (!loops.get(curEdge.id)) {
@@ -195,14 +198,13 @@ struct IOEdgeContainerIterator : public Iterator<edge>,
     return tmp;
   }
 
-  bool hasNext() override {
-    return (curEdge.isValid());
-  }
+  bool hasNext() override { return (curEdge.isValid()); }
 };
 
 // define a class to iterate on in or out nodes of a given node
 template <IO_TYPE io_type>
-struct IONodesIterator : public Iterator<node>, public MemoryPool<IONodesIterator<io_type>> {
+struct IONodesIterator : public Iterator<node>,
+                         public MemoryPool<IONodesIterator<io_type>> {
   node n;
   const std::vector<std::pair<node, node>> &edges;
   Iterator<edge> *it;
@@ -216,13 +218,9 @@ struct IONodesIterator : public Iterator<node>, public MemoryPool<IONodesIterato
       it = new IOEdgeContainerIterator<io_type>(n, nEdges, edges);
   }
 
-  ~IONodesIterator() override {
-    delete it;
-  }
+  ~IONodesIterator() override { delete it; }
 
-  bool hasNext() override {
-    return (it->hasNext());
-  }
+  bool hasNext() override { return (it->hasNext()); }
 
   node next() override {
     // check hasNext()
@@ -247,7 +245,8 @@ Iterator<edge> *GraphStorage::getInOutEdges(const node n) const {
 }
 //=======================================================
 bool GraphStorage::getEdges(const node src, const node tgt, bool directed,
-                            std::vector<edge> &vEdges, const Graph *sg, bool onlyFirst) const {
+                            std::vector<edge> &vEdges, const Graph *sg,
+                            bool onlyFirst) const {
   std::vector<edge>::const_iterator it = nodeData[src.id].edges.begin();
   edge previous;
 
@@ -607,9 +606,7 @@ void GraphStorage::delAllEdges() {
 /**
  * @brief Delete all nodes in the graph
  */
-void GraphStorage::delAllNodes() {
-  clear();
-}
+void GraphStorage::delAllNodes() { clear(); }
 
 // member functions below do not belong to the public API
 // they are just needed by the current implementation

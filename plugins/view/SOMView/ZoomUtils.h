@@ -27,8 +27,10 @@ class GlMainWidget;
 struct BoundingBox;
 
 void zoomOnScreenRegion(GlMainWidget *glWidget, const BoundingBox &boundingBox,
-                        const bool optimalPath = true, const double velocity = 1.1,
+                        const bool optimalPath = true,
+                        const double velocity = 1.1,
                         const double p = std::sqrt(1.6));
-void zoomOnScreenRegionWithoutAnimation(GlMainWidget *glWidget, const BoundingBox &boundingBox);
+void zoomOnScreenRegionWithoutAnimation(GlMainWidget *glWidget,
+                                        const BoundingBox &boundingBox);
 } // namespace tlp
 #endif /* ZOOMUTILS_H_ */

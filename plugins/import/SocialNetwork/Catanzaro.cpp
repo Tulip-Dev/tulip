@@ -18,10 +18,10 @@
  */
 
 #include <cmath>
-#include <tulip/ImportModule.h>
-#include <tulip/TlpTools.h>
-#include <tulip/PluginProgress.h>
 #include <tulip/Graph.h>
+#include <tulip/ImportModule.h>
+#include <tulip/PluginProgress.h>
+#include <tulip/TlpTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -41,17 +41,18 @@ static const char *paramHelp[] = {
  * This plugin is an implementation of the model
  * described in
  * Michele Catanzaro, Guido Caldarelli, and Luciano Pietronero.
- * Assortative model for social networks. Physical Review E (Statistical, Nonlinear, and Soft Matter
- * Physics), 70(3), (2004).
+ * Assortative model for social networks. Physical Review E (Statistical,
+ * Nonlinear, and Soft Matter Physics), 70(3), (2004).
  *
  */
 struct Catanzaro : public ImportModule {
-  PLUGININFORMATION("Catanzaro and al. Model", "Arnaud Sallaberry", "21/02/2011",
-                    "Randomly generates a graph using the model described in<br/>Michele "
-                    "Catanzaro, Guido Caldarelli, and Luciano Pietronero.<br/><b>Assortative model "
-                    "for social networks.</b><br/>Physical Review E (Statistical, Nonlinear, and "
-                    "Soft Matter Physics), 70(3), (2004).",
-                    "1.0", "Social network")
+  PLUGININFORMATION(
+      "Catanzaro and al. Model", "Arnaud Sallaberry", "21/02/2011",
+      "Randomly generates a graph using the model described in<br/>Michele "
+      "Catanzaro, Guido Caldarelli, and Luciano Pietronero.<br/><b>Assortative model "
+      "for social networks.</b><br/>Physical Review E (Statistical, Nonlinear, and "
+      "Soft Matter Physics), 70(3), (2004).",
+      "1.0", "Social network")
 
   Catanzaro(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "300");
@@ -72,10 +73,12 @@ struct Catanzaro : public ImportModule {
 
     // check arguments
     if (m > n) {
-      pluginProgress->setError("The m parameter cannot be greater than the number of nodes");
+      pluginProgress->setError(
+          "The m parameter cannot be greater than the number of nodes");
       return false;
     } else if (p < 0 || p > 1) {
-      pluginProgress->setError("p is not a probability,\nit does not belong to [0, 1]");
+      pluginProgress->setError(
+          "p is not a probability,\nit does not belong to [0, 1]");
       return false;
     }
 
@@ -128,7 +131,8 @@ struct Catanzaro : public ImportModule {
           for (k = 0; k < i; ++k) {
             for (l = 0; l < k; ++l) {
               k_sum += graph->deg(nodes[k]) / (k_sum + j) *
-                       exp(-fabs(double(graph->deg(nodes[k])) - double(graph->deg(nodes[l]))));
+                       exp(-fabs(double(graph->deg(nodes[k])) -
+                                 double(graph->deg(nodes[l]))));
             }
           }
 
@@ -137,7 +141,8 @@ struct Catanzaro : public ImportModule {
           for (k = 0; k < i; ++k) {
             for (l = 0; l < k; ++l) {
               pr_sum += graph->deg(nodes[k]) / (k_sum + j) *
-                        exp(-fabs(double(graph->deg(nodes[k])) - double(graph->deg(nodes[l]))));
+                        exp(-fabs(double(graph->deg(nodes[k])) -
+                                  double(graph->deg(nodes[l]))));
             }
 
             if (pr_sum > pr) {

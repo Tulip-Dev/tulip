@@ -17,13 +17,13 @@
  *
  */
 
+#include "ui_TulipFontDialog.h"
 #include <tulip/TlpTools.h>
 #include <tulip/TulipFontDialog.h>
-#include "ui_TulipFontDialog.h"
 
+#include <QDebug>
 #include <QFontDatabase>
 #include <QPushButton>
-#include <QDebug>
 
 using namespace tlp;
 
@@ -44,9 +44,7 @@ TulipFontDialog::TulipFontDialog(QWidget *parent)
   }
 }
 
-TulipFontDialog::~TulipFontDialog() {
-  delete _ui;
-}
+TulipFontDialog::~TulipFontDialog() { delete _ui; }
 
 TulipFont TulipFontDialog::font() const {
   TulipFont result;
@@ -59,7 +57,8 @@ TulipFont TulipFontDialog::font() const {
 }
 
 void TulipFontDialog::fontChanged() {
-  if (_ui->nameList->currentItem() == nullptr || _ui->styleList->currentItem() == nullptr)
+  if (_ui->nameList->currentItem() == nullptr ||
+      _ui->styleList->currentItem() == nullptr)
     return;
 
   if (sender() == _ui->sizeList) {
@@ -68,17 +67,17 @@ void TulipFontDialog::fontChanged() {
   }
 
   TulipFont selectedFont = font();
-  _ui->preview->setStyleSheet("font-family: " + selectedFont.fontFamily() + "; " +
-                              (selectedFont.isItalic() ? "font-style: italic; " : "") +
-                              (selectedFont.isBold() ? "font-weight: bold; " : "") +
-                              "font-size: " + QString::number(_ui->sizeSpin->value()) + "px; ");
+  _ui->preview->setStyleSheet(
+      "font-family: " + selectedFont.fontFamily() + "; " +
+      (selectedFont.isItalic() ? "font-style: italic; " : "") +
+      (selectedFont.isBold() ? "font-weight: bold; " : "") +
+      "font-size: " + QString::number(_ui->sizeSpin->value()) + "px; ");
 }
-int TulipFontDialog::fontSize() const {
-  return _ui->sizeSpin->value();
-}
+int TulipFontDialog::fontSize() const { return _ui->sizeSpin->value(); }
 
 void TulipFontDialog::selectFont(const TulipFont &f) {
-  QList<QListWidgetItem *> items = _ui->nameList->findItems(f.fontName(), Qt::MatchExactly);
+  QList<QListWidgetItem *> items =
+      _ui->nameList->findItems(f.fontName(), Qt::MatchExactly);
 
   previousFont = f;
 
@@ -98,7 +97,8 @@ void TulipFontDialog::selectFont(const TulipFont &f) {
     _ui->styleList->setCurrentRow(0);
 }
 
-TulipFont TulipFontDialog::getFont(QWidget * /*parent*/, const TulipFont &selectedFont) {
+TulipFont TulipFontDialog::getFont(QWidget * /*parent*/,
+                                   const TulipFont &selectedFont) {
   TulipFontDialog dlg;
   dlg.selectFont(selectedFont);
 

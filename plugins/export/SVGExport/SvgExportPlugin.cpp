@@ -16,14 +16,14 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "ReadGraph.h"
 #include "ExportSvg.h"
+#include "ReadGraph.h"
 
-#include <tulip/ExportModule.h>
-#include <tulip/LayoutProperty.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/IntegerProperty.h>
 #include <tulip/DoubleProperty.h>
+#include <tulip/ExportModule.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
 
@@ -68,18 +68,18 @@ static const char *paramHelp[] = {
 class SvgExport : public tlp::ExportModule {
 
 public:
-  PLUGININFORMATION("SVG Export", "Sami Gasri, Charles-Antoine Lami, Bruno Pinaud", "16/07/2013",
-                    "<p>Supported extensions: svg, svgz (compressed svg).</p><p>Exports a graph "
-                    "visualization in a SVG formatted file.</p>",
-                    "1.9", "File")
+  PLUGININFORMATION(
+      "SVG Export", "Sami Gasri, Charles-Antoine Lami, Bruno Pinaud",
+      "16/07/2013",
+      "<p>Supported extensions: svg, svgz (compressed svg).</p><p>Exports a graph "
+      "visualization in a SVG formatted file.</p>",
+      "1.9", "File")
 
   std::string icon() const override {
     return ":/tulip/graphperspective/icons/32/export_svg.png";
   }
 
-  string fileExtension() const override {
-    return "svg";
-  }
+  string fileExtension() const override { return "svg"; }
 
   list<string> gzipFileExtensions() const override {
     list<string> ext;
@@ -91,9 +91,11 @@ public:
     addInParameter<bool>("Edge color interpolation", paramHelp[0], "false");
     addInParameter<bool>("Edge size interpolation", paramHelp[1], "true");
     addInParameter<bool>("Edge extremities", paramHelp[2], "false");
-    addInParameter<Color>("Background color", paramHelp[3], "(255,255,255,255)");
+    addInParameter<Color>("Background color", paramHelp[3],
+                          "(255,255,255,255)");
     addInParameter<bool>("No background", paramHelp[4], "false");
-    addInParameter<bool>("Makes SVG output human readable", paramHelp[5], "true");
+    addInParameter<bool>("Makes SVG output human readable", paramHelp[5],
+                         "true");
     addInParameter<bool>("Export node labels", paramHelp[6], "true");
     addInParameter<bool>("Export edge labels", paramHelp[7], "false");
     addInParameter<bool>("Export metanode labels", paramHelp[8], "false");
@@ -109,13 +111,15 @@ public:
       dataSet->get("Use Web Open Font Format v2", woff2);
     }
 
-    ExportSvg svg(pluginProgress, os, autoformatting, woff2); // We call our first concrete builder
+    ExportSvg svg(pluginProgress, os, autoformatting,
+                  woff2); // We call our first concrete builder
     bool ret = ReadGraph::readGraph(graph, dataSet, pluginProgress, svg);
 
     if (!ret && autoformatting) {
-      pluginProgress->setError(pluginProgress->getError() +
-                               "<br/><br/>Human readable output is on. This adds a large amount of "
-                               "data to the output file. Try to disable it and try again.");
+      pluginProgress->setError(
+          pluginProgress->getError() +
+          "<br/><br/>Human readable output is on. This adds a large amount of "
+          "data to the output file. Try to disable it and try again.");
     }
 
     return ret;

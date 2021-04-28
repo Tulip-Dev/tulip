@@ -20,8 +20,8 @@
 #ifndef SPIRALLAYOUT_H
 #define SPIRALLAYOUT_H
 
-#include <string>
 #include "LayoutFunction.h"
+#include <string>
 
 namespace pocore {
 class SpiralLayout : public LayoutFunction {

@@ -22,11 +22,10 @@
 using namespace std;
 using namespace tlp;
 
-GradientManager::GradientManager() : beginColorRange(0), endColorRange(359), minSVal(0) {}
+GradientManager::GradientManager()
+    : beginColorRange(0), endColorRange(359), minSVal(0) {}
 
-GradientManager::~GradientManager() {
-  cleanAllGradients();
-}
+GradientManager::~GradientManager() { cleanAllGradients(); }
 
 void GradientManager::cleanAllGradients() {
   for (auto &it : colorScaleMap) {
@@ -43,7 +42,8 @@ void GradientManager::init(const std::vector<std::string> &properties) {
   if (properties.empty())
     return;
 
-  int shift = int(floor(double((endColorRange - beginColorRange) / properties.size())));
+  int shift =
+      int(floor(double((endColorRange - beginColorRange) / properties.size())));
   pair<Color, Color> newColors;
   newColors.first.setV(255);
   newColors.first.setS(255);

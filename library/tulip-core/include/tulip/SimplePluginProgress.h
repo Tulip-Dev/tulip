@@ -21,8 +21,8 @@
 #ifndef SIMPLEPLUGINPROGRESS_H
 #define SIMPLEPLUGINPROGRESS_H
 
-#include <tulip/PluginProgress.h>
 #include <string>
+#include <tulip/PluginProgress.h>
 namespace tlp {
 /**
  * @brief Basic implementation for PluginProgress interface.
@@ -39,12 +39,8 @@ public:
   void showPreview(bool) override;
   void showStops(bool) override;
   ProgressState state() const override;
-  std::string getError() override {
-    return _error;
-  }
-  void setError(const std::string &error) override {
-    _error = error;
-  }
+  std::string getError() override { return _error; }
+  void setError(const std::string &error) override { _error = error; }
   void setComment(const std::string &) override {}
   void setTitle(const std::string &) override {}
 

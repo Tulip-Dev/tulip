@@ -28,8 +28,8 @@
 #include <tulip/OpenGlIncludes.h>
 
 #include <set>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 
 namespace tlp {
 
@@ -103,21 +103,15 @@ public:
   /**
    * Set animationStep for next textures (for next activateTexture)
    */
-  static inline void setAnimationFrame(unsigned int id) {
-    animationFrame = id;
-  }
+  static inline void setAnimationFrame(unsigned int id) { animationFrame = id; }
   /**
    * Get animationStep of next textures
    */
-  static inline unsigned int getAnimationFrame() {
-    return animationFrame;
-  }
+  static inline unsigned int getAnimationFrame() { return animationFrame; }
   /**
    * Clear vector of textures with error
    */
-  static inline void clearErrorVector() {
-    texturesWithError.clear();
-  }
+  static inline void clearErrorVector() { texturesWithError.clear(); }
   /**
    * Remove an entry of vector of textures with error
    */
@@ -128,7 +122,8 @@ public:
   /**
    * Register an external texture is GlTextureManager
    */
-  static void registerExternalTexture(const std::string &textureName, const GLuint textureId);
+  static void registerExternalTexture(const std::string &textureName,
+                                      const GLuint textureId);
 
   /**
    * Get Texture loader

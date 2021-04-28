@@ -42,32 +42,37 @@ void copy(QIODevice &in, QIODevice &out) {
   out.close();
 }
 
-bool zipDirContent(QDir &currentDir, QuaZip &archive, const QString &archivePath,
-                   tlp::PluginProgress *progress) {
-  QFileInfoList entries = currentDir.entryInfoList(QDir::NoDotAndDotDot | QDir::System |
-                                                       QDir::Hidden | QDir::AllDirs | QDir::Files,
-                                                   QDir::DirsFirst);
-  progress->setComment(
-      tlp::QStringToTlpString("Compressing directory " + currentDir.absolutePath()));
+bool zipDirContent(QDir &currentDir, QuaZip &archive,
+                   const QString &archivePath, tlp::PluginProgress *progress) {
+  QFileInfoList entries =
+      currentDir.entryInfoList(QDir::NoDotAndDotDot | QDir::System |
+                                   QDir::Hidden | QDir::AllDirs | QDir::Files,
+                               QDir::DirsFirst);
+  progress->setComment(tlp::QStringToTlpString("Compressing directory " +
+                                               currentDir.absolutePath()));
   int i = 0;
   progress->progress(i, entries.size());
 
   for (const QFileInfo &info : entries) {
     progress->progress(i++, entries.size());
 
-    if (info.isDir()) { // Recurse in directories if they are different from . and ..
+    if (info.isDir()) { // Recurse in directories if they are different from .
+                        // and ..
       QDir childDir(info.absoluteFilePath());
       QFileInfo childInfo(childDir.absolutePath());
-      zipDirContent(childDir, archive, archivePath + childInfo.fileName() + "/", progress);
+      zipDirContent(childDir, archive, archivePath + childInfo.fileName() + "/",
+                    progress);
     }
 
     else {
       QuaZipFile outFile(&archive);
-      QuaZipNewInfo newFileInfo(archivePath + info.fileName(), info.absoluteFilePath());
+      QuaZipNewInfo newFileInfo(archivePath + info.fileName(),
+                                info.absoluteFilePath());
       newFileInfo.externalAttr = 0x81fd0000;
       QFile inFile(info.absoluteFilePath());
 
-      if (!outFile.open(QIODevice::WriteOnly, newFileInfo) || !inFile.open(QIODevice::ReadOnly))
+      if (!outFile.open(QIODevice::WriteOnly, newFileInfo) ||
+          !inFile.open(QIODevice::ReadOnly))
         return false;
 
       copy(inFile, outFile);
@@ -148,11 +153,13 @@ bool QuaZIPFacade::unzip(const QString &rootPath, const QString &archivePath,
     deleteProgress = true;
   }
 
-  progress->setComment(tlp::QStringToTlpString("Uncompressing archive " + archivePath));
+  progress->setComment(
+      tlp::QStringToTlpString("Uncompressing archive " + archivePath));
   int i = 0, n = archive.getEntriesCount();
   progress->progress(i, n);
 
-  for (bool readMore = archive.goToFirstFile(); readMore; readMore = archive.goToNextFile()) {
+  for (bool readMore = archive.goToFirstFile(); readMore;
+       readMore = archive.goToNextFile()) {
     progress->progress(i++, n);
 
     QuaZipFile inFile(&archive);
@@ -164,8 +171,10 @@ bool QuaZIPFacade::unzip(const QString &rootPath, const QString &archivePath,
 
     QFile outFile(outInfo.absoluteFilePath());
 
-    if (!outFile.open(QIODevice::WriteOnly) || !inFile.open(QIODevice::ReadOnly)) {
-      progress->setError("Could not write in folder or could not read from file");
+    if (!outFile.open(QIODevice::WriteOnly) ||
+        !inFile.open(QIODevice::ReadOnly)) {
+      progress->setError(
+          "Could not write in folder or could not read from file");
       return false;
     }
 

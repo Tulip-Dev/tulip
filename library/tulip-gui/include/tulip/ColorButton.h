@@ -23,9 +23,9 @@
 
 #include <QPushButton>
 
-#include <tulip/tulipconf.h>
 #include <tulip/Color.h>
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
 

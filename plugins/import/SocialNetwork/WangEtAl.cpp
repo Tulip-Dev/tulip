@@ -17,10 +17,10 @@
  *
  */
 
-#include <tulip/ImportModule.h>
-#include <tulip/TlpTools.h>
-#include <tulip/PluginProgress.h>
 #include <tulip/Graph.h>
+#include <tulip/ImportModule.h>
+#include <tulip/PluginProgress.h>
+#include <tulip/TlpTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -35,16 +35,18 @@ static const char *paramHelp[] = {
  * described in
  * L.Wang, F. Du, H. P. Dai, and Y. X. Sun.
  * Random pseudofractal scale-free networks with small-world effect.
- * The European Physical Journal B - Condensed Matter and Complex Systems, 53, 361-366, (2006).
+ * The European Physical Journal B - Condensed Matter and Complex Systems, 53,
+ * 361-366, (2006).
  *
  */
 struct WangEtAl : public ImportModule {
-  PLUGININFORMATION("Wang et al. Model", "Arnaud Sallaberry", "21/02/2011",
-                    "Randomly generates a small world graph using the model described "
-                    "in<br/>L.Wang, F. Du, H. P. Dai, and Y. X. Sun.<br/><b>Random pseudofractal "
-                    "scale-free networks with small-world effect.</b><br/>The European Physical "
-                    "Journal B - Condensed Matter and Complex Systems, 53, 361-366, (2006).",
-                    "1.0", "Social network")
+  PLUGININFORMATION(
+      "Wang et al. Model", "Arnaud Sallaberry", "21/02/2011",
+      "Randomly generates a small world graph using the model described "
+      "in<br/>L.Wang, F. Du, H. P. Dai, and Y. X. Sun.<br/><b>Random pseudofractal "
+      "scale-free networks with small-world effect.</b><br/>The European Physical "
+      "Journal B - Condensed Matter and Complex Systems, 53, 361-366, (2006).",
+      "1.0", "Social network")
 
   WangEtAl(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "300");

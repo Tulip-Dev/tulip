@@ -18,13 +18,14 @@
  */
 #include "TulipPerspectiveMainWindow.h"
 
+#include <QAction>
 #include <QCloseEvent>
 #include <QShortcut>
-#include <QAction>
 #include <tulip/Perspective.h>
 #include <tulip/TulipProject.h>
 
-TulipPerspectiveProcessMainWindow::TulipPerspectiveProcessMainWindow(QString title, QWidget *parent)
+TulipPerspectiveProcessMainWindow::TulipPerspectiveProcessMainWindow(
+    QString title, QWidget *parent)
     : QMainWindow(parent), _project(nullptr), _title(title) {}
 
 void TulipPerspectiveProcessMainWindow::closeEvent(QCloseEvent *event) {
@@ -42,7 +43,8 @@ void TulipPerspectiveProcessMainWindow::setProject(tlp::TulipProject *project) {
           SLOT(projectFileChanged()));
 }
 
-void TulipPerspectiveProcessMainWindow::projectFileChanged(const QString &projectFile) {
+void TulipPerspectiveProcessMainWindow::projectFileChanged(
+    const QString &projectFile) {
   QString wTitle(_title);
 
   wTitle += QString(" [") + _project->perspective() + "]";

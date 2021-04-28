@@ -28,12 +28,14 @@ namespace tlp {
 /** @brief Tulip interactor abstract class for NodeLinkDiagramComponent
  *
  */
-class TLP_QT_SCOPE NodeLinkDiagramComponentInteractor : public GLInteractorComposite {
+class TLP_QT_SCOPE NodeLinkDiagramComponentInteractor
+    : public GLInteractorComposite {
   QLabel *_label;
   unsigned int _priority;
 
 public:
-  NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text,
+  NodeLinkDiagramComponentInteractor(const QString &iconPath,
+                                     const QString &text,
                                      unsigned int priority = 0);
 
   ~NodeLinkDiagramComponentInteractor() override;

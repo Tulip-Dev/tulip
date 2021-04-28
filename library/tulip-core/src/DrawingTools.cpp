@@ -16,13 +16,13 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <tulip/BooleanProperty.h>
+#include <tulip/ConvexHull.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/ConvexHull.h>
 
 #include <climits>
 
@@ -39,13 +39,17 @@ static void rotate(Coord &vec, double alpha) {
 }
 
 /**
- * Compute all points of a Tulip layout (with size, rotation, edge bends, and node position)
+ * Compute all points of a Tulip layout (with size, rotation, edge bends, and
+ * node position)
  * @todo take edge size into account
  * @todo create unit test to automatically check that function
  */
-static void computeGraphPoints(const std::vector<node> &nodes, const std::vector<edge> &edges,
-                               const LayoutProperty *layout, const SizeProperty *size,
-                               const DoubleProperty *rotation, const BooleanProperty *selection,
+static void computeGraphPoints(const std::vector<node> &nodes,
+                               const std::vector<edge> &edges,
+                               const LayoutProperty *layout,
+                               const SizeProperty *size,
+                               const DoubleProperty *rotation,
+                               const BooleanProperty *selection,
                                std::vector<Coord> &gPoints) {
   for (auto n : nodes) {
     if ((selection == nullptr) || selection->getNodeValue(n)) {
@@ -78,14 +82,19 @@ static void computeGraphPoints(const std::vector<node> &nodes, const std::vector
 }
 
 //===========================================================================
-BoundingBox tlp::computeBoundingBox(const Graph *graph, const LayoutProperty *layout,
-                                    const SizeProperty *size, const DoubleProperty *rotation,
+BoundingBox tlp::computeBoundingBox(const Graph *graph,
+                                    const LayoutProperty *layout,
+                                    const SizeProperty *size,
+                                    const DoubleProperty *rotation,
                                     const BooleanProperty *selection) {
-  return computeBoundingBox(graph->nodes(), graph->edges(), layout, size, rotation, selection);
+  return computeBoundingBox(graph->nodes(), graph->edges(), layout, size,
+                            rotation, selection);
 }
 //===========================================================================
-BoundingBox tlp::computeBoundingBox(const std::vector<node> &nodes, const std::vector<edge> &edges,
-                                    const LayoutProperty *layout, const SizeProperty *size,
+BoundingBox tlp::computeBoundingBox(const std::vector<node> &nodes,
+                                    const std::vector<edge> &edges,
+                                    const LayoutProperty *layout,
+                                    const SizeProperty *size,
                                     const DoubleProperty *rotation,
                                     const BooleanProperty *selection) {
   std::vector<Coord> gPoints;
@@ -96,16 +105,16 @@ BoundingBox tlp::computeBoundingBox(const std::vector<node> &nodes, const std::v
   return bbox;
 }
 //===========================================================================
-pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutProperty *layout,
-                                              const SizeProperty *size,
-                                              const DoubleProperty *rotation,
-                                              const BooleanProperty *selection) {
+pair<Coord, Coord> tlp::computeBoundingRadius(
+    const Graph *graph, const LayoutProperty *layout, const SizeProperty *size,
+    const DoubleProperty *rotation, const BooleanProperty *selection) {
   pair<Coord, Coord> result;
 
   if (graph->isEmpty())
     return result;
 
-  BoundingBox boundingBox(tlp::computeBoundingBox(graph, layout, size, rotation, selection));
+  BoundingBox boundingBox(
+      tlp::computeBoundingBox(graph, layout, size, rotation, selection));
   Coord centre(boundingBox.center());
   result.first = result.second = centre;
 
@@ -115,7 +124,8 @@ pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutPr
     Size curSize(size->getNodeValue(n) / 2.0f);
 
     if (selection == nullptr || selection->getNodeValue(n)) {
-      double nodeRad = sqrt(curSize.getW() * curSize.getW() + curSize.getH() * curSize.getH());
+      double nodeRad = sqrt(curSize.getW() * curSize.getW() +
+                            curSize.getH() * curSize.getH());
       Coord radDir(curCoord - centre);
       double curRad = nodeRad + radDir.norm();
 
@@ -167,23 +177,28 @@ vector<Coord> tlp::computeConvexHull(const std::vector<Coord> &allPoints) {
 }
 //======================================================================================
 
-std::vector<Coord> tlp::computeConvexHull(const Graph *graph, const LayoutProperty *layout,
-                                          const SizeProperty *size, const DoubleProperty *rotation,
+std::vector<Coord> tlp::computeConvexHull(const Graph *graph,
+                                          const LayoutProperty *layout,
+                                          const SizeProperty *size,
+                                          const DoubleProperty *rotation,
                                           const BooleanProperty *selection) {
 
   std::vector<Coord> gPoints;
-  computeGraphPoints(graph->nodes(), graph->edges(), layout, size, rotation, selection, gPoints);
+  computeGraphPoints(graph->nodes(), graph->edges(), layout, size, rotation,
+                     selection, gPoints);
   return computeConvexHull(gPoints);
 }
 
 //======================================================================================
 
-// implementation based on http://mathworld.wolfram.com/Line-LineIntersection.html
-// reference : Hill, F. S. Jr. "The Pleasures of 'Perp Dot' Products." Ch. II.5 in Graphics Gems IV
+// implementation based on
+// http://mathworld.wolfram.com/Line-LineIntersection.html reference : Hill, F.
+// S. Jr. "The Pleasures of 'Perp Dot' Products." Ch. II.5 in Graphics Gems IV
 // (Ed. P. S. Heckbert). San Diego: Academic Press, pp. 138-148, 1994.
-bool tlp::computeLinesIntersection(const std::pair<tlp::Coord, tlp::Coord> &line1,
-                                   const std::pair<tlp::Coord, tlp::Coord> &line2,
-                                   tlp::Coord &intersectionPoint) {
+bool tlp::computeLinesIntersection(
+    const std::pair<tlp::Coord, tlp::Coord> &line1,
+    const std::pair<tlp::Coord, tlp::Coord> &line2,
+    tlp::Coord &intersectionPoint) {
 
   Coord a(line1.second - line1.first);
   Coord b(line2.second - line2.first);
@@ -222,11 +237,14 @@ Coord tlp::computePolygonCentroid(const vector<Coord> &points) {
   double Cy = 0.0;
 
   for (size_t i = 0; i < pointsCp.size() - 1; ++i) {
-    A += (pointsCp[i][0] * pointsCp[i + 1][1] - pointsCp[i + 1][0] * pointsCp[i][1]);
+    A += (pointsCp[i][0] * pointsCp[i + 1][1] -
+          pointsCp[i + 1][0] * pointsCp[i][1]);
     Cx += (pointsCp[i][0] + pointsCp[i + 1][0]) *
-          (pointsCp[i][0] * pointsCp[i + 1][1] - pointsCp[i + 1][0] * pointsCp[i][1]);
+          (pointsCp[i][0] * pointsCp[i + 1][1] -
+           pointsCp[i + 1][0] * pointsCp[i][1]);
     Cy += (pointsCp[i][1] + pointsCp[i + 1][1]) *
-          (pointsCp[i][0] * pointsCp[i + 1][1] - pointsCp[i + 1][0] * pointsCp[i][1]);
+          (pointsCp[i][0] * pointsCp[i + 1][1] -
+           pointsCp[i + 1][0] * pointsCp[i][1]);
   }
 
   A *= 0.5;
@@ -244,7 +262,8 @@ static inline void normalize(Vec3f &v) {
 
 //======================================================================================================
 
-bool tlp::isLayoutCoPlanar(const vector<Coord> &points, Mat3f &invTransformMatrix) {
+bool tlp::isLayoutCoPlanar(const vector<Coord> &points,
+                           Mat3f &invTransformMatrix) {
   Coord A(points[0]), B(0), C(0);
   bool BSet = false;
 
@@ -280,7 +299,8 @@ bool tlp::isLayoutCoPlanar(const vector<Coord> &points, Mat3f &invTransformMatri
     }
   }
 
-  // compute the inverse transform matrix for projecting the points in the z = 0 plane
+  // compute the inverse transform matrix for projecting the points in the z = 0
+  // plane
   invTransformMatrix[0][0] = a[0];
   invTransformMatrix[1][0] = a[1];
   invTransformMatrix[2][0] = a[2];
@@ -298,7 +318,8 @@ bool tlp::isLayoutCoPlanar(const vector<Coord> &points, Mat3f &invTransformMatri
 //======================================================================================================
 
 std::vector<tlp::Coord> tlp::computeRegularPolygon(unsigned int numberOfSides,
-                                                   const tlp::Coord &center, const tlp::Size &size,
+                                                   const tlp::Coord &center,
+                                                   const tlp::Size &size,
                                                    float startAngle) {
 
   assert(numberOfSides > 2);
@@ -315,11 +336,12 @@ std::vector<tlp::Coord> tlp::computeRegularPolygon(unsigned int numberOfSides,
   }
 
   for (auto &point : points) {
-    point.set(
-        center[0] + ((point[0] - ((box[1][0] + box[0][0]) / 2.)) / ((box[1][0] - box[0][0]) / 2.)) *
-                        size[0],
-        center[1] + ((point[1] - ((box[1][1] + box[0][1]) / 2.)) / ((box[1][1] - box[0][1]) / 2.)) *
-                        size[1]);
+    point.set(center[0] + ((point[0] - ((box[1][0] + box[0][0]) / 2.)) /
+                           ((box[1][0] - box[0][0]) / 2.)) *
+                              size[0],
+              center[1] + ((point[1] - ((box[1][1] + box[0][1]) / 2.)) /
+                           ((box[1][1] - box[0][1]) / 2.)) *
+                              size[1]);
   }
 
   return points;

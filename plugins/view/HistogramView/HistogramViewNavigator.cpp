@@ -17,12 +17,12 @@
  *
  */
 
-#include <tulip/QtGlSceneZoomAndPanAnimator.h>
-#include <tulip/GlMainWidget.h>
 #include <tulip/Camera.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/QtGlSceneZoomAndPanAnimator.h>
 
-#include "HistogramViewNavigator.h"
 #include "HistogramView.h"
+#include "HistogramViewNavigator.h"
 
 #include <QMouseEvent>
 
@@ -60,21 +60,23 @@ bool HistogramViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     int x = glWidget->width() - me->x();
     int y = me->y();
     Coord screenCoords(x, y, 0);
-    Coord &&sceneCoords = glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
-        glWidget->screenToViewport(Coord(x, y, 0)));
+    Coord &&sceneCoords =
+        glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
+            glWidget->screenToViewport(Coord(x, y, 0)));
     selectedHistoOverview = getOverviewUnderPointer(sceneCoords);
     return true;
   } else if (e->type() == QEvent::MouseButtonDblClick) {
-    if (selectedHistoOverview != nullptr && histoView->smallMultiplesViewSet()) {
-      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget,
-                                                     selectedHistoOverview->getBoundingBox());
+    if (selectedHistoOverview != nullptr &&
+        histoView->smallMultiplesViewSet()) {
+      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(
+          glWidget, selectedHistoOverview->getBoundingBox());
       zoomAndPanAnimator.animateZoomAndPan();
       histoView->switchFromSmallMultiplesToDetailedView(selectedHistoOverview);
       selectedHistoOverview = nullptr;
     } else if (!histoView->smallMultiplesViewSet()) {
       histoView->switchFromDetailedViewToSmallMultiples();
-      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget,
-                                                     histoView->getSmallMultiplesBoundingBox());
+      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(
+          glWidget, histoView->getSmallMultiplesBoundingBox());
       zoomAndPanAnimator.animateZoomAndPan();
     }
 
@@ -84,11 +86,14 @@ bool HistogramViewNavigator::eventFilter(QObject *widget, QEvent *e) {
   return false;
 }
 
-Histogram *HistogramViewNavigator::getOverviewUnderPointer(const Coord &sceneCoords) const {
+Histogram *HistogramViewNavigator::getOverviewUnderPointer(
+    const Coord &sceneCoords) const {
   for (auto histo : histoView->getHistograms()) {
     BoundingBox &&overviewBB = histo->getBoundingBox();
-    if (sceneCoords.getX() >= overviewBB[0][0] && sceneCoords.getX() <= overviewBB[1][0] &&
-        sceneCoords.getY() >= overviewBB[0][1] && sceneCoords.getY() <= overviewBB[1][1])
+    if (sceneCoords.getX() >= overviewBB[0][0] &&
+        sceneCoords.getX() <= overviewBB[1][0] &&
+        sceneCoords.getY() >= overviewBB[0][1] &&
+        sceneCoords.getY() <= overviewBB[1][1])
       return histo;
   }
 

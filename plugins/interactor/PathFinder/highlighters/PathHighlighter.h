@@ -43,9 +43,7 @@ public:
   PathHighlighter(const std::string &name);
   ~PathHighlighter() override;
 
-  inline std::string getName() const {
-    return this->name;
-  }
+  inline std::string getName() const { return this->name; }
   virtual void highlight(const PathFinder *parent, GlMainWidget *glMainWidget,
                          BooleanProperty *selection, node src, node tgt) = 0;
   virtual void draw(tlp::GlMainWidget *glMainWidget) = 0;
@@ -56,8 +54,8 @@ public:
 protected:
   tlp::GlLayer *getWorkingLayer(tlp::GlScene *scene);
   tlp::GlGraphInputData *getInputData(tlp::GlMainWidget *glMainWidget);
-  void addGlEntity(tlp::GlScene *scene, tlp::GlSimpleEntity *entity, bool deleteOnExit = true,
-                   const std::string &name = "");
+  void addGlEntity(tlp::GlScene *scene, tlp::GlSimpleEntity *entity,
+                   bool deleteOnExit = true, const std::string &name = "");
   void treatEvent(const Event &ev) override;
 
 private:

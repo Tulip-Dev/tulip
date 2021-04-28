@@ -21,18 +21,18 @@
 #include <string>
 
 #include <tulip/Gl2DRect.h>
-#include <tulip/GlComposite.h>
 #include <tulip/GlBox.h>
 #include <tulip/GlCircle.h>
+#include <tulip/GlComplexPolygon.h>
+#include <tulip/GlComposite.h>
+#include <tulip/GlCurve.h>
 #include <tulip/GlGrid.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlLine.h>
 #include <tulip/GlPolygon.h>
+#include <tulip/GlQuad.h>
 #include <tulip/GlRect.h>
 #include <tulip/GlSphere.h>
-#include <tulip/GlCurve.h>
-#include <tulip/GlComplexPolygon.h>
-#include <tulip/GlQuad.h>
 
 using namespace std;
 
@@ -45,7 +45,8 @@ void GlXMLTools::applyIndentation(string &outString) {
     outString.append("  ");
 }
 
-void GlXMLTools::goToNextCaracter(const string &inString, unsigned int &currentPosition) {
+void GlXMLTools::goToNextCaracter(const string &inString,
+                                  unsigned int &currentPosition) {
   while (inString[currentPosition] == ' ' || inString[currentPosition] == '\n')
     currentPosition++;
 }
@@ -62,13 +63,15 @@ void GlXMLTools::endDataNode(string &outString) {
   outString.append("</data>\n");
 }
 
-void GlXMLTools::enterDataNode(const string &inString, unsigned int &currentPosition) {
+void GlXMLTools::enterDataNode(const string &inString,
+                               unsigned int &currentPosition) {
   goToNextCaracter(inString, currentPosition);
   assert(inString.substr(currentPosition, 6) == "<data>");
   currentPosition += 6;
 }
 
-void GlXMLTools::leaveDataNode(const string &inString, unsigned int &currentPosition) {
+void GlXMLTools::leaveDataNode(const string &inString,
+                               unsigned int &currentPosition) {
   goToNextCaracter(inString, currentPosition);
   assert(inString.substr(currentPosition, 7) == "</data>");
   currentPosition += 7;
@@ -86,12 +89,14 @@ void GlXMLTools::endChildNode(string &outString, const string &name) {
   outString.append("</" + name + ">\n");
 }
 
-string GlXMLTools::enterChildNode(const string &inString, unsigned int &currentPosition) {
+string GlXMLTools::enterChildNode(const string &inString,
+                                  unsigned int &currentPosition) {
   goToNextCaracter(inString, currentPosition);
   unsigned int beginPosition = currentPosition + 1;
   size_t endPosition = inString.find('>', currentPosition);
 
-  if (inString.substr(beginPosition - 1, endPosition - beginPosition).find("</") != string::npos)
+  if (inString.substr(beginPosition - 1, endPosition - beginPosition)
+          .find("</") != string::npos)
     return "";
 
   size_t childNameEndPosition = inString.find(' ', currentPosition);
@@ -103,13 +108,15 @@ string GlXMLTools::enterChildNode(const string &inString, unsigned int &currentP
     return inString.substr(beginPosition, endPosition - beginPosition);
 }
 
-void GlXMLTools::leaveChildNode(const string &inString, unsigned int &currentPosition,
+void GlXMLTools::leaveChildNode(const string &inString,
+                                unsigned int &currentPosition,
                                 const string &childName) {
-  currentPosition = inString.find("</" + childName + ">", currentPosition) + 3 + childName.size();
+  currentPosition = inString.find("</" + childName + ">", currentPosition) + 3 +
+                    childName.size();
 }
 
-void GlXMLTools::createProperty(string &outString, const string &name, const string &value,
-                                const string &parent) {
+void GlXMLTools::createProperty(string &outString, const string &name,
+                                const string &value, const string &parent) {
   if (parent.empty()) {
     outString = outString.substr(0, outString.size() - 2);
     outString.append(" " + name + "=\"" + value + "\">\n");
@@ -132,8 +139,10 @@ map<string, string> GlXMLTools::getProperties(const string &inString,
   while (propertyPosition < currentPosition) {
     size_t propertyNameBegin = inString.rfind(' ', propertyPosition) + 1;
     size_t propertyValueEnd = inString.find('\"', propertyPosition + 2);
-    string name = inString.substr(propertyNameBegin, propertyPosition - propertyNameBegin);
-    string value = inString.substr(propertyPosition + 2, propertyValueEnd - propertyPosition - 2);
+    string name = inString.substr(propertyNameBegin,
+                                  propertyPosition - propertyNameBegin);
+    string value = inString.substr(propertyPosition + 2,
+                                   propertyValueEnd - propertyPosition - 2);
     properties[name] = value;
     propertyPosition = inString.find('=', propertyPosition + 1);
   }
@@ -172,7 +181,8 @@ GlSimpleEntity *GlXMLTools::createEntity(const string &name) {
   } else if (name == "GlSphere") {
     return new GlSphere();
   } else {
-    tlp::debug() << "Unknown entity type : " << name << ". Can't create it !" << endl;
+    tlp::debug() << "Unknown entity type : " << name << ". Can't create it !"
+                 << endl;
   }
 
   return nullptr;

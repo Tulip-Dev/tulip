@@ -16,25 +16,26 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/GlLayer.h>
-#include <tulip/GlXMLTools.h>
 #include <tulip/Camera.h>
-#include <tulip/GlSceneVisitor.h>
-#include <tulip/GlScene.h>
 #include <tulip/GlGraphComposite.h>
+#include <tulip/GlLayer.h>
+#include <tulip/GlScene.h>
+#include <tulip/GlSceneVisitor.h>
+#include <tulip/GlXMLTools.h>
 
 using namespace std;
 
 namespace tlp {
 
 GlLayer::GlLayer(const std::string &name, bool workingLayer)
-    : name(name), scene(nullptr), camera(new Camera(nullptr)), sharedCamera(false),
-      workingLayer(workingLayer) {
+    : name(name), scene(nullptr), camera(new Camera(nullptr)),
+      sharedCamera(false), workingLayer(workingLayer) {
   composite.addLayerParent(this);
 }
 
 GlLayer::GlLayer(const std::string &name, Camera *camera, bool workingLayer)
-    : name(name), scene(nullptr), camera(camera), sharedCamera(true), workingLayer(workingLayer) {
+    : name(name), scene(nullptr), camera(camera), sharedCamera(true),
+      workingLayer(workingLayer) {
   composite.addLayerParent(this);
 }
 
@@ -161,7 +162,8 @@ void GlLayer::getXMLOnlyForCameras(string &outString) {
   GlXMLTools::endDataNode(outString);
 }
 
-void GlLayer::setWithXML(const string &inString, unsigned int &currentPosition) {
+void GlLayer::setWithXML(const string &inString,
+                         unsigned int &currentPosition) {
 
   GlXMLTools::enterDataNode(inString, currentPosition);
   string childName = GlXMLTools::enterChildNode(inString, currentPosition);
@@ -179,7 +181,8 @@ void GlLayer::setWithXML(const string &inString, unsigned int &currentPosition) 
 
   if (!childName.empty()) {
 
-    map<string, string> childMap = GlXMLTools::getProperties(inString, currentPosition);
+    map<string, string> childMap =
+        GlXMLTools::getProperties(inString, currentPosition);
     assert(childMap["type"] == "GlComposite");
     composite.setWithXML(inString, currentPosition);
 

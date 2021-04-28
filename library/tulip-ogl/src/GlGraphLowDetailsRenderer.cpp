@@ -16,13 +16,13 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/GlGraphLowDetailsRenderer.h>
-#include <tulip/GraphProperty.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/GlGraphLowDetailsRenderer.h>
 #include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/GlTools.h>
 #include <tulip/GlScene.h>
+#include <tulip/GlTools.h>
 #include <tulip/GlVertexArrayManager.h>
+#include <tulip/GraphProperty.h>
 #include <tulip/OcclusionTest.h>
 #include <tulip/OpenGlConfigManager.h>
 
@@ -30,7 +30,8 @@ using namespace std;
 
 namespace tlp {
 
-GlGraphLowDetailsRenderer::GlGraphLowDetailsRenderer(const GlGraphInputData *inputData)
+GlGraphLowDetailsRenderer::GlGraphLowDetailsRenderer(
+    const GlGraphInputData *inputData)
     : GlGraphRenderer(inputData), fakeScene(new GlScene), buildVBO(true) {
   fakeScene->createLayer("fakeLayer");
   addObservers();
@@ -82,7 +83,8 @@ void GlGraphLowDetailsRenderer::initEdgesArray() {
       tmp *= 1. / (bends.size() + 2);
       tmp *= j + 1;
       tmp += ca;
-      colors[i_col++].set(uchar(tmp[0]), uchar(tmp[1]), uchar(tmp[2]), uchar(tmp[3]));
+      colors[i_col++].set(uchar(tmp[0]), uchar(tmp[1]), uchar(tmp[2]),
+                          uchar(tmp[3]));
       indices[i_indices++] = i_point;
       indices[i_indices++] = i_point;
       points[i_point][0] = bends[j][0];
@@ -159,7 +161,8 @@ void GlGraphLowDetailsRenderer::draw(float, Camera *) {
     if (indices.size() - cur > 64000) {
       glDrawElements(GL_LINES, 64000, GL_UNSIGNED_INT, &indices[cur]);
     } else
-      glDrawElements(GL_LINES, indices.size() - cur, GL_UNSIGNED_INT, &indices[cur]);
+      glDrawElements(GL_LINES, indices.size() - cur, GL_UNSIGNED_INT,
+                     &indices[cur]);
 
     cur += 64000;
   }
@@ -174,12 +177,14 @@ void GlGraphLowDetailsRenderer::draw(float, Camera *) {
     if (quad_indices.size() - cur > 64000) {
       glDrawElements(GL_QUADS, 64000, GL_UNSIGNED_INT, &quad_indices[cur]);
     } else
-      glDrawElements(GL_QUADS, quad_indices.size() - cur, GL_UNSIGNED_INT, &quad_indices[cur]);
+      glDrawElements(GL_QUADS, quad_indices.size() - cur, GL_UNSIGNED_INT,
+                     &quad_indices[cur]);
 
     cur += 64000;
   }
 
-  // glDrawElements(GL_QUADS, quad_indices.size(), GL_UNSIGNED_INT, &quad_indices[0]);
+  // glDrawElements(GL_QUADS, quad_indices.size(), GL_UNSIGNED_INT,
+  // &quad_indices[0]);
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_COLOR_ARRAY);
 
@@ -229,8 +234,10 @@ void GlGraphLowDetailsRenderer::treatEvent(const Event &ev) {
       const PropertyInterface *property =
           inputData->getGraph()->getProperty(graphEvent->getPropertyName());
 
-      if (property == inputData->getElementLayout() || property == inputData->getElementSize() ||
-          property == inputData->getElementColor() || property == inputData->getElementSelected()) {
+      if (property == inputData->getElementLayout() ||
+          property == inputData->getElementSize() ||
+          property == inputData->getElementColor() ||
+          property == inputData->getElementSelected()) {
         buildVBO = true;
         updateObservers();
       }
@@ -242,7 +249,8 @@ void GlGraphLowDetailsRenderer::treatEvent(const Event &ev) {
       break;
     }
   } else if (typeid(ev) == typeid(PropertyEvent)) {
-    const PropertyEvent *propertyEvent = dynamic_cast<const PropertyEvent *>(&ev);
+    const PropertyEvent *propertyEvent =
+        dynamic_cast<const PropertyEvent *>(&ev);
 
     switch (propertyEvent->getType()) {
     case PropertyEvent::TLP_BEFORE_SET_ALL_NODE_VALUE:

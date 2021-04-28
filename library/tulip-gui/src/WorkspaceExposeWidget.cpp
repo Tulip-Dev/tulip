@@ -19,18 +19,18 @@
 
 #include "tulip/WorkspaceExposeWidget.h"
 
-#include <QEvent>
 #include <QDebug>
-#include <QPropertyAnimation>
-#include <QParallelAnimationGroup>
+#include <QEvent>
 #include <QGraphicsSceneMouseEvent>
-#include <QKeyEvent>
 #include <QGraphicsTextItem>
+#include <QKeyEvent>
+#include <QParallelAnimationGroup>
+#include <QPropertyAnimation>
 
-#include <tulip/View.h>
-#include <tulip/WorkspacePanel.h>
 #include <tulip/Graph.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/View.h>
+#include <tulip/WorkspacePanel.h>
 
 #include <cmath>
 
@@ -40,14 +40,16 @@ using namespace tlp;
 QPixmap *PreviewItem::_closeButtonPixmap = nullptr;
 QRect PreviewItem::_closePixmapRect = QRect();
 
-PreviewItem::PreviewItem(const QPixmap &pixmap, WorkspacePanel *panel, QGraphicsItem *parent)
+PreviewItem::PreviewItem(const QPixmap &pixmap, WorkspacePanel *panel,
+                         QGraphicsItem *parent)
     : QGraphicsObject(parent), _pixmap(pixmap), _panel(panel), _hovered(false),
       _closeButtonHovered(false) {
   if (_closeButtonPixmap == nullptr) {
     _closeButtonPixmap = new QPixmap(":/tulip/gui/ui/darkclosebutton.png");
-    _closePixmapRect = QRect(boundingRect().width() - _closeButtonPixmap->width() - 5,
-                             -0.5 * _closeButtonPixmap->height(), _closeButtonPixmap->width(),
-                             _closeButtonPixmap->height());
+    _closePixmapRect =
+        QRect(boundingRect().width() - _closeButtonPixmap->width() - 5,
+              -0.5 * _closeButtonPixmap->height(), _closeButtonPixmap->width(),
+              _closeButtonPixmap->height());
   }
 
   setFlag(ItemIsMovable);
@@ -60,13 +62,15 @@ int PreviewItem::textHeight() const {
   f.setBold(true);
   text.setFont(f);
   text.setPlainText(_panel->windowTitle() + " (" +
-                    tlpStringToQString(_panel->view()->graph()->getName()) + ")");
+                    tlpStringToQString(_panel->view()->graph()->getName()) +
+                    ")");
   text.setTextWidth(WorkspaceExposeWidget::previewSize().width());
   return text.boundingRect().height();
 }
 QRectF PreviewItem::boundingRect() const {
-  QRectF result = QRectF(0, 0, WorkspaceExposeWidget::previewSize().width(),
-                         WorkspaceExposeWidget::previewSize().height() + textHeight());
+  QRectF result =
+      QRectF(0, 0, WorkspaceExposeWidget::previewSize().width(),
+             WorkspaceExposeWidget::previewSize().height() + textHeight());
 
   if (_hovered) {
     result.setTop(_closePixmapRect.top());
@@ -74,10 +78,9 @@ QRectF PreviewItem::boundingRect() const {
 
   return result;
 }
-tlp::WorkspacePanel *PreviewItem::panel() const {
-  return _panel;
-}
-void PreviewItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
+tlp::WorkspacePanel *PreviewItem::panel() const { return _panel; }
+void PreviewItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
+                        QWidget *) {
   painter->drawPixmap(0, 0, WorkspaceExposeWidget::previewSize().width(),
                       WorkspaceExposeWidget::previewSize().height(), _pixmap);
   QFont f;
@@ -87,7 +90,8 @@ void PreviewItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWi
                     WorkspaceExposeWidget::previewSize().width(), textHeight(),
                     Qt::AlignHCenter | Qt::TextWordWrap,
                     _panel->windowTitle() + " (" +
-                        tlpStringToQString(_panel->view()->graph()->getName()) + ")");
+                        tlpStringToQString(_panel->view()->graph()->getName()) +
+                        ")");
 
   if (_hovered) {
     painter->setOpacity(_closeButtonHovered ? 1 : 0.5);
@@ -103,7 +107,8 @@ void PreviewItem::hoverLeaveEvent(QGraphicsSceneHoverEvent * /*event*/) {
   prepareGeometryChange();
 }
 void PreviewItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
-  bool newCloseButtonHovered = _closePixmapRect.contains(event->pos().toPoint());
+  bool newCloseButtonHovered =
+      _closePixmapRect.contains(event->pos().toPoint());
 
   if (newCloseButtonHovered != _closeButtonHovered) {
     _closeButtonHovered = newCloseButtonHovered;
@@ -118,24 +123,21 @@ bool PreviewItem::shouldClose(const QPointF &p) {
 }
 
 // *************************
-QSize WorkspaceExposeWidget::previewSize() {
-  return QSize(150, 100);
-}
+QSize WorkspaceExposeWidget::previewSize() { return QSize(150, 100); }
 
 const int WorkspaceExposeWidget::MARGIN = 50;
 
 WorkspaceExposeWidget::WorkspaceExposeWidget(QWidget *parent)
-    : QGraphicsView(parent), _positionAnimation(nullptr), _selectedItem(nullptr),
-      _placeholderItem(nullptr), _switchToSingleMode(false) {
+    : QGraphicsView(parent), _positionAnimation(nullptr),
+      _selectedItem(nullptr), _placeholderItem(nullptr),
+      _switchToSingleMode(false) {
   setScene(new QGraphicsScene);
   scene()->setBackgroundBrush(QBrush(QColor(72, 136, 186)));
   setSceneRect(0, 0, width(), height());
   setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
-WorkspaceExposeWidget::~WorkspaceExposeWidget() {
-  delete scene();
-}
+WorkspaceExposeWidget::~WorkspaceExposeWidget() { delete scene(); }
 
 int WorkspaceExposeWidget::currentPanelIndex() const {
   return _currentPanelIndex;
@@ -162,7 +164,8 @@ void WorkspaceExposeWidget::setData(const QVector<WorkspacePanel *> &panels,
   for (auto p : panels) {
     QPixmap pixmap = p->view()
                          ->snapshot(previewSize() * 3)
-                         .scaled(previewSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+                         .scaled(previewSize(), Qt::IgnoreAspectRatio,
+                                 Qt::SmoothTransformation);
     PreviewItem *item = new PreviewItem(pixmap, p);
     scene()->addItem(item);
     _items << item;
@@ -184,10 +187,11 @@ qreal distance(const QPointF &a, const QPointF &b) {
 
 void WorkspaceExposeWidget::updatePositions(bool resetScenePos) {
   //  delete _positionAnimation;
-  // Use the reference distance as the distance for a preview to move to the next position. We will
-  // index animation speed on that.
+  // Use the reference distance as the distance for a preview to move to the
+  // next position. We will index animation speed on that.
   const int referenceDuration = 120;
-  qreal referenceDistance = distance(QPointF(0, 0), QPointF(previewSize().width() + MARGIN, 0));
+  qreal referenceDistance =
+      distance(QPointF(0, 0), QPointF(previewSize().width() + MARGIN, 0));
 
   QParallelAnimationGroup *group = new QParallelAnimationGroup(this);
   int x = MARGIN, y = MARGIN;
@@ -198,16 +202,16 @@ void WorkspaceExposeWidget::updatePositions(bool resetScenePos) {
       QPointF startPoint = i->pos();
       QPointF endPoint = QPointF(x, y);
       qreal d = distance(startPoint, endPoint);
-      int actualDuration =
-          std::min<int>(d * referenceDuration / referenceDistance, referenceDuration * 2);
+      int actualDuration = std::min<int>(
+          d * referenceDuration / referenceDistance, referenceDuration * 2);
       moveAnim->setDuration(actualDuration);
       moveAnim->setStartValue(startPoint);
       moveAnim->setEndValue(endPoint);
       group->addAnimation(moveAnim);
     } else if (_selectedItem != nullptr) {
       if (_placeholderItem == nullptr) {
-        _placeholderItem =
-            new QGraphicsRectItem(0, 0, previewSize().width(), previewSize().height());
+        _placeholderItem = new QGraphicsRectItem(0, 0, previewSize().width(),
+                                                 previewSize().height());
         _placeholderItem->setBrush(QColor(220, 220, 220));
         _placeholderItem->setPen(QColor(190, 190, 190));
         scene()->addItem(_placeholderItem);
@@ -230,7 +234,8 @@ void WorkspaceExposeWidget::updatePositions(bool resetScenePos) {
     connect(group, SIGNAL(finished()), this, SLOT(resetSceneRect()));
   }
 
-  connect(group, SIGNAL(finished()), this, SLOT(updatePositionsAnimationFinished()));
+  connect(group, SIGNAL(finished()), this,
+          SLOT(updatePositionsAnimationFinished()));
   group->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
@@ -267,7 +272,8 @@ bool WorkspaceExposeWidget::eventFilter(QObject *obj, QEvent *ev) {
 
   else if (item == _selectedItem) {
     if (ev->type() == QEvent::GraphicsSceneMouseMove) {
-      QGraphicsSceneMouseEvent *mouseEv = static_cast<QGraphicsSceneMouseEvent *>(ev);
+      QGraphicsSceneMouseEvent *mouseEv =
+          static_cast<QGraphicsSceneMouseEvent *>(ev);
       QPointF itemPos = mouseEv->scenePos();
       int itemPerLine = floor(width() / (previewSize().width() + MARGIN));
       int nbLines = _items.size() / itemPerLine;
@@ -316,6 +322,4 @@ void WorkspaceExposeWidget::itemOpened() {
   finish();
 }
 
-void WorkspaceExposeWidget::finish() {
-  emit exposeFinished();
-}
+void WorkspaceExposeWidget::finish() { emit exposeFinished(); }

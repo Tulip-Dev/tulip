@@ -18,11 +18,11 @@
  */
 
 #include <algorithm>
-#include <iostream>
-#include <fstream>
 #include <cctype>
 #include <cstdlib>
 #include <cstring>
+#include <fstream>
+#include <iostream>
 #include <tulip/TulipPluginHeaders.h>
 
 /** \file
@@ -83,7 +83,8 @@ bool skipEqualSign(const string &str, string::size_type &pos) {
   return false;
 }
 
-bool nextUnsignedInt(const string &str, unsigned int &value, string::size_type &pos) {
+bool nextUnsignedInt(const string &str, unsigned int &value,
+                     string::size_type &pos) {
   string::size_type lastPos = str.find_first_not_of(" \r\t ,=", pos);
   // Find next separator
   pos = str.find_first_of(" \r\t ,", lastPos);
@@ -130,7 +131,8 @@ bool nextString(const string &str, string &token, string::size_type &pos) {
   return false;
 }
 
-bool nextToken(const string &str, const string &separators, string &token, string::size_type &pos) {
+bool nextToken(const string &str, const string &separators, string &token,
+               string::size_type &pos) {
   token.clear();
   // Skip separators at the beginning.
   string::size_type lastPos = str.find_first_not_of(separators, pos);
@@ -174,7 +176,8 @@ bool nextToken(const string &str, const string &separators, string &token, strin
   return true;
 }
 
-bool tokenize(const string &str, vector<string> &tokens, const string &separators) {
+bool tokenize(const string &str, vector<string> &tokens,
+              const string &separators) {
   if (str.empty())
     return true;
 
@@ -214,9 +217,10 @@ public:
     return l;
   }
   ImportUCINET(const tlp::PluginContext *context)
-      : ImportModule(context), nbNodes(0), defaultMetric("weight"), n(0), nr(0), nc(0), nm(0),
-        current(0), dl_found(false), diagonal(true), diagonal_found(false), labels_known(false),
-        title_found(false), expectedLine(DL_HEADER), embedding(DL_NONE), dataFormat(DL_FM) {
+      : ImportModule(context), nbNodes(0), defaultMetric("weight"), n(0), nr(0),
+        nc(0), nm(0), current(0), dl_found(false), diagonal(true),
+        diagonal_found(false), labels_known(false), title_found(false),
+        expectedLine(DL_HEADER), embedding(DL_NONE), dataFormat(DL_FM) {
     addInParameter<string>("file::filename", paramHelp[0], "");
     addInParameter<string>("Default metric", paramHelp[1], "weight");
   }
@@ -253,13 +257,29 @@ public:
   };
   // indicates what kind of line is expected
   TypeOfLine expectedLine;
-  enum TypeOfLabelEmbedding { DL_NONE = 0, DL_ROWS = 1, DL_COLS = 2, DL_ALL = 4 };
+  enum TypeOfLabelEmbedding {
+    DL_NONE = 0,
+    DL_ROWS = 1,
+    DL_COLS = 2,
+    DL_ALL = 4
+  };
   // indicates what labels are embedded in the data to be read
   unsigned int embedding;
-  enum TypeOfData { DL_FM, DL_UH, DL_LH, DL_NL1, DL_NL2, DL_NL1B, DL_EL1, DL_EL2, DL_BM };
+  enum TypeOfData {
+    DL_FM,
+    DL_UH,
+    DL_LH,
+    DL_NL1,
+    DL_NL2,
+    DL_NL1B,
+    DL_EL1,
+    DL_EL2,
+    DL_BM
+  };
   // indicates the current format for the data to be read
   TypeOfData dataFormat;
-  std::unordered_map<std::string, node> labelToNode, colLabelToNode, rowLabelToNode;
+  std::unordered_map<std::string, node> labelToNode, colLabelToNode,
+      rowLabelToNode;
 
   bool readHeader(string &str, stringstream &error) {
     string token;
@@ -285,7 +305,8 @@ public:
           return false;
         }
 
-        if (!skipEqualSign(str, pos) || !nextString(str, token, pos) || token.empty()) {
+        if (!skipEqualSign(str, pos) || !nextString(str, token, pos) ||
+            token.empty()) {
           error << "invalid specification for parameter TITLE";
           return false;
         }
@@ -371,7 +392,8 @@ public:
 
       if (nocasecmp(token, "format")) {
         // format found
-        if (!skipEqualSign(str, pos) || !nextToken(str, " \r\t,", token, pos) || token.empty()) {
+        if (!skipEqualSign(str, pos) || !nextToken(str, " \r\t,", token, pos) ||
+            token.empty()) {
           error << "invalid specification for parameter FORMAT";
           return false;
         }
@@ -394,7 +416,8 @@ public:
 
         if (nocasecmp(token, "nodelist1") || nocasecmp(token, "nl1")) {
           if (nr || nc) {
-            error << "specification of parameter FORMAT applies only to 1-mode matrix";
+            error
+                << "specification of parameter FORMAT applies only to 1-mode matrix";
             return false;
           }
 
@@ -409,7 +432,8 @@ public:
 
         if (nocasecmp(token, "nodelist1b") || nocasecmp(token, "nl1b")) {
           if (nr || nc) {
-            error << "specification of parameter FORMAT applies only to 1-mode matrix";
+            error
+                << "specification of parameter FORMAT applies only to 1-mode matrix";
             return false;
           }
 
@@ -452,7 +476,8 @@ public:
 
         // specification says that DIAGONAL = PRESENT|ABSENT
         // but = may not exist
-        if ((token == "=") && (!nextToken(str, " \r\t,", token, pos) || token.empty())) {
+        if ((token == "=") &&
+            (!nextToken(str, " \r\t,", token, pos) || token.empty())) {
           error << "invalid specification for parameter DIAGONAL";
           return false;
         }
@@ -499,7 +524,8 @@ public:
         // or 'labels:'
         if (nocasecmp(token, "labels:")) {
           if (n == 0 && nr == 0) {
-            error << "specification of ROW LABELS applies only to 2-mode matrix";
+            error
+                << "specification of ROW LABELS applies only to 2-mode matrix";
             return false;
           }
 
@@ -538,7 +564,8 @@ public:
         // or 'labels:'
         if (nocasecmp(token, "labels:")) {
           if (n == 0 && nc == 0) {
-            error << "specification of COLUMN LABELS applies only to 2-mode matrix";
+            error
+                << "specification of COLUMN LABELS applies only to 2-mode matrix";
             return false;
           }
 
@@ -561,7 +588,8 @@ public:
         // next token must be labels:
         if (nocasecmp(token, "labels:")) {
           if (nm == 0) {
-            error << "specification of MATRIX LABELS cannot apply if NM is not defined";
+            error
+                << "specification of MATRIX LABELS cannot apply if NM is not defined";
             return false;
           }
 
@@ -621,7 +649,8 @@ public:
             for (unsigned int i = 0; i < nm; ++i) {
               stringstream sstr;
               sstr << defaultMetric << (i + 1);
-              DoubleProperty *metric = graph->getProperty<DoubleProperty>(sstr.str());
+              DoubleProperty *metric =
+                  graph->getProperty<DoubleProperty>(sstr.str());
               metrics.push_back(metric);
             }
           }
@@ -640,8 +669,9 @@ public:
   }
 
   bool readLabels(const string &str, stringstream &error,
-                  std::unordered_map<std::string, node> &labelsHMap, unsigned int nbLabels,
-                  unsigned int offset, const vector<node> &nodes) {
+                  std::unordered_map<std::string, node> &labelsHMap,
+                  unsigned int nbLabels, unsigned int offset,
+                  const vector<node> &nodes) {
     vector<std::string> labels;
     StringProperty *label = graph->getProperty<StringProperty>("viewLabel");
 
@@ -670,8 +700,9 @@ public:
     return true;
   }
 
-  void checkColumnLabels(vector<std::string> &tokens, unsigned int &ir, unsigned int &ic,
-                         unsigned int &i, const vector<node> &nodes) {
+  void checkColumnLabels(vector<std::string> &tokens, unsigned int &ir,
+                         unsigned int &ic, unsigned int &i,
+                         const vector<node> &nodes) {
     if (ir == 0 && embedding & uint(DL_COLS)) {
       StringProperty *label = graph->getProperty<StringProperty>("viewLabel");
 
@@ -688,7 +719,8 @@ public:
     }
   }
 
-  node getNodeFromInfo(string &token, unsigned int &i, bool findCol, const vector<node> &nodes) {
+  node getNodeFromInfo(string &token, unsigned int &i, bool findCol,
+                       const vector<node> &nodes) {
     if (embedding == DL_NONE ||
         (embedding != DL_ALL && !(embedding & (findCol ? DL_COLS : DL_ROWS)))) {
       // token is row index (first is 1)
@@ -705,7 +737,8 @@ public:
               static_cast<int (*)(int)>(std::toupper));
 
     if (n /*embedding == DL_ALL*/) { // 1-mode
-      std::unordered_map<std::string, node>::iterator it = labelToNode.find(upcasetoken);
+      std::unordered_map<std::string, node>::iterator it =
+          labelToNode.find(upcasetoken);
 
       if (it != labelToNode.end())
         return (*it).second;
@@ -715,12 +748,14 @@ public:
         return node();
 
       ++i;
-      graph->getProperty<StringProperty>("viewLabel")->setNodeValue(nodes[i - 1], token);
+      graph->getProperty<StringProperty>("viewLabel")
+          ->setNodeValue(nodes[i - 1], token);
       return labelToNode[upcasetoken] = nodes[i - 1];
     }
 
     if (findCol) {
-      std::unordered_map<std::string, node>::iterator it = colLabelToNode.find(upcasetoken);
+      std::unordered_map<std::string, node>::iterator it =
+          colLabelToNode.find(upcasetoken);
 
       if (it != colLabelToNode.end())
         return (*it).second;
@@ -730,10 +765,12 @@ public:
         return node();
 
       ++i;
-      graph->getProperty<StringProperty>("viewLabel")->setNodeValue(nodes[i - 1], token);
+      graph->getProperty<StringProperty>("viewLabel")
+          ->setNodeValue(nodes[i - 1], token);
       return colLabelToNode[upcasetoken] = nodes[i - 1];
     } else {
-      std::unordered_map<std::string, node>::iterator it = rowLabelToNode.find(upcasetoken);
+      std::unordered_map<std::string, node>::iterator it =
+          rowLabelToNode.find(upcasetoken);
 
       if (it != rowLabelToNode.end())
         return (*it).second;
@@ -743,13 +780,15 @@ public:
         return node();
 
       ++i;
-      graph->getProperty<StringProperty>("viewLabel")->setNodeValue(nodes[nc + i - 1], token);
+      graph->getProperty<StringProperty>("viewLabel")
+          ->setNodeValue(nodes[nc + i - 1], token);
       return rowLabelToNode[upcasetoken] = nodes[nc + i - 1];
     }
   }
 
-  bool readData(vector<std::string> &tokens, stringstream &error, unsigned int &ir,
-                unsigned int &ic, DoubleProperty *metric, const vector<node> &nodes) {
+  bool readData(vector<std::string> &tokens, stringstream &error,
+                unsigned int &ir, unsigned int &ic, DoubleProperty *metric,
+                const vector<node> &nodes) {
     // index of current token
     unsigned int i = 0;
 
@@ -772,7 +811,8 @@ public:
 
         // check if we first have row label
         if ((embedding & DL_ROWS) && (ic == 0) && (current == 0)) {
-          graph->getProperty<StringProperty>("viewLabel")->setNodeValue(src, tokens[i]);
+          graph->getProperty<StringProperty>("viewLabel")
+              ->setNodeValue(src, tokens[i]);
 
           if (ir == 0 && nc == 1 && diagonal == false)
             ++ir;
@@ -837,7 +877,8 @@ public:
     case DL_NL1:
     case DL_NL2: {
       // first token indicates the source
-      node src = getNodeFromInfo(tokens[0], dataFormat == DL_NL1 ? ic : ir, false, nodes);
+      node src = getNodeFromInfo(tokens[0], dataFormat == DL_NL1 ? ic : ir,
+                                 false, nodes);
 
       if (!src.isValid()) {
         error << "invalid row";
@@ -901,7 +942,8 @@ public:
       }
 
       // first two token indicates the source and target of the edge
-      node src = getNodeFromInfo(tokens[0], (dataFormat == DL_EL1) ? ic : ir, false, nodes);
+      node src = getNodeFromInfo(tokens[0], (dataFormat == DL_EL1) ? ic : ir,
+                                 false, nodes);
 
       if (!src.isValid()) {
         error << "invalid row";
@@ -968,11 +1010,13 @@ public:
         break;
 
       case DL_ROW_LABELS:
-        result = readLabels(line, errors, rowLabelToNode, nr ? nr : n, nc, nodes);
+        result =
+            readLabels(line, errors, rowLabelToNode, nr ? nr : n, nc, nodes);
         break;
 
       case DL_COL_LABELS:
-        result = readLabels(line, errors, colLabelToNode, nc ? nc : n, 0, nodes);
+        result =
+            readLabels(line, errors, colLabelToNode, nc ? nc : n, 0, nodes);
         break;
 
       case DL_LABELS:
@@ -991,7 +1035,8 @@ public:
 
         if (result) {
           for (; current < labels.size(); ++current)
-            metrics.push_back(graph->getProperty<DoubleProperty>(labels[current]));
+            metrics.push_back(
+                graph->getProperty<DoubleProperty>(labels[current]));
 
           // check if all matrix labels have been read
           if (current == nm)
@@ -1027,8 +1072,8 @@ public:
         // check for line separation between matrices
         // if dataFormat == DL_EL1 | DL_EL2
         // ! indicates a new matrix
-        if ((tokens.size() == 1) && (tokens[0] == "!") && (nm > 1) && (im < nm) &&
-            ((dataFormat == DL_EL1) || (dataFormat == DL_EL2))) {
+        if ((tokens.size() == 1) && (tokens[0] == "!") && (nm > 1) &&
+            (im < nm) && ((dataFormat == DL_EL1) || (dataFormat == DL_EL2))) {
           ++im;
           break;
         }

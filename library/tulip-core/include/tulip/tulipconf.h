@@ -24,8 +24,8 @@
 #include <cstddef>
 
 /**
- * @brief this file contains various helper macros and functions to have a true cross-platform
- * compilation.
+ * @brief this file contains various helper macros and functions to have a true
+ * cross-platform compilation.
  *
  */
 
@@ -39,68 +39,58 @@ typedef unsigned char uchar;
 #if defined(_MSC_VER)
 // disable some annoying Visual Studio warnings
 #pragma warning(disable : 4251) // member is not dllexport
-#pragma warning(disable : 4267) // conversion from 'size_t' to 'type', possible loss of data
+#pragma warning(disable : 4267) // conversion from 'size_t' to 'type', possible
+                                // loss of data
 #pragma warning(disable : 4275) // base class is not dllexport
 #pragma warning(disable : 4244) // conversion to (or from) smaller integer type
 #pragma warning(disable : 4355) //'this' pointer used in initializer list
-#pragma warning(disable : 4800) // non-bool value coerced into bool (e.g. bool a = 5;)
+#pragma warning(                                                               \
+    disable : 4800) // non-bool value coerced into bool (e.g. bool a = 5;)
 #pragma warning(disable : 4503) // decorated name too long, truncated
-#pragma warning(disable : 4344) // template specialisation results in different function being
-                                // called (getProperty<>)
+#pragma warning(disable : 4344) // template specialisation results in different
+                                // function being called (getProperty<>)
 
-// disable deprecated warnings when compiling the tulip dlls, as MSVC is overly verbose with
-// deprecation
-// (even if a deprecated function is not used, warnings are issued)
-#if defined(DLL_TULIP) || defined(DLL_TULIP_GL) || defined(DLL_TULIP_QT) || defined(DLL_TULIP_QT2)
+// disable deprecated warnings when compiling the tulip dlls, as MSVC is overly
+// verbose with deprecation (even if a deprecated function is not used, warnings
+// are issued)
+#if defined(DLL_TULIP) || defined(DLL_TULIP_GL) || defined(DLL_TULIP_QT) ||    \
+    defined(DLL_TULIP_QT2)
 #pragma warning(disable : 4996) // deprecated functions
 #endif
 
 #define _DEPRECATED __declspec(deprecated)
-#define _DEPRECATED_TYPEDEF(type, deprecated_type) typedef _DEPRECATED type deprecated_type
+#define _DEPRECATED_TYPEDEF(type, deprecated_type)                             \
+  typedef _DEPRECATED type deprecated_type
 
-#define __PRETTY_FUNCTION__ __FUNCTION__ // MSVC has a different name for pretty_function
-#define strcasecmp stricmp               // strcasecmp does not exists for VC, workaround
+#define __PRETTY_FUNCTION__                                                    \
+  __FUNCTION__             // MSVC has a different name for pretty_function
+#define strcasecmp stricmp // strcasecmp does not exists for VC, workaround
 
 #include <cmath>
 
-inline double fabs(int i) {
-  return std::fabs(double(i));
-}
+inline double fabs(int i) { return std::fabs(double(i)); }
 
-// Visual Studio 2013 improved C99 support, no need to redefine some cmath functions
+// Visual Studio 2013 improved C99 support, no need to redefine some cmath
+// functions
 #if _MSC_VER < 1800
 
 // MSVC needs explicit casting of ints to double, float or long double.
 // Let's just pretend he does not.
 #include <cstdlib>
 
-inline double sqrt(int i) {
-  return std::sqrt(double(i));
-}
+inline double sqrt(int i) { return std::sqrt(double(i)); }
 
-inline double sqrt(unsigned int i) {
-  return std::sqrt(double(i));
-}
+inline double sqrt(unsigned int i) { return std::sqrt(double(i)); }
 
-inline double log(int i) {
-  return std::log(double(i));
-}
+inline double log(int i) { return std::log(double(i)); }
 
-inline double log(unsigned int i) {
-  return std::log(double(i));
-}
+inline double log(unsigned int i) { return std::log(double(i)); }
 
-inline double floor(int i) {
-  return std::floor(double(i));
-}
+inline double floor(int i) { return std::floor(double(i)); }
 
-inline double floor(unsigned int i) {
-  return std::floor(double(i));
-}
+inline double floor(unsigned int i) { return std::floor(double(i)); }
 
-inline double round(double d) {
-  return std::floor(d + 0.5);
-}
+inline double round(double d) { return std::floor(d + 0.5); }
 
 inline float strtof(const char *cptr, char **endptr) {
   return std::strtod(cptr, endptr);
@@ -108,12 +98,11 @@ inline float strtof(const char *cptr, char **endptr) {
 
 // C99 features, and VC++ does not support C99. workaround this.
 #define isnan(x) ((x) != (x))
-#define rint(arg) arg > 0 ? int(std::floor(double(arg))) : int(std::ceil(double(arg)))
+#define rint(arg)                                                              \
+  arg > 0 ? int(std::floor(double(arg))) : int(std::ceil(double(arg)))
 
 #if _MSC_VER <= 1600
-inline double log1p(double x) {
-  return log(x + 1);
-}
+inline double log1p(double x) { return log(x + 1); }
 #endif
 
 #else // _MSC_VER < 1800
@@ -123,16 +112,18 @@ inline double log1p(double x) {
 
 #endif // _MSC_VER < 1800
 
-// clang does not define __GNUC_MINOR__, thus having a separate clang #elif seems cleaner than
-// adding defined() in the #else
+// clang does not define __GNUC_MINOR__, thus having a separate clang #elif
+// seems cleaner than adding defined() in the #else
 #elif __clang__
 #define _DEPRECATED __attribute__((deprecated))
-#define _DEPRECATED_TYPEDEF(type, deprecated_type) typedef type deprecated_type _DEPRECATED
+#define _DEPRECATED_TYPEDEF(type, deprecated_type)                             \
+  typedef type deprecated_type _DEPRECATED
 
 // for GCC 4.X
 #else
 #define _DEPRECATED __attribute__((deprecated))
-#define _DEPRECATED_TYPEDEF(type, deprecated_type) typedef type deprecated_type _DEPRECATED
+#define _DEPRECATED_TYPEDEF(type, deprecated_type)                             \
+  typedef type deprecated_type _DEPRECATED
 #endif
 
 // WIN32 specific defines: dllimport and dllexport stuff

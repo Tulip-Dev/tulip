@@ -20,21 +20,24 @@
 
 #include "ui_PerspectiveItem.h"
 
-#include <QMouseEvent>
 #include <QGuiApplication>
+#include <QMouseEvent>
 #include <QScreen>
 
+#include "TulipMainWindow.h"
 #include <tulip/PluginLister.h>
 #include <tulip/TlpQtTools.h>
-#include "TulipMainWindow.h"
 
 using namespace tlp;
 
-PerspectiveItemWidget::PerspectiveItemWidget(const QString &perspectiveName, QWidget *parent)
-    : QWidget(parent), _perspectiveName(perspectiveName), _ui(new Ui::PerspectiveItemData) {
+PerspectiveItemWidget::PerspectiveItemWidget(const QString &perspectiveName,
+                                             QWidget *parent)
+    : QWidget(parent), _perspectiveName(perspectiveName),
+      _ui(new Ui::PerspectiveItemData) {
   _ui->setupUi(this);
   _ui->name->setText(_perspectiveName);
-  const tlp::Plugin &info = PluginLister::pluginInformation(QStringToTlpString(_perspectiveName));
+  const tlp::Plugin &info =
+      PluginLister::pluginInformation(QStringToTlpString(_perspectiveName));
   _ui->description->setText(info.info().c_str());
 
   QPixmap px(info.icon().c_str());
@@ -44,18 +47,14 @@ PerspectiveItemWidget::PerspectiveItemWidget(const QString &perspectiveName, QWi
   _ui->icon->setPixmap(px);
 }
 
-PerspectiveItemWidget::~PerspectiveItemWidget() {
-  delete _ui;
-}
+PerspectiveItemWidget::~PerspectiveItemWidget() { delete _ui; }
 
 void PerspectiveItemWidget::run() {
   TulipMainWindow::instance()->createPerspective(_perspectiveName);
   emit selected();
 }
 
-void PerspectiveItemWidget::mouseDoubleClickEvent(QMouseEvent *) {
-  run();
-}
+void PerspectiveItemWidget::mouseDoubleClickEvent(QMouseEvent *) { run(); }
 
 void PerspectiveItemWidget::focusInEvent(QFocusEvent *) {
   _ui->frame->setProperty("highlighted", true);

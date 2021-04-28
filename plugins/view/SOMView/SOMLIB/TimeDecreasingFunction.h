@@ -21,10 +21,11 @@
 #define TIMEDECREASINGFUNCTION_H_
 
 /**
- * @brief Interface for building time rate function for learning coefficient computation.
- * Interface for building time rate function for learning coefficient computation. Compute the time
- * coefficient in function of the current iteration, the max iteration and the input sample size.
- * See SOM algorithm for more details on time coefficient in SOM computation.
+ * @brief Interface for building time rate function for learning coefficient
+ * computation. Interface for building time rate function for learning
+ * coefficient computation. Compute the time coefficient in function of the
+ * current iteration, the max iteration and the input sample size. See SOM
+ * algorithm for more details on time coefficient in SOM computation.
  */
 class TimeDecreasingFunction {
 public:
@@ -37,7 +38,8 @@ public:
    * @param inputSampleSize The size of the input sample.
    * @return
    */
-  virtual double computeCurrentTimeRate(unsigned int currentIteration, unsigned int maxIteration,
+  virtual double computeCurrentTimeRate(unsigned int currentIteration,
+                                        unsigned int maxIteration,
                                         unsigned int inputSampleSize) = 0;
 };
 

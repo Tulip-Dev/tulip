@@ -21,8 +21,8 @@
 
 #include <tulip/tulipconf.h>
 
-#include <sstream>
 #include <cstring>
+#include <sstream>
 
 #if defined(__unix__) || defined(__APPLE__)
 
@@ -51,8 +51,8 @@ char *getStackFrameDetails(void *address) {
   char tmp[1024];
 
   if (dladdr(address, &dli)) {
-    int64_t function_offset =
-        reinterpret_cast<int64_t>(address) - reinterpret_cast<int64_t>(dli.dli_saddr);
+    int64_t function_offset = reinterpret_cast<int64_t>(address) -
+                              reinterpret_cast<int64_t>(dli.dli_saddr);
     sprintf(tmp, "%s(%s+%p)[%p]", dli.dli_fname, dli.dli_sname,
             reinterpret_cast<void *>(function_offset), address);
   } else {
@@ -110,7 +110,8 @@ std::string pOpen(const std::string &cmd) {
   return "";
 }
 
-std::pair<const char *, unsigned int> extractFileAndLine(const std::string &atosOutput) {
+std::pair<const char *, unsigned int>
+extractFileAndLine(const std::string &atosOutput) {
   std::string ext[5] = {".cpp", ".cc", ".c", ".hpp", ".h"};
 
   for (size_t i = 0; i < 5; ++i) {
@@ -124,8 +125,9 @@ std::pair<const char *, unsigned int> extractFileAndLine(const std::string &atos
         --pos;
       }
 
-      return std::make_pair(atosOutput.substr(pos + 1, pos2 - pos - 1).c_str(),
-                            atoi(atosOutput.substr(pos2 + 1, pos3 - pos2 - 1).c_str()));
+      return std::make_pair(
+          atosOutput.substr(pos + 1, pos2 - pos - 1).c_str(),
+          atoi(atosOutput.substr(pos2 + 1, pos3 - pos2 - 1).c_str()));
     }
   }
 
@@ -214,8 +216,9 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
   int offset = i;
 
   for (; i < size; ++i) {
-    char *mangled_name = nullptr, *runtime_offset = nullptr, *offset_end = nullptr,
-         *runtime_addr = nullptr, *runtime_addr_end = nullptr, *dsoName = nullptr;
+    char *mangled_name = nullptr, *runtime_offset = nullptr,
+         *offset_end = nullptr, *runtime_addr = nullptr,
+         *runtime_addr_end = nullptr, *dsoName = nullptr;
 
     if (uint(i) > maxDepth)
       return;
@@ -251,11 +254,14 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
       std::string dsoNameStr(dsoName);
 
       int status = 0;
-      char *real_name = abi::__cxa_demangle(mangled_name, nullptr, nullptr, &status);
+      char *real_name =
+          abi::__cxa_demangle(mangled_name, nullptr, nullptr, &status);
 
       char *end;
-      int64_t runtimeAddr = static_cast<int64_t>(strtoll(runtime_addr, &end, 16));
-      int64_t runtimeOffset = static_cast<int64_t>(strtoll(runtime_offset, &end, 0));
+      int64_t runtimeAddr =
+          static_cast<int64_t>(strtoll(runtime_addr, &end, 16));
+      int64_t runtimeOffset =
+          static_cast<int64_t>(strtoll(runtime_offset, &end, 0));
 
       if (runtimeAddr == 1 && i == (size - 1))
         break;
@@ -269,9 +275,10 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
       }
 
       if (bfdMap[dsoNameStr]) {
-        dsoName = const_cast<char *>(bfdMap[dsoNameStr]->getDsoAbsolutePath().c_str());
-        info =
-            bfdMap[dsoNameStr]->getFileAndLineForAddress(mangled_name, runtimeAddr, runtimeOffset);
+        dsoName = const_cast<char *>(
+            bfdMap[dsoNameStr]->getDsoAbsolutePath().c_str());
+        info = bfdMap[dsoNameStr]->getFileAndLineForAddress(
+            mangled_name, runtimeAddr, runtimeOffset);
       }
 
 #endif
@@ -296,17 +303,19 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
       if (status == 0) {
         if (std::string(info.first).empty()) {
-          printFrameInfo(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset);
+          printFrameInfo(os, i - offset, runtimeAddr, dsoName, real_name,
+                         runtimeOffset);
         } else {
-          printFrameInfo(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset, info.first,
-                         info.second);
+          printFrameInfo(os, i - offset, runtimeAddr, dsoName, real_name,
+                         runtimeOffset, info.first, info.second);
         }
       } else {
         if (std::string(info.first).empty()) {
-          printFrameInfo(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset);
+          printFrameInfo(os, i - offset, runtimeAddr, dsoName, mangled_name,
+                         runtimeOffset);
         } else {
-          printFrameInfo(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset,
-                         info.first, info.second);
+          printFrameInfo(os, i - offset, runtimeAddr, dsoName, mangled_name,
+                         runtimeOffset, info.first, info.second);
         }
       }
 
@@ -319,8 +328,8 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
 #elif defined(__MINGW32__)
 
-#include <imagehlp.h>
 #include <cxxabi.h>
+#include <imagehlp.h>
 
 StackWalkerMinGW::StackWalkerMinGW() {}
 
@@ -373,15 +382,16 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
   int depth = maxDepth;
 
-  while (StackWalk(machine, process, thread, &frame, context, 0, SymFunctionTableAccess,
-                   SymGetModuleBase, 0)) {
+  while (StackWalk(machine, process, thread, &frame, context, 0,
+                   SymFunctionTableAccess, SymGetModuleBase, 0)) {
 
     --depth;
 
     if (depth < 0)
       break;
 
-    IMAGEHLP_SYMBOL *symbol = reinterpret_cast<IMAGEHLP_SYMBOL *>(symbol_buffer);
+    IMAGEHLP_SYMBOL *symbol =
+        reinterpret_cast<IMAGEHLP_SYMBOL *>(symbol_buffer);
     symbol->SizeOfStruct = (sizeof *symbol) + 255;
     symbol->MaxNameLength = 254;
 
@@ -396,7 +406,8 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
     const char *module_name = "[unknown module]";
 
     if (module_base &&
-        GetModuleFileNameA(reinterpret_cast<HMODULE>(module_base), module_name_raw, MAX_PATH)) {
+        GetModuleFileNameA(reinterpret_cast<HMODULE>(module_base),
+                           module_name_raw, MAX_PATH)) {
       module_name = module_name_raw;
     }
 
@@ -450,11 +461,11 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
 #endif
 
     if (info.first == nullptr || info.second == 0) {
-      printFrameInfo(os, maxDepth - depth - 1, frame.AddrPC.Offset, module_name, func,
-                     symbolOffset);
+      printFrameInfo(os, maxDepth - depth - 1, frame.AddrPC.Offset, module_name,
+                     func, symbolOffset);
     } else {
-      printFrameInfo(os, maxDepth - depth - 1, frame.AddrPC.Offset, module_name, func, symbolOffset,
-                     info.first, info.second);
+      printFrameInfo(os, maxDepth - depth - 1, frame.AddrPC.Offset, module_name,
+                     func, symbolOffset, info.first, info.second);
     }
   }
 
@@ -485,7 +496,8 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
   const int bufferSize = 2048;
   char searchPaths[bufferSize];
 
-  if (!extraSymbolsSearchPaths.empty() && SymGetSearchPath(process, searchPaths, bufferSize)) {
+  if (!extraSymbolsSearchPaths.empty() &&
+      SymGetSearchPath(process, searchPaths, bufferSize)) {
     std::string searchPathsStr(searchPaths);
     searchPathsStr = extraSymbolsSearchPaths + ";" + searchPathsStr;
     SymSetSearchPath(process, searchPathsStr.c_str());
@@ -493,8 +505,8 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
   STACKFRAME stack;
   ULONG frame;
-  IMAGEHLP_SYMBOL *symbol =
-      reinterpret_cast<IMAGEHLP_SYMBOL *>(malloc(sizeof(IMAGEHLP_SYMBOL) + 2048 * sizeof(TCHAR)));
+  IMAGEHLP_SYMBOL *symbol = reinterpret_cast<IMAGEHLP_SYMBOL *>(
+      malloc(sizeof(IMAGEHLP_SYMBOL) + 2048 * sizeof(TCHAR)));
 #ifdef X86_64
   DWORD64 displacement = 0;
 #else
@@ -525,8 +537,8 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
   stack.AddrFrame.Mode = AddrModeFlat;
 
   for (frame = 0;; frame++) {
-    result = StackWalk(machine, process, thread, &stack, context, nullptr, SymFunctionTableAccess,
-                       SymGetModuleBase, nullptr);
+    result = StackWalk(machine, process, thread, &stack, context, nullptr,
+                       SymFunctionTableAccess, SymGetModuleBase, nullptr);
 
     if (!result) {
       break;
@@ -553,11 +565,13 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
       module_name = image_module.ImageName;
     }
 
-    if (SymGetSymFromAddr(process, stack.AddrPC.Offset, &displacement, symbol)) {
+    if (SymGetSymFromAddr(process, stack.AddrPC.Offset, &displacement,
+                          symbol)) {
       symbol_name = symbol->Name;
     }
 
-    if (SymGetLineFromAddr(process, stack.AddrPC.Offset - 1, &displacement2, &image_line)) {
+    if (SymGetLineFromAddr(process, stack.AddrPC.Offset - 1, &displacement2,
+                           &image_line)) {
       file_name = image_line.FileName;
       line = image_line.LineNumber;
     }

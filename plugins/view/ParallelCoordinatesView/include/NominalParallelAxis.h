@@ -33,11 +33,12 @@ class GlNominativeAxis;
 class NominalParallelAxis : public ParallelAxis {
 
 public:
-  NominalParallelAxis(const Coord &base_coord, const float height, const float axisAreaWidth,
-                      ParallelCoordinatesGraphProxy *graphProxy,
-                      const std::string &graphPropertyName, const Color &axisColor,
-                      const float rotationAngle = 0,
-                      const GlAxis::CaptionLabelPosition captionPosition = GlAxis::BELOW);
+  NominalParallelAxis(
+      const Coord &base_coord, const float height, const float axisAreaWidth,
+      ParallelCoordinatesGraphProxy *graphProxy,
+      const std::string &graphPropertyName, const Color &axisColor,
+      const float rotationAngle = 0,
+      const GlAxis::CaptionLabelPosition captionPosition = GlAxis::BELOW);
 
   Coord getLabelCoord(const std::string &label);
 
@@ -49,22 +50,17 @@ public:
 
   void setLabels();
 
-  const std::vector<std::string> &getLabelsOrder() const {
-    return labelsOrder;
-  }
+  const std::vector<std::string> &getLabelsOrder() const { return labelsOrder; }
   void setLabelsOrder(const std::vector<std::string> &labelsOrder) {
     this->labelsOrder = labelsOrder;
   }
 
-  std::string getTopSliderTextValue() override {
-    return " ";
-  }
-  std::string getBottomSliderTextValue() override {
-    return " ";
-  }
+  std::string getTopSliderTextValue() override { return " "; }
+  std::string getBottomSliderTextValue() override { return " "; }
 
   const std::set<unsigned int> &getDataInSlidersRange() override;
-  void updateSlidersWithDataSubset(const std::set<unsigned int> &dataSubset) override;
+  void updateSlidersWithDataSubset(
+      const std::set<unsigned int> &dataSubset) override;
 
 private:
   GlNominativeAxis *glNominativeAxis;

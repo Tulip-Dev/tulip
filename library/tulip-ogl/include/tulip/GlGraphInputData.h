@@ -21,15 +21,15 @@
 #ifndef Tulip_GLGRAPHINPUTDATA_H
 #define Tulip_GLGRAPHINPUTDATA_H
 
-#include <tulip/tulipconf.h>
-#include <tulip/Observable.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/StringProperty.h>
 #include <tulip/BooleanProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/Observable.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
 
@@ -73,13 +73,15 @@ public:
     VIEW_TGTANCHORSHAPE,   /**< shape of target arrow edge extremity */
     VIEW_TGTANCHORSIZE,    /**< size of target arrow edge extremity */
     VIEW_ANIMATIONFRAME,   /**< animation frame */
-    VIEW_FONTAWESOMEICON,  /**< font awesome icon name for the font awesome icon glyph*/
+    VIEW_FONTAWESOMEICON,  /**< font awesome icon name for the font awesome icon
+                              glyph*/
     VIEW_ICON,             /**< icon name for the icon glyph*/
-    NB_PROPS               /** must be the last, give the number of enum props */
+    NB_PROPS /** must be the last, give the number of enum props */
   };
 
   /**
-   * Create the inputData with Graph : graph and GlGraphRenderingParameters : parameters
+   * Create the inputData with Graph : graph and GlGraphRenderingParameters :
+   * parameters
    */
   GlGraphInputData(Graph *graph, GlGraphRenderingParameters *parameters,
                    GlMetaNodeRenderer *renderer = nullptr);
@@ -89,24 +91,22 @@ public:
   /**
    * Return the graph of this inputData
    */
-  Graph *getGraph() const {
-    return graph;
-  }
+  Graph *getGraph() const { return graph; }
 
   void treatEvent(const Event &ev) override;
 
   /**
    * Set metaNode renderer
-   * If deleteOldMetaNodeRenderer==true : this function delete old meta node renderer
+   * If deleteOldMetaNodeRenderer==true : this function delete old meta node
+   * renderer
    */
-  void setMetaNodeRenderer(GlMetaNodeRenderer *renderer, bool deleteOldMetaNodeRenderer = true);
+  void setMetaNodeRenderer(GlMetaNodeRenderer *renderer,
+                           bool deleteOldMetaNodeRenderer = true);
 
   /**
    * Return metaNode renderer
    */
-  GlMetaNodeRenderer *getMetaNodeRenderer() const {
-    return _metaNodeRenderer;
-  }
+  GlMetaNodeRenderer *getMetaNodeRenderer() const { return _metaNodeRenderer; }
 
   /**
    * Return glEdgeDisplayManager
@@ -115,9 +115,7 @@ public:
     return _glVertexArrayManager;
   }
 
-  GlGlyphRenderer *getGlGlyphRenderer() const {
-    return _glGlyphRenderer;
-  }
+  GlGlyphRenderer *getGlGlyphRenderer() const { return _glGlyphRenderer; }
 
   /**
    * Set glEdgeDisplayManager
@@ -143,8 +141,7 @@ public:
    * Function to get the typed PropertyInterface* for a given propertyName
    * See PropertyName enum for more details on available properties
    */
-  template <typename T>
-  T *getProperty(PropertyName propertyName) const {
+  template <typename T> T *getProperty(PropertyName propertyName) const {
     return static_cast<T *>(_propertiesMap[propertyName]);
   }
 
@@ -166,7 +163,8 @@ public:
   /**
    * Function to set a bunch of named PropertyInterface*
    */
-  bool installProperties(const std::map<std::string, tlp::PropertyInterface *> &propsMap);
+  bool installProperties(
+      const std::map<std::string, tlp::PropertyInterface *> &propsMap);
 
   /**
    * Return a pointer on the property used to elementColor
@@ -444,7 +442,8 @@ public:
   }
 
   /**
-   * @brief reloadGraphProperties restore the properties of the GlGraphInputData from the the graph.
+   * @brief reloadGraphProperties restore the properties of the GlGraphInputData
+   * from the the graph.
    */
   void reloadGraphProperties();
 
@@ -452,9 +451,7 @@ public:
    * @brief renderingParameters return a pointer on the rendering parameters.
    * @return
    */
-  GlGraphRenderingParameters *renderingParameters() const {
-    return parameters;
-  }
+  GlGraphRenderingParameters *renderingParameters() const { return parameters; }
 
   /**
    * @brief setRenderingParameters set the pointer on the rendering parameters.

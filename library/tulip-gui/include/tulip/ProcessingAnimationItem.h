@@ -21,10 +21,10 @@
 #ifndef PROCESSINGANIMATIONITEM_H
 #define PROCESSINGANIMATIONITEM_H
 
-#include <QGraphicsPixmapItem>
-#include <QTimer>
-#include <QObject>
 #include <QBrush>
+#include <QGraphicsPixmapItem>
+#include <QObject>
+#include <QTimer>
 
 class ProcessingAnimationItem : public QObject, public QGraphicsPixmapItem {
   Q_OBJECT
@@ -39,16 +39,13 @@ public:
                                    QGraphicsItem *parent = nullptr);
   ~ProcessingAnimationItem() override;
 
-  QBrush brush() const {
-    return _brush;
-  }
-  void setBrush(const QBrush &brush) {
-    _brush = brush;
-  }
+  QBrush brush() const { return _brush; }
+  void setBrush(const QBrush &brush) { _brush = brush; }
 
 protected slots:
   void animationTimeout();
-  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+             QWidget *widget) override;
 };
 
 #endif // PROCESSINGANIMATIONITEM_H

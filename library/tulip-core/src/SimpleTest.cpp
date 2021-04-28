@@ -17,22 +17,24 @@
  *
  */
 
-#include <vector>
 #include <tulip/Graph.h>
 #include <tulip/GraphTools.h>
-#include <tulip/SimpleTest.h>
 #include <tulip/MutableContainer.h>
+#include <tulip/SimpleTest.h>
+#include <vector>
 
 using namespace std;
 using namespace tlp;
 //=================================================================
 class SimpleTestListener : public Observable {
 public:
-  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
+  // override of Observable::treatEvent to remove the cached result for a graph
+  // if it is modified.
   void treatEvent(const Event &) override;
 
   /**
-   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the map.
+   * @brief Stored results for graphs. When a graph is updated, its entry is
+   *removed from the map.
    **/
   std::unordered_map<const Graph *, bool> resultsBuffer;
 
@@ -96,10 +98,12 @@ bool SimpleTest::isSimple(const tlp::Graph *graph, const bool directed) {
     return it->second;
 
   graph->addListener(instance);
-  return instance->resultsBuffer[graph] = simpleTest(graph, nullptr, nullptr, directed);
+  return instance->resultsBuffer[graph] =
+             simpleTest(graph, nullptr, nullptr, directed);
 }
 //**********************************************************************
-void SimpleTest::makeSimple(Graph *graph, vector<edge> &removed, const bool directed) {
+void SimpleTest::makeSimple(Graph *graph, vector<edge> &removed,
+                            const bool directed) {
   if (SimpleTest::isSimple(graph, directed))
     return;
 
@@ -112,8 +116,9 @@ void SimpleTest::makeSimple(Graph *graph, vector<edge> &removed, const bool dire
   assert(SimpleTest::isSimple(graph, directed));
 }
 //=================================================================
-bool SimpleTest::simpleTest(const tlp::Graph *graph, vector<edge> *multipleEdges,
-                            vector<edge> *loops, const bool directed) {
+bool SimpleTest::simpleTest(const tlp::Graph *graph,
+                            vector<edge> *multipleEdges, vector<edge> *loops,
+                            const bool directed) {
   bool result = true;
   const bool computeAll = (loops != nullptr) || (multipleEdges != nullptr);
   const bool vDiff = loops != multipleEdges;

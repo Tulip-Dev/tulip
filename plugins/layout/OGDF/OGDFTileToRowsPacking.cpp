@@ -32,11 +32,13 @@ public:
 class OGDFTileToRowsPacking : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Tile To Rows Packing (OGDF)", "Carsten Gutwenger", "12/11/2007",
-                    "The tile-to-rows algorithm for packing drawings of connected components.",
-                    "1.0", "Misc")
+  PLUGININFORMATION(
+      "Tile To Rows Packing (OGDF)", "Carsten Gutwenger", "12/11/2007",
+      "The tile-to-rows algorithm for packing drawings of connected components.",
+      "1.0", "Misc")
   OGDFTileToRowsPacking(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, context ? new ogdf::ComponentSplitterLayout() : nullptr) {}
+      : OGDFLayoutPluginBase(
+            context, context ? new ogdf::ComponentSplitterLayout() : nullptr) {}
 
   void beforeCall() override {
     ogdf::ComponentSplitterLayout *csl =

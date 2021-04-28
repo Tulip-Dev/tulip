@@ -21,8 +21,8 @@
 #ifndef TULIP_COORD_H
 #define TULIP_COORD_H
 
-#include <tulip/tulipconf.h>
 #include <tulip/Vector.h>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
 

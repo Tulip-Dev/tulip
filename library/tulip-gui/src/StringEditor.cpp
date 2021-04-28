@@ -17,10 +17,10 @@
  *
  */
 
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
 #include <tulip/StringEditor.h>
 #include <tulip/TlpQtTools.h>
-#include <QVBoxLayout>
-#include <QDialogButtonBox>
 
 using namespace tlp;
 
@@ -29,8 +29,8 @@ StringEditor::StringEditor(QWidget *parent) : QDialog(parent) {
   setLayout(layout);
   edit = new QTextEdit(this);
   layout->addWidget(edit);
-  QDialogButtonBox *buttonBox =
-      new QDialogButtonBox(QDialogButtonBox::Cancel | QDialogButtonBox::Ok, Qt::Horizontal);
+  QDialogButtonBox *buttonBox = new QDialogButtonBox(
+      QDialogButtonBox::Cancel | QDialogButtonBox::Ok, Qt::Horizontal);
   layout->addWidget(buttonBox);
   QWidget::setTabOrder(edit, buttonBox);
   QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
@@ -40,9 +40,7 @@ StringEditor::StringEditor(QWidget *parent) : QDialog(parent) {
   setWindowTitle("Set string value");
 }
 
-QString StringEditor::getString() const {
-  return currentString;
-}
+QString StringEditor::getString() const { return currentString; }
 
 void StringEditor::setString(const QString &qstr) {
   currentString = qstr;

@@ -41,8 +41,8 @@ static const char *paramHelp[] = {
  */
 class CompleteTree : public ImportModule {
 public:
-  PLUGININFORMATION("Complete Tree", "Auber", "08/09/2002", "Imports a new complete tree.", "1.1",
-                    "Graph")
+  PLUGININFORMATION("Complete Tree", "Auber", "08/09/2002",
+                    "Imports a new complete tree.", "1.1", "Graph")
   CompleteTree(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("depth", paramHelp[0], "5");
     addInParameter<unsigned int>("degree", paramHelp[1], "2");
@@ -91,7 +91,8 @@ public:
       // apply Tree Leaf
       string errMsg;
       LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
-      return graph->applyPropertyAlgorithm("Tree Leaf", layout, errMsg, nullptr, pluginProgress);
+      return graph->applyPropertyAlgorithm("Tree Leaf", layout, errMsg, nullptr,
+                                           pluginProgress);
     }
 
     return true;

@@ -31,8 +31,9 @@ namespace tlp {
 /**
  * @brief Helper class for the configuration of a Font Awesome glyph.
  *
- * Font Awesome is a free iconic font by Dave Gandy (see https://fontawesome.com)
- * offering more than 500 customizable scalable vector icons.
+ * Font Awesome is a free iconic font by Dave Gandy (see
+ *https://fontawesome.com) offering more than 500 customizable scalable vector
+ *icons.
  *
  * A glyph has been added to Tulip enabling to use these great icons
  * as nodes and edges extremities shapes.
@@ -40,15 +41,16 @@ namespace tlp {
  * That class offers utility functions and supported icons names constants.
  *
  * To set a node glyph as a Font Awesome icon, the Icon glyph must be associated
- * to the node through the modification of the "viewShape" integer property attached to the graph.
- * The name of the icon to use must then be set in the "viewIcon" string property.
- * As an example, the following code snippet activates the Font Awesome glyph for all nodes
- * and sets the "user" icon.
+ * to the node through the modification of the "viewShape" integer property
+ *attached to the graph. The name of the icon to use must then be set in the
+ *"viewIcon" string property. As an example, the following code snippet
+ *activates the Font Awesome glyph for all nodes and sets the "user" icon.
  *
  * @code
  *    // graph is a pointer to a tlp::Graph object
- *    tlp::IntegerProperty *viewShape = graph->getProperty<tlp::IntegerProperty>("viewShape");
- *    tlp::StringProperty *viewIcon = graph->getProperty<tlp::StringProperty>("viewIcon");
+ *    tlp::IntegerProperty *viewShape =
+ *graph->getProperty<tlp::IntegerProperty>("viewShape"); tlp::StringProperty
+ **viewIcon = graph->getProperty<tlp::StringProperty>("viewIcon");
  *
  *    // sets the Icon glyph on all nodes
  *    viewShape->setAllNodeValue(tlp::NodeShape::Icon);

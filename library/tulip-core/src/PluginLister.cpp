@@ -17,9 +17,9 @@
  *
  */
 #include <cstdlib>
+#include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginLister.h>
 #include <tulip/PluginLoader.h>
-#include <tulip/PluginLibraryLoader.h>
 
 using namespace tlp;
 using namespace std;
@@ -85,7 +85,8 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader *loader) {
     std::list<std::string> &&plugins = PluginLister::availablePlugins();
 
     for (const string &pluginName : plugins) {
-      const std::list<Dependency> &dependencies = PluginLister::getPluginDependencies(pluginName);
+      const std::list<Dependency> &dependencies =
+          PluginLister::getPluginDependencies(pluginName);
 
       // loop over dependencies
       for (const Dependency &dep : dependencies) {
@@ -93,25 +94,28 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader *loader) {
 
         if (!PluginLister::pluginExists(pluginDepName)) {
           if (loader)
-            loader->aborted(pluginName, " '" + pluginName +
-                                            "' will be removed, it depends on missing " + "'" +
-                                            pluginDepName + "'.");
+            loader->aborted(pluginName,
+                            " '" + pluginName +
+                                "' will be removed, it depends on missing " +
+                                "'" + pluginDepName + "'.");
 
           PluginLister::removePlugin(pluginName);
           depsNeedCheck = true;
           break;
         }
 
-        const std::string &release = PluginLister::getPluginRelease(pluginDepName);
+        const std::string &release =
+            PluginLister::getPluginRelease(pluginDepName);
         const std::string &releaseDep = dep.pluginRelease;
 
         if (tlp::getMajor(release) != tlp::getMajor(releaseDep) ||
             tlp::getMinor(release) < tlp::getMinor(releaseDep)) {
           if (loader) {
-            loader->aborted(pluginName, " '" + pluginName +
-                                            "' will be removed, it depends on release " +
-                                            releaseDep + " of" + " '" + pluginDepName + "' but " +
-                                            release + " is loaded.");
+            loader->aborted(pluginName,
+                            " '" + pluginName +
+                                "' will be removed, it depends on release " +
+                                releaseDep + " of" + " '" + pluginDepName +
+                                "' but " + release + " is loaded.");
           }
 
           PluginLister::removePlugin(pluginName);
@@ -136,9 +140,7 @@ class PluginIterator : public Iterator<Plugin *> {
 public:
   PluginIterator() : it(_plugins.begin()) {}
 
-  bool hasNext() {
-    return it != _plugins.end();
-  }
+  bool hasNext() { return it != _plugins.end(); }
 
   Plugin *next() {
     Plugin *plugin = nullptr;
@@ -204,17 +206,18 @@ void PluginLister::registerPlugin(PluginFactory *factory) {
         plugins[oldName].info = factory->createPluginObject(nullptr);
       } else if (PluginLoader::current != nullptr) {
         std::string tmpStr;
-        tmpStr += "'" + oldName + "' cannot be a deprecated name of plugin '" + pluginName + "'";
-        PluginLoader::current->aborted(tmpStr,
-                                       "multiple definitions found; check your plugin libraries.");
+        tmpStr += "'" + oldName + "' cannot be a deprecated name of plugin '" +
+                  pluginName + "'";
+        PluginLoader::current->aborted(
+            tmpStr, "multiple definitions found; check your plugin libraries.");
       }
     }
   } else {
     if (PluginLoader::current != nullptr) {
       std::string tmpStr;
       tmpStr += "'" + pluginName + "' plugin";
-      PluginLoader::current->aborted(tmpStr,
-                                     "multiple definitions found; check your plugin libraries.");
+      PluginLoader::current->aborted(
+          tmpStr, "multiple definitions found; check your plugin libraries.");
     }
 
     delete information;
@@ -226,13 +229,15 @@ void tlp::PluginLister::removePlugin(const std::string &name) {
   _pluginEventSender.sendPluginRemovedEvent(name);
 }
 
-tlp::Plugin *PluginLister::getPluginObject(const std::string &name, PluginContext *context) {
+tlp::Plugin *PluginLister::getPluginObject(const std::string &name,
+                                           PluginContext *context) {
   auto it = _plugins.find(name);
 
   if (it != _plugins.end()) {
     std::string pluginName = it->second.info->name();
     if (name != pluginName)
-      tlp::warning() << "Warning: '" << name << "' is a deprecated plugin name. Use '" << pluginName
+      tlp::warning() << "Warning: '" << name
+                     << "' is a deprecated plugin name. Use '" << pluginName
                      << "' instead." << std::endl;
 
     return it->second.factory->createPluginObject(context);
@@ -241,7 +246,8 @@ tlp::Plugin *PluginLister::getPluginObject(const std::string &name, PluginContex
   return nullptr;
 }
 
-const tlp::ParameterDescriptionList &PluginLister::getPluginParameters(const std::string &name) {
+const tlp::ParameterDescriptionList &
+PluginLister::getPluginParameters(const std::string &name) {
   return pluginInformation(name).getParameters();
 }
 
@@ -249,7 +255,8 @@ std::string PluginLister::getPluginRelease(const std::string &name) {
   return pluginInformation(name).release();
 }
 
-const std::list<tlp::Dependency> &PluginLister::getPluginDependencies(const std::string &name) {
+const std::list<tlp::Dependency> &
+PluginLister::getPluginDependencies(const std::string &name) {
   return pluginInformation(name).dependencies();
 }
 

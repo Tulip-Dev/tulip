@@ -24,15 +24,14 @@ using namespace std;
 
 namespace tlp {
 
-ColorScale::ColorScale() {
-  setColorScale(vector<Color>(), true);
-}
+ColorScale::ColorScale() { setColorScale(vector<Color>(), true); }
 
 ColorScale::ColorScale(const std::vector<Color> &colors, const bool gradient) {
   setColorScale(colors, gradient);
 }
 
-ColorScale::ColorScale(const std::map<float, Color> &colorMap, const bool gradient)
+ColorScale::ColorScale(const std::map<float, Color> &colorMap,
+                       const bool gradient)
     : colorMap(colorMap), gradient(gradient) {}
 
 ColorScale::ColorScale(const ColorScale &scale) : Observable() {
@@ -48,7 +47,8 @@ ColorScale &ColorScale::operator=(const ColorScale &scale) {
 
 ColorScale::~ColorScale() {}
 
-void ColorScale::setColorScale(const std::vector<Color> &colors, const bool gradientV) {
+void ColorScale::setColorScale(const std::vector<Color> &colors,
+                               const bool gradientV) {
   gradient = gradientV;
   colorMap.clear();
 
@@ -125,8 +125,8 @@ Color ColorScale::getColorAtPos(const float pos) const {
       double ratio = (pos - startPos) / (endPos - startPos);
 
       for (unsigned int i = 0; i < 4; ++i) {
-        ret[i] =
-            uchar((double(startColor[i]) + (double(endColor[i]) - double(startColor[i])) * ratio));
+        ret[i] = uchar((double(startColor[i]) +
+                        (double(endColor[i]) - double(startColor[i])) * ratio));
       }
 
       return ret;
@@ -140,7 +140,8 @@ void ColorScale::setColorMap(const map<float, Color> &newColorMap) {
   colorMap.clear();
 
   // insert all values in [0, 1]
-  for (map<float, Color>::const_iterator it = newColorMap.begin(); it != newColorMap.end(); ++it) {
+  for (map<float, Color>::const_iterator it = newColorMap.begin();
+       it != newColorMap.end(); ++it) {
     if ((*it).first < 0.f || (*it).first > 1.f)
       continue;
     else
@@ -150,7 +151,8 @@ void ColorScale::setColorMap(const map<float, Color> &newColorMap) {
   if (!colorMap.empty()) {
     // Ensure color scale is valid
     if (colorMap.size() == 1) {
-      // If there is only one value in the map fill the interval with the whole color.
+      // If there is only one value in the map fill the interval with the whole
+      // color.
       Color c = (*colorMap.begin()).second;
       colorMap.clear();
       colorMap[0.f] = c;
@@ -180,7 +182,8 @@ void ColorScale::setColorMap(const map<float, Color> &newColorMap) {
 
 void ColorScale::setColorMapTransparency(unsigned char alpha) {
   // force the alpha value of all mapped colors
-  for (map<float, Color>::iterator it = colorMap.begin(); it != colorMap.end(); ++it) {
+  for (map<float, Color>::iterator it = colorMap.begin(); it != colorMap.end();
+       ++it) {
     Color &color = it->second;
     color.setA(alpha);
   }
@@ -192,7 +195,8 @@ bool ColorScale::operator==(const std::vector<Color> &colors) const {
 
   unsigned int i = 0;
 
-  for (map<float, Color>::const_iterator it = colorMap.begin(); it != colorMap.end(); ++it, ++i) {
+  for (map<float, Color>::const_iterator it = colorMap.begin();
+       it != colorMap.end(); ++it, ++i) {
     Color csColor = it->second;
 
     if (csColor != colors[i])

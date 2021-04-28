@@ -17,25 +17,25 @@
  *
  */
 
-#include <QString>
-#include <QFile>
-#include <QDir>
-#include <QXmlStreamWriter>
-#include <QLibrary>
-#include <QDebug>
 #include <QApplication>
 #include <QDateTime>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QLibrary>
+#include <QString>
+#include <QXmlStreamWriter>
 
-#include <tulip/SystemDefinition.h>
-#include <tulip/PluginLister.h>
+#include <tulip/EdgeExtremityGlyphManager.h>
+#include <tulip/GlyphManager.h>
+#include <tulip/Interactor.h>
 #include <tulip/PluginLibraryLoader.h>
+#include <tulip/PluginLister.h>
 #include <tulip/PluginLoaderTxt.h>
 #include <tulip/QuaZIPFacade.h>
+#include <tulip/SystemDefinition.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/TlpTools.h>
-#include <tulip/Interactor.h>
-#include <tulip/GlyphManager.h>
-#include <tulip/EdgeExtremityGlyphManager.h>
 
 #include <fcntl.h>
 
@@ -45,11 +45,13 @@ using namespace tlp;
 struct PluginInformationCollector : public PluginLoader {
 
   void loaded(const tlp::Plugin *info, const std::list<Dependency> &) override {
-    _directoryPlugins[_currentDirectory].push_back(tlp::tlpStringToQString(info->name()));
+    _directoryPlugins[_currentDirectory].push_back(
+        tlp::tlpStringToQString(info->name()));
   }
 
   void aborted(const std::string &plugin, const std::string &message) override {
-    std::cout << "failed to load plugin " << plugin << ": " << message << std::endl;
+    std::cout << "failed to load plugin " << plugin << ": " << message
+              << std::endl;
   }
   void loading(const std::string &) override {}
   void finished(bool, const std::string &) override {}
@@ -75,8 +77,10 @@ int main(int argc, char **argv) {
   QFileInfo destInfo(destinationDir);
   QDir::home().mkpath(destInfo.absoluteFilePath());
 
-  // First we initialize Tulip with basic plugins to ensure dependencies consistency
-  tlp::initTulipLib(tlp::QStringToTlpString(QApplication::applicationDirPath()).c_str());
+  // First we initialize Tulip with basic plugins to ensure dependencies
+  // consistency
+  tlp::initTulipLib(
+      tlp::QStringToTlpString(QApplication::applicationDirPath()).c_str());
   tlp::PluginLibraryLoader::loadPlugins();
   tlp::PluginLister::checkLoadedPluginsDependencies(nullptr);
   tlp::InteractorLister::initInteractorsDependencies();
@@ -85,7 +89,8 @@ int main(int argc, char **argv) {
 
   QDir outputDir(destinationDir);
 
-  // Next: we load additional plugins from external project and ZIP data into output directory
+  // Next: we load additional plugins from external project and ZIP data into
+  // output directory
   PluginInformationCollector collector;
   QDir pluginServerDir(argv[1]);
   PluginLoader::current = &collector;
@@ -97,16 +102,18 @@ int main(int argc, char **argv) {
     QDir::home().mkpath(outputDir.absoluteFilePath(component.fileName()));
 
     if (!QuaZIPFacade::zipDir(pluginDir.absolutePath(),
-                              outputDir.absoluteFilePath(component.fileName() + QDir::separator() +
-                                                         "data-" + OS_PLATFORM + OS_ARCHITECTURE +
-                                                         ".zip"))) {
+                              outputDir.absoluteFilePath(
+                                  component.fileName() + QDir::separator() +
+                                  "data-" + OS_PLATFORM + OS_ARCHITECTURE +
+                                  ".zip"))) {
       qFatal("Failed to zip archive");
     }
 
     pluginDir.cd("lib");
     pluginDir.cd("tulip");
 
-    for (const QFileInfo &pluginFile : pluginDir.entryInfoList(QDir::Files | QDir::NoSymLinks)) {
+    for (const QFileInfo &pluginFile :
+         pluginDir.entryInfoList(QDir::Files | QDir::NoSymLinks)) {
       if (QLibrary::isLibrary(pluginFile.absoluteFilePath())) {
         PluginLibraryLoader::loadPluginLibrary(
             tlp::QStringToTlpString(pluginFile.absoluteFilePath()), &collector);
@@ -121,7 +128,8 @@ int main(int argc, char **argv) {
   stream.writeStartDocument();
   stream.writeStartElement("server");
   stream.writeAttribute("serverName", destinationDir);
-  stream.writeAttribute("lastUpdate", QDateTime::currentDateTime().toString(Qt::ISODate));
+  stream.writeAttribute("lastUpdate",
+                        QDateTime::currentDateTime().toString(Qt::ISODate));
   stream.writeAttribute("release", TULIP_VERSION);
   stream.writeStartElement("plugins");
 
@@ -131,17 +139,21 @@ int main(int argc, char **argv) {
       stream.writeStartElement("plugin");
       stream.writeAttribute("name", plugin);
       stream.writeAttribute("path", component);
-      const Plugin &info = PluginLister::pluginInformation(tlp::QStringToTlpString(plugin));
+      const Plugin &info =
+          PluginLister::pluginInformation(tlp::QStringToTlpString(plugin));
       stream.writeAttribute("category", info.category().c_str());
       stream.writeAttribute("author", tlp::tlpStringToQString(info.author()));
       stream.writeAttribute("date", info.date().c_str());
       stream.writeAttribute("desc", tlp::tlpStringToQString(info.info()));
       stream.writeAttribute("release", info.release().c_str());
-      stream.writeAttribute("tulip", (info.tulipMajor() + '.' + info.tulipMinor()).c_str());
+      stream.writeAttribute(
+          "tulip", (info.tulipMajor() + '.' + info.tulipMinor()).c_str());
       stream.writeStartElement("dependencies");
-      const std::list<Dependency> &deps = PluginLister::getPluginDependencies(info.name());
+      const std::list<Dependency> &deps =
+          PluginLister::getPluginDependencies(info.name());
 
-      for (std::list<Dependency>::const_iterator it = deps.begin(); it != deps.end(); ++it) {
+      for (std::list<Dependency>::const_iterator it = deps.begin();
+           it != deps.end(); ++it) {
         stream.writeStartElement("dependency");
         stream.writeAttribute("name", tlp::tlpStringToQString(it->pluginName));
         stream.writeEndElement(); // dependency
@@ -157,8 +169,10 @@ int main(int argc, char **argv) {
   stream.writeEndDocument();
   outputXML.close();
 
-  for (const QFileInfo &phpFile : QDir(":/tulip/pluginpackager/php/").entryInfoList(QDir::Files)) {
-    QFile::copy(phpFile.absoluteFilePath(), QDir(destinationDir).filePath(phpFile.fileName()));
+  for (const QFileInfo &phpFile :
+       QDir(":/tulip/pluginpackager/php/").entryInfoList(QDir::Files)) {
+    QFile::copy(phpFile.absoluteFilePath(),
+                QDir(destinationDir).filePath(phpFile.fileName()));
   }
 
   qDebug() << "Output stored in" << outputDir.absolutePath();

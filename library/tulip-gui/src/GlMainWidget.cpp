@@ -28,26 +28,25 @@
 #include <QOpenGLFramebufferObject>
 #define __GLEW_H__
 
-#include <QSurfaceFormat>
 #include <QOffscreenSurface>
+#include <QSurfaceFormat>
 
+#include <tulip/Camera.h>
+#include <tulip/GLInteractor.h>
+#include <tulip/Gl2DRect.h>
+#include <tulip/GlCompositeHierarchyManager.h>
+#include <tulip/GlGraphComposite.h>
+#include <tulip/GlOffscreenRenderer.h>
+#include <tulip/GlQuadTreeLODCalculator.h>
+#include <tulip/GlTextureManager.h>
+#include <tulip/GlTools.h>
+#include <tulip/GlVertexArrayManager.h>
+#include <tulip/Graph.h>
+#include <tulip/Interactor.h>
+#include <tulip/OpenGlConfigManager.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
-#include <tulip/Graph.h>
-#include <tulip/GlTools.h>
-#include <tulip/GlTextureManager.h>
-#include <tulip/Gl2DRect.h>
-#include <tulip/GlQuadTreeLODCalculator.h>
-#include <tulip/GLInteractor.h>
-#include <tulip/GlGraphComposite.h>
-#include <tulip/Interactor.h>
-#include <tulip/GlCompositeHierarchyManager.h>
-#include <tulip/GlVertexArrayManager.h>
 #include <tulip/View.h>
-#include <tulip/Camera.h>
-#include <tulip/OpenGlConfigManager.h>
-#include <tulip/GlOffscreenRenderer.h>
-#include <tulip/GlTextureManager.h>
 using namespace std;
 
 namespace tlp {
@@ -63,9 +62,7 @@ public:
     glFrameBuf->bind();
   }
 
-  ~GlBufferBinder() {
-    glFrameBuf->release();
-  }
+  ~GlBufferBinder() { glFrameBuf->release(); }
 };
 
 #define GL_BIND_BUFFER(glbuf) GlBufferBinder _glbb(glbuf)
@@ -77,9 +74,9 @@ bool GlMainWidget::inRendering = false;
 
 //==================================================
 GlMainWidget::GlMainWidget(QWidget *parent, View *view)
-    : QOpenGLWidget(parent), scene(new GlQuadTreeLODCalculator), view(view), widthStored(0),
-      heightStored(0), glFrameBuf(nullptr), glFrameBuf2(nullptr),
-      keepPointOfViewOnSubgraphChanging(false),
+    : QOpenGLWidget(parent), scene(new GlQuadTreeLODCalculator), view(view),
+      widthStored(0), heightStored(0), glFrameBuf(nullptr),
+      glFrameBuf2(nullptr), keepPointOfViewOnSubgraphChanging(false),
       sceneTextureId("scene" + to_string(reinterpret_cast<uintptr_t>(this))) {
   setFocusPolicy(Qt::StrongFocus);
   setMouseTracking(true);
@@ -117,13 +114,12 @@ void GlMainWidget::paintEvent(QPaintEvent *) {
   _visibleArea = rect; // Save the new visible area.
 }
 //==================================================
-void GlMainWidget::closeEvent(QCloseEvent *e) {
-  emit closing(this, e);
-}
+void GlMainWidget::closeEvent(QCloseEvent *e) { emit closing(this, e); }
 //==================================================
 void GlMainWidget::createFramebuffers(int width, int height) {
 
-  if (!glFrameBuf || glFrameBuf->size().width() != width || glFrameBuf->size().height() != height) {
+  if (!glFrameBuf || glFrameBuf->size().width() != width ||
+      glFrameBuf->size().height() != height) {
     makeCurrent();
     deleteFramebuffers();
     QOpenGLFramebufferObjectFormat fboFormat;
@@ -131,7 +127,8 @@ void GlMainWidget::createFramebuffers(int width, int height) {
     fboFormat.setSamples(OpenGlConfigManager::maxNumberOfSamples());
     glFrameBuf = new QOpenGLFramebufferObject(width, height, fboFormat);
     glFrameBuf2 = new QOpenGLFramebufferObject(width, height);
-    GlTextureManager::registerExternalTexture(sceneTextureId, glFrameBuf2->texture());
+    GlTextureManager::registerExternalTexture(sceneTextureId,
+                                              glFrameBuf2->texture());
     widthStored = width;
     heightStored = height;
   }
@@ -179,7 +176,8 @@ void GlMainWidget::render(RenderingOptions options, bool checkVisibility) {
 
       // copy rendered scene in a texture/QImage compatible framebuffer
       QRect fbRect(0, 0, width, height);
-      QOpenGLFramebufferObject::blitFramebuffer(glFrameBuf2, fbRect, glFrameBuf, fbRect);
+      QOpenGLFramebufferObject::blitFramebuffer(glFrameBuf2, fbRect, glFrameBuf,
+                                                fbRect);
 
       // restore internal QOpenGLWidget framebuffer binding
       makeCurrent();
@@ -296,65 +294,81 @@ void GlMainWidget::doneCurrent() {
 bool GlMainWidget::isCurrent() {
   auto current = QOpenGLContext::currentContext();
   return (current != nullptr) &&
-         (isVisible() ? (current == context())
-                      : (current == GlOffscreenRenderer::getInstance()->getOpenGLContext()));
+         (isVisible()
+              ? (current == context())
+              : (current ==
+                 GlOffscreenRenderer::getInstance()->getOpenGLContext()));
 }
 //==================================================
-bool GlMainWidget::pickGlEntities(const int x, const int y, const int width, const int height,
-                                  std::vector<SelectedEntity> &pickedEntities, GlLayer *layer) {
+bool GlMainWidget::pickGlEntities(const int x, const int y, const int width,
+                                  const int height,
+                                  std::vector<SelectedEntity> &pickedEntities,
+                                  GlLayer *layer) {
   makeCurrent();
   GL_BIND_BUFFER(glFrameBuf);
   return scene.selectEntities(
-      static_cast<RenderingEntitiesFlag>(RenderingSimpleEntities | RenderingWithoutRemove),
-      screenToViewport(x), screenToViewport(y), screenToViewport(width), screenToViewport(height),
-      layer, pickedEntities);
+      static_cast<RenderingEntitiesFlag>(RenderingSimpleEntities |
+                                         RenderingWithoutRemove),
+      screenToViewport(x), screenToViewport(y), screenToViewport(width),
+      screenToViewport(height), layer, pickedEntities);
 }
 //==================================================
 bool GlMainWidget::pickGlEntities(const int x, const int y,
-                                  std::vector<SelectedEntity> &pickedEntities, GlLayer *layer) {
+                                  std::vector<SelectedEntity> &pickedEntities,
+                                  GlLayer *layer) {
   return pickGlEntities(x, y, 2, 2, pickedEntities, layer);
 }
 //==================================================
-void GlMainWidget::pickNodesEdges(const int x, const int y, const int width, const int height,
+void GlMainWidget::pickNodesEdges(const int x, const int y, const int width,
+                                  const int height,
                                   std::vector<SelectedEntity> &selectedNodes,
-                                  std::vector<SelectedEntity> &selectedEdges, GlLayer *layer,
-                                  bool pickNodes, bool pickEdges) {
+                                  std::vector<SelectedEntity> &selectedEdges,
+                                  GlLayer *layer, bool pickNodes,
+                                  bool pickEdges) {
   makeCurrent();
   GL_BIND_BUFFER(glFrameBuf);
 
   if (pickNodes) {
-    scene.selectEntities(
-        static_cast<RenderingEntitiesFlag>(RenderingNodes | RenderingWithoutRemove),
-        screenToViewport(x), screenToViewport(y), screenToViewport(width), screenToViewport(height),
-        layer, selectedNodes);
+    scene.selectEntities(static_cast<RenderingEntitiesFlag>(
+                             RenderingNodes | RenderingWithoutRemove),
+                         screenToViewport(x), screenToViewport(y),
+                         screenToViewport(width), screenToViewport(height),
+                         layer, selectedNodes);
   }
 
   if (pickEdges) {
-    scene.selectEntities(
-        static_cast<RenderingEntitiesFlag>(RenderingEdges | RenderingWithoutRemove),
-        screenToViewport(x), screenToViewport(y), screenToViewport(width), screenToViewport(height),
-        layer, selectedEdges);
+    scene.selectEntities(static_cast<RenderingEntitiesFlag>(
+                             RenderingEdges | RenderingWithoutRemove),
+                         screenToViewport(x), screenToViewport(y),
+                         screenToViewport(width), screenToViewport(height),
+                         layer, selectedEdges);
   }
 }
 //=====================================================
-bool GlMainWidget::pickNodesEdges(const int x, const int y, SelectedEntity &selectedEntity,
-                                  GlLayer *layer, bool pickNodes, bool pickEdges) {
+bool GlMainWidget::pickNodesEdges(const int x, const int y,
+                                  SelectedEntity &selectedEntity,
+                                  GlLayer *layer, bool pickNodes,
+                                  bool pickEdges) {
   makeCurrent();
   GL_BIND_BUFFER(glFrameBuf);
   vector<SelectedEntity> selectedEntities;
 
-  if (pickNodes && scene.selectEntities(
-                       static_cast<RenderingEntitiesFlag>(RenderingNodes | RenderingWithoutRemove),
-                       screenToViewport(x - 1), screenToViewport(y - 1), screenToViewport(3),
-                       screenToViewport(3), layer, selectedEntities)) {
+  if (pickNodes &&
+      scene.selectEntities(static_cast<RenderingEntitiesFlag>(
+                               RenderingNodes | RenderingWithoutRemove),
+                           screenToViewport(x - 1), screenToViewport(y - 1),
+                           screenToViewport(3), screenToViewport(3), layer,
+                           selectedEntities)) {
     selectedEntity = selectedEntities[0];
     return true;
   }
 
-  if (pickEdges && scene.selectEntities(
-                       static_cast<RenderingEntitiesFlag>(RenderingEdges | RenderingWithoutRemove),
-                       screenToViewport(x - 1), screenToViewport(y - 1), screenToViewport(3),
-                       screenToViewport(3), layer, selectedEntities)) {
+  if (pickEdges &&
+      scene.selectEntities(static_cast<RenderingEntitiesFlag>(
+                               RenderingEdges | RenderingWithoutRemove),
+                           screenToViewport(x - 1), screenToViewport(y - 1),
+                           screenToViewport(3), screenToViewport(3), layer,
+                           selectedEntities)) {
     selectedEntity = selectedEntities[0];
     return true;
   }
@@ -362,7 +376,8 @@ bool GlMainWidget::pickNodesEdges(const int x, const int y, SelectedEntity &sele
   return false;
 }
 //=====================================================
-void GlMainWidget::getTextureRealSize(int width, int height, int &textureRealWidth,
+void GlMainWidget::getTextureRealSize(int width, int height,
+                                      int &textureRealWidth,
                                       int &textureRealHeight) {
   textureRealWidth = 1;
   textureRealHeight = 1;
@@ -384,12 +399,14 @@ void GlMainWidget::getTextureRealSize(int width, int height, int &textureRealWid
   }
 }
 //=====================================================
-void GlMainWidget::createPicture(const std::string &pictureName, int width, int height,
-                                 bool center) {
-  createPicture(width, height, center).save(tlp::tlpStringToQString(pictureName));
+void GlMainWidget::createPicture(const std::string &pictureName, int width,
+                                 int height, bool center) {
+  createPicture(width, height, center)
+      .save(tlp::tlpStringToQString(pictureName));
 }
 //=====================================================
-QImage GlMainWidget::createPicture(int width, int height, bool center, QImage::Format format) {
+QImage GlMainWidget::createPicture(int width, int height, bool center,
+                                   QImage::Format format) {
 
   QImage resultImage;
 
@@ -398,8 +415,10 @@ QImage GlMainWidget::createPicture(int width, int height, bool center, QImage::F
   QOpenGLFramebufferObjectFormat fboFormat;
   fboFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
   fboFormat.setSamples(OpenGlConfigManager::maxNumberOfSamples());
-  QOpenGLFramebufferObject *frameBuf = new QOpenGLFramebufferObject(width, height, fboFormat);
-  QOpenGLFramebufferObject *frameBuf2 = new QOpenGLFramebufferObject(width, height);
+  QOpenGLFramebufferObject *frameBuf =
+      new QOpenGLFramebufferObject(width, height, fboFormat);
+  QOpenGLFramebufferObject *frameBuf2 =
+      new QOpenGLFramebufferObject(width, height);
 
   if (frameBuf->isValid() && frameBuf2->isValid()) {
     frameBuf->bind();
@@ -426,8 +445,9 @@ QImage GlMainWidget::createPicture(int width, int height, bool center, QImage::F
     drawInteractors();
     frameBuf->release();
 
-    QOpenGLFramebufferObject::blitFramebuffer(frameBuf2, QRect(0, 0, width, height), frameBuf,
-                                              QRect(0, 0, width, height));
+    QOpenGLFramebufferObject::blitFramebuffer(
+        frameBuf2, QRect(0, 0, width, height), frameBuf,
+        QRect(0, 0, width, height));
 
     resultImage = frameBuf2->toImage();
 
@@ -455,10 +475,11 @@ QImage GlMainWidget::createPicture(int width, int height, bool center, QImage::F
   delete frameBuf2;
 
   // The QOpenGLFramebufferObject returns the wrong image format
-  // QImage::Format_ARGB32_Premultiplied. We need to create an image from original data with the
-  // right format QImage::Format_ARGB32. We need to clone the data as when the image var will be
-  // destroy at the end of the function it's data will be destroyed too and the newly created image
-  // object will have invalid data pointer.
+  // QImage::Format_ARGB32_Premultiplied. We need to create an image from
+  // original data with the right format QImage::Format_ARGB32. We need to clone
+  // the data as when the image var will be destroy at the end of the function
+  // it's data will be destroyed too and the newly created image object will
+  // have invalid data pointer.
   return QImage(resultImage.bits(), resultImage.width(), resultImage.height(),
                 QImage::Format_ARGB32)
       .convertToFormat(format);
@@ -474,9 +495,7 @@ void GlMainWidget::centerScene(bool graphChanged, float zf) {
   draw(graphChanged);
 }
 
-void GlMainWidget::emitGraphChanged() {
-  emit graphChanged();
-}
+void GlMainWidget::emitGraphChanged() { emit graphChanged(); }
 
 void GlMainWidget::setKeepScenePointOfViewOnSubgraphChanging(bool k) {
   keepPointOfViewOnSubgraphChanging = k;

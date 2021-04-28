@@ -28,9 +28,7 @@ AddressSelectionDialog::AddressSelectionDialog(QWidget *parent)
   connect(_ui->okButton, SIGNAL(clicked()), this, SLOT(accept()));
 }
 
-AddressSelectionDialog::~AddressSelectionDialog() {
-  delete _ui;
-}
+AddressSelectionDialog::~AddressSelectionDialog() { delete _ui; }
 
 void AddressSelectionDialog::setBaseAddress(const QString &address) {
   _ui->addressLabel->setText(address);

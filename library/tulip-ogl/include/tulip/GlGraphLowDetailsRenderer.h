@@ -25,8 +25,8 @@
 
 #include <vector>
 
-#include <tulip/Observable.h>
 #include <tulip/GlGraphRenderer.h>
+#include <tulip/Observable.h>
 
 namespace tlp {
 
@@ -47,7 +47,8 @@ class BooleanProperty;
  *
  * See GlGraphRenderer documentation for functions documentations
  */
-class TLP_GL_SCOPE GlGraphLowDetailsRenderer : public GlGraphRenderer, public Observable {
+class TLP_GL_SCOPE GlGraphLowDetailsRenderer : public GlGraphRenderer,
+                                               public Observable {
 
 public:
   GlGraphLowDetailsRenderer(const GlGraphInputData *inputData);

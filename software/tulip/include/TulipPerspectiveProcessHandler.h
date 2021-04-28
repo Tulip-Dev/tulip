@@ -20,8 +20,8 @@
 #define TULIPPERSPECTIVEPROCESSHANDLER_H
 
 #include <QObject>
-#include <QVariantMap>
 #include <QProcess>
+#include <QVariantMap>
 
 #include <QPushButton>
 
@@ -40,8 +40,8 @@ public:
 struct PerspectiveProcessInfo {
   PerspectiveProcessInfo() {}
 
-  PerspectiveProcessInfo(const QString &name, const QVariantMap &args, const QString &file,
-                         time_t id)
+  PerspectiveProcessInfo(const QString &name, const QVariantMap &args,
+                         const QString &file, time_t id)
       : name(name), args(args), file(file), _perspectiveId(id) {}
 
   QString name;

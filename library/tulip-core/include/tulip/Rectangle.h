@@ -21,8 +21,8 @@
 //@TLPGEOLICENCE#
 #ifndef TLP_RECTANGLE_H
 #define TLP_RECTANGLE_H
-#include <tulip/Vector.h>
 #include <tulip/BoundingBox.h>
+#include <tulip/Vector.h>
 
 namespace tlp {
 
@@ -72,7 +72,8 @@ struct Rectangle : public Array<Vector<Obj, 2, OTYPE>, 2> {
    * create a new Rectangle
    * \warning the rectangle must be valid (tested in debug mode)
    */
-  Rectangle(const Vector<Obj, 2, OTYPE> &min, const Vector<Obj, 2, OTYPE> &max) {
+  Rectangle(const Vector<Obj, 2, OTYPE> &min,
+            const Vector<Obj, 2, OTYPE> &max) {
     (*this)[0] = min;
     (*this)[1] = max;
     assert(isValid());
@@ -100,8 +101,8 @@ struct Rectangle : public Array<Vector<Obj, 2, OTYPE>, 2> {
     return true;
   }
   /**
-   * @return the true if there is an intersection else false, the intersection parameter is used
-   * to stored the Rectangle pf intersection (if it exists).
+   * @return the true if there is an intersection else false, the intersection
+   * parameter is used to stored the Rectangle pf intersection (if it exists).
    * \warning the rectangle must be valid (tested in debug mode)
    */
   bool intersect(const Rectangle &r, Rectangle &intersection) const {
@@ -119,7 +120,8 @@ struct Rectangle : public Array<Vector<Obj, 2, OTYPE>, 2> {
     return true;
   }
   /**
-   * @return true if the Rectangle is well define [0] min corner, [1] max corner.
+   * @return true if the Rectangle is well define [0] min corner, [1] max
+   * corner.
    */
   bool isValid() const {
     return (*this)[0][0] <= (*this)[1][0] && (*this)[0][1] <= (*this)[1][1];

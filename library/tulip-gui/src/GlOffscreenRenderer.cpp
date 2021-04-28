@@ -33,12 +33,12 @@
 #include <QOffscreenSurface>
 
 #include <tulip/Camera.h>
-#include <tulip/GlOffscreenRenderer.h>
-#include <tulip/GlMainWidget.h>
-#include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlGraphComposite.h>
-#include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/GlOffscreenRenderer.h>
 #include <tulip/GlTools.h>
+#include <tulip/GlVertexArrayManager.h>
+#include <tulip/OpenGlConfigManager.h>
 
 #include <sstream>
 
@@ -49,9 +49,10 @@ namespace tlp {
 GlOffscreenRenderer *GlOffscreenRenderer::instance(new GlOffscreenRenderer);
 
 GlOffscreenRenderer::GlOffscreenRenderer()
-    : glContext(nullptr), offscreenSurface(nullptr), vPWidth(512), vPHeight(512),
-      glFrameBuf(nullptr), glFrameBuf2(nullptr), mainLayer(new GlLayer("Main")), entitiesCpt(0),
-      zoomFactor(DBL_MAX), cameraCenter(FLT_MAX, FLT_MAX, FLT_MAX) {
+    : glContext(nullptr), offscreenSurface(nullptr), vPWidth(512),
+      vPHeight(512), glFrameBuf(nullptr), glFrameBuf2(nullptr),
+      mainLayer(new GlLayer("Main")), entitiesCpt(0), zoomFactor(DBL_MAX),
+      cameraCenter(FLT_MAX, FLT_MAX, FLT_MAX) {
   GlLayer *backgroundLayer = new GlLayer("Background");
   backgroundLayer->setVisible(true);
   GlLayer *foregroundLayer = new GlLayer("Foreground");
@@ -99,7 +100,8 @@ void GlOffscreenRenderer::addGraphToScene(Graph *graph) {
   addGraphCompositeToScene(new GlGraphComposite(graph));
 }
 
-void GlOffscreenRenderer::addGraphCompositeToScene(GlGraphComposite *graphComposite) {
+void GlOffscreenRenderer::addGraphCompositeToScene(
+    GlGraphComposite *graphComposite) {
   // Delete old composite if it exist
   GlSimpleEntity *oldComposite = mainLayer->findGlEntity("graph");
 
@@ -129,10 +131,11 @@ void GlOffscreenRenderer::clearScene(bool deleteGlEntities) {
 
 void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
 
-  antialiasedFbo = antialiased && QOpenGLFramebufferObject::hasOpenGLFramebufferBlit();
+  antialiasedFbo =
+      antialiased && QOpenGLFramebufferObject::hasOpenGLFramebufferBlit();
 
-  if (glFrameBuf != nullptr &&
-      (vPWidth != uint(glFrameBuf->width()) || vPHeight != uint(glFrameBuf->height()))) {
+  if (glFrameBuf != nullptr && (vPWidth != uint(glFrameBuf->width()) ||
+                                vPHeight != uint(glFrameBuf->height()))) {
     delete glFrameBuf;
     glFrameBuf = nullptr;
     delete glFrameBuf2;
@@ -154,7 +157,8 @@ void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
   }
 }
 
-void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antialiased) {
+void GlOffscreenRenderer::renderScene(const bool centerScene,
+                                      const bool antialiased) {
 
   makeOpenGLContextCurrent();
 
@@ -186,11 +190,12 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
 
   if (antialiasedFbo)
     QOpenGLFramebufferObject::blitFramebuffer(
-        glFrameBuf2, QRect(0, 0, glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf,
-        QRect(0, 0, glFrameBuf->width(), glFrameBuf->height()));
+        glFrameBuf2, QRect(0, 0, glFrameBuf2->width(), glFrameBuf2->height()),
+        glFrameBuf, QRect(0, 0, glFrameBuf->width(), glFrameBuf->height()));
 }
 
-void GlOffscreenRenderer::renderExternalScene(GlScene *scene, const bool antialiased) {
+void GlOffscreenRenderer::renderExternalScene(GlScene *scene,
+                                              const bool antialiased) {
 
   makeOpenGLContextCurrent();
 
@@ -206,8 +211,8 @@ void GlOffscreenRenderer::renderExternalScene(GlScene *scene, const bool antiali
 
   if (antialiasedFbo)
     QOpenGLFramebufferObject::blitFramebuffer(
-        glFrameBuf2, QRect(0, 0, glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf,
-        QRect(0, 0, glFrameBuf->width(), glFrameBuf->height()));
+        glFrameBuf2, QRect(0, 0, glFrameBuf2->width(), glFrameBuf2->height()),
+        glFrameBuf, QRect(0, 0, glFrameBuf->width(), glFrameBuf->height()));
 
   scene->setViewport(backupViewport);
 }
@@ -217,7 +222,8 @@ bool GlOffscreenRenderer::frameBufferOk() const {
 }
 
 static inline QImage convertImage(const QImage &image) {
-  return QImage(image.constBits(), image.width(), image.height(), QImage::Format_ARGB32)
+  return QImage(image.constBits(), image.width(), image.height(),
+                QImage::Format_ARGB32)
       .convertToFormat(QImage::Format_RGB32);
 }
 
@@ -233,8 +239,9 @@ GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
 
   makeOpenGLContextCurrent();
 
-  bool canUseMipmaps = OpenGlConfigManager::isExtensionSupported("GL_ARB_framebuffer_object") ||
-                       OpenGlConfigManager::isExtensionSupported("GL_EXT_framebuffer_object");
+  bool canUseMipmaps =
+      OpenGlConfigManager::isExtensionSupported("GL_ARB_framebuffer_object") ||
+      OpenGlConfigManager::isExtensionSupported("GL_EXT_framebuffer_object");
 
   GLuint textureId = 0;
   glGenTextures(1, &textureId);
@@ -242,7 +249,8 @@ GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
   glBindTexture(GL_TEXTURE_2D, textureId);
 
   if (generateMipMaps && canUseMipmaps) {
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                    GL_LINEAR_MIPMAP_LINEAR);
   } else {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   }
@@ -258,8 +266,8 @@ GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
 
   glBindTexture(GL_TEXTURE_2D, textureId);
 
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getViewportWidth(), getViewportHeight(), 0, GL_BGRA,
-               GL_UNSIGNED_BYTE, buff);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getViewportWidth(),
+               getViewportHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, buff);
 
   if (generateMipMaps && canUseMipmaps) {
     glGenerateMipmap(GL_TEXTURE_2D);
@@ -293,13 +301,15 @@ void GlOffscreenRenderer::doneOpenGLContextCurrent() {
   getOpenGLContext()->doneCurrent();
 }
 
-void GlOffscreenRenderer::renderGlMainWidget(GlMainWidget *glWidget, bool redrawNeeded) {
+void GlOffscreenRenderer::renderGlMainWidget(GlMainWidget *glWidget,
+                                             bool redrawNeeded) {
   makeOpenGLContextCurrent();
   initFrameBuffers(true);
   glFrameBuf2->bind();
   glPushAttrib(GL_ALL_ATTRIB_BITS);
   if (redrawNeeded) {
-    glWidget->render(GlMainWidget::RenderingOptions(GlMainWidget::RenderScene), false);
+    glWidget->render(GlMainWidget::RenderingOptions(GlMainWidget::RenderScene),
+                     false);
   } else {
     glWidget->render(GlMainWidget::RenderingOptions(), false);
   }

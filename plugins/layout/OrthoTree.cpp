@@ -16,11 +16,11 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <vector>
-#include <tulip/SizeProperty.h>
 #include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
 #include <tulip/StaticProperty.h>
 #include <tulip/TreeTest.h>
+#include <vector>
 
 using namespace std;
 using namespace tlp;
@@ -32,12 +32,14 @@ class OrthoTree : public tlp::LayoutAlgorithm {
   tlp::SizeProperty *size;
   Graph *tree;
 
-  void computeVerticalSize(const tlp::node n, tlp::NodeStaticProperty<double> &verticalSize);
-  void computeLayout(const tlp::node n, tlp::NodeStaticProperty<double> &verticalSize);
+  void computeVerticalSize(const tlp::node n,
+                           tlp::NodeStaticProperty<double> &verticalSize);
+  void computeLayout(const tlp::node n,
+                     tlp::NodeStaticProperty<double> &verticalSize);
 
 public:
-  PLUGININFORMATION("OrthoTree", "Romain Bourqui", "20/02/2012", "Orthogonal Tree layout", "1.0",
-                    "Tree")
+  PLUGININFORMATION("OrthoTree", "Romain Bourqui", "20/02/2012",
+                    "Orthogonal Tree layout", "1.0", "Tree")
 
   OrthoTree(const tlp::PluginContext *context);
 
@@ -54,12 +56,14 @@ static const char *paramHelp[] = {
     "Define the spacing between two nodes"};
 
 OrthoTree::OrthoTree(const tlp::PluginContext *context)
-    : tlp::LayoutAlgorithm(context), nodeSpacing(4), layerSpacing(10), size(nullptr) {
+    : tlp::LayoutAlgorithm(context), nodeSpacing(4), layerSpacing(10),
+      size(nullptr) {
   addInParameter<unsigned int>("layer spacing", paramHelp[0], "10", true);
   addInParameter<unsigned int>("node spacing", paramHelp[1], "4", true);
 }
 
-void OrthoTree::computeVerticalSize(const node n, NodeStaticProperty<double> &verticalSize) {
+void OrthoTree::computeVerticalSize(const node n,
+                                    NodeStaticProperty<double> &verticalSize) {
   auto d = tree->outdeg(n);
   if (d == 0) {
     verticalSize[n] = size->getNodeValue(n)[1];
@@ -78,7 +82,8 @@ void OrthoTree::computeVerticalSize(const node n, NodeStaticProperty<double> &ve
   }
 }
 
-void OrthoTree::computeLayout(const node n, NodeStaticProperty<double> &verticalSize) {
+void OrthoTree::computeLayout(const node n,
+                              NodeStaticProperty<double> &verticalSize) {
   const Coord &cn = result->getNodeValue(n);
   double prev = 0.;
   for (auto e : tree->getOutEdges(n)) {
