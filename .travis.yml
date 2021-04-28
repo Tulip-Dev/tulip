@@ -252,12 +252,12 @@ jobs:
         - sudo docker run --rm=true -e CCACHE_DIR=/ccache --volumes-from ccache --cap-add SYS_ADMIN --device /dev/fuse:/dev/fuse:mrw --rm=true -v `pwd`:/tulip:rw -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ${DOCKER_IMAGE} /bin/bash -c "bash -xe /tulip/bundlers/linux/tulip_appimage_centos6_build.sh CCACHE RUN_TESTS"
 
   #==============================================================================================================================================================
-    # Tulip thirdparty build stage on Mac OS
-    - stage: Tulip thirdparty build (Mac OS)
+    # Tulip thirdparty macports build stage
+    - stage: Tulip thirdparty build (MacPorts)
       # nothing to build if a non-macports platform is specified
       # at the end of the commit message
       if: commit_message !~ /\[(appimage|linux|homebrew|windows)-only\]$/
-    # legacy Tulip thirdparty build on Mac OS (MacPorts)
+    # legacy Tulip thirdparty macports build
       os: osx
       # use the oldest osx image acceptable for macports without build
       osx_image: xcode10.2
@@ -277,7 +277,7 @@ jobs:
         - bash -xe ./bundlers/mac/macports_build.sh
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # modern Tulip thirdparty build on Mac OS (MacPorts)
+    # modern Tulip thirdparty macports build
     -
       # nothing to build if a non-macports platform is specified
       # at the end of the commit message
@@ -301,12 +301,134 @@ jobs:
         # launch macports build
         - bash -xe ./bundlers/mac/macports_build.sh
 
+  #==============================================================================================================================================================
+    # Tulip core macports build stage
+    - stage: Tulip core build (MacPorts)
+      # nothing to build if a non-macports platform is specified
+      # at the end of the commit message
+      if: commit_message !~ /\[(appimage|linux|homebrew|windows)-only\]$/
+    # legacy Tulip core macports build
+      os: osx
+      # use the oldest osx image acceptable for macports without build
+      osx_image: xcode10.2
+      compiler: clang
+      cache:
+        ccache: true
+        directories:
+        - $HOME/.macports-ci-ccache
+      env:
+        - ENV="MacOS default, AppleClang, MacPorts"
+
+      script:
+        # get Python 3.6 and install it
+        - curl -LO https://www.python.org/ftp/python/3.6.8/python-3.6.8-macosx10.9.pkg
+        - sudo installer -store -pkg python-3.6.*.pkg -target /
+        # setup build env
+        - export MACPORTS_CI_CCACHE=ON
+        - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.6/bin/python3
+        - export TULIP_BUILD_CORE_ONLY=ON
+        - export TULIP_BUILD_DOC=OFF
+        - export TULIP_BUILD_TESTS=ON
+        # launch macports build
+        - bash -xe ./bundlers/mac/macports_build.sh
+
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # legacy Tulip thirdparty build on Mac OS (Homebrew)
+    # modern Tulip core macports build
     -
+      # nothing to build if a non-macports platform is specified
+      # at the end of the commit message
+      if: commit_message !~ /\[(appimage|linux|homebrew|windows)-only\]$/
+      os: osx
+      # use the most recent Xcode version
+      osx_image: xcode12.2
+      compiler: clang
+      cache:
+        ccache: true
+        directories:
+        - $HOME/.macports-ci-ccache
+      env:
+        - ENV="MacOS most recent, LLVM Clang, MacPorts"
+
+      script:
+        # get Python 3.9 and install it
+        - curl -LO https://www.python.org/ftp/python/3.9.4/python-3.9.4-macosx10.9.pkg
+        - sudo installer -store -pkg python-3.9.*.pkg -target /
+        # setup build env
+        - export CLANG_COMPILER_VERSION=10
+        - export MACPORTS_CI_CCACHE=ON
+        - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.9/bin/python3
+        - export TULIP_BUILD_CORE_ONLY=ON
+        - export TULIP_BUILD_TESTS=ON
+        # launch macports build
+        - bash -xe ./bundlers/mac/macports_build.sh
+
+  #==============================================================================================================================================================
+    # Tulip complete macports build stage
+    - stage: Tulip complete build (MacPorts)
+      # nothing to build if a non-macports platform is specified
+      # at the end of the commit message
+      if: commit_message !~ /\[(appimage|linux|homebrew|windows)-only\]$/
+    # legacy Tulip complete macports build
+      os: osx
+      # use the oldest osx image acceptable for macports without build
+      osx_image: xcode10.2
+      compiler: clang
+      cache:
+        ccache: true
+        directories:
+        - $HOME/.macports-ci-ccache
+      env:
+        - ENV="MacOS default, AppleClang, MacPorts"
+
+      script:
+        # get Python 3.6 and install it
+        - curl -LO https://www.python.org/ftp/python/3.6.8/python-3.6.8-macosx10.9.pkg
+        - sudo installer -store -pkg python-3.6.*.pkg -target /
+        # setup build env
+        - export MACPORTS_CI_CCACHE=ON
+        - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.6/bin/python3
+        - export TULIP_BUILD_DOC=ON
+        - export TULIP_BUILD_TESTS=ON
+        # launch macports build
+        - travis_wait bash -xe ./bundlers/mac/macports_build.sh
+
+    #--------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # modern Tulip complete macports build
+    -
+      # nothing to build if a non-macports platform is specified
+      # at the end of the commit message
+      if: commit_message !~ /\[(appimage|linux|homebrew|windows)-only\]$/
+      os: osx
+      # use the most recent Xcode version
+      osx_image: xcode12.2
+      compiler: clang
+      cache:
+        ccache: true
+        directories:
+        - $HOME/.macports-ci-ccache
+      env:
+        - ENV="MacOS most recent, LLVM Clang, MacPorts"
+
+      script:
+        # get Python 3.9 and install it
+        - curl -LO https://www.python.org/ftp/python/3.9.4/python-3.9.4-macosx10.9.pkg
+        - sudo installer -store -pkg python-3.9.*.pkg -target /
+        # setup build env
+        - export CLANG_COMPILER_VERSION=10
+        - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.9/bin/python3
+        - export TULIP_BUILD_TESTS=ON
+        - export TULIP_BUILD_GEOVIEW=OFF
+        - export MACPORTS_CI_CCACHE=ON
+        # launch macports build
+        - travis_wait bash -xe ./bundlers/mac/macports_build.sh
+
+  #==============================================================================================================================================================
+    # Tulip thirdparty Homebrew build stage
+    - stage: Tulip thirdparty build (Homebrew)
       # nothing to build if a non-homebrew platform is specified
       # at the end of the commit message
       if: commit_message !~ /\[(appimage|linux|macports|windows)-only\]$/
+    # legacy Tulip thirdparty homebrew build
       os: osx
       # use the oldest osx 10.14 image acceptable for homebrew
       osx_image: xcode10.2
@@ -337,7 +459,7 @@ jobs:
         - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # modern Tulip thirdparty build on Mac OS (Homebrew)
+    # modern Tulip thirdparty homebrew build
     -
       # nothing to build if a non-homebrew platform is specified
       # at the end of the commit message
@@ -372,72 +494,12 @@ jobs:
         - ninja -j$(getconf _NPROCESSORS_ONLN) || travis_terminate 1
 
   #==============================================================================================================================================================
-    # Tulip core build stage on Mac OS
-    - stage: Tulip core build (Mac OS)
-      # nothing to build if a non-macports platform is specified
-      # at the end of the commit message
-      if: commit_message !~ /\[(appimage|linux|homebrew|windows)-only\]$/
-    # legacy Tulip core build on Mac OS (MacPorts)
-      os: osx
-      # use the oldest osx image acceptable for macports without build
-      osx_image: xcode10.2
-      compiler: clang
-      cache:
-        ccache: true
-        directories:
-        - $HOME/.macports-ci-ccache
-      env:
-        - ENV="MacOS default, AppleClang, MacPorts"
-
-      script:
-        # get Python 3.6 and install it
-        - curl -LO https://www.python.org/ftp/python/3.6.8/python-3.6.8-macosx10.9.pkg
-        - sudo installer -store -pkg python-3.6.*.pkg -target /
-        # setup build env
-        - export MACPORTS_CI_CCACHE=ON
-        - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.6/bin/python3
-        - export TULIP_BUILD_CORE_ONLY=ON
-        - export TULIP_BUILD_DOC=OFF
-        - export TULIP_BUILD_TESTS=ON
-        # launch macports build
-        - bash -xe ./bundlers/mac/macports_build.sh
-
-    #--------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # modern Tulip core build on Mac OS (MacPorts)
-    -
-      # nothing to build if a non-macports platform is specified
-      # at the end of the commit message
-      if: commit_message !~ /\[(appimage|linux|homebrew|windows)-only\]$/
-      os: osx
-      # use the most recent Xcode version
-      osx_image: xcode12.2
-      compiler: clang
-      cache:
-        ccache: true
-        directories:
-        - $HOME/.macports-ci-ccache
-      env:
-        - ENV="MacOS most recent, LLVM Clang, MacPorts"
-
-      script:
-        # get Python 3.9 and install it
-        - curl -LO https://www.python.org/ftp/python/3.9.4/python-3.9.4-macosx10.9.pkg
-        - sudo installer -store -pkg python-3.9.*.pkg -target /
-        # setup build env
-        - export CLANG_COMPILER_VERSION=10
-        - export MACPORTS_CI_CCACHE=ON
-        - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.9/bin/python3
-        - export TULIP_BUILD_CORE_ONLY=ON
-        - export TULIP_BUILD_TESTS=ON
-        # launch macports build
-        - bash -xe ./bundlers/mac/macports_build.sh
-
-    #--------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # legacy Tulip core build on Mac OS (Homebrew)
-    -
+    # Tulip core Homebrew build stage
+    - stage: Tulip core build (Homebrew)
       # nothing to build if a non-homebrew platform is specified
       # at the end of the commit message
       if: commit_message !~ /\[(appimage|linux|macports|windows)-only\]$/
+    # legacy Tulip core Homebrew build
       os: osx
       # use the oldest osx 10.14 image acceptable for homebrew
       osx_image: xcode10.2
@@ -477,7 +539,7 @@ jobs:
         #- ninja runTests
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # modern Tulip core build on Mac OS (Homebrew)
+    # modern Tulip core homebrew build
     -
       # nothing to build if a non-homebrew platform is specified
       # at the end of the commit message
@@ -521,71 +583,12 @@ jobs:
         #- ninja runTests
 
   #==============================================================================================================================================================
-    # Tulip complete build stage on Mac OS
-    - stage: Tulip complete build (Mac OS)
-      # nothing to build if a non-macports platform is specified
-      # at the end of the commit message
-      if: commit_message !~ /\[(appimage|linux|homebrew|windows)-only\]$/
-    # legacy Tulip complete build on Mac OS (MacPorts)
-      os: osx
-      # use the oldest osx image acceptable for macports without build
-      osx_image: xcode10.2
-      compiler: clang
-      cache:
-        ccache: true
-        directories:
-        - $HOME/.macports-ci-ccache
-      env:
-        - ENV="MacOS default, AppleClang, MacPorts"
-
-      script:
-        # get Python 3.6 and install it
-        - curl -LO https://www.python.org/ftp/python/3.6.8/python-3.6.8-macosx10.9.pkg
-        - sudo installer -store -pkg python-3.6.*.pkg -target /
-        # setup build env
-        - export MACPORTS_CI_CCACHE=ON
-        - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.6/bin/python3
-        - export TULIP_BUILD_DOC=ON
-        - export TULIP_BUILD_TESTS=ON
-        # launch macports build
-        - travis_wait bash -xe ./bundlers/mac/macports_build.sh
-
-    #--------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # modern Tulip complete build on Mac OS (MacPorts)
-    -
-      # nothing to build if a non-macports platform is specified
-      # at the end of the commit message
-      if: commit_message !~ /\[(appimage|linux|homebrew|windows)-only\]$/
-      os: osx
-      # use the most recent Xcode version
-      osx_image: xcode12.2
-      compiler: clang
-      cache:
-        ccache: true
-        directories:
-        - $HOME/.macports-ci-ccache
-      env:
-        - ENV="MacOS most recent, LLVM Clang, MacPorts"
-
-      script:
-        # get Python 3.9 and install it
-        - curl -LO https://www.python.org/ftp/python/3.9.4/python-3.9.4-macosx10.9.pkg
-        - sudo installer -store -pkg python-3.9.*.pkg -target /
-        # setup build env
-        - export CLANG_COMPILER_VERSION=10
-        - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.9/bin/python3
-        - export TULIP_BUILD_TESTS=ON
-        - export TULIP_BUILD_GEOVIEW=OFF
-        - export MACPORTS_CI_CCACHE=ON
-        # launch macports build
-        - travis_wait bash -xe ./bundlers/mac/macports_build.sh
-
-    #--------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # legacy Tulip complete build on Mac OS (Homebrew)
-    -
+    # Tulip complete homebrew build stage
+    - stage: Tulip complete build (Homebrew)
       # nothing to build if a non-homebrew platform is specified
       # at the end of the commit message
       if: commit_message !~ /\[(appimage|linux|macports|windows)-only\]$/
+    # legacy Tulip complete homebrew build
       os: osx
       # use the oldest osx 10.14 image acceptable for homebrew
       osx_image: xcode10.2
@@ -630,7 +633,7 @@ jobs:
         #- ninja runTests
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # modern Tulip complete build on Mac OS (Homebrew)
+    # modern Tulip complete homebrew build
     -
       # nothing to build if a non-homebrew platform is specified
       # at the end of the commit message
