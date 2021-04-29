@@ -23,8 +23,8 @@
 
 #include <string>
 
-#include <tulip/Observable.h>
 #include <tulip/tulipconf.h>
+#include <tulip/Observable.h>
 
 namespace tlp {
 
@@ -45,11 +45,10 @@ public:
     TLP_DELENTITY
   };
 
-  GlSceneEvent(const GlScene &scene, GlSceneEventType sceneEventType,
-               const std::string &layerName, GlLayer *layer);
+  GlSceneEvent(const GlScene &scene, GlSceneEventType sceneEventType, const std::string &layerName,
+               GlLayer *layer);
 
-  GlSceneEvent(const GlScene &scene, GlSceneEventType sceneEventType,
-               GlSimpleEntity *entity);
+  GlSceneEvent(const GlScene &scene, GlSceneEventType sceneEventType, GlSimpleEntity *entity);
 
   GlSimpleEntity *getGlSimpleEntity() const;
 

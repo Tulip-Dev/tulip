@@ -22,8 +22,8 @@
 #include <QFileInfo>
 #include <QList>
 #include <QNetworkAccessManager>
-#include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QNetworkReply>
 #include <QStringList>
 #include <QTimer>
 #include <QUrl>
@@ -43,12 +43,10 @@ DownloadManager *DownloadManager::getInstance() {
 }
 
 DownloadManager::DownloadManager() {
-  connect(this, SIGNAL(finished(QNetworkReply *)),
-          SLOT(downloadFinished(QNetworkReply *)));
+  connect(this, SIGNAL(finished(QNetworkReply *)), SLOT(downloadFinished(QNetworkReply *)));
 }
 
-QNetworkReply *DownloadManager::downloadPlugin(const QUrl &url,
-                                               const QString &destination) {
+QNetworkReply *DownloadManager::downloadPlugin(const QUrl &url, const QString &destination) {
   downloadDestinations[url] = destination;
 
   QNetworkRequest request(url);
@@ -81,11 +79,11 @@ void DownloadManager::downloadFinished(QNetworkReply *reply) {
       QString filename = downloadDestinations[url];
 
       if (saveToDisk(filename, reply))
-        printf("Download of %s succeeded (saved to %s)\n",
-               url.toEncoded().constData(), qPrintable(filename));
+        printf("Download of %s succeeded (saved to %s)\n", url.toEncoded().constData(),
+               qPrintable(filename));
     } else {
-      fprintf(stderr, "Download of %s failed: %s\n",
-              url.toEncoded().constData(), qPrintable(reply->errorString()));
+      fprintf(stderr, "Download of %s failed: %s\n", url.toEncoded().constData(),
+              qPrintable(reply->errorString()));
     }
 
     currentDownloads.removeAll(reply);

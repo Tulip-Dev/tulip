@@ -20,11 +20,9 @@
 
 using namespace tlp;
 
-LinLogLayout::LinLogLayout(tlp::Graph *_graph,
-                           tlp::PluginProgress *_pluginProgress)
-    : edgeWeight(nullptr), layoutResult(nullptr), linLogWeight(_graph),
-      skipNodes(nullptr), graph(_graph), pluginProgress(_pluginProgress),
-      _dim(2), _nbNodes(0) {
+LinLogLayout::LinLogLayout(tlp::Graph *_graph, tlp::PluginProgress *_pluginProgress)
+    : edgeWeight(nullptr), layoutResult(nullptr), linLogWeight(_graph), skipNodes(nullptr),
+      graph(_graph), pluginProgress(_pluginProgress), _dim(2), _nbNodes(0) {
 
   if (_graph == nullptr)
     std::cerr << "graph is Null\n";
@@ -43,11 +41,9 @@ LinLogLayout::LinLogLayout(tlp::Graph *_graph,
   max_iter = 100;
 }
 
-bool LinLogLayout::initAlgo(tlp::LayoutProperty *_layout,
-                            tlp::NumericProperty *_weight, double _attrExponent,
-                            double _repuExponent, double _gravFactor,
-                            unsigned int _max_iter, bool _is3D,
-                            bool _useOctTree,
+bool LinLogLayout::initAlgo(tlp::LayoutProperty *_layout, tlp::NumericProperty *_weight,
+                            double _attrExponent, double _repuExponent, double _gravFactor,
+                            unsigned int _max_iter, bool _is3D, bool _useOctTree,
                             tlp::BooleanProperty *_skipNodes) {
   // initializes with the current layout,
   // we might want to initialize it with a random layout too, not in this class
@@ -110,8 +106,7 @@ void LinLogLayout::initEnergyFactors() {
   if (repuSum > 0.0 && attrSum > 0.0) {
     double density = attrSum / repuSum / repuSum;
     repuFactor = density * pow(repuSum, 0.5 * (attrExponent - repuExponent));
-    gravFactor =
-        density * repuSum * pow(gravFactor, attrExponent - repuExponent);
+    gravFactor = density * repuSum * pow(gravFactor, attrExponent - repuExponent);
   } else
     repuFactor = 1.0;
 }
@@ -122,13 +117,11 @@ void LinLogLayout::initEnergyFactors() {
  * @return total energy of the specified node
  */
 double LinLogLayout::getEnergy(node u) {
-  return getRepulsionEnergy(u) + getAttractionEnergy(u) +
-         getGravitationEnergy(u);
+  return getRepulsionEnergy(u) + getAttractionEnergy(u) + getGravitationEnergy(u);
 }
 
 double LinLogLayout::getEnergy(node u, OctTree *tree) {
-  return getRepulsionEnergy(u, tree) + getAttractionEnergy(u) +
-         getGravitationEnergy(u);
+  return getRepulsionEnergy(u, tree) + getAttractionEnergy(u) + getGravitationEnergy(u);
 }
 
 /**
@@ -156,8 +149,7 @@ double LinLogLayout::getRepulsionEnergy(node u) {
     if (repuExponent == 0.0) {
       energy -= repuFactor * u_weight * v_weight * log(dist);
     } else {
-      energy -= repuFactor * u_weight * v_weight * pow(dist, repuExponent) /
-                repuExponent;
+      energy -= repuFactor * u_weight * v_weight * pow(dist, repuExponent) / repuExponent;
     }
   }
 
@@ -195,8 +187,7 @@ double LinLogLayout::getRepulsionEnergy(node u, OctTree *tree) {
   if (repuExponent == 0.0) {
     return -repuFactor * u_weight * tree->weight * log(dist);
   } else {
-    return -repuFactor * u_weight * tree->weight * pow(dist, repuExponent) /
-           repuExponent;
+    return -repuFactor * u_weight * tree->weight * pow(dist, repuExponent) / repuExponent;
   }
 }
 
@@ -253,8 +244,7 @@ double LinLogLayout::getDist(const Coord &pos1, const Coord &pos2) {
   return sqrt(dist);
 }
 
-double LinLogLayout::getDistForComparison(const Coord &pos1,
-                                          const Coord &pos2) {
+double LinLogLayout::getDistForComparison(const Coord &pos1, const Coord &pos2) {
   double dist = 0.0;
 
   for (unsigned int d = 0; d < _dim; ++d) {
@@ -331,8 +321,7 @@ double LinLogLayout::addRepulsionDir(node u, double *dir, OctTree *tree) {
     return dir2;
   }
 
-  double tmp =
-      repuFactor * u_weight * tree->weight * pow(dist, repuExponent - 2);
+  double tmp = repuFactor * u_weight * tree->weight * pow(dist, repuExponent - 2);
 
   for (unsigned int d = 0; d < _dim; ++d)
     dir[d] -= (tree->position[d] - position[d]) * tmp;
@@ -429,8 +418,7 @@ void LinLogLayout::getDirection(node u, double *dir) {
     // ensure that the length of dir is not greater
     // than average Euclidean distance to other nodes
 
-    double length =
-        0; // calculate length of Dir //getDist(dir, new double[_dim]);
+    double length = 0; // calculate length of Dir //getDist(dir, new double[_dim]);
 
     if (avgDist > 0.0 && length > avgDist) {
       length /= avgDist;
@@ -481,12 +469,13 @@ void LinLogLayout::getDirection(node u, double *dir, OctTree *tree) {
  * Iteratively minimizes energy using the Barnes-Hut algorithm.
  * Starts from the positions in the parameter <code>positions</code>,
  * and stores the computed positions in <code>positions</code>.
- * @param positions  position in <code>nrDims</code>-dimensional space for each
- * node. Is not copied and serves as input and output parameter. Each position
- * must be a <code>double[nrDims]</code>. If the input is two-dimensional (i.e.
- * the third array element is 0.0 for all nodes), the output is also
- * two-dimensional. Different nodes with nonzero weights must have different
- * positions. Random initial positions are appropriate.
+ * @param positions  position in <code>nrDims</code>-dimensional space for each node.
+ *   Is not copied and serves as input and output parameter.
+ *   Each position must be a <code>double[nrDims]</code>.
+ *   If the input is two-dimensional (i.e. the third array element
+ *   is 0.0 for all nodes), the output is also two-dimensional.
+ *   Different nodes with nonzero weights must have different positions.
+ *   Random initial positions are appropriate.
  * @param nrIterations  number of iterations. Choose appropriate values
  *   by observing the convergence of energy.  A typical value is 100.
  */
@@ -524,10 +513,10 @@ bool LinLogLayout::minimizeEnergyNoTree(int nrIterations) {
         repuExponent += 0.9 * (1.0 - finalRepuExponent);
       } else if (step <= 0.9 * nrIterations) {
         // gradually move to final energy model
-        attrExponent += 1.1 * (1.0 - finalRepuExponent) *
-                        (0.9 - (step / double(nrIterations))) / 0.3;
-        repuExponent += 0.9 * (1.0 - finalRepuExponent) *
-                        (0.9 - (step / double(nrIterations))) / 0.3;
+        attrExponent +=
+            1.1 * (1.0 - finalRepuExponent) * (0.9 - (step / double(nrIterations))) / 0.3;
+        repuExponent +=
+            0.9 * (1.0 - finalRepuExponent) * (0.9 - (step / double(nrIterations))) / 0.3;
       }
     }
 
@@ -551,8 +540,7 @@ bool LinLogLayout::minimizeEnergyNoTree(int nrIterations) {
       for (unsigned int d = 0; d < _dim; ++d)
         bestDir[d] /= 32;
 
-      for (int multiple = 32;
-           multiple >= 1 && (bestMultiple == 0 || bestMultiple / 2 == multiple);
+      for (int multiple = 32; multiple >= 1 && (bestMultiple == 0 || bestMultiple / 2 == multiple);
            multiple /= 2) {
         for (unsigned int d = 0; d < _dim; ++d)
           pos[d] = oldPos[d] + bestDir[d] * multiple;
@@ -569,8 +557,7 @@ bool LinLogLayout::minimizeEnergyNoTree(int nrIterations) {
         }
       }
 
-      for (int multiple = 64; multiple <= 128 && bestMultiple == multiple / 2;
-           multiple *= 2) {
+      for (int multiple = 64; multiple <= 128 && bestMultiple == multiple / 2; multiple *= 2) {
         for (unsigned int d = 0; d < _dim; ++d)
           pos[d] = oldPos[d] + bestDir[d] * multiple;
 
@@ -640,10 +627,10 @@ bool LinLogLayout::minimizeEnergy(int nrIterations) {
         repuExponent += 0.9 * (1.0 - finalRepuExponent);
       } else if (step <= 0.9 * nrIterations) {
         // gradually move to final energy model
-        attrExponent += 1.1 * (1.0 - finalRepuExponent) *
-                        (0.9 - (step / double(nrIterations))) / 0.3;
-        repuExponent += 0.9 * (1.0 - finalRepuExponent) *
-                        (0.9 - (step / double(nrIterations))) / 0.3;
+        attrExponent +=
+            1.1 * (1.0 - finalRepuExponent) * (0.9 - (step / double(nrIterations))) / 0.3;
+        repuExponent +=
+            0.9 * (1.0 - finalRepuExponent) * (0.9 - (step / double(nrIterations))) / 0.3;
       }
     }
 
@@ -667,8 +654,7 @@ bool LinLogLayout::minimizeEnergy(int nrIterations) {
       for (unsigned int d = 0; d < _dim; ++d)
         bestDir[d] /= 32;
 
-      for (int multiple = 32;
-           multiple >= 1 && (bestMultiple == 0 || bestMultiple / 2 == multiple);
+      for (int multiple = 32; multiple >= 1 && (bestMultiple == 0 || bestMultiple / 2 == multiple);
            multiple /= 2) {
         octTree->removeNode(u, pos, 0);
 
@@ -688,8 +674,7 @@ bool LinLogLayout::minimizeEnergy(int nrIterations) {
         }
       }
 
-      for (int multiple = 64; multiple <= 128 && bestMultiple == multiple / 2;
-           multiple *= 2) {
+      for (int multiple = 64; multiple <= 128 && bestMultiple == multiple / 2; multiple *= 2) {
         octTree->removeNode(u, pos, 0);
 
         for (unsigned int d = 0; d < _dim; ++d)

@@ -20,9 +20,9 @@
 
 #ifndef ORDERING_H
 #define ORDERING_H
-#include <tulip/Edge.h>
 #include <tulip/Face.h>
 #include <tulip/Node.h>
+#include <tulip/Edge.h>
 
 #include <tulip/MutableContainer.h>
 
@@ -38,13 +38,17 @@ public:
     node n_last;
   } FaceAndPos;
 
-  std::vector<edge> getDummyEdges() { return dummy_edge; }
+  std::vector<edge> getDummyEdges() {
+    return dummy_edge;
+  }
 
-  Ordering(PlanarConMap *G, PluginProgress *pluginProgress = nullptr,
-           int minProgress = 0, int deltaProgress = 0, int maxProgress = 0);
+  Ordering(PlanarConMap *G, PluginProgress *pluginProgress = nullptr, int minProgress = 0,
+           int deltaProgress = 0, int maxProgress = 0);
   ~Ordering();
   //   inline void push_back(std::vector<node> nodeVector) {
-  inline size_t size() { return _data.size(); }
+  inline size_t size() {
+    return _data.size();
+  }
   inline std::vector<node> operator[](const unsigned int i) const {
     return _data[i];
   }
@@ -82,11 +86,9 @@ private:
 
   void updateOutAndVisitedFaces(Face f);
   void updateContourLeftRight(node prec, node n, edge e, node last);
-  void updateNewSelectableNodes(node node_f, node no_tmp2, edge ed_tmp,
-                                node node_last,
-                                const std::vector<Face> &v_faces,
-                                bool one_face = false, bool was_visited = false,
-                                bool selection_face = false);
+  void updateNewSelectableNodes(node node_f, node no_tmp2, edge ed_tmp, node node_last,
+                                const std::vector<Face> &v_faces, bool one_face = false,
+                                bool was_visited = false, bool selection_face = false);
   void updateSelectableFaces(const std::vector<Face> &v_faces);
 
   int seqp(Face f);
@@ -94,8 +96,7 @@ private:
   void setMinMarkedFace(Face f);
 
   struct augmentableAndNodes_ getAugAndNodes(Face f);
-  void augment(Face f, node prec, node n, node prec_last, node last,
-               int nbNewFace, bool pair);
+  void augment(Face f, node prec, node n, node prec_last, node last, int nbNewFace, bool pair);
   void selectAndUpdateFace(Face f);
   void selectAndUpdateNode(node n);
   bool isSelectable(node n);

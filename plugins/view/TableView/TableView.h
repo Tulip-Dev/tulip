@@ -20,9 +20,9 @@
 #ifndef TABLEVIEW_H
 #define TABLEVIEW_H
 
-#include <QModelIndex>
-#include <tulip/BooleanProperty.h>
 #include <tulip/ViewWidget.h>
+#include <tulip/BooleanProperty.h>
+#include <QModelIndex>
 
 namespace Ui {
 class TableViewWidget;
@@ -47,22 +47,25 @@ class TableView : public tlp::ViewWidget {
   int minFontSize;
 
 public:
-  PLUGININFORMATION("Spreadsheet view", "Tulip Team", "04/17/2012",
-                    "Spreadsheet view for raw data", "4.0", "")
+  PLUGININFORMATION("Spreadsheet view", "Tulip Team", "04/17/2012", "Spreadsheet view for raw data",
+                    "4.0", "")
 
   TableView(tlp::PluginContext *);
   ~TableView() override;
-  std::string icon() const override { return ":/spreadsheet_view.png"; }
+  std::string icon() const override {
+    return ":/spreadsheet_view.png";
+  }
   tlp::DataSet state() const override;
   void setState(const tlp::DataSet &) override;
   void setupWidget() override;
   QList<QWidget *> configurationWidgets() const override;
-  bool getNodeOrEdgeAtViewportPos(int x, int y, tlp::node &n,
-                                  tlp::edge &e) const override;
+  bool getNodeOrEdgeAtViewportPos(int x, int y, tlp::node &n, tlp::edge &e) const override;
 
   // Qt bug workaround
   // see void WorkspacePanel::showEvent(QShowEvent *event);
-  bool rebuildSceneOnShowEvent() override { return true; }
+  bool rebuildSceneOnShowEvent() override {
+    return true;
+  }
 
 public slots:
   void readSettings();

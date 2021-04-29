@@ -35,10 +35,9 @@ static const char *paramHelp[] = {
 #define BOTH_TARGET 0
 
 //==================================================================
-IdMetric::IdMetric(const tlp::PluginContext *context)
-    : DoubleAlgorithm(context) {
-  addInParameter<StringCollection>(TARGET_TYPE, paramHelp[0], TARGET_TYPES,
-                                   true, "both <br> nodes <br> edges");
+IdMetric::IdMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
+  addInParameter<StringCollection>(TARGET_TYPE, paramHelp[0], TARGET_TYPES, true,
+                                   "both <br> nodes <br> edges");
 
   // result needs to be an inout parameter
   // in order to preserve the original values of non targeted elements

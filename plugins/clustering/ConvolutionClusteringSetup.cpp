@@ -17,8 +17,8 @@
  *
  */
 #include "ConvolutionClusteringSetup.h"
-#include "ConvolutionClustering.h"
 #include "ui_ConvolutionClusteringSetup.h"
+#include "ConvolutionClustering.h"
 
 #include <QPainter>
 
@@ -69,10 +69,8 @@ public:
     int borderWidth = int(10.0 * scale);
     int axisWidth = int(15.0 * scale);
     painter.setWindow(0, 0, 2 * histogram.size() + legendWidth,
-                      histogram.size() +
-                          legendWidth); // defines coordinate system
-    painter.fillRect(0, 0, 2 * histogram.size() + legendWidth,
-                     histogram.size() + legendWidth,
+                      histogram.size() + legendWidth); // defines coordinate system
+    painter.fillRect(0, 0, 2 * histogram.size() + legendWidth, histogram.size() + legendWidth,
                      QBrush(QColor(255, 255, 255)));
     // draw bars
     QColor c;
@@ -91,15 +89,12 @@ public:
       if (height < 1)
         height = 1;
 
-      painter.drawRect(borderWidth + i * 2,
-                       borderWidth + 1 + histogram.size() - height, 2, height);
+      painter.drawRect(borderWidth + i * 2, borderWidth + 1 + histogram.size() - height, 2, height);
     }
 
     // draw axis
-    painter.drawLine(borderWidth, borderWidth, borderWidth,
-                     histogram.size() + borderWidth);
-    painter.drawLine(borderWidth, histogram.size() + borderWidth,
-                     2 * histogram.size() + axisWidth,
+    painter.drawLine(borderWidth, borderWidth, borderWidth, histogram.size() + borderWidth);
+    painter.drawLine(borderWidth, histogram.size() + borderWidth, 2 * histogram.size() + axisWidth,
                      histogram.size() + borderWidth);
     c.setHsv(359, 255, 255);
 
@@ -118,10 +113,10 @@ private:
   ConvolutionClusteringSetup *setupDialog;
 };
 
-ConvolutionClusteringSetup::ConvolutionClusteringSetup(
-    ConvolutionClustering *convolPlugin, QWidget *parent)
-    : QDialog(parent), _ui(new Ui::ConvolutionClusteringSetupData),
-      convolPlugin(convolPlugin), useLogarithmicScale(false) {
+ConvolutionClusteringSetup::ConvolutionClusteringSetup(ConvolutionClustering *convolPlugin,
+                                                       QWidget *parent)
+    : QDialog(parent), _ui(new Ui::ConvolutionClusteringSetupData), convolPlugin(convolPlugin),
+      useLogarithmicScale(false) {
   _ui->setupUi(this);
   histogramWidget = new HistogramWidget(this, _ui->Frame3);
   QGridLayout *flayout = new QGridLayout(_ui->Frame3);
@@ -138,7 +133,9 @@ ConvolutionClusteringSetup::ConvolutionClusteringSetup(
   _ui->discretizationSlider->setValue(a);
 }
 
-ConvolutionClusteringSetup::~ConvolutionClusteringSetup() { delete _ui; }
+ConvolutionClusteringSetup::~ConvolutionClusteringSetup() {
+  delete _ui;
+}
 
 /*
  * public slot
@@ -149,10 +146,8 @@ void ConvolutionClusteringSetup::setlog(bool b) {
 }
 
 void ConvolutionClusteringSetup::update() {
-  _ui->widthSlider->setMaximum(
-      std::max(_ui->discretizationSlider->value() / 2, 1));
-  convolPlugin->setParameters(_ui->discretizationSlider->value(), 0,
-                              _ui->widthSlider->value());
+  _ui->widthSlider->setMaximum(std::max(_ui->discretizationSlider->value() / 2, 1));
+  convolPlugin->setParameters(_ui->discretizationSlider->value(), 0, _ui->widthSlider->value());
 
   if (histogramWidget)
     histogramWidget->update();

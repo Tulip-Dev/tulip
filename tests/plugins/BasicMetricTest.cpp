@@ -17,8 +17,8 @@
  *
  */
 #include "BasicMetricTest.h"
-#include <tulip/DoubleProperty.h>
 #include <tulip/Graph.h>
+#include <tulip/DoubleProperty.h>
 
 using namespace std;
 using namespace tlp;
@@ -26,8 +26,7 @@ using namespace tlp;
 CPPUNIT_TEST_SUITE_REGISTRATION(BasicMetricTest);
 
 template <typename PropType>
-bool BasicMetricTest::computeProperty(const std::string &algorithm,
-                                      const std::string &graphType,
+bool BasicMetricTest::computeProperty(const std::string &algorithm, const std::string &graphType,
                                       PropType *prop) {
 
   DataSet ds;
@@ -48,9 +47,13 @@ bool BasicMetricTest::computeProperty(const std::string &algorithm,
   return result;
 }
 
-void BasicMetricTest::setUp() { graph = tlp::newGraph(); }
+void BasicMetricTest::setUp() {
+  graph = tlp::newGraph();
+}
 
-void BasicMetricTest::tearDown() { delete graph; }
+void BasicMetricTest::tearDown() {
+  delete graph;
+}
 
 void BasicMetricTest::testArityMetric() {
   bool result = computeProperty<DoubleProperty>("Degree");
@@ -123,8 +126,7 @@ void BasicMetricTest::testPathLengthMetric() {
   bool result = computeProperty<DoubleProperty>("Path Length");
   CPPUNIT_ASSERT(result == false);
   graph->clear();
-  result =
-      computeProperty<DoubleProperty>("Path Length", "Random General Tree");
+  result = computeProperty<DoubleProperty>("Path Length", "Random General Tree");
   CPPUNIT_ASSERT(result);
 }
 //==========================================================

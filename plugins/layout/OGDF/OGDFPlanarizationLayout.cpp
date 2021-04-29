@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <ogdf/planarity/PlanarizationLayout.h>
 #include <ogdf/planarity/EmbedderMaxFace.h>
 #include <ogdf/planarity/EmbedderMaxFaceLayers.h>
 #include <ogdf/planarity/EmbedderMinDepth.h>
@@ -23,7 +24,6 @@
 #include <ogdf/planarity/EmbedderMinDepthMaxFaceLayers.h>
 #include <ogdf/planarity/EmbedderMinDepthPiTa.h>
 #include <ogdf/planarity/EmbedderOptimalFlexDraw.h>
-#include <ogdf/planarity/PlanarizationLayout.h>
 #include <ogdf/planarity/SimpleEmbedder.h>
 
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
@@ -80,18 +80,14 @@ class OGDFPlanarizationLayout : public OGDFLayoutPluginBase {
   ogdf::PlanarizationLayout *pl;
 
 public:
-  PLUGININFORMATION("Planarization Layout (OGDF)", "Carsten Gutwenger",
-                    "12/11/2007",
-                    "The planarization approach for drawing graphs.", "1.0",
-                    "Planar")
+  PLUGININFORMATION("Planarization Layout (OGDF)", "Carsten Gutwenger", "12/11/2007",
+                    "The planarization approach for drawing graphs.", "1.0", "Planar")
   OGDFPlanarizationLayout(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, context ? new ogdf::PlanarizationLayout()
-                                              : nullptr),
+      : OGDFLayoutPluginBase(context, context ? new ogdf::PlanarizationLayout() : nullptr),
         pl(static_cast<ogdf::PlanarizationLayout *>(ogdfLayoutAlgo)) {
     addInParameter<double>("page ratio", paramHelp[0], "1.1");
     addInParameter<int>("minimal clique size", paramHelp[1], "3");
-    addInParameter<StringCollection>(ELT_EMBEDDER, paramHelp[2],
-                                     ELT_EMBEDDER_LIST, true,
+    addInParameter<StringCollection>(ELT_EMBEDDER, paramHelp[2], ELT_EMBEDDER_LIST, true,
                                      embedderValuesDescription);
     addOutParameter<int>("number of crossings", paramHelp[3]);
   }

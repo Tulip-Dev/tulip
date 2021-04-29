@@ -20,8 +20,8 @@
 #ifndef LOGARITHMICMAPPINGCOLOR_H
 #define LOGARITHMICMAPPINGCOLOR_H
 
-#include "LinearMappingColor.h"
 #include "potypes.h"
+#include "LinearMappingColor.h"
 
 namespace pocore {
 class LogarithmicMappingColor : public LinearMappingColor {

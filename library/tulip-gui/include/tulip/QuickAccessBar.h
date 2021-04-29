@@ -106,8 +106,7 @@ public:
   Q_DECLARE_FLAGS(QuickAccessButtons, QuickAccessButton)
 
   explicit QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem = nullptr,
-                              QuickAccessButtons button = ALLBUTTONS,
-                              QWidget *parent = nullptr);
+                              QuickAccessButtons button = ALLBUTTONS, QWidget *parent = nullptr);
   ~QuickAccessBarImpl() override;
 
   QPushButton *showEdgesButton();
@@ -124,8 +123,7 @@ protected:
   void updateFontButtonStyle();
   void showHideCaption(CaptionItem::CaptionType captionType);
   void setAllValues(unsigned int eltType, PropertyInterface *prop);
-  void setAllColorValues(unsigned int eltType, ColorProperty *prop,
-                         const Color &color);
+  void setAllColorValues(unsigned int eltType, ColorProperty *prop, const Color &color);
 
 public slots:
   void reset() override;

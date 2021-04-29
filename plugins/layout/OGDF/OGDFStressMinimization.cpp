@@ -21,8 +21,8 @@
 
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
 
-#include <tulip/NumericProperty.h>
 #include <tulip/StringCollection.h>
+#include <tulip/NumericProperty.h>
 
 using namespace tlp;
 using namespace ogdf;
@@ -66,17 +66,15 @@ static const char *paramHelp[] = {
 class OGDFStressMinimization : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION(
-      "Stress Minimization (OGDF)", "Karsten Klein", "12/11/2007",
-      "Implements an alternative to force-directed layout which is a distance-based "
-      "layout realized by the stress minimization via majorization algorithm. ",
-      "2.0", "Force Directed")
+  PLUGININFORMATION("Stress Minimization (OGDF)", "Karsten Klein", "12/11/2007",
+                    "Implements an alternative to force-directed layout which is a distance-based "
+                    "layout realized by the stress minimization via majorization algorithm. ",
+                    "2.0", "Force Directed")
   OGDFStressMinimization(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, context ? new ogdf::StressMinimization()
-                                              : nullptr) {
-    addInParameter<StringCollection>(
-        "terminationCriterion", paramHelp[0], "None;PositionDifference;Stress",
-        true, "None <br> PositionDifference <br> Stress");
+      : OGDFLayoutPluginBase(context, context ? new ogdf::StressMinimization() : nullptr) {
+    addInParameter<StringCollection>("terminationCriterion", paramHelp[0],
+                                     "None;PositionDifference;Stress", true,
+                                     "None <br> PositionDifference <br> Stress");
     addInParameter<bool>("fixXCoordinates", paramHelp[1], "false");
     addInParameter<bool>("fixYCoordinates", paramHelp[2], "false");
     addInParameter<bool>("fixZCoordinates", paramHelp[3], "false");
@@ -85,35 +83,30 @@ public:
     addInParameter<int>("numberOfIterations", paramHelp[6], "200");
     addInParameter<double>("edgeCosts", paramHelp[7], "100");
     addInParameter<bool>("useEdgeCostsProperty", paramHelp[8], "false");
-    addInParameter<tlp::NumericProperty *>("edgeCostsProperty", paramHelp[9],
-                                           "viewMetric");
+    addInParameter<tlp::NumericProperty *>("edgeCostsProperty", paramHelp[9], "viewMetric");
     declareDeprecatedName("Stress Majorization (OGDF)");
   }
 
   ~OGDFStressMinimization() override {}
 
   void beforeCall() override {
-    ogdf::StressMinimization *stressm =
-        static_cast<ogdf::StressMinimization *>(ogdfLayoutAlgo);
+    ogdf::StressMinimization *stressm = static_cast<ogdf::StressMinimization *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {
       double dval = 0;
       int ival = 0;
       bool bval = false;
       StringCollection sc;
-      tlp::NumericProperty *edgeCosts =
-          graph->getProperty<tlp::DoubleProperty>("viewMetric");
+      tlp::NumericProperty *edgeCosts = graph->getProperty<tlp::DoubleProperty>("viewMetric");
 
       if (dataSet->get("terminationCriterion", sc)) {
         if (sc.getCurrentString() == "PositionDifference") {
           stressm->convergenceCriterion(
               StressMinimization::TerminationCriterion::PositionDifference);
         } else if (sc.getCurrentString() == "Stress") {
-          stressm->convergenceCriterion(
-              StressMinimization::TerminationCriterion::Stress);
+          stressm->convergenceCriterion(StressMinimization::TerminationCriterion::Stress);
         } else {
-          stressm->convergenceCriterion(
-              StressMinimization::TerminationCriterion::None);
+          stressm->convergenceCriterion(StressMinimization::TerminationCriterion::None);
         }
       }
 

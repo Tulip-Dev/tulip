@@ -17,8 +17,8 @@
  *
  */
 
-#include "ui_SimplePluginProgressWidget.h"
 #include <tulip/SimplePluginProgressWidget.h>
+#include "ui_SimplePluginProgressWidget.h"
 
 #include <QCloseEvent>
 #include <QStyle>
@@ -31,21 +31,20 @@
 
 using namespace tlp;
 
-SimplePluginProgressWidget::SimplePluginProgressWidget(QWidget *parent,
-                                                       Qt::WindowFlags f)
+SimplePluginProgressWidget::SimplePluginProgressWidget(QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, f), _ui(new Ui::SimplePluginProgressWidgetData),
       _lastUpdate(QTime::currentTime()), _state(tlp::TLP_CONTINUE) {
 
   _ui->setupUi(this);
-  _ui->cancelButton->setIcon(
-      QApplication::style()->standardIcon(QStyle::SP_DialogCancelButton));
-  _ui->stopButton->setIcon(
-      QApplication::style()->standardIcon(QStyle::SP_MediaStop));
+  _ui->cancelButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogCancelButton));
+  _ui->stopButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_MediaStop));
   connect(_ui->cancelButton, SIGNAL(clicked()), this, SLOT(cancelClicked()));
   connect(_ui->stopButton, SIGNAL(clicked()), this, SLOT(stopClicked()));
 }
 
-SimplePluginProgressWidget::~SimplePluginProgressWidget() { delete _ui; }
+SimplePluginProgressWidget::~SimplePluginProgressWidget() {
+  delete _ui;
+}
 
 void SimplePluginProgressWidget::checkLastUpdate() {
   if (_lastUpdate.msecsTo(QTime::currentTime()) > 50) {
@@ -75,9 +74,13 @@ ProgressState SimplePluginProgressWidget::progress(int step, int max_step) {
   return _state;
 }
 
-void SimplePluginProgressWidget::cancel() { _state = tlp::TLP_CANCEL; }
+void SimplePluginProgressWidget::cancel() {
+  _state = tlp::TLP_CANCEL;
+}
 
-void SimplePluginProgressWidget::stop() { _state = tlp::TLP_STOP; }
+void SimplePluginProgressWidget::stop() {
+  _state = tlp::TLP_STOP;
+}
 
 bool SimplePluginProgressWidget::isPreviewMode() const {
   return _ui->previewBox->isChecked();
@@ -101,15 +104,21 @@ void SimplePluginProgressWidget::showStops(bool showButtons) {
     setComment("Processing in progress...");
 }
 
-ProgressState SimplePluginProgressWidget::state() const { return _state; }
+ProgressState SimplePluginProgressWidget::state() const {
+  return _state;
+}
 
-std::string SimplePluginProgressWidget::getError() { return _error; }
+std::string SimplePluginProgressWidget::getError() {
+  return _error;
+}
 
 void SimplePluginProgressWidget::setError(const std::string &error) {
   _error = error;
 }
 
-void SimplePluginProgressWidget::closeEvent(QCloseEvent *ev) { ev->ignore(); }
+void SimplePluginProgressWidget::closeEvent(QCloseEvent *ev) {
+  ev->ignore();
+}
 
 void SimplePluginProgressWidget::setCancelButtonVisible(bool v) {
   _ui->cancelButton->setVisible(v);
@@ -119,17 +128,20 @@ void SimplePluginProgressWidget::setStopButtonVisible(bool v) {
   _ui->stopButton->setVisible(v);
 }
 
-void SimplePluginProgressWidget::cancelClicked() { cancel(); }
+void SimplePluginProgressWidget::cancelClicked() {
+  cancel();
+}
 
-void SimplePluginProgressWidget::stopClicked() { stop(); }
+void SimplePluginProgressWidget::stopClicked() {
+  stop();
+}
 
 // ===================
 // DIALOG
 // ===================
 
 SimplePluginProgressDialog::SimplePluginProgressDialog(QWidget *parent)
-    : QDialog(parent, Qt::WindowTitleHint | Qt::CustomizeWindowHint),
-      _painted(false) {
+    : QDialog(parent, Qt::WindowTitleHint | Qt::CustomizeWindowHint), _painted(false) {
   setModal(true);
   // configure style sheet
   QString s_sheet(R"(
@@ -150,7 +162,9 @@ QLabel { color: %FG_COLOR%; }
   resize(500, height());
 }
 
-SimplePluginProgressDialog::~SimplePluginProgressDialog() { delete _progress; }
+SimplePluginProgressDialog::~SimplePluginProgressDialog() {
+  delete _progress;
+}
 
 void SimplePluginProgressDialog::setComment(const std::string &s) {
   _progress->setComment(s);
@@ -174,9 +188,13 @@ ProgressState SimplePluginProgressDialog::progress(int step, int max_step) {
   return _progress->progress(step, max_step);
 }
 
-void SimplePluginProgressDialog::cancel() { _progress->cancel(); }
+void SimplePluginProgressDialog::cancel() {
+  _progress->cancel();
+}
 
-void SimplePluginProgressDialog::stop() { _progress->stop(); }
+void SimplePluginProgressDialog::stop() {
+  _progress->stop();
+}
 
 bool SimplePluginProgressDialog::isPreviewMode() const {
   return _progress->isPreviewMode();
@@ -223,7 +241,9 @@ void SimplePluginProgressDialog::paintEvent(QPaintEvent *ev) {
   _painted = true;
 }
 
-void SimplePluginProgressDialog::closeEvent(QCloseEvent *ev) { ev->ignore(); }
+void SimplePluginProgressDialog::closeEvent(QCloseEvent *ev) {
+  ev->ignore();
+}
 
 void SimplePluginProgressDialog::setCancelButtonVisible(bool v) {
   _progress->setCancelButtonVisible(v);

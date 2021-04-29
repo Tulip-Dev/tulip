@@ -17,28 +17,29 @@
  *
  */
 
-#include <QApplication>
-#include <QDesktopWidget>
+#include <QString>
 #include <QDir>
+#include <QApplication>
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QDesktopWidget>
 #include <QStandardPaths>
-#include <QString>
 
 #include <CrashHandling.h>
 
+#include <tulip/TulipException.h>
+#include <tulip/TulipRelease.h>
+#include <tulip/TlpTools.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/TulipProject.h>
+#include <tulip/SimplePluginProgressWidget.h>
+#include <tulip/PluginLister.h>
+#include <tulip/Perspective.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/TulipSettings.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlOffscreenRenderer.h>
 #include <tulip/GlTextureManager.h>
-#include <tulip/Perspective.h>
-#include <tulip/PluginLister.h>
-#include <tulip/SimplePluginProgressWidget.h>
-#include <tulip/TlpQtTools.h>
-#include <tulip/TlpTools.h>
-#include <tulip/TulipException.h>
-#include <tulip/TulipProject.h>
-#include <tulip/TulipRelease.h>
-#include <tulip/TulipSettings.h>
 
 #include "TulipPerspectiveMainWindow.h"
 
@@ -61,10 +62,8 @@ struct PluginLoaderToProgress : public PluginLoader {
   int max_step;
   int step;
 
-  PluginLoaderToProgress(PluginProgress *progress = nullptr,
-                         bool debug_output = false)
-      : _progress(progress), _debug_output(debug_output), max_step(0), step(0) {
-  }
+  PluginLoaderToProgress(PluginProgress *progress = nullptr, bool debug_output = false)
+      : _progress(progress), _debug_output(debug_output), max_step(0), step(0) {}
 
   void start(const std::string &path) override {
     step = 0;
@@ -85,7 +84,9 @@ struct PluginLoaderToProgress : public PluginLoader {
     }
   }
 
-  void numberOfFiles(int n) override { max_step = n; }
+  void numberOfFiles(int n) override {
+    max_step = n;
+  }
 
   void loading(const std::string &filename) override {
     step++;
@@ -95,17 +96,13 @@ struct PluginLoaderToProgress : public PluginLoader {
       tlp::debug() << "Loading " << filename << std::endl;
   }
 
-  void loaded(const tlp::Plugin *plugin,
-              const std::list<tlp::Dependency> &) override {
+  void loaded(const tlp::Plugin *plugin, const std::list<tlp::Dependency> &) override {
     if (_debug_output)
-      tlp::debug() << "  - Plugin '" << plugin->name() << "' registered"
-                   << std::endl;
+      tlp::debug() << "  - Plugin '" << plugin->name() << "' registered" << std::endl;
   }
 
-  void aborted(const std::string &fileName,
-               const std::string &errorMsg) override {
-    tlp::error() << "[Warning] Failed to load " << fileName << ": " << errorMsg
-                 << std::endl;
+  void aborted(const std::string &fileName, const std::string &errorMsg) override {
+    tlp::error() << "[Warning] Failed to load " << fileName << ": " << errorMsg << std::endl;
   }
 };
 
@@ -134,13 +131,11 @@ void usage(const QString &error) {
       << endl
       << "  --geometry=<X,Y,width,height>\tSet the given rectangle as geometry for the main window."
       << endl
-      << "  --title=<title>\tDisplay a specific name in the loading dialog."
-      << endl
+      << "  --title=<title>\tDisplay a specific name in the loading dialog." << endl
       << "  --icon=<relative path>\tChoose the icon in the loading dialog by providing a path "
          "relative to Tulip bitmap directory."
       << endl
-      << "  --help (-h)\tDisplay this help message and ignore other options."
-      << endl
+      << "  --help (-h)\tDisplay this help message and ignore other options." << endl
       << endl
       << "Other options (written as --<option_name>=<value>) will be passed to the perspective."
       << endl
@@ -227,8 +222,7 @@ int main(int argc, char **argv) {
   QRegExp iconRegexp("^\\-\\-icon=(.*)");
   QRegExp portRegexp("^\\-\\-port=([0-9]*)");
   QRegExp idRegexp("^\\-\\-id=([0-9]*)");
-  QRegExp geometryRegexp(
-      "^\\-\\-geometry=([0-9]*)\\,([0-9]*)\\,([0-9]*)\\,([0-9]*)");
+  QRegExp geometryRegexp("^\\-\\-geometry=([0-9]*)\\,([0-9]*)\\,([0-9]*)\\,([0-9]*)");
   QRegExp debugPluginLoadRegExp("^\\-debug_plugin_load");
   bool debugPluginLoad = false;
   QRegExp extraParametersRegexp("^\\-\\-([^=]*)=(.*)");
@@ -249,19 +243,16 @@ int main(int argc, char **argv) {
     } else if (iconRegexp.exactMatch(a)) {
       iconPath = iconRegexp.cap(1);
     } else if (geometryRegexp.exactMatch(a)) {
-      windowGeometry =
-          QRect(geometryRegexp.cap(1).toInt(), geometryRegexp.cap(2).toInt(),
-                geometryRegexp.cap(3).toInt(), geometryRegexp.cap(4).toInt());
+      windowGeometry = QRect(geometryRegexp.cap(1).toInt(), geometryRegexp.cap(2).toInt(),
+                             geometryRegexp.cap(3).toInt(), geometryRegexp.cap(4).toInt());
     } else if (portRegexp.exactMatch(a)) {
       context->tulipPort = portRegexp.cap(1).toUInt();
     } else if (debugPluginLoadRegExp.exactMatch(a))
       debugPluginLoad = true;
     else if (idRegexp.exactMatch(a)) {
       context->id = idRegexp.cap(1).toUInt();
-      QString dumpPath =
-          QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation)
-                   .at(0))
-              .filePath("tulip_perspective-" + idRegexp.cap(1) + ".log");
+      QString dumpPath = QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0))
+                             .filePath("tulip_perspective-" + idRegexp.cap(1) + ".log");
       CrashHandling::setDumpPath(QStringToTlpString(dumpPath));
     } else if (extraParametersRegexp.exactMatch(a)) {
       extraParams[extraParametersRegexp.cap(1)] = extraParametersRegexp.cap(2);
@@ -273,9 +264,9 @@ int main(int argc, char **argv) {
   initTulipLib(QStringToTlpString(QApplication::applicationDirPath()).c_str());
 
 #ifdef _MSC_VER
-  // Add path to Tulip pdb files generated by Visual Studio (for configurations
-  // Debug and RelWithDebInfo) It allows to get a detailed stack trace when
-  // Tulip crashes.
+  // Add path to Tulip pdb files generated by Visual Studio (for configurations Debug and
+  // RelWithDebInfo)
+  // It allows to get a detailed stack trace when Tulip crashes.
   CrashHandling::setExtraSymbolsSearchPaths(tlp::TulipShareDir + "pdb");
 #endif
 
@@ -296,8 +287,7 @@ int main(int argc, char **argv) {
   while (start) {
     QFileInfo fileInfo(projectFilePath);
 
-    if (!projectFilePath.isEmpty() &&
-        (!fileInfo.exists() || fileInfo.isDir())) {
+    if (!projectFilePath.isEmpty() && (!fileInfo.exists() || fileInfo.isDir())) {
       usage("File " + projectFilePath + " not found or is a directory");
     }
 
@@ -325,8 +315,7 @@ int main(int argc, char **argv) {
     progress->progress(100, 100);
     progress->setComment("Setting up GUI (this can take some time)");
     // Create perspective's window
-    TulipPerspectiveProcessMainWindow *mainWindow =
-        new TulipPerspectiveProcessMainWindow(title);
+    TulipPerspectiveProcessMainWindow *mainWindow = new TulipPerspectiveProcessMainWindow(title);
     mainWindow->setVisible(false);
 
     context->mainWindow = mainWindow;
@@ -360,8 +349,7 @@ int main(int argc, char **argv) {
       mainWindow->setGeometry(windowGeometry);
     } else {
       mainWindow->move(0, 0);
-      mainWindow->resize(QDesktopWidget().availableGeometry(mainWindow).size() *
-                         0.9);
+      mainWindow->resize(QDesktopWidget().availableGeometry(mainWindow).size() * 0.9);
     }
 
     TulipSettings::setFirstRun(false);

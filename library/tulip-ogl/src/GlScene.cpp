@@ -19,21 +19,21 @@
 #include <GL/glew.h>
 
 #include <algorithm>
+#include <cstdlib>
 #include <climits>
 #include <cstdio>
-#include <cstdlib>
 
-#include <tulip/Camera.h>
-#include <tulip/GlBoundingBoxSceneVisitor.h>
-#include <tulip/GlCPULODCalculator.h>
-#include <tulip/GlGraphComposite.h>
+#include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlScene.h>
-#include <tulip/GlSceneObserver.h>
-#include <tulip/GlSelectSceneVisitor.h>
-#include <tulip/GlSimpleEntity.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlXMLTools.h>
-#include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlCPULODCalculator.h>
+#include <tulip/GlBoundingBoxSceneVisitor.h>
+#include <tulip/GlSelectSceneVisitor.h>
+#include <tulip/Camera.h>
+#include <tulip/GlSimpleEntity.h>
+#include <tulip/GlGraphComposite.h>
+#include <tulip/GlSceneObserver.h>
 
 using namespace std;
 
@@ -46,8 +46,7 @@ struct EntityWithDistance {
 
   EntityWithDistance(const double &dist, EntityLODUnit *entity)
       : distance(dist), entity(entity), isComplexEntity(false), isNode(true) {}
-  EntityWithDistance(const double &dist, ComplexEntityLODUnit *entity,
-                     bool isNode)
+  EntityWithDistance(const double &dist, ComplexEntityLODUnit *entity, bool isNode)
       : distance(dist), entity(entity), isComplexEntity(true), isNode(isNode) {}
 
   double distance;
@@ -61,8 +60,7 @@ struct EntityWithDistance {
  */
 struct entityWithDistanceCompare {
   static const GlGraphInputData *inputData;
-  bool operator()(const EntityWithDistance &e1,
-                  const EntityWithDistance &e2) const {
+  bool operator()(const EntityWithDistance &e1, const EntityWithDistance &e2) const {
     if (e1.distance > e2.distance)
       return true;
 
@@ -82,9 +80,8 @@ struct entityWithDistanceCompare {
 //====================================================
 
 GlScene::GlScene(GlLODCalculator *calculator)
-    : backgroundColor(255, 255, 255, 255), viewOrtho(true),
-      glGraphComposite(nullptr), graphLayer(nullptr), clearBufferAtDraw(true),
-      inDraw(false), clearDepthBufferAtDraw(true),
+    : backgroundColor(255, 255, 255, 255), viewOrtho(true), glGraphComposite(nullptr),
+      graphLayer(nullptr), clearBufferAtDraw(true), inDraw(false), clearDepthBufferAtDraw(true),
       clearStencilBufferAtDraw(true) {
 
   if (calculator != nullptr)
@@ -134,8 +131,8 @@ void GlScene::initGlParameters() {
   }
 
   if (clearBufferAtDraw) {
-    glClearColor(backgroundColor.getRGL(), backgroundColor.getGGL(),
-                 backgroundColor.getBGL(), backgroundColor.getAGL());
+    glClearColor(backgroundColor.getRGL(), backgroundColor.getGGL(), backgroundColor.getBGL(),
+                 backgroundColor.getAGL());
     glClear(GL_COLOR_BUFFER_BIT);
   }
 
@@ -192,9 +189,8 @@ void GlScene::draw() {
     }
 
     // Draw simple entities
-    if (getGlGraphComposite() && !getGlGraphComposite()
-                                      ->getInputData()
-                                      ->parameters->isElementZOrdered()) {
+    if (getGlGraphComposite() &&
+        !getGlGraphComposite()->getInputData()->parameters->isElementZOrdered()) {
       for (auto &it : itLayer.simpleEntitiesLODVector) {
         if (it.lod < 0)
           continue;
@@ -216,19 +212,15 @@ void GlScene::draw() {
 
         bb = it.boundingBox;
         Coord &&middle = (bb[1] + bb[0]) / 2.f;
-        dist = (double(middle[0]) - double(camPos[0])) *
-               (double(middle[0]) - double(camPos[0]));
-        dist += (double(middle[1]) - double(camPos[1])) *
-                (double(middle[1]) - double(camPos[1]));
-        dist += (double(middle[2]) - double(camPos[2])) *
-                (double(middle[2]) - double(camPos[2]));
+        dist = (double(middle[0]) - double(camPos[0])) * (double(middle[0]) - double(camPos[0]));
+        dist += (double(middle[1]) - double(camPos[1])) * (double(middle[1]) - double(camPos[1]));
+        dist += (double(middle[2]) - double(camPos[2])) * (double(middle[2]) - double(camPos[2]));
         entitiesSet.emplace(dist, &it);
       }
 
       for (auto &it : entitiesSet) {
         // Simple entities
-        GlSimpleEntity *entity =
-            static_cast<SimpleEntityLODUnit *>(it.entity)->entity;
+        GlSimpleEntity *entity = static_cast<SimpleEntityLODUnit *>(it.entity)->entity;
         glStencilFunc(GL_LEQUAL, entity->getStencil(), 0xFFFF);
         entity->draw(it.entity->lod, camera);
       }
@@ -276,8 +268,7 @@ GlLayer *GlScene::createLayerBefore(const std::string &layerName,
       newLayer->setScene(this);
 
       if (hasOnlookers())
-        sendEvent(GlSceneEvent(*this, GlSceneEvent::TLP_ADDLAYER, layerName,
-                               newLayer));
+        sendEvent(GlSceneEvent(*this, GlSceneEvent::TLP_ADDLAYER, layerName, newLayer));
 
       if (oldLayer != nullptr) {
         removeLayer(oldLayer);
@@ -306,8 +297,7 @@ GlLayer *GlScene::createLayerAfter(const std::string &layerName,
       newLayer->setScene(this);
 
       if (hasOnlookers())
-        sendEvent(GlSceneEvent(*this, GlSceneEvent::TLP_ADDLAYER, layerName,
-                               newLayer));
+        sendEvent(GlSceneEvent(*this, GlSceneEvent::TLP_ADDLAYER, layerName, newLayer));
 
       if (oldLayer != nullptr) {
         tlp::warning()
@@ -337,12 +327,10 @@ void GlScene::addExistingLayer(GlLayer *layer) {
   layer->setScene(this);
 
   if (hasOnlookers())
-    sendEvent(GlSceneEvent(*this, GlSceneEvent::TLP_ADDLAYER, layer->getName(),
-                           layer));
+    sendEvent(GlSceneEvent(*this, GlSceneEvent::TLP_ADDLAYER, layer->getName(), layer));
 }
 
-bool GlScene::addExistingLayerBefore(GlLayer *layer,
-                                     const std::string &beforeLayerWithName) {
+bool GlScene::addExistingLayerBefore(GlLayer *layer, const std::string &beforeLayerWithName) {
   bool insertionOk = false;
   GlLayer *oldLayer = getLayer(layer->getName());
 
@@ -352,8 +340,7 @@ bool GlScene::addExistingLayerBefore(GlLayer *layer,
       layer->setScene(this);
 
       if (hasOnlookers())
-        sendEvent(GlSceneEvent(*this, GlSceneEvent::TLP_ADDLAYER,
-                               layer->getName(), layer));
+        sendEvent(GlSceneEvent(*this, GlSceneEvent::TLP_ADDLAYER, layer->getName(), layer));
 
       if (oldLayer != nullptr) {
         tlp::warning()
@@ -370,8 +357,7 @@ bool GlScene::addExistingLayerBefore(GlLayer *layer,
   return insertionOk;
 }
 
-bool GlScene::addExistingLayerAfter(GlLayer *layer,
-                                    const std::string &afterLayerWithName) {
+bool GlScene::addExistingLayerAfter(GlLayer *layer, const std::string &afterLayerWithName) {
   bool insertionOk = false;
   GlLayer *oldLayer = getLayer(layer->getName());
 
@@ -382,8 +368,7 @@ bool GlScene::addExistingLayerAfter(GlLayer *layer,
       layer->setScene(this);
 
       if (hasOnlookers())
-        sendEvent(GlSceneEvent(*this, GlSceneEvent::TLP_ADDLAYER,
-                               layer->getName(), layer));
+        sendEvent(GlSceneEvent(*this, GlSceneEvent::TLP_ADDLAYER, layer->getName(), layer));
 
       if (oldLayer != nullptr) {
         tlp::warning()
@@ -414,8 +399,7 @@ void GlScene::removeLayer(const std::string &name, bool deleteLayer) {
   for (auto it = layersList.begin(); it != layersList.end(); ++it) {
     if (it->first == name) {
       if (hasOnlookers())
-        sendEvent(
-            GlSceneEvent(*this, GlSceneEvent::TLP_DELLAYER, name, it->second));
+        sendEvent(GlSceneEvent(*this, GlSceneEvent::TLP_DELLAYER, name, it->second));
 
       if (deleteLayer)
         delete it->second;
@@ -432,8 +416,7 @@ void GlScene::removeLayer(GlLayer *layer, bool deleteLayer) {
   for (auto it = layersList.begin(); it != layersList.end(); ++it) {
     if (it->second == layer) {
       if (hasOnlookers())
-        sendEvent(GlSceneEvent(*this, GlSceneEvent::TLP_DELLAYER,
-                               layer->getName(), layer));
+        sendEvent(GlSceneEvent(*this, GlSceneEvent::TLP_DELLAYER, layer->getName(), layer));
 
       if (deleteLayer)
         delete it->second;
@@ -461,13 +444,13 @@ void GlScene::notifyDeletedEntity(GlSimpleEntity *entity) {
     sendEvent(GlSceneEvent(*this, GlSceneEvent::TLP_DELENTITY, entity));
 }
 
-void GlScene::centerScene() { adjustSceneToSize(viewport[2], viewport[3]); }
+void GlScene::centerScene() {
+  adjustSceneToSize(viewport[2], viewport[3]);
+}
 
-void GlScene::computeAdjustSceneToSize(int width, int height, Coord *center,
-                                       Coord *eye, float *sceneRadius,
-                                       float *xWhiteFactor, float *yWhiteFactor,
-                                       BoundingBox *sceneBoundingBox,
-                                       float *zoomFactor) {
+void GlScene::computeAdjustSceneToSize(int width, int height, Coord *center, Coord *eye,
+                                       float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor,
+                                       BoundingBox *sceneBoundingBox, float *zoomFactor) {
   if (xWhiteFactor)
     *xWhiteFactor = 0.;
 
@@ -535,8 +518,7 @@ void GlScene::computeAdjustSceneToSize(int width, int height, Coord *center,
       sceneRadiusTmp = float(dx);
 
       if (yWhiteFactor)
-        *yWhiteFactor =
-            float((1. - (dy / (sceneRadiusTmp * (height / width)))) / 2.);
+        *yWhiteFactor = float((1. - (dy / (sceneRadiusTmp * (height / width)))) / 2.);
     } else {
       if (width < height)
         sceneRadiusTmp = float(dx * wdx / hdy);
@@ -552,8 +534,7 @@ void GlScene::computeAdjustSceneToSize(int width, int height, Coord *center,
       sceneRadiusTmp = float(dy);
 
       if (xWhiteFactor)
-        *xWhiteFactor =
-            float((1. - (dx / (sceneRadiusTmp * (width / height)))) / 2.);
+        *xWhiteFactor = float((1. - (dx / (sceneRadiusTmp * (width / height)))) / 2.);
     } else {
       if (height < width)
         sceneRadiusTmp = float(dy * hdy / wdx);
@@ -592,8 +573,8 @@ void GlScene::adjustSceneToSize(int width, int height) {
   float zoomFactor;
   BoundingBox sceneBoundingBox;
 
-  computeAdjustSceneToSize(width, height, &center, &eye, &sceneRadius, nullptr,
-                           nullptr, &sceneBoundingBox, &zoomFactor);
+  computeAdjustSceneToSize(width, height, &center, &eye, &sceneRadius, nullptr, nullptr,
+                           &sceneBoundingBox, &zoomFactor);
 
   for (auto &it : layersList) {
     Camera &camera = it.second->getCamera();
@@ -621,9 +602,8 @@ void GlScene::zoomXY(int step, const int x, const int y) {
 void GlScene::zoom(float, const Coord &dest) {
   for (auto &it : layersList) {
     if (it.second->getCamera().is3D() && (!it.second->useSharedCamera())) {
-      it.second->getCamera().setEyes(dest +
-                                     (it.second->getCamera().getEyes() -
-                                      it.second->getCamera().getCenter()));
+      it.second->getCamera().setEyes(
+          dest + (it.second->getCamera().getEyes() - it.second->getCamera().getCenter()));
       it.second->getCamera().setCenter(dest);
     }
   }
@@ -636,8 +616,7 @@ void GlScene::translateCamera(const int x, const int y, const int z) {
       Coord &&v2 = it.second->getCamera().viewportTo3DWorld(Coord(x, y, z));
       Coord &&move = v2 - v1;
       it.second->getCamera().setEyes(it.second->getCamera().getEyes() + move);
-      it.second->getCamera().setCenter(it.second->getCamera().getCenter() +
-                                       move);
+      it.second->getCamera().setCenter(it.second->getCamera().getCenter() + move);
     }
   }
 }
@@ -645,8 +624,7 @@ void GlScene::translateCamera(const int x, const int y, const int z) {
 void GlScene::zoomFactor(float factor) {
   for (auto &it : layersList) {
     if (it.second->getCamera().is3D() && (!it.second->useSharedCamera())) {
-      it.second->getCamera().setZoomFactor(
-          it.second->getCamera().getZoomFactor() * factor);
+      it.second->getCamera().setZoomFactor(it.second->getCamera().getZoomFactor() * factor);
     }
   }
 }
@@ -661,14 +639,12 @@ void GlScene::rotateCamera(const int x, const int y, const int z) {
   }
 }
 //========================================================================================================
-void GlScene::glGraphCompositeAdded(GlLayer *layer,
-                                    GlGraphComposite *glGraphComposite) {
+void GlScene::glGraphCompositeAdded(GlLayer *layer, GlGraphComposite *glGraphComposite) {
   this->graphLayer = layer;
   this->glGraphComposite = glGraphComposite;
 }
 //========================================================================================================
-void GlScene::glGraphCompositeRemoved(GlLayer *layer,
-                                      GlGraphComposite *glGraphComposite) {
+void GlScene::glGraphCompositeRemoved(GlLayer *layer, GlGraphComposite *glGraphComposite) {
   if (this->glGraphComposite == glGraphComposite) {
     // fixes unused warning in release
     (void)layer;
@@ -713,8 +689,7 @@ static void pickMatrix(GLdouble x, GLdouble y, GLdouble width, GLdouble height,
 }
 
 //========================================================================================================
-bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int w,
-                             int h, GlLayer *layer,
+bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int w, int h, GlLayer *layer,
                              vector<SelectedEntity> &selectedEntities) {
   if (w == 0)
     w = 1;
@@ -734,12 +709,10 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int w,
     }
   }
 
-  GlLODCalculator *selectLODCalculator =
-      layerInScene ? lodCalculator : lodCalculator->clone();
+  GlLODCalculator *selectLODCalculator = layerInScene ? lodCalculator : lodCalculator->clone();
 
   selectLODCalculator->setRenderingEntitiesFlag(
-      static_cast<RenderingEntitiesFlag>(RenderingAll |
-                                         RenderingWithoutRemove));
+      static_cast<RenderingEntitiesFlag>(RenderingAll | RenderingWithoutRemove));
   selectLODCalculator->clear();
 
   // Collect entities if needed
@@ -831,8 +804,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int w,
         if (it.lod < 0)
           continue;
 
-        GlGraphComposite *composite =
-            dynamic_cast<GlGraphComposite *>(it.entity);
+        GlGraphComposite *composite = dynamic_cast<GlGraphComposite *>(it.entity);
 
         if (composite) {
           compositesToRender.push_back(composite);
@@ -874,14 +846,13 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int w,
 }
 //====================================================
 unsigned char *GlScene::getImage() {
-  unsigned char *image = static_cast<unsigned char *>(
-      malloc(viewport[2] * viewport[3] * 3 * sizeof(unsigned char)));
+  unsigned char *image =
+      static_cast<unsigned char *>(malloc(viewport[2] * viewport[3] * 3 * sizeof(unsigned char)));
   draw();
   glFlush();
   glFinish();
   glPixelStorei(GL_PACK_ALIGNMENT, 1);
-  glReadPixels(viewport[0], viewport[1], viewport[2], viewport[3], GL_RGB,
-               GL_UNSIGNED_BYTE, image);
+  glReadPixels(viewport[0], viewport[1], viewport[2], viewport[3], GL_RGB, GL_UNSIGNED_BYTE, image);
   return image;
 }
 //====================================================
@@ -969,8 +940,7 @@ void GlScene::setWithXML(string &in, Graph *graph) {
   while (!childName.empty()) {
     assert(childName == "GlLayer");
 
-    map<string, string> &&properties =
-        GlXMLTools::getProperties(in, currentPosition);
+    map<string, string> &&properties = GlXMLTools::getProperties(in, currentPosition);
 
     assert(properties.count("name") != 0);
 

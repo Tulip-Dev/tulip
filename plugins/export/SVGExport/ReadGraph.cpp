@@ -18,31 +18,29 @@
  */
 #include <algorithm>
 
-#include "ExportInterface.h"
 #include "ReadGraph.h"
+#include "ExportInterface.h"
 
-#include <tulip/DrawingTools.h>
+#include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
+#include <tulip/GlGraphStaticData.h>
+#include <tulip/DrawingTools.h>
+#include <tulip/StringProperty.h>
 #include <tulip/GlEdge.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/GlGraphStaticData.h>
-#include <tulip/GlyphManager.h>
-#include <tulip/StringProperty.h>
 
 using namespace std;
 using namespace tlp;
 
-static bool
-treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface &exportint,
-           unsigned &i, const int nb_elements, tlp::SizeProperty *sizes,
-           tlp::ColorProperty *colors, tlp::LayoutProperty *layout,
-           tlp::IntegerProperty *shape, tlp::IntegerProperty *srcanchorshape,
-           tlp::IntegerProperty *tgtanchorshape, tlp::StringProperty *label,
-           tlp::ColorProperty *labelcolor, bool edge_color_interpolation,
-           bool edge_size_interpolation, bool edge_extremities,
-           const bool edge_labels, IntegerProperty *fontsize,
-           StringProperty *iconName) {
+static bool treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface &exportint,
+                       unsigned &i, const int nb_elements, tlp::SizeProperty *sizes,
+                       tlp::ColorProperty *colors, tlp::LayoutProperty *layout,
+                       tlp::IntegerProperty *shape, tlp::IntegerProperty *srcanchorshape,
+                       tlp::IntegerProperty *tgtanchorshape, tlp::StringProperty *label,
+                       tlp::ColorProperty *labelcolor, bool edge_color_interpolation,
+                       bool edge_size_interpolation, bool edge_extremities, const bool edge_labels,
+                       IntegerProperty *fontsize, StringProperty *iconName) {
   pp->setComment("Exporting edges...");
   bool ret(true);
   ret = exportint.groupEdge();
@@ -81,36 +79,30 @@ treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface &exportint,
     Coord srcCoord, tgtCoord;
     Size srcSize, tgtSize;
     vector<Coord> edgeVertices;
-    auto nbVertices =
-        glEdge.getVertices(&inputData, e, ends.first, ends.second, srcCoord,
-                           tgtCoord, srcSize, tgtSize, edgeVertices);
+    auto nbVertices = glEdge.getVertices(&inputData, e, ends.first, ends.second, srcCoord, tgtCoord,
+                                         srcSize, tgtSize, edgeVertices);
 
     // nothing to do if current edge is a loop with no bends
     if (!nbVertices)
       continue;
 
     // Edges extremities
-    EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type =
-        EdgeExtremityShape::None;
-    EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type =
-        EdgeExtremityShape::None;
+    EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type = EdgeExtremityShape::None;
+    EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type = EdgeExtremityShape::None;
     bool ret(true);
 
     if (edge_extremities) {
       src_anchor_shape_type =
-          static_cast<EdgeExtremityShape::EdgeExtremityShapes>(
-              srcanchorshape->getEdgeValue(e));
+          static_cast<EdgeExtremityShape::EdgeExtremityShapes>(srcanchorshape->getEdgeValue(e));
       tgt_anchor_shape_type =
-          static_cast<EdgeExtremityShape::EdgeExtremityShapes>(
-              tgtanchorshape->getEdgeValue(e));
+          static_cast<EdgeExtremityShape::EdgeExtremityShapes>(tgtanchorshape->getEdgeValue(e));
     }
 
     if (src_anchor_shape_type != EdgeExtremityShape::None ||
         tgt_anchor_shape_type != EdgeExtremityShape::None) {
-      ret = exportint.exportEdgeExtremity(
-          id_src_shape, id_tgt_shape, src_anchor_shape_type,
-          tgt_anchor_shape_type, colors->getEdgeValue(e), id_src_grad,
-          id_tgt_grad, iconName->getEdgeValue(e));
+      ret = exportint.exportEdgeExtremity(id_src_shape, id_tgt_shape, src_anchor_shape_type,
+                                          tgt_anchor_shape_type, colors->getEdgeValue(e),
+                                          id_src_grad, id_tgt_grad, iconName->getEdgeValue(e));
 
       if (!ret) {
         if (pp->getError().empty()) {
@@ -127,25 +119,22 @@ treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface &exportint,
 
     if (edge_size_interpolation) {
       // svg only handles a width for each edge
-      width = std::min(sizes->getNodeValue(ends.first)[0] / 8,
-                       sizes->getNodeValue(ends.second)[0] / 8);
-    } else
       width =
-          std::min(sizes->getEdgeValue(e)[0], sizes->getEdgeValue(e)[1]) + 1;
+          std::min(sizes->getNodeValue(ends.first)[0] / 8, sizes->getNodeValue(ends.second)[0] / 8);
+    } else
+      width = std::min(sizes->getEdgeValue(e)[0], sizes->getEdgeValue(e)[1]) + 1;
 
     // Get edge type
     if (!edge_color_interpolation) {
-      ret = exportint.exportEdge(
-          static_cast<EdgeShape::EdgeShapes>(shape->getEdgeValue(e)),
-          layout->getEdgeValue(e), colors->getEdgeValue(e), width,
-          src_anchor_shape_type, id_src_shape, tgt_anchor_shape_type,
-          id_tgt_shape, edgeVertices);
+      ret = exportint.exportEdge(static_cast<EdgeShape::EdgeShapes>(shape->getEdgeValue(e)),
+                                 layout->getEdgeValue(e), colors->getEdgeValue(e), width,
+                                 src_anchor_shape_type, id_src_shape, tgt_anchor_shape_type,
+                                 id_tgt_shape, edgeVertices);
     } else {
-      ret = exportint.exportEdge(
-          e.id, static_cast<EdgeShape::EdgeShapes>(shape->getEdgeValue(e)),
-          layout->getEdgeValue(e), colors->getNodeValue(ends.first),
-          colors->getNodeValue(ends.second), width, src_anchor_shape_type,
-          id_src_shape, tgt_anchor_shape_type, id_tgt_shape, edgeVertices);
+      ret = exportint.exportEdge(e.id, static_cast<EdgeShape::EdgeShapes>(shape->getEdgeValue(e)),
+                                 layout->getEdgeValue(e), colors->getNodeValue(ends.first),
+                                 colors->getNodeValue(ends.second), width, src_anchor_shape_type,
+                                 id_src_shape, tgt_anchor_shape_type, id_tgt_shape, edgeVertices);
     }
 
     if (!ret) {
@@ -159,11 +148,9 @@ treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface &exportint,
     }
 
     if (edge_labels) {
-      Coord &&c = edgeVertices[edgeVertices.size() / 2] +
-                  edgeVertices[edgeVertices.size() / 2 - 1];
-      ret = exportint.addLabel(
-          "edge", label->getEdgeValue(e), labelcolor->getEdgeValue(e), c /= 2,
-          fontsize->getEdgeValue(e), sizes->getEdgeValue(e));
+      Coord &&c = edgeVertices[edgeVertices.size() / 2] + edgeVertices[edgeVertices.size() / 2 - 1];
+      ret = exportint.addLabel("edge", label->getEdgeValue(e), labelcolor->getEdgeValue(e), c /= 2,
+                               fontsize->getEdgeValue(e), sizes->getEdgeValue(e));
 
       if (!ret) {
         if (pp->getError().empty()) {
@@ -228,15 +215,14 @@ struct sortNodes {
   }
 };
 
-static bool
-treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface &exportint,
-           unsigned &i, const int nb_elements, tlp::SizeProperty *sizes,
-           tlp::ColorProperty *colors, tlp::LayoutProperty *layout,
-           tlp::IntegerProperty *shape, tlp::DoubleProperty *rotation,
-           tlp::DoubleProperty *borderwidth, tlp::StringProperty *label,
-           tlp::ColorProperty *labelcolor, tlp::ColorProperty *bordercolor,
-           std::vector<tlp::node> &metanodeVertices, const bool node_labels,
-           IntegerProperty *fontsize, StringProperty *iconName) {
+static bool treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface &exportint,
+                       unsigned &i, const int nb_elements, tlp::SizeProperty *sizes,
+                       tlp::ColorProperty *colors, tlp::LayoutProperty *layout,
+                       tlp::IntegerProperty *shape, tlp::DoubleProperty *rotation,
+                       tlp::DoubleProperty *borderwidth, tlp::StringProperty *label,
+                       tlp::ColorProperty *labelcolor, tlp::ColorProperty *bordercolor,
+                       std::vector<tlp::node> &metanodeVertices, const bool node_labels,
+                       IntegerProperty *fontsize, StringProperty *iconName) {
   pp->setComment("Exporting nodes...");
   bool ret = exportint.groupNode();
 
@@ -250,9 +236,10 @@ treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface &exportint,
   /*z-ordering is handled in SVG.
   from the SVG 1.1 spec:
     3.3 Rendering Order
-   Elements in an SVG document fragment have an implicit drawing order, with the
-  first elements in the SVG document fragment getting "painted" first.
-  Subsequent elements are painted on top of previously painted elements.
+   Elements in an SVG document fragment have an implicit drawing order, with the first elements in
+  the SVG document
+  fragment getting "painted" first. Subsequent elements are painted on top of previously painted
+  elements.
 
   So order nodes following their z coordinates before exporting them
   */
@@ -299,10 +286,9 @@ treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface &exportint,
       }
     }
 
-    ret = exportint.addShape(
-        static_cast<NodeShape::NodeShapes>(shape->getNodeValue(n)), c, s,
-        bordercolor->getNodeValue(n), borderwidth->getNodeValue(n),
-        colors->getNodeValue(n), iconName->getNodeValue(n));
+    ret = exportint.addShape(static_cast<NodeShape::NodeShapes>(shape->getNodeValue(n)), c, s,
+                             bordercolor->getNodeValue(n), borderwidth->getNodeValue(n),
+                             colors->getNodeValue(n), iconName->getNodeValue(n));
 
     if (!ret) {
       if (pp->getError().empty()) {
@@ -315,8 +301,7 @@ treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface &exportint,
     }
 
     if (node_labels) {
-      ret = exportint.addLabel("node", label->getNodeValue(n),
-                               labelcolor->getNodeValue(n), c,
+      ret = exportint.addLabel("node", label->getNodeValue(n), labelcolor->getNodeValue(n), c,
                                fontsize->getNodeValue(n), s);
 
       if (!ret) {
@@ -366,26 +351,20 @@ treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface &exportint,
   return true;
 }
 
-bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds,
-                          tlp::PluginProgress *pp, ExportInterface &exportint) {
+bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp,
+                          ExportInterface &exportint) {
   LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
   ColorProperty *colors = graph->getProperty<ColorProperty>("viewColor");
   IntegerProperty *shape = graph->getProperty<IntegerProperty>("viewShape");
-  IntegerProperty *srcanchorshape =
-      graph->getProperty<IntegerProperty>("viewSrcAnchorShape");
-  IntegerProperty *tgtanchorshape =
-      graph->getProperty<IntegerProperty>("viewTgtAnchorShape");
+  IntegerProperty *srcanchorshape = graph->getProperty<IntegerProperty>("viewSrcAnchorShape");
+  IntegerProperty *tgtanchorshape = graph->getProperty<IntegerProperty>("viewTgtAnchorShape");
   SizeProperty *sizes = graph->getProperty<SizeProperty>("viewSize");
   StringProperty *label = graph->getProperty<StringProperty>("viewLabel");
-  ColorProperty *labelcolor =
-      graph->getProperty<ColorProperty>("viewLabelColor");
-  ColorProperty *bordercolor =
-      graph->getProperty<ColorProperty>("viewBorderColor");
-  DoubleProperty *borderwidth =
-      graph->getProperty<DoubleProperty>("viewBorderWidth");
+  ColorProperty *labelcolor = graph->getProperty<ColorProperty>("viewLabelColor");
+  ColorProperty *bordercolor = graph->getProperty<ColorProperty>("viewBorderColor");
+  DoubleProperty *borderwidth = graph->getProperty<DoubleProperty>("viewBorderWidth");
   DoubleProperty *rotation = graph->getProperty<DoubleProperty>("viewRotation");
-  IntegerProperty *fontsize =
-      graph->getProperty<IntegerProperty>("viewFontSize");
+  IntegerProperty *fontsize = graph->getProperty<IntegerProperty>("viewFontSize");
   StringProperty *fontIconName = graph->getProperty<StringProperty>("viewIcon");
   bool edge_color_interpolation = false;
   bool edge_extremities = false;
@@ -432,10 +411,9 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds,
   unsigned i = 0;
 
   // Analysing edges
-  ret = treatEdges(graph, pp, exportint, i, nb_elements, sizes, colors, layout,
-                   shape, srcanchorshape, tgtanchorshape, label, labelcolor,
-                   edge_color_interpolation, edge_size_interpolation,
-                   edge_extremities, edge_labels, fontsize, fontIconName);
+  ret = treatEdges(graph, pp, exportint, i, nb_elements, sizes, colors, layout, shape,
+                   srcanchorshape, tgtanchorshape, label, labelcolor, edge_color_interpolation,
+                   edge_size_interpolation, edge_extremities, edge_labels, fontsize, fontIconName);
 
   if (!ret) {
     if (pp->getError().empty())
@@ -446,9 +424,9 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds,
 
   // Analysing nodes
   std::vector<tlp::node> metanodeVertices;
-  ret = treatNodes(graph, pp, exportint, i, nb_elements, sizes, colors, layout,
-                   shape, rotation, borderwidth, label, labelcolor, bordercolor,
-                   metanodeVertices, node_labels, fontsize, fontIconName);
+  ret = treatNodes(graph, pp, exportint, i, nb_elements, sizes, colors, layout, shape, rotation,
+                   borderwidth, label, labelcolor, bordercolor, metanodeVertices, node_labels,
+                   fontsize, fontIconName);
 
   if (!ret) {
     if (pp->getError().empty())
@@ -466,8 +444,7 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds,
 
     for (auto metanode : metanodeVertices) {
       Graph *metagraph = graph->getNodeMetaInfo(metanode);
-      BoundingBox metagraphbb =
-          tlp::computeBoundingBox(metagraph, layout, sizes, rotation);
+      BoundingBox metagraphbb = tlp::computeBoundingBox(metagraph, layout, sizes, rotation);
       const Coord &coord_meta_node = layout->getNodeValue(metanode);
       const Size &size_meta_node = sizes->getNodeValue(metanode);
 
@@ -479,20 +456,17 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds,
         scale *= 0.64f;
 
       // We compute the transformation on X and add him to our vertice
-      transformationVertices.push_back(
-          -graphbb.center().getX() + graphbb.width() / 2 -
-          metagraphbb.center().getX() * (scale - 1) + coord_meta_node.getX() -
-          metagraphbb.center().getX());
+      transformationVertices.push_back(-graphbb.center().getX() + graphbb.width() / 2 -
+                                       metagraphbb.center().getX() * (scale - 1) +
+                                       coord_meta_node.getX() - metagraphbb.center().getX());
       // We compute the transformation on Y and add him to our vertice
-      transformationVertices.push_back(
-          graphbb.center().getY() + graphbb.height() / 2 +
-          metagraphbb.center().getY() * (scale - 1) - coord_meta_node.getY() +
-          metagraphbb.center().getY());
+      transformationVertices.push_back(graphbb.center().getY() + graphbb.height() / 2 +
+                                       metagraphbb.center().getY() * (scale - 1) -
+                                       coord_meta_node.getY() + metagraphbb.center().getY());
 
       vector<int>::const_iterator tran = transformationVertices.begin();
 
-      ret = exportint.writeMetaGraph(tran[indice_Transform],
-                                     tran[indice_Transform + 1], scale);
+      ret = exportint.writeMetaGraph(tran[indice_Transform], tran[indice_Transform + 1], scale);
 
       if (!ret) {
         if (pp->getError().empty())
@@ -504,11 +478,10 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds,
       indice_Transform += 2;
 
       // Analysing edges in the metanode
-      ret = treatEdges(metagraph, pp, exportint, i, nb_elements, sizes, colors,
-                       layout, shape, srcanchorshape, tgtanchorshape, label,
-                       labelcolor, edge_color_interpolation,
-                       edge_size_interpolation, edge_extremities,
-                       metanode_labels, fontsize, fontIconName);
+      ret = treatEdges(metagraph, pp, exportint, i, nb_elements, sizes, colors, layout, shape,
+                       srcanchorshape, tgtanchorshape, label, labelcolor, edge_color_interpolation,
+                       edge_size_interpolation, edge_extremities, metanode_labels, fontsize,
+                       fontIconName);
 
       if (!ret) {
         stringstream str;
@@ -518,10 +491,9 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds,
       }
 
       // Analysing nodes in the metanode
-      ret = treatNodes(metagraph, pp, exportint, i, nb_elements, sizes, colors,
-                       layout, shape, rotation, borderwidth, label, labelcolor,
-                       bordercolor, subMetanodeVertices, metanode_labels,
-                       fontsize, fontIconName);
+      ret = treatNodes(metagraph, pp, exportint, i, nb_elements, sizes, colors, layout, shape,
+                       rotation, borderwidth, label, labelcolor, bordercolor, subMetanodeVertices,
+                       metanode_labels, fontsize, fontIconName);
 
       if (!ret) {
         stringstream str;

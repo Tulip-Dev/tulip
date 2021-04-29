@@ -19,34 +19,29 @@
 
 #include <GL/glew.h>
 
+#include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlSphere.h>
+#include <tulip/GlXMLTools.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlTools.h>
-#include <tulip/GlXMLTools.h>
-#include <tulip/OpenGlConfigManager.h>
 
 using namespace std;
 
 namespace tlp {
 
-GlSphere::GlSphere(const Coord &position, float radius, const Color &color,
-                   float rotX, float rotY, float rotZ)
+GlSphere::GlSphere(const Coord &position, float radius, const Color &color, float rotX, float rotY,
+                   float rotZ)
     : position(position), radius(radius), color(color), rot(rotX, rotY, rotZ) {
-  boundingBox[0] =
-      Coord(position[0] - radius, position[1] - radius, position[2] - radius);
-  boundingBox[1] =
-      Coord(position[0] + radius, position[1] + radius, position[2] + radius);
+  boundingBox[0] = Coord(position[0] - radius, position[1] - radius, position[2] - radius);
+  boundingBox[1] = Coord(position[0] + radius, position[1] + radius, position[2] + radius);
 }
 
-GlSphere::GlSphere(const Coord &position, float radius,
-                   const string &textureFile, int alpha, float rotX, float rotY,
-                   float rotZ)
-    : position(position), radius(radius), color(255, 255, 255, alpha),
-      textureFile(textureFile), rot(rotX, rotY, rotZ) {
-  boundingBox[0] =
-      Coord(position[0] - radius, position[1] - radius, position[2] - radius);
-  boundingBox[1] =
-      Coord(position[0] + radius, position[1] + radius, position[2] + radius);
+GlSphere::GlSphere(const Coord &position, float radius, const string &textureFile, int alpha,
+                   float rotX, float rotY, float rotZ)
+    : position(position), radius(radius), color(255, 255, 255, alpha), textureFile(textureFile),
+      rot(rotX, rotY, rotZ) {
+  boundingBox[0] = Coord(position[0] - radius, position[1] - radius, position[2] - radius);
+  boundingBox[1] = Coord(position[0] + radius, position[1] + radius, position[2] + radius);
 }
 
 GlSphere::~GlSphere() {
@@ -94,10 +89,8 @@ void GlSphere::generateBuffers(int space) {
       texturesCoord[(verticesCount + n) * 2 + 1] = -texturesCoord[n * 2 + 1];
       n++;
 
-      vertices[n * 3] =
-          sin((i) / 180 * PI) * sin((j + space) / 180 * PI) * radius;
-      vertices[n * 3 + 1] =
-          cos((i) / 180 * PI) * sin((j + space) / 180 * PI) * radius;
+      vertices[n * 3] = sin((i) / 180 * PI) * sin((j + space) / 180 * PI) * radius;
+      vertices[n * 3 + 1] = cos((i) / 180 * PI) * sin((j + space) / 180 * PI) * radius;
       vertices[n * 3 + 2] = -cos((j + space) / 180 * PI) * radius;
       vertices[(verticesCount + n) * 3] = vertices[n * 3];
       vertices[(verticesCount + n) * 3 + 1] = vertices[n * 3 + 1];
@@ -108,10 +101,8 @@ void GlSphere::generateBuffers(int space) {
       texturesCoord[(verticesCount + n) * 2 + 1] = -texturesCoord[n * 2 + 1];
       n++;
 
-      vertices[n * 3] =
-          sin((i + space) / 180 * PI) * sin((j) / 180 * PI) * radius;
-      vertices[n * 3 + 1] =
-          cos((i + space) / 180 * PI) * sin((j) / 180 * PI) * radius;
+      vertices[n * 3] = sin((i + space) / 180 * PI) * sin((j) / 180 * PI) * radius;
+      vertices[n * 3 + 1] = cos((i + space) / 180 * PI) * sin((j) / 180 * PI) * radius;
       vertices[n * 3 + 2] = -cos((j) / 180 * PI) * radius;
       vertices[(verticesCount + n) * 3] = vertices[n * 3];
       vertices[(verticesCount + n) * 3 + 1] = vertices[n * 3 + 1];
@@ -122,10 +113,8 @@ void GlSphere::generateBuffers(int space) {
       texturesCoord[(verticesCount + n) * 2 + 1] = -texturesCoord[n * 2 + 1];
       n++;
 
-      vertices[n * 3] =
-          sin((i + space) / 180 * PI) * sin((j + space) / 180 * PI) * radius;
-      vertices[n * 3 + 1] =
-          cos((i + space) / 180 * PI) * sin((j + space) / 180 * PI) * radius;
+      vertices[n * 3] = sin((i + space) / 180 * PI) * sin((j + space) / 180 * PI) * radius;
+      vertices[n * 3 + 1] = cos((i + space) / 180 * PI) * sin((j + space) / 180 * PI) * radius;
       vertices[n * 3 + 2] = -cos((j + space) / 180 * PI) * radius;
       vertices[(verticesCount + n) * 3] = vertices[n * 3];
       vertices[(verticesCount + n) * 3 + 1] = vertices[n * 3 + 1];
@@ -141,14 +130,13 @@ void GlSphere::generateBuffers(int space) {
   indices[verticesCount] = verticesCount * 2 - 1;
 
   glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0],
-               GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
   glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-  glBufferData(GL_ARRAY_BUFFER, texturesCoord.size() * sizeof(float),
-               &texturesCoord[0], GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, texturesCoord.size() * sizeof(float), &texturesCoord[0],
+               GL_STATIC_DRAW);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short),
-               &indices[0], GL_STATIC_DRAW);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0],
+               GL_STATIC_DRAW);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
@@ -188,8 +176,7 @@ void GlSphere::draw(float, Camera *) {
   }
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
-  glDrawElements(GL_TRIANGLE_STRIP, verticesCount, GL_UNSIGNED_SHORT,
-                 BUFFER_OFFSET(0));
+  glDrawElements(GL_TRIANGLE_STRIP, verticesCount, GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));
   glDrawElements(GL_TRIANGLE_STRIP, verticesCount, GL_UNSIGNED_SHORT,
                  BUFFER_OFFSET(verticesCount * sizeof(unsigned short)));
 
@@ -221,8 +208,7 @@ void GlSphere::getXML(string &outString) {
   GlXMLTools::getXML(outString, "rotation", rot);
 }
 //============================================================
-void GlSphere::setWithXML(const string &inString,
-                          unsigned int &currentPosition) {
+void GlSphere::setWithXML(const string &inString, unsigned int &currentPosition) {
 
   GlXMLTools::setWithXML(inString, currentPosition, "position", position);
   GlXMLTools::setWithXML(inString, currentPosition, "radius", radius);
@@ -230,9 +216,7 @@ void GlSphere::setWithXML(const string &inString,
   GlXMLTools::setWithXML(inString, currentPosition, "textureFile", textureFile);
   GlXMLTools::setWithXML(inString, currentPosition, "rotation", rot);
 
-  boundingBox[0] =
-      Coord(position[0] - radius, position[1] - radius, position[2] - radius);
-  boundingBox[1] =
-      Coord(position[0] + radius, position[1] + radius, position[2] + radius);
+  boundingBox[0] = Coord(position[0] - radius, position[1] - radius, position[2] - radius);
+  boundingBox[1] = Coord(position[0] + radius, position[1] + radius, position[2] + radius);
 }
 } // namespace tlp

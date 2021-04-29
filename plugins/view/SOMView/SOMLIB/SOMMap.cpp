@@ -19,11 +19,11 @@
 
 #include "SOMMap.h"
 #include <tulip/DoubleProperty.h>
-#include <tulip/GlyphManager.h>
 #include <tulip/IntegerProperty.h>
+#include <tulip/GlyphManager.h>
+#include <tulip/tulipconf.h>
 #include <tulip/StringCollection.h>
 #include <tulip/TulipViewSettings.h>
-#include <tulip/tulipconf.h>
 
 using namespace std;
 using namespace tlp;
@@ -34,16 +34,14 @@ using namespace tlp;
 
 SOMMap::SOMMap(Graph *root, unsigned int width, unsigned int height,
                SOMMapConnectivity connectivity, bool oppositeConnected)
-    : tlp::GraphDecorator(root), width(width), height(height),
-      connectivity(connectivity), oppositeConnected(oppositeConnected),
-      graphCreated(false) {
+    : tlp::GraphDecorator(root), width(width), height(height), connectivity(connectivity),
+      oppositeConnected(oppositeConnected), graphCreated(false) {
   initMap();
 }
-SOMMap::SOMMap(unsigned int width, unsigned int height,
-               SOMMapConnectivity connectivity, bool oppositeConnected)
-    : tlp::GraphDecorator(newGraph()), width(width), height(height),
-      connectivity(connectivity), oppositeConnected(oppositeConnected),
-      graphCreated(true) {
+SOMMap::SOMMap(unsigned int width, unsigned int height, SOMMapConnectivity connectivity,
+               bool oppositeConnected)
+    : tlp::GraphDecorator(newGraph()), width(width), height(height), connectivity(connectivity),
+      oppositeConnected(oppositeConnected), graphCreated(true) {
   initMap();
 }
 
@@ -83,13 +81,11 @@ void SOMMap::initMap() {
     gridDataSet.set("oppositeNodesConnected", oppositeConnected);
     // Suppress spacing
     gridDataSet.set("spacing", 0.0);
-    graph_component =
-        importGraph("Grid", gridDataSet, nullptr, graph_component);
+    graph_component = importGraph("Grid", gridDataSet, nullptr, graph_component);
   }
 
   assert(graph_component != nullptr);
-  IntegerProperty *nodeShape =
-      graph_component->getProperty<IntegerProperty>("viewShape");
+  IntegerProperty *nodeShape = graph_component->getProperty<IntegerProperty>("viewShape");
 
   switch (connectivity) {
   case four:
@@ -151,16 +147,14 @@ void SOMMap::registerModification(const vector<string> &propertiesToListen) {
   for (auto n : nodes()) {
     assert(propertiesToListen.size() == nodeToNodeVec[n].getSize());
 
-    for (unsigned int propertyNumber = 0; propertyNumber < properties.size();
-         ++propertyNumber) {
+    for (unsigned int propertyNumber = 0; propertyNumber < properties.size(); ++propertyNumber) {
 
       // If the property is double no need to convert
       if (properties[propertyNumber]->getTypename().compare("double") == 0) {
         static_cast<DoubleProperty *>(properties[propertyNumber])
             ->setNodeValue(n, nodeToNodeVec[n][propertyNumber]);
       } else {
-        std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__
-                  << " unmanaged type "
+        std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << " unmanaged type "
                   << properties[propertyNumber]->getTypename() << std::endl;
         assert(false);
       }

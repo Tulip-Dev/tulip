@@ -31,12 +31,10 @@ class GlMainWidget;
 class TLP_QT_SCOPE GlMainWidgetGraphicsItem : public QGraphicsObject {
   Q_OBJECT
 public:
-  GlMainWidgetGraphicsItem(tlp::GlMainWidget *glMainWidget, int width,
-                           int height);
+  GlMainWidgetGraphicsItem(tlp::GlMainWidget *glMainWidget, int width, int height);
   ~GlMainWidgetGraphicsItem() override;
 
-  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-             QWidget *widget) override;
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
   QRectF boundingRect() const override;
 
@@ -46,7 +44,9 @@ public:
     this->_redrawNeeded = redrawNeeded;
   }
 
-  tlp::GlMainWidget *getGlMainWidget() { return glMainWidget; }
+  tlp::GlMainWidget *getGlMainWidget() {
+    return glMainWidget;
+  }
 
   void setGlMainWidget(tlp::GlMainWidget *);
 

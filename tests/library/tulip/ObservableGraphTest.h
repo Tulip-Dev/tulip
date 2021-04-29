@@ -43,7 +43,9 @@ private:
   static tlp::Graph *graph;
 
 public:
-  static void setGraph(tlp::Graph *g) { graph = g; }
+  static void setGraph(tlp::Graph *g) {
+    graph = g;
+  }
   void setUp() override;
   void tearDown() override;
 

@@ -18,11 +18,11 @@
  */
 
 #include <tulip/DoubleProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/GlPolyQuad.h>
 #include <tulip/Gl2DRect.h>
 #include <tulip/GlOffscreenRenderer.h>
-#include <tulip/GlPolyQuad.h>
 #include <tulip/GlTextureManager.h>
-#include <tulip/IntegerProperty.h>
 
 #include "Histogram.h"
 
@@ -61,27 +61,22 @@ static void setGraphView(GlGraphComposite *glGraph, bool displayEdges) {
 
 int Histogram::overviewCpt(0);
 
-Histogram::Histogram(Graph *graph, Graph *edgeGraph,
-                     std::unordered_map<edge, node> &edgeMap,
-                     const std::string &propertyName,
-                     const ElementType &dataLocation, const Coord &blCorner,
-                     unsigned int size, const Color &backgroundColor,
+Histogram::Histogram(Graph *graph, Graph *edgeGraph, std::unordered_map<edge, node> &edgeMap,
+                     const std::string &propertyName, const ElementType &dataLocation,
+                     const Coord &blCorner, unsigned int size, const Color &backgroundColor,
                      const Color &textColor)
     : graph(graph), propertyName(propertyName), blCorner(blCorner), size(size),
-      nbHistogramBins(100), xAxis(nullptr), yAxis(nullptr),
-      xAxisLogScale(false), yAxisLogScale(false), nbXGraduations(15),
-      yAxisIncrementStep(0), histogramLayout(new LayoutProperty(graph)),
-      histogramEdgeLayout(new LayoutProperty(graph)),
-      histogramSize(new SizeProperty(graph)),
-      histoBinsComposite(new GlComposite()), uniformQuantification(false),
-      cumulativeFreqHisto(false), lastCumulHisto(false),
-      edgeAsNodeGraph(edgeGraph), edgeToNode(edgeMap),
-      backgroundColor(backgroundColor), textColor(textColor),
-      integerScale(false), dataLocation(dataLocation), displayEdges(false),
+      nbHistogramBins(100), xAxis(nullptr), yAxis(nullptr), xAxisLogScale(false),
+      yAxisLogScale(false), nbXGraduations(15), yAxisIncrementStep(0),
+      histogramLayout(new LayoutProperty(graph)), histogramEdgeLayout(new LayoutProperty(graph)),
+      histogramSize(new SizeProperty(graph)), histoBinsComposite(new GlComposite()),
+      uniformQuantification(false), cumulativeFreqHisto(false), lastCumulHisto(false),
+      edgeAsNodeGraph(edgeGraph), edgeToNode(edgeMap), backgroundColor(backgroundColor),
+      textColor(textColor), integerScale(false), dataLocation(dataLocation), displayEdges(false),
       layoutUpdateNeeded(true), sizesUpdateNeeded(true), updateNeeded(true),
-      xAxisScaleDefined(false), yAxisScaleDefined(false),
-      xAxisScale(make_pair(0, 0)), yAxisScale(make_pair(0, 0)),
-      initXAxisScale(make_pair(0, 0)), initYAxisScale(make_pair(0, 0)) {
+      xAxisScaleDefined(false), yAxisScaleDefined(false), xAxisScale(make_pair(0, 0)),
+      yAxisScale(make_pair(0, 0)), initXAxisScale(make_pair(0, 0)),
+      initYAxisScale(make_pair(0, 0)) {
 
   if (dataLocation == NODE) {
     graphComposite = new GlGraphComposite(graph);
@@ -96,8 +91,7 @@ Histogram::Histogram(Graph *graph, Graph *edgeGraph,
 
   setGraphView(graphComposite, (dataLocation == NODE) ? displayEdges : false);
   overviewId = overviewCpt++;
-  textureName =
-      propertyName + " histo texture " + getStringFromNumber(overviewId);
+  textureName = propertyName + " histo texture " + getStringFromNumber(overviewId);
   update();
 }
 
@@ -133,8 +127,7 @@ void Histogram::setDataLocation(const ElementType &dataLocation) {
   this->dataLocation = dataLocation;
 }
 
-static unsigned int clamp(unsigned int ui, unsigned int minVal,
-                          unsigned int maxVal) {
+static unsigned int clamp(unsigned int ui, unsigned int minVal, unsigned int maxVal) {
   return min(max(ui, minVal), maxVal);
 }
 
@@ -155,15 +148,11 @@ void Histogram::computeHistogram() {
     }
   } else {
     if (dataLocation == NODE) {
-      min =
-          graph->getProperty<IntegerProperty>(propertyName)->getNodeMin(graph);
-      max =
-          graph->getProperty<IntegerProperty>(propertyName)->getNodeMax(graph);
+      min = graph->getProperty<IntegerProperty>(propertyName)->getNodeMin(graph);
+      max = graph->getProperty<IntegerProperty>(propertyName)->getNodeMax(graph);
     } else {
-      min =
-          graph->getProperty<IntegerProperty>(propertyName)->getEdgeMin(graph);
-      max =
-          graph->getProperty<IntegerProperty>(propertyName)->getEdgeMax(graph);
+      min = graph->getProperty<IntegerProperty>(propertyName)->getEdgeMin(graph);
+      max = graph->getProperty<IntegerProperty>(propertyName)->getEdgeMax(graph);
     }
   }
 
@@ -198,14 +187,12 @@ void Histogram::computeHistogram() {
       if (dataLocation == NODE) {
         for (auto n : graph->nodes()) {
           propertyCopy.setNodeValue(
-              n, graph->getProperty<IntegerProperty>(propertyName)
-                     ->getNodeValue(n));
+              n, graph->getProperty<IntegerProperty>(propertyName)->getNodeValue(n));
         }
       } else {
         for (auto e : graph->edges()) {
           propertyCopy.setEdgeValue(
-              e, graph->getProperty<IntegerProperty>(propertyName)
-                     ->getEdgeValue(e));
+              e, graph->getProperty<IntegerProperty>(propertyName)->getEdgeValue(e));
         }
       }
     }
@@ -230,11 +217,9 @@ void Histogram::computeHistogram() {
         double val;
 
         if (graph->getProperty(propertyName)->getTypename() == "double") {
-          val =
-              graph->getProperty<DoubleProperty>(propertyName)->getNodeValue(n);
+          val = graph->getProperty<DoubleProperty>(propertyName)->getNodeValue(n);
         } else {
-          val = graph->getProperty<IntegerProperty>(propertyName)
-                    ->getNodeValue(n);
+          val = graph->getProperty<IntegerProperty>(propertyName)->getNodeValue(n);
         }
 
         if (val < binMinMaxMap[binId].first) {
@@ -259,11 +244,9 @@ void Histogram::computeHistogram() {
         double val;
 
         if (graph->getProperty(propertyName)->getTypename() == "double") {
-          val =
-              graph->getProperty<DoubleProperty>(propertyName)->getEdgeValue(e);
+          val = graph->getProperty<DoubleProperty>(propertyName)->getEdgeValue(e);
         } else {
-          val = graph->getProperty<IntegerProperty>(propertyName)
-                    ->getEdgeValue(e);
+          val = graph->getProperty<IntegerProperty>(propertyName)->getEdgeValue(e);
         }
 
         if (val < binMinMaxMap[binId].first) {
@@ -280,8 +263,7 @@ void Histogram::computeHistogram() {
 
     for (unsigned int i = 0; i < nbHistogramBins; ++i) {
       if (histogramBins[i].size() > 0) {
-        uniformQuantificationAxisLabels.push_back(
-            getStringFromNumber(binMinMaxMap[i].first));
+        uniformQuantificationAxisLabels.push_back(getStringFromNumber(binMinMaxMap[i].first));
       } else {
         if (histogramBins[i - 1].size() > 0) {
           uniformQuantificationAxisLabels.push_back(
@@ -301,19 +283,17 @@ void Histogram::computeHistogram() {
         double value;
 
         if (graph->getProperty(propertyName)->getTypename() == "double") {
-          value =
-              graph->getProperty<DoubleProperty>(propertyName)->getNodeValue(n);
+          value = graph->getProperty<DoubleProperty>(propertyName)->getNodeValue(n);
           double intpart, fracpart;
           fracpart = modf(value, &intpart);
           integerScale = integerScale && (fracpart == 0);
         } else {
-          value = graph->getProperty<IntegerProperty>(propertyName)
-                      ->getNodeValue(n);
+          value = graph->getProperty<IntegerProperty>(propertyName)->getNodeValue(n);
         }
 
         if (value != max) {
-          unsigned int nodeHistoBin = clamp(
-              uint(floor((value - min) / binWidth)), 0, nbHistogramBins - 1);
+          unsigned int nodeHistoBin =
+              clamp(uint(floor((value - min) / binWidth)), 0, nbHistogramBins - 1);
           histogramBins[nodeHistoBin].push_back(n.id);
 
           if (histogramBins[nodeHistoBin].size() > maxBinSize) {
@@ -334,14 +314,12 @@ void Histogram::computeHistogram() {
         double value;
 
         if (graph->getProperty(propertyName)->getTypename() == "double") {
-          value =
-              graph->getProperty<DoubleProperty>(propertyName)->getEdgeValue(e);
+          value = graph->getProperty<DoubleProperty>(propertyName)->getEdgeValue(e);
           double intpart, fracpart;
           fracpart = modf(value, &intpart);
           integerScale = integerScale && (fracpart == 0);
         } else {
-          value = graph->getProperty<IntegerProperty>(propertyName)
-                      ->getEdgeValue(e);
+          value = graph->getProperty<IntegerProperty>(propertyName)->getEdgeValue(e);
         }
 
         if (value != max) {
@@ -423,20 +401,18 @@ void Histogram::createAxis() {
       ++yAxisIncrementStep;
   }
 
-  yAxis = new GlQuantitativeAxis(
-      (dataLocation == NODE ? "number of nodes" : "number of edges"),
-      Coord(0, 0, 0), axisLength, GlAxis::VERTICAL_AXIS, textColor);
-  yAxis->setAxisParameters(int(minAxisValue), int(maxAxisValue),
-                           yAxisIncrementStep, GlAxis::LEFT_OR_BELOW, true);
+  yAxis = new GlQuantitativeAxis((dataLocation == NODE ? "number of nodes" : "number of edges"),
+                                 Coord(0, 0, 0), axisLength, GlAxis::VERTICAL_AXIS, textColor);
+  yAxis->setAxisParameters(int(minAxisValue), int(maxAxisValue), yAxisIncrementStep,
+                           GlAxis::LEFT_OR_BELOW, true);
   yAxis->setLogScale(yAxisLogScale);
   float yAxisGradsWidth = axisLength / 20;
   yAxis->setAxisGradsWidth(yAxisGradsWidth);
   yAxis->updateAxis();
-  yAxis->addCaption(GlAxis::BELOW, axisLength / 10, false, (axisLength / 2.), 0,
-                    " ");
+  yAxis->addCaption(GlAxis::BELOW, axisLength / 10, false, (axisLength / 2.), 0, " ");
 
-  xAxis = new GlQuantitativeAxis(propertyName, Coord(0, 0, 0), axisLength,
-                                 GlAxis::HORIZONTAL_AXIS, textColor, true);
+  xAxis = new GlQuantitativeAxis(propertyName, Coord(0, 0, 0), axisLength, GlAxis::HORIZONTAL_AXIS,
+                                 textColor, true);
   float xAxisGradWidth = axisLength / 20;
 
   if (uniformQuantification) {
@@ -446,8 +422,7 @@ void Histogram::createAxis() {
   xAxis->setAxisGradsWidth(xAxisGradWidth);
 
   if (uniformQuantification) {
-    xAxis->setAxisGraduations(uniformQuantificationAxisLabels,
-                              GlAxis::LEFT_OR_BELOW);
+    xAxis->setAxisGraduations(uniformQuantificationAxisLabels, GlAxis::LEFT_OR_BELOW);
   } else {
     if (integerScale) {
       long long axisMin = static_cast<long long>(min);
@@ -456,20 +431,16 @@ void Histogram::createAxis() {
       // check the [min, max] double values range
       // fit in a long long range
       if (axisMax != LLONG_MIN) {
-        long long incrementStep =
-            static_cast<long long>((max - min) / nbXGraduations);
+        long long incrementStep = static_cast<long long>((max - min) / nbXGraduations);
 
         if (incrementStep < 1)
           incrementStep = 1;
 
-        xAxis->setAxisParameters(axisMin, axisMax, incrementStep,
-                                 GlAxis::LEFT_OR_BELOW, true);
+        xAxis->setAxisParameters(axisMin, axisMax, incrementStep, GlAxis::LEFT_OR_BELOW, true);
       } else
-        xAxis->setAxisParameters(min, max, nbXGraduations,
-                                 GlAxis::LEFT_OR_BELOW, true);
+        xAxis->setAxisParameters(min, max, nbXGraduations, GlAxis::LEFT_OR_BELOW, true);
     } else {
-      xAxis->setAxisParameters(min, max, nbXGraduations, GlAxis::LEFT_OR_BELOW,
-                               true);
+      xAxis->setAxisParameters(min, max, nbXGraduations, GlAxis::LEFT_OR_BELOW, true);
     }
   }
 
@@ -483,12 +454,10 @@ void Histogram::createAxis() {
   if (cumulativeFreqHisto) {
     if (dataLocation == NODE) {
       refSizeY =
-          yAxis->getAxisPointCoordForValue(graph->numberOfNodes()).getY() /
-          graph->numberOfNodes();
+          yAxis->getAxisPointCoordForValue(graph->numberOfNodes()).getY() / graph->numberOfNodes();
     } else {
       refSizeY =
-          yAxis->getAxisPointCoordForValue(graph->numberOfEdges()).getY() /
-          graph->numberOfEdges();
+          yAxis->getAxisPointCoordForValue(graph->numberOfEdges()).getY() / graph->numberOfEdges();
     }
   } else {
     refSizeY = yAxis->getAxisPointCoordForValue(maxBinSize).getY() / maxBinSize;
@@ -513,8 +482,7 @@ void Histogram::updateLayout() {
 
     if (!uniformQuantification) {
       binXCoord = xAxis->getAxisPointCoordForValue(min + i * binWidth).getX();
-      binXCoordEnd =
-          xAxis->getAxisPointCoordForValue(min + (i + 1) * binWidth).getX();
+      binXCoordEnd = xAxis->getAxisPointCoordForValue(min + (i + 1) * binWidth).getX();
     } else {
       binXCoord = i * refSizeX;
       binXCoordEnd = (i + 1) * refSizeX;
@@ -531,10 +499,9 @@ void Histogram::updateLayout() {
                      2.f;
 
       } else {
-        nodeYCoord =
-            (yAxis->getAxisPointCoordForValue(cumulativeSize - j - 1).getY() +
-             yAxis->getAxisPointCoordForValue(cumulativeSize - j).getY()) /
-            2.;
+        nodeYCoord = (yAxis->getAxisPointCoordForValue(cumulativeSize - j - 1).getY() +
+                      yAxis->getAxisPointCoordForValue(cumulativeSize - j).getY()) /
+                     2.;
       }
 
       Coord nodeCoord(nodeXCoord, nodeYCoord, 0);
@@ -547,8 +514,7 @@ void Histogram::updateLayout() {
 
         vector<Coord> edgeHistoPointCoord;
         edgeHistoPointCoord.push_back(nodeCoord);
-        histogramLayout->setEdgeValue(edge(histogramBins[i][j]),
-                                      edgeHistoPointCoord);
+        histogramLayout->setEdgeValue(edge(histogramBins[i][j]), edgeHistoPointCoord);
       }
     }
   }
@@ -587,8 +553,7 @@ void Histogram::updateSizes() {
 
     if (!uniformQuantification) {
       binXCoord = xAxis->getAxisPointCoordForValue(min + i * binWidth).getX();
-      binXCoordEnd =
-          xAxis->getAxisPointCoordForValue(min + (i + 1) * binWidth).getX();
+      binXCoordEnd = xAxis->getAxisPointCoordForValue(min + (i + 1) * binWidth).getX();
     } else {
       binXCoord = i * refSizeX;
       binXCoordEnd = (i + 1) * refSizeX;
@@ -596,15 +561,12 @@ void Histogram::updateSizes() {
 
     for (unsigned int j = 0; j < binSize; ++j) {
       if (dataLocation == NODE) {
-        const Size &currentNodeSize =
-            viewSize->getNodeValue(node(histogramBins[i][j]));
+        const Size &currentNodeSize = viewSize->getNodeValue(node(histogramBins[i][j]));
         Size newNodeSize;
 
         if (resize) {
-          newNodeSize[0] =
-              minSize + resizeFactor[0] * (currentNodeSize[0] - eltMinSize[0]);
-          newNodeSize[1] =
-              minSize + resizeFactor[1] * (currentNodeSize[1] - eltMinSize[1]);
+          newNodeSize[0] = minSize + resizeFactor[0] * (currentNodeSize[0] - eltMinSize[0]);
+          newNodeSize[1] = minSize + resizeFactor[1] * (currentNodeSize[1] - eltMinSize[1]);
         } else {
           newNodeSize[0] = refSize;
           newNodeSize[1] = refSize;
@@ -656,8 +618,7 @@ void Histogram::update() {
     for (unsigned int j = 0; j < binSize; ++j) {
       if (dataLocation == NODE) {
         for (unsigned int k = 0; k < 4; ++k) {
-          quadColorCumul[k] +=
-              uint(viewColor->getNodeValue(node(histogramBins[i][j]))[k]);
+          quadColorCumul[k] += uint(viewColor->getNodeValue(node(histogramBins[i][j]))[k]);
         }
       }
     }
@@ -666,8 +627,7 @@ void Histogram::update() {
 
     if (!uniformQuantification) {
       binXCoord = xAxis->getAxisPointCoordForValue(min + i * binWidth).getX();
-      binXCoordEnd =
-          xAxis->getAxisPointCoordForValue(min + (i + 1) * binWidth).getX();
+      binXCoordEnd = xAxis->getAxisPointCoordForValue(min + (i + 1) * binWidth).getX();
     } else {
       binXCoord = i * refSizeX;
       binXCoordEnd = (i + 1) * refSizeX;
@@ -681,8 +641,7 @@ void Histogram::update() {
         binYBottom = yAxis->getAxisPointCoordForValue(0).getY();
       } else {
         binYTop = yAxis->getAxisPointCoordForValue(cumulativeSize).getY();
-        binYBottom =
-            yAxis->getAxisPointCoordForValue(cumulativeSize - binSize).getY();
+        binYBottom = yAxis->getAxisPointCoordForValue(cumulativeSize - binSize).getY();
       }
 
       Coord startLeftVertex(binXCoord, binYBottom);
@@ -697,14 +656,14 @@ void Histogram::update() {
 
       if (dataLocation == NODE) {
         quadColorCumul /= binSize;
-        quadColor = Color(quadColorCumul[0], quadColorCumul[1],
-                          quadColorCumul[2], quadColorCumul[3]);
+        quadColor =
+            Color(quadColorCumul[0], quadColorCumul[1], quadColorCumul[2], quadColorCumul[3]);
       } else {
         quadColor = Color(255, 0, 0);
       }
 
-      GlPolyQuad *binRect = new GlPolyQuad(
-          polyQuadCoords, quadColor, BIN_RECT_TEXTURE, true, 1, quadColor);
+      GlPolyQuad *binRect =
+          new GlPolyQuad(polyQuadCoords, quadColor, BIN_RECT_TEXTURE, true, 1, quadColor);
       binRect->setStencil(1);
       oss.str("");
       oss << "bin rect " << ++rectCpt;
@@ -712,26 +671,22 @@ void Histogram::update() {
     }
 
     if (cumulativeFreqHisto) {
-      float quadEdgeYTopCoord =
-          yAxis->getAxisPointCoordForValue(cumulativeSize).getY();
+      float quadEdgeYTopCoord = yAxis->getAxisPointCoordForValue(cumulativeSize).getY();
 
       if ((i == 0 || i == (nbHistogramBins - 1)) || binSize > 0) {
-        cumulativeHistogram->addQuadEdge(
-            Coord(binXCoord, xAxis->getAxisBaseCoord().getY()),
-            Coord(binXCoord, quadEdgeYTopCoord, 0), quadColor);
+        cumulativeHistogram->addQuadEdge(Coord(binXCoord, xAxis->getAxisBaseCoord().getY()),
+                                         Coord(binXCoord, quadEdgeYTopCoord, 0), quadColor);
 
         if (i == (nbHistogramBins - 1)) {
-          cumulativeHistogram->addQuadEdge(
-              Coord(binXCoordEnd, xAxis->getAxisBaseCoord().getY()),
-              Coord(binXCoordEnd, quadEdgeYTopCoord, 0), quadColor);
+          cumulativeHistogram->addQuadEdge(Coord(binXCoordEnd, xAxis->getAxisBaseCoord().getY()),
+                                           Coord(binXCoordEnd, quadEdgeYTopCoord, 0), quadColor);
         }
       }
     }
   }
 
   if (cumulativeFreqHisto) {
-    histoBinsComposite->addGlEntity(cumulativeHistogram,
-                                    "cumulative histogram");
+    histoBinsComposite->addGlEntity(cumulativeHistogram, "cumulative histogram");
   } else {
     delete cumulativeHistogram;
   }
@@ -752,9 +707,8 @@ void Histogram::update() {
   GlTextureManager::registerExternalTexture(textureName, textureId);
   glOffscreenRenderer->clearScene();
 
-  Gl2DRect *rectTextured =
-      new Gl2DRect(blCorner.getY() + size, blCorner.getY(), blCorner.getX(),
-                   blCorner.getX() + size, textureName);
+  Gl2DRect *rectTextured = new Gl2DRect(blCorner.getY() + size, blCorner.getY(), blCorner.getX(),
+                                        blCorner.getX() + size, textureName);
   rectTextured->setFillColor(Color(255, 255, 255));
   addGlEntity(rectTextured, textureName + " overview");
   computeBoundingBox();
@@ -792,5 +746,7 @@ void Histogram::setSizesUpdateNeeded() {
   updateNeeded = true;
 }
 
-void Histogram::setUpdateNeeded() { updateNeeded = true; }
+void Histogram::setUpdateNeeded() {
+  updateNeeded = true;
+}
 } // namespace tlp

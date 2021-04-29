@@ -26,12 +26,12 @@
 #include <climits>
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
+#include <tulip/Size.h>
 #include <tulip/GlBox.h>
 #include <tulip/GlEntity.h>
-#include <tulip/GlGraphInputData.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlSceneVisitor.h>
-#include <tulip/Size.h>
+#include <tulip/GlGraphInputData.h>
 
 #include <vector>
 
@@ -54,13 +54,15 @@ public:
    */
   GlNode(unsigned int _nid = UINT_MAX, unsigned int _npos = UINT_MAX)
       : id(_nid), pos(_npos), oldId(UINT_MAX),
-        selectionBox(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 255, 255),
-                     Color(0, 255, 0, 255), false, true, "", 3) {}
+        selectionBox(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 255, 255), Color(0, 255, 0, 255),
+                     false, true, "", 3) {}
 
   /**
    * Virtual function to accept GlSceneVisitor on this class
    */
-  void acceptVisitor(GlSceneVisitor *visitor) override { visitor->visit(this); }
+  void acceptVisitor(GlSceneVisitor *visitor) override {
+    visitor->visit(this);
+  }
 
   /**
    * Return the node bounding box
@@ -75,8 +77,7 @@ public:
   /**
    * Draw the label of the node if drawEdgesLabel is true
    */
-  void drawLabel(GlLabel &label, OcclusionTest *test,
-                 const GlGraphInputData *data, float lod,
+  void drawLabel(GlLabel &label, OcclusionTest *test, const GlGraphInputData *data, float lod,
                  Camera *camera = nullptr);
 
   // node id and node position in graph->nodes()

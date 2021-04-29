@@ -25,8 +25,8 @@ class QWidget;
 
 #include <QMenu>
 
-#include <tulip/DataSet.h>
 #include <tulip/View.h>
+#include <tulip/DataSet.h>
 
 namespace tlp {
 

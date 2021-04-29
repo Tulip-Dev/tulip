@@ -20,18 +20,17 @@
 #include "tulip/TreeViewComboBox.h"
 
 #include <QHeaderView>
-#include <QMouseEvent>
+#include <QStyledItemDelegate>
 #include <QPainter>
 #include <QStyleOptionViewItem>
-#include <QStyledItemDelegate>
+#include <QMouseEvent>
 #include <QTreeView>
 
 class TreeViewDelegate : public QStyledItemDelegate {
 public:
   TreeViewDelegate(QObject *parent = nullptr) : QStyledItemDelegate(parent) {}
 
-  QSize sizeHint(const QStyleOptionViewItem &option,
-                 const QModelIndex &index) const override {
+  QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override {
     QSize result = QStyledItemDelegate::sizeHint(option, index);
     result.setHeight(result.height() + 10);
     return result;
@@ -51,8 +50,7 @@ TreeViewComboBox::TreeViewComboBox(QWidget *parent)
   _treeView->setItemsExpandable(true);
   setView(_treeView);
   view()->viewport()->installEventFilter(this);
-  connect(this, SIGNAL(currentIndexChanged(int)), this,
-          SLOT(currentIndexChanged()));
+  connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChanged()));
 }
 
 void TreeViewComboBox::setModel(QAbstractItemModel *model) {
@@ -110,4 +108,6 @@ void TreeViewComboBox::rowsRemoved(const QModelIndex &parent, int, int) {
     selectIndex(parent);
 }
 
-void TreeViewComboBox::currentIndexChanged() { selectIndex(selectedIndex()); }
+void TreeViewComboBox::currentIndexChanged() {
+  selectIndex(selectedIndex());
+}

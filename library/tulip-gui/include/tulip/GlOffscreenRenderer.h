@@ -21,9 +21,9 @@
 #ifndef GLOFFSCREENRENDERER_H_
 #define GLOFFSCREENRENDERER_H_
 
+#include <tulip/tulipconf.h>
 #include <tulip/Coord.h>
 #include <tulip/GlScene.h>
-#include <tulip/tulipconf.h>
 
 #include <tulip/OpenGlIncludes.h>
 
@@ -45,8 +45,7 @@ class GlMainWidget;
  * Here is an example to render a graph in a QImage to use it as preview.
  * @code
  * //Get the renderer
- * glOffscreenRenderer *glOffscreenRenderer =
- *GlOffscreenRenderer::getInstance();
+ * glOffscreenRenderer *glOffscreenRenderer = GlOffscreenRenderer::getInstance();
  * //Define the viewport size. Needed to initialize the offscreen rederer.
  * glOffscreenRenderer->setViewPortSize(200,200);
  * //Erase old elements
@@ -66,40 +65,42 @@ public:
   /**
    * @brief Get the renderer instance.
    **/
-  inline static GlOffscreenRenderer *getInstance() { return instance; }
+  inline static GlOffscreenRenderer *getInstance() {
+    return instance;
+  }
 
   ~GlOffscreenRenderer();
 
   /**
    * @brief Define the viewport size.
    **/
-  void setViewPortSize(const unsigned int viewPortWidth,
-                       const unsigned int viewPortHeight);
+  void setViewPortSize(const unsigned int viewPortWidth, const unsigned int viewPortHeight);
   unsigned int getViewportWidth();
   unsigned int getViewportHeight();
   bool frameBufferOk() const;
 
-  GlScene *getScene() { return &scene; }
-  void setZoomFactor(double zoomFactor) { this->zoomFactor = zoomFactor; }
+  GlScene *getScene() {
+    return &scene;
+  }
+  void setZoomFactor(double zoomFactor) {
+    this->zoomFactor = zoomFactor;
+  }
   void setCameraCenter(const Coord &cameraCenter) {
     this->cameraCenter = cameraCenter;
   }
 
   void setSceneBackgroundColor(const Color &color);
   /**
-   * @brief Add an entity to the scene. The scene become the owner of the
-   *object.
+   * @brief Add an entity to the scene. The scene become the owner of the object.
    **/
   void addGlEntityToScene(GlSimpleEntity *entity);
   /**
-   * @brief Add a graph composite to the scene. The scene become the owner of
-   *the object.
+   * @brief Add a graph composite to the scene. The scene become the owner of the object.
    **/
   void addGraphCompositeToScene(GlGraphComposite *graphComposite);
 
   /**
-   * @brief Add a graph to the scene. Just create a new GraphComposite and call
-   *GlGraphComposite.
+   * @brief Add a graph to the scene. Just create a new GraphComposite and call GlGraphComposite.
    **/
   void addGraphToScene(Graph *graph);
 
@@ -109,24 +110,23 @@ public:
   void clearScene(bool deleteGlEntities = false);
 
   /**
-   * @brief Render the scene in a buffer. You need to call this function before
-   *getting the result with getImage or getGlTexture.
+   * @brief Render the scene in a buffer. You need to call this function before getting the result
+   *with getImage or getGlTexture.
    **/
-  void renderScene(const bool centerScene = true,
-                   const bool antialiased = false);
+  void renderScene(const bool centerScene = true, const bool antialiased = false);
 
   void renderExternalScene(GlScene *scene, const bool antialiased = false);
 
   void renderGlMainWidget(GlMainWidget *glWidget, bool redrawNeeded = true);
 
   /**
-   * @brief Generate a QImage from the scene. You need to call the renderScene
-   *function before this function.
+   * @brief Generate a QImage from the scene. You need to call the renderScene function before this
+   *function.
    **/
   QImage getImage();
   /**
-   * @brief Generate an open gl texture from the scene. You need to call the
-   *renderScene function before this function.
+   * @brief Generate an open gl texture from the scene. You need to call the renderScene function
+   *before this function.
    **/
   GLuint getGLTexture(const bool generateMipMaps = false);
 

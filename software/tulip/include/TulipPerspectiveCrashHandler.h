@@ -19,8 +19,8 @@
 #ifndef TULIPPERSPECTIVECRASHHANDLER_H
 #define TULIPPERSPECTIVECRASHHANDLER_H
 
-#include "TulipPerspectiveProcessHandler.h"
 #include <QDialog>
+#include "TulipPerspectiveProcessHandler.h"
 
 class FormPost;
 
@@ -50,9 +50,8 @@ public slots:
   void toggleDetailedView();
   void sendReport();
   //  void saveData();
-  void setEnvData(const QString &plateform, const QString &arch,
-                  const QString &compiler, const QString &version,
-                  const QString &stackTrace);
+  void setEnvData(const QString &plateform, const QString &arch, const QString &compiler,
+                  const QString &version, const QString &stackTrace);
   void setPerspectiveData(const PerspectiveProcessInfo &info);
 };
 

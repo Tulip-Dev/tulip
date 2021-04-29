@@ -22,31 +22,31 @@
 #include <QProgressDialog>
 
 #include <tulip/BooleanProperty.h>
-#include <tulip/BoundingBox.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/GlBoundingBoxSceneVisitor.h>
-#include <tulip/GlCatmullRomCurve.h>
-#include <tulip/GlCubicBSplineInterpolation.h>
-#include <tulip/GlGraphComposite.h>
-#include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/GlLine.h>
-#include <tulip/GlMainWidget.h>
-#include <tulip/GlPolyQuad.h>
-#include <tulip/GlScene.h>
 #include <tulip/IntegerProperty.h>
-#include <tulip/Iterator.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/Perspective.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
-#include <tulip/TlpQtTools.h>
+#include <tulip/Iterator.h>
+#include <tulip/BoundingBox.h>
+#include <tulip/GlBoundingBoxSceneVisitor.h>
+#include <tulip/GlPolyQuad.h>
+#include <tulip/GlCatmullRomCurve.h>
+#include <tulip/GlCubicBSplineInterpolation.h>
+#include <tulip/GlLine.h>
+#include <tulip/GlScene.h>
+#include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/GlGraphComposite.h>
+#include <tulip/GlMainWidget.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/Perspective.h>
 
-#include "NominalParallelAxis.h"
 #include "ParallelCoordinatesDrawing.h"
-#include "ParallelCoordinatesGraphProxy.h"
-#include "ParallelTools.h"
+#include "NominalParallelAxis.h"
 #include "QuantitativeParallelAxis.h"
+#include "ParallelTools.h"
+#include "ParallelCoordinatesGraphProxy.h"
 
 #include <sstream>
 
@@ -54,26 +54,19 @@ using namespace std;
 
 namespace tlp {
 
-ParallelCoordinatesDrawing::ParallelCoordinatesDrawing(
-    ParallelCoordinatesGraphProxy *graph, Graph *axisPointsGraph)
-    : nbAxis(0), firstAxisPos(Coord(0.0f, 0.0f, 0.0f)), width(0),
-      height(DEFAULT_AXIS_HEIGHT), spaceBetweenAxis(height / 2),
-      linesColorAlphaValue(DEFAULT_LINES_COLOR_ALPHA_VALUE),
-      drawPointsOnAxis(true), graphProxy(graph),
-      backgroundColor(Color(255, 255, 255)), createAxisFlag(true),
-      axisPointsGraph(axisPointsGraph), layoutType(PARALLEL),
+ParallelCoordinatesDrawing::ParallelCoordinatesDrawing(ParallelCoordinatesGraphProxy *graph,
+                                                       Graph *axisPointsGraph)
+    : nbAxis(0), firstAxisPos(Coord(0.0f, 0.0f, 0.0f)), width(0), height(DEFAULT_AXIS_HEIGHT),
+      spaceBetweenAxis(height / 2), linesColorAlphaValue(DEFAULT_LINES_COLOR_ALPHA_VALUE),
+      drawPointsOnAxis(true), graphProxy(graph), backgroundColor(Color(255, 255, 255)),
+      createAxisFlag(true), axisPointsGraph(axisPointsGraph), layoutType(PARALLEL),
       linesType(STRAIGHT), linesThickness(THICK), resetAxisLayout(false) {
-  axisPointsGraphLayout =
-      axisPointsGraph->getProperty<LayoutProperty>("viewLayout");
+  axisPointsGraphLayout = axisPointsGraph->getProperty<LayoutProperty>("viewLayout");
   axisPointsGraphSize = axisPointsGraph->getProperty<SizeProperty>("viewSize");
-  axisPointsGraphShape =
-      axisPointsGraph->getProperty<IntegerProperty>("viewShape");
-  axisPointsGraphLabels =
-      axisPointsGraph->getProperty<StringProperty>("viewLabel");
-  axisPointsGraphColors =
-      axisPointsGraph->getProperty<ColorProperty>("viewColor");
-  axisPointsGraphSelection =
-      axisPointsGraph->getProperty<BooleanProperty>("viewSelection");
+  axisPointsGraphShape = axisPointsGraph->getProperty<IntegerProperty>("viewShape");
+  axisPointsGraphLabels = axisPointsGraph->getProperty<StringProperty>("viewLabel");
+  axisPointsGraphColors = axisPointsGraph->getProperty<ColorProperty>("viewColor");
+  axisPointsGraphSelection = axisPointsGraph->getProperty<BooleanProperty>("viewSelection");
 
   dataPlotComposite = new GlComposite();
   axisPlotComposite = new GlComposite();
@@ -83,8 +76,7 @@ ParallelCoordinatesDrawing::ParallelCoordinatesDrawing(
 
 ParallelCoordinatesDrawing::~ParallelCoordinatesDrawing() {}
 
-void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget,
-                                            QProgressDialog *progress) {
+void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget, QProgressDialog *progress) {
 
   glWidget->makeCurrent();
 
@@ -94,8 +86,7 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget,
 
   static LayoutType lastLayouType = PARALLEL;
 
-  if (axisOrder.size() != selectedProperties.size() ||
-      lastLayouType != layoutType) {
+  if (axisOrder.size() != selectedProperties.size() || lastLayouType != layoutType) {
     resetAxisLayout = true;
   }
 
@@ -174,11 +165,9 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget,
 
     if (layoutType == PARALLEL) {
       if (nbAxis != 1) {
-        coord = Coord(firstAxisPos.getX() + pos * (width / (nbAxis - 1)),
-                      firstAxisPos.getY());
+        coord = Coord(firstAxisPos.getX() + pos * (width / (nbAxis - 1)), firstAxisPos.getY());
       } else {
-        coord =
-            Coord(firstAxisPos.getX() + (width / 2.0f), firstAxisPos.getY());
+        coord = Coord(firstAxisPos.getX() + (width / 2.0f), firstAxisPos.getY());
       }
     } else {
       coord = Coord(0, circleLayoutYOffset, 0.0f);
@@ -215,13 +204,12 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget,
       string typeName((graphProxy->getProperty(selectedProp))->getTypename());
 
       if (typeName == "string") {
-        axis = new NominalParallelAxis(coord, height, maxCaptionWidth,
-                                       graphProxy, selectedProp, axisColor,
-                                       rotationAngle, captionPosition);
+        axis = new NominalParallelAxis(coord, height, maxCaptionWidth, graphProxy, selectedProp,
+                                       axisColor, rotationAngle, captionPosition);
       } else if (typeName == "int" || typeName == "double") {
-        axis = new QuantitativeParallelAxis(
-            coord, height, maxCaptionWidth, graphProxy, selectedProp, true,
-            axisColor, rotationAngle, captionPosition);
+        axis =
+            new QuantitativeParallelAxis(coord, height, maxCaptionWidth, graphProxy, selectedProp,
+                                         true, axisColor, rotationAngle, captionPosition);
       }
     }
 
@@ -249,8 +237,7 @@ void ParallelCoordinatesDrawing::destroyAxisIfNeeded() {
   }
 }
 
-void ParallelCoordinatesDrawing::plotAllData(GlMainWidget *glWidget,
-                                             QProgressDialog *progress) {
+void ParallelCoordinatesDrawing::plotAllData(GlMainWidget *glWidget, QProgressDialog *progress) {
   Color color;
   computeResizeFactor();
 
@@ -270,16 +257,13 @@ void ParallelCoordinatesDrawing::plotAllData(GlMainWidget *glWidget,
       color = graphProxy->getDataColor(dataId);
 
       if (linesColorAlphaValue <= 255 &&
-          ((graphProxy->highlightedEltsSet() &&
-            graphProxy->isDataHighlighted(dataId)) ||
+          ((graphProxy->highlightedEltsSet() && graphProxy->isDataHighlighted(dataId)) ||
            (!graphProxy->highlightedEltsSet()))) {
         color.setA(linesColorAlphaValue);
       }
     } else {
-      color = glWidget->getScene()
-                  ->getGlGraphComposite()
-                  ->getRenderingParameters()
-                  .getSelectionColor();
+      color =
+          glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().getSelectionColor();
     }
 
     plotData(dataId, color);
@@ -291,17 +275,13 @@ void ParallelCoordinatesDrawing::plotAllData(GlMainWidget *glWidget,
   lastHighlightedElements = graphProxy->getHighlightedElts();
 }
 
-void ParallelCoordinatesDrawing::plotData(const unsigned int dataId,
-                                          const Color &color) {
+void ParallelCoordinatesDrawing::plotData(const unsigned int dataId, const Color &color) {
 
   Size eltMinSize(graphProxy->getProperty<SizeProperty>("viewSize")->getMin());
   Size dataViewSize(graphProxy->getDataViewSize(dataId));
-  Size adjustedViewSize(axisPointMinSize +
-                        resizeFactor * (dataViewSize - eltMinSize));
+  Size adjustedViewSize(axisPointMinSize + resizeFactor * (dataViewSize - eltMinSize));
   float pointRadius =
-      ((adjustedViewSize[0] + adjustedViewSize[1] + adjustedViewSize[2]) /
-       3.0f) /
-      2.0f;
+      ((adjustedViewSize[0] + adjustedViewSize[1] + adjustedViewSize[2]) / 3.0f) / 2.0f;
   float lineHalfWidth = pointRadius - (1.0f / 10.0f) * pointRadius;
 
   vector<Coord> polylineCoords;
@@ -316,8 +296,7 @@ void ParallelCoordinatesDrawing::plotData(const unsigned int dataId,
 
     if (drawPointsOnAxis) {
 
-      if (!graphProxy->highlightedEltsSet() ||
-          graphProxy->isDataSelected(dataId)) {
+      if (!graphProxy->highlightedEltsSet() || graphProxy->isDataSelected(dataId)) {
         node n = axisPointsGraph->addNode();
         axisPointsDataMap[n] = dataId;
         axisPointsGraphLayout->setNodeValue(n, pointCoord);
@@ -325,19 +304,17 @@ void ParallelCoordinatesDrawing::plotData(const unsigned int dataId,
 
         if (graphProxy->getDataLocation() == NODE) {
           axisPointsGraphShape->setNodeValue(
-              n,
-              graphProxy->getPropertyValueForData<IntegerProperty, IntegerType>(
-                  "viewShape", dataId));
+              n, graphProxy->getPropertyValueForData<IntegerProperty, IntegerType>("viewShape",
+                                                                                   dataId));
         } else {
           axisPointsGraphShape->setNodeValue(n, NodeShape::Circle);
         }
 
         axisPointsGraphLabels->setNodeValue(
-            n, graphProxy->getPropertyValueForData<StringProperty, StringType>(
-                   "viewLabel", dataId));
+            n,
+            graphProxy->getPropertyValueForData<StringProperty, StringType>("viewLabel", dataId));
         axisPointsGraphColors->setNodeValue(
-            n, graphProxy->getPropertyValueForData<ColorProperty, ColorType>(
-                   "viewColor", dataId));
+            n, graphProxy->getPropertyValueForData<ColorProperty, ColorType>("viewColor", dataId));
 
         if (graphProxy->isDataSelected(dataId)) {
           axisPointsGraphSelection->setNodeValue(n, true);
@@ -381,8 +358,8 @@ void ParallelCoordinatesDrawing::plotData(const unsigned int dataId,
     }
 
     if (linesThickness == THICK) {
-      GlPolyQuad *polyquad = new GlPolyQuad(
-          polylineCoords, color, lineTextureFilename, true, 1, color);
+      GlPolyQuad *polyquad =
+          new GlPolyQuad(polylineCoords, color, lineTextureFilename, true, 1, color);
       polyquad->setOutlined(false);
       line = polyquad;
     } else {
@@ -399,9 +376,9 @@ void ParallelCoordinatesDrawing::plotData(const unsigned int dataId,
       textureName = lineTextureFilename;
     }
 
-    GlCatmullRomCurve *catmull = new GlCatmullRomCurve(
-        splineCurvePassPoints, color, color, size, size, closeSpline,
-        20 * splineCurvePassPoints.size() - 1);
+    GlCatmullRomCurve *catmull =
+        new GlCatmullRomCurve(splineCurvePassPoints, color, color, size, size, closeSpline,
+                              20 * splineCurvePassPoints.size() - 1);
 
     if (textureName == DEFAULT_TEXTURE_FILE) {
       catmull->setOutlined(true);
@@ -423,10 +400,8 @@ void ParallelCoordinatesDrawing::plotData(const unsigned int dataId,
       splineCurvePassPoints.push_back(splineCurvePassPoints[0]);
     }
 
-    GlCubicBSplineInterpolation *cubicInterpolation =
-        new GlCubicBSplineInterpolation(splineCurvePassPoints, color, color,
-                                        size, size,
-                                        20 * splineCurvePassPoints.size() - 1);
+    GlCubicBSplineInterpolation *cubicInterpolation = new GlCubicBSplineInterpolation(
+        splineCurvePassPoints, color, color, size, size, 20 * splineCurvePassPoints.size() - 1);
 
     if (textureName == DEFAULT_TEXTURE_FILE) {
       cubicInterpolation->setOutlined(true);
@@ -455,8 +430,7 @@ unsigned int ParallelCoordinatesDrawing::nbParallelAxis() const {
   return nbAxis;
 }
 
-void ParallelCoordinatesDrawing::swapAxis(ParallelAxis *axis1,
-                                          ParallelAxis *axis2) {
+void ParallelCoordinatesDrawing::swapAxis(ParallelAxis *axis1, ParallelAxis *axis2) {
   int pi = 0, pj = 0;
   int pos = 0;
 
@@ -494,8 +468,7 @@ void ParallelCoordinatesDrawing::swapAxis(ParallelAxis *axis1,
   createAxisFlag = false;
 }
 
-bool ParallelCoordinatesDrawing::getDataIdFromGlEntity(GlEntity *glEntity,
-                                                       unsigned int &dataId) {
+bool ParallelCoordinatesDrawing::getDataIdFromGlEntity(GlEntity *glEntity, unsigned int &dataId) {
 
   bool dataMatch = glEntitiesDataMap.find(glEntity) != glEntitiesDataMap.end();
 
@@ -506,8 +479,7 @@ bool ParallelCoordinatesDrawing::getDataIdFromGlEntity(GlEntity *glEntity,
   return dataMatch;
 }
 
-bool ParallelCoordinatesDrawing::getDataIdFromAxisPoint(node axisPoint,
-                                                        unsigned int &dataId) {
+bool ParallelCoordinatesDrawing::getDataIdFromAxisPoint(node axisPoint, unsigned int &dataId) {
 
   bool dataMatch = axisPointsDataMap.find(axisPoint) != axisPointsDataMap.end();
 
@@ -518,8 +490,7 @@ bool ParallelCoordinatesDrawing::getDataIdFromAxisPoint(node axisPoint,
   return dataMatch;
 }
 
-void ParallelCoordinatesDrawing::update(GlMainWidget *glWidget,
-                                        bool progressBar) {
+void ParallelCoordinatesDrawing::update(GlMainWidget *glWidget, bool progressBar) {
 
   deleteGlEntity(axisPlotComposite);
   deleteGlEntity(dataPlotComposite);
@@ -599,8 +570,7 @@ void ParallelCoordinatesDrawing::computeResizeFactor() {
 
   for (unsigned int i = 0; i < 3; ++i) {
     if (deltaSize[i] != 0.0f) {
-      resizeFactor[i] =
-          (axisPointMaxSize[i] - axisPointMinSize[i]) / deltaSize[i];
+      resizeFactor[i] = (axisPointMaxSize[i] - axisPointMinSize[i]) / deltaSize[i];
     } else {
       resizeFactor[i] = 0.0f;
     }
@@ -633,29 +603,23 @@ void ParallelCoordinatesDrawing::updateWithAxisSlidersRange(
 
   if (highlightedEltsSetOp == INTERSECTION) {
     const set<unsigned int> &eltsInSlidersRange(axis->getDataInSlidersRange());
-    const set<unsigned int> &currentHighlightedElts(
-        graphProxy->getHighlightedElts());
-    unsigned int size =
-        eltsInSlidersRange.size() > currentHighlightedElts.size()
-            ? eltsInSlidersRange.size()
-            : currentHighlightedElts.size();
+    const set<unsigned int> &currentHighlightedElts(graphProxy->getHighlightedElts());
+    unsigned int size = eltsInSlidersRange.size() > currentHighlightedElts.size()
+                            ? eltsInSlidersRange.size()
+                            : currentHighlightedElts.size();
     vector<unsigned int> intersection(size);
     vector<unsigned int>::iterator intersectionEnd = std::set_intersection(
-        eltsInSlidersRange.begin(), eltsInSlidersRange.end(),
-        currentHighlightedElts.begin(), currentHighlightedElts.end(),
-        intersection.begin());
+        eltsInSlidersRange.begin(), eltsInSlidersRange.end(), currentHighlightedElts.begin(),
+        currentHighlightedElts.end(), intersection.begin());
     dataSubset = set<unsigned int>(intersection.begin(), intersectionEnd);
   } else if (highlightedEltsSetOp == UNION) {
     const set<unsigned int> &eltsInSlidersRange(axis->getDataInSlidersRange());
-    const set<unsigned int> &currentHighlightedElts(
-        graphProxy->getHighlightedElts());
+    const set<unsigned int> &currentHighlightedElts(graphProxy->getHighlightedElts());
 
-    vector<unsigned int> unionSet(eltsInSlidersRange.size() +
-                                  currentHighlightedElts.size());
-    vector<unsigned int>::iterator unionEnd =
-        std::set_union(eltsInSlidersRange.begin(), eltsInSlidersRange.end(),
-                       currentHighlightedElts.begin(),
-                       currentHighlightedElts.end(), unionSet.begin());
+    vector<unsigned int> unionSet(eltsInSlidersRange.size() + currentHighlightedElts.size());
+    vector<unsigned int>::iterator unionEnd = std::set_union(
+        eltsInSlidersRange.begin(), eltsInSlidersRange.end(), currentHighlightedElts.begin(),
+        currentHighlightedElts.end(), unionSet.begin());
     dataSubset = set<unsigned int>(unionSet.begin(), unionEnd);
   } else {
     dataSubset = axis->getDataInSlidersRange();
@@ -718,8 +682,7 @@ void ParallelCoordinatesDrawing::treatEvent(const tlp::Event &evt) {
   }
 }
 
-void ParallelCoordinatesDrawing::removeHighlightedElt(
-    const unsigned int dataId) {
+void ParallelCoordinatesDrawing::removeHighlightedElt(const unsigned int dataId) {
   if (lastHighlightedElements.erase(dataId)) {
     graphProxy->removeHighlightedElement(dataId);
 

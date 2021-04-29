@@ -84,27 +84,23 @@ void DoubleStringsListSelectionWidget::setMaxSelectedStringsListSize(
   }
 }
 
-vector<string>
-DoubleStringsListSelectionWidget::getSelectedStringsList() const {
+vector<string> DoubleStringsListSelectionWidget::getSelectedStringsList() const {
   vector<string> outputStringList;
 
   outputStringList.reserve(_ui->outputList->count());
   for (int i = 0; i < _ui->outputList->count(); ++i) {
-    outputStringList.push_back(
-        tlp::QStringToTlpString(_ui->outputList->item(i)->text()));
+    outputStringList.push_back(tlp::QStringToTlpString(_ui->outputList->item(i)->text()));
   }
 
   return outputStringList;
 }
 
-vector<string>
-DoubleStringsListSelectionWidget::getUnselectedStringsList() const {
+vector<string> DoubleStringsListSelectionWidget::getUnselectedStringsList() const {
   vector<string> inputStringList;
 
   inputStringList.reserve(_ui->inputList->count());
   for (int i = 0; i < _ui->inputList->count(); ++i) {
-    inputStringList.push_back(
-        tlp::QStringToTlpString(_ui->inputList->item(i)->text()));
+    inputStringList.push_back(tlp::QStringToTlpString(_ui->inputList->item(i)->text()));
   }
 
   return inputStringList;
@@ -133,10 +129,8 @@ void DoubleStringsListSelectionWidget::qtWidgetsConnection() {
   connect(_ui->removeButton, SIGNAL(clicked()), this, SLOT(pressButtonRem()));
   connect(_ui->upButton, SIGNAL(clicked()), this, SLOT(pressButtonUp()));
   connect(_ui->downButton, SIGNAL(clicked()), this, SLOT(pressButtonDown()));
-  connect(_ui->selectButton, SIGNAL(clicked()), this,
-          SLOT(pressButtonSelectAll()));
-  connect(_ui->unselectButton, SIGNAL(clicked()), this,
-          SLOT(pressButtonUnselectAll()));
+  connect(_ui->selectButton, SIGNAL(clicked()), this, SLOT(pressButtonSelectAll()));
+  connect(_ui->unselectButton, SIGNAL(clicked()), this, SLOT(pressButtonUnselectAll()));
 }
 
 void DoubleStringsListSelectionWidget::pressButtonAdd() {

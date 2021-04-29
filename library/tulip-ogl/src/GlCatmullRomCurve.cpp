@@ -21,10 +21,10 @@
 
 #include <sstream>
 
-#include <tulip/GlBezierCurve.h>
 #include <tulip/GlCatmullRomCurve.h>
-#include <tulip/GlShaderProgram.h>
+#include <tulip/GlBezierCurve.h>
 #include <tulip/ParametricCurves.h>
+#include <tulip/GlShaderProgram.h>
 
 using namespace std;
 
@@ -113,34 +113,28 @@ static string catmullRomSpecificShaderCode =
 namespace tlp {
 
 GlCatmullRomCurve::GlCatmullRomCurve()
-    : AbstractGlCurve("catmull rom vertex shader",
-                      catmullRomSpecificShaderCode),
+    : AbstractGlCurve("catmull rom vertex shader", catmullRomSpecificShaderCode),
       closedCurve(false), paramType(CENTRIPETAL) {}
 
-GlCatmullRomCurve::GlCatmullRomCurve(const vector<Coord> &controlPoints,
-                                     const Color &startColor,
-                                     const Color &endColor,
-                                     const float startSize, const float endSize,
-                                     const bool closedCurve,
+GlCatmullRomCurve::GlCatmullRomCurve(const vector<Coord> &controlPoints, const Color &startColor,
+                                     const Color &endColor, const float startSize,
+                                     const float endSize, const bool closedCurve,
                                      const unsigned int nbCurvePoints,
                                      const ParameterizationType paramType)
-    : AbstractGlCurve("catmull rom vertex shader", catmullRomSpecificShaderCode,
-                      controlPoints, startColor, endColor, startSize, endSize,
-                      nbCurvePoints),
+    : AbstractGlCurve("catmull rom vertex shader", catmullRomSpecificShaderCode, controlPoints,
+                      startColor, endColor, startSize, endSize, nbCurvePoints),
       closedCurve(closedCurve), paramType(paramType) {}
 
 GlCatmullRomCurve::~GlCatmullRomCurve() {}
 
-Coord GlCatmullRomCurve::computeCurvePointOnCPU(
-    const std::vector<Coord> &controlPoints, float t) {
+Coord GlCatmullRomCurve::computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t) {
   return computeCatmullRomPoint(controlPoints, t, closedCurve, alpha);
 }
 
-void GlCatmullRomCurve::computeCurvePointsOnCPU(
-    const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints,
-    unsigned int nbCurvePoints) {
-  computeCatmullRomPoints(controlPoints, curvePoints, closedCurve,
-                          nbCurvePoints, alpha);
+void GlCatmullRomCurve::computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints,
+                                                std::vector<Coord> &curvePoints,
+                                                unsigned int nbCurvePoints) {
+  computeCatmullRomPoints(controlPoints, curvePoints, closedCurve, nbCurvePoints, alpha);
 }
 
 void GlCatmullRomCurve::setCurveVertexShaderRenderingSpecificParameters() {
@@ -149,10 +143,8 @@ void GlCatmullRomCurve::setCurveVertexShaderRenderingSpecificParameters() {
   curveShaderProgram->setUniformFloat("alpha", alpha);
 }
 
-void GlCatmullRomCurve::drawCurve(vector<Coord> &controlPoints,
-                                  const Color &startColor,
-                                  const Color &endColor, const float startSize,
-                                  const float endSize,
+void GlCatmullRomCurve::drawCurve(vector<Coord> &controlPoints, const Color &startColor,
+                                  const Color &endColor, const float startSize, const float endSize,
                                   const unsigned int nbCurvePoints) {
 
   GLint renderMode;
@@ -169,8 +161,7 @@ void GlCatmullRomCurve::drawCurve(vector<Coord> &controlPoints,
     alpha = 1.0f;
   }
 
-  if (closedCurve && renderMode != GL_SELECT &&
-      curveShaderProgramNormal != nullptr) {
+  if (closedCurve && renderMode != GL_SELECT && curveShaderProgramNormal != nullptr) {
     controlPointsCp = controlPoints;
     controlPointsCp.push_back(controlPointsCp[0]);
     controlPointsP = &controlPointsCp;
@@ -180,8 +171,7 @@ void GlCatmullRomCurve::drawCurve(vector<Coord> &controlPoints,
     totalLength = 0.0f;
 
     for (size_t i = 1; i < controlPointsP->size(); ++i) {
-      float dist =
-          pow((*controlPointsP)[i - 1].dist((*controlPointsP)[i]), alpha);
+      float dist = pow((*controlPointsP)[i - 1].dist((*controlPointsP)[i]), alpha);
       totalLength += dist;
     }
   }
@@ -198,11 +188,10 @@ void GlCatmullRomCurve::drawCurve(vector<Coord> &controlPoints,
     curve.setTexture(texture);
     curve.setBillboardCurve(billboardCurve);
     curve.setLookDir(lookDir);
-    curve.drawCurve(controlPoints, startColor, endColor, startSize, endSize,
-                    nbCurvePoints);
+    curve.drawCurve(controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
   } else {
-    AbstractGlCurve::drawCurve(*controlPointsP, startColor, endColor, startSize,
-                               endSize, nbCurvePoints);
+    AbstractGlCurve::drawCurve(*controlPointsP, startColor, endColor, startSize, endSize,
+                               nbCurvePoints);
   }
 }
 } // namespace tlp

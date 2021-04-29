@@ -20,20 +20,20 @@
 #ifndef HISTOGRAMCOLORMAPPING_H_
 #define HISTOGRAMCOLORMAPPING_H_
 
-#include <tulip/ColorScale.h>
-#include <tulip/ColorScaleConfigDialog.h>
+#include <tulip/tulipconf.h>
 #include <tulip/GLInteractor.h>
 #include <tulip/GlCircle.h>
-#include <tulip/GlColorScale.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlPolyQuad.h>
-#include <tulip/tulipconf.h>
+#include <tulip/ColorScale.h>
+#include <tulip/GlColorScale.h>
+#include <tulip/ColorScaleConfigDialog.h>
 
 #include <map>
 
-#include "GlyphScaleConfigDialog.h"
 #include "HistogramView.h"
 #include "SizeScaleConfigDialog.h"
+#include "GlyphScaleConfigDialog.h"
 
 class QMenu;
 class QAction;
@@ -43,18 +43,18 @@ namespace tlp {
 class GlEditableCurve : public GlSimpleEntity {
 
 public:
-  GlEditableCurve(const Coord &startPoint, const Coord &endPoint,
-                  const Color &curveColor);
+  GlEditableCurve(const Coord &startPoint, const Coord &endPoint, const Color &curveColor);
   GlEditableCurve(const GlEditableCurve &curve);
   ~GlEditableCurve() override {}
 
-  void setXAxisScale(GlQuantitativeAxis *xAxis) { this->xAxis = xAxis; }
+  void setXAxisScale(GlQuantitativeAxis *xAxis) {
+    this->xAxis = xAxis;
+  }
   bool pointBelong(const Coord &point);
   void addCurveAnchor(const Coord &point);
   Coord *getCurveAnchorAtPointIfAny(const Coord &point, Camera *camera);
   void removeCurveAnchor(const Coord &curveAnchor);
-  Coord translateCurveAnchorToPoint(const Coord &curveAnchor,
-                                    const Coord &targetPoint);
+  Coord translateCurveAnchorToPoint(const Coord &curveAnchor, const Coord &targetPoint);
   float getYCoordForX(const float xCoord);
   void updateSize(const Coord &newMinPoint, const Coord &newMaxPoint);
   void resetCurve();
@@ -63,24 +63,40 @@ public:
   void getXML(std::string &) override {}
   void setWithXML(const std::string &, unsigned int &) override {}
 
-  const Coord &getMinPoint() const { return minPoint; }
-  const Coord &getMaxPoint() const { return maxPoint; }
+  const Coord &getMinPoint() const {
+    return minPoint;
+  }
+  const Coord &getMaxPoint() const {
+    return maxPoint;
+  }
 
-  const Coord &getFirstCurvePoint() const { return startPoint; }
+  const Coord &getFirstCurvePoint() const {
+    return startPoint;
+  }
   void setCurveStartPoint(const Coord &startPoint) {
     this->startPoint = startPoint;
   }
 
-  const Coord &getLastCurvePoint() const { return endPoint; }
-  void setLastCurvePoint(const Coord &endPoint) { this->endPoint = endPoint; }
+  const Coord &getLastCurvePoint() const {
+    return endPoint;
+  }
+  void setLastCurvePoint(const Coord &endPoint) {
+    this->endPoint = endPoint;
+  }
 
-  const std::vector<Coord> &getCurvePoints() const { return curvePoints; }
+  const std::vector<Coord> &getCurvePoints() const {
+    return curvePoints;
+  }
   void setCurvePoints(const std::vector<Coord> &curvePoints) {
     this->curvePoints = curvePoints;
   }
 
-  const Color &getCurveColor() const { return curveColor; }
-  void setCurveColor(const Color &color) { curveColor = color; }
+  const Color &getCurveColor() const {
+    return curveColor;
+  }
+  void setCurveColor(const Color &color) {
+    curveColor = color;
+  }
 
 private:
   void init();
@@ -98,9 +114,8 @@ class GlSizeScale : public GlSimpleEntity {
 public:
   enum Orientation { Horizontal, Vertical };
 
-  GlSizeScale(const float minSize, const float maxSize, const Coord &baseCoord,
-              const float length, const float thickness, const Color &color,
-              Orientation orientation);
+  GlSizeScale(const float minSize, const float maxSize, const Coord &baseCoord, const float length,
+              const float thickness, const Color &color, Orientation orientation);
   ~GlSizeScale() override;
 
   float getSizeAtPos(const Coord &pos);
@@ -113,19 +128,35 @@ public:
 
   void setWithXML(const std::string &, unsigned int &) override {}
 
-  Coord getBaseCoord() const { return baseCoord; }
+  Coord getBaseCoord() const {
+    return baseCoord;
+  }
 
-  float getThickness() const { return thickness; }
+  float getThickness() const {
+    return thickness;
+  }
 
-  float getLength() const { return length; }
+  float getLength() const {
+    return length;
+  }
 
-  float getMinSize() const { return minSize; }
-  float getMaxSize() const { return maxSize; }
+  float getMinSize() const {
+    return minSize;
+  }
+  float getMaxSize() const {
+    return maxSize;
+  }
 
-  void setMinSize(const float minSize) { this->minSize = minSize; }
-  void setMaxSize(const float maxSize) { this->maxSize = maxSize; }
+  void setMinSize(const float minSize) {
+    this->minSize = minSize;
+  }
+  void setMaxSize(const float maxSize) {
+    this->maxSize = maxSize;
+  }
 
-  void setColor(const Color &color) { this->color = color; }
+  void setColor(const Color &color) {
+    this->color = color;
+  }
 
 private:
   float minSize, maxSize;
@@ -142,8 +173,7 @@ class GlGlyphScale : public GlSimpleEntity {
 public:
   enum Orientation { Horizontal, Vertical };
 
-  GlGlyphScale(const Coord &baseCoord, const float length,
-               Orientation orientation);
+  GlGlyphScale(const Coord &baseCoord, const float length, Orientation orientation);
   ~GlGlyphScale() override;
 
   void setGlyphsList(const std::vector<int> &glyphsList);
@@ -158,9 +188,13 @@ public:
 
   void setWithXML(const std::string &, unsigned int &) override {}
 
-  Coord getBaseCoord() const { return baseCoord; }
+  Coord getBaseCoord() const {
+    return baseCoord;
+  }
 
-  float getLength() const { return length; }
+  float getLength() const {
+    return length;
+  }
 
 private:
   GlGraphRenderingParameters glyphGraphRenderingParameters;
@@ -179,12 +213,7 @@ private:
 
 class HistogramMetricMapping : public GLInteractorComponent {
 
-  enum MappingType {
-    VIEWCOLOR_MAPPING,
-    VIEWBORDERCOLOR_MAPPING,
-    SIZE_MAPPING,
-    GLYPH_MAPPING
-  };
+  enum MappingType { VIEWCOLOR_MAPPING, VIEWBORDERCOLOR_MAPPING, SIZE_MAPPING, GLYPH_MAPPING };
 
 public:
   HistogramMetricMapping();
@@ -195,13 +224,11 @@ public:
   bool draw(GlMainWidget *glMainWidget) override;
   bool compute(GlMainWidget *glMainWidget) override;
   void viewChanged(View *view) override;
-  bool showContextMenu(const QPoint &globalPoint,
-                       const QPointF &scenePoint) override;
+  bool showContextMenu(const QPoint &globalPoint, const QPointF &scenePoint) override;
 
   bool pointerUnderScale(const Coord &sceneCoords);
   void updateGraphWithMapping(Graph *graph, LayoutProperty *histogramLayout);
-  void updateMapping(GlQuantitativeAxis *histoXAxis,
-                     unsigned int nbHistogramBins);
+  void updateMapping(GlQuantitativeAxis *histoXAxis, unsigned int nbHistogramBins);
 
 private:
   void initInteractor();

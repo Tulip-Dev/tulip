@@ -19,17 +19,16 @@
 #include <tulip/GlCPULODCalculator.h>
 #include <tulip/GlGraphInputData.h>
 
+#include <tulip/Matrix.h>
 #include <tulip/Camera.h>
 #include <tulip/GlTools.h>
-#include <tulip/Matrix.h>
 #include <tulip/ParallelTools.h>
 
 using namespace std;
 
 namespace tlp {
 
-GlCPULODCalculator::GlCPULODCalculator()
-    : computeEdgesLOD(true), noBBCheck(false) {
+GlCPULODCalculator::GlCPULODCalculator() : computeEdgesLOD(true), noBBCheck(false) {
   threadSafe = true;
   noBBCheck.assign(ThreadManager::getNumberOfThreads(), false);
   bbs.resize(ThreadManager::getNumberOfThreads());
@@ -44,15 +43,14 @@ void GlCPULODCalculator::beginNewCamera(Camera *camera) {
   currentLayerLODUnit->camera = camera;
 }
 
-void GlCPULODCalculator::addSimpleEntityBoundingBox(GlSimpleEntity *entity,
-                                                    const BoundingBox &bb) {
+void GlCPULODCalculator::addSimpleEntityBoundingBox(GlSimpleEntity *entity, const BoundingBox &bb) {
   assert(bb.isValid());
 
   // This code is here to prevent adding entities in percentage
   //  If you look at the Gl2DRect, you can see an option inPercent,
-  //   if this entity is inPercent we cannot compute bounding box, so we create
-  //   the biggest possible bounding box and here we don't add this false
-  //   bounding box to the scene bounding box
+  //   if this entity is inPercent we cannot compute bounding box, so we create the biggest possible
+  //   bounding box
+  //   and here we don't add this false bounding box to the scene bounding box
   //   TODO: See if we can change the bounding box compute in Gl2DRect
   if (bb[0][0] != numeric_limits<float>::min()) {
     auto ti = ThreadManager::getThreadNumber();
@@ -86,8 +84,7 @@ BoundingBox GlCPULODCalculator::getSceneBoundingBox() {
   return bb;
 }
 
-void GlCPULODCalculator::reserveMemoryForGraphElts(unsigned int nbNodes,
-                                                   unsigned int nbEdges) {
+void GlCPULODCalculator::reserveMemoryForGraphElts(unsigned int nbNodes, unsigned int nbEdges) {
   currentLayerLODUnit->nodesLODVector.resize(nbNodes);
   currentLayerLODUnit->edgesLODVector.resize(nbEdges);
 }
@@ -102,11 +99,9 @@ void GlCPULODCalculator::compute(const Vector<int, 4> &globalViewport,
     camera->getTransformMatrix(globalViewport, transformMatrix);
 
     if (camera->is3D()) {
-      Coord &&eye =
-          camera->getEyes() + (camera->getEyes() - camera->getCenter()) /
-                                  float(camera->getZoomFactor());
-      computeFor3DCamera(&(*it), eye, transformMatrix, globalViewport,
-                         currentViewport);
+      Coord &&eye = camera->getEyes() +
+                    (camera->getEyes() - camera->getCenter()) / float(camera->getZoomFactor());
+      computeFor3DCamera(&(*it), eye, transformMatrix, globalViewport, currentViewport);
     } else {
       computeFor2DCamera(&(*it), globalViewport, currentViewport);
     }
@@ -115,18 +110,17 @@ void GlCPULODCalculator::compute(const Vector<int, 4> &globalViewport,
   }
 }
 
-void GlCPULODCalculator::computeFor3DCamera(
-    LayerLODUnit *layerLODUnit, const Coord &eye,
-    const Matrix<float, 4> &transformMatrix,
-    const Vector<int, 4> &globalViewport,
-    const Vector<int, 4> &currentViewport) {
+void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, const Coord &eye,
+                                            const Matrix<float, 4> &transformMatrix,
+                                            const Vector<int, 4> &globalViewport,
+                                            const Vector<int, 4> &currentViewport) {
 
   if ((renderingEntitiesFlag & RenderingSimpleEntities) != 0) {
     auto nb = layerLODUnit->simpleEntitiesLODVector.size();
     TLP_PARALLEL_MAP_INDICES(nb, [&](unsigned int i) {
-      layerLODUnit->simpleEntitiesLODVector[i].lod = calculateAABBSize(
-          layerLODUnit->simpleEntitiesLODVector[i].boundingBox, eye,
-          transformMatrix, globalViewport, currentViewport);
+      layerLODUnit->simpleEntitiesLODVector[i].lod =
+          calculateAABBSize(layerLODUnit->simpleEntitiesLODVector[i].boundingBox, eye,
+                            transformMatrix, globalViewport, currentViewport);
     });
   }
 
@@ -134,8 +128,8 @@ void GlCPULODCalculator::computeFor3DCamera(
     auto nb = layerLODUnit->nodesLODVector.size();
     TLP_PARALLEL_MAP_INDICES(nb, [&](unsigned int i) {
       layerLODUnit->nodesLODVector[i].lod =
-          calculateAABBSize(layerLODUnit->nodesLODVector[i].boundingBox, eye,
-                            transformMatrix, globalViewport, currentViewport);
+          calculateAABBSize(layerLODUnit->nodesLODVector[i].boundingBox, eye, transformMatrix,
+                            globalViewport, currentViewport);
     });
   }
 
@@ -145,33 +139,32 @@ void GlCPULODCalculator::computeFor3DCamera(
     if (computeEdgesLOD) {
       TLP_PARALLEL_MAP_INDICES(nb, [&](unsigned int i) {
         layerLODUnit->edgesLODVector[i].lod =
-            calculateAABBSize(layerLODUnit->edgesLODVector[i].boundingBox, eye,
-                              transformMatrix, globalViewport, currentViewport);
+            calculateAABBSize(layerLODUnit->edgesLODVector[i].boundingBox, eye, transformMatrix,
+                              globalViewport, currentViewport);
       });
     } else {
-      TLP_PARALLEL_MAP_INDICES(nb, [&](unsigned int i) {
-        layerLODUnit->edgesLODVector[i].lod = 10;
-      });
+      TLP_PARALLEL_MAP_INDICES(nb,
+                               [&](unsigned int i) { layerLODUnit->edgesLODVector[i].lod = 10; });
     }
   }
 }
 
-void GlCPULODCalculator::computeFor2DCamera(
-    LayerLODUnit *layerLODUnit, const Vector<int, 4> &globalViewport,
-    const Vector<int, 4> &currentViewport) {
+void GlCPULODCalculator::computeFor2DCamera(LayerLODUnit *layerLODUnit,
+                                            const Vector<int, 4> &globalViewport,
+                                            const Vector<int, 4> &currentViewport) {
 
   for (auto it = layerLODUnit->simpleEntitiesLODVector.begin();
        it != layerLODUnit->simpleEntitiesLODVector.end(); ++it) {
     it->lod = calculate2DLod(it->boundingBox, globalViewport, currentViewport);
   }
 
-  for (auto it = layerLODUnit->nodesLODVector.begin();
-       it != layerLODUnit->nodesLODVector.end(); ++it) {
+  for (auto it = layerLODUnit->nodesLODVector.begin(); it != layerLODUnit->nodesLODVector.end();
+       ++it) {
     it->lod = calculate2DLod(it->boundingBox, globalViewport, currentViewport);
   }
 
-  for (auto it = layerLODUnit->edgesLODVector.begin();
-       it != layerLODUnit->edgesLODVector.end(); ++it) {
+  for (auto it = layerLODUnit->edgesLODVector.begin(); it != layerLODUnit->edgesLODVector.end();
+       ++it) {
     it->lod = calculate2DLod(it->boundingBox, globalViewport, currentViewport);
   }
 }

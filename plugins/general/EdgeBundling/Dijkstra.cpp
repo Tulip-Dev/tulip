@@ -36,8 +36,7 @@ TLP_DEFINE_GLOBAL_LOCK(DijkstraProps);
 
 //============================================================
 void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
-                            const EdgeStaticProperty<double> &weights,
-                            const set<node> &fous) {
+                            const EdgeStaticProperty<double> &weights, const set<node> &fous) {
 
   assert(srcTlp.isValid());
   src = ntlp2dik.get(srcTlp);
@@ -83,14 +82,12 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
 
   while (!dijkstraTable.empty()) {
     // select the first element in the list the one with min value
-    set<DijkstraElement *, LessDijkstraElement>::iterator it =
-        dijkstraTable.begin();
+    set<DijkstraElement *, LessDijkstraElement>::iterator it = dijkstraTable.begin();
     DijkstraElement &u = *(*it);
     dijkstraTable.erase(it);
 
     if (!focusTable.empty()) {
-      set<DijkstraElement *, LessDijkstraElement>::reverse_iterator it =
-          focusTable.rbegin();
+      set<DijkstraElement *, LessDijkstraElement>::reverse_iterator it = focusTable.rbegin();
       double maxDist = (*it)->dist;
 
       if (u.dist > maxDist) {
@@ -107,8 +104,7 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
       DijkstraElement &dEle = *mapDik[v];
 
       auto eWeight = weights.getEdgeValue(edik2tlp[e]);
-      if (fabs((u.dist + eWeight) - dEle.dist) <
-          1E-9) // path of the same length
+      if (fabs((u.dist + eWeight) - dEle.dist) < 1E-9) // path of the same length
         dEle.usedEdge.push_back(e);
       else if ((u.dist + eWeight) < dEle.dist) {
         // we find a node closer with that path
@@ -204,6 +200,6 @@ void Dijkstra::searchPath(node ntlp, vector<node> &vNodes) {
   }
 
   if (n != src)
-    cout << "A path does not exist between node " << src.id << " and node "
-         << tgte.id << "!" << endl;
+    cout << "A path does not exist between node " << src.id << " and node " << tgte.id << "!"
+         << endl;
 }

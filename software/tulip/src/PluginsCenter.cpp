@@ -23,17 +23,17 @@
 #include "PluginInformationListItem.h"
 
 #include <tulip/Algorithm.h>
-#include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/ExportModule.h>
-#include <tulip/Glyph.h>
-#include <tulip/ImportModule.h>
-#include <tulip/Interactor.h>
-#include <tulip/Perspective.h>
-#include <tulip/PluginManager.h>
-#include <tulip/PropertyAlgorithm.h>
 #include <tulip/TemplateAlgorithm.h>
-#include <tulip/TulipSettings.h>
+#include <tulip/PropertyAlgorithm.h>
 #include <tulip/View.h>
+#include <tulip/Perspective.h>
+#include <tulip/Interactor.h>
+#include <tulip/Glyph.h>
+#include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/ImportModule.h>
+#include <tulip/ExportModule.h>
+#include <tulip/PluginManager.h>
+#include <tulip/TulipSettings.h>
 
 #include "ui_PluginsCenter.h"
 
@@ -53,14 +53,11 @@ PluginsCenter::PluginsCenter(QWidget *parent)
   _ui->setupUi(this);
 
   QStringList remoteLocs = TulipSettings::remoteLocations();
-  _ui->stableCheck->setChecked(
-      remoteLocs.contains(PluginManager::STABLE_LOCATION));
-  _ui->testingCheck->setChecked(
-      remoteLocs.contains(PluginManager::TESTING_LOCATION));
+  _ui->stableCheck->setChecked(remoteLocs.contains(PluginManager::STABLE_LOCATION));
+  _ui->testingCheck->setChecked(remoteLocs.contains(PluginManager::TESTING_LOCATION));
 
   for (const QString &s : remoteLocs) {
-    if (s != PluginManager::STABLE_LOCATION &&
-        s != PluginManager::TESTING_LOCATION)
+    if (s != PluginManager::STABLE_LOCATION && s != PluginManager::TESTING_LOCATION)
       _ui->remoteLocationsList->addItem(s);
   }
 #if defined(WIN32) || defined(__APPLE__)
@@ -69,13 +66,14 @@ PluginsCenter::PluginsCenter(QWidget *parent)
 #endif
 }
 
-PluginsCenter::~PluginsCenter() { delete _ui; }
+PluginsCenter::~PluginsCenter() {
+  delete _ui;
+}
 
 void PluginsCenter::reportPluginErrors(const QMap<QString, QString> &errors) {
   if (!errors.empty())
     _ui->pluginsSideList->item(ERRORS_ROW)
-        ->setFlags(Qt::ItemIsEnabled |
-                   _ui->pluginsSideList->item(ERRORS_ROW)->flags());
+        ->setFlags(Qt::ItemIsEnabled | _ui->pluginsSideList->item(ERRORS_ROW)->flags());
 
   for (const QString &k : errors.keys()) {
     _ui->errorsLogAreaLayout->addWidget(new PluginErrorReport(k, errors[k]));
@@ -97,27 +95,27 @@ void PluginsCenter::showRepositoriesPage() {
   _ui->pluginsContent->setCurrentWidget(_ui->reposPage);
 }
 
-void PluginsCenter::searchAll() { setCategoryFilter(""); }
+void PluginsCenter::searchAll() {
+  setCategoryFilter("");
+}
 
 void PluginsCenter::searchAlgorithms() {
-  setCategoryFilters(QStringList() << tlp::ALGORITHM_CATEGORY.c_str()
-                                   << tlp::BOOLEAN_ALGORITHM_CATEGORY.c_str()
-                                   << tlp::COLOR_ALGORITHM_CATEGORY.c_str()
-                                   << tlp::DOUBLE_ALGORITHM_CATEGORY.c_str()
-                                   << tlp::INTEGER_ALGORITHM_CATEGORY.c_str()
-                                   << tlp::LAYOUT_ALGORITHM_CATEGORY.c_str()
-                                   << tlp::STRING_ALGORITHM_CATEGORY.c_str()
-                                   << tlp::PROPERTY_ALGORITHM_CATEGORY.c_str());
+  setCategoryFilters(QStringList()
+                     << tlp::ALGORITHM_CATEGORY.c_str() << tlp::BOOLEAN_ALGORITHM_CATEGORY.c_str()
+                     << tlp::COLOR_ALGORITHM_CATEGORY.c_str()
+                     << tlp::DOUBLE_ALGORITHM_CATEGORY.c_str()
+                     << tlp::INTEGER_ALGORITHM_CATEGORY.c_str()
+                     << tlp::LAYOUT_ALGORITHM_CATEGORY.c_str()
+                     << tlp::STRING_ALGORITHM_CATEGORY.c_str()
+                     << tlp::PROPERTY_ALGORITHM_CATEGORY.c_str());
 }
 
 void PluginsCenter::searchImportExport() {
-  setCategoryFilters(QStringList() << tlp::IMPORT_CATEGORY.c_str()
-                                   << tlp::EXPORT_CATEGORY.c_str());
+  setCategoryFilters(QStringList() << tlp::IMPORT_CATEGORY.c_str() << tlp::EXPORT_CATEGORY.c_str());
 }
 
 void PluginsCenter::searchGlyphs() {
-  setCategoryFilters(QStringList() << tlp::GLYPH_CATEGORY.c_str()
-                                   << tlp::EEGLYPH_CATEGORY.c_str());
+  setCategoryFilters(QStringList() << tlp::GLYPH_CATEGORY.c_str() << tlp::EEGLYPH_CATEGORY.c_str());
 }
 
 void PluginsCenter::searchViews() {
@@ -163,8 +161,7 @@ void PluginsCenter::refreshFilter() {
     }
   }
 
-  lyt->addItem(
-      new QSpacerItem(0, 0, QSizePolicy::Maximum, QSizePolicy::Expanding));
+  lyt->addItem(new QSpacerItem(0, 0, QSizePolicy::Maximum, QSizePolicy::Expanding));
 
   QString oldObjName = _ui->pluginsSearchListContent->objectName();
   _ui->pluginsSearchList->setWidget(nullptr);
@@ -238,8 +235,7 @@ void PluginsCenter::repoAdded() {
   QString location = _ui->remoteLocationText->text();
   TulipSettings::addRemoteLocation(location);
 
-  if (_ui->remoteLocationsList->findItems(location, Qt::MatchExactly).size() ==
-      0)
+  if (_ui->remoteLocationsList->findItems(location, Qt::MatchExactly).size() == 0)
     _ui->remoteLocationsList->addItem(location);
 }
 
@@ -251,8 +247,7 @@ void PluginsCenter::repoRemoved() {
 
   QString location = selected.first()->text();
   TulipSettings::removeRemoteLocation(location);
-  QList<QListWidgetItem *> lst =
-      _ui->remoteLocationsList->findItems(location, Qt::MatchExactly);
+  QList<QListWidgetItem *> lst = _ui->remoteLocationsList->findItems(location, Qt::MatchExactly);
 
   if (lst.size() > 0) {
     for (auto i : lst) {

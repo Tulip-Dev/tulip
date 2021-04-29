@@ -16,13 +16,13 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/AroundTexturedSphere.h>
-#include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/GlGraphInputData.h>
-#include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/Glyph.h>
-#include <tulip/OpenGlIncludes.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/Glyph.h>
+#include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/GlGraphInputData.h>
+#include <tulip/OpenGlIncludes.h>
+#include <tulip/AroundTexturedSphere.h>
 
 using namespace std;
 using namespace tlp;
@@ -38,8 +38,8 @@ namespace tlp {
  */
 class GlowSphere : public AroundTexturedSphere {
 public:
-  GLYPHINFORMATION("3D - Glow Sphere", "Patrick Mary", "24/01/2012",
-                   "Glow Sphere", "1.0", NodeShape::GlowSphere)
+  GLYPHINFORMATION("3D - Glow Sphere", "Patrick Mary", "24/01/2012", "Glow Sphere", "1.0",
+                   NodeShape::GlowSphere)
   GlowSphere(const tlp::PluginContext *context = nullptr)
       : AroundTexturedSphere(context, "radialGradientTexture.png", 128) {}
   ~GlowSphere() override {}
@@ -50,19 +50,16 @@ PLUGIN(GlowSphere)
 class EEGlowSphere : public EdgeExtremityGlyph {
 public:
   GLYPHINFORMATION("3D - Glow Sphere extremity", "Patrick Mary", "24/01/2012",
-                   "Glow Sphere for edge extremities", "1.0",
-                   EdgeExtremityShape::GlowSphere)
-  EEGlowSphere(const tlp::PluginContext *context = nullptr)
-      : EdgeExtremityGlyph(context) {}
+                   "Glow Sphere for edge extremities", "1.0", EdgeExtremityShape::GlowSphere)
+  EEGlowSphere(const tlp::PluginContext *context = nullptr) : EdgeExtremityGlyph(context) {}
   ~EEGlowSphere() override {}
-  void draw(edge e, node n, const Color &glyphColor,
-            const Color & /* borderColor */, float /* lod */) override {
+  void draw(edge e, node n, const Color &glyphColor, const Color & /* borderColor */,
+            float /* lod */) override {
     glDisable(GL_LIGHTING);
     AroundTexturedSphere::drawGlyph(
         glyphColor, edgeExtGlGraphInputData->getElementSize()->getNodeValue(n),
         edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
-        edgeExtGlGraphInputData->parameters->getTexturePath(),
-        "radialGradientTexture.png", 128);
+        edgeExtGlGraphInputData->parameters->getTexturePath(), "radialGradientTexture.png", 128);
   }
 };
 

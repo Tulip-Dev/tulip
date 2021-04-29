@@ -19,11 +19,11 @@
 
 #include "WithParameterTest.h"
 
-#include <tulip/Color.h>
-#include <tulip/Coord.h>
-#include <tulip/DataSet.h>
-#include <tulip/Size.h>
 #include <tulip/WithParameter.h>
+#include <tulip/Coord.h>
+#include <tulip/Size.h>
+#include <tulip/Color.h>
+#include <tulip/DataSet.h>
 
 using namespace tlp;
 using namespace std;
@@ -43,9 +43,9 @@ const std::string ColorParameter = "colorParameter";
 
 typedef unsigned int uint;
 
-#define EXPECTED_VALUE(TYPE, VALUE)                                            \
-  TYPE TYPE##Value = TYPE();                                                   \
-  set.get<TYPE>(TYPE##Parameter, TYPE##Value);                                 \
+#define EXPECTED_VALUE(TYPE, VALUE)                                                                \
+  TYPE TYPE##Value = TYPE();                                                                       \
+  set.get<TYPE>(TYPE##Parameter, TYPE##Value);                                                     \
   CPPUNIT_ASSERT_EQUAL(VALUE, TYPE##Value)
 
 void WithParameterTest::testBuildDefaultDataSet() {
@@ -80,22 +80,13 @@ void WithParameterTest::testBuildDefaultDataSet() {
 
 ParameteredClass::ParameteredClass() {
   addInParameter<int>(intParameter, "this is a test integer parameter", "42");
-  addInParameter<long>(longParameter, "this is a test long parameter",
-                       "420000000");
-  addInParameter<string>(stringParameter, "this is a test string parameter",
-                         "forty two");
-  addInParameter<uint>(uintParameter,
-                       "this is a test unsigned integer parameter", "24");
-  addInParameter<double>(doubleParameter, "this is a test double parameter",
-                         "4.2");
-  addInParameter<float>(floatParameter, "this is a test float parameter",
-                        "2.4");
-  addInParameter<bool>(boolParameter, "this is a test boolean parameter",
-                       "true");
-  addInParameter<Coord>(CoordParameter, "this is a test Coord parameter",
-                        "(4.4, 2, 1.1)");
-  addInParameter<Size>(SizeParameter, "this is a test Size parameter",
-                       "(2.2, 1.1, 4)");
-  addInParameter<Color>(ColorParameter, "this is a test Color parameter",
-                        "(1, 4, 255, 9)");
+  addInParameter<long>(longParameter, "this is a test long parameter", "420000000");
+  addInParameter<string>(stringParameter, "this is a test string parameter", "forty two");
+  addInParameter<uint>(uintParameter, "this is a test unsigned integer parameter", "24");
+  addInParameter<double>(doubleParameter, "this is a test double parameter", "4.2");
+  addInParameter<float>(floatParameter, "this is a test float parameter", "2.4");
+  addInParameter<bool>(boolParameter, "this is a test boolean parameter", "true");
+  addInParameter<Coord>(CoordParameter, "this is a test Coord parameter", "(4.4, 2, 1.1)");
+  addInParameter<Size>(SizeParameter, "this is a test Size parameter", "(2.2, 1.1, 4)");
+  addInParameter<Color>(ColorParameter, "this is a test Color parameter", "(1, 4, 255, 9)");
 }

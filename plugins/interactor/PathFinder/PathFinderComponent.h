@@ -35,9 +35,9 @@ class PathHighlighter;
 class PathFinder;
 
 /**
- * @brief The main component of the PathFinder interactor. Runs the path finding
- * algorithm when two nodes have been selected and triggers the highlighters if
- * a path has been found.
+ * @brief The main component of the PathFinder interactor. Runs the path finding algorithm when two
+ * nodes have been selected and
+ * triggers the highlighters if a path has been found.
  */
 class PathFinderComponent : public GLInteractorComponent {
 public:
@@ -46,8 +46,8 @@ public:
   bool eventFilter(QObject *, QEvent *) override;
 
   /**
-   * Install a path highlighter. This highlighter is not always activated. The
-   * component will ask its interactor parent before triggering an highlighter.
+   * Install a path highlighter. This highlighter is not always activated. The component will ask
+   * its interactor parent before triggering an highlighter.
    * @param highlighter The highlighter to install.
    */
   void addHighlighter(PathHighlighter *highlighter);
@@ -67,9 +67,8 @@ private:
   bool graphPopable;
 
   QSet<PathHighlighter *> highlighters;
-  void runHighlighters(tlp::GlMainWidget *glMainWidget,
-                       tlp::BooleanProperty *selection, tlp::node src,
-                       tlp::node tgt);
+  void runHighlighters(tlp::GlMainWidget *glMainWidget, tlp::BooleanProperty *selection,
+                       tlp::node src, tlp::node tgt);
   void clearHighlighters(tlp::GlMainWidget *glMainWidget);
 
   void selectPath(GlMainWidget *glMainWidget, tlp::Graph *graph);

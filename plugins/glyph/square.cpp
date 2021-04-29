@@ -17,13 +17,13 @@
  *
  */
 #include <tulip/Color.h>
-#include <tulip/Coord.h>
-#include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/GlGraphInputData.h>
-#include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/GlRect.h>
-#include <tulip/Glyph.h>
 #include <tulip/Size.h>
+#include <tulip/Coord.h>
+#include <tulip/Glyph.h>
+#include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/GlRect.h>
+#include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/GlGraphInputData.h>
 #include <tulip/TulipViewSettings.h>
 
 using namespace std;
@@ -31,11 +31,9 @@ using namespace tlp;
 
 namespace tlp {
 
-static void drawGlyph(const Color &glyphColor, const string &texture,
-                      const string &texturePath, double borderWidth,
-                      const Color &borderColor, float lod) {
-  static GlRect rect(Coord(0, 0, 0), 1., 1., Color(0, 0, 0, 255),
-                     Color(0, 0, 0, 255));
+static void drawGlyph(const Color &glyphColor, const string &texture, const string &texturePath,
+                      double borderWidth, const Color &borderColor, float lod) {
+  static GlRect rect(Coord(0, 0, 0), 1., 1., Color(0, 0, 0, 255), Color(0, 0, 0, 255));
   rect.setFillColor(glyphColor);
   rect.setTextureName(texturePath + texture);
 
@@ -60,8 +58,8 @@ static void drawGlyph(const Color &glyphColor, const string &texture,
  */
 class Square : public Glyph {
 public:
-  GLYPHINFORMATION("2D - Square", "David Auber", "09/07/2002",
-                   "Textured square", "1.0", NodeShape::Square)
+  GLYPHINFORMATION("2D - Square", "David Auber", "09/07/2002", "Textured square", "1.0",
+                   NodeShape::Square)
   Square(const tlp::PluginContext *context = nullptr);
   ~Square() override;
   void draw(node n, float lod) override;
@@ -92,18 +90,14 @@ Coord Square::getAnchor(const Coord &vector) const {
 class EESquare : public EdgeExtremityGlyph {
 public:
   GLYPHINFORMATION("2D - Square extremity", "David Auber", "09/07/2002",
-                   "Textured square for edge extremities", "1.0",
-                   EdgeExtremityShape::Square)
+                   "Textured square for edge extremities", "1.0", EdgeExtremityShape::Square)
   EESquare(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
 
-  void draw(edge e, node, const Color &glyphColor, const Color &borderColor,
-            float lod) override {
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) override {
     glDisable(GL_LIGHTING);
-    drawGlyph(glyphColor,
-              edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
+    drawGlyph(glyphColor, edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
               edgeExtGlGraphInputData->parameters->getTexturePath(),
-              edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-              borderColor, lod);
+              edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), borderColor, lod);
   }
 };
 PLUGIN(EESquare)

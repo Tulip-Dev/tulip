@@ -21,25 +21,25 @@
 #define BFDWRAPPER_H_
 
 #ifdef __MINGW32__
-#include <stdint.h>
 #include <windows.h>
+#include <stdint.h>
 #endif
 
-#include <cstdarg>
-#include <cstdio>
 #include <cstdlib>
+#include <cstdio>
+#include <cstdarg>
 #include <cstring>
-#include <string>
 #include <utility>
+#include <string>
 
-// On FreeBSD, the ansidecl.h header file from the binutils port, containing the
-// ATTRIBUTE_UNUSED and ENUM_BITFIELD preprocessor macro is not installed and
-// its use from bfd.h is also removed (see
+// On FreeBSD, the ansidecl.h header file from the binutils port, containing the ATTRIBUTE_UNUSED
+// and ENUM_BITFIELD
+// preprocessor macro is not installed and its use from bfd.h is also removed (see
 // https://svnweb.freebsd.org/ports?view=revision&revision=366535,
 // https://svnweb.freebsd.org/ports?view=revision&revision=343349,
 // https://svnweb.freebsd.org/ports?view=revision&revision=336642)
-// Those macro are needed for compiling a file including bfd.h, so define them
-// as found in ansidecl.h
+// Those macro are needed for compiling a file including bfd.h, so define them as found in
+// ansidecl.h
 #ifdef __FreeBSD__
 #ifndef ATTRIBUTE_UNUSED
 #define ATTRIBUTE_UNUSED __attribute__((__unused__))
@@ -52,8 +52,7 @@
 // devel/gnulibiberty to resolve the missing symbols, but that port uses
 // libiberty from binutils v2.19.1 which doesn't contain all the symbols from
 // v2.24, in particular filename_ncmp required by libbfd.
-// So add the implementation from filename_ncmp as found in the libiberty source
-// code.
+// So add the implementation from filename_ncmp as found in the libiberty source code.
 extern "C" int filename_ncmp(const char *s1, const char *s2, size_t n);
 
 #endif
@@ -67,17 +66,17 @@ public:
   ~BfdWrapper();
 
 #ifndef __MINGW32__
-  std::pair<const char *, unsigned int>
-  getFileAndLineForAddress(const char *unmangledFuncName,
-                           const int64_t runtimeAddr,
-                           const int64_t runtimeOffset);
+  std::pair<const char *, unsigned int> getFileAndLineForAddress(const char *unmangledFuncName,
+                                                                 const int64_t runtimeAddr,
+                                                                 const int64_t runtimeOffset);
 #else
-  std::pair<const char *, unsigned int>
-  getFileAndLineForAddress(const int64_t runtimeAddr);
+  std::pair<const char *, unsigned int> getFileAndLineForAddress(const int64_t runtimeAddr);
   const char *getFunctionForAddress(const int64_t runtimeAddr);
 #endif
 
-  const std::string &getDsoAbsolutePath() const { return filePath; }
+  const std::string &getDsoAbsolutePath() const {
+    return filePath;
+  }
 
 private:
   std::string filePath;

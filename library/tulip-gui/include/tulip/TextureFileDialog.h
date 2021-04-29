@@ -23,9 +23,9 @@
 
 #include <QDialog>
 
-#include "ui_TextureFileDialog.h"
-#include <tulip/TulipMetaTypes.h>
 #include <tulip/tulipconf.h>
+#include <tulip/TulipMetaTypes.h>
+#include "ui_TextureFileDialog.h"
 
 namespace Ui {
 class TextureFileDialogData;
@@ -53,7 +53,9 @@ public:
 
   void setData(const TextureFile &tf);
 
-  const TextureFile &data() { return _data; }
+  const TextureFile &data() {
+    return _data;
+  }
 
   void showEvent(QShowEvent *ev) override;
 

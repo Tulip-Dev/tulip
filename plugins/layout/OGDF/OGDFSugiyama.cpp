@@ -17,20 +17,21 @@
  *
  */
 
+#include <ogdf/layered/SugiyamaLayout.h>
+#include <ogdf/layered/LongestPathRanking.h>
+#include <ogdf/layered/OptimalRanking.h>
 #include <ogdf/layered/BarycenterHeuristic.h>
-#include <ogdf/layered/CoffmanGrahamRanking.h>
+#include <ogdf/layered/MedianHeuristic.h>
+#include <ogdf/layered/SplitHeuristic.h>
 #include <ogdf/layered/FastHierarchyLayout.h>
-#include <ogdf/layered/FastSimpleHierarchyLayout.h>
+#include <ogdf/layered/CoffmanGrahamRanking.h>
+#include <ogdf/layered/SiftingHeuristic.h>
 #include <ogdf/layered/GreedyInsertHeuristic.h>
 #include <ogdf/layered/GreedySwitchHeuristic.h>
-#include <ogdf/layered/GridSifting.h>
-#include <ogdf/layered/LongestPathRanking.h>
-#include <ogdf/layered/MedianHeuristic.h>
 #include <ogdf/layered/OptimalHierarchyLayout.h>
-#include <ogdf/layered/OptimalRanking.h>
-#include <ogdf/layered/SiftingHeuristic.h>
-#include <ogdf/layered/SplitHeuristic.h>
-#include <ogdf/layered/SugiyamaLayout.h>
+#include <ogdf/layered/FastSimpleHierarchyLayout.h>
+#include <ogdf/layered/GridSifting.h>
+#include <ogdf/layered/OptimalHierarchyLayout.h>
 
 #include <tulip/StringCollection.h>
 
@@ -43,8 +44,8 @@
 #define ELT_COFFMANGRAHAMRANKING 2
 
 #define ELT_TWOLAYERCROSS "Two-layer crossing minimization"
-#define ELT_TWOLAYERCROSSLIST                                                                  \
-  "BarycenterHeuristic;MedianHeuristic;SplitHeuristic;SiftingHeuristic;GreedyInsertHeuristic;" \
+#define ELT_TWOLAYERCROSSLIST                                                                      \
+  "BarycenterHeuristic;MedianHeuristic;SplitHeuristic;SiftingHeuristic;GreedyInsertHeuristic;"     \
   "GreedySwitchHeuristic;GlobalSiftingHeuristic;GridSiftingHeuristic"
 #define ELT_BARYCENTER 0
 #define ELT_MEDIAN 1
@@ -56,7 +57,7 @@
 #define ELT_GRIDSIFTING 7
 
 #define ELT_HIERARCHYLAYOUT "Layout"
-#define ELT_HIERARCHYLAYOUTLIST                                                \
+#define ELT_HIERARCHYLAYOUTLIST                                                                    \
   "FastHierarchyLayout;FastSimpleHierarchyLayout;OptimalHierarchyLayout"
 #define ELT_FASTHIERARCHY 0
 #define ELT_FASTSIMPLEHIERARCHY 1
@@ -157,8 +158,7 @@ class OGDFSugiyama : public OGDFLayoutPluginBase {
 
 public:
   OGDFSugiyama(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context,
-                             context ? new ogdf::SugiyamaLayout() : nullptr),
+      : OGDFLayoutPluginBase(context, context ? new ogdf::SugiyamaLayout() : nullptr),
         sugiyama(static_cast<ogdf::SugiyamaLayout *>(ogdfLayoutAlgo)) {
     addInParameter<int>("fails", paramHelp[0], "4");
     addInParameter<int>("runs", paramHelp[1], "15");
@@ -171,15 +171,12 @@ public:
     addInParameter<double>("pageRatio", paramHelp[8], "1.0");
     addInParameter<bool>("alignBaseClasses", paramHelp[9], "false");
     addInParameter<bool>("alignSiblings", paramHelp[10], "false");
-    addInParameter<StringCollection>(ELT_RANKING, paramHelp[11],
-                                     ELT_RANKINGLIST, true,
+    addInParameter<StringCollection>(ELT_RANKING, paramHelp[11], ELT_RANKINGLIST, true,
                                      eltRankingValuesDescription);
-    addInParameter<StringCollection>(ELT_TWOLAYERCROSS, paramHelp[12],
-                                     ELT_TWOLAYERCROSSLIST, true,
+    addInParameter<StringCollection>(ELT_TWOLAYERCROSS, paramHelp[12], ELT_TWOLAYERCROSSLIST, true,
                                      twoLayerCrossValuesDescription);
-    addInParameter<StringCollection>(ELT_HIERARCHYLAYOUT, paramHelp[13],
-                                     ELT_HIERARCHYLAYOUTLIST, true,
-                                     hierarchyLayoutValuesDescription);
+    addInParameter<StringCollection>(ELT_HIERARCHYLAYOUT, paramHelp[13], ELT_HIERARCHYLAYOUTLIST,
+                                     true, hierarchyLayoutValuesDescription);
     addInParameter<bool>("transpose vertically", paramHelp[14], "true");
     addOutParameter<int>("Number of crossings", paramHelp[15]);
     addOutParameter<int>("Number of levels/layers", paramHelp[16]);
@@ -187,11 +184,10 @@ public:
 
   ~OGDFSugiyama() override {}
 
-  PLUGININFORMATION(
-      "Sugiyama (OGDF)", "Carsten Gutwenger", "12/11/2007",
-      "Implements the classical layout algorithm by Sugiyama, Tagawa, and Toda. It "
-      "is a layer-based approach for producing upward drawings.",
-      "1.7", "Hierarchical")
+  PLUGININFORMATION("Sugiyama (OGDF)", "Carsten Gutwenger", "12/11/2007",
+                    "Implements the classical layout algorithm by Sugiyama, Tagawa, and Toda. It "
+                    "is a layer-based approach for producing upward drawings.",
+                    "1.7", "Hierarchical")
 
   void beforeCall() override {
     if (dataSet != nullptr) {
@@ -268,14 +264,12 @@ public:
           fhl->fixedLayerDistance(fixedLayerDistance);
           sugiyama->setLayout(fhl);
         } else if (sc.getCurrent() == ELT_FASTSIMPLEHIERARCHY) {
-          ogdf::FastSimpleHierarchyLayout *fshl =
-              new ogdf::FastSimpleHierarchyLayout();
+          ogdf::FastSimpleHierarchyLayout *fshl = new ogdf::FastSimpleHierarchyLayout();
           fshl->nodeDistance(nodeDistance);
           fshl->layerDistance(layerDistance);
           sugiyama->setLayout(fshl);
         } else {
-          ogdf::OptimalHierarchyLayout *ohl =
-              new ogdf::OptimalHierarchyLayout();
+          ogdf::OptimalHierarchyLayout *ohl = new ogdf::OptimalHierarchyLayout();
           ohl->nodeDistance(nodeDistance);
           ohl->layerDistance(layerDistance);
           sugiyama->setLayout(ohl);
@@ -285,8 +279,7 @@ public:
   }
 
   void callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) override {
-    ogdf::SugiyamaLayout *sugiyama =
-        static_cast<ogdf::SugiyamaLayout *>(ogdfLayoutAlgo);
+    ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout *>(ogdfLayoutAlgo);
 
     if (sugiyama->alignBaseClasses() || sugiyama->alignSiblings())
       sugiyama->callUML(gAttributes);

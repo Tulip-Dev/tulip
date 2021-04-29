@@ -26,7 +26,8 @@
 
 namespace tlp {
 
-template <class itType> struct Iterator;
+template <class itType>
+struct Iterator;
 
 class PropertyInterface;
 class Graph;

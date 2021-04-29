@@ -17,28 +17,28 @@
  *
  */
 
-#include <tulip/GlLabel.h>
-#include <tulip/GlMainWidget.h>
 #include <tulip/GlQuantitativeAxis.h>
-#include <tulip/GlRect.h>
 #include <tulip/Interactor.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/GlLabel.h>
+#include <tulip/GlRect.h>
 
 #include <tulip/Perspective.h>
-#include <tulip/QuickAccessBar.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/QuickAccessBar.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/ViewGraphPropertiesSelectionWidget.h>
 
-#include <QApplication>
-#include <QGraphicsProxyWidget>
-#include <QGraphicsView>
 #include <QHelpEvent>
-#include <QMessageBox>
+#include <QApplication>
 #include <QToolTip>
+#include <QGraphicsView>
+#include <QGraphicsProxyWidget>
+#include <QMessageBox>
 
-#include "HistoOptionsWidget.h"
-#include "HistogramInteractors.h"
 #include "HistogramView.h"
+#include "HistogramInteractors.h"
+#include "HistoOptionsWidget.h"
 
 using namespace std;
 
@@ -46,8 +46,7 @@ const unsigned int OVERVIEW_SIZE = 512;
 
 const string propertiesTypes[] = {"double", "int"};
 const unsigned int nbPropertiesTypes = sizeof(propertiesTypes) / sizeof(string);
-const vector<string> propertiesTypesFilter(propertiesTypes,
-                                           propertiesTypes + nbPropertiesTypes);
+const vector<string> propertiesTypesFilter(propertiesTypes, propertiesTypes + nbPropertiesTypes);
 
 template <typename T>
 std::string getStringFromNumber(T number, unsigned int precision = 5) {
@@ -62,15 +61,13 @@ namespace tlp {
 PLUGIN(HistogramView)
 
 HistogramView::HistogramView(const PluginContext *)
-    : GlMainView(true), propertiesSelectionWidget(nullptr),
-      histoOptionsWidget(nullptr), xAxisDetail(nullptr), yAxisDetail(nullptr),
-      _histoGraph(nullptr), emptyGraph(nullptr), emptyGlGraphComposite(nullptr),
-      histogramsComposite(nullptr), labelsComposite(nullptr),
+    : GlMainView(true), propertiesSelectionWidget(nullptr), histoOptionsWidget(nullptr),
+      xAxisDetail(nullptr), yAxisDetail(nullptr), _histoGraph(nullptr), emptyGraph(nullptr),
+      emptyGlGraphComposite(nullptr), histogramsComposite(nullptr), labelsComposite(nullptr),
       axisComposite(nullptr), smallMultiplesView(true), mainLayer(nullptr),
-      detailedHistogram(nullptr), sceneRadiusBak(0), zoomFactorBak(0),
-      emptyRect(nullptr), emptyRect2(nullptr), isConstruct(false),
-      lastNbHistograms(0), dataLocation(NODE), needUpdateHistogram(false),
-      edgeAsNodeGraph(nullptr) {}
+      detailedHistogram(nullptr), sceneRadiusBak(0), zoomFactorBak(0), emptyRect(nullptr),
+      emptyRect2(nullptr), isConstruct(false), lastNbHistograms(0), dataLocation(NODE),
+      needUpdateHistogram(false), edgeAsNodeGraph(nullptr) {}
 
 HistogramView::~HistogramView() {
   if (isConstruct) {
@@ -145,21 +142,19 @@ void HistogramView::cleanupGlScene() {
 
 QuickAccessBar *HistogramView::getQuickAccessBarImpl() {
   auto _bar = new QuickAccessBarImpl(
-      nullptr,
-      QuickAccessBarImpl::QuickAccessButtons(
-          QuickAccessBarImpl::SCREENSHOT | QuickAccessBarImpl::BACKGROUNDCOLOR |
-          QuickAccessBarImpl::SHOWLABELS | QuickAccessBarImpl::LABELSSCALED |
-          QuickAccessBarImpl::SHOWEDGES | QuickAccessBarImpl::NODECOLOR |
-          QuickAccessBarImpl::EDGECOLOR | QuickAccessBarImpl::NODEBORDERCOLOR |
-          QuickAccessBarImpl::LABELCOLOR));
+      nullptr, QuickAccessBarImpl::QuickAccessButtons(
+                   QuickAccessBarImpl::SCREENSHOT | QuickAccessBarImpl::BACKGROUNDCOLOR |
+                   QuickAccessBarImpl::SHOWLABELS | QuickAccessBarImpl::LABELSSCALED |
+                   QuickAccessBarImpl::SHOWEDGES | QuickAccessBarImpl::NODECOLOR |
+                   QuickAccessBarImpl::EDGECOLOR | QuickAccessBarImpl::NODEBORDERCOLOR |
+                   QuickAccessBarImpl::LABELCOLOR));
   return _bar;
 }
 
 void HistogramView::graphicsViewResized(int w, int h) {
   if (isConstruct && noPropertyMsgBox->isVisible()) {
-    noPropertyMsgBox->setPos(
-        w / 2 - noPropertyMsgBox->sceneBoundingRect().width() / 2,
-        h / 2 - noPropertyMsgBox->sceneBoundingRect().height() / 2);
+    noPropertyMsgBox->setPos(w / 2 - noPropertyMsgBox->sceneBoundingRect().width() / 2,
+                             h / 2 - noPropertyMsgBox->sceneBoundingRect().height() / 2);
   }
 }
 
@@ -180,12 +175,11 @@ void HistogramView::setState(const DataSet &dataSet) {
     qgrItem->setPen(QPen(Qt::transparent));
     graphicsView()->scene()->addItem(qgrItem);
 
-    QMessageBox *msgBox =
-        new QMessageBox(QMessageBox::Warning, "",
-                        "<b><font size=\"+1\">"
-                        "No graph properties selected.</font></b><br/><br/>"
-                        "Open the <b>Properties</b> configuration tab<br/>"
-                        "to proceed.");
+    QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning, "",
+                                          "<b><font size=\"+1\">"
+                                          "No graph properties selected.</font></b><br/><br/>"
+                                          "Open the <b>Properties</b> configuration tab<br/>"
+                                          "to proceed.");
     msgBox->setModal(false);
     // set a specific name before applying style sheet
     msgBox->setObjectName("needConfigurationMessageBox");
@@ -224,22 +218,18 @@ void HistogramView::setState(const DataSet &dataSet) {
         nodeToEdge[edgeToNode[e] = edgeAsNodeGraph->addNode()] = e;
         edgeAsNodeGraph->getProperty<ColorProperty>("viewColor")
             ->setNodeValue(edgeToNode[e],
-                           _histoGraph->getProperty<ColorProperty>("viewColor")
-                               ->getEdgeValue(e));
+                           _histoGraph->getProperty<ColorProperty>("viewColor")->getEdgeValue(e));
         edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection")
             ->setNodeValue(
                 edgeToNode[e],
-                _histoGraph->getProperty<BooleanProperty>("viewSelection")
-                    ->getEdgeValue(e));
+                _histoGraph->getProperty<BooleanProperty>("viewSelection")->getEdgeValue(e));
         edgeAsNodeGraph->getProperty<StringProperty>("viewLabel")
             ->setNodeValue(edgeToNode[e],
-                           _histoGraph->getProperty<StringProperty>("viewLabel")
-                               ->getEdgeValue(e));
+                           _histoGraph->getProperty<StringProperty>("viewLabel")->getEdgeValue(e));
       }
       edgeAsNodeGraph->getProperty<IntegerProperty>("viewShape")
           ->setAllNodeValue(NodeShape::Circle);
-      edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection")
-          ->addListener(this);
+      edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection")->addListener(this);
       _histoGraph->addListener(this);
       _histoGraph->getProperty("viewColor")->addListener(this);
       _histoGraph->getProperty("viewLabel")->addListener(this);
@@ -250,8 +240,7 @@ void HistogramView::setState(const DataSet &dataSet) {
     }
   }
 
-  propertiesSelectionWidget->setWidgetParameters(graph(),
-                                                 propertiesTypesFilter);
+  propertiesSelectionWidget->setWidgetParameters(graph(), propertiesTypesFilter);
 
   dataSet.get("histo detailed name", detailedHistogramPropertyName);
   Color backgroundColor;
@@ -286,32 +275,31 @@ void HistogramView::setState(const DataSet &dataSet) {
 
       Histogram *histo = histogramsMap[selectedProperties[j]];
 
-      if (histogramParametersMap[selectedProperties[j]].get("nb histogram bins",
-                                                            nbHistogramBins)) {
+      if (histogramParametersMap[selectedProperties[j]].get("nb histogram bins", nbHistogramBins)) {
         histo->setLayoutUpdateNeeded();
         histo->setNbHistogramBins(nbHistogramBins);
       }
 
       unsigned int nbXGraduations = 0;
 
-      if (histogramParametersMap[selectedProperties[j]].get(
-              "x axis nb graduations", nbXGraduations)) {
+      if (histogramParametersMap[selectedProperties[j]].get("x axis nb graduations",
+                                                            nbXGraduations)) {
         histo->setLayoutUpdateNeeded();
         histo->setNbXGraduations(nbXGraduations);
       }
 
       unsigned int yAxisIncrementStep = 0;
 
-      if (histogramParametersMap[selectedProperties[j]].get(
-              "y axis increment step", yAxisIncrementStep)) {
+      if (histogramParametersMap[selectedProperties[j]].get("y axis increment step",
+                                                            yAxisIncrementStep)) {
         histo->setLayoutUpdateNeeded();
         histo->setYAxisIncrementStep(yAxisIncrementStep);
       }
 
       bool cumulativeFrequenciesHisto = false;
 
-      if (histogramParametersMap[selectedProperties[j]].get(
-              "cumulative frequencies histogram", cumulativeFrequenciesHisto)) {
+      if (histogramParametersMap[selectedProperties[j]].get("cumulative frequencies histogram",
+                                                            cumulativeFrequenciesHisto)) {
         histo->setLayoutUpdateNeeded();
         histo->setCumulativeHistogram(cumulativeFrequenciesHisto);
         histo->setLastCumulativeHistogram(cumulativeFrequenciesHisto);
@@ -319,56 +307,50 @@ void HistogramView::setState(const DataSet &dataSet) {
 
       bool uniformQuantification = false;
 
-      if (histogramParametersMap[selectedProperties[j]].get(
-              "uniform quantification", uniformQuantification)) {
+      if (histogramParametersMap[selectedProperties[j]].get("uniform quantification",
+                                                            uniformQuantification)) {
         histo->setLayoutUpdateNeeded();
         histo->setUniformQuantification(uniformQuantification);
       }
 
       bool xAxisLogScale = false;
 
-      if (histogramParametersMap[selectedProperties[j]].get("x axis logscale",
-                                                            xAxisLogScale)) {
+      if (histogramParametersMap[selectedProperties[j]].get("x axis logscale", xAxisLogScale)) {
         histo->setLayoutUpdateNeeded();
         histo->setXAxisLogScale(xAxisLogScale);
       }
 
       bool yAxisLogScale = false;
 
-      if (histogramParametersMap[selectedProperties[j]].get("y axis logscale",
-                                                            yAxisLogScale)) {
+      if (histogramParametersMap[selectedProperties[j]].get("y axis logscale", yAxisLogScale)) {
         histo->setLayoutUpdateNeeded();
         histo->setYAxisLogScale(yAxisLogScale);
       }
 
       bool useCustomAxisScale = false;
 
-      if (histogramParametersMap[selectedProperties[j]].get(
-              "x axis custom scale", useCustomAxisScale)) {
+      if (histogramParametersMap[selectedProperties[j]].get("x axis custom scale",
+                                                            useCustomAxisScale)) {
         histo->setLayoutUpdateNeeded();
         histo->setXAxisScaleDefined(useCustomAxisScale);
 
         if (useCustomAxisScale) {
           std::pair<double, double> axisScale(0, 0);
-          histogramParametersMap[selectedProperties[j]].get("x axis scale min",
-                                                            axisScale.first);
-          histogramParametersMap[selectedProperties[j]].get("x axis scale max",
-                                                            axisScale.second);
+          histogramParametersMap[selectedProperties[j]].get("x axis scale min", axisScale.first);
+          histogramParametersMap[selectedProperties[j]].get("x axis scale max", axisScale.second);
           histo->setXAxisScale(axisScale);
         }
       }
 
-      if (histogramParametersMap[selectedProperties[j]].get(
-              "y axis custom scale", useCustomAxisScale)) {
+      if (histogramParametersMap[selectedProperties[j]].get("y axis custom scale",
+                                                            useCustomAxisScale)) {
         histo->setLayoutUpdateNeeded();
         histo->setYAxisScaleDefined(useCustomAxisScale);
 
         if (useCustomAxisScale) {
           std::pair<double, double> axisScale(0, 0);
-          histogramParametersMap[selectedProperties[j]].get("y axis scale min",
-                                                            axisScale.first);
-          histogramParametersMap[selectedProperties[j]].get("y axis scale max",
-                                                            axisScale.second);
+          histogramParametersMap[selectedProperties[j]].get("y axis scale min", axisScale.first);
+          histogramParametersMap[selectedProperties[j]].get("y axis scale max", axisScale.second);
           histo->setXAxisScale(axisScale);
         }
       }
@@ -409,14 +391,11 @@ DataSet HistogramView::state() const {
     auto histo = histogramsMap.find(prop)->second;
     histogramParameters.set("property name", prop);
     histogramParameters.set("nb histogram bins", histo->getNbHistogramBins());
-    histogramParameters.set("x axis nb graduations",
-                            histo->getNbXGraduations());
-    histogramParameters.set("y axis increment step",
-                            histo->getYAxisIncrementStep());
+    histogramParameters.set("x axis nb graduations", histo->getNbXGraduations());
+    histogramParameters.set("y axis increment step", histo->getYAxisIncrementStep());
     histogramParameters.set("cumulative frequencies histogram",
                             histo->cumulativeFrequenciesHistogram());
-    histogramParameters.set("uniform quantification",
-                            histo->uniformQuantificationHistogram());
+    histogramParameters.set("uniform quantification", histo->uniformQuantificationHistogram());
     histogramParameters.set("x axis logscale", histo->xAxisLogScaleSet());
     histogramParameters.set("y axis logscale", histo->yAxisLogScaleSet());
     bool customScale = histo->getXAxisScaleDefined();
@@ -440,8 +419,7 @@ DataSet HistogramView::state() const {
     dataSet.set("histo" + ss.str(), histogramParameters);
   }
 
-  dataSet.set("backgroundColor",
-              getGlMainWidget()->getScene()->getBackgroundColor());
+  dataSet.set("backgroundColor", getGlMainWidget()->getScene()->getBackgroundColor());
   string histoDetailedNamed = "";
 
   if (detailedHistogram != nullptr) {
@@ -464,15 +442,12 @@ bool HistogramView::eventFilter(QObject *object, QEvent *event) {
     int x = glw->width() - he->x();
     int y = he->y();
     Coord screenCoords(x, y, 0);
-    Coord sceneCoords(
-        glw->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(
-            glw->screenToViewport(screenCoords)));
+    Coord sceneCoords(glw->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(
+        glw->screenToViewport(screenCoords)));
     BoundingBox xAxisBB = xAxisDetail->getBoundingBox();
 
-    if (sceneCoords.getX() > xAxisBB[0][0] &&
-        sceneCoords.getX() < xAxisBB[1][0] &&
-        sceneCoords.getY() > xAxisBB[0][1] &&
-        sceneCoords.getY() < xAxisBB[1][1]) {
+    if (sceneCoords.getX() > xAxisBB[0][0] && sceneCoords.getX() < xAxisBB[1][0] &&
+        sceneCoords.getY() > xAxisBB[0][1] && sceneCoords.getY() < xAxisBB[1][1]) {
       double val = xAxisDetail->getValueForAxisPoint(sceneCoords);
       string valStr(getStringFromNumber(val));
       QToolTip::showText(he->globalPos(), tlp::tlpStringToQString(valStr));
@@ -485,10 +460,8 @@ bool HistogramView::eventFilter(QObject *object, QEvent *event) {
 }
 
 void HistogramView::viewConfigurationChanged() {
-  getGlMainWidget()->getScene()->setBackgroundColor(
-      histoOptionsWidget->getBackgroundColor());
-  bool dataLocationChanged =
-      propertiesSelectionWidget->getDataLocation() != dataLocation;
+  getGlMainWidget()->getScene()->setBackgroundColor(histoOptionsWidget->getBackgroundColor());
+  bool dataLocationChanged = propertiesSelectionWidget->getDataLocation() != dataLocation;
 
   if (dataLocationChanged) {
     histogramsComposite->reset(true);
@@ -499,34 +472,24 @@ void HistogramView::viewConfigurationChanged() {
 
   buildHistograms();
 
-  if (detailedHistogram != nullptr && lastNbHistograms != 0 &&
-      !dataLocationChanged) {
+  if (detailedHistogram != nullptr && lastNbHistograms != 0 && !dataLocationChanged) {
 
-    detailedHistogram->setNbHistogramBins(
-        histoOptionsWidget->getNbOfHistogramBins());
-    detailedHistogram->setNbXGraduations(
-        histoOptionsWidget->getNbXGraduations());
-    detailedHistogram->setYAxisIncrementStep(
-        histoOptionsWidget->getYAxisIncrementStep());
+    detailedHistogram->setNbHistogramBins(histoOptionsWidget->getNbOfHistogramBins());
+    detailedHistogram->setNbXGraduations(histoOptionsWidget->getNbXGraduations());
+    detailedHistogram->setYAxisIncrementStep(histoOptionsWidget->getYAxisIncrementStep());
     detailedHistogram->setXAxisLogScale(histoOptionsWidget->xAxisLogScaleSet());
     detailedHistogram->setYAxisLogScale(histoOptionsWidget->yAxisLogScaleSet());
-    detailedHistogram->setCumulativeHistogram(
-        histoOptionsWidget->cumulativeFrequenciesHisto());
-    detailedHistogram->setUniformQuantification(
-        histoOptionsWidget->uniformQuantification());
-    detailedHistogram->setDisplayGraphEdges(
-        histoOptionsWidget->showGraphEdges());
-    detailedHistogram->setXAxisScaleDefined(
-        histoOptionsWidget->useCustomXAxisScale());
+    detailedHistogram->setCumulativeHistogram(histoOptionsWidget->cumulativeFrequenciesHisto());
+    detailedHistogram->setUniformQuantification(histoOptionsWidget->uniformQuantification());
+    detailedHistogram->setDisplayGraphEdges(histoOptionsWidget->showGraphEdges());
+    detailedHistogram->setXAxisScaleDefined(histoOptionsWidget->useCustomXAxisScale());
     detailedHistogram->setXAxisScale(histoOptionsWidget->getXAxisScale());
-    detailedHistogram->setYAxisScaleDefined(
-        histoOptionsWidget->useCustomYAxisScale());
+    detailedHistogram->setYAxisScaleDefined(histoOptionsWidget->useCustomYAxisScale());
     detailedHistogram->setYAxisScale(histoOptionsWidget->getYAxisScale());
     detailedHistogram->setLayoutUpdateNeeded();
     detailedHistogram->update();
     histoOptionsWidget->setBinWidth(detailedHistogram->getHistogramBinsWidth());
-    histoOptionsWidget->setYAxisIncrementStep(
-        detailedHistogram->getYAxisIncrementStep());
+    histoOptionsWidget->setYAxisIncrementStep(detailedHistogram->getYAxisIncrementStep());
   }
 
   updateHistograms(detailedHistogram);
@@ -576,14 +539,12 @@ void HistogramView::draw() {
   }
 
   if (!smallMultiplesView &&
-      (detailedHistogram == nullptr ||
-       (selectedProperties.size() > 1 && lastNbHistograms == 1))) {
+      (detailedHistogram == nullptr || (selectedProperties.size() > 1 && lastNbHistograms == 1))) {
     switchFromDetailedViewToSmallMultiples();
   }
 
   if (selectedProperties.size() == 1) {
-    switchFromSmallMultiplesToDetailedView(
-        histogramsMap[selectedProperties[0]]);
+    switchFromSmallMultiplesToDetailedView(histogramsMap[selectedProperties[0]]);
     propertiesSelectionWidget->setWidgetEnabled(true);
   }
 
@@ -594,7 +555,9 @@ void HistogramView::draw() {
     gl->draw();
 }
 
-void HistogramView::refresh() { getGlMainWidget()->redraw(); }
+void HistogramView::refresh() {
+  getGlMainWidget()->redraw();
+}
 
 void HistogramView::graphChanged(Graph *) {
   // We copy the value of "Nodes/Edges"
@@ -628,8 +591,7 @@ void HistogramView::buildHistograms() {
 
   float squareRoot = sqrt(float(selectedProperties.size()));
   const unsigned int N =
-      uint(squareRoot) +
-      (fmod(float(selectedProperties.size()), squareRoot) == 0.f ? 0u : 1u);
+      uint(squareRoot) + (fmod(float(selectedProperties.size()), squareRoot) == 0.f ? 0u : 1u);
 
   Color backgroundColor(histoOptionsWidget->getBackgroundColor());
   getGlMainWidget()->getScene()->setBackgroundColor(backgroundColor);
@@ -657,17 +619,14 @@ void HistogramView::buildHistograms() {
 
     Coord overviewBLCorner(
         col * (OVERVIEW_SIZE + spaceBetweenOverviews),
-        -(labelHeight +
-          row * (OVERVIEW_SIZE + spaceBetweenOverviews + labelHeight)),
-        0);
+        -(labelHeight + row * (OVERVIEW_SIZE + spaceBetweenOverviews + labelHeight)), 0);
     ostringstream oss;
     oss << "histogram overview for property " << selectedProperties[i];
 
     if (histogramsMap.find(selectedProperties[i]) == histogramsMap.end()) {
-      Histogram *histoOverview =
-          new Histogram(_histoGraph, edgeAsNodeGraph, edgeToNode,
-                        selectedProperties[i], dataLocation, overviewBLCorner,
-                        OVERVIEW_SIZE, backgroundColor, foregroundColor);
+      Histogram *histoOverview = new Histogram(
+          _histoGraph, edgeAsNodeGraph, edgeToNode, selectedProperties[i], dataLocation,
+          overviewBLCorner, OVERVIEW_SIZE, backgroundColor, foregroundColor);
       histogramsMap[selectedProperties[i]] = histoOverview;
     } else {
       histogramsMap[selectedProperties[i]]->setDataLocation(dataLocation);
@@ -676,13 +635,12 @@ void HistogramView::buildHistograms() {
       histogramsMap[selectedProperties[i]]->setTextColor(foregroundColor);
     }
 
-    histogramsComposite->addGlEntity(histogramsMap[selectedProperties[i]],
-                                     oss.str());
+    histogramsComposite->addGlEntity(histogramsMap[selectedProperties[i]], oss.str());
 
-    GlLabel *propertyLabel = new GlLabel(
-        Coord(overviewBLCorner.getX() + OVERVIEW_SIZE / 2,
-              overviewBLCorner.getY() - labelHeight / 2, 0),
-        Size((8.f / 10.f) * OVERVIEW_SIZE, labelHeight), foregroundColor);
+    GlLabel *propertyLabel =
+        new GlLabel(Coord(overviewBLCorner.getX() + OVERVIEW_SIZE / 2,
+                          overviewBLCorner.getY() - labelHeight / 2, 0),
+                    Size((8.f / 10.f) * OVERVIEW_SIZE, labelHeight), foregroundColor);
     propertyLabel->setText(selectedProperties[i]);
     propertiesLabels.push_back(propertyLabel);
 
@@ -693,8 +651,7 @@ void HistogramView::buildHistograms() {
         minSize = propertyLabel->getHeightAfterScale();
     }
 
-    labelsComposite->addGlEntity(propertyLabel,
-                                 selectedProperties[i] + " label");
+    labelsComposite->addGlEntity(propertyLabel, selectedProperties[i] + " label");
 
     if (selectedProperties.size() == 1 ||
         (detailedHistogramPropertyName == selectedProperties[i])) {
@@ -758,22 +715,18 @@ void HistogramView::destroyHistogramsIfNeeded() {
   }
 
   for (auto &prop : propertiesToRemove) {
-    selectedProperties.erase(
-        remove(selectedProperties.begin(), selectedProperties.end(), prop),
-        selectedProperties.end());
+    selectedProperties.erase(remove(selectedProperties.begin(), selectedProperties.end(), prop),
+                             selectedProperties.end());
   }
 }
 
-void HistogramView::switchFromSmallMultiplesToDetailedView(
-    Histogram *histogramToDetail) {
+void HistogramView::switchFromSmallMultiplesToDetailedView(Histogram *histogramToDetail) {
   if (!histogramToDetail)
     return;
 
   if (smallMultiplesView) {
-    sceneRadiusBak =
-        getGlMainWidget()->getScene()->getGraphCamera().getSceneRadius();
-    zoomFactorBak =
-        getGlMainWidget()->getScene()->getGraphCamera().getZoomFactor();
+    sceneRadiusBak = getGlMainWidget()->getScene()->getGraphCamera().getSceneRadius();
+    zoomFactorBak = getGlMainWidget()->getScene()->getGraphCamera().getZoomFactor();
     eyesBak = getGlMainWidget()->getScene()->getGraphCamera().getEyes();
     centerBak = getGlMainWidget()->getScene()->getGraphCamera().getCenter();
     upBak = getGlMainWidget()->getScene()->getGraphCamera().getUp();
@@ -783,8 +736,7 @@ void HistogramView::switchFromSmallMultiplesToDetailedView(
   mainLayer->deleteGlEntity(labelsComposite);
 
   if (detailedHistogram)
-    _histoGraph->getProperty(detailedHistogram->getPropertyName())
-        ->removeListener(this);
+    _histoGraph->getProperty(detailedHistogram->getPropertyName())->removeListener(this);
 
   detailedHistogram = histogramToDetail;
   detailedHistogramPropertyName = detailedHistogram->getPropertyName();
@@ -793,29 +745,23 @@ void HistogramView::switchFromSmallMultiplesToDetailedView(
   updateDetailedHistogramAxis();
 
   mainLayer->addGlEntity(axisComposite, "axis composite");
-  mainLayer->addGlEntity(histogramToDetail->getBinsComposite(),
-                         "bins composite");
+  mainLayer->addGlEntity(histogramToDetail->getBinsComposite(), "bins composite");
 
   float offset = detailedHistogram->getYAxis()->getMaxLabelWidth() + 90;
-  Coord brCoord(detailedHistogram->getYAxis()->getAxisBaseCoord() -
-                Coord(offset, 0, 0));
-  Coord tlCoord(detailedHistogram->getYAxis()->getAxisBaseCoord() -
-                Coord(offset + 65, 0, 0) +
+  Coord brCoord(detailedHistogram->getYAxis()->getAxisBaseCoord() - Coord(offset, 0, 0));
+  Coord tlCoord(detailedHistogram->getYAxis()->getAxisBaseCoord() - Coord(offset + 65, 0, 0) +
                 Coord(0, detailedHistogram->getYAxis()->getAxisLength()));
   delete emptyRect;
-  emptyRect =
-      new GlRect(tlCoord, brCoord, Color(0, 0, 0, 0), Color(0, 0, 0, 0));
+  emptyRect = new GlRect(tlCoord, brCoord, Color(0, 0, 0, 0), Color(0, 0, 0, 0));
 
   float offset2 = (detailedHistogram->getXAxis()->getAxisGradsWidth() / 2.) +
                   detailedHistogram->getXAxis()->getLabelHeight();
-  Coord tlCoord2(detailedHistogram->getXAxis()->getAxisBaseCoord() -
-                 Coord(0, offset2, 0));
+  Coord tlCoord2(detailedHistogram->getXAxis()->getAxisBaseCoord() - Coord(0, offset2, 0));
   Coord brCoord2(detailedHistogram->getXAxis()->getAxisBaseCoord() +
                  Coord(detailedHistogram->getXAxis()->getAxisLength(), 0, 0) -
                  Coord(0, offset2 + 60, 0));
   delete emptyRect2;
-  emptyRect2 =
-      new GlRect(tlCoord2, brCoord2, Color(0, 0, 0, 0), Color(0, 0, 0, 0));
+  emptyRect2 = new GlRect(tlCoord2, brCoord2, Color(0, 0, 0, 0), Color(0, 0, 0, 0));
 
   mainLayer->addGlEntity(emptyRect, "emptyRect");
   mainLayer->addGlEntity(emptyRect2, "emptyRect2");
@@ -836,24 +782,19 @@ void HistogramView::switchFromSmallMultiplesToDetailedView(
   histoOptionsWidget->setWidgetEnabled(true);
 
   histoOptionsWidget->enableShowGraphEdgesCB(dataLocation == NODE);
-  histoOptionsWidget->setUniformQuantification(
-      detailedHistogram->uniformQuantificationHistogram());
-  histoOptionsWidget->setNbOfHistogramBins(
-      detailedHistogram->getNbHistogramBins());
+  histoOptionsWidget->setUniformQuantification(detailedHistogram->uniformQuantificationHistogram());
+  histoOptionsWidget->setNbOfHistogramBins(detailedHistogram->getNbHistogramBins());
   histoOptionsWidget->setBinWidth(detailedHistogram->getHistogramBinsWidth());
-  histoOptionsWidget->setYAxisIncrementStep(
-      detailedHistogram->getYAxisIncrementStep());
+  histoOptionsWidget->setYAxisIncrementStep(detailedHistogram->getYAxisIncrementStep());
   histoOptionsWidget->setYAxisLogScale(detailedHistogram->yAxisLogScaleSet());
   histoOptionsWidget->setNbXGraduations(detailedHistogram->getNbXGraduations());
   histoOptionsWidget->setXAxisLogScale(detailedHistogram->xAxisLogScaleSet());
   histoOptionsWidget->setCumulativeFrequenciesHistogram(
       detailedHistogram->cumulativeFrequenciesHistogram());
   histoOptionsWidget->setShowGraphEdges(detailedHistogram->displayGraphEdges());
-  histoOptionsWidget->useCustomXAxisScale(
-      detailedHistogram->getXAxisScaleDefined());
+  histoOptionsWidget->useCustomXAxisScale(detailedHistogram->getXAxisScaleDefined());
   histoOptionsWidget->setXAxisScale(detailedHistogram->getXAxisScale());
-  histoOptionsWidget->useCustomYAxisScale(
-      detailedHistogram->getYAxisScaleDefined());
+  histoOptionsWidget->useCustomYAxisScale(detailedHistogram->getYAxisScaleDefined());
   histoOptionsWidget->setYAxisScale(detailedHistogram->getYAxisScale());
   histoOptionsWidget->setInitXAxisScale(detailedHistogram->getInitXAxisScale());
   histoOptionsWidget->setInitYAxisScale(detailedHistogram->getInitYAxisScale());
@@ -904,18 +845,15 @@ void HistogramView::switchFromDetailedViewToSmallMultiples() {
 }
 
 void HistogramView::toggleInteractors(const bool activate) {
-  View::toggleInteractors(activate,
-                          {InteractorName::HistogramInteractorNavigation});
+  View::toggleInteractors(activate, {InteractorName::HistogramInteractorNavigation});
 }
 
 void HistogramView::updateDetailedHistogramAxis() {
   GlQuantitativeAxis *xAxis = detailedHistogram->getXAxis();
   GlQuantitativeAxis *yAxis = detailedHistogram->getYAxis();
-  xAxis->addCaption(GlAxis::BELOW, 100, false, 300, 155,
-                    detailedHistogram->getPropertyName());
-  yAxis->addCaption(
-      GlAxis::LEFT, 100, false, 300, 155,
-      (dataLocation == NODE ? "number of nodes" : "number of edges"));
+  xAxis->addCaption(GlAxis::BELOW, 100, false, 300, 155, detailedHistogram->getPropertyName());
+  yAxis->addCaption(GlAxis::LEFT, 100, false, 300, 155,
+                    (dataLocation == NODE ? "number of nodes" : "number of edges"));
 
   if (xAxis->getCaptionHeight() > yAxis->getCaptionHeight())
     xAxis->setCaptionHeight(yAxis->getCaptionHeight(), false);
@@ -985,24 +923,19 @@ void HistogramView::treatEvent(const Event &message) {
   }
 
   if (typeid(message) == typeid(PropertyEvent)) {
-    const PropertyEvent *propertyEvent =
-        dynamic_cast<const PropertyEvent *>(&message);
+    const PropertyEvent *propertyEvent = dynamic_cast<const PropertyEvent *>(&message);
 
     if (propertyEvent) {
       if (propertyEvent->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE)
-        afterSetNodeValue(propertyEvent->getProperty(),
-                          propertyEvent->getNode());
+        afterSetNodeValue(propertyEvent->getProperty(), propertyEvent->getNode());
 
       if (propertyEvent->getType() == PropertyEvent::TLP_AFTER_SET_EDGE_VALUE)
-        afterSetEdgeValue(propertyEvent->getProperty(),
-                          propertyEvent->getEdge());
+        afterSetEdgeValue(propertyEvent->getProperty(), propertyEvent->getEdge());
 
-      if (propertyEvent->getType() ==
-          PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE)
+      if (propertyEvent->getType() == PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE)
         afterSetAllNodeValue(propertyEvent->getProperty());
 
-      if (propertyEvent->getType() ==
-          PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE)
+      if (propertyEvent->getType() == PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE)
         afterSetAllEdgeValue(propertyEvent->getProperty());
     }
   }
@@ -1010,13 +943,10 @@ void HistogramView::treatEvent(const Event &message) {
 
 void HistogramView::afterSetNodeValue(PropertyInterface *p, const node n) {
   if (p->getGraph() == edgeAsNodeGraph && p->getName() == "viewSelection") {
-    BooleanProperty *edgeAsNodeGraphSelection =
-        static_cast<BooleanProperty *>(p);
-    BooleanProperty *viewSelection =
-        _histoGraph->getProperty<BooleanProperty>("viewSelection");
+    BooleanProperty *edgeAsNodeGraphSelection = static_cast<BooleanProperty *>(p);
+    BooleanProperty *viewSelection = _histoGraph->getProperty<BooleanProperty>("viewSelection");
     viewSelection->removeListener(this);
-    viewSelection->setEdgeValue(nodeToEdge[n],
-                                edgeAsNodeGraphSelection->getNodeValue(n));
+    viewSelection->setEdgeValue(nodeToEdge[n], edgeAsNodeGraphSelection->getNodeValue(n));
     viewSelection->addListener(this);
     setUpdateNeeded();
     return;
@@ -1030,28 +960,23 @@ void HistogramView::afterSetEdgeValue(PropertyInterface *p, const edge e) {
     return;
 
   if (p->getName() == "viewColor") {
-    ColorProperty *edgeAsNodeGraphColors =
-        edgeAsNodeGraph->getProperty<ColorProperty>("viewColor");
+    ColorProperty *edgeAsNodeGraphColors = edgeAsNodeGraph->getProperty<ColorProperty>("viewColor");
     ColorProperty *viewColor = static_cast<ColorProperty *>(p);
-    edgeAsNodeGraphColors->setNodeValue(edgeToNode[e],
-                                        viewColor->getEdgeValue(e));
+    edgeAsNodeGraphColors->setNodeValue(edgeToNode[e], viewColor->getEdgeValue(e));
     setUpdateNeeded();
   } else if (p->getName() == "viewLabel") {
     StringProperty *edgeAsNodeGraphLabels =
         edgeAsNodeGraph->getProperty<StringProperty>("viewLabel");
     StringProperty *viewLabel = static_cast<StringProperty *>(p);
-    edgeAsNodeGraphLabels->setNodeValue(edgeToNode[e],
-                                        viewLabel->getEdgeValue(e));
+    edgeAsNodeGraphLabels->setNodeValue(edgeToNode[e], viewLabel->getEdgeValue(e));
   } else if (p->getName() == "viewSelection") {
     BooleanProperty *edgeAsNodeGraphSelection =
         edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection");
     BooleanProperty *viewSelection = static_cast<BooleanProperty *>(p);
     edgeAsNodeGraphSelection->removeListener(this);
 
-    if (edgeAsNodeGraphSelection->getNodeValue(edgeToNode[e]) !=
-        viewSelection->getEdgeValue(e))
-      edgeAsNodeGraphSelection->setNodeValue(edgeToNode[e],
-                                             viewSelection->getEdgeValue(e));
+    if (edgeAsNodeGraphSelection->getNodeValue(edgeToNode[e]) != viewSelection->getEdgeValue(e))
+      edgeAsNodeGraphSelection->setNodeValue(edgeToNode[e], viewSelection->getEdgeValue(e));
 
     edgeAsNodeGraphSelection->addListener(this);
     setUpdateNeeded();
@@ -1059,19 +984,16 @@ void HistogramView::afterSetEdgeValue(PropertyInterface *p, const edge e) {
 }
 
 void HistogramView::afterSetAllNodeValue(PropertyInterface *p) {
-  if (detailedHistogram &&
-      p->getName() == detailedHistogram->getPropertyName()) {
+  if (detailedHistogram && p->getName() == detailedHistogram->getPropertyName()) {
     setLayoutUpdateNeeded();
   } else if (p->getName() == "viewSize") {
     setSizesUpdateNeeded();
   } else if (p->getName() == "viewSelection") {
     if (p->getGraph() == edgeAsNodeGraph) {
-      BooleanProperty *edgeAsNodeGraphSelection =
-          static_cast<BooleanProperty *>(p);
-      BooleanProperty *viewSelection =
-          _histoGraph->getProperty<BooleanProperty>("viewSelection");
-      viewSelection->setAllEdgeValue(edgeAsNodeGraphSelection->getNodeValue(
-          edgeAsNodeGraph->getOneNode()));
+      BooleanProperty *edgeAsNodeGraphSelection = static_cast<BooleanProperty *>(p);
+      BooleanProperty *viewSelection = _histoGraph->getProperty<BooleanProperty>("viewSelection");
+      viewSelection->setAllEdgeValue(
+          edgeAsNodeGraphSelection->getNodeValue(edgeAsNodeGraph->getOneNode()));
     }
 
     setUpdateNeeded();
@@ -1083,14 +1005,12 @@ void HistogramView::afterSetAllNodeValue(PropertyInterface *p) {
 
 void HistogramView::afterSetAllEdgeValue(PropertyInterface *p) {
 
-  if (detailedHistogram &&
-      p->getName() == detailedHistogram->getPropertyName()) {
+  if (detailedHistogram && p->getName() == detailedHistogram->getPropertyName()) {
     setLayoutUpdateNeeded();
   }
 
   if (p->getName() == "viewColor") {
-    ColorProperty *edgeAsNodeGraphColors =
-        edgeAsNodeGraph->getProperty<ColorProperty>("viewColor");
+    ColorProperty *edgeAsNodeGraphColors = edgeAsNodeGraph->getProperty<ColorProperty>("viewColor");
     ColorProperty *viewColor = static_cast<ColorProperty *>(p);
     edgeAsNodeGraphColors->setAllNodeValue(viewColor->getEdgeDefaultValue());
     setUpdateNeeded();
@@ -1104,10 +1024,8 @@ void HistogramView::afterSetAllEdgeValue(PropertyInterface *p) {
         edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection");
     BooleanProperty *viewSelection = static_cast<BooleanProperty *>(p);
     for (auto e : _histoGraph->edges()) {
-      if (edgeAsNodeGraphSelection->getNodeValue(edgeToNode[e]) !=
-          viewSelection->getEdgeValue(e)) {
-        edgeAsNodeGraphSelection->setNodeValue(edgeToNode[e],
-                                               viewSelection->getEdgeValue(e));
+      if (edgeAsNodeGraphSelection->getNodeValue(edgeToNode[e]) != viewSelection->getEdgeValue(e)) {
+        edgeAsNodeGraphSelection->setNodeValue(edgeToNode[e], viewSelection->getEdgeValue(e));
       }
     }
 

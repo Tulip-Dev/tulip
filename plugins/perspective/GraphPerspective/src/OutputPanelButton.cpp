@@ -19,11 +19,10 @@
 
 #include "OutputPanelButton.h"
 
-#include <QApplication>
 #include <QPainter>
+#include <QApplication>
 
-OutputPanelButton::OutputPanelButton(QWidget *parent)
-    : QPushButton(parent), _number(0) {}
+OutputPanelButton::OutputPanelButton(QWidget *parent) : QPushButton(parent), _number(0) {}
 
 QSize OutputPanelButton::sizeHint() const {
   ensurePolished();
@@ -58,8 +57,7 @@ void OutputPanelButton::paintEvent(QPaintEvent *event) {
   if (!isChecked())
     p.setPen(Qt::black);
 
-#ifdef __APPLE__ // On MacOS: force the baseLine to 2 to get the text drawn in
-                 // the button
+#ifdef __APPLE__ // On MacOS: force the baseLine to 2 to get the text drawn in the button
   baseLine = 2;
 #endif
   int leftPart = 22;
@@ -85,12 +83,10 @@ void OutputPanelButton::setGlowColor(const QColor &color) {
   str.setNum(color.alpha());
   colorStr.append(str + ")");
 
-  setStyleSheet(
-      QString(
-          "OutputPanelButton { background-color: qlineargradient(spread:pad, x1:0, "
-          "y1:0, x2:1, y2:0,") +
-      "stop:0 rgba(255,255,255, 0), stop:0.25 " + colorStr + ", stop:0.9 " +
-      colorStr + ", stop:1 rgba(255,255,255, 0)); }");
+  setStyleSheet(QString("OutputPanelButton { background-color: qlineargradient(spread:pad, x1:0, "
+                        "y1:0, x2:1, y2:0,") +
+                "stop:0 rgba(255,255,255, 0), stop:0.25 " + colorStr + ", stop:0.9 " + colorStr +
+                ", stop:1 rgba(255,255,255, 0)); }");
 }
 
 void OutputPanelButton::resetBackgroundColor() {

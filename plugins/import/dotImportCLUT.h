@@ -676,14 +676,12 @@ struct X11Color {
     {"yellowgreen", 56, 192, 205},
 };
 
-void HSBtoRGB(float inH, float inS, float inB, float &outR, float &outG,
-              float &outB) {
+void HSBtoRGB(float inH, float inS, float inB, float &outR, float &outG, float &outB) {
   if (inS == 0.0f) {
     outR = outG = outB = inB * 255.0f;
   } else {
     float _h = inH * 6.0f, _i = int(_h), _1 = inB * (1.0f - inS),
-          _2 = inB * (1.0f - inS * (_h - _i)),
-          _3 = inB * (1.0f - inS * (1.0f - (_h - _i)));
+          _2 = inB * (1.0f - inS * (_h - _i)), _3 = inB * (1.0f - inS * (1.0f - (_h - _i)));
 
     switch (int(_i)) {
     case 0:
@@ -746,8 +744,7 @@ bool DecodeColor(tlp::Color &outColor, const std::string &inValue) {
     int n = sscanf(inValue.c_str(), "%f,%f,%f", &r, &g, &b);
 
     if (n == 3) {
-      outColor =
-          tlp::Color(uchar(r * 255.0f), uchar(g * 255.0f), uchar(b * 255.0f));
+      outColor = tlp::Color(uchar(r * 255.0f), uchar(g * 255.0f), uchar(b * 255.0f));
       return true;
     }
   }
@@ -758,8 +755,7 @@ bool DecodeColor(tlp::Color &outColor, const std::string &inValue) {
     int n = sscanf(inValue.c_str(), "%f %f %f", &r, &g, &b);
 
     if (n == 3) {
-      outColor =
-          tlp::Color(uchar(r * 255.0f), uchar(g * 255.0f), uchar(b * 255.0f));
+      outColor = tlp::Color(uchar(r * 255.0f), uchar(g * 255.0f), uchar(b * 255.0f));
       return true;
     }
   }

@@ -20,10 +20,10 @@
 #ifndef TULIP_INT_H
 #define TULIP_INT_H
 
-#include <tulip/AbstractProperty.h>
-#include <tulip/NumericProperty.h>
 #include <tulip/PropertyTypes.h>
+#include <tulip/AbstractProperty.h>
 #include <tulip/minmaxproperty.h>
+#include <tulip/NumericProperty.h>
 
 namespace tlp {
 
@@ -42,15 +42,14 @@ class TLP_SCOPE IntegerProperty : public IntegerMinMaxProperty {
 public:
   IntegerProperty(Graph *, const std::string &n = "");
 
-  PropertyInterface *clonePrototype(Graph *,
-                                    const std::string &) const override;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const override { return propertyTypename; }
+  const std::string &getTypename() const override {
+    return propertyTypename;
+  }
   DEFINE_GET_CPP_CLASS_NAME;
-  void setNodeValue(const node n,
-                    tlp::StoredType<int>::ReturnedConstValue v) override;
-  void setEdgeValue(const edge e,
-                    tlp::StoredType<int>::ReturnedConstValue v) override;
+  void setNodeValue(const node n, tlp::StoredType<int>::ReturnedConstValue v) override;
+  void setEdgeValue(const edge e, tlp::StoredType<int>::ReturnedConstValue v) override;
   void setAllNodeValue(tlp::StoredType<int>::ReturnedConstValue v) override;
 
   void setValueToGraphNodes(tlp::StoredType<int>::ReturnedConstValue v,
@@ -100,8 +99,8 @@ public:
   }
 
 protected:
-  void clone_handler(AbstractProperty<tlp::IntegerType, tlp::IntegerType,
-                                      tlp::NumericProperty> &) override;
+  void clone_handler(
+      AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::NumericProperty> &) override;
 
 private:
   // override Observable::treatEvent
@@ -118,10 +117,11 @@ public:
   IntegerVectorProperty(Graph *g, const std::string &n = "")
       : AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>(g, n) {}
   // redefinition of some PropertyInterface methods
-  PropertyInterface *clonePrototype(Graph *,
-                                    const std::string &) const override;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const override { return propertyTypename; }
+  const std::string &getTypename() const override {
+    return propertyTypename;
+  }
   DEFINE_GET_CPP_CLASS_NAME;
 };
 } // namespace tlp

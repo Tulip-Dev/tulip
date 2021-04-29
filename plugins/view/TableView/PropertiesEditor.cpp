@@ -20,46 +20,45 @@
 #include "PropertiesEditor.h"
 #include "ui_PropertiesEditor.h"
 
-#include <QCursor>
-#include <QDialog>
+#include <QSortFilterProxyModel>
+#include <QMenu>
 #include <QDialogButtonBox>
-#include <QGraphicsItem>
-#include <QGraphicsProxyWidget>
+#include <QDialog>
+#include <QCursor>
+#include <QMainWindow>
+#include <QMessageBox>
+#include <QTimer>
 #include <QGraphicsView>
 #include <QMainWindow>
-#include <QMenu>
-#include <QMessageBox>
-#include <QSortFilterProxyModel>
-#include <QTimer>
+#include <QGraphicsItem>
+#include <QGraphicsProxyWidget>
 
-#include <tulip/BooleanProperty.h>
-#include <tulip/CopyPropertyDialog.h>
-#include <tulip/GraphModel.h>
 #include <tulip/Perspective.h>
+#include <tulip/GraphModel.h>
+#include <tulip/TulipItemEditorCreators.h>
+#include <tulip/CopyPropertyDialog.h>
 #include <tulip/PropertyCreationDialog.h>
 #include <tulip/RenamePropertyDialog.h>
-#include <tulip/StringProperty.h>
-#include <tulip/TlpQtTools.h>
 #include <tulip/TulipItemDelegate.h>
-#include <tulip/TulipItemEditorCreators.h>
+#include <tulip/StringProperty.h>
+#include <tulip/BooleanProperty.h>
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/TlpQtTools.h>
 
 Q_DECLARE_METATYPE(Qt::CheckState)
 
 using namespace tlp;
 
 PropertiesEditor::PropertiesEditor(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::PropertiesEditor), _contextProperty(nullptr),
-      _graph(nullptr), _delegate(new tlp::TulipItemDelegate),
-      _sourceModel(nullptr), filteringProperties(false), editorParent(parent),
-      _caseSensitiveSearch(Qt::CaseSensitive) {
+    : QWidget(parent), _ui(new Ui::PropertiesEditor), _contextProperty(nullptr), _graph(nullptr),
+      _delegate(new tlp::TulipItemDelegate), _sourceModel(nullptr), filteringProperties(false),
+      editorParent(parent), _caseSensitiveSearch(Qt::CaseSensitive) {
   Perspective::setStyleSheet(this);
   _ui->setupUi(this);
   connect(_ui->newButton, SIGNAL(clicked()), this, SLOT(newProperty()));
   // use a push button instead of a combobox
   // waiting for a fix for combobox in QGraphicsItem
-  connect(_ui->propMatchButton, SIGNAL(pressed()), this,
-          SLOT(setMatchProperty()));
+  connect(_ui->propMatchButton, SIGNAL(pressed()), this, SLOT(setMatchProperty()));
 }
 
 PropertiesEditor::~PropertiesEditor() {
@@ -75,8 +74,7 @@ void PropertiesEditor::setCaseSensitive(Qt::CaseSensitivity cs) {
 
 void PropertiesEditor::setGraph(tlp::Graph *g) {
   _graph = g;
-  QSortFilterProxyModel *model =
-      new QSortFilterProxyModel(_ui->propertiesTableView);
+  QSortFilterProxyModel *model = new QSortFilterProxyModel(_ui->propertiesTableView);
   delete _sourceModel;
   _sourceModel = new GraphPropertiesModel<PropertyInterface>(g, true);
   model->setSourceModel(_sourceModel);
@@ -85,14 +83,13 @@ void PropertiesEditor::setGraph(tlp::Graph *g) {
   // of the displayed properties filtering
   connect(_ui->propertiesFilterEdit, SIGNAL(textChanged(QString)), this,
           SLOT(setPropertiesFilter(QString)));
-  connect(model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)),
-          this,
+  connect(model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)), this,
           SLOT(displayedPropertiesRemoved(const QModelIndex &, int, int)));
   connect(model, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this,
           SLOT(displayedPropertiesInserted(const QModelIndex &, int, int)));
   _ui->propertiesTableView->setModel(model);
-  connect(_sourceModel, SIGNAL(checkStateChanged(QModelIndex, Qt::CheckState)),
-          this, SLOT(checkStateChanged(QModelIndex, Qt::CheckState)));
+  connect(_sourceModel, SIGNAL(checkStateChanged(QModelIndex, Qt::CheckState)), this,
+          SLOT(checkStateChanged(QModelIndex, Qt::CheckState)));
   _ui->propertiesTableView->resizeColumnsToContents();
   _ui->propertiesTableView->sortByColumn(0, Qt::AscendingOrder);
   _ui->visualPropertiesCheck->setChecked(true);
@@ -110,16 +107,13 @@ void PropertiesEditor::setMatchProperty() {
   QPalette palette = QComboBox().palette();
 
   // set a combo like stylesheet
-  menu.setStyleSheet(
-      QString(
-          "QMenu::item {border-image: none; border-width: 4; padding: 0px 6px; "
-          "font-size: 12px; color: %1; background-color: %2;} "
-          "QMenu::item:selected {color: %3; background-color: %4}")
-          .arg(palette.color(QPalette::Active, QPalette::Text).name())
-          .arg(palette.color(QPalette::Active, QPalette::Base).name())
-          .arg(
-              palette.color(QPalette::Active, QPalette::HighlightedText).name())
-          .arg(palette.color(QPalette::Active, QPalette::Highlight).name()));
+  menu.setStyleSheet(QString("QMenu::item {border-image: none; border-width: 4; padding: 0px 6px; "
+                             "font-size: 12px; color: %1; background-color: %2;} "
+                             "QMenu::item:selected {color: %3; background-color: %4}")
+                         .arg(palette.color(QPalette::Active, QPalette::Text).name())
+                         .arg(palette.color(QPalette::Active, QPalette::Base).name())
+                         .arg(palette.color(QPalette::Active, QPalette::HighlightedText).name())
+                         .arg(palette.color(QPalette::Active, QPalette::Highlight).name()));
 
   // compute a combo like position
   // to popup the menu
@@ -128,11 +122,10 @@ void PropertiesEditor::setMatchProperty() {
   QGraphicsView *pGraphicsView = static_cast<QGraphicsView *>(pView);
   QGraphicsItem *pGraphicsItem =
       pGraphicsView->items(pViewport->mapFromGlobal(QCursor::pos())).first();
-  QPoint popupPos = pGraphicsView->mapToGlobal(
-      pGraphicsView->mapFromScene(pGraphicsItem->mapToScene(
-          static_cast<QGraphicsProxyWidget *>(pGraphicsItem)
-              ->subWidgetRect(_ui->propMatchButton)
-              .bottomLeft())));
+  QPoint popupPos = pGraphicsView->mapToGlobal(pGraphicsView->mapFromScene(
+      pGraphicsItem->mapToScene(static_cast<QGraphicsProxyWidget *>(pGraphicsItem)
+                                    ->subWidgetRect(_ui->propMatchButton)
+                                    .bottomLeft())));
 
   action = menu.exec(popupPos);
 
@@ -146,8 +139,8 @@ void PropertiesEditor::setMatchProperty() {
             "Only show the properties whose name\nis like the given pattern (sql like pattern).");
         _ui->propertiesFilterEdit->setPlaceholderText("a sql like pattern");
       } else {
-        tooltip = QString(
-            "Only show the properties whose name\nmatches the given regular expression.");
+        tooltip =
+            QString("Only show the properties whose name\nmatches the given regular expression.");
         _ui->propertiesFilterEdit->setPlaceholderText("a regular expression");
       }
       _ui->propMatchLabel->setToolTip(tooltip);
@@ -183,10 +176,8 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
                          .value<PropertyInterface *>();
   _contextPropertyList.clear();
 
-  for (const QModelIndex &sidx :
-       _ui->propertiesTableView->selectionModel()->selectedRows()) {
-    _contextPropertyList +=
-        sidx.data(TulipModel::PropertyRole).value<PropertyInterface *>();
+  for (const QModelIndex &sidx : _ui->propertiesTableView->selectionModel()->selectedRows()) {
+    _contextPropertyList += sidx.data(TulipModel::PropertyRole).value<PropertyInterface *>();
   }
 
   if (_contextProperty == nullptr)
@@ -207,10 +198,8 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
     bool enabled = true;
 
     for (auto pi : _contextPropertyList) {
-      if (Perspective::instance()->isReservedPropertyName(
-              pi->getName().c_str()) &&
-          (_graph == _graph->getRoot() ||
-           !_graph->existLocalProperty(pi->getName()))) {
+      if (Perspective::instance()->isReservedPropertyName(pi->getName().c_str()) &&
+          (_graph == _graph->getRoot() || !_graph->existLocalProperty(pi->getName()))) {
         enabled = false;
         break;
       }
@@ -221,58 +210,48 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
       action->setToolTip("Delete the highlighted properties");
       connect(action, SIGNAL(triggered()), this, SLOT(delProperties()));
       action = menu.addAction("Hide all other properties");
-      action->setToolTip(
-          "Show only the columns corresponding to the highlighted properties");
-      connect(action, SIGNAL(triggered()), this,
-              SLOT(setPropsNotVisibleExcept()));
+      action->setToolTip("Show only the columns corresponding to the highlighted properties");
+      connect(action, SIGNAL(triggered()), this, SLOT(setPropsNotVisibleExcept()));
     }
 
     menu.exec(QCursor::pos());
   } else {
     // the style sheet below allows to display disabled items
     // as "title" items in the "mainMenu"
-    menu.setStyleSheet(
-        "QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: "
-        "qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), "
-        "stop:1 rgb(60, 60, 60))}");
+    menu.setStyleSheet("QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: "
+                       "qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), "
+                       "stop:1 rgb(60, 60, 60))}");
     // so it is the "mainMenu"
     menu.setProperty("mainMenu", true);
     menu.addAction(pname)->setEnabled(false);
     menu.addSeparator();
     action = menu.addAction("Hide all other properties");
     action->setToolTip("Show only the column corresponding to this property");
-    connect(action, SIGNAL(triggered()), this,
-            SLOT(setPropsNotVisibleExcept()));
+    connect(action, SIGNAL(triggered()), this, SLOT(setPropsNotVisibleExcept()));
     menu.addSeparator();
 
-    action = menu.addAction(QIcon(":/tulip/gui/icons/64/list-add.png"),
-                            "Add new property");
-    action->setToolTip(
-        "Display a dialog box to create a new local property of the current graph");
+    action = menu.addAction(QIcon(":/tulip/gui/icons/64/list-add.png"), "Add new property");
+    action->setToolTip("Display a dialog box to create a new local property of the current graph");
     connect(action, SIGNAL(triggered()), this, SLOT(newProperty()));
 
     const std::string &propName = _contextProperty->getName();
 
     action = menu.addAction("Copy");
-    action->setToolTip(
-        QString("Display a dialog box allowing to copy the values of <b>") +
-        propName.c_str() +
-        "</b> into a new or existing property of the same type");
+    action->setToolTip(QString("Display a dialog box allowing to copy the values of <b>") +
+                       propName.c_str() + "</b> into a new or existing property of the same type");
     connect(action, SIGNAL(triggered()), this, SLOT(copyProperty()));
 
     bool enabled = true;
 
     if (Perspective::instance()->isReservedPropertyName(propName.c_str())) {
-      // Enable deletion of reserved properties when on a subgraph and that
-      // properties are local
+      // Enable deletion of reserved properties when on a subgraph and that properties are local
       if (_graph == _graph->getRoot() || !_graph->existLocalProperty(propName))
         enabled = false;
     }
 
     if (enabled) {
       action = menu.addAction("Delete");
-      action->setToolTip(QString("Delete the property <b>") + propName.c_str() +
-                         "</b>");
+      action->setToolTip(QString("Delete the property <b>") + propName.c_str() + "</b>");
       connect(action, SIGNAL(triggered()), this, SLOT(delProperty()));
     }
 
@@ -280,44 +259,32 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
 
     if (!Perspective::instance()->isReservedPropertyName(propName.c_str())) {
       rename = menu.addAction("Rename");
-      rename->setToolTip(QString("Rename the property <b>") + propName.c_str() +
-                         "</b>");
+      rename->setToolTip(QString("Rename the property <b>") + propName.c_str() + "</b>");
     }
 
     menu.addSeparator();
 
     QMenu *subMenu = menu.addMenu("Set values of");
-    QAction *nodesSetAll = subMenu->addAction(
-        QString("All nodes") + OF_PROPERTY + " to a new default value");
+    QAction *nodesSetAll =
+        subMenu->addAction(QString("All nodes") + OF_PROPERTY + " to a new default value");
     nodesSetAll->setToolTip(
-        QString(
-            "Choose a new node default value to reset the values of all nodes") +
-        OF_PROPERTY);
-    QAction *edgesSetAll = subMenu->addAction(
-        QString("All edges") + OF_PROPERTY + " to a new default value");
+        QString("Choose a new node default value to reset the values of all nodes") + OF_PROPERTY);
+    QAction *edgesSetAll =
+        subMenu->addAction(QString("All edges") + OF_PROPERTY + " to a new default value");
     edgesSetAll->setToolTip(
-        QString(
-            "Choose a new edge default value to reset the values of all edges ") +
-        OF_PROPERTY);
-    QAction *nodesSetAllGraph =
-        subMenu->addAction(QString("All nodes") + OF_GRAPH);
+        QString("Choose a new edge default value to reset the values of all edges ") + OF_PROPERTY);
+    QAction *nodesSetAllGraph = subMenu->addAction(QString("All nodes") + OF_GRAPH);
     nodesSetAllGraph->setToolTip(
-        QString("Choose a value to be assigned to all the existing nodes") +
-        OF_GRAPH);
+        QString("Choose a value to be assigned to all the existing nodes") + OF_GRAPH);
     QAction *edgesSetAllGraph = subMenu->addAction("All edges" + OF_GRAPH);
     edgesSetAllGraph->setToolTip(
-        QString("Choose a value to be assigned to all the existing edges") +
-        OF_GRAPH);
-    QAction *selectedNodesSetAll =
-        subMenu->addAction("Selected nodes" + OF_GRAPH);
-    selectedNodesSetAll->setToolTip(
-        QString("Choose a value to be assigned to the selected nodes") +
-        OF_GRAPH);
-    QAction *selectedEdgesSetAll =
-        subMenu->addAction("Selected edges" + OF_GRAPH);
-    selectedEdgesSetAll->setToolTip(
-        QString("Choose a value to be assigned to the selected edges") +
-        OF_GRAPH);
+        QString("Choose a value to be assigned to all the existing edges") + OF_GRAPH);
+    QAction *selectedNodesSetAll = subMenu->addAction("Selected nodes" + OF_GRAPH);
+    selectedNodesSetAll->setToolTip(QString("Choose a value to be assigned to the selected nodes") +
+                                    OF_GRAPH);
+    QAction *selectedEdgesSetAll = subMenu->addAction("Selected edges" + OF_GRAPH);
+    selectedEdgesSetAll->setToolTip(QString("Choose a value to be assigned to the selected edges") +
+                                    OF_GRAPH);
 
     enabled = (pname != "viewLabel");
 
@@ -325,38 +292,29 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
       subMenu = menu.addMenu("To labels of");
       action = subMenu->addAction("All elements" + OF_GRAPH);
       action->setToolTip(
-          QString(
-              "Set the values of the current property as labels of all elements") +
-          OF_GRAPH);
+          QString("Set the values of the current property as labels of all elements") + OF_GRAPH);
       connect(action, SIGNAL(triggered()), this, SLOT(toLabels()));
       action = subMenu->addAction("All nodes" + OF_GRAPH);
-      action->setToolTip(
-          QString(
-              "Set the values of the current property as labels of the nodes") +
-          OF_GRAPH);
+      action->setToolTip(QString("Set the values of the current property as labels of the nodes") +
+                         OF_GRAPH);
       connect(action, SIGNAL(triggered()), this, SLOT(toNodesLabels()));
       action = subMenu->addAction("All edges" + OF_GRAPH);
-      action->setToolTip(
-          QString(
-              "Set the values of the current property as labels of the edges") +
-          OF_GRAPH);
+      action->setToolTip(QString("Set the values of the current property as labels of the edges") +
+                         OF_GRAPH);
       connect(action, SIGNAL(triggered()), this, SLOT(toEdgesLabels()));
       action = subMenu->addAction("All selected elements" + OF_GRAPH);
       action->setToolTip(
-          QString(
-              "Set the values of the current property as labels of the selected elements") +
+          QString("Set the values of the current property as labels of the selected elements") +
           OF_GRAPH);
       connect(action, SIGNAL(triggered()), this, SLOT(toSelectedLabels()));
       action = subMenu->addAction("Selected nodes" + OF_GRAPH);
       action->setToolTip(
-          QString(
-              "Set the values of the current property as labels of the selected nodes") +
+          QString("Set the values of the current property as labels of the selected nodes") +
           OF_GRAPH);
       connect(action, SIGNAL(triggered()), this, SLOT(toSelectedNodesLabels()));
       action = subMenu->addAction("Selected edges" + OF_GRAPH);
       action->setToolTip(
-          QString(
-              "Set the values of the current property as labels of the selected edges") +
+          QString("Set the values of the current property as labels of the selected edges") +
           OF_GRAPH);
       connect(action, SIGNAL(triggered()), this, SLOT(toSelectedEdgesLabels()));
     }
@@ -423,8 +381,7 @@ void PropertiesEditor::setPropsVisibility(int state) {
     if (_sourceModel->index(i, 0).data().toString().indexOf("view") == 0)
       setPropertyChecked(i, showVisualP);
     else
-      _sourceModel->setData(_sourceModel->index(i, 0), state,
-                            Qt::CheckStateRole);
+      _sourceModel->setData(_sourceModel->index(i, 0), state, Qt::CheckStateRole);
   }
 }
 
@@ -435,9 +392,8 @@ void PropertiesEditor::setPropsNotVisibleExcept() {
     ctxPropNames.insert(pi->getName());
 
   for (int i = 0; i < _sourceModel->rowCount(); ++i) {
-    setPropertyChecked(i,
-                       ctxPropNames.count(QStringToTlpString(
-                           _sourceModel->index(i, 0).data().toString())) == 1);
+    setPropertyChecked(i, ctxPropNames.count(QStringToTlpString(
+                              _sourceModel->index(i, 0).data().toString())) == 1);
   }
 
   _ui->propsVisibilityCheck->setTristate(true);
@@ -448,8 +404,7 @@ void PropertiesEditor::showVisualProperties(bool f) {
   // reset property name filter
   _ui->propertiesFilterEdit->setText(QString());
 
-  static_cast<QSortFilterProxyModel *>(_ui->propertiesTableView->model())
-      ->setFilterFixedString("");
+  static_cast<QSortFilterProxyModel *>(_ui->propertiesTableView->model())->setFilterFixedString("");
 
   // ensure all visual properties are shown/hidden
   for (int i = 0; i < _sourceModel->rowCount(); ++i) {
@@ -460,53 +415,47 @@ void PropertiesEditor::showVisualProperties(bool f) {
 
 // properties inserted when filtering
 // are visible according to their CheckState
-void PropertiesEditor::displayedPropertiesInserted(const QModelIndex &parent,
-                                                   int start, int end) {
+void PropertiesEditor::displayedPropertiesInserted(const QModelIndex &parent, int start, int end) {
   QSortFilterProxyModel *model = static_cast<QSortFilterProxyModel *>(sender());
 
   for (; start <= end; ++start) {
     QModelIndex sIndex = model->mapToSource(model->index(start, 0, parent));
-    PropertyInterface *pi = _sourceModel->data(sIndex, TulipModel::PropertyRole)
-                                .value<PropertyInterface *>();
+    PropertyInterface *pi =
+        _sourceModel->data(sIndex, TulipModel::PropertyRole).value<PropertyInterface *>();
 
     if (filteringProperties == false)
       _sourceModel->setData(sIndex, Qt::Checked, Qt::CheckStateRole);
 
-    emit propertyVisibilityChanged(
-        pi, _sourceModel->data(sIndex, Qt::CheckStateRole).toInt() !=
-                Qt::Unchecked);
+    emit propertyVisibilityChanged(pi, _sourceModel->data(sIndex, Qt::CheckStateRole).toInt() !=
+                                           Qt::Unchecked);
   }
 }
 
 // properties removed when filtering
 // are no longer visible
-void PropertiesEditor::displayedPropertiesRemoved(const QModelIndex &parent,
-                                                  int start, int end) {
+void PropertiesEditor::displayedPropertiesRemoved(const QModelIndex &parent, int start, int end) {
   QSortFilterProxyModel *model = static_cast<QSortFilterProxyModel *>(sender());
 
   for (; start <= end; ++start) {
     PropertyInterface *pi =
         _sourceModel
-            ->data(model->mapToSource(model->index(start, 0, parent)),
-                   TulipModel::PropertyRole)
+            ->data(model->mapToSource(model->index(start, 0, parent)), TulipModel::PropertyRole)
             .value<PropertyInterface *>();
     emit propertyVisibilityChanged(pi, false);
   }
 }
 
-bool PropertiesEditor::setAllValues(PropertyInterface *prop, bool nodes,
-                                    bool selectedOnly, bool graphOnly) {
+bool PropertiesEditor::setAllValues(PropertyInterface *prop, bool nodes, bool selectedOnly,
+                                    bool graphOnly) {
   QVariant val = TulipItemDelegate::showEditorDialog(
-      nodes ? NODE : EDGE, prop, _graph,
-      static_cast<TulipItemDelegate *>(_delegate), editorParent);
+      nodes ? NODE : EDGE, prop, _graph, static_cast<TulipItemDelegate *>(_delegate), editorParent);
 
   // Check if edition has been cancelled
   if (!val.isValid())
     return false;
 
   if (selectedOnly) {
-    BooleanProperty *selection =
-        _graph->getProperty<BooleanProperty>("viewSelection");
+    BooleanProperty *selection = _graph->getProperty<BooleanProperty>("viewSelection");
 
     if (nodes) {
       for (auto n : selection->getNonDefaultValuatedNodes(_graph)) {
@@ -531,11 +480,9 @@ bool PropertiesEditor::setAllValues(PropertyInterface *prop, bool nodes,
   return true;
 }
 
-void PropertiesEditor::setDefaultValue(tlp::PropertyInterface *prop,
-                                       bool nodes) {
+void PropertiesEditor::setDefaultValue(tlp::PropertyInterface *prop, bool nodes) {
   QVariant val = TulipItemDelegate::showEditorDialog(
-      nodes ? NODE : EDGE, prop, _graph,
-      static_cast<TulipItemDelegate *>(_delegate), editorParent);
+      nodes ? NODE : EDGE, prop, _graph, static_cast<TulipItemDelegate *>(_delegate), editorParent);
 
   // Check if edition has been cancelled
   if (!val.isValid())
@@ -552,8 +499,7 @@ void PropertiesEditor::copyProperty() {
   _graph->push();
 
   if (CopyPropertyDialog::copyProperty(_graph, _contextProperty, true,
-                                       Perspective::instance()->mainWindow()) ==
-      nullptr)
+                                       Perspective::instance()->mainWindow()) == nullptr)
     // copy has been cancelled
     _graph->pop();
 }
@@ -561,10 +507,9 @@ void PropertiesEditor::copyProperty() {
 void PropertiesEditor::newProperty() {
   _graph->push();
 
-  if (PropertyCreationDialog::createNewProperty(
-          _graph, Perspective::instance()->mainWindow(),
-          _contextProperty ? _contextProperty->getTypename() : std::string()) ==
-      nullptr)
+  if (PropertyCreationDialog::createNewProperty(_graph, Perspective::instance()->mainWindow(),
+                                                _contextProperty ? _contextProperty->getTypename()
+                                                                 : std::string()) == nullptr)
     // creation has been cancelled
     _graph->pop();
 }
@@ -582,8 +527,7 @@ void PropertiesEditor::delProperties() {
 }
 
 bool PropertiesEditor::renameProperty(PropertyInterface *prop) {
-  return RenamePropertyDialog::renameProperty(
-      prop, Perspective::instance()->mainWindow());
+  return RenamePropertyDialog::renameProperty(prop, Perspective::instance()->mainWindow());
 }
 
 void PropertiesEditor::toLabels() {
@@ -624,8 +568,7 @@ void PropertiesEditor::toLabels(PropertyInterface *prop, bool nodes, bool edges,
   data.set("input", prop);
 
   if (selectedOnly)
-    data.set("selection",
-             _graph->getProperty<BooleanProperty>("viewSelection"));
+    data.set("selection", _graph->getProperty<BooleanProperty>("viewSelection"));
 
   std::string msg;
   // _graph->push() must be done outside of this method
@@ -634,10 +577,9 @@ void PropertiesEditor::toLabels(PropertyInterface *prop, bool nodes, bool edges,
   _graph->applyPropertyAlgorithm("To labels", result, msg, &data);
 }
 
-void PropertiesEditor::checkStateChanged(QModelIndex index,
-                                         Qt::CheckState state) {
-  PropertyInterface *pi = _sourceModel->data(index, TulipModel::PropertyRole)
-                              .value<PropertyInterface *>();
+void PropertiesEditor::checkStateChanged(QModelIndex index, Qt::CheckState state) {
+  PropertyInterface *pi =
+      _sourceModel->data(index, TulipModel::PropertyRole).value<PropertyInterface *>();
   emit propertyVisibilityChanged(pi, state == Qt::Checked);
 }
 
@@ -649,8 +591,7 @@ QSet<PropertyInterface *> PropertiesEditor::visibleProperties() const {
 }
 
 void PropertiesEditor::setPropertyChecked(int index, bool state) {
-  _sourceModel->setData(_sourceModel->index(index, 0),
-                        state ? Qt::Checked : Qt::Unchecked,
+  _sourceModel->setData(_sourceModel->index(index, 0), state ? Qt::Checked : Qt::Unchecked,
                         Qt::CheckStateRole);
 }
 
@@ -658,8 +599,7 @@ void PropertiesEditor::setPropertyChecked(const QString &pName, bool state) {
   int index = _sourceModel->rowOf(pName);
 
   if (index != -1)
-    _sourceModel->setData(_sourceModel->index(index, 0),
-                          state ? Qt::Checked : Qt::Unchecked,
+    _sourceModel->setData(_sourceModel->index(index, 0), state ? Qt::Checked : Qt::Unchecked,
                           Qt::CheckStateRole);
 }
 

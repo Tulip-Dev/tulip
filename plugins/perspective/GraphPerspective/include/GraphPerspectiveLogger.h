@@ -20,11 +20,11 @@
 #ifndef GRAPHPERSPECTIVELOGGER_H
 #define GRAPHPERSPECTIVELOGGER_H
 
-#include <QByteArray>
+#include <QPixmap>
 #include <QDebug>
 #include <QDialog>
 #include <QMap>
-#include <QPixmap>
+#include <QByteArray>
 
 namespace Ui {
 class GraphPerspectiveLogger;
@@ -59,7 +59,9 @@ public:
   void showEvent(QShowEvent *) override;
   void hideEvent(QHideEvent *) override;
 
-  bool anchored() const { return _anchored; }
+  bool anchored() const {
+    return _anchored;
+  }
 
   void setGeometry(int x, int y, int w, int h);
 

@@ -31,20 +31,17 @@ const string DoubleVectorProperty::propertyTypename = "vector<double>";
 // Predefined Meta Value Calculators
 //=============================================================
 typedef void (*DoubleNodePredefinedCalculator)(
-    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>
-        *metric,
-    node mN, Graph *sg);
+    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> *metric, node mN,
+    Graph *sg);
 
 typedef void (*DoubleEdgePredefinedCalculator)(
-    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>
-        *metric,
-    edge mE, Iterator<edge> *itE);
+    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> *metric, edge mE,
+    Iterator<edge> *itE);
 
 // average values
 static void computeNodeAvgValue(
-    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>
-        *metric,
-    node mN, Graph *sg) {
+    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> *metric, node mN,
+    Graph *sg) {
   // nothing to do if the subgraph is not linked to the property graph
   if (sg != metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
@@ -68,9 +65,8 @@ static void computeNodeAvgValue(
 }
 
 static void computeEdgeAvgValue(
-    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>
-        *metric,
-    edge mE, Iterator<edge> *itE) {
+    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> *metric, edge mE,
+    Iterator<edge> *itE) {
   double value = 0;
   unsigned int nbEdges = 0;
 
@@ -86,9 +82,8 @@ static void computeEdgeAvgValue(
 
 // sum values
 static void computeNodeSumValue(
-    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>
-        *metric,
-    node mN, Graph *sg) {
+    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> *metric, node mN,
+    Graph *sg) {
   // nothing to do if the subgraph is not linked to the property graph
   if (sg != metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
@@ -108,9 +103,8 @@ static void computeNodeSumValue(
 }
 
 static void computeEdgeSumValue(
-    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>
-        *metric,
-    edge mE, Iterator<edge> *itE) {
+    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> *metric, edge mE,
+    Iterator<edge> *itE) {
   double value = 0;
 
   while (itE->hasNext()) {
@@ -123,9 +117,8 @@ static void computeEdgeSumValue(
 
 // max values
 static void computeNodeMaxValue(
-    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>
-        *metric,
-    node mN, Graph *sg) {
+    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> *metric, node mN,
+    Graph *sg) {
   // nothing to do if the subgraph is not linked to the property graph
   if (sg != metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
@@ -148,9 +141,8 @@ static void computeNodeMaxValue(
 }
 
 static void computeEdgeMaxValue(
-    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>
-        *metric,
-    edge mE, Iterator<edge> *itE) {
+    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> *metric, edge mE,
+    Iterator<edge> *itE) {
   double value = -DBL_MAX;
 
   while (itE->hasNext()) {
@@ -165,9 +157,8 @@ static void computeEdgeMaxValue(
 
 // min values
 static void computeNodeMinValue(
-    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>
-        *metric,
-    node mN, Graph *sg) {
+    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> *metric, node mN,
+    Graph *sg) {
   // nothing to do if the subgraph is not linked to the property graph
   if (sg != metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
@@ -190,9 +181,8 @@ static void computeNodeMinValue(
 }
 
 static void computeEdgeMinValue(
-    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>
-        *metric,
-    edge mE, Iterator<edge> *itE) {
+    AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> *metric, edge mE,
+    Iterator<edge> *itE) {
   double value = DBL_MAX;
 
   while (itE->hasNext()) {
@@ -207,12 +197,10 @@ static void computeEdgeMinValue(
 
 // 2 arrays to hold the predefined functions
 DoubleNodePredefinedCalculator nodeCalculators[] = {
-    nullptr, computeNodeAvgValue, computeNodeSumValue, computeNodeMaxValue,
-    computeNodeMinValue};
+    nullptr, computeNodeAvgValue, computeNodeSumValue, computeNodeMaxValue, computeNodeMinValue};
 
 DoubleEdgePredefinedCalculator edgeCalculators[] = {
-    nullptr, computeEdgeAvgValue, computeEdgeSumValue, computeEdgeMaxValue,
-    computeEdgeMinValue};
+    nullptr, computeEdgeAvgValue, computeEdgeSumValue, computeEdgeMaxValue, computeEdgeMinValue};
 
 class DoublePropertyPredefinedCalculator
     : public AbstractProperty<tlp::DoubleType, tlp::DoubleType,
@@ -222,24 +210,22 @@ class DoublePropertyPredefinedCalculator
 
 public:
   DoublePropertyPredefinedCalculator(
-      DoubleProperty::PredefinedMetaValueCalculator nCalc =
-          DoubleProperty::AVG_CALC,
-      DoubleProperty::PredefinedMetaValueCalculator eCalc =
-          DoubleProperty::AVG_CALC)
+      DoubleProperty::PredefinedMetaValueCalculator nCalc = DoubleProperty::AVG_CALC,
+      DoubleProperty::PredefinedMetaValueCalculator eCalc = DoubleProperty::AVG_CALC)
       : AbstractProperty<tlp::DoubleType, tlp::DoubleType,
                          tlp::NumericProperty>::MetaValueCalculator(),
         nodeCalc(nodeCalculators[nCalc]), edgeCalc(edgeCalculators[eCalc]) {}
 
-  void computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType,
-                                         tlp::NumericProperty> *metric,
-                        node mN, Graph *sg, Graph *) override {
+  void
+  computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> *metric,
+                   node mN, Graph *sg, Graph *) override {
     if (nodeCalc)
       nodeCalc(metric, mN, sg);
   }
 
-  void computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType,
-                                         tlp::NumericProperty> *metric,
-                        edge mE, Iterator<edge> *itE, Graph *) override {
+  void
+  computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> *metric,
+                   edge mE, Iterator<edge> *itE, Graph *) override {
     if (edgeCalc)
       edgeCalc(metric, mE, itE);
   }
@@ -248,12 +234,10 @@ public:
 // default calculator
 static DoublePropertyPredefinedCalculator avgCalculator;
 
-class ViewBorderWidthCalculator
-    : public DoubleMinMaxProperty::MetaValueCalculator {
+class ViewBorderWidthCalculator : public DoubleMinMaxProperty::MetaValueCalculator {
 public:
-  void computeMetaValue(
-      AbstractProperty<DoubleType, DoubleType, NumericProperty> *width, node mN,
-      Graph *, Graph *) override {
+  void computeMetaValue(AbstractProperty<DoubleType, DoubleType, NumericProperty> *width, node mN,
+                        Graph *, Graph *) override {
     // meta node border width is 1
     width->setNodeValue(mN, 1);
   }
@@ -302,78 +286,67 @@ void DoubleProperty::clone_handler(
   minMaxEdge = proxy->minMaxEdge;
 }
 //=================================================================================
-void DoubleProperty::setNodeValue(
-    const node n, tlp::StoredType<double>::ReturnedConstValue v) {
+void DoubleProperty::setNodeValue(const node n, tlp::StoredType<double>::ReturnedConstValue v) {
   DoubleMinMaxProperty::updateNodeValue(n, v);
   DoubleMinMaxProperty::setNodeValue(n, v);
 }
 //=================================================================================
-void DoubleProperty::setEdgeValue(
-    const edge e, tlp::StoredType<double>::ReturnedConstValue v) {
+void DoubleProperty::setEdgeValue(const edge e, tlp::StoredType<double>::ReturnedConstValue v) {
   DoubleMinMaxProperty::updateEdgeValue(e, v);
   DoubleMinMaxProperty::setEdgeValue(e, v);
 }
 //=================================================================================
-void DoubleProperty::setAllNodeValue(
-    tlp::StoredType<double>::ReturnedConstValue v) {
+void DoubleProperty::setAllNodeValue(tlp::StoredType<double>::ReturnedConstValue v) {
   DoubleMinMaxProperty::updateAllNodesValues(v);
   DoubleMinMaxProperty::setAllNodeValue(v);
 }
 //=================================================================================
-void DoubleProperty::setValueToGraphNodes(
-    tlp::StoredType<double>::ReturnedConstValue v, const Graph *graph) {
+void DoubleProperty::setValueToGraphNodes(tlp::StoredType<double>::ReturnedConstValue v,
+                                          const Graph *graph) {
   DoubleMinMaxProperty::updateAllNodesValues(v);
   DoubleMinMaxProperty::setValueToGraphNodes(v, graph);
 }
 //=================================================================================
-void DoubleProperty::setAllEdgeValue(
-    tlp::StoredType<double>::ReturnedConstValue v) {
+void DoubleProperty::setAllEdgeValue(tlp::StoredType<double>::ReturnedConstValue v) {
   DoubleMinMaxProperty::updateAllEdgesValues(v);
   DoubleMinMaxProperty::setAllEdgeValue(v);
 }
 //=================================================================================
-void DoubleProperty::setValueToGraphEdges(
-    tlp::StoredType<double>::ReturnedConstValue v, const Graph *graph) {
+void DoubleProperty::setValueToGraphEdges(tlp::StoredType<double>::ReturnedConstValue v,
+                                          const Graph *graph) {
   DoubleMinMaxProperty::updateAllEdgesValues(v);
   DoubleMinMaxProperty::setValueToGraphEdges(v, graph);
 }
 //=================================================================================
-PropertyInterface *DoubleProperty::clonePrototype(Graph *g,
-                                                  const std::string &n) const {
+PropertyInterface *DoubleProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
     return nullptr;
 
   // allow to get an unregistered property (empty name)
-  DoubleProperty *p = n.empty() ? new DoubleProperty(g)
-                                : g->getLocalProperty<DoubleProperty>(n);
+  DoubleProperty *p = n.empty() ? new DoubleProperty(g) : g->getLocalProperty<DoubleProperty>(n);
   p->setAllNodeValue(getNodeDefaultValue());
   p->setAllEdgeValue(getEdgeDefaultValue());
   return p;
 }
 //=================================================================================
-PropertyInterface *
-DoubleVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
+PropertyInterface *DoubleVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
     return nullptr;
 
   // allow to get an unregistered property (empty name)
-  DoubleVectorProperty *p = n.empty()
-                                ? new DoubleVectorProperty(g)
-                                : g->getLocalProperty<DoubleVectorProperty>(n);
+  DoubleVectorProperty *p =
+      n.empty() ? new DoubleVectorProperty(g) : g->getLocalProperty<DoubleVectorProperty>(n);
   p->setAllNodeValue(getNodeDefaultValue());
   p->setAllEdgeValue(getEdgeDefaultValue());
   return p;
 }
 //=============================================================
-void DoubleProperty::setMetaValueCalculator(
-    PredefinedMetaValueCalculator nodeCalc,
-    PredefinedMetaValueCalculator edgeCalc) {
-  setMetaValueCalculator(
-      new DoublePropertyPredefinedCalculator(nodeCalc, edgeCalc));
+void DoubleProperty::setMetaValueCalculator(PredefinedMetaValueCalculator nodeCalc,
+                                            PredefinedMetaValueCalculator edgeCalc) {
+  setMetaValueCalculator(new DoublePropertyPredefinedCalculator(nodeCalc, edgeCalc));
 }
 //=============================================================
-void DoubleProperty::setMetaValueCalculator(
-    PropertyInterface::MetaValueCalculator *calc) {
+void DoubleProperty::setMetaValueCalculator(PropertyInterface::MetaValueCalculator *calc) {
   if (metaValueCalculator && metaValueCalculator != &avgCalculator &&
       typeid(metaValueCalculator) == typeid(DoublePropertyPredefinedCalculator))
     delete metaValueCalculator;

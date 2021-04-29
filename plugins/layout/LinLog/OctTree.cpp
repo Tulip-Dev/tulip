@@ -31,8 +31,7 @@ using namespace tlp;
 OctTree::OctTree(tlp::node _node, Coord _position, Coord _minPos, Coord _maxPos,
                  tlp::DoubleProperty *_linLogWeight, bool _firstNode)
     : position(_position[0], _position[1], _position[2]),
-      minPos(_minPos[0], _minPos[1], _minPos[2]),
-      maxPos(_maxPos[0], _maxPos[1], _maxPos[2]) {
+      minPos(_minPos[0], _minPos[1], _minPos[2]), maxPos(_maxPos[0], _maxPos[1], _maxPos[2]) {
 
   firstNode = _firstNode;
   linLogWeight = _linLogWeight;
@@ -93,7 +92,9 @@ OctTree::~OctTree() {
  *  @param max maximum nimber of children
  */
 
-void OctTree::setMaxChildren(unsigned int max) { MAX_CHILDREN = max; }
+void OctTree::setMaxChildren(unsigned int max) {
+  MAX_CHILDREN = max;
+}
 
 /**
  * Adds a graph node to the octtree.
@@ -104,8 +105,7 @@ void OctTree::setMaxChildren(unsigned int max) { MAX_CHILDREN = max; }
  */
 void OctTree::addNode(tlp::node newNode, Coord newPos, unsigned int depth) {
   if (depth > MAX_DEPTH - 1) {
-    std::cerr
-        << "assert: adding a node at a depth deeper than the max depth (add1)\n";
+    std::cerr << "assert: adding a node at a depth deeper than the max depth (add1)\n";
     return;
   }
 
@@ -136,8 +136,7 @@ void OctTree::addNode(tlp::node newNode, Coord newPos, unsigned int depth) {
   //}
 
   for (int d = 0; d < 3; ++d) {
-    position[d] =
-        (weight * position[d] + nnWeight * newPos[d]) / (weight + nnWeight);
+    position[d] = (weight * position[d] + nnWeight * newPos[d]) / (weight + nnWeight);
   }
 
   weight += nnWeight;
@@ -149,7 +148,9 @@ void OctTree::addNode(tlp::node newNode, Coord newPos, unsigned int depth) {
  * Returns the current node of this OctTree
  */
 
-tlp::node OctTree::getNode() { return node; }
+tlp::node OctTree::getNode() {
+  return node;
+}
 
 /**
  * Adds a graph node to the OctTree,
@@ -161,8 +162,7 @@ tlp::node OctTree::getNode() { return node; }
  */
 void OctTree::addNode2(tlp::node newNode, Coord newPos, unsigned int depth) {
   if (depth > MAX_DEPTH - 1) {
-    std::cerr
-        << "assert: adding a node at a depth deeper than the max depth! (add2)\n";
+    std::cerr << "assert: adding a node at a depth deeper than the max depth! (add2)\n";
     return;
   }
 
@@ -189,8 +189,7 @@ void OctTree::addNode2(tlp::node newNode, Coord newPos, unsigned int depth) {
         _children[i] = nullptr;
     }
 
-    _children[childCount++] =
-        new OctTree(newNode, newPos, newPos, newPos, linLogWeight, false);
+    _children[childCount++] = new OctTree(newNode, newPos, newPos, newPos, linLogWeight, false);
 
     return;
   }
@@ -228,8 +227,7 @@ void OctTree::addNode2(tlp::node newNode, Coord newPos, unsigned int depth) {
     }
 
     childCount++;
-    _children[childIndex] =
-        new OctTree(newNode, newPos, newMinPos, newMaxPos, linLogWeight, false);
+    _children[childIndex] = new OctTree(newNode, newPos, newMinPos, newMaxPos, linLogWeight, false);
   } else {
     _children[childIndex]->addNode(newNode, newPos, depth + 1);
   }
@@ -249,9 +247,8 @@ void OctTree::printTree(unsigned int depth) {
     ;
   }
 
-  std::cerr << "[d(" << depth << "),w(" << weight << "),n(" << node.id << "),l("
-            << isLeaf << "),p(" << position[0] << "," << position[1] << ","
-            << position[2] << "),";
+  std::cerr << "[d(" << depth << "),w(" << weight << "),n(" << node.id << "),l(" << isLeaf << "),p("
+            << position[0] << "," << position[1] << "," << position[2] << "),";
 
   if (_children != nullptr) {
     for (unsigned int i = 0; i < MAX_CHILDREN; ++i) {
@@ -299,8 +296,8 @@ void OctTree::removeNode(tlp::node oldNode, Coord oldPos, unsigned int depth) {
     }*/
 
   if (depth > MAX_DEPTH - 1) {
-    std::cerr << "assert: remove a node at a depth deeper than the max depth: "
-              << depth << " / " << MAX_DEPTH - 1 << "\n";
+    std::cerr << "assert: remove a node at a depth deeper than the max depth: " << depth << " / "
+              << MAX_DEPTH - 1 << "\n";
     return;
   }
 
@@ -328,8 +325,7 @@ void OctTree::removeNode(tlp::node oldNode, Coord oldPos, unsigned int depth) {
   }
 
   for (int d = 0; d < 3; ++d) {
-    position[d] =
-        (weight * position[d] - onWeight * oldPos[d]) / (weight - onWeight);
+    position[d] = (weight * position[d] - onWeight * oldPos[d]) / (weight - onWeight);
   }
 
   weight -= onWeight;
@@ -354,18 +350,15 @@ void OctTree::removeNode(tlp::node oldNode, Coord oldPos, unsigned int depth) {
             std::cerr << "this part of the tree is null\n";
             childIndex++;
           }
-          /*          else if ((_children[childIndex])->node == nullptr ||
-             oldNode == nullptr)
+          /*          else if ((_children[childIndex])->node == nullptr || oldNode == nullptr)
                 {
-                //std::cerr<<"this tree node or the searched one is nullptr:
-             "<<oldNode<<" and
+                //std::cerr<<"this tree node or the searched one is nullptr: "<<oldNode<<" and
              "<<(_children[childIndex])->node<<"\n";
                 childIndex++;
                 }
           */
           else if ((_children[childIndex])->node.id != oldNode.id) {
-            // std::cerr<<"this tree node is different from the searched one:
-            // "<<oldNode.id<<" and
+            // std::cerr<<"this tree node is different from the searched one: "<<oldNode.id<<" and
             // "<<(_children[childIndex])->node.id<<"\n";
             childIndex++;
           } else {
@@ -374,8 +367,7 @@ void OctTree::removeNode(tlp::node oldNode, Coord oldPos, unsigned int depth) {
           }
 
         } else {
-          std::cerr << "we're stopping at the end of the table: " << childIndex
-                    << "\n";
+          std::cerr << "we're stopping at the end of the table: " << childIndex << "\n";
           endwhile = true;
         }
       }
@@ -428,8 +420,7 @@ void OctTree::removeNode(tlp::node oldNode, Coord oldPos, unsigned int depth) {
         --childCount;
       }
     } else {
-      std::cerr
-          << "assert: the selected child it is not supposed to be nullptr!\n";
+      std::cerr << "assert: the selected child it is not supposed to be nullptr!\n";
       return;
     }
   }

@@ -21,8 +21,8 @@
 #ifndef VECTOREDITOR_H
 #define VECTOREDITOR_H
 
-#include <QAbstractButton>
 #include <QDialog>
+#include <QAbstractButton>
 
 #include <tulip/tulipconf.h>
 
@@ -41,7 +41,9 @@ public:
   explicit VectorEditor(QWidget *parent = nullptr);
   ~VectorEditor() override;
   void setVector(const QVector<QVariant> &d, int userType);
-  const QVector<QVariant> &vector() const { return currentVector; }
+  const QVector<QVariant> &vector() const {
+    return currentVector;
+  }
 
 public slots:
   void add();

@@ -17,9 +17,9 @@
  *
  */
 
+#include <tulip/PropertyTypes.h>
 #include <tulip/Graph.h>
 #include <tulip/PropertiesCollection.h>
-#include <tulip/PropertyTypes.h>
 #include <tulip/StringCollection.h>
 #include <tulip/TulipException.h>
 
@@ -30,9 +30,13 @@ using namespace std;
 using namespace tlp;
 
 // GraphType
-GraphType::RealType GraphType::undefinedValue() { return nullptr; }
+GraphType::RealType GraphType::undefinedValue() {
+  return nullptr;
+}
 
-GraphType::RealType GraphType::defaultValue() { return nullptr; }
+GraphType::RealType GraphType::defaultValue() {
+  return nullptr;
+}
 
 void GraphType::write(ostream &oss, const RealType &v) {
   if (v)
@@ -142,8 +146,7 @@ bool EdgeSetType::readb(istream &iss, RealType &s) {
   edge *data = v.data();
 
   // get the edges in one read
-  if (!bool(iss.read(reinterpret_cast<char *>(v.data()),
-                     size * sizeof(unsigned int))))
+  if (!bool(iss.read(reinterpret_cast<char *>(v.data()), size * sizeof(unsigned int))))
     return false;
 
   // insert edges in the set
@@ -157,9 +160,13 @@ bool EdgeSetType::readb(istream &iss, RealType &s) {
 }
 
 // DoubleType
-double DoubleType::undefinedValue() { return -DBL_MAX; }
+double DoubleType::undefinedValue() {
+  return -DBL_MAX;
+}
 
-double DoubleType::defaultValue() { return 0; }
+double DoubleType::defaultValue() {
+  return 0;
+}
 
 // add support for inf, -inf and nan
 bool DoubleType::read(istream &iss, double &v) {
@@ -209,9 +216,13 @@ bool DoubleType::read(istream &iss, double &v) {
 }
 
 // FloatType
-float FloatType::undefinedValue() { return -FLT_MAX; }
+float FloatType::undefinedValue() {
+  return -FLT_MAX;
+}
 
-float FloatType::defaultValue() { return 0; }
+float FloatType::defaultValue() {
+  return 0;
+}
 
 // add support for inf, -inf and nan
 bool FloatType::read(istream &iss, float &v) {
@@ -260,24 +271,40 @@ bool FloatType::read(istream &iss, float &v) {
 }
 
 // IntegerType
-int IntegerType::undefinedValue() { return INT_MIN; }
+int IntegerType::undefinedValue() {
+  return INT_MIN;
+}
 
-int IntegerType::defaultValue() { return 0; }
+int IntegerType::defaultValue() {
+  return 0;
+}
 
 // LongType
-long LongType::undefinedValue() { return LONG_MIN; }
+long LongType::undefinedValue() {
+  return LONG_MIN;
+}
 
-long LongType::defaultValue() { return 0; }
+long LongType::defaultValue() {
+  return 0;
+}
 
 // UnsignedIntegerType
-unsigned int UnsignedIntegerType::undefinedValue() { return UINT_MAX; }
+unsigned int UnsignedIntegerType::undefinedValue() {
+  return UINT_MAX;
+}
 
-unsigned int UnsignedIntegerType::defaultValue() { return 0; }
+unsigned int UnsignedIntegerType::defaultValue() {
+  return 0;
+}
 
 // BooleanType
-bool BooleanType::undefinedValue() { return false; }
+bool BooleanType::undefinedValue() {
+  return false;
+}
 
-bool BooleanType::defaultValue() { return false; }
+bool BooleanType::defaultValue() {
+  return false;
+}
 
 void BooleanType::write(ostream &os, const RealType &v) {
   if (v)
@@ -372,8 +399,8 @@ void BooleanVectorType::writeb(ostream &oss, const RealType &v) {
   oss.write(vc.data(), vSize);
 }
 
-bool BooleanVectorType::read(istream &is, RealType &v, char openChar,
-                             char sepChar, char closeChar) {
+bool BooleanVectorType::read(istream &is, RealType &v, char openChar, char sepChar,
+                             char closeChar) {
   v.clear();
 
   char c = ' ';
@@ -431,8 +458,7 @@ bool BooleanVectorType::read(const std::vector<std::string> &vs, RealType &v) {
   return true;
 }
 
-bool BooleanVectorType::tokenize(const std::string &s,
-                                 std::vector<std::string> &v, char openChar,
+bool BooleanVectorType::tokenize(const std::string &s, std::vector<std::string> &v, char openChar,
                                  char sepChar, char closeChar) {
   v.clear();
 
@@ -504,8 +530,7 @@ bool BooleanVectorType::readb(istream &iss, RealType &v) {
 }
 
 // LineType
-bool LineType::read(istream &is, RealType &v, char openChar, char sepChar,
-                    char closeChar) {
+bool LineType::read(istream &is, RealType &v, char openChar, char sepChar, char closeChar) {
   v.clear();
 
   char c = ' ';
@@ -583,7 +608,9 @@ Coord PointType::undefinedValue() {
   return tmp;
 }
 
-Coord PointType::defaultValue() { return Coord(0, 0, 0); }
+Coord PointType::defaultValue() {
+  return Coord(0, 0, 0);
+}
 
 bool PointType::read(istream &is, RealType &v) {
   // value may have been enclosed by double quotes
@@ -661,9 +688,13 @@ bool PointType::fromString(RealType &v, const string &s) {
 
 //
 // SizeType
-Size SizeType::undefinedValue() { return Size(-FLT_MAX, -FLT_MAX, -FLT_MAX); }
+Size SizeType::undefinedValue() {
+  return Size(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+}
 
-Size SizeType::defaultValue() { return Size(1, 1, 0); }
+Size SizeType::defaultValue() {
+  return Size(1, 1, 0);
+}
 
 bool SizeType::read(istream &is, RealType &v) {
   // value may have been enclosed by double quotes
@@ -704,9 +735,13 @@ bool SizeType::fromString(RealType &v, const string &s) {
 }
 
 // StringType
-string StringType::undefinedValue() { return string(""); }
+string StringType::undefinedValue() {
+  return string("");
+}
 
-string StringType::defaultValue() { return string(""); }
+string StringType::defaultValue() {
+  return string("");
+}
 
 void StringType::write(ostream &os, const RealType &v, char openCloseChar) {
   if (openCloseChar)
@@ -734,7 +769,9 @@ void StringType::writeb(ostream &os, const RealType &str) {
   os.write(str.c_str(), size);
 }
 
-string StringType::toString(const RealType &v) { return v; }
+string StringType::toString(const RealType &v) {
+  return v;
+}
 
 bool StringType::read(istream &is, RealType &v, char openChar, char closeChar) {
   char c = ' ';
@@ -830,8 +867,7 @@ void StringVectorType::writeb(ostream &os, const RealType &v) {
     StringType::writeb(os, v[i]);
 }
 
-bool StringVectorType::read(istream &is, RealType &v, char openChar,
-                            char sepChar, char closeChar) {
+bool StringVectorType::read(istream &is, RealType &v, char openChar, char sepChar, char closeChar) {
   v.clear();
   char c = ' ';
 
@@ -873,8 +909,7 @@ bool StringVectorType::read(istream &is, RealType &v, char openChar,
         string str;
         is.unget();
 
-        if (!(openChar ? StringType::read(is, str)
-                       : StringType::read(is, str, '\0', sepChar)))
+        if (!(openChar ? StringType::read(is, str) : StringType::read(is, str, '\0', sepChar)))
           return false;
 
         v.push_back(std::move(str));
@@ -910,7 +945,9 @@ bool StringVectorType::readb(istream &iss, RealType &v) {
 }
 
 // ColorType
-Color ColorType::undefinedValue() { return Color(255, 255, 255, 255); }
+Color ColorType::undefinedValue() {
+  return Color(255, 255, 255, 255);
+}
 
 void ColorType::write(ostream &os, const RealType &v) {
   // add double quotes to ensure compatibility in gui tests
@@ -970,7 +1007,9 @@ struct DataSetTypeSerializer : public TypedDataSerializer<DataSet> {
     DataSet::write(os, ds);
   }
 
-  bool read(istream &is, DataSet &ds) override { return DataSet::read(is, ds); }
+  bool read(istream &is, DataSet &ds) override {
+    return DataSet::read(is, ds);
+  }
 
   bool setData(tlp::DataSet &, const string &, const string &) override {
     // no sense
@@ -987,7 +1026,9 @@ struct NodeTypeSerializer : public TypedDataSerializer<node> {
     uintSerializer = new KnownTypeSerializer<UnsignedIntegerType>("");
   }
 
-  ~NodeTypeSerializer() override { delete uintSerializer; }
+  ~NodeTypeSerializer() override {
+    delete uintSerializer;
+  }
 
   DataTypeSerializer *clone() const override {
     return new NodeTypeSerializer();
@@ -1015,20 +1056,20 @@ struct NodeVectorTypeSerializer : public TypedDataSerializer<vector<node>> {
     uintVecSerializer = new KnownTypeSerializer<UnsignedIntegerVectorType>("");
   }
 
-  ~NodeVectorTypeSerializer() override { delete uintVecSerializer; }
+  ~NodeVectorTypeSerializer() override {
+    delete uintVecSerializer;
+  }
 
   DataTypeSerializer *clone() const override {
     return new NodeVectorTypeSerializer();
   }
 
   void write(ostream &os, const vector<node> &vn) override {
-    uintVecSerializer->write(
-        os, reinterpret_cast<const vector<unsigned int> &>(vn));
+    uintVecSerializer->write(os, reinterpret_cast<const vector<unsigned int> &>(vn));
   }
 
   bool read(istream &is, vector<node> &vn) override {
-    return uintVecSerializer->read(
-        is, reinterpret_cast<vector<unsigned int> &>(vn));
+    return uintVecSerializer->read(is, reinterpret_cast<vector<unsigned int> &>(vn));
   }
 
   bool setData(tlp::DataSet &, const string &, const string &) override {
@@ -1045,7 +1086,9 @@ struct EdgeTypeSerializer : public TypedDataSerializer<edge> {
     uintSerializer = new KnownTypeSerializer<UnsignedIntegerType>("");
   }
 
-  ~EdgeTypeSerializer() override { delete uintSerializer; }
+  ~EdgeTypeSerializer() override {
+    delete uintSerializer;
+  }
 
   DataTypeSerializer *clone() const override {
     return new EdgeTypeSerializer();
@@ -1073,20 +1116,20 @@ struct EdgeVectorTypeSerializer : public TypedDataSerializer<vector<edge>> {
     uintVecSerializer = new KnownTypeSerializer<UnsignedIntegerVectorType>("");
   }
 
-  ~EdgeVectorTypeSerializer() override { delete uintVecSerializer; }
+  ~EdgeVectorTypeSerializer() override {
+    delete uintVecSerializer;
+  }
 
   DataTypeSerializer *clone() const override {
     return new EdgeVectorTypeSerializer();
   }
 
   void write(ostream &os, const vector<edge> &ve) override {
-    uintVecSerializer->write(
-        os, reinterpret_cast<const vector<unsigned int> &>(ve));
+    uintVecSerializer->write(os, reinterpret_cast<const vector<unsigned int> &>(ve));
   }
 
   bool read(istream &is, vector<edge> &ve) override {
-    return uintVecSerializer->read(
-        is, reinterpret_cast<vector<unsigned int> &>(ve));
+    return uintVecSerializer->read(is, reinterpret_cast<vector<unsigned int> &>(ve));
   }
 
   bool setData(tlp::DataSet &, const string &, const string &) override {
@@ -1095,8 +1138,7 @@ struct EdgeVectorTypeSerializer : public TypedDataSerializer<vector<edge>> {
   }
 };
 
-struct PropertiesCollectionSerializer
-    : public TypedDataSerializer<PropertiesCollection> {
+struct PropertiesCollectionSerializer : public TypedDataSerializer<PropertiesCollection> {
   PropertiesCollectionSerializer()
       : TypedDataSerializer<PropertiesCollection>("PropertiesCollection") {}
 
@@ -1106,19 +1148,16 @@ struct PropertiesCollectionSerializer
 
   // called when writing a tlp file, which should never happen
   void write(ostream &, const PropertiesCollection &) override {
-    throw TulipException(
-        "PropertiesCollectionSerializer::write is not implemented");
+    throw TulipException("PropertiesCollectionSerializer::write is not implemented");
   }
 
   // called when reading a tlp file, which should never happen
   bool read(istream &, PropertiesCollection &) override {
-    throw TulipException(
-        "PropertiesCollectionSerializer::read is not implemented");
+    throw TulipException("PropertiesCollectionSerializer::read is not implemented");
   }
 
   std::string toString(const DataType *data) override {
-    auto &selected =
-        static_cast<PropertiesCollection *>(data->value)->getSelected();
+    auto &selected = static_cast<PropertiesCollection *>(data->value)->getSelected();
     ostringstream oss;
     oss << '"';
     for (size_t i = 0; i < selected.size(); ++i) {
@@ -1137,10 +1176,8 @@ struct PropertiesCollectionSerializer
   }
 };
 
-struct StringCollectionSerializer
-    : public TypedDataSerializer<StringCollection> {
-  StringCollectionSerializer()
-      : TypedDataSerializer<StringCollection>("StringCollection") {}
+struct StringCollectionSerializer : public TypedDataSerializer<StringCollection> {
+  StringCollectionSerializer() : TypedDataSerializer<StringCollection>("StringCollection") {}
 
   DataTypeSerializer *clone() const override {
     return new StringCollectionSerializer();
@@ -1190,14 +1227,12 @@ struct StringCollectionSerializer
   }
 
   std::string toString(const DataType *data) override {
-    return std::string("\"") +
-           static_cast<StringCollection *>(data->value)->getCurrentString() +
+    return std::string("\"") + static_cast<StringCollection *>(data->value)->getCurrentString() +
            '"';
     ;
   }
 
-  bool setData(tlp::DataSet &dts, const string &prop,
-               const string &val) override {
+  bool setData(tlp::DataSet &dts, const string &prop, const string &val) override {
     StringCollection col(val);
     dts.set(prop, col);
     return true;
@@ -1211,8 +1246,7 @@ void tlp::initTypeSerializers() {
   DataSet::registerDataTypeSerializer<DoubleType::RealType>(
       KnownTypeSerializer<DoubleType>("double"));
 
-  DataSet::registerDataTypeSerializer<FloatType::RealType>(
-      KnownTypeSerializer<FloatType>("float"));
+  DataSet::registerDataTypeSerializer<FloatType::RealType>(KnownTypeSerializer<FloatType>("float"));
 
   DataSet::registerDataTypeSerializer<BooleanType::RealType>(
       KnownTypeSerializer<BooleanType>("bool"));
@@ -1223,14 +1257,11 @@ void tlp::initTypeSerializers() {
   DataSet::registerDataTypeSerializer<UnsignedIntegerType::RealType>(
       KnownTypeSerializer<UnsignedIntegerType>("uint"));
 
-  DataSet::registerDataTypeSerializer<LongType::RealType>(
-      KnownTypeSerializer<LongType>("long"));
+  DataSet::registerDataTypeSerializer<LongType::RealType>(KnownTypeSerializer<LongType>("long"));
 
-  DataSet::registerDataTypeSerializer<ColorType::RealType>(
-      KnownTypeSerializer<ColorType>("color"));
+  DataSet::registerDataTypeSerializer<ColorType::RealType>(KnownTypeSerializer<ColorType>("color"));
 
-  DataSet::registerDataTypeSerializer<PointType::RealType>(
-      KnownTypeSerializer<PointType>("coord"));
+  DataSet::registerDataTypeSerializer<PointType::RealType>(KnownTypeSerializer<PointType>("coord"));
 
   DataSet::registerDataTypeSerializer<StringType::RealType>(
       KnownTypeSerializer<StringType>("string"));
@@ -1263,9 +1294,7 @@ void tlp::initTypeSerializers() {
 
   DataSet::registerDataTypeSerializer<vector<edge>>(EdgeVectorTypeSerializer());
 
-  DataSet::registerDataTypeSerializer<StringCollection>(
-      StringCollectionSerializer());
+  DataSet::registerDataTypeSerializer<StringCollection>(StringCollectionSerializer());
 
-  DataSet::registerDataTypeSerializer<PropertiesCollection>(
-      PropertiesCollectionSerializer());
+  DataSet::registerDataTypeSerializer<PropertiesCollection>(PropertiesCollectionSerializer());
 }

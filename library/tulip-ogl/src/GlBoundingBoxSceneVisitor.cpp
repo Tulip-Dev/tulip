@@ -18,17 +18,16 @@
  */
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 
-#include <tulip/GlEdge.h>
-#include <tulip/GlNode.h>
 #include <tulip/GlSimpleEntity.h>
+#include <tulip/GlNode.h>
+#include <tulip/GlEdge.h>
 #include <tulip/ParallelTools.h>
 
 using namespace std;
 
 namespace tlp {
 
-GlBoundingBoxSceneVisitor::GlBoundingBoxSceneVisitor(
-    GlGraphInputData *inputData)
+GlBoundingBoxSceneVisitor::GlBoundingBoxSceneVisitor(GlGraphInputData *inputData)
     : inputData(inputData) {
   threadSafe = true;
   noBBCheck.assign(ThreadManager::getNumberOfThreads(), false);

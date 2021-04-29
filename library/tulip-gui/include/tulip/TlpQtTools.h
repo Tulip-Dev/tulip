@@ -24,8 +24,8 @@
 #include <QDebug>
 
 #include <tulip/Color.h>
-#include <tulip/PropertyInterface.h>
 #include <tulip/tulipconf.h>
+#include <tulip/PropertyInterface.h>
 
 class QWidget;
 class QString;
@@ -34,8 +34,8 @@ namespace tlp {
 
 struct PluginLoader;
 
-TLP_QT_SCOPE bool getColorDialog(const QColor &color, QWidget *parent,
-                                 const QString &title, QColor &result);
+TLP_QT_SCOPE bool getColorDialog(const QColor &color, QWidget *parent, const QString &title,
+                                 QColor &result);
 
 inline QColor colorToQColor(const Color &color) {
   return QColor(color.getR(), color.getG(), color.getB(), color.getA());
@@ -65,37 +65,31 @@ inline bool QStringCaseCmp(const QString &s1, const QString &s2) {
 
 /**
  * @brief Convert the property type string to a label to display in the GUI.
- * The property type label is the string to display in the GUI instead of the
- *basic property type string.
+ * The property type label is the string to display in the GUI instead of the basic property type
+ *string.
  **/
-TLP_QT_SCOPE QString
-propertyTypeToPropertyTypeLabel(const std::string &typeName);
+TLP_QT_SCOPE QString propertyTypeToPropertyTypeLabel(const std::string &typeName);
 
 /**
  * @brief Get the string to display as property type for the given property.
- * The property type label is the string to display in the GUI instead of the
- *property type string. By example for a property of type "double" the label
- *displayed in the GUI will be "Metric".
+ * The property type label is the string to display in the GUI instead of the property type string.
+ * By example for a property of type "double" the label displayed in the GUI will be "Metric".
  **/
-inline QString propertyInterfaceToPropertyTypeLabel(
-    const tlp::PropertyInterface *const property) {
+inline QString propertyInterfaceToPropertyTypeLabel(const tlp::PropertyInterface *const property) {
   return propertyTypeToPropertyTypeLabel(property->getTypename());
 }
 
 /**
- * @brief Convert the label of a property type to it's corresponding property
- *type. The property type label is the string to display in the GUI instead of
- *the property type string. By example for a property of type "double" the label
- *displayed in the GUI will be "Metric".
+ * @brief Convert the label of a property type to it's corresponding property type.
+ * The property type label is the string to display in the GUI instead of the property type string.
+ * By example for a property of type "double" the label displayed in the GUI will be "Metric".
  **/
-TLP_QT_SCOPE std::string
-propertyTypeLabelToPropertyType(const QString &typeNameLabel);
+TLP_QT_SCOPE std::string propertyTypeLabelToPropertyType(const QString &typeNameLabel);
 
 /**
  * @brief Gets the name of the package to retrieve for this version of tulip.
- * The package name uses the Tulip release, platform (windows, unix, ...),
- *architecture (x86, x86_64), and compiler used (GCC, Clang, MSVC) to determine
- *which package this version can use.
+ * The package name uses the Tulip release, platform (windows, unix, ...), architecture (x86,
+ *x86_64), and compiler used (GCC, Clang, MSVC) to determine which package this version can use.
  *
  * @param pluginName The name of the plugin for which we want the package name.
  **/
@@ -159,15 +153,14 @@ inline QDebug operator<<(QDebug dbg, const std::string &s) {
 
 // useful macros needed for menu actions building
 #ifdef __APPLE__
-#define SET_TOOLTIP_WITH_CTRL_SHORTCUT(a, tt, sc)                              \
+#define SET_TOOLTIP_WITH_CTRL_SHORTCUT(a, tt, sc)                                                  \
   a->setToolTip(QString(tt) + tlpStringToQString(" [⌘+") + sc + "]")
 #else
-#define SET_TOOLTIP_WITH_CTRL_SHORTCUT(a, tt, sc)                              \
-  a->setToolTip(QString(tt) + " [Ctrl+" + sc + "]")
+#define SET_TOOLTIP_WITH_CTRL_SHORTCUT(a, tt, sc) a->setToolTip(QString(tt) + " [Ctrl+" + sc + "]")
 #endif
 
-#define SET_TIPS_WITH_CTRL_SHORTCUT(a, tt, sc)                                 \
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(a, tt, sc);                                   \
+#define SET_TIPS_WITH_CTRL_SHORTCUT(a, tt, sc)                                                     \
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(a, tt, sc);                                                       \
   a->setStatusTip(a->toolTip())
 
 #endif

@@ -33,8 +33,7 @@ namespace tlp {
 /** \brief Interactor abstract class for ParallelCoordinates
  *
  */
-class ParallelCoordinatesInteractor
-    : public NodeLinkDiagramComponentInteractor {
+class ParallelCoordinatesInteractor : public NodeLinkDiagramComponentInteractor {
 
 public:
   ParallelCoordinatesInteractor(const QString &iconPath, const QString &text,
@@ -51,8 +50,8 @@ public:
 class InteractorParallelCoordsSelection : public ParallelCoordinatesInteractor {
 
 public:
-  PLUGININFORMATION("InteractorParallelCoordsSelection", "Tulip Team",
-                    "02/04/2009", "Selection Interactor", "1.0", "Selection")
+  PLUGININFORMATION("InteractorParallelCoordsSelection", "Tulip Team", "02/04/2009",
+                    "Selection Interactor", "1.0", "Selection")
 
   /**
    * Default constructor
@@ -91,8 +90,8 @@ public:
 class InteractorAxisSwapper : public ParallelCoordinatesInteractor {
 
 public:
-  PLUGININFORMATION("InteractorAxisSwapper", "Tulip Team", "02/04/2009",
-                    "Axis Swap Interactor", "1.0", "Modification")
+  PLUGININFORMATION("InteractorAxisSwapper", "Tulip Team", "02/04/2009", "Axis Swap Interactor",
+                    "1.0", "Modification")
 
   /**
    * Default constructor
@@ -128,8 +127,8 @@ class InteractorAxisSliders : public ParallelCoordinatesInteractor {
   AxisSliderOptions *configwidget;
 
 public:
-  PLUGININFORMATION("InteractorAxisSliders", "Tulip Team", "02/04/2009",
-                    "Axis Sliders Interactor", "1.0", "Modification")
+  PLUGININFORMATION("InteractorAxisSliders", "Tulip Team", "02/04/2009", "Axis Sliders Interactor",
+                    "1.0", "Modification")
 
   /**
    * Default constructor
@@ -150,8 +149,8 @@ public:
 class InteractorBoxPlot : public ParallelCoordinatesInteractor {
 
 public:
-  PLUGININFORMATION("InteractorBoxPlot", "Tulip Team", "02/04/2009",
-                    "Box Plot Interactor", "1.0", "Information")
+  PLUGININFORMATION("InteractorBoxPlot", "Tulip Team", "02/04/2009", "Box Plot Interactor", "1.0",
+                    "Information")
 
   /**
    * Default constructor
@@ -164,8 +163,7 @@ public:
   void construct() override;
 };
 
-/** \brief Parallel coordinates interactor to show element properties when
- * clicking on it
+/** \brief Parallel coordinates interactor to show element properties when clicking on it
  *
  */
 class InteractorShowElementInfo : public ParallelCoordinatesInteractor {
@@ -185,15 +183,15 @@ public:
   void construct() override;
 };
 
-/** \brief Parallel coordinates interactor to modify space between two
- * consecutive axis by using the mouse wheel
+/** \brief Parallel coordinates interactor to modify space between two consecutive axis by using the
+ * mouse wheel
  *
  */
 class InteractorAxisSpacer : public ParallelCoordinatesInteractor {
 
 public:
-  PLUGININFORMATION("InteractorAxisSpacer", "Tulip Team", "02/04/2009",
-                    "Axis Spacer Interactor", "1.0", "Modification")
+  PLUGININFORMATION("InteractorAxisSpacer", "Tulip Team", "02/04/2009", "Axis Spacer Interactor",
+                    "1.0", "Modification")
 
   /**
    * Default constructor

@@ -57,10 +57,8 @@ public:
   node target(const edge e) const override;
   void setTarget(const edge, const node) override;
   node opposite(const edge e, const node n) const override;
-  edge existEdge(const node n, const node m,
-                 bool directed = true) const override;
-  bool hasEdge(const node source, const node target,
-               bool directed = true) const override;
+  edge existEdge(const node n, const node m, bool directed = true) const override;
+  bool hasEdge(const node source, const node target, bool directed = true) const override;
   std::vector<edge> getEdges(const node source, const node target,
                              bool directed = true) const override;
   const std::pair<node, node> &ends(const edge e) const override;
@@ -76,8 +74,7 @@ public:
                       bool delAllEdge = true) override;
   void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
                        std::vector<node> &metaNodes) override;
-  node createMetaNode(Graph *subGraph, bool multiEdges = true,
-                      bool delAllEdge = true) override;
+  node createMetaNode(Graph *subGraph, bool multiEdges = true, bool delAllEdge = true) override;
 
   //============================================================
   node getOneNode() const override;
@@ -143,8 +140,7 @@ public:
   bool existProperty(const std::string &name) const override;
   bool existLocalProperty(const std::string &name) const override;
   void delLocalProperty(const std::string &name) override;
-  void addLocalProperty(const std::string &name,
-                        PropertyInterface *prop) override;
+  void addLocalProperty(const std::string &name, PropertyInterface *prop) override;
   Iterator<std::string> *getLocalProperties() const override;
   Iterator<std::string> *getInheritedProperties() const override;
   Iterator<std::string> *getProperties() const override;
@@ -153,8 +149,7 @@ public:
   Iterator<PropertyInterface *> *getObjectProperties() const override;
   // updates management
   void push(bool unpopAllowed = true,
-            std::vector<PropertyInterface *> *propertiesToPreserveOnPop =
-                nullptr) override;
+            std::vector<PropertyInterface *> *propertiesToPreserveOnPop = nullptr) override;
   void pop(bool unpopAllowed = true) override;
   void popIfNoUpdates() override;
   void unpop() override;
@@ -183,8 +178,7 @@ protected:
   void restoreSubGraph(Graph *) override;
   void setSubGraphToKeep(Graph *) override;
   // internally used for property renaming
-  bool renameLocalProperty(PropertyInterface *prop,
-                           const std::string &newName) override;
+  bool renameLocalProperty(PropertyInterface *prop, const std::string &newName) override;
 };
 
 //====================================================================================

@@ -20,10 +20,10 @@
 #ifndef APIDATABASE_H_
 #define APIDATABASE_H_
 
-#include <QHash>
 #include <QSet>
-#include <QString>
 #include <QVector>
+#include <QHash>
+#include <QString>
 
 #include <tulip/tulipconf.h>
 
@@ -40,22 +40,21 @@ class TLP_PYTHON_SCOPE APIDataBase {
   static APIDataBase _instance;
 
 public:
-  static APIDataBase *getInstance() { return &_instance; }
+  static APIDataBase *getInstance() {
+    return &_instance;
+  }
 
   void loadApiFile(const QString &apiFilePath);
 
   void addApiEntry(const QString &apiEntry);
 
   QSet<QString> getTypesList() const;
-  QSet<QString> getDictContentForType(const QString &type,
-                                      const QString &prefix = "") const;
+  QSet<QString> getDictContentForType(const QString &type, const QString &prefix = "") const;
   QString getReturnTypeForMethodOrFunction(const QString &funcName) const;
-  QVector<QVector<QString>>
-  getParamTypesForMethodOrFunction(const QString &funcName) const;
+  QVector<QVector<QString>> getParamTypesForMethodOrFunction(const QString &funcName) const;
   bool functionExists(const QString &funcName) const;
   QVector<QString> findTypesContainingDictEntry(const QString &dictEntry) const;
-  QSet<QString>
-  getAllDictEntriesStartingWithPrefix(const QString &prefix) const;
+  QSet<QString> getAllDictEntriesStartingWithPrefix(const QString &prefix) const;
 
   bool typeExists(const QString &type) const;
   QString getFullTypeName(const QString &type) const;

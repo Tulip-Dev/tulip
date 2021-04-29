@@ -20,9 +20,9 @@
 
 #ifndef DELAUNAY_H
 #define DELAUNAY_H
+#include <vector>
 #include <set>
 #include <unordered_map>
-#include <vector>
 
 #include <tulip/Coord.h>
 
@@ -34,16 +34,16 @@ namespace tlp {
  *
  * \author : David Auber/Daniel Archambault/Antoine Lambert : auber@labri.fr
  *
- * Computes the delaunay triangulation and returns the set of delaunay edges in
- * the vector edges and delaunay simplices (triangles in 2d, tetrahedra in 3d)
- * of the triangulation in the vector simplices. Edges and simplices are defined
- * using a indexes into the original set of points.
+ * Computes the delaunay triangulation and returns the set of delaunay edges in the
+ * vector edges and delaunay simplices (triangles in 2d, tetrahedra in 3d) of the triangulation in
+ * the vector simplices.
+ * Edges and simplices are defined using a indexes into the original
+ * set of points.
  */
-TLP_SCOPE bool
-delaunayTriangulation(std::vector<Coord> &points,
-                      std::vector<std::pair<unsigned int, unsigned int>> &edges,
-                      std::vector<std::vector<unsigned int>> &simplices,
-                      bool voronoiMode = false);
+TLP_SCOPE bool delaunayTriangulation(std::vector<Coord> &points,
+                                     std::vector<std::pair<unsigned int, unsigned int>> &edges,
+                                     std::vector<std::vector<unsigned int>> &simplices,
+                                     bool voronoiMode = false);
 
 /**
  * @ingroup Graph
@@ -57,25 +57,31 @@ public:
   // A voronoi vertex.
   typedef Coord Vertex;
 
-  // A voronoi edge defined by the indexes of its extremities in the vertices
-  // vector
+  // A voronoi edge defined by the indexes of its extremities in the vertices vector
   typedef std::pair<unsigned int, unsigned int> Edge;
 
-  // A voronoi Cell defined by the indexes of its vertices in the vertices
-  // vector
+  // A voronoi Cell defined by the indexes of its vertices in the vertices vector
   typedef std::set<unsigned int> Cell;
 
   // Returns the number of voronoi sites
-  unsigned int nbSites() const { return sites.size(); }
+  unsigned int nbSites() const {
+    return sites.size();
+  }
 
   // Returns the number of voronoi vertices
-  unsigned int nbVertices() const { return vertices.size(); }
+  unsigned int nbVertices() const {
+    return vertices.size();
+  }
 
   // Returns the number of voronoi edges
-  unsigned int nbEdges() const { return edges.size(); }
+  unsigned int nbEdges() const {
+    return edges.size();
+  }
 
   // Returns the ith site
-  const Site &site(const unsigned int siteIdx) { return sites[siteIdx]; }
+  const Site &site(const unsigned int siteIdx) {
+    return sites[siteIdx];
+  }
 
   // Returns the ith voronoi vertex
   const Vertex &vertex(const unsigned int vertexIdx) {
@@ -83,10 +89,14 @@ public:
   }
 
   // Returns the ith voronoi edge
-  const Edge &edge(const unsigned int edgeIdx) { return edges[edgeIdx]; }
+  const Edge &edge(const unsigned int edgeIdx) {
+    return edges[edgeIdx];
+  }
 
   // Returns the ith voronoi cell
-  const Cell &cell(const unsigned int cellIdx) { return cells[cellIdx]; }
+  const Cell &cell(const unsigned int cellIdx) {
+    return cells[cellIdx];
+  }
 
   // Returns the degree of the ith voronoi vertex
   unsigned int degreeOfVertex(const unsigned int vertexIdx) {
@@ -121,15 +131,14 @@ public:
 
 /**
  * Computes the voronoi diagram of a set of points (for 2d and 3d layouts).
- * The set of input points are given in sites.  The resultant voronoi diagram is
- * returned in voronoiDiagram.  It automatically computes the set of all voronoi
+ * The set of input points are given in sites.  The resultant voronoi diagram is returned
+ * in voronoiDiagram.  It automatically computes the set of all voronoi
  * vertices, edges and cells. In order to not have to deal with infinite
  * voronoi rays, the input layout is enclosed in its convex hull in 2d or
  * in its bounding box in 3d. It enables to have a connected voronoi cell
  * for each input site.
  */
-TLP_SCOPE bool voronoiDiagram(std::vector<Coord> &sites,
-                              VoronoiDiagram &voronoiDiagram);
+TLP_SCOPE bool voronoiDiagram(std::vector<Coord> &sites, VoronoiDiagram &voronoiDiagram);
 } // namespace tlp
 #endif
 ///@endcond

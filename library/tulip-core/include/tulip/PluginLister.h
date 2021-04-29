@@ -21,13 +21,13 @@
 #define TULIP_PLUGINLISTER_H
 
 #include <list>
-#include <map>
 #include <string>
+#include <map>
 
 #include <tulip/Iterator.h>
-#include <tulip/Observable.h>
 #include <tulip/Plugin.h>
 #include <tulip/PluginLoader.h>
+#include <tulip/Observable.h>
 
 namespace tlp {
 class PluginContext;
@@ -35,15 +35,14 @@ class PluginContext;
 /**
  * @ingroup Plugins
  *
- * @brief The PluginLister class is a singleton used to list plugins currently
- * loaded into Tulip and retrieve information about them.
+ * @brief The PluginLister class is a singleton used to list plugins currently loaded into Tulip and
+ * retrieve information about them.
  *
- * This class holds various methods to check information about plugins currently
- * loaded into Tulip. You can use it to list plugins, get dependencies
- * information or create an instance of a plugin.
+ * This class holds various methods to check information about plugins currently loaded into Tulip.
+ * You can use it to list plugins, get dependencies information or create an instance of a plugin.
  *
- * @note Since a plugin name is unique, Plugins are mainly identified by their
- * name (tlp::Plugin::name()) when interfaced with the plugin lister.
+ * @note Since a plugin name is unique, Plugins are mainly identified by their name
+ * (tlp::Plugin::name()) when interfaced with the plugin lister.
  *
  * @see tlp::Plugin
  * @see tlp::PluginLoader
@@ -59,8 +58,7 @@ public:
   /**
    * @brief Checks if all registered plug-ins have their dependencies met.
    *
-   * @param loader If there are errors, the loader is informed about them so
-   *they can be displayed.
+   * @param loader If there are errors, the loader is informed about them so they can be displayed.
    * @return void
    **/
   static void checkLoadedPluginsDependencies(tlp::PluginLoader *loader);
@@ -77,8 +75,8 @@ public:
 
   /**
    * @brief Checks if a plugin of a given type is loaded
-   * This method checks the plugin "pluginName" is currently loaded into Tulip
-   * and if it's of type PluginType.
+   * This method checks the plugin "pluginName" is currently loaded into Tulip and if it's of type
+   * PluginType.
    * @param PluginType the class type of the plugin
    * @param pluginName the name of the plugin
    * @return true if a matching plugin is currently loaded into Tulip.
@@ -90,17 +88,15 @@ public:
   }
 
   /**
-   * @brief Similar to tlp::PluginLister::getPluginObject() but returns a typed
-   * instance
+   * @brief Similar to tlp::PluginLister::getPluginObject() but returns a typed instance
    *
-   * This method instantiate a plugin from its name and returns it casted into
-   * the given type.
+   * This method instantiate a plugin from its name and returns it casted into the given type.
    *
    * @param name The plugin's name
    * @param context The context to give to the plugin
    *
-   * @return The plugin instance. If there is no such plugin or if the plugin
-   * does not match the required type, this method returns nullptr
+   * @return The plugin instance. If there is no such plugin or if the plugin does not match the
+   * required type, this method returns nullptr
    */
   template <typename PluginType>
   static PluginType *getPluginObject(const std::string &name,
@@ -143,8 +139,7 @@ public:
    * @brief Checks if a given name is registered in this factory.
    *
    * @param pluginName The name of the plug-in to look for.
-   * @return bool Whether there is a plug-in with the given name registered in
-   *this factory.
+   * @return bool Whether there is a plug-in with the given name registered in this factory.
    **/
   static bool pluginExists(const std::string &pluginName);
 
@@ -154,18 +149,16 @@ public:
    * @param name The name of the plug-in to retrieve the parameters of.
    * @return :ParameterDescriptionList The parameters of the plug-in.
    **/
-  static const ParameterDescriptionList &
-  getPluginParameters(const std::string &name);
+  static const ParameterDescriptionList &getPluginParameters(const std::string &name);
 
   /**
    * @brief Gets the dependencies of a plug-in.
    *
    * @param name The name of the plug-in to retrieve the dependencies of.
-   * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > > The
-   *list of dependencies of the plug-in.
+   * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > > The list of dependencies of
+   *the plug-in.
    **/
-  static const std::list<tlp::Dependency> &
-  getPluginDependencies(const std::string &name);
+  static const std::list<tlp::Dependency> &getPluginDependencies(const std::string &name);
 
   /**
    * @brief Gets the library from which a plug-in has been loaded.
@@ -177,8 +170,7 @@ public:
 
   /**
    * @brief Removes a plug-in from this factory.
-   * This is useful when a plug-in has unmet dependencies, or appears more than
-   *once.
+   * This is useful when a plug-in has unmet dependencies, or appears more than once.
    *
    * @param name The name of the plug-in to remove.
    * @return void
@@ -199,8 +191,8 @@ protected:
    * @brief Gets the release number of the given plug-in.
    *
    * @param name The name of the plug-in to retrieve the version number of.
-   * @return :string The version number, usually formatted as X[.Y], where X is
-   *the major, and Y the minor.
+   * @return :string The version number, usually formatted as X[.Y], where X is the major, and Y
+   *the minor.
    **/
   static std::string getPluginRelease(const std::string &name);
   ///@endcond
@@ -214,12 +206,15 @@ public:
   // constructor for node/edge events
   PluginEvent(const Observable &sender, PluginEventType pluginEvtType,
               const std::string &pluginName)
-      : Event(sender, Event::TLP_MODIFICATION), evtType(pluginEvtType),
-        pluginName(pluginName) {}
+      : Event(sender, Event::TLP_MODIFICATION), evtType(pluginEvtType), pluginName(pluginName) {}
 
-  PluginEventType getType() const { return evtType; }
+  PluginEventType getType() const {
+    return evtType;
+  }
 
-  std::string getPluginName() const { return pluginName; }
+  std::string getPluginName() const {
+    return pluginName;
+  }
 
   static void addListener(Observable *);
 

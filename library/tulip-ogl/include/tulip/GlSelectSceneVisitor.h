@@ -25,11 +25,7 @@
 
 namespace tlp {
 
-enum SelectionFlag {
-  SelectSimpleEntities = 1,
-  SelectNodes = 2,
-  SelectEdges = 4
-};
+enum SelectionFlag { SelectSimpleEntities = 1, SelectNodes = 2, SelectEdges = 4 };
 
 class GlGraphInputData;
 class GlLODCalculator;
@@ -41,8 +37,8 @@ class TLP_GL_SCOPE GlSelectSceneVisitor : public GlSceneVisitor {
 
 public:
   /**
-   * Constructor with SelectionFlac (SelectSimpleEntity, SelectNodes and
-   * SelectEdges), GlGraphInputData and GlLODCalculator
+   * Constructor with SelectionFlac (SelectSimpleEntity, SelectNodes and SelectEdges),
+   * GlGraphInputData and GlLODCalculator
    */
   GlSelectSceneVisitor(SelectionFlag flag, GlGraphInputData *inputData,
                        GlLODCalculator *calculator);

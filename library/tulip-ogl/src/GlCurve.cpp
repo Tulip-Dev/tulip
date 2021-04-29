@@ -25,9 +25,8 @@
 using namespace std;
 
 namespace tlp {
-GlCurve::GlCurve(const vector<Coord> &points, const Color &beginFColor,
-                 const Color &endFColor, const float &beginSize,
-                 const float &endSize)
+GlCurve::GlCurve(const vector<Coord> &points, const Color &beginFColor, const Color &endFColor,
+                 const float &beginSize, const float &endSize)
     : _points(points), _beginFillColor(beginFColor), _endFillColor(endFColor),
       _beginSize(beginSize), _endSize(endSize), texture("") {
 
@@ -36,8 +35,7 @@ GlCurve::GlCurve(const vector<Coord> &points, const Color &beginFColor,
   boundingBox.expand(points);
 }
 //=====================================================
-GlCurve::GlCurve(const unsigned int nbPoints)
-    : _points(nbPoints), texture("") {}
+GlCurve::GlCurve(const unsigned int nbPoints) : _points(nbPoints), texture("") {}
 //=====================================================
 GlCurve::~GlCurve() {}
 //=====================================================
@@ -50,7 +48,9 @@ const tlp::Coord &GlCurve::point(const unsigned int i) const {
   return _points[i];
 }
 //=====================================================
-tlp::Coord &GlCurve::point(const unsigned int i) { return _points[i]; }
+tlp::Coord &GlCurve::point(const unsigned int i) {
+  return _points[i];
+}
 //=====================================================
 void GlCurve::draw(float, Camera *) {
   //    tlp::warning() << ".";
@@ -73,9 +73,8 @@ void GlCurve::draw(float, Camera *) {
     GlTextureManager::activateTexture(texture);
   }
 
-  tlp::splineQuad(newPoints, _beginFillColor, _endFillColor, _beginSize,
-                  _endSize, newPoints[0] - Coord(1., 0.0, 0.),
-                  newPoints[3] + Coord(1., 0.0, 0.));
+  tlp::splineQuad(newPoints, _beginFillColor, _endFillColor, _beginSize, _endSize,
+                  newPoints[0] - Coord(1., 0.0, 0.), newPoints[3] + Coord(1., 0.0, 0.));
 
   GlTextureManager::deactivateTexture();
   glEnable(GL_LIGHTING);
@@ -105,14 +104,11 @@ void GlCurve::getXML(string &outString) {
   GlXMLTools::getXML(outString, "endSize", _endSize);
 }
 //============================================================
-void GlCurve::setWithXML(const string &inString,
-                         unsigned int &currentPosition) {
+void GlCurve::setWithXML(const string &inString, unsigned int &currentPosition) {
 
   GlXMLTools::setWithXML(inString, currentPosition, "points", _points);
-  GlXMLTools::setWithXML(inString, currentPosition, "beginFillColor",
-                         _beginFillColor);
-  GlXMLTools::setWithXML(inString, currentPosition, "endFillColor",
-                         _endFillColor);
+  GlXMLTools::setWithXML(inString, currentPosition, "beginFillColor", _beginFillColor);
+  GlXMLTools::setWithXML(inString, currentPosition, "endFillColor", _endFillColor);
   GlXMLTools::setWithXML(inString, currentPosition, "beginSize", _beginSize);
   GlXMLTools::setWithXML(inString, currentPosition, "endSize", _endSize);
 

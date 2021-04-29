@@ -17,34 +17,34 @@
  *
  */
 
-#include <fstream>
 #include <iomanip>
+#include <fstream>
 #include <stack>
 #include <unordered_map>
 #include <unordered_set>
 
-#include <tulip/Algorithm.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/BoundingBox.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/DataSet.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/DrawingTools.h>
-#include <tulip/ExportModule.h>
+#include <tulip/StlIterator.h>
+#include <tulip/TlpTools.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphImpl.h>
-#include <tulip/GraphProperty.h>
-#include <tulip/ImportModule.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
+#include <tulip/GraphProperty.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/PluginLister.h>
-#include <tulip/SimplePluginProgress.h>
 #include <tulip/SizeProperty.h>
-#include <tulip/StlIterator.h>
 #include <tulip/StringProperty.h>
-#include <tulip/TlpTools.h>
+#include <tulip/DataSet.h>
+#include <tulip/ExportModule.h>
+#include <tulip/Algorithm.h>
+#include <tulip/ImportModule.h>
+#include <tulip/SimplePluginProgress.h>
+#include <tulip/BoundingBox.h>
+#include <tulip/DrawingTools.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/vectorgraph.h>
+#include <tulip/PluginLister.h>
 
 using namespace std;
 using namespace tlp;
@@ -82,8 +82,7 @@ ostream &operator<<(ostream &os, const Graph *graph) {
 
   for (auto e : graph->edges()) {
     auto ends = graph->ends(e);
-    os << "(edge " << e.id << " " << ends.first.id << " " << ends.second.id
-       << ")" << endl;
+    os << "(edge " << e.id << " " << ends.first.id << " " << ends.second.id << ")" << endl;
   }
 
   return os;
@@ -91,41 +90,31 @@ ostream &operator<<(ostream &os, const Graph *graph) {
 
 static void setViewPropertiesDefaults(Graph *g) {
 
-  const std::string shapes = "viewShape", colors = "viewColor",
-                    sizes = "viewSize", metrics = "viewMetric",
-                    fonts = "viewFont", fontAwesomeIcon = "viewFontAwesomeIcon",
-                    fontSizes = "viewFontSize", borderWidth = "viewBorderWidth",
-                    borderColor = "viewBorderColor",
-                    tgtShape = "viewTgtAnchorShape",
-                    srcShape = "viewSrcAnchorShape", icon = "viewIcon",
-                    labelColor = "viewLabelColor",
+  const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize",
+                    metrics = "viewMetric", fonts = "viewFont",
+                    fontAwesomeIcon = "viewFontAwesomeIcon", fontSizes = "viewFontSize",
+                    borderWidth = "viewBorderWidth", borderColor = "viewBorderColor",
+                    tgtShape = "viewTgtAnchorShape", srcShape = "viewSrcAnchorShape",
+                    icon = "viewIcon", labelColor = "viewLabelColor",
                     labelBorderColor = "viewLabelBorderColor",
-                    labelBorderWidth = "viewLabelBorderWidth",
-                    labelPosition = "viewLabelPosition", label = "viewLabel",
-                    layout = "viewLayout", rotation = "viewRotation",
-                    srcAnchorSize = "viewSrcAnchorSize",
-                    selection = "viewSelection", texture = "viewTexture",
-                    tgtAnchorSize = "viewTgtAnchorSize";
+                    labelBorderWidth = "viewLabelBorderWidth", labelPosition = "viewLabelPosition",
+                    label = "viewLabel", layout = "viewLayout", rotation = "viewRotation",
+                    srcAnchorSize = "viewSrcAnchorSize", selection = "viewSelection",
+                    texture = "viewTexture", tgtAnchorSize = "viewTgtAnchorSize";
 
   if (!g->existProperty(shapes)) {
-    g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(
-        TulipViewSettings::defaultShape(NODE));
-    g->getProperty<IntegerProperty>(shapes)->setAllEdgeValue(
-        TulipViewSettings::defaultShape(EDGE));
+    g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(TulipViewSettings::defaultShape(NODE));
+    g->getProperty<IntegerProperty>(shapes)->setAllEdgeValue(TulipViewSettings::defaultShape(EDGE));
   }
 
   if (!g->existProperty(colors)) {
-    g->getProperty<ColorProperty>(colors)->setAllNodeValue(
-        TulipViewSettings::defaultColor(NODE));
-    g->getProperty<ColorProperty>(colors)->setAllEdgeValue(
-        TulipViewSettings::defaultColor(EDGE));
+    g->getProperty<ColorProperty>(colors)->setAllNodeValue(TulipViewSettings::defaultColor(NODE));
+    g->getProperty<ColorProperty>(colors)->setAllEdgeValue(TulipViewSettings::defaultColor(EDGE));
   }
 
   if (!g->existProperty(sizes)) {
-    g->getProperty<SizeProperty>(sizes)->setAllNodeValue(
-        TulipViewSettings::defaultSize(NODE));
-    g->getProperty<SizeProperty>(sizes)->setAllEdgeValue(
-        TulipViewSettings::defaultSize(EDGE));
+    g->getProperty<SizeProperty>(sizes)->setAllNodeValue(TulipViewSettings::defaultSize(NODE));
+    g->getProperty<SizeProperty>(sizes)->setAllEdgeValue(TulipViewSettings::defaultSize(EDGE));
   }
 
   if (!g->existProperty(metrics)) {
@@ -134,10 +123,8 @@ static void setViewPropertiesDefaults(Graph *g) {
   }
 
   if (!g->existProperty(fonts)) {
-    g->getProperty<StringProperty>(fonts)->setAllNodeValue(
-        TulipViewSettings::defaultFontFile());
-    g->getProperty<StringProperty>(fonts)->setAllEdgeValue(
-        TulipViewSettings::defaultFontFile());
+    g->getProperty<StringProperty>(fonts)->setAllNodeValue(TulipViewSettings::defaultFontFile());
+    g->getProperty<StringProperty>(fonts)->setAllEdgeValue(TulipViewSettings::defaultFontFile());
   }
 
   if (!g->existProperty(fontSizes)) {
@@ -201,8 +188,7 @@ static void setViewPropertiesDefaults(Graph *g) {
 
   if (!g->existProperty(layout)) {
     g->getProperty<LayoutProperty>(layout)->setAllNodeValue(Coord(0, 0, 0));
-    g->getProperty<LayoutProperty>(layout)->setAllEdgeValue(
-        std::vector<Coord>());
+    g->getProperty<LayoutProperty>(layout)->setAllEdgeValue(std::vector<Coord>());
   }
 
   if (!g->existProperty(rotation)) {
@@ -245,9 +231,8 @@ static void setViewPropertiesDefaults(Graph *g) {
     StringProperty *faiProp = g->getProperty<StringProperty>(fontAwesomeIcon);
     StringProperty *iProp = g->getProperty<StringProperty>(icon);
 
-    // transform old font awesome icon names to new ones and store them in the
-    // viewIcon property only if the content of that property is default
-    // valuated
+    // transform old font awesome icon names to new ones and store them in the viewIcon
+    // property only if the content of that property is default valuated
     if (iProp->hasNonDefaultValuatedNodes()) {
       iProp->setAllNodeValue("fa-" + faiProp->getNodeDefaultValue());
       for (auto n : faiProp->getNonDefaultValuatedNodes()) {
@@ -289,8 +274,8 @@ Graph *tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
   list<string> &&importPlugins = PluginLister::availablePlugins<ImportModule>();
 
   for (const string &pluginName : importPlugins) {
-    const ImportModule &importPlugin = static_cast<const ImportModule &>(
-        PluginLister::pluginInformation(pluginName));
+    const ImportModule &importPlugin =
+        static_cast<const ImportModule &>(PluginLister::pluginInformation(pluginName));
     list<string> extensions(importPlugin.fileExtensions());
 
     for (const string &ext : extensions)
@@ -312,8 +297,8 @@ Graph *tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
   return graph;
 }
 //=========================================================
-bool tlp::saveGraph(Graph *graph, const std::string &filename,
-                    PluginProgress *progress, DataSet *data) {
+bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *progress,
+                    DataSet *data) {
   ostream *os;
 
   bool gzip = false;
@@ -322,8 +307,7 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename,
   list<string> &&exportPlugins = PluginLister::availablePlugins<ExportModule>();
 
   for (const string &pluginName : exportPlugins) {
-    ExportModule *exportPlugin =
-        PluginLister::getPluginObject<ExportModule>(pluginName);
+    ExportModule *exportPlugin = PluginLister::getPluginObject<ExportModule>(pluginName);
     string ext(exportPlugin->fileExtension());
 
     if (filename.rfind(ext) != string::npos &&
@@ -381,12 +365,12 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename,
   return result;
 }
 //=========================================================
-Graph *tlp::importGraph(const std::string &format, DataSet &dataSet,
-                        PluginProgress *progress, Graph *graph) {
+Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress,
+                        Graph *graph) {
 
   if (!PluginLister::pluginExists(format)) {
-    tlp::warning() << "libtulip: " << __FUNCTION__ << ": import plugin \""
-                   << format << "\" does not exist (or is not loaded)" << endl;
+    tlp::warning() << "libtulip: " << __FUNCTION__ << ": import plugin \"" << format
+                   << "\" does not exist (or is not loaded)" << endl;
     return nullptr;
   }
 
@@ -407,8 +391,7 @@ Graph *tlp::importGraph(const std::string &format, DataSet &dataSet,
     tmpProgress = progress;
 
   AlgorithmContext context(graph, &dataSet, tmpProgress);
-  ImportModule *importModule =
-      PluginLister::getPluginObject<ImportModule>(format, &context);
+  ImportModule *importModule = PluginLister::getPluginObject<ImportModule>(format, &context);
   assert(importModule != nullptr);
 
   // ensure that the parsing of float or double does not depend on locale
@@ -439,12 +422,11 @@ Graph *tlp::importGraph(const std::string &format, DataSet &dataSet,
   return graph;
 }
 //=========================================================
-bool tlp::exportGraph(Graph *graph, std::ostream &outputStream,
-                      const std::string &format, DataSet &dataSet,
-                      PluginProgress *progress) {
+bool tlp::exportGraph(Graph *graph, std::ostream &outputStream, const std::string &format,
+                      DataSet &dataSet, PluginProgress *progress) {
   if (!PluginLister::pluginExists(format)) {
-    tlp::warning() << "libtulip: " << __FUNCTION__ << ": export plugin \""
-                   << format << "\" does not exist (or is not loaded)" << endl;
+    tlp::warning() << "libtulip: " << __FUNCTION__ << ": export plugin \"" << format
+                   << "\" does not exist (or is not loaded)" << endl;
     return false;
   }
 
@@ -459,8 +441,7 @@ bool tlp::exportGraph(Graph *graph, std::ostream &outputStream,
     tmpProgress = progress;
 
   AlgorithmContext context(graph, &dataSet, tmpProgress);
-  ExportModule *exportModule =
-      PluginLister::getPluginObject<ExportModule>(format, &context);
+  ExportModule *exportModule = PluginLister::getPluginObject<ExportModule>(format, &context);
   assert(exportModule != nullptr);
   std::string filename;
 
@@ -477,8 +458,7 @@ bool tlp::exportGraph(Graph *graph, std::ostream &outputStream,
   return result;
 }
 //=========================================================
-static void removeFromGraph(Graph *g, const vector<node> &nodes,
-                            const std::vector<edge> &edges) {
+static void removeFromGraph(Graph *g, const vector<node> &nodes, const std::vector<edge> &edges) {
   unsigned int nbNodes = nodes.size();
   unsigned int nbEdges = edges.size();
 
@@ -584,9 +564,8 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
   for (PropertyInterface *src : inG->getObjectProperties()) {
     if (dynamic_cast<GraphProperty *>(src) == nullptr) {
       const std::string &pName = src->getName();
-      PropertyInterface *dst = outG->existProperty(pName)
-                                   ? outG->getProperty(pName)
-                                   : src->clonePrototype(outG, pName);
+      PropertyInterface *dst =
+          outG->existProperty(pName) ? outG->getProperty(pName) : src->clonePrototype(outG, pName);
       properties.emplace_back(src, dst);
     }
   }
@@ -608,8 +587,7 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
 
     // copy node properties
     for (unsigned int i = 0; i < nbProperties; ++i) {
-      std::pair<PropertyInterface *, PropertyInterface *> &props =
-          properties[i];
+      std::pair<PropertyInterface *, PropertyInterface *> &props = properties[i];
       props.second->copy(nOut, nIn, props.first);
     }
   }
@@ -619,8 +597,7 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
 
   if (inSel) {
     edgeIt = inSel->getNonDefaultValuatedEdges(inG);
-    outG->reserveEdges(outG->numberOfEdges() +
-                       inSel->numberOfNonDefaultValuatedEdges(inG));
+    outG->reserveEdges(outG->numberOfEdges() + inSel->numberOfNonDefaultValuatedEdges(inG));
   } else {
     edgeIt = inG->getEdges();
     outG->reserveEdges(outG->numberOfEdges() + inG->numberOfEdges());
@@ -630,8 +607,7 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
   for (auto eIn : edgeIt) {
     const pair<node, node> &eEnds = inG->ends(eIn);
     // add outG corresponding edge
-    edge eOut = outG->addEdge(nodeTrl.get(eEnds.first.id),
-                              nodeTrl.get(eEnds.second.id));
+    edge eOut = outG->addEdge(nodeTrl.get(eEnds.first.id), nodeTrl.get(eEnds.second.id));
 
     // select added edge
     if (outSel)
@@ -639,8 +615,7 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
 
     // copy edge properties
     for (unsigned int i = 0; i < nbProperties; ++i) {
-      std::pair<PropertyInterface *, PropertyInterface *> &props =
-          properties[i];
+      std::pair<PropertyInterface *, PropertyInterface *> &props = properties[i];
       props.second->copy(eOut, eIn, props.first);
     }
   }
@@ -668,26 +643,31 @@ public:
     }
 
     rootsIterator =
-        new StlIterator<Graph *, std::vector<tlp::Graph *>::iterator>(
-            roots.begin(), roots.end());
+        new StlIterator<Graph *, std::vector<tlp::Graph *>::iterator>(roots.begin(), roots.end());
   }
 
-  ~RootGraphsIterator() override { delete rootsIterator; }
+  ~RootGraphsIterator() override {
+    delete rootsIterator;
+  }
 
-  Graph *next() override { return rootsIterator->next(); }
+  Graph *next() override {
+    return rootsIterator->next();
+  }
 
-  bool hasNext() override { return rootsIterator->hasNext(); }
+  bool hasNext() override {
+    return rootsIterator->hasNext();
+  }
 };
 
-Iterator<Graph *> *tlp::getRootGraphs() { return new RootGraphsIterator(); }
+Iterator<Graph *> *tlp::getRootGraphs() {
+  return new RootGraphsIterator();
+}
 
-bool Graph::applyAlgorithm(const std::string &algorithm,
-                           std::string &errorMessage, DataSet *parameters,
-                           PluginProgress *progress) {
+bool Graph::applyAlgorithm(const std::string &algorithm, std::string &errorMessage,
+                           DataSet *parameters, PluginProgress *progress) {
   if (!PluginLister::pluginExists(algorithm)) {
-    tlp::warning() << "libtulip: " << __FUNCTION__ << ": algorithm plugin \""
-                   << algorithm << "\" does not exist (or is not loaded)"
-                   << endl;
+    tlp::warning() << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << algorithm
+                   << "\" does not exist (or is not loaded)" << endl;
     return false;
   }
 
@@ -702,8 +682,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
     tmpProgress = progress;
 
   AlgorithmContext context(this, parameters, tmpProgress);
-  Algorithm *algo =
-      PluginLister::getPluginObject<Algorithm>(algorithm, &context);
+  Algorithm *algo = PluginLister::getPluginObject<Algorithm>(algorithm, &context);
 
   if ((result = algo->check(errorMessage))) {
     result = algo->run();
@@ -721,10 +700,8 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
 }
 
 //=========================================================
-bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
-                                        PropertyInterface *prop,
-                                        std::string &errorMessage,
-                                        tlp::DataSet *parameters,
+bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm, PropertyInterface *prop,
+                                        std::string &errorMessage, tlp::DataSet *parameters,
                                         tlp::PluginProgress *progress) {
   bool result;
 
@@ -783,8 +760,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
 
   tlp::Observable::holdObservers();
   circularCalls[algorithm] = prop;
-  Algorithm *algo = tlp::PluginLister::getPluginObject<PropertyAlgorithm>(
-      algorithm, &context);
+  Algorithm *algo = tlp::PluginLister::getPluginObject<PropertyAlgorithm>(algorithm, &context);
 
   if (algo != nullptr) {
     result = algo->check(errorMessage);
@@ -875,8 +851,7 @@ void Graph::notifyReverseEdge(const edge e) {
 
 void Graph::notifyBeforeSetEnds(const edge e) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_SET_ENDS, e,
-                         Event::TLP_INFORMATION));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_SET_ENDS, e, Event::TLP_INFORMATION));
 }
 
 void Graph::notifyAfterSetEnds(const edge e) {
@@ -941,30 +916,25 @@ void Graph::notifyAfterDelSubGraph(const Graph *graph) {
 
 void Graph::notifyBeforeAddDescendantGraph(const Graph *graph) {
   if (hasOnlookers())
-    sendEvent(
-        GraphEvent(*this, GraphEvent::TLP_BEFORE_ADD_DESCENDANTGRAPH, graph));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_ADD_DESCENDANTGRAPH, graph));
 }
 void Graph::notifyAfterAddDescendantGraph(const Graph *graph) {
   if (hasOnlookers())
-    sendEvent(
-        GraphEvent(*this, GraphEvent::TLP_AFTER_ADD_DESCENDANTGRAPH, graph));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_ADD_DESCENDANTGRAPH, graph));
 }
 
 void Graph::notifyBeforeDelDescendantGraph(const Graph *graph) {
   if (hasOnlookers())
-    sendEvent(
-        GraphEvent(*this, GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH, graph));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH, graph));
 }
 void Graph::notifyAfterDelDescendantGraph(const Graph *graph) {
   if (hasOnlookers())
-    sendEvent(
-        GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH, graph));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH, graph));
 }
 
 void Graph::notifyBeforeAddLocalProperty(const std::string &propName) {
   if (hasOnlookers())
-    sendEvent(
-        GraphEvent(*this, GraphEvent::TLP_BEFORE_ADD_LOCAL_PROPERTY, propName));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_ADD_LOCAL_PROPERTY, propName));
 }
 void Graph::notifyAddLocalProperty(const std::string &propName) {
   if (hasOnlookers())
@@ -973,20 +943,19 @@ void Graph::notifyAddLocalProperty(const std::string &propName) {
 
 void Graph::notifyBeforeDelLocalProperty(const std::string &propName) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY,
-                         propName, Event::TLP_INFORMATION));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY, propName,
+                         Event::TLP_INFORMATION));
 }
 
 void Graph::notifyAfterDelLocalProperty(const std::string &propName) {
   if (hasOnlookers())
-    sendEvent(
-        GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY, propName));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY, propName));
 }
 
 void Graph::notifyBeforeSetAttribute(const std::string &attName) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_SET_ATTRIBUTE, attName,
-                         Event::TLP_INFORMATION));
+    sendEvent(
+        GraphEvent(*this, GraphEvent::TLP_BEFORE_SET_ATTRIBUTE, attName, Event::TLP_INFORMATION));
 }
 
 void Graph::notifyAfterSetAttribute(const std::string &attName) {
@@ -996,8 +965,7 @@ void Graph::notifyAfterSetAttribute(const std::string &attName) {
 
 void Graph::notifyRemoveAttribute(const std::string &attName) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_REMOVE_ATTRIBUTE, attName,
-                         Event::TLP_INFORMATION));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_REMOVE_ATTRIBUTE, attName, Event::TLP_INFORMATION));
 }
 
 void Graph::notifyDestroy() {
@@ -1025,21 +993,17 @@ PropertyInterface *Graph::getLocalProperty(const std::string &propertyName,
     return getLocalProperty<SizeProperty>(propertyName);
   } else if (propertyType.compare(BooleanProperty::propertyTypename) == 0) {
     return getLocalProperty<BooleanProperty>(propertyName);
-  } else if (propertyType.compare(DoubleVectorProperty::propertyTypename) ==
-             0) {
+  } else if (propertyType.compare(DoubleVectorProperty::propertyTypename) == 0) {
     return getLocalProperty<DoubleVectorProperty>(propertyName);
-  } else if (propertyType.compare(StringVectorProperty::propertyTypename) ==
-             0) {
+  } else if (propertyType.compare(StringVectorProperty::propertyTypename) == 0) {
     return getLocalProperty<StringVectorProperty>(propertyName);
-  } else if (propertyType.compare(IntegerVectorProperty::propertyTypename) ==
-             0) {
+  } else if (propertyType.compare(IntegerVectorProperty::propertyTypename) == 0) {
     return getLocalProperty<IntegerVectorProperty>(propertyName);
   } else if (propertyType.compare(CoordVectorProperty::propertyTypename) == 0) {
     return getLocalProperty<CoordVectorProperty>(propertyName);
   } else if (propertyType.compare(ColorVectorProperty::propertyTypename) == 0) {
     return getLocalProperty<ColorVectorProperty>(propertyName);
-  } else if (propertyType.compare(BooleanVectorProperty::propertyTypename) ==
-             0) {
+  } else if (propertyType.compare(BooleanVectorProperty::propertyTypename) == 0) {
     return getLocalProperty<BooleanVectorProperty>(propertyName);
   } else if (propertyType.compare(SizeVectorProperty::propertyTypename) == 0) {
     return getLocalProperty<SizeVectorProperty>(propertyName);
@@ -1066,21 +1030,17 @@ PropertyInterface *Graph::getProperty(const std::string &propertyName,
     return getProperty<SizeProperty>(propertyName);
   } else if (propertyType.compare(BooleanProperty::propertyTypename) == 0) {
     return getProperty<BooleanProperty>(propertyName);
-  } else if (propertyType.compare(DoubleVectorProperty::propertyTypename) ==
-             0) {
+  } else if (propertyType.compare(DoubleVectorProperty::propertyTypename) == 0) {
     return getProperty<DoubleVectorProperty>(propertyName);
-  } else if (propertyType.compare(StringVectorProperty::propertyTypename) ==
-             0) {
+  } else if (propertyType.compare(StringVectorProperty::propertyTypename) == 0) {
     return getProperty<StringVectorProperty>(propertyName);
-  } else if (propertyType.compare(IntegerVectorProperty::propertyTypename) ==
-             0) {
+  } else if (propertyType.compare(IntegerVectorProperty::propertyTypename) == 0) {
     return getProperty<IntegerVectorProperty>(propertyName);
   } else if (propertyType.compare(CoordVectorProperty::propertyTypename) == 0) {
     return getProperty<CoordVectorProperty>(propertyName);
   } else if (propertyType.compare(ColorVectorProperty::propertyTypename) == 0) {
     return getProperty<ColorVectorProperty>(propertyName);
-  } else if (propertyType.compare(BooleanVectorProperty::propertyTypename) ==
-             0) {
+  } else if (propertyType.compare(BooleanVectorProperty::propertyTypename) == 0) {
     return getProperty<BooleanVectorProperty>(propertyName);
   } else if (propertyType.compare(SizeVectorProperty::propertyTypename) == 0) {
     return getProperty<SizeVectorProperty>(propertyName);
@@ -1111,27 +1071,21 @@ static void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping,
   }
 }
 //====================================================================================
-void updatePropertiesUngroup(Graph *graph, node metanode,
-                             GraphProperty *clusterInfo) {
+void updatePropertiesUngroup(Graph *graph, node metanode, GraphProperty *clusterInfo) {
   if (clusterInfo->getNodeValue(metanode) == nullptr)
     return; // The metanode is not a metanode.
 
-  LayoutProperty *graphLayout =
-      graph->getProperty<LayoutProperty>(layoutProperty);
+  LayoutProperty *graphLayout = graph->getProperty<LayoutProperty>(layoutProperty);
   SizeProperty *graphSize = graph->getProperty<SizeProperty>(sizeProperty);
-  DoubleProperty *graphRot =
-      graph->getProperty<DoubleProperty>(rotationProperty);
+  DoubleProperty *graphRot = graph->getProperty<DoubleProperty>(rotationProperty);
   const Size &size = graphSize->getNodeValue(metanode);
   const Coord &pos = graphLayout->getNodeValue(metanode);
   const double &rot = graphRot->getNodeValue(metanode);
   Graph *cluster = clusterInfo->getNodeValue(metanode);
-  LayoutProperty *clusterLayout =
-      cluster->getProperty<LayoutProperty>(layoutProperty);
+  LayoutProperty *clusterLayout = cluster->getProperty<LayoutProperty>(layoutProperty);
   SizeProperty *clusterSize = cluster->getProperty<SizeProperty>(sizeProperty);
-  DoubleProperty *clusterRot =
-      cluster->getProperty<DoubleProperty>(rotationProperty);
-  BoundingBox &&box =
-      tlp::computeBoundingBox(cluster, clusterLayout, clusterSize, clusterRot);
+  DoubleProperty *clusterRot = cluster->getProperty<DoubleProperty>(rotationProperty);
+  BoundingBox &&box = tlp::computeBoundingBox(cluster, clusterLayout, clusterSize, clusterRot);
   double width = box.width();
   double height = box.height();
   double depth = box.depth();
@@ -1175,15 +1129,13 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
 
   // propagate all cluster local properties
   for (PropertyInterface *property : cluster->getLocalObjectProperties()) {
-    if (property == graphLayout || property == graphSize ||
-        property == graphRot)
+    if (property == graphLayout || property == graphSize || property == graphRot)
       continue;
 
     PropertyInterface *graphProp = nullptr;
 
     if (graph->existProperty(property->getName()) &&
-        graph->getProperty(property->getName())->getTypename() ==
-            property->getTypename())
+        graph->getProperty(property->getName())->getTypename() == property->getTypename())
       graphProp = graph->getProperty(property->getName());
     else
       graphProp = property->clonePrototype(graph, property->getName());
@@ -1222,8 +1174,7 @@ Graph *Graph::addCloneSubGraph(const std::string &name, bool addSibling,
 
   if (addSibling && addSiblingProperties) {
     for (PropertyInterface *prop : getLocalObjectProperties()) {
-      PropertyInterface *cloneProp =
-          prop->clonePrototype(clone, prop->getName());
+      PropertyInterface *cloneProp = prop->clonePrototype(clone, prop->getName());
       tlp::debug() << "clone property " << prop->getName().c_str() << std::endl;
       cloneProp->copy(prop);
     }
@@ -1232,8 +1183,8 @@ Graph *Graph::addCloneSubGraph(const std::string &name, bool addSibling,
   return clone;
 }
 //=========================================================
-Graph *Graph::inducedSubGraph(const std::vector<node> &nodes,
-                              Graph *parentSubGraph, const string &name) {
+Graph *Graph::inducedSubGraph(const std::vector<node> &nodes, Graph *parentSubGraph,
+                              const string &name) {
   if (parentSubGraph == nullptr)
     parentSubGraph = this;
 
@@ -1265,20 +1216,16 @@ Graph *Graph::inducedSubGraph(BooleanProperty *selection, Graph *parentSubGraph,
   return inducedSubGraph(nodes, parentSubGraph, name);
 }
 //====================================================================================
-node Graph::createMetaNode(const std::vector<node> &nodes, bool multiEdges,
-                           bool delAllEdge) {
+node Graph::createMetaNode(const std::vector<node> &nodes, bool multiEdges, bool delAllEdge) {
   if (getRoot() == this) {
     tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
-    tlp::warning()
-        << "\t Error: Could not group a set of nodes in the root graph"
-        << std::endl;
+    tlp::warning() << "\t Error: Could not group a set of nodes in the root graph" << std::endl;
     return node();
   }
 
   if (nodes.empty()) {
     tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
-    tlp::warning() << '\t' << "Warning: Creation of an empty metagraph"
-                   << std::endl;
+    tlp::warning() << '\t' << "Warning: Creation of an empty metagraph" << std::endl;
   }
 
   // create an induced brother sub graph
@@ -1306,13 +1253,11 @@ node Graph::createMetaNode(const std::vector<node> &nodes, bool multiEdges,
 node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   if (getRoot() == this) {
     tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
-    tlp::warning() << "\t Error: Could not create a meta node in the root graph"
-                   << std::endl;
+    tlp::warning() << "\t Error: Could not create a meta node in the root graph" << std::endl;
     return node();
   }
 
-  GraphProperty *metaInfo =
-      static_cast<GraphAbstract *>(getRoot())->getMetaGraphProperty();
+  GraphProperty *metaInfo = static_cast<GraphAbstract *>(getRoot())->getMetaGraphProperty();
   node metaNode = addNode();
   metaInfo->setNodeValue(metaNode, subGraph);
   Observable::holdObservers();
@@ -1431,8 +1376,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 
 // map all nodes or embedded nodes (nodes of meta node subgraph)
 // of a subgraph to metaNode
-static void mapSubGraphNodes(Graph *sg, node metaNode,
-                             MutableContainer<node> &mappingM,
+static void mapSubGraphNodes(Graph *sg, node metaNode, MutableContainer<node> &mappingM,
                              GraphProperty *metaInfo) {
   for (auto n : sg->nodes()) {
     mappingM.set(n.id, metaNode);
@@ -1446,14 +1390,11 @@ static void mapSubGraphNodes(Graph *sg, node metaNode,
 void Graph::openMetaNode(node metaNode, bool updateProperties) {
   if (getRoot() == this) {
     tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
-    tlp::warning()
-        << "\t Error: Could not ungroup a meta node in the root graph"
-        << std::endl;
+    tlp::warning() << "\t Error: Could not ungroup a meta node in the root graph" << std::endl;
     return;
   }
 
-  GraphProperty *metaInfo =
-      static_cast<GraphAbstract *>(getRoot())->getMetaGraphProperty();
+  GraphProperty *metaInfo = static_cast<GraphAbstract *>(getRoot())->getMetaGraphProperty();
   Graph *metaGraph = metaInfo->getNodeValue(metaNode);
 
   if (metaGraph == nullptr)
@@ -1519,8 +1460,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
       if (!super->isElement(metaEdge))
         continue;
       Color metaColor = graphColors->getEdgeValue(metaEdge);
-      std::unordered_map<node, std::unordered_map<node, set<edge>>>
-          newMetaEdges;
+      std::unordered_map<node, std::unordered_map<node, set<edge>>> newMetaEdges;
 
       for (auto e : getEdgeMetaInfo(metaEdge)) {
         auto eEnds = super->ends(e);
@@ -1598,8 +1538,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
     std::unordered_map<node, Color> metaEdgeToColor;
 
     for (auto metaEdge : super->getInOutEdges(metaNode)) {
-      metaEdgeToColor[opposite(metaEdge, metaNode)] =
-          graphColors->getEdgeValue(metaEdge);
+      metaEdgeToColor[opposite(metaEdge, metaNode)] = graphColors->getEdgeValue(metaEdge);
     }
 
     // Remove the metagraph from the hierarchy and remove the metanode
@@ -1634,22 +1573,19 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
           continue;
       }
 
-      if (metaInfo->getNodeValue(src) == nullptr &&
-          metaInfo->getNodeValue(tgt) == nullptr) {
+      if (metaInfo->getNodeValue(src) == nullptr && metaInfo->getNodeValue(tgt) == nullptr) {
         addEdge(e);
         continue;
       }
 
-      if ((edges.find(src) == edges.end()) ||
-          (edges[src].find(tgt) == edges[src].end())) {
+      if ((edges.find(src) == edges.end()) || (edges[src].find(tgt) == edges[src].end())) {
         edges[src].insert(tgt);
 
         if (!existEdge(src, tgt).isValid()) {
           edge addedEdge = addEdge(src, tgt);
           graphColors->setEdgeValue(addedEdge, edgeColor);
         } else
-          tlp::error() << __PRETTY_FUNCTION__ << ": bug exist edge 1"
-                       << std::endl;
+          tlp::error() << __PRETTY_FUNCTION__ << ": bug exist edge 1" << std::endl;
       }
     }
   }
@@ -1663,23 +1599,21 @@ struct MetaEdge {
 };
 
 namespace std {
-template <> struct less<MetaEdge> {
+template <>
+struct less<MetaEdge> {
   bool operator()(const MetaEdge &c, const MetaEdge &d) const {
     /*if (c.source<d.source) return true;
     if (c.source>d.source) return false;
     if (c.target<d.target) return true;
     if (c.target>d.target) return false;
     return false;*/
-    return (c.source < d.source) ||
-           ((c.source == d.source) && (c.target < d.target));
+    return (c.source < d.source) || ((c.source == d.source) && (c.target < d.target));
   }
 };
 } // namespace std
 
-void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
-                            vector<node> &metaNodes) {
-  GraphProperty *metaInfo =
-      static_cast<GraphAbstract *>(getRoot())->getMetaGraphProperty();
+void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector<node> &metaNodes) {
+  GraphProperty *metaInfo = static_cast<GraphAbstract *>(getRoot())->getMetaGraphProperty();
   unordered_map<edge, set<edge>> eMapping;
   Observable::holdObservers();
   {
@@ -1694,8 +1628,7 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
         metaNodes.push_back(metaN);
         metaInfo->setNodeValue(metaN, its);
         // compute meta node values
-        for (PropertyInterface *property :
-             quotientGraph->getObjectProperties()) {
+        for (PropertyInterface *property : quotientGraph->getObjectProperties()) {
           property->computeMetaValue(metaN, its, quotientGraph);
         }
         for (auto n : its->nodes()) {
@@ -1772,38 +1705,32 @@ Graph *Graph::getNthSubGraph(unsigned int n) const {
 }
 
 const std::string &GraphEvent::getPropertyName() const {
-  assert((evtType > TLP_AFTER_DEL_SUBGRAPH &&
-          evtType < TLP_BEFORE_SET_ATTRIBUTE) ||
+  assert((evtType > TLP_AFTER_DEL_SUBGRAPH && evtType < TLP_BEFORE_SET_ATTRIBUTE) ||
          evtType > TLP_REMOVE_ATTRIBUTE);
 
-  if (evtType == TLP_BEFORE_RENAME_LOCAL_PROPERTY ||
-      evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY)
+  if (evtType == TLP_BEFORE_RENAME_LOCAL_PROPERTY || evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY)
     return info.renamedProp->first->getName();
 
   return *(info.name);
 }
 
 void Graph::addNodes(const std::vector<node> &nodes) {
-  StlIterator<node, vector<node>::const_iterator> vIterator(nodes.begin(),
-                                                            nodes.end());
+  StlIterator<node, vector<node>::const_iterator> vIterator(nodes.begin(), nodes.end());
   addNodes(&vIterator);
 }
 
 void Graph::delNodes(const std::vector<node> &nodes, bool deleteInAllGraphs) {
-  StlIterator<node, vector<node>::const_iterator> vIterator(nodes.begin(),
-                                                            nodes.end());
+  StlIterator<node, vector<node>::const_iterator> vIterator(nodes.begin(), nodes.end());
   delNodes(&vIterator, deleteInAllGraphs);
 }
 
 void Graph::addEdges(const std::vector<edge> &edges) {
-  StlIterator<edge, vector<edge>::const_iterator> vIterator(edges.begin(),
-                                                            edges.end());
+  StlIterator<edge, vector<edge>::const_iterator> vIterator(edges.begin(), edges.end());
   addEdges(&vIterator);
 }
 
 void Graph::delEdges(const std::vector<edge> &edges, bool deleteInAllGraphs) {
-  StlIterator<edge, vector<edge>::const_iterator> vIterator(edges.begin(),
-                                                            edges.end());
+  StlIterator<edge, vector<edge>::const_iterator> vIterator(edges.begin(), edges.end());
   delEdges(&vIterator, deleteInAllGraphs);
 }
 
@@ -1832,7 +1759,9 @@ struct DescendantGraphsIterator : public Iterator<Graph *> {
     }
   }
 
-  bool hasNext() override { return current != nullptr; }
+  bool hasNext() override {
+    return current != nullptr;
+  }
 
   Graph *next() override {
     if (current) {
@@ -1876,8 +1805,7 @@ Iterator<Graph *> *Graph::getDescendantGraphs() const {
 GraphEvent::~GraphEvent() {
   if (evtType > TLP_AFTER_DEL_SUBGRAPH) {
     // need to cleanup name if any
-    if (evtType == TLP_BEFORE_RENAME_LOCAL_PROPERTY ||
-        evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY)
+    if (evtType == TLP_BEFORE_RENAME_LOCAL_PROPERTY || evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY)
       delete info.renamedProp;
     else
       delete info.name;
@@ -1899,12 +1827,10 @@ const std::vector<node> &GraphEvent::getNodes() const {
     addedNodes->reserve(nbElts);
     const std::vector<node> &nodes = getGraph()->nodes();
     // copy new graph nodes in addedNodes reserved memory
-    memcpy(addedNodes->data(), &nodes[nodes.size() - nbElts],
-           nbElts * sizeof(node));
+    memcpy(addedNodes->data(), &nodes[nodes.size() - nbElts], nbElts * sizeof(node));
     // set addedNodes size using underlying vector pointers
     // to avoid unnecessary multiple constructeur calls
-    reinterpret_cast<node **>(addedNodes)[1] =
-        reinterpret_cast<node **>(addedNodes)[0] + nbElts;
+    reinterpret_cast<node **>(addedNodes)[1] = reinterpret_cast<node **>(addedNodes)[0] + nbElts;
     // record allocated vector in vectInfos
     const_cast<GraphEvent *>(this)->vectInfos.addedNodes = addedNodes;
   }
@@ -1921,12 +1847,10 @@ const std::vector<edge> &GraphEvent::getEdges() const {
     addedEdges->reserve(nbElts);
     const std::vector<edge> &edges = getGraph()->edges();
     // copy new graph edges in addedEdges reserved memory
-    memcpy(addedEdges->data(), &edges[edges.size() - nbElts],
-           nbElts * sizeof(edge));
+    memcpy(addedEdges->data(), &edges[edges.size() - nbElts], nbElts * sizeof(edge));
     // set addedEdges size using underlying vector pointers
     // to avoid unnecessary multiple constructeur calls
-    reinterpret_cast<edge **>(addedEdges)[1] =
-        reinterpret_cast<edge **>(addedEdges)[0] + nbElts;
+    reinterpret_cast<edge **>(addedEdges)[1] = reinterpret_cast<edge **>(addedEdges)[0] + nbElts;
     // record allocated vector in vectInfos
     const_cast<GraphEvent *>(this)->vectInfos.addedEdges = addedEdges;
   }

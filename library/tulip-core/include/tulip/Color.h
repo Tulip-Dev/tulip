@@ -34,8 +34,7 @@ public:
                const unsigned char blue = 0, const unsigned char alpha = 255);
   ///
   inline void set(const unsigned char red = 0, const unsigned char green = 0,
-                  const unsigned char blue = 0,
-                  const unsigned char alpha = 255);
+                  const unsigned char blue = 0, const unsigned char alpha = 255);
   ///
   inline float getRGL() const;
   ///
@@ -162,11 +161,10 @@ TLP_SCOPE std::ostream &operator<<(std::ostream &os, const tlp::Color &);
 TLP_SCOPE std::istream &operator>>(std::istream &is, tlp::Color &);
 } // namespace tlp
 
-tlp::Color::Color(const tlp::Vector<unsigned char, 4> &v)
-    : tlp::Vector<unsigned char, 4>(v) {}
+tlp::Color::Color(const tlp::Vector<unsigned char, 4> &v) : tlp::Vector<unsigned char, 4>(v) {}
 
-tlp::Color::Color(const unsigned char red, const unsigned char green,
-                  const unsigned char blue, const unsigned char alpha) {
+tlp::Color::Color(const unsigned char red, const unsigned char green, const unsigned char blue,
+                  const unsigned char alpha) {
   set(red, green, blue, alpha);
 }
 
@@ -178,15 +176,31 @@ void tlp::Color::set(unsigned char red, unsigned char green, unsigned char blue,
   (*this)[3] = alpha;
 }
 
-unsigned char tlp::Color::getR() const { return (*this)[0]; }
-unsigned char tlp::Color::getG() const { return (*this)[1]; }
-unsigned char tlp::Color::getB() const { return (*this)[2]; }
-unsigned char tlp::Color::getA() const { return (*this)[3]; }
+unsigned char tlp::Color::getR() const {
+  return (*this)[0];
+}
+unsigned char tlp::Color::getG() const {
+  return (*this)[1];
+}
+unsigned char tlp::Color::getB() const {
+  return (*this)[2];
+}
+unsigned char tlp::Color::getA() const {
+  return (*this)[3];
+}
 
-float tlp::Color::getRGL() const { return float((*this)[0] / 255.0); }
-float tlp::Color::getGGL() const { return float((*this)[1] / 255.0); }
-float tlp::Color::getBGL() const { return float((*this)[2] / 255.0); }
-float tlp::Color::getAGL() const { return float((*this)[3] / 255.0); }
+float tlp::Color::getRGL() const {
+  return float((*this)[0] / 255.0);
+}
+float tlp::Color::getGGL() const {
+  return float((*this)[1] / 255.0);
+}
+float tlp::Color::getBGL() const {
+  return float((*this)[2] / 255.0);
+}
+float tlp::Color::getAGL() const {
+  return float((*this)[3] / 255.0);
+}
 float *tlp::Color::getGL() const {
   float *result = new float[4];
   result[0] = getRGL();
@@ -196,13 +210,22 @@ float *tlp::Color::getGL() const {
   return result;
 }
 
-void tlp::Color::setR(unsigned char red) { (*this)[0] = red; }
-void tlp::Color::setG(unsigned char green) { (*this)[1] = green; }
-void tlp::Color::setB(unsigned char blue) { (*this)[2] = blue; }
-void tlp::Color::setA(unsigned char alpha) { (*this)[3] = alpha; }
+void tlp::Color::setR(unsigned char red) {
+  (*this)[0] = red;
+}
+void tlp::Color::setG(unsigned char green) {
+  (*this)[1] = green;
+}
+void tlp::Color::setB(unsigned char blue) {
+  (*this)[2] = blue;
+}
+void tlp::Color::setA(unsigned char alpha) {
+  (*this)[3] = alpha;
+}
 
 namespace std {
-template <> struct hash<tlp::Color> {
+template <>
+struct hash<tlp::Color> {
   inline std::size_t operator()(const tlp::Color &c) const {
     return hash_vector(c);
   }

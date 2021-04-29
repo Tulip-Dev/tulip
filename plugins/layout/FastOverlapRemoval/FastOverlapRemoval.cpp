@@ -17,9 +17,9 @@
  *
  */
 #include <tulip/DoubleProperty.h>
-#include <tulip/GraphParallelTools.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringCollection.h>
+#include <tulip/GraphParallelTools.h>
 
 #include "FastOverlapRemoval.h"
 #include "generate-constraints.h"
@@ -64,8 +64,7 @@ static const char *overlapRemovalTypeValuesDescription =
 
 FastOverlapRemoval::FastOverlapRemoval(const tlp::PluginContext *context)
     : tlp::LayoutAlgorithm(context) {
-  addInParameter<StringCollection>("overlap removal type", paramHelp[0],
-                                   OVERLAP_TYPE, true,
+  addInParameter<StringCollection>("overlap removal type", paramHelp[0], OVERLAP_TYPE, true,
                                    overlapRemovalTypeValuesDescription);
   addInParameter<LayoutProperty>("layout", paramHelp[1], "viewLayout");
   addInParameter<SizeProperty>("bounding box", paramHelp[2], "viewSize");
@@ -136,8 +135,7 @@ bool FastOverlapRemoval::run() {
 
   for (float passIndex = 1; passIndex <= nbPasses; ++passIndex) {
     // initialization
-    TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node &curNode,
-                                                  unsigned int i) {
+    TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node &curNode, unsigned int i) {
       Size sz = viewSize->getNodeValue(curNode) * passIndex / float(nbPasses);
       const Coord &pos = viewLayout->getNodeValue(curNode);
       double curRot = viewRot->getNodeValue(curNode);
@@ -151,8 +149,7 @@ bool FastOverlapRemoval::run() {
       double minX = pos.getX() - rotSize.getW() / 2.0;
       double minY = pos.getY() - rotSize.getH() / 2.0;
 
-      nodeRectangles[i] =
-          vpsc::Rectangle(minX, maxX, minY, maxY, xBorder, yBorder);
+      nodeRectangles[i] = vpsc::Rectangle(minX, maxX, minY, maxY, xBorder, yBorder);
     });
 
     // actually apply fast overlap removal
@@ -165,8 +162,7 @@ bool FastOverlapRemoval::run() {
     }
 
     for (unsigned int i = 0; i < nbNodes; ++i) {
-      Coord newPos(nodeRectangles[i].getCentreX(),
-                   nodeRectangles[i].getCentreY(), 0.0);
+      Coord newPos(nodeRectangles[i].getCentreX(), nodeRectangles[i].getCentreY(), 0.0);
       LayoutAlgorithm::result->setNodeValue(nodes[i], newPos);
     }
   }

@@ -16,23 +16,22 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/GlGraphComposite.h>
-#include <tulip/GlGraphHighDetailsRenderer.h>
-#include <tulip/GlScene.h>
-#include <tulip/GlTools.h>
-#include <tulip/GlVertexArrayManager.h>
-#include <tulip/GlXMLTools.h>
 #include <tulip/GraphProperty.h>
+#include <tulip/GlXMLTools.h>
+#include <tulip/GlTools.h>
+#include <tulip/GlScene.h>
+#include <tulip/GlVertexArrayManager.h>
+#include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/OcclusionTest.h>
+#include <tulip/GlGraphHighDetailsRenderer.h>
 
 using namespace std;
 
 namespace tlp {
 
 GlGraphComposite::GlGraphComposite(Graph *graph, GlGraphRenderer *graphRenderer)
-    : inputData(graph, &parameters), graphRenderer(graphRenderer),
-      nodesModified(true) {
+    : inputData(graph, &parameters), graphRenderer(graphRenderer), nodesModified(true) {
   if (graphRenderer == nullptr) {
     this->graphRenderer = new GlGraphHighDetailsRenderer(&inputData);
   }
@@ -42,9 +41,7 @@ GlGraphComposite::GlGraphComposite(Graph *graph, GlGraphRenderer *graphRenderer)
   } else {
     rootGraph = graph->getRoot();
     graph->addListener(this);
-    graph->getRoot()
-        ->getProperty<GraphProperty>("viewMetaGraph")
-        ->addListener(this);
+    graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph")->addListener(this);
 
     for (auto n : graph->nodes()) {
       if (graph->getNodeMetaInfo(n))
@@ -62,9 +59,7 @@ GlGraphComposite::GlGraphComposite(Graph *graph, GlScene *scene)
   } else {
     rootGraph = graph->getRoot();
     graph->addListener(this);
-    graph->getRoot()
-        ->getProperty<GraphProperty>("viewMetaGraph")
-        ->addListener(this);
+    graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph")->addListener(this);
 
     for (auto n : graph->nodes()) {
       if (graph->getNodeMetaInfo(n))
@@ -73,7 +68,9 @@ GlGraphComposite::GlGraphComposite(Graph *graph, GlScene *scene)
   }
 }
 
-GlGraphComposite::~GlGraphComposite() { delete graphRenderer; }
+GlGraphComposite::~GlGraphComposite() {
+  delete graphRenderer;
+}
 
 void GlGraphComposite::acceptVisitor(GlSceneVisitor *visitor) {
   GlBoundingBoxSceneVisitor bbVisitor(&inputData);
@@ -93,9 +90,8 @@ void GlGraphComposite::draw(float lod, Camera *camera) {
   graphRenderer->draw(lod, camera);
 }
 //===================================================================
-void GlGraphComposite::selectEntities(
-    Camera *camera, RenderingEntitiesFlag type, int x, int y, int w, int h,
-    vector<SelectedEntity> &selectedEntities) {
+void GlGraphComposite::selectEntities(Camera *camera, RenderingEntitiesFlag type, int x, int y,
+                                      int w, int h, vector<SelectedEntity> &selectedEntities) {
   graphRenderer->selectEntities(camera, type, x, y, w, h, selectedEntities);
 }
 //===================================================================
@@ -103,8 +99,7 @@ const GlGraphRenderingParameters &GlGraphComposite::getRenderingParameters() {
   return parameters;
 }
 //===================================================================
-void GlGraphComposite::setRenderingParameters(
-    const GlGraphRenderingParameters &parameter) {
+void GlGraphComposite::setRenderingParameters(const GlGraphRenderingParameters &parameter) {
   if (parameters.isElementOrdered() != parameter.isElementOrdered()) {
     parameters = parameter;
     graphRenderer->setGraphModified(true);
@@ -117,7 +112,9 @@ GlGraphRenderingParameters *GlGraphComposite::getRenderingParametersPointer() {
   return &parameters;
 }
 //===================================================================
-GlGraphInputData *GlGraphComposite::getInputData() { return &inputData; }
+GlGraphInputData *GlGraphComposite::getInputData() {
+  return &inputData;
+}
 //====================================================
 void GlGraphComposite::getXML(string &outString) {
   GlXMLTools::createProperty(outString, "type", "GlGraphComposite", "GlEntity");
@@ -154,11 +151,9 @@ void GlGraphComposite::treatEvent(const Event &evt) {
       inputData.graph = nullptr;
     }
   } else {
-    const PropertyEvent *propertyEvent =
-        dynamic_cast<const PropertyEvent *>(&evt);
+    const PropertyEvent *propertyEvent = dynamic_cast<const PropertyEvent *>(&evt);
 
-    if (propertyEvent &&
-        propertyEvent->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE) {
+    if (propertyEvent && propertyEvent->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE) {
       nodesModified = true;
     }
   }

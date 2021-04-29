@@ -17,23 +17,22 @@
  *
  */
 
-#include <tulip/Camera.h>
-#include <tulip/GlMainWidget.h>
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/Camera.h>
 
 #include <QMouseEvent>
 
-#include "ScatterPlot2D.h"
 #include "ScatterPlot2DView.h"
 #include "ScatterPlot2DViewNavigator.h"
+#include "ScatterPlot2D.h"
 
 using namespace std;
 
 namespace tlp {
 
 ScatterPlot2DViewNavigator::ScatterPlot2DViewNavigator()
-    : scatterPlot2dView(nullptr), selectedScatterPlotOverview(nullptr),
-      glWidget(nullptr) {}
+    : scatterPlot2dView(nullptr), selectedScatterPlotOverview(nullptr), glWidget(nullptr) {}
 
 ScatterPlot2DViewNavigator::~ScatterPlot2DViewNavigator() {}
 
@@ -52,8 +51,7 @@ bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
       glWidget->setMouseTracking(true);
     }
 
-    if (!scatterPlot2dView->matrixViewSet() &&
-        !scatterPlot2dView->interactorsEnabled()) {
+    if (!scatterPlot2dView->matrixViewSet() && !scatterPlot2dView->interactorsEnabled()) {
       scatterPlot2dView->toggleInteractors(true);
     }
 
@@ -62,9 +60,8 @@ bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
       int x = glWidget->width() - me->x();
       int y = me->y();
       Coord screenCoords(x, y, 0.0f);
-      Coord sceneCoords(
-          glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
-              glWidget->screenToViewport(screenCoords)));
+      Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
+          glWidget->screenToViewport(screenCoords)));
       selectedScatterPlotOverview = getOverviewUnderPointer(sceneCoords);
       return true;
     } else if (e->type() == QEvent::MouseButtonDblClick) {
@@ -72,18 +69,16 @@ bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
           !selectedScatterPlotOverview->overviewGenerated()) {
         scatterPlot2dView->generateScatterPlot(selectedScatterPlotOverview);
         glWidget->draw();
-      } else if (selectedScatterPlotOverview != nullptr &&
-                 scatterPlot2dView->matrixViewSet()) {
+      } else if (selectedScatterPlotOverview != nullptr && scatterPlot2dView->matrixViewSet()) {
         QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(
             glWidget, selectedScatterPlotOverview->getBoundingBox());
         zoomAndPanAnimator.animateZoomAndPan();
-        scatterPlot2dView->switchFromMatrixToDetailView(
-            selectedScatterPlotOverview, true);
+        scatterPlot2dView->switchFromMatrixToDetailView(selectedScatterPlotOverview, true);
         selectedScatterPlotOverview = nullptr;
       } else if (!scatterPlot2dView->matrixViewSet()) {
         scatterPlot2dView->switchFromDetailViewToMatrixView();
-        QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(
-            glWidget, scatterPlot2dView->getMatrixBoundingBox());
+        QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget,
+                                                       scatterPlot2dView->getMatrixBoundingBox());
         zoomAndPanAnimator.animateZoomAndPan();
       }
 
@@ -94,17 +89,13 @@ bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
   return false;
 }
 
-ScatterPlot2D *
-ScatterPlot2DViewNavigator::getOverviewUnderPointer(const Coord &sceneCoords) {
-  vector<ScatterPlot2D *> &&overviews =
-      scatterPlot2dView->getSelectedScatterPlots();
+ScatterPlot2D *ScatterPlot2DViewNavigator::getOverviewUnderPointer(const Coord &sceneCoords) {
+  vector<ScatterPlot2D *> &&overviews = scatterPlot2dView->getSelectedScatterPlots();
 
   for (auto ov : overviews) {
     BoundingBox &&overviewBB = ov->getBoundingBox();
-    if (sceneCoords.getX() >= overviewBB[0][0] &&
-        sceneCoords.getX() <= overviewBB[1][0] &&
-        sceneCoords.getY() >= overviewBB[0][1] &&
-        sceneCoords.getY() <= overviewBB[1][1])
+    if (sceneCoords.getX() >= overviewBB[0][0] && sceneCoords.getX() <= overviewBB[1][0] &&
+        sceneCoords.getY() >= overviewBB[0][1] && sceneCoords.getY() <= overviewBB[1][1])
       return ov;
   }
 

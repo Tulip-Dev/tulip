@@ -30,8 +30,7 @@ using namespace std;
 namespace tlp {
 
 SimpleStringsListSelectionWidget::SimpleStringsListSelectionWidget(
-    QWidget *parent, const unsigned int maxSelectedStringsListSize,
-    bool orderable)
+    QWidget *parent, const unsigned int maxSelectedStringsListSize, bool orderable)
     : QWidget(parent), _ui(new Ui::SimpleStringsListSelectionData()),
       maxSelectedStringsListSize(maxSelectedStringsListSize) {
 
@@ -50,10 +49,8 @@ SimpleStringsListSelectionWidget::SimpleStringsListSelectionWidget(
     connect(_ui->downButton, SIGNAL(clicked()), this, SLOT(pressButtonDown()));
   } else
     delete _ui->upDownLayout;
-  connect(_ui->selectButton, SIGNAL(clicked()), this,
-          SLOT(pressButtonSelectAll()));
-  connect(_ui->unselectButton, SIGNAL(clicked()), this,
-          SLOT(pressButtonUnselectAll()));
+  connect(_ui->selectButton, SIGNAL(clicked()), this, SLOT(pressButtonSelectAll()));
+  connect(_ui->unselectButton, SIGNAL(clicked()), this, SLOT(pressButtonUnselectAll()));
 }
 
 SimpleStringsListSelectionWidget::~SimpleStringsListSelectionWidget() {
@@ -63,15 +60,14 @@ SimpleStringsListSelectionWidget::~SimpleStringsListSelectionWidget() {
 void SimpleStringsListSelectionWidget::setUnselectedStringsList(
     const std::vector<std::string> &unselectedStringsList) {
   for (unsigned int i = 0; i < unselectedStringsList.size(); ++i) {
-    QList<QListWidgetItem *> items = _ui->listWidget->findItems(
-        tlpStringToQString(unselectedStringsList[i]), Qt::MatchExactly);
+    QList<QListWidgetItem *> items =
+        _ui->listWidget->findItems(tlpStringToQString(unselectedStringsList[i]), Qt::MatchExactly);
 
     if (items.size() > 0) {
       items[0]->setFlags(items[0]->flags() | Qt::ItemIsUserCheckable);
       items[0]->setCheckState(Qt::Unchecked);
     } else {
-      QListWidgetItem *item =
-          new QListWidgetItem(tlpStringToQString(unselectedStringsList[i]));
+      QListWidgetItem *item = new QListWidgetItem(tlpStringToQString(unselectedStringsList[i]));
       item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
       item->setCheckState(Qt::Unchecked);
       _ui->listWidget->addItem(item);
@@ -87,15 +83,14 @@ void SimpleStringsListSelectionWidget::setSelectedStringsList(
       break;
     }
 
-    QList<QListWidgetItem *> items = _ui->listWidget->findItems(
-        tlpStringToQString(selectedStringsList[i]), Qt::MatchExactly);
+    QList<QListWidgetItem *> items =
+        _ui->listWidget->findItems(tlpStringToQString(selectedStringsList[i]), Qt::MatchExactly);
 
     if (items.size() > 0) {
       items[0]->setFlags(items[0]->flags() | Qt::ItemIsUserCheckable);
       items[0]->setCheckState(Qt::Checked);
     } else {
-      QListWidgetItem *item =
-          new QListWidgetItem(tlpStringToQString(selectedStringsList[i]));
+      QListWidgetItem *item = new QListWidgetItem(tlpStringToQString(selectedStringsList[i]));
       item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
       item->setCheckState(Qt::Checked);
       _ui->listWidget->addItem(item);
@@ -146,8 +141,7 @@ void SimpleStringsListSelectionWidget::setMaxSelectedStringsListSize(
   }
 }
 
-vector<string>
-SimpleStringsListSelectionWidget::getSelectedStringsList() const {
+vector<string> SimpleStringsListSelectionWidget::getSelectedStringsList() const {
   vector<string> ret;
 
   for (int i = 0; i < _ui->listWidget->count(); ++i) {
@@ -161,8 +155,7 @@ SimpleStringsListSelectionWidget::getSelectedStringsList() const {
   return ret;
 }
 
-vector<string>
-SimpleStringsListSelectionWidget::getUnselectedStringsList() const {
+vector<string> SimpleStringsListSelectionWidget::getUnselectedStringsList() const {
   vector<string> ret;
 
   for (int i = 0; i < _ui->listWidget->count(); ++i) {
@@ -195,10 +188,8 @@ void SimpleStringsListSelectionWidget::pressButtonUp() {
     int row = _ui->listWidget->currentRow();
 
     if (row > 0) {
-      QListWidgetItem *item1 =
-          new QListWidgetItem(*(_ui->listWidget->currentItem()));
-      QListWidgetItem *item2 =
-          new QListWidgetItem(*(_ui->listWidget->item(row - 1)));
+      QListWidgetItem *item1 = new QListWidgetItem(*(_ui->listWidget->currentItem()));
+      QListWidgetItem *item2 = new QListWidgetItem(*(_ui->listWidget->item(row - 1)));
       delete _ui->listWidget->item(row - 1);
       delete _ui->listWidget->item(row - 1);
       _ui->listWidget->insertItem(row - 1, item2);
@@ -213,10 +204,8 @@ void SimpleStringsListSelectionWidget::pressButtonDown() {
     int row = _ui->listWidget->currentRow();
 
     if (row != -1 && row < (_ui->listWidget->count() - 1)) {
-      QListWidgetItem *item1 =
-          new QListWidgetItem(*(_ui->listWidget->currentItem()));
-      QListWidgetItem *item2 =
-          new QListWidgetItem(*(_ui->listWidget->item(row + 1)));
+      QListWidgetItem *item1 = new QListWidgetItem(*(_ui->listWidget->currentItem()));
+      QListWidgetItem *item2 = new QListWidgetItem(*(_ui->listWidget->item(row + 1)));
       delete _ui->listWidget->item(row);
       delete _ui->listWidget->item(row);
       _ui->listWidget->insertItem(row, item1);

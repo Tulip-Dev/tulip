@@ -29,11 +29,12 @@ SizeScaleConfigDialog::SizeScaleConfigDialog(QWidget *d)
           SLOT(minSizeValueChanged(double)));
   connect(_ui->maxSizeSpinBox, SIGNAL(valueChanged(double)), this,
           SLOT(maxSizeValueChanged(double)));
-  connect(_ui->viewSizeRB, SIGNAL(toggled(bool)), this,
-          SLOT(viewSizeRadioButtonToggled(bool)));
+  connect(_ui->viewSizeRB, SIGNAL(toggled(bool)), this, SLOT(viewSizeRadioButtonToggled(bool)));
 }
 
-SizeScaleConfigDialog::~SizeScaleConfigDialog() { delete _ui; }
+SizeScaleConfigDialog::~SizeScaleConfigDialog() {
+  delete _ui;
+}
 
 float SizeScaleConfigDialog::getMinSize() const {
   return float(_ui->minSizeSpinBox->value());

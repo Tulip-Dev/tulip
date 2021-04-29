@@ -17,18 +17,17 @@
  *
  */
 
-#include <QFont>
 #include <tulip/GraphElementModel.h>
 #include <tulip/TulipMetaTypes.h>
+#include <QFont>
 
-#include <tulip/FilterIterator.h>
 #include <tulip/Graph.h>
+#include <tulip/FilterIterator.h>
 
 using namespace tlp;
 using namespace std;
 
-GraphElementModel::GraphElementModel(Graph *graph, unsigned int id,
-                                     QObject *parent)
+GraphElementModel::GraphElementModel(Graph *graph, unsigned int id, QObject *parent)
     : TulipModel(parent), _graph(graph), _id(id) {}
 
 int GraphElementModel::rowCount(const QModelIndex &parent) const {
@@ -48,8 +47,7 @@ QModelIndex GraphElementModel::parent(const QModelIndex & /*child*/) const {
   return QModelIndex();
 }
 
-QVariant GraphElementModel::headerData(int section, Qt::Orientation orientation,
-                                       int role) const {
+QVariant GraphElementModel::headerData(int section, Qt::Orientation orientation, int role) const {
   if (orientation == Qt::Horizontal) {
     if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
       return headerText(_id);
@@ -62,8 +60,7 @@ QVariant GraphElementModel::headerData(int section, Qt::Orientation orientation,
   return TulipModel::headerData(section, orientation, role);
 }
 
-QModelIndex GraphElementModel::index(int row, int column,
-                                     const QModelIndex &parent) const {
+QModelIndex GraphElementModel::index(int row, int column, const QModelIndex &parent) const {
   if (!hasIndex(row, column, parent))
     return QModelIndex();
   return createIndex(row, column, getGraphProperties()[row]);
@@ -71,12 +68,9 @@ QModelIndex GraphElementModel::index(int row, int column,
 
 QVariant GraphElementModel::data(const QModelIndex &index, int role) const {
   if (role == PropertyNameRole) {
-    return static_cast<PropertyInterface *>(index.internalPointer())
-        ->getName()
-        .c_str();
+    return static_cast<PropertyInterface *>(index.internalPointer())->getName().c_str();
   } else if (role == Qt::DisplayRole) {
-    return value(_id,
-                 static_cast<PropertyInterface *>(index.internalPointer()));
+    return value(_id, static_cast<PropertyInterface *>(index.internalPointer()));
   } else if (role == TulipModel::PropertyRole) {
     return QVariant::fromValue<PropertyInterface *>(
         static_cast<PropertyInterface *>(index.internalPointer()));
@@ -90,8 +84,7 @@ Qt::ItemFlags GraphElementModel::flags(const QModelIndex &index) const {
   return TulipModel::flags(index) | Qt::ItemIsEditable;
 #else
 
-  if (static_cast<PropertyInterface *>(index.internalPointer())->getName() ==
-      "viewMetaGraph")
+  if (static_cast<PropertyInterface *>(index.internalPointer())->getName() == "viewMetaGraph")
     return TulipModel::flags(index);
 
   return TulipModel::flags(index) | Qt::ItemIsEditable;
@@ -103,8 +96,7 @@ QVector<PropertyInterface *> GraphElementModel::getGraphProperties() const {
   for (PropertyInterface *prop : _graph->getObjectProperties()) {
     auto propName = prop->getName();
     // an empty set indicates that all the properties are visible
-    if (!_visibleProps.empty() &&
-        (_visibleProps.find(propName) == _visibleProps.end()))
+    if (!_visibleProps.empty() && (_visibleProps.find(propName) == _visibleProps.end()))
       continue;
 #ifdef NDEBUG
     if (propName == "viewMetaGraph")
@@ -115,11 +107,9 @@ QVector<PropertyInterface *> GraphElementModel::getGraphProperties() const {
   return properties;
 }
 
-bool GraphNodeElementModel::setData(const QModelIndex &index,
-                                    const QVariant &value, int role) {
+bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if (role == Qt::EditRole) {
-    PropertyInterface *prop =
-        static_cast<PropertyInterface *>(index.internalPointer());
+    PropertyInterface *prop = static_cast<PropertyInterface *>(index.internalPointer());
     _graph->push();
     bool result = GraphModel::setNodeValue(_id, prop, value);
     _graph->popIfNoUpdates();
@@ -129,11 +119,9 @@ bool GraphNodeElementModel::setData(const QModelIndex &index,
   return false;
 }
 
-bool GraphEdgeElementModel::setData(const QModelIndex &index,
-                                    const QVariant &value, int role) {
+bool GraphEdgeElementModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if (role == Qt::EditRole) {
-    PropertyInterface *prop =
-        static_cast<PropertyInterface *>(index.internalPointer());
+    PropertyInterface *prop = static_cast<PropertyInterface *>(index.internalPointer());
     _graph->push();
     bool result = GraphModel::setEdgeValue(_id, prop, value);
     _graph->popIfNoUpdates();

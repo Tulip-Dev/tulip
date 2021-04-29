@@ -17,45 +17,42 @@
  *
  */
 
-#include <QDrag>
-#include <QMessageBox>
 #include <QMouseEvent>
+#include <QMessageBox>
+#include <QDrag>
 #include <QtCore/QTime>
 
-#include "AlgorithmRunnerItem.h"
 #include "GraphPerspective.h"
+#include "AlgorithmRunnerItem.h"
 #include "ui_AlgorithmRunnerItem.h"
 
-#include <tulip/BooleanProperty.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/ColorScalesManager.h>
-#include <tulip/GraphProperty.h>
 #include <tulip/GraphTest.h>
-#include <tulip/IntegerProperty.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/ParameterListModel.h>
-#include <tulip/PluginLister.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/StableIterator.h>
-#include <tulip/StringProperty.h>
-#include <tulip/TlpQtTools.h>
-#include <tulip/TulipItemDelegate.h>
-#include <tulip/TulipMetaTypes.h>
 #include <tulip/TulipMimes.h>
+#include <tulip/TulipItemDelegate.h>
+#include <tulip/ParameterListModel.h>
 #include <tulip/TulipSettings.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/StringProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/GraphProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/TulipMetaTypes.h>
+#include <tulip/ColorScalesManager.h>
+#include <tulip/StableIterator.h>
+#include <tulip/PluginLister.h>
 
 using namespace tlp;
 
-AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName,
-                                         bool darkBackground, QWidget *parent)
-    : QWidget(parent), _ui(new Ui::AlgorithmRunnerItem),
-      _pluginName(pluginName), _graph(nullptr), _storeResultAsLocal(true) {
+AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, bool darkBackground, QWidget *parent)
+    : QWidget(parent), _ui(new Ui::AlgorithmRunnerItem), _pluginName(pluginName), _graph(nullptr),
+      _storeResultAsLocal(true) {
   setProperty("algorithRunnerItem", true);
   _ui->setupUi(this);
-  connect(_ui->favoriteCheck, SIGNAL(toggled(bool)), this,
-          SIGNAL(favorized(bool)));
-  const Plugin &plugin =
-      PluginLister::pluginInformation(QStringToTlpString(pluginName));
+  connect(_ui->favoriteCheck, SIGNAL(toggled(bool)), this, SIGNAL(favorized(bool)));
+  const Plugin &plugin = PluginLister::pluginInformation(QStringToTlpString(pluginName));
   // split pluginName after the second word if needed
   QStringList words = pluginName.split(' ');
 
@@ -75,8 +72,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName,
   // set foreground colors according to contents background color
   if (darkBackground) {
     _ui->parameters->setStyleSheet("QHeaderView::section { color: white }");
-    _ui->playButton->setStyleSheet(
-        "QPushButton { color: white; text-align: left; } ");
+    _ui->playButton->setStyleSheet("QPushButton { color: white; text-align: left; } ");
   }
 
   if (!plugin.getParameters().empty()) {
@@ -89,16 +85,14 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName,
 
   // show info in tooltip only if it contains more than one word
   if (info.find(' ') != std::string::npos)
-    _ui->playButton->setToolTip(QString("%1:<br/><i>%2</i>")
-                                    .arg(tooltip)
-                                    .arg(tlp::tlpStringToQString(info)));
+    _ui->playButton->setToolTip(
+        QString("%1:<br/><i>%2</i>").arg(tooltip).arg(tlp::tlpStringToQString(info)));
   else
     _ui->playButton->setToolTip(tooltip);
 
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
 
-  connect(_ui->favoriteCheck, SIGNAL(stateChanged(int)), this,
-          SLOT(favoriteChanged(int)));
+  connect(_ui->favoriteCheck, SIGNAL(stateChanged(int)), this, SLOT(favoriteChanged(int)));
   // used to display plugin doc in a QMessageBox
   _ui->settingsButton->installEventFilter(this);
 }
@@ -112,11 +106,9 @@ void AlgorithmRunnerItem::setGraph(Graph *g) {
   _graph = g;
 
   if (_ui->parameters->model() != nullptr) {
-    ParameterListModel *model =
-        static_cast<ParameterListModel *>(_ui->parameters->model());
+    ParameterListModel *model = static_cast<ParameterListModel *>(_ui->parameters->model());
     DataSet dataSet = model->parametersValues();
-    for (const std::pair<std::string, tlp::DataType *> &it :
-         stableIterator(dataSet.getValues())) {
+    for (const std::pair<std::string, tlp::DataType *> &it : stableIterator(dataSet.getValues())) {
       if (it.second->isTulipProperty()) {
         dataSet.remove(it.first);
       }
@@ -132,16 +124,20 @@ void AlgorithmRunnerItem::setGraph(Graph *g) {
 
 void AlgorithmRunnerItem::setData(const DataSet &data) {
   initModel();
-  ParameterListModel *model =
-      static_cast<ParameterListModel *>(_ui->parameters->model());
+  ParameterListModel *model = static_cast<ParameterListModel *>(_ui->parameters->model());
   model->setParametersValues(data);
 }
 
-QString AlgorithmRunnerItem::name() const { return _pluginName; }
+QString AlgorithmRunnerItem::name() const {
+  return _pluginName;
+}
 
-tlp::Graph *AlgorithmRunnerItem::graph() const { return _graph; }
+tlp::Graph *AlgorithmRunnerItem::graph() const {
+  return _graph;
+}
 
-template <typename PROP> void asLocal(QVariant var, DataSet &data, Graph *g) {
+template <typename PROP>
+void asLocal(QVariant var, DataSet &data, Graph *g) {
   if (var.userType() == qMetaTypeId<PROP *>()) {
     PROP *prop = var.value<PROP *>();
     if (!prop) {
@@ -188,8 +184,7 @@ struct OutPropertyParam {
 
   static bool inUse;
 
-  OutPropertyParam(const std::string &pName)
-      : name(pName), dest(nullptr), tmp(nullptr) {}
+  OutPropertyParam(const std::string &pName) : name(pName), dest(nullptr), tmp(nullptr) {}
 
   ~OutPropertyParam() {
     if (!inUse)
@@ -220,8 +215,8 @@ public:
       }
 
       // restore initial properties
-      Perspective::typedInstance<GraphPerspective>()
-          ->setGlMainViewPropertiesForGraph(graph, outPropsMap);
+      Perspective::typedInstance<GraphPerspective>()->setGlMainViewPropertiesForGraph(graph,
+                                                                                      outPropsMap);
     }
   }
 
@@ -239,16 +234,15 @@ public:
 
       if (!outPropsMap.empty() &&
           // set temporary properties as drawing properties
-          (Perspective::typedInstance<GraphPerspective>()
-               ->setGlMainViewPropertiesForGraph(graph, outPropsMap) == false))
+          (Perspective::typedInstance<GraphPerspective>()->setGlMainViewPropertiesForGraph(
+               graph, outPropsMap) == false))
         // clear map if there is nothing to do
         outPropsMap.clear();
     }
 
     // draw with temporary computed properties
     if (!outPropsMap.empty()) {
-      Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(
-          graph, true, true);
+      Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(graph, true, true);
     }
   }
 };
@@ -268,16 +262,14 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
   Observable::holdObservers();
   DataSet originalDataSet =
-      static_cast<ParameterListModel *>(_ui->parameters->model())
-          ->parametersValues();
+      static_cast<ParameterListModel *>(_ui->parameters->model())->parametersValues();
 
   DataSet dataSet(originalDataSet);
 
   // ensure each input property
   // is a local one when it exits
   std::string algorithm = QStringToTlpString(_pluginName);
-  ParameterDescriptionList paramList =
-      PluginLister::getPluginParameters(algorithm);
+  ParameterDescriptionList paramList = PluginLister::getPluginParameters(algorithm);
   for (const ParameterDescription &desc : paramList.getParameters()) {
     if (desc.getDirection() == IN_PARAM) {
 
@@ -361,8 +353,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
     // clone it in a not registered (because unnamed)
     // temporary property
     outPropParam.tmp = outPropParam.dest
-                           ? outPropParam.dest->clonePrototype(
-                                 outPropParam.dest->getGraph(), "")
+                           ? outPropParam.dest->clonePrototype(outPropParam.dest->getGraph(), "")
                            : nullptr;
     // set the temporary as the destination property
     dataSet.set(desc.getName(), outPropParam.tmp);
@@ -390,8 +381,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
   // set preview handler if needed
   if (!outPropertyParams.empty())
-    progress->setPreviewHandler(
-        new AlgorithmPreviewHandler(g, outPropertyParams));
+    progress->setPreviewHandler(new AlgorithmPreviewHandler(g, outPropertyParams));
   else
     progress->showPreview(false);
 
@@ -435,9 +425,8 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
       if (opp.name == "result" && TulipSettings::isResultPropertyStored()) {
         // store the result property values in an automatically named property
-        std::string storedResultName = algorithm + " - " +
-                                       originalDataSet.toString() + "(" +
-                                       opp.dest->getName() + ")";
+        std::string storedResultName =
+            algorithm + " - " + originalDataSet.toString() + "(" + opp.dest->getName() + ")";
         PropertyInterface *storedResultProp =
             opp.dest->clonePrototype(opp.dest->getGraph(), storedResultName);
         storedResultProp->copy(opp.tmp);
@@ -449,8 +438,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
       std::stringstream log;
       log << algorithm.c_str() << " - " << dataSet.toString().c_str();
 
-      if (TulipSettings::logPluginCall() ==
-          TulipSettings::LogCallWithExecutionTime)
+      if (TulipSettings::logPluginCall() == TulipSettings::LogCallWithExecutionTime)
         log << ": " << spentTime << "ms";
 
       qDebug() << log.str().c_str();
@@ -471,8 +459,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
       delete dataType;
     }
 
-    ParameterListModel *model =
-        static_cast<ParameterListModel *>(_ui->parameters->model());
+    ParameterListModel *model = static_cast<ParameterListModel *>(_ui->parameters->model());
     model->setParametersValues(originalDataSet);
   }
 
@@ -500,15 +487,13 @@ void AlgorithmRunnerItem::mousePressEvent(QMouseEvent *ev) {
 
 void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
   if (!(ev->buttons() & Qt::LeftButton) ||
-      (ev->pos() - _dragStartPosition).manhattanLength() <
-          QApplication::startDragDistance()) {
+      (ev->pos() - _dragStartPosition).manhattanLength() < QApplication::startDragDistance()) {
     QWidget::mouseMoveEvent(ev);
     return;
   }
 
   QDrag *drag = new QDrag(this);
-  const Plugin &p =
-      PluginLister::pluginInformation(QStringToTlpString(_pluginName).c_str());
+  const Plugin &p = PluginLister::pluginInformation(QStringToTlpString(_pluginName).c_str());
   QPixmap icon(QPixmap(p.icon().c_str()).scaled(64, 64));
   QFont f;
   f.setBold(true);
@@ -516,18 +501,15 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
   int textHeight =
       metrics
           .boundingRect(0, 0, icon.width(), INT_MAX,
-                        Qt::AlignTop | Qt::AlignHCenter | Qt::TextWordWrap,
-                        _pluginName)
+                        Qt::AlignTop | Qt::AlignHCenter | Qt::TextWordWrap, _pluginName)
           .height();
   QPixmap pix(icon.width() + textHeight, icon.height() + textHeight);
   pix.fill(Qt::white);
   QPainter painter(&pix);
-  painter.drawPixmap(pix.width() / 2 - icon.width() / 2, 0, icon.width(),
-                     icon.height(), icon);
+  painter.drawPixmap(pix.width() / 2 - icon.width() / 2, 0, icon.width(), icon.height(), icon);
   painter.setFont(f);
   painter.drawText(0, icon.height(), pix.width(), pix.height() - icon.height(),
-                   Qt::AlignCenter | Qt::AlignHCenter | Qt::TextWordWrap,
-                   _pluginName);
+                   Qt::AlignCenter | Qt::AlignHCenter | Qt::TextWordWrap, _pluginName);
   painter.setBrush(Qt::transparent);
   painter.setPen(QColor(169, 169, 169));
   painter.drawRect(0, 0, pix.width() - 1, pix.height() - 1);
@@ -535,10 +517,8 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
 
   initModel();
   AlgorithmMimeType *mimeData = new AlgorithmMimeType(
-      name(), static_cast<ParameterListModel *>(_ui->parameters->model())
-                  ->parametersValues());
-  connect(mimeData, SIGNAL(mimeRun(tlp::Graph *)), this,
-          SLOT(run(tlp::Graph *)));
+      name(), static_cast<ParameterListModel *>(_ui->parameters->model())->parametersValues());
+  connect(mimeData, SIGNAL(mimeRun(tlp::Graph *)), this, SLOT(run(tlp::Graph *)));
   drag->setMimeData(mimeData);
   drag->exec(Qt::CopyAction | Qt::MoveAction);
 }
@@ -547,8 +527,7 @@ bool AlgorithmRunnerItem::eventFilter(QObject *, QEvent *ev) {
   if (ev->type() == QEvent::MouseButtonRelease) {
     QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(ev);
     if (qMouseEv->button() == Qt::RightButton) {
-      QMessageBox::information(parentWidget(),
-                               this->name().append(" documentation"),
+      QMessageBox::information(parentWidget(), this->name().append(" documentation"),
                                _ui->playButton->toolTip());
       return true;
     }
@@ -594,15 +573,11 @@ void AlgorithmRunnerItem::afterRun(Graph *g, const tlp::DataSet &dataSet) {
         }
       } else {
         color = g->getLocalProperty<ColorProperty>("viewColor");
-        ColorProperty *ancestorColor =
-            g->getSuperGraph()->getProperty<ColorProperty>("viewColor");
-        if (!applyMapping &&
-            (ancestorColor->numberOfNonDefaultValuatedNodes(g) != 0)) {
+        ColorProperty *ancestorColor = g->getSuperGraph()->getProperty<ColorProperty>("viewColor");
+        if (!applyMapping && (ancestorColor->numberOfNonDefaultValuatedNodes(g) != 0)) {
           // same default values as ancestor property default values
-          color->setAllNodeDataMemValue(
-              ancestorColor->getNodeDefaultDataMemValue());
-          color->setAllEdgeDataMemValue(
-              ancestorColor->getEdgeDefaultDataMemValue());
+          color->setAllNodeDataMemValue(ancestorColor->getNodeDefaultDataMemValue());
+          color->setAllEdgeDataMemValue(ancestorColor->getEdgeDefaultDataMemValue());
         }
       }
 
@@ -613,8 +588,7 @@ void AlgorithmRunnerItem::afterRun(Graph *g, const tlp::DataSet &dataSet) {
         ColorScale cs;
 
         if (colorMappingModel)
-          colorMappingModel->parametersValues().get<ColorScale>("color scale",
-                                                                cs);
+          colorMappingModel->parametersValues().get<ColorScale>("color scale", cs);
         else
           cs = ColorScalesManager::getLatestColorScale();
 
@@ -625,18 +599,15 @@ void AlgorithmRunnerItem::afterRun(Graph *g, const tlp::DataSet &dataSet) {
   } else if (PluginLister::pluginExists<GraphTest>(stdName)) {
     bool result = true;
     dataSet.get<bool>("result", result);
-    std::string str = "\"" + stdName + "\" test " +
-                      (result ? "succeeded" : "failed") + " on:\n" +
+    std::string str = "\"" + stdName + "\" test " + (result ? "succeeded" : "failed") + " on:\n" +
                       g->getName() + ".";
 
     if (result) {
       tlp::debug() << str << std::endl;
-      QMessageBox::information(parentWidget(), "Tulip test result",
-                               tlp::tlpStringToQString(str));
+      QMessageBox::information(parentWidget(), "Tulip test result", tlp::tlpStringToQString(str));
     } else {
       tlp::warning() << str << std::endl;
-      QMessageBox::warning(parentWidget(), "Tulip test result",
-                           tlp::tlpStringToQString(str));
+      QMessageBox::warning(parentWidget(), "Tulip test result", tlp::tlpStringToQString(str));
     }
   }
 }
@@ -646,17 +617,15 @@ void AlgorithmRunnerItem::setFavorite(bool f) {
 }
 
 void AlgorithmRunnerItem::favoriteChanged(int state) {
-  _ui->favoriteCheck->setToolTip((state == Qt::Unchecked)
-                                     ? QString("Add to Favorites")
-                                     : QString("Remove from Favorites"));
+  _ui->favoriteCheck->setToolTip((state == Qt::Unchecked) ? QString("Add to Favorites")
+                                                          : QString("Remove from Favorites"));
 }
 
 tlp::DataSet AlgorithmRunnerItem::data() const {
   if (_ui->parameters->model() == nullptr)
     return DataSet();
 
-  return static_cast<ParameterListModel *>(_ui->parameters->model())
-      ->parametersValues();
+  return static_cast<ParameterListModel *>(_ui->parameters->model())->parametersValues();
 }
 
 ParameterListModel *AlgorithmRunnerItem::colorMappingModel = nullptr;
@@ -665,15 +634,14 @@ void AlgorithmRunnerItem::initModel() {
   if (_ui->parameters->model() != nullptr)
     return;
 
-  ParameterListModel *model = new ParameterListModel(
-      PluginLister::getPluginParameters(QStringToTlpString(_pluginName)),
-      _graph, _ui->parameters, true);
+  ParameterListModel *model =
+      new ParameterListModel(PluginLister::getPluginParameters(QStringToTlpString(_pluginName)),
+                             _graph, _ui->parameters, true);
 
   if (_pluginName == "Color Mapping") {
     colorMappingModel = model;
     tlp::DataSet data = model->parametersValues();
-    data.set<ColorScale>("color scale",
-                         ColorScalesManager::getLatestColorScale());
+    data.set<ColorScale>("color scale", ColorScalesManager::getLatestColorScale());
     model->setParametersValues(data);
   }
 
@@ -688,8 +656,7 @@ void AlgorithmRunnerItem::initModel() {
 
   if (!_initData.empty()) {
     DataSet dataSet = model->parametersValues();
-    for (const std::pair<std::string, tlp::DataType *> &it :
-         _initData.getValues()) {
+    for (const std::pair<std::string, tlp::DataType *> &it : _initData.getValues()) {
       dataSet.setData(it.first, it.second);
     }
     model->setParametersValues(dataSet);

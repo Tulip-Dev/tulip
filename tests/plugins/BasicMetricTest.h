@@ -48,8 +48,7 @@ class BasicMetricTest : public CppUnit::TestFixture {
 private:
   tlp::Graph *graph;
   template <typename PropType>
-  bool computeProperty(const std::string &algorithm,
-                       const std::string &graphType = "Planar Graph",
+  bool computeProperty(const std::string &algorithm, const std::string &graphType = "Planar Graph",
                        PropType *prop = nullptr);
 
 public:

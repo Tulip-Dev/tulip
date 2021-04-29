@@ -19,10 +19,8 @@
 #include <cmath>
 #include <tulip/Color.h>
 
-static void RGBtoHSV(unsigned char r, unsigned char g, unsigned char b, int &h,
-                     int &s, int &v);
-static void HSVtoRGB(int h, int s, int v, unsigned char &r, unsigned char &g,
-                     unsigned char &b);
+static void RGBtoHSV(unsigned char r, unsigned char g, unsigned char b, int &h, int &s, int &v);
+static void HSVtoRGB(int h, int s, int v, unsigned char &r, unsigned char &g, unsigned char &b);
 
 const tlp::Color tlp::Color::Amaranth(229, 43, 80);
 const tlp::Color tlp::Color::Amber(255, 191, 0);

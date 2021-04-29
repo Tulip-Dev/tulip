@@ -18,9 +18,9 @@
  */
 #include <tulip/GlComposite.h>
 
-#include <tulip/GlGraphComposite.h>
 #include <tulip/GlLayer.h>
 #include <tulip/GlScene.h>
+#include <tulip/GlGraphComposite.h>
 #include <tulip/GlXMLTools.h>
 
 using namespace std;
@@ -31,7 +31,9 @@ typedef std::map<string, GlSimpleEntity *>::const_iterator ITM;
 GlComposite::GlComposite(bool deleteComponentsInDestructor)
     : deleteComponentsInDestructor(deleteComponentsInDestructor) {}
 //============================================================
-GlComposite::~GlComposite() { reset(deleteComponentsInDestructor); }
+GlComposite::~GlComposite() {
+  reset(deleteComponentsInDestructor);
+}
 //============================================================
 void GlComposite::addLayerParent(GlLayer *layer) {
   layerParents.push_back(layer);
@@ -45,8 +47,7 @@ void GlComposite::addLayerParent(GlLayer *layer) {
 }
 //============================================================
 void GlComposite::removeLayerParent(GlLayer *layer) {
-  for (vector<GlLayer *>::iterator it = layerParents.begin();
-       it != layerParents.end(); ++it) {
+  for (vector<GlLayer *>::iterator it = layerParents.begin(); it != layerParents.end(); ++it) {
     if ((*it) == layer) {
       layerParents.erase(it);
       break;
@@ -65,8 +66,8 @@ void GlComposite::reset(bool deleteElems) {
   vector<GlSimpleEntity *> toTreat;
 
   for (ITM i = elements.begin(); i != elements.end(); ++i) {
-    // Push elements to treat in a vector as deleting elements in the loop
-    // invalidate the current iterator.
+    // Push elements to treat in a vector as deleting elements in the loop invalidate the current
+    // iterator.
     toTreat.push_back(i->second);
   }
 
@@ -261,8 +262,7 @@ void GlComposite::getXML(string &outString) {
   GlXMLTools::endChildNode(outString);
 }
 //============================================================
-void GlComposite::setWithXML(const string &inString,
-                             unsigned int &currentPosition) {
+void GlComposite::setWithXML(const string &inString, unsigned int &currentPosition) {
 
   string childName = GlXMLTools::enterChildNode(inString, currentPosition);
   assert(childName == "children");
@@ -271,8 +271,7 @@ void GlComposite::setWithXML(const string &inString,
 
   while (!childName.empty()) {
 
-    map<string, string> properties =
-        GlXMLTools::getProperties(inString, currentPosition);
+    map<string, string> properties = GlXMLTools::getProperties(inString, currentPosition);
 
     assert(properties.count("name") != 0);
     assert(properties.count("type") != 0);

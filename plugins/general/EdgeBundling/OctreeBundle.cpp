@@ -17,11 +17,11 @@
  *
  */
 
-#include <tulip/DoubleProperty.h>
-#include <tulip/LayoutProperty.h>
 #include <tulip/MutableContainer.h>
-#include <tulip/SimpleTest.h>
+#include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/SimpleTest.h>
 #include <tulip/TulipException.h>
 
 #include "OctreeBundle.h"
@@ -29,8 +29,7 @@
 using namespace tlp;
 using namespace std;
 
-void OctreeBundle::compute(Graph *g, double splitRatio,
-                           tlp::LayoutProperty *layout,
+void OctreeBundle::compute(Graph *g, double splitRatio, tlp::LayoutProperty *layout,
                            tlp::SizeProperty *size) {
   OctreeBundle tmp;
   tmp.splitRatio = splitRatio;
@@ -55,8 +54,8 @@ node OctreeBundle::splitEdge(node a, node b) {
   return n;
 }
 //=====================================
-bool OctreeBundle::isIn(const Coord &p, const Coord &a, const Coord &b,
-                        const Coord &c, const Coord &) {
+bool OctreeBundle::isIn(const Coord &p, const Coord &a, const Coord &b, const Coord &c,
+                        const Coord &) {
   if (p[0] < a[0])
     return false;
 
@@ -78,14 +77,11 @@ bool OctreeBundle::isIn(const Coord &p, const Coord &a, const Coord &b,
   return true;
 }
 //=====================================
-void OctreeBundle::elmentSplitting(const Coord &a, const Coord &b,
-                                   const Coord &c, const Coord &d,
-                                   const vector<node> &input, vector<node> &in,
-                                   vector<node> &out) {
+void OctreeBundle::elmentSplitting(const Coord &a, const Coord &b, const Coord &c, const Coord &d,
+                                   const vector<node> &input, vector<node> &in, vector<node> &out) {
   if (!((a[0] < b[0]) && (a[1] < b[1])))
-    throw TulipException(
-        "Two nodes have the same position.\nTry to apply the \"Fast Overlap "
-        "Removal\" algorithm first.");
+    throw TulipException("Two nodes have the same position.\nTry to apply the \"Fast Overlap "
+                         "Removal\" algorithm first.");
 
   in.clear();
   out.clear();
@@ -113,8 +109,7 @@ node OctreeBundle::addNode(const tlp::Coord &pos) {
   return itn->second;
 }
 
-void OctreeBundle::recQuad(const Coord fr[4], const Coord ba[4],
-                           const vector<node> &input) {
+void OctreeBundle::recQuad(const Coord fr[4], const Coord ba[4], const vector<node> &input) {
 
   node frN[4];
   node baN[4];
@@ -133,8 +128,7 @@ void OctreeBundle::recQuad(const Coord fr[4], const Coord ba[4],
     graph->addEdge(baN[i], baN[(i + 1) % 4]);
   }
 
-  if (input.size() == 1 &&
-      (fr[0] - ba[2]).norm() < (minSize / (splitRatio * 2.))) {
+  if (input.size() == 1 && (fr[0] - ba[2]).norm() < (minSize / (splitRatio * 2.))) {
     node src = input[0];
 
     for (int i = 0; i < 4; ++i) {
@@ -177,27 +171,30 @@ void OctreeBundle::recQuad(const Coord fr[4], const Coord ba[4],
 
   */
   /*
-          fr[0]        fr[0]+fr[1]   fr[0]+fr[2]    fr[0]+fr[3]     ||
-     fr[0]+ba[0]   fr[0]+ba[1] fr[0]+ba[2]   fr[0]+ba[3] fr[1]+fr[0]  fr[1]
-     fr[1]+fr[2]    fr[1]+fr[3]     ||   fr[1]+ba[0]   fr[1]+ba[1] fr[1]+ba[2]
-     fr[1]+ba[3] fr[2]+fr[0]  fr[2]+fr[3]   fr[2]          fr[2] + fr[3]   ||
-     fr[2]+ba[0]   fr[2]+ba[1] fr[2]+ba[2]   fr[2]+ba[3] fr[3]+fr[0] fr[3]+fr[1]
-     fr[3]+fr[2]    fr[3]           ||   fr[3]+ba[0]   fr[3]+ba[1] fr[3]+ba[2]
-     fr[3]+ba[3]
+          fr[0]        fr[0]+fr[1]   fr[0]+fr[2]    fr[0]+fr[3]     ||   fr[0]+ba[0]   fr[0]+ba[1]
+     fr[0]+ba[2]   fr[0]+ba[3]
+          fr[1]+fr[0]  fr[1]         fr[1]+fr[2]    fr[1]+fr[3]     ||   fr[1]+ba[0]   fr[1]+ba[1]
+     fr[1]+ba[2]   fr[1]+ba[3]
+          fr[2]+fr[0]  fr[2]+fr[3]   fr[2]          fr[2] + fr[3]   ||   fr[2]+ba[0]   fr[2]+ba[1]
+     fr[2]+ba[2]   fr[2]+ba[3]
+          fr[3]+fr[0]  fr[3]+fr[1]   fr[3]+fr[2]    fr[3]           ||   fr[3]+ba[0]   fr[3]+ba[1]
+     fr[3]+ba[2]   fr[3]+ba[3]
 
-          fr[0]+ba[0]   fr[0]+ba[1]   fr[0]+ba[2]   fr[0]+ba[3]     ||   ba[0]
-     ba[0]+fr[1] ba[0]+fr[2]   ba[0]+ba[3] fr[1]+ba[0]   fr[1]+ba[1] fr[1]+ba[2]
-     fr[1]+ba[3]     ||   ba[1]+ba[0]   ba[1] ba[1]+ba[2]   ba[1]+ba[3]
-          fr[2]+ba[0]   fr[2]+ba[1]   fr[2]+ba[2]   fr[2]+ba[3]     ||
-     ba[2]+ba[0]   ba[2]+ba[3] ba[2]         fr[2]+ba[3] fr[3]+ba[0] fr[3]+ba[1]
-     fr[3]+ba[2]   fr[3]+ba[3]     ||   ba[3]+ba[0]   ba[3]+ba[1] ba[3]+ba[2]
-     ba[3]
+          fr[0]+ba[0]   fr[0]+ba[1]   fr[0]+ba[2]   fr[0]+ba[3]     ||   ba[0]         ba[0]+fr[1]
+     ba[0]+fr[2]   ba[0]+ba[3]
+          fr[1]+ba[0]   fr[1]+ba[1]   fr[1]+ba[2]   fr[1]+ba[3]     ||   ba[1]+ba[0]   ba[1]
+     ba[1]+ba[2]   ba[1]+ba[3]
+          fr[2]+ba[0]   fr[2]+ba[1]   fr[2]+ba[2]   fr[2]+ba[3]     ||   ba[2]+ba[0]   ba[2]+ba[3]
+     ba[2]         fr[2]+ba[3]
+          fr[3]+ba[0]   fr[3]+ba[1]   fr[3]+ba[2]   fr[3]+ba[3]     ||   ba[3]+ba[0]   ba[3]+ba[1]
+     ba[3]+ba[2]   ba[3]
 
 
-      oc1 => a,   (a+b)/2,      (a+c)/2,     (a+d)/2,   || (a+e)/2,    (a+f)/2,
-     (a+g) /2, (a+h)/2 oc2 => b;   (b+c)/2,      (b+d)/2,     (b+a)/2    ||
-     (b+f)/2,    (b+g)/2,     (b+h) /3, (b+e)/2 pc2 => c,   (c+d)/2, (c+a)/2,
-     (c+b)/2
+      oc1 => a,   (a+b)/2,      (a+c)/2,     (a+d)/2,   || (a+e)/2,    (a+f)/2,     (a+g) /2,
+     (a+h)/2
+      oc2 => b;   (b+c)/2,      (b+d)/2,     (b+a)/2    || (b+f)/2,    (b+g)/2,     (b+h) /3,
+     (b+e)/2
+      pc2 => c,   (c+d)/2,      (c+a)/2,     (c+b)/2
      */
   Coord frontFace[4][4];
   Coord middleFace[4][4];
@@ -224,14 +221,14 @@ void OctreeBundle::recQuad(const Coord fr[4], const Coord ba[4],
   input2 = input;
 
   for (int i = 0; i < 4; ++i) {
-    elmentSplitting(frontFace[i][0], frontFace[i][2], middleFace[i][0],
-                    middleFace[i][2], input2, in, out);
+    elmentSplitting(frontFace[i][0], frontFace[i][2], middleFace[i][0], middleFace[i][2], input2,
+                    in, out);
     recQuad(frontFace[i], middleFace[i], in);
     input2 = out;
 
     if (i != 3) {
-      elmentSplitting(middleFace[i][0], middleFace[i][2], backFace[i][0],
-                      backFace[i][2], input2, in, out);
+      elmentSplitting(middleFace[i][0], middleFace[i][2], backFace[i][0], backFace[i][2], input2,
+                      in, out);
       input2 = out;
       recQuad(middleFace[i], backFace[i], in);
     } else
@@ -255,8 +252,7 @@ void OctreeBundle::recQuad(const Coord fr[4], const Coord ba[4],
   //    recQuad(i,e,h,d, out);
 }
 //========================================================
-void OctreeBundle::createOctree(Graph *graph, tlp::LayoutProperty *lay,
-                                tlp::SizeProperty *siz) {
+void OctreeBundle::createOctree(Graph *graph, tlp::LayoutProperty *lay, tlp::SizeProperty *siz) {
   // create the border of the Quadtree
   nbNodesInOriginalGraph = graph->numberOfNodes();
   layout = graph->getProperty<LayoutProperty>("viewLayout");

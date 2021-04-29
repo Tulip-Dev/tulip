@@ -16,10 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "dotImportCLUT.h"
-#include <cerrno>
 #include <cstring>
+#include <cerrno>
 #include <tulip/TulipPluginHeaders.h>
+#include "dotImportCLUT.h"
 
 using namespace std;
 using namespace tlp;
@@ -34,8 +34,8 @@ using namespace tlp;
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
 namespace {
-#include "dotImportLexer.h"
 #include "dotImportParser.h"
+#include "dotImportLexer.h"
 } // namespace
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
@@ -62,14 +62,13 @@ static const char *paramHelp[] = {
  */
 class DotImport : public ImportModule {
 public:
-  PLUGININFORMATION(
-      "graphviz", "Gerald Gainant", "01/03/2004",
-      "<p>Supported extensions: dot</p><p>Imports a new graph from a file in the dot "
-      "input format.</p>"
-      "<p>(see <a "
-      "href=\"https://www.graphviz.org/doc/info/lang.html\">https://www.graphviz.org/"
-      "doc/info/lang.html</a>)</p>",
-      "1.0", "File")
+  PLUGININFORMATION("graphviz", "Gerald Gainant", "01/03/2004",
+                    "<p>Supported extensions: dot</p><p>Imports a new graph from a file in the dot "
+                    "input format.</p>"
+                    "<p>(see <a "
+                    "href=\"https://www.graphviz.org/doc/info/lang.html\">https://www.graphviz.org/"
+                    "doc/info/lang.html</a>)</p>",
+                    "1.0", "File")
   std::list<std::string> fileExtensions() const override {
     std::list<std::string> l;
     l.push_back("dot");

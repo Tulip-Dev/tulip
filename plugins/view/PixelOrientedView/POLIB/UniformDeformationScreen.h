@@ -20,8 +20,8 @@
 #ifndef UNIFORMDEFORMATIONSCREEN_H
 #define UNIFORMDEFORMATIONSCREEN_H
 
-#include "ScreenFunction.h"
 #include <tulip/Matrix.h>
+#include "ScreenFunction.h"
 
 namespace pocore {
 class UniformDeformationScreen : public ScreenFunction {

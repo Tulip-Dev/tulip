@@ -32,9 +32,8 @@ public:
   /**
    * Basic constructor with vector of coord, begin/end color and begin/end size
    */
-  GlCurve(const std::vector<tlp::Coord> &points, const Color &beginFColor,
-          const Color &endFColor, const float &beginSize = 0.,
-          const float &endSize = 0.);
+  GlCurve(const std::vector<tlp::Coord> &points, const Color &beginFColor, const Color &endFColor,
+          const float &beginSize = 0., const float &endSize = 0.);
 
   /**
    * Basic constructor with number of points
@@ -79,8 +78,7 @@ public:
   /**
    * Function to set data with inString (in XML format)
    */
-  void setWithXML(const std::string &inString,
-                  unsigned int &currentPosition) override;
+  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
 
 protected:
   std::vector<tlp::Coord> _points;

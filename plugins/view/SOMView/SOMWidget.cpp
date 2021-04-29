@@ -22,9 +22,10 @@
 
 using namespace tlp;
 
-SOMWidget::SOMWidget(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::SOMWidget) {
+SOMWidget::SOMWidget(QWidget *parent) : QWidget(parent), _ui(new Ui::SOMWidget) {
   _ui->setupUi(this);
 }
 
-SOMWidget::~SOMWidget() { delete _ui; }
+SOMWidget::~SOMWidget() {
+  delete _ui;
+}

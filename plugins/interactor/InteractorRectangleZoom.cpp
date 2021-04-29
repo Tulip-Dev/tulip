@@ -17,13 +17,13 @@
  *
  */
 
-#include <tulip/MouseBoxZoomer.h>
 #include <tulip/MouseInteractors.h>
-#include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
+#include <tulip/MouseBoxZoomer.h>
+#include <tulip/NodeLinkDiagramComponent.h>
 
-#include "../utils/PluginNames.h"
 #include "../utils/StandardInteractorPriority.h"
+#include "../utils/PluginNames.h"
 
 using namespace tlp;
 
@@ -39,9 +39,8 @@ public:
    * Default constructor
    */
   InteractorRectangleZoom(const tlp::PluginContext *)
-      : NodeLinkDiagramComponentInteractor(
-            ":/tulip/gui/icons/i_zoom.png", "Zoom on rectangle",
-            StandardInteractorPriority::ZoomOnRectangle) {}
+      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_zoom.png", "Zoom on rectangle",
+                                           StandardInteractorPriority::ZoomOnRectangle) {}
 
   /**
    * Construct chain of responsibility
@@ -66,12 +65,13 @@ public:
     push_back(new MouseBoxZoomer);
   }
 
-  QCursor cursor() const override { return QCursor(Qt::CrossCursor); }
+  QCursor cursor() const override {
+    return QCursor(Qt::CrossCursor);
+  }
 
   bool isCompatible(const std::string &viewName) const override {
     return ((viewName == NodeLinkDiagramComponent::viewName) ||
-            (viewName == ViewName::HistogramViewName) ||
-            (viewName == ViewName::MatrixViewName) ||
+            (viewName == ViewName::HistogramViewName) || (viewName == ViewName::MatrixViewName) ||
             (viewName == ViewName::ParallelCoordinatesViewName) ||
             (viewName == ViewName::PixelOrientedViewName) ||
             (viewName == ViewName::ScatterPlot2DViewName));

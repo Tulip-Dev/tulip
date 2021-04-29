@@ -25,13 +25,14 @@
 #include <vector>
 
 #include <tulip/GlCPULODCalculator.h>
-#include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/Observable.h>
+#include <tulip/GlGraphRenderingParameters.h>
 
 namespace tlp {
 
 class Camera;
-template <class TYPE> class QuadTreeNode;
+template <class TYPE>
+class QuadTreeNode;
 class GlScene;
 class PropertyInterface;
 class Graph;
@@ -40,8 +41,7 @@ class GlLayer;
 /**
  * Class use to compute bounding boxs of a vector of GlEntity
  */
-class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator,
-                                             private Observable {
+class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator, private Observable {
 
 public:
   GlQuadTreeLODCalculator();
@@ -53,8 +53,7 @@ public:
   void setScene(GlScene &scene) override;
 
   /**
-   * To know if the calculator need to have entities returned by a visitor in
-   * GlScene
+   * To know if the calculator need to have entities returned by a visitor in GlScene
    */
   bool needEntities() override;
   /**
@@ -65,19 +64,16 @@ public:
   /**
    * This function is call by GlLODSceneVisitor when a simple entity is found
    */
-  void addSimpleEntityBoundingBox(GlSimpleEntity *entity,
-                                  const BoundingBox &bb) override;
+  void addSimpleEntityBoundingBox(GlSimpleEntity *entity, const BoundingBox &bb) override;
   /**
    * This function is call by GlLODSceneVisitor when an edge is found
    */
-  void addEdgeBoundingBox(unsigned int id, unsigned int pos,
-                          const BoundingBox &bb) override;
+  void addEdgeBoundingBox(unsigned int id, unsigned int pos, const BoundingBox &bb) override;
 
   /**
    * This function compute LOD
    * See compute function of GlCPULODCalculator for more details
-   * This function do some computation and after call computeFor2DCamera() or
-   * computeFor3DCamera()
+   * This function do some computation and after call computeFor2DCamera() or computeFor3DCamera()
    */
   void compute(const Vector<int, 4> &globalViewport,
                const Vector<int, 4> &currentViewport) override;

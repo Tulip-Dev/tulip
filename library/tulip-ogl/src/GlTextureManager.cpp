@@ -124,8 +124,7 @@ static bool loadBMP(const string &filename, TextureInfo *texture) {
   }
 
   if (biPlanes != 1) {
-    tlp::error() << "Error: number of Planes not 1 in: " << filename
-                 << std::endl;
+    tlp::error() << "Error: number of Planes not 1 in: " << filename << std::endl;
     fclose(file);
     return false;
   }
@@ -220,8 +219,7 @@ static bool loadJPEG(const string &filename, TextureInfo *texture) {
 
   while (cinfo.output_scanline < cinfo.output_height) {
     jpeg_read_scanlines(&cinfo, &row_pointer, 1);
-    memcpy(&(texture->data[(cinfo.output_height - cinfo.output_scanline) * 3 *
-                           cinfo.output_width]),
+    memcpy(&(texture->data[(cinfo.output_height - cinfo.output_scanline) * 3 * cinfo.output_width]),
            row_pointer, (texture->width) * 3);
   }
 
@@ -248,8 +246,7 @@ static bool loadPNG(const string &filename, TextureInfo *texture) {
     return false;
   }
 
-  png_structp png_ptr =
-      png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+  png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
   if (!png_ptr) {
     tlp::error() << "Error reading file: " << filename << std::endl;
@@ -271,8 +268,7 @@ static bool loadPNG(const string &filename, TextureInfo *texture) {
 
   if (!end_info) {
     tlp::error() << "Error reading file: " << filename << std::endl;
-    png_destroy_read_struct(&png_ptr, &info_ptr,
-                            static_cast<png_infopp>(nullptr));
+    png_destroy_read_struct(&png_ptr, &info_ptr, static_cast<png_infopp>(nullptr));
     fclose(file);
     return false;
   }
@@ -291,14 +287,13 @@ static bool loadPNG(const string &filename, TextureInfo *texture) {
   png_read_info(png_ptr, info_ptr);
   /*
   png_uint_32 width, height;
-  int bit_depth, color_type, interlace_method, compression_method,
-  filter_method; png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth,
+  int bit_depth, color_type, interlace_method, compression_method, filter_method;
+  png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth,
          &color_type, &interlace_method, &compression_method, &filter_method);
    */
 
   int ctype = png_get_color_type(png_ptr, info_ptr);
-  texture->hasAlpha = (ctype == PNG_COLOR_TYPE_GRAY_ALPHA) ||
-                      (ctype == PNG_COLOR_TYPE_RGB_ALPHA);
+  texture->hasAlpha = (ctype == PNG_COLOR_TYPE_GRAY_ALPHA) || (ctype == PNG_COLOR_TYPE_RGB_ALPHA);
   texture->width = png_get_image_width(png_ptr, info_ptr);
   texture->height = png_get_image_height(png_ptr, info_ptr);
   int linestride = texture->width * (texture->hasAlpha ? 4 : 3);
@@ -306,8 +301,8 @@ static bool loadPNG(const string &filename, TextureInfo *texture) {
   png_bytep *row_pointers = new png_bytep[texture->height];
 
   for (unsigned int i = 0; i < texture->height; ++i)
-    row_pointers[i] = static_cast<png_bytep>(
-        &(texture->data[linestride * (texture->height - 1 - i)]));
+    row_pointers[i] =
+        static_cast<png_bytep>(&(texture->data[linestride * (texture->height - 1 - i)]));
 
   png_set_strip_16(png_ptr);    // force 8 bits/channel
   png_set_gray_to_rgb(png_ptr); // force RGB
@@ -318,8 +313,8 @@ static bool loadPNG(const string &filename, TextureInfo *texture) {
   return true;
 }
 
-static bool generateTexture(const std::string &filename,
-                            const TextureInfo &texti, GlTexture &glTexture) {
+static bool generateTexture(const std::string &filename, const TextureInfo &texti,
+                            GlTexture &glTexture) {
   int GLFmt = texti.hasAlpha ? GL_RGBA : GL_RGB;
 
   bool spriteOnWidth = false;
@@ -329,10 +324,9 @@ static bool generateTexture(const std::string &filename,
 
   if ((texti.height - (texti.height / texti.width) * texti.width) != 0 &&
       (texti.width - (texti.width / texti.height) * texti.height) != 0) {
-    tlp::error()
-        << "Texture loader error: invalid size\ntexture size should be of the form:\n - "
-           "width=height or\n - height=N*width (for animated textures)\nfor file: "
-        << filename << std::endl;
+    tlp::error() << "Texture loader error: invalid size\ntexture size should be of the form:\n - "
+                    "width=height or\n - height=N*width (for animated textures)\nfor file: "
+                 << filename << std::endl;
     return false;
   } else {
     if (texti.width != texti.height) {
@@ -347,8 +341,8 @@ static bool generateTexture(const std::string &filename,
       }
     }
 
-    bool canUseNpotTextures = OpenGlConfigManager::isExtensionSupported(
-        "GL_ARB_texture_non_power_of_two");
+    bool canUseNpotTextures =
+        OpenGlConfigManager::isExtensionSupported("GL_ARB_texture_non_power_of_two");
 
     if (!canUseNpotTextures) {
       bool formatOk = false;
@@ -359,10 +353,9 @@ static bool generateTexture(const std::string &filename,
       }
 
       if (!formatOk) {
-        tlp::error()
-            << "Texture loader error: invalid size\ntexture width should be a power of "
-               "2\nfor file: "
-            << filename << std::endl;
+        tlp::error() << "Texture loader error: invalid size\ntexture width should be a power of "
+                        "2\nfor file: "
+                     << filename << std::endl;
         return false;
       }
 
@@ -374,18 +367,16 @@ static bool generateTexture(const std::string &filename,
       }
 
       if (!formatOk) {
-        tlp::error()
-            << "Texture loader error: invalid size\ntexture height should be a power of "
-               "2\nfor file: "
-            << filename << std::endl;
+        tlp::error() << "Texture loader error: invalid size\ntexture height should be a power of "
+                        "2\nfor file: "
+                     << filename << std::endl;
         return false;
       }
     }
   }
 
-  bool canUseMipmaps =
-      OpenGlConfigManager::isExtensionSupported("GL_ARB_framebuffer_object") ||
-      OpenGlConfigManager::isExtensionSupported("GL_EXT_framebuffer_object");
+  bool canUseMipmaps = OpenGlConfigManager::isExtensionSupported("GL_ARB_framebuffer_object") ||
+                       OpenGlConfigManager::isExtensionSupported("GL_EXT_framebuffer_object");
 
   GLuint *textureNum = new GLuint[spriteNumber];
 
@@ -408,32 +399,20 @@ static bool generateTexture(const std::string &filename,
     for (unsigned int i = 0; i < texti.height; i++) {
       for (unsigned int j = 0; j < texti.width; ++j) {
         if (texti.hasAlpha) {
-          dataForWidthSpriteTexture[j / width][i * width * 4 +
-                                               (j - (j / width) * width) * 4] =
+          dataForWidthSpriteTexture[j / width][i * width * 4 + (j - (j / width) * width) * 4] =
               texti.data[i * texti.width * 4 + j * 4];
-          dataForWidthSpriteTexture[j / width][i * width * 4 +
-                                               (j - (j / width) * width) * 4 +
-                                               1] =
+          dataForWidthSpriteTexture[j / width][i * width * 4 + (j - (j / width) * width) * 4 + 1] =
               texti.data[i * texti.width * 4 + j * 4 + 1];
-          dataForWidthSpriteTexture[j / width][i * width * 4 +
-                                               (j - (j / width) * width) * 4 +
-                                               2] =
+          dataForWidthSpriteTexture[j / width][i * width * 4 + (j - (j / width) * width) * 4 + 2] =
               texti.data[i * texti.width * 4 + j * 4 + 2];
-          dataForWidthSpriteTexture[j / width][i * width * 4 +
-                                               (j - (j / width) * width) * 4 +
-                                               3] =
+          dataForWidthSpriteTexture[j / width][i * width * 4 + (j - (j / width) * width) * 4 + 3] =
               texti.data[i * texti.width * 4 + j * 4 + 3];
         } else {
-          dataForWidthSpriteTexture[j / width][i * width * 3 +
-                                               (j - (j / width) * width) * 3] =
+          dataForWidthSpriteTexture[j / width][i * width * 3 + (j - (j / width) * width) * 3] =
               texti.data[i * texti.width * 3 + j * 3];
-          dataForWidthSpriteTexture[j / width][i * width * 3 +
-                                               (j - (j / width) * width) * 3 +
-                                               1] =
+          dataForWidthSpriteTexture[j / width][i * width * 3 + (j - (j / width) * width) * 3 + 1] =
               texti.data[i * texti.width * 3 + j * 3 + 1];
-          dataForWidthSpriteTexture[j / width][i * width * 3 +
-                                               (j - (j / width) * width) * 3 +
-                                               2] =
+          dataForWidthSpriteTexture[j / width][i * width * 3 + (j - (j / width) * width) * 3 + 2] =
               texti.data[i * texti.width * 3 + j * 3 + 2];
         }
       }
@@ -451,14 +430,14 @@ static bool generateTexture(const std::string &filename,
 
     if (!spriteOnWidth) {
       if (texti.hasAlpha)
-        glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt,
-                     GL_UNSIGNED_BYTE, texti.data + (width * height * 4 * i));
+        glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE,
+                     texti.data + (width * height * 4 * i));
       else
-        glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt,
-                     GL_UNSIGNED_BYTE, texti.data + (width * height * 3 * i));
+        glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE,
+                     texti.data + (width * height * 3 * i));
     } else {
-      glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt,
-                   GL_UNSIGNED_BYTE, dataForWidthSpriteTexture[i]);
+      glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE,
+                   dataForWidthSpriteTexture[i]);
 
       delete[] dataForWidthSpriteTexture[i];
     }
@@ -466,8 +445,7 @@ static bool generateTexture(const std::string &filename,
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     if (canUseMipmaps) {
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-                      GL_LINEAR_MIPMAP_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
       glGenerateMipmap(GL_TEXTURE_2D);
     } else {
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -497,9 +475,8 @@ bool GlTextureLoader::loadTexture(const string &filename, GlTexture &texture) {
   else if (extension == "PNG")
     loader = &loadPNG;
   else {
-    tlp::error()
-        << "GlTextureLoader Error: no texture loader found for file extension \""
-        << extension << "\"" << std::endl;
+    tlp::error() << "GlTextureLoader Error: no texture loader found for file extension \""
+                 << extension << "\"" << std::endl;
   }
 
   TextureInfo texti;
@@ -582,8 +559,7 @@ bool GlTextureManager::activateTexture(const string &filename) {
   return activateTexture(filename, animationFrame);
 }
 //====================================================================
-bool GlTextureManager::activateTexture(const string &filename,
-                                       unsigned int frame) {
+bool GlTextureManager::activateTexture(const string &filename, unsigned int frame) {
   if (texturesWithError.count(filename) != 0)
     return false;
 
@@ -606,7 +582,9 @@ bool GlTextureManager::activateTexture(const string &filename,
   return true;
 }
 //====================================================================
-void GlTextureManager::deactivateTexture() { glDisable(GL_TEXTURE_2D); }
+void GlTextureManager::deactivateTexture() {
+  glDisable(GL_TEXTURE_2D);
+}
 //====================================================================
 void GlTextureManager::deleteAllTextures() {
   for (auto &it : texturesMap) {

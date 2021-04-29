@@ -23,8 +23,7 @@ PLUGIN(DagLevelMetric)
 using namespace std;
 using namespace tlp;
 
-DagLevelMetric::DagLevelMetric(const tlp::PluginContext *context)
-    : DoubleAlgorithm(context) {}
+DagLevelMetric::DagLevelMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {}
 
 DagLevelMetric::~DagLevelMetric() {}
 //======================================================

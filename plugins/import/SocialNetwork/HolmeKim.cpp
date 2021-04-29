@@ -17,10 +17,10 @@
  *
  */
 
-#include <tulip/Graph.h>
 #include <tulip/ImportModule.h>
-#include <tulip/PluginProgress.h>
 #include <tulip/TlpTools.h>
+#include <tulip/PluginProgress.h>
+#include <tulip/Graph.h>
 
 using namespace std;
 using namespace tlp;
@@ -45,12 +45,11 @@ static const char *paramHelp[] = {
  *
  */
 struct HolmeKim : public ImportModule {
-  PLUGININFORMATION(
-      "Holme and Kim Model", "Sallaberry & Pennarun", "21/02/2011 & 08/04/2014",
-      "Randomly generates a scale-free graph using the model described in<br/>Petter "
-      "Holme and Beom Jun Kim.<br/><b>Growing scale-free networks with tunable "
-      "clustering.</b><br/>Physical Review E, 65, 026107, (2002).",
-      "1.0", "Social network")
+  PLUGININFORMATION("Holme and Kim Model", "Sallaberry & Pennarun", "21/02/2011 & 08/04/2014",
+                    "Randomly generates a scale-free graph using the model described in<br/>Petter "
+                    "Holme and Beom Jun Kim.<br/><b>Growing scale-free networks with tunable "
+                    "clustering.</b><br/>Physical Review E, 65, 026107, (2002).",
+                    "1.0", "Social network")
 
   HolmeKim(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "300");
@@ -71,8 +70,7 @@ struct HolmeKim : public ImportModule {
 
     // check arguments
     if (m > n) {
-      pluginProgress->setError(
-          "The m parameter cannot be greater than the number of nodes.");
+      pluginProgress->setError("The m parameter cannot be greater than the number of nodes.");
       return false;
     }
 
@@ -133,8 +131,7 @@ struct HolmeKim : public ImportModule {
 
           if (!freeNeighbours.empty()) {
             // randomly choose one of the free neighbours to connect with
-            unsigned int randomNeighbour =
-                tlp::randomUnsignedInteger(freeNeighbours.size() - 1);
+            unsigned int randomNeighbour = tlp::randomUnsignedInteger(freeNeighbours.size() - 1);
             graph->addEdge(nodes[i], freeNeighbours[randomNeighbour]);
             continue;
           }

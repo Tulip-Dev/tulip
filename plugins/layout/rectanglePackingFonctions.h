@@ -19,9 +19,9 @@
 #ifndef RECTANGLEPACKINGFONCTIONS_H
 #define RECTANGLEPACKINGFONCTIONS_H
 
-#include "RectanglePacking.h"
-#include <tulip/PluginProgress.h>
 #include <vector>
+#include <tulip/PluginProgress.h>
+#include "RectanglePacking.h"
 
 /**
  *This function is used for packing rectangles. It is used when we want to
@@ -32,8 +32,7 @@
  *@param progress pointer on an instance of the PluginProgress class.
  *@return true if the computation has not stopped due to the PluginProgress.
  */
-bool RectanglePackingLimitRectangles(std::vector<tlp::Rectangle<float>> &v,
-                                     const char *quality,
+bool RectanglePackingLimitRectangles(std::vector<tlp::Rectangle<float>> &v, const char *quality,
                                      tlp::PluginProgress *progress);
 
 /**
@@ -45,8 +44,7 @@ bool RectanglePackingLimitRectangles(std::vector<tlp::Rectangle<float>> &v,
  *@param progress pointer on an instance of the PluginProgress class.
  *@return true if the computation has not stopped due to the PluginProgress.
  */
-bool RectanglePackingLimitPositions(std::vector<tlp::Rectangle<float>> &v,
-                                    const char *quality,
+bool RectanglePackingLimitPositions(std::vector<tlp::Rectangle<float>> &v, const char *quality,
                                     tlp::PluginProgress *progress);
 
 #endif

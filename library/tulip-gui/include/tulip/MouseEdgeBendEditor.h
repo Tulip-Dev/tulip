@@ -21,11 +21,11 @@
 #ifndef MOUSEEDGEBENDEDITION_H
 #define MOUSEEDGEBENDEDITION_H
 
-#include <tulip/GLInteractor.h>
 #include <tulip/GlCircle.h>
-#include <tulip/GlLines.h>
-#include <tulip/GlScene.h>
 #include <tulip/GlTriangle.h>
+#include <tulip/GLInteractor.h>
+#include <tulip/GlScene.h>
+#include <tulip/GlLines.h>
 
 namespace tlp {
 
@@ -79,9 +79,13 @@ public:
 protected:
   enum EditOperation { NONE_OP = 0, TRANSLATE_OP, NEW_OP, DELETE_OP };
 
-  EditOperation operation() const { return _operation; }
+  EditOperation operation() const {
+    return _operation;
+  }
 
-  tlp::edge getEdge() const { return mEdge; }
+  tlp::edge getEdge() const {
+    return mEdge;
+  }
 
   void stopEdition();
 

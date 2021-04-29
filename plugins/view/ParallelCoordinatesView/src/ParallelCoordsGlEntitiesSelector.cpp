@@ -17,11 +17,11 @@
  *
  */
 
-#include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/GlGraphComposite.h>
 
-#include "ParallelCoordinatesView.h"
 #include "ParallelCoordsGlEntitiesSelector.h"
+#include "ParallelCoordinatesView.h"
 
 using namespace std;
 
@@ -29,8 +29,7 @@ namespace tlp {
 
 bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
 
-  ParallelCoordinatesView *parallelView =
-      static_cast<ParallelCoordinatesView *>(view());
+  ParallelCoordinatesView *parallelView = static_cast<ParallelCoordinatesView *>(view());
   GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
 
   if (e->type() == QEvent::MouseButtonPress) {
@@ -45,10 +44,7 @@ bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
         w = 0;
         h = 0;
         started = true;
-        graph = glMainWidget->getScene()
-                    ->getGlGraphComposite()
-                    ->getInputData()
-                    ->getGraph();
+        graph = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
       }
 
       return true;

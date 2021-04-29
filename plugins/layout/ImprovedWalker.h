@@ -38,8 +38,7 @@ class ImprovedWalkerIterator;
  *  Improving Walker’s Algorithm to Run in Linear Time. \n
  *  Buchheim C., Jünger M., Leipert S. (2002)\n
  *  In: Goodrich M.T., Kobourov S.G. (eds) Graph Drawing (GD) 2002. \n
- *  Lecture Notes in Computer Science, vol 2528. Springer, Berlin, Heidelberg.
- *<a
+ *  Lecture Notes in Computer Science, vol 2528. Springer, Berlin, Heidelberg. <a
  *href=\"https://doi.org/10.1007/3-540-36151-0_32\">10.1007/3-540-36151-0_32</a>
  *
  *  \note This algorithm works on tree.
@@ -122,8 +121,7 @@ private:
 
   inline tlp::node nextRightContour(tlp::node v);
   inline tlp::node nextLeftContour(tlp::node v);
-  inline tlp::node findCommonAncestor(tlp::node left, tlp::node right,
-                                      tlp::node defaultAncestor);
+  inline tlp::node findCommonAncestor(tlp::node left, tlp::node right, tlp::node defaultAncestor);
 };
 
 //====================================================================
@@ -193,8 +191,7 @@ inline tlp::node ImprovedWalker::nextLeftContour(tlp::node n) {
 }
 
 //====================================================================
-inline tlp::node ImprovedWalker::findCommonAncestor(tlp::node left,
-                                                    tlp::node right,
+inline tlp::node ImprovedWalker::findCommonAncestor(tlp::node left, tlp::node right,
                                                     tlp::node defaultAncestor) {
   if (getSuperGraph(ancestor[left]) == getSuperGraph(right) /*&& left!=right*/)
     return ancestor[left];

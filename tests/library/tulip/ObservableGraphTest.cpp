@@ -39,9 +39,13 @@ public:
 
   ObserverGTest() : print(false) {}
 
-  void reset() { observables.clear(); }
+  void reset() {
+    observables.clear();
+  }
 
-  unsigned int nbObservables() { return observables.size(); }
+  unsigned int nbObservables() {
+    return observables.size();
+  }
 
   bool found(Observable *obs) {
     return observables.find(obs) != observables.end();
@@ -63,8 +67,7 @@ static ObserverGTest *observer;
 
 class PropertiesDeletedObserver : public Observable {
 public:
-  PropertiesDeletedObserver()
-      : inheritedPropertyExist(false), initialized(false) {}
+  PropertiesDeletedObserver() : inheritedPropertyExist(false), initialized(false) {}
   bool inheritedPropertyExist;
   bool initialized;
 
@@ -164,38 +167,52 @@ public:
     obs = nullptr;
   }
 
-  ~GraphObserverTest() override { delete obs; }
+  ~GraphObserverTest() override {
+    delete obs;
+  }
 
   Graph *getObservedGraph() {
     assert(graphs.size() == 1);
     return graphs[0];
   }
 
-  vector<Graph *> &getObservedGraphs() { return graphs; }
+  vector<Graph *> &getObservedGraphs() {
+    return graphs;
+  }
 
   Graph *getObservedSubgraph() {
     assert(sGraphs.size() == 1);
     return sGraphs[0];
   }
 
-  vector<Graph *> &getObservedSubgraphs() { return sGraphs; }
+  vector<Graph *> &getObservedSubgraphs() {
+    return sGraphs;
+  }
 
   node getObservedNode() {
     assert(nodes.size() == 1);
     return nodes[0];
   }
 
-  vector<node> &getObservedNodes() { return nodes; }
+  vector<node> &getObservedNodes() {
+    return nodes;
+  }
 
   edge getObservedEdge() {
     assert(edges.size() == 1);
     return edges[0];
   }
 
-  vector<edge> &getObservedEdges() { return edges; }
+  vector<edge> &getObservedEdges() {
+    return edges;
+  }
 
-  string &getLocalPropertyName() { return pName; }
-  string &getInheritedPropertyName() { return spName; }
+  string &getLocalPropertyName() {
+    return pName;
+  }
+  string &getInheritedPropertyName() {
+    return spName;
+  }
 
   void reset() {
     graphs.clear(), sGraphs.clear();
@@ -205,7 +222,9 @@ public:
   void addNode(Graph *g, const node n) {
     graphs.push_back(g), nodes.push_back(n);
   }
-  void addEdge(Graph *g, edge e) { graphs.push_back(g), edges.push_back(e); }
+  void addEdge(Graph *g, edge e) {
+    graphs.push_back(g), edges.push_back(e);
+  }
   void addEdges(Graph *g, const vector<edge> &ve) {
     graphs.push_back(g);
     for (size_t i = 0; i < ve.size(); ++i) {
@@ -215,11 +234,15 @@ public:
   void delNode(Graph *g, const node n) {
     graphs.push_back(g), nodes.push_back(n);
   }
-  void delEdge(Graph *g, edge e) { graphs.push_back(g), edges.push_back(e); }
+  void delEdge(Graph *g, edge e) {
+    graphs.push_back(g), edges.push_back(e);
+  }
   void reverseEdge(Graph *g, edge e) {
     graphs.push_back(g), edges.push_back(e);
   }
-  void destroy(Graph *g) { graphs.push_back(g); }
+  void destroy(Graph *g) {
+    graphs.push_back(g);
+  }
   void addSubGraph(Graph *g, Graph *sg) {
     graphs.push_back(g), sGraphs.push_back(sg);
   }
@@ -366,8 +389,7 @@ public:
 
 class DelInheritedPropertyObserverTest : public Observable {
 public:
-  DelInheritedPropertyObserverTest()
-      : inheritedPropertyExist(false), initialized(false) {}
+  DelInheritedPropertyObserverTest() : inheritedPropertyExist(false), initialized(false) {}
   bool inheritedPropertyExist;
   bool initialized;
   void delInheritedProperty(Graph *g, const string &name) {
@@ -380,8 +402,7 @@ public:
 
       initialized = true;
     } else {
-      inheritedPropertyExist =
-          inheritedPropertyExist & (g->getProperty(name) != nullptr);
+      inheritedPropertyExist = inheritedPropertyExist & (g->getProperty(name) != nullptr);
 
       if (inheritedPropertyExist) {
         g->getProperty(name)->getName();
@@ -436,8 +457,7 @@ void ObservableGraphTest::testAddDel() {
   for (unsigned int i = 0; i < NB_NODES; ++i) {
     gObserver->reset();
     observer->reset();
-    edges.push_back(
-        graph->addEdge(nodes[i], (i == NB_NODES - 1) ? nodes[0] : nodes[i]));
+    edges.push_back(graph->addEdge(nodes[i], (i == NB_NODES - 1) ? nodes[0] : nodes[i]));
     CPPUNIT_ASSERT_EQUAL(edges[i], gObserver->getObservedEdge());
     CPPUNIT_ASSERT_EQUAL(graph, gObserver->getObservedGraph());
     CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
@@ -489,8 +509,7 @@ void ObservableGraphTest::testClear() {
   }
 
   for (unsigned int i = 0; i < NB_NODES; ++i) {
-    edges.push_back(graph->addEdge(
-        nodes[i], (i == NB_NODES - 1) ? nodes[i] : nodes[i + 1]));
+    edges.push_back(graph->addEdge(nodes[i], (i == NB_NODES - 1) ? nodes[i] : nodes[i + 1]));
   }
 
   gObserver->reset();
@@ -526,8 +545,7 @@ void ObservableGraphTest::testReverse() {
   }
 
   for (unsigned int i = 0; i < NB_NODES; ++i) {
-    edges.push_back(graph->addEdge(
-        nodes[i], (i == NB_NODES - 1) ? nodes[0] : nodes[i + 1]));
+    edges.push_back(graph->addEdge(nodes[i], (i == NB_NODES - 1) ? nodes[0] : nodes[i + 1]));
   }
 
   for (unsigned int i = 0; i < NB_NODES; ++i) {
@@ -882,11 +900,9 @@ void ObservableGraphTest::testObserverWhenRemoveObservable() {
   CPPUNIT_ASSERT_EQUAL(listeners, graph->countListeners());
 }
 
-void ObservableGraphTest::
-    testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend() {
+void ObservableGraphTest::testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend() {
   Graph *g1 = graph->addSubGraph();
-  DelInheritedPropertyObserverTest *observer =
-      new DelInheritedPropertyObserverTest();
+  DelInheritedPropertyObserverTest *observer = new DelInheritedPropertyObserverTest();
   g1->addListener(observer);
   graph->getLocalProperty<BooleanProperty>("test");
   graph->delLocalProperty("test");
@@ -895,8 +911,7 @@ void ObservableGraphTest::
   delete observer;
 }
 
-void ObservableGraphTest::
-    testNotifyDelInheritedPropertyIsSendWhenLocalPropertyIsDeleted() {
+void ObservableGraphTest::testNotifyDelInheritedPropertyIsSendWhenLocalPropertyIsDeleted() {
 
   Graph *g1 = graph->addSubGraph();
   Graph *g2 = g1->addSubGraph();
@@ -1020,8 +1035,7 @@ void ObservableGraphTest::testAddEdgesEventForTLPBImport() {
   string tlpbFile = "test.tlpb.gz";
   saveGraph(testGraph, tlpbFile);
 
-  // import the previously saved graph by populating the already created empty
-  // graph
+  // import the previously saved graph by populating the already created empty graph
   DataSet params;
   params.set("file::filename", tlpbFile);
   importGraph("TLPB Import", params, nullptr, graph);

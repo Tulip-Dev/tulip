@@ -17,8 +17,8 @@
  *
  */
 
-#include <cmath>
 #include <iostream>
+#include <cmath>
 
 #include "SpiralLayout.h"
 
@@ -26,7 +26,9 @@ using namespace std;
 using namespace tlp;
 
 namespace {
-inline double eq2D2(const double c) { return (4. - sqrt(16. - 16. * c)) / -8.; }
+inline double eq2D2(const double c) {
+  return (4. - sqrt(16. - 16. * c)) / -8.;
+}
 } // namespace
 
 namespace pocore {
@@ -122,78 +124,63 @@ bool testProject() {
   unsigned char color[4];
   compute(0, points, color);
   if (points[0]!=0 || points[1]!=0) {
-    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] <<
-")" << endl;
+    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] << ")" << endl;
   }
   compute(1, points, color);
   if (points[0]!=1 || points[1]!=1) {
-    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] <<
-")" << endl;
+    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] << ")" << endl;
   }
   compute(2, points, color);
   if (points[0]!=1 || points[1]!=0) {
-    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] <<
-")" << endl;
+    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] << ")" << endl;
   }
   compute(3, points, color);
   if (points[0]!=1 || points[1]!=-1) {
-    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] <<
-")" << endl;
+    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] << ")" << endl;
   }
   compute(4, points, color);
   if (points[0]!=0 || points[1]!=-1) {
-    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] <<
-")" << endl;
+    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] << ")" << endl;
   }
   compute(5, points, color);
   if (points[0]!=-1 || points[1]!=-1) {
-    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] <<
-")" << endl;
+    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] << ")" << endl;
   }
   compute(6, points, color);
   if (points[0]!=-1 || points[1]!=0) {
-    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] <<
-")" << endl;
+    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] << ")" << endl;
   }
   compute(7, points, color);
   if (points[0]!=-1 || points[1]!=1) {
-    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] <<
-")" << endl;
+    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] << ")" << endl;
   }
   compute(8, points, color);
   if (points[0]!=0 || points[1]!=1) {
-    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] <<
-")" << endl;
+    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] << ")" << endl;
   }
   compute(9, points, color);
   if (points[0]!=2 || points[1]!=2) {
-    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] <<
-")" << endl;
+    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] << ")" << endl;
   }
   compute(10, points, color);
   if (points[0]!=2 || points[1]!=1) {
-    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] <<
-")" << endl;
+    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] << ")" << endl;
   }
   compute(11, points, color);
   if (points[0]!=2 || points[1]!=0) {
-    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] <<
-")" << endl;
+    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] << ")" << endl;
   }
   compute(12, points, color);
   if (points[0]!=2 || points[1]!=-1) {
-    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] <<
-")" << endl;
+    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] << ")" << endl;
   }
   compute(13, points, color);
   if (points[0]!=2 || points[1]!=-2) {
-    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] <<
-")" << endl;
+    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] << ")" << endl;
   }
   compute(25, points, color);
   if (points[0]!=3 || points[1]!=3) {
-    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] <<
-")" << endl;
+    cerr << "error : " << __LINE__ << ": (" << points[0] << "," << points[1] << ")" << endl;
   }
   return true;
 }
@@ -206,8 +193,8 @@ bool testUnproject() {
     if (inverseCompute(points) != i) {
       cerr << "error line : " << __LINE__ ;
     cerr << "/ inv :";
-    cerr << inverseCompute(points) << " / pos : (" << points[0] << "," <<
-points[1] << ") /"; cerr << " i: " << i << endl;
+    cerr << inverseCompute(points) << " / pos : (" << points[0] << "," << points[1] << ") /";
+    cerr << " i: " << i << endl;
     }
   }
   return true;

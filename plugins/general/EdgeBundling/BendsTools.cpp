@@ -26,8 +26,7 @@ using namespace std;
 BendsTools::BendsTools() {}
 
 //============================================
-double BendsTools::cosAlpha(LayoutProperty *layout, const node a, const node b,
-                            const node c) {
+double BendsTools::cosAlpha(LayoutProperty *layout, const node a, const node b, const node c) {
   Vector<double, 2> point[3];
   const Coord &aC = layout->getNodeValue(a);
   point[0][0] = aC[0];
@@ -47,8 +46,7 @@ double BendsTools::cosAlpha(LayoutProperty *layout, const node a, const node b,
   return ba.dotProduct(bc) / (ba.norm() * bc.norm());
 }
 //============================================
-bool BendsTools::straightLine(LayoutProperty *layout, const node a,
-                              const node b, const node c) {
+bool BendsTools::straightLine(LayoutProperty *layout, const node a, const node b, const node c) {
   Vector<double, 2> point[3];
   const Coord &aC = layout->getNodeValue(a);
   point[0][0] = aC[0];
@@ -67,8 +65,7 @@ bool BendsTools::straightLine(LayoutProperty *layout, const node a,
   return (fabs(ba.norm() + bc.norm() - ac.norm()) < 1E-9);
 }
 //============================================
-vector<node> BendsTools::bendsSimplification(vector<node> &bends,
-                                             LayoutProperty *layout) {
+vector<node> BendsTools::bendsSimplification(vector<node> &bends, LayoutProperty *layout) {
   // remove all <=90° angles if the 3 point are in a freecell
   vector<node> result1;
   bool redo = true;

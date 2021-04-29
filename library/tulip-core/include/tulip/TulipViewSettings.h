@@ -20,14 +20,14 @@
 #ifndef TULIPVIEWSETTINGS_H
 #define TULIPVIEWSETTINGS_H
 
+#include <tulip/tulipconf.h>
 #include <tulip/Color.h>
+#include <tulip/Size.h>
 #include <tulip/Graph.h>
 #include <tulip/Observable.h>
-#include <tulip/Size.h>
-#include <tulip/tulipconf.h>
 
-#include <map>
 #include <string>
+#include <map>
 
 namespace tlp {
 
@@ -67,12 +67,7 @@ public:
 class TLP_SCOPE EdgeShape {
 
 public:
-  enum EdgeShapes {
-    Polyline = 0,
-    BezierCurve = 4,
-    CatmullRomCurve = 8,
-    CubicBSplineCurve = 16
-  };
+  enum EdgeShapes { Polyline = 0, BezierCurve = 4, CatmullRomCurve = 8, CubicBSplineCurve = 16 };
 };
 
 class TLP_SCOPE EdgeExtremityShape {
@@ -188,15 +183,25 @@ public:
       : Event(TulipViewSettings::instance(), Event::TLP_MODIFICATION),
         _type(TLP_DEFAULT_LABEL_COLOR_MODIFIED), _color(labelColor) {}
 
-  ViewSettingsEventType getType() const { return _type; }
+  ViewSettingsEventType getType() const {
+    return _type;
+  }
 
-  ElementType getElementType() const { return _elem; }
+  ElementType getElementType() const {
+    return _elem;
+  }
 
-  Color getColor() const { return _color; }
+  Color getColor() const {
+    return _color;
+  }
 
-  Size getSize() const { return _size; }
+  Size getSize() const {
+    return _size;
+  }
 
-  int getShape() const { return _shape; }
+  int getShape() const {
+    return _shape;
+  }
 
 private:
   ViewSettingsEventType _type;

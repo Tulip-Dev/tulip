@@ -37,13 +37,18 @@ class ConvolutionClusteringSetup : public QDialog {
   Ui::ConvolutionClusteringSetupData *_ui;
 
 public:
-  ConvolutionClusteringSetup(ConvolutionClustering *convolPlugin,
-                             QWidget *parent = nullptr);
+  ConvolutionClusteringSetup(ConvolutionClustering *convolPlugin, QWidget *parent = nullptr);
   ~ConvolutionClusteringSetup() override;
 
-  inline ConvolutionClustering *getPlugin() const { return convolPlugin; }
-  inline bool getLogarithmicScale() const { return useLogarithmicScale; }
-  void abort() { reject(); }
+  inline ConvolutionClustering *getPlugin() const {
+    return convolPlugin;
+  }
+  inline bool getLogarithmicScale() const {
+    return useLogarithmicScale;
+  }
+  void abort() {
+    reject();
+  }
 
 public slots:
   void update();

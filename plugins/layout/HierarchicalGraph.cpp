@@ -22,8 +22,8 @@
 #include <tulip/SortIterator.h>
 #include <tulip/StringCollection.h>
 
-#include "DatasetTools.h"
 #include "HierarchicalGraph.h"
+#include "DatasetTools.h"
 
 PLUGIN(HierarchicalGraph)
 
@@ -41,11 +41,10 @@ static const char *paramHelp[] = {
 //================================================================================
 #define ORIENTATION "horizontal;vertical;"
 //================================================================================
-HierarchicalGraph::HierarchicalGraph(const tlp::PluginContext *context)
-    : LayoutAlgorithm(context) {
+HierarchicalGraph::HierarchicalGraph(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
-  addInParameter<StringCollection>("orientation", paramHelp[0], ORIENTATION,
-                                   true, "horizontal <br> vertical");
+  addInParameter<StringCollection>("orientation", paramHelp[0], ORIENTATION, true,
+                                   "horizontal <br> vertical");
   addSpacingParameters(this);
   addDependency("Hierarchical Tree (R-T Extended)", "1.1");
 }
@@ -57,8 +56,7 @@ public:
   DoubleProperty *metric;
   Graph *sg;
   bool operator()(edge e1, edge e2) {
-    return (metric->getNodeValue(sg->source(e1)) <
-            metric->getNodeValue(sg->source(e2)));
+    return (metric->getNodeValue(sg->source(e1)) < metric->getNodeValue(sg->source(e2)));
   }
 };
 //================================================================================
@@ -77,13 +75,11 @@ void HierarchicalGraph::buildGrid(tlp::Graph *sg) {
   });
 }
 //================================================================================
-inline unsigned int HierarchicalGraph::degree(tlp::Graph *sg, tlp::node n,
-                                              bool directed) {
+inline unsigned int HierarchicalGraph::degree(tlp::Graph *sg, tlp::node n, bool directed) {
   return directed ? sg->outdeg(n) : sg->indeg(n);
 }
 //================================================================================
-void HierarchicalGraph::twoLayerCrossReduction(tlp::Graph *sg,
-                                               unsigned int freeLayer) {
+void HierarchicalGraph::twoLayerCrossReduction(tlp::Graph *sg, unsigned int freeLayer) {
   for (auto n : grid[freeLayer]) {
     double sum = embedding->getNodeValue(n);
     unsigned int deg = 1;
@@ -96,8 +92,7 @@ void HierarchicalGraph::twoLayerCrossReduction(tlp::Graph *sg,
 }
 //================================================================================
 // Set initial position using a DFS
-void HierarchicalGraph::initCross(tlp::Graph *sg, tlp::node n,
-                                  tlp::MutableContainer<bool> &visited,
+void HierarchicalGraph::initCross(tlp::Graph *sg, tlp::node n, tlp::MutableContainer<bool> &visited,
                                   int id) {
   if (visited.get(n.id))
     return;
@@ -160,8 +155,7 @@ void HierarchicalGraph::crossReduction(tlp::Graph *sg) {
   sg->delNode(tmp, true);
 }
 //================================================================================
-void HierarchicalGraph::DagLevelSpanningTree(tlp::Graph *sg,
-                                             tlp::DoubleProperty *embedding) {
+void HierarchicalGraph::DagLevelSpanningTree(tlp::Graph *sg, tlp::DoubleProperty *embedding) {
   assert(AcyclicTest::isAcyclic(sg));
   LessThanEdge tmpL;
   tmpL.metric = embedding;
@@ -238,9 +232,8 @@ void HierarchicalGraph::computeEdgeBends(
   }
 }
 //=======================================================================
-void HierarchicalGraph::computeSelfLoops(
-    tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout,
-    std::vector<tlp::SelfLoops> &listSelfLoops) {
+void HierarchicalGraph::computeSelfLoops(tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout,
+                                         std::vector<tlp::SelfLoops> &listSelfLoops) {
   // tlp::warning() << "We compute self loops" << endl;
   while (!listSelfLoops.empty()) {
     tlp::SelfLoops tmp = listSelfLoops.back();
@@ -328,8 +321,8 @@ bool HierarchicalGraph::run() {
     buildGrid(mySGraph);
     crossReduction(mySGraph);
     for (auto n : graph->nodes()) {
-      vector<edge> order = iteratorVector(new SortTargetEdgeIterator(
-          mySGraph->getOutEdges(n), mySGraph, embedding));
+      vector<edge> order =
+          iteratorVector(new SortTargetEdgeIterator(mySGraph->getOutEdges(n), mySGraph, embedding));
       mySGraph->setEdgeOrder(n, order);
     }
     // We extract a spanning tree from the proper dag.
@@ -361,8 +354,8 @@ bool HierarchicalGraph::run() {
 #ifndef NDEBUG
   resultBool =
 #endif
-      mySGraph->applyPropertyAlgorithm("Hierarchical Tree (R-T Extended)",
-                                       &tmpLayout, erreurMsg, &tmp);
+      mySGraph->applyPropertyAlgorithm("Hierarchical Tree (R-T Extended)", &tmpLayout, erreurMsg,
+                                       &tmp);
 
   if (edgeLength)
     delete edgeLength;

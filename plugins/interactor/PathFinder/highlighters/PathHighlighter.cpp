@@ -18,9 +18,9 @@
  */
 #include "PathHighlighter.h"
 
-#include <tulip/GlGraphComposite.h>
-#include <tulip/GlMainView.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/GlMainView.h>
+#include <tulip/GlGraphComposite.h>
 
 using namespace tlp;
 using namespace std;
@@ -53,8 +53,7 @@ void PathHighlighter::clear() {
   if (backupScene) {
     GlLayer *layer = getWorkingLayer(backupScene);
 
-    for (unordered_map<string, bool>::iterator it = entities.begin();
-         it != entities.end(); ++it) {
+    for (unordered_map<string, bool>::iterator it = entities.begin(); it != entities.end(); ++it) {
       string entityName(it->first);
       GlSimpleEntity *entity(layer->findGlEntity(entityName));
 
@@ -70,8 +69,8 @@ void PathHighlighter::clear() {
   }
 }
 
-void PathHighlighter::addGlEntity(GlScene *scene, GlSimpleEntity *entity,
-                                  bool deleteOnExit, const string &name) {
+void PathHighlighter::addGlEntity(GlScene *scene, GlSimpleEntity *entity, bool deleteOnExit,
+                                  const string &name) {
   string realName = name;
 
   if (realName.compare("") == 0) {

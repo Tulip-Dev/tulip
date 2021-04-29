@@ -19,9 +19,9 @@
 #ifndef __OCTTREE_H__
 #define __OCTTREE_H__
 
+#include <tulip/Node.h>
 #include <tulip/Coord.h>
 #include <tulip/DoubleProperty.h>
-#include <tulip/Node.h>
 #include <vector>
 
 namespace tlp {
@@ -79,8 +79,7 @@ public:
   // Adds a graph node to the octtree
   void addNode(tlp::node newNode, Coord newPos, unsigned int depth);
 
-  // Adds a graph node to the OctTree, without changing the position and weight
-  // of the root
+  // Adds a graph node to the OctTree, without changing the position and weight of the root
   void addNode2(tlp::node newNode, Coord newPos, unsigned int depth);
 
   // Removes a graph node from the octtree

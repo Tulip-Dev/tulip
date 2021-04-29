@@ -21,10 +21,10 @@
 
 #include <tulip/Graph.h>
 #include <tulip/GraphImpl.h>
+#include <tulip/PropertyManager.h>
+#include <tulip/GraphView.h>
 #include <tulip/GraphIterators.h>
 #include <tulip/GraphUpdatesRecorder.h>
-#include <tulip/GraphView.h>
-#include <tulip/PropertyManager.h>
 
 using namespace std;
 using namespace tlp;
@@ -77,8 +77,7 @@ void GraphImpl::clear() {
 //----------------------------------------------------------------
 edge GraphImpl::existEdge(const node src, const node tgt, bool directed) const {
   std::vector<edge> edges;
-  return storage.getEdges(src, tgt, directed, edges, nullptr, true) ? edges[0]
-                                                                    : edge();
+  return storage.getEdges(src, tgt, directed, edges, nullptr, true) ? edges[0] : edge();
 }
 //----------------------------------------------------------------
 unsigned int GraphImpl::getSubGraphId(unsigned int id) {
@@ -89,7 +88,9 @@ unsigned int GraphImpl::getSubGraphId(unsigned int id) {
   return id;
 }
 //----------------------------------------------------------------
-void GraphImpl::freeSubGraphId(unsigned int id) { graphIds.free(id); }
+void GraphImpl::freeSubGraphId(unsigned int id) {
+  graphIds.free(id);
+}
 //----------------------------------------------------------------
 void GraphImpl::restoreNode(node newNode) {
   storage.restoreNode(newNode);
@@ -121,16 +122,18 @@ void GraphImpl::addNodes(unsigned int nb, std::vector<node> &addedNodes) {
 }
 //----------------------------------------------------------------
 void GraphImpl::addNode(const node) {
-  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__
-                 << " ... Impossible operation on Root Graph" << std::endl;
+  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph"
+                 << std::endl;
 }
 //----------------------------------------------------------------
 void GraphImpl::addNodes(Iterator<node> *) {
-  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__
-                 << " ... Impossible operation on Root Graph" << std::endl;
+  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph"
+                 << std::endl;
 }
 //----------------------------------------------------------------
-void GraphImpl::reserveNodes(unsigned int nb) { storage.reserveNodes(nb); }
+void GraphImpl::reserveNodes(unsigned int nb) {
+  storage.reserveNodes(nb);
+}
 //----------------------------------------------------------------
 void GraphImpl::restoreEdge(edge newEdge, const node src, const node tgt) {
   storage.restoreEdge(src, tgt, newEdge);
@@ -164,18 +167,20 @@ void GraphImpl::addEdges(const std::vector<std::pair<node, node>> &edges) {
 }
 //----------------------------------------------------------------
 void GraphImpl::addEdge(const edge e) {
-  tlp::warning() << "Warning: " << __PRETTY_FUNCTION__
-                 << " ... Impossible operation on Root Graph" << std::endl;
-  tlp::warning() << "\t Trying to add edge " << e.id << " (" << source(e).id
-                 << "," << target(e).id << ")";
+  tlp::warning() << "Warning: " << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph"
+                 << std::endl;
+  tlp::warning() << "\t Trying to add edge " << e.id << " (" << source(e).id << "," << target(e).id
+                 << ")";
 }
 //----------------------------------------------------------------
 void GraphImpl::addEdges(Iterator<edge> *) {
-  tlp::warning() << "Warning: " << __PRETTY_FUNCTION__
-                 << " ... Impossible operation on Root Graph" << std::endl;
+  tlp::warning() << "Warning: " << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph"
+                 << std::endl;
 }
 //----------------------------------------------------------------
-void GraphImpl::reserveEdges(unsigned int nb) { storage.reserveEdges(nb); }
+void GraphImpl::reserveEdges(unsigned int nb) {
+  storage.reserveEdges(nb);
+}
 //----------------------------------------------------------------
 void GraphImpl::removeNode(const node n) {
   assert(isElement(n));
@@ -278,8 +283,7 @@ Iterator<edge> *GraphImpl::getInOutEdges(const node n) const {
   return new GraphEdgeIterator(this, storage.getInOutEdges(n));
 }
 //----------------------------------------------------------------
-std::vector<edge> GraphImpl::getEdges(const node src, const node tgt,
-                                      bool directed) const {
+std::vector<edge> GraphImpl::getEdges(const node src, const node tgt, bool directed) const {
   std::vector<edge> edges;
   storage.getEdges(src, tgt, directed, edges);
   return edges;
@@ -305,8 +309,7 @@ void GraphImpl::setEnds(const edge e, const node newSrc, const node newTgt) {
 
   // not allowed on meta edge
   if (isMetaEdge(e)) {
-    tlp::warning() << "Warning: invoking Graph::setEnds on meta edge " << e.id
-                   << std::endl;
+    tlp::warning() << "Warning: invoking Graph::setEnds on meta edge " << e.id << std::endl;
     return;
   }
 
@@ -346,17 +349,20 @@ void GraphImpl::removeEdge(const edge e) {
   propertyContainer->erase(e);
 }
 //----------------------------------------------------------------
-bool GraphImpl::canPop() { return (!recorders.empty()); }
+bool GraphImpl::canPop() {
+  return (!recorders.empty());
+}
 //----------------------------------------------------------------
 bool GraphImpl::canPopThenUnpop() {
   return (!recorders.empty() && recorders.front()->restartAllowed);
 }
 //----------------------------------------------------------------
-bool GraphImpl::canUnpop() { return (!previousRecorders.empty()); }
+bool GraphImpl::canUnpop() {
+  return (!previousRecorders.empty());
+}
 //----------------------------------------------------------------
 void GraphImpl::delPreviousRecorders() {
-  std::list<GraphUpdatesRecorder *>::reverse_iterator it =
-      previousRecorders.rbegin();
+  std::list<GraphUpdatesRecorder *>::reverse_iterator it = previousRecorders.rbegin();
 
   // we delete previous recorders in reverse order
   // because they are pushed in front of previousRecorders
@@ -408,8 +414,7 @@ void GraphImpl::unobserveUpdates() {
 }
 //----------------------------------------------------------------
 #define NB_MAX_RECORDERS 10
-void GraphImpl::push(bool unpopAllowed,
-                     std::vector<PropertyInterface *> *propsToPreserve) {
+void GraphImpl::push(bool unpopAllowed, std::vector<PropertyInterface *> *propsToPreserve) {
   // from now if previous recorders exist
   // they cannot be unpop
   // so delete them
@@ -434,8 +439,7 @@ void GraphImpl::push(bool unpopAllowed,
   const GraphStorageIdsMemento *prevIdsMemento =
       hasRecorders ? recorders.front()->newIdsState : nullptr;
 
-  GraphUpdatesRecorder *recorder =
-      new GraphUpdatesRecorder(unpopAllowed, prevIdsMemento);
+  GraphUpdatesRecorder *recorder = new GraphUpdatesRecorder(unpopAllowed, prevIdsMemento);
   recorder->startRecording(this);
   recorders.push_front(recorder);
 
@@ -446,8 +450,7 @@ void GraphImpl::push(bool unpopAllowed,
     unsigned int nb = recorders.size();
 
     if (nb > NB_MAX_RECORDERS) {
-      std::list<GraphUpdatesRecorder *>::reverse_iterator it =
-          recorders.rbegin();
+      std::list<GraphUpdatesRecorder *>::reverse_iterator it = recorders.rbegin();
 
       while (nb > NB_MAX_RECORDERS) {
         delete (*it);
@@ -529,6 +532,5 @@ void GraphImpl::unpop() {
 }
 //----------------------------------------------------------------
 bool GraphImpl::canDeleteProperty(Graph *g, PropertyInterface *prop) {
-  return recorders.empty() ||
-         !recorders.front()->isAddedOrDeletedProperty(g, prop);
+  return recorders.empty() || !recorders.front()->isAddedOrDeletedProperty(g, prop);
 }

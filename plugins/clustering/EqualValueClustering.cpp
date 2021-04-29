@@ -41,11 +41,9 @@ static const char *paramHelp[] = {
 #define NODE_ELT 0
 #define EDGE_ELT 1
 //================================================================================
-EqualValueClustering::EqualValueClustering(tlp::PluginContext *context)
-    : Algorithm(context) {
+EqualValueClustering::EqualValueClustering(tlp::PluginContext *context) : Algorithm(context) {
   addInParameter<PropertyInterface *>("Property", paramHelp[0], "viewMetric");
-  addInParameter<StringCollection>(ELT_TYPE, paramHelp[1], ELT_TYPES, true,
-                                   "nodes <br> edges");
+  addInParameter<StringCollection>(ELT_TYPE, paramHelp[1], ELT_TYPES, true, "nodes <br> edges");
   addInParameter<bool>("Connected", paramHelp[2], "false");
 }
 //===============================================================================
@@ -68,14 +66,12 @@ bool EqualValueClustering::run() {
 
   // try to work with NumericProperty
   if (dynamic_cast<NumericProperty *>(property))
-    return computeClusters(static_cast<NumericProperty *>(property), onNodes,
-                           connected);
+    return computeClusters(static_cast<NumericProperty *>(property), onNodes, connected);
 
   return computeClusters(property, onNodes, connected);
 }
 
-bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes,
-                                           bool connected) {
+bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes, bool connected) {
   unsigned int step = 0;
   unsigned int maxSteps;
 
@@ -109,8 +105,7 @@ bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes,
           sstr << curValue;
 
           if (connected) {
-            std::unordered_map<std::string, unsigned int>::iterator itv =
-                valuesCount.find(strVal);
+            std::unordered_map<std::string, unsigned int>::iterator itv = valuesCount.find(strVal);
 
             if (itv != valuesCount.end()) {
               itv->second += 1;
@@ -204,8 +199,7 @@ bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes,
           sstr << curValue;
 
           if (connected) {
-            std::unordered_map<std::string, unsigned int>::iterator itv =
-                valuesCount.find(strVal);
+            std::unordered_map<std::string, unsigned int>::iterator itv = valuesCount.find(strVal);
 
             if (itv != valuesCount.end()) {
               itv->second += 1;
@@ -244,8 +238,7 @@ bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes,
           for (auto curEdge : graph->getInOutEdges(curNode)) {
             // check if the edge has not been visited AND
             // if it has the same value
-            if (!visited.get(curEdge.id) &&
-                curValue == prop->getEdgeDoubleValue(curEdge)) {
+            if (!visited.get(curEdge.id) && curValue == prop->getEdgeDoubleValue(curEdge)) {
               node neighbour = graph->opposite(curEdge, curNode);
 
               if (neighbour != curNode) {
@@ -275,8 +268,7 @@ bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes,
   return true;
 }
 
-bool EqualValueClustering::computeClusters(PropertyInterface *prop,
-                                           bool onNodes, bool connected) {
+bool EqualValueClustering::computeClusters(PropertyInterface *prop, bool onNodes, bool connected) {
   unsigned int step = 0;
   unsigned int maxSteps;
 
@@ -441,8 +433,7 @@ bool EqualValueClustering::computeClusters(PropertyInterface *prop,
           for (auto curEdge : graph->getInOutEdges(curNode)) {
             // check if the edge has not been visited AND
             // if it has the same value
-            if (!visited.get(curEdge.id) &&
-                curValue == prop->getEdgeStringValue(curEdge)) {
+            if (!visited.get(curEdge.id) && curValue == prop->getEdgeStringValue(curEdge)) {
               node neighbour = graph->opposite(curEdge, curNode);
 
               if (neighbour != curNode) {

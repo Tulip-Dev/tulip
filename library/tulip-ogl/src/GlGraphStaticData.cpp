@@ -26,12 +26,11 @@ using namespace std;
 namespace tlp {
 
 const int GlGraphStaticData::edgeShapesCount = 4;
-int GlGraphStaticData::edgeShapeIds[edgeShapesCount] = {
-    EdgeShape::Polyline, EdgeShape::BezierCurve, EdgeShape::CatmullRomCurve,
-    EdgeShape::CubicBSplineCurve};
-string GlGraphStaticData::labelPositionNames[] = {
-    string("Center"), string("Top"), string("Bottom"), string("Left"),
-    string("Right")};
+int GlGraphStaticData::edgeShapeIds[edgeShapesCount] = {EdgeShape::Polyline, EdgeShape::BezierCurve,
+                                                        EdgeShape::CatmullRomCurve,
+                                                        EdgeShape::CubicBSplineCurve};
+string GlGraphStaticData::labelPositionNames[] = {string("Center"), string("Top"), string("Bottom"),
+                                                  string("Left"), string("Right")};
 
 string GlGraphStaticData::edgeShapeName(int id) {
   switch (id) {

@@ -109,7 +109,9 @@ FishEyesScreenFurnas::FishEyesScreenFurnas() {
   fisheyesCenter.fill(0);
 }
 //==============================================================
-void FishEyesScreenFurnas::setRadius(double r) { R = r; }
+void FishEyesScreenFurnas::setRadius(double r) {
+  R = r;
+}
 void FishEyesScreenFurnas::setHeight(double h) {
   k = h;
 

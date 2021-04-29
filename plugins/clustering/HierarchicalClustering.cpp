@@ -29,8 +29,7 @@ static const char *paramHelp[] = {
     "An existing node metric property."};
 
 //================================================================================
-HierarchicalClustering::HierarchicalClustering(PluginContext *context)
-    : Algorithm(context) {
+HierarchicalClustering::HierarchicalClustering(PluginContext *context) : Algorithm(context) {
   addInParameter<NumericProperty *>("metric", paramHelp[0], "viewMetric");
 }
 //================================================================================
@@ -45,8 +44,7 @@ public:
   }
 };
 
-bool HierarchicalClustering::split(NumericProperty *metric,
-                                   list<node> &orderedNode) {
+bool HierarchicalClustering::split(NumericProperty *metric, list<node> &orderedNode) {
 
   for (auto n : graph->nodes())
     orderedNode.push_back(n);
@@ -71,8 +69,7 @@ bool HierarchicalClustering::split(NumericProperty *metric,
   --nbElement;
 
   while ((itListNode != orderedNode.end()) &&
-         ((nbElement > 0) ||
-          (tmpDbl == metric->getNodeDoubleValue(*itListNode)))) {
+         ((nbElement > 0) || (tmpDbl == metric->getNodeDoubleValue(*itListNode)))) {
     tmpDbl = metric->getNodeDoubleValue(*itListNode);
     ++itListNode;
     --nbElement;

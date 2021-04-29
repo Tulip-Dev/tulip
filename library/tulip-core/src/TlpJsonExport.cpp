@@ -24,14 +24,14 @@
 #include <algorithm>
 #include <sstream>
 
-#include <tulip/DataSet.h>
 #include <tulip/ExportModule.h>
 #include <tulip/Graph.h>
-#include <tulip/GraphProperty.h>
-#include <tulip/JsonTokens.h>
+#include <tulip/DataSet.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/TlpTools.h>
 #include <tulip/YajlFacade.h>
+#include <tulip/JsonTokens.h>
+#include <tulip/GraphProperty.h>
 
 using namespace std;
 using namespace tlp;
@@ -39,31 +39,32 @@ using namespace tlp;
 /**
  * @brief Exports a Tulip Graph to a JSON format.
  *
- * In order to maintain full capabilities of exporting to older format versions,
- *the export of the data is decomposed in two parts:
+ * In order to maintain full capabilities of exporting to older format versions, the export of the
+ *data is decomposed in two parts:
  * * The metadata
  * * The Graph Hierarchy
  *
- * The metadata is exported by saveMetaData() and the graph hierarchy saved
- *(recursively) by saveGraph().
+ * The metadata is exported by saveMetaData() and the graph hierarchy saved (recursively) by
+ *saveGraph().
  *
- * These functions are suffixed by the format version they export to (e.g.
- *saveGraph_V4() as of version 4.0 of the format). Under no circumstances should
- *these functions be modified for anything besides a simple bugfix.
+ * These functions are suffixed by the format version they export to (e.g. saveGraph_V4() as of
+ *version 4.0 of the format).
+ * Under no circumstances should these functions be modified for anything besides a simple bugfix.
  *
- * Any feature addition should be done by writing a new version of saveMetaData
- *and saveGraph, and switching on the version number in the main function.
+ * Any feature addition should be done by writing a new version of saveMetaData and saveGraph, and
+ *switching on the version number in the main function.
  *
  **/
 class TlpJsonExport : public ExportModule {
 public:
-  PLUGININFORMATION(
-      "JSON Export", "Charles Huet", "18/05/2011",
-      "<p>Supported extensions: json</p><p>Exports a graph in a file using the Tulip "
-      "JSON format.</p>",
-      "1.0", "File")
+  PLUGININFORMATION("JSON Export", "Charles Huet", "18/05/2011",
+                    "<p>Supported extensions: json</p><p>Exports a graph in a file using the Tulip "
+                    "JSON format.</p>",
+                    "1.0", "File")
 
-  std::string fileExtension() const override { return "json"; }
+  std::string fileExtension() const override {
+    return "json";
+  }
 
   std::string icon() const override {
     return ":/tulip/gui/icons/json32x32.png";
@@ -75,10 +76,9 @@ public:
    * @param context The context this export algorithm will be initialized with.
    **/
   TlpJsonExport(tlp::PluginContext *context) : ExportModule(context) {
-    addInParameter<bool>(
-        "Beautify JSON string",
-        "If true, generate a JSON string with indentation and line breaks.",
-        "false");
+    addInParameter<bool>("Beautify JSON string",
+                         "If true, generate a JSON string with indentation and line breaks.",
+                         "false");
   }
 
   bool exportGraph(ostream &fileOut) override {
@@ -218,9 +218,8 @@ public:
       _writer.writeString(property->getTypename());
 
       _writer.writeString(NodeDefaultToken);
-      bool writingPathViewProperty =
-          (property->getName() == string("viewFont") ||
-           property->getName() == string("viewTexture"));
+      bool writingPathViewProperty = (property->getName() == string("viewFont") ||
+                                      property->getName() == string("viewTexture"));
 
       string dsValue = property->getNodeDefaultStringValue();
 
@@ -252,8 +251,7 @@ public:
         // is not the root graph we will have to check if the node pointed
         // subgraph is a descendant graph of this graph
         bool checkForDescendantGraph =
-            (g->getId() != 0) &&
-            (property->getTypename() == GraphProperty::propertyTypename);
+            (g->getId() != 0) && (property->getTypename() == GraphProperty::propertyTypename);
         for (auto n : property->getNonDefaultValuatedNodes(g)) {
 
           string sValue = property->getNodeStringValue(n);
@@ -292,8 +290,7 @@ public:
 
           if (property->getTypename() == GraphProperty::propertyTypename) {
             // reindex embedded edges
-            const set<edge> &eEdges =
-                static_cast<GraphProperty *>(property)->getEdgeValue(e);
+            const set<edge> &eEdges = static_cast<GraphProperty *>(property)->getEdgeValue(e);
             set<edge> rEdges;
             for (auto eEdge : eEdges) {
               if (graph->isElement(eEdge))
@@ -339,19 +336,16 @@ public:
       if (attribute.second->getTypeName() == string(typeid(node).name())) {
         node *n = static_cast<node *>(attribute.second->value);
         n->id = graph->nodePos(*n);
-      } else if (attribute.second->getTypeName() ==
-                 string(typeid(edge).name())) {
+      } else if (attribute.second->getTypeName() == string(typeid(edge).name())) {
         edge *e = static_cast<edge *>(attribute.second->value);
         e->id = g->edgePos(*e);
-      } else if (attribute.second->getTypeName() ==
-                 string(typeid(vector<node>).name())) {
+      } else if (attribute.second->getTypeName() == string(typeid(vector<node>).name())) {
         vector<node> *vn = static_cast<vector<node> *>(attribute.second->value);
 
         for (size_t i = 0; i < vn->size(); ++i) {
           (*vn)[i].id = graph->nodePos((*vn)[i]);
         }
-      } else if (attribute.second->getTypeName() ==
-                 string(typeid(vector<edge>).name())) {
+      } else if (attribute.second->getTypeName() == string(typeid(vector<edge>).name())) {
         vector<edge> *ve = static_cast<vector<edge> *>(attribute.second->value);
 
         for (size_t i = 0; i < ve->size(); ++i) {
@@ -384,17 +378,16 @@ public:
   }
 
   /**
-   * @brief Writes a set of identifiers as contiguous intervals (defined by
-   *arrays containing lower and higher bounds). e.g. the set {0, 1, 2, 3, 4, 5,
-   *6, 7, 9, 10, 11, 15, 17} will be saved as the array: [ [0, 7], [9, 11], 15,
-   *17]
+   * @brief Writes a set of identifiers as contiguous intervals (defined by arrays containing lower
+   *and higher bounds).
+   * e.g. the set {0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 15, 17} will be saved as the array:
+   * [ [0, 7], [9, 11], 15, 17]
    *
    * @param intervalName The name of the interval.
    * @param iterator An iterator over the values to save.
    * @return void
    **/
-  void writeInterval(const std::string &intervalName,
-                     std::vector<unsigned int> &pos) {
+  void writeInterval(const std::string &intervalName, std::vector<unsigned int> &pos) {
     _writer.writeString(intervalName);
     _writer.writeArrayOpen();
     unsigned int intervalBegin = UINT_MAX;
@@ -409,12 +402,11 @@ public:
       // we don't need/want to do all this on the first time we loop
       if (previousId != UINT_MAX) {
 
-        // if the ID are continuous, define an interval, otherwise write the IDs
-        // (either intervals or single)
+        // if the ID are continuous, define an interval, otherwise write the IDs (either intervals
+        // or single)
         if (currentId == previousId + 1) {
-          // if we have no interval being defined, set the lower bound to the
-          // previous edge ID if an interval is being defined, set its end to
-          // the current edge ID
+          // if we have no interval being defined, set the lower bound to the previous edge ID
+          // if an interval is being defined, set its end to the current edge ID
           if (intervalBegin == UINT_MAX) {
             intervalBegin = previousId;
           }

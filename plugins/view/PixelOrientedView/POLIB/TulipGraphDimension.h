@@ -22,8 +22,8 @@
 
 #include <tulip/Graph.h>
 
-#include <map>
 #include <string>
+#include <map>
 
 #include "DimensionBase.h"
 #include "TulipNodeMetricSorter.h"
@@ -49,12 +49,17 @@ public:
   double minValue() const override;
   double maxValue() const override;
   std::vector<unsigned int> links(const unsigned int itemId) const override;
-  std::string getDimensionName() const override { return dimName; }
-  tlp::Graph *getTulipGraph() const { return graph; }
+  std::string getDimensionName() const override {
+    return dimName;
+  }
+  tlp::Graph *getTulipGraph() const {
+    return graph;
+  }
   void updateNodesRank();
 
 private:
-  template <typename PROPERTY> double getNodeValue(const tlp::node n) const;
+  template <typename PROPERTY>
+  double getNodeValue(const tlp::node n) const;
 
   tlp::Graph *graph;
   std::string dimName;

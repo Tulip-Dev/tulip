@@ -25,8 +25,8 @@
 #include "tulip/PythonIncludes.h"
 #include "tulip/PythonInterpreter.h"
 
-#include <tulip/Perspective.h>
 #include <tulip/PluginLister.h>
+#include <tulip/Perspective.h>
 
 using namespace tlp;
 
@@ -59,8 +59,7 @@ static PyObject *tuliputils_runGraphScript(PyObject *, PyObject *args) {
     QString scriptName(s);
     scriptName.replace(".py", "");
 
-    if (PythonInterpreter::getInstance()->runString(QString("import ") +
-                                                    scriptName)) {
+    if (PythonInterpreter::getInstance()->runString(QString("import ") + scriptName)) {
 
       // Getting proper sipWrapperType
       const sipTypeDef *kpTypeDef = sipFindType("tlp::Graph");
@@ -74,13 +73,11 @@ static PyObject *tuliputils_runGraphScript(PyObject *, PyObject *args) {
         tlp::Graph *graph = static_cast<tlp::Graph *>(
             sipConvertToType(o, kpTypeDef, NULL, SIP_NOT_NONE, &state, &err));
 
-        if (!PythonInterpreter::getInstance()->runGraphScript(scriptName,
-                                                              "main", graph)) {
-          PyErr_SetString(
-              PyExc_Exception,
-              (std::string("An exception occurred when executing the ") +
-               std::string(s) + " script")
-                  .c_str());
+        if (!PythonInterpreter::getInstance()->runGraphScript(scriptName, "main", graph)) {
+          PyErr_SetString(PyExc_Exception,
+                          (std::string("An exception occurred when executing the ") +
+                           std::string(s) + " script")
+                              .c_str());
           return NULL;
         }
 
@@ -91,15 +88,13 @@ static PyObject *tuliputils_runGraphScript(PyObject *, PyObject *args) {
         return NULL;
       }
     } else {
-      PyErr_SetString(PyExc_Exception, (std::string("The script ") +
-                                        std::string(s) + " does not exist")
-                                           .c_str());
+      PyErr_SetString(PyExc_Exception,
+                      (std::string("The script ") + std::string(s) + " does not exist").c_str());
       return NULL;
     }
   } else {
-    PyErr_SetString(
-        PyExc_TypeError,
-        "Parameters provided to the runGraphScript function have invalid types");
+    PyErr_SetString(PyExc_TypeError,
+                    "Parameters provided to the runGraphScript function have invalid types");
     return NULL;
   }
 
@@ -126,8 +121,7 @@ static PyObject *tuliputils_setProcessQtEvents(PyObject *, PyObject *o) {
   if (!PyArg_ParseTuple(o, "i", &i))
     return NULL;
 
-  PythonInterpreter::getInstance()->setProcessQtEventsDuringScriptExecution(i >
-                                                                            0);
+  PythonInterpreter::getInstance()->setProcessQtEventsDuringScriptExecution(i > 0);
 
   Py_RETURN_NONE;
 }

@@ -21,8 +21,8 @@
 #define PATHFINDERTOOLS_H_
 
 #include <tulip/Circle.h>
-#include <tulip/Edge.h>
 #include <tulip/Node.h>
+#include <tulip/Edge.h>
 
 namespace tlp {
 class GlGraphInputData;
@@ -30,25 +30,23 @@ class SizeProperty;
 class LayoutProperty;
 
 /**
- * Computes the enclosing circle of a graph's node using the layout,size etc
- * properties specified in the input data.
+ * Computes the enclosing circle of a graph's node using the layout,size etc properties specified in
+ * the input data.
  * @param circle The resulting circle.
  * @param inputData The graph's input data
  * @param n the node.
  * @return true if the circle has been successfully computed.
  */
-bool getNodeEnclosingCircle(Circlef &circle, GlGraphInputData *inputData,
-                            node n);
+bool getNodeEnclosingCircle(Circlef &circle, GlGraphInputData *inputData, node n);
 
 /**
- * Computes the enclosing circle of a graph's edge bends using the layout,size
- * etc properties specified in the input data.
+ * Computes the enclosing circle of a graph's edge bends using the layout,size etc properties
+ * specified in the input data.
  * @param circle The resulting circle.
  * @param inputData The graph's input data
  * @param n the node.
  * @return true if the circle has been successfully computed.
  */
-bool getEdgeEnclosingCircle(Circlef &circle, GlGraphInputData *inputData,
-                            edge n);
+bool getEdgeEnclosingCircle(Circlef &circle, GlGraphInputData *inputData, edge n);
 } // namespace tlp
 #endif /* PATHFINDERTOOLS_H_ */

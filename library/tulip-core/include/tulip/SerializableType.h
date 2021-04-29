@@ -21,26 +21,26 @@
 #ifndef SERIALIZABLETYPE_H
 #define SERIALIZABLETYPE_H
 
-#include <cfloat>
-#include <iostream>
-#include <list>
 #include <set>
-#include <sstream>
-#include <string>
 #include <vector>
+#include <string>
+#include <list>
+#include <iostream>
+#include <sstream>
+#include <cfloat>
 
 #include <tulip/TypeInterface.h>
 
-#define FORWARD_TOSTRING(T)                                                    \
-  static std::string toString(const T::RealType &v) {                          \
-    std::ostringstream oss;                                                    \
-    write(oss, v);                                                             \
-    return oss.str();                                                          \
+#define FORWARD_TOSTRING(T)                                                                        \
+  static std::string toString(const T::RealType &v) {                                              \
+    std::ostringstream oss;                                                                        \
+    write(oss, v);                                                                                 \
+    return oss.str();                                                                              \
   }
-#define FORWARD_FROMSTRING(T)                                                  \
-  static bool fromString(T::RealType &v, const std::string &s) {               \
-    std::istringstream iss(s);                                                 \
-    return read(iss, v);                                                       \
+#define FORWARD_FROMSTRING(T)                                                                      \
+  static bool fromString(T::RealType &v, const std::string &s) {                                   \
+    std::istringstream iss(s);                                                                     \
+    return read(iss, v);                                                                           \
   }
 #define FORWARD_STRING_METHODS(T) FORWARD_FROMSTRING(T) FORWARD_TOSTRING(T)
 
@@ -48,8 +48,7 @@ namespace tlp {
 template <typename T>
 class TLP_SCOPE SerializableType : public TypeInterface<T> {
 public:
-  static void write(std::ostream &oss,
-                    const typename TypeInterface<T>::RealType &v) {
+  static void write(std::ostream &oss, const typename TypeInterface<T>::RealType &v) {
     oss << v;
   }
   static bool read(std::istream &iss, typename TypeInterface<T>::RealType &v) {
@@ -59,10 +58,9 @@ public:
 };
 
 template <typename ELT_TYPE, typename ELT_READER, int openParen>
-class TLP_SCOPE SerializableVectorType
-    : public TypeInterface<std::vector<ELT_TYPE>> {
-  static bool readVector(std::istream &is, std::vector<ELT_TYPE> &v,
-                         char openChar, char sepChar, char closeChar) {
+class TLP_SCOPE SerializableVectorType : public TypeInterface<std::vector<ELT_TYPE>> {
+  static bool readVector(std::istream &is, std::vector<ELT_TYPE> &v, char openChar, char sepChar,
+                         char closeChar) {
     v.clear();
 
     char c = ' ';
@@ -131,34 +129,26 @@ class TLP_SCOPE SerializableVectorType
   }
 
 public:
-  static void
-  write(std::ostream &oss,
-        const typename TypeInterface<std::vector<ELT_TYPE>>::RealType &v) {
+  static void write(std::ostream &oss,
+                    const typename TypeInterface<std::vector<ELT_TYPE>>::RealType &v) {
     writeVector(oss, v);
   }
-  static void
-  writeb(std::ostream &oss,
-         const typename TypeInterface<std::vector<ELT_TYPE>>::RealType &v) {
+  static void writeb(std::ostream &oss,
+                     const typename TypeInterface<std::vector<ELT_TYPE>>::RealType &v) {
     unsigned int vSize = v.size();
     oss.write(reinterpret_cast<const char *>(&vSize), sizeof(vSize));
-    oss.write(reinterpret_cast<const char *>(v.data()),
-              vSize * sizeof(ELT_TYPE));
+    oss.write(reinterpret_cast<const char *>(v.data()), vSize * sizeof(ELT_TYPE));
   }
-  static bool read(std::istream &iss,
-                   typename TypeInterface<std::vector<ELT_TYPE>>::RealType &v,
-                   char openChar = '(', char sepChar = ',',
-                   char closeChar = ')') {
+  static bool read(std::istream &iss, typename TypeInterface<std::vector<ELT_TYPE>>::RealType &v,
+                   char openChar = '(', char sepChar = ',', char closeChar = ')') {
     return readVector(iss, v, openChar, sepChar, closeChar);
   }
-  static bool
-  readb(std::istream &iss,
-        typename TypeInterface<std::vector<ELT_TYPE>>::RealType &v) {
+  static bool readb(std::istream &iss, typename TypeInterface<std::vector<ELT_TYPE>>::RealType &v) {
     unsigned int vSize;
 
     if (bool(iss.read(reinterpret_cast<char *>(&vSize), sizeof(vSize)))) {
       v.resize(vSize);
-      return bool(iss.read(reinterpret_cast<char *>(v.data()),
-                           vSize * sizeof(ELT_TYPE)));
+      return bool(iss.read(reinterpret_cast<char *>(v.data()), vSize * sizeof(ELT_TYPE)));
     }
     return false;
   }
@@ -177,8 +167,8 @@ public:
     }
     return true;
   }
-  static bool tokenize(const std::string &s, std::vector<std::string> &v,
-                       char openChar, char sepChar, char closeChar) {
+  static bool tokenize(const std::string &s, std::vector<std::string> &v, char openChar,
+                       char sepChar, char closeChar) {
     v.clear();
 
     std::istringstream is(s);

@@ -19,25 +19,25 @@
 
 #include <map>
 
-#include <tulip/ColorScale.h>
 #include <tulip/GlColorScale.h>
+#include <tulip/ColorScale.h>
 #include <tulip/GlPolyQuad.h>
 
 using namespace std;
 
 namespace tlp {
 
-GlColorScale::GlColorScale(ColorScale *colorScale, const Coord &baseCoord,
-                           const float length, const float thickness,
-                           Orientation orientation)
-    : colorScale(colorScale), baseCoord(baseCoord), length(length),
-      thickness(thickness), colorScalePolyQuad(nullptr),
-      orientation(orientation) {
+GlColorScale::GlColorScale(ColorScale *colorScale, const Coord &baseCoord, const float length,
+                           const float thickness, Orientation orientation)
+    : colorScale(colorScale), baseCoord(baseCoord), length(length), thickness(thickness),
+      colorScalePolyQuad(nullptr), orientation(orientation) {
   colorScale->addListener(this);
   updateDrawing();
 }
 
-GlColorScale::~GlColorScale() { delete colorScalePolyQuad; }
+GlColorScale::~GlColorScale() {
+  delete colorScalePolyQuad;
+}
 
 void GlColorScale::setColorScale(ColorScale *scale) {
   colorScale->removeListener(this);
@@ -70,10 +70,10 @@ void GlColorScale::updateDrawing() {
       currentMax.set(baseCoord.getX() + thickness / 2,
                      baseCoord.getY() + colorMapIt.first * length);
     } else {
-      currentMin.set(baseCoord.getX() + colorMapIt.first * length,
-                     baseCoord.getY() - thickness / 2, 0);
-      currentMax.set(baseCoord.getX() + colorMapIt.first * length,
-                     baseCoord.getY() + thickness / 2, 0);
+      currentMin.set(baseCoord.getX() + colorMapIt.first * length, baseCoord.getY() - thickness / 2,
+                     0);
+      currentMax.set(baseCoord.getX() + colorMapIt.first * length, baseCoord.getY() + thickness / 2,
+                     0);
     }
 
     colorScalePolyQuad->addQuadEdge(currentMin, currentMax, colorMapIt.second);

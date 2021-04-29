@@ -19,20 +19,20 @@
 
 #include <QMouseEvent>
 
-#include <tulip/BooleanProperty.h>
+#include <tulip/MouseSelectionEditor.h>
 #include <tulip/Camera.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/DrawingTools.h>
-#include <tulip/GlGraphComposite.h>
-#include <tulip/GlMainWidget.h>
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/MouseSelectionEditor.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/SizeProperty.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/DrawingTools.h>
+#include <tulip/GlGraphComposite.h>
 #include <tulip/TlpQtTools.h>
 
-#include <climits>
 #include <cmath>
+#include <climits>
 
 #define EPSILON 1.0
 #define EPSILON_SCREEN 50
@@ -43,14 +43,12 @@ using namespace tlp;
 using namespace std;
 
 const unsigned int arrowWithLineSize = 8;
-const Coord arrowWithLine[] = {
-    Coord(0, 3, 0), Coord(-5, -5, 0), Coord(5, -5, 0), Coord(0, 3, 0),
-    Coord(5, 3, 0), Coord(5, 5, 0),   Coord(-5, 5, 0), Coord(-5, 3, 0)};
+const Coord arrowWithLine[] = {Coord(0, 3, 0), Coord(-5, -5, 0), Coord(5, -5, 0), Coord(0, 3, 0),
+                               Coord(5, 3, 0), Coord(5, 5, 0),   Coord(-5, 5, 0), Coord(-5, 3, 0)};
 const unsigned int twoArrowWithLineSize = 10;
 const Coord twoArrowWithLine[] = {
-    Coord(0, 0, 0),  Coord(5, -5, 0), Coord(-5, -5, 0), Coord(0, 0, 0),
-    Coord(-5, 0, 0), Coord(5, 0, 0),  Coord(0, 0, 0),   Coord(5, 5, 0),
-    Coord(-5, 5, 0), Coord(0, 0, 0)};
+    Coord(0, 0, 0), Coord(5, -5, 0), Coord(-5, -5, 0), Coord(0, 0, 0),  Coord(-5, 0, 0),
+    Coord(5, 0, 0), Coord(0, 0, 0),  Coord(5, 5, 0),   Coord(-5, 5, 0), Coord(0, 0, 0)};
 
 //========================================================================================
 MouseSelectionEditor::MouseSelectionEditor()
@@ -199,9 +197,8 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
                           _selection->hasNonDefaultValuatedEdges(_graph);
 
       if (!hasSelection || !layer ||
-          !glMainWidget->pickGlEntities(int(editPosition[0]) - 3,
-                                        int(editPosition[1]) - 3, 6, 6, select,
-                                        layer)) {
+          !glMainWidget->pickGlEntities(int(editPosition[0]) - 3, int(editPosition[1]) - 3, 6, 6,
+                                        select, layer)) {
         // event occurs outside the selection rectangle
         // so from now we delegate the job to a MouseSelector object
         // which should intercept the event
@@ -313,8 +310,8 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     return true;
   }
 
-  if (e->type() == QEvent::MouseButtonRelease &&
-      qMouseEv->button() == Qt::LeftButton && operation != NONE) {
+  if (e->type() == QEvent::MouseButtonRelease && qMouseEv->button() == Qt::LeftButton &&
+      operation != NONE) {
     stopEdition();
 
     // restore colors
@@ -355,8 +352,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     return hasSelection;
   }
 
-  if (e->type() == QEvent::MouseMove && qMouseEv->buttons() & Qt::LeftButton &&
-      operation != NONE) {
+  if (e->type() == QEvent::MouseMove && qMouseEv->buttons() & Qt::LeftButton && operation != NONE) {
     int newX = qMouseEv->x();
     int newY = qMouseEv->y();
 
@@ -384,8 +380,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     case ALIGN_VERTICALLY:
     case ALIGN_HORIZONTALLY:
     default:
-      qWarning() << "[Error] : " << __FUNCTION__
-                 << " should not have been called" << QT_ENDL;
+      qWarning() << "[Error] : " << __FUNCTION__ << " should not have been called" << QT_ENDL;
       break;
     }
   }
@@ -406,8 +401,7 @@ bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
     const vector<pair<std::string, GlLayer *>> &layersList =
         glMainWidget->getScene()->getLayersList();
 
-    for (vector<pair<std::string, GlLayer *>>::const_iterator it =
-             layersList.begin();
+    for (vector<pair<std::string, GlLayer *>>::const_iterator it = layersList.begin();
          it != layersList.end(); ++it) {
       if ((*it).second == layer) {
         layerInScene = true;
@@ -428,8 +422,7 @@ bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
     composite->addGlEntity(&_controls[6], "bottom");
     composite->addGlEntity(&_controls[7], "bottom-left");
 
-    bool moreThanOneNode =
-        iteratorCountCheck(_selection->getNodesEqualTo(true, _graph), 2);
+    bool moreThanOneNode = iteratorCountCheck(_selection->getNodesEqualTo(true, _graph), 2);
 
     if (moreThanOneNode) {
       composite->addGlEntity(&advRect, "AdvRectangle");
@@ -468,7 +461,9 @@ bool MouseSelectionEditor::draw(GlMainWidget *) {
   return true;
 }
 //========================================================================================
-void MouseSelectionEditor::initEdition() { _graph->push(); }
+void MouseSelectionEditor::initEdition() {
+  _graph->push();
+}
 //========================================================================================
 void MouseSelectionEditor::undoEdition() {
   if (operation == NONE)
@@ -489,8 +484,7 @@ void MouseSelectionEditor::stopEdition() {
 }
 //========================================================================================
 void MouseSelectionEditor::initProxies(GlMainWidget *glMainWidget) {
-  GlGraphInputData *inputData =
-      glMainWidget->getScene()->getGlGraphComposite()->getInputData();
+  GlGraphInputData *inputData = glMainWidget->getScene()->getGlGraphComposite()->getInputData();
   _graph = inputData->getGraph();
   _layout = inputData->getElementLayout();
   _selection = inputData->getElementSelected();
@@ -498,8 +492,7 @@ void MouseSelectionEditor::initProxies(GlMainWidget *glMainWidget) {
   _sizes = inputData->getElementSize();
 }
 //========================================================================================
-void MouseSelectionEditor::mMouseTranslate(double newX, double newY,
-                                           GlMainWidget *glMainWidget) {
+void MouseSelectionEditor::mMouseTranslate(double newX, double newY, GlMainWidget *glMainWidget) {
   //  qWarning() << __PRETTY_FUNCTION__ << endl;
   Observable::holdObservers();
   initProxies(glMainWidget);
@@ -519,25 +512,20 @@ void MouseSelectionEditor::mMouseTranslate(double newX, double newY,
   Observable::unholdObservers();
 }
 //========================================================================================
-void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY,
-                                             GlMainWidget *glMainWidget) {
-  //  qWarning() << __PRETTY_FUNCTION__ << "/op=" << operation << ", mod:" <<
-  //  mode << endl;
-  Coord curPos(glMainWidget->screenToViewport(newX),
-               glMainWidget->screenToViewport(newY), 0);
+void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlMainWidget *glMainWidget) {
+  //  qWarning() << __PRETTY_FUNCTION__ << "/op=" << operation << ", mod:" << mode << endl;
+  Coord curPos(glMainWidget->screenToViewport(newX), glMainWidget->screenToViewport(newY), 0);
   Coord stretch(1, 1, 1);
 
   //  qWarning() << "cur : << " << curPos << " center : " << editCenter << endl;
   if (operation == STRETCH_X || operation == STRETCH_XY) {
-    stretch[0] =
-        (curPos[0] - editCenter[0]) /
-        (glMainWidget->screenToViewport(editPosition[0]) - editCenter[0]);
+    stretch[0] = (curPos[0] - editCenter[0]) /
+                 (glMainWidget->screenToViewport(editPosition[0]) - editCenter[0]);
   }
 
   if (operation == STRETCH_Y || operation == STRETCH_XY) {
-    stretch[1] =
-        (curPos[1] - editCenter[1]) /
-        (glMainWidget->screenToViewport(editPosition[1]) - editCenter[1]);
+    stretch[1] = (curPos[1] - editCenter[1]) /
+                 (glMainWidget->screenToViewport(editPosition[1]) - editCenter[1]);
   }
 
   //  qWarning() << "stretch : << "<< stretch << endl;
@@ -586,8 +574,7 @@ void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY,
   Observable::unholdObservers();
 }
 //========================================================================================
-void MouseSelectionEditor::mMouseRotate(double newX, double newY,
-                                        GlMainWidget *glMainWidget) {
+void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *glMainWidget) {
   //  qWarning() << __PRETTY_FUNCTION__ << endl;
   if (operation == ROTATE_Z) {
     Coord curPos(newX, newY, 0);
@@ -648,8 +635,7 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY,
     delta = abs(glMainWidget->screenToViewport(newX - editPosition[0]));
 
     if (delta > abs(glMainWidget->screenToViewport(newY - editPosition[1]))) {
-      initDelta =
-          abs(editCenter[0] - glMainWidget->screenToViewport(editPosition[0]));
+      initDelta = abs(editCenter[0] - glMainWidget->screenToViewport(editPosition[0]));
       nbPI = floor(delta / (2. * initDelta));
       delta -= nbPI * 2. * initDelta;
       cosa = (initDelta - delta) / initDelta;
@@ -657,8 +643,7 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY,
       yAngle = (acos(cosa) + (nbPI * M_PI)) * 180.0 / M_PI;
     } else {
       delta = abs(glMainWidget->screenToViewport(newY - editPosition[1]));
-      initDelta =
-          abs(editCenter[1] - glMainWidget->screenToViewport(editPosition[1]));
+      initDelta = abs(editCenter[1] - glMainWidget->screenToViewport(editPosition[1]));
       nbPI = floor(delta / (2. * initDelta));
       delta -= nbPI * 2. * initDelta;
       cosa = (initDelta - delta) / initDelta;
@@ -860,16 +845,12 @@ Coord maxCoord(const Coord &v1, const Coord &v2) {
 //========================================================================================
 bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   if (!glMainWidget->getScene()->getGlGraphComposite() ||
-      !glMainWidget->getScene()
-           ->getGlGraphComposite()
-           ->getInputData()
-           ->getGraph())
+      !glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph())
     return false;
 
   // We calculate the bounding box for the selection :
   initProxies(glMainWidget);
-  BoundingBox boundingBox =
-      tlp::computeBoundingBox(_graph, _layout, _sizes, _rotation, _selection);
+  BoundingBox boundingBox = tlp::computeBoundingBox(_graph, _layout, _sizes, _rotation, _selection);
 
   if (!boundingBox.isValid())
     return false;
@@ -880,8 +861,7 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   Coord min2D, max2D;
   _layoutCenter = Coord(boundingBox.center());
 
-  // project the 8 points of the cube to obtain the bounding square on the 2D
-  // screen
+  // project the 8 points of the cube to obtain the bounding square on the 2D screen
   Coord bbsize(boundingBox[1] - boundingBox[0]);
   // v1
   Coord tmp(boundingBox[0]);
@@ -928,8 +908,7 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
 
   ffdCenter = Coord(boundingBox.center());
 
-  Coord tmpCenter =
-      glMainWidget->getScene()->getGraphCamera().worldTo2DViewport(ffdCenter);
+  Coord tmpCenter = glMainWidget->getScene()->getGraphCamera().worldTo2DViewport(ffdCenter);
 
   //  qWarning() << tmpCenter << endl;
 
@@ -938,8 +917,7 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
 
   //  tmpCenter[1] = tmpCenter[1];
 
-  int x = int(max2D[0] - min2D[0]) / 2 +
-          1; // (+1) because selection use glLineWidth=3 thus
+  int x = int(max2D[0] - min2D[0]) / 2 + 1; // (+1) because selection use glLineWidth=3 thus
   int y = int(max2D[1] - min2D[1]) / 2 + 1; // the rectangle can be too small.
 
   if (x < 20)
@@ -983,61 +961,55 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   vector<Coord> advControlVect;
 
   for (unsigned int i = 0; i < arrowWithLineSize; ++i) {
-    advControlVect.push_back(arrowWithLine[i] + positions[7] +
-                             Coord(-11, 8, 0));
+    advControlVect.push_back(arrowWithLine[i] + positions[7] + Coord(-11, 8, 0));
   }
 
-  _advControls[0] = GlComplexPolygon(advControlVect, Color(255, 40, 40, 200),
-                                     Color(128, 20, 20, 200));
+  _advControls[0] =
+      GlComplexPolygon(advControlVect, Color(255, 40, 40, 200), Color(128, 20, 20, 200));
   advControlVect.clear();
 
   for (unsigned int i = 0; i < arrowWithLineSize; ++i) {
-    advControlVect.push_back(
-        Coord(arrowWithLine[i][0], -arrowWithLine[i][1], 0) + positions[7] +
-        Coord(-25, 8, 0));
+    advControlVect.push_back(Coord(arrowWithLine[i][0], -arrowWithLine[i][1], 0) + positions[7] +
+                             Coord(-25, 8, 0));
   }
 
-  _advControls[1] = GlComplexPolygon(advControlVect, Color(255, 40, 40, 200),
-                                     Color(128, 20, 20, 200));
+  _advControls[1] =
+      GlComplexPolygon(advControlVect, Color(255, 40, 40, 200), Color(128, 20, 20, 200));
   advControlVect.clear();
 
   for (unsigned int i = 0; i < arrowWithLineSize; ++i) {
-    advControlVect.push_back(
-        Coord(-arrowWithLine[i][1], arrowWithLine[i][0], 0) + positions[7] +
-        Coord(-39, 8, 0));
+    advControlVect.push_back(Coord(-arrowWithLine[i][1], arrowWithLine[i][0], 0) + positions[7] +
+                             Coord(-39, 8, 0));
   }
 
-  _advControls[2] = GlComplexPolygon(advControlVect, Color(255, 40, 40, 200),
-                                     Color(128, 20, 20, 200));
+  _advControls[2] =
+      GlComplexPolygon(advControlVect, Color(255, 40, 40, 200), Color(128, 20, 20, 200));
   advControlVect.clear();
 
   for (unsigned int i = 0; i < arrowWithLineSize; ++i) {
-    advControlVect.push_back(
-        Coord(arrowWithLine[i][1], arrowWithLine[i][0], 0) + positions[7] +
-        Coord(-53, 8, 0));
+    advControlVect.push_back(Coord(arrowWithLine[i][1], arrowWithLine[i][0], 0) + positions[7] +
+                             Coord(-53, 8, 0));
   }
 
-  _advControls[3] = GlComplexPolygon(advControlVect, Color(255, 40, 40, 200),
-                                     Color(128, 20, 20, 200));
+  _advControls[3] =
+      GlComplexPolygon(advControlVect, Color(255, 40, 40, 200), Color(128, 20, 20, 200));
   advControlVect.clear();
 
   for (unsigned int i = 0; i < twoArrowWithLineSize; ++i) {
-    advControlVect.push_back(twoArrowWithLine[i] + positions[7] +
-                             Coord(-67, 8, 0));
+    advControlVect.push_back(twoArrowWithLine[i] + positions[7] + Coord(-67, 8, 0));
   }
 
-  _advControls[4] = GlComplexPolygon(advControlVect, Color(255, 40, 40, 200),
-                                     Color(128, 20, 20, 200));
+  _advControls[4] =
+      GlComplexPolygon(advControlVect, Color(255, 40, 40, 200), Color(128, 20, 20, 200));
   advControlVect.clear();
 
   for (unsigned int i = 0; i < twoArrowWithLineSize; ++i) {
-    advControlVect.push_back(
-        Coord(twoArrowWithLine[i][1], twoArrowWithLine[i][0], 0) +
-        positions[7] + Coord(-81, 8, 0));
+    advControlVect.push_back(Coord(twoArrowWithLine[i][1], twoArrowWithLine[i][0], 0) +
+                             positions[7] + Coord(-81, 8, 0));
   }
 
-  _advControls[5] = GlComplexPolygon(advControlVect, Color(255, 40, 40, 200),
-                                     Color(128, 20, 20, 200));
+  _advControls[5] =
+      GlComplexPolygon(advControlVect, Color(255, 40, 40, 200), Color(128, 20, 20, 200));
   advControlVect.clear();
 
   for (unsigned int i = 0; i < 6; ++i) {

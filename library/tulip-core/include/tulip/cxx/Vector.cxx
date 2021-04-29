@@ -146,21 +146,16 @@ VECTORTLP tlp::operator^(const VECTORTLP &u, const VECTORTLP &v) {
 
   switch (SIZE) {
   case 3:
-    return VECTORTLP(
-        static_cast<TYPE>(
-            static_cast<OTYPE>(u.y()) * static_cast<OTYPE>(v.z()) -
-            static_cast<OTYPE>(u.z()) * static_cast<OTYPE>(v.y())),
-        static_cast<TYPE>(
-            static_cast<OTYPE>(u.z()) * static_cast<OTYPE>(v.x()) -
-            static_cast<OTYPE>(u.x()) * static_cast<OTYPE>(v.z())),
-        static_cast<TYPE>(
-            static_cast<OTYPE>(u.x()) * static_cast<OTYPE>(v.y()) -
-            static_cast<OTYPE>(u.y()) * static_cast<OTYPE>(v.x())));
+    return VECTORTLP(static_cast<TYPE>(static_cast<OTYPE>(u.y()) * static_cast<OTYPE>(v.z()) -
+                                       static_cast<OTYPE>(u.z()) * static_cast<OTYPE>(v.y())),
+                     static_cast<TYPE>(static_cast<OTYPE>(u.z()) * static_cast<OTYPE>(v.x()) -
+                                       static_cast<OTYPE>(u.x()) * static_cast<OTYPE>(v.z())),
+                     static_cast<TYPE>(static_cast<OTYPE>(u.x()) * static_cast<OTYPE>(v.y()) -
+                                       static_cast<OTYPE>(u.y()) * static_cast<OTYPE>(v.x())));
     break;
 
   default:
-    tlp::warning() << "cross product not implemented for dimension :" << SIZE
-                   << std::endl;
+    tlp::warning() << "cross product not implemented for dimension :" << SIZE << std::endl;
     VECTORTLP result;
     return result;
     break;
@@ -248,12 +243,10 @@ TYPE VECTORTLP::norm() const {
     return (*this)[0];
 
   case 2:
-    return tlpsqrt<TYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x()) +
-                                tlpsqr<TYPE, OTYPE>(y()));
+    return tlpsqrt<TYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x()) + tlpsqr<TYPE, OTYPE>(y()));
 
   case 3:
-    return tlpsqrt<TYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x()) +
-                                tlpsqr<TYPE, OTYPE>(y()) +
+    return tlpsqrt<TYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x()) + tlpsqr<TYPE, OTYPE>(y()) +
                                 tlpsqr<TYPE, OTYPE>(z()));
 
   default:

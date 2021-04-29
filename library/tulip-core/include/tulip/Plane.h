@@ -50,8 +50,9 @@ public:
   ~Plane();
 
   /**
-   * Static function used to determine the last coordinate of a point in order
-   * to have it on the plane It follows the equation : Z = (aX + bY + d) / c
+   * Static function used to determine the last coordinate of a point in order to have it on the
+   * plane
+   * It follows the equation : Z = (aX + bY + d) / c
    */
   static float planeValue(float a, float b, float c, float d, float x, float y);
 

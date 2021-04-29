@@ -21,10 +21,10 @@
 #define Tulip_GLGRAPHCOMPOSITE_H
 
 #include <tulip/GlComposite.h>
-#include <tulip/GlGraphInputData.h>
-#include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/GlScene.h>
 #include <tulip/Observable.h>
+#include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/GlGraphInputData.h>
+#include <tulip/GlScene.h>
 
 namespace tlp {
 
@@ -39,15 +39,13 @@ class GlGraphRenderer;
  * @see GlSimpleEntity
  * @see GlScene
  *
- * To visualize graph you have to create a new GlGraphComposite and add it to a
- * GlLayer of a GlScene After that you can change some visualize parameters
- * throw GlGraphRenderingParameters class
+ * To visualize graph you have to create a new GlGraphComposite and add it to a GlLayer of a GlScene
+ * After that you can change some visualize parameters throw GlGraphRenderingParameters class
  * @see GlGraphRenderingParameters
  * @see getRenderingParametersPointer()
  *
- * To render the graph in OpenGL, GlGraphComposite use a GlGraphRenderer. So if
- * you want to change the system to render the graph, you have to create a new
- * GlGraphRender
+ * To render the graph in OpenGL, GlGraphComposite use a GlGraphRenderer. So if you want to change
+ * the system to render the graph, you have to create a new GlGraphRender
  * @see GlGraphRenderer
  */
 class TLP_GL_SCOPE GlGraphComposite : public GlComposite, public Observable {
@@ -56,8 +54,8 @@ public:
   /**
    * @brief Build a GlGraphComposite with the graph data
    *
-   * You can specify a GlGraphRenderer, if you don't do this a
-   * GlGraphHighDetailsRenderer will be used to display the graph
+   * You can specify a GlGraphRenderer, if you don't do this a GlGraphHighDetailsRenderer will be
+   * used to display the graph
    */
   GlGraphComposite(Graph *graph, GlGraphRenderer *graphRenderer = nullptr);
 
@@ -103,7 +101,9 @@ public:
   /**
    * @brief Return the graph used by this GlGraphComposite
    */
-  Graph *getGraph() { return inputData.getGraph(); }
+  Graph *getGraph() {
+    return inputData.getGraph();
+  }
 
   ///@cond DOXYGEN_HIDDEN
 
@@ -112,16 +112,14 @@ public:
    */
   void acceptVisitor(GlSceneVisitor *visitor) override;
   /**
-   * You have to use this function if you want to visit nodes/edges of the graph
-   * composite
+   * You have to use this function if you want to visit nodes/edges of the graph composite
    */
   virtual void acceptVisitorOnGraph(GlSceneVisitor *visitor);
 
   void draw(float lod, Camera *camera) override;
 
-  virtual void selectEntities(Camera *camera, RenderingEntitiesFlag type, int x,
-                              int y, int w, int h,
-                              std::vector<SelectedEntity> &selectedEntities);
+  virtual void selectEntities(Camera *camera, RenderingEntitiesFlag type, int x, int y, int w,
+                              int h, std::vector<SelectedEntity> &selectedEntities);
 
   /**
    * Return set of metaNodes
@@ -142,12 +140,13 @@ public:
     return metaNodes;
   }
 
-  GlGraphRenderer *getRenderer() { return graphRenderer; }
+  GlGraphRenderer *getRenderer() {
+    return graphRenderer;
+  }
 
   /**
-   * @brief setRenderer Delete the old renderer and replace it by the new one.
-   * If the new renderer is equal to nullptr create a
-   * GlGraphHighDetailsRenderer.
+   * @brief setRenderer Delete the old renderer and replace it by the new one. If the new renderer
+   * is equal to nullptr create a GlGraphHighDetailsRenderer.
    */
   void setRenderer(tlp::GlGraphRenderer *);
 
@@ -161,8 +160,7 @@ public:
   /**
    * @brief Function to set data with inString (in XML format)
    */
-  void setWithXML(const std::string &inString,
-                  unsigned int &currentPosition) override;
+  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
 
 protected:
   ///@cond DOXYGEN_HIDDEN

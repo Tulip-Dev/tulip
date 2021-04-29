@@ -19,11 +19,11 @@
 
 #include <cassert>
 
-#include "PlanarityTestTest.h"
+#include <tulip/PlanarityTest.h>
+#include <tulip/PlanarConMap.h>
 #include <tulip/ConnectedTest.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/PlanarConMap.h>
-#include <tulip/PlanarityTest.h>
+#include "PlanarityTestTest.h"
 
 using namespace std;
 using namespace tlp;
@@ -138,8 +138,7 @@ void PlanarityTestTest::planarGraphsEmbedding() {
 }
 //==========================================================
 void PlanarityTestTest::planarMetaGraphsEmbedding() {
-  tlp::warning() << "===========MetaGraphsEmbedding======================="
-                 << endl;
+  tlp::warning() << "===========MetaGraphsEmbedding=======================" << endl;
   graph = tlp_loadGraph(GRAPHPATH + "planar/grid1010.tlp");
   Graph *g = graph->addCloneSubGraph();
   vector<node> toGroup;
@@ -167,10 +166,8 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
 
   PlanarConMap *graphMap = computePlanarConMap(g);
   //  graphMap->makePlanar();
-  CPPUNIT_ASSERT(
-      PlanarityTest::isPlanar(g)); // eulerIdentity(g), graphMap->nbFaces());
-  CPPUNIT_ASSERT(PlanarityTest::isPlanar(
-      graphMap)); // eulerIdentity(g), graphMap->nbFaces());
+  CPPUNIT_ASSERT(PlanarityTest::isPlanar(g));        // eulerIdentity(g), graphMap->nbFaces());
+  CPPUNIT_ASSERT(PlanarityTest::isPlanar(graphMap)); // eulerIdentity(g), graphMap->nbFaces());
   delete graphMap;
   graph->delSubGraph(g);
   delete graph;
@@ -179,8 +176,8 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
     graph = tlp::loadGraph(GRAPHPATH + "planar/unconnected.tlp");
     graph->setAttribute("name", string("unconnected"));
     graphMap = new PlanarConMap(graph);
-    tlp::warning() << "Graph name : " << graph->getAttribute<string>("name") <<
-    endl; graphMap->makePlanar();*/
+    tlp::warning() << "Graph name : " << graph->getAttribute<string>("name") << endl;
+    graphMap->makePlanar();*/
   /*
    * The number of faces must be adapted because the Planarity Test split the
    * external face into several faces (one by connected componnent).

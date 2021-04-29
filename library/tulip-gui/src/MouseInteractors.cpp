@@ -18,21 +18,21 @@
  */
 
 #include <QEvent>
-#include <QPanGesture>
-#include <QPinchGesture>
 #include <QWheelEvent>
+#include <QPinchGesture>
+#include <QPanGesture>
 
-#include <tulip/DrawingTools.h>
-#include <tulip/GlBoundingBoxSceneVisitor.h>
+#include <tulip/GlNode.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/View.h>
+#include <tulip/Observable.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainView.h>
-#include <tulip/GlMainWidget.h>
-#include <tulip/GlNode.h>
-#include <tulip/MouseInteractors.h>
-#include <tulip/NodeLinkDiagramComponent.h>
-#include <tulip/Observable.h>
+#include <tulip/GlBoundingBoxSceneVisitor.h>
+#include <tulip/DrawingTools.h>
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
-#include <tulip/View.h>
+#include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/MouseInteractors.h>
 
 #include <iostream>
 
@@ -57,8 +57,7 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
       auto wePos = we->position();
 #endif
       g->getScene()->zoomXY(g->screenToViewport(vDelta) / WHEEL_DELTA,
-                            g->screenToViewport(wePos.x()),
-                            g->screenToViewport(wePos.y()));
+                            g->screenToViewport(wePos.x()), g->screenToViewport(wePos.y()));
       g->draw(false);
       return true;
     }
@@ -75,8 +74,7 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
     }*/
 
     if (gesture->gesture(Qt::PinchGesture)) {
-      QPinchGesture *pinch =
-          static_cast<QPinchGesture *>(gesture->gesture(Qt::PinchGesture));
+      QPinchGesture *pinch = static_cast<QPinchGesture *>(gesture->gesture(Qt::PinchGesture));
       Camera &camera = g->getScene()->getGraphCamera();
 
       // store the camera scale factor when starting the gesture
@@ -86,8 +84,8 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
       }
 
       if (pinch->changeFlags() & QPinchGesture::ScaleFactorChanged) {
-        // only set the zoom factor if two events in a row were in the same
-        // direction (zoom in or out) to smooth a bit the effect.
+        // only set the zoom factor if two events in a row were in the same direction (zoom in or
+        // out) to smooth a bit the effect.
         if ((pinch->lastScaleFactor() > 1 && pinch->scaleFactor() > 1) ||
             (pinch->lastScaleFactor() <= 1 && pinch->scaleFactor() <= 1)) {
           camera.setZoomFactor(cameraScaleFactor * pinch->totalScaleFactor());
@@ -99,16 +97,13 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
               Coord oldCenter = camera.getCenter();
               Coord oldEye = camera.getEyes();
         //sets the camera center to the center of the pich gesture
-              Coord
-        rotationCenter(g->mapFromGlobal(pinch->centerPoint().toPoint()).x(),
+              Coord rotationCenter(g->mapFromGlobal(pinch->centerPoint().toPoint()).x(),
         g->mapFromGlobal(pinch->centerPoint().toPoint()).y(), oldCenter.getZ());
               Coord rotationEye=camera.getEyes()+(rotationCenter-oldCenter);
               camera.setCenter(rotationCenter);
               camera.setEyes(rotationEye);*/
         // rotates the camera
-        camera.rotate((pinch->rotationAngle() - pinch->lastRotationAngle()) /
-                          180 * M_PI,
-                      0, 0, 1);
+        camera.rotate((pinch->rotationAngle() - pinch->lastRotationAngle()) / 180 * M_PI, 0, 0, 1);
         /*
         //restore old camera center and eyes
               camera.setCenter(oldCenter);
@@ -120,8 +115,7 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
       }
 
       if (gesture->gesture(Qt::PanGesture)) {
-        QPanGesture *pan =
-            static_cast<QPanGesture *>(gesture->gesture(Qt::PanGesture));
+        QPanGesture *pan = static_cast<QPanGesture *>(gesture->gesture(Qt::PanGesture));
 
         if (pan->state() == Qt::GestureStarted) {
           isGesturing = true;
@@ -132,8 +126,7 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
         }
 
         g->getScene()->translateCamera(g->screenToViewport(pan->delta().x()),
-                                       -g->screenToViewport(pan->delta().y()),
-                                       0);
+                                       -g->screenToViewport(pan->delta().y()), 0);
       }
     }
 
@@ -145,8 +138,7 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
 }
 
 //===============================================================
-void MouseElementDeleter::delElement(Graph *graph,
-                                     SelectedEntity &selectedEntity) {
+void MouseElementDeleter::delElement(Graph *graph, SelectedEntity &selectedEntity) {
   switch (selectedEntity.getEntityType()) {
   case SelectedEntity::NODE_SELECTED:
     graph->delNode(node(selectedEntity.getComplexEntityId()));
@@ -171,24 +163,17 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
       glMainWidget = static_cast<GlMainWidget *>(widget);
 
     if (e->type() == QEvent::MouseMove) {
-      if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(),
-                                       selectedEntity)) {
-        glMainWidget->setCursor(
-            QCursor(QPixmap(":/tulip/gui/icons/i_del.png")));
+      if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity)) {
+        glMainWidget->setCursor(QCursor(QPixmap(":/tulip/gui/icons/i_del.png")));
       } else {
         glMainWidget->setCursor(Qt::ArrowCursor);
       }
 
       return false;
-    } else if (e->type() == QEvent::MouseButtonPress &&
-               qMouseEv->button() == Qt::LeftButton) {
-      if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(),
-                                       selectedEntity)) {
+    } else if (e->type() == QEvent::MouseButtonPress && qMouseEv->button() == Qt::LeftButton) {
+      if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity)) {
         Observable::holdObservers();
-        Graph *graph = glMainWidget->getScene()
-                           ->getGlGraphComposite()
-                           ->getInputData()
-                           ->getGraph();
+        Graph *graph = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
         // allow to undo
         graph->push();
         delElement(graph, selectedEntity);
@@ -237,12 +222,10 @@ bool MouseRotXRotY::eventFilter(QObject *widget, QEvent *e) {
       deltaX = 0;
 
     if (deltaY != 0)
-      glMainWidget->getScene()->rotateCamera(
-          glMainWidget->screenToViewport(deltaY), 0, 0);
+      glMainWidget->getScene()->rotateCamera(glMainWidget->screenToViewport(deltaY), 0, 0);
 
     if (deltaX != 0)
-      glMainWidget->getScene()->rotateCamera(
-          0, glMainWidget->screenToViewport(deltaX), 0);
+      glMainWidget->getScene()->rotateCamera(0, glMainWidget->screenToViewport(deltaX), 0);
 
     x = qMouseEv->x();
     y = qMouseEv->y();
@@ -297,16 +280,14 @@ bool MouseZoomRotZ::eventFilter(QObject *widget, QEvent *e) {
     if (inZoom) {
       // Zoom
       deltaY = qMouseEv->y() - y;
-      glMainWidget->getScene()->zoom(
-          -glMainWidget->screenToViewport(deltaY / 2));
+      glMainWidget->getScene()->zoom(-glMainWidget->screenToViewport(deltaY / 2));
       y = qMouseEv->y();
     }
 
     if (inRotation) {
       // Rotation
       deltaX = qMouseEv->x() - x;
-      glMainWidget->getScene()->rotateCamera(
-          0, 0, glMainWidget->screenToViewport(deltaX));
+      glMainWidget->getScene()->rotateCamera(0, 0, glMainWidget->screenToViewport(deltaX));
       x = qMouseEv->x();
     }
 
@@ -338,8 +319,8 @@ bool MouseMove::eventFilter(QObject *widget, QEvent *e) {
     GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
 
     if (qMouseEv->x() != x)
-      glMainWidget->getScene()->translateCamera(
-          glMainWidget->screenToViewport(qMouseEv->x() - x), 0, 0);
+      glMainWidget->getScene()->translateCamera(glMainWidget->screenToViewport(qMouseEv->x() - x),
+                                                0, 0);
 
     if (qMouseEv->y() != y)
       glMainWidget->getScene()->translateCamera(
@@ -358,13 +339,11 @@ bool MouseMove::eventFilter(QObject *widget, QEvent *e) {
 class MyQtGlSceneZoomAndPanAnimator : public tlp::QtGlSceneZoomAndPanAnimator {
 public:
   MyQtGlSceneZoomAndPanAnimator(tlp::GlMainWidget *glWidget, tlp::View *view,
-                                const tlp::BoundingBox &boundingBox,
-                                tlp::Graph *graph, tlp::node n,
+                                const tlp::BoundingBox &boundingBox, tlp::Graph *graph, tlp::node n,
                                 const float &color)
-      : tlp::QtGlSceneZoomAndPanAnimator(glWidget, boundingBox), view(view),
-        graph(graph), n(n), alphaEnd(color) {
-    tlp::ColorProperty *colorProp =
-        graph->getProperty<tlp::ColorProperty>("viewColor");
+      : tlp::QtGlSceneZoomAndPanAnimator(glWidget, boundingBox), view(view), graph(graph), n(n),
+        alphaEnd(color) {
+    tlp::ColorProperty *colorProp = graph->getProperty<tlp::ColorProperty>("viewColor");
     alphaBegin = colorProp->getNodeValue(n)[3];
   }
 
@@ -403,21 +382,16 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   GlMainWidget *glmainwidget = static_cast<GlMainWidget *>(widget);
   QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
 
-  if (e->type() == QEvent::MouseButtonDblClick &&
-      qMouseEv->button() == Qt::LeftButton) {
+  if (e->type() == QEvent::MouseButtonDblClick && qMouseEv->button() == Qt::LeftButton) {
     if (mouseNavigationDisabled)
       return false;
 
-    Graph *graph = glmainwidget->getScene()
-                       ->getGlGraphComposite()
-                       ->getInputData()
-                       ->getGraph();
+    Graph *graph = glmainwidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
 
     if (qMouseEv->modifiers() != Qt::ControlModifier) {
       vector<SelectedEntity> tmpNodes;
       vector<SelectedEntity> tmpEdges;
-      glmainwidget->pickNodesEdges(qMouseEv->x() - 1, qMouseEv->y() - 1, 3, 3,
-                                   tmpNodes, tmpEdges);
+      glmainwidget->pickNodesEdges(qMouseEv->x() - 1, qMouseEv->y() - 1, 3, 3, tmpNodes, tmpEdges);
       node metaNode;
       bool find = false;
 
@@ -452,8 +426,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
 
         Observable::holdObservers();
 
-        ColorProperty *colorProp =
-            oldGraph->getProperty<ColorProperty>("viewColor");
+        ColorProperty *colorProp = oldGraph->getProperty<ColorProperty>("viewColor");
         float alphaOrigin = colorProp->getNodeValue(n)[3];
         Color color = colorProp->getNodeValue(n);
         color[3] = 0;
@@ -462,14 +435,11 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
         Observable::unholdObservers();
 
         nldc->requestChangeGraph(oldGraph);
-        glmainwidget->getScene()->getLayer("Main")->getCamera().setCenter(
-            camera.getCenter());
-        glmainwidget->getScene()->getLayer("Main")->getCamera().setEyes(
-            camera.getEyes());
+        glmainwidget->getScene()->getLayer("Main")->getCamera().setCenter(camera.getCenter());
+        glmainwidget->getScene()->getLayer("Main")->getCamera().setEyes(camera.getEyes());
         glmainwidget->getScene()->getLayer("Main")->getCamera().setSceneRadius(
             camera.getSceneRadius());
-        glmainwidget->getScene()->getLayer("Main")->getCamera().setUp(
-            camera.getUp());
+        glmainwidget->getScene()->getLayer("Main")->getCamera().setUp(camera.getUp());
         glmainwidget->getScene()->getLayer("Main")->getCamera().setZoomFactor(
             camera.getZoomFactor());
         glmainwidget->draw(false);
@@ -479,8 +449,8 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
         glmainwidget->getScene()->getLayer("Main")->acceptVisitor(&visitor);
         BoundingBox boundingBox(visitor.getBoundingBox());
 
-        MyQtGlSceneZoomAndPanAnimator navigator(glmainwidget, nldc, boundingBox,
-                                                oldGraph, n, alphaOrigin);
+        MyQtGlSceneZoomAndPanAnimator navigator(glmainwidget, nldc, boundingBox, oldGraph, n,
+                                                alphaOrigin);
         navigator.animateZoomAndPan();
 
         return true;
@@ -539,23 +509,21 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
 
     switch (ke->key()) {
     case Qt::Key_Left:
-      glmainwidget->getScene()->translateCamera(
-          glmainwidget->screenToViewport(delta * 2), 0, 0);
+      glmainwidget->getScene()->translateCamera(glmainwidget->screenToViewport(delta * 2), 0, 0);
       break;
 
     case Qt::Key_Right:
-      glmainwidget->getScene()->translateCamera(
-          glmainwidget->screenToViewport(-1 * delta * 2), 0, 0);
+      glmainwidget->getScene()->translateCamera(glmainwidget->screenToViewport(-1 * delta * 2), 0,
+                                                0);
       break;
 
     case Qt::Key_Up:
-      glmainwidget->getScene()->translateCamera(
-          0, glmainwidget->screenToViewport(-1 * delta * 2), 0);
+      glmainwidget->getScene()->translateCamera(0, glmainwidget->screenToViewport(-1 * delta * 2),
+                                                0);
       break;
 
     case Qt::Key_Down:
-      glmainwidget->getScene()->translateCamera(
-          0, glmainwidget->screenToViewport(delta * 2), 0);
+      glmainwidget->getScene()->translateCamera(0, glmainwidget->screenToViewport(delta * 2), 0);
       break;
 
     case Qt::Key_PageUp:
@@ -563,28 +531,24 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
       break;
 
     case Qt::Key_PageDown:
-      glmainwidget->getScene()->zoom(
-          glmainwidget->screenToViewport(-1 * delta));
+      glmainwidget->getScene()->zoom(glmainwidget->screenToViewport(-1 * delta));
       break;
 
     case Qt::Key_Home:
-      glmainwidget->getScene()->translateCamera(
-          0, 0, glmainwidget->screenToViewport(-1 * delta * 2));
+      glmainwidget->getScene()->translateCamera(0, 0,
+                                                glmainwidget->screenToViewport(-1 * delta * 2));
       break;
 
     case Qt::Key_End:
-      glmainwidget->getScene()->translateCamera(
-          0, 0, glmainwidget->screenToViewport(delta * 2));
+      glmainwidget->getScene()->translateCamera(0, 0, glmainwidget->screenToViewport(delta * 2));
       break;
 
     case Qt::Key_Insert:
-      glmainwidget->getScene()->rotateCamera(
-          0, 0, glmainwidget->screenToViewport(-1 * delta * 2));
+      glmainwidget->getScene()->rotateCamera(0, 0, glmainwidget->screenToViewport(-1 * delta * 2));
       break;
 
     case Qt::Key_Delete:
-      glmainwidget->getScene()->rotateCamera(
-          0, 0, glmainwidget->screenToViewport(delta * 2));
+      glmainwidget->getScene()->rotateCamera(0, 0, glmainwidget->screenToViewport(delta * 2));
       break;
 
     default:

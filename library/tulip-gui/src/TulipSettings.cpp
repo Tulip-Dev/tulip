@@ -19,14 +19,14 @@
 
 #include "tulip/TulipSettings.h"
 
+#include <tulip/TulipMetaTypes.h>
+#include <tulip/PropertyTypes.h>
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/GlyphManager.h>
-#include <tulip/PropertyTypes.h>
-#include <tulip/TlpQtTools.h>
-#include <tulip/TlpTools.h>
-#include <tulip/TulipMetaTypes.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/TlpTools.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QStringList>
@@ -47,15 +47,13 @@ static const QString TS_DefaultColor = "graph/defaults/color/";
 static const QString TS_DefaultLabelColor = "graph/defaults/color/labels";
 static const QString TS_DefaultSize = "graph/defaults/size/";
 static const QString TS_DefaultShape = "graph/defaults/shape/";
-static const QString TS_DefaultSelectionColor =
-    "graph/defaults/selectioncolor/";
+static const QString TS_DefaultSelectionColor = "graph/defaults/selectioncolor/";
 // add a specific key which must never exists in user settings
 static const QString TS_DefaultOfDefault = "never written in user file";
 static const QString TS_FavoriteAlgorithms = "app/algorithms/favorites";
 
 static const QString TS_FirstRun = "app/tulip/firstRun";
-static const QString TS_FirstRunMM =
-    QString("app/") + TULIP_MM_VERSION + "/firstRun";
+static const QString TS_FirstRunMM = QString("app/") + TULIP_MM_VERSION + "/firstRun";
 
 static const QString TS_ProxyEnabled = "app/proxy/enabled";
 static const QString TS_ProxyType = "app/proxy/type";
@@ -65,8 +63,7 @@ static const QString TS_ProxyUseAuth = "app/proxy/user";
 static const QString TS_ProxyUsername = "app/proxy/useAuth";
 static const QString TS_ProxyPassword = "app/proxy/passwd";
 
-static const QString TS_AutomaticDisplayDefaultViews =
-    "graph/auto/defaultViews";
+static const QString TS_AutomaticDisplayDefaultViews = "graph/auto/defaultViews";
 static const QString TS_AutomaticPerfectAspectRatio = "graph/auto/ratio";
 static const QString TS_AutomaticCentering = "graph/auto/center";
 static const QString TS_ViewOrtho = "graph/auto/ortho";
@@ -78,8 +75,7 @@ static const QString TS_LogPluginCall = "graph/auto/log";
 static const QString TS_UseTlpbFileFormat = "graph/auto/usetlpb";
 static const QString TS_SeedForRandomSequence = "graph/auto/seed";
 
-static const QString TS_WarnUserAboutGraphicsCard =
-    "app/warn_about_graphics_card";
+static const QString TS_WarnUserAboutGraphicsCard = "app/warn_about_graphics_card";
 static const QString TS_DisplayInDarkMode = "app/gui/display_in_dark_mode";
 static const QString TS_ShowStatusBar = "app/gui/show_status_bar";
 static const QString TS_LoggerAnchored = "app/gui/logger_anchored";
@@ -98,7 +94,9 @@ TulipSettings &TulipSettings::instance() {
   return *_instance;
 }
 
-void TulipSettings::synchronizeSettings() { instance().sync(); }
+void TulipSettings::synchronizeSettings() {
+  instance().sync();
+}
 
 void TulipSettings::synchronizeViewSettings() {
   TulipViewSettings::setDefaultColor(NODE, defaultColor(NODE));
@@ -115,8 +113,7 @@ QStringList TulipSettings::recentDocuments() {
 }
 
 void TulipSettings::checkRecentDocuments() {
-  QList<QVariant> recentDocumentsValue =
-      instance().value(TS_RecentDocuments).toList();
+  QList<QVariant> recentDocumentsValue = instance().value(TS_RecentDocuments).toList();
 
   for (const QVariant &doc : recentDocumentsValue) {
     if (!QFileInfo(doc.toString()).exists())
@@ -127,8 +124,7 @@ void TulipSettings::checkRecentDocuments() {
 }
 
 void TulipSettings::addToRecentDocuments(const QString &name) {
-  QList<QVariant> recentDocumentsValue =
-      instance().value(TS_RecentDocuments).toList();
+  QList<QVariant> recentDocumentsValue = instance().value(TS_RecentDocuments).toList();
 
   if (recentDocumentsValue.contains(name))
     recentDocumentsValue.removeAll(name);
@@ -142,8 +138,7 @@ void TulipSettings::addToRecentDocuments(const QString &name) {
 }
 
 void TulipSettings::addRemoteLocation(const QString &remoteLocation) {
-  QStringList remoteLocations =
-      instance().value(TS_RemoteLocations).toStringList();
+  QStringList remoteLocations = instance().value(TS_RemoteLocations).toStringList();
 
   if (!remoteLocations.contains(remoteLocation)) {
     remoteLocations.append(remoteLocation);
@@ -153,8 +148,7 @@ void TulipSettings::addRemoteLocation(const QString &remoteLocation) {
 }
 
 void TulipSettings::removeRemoteLocation(const QString &remoteLocation) {
-  QStringList remoteLocations =
-      instance().value(TS_RemoteLocations).toStringList();
+  QStringList remoteLocations = instance().value(TS_RemoteLocations).toStringList();
 
   if (remoteLocations.contains(remoteLocation)) {
     remoteLocations.removeOne(remoteLocation);
@@ -172,8 +166,7 @@ const QStringList TulipSettings::pluginsToRemove() {
 }
 
 void TulipSettings::markPluginForRemoval(const QString &pluginLibrary) {
-  QStringList markedPlugins =
-      instance().value(TS_PluginsToRemove).toStringList();
+  QStringList markedPlugins = instance().value(TS_PluginsToRemove).toStringList();
 
   if (!markedPlugins.contains(pluginLibrary)) {
     markedPlugins.append(pluginLibrary);
@@ -183,8 +176,7 @@ void TulipSettings::markPluginForRemoval(const QString &pluginLibrary) {
 }
 
 void TulipSettings::unmarkPluginForRemoval(const QString &pluginLibrary) {
-  QStringList markedPlugins =
-      instance().value(TS_PluginsToRemove).toStringList();
+  QStringList markedPlugins = instance().value(TS_PluginsToRemove).toStringList();
 
   if (markedPlugins.contains(pluginLibrary)) {
     markedPlugins.removeAll(pluginLibrary);
@@ -193,38 +185,30 @@ void TulipSettings::unmarkPluginForRemoval(const QString &pluginLibrary) {
   _instance->setValue(TS_PluginsToRemove, markedPlugins);
 }
 
-QString TulipSettings::elementKey(const QString &configEntry,
-                                  tlp::ElementType elem) {
+QString TulipSettings::elementKey(const QString &configEntry, tlp::ElementType elem) {
   return configEntry + (elem == tlp::NODE ? "node" : "edge");
 }
 
-tlp::Color TulipSettings::defaultColor(tlp::ElementType elem,
-                                       bool tulipDefault) {
-  QString val =
-      instance()
-          .value(
-              elementKey(tulipDefault ? TS_DefaultOfDefault : TS_DefaultColor,
-                         elem),
-              (elem == tlp::NODE ? "(255, 95, 95)" : "(180,180,180)"))
-          .toString();
+tlp::Color TulipSettings::defaultColor(tlp::ElementType elem, bool tulipDefault) {
+  QString val = instance()
+                    .value(elementKey(tulipDefault ? TS_DefaultOfDefault : TS_DefaultColor, elem),
+                           (elem == tlp::NODE ? "(255, 95, 95)" : "(180,180,180)"))
+                    .toString();
   Color result;
   ColorType::fromString(result, QStringToTlpString(val));
   return result;
 }
 
-void TulipSettings::setDefaultColor(tlp::ElementType elem,
-                                    const tlp::Color &color) {
+void TulipSettings::setDefaultColor(tlp::ElementType elem, const tlp::Color &color) {
   QString value = tlp::ColorType::toString(color).c_str();
   instance().setValue(elementKey(TS_DefaultColor, elem), value);
   TulipViewSettings::setDefaultColor(elem, color);
 }
 
 Color TulipSettings::defaultLabelColor(bool tulipDefault) {
-  QString val =
-      instance()
-          .value(tulipDefault ? TS_DefaultOfDefault : TS_DefaultLabelColor,
-                 "(0, 0, 0)")
-          .toString();
+  QString val = instance()
+                    .value(tulipDefault ? TS_DefaultOfDefault : TS_DefaultLabelColor, "(0, 0, 0)")
+                    .toString();
   Color result;
   ColorType::fromString(result, QStringToTlpString(val));
   return result;
@@ -237,19 +221,16 @@ void TulipSettings::setDefaultLabelColor(const Color &color) {
 }
 
 tlp::Size TulipSettings::defaultSize(tlp::ElementType elem, bool tulipDefault) {
-  QString val =
-      instance()
-          .value(elementKey(tulipDefault ? TS_DefaultOfDefault : TS_DefaultSize,
-                            elem),
-                 (elem == tlp::NODE ? "(1,1,1)" : "(0.125,0.125,0.5)"))
-          .toString();
+  QString val = instance()
+                    .value(elementKey(tulipDefault ? TS_DefaultOfDefault : TS_DefaultSize, elem),
+                           (elem == tlp::NODE ? "(1,1,1)" : "(0.125,0.125,0.5)"))
+                    .toString();
   Size result;
   SizeType::fromString(result, QStringToTlpString(val));
   return result;
 }
 
-void TulipSettings::setDefaultSize(tlp::ElementType elem,
-                                   const tlp::Size &size) {
+void TulipSettings::setDefaultSize(tlp::ElementType elem, const tlp::Size &size) {
   QString value = tlp::SizeType::toString(size).c_str();
   instance().setValue(elementKey(TS_DefaultSize, elem), value);
   TulipViewSettings::setDefaultSize(elem, size);
@@ -257,10 +238,8 @@ void TulipSettings::setDefaultSize(tlp::ElementType elem,
 
 int TulipSettings::defaultShape(tlp::ElementType elem, bool tulipDefault) {
   return instance()
-      .value(elementKey(tulipDefault ? TS_DefaultOfDefault : TS_DefaultShape,
-                        elem),
-             (elem == tlp::NODE ? int(NodeShape::Circle)
-                                : int(EdgeShape::Polyline)))
+      .value(elementKey(tulipDefault ? TS_DefaultOfDefault : TS_DefaultShape, elem),
+             (elem == tlp::NODE ? int(NodeShape::Circle) : int(EdgeShape::Polyline)))
       .toInt();
 }
 
@@ -272,8 +251,7 @@ void TulipSettings::setDefaultShape(tlp::ElementType elem, int shape) {
 tlp::Color TulipSettings::defaultSelectionColor(bool tulipDefault) {
   QString val =
       instance()
-          .value(tulipDefault ? TS_DefaultOfDefault : TS_DefaultSelectionColor,
-                 "(23, 81, 228)")
+          .value(tulipDefault ? TS_DefaultOfDefault : TS_DefaultSelectionColor, "(23, 81, 228)")
           .toString();
   Color result;
   ColorType::fromString(result, QStringToTlpString(val));
@@ -290,8 +268,7 @@ void TulipSettings::setDefaultSelectionColor(const tlp::Color &color) {
 }
 
 QSet<QString> TulipSettings::favoriteAlgorithms() {
-  auto ls =
-      instance().value(TS_FavoriteAlgorithms, QStringList()).toStringList();
+  auto ls = instance().value(TS_FavoriteAlgorithms, QStringList()).toStringList();
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
   return ls.toSet();
 #else
@@ -320,8 +297,7 @@ void TulipSettings::setProxyEnabled(bool f) {
 }
 
 QNetworkProxy::ProxyType TulipSettings::proxyType() {
-  return static_cast<QNetworkProxy::ProxyType>(
-      instance().value(TS_ProxyType).toInt());
+  return static_cast<QNetworkProxy::ProxyType>(instance().value(TS_ProxyType).toInt());
 }
 
 void TulipSettings::setProxyType(QNetworkProxy::ProxyType t) {
@@ -370,8 +346,7 @@ void TulipSettings::setProxyPassword(const QString &s) {
 
 void TulipSettings::applyProxySettings() {
   if (isProxyEnabled()) {
-    QNetworkProxy proxy(proxyType(), proxyHost(),
-                        static_cast<qint16>(proxyPort()));
+    QNetworkProxy proxy(proxyType(), proxyHost(), static_cast<qint16>(proxyPort()));
 
     if (isUseProxyAuthentification()) {
       proxy.setUser(proxyUsername());
@@ -386,7 +361,9 @@ bool TulipSettings::isFirstRun() {
   return instance().contains(TS_FirstRun) == false;
 }
 
-void TulipSettings::setFirstRun(bool f) { instance().setValue(TS_FirstRun, f); }
+void TulipSettings::setFirstRun(bool f) {
+  instance().setValue(TS_FirstRun, f);
+}
 
 bool TulipSettings::isFirstTulipMMRun() {
   return instance().contains(TS_FirstRunMM) == false;
@@ -442,11 +419,9 @@ void TulipSettings::setViewOrtho(bool f) {
 
 void TulipSettings::setFavoriteAlgorithms(const QSet<QString> &lst) {
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-  instance().setValue(TS_FavoriteAlgorithms,
-                      static_cast<QStringList>(lst.toList()));
+  instance().setValue(TS_FavoriteAlgorithms, static_cast<QStringList>(lst.toList()));
 #else
-  instance().setValue(TS_FavoriteAlgorithms,
-                      QStringList(lst.begin(), lst.end()));
+  instance().setValue(TS_FavoriteAlgorithms, QStringList(lst.begin(), lst.end()));
 #endif
 }
 
@@ -475,9 +450,7 @@ void TulipSettings::setUseTlpbFileFormat(bool f) {
 }
 
 unsigned int TulipSettings::seedOfRandomSequence() {
-  return instance()
-      .value(TS_SeedForRandomSequence, tlp::getSeedOfRandomSequence())
-      .toUInt();
+  return instance().value(TS_SeedForRandomSequence, tlp::getSeedOfRandomSequence()).toUInt();
 }
 
 void TulipSettings::setSeedOfRandomSequence(unsigned int seed) {
@@ -551,19 +524,15 @@ void TulipSettings::setRecentPerspectiveFiles(QStringList &files) {
 }
 
 void TulipSettings::treatEvent(const Event &message) {
-  const ViewSettingsEvent *sev =
-      dynamic_cast<const ViewSettingsEvent *>(&message);
+  const ViewSettingsEvent *sev = dynamic_cast<const ViewSettingsEvent *>(&message);
 
   if (sev && sev->getType() == ViewSettingsEvent::TLP_DEFAULT_COLOR_MODIFIED) {
     setDefaultColor(sev->getElementType(), sev->getColor());
-  } else if (sev &&
-             sev->getType() == ViewSettingsEvent::TLP_DEFAULT_SIZE_MODIFIED) {
+  } else if (sev && sev->getType() == ViewSettingsEvent::TLP_DEFAULT_SIZE_MODIFIED) {
     setDefaultSize(sev->getElementType(), sev->getSize());
-  } else if (sev &&
-             sev->getType() == ViewSettingsEvent::TLP_DEFAULT_SHAPE_MODIFIED) {
+  } else if (sev && sev->getType() == ViewSettingsEvent::TLP_DEFAULT_SHAPE_MODIFIED) {
     setDefaultShape(sev->getElementType(), sev->getShape());
-  } else if (sev && sev->getType() ==
-                        ViewSettingsEvent::TLP_DEFAULT_LABEL_COLOR_MODIFIED) {
+  } else if (sev && sev->getType() == ViewSettingsEvent::TLP_DEFAULT_LABEL_COLOR_MODIFIED) {
     setDefaultLabelColor(sev->getColor());
   }
 }

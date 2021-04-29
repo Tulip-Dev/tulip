@@ -45,7 +45,9 @@ const tlp::Coord &GlLine::point(const unsigned int i) const {
   return _points[i];
 }
 //=====================================================
-tlp::Coord &GlLine::point(const unsigned int i) { return _points[i]; }
+tlp::Coord &GlLine::point(const unsigned int i) {
+  return _points[i];
+}
 //=====================================================
 void GlLine::addPoint(const Coord &point, const Color &color) {
   _points.emplace_back(point);
@@ -57,7 +59,9 @@ const tlp::Color &GlLine::color(const unsigned int i) const {
   return _colors[i];
 }
 //=====================================================
-tlp::Color &GlLine::color(const unsigned int i) { return _colors[i]; }
+tlp::Color &GlLine::color(const unsigned int i) {
+  return _colors[i];
+}
 //=====================================================
 void GlLine::draw(float, Camera *) {
   GL_THROW_ON_ERROR();
@@ -87,7 +91,9 @@ void GlLine::draw(float, Camera *) {
   GL_THROW_ON_ERROR();
 }
 //=====================================================
-void GlLine::setLineWidth(float width) { this->width = width; }
+void GlLine::setLineWidth(float width) {
+  this->width = width;
+}
 //=====================================================
 void GlLine::setLineStipple(unsigned char factor, unsigned int pattern) {
   this->factor = factor;

@@ -18,11 +18,11 @@
  */
 
 #include <tulip/MouseInteractors.h>
-#include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
+#include <tulip/NodeLinkDiagramComponent.h>
 
-#include "../utils/PluginNames.h"
 #include "../utils/StandardInteractorPriority.h"
+#include "../utils/PluginNames.h"
 
 using namespace tlp;
 
@@ -32,23 +32,22 @@ using namespace tlp;
 class InteractorNavigation : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATION(InteractorName::InteractorNavigation, "Tulip Team",
-                    "01/04/2009", "Navigation Interactor", "1.0", "Navigation")
+  PLUGININFORMATION(InteractorName::InteractorNavigation, "Tulip Team", "01/04/2009",
+                    "Navigation Interactor", "1.0", "Navigation")
   /**
    * Default constructor
    */
   InteractorNavigation(const tlp::PluginContext *)
-      : NodeLinkDiagramComponentInteractor(
-            ":/tulip/gui/icons/i_navigation.png", "Navigate in graph",
-            StandardInteractorPriority::Navigation) {}
+      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_navigation.png",
+                                           "Navigate in graph",
+                                           StandardInteractorPriority::Navigation) {}
 
   /**
    * Construct chain of responsibility
    */
   void construct() override {
     setConfigurationWidgetText(
-        QString("<h3>Navigate in graph</h3>") +
-        "3D Navigation in the graph<br/><br/>" +
+        QString("<h3>Navigate in graph</h3>") + "3D Navigation in the graph<br/><br/>" +
         "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys "
         "</li></ul>" +
         "X or Y rotation: <ul><li><b>Shift + Mouse left</b> down + up/down or left/right "
@@ -73,7 +72,9 @@ public:
     push_back(new MouseNKeysNavigator);
   }
 
-  QCursor cursor() const override { return QCursor(Qt::OpenHandCursor); }
+  QCursor cursor() const override {
+    return QCursor(Qt::OpenHandCursor);
+  }
 
   bool isCompatible(const std::string &viewName) const override {
     return ((viewName == NodeLinkDiagramComponent::viewName) ||

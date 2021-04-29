@@ -16,8 +16,8 @@
  *
  * Released under GNU LGPL, read the file 'COPYING' for more information
  *
- * 2005 modification hereby placed in public domain.  Probably supersedes the
- * 2004 copyright for the code itself.
+ * 2005 modification hereby placed in public domain.  Probably supersedes the 2004 copyright
+ * for the code itself.
  */
 
 #include <cmath>
@@ -47,10 +47,9 @@
 #else
 #define isFinite(_a) (std::isfinite(_a))
 #endif
-/* If the above doesn't work, then try (finite(_a) && !isNaN(_a)) or
- * (!isNaN((_a) - (_a))). Also, please report a bug as per
- * http://www.inkscape.org/report_bugs.php, giving information about what
- * platform and compiler version you're using.
+/* If the above doesn't work, then try (finite(_a) && !isNaN(_a)) or (!isNaN((_a) - (_a))).
+ * Also, please report a bug as per http://www.inkscape.org/report_bugs.php,
+ * giving information about what platform and compiler version you're using.
  */
 
 #endif /* __ISNAN_H__ */

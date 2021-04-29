@@ -26,8 +26,7 @@ using namespace tlp;
 ConnectedComponent::ConnectedComponent(const tlp::PluginContext *context)
     : DoubleAlgorithm(context) {
 
-  addOutParameter<unsigned>("#connected components",
-                            "Number of components found");
+  addOutParameter<unsigned>("#connected components", "Number of components found");
 }
 //======================================================
 bool ConnectedComponent::run() {

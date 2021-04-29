@@ -23,18 +23,19 @@
 class AcyclicTest : public tlp::GraphTest {
 public:
   PLUGININFORMATION("Acyclic", "Tulip team", "18/04/2012",
-                    "Tests whether a graph is acyclic or not.", "1.0",
-                    "Topological Test")
+                    "Tests whether a graph is acyclic or not.", "1.0", "Topological Test")
   AcyclicTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {}
 
-  bool test() override { return tlp::AcyclicTest::isAcyclic(graph); }
+  bool test() override {
+    return tlp::AcyclicTest::isAcyclic(graph);
+  }
 };
 PLUGIN(AcyclicTest)
 
 class MakeAcyclic : public tlp::Algorithm {
 public:
-  PLUGININFORMATION("Make Acyclic", "Tulip team", "18/04/2012",
-                    "Makes a graph acyclic.", "1.0", "Topology Update")
+  PLUGININFORMATION("Make Acyclic", "Tulip team", "18/04/2012", "Makes a graph acyclic.", "1.0",
+                    "Topology Update")
   MakeAcyclic(const tlp::PluginContext *context) : tlp::Algorithm(context) {}
 
   bool run() override {

@@ -18,15 +18,14 @@
  */
 #include <tulip/ItemsListWidget.h>
 
-#include <QApplication>
-#include <QDrag>
-#include <QMimeData>
 #include <QMouseEvent>
+#include <QApplication>
+#include <QMimeData>
+#include <QDrag>
 
 namespace tlp {
 
-ItemsListWidget::ItemsListWidget(QWidget *parent,
-                                 const unsigned int maxListSize)
+ItemsListWidget::ItemsListWidget(QWidget *parent, const unsigned int maxListSize)
     : QListWidget(parent), maxListSize(maxListSize) {
   setAcceptDrops(true);
 }

@@ -21,13 +21,13 @@
 
 #include <QMouseEvent>
 
-#include <tulip/Camera.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/GlGraphComposite.h>
-#include <tulip/GlMainView.h>
-#include <tulip/GlMainWidget.h>
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/GlGraphComposite.h>
+#include <tulip/GlMainView.h>
+#include <tulip/Camera.h>
 
 using namespace tlp;
 using namespace std;
@@ -42,8 +42,7 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
       glMainWidget = static_cast<GlMainWidget *>(widget);
 
     if (e->type() == QEvent::MouseMove) {
-      if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(),
-                                       selectedEntity) &&
+      if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) &&
           selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         glMainWidget->setCursor(Qt::ForbiddenCursor);
       } else {
@@ -55,8 +54,7 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
     if (e->type() == _eventType) {
       if (qMouseEv->button() == Qt::LeftButton) {
-        if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(),
-                                         selectedEntity) &&
+        if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) &&
             selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
           return true;
         }
@@ -75,9 +73,8 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
             glMainWidget->screenToViewport(point));
 
         // This code is here to block z coordinate to 0 when we are in "2D mode"
-        Coord cameraDirection =
-            glMainWidget->getScene()->getGraphCamera().getEyes() -
-            glMainWidget->getScene()->getGraphCamera().getCenter();
+        Coord cameraDirection = glMainWidget->getScene()->getGraphCamera().getEyes() -
+                                glMainWidget->getScene()->getGraphCamera().getCenter();
 
         if (cameraDirection[0] == 0 && cameraDirection[1] == 0)
           point[2] = 0;

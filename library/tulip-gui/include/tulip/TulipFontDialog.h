@@ -23,8 +23,8 @@
 
 #include <QDialog>
 
-#include <tulip/TulipFont.h>
 #include <tulip/tulipconf.h>
+#include <tulip/TulipFont.h>
 
 namespace Ui {
 class TulipFontDialog;
@@ -53,8 +53,7 @@ public:
   }
   void showEvent(QShowEvent *ev) override;
 
-  static TulipFont getFont(QWidget *parent = nullptr,
-                           const TulipFont &selectedFont = TulipFont());
+  static TulipFont getFont(QWidget *parent = nullptr, const TulipFont &selectedFont = TulipFont());
 
 public slots:
   void selectFont(const TulipFont &);

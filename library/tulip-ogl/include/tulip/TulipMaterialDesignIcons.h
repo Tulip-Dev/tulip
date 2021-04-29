@@ -45,17 +45,16 @@ namespace tlp {
  *
  * That class offers utility functions and supported icons names constants.
  *
- * To set a node glyph as a Material Design icon, the Icon glyph must be
- *associated to the node through the modification of the "viewShape" integer
- *property attached to the graph. The name of the icon to use must then be set
- *in the "viewIcon" string property. As an example, the following code snippet
- *activates the Material Design glyph for all nodes and sets the "user" icon.
+ * To set a node glyph as a Material Design icon, the Icon glyph must be associated
+ * to the node through the modification of the "viewShape" integer property attached to the graph.
+ * The name of the icon to use must then be set in the "viewIcon" string property.
+ * As an example, the following code snippet activates the Material Design glyph for all nodes
+ * and sets the "user" icon.
  *
  * @code
  *    // graph is a pointer to a tlp::Graph object
- *    tlp::IntegerProperty *viewShape =
- *graph->getProperty<tlp::IntegerProperty>("viewShape"); tlp::StringProperty
- **viewIcon = graph->getProperty<tlp::StringProperty>("viewIcon");
+ *    tlp::IntegerProperty *viewShape = graph->getProperty<tlp::IntegerProperty>("viewShape");
+ *    tlp::StringProperty *viewIcon = graph->getProperty<tlp::StringProperty>("viewIcon");
  *
  *    // sets the Icon glyph on all nodes
  *    viewShape->setAllNodeValue(tlp::NodeShape::Icon);
@@ -73,20 +72,17 @@ public:
   static std::string getVersion();
 
   /**
-   * Returns the location of the Material Design Icons .ttf file bundled with
-   * Tulip
+   * Returns the location of the Material Design Icons .ttf file bundled with Tulip
    */
   static std::string getTTFLocation();
 
   /**
-   * Returns the location of the Material Design Icons .woff file bundled with
-   * Tulip
+   * Returns the location of the Material Design Icons .woff file bundled with Tulip
    */
   static std::string getWOFFLocation();
 
   /**
-   * Returns the location of the Material Design Icons .woff2 file bundled with
-   * Tulip
+   * Returns the location of the Material Design Icons .woff2 file bundled with Tulip
    */
   static std::string getWOFF2Location();
 

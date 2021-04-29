@@ -20,10 +20,10 @@
 #ifndef PARALLELCOORDSAXISSLIDERS_H_
 #define PARALLELCOORDSAXISSLIDERS_H_
 
+#include <tulip/GlSimpleEntity.h>
 #include <tulip/GLInteractor.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlPolygon.h>
-#include <tulip/GlSimpleEntity.h>
 
 #include "ParallelCoordinatesDrawing.h"
 
@@ -37,26 +37,35 @@ enum sliderType { TOP_SLIDER = 0, BOTTOM_SLIDER = 1 };
 class AxisSlider : public GlSimpleEntity {
 
 public:
-  AxisSlider(const sliderType type, const Coord &sliderCoord,
-             const float halfWidth, const float halfHeight,
-             const Color &sliderColor, const Color &labelColor,
+  AxisSlider(const sliderType type, const Coord &sliderCoord, const float halfWidth,
+             const float halfHeight, const Color &sliderColor, const Color &labelColor,
              const float rotationAngle = 0);
   ~AxisSlider() override;
 
   void setSliderFillColor(const Color &color);
   void setSliderOutlineColor(const Color &color);
-  void setSliderLabel(const std::string &label) { sliderLabel->setText(label); }
+  void setSliderLabel(const std::string &label) {
+    sliderLabel->setText(label);
+  }
   void setRotationAngle(const float rotationAngle) {
     this->rotationAngle = rotationAngle;
   }
 
   void draw(float lod, Camera *camera) override;
   BoundingBox getBoundingBox() override;
-  Coord getSliderCoord() const { return sliderCoord; }
+  Coord getSliderCoord() const {
+    return sliderCoord;
+  }
   void translate(const Coord &move) override;
-  void moveToCoord(const Coord &coord) { translate(coord - sliderCoord); }
-  sliderType getSliderType() const { return type; }
-  Color getColor() { return arrowPolygon->getFillColor(0); }
+  void moveToCoord(const Coord &coord) {
+    translate(coord - sliderCoord);
+  }
+  sliderType getSliderType() const {
+    return type;
+  }
+  Color getColor() {
+    return arrowPolygon->getFillColor(0);
+  }
 
   void getXML(std::string &) override {}
   void setWithXML(const std::string &, unsigned int &) override {}
@@ -85,8 +94,7 @@ public:
 
 private:
   void initOrUpdateSliders();
-  AxisSlider *getSliderUnderPointer(GlMainWidget *glWidget, ParallelAxis *axis,
-                                    int x, int y);
+  AxisSlider *getSliderUnderPointer(GlMainWidget *glWidget, ParallelAxis *axis, int x, int y);
   void updateOtherAxisSliders();
   void buildGlSliders(const std::vector<ParallelAxis *> &axis);
   void deleteGlSliders();

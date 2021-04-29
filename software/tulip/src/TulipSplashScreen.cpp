@@ -19,24 +19,22 @@
 
 #include "TulipSplashScreen.h"
 
-#include <QApplication>
-#include <QDir>
 #include <QPainter>
+#include <QApplication>
 #include <QPropertyAnimation>
+#include <QDir>
 
+#include <tulip/TlpTools.h>
 #include <tulip/Plugin.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/TlpTools.h>
 
 using namespace tlp;
 
-TulipSplashScreen::TulipSplashScreen()
-    : PluginLoader(), QSplashScreen(), _fileCounter(0) {
+TulipSplashScreen::TulipSplashScreen() : PluginLoader(), QSplashScreen(), _fileCounter(0) {
   setPixmap(QPixmap(QDir(QApplication::applicationDirPath())
                         .absoluteFilePath("../share/tulip/bitmaps/logo.bmp")));
   setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
-  QPropertyAnimation *fadeInAnimation =
-      new QPropertyAnimation(this, "windowOpacity");
+  QPropertyAnimation *fadeInAnimation = new QPropertyAnimation(this, "windowOpacity");
   fadeInAnimation->setStartValue(0);
   fadeInAnimation->setEndValue(1);
   fadeInAnimation->setDuration(200);
@@ -57,15 +55,12 @@ void TulipSplashScreen::loading(const std::string &filename) {
   repaint();
 }
 
-void TulipSplashScreen::loaded(const Plugin *info,
-                               const std::list<Dependency> &) {
+void TulipSplashScreen::loaded(const Plugin *info, const std::list<Dependency> &) {
   _message = tlp::tlpStringToQString(info->name()) + " loaded.";
 }
 
-void TulipSplashScreen::aborted(const std::string &filename,
-                                const std::string &erreurmsg) {
-  _message =
-      QString("Error loading ") + filename.c_str() + ": " + erreurmsg.c_str();
+void TulipSplashScreen::aborted(const std::string &filename, const std::string &erreurmsg) {
+  _message = QString("Error loading ") + filename.c_str() + ": " + erreurmsg.c_str();
   _errors[filename.c_str()] = erreurmsg.c_str();
 }
 
@@ -97,17 +92,13 @@ void TulipSplashScreen::drawContents(QPainter *painter) {
   font.setBold(true);
   painter->setFont(font);
   painter->drawText(messageRect.x(), messageRect.y() + messageRect.height() / 3,
-                    messageRect.width(), messageRect.height() / 3,
-                    Qt::AlignHCenter, _title);
+                    messageRect.width(), messageRect.height() / 3, Qt::AlignHCenter, _title);
   font.setBold(false);
   painter->setFont(font);
-  painter->drawText(messageRect.x(),
-                    messageRect.y() + messageRect.height() * 2 / 3,
-                    messageRect.width(), messageRect.height() / 3,
-                    Qt::AlignHCenter, _message);
+  painter->drawText(messageRect.x(), messageRect.y() + messageRect.height() * 2 / 3,
+                    messageRect.width(), messageRect.height() / 3, Qt::AlignHCenter, _message);
 
-  QRectF progressRect(messageRect.x() + 10,
-                      messageRect.y() + messageRect.height() - 10,
+  QRectF progressRect(messageRect.x() + 10, messageRect.y() + messageRect.height() - 10,
                       messageRect.width() - 20, 5);
   painter->setBrush(QColor(0, 0, 0, 50));
   painter->setPen(QColor(0, 0, 0, 50));
@@ -118,6 +109,5 @@ void TulipSplashScreen::drawContents(QPainter *painter) {
     w = 1. * _fileCounter * progressRect.width() / _numberOfFiles;
 
   painter->setBrush(QColor(0, 0, 0, 200));
-  painter->drawRect(progressRect.x(), progressRect.y(), w,
-                    progressRect.height());
+  painter->drawRect(progressRect.x(), progressRect.y(), w, progressRect.height());
 }

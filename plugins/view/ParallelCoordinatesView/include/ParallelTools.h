@@ -22,9 +22,9 @@
 
 #include <tulip/Coord.h>
 
-#include <iostream>
-#include <sstream>
 #include <string>
+#include <sstream>
+#include <iostream>
 
 namespace tlp {
 
@@ -52,23 +52,22 @@ const float DEFAULT_CAPTION_HEIGHT = 30;
 
 const float DEFAULT_CAPTION_VERTICAl_OFFSET = 20;
 
-template <typename T> std::string getStringFromNumber(T number) {
+template <typename T>
+std::string getStringFromNumber(T number) {
   std::ostringstream oss;
   oss.precision(5);
   oss << number;
   return oss.str();
 }
 
-float computeABACAngleWithAlKashi(const Coord &A, const Coord &B,
-                                  const Coord &C);
+float computeABACAngleWithAlKashi(const Coord &A, const Coord &B, const Coord &C);
 
 const int X_ROT = 0;
 const int Y_ROT = 1;
 const int Z_ROT = 2;
 void rotateVector(Coord &vec, float alpha, int rot);
 
-Coord *computeStraightLineIntersection(const Coord line1[2],
-                                       const Coord line2[2]);
+Coord *computeStraightLineIntersection(const Coord line1[2], const Coord line2[2]);
 } // namespace tlp
 
 #endif /* !PARALLELTOOLS_H_ */

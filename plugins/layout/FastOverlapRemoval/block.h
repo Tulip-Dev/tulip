@@ -14,9 +14,10 @@
 #ifndef SEEN_REMOVEOVERLAP_BLOCK_H
 #define SEEN_REMOVEOVERLAP_BLOCK_H
 
-#include <iostream>
 #include <vector>
-template <class T> class PairingHeap;
+#include <iostream>
+template <class T>
+class PairingHeap;
 namespace vpsc {
 class Variable;
 class Constraint;
@@ -61,10 +62,8 @@ private:
   typedef enum { NONE, LEFT, RIGHT } Direction;
   typedef std::pair<double, Constraint *> Pair;
   void reset_active_lm(Variable *const v, Variable *const u);
-  double compute_dfdv(Variable *const v, Variable *const u,
-                      Constraint *&min_lm);
-  Pair compute_dfdv_between(Variable *, Variable *const, Variable *const,
-                            const Direction, bool);
+  double compute_dfdv(Variable *const v, Variable *const u, Constraint *&min_lm);
+  Pair compute_dfdv_between(Variable *, Variable *const, Variable *const, const Direction, bool);
   bool canFollowLeft(Constraint *c, const Variable *const last);
   bool canFollowRight(Constraint *c, const Variable *const last);
   void populateSplitBlock(Block *b, Variable *const v, Variable *const u);

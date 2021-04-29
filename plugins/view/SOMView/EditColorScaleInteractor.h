@@ -44,8 +44,7 @@ public:
   bool draw(GlMainWidget *glMainWidget) override;
 
 protected:
-  virtual void propertyChanged(SOMView *somView,
-                               const std::string &propertyName,
+  virtual void propertyChanged(SOMView *somView, const std::string &propertyName,
                                NumericProperty *newProperty);
   virtual bool screenSizeChanged(SOMView *somView);
   NumericProperty *currentProperty;

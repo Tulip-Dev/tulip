@@ -16,26 +16,25 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/GlPolyQuad.h>
-#include <tulip/GlShaderProgram.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlXMLTools.h>
+#include <tulip/GlPolyQuad.h>
 #include <tulip/Vector.h>
+#include <tulip/GlShaderProgram.h>
 
 using namespace std;
 
 namespace tlp {
 
-GlPolyQuad::GlPolyQuad(const string &textureName, const bool outlined,
-                       const int outlineWidth, const Color &outlineColor)
+GlPolyQuad::GlPolyQuad(const string &textureName, const bool outlined, const int outlineWidth,
+                       const Color &outlineColor)
     : textureName(textureName), outlined(outlined), outlineWidth(outlineWidth),
       outlineColor(outlineColor) {}
 
-GlPolyQuad::GlPolyQuad(const vector<Coord> &polyQuadEdges,
-                       const vector<Color> &polyQuadEdgesColors,
-                       const string &textureName, const bool outlined,
-                       const int outlineWidth, const Color &outlineColor)
+GlPolyQuad::GlPolyQuad(const vector<Coord> &polyQuadEdges, const vector<Color> &polyQuadEdgesColors,
+                       const string &textureName, const bool outlined, const int outlineWidth,
+                       const Color &outlineColor)
     : textureName(textureName), outlined(outlined), outlineWidth(outlineWidth),
       outlineColor(outlineColor) {
 
@@ -43,28 +42,25 @@ GlPolyQuad::GlPolyQuad(const vector<Coord> &polyQuadEdges,
          polyQuadEdgesColors.size() == (polyQuadEdges.size() / 2));
 
   for (size_t i = 0; i < (polyQuadEdges.size() / 2); ++i) {
-    addQuadEdge(polyQuadEdges[2 * i], polyQuadEdges[2 * i + 1],
-                polyQuadEdgesColors[i], i != 0);
+    addQuadEdge(polyQuadEdges[2 * i], polyQuadEdges[2 * i + 1], polyQuadEdgesColors[i], i != 0);
   }
 }
 
-GlPolyQuad::GlPolyQuad(const std::vector<Coord> &polyQuadEdges,
-                       const Color &polyQuadColor,
-                       const std::string &textureName, const bool outlined,
-                       const int outlineWidth, const Color &outlineColor)
+GlPolyQuad::GlPolyQuad(const std::vector<Coord> &polyQuadEdges, const Color &polyQuadColor,
+                       const std::string &textureName, const bool outlined, const int outlineWidth,
+                       const Color &outlineColor)
     : textureName(textureName), outlined(outlined), outlineWidth(outlineWidth),
       outlineColor(outlineColor) {
 
   assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdges.size() > 2);
 
   for (size_t i = 0; i < (polyQuadEdges.size() / 2); ++i) {
-    addQuadEdge(polyQuadEdges[2 * i], polyQuadEdges[2 * i + 1], polyQuadColor,
-                i != 0);
+    addQuadEdge(polyQuadEdges[2 * i], polyQuadEdges[2 * i + 1], polyQuadColor, i != 0);
   }
 }
 
-void GlPolyQuad::addQuadEdge(const Coord &startEdge, const Coord &endEdge,
-                             const Color &edgeColor, bool noCheck) {
+void GlPolyQuad::addQuadEdge(const Coord &startEdge, const Coord &endEdge, const Color &edgeColor,
+                             bool noCheck) {
   polyQuadEdges.emplace_back(startEdge);
   polyQuadEdges.emplace_back(endEdge);
   boundingBox.expand(startEdge, noCheck);
@@ -91,8 +87,7 @@ void GlPolyQuad::draw(float, Camera *) {
   if (currentShader != nullptr && currentShader->getName() == "fisheye") {
     nbSubdivisionsPerSegment = 20;
     vertices = &vertexArray;
-    nbVertices =
-        ((polyQuadEdges.size() / 2) - 1) * nbSubdivisionsPerSegment * 2;
+    nbVertices = ((polyQuadEdges.size() / 2) - 1) * nbSubdivisionsPerSegment * 2;
     vertexArray.reserve(nbVertices);
   }
 
@@ -134,28 +129,24 @@ void GlPolyQuad::draw(float, Camera *) {
 
         unsigned int n = i * nbSubdivisionsPerSegment + j;
 
-        Coord &&v1 = polyQuadEdges[2 * i] +
+        Coord &&v1 = polyQuadEdges[2 * i] + (j / float(nbSubdivisionsPerSegment - 1)) *
+                                                (polyQuadEdges[2 * (i + 1)] - polyQuadEdges[2 * i]);
+        Coord &&v2 = polyQuadEdges[2 * i + 1] +
                      (j / float(nbSubdivisionsPerSegment - 1)) *
-                         (polyQuadEdges[2 * (i + 1)] - polyQuadEdges[2 * i]);
-        Coord &&v2 =
-            polyQuadEdges[2 * i + 1] +
-            (j / float(nbSubdivisionsPerSegment - 1)) *
-                (polyQuadEdges[2 * (i + 1) + 1] - polyQuadEdges[2 * i + 1]);
+                         (polyQuadEdges[2 * (i + 1) + 1] - polyQuadEdges[2 * i + 1]);
         vertexArray.push_back(std::move(v1));
         vertexArray.push_back(std::move(v2));
 
-        float texCoordFactor =
-            ((polyQuadEdges[2 * i].dist(polyQuadEdges[2 * i + 2])) /
-             (nbSubdivisionsPerSegment - 1)) /
-            (polyQuadEdges[2 * i].dist(polyQuadEdges[2 * i + 1]));
+        float texCoordFactor = ((polyQuadEdges[2 * i].dist(polyQuadEdges[2 * i + 2])) /
+                                (nbSubdivisionsPerSegment - 1)) /
+                               (polyQuadEdges[2 * i].dist(polyQuadEdges[2 * i + 1]));
         texCoordsArray.push_back(GLfloat(i) + GLfloat(j) * texCoordFactor);
         texCoordsArray.push_back(0.0f);
         texCoordsArray.push_back(GLfloat(i) + GLfloat(j) * texCoordFactor);
         texCoordsArray.push_back(1.0f);
 
         Vector<float, 4> &&color =
-            startColor +
-            (j / float(nbSubdivisionsPerSegment - 1)) * (endColor - startColor);
+            startColor + (j / float(nbSubdivisionsPerSegment - 1)) * (endColor - startColor);
         colorsArray.emplace_back(color);
         colorsArray.push_back(std::move(color));
 
@@ -202,11 +193,9 @@ void GlPolyQuad::draw(float, Camera *) {
   glColorPointer(4, GL_FLOAT, 4 * sizeof(float), &colorsArray[0][0]);
 
   if (nbSubdivisionsPerSegment > 1) {
-    glDrawElements(GL_QUAD_STRIP, vertexArray.size(), GL_UNSIGNED_SHORT,
-                   &quadIndices[0]);
+    glDrawElements(GL_QUAD_STRIP, vertexArray.size(), GL_UNSIGNED_SHORT, &quadIndices[0]);
   } else {
-    glDrawElements(GL_QUAD_STRIP, polyQuadEdges.size(), GL_UNSIGNED_SHORT,
-                   &quadIndices[0]);
+    glDrawElements(GL_QUAD_STRIP, polyQuadEdges.size(), GL_UNSIGNED_SHORT, &quadIndices[0]);
   }
 
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -221,11 +210,9 @@ void GlPolyQuad::draw(float, Camera *) {
     setMaterial(outlineColor);
 
     if (nbSubdivisionsPerSegment > 1) {
-      glDrawElements(GL_LINE_LOOP, vertexArray.size(), GL_UNSIGNED_SHORT,
-                     &outlineIndices[0]);
+      glDrawElements(GL_LINE_LOOP, vertexArray.size(), GL_UNSIGNED_SHORT, &outlineIndices[0]);
     } else {
-      glDrawElements(GL_LINE_LOOP, polyQuadEdges.size(), GL_UNSIGNED_SHORT,
-                     &outlineIndices[0]);
+      glDrawElements(GL_LINE_LOOP, polyQuadEdges.size(), GL_UNSIGNED_SHORT, &outlineIndices[0]);
     }
 
     if (outlineWidth != 1) {
@@ -262,13 +249,10 @@ void GlPolyQuad::getXML(string &outString) {
   GlXMLTools::getXML(outString, "textureName", textureName);
 }
 
-void GlPolyQuad::setWithXML(const string &inString,
-                            unsigned int &currentPosition) {
+void GlPolyQuad::setWithXML(const string &inString, unsigned int &currentPosition) {
 
-  GlXMLTools::setWithXML(inString, currentPosition, "polyQuadEdges",
-                         polyQuadEdges);
-  GlXMLTools::setWithXML(inString, currentPosition, "polyQuadEdgesColors",
-                         polyQuadEdgesColors);
+  GlXMLTools::setWithXML(inString, currentPosition, "polyQuadEdges", polyQuadEdges);
+  GlXMLTools::setWithXML(inString, currentPosition, "polyQuadEdgesColors", polyQuadEdgesColors);
   GlXMLTools::setWithXML(inString, currentPosition, "textureName", textureName);
 
   boundingBox.expand(polyQuadEdges);

@@ -18,9 +18,9 @@
  */
 
 #include <tulip/GraphAbstract.h>
-#include <tulip/GraphProperty.h>
-#include <tulip/PropertyInterface.h>
 #include <tulip/PropertyManager.h>
+#include <tulip/PropertyInterface.h>
+#include <tulip/GraphProperty.h>
 
 namespace tlp {
 //======================================================================================
@@ -33,22 +33,22 @@ public:
   std::map<std::string, PropertyInterface *>::iterator it, itEnd;
 };
 //==============================================================
-PropertiesIterator::PropertiesIterator(
-    std::map<std::string, PropertyInterface *>::iterator itB,
-    std::map<std::string, PropertyInterface *>::iterator itE)
+PropertiesIterator::PropertiesIterator(std::map<std::string, PropertyInterface *>::iterator itB,
+                                       std::map<std::string, PropertyInterface *>::iterator itE)
     : it(itB), itEnd(itE) {}
 PropertyInterface *PropertiesIterator::next() {
   PropertyInterface *tmp = (*it).second;
   ++it;
   return tmp;
 }
-bool PropertiesIterator::hasNext() { return (it != itEnd); }
+bool PropertiesIterator::hasNext() {
+  return (it != itEnd);
+}
 //======================================================================================
 class PropertyNamesIterator : public Iterator<std::string> {
 public:
-  PropertyNamesIterator(
-      std::map<std::string, PropertyInterface *>::iterator itB,
-      std::map<std::string, PropertyInterface *>::iterator itE)
+  PropertyNamesIterator(std::map<std::string, PropertyInterface *>::iterator itB,
+                        std::map<std::string, PropertyInterface *>::iterator itE)
       : itProp(itB, itE) {}
   std::string next() override {
     std::string tmp = (*(itProp.it)).first;
@@ -56,7 +56,9 @@ public:
     return tmp;
   }
 
-  bool hasNext() override { return itProp.hasNext(); }
+  bool hasNext() override {
+    return itProp.hasNext();
+  }
   PropertiesIterator itProp;
 };
 } // namespace tlp
@@ -71,13 +73,11 @@ PropertyManager::PropertyManager(Graph *g) : graph(g) {
   // get inherited properties
   if (graph != graph->getSuperGraph()) {
 
-    for (PropertyInterface *prop :
-         graph->getSuperGraph()->getObjectProperties()) {
+    for (PropertyInterface *prop : graph->getSuperGraph()->getObjectProperties()) {
       inheritedProperties[prop->getName()] = prop;
 
       if (prop->getName() == metaGraphPropertyName)
-        static_cast<GraphAbstract *>(graph)->metaGraphProperty =
-            static_cast<GraphProperty *>(prop);
+        static_cast<GraphAbstract *>(graph)->metaGraphProperty = static_cast<GraphProperty *>(prop);
     }
   }
 }
@@ -104,8 +104,7 @@ bool PropertyManager::existInheritedProperty(const string &str) const {
   return (inheritedProperties.find(str) != inheritedProperties.end());
 }
 //==============================================================
-void PropertyManager::setLocalProperty(const string &str,
-                                       PropertyInterface *p) {
+void PropertyManager::setLocalProperty(const string &str, PropertyInterface *p) {
   bool hasInheritedProperty = false;
 
   if (existLocalProperty(str))
@@ -114,8 +113,7 @@ void PropertyManager::setLocalProperty(const string &str,
   else {
     // remove previously existing inherited property
     map<string, PropertyInterface *>::iterator it;
-    hasInheritedProperty =
-        ((it = inheritedProperties.find(str)) != inheritedProperties.end());
+    hasInheritedProperty = ((it = inheritedProperties.find(str)) != inheritedProperties.end());
 
     if (hasInheritedProperty) {
       // Notify property destruction old state.
@@ -136,13 +134,11 @@ void PropertyManager::setLocalProperty(const string &str,
   // loop on subgraphs
   for (Graph *sg : graph->subGraphs()) {
     // to set p as inherited property
-    static_cast<GraphAbstract *>(sg)->propertyContainer->setInheritedProperty(
-        str, p);
+    static_cast<GraphAbstract *>(sg)->propertyContainer->setInheritedProperty(str, p);
   }
 }
 //==============================================================
-bool PropertyManager::renameLocalProperty(PropertyInterface *prop,
-                                          const string &newName) {
+bool PropertyManager::renameLocalProperty(PropertyInterface *prop, const string &newName) {
   assert(prop && prop->getGraph() == graph);
 
   if (existLocalProperty(newName))
@@ -158,8 +154,7 @@ bool PropertyManager::renameLocalProperty(PropertyInterface *prop,
   assert(it->second == prop);
 
   // before rename notification
-  static_cast<GraphAbstract *>(graph)->notifyBeforeRenameLocalProperty(prop,
-                                                                       newName);
+  static_cast<GraphAbstract *>(graph)->notifyBeforeRenameLocalProperty(prop, newName);
 
   // loop in the ascendant hierarchy to get
   // an inherited property
@@ -177,15 +172,13 @@ bool PropertyManager::renameLocalProperty(PropertyInterface *prop,
 
   // Warn subgraphs for deletion.
   for (Graph *sg : graph->subGraphs()) {
-    static_cast<GraphAbstract *>(sg)
-        ->propertyContainer->notifyBeforeDelInheritedProperty(propName);
+    static_cast<GraphAbstract *>(sg)->propertyContainer->notifyBeforeDelInheritedProperty(propName);
   }
 
   // Remove property from map.
   localProperties.erase(it);
   // Set the inherited property in this graph and all it's subgraphs.
-  static_cast<GraphAbstract *>(graph)->propertyContainer->setInheritedProperty(
-      propName, newProp);
+  static_cast<GraphAbstract *>(graph)->propertyContainer->setInheritedProperty(propName, newProp);
 
   // remove previously existing inherited property
   bool hasInheritedProperty =
@@ -203,41 +196,34 @@ bool PropertyManager::renameLocalProperty(PropertyInterface *prop,
 
   // If we had an inherited property notify it's destruction.
   if (hasInheritedProperty) {
-    static_cast<GraphAbstract *>(graph)->notifyAfterDelInheritedProperty(
-        newName);
+    static_cast<GraphAbstract *>(graph)->notifyAfterDelInheritedProperty(newName);
   }
 
   // loop on subgraphs
   for (Graph *sg : graph->subGraphs()) {
     // to set p as inherited property
-    static_cast<GraphAbstract *>(sg)->propertyContainer->setInheritedProperty(
-        newName, prop);
+    static_cast<GraphAbstract *>(sg)->propertyContainer->setInheritedProperty(newName, prop);
   }
 
   // update property name
   prop->name = newName;
 
   // after renaming notification
-  static_cast<GraphAbstract *>(graph)->notifyAfterRenameLocalProperty(prop,
-                                                                      propName);
+  static_cast<GraphAbstract *>(graph)->notifyAfterRenameLocalProperty(prop, propName);
 
   return true;
 }
 //==============================================================
-void PropertyManager::setInheritedProperty(const string &str,
-                                           PropertyInterface *p) {
+void PropertyManager::setInheritedProperty(const string &str, PropertyInterface *p) {
   if (!existLocalProperty(str)) {
-    bool hasInheritedProperty =
-        inheritedProperties.find(str) != inheritedProperties.end();
+    bool hasInheritedProperty = inheritedProperties.find(str) != inheritedProperties.end();
 
     if (p != nullptr) {
-      static_cast<GraphAbstract *>(graph)->notifyBeforeAddInheritedProperty(
-          str);
+      static_cast<GraphAbstract *>(graph)->notifyBeforeAddInheritedProperty(str);
       inheritedProperties[str] = p;
 
       if (str == metaGraphPropertyName)
-        static_cast<GraphAbstract *>(graph)->metaGraphProperty =
-            static_cast<GraphProperty *>(p);
+        static_cast<GraphAbstract *>(graph)->metaGraphProperty = static_cast<GraphProperty *>(p);
     } else {
       // no need for notification
       // already done thru notifyBeforeDelInheritedProperty(str);
@@ -257,8 +243,7 @@ void PropertyManager::setInheritedProperty(const string &str,
     // loop on subgraphs
     for (Graph *sg : graph->subGraphs()) {
       // to set p as inherited property
-      static_cast<GraphAbstract *>(sg)->propertyContainer->setInheritedProperty(
-          str, p);
+      static_cast<GraphAbstract *>(sg)->propertyContainer->setInheritedProperty(str, p);
     }
   }
 }
@@ -280,8 +265,7 @@ PropertyInterface *PropertyManager::getLocalProperty(const string &str) const {
   return const_cast<PropertyManager *>(this)->localProperties[str];
 }
 //==============================================================
-PropertyInterface *
-PropertyManager::getInheritedProperty(const string &str) const {
+PropertyInterface *PropertyManager::getInheritedProperty(const string &str) const {
   assert(existInheritedProperty(str));
   return const_cast<PropertyManager *>(this)->inheritedProperties[str];
 }
@@ -310,15 +294,13 @@ void PropertyManager::delLocalProperty(const string &str) {
 
     // Warn subgraphs.
     for (Graph *sg : graph->subGraphs()) {
-      static_cast<GraphAbstract *>(sg)
-          ->propertyContainer->notifyBeforeDelInheritedProperty(str);
+      static_cast<GraphAbstract *>(sg)->propertyContainer->notifyBeforeDelInheritedProperty(str);
     }
 
     // Remove property from map.
     localProperties.erase(it);
     // Set the inherited property in this graph and all it's subgraphs.
-    static_cast<GraphAbstract *>(graph)
-        ->propertyContainer->setInheritedProperty(str, newProp);
+    static_cast<GraphAbstract *>(graph)->propertyContainer->setInheritedProperty(str, newProp);
 
     // Delete property
     // Need to be done after subgraph notification.
@@ -341,26 +323,22 @@ void PropertyManager::notifyBeforeDelInheritedProperty(const string &str) {
     // loop on subgraphs
     for (Graph *sg : graph->subGraphs()) {
       // to remove as inherited property
-      static_cast<GraphAbstract *>(sg)
-          ->propertyContainer->notifyBeforeDelInheritedProperty(str);
+      static_cast<GraphAbstract *>(sg)->propertyContainer->notifyBeforeDelInheritedProperty(str);
     }
   }
 }
 
 Iterator<string> *PropertyManager::getLocalProperties() {
-  return new PropertyNamesIterator(localProperties.begin(),
-                                   localProperties.end());
+  return new PropertyNamesIterator(localProperties.begin(), localProperties.end());
 }
 Iterator<string> *PropertyManager::getInheritedProperties() {
-  return new PropertyNamesIterator(inheritedProperties.begin(),
-                                   inheritedProperties.end());
+  return new PropertyNamesIterator(inheritedProperties.begin(), inheritedProperties.end());
 }
 Iterator<PropertyInterface *> *PropertyManager::getLocalObjectProperties() {
   return new PropertiesIterator(localProperties.begin(), localProperties.end());
 }
 Iterator<PropertyInterface *> *PropertyManager::getInheritedObjectProperties() {
-  return new PropertiesIterator(inheritedProperties.begin(),
-                                inheritedProperties.end());
+  return new PropertiesIterator(inheritedProperties.begin(), inheritedProperties.end());
 }
 //===============================================================
 void PropertyManager::erase(const node n) {

@@ -21,23 +21,23 @@
 #ifndef GLPOLYQUAD_H_
 #define GLPOLYQUAD_H_
 
-#include <tulip/Color.h>
-#include <tulip/Coord.h>
-#include <tulip/GlSimpleEntity.h>
 #include <tulip/tulipconf.h>
+#include <tulip/Coord.h>
+#include <tulip/Color.h>
+#include <tulip/GlSimpleEntity.h>
 
-#include <string>
 #include <vector>
+#include <string>
 
 namespace tlp {
 
 /**
  * @ingroup OpenGL
- * \brief General class used to render a connected group of quadrilaterals
- * (textured or not) that shares edges as GlEntity
+ * \brief General class used to render a connected group of quadrilaterals (textured or not) that
+ * shares edges as GlEntity
  *
- * This generic class is used  to render a connected group of quadrilaterals
- * (textured or not) that shares edges as GlEntity
+ * This generic class is used  to render a connected group of quadrilaterals (textured or not) that
+ * shares edges as GlEntity
  */
 class TLP_GL_SCOPE GlPolyQuad : public GlSimpleEntity {
 
@@ -51,14 +51,13 @@ public:
    *
    */
   GlPolyQuad(const std::string &textureName = "", const bool outlined = false,
-             const int outlineWidth = 1,
-             const Color &outlineColor = Color(0, 0, 0));
+             const int outlineWidth = 1, const Color &outlineColor = Color(0, 0, 0));
 
   /**
    * Constructor for building a polyquad with spefific colors for each edges
    *
-   * Pay attention to the order of the edges point in the polyQuadEdges vector.
-   * Indeed, to draw the following polyquad
+   * Pay attention to the order of the edges point in the polyQuadEdges vector. Indeed, to draw the
+   * following polyquad
    *
    *                    v2
    *          v0+--------+--------+ v4
@@ -68,33 +67,30 @@ public:
    *          v1+--------+--------+ v5
    *                    v3
    *
-   * The content of the polyQuadEdges vector should be {v0, v1, v2, v3, v4, v5}
-   * or {v1, v0, v3, v2, v5, v4}
+   * The content of the polyQuadEdges vector should be {v0, v1, v2, v3, v4, v5} or {v1, v0, v3, v2,
+   * v5, v4}
    *
-   * \param polyQuadEdges A vector containing the coordinates of the quad edges,
-   * its size must be  a multiple of 2 because an edge is defined by 2 points
-   * \param polyQuadEdgesColor A vector containing the edges's colors, its size
-   * must be equal to the number of edges defined by the polyQuadEdges vector
+   * \param polyQuadEdges A vector containing the coordinates of the quad edges, its size must be  a
+   * multiple of 2 because an edge is defined by 2 points
+   * \param polyQuadEdgesColor A vector containing the edges's colors, its size must be equal to the
+   * number of edges defined by the polyQuadEdges vector
    * \param  textureName The absolute path of the texture image file to use
    */
-  GlPolyQuad(const std::vector<Coord> &polyQuadEdges,
-             const std::vector<Color> &polyQuadEdgesColor,
+  GlPolyQuad(const std::vector<Coord> &polyQuadEdges, const std::vector<Color> &polyQuadEdgesColor,
              const std::string &textureName = "", const bool outlined = false,
-             const int outlineWidth = 1,
-             const Color &outlineColor = Color(0, 0, 0));
+             const int outlineWidth = 1, const Color &outlineColor = Color(0, 0, 0));
 
   /**
    * Constructor for building a polyquad with a single color
    *
-   * \param polyQuadEdges A vector containing the coordinates of the quad edges,
-   * its size must be  a multiple of 2 because an edge is defined by 2 points
+   * \param polyQuadEdges A vector containing the coordinates of the quad edges, its size must be  a
+   * multiple of 2 because an edge is defined by 2 points
    * \param polyQuadColor The polyquad color
    * \param  textureName The absolute path of the texture image file to use
    */
-  GlPolyQuad(const std::vector<Coord> &polyQuadEdges,
-             const Color &polyQuadColor, const std::string &textureName = "",
-             const bool outlined = false, const int outlineWidth = 1,
-             const Color &outlineColor = Color(0, 0, 0));
+  GlPolyQuad(const std::vector<Coord> &polyQuadEdges, const Color &polyQuadColor,
+             const std::string &textureName = "", const bool outlined = false,
+             const int outlineWidth = 1, const Color &outlineColor = Color(0, 0, 0));
 
   /**
    * Method to add a polyquad edge
@@ -105,8 +101,8 @@ public:
    * \param noCheck when true the bounding box validity is not checked
    *
    */
-  void addQuadEdge(const Coord &edgeStart, const Coord &edgeEnd,
-                   const Color &edgeColor, bool noCheck = false);
+  void addQuadEdge(const Coord &edgeStart, const Coord &edgeEnd, const Color &edgeColor,
+                   bool noCheck = false);
 
   /**
    * Virtual function used to draw the polyquad.
@@ -121,17 +117,23 @@ public:
   /**
    * Method to set the polyquad outline color
    */
-  void setOutlineColor(const Color &color) { outlineColor = color; }
+  void setOutlineColor(const Color &color) {
+    outlineColor = color;
+  }
 
   /**
    * Method to toggle polyquad outline
    */
-  void setOutlined(const bool outline) { outlined = outline; }
+  void setOutlined(const bool outline) {
+    outlined = outline;
+  }
 
   /**
    * Method to set the polyquad outline width
    */
-  void setOutlineWidth(const int width) { outlineWidth = width; }
+  void setOutlineWidth(const int width) {
+    outlineWidth = width;
+  }
 
   /**
    *  Method to translate entity
@@ -146,14 +148,12 @@ public:
   /**
    * Function to set data with inString (in XML format)
    */
-  void setWithXML(const std::string &inString,
-                  unsigned int &currentPosition) override;
+  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
 
 private:
-  std::vector<Coord> polyQuadEdges; // vector which contains polyquad edges, an
-                                    // edge being defined by a pair of Coord
-  std::vector<Color>
-      polyQuadEdgesColors; // vector which contains polyquad edges colors
+  std::vector<Coord> polyQuadEdges; // vector which contains polyquad edges, an edge being defined
+                                    // by a pair of Coord
+  std::vector<Color> polyQuadEdgesColors; // vector which contains polyquad edges colors
   std::string textureName;
   bool outlined;
   int outlineWidth;

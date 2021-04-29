@@ -30,12 +30,10 @@ public:
                                  Qt::KeyboardModifier modifier = Qt::NoModifier)
       : ParallelCoordsGlEntitiesSelector(button, modifier) {}
   ~ParallelCoordsElementsSelector() override {}
-  void
-  unselectAllEntitiesHandler(ParallelCoordinatesView *parallelView) override;
-  void selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x,
-                               int y, bool addToSelection) override;
-  void selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x,
-                               int y, int w, int h,
+  void unselectAllEntitiesHandler(ParallelCoordinatesView *parallelView) override;
+  void selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y,
+                               bool addToSelection) override;
+  void selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y, int w, int h,
                                bool addToSelection) override;
 };
 } // namespace tlp

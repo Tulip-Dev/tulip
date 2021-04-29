@@ -17,12 +17,12 @@
  *
  */
 #include <list>
+#include <unordered_map>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/Glyph.h>
 #include <tulip/PluginLister.h>
 #include <tulip/TulipViewSettings.h>
-#include <unordered_map>
 
 using namespace std;
 
@@ -72,9 +72,8 @@ void EdgeExtremityGlyphManager::loadGlyphPlugins() {
   }
 }
 //====================================================
-void EdgeExtremityGlyphManager::initGlyphList(
-    Graph **graph, GlGraphInputData *glGraphInputData,
-    MutableContainer<EdgeExtremityGlyph *> &glyphs) {
+void EdgeExtremityGlyphManager::initGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
+                                              MutableContainer<EdgeExtremityGlyph *> &glyphs) {
   GlyphContext gc = GlyphContext(graph, glGraphInputData);
   glyphs.setAll(nullptr);
 
@@ -85,9 +84,8 @@ void EdgeExtremityGlyphManager::initGlyphList(
   }
 }
 
-void EdgeExtremityGlyphManager::clearGlyphList(
-    Graph **, GlGraphInputData *,
-    MutableContainer<EdgeExtremityGlyph *> &glyphs) {
+void EdgeExtremityGlyphManager::clearGlyphList(Graph **, GlGraphInputData *,
+                                               MutableContainer<EdgeExtremityGlyph *> &glyphs) {
 
   for (const string &glyphName : plugins) {
     delete glyphs.get(PluginLister::pluginInformation(glyphName).id());

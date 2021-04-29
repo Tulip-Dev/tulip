@@ -16,17 +16,17 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <tulip/GlGraphRenderer.h>
+#include <tulip/GraphProperty.h>
+#include <tulip/GlTools.h>
+#include <tulip/GlScene.h>
+#include <tulip/GlVertexArrayManager.h>
+#include <tulip/GlSceneVisitor.h>
+#include <tulip/GlNode.h>
 #include <tulip/GlEdge.h>
 #include <tulip/GlGraphInputData.h>
-#include <tulip/GlGraphRenderer.h>
 #include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/GlNode.h>
-#include <tulip/GlScene.h>
-#include <tulip/GlSceneVisitor.h>
-#include <tulip/GlTools.h>
-#include <tulip/GlVertexArrayManager.h>
 #include <tulip/GraphParallelTools.h>
-#include <tulip/GraphProperty.h>
 
 using namespace std;
 
@@ -36,8 +36,7 @@ GlGraphRenderer::GlGraphRenderer(const GlGraphInputData *inputData)
     : inputData(inputData), graphModified(true), selectionDrawActivate(false),
       selectionIdMap(nullptr), selectionCurrentId(nullptr) {}
 
-void GlGraphRenderer::visitGraph(GlSceneVisitor *visitor,
-                                 bool visitHiddenEntities) {
+void GlGraphRenderer::visitGraph(GlSceneVisitor *visitor, bool visitHiddenEntities) {
   Graph *graph = inputData->getGraph();
 
   if (!graph)
@@ -46,11 +45,9 @@ void GlGraphRenderer::visitGraph(GlSceneVisitor *visitor,
   unsigned int nbNodes = graph->numberOfNodes();
   unsigned int nbEdges = graph->numberOfEdges();
   if (!visitHiddenEntities && !inputData->parameters->isViewMetaLabel()) {
-    if (!inputData->parameters->isDisplayNodes() &&
-        !inputData->parameters->isViewNodeLabel())
+    if (!inputData->parameters->isDisplayNodes() && !inputData->parameters->isViewNodeLabel())
       nbNodes = 0;
-    if (!inputData->parameters->isDisplayEdges() &&
-        !inputData->parameters->isViewEdgeLabel())
+    if (!inputData->parameters->isDisplayEdges() && !inputData->parameters->isViewEdgeLabel())
       nbEdges = 0;
   }
   visitor->reserveMemoryForGraphElts(nbNodes, nbEdges);

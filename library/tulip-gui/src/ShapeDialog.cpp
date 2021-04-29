@@ -22,8 +22,7 @@
 
 using namespace tlp;
 
-ShapeDialog::ShapeDialog(std::list<std::pair<QString, QPixmap>> &&nodeShapes,
-                         QWidget *parent)
+ShapeDialog::ShapeDialog(std::list<std::pair<QString, QPixmap>> &&nodeShapes, QWidget *parent)
     : QDialog(parent), _ui(new Ui::ShapeDialog), shapes(std::move(nodeShapes)) {
 
   _ui->setupUi(this);
@@ -31,13 +30,14 @@ ShapeDialog::ShapeDialog(std::list<std::pair<QString, QPixmap>> &&nodeShapes,
   updateShapeList();
 }
 
-ShapeDialog::~ShapeDialog() { delete _ui; }
+ShapeDialog::~ShapeDialog() {
+  delete _ui;
+}
 
 void ShapeDialog::updateShapeList() {
   _ui->shapeListWidget->clear();
 
-  for (std::list<std::pair<QString, QPixmap>>::const_iterator it =
-           shapes.begin();
+  for (std::list<std::pair<QString, QPixmap>>::const_iterator it = shapes.begin();
        it != shapes.end(); ++it) {
     _ui->shapeListWidget->addItem(new QListWidgetItem(it->second, it->first));
   }
@@ -47,11 +47,12 @@ void ShapeDialog::updateShapeList() {
   }
 }
 
-QString ShapeDialog::getSelectedShapeName() const { return _selectedShapeName; }
+QString ShapeDialog::getSelectedShapeName() const {
+  return _selectedShapeName;
+}
 
 void ShapeDialog::setSelectedShapeName(const QString &shapeName) {
-  QList<QListWidgetItem *> items =
-      _ui->shapeListWidget->findItems(shapeName, Qt::MatchExactly);
+  QList<QListWidgetItem *> items = _ui->shapeListWidget->findItems(shapeName, Qt::MatchExactly);
 
   if (!items.isEmpty()) {
     _ui->shapeListWidget->setCurrentItem(items.at(0));

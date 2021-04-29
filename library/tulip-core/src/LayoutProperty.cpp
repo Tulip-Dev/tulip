@@ -16,13 +16,13 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <cfloat>
 #include <cmath>
+#include <cfloat>
 #include <forward_list>
 #include <unordered_map>
 
-#include <tulip/Coord.h>
 #include <tulip/LayoutProperty.h>
+#include <tulip/Coord.h>
 
 using namespace std;
 using namespace tlp;
@@ -41,14 +41,12 @@ void minV(tlp::Coord &res, const tlp::Coord &cmp) {
 }
 
 /**
- * @brief This template specialization provides specific computation for min and
- *max values of Layout properties (they are specific in that they use the
- *control points of the edges)
+ * @brief This template specialization provides specific computation for min and max values of
+ *Layout properties (they are specific in that they use the control points of the edges)
  **/
 template <>
 std::pair<tlp::Coord, tlp::Coord>
-tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(
-    const Graph *sg) {
+tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(const Graph *sg) {
 #ifndef NDEBUG
   tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
 #endif
@@ -88,15 +86,13 @@ tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(
 }
 
 /**
- * @brief This template specialization provides specific computation for min and
- *max values of Layout properties (they are specific in that they use the
- *control points of the edges)
+ * @brief This template specialization provides specific computation for min and max values of
+ *Layout properties (they are specific in that they use the control points of the edges)
  **/
 template <>
 void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(
     tlp::edge e, tlp::LineType::RealType newValue) {
-  std::unordered_map<unsigned int,
-                     std::pair<tlp::Coord, tlp::Coord>>::const_iterator it =
+  std::unordered_map<unsigned int, std::pair<tlp::Coord, tlp::Coord>>::const_iterator it =
       minMaxNode.begin();
 
   const std::vector<Coord> &oldV = this->getEdgeValue(e);
@@ -154,8 +150,7 @@ void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(
 
       // reset bounding box if needed
       if (reset) {
-        needGraphListener =
-            static_cast<LayoutProperty *>(this)->nbBendedEdges > 0;
+        needGraphListener = static_cast<LayoutProperty *>(this)->nbBendedEdges > 0;
         removeListenersAndClearNodeMap();
         return;
       }
@@ -165,27 +160,25 @@ void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(
   // we need to observe the graph as soon as there is an edge
   // with bends
   if (!needGraphListener &&
-      (needGraphListener =
-           (static_cast<LayoutProperty *>(this)->nbBendedEdges > 0)) &&
+      (needGraphListener = (static_cast<LayoutProperty *>(this)->nbBendedEdges > 0)) &&
       (minMaxNode.find(graph->getId()) == minMaxNode.end()))
     graph->addListener(this);
 }
 } // namespace tlp
 
-inline double sqr(double x) { return (x * x); }
+inline double sqr(double x) {
+  return (x * x);
+}
 
 const string LayoutProperty::propertyTypename = "layout";
 const string CoordVectorProperty::propertyTypename = "vector<coord>";
 
 // define a specific MetaValueCalculator
-class LayoutMetaValueCalculator
-    : public AbstractLayoutProperty::MetaValueCalculator {
+class LayoutMetaValueCalculator : public AbstractLayoutProperty::MetaValueCalculator {
 public:
-  void computeMetaValue(AbstractLayoutProperty *layout, node mN, Graph *sg,
-                        Graph *) override {
+  void computeMetaValue(AbstractLayoutProperty *layout, node mN, Graph *sg, Graph *) override {
     // nothing to do if the subgraph is not linked to the property graph
-    if (sg != layout->getGraph() &&
-        !layout->getGraph()->isDescendantGraph(sg)) {
+    if (sg != layout->getGraph() && !layout->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
       tlp::warning()
           << "Warning : " << __PRETTY_FUNCTION__
@@ -201,16 +194,14 @@ public:
       return;
 
     case 1:
-      layout->setNodeValue(mN,
-                           static_cast<LayoutProperty *>(layout)->getMax(sg));
+      layout->setNodeValue(mN, static_cast<LayoutProperty *>(layout)->getMax(sg));
       return;
 
     default:
       // between the min and max computed values
-      layout->setNodeValue(mN,
-                           (static_cast<LayoutProperty *>(layout)->getMax(sg) +
-                            static_cast<LayoutProperty *>(layout)->getMin(sg)) /
-                               2.0f);
+      layout->setNodeValue(mN, (static_cast<LayoutProperty *>(layout)->getMax(sg) +
+                                static_cast<LayoutProperty *>(layout)->getMin(sg)) /
+                                   2.0f);
     }
   }
 };
@@ -220,8 +211,7 @@ static LayoutMetaValueCalculator mvLayoutCalculator;
 //======================================================
 LayoutProperty::LayoutProperty(Graph *sg, const std::string &n)
     : LayoutMinMaxProperty(sg, n, Coord(FLT_MAX, FLT_MAX, FLT_MAX),
-                           Coord(-FLT_MAX, -FLT_MAX, -FLT_MAX),
-                           tlp::LineType::RealType(),
+                           Coord(-FLT_MAX, -FLT_MAX, -FLT_MAX), tlp::LineType::RealType(),
                            tlp::LineType::RealType()),
       nbBendedEdges(0) {
   // set default MetaValueCalculator
@@ -302,18 +292,15 @@ void LayoutProperty::rotate(const double &alpha, int rot, Iterator<node> *itN,
   Observable::unholdObservers();
 }
 //=================================================================================
-void LayoutProperty::rotateX(const double &alpha, Iterator<node> *itN,
-                             Iterator<edge> *itE) {
+void LayoutProperty::rotateX(const double &alpha, Iterator<node> *itN, Iterator<edge> *itE) {
   rotate(alpha, X_ROT, itN, itE);
 }
 //=================================================================================
-void LayoutProperty::rotateY(const double &alpha, Iterator<node> *itN,
-                             Iterator<edge> *itE) {
+void LayoutProperty::rotateY(const double &alpha, Iterator<node> *itN, Iterator<edge> *itE) {
   rotate(alpha, Y_ROT, itN, itE);
 }
 //=================================================================================
-void LayoutProperty::rotateZ(const double &alpha, Iterator<node> *itN,
-                             Iterator<edge> *itE) {
+void LayoutProperty::rotateZ(const double &alpha, Iterator<node> *itN, Iterator<edge> *itE) {
   rotate(alpha, Z_ROT, itN, itE);
 }
 //=================================================================================
@@ -365,8 +352,7 @@ void LayoutProperty::rotateZ(const double &alpha, const Graph *sg) {
   delete itE;
 }
 //=================================================================================
-void LayoutProperty::scale(const tlp::Vec3f &v, Iterator<node> *itN,
-                           Iterator<edge> *itE) {
+void LayoutProperty::scale(const tlp::Vec3f &v, Iterator<node> *itN, Iterator<edge> *itE) {
   Observable::holdObservers();
 
   while (itN->hasNext()) {
@@ -412,8 +398,7 @@ void LayoutProperty::scale(const tlp::Vec3f &v, const Graph *sg) {
   delete itE;
 }
 //=================================================================================
-void LayoutProperty::translate(const tlp::Vec3f &v, Iterator<node> *itN,
-                               Iterator<edge> *itE) {
+void LayoutProperty::translate(const tlp::Vec3f &v, Iterator<node> *itN, Iterator<edge> *itE) {
 
   // nothing to do if it is the null vector
   // or if there is no nodes or bends of edges to translate
@@ -520,8 +505,7 @@ void LayoutProperty::normalize(const Graph *sg) {
 
   for (auto itn : sg->nodes()) {
     const Coord &tmpCoord = getNodeValue(itn);
-    dtmpMax = std::max(dtmpMax,
-                       sqr(tmpCoord[0]) + sqr(tmpCoord[1]) + sqr(tmpCoord[2]));
+    dtmpMax = std::max(dtmpMax, sqr(tmpCoord[0]) + sqr(tmpCoord[1]) + sqr(tmpCoord[2]));
   }
 
   dtmpMax = 1.0 / sqrt(dtmpMax);
@@ -565,8 +549,7 @@ void LayoutProperty::perfectAspectRatio(const Graph *subgraph) {
 }
 
 //=================================================================================
-void LayoutProperty::clone_handler(
-    AbstractProperty<tlp::PointType, tlp::LineType> &proxyC) {
+void LayoutProperty::clone_handler(AbstractProperty<tlp::PointType, tlp::LineType> &proxyC) {
   if (typeid(this) == typeid(&proxyC)) {
     LayoutProperty *proxy = static_cast<LayoutProperty *>(&proxyC);
     minMaxNode = proxy->minMaxNode;
@@ -578,39 +561,35 @@ void LayoutProperty::resetBoundingBox() {
   minMaxEdge.clear();
 }
 //================================================================================
-void LayoutProperty::setNodeValue(
-    const node n, tlp::StoredType<Coord>::ReturnedConstValue v) {
+void LayoutProperty::setNodeValue(const node n, tlp::StoredType<Coord>::ReturnedConstValue v) {
   LayoutMinMaxProperty::updateNodeValue(n, v);
   LayoutMinMaxProperty::setNodeValue(n, v);
 }
 //================================================================================
-void LayoutProperty::setEdgeValue(
-    const edge e, tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v) {
+void LayoutProperty::setEdgeValue(const edge e,
+                                  tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v) {
   LayoutMinMaxProperty::updateEdgeValue(e, v);
   LayoutMinMaxProperty::setEdgeValue(e, v);
 }
 //=================================================================================
-void LayoutProperty::setAllNodeValue(
-    tlp::StoredType<Coord>::ReturnedConstValue v) {
+void LayoutProperty::setAllNodeValue(tlp::StoredType<Coord>::ReturnedConstValue v) {
   resetBoundingBox();
   LayoutMinMaxProperty::setAllNodeValue(v);
 }
 //=================================================================================
-void LayoutProperty::setValueToGraphNodes(
-    tlp::StoredType<Coord>::ReturnedConstValue v, const Graph *graph) {
+void LayoutProperty::setValueToGraphNodes(tlp::StoredType<Coord>::ReturnedConstValue v,
+                                          const Graph *graph) {
   resetBoundingBox();
   LayoutMinMaxProperty::setValueToGraphNodes(v, graph);
 }
 //=================================================================================
-void LayoutProperty::setAllEdgeValue(
-    tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v) {
+void LayoutProperty::setAllEdgeValue(tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v) {
   resetBoundingBox();
   LayoutMinMaxProperty::setAllEdgeValue(v);
 }
 //=================================================================================
-void LayoutProperty::setValueToGraphEdges(
-    tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v,
-    const Graph *graph) {
+void LayoutProperty::setValueToGraphEdges(tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v,
+                                          const Graph *graph) {
   resetBoundingBox();
   LayoutMinMaxProperty::setValueToGraphEdges(v, graph);
 }
@@ -685,16 +664,14 @@ void LayoutProperty::computeEmbedding(const node n, Graph *sg) {
   const Coord &center = getNodeValue(n);
   forward_list<pCE>::iterator it, bit;
 
-  for (bit = adjCoord.before_begin(), it = adjCoord.begin();
-       it != adjCoord.end(); ++it) {
+  for (bit = adjCoord.before_begin(), it = adjCoord.begin(); it != adjCoord.end(); ++it) {
     it->first -= center;
     float norm = it->first.norm();
 
     if (norm < 1E-5) {
       adjCoord.erase_after(bit);
       it = bit;
-      cerr << "[ERROR]:" << __PRETTY_FUNCTION__
-           << " :: norms are too small for node:" << n << endl;
+      cerr << "[ERROR]:" << __PRETTY_FUNCTION__ << " :: norms are too small for node:" << n << endl;
       --adjSize;
     }
     bit = it;
@@ -712,8 +689,7 @@ void LayoutProperty::computeEmbedding(const node n, Graph *sg) {
   sg->setEdgeOrder(n, tmpOrder);
 }
 //=================================================================================
-vector<double> LayoutProperty::angularResolutions(const node n,
-                                                  const Graph *sg) const {
+vector<double> LayoutProperty::angularResolutions(const node n, const Graph *sg) const {
   vector<double> result;
 
   if (sg == nullptr)
@@ -750,8 +726,7 @@ vector<double> LayoutProperty::angularResolutions(const node n,
   const Coord &center = getNodeValue(n);
   forward_list<Coord>::iterator it, bit;
 
-  for (bit = adjCoord.before_begin(), it = adjCoord.begin();
-       it != adjCoord.end(); ++it) {
+  for (bit = adjCoord.before_begin(), it = adjCoord.begin(); it != adjCoord.end(); ++it) {
     (*it) -= center;
     float norm = (*it).norm();
 
@@ -811,8 +786,7 @@ vector<double> LayoutProperty::angularResolutions(const node n,
   return result;
 }
 //=================================================================================
-double LayoutProperty::averageAngularResolution(const node n,
-                                                const Graph *sg) const {
+double LayoutProperty::averageAngularResolution(const node n, const Graph *sg) const {
   vector<double> &&tmp = angularResolutions(n, sg);
 
   if (tmp.empty())
@@ -862,14 +836,12 @@ double LayoutProperty::averageEdgeLength(const Graph *sg) const {
 //  return 0;
 //}
 //=================================================================================
-PropertyInterface *LayoutProperty::clonePrototype(Graph *g,
-                                                  const std::string &n) const {
+PropertyInterface *LayoutProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
     return nullptr;
 
   // allow to get an unregistered property (empty name)
-  LayoutProperty *p = n.empty() ? new LayoutProperty(g)
-                                : g->getLocalProperty<LayoutProperty>(n);
+  LayoutProperty *p = n.empty() ? new LayoutProperty(g) : g->getLocalProperty<LayoutProperty>(n);
   p->setAllNodeValue(getNodeDefaultValue());
   p->setAllEdgeValue(getEdgeDefaultValue());
   return p;
@@ -909,15 +881,13 @@ void LayoutProperty::treatEvent(const Event &evt) {
   }
 }
 //=================================================================================
-PropertyInterface *
-CoordVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
+PropertyInterface *CoordVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
     return nullptr;
 
   // allow to get an unregistered property (empty name)
-  CoordVectorProperty *p = n.empty()
-                               ? new CoordVectorProperty(g)
-                               : g->getLocalProperty<CoordVectorProperty>(n);
+  CoordVectorProperty *p =
+      n.empty() ? new CoordVectorProperty(g) : g->getLocalProperty<CoordVectorProperty>(n);
   p->setAllNodeValue(getNodeDefaultValue());
   p->setAllEdgeValue(getEdgeDefaultValue());
   return p;

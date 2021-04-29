@@ -21,8 +21,8 @@
 #ifndef TLP_GEO_CIRCLE_H
 #define TLP_GEO_CIRCLE_H
 
-#include <tulip/Vector.h>
 #include <vector>
+#include <tulip/Vector.h>
 namespace tlp {
 /**
  * @ingroup Structures
@@ -47,7 +47,9 @@ struct Circle : public Vector<Obj, 2, OTYPE> {
   /**
    * Translate "this" by vector v
    */
-  void translate(const Vector<Obj, 2, OTYPE> &v) { (*this) += v; }
+  void translate(const Vector<Obj, 2, OTYPE> &v) {
+    (*this) += v;
+  }
   /**
    * Merges this circle with another circle; merging operation
    * consists in computing the smallest enclosing circle of the
@@ -65,14 +67,13 @@ struct Circle : public Vector<Obj, 2, OTYPE> {
 };
 
 /**
- * Give the instersection of two circles, return false if no intersection exist
- * else put the two points in p1 & p2, if there is only one solution p1 == p2;
+ * Give the instersection of two circles, return false if no intersection exist else put the two
+ * points in p1 & p2,
+ * if there is only one solution p1 == p2;
  */
 template <typename Obj, typename OTYPE>
-bool intersection(const tlp::Circle<Obj, OTYPE> &c1,
-                  const tlp::Circle<Obj, OTYPE> &c2,
-                  tlp::Vector<Obj, 2, OTYPE> &sol1,
-                  tlp::Vector<Obj, 2, OTYPE> &sol2) {
+bool intersection(const tlp::Circle<Obj, OTYPE> &c1, const tlp::Circle<Obj, OTYPE> &c2,
+                  tlp::Vector<Obj, 2, OTYPE> &sol1, tlp::Vector<Obj, 2, OTYPE> &sol2) {
   double d = c1.dist(c2);
   double r1 = c1.radius;
   double r2 = c2.radius;
@@ -114,16 +115,14 @@ tlp::Circle<Obj, OTYPE> enclosingCircle(const tlp::Circle<Obj, OTYPE> &,
  * Compute the optimum enclosing circle of a set of circles.
  */
 template <typename Obj, typename OTYPE>
-tlp::Circle<Obj, OTYPE>
-enclosingCircle(const std::vector<tlp::Circle<Obj, OTYPE>> &circles);
+tlp::Circle<Obj, OTYPE> enclosingCircle(const std::vector<tlp::Circle<Obj, OTYPE>> &circles);
 /**
  * Compute an enclosing circle of a set of circles,
  * this algorithm is an approximation of the smallest
  * enclosing circle.
  */
 template <typename Obj, typename OTYPE>
-tlp::Circle<Obj, OTYPE>
-lazyEnclosingCircle(const std::vector<tlp::Circle<Obj, OTYPE>> &circles);
+tlp::Circle<Obj, OTYPE> lazyEnclosingCircle(const std::vector<tlp::Circle<Obj, OTYPE>> &circles);
 /**
  * Write circle in a stream
  */

@@ -18,12 +18,12 @@
  */
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
+#include <tulip/Size.h>
+#include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/GlHexagon.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/GlHexagon.h>
-#include <tulip/Glyph.h>
-#include <tulip/Size.h>
 #include <tulip/TulipViewSettings.h>
 
 using namespace std;
@@ -31,9 +31,8 @@ using namespace tlp;
 
 namespace tlp {
 
-static void drawHexagon(const Color &fillColor, const Color &borderColor,
-                        float borderWidth, const std::string &textureName,
-                        float lod, bool mode) {
+static void drawHexagon(const Color &fillColor, const Color &borderColor, float borderWidth,
+                        const std::string &textureName, float lod, bool mode) {
   static GlHexagon hexagon(Coord(0, 0, 0), Size(.5, .5, 0));
 
   hexagon.setLightingMode(mode);
@@ -61,8 +60,8 @@ static void drawHexagon(const Color &fillColor, const Color &borderColor,
  */
 class Hexagon : public Glyph {
 public:
-  GLYPHINFORMATION("2D - Hexagon", "David Auber", "09/07/2002",
-                   "Textured Hexagon", "1.0", NodeShape::Hexagon)
+  GLYPHINFORMATION("2D - Hexagon", "David Auber", "09/07/2002", "Textured Hexagon", "1.0",
+                   NodeShape::Hexagon)
   Hexagon(const tlp::PluginContext *context = nullptr);
   ~Hexagon() override;
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
@@ -83,31 +82,25 @@ void Hexagon::draw(node n, float lod) {
 
   drawHexagon(glGraphInputData->getElementColor()->getNodeValue(n),
               glGraphInputData->getElementBorderColor()->getNodeValue(n),
-              glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-              textureName, lod, true);
+              glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod, true);
 }
 
 class EEHexagon : public EdgeExtremityGlyph {
 public:
   GLYPHINFORMATION("2D - Hexagon extremity", "David Auber", "09/07/2002",
-                   "Textured Hexagon for edge extremities", "1.0",
-                   EdgeExtremityShape::Hexagon)
+                   "Textured Hexagon for edge extremities", "1.0", EdgeExtremityShape::Hexagon)
 
   EEHexagon(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
 
-  void draw(edge e, node, const Color &glyphColor, const Color &borderColor,
-            float lod) override {
-    string textureName =
-        edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) override {
+    string textureName = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
     if (!textureName.empty())
-      textureName =
-          edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
+      textureName = edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
 
-    drawHexagon(
-        glyphColor, borderColor,
-        edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-        textureName, lod, false);
+    drawHexagon(glyphColor, borderColor,
+                edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), textureName, lod,
+                false);
   }
 };
 PLUGIN(EEHexagon)

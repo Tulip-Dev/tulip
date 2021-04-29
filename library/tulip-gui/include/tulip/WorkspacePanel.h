@@ -21,9 +21,9 @@
 #ifndef WORKSPACEPANEL_H
 #define WORKSPACEPANEL_H
 
+#include <QFrame>
 #include <QAction>
 #include <QDialog>
-#include <QFrame>
 
 #include <tulip/tulipconf.h>
 

@@ -20,8 +20,8 @@
 #define ORIENTATION_H
 
 #include "OrientableConstants.h"
-#include "OrientableCoord.h"
 #include "OrientableLayout.h"
+#include "OrientableCoord.h"
 #include "OrientableSize.h"
 #include "OrientableSizeProxy.h"
 

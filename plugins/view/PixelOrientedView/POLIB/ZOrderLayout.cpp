@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <climits>
 #include <cmath>
+#include <climits>
 
 #include "ZOrderLayout.h"
 

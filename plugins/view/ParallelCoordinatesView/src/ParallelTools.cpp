@@ -21,17 +21,16 @@
 
 namespace tlp {
 
-static inline float square(float x) { return x * x; }
+static inline float square(float x) {
+  return x * x;
+}
 
-// Given a triangle ABC, this function compute the (AB, AC) angle in degree
-// using Al Kashi theorem
-float computeABACAngleWithAlKashi(const Coord &A, const Coord &B,
-                                  const Coord &C) {
+// Given a triangle ABC, this function compute the (AB, AC) angle in degree using Al Kashi theorem
+float computeABACAngleWithAlKashi(const Coord &A, const Coord &B, const Coord &C) {
   float AB = A.dist(B);
   float AC = A.dist(C);
   float BC = B.dist(C);
-  return acos((square(AB) + square(AC) - square(BC)) / (2.0f * AB * AC)) *
-         (180.0f / M_PI);
+  return acos((square(AB) + square(AC) - square(BC)) / (2.0f * AB * AC)) * (180.0f / M_PI);
 }
 
 void rotateVector(Coord &vec, float alpha, int rot) {
@@ -58,8 +57,7 @@ void rotateVector(Coord &vec, float alpha, int rot) {
   }
 }
 
-Coord *computeStraightLineIntersection(const Coord line1[2],
-                                       const Coord line2[2]) {
+Coord *computeStraightLineIntersection(const Coord line1[2], const Coord line2[2]) {
 
   Coord *intersectionPoint = nullptr;
   bool line1ParallelToXaxis = false;

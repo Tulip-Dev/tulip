@@ -17,35 +17,32 @@
  *
  */
 
-#include <tulip/Circle.h>
-#include <tulip/ColorButton.h>
-#include <tulip/GlCircle.h>
-#include <tulip/GlGraphInputData.h>
-#include <tulip/GlMainView.h>
-#include <tulip/GlMainWidget.h>
 #include <tulip/GlScene.h>
+#include <tulip/Circle.h>
+#include <tulip/GlCircle.h>
+#include <tulip/GlMainView.h>
+#include <tulip/GlGraphInputData.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/ColorButton.h>
 
 #include <QWidget>
 
-#include "../PathFinderTools.h"
 #include "EnclosingCircleHighlighter.h"
+#include "../PathFinderTools.h"
 #include "ui_EnclosingCircleConfiguration.h"
 
 using namespace tlp;
 using namespace std;
 
-EnclosingCircleConfigurationWidget::EnclosingCircleConfigurationWidget(
-    Color &circleColor, QWidget *parent)
+EnclosingCircleConfigurationWidget::EnclosingCircleConfigurationWidget(Color &circleColor,
+                                                                       QWidget *parent)
     : QWidget(parent), _ui(new Ui::EnclosingCircleConfigurationData) {
   _ui->setupUi(this);
-  connect(_ui->solidColorRadio, SIGNAL(clicked(bool)), this,
-          SIGNAL(solidColorRadioChecked(bool)));
+  connect(_ui->solidColorRadio, SIGNAL(clicked(bool)), this, SIGNAL(solidColorRadioChecked(bool)));
   connect(_ui->inverseColorRadio, SIGNAL(clicked(bool)), this,
           SIGNAL(inverseColorRadioChecked(bool)));
-  connect(_ui->circleColorBtn, SIGNAL(clicked()), this,
-          SIGNAL(colorButtonClicked()));
-  connect(_ui->alphaSlider, SIGNAL(valueChanged(int)), this,
-          SIGNAL(alphaChanged(int)));
+  connect(_ui->circleColorBtn, SIGNAL(clicked()), this, SIGNAL(colorButtonClicked()));
+  connect(_ui->alphaSlider, SIGNAL(valueChanged(int)), this, SIGNAL(alphaChanged(int)));
   _ui->circleColorBtn->setDialogTitle("Choose the enclosing circle color");
   _ui->circleColorBtn->setTulipColor(circleColor);
 }
@@ -54,13 +51,11 @@ EnclosingCircleConfigurationWidget::~EnclosingCircleConfigurationWidget() {
   delete _ui;
 }
 
-void EnclosingCircleConfigurationWidget::circleColorBtnDisabled(
-    const bool disabled) {
+void EnclosingCircleConfigurationWidget::circleColorBtnDisabled(const bool disabled) {
   _ui->circleColorBtn->setDisabled(disabled);
 }
 
-void EnclosingCircleConfigurationWidget::inverseColorRadioCheck(
-    const bool checked) {
+void EnclosingCircleConfigurationWidget::inverseColorRadioCheck(const bool checked) {
   _ui->inverseColorRadio->setChecked(checked);
 }
 
@@ -68,8 +63,7 @@ void EnclosingCircleConfigurationWidget::alphaSliderSetValue(const int val) {
   _ui->alphaSlider->setValue(val);
 }
 
-void EnclosingCircleConfigurationWidget::solidColorRadioCheck(
-    const bool checked) {
+void EnclosingCircleConfigurationWidget::solidColorRadioCheck(const bool checked) {
   _ui->solidColorRadio->setChecked(checked);
 }
 
@@ -83,20 +77,16 @@ Color getInverseColor(const Color &c) {
 
 //******************************************************
 EnclosingCircleHighlighter::EnclosingCircleHighlighter()
-    : PathHighlighter("Enclosing circle"), circleColor(200, 200, 200),
-      outlineColor(0, 0, 0), alpha(128), inversedColor(false),
-      configurationWidget(nullptr) {}
+    : PathHighlighter("Enclosing circle"), circleColor(200, 200, 200), outlineColor(0, 0, 0),
+      alpha(128), inversedColor(false), configurationWidget(nullptr) {}
 
-void EnclosingCircleHighlighter::highlight(const PathFinder *,
-                                           GlMainWidget *glMainWidget,
-                                           BooleanProperty *selection, node,
-                                           node) {
+void EnclosingCircleHighlighter::highlight(const PathFinder *, GlMainWidget *glMainWidget,
+                                           BooleanProperty *selection, node, node) {
   GlGraphInputData *inputData(getInputData(glMainWidget));
   GlScene *scene = glMainWidget->getScene();
   LayoutProperty *layout = inputData->getElementLayout();
   vector<Circlef> circles;
-  float minDepth = -.5; // We'll draw the circle beyond the deeper node. Will
-                        // work in most cases.
+  float minDepth = -.5; // We'll draw the circle beyond the deeper node. Will work in most cases.
   for (auto n : selection->getNodesEqualTo(true)) {
     Circlef c;
     minDepth = min(minDepth, layout->getNodeValue(n).getZ());
@@ -124,15 +114,16 @@ void EnclosingCircleHighlighter::highlight(const PathFinder *,
 
   inside.setA(alpha);
 
-  GlCircle *glCircle =
-      new GlCircle(Coord(enclosing[0], enclosing[1], minDepth),
-                   enclosing.radius, outline, inside, true, true, 0, 256);
+  GlCircle *glCircle = new GlCircle(Coord(enclosing[0], enclosing[1], minDepth), enclosing.radius,
+                                    outline, inside, true, true, 0, 256);
   addGlEntity(scene, glCircle, true, "PathFinderCircle");
 }
 
 void EnclosingCircleHighlighter::draw(GlMainWidget *) {}
 
-bool EnclosingCircleHighlighter::isConfigurable() const { return true; }
+bool EnclosingCircleHighlighter::isConfigurable() const {
+  return true;
+}
 
 EnclosingCircleHighlighter::~EnclosingCircleHighlighter() {
   // no need to delete the configurationWidget. Qt will do it well.
@@ -153,10 +144,8 @@ QWidget *EnclosingCircleHighlighter::getConfigurationWidget() {
           SLOT(solidColorRadioChecked(bool)));
   connect(configurationWidget, SIGNAL(inverseColorRadioChecked(bool)), this,
           SLOT(inverseColorRadioChecked(bool)));
-  connect(configurationWidget, SIGNAL(colorButtonClicked()), this,
-          SLOT(colorButtonClicked()));
-  connect(configurationWidget, SIGNAL(alphaChanged(int)), this,
-          SLOT(alphaChanged(int)));
+  connect(configurationWidget, SIGNAL(colorButtonClicked()), this, SLOT(colorButtonClicked()));
+  connect(configurationWidget, SIGNAL(alphaChanged(int)), this, SLOT(alphaChanged(int)));
   return configurationWidget;
 }
 
@@ -175,4 +164,6 @@ void EnclosingCircleHighlighter::colorButtonClicked() {
   circleColor = configurationWidget->getCircleColor();
 }
 
-void EnclosingCircleHighlighter::alphaChanged(int a) { alpha = a; }
+void EnclosingCircleHighlighter::alphaChanged(int a) {
+  alpha = a;
+}

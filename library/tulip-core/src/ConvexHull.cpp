@@ -20,9 +20,9 @@
 #include <tulip/ConvexHull.h>
 #include <tulip/DrawingTools.h>
 
-#include <algorithm>
 #include <list>
 #include <map>
+#include <algorithm>
 
 #ifdef __GNUC__
 #pragma GCC diagnostic push
@@ -42,8 +42,7 @@ using namespace tlp;
 
 //================================================================================
 
-static bool runQHull(int dim, vector<double> &points,
-                     vector<vector<unsigned int>> &facets,
+static bool runQHull(int dim, vector<double> &points, vector<vector<unsigned int>> &facets,
                      vector<vector<unsigned int>> &neighbors) {
 
   // Set default options for qhull convex hull
@@ -59,13 +58,11 @@ static bool runQHull(int dim, vector<double> &points,
   qhT *qh = &qh_qh;
   QHULL_LIB_CHECK
   qh_zero(qh, stderr);
-  int qhullKo =
-      qh_new_qhull(qh, dim, points.size() / dim, &points[0], false,
-                   const_cast<char *>(qhullCommand.c_str()), nullptr, stderr);
+  int qhullKo = qh_new_qhull(qh, dim, points.size() / dim, &points[0], false,
+                             const_cast<char *>(qhullCommand.c_str()), nullptr, stderr);
 #else
-  int qhullKo =
-      qh_new_qhull(dim, points.size() / dim, &points[0], false,
-                   const_cast<char *>(qhullCommand.c_str()), nullptr, stderr);
+  int qhullKo = qh_new_qhull(dim, points.size() / dim, &points[0], false,
+                             const_cast<char *>(qhullCommand.c_str()), nullptr, stderr);
 #endif
 
   if (!qhullKo) {
@@ -86,7 +83,9 @@ static bool runQHull(int dim, vector<double> &points,
       faceIds[getid_(facet)] = facets.size();
       facets.push_back(facetV);
       facetT *neighbor, **neighborp;
-      FOREACHneighbor_(facet) { neighborsV.push_back(getid_(neighbor)); }
+      FOREACHneighbor_(facet) {
+        neighborsV.push_back(getid_(neighbor));
+      }
       neighbors.push_back(neighborsV);
     }
 
@@ -111,8 +110,7 @@ static bool runQHull(int dim, vector<double> &points,
 }
 
 //================================================================================
-void tlp::convexHull(const std::vector<Coord> &points,
-                     std::vector<unsigned int> &hull) {
+void tlp::convexHull(const std::vector<Coord> &points, std::vector<unsigned int> &hull) {
   hull.clear();
 
   vector<double> pointsQHull;
@@ -171,8 +169,7 @@ void tlp::convexHull(const std::vector<Coord> &points,
 
     signedArea += (point[0] * nextPoint[1] - nextPoint[0] * point[1]);
 
-    // hull points are in clockwise order, reverse the points vector in that
-    // case
+    // hull points are in clockwise order, reverse the points vector in that case
     if (signedArea < 0) {
       std::reverse(hull.begin(), hull.end());
     }

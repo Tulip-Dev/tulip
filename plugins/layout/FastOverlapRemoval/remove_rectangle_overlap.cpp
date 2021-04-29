@@ -9,21 +9,21 @@
  * Released under GNU LGPL.  Read the file 'COPYING' for more information.
  */
 
-#include <cassert>
 #include <iostream>
+#include <cassert>
 #include <vector>
 
-#include <tulip/ParallelTools.h>
 #include <tulip/tulipconf.h>
+#include <tulip/ParallelTools.h>
 
-#include "constraint.h"
 #include "generate-constraints.h"
 #include "solve_VPSC.h"
 #include "variable.h"
+#include "constraint.h"
 
 #ifdef RECTANGLE_OVERLAP_LOGGING
-#include "blocks.h"
 #include <fstream>
+#include "blocks.h"
 using std::endl;
 using std::ios;
 using std::ofstream;
@@ -44,8 +44,7 @@ using namespace tlp;
  *    x-positions - this corrects the case where rectangles were moved
  *    too much in the first pass.
  */
-void removeRectangleOverlap(unsigned n, Rectangle rs[], double &xBorder,
-                            double &yBorder) {
+void removeRectangleOverlap(unsigned n, Rectangle rs[], double &xBorder, double &yBorder) {
   try {
     // The extra gap avoids numerical imprecision problems
     xBorder += EXTRA_GAP;
@@ -54,11 +53,9 @@ void removeRectangleOverlap(unsigned n, Rectangle rs[], double &xBorder,
 
     Constraint **cs;
     double *oldX = new double[n];
-    unsigned m =
-        ConstraintsGenerator(n).generateXConstraints(rs, vs.data(), cs, true);
+    unsigned m = ConstraintsGenerator(n).generateXConstraints(rs, vs.data(), cs, true);
 
-    TLP_PARALLEL_MAP_INDICES(
-        n, [&](unsigned int i) { oldX[i] = vs[i].desiredPosition; });
+    TLP_PARALLEL_MAP_INDICES(n, [&](unsigned int i) { oldX[i] = vs[i].desiredPosition; });
 
     Solver vpsc_x(n, vs.data(), m, cs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
@@ -68,16 +65,15 @@ void removeRectangleOverlap(unsigned n, Rectangle rs[], double &xBorder,
 #endif
     vpsc_x.solve();
 
-    TLP_PARALLEL_MAP_INDICES(
-        n, [&](unsigned int i) { rs[i].moveCentreX(vs[i].position()); });
+    TLP_PARALLEL_MAP_INDICES(n, [&](unsigned int i) { rs[i].moveCentreX(vs[i].position()); });
 
     for (unsigned i = 0; i < m; ++i) {
       delete cs[i];
     }
 
     delete[] cs;
-    // Removing the extra gap here ensures things that were moved to be adjacent
-    // to one another above are not considered overlapping
+    // Removing the extra gap here ensures things that were moved to be adjacent to
+    // one another above are not considered overlapping
     xBorder -= EXTRA_GAP;
     m = ConstraintsGenerator(n).generateYConstraints(rs, vs.data(), cs);
     Solver vpsc_y(n, vs.data(), m, cs);
@@ -116,8 +112,7 @@ void removeRectangleOverlap(unsigned n, Rectangle rs[], double &xBorder,
 
     delete[] cs;
 
-    TLP_PARALLEL_MAP_INDICES(
-        n, [&](unsigned int i) { rs[i].moveCentreX(vs[i].position()); });
+    TLP_PARALLEL_MAP_INDICES(n, [&](unsigned int i) { rs[i].moveCentreX(vs[i].position()); });
 
   } catch (char const *str) {
     std::cerr << str << std::endl;
@@ -128,16 +123,14 @@ void removeRectangleOverlap(unsigned n, Rectangle rs[], double &xBorder,
   }
 }
 
-void removeRectangleOverlapX(unsigned n, Rectangle rs[], double &xBorder,
-                             double &yBorder) {
+void removeRectangleOverlapX(unsigned n, Rectangle rs[], double &xBorder, double &yBorder) {
   try {
     // The extra gap avoids numerical imprecision problems
     yBorder = (xBorder += EXTRA_GAP);
     std::vector<Variable> vs(n);
 
     Constraint **cs;
-    unsigned m =
-        ConstraintsGenerator(n).generateXConstraints(rs, vs.data(), cs, false);
+    unsigned m = ConstraintsGenerator(n).generateXConstraints(rs, vs.data(), cs, false);
     Solver vpsc_x(n, vs.data(), m, cs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
     ofstream f(LOGFILE, ios::app);
@@ -146,8 +139,7 @@ void removeRectangleOverlapX(unsigned n, Rectangle rs[], double &xBorder,
 #endif
     vpsc_x.solve();
 
-    TLP_PARALLEL_MAP_INDICES(
-        n, [&](unsigned int i) { rs[i].moveCentreX(vs[i].position()); });
+    TLP_PARALLEL_MAP_INDICES(n, [&](unsigned int i) { rs[i].moveCentreX(vs[i].position()); });
 
     for (unsigned i = 0; i < m; ++i) {
       delete cs[i];
@@ -171,8 +163,7 @@ void removeRectangleOverlapY(unsigned n, Rectangle rs[], double &yBorder) {
     std::vector<Variable> vs(n);
 
     Constraint **cs;
-    unsigned int m =
-        ConstraintsGenerator(n).generateYConstraints(rs, vs.data(), cs);
+    unsigned int m = ConstraintsGenerator(n).generateYConstraints(rs, vs.data(), cs);
     Solver vpsc_y(n, vs.data(), m, cs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
     f.open(LOGFILE, ios::app);
@@ -181,8 +172,7 @@ void removeRectangleOverlapY(unsigned n, Rectangle rs[], double &yBorder) {
 #endif
     vpsc_y.solve();
 
-    TLP_PARALLEL_MAP_INDICES(
-        n, [&](unsigned int i) { rs[i].moveCentreY(vs[i].position()); });
+    TLP_PARALLEL_MAP_INDICES(n, [&](unsigned int i) { rs[i].moveCentreY(vs[i].position()); });
 
     for (unsigned i = 0; i < m; ++i) {
       delete cs[i];

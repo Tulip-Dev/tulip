@@ -22,8 +22,8 @@
 #include "ParallelCoordinatesGraphProxy.h"
 #include "ParallelTools.h"
 
-#include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
+#include <tulip/DoubleProperty.h>
 
 using namespace std;
 
@@ -32,16 +32,13 @@ namespace tlp {
 QuantitativeParallelAxis::QuantitativeParallelAxis(
     const Coord &baseCoord, const float height, const float axisAreaWidth,
     ParallelCoordinatesGraphProxy *graphProxy, const string &graphPropertyName,
-    const bool ascendingOrder, const Color &axisColor,
-    const float rotationAngle,
+    const bool ascendingOrder, const Color &axisColor, const float rotationAngle,
     const GlAxis::CaptionLabelPosition captionPosition)
     : ParallelAxis(new GlQuantitativeAxis(graphPropertyName, baseCoord, height,
-                                          GlAxis::VERTICAL_AXIS, axisColor,
-                                          true, ascendingOrder),
+                                          GlAxis::VERTICAL_AXIS, axisColor, true, ascendingOrder),
                    axisAreaWidth, rotationAngle, captionPosition),
-      nbAxisGrad(DEFAULT_NB_AXIS_GRAD), axisMinValue(DBL_MAX),
-      axisMaxValue(-DBL_MAX), graphProxy(graphProxy), log10Scale(false),
-      integerScale(false) {
+      nbAxisGrad(DEFAULT_NB_AXIS_GRAD), axisMinValue(DBL_MAX), axisMaxValue(-DBL_MAX),
+      graphProxy(graphProxy), log10Scale(false), integerScale(false) {
   glQuantitativeAxis = dynamic_cast<GlQuantitativeAxis *>(glAxis);
   boxPlotValuesCoord.resize(5);
   boxPlotStringValues.resize(5);
@@ -57,8 +54,7 @@ void QuantitativeParallelAxis::setAxisLabels() {
     if (getAxisDataTypeName() == "double") {
       for (unsigned int n : graphProxy->getDataIterator()) {
         double val =
-            graphProxy->getPropertyValueForData<DoubleProperty, DoubleType>(
-                getAxisName(), n);
+            graphProxy->getPropertyValueForData<DoubleProperty, DoubleType>(getAxisName(), n);
         double intpart, fracpart;
         fracpart = modf(val, &intpart);
         realScale = realScale || (fracpart != 0);
@@ -77,8 +73,8 @@ void QuantitativeParallelAxis::setAxisLabels() {
   }
 
   if (getAxisDataTypeName() == "double" && realScale) {
-    glQuantitativeAxis->setAxisParameters(
-        axisMinValue, axisMaxValue, nbAxisGrad, GlAxis::RIGHT_OR_ABOVE, true);
+    glQuantitativeAxis->setAxisParameters(axisMinValue, axisMaxValue, nbAxisGrad,
+                                          GlAxis::RIGHT_OR_ABOVE, true);
     integerScale = false;
   } else {
     long long min = static_cast<long long>(axisMinValue);
@@ -88,8 +84,7 @@ void QuantitativeParallelAxis::setAxisLabels() {
     if (incrementStep < 1)
       incrementStep = 1;
 
-    glQuantitativeAxis->setAxisParameters(min, max, incrementStep,
-                                          GlAxis::RIGHT_OR_ABOVE, true);
+    glQuantitativeAxis->setAxisParameters(min, max, incrementStep, GlAxis::RIGHT_OR_ABOVE, true);
     integerScale = true;
   }
 
@@ -104,19 +99,17 @@ void QuantitativeParallelAxis::computeBoxPlotCoords() {
     double value;
 
     if (getAxisDataTypeName() == "double") {
-      value = graphProxy->getPropertyValueForData<DoubleProperty, DoubleType>(
-          getAxisName(), dataId);
+      value =
+          graphProxy->getPropertyValueForData<DoubleProperty, DoubleType>(getAxisName(), dataId);
     } else {
       value = double(
-          graphProxy->getPropertyValueForData<IntegerProperty, IntegerType>(
-              getAxisName(), dataId));
+          graphProxy->getPropertyValueForData<IntegerProperty, IntegerType>(getAxisName(), dataId));
     }
 
     propertyValuesSet.insert(value);
   }
 
-  vector<double> propertyValuesVector(propertyValuesSet.begin(),
-                                      propertyValuesSet.end());
+  vector<double> propertyValuesVector(propertyValuesSet.begin(), propertyValuesSet.end());
   unsigned int vectorSize = propertyValuesVector.size();
 
   if (vectorSize < 4) {
@@ -140,9 +133,9 @@ void QuantitativeParallelAxis::computeBoxPlotCoords() {
     if (vectorSize % 2 == 1) {
       median = propertyValuesVector[vectorSize / 2.];
     } else {
-      median = (propertyValuesVector[(vectorSize / 2.) - 1] +
-                propertyValuesVector[vectorSize / 2.]) /
-               2.;
+      median =
+          (propertyValuesVector[(vectorSize / 2.) - 1] + propertyValuesVector[vectorSize / 2.]) /
+          2.;
     }
 
     double firstQuartile;
@@ -150,9 +143,8 @@ void QuantitativeParallelAxis::computeBoxPlotCoords() {
     if (vectorSize % 2 == 1) {
       firstQuartile = propertyValuesVector[vectorSize / 4.];
     } else {
-      firstQuartile = (propertyValuesVector[(vectorSize / 4.) - 1] +
-                       propertyValuesVector[vectorSize / 4.]) /
-                      2;
+      firstQuartile =
+          (propertyValuesVector[(vectorSize / 4.) - 1] + propertyValuesVector[vectorSize / 4.]) / 2;
     }
 
     double thirdQuartile;
@@ -165,8 +157,7 @@ void QuantitativeParallelAxis::computeBoxPlotCoords() {
                       2.;
     }
 
-    double lowBorder =
-        (firstQuartile - (1.5 * (thirdQuartile - firstQuartile)));
+    double lowBorder = (firstQuartile - (1.5 * (thirdQuartile - firstQuartile)));
     double bottomOutlier = 0.0;
 
     for (auto val : propertyValuesVector) {
@@ -176,13 +167,11 @@ void QuantitativeParallelAxis::computeBoxPlotCoords() {
       }
     }
 
-    double highBorder =
-        (thirdQuartile + (1.5 * (thirdQuartile - firstQuartile)));
+    double highBorder = (thirdQuartile + (1.5 * (thirdQuartile - firstQuartile)));
     double topOutlier = 0;
     vector<double>::reverse_iterator itr;
 
-    for (itr = propertyValuesVector.rbegin();
-         itr != propertyValuesVector.rend(); ++itr) {
+    for (itr = propertyValuesVector.rbegin(); itr != propertyValuesVector.rend(); ++itr) {
       if (*itr < highBorder) {
         topOutlier = *itr;
         break;
@@ -206,11 +195,9 @@ void QuantitativeParallelAxis::computeBoxPlotCoords() {
 double QuantitativeParallelAxis::getAssociatedPropertyMinValue() {
   if (graphProxy->getGraph()->getRoot() == graphProxy->getGraph()) {
     if (getAxisDataTypeName() == "double") {
-      return graphProxy->getPropertyMinValue<DoubleProperty, DoubleType>(
-          getAxisName());
+      return graphProxy->getPropertyMinValue<DoubleProperty, DoubleType>(getAxisName());
     } else {
-      return graphProxy->getPropertyMinValue<IntegerProperty, IntegerType>(
-          getAxisName());
+      return graphProxy->getPropertyMinValue<IntegerProperty, IntegerType>(getAxisName());
     }
   } else {
 
@@ -221,12 +208,10 @@ double QuantitativeParallelAxis::getAssociatedPropertyMinValue() {
 
       if (getAxisDataTypeName() == "double") {
         propertyValue =
-            graphProxy->getPropertyValueForData<DoubleProperty, DoubleType>(
-                getAxisName(), dataId);
+            graphProxy->getPropertyValueForData<DoubleProperty, DoubleType>(getAxisName(), dataId);
       } else {
-        propertyValue =
-            graphProxy->getPropertyValueForData<IntegerProperty, IntegerType>(
-                getAxisName(), dataId);
+        propertyValue = graphProxy->getPropertyValueForData<IntegerProperty, IntegerType>(
+            getAxisName(), dataId);
       }
       min = std::min(propertyValue, min);
     }
@@ -237,11 +222,9 @@ double QuantitativeParallelAxis::getAssociatedPropertyMinValue() {
 
 double QuantitativeParallelAxis::getAssociatedPropertyMaxValue() {
   if (getAxisDataTypeName() == "double") {
-    return graphProxy->getPropertyMaxValue<DoubleProperty, DoubleType>(
-        getAxisName());
+    return graphProxy->getPropertyMaxValue<DoubleProperty, DoubleType>(getAxisName());
   } else {
-    return graphProxy->getPropertyMaxValue<IntegerProperty, IntegerType>(
-        getAxisName());
+    return graphProxy->getPropertyMaxValue<IntegerProperty, IntegerType>(getAxisName());
   }
 }
 
@@ -254,17 +237,14 @@ void QuantitativeParallelAxis::translate(const Coord &c) {
   boxPlotValuesCoord[TOP_OUTLIER] += c;
 }
 
-Coord QuantitativeParallelAxis::getPointCoordOnAxisForData(
-    const unsigned int dataIdx) {
+Coord QuantitativeParallelAxis::getPointCoordOnAxisForData(const unsigned int dataIdx) {
   double value = 0;
 
   if (getAxisDataTypeName() == "double") {
-    value = graphProxy->getPropertyValueForData<DoubleProperty, DoubleType>(
-        getAxisName(), dataIdx);
+    value = graphProxy->getPropertyValueForData<DoubleProperty, DoubleType>(getAxisName(), dataIdx);
   } else if (getAxisDataTypeName() == "int") {
     value = double(
-        graphProxy->getPropertyValueForData<IntegerProperty, IntegerType>(
-            getAxisName(), dataIdx));
+        graphProxy->getPropertyValueForData<IntegerProperty, IntegerType>(getAxisName(), dataIdx));
   }
 
   Coord axisPointCoord(glQuantitativeAxis->getAxisPointCoordForValue(value));
@@ -305,8 +285,7 @@ std::string QuantitativeParallelAxis::getTopSliderTextValue() {
     int val = int(getValueForAxisCoord(topSliderCoord));
 
     if (glQuantitativeAxis->hasAscendingOrder()) {
-      return getStringFromNumber(
-          val == glQuantitativeAxis->getAxisMaxValue() ? val : val - 1);
+      return getStringFromNumber(val == glQuantitativeAxis->getAxisMaxValue() ? val : val - 1);
     } else {
       return getStringFromNumber(val);
     }
@@ -322,8 +301,7 @@ std::string QuantitativeParallelAxis::getBottomSliderTextValue() {
     int val = int(getValueForAxisCoord(bottomSliderCoord));
 
     if (!glQuantitativeAxis->hasAscendingOrder()) {
-      return getStringFromNumber(
-          val == glQuantitativeAxis->getAxisMaxValue() ? val : val - 1);
+      return getStringFromNumber(val == glQuantitativeAxis->getAxisMaxValue() ? val : val - 1);
     } else {
       return getStringFromNumber(val);
     }
@@ -336,8 +314,8 @@ std::string QuantitativeParallelAxis::getBottomSliderTextValue() {
   }
 }
 
-const set<unsigned int> &
-QuantitativeParallelAxis::getDataInRange(float yLowBound, float yHighBound) {
+const set<unsigned int> &QuantitativeParallelAxis::getDataInRange(float yLowBound,
+                                                                  float yHighBound) {
   dataSubset.clear();
   float rotAngleBak = rotationAngle;
   rotationAngle = 0.0f;
@@ -358,8 +336,7 @@ const set<unsigned int> &QuantitativeParallelAxis::getDataInSlidersRange() {
   return getDataInRange(bottomSliderCoord.getY(), topSliderCoord.getY());
 }
 
-const set<unsigned int> &
-QuantitativeParallelAxis::getDataBetweenBoxPlotBounds() {
+const set<unsigned int> &QuantitativeParallelAxis::getDataBetweenBoxPlotBounds() {
   if (boxPlotLowBound != NO_VALUE && boxPlotHighBound != NO_VALUE) {
     return getDataInRange(boxPlotValuesCoord[boxPlotLowBound].getY(),
                           boxPlotValuesCoord[boxPlotHighBound].getY());
@@ -369,8 +346,7 @@ QuantitativeParallelAxis::getDataBetweenBoxPlotBounds() {
   }
 }
 
-void QuantitativeParallelAxis::updateSlidersWithDataSubset(
-    const set<unsigned int> &dataSubset) {
+void QuantitativeParallelAxis::updateSlidersWithDataSubset(const set<unsigned int> &dataSubset) {
   float rotAngleBak = rotationAngle;
   rotationAngle = 0.0f;
   set<unsigned int>::iterator it;
@@ -403,15 +379,14 @@ void QuantitativeParallelAxis::setAscendingOrder(const bool ascendingOrder) {
 
     float spaceBetweenSlider = topSliderCoord.getY() - bottomSliderCoord.getY();
 
-    float axisCenterTopSliderDist =
-        topSliderCoord.getY() - (baseCoord.getY() + axisHeight / 2.0f);
-    topSliderCoord.setY((baseCoord.getY() + axisHeight / 2.0f) -
-                        axisCenterTopSliderDist + spaceBetweenSlider);
+    float axisCenterTopSliderDist = topSliderCoord.getY() - (baseCoord.getY() + axisHeight / 2.0f);
+    topSliderCoord.setY((baseCoord.getY() + axisHeight / 2.0f) - axisCenterTopSliderDist +
+                        spaceBetweenSlider);
 
     float axisCenterBottomSliderDist =
         bottomSliderCoord.getY() - (baseCoord.getY() + axisHeight / 2.0f);
-    bottomSliderCoord.setY((baseCoord.getY() + axisHeight / 2.0f) -
-                           axisCenterBottomSliderDist - spaceBetweenSlider);
+    bottomSliderCoord.setY((baseCoord.getY() + axisHeight / 2.0f) - axisCenterBottomSliderDist -
+                           spaceBetweenSlider);
   }
 
   glQuantitativeAxis->setAscendingOrder(ascendingOrder);

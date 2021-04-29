@@ -25,8 +25,8 @@
 
 #include <cassert>
 #include <iostream>
-#include <tulip/Vector.h>
 #include <vector>
+#include <tulip/Vector.h>
 
 namespace tlp {
 
@@ -50,8 +50,7 @@ template <typename Obj, size_t SIZE>
 class Matrix : public Array<Vector<Obj, SIZE>, SIZE> {
 public:
   Matrix() {}
-  Matrix(const Array<Vector<Obj, SIZE>, SIZE> &a)
-      : Array<Vector<Obj, SIZE>, SIZE>(a) {}
+  Matrix(const Array<Vector<Obj, SIZE>, SIZE> &a) : Array<Vector<Obj, SIZE>, SIZE>(a) {}
 
   // Builds a correlation matrix from a covariance matrix !
   Matrix(const std::vector<std::vector<Obj>> &covarianceMatrix);
@@ -133,12 +132,10 @@ public:
   inline bool simplify(Matrix<Obj, 2> &simplifiedMatrix) const;
 
   /**
-   * Returns the EigenVector of the matrix corresponding to the EigenValue
-   * passed, with a base x
+   * Returns the EigenVector of the matrix corresponding to the EigenValue passed, with a base x
    *           /!\ This can only be used with a 2x2 matrix !!! /!\
    */
-  inline bool computeEigenVector(const float x,
-                                 Vector<Obj, 3> &eigenVector) const;
+  inline bool computeEigenVector(const float x, Vector<Obj, 3> &eigenVector) const;
   ///@endcond
 };
 
@@ -174,15 +171,13 @@ inline MATRIX operator*(const MATRIX &mat1, const MATRIX &mat2);
  * a matrix,(the vector is automatically transposed to do the multiplication)
  */
 template <typename Obj, size_t SIZE>
-inline Vector<Obj, SIZE> operator*(const Vector<Obj, SIZE> &vec,
-                                   const tlp::Matrix<Obj, SIZE> &);
+inline Vector<Obj, SIZE> operator*(const Vector<Obj, SIZE> &vec, const tlp::Matrix<Obj, SIZE> &);
 /**
  * Returns a new vector equal to the multiplication of the matrix by
  * a vector
  */
 template <typename Obj, size_t SIZE>
-inline Vector<Obj, SIZE> operator*(const Matrix<Obj, SIZE> &,
-                                   const Vector<Obj, SIZE> &vec);
+inline Vector<Obj, SIZE> operator*(const Matrix<Obj, SIZE> &, const Vector<Obj, SIZE> &vec);
 } // namespace tlp
 
 #include "cxx/Matrix.cxx"

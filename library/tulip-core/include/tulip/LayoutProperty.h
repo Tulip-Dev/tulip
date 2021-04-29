@@ -20,10 +20,10 @@
 #ifndef TULIP_LAYOUT_H
 #define TULIP_LAYOUT_H
 
-#include <tulip/AbstractProperty.h>
-#include <tulip/Observable.h>
-#include <tulip/PropertyAlgorithm.h>
 #include <tulip/PropertyTypes.h>
+#include <tulip/Observable.h>
+#include <tulip/AbstractProperty.h>
+#include <tulip/PropertyAlgorithm.h>
 #include <tulip/minmaxproperty.h>
 
 namespace tlp {
@@ -34,8 +34,7 @@ void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(
 
 template <>
 std::pair<tlp::Coord, tlp::Coord>
-tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(
-    const Graph *sg);
+tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(const Graph *sg);
 
 class PropertyContext;
 class Graph;
@@ -45,19 +44,19 @@ typedef MinMaxProperty<tlp::PointType, tlp::LineType> LayoutMinMaxProperty;
 
 /**
  * @ingroup Graph
- * @brief A graph property that maps a tlp::Coord value to graph nodes and
- * std::vector<tlp::Coord> for edges.
+ * @brief A graph property that maps a tlp::Coord value to graph nodes and std::vector<tlp::Coord>
+ * for edges.
  */
 class TLP_SCOPE LayoutProperty : public LayoutMinMaxProperty {
 public:
-  LayoutProperty(Graph *graph, const std::string &name =
-                                   "" /*, bool updateOnEdgeReversal=true*/);
+  LayoutProperty(Graph *graph, const std::string &name = "" /*, bool updateOnEdgeReversal=true*/);
 
   // override some PropertyInterface methods
-  PropertyInterface *clonePrototype(Graph *,
-                                    const std::string &) const override;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const override { return propertyTypename; }
+  const std::string &getTypename() const override {
+    return propertyTypename;
+  }
   DEFINE_GET_CPP_CLASS_NAME;
 
   //=======================================
@@ -65,20 +64,18 @@ public:
   //=======================================
 
   /**
-   * Returns the maximum coordinate of the layout, i.e. the top-right corner of
-   *the induced bounding box
+   * Returns the maximum coordinate of the layout, i.e. the top-right corner of the induced bounding
+   *box
    *
-   * @param subgraph If not null, returns the maximum coordinate for a subgraph
-   *layout
+   * @param subgraph If not null, returns the maximum coordinate for a subgraph layout
    **/
   Coord getMax(const Graph *subgraph = nullptr);
 
   /**
-   * Returns the minimum coordinate of the layout, i.e. the bottom-left corner
-   *of the induced bounding box
+   * Returns the minimum coordinate of the layout, i.e. the bottom-left corner of the induced
+   *bounding box
    *
-   * @param subgraph If not null, returns the minimum coordinate for a subgraph
-   *layout
+   * @param subgraph If not null, returns the minimum coordinate for a subgraph layout
    **/
   Coord getMin(const Graph *subgraph = nullptr);
 
@@ -95,8 +92,8 @@ public:
   void translate(const Vec3f &move, const Graph *subgraph = nullptr);
 
   /**
-   * Translates the layout of a set of nodes and edges provided through
-   *iterators according to a movement vector
+   * Translates the layout of a set of nodes and edges provided through iterators
+   * according to a movement vector
    *
    * @param move a movement vector
    * @param itNodes an iterator on graph nodes
@@ -104,12 +101,10 @@ public:
    *
    * @warning The iterators are not deleted
    **/
-  void translate(const Vec3f &move, Iterator<node> *itNodes,
-                 Iterator<edge> *itEdges);
+  void translate(const Vec3f &move, Iterator<node> *itNodes, Iterator<edge> *itEdges);
 
   /**
-   * Scales the current layout according to a vector of scale factors (sx, sy,
-   *sz).
+   * Scales the current layout according to a vector of scale factors (sx, sy, sz).
    *
    * @param scaleFactors a vector of scale factors
    * @param subgraph If not null, only scales the layout of that subgraph
@@ -126,8 +121,7 @@ public:
    *
    * @warning The iterators are not deleted
    **/
-  void scale(const Vec3f &scaleFactors, Iterator<node> *itNodes,
-             Iterator<edge> *itEdges);
+  void scale(const Vec3f &scaleFactors, Iterator<node> *itNodes, Iterator<edge> *itEdges);
 
   /**
    * Rotates the layout around the X-axis according to an angle in degrees.
@@ -163,8 +157,7 @@ public:
    *
    * @warning The iterators are not deleted
    **/
-  void rotateX(const double &alpha, Iterator<node> *itNodes,
-               Iterator<edge> *itEdges);
+  void rotateX(const double &alpha, Iterator<node> *itNodes, Iterator<edge> *itEdges);
 
   /**
    * Rotates the layout around the Y-axis of the nodes and edges provided
@@ -176,12 +169,11 @@ public:
    *
    * @warning The iterators are not deleted
    **/
-  void rotateY(const double &alpha, Iterator<node> *itNodes,
-               Iterator<edge> *itEdges);
+  void rotateY(const double &alpha, Iterator<node> *itNodes, Iterator<edge> *itEdges);
 
   /**
-   * Rotates the layout around the Z-axis of the nodes and edges provided
-   *through iterators according to an angle in degrees.
+   * Rotates the layout around the Z-axis of the nodes and edges provided through
+   * iterators according to an angle in degrees.
    *
    * @param alpha an angle in degrees
    * @param itNodes an iterator on graph nodes
@@ -189,8 +181,7 @@ public:
    *
    * @warning The iterators are not deleted
    **/
-  void rotateZ(const double &alpha, Iterator<node> *itNodes,
-               Iterator<edge> *itEdges);
+  void rotateZ(const double &alpha, Iterator<node> *itNodes, Iterator<edge> *itEdges);
 
   /**
    * Centers the layout, meaning translating it in order that
@@ -210,16 +201,15 @@ public:
   void center(const Vec3f &newCenter, const Graph *subgraph = nullptr);
 
   /**
-   * Normalizes the layout, meaning dividing each nodes and edges coordinate by
-   *the maximum magnitude of the whole coordinates set
+   * Normalizes the layout, meaning dividing each nodes and edges coordinate by the maximum
+   *magnitude of the whole coordinates set
    *
    * @param subgraph If not null, only normalizes the layout of that subgraph
    **/
   void normalize(const Graph *subgraph = nullptr);
 
   /**
-   * Scales the layout in order to approach an aspect ratio (width / height)
-   *of 1.0 .
+   * Scales the layout in order to approach an aspect ratio (width / height) of 1.0 .
    * @param subgraph If not null, only scales the layout of that subgraph
    **/
   void perfectAspectRatio(const Graph *subgraph = nullptr);
@@ -234,18 +224,15 @@ public:
    *
    * @param e the graph edge on which to compute its length
    *
-   * @warning this function only measure the length of the polyline between
-   *bends, when using curves like Bézier etc... the result will not be the
-   *length of the curve.
+   * @warning this function only measure the length of the polyline between bends,
+   * when using curves like Bézier etc... the result will not be the length of the curve.
    **/
   double edgeLength(const edge e) const;
 
   /**
-   * Returns the average edge length of the layout, the bends are taken into
-   *account
+   * Returns the average edge length of the layout, the bends are taken into account
    *
-   * @param subgraph If not null, only compute the average edge length for that
-   *subgraph
+   * @param subgraph If not null, only compute the average edge length for that subgraph
    **/
   double averageEdgeLength(const Graph *subgraph = nullptr) const;
 
@@ -254,8 +241,7 @@ public:
    * It is only defined for 2D drawing, meaning the third coordinate
    * is omitted
    *
-   * @param subgraph It not null, only computes the average angular resolution
-   *for that subgraph
+   * @param subgraph It not null, only computes the average angular resolution for that subgraph
    **/
   double averageAngularResolution(const Graph *subgraph = nullptr) const;
 
@@ -265,11 +251,10 @@ public:
    * is omitted
    *
    * @param n the graph node on which to compute the angular resolution
-   * @param subgraph If not null, only computes the average angular resolution
-   *for the node in that subgraph
+   * @param subgraph If not null, only computes the average angular resolution for the node in that
+   *subgraph
    **/
-  double averageAngularResolution(const node n,
-                                  const Graph *subgraph = nullptr) const;
+  double averageAngularResolution(const node n, const Graph *subgraph = nullptr) const;
 
   /**
    * Returns a vector of all angular resolution of a node.
@@ -277,17 +262,15 @@ public:
    * is omitted
    *
    * @param n the graph node on which to compute the angular resolution
-   * @param subgraph If not null, only computes the average angular resolution
-   *for the node in that subgraph
+   * @param subgraph If not null, only computes the average angular resolution for the node in that
+   *subgraph
    **/
-  std::vector<double> angularResolutions(const node n,
-                                         const Graph *subgraph = nullptr) const;
+  std::vector<double> angularResolutions(const node n, const Graph *subgraph = nullptr) const;
 
   /**
    * Fixes embedding of the graph according to the layout
-   * ie. sort edges around nodes according to their neighbors/bends position in
-   *the layout/ Only works in 2D, the third coordinate is not taken into
-   *account.
+   * ie. sort edges around nodes according to their neighbors/bends position in the layout/
+   * Only works in 2D, the third coordinate is not taken into account.
    *
    * @param subgraph It not null, only fixes embedding in that subgraph
    **/
@@ -295,12 +278,11 @@ public:
 
   /**
    * Fixes embedding of the node according to the layout
-   * ie. sort edges around the node according to its neighbors/bends position in
-   *the layout/ Only work in 2D, the third coordinate is not taken into account.
+   * ie. sort edges around the node according to its neighbors/bends position in the layout/
+   * Only work in 2D, the third coordinate is not taken into account.
    *
    * @param n the graph node on which to fix embedding
-   * @param subgraph If not null, only fixes the embedding of the node in that
-   *subgraph
+   * @param subgraph If not null, only fixes the embedding of the node in that subgraph
    **/
   void computeEmbedding(const node n, Graph *subgraph = nullptr);
 
@@ -311,26 +293,19 @@ public:
   // unsigned int crossingNumber() const;
 
   // redefinition of some AbstractProperty methods
-  void setNodeValue(
-      const node,
-      tlp::StoredType<tlp::PointType::RealType>::ReturnedConstValue v) override;
-  void setAllNodeValue(
-      tlp::StoredType<tlp::PointType::RealType>::ReturnedConstValue v) override;
-  void setValueToGraphNodes(
-      tlp::StoredType<tlp::PointType::RealType>::ReturnedConstValue v,
-      const Graph *graph) override;
-  void setEdgeValue(
-      const edge,
-      tlp::StoredType<tlp::LineType::RealType>::ReturnedConstValue v) override;
-  void setAllEdgeValue(
-      tlp::StoredType<tlp::LineType::RealType>::ReturnedConstValue v) override;
-  void setValueToGraphEdges(
-      tlp::StoredType<tlp::LineType::RealType>::ReturnedConstValue v,
-      const Graph *graph) override;
+  void setNodeValue(const node,
+                    tlp::StoredType<tlp::PointType::RealType>::ReturnedConstValue v) override;
+  void setAllNodeValue(tlp::StoredType<tlp::PointType::RealType>::ReturnedConstValue v) override;
+  void setValueToGraphNodes(tlp::StoredType<tlp::PointType::RealType>::ReturnedConstValue v,
+                            const Graph *graph) override;
+  void setEdgeValue(const edge,
+                    tlp::StoredType<tlp::LineType::RealType>::ReturnedConstValue v) override;
+  void setAllEdgeValue(tlp::StoredType<tlp::LineType::RealType>::ReturnedConstValue v) override;
+  void setValueToGraphEdges(tlp::StoredType<tlp::LineType::RealType>::ReturnedConstValue v,
+                            const Graph *graph) override;
 
 protected:
-  void
-  clone_handler(AbstractProperty<tlp::PointType, tlp::LineType> &) override;
+  void clone_handler(AbstractProperty<tlp::PointType, tlp::LineType> &) override;
 
 private:
   void resetBoundingBox();
@@ -345,8 +320,7 @@ public:
 
 /**
  * @ingroup Graph
- * @brief A graph property that maps a std::vector<tlp::Coord> value to graph
- * elements.
+ * @brief A graph property that maps a std::vector<tlp::Coord> value to graph elements.
  */
 class TLP_SCOPE CoordVectorProperty
     : public AbstractVectorProperty<tlp::CoordVectorType, tlp::PointType> {
@@ -354,10 +328,11 @@ public:
   CoordVectorProperty(Graph *g, const std::string &n = "")
       : AbstractVectorProperty<CoordVectorType, tlp::PointType>(g, n) {}
   // redefinition of some PropertyInterface methods
-  PropertyInterface *clonePrototype(Graph *,
-                                    const std::string &) const override;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const override { return propertyTypename; }
+  const std::string &getTypename() const override {
+    return propertyTypename;
+  }
   DEFINE_GET_CPP_CLASS_NAME;
 };
 

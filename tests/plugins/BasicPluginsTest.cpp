@@ -19,14 +19,14 @@
 #include <sstream>
 
 #include "BasicPluginsTest.h"
+#include <tulip/TlpTools.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/SimplePluginProgress.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
-#include <tulip/TlpTools.h>
+#include <tulip/SimplePluginProgress.h>
 
 using namespace std;
 using namespace tlp;
@@ -34,9 +34,13 @@ using namespace tlp;
 CPPUNIT_TEST_SUITE_REGISTRATION(BasicPluginsTest);
 
 //==========================================================
-void BasicPluginsTest::setUp() { graph = tlp::newGraph(); }
+void BasicPluginsTest::setUp() {
+  graph = tlp::newGraph();
+}
 //==========================================================
-void BasicPluginsTest::tearDown() { delete graph; }
+void BasicPluginsTest::tearDown() {
+  delete graph;
+}
 //==========================================================
 void BasicPluginsTest::initializeGraph(const string &type) {
   DataSet ds;
@@ -45,8 +49,7 @@ void BasicPluginsTest::initializeGraph(const string &type) {
 }
 //==========================================================
 template <typename PropType>
-bool BasicPluginsTest::computeProperty(const std::string &algorithm,
-                                       const std::string &graphType,
+bool BasicPluginsTest::computeProperty(const std::string &algorithm, const std::string &graphType,
                                        PropType *prop) {
   initializeGraph(graphType);
   bool deleteProp = (prop == nullptr);
@@ -170,8 +173,8 @@ void BasicPluginsTest::testExportImportTLPB() {
   ds.set("file::filename", string("data/tlp_importexport_test.tlp"));
   Graph *g = importGraph("TLP Import", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
-  std::ostream *os = tlp::getOutputFileStream("tlpb_importexport_test.tlpb",
-                                              std::ios::out | std::ios::binary);
+  std::ostream *os =
+      tlp::getOutputFileStream("tlpb_importexport_test.tlpb", std::ios::out | std::ios::binary);
   CPPUNIT_ASSERT(exportGraph(graph, *os, "TLPB Export", ds, nullptr));
   delete os;
   tearDown();
@@ -224,8 +227,7 @@ void BasicPluginsTest::testImportAdjacencyMatrix() {
 //==========================================================
 void BasicPluginsTest::testImportPajek() {
   // test all data/*.net files
-  const char *net_files[] = {"data/NDActors.net", "data/NDwww.net",
-                             "data/netscience.net", nullptr};
+  const char *net_files[] = {"data/NDActors.net", "data/NDwww.net", "data/netscience.net", nullptr};
   const char **files = &net_files[0];
 
   while (files[0]) {
@@ -315,8 +317,7 @@ void BasicPluginsTest::testMetricColorMapping() {
   DataSet ds;
   ds.set("linear/uniform\nproperty", &metric);
   ColorProperty color(graph);
-  result = graph->applyPropertyAlgorithm("Color Mapping", &color, errorMsg, &ds,
-                                         nullptr);
+  result = graph->applyPropertyAlgorithm("Color Mapping", &color, errorMsg, &ds, nullptr);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -331,8 +332,7 @@ void BasicPluginsTest::testInducedSubGraphSelection() {
 //==========================================================
 void BasicPluginsTest::testLoopSelection() {
   BooleanProperty selection(graph);
-  bool result = computeProperty<BooleanProperty>("Loop Selection",
-                                                 "Planar Graph", &selection);
+  bool result = computeProperty<BooleanProperty>("Loop Selection", "Planar Graph", &selection);
   CPPUNIT_ASSERT(result);
   for (auto n : graph->nodes()) {
     CPPUNIT_ASSERT(selection.getNodeValue(n) == false);
@@ -341,8 +341,8 @@ void BasicPluginsTest::testLoopSelection() {
 //==========================================================
 void BasicPluginsTest::testMultipleEdgeSelection() {
   BooleanProperty selection(graph);
-  bool result = computeProperty<BooleanProperty>("Multiple Edges Selection",
-                                                 "Planar Graph", &selection);
+  bool result =
+      computeProperty<BooleanProperty>("Multiple Edges Selection", "Planar Graph", &selection);
   CPPUNIT_ASSERT(result);
   for (auto n : graph->nodes()) {
     CPPUNIT_ASSERT(selection.getNodeValue(n) == false);
@@ -360,8 +360,7 @@ void BasicPluginsTest::testReachableSubGraphSelection() {
 //==========================================================
 void BasicPluginsTest::testSpanningDagSelection() {
   BooleanProperty selection(graph);
-  bool result = computeProperty<BooleanProperty>("Spanning Dag", "Planar Graph",
-                                                 &selection);
+  bool result = computeProperty<BooleanProperty>("Spanning Dag", "Planar Graph", &selection);
   CPPUNIT_ASSERT(result);
   for (auto n : graph->nodes()) {
     CPPUNIT_ASSERT(selection.getNodeValue(n));
@@ -370,8 +369,7 @@ void BasicPluginsTest::testSpanningDagSelection() {
 //==========================================================
 void BasicPluginsTest::testSpanningTreeSelection() {
   BooleanProperty selection(graph);
-  bool result = computeProperty<BooleanProperty>("Spanning Forest",
-                                                 "Planar Graph", &selection);
+  bool result = computeProperty<BooleanProperty>("Spanning Forest", "Planar Graph", &selection);
   CPPUNIT_ASSERT(result);
   for (auto n : graph->nodes()) {
     CPPUNIT_ASSERT(selection.getNodeValue(n));
@@ -393,8 +391,7 @@ void BasicPluginsTest::testMetricSizeMapping() {
 
   SizeProperty size(graph);
   ds.set("property", &metric);
-  result = graph->applyPropertyAlgorithm("Size Mapping", &size, errorMsg, &ds,
-                                         nullptr);
+  result = graph->applyPropertyAlgorithm("Size Mapping", &size, errorMsg, &ds, nullptr);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -435,8 +432,7 @@ void BasicPluginsTest::testEqualValueClustering() {
 
   PluginProgress *progress = new SimplePluginProgress();
   initializeGraph("Planar Graph");
-  result = graph->applyPropertyAlgorithm("Degree", metric, errorMsg, nullptr,
-                                         progress);
+  result = graph->applyPropertyAlgorithm("Degree", metric, errorMsg, nullptr, progress);
   CPPUNIT_ASSERT_MESSAGE(errorMsg, result);
   result = graph->applyAlgorithm(algorithmName, errorMsg, &ds);
   CPPUNIT_ASSERT_MESSAGE(errorMsg, result);
@@ -476,7 +472,6 @@ void BasicPluginsTest::testStrengthClustering() {
   CPPUNIT_ASSERT(result);
   ds.set("metric", &metric);
   DoubleProperty resultMetric(graph);
-  result = graph->applyPropertyAlgorithm("Strength Clustering", &resultMetric,
-                                         errorMsg);
+  result = graph->applyPropertyAlgorithm("Strength Clustering", &resultMetric, errorMsg);
   CPPUNIT_ASSERT(result);
 }

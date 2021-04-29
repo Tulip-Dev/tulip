@@ -19,8 +19,8 @@
 #ifndef CLIQUEENUMERATION_H
 #define CLIQUEENUMERATION_H
 
-#include <set>
 #include <string>
+#include <set>
 #include <vector>
 
 #include <tulip/Algorithm.h>
@@ -30,20 +30,18 @@
 /*@{*/
 /**
  * \file
- * \brief Compute all maximal cliques (or maximal cliques whose size is above a
- * given threshold) according to:
+ * \brief Compute all maximal cliques (or maximal cliques whose size is above a given threshold)
+ * according to:
  *
  * Listing All Maximal Cliques in Sparse Graphs in Near-optimal Time</b>,
- * In: Cheong O., Chwa KY., Park K. (eds) Algorithms and Computation. ISAAC
- * 2010. Lecture Notes in Computer Science, vol 6506. Springer, Berlin,
- * Heidelberg. doi: <a
+ * In: Cheong O., Chwa KY., Park K. (eds) Algorithms and Computation. ISAAC 2010. Lecture Notes in
+ * Computer Science, vol 6506. Springer, Berlin, Heidelberg. doi: <a
  * href=\"https://doi.org/10.1007/978-3-642-17517-6_36\">10.1007/978-3-642-17517-6_36</a>,
  *
  *  <b>HISTORY</b>
  *
  *
- * - 2017 Version 1.0 (Bruno Pinaud): moved to Tulip trunk and clean the code a
- * bit.
+ * - 2017 Version 1.0 (Bruno Pinaud): moved to Tulip trunk and clean the code a bit.
  * - 2013 Version 0.1: Initial release
  *  by François Queyroi, LaBRI, University Bordeaux I, France
  *
@@ -62,8 +60,7 @@ class CliqueEnumeration : public tlp::Algorithm {
   void getDegenerateOrdering(std::vector<tlp::node> &);
   void getNeighborhood(const tlp::node, std::set<tlp::node> &);
   tlp::node choosePivot(const std::set<tlp::node> &);
-  void maxCliquePivot(std::set<tlp::node> &, const std::vector<tlp::node> &,
-                      std::set<tlp::node> &);
+  void maxCliquePivot(std::set<tlp::node> &, const std::vector<tlp::node> &, std::set<tlp::node> &);
 
   unsigned int minsize;
   unsigned cliqueid;

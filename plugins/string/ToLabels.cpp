@@ -36,13 +36,11 @@ static const char *paramHelp[] = {
 
 class ToLabels : public tlp::StringAlgorithm {
 public:
-  PLUGININFORMATION(
-      "To labels", "Ludwig Fiolka", "2012/03/16",
-      "Maps the labels of the graph elements onto the values of a given property.",
-      "1.0", "")
+  PLUGININFORMATION("To labels", "Ludwig Fiolka", "2012/03/16",
+                    "Maps the labels of the graph elements onto the values of a given property.",
+                    "1.0", "")
   ToLabels(const tlp::PluginContext *context) : StringAlgorithm(context) {
-    addInParameter<PropertyInterface *>("input", paramHelp[0], "viewMetric",
-                                        true);
+    addInParameter<PropertyInterface *>("input", paramHelp[0], "viewMetric", true);
     addInParameter<BooleanProperty>("selection", paramHelp[1], "", false);
     addInParameter<bool>("nodes", paramHelp[2], "true");
     addInParameter<bool>("edges", paramHelp[3], "true");
@@ -66,8 +64,7 @@ public:
     if (onNodes) {
       pluginProgress->setComment("Copying nodes values");
       int step = 0, max_step = graph->numberOfNodes();
-      for (auto n : selection ? selection->getNonDefaultValuatedNodes()
-                              : graph->getNodes()) {
+      for (auto n : selection ? selection->getNonDefaultValuatedNodes() : graph->getNodes()) {
         if ((++step % 100) == 0)
           pluginProgress->progress(step, max_step);
 
@@ -78,8 +75,7 @@ public:
     if (onEdges) {
       pluginProgress->setComment("Copying edges values");
       int step = 0, max_step = graph->numberOfEdges();
-      for (auto e : selection ? selection->getNonDefaultValuatedEdges()
-                              : graph->getEdges()) {
+      for (auto e : selection ? selection->getNonDefaultValuatedEdges() : graph->getEdges()) {
         if ((++step % 100) == 0)
           pluginProgress->progress(step, max_step);
 

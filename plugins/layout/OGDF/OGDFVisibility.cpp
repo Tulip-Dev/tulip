@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <ogdf/packing/ComponentSplitterLayout.h>
 #include <ogdf/upward/VisibilityLayout.h>
+#include <ogdf/packing/ComponentSplitterLayout.h>
 
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
 
@@ -34,14 +34,12 @@ static const char *paramHelp[] = {
 class OGDFVisibility : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION(
-      "Visibility (OGDF)", "Hoi-Ming Wong", "12/11/2007",
-      "Implements a simple upward drawing algorithm based on visibility "
-      "representations (horizontal segments for nodes, vertical segments for edges).",
-      "1.1", "Hierarchical")
+  PLUGININFORMATION("Visibility (OGDF)", "Hoi-Ming Wong", "12/11/2007",
+                    "Implements a simple upward drawing algorithm based on visibility "
+                    "representations (horizontal segments for nodes, vertical segments for edges).",
+                    "1.1", "Hierarchical")
   OGDFVisibility(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, context ? new ComponentSplitterLayout()
-                                              : nullptr) {
+      : OGDFLayoutPluginBase(context, context ? new ComponentSplitterLayout() : nullptr) {
     addInParameter<int>("minimum grid distance", paramHelp[0], "1");
     addInParameter<bool>("transpose", paramHelp[1], "false");
   }

@@ -20,31 +20,40 @@
 #ifndef GLLABELLEDCOLORSCALE_H_
 #define GLLABELLEDCOLORSCALE_H_
 
-#include <tulip/GlColorScale.h>
 #include <tulip/GlComposite.h>
 #include <tulip/GlLabel.h>
+#include <tulip/GlColorScale.h>
 namespace tlp {
 class GlLayer;
 
 class GlLabelledColorScale : public tlp::GlComposite {
 public:
-  GlLabelledColorScale(tlp::Coord position, tlp::Size size,
-                       tlp::ColorScale *colorScale, double minValue = 0,
-                       double maxValue = 0, bool ColorScaleAtTop = true);
+  GlLabelledColorScale(tlp::Coord position, tlp::Size size, tlp::ColorScale *colorScale,
+                       double minValue = 0, double maxValue = 0, bool ColorScaleAtTop = true);
 
   ~GlLabelledColorScale() override;
 
   void setMinValue(double value);
-  double getMinValue() const { return minValue; }
+  double getMinValue() const {
+    return minValue;
+  }
   void setMaxValue(double value);
-  double getMaxValue() const { return maxValue; }
+  double getMaxValue() const {
+    return maxValue;
+  }
 
-  const tlp::Coord &getPosition() const { return position; }
-  const tlp::Size &getSize() const { return size; }
+  const tlp::Coord &getPosition() const {
+    return position;
+  }
+  const tlp::Size &getSize() const {
+    return size;
+  }
 
   tlp::BoundingBox getColorScaleBoundingBox();
 
-  tlp::GlColorScale *getGlColorScale() { return glColorScale; }
+  tlp::GlColorScale *getGlColorScale() {
+    return glColorScale;
+  }
 
   void setColorScale(tlp::ColorScale *cs);
 

@@ -19,8 +19,8 @@
 
 #include <tulip/Glyph.h>
 #include <tulip/Iterator.h>
-#include <tulip/PluginLister.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/PluginLister.h>
 
 #include <QComboBox>
 #include <QPushButton>
@@ -37,8 +37,7 @@ GlyphScaleConfigDialog::GlyphScaleConfigDialog(QWidget *parent)
   _ui->tableWidget->setRowCount(5);
   list<string> pluginsList = PluginLister::availablePlugins<Glyph>();
 
-  for (list<string>::iterator it = pluginsList.begin(); it != pluginsList.end();
-       ++it) {
+  for (list<string>::iterator it = pluginsList.begin(); it != pluginsList.end(); ++it) {
     string glyphName = *it;
     glyphsNameList << QString(glyphName.c_str());
   }
@@ -54,15 +53,16 @@ GlyphScaleConfigDialog::GlyphScaleConfigDialog(QWidget *parent)
           SLOT(nbGlyphsSpinBoxValueChanged(int)));
 }
 
-GlyphScaleConfigDialog::~GlyphScaleConfigDialog() { delete _ui; }
+GlyphScaleConfigDialog::~GlyphScaleConfigDialog() {
+  delete _ui;
+}
 
 vector<int> GlyphScaleConfigDialog::getSelectedGlyphsId() const {
   vector<int> ret;
 
   for (int i = 0; i < _ui->tableWidget->rowCount(); ++i) {
     string glyphName = QStringToTlpString(
-        static_cast<QComboBox *>(_ui->tableWidget->cellWidget(i, 0))
-            ->currentText());
+        static_cast<QComboBox *>(_ui->tableWidget->cellWidget(i, 0))->currentText());
     ret.push_back(PluginLister::pluginInformation(glyphName).id());
   }
 

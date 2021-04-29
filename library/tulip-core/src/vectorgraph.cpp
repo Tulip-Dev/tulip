@@ -17,17 +17,17 @@
  *
  */
 
+#include <vector>
+#include <set>
 #include <cassert>
 #include <iostream>
-#include <random>
-#include <set>
 #include <string>
-#include <vector>
+#include <random>
 
-#include <tulip/Edge.h>
-#include <tulip/Node.h>
-#include <tulip/StlIterator.h>
 #include <tulip/vectorgraph.h>
+#include <tulip/Node.h>
+#include <tulip/Edge.h>
+#include <tulip/StlIterator.h>
 
 using namespace std;
 using namespace tlp;
@@ -49,16 +49,17 @@ namespace {
  * \see VectorGraph
  */
 template <bool SENS>
-class bInOutNodeIterator : public Iterator<node>,
-                           public MemoryPool<bInOutNodeIterator<SENS>> {
+class bInOutNodeIterator : public Iterator<node>, public MemoryPool<bInOutNodeIterator<SENS>> {
 public:
-  bInOutNodeIterator(const std::vector<node> &nodes,
-                     const std::vector<bool> &sens, unsigned int elem)
-      : itn(nodes.begin()), itn_end(nodes.end()), its(sens.begin()),
-        its_end(sens.end()), _elem(elem) {
+  bInOutNodeIterator(const std::vector<node> &nodes, const std::vector<bool> &sens,
+                     unsigned int elem)
+      : itn(nodes.begin()), itn_end(nodes.end()), its(sens.begin()), its_end(sens.end()),
+        _elem(elem) {
     update();
   }
-  bool hasNext() override { return its != its_end; }
+  bool hasNext() override {
+    return its != its_end;
+  }
   node next() override {
     node n = *itn;
     ++its;
@@ -93,16 +94,17 @@ private:
  * \see VectorGraph
  */
 template <bool SENS>
-class bInOutEdgeIterator : public Iterator<edge>,
-                           public MemoryPool<bInOutEdgeIterator<SENS>> {
+class bInOutEdgeIterator : public Iterator<edge>, public MemoryPool<bInOutEdgeIterator<SENS>> {
 public:
-  bInOutEdgeIterator(const std::vector<edge> &edges,
-                     const std::vector<bool> &sens, unsigned int elem)
-      : ite(edges.begin()), ite_end(edges.end()), its(sens.begin()),
-        its_end(sens.end()), _elem(elem) {
+  bInOutEdgeIterator(const std::vector<edge> &edges, const std::vector<bool> &sens,
+                     unsigned int elem)
+      : ite(edges.begin()), ite_end(edges.end()), its(sens.begin()), its_end(sens.end()),
+        _elem(elem) {
     update();
   }
-  bool hasNext() override { return its != its_end; }
+  bool hasNext() override {
+    return its != its_end;
+  }
   edge next() override {
     edge e = *ite;
     ++its;
@@ -155,8 +157,7 @@ void VectorGraph::clear() {
   _edgeValues.clear();
 }
 //=======================================================
-edge VectorGraph::existEdge(const node src, const node tgt,
-                            bool directed) const {
+edge VectorGraph::existEdge(const node src, const node tgt, bool directed) const {
   const _iNodes &srcData = _nData[src];
   const _iNodes &tgtData = _nData[tgt];
   unsigned int srcDeg = srcData._adje.size();
@@ -262,43 +263,37 @@ void VectorGraph::reserveAdj(const node n, const size_t nbEdges) {
 }
 //=======================================================
 Iterator<node> *VectorGraph::getNodes() const {
-  return new MPStlIterator<node, vector<node>::const_iterator>(_nodes.begin(),
-                                                               _nodes.end());
+  return new MPStlIterator<node, vector<node>::const_iterator>(_nodes.begin(), _nodes.end());
 }
 //=======================================================
 Iterator<edge> *VectorGraph::getEdges() const {
-  return new MPStlIterator<edge, vector<edge>::const_iterator>(_edges.begin(),
-                                                               _edges.end());
+  return new MPStlIterator<edge, vector<edge>::const_iterator>(_edges.begin(), _edges.end());
 }
 //=======================================================
 Iterator<edge> *VectorGraph::getInOutEdges(const node n) const {
-  return new MPStlIterator<edge, vector<edge>::const_iterator>(
-      _nData[n]._adje.begin(), _nData[n]._adje.end());
+  return new MPStlIterator<edge, vector<edge>::const_iterator>(_nData[n]._adje.begin(),
+                                                               _nData[n]._adje.end());
 }
 //=======================================================
 Iterator<edge> *VectorGraph::getOutEdges(const node n) const {
-  return new bInOutEdgeIterator<true>(_nData[n]._adje, _nData[n]._adjt,
-                                      outdeg(n));
+  return new bInOutEdgeIterator<true>(_nData[n]._adje, _nData[n]._adjt, outdeg(n));
 }
 //=======================================================
 Iterator<edge> *VectorGraph::getInEdges(const node n) const {
-  return new bInOutEdgeIterator<false>(_nData[n]._adje, _nData[n]._adjt,
-                                       indeg(n));
+  return new bInOutEdgeIterator<false>(_nData[n]._adje, _nData[n]._adjt, indeg(n));
 }
 //=======================================================
 Iterator<node> *VectorGraph::getInOutNodes(const node n) const {
-  return new MPStlIterator<node, vector<node>::const_iterator>(
-      _nData[n]._adjn.begin(), _nData[n]._adjn.end());
+  return new MPStlIterator<node, vector<node>::const_iterator>(_nData[n]._adjn.begin(),
+                                                               _nData[n]._adjn.end());
 }
 //=======================================================
 Iterator<node> *VectorGraph::getInNodes(const node n) const {
-  return new bInOutNodeIterator<false>(_nData[n]._adjn, _nData[n]._adjt,
-                                       indeg(n));
+  return new bInOutNodeIterator<false>(_nData[n]._adjn, _nData[n]._adjt, indeg(n));
 }
 //=======================================================
 Iterator<node> *VectorGraph::getOutNodes(const node n) const {
-  return new bInOutNodeIterator<true>(_nData[n]._adjn, _nData[n]._adjt,
-                                      outdeg(n));
+  return new bInOutNodeIterator<true>(_nData[n]._adjn, _nData[n]._adjt, outdeg(n));
 }
 //=======================================================
 node VectorGraph::addNode() {
@@ -352,8 +347,7 @@ void VectorGraph::delNode(const node n) {
   // integrityTest();
 }
 //=======================================================
-void VectorGraph::addEdgeInternal(const edge newEdge, const node src,
-                                  const node tgt) {
+void VectorGraph::addEdgeInternal(const edge newEdge, const node src, const node tgt) {
   _iEdges &eData = _eData[newEdge];
   eData._ends = std::make_pair(src, tgt);
   _iNodes &srcData = _nData[src];
@@ -567,9 +561,13 @@ void VectorGraph::shuffleEdges() {
   _edges.reIndex();
 }
 //=======================================================
-void VectorGraph::swap(const node a, const node b) { _nodes.swap(a, b); }
+void VectorGraph::swap(const node a, const node b) {
+  _nodes.swap(a, b);
+}
 //=======================================================
-void VectorGraph::swap(const edge a, const edge b) { _edges.swap(a, b); }
+void VectorGraph::swap(const edge a, const edge b) {
+  _edges.swap(a, b);
+}
 //=======================================================
 void VectorGraph::dump() const {
   tlp::debug() << "nodes : ";
@@ -578,8 +576,7 @@ void VectorGraph::dump() const {
   tlp::debug() << endl;
   tlp::debug() << "edges: ";
   for (auto e : edges())
-    tlp::debug() << "e_" << e.id << "(" << source(e).id << "," << target(e).id
-                 << ") ";
+    tlp::debug() << "e_" << e.id << "(" << source(e).id << "," << target(e).id << ") ";
   tlp::debug() << endl;
 
   for (auto n : nodes()) {
@@ -629,8 +626,7 @@ void VectorGraph::integrityTest() {
     nodeFound.insert(n);
 
     for (unsigned int j = 0; j < _nData[n]._adjn.size(); ++j) {
-      testCond(this, "opposite",
-               opposite(_nData[n]._adje[j], _nodes[i]) == _nData[n]._adjn[j]);
+      testCond(this, "opposite", opposite(_nData[n]._adje[j], _nodes[i]) == _nData[n]._adjn[j]);
 
       if (!_nData[n]._adjt[j])
         ++_indeg;
@@ -645,8 +641,7 @@ void VectorGraph::integrityTest() {
     testCond(this, "_adjt out", _outdeg == outdeg(n));
 
     sumDeg += _nData[_nodes[i]]._adjn.size();
-    testCond(this, "deg/in/out",
-             _nData[n]._adjn.size() == outdeg(n) + indeg(n));
+    testCond(this, "deg/in/out", _nData[n]._adjn.size() == outdeg(n) + indeg(n));
   }
 
   testCond(this, "edges found", edgeFound.size() == _edges.size());
@@ -714,10 +709,8 @@ void VectorGraph::partialDelEdge(node n, edge e) {
     bool loop = _eData[e]._ends.first == _eData[e]._ends.second;
 
     if (loop) {
-      unsigned int i1 =
-          std::max(_eData[e]._endsPos.first, _eData[e]._endsPos.second);
-      unsigned int i2 =
-          std::min(_eData[e]._endsPos.first, _eData[e]._endsPos.second);
+      unsigned int i1 = std::max(_eData[e]._endsPos.first, _eData[e]._endsPos.second);
+      unsigned int i2 = std::min(_eData[e]._endsPos.first, _eData[e]._endsPos.second);
       moveEdge(n, endP, i1);
       --endP;
       moveEdge(n, endP, i2);

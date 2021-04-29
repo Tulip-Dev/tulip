@@ -21,8 +21,8 @@
 
 #include <tulip/TlpQtTools.h>
 
-#include "ParallelCoordsDrawConfigWidget.h"
 #include "ParallelTools.h"
+#include "ParallelCoordsDrawConfigWidget.h"
 #include "ui_ParallelCoordsDrawConfigWidget.h"
 
 using namespace std;
@@ -34,10 +34,8 @@ ParallelCoordsDrawConfigWidget::ParallelCoordsDrawConfigWidget(QWidget *parent)
       _ui(new Ui::ParallelCoordsDrawConfigWidgetData) {
   _ui->setupUi(this);
   setBackgroundColor(Color(255, 255, 255));
-  connect(_ui->browseButton, SIGNAL(clicked()), this,
-          SLOT(pressButtonBrowse()));
-  connect(_ui->userTexture, SIGNAL(toggled(bool)), this,
-          SLOT(userTextureRbToggled(bool)));
+  connect(_ui->browseButton, SIGNAL(clicked()), this, SLOT(pressButtonBrowse()));
+  connect(_ui->userTexture, SIGNAL(toggled(bool)), this, SLOT(userTextureRbToggled(bool)));
   connect(_ui->minAxisPointSize, SIGNAL(valueChanged(int)), this,
           SLOT(minAxisPointSizeValueChanged(int)));
   connect(_ui->maxAxisPointSize, SIGNAL(valueChanged(int)), this,
@@ -49,8 +47,8 @@ ParallelCoordsDrawConfigWidget::~ParallelCoordsDrawConfigWidget() {
 }
 
 void ParallelCoordsDrawConfigWidget::pressButtonBrowse() {
-  QString fileName(QFileDialog::getOpenFileName(
-      this, "Open Texture File", "./", "Image Files (*.png *.jpg *.bmp)"));
+  QString fileName(QFileDialog::getOpenFileName(this, "Open Texture File", "./",
+                                                "Image Files (*.png *.jpg *.bmp)"));
   _ui->userTextureFile->setText(fileName);
 }
 
@@ -104,13 +102,11 @@ Size ParallelCoordsDrawConfigWidget::getAxisPointMaxSize() const {
   return Size(pointSize, pointSize, pointSize);
 }
 
-void ParallelCoordsDrawConfigWidget::setAxisPointMinSize(
-    const unsigned int axisPointMinSize) {
+void ParallelCoordsDrawConfigWidget::setAxisPointMinSize(const unsigned int axisPointMinSize) {
   _ui->minAxisPointSize->setValue(axisPointMinSize);
 }
 
-void ParallelCoordsDrawConfigWidget::setAxisPointMaxSize(
-    const unsigned int axisPointMaxSize) {
+void ParallelCoordsDrawConfigWidget::setAxisPointMaxSize(const unsigned int axisPointMaxSize) {
   _ui->maxAxisPointSize->setValue(axisPointMaxSize);
 }
 
@@ -127,22 +123,19 @@ void ParallelCoordsDrawConfigWidget::userTextureRbToggled(const bool checked) {
   _ui->browseButton->setEnabled(checked);
 }
 
-void ParallelCoordsDrawConfigWidget::minAxisPointSizeValueChanged(
-    const int newValue) {
+void ParallelCoordsDrawConfigWidget::minAxisPointSizeValueChanged(const int newValue) {
   if (_ui->maxAxisPointSize->value() < newValue) {
     _ui->maxAxisPointSize->setValue(newValue + 1);
   }
 }
 
-void ParallelCoordsDrawConfigWidget::maxAxisPointSizeValueChanged(
-    const int newValue) {
+void ParallelCoordsDrawConfigWidget::maxAxisPointSizeValueChanged(const int newValue) {
   if (_ui->minAxisPointSize->value() > newValue) {
     _ui->minAxisPointSize->setValue(newValue - 1);
   }
 }
 
-void ParallelCoordsDrawConfigWidget::setLinesColorAlphaValue(
-    unsigned int value) {
+void ParallelCoordsDrawConfigWidget::setLinesColorAlphaValue(unsigned int value) {
   if (value > 255) {
     _ui->viewColorAlphaRb->setChecked(true);
     _ui->userAlphaRb->setChecked(false);
@@ -169,13 +162,11 @@ Color ParallelCoordsDrawConfigWidget::getBackgroundColor() const {
   return _ui->bgColorButton->tulipColor();
 }
 
-void ParallelCoordsDrawConfigWidget::setDrawPointOnAxis(
-    const bool drawPointOnAxis) {
+void ParallelCoordsDrawConfigWidget::setDrawPointOnAxis(const bool drawPointOnAxis) {
   _ui->cBoxAxisPoints->setChecked(drawPointOnAxis);
 }
 
-unsigned int
-ParallelCoordsDrawConfigWidget::getUnhighlightedEltsColorsAlphaValue() const {
+unsigned int ParallelCoordsDrawConfigWidget::getUnhighlightedEltsColorsAlphaValue() const {
   return _ui->nonHighlightedEltsAlphaValue->value();
 }
 
@@ -188,15 +179,13 @@ bool ParallelCoordsDrawConfigWidget::configurationChanged() {
   bool confChanged = false;
 
   if (oldValuesInitialized) {
-    if (oldAxisHeight != getAxisHeight() ||
-        oldDrawPointOnAxis != drawPointOnAxis() ||
+    if (oldAxisHeight != getAxisHeight() || oldDrawPointOnAxis != drawPointOnAxis() ||
         oldAxisPointMinSize != getAxisPointMinSize() ||
         oldAxisPointMaxSize != getAxisPointMaxSize() ||
         oldDisplayNodesLabels != displayNodeLabels() ||
         oldLinesColorAlphaValue != getLinesColorAlphaValue() ||
         oldBackgroundColor != getBackgroundColor() ||
-        oldUnhighlightedEltsColorsAlphaValue !=
-            getUnhighlightedEltsColorsAlphaValue() ||
+        oldUnhighlightedEltsColorsAlphaValue != getUnhighlightedEltsColorsAlphaValue() ||
         oldLinesTextureFilename != getLinesTextureFilename()) {
       confChanged = true;
     }
@@ -213,8 +202,7 @@ bool ParallelCoordsDrawConfigWidget::configurationChanged() {
     oldDisplayNodesLabels = displayNodeLabels();
     oldLinesColorAlphaValue = getLinesColorAlphaValue();
     oldBackgroundColor = getBackgroundColor();
-    oldUnhighlightedEltsColorsAlphaValue =
-        getUnhighlightedEltsColorsAlphaValue();
+    oldUnhighlightedEltsColorsAlphaValue = getUnhighlightedEltsColorsAlphaValue();
     oldLinesTextureFilename = getLinesTextureFilename();
   }
 

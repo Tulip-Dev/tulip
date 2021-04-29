@@ -17,8 +17,8 @@
  *
  */
 #include <ogdf/energybased/SpringEmbedderFRExact.h>
-#include <tulip/StringCollection.h>
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
+#include <tulip/StringCollection.h>
 
 #define ELT_COOLING "Cooling function"
 #define ELT_COOLINGLIST "Factor;Logarithmic"
@@ -62,24 +62,21 @@ static const char *paramHelp[] = {
 class OGDFFruchtermanReingold : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION(
-      "Fruchterman Reingold (OGDF)", "Stephan Hachul", "15/11/2007",
-      "Implements the Fruchterman and Reingold layout algorithm, first published "
-      "as:<br/><b>Graph Drawing by Force-Directed Placement</b>, Fruchterman, Thomas "
-      "M. J., Reingold, Edward M., Software – Practice & Experience (Wiley) Volume "
-      "21, Issue 11, pages 1129–1164, (1991)",
-      "1.1", "Force Directed")
+  PLUGININFORMATION("Fruchterman Reingold (OGDF)", "Stephan Hachul", "15/11/2007",
+                    "Implements the Fruchterman and Reingold layout algorithm, first published "
+                    "as:<br/><b>Graph Drawing by Force-Directed Placement</b>, Fruchterman, Thomas "
+                    "M. J., Reingold, Edward M., Software – Practice & Experience (Wiley) Volume "
+                    "21, Issue 11, pages 1129–1164, (1991)",
+                    "1.1", "Force Directed")
 
   OGDFFruchtermanReingold(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(
-            context, context ? new ogdf::SpringEmbedderFRExact() : nullptr) {
+      : OGDFLayoutPluginBase(context, context ? new ogdf::SpringEmbedderFRExact() : nullptr) {
     addInParameter<int>("iterations", paramHelp[0], "1000");
     addInParameter<bool>("noise", paramHelp[1], "true");
     addInParameter<bool>("use node weights", paramHelp[2], "false");
-    addInParameter<NumericProperty *>("node weights", paramHelp[3],
-                                      "viewMetric");
-    addInParameter<StringCollection>(ELT_COOLING, paramHelp[4], ELT_COOLINGLIST,
-                                     true, "Factor<br> Logarithmic");
+    addInParameter<NumericProperty *>("node weights", paramHelp[3], "viewMetric");
+    addInParameter<StringCollection>(ELT_COOLING, paramHelp[4], ELT_COOLINGLIST, true,
+                                     "Factor<br> Logarithmic");
     addInParameter<double>("ideal edge length", paramHelp[5], "10.0");
     addInParameter<double>("minDistCC", paramHelp[6], "20.0");
     addInParameter<double>("pageRatio", paramHelp[7], "1.0");
@@ -92,8 +89,7 @@ public:
   ~OGDFFruchtermanReingold() override {}
 
   void beforeCall() override {
-    ogdf::SpringEmbedderFRExact *sefr =
-        static_cast<ogdf::SpringEmbedderFRExact *>(ogdfLayoutAlgo);
+    ogdf::SpringEmbedderFRExact *sefr = static_cast<ogdf::SpringEmbedderFRExact *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {
       int ival = 0;
@@ -117,8 +113,7 @@ public:
         if (sc.getCurrent() == ELT_FACTOR) {
           sefr->coolingFunction(SpringEmbedderFRExact::CoolingFunction::Factor);
         } else {
-          sefr->coolingFunction(
-              SpringEmbedderFRExact::CoolingFunction::Logarithmic);
+          sefr->coolingFunction(SpringEmbedderFRExact::CoolingFunction::Logarithmic);
         }
       }
 

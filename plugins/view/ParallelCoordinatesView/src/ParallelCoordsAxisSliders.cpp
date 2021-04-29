@@ -17,16 +17,16 @@
  *
  */
 
-#include <tulip/GlBoundingBoxSceneVisitor.h>
-#include <tulip/GlLabel.h>
-#include <tulip/GlMainWidget.h>
 #include <tulip/GlPolygon.h>
+#include <tulip/GlLabel.h>
 #include <tulip/GlQuad.h>
+#include <tulip/GlBoundingBoxSceneVisitor.h>
+#include <tulip/GlMainWidget.h>
 
-#include "ParallelAxis.h"
 #include "ParallelCoordinatesView.h"
-#include "ParallelCoordsAxisSliders.h"
 #include "ParallelTools.h"
+#include "ParallelCoordsAxisSliders.h"
+#include "ParallelAxis.h"
 
 #include <QMouseEvent>
 
@@ -41,9 +41,8 @@ const Color blueColor(14, 241, 212);
 const Color orangeColor(255, 123, 0);
 const Color lightGreen(197, 255, 0);
 
-AxisSlider::AxisSlider(const sliderType type, const Coord &sliderCoord,
-                       const float halfWidth, const float halfHeight,
-                       const Color &sliderColor, const Color &labelColor,
+AxisSlider::AxisSlider(const sliderType type, const Coord &sliderCoord, const float halfWidth,
+                       const float halfHeight, const Color &sliderColor, const Color &labelColor,
                        const float rotationAngle)
     : type(type), sliderComposite(new GlComposite()), sliderCoord(sliderCoord),
       rotationAngle(rotationAngle) {
@@ -85,9 +84,8 @@ AxisSlider::AxisSlider(const sliderType type, const Coord &sliderCoord,
   arrowPolygonCoords.push_back(std::move(arrowPolygonVertice6));
   arrowPolygonCoords.push_back(std::move(arrowPolygonVertice7));
 
-  sliderQuad =
-      new GlQuad(sliderPolygonVertice1, sliderPolygonVertice2,
-                 sliderPolygonVertice3, sliderPolygonVertice4, sliderColor);
+  sliderQuad = new GlQuad(sliderPolygonVertice1, sliderPolygonVertice2, sliderPolygonVertice3,
+                          sliderPolygonVertice4, sliderColor);
   sliderQuad->setTextureName(SLIDER_TEXTURE_NAME);
   sliderComposite->addGlEntity(sliderQuad, "slider quad");
 
@@ -100,17 +98,16 @@ AxisSlider::AxisSlider(const sliderType type, const Coord &sliderCoord,
   sliderPolygonCoords.push_back(std::move(sliderPolygonVertice3));
   sliderPolygonCoords.push_back(std::move(sliderPolygonVertice4));
 
-  sliderPolygon = new GlPolygon(sliderPolygonCoords, sliderPolygonColors,
-                                sliderPolygonColors, false, true);
+  sliderPolygon =
+      new GlPolygon(sliderPolygonCoords, sliderPolygonColors, sliderPolygonColors, false, true);
   sliderComposite->addGlEntity(sliderPolygon, "slider polygon");
 
-  arrowPolygon = new GlPolygon(arrowPolygonCoords, arrowPolygonColors,
-                               arrowPolygonColors, true, false);
+  arrowPolygon =
+      new GlPolygon(arrowPolygonCoords, arrowPolygonColors, arrowPolygonColors, true, false);
   sliderComposite->addGlEntity(arrowPolygon, "arrow polygon");
 
-  sliderLabel = new GlLabel(
-      Coord(sliderCoord.getX(), sliderCoord.getY() + n * 1.75f * halfHeight),
-      Size(3.0f * halfWidth, 1.5f * halfHeight), labelColor);
+  sliderLabel = new GlLabel(Coord(sliderCoord.getX(), sliderCoord.getY() + n * 1.75f * halfHeight),
+                            Size(3.0f * halfWidth, 1.5f * halfHeight), labelColor);
   sliderComposite->addGlEntity(sliderLabel, "slider label");
 }
 
@@ -176,11 +173,9 @@ void AxisSlider::translate(const Coord &move) {
 }
 
 ParallelCoordsAxisSliders::ParallelCoordsAxisSliders()
-    : parallelView(nullptr), currentGraph(nullptr), selectedAxis(nullptr),
-      selectedSlider(nullptr), axisSliderDragStarted(false),
-      pointerBetweenSliders(false), slidersRangeDragStarted(false),
-      slidersRangeLength(0), xClick(0), yClick(0), lastAxisHeight(0),
-      lastNbAxis(0),
+    : parallelView(nullptr), currentGraph(nullptr), selectedAxis(nullptr), selectedSlider(nullptr),
+      axisSliderDragStarted(false), pointerBetweenSliders(false), slidersRangeDragStarted(false),
+      slidersRangeLength(0), xClick(0), yClick(0), lastAxisHeight(0), lastNbAxis(0),
       highlightedEltsSetOperation(ParallelCoordinatesDrawing::NONE),
       selectionLayer(new GlLayer("sliders selection layer")) {}
 
@@ -214,14 +209,12 @@ void ParallelCoordsAxisSliders::initOrUpdateSliders() {
     return;
   }
 
-  if ((lastAxisHeight != 0 && !allAxis.empty() &&
-       lastAxisHeight != allAxis[0]->getAxisHeight()) ||
+  if ((lastAxisHeight != 0 && !allAxis.empty() && lastAxisHeight != allAxis[0]->getAxisHeight()) ||
       (lastNbAxis != 0 && lastNbAxis != allAxis.size()) ||
       (currentGraph != parallelView->getGraphProxy()->getGraph())) {
     deleteGlSliders();
 
-    if (currentGraph != nullptr &&
-        currentGraph != parallelView->getGraphProxy()->getGraph()) {
+    if (currentGraph != nullptr && currentGraph != parallelView->getGraphProxy()->getGraph()) {
       for (auto pa : allAxis) {
         pa->resetSlidersPosition();
       }
@@ -241,10 +234,8 @@ void ParallelCoordsAxisSliders::initOrUpdateSliders() {
 
   for (auto &it : axisSlidersMap) {
     ParallelAxis *axis = it.first;
-    axisSlidersMap[axis][TOP_SLIDER]->setRotationAngle(
-        axis->getRotationAngle());
-    axisSlidersMap[axis][BOTTOM_SLIDER]->setRotationAngle(
-        axis->getRotationAngle());
+    axisSlidersMap[axis][TOP_SLIDER]->setRotationAngle(axis->getRotationAngle());
+    axisSlidersMap[axis][BOTTOM_SLIDER]->setRotationAngle(axis->getRotationAngle());
   }
 }
 
@@ -255,8 +246,7 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
   if (glWidget == nullptr)
     return false;
 
-  selectionLayer->setSharedCamera(
-      &glWidget->getScene()->getLayer("Main")->getCamera());
+  selectionLayer->setSharedCamera(&glWidget->getScene()->getLayer("Main")->getCamera());
 
   initOrUpdateSliders();
 
@@ -269,48 +259,39 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
     int x = glWidget->width() - me->x();
     int y = me->y();
     Coord screenCoords(x, y, 0.0f);
-    Coord sceneCoords(
-        glWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(
-            glWidget->screenToViewport(screenCoords)));
+    Coord sceneCoords(glWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(
+        glWidget->screenToViewport(screenCoords)));
 
     if (!axisSliderDragStarted && !slidersRangeDragStarted) {
       selectedAxis = parallelView->getAxisUnderPointer(me->x(), me->y());
 
       if (selectedAxis != nullptr) {
-        if (parallelView->getLayoutType() ==
-            ParallelCoordinatesDrawing::CIRCULAR) {
+        if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
           rotateVector(sceneCoords, -(selectedAxis->getRotationAngle()), Z_ROT);
         }
 
-        selectedSlider =
-            getSliderUnderPointer(glWidget, selectedAxis, me->x(), me->y());
+        selectedSlider = getSliderUnderPointer(glWidget, selectedAxis, me->x(), me->y());
         pointerBetweenSliders =
-            (sceneCoords.getY() < axisSlidersMap[selectedAxis][TOP_SLIDER]
-                                      ->getSliderCoord()
-                                      .getY()) &&
-            (sceneCoords.getY() > axisSlidersMap[selectedAxis][BOTTOM_SLIDER]
-                                      ->getSliderCoord()
-                                      .getY());
+            (sceneCoords.getY() <
+             axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getY()) &&
+            (sceneCoords.getY() >
+             axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getY());
       } else {
         pointerBetweenSliders = false;
       }
-    } else if (selectedAxis != nullptr && selectedSlider != nullptr &&
-               axisSliderDragStarted) {
+    } else if (selectedAxis != nullptr && selectedSlider != nullptr && axisSliderDragStarted) {
 
       float minY, maxY;
 
-      if (highlightedEltsSetOperation !=
-          ParallelCoordinatesDrawing::INTERSECTION) {
+      if (highlightedEltsSetOperation != ParallelCoordinatesDrawing::INTERSECTION) {
         minY = selectedAxis->getBaseCoord().getY();
-        maxY =
-            selectedAxis->getBaseCoord().getY() + selectedAxis->getAxisHeight();
+        maxY = selectedAxis->getBaseCoord().getY() + selectedAxis->getAxisHeight();
       } else {
         minY = slidersYBoundaries[selectedAxis].first;
         maxY = slidersYBoundaries[selectedAxis].second;
       }
 
-      if (parallelView->getLayoutType() ==
-          ParallelCoordinatesDrawing::CIRCULAR) {
+      if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
         rotateVector(sceneCoords, -(selectedAxis->getRotationAngle()), Z_ROT);
       }
 
@@ -320,8 +301,7 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
         sceneCoords = Coord(selectedAxis->getBaseCoord().getX(), maxY, 0.0f);
       }
 
-      if (selectedSlider != nullptr &&
-          selectedSlider->getSliderType() == TOP_SLIDER) {
+      if (selectedSlider != nullptr && selectedSlider->getSliderType() == TOP_SLIDER) {
         if (sceneCoords.getY() < selectedAxis->getBottomSliderCoord().getY()) {
           sceneCoords = selectedAxis->getBottomSliderCoord();
         }
@@ -339,8 +319,7 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
     } else if (selectedAxis != nullptr && slidersRangeDragStarted) {
       int dy = yClick - y;
 
-      if (parallelView->getLayoutType() ==
-          ParallelCoordinatesDrawing::CIRCULAR) {
+      if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
         float rotAngle = selectedAxis->getRotationAngle();
 
         if (rotAngle < -90.0f && rotAngle > -270.0f) {
@@ -352,29 +331,23 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
         }
       }
 
-      if ((axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getY() +
-           dy) > (selectedAxis->getBaseCoord().getY() +
-                  selectedAxis->getAxisHeight())) {
+      if ((axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getY() + dy) >
+          (selectedAxis->getBaseCoord().getY() + selectedAxis->getAxisHeight())) {
         selectedAxis->setBottomSliderCoord(
             selectedAxis->getBaseCoord() +
             Coord(0.0f, selectedAxis->getAxisHeight() - slidersRangeLength));
-        selectedAxis->setTopSliderCoord(
-            selectedAxis->getBaseCoord() +
-            Coord(0.0f, selectedAxis->getAxisHeight()));
-      } else if ((axisSlidersMap[selectedAxis][BOTTOM_SLIDER]
-                      ->getSliderCoord()
-                      .getY() +
-                  dy) < (selectedAxis->getBaseCoord().getY())) {
+        selectedAxis->setTopSliderCoord(selectedAxis->getBaseCoord() +
+                                        Coord(0.0f, selectedAxis->getAxisHeight()));
+      } else if ((axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getY() + dy) <
+                 (selectedAxis->getBaseCoord().getY())) {
         selectedAxis->setBottomSliderCoord(selectedAxis->getBaseCoord());
         selectedAxis->setTopSliderCoord(selectedAxis->getBaseCoord() +
                                         Coord(0.0f, slidersRangeLength));
       } else {
         selectedAxis->setBottomSliderCoord(
-            axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord() +
-            Coord(0.0f, dy));
-        selectedAxis->setTopSliderCoord(
-            axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord() +
-            Coord(0.0f, dy));
+            axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord() + Coord(0.0f, dy));
+        selectedAxis->setTopSliderCoord(axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord() +
+                                        Coord(0.0f, dy));
       }
 
       yClick = y;
@@ -386,20 +359,17 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
   } else if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent *me = static_cast<QMouseEvent *>(e);
 
-    if (me->button() == Qt::LeftButton && selectedSlider != nullptr &&
-        !axisSliderDragStarted) {
+    if (me->button() == Qt::LeftButton && selectedSlider != nullptr && !axisSliderDragStarted) {
       axisSliderDragStarted = true;
       parallelView->refresh();
       return true;
     } else if (selectedAxis != nullptr && pointerBetweenSliders &&
-               highlightedEltsSetOperation !=
-                   ParallelCoordinatesDrawing::INTERSECTION &&
+               highlightedEltsSetOperation != ParallelCoordinatesDrawing::INTERSECTION &&
                !slidersRangeDragStarted) {
       QMouseEvent *me = static_cast<QMouseEvent *>(e);
       slidersRangeDragStarted = true;
-      slidersRangeLength =
-          axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getY() -
-          axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getY();
+      slidersRangeLength = axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getY() -
+                           axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getY();
       yClick = me->y();
       xClick = me->x();
       return true;
@@ -412,8 +382,7 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
       axisSliderDragStarted = false;
       slidersRangeDragStarted = false;
       Observable::holdObservers();
-      parallelView->updateWithAxisSlidersRange(selectedAxis,
-                                               highlightedEltsSetOperation);
+      parallelView->updateWithAxisSlidersRange(selectedAxis, highlightedEltsSetOperation);
       updateSlidersYBoundaries();
       Observable::unholdObservers();
       selectedSlider = nullptr;
@@ -454,25 +423,20 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
   return false;
 }
 
-void ParallelCoordsAxisSliders::buildGlSliders(
-    const vector<ParallelAxis *> &axis) {
+void ParallelCoordsAxisSliders::buildGlSliders(const vector<ParallelAxis *> &axis) {
   for (auto pa : axis) {
     lastAxisHeight = pa->getAxisHeight();
     float sliderMetricRef = pa->getAxisHeight() / 60.0f;
-    AxisSlider *axisTopSlider =
-        new AxisSlider(TOP_SLIDER, pa->getTopSliderCoord(),
-                       2.5f * sliderMetricRef, 2.0f * sliderMetricRef, redColor,
-                       pa->getAxisColor(), pa->getRotationAngle());
-    AxisSlider *axisBottomSlider =
-        new AxisSlider(BOTTOM_SLIDER, pa->getBottomSliderCoord(),
-                       2.5f * sliderMetricRef, 2.0f * sliderMetricRef, redColor,
-                       pa->getAxisColor(), pa->getRotationAngle());
+    AxisSlider *axisTopSlider = new AxisSlider(
+        TOP_SLIDER, pa->getTopSliderCoord(), 2.5f * sliderMetricRef, 2.0f * sliderMetricRef,
+        redColor, pa->getAxisColor(), pa->getRotationAngle());
+    AxisSlider *axisBottomSlider = new AxisSlider(
+        BOTTOM_SLIDER, pa->getBottomSliderCoord(), 2.5f * sliderMetricRef, 2.0f * sliderMetricRef,
+        redColor, pa->getAxisColor(), pa->getRotationAngle());
     axisSlidersMap[pa].push_back(axisTopSlider);
     axisSlidersMap[pa].push_back(axisBottomSlider);
-    selectionLayer->addGlEntity(axisTopSlider,
-                                getStringFromNumber(axisTopSlider));
-    selectionLayer->addGlEntity(axisBottomSlider,
-                                getStringFromNumber(axisBottomSlider));
+    selectionLayer->addGlEntity(axisTopSlider, getStringFromNumber(axisTopSlider));
+    selectionLayer->addGlEntity(axisBottomSlider, getStringFromNumber(axisBottomSlider));
   }
 }
 
@@ -488,8 +452,8 @@ void ParallelCoordsAxisSliders::deleteGlSliders() {
   axisSlidersMap.clear();
 }
 
-AxisSlider *ParallelCoordsAxisSliders::getSliderUnderPointer(
-    GlMainWidget *glWidget, ParallelAxis *axis, int x, int y) {
+AxisSlider *ParallelCoordsAxisSliders::getSliderUnderPointer(GlMainWidget *glWidget,
+                                                             ParallelAxis *axis, int x, int y) {
   vector<SelectedEntity> pickedEntities;
 
   if (glWidget->pickGlEntities(x, y, pickedEntities, selectionLayer)) {
@@ -511,12 +475,9 @@ void ParallelCoordsAxisSliders::updateOtherAxisSliders() {
 
     if (axis != selectedAxis) {
       axisSlidersMap[axis][TOP_SLIDER]->moveToCoord(axis->getTopSliderCoord());
-      axisSlidersMap[axis][TOP_SLIDER]->setSliderLabel(
-          axis->getTopSliderTextValue());
-      axisSlidersMap[axis][BOTTOM_SLIDER]->moveToCoord(
-          axis->getBottomSliderCoord());
-      axisSlidersMap[axis][BOTTOM_SLIDER]->setSliderLabel(
-          axis->getBottomSliderTextValue());
+      axisSlidersMap[axis][TOP_SLIDER]->setSliderLabel(axis->getTopSliderTextValue());
+      axisSlidersMap[axis][BOTTOM_SLIDER]->moveToCoord(axis->getBottomSliderCoord());
+      axisSlidersMap[axis][BOTTOM_SLIDER]->setSliderLabel(axis->getBottomSliderTextValue());
     }
   }
 }
@@ -546,16 +507,14 @@ bool ParallelCoordsAxisSliders::draw(GlMainWidget *glMainWidget) {
       } else if (slidersRangeDragStarted && axis == selectedAxis) {
         slider->setSliderFillColor(greenColor);
         slider->setSliderOutlineColor(greenColor);
-      } else if (std::find(lastSelectedAxis.begin(), lastSelectedAxis.end(),
-                           axis) != lastSelectedAxis.end()) {
+      } else if (std::find(lastSelectedAxis.begin(), lastSelectedAxis.end(), axis) !=
+                 lastSelectedAxis.end()) {
         slider->setSliderFillColor(blueColor);
         slider->setSliderOutlineColor(blueColor);
-      } else if (highlightedEltsSetOperation ==
-                 ParallelCoordinatesDrawing::INTERSECTION) {
+      } else if (highlightedEltsSetOperation == ParallelCoordinatesDrawing::INTERSECTION) {
         slider->setSliderFillColor(orangeColor);
         slider->setSliderOutlineColor(orangeColor);
-      } else if (highlightedEltsSetOperation ==
-                 ParallelCoordinatesDrawing::UNION) {
+      } else if (highlightedEltsSetOperation == ParallelCoordinatesDrawing::UNION) {
         slider->setSliderFillColor(lightGreen);
         slider->setSliderOutlineColor(lightGreen);
       } else {
@@ -579,17 +538,14 @@ bool ParallelCoordsAxisSliders::draw(GlMainWidget *glMainWidget) {
     Coord p2(axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getX() +
                  1.5f * selectedAxis->getAxisGradsWidth(),
              axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getY());
-    Coord p3(
-        axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getX() +
-            1.5f * selectedAxis->getAxisGradsWidth(),
-        axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getY());
-    Coord p4(
-        axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getX() -
-            1.5f * selectedAxis->getAxisGradsWidth(),
-        axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getY());
+    Coord p3(axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getX() +
+                 1.5f * selectedAxis->getAxisGradsWidth(),
+             axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getY());
+    Coord p4(axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getX() -
+                 1.5f * selectedAxis->getAxisGradsWidth(),
+             axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getY());
     GlQuad quad(p1, p2, p3, p4,
-                axisSlidersMap[selectedAxis][TOP_SLIDER]->getColor() +
-                    Color(0, 0, 0, 100));
+                axisSlidersMap[selectedAxis][TOP_SLIDER]->getColor() + Color(0, 0, 0, 100));
     float rotAngle = selectedAxis->getRotationAngle();
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);

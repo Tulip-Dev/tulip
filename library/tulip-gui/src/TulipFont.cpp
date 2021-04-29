@@ -19,13 +19,13 @@
 
 #include "tulip/TulipFont.h"
 
-#include <QDebug>
-#include <QDir>
-#include <QFileInfo>
 #include <QFontDatabase>
+#include <QFileInfo>
+#include <QDir>
+#include <QDebug>
 
-#include <tulip/TlpQtTools.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace tlp;
 
@@ -43,8 +43,8 @@ QStringList TulipFont::installedFontNames() {
        installedFontsDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs)) {
     QString fontName(fontDirInfo.fileName());
     // sanity checks
-    TulipFont normalFont(fontName), boldFont(normalFont),
-        italicFont(normalFont), boldItalicFont(normalFont);
+    TulipFont normalFont(fontName), boldFont(normalFont), italicFont(normalFont),
+        boldItalicFont(normalFont);
     boldFont.setBold(true);
     italicFont.setItalic(true);
     boldItalicFont.setBold(true);
@@ -63,13 +63,9 @@ QStringList TulipFont::installedFontNames() {
 TulipFont TulipFont::fromFile(const QString &path) {
   TulipFont result("");
   result._fontFile = path;
-  result._bold =
-      path.endsWith("_Bold.ttf") || path.endsWith("_Bold_Italic.ttf");
-  result._italic =
-      path.endsWith("_Italic.ttf") || path.endsWith("_Bold_Italic.ttf");
-  result._fontName =
-      QFileInfo(path).fileName().remove("_Bold").remove("_Italic").remove(
-          ".ttf");
+  result._bold = path.endsWith("_Bold.ttf") || path.endsWith("_Bold_Italic.ttf");
+  result._italic = path.endsWith("_Italic.ttf") || path.endsWith("_Bold_Italic.ttf");
+  result._fontName = QFileInfo(path).fileName().remove("_Bold").remove("_Italic").remove(".ttf");
   return result;
 }
 
@@ -90,16 +86,21 @@ TulipFont::TulipFont(const QString fontName, QObject *parent)
   refreshFontFile();
 }
 
-TulipFont::TulipFont(QObject *parent)
-    : QObject(parent), _bold(false), _italic(false) {
+TulipFont::TulipFont(QObject *parent) : QObject(parent), _bold(false), _italic(false) {
   refreshFontFile();
 }
 
-bool TulipFont::isBold() const { return _bold; }
+bool TulipFont::isBold() const {
+  return _bold;
+}
 
-bool TulipFont::isItalic() const { return _italic; }
+bool TulipFont::isItalic() const {
+  return _italic;
+}
 
-QString TulipFont::fontName() const { return _fontName; }
+QString TulipFont::fontName() const {
+  return _fontName;
+}
 
 int TulipFont::fontId(const QString &path) {
   int result = -1;
@@ -114,7 +115,9 @@ int TulipFont::fontId(const QString &path) {
   return result;
 }
 
-int TulipFont::fontId() const { return fontId(_fontFile); }
+int TulipFont::fontId() const {
+  return fontId(_fontFile);
+}
 
 QString TulipFont::fontFamily() const {
   QStringList families(QFontDatabase::applicationFontFamilies(fontId()));
@@ -126,7 +129,9 @@ QString TulipFont::fontFamily() const {
   return family;
 }
 
-QString TulipFont::fontFile() const { return _fontFile; }
+QString TulipFont::fontFile() const {
+  return _fontFile;
+}
 
 void TulipFont::setItalic(bool i) {
   _italic = i;

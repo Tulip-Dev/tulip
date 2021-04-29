@@ -10,11 +10,11 @@
  *
  * Released under GNU LGPL.  Read the file 'COPYING' for more information.
  */
-#include "block.h"
-#include "PairingHeap.h"
-#include "blocks.h"
-#include "constraint.h"
 #include <cassert>
+#include "PairingHeap.h"
+#include "constraint.h"
+#include "block.h"
+#include "blocks.h"
 #ifdef RECTANGLE_OVERLAP_LOGGING
 #include <fstream>
 using std::endl;
@@ -59,8 +59,12 @@ Block::~Block(void) {
   delete in;
   delete out;
 }
-void Block::setUpInConstraints() { setUpConstraintHeap(in, true); }
-void Block::setUpOutConstraints() { setUpConstraintHeap(out, false); }
+void Block::setUpInConstraints() {
+  setUpConstraintHeap(in, true);
+}
+void Block::setUpOutConstraints() {
+  setUpConstraintHeap(out, false);
+}
 void Block::setUpConstraintHeap(PairingHeap<Constraint *> *&h, bool in) {
   delete h;
   h = new PairingHeap<Constraint *>(&compareConstraints);
@@ -225,7 +229,9 @@ void Block::deleteMinInConstraint() {
   f << "  result: " << *in << endl;
 #endif
 }
-void Block::deleteMinOutConstraint() { out->deleteMin(); }
+void Block::deleteMinOutConstraint() {
+  out->deleteMin();
+}
 inline bool Block::canFollowLeft(Constraint *c, const Variable *const last) {
   return c->left->block == this && c->active && last != c->left;
 }
@@ -238,8 +244,7 @@ inline bool Block::canFollowRight(Constraint *c, const Variable *const last) {
 // Does not backtrack over u.
 // also records the constraint with minimum lagrange multiplier
 // in min_lm
-double Block::compute_dfdv(Variable *const v, Variable *const u,
-                           Constraint *&min_lm) {
+double Block::compute_dfdv(Variable *const v, Variable *const u, Constraint *&min_lm) {
   double dfdv = v->weight * (v->position() - v->desiredPosition);
 
   for (Cit it = v->out.begin(); it != v->out.end(); ++it) {
@@ -280,10 +285,8 @@ double Block::compute_dfdv(Variable *const v, Variable *const u,
 // the recursion (checking only constraints traversed left-to-right
 // in order to avoid creating any new violations).
 // We also do not consider equality constraints as potential split points
-Block::Pair Block::compute_dfdv_between(Variable *r, Variable *const v,
-                                        Variable *const u,
-                                        const Direction dir = NONE,
-                                        bool changedDirection = false) {
+Block::Pair Block::compute_dfdv_between(Variable *r, Variable *const v, Variable *const u,
+                                        const Direction dir = NONE, bool changedDirection = false) {
   double dfdv = v->weight * (v->position() - v->desiredPosition);
   Constraint *m = nullptr;
 
@@ -329,8 +332,7 @@ Block::Pair Block::compute_dfdv_between(Variable *r, Variable *const v,
       dfdv += c->lm = p.first;
 
       if (r && p.second)
-        m = changedDirection && !c->equality && c->lm < p.second->lm ? c
-                                                                     : p.second;
+        m = changedDirection && !c->equality && c->lm < p.second->lm ? c : p.second;
     }
   }
 
@@ -360,8 +362,8 @@ void Block::reset_active_lm(Variable *const v, Variable *const u) {
   }
 }
 /**
- * finds the constraint with the minimum lagrange multiplier, that is, the
- * constraint that most wants to split
+ * finds the constraint with the minimum lagrange multiplier, that is, the constraint
+ * that most wants to split
  */
 Constraint *Block::findMinLM() {
   Constraint *min_lm = nullptr;
@@ -375,9 +377,8 @@ Constraint *Block::findMinLMBetween(Variable *const lv, Variable *const rv) {
   return min_lm;
 }
 
-// populates block b by traversing the active constraint tree adding variables
-// as they're visited.  Starts from variable v and does not backtrack over
-// variable u.
+// populates block b by traversing the active constraint tree adding variables as they're
+// visited.  Starts from variable v and does not backtrack over variable u.
 void Block::populateSplitBlock(Block *b, Variable *const v, Variable *const u) {
   b->addVariable(v);
 
@@ -392,8 +393,8 @@ void Block::populateSplitBlock(Block *b, Variable *const v, Variable *const u) {
   }
 }
 // Search active constraint tree from u to see if there is a directed path to v.
-// Returns true if path is found with all constraints in path having their
-// visited flag set true.
+// Returns true if path is found with all constraints in path having their visited flag
+// set true.
 bool Block::isActiveDirectedPathBetween(Variable *u, Variable *v) {
   if (u == v)
     return true;
@@ -413,12 +414,11 @@ bool Block::isActiveDirectedPathBetween(Variable *u, Variable *v) {
 }
 /**
  * Block needs to be split because of a violated constraint between vl and vr.
- * We need to search the active constraint tree between l and r and find the
- * constraint with min lagrangrian multiplier and split at that point. Returns
- * the split constraint
+ * We need to search the active constraint tree between l and r and find the constraint
+ * with min lagrangrian multiplier and split at that point.
+ * Returns the split constraint
  */
-Constraint *Block::splitBetween(Variable *const vl, Variable *const vr,
-                                Block *&lb, Block *&rb) {
+Constraint *Block::splitBetween(Variable *const vl, Variable *const vr, Block *&lb, Block *&rb) {
 #ifdef RECTANGLE_OVERLAP_LOGGING
   ofstream f(LOGFILE, ios::app);
   f << "  need to split between: " << *vl << " and " << *vr << endl;

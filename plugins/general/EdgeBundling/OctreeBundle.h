@@ -19,18 +19,16 @@
 
 #ifndef OCTREEBUNDLE_H
 #define OCTREEBUNDLE_H
-#include <tulip/DrawingTools.h>
 #include <tulip/Vector.h>
+#include <tulip/DrawingTools.h>
 
 class OctreeBundle {
 public:
-  static void compute(tlp::Graph *graph, double splitRatio,
-                      tlp::LayoutProperty *layout = nullptr,
+  static void compute(tlp::Graph *graph, double splitRatio, tlp::LayoutProperty *layout = nullptr,
                       tlp::SizeProperty *size = nullptr);
   //=====================================
-  static bool isIn(const tlp::Coord &p, const tlp::Coord &a,
-                   const tlp::Coord &b, const tlp::Coord &c,
-                   const tlp::Coord &d);
+  static bool isIn(const tlp::Coord &p, const tlp::Coord &a, const tlp::Coord &b,
+                   const tlp::Coord &c, const tlp::Coord &d);
 
 protected:
   void createOctree(tlp::Graph *graph, tlp::LayoutProperty *layout = nullptr,
@@ -50,13 +48,11 @@ private:
   //=====================================
   tlp::node splitEdge(tlp::node a, tlp::node b);
   //=====================================
-  void elmentSplitting(const tlp::Coord &a, const tlp::Coord &b,
-                       const tlp::Coord &c, const tlp::Coord &d,
-                       const std::vector<tlp::node> &input,
+  void elmentSplitting(const tlp::Coord &a, const tlp::Coord &b, const tlp::Coord &c,
+                       const tlp::Coord &d, const std::vector<tlp::node> &input,
                        std::vector<tlp::node> &in, std::vector<tlp::node> &out);
   //=====================================
-  void recQuad(const tlp::Coord fr[4], const tlp::Coord ba[4],
-               const std::vector<tlp::node> &input);
+  void recQuad(const tlp::Coord fr[4], const tlp::Coord ba[4], const std::vector<tlp::node> &input);
   tlp::node addNode(const tlp::Coord &pos);
   std::vector<std::pair<tlp::node, tlp::node>> unvalidEdges;
 };

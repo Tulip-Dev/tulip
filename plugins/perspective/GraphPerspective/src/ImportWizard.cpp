@@ -22,9 +22,9 @@
 #include <QAbstractButton>
 #include <QMessageBox>
 
-#include <tulip/ImportModule.h>
-#include <tulip/ParameterListModel.h>
 #include <tulip/TulipItemDelegate.h>
+#include <tulip/ParameterListModel.h>
+#include <tulip/ImportModule.h>
 
 #include <tulip/GraphHierarchiesModel.h>
 #include <tulip/PluginModel.h>
@@ -33,16 +33,15 @@
 using namespace tlp;
 using namespace std;
 
-ImportWizard::ImportWizard(QWidget *parent)
-    : QWizard(parent), _ui(new Ui::ImportWizard) {
+ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::ImportWizard) {
 #if !defined(__LINUX)
   setWizardStyle(QWizard::ClassicStyle);
 #endif
 
   _ui->setupUi(this);
 
-  bool darkBackground = _ui->importModules->palette().color(backgroundRole()) !=
-                        QColor(255, 255, 255);
+  bool darkBackground =
+      _ui->importModules->palette().color(backgroundRole()) != QColor(255, 255, 255);
   // update foreground colors according to background color
   if (darkBackground) {
     auto ss = _ui->importModules->styleSheet();
@@ -50,20 +49,18 @@ ImportWizard::ImportWizard(QWidget *parent)
     _ui->importModules->setStyleSheet(ss);
     _ui->parameters->setStyleSheet("QHeaderView::section { color: white }");
   }
-  PluginModel<tlp::ImportModule> *model =
-      new PluginModel<tlp::ImportModule>(_ui->importModules);
+  PluginModel<tlp::ImportModule> *model = new PluginModel<tlp::ImportModule>(_ui->importModules);
 
   _ui->importModules->setModel(model);
   _ui->importModules->setRootIndex(model->index(0, 0));
   _ui->importModules->expandAll();
-  connect(_ui->importModules->selectionModel(),
-          SIGNAL(currentChanged(QModelIndex, QModelIndex)), this,
-          SLOT(algorithmSelected(QModelIndex)));
+  connect(_ui->importModules->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
+          this, SLOT(algorithmSelected(QModelIndex)));
 
   _ui->parameters->setItemDelegate(new TulipItemDelegate(_ui->parameters));
   _ui->parameters->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-  connect(_ui->importModules, SIGNAL(doubleClicked(QModelIndex)),
-          button(QWizard::FinishButton), SLOT(click()));
+  connect(_ui->importModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton),
+          SLOT(click()));
   // display OK instead of Finish
   setButtonText(QWizard::FinishButton, "OK");
   // Help button is used to display import plugin doc
@@ -73,23 +70,19 @@ ImportWizard::ImportWizard(QWidget *parent)
   connect(helpButton, SIGNAL(clicked(bool)), this, SLOT(helpButtonClicked()));
 
   _ui->parametersFrame->hide();
-  QString importLabel(
-      "<html><head/><body><p align=\"justify\">Import a graph hierarchy into your "
-      "project. First, select an import method, then adjust its parameters if "
-      "needed.<br/>Click <b>Ok</b> to import your graph, then visualize it using "
-      "the ");
+  QString importLabel("<html><head/><body><p align=\"justify\">Import a graph hierarchy into your "
+                      "project. First, select an import method, then adjust its parameters if "
+                      "needed.<br/>Click <b>Ok</b> to import your graph, then visualize it using "
+                      "the ");
 
   if (TulipSettings::displayDefaultViews())
-    importLabel +=
-        "<b>Node Link Diagram</b> and <b>Spreadsheet</b> (automatically opened) views.";
+    importLabel += "<b>Node Link Diagram</b> and <b>Spreadsheet</b> (automatically opened) views.";
   else
-    importLabel +=
-        "<img src=\":/tulip/gui/icons/16/list-add.png\"/>&nbsp;<b>Add "
-        "panel</b> button to open specific views on it.";
+    importLabel += "<img src=\":/tulip/gui/icons/16/list-add.png\"/>&nbsp;<b>Add "
+                   "panel</b> button to open specific views on it.";
 
-  importLabel +=
-      "<br/><br/>See <b>Edit</b> menu, then <b>Preferences</b> for more options when "
-      "importing a graph.</p></body></html>";
+  importLabel += "<br/><br/>See <b>Edit</b> menu, then <b>Preferences</b> for more options when "
+                 "importing a graph.</p></body></html>";
   _ui->label->setText(importLabel);
 
   updateFinishButton();
@@ -118,8 +111,7 @@ void ImportWizard::algorithmSelected(const QModelIndex &index) {
     std::string group = PluginLister::pluginInformation(algs).group();
 
     if (!group.empty())
-      categoryText +=
-          "&nbsp;<font size=-2>[" + tlpStringToQString(group) + "]</font>";
+      categoryText += "&nbsp;<font size=-2>[" + tlpStringToQString(group) + "]</font>";
 
     setButtonText(QWizard::HelpButton, QString("%1 documentation").arg(alg));
     button(QWizard::HelpButton)->setVisible(true);
@@ -140,17 +132,13 @@ void ImportWizard::algorithmSelected(const QModelIndex &index) {
 
 QString ImportWizard::algorithm() const {
   if (_ui->importModules->selectionModel()->hasSelection())
-    return _ui->importModules->selectionModel()
-        ->selectedIndexes()[0]
-        .data()
-        .toString();
+    return _ui->importModules->selectionModel()->selectedIndexes()[0].data().toString();
 
   return "";
 }
 
 tlp::DataSet ImportWizard::parameters() const {
-  ParameterListModel *model =
-      dynamic_cast<ParameterListModel *>(_ui->parameters->model());
+  ParameterListModel *model = dynamic_cast<ParameterListModel *>(_ui->parameters->model());
 
   if (model == nullptr)
     return DataSet();
@@ -160,12 +148,10 @@ tlp::DataSet ImportWizard::parameters() const {
 
 void ImportWizard::helpButtonClicked() {
   // display current import plugin documentation
-  QMessageBox::information(this,
-                           _index->data().toString().append(" documentation"),
+  QMessageBox::information(this, _index->data().toString().append(" documentation"),
                            _index->data(Qt::ToolTipRole).toString());
 }
 
 void ImportWizard::updateFinishButton() {
-  button(QWizard::FinishButton)
-      ->setEnabled(_ui->parameters->model() != nullptr);
+  button(QWizard::FinishButton)->setEnabled(_ui->parameters->model() != nullptr);
 }

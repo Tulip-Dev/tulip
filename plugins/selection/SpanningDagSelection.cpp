@@ -30,8 +30,7 @@ using namespace tlp;
 //=================================================================
 SpanningDagSelection::SpanningDagSelection(const tlp::PluginContext *context)
     : BooleanAlgorithm(context) {
-  addOutParameter<unsigned int>("#edges selected",
-                                "The number of 'dag' selected edges");
+  addOutParameter<unsigned int>("#edges selected", "The number of 'dag' selected edges");
 }
 //=================================================================
 bool SpanningDagSelection::run() {
@@ -52,8 +51,7 @@ bool SpanningDagSelection::run() {
 
   // output some useful information
   if (dataSet != nullptr) {
-    dataSet->set("#edges selected",
-                 uint(graph->numberOfEdges() - obstructions.size()));
+    dataSet->set("#edges selected", uint(graph->numberOfEdges() - obstructions.size()));
   }
 
   return true;

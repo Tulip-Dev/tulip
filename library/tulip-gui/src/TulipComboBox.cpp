@@ -42,18 +42,15 @@ void TulipComboBox::showPopup() {
   QFont f = cb.font();
 
   // set a combo like stylesheet
-  menu.setStyleSheet(
-      QString(
-          "QMenu { font: %1pt; }"
-          "QMenu::item {border-image: none; border-width: 4; padding: 0px 6px;"
-          "color: %2; background-color: %3;} "
-          "QMenu::item:selected {color: %4; background-color: %5}")
-          .arg(f.pointSize() - 1)
-          .arg(palette.color(QPalette::Active, QPalette::Text).name())
-          .arg(palette.color(QPalette::Active, QPalette::Base).name())
-          .arg(
-              palette.color(QPalette::Active, QPalette::HighlightedText).name())
-          .arg(palette.color(QPalette::Active, QPalette::Highlight).name()));
+  menu.setStyleSheet(QString("QMenu { font: %1pt; }"
+                             "QMenu::item {border-image: none; border-width: 4; padding: 0px 6px;"
+                             "color: %2; background-color: %3;} "
+                             "QMenu::item:selected {color: %4; background-color: %5}")
+                         .arg(f.pointSize() - 1)
+                         .arg(palette.color(QPalette::Active, QPalette::Text).name())
+                         .arg(palette.color(QPalette::Active, QPalette::Base).name())
+                         .arg(palette.color(QPalette::Active, QPalette::HighlightedText).name())
+                         .arg(palette.color(QPalette::Active, QPalette::Highlight).name()));
   // compute a combo like position
   // to popup the menu
   QWidget *pViewport = QApplication::widgetAt(QCursor::pos());
@@ -61,11 +58,9 @@ void TulipComboBox::showPopup() {
   QGraphicsView *pGraphicsView = static_cast<QGraphicsView *>(pView);
   QGraphicsItem *pGraphicsItem =
       pGraphicsView->items(pViewport->mapFromGlobal(QCursor::pos())).first();
-  QPoint popupPos = pGraphicsView->mapToGlobal(
-      pGraphicsView->mapFromScene(pGraphicsItem->mapToScene(
-          static_cast<QGraphicsProxyWidget *>(pGraphicsItem)
-              ->subWidgetRect(this)
-              .bottomLeft())));
+  QPoint popupPos =
+      pGraphicsView->mapToGlobal(pGraphicsView->mapFromScene(pGraphicsItem->mapToScene(
+          static_cast<QGraphicsProxyWidget *>(pGraphicsItem)->subWidgetRect(this).bottomLeft())));
 
   action = menu.exec(popupPos);
 

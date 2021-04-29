@@ -29,9 +29,8 @@ static const char *paramHelp[] = {
 MakeSelectionGraph::MakeSelectionGraph(const tlp::PluginContext *context)
     : BooleanAlgorithm(context) {
   addInParameter<BooleanProperty>("selection", paramHelp[0], "viewSelection");
-  addOutParameter<unsigned int>(
-      "#elements selected",
-      "The number of graph elements (nodes + edges) selected");
+  addOutParameter<unsigned int>("#elements selected",
+                                "The number of graph elements (nodes + edges) selected");
 }
 bool MakeSelectionGraph::run() {
   BooleanProperty *sel = graph->getProperty<BooleanProperty>("viewSelection");
@@ -49,8 +48,7 @@ bool MakeSelectionGraph::run() {
   return true;
 }
 
-isGraphTest::isGraphTest(const tlp::PluginContext *context)
-    : tlp::GraphTest(context) {
+isGraphTest::isGraphTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {
   addInParameter<BooleanProperty>("selection", paramHelp[0], "viewSelection");
 }
 

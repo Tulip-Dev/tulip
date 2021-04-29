@@ -37,17 +37,15 @@ class OGDFPlanarizationGrid : public OGDFLayoutPluginBase {
   ogdf::PlanarizationGridLayout *pgl;
 
 public:
-  PLUGININFORMATION(
-      "Planarization Grid (OGDF)", "Carsten Gutwenger", "12/11/2007",
-      "The planarization grid layout algorithm applies the planarization approach "
-      "for crossing minimization, combined with the topology-shape-metrics approach "
-      "for orthogonal planar graph drawing. It produces drawings with few crossings "
-      "and is suited for small to medium sized sparse graphs. It uses a planar grid "
-      "layout algorithm to produce a drawing on a grid.",
-      "1.0", "Planar")
+  PLUGININFORMATION("Planarization Grid (OGDF)", "Carsten Gutwenger", "12/11/2007",
+                    "The planarization grid layout algorithm applies the planarization approach "
+                    "for crossing minimization, combined with the topology-shape-metrics approach "
+                    "for orthogonal planar graph drawing. It produces drawings with few crossings "
+                    "and is suited for small to medium sized sparse graphs. It uses a planar grid "
+                    "layout algorithm to produce a drawing on a grid.",
+                    "1.0", "Planar")
   OGDFPlanarizationGrid(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(
-            context, context ? new ogdf::PlanarizationGridLayout() : nullptr),
+      : OGDFLayoutPluginBase(context, context ? new ogdf::PlanarizationGridLayout() : nullptr),
         pgl(static_cast<ogdf::PlanarizationGridLayout *>(ogdfLayoutAlgo)) {
     addInParameter<double>("page ratio", paramHelp[0], "1.1");
     addOutParameter<int>("number of crossings", paramHelp[1]);

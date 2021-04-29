@@ -45,16 +45,17 @@ class BooleanProperty;
 /** \file
  *  \brief PathFinder helps you finding paths between nodes in your graph.
  *
- * This plug-in offers several possibilities to highlight different kinds of
- * paths between two nodes in a graph. You can thus display one or several
- * shortest paths between two selected nodes, or you can even extend to
- * non-shortest paths with length limitations.
+ * This plug-in offers several possibilities to highlight different kinds of paths between two nodes
+ * in a graph.
+ * You can thus display one or several shortest paths between two selected nodes, or you can even
+ * extend to non-shortest paths
+ * with length limitations.
  */
 class PathFinder : public tlp::GLInteractorComposite {
   Q_OBJECT
 public:
-  PLUGININFORMATION("PathFinder", "Tulip Team", "03/24/2010",
-                    "Path finding interactor", "1.0", "Information")
+  PLUGININFORMATION("PathFinder", "Tulip Team", "03/24/2010", "Path finding interactor", "1.0",
+                    "Information")
 
   PathFinder(const tlp::PluginContext *);
   ~PathFinder() override;
@@ -65,15 +66,18 @@ public:
   QWidget *configurationWidget() const override;
 
   /**
-   * @return The name of the property used to get the weight values over the
-   * edges.
+   * @return The name of the property used to get the weight values over the edges.
    */
-  inline std::string getWeightMetricName() const { return weightMetric; }
+  inline std::string getWeightMetricName() const {
+    return weightMetric;
+  }
 
   /**
    * @return true if the user chose not to select only one path
    */
-  inline bool isSelectAllPaths() const { return selectAllPaths; }
+  inline bool isSelectAllPaths() const {
+    return selectAllPaths;
+  }
 
   /**
    * @return The edge orientation used when computing the path.
@@ -87,11 +91,12 @@ public:
    * @return the type of path the user wants to select.
    * @see PathAlgorithm::PathType
    */
-  inline PathAlgorithm::PathType getPathsType() const { return pathsTypes; }
+  inline PathAlgorithm::PathType getPathsType() const {
+    return pathsTypes;
+  }
 
   /**
-   * @return The length tolerance factor when the user doesn't want only the
-   * shortest path.
+   * @return The length tolerance factor when the user doesn't want only the shortest path.
    */
   double getTolerance();
 

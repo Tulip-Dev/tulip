@@ -21,13 +21,18 @@
 template <typename TYPE>
 tlp::BmdList<TYPE>::BmdList() : head(nullptr), tail(nullptr), count(0) {}
 //=================================================================
-template <typename TYPE> tlp::BmdList<TYPE>::~BmdList() { clear(); }
+template <typename TYPE>
+tlp::BmdList<TYPE>::~BmdList() {
+  clear();
+}
 //=================================================================
-template <typename TYPE> tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::firstItem() {
+template <typename TYPE>
+tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::firstItem() {
   return head;
 }
 //=================================================================
-template <typename TYPE> tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::lastItem() {
+template <typename TYPE>
+tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::lastItem() {
   return tail;
 }
 //=================================================================
@@ -36,11 +41,13 @@ TYPE tlp::BmdList<TYPE>::entry(tlp::BmdLink<TYPE> *it) {
   return it->data;
 }
 //=================================================================
-template <typename TYPE> int BmdList<TYPE>::size() { return count; }
+template <typename TYPE>
+int BmdList<TYPE>::size() {
+  return count;
+}
 //=================================================================
 template <typename TYPE>
-tlp::BmdLink<TYPE> *BmdList<TYPE>::nextItem(tlp::BmdLink<TYPE> *p,
-                                            tlp::BmdLink<TYPE> *predP) {
+tlp::BmdLink<TYPE> *BmdList<TYPE>::nextItem(tlp::BmdLink<TYPE> *p, tlp::BmdLink<TYPE> *predP) {
   if (p != nullptr) {
     if (p == tail)
       return nullptr;
@@ -57,8 +64,7 @@ tlp::BmdLink<TYPE> *BmdList<TYPE>::nextItem(tlp::BmdLink<TYPE> *p,
 }
 //=================================================================
 template <typename TYPE>
-tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::predItem(tlp::BmdLink<TYPE> *p,
-                                                 tlp::BmdLink<TYPE> *succP) {
+tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::predItem(tlp::BmdLink<TYPE> *p, tlp::BmdLink<TYPE> *succP) {
   if (p != nullptr) {
     if (p == head)
       return nullptr;
@@ -165,7 +171,8 @@ TYPE tlp::BmdList<TYPE>::delItem(tlp::BmdLink<TYPE> *it) {
   return x;
 }
 //=================================================================
-template <typename TYPE> TYPE tlp::BmdList<TYPE>::pop() {
+template <typename TYPE>
+TYPE tlp::BmdList<TYPE>::pop() {
   assert(head != nullptr);
   tlp::BmdLink<TYPE> *x = head;
   head = nextItem(head, nullptr);
@@ -184,7 +191,8 @@ template <typename TYPE> TYPE tlp::BmdList<TYPE>::pop() {
   return p;
 }
 //=================================================================
-template <typename TYPE> TYPE tlp::BmdList<TYPE>::popBack() {
+template <typename TYPE>
+TYPE tlp::BmdList<TYPE>::popBack() {
   assert(head != nullptr);
   tlp::BmdLink<TYPE> *x = tail;
   tail = predItem(tail, nullptr);
@@ -203,13 +211,15 @@ template <typename TYPE> TYPE tlp::BmdList<TYPE>::popBack() {
   return p;
 }
 //=================================================================
-template <typename TYPE> void tlp::BmdList<TYPE>::reverse() {
+template <typename TYPE>
+void tlp::BmdList<TYPE>::reverse() {
   tlp::BmdLink<TYPE> *x = head;
   head = tail;
   tail = x;
 }
 //=================================================================
-template <typename TYPE> void tlp::BmdList<TYPE>::conc(tlp::BmdList<TYPE> &l) {
+template <typename TYPE>
+void tlp::BmdList<TYPE>::conc(tlp::BmdList<TYPE> &l) {
   if (head == nullptr) {
     head = l.head;
     tail = l.tail;
@@ -234,7 +244,8 @@ template <typename TYPE> void tlp::BmdList<TYPE>::conc(tlp::BmdList<TYPE> &l) {
   l.count = 0;
 }
 //=================================================================
-template <typename TYPE> void tlp::BmdList<TYPE>::clear() {
+template <typename TYPE>
+void tlp::BmdList<TYPE>::clear() {
   if (head == nullptr)
     return;
 
@@ -256,7 +267,8 @@ template <typename TYPE> void tlp::BmdList<TYPE>::clear() {
   head = tail = nullptr;
 }
 //=================================================================
-template <typename TYPE> void tlp::BmdList<TYPE>::swap(tlp::BmdList<TYPE> &l) {
+template <typename TYPE>
+void tlp::BmdList<TYPE>::swap(tlp::BmdList<TYPE> &l) {
   tlp::BmdLink<TYPE> *tmp;
   int tmp1;
   tmp = l.head;

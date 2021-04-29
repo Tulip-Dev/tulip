@@ -20,9 +20,9 @@
 #include "MatrixViewConfigurationWidget.h"
 #include "ui_MatrixViewConfigurationWidget.h"
 
-#include <tulip/ColorButton.h>
 #include <tulip/Graph.h>
 #include <tulip/Perspective.h>
+#include <tulip/ColorButton.h>
 #include <tulip/TlpQtTools.h>
 
 #include <QMainWindow>
@@ -30,8 +30,7 @@
 using namespace std;
 namespace tlp {
 MatrixViewConfigurationWidget::MatrixViewConfigurationWidget(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::MatrixViewConfigurationWidget()),
-      _modifyingMetricList(false) {
+    : QWidget(parent), _ui(new Ui::MatrixViewConfigurationWidget()), _modifyingMetricList(false) {
   _ui->setupUi(this);
   connect(_ui->orderingMetricCombo, SIGNAL(currentIndexChanged(int)), this,
           SLOT(orderingMetricComboIndexChanged(int)));
@@ -39,19 +38,17 @@ MatrixViewConfigurationWidget::MatrixViewConfigurationWidget(QWidget *parent)
           SIGNAL(changeBackgroundColor(QColor)));
   connect(_ui->gridDisplayCombo, SIGNAL(currentIndexChanged(int)), this,
           SIGNAL(setGridDisplayMode()));
-  connect(_ui->showedgesbox, SIGNAL(clicked(bool)), this,
-          SIGNAL(showEdges(bool)));
-  connect(_ui->node_labels, SIGNAL(clicked(bool)), this,
-          SIGNAL(nodeLabels(bool)));
+  connect(_ui->showedgesbox, SIGNAL(clicked(bool)), this, SIGNAL(showEdges(bool)));
+  connect(_ui->node_labels, SIGNAL(clicked(bool)), this, SIGNAL(nodeLabels(bool)));
   connect(_ui->enableColorInterpolationCBox, SIGNAL(clicked(bool)), this,
           SIGNAL(enableEdgeColorInterpolation(bool)));
-  connect(_ui->orientedCBox, SIGNAL(clicked(bool)), this,
-          SIGNAL(updateOriented(bool)));
-  connect(_ui->ascendingOrderCBox, SIGNAL(toggled(bool)), this,
-          SLOT(orderingDirectionChanged()));
+  connect(_ui->orientedCBox, SIGNAL(clicked(bool)), this, SIGNAL(updateOriented(bool)));
+  connect(_ui->ascendingOrderCBox, SIGNAL(toggled(bool)), this, SLOT(orderingDirectionChanged()));
 }
 
-MatrixViewConfigurationWidget::~MatrixViewConfigurationWidget() { delete _ui; }
+MatrixViewConfigurationWidget::~MatrixViewConfigurationWidget() {
+  delete _ui;
+}
 
 void MatrixViewConfigurationWidget::setBackgroundColor(const QColor &c) {
   _ui->backgroundColorBtn->setColor(c);
@@ -78,8 +75,7 @@ bool MatrixViewConfigurationWidget::displayNodeLabels() const {
   return _ui->node_labels->isChecked();
 }
 
-void MatrixViewConfigurationWidget::setEdgeColorInterpolation(
-    const bool state) {
+void MatrixViewConfigurationWidget::setEdgeColorInterpolation(const bool state) {
   _ui->enableColorInterpolationCBox->setChecked(state);
   emit enableEdgeColorInterpolation(state);
 }
@@ -114,8 +110,7 @@ void MatrixViewConfigurationWidget::setGraph(tlp::Graph *g) {
   for (const string &s : g->getProperties()) {
     string type = g->getProperty(s)->getTypename();
 
-    if (type != DoubleProperty::propertyTypename &&
-        type != IntegerProperty::propertyTypename &&
+    if (type != DoubleProperty::propertyTypename && type != IntegerProperty::propertyTypename &&
         type != StringProperty::propertyTypename)
       continue;
 

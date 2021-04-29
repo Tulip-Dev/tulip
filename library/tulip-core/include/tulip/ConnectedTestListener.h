@@ -30,13 +30,11 @@ namespace tlp {
 
 class ConnectedTestListener : public Observable {
 public:
-  // override of Observable::treatEvent to remove the cached result for a graph
-  // if it is modified.
+  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
   void treatEvent(const Event &) override;
 
   /**
-   * @brief Stored results for graphs. When a graph is updated, its entry is
-   *removed from the map.
+   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the map.
    **/
   std::unordered_map<const Graph *, bool> resultsBuffer;
 };

@@ -18,13 +18,13 @@
  */
 
 #include <tulip/MouseInteractors.h>
-#include <tulip/MouseSelectionEditor.h>
-#include <tulip/MouseSelector.h>
-#include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
+#include <tulip/MouseSelector.h>
+#include <tulip/MouseSelectionEditor.h>
+#include <tulip/NodeLinkDiagramComponent.h>
 
-#include "../utils/PluginNames.h"
 #include "../utils/StandardInteractorPriority.h"
+#include "../utils/PluginNames.h"
 
 using namespace tlp;
 
@@ -40,17 +40,17 @@ public:
    * Default constructor
    */
   InteractorSelectionModifier(const tlp::PluginContext *)
-      : NodeLinkDiagramComponentInteractor(
-            ":/tulip/gui/icons/i_move.png", "Move/Reshape rectangle selection",
-            StandardInteractorPriority::RectangleSelectionModifier) {}
+      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_move.png",
+                                           "Move/Reshape rectangle selection",
+                                           StandardInteractorPriority::RectangleSelectionModifier) {
+  }
 
   /**
    * Construct chain of responsibility
    */
   void construct() override {
     setConfigurationWidgetText(
-        QString("<h3>Move/Reshape rectangle selection</h3>") +
-        "<u>Modify selection</u><br/><br/>" +
+        QString("<h3>Move/Reshape rectangle selection</h3>") + "<u>Modify selection</u><br/><br/>" +
         "Resize: <ul><li><b>Mouse left</b> down on triangle + moves</li></ul>" +
         "<ul><li><b>Mouse left</b> down on square + moves</li></ul>" +
         "Only change node size: <ul><li><b>Ctrl + Mouse left</b> down on triangle + "
@@ -82,7 +82,9 @@ public:
     push_back(new MouseSelectionEditor);
   }
 
-  QCursor cursor() const override { return QCursor(Qt::CrossCursor); }
+  QCursor cursor() const override {
+    return QCursor(Qt::CrossCursor);
+  }
 
   bool isCompatible(const std::string &viewName) const override {
     return (viewName == NodeLinkDiagramComponent::viewName);

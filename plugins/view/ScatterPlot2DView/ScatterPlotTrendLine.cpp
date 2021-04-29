@@ -17,26 +17,26 @@
  *
  */
 
-#include <tulip/DoubleProperty.h>
-#include <tulip/GlLabel.h>
-#include <tulip/GlLine.h>
-#include <tulip/GlMainWidget.h>
-#include <tulip/GlQuantitativeAxis.h>
 #include <tulip/IntegerProperty.h>
+#include <tulip/GlLine.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/GlQuantitativeAxis.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/GlLabel.h>
 
 #include <QEvent>
 
-#include "ScatterPlot2D.h"
-#include "ScatterPlot2DView.h"
 #include "ScatterPlotTrendLine.h"
+#include "ScatterPlot2DView.h"
+#include "ScatterPlot2D.h"
 
 using namespace std;
 
 namespace tlp {
 
 // Computes the Linear regression function of a graph on two metrics (y = ax +b)
-void computeLinearRegressionFunction(Graph *graph, DoubleProperty *xk,
-                                     DoubleProperty *yk, float &a, float &b) {
+void computeLinearRegressionFunction(Graph *graph, DoubleProperty *xk, DoubleProperty *yk, float &a,
+                                     float &b) {
   float sxk, syk, sxkxk, sxkyk;
   sxk = 0.0f;
   syk = 0.0f;
@@ -60,8 +60,7 @@ void computeLinearRegressionFunction(Graph *graph, DoubleProperty *xk,
   b = (syk / n) - a * (sxk / n);
 }
 
-ScatterPlotTrendLine::ScatterPlotTrendLine()
-    : scatterView(nullptr), a(0.0f), b(0.0f) {}
+ScatterPlotTrendLine::ScatterPlotTrendLine() : scatterView(nullptr), a(0.0f), b(0.0f) {}
 
 ScatterPlotTrendLine::~ScatterPlotTrendLine() {}
 
@@ -95,13 +94,11 @@ bool ScatterPlotTrendLine::draw(GlMainWidget *glMainWidget) {
 
   GlLine trendLine;
   trendLine.addPoint(Coord(xAxis->getAxisBaseCoord().getX(),
-                           yAxis->getAxisPointCoordForValue(yStart).getY(),
-                           0.0f),
+                           yAxis->getAxisPointCoordForValue(yStart).getY(), 0.0f),
                      Color(0, 255, 0));
-  trendLine.addPoint(
-      Coord(xAxis->getAxisBaseCoord().getX() + xAxis->getAxisLength(),
-            yAxis->getAxisPointCoordForValue(yEnd).getY(), 0.0f),
-      Color(0, 255, 0));
+  trendLine.addPoint(Coord(xAxis->getAxisBaseCoord().getX() + xAxis->getAxisLength(),
+                           yAxis->getAxisPointCoordForValue(yEnd).getY(), 0.0f),
+                     Color(0, 255, 0));
   trendLine.setLineWidth(3);
 
   glDisable(GL_STENCIL_TEST);
@@ -111,17 +108,15 @@ bool ScatterPlotTrendLine::draw(GlMainWidget *glMainWidget) {
   trendLine.draw(0, nullptr);
   glDisable(GL_BLEND);
 
-  GlLabel lineEquationLabel(
-      Coord(xAxis->getAxisBaseCoord().getX() + xAxis->getAxisLength() +
-                xAxis->getAxisLength() / 8.0f,
-            yAxis->getAxisPointCoordForValue(yEnd).getY(), 0.0f),
-      Size(xAxis->getAxisLength() / 4.0f, yAxis->getAxisLength() / 10.0f),
-      Color(0, 255, 0));
+  GlLabel lineEquationLabel(Coord(xAxis->getAxisBaseCoord().getX() + xAxis->getAxisLength() +
+                                      xAxis->getAxisLength() / 8.0f,
+                                  yAxis->getAxisPointCoordForValue(yEnd).getY(), 0.0f),
+                            Size(xAxis->getAxisLength() / 4.0f, yAxis->getAxisLength() / 10.0f),
+                            Color(0, 255, 0));
   ostringstream oss;
   oss << "y = " << a << " * x + " << b;
   lineEquationLabel.setText(oss.str());
-  lineEquationLabel.draw(
-      0, &glMainWidget->getScene()->getLayer("Main")->getCamera());
+  lineEquationLabel.draw(0, &glMainWidget->getScene()->getLayer("Main")->getCamera());
 
   return true;
 }

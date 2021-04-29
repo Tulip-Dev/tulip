@@ -19,15 +19,14 @@
 
 #include <QFileInfo>
 
-#include "tulip/PythonCodeEditor.h"
 #include "tulip/PythonEditorsTabWidget.h"
+#include "tulip/PythonCodeEditor.h"
 
 using namespace tlp;
 
 PythonEditorsTabWidget::PythonEditorsTabWidget(QWidget *parent)
     : QTabWidget(parent), _fontZoom(0), _dontTreatFocusIn(false) {
-  connect(this, SIGNAL(tabCloseRequested(int)), this,
-          SLOT(closeTabRequested(int)));
+  connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTabRequested(int)));
 }
 
 int PythonEditorsTabWidget::addEditor(const QString &fileName) {
@@ -44,8 +43,7 @@ int PythonEditorsTabWidget::addEditor(const QString &fileName) {
   codeEditor->installEventFilter(this);
   connect(codeEditor, SIGNAL(textChanged()), this, SLOT(scriptTextChanged()));
   int idx = addTab(codeEditor, fileInfo.fileName());
-  setTabToolTip(idx, fileInfo.exists() ? fileInfo.absoluteFilePath()
-                                       : fileInfo.fileName());
+  setTabToolTip(idx, fileInfo.exists() ? fileInfo.absoluteFilePath() : fileInfo.fileName());
   setCurrentIndex(idx);
 
   if (_fontZoom < 0) {
@@ -94,8 +92,7 @@ void PythonEditorsTabWidget::scriptTextChanged() {
   }
 }
 
-void PythonEditorsTabWidget::indicateErrors(
-    const QMap<QString, QVector<int>> &errorLines) {
+void PythonEditorsTabWidget::indicateErrors(const QMap<QString, QVector<int>> &errorLines) {
   for (int i = 0; i < count(); ++i) {
     QString moduleFile = getEditor(i)->getFileName();
 
@@ -137,9 +134,8 @@ bool PythonEditorsTabWidget::eventFilter(QObject *obj, QEvent *event) {
           saveCurrentEditorContentToFile();
           return true;
         } else {
-          // when there is no file associated to the Python module, its content
-          // will then be saved in the project file (.tlpx) currently loaded in
-          // Tulip
+          // when there is no file associated to the Python module, its content will then be saved
+          // in the project file (.tlpx) currently loaded in Tulip
           if (moduleFile[moduleFile.size() - 1] == '*')
             moduleFile = moduleFile.mid(0, moduleFile.size() - 1);
 
@@ -176,8 +172,7 @@ bool PythonEditorsTabWidget::reloadCodeInEditorIfNeeded(int index) {
   if (!fileName.isEmpty()) {
     QFileInfo fileInfo(fileName);
 
-    if (fileInfo.exists() &&
-        fileInfo.lastModified() != codeEditor->getLastSavedTime()) {
+    if (fileInfo.exists() && fileInfo.lastModified() != codeEditor->getLastSavedTime()) {
       if (codeEditor->loadCodeFromFile(fileName)) {
         QString filename = tabText(index);
         if (filename.endsWith("*")) {
@@ -251,4 +246,6 @@ void PythonEditorsTabWidget::increaseFontSize() {
   ++_fontZoom;
 }
 
-QTabBar *PythonEditorsTabWidget::tabBar() const { return QTabWidget::tabBar(); }
+QTabBar *PythonEditorsTabWidget::tabBar() const {
+  return QTabWidget::tabBar();
+}

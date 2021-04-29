@@ -4,12 +4,12 @@
 
 #include <cfloat>
 
-#include <tulip/PropertyTypes.h>
 #include <tulip/ScientificDoubleSpinBox.h>
+#include <tulip/PropertyTypes.h>
 #include <tulip/TlpQtTools.h>
 
-#include <QLineEdit>
 #include <QRegExp>
+#include <QLineEdit>
 
 using namespace tlp;
 
@@ -48,15 +48,13 @@ void FloatValidator::fixup(QString &text) const {
   }
 }
 
-ScientificDoubleSpinBox::ScientificDoubleSpinBox(QWidget *parent)
-    : QDoubleSpinBox(parent) {
+ScientificDoubleSpinBox::ScientificDoubleSpinBox(QWidget *parent) : QDoubleSpinBox(parent) {
   setMinimum(-DBL_MAX);
   setMaximum(DBL_MAX);
   setDecimals(1000);
 }
 
-QValidator::State ScientificDoubleSpinBox::validate(QString &input,
-                                                    int &pos) const {
+QValidator::State ScientificDoubleSpinBox::validate(QString &input, int &pos) const {
   return floatValidator.validate(input, pos);
 }
 

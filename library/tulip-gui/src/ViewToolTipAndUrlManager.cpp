@@ -16,27 +16,26 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <tulip/ViewToolTipAndUrlManager.h>
 #include <QActionGroup>
-#include <QDesktopServices>
 #include <QGraphicsView>
 #include <QHelpEvent>
-#include <QKeyEvent>
-#include <QString>
 #include <QToolTip>
+#include <QString>
+#include <QKeyEvent>
 #include <QUrl>
-#include <tulip/ViewToolTipAndUrlManager.h>
+#include <QDesktopServices>
 
+#include <tulip/TlpTools.h>
+#include <tulip/TlpQtTools.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphModel.h>
 #include <tulip/StringProperty.h>
-#include <tulip/TlpQtTools.h>
-#include <tulip/TlpTools.h>
 
 using namespace tlp;
 using namespace std;
 
-ViewToolTipAndUrlManager::ViewToolTipAndUrlManager(tlp::View *view,
-                                                   QWidget *widget)
+ViewToolTipAndUrlManager::ViewToolTipAndUrlManager(tlp::View *view, QWidget *widget)
     : _view(view), _widget(widget), _tooltips(false) {}
 
 void ViewToolTipAndUrlManager::setState(const tlp::DataSet &data) {
@@ -56,16 +55,14 @@ void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu, node n) {
   Graph *graph = _view->graph();
 
   _contextMenuUrl =
-      dynamic_cast<StringProperty *>(graph->getProperty(_urlPropName))
-          ->getNodeValue(n);
+      dynamic_cast<StringProperty *>(graph->getProperty(_urlPropName))->getNodeValue(n);
 
   if (_contextMenuUrl.empty())
     return;
 
   menu->addSeparator();
-  QAction *action = menu->addAction(
-      QString("Open ").append(tlpStringToQString(_contextMenuUrl)), this,
-      SLOT(openUrl()));
+  QAction *action = menu->addAction(QString("Open ").append(tlpStringToQString(_contextMenuUrl)),
+                                    this, SLOT(openUrl()));
   action->setToolTip(action->text().append(" in the default browser"));
 }
 
@@ -76,16 +73,14 @@ void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu, edge e) {
   Graph *graph = _view->graph();
 
   _contextMenuUrl =
-      dynamic_cast<StringProperty *>(graph->getProperty(_urlPropName))
-          ->getEdgeValue(e);
+      dynamic_cast<StringProperty *>(graph->getProperty(_urlPropName))->getEdgeValue(e);
   if (_contextMenuUrl.empty())
     return;
 
   menu->addSeparator();
 
-  QAction *action = menu->addAction(
-      QString("Open ").append(tlpStringToQString(_contextMenuUrl)), this,
-      SLOT(openUrl()));
+  QAction *action = menu->addAction(QString("Open ").append(tlpStringToQString(_contextMenuUrl)),
+                                    this, SLOT(openUrl()));
   action->setToolTip(action->text().append(" in the default browser"));
 }
 
@@ -98,9 +93,8 @@ void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu) {
   Graph *graph = _view->graph();
 
   QAction *action = menu->addAction("Tooltips");
-  action->setToolTip(
-      QString("When moving the mouse pointer, a tooltip is displayed with some "
-              "information about the graph element located under the pointer"));
+  action->setToolTip(QString("When moving the mouse pointer, a tooltip is displayed with some "
+                             "information about the graph element located under the pointer"));
   action->setCheckable(true);
   action->setChecked(_tooltips);
   connect(action, SIGNAL(triggered(bool)), this, SLOT(displayToolTips(bool)));
@@ -108,21 +102,18 @@ void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu) {
   // add submenu to manage the url property choice
   QMenu *urlPropMenu;
   if (graph->existProperty(_urlPropName))
-    urlPropMenu = menu->addMenu(QString("Url property")
-                                    .append(" (")
-                                    .append(tlpStringToQString(_urlPropName))
-                                    .append(")"));
+    urlPropMenu = menu->addMenu(
+        QString("Url property").append(" (").append(tlpStringToQString(_urlPropName)).append(")"));
   else {
     urlPropMenu = menu->addMenu("Url property");
     _urlPropName.clear();
   }
-  urlPropMenu->setToolTip(QString(
-      "Choose the property giving the web page associated with a graph element"));
+  urlPropMenu->setToolTip(
+      QString("Choose the property giving the web page associated with a graph element"));
 
   QActionGroup *urlPropGroup = new QActionGroup(urlPropMenu);
   urlPropGroup->setExclusive(true);
-  connect(urlPropMenu, SIGNAL(triggered(QAction *)), this,
-          SLOT(setUrlProp(QAction *)));
+  connect(urlPropMenu, SIGNAL(triggered(QAction *)), this, SLOT(setUrlProp(QAction *)));
   action = urlPropMenu->addAction(" None ");
   action->setCheckable(true);
   urlPropGroup->addAction(action);
@@ -150,8 +141,7 @@ void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu) {
     if (propName.find("view") != 0 || propName == "viewLabel") {
       action = urlPropMenu->addAction(tlpStringToQString(propName));
       action->setToolTip(
-          QString(
-              "The url of the web page associated with a graph element is given by the \"")
+          QString("The url of the web page associated with a graph element is given by the \"")
               .append(tlpStringToQString(propName))
               .append(QString("\" property value")));
       urlPropGroup->addAction(action);
@@ -186,13 +176,11 @@ bool ViewToolTipAndUrlManager::eventFilter(QObject *, QEvent *event) {
     _url.clear();
 
   // get the property holding the urls associated to graph elements
-  StringProperty *urlProp =
-      _urlPropName.empty()
-          ? nullptr
-          : dynamic_cast<StringProperty *>(graph->getProperty(_urlPropName));
+  StringProperty *urlProp = _urlPropName.empty()
+                                ? nullptr
+                                : dynamic_cast<StringProperty *>(graph->getProperty(_urlPropName));
 
-  if (event->type() == QEvent::ToolTip &&
-      (_tooltips == true || urlProp != nullptr)) {
+  if (event->type() == QEvent::ToolTip && (_tooltips == true || urlProp != nullptr)) {
     QHelpEvent *he = static_cast<QHelpEvent *>(event);
 
     node tmpNode;

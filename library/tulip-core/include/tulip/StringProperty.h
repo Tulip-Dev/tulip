@@ -20,15 +20,14 @@
 #ifndef TULIP_STRING_H
 #define TULIP_STRING_H
 
-#include <tulip/AbstractProperty.h>
 #include <tulip/PropertyTypes.h>
+#include <tulip/AbstractProperty.h>
 
 namespace tlp {
 
 class PropertyContext;
 
-typedef AbstractProperty<tlp::StringType, tlp::StringType>
-    AbstractStringProperty;
+typedef AbstractProperty<tlp::StringType, tlp::StringType> AbstractStringProperty;
 
 /**
  * @ingroup Graph
@@ -39,22 +38,26 @@ public:
   StringProperty(Graph *g, const std::string &n = "");
 
   // redefinition of some PropertyInterface methods
-  PropertyInterface *clonePrototype(Graph *,
-                                    const std::string &) const override;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const override { return propertyTypename; }
+  const std::string &getTypename() const override {
+    return propertyTypename;
+  }
   DEFINE_GET_CPP_CLASS_NAME;
   // the value size of a StringVectorProperty is not fixed
-  unsigned int nodeValueSize() const override { return 0; }
-  unsigned int edgeValueSize() const override { return 0; }
+  unsigned int nodeValueSize() const override {
+    return 0;
+  }
+  unsigned int edgeValueSize() const override {
+    return 0;
+  }
   int compare(const node n1, const node n2) const override;
   int compare(const edge e1, const edge e2) const override;
 };
 
 /**
  * @ingroup Graph
- * @brief A graph property that maps a std::vector<std::string> value to graph
- * elements.
+ * @brief A graph property that maps a std::vector<std::string> value to graph elements.
  */
 class TLP_SCOPE StringVectorProperty
     : public AbstractVectorProperty<tlp::StringVectorType, tlp::StringType> {
@@ -63,14 +66,19 @@ public:
       : AbstractVectorProperty<StringVectorType, tlp::StringType>(g, n) {}
 
   // redefinition of some PropertyInterface methods
-  PropertyInterface *clonePrototype(Graph *,
-                                    const std::string &) const override;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const override { return propertyTypename; }
+  const std::string &getTypename() const override {
+    return propertyTypename;
+  }
   DEFINE_GET_CPP_CLASS_NAME;
   // the value size of a StringVectorProperty is not fixed
-  unsigned int nodeValueSize() const override { return 0; }
-  unsigned int edgeValueSize() const override { return 0; }
+  unsigned int nodeValueSize() const override {
+    return 0;
+  }
+  unsigned int edgeValueSize() const override {
+    return 0;
+  }
 };
 /*\@}*/
 } // namespace tlp

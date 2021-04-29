@@ -20,18 +20,17 @@
 #ifndef TULIP_METRIC_H
 #define TULIP_METRIC_H
 
-#include <tulip/AbstractProperty.h>
-#include <tulip/NumericProperty.h>
-#include <tulip/PropertyAlgorithm.h>
 #include <tulip/PropertyTypes.h>
+#include <tulip/AbstractProperty.h>
+#include <tulip/PropertyAlgorithm.h>
 #include <tulip/minmaxproperty.h>
+#include <tulip/NumericProperty.h>
 
 namespace tlp {
 
 class PropertyContext;
 
-typedef MinMaxProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>
-    DoubleMinMaxProperty;
+typedef MinMaxProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> DoubleMinMaxProperty;
 
 /**
  * @ingroup Graph
@@ -41,19 +40,18 @@ class TLP_SCOPE DoubleProperty : public DoubleMinMaxProperty {
 public:
   DoubleProperty(Graph *, const std::string &n = "");
 
-  void clone_handler(AbstractProperty<tlp::DoubleType, tlp::DoubleType,
-                                      tlp::NumericProperty> &) override;
+  void clone_handler(
+      AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> &) override;
 
-  PropertyInterface *clonePrototype(Graph *,
-                                    const std::string &) const override;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const override { return propertyTypename; }
+  const std::string &getTypename() const override {
+    return propertyTypename;
+  }
   DEFINE_GET_CPP_CLASS_NAME;
 
-  void setNodeValue(const node n,
-                    tlp::StoredType<double>::ReturnedConstValue v) override;
-  void setEdgeValue(const edge e,
-                    tlp::StoredType<double>::ReturnedConstValue v) override;
+  void setNodeValue(const node n, tlp::StoredType<double>::ReturnedConstValue v) override;
+  void setEdgeValue(const edge e, tlp::StoredType<double>::ReturnedConstValue v) override;
   void setAllNodeValue(tlp::StoredType<double>::ReturnedConstValue v) override;
 
   void setValueToGraphNodes(tlp::StoredType<double>::ReturnedConstValue v,
@@ -71,11 +69,9 @@ public:
   };
 
   // setMetaValueCalculator overloading
-  void
-  setMetaValueCalculator(PropertyInterface::MetaValueCalculator *calc) override;
-  void
-  setMetaValueCalculator(PredefinedMetaValueCalculator nodeCalc = AVG_CALC,
-                         PredefinedMetaValueCalculator edgeCalc = AVG_CALC);
+  void setMetaValueCalculator(PropertyInterface::MetaValueCalculator *calc) override;
+  void setMetaValueCalculator(PredefinedMetaValueCalculator nodeCalc = AVG_CALC,
+                              PredefinedMetaValueCalculator edgeCalc = AVG_CALC);
 
   // NumericProperty interface
   double getNodeDoubleValue(const node n) const override {
@@ -121,8 +117,7 @@ private:
 
 /**
  * @ingroup Graph
- * @brief A graph property that maps a std::vector<double> value to graph
- * elements.
+ * @brief A graph property that maps a std::vector<double> value to graph elements.
  */
 
 class TLP_SCOPE DoubleVectorProperty
@@ -131,10 +126,11 @@ public:
   DoubleVectorProperty(Graph *g, const std::string &n = "")
       : AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>(g, n) {}
   // redefinition of some PropertyInterface methods
-  PropertyInterface *clonePrototype(Graph *,
-                                    const std::string &) const override;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const override { return propertyTypename; }
+  const std::string &getTypename() const override {
+    return propertyTypename;
+  }
   DEFINE_GET_CPP_CLASS_NAME;
 };
 } // namespace tlp

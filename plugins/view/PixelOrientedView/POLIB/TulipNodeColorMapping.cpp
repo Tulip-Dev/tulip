@@ -19,9 +19,9 @@
 
 #include "TulipNodeColorMapping.h"
 
-#include <tulip/BooleanProperty.h>
 #include <tulip/Color.h>
 #include <tulip/ColorProperty.h>
+#include <tulip/BooleanProperty.h>
 
 using namespace tlp;
 using namespace std;
@@ -32,19 +32,16 @@ namespace pocore {
 
 TulipNodeColorMapping::TulipNodeColorMapping(Graph *graph) : graph(graph) {}
 
-RGBA TulipNodeColorMapping::getColor(const double &,
-                                     const unsigned int itemId) const {
+RGBA TulipNodeColorMapping::getColor(const double &, const unsigned int itemId) const {
   RGBA ret;
 
-  if (graph->getProperty<BooleanProperty>("viewSelection")
-          ->getNodeValue(node(itemId))) {
+  if (graph->getProperty<BooleanProperty>("viewSelection")->getNodeValue(node(itemId))) {
     ret[0] = COLOR_SELECT.getR();
     ret[1] = COLOR_SELECT.getG();
     ret[2] = COLOR_SELECT.getB();
     ret[3] = COLOR_SELECT.getA();
   } else {
-    Color nodeColor = graph->getProperty<ColorProperty>("viewColor")
-                          ->getNodeValue(node(itemId));
+    Color nodeColor = graph->getProperty<ColorProperty>("viewColor")->getNodeValue(node(itemId));
     ret[0] = nodeColor.getR();
     ret[1] = nodeColor.getG();
     ret[2] = nodeColor.getB();

@@ -53,8 +53,7 @@ struct edgeS_comp {
       }
       return (cs < ds) || ((cs == ds) && (ct < dt));
     } else {
-      return (c.source < d.source) ||
-             ((c.source == d.source) && (c.target < d.target));
+      return (c.source < d.source) || ((c.source == d.source) && (c.target < d.target));
     }
   }
   bool directed;
@@ -80,8 +79,7 @@ static const char *paramHelp[] = {
  *
  * <b>HISTORY</b>
  * - 16/06/2002 Version 1.0: Initial Release (David Auber)
- * - 08/04/2019 Version 2.0: Add directed parameter + fix for high-density
- * (François Queyroi)
+ * - 08/04/2019 Version 2.0: Add directed parameter + fix for high-density (François Queyroi)
  */
 class RandomGraph : public ImportModule {
 public:
@@ -110,8 +108,7 @@ public:
 
     if (nbNodes == 0) {
       if (pluginProgress)
-        pluginProgress->setError(
-            string("Error: the number of nodes cannot be null"));
+        pluginProgress->setError(string("Error: the number of nodes cannot be null"));
 
       return false;
     }
@@ -122,15 +119,13 @@ public:
 
     if (density_g > 1) {
       if (directed)
-        pluginProgress->setError(
-            string("Error: For ") + std::to_string(nbNodes) +
-            string(" nodes, the maximum number of edges is ") +
-            std::to_string(nbNodes * (nbNodes - 1)));
+        pluginProgress->setError(string("Error: For ") + std::to_string(nbNodes) +
+                                 string(" nodes, the maximum number of edges is ") +
+                                 std::to_string(nbNodes * (nbNodes - 1)));
       else
-        pluginProgress->setError(
-            string("Error: For ") + std::to_string(nbNodes) +
-            string(" nodes, the maximum number of edges is ") +
-            std::to_string(nbNodes * (nbNodes - 1) / 2));
+        pluginProgress->setError(string("Error: For ") + std::to_string(nbNodes) +
+                                 string(" nodes, the maximum number of edges is ") +
+                                 std::to_string(nbNodes * (nbNodes - 1) / 2));
       return false;
     }
 
@@ -150,8 +145,7 @@ public:
 
     while (myGraph.size() < nb_disctint_pairs_needed) {
       if (myGraph.size() % nbNodes == 1 &&
-          (pluginProgress->progress(myGraph.size(), nb_disctint_pairs_needed) !=
-           TLP_CONTINUE))
+          (pluginProgress->progress(myGraph.size(), nb_disctint_pairs_needed) != TLP_CONTINUE))
         return pluginProgress->state() != TLP_CANCEL;
 
       edgeS tmp;
@@ -210,8 +204,7 @@ PLUGIN(RandomGraph)
 class RandomSimpleGraph : public ImportModule {
 public:
   PLUGININFORMATION("Random Simple Graph", "Auber", "16/06/2002",
-                    "Imports a new randomly generated simple graph.", "1.0",
-                    "Graph")
+                    "Imports a new randomly generated simple graph.", "1.0", "Graph")
   RandomSimpleGraph(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "500");
     addInParameter<unsigned int>("edges", paramHelp[1], "1000");
@@ -219,8 +212,7 @@ public:
 
   bool importGraph() override {
     // for backward compatibility
-    return tlp::importGraph("Random General Graph", *dataSet, pluginProgress,
-                            graph) != nullptr;
+    return tlp::importGraph("Random General Graph", *dataSet, pluginProgress, graph) != nullptr;
   }
 };
 

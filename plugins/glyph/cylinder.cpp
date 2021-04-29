@@ -21,15 +21,15 @@
 
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include <tulip/DrawingTools.h>
+#include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/GlTools.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlTextureManager.h>
-#include <tulip/GlTools.h>
-#include <tulip/Glyph.h>
-#include <tulip/OpenGlConfigManager.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/DrawingTools.h>
+#include <tulip/OpenGlConfigManager.h>
 
 using namespace std;
 using namespace tlp;
@@ -42,11 +42,11 @@ public:
   void drawCylinder(float cylinderHeight = 1.0, float dz = 0) {
     if (cylinderVertices.empty()) {
       const unsigned int numberOfSides = 30;
-      cylinderVertices = computeRegularPolygon(
-          numberOfSides, Coord(0, 0, -cylinderHeight / 2 + dz), Size(0.5, 0.5));
+      cylinderVertices = computeRegularPolygon(numberOfSides, Coord(0, 0, -cylinderHeight / 2 + dz),
+                                               Size(0.5, 0.5));
       cylinderVertices.push_back(Coord(0, 0, -cylinderHeight / 2 + dz));
-      vector<Coord> tmp = computeRegularPolygon(
-          numberOfSides, Coord(0, 0, cylinderHeight / 2 + dz), Size(0.5, 0.5));
+      vector<Coord> tmp = computeRegularPolygon(numberOfSides, Coord(0, 0, cylinderHeight / 2 + dz),
+                                                Size(0.5, 0.5));
       cylinderVertices.insert(cylinderVertices.end(), tmp.begin(), tmp.end());
       cylinderVertices.push_back(Coord(0, 0, cylinderHeight / 2 + dz));
 
@@ -57,11 +57,11 @@ public:
 
       size_t startIdx = cylinderVertices.size();
 
-      tmp = computeRegularPolygon(
-          numberOfSides, Coord(0, 0, -cylinderHeight / 2 + dz), Size(0.5, 0.5));
+      tmp = computeRegularPolygon(numberOfSides, Coord(0, 0, -cylinderHeight / 2 + dz),
+                                  Size(0.5, 0.5));
       cylinderVertices.insert(cylinderVertices.end(), tmp.begin(), tmp.end());
-      tmp = computeRegularPolygon(
-          numberOfSides, Coord(0, 0, cylinderHeight / 2 + dz), Size(0.5, 0.5));
+      tmp = computeRegularPolygon(numberOfSides, Coord(0, 0, cylinderHeight / 2 + dz),
+                                  Size(0.5, 0.5));
       cylinderVertices.insert(cylinderVertices.end(), tmp.begin(), tmp.end());
 
       for (size_t i = startIdx; i < cylinderVertices.size(); ++i) {
@@ -116,15 +116,13 @@ public:
       glBufferData(GL_ARRAY_BUFFER, cylinderVertices.size() * 3 * sizeof(float),
                    &cylinderVertices[0], GL_STATIC_DRAW);
       glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-      glBufferData(GL_ARRAY_BUFFER, cylinderNormals.size() * 3 * sizeof(float),
-                   &cylinderNormals[0], GL_STATIC_DRAW);
+      glBufferData(GL_ARRAY_BUFFER, cylinderNormals.size() * 3 * sizeof(float), &cylinderNormals[0],
+                   GL_STATIC_DRAW);
       glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
-      glBufferData(GL_ARRAY_BUFFER,
-                   cylinderTexCoords.size() * 2 * sizeof(float),
+      glBufferData(GL_ARRAY_BUFFER, cylinderTexCoords.size() * 2 * sizeof(float),
                    &cylinderTexCoords[0], GL_STATIC_DRAW);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                   cylinderIndices.size() * sizeof(unsigned short),
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER, cylinderIndices.size() * sizeof(unsigned short),
                    &cylinderIndices[0], GL_STATIC_DRAW);
       glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
@@ -143,8 +141,7 @@ public:
     glTexCoordPointer(2, GL_FLOAT, 0, BUFFER_OFFSET(0));
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
-    glDrawElements(GL_TRIANGLES, cylinderIndices.size(), GL_UNSIGNED_SHORT,
-                   BUFFER_OFFSET(0));
+    glDrawElements(GL_TRIANGLES, cylinderIndices.size(), GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));
 
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
@@ -171,8 +168,8 @@ private:
  */
 class Cylinder : public NoShaderGlyph, public CylinderBase {
 public:
-  GLYPHINFORMATION("3D - Cylinder", "Bertrand Mathieu", "31/07/2002",
-                   "Textured Cylinder", "1.0", NodeShape::Cylinder)
+  GLYPHINFORMATION("3D - Cylinder", "Bertrand Mathieu", "31/07/2002", "Textured Cylinder", "1.0",
+                   NodeShape::Cylinder)
   Cylinder(const tlp::PluginContext *context = nullptr);
   ~Cylinder() override;
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
@@ -181,8 +178,7 @@ public:
 };
 PLUGIN(Cylinder)
 
-Cylinder::Cylinder(const tlp::PluginContext *context)
-    : NoShaderGlyph(context) {}
+Cylinder::Cylinder(const tlp::PluginContext *context) : NoShaderGlyph(context) {}
 Cylinder::~Cylinder() {}
 void Cylinder::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
   boundingBox[0] = Coord(-0.35f, -0.35f, 0);
@@ -191,8 +187,7 @@ void Cylinder::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
 void Cylinder::draw(node n, float) {
 
   setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
-  const string &texFile =
-      glGraphInputData->getElementTexture()->getNodeValue(n);
+  const string &texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
 
   if (!texFile.empty()) {
     const string &texturePath = glGraphInputData->parameters->getTexturePath();
@@ -239,8 +234,8 @@ Coord Cylinder::getAnchor(const Coord &vector) const {
 //=================================================================================================
 class HalfCylinder : public NoShaderGlyph, public CylinderBase {
 public:
-  GLYPHINFORMATION("3D - Half Cylinder", "Auber David", "31/07/2002",
-                   "Textured HalfCylinder", "1.0", NodeShape::HalfCylinder)
+  GLYPHINFORMATION("3D - Half Cylinder", "Auber David", "31/07/2002", "Textured HalfCylinder",
+                   "1.0", NodeShape::HalfCylinder)
   HalfCylinder(const tlp::PluginContext *context = nullptr);
   ~HalfCylinder() override;
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
@@ -252,8 +247,7 @@ private:
 
 PLUGIN(HalfCylinder)
 //=================================================================================================
-HalfCylinder::HalfCylinder(const tlp::PluginContext *context)
-    : NoShaderGlyph(context) {}
+HalfCylinder::HalfCylinder(const tlp::PluginContext *context) : NoShaderGlyph(context) {}
 //=================================================================================================
 HalfCylinder::~HalfCylinder() {}
 //=====================================================
@@ -265,8 +259,7 @@ void HalfCylinder::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
 void HalfCylinder::draw(node n, float) {
 
   setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
-  const string &texFile =
-      glGraphInputData->getElementTexture()->getNodeValue(n);
+  const string &texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
 
   if (!texFile.empty()) {
     const string &texturePath = glGraphInputData->parameters->getTexturePath();
@@ -293,23 +286,19 @@ Coord HalfCylinder::getAnchor(const Coord &vector) const {
 class EECylinder : public EdgeExtremityGlyph, public CylinderBase {
 public:
   GLYPHINFORMATION("3D - Cylinder extremity", "Bertrand Mathieu", "31/07/2002",
-                   "Textured Cylinder for edge extremities", "1.0",
-                   EdgeExtremityShape::Cylinder)
+                   "Textured Cylinder for edge extremities", "1.0", EdgeExtremityShape::Cylinder)
 
   EECylinder(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
 
-  void draw(edge, node n, const Color &glyphColor, const Color &,
-            float) override {
+  void draw(edge, node n, const Color &glyphColor, const Color &, float) override {
     glEnable(GL_LIGHTING);
     glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
 
     setMaterial(glyphColor);
-    const string &texFile =
-        edgeExtGlGraphInputData->getElementTexture()->getNodeValue(n);
+    const string &texFile = edgeExtGlGraphInputData->getElementTexture()->getNodeValue(n);
 
     if (!texFile.empty()) {
-      const string &texturePath =
-          edgeExtGlGraphInputData->parameters->getTexturePath();
+      const string &texturePath = edgeExtGlGraphInputData->parameters->getTexturePath();
       GlTextureManager::activateTexture(texturePath + texFile);
     }
 

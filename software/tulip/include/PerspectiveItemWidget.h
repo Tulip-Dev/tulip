@@ -36,8 +36,7 @@ class PerspectiveItemWidget : public QWidget {
   Ui::PerspectiveItemData *_ui;
 
 public:
-  explicit PerspectiveItemWidget(const QString &perspectiveName,
-                                 QWidget *parent = nullptr);
+  explicit PerspectiveItemWidget(const QString &perspectiveName, QWidget *parent = nullptr);
   ~PerspectiveItemWidget() override;
 
 public slots:

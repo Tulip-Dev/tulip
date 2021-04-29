@@ -17,17 +17,16 @@
  *
  */
 #include <tulip/GlGrid.h>
-#include <tulip/GlTools.h>
 #include <tulip/GlXMLTools.h>
+#include <tulip/GlTools.h>
 
 using namespace std;
 
 namespace tlp {
 //============================================================
-GlGrid::GlGrid(const Coord &frontTopLeft, const Coord &backBottomRight,
-               const Size &cell, const Color &color, bool displayDim[3])
-    : frontTopLeft(frontTopLeft), backBottomRight(backBottomRight),
-      color(color), cell(cell) {
+GlGrid::GlGrid(const Coord &frontTopLeft, const Coord &backBottomRight, const Size &cell,
+               const Color &color, bool displayDim[3])
+    : frontTopLeft(frontTopLeft), backBottomRight(backBottomRight), color(color), cell(cell) {
   for (unsigned int i = 0; i < 3; ++i)
     this->displayDim[i] = displayDim[i];
 
@@ -138,16 +137,11 @@ void GlGrid::getXML(string &outString) {
 //====================================================
 void GlGrid::setWithXML(const string &inString, unsigned int &currentPosition) {
 
-  GlXMLTools::setWithXML(inString, currentPosition, "displayDim0",
-                         displayDim[0]);
-  GlXMLTools::setWithXML(inString, currentPosition, "displayDim1",
-                         displayDim[1]);
-  GlXMLTools::setWithXML(inString, currentPosition, "displayDim2",
-                         displayDim[2]);
-  GlXMLTools::setWithXML(inString, currentPosition, "frontTopLeft",
-                         frontTopLeft);
-  GlXMLTools::setWithXML(inString, currentPosition, "backBottomRight",
-                         backBottomRight);
+  GlXMLTools::setWithXML(inString, currentPosition, "displayDim0", displayDim[0]);
+  GlXMLTools::setWithXML(inString, currentPosition, "displayDim1", displayDim[1]);
+  GlXMLTools::setWithXML(inString, currentPosition, "displayDim2", displayDim[2]);
+  GlXMLTools::setWithXML(inString, currentPosition, "frontTopLeft", frontTopLeft);
+  GlXMLTools::setWithXML(inString, currentPosition, "backBottomRight", backBottomRight);
   GlXMLTools::setWithXML(inString, currentPosition, "color", color);
   GlXMLTools::setWithXML(inString, currentPosition, "cell", cell);
 

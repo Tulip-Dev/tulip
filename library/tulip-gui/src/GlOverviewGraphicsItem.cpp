@@ -19,14 +19,15 @@
 
 #include "tulip/GlOverviewGraphicsItem.h"
 
-#include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QMessageBox>
+#include <QGraphicsSceneMouseEvent>
 #include <QPen>
 
-#include <tulip/GlGraphComposite.h>
-#include <tulip/GlMainView.h>
+#include <tulip/GlOffscreenRenderer.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/GlMainView.h>
+#include <tulip/GlGraphComposite.h>
 #include <tulip/GlOffscreenRenderer.h>
 
 using namespace std;
@@ -34,9 +35,8 @@ using namespace std;
 namespace tlp {
 
 GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view, GlScene &scene)
-    : QGraphicsRectItem(0, 0, 128, 128), view(view), baseScene(scene),
-      width(128), height(128), mouseClicked(false), _frameColor(Color::Gray),
-      _frameWidth(2) {}
+    : QGraphicsRectItem(0, 0, 128, 128), view(view), baseScene(scene), width(128), height(128),
+      mouseClicked(false), _frameColor(Color::Gray), _frameWidth(2) {}
 
 GlOverviewGraphicsItem::~GlOverviewGraphicsItem() {
   overview.setParentItem(nullptr);
@@ -74,8 +74,7 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
     setBrush(QBrush(QColor(255, 255, 255, 255)));
 
     QPainterPath path;
-    path.addRect(_frameWidth / 2, _frameWidth / 2, width - _frameWidth,
-                 height - _frameWidth);
+    path.addRect(_frameWidth / 2, _frameWidth / 2, width - _frameWidth, height - _frameWidth);
     overviewBorder.setPath(path);
     overviewBorder.setParentItem(this);
 
@@ -128,26 +127,23 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
   vector<Coord> cameraBoundingBox;
   cameraBoundingBox.reserve(4);
-  cameraBoundingBox.push_back(baseCamera.viewportTo3DWorld(
-      Coord(backupViewport[0], backupViewport[1], 0)));
+  cameraBoundingBox.push_back(
+      baseCamera.viewportTo3DWorld(Coord(backupViewport[0], backupViewport[1], 0)));
   cameraBoundingBox.push_back(baseCamera.viewportTo3DWorld(
       Coord(backupViewport[0] + backupViewport[2], backupViewport[1], 0)));
   cameraBoundingBox.push_back(baseCamera.viewportTo3DWorld(
-      Coord(backupViewport[0] + backupViewport[2],
-            backupViewport[1] + backupViewport[3], 0)));
+      Coord(backupViewport[0] + backupViewport[2], backupViewport[1] + backupViewport[3], 0)));
   cameraBoundingBox.push_back(baseCamera.viewportTo3DWorld(
       Coord(backupViewport[0], backupViewport[1] + backupViewport[3], 0)));
 
   // This code modify cameraBoundingBox coords to have coords with (x,y,0)
-  // If we don't do this we will have invalid polygon when we do
-  // worldTo2DViewport transformations
+  // If we don't do this we will have invalid polygon when we do worldTo2DViewport transformations
   Coord eyesVector = baseCamera.getEyes() - baseCamera.getCenter();
 
   eyesVector = eyesVector * (1.f / eyesVector[2]);
 
   for (unsigned int i = 0; i < 4; i++)
-    cameraBoundingBox[i] =
-        cameraBoundingBox[i] - eyesVector * cameraBoundingBox[i][2];
+    cameraBoundingBox[i] = cameraBoundingBox[i] - eyesVector * cameraBoundingBox[i][2];
 
   // Change viewport of the scene to the overview viewport
   baseScene.setViewport(0, 0, width, height);
@@ -193,24 +189,15 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
   }
 
   if (generatePixmap) {
-    bool edgesLabels = baseScene.getGlGraphComposite()
-                           ->getRenderingParametersPointer()
-                           ->isViewEdgeLabel();
-    bool nodesLabels = baseScene.getGlGraphComposite()
-                           ->getRenderingParametersPointer()
-                           ->isViewNodeLabel();
-    bool metaNodesLabels = baseScene.getGlGraphComposite()
-                               ->getRenderingParametersPointer()
-                               ->isViewMetaLabel();
-    baseScene.getGlGraphComposite()
-        ->getRenderingParametersPointer()
-        ->setViewEdgeLabel(false);
-    baseScene.getGlGraphComposite()
-        ->getRenderingParametersPointer()
-        ->setViewNodeLabel(false);
-    baseScene.getGlGraphComposite()
-        ->getRenderingParametersPointer()
-        ->setViewMetaLabel(false);
+    bool edgesLabels =
+        baseScene.getGlGraphComposite()->getRenderingParametersPointer()->isViewEdgeLabel();
+    bool nodesLabels =
+        baseScene.getGlGraphComposite()->getRenderingParametersPointer()->isViewNodeLabel();
+    bool metaNodesLabels =
+        baseScene.getGlGraphComposite()->getRenderingParametersPointer()->isViewMetaLabel();
+    baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewEdgeLabel(false);
+    baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewNodeLabel(false);
+    baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewMetaLabel(false);
 
     vector<bool> layersVisibility;
     layersVisibility.reserve(layersList.size());
@@ -226,8 +213,8 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
     }
 
     // Draw the scene
-    GlOffscreenRenderer::getInstance()->setViewPortSize(
-        width - 2 * _frameWidth, height - 2 * _frameWidth);
+    GlOffscreenRenderer::getInstance()->setViewPortSize(width - 2 * _frameWidth,
+                                                        height - 2 * _frameWidth);
     GlOffscreenRenderer::getInstance()->renderExternalScene(&baseScene, true);
 
     vector<bool>::iterator itTmp = layersVisibility.begin();
@@ -268,8 +255,7 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
   line[0].setLine(width - 2 * _frameWidth, 0, p0[0], height - p0[1]);
   line[1].setLine(0, 0, p1[0], height - p1[1]);
   line[2].setLine(0, height - 2 * _frameWidth, p2[0], height - p2[1]);
-  line[3].setLine(width - 2 * _frameWidth, height - 2 * _frameWidth, p3[0],
-                  height - p3[1]);
+  line[3].setLine(width - 2 * _frameWidth, height - 2 * _frameWidth, p3[0], height - p3[1]);
   line[4].setLine(p0[0], height - p0[1], p1[0], height - p1[1]);
   line[5].setLine(p1[0], height - p1[1], p2[0], height - p2[1]);
   line[6].setLine(p2[0], height - p2[1], p3[0], height - p3[1]);
@@ -300,8 +286,7 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
   tmpVect.push_back(QPointF(width - 2 * _frameWidth, 0));
   poly[3].setPolygon(QPolygonF(tmpVect));
 
-  QPen pen(
-      QColor(_frameColor[0], _frameColor[1], _frameColor[2], _frameColor[3]));
+  QPen pen(QColor(_frameColor[0], _frameColor[1], _frameColor[2], _frameColor[3]));
   pen.setWidth(_frameWidth);
   pen.setJoinStyle(Qt::MiterJoin);
 
@@ -315,8 +300,7 @@ void GlOverviewGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
   }
 }
 
-void GlOverviewGraphicsItem::mouseReleaseEvent(
-    QGraphicsSceneMouseEvent *event) {
+void GlOverviewGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
     mouseClicked = false;
   }

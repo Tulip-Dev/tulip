@@ -28,12 +28,11 @@ namespace tlp {
  * @ingroup Graph
  * @brief The node struct represents a node in a Graph object.
  *
- * This structure only contains an identifier, and a function to check if the
- * node is valid. A node is considered invalid when its id has the UINT_MAX
- * value.
+ * This structure only contains an identifier, and a function to check if the node is valid.
+ * A node is considered invalid when its id has the UINT_MAX value.
  *
- * Most operations performed on a node (getting out edges etc) are available
- * into the tlp::Graph object.
+ * Most operations performed on a node (getting out edges etc) are available into the tlp::Graph
+ * object.
  *
  * @see tlp::edge
  * @see tlp::Graph
@@ -51,34 +50,38 @@ struct node {
 
   /**
    * @brief node Create a node of given identifier.
-   * It is your responsibility to make sure a node of this ID exists when you
-   * create the node. If you want to make sure this node exists, use
-   * Graph::isElement(), as isValid() will only tell is the node was correctly
-   * initialized.
+   * It is your responsibility to make sure a node of this ID exists when you create the node.
+   * If you want to make sure this node exists, use Graph::isElement(), as isValid() will only tell
+   * is the node was correctly initialized.
    *
    * @param j the identifier this node will use.
    */
   explicit node(unsigned int j) : id(j) {}
 
   /**
-   * @brief operator unsigned int A convenience function to get the id of a
-   * node.
+   * @brief operator unsigned int A convenience function to get the id of a node.
    */
-  operator unsigned int() const { return id; }
+  operator unsigned int() const {
+    return id;
+  }
 
   /**
    * @brief operator != Compares two nodes, checking that they are different..
    * @param n The other node to compare this one to.
    * @return Whether or not the two nodes are different.
    */
-  bool operator!=(const node n) const { return id != n.id; }
+  bool operator!=(const node n) const {
+    return id != n.id;
+  }
 
   /**
    * @brief operator != Compares two nodes, checking that they are identical.
    * @param n The other node to compare this one to.
    * @return Whether or not the two nodes are the same.
    */
-  bool operator==(const node n) const { return id == n.id; }
+  bool operator==(const node n) const {
+    return id == n.id;
+  }
 
   /**
    * @brief isValid checks if the node is valid.
@@ -86,30 +89,37 @@ struct node {
    *
    * @return whether the node is valid or not.
    */
-  bool isValid() const { return id != UINT_MAX; }
+  bool isValid() const {
+    return id != UINT_MAX;
+  }
 };
 } // namespace tlp
 
 #ifdef _MSC_VER
-#include <tulip/tulipconf.h>
 #include <vector>
+#include <tulip/tulipconf.h>
 // needed by MSVC to avoid multiple definitions
 struct TLP_SCOPE __tlp_vector_node : public std::vector<tlp::node> {};
 #endif
 
 ///@cond DOXYGEN_HIDDEN
-// these three functions allow to use tlp::node as a key in a hash-based data
-// structure (e.g. hashmap).
+// these three functions allow to use tlp::node as a key in a hash-based data structure (e.g.
+// hashmap).
 namespace std {
-template <> struct hash<tlp::node> {
-  size_t operator()(const tlp::node n) const { return n.id; }
+template <>
+struct hash<tlp::node> {
+  size_t operator()(const tlp::node n) const {
+    return n.id;
+  }
 };
-template <> struct equal_to<tlp::node> {
+template <>
+struct equal_to<tlp::node> {
   size_t operator()(const tlp::node n, const tlp::node n2) const {
     return n.id == n2.id;
   }
 };
-template <> struct less<tlp::node> {
+template <>
+struct less<tlp::node> {
   size_t operator()(const tlp::node n, const tlp::node n2) const {
     return n.id < n2.id;
   }

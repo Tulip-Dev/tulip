@@ -20,8 +20,8 @@
 #define DENDROGRAM_H
 
 #include <map>
-#include <tulip/TulipPluginHeaders.h>
 #include <vector>
+#include <tulip/TulipPluginHeaders.h>
 
 class OrientableLayout;
 class OrientableCoord;
@@ -42,15 +42,14 @@ class OrientableSizeProxy;
  **/
 class Dendrogram : public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATION(
-      "Dendrogram",
-      "Julien Testut, Antony Durand, Pascal Ollier, Yashvin Nababsing, "
-      "Sebastien Leclerc, Thibault Ruchon, Eric Dauchier",
-      "03/12/04",
-      "This is an implementation of a dendrogram, an extended "
-      "implementation of a <b>Bio representation</b> which includes "
-      "variable orientation and variable node sizelayout.",
-      "1.0", "Tree")
+  PLUGININFORMATION("Dendrogram",
+                    "Julien Testut, Antony Durand, Pascal Ollier, Yashvin Nababsing, "
+                    "Sebastien Leclerc, Thibault Ruchon, Eric Dauchier",
+                    "03/12/04",
+                    "This is an implementation of a dendrogram, an extended "
+                    "implementation of a <b>Bio representation</b> which includes "
+                    "variable orientation and variable node sizelayout.",
+                    "1.0", "Tree")
   Dendrogram(const tlp::PluginContext *context);
   ~Dendrogram() override;
 
@@ -65,15 +64,12 @@ private:
   tlp::Graph *tree;
   std::vector<float> levelHeights;
 
-  float setAllNodesCoordX(tlp::node n, float rightMargin,
-                          OrientableLayout *oriLayout,
+  float setAllNodesCoordX(tlp::node n, float rightMargin, OrientableLayout *oriLayout,
                           OrientableSizeProxy *oriSize);
-  void setAllNodesCoordY(OrientableLayout *oriLayout,
-                         OrientableSizeProxy *oriSize);
+  void setAllNodesCoordY(OrientableLayout *oriLayout, OrientableSizeProxy *oriSize);
   float computeFatherXPosition(tlp::node father, OrientableLayout *oriLayout);
   void shiftAllNodes(tlp::node n, float shift, OrientableLayout *oriLayout);
-  void setNodePosition(tlp::node n, float x, float y, float z,
-                       OrientableLayout *oriLayout);
+  void setNodePosition(tlp::node n, float x, float y, float z, OrientableLayout *oriLayout);
   void setCoordY(tlp::node n, float &maxYLeaf, OrientableLayout *oriLayout,
                  OrientableSizeProxy *oriSize);
   void computeLevelHeights(tlp::Graph *tree, tlp::node n, unsigned int depth,

@@ -30,12 +30,14 @@ namespace tlp {
  * @ingroup OpenGL
  * @brief A class to draw a Catmull-Rom curve
  *
- * This class allow to draw a Catmull-Rom curve, a smooth curve which passes
- * through all its control points. Catmull-Rom splines are a family of cubic
- * interpolating splines formulated such that the tangent at each control point
- * is calculated using the previous and next control point point of the spline.
- * Catmull-Rom splines have C^1 continuity, local control, and interpolation,
- * but do not lie within the convex hull of their control points.
+ * This class allow to draw a Catmull-Rom curve, a smooth curve which passes through all its control
+ * points.
+ * Catmull-Rom splines are a family of cubic interpolating splines formulated such that the tangent
+ * at each
+ * control point is calculated using the previous and next control point point of the spline.
+ * Catmull-Rom splines have C^1 continuity, local control, and interpolation, but do not lie within
+ * the convex
+ * hull of their control points.
  */
 class TLP_GL_SCOPE GlCatmullRomCurve : public AbstractGlCurve {
 
@@ -47,23 +49,20 @@ public:
   /**
    * @brief GlCatmullRomCurve constructor
    *
-   * @param controlPoints a vector of control points (size must be greater or
-   * equal to 4)
+   * @param controlPoints a vector of control points (size must be greater or equal to 4)
    * @param startColor the color at the start of the curve
    * @param endColor the color at the end of the curve
    * @param startSize the width at the start of the curve
    * @param endSize the width at the end of the curve
-   * @param closedCurve if true, the curve will be closed and a bezier segment
-   * will be drawn between the last and first control point
+   * @param closedCurve if true, the curve will be closed and a bezier segment will be drawn between
+   * the last and first control point
    * @param paramType curve parameterization type (GlCatmullRomCurve::UNIFORM |
    * GlCatmullRomCurve::CENTRIPETAL | GlCatmullRomCurve::CHORD_LENGTH (default))
    * @param nbCurvePoints the number of curve points to generate
    */
-  GlCatmullRomCurve(const std::vector<Coord> &controlPoints,
-                    const Color &startColor, const Color &endColor,
-                    const float startSize, const float endSize,
-                    const bool closedCurve = false,
-                    const unsigned int nbCurvePoints = 200,
+  GlCatmullRomCurve(const std::vector<Coord> &controlPoints, const Color &startColor,
+                    const Color &endColor, const float startSize, const float endSize,
+                    const bool closedCurve = false, const unsigned int nbCurvePoints = 200,
                     const ParameterizationType paramType = CENTRIPETAL);
 
   ~GlCatmullRomCurve() override;
@@ -72,9 +71,8 @@ public:
     this->paramType = paramType;
   }
 
-  void drawCurve(std::vector<Coord> &controlPoints, const Color &startColor,
-                 const Color &endColor, const float startSize,
-                 const float endSize,
+  void drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
+                 const float startSize, const float endSize,
                  const unsigned int nbCurvePoints = 200) override;
 
   void setClosedCurve(const bool closedCurve) {
@@ -84,8 +82,7 @@ public:
 protected:
   void setCurveVertexShaderRenderingSpecificParameters() override;
 
-  Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints,
-                               float t) override;
+  Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t) override;
 
   void computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints,
                                std::vector<Coord> &curvePoints,

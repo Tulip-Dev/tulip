@@ -19,8 +19,8 @@
 #ifndef _STRAHLERGRAPH2METRIC_H
 #define _STRAHLERGRAPH2METRIC_H
 
-#include <tulip/TulipPluginHeaders.h>
 #include <unordered_map>
+#include <tulip/TulipPluginHeaders.h>
 struct Strahler {
   Strahler(int stra = 1, int sta = 0, int used = 0)
       : strahler(stra), stacks(sta), usedStack(used) {}
@@ -71,13 +71,11 @@ public:
   bool run() override;
 
 private:
-  Strahler
-  topSortStrahler(tlp::node n, int &curPref,
-                  std::unordered_map<tlp::node, int> &tofree,
-                  std::unordered_map<tlp::node, int> &prefix,
-                  std::unordered_map<tlp::node, bool> &visited,
-                  std::unordered_map<tlp::node, bool> &finished,
-                  std::unordered_map<tlp::node, Strahler> &cachedValues);
+  Strahler topSortStrahler(tlp::node n, int &curPref, std::unordered_map<tlp::node, int> &tofree,
+                           std::unordered_map<tlp::node, int> &prefix,
+                           std::unordered_map<tlp::node, bool> &visited,
+                           std::unordered_map<tlp::node, bool> &finished,
+                           std::unordered_map<tlp::node, Strahler> &cachedValues);
   bool allNodes;
 };
 

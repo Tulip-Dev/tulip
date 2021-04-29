@@ -1,13 +1,13 @@
-#include <QGraphicsProxyWidget>
+#include <QPropertyAnimation>
 #include <QGraphicsView>
 #include <QLabel>
-#include <QPropertyAnimation>
+#include <QGraphicsProxyWidget>
 
+#include <tulip/MouseInteractors.h>
+#include <tulip/Interactor.h>
 #include <tulip/GlMainView.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlScene.h>
-#include <tulip/Interactor.h>
-#include <tulip/MouseInteractors.h>
 
 using namespace tlp;
 
@@ -44,8 +44,8 @@ public:
   /*
   Most important function of an interactor component
   When an event arrive on your interactor : this function is call
-  You have to process it and return true. If the event do nothing in your
-  interactor : this function return false;
+  You have to process it and return true. If the event do nothing in your interactor : this function
+  return false;
   */
   bool eventFilter(QObject *, QEvent *e) {
 
@@ -69,8 +69,7 @@ public:
       /*
       Check if event is a left mouse button press
       */
-      if (e->type() == QEvent::MouseButtonPress &&
-          qMouseEv->button() == Qt::LeftButton) {
+      if (e->type() == QEvent::MouseButtonPress && qMouseEv->button() == Qt::LeftButton) {
 
         /*
         If you have clicked on a node/edge, information widget is visible.
@@ -87,8 +86,8 @@ public:
           */
           SelectedEntity selectedEntity;
 
-          if (glMainView->getGlMainWidget()->pickNodesEdges(
-                  qMouseEv->x(), qMouseEv->y(), selectedEntity)) {
+          if (glMainView->getGlMainWidget()->pickNodesEdges(qMouseEv->x(), qMouseEv->y(),
+                                                            selectedEntity)) {
 
             /*
             Change text of the information label with
@@ -102,8 +101,7 @@ public:
             else
               text += "edge ";
 
-            text +=
-                " id : " + QString::number(selectedEntity.getComplexEntityId());
+            text += " id : " + QString::number(selectedEntity.getComplexEntityId());
 
             /*
             - Update QLabel with new text
@@ -143,8 +141,8 @@ public:
 };
 
 /*
- If you want to create an interactor plugin, the first think to do is to create
- a sub class of InteractorComposite
+ If you want to create an interactor plugin, the first think to do is to create a sub class of
+ InteractorComposite
 */
 class InteractorPlugin : public InteractorComposite {
 
@@ -153,44 +151,43 @@ class InteractorPlugin : public InteractorComposite {
 public:
   /*
   This macro is here to register information about the plugin
-  PLUGININFORMATION(Plugin name, Author, Date, Plugin long name, version, type
-  of plugin (Navigation,Information...))
+  PLUGININFORMATION(Plugin name, Author, Date, Plugin long name, version, type of plugin
+  (Navigation,Information...))
   */
-  PLUGININFORMATION("InteractorPlugin", "Tulip Team", "05/10/2012",
-                    "Demo Interactor", "1.0", "Information")
+  PLUGININFORMATION("InteractorPlugin", "Tulip Team", "05/10/2012", "Demo Interactor", "1.0",
+                    "Information")
 
   /*
   The constructor
-  Here we specify the icon of interactor with Qt qrc system, and the ToolTip
-  text of the plugin
+  Here we specify the icon of interactor with Qt qrc system, and the ToolTip text of the plugin
   */
   InteractorPlugin(const tlp::PluginContext *)
-      : InteractorComposite(QIcon(":/i_interactor_plugin.png"),
-                            "Demo Interactor") {
+      : InteractorComposite(QIcon(":/i_interactor_plugin.png"), "Demo Interactor") {
     /*
     Here we create a label with a minimal configuration text
     This text will be displayed when you click on the name of the plugin
     */
-    _configurationLabel = new QLabel(
-        QString("This is a demo interactor.<br>") +
-        "You can zoom and pan and display information if you click on a node/edge.");
+    _configurationLabel =
+        new QLabel(QString("This is a demo interactor.<br>") +
+                   "You can zoom and pan and display information if you click on a node/edge.");
   }
 
-  ~InteractorPlugin() { delete _configurationLabel; }
+  ~InteractorPlugin() {
+    delete _configurationLabel;
+  }
 
   /*
   Here we construct the interactor
   An InteractorComposite is a list of InteractorComponent.
   It's like a chain of responsibility :
-  - When an event arrive the first InteractorComponent catch it in eventFilter
-  function.
-  - If the InteractorComponent don't process this event (if eventFilter function
-  return false), the event is passed to the second InteractorComponent
+  - When an event arrive the first InteractorComponent catch it in eventFilter function.
+  - If the InteractorComponent don't process this event (if eventFilter function return false), the
+  event is passed to the second InteractorComponent
 
   In this example we have two InteractorComponent
   The first one : InteractorPluginComponent is the example InteractorComponent
-  The second one : MouseNKeysNavigation is a standard Tulip InteractorComponent
-  who activate Zoom and pan interaction
+  The second one : MouseNKeysNavigation is a standard Tulip InteractorComponent who activate Zoom
+  and pan interaction
   */
   void construct() {
     push_back(new MouseNKeysNavigator);
@@ -198,9 +195,8 @@ public:
   }
 
   /*
-  In this function we say : this plugin is compatible with Node Link Diagram
-  View If you don't implement this function your plugin won't be displayed in
-  interactors tool bar
+  In this function we say : this plugin is compatible with Node Link Diagram View
+  If you don't implement this function your plugin won't be displayed in interactors tool bar
   */
   bool isCompatible(const std::string &viewName) const {
     return (viewName == "Node Link Diagram view");
@@ -209,14 +205,17 @@ public:
   /*
   In this function we say : _configurationLabel is the configuration widget
   */
-  QWidget *configurationWidget() const { return _configurationLabel; }
+  QWidget *configurationWidget() const {
+    return _configurationLabel;
+  }
 
   /*
   In Plugin system we have a priority system to display interactor icon
-  If priority is low, you interactor will be at the left of the interactord tool
-  bar
+  If priority is low, you interactor will be at the left of the interactord tool bar
   */
-  unsigned int priority() const { return 5; }
+  unsigned int priority() const {
+    return 5;
+  }
 };
 
 /*

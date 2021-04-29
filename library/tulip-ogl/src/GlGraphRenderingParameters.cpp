@@ -16,32 +16,27 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/NumericProperty.h>
-#include <tulip/TlpTools.h>
 #include <tulip/Vector.h>
+#include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/TlpTools.h>
+#include <tulip/NumericProperty.h>
 
 using namespace tlp;
 
 GlGraphRenderingParameters::GlGraphRenderingParameters()
-    : _antialiased(true), _viewArrow(false), _viewNodeLabel(true),
-      _viewEdgeLabel(false), _viewMetaLabel(false), _viewOutScreenLabel(false),
-      _elementOrdered(false), _elementOrderedDescending(true),
-      _edgeColorInterpolate(true), _edge3D(false), _edgeSizeInterpolate(true),
-      _edgeFrontDisplay(true), _displayEdges(true), _displayNodes(true),
-      _displayMetaNodes(true), _elementZOrdered(false),
-      _selectedNodesStencil(0x0002), _selectedMetaNodesStencil(0x0002),
-      _selectedEdgesStencil(0x0002), _nodesStencil(0xFFFF),
-      _metaNodesStencil(0xFFFF), _edgesStencil(0xFFFF),
-      _nodesLabelStencil(0xFFFF), _metaNodesLabelStencil(0xFFFF),
-      _edgesLabelStencil(0xFFFF), _labelScaled(false),
-      _labelFixedFontSize(false), _labelMinSize(4), _labelMaxSize(30),
-      _labelsDensity(0), _labelsAreBillboarded(false),
-      _fontsPath(tlp::TulipBitmapDir), _texturePath(""),
+    : _antialiased(true), _viewArrow(false), _viewNodeLabel(true), _viewEdgeLabel(false),
+      _viewMetaLabel(false), _viewOutScreenLabel(false), _elementOrdered(false),
+      _elementOrderedDescending(true), _edgeColorInterpolate(true), _edge3D(false),
+      _edgeSizeInterpolate(true), _edgeFrontDisplay(true), _displayEdges(true), _displayNodes(true),
+      _displayMetaNodes(true), _elementZOrdered(false), _selectedNodesStencil(0x0002),
+      _selectedMetaNodesStencil(0x0002), _selectedEdgesStencil(0x0002), _nodesStencil(0xFFFF),
+      _metaNodesStencil(0xFFFF), _edgesStencil(0xFFFF), _nodesLabelStencil(0xFFFF),
+      _metaNodesLabelStencil(0xFFFF), _edgesLabelStencil(0xFFFF), _labelScaled(false),
+      _labelFixedFontSize(false), _labelMinSize(4), _labelMaxSize(30), _labelsDensity(0),
+      _labelsAreBillboarded(false), _fontsPath(tlp::TulipBitmapDir), _texturePath(""),
       _edgesMaxSizeToNodesSize(true),
-      _selectionColor(
-          GlDefaultSelectionColorManager::getDefaultSelectionColor()),
+      _selectionColor(GlDefaultSelectionColorManager::getDefaultSelectionColor()),
       _displayFilteringProperty(nullptr), _elementOrderingProperty(nullptr) {}
 // This function should rewritten completly
 DataSet GlGraphRenderingParameters::getParameters() const {
@@ -84,8 +79,7 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   data.set("elementsOrderedDescending", _elementOrderedDescending);
 
   if (_elementOrderingProperty)
-    data.set("elementsOrderingPropertyName",
-             _elementOrderingProperty->getName());
+    data.set("elementsOrderingPropertyName", _elementOrderingProperty->getName());
 
   return data;
 }
@@ -280,8 +274,12 @@ void GlGraphRenderingParameters::setAntialiasing(const bool b) {
   _antialiased = b;
 }
 //====================================================
-bool GlGraphRenderingParameters::isViewArrow() const { return (_viewArrow); }
-void GlGraphRenderingParameters::setViewArrow(const bool b) { _viewArrow = b; }
+bool GlGraphRenderingParameters::isViewArrow() const {
+  return (_viewArrow);
+}
+void GlGraphRenderingParameters::setViewArrow(const bool b) {
+  _viewArrow = b;
+}
 //====================================================
 bool GlGraphRenderingParameters::isElementOrdered() const {
   return (_elementOrdered);
@@ -304,8 +302,12 @@ void GlGraphRenderingParameters::setElementZOrdered(const bool b) {
   _elementZOrdered = b;
 }
 //====================================================
-bool GlGraphRenderingParameters::isEdge3D() const { return _edge3D; }
-void GlGraphRenderingParameters::setEdge3D(const bool b) { _edge3D = b; }
+bool GlGraphRenderingParameters::isEdge3D() const {
+  return _edge3D;
+}
+void GlGraphRenderingParameters::setEdge3D(const bool b) {
+  _edge3D = b;
+}
 //====================================================
 bool GlGraphRenderingParameters::isViewNodeLabel() const {
   return (_viewNodeLabel);
@@ -335,8 +337,7 @@ int GlGraphRenderingParameters::getSelectedNodesStencil() const {
   return _selectedNodesStencil;
 }
 //====================================================
-void GlGraphRenderingParameters::setSelectedMetaNodesStencil(
-    const int stencil) {
+void GlGraphRenderingParameters::setSelectedMetaNodesStencil(const int stencil) {
   _selectedMetaNodesStencil = stencil;
 }
 int GlGraphRenderingParameters::getSelectedMetaNodesStencil() const {
@@ -427,7 +428,9 @@ Color GlGraphRenderingParameters::getSelectionColor() const {
   return _selectionColor;
 }
 //====================================================
-bool GlGraphRenderingParameters::isLabelScaled() const { return _labelScaled; }
+bool GlGraphRenderingParameters::isLabelScaled() const {
+  return _labelScaled;
+}
 void GlGraphRenderingParameters::setLabelScaled(bool state) {
   _labelScaled = state;
 }
@@ -460,20 +463,16 @@ void GlGraphRenderingParameters::setMaxSizeOfLabel(int size) {
   _labelMaxSize = size;
 }
 //====================================================
-void GlGraphRenderingParameters::setElementOrderingProperty(
-    tlp::NumericProperty *property) {
+void GlGraphRenderingParameters::setElementOrderingProperty(tlp::NumericProperty *property) {
   _elementOrderingProperty = property;
 }
-tlp::NumericProperty *
-GlGraphRenderingParameters::getElementOrderingProperty() const {
+tlp::NumericProperty *GlGraphRenderingParameters::getElementOrderingProperty() const {
   return _elementOrderingProperty;
 }
 //====================================================
-GlDefaultSelectionColorManager *GlDefaultSelectionColorManager::manager =
-    nullptr;
+GlDefaultSelectionColorManager *GlDefaultSelectionColorManager::manager = nullptr;
 
-void GlDefaultSelectionColorManager::setManager(
-    GlDefaultSelectionColorManager *mgr) {
+void GlDefaultSelectionColorManager::setManager(GlDefaultSelectionColorManager *mgr) {
   manager = mgr;
 }
 

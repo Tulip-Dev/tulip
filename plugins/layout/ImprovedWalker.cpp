@@ -20,8 +20,8 @@
 #include <tulip/TreeTest.h>
 
 #include "DatasetTools.h"
-#include "ImprovedWalker.h"
 #include "Orientation.h"
+#include "ImprovedWalker.h"
 
 using namespace std;
 using namespace tlp;
@@ -38,14 +38,14 @@ private:
   bool isReversed;
 
 public:
-  ImprovedWalkerIterator(Graph *graphParam, node nParam, int currentChildParam,
-                         int endChildParam)
-      : graph(graphParam), n(nParam), currentChild(currentChildParam),
-        endChild(endChildParam) {
+  ImprovedWalkerIterator(Graph *graphParam, node nParam, int currentChildParam, int endChildParam)
+      : graph(graphParam), n(nParam), currentChild(currentChildParam), endChild(endChildParam) {
     isReversed = currentChild > endChild;
   }
 
-  bool hasNext() override { return currentChild != endChild; }
+  bool hasNext() override {
+    return currentChild != endChild;
+  }
 
   node next() override {
     node tmp = graph->getOutNode(n, currentChild);
@@ -59,8 +59,7 @@ public:
   }
 };
 //====================================================================
-ImprovedWalker::ImprovedWalker(const tlp::PluginContext *context)
-    : LayoutAlgorithm(context) {
+ImprovedWalker::ImprovedWalker(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addOrientationParameters(this);
   addOrthogonalParameters(this);
@@ -166,13 +165,11 @@ int ImprovedWalker::countSibling(tlp::node from, tlp::node to) {
   return abs(order[from] - order[to]);
 }
 //====================================================================
-ImprovedWalkerIterator *ImprovedWalker::iterateSibling(tlp::node from,
-                                                       tlp::node to) {
+ImprovedWalkerIterator *ImprovedWalker::iterateSibling(tlp::node from, tlp::node to) {
   int modifier = (order[from] > order[to] ? 1 : -1);
   node father = tree->getInNode(from, 1);
 
-  return new ImprovedWalkerIterator(tree, father, order[from],
-                                    order[to] + modifier);
+  return new ImprovedWalkerIterator(tree, father, order[from], order[to] + modifier);
 }
 //====================================================================
 Iterator<node> *ImprovedWalker::getChildren(tlp::node n) {
@@ -191,8 +188,7 @@ void ImprovedWalker::firstWalk(tlp::node v) {
     node vleftSibling = leftSibling(v);
 
     if (vleftSibling.isValid())
-      prelimX[v] += prelimX[vleftSibling] + nodeSpacing +
-                    oriSize->getNodeValue(v).getW() / 2.f +
+      prelimX[v] += prelimX[vleftSibling] + nodeSpacing + oriSize->getNodeValue(v).getW() / 2.f +
                     oriSize->getNodeValue(vleftSibling).getW() / 2.f;
   } else {
     node defaultAncestor = leftmostChild(v);
@@ -204,14 +200,12 @@ void ImprovedWalker::firstWalk(tlp::node v) {
 
     executeShifts(v);
 
-    float midPoint =
-        (prelimX[leftmostChild(v)] + prelimX[rightmostChild(v)]) / 2.f;
+    float midPoint = (prelimX[leftmostChild(v)] + prelimX[rightmostChild(v)]) / 2.f;
 
     node leftBrother = leftSibling(v);
 
     if (leftBrother.isValid()) {
-      prelimX[v] = prelimX[leftBrother] + nodeSpacing +
-                   oriSize->getNodeValue(v).getW() / 2.f +
+      prelimX[v] = prelimX[leftBrother] + nodeSpacing + oriSize->getNodeValue(v).getW() / 2.f +
                    oriSize->getNodeValue(leftBrother).getW() / 2.f;
       modChildX[v] = prelimX[v] - midPoint;
     } else
@@ -220,8 +214,7 @@ void ImprovedWalker::firstWalk(tlp::node v) {
 }
 //====================================================================
 void ImprovedWalker::secondWalk(tlp::node v, float modifierX, int depth) {
-  OrientableCoord coord =
-      oriLayout->createCoord(prelimX[v] + modifierX, depth * spacing, 0);
+  OrientableCoord coord = oriLayout->createCoord(prelimX[v] + modifierX, depth * spacing, 0);
   oriLayout->setNodeValue(v, coord);
 
   for (auto n : getChildren(v))
@@ -267,8 +260,7 @@ void ImprovedWalker::combineSubtree(tlp::node v, tlp::node *defaultAncestor) {
       ancestor[nodeOutsideRight] = v;
 
       float shift = (prelimX[nodeInsideLeft] + shiftInsideLeft) -
-                    (prelimX[nodeInsideRight] + shiftInsideRight) +
-                    nodeSpacing +
+                    (prelimX[nodeInsideRight] + shiftInsideRight) + nodeSpacing +
                     oriSize->getNodeValue(nodeInsideLeft).getW() / 2.f +
                     oriSize->getNodeValue(nodeInsideRight).getW() / 2.f;
 
@@ -291,8 +283,7 @@ void ImprovedWalker::combineSubtree(tlp::node v, tlp::node *defaultAncestor) {
       modChildX[nodeOutsideRight] += shiftInsideLeft - shiftOutsideRight;
     }
 
-    if (nextLeftContour(nodeInsideRight).isValid() &&
-        !nextLeftContour(nodeOutsideLeft).isValid()) {
+    if (nextLeftContour(nodeInsideRight).isValid() && !nextLeftContour(nodeOutsideLeft).isValid()) {
       thread[nodeOutsideLeft] = nextLeftContour(nodeInsideRight);
       modChildX[nodeOutsideLeft] += shiftInsideRight - shiftOutsideLeft;
 
@@ -301,8 +292,7 @@ void ImprovedWalker::combineSubtree(tlp::node v, tlp::node *defaultAncestor) {
   }
 }
 //====================================================================
-void ImprovedWalker::moveSubtree(tlp::node fromNode, tlp::node toNode,
-                                 float rightShift) {
+void ImprovedWalker::moveSubtree(tlp::node fromNode, tlp::node toNode, float rightShift) {
   int nbElementSubtree = countSibling(toNode, fromNode);
   float shiftByElem = rightShift / nbElementSubtree;
 

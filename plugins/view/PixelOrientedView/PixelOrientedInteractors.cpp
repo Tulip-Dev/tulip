@@ -20,18 +20,17 @@
 #include <tulip/MouseInteractors.h>
 
 #include "PixelOrientedInteractors.h"
-#include "PixelOrientedView.h"
 #include "PixelOrientedViewNavigator.h"
+#include "PixelOrientedView.h"
 
-#include "../../utils/PluginNames.h"
 #include "../../utils/StandardInteractorPriority.h"
+#include "../../utils/PluginNames.h"
 
 using namespace std;
 
 namespace tlp {
 
-PixelOrientedInteractor::PixelOrientedInteractor(const QString &iconPath,
-                                                 const QString &text,
+PixelOrientedInteractor::PixelOrientedInteractor(const QString &iconPath, const QString &text,
                                                  const unsigned int priority)
     : NodeLinkDiagramComponentInteractor(iconPath, text, priority) {}
 
@@ -41,10 +40,8 @@ bool PixelOrientedInteractor::isCompatible(const std::string &viewName) const {
 
 PLUGIN(PixelOrientedInteractorNavigation)
 
-PixelOrientedInteractorNavigation::PixelOrientedInteractorNavigation(
-    const PluginContext *)
-    : PixelOrientedInteractor(":/tulip/gui/icons/i_navigation.png",
-                              "Navigate in view",
+PixelOrientedInteractorNavigation::PixelOrientedInteractorNavigation(const PluginContext *)
+    : PixelOrientedInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view",
                               StandardInteractorPriority::Navigation) {}
 
 void PixelOrientedInteractorNavigation::construct() {
@@ -60,12 +57,10 @@ void PixelOrientedInteractorNavigation::construct() {
       "in the view.</p>" +
       "<p>Otherwise, this interactor offers the same functionnalities as the one in the \"Node "
       "Link Diagram view\". The commands are described below:</p>" +
-      "<b>Ctrl + Mouse up/down</b>: zoom<br>" +
-      "<b>Ctrl + Mouse left/right</b>: z rotation<br>" +
+      "<b>Ctrl + Mouse up/down</b>: zoom<br>" + "<b>Ctrl + Mouse left/right</b>: z rotation<br>" +
       "<b>Shift + Mouse</b>: rotation<br>" + "<b>Key up/down</b>: up/down<br>" +
-      "<b>Key left/right</b>: left/right<br>" +
-      "<b>Key page up/down</b>: zoom<br>" + "<b>Key insert</b>: rotate<br>" +
-      "</body>" + "</html>");
+      "<b>Key left/right</b>: left/right<br>" + "<b>Key page up/down</b>: zoom<br>" +
+      "<b>Key insert</b>: rotate<br>" + "</body>" + "</html>");
   push_back(new PixelOrientedViewNavigator);
   push_back(new MouseNKeysNavigator);
 }

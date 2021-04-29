@@ -16,9 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <tulip/PropertyTypes.h>
 #include "tulip/TulipMetaTypes.h"
 #include "tulip/TlpQtTools.h"
-#include <tulip/PropertyTypes.h>
 
 using namespace tlp;
 
@@ -70,8 +70,8 @@ bool QStringType::fromString(QString &s, const std::string &str) {
   return true;
 }
 
-#define CHECK_QVARIANT(TYPE)                                                   \
-  if (v.userType() == qMetaTypeId<TYPE>())                                     \
+#define CHECK_QVARIANT(TYPE)                                                                       \
+  if (v.userType() == qMetaTypeId<TYPE>())                                                         \
     return new TypedData<TYPE>(new TYPE(v.value<TYPE>()));
 
 tlp::DataType *TulipMetaTypes::qVariantToDataType(const QVariant &v) {
@@ -88,8 +88,7 @@ tlp::DataType *TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   if (v.userType() == qMetaTypeId<QVector<bool>>()) {
     auto &&qvb = v.value<QVector<bool>>();
     return new TypedData<tlp::BooleanVectorType::RealType>(
-        new tlp::BooleanVectorType::RealType(
-            std::vector<bool>(qvb.begin(), qvb.end())));
+        new tlp::BooleanVectorType::RealType(std::vector<bool>(qvb.begin(), qvb.end())));
   }
   CHECK_QVARIANT(tlp::PointType::RealType);
   CHECK_QVARIANT(tlp::SizeType::RealType);
@@ -130,8 +129,7 @@ tlp::DataType *TulipMetaTypes::qVariantToDataType(const QVariant &v) {
 
   if (v.userType() == qMetaTypeId<TulipFileDescriptor>()) {
     TulipFileDescriptor desc = v.value<TulipFileDescriptor>();
-    return new TypedData<std::string>(
-        new std::string(QStringToTlpString(desc.absolutePath)));
+    return new TypedData<std::string>(new std::string(QStringToTlpString(desc.absolutePath)));
   }
 
   if (v.userType() == qMetaTypeId<TulipFontIcon>())
@@ -141,28 +139,25 @@ tlp::DataType *TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   return nullptr;
 }
 
-#define CHECK_DATATYPE(TYPE)                                                   \
-  if (type.compare(typeid(TYPE).name()) == 0)                                  \
+#define CHECK_DATATYPE(TYPE)                                                                       \
+  if (type.compare(typeid(TYPE).name()) == 0)                                                      \
     return typedVariant<TYPE>(dm);
 
 #include <QDebug>
 
-QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm,
-                                            const std::string &paramName) {
+QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string &paramName) {
   std::string type = dm->getTypeName();
 
-  // First, we set up some hack to provide custom types for string data whose
-  // name starts with file:: or dir::
+  // First, we set up some hack to provide custom types for string data whose name starts with
+  // file:: or dir::
   QString name(paramName.c_str());
 
   if (type.compare(typeid(std::string).name()) == 0 &&
-      (name.startsWith("file::") || name.startsWith("anyfile::") ||
-       name.startsWith("dir::"))) {
+      (name.startsWith("file::") || name.startsWith("anyfile::") || name.startsWith("dir::"))) {
     TulipFileDescriptor desc;
-    desc.absolutePath =
-        tlpStringToQString(*static_cast<std::string *>(dm->value));
-    desc.type = name.startsWith("dir::") ? TulipFileDescriptor::Directory
-                                         : TulipFileDescriptor::File;
+    desc.absolutePath = tlpStringToQString(*static_cast<std::string *>(dm->value));
+    desc.type =
+        name.startsWith("dir::") ? TulipFileDescriptor::Directory : TulipFileDescriptor::File;
     desc.mustExist = !name.startsWith("any");
     return QVariant::fromValue<TulipFileDescriptor>(desc);
   }
@@ -185,11 +180,9 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm,
     if (dm)
       result = *(static_cast<tlp::BooleanVectorType::RealType *>(dm->value));
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-    return QVariant::fromValue<QVector<bool>>(
-        QVector<bool>::fromStdVector(result));
+    return QVariant::fromValue<QVector<bool>>(QVector<bool>::fromStdVector(result));
 #else
-    return QVariant::fromValue<QVector<bool>>(
-        QVector<bool>(result.begin(), result.end()));
+    return QVariant::fromValue<QVector<bool>>(QVector<bool>(result.begin(), result.end()));
 #endif
   }
 

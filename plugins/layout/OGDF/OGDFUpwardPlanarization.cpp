@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <ogdf/packing/ComponentSplitterLayout.h>
 #include <ogdf/upward/UpwardPlanarizationLayout.h>
+#include <ogdf/packing/ComponentSplitterLayout.h>
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
 
 using namespace tlp;
@@ -38,23 +38,20 @@ class OGDFUpwardPlanarization : public OGDFLayoutPluginBase {
   UpwardPlanarizationLayout *upl;
 
 public:
-  PLUGININFORMATION(
-      "Upward Planarization (OGDF)", "Hoi-Ming Wong", "12/11/2007",
-      "Implements an alternative to the classical Sugiyama approach. It adapts the "
-      "planarization approach for hierarchical graphs and produces significantly "
-      "less crossings than Sugiyama layout.",
-      "1.1", "Hierarchical")
+  PLUGININFORMATION("Upward Planarization (OGDF)", "Hoi-Ming Wong", "12/11/2007",
+                    "Implements an alternative to the classical Sugiyama approach. It adapts the "
+                    "planarization approach for hierarchical graphs and produces significantly "
+                    "less crossings than Sugiyama layout.",
+                    "1.1", "Hierarchical")
   OGDFUpwardPlanarization(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(
-            context, context ? new ogdf::ComponentSplitterLayout() : nullptr) {
+      : OGDFLayoutPluginBase(context, context ? new ogdf::ComponentSplitterLayout() : nullptr) {
     addInParameter<bool>("transpose", paramHelp[0], "false");
     addOutParameter<int>("number of crossings", paramHelp[1]);
     addOutParameter<int>("number of layers", paramHelp[2]);
   }
 
   void beforeCall() override {
-    ComponentSplitterLayout *csl =
-        static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
+    ComponentSplitterLayout *csl = static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
     upl = new UpwardPlanarizationLayout();
     csl->setLayoutModule(upl);
   }

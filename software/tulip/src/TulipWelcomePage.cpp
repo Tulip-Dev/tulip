@@ -19,20 +19,20 @@
 
 #include "TulipWelcomePage.h"
 
-#include <QApplication>
-#include <QDesktopServices>
-#include <QFileInfo>
 #include <QMessageBox>
+#include <QFileInfo>
+#include <QDesktopServices>
+#include <QApplication>
 #include <QNetworkAccessManager>
-#include <QNetworkReply>
 #include <QNetworkRequest>
-#include <QStyle>
+#include <QNetworkReply>
 #include <QXmlStreamReader>
+#include <QStyle>
 
-#include <tulip/Perspective.h>
-#include <tulip/PluginLister.h>
-#include <tulip/PluginManager.h>
 #include <tulip/TulipSettings.h>
+#include <tulip/PluginManager.h>
+#include <tulip/PluginLister.h>
+#include <tulip/Perspective.h>
 
 #include "PerspectiveItemWidget.h"
 #include "ui_TulipWelcomePage.h"
@@ -44,10 +44,8 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent)
   _ui->setupUi(this);
 
   // Finalize Ui
-  _ui->openProjectButton->setIcon(
-      QApplication::style()->standardIcon(QStyle::SP_DirHomeIcon));
-  connect(_ui->openProjectButton, SIGNAL(clicked()), this,
-          SIGNAL(openProject()));
+  _ui->openProjectButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DirHomeIcon));
+  connect(_ui->openProjectButton, SIGNAL(clicked()), this, SIGNAL(openProject()));
 
   // Recent documents list
   TulipSettings::checkRecentDocuments();
@@ -57,32 +55,29 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent)
     QString txt;
 
     for (const QString &txt2 : recentDocs)
-      txt +=
-          "<p><span><img src=\":/tulip/gui/ui/list_bullet_arrow.png\"></img>   <a href=\"" +
-          txt2 + "\">" + txt2 + "</a>" + "</span></p><p/>";
+      txt += "<p><span><img src=\":/tulip/gui/ui/list_bullet_arrow.png\"></img>   <a href=\"" +
+             txt2 + "\">" + txt2 + "</a>" + "</span></p><p/>";
 
     _ui->recentDocumentsLabel->setText(txt);
   }
 
-  std::list<std::string> perspectives =
-      PluginLister::availablePlugins<tlp::Perspective>();
+  std::list<std::string> perspectives = PluginLister::availablePlugins<tlp::Perspective>();
 
-  for (std::list<std::string>::iterator it = perspectives.begin();
-       it != perspectives.end(); ++it) {
-    _ui->perspectivesFrame->layout()->addWidget(
-        new PerspectiveItemWidget(it->c_str()));
+  for (std::list<std::string>::iterator it = perspectives.begin(); it != perspectives.end(); ++it) {
+    _ui->perspectivesFrame->layout()->addWidget(new PerspectiveItemWidget(it->c_str()));
   }
 
   _ui->perspectivesFrame->layout()->addItem(
       new QSpacerItem(0, 0, QSizePolicy::Maximum, QSizePolicy::Expanding));
 }
 
-TulipWelcomePage::~TulipWelcomePage() { delete _ui; }
+TulipWelcomePage::~TulipWelcomePage() {
+  delete _ui;
+}
 
 void TulipWelcomePage::recentFileLinkActivated(const QString &link) {
   if (!QFileInfo(link).exists())
-    QMessageBox::critical(this, "Error",
-                          "Selected recent project does not exist anymore");
+    QMessageBox::critical(this, "Error", "Selected recent project does not exist anymore");
   else
     emit openFile(link);
 }

@@ -22,8 +22,8 @@
 
 #include <tulip/GlMainView.h>
 
-#include <unordered_map>
 #include <vector>
+#include <unordered_map>
 
 #include "../../utils/PluginNames.h"
 #include "Histogram.h"
@@ -47,18 +47,17 @@ class QuickAccessBarImpl;
 /** \file
  *  \brief  Tulip Histogram view
 
- * This view plugin allows to create frequency histograms from graph properties
- (supported types are Double and Integer).
- * By selecting a set of graph properties, frequency histograms are computed and
- displayed for values associated
+ * This view plugin allows to create frequency histograms from graph properties (supported types are
+ Double and Integer).
+ * By selecting a set of graph properties, frequency histograms are computed and displayed for
+ values associated
  * to nodes (or edges).
  *
- * This view also allows to map visual properties (colors, sizes, glyphs, ..) of
- the graph elements
- * with respect to a graph metric in a visual way. These operations can be done
- with the "Metric mapping"
- * interactor. Many interactors are also bundled with the view to perform
- elements selection, statistical analysis, ...
+ * This view also allows to map visual properties (colors, sizes, glyphs, ..) of the graph elements
+ * with respect to a graph metric in a visual way. These operations can be done with the "Metric
+ mapping"
+ * interactor. Many interactors are also bundled with the view to perform elements selection,
+ statistical analysis, ...
  *
  *
  */
@@ -67,45 +66,54 @@ class HistogramView : public GlMainView {
   Q_OBJECT
 
 public:
-  PLUGININFORMATION(
-      ViewName::HistogramViewName, "Antoine Lambert", "02/2009",
-      "<p>The Histogram view allows to create frequency histograms from graph "
-      "properties (supported types are Double and Integer). "
-      "By selecting a set of graph properties, frequency histograms are computed and "
-      "displayed for values associated to nodes (or edges).</p>"
-      "<p>This view also allows to map visual properties (colors, sizes, glyphs, ..) "
-      "of the graph elements with respect to a graph metric in a visual way. These "
-      "operations can be done with the \"Metric mapping\" interactor. Many "
-      "interactors are also bundled with the view to perform elements selection, "
-      "statistical analysis, ...</p>",
-      "1.1", "View")
+  PLUGININFORMATION(ViewName::HistogramViewName, "Antoine Lambert", "02/2009",
+                    "<p>The Histogram view allows to create frequency histograms from graph "
+                    "properties (supported types are Double and Integer). "
+                    "By selecting a set of graph properties, frequency histograms are computed and "
+                    "displayed for values associated to nodes (or edges).</p>"
+                    "<p>This view also allows to map visual properties (colors, sizes, glyphs, ..) "
+                    "of the graph elements with respect to a graph metric in a visual way. These "
+                    "operations can be done with the \"Metric mapping\" interactor. Many "
+                    "interactors are also bundled with the view to perform elements selection, "
+                    "statistical analysis, ...</p>",
+                    "1.1", "View")
 
   HistogramView(const PluginContext *);
   ~HistogramView() override;
 
-  std::string icon() const override { return ":/histogram_view.png"; }
+  std::string icon() const override {
+    return ":/histogram_view.png";
+  }
 
   void setState(const DataSet &dataSet) override;
   DataSet state() const override;
   void graphChanged(Graph *graph) override;
   void graphicsViewResized(int w, int h) override;
-  Graph *histoGraph() { return _histoGraph; }
+  Graph *histoGraph() {
+    return _histoGraph;
+  }
   bool eventFilter(QObject *object, QEvent *event) override;
   QList<QWidget *> configurationWidgets() const override;
 
   std::vector<Histogram *> getHistograms() const;
-  bool smallMultiplesViewSet() const { return smallMultiplesView; }
+  bool smallMultiplesViewSet() const {
+    return smallMultiplesView;
+  }
 
   QuickAccessBar *getQuickAccessBarImpl() override;
 
   void switchFromSmallMultiplesToDetailedView(Histogram *histogramToDetail);
   void switchFromDetailedViewToSmallMultiples();
   BoundingBox getSmallMultiplesBoundingBox() const;
-  Histogram *getDetailedHistogram() const { return detailedHistogram; }
+  Histogram *getDetailedHistogram() const {
+    return detailedHistogram;
+  }
 
   void toggleInteractors(const bool activate);
 
-  ElementType getDataLocation() const { return dataLocation; }
+  ElementType getDataLocation() const {
+    return dataLocation;
+  }
 
   void updateHistograms(Histogram *detailOverview = nullptr);
 

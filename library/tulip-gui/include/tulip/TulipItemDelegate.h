@@ -37,21 +37,23 @@ class TLP_QT_SCOPE TulipItemDelegate : public QStyledItemDelegate {
   QComboBox *_currentMonitoredCombo;
 
 public:
-  static QVariant showEditorDialog(tlp::ElementType, tlp::PropertyInterface *,
-                                   tlp::Graph *, TulipItemDelegate *,
-                                   QWidget *dialogParent = nullptr,
+  static QVariant showEditorDialog(tlp::ElementType, tlp::PropertyInterface *, tlp::Graph *,
+                                   TulipItemDelegate *, QWidget *dialogParent = nullptr,
                                    unsigned int id = UINT_MAX);
 
   explicit TulipItemDelegate(QObject *parent = nullptr);
   ~TulipItemDelegate() override;
 
-  template <typename T> void registerCreator(tlp::TulipItemEditorCreator *);
+  template <typename T>
+  void registerCreator(tlp::TulipItemEditorCreator *);
 
   void unregisterCreator(tlp::TulipItemEditorCreator *);
 
-  template <typename T> void unregisterCreator();
+  template <typename T>
+  void unregisterCreator();
 
-  template <typename T> tlp::TulipItemEditorCreator *creator() const;
+  template <typename T>
+  tlp::TulipItemEditorCreator *creator() const;
 
   tlp::TulipItemEditorCreator *creator(int) const;
 
@@ -59,13 +61,11 @@ public:
                         const QModelIndex &index) const override;
   void paint(QPainter *painter, const QStyleOptionViewItem &option,
              const QModelIndex &index) const override;
-  QString displayText(const QVariant &value,
-                      const QLocale &locale) const override;
+  QString displayText(const QVariant &value, const QLocale &locale) const override;
   void setEditorData(QWidget *editor, const QModelIndex &index) const override;
   void setModelData(QWidget *editor, QAbstractItemModel *model,
                     const QModelIndex &index) const override;
-  QSize sizeHint(const QStyleOptionViewItem &option,
-                 const QModelIndex &index) const override;
+  QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
   bool eventFilter(QObject *object, QEvent *event) override;
 

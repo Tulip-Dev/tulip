@@ -27,8 +27,7 @@
  * "Energy Models for Graph Clustering", \n
  * in Journal of Graph \n
  * Algorithms and Applications 11(2):453-480, 2007
- * doi: <a
- * href=\"https://dx.doi.org/10.7155/jgaa.00154\">10.7155/jgaa.00154</a>,
+ * doi: <a href=\"https://dx.doi.org/10.7155/jgaa.00154\">10.7155/jgaa.00154</a>,
  *
  * The code of the plugin has been translated and adapted
  * from A. Noack's java implementation of the LinLog algorithm
@@ -38,14 +37,13 @@
 class LinLogAlgorithm : public tlp::LayoutAlgorithm {
 
 public:
-  PLUGININFORMATION(
-      "LinLog", "B. Renoust", "11/02/13",
-      "Implements the LinLog layout algorithm, an energy model layout algorithm, "
-      "first published as:<br/>"
-      "<b>Energy Models for Graph Clustering</b>, Andreas Noack., "
-      "Journal of Graph Algorithms and Applications 11(2):453-480, 2007, "
-      "doi: <a href=\"https://dx.doi.org/10.7155/jgaa.00154\">10.7155/jgaa.00154</a>",
-      "1.0", "Force Directed")
+  PLUGININFORMATION("LinLog", "B. Renoust", "11/02/13",
+                    "Implements the LinLog layout algorithm, an energy model layout algorithm, "
+                    "first published as:<br/>"
+                    "<b>Energy Models for Graph Clustering</b>, Andreas Noack., "
+                    "Journal of Graph Algorithms and Applications 11(2):453-480, 2007, "
+                    "doi: <a href=\"https://dx.doi.org/10.7155/jgaa.00154\">10.7155/jgaa.00154</a>",
+                    "1.0", "Force Directed")
 
   LinLogAlgorithm(const tlp::PluginContext *context);
 

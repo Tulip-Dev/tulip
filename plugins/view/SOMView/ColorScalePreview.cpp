@@ -23,8 +23,7 @@
 
 using namespace tlp;
 
-ColorScalePreview::ColorScalePreview(ColorScale *colorScale)
-    : currentColorScale(colorScale) {
+ColorScalePreview::ColorScalePreview(ColorScale *colorScale) : currentColorScale(colorScale) {
   setAutoFillBackground(true);
   fillLabel();
 }

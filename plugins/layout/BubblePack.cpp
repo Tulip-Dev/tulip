@@ -19,23 +19,22 @@
 #include <algorithm>
 
 #include <tulip/Circle.h>
-#include <tulip/ConnectedTest.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/SizeProperty.h>
 #include <tulip/StaticProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/ConnectedTest.h>
 #include <tulip/TreeTest.h>
 
 class BubblePack : public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATION("Bubble Pack", "D.Auber", "01/10/2012", "Stable", "1.0",
-                    "Tree")
+  PLUGININFORMATION("Bubble Pack", "D.Auber", "01/10/2012", "Stable", "1.0", "Tree")
   BubblePack(const tlp::PluginContext *context);
   ~BubblePack() override;
   bool run() override;
 
 private:
-  double computeRelativePosition(
-      tlp::node n, tlp::NodeStaticProperty<tlp::Vec4f> &relativePosition);
+  double computeRelativePosition(tlp::node n,
+                                 tlp::NodeStaticProperty<tlp::Vec4f> &relativePosition);
   void calcLayout(tlp::node n, tlp::Vec2f pos,
                   tlp::NodeStaticProperty<tlp::Vec4f> &relativePosition);
 
@@ -65,8 +64,8 @@ struct lessRadius {
   }
 };
 
-double BubblePack::computeRelativePosition(
-    tlp::node n, NodeStaticProperty<Vec4f> &relativePosition) {
+double BubblePack::computeRelativePosition(tlp::node n,
+                                           NodeStaticProperty<Vec4f> &relativePosition) {
 
   Size centralNodeSize = nodeSize->getNodeValue(n);
   centralNodeSize[2] = 0.; // remove z-coordinates because the drawing is 2D
@@ -177,8 +176,7 @@ double BubblePack::computeRelativePosition(
         TLP_PARALLEL_MAP_INDICES(discret, [&](unsigned int j) {
           float _angle = float(j) * 2. * M_PI / float(discret) + angle;
           double spiralRadius = sizeFather + radius + 1E-3;
-          Circled tmp(spiralRadius * cos(_angle), spiralRadius * sin(_angle),
-                      radius);
+          Circled tmp(spiralRadius * cos(_angle), spiralRadius * sin(_angle), radius);
           bool restart = true;
 
           // int restcnt = 0;
@@ -188,12 +186,10 @@ double BubblePack::computeRelativePosition(
 
             for (unsigned int k = 0; k < placed.size(); ++k) {
               if (placed[k].dist(tmp) < placed[k].radius + tmp.radius) {
-                spiralRadius = std::max(spiralRadius, double(placed[k].norm()) +
-                                                          placed[k].radius +
+                spiralRadius = std::max(spiralRadius, double(placed[k].norm()) + placed[k].radius +
                                                           radius + 1E-3);
                 // spiralRadius += 0.01;
-                tmp = Circled(spiralRadius * cos(_angle),
-                              spiralRadius * sin(_angle), radius);
+                tmp = Circled(spiralRadius * cos(_angle), spiralRadius * sin(_angle), radius);
                 // restart = true;
               }
             }
@@ -218,8 +214,7 @@ double BubblePack::computeRelativePosition(
   circles.push_back(Circled(0., 0., sizeFather));
   Circled circleH;
 
-  if (circles.size() >
-      2000) { // Stack overflow when number of circles exceed 2k
+  if (circles.size() > 2000) { // Stack overflow when number of circles exceed 2k
     circleH = tlp::lazyEnclosingCircle(circles);
   } else {
     circleH = tlp::enclosingCircle(circles);
@@ -247,8 +242,7 @@ double BubblePack::computeRelativePosition(
   return circleH.radius + 1.;
 }
 
-void BubblePack::calcLayout(tlp::node n, Vec2f pos,
-                            NodeStaticProperty<Vec4f> &relativePosition) {
+void BubblePack::calcLayout(tlp::node n, Vec2f pos, NodeStaticProperty<Vec4f> &relativePosition) {
   /*
    * Make the recursive call, to place the children of n.
    */
@@ -270,8 +264,7 @@ static const char *paramHelp[] = {
     // node size
     "This parameter defines the property used for node's sizes."};
 
-BubblePack::BubblePack(const tlp::PluginContext *context)
-    : LayoutAlgorithm(context) {
+BubblePack::BubblePack(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
   addInParameter<bool>("complexity", paramHelp[0], "true");
   addInParameter<SizeProperty>("node size", paramHelp[1], "viewSize");
   addDependency("Connected Component Packing", "1.0");
@@ -306,8 +299,8 @@ bool BubblePack::run() {
     LayoutProperty tmpLayout(graph);
     DataSet tmpdataSet;
     tmpdataSet.set("coordinates", result);
-    graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout,
-                                  err, &tmpdataSet, pluginProgress);
+    graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout, err, &tmpdataSet,
+                                  pluginProgress);
     *result = tmpLayout;
     return true;
   }

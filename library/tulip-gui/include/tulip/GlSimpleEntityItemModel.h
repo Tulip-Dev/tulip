@@ -36,11 +36,11 @@ public:
 
   /**
    * @brief Return properties names for this entity
-   * These properties names are used to dynamically configure the embedded
-   * entity for example this function can be used by Mouse information
-   * interactor If you create a class that inherits of GlSimpleEntityItemEditor
-   * : you can reimplement this function to return your properties names for
-   * example : return QStringList() << "fillColor" << "outlineColor";
+   * These properties names are used to dynamically configure the embedded entity
+   * for example this function can be used by Mouse information interactor
+   * If you create a class that inherits of GlSimpleEntityItemEditor : you can reimplement this
+   * function to return your properties names
+   * for example : return QStringList() << "fillColor" << "outlineColor";
    * @return QList of properties names
    */
   virtual QStringList propertiesNames() const;
@@ -49,21 +49,23 @@ public:
    * @brief Return properties (in QVariant format) for this entity
    * These properties QVariant are used to dynamically configure the entity
    * for example this function can be used by Mouse information interactor
-   * If you create a class that inherits of GlSimpleEntity : you can reimplement
-   * this function to return your properties for example : return QVariantList()
-   * << QVariant::fromValue<Color>(getFillColor()) <<
+   * If you create a class that inherits of GlSimpleEntity : you can reimplement this function to
+   * return your properties
+   * for example : return QVariantList() << QVariant::fromValue<Color>(getFillColor()) <<
    * QVariant::fromValue<Color>(getOutlineColor());
    * @return QList of properties (in QVariant format)
    */
   virtual QVariantList propertiesQVariant() const;
 
   /**
-   * @brief Set value for a property previously returned by propertiesNames()
-   * and properties() functions This function is called  to set the value of a
-   * property this parameter is returned in list by propertiesNames() and
-   * properties functions If you create a class that inherits of
-   * GlSimpleEntityItemEditor : you can reimplement this function to set your
-   * properties For example : if(name=="fillColor")
+   * @brief Set value for a property previously returned by propertiesNames() and properties()
+   * functions
+   * This function is called  to set the value of a property
+   * this parameter is returned in list by propertiesNames() and properties functions
+   * If you create a class that inherits of GlSimpleEntityItemEditor : you can reimplement this
+   * function to set your properties
+   * For example :
+   * if(name=="fillColor")
    *   setFillColor(value.value<Color>());
    * else if(name=="outlineColor")
    *   setOutlineColor(value.value<Color>());
@@ -81,25 +83,22 @@ class TLP_QT_SCOPE GlSimpleEntityItemModel : public QAbstractItemModel {
 public:
   enum SimpleEntityRole { SimpleEntityRole = Qt::UserRole + 1 };
 
-  GlSimpleEntityItemModel(GlSimpleEntityItemEditor *itemEditor,
-                          QObject *parent = nullptr);
+  GlSimpleEntityItemModel(GlSimpleEntityItemEditor *itemEditor, QObject *parent = nullptr);
   ~GlSimpleEntityItemModel() override;
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const override;
   int columnCount(const QModelIndex &parent = QModelIndex()) const override;
   QModelIndex parent(const QModelIndex &child) const override;
 
-  QVariant headerData(int section, Qt::Orientation orientation,
-                      int role) const override;
-  QModelIndex index(int row, int column,
-                    const QModelIndex &parent = QModelIndex()) const override;
-  QVariant data(const QModelIndex &index,
-                int role = Qt::DisplayRole) const override;
+  QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-  QString headerText() const { return QString("toto"); }
+  QString headerText() const {
+    return QString("toto");
+  }
 
-  bool setData(const QModelIndex &index, const QVariant &value,
-               int role) override;
+  bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
   Qt::ItemFlags flags(const QModelIndex &index) const override {
     return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;

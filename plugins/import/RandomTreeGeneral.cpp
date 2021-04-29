@@ -90,19 +90,13 @@ public:
 
     if (dataSet != nullptr) {
       if (!dataSet->get("Minimum size", sizeMin))
-        dataSet->get(
-            "minsize",
-            sizeMin); // keep old parameter name for backward compatibility
+        dataSet->get("minsize", sizeMin); // keep old parameter name for backward compatibility
 
       if (!dataSet->get("Maximum size", sizeMax))
-        dataSet->get(
-            "maxsize",
-            sizeMax); // keep old parameter name for backward compatibility
+        dataSet->get("maxsize", sizeMax); // keep old parameter name for backward compatibility
 
       if (!dataSet->get("Maximal node's degree", arityMax))
-        dataSet->get(
-            "maxdegree",
-            arityMax); // keep old parameter name for backward compatibility
+        dataSet->get("maxdegree", arityMax); // keep old parameter name for backward compatibility
 
       dataSet->get("tree layout", needLayout);
     }
@@ -117,16 +111,14 @@ public:
 
     if (sizeMax < 1) {
       if (pluginProgress)
-        pluginProgress->setError(
-            "Error: maximum size must be a strictly positive integer");
+        pluginProgress->setError("Error: maximum size must be a strictly positive integer");
 
       return false;
     }
 
     if (sizeMax < sizeMin) {
       if (pluginProgress)
-        pluginProgress->setError(
-            "Error: maximum size must be greater than minimum size");
+        pluginProgress->setError("Error: maximum size must be greater than minimum size");
 
       return false;
     }
@@ -159,8 +151,7 @@ public:
       // apply Tree Leaf
       string errMsg;
       LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
-      return graph->applyPropertyAlgorithm("Tree Leaf", layout, errMsg, nullptr,
-                                           pluginProgress);
+      return graph->applyPropertyAlgorithm("Tree Leaf", layout, errMsg, nullptr, pluginProgress);
     }
 
     return true;

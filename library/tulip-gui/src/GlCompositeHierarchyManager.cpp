@@ -18,11 +18,11 @@
  */
 #include "tulip/GlCompositeHierarchyManager.h"
 
-#include <tulip/DoubleProperty.h>
-#include <tulip/GlConvexGraphHull.h>
-#include <tulip/GlLayer.h>
-#include <tulip/GlTextureManager.h>
 #include <tulip/Graph.h>
+#include <tulip/GlLayer.h>
+#include <tulip/GlConvexGraphHull.h>
+#include <tulip/GlTextureManager.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
 
@@ -41,8 +41,7 @@ private:
   GlCompositeHierarchyManager *_manager;
 };
 
-GlHierarchyMainComposite::GlHierarchyMainComposite(
-    GlCompositeHierarchyManager *manager)
+GlHierarchyMainComposite::GlHierarchyMainComposite(GlCompositeHierarchyManager *manager)
     : _manager(manager) {}
 
 void GlHierarchyMainComposite::setVisible(bool visible) {
@@ -53,16 +52,16 @@ void GlHierarchyMainComposite::setVisible(bool visible) {
 const std::string GlCompositeHierarchyManager::temporaryPropertyValue =
     "temporaryPropertyFromGlCompositeHierarchyManager";
 
-GlCompositeHierarchyManager::GlCompositeHierarchyManager(
-    Graph *graph, GlLayer *layer, const std::string &layerName,
-    LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation,
-    bool visible, const std::string &namingProperty,
-    const std::string &subCompositeSuffix)
+GlCompositeHierarchyManager::GlCompositeHierarchyManager(Graph *graph, GlLayer *layer,
+                                                         const std::string &layerName,
+                                                         LayoutProperty *layout, SizeProperty *size,
+                                                         DoubleProperty *rotation, bool visible,
+                                                         const std::string &namingProperty,
+                                                         const std::string &subCompositeSuffix)
     : _currentColor(0), _currentTexture(0), _graph(graph), _layer(layer),
-      _composite(new GlHierarchyMainComposite(this)), _layout(layout),
-      _size(size), _rotation(rotation), _layerName(layerName),
-      _isVisible(visible), _subCompositesSuffix(subCompositeSuffix),
-      _nameAttribute(namingProperty) {
+      _composite(new GlHierarchyMainComposite(this)), _layout(layout), _size(size),
+      _rotation(rotation), _layerName(layerName), _isVisible(visible),
+      _subCompositesSuffix(subCompositeSuffix), _nameAttribute(namingProperty) {
   _layer->addGlEntity(_composite, _layerName);
   _composite->setVisible(_isVisible);
   _layout->addObserver(this);
@@ -101,8 +100,8 @@ const std::string &GlCompositeHierarchyManager::getTexture() {
   return current;
 }
 
-void GlCompositeHierarchyManager::buildComposite(
-    Graph *current, GlConvexGraphHullsComposite *composite) {
+void GlCompositeHierarchyManager::buildComposite(Graph *current,
+                                                 GlConvexGraphHullsComposite *composite) {
   static bool loadTextures = true;
   if (loadTextures) {
     for (const string &texture : _fillTextures)
@@ -113,18 +112,16 @@ void GlCompositeHierarchyManager::buildComposite(
 
   stringstream naming;
   naming << current->getName() << " [#" << current->getId() << ']';
-  GlConvexGraphHull *hull = new GlConvexGraphHull(
-      composite, naming.str(), getColor(), _fillTextures[_currentColor - 1],
-      current, _layout, _size, _rotation);
+  GlConvexGraphHull *hull =
+      new GlConvexGraphHull(composite, naming.str(), getColor(), _fillTextures[_currentColor - 1],
+                            current, _layout, _size, _rotation);
   hull->setTextureZoom(0.02);
 
   _graphsComposites.emplace(
-      current, std::pair<GlConvexGraphHullsComposite *, GlConvexGraphHull *>(
-                   composite, hull));
+      current, std::pair<GlConvexGraphHullsComposite *, GlConvexGraphHull *>(composite, hull));
 
   if (!current->subGraphs().empty()) {
-    GlConvexGraphHullsComposite *newComposite =
-        new GlConvexGraphHullsComposite();
+    GlConvexGraphHullsComposite *newComposite = new GlConvexGraphHullsComposite();
     naming << " - " << _subCompositesSuffix;
     composite->addGlEntity(newComposite, naming.str());
 
@@ -158,12 +155,11 @@ void GlCompositeHierarchyManager::treatEvent(const Event &evt) {
     case GraphEvent::TLP_BEFORE_SET_ATTRIBUTE: {
       auto attributeName = gEvt->getAttributeName();
 
-      // we save the old property value in a temporary attribute, so we can find
-      // the GlEntity and change its name once the attribute has been set
+      // we save the old property value in a temporary attribute, so we can find the GlEntity and
+      // change its name once the attribute has been set
       if (attributeName == _nameAttribute) {
-        graph->setAttribute<string>(
-            GlCompositeHierarchyManager::temporaryPropertyValue,
-            graph->getName());
+        graph->setAttribute<string>(GlCompositeHierarchyManager::temporaryPropertyValue,
+                                    graph->getName());
       }
 
       break;
@@ -174,14 +170,11 @@ void GlCompositeHierarchyManager::treatEvent(const Event &evt) {
 
       if (attributeName == _nameAttribute) {
         string oldPropertyValue;
-        graph->getAttribute<string>(
-            GlCompositeHierarchyManager::temporaryPropertyValue,
-            oldPropertyValue);
-        graph->removeAttribute(
-            GlCompositeHierarchyManager::temporaryPropertyValue);
+        graph->getAttribute<string>(GlCompositeHierarchyManager::temporaryPropertyValue,
+                                    oldPropertyValue);
+        graph->removeAttribute(GlCompositeHierarchyManager::temporaryPropertyValue);
         GlComposite *composite = _graphsComposites[graph].first;
-        GlSimpleEntity *temporaryEntity =
-            composite->findGlEntity(oldPropertyValue);
+        GlSimpleEntity *temporaryEntity = composite->findGlEntity(oldPropertyValue);
 
         if (temporaryEntity) {
           composite->deleteGlEntity(temporaryEntity);
@@ -274,8 +267,7 @@ void GlCompositeHierarchyManager::setGraph(tlp::Graph *graph) {
 void GlCompositeHierarchyManager::createComposite() {
   _composite->reset(true);
   _graphsComposites.clear();
-  LayoutProperty *layout =
-      _graph->getProperty<LayoutProperty>(_layout->getName());
+  LayoutProperty *layout = _graph->getProperty<LayoutProperty>(_layout->getName());
   if (layout != _layout) {
     _layout->removeObserver(this);
     _layout = layout;
@@ -287,8 +279,7 @@ void GlCompositeHierarchyManager::createComposite() {
     _size = size;
     _size->addObserver(this);
   }
-  DoubleProperty *rotation =
-      _graph->getProperty<DoubleProperty>(_rotation->getName());
+  DoubleProperty *rotation = _graph->getProperty<DoubleProperty>(_rotation->getName());
   if (rotation != _rotation) {
     _rotation->removeObserver(this);
     _rotation = rotation;
@@ -310,15 +301,17 @@ void GlCompositeHierarchyManager::setVisible(bool visible) {
   }
 }
 
-bool GlCompositeHierarchyManager::isVisible() const { return _isVisible; }
+bool GlCompositeHierarchyManager::isVisible() const {
+  return _isVisible;
+}
 
 DataSet GlCompositeHierarchyManager::getData() {
   DataSet set;
 
   for (const auto &it : _graphsComposites) {
     unsigned int graphId = it.first->getId();
-    unsigned int visibility = uint(it.second.first->isVisible()) * 2 +
-                              uint(it.second.second->isVisible());
+    unsigned int visibility =
+        uint(it.second.first->isVisible()) * 2 + uint(it.second.second->isVisible());
     stringstream graph;
     graph << graphId;
     set.set(graph.str(), visibility);

@@ -13,10 +13,9 @@
 #include "constraint.h"
 #include <cassert>
 namespace vpsc {
-Constraint::Constraint(Variable *left, Variable *right, double gap,
-                       bool equality)
-    : left(left), right(right), gap(gap), lm(0), timeStamp(0), active(false),
-      visited(false), equality(equality) {
+Constraint::Constraint(Variable *left, Variable *right, double gap, bool equality)
+    : left(left), right(right), gap(gap), lm(0), timeStamp(0), active(false), visited(false),
+      equality(equality) {
   left->out.push_back(this);
   right->in.push_back(this);
 }

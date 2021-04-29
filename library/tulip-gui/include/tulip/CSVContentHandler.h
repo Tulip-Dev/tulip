@@ -27,8 +27,7 @@
 
 namespace tlp {
 /**
- * @brief Interface to inherit to get and treat data from csv files with
- * CSVParser object.
+ * @brief Interface to inherit to get and treat data from csv files with CSVParser object.
  */
 class TLP_QT_SCOPE CSVContentHandler {
 public:
@@ -43,14 +42,12 @@ public:
    * @param row The number of the row.
    * @param lineTokens The tokens.
    */
-  virtual bool line(unsigned int row,
-                    const std::vector<std::string> &lineTokens) = 0;
+  virtual bool line(unsigned int row, const std::vector<std::string> &lineTokens) = 0;
 
   /**
    * Function called at the end of the parsing.
    * @param rowNumber the number of row read in the file.
-   * @param columnNumber The column number for the line with the greatest column
-   * number.
+   * @param columnNumber The column number for the line with the greatest column number.
    */
   virtual bool end(unsigned int rowNumber, unsigned int columnNumber) = 0;
 };

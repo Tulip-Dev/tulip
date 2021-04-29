@@ -27,14 +27,17 @@ using namespace tlp;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(StringPropertyTest);
 
-void StringPropertyTest::setUp() { graph = tlp::newGraph(); }
+void StringPropertyTest::setUp() {
+  graph = tlp::newGraph();
+}
 
-void StringPropertyTest::tearDown() { delete graph; }
+void StringPropertyTest::tearDown() {
+  delete graph;
+}
 
 void StringPropertyTest::simpleVectorTest() {
   node n = graph->addNode();
-  StringVectorProperty *vectorProperty =
-      graph->getProperty<StringVectorProperty>("data_1");
+  StringVectorProperty *vectorProperty = graph->getProperty<StringVectorProperty>("data_1");
   vector<string> tmp;
 
   for (unsigned int i = 0; i < 5; ++i) {
@@ -55,8 +58,7 @@ void StringPropertyTest::simpleVectorTest() {
 
 void StringPropertyTest::complexVectorTest() {
   node n = graph->addNode();
-  StringVectorProperty *vectorProperty =
-      graph->getProperty<StringVectorProperty>("stp");
+  StringVectorProperty *vectorProperty = graph->getProperty<StringVectorProperty>("stp");
   vector<string> tmp;
 
   for (unsigned int i = 0; i < 5000; ++i) {

@@ -20,11 +20,11 @@
 #ifndef GLGLYPHRENDERER_H
 #define GLGLYPHRENDERER_H
 
-#include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include <tulip/Edge.h>
-#include <tulip/Node.h>
 #include <tulip/Size.h>
+#include <tulip/Color.h>
+#include <tulip/Node.h>
+#include <tulip/Edge.h>
 
 #include <vector>
 
@@ -40,10 +40,10 @@ struct TLP_GL_SCOPE NodeGlyphData {
 
   NodeGlyphData() {}
 
-  NodeGlyphData(Glyph *glyph, node n, float lod, const Coord &nodePos,
-                const Size &nodeSize, float nodeRot, bool selected)
-      : glyph(glyph), n(n), lod(lod), nodePos(nodePos), nodeSize(nodeSize),
-        nodeRot(nodeRot), selected(selected) {}
+  NodeGlyphData(Glyph *glyph, node n, float lod, const Coord &nodePos, const Size &nodeSize,
+                float nodeRot, bool selected)
+      : glyph(glyph), n(n), lod(lod), nodePos(nodePos), nodeSize(nodeSize), nodeRot(nodeRot),
+        selected(selected) {}
 
   Glyph *glyph;
   node n;
@@ -58,10 +58,9 @@ struct TLP_GL_SCOPE EdgeExtremityGlyphData {
 
   EdgeExtremityGlyphData() {}
 
-  EdgeExtremityGlyphData(EdgeExtremityGlyph *glyph, edge e, node source,
-                         Color glyphColor, Color glyphBorderColor, float lod,
-                         Coord beginAnchor, Coord srcAnchor, Size size,
-                         bool selected)
+  EdgeExtremityGlyphData(EdgeExtremityGlyph *glyph, edge e, node source, Color glyphColor,
+                         Color glyphBorderColor, float lod, Coord beginAnchor, Coord srcAnchor,
+                         Size size, bool selected)
       : glyph(glyph), e(e), source(source), glyphColor(glyphColor),
         glyphBorderColor(glyphBorderColor), lod(lod), beginAnchor(beginAnchor),
         srcAnchor(srcAnchor), size(size), selected(selected) {}
@@ -81,22 +80,18 @@ struct TLP_GL_SCOPE EdgeExtremityGlyphData {
 class TLP_GL_SCOPE GlGlyphRenderer {
 
 public:
-  GlGlyphRenderer(GlGraphInputData *inputData)
-      : _inputData(inputData), _renderingStarted(false) {}
+  GlGlyphRenderer(GlGraphInputData *inputData) : _inputData(inputData), _renderingStarted(false) {}
 
   void startRendering();
 
   bool renderingHasStarted();
 
-  void addNodeGlyphRendering(Glyph *glyph, node n, float lod,
-                             const Coord &nodePos, const Size &nodeSize,
-                             float nodeRot, bool selected);
+  void addNodeGlyphRendering(Glyph *glyph, node n, float lod, const Coord &nodePos,
+                             const Size &nodeSize, float nodeRot, bool selected);
 
-  void addEdgeExtremityGlyphRendering(EdgeExtremityGlyph *glyph, edge e,
-                                      node source, Color glyphColor,
-                                      Color glyphBorderColor, float lod,
-                                      Coord beginAnchor, Coord srcAnchor,
-                                      Size size, bool selected);
+  void addEdgeExtremityGlyphRendering(EdgeExtremityGlyph *glyph, edge e, node source,
+                                      Color glyphColor, Color glyphBorderColor, float lod,
+                                      Coord beginAnchor, Coord srcAnchor, Size size, bool selected);
 
   void endRendering();
 

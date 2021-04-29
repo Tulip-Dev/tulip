@@ -18,8 +18,8 @@
  */
 #ifndef Tulip_HierarchicalGraph_H
 #define Tulip_HierarchicalGraph_H
-#include <tulip/TulipPluginHeaders.h>
 #include <unordered_map>
+#include <tulip/TulipPluginHeaders.h>
 
 class LessThanNode2 {
 public:
@@ -48,12 +48,11 @@ public:
 class HierarchicalGraph : public tlp::LayoutAlgorithm {
 
 public:
-  PLUGININFORMATION(
-      "Hierarchical Graph", "David Auber", "23/05/2000",
-      "Implements the hierarchical layout algorithm  first published as:<br/>"
-      "<b>Tulip - A Huge Graph Visualization Framework</b>, D. Auber, Book. Graph "
-      "Drawing Software. (Ed. Michael Junger & Petra Mutzel) pages 105--126. (2004).",
-      "1.0", "Hierarchical")
+  PLUGININFORMATION("Hierarchical Graph", "David Auber", "23/05/2000",
+                    "Implements the hierarchical layout algorithm  first published as:<br/>"
+                    "<b>Tulip - A Huge Graph Visualization Framework</b>, D. Auber, Book. Graph "
+                    "Drawing Software. (Ed. Michael Junger & Petra Mutzel) pages 105--126. (2004).",
+                    "1.0", "Hierarchical")
   HierarchicalGraph(const tlp::PluginContext *context);
   ~HierarchicalGraph() override;
   bool run() override;
@@ -64,16 +63,14 @@ private:
   tlp::DoubleProperty *embedding;
   void twoLayerCrossReduction(tlp::Graph *sg, unsigned int freeLayer);
   void crossReduction(tlp::Graph *sg);
-  void computeEdgeBends(
-      const tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout,
-      const std::unordered_map<tlp::edge, tlp::edge> &replacedEdges,
-      const std::vector<tlp::edge> &reversedEdges);
+  void computeEdgeBends(const tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout,
+                        const std::unordered_map<tlp::edge, tlp::edge> &replacedEdges,
+                        const std::vector<tlp::edge> &reversedEdges);
   void computeSelfLoops(tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout,
                         std::vector<tlp::SelfLoops> &listSelfLoops);
   void buildGrid(tlp::Graph *);
   unsigned int degree(tlp::Graph *sg, tlp::node n, bool sense);
-  void initCross(tlp::Graph *sg, tlp::node n,
-                 tlp::MutableContainer<bool> &visited, int id);
+  void initCross(tlp::Graph *sg, tlp::node n, tlp::MutableContainer<bool> &visited, int id);
 
   LessThanNode2 lessNode;
   std::string orientation;

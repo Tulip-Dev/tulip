@@ -21,14 +21,12 @@
 
 //================================================================================
 template <typename ATTRIBUTETYPE>
-bool tlp::Graph::getAttribute(const std::string &name,
-                              ATTRIBUTETYPE &value) const {
+bool tlp::Graph::getAttribute(const std::string &name, ATTRIBUTETYPE &value) const {
   return getAttributes().get(name, value);
 }
 //================================================================================
 template <typename ATTRIBUTETYPE>
-void tlp::Graph::setAttribute(const std::string &name,
-                              const ATTRIBUTETYPE &value) {
+void tlp::Graph::setAttribute(const std::string &name, const ATTRIBUTETYPE &value) {
   tlp::DataSet &data = getNonConstAttributes();
   notifyBeforeSetAttribute(name);
   data.set(name, value);

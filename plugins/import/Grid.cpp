@@ -45,26 +45,25 @@ static const char *paramHelp[] = {
 /// Grid - Import of a grid.
 /** This plugin enables to create a grid.
  *
- *  User can specify the connectivity of each nodes in the grid, spacing between
- * nodes and if opposite nodes are connected.
+ *  User can specify the connectivity of each nodes in the grid, spacing between nodes and if
+ * opposite nodes are connected.
  */
 class Grid : public ImportModule {
 public:
-  PLUGININFORMATION("Grid", "Jonathan Dubois", "02/12/2003",
-                    "Imports a new grid structured graph.", "2.0", "Graph")
+  PLUGININFORMATION("Grid", "Jonathan Dubois", "02/12/2003", "Imports a new grid structured graph.",
+                    "2.0", "Graph")
   Grid(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("width", paramHelp[0], "10");
     addInParameter<unsigned int>("height", paramHelp[1], "10");
-    addInParameter<StringCollection>("connectivity", paramHelp[2], "4;6;8",
-                                     true, "4 <br> 6 <br> 8");
+    addInParameter<StringCollection>("connectivity", paramHelp[2], "4;6;8", true,
+                                     "4 <br> 6 <br> 8");
     addInParameter<bool>("oppositeNodesConnected", paramHelp[3], "false");
     addInParameter<double>("spacing", paramHelp[4], "1.0");
   }
   ~Grid() override {}
 
-  void buildRow(const vector<node> &nodes, vector<pair<node, node>> &ends,
-                unsigned int iRow, unsigned width, int conn, bool isTore,
-                double spacing) {
+  void buildRow(const vector<node> &nodes, vector<pair<node, node>> &ends, unsigned int iRow,
+                unsigned width, int conn, bool isTore, double spacing) {
     LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
 
     // Used for conn == 6
@@ -87,12 +86,10 @@ public:
       current = nodes[iBegin + i];
 
       if (conn == 6) {
-        layout->setNodeValue(current,
-                             Coord(i * 2 * h + shift + i * spacing,
-                                   iRow * (1.0 - hHeight + spacing), 0));
-      } else
         layout->setNodeValue(
-            current, Coord(i * (1.0 + spacing), iRow * (1.0 + spacing), 0));
+            current, Coord(i * 2 * h + shift + i * spacing, iRow * (1.0 - hHeight + spacing), 0));
+      } else
+        layout->setNodeValue(current, Coord(i * (1.0 + spacing), iRow * (1.0 + spacing), 0));
 
       if (previous.isValid())
         ends.push_back(pair<node, node>(previous, current));
@@ -104,51 +101,41 @@ public:
       ends.push_back(pair<node, node>(current, nodes[iBegin]));
   }
 
-  void connectRow(const vector<node> &nodes, vector<pair<node, node>> &ends,
-                  unsigned int row1, unsigned int row2, unsigned int width,
-                  int conn, bool isTore) {
+  void connectRow(const vector<node> &nodes, vector<pair<node, node>> &ends, unsigned int row1,
+                  unsigned int row2, unsigned int width, int conn, bool isTore) {
     unsigned int row1Begin = row1 * width;
     unsigned int row2Begin = row2 * width;
 
     for (unsigned int i = 0; i < width; ++i) {
-      ends.push_back(
-          pair<node, node>(nodes[row1Begin + i], nodes[row2Begin + i]));
+      ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin + i]));
 
       if (conn == 8) {
         if (i > 0) {
-          ends.push_back(
-              pair<node, node>(nodes[row1Begin + i], nodes[row2Begin + i - 1]));
+          ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin + i - 1]));
         } else if (isTore) {
-          ends.push_back(pair<node, node>(nodes[row1Begin + i],
-                                          nodes[row2Begin + width - 1]));
+          ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin + width - 1]));
         }
 
         if (i < width - 1) {
-          ends.push_back(
-              pair<node, node>(nodes[row1Begin + i], nodes[row2Begin + i + 1]));
+          ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin + i + 1]));
         } else if (isTore) {
-          ends.push_back(
-              pair<node, node>(nodes[row1Begin + i], nodes[row2Begin]));
+          ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin]));
         }
       }
 
       if (conn == 6) {
-        // In this case row1 must be even in order to ensure right connectivity
-        // in the hexagonal grid.
+        // In this case row1 must be even in order to ensure right connectivity in the hexagonal
+        // grid.
         if (row1 % 2 == 0) {
           if (i < width - 1)
-            ends.push_back(pair<node, node>(nodes[row1Begin + i],
-                                            nodes[row2Begin + i + 1]));
+            ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin + i + 1]));
           else if (isTore)
-            ends.push_back(
-                pair<node, node>(nodes[row1Begin + i], nodes[row2Begin]));
+            ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin]));
         } else {
           if (i > 0)
-            ends.push_back(pair<node, node>(nodes[row1Begin + i],
-                                            nodes[row2Begin + i - 1]));
+            ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin + i - 1]));
           else if (isTore)
-            ends.push_back(pair<node, node>(nodes[row1Begin + i],
-                                            nodes[row2Begin + width - 1]));
+            ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin + width - 1]));
         }
       }
     }
@@ -186,8 +173,7 @@ public:
 
     if (spacing < 0.0) {
       if (pluginProgress)
-        pluginProgress->setError(
-            string("Error: spacing must be strictly positive"));
+        pluginProgress->setError(string("Error: spacing must be strictly positive"));
 
       return false;
     }

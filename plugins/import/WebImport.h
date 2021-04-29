@@ -17,8 +17,8 @@
  *
  */
 
-#include <QEventLoop>
 #include <QNetworkReply>
+#include <QEventLoop>
 #include <QTimer>
 
 #include <string>

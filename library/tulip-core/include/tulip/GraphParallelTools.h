@@ -28,8 +28,8 @@ namespace tlp {
 // ===================================================================================
 
 template <typename NodeIndexFunction>
-void inline TLP_MAP_NODES_AND_INDICES(
-    const tlp::Graph *graph, const NodeIndexFunction &nodeIndexFunction) {
+void inline TLP_MAP_NODES_AND_INDICES(const tlp::Graph *graph,
+                                      const NodeIndexFunction &nodeIndexFunction) {
   unsigned int i = 0;
   for (auto n : graph->nodes()) {
     nodeIndexFunction(n, i++);
@@ -45,8 +45,7 @@ void inline TLP_MAP_NODES_AND_INDICES(
  * @since Tulip 5.2
  *
  * @param graph the graph on which to run job on the nodes
- * @param nodeFunction callable object (e.g. lambda function) taking a tlp::node
- * as parameter
+ * @param nodeFunction callable object (e.g. lambda function) taking a tlp::node as parameter
  *
  * Example of use:
  *
@@ -64,10 +63,8 @@ void inline TLP_MAP_NODES_AND_INDICES(
  * @endcode
  */
 template <typename NodeFunction>
-void inline TLP_PARALLEL_MAP_NODES(const tlp::Graph *graph,
-                                   const NodeFunction &nodeFunction) {
-  TLP_PARALLEL_MAP_VECTOR<tlp::node, NodeFunction>(graph->nodes(),
-                                                   nodeFunction);
+void inline TLP_PARALLEL_MAP_NODES(const tlp::Graph *graph, const NodeFunction &nodeFunction) {
+  TLP_PARALLEL_MAP_VECTOR<tlp::node, NodeFunction>(graph->nodes(), nodeFunction);
 }
 
 // ===================================================================================
@@ -79,8 +76,8 @@ void inline TLP_PARALLEL_MAP_NODES(const tlp::Graph *graph,
  * @since Tulip 5.2
  *
  * @param graph the graph on which to run job on the nodes
- * @param nodeIndexFunction callable object (e.g. lambda function) taking a
- * tlp::node and and unsigned integer as parameter
+ * @param nodeIndexFunction callable object (e.g. lambda function) taking a tlp::node and
+ *    and unsigned integer as parameter
  *
  * Example of use:
  *
@@ -98,17 +95,16 @@ void inline TLP_PARALLEL_MAP_NODES(const tlp::Graph *graph,
  * @endcode
  */
 template <typename NodeFunction>
-void inline TLP_PARALLEL_MAP_NODES_AND_INDICES(
-    const tlp::Graph *graph, const NodeFunction &nodeFunction) {
-  TLP_PARALLEL_MAP_VECTOR_AND_INDICES<tlp::node, NodeFunction>(graph->nodes(),
-                                                               nodeFunction);
+void inline TLP_PARALLEL_MAP_NODES_AND_INDICES(const tlp::Graph *graph,
+                                               const NodeFunction &nodeFunction) {
+  TLP_PARALLEL_MAP_VECTOR_AND_INDICES<tlp::node, NodeFunction>(graph->nodes(), nodeFunction);
 }
 
 // ===================================================================================
 
 template <typename EdgeIndexFunction>
-void inline TLP_MAP_EDGES_AND_INDICES(
-    const tlp::Graph *graph, const EdgeIndexFunction &edgeIndexFunction) {
+void inline TLP_MAP_EDGES_AND_INDICES(const tlp::Graph *graph,
+                                      const EdgeIndexFunction &edgeIndexFunction) {
   unsigned int i = 0;
   for (auto e : graph->edges()) {
     edgeIndexFunction(e, i++);
@@ -124,8 +120,7 @@ void inline TLP_MAP_EDGES_AND_INDICES(
  * @since Tulip 5.2
  *
  * @param graph the graph on which to run job on the edges
- * @param edgeFunction callable object (e.g. lambda function) taking a tlp::edge
- * as parameter
+ * @param edgeFunction callable object (e.g. lambda function) taking a tlp::edge as parameter
  *
  * Example of use:
  *
@@ -143,10 +138,8 @@ void inline TLP_MAP_EDGES_AND_INDICES(
  * @endcode
  */
 template <typename EdgeFunction>
-void inline TLP_PARALLEL_MAP_EDGES(const tlp::Graph *graph,
-                                   const EdgeFunction &edgeFunction) {
-  TLP_PARALLEL_MAP_VECTOR<tlp::edge, EdgeFunction>(graph->edges(),
-                                                   edgeFunction);
+void inline TLP_PARALLEL_MAP_EDGES(const tlp::Graph *graph, const EdgeFunction &edgeFunction) {
+  TLP_PARALLEL_MAP_VECTOR<tlp::edge, EdgeFunction>(graph->edges(), edgeFunction);
 }
 
 // ===================================================================================
@@ -158,8 +151,8 @@ void inline TLP_PARALLEL_MAP_EDGES(const tlp::Graph *graph,
  * @since Tulip 5.2
  *
  * @param graph the graph on which to run job on the edges
- * @param edgeIndexFunction callable object (e.g. lambda function) taking a
- * tlp::edge and and unsigned integer as parameter
+ * @param edgeIndexFunction callable object (e.g. lambda function) taking a tlp::edge and
+ *    and unsigned integer as parameter
  *
  * Example of use:
  *
@@ -177,10 +170,9 @@ void inline TLP_PARALLEL_MAP_EDGES(const tlp::Graph *graph,
  * @endcode
  */
 template <typename EdgeFunction>
-void inline TLP_PARALLEL_MAP_EDGES_AND_INDICES(
-    const tlp::Graph *graph, const EdgeFunction &edgeFunction) {
-  TLP_PARALLEL_MAP_VECTOR_AND_INDICES<tlp::edge, EdgeFunction>(graph->edges(),
-                                                               edgeFunction);
+void inline TLP_PARALLEL_MAP_EDGES_AND_INDICES(const tlp::Graph *graph,
+                                               const EdgeFunction &edgeFunction) {
+  TLP_PARALLEL_MAP_VECTOR_AND_INDICES<tlp::edge, EdgeFunction>(graph->edges(), edgeFunction);
 }
 } // namespace tlp
 

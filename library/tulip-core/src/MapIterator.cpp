@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/Graph.h>
 #include <tulip/MapIterator.h>
+#include <tulip/Graph.h>
 using namespace std;
 using namespace tlp;
 
@@ -59,7 +59,9 @@ node NodeMapIterator::next() {
   return tmp;
 }
 
-bool NodeMapIterator::hasNext() { return (itStl != cloneIt.end()); }
+bool NodeMapIterator::hasNext() {
+  return (itStl != cloneIt.end());
+}
 
 //=========================================
 EdgeMapIterator::EdgeMapIterator(const Graph *sg, edge source, node target) {
@@ -83,5 +85,7 @@ edge EdgeMapIterator::next() {
   return adj[pos++];
 }
 //=========================================
-bool EdgeMapIterator::hasNext() { return (treat > 0); }
+bool EdgeMapIterator::hasNext() {
+  return (treat > 0);
+}
 //=========================================

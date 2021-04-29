@@ -22,8 +22,8 @@
 using namespace std;
 
 namespace tlp {
-GlPolygon::GlPolygon(const bool filled, const bool outlined,
-                     const string &textureName, const float outlineSize) {
+GlPolygon::GlPolygon(const bool filled, const bool outlined, const string &textureName,
+                     const float outlineSize) {
   setFillMode(filled);
   setOutlineMode(outlined);
   setTextureName(textureName);
@@ -31,9 +31,8 @@ GlPolygon::GlPolygon(const bool filled, const bool outlined,
 }
 //=====================================================
 GlPolygon::GlPolygon(const vector<Coord> &points, const vector<Color> &fcolors,
-                     const vector<Color> &ocolors, const bool filled,
-                     const bool outlined, const string &textureName,
-                     const float outlineSize) {
+                     const vector<Color> &ocolors, const bool filled, const bool outlined,
+                     const string &textureName, const float outlineSize) {
   setPoints(points);
   setFillColors(fcolors);
   setOutlineColors(ocolors);
@@ -43,11 +42,9 @@ GlPolygon::GlPolygon(const vector<Coord> &points, const vector<Color> &fcolors,
   setOutlineSize(outlineSize);
 }
 //=====================================================
-GlPolygon::GlPolygon(const unsigned int nbPoints,
-                     const unsigned int nbFillColors,
-                     const unsigned int nbOutlineColors, const bool filled,
-                     const bool outlined, const string &textureName,
-                     const float outlineSize) {
+GlPolygon::GlPolygon(const unsigned int nbPoints, const unsigned int nbFillColors,
+                     const unsigned int nbOutlineColors, const bool filled, const bool outlined,
+                     const string &textureName, const float outlineSize) {
   vector<Coord> points;
   points.resize(nbPoints);
   setPoints(points);
@@ -81,5 +78,7 @@ const tlp::Coord &GlPolygon::point(const unsigned int i) const {
   return points[i];
 }
 //=====================================================
-tlp::Coord &GlPolygon::point(const unsigned int i) { return points[i]; }
+tlp::Coord &GlPolygon::point(const unsigned int i) {
+  return points[i];
+}
 } // namespace tlp

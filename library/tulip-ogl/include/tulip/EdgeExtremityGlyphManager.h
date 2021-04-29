@@ -23,8 +23,8 @@
 
 #include <string>
 
-#include <tulip/MutableContainer.h>
 #include <tulip/tulipconf.h>
+#include <tulip/MutableContainer.h>
 
 namespace tlp {
 class GlGraphInputData;

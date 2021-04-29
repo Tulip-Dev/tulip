@@ -30,8 +30,7 @@ class ScatterPlotQuickAccessBar : public tlp::QuickAccessBarImpl {
   ScatterPlot2DOptionsWidget *_optionsWidget;
 
 public:
-  ScatterPlotQuickAccessBar(ScatterPlot2DOptionsWidget *opt,
-                            QWidget *parent = nullptr);
+  ScatterPlotQuickAccessBar(ScatterPlot2DOptionsWidget *opt, QWidget *parent = nullptr);
 
 public slots:
   void reset() override;

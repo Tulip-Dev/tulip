@@ -30,8 +30,7 @@ using namespace ogdf;
 
 OGDFLayoutPluginBase::OGDFLayoutPluginBase(const tlp::PluginContext *context,
                                            ogdf::LayoutModule *ogdfLayoutAlgo)
-    : tlp::LayoutAlgorithm(context), tlpToOGDF(nullptr),
-      ogdfLayoutAlgo(ogdfLayoutAlgo) {
+    : tlp::LayoutAlgorithm(context), tlpToOGDF(nullptr), ogdfLayoutAlgo(ogdfLayoutAlgo) {
   // convert Tulip Graph to OGDF Graph including attributes
   if (graph)
     tlpToOGDF = new TulipToOGDF(graph, false);
@@ -125,8 +124,7 @@ bool OGDFLayoutPluginBase::run() {
   return true;
 }
 
-void OGDFLayoutPluginBase::callOGDFLayoutAlgorithm(
-    GraphAttributes &gAttributes) {
+void OGDFLayoutPluginBase::callOGDFLayoutAlgorithm(GraphAttributes &gAttributes) {
   ogdfLayoutAlgo->call(gAttributes);
 }
 
@@ -135,9 +133,9 @@ void OGDFLayoutPluginBase::transposeLayoutVertically() {
   const vector<tlp::node> &nodes = graph->nodes();
   const vector<tlp::edge> &edges = graph->edges();
 
-  tlp::BoundingBox graphBB = tlp::computeBoundingBox(
-      nodes, edges, result, graph->getProperty<SizeProperty>("viewSize"),
-      graph->getProperty<DoubleProperty>("viewRotation"));
+  tlp::BoundingBox graphBB =
+      tlp::computeBoundingBox(nodes, edges, result, graph->getProperty<SizeProperty>("viewSize"),
+                              graph->getProperty<DoubleProperty>("viewRotation"));
   float midY = (graphBB[0][1] + graphBB[1][1]) / 2.f;
 
   for (auto n : nodes) {

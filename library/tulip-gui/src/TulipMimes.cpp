@@ -19,16 +19,18 @@
 
 #include "tulip/TulipMimes.h"
 
+#include <tulip/TulipMetaTypes.h>
 #include <tulip/Perspective.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/TulipMetaTypes.h>
 
 using namespace tlp;
 
 AlgorithmMimeType::AlgorithmMimeType(QString algorithmName, const DataSet &data)
     : _algorithm(algorithmName), _params(data) {}
 
-void AlgorithmMimeType::run(Graph *g) const { emit mimeRun(g); }
+void AlgorithmMimeType::run(Graph *g) const {
+  emit mimeRun(g);
+}
 
 QStringList GraphMimeType::formats() const {
   return QMimeData::formats() << GRAPH_MIME_TYPE;

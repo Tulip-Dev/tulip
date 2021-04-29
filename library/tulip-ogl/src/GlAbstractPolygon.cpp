@@ -19,56 +19,71 @@
 #include <GL/glew.h>
 
 #include <tulip/GlAbstractPolygon.h>
-#include <tulip/GlTextureManager.h>
 #include <tulip/GlTools.h>
-#include <tulip/GlXMLTools.h>
 #include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlTextureManager.h>
+#include <tulip/GlXMLTools.h>
 
 using namespace std;
 
 namespace tlp {
 
 GlAbstractPolygon::GlAbstractPolygon()
-    : polygonMode(POLYGON), filled(true), outlined(true), lighting(true),
-      invertYTexture(true), textureName(""), outlineSize(1.),
-      hideOutlineLod(0.), indices(nullptr), auxIndices(nullptr),
+    : polygonMode(POLYGON), filled(true), outlined(true), lighting(true), invertYTexture(true),
+      textureName(""), outlineSize(1.), hideOutlineLod(0.), indices(nullptr), auxIndices(nullptr),
       texArray(nullptr), generated(false) {}
 //=====================================================
-GlAbstractPolygon::~GlAbstractPolygon() { clearGenerated(); }
+GlAbstractPolygon::~GlAbstractPolygon() {
+  clearGenerated();
+}
 //=====================================================
 GlAbstractPolygon::PolygonMode GlAbstractPolygon::getPolygonMode() {
   return polygonMode;
 }
 //=====================================================
-void GlAbstractPolygon::setPolygonMode(PolygonMode mode) { polygonMode = mode; }
+void GlAbstractPolygon::setPolygonMode(PolygonMode mode) {
+  polygonMode = mode;
+}
 //=====================================================
-bool GlAbstractPolygon::getFillMode() { return filled; }
+bool GlAbstractPolygon::getFillMode() {
+  return filled;
+}
 //=====================================================
 void GlAbstractPolygon::setFillMode(const bool filled) {
   this->filled = filled;
 }
 //=====================================================
-bool GlAbstractPolygon::getOutlineMode() { return outlined; }
+bool GlAbstractPolygon::getOutlineMode() {
+  return outlined;
+}
 //=====================================================
 void GlAbstractPolygon::setOutlineMode(const bool outlined) {
   this->outlined = outlined;
 }
 //=====================================================
-bool GlAbstractPolygon::getLightingMode() { return lighting; }
+bool GlAbstractPolygon::getLightingMode() {
+  return lighting;
+}
 //=====================================================
 void GlAbstractPolygon::setLightingMode(const bool lighting) {
   this->lighting = lighting;
 }
 //=====================================================
-string GlAbstractPolygon::getTextureName() { return textureName; }
+string GlAbstractPolygon::getTextureName() {
+  return textureName;
+}
 //=====================================================
 void GlAbstractPolygon::setTextureName(const string &name) {
   textureName = name;
 }
 //=====================================================
-float GlAbstractPolygon::getOutlineSize() { return outlineSize; }
+float GlAbstractPolygon::getOutlineSize() {
+  return outlineSize;
+}
 //=====================================================
-void GlAbstractPolygon::setOutlineSize(float size) { outlineSize = size; }
+void GlAbstractPolygon::setOutlineSize(float size) {
+  outlineSize = size;
+}
 //=====================================================
 Color GlAbstractPolygon::getFillColor(unsigned int i) {
   if (fillColors.size() < i)
@@ -110,9 +125,13 @@ void GlAbstractPolygon::setOutlineColor(const Color &color) {
   outlineColors.emplace_back(color);
 }
 //=====================================================
-float GlAbstractPolygon::getHideOutlineLod() { return hideOutlineLod; }
+float GlAbstractPolygon::getHideOutlineLod() {
+  return hideOutlineLod;
+}
 //=====================================================
-void GlAbstractPolygon::setHideOutlineLod(float lod) { hideOutlineLod = lod; }
+void GlAbstractPolygon::setHideOutlineLod(float lod) {
+  hideOutlineLod = lod;
+}
 //=====================================================
 void GlAbstractPolygon::setInvertYTexture(bool invertYTexture) {
   this->invertYTexture = invertYTexture;
@@ -201,15 +220,15 @@ void GlAbstractPolygon::draw(float lod, Camera *) {
     // Compute texture coord array and indice array
     for (size_t i = 0; i < size; ++i) {
       if (filled) {
-        texArray[i * 2] = (points[i][0] - boundingBox[0][0]) /
-                          (boundingBox[1][0] - boundingBox[0][0]);
+        texArray[i * 2] =
+            (points[i][0] - boundingBox[0][0]) / (boundingBox[1][0] - boundingBox[0][0]);
 
         if (!invertYTexture)
-          texArray[i * 2 + 1] = (points[i][1] - boundingBox[0][1]) /
-                                (boundingBox[1][1] - boundingBox[0][1]);
+          texArray[i * 2 + 1] =
+              (points[i][1] - boundingBox[0][1]) / (boundingBox[1][1] - boundingBox[0][1]);
         else
-          texArray[i * 2 + 1] = 1 - (points[i][1] - boundingBox[0][1]) /
-                                        (boundingBox[1][1] - boundingBox[0][1]);
+          texArray[i * 2 + 1] =
+              1 - (points[i][1] - boundingBox[0][1]) / (boundingBox[1][1] - boundingBox[0][1]);
       }
 
       indices[i] = i;
@@ -227,38 +246,32 @@ void GlAbstractPolygon::draw(float lod, Camera *) {
       // Generate buffers
       glGenBuffers(7, buffers);
       glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-      glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 3 * size, &points[0],
-                   GL_STATIC_DRAW);
+      glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 3 * size, &points[0], GL_STATIC_DRAW);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[5]);
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte) * size, indices,
-                   GL_STATIC_DRAW);
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte) * size, indices, GL_STATIC_DRAW);
 
       if (polygonMode == QUAD_STRIP) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[6]);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte) * size,
-                     auxIndices, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte) * size, auxIndices, GL_STATIC_DRAW);
       }
 
       if (filled) {
         glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 3 * size,
-                     &normalArray[0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 3 * size, &normalArray[0], GL_STATIC_DRAW);
 
         if (fillColors.size() != 1) {
           glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
-          glBufferData(GL_ARRAY_BUFFER, sizeof(GLubyte) * 4 * size,
-                       &fillColors[0], GL_STATIC_DRAW);
+          glBufferData(GL_ARRAY_BUFFER, sizeof(GLubyte) * 4 * size, &fillColors[0], GL_STATIC_DRAW);
         }
 
         glBindBuffer(GL_ARRAY_BUFFER, buffers[4]);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 2 * size, texArray,
-                     GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 2 * size, texArray, GL_STATIC_DRAW);
       }
 
       if (outlined && outlineColors.size() != 1) {
         glBindBuffer(GL_ARRAY_BUFFER, buffers[3]);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(GLubyte) * 4 * size,
-                     &outlineColors[0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(GLubyte) * 4 * size, &outlineColors[0],
+                     GL_STATIC_DRAW);
       }
 
       delete[] indices;
@@ -301,11 +314,9 @@ void GlAbstractPolygon::draw(float lod, Camera *) {
 
       if (canUseVBO) {
         glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
-        glColorPointer(4, GL_UNSIGNED_BYTE, 4 * sizeof(GLubyte),
-                       BUFFER_OFFSET(0));
+        glColorPointer(4, GL_UNSIGNED_BYTE, 4 * sizeof(GLubyte), BUFFER_OFFSET(0));
       } else {
-        glColorPointer(4, GL_UNSIGNED_BYTE, 4 * sizeof(GLubyte),
-                       &fillColors[0]);
+        glColorPointer(4, GL_UNSIGNED_BYTE, 4 * sizeof(GLubyte), &fillColors[0]);
       }
     } else {
       setMaterial(fillColors[0]);
@@ -341,8 +352,7 @@ void GlAbstractPolygon::draw(float lod, Camera *) {
     // Draw
     if (canUseVBO) {
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[5]);
-      glDrawElements(fillMode, points.size(), GL_UNSIGNED_BYTE,
-                     BUFFER_OFFSET(0));
+      glDrawElements(fillMode, points.size(), GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
 
     } else {
       glDrawElements(fillMode, points.size(), GL_UNSIGNED_BYTE, indices);
@@ -360,8 +370,7 @@ void GlAbstractPolygon::draw(float lod, Camera *) {
 
   // Outline
   if (outlined && outlineSize != 0) {
-    if ((outlineSize < 1 && lod >= hideOutlineLod) ||
-        (lod >= (hideOutlineLod / outlineSize))) {
+    if ((outlineSize < 1 && lod >= hideOutlineLod) || (lod >= (hideOutlineLod / outlineSize))) {
       glDisable(GL_LIGHTING);
 
       glLineWidth(outlineSize);
@@ -372,35 +381,29 @@ void GlAbstractPolygon::draw(float lod, Camera *) {
 
         if (canUseVBO) {
           glBindBuffer(GL_ARRAY_BUFFER, buffers[3]);
-          glColorPointer(4, GL_UNSIGNED_BYTE, 4 * sizeof(GLubyte),
-                         BUFFER_OFFSET(0));
+          glColorPointer(4, GL_UNSIGNED_BYTE, 4 * sizeof(GLubyte), BUFFER_OFFSET(0));
         } else {
-          glColorPointer(4, GL_UNSIGNED_BYTE, 4 * sizeof(GLubyte),
-                         &outlineColors[0]);
+          glColorPointer(4, GL_UNSIGNED_BYTE, 4 * sizeof(GLubyte), &outlineColors[0]);
         }
       } else {
-        glColor4ub(outlineColors[0][0], outlineColors[0][1],
-                   outlineColors[0][2], outlineColors[0][3]);
+        glColor4ub(outlineColors[0][0], outlineColors[0][1], outlineColors[0][2],
+                   outlineColors[0][3]);
       }
 
       // Draw
       if (polygonMode != QUAD_STRIP) {
         if (canUseVBO) {
           glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[5]);
-          glDrawElements(GL_LINE_LOOP, points.size(), GL_UNSIGNED_BYTE,
-                         BUFFER_OFFSET(0));
+          glDrawElements(GL_LINE_LOOP, points.size(), GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
         } else {
-          glDrawElements(GL_LINE_LOOP, points.size(), GL_UNSIGNED_BYTE,
-                         indices);
+          glDrawElements(GL_LINE_LOOP, points.size(), GL_UNSIGNED_BYTE, indices);
         }
       } else {
         if (canUseVBO) {
           glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[6]);
-          glDrawElements(GL_LINE_LOOP, points.size(), GL_UNSIGNED_BYTE,
-                         BUFFER_OFFSET(0));
+          glDrawElements(GL_LINE_LOOP, points.size(), GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
         } else {
-          glDrawElements(GL_LINE_LOOP, points.size(), GL_UNSIGNED_BYTE,
-                         auxIndices);
+          glDrawElements(GL_LINE_LOOP, points.size(), GL_UNSIGNED_BYTE, auxIndices);
         }
       }
 
@@ -459,16 +462,14 @@ void GlAbstractPolygon::getXMLOnlyData(string &outString) {
   GlXMLTools::getXML(outString, "outlineSize", outlineSize);
 }
 //============================================================
-void GlAbstractPolygon::setWithXML(const string &inString,
-                                   unsigned int &currentPosition) {
+void GlAbstractPolygon::setWithXML(const string &inString, unsigned int &currentPosition) {
 
   points.clear();
   GlXMLTools::setWithXML(inString, currentPosition, "points", points);
   fillColors.clear();
   GlXMLTools::setWithXML(inString, currentPosition, "fillColors", fillColors);
   outlineColors.clear();
-  GlXMLTools::setWithXML(inString, currentPosition, "outlineColors",
-                         outlineColors);
+  GlXMLTools::setWithXML(inString, currentPosition, "outlineColors", outlineColors);
   GlXMLTools::setWithXML(inString, currentPosition, "filled", filled);
   GlXMLTools::setWithXML(inString, currentPosition, "outlined", outlined);
   GlXMLTools::setWithXML(inString, currentPosition, "textureName", textureName);

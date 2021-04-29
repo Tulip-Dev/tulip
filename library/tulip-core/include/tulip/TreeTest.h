@@ -31,15 +31,14 @@ struct node;
 /**
  * @ingroup Checks
  * @brief Performs test to check whether a graph is a simple or rooted tree.
- * From wikipedia: "A tree is an undirected graph in which any two vertices are
- *connected by exactly one simple path." Free trees have no designated root,
- *while rooted trees do.
+ * From wikipedia: "A tree is an undirected graph in which any two vertices are connected by exactly
+ *one simple path."
+ * Free trees have no designated root, while rooted trees do.
  **/
 class TLP_SCOPE TreeTest {
 public:
   /**
-   * @brief Checks if the graph is a rooted tree (i.e. one node is designated as
-   *the root).
+   * @brief Checks if the graph is a rooted tree (i.e. one node is designated as the root).
    *
    * @param graph The graph to check is a tree.
    * @return bool True if the graph is a tree, false otherwise.
@@ -52,8 +51,8 @@ public:
    *  false otherwise.
    */
   /**
-   * @brief Checks if the graph is a topological tree (i.e. if the graph was
-   *undirected, there would be no cycle).
+   * @brief Checks if the graph is a topological tree (i.e. if the graph was undirected, there would
+   *be no cycle).
    *
    * @param graph The graph to check is a free tree.
    * @return bool True if the graph is a free tree, false otherwise.
@@ -76,18 +75,16 @@ public:
    * @brief Computes a rooted tree from the graph.
    * If the graph is a rooted tree, the input graph is returned as is.
    * If the graphs is a free tree, a rooted clone subgraph is returned.
-   * If the graph is connected, a rooted spanning tree of a clone subgraph is
-   *returned If the graph is not connected, computes a tree for each of the
-   *connected components of a clone subgraph, adds a simple source and returns
-   *the clone.
+   * If the graph is connected, a rooted spanning tree of a clone subgraph is returned
+   * If the graph is not connected, computes a tree for each of the connected components of a clone
+   *subgraph, adds a simple source and returns the clone.
    *
    * @param graph The graph to compute a tree on.
    * @param pluginProgress reports progress on the computation. Defaults to 0.
-   * @return :Graph* If the input graph is a rooted tree, returns it as is,
-   *otherwise a clone subgraph transformed into a rooted tree.
+   * @return :Graph* If the input graph is a rooted tree, returns it as is, otherwise a clone
+   *subgraph transformed into a rooted tree.
    **/
-  static Graph *computeTree(Graph *graph,
-                            PluginProgress *pluginProgress = nullptr);
+  static Graph *computeTree(Graph *graph, PluginProgress *pluginProgress = nullptr);
 
   /**
    * @brief Removes subgraphs created during tree computation.

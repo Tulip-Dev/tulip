@@ -21,26 +21,25 @@
 #ifndef TULIPSETTINGS_H
 #define TULIPSETTINGS_H
 
-#include <QNetworkProxy>
 #include <QSettings>
+#include <QNetworkProxy>
 #include <QString>
 
 #include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/Graph.h>
 #include <tulip/Size.h>
+#include <tulip/Graph.h>
 
 namespace tlp {
 
 /**
- * @brief This class provides convenience functions to access the Tulip settings
- * file (using QSettings) TulipSettings is a wrapper for QSettings providing
- * quick access to common keys provided in the tulip configuration file. This
- * object does not mask any method from the QSettings class, which mean that the
- * user can still access custom keys by invoking the QSettings::value method.
+ * @brief This class provides convenience functions to access the Tulip settings file (using
+ * QSettings)
+ * TulipSettings is a wrapper for QSettings providing quick access to common keys provided in the
+ * tulip configuration file.
+ * This object does not mask any method from the QSettings class, which mean that the user can
+ * still access custom keys by invoking the QSettings::value method.
  */
-class TLP_QT_SCOPE TulipSettings : public QSettings,
-                                   GlDefaultSelectionColorManager,
-                                   Observable {
+class TLP_QT_SCOPE TulipSettings : public QSettings, GlDefaultSelectionColorManager, Observable {
   Q_OBJECT
   Q_ENUMS(DisplayProperty)
 
@@ -60,8 +59,7 @@ public:
 
   /**
     @brief Registers a file in the list of recently opened documents.
-    If the list already contains 5 elements, the last one (in chronological
-    order) will be removed.
+    If the list already contains 5 elements, the last one (in chronological order) will be removed.
     */
   static void addToRecentDocuments(const QString &);
 
@@ -97,15 +95,13 @@ public:
   static void markPluginForRemoval(const QString &pluginLibrary);
   static void unmarkPluginForRemoval(const QString &pluginLibrary);
 
-  static tlp::Color defaultColor(tlp::ElementType elem,
-                                 bool tulipDefault = false);
+  static tlp::Color defaultColor(tlp::ElementType elem, bool tulipDefault = false);
   static void setDefaultColor(tlp::ElementType elem, const tlp::Color &color);
 
   static tlp::Color defaultLabelColor(bool tulipDefault = false);
   static void setDefaultLabelColor(const tlp::Color &color);
 
-  static tlp::Size defaultSize(tlp::ElementType elem,
-                               bool tulipDefault = false);
+  static tlp::Size defaultSize(tlp::ElementType elem, bool tulipDefault = false);
   static void setDefaultSize(tlp::ElementType elem, const tlp::Size &size);
 
   static int defaultShape(tlp::ElementType elem, bool tulipDefault = false);

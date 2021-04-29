@@ -17,16 +17,16 @@
  *
  */
 
-#include <QApplication>
-#include <QDrag>
 #include <QMimeData>
+#include <QDrag>
 #include <QMouseEvent>
+#include <QApplication>
 
-#include <tulip/DragHandle.h>
 #include <tulip/Edge.h>
+#include <tulip/DragHandle.h>
 #include <tulip/TulipMimes.h>
-#include <tulip/View.h>
 #include <tulip/WorkspacePanel.h>
+#include <tulip/View.h>
 
 #include <cassert>
 
@@ -40,14 +40,15 @@ void DragHandle::mousePressEvent(QMouseEvent *ev) {
   _clickPosition = ev->pos();
 }
 
-void DragHandle::mouseReleaseEvent(QMouseEvent *) { _pressed = false; }
+void DragHandle::mouseReleaseEvent(QMouseEvent *) {
+  _pressed = false;
+}
 
 void DragHandle::mouseMoveEvent(QMouseEvent *ev) {
   assert(_panel != nullptr);
 
   if (!_panel || !_pressed ||
-      (ev->pos() - _clickPosition).manhattanLength() <
-          QApplication::startDragDistance())
+      (ev->pos() - _clickPosition).manhattanLength() < QApplication::startDragDistance())
     return;
 
   QDrag *drag = new QDrag(_panel);
@@ -58,4 +59,6 @@ void DragHandle::mouseMoveEvent(QMouseEvent *ev) {
   drag->exec(Qt::MoveAction);
 }
 
-void DragHandle::setPanel(tlp::WorkspacePanel *panel) { _panel = panel; }
+void DragHandle::setPanel(tlp::WorkspacePanel *panel) {
+  _panel = panel;
+}

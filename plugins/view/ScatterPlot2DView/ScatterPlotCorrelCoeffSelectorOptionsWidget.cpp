@@ -17,21 +17,20 @@
  *
  */
 
-#include <QLinearGradient>
 #include <QMainWindow>
 #include <QPainter>
+#include <QLinearGradient>
 
-#include "ScatterPlotCorrelCoeffSelectorOptionsWidget.h"
-#include "ui_ScatterPlotCorrelCoeffSelectorOptionsWidget.h"
 #include <tulip/Interactor.h>
 #include <tulip/Perspective.h>
+#include "ScatterPlotCorrelCoeffSelectorOptionsWidget.h"
+#include "ui_ScatterPlotCorrelCoeffSelectorOptionsWidget.h"
 
 namespace tlp {
 
-ScatterPlotCorrelCoeffSelectorOptionsWidget::
-    ScatterPlotCorrelCoeffSelectorOptionsWidget(QWidget *parent)
-    : QWidget(parent),
-      _ui(new Ui::ScatterPlotCorrelCoeffSelectorOptionsWidgetData) {
+ScatterPlotCorrelCoeffSelectorOptionsWidget::ScatterPlotCorrelCoeffSelectorOptionsWidget(
+    QWidget *parent)
+    : QWidget(parent), _ui(new Ui::ScatterPlotCorrelCoeffSelectorOptionsWidgetData) {
   Interactor::setupConfigWidget(this);
   _ui->setupUi(this);
   _ui->minusOneColorButton->setDialogTitle("Choose the color for -1");
@@ -42,21 +41,17 @@ ScatterPlotCorrelCoeffSelectorOptionsWidget::
   setButtonColor(_ui->oneColorButton, Color(0, 255, 0, 150));
   updateColorScale();
 
-  connect(_ui->minusOneColorButton, SIGNAL(clicked()), this,
-          SLOT(updateColorScale()));
-  connect(_ui->zeroColorButton, SIGNAL(clicked()), this,
-          SLOT(updateColorScale()));
-  connect(_ui->oneColorButton, SIGNAL(clicked()), this,
-          SLOT(updateColorScale()));
+  connect(_ui->minusOneColorButton, SIGNAL(clicked()), this, SLOT(updateColorScale()));
+  connect(_ui->zeroColorButton, SIGNAL(clicked()), this, SLOT(updateColorScale()));
+  connect(_ui->oneColorButton, SIGNAL(clicked()), this, SLOT(updateColorScale()));
 }
 
-ScatterPlotCorrelCoeffSelectorOptionsWidget::
-    ~ScatterPlotCorrelCoeffSelectorOptionsWidget() {
+ScatterPlotCorrelCoeffSelectorOptionsWidget::~ScatterPlotCorrelCoeffSelectorOptionsWidget() {
   delete _ui;
 }
 
-void ScatterPlotCorrelCoeffSelectorOptionsWidget::setButtonColor(
-    ColorButton *button, const Color &color) {
+void ScatterPlotCorrelCoeffSelectorOptionsWidget::setButtonColor(ColorButton *button,
+                                                                 const Color &color) {
   button->setTulipColor(color);
 }
 
@@ -83,8 +78,8 @@ void ScatterPlotCorrelCoeffSelectorOptionsWidget::updateColorScale() {
   qLinearGradient.setColorAt(0, _ui->minusOneColorButton->color());
   qLinearGradient.setColorAt(1. / 2., _ui->zeroColorButton->color());
   qLinearGradient.setColorAt(1, _ui->oneColorButton->color());
-  painter.fillRect(0, 0, _ui->colorScaleLabel->width(),
-                   _ui->colorScaleLabel->height(), qLinearGradient);
+  painter.fillRect(0, 0, _ui->colorScaleLabel->width(), _ui->colorScaleLabel->height(),
+                   qLinearGradient);
   painter.end();
   _ui->colorScaleLabel->setPixmap(pixmap);
 }

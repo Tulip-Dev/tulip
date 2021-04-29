@@ -17,14 +17,14 @@
  *
  */
 
-#include <tulip/Camera.h>
-#include <tulip/GlCPULODCalculator.h>
-#include <tulip/GlGraphComposite.h>
-#include <tulip/GlGraphInputData.h>
 #include <tulip/GlMetaNodeRenderer.h>
-#include <tulip/GlNode.h>
+#include <tulip/GlGraphInputData.h>
 #include <tulip/GlScene.h>
+#include <tulip/GlCPULODCalculator.h>
+#include <tulip/GlNode.h>
+#include <tulip/GlGraphComposite.h>
 #include <tulip/Glyph.h>
+#include <tulip/Camera.h>
 
 #include <tulip/OpenGlIncludes.h>
 
@@ -32,10 +32,11 @@ using namespace std;
 
 namespace tlp {
 
-GlMetaNodeRenderer::GlMetaNodeRenderer(GlGraphInputData *inputData)
-    : _inputData(inputData) {}
+GlMetaNodeRenderer::GlMetaNodeRenderer(GlGraphInputData *inputData) : _inputData(inputData) {}
 
-GlMetaNodeRenderer::~GlMetaNodeRenderer() { clearScenes(); }
+GlMetaNodeRenderer::~GlMetaNodeRenderer() {
+  clearScenes();
+}
 
 void GlMetaNodeRenderer::setInputData(GlGraphInputData *inputData) {
   _inputData = inputData;
@@ -48,11 +49,10 @@ GlGraphInputData *GlMetaNodeRenderer::getInputData() const {
 void GlMetaNodeRenderer::render(node n, float, Camera *camera) {
 
   bool viewMeta = _inputData->renderingParameters()
-                      ->isDisplayMetaNodes(); // Checks if user wants to see
-                                              // metanode content
-  bool viewMetaLabels = _inputData->renderingParameters()
-                            ->isViewMetaLabel(); // Checks if user wants to see
-                                                 // metanode content labels
+                      ->isDisplayMetaNodes(); // Checks if user wants to see metanode content
+  bool viewMetaLabels =
+      _inputData->renderingParameters()
+          ->isViewMetaLabel(); // Checks if user wants to see metanode content labels
 
   if (!viewMeta && !viewMetaLabels) {
     return;
@@ -76,43 +76,24 @@ void GlMetaNodeRenderer::render(node n, float, Camera *camera) {
     metaGraph->addListener(this);
   }
 
-  scene->getGlGraphComposite()->setRenderingParameters(
-      *(_inputData->renderingParameters()));
+  scene->getGlGraphComposite()->setRenderingParameters(*(_inputData->renderingParameters()));
   int metaStencil = _inputData->renderingParameters()->getMetaNodesStencil();
-  int metaSelectedStencil =
-      _inputData->renderingParameters()->getSelectedMetaNodesStencil();
-  int metaLabelStencil =
-      _inputData->renderingParameters()->getMetaNodesLabelStencil();
-  scene->getGlGraphComposite()
-      ->getRenderingParametersPointer()
-      ->setDisplayNodes(viewMeta);
-  scene->getGlGraphComposite()
-      ->getRenderingParametersPointer()
-      ->setDisplayEdges(viewMeta);
-  scene->getGlGraphComposite()
-      ->getRenderingParametersPointer()
-      ->setViewEdgeLabel(viewMetaLabels);
-  scene->getGlGraphComposite()
-      ->getRenderingParametersPointer()
-      ->setViewNodeLabel(viewMetaLabels);
-  scene->getGlGraphComposite()
-      ->getRenderingParametersPointer()
-      ->setNodesStencil(metaStencil);
-  scene->getGlGraphComposite()
-      ->getRenderingParametersPointer()
-      ->setEdgesStencil(metaStencil);
-  scene->getGlGraphComposite()
-      ->getRenderingParametersPointer()
-      ->setSelectedNodesStencil(metaSelectedStencil);
-  scene->getGlGraphComposite()
-      ->getRenderingParametersPointer()
-      ->setSelectedEdgesStencil(metaSelectedStencil);
-  scene->getGlGraphComposite()
-      ->getRenderingParametersPointer()
-      ->setNodesLabelStencil(metaLabelStencil);
-  scene->getGlGraphComposite()
-      ->getRenderingParametersPointer()
-      ->setEdgesLabelStencil(metaLabelStencil);
+  int metaSelectedStencil = _inputData->renderingParameters()->getSelectedMetaNodesStencil();
+  int metaLabelStencil = _inputData->renderingParameters()->getMetaNodesLabelStencil();
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setDisplayNodes(viewMeta);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setDisplayEdges(viewMeta);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setViewEdgeLabel(viewMetaLabels);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setViewNodeLabel(viewMetaLabels);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setNodesStencil(metaStencil);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setEdgesStencil(metaStencil);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setSelectedNodesStencil(
+      metaSelectedStencil);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setSelectedEdgesStencil(
+      metaSelectedStencil);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setNodesLabelStencil(
+      metaLabelStencil);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setEdgesLabelStencil(
+      metaLabelStencil);
 
   GlNode glNode(n.id);
 
@@ -120,21 +101,19 @@ void GlMetaNodeRenderer::render(node n, float, Camera *camera) {
   _inputData->glyphs.get(_inputData->getElementShape()->getNodeValue(n))
       ->getIncludeBoundingBox(includeBB, n);
   BoundingBox &&bbTmp = glNode.getBoundingBox(_inputData);
-  BoundingBox bb(
-      bbTmp.center() - Coord((bbTmp.width() / 2.f) * (includeBB[0][0] * -2.f),
-                             (bbTmp.height() / 2.f) * (includeBB[0][1] * -2.f),
-                             (bbTmp.depth() / 2.f) * (includeBB[0][2] * -2.f)),
-      bbTmp.center() + Coord((bbTmp.width() / 2.f) * (includeBB[1][0] * 2.f),
-                             (bbTmp.height() / 2.f) * (includeBB[1][1] * 2.f),
-                             (bbTmp.depth() / 2.f) * (includeBB[1][2] * 2.f)));
+  BoundingBox bb(bbTmp.center() - Coord((bbTmp.width() / 2.f) * (includeBB[0][0] * -2.f),
+                                        (bbTmp.height() / 2.f) * (includeBB[0][1] * -2.f),
+                                        (bbTmp.depth() / 2.f) * (includeBB[0][2] * -2.f)),
+                 bbTmp.center() + Coord((bbTmp.width() / 2.f) * (includeBB[1][0] * 2.f),
+                                        (bbTmp.height() / 2.f) * (includeBB[1][1] * 2.f),
+                                        (bbTmp.depth() / 2.f) * (includeBB[1][2] * 2.f)));
 
   Coord &&eyeDirection = camera->getEyes() - camera->getCenter();
   eyeDirection = eyeDirection / eyeDirection.norm();
 
   Camera newCamera2(*camera);
-  newCamera2.setEyes(
-      newCamera2.getCenter() +
-      Coord(0, 0, 1) * (newCamera2.getEyes() - newCamera2.getCenter()).norm());
+  newCamera2.setEyes(newCamera2.getCenter() +
+                     Coord(0, 0, 1) * (newCamera2.getEyes() - newCamera2.getCenter()).norm());
   newCamera2.setUp(Coord(0, 1, 0));
 
   Coord &&center = camera->worldTo2DViewport((bb[0] + bb[1]) / 2.f);
@@ -175,8 +154,8 @@ void GlMetaNodeRenderer::render(node n, float, Camera *camera) {
   newCamera.setZoomFactor(newCamera.getZoomFactor() * 0.5);
   scene->getGraphLayer()->setSharedCamera(&newCamera);
 
-  // small hack to avoid z-fighting between the rendering of the metanode
-  // content and the rendering of the metanode that occurs afterwards
+  // small hack to avoid z-fighting between the rendering of the metanode content
+  // and the rendering of the metanode that occurs afterwards
   glDepthRange(0.1, 1);
   scene->draw();
   // restore default depth range
@@ -211,8 +190,7 @@ void GlMetaNodeRenderer::treatEvent(const Event &e) {
 }
 
 void GlMetaNodeRenderer::clearScenes() {
-  for (auto it = _metaGraphToSceneMap.begin(); it != _metaGraphToSceneMap.end();
-       ++it) {
+  for (auto it = _metaGraphToSceneMap.begin(); it != _metaGraphToSceneMap.end(); ++it) {
     delete it->second;
   }
 
@@ -221,7 +199,6 @@ void GlMetaNodeRenderer::clearScenes() {
 
 GlScene *GlMetaNodeRenderer::getSceneForMetaGraph(Graph *g) const {
   auto sceneit = _metaGraphToSceneMap.find(g);
-  return (sceneit == _metaGraphToSceneMap.end()) ? (nullptr)
-                                                 : (sceneit->second);
+  return (sceneit == _metaGraphToSceneMap.end()) ? (nullptr) : (sceneit->second);
 }
 } // namespace tlp

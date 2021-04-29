@@ -29,17 +29,17 @@
  *
  *  Bubble Tree Drawing Algorithm : \n
  *  D. Auber and S. Grivet and J-P Domenger and Guy Melancon, \n
- *  Computer Vision and Graphics. Computational Imaging and Vision, vol 32,
- * 2006. \n Springer, Dordrecht <a
+ *  Computer Vision and Graphics. Computational Imaging and Vision, vol 32, 2006. \n
+ *  Springer, Dordrecht <a
  * href=\"https://doi.org/10.1007/1-4020-4179-9_91\">10.1007/1-4020-4179-9_91</a>",
  *
  *
- *  Let n be the number of nodes, the algorithm complexity is in O(n) or
- * O(nlog(n)), By default O(nlog(n)) algorithm is used, but one can choose the
- * complexity by using the argument (bool)"complexity" (true means  O(nlog(n),
- * false  O(n)). The algorithm can manage nodes of different size. The
- * SizeProperty "viewSize" is used by default if no parameters are given to the
- * plug-in. The parameter is (SizeProperty*) "node size".
+ *  Let n be the number of nodes, the algorithm complexity is in O(n) or O(nlog(n)),
+ *  By default O(nlog(n)) algorithm is used, but one can choose the complexity by using
+ *  the argument (bool)"complexity" (true means  O(nlog(n), false  O(n)).
+ *  The algorithm can manage nodes of different size. The SizeProperty "viewSize"
+ *  is used by default if no parameters are given to the plug-in.
+ *  The parameter is (SizeProperty*) "node size".
  *
  *
  *
@@ -62,16 +62,12 @@ public:
   bool run() override;
 
 private:
-  double computeRelativePosition(
-      tlp::node n,
-      tlp::NodeStaticProperty<tlp::Vector<double, 5>> &relativePosition);
-  void
-  calcLayout(tlp::node n,
-             tlp::NodeStaticProperty<tlp::Vector<double, 5>> &relativePosition);
-  void
-  calcLayout2(tlp::node n, tlp::Vector<double, 5> &nrPos,
-              tlp::NodeStaticProperty<tlp::Vector<double, 5>> &relativePosition,
-              const tlp::Vector<double, 3> &, const tlp::Vector<double, 3> &);
+  double computeRelativePosition(tlp::node n,
+                                 tlp::NodeStaticProperty<tlp::Vector<double, 5>> &relativePosition);
+  void calcLayout(tlp::node n, tlp::NodeStaticProperty<tlp::Vector<double, 5>> &relativePosition);
+  void calcLayout2(tlp::node n, tlp::Vector<double, 5> &nrPos,
+                   tlp::NodeStaticProperty<tlp::Vector<double, 5>> &relativePosition,
+                   const tlp::Vector<double, 3> &, const tlp::Vector<double, 3> &);
   tlp::Graph *tree;
   tlp::SizeProperty *nodeSize;
   bool nAlgo;

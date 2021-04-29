@@ -18,21 +18,21 @@
  */
 #include "TulipPerspectiveProcessHandler.h"
 
+#include <QDir>
 #include <QApplication>
 #include <QDebug>
-#include <QDir>
 #include <QFileDialog>
 #include <QPainter>
 #include <QStandardPaths>
 #include <QTcpSocket>
 #include <tulip/TulipProject.h>
 
-#include <CrashHandling.h>
 #include <ctime>
 #include <iostream>
+#include <CrashHandling.h>
 
-#include "TulipMainWindow.h"
 #include "TulipPerspectiveCrashHandler.h"
+#include "TulipMainWindow.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -46,16 +46,13 @@ void SelectionButton::paintEvent(QPaintEvent *e) {
   p.drawPixmap(10, height() / 2 - pixmap.height() / 2, pixmap);
 }
 
-TulipPerspectiveProcessHandler *TulipPerspectiveProcessHandler::_instance =
-    nullptr;
+TulipPerspectiveProcessHandler *TulipPerspectiveProcessHandler::_instance = nullptr;
 
 TulipPerspectiveProcessHandler::TulipPerspectiveProcessHandler() {
   listen(QHostAddress::LocalHost);
   connect(this, SIGNAL(newConnection()), this, SLOT(acceptConnection()));
-  QFile f(
-      QDir(
-          QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0))
-          .filePath("tulip.lck"));
+  QFile f(QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0))
+              .filePath("tulip.lck"));
   f.open(QIODevice::WriteOnly);
   f.write(QString::number(serverPort()).toUtf8());
   f.flush();
@@ -79,9 +76,9 @@ TulipPerspectiveProcessHandler *TulipPerspectiveProcessHandler::instance() {
   return _instance;
 }
 
-void TulipPerspectiveProcessHandler::createPerspective(
-    const QString &perspective, const QString &file,
-    const QVariantMap &parameters) {
+void TulipPerspectiveProcessHandler::createPerspective(const QString &perspective,
+                                                       const QString &file,
+                                                       const QVariantMap &parameters) {
   QStringList args;
 
   if (!perspective.isEmpty())
@@ -111,12 +108,10 @@ void TulipPerspectiveProcessHandler::createPerspective(
           SLOT(perspectiveFinished(int, QProcess::ExitStatus)));
   process->setProcessChannelMode(QProcess::ForwardedChannels);
   process->start(appDir.absoluteFilePath("tulip_perspective"), args);
-  _processInfo[process] =
-      PerspectiveProcessInfo(perspective, parameters, file, perspectiveId);
+  _processInfo[process] = PerspectiveProcessInfo(perspective, parameters, file, perspectiveId);
 }
 
-void TulipPerspectiveProcessHandler::perspectiveCrashed(
-    QProcess::ProcessError) {
+void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) {
   QProcess *process = static_cast<QProcess *>(sender());
   process->setReadChannel(QProcess::StandardError);
   PerspectiveProcessInfo info = _processInfo[process];
@@ -129,11 +124,8 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(
       version("^" + QString(TLP_VERSION_HEADER) + " (.*)\n");
 
   // TODO: replace reading process by reading file
-  QFile f(
-      QDir(
-          QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0))
-          .filePath("tulip_perspective-" +
-                    QString::number(info._perspectiveId) + ".log"));
+  QFile f(QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0))
+              .filePath("tulip_perspective-" + QString::number(info._perspectiveId) + ".log"));
   f.open(QIODevice::ReadOnly);
 
   QMap<QRegExp *, QString> envInfo;
@@ -176,14 +168,13 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(
   if (stackTrace.isEmpty())
     return;
 
-  crashHandler.setEnvData(envInfo[&plateform], envInfo[&arch],
-                          envInfo[&compiler], envInfo[&version], stackTrace);
+  crashHandler.setEnvData(envInfo[&plateform], envInfo[&arch], envInfo[&compiler],
+                          envInfo[&version], stackTrace);
   crashHandler.setPerspectiveData(info);
   crashHandler.exec();
 }
 
-void TulipPerspectiveProcessHandler::perspectiveFinished(int,
-                                                         QProcess::ExitStatus) {
+void TulipPerspectiveProcessHandler::perspectiveFinished(int, QProcess::ExitStatus) {
   QProcess *process = static_cast<QProcess *>(sender());
   delete process;
   _processInfo.remove(process);
@@ -199,10 +190,8 @@ void TulipPerspectiveProcessHandler::perspectiveReadyRead() {
   QTcpSocket *socket = static_cast<QTcpSocket *>(sender());
   QString data(QString::fromUtf8(socket->readAll()));
   QStringList tokens = data.split("\t");
-  QString args = QString(data).remove(0, tokens[0].length() +
-                                             1); // arguments except first one
-  QString args2 = QString(args).remove(0, tokens[1].length() +
-                                              1); // arguments except two firsts
+  QString args = QString(data).remove(0, tokens[0].length() + 1);  // arguments except first one
+  QString args2 = QString(args).remove(0, tokens[1].length() + 1); // arguments except two firsts
 
   if (tokens[0] == "SHOW_AGENT") {
     if (tokens[1] == "PLUGINS")

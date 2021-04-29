@@ -25,11 +25,9 @@ class OrientableLayout : public OrientableLayoutInterface {
   friend class OrientableCoord;
 
 public:
-  OrientableLayout(tlp::LayoutProperty *layout,
-                   orientationType mask = ORI_DEFAULT);
+  OrientableLayout(tlp::LayoutProperty *layout, orientationType mask = ORI_DEFAULT);
 
-  OrientableCoord createCoord(const float x = 0, const float y = 0,
-                              const float z = 0) override;
+  OrientableCoord createCoord(const float x = 0, const float y = 0, const float z = 0) override;
   OrientableCoord createCoord(const tlp::Coord &v) override;
 
   void setOrientation(orientationType mask) override;
@@ -50,8 +48,7 @@ public:
 
 private:
   typedef std::vector<tlp::Coord> CoordLineType;
-  std::vector<OrientableCoord>
-  convertEdgeLinetype(const std::vector<tlp::Coord> &v);
+  std::vector<OrientableCoord> convertEdgeLinetype(const std::vector<tlp::Coord> &v);
 
   tlp::LayoutProperty *layout;
   orientationType orientation;
@@ -62,8 +59,8 @@ private:
   void (OrientableCoord::*writeX)(float);
   void (OrientableCoord::*writeY)(float);
   void (OrientableCoord::*writeZ)(float);
-  void addControlPoints(const tlp::Graph *tree, OrientableCoord fatherCoord,
-                        tlp::edge e, float interNodeDistance);
+  void addControlPoints(const tlp::Graph *tree, OrientableCoord fatherCoord, tlp::edge e,
+                        float interNodeDistance);
 };
 
 #endif

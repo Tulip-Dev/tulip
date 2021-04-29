@@ -31,8 +31,7 @@ public:
   enum SelectionMode { EdgesAndNodes = 0, EdgesOnly, NodesOnly };
 
   MouseSelector(Qt::MouseButton button = Qt::LeftButton,
-                Qt::KeyboardModifier modifier = Qt::NoModifier,
-                SelectionMode mode = EdgesAndNodes);
+                Qt::KeyboardModifier modifier = Qt::NoModifier, SelectionMode mode = EdgesAndNodes);
   ~MouseSelector() override {}
   bool draw(GlMainWidget *) override;
   bool eventFilter(QObject *, QEvent *) override;

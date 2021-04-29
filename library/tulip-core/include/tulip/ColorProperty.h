@@ -20,8 +20,8 @@
 #ifndef TULIP_COLORS_H
 #define TULIP_COLORS_H
 
-#include <tulip/AbstractProperty.h>
 #include <tulip/PropertyTypes.h>
+#include <tulip/AbstractProperty.h>
 
 namespace tlp {
 
@@ -37,10 +37,11 @@ class TLP_SCOPE ColorProperty : public AbstractColorProperty {
 public:
   ColorProperty(Graph *g, const std::string &n = "");
   // PropertyInterface inherited methods
-  PropertyInterface *clonePrototype(Graph *,
-                                    const std::string &) const override;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const override { return propertyTypename; }
+  const std::string &getTypename() const override {
+    return propertyTypename;
+  }
   DEFINE_GET_CPP_CLASS_NAME;
 
   int compare(const node n1, const node n2) const override;
@@ -49,8 +50,7 @@ public:
 
 /**
  * @ingroup Graph
- * @brief A graph property that maps a std::vector<tlp::Color> value to graph
- * elements.
+ * @brief A graph property that maps a std::vector<tlp::Color> value to graph elements.
  */
 class TLP_SCOPE ColorVectorProperty
     : public AbstractVectorProperty<tlp::ColorVectorType, tlp::ColorType> {
@@ -58,10 +58,11 @@ public:
   ColorVectorProperty(Graph *g, const std::string &n = "")
       : AbstractVectorProperty<ColorVectorType, tlp::ColorType>(g, n) {}
   // PropertyInterface inherited methods
-  PropertyInterface *clonePrototype(Graph *,
-                                    const std::string &) const override;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const override { return propertyTypename; }
+  const std::string &getTypename() const override {
+    return propertyTypename;
+  }
   DEFINE_GET_CPP_CLASS_NAME;
 };
 } // namespace tlp

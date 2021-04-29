@@ -21,21 +21,28 @@
 //===================================================================
 // Specialisation
 namespace tlp {
-template <typename Obj> class Matrix<Obj, 1> : public Array<Vector<Obj, 1>, 1> {
+template <typename Obj>
+class Matrix<Obj, 1> : public Array<Vector<Obj, 1>, 1> {
 public:
-  Obj determinant() { return (*this)[0][0]; }
+  Obj determinant() {
+    return (*this)[0][0];
+  }
   //      Matrix<Obj,1>& fill(Obj obj) {return *this;}
   Matrix<Obj, 1> &inverse() {
     (*this)[0][0] = 1.0 / (*this)[0][0];
     return *this;
   }
-  Matrix<Obj, 1> &transpose() { return *this; }
+  Matrix<Obj, 1> &transpose() {
+    return *this;
+  }
   Matrix<Obj, 1> &operator*=(const Matrix<Obj, 1> &mat) {
     (*this)[0][0] *= mat[0][0];
     return *this;
   }
   //      Matrix<Obj,1>& operator/=(const Obj &obj){return *this;}
-  Matrix<Obj, 1> cofactor() { return *this; }
+  Matrix<Obj, 1> cofactor() {
+    return *this;
+  }
 };
 } // namespace tlp
 
@@ -44,12 +51,13 @@ template <typename Obj, size_t SIZE>
 MATRIX::Matrix(const std::vector<std::vector<Obj>> &covarianceMatrix) {
   for (size_t i = 0; i < SIZE; i++)
     for (size_t j = 0; j < SIZE; j++)
-      (*this)[i][j] = covarianceMatrix[i][j] /
-                      (sqrt(covarianceMatrix[i][i] * covarianceMatrix[j][j]));
+      (*this)[i][j] =
+          covarianceMatrix[i][j] / (sqrt(covarianceMatrix[i][i] * covarianceMatrix[j][j]));
 }
 
 //===================================================================
-template <typename Obj, size_t SIZE> MATRIX &MATRIX::fill(Obj obj) {
+template <typename Obj, size_t SIZE>
+MATRIX &MATRIX::fill(Obj obj) {
   for (size_t i = 0; i < SIZE; ++i)
     (*this)[i].fill(obj);
 
@@ -122,19 +130,17 @@ MATRIX &MATRIX::operator/=(const Obj &obj) {
   return (*this);
 }
 //=====================================================================================
-template <typename Obj, size_t SIZE> Obj MATRIX::determinant() const {
+template <typename Obj, size_t SIZE>
+Obj MATRIX::determinant() const {
   switch (SIZE) {
   case 2:
     return (*this)[0][0] * (*this)[1][1] - (*this)[1][0] * (*this)[0][1];
     break;
 
   case 3:
-    return (*this)[0][0] *
-               ((*this)[1][1] * (*this)[2][2] - (*this)[1][2] * (*this)[2][1]) -
-           (*this)[0][1] *
-               ((*this)[1][0] * (*this)[2][2] - (*this)[1][2] * (*this)[2][0]) +
-           (*this)[0][2] *
-               ((*this)[1][0] * (*this)[2][1] - (*this)[1][1] * (*this)[2][0]);
+    return (*this)[0][0] * ((*this)[1][1] * (*this)[2][2] - (*this)[1][2] * (*this)[2][1]) -
+           (*this)[0][1] * ((*this)[1][0] * (*this)[2][2] - (*this)[1][2] * (*this)[2][0]) +
+           (*this)[0][2] * ((*this)[1][0] * (*this)[2][1] - (*this)[1][1] * (*this)[2][0]);
     break;
 
   default:
@@ -166,7 +172,8 @@ template <typename Obj, size_t SIZE> Obj MATRIX::determinant() const {
   }
 }
 //=====================================================================================
-template <typename Obj, size_t SIZE> MATRIX MATRIX::cofactor() const {
+template <typename Obj, size_t SIZE>
+MATRIX MATRIX::cofactor() const {
   MATRIX result;
 
   switch (SIZE) {
@@ -178,24 +185,15 @@ template <typename Obj, size_t SIZE> MATRIX MATRIX::cofactor() const {
     break;
 
   case 3:
-    (result)[0][0] =
-        (*this)[1][1] * (*this)[2][2] - (*this)[1][2] * (*this)[2][1];
-    (result)[0][1] =
-        -((*this)[1][0] * (*this)[2][2] - (*this)[2][0] * (*this)[1][2]);
-    (result)[0][2] =
-        (*this)[1][0] * (*this)[2][1] - (*this)[1][1] * (*this)[2][0];
-    (result)[1][0] =
-        -((*this)[0][1] * (*this)[2][2] - (*this)[0][2] * (*this)[2][1]);
-    (result)[1][1] =
-        (*this)[0][0] * (*this)[2][2] - (*this)[0][2] * (*this)[2][0];
-    (result)[1][2] =
-        -((*this)[0][0] * (*this)[2][1] - (*this)[0][1] * (*this)[2][0]);
-    (result)[2][0] =
-        (*this)[0][1] * (*this)[1][2] - (*this)[0][2] * (*this)[1][1];
-    (result)[2][1] =
-        -((*this)[0][0] * (*this)[1][2] - (*this)[0][2] * (*this)[1][0]);
-    (result)[2][2] =
-        (*this)[0][0] * (*this)[1][1] - (*this)[0][1] * (*this)[1][0];
+    (result)[0][0] = (*this)[1][1] * (*this)[2][2] - (*this)[1][2] * (*this)[2][1];
+    (result)[0][1] = -((*this)[1][0] * (*this)[2][2] - (*this)[2][0] * (*this)[1][2]);
+    (result)[0][2] = (*this)[1][0] * (*this)[2][1] - (*this)[1][1] * (*this)[2][0];
+    (result)[1][0] = -((*this)[0][1] * (*this)[2][2] - (*this)[0][2] * (*this)[2][1]);
+    (result)[1][1] = (*this)[0][0] * (*this)[2][2] - (*this)[0][2] * (*this)[2][0];
+    (result)[1][2] = -((*this)[0][0] * (*this)[2][1] - (*this)[0][1] * (*this)[2][0]);
+    (result)[2][0] = (*this)[0][1] * (*this)[1][2] - (*this)[0][2] * (*this)[1][1];
+    (result)[2][1] = -((*this)[0][0] * (*this)[1][2] - (*this)[0][2] * (*this)[1][0]);
+    (result)[2][2] = (*this)[0][0] * (*this)[1][1] - (*this)[0][1] * (*this)[1][0];
     break;
 
   default:
@@ -236,7 +234,8 @@ template <typename Obj, size_t SIZE> MATRIX MATRIX::cofactor() const {
   return result;
 }
 //=====================================================================================
-template <typename Obj, size_t SIZE> MATRIX &MATRIX::transpose() {
+template <typename Obj, size_t SIZE>
+MATRIX &MATRIX::transpose() {
   Obj tmp;
 
   for (size_t i = 1; i < SIZE; ++i) {
@@ -250,7 +249,8 @@ template <typename Obj, size_t SIZE> MATRIX &MATRIX::transpose() {
   return (*this);
 }
 //=====================================================================================
-template <typename Obj, size_t SIZE> MATRIX &MATRIX::inverse() {
+template <typename Obj, size_t SIZE>
+MATRIX &MATRIX::inverse() {
   (*this) = (*this).cofactor().transpose() /= (*this).determinant();
   return (*this);
 }
@@ -296,8 +296,7 @@ MATRIX tlp::operator*(const MATRIX &mat, const Obj &obj) {
 }
 //=====================================================================================
 template <typename Obj, size_t SIZE>
-tlp::Vector<Obj, SIZE> tlp::operator*(const MATRIX &mat,
-                                      const tlp::Vector<Obj, SIZE> &vec) {
+tlp::Vector<Obj, SIZE> tlp::operator*(const MATRIX &mat, const tlp::Vector<Obj, SIZE> &vec) {
   tlp::Vector<Obj, SIZE> result;
 
   for (size_t row = 0; row < SIZE; ++row) {
@@ -314,8 +313,7 @@ tlp::Vector<Obj, SIZE> tlp::operator*(const MATRIX &mat,
 }
 //=====================================================================================
 template <typename Obj, size_t SIZE>
-tlp::Vector<Obj, SIZE> tlp::operator*(const tlp::Vector<Obj, SIZE> &vec,
-                                      const MATRIX &mat) {
+tlp::Vector<Obj, SIZE> tlp::operator*(const tlp::Vector<Obj, SIZE> &vec, const MATRIX &mat) {
   tlp::Vector<Obj, SIZE> result;
 
   for (size_t row = 0; row < SIZE; ++row) {
@@ -333,8 +331,7 @@ tlp::Vector<Obj, SIZE> tlp::operator*(const tlp::Vector<Obj, SIZE> &vec,
 
 //=====================================================================================
 template <typename Obj, size_t SIZE>
-tlp::Vector<Obj, SIZE>
-MATRIX::powerIteration(const unsigned int nIterations) const {
+tlp::Vector<Obj, SIZE> MATRIX::powerIteration(const unsigned int nIterations) const {
   tlp::Vector<Obj, SIZE> iteration;
 
   for (size_t i = 0; i < SIZE; i++)
@@ -354,15 +351,13 @@ MATRIX::powerIteration(const unsigned int nIterations) const {
 template <typename Obj, size_t SIZE>
 bool MATRIX::simplify(tlp::Matrix<Obj, 2> &simplifiedMatrix) const {
   if (SIZE != 3) {
-    tlp::warning()
-        << "Computation allowed only for 3x3 Matrices. Yours sizes : " << SIZE
-        << "x" << SIZE << std::endl;
+    tlp::warning() << "Computation allowed only for 3x3 Matrices. Yours sizes : " << SIZE << "x"
+                   << SIZE << std::endl;
 
     return false;
   }
 
-  // We start with a matrix representing an equation system under the following
-  // form :
+  // We start with a matrix representing an equation system under the following form :
   //
   // ax + by + cz = 0
   // dx + ey + fz = 0
@@ -380,9 +375,8 @@ bool MATRIX::simplify(tlp::Matrix<Obj, 2> &simplifiedMatrix) const {
   // lx + mz = 0
   //
   // So to reduce the matrix, we will use the Gaussian Elimination.
-  // For the first line we will apply a Gaussian Elimination between (e1) and
-  // (e2) For the second line we will apply a Gaussian Elimination between (e1)
-  // and (e3)
+  // For the first line we will apply a Gaussian Elimination between (e1) and (e2)
+  // For the second line we will apply a Gaussian Elimination between (e1) and (e3)
 
   float coeff;
 
@@ -414,12 +408,10 @@ bool MATRIX::simplify(tlp::Matrix<Obj, 2> &simplifiedMatrix) const {
 //=====================================================================================
 
 template <typename Obj, size_t SIZE>
-bool MATRIX::computeEigenVector(const float x,
-                                tlp::Vector<Obj, 3> &eigenVector) const {
+bool MATRIX::computeEigenVector(const float x, tlp::Vector<Obj, 3> &eigenVector) const {
   if (SIZE != 2) {
-    tlp::warning()
-        << "Computation allowed only for 2x2 Matrices. Yours sizes : " << SIZE
-        << "x" << SIZE << std::endl;
+    tlp::warning() << "Computation allowed only for 2x2 Matrices. Yours sizes : " << SIZE << "x"
+                   << SIZE << std::endl;
 
     return false;
   }

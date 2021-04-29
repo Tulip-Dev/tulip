@@ -38,8 +38,7 @@ struct dfsBiconnectStruct {
   unsigned int depth;
   Iterator<node> *inOutNodes;
 
-  dfsBiconnectStruct(Graph *graph, node n, unsigned int d = 0, node u = node(),
-                     node first = node())
+  dfsBiconnectStruct(Graph *graph, node n, unsigned int d = 0, node u = node(), node first = node())
       : from(n), u(u), first(first), depth(d),
         inOutNodes(new StableIterator<node>(graph->getInOutNodes(from))) {}
 };
@@ -95,8 +94,7 @@ static void makeBiconnectedDFS(Graph *graph, vector<edge> &addedEdges) {
         dfsParams.depth = currentDepth;
         depth.set(to.id, currentDepth);
         low.set(to.id, currentDepth);
-        dfsParams.inOutNodes =
-            new StableIterator<node>(graph->getInOutNodes(to));
+        dfsParams.inOutNodes = new StableIterator<node>(graph->getInOutNodes(to));
         break;
       } else {
         low.set(from.id, std::min(low.get(from.id), depth.get(to.id)));
@@ -133,10 +131,9 @@ static void makeBiconnectedDFS(Graph *graph, vector<edge> &addedEdges) {
 }
 
 //=================================================================
-bool biconnectedTest(const Graph *graph, node v,
-                     MutableContainer<unsigned int> &low,
-                     MutableContainer<unsigned int> &dfsNumber,
-                     MutableContainer<node> &supergraph, unsigned int &count) {
+bool biconnectedTest(const Graph *graph, node v, MutableContainer<unsigned int> &low,
+                     MutableContainer<unsigned int> &dfsNumber, MutableContainer<node> &supergraph,
+                     unsigned int &count) {
   unsigned int vDfs = count++;
   dfsNumber.set(v.id, vDfs);
   low.set(v.id, vDfs);
@@ -176,8 +173,7 @@ static bool biconnectedTest(const Graph *graph) {
   dfsNumber.setAll(UINT_MAX);
   MutableContainer<node> supergraph;
   unsigned int count = 1;
-  return (biconnectedTest(graph, graph->nodes()[0], low, dfsNumber, supergraph,
-                          count) &&
+  return (biconnectedTest(graph, graph->nodes()[0], low, dfsNumber, supergraph, count) &&
           (count == graph->numberOfNodes() + 1));
 }
 //=================================================================

@@ -43,8 +43,7 @@ struct Triangle {
 class PlanarGraph : public ImportModule {
 public:
   PLUGININFORMATION("Planar Graph", "Auber", "25/06/2005",
-                    "Imports a new randomly generated planar graph.", "1.0",
-                    "Graph")
+                    "Imports a new randomly generated planar graph.", "1.0", "Graph")
   PlanarGraph(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "30");
   }
@@ -63,8 +62,7 @@ public:
     // initialize a random sequence according the given seed
     tlp::initRandomSequence();
 
-    LayoutProperty *newLayout =
-        graph->getLocalProperty<LayoutProperty>("viewLayout");
+    LayoutProperty *newLayout = graph->getLocalProperty<LayoutProperty>("viewLayout");
     SizeProperty *newSize = graph->getLocalProperty<SizeProperty>("viewSize");
     newSize->setAllNodeValue(Size(1.0, 1.0, 1.0));
 
@@ -89,8 +87,8 @@ public:
       unsigned int i = randomUnsignedInteger(faces.size() - 1);
       Triangle f = faces[i];
       node n = graph->addNode();
-      Coord &&tmp = newLayout->getNodeValue(f.a) +
-                    newLayout->getNodeValue(f.b) + newLayout->getNodeValue(f.c);
+      Coord &&tmp = newLayout->getNodeValue(f.a) + newLayout->getNodeValue(f.b) +
+                    newLayout->getNodeValue(f.c);
       tmp /= 3.0;
       newLayout->setNodeValue(n, tmp);
 

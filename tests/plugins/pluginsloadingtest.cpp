@@ -17,17 +17,17 @@
  *
  */
 
-#include <cstdlib>
 #include <iostream>
+#include <cstdlib>
 
 #ifndef TULIP_BUILD_CORE_ONLY
 #include <QApplication>
 #endif
 
+#include <tulip/TlpTools.h>
+#include <tulip/PluginLoaderTxt.h>
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginLister.h>
-#include <tulip/PluginLoaderTxt.h>
-#include <tulip/TlpTools.h>
 
 // Custom loader to catch if there was some issues
 // when loading plugins
@@ -35,10 +35,8 @@ class PluginLoaderTest : public tlp::PluginLoaderTxt {
 public:
   PluginLoaderTest() : allPluginsLoaded(true) {}
 
-  void aborted(const std::string &filename,
-               const std::string &errormsg) override {
-    const std::string &libName =
-        tlp::PluginLibraryLoader::getCurrentPluginFileName();
+  void aborted(const std::string &filename, const std::string &errormsg) override {
+    const std::string &libName = tlp::PluginLibraryLoader::getCurrentPluginFileName();
     // plugins may be loaded twice because it may exist an other version
     // of the plugins in a CMakeFiles sub dir (/CMakeRelink.dir)
     // So set the failure flag only if the plugin was not found
@@ -58,8 +56,8 @@ public:
 int main(int argc, char **argv) {
 
 #ifndef TULIP_BUILD_CORE_ONLY
-  // we need to create a QApplication as some plugins (view, perspective,
-  // interactor) need one to load correctly
+  // we need to create a QApplication as some plugins (view, perspective, interactor)
+  // need one to load correctly
   QApplication app(argc, argv);
 #endif
 

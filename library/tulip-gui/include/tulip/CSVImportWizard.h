@@ -41,8 +41,7 @@ class CSVGraphMappingConfigurationWidget;
 class CSVImportParameters;
 
 /**
- * @brief QWIzardPage encapsulating a CSVParserConfigurationWidget and a
- *preview.
+ * @brief QWIzardPage encapsulating a CSVParserConfigurationWidget and a preview.
  **/
 class CSVParsingConfigurationQWizardPage : public QWizardPage {
   Q_OBJECT
@@ -96,9 +95,13 @@ public:
   CSVImportConfigurationQWizardPage *getImportConfigurationPage() const;
   CSVGraphMappingConfigurationQWizardPage *getMappingConfigurationPage() const;
 
-  static void setGraph(Graph *g) { graph = g; }
+  static void setGraph(Graph *g) {
+    graph = g;
+  }
 
-  static Graph *getGraph() { return graph; }
+  static Graph *getGraph() {
+    return graph;
+  }
 
 public slots:
   void accept() override;

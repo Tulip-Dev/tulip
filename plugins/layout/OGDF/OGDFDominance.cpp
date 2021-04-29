@@ -17,8 +17,8 @@
  *
  */
 #include <ogdf/upward/DominanceLayout.h>
-#include <tulip/ConnectedTest.h>
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
+#include <tulip/ConnectedTest.h>
 
 using namespace tlp;
 using namespace std;
@@ -38,8 +38,7 @@ public:
       "Implements a simple upward drawing algorithm based on dominance drawings of st-digraphs.",
       "1.0", "Hierarchical")
   OGDFDominance(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context,
-                             context ? new ogdf::DominanceLayout() : nullptr) {
+      : OGDFLayoutPluginBase(context, context ? new ogdf::DominanceLayout() : nullptr) {
     addInParameter<int>("minimum grid distance", paramHelp[0], "1");
     addInParameter<bool>("transpose", paramHelp[1], "false");
   }
@@ -55,8 +54,7 @@ public:
   }
 
   void beforeCall() override {
-    ogdf::DominanceLayout *dominance =
-        static_cast<ogdf::DominanceLayout *>(ogdfLayoutAlgo);
+    ogdf::DominanceLayout *dominance = static_cast<ogdf::DominanceLayout *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {
       int ival = 0;

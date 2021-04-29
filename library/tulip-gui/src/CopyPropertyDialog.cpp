@@ -17,50 +17,48 @@
  *
  */
 
-#include <QInputDialog>
-#include <QLabel>
-#include <QListView>
-#include <QMessageBox>
-#include <QPushButton>
 #include <QString>
 #include <QStringList>
+#include <QListView>
+#include <QPushButton>
+#include <QMessageBox>
+#include <QInputDialog>
+#include <QLabel>
 #include <QTabWidget>
 
 #include "ui_CopyPropertyDialog.h"
 
+#include <tulip/CopyPropertyDialog.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/CopyPropertyDialog.h>
 #include <tulip/DoubleProperty.h>
-#include <tulip/Graph.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
-#include <tulip/TlpQtTools.h>
 
 using namespace std;
 using namespace tlp;
 
 //=============================================================================
 CopyPropertyDialog::CopyPropertyDialog(QWidget *parent)
-    : QDialog(parent), ui(new Ui::CopyPropertyDialogData()), _graph(nullptr),
-      _source(nullptr) {
+    : QDialog(parent), ui(new Ui::CopyPropertyDialogData()), _graph(nullptr), _source(nullptr) {
   ui->setupUi(this);
 
   ui->buttonBox->button(QDialogButtonBox::Ok)->setText("&Copy");
 
-  ui->errorIconLabel->setPixmap(QApplication::style()
-                                    ->standardIcon(QStyle::SP_MessageBoxWarning)
-                                    .pixmap(16, 16));
-  connect(ui->newPropertyNameLineEdit, SIGNAL(textChanged(QString)), this,
-          SLOT(checkValidity()));
-  connect(ui->buttonGroup, SIGNAL(buttonClicked(int)), this,
-          SLOT(checkValidity()));
+  ui->errorIconLabel->setPixmap(
+      QApplication::style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(16, 16));
+  connect(ui->newPropertyNameLineEdit, SIGNAL(textChanged(QString)), this, SLOT(checkValidity()));
+  connect(ui->buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(checkValidity()));
   checkValidity();
 }
 
-CopyPropertyDialog::~CopyPropertyDialog() { delete ui; }
+CopyPropertyDialog::~CopyPropertyDialog() {
+  delete ui;
+}
 
 void CopyPropertyDialog::init(Graph *graph, PropertyInterface *source) {
   _graph = graph;
@@ -80,13 +78,11 @@ void CopyPropertyDialog::init(Graph *graph, PropertyInterface *source) {
         // Check if name is different
         if (source->getName() != property->getName() &&
             _graph->existLocalProperty(property->getName()))
-          ui->localPropertiesComboBox->addItem(
-              tlpStringToQString(property->getName()));
+          ui->localPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
 
         // check if inherited exists
         if (parent && parent->existProperty(property->getName())) {
-          ui->inheritedPropertiesComboBox->addItem(
-              tlpStringToQString(property->getName()));
+          ui->inheritedPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
         }
       }
     }
@@ -126,13 +122,11 @@ PropertyInterface *CopyPropertyDialog::copyProperty(QString &errorMsg) {
       valid = false;
       errorMsg = tr("Cannot create a property with an empty name");
     } else if (_graph->existProperty(QStringToTlpString(propertyName))) {
-      PropertyInterface *existingProperty =
-          _graph->getProperty(QStringToTlpString(propertyName));
+      PropertyInterface *existingProperty = _graph->getProperty(QStringToTlpString(propertyName));
 
       if (typeid(*existingProperty) != typeid(*_source)) {
         valid = false;
-        errorMsg = tr(
-            "A property with the same name but a different type already exists");
+        errorMsg = tr("A property with the same name but a different type already exists");
       }
     }
   } else if (ui->localPropertyRadioButton->isChecked()) {
@@ -153,60 +147,42 @@ PropertyInterface *CopyPropertyDialog::copyProperty(QString &errorMsg) {
 
   if (valid) {
     string tulipPropertyName = QStringToTlpString(propertyName);
-    CopyPropertyDialog::PropertyScope destinationScope =
-        destinationPropertyScope();
+    CopyPropertyDialog::PropertyScope destinationScope = destinationPropertyScope();
     _graph->push();
 
-#define COPY_PROPERTY(TYPE, GRAPH, SOURCE, NAME, SCOPE)                        \
-  if (typeid((*SOURCE)) == typeid(TYPE)) {                                     \
-    TYPE *newProperty = SCOPE == INHERITED                                     \
-                            ? GRAPH->getSuperGraph()->getProperty<TYPE>(NAME)  \
-                            : GRAPH->getLocalProperty<TYPE>(NAME);             \
-    *newProperty = *(static_cast<TYPE *>(SOURCE));                             \
-    return newProperty;                                                        \
+#define COPY_PROPERTY(TYPE, GRAPH, SOURCE, NAME, SCOPE)                                            \
+  if (typeid((*SOURCE)) == typeid(TYPE)) {                                                         \
+    TYPE *newProperty = SCOPE == INHERITED ? GRAPH->getSuperGraph()->getProperty<TYPE>(NAME)       \
+                                           : GRAPH->getLocalProperty<TYPE>(NAME);                  \
+    *newProperty = *(static_cast<TYPE *>(SOURCE));                                                 \
+    return newProperty;                                                                            \
   }
 
-    COPY_PROPERTY(DoubleProperty, _graph, _source, tulipPropertyName,
-                  destinationScope);
-    COPY_PROPERTY(LayoutProperty, _graph, _source, tulipPropertyName,
-                  destinationScope);
-    COPY_PROPERTY(StringProperty, _graph, _source, tulipPropertyName,
-                  destinationScope);
-    COPY_PROPERTY(BooleanProperty, _graph, _source, tulipPropertyName,
-                  destinationScope);
-    COPY_PROPERTY(IntegerProperty, _graph, _source, tulipPropertyName,
-                  destinationScope);
-    COPY_PROPERTY(ColorProperty, _graph, _source, tulipPropertyName,
-                  destinationScope);
-    COPY_PROPERTY(SizeProperty, _graph, _source, tulipPropertyName,
-                  destinationScope);
-    COPY_PROPERTY(DoubleVectorProperty, _graph, _source, tulipPropertyName,
-                  destinationScope);
-    COPY_PROPERTY(CoordVectorProperty, _graph, _source, tulipPropertyName,
-                  destinationScope);
-    COPY_PROPERTY(StringVectorProperty, _graph, _source, tulipPropertyName,
-                  destinationScope);
-    COPY_PROPERTY(BooleanVectorProperty, _graph, _source, tulipPropertyName,
-                  destinationScope);
-    COPY_PROPERTY(IntegerVectorProperty, _graph, _source, tulipPropertyName,
-                  destinationScope);
-    COPY_PROPERTY(ColorVectorProperty, _graph, _source, tulipPropertyName,
-                  destinationScope);
-    COPY_PROPERTY(SizeVectorProperty, _graph, _source, tulipPropertyName,
-                  destinationScope);
+    COPY_PROPERTY(DoubleProperty, _graph, _source, tulipPropertyName, destinationScope);
+    COPY_PROPERTY(LayoutProperty, _graph, _source, tulipPropertyName, destinationScope);
+    COPY_PROPERTY(StringProperty, _graph, _source, tulipPropertyName, destinationScope);
+    COPY_PROPERTY(BooleanProperty, _graph, _source, tulipPropertyName, destinationScope);
+    COPY_PROPERTY(IntegerProperty, _graph, _source, tulipPropertyName, destinationScope);
+    COPY_PROPERTY(ColorProperty, _graph, _source, tulipPropertyName, destinationScope);
+    COPY_PROPERTY(SizeProperty, _graph, _source, tulipPropertyName, destinationScope);
+    COPY_PROPERTY(DoubleVectorProperty, _graph, _source, tulipPropertyName, destinationScope);
+    COPY_PROPERTY(CoordVectorProperty, _graph, _source, tulipPropertyName, destinationScope);
+    COPY_PROPERTY(StringVectorProperty, _graph, _source, tulipPropertyName, destinationScope);
+    COPY_PROPERTY(BooleanVectorProperty, _graph, _source, tulipPropertyName, destinationScope);
+    COPY_PROPERTY(IntegerVectorProperty, _graph, _source, tulipPropertyName, destinationScope);
+    COPY_PROPERTY(ColorVectorProperty, _graph, _source, tulipPropertyName, destinationScope);
+    COPY_PROPERTY(SizeVectorProperty, _graph, _source, tulipPropertyName, destinationScope);
   }
 
   return property;
 }
 
-PropertyInterface *
-CopyPropertyDialog::copyProperty(Graph *graph, PropertyInterface *toCopy,
-                                 bool askBeforePropertyOverwriting,
-                                 QWidget *parent) {
+PropertyInterface *CopyPropertyDialog::copyProperty(Graph *graph, PropertyInterface *toCopy,
+                                                    bool askBeforePropertyOverwriting,
+                                                    QWidget *parent) {
   PropertyInterface *property = nullptr;
   CopyPropertyDialog dialog(parent);
-  dialog.setWindowTitle(tr("Copy property ") +
-                        tlpStringToQString(toCopy->getName()));
+  dialog.setWindowTitle(tr("Copy property ") + tlpStringToQString(toCopy->getName()));
   dialog.init(graph, toCopy);
 
   if (dialog.exec() == QDialog::Accepted) {
@@ -218,11 +194,10 @@ CopyPropertyDialog::copyProperty(Graph *graph, PropertyInterface *toCopy,
       QString selectedPropertyName = dialog.destinationPropertyName();
 
       if (graph->existProperty(QStringToTlpString(selectedPropertyName))) {
-        if (QMessageBox::question(
-                parent, "Copy confirmation",
-                QString("Property ") + selectedPropertyName +
-                    " already exists,\ndo you really want to overwrite it?",
-                QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
+        if (QMessageBox::question(parent, "Copy confirmation",
+                                  QString("Property ") + selectedPropertyName +
+                                      " already exists,\ndo you really want to overwrite it?",
+                                  QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
           copy = false;
         }
       }
@@ -259,13 +234,11 @@ void CopyPropertyDialog::checkValidity() {
       valid = false;
       errorMsg = tr("Cannot create a property with an empty name");
     } else if (_graph->existProperty(QStringToTlpString(propertyName))) {
-      PropertyInterface *existingProperty =
-          _graph->getProperty(QStringToTlpString(propertyName));
+      PropertyInterface *existingProperty = _graph->getProperty(QStringToTlpString(propertyName));
 
       if (typeid(*existingProperty) != typeid(*_source)) {
         valid = false;
-        errorMsg = tr(
-            "A property with the same name but a different type already exists");
+        errorMsg = tr("A property with the same name but a different type already exists");
       }
     }
   } else if (ui->localPropertyRadioButton->isChecked()) {
@@ -303,8 +276,7 @@ QString CopyPropertyDialog::destinationPropertyName() const {
   return propertyName;
 }
 
-CopyPropertyDialog::PropertyScope
-CopyPropertyDialog::destinationPropertyScope() const {
+CopyPropertyDialog::PropertyScope CopyPropertyDialog::destinationPropertyScope() const {
   if (ui->newPropertyRadioButton->isChecked()) {
     return NEW;
   } else if (ui->localPropertyRadioButton->isChecked()) {

@@ -20,13 +20,12 @@
 #include "NeighborhoodHighlighterConfigWidget.h"
 #include "ui_NeighborhoodHighlighterConfigWidget.h"
 
-#include <tulip/Interactor.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/Interactor.h>
 
 using namespace tlp;
 
-NeighborhoodHighlighterConfigWidget::NeighborhoodHighlighterConfigWidget(
-    QWidget *parent)
+NeighborhoodHighlighterConfigWidget::NeighborhoodHighlighterConfigWidget(QWidget *parent)
     : QWidget(parent), _ui(new Ui::NeighborhoodHighlighterConfigWidget) {
   Interactor::setupConfigWidget(this);
   _ui->setupUi(this);
@@ -51,8 +50,8 @@ bool NeighborhoodHighlighterConfigWidget::computeReachableSubGraph() const {
   return _ui->computeReachableSGCB->isChecked();
 }
 
-void NeighborhoodHighlighterConfigWidget::
-    setCurrentMaxDistanceForReachableNodes(unsigned int distance) {
+void NeighborhoodHighlighterConfigWidget::setCurrentMaxDistanceForReachableNodes(
+    unsigned int distance) {
   _ui->distanceLineEdit->setText(QString::number(distance));
 }
 
@@ -72,11 +71,9 @@ void NeighborhoodHighlighterConfigWidget::setNumberOfNodes(int nodesNb) {
   _ui->nodesNumber->setValue(nodesNb);
 }
 
-void NeighborhoodHighlighterConfigWidget::setPropertyToUse(
-    const std::string &propertyName) {
+void NeighborhoodHighlighterConfigWidget::setPropertyToUse(const std::string &propertyName) {
   _ui->propertyName->addItem(tlpStringToQString(propertyName));
-  _ui->propertyName->setCurrentIndex(
-      _ui->propertyName->findText(tlpStringToQString(propertyName)));
+  _ui->propertyName->setCurrentIndex(_ui->propertyName->findText(tlpStringToQString(propertyName)));
 }
 
 bool NeighborhoodHighlighterConfigWidget::isdisplayEdgesCBChecked() const {

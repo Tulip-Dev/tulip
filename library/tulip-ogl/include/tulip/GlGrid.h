@@ -20,8 +20,8 @@
 #ifndef _Tulip_GLGRID_H_
 #define _Tulip_GLGRID_H_
 
-#include <tulip/Color.h>
 #include <tulip/Coord.h>
+#include <tulip/Color.h>
 #include <tulip/Size.h>
 
 #include <tulip/GlSimpleEntity.h>
@@ -51,8 +51,8 @@ public:
    * @param displays The dimensions of the grid to display.
    * @param hollowGrid Indicates if the grid should be hollowed.
    */
-  GlGrid(const Coord &frontTopLeft, const Coord &backBottomRight,
-         const Size &cell, const Color &color, bool displays[3]);
+  GlGrid(const Coord &frontTopLeft, const Coord &backBottomRight, const Size &cell,
+         const Color &color, bool displays[3]);
   /**
    * @brief Virtual function used to draw the grid.
    */
@@ -79,16 +79,14 @@ public:
   /**
    * @brief Function to set data with inString (in XML format)
    */
-  void setWithXML(const std::string &inString,
-                  unsigned int &currentPosition) override;
+  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
 
 protected:
-  bool displayDim[3]; /**< Which dimensions should be displayed ? Note that only
-                         one dimension at most should be disabled*/
-  bool hollowGrid;    /**< Should the grid be hollowed ?*/
-  Coord frontTopLeft; /**< Front top left point of the grid, the "minimum" */
-  Coord backBottomRight; /**< Back bottom right point of the grid, the "maximum"
-                          */
+  bool displayDim[3];    /**< Which dimensions should be displayed ? Note that only one dimension at
+                            most should be disabled*/
+  bool hollowGrid;       /**< Should the grid be hollowed ?*/
+  Coord frontTopLeft;    /**< Front top left point of the grid, the "minimum" */
+  Coord backBottomRight; /**< Back bottom right point of the grid, the "maximum" */
   Color color;           /**< The color of the grid */
   Size cell;             /**< The size of a cell of the grid */
 };

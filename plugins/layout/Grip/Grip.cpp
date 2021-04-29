@@ -17,8 +17,8 @@
  *
  */
 #include "Grip.h"
-#include "Distances.h"
 #include "MISFiltering.h"
+#include "Distances.h"
 
 using namespace std;
 using namespace tlp;
@@ -29,8 +29,8 @@ static const char *paramHelp[] = {
 
 //======================================================
 Grip::Grip(const tlp::PluginContext *context)
-    : LayoutAlgorithm(context), misf(nullptr), edgeLength(0), level(0),
-      currentGraph(nullptr), _dim(0) {
+    : LayoutAlgorithm(context), misf(nullptr), edgeLength(0), level(0), currentGraph(nullptr),
+      _dim(0) {
   addInParameter<bool>("3D layout", paramHelp[0], "false");
   addDependency("Connected Component Packing", "1.0");
 }
@@ -132,8 +132,7 @@ bool Grip::run() {
     DataSet tmp;
     tmp.set("coordinates", result);
     LayoutProperty layout(graph);
-    graph->applyPropertyAlgorithm("Connected Component Packing", &layout, err,
-                                  &tmp);
+    graph->applyPropertyAlgorithm("Connected Component Packing", &layout, err, &tmp);
 
     for (auto n : graph->nodes()) {
       result->setNodeValue(n, layout.getNodeValue(n));
@@ -147,7 +146,9 @@ bool Grip::run() {
   return true;
 }
 //======================================================
-void Grip::computeOrdering() { misf->computeFiltering(); }
+void Grip::computeOrdering() {
+  misf->computeFiltering();
+}
 
 //======================================================
 void Grip::firstNodesPlacement() {
@@ -175,8 +176,7 @@ void Grip::firstNodesPlacement() {
     g->addNode(n1);
     g->addNode(n2);
     g->addNode(n3);
-    result->rotateX(3.14159 / 2. - (3.14159 * randomInteger(1)), g->getNodes(),
-                    g->getEdges());
+    result->rotateX(3.14159 / 2. - (3.14159 * randomInteger(1)), g->getNodes(), g->getEdges());
     currentGraph->delSubGraph(g);
 
     const Coord &c1 = result->getNodeValue(n1);
@@ -217,8 +217,7 @@ void Grip::placement() {
     ++level;
   }
 
-  initialPlacement(misf->index[misf->index.size() - 1],
-                   misf->ordering.size() - 1);
+  initialPlacement(misf->index[misf->index.size() - 1], misf->ordering.size() - 1);
   fr_reffinement(0, misf->ordering.size() - 1);
 }
 //======================================================
@@ -230,9 +229,7 @@ void Grip::seeLayout(unsigned int end) {
 
     for (unsigned int j = 0; j < neighbors[n].size(); ++j) {
       cerr << "distance euclidienne "
-           << (result->getNodeValue(n) - result->getNodeValue(neighbors[n][j]))
-                      .norm() /
-                  edgeLength
+           << (result->getNodeValue(n) - result->getNodeValue(neighbors[n][j])).norm() / edgeLength
            << " et distance dans le graphe " << neighbors_dist[n][j] << endl;
     }
   }
@@ -242,8 +239,8 @@ void Grip::initialPlacement(unsigned int start, unsigned int end) {
   // cerr << __PRETTY_FUNCTION__ << endl;
   for (unsigned int i = start; i <= end; ++i) {
     node currNode = misf->ordering[i];
-    misf->getNearest(currNode, neighbors[currNode], neighbors_dist[currNode],
-                     level, levelToNbNeighbors[level + 1]);
+    misf->getNearest(currNode, neighbors[currNode], neighbors_dist[currNode], level,
+                     levelToNbNeighbors[level + 1]);
   }
 
   for (unsigned int i = start; i <= end; ++i) {
@@ -258,9 +255,9 @@ void Grip::initialPlacement(unsigned int start, unsigned int end) {
     }
 
     double alpha = edgeLength / 6.0 * randomDouble();
-    Coord alea = Coord(alpha - (2. * alpha * randomInteger(1)),
-                       alpha - (2. * alpha * randomInteger(1)),
-                       (alpha - (2. * alpha * randomInteger(1))));
+    Coord alea =
+        Coord(alpha - (2. * alpha * randomInteger(1)), alpha - (2. * alpha * randomInteger(1)),
+              (alpha - (2. * alpha * randomInteger(1))));
 
     if (_dim == 2)
       alea[2] = 0.;
@@ -294,9 +291,7 @@ void Grip::kk_local_reffinement(node currNode) {
         euclidian_dist_sqr += c_tmp[2] * c_tmp[2];
 
       float th_dist = neighbors_dist[currNode][j];
-      c_tmp *=
-          (euclidian_dist_sqr / (th_dist * th_dist * edgeLength * edgeLength)) -
-          1.;
+      c_tmp *= (euclidian_dist_sqr / (th_dist * th_dist * edgeLength * edgeLength)) - 1.;
       disp[currNode] += c_tmp;
     }
 
@@ -337,9 +332,7 @@ void Grip::kk_reffinement(unsigned int start, unsigned int end) {
           euclidian_dist_sqr += c_tmp[2] * c_tmp[2];
 
         float th_dist = neighbors_dist[currNode][j];
-        c_tmp *= (euclidian_dist_sqr /
-                  (th_dist * th_dist * edgeLength * edgeLength)) -
-                 1.;
+        c_tmp *= (euclidian_dist_sqr / (th_dist * th_dist * edgeLength * edgeLength)) - 1.;
         disp[currNode] += c_tmp;
       }
     }
@@ -382,8 +375,8 @@ void Grip::fr_reffinement(unsigned int start, unsigned int end) {
         node n = neighbors[currNode][j];
         const Coord &c_n = result->getNodeValue(n);
         Coord c_tmp = curCoord - c_n;
-        double euclidian_dist_sqr = double(c_tmp[0]) * double(c_tmp[0]) +
-                                    double(c_tmp[1]) * double(c_tmp[1]);
+        double euclidian_dist_sqr =
+            double(c_tmp[0]) * double(c_tmp[0]) + double(c_tmp[1]) * double(c_tmp[1]);
 
         if (_dim == 3)
           euclidian_dist_sqr += c_tmp[2] * c_tmp[2];
@@ -445,8 +438,8 @@ void Grip::updateLocalTemp(node v) {
   }
 }
 //======================================================
-unsigned int Grip::rounds(unsigned int x, unsigned int max, unsigned int maxVal,
-                          unsigned int min, unsigned int minVal) {
+unsigned int Grip::rounds(unsigned int x, unsigned int max, unsigned int maxVal, unsigned int min,
+                          unsigned int minVal) {
   if (x <= max)
     return maxVal;
   else if (max <= x && x <= min) {
@@ -464,8 +457,7 @@ void Grip::init() {
 
   double diam = sqrt(currentGraph->numberOfNodes());
   for (auto n : currentGraph->nodes()) {
-    Coord alea = Coord(diam - (2. * diam * randomInteger(1)),
-                       diam - (2. * diam * randomInteger(1)),
+    Coord alea = Coord(diam - (2. * diam * randomInteger(1)), diam - (2. * diam * randomInteger(1)),
                        diam - (2. * diam * randomInteger(1)));
 
     if (_dim == 2)
@@ -503,16 +495,13 @@ void Grip::set_nbr_size() {
   }
 
   if (maxLevel == 0 &&
-      int(currentGraph->numberOfNodes() * currentGraph->numberOfNodes()) -
-              initCxty >=
-          0)
+      int(currentGraph->numberOfNodes() * currentGraph->numberOfNodes()) - initCxty >= 0)
     maxLevel = misf->index.size();
 
   for (unsigned int i = 1; i < misf->index.size(); ++i) {
     if (i >= maxLevel)
       levelToNbNeighbors[i] =
-          min(uint(sched(misf->index.size() - i, 0, 2, 10000, 1) * maxCxty /
-                   (misf->index[i])),
+          min(uint(sched(misf->index.size() - i, 0, 2, 10000, 1) * maxCxty / (misf->index[i])),
               uint(misf->index[i] - 1));
     else
       levelToNbNeighbors[i] = max(misf->index[i] - 1, 3u);
@@ -520,16 +509,14 @@ void Grip::set_nbr_size() {
 
   if (misf->index.size() >= maxLevel)
     levelToNbNeighbors[misf->index.size()] =
-        min(uint(sched(currentGraph->numberOfNodes(), 0, 2, 10000, 1) *
-                 maxCxty / (float(currentGraph->numberOfNodes()))),
+        min(uint(sched(currentGraph->numberOfNodes(), 0, 2, 10000, 1) * maxCxty /
+                 (float(currentGraph->numberOfNodes()))),
             uint(currentGraph->numberOfNodes() - 1));
   else
-    levelToNbNeighbors[misf->index.size()] =
-        max(currentGraph->numberOfNodes() - 1, 3u);
+    levelToNbNeighbors[misf->index.size()] = max(currentGraph->numberOfNodes() - 1, 3u);
 
   levelToNbNeighbors[misf->index.size()] =
-      min(2 * levelToNbNeighbors[misf->index.size()],
-          currentGraph->numberOfNodes() - 1);
+      min(2 * levelToNbNeighbors[misf->index.size()], currentGraph->numberOfNodes() - 1);
 }
 //======================================================
 float Grip::sched(int x, int max, int maxVal, int min, int minVal) {

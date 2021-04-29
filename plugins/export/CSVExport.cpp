@@ -18,11 +18,11 @@
  */
 #include "CSVExport.h"
 
-#include <tulip/BooleanProperty.h>
-#include <tulip/Graph.h>
-#include <tulip/PropertiesCollection.h>
 #include <tulip/StringCollection.h>
+#include <tulip/PropertiesCollection.h>
+#include <tulip/Graph.h>
 #include <tulip/StringProperty.h>
+#include <tulip/BooleanProperty.h>
 
 PLUGIN(CsvExport)
 
@@ -88,16 +88,13 @@ static const char *paramHelp[] = {
 CsvExport::CsvExport(const PluginContext *context) : ExportModule(context) {
   addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES);
   addInParameter<bool>(EXPORT_SELECTION, paramHelp[1], "false");
-  addInParameter<BooleanProperty>("Export selection property", paramHelp[2],
-                                  "viewSelection");
+  addInParameter<BooleanProperty>("Export selection property", paramHelp[2], "viewSelection");
   addInParameter<bool>(EXPORT_ID, paramHelp[3], "false");
   addInParameter<PropertiesCollection>(EXPORTED_PROPERTIES, paramHelp[4],
                                        "the user defined properties");
-  addInParameter<StringCollection>(FIELD_SEPARATOR, paramHelp[5],
-                                   FIELD_SEPARATORS);
+  addInParameter<StringCollection>(FIELD_SEPARATOR, paramHelp[5], FIELD_SEPARATORS);
   addInParameter<string>(FIELD_SEPARATOR_CUSTOM, paramHelp[6], CUSTOM_MARK);
-  addInParameter<StringCollection>(STRING_DELIMITER, paramHelp[7],
-                                   STRING_DELIMITERS);
+  addInParameter<StringCollection>(STRING_DELIMITER, paramHelp[7], STRING_DELIMITERS);
   addInParameter<StringCollection>(DECIMAL_MARK, paramHelp[8], DECIMAL_MARKS);
 }
 
@@ -105,7 +102,9 @@ CsvExport::CsvExport(const PluginContext *context) : ExportModule(context) {
 // define a special facet to force the output
 // of a comma as decimal mark
 struct decimal_comma : std::numpunct<char> {
-  char do_decimal_point() const override { return ','; }
+  char do_decimal_point() const override {
+    return ',';
+  }
 };
 
 bool CsvExport::exportGraph(std::ostream &os) {
@@ -167,8 +166,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
     }
 
     if (dataSet->get(STRING_DELIMITER, stringDelimiters))
-      stringDelimiter =
-          stringDelimiters.getCurrent() == DBL_QUOTE_DELIMITER ? '"' : '\'';
+      stringDelimiter = stringDelimiters.getCurrent() == DBL_QUOTE_DELIMITER ? '"' : '\'';
 
     if (dataSet->get(DECIMAL_MARK, decimalMarks))
       decimalMark = decimalMarks.getCurrent() ? ',' : '.';
@@ -232,8 +230,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
     std::locale::global(std::locale(prevLocale, new decimal_comma));
 
   if (eltType != EDGE_TYPE) {
-    Iterator<node> *it = exportSelection ? prop->getNodesEqualTo(true, graph)
-                                         : graph->getNodes();
+    Iterator<node> *it = exportSelection ? prop->getNodesEqualTo(true, graph) : graph->getNodes();
 
     for (auto n : it) {
 
@@ -268,8 +265,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
 
   // export edges
   if (eltType != NODE_TYPE) {
-    Iterator<edge> *it = exportSelection ? prop->getEdgesEqualTo(true, graph)
-                                         : graph->getEdges();
+    Iterator<edge> *it = exportSelection ? prop->getEdgesEqualTo(true, graph) : graph->getEdges();
 
     for (auto e : it) {
 

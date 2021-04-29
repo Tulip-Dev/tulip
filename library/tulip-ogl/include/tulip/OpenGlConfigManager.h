@@ -57,9 +57,9 @@ public:
   static void initExtensions();
 
   /**
-   * Checks if an OpenGL extension is supported by the driver installed on the
-   * host system. \param extensionName the name of the OpenGL extension to check
-   * in the form "GL_.*" (for instance "GL_ARB_vertex_buffer_object")
+   * Checks if an OpenGL extension is supported by the driver installed on the host system.
+   * \param extensionName the name of the OpenGL extension to check in the form "GL_.*" (for
+   * instance "GL_ARB_vertex_buffer_object")
    */
   static bool isExtensionSupported(const std::string &extensionName);
 
@@ -78,7 +78,9 @@ public:
   /**
    * Returns the anti-aliasing state
    */
-  static bool antiAliasing() { return _antialiased; }
+  static bool antiAliasing() {
+    return _antialiased;
+  }
 
   /**
    * Activates anti-aliasing
@@ -95,8 +97,7 @@ public:
   static void deactivateAntiAliasing();
 
   /**
-   * Returns a maximum number of samples for anti-aliasing based on graphics
-   * hardware capability
+   * Returns a maximum number of samples for anti-aliasing based on graphics hardware capability
    *
    */
   static int maxNumberOfSamples();

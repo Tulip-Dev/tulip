@@ -21,16 +21,16 @@
 
 #include <QDebug>
 #include <QFile>
-#include <QGraphicsItem>
 #include <QGraphicsView>
-#include <QMainWindow>
+#include <QGraphicsItem>
 #include <QMenu>
+#include <QMainWindow>
 #include <QStatusBar>
 
-#include <tulip/Graph.h>
 #include <tulip/Interactor.h>
-#include <tulip/Perspective.h>
+#include <tulip/Graph.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/Perspective.h>
 #include <tulip/ViewToolTipAndUrlManager.h>
 
 using namespace tlp;
@@ -50,8 +50,8 @@ View::~View() {
   delete _tturlManager;
 }
 
-void View::toggleInteractors(
-    const bool activate, const std::unordered_set<const char *> &exceptions) {
+void View::toggleInteractors(const bool activate,
+                             const std::unordered_set<const char *> &exceptions) {
   for (auto it : _interactors) {
     if (exceptions.find(it->name().c_str()) == exceptions.end()) {
       it->action()->setEnabled(activate);
@@ -73,21 +73,21 @@ void View::setInteractors(const QList<tlp::Interactor *> &inters) {
 
   interactorsInstalled(inters);
 }
-Interactor *View::currentInteractor() const { return _currentInteractor; }
+Interactor *View::currentInteractor() const {
+  return _currentInteractor;
+}
 void View::setCurrentInteractor(tlp::Interactor *i) {
   if (_currentInteractor) {
     _currentInteractor->uninstall();
 
     if (graphicsView() != nullptr)
-      graphicsView()->setCursor(
-          QCursor()); // Force reset cursor when interactor is changed
+      graphicsView()->setCursor(QCursor()); // Force reset cursor when interactor is changed
   }
 
   _currentInteractor = i;
   currentInteractorChanged(i);
 
-  // We need a refresh here to clear last interactor displayed and init the next
-  // one
+  // We need a refresh here to clear last interactor displayed and init the next one
   refresh();
 }
 void View::currentInteractorChanged(tlp::Interactor *i) {
@@ -117,16 +117,14 @@ void View::fillContextMenu(QMenu *menu, edge e) {
 
 bool View::showContextMenu(const QPoint &point, const QPointF &scenePoint) {
   // try to display current interactor context menu first
-  if (_currentInteractor &&
-      _currentInteractor->showContextMenu(point, scenePoint))
+  if (_currentInteractor && _currentInteractor->showContextMenu(point, scenePoint))
     return true;
 
   if (_displayContextMenu) {
     QMenu menu;
-    menu.setStyleSheet(
-        "QMenu::item:disabled {color: white; background-color: "
-        "qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), "
-        "stop:1 rgb(60, 60, 60))}");
+    menu.setStyleSheet("QMenu::item:disabled {color: white; background-color: "
+                       "qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), "
+                       "stop:1 rgb(60, 60, 60))}");
     fillContextMenu(&menu, scenePoint);
 
     if (!menu.actions().empty()) {
@@ -151,9 +149,13 @@ void View::setState(const DataSet &dataSet) {
     _tturlManager->setState(dataSet);
 }
 
-void View::undoCallback() { centerView(); }
+void View::undoCallback() {
+  centerView();
+}
 
-Graph *View::graph() const { return _graph; }
+Graph *View::graph() const {
+  return _graph;
+}
 void View::setGraph(tlp::Graph *g) {
   if (_graph != nullptr)
     _graph->removeListener(this);
@@ -217,19 +219,25 @@ void View::interactorsInstalled(const QList<tlp::Interactor *> &) {
   emit interactorsChanged();
 }
 
-void View::centerView(bool /* graphChanged */) { draw(); }
+void View::centerView(bool /* graphChanged */) {
+  draw();
+}
 
 /*
   Triggers
   */
-QSet<tlp::Observable *> View::triggers() const { return _triggers; }
+QSet<tlp::Observable *> View::triggers() const {
+  return _triggers;
+}
 
 void View::removeRedrawTrigger(tlp::Observable *obs) {
   if (_triggers.remove(obs))
     obs->removeObserver(this);
 }
 
-void View::emitDrawNeededSignal() { emit drawNeeded(); }
+void View::emitDrawNeededSignal() {
+  emit drawNeeded();
+}
 
 void View::addRedrawTrigger(tlp::Observable *obs) {
   if (_triggers.contains(obs) || obs == nullptr)
@@ -255,7 +263,9 @@ void View::treatEvents(const std::vector<Event> &events) {
   }
 }
 
-QGraphicsItem *View::centralItem() const { return nullptr; }
+QGraphicsItem *View::centralItem() const {
+  return nullptr;
+}
 
 void View::clearRedrawTriggers() {
   for (auto t : triggers())

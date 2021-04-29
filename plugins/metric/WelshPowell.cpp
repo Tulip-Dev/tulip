@@ -80,8 +80,8 @@ class WelshPowell : public DoubleAlgorithm {
 public:
   PLUGININFORMATION(
       "Welsh & Powell", "David Auber", "03/01/2005",
-      "Nodes coloring measure,<br/>values assigned to adjacent nodes are always different.",
-      "1.0", "Graph")
+      "Nodes coloring measure,<br/>values assigned to adjacent nodes are always different.", "1.0",
+      "Graph")
 
   WelshPowell(const tlp::PluginContext *context) : DoubleAlgorithm(context) {}
 
@@ -90,12 +90,11 @@ public:
     unsigned int nbNodes = nodes.size();
     std::vector<nodeInfo> nodesInfo(nbNodes);
 
-    TLP_PARALLEL_MAP_NODES_AND_INDICES(graph,
-                                       [&](const node n, unsigned int i) {
-                                         nodeInfo nInfo;
-                                         nInfo.n = n, nInfo.val = graph->deg(n);
-                                         nodesInfo[i] = nInfo;
-                                       });
+    TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
+      nodeInfo nInfo;
+      nInfo.n = n, nInfo.val = graph->deg(n);
+      nodesInfo[i] = nInfo;
+    });
 
     // sort the nodes in descending order of their degrees
     sort(nodesInfo.begin(), nodesInfo.end(), nodesInfoCmp());

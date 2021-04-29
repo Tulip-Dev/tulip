@@ -55,28 +55,24 @@ void BooleanProperty::reverseEdgeDirection(Graph *sg) {
 }
 
 //=================================================================================
-PropertyInterface *BooleanProperty::clonePrototype(Graph *g,
-                                                   const std::string &n) const {
+PropertyInterface *BooleanProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (g == nullptr)
     return nullptr;
 
   // allow to get an unregistered property (empty name)
-  BooleanProperty *p = n.empty() ? new BooleanProperty(g)
-                                 : g->getLocalProperty<BooleanProperty>(n);
+  BooleanProperty *p = n.empty() ? new BooleanProperty(g) : g->getLocalProperty<BooleanProperty>(n);
   p->setAllNodeValue(getNodeDefaultValue());
   p->setAllEdgeValue(getEdgeDefaultValue());
   return p;
 }
 //=================================================================================
-PropertyInterface *
-BooleanVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
+PropertyInterface *BooleanVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
     return nullptr;
 
   // allow to get an unregistered property (empty name)
   BooleanVectorProperty *p =
-      n.empty() ? new BooleanVectorProperty(g)
-                : g->getLocalProperty<BooleanVectorProperty>(n);
+      n.empty() ? new BooleanVectorProperty(g) : g->getLocalProperty<BooleanVectorProperty>(n);
   p->setAllNodeValue(getNodeDefaultValue());
   p->setAllEdgeValue(getEdgeDefaultValue());
   return p;

@@ -29,8 +29,7 @@ static const char *paramHelp[] = {
     "reversed."};
 
 ReverseEdges::ReverseEdges(tlp::PluginContext *context) : Algorithm(context) {
-  addInParameter<BooleanProperty>("selection", paramHelp[0], "viewSelection",
-                                  false);
+  addInParameter<BooleanProperty>("selection", paramHelp[0], "viewSelection", false);
 }
 
 bool ReverseEdges::run() {
@@ -39,8 +38,7 @@ bool ReverseEdges::run() {
   if (dataSet)
     dataSet->get<BooleanProperty *>("selection", selection);
 
-  Iterator<edge> *ite =
-      selection ? selection->getEdgesEqualTo(true) : graph->getEdges();
+  Iterator<edge> *ite = selection ? selection->getEdgesEqualTo(true) : graph->getEdges();
 
   pluginProgress->showPreview(false);
 

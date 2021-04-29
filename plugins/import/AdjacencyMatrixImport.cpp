@@ -27,13 +27,7 @@
 using namespace std;
 using namespace tlp;
 
-enum ValType {
-  TLP_DOUBLE = 0,
-  TLP_STRING = 1,
-  TLP_NOVAL = 2,
-  TLP_NOTHING = 3,
-  TLP_AND = 4
-};
+enum ValType { TLP_DOUBLE = 0, TLP_STRING = 1, TLP_NOVAL = 2, TLP_NOTHING = 3, TLP_AND = 4 };
 
 static const char *paramHelp[] = {
     // filename
@@ -57,9 +51,9 @@ static const char *paramHelp[] = {
  *  viewMetric property of the graph. <br>
  *  If M(i,j) is a string, it is stored in the
  *  viewLabel property of the graph. <br>
- *  Use & to set the viewMetric and viewLabel properties of a node or edge in
- * the same time. If M(i,j) == @ an edge will be created without value <br> If
- * M(i,j) == # no edge will be created between node[i] and node[j]
+ *  Use & to set the viewMetric and viewLabel properties of a node or edge in the same time.
+ *  If M(i,j) == @ an edge will be created without value <br>
+ *  If M(i,j) == # no edge will be created between node[i] and node[j]
  *
  *  EXAMPLE 1 :
  *  <br>A
@@ -71,22 +65,21 @@ static const char *paramHelp[] = {
  *  <br>A
  *  <br>@ B
  *  <br>@ @ C
- *  <br>Defines a simple complete graph with 3 nodes (with labels A B C) and no
- * label (or value) on its edges
+ *  <br>Defines a simple complete graph with 3 nodes (with labels A B C) and no label (or value) on
+ * its edges
  *
  *  EXAMPLE 3 :
  *  <br>A # E & 5
  *  <br>@ B
  *  <br># @ C
- *  <br>Defines a graph with 3 nodes and 3 edges, the edge between A and C is
- * named E and has the value 5
+ *  <br>Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E and has the
+ * value 5
  *
  */
 class AdjacencyMatrixImport : public ImportModule {
 public:
-  PLUGININFORMATION(
-      "Adjacency Matrix", "Auber David", "05/09/2008",
-      "Imports a graph from a file coding an adjacency matrix.<br/>File format:<br/>\
+  PLUGININFORMATION("Adjacency Matrix", "Auber David", "05/09/2008",
+                    "Imports a graph from a file coding an adjacency matrix.<br/>File format:<br/>\
 The input format of this plugin is an ascii file where each line represents a row of the matrix.\
 In each row, cells must be separated by a space.<br/>Let M(i,j) be a cell of the matrix :<br/>\
      - if i==j we define the value of a node.<br/>\
@@ -110,7 +103,7 @@ EXAMPLE 3 :<br/>\
 A # E & 5<br/>\
 @ B<br/># @ C<br/>\
 Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E and has the value 5",
-      "1.2", "File")
+                    "1.2", "File")
   AdjacencyMatrixImport(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<string>("file::filename", paramHelp[0], "");
   }
@@ -260,8 +253,7 @@ Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E an
     if (curLine == nodes.size())
       return true;
 
-    pluginProgress->setError(std::string("The number of lines in file ") +
-                             name2 +
+    pluginProgress->setError(std::string("The number of lines in file ") + name2 +
                              "\n is different from the number of found nodes.");
     tlp::warning() << pluginProgress->getError() << std::endl;
     return false;

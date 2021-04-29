@@ -25,17 +25,17 @@ using namespace tlp;
 EdgeExtremityGlyph::EdgeExtremityGlyph(const PluginContext *context)
     : edgeExtGlGraphInputData(nullptr) {
   if (context != nullptr) {
-    const GlyphContext *glyphContext =
-        static_cast<const GlyphContext *>(context);
+    const GlyphContext *glyphContext = static_cast<const GlyphContext *>(context);
     edgeExtGlGraphInputData = glyphContext->glGraphInputData;
   }
 }
 
 EdgeExtremityGlyph::~EdgeExtremityGlyph() {}
 
-void EdgeExtremityGlyph::get3DTransformationMatrix(
-    const Coord &src, const Coord &dest, const Size &glyphSize,
-    MatrixGL &transformationMatrix, MatrixGL &scalingMatrix) {
+void EdgeExtremityGlyph::get3DTransformationMatrix(const Coord &src, const Coord &dest,
+                                                   const Size &glyphSize,
+                                                   MatrixGL &transformationMatrix,
+                                                   MatrixGL &scalingMatrix) {
   // Vecteur AB
   Vector<float, 3> vAB;
   // Vecteur V
@@ -91,9 +91,10 @@ void EdgeExtremityGlyph::get3DTransformationMatrix(
   scalingMatrix[3][3] = 1;
 }
 
-void EdgeExtremityGlyph::get2DTransformationMatrix(
-    const Coord &src, const Coord &dest, const Size &glyphSize,
-    MatrixGL &transformationMatrix, MatrixGL &scalingMatrix) {
+void EdgeExtremityGlyph::get2DTransformationMatrix(const Coord &src, const Coord &dest,
+                                                   const Size &glyphSize,
+                                                   MatrixGL &transformationMatrix,
+                                                   MatrixGL &scalingMatrix) {
   //  Vecteur AB
   Vector<float, 3> vAB;
   // Vecteur V

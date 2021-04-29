@@ -98,8 +98,7 @@ void ConnectedTest::makeConnected(Graph *graph, vector<edge> &addedEdges) {
   assert(connectedTest(graph));
 }
 //=================================================================
-unsigned int
-ConnectedTest::numberOfConnectedComponents(const tlp::Graph *const graph) {
+unsigned int ConnectedTest::numberOfConnectedComponents(const tlp::Graph *const graph) {
   if (graph->isEmpty())
     return 0u;
 
@@ -122,8 +121,8 @@ ConnectedTest::numberOfConnectedComponents(const tlp::Graph *const graph) {
   return result;
 }
 //======================================================================
-void ConnectedTest::computeConnectedComponents(
-    const tlp::Graph *graph, vector<vector<node>> &components) {
+void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
+                                               vector<vector<node>> &components) {
   NodeStaticProperty<bool> visited(graph);
   visited.setAll(false);
   // do a bfs traversal for each node
@@ -162,8 +161,7 @@ void ConnectedTest::computeConnectedComponents(
   });
 }
 //=================================================================
-void ConnectedTest::connect(const tlp::Graph *const graph,
-                            vector<node> &toLink) {
+void ConnectedTest::connect(const tlp::Graph *const graph, vector<node> &toLink) {
   auto it = instance.resultsBuffer.find(graph);
   if (it != instance.resultsBuffer.end()) {
     if (it->second)

@@ -17,10 +17,10 @@
  *
  */
 
-#include <tulip/TlpQtTools.h>
+#include <tulip/VectorEditor.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/TulipMetaTypes.h>
-#include <tulip/VectorEditor.h>
+#include <tulip/TlpQtTools.h>
 
 #include "ui_VectorEditor.h"
 
@@ -32,7 +32,9 @@ VectorEditor::VectorEditor(QWidget *parent)
   _ui->list->setItemDelegate(new TulipItemDelegate(_ui->list));
 }
 
-VectorEditor::~VectorEditor() { delete _ui; }
+VectorEditor::~VectorEditor() {
+  delete _ui;
+}
 
 void VectorEditor::setVector(const QVector<QVariant> &d, int userType) {
   _userType = userType;
@@ -42,8 +44,7 @@ void VectorEditor::setVector(const QVector<QVariant> &d, int userType) {
     QListWidgetItem *i = new QListWidgetItem();
 
     if (_userType == qMetaTypeId<std::string>())
-      i->setData(Qt::DisplayRole, QVariant::fromValue(tlpStringToQString(
-                                      v.value<std::string>())));
+      i->setData(Qt::DisplayRole, QVariant::fromValue(tlpStringToQString(v.value<std::string>())));
     else
       i->setData(Qt::DisplayRole, v);
 
@@ -61,11 +62,9 @@ void VectorEditor::add() {
   if (_userType == qMetaTypeId<std::string>()) {
     // workaround to indicate there is a new string to edit
     // because the height of the line if very small with an empty string
-    i->setData(Qt::DisplayRole,
-               QVariant::fromValue(QString("edit this string")));
+    i->setData(Qt::DisplayRole, QVariant::fromValue(QString("edit this string")));
   } else
-    i->setData(Qt::DisplayRole,
-               QVariant(_userType, static_cast<const void *>(nullptr)));
+    i->setData(Qt::DisplayRole, QVariant(_userType, static_cast<const void *>(nullptr)));
 
   // needed for color
   i->setSizeHint(QSize(i->sizeHint().width(), 15));
@@ -88,8 +87,8 @@ void VectorEditor::done(int r) {
 
     if (_userType == qMetaTypeId<std::string>()) {
       for (int i = 0; i < model->rowCount(); ++i) {
-        currentVector.push_back(QVariant::fromValue(
-            QStringToTlpString(model->data(model->index(i, 0)).toString())));
+        currentVector.push_back(
+            QVariant::fromValue(QStringToTlpString(model->data(model->index(i, 0)).toString())));
       }
     } else {
       for (int i = 0; i < model->rowCount(); ++i) {

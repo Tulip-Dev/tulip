@@ -23,19 +23,18 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-#include "ui_PythonPluginCreationDialog.h"
 #include <tulip/PythonPluginCreationDialog.h>
+#include "ui_PythonPluginCreationDialog.h"
 
 using namespace tlp;
 
 PythonPluginCreationDialog::PythonPluginCreationDialog(QWidget *parent)
-    : QDialog(parent, Qt::Tool | Qt::CustomizeWindowHint | Qt::WindowTitleHint |
-                          Qt::WindowCloseButtonHint),
+    : QDialog(parent,
+              Qt::Tool | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint),
       _ui(new Ui::PythonPluginCreationDialog) {
   _ui->setupUi(this);
 
-  connect(_ui->browseButton, SIGNAL(clicked()), this,
-          SLOT(selectPluginSourceFile()));
+  connect(_ui->browseButton, SIGNAL(clicked()), this, SLOT(selectPluginSourceFile()));
   QDate currentDate = QDate::currentDate();
   _ui->date->setText(currentDate.toString("dd/MM/yyyy"));
   _ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
@@ -44,23 +43,23 @@ PythonPluginCreationDialog::PythonPluginCreationDialog(QWidget *parent)
   _ui->pluginName->installEventFilter(this);
 }
 
-PythonPluginCreationDialog::~PythonPluginCreationDialog() { delete _ui; }
+PythonPluginCreationDialog::~PythonPluginCreationDialog() {
+  delete _ui;
+}
 
 void PythonPluginCreationDialog::accept() {
-  QString fileName = _ui->pluginFileName->text().mid(
-      _ui->pluginFileName->text().lastIndexOf("/") + 1);
+  QString fileName =
+      _ui->pluginFileName->text().mid(_ui->pluginFileName->text().lastIndexOf("/") + 1);
   fileName = fileName.mid(0, fileName.length() - 3);
 
   if (fileName.at(0).isNumber()) {
-    QMessageBox::critical(
-        this, "Error",
-        "Python does not allow a file name to begin with a number.");
+    QMessageBox::critical(this, "Error",
+                          "Python does not allow a file name to begin with a number.");
     return;
   }
 
   if (fileName.contains(" ")) {
-    QMessageBox::critical(
-        this, "Error", "The plugin file name cannot contain any whitespace.");
+    QMessageBox::critical(this, "Error", "The plugin file name cannot contain any whitespace.");
     return;
   }
 
@@ -68,8 +67,7 @@ void PythonPluginCreationDialog::accept() {
 
   while (PythonInterpreter::pythonReservedCharacters[i]) {
     if (fileName.contains(PythonInterpreter::pythonReservedCharacters[i++])) {
-      QMessageBox::critical(
-          this, "Error", "The plugin file name contains an invalid character.");
+      QMessageBox::critical(this, "Error", "The plugin file name contains an invalid character.");
       return;
     }
   }
@@ -87,10 +85,9 @@ void PythonPluginCreationDialog::accept() {
       ++nameIt;
       continue;
     }
-    QMessageBox::critical(
-        this, "Invalid plugin class name",
-        "A plugin class name must start with a letter or _ and\ncan only contain "
-        "A-z, 0-9, or _ characters.");
+    QMessageBox::critical(this, "Invalid plugin class name",
+                          "A plugin class name must start with a letter or _ and\ncan only contain "
+                          "A-z, 0-9, or _ characters.");
     return;
   }
 
@@ -98,8 +95,8 @@ void PythonPluginCreationDialog::accept() {
 }
 
 void PythonPluginCreationDialog::selectPluginSourceFile() {
-  QString fileName = QFileDialog::getSaveFileName(
-      this, tr("Set Plugin source file"), "", "Python script (*.py)");
+  QString fileName =
+      QFileDialog::getSaveFileName(this, tr("Set Plugin source file"), "", "Python script (*.py)");
 
   if (fileName.isEmpty())
     return;
@@ -149,8 +146,7 @@ QString PythonPluginCreationDialog::getPluginGroup() const {
 bool PythonPluginCreationDialog::eventFilter(QObject *, QEvent *ev) {
   if (ev->type() == QEvent::KeyRelease) {
     auto okButton = _ui->buttonBox->button(QDialogButtonBox::Ok);
-    okButton->setEnabled(!getPluginFileName().isEmpty() &&
-                         !getPluginClassName().isEmpty() &&
+    okButton->setEnabled(!getPluginFileName().isEmpty() && !getPluginClassName().isEmpty() &&
                          !getPluginName().isEmpty());
   }
   return false;

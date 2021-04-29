@@ -18,9 +18,9 @@
  */
 #include "DegreeMetric.h"
 
-#include <tulip/GraphMeasure.h>
-#include <tulip/StaticProperty.h>
 #include <tulip/StringCollection.h>
+#include <tulip/StaticProperty.h>
+#include <tulip/GraphMeasure.h>
 
 PLUGIN(DegreeMetric)
 
@@ -46,10 +46,9 @@ static const char *paramHelp[] = {
 #define DEGREE_TYPE "type"
 #define DEGREE_TYPES "InOut;In;Out;"
 //==============================================================================
-DegreeMetric::DegreeMetric(const tlp::PluginContext *context)
-    : DoubleAlgorithm(context) {
-  addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES,
-                                   true, "InOut <br> In <br> Out");
+DegreeMetric::DegreeMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
+  addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES, true,
+                                   "InOut <br> In <br> Out");
   addInParameter<NumericProperty *>("metric", paramHelp[1], "", false);
   addInParameter<bool>("norm", paramHelp[2], "false", false);
 }
@@ -67,8 +66,7 @@ bool DegreeMetric::run() {
   }
 
   NodeStaticProperty<double> deg(graph);
-  degree(graph, deg, static_cast<EDGE_TYPE>(degreeTypes.getCurrent()), weights,
-         norm);
+  degree(graph, deg, static_cast<EDGE_TYPE>(degreeTypes.getCurrent()), weights, norm);
   deg.copyToProperty(result);
 
   return true;
@@ -81,10 +79,8 @@ bool DegreeMetric::check(std::string &errorMsg) {
   if (dataSet != nullptr) {
     dataSet->get("metric", weights);
 
-    if (weights && !weights->getEdgeDefaultValue() &&
-        !weights->hasNonDefaultValuatedEdges()) {
-      errorMsg =
-          "Cannot compute a weighted degree with a null weight value\nfor all edges";
+    if (weights && !weights->getEdgeDefaultValue() && !weights->hasNonDefaultValuatedEdges()) {
+      errorMsg = "Cannot compute a weighted degree with a null weight value\nfor all edges";
       return false;
     }
   }

@@ -20,8 +20,8 @@
 #ifndef PARALLELCOORDSAXISSWAPPER_H_
 #define PARALLELCOORDSAXISSWAPPER_H_
 
-#include <tulip/Coord.h>
 #include <tulip/GLInteractor.h>
+#include <tulip/Coord.h>
 
 namespace tlp {
 

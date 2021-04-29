@@ -30,8 +30,8 @@ namespace tlp {
  * @ingroup Iterators
  * @brief Iterator that enables to filter an other Iterator
  * @param it the iterator that should be filtered
- * @param filter the functor or lambda function that enables to test whether or
- *not an element is filtered
+ * @param filter the functor or lambda function that enables to test whether or not an element is
+ *filtered
  *
  * The functor function should have the following form:
  * @code
@@ -48,13 +48,17 @@ public:
   FilterIterator(Iterator<TYPE> *it, FILTER filter) : _it(it), _filter(filter) {
     update();
   }
-  ~FilterIterator() { delete _it; }
+  ~FilterIterator() {
+    delete _it;
+  }
   inline TYPE next() {
     TYPE tmp = _curVal;
     update();
     return tmp;
   }
-  inline bool hasNext() { return _hasNext; }
+  inline bool hasNext() {
+    return _hasNext;
+  }
 
 private:
   void update() {
@@ -81,8 +85,7 @@ template <typename TYPE, typename FILTER>
 class MPFilterIterator : public FilterIterator<TYPE, FILTER>,
                          public MemoryPool<MPFilterIterator<TYPE, FILTER>> {
 public:
-  MPFilterIterator(Iterator<TYPE> *it, FILTER filter)
-      : FilterIterator<TYPE, FILTER>(it, filter) {}
+  MPFilterIterator(Iterator<TYPE> *it, FILTER filter) : FilterIterator<TYPE, FILTER>(it, filter) {}
 };
 
 /**
@@ -95,39 +98,36 @@ public:
  * The returned iterator takes ownership of the one provided as parameter.
  *
  * @param it a Tulip iterator
- * @param filter the functor or lambda function that enables to test whether or
- *not an element is filtered
+ * @param filter the functor or lambda function that enables to test whether or not an element is
+ *filtered
  * @return a FilterIterator
  **/
 template <typename TYPE, typename FILTER>
-inline FilterIterator<TYPE, FILTER> *filterIterator(Iterator<TYPE> *it,
-                                                    FILTER filter) {
+inline FilterIterator<TYPE, FILTER> *filterIterator(Iterator<TYPE> *it, FILTER filter) {
   return new MPFilterIterator<TYPE, FILTER>(it, filter);
 }
 
 /**
- * @brief Convenient function for creating a FilterIterator from a STL
- *container.
+ * @brief Convenient function for creating a FilterIterator from a STL container.
  * @ingroup Iterators
  *
  * @since Tulip 5.2
  *
- * Creates a FilterIterator from a STL container (std::list, std::vector,
- *std::set, std::map, ...) and a filter function.
+ * Creates a FilterIterator from a STL container (std::list, std::vector, std::set, std::map, ...)
+ * and a filter function.
  *
  * @param stlContainer any STL container
- * @param filter the functor or lambda function that enables to test whether or
- *not an element is filtered
+ * @param filter the functor or lambda function that enables to test whether or not an element is
+ *filtered
  * @return a FilterIterator
  **/
 template <typename Container, typename FILTER>
 typename std::enable_if<has_const_iterator<Container>::value,
                         MPFilterIterator<typename Container::value_type, FILTER>
-                            *>::type inline filterIterator(const Container
-                                                               &stlContainer,
+                            *>::type inline filterIterator(const Container &stlContainer,
                                                            FILTER filter) {
-  return new MPFilterIterator<typename Container::value_type, FILTER>(
-      stlIterator(stlContainer), filter);
+  return new MPFilterIterator<typename Container::value_type, FILTER>(stlIterator(stlContainer),
+                                                                      filter);
 }
 } // namespace tlp
 #endif // FILTERITERATOR_H

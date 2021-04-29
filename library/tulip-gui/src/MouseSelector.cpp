@@ -19,12 +19,12 @@
 
 #include <QMouseEvent>
 
+#include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
-#include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlTools.h>
-#include <tulip/Graph.h>
 #include <tulip/MouseSelector.h>
+#include <tulip/GlGraphComposite.h>
 
 #include <tulip/OpenGlIncludes.h>
 
@@ -32,18 +32,15 @@ using namespace std;
 using namespace tlp;
 
 //==================================================================
-MouseSelector::MouseSelector(Qt::MouseButton button,
-                             Qt::KeyboardModifier modifier, SelectionMode mode)
-    : mButton(button), kModifier(modifier), x(0), y(0), w(0), h(0),
-      started(false), graph(nullptr), _mode(mode) {}
+MouseSelector::MouseSelector(Qt::MouseButton button, Qt::KeyboardModifier modifier,
+                             SelectionMode mode)
+    : mButton(button), kModifier(modifier), x(0), y(0), w(0), h(0), started(false), graph(nullptr),
+      _mode(mode) {}
 //==================================================================
 bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
   QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
   GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
-  Graph *g = glMainWidget->getScene()
-                 ->getGlGraphComposite()
-                 ->getInputData()
-                 ->getGraph();
+  Graph *g = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
 
   if (e->type() == QEvent::MouseButtonPress) {
 
@@ -119,10 +116,8 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 
     if (started) {
       Observable::holdObservers();
-      BooleanProperty *selection = glMainWidget->getScene()
-                                       ->getGlGraphComposite()
-                                       ->getInputData()
-                                       ->getElementSelected();
+      BooleanProperty *selection =
+          glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementSelected();
       bool revertSelection = false; // add to selection
       bool boolVal = true;
       bool needPush = true; // undo management
@@ -134,8 +129,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
           Qt::ControlModifier
 #endif
       ) {
-        if (mousePressModifier == Qt::ShiftModifier &&
-            kModifier != Qt::ShiftModifier)
+        if (mousePressModifier == Qt::ShiftModifier && kModifier != Qt::ShiftModifier)
           boolVal = false;
         else {
           if (selection->getNodeDefaultValue() == true ||
@@ -175,15 +169,13 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
           case SelectedEntity::NODE_SELECTED:
 
             if (_mode == EdgesAndNodes || _mode == NodesOnly) {
-              result = selection->getNodeValue(
-                  node(selectedEntity.getComplexEntityId()));
+              result = selection->getNodeValue(node(selectedEntity.getComplexEntityId()));
 
               if (revertSelection || boolVal != result) {
                 if (needPush)
                   graph->push();
 
-                selection->setNodeValue(
-                    node(selectedEntity.getComplexEntityId()), !result);
+                selection->setNodeValue(node(selectedEntity.getComplexEntityId()), !result);
               }
             }
 
@@ -192,15 +184,13 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
           case SelectedEntity::EDGE_SELECTED:
 
             if (_mode == EdgesAndNodes || _mode == EdgesOnly) {
-              result = selection->getEdgeValue(
-                  edge(selectedEntity.getComplexEntityId()));
+              result = selection->getEdgeValue(edge(selectedEntity.getComplexEntityId()));
 
               if (revertSelection || boolVal != result) {
                 if (needPush)
                   graph->push();
 
-                selection->setEdgeValue(
-                    edge(selectedEntity.getComplexEntityId()), !result);
+                selection->setEdgeValue(edge(selectedEntity.getComplexEntityId()), !result);
               }
             }
 
@@ -233,21 +223,19 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 
         if (_mode == EdgesAndNodes || _mode == NodesOnly) {
           for (it = tmpSetNode.begin(); it != tmpSetNode.end(); ++it) {
-            selection->setNodeValue(
-                node((*it).getComplexEntityId()),
-                revertSelection
-                    ? !selection->getNodeValue(node((*it).getComplexEntityId()))
-                    : boolVal);
+            selection->setNodeValue(node((*it).getComplexEntityId()),
+                                    revertSelection
+                                        ? !selection->getNodeValue(node((*it).getComplexEntityId()))
+                                        : boolVal);
           }
         }
 
         if (_mode == EdgesAndNodes || _mode == EdgesOnly) {
           for (it = tmpSetEdge.begin(); it != tmpSetEdge.end(); ++it) {
-            selection->setEdgeValue(
-                edge((*it).getComplexEntityId()),
-                revertSelection
-                    ? !selection->getEdgeValue(edge((*it).getComplexEntityId()))
-                    : boolVal);
+            selection->setEdgeValue(edge((*it).getComplexEntityId()),
+                                    revertSelection
+                                        ? !selection->getEdgeValue(edge((*it).getComplexEntityId()))
+                                        : boolVal);
           }
         }
       }
@@ -267,10 +255,7 @@ bool MouseSelector::draw(GlMainWidget *glMainWidget) {
   if (!started)
     return false;
 
-  if (glMainWidget->getScene()
-          ->getGlGraphComposite()
-          ->getInputData()
-          ->getGraph() != graph) {
+  if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
     graph = nullptr;
     started = false;
   }

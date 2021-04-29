@@ -20,11 +20,11 @@
 #include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
 
-#include <tulip/AcyclicTest.h>
-#include <tulip/BiconnectedTest.h>
-#include <tulip/ConnectedTest.h>
 #include <tulip/SimpleTest.h>
 #include <tulip/TreeTest.h>
+#include <tulip/AcyclicTest.h>
+#include <tulip/ConnectedTest.h>
+#include <tulip/BiconnectedTest.h>
 #include <tulip/TriconnectedTest.h>
 
 #include "TestAlgorithmTest.h"
@@ -42,9 +42,13 @@ static Graph *tlp_loadGraph(const std::string &filename) {
 CPPUNIT_TEST_SUITE_REGISTRATION(TestAlgorithmTest);
 
 //==========================================================
-void TestAlgorithmTest::setUp() { graph = tlp::newGraph(); }
+void TestAlgorithmTest::setUp() {
+  graph = tlp::newGraph();
+}
 //==========================================================
-void TestAlgorithmTest::tearDown() { delete graph; }
+void TestAlgorithmTest::tearDown() {
+  delete graph;
+}
 //==========================================================
 void TestAlgorithmTest::testSimple() {
   std::vector<edge> multi;

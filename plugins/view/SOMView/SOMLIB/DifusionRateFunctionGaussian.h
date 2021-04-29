@@ -27,8 +27,7 @@ public:
   DifusionRateFunctionGaussian(TimeDecreasingFunction *decreasingFunction);
   ~DifusionRateFunctionGaussian() override;
   double computeSpaceRate(unsigned int distance, unsigned int currentIteration,
-                          unsigned int maxIteration,
-                          unsigned int inputSampleSize) override;
+                          unsigned int maxIteration, unsigned int inputSampleSize) override;
 
 protected:
 };

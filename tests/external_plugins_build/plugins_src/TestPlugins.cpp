@@ -23,11 +23,9 @@ PLUGIN(TestAlgorithmPlugin)
 class TestBooleanAlgorithmPlugin : public tlp::BooleanAlgorithm {
 
 public:
-  PLUGININFORMATION("Test Boolean Algorithm Plugin", "Tulip-dev", "2019", "",
-                    "1.0", "")
+  PLUGININFORMATION("Test Boolean Algorithm Plugin", "Tulip-dev", "2019", "", "1.0", "")
 
-  TestBooleanAlgorithmPlugin(tlp::PluginContext *context)
-      : tlp::BooleanAlgorithm(context) {}
+  TestBooleanAlgorithmPlugin(tlp::PluginContext *context) : tlp::BooleanAlgorithm(context) {}
 
   bool run() override {
     result->setAllNodeValue(false);
@@ -42,11 +40,9 @@ PLUGIN(TestBooleanAlgorithmPlugin)
 class TestColorAlgorithmPlugin : public tlp::ColorAlgorithm {
 
 public:
-  PLUGININFORMATION("Test Color Algorithm Plugin", "Tulip-dev", "2019", "",
-                    "1.0", "")
+  PLUGININFORMATION("Test Color Algorithm Plugin", "Tulip-dev", "2019", "", "1.0", "")
 
-  TestColorAlgorithmPlugin(tlp::PluginContext *context)
-      : tlp::ColorAlgorithm(context) {}
+  TestColorAlgorithmPlugin(tlp::PluginContext *context) : tlp::ColorAlgorithm(context) {}
 
   bool run() override {
     result->setAllNodeValue(tlp::Color::Red);
@@ -61,11 +57,9 @@ PLUGIN(TestColorAlgorithmPlugin)
 class TestDoubleAlgorithmPlugin : public tlp::DoubleAlgorithm {
 
 public:
-  PLUGININFORMATION("Test Double Algorithm Plugin", "Tulip-dev", "2019", "",
-                    "1.0", "")
+  PLUGININFORMATION("Test Double Algorithm Plugin", "Tulip-dev", "2019", "", "1.0", "")
 
-  TestDoubleAlgorithmPlugin(tlp::PluginContext *context)
-      : tlp::DoubleAlgorithm(context) {}
+  TestDoubleAlgorithmPlugin(tlp::PluginContext *context) : tlp::DoubleAlgorithm(context) {}
 
   bool run() override {
     result->setAllNodeValue(tlp::randomDouble());
@@ -80,11 +74,9 @@ PLUGIN(TestDoubleAlgorithmPlugin)
 class TestIntegerAlgorithmPlugin : public tlp::IntegerAlgorithm {
 
 public:
-  PLUGININFORMATION("Test Integer Algorithm Plugin", "Tulip-dev", "2019", "",
-                    "1.0", "")
+  PLUGININFORMATION("Test Integer Algorithm Plugin", "Tulip-dev", "2019", "", "1.0", "")
 
-  TestIntegerAlgorithmPlugin(tlp::PluginContext *context)
-      : tlp::IntegerAlgorithm(context) {}
+  TestIntegerAlgorithmPlugin(tlp::PluginContext *context) : tlp::IntegerAlgorithm(context) {}
 
   bool run() override {
     result->setAllNodeValue(tlp::randomInteger(10000));
@@ -99,11 +91,9 @@ PLUGIN(TestIntegerAlgorithmPlugin)
 class TestLayoutAlgorithmPlugin : public tlp::LayoutAlgorithm {
 
 public:
-  PLUGININFORMATION("Test Layout Algorithm Plugin", "Tulip-dev", "2019", "",
-                    "1.0", "")
+  PLUGININFORMATION("Test Layout Algorithm Plugin", "Tulip-dev", "2019", "", "1.0", "")
 
-  TestLayoutAlgorithmPlugin(tlp::PluginContext *context)
-      : tlp::LayoutAlgorithm(context) {}
+  TestLayoutAlgorithmPlugin(tlp::PluginContext *context) : tlp::LayoutAlgorithm(context) {}
 
   bool run() override {
     result->setAllNodeValue(tlp::Coord(0.0f, 0.0f));
@@ -118,16 +108,13 @@ PLUGIN(TestLayoutAlgorithmPlugin)
 class TestSizeAlgorithmPlugin : public tlp::SizeAlgorithm {
 
 public:
-  PLUGININFORMATION("Test Size Algorithm Plugin", "Tulip-dev", "2019", "",
-                    "1.0", "")
+  PLUGININFORMATION("Test Size Algorithm Plugin", "Tulip-dev", "2019", "", "1.0", "")
 
-  TestSizeAlgorithmPlugin(tlp::PluginContext *context)
-      : tlp::SizeAlgorithm(context) {}
+  TestSizeAlgorithmPlugin(tlp::PluginContext *context) : tlp::SizeAlgorithm(context) {}
 
   bool run() override {
     result->setAllNodeValue(tlp::Size(1.0f, 1.0f, 1.0f));
-    result->setNodeValue(graph->getRandomNode(),
-                         tlp::Size(10.0f, 10.0f, 10.0f));
+    result->setNodeValue(graph->getRandomNode(), tlp::Size(10.0f, 10.0f, 10.0f));
     return true;
   }
 };
@@ -138,11 +125,9 @@ PLUGIN(TestSizeAlgorithmPlugin)
 class TestStringAlgorithmPlugin : public tlp::StringAlgorithm {
 
 public:
-  PLUGININFORMATION("Test String Algorithm Plugin", "Tulip-dev", "2019", "",
-                    "1.0", "")
+  PLUGININFORMATION("Test String Algorithm Plugin", "Tulip-dev", "2019", "", "1.0", "")
 
-  TestStringAlgorithmPlugin(tlp::PluginContext *context)
-      : tlp::StringAlgorithm(context) {}
+  TestStringAlgorithmPlugin(tlp::PluginContext *context) : tlp::StringAlgorithm(context) {}
 
   bool run() override {
     result->setAllNodeValue("foo");
@@ -157,11 +142,9 @@ PLUGIN(TestStringAlgorithmPlugin)
 class TestImportModulePlugin : public tlp::ImportModule {
 
 public:
-  PLUGININFORMATION("Test Import Module Plugin", "Tulip-dev", "2019", "", "1.0",
-                    "")
+  PLUGININFORMATION("Test Import Module Plugin", "Tulip-dev", "2019", "", "1.0", "")
 
-  TestImportModulePlugin(tlp::PluginContext *context)
-      : tlp::ImportModule(context) {}
+  TestImportModulePlugin(tlp::PluginContext *context) : tlp::ImportModule(context) {}
 
   bool importGraph() override {
     graph->addNode();
@@ -175,18 +158,18 @@ PLUGIN(TestImportModulePlugin)
 class TestExportModulePlugin : public tlp::ExportModule {
 
 public:
-  PLUGININFORMATION("Test Export Module Plugin", "Tulip-dev", "2019", "", "1.0",
-                    "")
+  PLUGININFORMATION("Test Export Module Plugin", "Tulip-dev", "2019", "", "1.0", "")
 
-  TestExportModulePlugin(tlp::PluginContext *context)
-      : tlp::ExportModule(context) {}
+  TestExportModulePlugin(tlp::PluginContext *context) : tlp::ExportModule(context) {}
 
   bool exportGraph(std::ostream &os) override {
     os << graph;
     return true;
   }
 
-  std::string fileExtension() const override { return "graph"; }
+  std::string fileExtension() const override {
+    return "graph";
+  }
 };
 
 PLUGIN(TestExportModulePlugin)
@@ -199,8 +182,7 @@ class TestStaticPropertyPlugin : public tlp::Algorithm {
 public:
   PLUGININFORMATION("Test Static Property", "Tulip-dev", "2019", "", "1.0", "")
 
-  TestStaticPropertyPlugin(tlp::PluginContext *context)
-      : tlp::Algorithm(context) {}
+  TestStaticPropertyPlugin(tlp::PluginContext *context) : tlp::Algorithm(context) {}
 
   bool run() override {
     tlp::NodeStaticProperty<double *> test(graph);

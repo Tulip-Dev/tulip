@@ -18,12 +18,12 @@
  */
 
 #include <tulip/MouseInteractors.h>
+#include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/MouseSelector.h>
 #include <tulip/NodeLinkDiagramComponent.h>
-#include <tulip/NodeLinkDiagramComponentInteractor.h>
 
-#include "../utils/PluginNames.h"
 #include "../utils/StandardInteractorPriority.h"
+#include "../utils/PluginNames.h"
 
 using namespace tlp;
 
@@ -33,16 +33,15 @@ using namespace tlp;
 class InteractorSelection : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATION("InteractorSelection", "Tulip Team", "01/04/2009",
-                    "Selection Interactor", "1.0", "Modification")
+  PLUGININFORMATION("InteractorSelection", "Tulip Team", "01/04/2009", "Selection Interactor",
+                    "1.0", "Modification")
   /**
    * Default constructor
    */
   InteractorSelection(const tlp::PluginContext *)
-      : NodeLinkDiagramComponentInteractor(
-            ":/tulip/gui/icons/i_selection.png",
-            "Select nodes/edges in a rectangle",
-            StandardInteractorPriority::RectangleSelection) {}
+      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_selection.png",
+                                           "Select nodes/edges in a rectangle",
+                                           StandardInteractorPriority::RectangleSelection) {}
 
   /**
    * Construct chain of responsibility
@@ -74,12 +73,13 @@ public:
     push_back(new MouseSelector);
   }
 
-  QCursor cursor() const override { return Qt::CrossCursor; }
+  QCursor cursor() const override {
+    return Qt::CrossCursor;
+  }
 
   bool isCompatible(const std::string &viewName) const override {
     return ((viewName == NodeLinkDiagramComponent::viewName) ||
-            (viewName == ViewName::HistogramViewName) ||
-            (viewName == ViewName::MatrixViewName) ||
+            (viewName == ViewName::HistogramViewName) || (viewName == ViewName::MatrixViewName) ||
             (viewName == ViewName::PixelOrientedViewName) ||
             (viewName == ViewName::ScatterPlot2DViewName));
   }

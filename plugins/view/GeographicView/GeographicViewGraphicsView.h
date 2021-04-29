@@ -25,14 +25,14 @@
 #include "AddressSelectionDialog.h"
 #include "LeafletMaps.h"
 
-#include <tulip/Camera.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlMainWidgetGraphicsItem.h>
+#include <tulip/Camera.h>
 
-#include <QComboBox>
-#include <QGraphicsProxyWidget>
 #include <QGraphicsView>
+#include <QGraphicsProxyWidget>
+#include <QComboBox>
 
 class QOpenGLFramebufferObject;
 
@@ -45,30 +45,28 @@ class GeographicViewGraphicsView : public QGraphicsView, public Observable {
   Q_OBJECT
 
 public:
-  GeographicViewGraphicsView(GeographicView *_geoView,
-                             QGraphicsScene *graphicsScene,
+  GeographicViewGraphicsView(GeographicView *_geoView, QGraphicsScene *graphicsScene,
                              QWidget *parent = nullptr);
   ~GeographicViewGraphicsView() override;
 
   void setGraph(Graph *graph);
-  void createLayoutWithAddresses(const std::string &addressPropertyName,
-                                 bool createLatAndLngProps,
-                                 bool resetLatAndLngValues,
-                                 bool automaticChoice);
+  void createLayoutWithAddresses(const std::string &addressPropertyName, bool createLatAndLngProps,
+                                 bool resetLatAndLngValues, bool automaticChoice);
   void createLayoutWithLatLngs(const std::string &latitudePropertyName,
                                const std::string &longitudePropertyName,
                                const std::string &edgesPathsPropertyName);
 
   GlGraphComposite *getGlGraphComposite() const;
 
-  std::pair<double, double> getLatLngForNode(node n) { return nodeLatLng[n]; }
+  std::pair<double, double> getLatLngForNode(node n) {
+    return nodeLatLng[n];
+  }
 
   void setNodeLatLng(node n, const std::pair<double, double> &latLng) {
     nodeLatLng[n] = latLng;
   }
 
-  void setEdgeBendsLatLng(
-      edge e, const std::vector<std::pair<double, double>> &bendsLatLng) {
+  void setEdgeBendsLatLng(edge e, const std::vector<std::pair<double, double>> &bendsLatLng) {
     edgeBendsLatLng[e] = bendsLatLng;
   }
 
@@ -83,13 +81,21 @@ public:
 
   void centerMapOnNode(const node n);
 
-  GlMainWidget *getGlMainWidget() { return glMainWidget; }
+  GlMainWidget *getGlMainWidget() {
+    return glMainWidget;
+  }
 
-  LeafletMaps *getLeafletMapsPage() const { return leafletMaps; }
+  LeafletMaps *getLeafletMapsPage() const {
+    return leafletMaps;
+  }
 
-  LayoutProperty *getGeoLayout() const { return geoLayout; }
+  LayoutProperty *getGeoLayout() const {
+    return geoLayout;
+  }
 
-  SizeProperty *getGeoSizes() const { return geoViewSize; }
+  SizeProperty *getGeoSizes() const {
+    return geoViewSize;
+  }
 
   void setGeoLayout(LayoutProperty *);
 
@@ -99,9 +105,13 @@ public:
 
   void treatEvent(const Event &ev) override;
 
-  GlMainWidgetGraphicsItem *getGlMainWidgetItem() { return glWidgetItem; }
+  GlMainWidgetGraphicsItem *getGlMainWidgetItem() {
+    return glWidgetItem;
+  }
 
-  QGraphicsRectItem *getPlaceHolderItem() const { return _placeholderItem; }
+  QGraphicsRectItem *getPlaceHolderItem() const {
+    return _placeholderItem;
+  }
 
   void switchViewType();
 
@@ -109,9 +119,13 @@ public:
   void loadCsvFile(QString fileName);
   void loadPolyFile(QString fileName);
 
-  QComboBox *getViewTypeComboBox() { return viewTypeComboBox; }
+  QComboBox *getViewTypeComboBox() {
+    return viewTypeComboBox;
+  }
 
-  GlComposite *getPolygon() { return polygonEntity; }
+  GlComposite *getPolygon() {
+    return polygonEntity;
+  }
 
   void setGeoLayoutComputed();
 
@@ -140,8 +154,7 @@ private:
   Graph *graph;
   LeafletMaps *leafletMaps;
   std::unordered_map<node, std::pair<double, double>> nodeLatLng;
-  std::unordered_map<edge, std::vector<std::pair<double, double>>>
-      edgeBendsLatLng;
+  std::unordered_map<edge, std::vector<std::pair<double, double>>> edgeBendsLatLng;
   Camera globeCameraBackup;
   Camera mapCameraBackup;
 

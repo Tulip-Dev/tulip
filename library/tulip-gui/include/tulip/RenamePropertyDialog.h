@@ -31,24 +31,22 @@ class PropertyInterface;
 /**
  * @brief Provide a dialog that allow user to rename a property.
  *
- * The easiest way to use this class is to use the renameProperty static
- *function.
+ * The easiest way to use this class is to use the renameProperty static function.
  *
  **/
 
 class TLP_QT_SCOPE RenamePropertyDialog {
 public:
   /**
-   * @brief This is a convenience static function to rename a property using a
-   *dialog. If the user presses Cancel or an error occurs, it returns false.
+   * @brief This is a convenience static function to rename a property using a dialog. If the user
+   *presses Cancel or an error occurs, it returns false.
    *
-   * The function creates a modal property rename dialog with the given
-   *property, and parent widget.
+   * The function creates a modal property rename dialog with the given property, and parent
+   *widget.
    *
    * @param toRenameProp The property to rename.
    **/
-  static bool renameProperty(tlp::PropertyInterface *toRenameProp,
-                             QWidget *parent = nullptr);
+  static bool renameProperty(tlp::PropertyInterface *toRenameProp, QWidget *parent = nullptr);
 };
 } // namespace tlp
 #endif // RENAMEPROPERTYDIALOG_H

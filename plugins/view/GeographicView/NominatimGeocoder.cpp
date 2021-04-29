@@ -19,8 +19,8 @@
 
 #include <QEventLoop>
 #include <QNetworkAccessManager>
-#include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QNetworkReply>
 #include <QUrl>
 
 #include <tulip/TlpQtTools.h>
@@ -45,7 +45,9 @@ public:
     }
   }
 
-  void parseMapKey(string &value) override { _currentKey = value; }
+  void parseMapKey(string &value) override {
+    _currentKey = value;
+  }
 
   vector<string> addresses;
   vector<pair<double, double>> latLngs;
@@ -60,10 +62,11 @@ NominatimGeocoder::NominatimGeocoder() {
   _networkAccessManager = new QNetworkAccessManager();
 }
 
-NominatimGeocoder::~NominatimGeocoder() { delete _networkAccessManager; }
+NominatimGeocoder::~NominatimGeocoder() {
+  delete _networkAccessManager;
+}
 
-vector<NominatimGeocoderResult>
-NominatimGeocoder::getLatLngForAddress(const string &address) {
+vector<NominatimGeocoderResult> NominatimGeocoder::getLatLngForAddress(const string &address) {
 
   QUrl nominatimSearchUrl;
   nominatimSearchUrl.setScheme("https");
@@ -81,9 +84,8 @@ NominatimGeocoder::getLatLngForAddress(const string &address) {
   QByteArray jsonData = reply->readAll();
 
   NominatimResultsParser nominatimParser;
-  nominatimParser.parse(
-      reinterpret_cast<const unsigned char *>(jsonData.constData()),
-      jsonData.size());
+  nominatimParser.parse(reinterpret_cast<const unsigned char *>(jsonData.constData()),
+                        jsonData.size());
 
   unsigned int nbResults = nominatimParser.addresses.size();
 

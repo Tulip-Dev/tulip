@@ -47,16 +47,16 @@ class PythonCodeHighlighter : public QSyntaxHighlighter {
   bool _shellMode;
 
 public:
-  explicit PythonCodeHighlighter(QTextDocument *parent = nullptr,
-                                 bool darkBackground = false);
+  explicit PythonCodeHighlighter(QTextDocument *parent = nullptr, bool darkBackground = false);
 
-  void setShellMode(const bool shellMode) { _shellMode = shellMode; }
+  void setShellMode(const bool shellMode) {
+    _shellMode = shellMode;
+  }
 
 protected:
   void highlightBlock(const QString &text) override;
 
-  bool highlightMultilineString(const QString &text, const QRegExp &delimiter,
-                                const int inState,
+  bool highlightMultilineString(const QString &text, const QRegExp &delimiter, const int inState,
                                 const QTextCharFormat &style);
 };
 

@@ -20,17 +20,17 @@
 
 #include "PluginsTest.h"
 
+#include <tulip/TulipRelease.h>
+#include <tulip/tulipconf.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginLister.h>
 #include <tulip/PluginLoaderTxt.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/StringProperty.h>
-#include <tulip/TulipRelease.h>
-#include <tulip/tulipconf.h>
 
 using namespace std;
 using namespace tlp;
@@ -46,9 +46,13 @@ const std::string suffix = "so";
 #endif
 
 //==========================================================
-void PluginsTest::setUp() { graph = tlp::newGraph(); }
+void PluginsTest::setUp() {
+  graph = tlp::newGraph();
+}
 //==========================================================
-void PluginsTest::tearDown() { delete graph; }
+void PluginsTest::tearDown() {
+  delete graph;
+}
 //==========================================================
 void PluginsTest::testloadPlugin() {
   // plugin does not exist yet
@@ -57,8 +61,7 @@ void PluginsTest::testloadPlugin() {
   PluginLibraryLoader::loadPluginLibrary("./testPlugin." + suffix, &loader);
   // plugin should exist now
   CPPUNIT_ASSERT(tlp::PluginLister::pluginExists("Test"));
-  const list<Dependency> &deps =
-      tlp::PluginLister::getPluginDependencies("Test");
+  const list<Dependency> &deps = tlp::PluginLister::getPluginDependencies("Test");
   // only one dependency (see testPlugin.cpp)
   CPPUNIT_ASSERT_EQUAL(size_t(1), deps.size());
   CPPUNIT_ASSERT_EQUAL(string("Test"), deps.front().pluginName);
@@ -132,17 +135,14 @@ void PluginsTest::availablePlugins() {
 }
 
 void PluginsTest::pluginInformation() {
-  CPPUNIT_ASSERT_MESSAGE("'Test' plugin must be loaded",
-                         PluginLister::pluginExists("Test"));
+  CPPUNIT_ASSERT_MESSAGE("'Test' plugin must be loaded", PluginLister::pluginExists("Test"));
 
-  std::list<Dependency> dependencies =
-      PluginLister::getPluginDependencies("Test");
+  std::list<Dependency> dependencies = PluginLister::getPluginDependencies("Test");
   CPPUNIT_ASSERT_EQUAL(size_t(1), dependencies.size());
   CPPUNIT_ASSERT_EQUAL(string("Test"), dependencies.begin()->pluginName);
   CPPUNIT_ASSERT_EQUAL(string("1.0"), dependencies.begin()->pluginRelease);
 
-  tlp::ParameterDescriptionList parameters =
-      PluginLister::getPluginParameters("Test");
+  tlp::ParameterDescriptionList parameters = PluginLister::getPluginParameters("Test");
 
   Iterator<ParameterDescription> *it = parameters.getParameters();
   CPPUNIT_ASSERT_MESSAGE("Test plugin has no parameters", it->hasNext());
@@ -150,8 +150,7 @@ void PluginsTest::pluginInformation() {
   CPPUNIT_ASSERT_EQUAL(string("result"), param.getName());
   param = it->next();
   CPPUNIT_ASSERT_EQUAL(string("testParameter"), param.getName());
-  CPPUNIT_ASSERT_MESSAGE("test parameter should not be mandatory",
-                         !param.isMandatory());
+  CPPUNIT_ASSERT_MESSAGE("test parameter should not be mandatory", !param.isMandatory());
   CPPUNIT_ASSERT_EQUAL(string("0"), param.getDefaultValue());
 #ifndef _MSC_VER
   CPPUNIT_ASSERT_EQUAL(string("i"), param.getTypeName());

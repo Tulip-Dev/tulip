@@ -25,8 +25,8 @@
 
 #include <tulip/OpenGlIncludes.h>
 
-#include <tulip/Color.h>
 #include <tulip/Coord.h>
+#include <tulip/Color.h>
 
 #include <tulip/tulipconf.h>
 
@@ -39,48 +39,37 @@ struct TLP_GL_SCOPE GlLines {
 
   static void glDrawPoint(const Coord &p);
 
-  static void glDrawLine(const Coord &startPoint, const Coord &endPoint,
-                         const double width, const unsigned int stippleType,
-                         const Color &startColor, const Color &endColor,
-                         const bool arrow = false, const double arrowWidth = 1,
-                         const double arrowHeight = 1);
-  static void glDrawCurve(const Coord &startPoint,
-                          const std::vector<Coord> &bends,
-                          const Coord &endPoint, const double width,
-                          const unsigned int stippleType,
-                          const Color &startColor, const Color &endColor,
-                          const bool arrow = false, const double arrowWidth = 1,
-                          const double arrowHeight = 1);
-  static void
-  glDrawBezierCurve(const Coord &startPoint, const std::vector<Coord> &bends,
-                    const Coord &endPoint, unsigned int steps,
-                    const double width, const unsigned int stippleType,
-                    const Color &startColor, const Color &endColor,
-                    const bool arrow = false, const double arrowWidth = 1,
-                    const double arrowHeight = 1);
-  static void
-  glDrawSplineCurve(const Coord &startPoint, const std::vector<Coord> &bends,
-                    const Coord &endPoint, unsigned int steps,
-                    const double width, const unsigned int stippleType,
-                    const Color &startColor, const Color &endColor,
-                    const bool arrow = false, const double arrowWidth = 1,
-                    const double arrowHeight = 1);
-  static void
-  glDrawSpline2Curve(const Coord &startPoint, const std::vector<Coord> &bends,
-                     const Coord &endPoint, unsigned int steps,
-                     const double width, const unsigned int stippleType,
-                     const Color &startColor, const Color &endColor,
-                     const bool arrow = false, const double arrowWidth = 1,
-                     const double arrowHeight = 1);
+  static void glDrawLine(const Coord &startPoint, const Coord &endPoint, const double width,
+                         const unsigned int stippleType, const Color &startColor,
+                         const Color &endColor, const bool arrow = false,
+                         const double arrowWidth = 1, const double arrowHeight = 1);
+  static void glDrawCurve(const Coord &startPoint, const std::vector<Coord> &bends,
+                          const Coord &endPoint, const double width, const unsigned int stippleType,
+                          const Color &startColor, const Color &endColor, const bool arrow = false,
+                          const double arrowWidth = 1, const double arrowHeight = 1);
+  static void glDrawBezierCurve(const Coord &startPoint, const std::vector<Coord> &bends,
+                                const Coord &endPoint, unsigned int steps, const double width,
+                                const unsigned int stippleType, const Color &startColor,
+                                const Color &endColor, const bool arrow = false,
+                                const double arrowWidth = 1, const double arrowHeight = 1);
+  static void glDrawSplineCurve(const Coord &startPoint, const std::vector<Coord> &bends,
+                                const Coord &endPoint, unsigned int steps, const double width,
+                                const unsigned int stippleType, const Color &startColor,
+                                const Color &endColor, const bool arrow = false,
+                                const double arrowWidth = 1, const double arrowHeight = 1);
+  static void glDrawSpline2Curve(const Coord &startPoint, const std::vector<Coord> &bends,
+                                 const Coord &endPoint, unsigned int steps, const double width,
+                                 const unsigned int stippleType, const Color &startColor,
+                                 const Color &endColor, const bool arrow = false,
+                                 const double arrowWidth = 1, const double arrowHeight = 1);
 
 private:
   static void glDisableLineStipple(unsigned int stippleType);
   static void glEnableLineStipple(unsigned int stippleType);
-  static GLfloat *buildCurvePoints(const Coord &startPoint,
-                                   const std::vector<Coord> &bends,
+  static GLfloat *buildCurvePoints(const Coord &startPoint, const std::vector<Coord> &bends,
                                    const Coord &endPoint);
-  static GLfloat *buildCurvePoints(const Coord &p0, const Coord &p1,
-                                   const Coord &p2, const Coord &p3);
+  static GLfloat *buildCurvePoints(const Coord &p0, const Coord &p1, const Coord &p2,
+                                   const Coord &p3);
 };
 } // namespace tlp
 #endif // DOXYGEN_NOTFOR_DEVEL

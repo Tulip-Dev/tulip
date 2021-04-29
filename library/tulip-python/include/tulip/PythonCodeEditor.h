@@ -23,9 +23,9 @@
 #include <tulip/AutoCompletionDataBase.h>
 
 #include <QDateTime>
-#include <QDialog>
 #include <QListWidget>
 #include <QPlainTextEdit>
+#include <QDialog>
 
 namespace Ui {
 class FindReplaceDialogData;
@@ -89,7 +89,9 @@ public slots:
   bool doReplace();
   void doReplaceFind();
   void doReplaceAll();
-  void setResetSearch() { _resetSearch = true; }
+  void setResetSearch() {
+    _resetSearch = true;
+  }
   void regexpToggled(bool toggled);
 };
 
@@ -152,8 +154,7 @@ public:
   void setCursorPosition(int line, int col);
   void scrollToLine(int line);
 
-  void getSelection(int &lineFrom, int &indexFrom, int &lineTo,
-                    int &indexTo) const;
+  void getSelection(int &lineFrom, int &indexFrom, int &lineTo, int &indexTo) const;
   void setSelection(int startLine, int startCol, int endLine, int endCol);
   void removeSelectedText();
   bool hasSelectedText() const;
@@ -175,47 +176,65 @@ public:
     this->_autoIndent = autoIndent;
   }
 
-  bool autoIndentation() const { return _autoIndent; }
+  bool autoIndentation() const {
+    return _autoIndent;
+  }
 
   void setIndentationGuides(const bool indentGuides) {
     this->_indentGuides = indentGuides;
   }
 
-  bool indentationGuides() const { return _indentGuides; }
+  bool indentationGuides() const {
+    return _indentGuides;
+  }
 
   void setHighlightEditedLine(const bool highlightCurLine) {
     this->_highlightCurLine = highlightCurLine;
   }
 
-  bool highlightEditedLine() const { return _highlightCurLine; }
+  bool highlightEditedLine() const {
+    return _highlightCurLine;
+  }
 
   void setFindReplaceActivated(const bool activateFindReplace) {
     _findReplaceActivate = activateFindReplace;
   }
 
-  bool findReplaceActivated() const { return _findReplaceActivate; }
+  bool findReplaceActivated() const {
+    return _findReplaceActivate;
+  }
 
   void setCommentShortcutsActivated(const bool activateCommentShortcuts) {
     _commentShortcutsActivate = activateCommentShortcuts;
   }
 
-  bool commentShortcutsActivated() const { return _commentShortcutsActivate; }
+  bool commentShortcutsActivated() const {
+    return _commentShortcutsActivate;
+  }
 
   void setIndentShortcutsActivated(const bool activateIndentShortcuts) {
     _indentShortcutsActivate = activateIndentShortcuts;
   }
 
-  bool indentShortcutsActivated() const { return _indentShortcutsActivate; }
+  bool indentShortcutsActivated() const {
+    return _indentShortcutsActivate;
+  }
 
-  void setFileName(const QString &fileName) { _pythonFileName = fileName; }
+  void setFileName(const QString &fileName) {
+    _pythonFileName = fileName;
+  }
 
-  const QString &getFileName() const { return _pythonFileName; }
+  const QString &getFileName() const {
+    return _pythonFileName;
+  }
 
   bool loadCodeFromFile(const QString &filePath);
 
   bool saveCodeToFile();
 
-  QDateTime getLastSavedTime() const { return _lastSavedTime; }
+  QDateTime getLastSavedTime() const {
+    return _lastSavedTime;
+  }
 
   void setModuleEditor(const bool moduleEditor) {
     this->_moduleEditor = moduleEditor;
@@ -229,7 +248,9 @@ public:
 
   void setPlainText(const QString &text);
 
-  QMainWindow *mainWindow() const { return _mainWindow; }
+  QMainWindow *mainWindow() const {
+    return _mainWindow;
+  }
 
   static void deleteStaticResources() {
     delete _autoCompletionDb;

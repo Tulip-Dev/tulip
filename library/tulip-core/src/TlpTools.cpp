@@ -18,25 +18,25 @@
  */
 
 #include <algorithm>
-#include <cerrno>
-#include <chrono>
-#include <clocale>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
-#include <random>
-#include <sstream>
 #include <string>
+#include <sstream>
+#include <clocale>
+#include <cerrno>
+#include <random>
+#include <chrono>
 
 #ifndef _WIN32
-#include <gzstream.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <gzstream.h>
 #endif
 
 #ifdef _WIN32
-#include <utf8.h>
 #include <windows.h>
+#include <utf8.h>
 // msys2 build hack
 #define __CRT__NO_INLINE
 #include <gzstream.h>
@@ -53,11 +53,11 @@
 #include <dlfcn.h>
 #endif
 
+#include <tulip/TulipException.h>
+#include <tulip/TlpTools.h>
 #include <tulip/Plugin.h>
 #include <tulip/PluginLoader.h>
 #include <tulip/PropertyTypes.h>
-#include <tulip/TlpTools.h>
-#include <tulip/TulipException.h>
 #include <tulip/TulipRelease.h>
 
 using namespace std;
@@ -79,13 +79,17 @@ string tlp::TulipShareDir;
 bool tlp::TulipProgramExiting = false;
 
 // must be called at exit to ensure a clean exit
-static void atExit() { tlp::TulipProgramExiting = true; }
+static void atExit() {
+  tlp::TulipProgramExiting = true;
+}
 
 // as the exit handlers are called in reverse order
 // of their registration our own has to be registered after
 // this shared lib has been loaded (see initTulipLib) and
 // after the plugins are loaded (see PluginLibraryLoader::loadPlugins...)
-void tlp::registerTulipExitHandler() { atexit(atExit); }
+void tlp::registerTulipExitHandler() {
+  atexit(atExit);
+}
 
 #ifdef _WIN32
 const char tlp::PATH_DELIMITER = ';';
@@ -103,11 +107,10 @@ char *getTulipLibDir(char *buf) {
 
 #ifdef _WIN32
 #ifdef __MINGW32__
-  libTulipName = "libtulip-core-" + getMajor(TULIP_VERSION) + "." +
-                 getMinor(TULIP_VERSION) + ".dll";
+  libTulipName =
+      "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".dll";
 #else
-  libTulipName = "tulip-core-" + getMajor(TULIP_VERSION) + "_" +
-                 getMinor(TULIP_VERSION) + ".dll";
+  libTulipName = "tulip-core-" + getMajor(TULIP_VERSION) + "_" + getMinor(TULIP_VERSION) + ".dll";
 #endif
   HMODULE hmod = GetModuleHandle(libTulipName.c_str());
 
@@ -118,18 +121,16 @@ char *getTulipLibDir(char *buf) {
     if (dwLen > 0) {
       std::string tmp = szPath;
       std::replace(tmp.begin(), tmp.end(), '\\', '/');
-      tulipLibDir =
-          tmp.substr(0, tmp.rfind('/') + 1) + "../" + TULIP_INSTALL_LIBDIR_STR;
+      tulipLibDir = tmp.substr(0, tmp.rfind('/') + 1) + "../" + TULIP_INSTALL_LIBDIR_STR;
     }
   }
 
 #else
 #ifdef __APPLE__
-  libTulipName = "libtulip-core-" + getMajor(TULIP_VERSION) + "." +
-                 getMinor(TULIP_VERSION) + ".dylib";
+  libTulipName =
+      "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".dylib";
 #else
-  libTulipName = "libtulip-core-" + getMajor(TULIP_VERSION) + "." +
-                 getMinor(TULIP_VERSION) + ".so";
+  libTulipName = "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".so";
 #endif
   void *ptr = dlopen(libTulipName.c_str(), RTLD_LAZY);
 
@@ -161,8 +162,7 @@ static void checkDirectory(std::string dir, bool tlpDirSet, bool throwEx) {
 
   if (!pathExist(dir)) {
     std::stringstream ess;
-    ess << "Error - " << dir << ":" << std::endl
-        << strerror(errno) << std::endl;
+    ess << "Error - " << dir << ":" << std::endl << strerror(errno) << std::endl;
     if (tlpDirSet)
       ess << std::endl << "Check your TLP_DIR environment variable";
     if (throwEx)
@@ -195,8 +195,7 @@ void tlp::initTulipLib(const char *appDirPath) {
       curDir = std::string(appDirPath) + "/../" + TULIP_INSTALL_LIBDIR_STR;
 #else
       // one dir up to initialize the lib dir
-      curDir.append(appDirPath,
-                    strlen(appDirPath) - strlen(strrchr(appDirPath, '/') + 1));
+      curDir.append(appDirPath, strlen(appDirPath) - strlen(strrchr(appDirPath, '/') + 1));
       curDir.append(TULIP_INSTALL_LIBDIR_STR);
 
 #endif
@@ -350,15 +349,19 @@ std::ostream *tlp::getOgzstream(const std::string &name, int open_mode) {
 //=========================================================
 
 static unsigned int randomSeed = UINT_MAX;
-// uniformly-distributed integer random number generator that produces
-// non-deterministic random numbers
+// uniformly-distributed integer random number generator that produces non-deterministic random
+// numbers
 static std::random_device rd;
 // Mersenne Twister pseudo-random generator of 32-bit numbers
 static std::mt19937 mt;
 
-void tlp::setSeedOfRandomSequence(unsigned int seed) { randomSeed = seed; }
+void tlp::setSeedOfRandomSequence(unsigned int seed) {
+  randomSeed = seed;
+}
 
-unsigned int tlp::getSeedOfRandomSequence() { return randomSeed; }
+unsigned int tlp::getSeedOfRandomSequence() {
+  return randomSeed;
+}
 
 void tlp::initRandomSequence() {
   // init seed from random sequence with std::random_device
@@ -366,10 +369,9 @@ void tlp::initRandomSequence() {
 #ifndef __MINGW32__
     mt.seed(rd());
 #else
-    // std::random_device implementation is deterministic in MinGW so initialize
-    // seed with current time (microsecond precision)
-    mt.seed(uint(
-        std::chrono::high_resolution_clock::now().time_since_epoch().count()));
+    // std::random_device implementation is deterministic in MinGW so initialize seed with current
+    // time (microsecond precision)
+    mt.seed(uint(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
 #endif
   } else {
     mt.seed(randomSeed);
@@ -411,8 +413,7 @@ bool tlp::pathExist(const std::string &pathname) {
 #else
   struct _stat info;
   std::wstring utf16pathname;
-  utf8::utf8to16(pathname.begin(), pathname.end(),
-                 std::back_inserter(utf16pathname));
+  utf8::utf8to16(pathname.begin(), pathname.end(), std::back_inserter(utf16pathname));
   return _wstat(utf16pathname.c_str(), &info) == 0;
 #endif
 }
@@ -420,8 +421,8 @@ bool tlp::pathExist(const std::string &pathname) {
 //=========================================================
 
 #if defined(WIN32) && defined(__GLIBCXX__)
-// function to get the string representation of the bitwise combination of
-// std::ios_base::openmode flags
+// function to get the string representation of the bitwise combination of std::ios_base::openmode
+// flags
 static std::wstring openmodeToWString(std::ios_base::openmode mode) {
   std::wstring ret;
   bool testb = (mode & std::ios_base::binary) == std::ios_base::binary;
@@ -454,8 +455,7 @@ static std::wstring openmodeToWString(std::ios_base::openmode mode) {
   return ret;
 }
 
-// class to open a file for reading whose path contains non ascii characters
-// (MinGW only)
+// class to open a file for reading whose path contains non ascii characters (MinGW only)
 class wifilestream : public std::istream {
 public:
   wifilestream(const std::wstring &wfilename, std::ios_base::openmode mode)
@@ -481,8 +481,7 @@ private:
   __gnu_cxx::stdio_filebuf<char> *buffer;
 };
 
-// class to open a file for writing whose path contains non ascii characters
-// (MinGW only)
+// class to open a file for writing whose path contains non ascii characters (MinGW only)
 class wofilestream : public std::ostream {
 public:
   wofilestream(const std::wstring &wfilename, std::ios_base::openmode open_mode)
@@ -511,17 +510,15 @@ private:
 
 //=========================================================
 
-std::istream *tlp::getInputFileStream(const std::string &filename,
-                                      std::ios_base::openmode mode) {
+std::istream *tlp::getInputFileStream(const std::string &filename, std::ios_base::openmode mode) {
 #ifndef WIN32
   // On Linux and Mac OS, UTF-8 encoded paths are supported by std::ifstream
   return new std::ifstream(filename.c_str(), mode);
 #else
-  // On Windows, the path name (possibly containing non ascii characters) has to
-  // be converted to UTF-16 in order to open a stream
+  // On Windows, the path name (possibly containing non ascii characters) has to be converted to
+  // UTF-16 in order to open a stream
   std::wstring utf16filename;
-  utf8::utf8to16(filename.begin(), filename.end(),
-                 std::back_inserter(utf16filename));
+  utf8::utf8to16(filename.begin(), filename.end(), std::back_inserter(utf16filename));
 #ifdef __GLIBCXX__
   // With MinGW, it's a little bit tricky to get an input stream
   return new wifilestream(utf16filename, mode);
@@ -543,11 +540,10 @@ std::ostream *tlp::getOutputFileStream(const std::string &filename,
   // On Linux and Mac OS, UTF-8 encoded paths are supported by std::ofstream
   return new std::ofstream(filename.c_str(), open_mode);
 #else
-  // On Windows, the path name (possibly containing non ascii characters) has to
-  // be converted to UTF-16 in order to open a stream
+  // On Windows, the path name (possibly containing non ascii characters) has to be converted to
+  // UTF-16 in order to open a stream
   std::wstring utf16filename;
-  utf8::utf8to16(filename.begin(), filename.end(),
-                 std::back_inserter(utf16filename));
+  utf8::utf8to16(filename.begin(), filename.end(), std::back_inserter(utf16filename));
 #ifdef __GLIBCXX__
   // With MinGW, it's a little bit tricky to get an output stream
   return new wofilestream(utf16filename, open_mode);
@@ -566,6 +562,10 @@ std::ostream *tlp::getOutputFileStream(const std::string &filename,
 // Gui Test mode
 static bool GuiTestingMode = false;
 
-bool tlp::inGuiTestingMode() { return GuiTestingMode; }
+bool tlp::inGuiTestingMode() {
+  return GuiTestingMode;
+}
 
-void tlp::setGuiTestingMode(bool enabled) { GuiTestingMode = enabled; }
+void tlp::setGuiTestingMode(bool enabled) {
+  GuiTestingMode = enabled;
+}

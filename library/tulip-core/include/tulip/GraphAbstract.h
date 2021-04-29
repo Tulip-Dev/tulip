@@ -22,13 +22,14 @@
 #define TULIP_SUPERGRAPHABSTRACT_H
 
 #include <set>
-#include <tulip/DataSet.h>
-#include <tulip/Graph.h>
 #include <vector>
+#include <tulip/Graph.h>
+#include <tulip/DataSet.h>
 
 namespace tlp {
 
-template <class C> struct Iterator;
+template <class C>
+struct Iterator;
 class PropertyManager;
 class GraphProperty;
 
@@ -58,8 +59,12 @@ public:
   }
   void delSubGraph(Graph *) override;
   void delAllSubGraphs(Graph *) override;
-  inline Graph *getSuperGraph() const override { return supergraph; }
-  inline Graph *getRoot() const override { return root; }
+  inline Graph *getSuperGraph() const override {
+    return supergraph;
+  }
+  inline Graph *getRoot() const override {
+    return root;
+  }
   Iterator<Graph *> *getSubGraphs() const override;
   inline const std::vector<Graph *> &subGraphs() const override {
     return subgraphs;
@@ -94,8 +99,7 @@ public:
   bool existProperty(const std::string &) const override;
   bool existLocalProperty(const std::string &) const override;
   void delLocalProperty(const std::string &) override;
-  void addLocalProperty(const std::string &name,
-                        PropertyInterface *prop) override;
+  void addLocalProperty(const std::string &name, PropertyInterface *prop) override;
   Iterator<std::string> *getLocalProperties() const override;
   Iterator<std::string> *getInheritedProperties() const override;
   Iterator<std::string> *getProperties() const override;
@@ -114,13 +118,14 @@ public:
   Iterator<node> *dfs(const node root = node()) const override;
 
 protected:
-  DataSet &getNonConstAttributes() override { return attributes; }
+  DataSet &getNonConstAttributes() override {
+    return attributes;
+  }
   void setSuperGraph(Graph *) override;
   PropertyManager *propertyContainer;
   const std::set<edge> &getReferencedEdges(const edge) const;
 
-  bool renameLocalProperty(PropertyInterface *prop,
-                           const std::string &newName) override;
+  bool renameLocalProperty(PropertyInterface *prop, const std::string &newName) override;
 
   // internally used to deal with sub graph deletion
   void clearSubGraphs() override;
@@ -136,10 +141,8 @@ private:
   void notifyBeforeDelInheritedProperty(const std::string &prop);
   void notifyAfterDelInheritedProperty(const std::string &prop);
   // notification of property renaming
-  void notifyBeforeRenameLocalProperty(PropertyInterface *prop,
-                                       const std::string &newName);
-  void notifyAfterRenameLocalProperty(PropertyInterface *prop,
-                                      const std::string &oldName);
+  void notifyBeforeRenameLocalProperty(PropertyInterface *prop, const std::string &newName);
+  void notifyAfterRenameLocalProperty(PropertyInterface *prop, const std::string &oldName);
 };
 } // namespace tlp
 #endif

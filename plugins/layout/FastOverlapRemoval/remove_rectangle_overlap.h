@@ -16,11 +16,9 @@ namespace vpsc {
 class Rectangle;
 }
 
-void removeRectangleOverlap(unsigned n, vpsc::Rectangle rs[], double &xBorder,
-                            double &yBorder);
+void removeRectangleOverlap(unsigned n, vpsc::Rectangle rs[], double &xBorder, double &yBorder);
 
-void removeRectangleOverlapX(unsigned n, vpsc::Rectangle rs[], double &xBorder,
-                             double &yBorder);
+void removeRectangleOverlapX(unsigned n, vpsc::Rectangle rs[], double &xBorder, double &yBorder);
 
 void removeRectangleOverlapY(unsigned n, vpsc::Rectangle rs[], double &yBorder);
 

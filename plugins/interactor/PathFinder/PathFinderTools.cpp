@@ -19,21 +19,19 @@
 
 #include "PathFinderTools.h"
 
-#include <tulip/BooleanProperty.h>
+#include <tulip/GlGraphInputData.h>
 #include <tulip/BoundingBox.h>
 #include <tulip/DrawingTools.h>
-#include <tulip/GlGraphInputData.h>
+#include <tulip/BooleanProperty.h>
 
 using namespace std;
 
 namespace tlp {
-// Computes the enclosing circle of the elements contained in a boolean
-// property.
-Circlef getEnclosingCircle(GlGraphInputData *inputData,
-                           BooleanProperty *selection) {
-  BoundingBox bbox(computeBoundingBox(
-      inputData->getGraph(), inputData->getElementLayout(),
-      inputData->getElementSize(), inputData->getElementRotation(), selection));
+// Computes the enclosing circle of the elements contained in a boolean property.
+Circlef getEnclosingCircle(GlGraphInputData *inputData, BooleanProperty *selection) {
+  BoundingBox bbox(computeBoundingBox(inputData->getGraph(), inputData->getElementLayout(),
+                                      inputData->getElementSize(), inputData->getElementRotation(),
+                                      selection));
   Coord center(bbox.center());
   float norm = (bbox[1] - bbox[0]).norm();
   Circlef result;
@@ -43,8 +41,7 @@ Circlef getEnclosingCircle(GlGraphInputData *inputData,
   return result;
 }
 
-bool getNodeEnclosingCircle(Circlef &circle, GlGraphInputData *inputData,
-                            node n) {
+bool getNodeEnclosingCircle(Circlef &circle, GlGraphInputData *inputData, node n) {
   BooleanProperty *selection = new BooleanProperty(inputData->getGraph());
   selection->setAllNodeValue(false);
   selection->setNodeValue(n, true);
@@ -52,8 +49,7 @@ bool getNodeEnclosingCircle(Circlef &circle, GlGraphInputData *inputData,
   return true;
 }
 
-bool getEdgeEnclosingCircle(Circlef &circle, GlGraphInputData *inputData,
-                            edge e) {
+bool getEdgeEnclosingCircle(Circlef &circle, GlGraphInputData *inputData, edge e) {
   BooleanProperty *selection = new BooleanProperty(inputData->getGraph());
   selection->setAllEdgeValue(false);
   selection->setEdgeValue(e, true);

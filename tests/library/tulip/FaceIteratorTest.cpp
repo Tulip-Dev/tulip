@@ -66,8 +66,7 @@ void FaceIteratorTest::tearDown() {
 void FaceIteratorTest::testNodeFaceIterator() {
   for (const tlp::Face &f : map->getFaces()) {
     unsigned int i = iteratorCount(map->getFaceNodes(f));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(" test NodeFaceIterator ",
-                                 map->nbFacesEdges(f), i);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(" test NodeFaceIterator ", map->nbFacesEdges(f), i);
   }
 }
 

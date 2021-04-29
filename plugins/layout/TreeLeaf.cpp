@@ -19,9 +19,9 @@
 #include <tulip/GraphTools.h>
 #include <tulip/TreeTest.h>
 
+#include "TreeLeaf.h"
 #include "DatasetTools.h"
 #include "Orientation.h"
-#include "TreeLeaf.h"
 
 PLUGIN(TreeLeaf)
 
@@ -33,8 +33,7 @@ static const char *paramHelp[] = {
     "If the layer spacing is uniform, the spacing between two consecutive layers will be the "
     "same."};
 
-void TreeLeaf::computeLevelHeights(tlp::Graph *tree, tlp::node n,
-                                   unsigned int depth,
+void TreeLeaf::computeLevelHeights(tlp::Graph *tree, tlp::node n, unsigned int depth,
                                    OrientableSizeProxy *oriSize) {
   if (levelHeights.size() == depth)
     levelHeights.push_back(0);
@@ -48,16 +47,14 @@ void TreeLeaf::computeLevelHeights(tlp::Graph *tree, tlp::node n,
     computeLevelHeights(tree, on, depth + 1, oriSize);
 }
 
-float TreeLeaf::dfsPlacement(tlp::Graph *tree, tlp::node n, float x, float y,
-                             unsigned int depth, OrientableLayout *oriLayout,
-                             OrientableSizeProxy *oriSize) {
+float TreeLeaf::dfsPlacement(tlp::Graph *tree, tlp::node n, float x, float y, unsigned int depth,
+                             OrientableLayout *oriLayout, OrientableSizeProxy *oriSize) {
   float minX = 0;
   float maxX = 0;
   float nodeWidth = oriSize->getNodeValue(n).getW();
 
   if (tree->outdeg(n) == 0) {
-    oriLayout->setNodeValue(
-        n, OrientableCoord(oriLayout, x + nodeWidth / 2, y, 0));
+    oriLayout->setNodeValue(n, OrientableCoord(oriLayout, x + nodeWidth / 2, y, 0));
     return x + nodeWidth;
   }
 
@@ -68,16 +65,14 @@ float TreeLeaf::dfsPlacement(tlp::Graph *tree, tlp::node n, float x, float y,
   if (uniformLayerDistance == false) {
     if (depth < levelHeights.size() - 1) {
       layerSpacing += nodeSpacing;
-      layerSpacing = max(minLayerSpacing,
-                         (levelHeights[depth] + levelHeights[depth + 1]) / 2);
+      layerSpacing = max(minLayerSpacing, (levelHeights[depth] + levelHeights[depth + 1]) / 2);
     }
   }
 
   if (itN->hasNext()) {
     node itn = itN->next();
     minX = x;
-    maxX = x = dfsPlacement(tree, itn, x, y + layerSpacing, depth + 1,
-                            oriLayout, oriSize);
+    maxX = x = dfsPlacement(tree, itn, x, y + layerSpacing, depth + 1, oriLayout, oriSize);
 
     if (minX + nodeWidth > maxX)
       maxX = minX + nodeWidth;
@@ -86,8 +81,7 @@ float TreeLeaf::dfsPlacement(tlp::Graph *tree, tlp::node n, float x, float y,
   for (; itN->hasNext();) {
     node itn = itN->next();
     x += nodeSpacing;
-    x = dfsPlacement(tree, itn, x, y + layerSpacing, depth + 1, oriLayout,
-                     oriSize);
+    x = dfsPlacement(tree, itn, x, y + layerSpacing, depth + 1, oriLayout, oriSize);
 
     if (x > maxX)
       maxX = x;
@@ -102,8 +96,7 @@ float TreeLeaf::dfsPlacement(tlp::Graph *tree, tlp::node n, float x, float y,
   return maxX;
 }
 
-TreeLeaf::TreeLeaf(const tlp::PluginContext *context)
-    : LayoutAlgorithm(context) {
+TreeLeaf::TreeLeaf(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addOrientationParameters(this);
   addInParameter<bool>("uniform layer spacing", paramHelp[0], "true");
@@ -159,8 +152,7 @@ bool TreeLeaf::run() {
   // than the max of the minimum layer spacing of the tree
   if (uniformLayerDistance == true) {
     for (unsigned int i = 0; i < levelHeights.size() - 1; ++i) {
-      float layerSpacing =
-          (levelHeights[i] + levelHeights[i + 1]) / 2 + nodeSpacing;
+      float layerSpacing = (levelHeights[i] + levelHeights[i + 1]) / 2 + nodeSpacing;
 
       if (layerSpacing > minLayerSpacing)
         minLayerSpacing = layerSpacing;

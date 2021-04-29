@@ -20,16 +20,15 @@
 #ifndef MAKESELECTIONGRAPH_H
 #define MAKESELECTIONGRAPH_H
 
-#include "../utils/PluginNames.h"
 #include <tulip/BooleanProperty.h>
 #include <tulip/GraphTest.h>
+#include "../utils/PluginNames.h"
 
 /** \addtogroup selection */
 
 /**
  * This selection plugin extends the current selection to a graph.
- * All selected edges will also have their extremities selected (no dangling
- * edges).
+ * All selected edges will also have their extremities selected (no dangling edges).
  *
  *  \author Bruno Pinaud, LaBRI University of Bordeaux France:
  */
@@ -37,12 +36,11 @@
 class MakeSelectionGraph : public tlp::BooleanAlgorithm {
 public:
   MakeSelectionGraph(const tlp::PluginContext *context);
-  PLUGININFORMATION(
-      tlp::SelectionAlgorithm::MakeSelectionGraph, "Bruno Pinaud", "28/11/2016",
-      "Extends the selection to have a graph.<br/>"
-      "All selected edges of the current graph will have their extremities selected "
-      "(no dangling edges).",
-      "1.0", "Selection")
+  PLUGININFORMATION(tlp::SelectionAlgorithm::MakeSelectionGraph, "Bruno Pinaud", "28/11/2016",
+                    "Extends the selection to have a graph.<br/>"
+                    "All selected edges of the current graph will have their extremities selected "
+                    "(no dangling edges).",
+                    "1.0", "Selection")
   bool run() override;
 };
 

@@ -17,8 +17,8 @@
  *
  */
 
-#include <tulip/DoubleStringsListSelectionWidget.h>
 #include <tulip/SimpleStringsListSelectionWidget.h>
+#include <tulip/DoubleStringsListSelectionWidget.h>
 #include <tulip/StringsListSelectionWidget.h>
 
 #include <QLayout>
@@ -29,21 +29,18 @@ using namespace std;
 namespace tlp {
 
 StringsListSelectionWidget::StringsListSelectionWidget(
-    QWidget *parent, const ListType listType,
-    const unsigned int maxSelectedStringsListSize)
+    QWidget *parent, const ListType listType, const unsigned int maxSelectedStringsListSize)
     : QWidget(parent), listType(listType), stringsListSelectionWidget(nullptr) {
   setListType(listType);
-  stringsListSelectionWidget->setMaxSelectedStringsListSize(
-      maxSelectedStringsListSize);
+  stringsListSelectionWidget->setMaxSelectedStringsListSize(maxSelectedStringsListSize);
 }
 
 StringsListSelectionWidget::StringsListSelectionWidget(
-    const vector<string> &unselectedStringsList, QWidget *parent,
-    const ListType listType, const unsigned int maxSelectedStringsListSize)
+    const vector<string> &unselectedStringsList, QWidget *parent, const ListType listType,
+    const unsigned int maxSelectedStringsListSize)
     : QWidget(parent), listType(listType), stringsListSelectionWidget(nullptr) {
   setListType(listType);
-  stringsListSelectionWidget->setMaxSelectedStringsListSize(
-      maxSelectedStringsListSize);
+  stringsListSelectionWidget->setMaxSelectedStringsListSize(maxSelectedStringsListSize);
   stringsListSelectionWidget->setUnselectedStringsList(unselectedStringsList);
 }
 
@@ -59,8 +56,8 @@ void StringsListSelectionWidget::setListType(const ListType listType) {
   if (listType == DOUBLE_LIST) {
     stringsListSelectionWidget = new DoubleStringsListSelectionWidget();
   } else {
-    stringsListSelectionWidget = new SimpleStringsListSelectionWidget(
-        nullptr, 0, listType == SIMPLE_LIST);
+    stringsListSelectionWidget =
+        new SimpleStringsListSelectionWidget(nullptr, 0, listType == SIMPLE_LIST);
   }
 
   QVBoxLayout *newLayout = new QVBoxLayout;
@@ -73,8 +70,7 @@ void StringsListSelectionWidget::setUnselectedStringsList(
   stringsListSelectionWidget->setUnselectedStringsList(unselectedStringsList);
 }
 
-void StringsListSelectionWidget::setSelectedStringsList(
-    const vector<string> &selectedStringsList) {
+void StringsListSelectionWidget::setSelectedStringsList(const vector<string> &selectedStringsList) {
   stringsListSelectionWidget->setSelectedStringsList(selectedStringsList);
 }
 
@@ -104,8 +100,7 @@ void StringsListSelectionWidget::setSelectedStringsListLabel(
 
 void StringsListSelectionWidget::setMaxSelectedStringsListSize(
     const unsigned int maxSelectedStringsListSize) {
-  stringsListSelectionWidget->setMaxSelectedStringsListSize(
-      maxSelectedStringsListSize);
+  stringsListSelectionWidget->setMaxSelectedStringsListSize(maxSelectedStringsListSize);
 }
 
 vector<string> StringsListSelectionWidget::getSelectedStringsList() const {
@@ -116,12 +111,9 @@ vector<string> StringsListSelectionWidget::getUnselectedStringsList() const {
   return stringsListSelectionWidget->getUnselectedStringsList();
 }
 
-std::vector<std::string>
-StringsListSelectionWidget::getCompleteStringsList() const {
-  vector<string> completeList =
-      stringsListSelectionWidget->getSelectedStringsList();
-  vector<string> &&unselected =
-      stringsListSelectionWidget->getUnselectedStringsList();
+std::vector<std::string> StringsListSelectionWidget::getCompleteStringsList() const {
+  vector<string> completeList = stringsListSelectionWidget->getSelectedStringsList();
+  vector<string> &&unselected = stringsListSelectionWidget->getUnselectedStringsList();
   completeList.insert(completeList.end(), unselected.begin(), unselected.end());
   return completeList;
 }

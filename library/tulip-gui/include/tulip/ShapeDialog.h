@@ -25,8 +25,8 @@
 #include <tulip/tulipconf.h>
 
 #include <QDialog>
-#include <QPixmap>
 #include <QString>
+#include <QPixmap>
 
 namespace Ui {
 class ShapeDialog;
@@ -43,8 +43,7 @@ class TLP_QT_SCOPE ShapeDialog : public QDialog {
   std::list<std::pair<QString, QPixmap>> shapes;
 
 public:
-  ShapeDialog(std::list<std::pair<QString, QPixmap>> &&nodeShapes,
-              QWidget *parent = nullptr);
+  ShapeDialog(std::list<std::pair<QString, QPixmap>> &&nodeShapes, QWidget *parent = nullptr);
   ~ShapeDialog() override;
 
   QString getSelectedShapeName() const;

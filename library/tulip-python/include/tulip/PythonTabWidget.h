@@ -33,7 +33,9 @@ public:
     _drawGradient = drawGradient;
   }
 
-  void setTextColor(const QColor &textColor) { _textColor = textColor; }
+  void setTextColor(const QColor &textColor) {
+    _textColor = textColor;
+  }
 
 protected:
   void paintEvent(QPaintEvent *event) override;

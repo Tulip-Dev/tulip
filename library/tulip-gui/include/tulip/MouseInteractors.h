@@ -21,9 +21,9 @@
 #ifndef MOUSEOBJECT_H
 #define MOUSEOBJECT_H
 
+#include <tulip/InteractorComposite.h>
 #include <tulip/Camera.h>
 #include <tulip/GlScene.h>
-#include <tulip/InteractorComposite.h>
 
 namespace tlp {
 class GlMainWidget;
@@ -50,8 +50,7 @@ public:
   ~MouseElementDeleter() override {}
   bool eventFilter(QObject *, QEvent *) override;
   void clear() override;
-  virtual void delElement(tlp::Graph *graph,
-                          tlp::SelectedEntity &selectedEntity);
+  virtual void delElement(tlp::Graph *graph, tlp::SelectedEntity &selectedEntity);
 
 private:
   GlMainWidget *glMainWidget;

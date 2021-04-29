@@ -19,8 +19,8 @@
 #ifndef EXPORTWIZARD_H
 #define EXPORTWIZARD_H
 
-#include <QModelIndex>
 #include <QWizard>
+#include <QModelIndex>
 #include <tulip/WithParameter.h>
 
 namespace Ui {
@@ -39,8 +39,7 @@ class ExportWizard : public QWizard {
   QModelIndex const *_index;
 
 public:
-  explicit ExportWizard(tlp::Graph *g, const QString &exportFile,
-                        QWidget *parent = nullptr);
+  explicit ExportWizard(tlp::Graph *g, const QString &exportFile, QWidget *parent = nullptr);
   ~ExportWizard() override;
 
   QString algorithm() const;

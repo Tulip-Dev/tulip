@@ -20,13 +20,13 @@
 
 #ifndef GRAPHSTORAGE_H
 #define GRAPHSTORAGE_H
-#include <cassert>
 #include <cstring>
+#include <cassert>
 #include <vector>
 
+#include <tulip/Node.h>
 #include <tulip/Edge.h>
 #include <tulip/IdManager.h>
-#include <tulip/Node.h>
 
 namespace tlp {
 
@@ -56,48 +56,56 @@ public:
   /**
    * @brief Return true if n belongs to the graph
    */
-  inline bool isElement(const node n) const { return nodeIds.isElement(n); }
+  inline bool isElement(const node n) const {
+    return nodeIds.isElement(n);
+  }
   //=======================================================
   /**
    * @brief Return the number of nodes in the graph
    */
-  inline unsigned int numberOfNodes() const { return nodeIds.size(); }
+  inline unsigned int numberOfNodes() const {
+    return nodeIds.size();
+  }
   //=======================================================
   /**
    * @brief Return true if e belongs to the graph
    */
-  inline bool isElement(const edge e) const { return edgeIds.isElement(e); }
+  inline bool isElement(const edge e) const {
+    return edgeIds.isElement(e);
+  }
   //=======================================================
   /**
    * @brief Return the number of edges in the graph
    */
-  inline unsigned int numberOfEdges() const { return edgeIds.size(); }
+  inline unsigned int numberOfEdges() const {
+    return edgeIds.size();
+  }
   //=======================================================
   /**
    * @brief Enables to reserve memory for nbNodes
-   * Reserving memory before to addNode enable to reduce the number of vector
-   * resizing and then to speed up significantly construction of graphs.
+   * Reserving memory before to addNode enable to reduce the number of vector resizing and then
+   * to speed up significantly construction of graphs.
    */
   void reserveNodes(const size_t nb);
   //=======================================================
   /**
    * @brief Enables to reserve memory for nbEdges
-   * Reserving memory before to addEdge enable to reduce the number of vector
-   * resizing and then to speed up significantly construction of graphs.
+   * Reserving memory before to addEdge enable to reduce the number of vector resizing and then
+   * to speed up significantly construction of graphs.
    */
   void reserveEdges(const size_t nb);
   //=======================================================
   /**
    * @brief Enables to reserve memory for adjacency nodes
-   * Reserving memory before to addEdge enable to reduce the number of vector
-   * resizing and then to speed up significantly construction of graphs.
+   * Reserving memory before to addEdge enable to reduce the number of vector resizing and then
+   * to speed up significantly construction of graphs.
    */
   void reserveAdj(const node n, const size_t nb);
   //=======================================================
   /**
    * @brief Enables to reserve memory for adjacency nodes
-   * Reserving memory before to addEdge enable to reduce the number of vector
-   * resizing and then to speed up significantly construction of graphs.
+   * Reserving memory before to addEdge enable to reduce the number of vector resizing and then
+   * to speed up significantly construction of graphs.
    */
   void reserveAdj(const size_t nb);
   //=======================================================
@@ -123,11 +131,12 @@ public:
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on nodes of the graph
-   * @warning: The returned iterator should be deleted by the caller to prevent
-   * memory leaks
+   * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
    * @complexity: o(1)
    */
-  inline Iterator<node> *getNodes() const { return nodeIds.getElts(); }
+  inline Iterator<node> *getNodes() const {
+    return nodeIds.getElts();
+  }
   //=======================================================
   /**
    * @brief Return the current state of the ids management
@@ -143,30 +152,28 @@ public:
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on edges of the graph
-   * @warning: The returned iterator should be deleted by the caller to prevent
-   * memory leaks
+   * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
    */
-  inline Iterator<edge> *getEdges() const { return edgeIds.getElts(); }
+  inline Iterator<edge> *getEdges() const {
+    return edgeIds.getElts();
+  }
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on adjacent edges of the node n
    * @warning: be careful that loops appear twice
-   * @warning: The returned iterator should be deleted by the caller to prevent
-   * memory leaks
+   * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
    */
   Iterator<edge> *getInOutEdges(const node n) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on out edges of the node n
-   * @warning: The returned iterator must be deleted by the caller to prevent
-   * memory leaks
+   * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
   Iterator<edge> *getOutEdges(const node n) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on in edges of the node n
-   * @warning: The returned iterator must be deleted by the caller to prevent
-   * memory leaks
+   * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
   Iterator<edge> *getInEdges(const node n) const;
   //=======================================================
@@ -174,36 +181,31 @@ public:
    * @brief Return if edges exist between two nodes
    * @param src The source of the hypothetical edges.
    * @param tgt The target of the hypothetical edges.
-   * @param directed When set to false edges from target to source are also
-   * considered
+   * @param directed When set to false edges from target to source are also considered
    * @param edges The vector of edges to fill up with the edges found
    * @param the subgraph owning the edges
    * @param onlyFirst If true only the first edge found will be returned
    * @return true if an edge has been bound
    */
-  bool getEdges(const node src, const node tgt, bool directed,
-                std::vector<edge> &edges, const Graph *sg = nullptr,
-                bool onlyFirst = false) const;
+  bool getEdges(const node src, const node tgt, bool directed, std::vector<edge> &edges,
+                const Graph *sg = nullptr, bool onlyFirst = false) const;
 
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on adjacent nodes of the node n
-   * @warning: The returned iterator must be deleted by the caller to prevent
-   * memory leaks
+   * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
   Iterator<node> *getInOutNodes(const node n) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on in nodes of the node n
-   * @warning: The returned iterator must be deleted by the caller to prevent
-   * memory leaks
+   * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
   Iterator<node> *getInNodes(const node n) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on out nodes of the node n
-   * @warning: The returned iterator must be deleted by the caller to prevent
-   * memory leaks
+   * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
   Iterator<node> *getOutNodes(const node n) const;
   //=======================================================
@@ -235,22 +237,30 @@ public:
   /**
    * @brief Return the edges of the graph
    */
-  inline const std::vector<edge> &edges() const { return edgeIds; }
+  inline const std::vector<edge> &edges() const {
+    return edgeIds;
+  }
   //=======================================================
   /**
    * @brief Return the position of an edge in the edges of the graph
    */
-  inline unsigned int edgePos(const edge e) const { return edgeIds.getPos(e); }
+  inline unsigned int edgePos(const edge e) const {
+    return edgeIds.getPos(e);
+  }
   //=======================================================
   /**
    * @brief Return the nodes of the graph
    */
-  inline const std::vector<node> &nodes() const { return nodeIds; }
+  inline const std::vector<node> &nodes() const {
+    return nodeIds;
+  }
   //=======================================================
   /**
    * @brief Return the position of a node in the nodes of the graph
    */
-  inline unsigned int nodePos(const node n) const { return nodeIds.getPos(n); }
+  inline unsigned int nodePos(const node n) const {
+    return nodeIds.getPos(n);
+  }
   //=======================================================
   /**
    * @brief Return the extremities of an edge (src, target)
@@ -261,8 +271,7 @@ public:
   }
   //=======================================================
   /**
-   * @brief return the first extremity (considered as source if the graph is
-   * directed) of an edge
+   * @brief return the first extremity (considered as source if the graph is directed) of an edge
    */
   inline node source(const edge e) const {
     assert(isElement(e));
@@ -270,8 +279,7 @@ public:
   }
   //=======================================================
   /**
-   * @brief return the second extremity (considered as target if the graph is
-   * directed) of an edge
+   * @brief return the second extremity (considered as target if the graph is directed) of an edge
    */
   inline node target(const edge e) const {
     assert(isElement(e));
@@ -291,27 +299,33 @@ public:
   //=======================================================
   /**
    * @brief Reconnect the edge e to have the new given ends
-   * @warning That operation modifies the array of neighboors of extrmities of
-   * edges, thus it invalidates iterators on adjacency for the nodes at the
-   * extremities of the modified edges and nodes.
+   * @warning That operation modifies the array of neighboors of extrmities of edges, thus
+   * it invalidates iterators on adjacency for the nodes at the extremities of the modified edges
+   * and nodes.
    */
   void setEnds(const edge e, const node newSrc, const node newTgt);
   //=======================================================
   /**
    * @brief change the source of an edge
-   * @warning That operation modifies the array of neighboors of extrmities of
-   * edges, thus it invalidates iterators on adjacency for the nodes at the
-   * extremities of the modified edges and nodes. \see setEnds
+   * @warning That operation modifies the array of neighboors of extrmities of edges, thus
+   * it invalidates iterators on adjacency for the nodes at the extremities of the modified edges
+   * and nodes.
+   * \see setEnds
    */
-  inline void setSource(const edge e, const node n) { setEnds(e, n, node()); }
+  inline void setSource(const edge e, const node n) {
+    setEnds(e, n, node());
+  }
   //=======================================================
   /**
    * @brief change the target of an edge
-   * @warning That operation modifies the array of neighboors of extremities of
-   * edges, thus it invalidates iterators on adjacency for the nodes at the
-   * extremities of the modified edges and nodes. \see setEnds
+   * @warning That operation modifies the array of neighboors of extremities of edges, thus
+   * it invalidates iterators on adjacency for the nodes at the extremities of the modified edges
+   * and nodes.
+   * \see setEnds
    */
-  inline void setTarget(const edge e, const node n) { setEnds(e, node(), n); }
+  inline void setTarget(const edge e, const node n) {
+    setEnds(e, node(), n);
+  }
   //=======================================================
   /**
    * @brief Reverse an edge e, source becomes target and target becomes source
@@ -367,11 +381,9 @@ public:
    * @brief Delete a node and all its adjacent edges in the graph
    * @warning That operation modifies the array of nodes and the array of edges
    * and thus invalidates all iterators on it.
-   * @warning That operation modifies the array of neighboors of extrmities of
-   * edges, thus it invalidates iterators on adjacency for the nodes at the
-   * extremities od the deleted edges.
-   * @warning Orders of edges in the extremities of the deleted edges are
-   * affected
+   * @warning That operation modifies the array of neighboors of extrmities of edges, thus
+   * it invalidates iterators on adjacency for the nodes at the extremities od the deleted edges.
+   * @warning Orders of edges in the extremities of the deleted edges are affected
    * @complexity: o(1)
    */
   void delNode(const node n);
@@ -408,33 +420,30 @@ public:
    * @brief Delete an edge in the graph
    * @warning: That operation modifies the array of edges
    * and thus invalidates all iterators on it.
-   * @warning That operation modifies the array of neighboors of extremities of
-   * the edge e, thus it invalidates iterators on adjacency for the nodes at the
-   * extremities od the deleted edge.
-   * @warning Orders of edges in the extremities of the deleted edge are
-   * affected
+   * @warning That operation modifies the array of neighboors of extremities of the edge e, thus
+   * it invalidates iterators on adjacency for the nodes at the extremities od the deleted edge.
+   * @warning Orders of edges in the extremities of the deleted edge are affected
    */
   void delEdge(const edge e);
   //=======================================================
   /**
    * @brief Delete all edges in the graph
-   * @warning: That operation modifies the array of edges and all arrays of
-   * nodes and thus invalidates all iterators, only graph nodes iterators are
-   * not affected.
+   * @warning: That operation modifies the array of edges and all arrays of nodes
+   * and thus invalidates all iterators, only graph nodes iterators are not affected.
    */
   void delAllEdges();
   //=======================================================
   /**
    * @brief Delete all nodes in the graph
-   * @warning: That operation modifies the array of edges and all arrays of
-   * nodes and thus invalidates all iterators.
+   * @warning: That operation modifies the array of edges and all arrays of nodes
+   * and thus invalidates all iterators.
    */
   void delAllNodes();
   //=======================================================
   /**
    * @brief sort the graph elements in ascending order
-   * @warning: That operation modifies the vector of nodes and the vector of
-   * edges and thus invalidates all iterators.
+   * @warning: That operation modifies the vector of nodes and the vector of edges
+   * and thus invalidates all iterators.
    */
   inline void sortElts() {
     nodeIds.sort();

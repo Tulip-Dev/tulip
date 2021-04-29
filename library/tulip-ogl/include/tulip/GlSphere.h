@@ -22,8 +22,8 @@
 
 #include <tulip/tulipconf.h>
 
-#include <tulip/Color.h>
 #include <tulip/Coord.h>
+#include <tulip/Color.h>
 
 #include <tulip/GlSimpleEntity.h>
 
@@ -46,19 +46,18 @@ public:
   ~GlSphere() override;
 
   /**
-   * @brief Create a sphere with a position, a radius a fill color and multiple
-   * rotation (if you want)
+   * @brief Create a sphere with a position, a radius a fill color and multiple rotation (if you
+   * want)
    */
-  GlSphere(const Coord &position, float radius,
-           const Color &color = Color(0, 0, 0, 255), float rotX = 0,
-           float rotY = 0, float rotZ = 0);
+  GlSphere(const Coord &position, float radius, const Color &color = Color(0, 0, 0, 255),
+           float rotX = 0, float rotY = 0, float rotZ = 0);
 
   /**
-   * @brief Create a sphere with a position, a radius, a texture, an alphe and
-   * multiple rotation (if you want)
+   * @brief Create a sphere with a position, a radius, a texture, an alphe and multiple rotation (if
+   * you want)
    */
-  GlSphere(const Coord &position, float radius, const std::string &textureFile,
-           int alpha = 255, float rotX = 0, float rotY = 0, float rotZ = 0);
+  GlSphere(const Coord &position, float radius, const std::string &textureFile, int alpha = 255,
+           float rotX = 0, float rotY = 0, float rotZ = 0);
 
   /**
    * @brief Draw the sphere
@@ -73,27 +72,37 @@ public:
   /**
    * @brief Get absolute position
    */
-  const Coord &getPosition() const { return position; }
+  const Coord &getPosition() const {
+    return position;
+  }
 
   /**
    * @brief Set absolute position
    */
-  void setPosition(const Coord &pos) { position = pos; }
+  void setPosition(const Coord &pos) {
+    position = pos;
+  }
 
   /**
    * @brief Set the texture name
    */
-  virtual void setTexture(const std::string &texture) { textureFile = texture; }
+  virtual void setTexture(const std::string &texture) {
+    textureFile = texture;
+  }
 
   /**
    * @brief Get the color
    */
-  const Color &getColor() const { return color; }
+  const Color &getColor() const {
+    return color;
+  }
 
   /**
    * @brief Set the color
    */
-  void setColor(const Color &newColor) { color = newColor; }
+  void setColor(const Color &newColor) {
+    color = newColor;
+  }
 
   /**
    * @brief Function to export data in outString (in XML format)
@@ -103,8 +112,7 @@ public:
   /**
    * @brief Function to set data with inString (in XML format)
    */
-  void setWithXML(const std::string &inString,
-                  unsigned int &currentPosition) override;
+  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
 
 private:
   void generateBuffers(int space);

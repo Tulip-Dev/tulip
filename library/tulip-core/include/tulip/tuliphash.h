@@ -26,11 +26,10 @@
  * The TLP_HASH_MAP macro defines which implementation is used for hash maps.
  * The TLP_HASH_SET macro defines which implementation is used for hash sets.
  *
- * TLP_BEGIN_HASH_NAMESPACE is defined to open the namespace in which the hash
- * classes are defined, to define new hashes (e.g. for Edge).
+ * TLP_BEGIN_HASH_NAMESPACE is defined to open the namespace in which the hash classes are defined,
+ * to define new hashes (e.g. for Edge).
  * TLP_END_HASH_NAMESPACE is defined to close the namespace
- * TLP_HASH_NAMESPACE allows to use a specific hasher class when declaring a
- * hash set or a hash map.
+ * TLP_HASH_NAMESPACE allows to use a specific hasher class when declaring a hash set or a hash map.
  */
 
 #include <unordered_map>

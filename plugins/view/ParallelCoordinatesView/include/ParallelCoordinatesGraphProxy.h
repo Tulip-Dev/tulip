@@ -34,8 +34,7 @@ class ColorProperty;
 class ParallelCoordinatesGraphProxy : public GraphDecorator {
 
 public:
-  ParallelCoordinatesGraphProxy(Graph *graph,
-                                const ElementType location = NODE);
+  ParallelCoordinatesGraphProxy(Graph *graph, const ElementType location = NODE);
   ~ParallelCoordinatesGraphProxy() override;
 
   unsigned int getNumberOfSelectedProperties() const;
@@ -45,7 +44,9 @@ public:
   void removePropertyFromSelection(const std::string &propertyName);
 
   ElementType getDataLocation() const;
-  void setDataLocation(const ElementType location) { dataLocation = location; }
+  void setDataLocation(const ElementType location) {
+    dataLocation = location;
+  }
 
   unsigned int getDataCount() const;
   Iterator<unsigned int> *getDataIterator();
@@ -62,7 +63,9 @@ public:
 
   void deleteData(const unsigned int dataId);
 
-  Graph *getGraph() const { return graph_component; }
+  Graph *getGraph() const {
+    return graph_component;
+  }
 
   void setUnhighlightedEltsColorAlphaValue(const unsigned int alpha) {
     unhighlightedEltsColorAlphaValue = alpha;
@@ -81,11 +84,12 @@ public:
   }
   void resetHighlightedElts(const std::set<unsigned int> &highlightedData);
   void removeHighlightedElement(const unsigned int dataId);
-  bool graphColorsModified() const { return graphColorsChanged; }
+  bool graphColorsModified() const {
+    return graphColorsChanged;
+  }
   void colorDataAccordingToHighlightedElts();
 
-  void update(std::set<Observable *>::iterator begin,
-              std::set<Observable *>::iterator end);
+  void update(std::set<Observable *>::iterator begin, std::set<Observable *>::iterator end);
   void observableDestroyed(Observable *) {}
 
   template <typename Proxytype>
@@ -104,8 +108,7 @@ public:
 
   template <typename PROPERTY, typename PROPERTYTYPE>
   typename StoredType<typename PROPERTYTYPE::RealType>::ReturnedConstValue
-  getPropertyValueForData(const std::string &propertyName,
-                          const unsigned int dataId) {
+  getPropertyValueForData(const std::string &propertyName, const unsigned int dataId) {
     if (getDataLocation() == NODE) {
       return getProperty<PROPERTY>(propertyName)->getNodeValue(node(dataId));
     } else {
@@ -114,22 +117,18 @@ public:
   }
 
   template <typename PROPERTY, typename PROPERTYTYPE>
-  void setPropertyValueForData(
-      const std::string &propertyName, const unsigned int dataId,
-      const typename PROPERTYTYPE::RealType &propertyValue) {
+  void setPropertyValueForData(const std::string &propertyName, const unsigned int dataId,
+                               const typename PROPERTYTYPE::RealType &propertyValue) {
     if (getDataLocation() == NODE) {
-      getProperty<PROPERTY>(propertyName)
-          ->setNodeValue(node(dataId), propertyValue);
+      getProperty<PROPERTY>(propertyName)->setNodeValue(node(dataId), propertyValue);
     } else {
-      getProperty<PROPERTY>(propertyName)
-          ->setEdgeValue(edge(dataId), propertyValue);
+      getProperty<PROPERTY>(propertyName)->setEdgeValue(edge(dataId), propertyValue);
     }
   }
 
   template <typename PROPERTY, typename PROPERTYTYPE>
-  void setPropertyValueForAllData(
-      const std::string &propertyName,
-      const typename PROPERTYTYPE::RealType &propertyValue) {
+  void setPropertyValueForAllData(const std::string &propertyName,
+                                  const typename PROPERTYTYPE::RealType &propertyValue) {
     if (getDataLocation() == NODE) {
       getProperty<PROPERTY>(propertyName)->setAllNodeValue(propertyValue);
     } else {
@@ -138,8 +137,7 @@ public:
   }
 
   template <typename PROPERTY, typename PROPERTYTYPE>
-  typename PROPERTYTYPE::RealType
-  getPropertyMinValue(const std::string &propertyName) {
+  typename PROPERTYTYPE::RealType getPropertyMinValue(const std::string &propertyName) {
     if (getDataLocation() == NODE) {
       return getProperty<PROPERTY>(propertyName)->getNodeMin(graph_component);
     } else {
@@ -148,8 +146,7 @@ public:
   }
 
   template <typename PROPERTY, typename PROPERTYTYPE>
-  typename PROPERTYTYPE::RealType
-  getPropertyMaxValue(const std::string &propertyName) {
+  typename PROPERTYTYPE::RealType getPropertyMaxValue(const std::string &propertyName) {
     if (getDataLocation() == NODE) {
       return getProperty<PROPERTY>(propertyName)->getNodeMax(graph_component);
     } else {
@@ -173,13 +170,16 @@ template <typename GraphDataSource>
 class ParallelCoordinatesDataIterator : public Iterator<unsigned int> {
 
 public:
-  ParallelCoordinatesDataIterator(
-      Iterator<GraphDataSource> *graphDataSourceIterator)
+  ParallelCoordinatesDataIterator(Iterator<GraphDataSource> *graphDataSourceIterator)
       : graphDataSourceIt(graphDataSourceIterator) {}
 
-  unsigned int next() override { return graphDataSourceIt.next().id; }
+  unsigned int next() override {
+    return graphDataSourceIt.next().id;
+  }
 
-  bool hasNext() override { return graphDataSourceIt.hasNext(); }
+  bool hasNext() override {
+    return graphDataSourceIt.hasNext();
+  }
 
 private:
   StableIterator<GraphDataSource> graphDataSourceIt;

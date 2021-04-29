@@ -36,13 +36,15 @@ DynamicVector<T> &DynamicVector<T>::operator=(const DynamicVector<T> &vec) {
   return *this;
 }
 //=================================================================
-template <class T> T DynamicVector<T>::operator[](const unsigned int i) const {
+template <class T>
+T DynamicVector<T>::operator[](const unsigned int i) const {
 
   assert(i < size);
   return array[i];
 }
 //=================================================================
-template <class T> T &DynamicVector<T>::operator[](const unsigned int i) {
+template <class T>
+T &DynamicVector<T>::operator[](const unsigned int i) {
   assert(i < size);
   return array[i];
 }
@@ -137,8 +139,7 @@ DynamicVector<T> &DynamicVector<T>::operator^=(const DynamicVector<T> &v) {
     break;
 
   default:
-    std::cerr << "cross product not implemented for dimension :" << size
-              << std::endl;
+    std::cerr << "cross product not implemented for dimension :" << size << std::endl;
     break;
   }
 
@@ -168,8 +169,7 @@ DynamicVector<T> DynamicVector<T>::operator-(const T &scalaire) const {
 }
 //======================================================
 template <class T>
-DynamicVector<T> operator*(const DynamicVector<T> &v1,
-                           const DynamicVector<T> &v2) {
+DynamicVector<T> operator*(const DynamicVector<T> &v1, const DynamicVector<T> &v2) {
   assert(v1.size == v2.size);
   return DynamicVector<T>(v1) *= v2;
 }
@@ -227,14 +227,16 @@ T DynamicVector<T>::dotProduct(const DynamicVector<T> &v) const {
   return tmpO;
 }
 //======================================================
-template <class T> DynamicVector<T> &DynamicVector<T>::fill(const T &scalaire) {
+template <class T>
+DynamicVector<T> &DynamicVector<T>::fill(const T &scalaire) {
   for (unsigned int i = 0; i < size; ++i)
     DynamicVector<T>::array[i] = scalaire;
 
   return (*this);
 }
 //======================================================
-template <class T> T DynamicVector<T>::norm() const {
+template <class T>
+T DynamicVector<T>::norm() const {
   switch (size) {
   case 1:
     return DynamicVector<T>::array[0];
@@ -261,27 +263,26 @@ template <class T> T DynamicVector<T>::norm() const {
   }
 }
 //======================================================
-template <class T> T DynamicVector<T>::dist(const DynamicVector<T> &c) const {
+template <class T>
+T DynamicVector<T>::dist(const DynamicVector<T> &c) const {
   switch (size) {
   case 1:
     return fabs(DynamicVector<T>::array[0] - c.DynamicVector<T>::array[0]);
 
   case 2:
-    return sqrt(
-        (DynamicVector<T>::array[0] - c.DynamicVector<T>::array[0]) *
-            (DynamicVector<T>::array[0] - c.DynamicVector<T>::array[0]) +
-        (DynamicVector<T>::array[1] - c.DynamicVector<T>::array[1]) *
-            (DynamicVector<T>::array[1] - c.DynamicVector<T>::array[1]));
+    return sqrt((DynamicVector<T>::array[0] - c.DynamicVector<T>::array[0]) *
+                    (DynamicVector<T>::array[0] - c.DynamicVector<T>::array[0]) +
+                (DynamicVector<T>::array[1] - c.DynamicVector<T>::array[1]) *
+                    (DynamicVector<T>::array[1] - c.DynamicVector<T>::array[1]));
     break;
 
   case 3:
-    return sqrt(
-        (DynamicVector<T>::array[0] - c.DynamicVector<T>::array[0]) *
-            (DynamicVector<T>::array[0] - c.DynamicVector<T>::array[0]) +
-        (DynamicVector<T>::array[1] - c.DynamicVector<T>::array[1]) *
-            (DynamicVector<T>::array[1] - c.DynamicVector<T>::array[1]) +
-        (DynamicVector<T>::array[2] - c.DynamicVector<T>::array[2]) *
-            (DynamicVector<T>::array[2] - c.DynamicVector<T>::array[2]));
+    return sqrt((DynamicVector<T>::array[0] - c.DynamicVector<T>::array[0]) *
+                    (DynamicVector<T>::array[0] - c.DynamicVector<T>::array[0]) +
+                (DynamicVector<T>::array[1] - c.DynamicVector<T>::array[1]) *
+                    (DynamicVector<T>::array[1] - c.DynamicVector<T>::array[1]) +
+                (DynamicVector<T>::array[2] - c.DynamicVector<T>::array[2]) *
+                    (DynamicVector<T>::array[2] - c.DynamicVector<T>::array[2]));
     break;
 
   default:

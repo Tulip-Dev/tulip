@@ -19,36 +19,36 @@
 
 #include <algorithm>
 
-#include "GeographicView.h"
 #include "GeographicViewGraphicsView.h"
+#include "GeographicView.h"
 #include "NominatimGeocoder.h"
 
-#include <tulip/Gl2DRect.h>
 #include <tulip/GlCPULODCalculator.h>
 #include <tulip/GlComplexPolygon.h>
-#include <tulip/GlLine.h>
-#include <tulip/GlOffscreenRenderer.h>
-#include <tulip/GlSceneZoomAndPan.h>
 #include <tulip/GlSphere.h>
-#include <tulip/GlTextureManager.h>
+#include <tulip/GlLine.h>
+#include <tulip/GlSceneZoomAndPan.h>
 #include <tulip/GlyphManager.h>
-#include <tulip/Perspective.h>
-#include <tulip/TlpQtTools.h>
+#include <tulip/GlTextureManager.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/Perspective.h>
+#include <tulip/GlOffscreenRenderer.h>
+#include <tulip/Gl2DRect.h>
 
-#include <QApplication>
-#include <QFile>
-#include <QImage>
-#include <QMainWindow>
-#include <QMessageBox>
-#include <QOpenGLFramebufferObject>
-#include <QOpenGLPaintDevice>
-#include <QPainter>
-#include <QProgressDialog>
 #include <QPushButton>
 #include <QTextStream>
 #include <QTimeLine>
+#include <QFile>
+#include <QApplication>
+#include <QImage>
+#include <QPainter>
 #include <QTimer>
+#include <QMessageBox>
+#include <QMainWindow>
+#include <QProgressDialog>
+#include <QOpenGLFramebufferObject>
+#include <QOpenGLPaintDevice>
 
 using namespace std;
 
@@ -120,9 +120,8 @@ GlComposite *readPolyFile(QString fileName) {
 
         if (!datas.empty()) {
 
-          composite->addGlEntity(new GlComplexPolygon(datas, Color(0, 0, 0, 50),
-                                                      Color(0, 0, 0, 255)),
-                                 polygonName);
+          composite->addGlEntity(
+              new GlComplexPolygon(datas, Color(0, 0, 0, 50), Color(0, 0, 0, 255)), polygonName);
           datas.clear();
           currentVector.clear();
         }
@@ -137,8 +136,7 @@ GlComposite *readPolyFile(QString fileName) {
 
     double mercatorLatitude = lat * 2. / 360. * M_PI;
     mercatorLatitude = sin(abs(mercatorLatitude));
-    mercatorLatitude =
-        log((1. + mercatorLatitude) / (1. - mercatorLatitude)) / 2.;
+    mercatorLatitude = log((1. + mercatorLatitude) / (1. - mercatorLatitude)) / 2.;
 
     if (lat < 0)
       mercatorLatitude = 0. - mercatorLatitude;
@@ -153,9 +151,8 @@ GlComposite *readPolyFile(QString fileName) {
     if (!currentVector.empty())
       datas.push_back(currentVector);
 
-    composite->addGlEntity(
-        new GlComplexPolygon(datas, Color(0, 0, 0, 50), Color(0, 0, 0, 255)),
-        polygonName);
+    composite->addGlEntity(new GlComplexPolygon(datas, Color(0, 0, 0, 50), Color(0, 0, 0, 255)),
+                           polygonName);
   }
 
   return composite;
@@ -196,22 +193,20 @@ GlComposite *readCsvFile(QString fileName) {
 
     double mercatorLatitude = strList[1].toDouble();
     mercatorLatitude = sin(abs(mercatorLatitude));
-    mercatorLatitude =
-        log((1. + mercatorLatitude) / (1. - mercatorLatitude)) / 2.;
+    mercatorLatitude = log((1. + mercatorLatitude) / (1. - mercatorLatitude)) / 2.;
 
     if (strList[1].toDouble() < 0)
       mercatorLatitude = 0. - mercatorLatitude;
 
-    currentVector.emplace_back(strList[2].toDouble() * 360. / M_PI,
-                               mercatorLatitude * 360. / M_PI, 0);
+    currentVector.emplace_back(strList[2].toDouble() * 360. / M_PI, mercatorLatitude * 360. / M_PI,
+                               0);
   }
 
   if (datas.empty())
     return nullptr;
 
-  composite->addGlEntity(
-      new GlComplexPolygon(datas, Color(0, 0, 0, 50), Color(0, 0, 0, 255)),
-      "polygon");
+  composite->addGlEntity(new GlComplexPolygon(datas, Color(0, 0, 0, 50), Color(0, 0, 0, 255)),
+                         "polygon");
 
   return composite;
 }
@@ -219,8 +214,7 @@ GlComposite *readCsvFile(QString fileName) {
 static double latitudeToMercator(double latitude) {
   double mercatorLatitude = latitude * M_PI / 360.;
   mercatorLatitude = sin(abs(mercatorLatitude));
-  mercatorLatitude =
-      log((1. + mercatorLatitude) / (1. - mercatorLatitude)) / 2.;
+  mercatorLatitude = log((1. + mercatorLatitude) / (1. - mercatorLatitude)) / 2.;
 
   if (latitude < 0)
     return -mercatorLatitude / M_PI * 360.;
@@ -232,17 +226,16 @@ static double mercatorToLatitude(double mercator) {
   return atan(sinh(mercator / 360. * M_PI)) / M_PI * 360.;
 }
 
-GeographicViewGraphicsView::GeographicViewGraphicsView(
-    GeographicView *geoView, QGraphicsScene *graphicsScene, QWidget *parent)
-    : QGraphicsView(graphicsScene, parent), _geoView(geoView), graph(nullptr),
-      leafletMaps(nullptr), globeCameraBackup(nullptr, true),
-      mapCameraBackup(nullptr, true), geoLayout(nullptr), geoViewSize(nullptr),
-      geoViewShape(nullptr), geoLayoutBackup(nullptr),
-      mapTranslationBlocked(false), geocodingActive(false),
-      cancelGeocoding(false), polygonEntity(nullptr),
-      planisphereEntity(nullptr), noLayoutMsgBox(nullptr),
-      firstGlobeSwitch(true), geoLayoutComputed(false), renderFbo(nullptr),
-      latProp(nullptr), lngProp(nullptr) {
+GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
+                                                       QGraphicsScene *graphicsScene,
+                                                       QWidget *parent)
+    : QGraphicsView(graphicsScene, parent), _geoView(geoView), graph(nullptr), leafletMaps(nullptr),
+      globeCameraBackup(nullptr, true), mapCameraBackup(nullptr, true), geoLayout(nullptr),
+      geoViewSize(nullptr), geoViewShape(nullptr), geoLayoutBackup(nullptr),
+      mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false),
+      polygonEntity(nullptr), planisphereEntity(nullptr), noLayoutMsgBox(nullptr),
+      firstGlobeSwitch(true), geoLayoutComputed(false), renderFbo(nullptr), latProp(nullptr),
+      lngProp(nullptr) {
   mapTextureId = "leafletMap" + to_string(reinterpret_cast<uintptr_t>(this));
   setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing |
                  QPainter::TextAntialiasing);
@@ -253,15 +246,13 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(
   leafletMaps = new LeafletMaps();
   leafletMaps->setMouseTracking(false);
   leafletMaps->resize(512, 512);
-  connect(leafletMaps, SIGNAL(currentZoomChanged()), _geoView,
-          SLOT(currentZoomChanged()));
+  connect(leafletMaps, SIGNAL(currentZoomChanged()), _geoView, SLOT(currentZoomChanged()));
   _placeholderItem = new QGraphicsRectItem(0, 0, 1, 1);
   _placeholderItem->setBrush(Qt::transparent);
   _placeholderItem->setPen(QPen(Qt::transparent));
   scene()->addItem(_placeholderItem);
 
-  addressSelectionDialog =
-      new AddressSelectionDialog(Perspective::instance()->mainWindow());
+  addressSelectionDialog = new AddressSelectionDialog(Perspective::instance()->mainWindow());
 
   auto proxyGM = scene()->addWidget(leafletMaps);
   proxyGM->setPos(0, 0);
@@ -300,8 +291,8 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(
   viewTypeComboBox = new QComboBox;
   QStringList mapItems;
   mapItems.append(_geoView->getViewNameFromType(GeographicView::OpenStreetMap));
-  for (GeographicView::ViewType t = GeographicView::OpenStreetMap;
-       t <= GeographicView::Globe; t = GeographicView::ViewType(t + 1))
+  for (GeographicView::ViewType t = GeographicView::OpenStreetMap; t <= GeographicView::Globe;
+       t = GeographicView::ViewType(t + 1))
     mapItems.append(_geoView->getViewNameFromType(t));
   viewTypeComboBox->addItems(mapItems);
   viewTypeComboBox->insertSeparator(1);
@@ -316,8 +307,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(
 
   // 2 push buttons
   // zoom +
-  zoomInButton =
-      new QPushButton(QIcon(":/tulip/view/geographic/zoom+.png"), "");
+  zoomInButton = new QPushButton(QIcon(":/tulip/view/geographic/zoom+.png"), "");
   zoomInButton->setFixedSize(29, 27);
   zoomInButton->setContentsMargins(0, 0, 0, 0);
   connect(zoomInButton, SIGNAL(pressed()), _geoView, SLOT(zoomIn()));
@@ -326,8 +316,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(
   buttonProxy->setPos(20, 50);
 
   // zoom -
-  zoomOutButton =
-      new QPushButton(QIcon(":/tulip/view/geographic/zoom-.png"), "");
+  zoomOutButton = new QPushButton(QIcon(":/tulip/view/geographic/zoom-.png"), "");
   zoomOutButton->setFixedSize(29, 27);
   zoomOutButton->setContentsMargins(0, 0, 0, 0);
   connect(zoomOutButton, SIGNAL(pressed()), _geoView, SLOT(zoomOut()));
@@ -335,12 +324,11 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(
   buttonProxy->setParentItem(_placeholderItem);
   buttonProxy->setPos(20, 76);
 
-  QMessageBox *msgBox =
-      new QMessageBox(QMessageBox::Warning, "",
-                      "<font size=\"+1\"><b>The geolocated layout<br/>"
-                      "has not been initialized yet.</b></font><br/><br/>"
-                      "Open the <b>Geolocation</b> configuration tab<br/>"
-                      "to proceed.");
+  QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning, "",
+                                        "<font size=\"+1\"><b>The geolocated layout<br/>"
+                                        "has not been initialized yet.</b></font><br/><br/>"
+                                        "Open the <b>Geolocation</b> configuration tab<br/>"
+                                        "to proceed.");
   msgBox->setModal(false);
   // set a specific name before applying style sheet
   msgBox->setObjectName("needConfigurationMessageBox");
@@ -400,8 +388,8 @@ void GeographicViewGraphicsView::cleanup() {
     if (geoViewShape != graph->getProperty<IntegerProperty>("viewShape"))
       delete geoViewShape;
 
-    // those entities have been deleted by the prior call to
-    // GlScene::clearLayersList, so reset the pointers to nullptr value
+    // those entities have been deleted by the prior call to GlScene::clearLayersList,
+    // so reset the pointers to nullptr value
     polygonEntity = nullptr;
     planisphereEntity = nullptr;
   }
@@ -413,9 +401,7 @@ void GeographicViewGraphicsView::setGraph(Graph *graph) {
     GlGraphRenderingParameters rp;
 
     if (this->graph) {
-      rp = glMainWidget->getScene()
-               ->getGlGraphComposite()
-               ->getRenderingParameters();
+      rp = glMainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
     } else {
       rp.setNodesLabelStencil(1);
       rp.setLabelsAreBillboarded(true);
@@ -452,16 +438,13 @@ void GeographicViewGraphicsView::setGraph(Graph *graph) {
 }
 
 static unsigned char utf8ToLower(unsigned char c1, unsigned char c2) {
-  // C3 80 C3 81 C3 82 C3 83 C3 84 C3 85 C3 A0 C3 A1 C3 A2 C3 A3 C3 A4 C3 A5 C2
-  // AA // two-byte codes for "a" C3 88 C3 89 C3 8A C3 8B C3 A8 C3 A9 C3 AA C3
-  // AB // two-byte codes for "e" C3 8C C3 8D C3 8E C3 8F C3 AC C3 AD C3 AE C3
-  // AF // two-byte codes for "i" C3 92 C3 93 C3 94 C3 95 C3 96 C3 B2 C3 B3 C3
-  // B4 C3 B5 C3 B6 C2 BA // two-byte codes for "o" C3 99 C3 9A C3 9B C3 9C C3
-  // B9 C3 BA C3 BB C3 BC // two-byte codes for "u" C2 A9 C3 87 C3 A7 //
-  // two-byte codes for "c" C3 91 C3 B1
-  // // two-byte codes for "n" C2 AE // two-byte codes for "r" C3 9F // two-byte
-  // codes for "s" C5 BD C5 BE // two-byte codes for "z" C5 B8 C3 9D C3 BD C3 BF
-  // // two-byte codes for "y"
+  // C3 80 C3 81 C3 82 C3 83 C3 84 C3 85 C3 A0 C3 A1 C3 A2 C3 A3 C3 A4 C3 A5 C2 AA // two-byte codes
+  // for "a" C3 88 C3 89 C3 8A C3 8B C3 A8 C3 A9 C3 AA C3 AB // two-byte codes for "e" C3 8C C3 8D
+  // C3 8E C3 8F C3 AC C3 AD C3 AE C3 AF // two-byte codes for "i" C3 92 C3 93 C3 94 C3 95 C3 96 C3
+  // B2 C3 B3 C3 B4 C3 B5 C3 B6 C2 BA // two-byte codes for "o" C3 99 C3 9A C3 9B C3 9C C3 B9 C3 BA
+  // C3 BB C3 BC // two-byte codes for "u" C2 A9 C3 87 C3 A7 // two-byte codes for "c" C3 91 C3 B1
+  // // two-byte codes for "n" C2 AE // two-byte codes for "r" C3 9F // two-byte codes for "s" C5 BD
+  // C5 BE // two-byte codes for "z" C5 B8 C3 9D C3 BD C3 BF // two-byte codes for "y"
 
   if (c1 == 0xC2) {
     if (c2 == 0xAA) {
@@ -606,8 +589,8 @@ static unsigned char utf8ToLower(unsigned char c) {
 
 static void utf8ToLower(string &s) {
   // C0 C1 C2 C3 C4 C5 E0 E1 E2 E3 E4 E5 AA // one-byte codes for "a"
-  // C3 80 C3 81 C3 82 C3 83 C3 84 C3 85 C3 A0 C3 A1 C3 A2 C3 A3 C3 A4 C3 A5 C2
-  // AA // two-byte codes for "a"
+  // C3 80 C3 81 C3 82 C3 83 C3 84 C3 85 C3 A0 C3 A1 C3 A2 C3 A3 C3 A4 C3 A5 C2 AA // two-byte codes
+  // for "a"
 
   // C8 C9 CA CB E8 E9 EA EB // one-byte codes for "e"
   // C3 88 C3 89 C3 8A C3 8B C3 A8 C3 A9 C3 AA C3 AB // two-byte codes for "e"
@@ -616,8 +599,7 @@ static void utf8ToLower(string &s) {
   // C3 8C C3 8D C3 8E C3 8F C3 AC C3 AD C3 AE C3 AF // two-byte codes for "i"
 
   // D2 D3 D4 D5 D6 F2 F3 F4 F5 F6 BA // one-byte codes for "o"
-  // C3 92 C3 93 C3 94 C3 95 C3 96 C3 B2 C3 B3 C3 B4 C3 B5 C3 B6 C2 BA //
-  // two-byte codes for "o"
+  // C3 92 C3 93 C3 94 C3 95 C3 96 C3 B2 C3 B3 C3 B4 C3 B5 C3 B6 C2 BA // two-byte codes for "o"
 
   // D9 DA DB DC F9 FA FB FC // one-byte codes for "u"
   // C3 99 C3 9A C3 9B C3 9C C3 B9 C3 BA C3 BB C3 BC // two-byte codes for "u"
@@ -653,10 +635,9 @@ static void utf8ToLower(string &s) {
         } else {
           // s.at(pos) = utf8ToLower(c);
           // if it's a double code we don't recognize, skip both characters;
-          // this does mean that we lose the chance to handle back-to-back
-          // extended ascii characters but we'll assume that is less likely than
-          // a unicode "combining character" or other unrecognized unicode
-          // character for data
+          // this does mean that we lose the chance to handle back-to-back extended ascii characters
+          // but we'll assume that is less likely than a unicode "combining character" or other
+          // unrecognized unicode character for data
           i++;
         }
       } else {
@@ -729,10 +710,9 @@ void GeographicViewGraphicsView::loadCsvFile(QString fileName) {
   polygonEntity = readCsvFile(fileName);
 
   if (!polygonEntity) {
-    QMessageBox::critical(
-        Perspective::instance()->mainWindow()->centralWidget(),
-        "Can't read .poly file",
-        "We can't read csv file: " + fileName + "\nVerify the file.");
+    QMessageBox::critical(Perspective::instance()->mainWindow()->centralWidget(),
+                          "Can't read .poly file",
+                          "We can't read csv file: " + fileName + "\nVerify the file.");
     return;
   }
 
@@ -754,10 +734,9 @@ void GeographicViewGraphicsView::loadPolyFile(QString fileName) {
   polygonEntity = readPolyFile(fileName);
 
   if (!polygonEntity) {
-    QMessageBox::critical(
-        Perspective::instance()->mainWindow()->centralWidget(),
-        "Can't read .poly file",
-        "We can't read .poly file: " + fileName + "\nVerify the file.");
+    QMessageBox::critical(Perspective::instance()->mainWindow()->centralWidget(),
+                          "Can't read .poly file",
+                          "We can't read .poly file: " + fileName + "\nVerify the file.");
     return;
   }
 
@@ -790,13 +769,11 @@ void GeographicViewGraphicsView::mapToPolygon() {
           bool oddNodes = false;
           Coord lastCoord = polygonSide[0];
 
-          for (auto it = (++polygonSide.begin()); it != polygonSide.end();
-               ++it) {
+          for (auto it = (++polygonSide.begin()); it != polygonSide.end(); ++it) {
             if ((((*it)[1] < nodePos[1] && lastCoord[1] >= nodePos[1]) ||
                  (lastCoord[1] < nodePos[1] && (*it)[1] >= nodePos[1])) &&
                 ((*it)[0] <= nodePos[0] || lastCoord[0] <= nodePos[0])) {
-              oddNodes ^= ((*it)[0] + (nodePos[1] - (*it)[1]) /
-                                          (lastCoord[1] - (*it)[1]) *
+              oddNodes ^= ((*it)[0] + (nodePos[1] - (*it)[1]) / (lastCoord[1] - (*it)[1]) *
                                           (lastCoord[0] - (*it)[0]) <
                            nodePos[0]);
             }
@@ -813,11 +790,9 @@ void GeographicViewGraphicsView::mapToPolygon() {
             }
 
             geoLayout->setNodeValue(n, bb.center());
-            polygon->setFillColor(graph->getProperty<ColorProperty>("viewColor")
-                                      ->getNodeValue(n));
+            polygon->setFillColor(graph->getProperty<ColorProperty>("viewColor")->getNodeValue(n));
             polygon->setOutlineColor(
-                graph->getProperty<ColorProperty>("viewBorderColor")
-                    ->getNodeValue(n));
+                graph->getProperty<ColorProperty>("viewBorderColor")->getNodeValue(n));
             break;
           }
         }
@@ -843,16 +818,16 @@ GlGraphComposite *GeographicViewGraphicsView::getGlGraphComposite() const {
   return glMainWidget->getScene()->getGlGraphComposite();
 }
 
-void GeographicViewGraphicsView::createLayoutWithAddresses(
-    const string &addressPropertyName, bool createLatAndLngProps,
-    bool resetLatAndLngValues, bool automaticChoice) {
+void GeographicViewGraphicsView::createLayoutWithAddresses(const string &addressPropertyName,
+                                                           bool createLatAndLngProps,
+                                                           bool resetLatAndLngValues,
+                                                           bool automaticChoice) {
   geocodingActive = true;
   nodeLatLng.clear();
   Observable::holdObservers();
 
   if (graph->existProperty(addressPropertyName)) {
-    StringProperty *addressProperty =
-        graph->getProperty<StringProperty>(addressPropertyName);
+    StringProperty *addressProperty = graph->getProperty<StringProperty>(addressPropertyName);
 
     if (createLatAndLngProps) {
       latProp = graph->getProperty<DoubleProperty>("latitude");
@@ -872,9 +847,8 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(
     // hide msg
     noLayoutMsgBox->setVisible(false);
     {
-      QProgressDialog progress(
-          "Retrieving latitude/longitude for address: ", "Cancel", 0, nbNodes,
-          Perspective::instance()->mainWindow());
+      QProgressDialog progress("Retrieving latitude/longitude for address: ", "Cancel", 0, nbNodes,
+                               Perspective::instance()->mainWindow());
       progress.setWindowTitle("Retrieving latitude/longitude for address: ");
       progress.setMinimumWidth(400);
       progress.setWindowModality(Qt::WindowModal);
@@ -950,20 +924,17 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(
                 }
               } else {
                 addressSelectionDialog->clearList();
-                addressSelectionDialog->setBaseAddress(
-                    tlpStringToQString(addr));
+                addressSelectionDialog->setBaseAddress(tlpStringToQString(addr));
 
                 for (auto &result : geocodingResults) {
-                  addressSelectionDialog->addResultToList(
-                      tlpStringToQString(result.address));
+                  addressSelectionDialog->addResultToList(tlpStringToQString(result.address));
                 }
 
                 addressSelectionDialog->exec();
                 idx = addressSelectionDialog->getPickedResultIdx();
               }
             } else if (geocodingResults.empty()) {
-              qWarning() << "No geolocation found for"
-                         << tlpStringToQString(addrValue);
+              qWarning() << "No geolocation found for" << tlpStringToQString(addrValue);
               failures++;
               continue;
             }
@@ -983,14 +954,12 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(
       }
     }
     if (failures) {
-      QString msg =
-          QString("%1 %2 have not been geolocated.\nDo you want to see %3?")
-              .arg(failures > 1 ? QString::number(failures) : QString("One"))
-              .arg(failures > 1 ? "addresses" : "address")
-              .arg(failures > 1 ? "them" : "it");
+      QString msg = QString("%1 %2 have not been geolocated.\nDo you want to see %3?")
+                        .arg(failures > 1 ? QString::number(failures) : QString("One"))
+                        .arg(failures > 1 ? "addresses" : "address")
+                        .arg(failures > 1 ? "them" : "it");
 
-      if (QMessageBox::warning(Perspective::instance()->mainWindow(),
-                               "Geolocation failed", msg,
+      if (QMessageBox::warning(Perspective::instance()->mainWindow(), "Geolocation failed", msg,
                                QMessageBox::Yes | QMessageBox::No,
                                QMessageBox::Yes) == QMessageBox::Yes)
         Perspective::showLogMessages();
@@ -1001,9 +970,9 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(
   geocodingActive = false;
 }
 
-void GeographicViewGraphicsView::createLayoutWithLatLngs(
-    const std::string &latPropName, const std::string &lngPropName,
-    const string &edgesPathsPropertyName) {
+void GeographicViewGraphicsView::createLayoutWithLatLngs(const std::string &latPropName,
+                                                         const std::string &lngPropName,
+                                                         const string &edgesPathsPropertyName) {
   nodeLatLng.clear();
   pair<double, double> latLng;
 
@@ -1018,8 +987,7 @@ void GeographicViewGraphicsView::createLayoutWithLatLngs(
   }
 
   if (graph->existProperty(edgesPathsPropertyName)) {
-    auto edgesPathsProperty =
-        graph->getProperty<DoubleVectorProperty>(edgesPathsPropertyName);
+    auto edgesPathsProperty = graph->getProperty<DoubleVectorProperty>(edgesPathsPropertyName);
     for (auto e : graph->edges()) {
       auto &edgePath = edgesPathsProperty->getEdgeValue(e);
       std::vector<std::pair<double, double>> latLngs;
@@ -1041,9 +1009,8 @@ void GeographicViewGraphicsView::resizeEvent(QResizeEvent *event) {
   glWidgetItem->resize(width(), height());
 
   if (noLayoutMsgBox && noLayoutMsgBox->isVisible()) {
-    noLayoutMsgBox->setPos(
-        width() / 2 - noLayoutMsgBox->sceneBoundingRect().width() / 2,
-        height() / 2 - noLayoutMsgBox->sceneBoundingRect().height() / 2);
+    noLayoutMsgBox->setPos(width() / 2 - noLayoutMsgBox->sceneBoundingRect().width() / 2,
+                           height() / 2 - noLayoutMsgBox->sceneBoundingRect().height() / 2);
   }
 
   if (scene()) {
@@ -1052,7 +1019,9 @@ void GeographicViewGraphicsView::resizeEvent(QResizeEvent *event) {
 }
 
 #ifdef QT_HAS_WEBENGINE
-void GeographicViewGraphicsView::queueMapRefresh() { tId = startTimer(10); }
+void GeographicViewGraphicsView::queueMapRefresh() {
+  tId = startTimer(10);
+}
 
 void GeographicViewGraphicsView::timerEvent(QTimerEvent *event) {
   killTimer(event->timerId());
@@ -1080,19 +1049,13 @@ void GeographicViewGraphicsView::refreshMap() {
   if (rightCoord[0] - leftCoord[0]) {
     float mapWidth = (width() / (rightCoord - leftCoord)[0]) * 180.;
     float middleLng =
-        leafletMaps->getLatLngForPixelPosOnScreen(width() / 2., height() / 2.)
-            .second *
-        2.;
-    bb.expand(
-        Coord(middleLng - mapWidth / 2.,
-              latitudeToMercator(
-                  leafletMaps->getLatLngForPixelPosOnScreen(0, 0).first * 2.),
-              0));
+        leafletMaps->getLatLngForPixelPosOnScreen(width() / 2., height() / 2.).second * 2.;
+    bb.expand(Coord(middleLng - mapWidth / 2.,
+                    latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(0, 0).first * 2.),
+                    0));
     bb.expand(Coord(
         middleLng + mapWidth / 2.,
-        latitudeToMercator(
-            leafletMaps->getLatLngForPixelPosOnScreen(width(), height()).first *
-            2.),
+        latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(width(), height()).first * 2.),
         0));
     GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(), bb, "Main", 1);
     sceneZoomAndPan.zoomAndPanAnimationStep(1);
@@ -1103,8 +1066,7 @@ void GeographicViewGraphicsView::refreshMap() {
   scene()->update();
 }
 
-void GeographicViewGraphicsView::setMapTranslationBlocked(
-    const bool translationBlocked) {
+void GeographicViewGraphicsView::setMapTranslationBlocked(const bool translationBlocked) {
   mapTranslationBlocked = translationBlocked;
 }
 
@@ -1127,36 +1089,26 @@ void GeographicViewGraphicsView::setGeoLayout(LayoutProperty *property) {
     *property = *geoLayout;
     geoLayout = property;
     geoLayout->addListener(this);
-    glMainWidget->getScene()
-        ->getGlGraphComposite()
-        ->getInputData()
-        ->setElementLayout(geoLayout);
+    glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setElementLayout(geoLayout);
   }
 }
 
 void GeographicViewGraphicsView::setGeoSizes(SizeProperty *property) {
   *property = *geoViewSize;
   geoViewSize = property;
-  glMainWidget->getScene()
-      ->getGlGraphComposite()
-      ->getInputData()
-      ->setElementSize(geoViewSize);
+  glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setElementSize(geoViewSize);
 }
 
 void GeographicViewGraphicsView::setGeoShape(IntegerProperty *property) {
   *property = *geoViewShape;
   geoViewShape = property;
-  glMainWidget->getScene()
-      ->getGlGraphComposite()
-      ->getInputData()
-      ->setElementShape(geoViewShape);
+  glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setElementShape(geoViewShape);
 }
 
 void GeographicViewGraphicsView::treatEvent(const Event &ev) {
   const PropertyEvent *propEvt = dynamic_cast<const PropertyEvent *>(&ev);
 
-  if (propEvt &&
-      propEvt->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE &&
+  if (propEvt && propEvt->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE &&
       propEvt->getProperty() == geoLayout) {
     // update latitude/longitude properties
     if (latProp && lngProp) {
@@ -1182,8 +1134,7 @@ void GeographicViewGraphicsView::switchViewType() {
   case GeographicView::LeafletCustomTileLayer: {
     enableLeafletMap = true;
     QString url = _geoView->getConfigWidget()->getCustomTileLayerUrl();
-    QString attribution =
-        _geoView->getConfigWidget()->getCustomTilesAttribution();
+    QString attribution = _geoView->getConfigWidget()->getCustomTilesAttribution();
     // if attribution is empty or fill with white spaces
     // set it to url
     if (attribution.simplified().isEmpty())
@@ -1222,8 +1173,7 @@ void GeographicViewGraphicsView::switchViewType() {
 
   GlLayer *layer = glMainWidget->getScene()->getLayer("Main");
 
-  if (geoLayout == graph->getProperty<LayoutProperty>("viewLayout") &&
-      geoLayoutComputed)
+  if (geoLayout == graph->getProperty<LayoutProperty>("viewLayout") && geoLayoutComputed)
     graph->push();
 
   Observable::holdObservers();
@@ -1248,8 +1198,7 @@ void GeographicViewGraphicsView::switchViewType() {
 
       if (nodeLatLng.find(n) != nodeLatLng.end()) {
         geoLayout->setNodeValue(
-            n, Coord(nodeLatLng[n].second * 2.,
-                     latitudeToMercator(nodeLatLng[n].first * 2.), 0));
+            n, Coord(nodeLatLng[n].second * 2., latitudeToMercator(nodeLatLng[n].first * 2.), 0));
       }
     }
     geoLayout->addListener(this);
@@ -1260,8 +1209,7 @@ void GeographicViewGraphicsView::switchViewType() {
         vector<Coord> edgeBendsCoords;
         edgeBendsCoords.reserve(eb.size());
         for (unsigned int i = 0; i < eb.size(); ++i) {
-          edgeBendsCoords.emplace_back(eb[i].second * 2.,
-                                       latitudeToMercator(eb[i].first * 2.), 0);
+          edgeBendsCoords.emplace_back(eb[i].second * 2., latitudeToMercator(eb[i].first * 2.), 0);
         }
 
         geoLayout->setEdgeValue(e, edgeBendsCoords);
@@ -1281,10 +1229,8 @@ void GeographicViewGraphicsView::switchViewType() {
     if (!planisphereEntity) {
       GlOffscreenRenderer::getInstance()->makeOpenGLContextCurrent();
       GlTextureManager::loadTexture(planisphereTextureId);
-      planisphereEntity = new GlSphere(Coord(0., 0., 0.), 50.,
-                                       planisphereTextureId, 255, 0, 0, 90);
-      glMainWidget->getScene()->getLayer("Main")->addGlEntity(planisphereEntity,
-                                                              "globeMap");
+      planisphereEntity = new GlSphere(Coord(0., 0., 0.), 50., planisphereTextureId, 255, 0, 0, 90);
+      glMainWidget->getScene()->getLayer("Main")->addGlEntity(planisphereEntity, "globeMap");
     }
 
     if (geoLayoutComputed) {
@@ -1305,8 +1251,8 @@ void GeographicViewGraphicsView::switchViewType() {
         }
 
         if (nodeLatLng.find(n) != nodeLatLng.end()) {
-          Coord tmp(nodeLatLng[n].first * 2. / 360. * M_PI,
-                    nodeLatLng[n].second * 2. / 360. * M_PI, 0);
+          Coord tmp(nodeLatLng[n].first * 2. / 360. * M_PI, nodeLatLng[n].second * 2. / 360. * M_PI,
+                    0);
 
           float lambda = tmp[1];
           float theta;
@@ -1318,8 +1264,7 @@ void GeographicViewGraphicsView::switchViewType() {
 
           float phi = M_PI / 2.0 - tmp[0];
 
-          tmp = Coord(50. * sin(phi) * cos(theta), 50. * sin(phi) * sin(theta),
-                      50. * cos(phi));
+          tmp = Coord(50. * sin(phi) * cos(theta), 50. * sin(phi) * sin(theta), 50. * cos(phi));
           geoLayout->setNodeValue(n, tmp);
         }
       }
@@ -1338,8 +1283,7 @@ void GeographicViewGraphicsView::switchViewType() {
         bends.reserve(bendsNumber);
 
         for (unsigned int i = 0; i < bendsNumber; ++i) {
-          Coord &&tmp =
-              srcC + ((tgtC - srcC) / (bendsNumber + 1.f)) * (i + 1.f);
+          Coord &&tmp = srcC + ((tgtC - srcC) / (bendsNumber + 1.f)) * (i + 1.f);
           float lambda = tmp[1];
           float theta;
 
@@ -1350,8 +1294,8 @@ void GeographicViewGraphicsView::switchViewType() {
 
           float phi = M_PI / 2.0 - tmp[0];
 
-          bends.emplace_back(75. * sin(phi) * cos(theta),
-                             75. * sin(phi) * sin(theta), 75. * cos(phi));
+          bends.emplace_back(75. * sin(phi) * cos(theta), 75. * sin(phi) * sin(theta),
+                             75. * cos(phi));
         }
 
         geoLayout->setEdgeValue(e, bends);
@@ -1383,10 +1327,8 @@ void GeographicViewGraphicsView::switchViewType() {
   if (planisphereEntity)
     planisphereEntity->setVisible(enablePlanisphere);
 
-  glMainWidget->getScene()
-      ->getGlGraphComposite()
-      ->getRenderingParametersPointer()
-      ->setEdge3D(viewType == GeographicView::Globe);
+  glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setEdge3D(
+      viewType == GeographicView::Globe);
 
   Observable::unholdObservers();
 
@@ -1412,12 +1354,10 @@ void GeographicViewGraphicsView::updateMapTexture() {
 
   GlOffscreenRenderer::getInstance()->makeOpenGLContextCurrent();
 
-  if (renderFbo == nullptr || renderFbo->width() != width ||
-      renderFbo->height() != height) {
+  if (renderFbo == nullptr || renderFbo->width() != width || renderFbo->height() != height) {
     delete renderFbo;
     renderFbo = new QOpenGLFramebufferObject(width, height);
-    GlTextureManager::registerExternalTexture(mapTextureId,
-                                              renderFbo->texture());
+    GlTextureManager::registerExternalTexture(mapTextureId, renderFbo->texture());
   }
 
   renderFbo->bind();

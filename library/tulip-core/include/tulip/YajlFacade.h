@@ -31,9 +31,9 @@ struct yajl_gen_t;
 /**
  * @brief A Simple C++ wrapper around the C library 'yajl' parsing capabilities.
  *
- * It uses callbacks to signal what is being parsed (map start and end, strings,
- *...), and this class is intended to be subclassed, with the subclass
- *overriding the callbacks to process the events.
+ * It uses callbacks to signal what is being parsed (map start and end, strings, ...), and this
+ *class is intended to be subclassed,
+ * with the subclass overriding the callbacks to process the events.
  **/
 class TLP_SCOPE YajlParseFacade {
 public:
@@ -42,8 +42,8 @@ public:
   virtual ~YajlParseFacade() {}
   /**
    * @brief Parses a JSON file.
-   * Once this function is called, the callbacks (all the parse* functions) will
-   *get called when the corresponding event happens.
+   * Once this function is called, the callbacks (all the parse* functions) will get called when the
+   *corresponding event happens.
    *
    * @param filename The file to parse.
    * @return void

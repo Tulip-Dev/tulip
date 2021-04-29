@@ -18,10 +18,10 @@
  */
 #include "tulip/CaptionItem.h"
 
-#include <tulip/CaptionGraphicsItem.h>
-#include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
+#include <tulip/ColorProperty.h>
 #include <tulip/SizeProperty.h>
+#include <tulip/CaptionGraphicsItem.h>
 #include <tulip/View.h>
 
 #include <QtGui/QLinearGradient>
@@ -31,17 +31,18 @@ using namespace std;
 namespace tlp {
 
 CaptionItem::CaptionItem(View *view)
-    : view(view), _graph(nullptr), _metricProperty(nullptr),
-      _colorProperty(nullptr), _sizeProperty(nullptr),
-      _backupColorProperty(nullptr), _backupBorderColorProperty(nullptr) {
+    : view(view), _graph(nullptr), _metricProperty(nullptr), _colorProperty(nullptr),
+      _sizeProperty(nullptr), _backupColorProperty(nullptr), _backupBorderColorProperty(nullptr) {
   _captionGraphicsItem = new CaptionGraphicsItem(view);
   connect(_captionGraphicsItem, SIGNAL(filterChanged(float, float)), this,
           SLOT(applyNewFilter(float, float)));
-  connect(_captionGraphicsItem, SIGNAL(selectedPropertyChanged(std::string)),
-          this, SLOT(selectedPropertyChanged(std::string)));
+  connect(_captionGraphicsItem, SIGNAL(selectedPropertyChanged(std::string)), this,
+          SLOT(selectedPropertyChanged(std::string)));
 }
 
-CaptionItem::~CaptionItem() { clearObservers(); }
+CaptionItem::~CaptionItem() {
+  clearObservers();
+}
 
 void CaptionItem::create(CaptionType captionType) {
   _captionType = captionType;
@@ -101,8 +102,8 @@ void CaptionItem::clearObservers() {
     _metricProperty->removeObserver(this);
 
   if (!_captionGraphicsItem->usedProperty().empty()) {
-    _metricProperty = view->graph()->getProperty<DoubleProperty>(
-        _captionGraphicsItem->usedProperty());
+    _metricProperty =
+        view->graph()->getProperty<DoubleProperty>(_captionGraphicsItem->usedProperty());
     _metricProperty->addObserver(this);
   } else {
     _metricProperty = nullptr;
@@ -144,10 +145,8 @@ void CaptionItem::generateColorCaption(CaptionType captionType) {
   string propertyName = "empty";
 
   if (_metricProperty == nullptr) {
-    metricToColorFiltered.push_back(
-        pair<double, Color>(0., Color(255, 255, 255, 255)));
-    metricToColorFiltered.push_back(
-        pair<double, Color>(1., Color(255, 255, 255, 255)));
+    metricToColorFiltered.push_back(pair<double, Color>(0., Color(255, 255, 255, 255)));
+    metricToColorFiltered.push_back(pair<double, Color>(1., Color(255, 255, 255, 255)));
   } else {
 
     map<double, Color> metricToColorMap;
@@ -157,8 +156,7 @@ void CaptionItem::generateColorCaption(CaptionType captionType) {
       maxProp = _metricProperty->getNodeMax();
 
       for (auto n : view->graph()->nodes()) {
-        metricToColorMap[_metricProperty->getNodeValue(n)] =
-            _colorProperty->getNodeValue(n);
+        metricToColorMap[_metricProperty->getNodeValue(n)] = _colorProperty->getNodeValue(n);
       }
 
     } else {
@@ -166,8 +164,7 @@ void CaptionItem::generateColorCaption(CaptionType captionType) {
       maxProp = _metricProperty->getEdgeMax();
 
       for (auto e : view->graph()->edges()) {
-        metricToColorMap[_metricProperty->getEdgeValue(e)] =
-            _colorProperty->getEdgeValue(e);
+        metricToColorMap[_metricProperty->getEdgeValue(e)] = _colorProperty->getEdgeValue(e);
       }
     }
 
@@ -186,15 +183,13 @@ void CaptionItem::generateColorCaption(CaptionType captionType) {
   }
 
   if (metricToColorFiltered.size() < 2) {
-    metricToColorFiltered.push_back(
-        pair<double, Color>(0., Color(255, 255, 255, 255)));
-    metricToColorFiltered.push_back(
-        pair<double, Color>(1., Color(255, 255, 255, 255)));
+    metricToColorFiltered.push_back(pair<double, Color>(0., Color(255, 255, 255, 255)));
+    metricToColorFiltered.push_back(pair<double, Color>(1., Color(255, 255, 255, 255)));
   }
 
   generateGradients(metricToColorFiltered, activeGradient, hideGradient);
-  _captionGraphicsItem->generateColorCaption(activeGradient, hideGradient,
-                                             propertyName, minProp, maxProp);
+  _captionGraphicsItem->generateColorCaption(activeGradient, hideGradient, propertyName, minProp,
+                                             maxProp);
 }
 
 void CaptionItem::generateSizeCaption(CaptionType captionType) {
@@ -205,8 +200,7 @@ void CaptionItem::generateSizeCaption(CaptionType captionType) {
     vector<pair<double, float>> metricToSizeFiltered;
     metricToSizeFiltered.push_back(pair<double, float>(0., 1.));
     metricToSizeFiltered.push_back(pair<double, float>(1., 1.));
-    _captionGraphicsItem->generateSizeCaption(metricToSizeFiltered, "empty", 0.,
-                                              1.);
+    _captionGraphicsItem->generateSizeCaption(metricToSizeFiltered, "empty", 0., 1.);
     return;
   }
 
@@ -220,8 +214,7 @@ void CaptionItem::generateSizeCaption(CaptionType captionType) {
   if (captionType == NodesSizeCaption) {
 
     for (auto n : view->graph()->nodes()) {
-      metricToSizeMap[_metricProperty->getNodeValue(n)] =
-          _sizeProperty->getNodeValue(n)[0];
+      metricToSizeMap[_metricProperty->getNodeValue(n)] = _sizeProperty->getNodeValue(n)[0];
 
       if (maxSize < _sizeProperty->getNodeValue(n)[0])
         maxSize = _sizeProperty->getNodeValue(n)[0];
@@ -230,8 +223,7 @@ void CaptionItem::generateSizeCaption(CaptionType captionType) {
   } else {
 
     for (auto e : view->graph()->edges()) {
-      metricToSizeMap[_metricProperty->getEdgeValue(e)] =
-          _sizeProperty->getEdgeValue(e)[0];
+      metricToSizeMap[_metricProperty->getEdgeValue(e)] = _sizeProperty->getEdgeValue(e)[0];
 
       if (maxSize < _sizeProperty->getEdgeValue(e)[0])
         maxSize = _sizeProperty->getEdgeValue(e)[0];
@@ -241,11 +233,10 @@ void CaptionItem::generateSizeCaption(CaptionType captionType) {
   double intervale = (maxProp - minProp) / 50.;
   double nextValue = minProp;
 
-  for (map<double, float>::const_iterator it = metricToSizeMap.begin();
-       it != metricToSizeMap.end(); ++it) {
+  for (map<double, float>::const_iterator it = metricToSizeMap.begin(); it != metricToSizeMap.end();
+       ++it) {
     if ((*it).first >= nextValue) {
-      metricToSizeFiltered.push_back(
-          pair<double, float>((*it).first, (*it).second / maxSize));
+      metricToSizeFiltered.push_back(pair<double, float>((*it).first, (*it).second / maxSize));
       nextValue += intervale;
     }
   }
@@ -263,35 +254,28 @@ void CaptionItem::generateSizeCaption(CaptionType captionType) {
     metricToSizeFiltered.clear();
     metricToSizeFiltered.push_back(pair<double, float>(0., 1.));
     metricToSizeFiltered.push_back(pair<double, float>(1., 1.));
-    _captionGraphicsItem->generateSizeCaption(metricToSizeFiltered, "empty", 0.,
-                                              1.);
+    _captionGraphicsItem->generateSizeCaption(metricToSizeFiltered, "empty", 0., 1.);
     return;
   }
 
-  _captionGraphicsItem->generateSizeCaption(
-      metricToSizeFiltered, _captionGraphicsItem->usedProperty(), minProp,
-      maxProp);
+  _captionGraphicsItem->generateSizeCaption(metricToSizeFiltered,
+                                            _captionGraphicsItem->usedProperty(), minProp, maxProp);
 }
 
-void CaptionItem::generateGradients(
-    const vector<pair<double, Color>> &metricToColorFiltered,
-    QGradient &activeGradient, QGradient &hideGradient) {
+void CaptionItem::generateGradients(const vector<pair<double, Color>> &metricToColorFiltered,
+                                    QGradient &activeGradient, QGradient &hideGradient) {
   double minProp = (*metricToColorFiltered.begin()).first;
   double maxProp = (*(--metricToColorFiltered.end())).first;
 
   Color color;
 
-  for (vector<pair<double, Color>>::const_iterator it =
-           metricToColorFiltered.begin();
+  for (vector<pair<double, Color>>::const_iterator it = metricToColorFiltered.begin();
        it != metricToColorFiltered.end(); ++it) {
-    float position = (maxProp - minProp)
-                         ? (1. - ((*it).first - minProp) / (maxProp - minProp))
-                         : 0.0;
+    float position =
+        (maxProp - minProp) ? (1. - ((*it).first - minProp) / (maxProp - minProp)) : 0.0;
     color = (*it).second;
-    activeGradient.setColorAt(position,
-                              QColor(color[0], color[1], color[2], 255));
-    hideGradient.setColorAt(position,
-                            QColor(color[0], color[1], color[2], 100));
+    activeGradient.setColorAt(position, QColor(color[0], color[1], color[2], 255));
+    hideGradient.setColorAt(position, QColor(color[0], color[1], color[2], 100));
   }
 }
 
@@ -304,8 +288,7 @@ void CaptionItem::removeObservation(bool remove) {
     _graph->addObserver(this);
     _metricProperty->addObserver(this);
 
-    if (_captionType == NodesColorCaption ||
-        _captionType == EdgesColorCaption) {
+    if (_captionType == NodesColorCaption || _captionType == EdgesColorCaption) {
       _colorProperty->addObserver(this);
     } else {
       _sizeProperty->addObserver(this);
@@ -316,8 +299,7 @@ void CaptionItem::removeObservation(bool remove) {
     if (_metricProperty)
       _metricProperty->removeObserver(this);
 
-    if (_captionType == NodesColorCaption ||
-        _captionType == EdgesColorCaption) {
+    if (_captionType == NodesColorCaption || _captionType == EdgesColorCaption) {
       _colorProperty->removeObserver(this);
     } else {
       _sizeProperty->removeObserver(this);
@@ -341,8 +323,7 @@ void CaptionItem::applyNewFilter(float begin, float end) {
 
   Observable::holdObservers();
 
-  ColorProperty *borderColorProperty =
-      _graph->getProperty<ColorProperty>("viewBorderColor");
+  ColorProperty *borderColorProperty = _graph->getProperty<ColorProperty>("viewBorderColor");
 
   if (!_backupBorderColorProperty) {
     _backupBorderColorProperty = new ColorProperty(_graph);

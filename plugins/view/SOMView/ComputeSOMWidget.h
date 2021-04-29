@@ -22,8 +22,8 @@
 
 #include <QWidget>
 
-#include <string>
 #include <vector>
+#include <string>
 
 namespace Ui {
 class SOMComputeWidget;
@@ -33,8 +33,7 @@ namespace tlp {
 
 class Graph;
 /**
- * @brief Class configuring properties selected and number of iteration for
- * computing SOM.
+ * @brief Class configuring properties selected and number of iteration for computing SOM.
  */
 class ComputeSOMWidget : public QWidget {
   Q_OBJECT
@@ -47,8 +46,7 @@ public:
   void setNumber(unsigned uintValue);
   void clearLists();
   std::vector<std::string> getSelectedProperties();
-  void setWidgetParameters(tlp::Graph *g,
-                           std::vector<std::string> &propertyFilterType);
+  void setWidgetParameters(tlp::Graph *g, std::vector<std::string> &propertyFilterType);
   void setOutputPropertiesList(std::vector<std::string> &properties);
 };
 } // namespace tlp

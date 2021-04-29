@@ -20,8 +20,8 @@
 #ifndef PYTHONPLUGINSIDE_H
 #define PYTHONPLUGINSIDE_H
 
-#include <QDateTime>
 #include <QFrame>
+#include <QDateTime>
 #include <QMap>
 #include <QUrl>
 
@@ -67,8 +67,7 @@ class TLP_PYTHON_SCOPE PythonIDE : public QFrame {
   QWidget *_moduleEditorsWidget, *_moduleControlWidget;
 
   bool loadPythonPlugin(const QString &fileName, bool clear = true);
-  bool loadPythonPluginFromSrcCode(const QString &moduleName,
-                                   const QString &pluginSrcCode,
+  bool loadPythonPluginFromSrcCode(const QString &moduleName, const QString &pluginSrcCode,
                                    bool clear = true);
   void savePythonPlugin(int tabIdx);
   bool indicateErrors() const;
@@ -84,8 +83,7 @@ class TLP_PYTHON_SCOPE PythonIDE : public QFrame {
   QString readProjectFile(const QString &filePath);
   void writeScriptFileToProject(int idx, const QString &scriptFileName,
                                 const QString &scriptContent);
-  void writeFileToProject(const QString &projectFile,
-                          const QString &fileContent);
+  void writeFileToProject(const QString &projectFile, const QString &fileContent);
   void deleteFilesFromProjectIfRemoved(const QString &projectDir,
                                        const QStringList &existingFilenames);
 
@@ -124,8 +122,7 @@ private:
   tlp::PythonCodeEditor *getCurrentPluginEditor() const;
 
   bool closeEditorTabRequested(PythonEditorsTabWidget *tabWidget, int idx);
-  bool loadModuleFromSrcCode(const QString &moduleName,
-                             const QString &moduleSrcCode);
+  bool loadModuleFromSrcCode(const QString &moduleName, const QString &moduleSrcCode);
 
   void loadScriptsAndModulesFromPythonScriptViewDataSet(const DataSet &dataSet);
 

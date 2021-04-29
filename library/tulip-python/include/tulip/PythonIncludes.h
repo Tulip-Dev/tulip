@@ -20,12 +20,11 @@
 #ifndef PYTHONINCLUDES_H
 #define PYTHONINCLUDES_H
 
-// Need to include cmath before Python.h when compiling with MinGW and C++11
-// standard to avoid a compilation error (see
-// http://stackoverflow.com/questions/28683358/)
+// Need to include cmath before Python.h when compiling with MinGW and C++11 standard
+// to avoid a compilation error (see http://stackoverflow.com/questions/28683358/)
 #if defined(__MINGW32__)
-#include <cmath>
 #include <math.h>
+#include <cmath>
 #endif
 
 // thanks to the VTK project for this patch for Visual Studio in debug mode
@@ -34,8 +33,8 @@
 // a debug build against a release build of python the compiler will end up
 // including these low level headers without DEBUG enabled, causing it to try
 // and link release versions of this low level C api.
-#include <assert.h>
 #include <basetsd.h>
+#include <assert.h>
 #include <ctype.h>
 #include <errno.h>
 #include <io.h>
@@ -54,16 +53,16 @@
 #endif
 #include <Python.h>
 #include <frameobject.h>
+#include <structmember.h>
 #include <import.h>
 #include <sip.h>
-#include <structmember.h>
 #define _DEBUG
 #else
 #include <Python.h>
 #include <frameobject.h>
+#include <structmember.h>
 #include <import.h>
 #include <sip.h>
-#include <structmember.h>
 #endif
 
 #include <tulip/tulipconf.h>
@@ -72,8 +71,7 @@
 
 static const sipAPIDef *getSipAPI() {
 #if defined(SIP_USE_PYCAPSULE)
-  return static_cast<const sipAPIDef *>(
-      PyCapsule_Import(SIP_MODULE_STR "._C_API", 0));
+  return static_cast<const sipAPIDef *>(PyCapsule_Import(SIP_MODULE_STR "._C_API", 0));
 #else
   PyObject *sip_module;
   PyObject *sip_module_dict;
@@ -189,10 +187,8 @@ inline const sipAPIDef *sipAPI() {
 #define sipUnicode_AsWChar sipAPI()->api_unicode_as_wchar
 #define sipUnicode_AsWString sipAPI()->api_unicode_as_wstring
 #define sipConvertFromConstVoidPtr sipAPI()->api_convert_from_const_void_ptr
-#define sipConvertFromVoidPtrAndSize                                           \
-  sipAPI()->api_convert_from_void_ptr_and_size
-#define sipConvertFromConstVoidPtrAndSize                                      \
-  sipAPI()->api_convert_from_const_void_ptr_and_size
+#define sipConvertFromVoidPtrAndSize sipAPI()->api_convert_from_void_ptr_and_size
+#define sipConvertFromConstVoidPtrAndSize sipAPI()->api_convert_from_const_void_ptr_and_size
 #define sipInvokeSlot sipAPI()->api_invoke_slot
 #define sipInvokeSlotEx sipAPI()->api_invoke_slot_ex
 #define sipSaveSlot sipAPI()->api_save_slot

@@ -25,7 +25,8 @@
 #include <tulip/BmdLink.h>
 
 namespace tlp {
-template <typename TYPE> class BmdList {
+template <typename TYPE>
+class BmdList {
 public:
   typedef tlp::BmdLink<TYPE> BMDTYPE;
 
@@ -57,13 +58,16 @@ private:
 
 #include <tulip/cxx/BmdList.cxx>
 
-template <typename TYPE> struct BmdListIt : public Iterator<TYPE> {
+template <typename TYPE>
+struct BmdListIt : public Iterator<TYPE> {
 
   BmdListIt(BmdList<TYPE> &bmdList) : bmdList(bmdList) {
     pos = bmdList.firstItem();
     pred = nullptr;
   }
-  bool hasNext() override { return pos != nullptr; }
+  bool hasNext() override {
+    return pos != nullptr;
+  }
   TYPE next() override {
     TYPE val = pos->getData();
     tlp::BmdLink<TYPE> *tmp = pos;
@@ -78,12 +82,15 @@ private:
   BmdList<TYPE> &bmdList;
 };
 
-template <typename TYPE> struct BmdListRevIt : public Iterator<TYPE> {
+template <typename TYPE>
+struct BmdListRevIt : public Iterator<TYPE> {
   BmdListRevIt(BmdList<TYPE> &bmdList) : bmdList(bmdList) {
     pos = bmdList.lastItem();
     suc = nullptr;
   }
-  bool hasNext() override { return pos != nullptr; }
+  bool hasNext() override {
+    return pos != nullptr;
+  }
   TYPE next() override {
     TYPE val = pos->getData();
     tlp::BmdLink<TYPE> *tmp = pos;

@@ -17,8 +17,8 @@
  *
  */
 
-#include <tulip/StringCollection.h>
 #include <tulip/StringProperty.h>
+#include <tulip/StringCollection.h>
 
 #include "StrahlerMetric.h"
 
@@ -38,7 +38,8 @@ struct couple {
   }
 };
 
-template <> struct equal_to<couple> {
+template <>
+struct equal_to<couple> {
   bool operator()(const couple c, const couple d) {
     if ((c.r == d.r) && (c.p == d.p))
       return true;
@@ -47,7 +48,8 @@ template <> struct equal_to<couple> {
   }
 };
 
-template <> struct less<couple> {
+template <>
+struct less<couple> {
   bool operator()(const couple c, const couple d) {
     return (c.r < d.r) || ((c.r == d.r) && (c.p < d.p));
   }
@@ -65,12 +67,12 @@ struct GreaterStackEval {
   }
 };
 
-Strahler StrahlerMetric::topSortStrahler(
-    tlp::node n, int &curPref, std::unordered_map<node, int> &tofree,
-    std::unordered_map<node, int> &prefix,
-    std::unordered_map<node, bool> &visited,
-    std::unordered_map<node, bool> &finished,
-    std::unordered_map<node, Strahler> &cachedValues) {
+Strahler StrahlerMetric::topSortStrahler(tlp::node n, int &curPref,
+                                         std::unordered_map<node, int> &tofree,
+                                         std::unordered_map<node, int> &prefix,
+                                         std::unordered_map<node, bool> &visited,
+                                         std::unordered_map<node, bool> &finished,
+                                         std::unordered_map<node, Strahler> &cachedValues) {
   visited[n] = true;
   Strahler result;
   prefix[n] = curPref;
@@ -90,17 +92,15 @@ Strahler StrahlerMetric::topSortStrahler(
     if (!visited[tmpN]) {
       // Arc Normal
       tofree[n] = 0;
-      Strahler tmpValue = topSortStrahler(tmpN, curPref, tofree, prefix,
-                                          visited, finished, cachedValues);
+      Strahler tmpValue =
+          topSortStrahler(tmpN, curPref, tofree, prefix, visited, finished, cachedValues);
       // Data for strahler evaluation on the spanning Dag.
       strahlerResult.push_front(tmpValue.strahler);
       // Counting current used stacks.
-      tmpEval.push_back(
-          StackEval(tmpValue.stacks - tmpValue.usedStack + tofree[n],
-                    tmpValue.usedStack - tofree[n]));
+      tmpEval.push_back(StackEval(tmpValue.stacks - tmpValue.usedStack + tofree[n],
+                                  tmpValue.usedStack - tofree[n]));
       // Looking if we need more stacks to evaluate this node.
-      // old
-      // freeStacks=max(freeStacks,tmpValue.stacks-tmpValue.usedStack+tofree[n]);
+      // old freeStacks=max(freeStacks,tmpValue.stacks-tmpValue.usedStack+tofree[n]);
     } else {
       if (finished[tmpN]) {
         if (prefix[tmpN] < prefix[n]) {
@@ -187,8 +187,7 @@ static const char *paramHelp[] = {
 StrahlerMetric::StrahlerMetric(const tlp::PluginContext *context)
     : DoubleAlgorithm(context), allNodes(false) {
   addInParameter<bool>("All nodes", paramHelp[0], "false");
-  addInParameter<StringCollection>(COMPUTATION_TYPE, paramHelp[1],
-                                   COMPUTATION_TYPES, true,
+  addInParameter<StringCollection>(COMPUTATION_TYPE, paramHelp[1], COMPUTATION_TYPES, true,
                                    "all <br> ramification <br> nested cycles");
 }
 //==============================================================================
@@ -218,8 +217,7 @@ bool StrahlerMetric::run() {
     tofree[n] = 0;
 
     if (!finished[n]) {
-      topSortStrahler(n, curPref, tofree, prefix, visited, finished,
-                      cachedValues);
+      topSortStrahler(n, curPref, tofree, prefix, visited, finished, cachedValues);
     }
 
     if (allNodes) {
@@ -229,10 +227,9 @@ bool StrahlerMetric::run() {
 
       switch (computationTypes.getCurrent()) {
       case ALL:
-        result->setNodeValue(n, sqrt(double(cachedValues[n].strahler) *
-                                         double(cachedValues[n].strahler) +
-                                     double(cachedValues[n].stacks) *
-                                         double(cachedValues[n].stacks)));
+        result->setNodeValue(
+            n, sqrt(double(cachedValues[n].strahler) * double(cachedValues[n].strahler) +
+                    double(cachedValues[n].stacks) * double(cachedValues[n].stacks)));
         break;
 
       case REGISTERS:
@@ -261,10 +258,9 @@ bool StrahlerMetric::run() {
 
       switch (computationTypes.getCurrent()) {
       case ALL:
-        result->setNodeValue(n, sqrt(double(cachedValues[n].strahler) *
-                                         double(cachedValues[n].strahler) +
-                                     double(cachedValues[n].stacks) *
-                                         double(cachedValues[n].stacks)));
+        result->setNodeValue(
+            n, sqrt(double(cachedValues[n].strahler) * double(cachedValues[n].strahler) +
+                    double(cachedValues[n].stacks) * double(cachedValues[n].stacks)));
         break;
 
       case REGISTERS:

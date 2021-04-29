@@ -38,19 +38,17 @@ double unprojectRho(double rho_s, double R, double k) {
   double t33 = t8 * t8;
   double t39 = t19 * t13;
   double t46 = R * t13;
-  double t53 = 8.0 * t8 * t14 + 4.0 * t14 + 8.0 * t18 * t19 + 4.0 * t22 * t14 +
-               12.0 * t25 + 12.0 * t22 * t13 + 12.0 * t29 + 12.0 * t22 * k +
-               4.0 * R * t33 * t13 - 20.0 * t29 * t8 - 20.0 * t39 * t8 +
-               4.0 * t33 * t14 + 4.0 * t22 + 24.0 * t39 + 12.0 * t46 +
-               12.0 * t19 * k - t25 * t8 + 16.0 * t46 * t8;
+  double t53 = 8.0 * t8 * t14 + 4.0 * t14 + 8.0 * t18 * t19 + 4.0 * t22 * t14 + 12.0 * t25 +
+               12.0 * t22 * t13 + 12.0 * t29 + 12.0 * t22 * k + 4.0 * R * t33 * t13 -
+               20.0 * t29 * t8 - 20.0 * t39 * t8 + 4.0 * t33 * t14 + 4.0 * t22 + 24.0 * t39 +
+               12.0 * t46 + 12.0 * t19 * k - t25 * t8 + 16.0 * t46 * t8;
   double t55 = sqrt(t53 * t1);
-  double t60 = pow((-36.0 * t2 * k + 72.0 * rho_s * k + 72.0 * t2 +
-                    8.0 * t8 * rho_s * k + 12.0 * t12 * t55) *
-                       t13,
-                   0.3333333333333333);
-  double t72 = t1 * t60 / 6.0 +
-               2.0 / 3.0 * (-3.0 * R * k - 3.0 * k - 3.0 * R + t18) / t60 +
-               rho_s / 3.0;
+  double t60 = pow(
+      (-36.0 * t2 * k + 72.0 * rho_s * k + 72.0 * t2 + 8.0 * t8 * rho_s * k + 12.0 * t12 * t55) *
+          t13,
+      0.3333333333333333);
+  double t72 =
+      t1 * t60 / 6.0 + 2.0 / 3.0 * (-3.0 * R * k - 3.0 * k - 3.0 * R + t18) / t60 + rho_s / 3.0;
   return t72;
 }
 //==============================================================
@@ -68,9 +66,13 @@ FishEyesScreen::FishEyesScreen() {
   fisheyesCenter.fill(0);
 }
 //==============================================================
-void FishEyesScreen::setRadius(double r) { R = r * r / 2.0; }
+void FishEyesScreen::setRadius(double r) {
+  R = r * r / 2.0;
+}
 //==============================================================
-double FishEyesScreen::getRadius() { return sqrt(2.0 * R); }
+double FishEyesScreen::getRadius() {
+  return sqrt(2.0 * R);
+}
 //==============================================================
 void FishEyesScreen::setHeight(double h) {
   k = h;

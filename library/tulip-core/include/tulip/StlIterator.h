@@ -42,14 +42,15 @@ namespace tlp {
  **/
 template <typename T, typename ITERATOR>
 struct StlIterator : public Iterator<T> {
-  StlIterator(const ITERATOR &startIt, const ITERATOR &endIt)
-      : it(startIt), itEnd(endIt) {}
+  StlIterator(const ITERATOR &startIt, const ITERATOR &endIt) : it(startIt), itEnd(endIt) {}
   T next() {
     T tmp = *it;
     ++it;
     return tmp;
   }
-  bool hasNext() { return (itEnd != it); }
+  bool hasNext() {
+    return (itEnd != it);
+  }
 
 private:
   ITERATOR it, itEnd;
@@ -64,10 +65,13 @@ struct MPStlIterator : public StlIterator<T, ITERATOR>,
 //=================================================
 
 // Helper to determine whether there's a const_iterator for T.
-template <typename T> struct has_const_iterator {
+template <typename T>
+struct has_const_iterator {
 private:
-  template <typename C> static char test(typename C::const_iterator *);
-  template <typename C> static int test(...);
+  template <typename C>
+  static char test(typename C::const_iterator *);
+  template <typename C>
+  static int test(...);
 
 public:
   enum { value = sizeof(test<T>(0)) == sizeof(char) };
@@ -79,19 +83,17 @@ public:
  *
  * @since Tulip 5.2
  *
- * Creates a StlIterator from a STL container (std::list, std::vector, std::set,
- *std::map, ...).
+ * Creates a StlIterator from a STL container (std::list, std::vector, std::set, std::map, ...).
  *
  * @param stlContainer any STL container
  * @return a StlIterator
  **/
 template <typename Container>
-typename std::enable_if<has_const_iterator<Container>::value,
-                        StlIterator<typename Container::value_type,
-                                    typename Container::const_iterator> *>::
-    type inline stlIterator(const Container &stlContainer) {
-  return new MPStlIterator<typename Container::value_type,
-                           typename Container::const_iterator>(
+typename std::enable_if<
+    has_const_iterator<Container>::value,
+    StlIterator<typename Container::value_type, typename Container::const_iterator>
+        *>::type inline stlIterator(const Container &stlContainer) {
+  return new MPStlIterator<typename Container::value_type, typename Container::const_iterator>(
       stlContainer.begin(), stlContainer.end());
 }
 
@@ -108,7 +110,9 @@ struct StlMapIterator : public Iterator<std::pair<KEY, VALUE>> {
     return tmp;
   }
 
-  bool hasNext() { return (itEnd != it); }
+  bool hasNext() {
+    return (itEnd != it);
+  }
 
 private:
   typename std::map<KEY, VALUE>::const_iterator it, itEnd;
@@ -126,7 +130,9 @@ struct StlMapKeyIterator : public tlp::Iterator<KEY> {
     return tmp;
   }
 
-  bool hasNext() { return it != itEnd; }
+  bool hasNext() {
+    return it != itEnd;
+  }
 
 private:
   typename std::map<KEY, VALUE>::const_iterator it, itEnd;

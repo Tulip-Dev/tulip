@@ -20,22 +20,21 @@
 #ifndef TLP_PROGRESS
 #define TLP_PROGRESS
 
-#include <string>
 #include <tulip/tulipconf.h>
+#include <string>
 
 namespace tlp {
 
 /**
  * @ingroup Plugins
- * @brief The ProgressPreviewHandler class handles the way a process handled by
- * a PluginProgress is handled
+ * @brief The ProgressPreviewHandler class handles the way a process handled by a PluginProgress is
+ * handled
  *
- * When PluginProgress::setPreview() is called, the associated
- * ProgressPreviewHandler will be enabled. Allowing it to implement custom
- * behavior to allow the user to preview the result of the underlaying process
+ * When PluginProgress::setPreview() is called, the associated ProgressPreviewHandler will be
+ * enabled. Allowing it to implement custom behavior to allow the user to preview the result of the
+ * underlaying process
  * Once enabled, the progressStateChanged method will be called back each time
- * PluginProgress::progress is called to allow synchronizing the preview with
- * progression.
+ * PluginProgress::progress is called to allow synchronizing the preview with progression.
  */
 class TLP_SCOPE ProgressPreviewHandler {
 public:
@@ -50,15 +49,12 @@ public:
 /**
  * @ingroup Plugins
  *
- * @brief This enum describes callback actions for the underlaying system when
- *calling tlp::PluginProgress::progress();
+ * @brief This enum describes callback actions for the underlaying system when calling
+ *tlp::PluginProgress::progress();
  * @list
- * @li TLP_CONTINUE: tells that the process monitored by the the progress should
- *continue.
- * @li TLP_CANCEL: The process should be cancelled, reverting all changes since
- *it was started.
- * @li TLP_STOP: The process should stop, leaving all the changes made since the
- *beginning
+ * @li TLP_CONTINUE: tells that the process monitored by the the progress should continue.
+ * @li TLP_CANCEL: The process should be cancelled, reverting all changes since it was started.
+ * @li TLP_STOP: The process should stop, leaving all the changes made since the beginning
  * @endlist
  *
  * @see tlp::PluginProgress
@@ -66,8 +62,7 @@ public:
 enum ProgressState {
   /** The plugin should continue its execution. */
   TLP_CONTINUE,
-  /** The plugin should cancel, reverting all performed changes since the plugin
-     was called. */
+  /** The plugin should cancel, reverting all performed changes since the plugin was called. */
   TLP_CANCEL,
   /** The plugin should stop, leaving the graph in its current state. */
   TLP_STOP
@@ -75,15 +70,14 @@ enum ProgressState {
 
 /**
  * @ingroup Plugins
- * @brief PluginProcess subclasses are meant to notify about the progress state
- *of some process (typically a plugin)
+ * @brief PluginProcess subclasses are meant to notify about the progress state of some process
+ *(typically a plugin)
  *
- * PluginProgress are mainly used alongside with tlp::Plugin instances to give
- *user a visual feedback about the progress of the plugin. Every plugin in tulip
- *got a pluginProgress member they can call to give progress feedbacks. When
- *running, the plugin should make a call to tlp::PluginProgress::progress()
- *indicating the current state of the computation. The tlp::PluginProgress
- *returns a tlp::ProgressState indicating what behavior the underlaying system
+ * PluginProgress are mainly used alongside with tlp::Plugin instances to give user a visual
+ *feedback about the progress of the plugin. Every plugin in tulip got a pluginProgress member they
+ *can call to give progress feedbacks. When running, the plugin should make a call to
+ *tlp::PluginProgress::progress() indicating the current state of the computation. The
+ *tlp::PluginProgress returns a tlp::ProgressState indicating what behavior the underlaying system
  *should have (see tlp::ProgressState for details)
  **/
 class TLP_SCOPE PluginProgress {
@@ -103,39 +97,36 @@ public:
    * @warning For default previsualisation handling to work, be sure to call
    * PluginProgress::progress in this method (the return value can be ignored)
    *
-   * @return tlp::ProgressState a value indicating whether the progress has been
-   *stopped, cancelled, or will continue.
+   * @return tlp::ProgressState a value indicating whether the progress has been stopped, cancelled,
+   *or will continue.
    * @see tlp::ProgressState
    **/
   virtual ProgressState progress(int step, int max_step);
 
   /**
-   * @brief Sets the state flag to cancel, notifying to the process that the
-   *user wants to cancel it. Canceling a process must stop it and revert all the
-   *changes performed since its start.
+   * @brief Sets the state flag to cancel, notifying to the process that the user wants to cancel
+   *it. Canceling a process must stop it and revert all the changes performed since its start.
    *
    * @return void
    **/
   virtual void cancel() = 0;
 
   /**
-   * @brief Sets the state flag to stop, notifying to the process that the user
-   *wants to stop it. Stopping a process does not revert changes.
+   * @brief Sets the state flag to stop, notifying to the process that the user wants to stop it.
+   * Stopping a process does not revert changes.
    * @return void
    **/
   virtual void stop() = 0;
 
   /**
-   * @brief The preview mode redraws the graph while applying the algorithm,
-   *making it slower.
+   * @brief The preview mode redraws the graph while applying the algorithm, making it slower.
    *
    * @return bool Whether the preview mode is activated.
    **/
   virtual bool isPreviewMode() const = 0;
 
   /**
-   * @brief The preview mode redraws the graph while applying the algorithm,
-   *making it slower.
+   * @brief The preview mode redraws the graph while applying the algorithm, making it slower.
    *
    * @param drawPreview Whether the preview should be drawn.
    * @return void
@@ -168,16 +159,15 @@ public:
   virtual ProgressState state() const = 0;
 
   /**
-   * @brief Returns a message describing the error encountered during the
-   *process. If no error has been encountered, an empty string is returned.
+   * @brief Returns a message describing the error encountered during the process. If no error has
+   *been encountered, an empty string is returned.
    *
    * @return :string A description of the encountered error, if any.
    **/
   virtual std::string getError() = 0;
 
   /**
-   * @brief Sets the message describing the error encountered during the
-   *process.
+   * @brief Sets the message describing the error encountered during the process.
    *
    * @param error The description of the encountered error.
    * @return void
@@ -187,8 +177,8 @@ public:
   /**
    * @brief Changes the comment about the process progression.
    *
-   * @param comment A description of what the plugin is currently doing,
-   *displayed to inform the user.
+   * @param comment A description of what the plugin is currently doing, displayed to inform the
+   *user.
    * @return void
    **/
   virtual void setComment(const std::string &comment) = 0;

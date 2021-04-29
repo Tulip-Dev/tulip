@@ -21,13 +21,13 @@
 
 #include <QFile>
 #include <QList>
-#include <QRegExp>
 #include <QStringList>
+#include <QRegExp>
 #include <QTextStream>
 
 #include <tulip/PythonInterpreter.h>
-#include <tulip/TlpQtTools.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace tlp;
 
@@ -107,8 +107,7 @@ void APIDataBase::addApiEntry(const QString &apiEnt) {
 
   if (func) {
     withoutParams = apiEntry.mid(0, parenPos);
-    QString parameters =
-        apiEntry.mid(parenPos + 1, apiEntry.lastIndexOf(')') - parenPos - 1);
+    QString parameters = apiEntry.mid(parenPos + 1, apiEntry.lastIndexOf(')') - parenPos - 1);
 
     if (!parameters.isEmpty()) {
       QStringList paramsList = parameters.split(',');
@@ -203,8 +202,7 @@ QSet<QString> APIDataBase::getTypesList() const {
   return ret;
 }
 
-QSet<QString> APIDataBase::getDictContentForType(const QString &type,
-                                                 const QString &prefix) const {
+QSet<QString> APIDataBase::getDictContentForType(const QString &type, const QString &prefix) const {
   QSet<QString> ret;
 
   if (_dictContent.find(type) != _dictContent.end()) {
@@ -218,8 +216,7 @@ QSet<QString> APIDataBase::getDictContentForType(const QString &type,
   return ret;
 }
 
-QString
-APIDataBase::getReturnTypeForMethodOrFunction(const QString &funcName) const {
+QString APIDataBase::getReturnTypeForMethodOrFunction(const QString &funcName) const {
   QString ret;
 
   if (_returnType.find(funcName) != _returnType.end()) {
@@ -244,8 +241,7 @@ bool APIDataBase::functionExists(const QString &funcName) const {
   return _paramTypes.find(funcName) != _paramTypes.end();
 }
 
-QVector<QString>
-APIDataBase::findTypesContainingDictEntry(const QString &dictEntry) const {
+QVector<QString> APIDataBase::findTypesContainingDictEntry(const QString &dictEntry) const {
   QVector<QString> ret;
   QHashIterator<QString, QSet<QString>> i(_dictContent);
 
@@ -263,8 +259,7 @@ APIDataBase::findTypesContainingDictEntry(const QString &dictEntry) const {
   return ret;
 }
 
-QSet<QString>
-APIDataBase::getAllDictEntriesStartingWithPrefix(const QString &prefix) const {
+QSet<QString> APIDataBase::getAllDictEntriesStartingWithPrefix(const QString &prefix) const {
   QSet<QString> ret;
   QHashIterator<QString, QSet<QString>> i(_dictContent);
 
@@ -291,8 +286,7 @@ QString APIDataBase::getFullTypeName(const QString &t) const {
   for (const QString &type : keys) {
     int pos = type.lastIndexOf(t);
 
-    if (pos != -1 && (pos + t.length()) == type.length() &&
-        (pos == 0 || type[pos - 1] == '.')) {
+    if (pos != -1 && (pos + t.length()) == type.length() && (pos == 0 || type[pos - 1] == '.')) {
       return type;
     }
   }
@@ -300,8 +294,7 @@ QString APIDataBase::getFullTypeName(const QString &t) const {
   return "";
 }
 
-bool APIDataBase::dictEntryExists(const QString &type,
-                                  const QString &dictEntry) const {
+bool APIDataBase::dictEntryExists(const QString &type, const QString &dictEntry) const {
   if (_dictContent.find(type) == _dictContent.end()) {
     return false;
   }

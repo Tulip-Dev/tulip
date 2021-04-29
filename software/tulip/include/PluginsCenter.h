@@ -22,9 +22,9 @@
 
 #include <tulip/TulipRelease.h>
 
+#include <QWidget>
 #include <QMap>
 #include <QNetworkReply>
-#include <QWidget>
 
 namespace Ui {
 class PluginsCenterData;

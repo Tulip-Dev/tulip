@@ -30,9 +30,9 @@ namespace tlp {
  *
  * @brief Create a 2D rectangle
  *
- * This rect add screen percentage system (for example you can create a
- * rectangle that start on (10%,10%) and finish on (90%90%) If you when a simple
- * 2D rectangle with normal coordinates use GlRect class
+ * This rect add screen percentage system (for example you can create a rectangle that start on
+ * (10%,10%) and finish on (90%90%)
+ * If you when a simple 2D rectangle with normal coordinates use GlRect class
  * @see GlRect
  */
 class TLP_GL_SCOPE Gl2DRect : public GlRect {
@@ -51,11 +51,10 @@ public:
    * @param left coordinate
    * @param right coordinate
    * @param textureName path to a texture
-   * @param inPercent if true : top/bottom/left/right is used as in percent
-   * parameters
+   * @param inPercent if true : top/bottom/left/right is used as in percent parameters
    */
-  Gl2DRect(float top, float bottom, float left, float right,
-           const std::string &textureName, bool inPercent = false);
+  Gl2DRect(float top, float bottom, float left, float right, const std::string &textureName,
+           bool inPercent = false);
 
   /**
    * @brief Constructor
@@ -68,8 +67,8 @@ public:
    * @param xInv if true : use viewportX - left and viewportX - right
    * @param yInv if true : use viewportY - top and viewportY - bottom
    */
-  Gl2DRect(float bottom, float left, float height, float width,
-           const std::string &textureName, bool xInv, bool yInv);
+  Gl2DRect(float bottom, float left, float height, float width, const std::string &textureName,
+           bool xInv, bool yInv);
 
   /**
    * @brief Destructor
@@ -95,13 +94,11 @@ public:
   /**
    * @brief Set coordinates of rectangle
    */
-  virtual void setCoordinates(float bottom, float left, float width,
-                              float height);
+  virtual void setCoordinates(float bottom, float left, float width, float height);
 
   void getXML(std::string &outString) override;
 
-  void setWithXML(const std::string &inString,
-                  unsigned int &currentPosition) override;
+  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
 
 protected:
   float top;

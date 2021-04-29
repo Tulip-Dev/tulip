@@ -20,8 +20,8 @@
 #define TLPSELECTIONPROXYTEST
 
 #include <string>
-#include <tulip/BooleanProperty.h>
 #include <tulip/Graph.h>
+#include <tulip/BooleanProperty.h>
 
 #include "CppUnitIncludes.h"
 

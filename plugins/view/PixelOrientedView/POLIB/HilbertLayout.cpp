@@ -27,11 +27,10 @@ namespace {
 typedef tlp::Vector<int, 2> uPoint;
 enum STATESID { KEY = 1, POINT = 0, NEXT = 2 };
 
-static const unsigned char states[4][3][4] = {
-    {{0, 1, 3, 2}, {0, 1, 3, 2}, {1, 0, 0, 2}},
-    {{0, 3, 1, 2}, {0, 2, 3, 1}, {0, 1, 1, 3}},
-    {{2, 1, 3, 0}, {3, 1, 0, 2}, {3, 2, 2, 0}},
-    {{2, 3, 1, 0}, {3, 2, 0, 1}, {2, 3, 3, 1}}};
+static const unsigned char states[4][3][4] = {{{0, 1, 3, 2}, {0, 1, 3, 2}, {1, 0, 0, 2}},
+                                              {{0, 3, 1, 2}, {0, 2, 3, 1}, {0, 1, 1, 3}},
+                                              {{2, 1, 3, 0}, {3, 1, 0, 2}, {3, 2, 2, 0}},
+                                              {{2, 3, 1, 0}, {3, 2, 0, 1}, {2, 3, 3, 1}}};
 
 inline uPoint hilbertPoint(const unsigned int key, const unsigned char order) {
   //  cerr << "========" << endl;
@@ -44,8 +43,7 @@ inline uPoint hilbertPoint(const unsigned int key, const unsigned char order) {
     unsigned char bits = (key >> (i << 1)) & 3;
     //    unsigned char co = grState.graph[state].key[bits];
     unsigned char co = states[state][KEY][bits];
-    //    cerr << "state :" << (int) state << " bits" << bits << " co:" <<
-    //    (int)co;
+    //    cerr << "state :" << (int) state << " bits" << bits << " co:" << (int)co;
     point[1] += (co & 1) << i;
     //    point[0] += ((co >> 1) & 1) << (i-1);
     point[0] += ((co >> 1)) << i;
@@ -69,8 +67,7 @@ inline unsigned int hilbertKey(const uPoint &p, const unsigned char order) {
     //    cerr << "p:" << p << " bits:" << bits << endl;
     //    unsigned char co = grState.graph[state].point[bits];
     unsigned char co = states[state][POINT][bits];
-    //    cerr << "state :" << (int) state << " bits" << bits << " co:" <<
-    //    (int)co;
+    //    cerr << "state :" << (int) state << " bits" << bits << " co:" << (int)co;
     key += co << (i << 1);
     //    state = grState.graph[state].next[co];
     state = states[state][NEXT][co];

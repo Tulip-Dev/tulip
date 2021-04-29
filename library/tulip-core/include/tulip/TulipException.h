@@ -21,8 +21,8 @@
 #ifndef TULIPEXCEPTION_H
 #define TULIPEXCEPTION_H
 
-#include <string>
 #include <tulip/tulipconf.h>
+#include <string>
 
 namespace tlp {
 

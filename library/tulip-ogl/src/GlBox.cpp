@@ -19,9 +19,9 @@
 #include <GL/glew.h>
 
 #include <tulip/GlBox.h>
-#include <tulip/GlTextureManager.h>
-#include <tulip/GlTools.h>
 #include <tulip/GlXMLTools.h>
+#include <tulip/GlTools.h>
+#include <tulip/GlTextureManager.h>
 #include <tulip/OpenGlConfigManager.h>
 
 using namespace std;
@@ -134,9 +134,8 @@ static GLfloat cubeCoordArrays[] = {
 static GLubyte cubeIndices[] = {0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11,
                                 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23};
 
-static GLubyte cubeOutlineIndices[] = {0,  1,  1,  2,  2,  3,  3,  0,
-                                       20, 21, 21, 22, 22, 23, 23, 20,
-                                       0,  23, 1,  22, 2,  21, 3,  20};
+static GLubyte cubeOutlineIndices[] = {0,  1,  1,  2,  2, 3,  3, 0,  20, 21, 21, 22,
+                                       22, 23, 23, 20, 0, 23, 1, 22, 2,  21, 3,  20};
 
 //===========================================================
 //===========================================================
@@ -149,11 +148,10 @@ GlBox::GlBox() {
 }
 //===========================================================
 GlBox::GlBox(const Coord &position, const Size &size, const Color &fillColor,
-             const Color &outlineColor, bool filled, bool outlined,
-             const string &textureName, float outlineSize)
-    : position(position), size(size), filled(filled), outlined(outlined),
-      textureName(textureName), outlineSize(outlineSize),
-      newCubeCoordArrays(nullptr), generated(false) {
+             const Color &outlineColor, bool filled, bool outlined, const string &textureName,
+             float outlineSize)
+    : position(position), size(size), filled(filled), outlined(outlined), textureName(textureName),
+      outlineSize(outlineSize), newCubeCoordArrays(nullptr), generated(false) {
   if (filled)
     fillColors.emplace_back(fillColor);
 
@@ -164,7 +162,9 @@ GlBox::GlBox(const Coord &position, const Size &size, const Color &fillColor,
   boundingBox.expand(position + size / 2.f, true);
 }
 //===========================================================
-GlBox::~GlBox() { clearGenerated(); }
+GlBox::~GlBox() {
+  clearGenerated();
+}
 //===========================================================
 void GlBox::draw(float lod, Camera *) {
 
@@ -175,30 +175,23 @@ void GlBox::draw(float lod, Camera *) {
       GLfloat newCubeCoordArrays[72];
 
       for (unsigned int i = 0; i < 24; ++i) {
-        newCubeCoordArrays[i * 3] =
-            cubeCoordArrays[i * 3] * size[0] + position[0];
-        newCubeCoordArrays[i * 3 + 1] =
-            cubeCoordArrays[i * 3 + 1] * size[1] + position[1];
-        newCubeCoordArrays[i * 3 + 2] =
-            cubeCoordArrays[i * 3 + 2] * size[2] + position[2];
+        newCubeCoordArrays[i * 3] = cubeCoordArrays[i * 3] * size[0] + position[0];
+        newCubeCoordArrays[i * 3 + 1] = cubeCoordArrays[i * 3 + 1] * size[1] + position[1];
+        newCubeCoordArrays[i * 3 + 2] = cubeCoordArrays[i * 3 + 2] * size[2] + position[2];
       }
 
       glGenBuffers(5, buffers);
       glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-      glBufferData(GL_ARRAY_BUFFER, sizeof(newCubeCoordArrays),
-                   newCubeCoordArrays, GL_STATIC_DRAW);
+      glBufferData(GL_ARRAY_BUFFER, sizeof(newCubeCoordArrays), newCubeCoordArrays, GL_STATIC_DRAW);
       glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-      glBufferData(GL_ARRAY_BUFFER, sizeof(cubeNormalArrays), cubeNormalArrays,
-                   GL_STATIC_DRAW);
+      glBufferData(GL_ARRAY_BUFFER, sizeof(cubeNormalArrays), cubeNormalArrays, GL_STATIC_DRAW);
       glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
-      glBufferData(GL_ARRAY_BUFFER, sizeof(cubeTexArrays), cubeTexArrays,
-                   GL_STATIC_DRAW);
+      glBufferData(GL_ARRAY_BUFFER, sizeof(cubeTexArrays), cubeTexArrays, GL_STATIC_DRAW);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeIndices), cubeIndices,
-                   GL_STATIC_DRAW);
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeIndices), cubeIndices, GL_STATIC_DRAW);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[4]);
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeOutlineIndices),
-                   cubeOutlineIndices, GL_STATIC_DRAW);
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeOutlineIndices), cubeOutlineIndices,
+                   GL_STATIC_DRAW);
       generated = true;
     }
   } else {
@@ -206,12 +199,9 @@ void GlBox::draw(float lod, Camera *) {
       newCubeCoordArrays = new GLfloat[72];
 
       for (unsigned int i = 0; i < 24; ++i) {
-        newCubeCoordArrays[i * 3] =
-            cubeCoordArrays[i * 3] * size[0] + position[0];
-        newCubeCoordArrays[i * 3 + 1] =
-            cubeCoordArrays[i * 3 + 1] * size[1] + position[1];
-        newCubeCoordArrays[i * 3 + 2] =
-            cubeCoordArrays[i * 3 + 2] * size[2] + position[2];
+        newCubeCoordArrays[i * 3] = cubeCoordArrays[i * 3] * size[0] + position[0];
+        newCubeCoordArrays[i * 3 + 1] = cubeCoordArrays[i * 3 + 1] * size[1] + position[1];
+        newCubeCoordArrays[i * 3 + 2] = cubeCoordArrays[i * 3 + 2] * size[2] + position[2];
       }
 
       generated = true;
@@ -313,27 +303,39 @@ void GlBox::setPosition(const Coord &position) {
   clearGenerated();
 }
 //===========================================================
-Size GlBox::getSize() const { return size; }
+Size GlBox::getSize() const {
+  return size;
+}
 //===========================================================
-Color GlBox::getFillColor() const { return fillColors[0]; }
+Color GlBox::getFillColor() const {
+  return fillColors[0];
+}
 //===========================================================
 void GlBox::setFillColor(const Color &color) {
   fillColors.clear();
   fillColors.emplace_back(color);
 }
 //===========================================================
-Color GlBox::getOutlineColor() const { return outlineColors[0]; }
+Color GlBox::getOutlineColor() const {
+  return outlineColors[0];
+}
 //===========================================================
 void GlBox::setOutlineColor(const Color &color) {
   outlineColors.clear();
   outlineColors.emplace_back(color);
 }
 //===========================================================
-float GlBox::getOutlineSize() const { return outlineSize; }
+float GlBox::getOutlineSize() const {
+  return outlineSize;
+}
 //===========================================================
-void GlBox::setOutlineSize(float size) { outlineSize = size; }
+void GlBox::setOutlineSize(float size) {
+  outlineSize = size;
+}
 //===========================================================
-string GlBox::getTextureName() const { return textureName; }
+string GlBox::getTextureName() const {
+  return textureName;
+}
 //===========================================================
 void GlBox::setTextureName(const string &textureName) {
   this->textureName = textureName;
@@ -368,8 +370,7 @@ void GlBox::setWithXML(const string &inString, unsigned int &currentPosition) {
   fillColors.clear();
   GlXMLTools::setWithXML(inString, currentPosition, "fillColors", fillColors);
   outlineColors.clear();
-  GlXMLTools::setWithXML(inString, currentPosition, "outlineColors",
-                         outlineColors);
+  GlXMLTools::setWithXML(inString, currentPosition, "outlineColors", outlineColors);
   GlXMLTools::setWithXML(inString, currentPosition, "filled", filled);
   GlXMLTools::setWithXML(inString, currentPosition, "outlined", outlined);
   GlXMLTools::setWithXML(inString, currentPosition, "textureName", textureName);
@@ -392,11 +393,9 @@ void GlBox::clearGenerated() {
 }
 
 //============================================================
-void GlBox::draw(const Color &fillColor, const Color &outlineColor,
-                 float outlineWidth, const std::string &textureFile,
-                 float lod) {
-  static GlBox box(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 0, 255),
-                   Color(0, 0, 0, 255));
+void GlBox::draw(const Color &fillColor, const Color &outlineColor, float outlineWidth,
+                 const std::string &textureFile, float lod) {
+  static GlBox box(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 0, 255), Color(0, 0, 0, 255));
 
   box.setTextureName(textureFile);
   box.setFillColor(fillColor);

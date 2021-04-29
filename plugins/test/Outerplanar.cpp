@@ -17,17 +17,17 @@
  *
  */
 
-#include <tulip/GraphTest.h>
 #include <tulip/OuterPlanarTest.h>
+#include <tulip/GraphTest.h>
 
 class OuterplanarTest : public tlp::GraphTest {
 public:
   PLUGININFORMATION("Outer Planar", "Tulip team", "18/04/2012",
-                    "Tests whether a graph is outer planar or not.", "1.0",
-                    "Topological Test")
-  OuterplanarTest(const tlp::PluginContext *context)
-      : tlp::GraphTest(context) {}
+                    "Tests whether a graph is outer planar or not.", "1.0", "Topological Test")
+  OuterplanarTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {}
 
-  bool test() override { return tlp::OuterPlanarTest::isOuterPlanar(graph); }
+  bool test() override {
+    return tlp::OuterPlanarTest::isOuterPlanar(graph);
+  }
 };
 PLUGIN(OuterplanarTest)

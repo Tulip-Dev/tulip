@@ -17,8 +17,8 @@
  *
  */
 
-#include "ParallelCoordsElementDeleter.h"
 #include "ParallelCoordinatesView.h"
+#include "ParallelCoordsElementDeleter.h"
 
 #include <QEvent>
 #include <QMouseEvent>
@@ -33,8 +33,7 @@ bool ParallelCoordsElementDeleter::eventFilter(QObject *, QEvent *e) {
     QMouseEvent *me = static_cast<QMouseEvent *>(e);
 
     if (me->buttons() == Qt::LeftButton) {
-      ParallelCoordinatesView *parallelView =
-          static_cast<ParallelCoordinatesView *>(view());
+      ParallelCoordinatesView *parallelView = static_cast<ParallelCoordinatesView *>(view());
       Observable::holdObservers();
       parallelView->deleteDataUnderPointer(me->x(), me->y());
       Observable::unholdObservers();

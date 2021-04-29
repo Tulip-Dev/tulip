@@ -17,13 +17,13 @@
  *
  */
 
+#include <vector>
 #include "TlpImportExportTest.h"
+#include <tulip/Graph.h>
+#include <tulip/DataSet.h>
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include <tulip/DataSet.h>
-#include <tulip/Graph.h>
 #include <tulip/Size.h>
-#include <vector>
 
 #include <string>
 
@@ -42,8 +42,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(TlpImportExportTest);
 //==========================================================
 void TlpImportExportTest::testImport() {
   DataSet dataSet;
-  dataSet.set("file::filename",
-              std::string("cette erreur fait partie de testImport"));
+  dataSet.set("file::filename", std::string("cette erreur fait partie de testImport"));
   Graph *graph = tlp::importGraph("TLP Import", dataSet, nullptr);
   CPPUNIT_ASSERT(graph == nullptr);
   dataSet.set("file::filename", std::string("TlpImportExportTest.cpp"));

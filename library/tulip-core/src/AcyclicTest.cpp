@@ -27,13 +27,11 @@ using namespace tlp;
 //**********************************************************************
 class TestAcyclicListener : public Observable {
 public:
-  // override of Observable::treatEvent to remove the cached result for a graph
-  // if it is modified.
+  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
   void treatEvent(const Event &) override;
 
   /**
-   * @brief Stored results for graphs. When a graph is updated, its entry is
-   *removed from the map.
+   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the map.
    **/
   std::unordered_map<const Graph *, bool> resultsBuffer;
 };
@@ -107,8 +105,7 @@ void AcyclicTest::makeAcyclic(Graph *graph, vector<edge> &reversed,
     if (eEnds.first == eEnds.second) {
       node n1 = graph->addNode();
       node n2 = graph->addNode();
-      selfLoops.emplace_back(n1, n2, graph->addEdge(eEnds.first, n1),
-                             graph->addEdge(n1, n2),
+      selfLoops.emplace_back(n1, n2, graph->addEdge(eEnds.first, n1), graph->addEdge(n1, n2),
                              graph->addEdge(eEnds.first, n2), e);
       edgesToDel.push_back(e);
     }
@@ -121,8 +118,7 @@ void AcyclicTest::makeAcyclic(Graph *graph, vector<edge> &reversed,
   acyclicTest(graph, &reversed);
 
   if (reversed.size() > graph->numberOfEdges() / 2) {
-    tlp::warning() << "[Warning]: " << __FUNCTION__ << ", is not efficient"
-                   << std::endl;
+    tlp::warning() << "[Warning]: " << __FUNCTION__ << ", is not efficient" << std::endl;
   }
 
   for (auto e : reversed)
@@ -131,8 +127,7 @@ void AcyclicTest::makeAcyclic(Graph *graph, vector<edge> &reversed,
   assert(AcyclicTest::acyclicTest(graph));
 }
 //**********************************************************************
-bool AcyclicTest::acyclicTest(const Graph *graph,
-                              vector<edge> *obstructionEdges) {
+bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges) {
   MutableContainer<bool> visited;
   MutableContainer<bool> finished;
   visited.setAll(false);

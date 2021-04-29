@@ -18,24 +18,22 @@
  */
 #include "ui_CSVImportWizard.h"
 
-#include <QHeaderView>
-#include <QLabel>
 #include <QVBoxLayout>
+#include <QLabel>
+#include <QHeaderView>
 
 #include <tulip/CSVGraphImport.h>
-#include <tulip/CSVGraphMappingConfigurationWidget.h>
-#include <tulip/CSVImportConfigurationWidget.h>
-#include <tulip/CSVImportWizard.h>
-#include <tulip/CSVParser.h>
 #include <tulip/CSVParserConfigurationWidget.h>
+#include <tulip/CSVImportWizard.h>
+#include <tulip/CSVImportConfigurationWidget.h>
+#include <tulip/CSVGraphMappingConfigurationWidget.h>
 #include <tulip/SimplePluginProgressWidget.h>
+#include <tulip/CSVParser.h>
 
 using namespace tlp;
 
-CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage(
-    QWidget *parent)
-    : QWizardPage(parent),
-      parserConfigurationWidget(new CSVParserConfigurationWidget(this)),
+CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage(QWidget *parent)
+    : QWizardPage(parent), parserConfigurationWidget(new CSVParserConfigurationWidget(this)),
       previewTableWidget(new CSVTableWidget(this)), previewLineNumber(6) {
 
   QVBoxLayout *vbLayout = new QVBoxLayout();
@@ -46,17 +44,14 @@ CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage(
   layout()->addWidget(previewTableWidget);
   previewTableWidget->setMaxPreviewLineNumber(previewLineNumber);
   previewTableWidget->horizontalHeader()->setVisible(false);
-  previewTableWidget->horizontalHeader()->setSectionResizeMode(
-      QHeaderView::Stretch);
+  previewTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
   previewTableWidget->verticalHeader()->setVisible(false);
-  connect(parserConfigurationWidget, SIGNAL(parserChanged()), this,
-          SLOT(parserChanged()));
+  connect(parserConfigurationWidget, SIGNAL(parserChanged()), this, SLOT(parserChanged()));
   QLabel *noteWidget = new QLabel(this);
   noteWidget->setWordWrap(true);
-  noteWidget->setText(
-      " <em>Note: several (node and/or edge) import operations using the same "
-      "source file may be required to get all data to be imported and inserted "
-      "into a same graph.</em>");
+  noteWidget->setText(" <em>Note: several (node and/or edge) import operations using the same "
+                      "source file may be required to get all data to be imported and inserted "
+                      "into a same graph.</em>");
   layout()->addWidget(noteWidget);
 
   // init with last opened file if possible
@@ -70,8 +65,8 @@ bool CSVParsingConfigurationQWizardPage::isComplete() const {
 void CSVParsingConfigurationQWizardPage::parserChanged() {
   // Fill the preview widget
   int firstLine = parserConfigurationWidget->getFirstLineIndex();
-  CSVParser *parser = parserConfigurationWidget->buildParser(
-      firstLine, firstLine + previewLineNumber);
+  CSVParser *parser =
+      parserConfigurationWidget->buildParser(firstLine, firstLine + previewLineNumber);
   // Force widget to clear content.
   previewTableWidget->begin();
 
@@ -93,13 +88,11 @@ void CSVParsingConfigurationQWizardPage::parserChanged() {
   emit completeChanged();
 }
 
-// CSVToGraphDataMapping*
-// CSVGraphMappingConfigurationQWizardPage::buildMappingObject()const {
+// CSVToGraphDataMapping* CSVGraphMappingConfigurationQWizardPage::buildMappingObject()const {
 //  return graphMappingConfigurationWidget->buildMappingObject();
 //}
 
-CSVToGraphDataMapping *
-CSVGraphMappingConfigurationQWizardPage::buildMappingObject() const {
+CSVToGraphDataMapping *CSVGraphMappingConfigurationQWizardPage::buildMappingObject() const {
   return graphMappingConfigurationWidget->buildMappingObject();
 }
 
@@ -108,8 +101,7 @@ void CSVParsingConfigurationQWizardPage::updatePreview() {
   previewTableWidget->setColumnCount(0);
 }
 
-CSVParser *
-CSVParsingConfigurationQWizardPage::buildParser(int firstLine) const {
+CSVParser *CSVParsingConfigurationQWizardPage::buildParser(int firstLine) const {
   return parserConfigurationWidget->buildParser(firstLine);
 }
 
@@ -117,10 +109,8 @@ int CSVParsingConfigurationQWizardPage::getFirstLineIndex() const {
   return parserConfigurationWidget->getFirstLineIndex();
 }
 
-CSVImportConfigurationQWizardPage::CSVImportConfigurationQWizardPage(
-    QWidget *parent)
-    : QWizardPage(parent),
-      importConfigurationWidget(new CSVImportConfigurationWidget(this)) {
+CSVImportConfigurationQWizardPage::CSVImportConfigurationQWizardPage(QWidget *parent)
+    : QWizardPage(parent), importConfigurationWidget(new CSVImportConfigurationWidget(this)) {
   setLayout(new QVBoxLayout());
   layout()->addWidget(importConfigurationWidget);
 }
@@ -134,10 +124,9 @@ void CSVImportConfigurationQWizardPage::initializePage() {
       csvWizard->getParsingConfigurationPage()->buildParser(firstLine));
 }
 
-CSVGraphMappingConfigurationQWizardPage::
-    CSVGraphMappingConfigurationQWizardPage(QWidget *parent)
-    : QWizardPage(parent), graphMappingConfigurationWidget(
-                               new CSVGraphMappingConfigurationWidget()) {
+CSVGraphMappingConfigurationQWizardPage::CSVGraphMappingConfigurationQWizardPage(QWidget *parent)
+    : QWizardPage(parent),
+      graphMappingConfigurationWidget(new CSVGraphMappingConfigurationWidget()) {
   setLayout(new QVBoxLayout());
   layout()->addWidget(graphMappingConfigurationWidget);
   connect(graphMappingConfigurationWidget, SIGNAL(mappingChanged()), this,
@@ -148,8 +137,7 @@ bool CSVGraphMappingConfigurationQWizardPage::isComplete() const {
   return graphMappingConfigurationWidget->isValid();
 }
 
-CSVImportParameters
-CSVImportConfigurationQWizardPage::getImportParameters() const {
+CSVImportParameters CSVImportConfigurationQWizardPage::getImportParameters() const {
   return importConfigurationWidget->getImportParameters();
 }
 
@@ -157,14 +145,12 @@ void CSVGraphMappingConfigurationQWizardPage::initializePage() {
   CSVImportWizard *csvWizard = qobject_cast<CSVImportWizard *>(wizard());
   assert(csvWizard != nullptr);
   graphMappingConfigurationWidget->updateWidget(
-      csvWizard->getGraph(),
-      csvWizard->getImportConfigurationPage()->getImportParameters());
+      csvWizard->getGraph(), csvWizard->getImportConfigurationPage()->getImportParameters());
 }
 
 Graph *CSVImportWizard::graph = nullptr;
 
-CSVImportWizard::CSVImportWizard(QWidget *parent)
-    : QWizard(parent), ui(new Ui::CSVImportWizard) {
+CSVImportWizard::CSVImportWizard(QWidget *parent) : QWizard(parent), ui(new Ui::CSVImportWizard) {
 #if !defined(__LINUX)
   setWizardStyle(QWizard::ClassicStyle);
 #endif
@@ -174,18 +160,17 @@ CSVImportWizard::CSVImportWizard(QWidget *parent)
   ui->setupUi(this);
 }
 
-CSVImportWizard::~CSVImportWizard() { delete ui; }
+CSVImportWizard::~CSVImportWizard() {
+  delete ui;
+}
 
-CSVParsingConfigurationQWizardPage *
-CSVImportWizard::getParsingConfigurationPage() const {
+CSVParsingConfigurationQWizardPage *CSVImportWizard::getParsingConfigurationPage() const {
   return qobject_cast<CSVParsingConfigurationQWizardPage *>(page(0));
 }
-CSVImportConfigurationQWizardPage *
-CSVImportWizard::getImportConfigurationPage() const {
+CSVImportConfigurationQWizardPage *CSVImportWizard::getImportConfigurationPage() const {
   return qobject_cast<CSVImportConfigurationQWizardPage *>(page(1));
 }
-CSVGraphMappingConfigurationQWizardPage *
-CSVImportWizard::getMappingConfigurationPage() const {
+CSVGraphMappingConfigurationQWizardPage *CSVImportWizard::getMappingConfigurationPage() const {
   return qobject_cast<CSVGraphMappingConfigurationQWizardPage *>(page(2));
 }
 
@@ -197,15 +182,12 @@ void CSVImportWizard::accept() {
 
     if (parser != nullptr) {
       processIsValid = true;
-      CSVImportParameters importParam =
-          getImportConfigurationPage()->getImportParameters();
+      CSVImportParameters importParam = getImportConfigurationPage()->getImportParameters();
       // Get row to graph element mapping
-      CSVToGraphDataMapping *rowMapping =
-          getMappingConfigurationPage()->buildMappingObject();
+      CSVToGraphDataMapping *rowMapping = getMappingConfigurationPage()->buildMappingObject();
       // Get column to graph properties mapping
       CSVImportColumnToGraphPropertyMapping *columnMapping =
-          new CSVImportColumnToGraphPropertyMappingProxy(graph, importParam,
-                                                         this);
+          new CSVImportColumnToGraphPropertyMappingProxy(graph, importParam, this);
 
       // Invalid mapping objects
       if (rowMapping == nullptr || columnMapping == nullptr) {

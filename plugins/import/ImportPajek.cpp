@@ -17,21 +17,22 @@
  *
  */
 
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <cctype>
 #include <cstdlib>
-#include <fstream>
-#include <iostream>
-#include <string>
 #include <tulip/TulipPluginHeaders.h>
 
 /** \file
  *  \brief - Import Pajek format graph file.
  *  This plugin imports a graph from a file (.net) in Pajek input format,</br>
  *  as it is described in the Pajek manual
- * (http://pajek.imfm.si/lib/exe/fetch.php?media=dl:pajekman203.pdf) from the
- * Pajek wiki page http://pajek.imfm.si/doku.php?id=download. Warning: the
- * description of the edges with *Matrix (adjacency lists)</br> is not yet
- * supported. <b>HISTORY</b>
+ * (http://pajek.imfm.si/lib/exe/fetch.php?media=dl:pajekman203.pdf) from the Pajek wiki page
+ * http://pajek.imfm.si/doku.php?id=download.
+ *  Warning: the description of the edges with *Matrix (adjacency lists)</br>
+ *  is not yet supported.
+ *  <b>HISTORY</b>
  *
  *  - 09/05/2011 Version 1.0: Initial release
  *
@@ -48,8 +49,7 @@ static const char *paramHelp[] = {
 };
 
 namespace {
-bool tokenize(const string &str, vector<string> &tokens,
-              const string &delimiters) {
+bool tokenize(const string &str, vector<string> &tokens, const string &delimiters) {
   if (str.empty())
     return true;
 
@@ -108,17 +108,16 @@ bool tokenize(const string &str, vector<string> &tokens,
 class ImportPajek : public ImportModule {
 
 public:
-  PLUGININFORMATION(
-      "Pajek", "Patrick Mary", "09/05/2011",
-      "<p>Supported extensions: net, paj</p><p>Imports a new graph from a file "
-      "(.net) in Pajek NET format<br/>as it is described in the Pajek manual "
-      "(<a "
-      "href=\"http://mrvar.fdv.uni-lj.si/pajek/pajekman.pdf\">http://"
-      "mrvar.fdv.uni-lj.si/pajek/pajekman.pdf</a>)</p>"
-      "<p>Warning: the "
-      "description of the edges with Matrix (adjacency lists)is not yet "
-      "supported.</p>",
-      "1.0", "File")
+  PLUGININFORMATION("Pajek", "Patrick Mary", "09/05/2011",
+                    "<p>Supported extensions: net, paj</p><p>Imports a new graph from a file "
+                    "(.net) in Pajek NET format<br/>as it is described in the Pajek manual "
+                    "(<a "
+                    "href=\"http://mrvar.fdv.uni-lj.si/pajek/pajekman.pdf\">http://"
+                    "mrvar.fdv.uni-lj.si/pajek/pajekman.pdf</a>)</p>"
+                    "<p>Warning: the "
+                    "description of the edges with Matrix (adjacency lists)is not yet "
+                    "supported.</p>",
+                    "1.0", "File")
   std::list<std::string> fileExtensions() const override {
     std::list<std::string> l;
     l.push_back("net");
@@ -127,9 +126,9 @@ public:
   }
 
   ImportPajek(const tlp::PluginContext *context)
-      : ImportModule(context), nbNodes(0), weights(nullptr), labels(nullptr),
-        layout(nullptr), sizes(nullptr), expectedLine(NET_UNKNOWN),
-        partition(nullptr), curNodeId(0), vectorProp(nullptr) {
+      : ImportModule(context), nbNodes(0), weights(nullptr), labels(nullptr), layout(nullptr),
+        sizes(nullptr), expectedLine(NET_UNKNOWN), partition(nullptr), curNodeId(0),
+        vectorProp(nullptr) {
     addInParameter<string>("file::filename", paramHelp[0], "");
   }
 
@@ -239,15 +238,15 @@ public:
         return true;
       }
 
-      if (tokens[0] == "*Arcslist" || tokens[0] == "*arcslist" ||
-          tokens[0] == "*Edgeslist" || tokens[0] == "*edgeslist") {
+      if (tokens[0] == "*Arcslist" || tokens[0] == "*arcslist" || tokens[0] == "*Edgeslist" ||
+          tokens[0] == "*edgeslist") {
         expectedLine = NET_EDGESLIST;
         // no more token for this line
         return true;
       }
 
-      if (tokens[0] == "*Arcs" || tokens[0] == "*arcs" ||
-          tokens[0] == "*Edges" || tokens[0] == "*edges") {
+      if (tokens[0] == "*Arcs" || tokens[0] == "*arcs" || tokens[0] == "*Edges" ||
+          tokens[0] == "*edges") {
         expectedLine = NET_EDGE;
         // no more token for this line
         return true;
@@ -268,8 +267,8 @@ public:
         return true;
       }
 
-      if (tokens[0] == "*Vector" || tokens[0] == "*vector" ||
-          tokens[0] == "*Permutation" || tokens[0] == "*permutation") {
+      if (tokens[0] == "*Vector" || tokens[0] == "*vector" || tokens[0] == "*Permutation" ||
+          tokens[0] == "*permutation") {
 
         if (nbTokens < 2)
           return false;

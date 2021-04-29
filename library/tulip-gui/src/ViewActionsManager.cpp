@@ -18,22 +18,20 @@
  */
 #include <QGraphicsView>
 
+#include <tulip/ViewActionsManager.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/SnapshotDialog.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/ViewActionsManager.h>
 
 using namespace tlp;
 
-ViewActionsManager::ViewActionsManager(View *view, GlMainWidget *widget,
-                                       bool keepRatio)
+ViewActionsManager::ViewActionsManager(View *view, GlMainWidget *widget, bool keepRatio)
     : _view(view), _glMainWidget(widget), _keepSizeRatio(keepRatio),
       _advAntiAliasingAction(nullptr) {
   // create actions and add them to _view->graphicsView()
   // to enable their keyboard shortcut
   _forceRedrawAction = new QAction("Force redraw", widget);
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_forceRedrawAction, "Redraw the current view",
-                                 "Shift+R");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_forceRedrawAction, "Redraw the current view", "Shift+R");
   connect(_forceRedrawAction, SIGNAL(triggered()), this, SLOT(redraw()));
   _forceRedrawAction->setShortcut(tr("Ctrl+Shift+R"));
   _forceRedrawAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
@@ -41,8 +39,7 @@ ViewActionsManager::ViewActionsManager(View *view, GlMainWidget *widget,
 
   _centerViewAction = new QAction("Center view", widget);
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(
-      _centerViewAction,
-      "Make the view to fully display and center its contents", "Shif+C");
+      _centerViewAction, "Make the view to fully display and center its contents", "Shif+C");
   connect(_centerViewAction, SIGNAL(triggered()), this, SLOT(centerView()));
   _centerViewAction->setShortcut(tr("Ctrl+Shift+C"));
   _centerViewAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
@@ -50,19 +47,20 @@ ViewActionsManager::ViewActionsManager(View *view, GlMainWidget *widget,
 
   _snapshotAction = new QAction("Take a snapshot", widget);
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(
-      _snapshotAction,
-      "Show a dialog to save a snapshot of the current view display",
-      "Shift+P");
-  connect(_snapshotAction, SIGNAL(triggered()), this,
-          SLOT(openSnapshotDialog()));
+      _snapshotAction, "Show a dialog to save a snapshot of the current view display", "Shift+P");
+  connect(_snapshotAction, SIGNAL(triggered()), this, SLOT(openSnapshotDialog()));
   _snapshotAction->setShortcut(tr("Ctrl+Shift+P"));
   _snapshotAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   _view->graphicsView()->addAction(_snapshotAction);
 }
 
-void ViewActionsManager::centerView() { _view->centerView(); }
+void ViewActionsManager::centerView() {
+  _view->centerView();
+}
 
-void ViewActionsManager::redraw() { _view->refresh(); }
+void ViewActionsManager::redraw() {
+  _view->refresh();
+}
 
 void ViewActionsManager::openSnapshotDialog() {
   SnapshotDialog dlg(_view, _view->graphicsView()->window());

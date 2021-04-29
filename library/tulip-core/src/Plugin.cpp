@@ -27,8 +27,8 @@ std::string tlp::getMinor(const std::string &release) {
 #ifdef _MSC_VER
   char sep = '_';
 
-  // handle the case where the version number separator is not an underscore
-  // (e.g. for Tulip plugins)
+  // handle the case where the version number separator is not an underscore (e.g. for Tulip
+  // plugins)
   if (release.find(sep) == std::string::npos) {
     sep = '.';
   }
@@ -48,8 +48,7 @@ std::string tlp::getMinor(const std::string &release) {
   if (pos == rpos)
     return release.substr(pos + 1);
 
-  // if there is more than one dot, return everything between the first and last
-  // dots
+  // if there is more than one dot, return everything between the first and last dots
   return release.substr(pos + 1, rpos - pos - 1);
 }
 
@@ -57,8 +56,8 @@ std::string tlp::getMajor(const std::string &release) {
 #ifdef _MSC_VER
   char sep = '_';
 
-  // handle the case where the version number separator is not an underscore
-  // (e.g. for Tulip plugins)
+  // handle the case where the version number separator is not an underscore (e.g. for Tulip
+  // plugins)
   if (release.find(sep) == std::string::npos) {
     sep = '.';
   }
@@ -70,28 +69,41 @@ std::string tlp::getMajor(const std::string &release) {
   return release.substr(0, pos);
 }
 
-string Plugin::major() const { return tlp::getMajor(release()); }
+string Plugin::major() const {
+  return tlp::getMajor(release());
+}
 
-string Plugin::minor() const { return tlp::getMinor(release()); }
+string Plugin::minor() const {
+  return tlp::getMinor(release());
+}
 
-string Plugin::tulipMajor() const { return tlp::getMajor(tulipRelease()); }
+string Plugin::tulipMajor() const {
+  return tlp::getMajor(tulipRelease());
+}
 
-string Plugin::tulipMinor() const { return tlp::getMinor(tulipRelease()); }
+string Plugin::tulipMinor() const {
+  return tlp::getMinor(tulipRelease());
+}
 
-int Plugin::id() const { return 0; }
+int Plugin::id() const {
+  return 0;
+}
 
-std::string Plugin::icon() const { return ":/tulip/gui/icons/logo32x32.png"; }
+std::string Plugin::icon() const {
+  return ":/tulip/gui/icons/logo32x32.png";
+}
 
-std::string Plugin::programmingLanguage() const { return "C++"; }
+std::string Plugin::programmingLanguage() const {
+  return "C++";
+}
 
 void Plugin::declareDeprecatedName(const std::string &previousName) {
   if (oldName.empty())
     oldName = previousName;
   else
     tlp::warning() << "Warning: '" << previousName
-                   << "' cannot be declared as deprecated name of Plugin '"
-                   << name() << "' because '" << oldName << "' already is."
-                   << std::endl;
+                   << "' cannot be declared as deprecated name of Plugin '" << name()
+                   << "' because '" << oldName << "' already is." << std::endl;
 }
 
 void PluginFactory::registerFactory(PluginFactory *factory) {

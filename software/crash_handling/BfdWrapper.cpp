@@ -24,11 +24,11 @@
 
 #include "BfdWrapper.h"
 
-#include <cxxabi.h>
 #include <iostream>
 #include <sstream>
-#include <sys/stat.h>
 #include <vector>
+#include <cxxabi.h>
+#include <sys/stat.h>
 
 #define INRANGE(foo, bar, baz) (foo(bar)) && ((bar)baz)
 
@@ -61,8 +61,8 @@ extern "C" int filename_ncmp(const char *s1, const char *s2, size_t n) {
 
 using namespace std;
 
-static asymbol **slurp_symtab(bfd *abfd, bool useMini, long *nSymbols,
-                              unsigned int *symbolSize, bool *isDynamic) {
+static asymbol **slurp_symtab(bfd *abfd, bool useMini, long *nSymbols, unsigned int *symbolSize,
+                              bool *isDynamic) {
   *nSymbols = 0;
   *symbolSize = 0;
   *isDynamic = false;
@@ -74,18 +74,17 @@ static asymbol **slurp_symtab(bfd *abfd, bool useMini, long *nSymbols,
   }
 
   if (useMini) {
-    *nSymbols = bfd_read_minisymbols(
-        abfd, false, reinterpret_cast<void **>(&symbol_table), symbolSize);
+    *nSymbols =
+        bfd_read_minisymbols(abfd, false, reinterpret_cast<void **>(&symbol_table), symbolSize);
 
     if (*nSymbols == 0) {
       *isDynamic = true;
-      *nSymbols = bfd_read_minisymbols(
-          abfd, true, reinterpret_cast<void **>(&symbol_table), symbolSize);
+      *nSymbols =
+          bfd_read_minisymbols(abfd, true, reinterpret_cast<void **>(&symbol_table), symbolSize);
     }
 
     if (*nSymbols < 0) {
-      cerr << "Error (bfd_read_minisymbols) in " << bfd_get_filename(abfd)
-           << endl;
+      cerr << "Error (bfd_read_minisymbols) in " << bfd_get_filename(abfd) << endl;
       return symbol_table;
     }
   } else {
@@ -125,21 +124,18 @@ int file_exist(const std::string &filename) {
 static DWORD GetModuleBase(DWORD dwAddress) {
   MEMORY_BASIC_INFORMATION Buffer;
 #ifndef X86_64
-  return VirtualQuery(reinterpret_cast<LPCVOID>(dwAddress), &Buffer,
-                      sizeof(Buffer))
+  return VirtualQuery(reinterpret_cast<LPCVOID>(dwAddress), &Buffer, sizeof(Buffer))
              ? reinterpret_cast<DWORD>(Buffer.AllocationBase)
              : 0;
 #else
-  return VirtualQuery(reinterpret_cast<LPCVOID>(dwAddress), &Buffer,
-                      sizeof(Buffer))
+  return VirtualQuery(reinterpret_cast<LPCVOID>(dwAddress), &Buffer, sizeof(Buffer))
              ? reinterpret_cast<DWORD64>(Buffer.AllocationBase)
              : 0;
 #endif
 }
 #else
 
-static void tokenize(const string &str, vector<string> &tokens,
-                     const string &delimiters = " ") {
+static void tokenize(const string &str, vector<string> &tokens, const string &delimiters = " ") {
   string::size_type lastPos = 0;
   string::size_type pos = str.find_first_of(delimiters, lastPos);
 
@@ -160,9 +156,8 @@ static void tokenize(const string &str, vector<string> &tokens,
 static bool bfdInit = false;
 
 BfdWrapper::BfdWrapper(const char *dsoName)
-    : filePath(dsoName), abfd(nullptr), textSection(nullptr),
-      symbolTable(nullptr), nSymbols(0), symbolSize(0), isMini(true),
-      isDynamic(false), scratchSymbol(nullptr), relocationOffset(-1) {
+    : filePath(dsoName), abfd(nullptr), textSection(nullptr), symbolTable(nullptr), nSymbols(0),
+      symbolSize(0), isMini(true), isDynamic(false), scratchSymbol(nullptr), relocationOffset(-1) {
 
 #ifndef __MINGW32__
 
@@ -246,8 +241,7 @@ BfdWrapper::BfdWrapper(const char *dsoName)
   asymbol *scratchSymbol = bfd_make_empty_symbol(abfd);
 
   if (scratchSymbol == nullptr) {
-    cerr << "Error (bfd_make_empty_symbol) in " << bfd_get_filename(abfd)
-         << endl;
+    cerr << "Error (bfd_make_empty_symbol) in " << bfd_get_filename(abfd) << endl;
     free(symbolTable);
     bfd_close(abfd);
     return;
@@ -266,10 +260,9 @@ BfdWrapper::~BfdWrapper() {
 
 #ifndef __MINGW32__
 
-pair<const char *, unsigned int>
-BfdWrapper::getFileAndLineForAddress(const char *mangledSymbol,
-                                     const int64_t runtimeAddr,
-                                     const int64_t runtimeOffset) {
+pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const char *mangledSymbol,
+                                                                      const int64_t runtimeAddr,
+                                                                      const int64_t runtimeOffset) {
   pair<const char *, unsigned int> ret("", 0);
 
   if (!abfd || !isMini || symbolSize == 0)
@@ -280,12 +273,10 @@ BfdWrapper::getFileAndLineForAddress(const char *mangledSymbol,
   int index = 0;
 
   for (; from < fromend; from += symbolSize, index++) {
-    asymbol *sym =
-        bfd_minisymbol_to_symbol(abfd, isDynamic, from, scratchSymbol);
+    asymbol *sym = bfd_minisymbol_to_symbol(abfd, isDynamic, from, scratchSymbol);
 
     if (sym == nullptr) {
-      cerr << "Error (bfd_minisymbol_to_symbol) in " << bfd_get_filename(abfd)
-           << endl;
+      cerr << "Error (bfd_minisymbol_to_symbol) in " << bfd_get_filename(abfd) << endl;
       return ret;
     }
 
@@ -315,25 +306,22 @@ BfdWrapper::getFileAndLineForAddress(const char *mangledSymbol,
         bfd_vma textSection_vma = BFD_SECTION_VMA(abfd, textSection);
         bfd_size_type textSection_size = BFD_SECTION_SIZE(abfd, textSection);
 
-        if (!INRANGE(
-                static_cast<int64_t>(textSection_vma) <=, unrelocatedAddr,
-                <= static_cast<int64_t>(textSection_vma + textSection_size))) {
-          cerr
-              << "Trying to look up an address that's outside of the range of the text section of "
-              << filePath
-              << "... usually this means the executable or DSO in question has "
-                 "changed since the stack trace was generated"
-              << endl;
+        if (!INRANGE(static_cast<int64_t>(textSection_vma) <=, unrelocatedAddr,
+                     <= static_cast<int64_t>(textSection_vma + textSection_size))) {
+          cerr << "Trying to look up an address that's outside of the range of the text section of "
+               << filePath
+               << "... usually this means the executable or DSO in question has "
+                  "changed since the stack trace was generated"
+               << endl;
           return ret;
         }
 
         if (!bfd_find_nearest_line(abfd, textSection, symbolTable,
-                                   unrelocatedAddr - textSection_vma - 1,
-                                   &fileName, &funcName, &lineno)) {
+                                   unrelocatedAddr - textSection_vma - 1, &fileName, &funcName,
+                                   &lineno)) {
           cerr << "Can't find line for address " << hex
                << static_cast<unsigned long long>(relocatedAddr) << " <- "
-               << static_cast<unsigned long long>(unrelocatedAddr) << dec
-               << endl;
+               << static_cast<unsigned long long>(unrelocatedAddr) << dec << endl;
           return ret;
         } else {
           if (fileName) {
@@ -351,8 +339,7 @@ BfdWrapper::getFileAndLineForAddress(const char *mangledSymbol,
 
 #else
 
-pair<const char *, unsigned int>
-BfdWrapper::getFileAndLineForAddress(const int64_t runtimeAddr) {
+pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const int64_t runtimeAddr) {
   if (!abfd)
     return make_pair("", 0);
 
@@ -365,15 +352,14 @@ BfdWrapper::getFileAndLineForAddress(const int64_t runtimeAddr) {
 
   if (!INRANGE(static_cast<int64_t>(0) <=, symbolOffset,
                <= static_cast<int64_t>(textSection_size))) {
-    cerr
-        << "Trying to look up an address that's outside of the range of the text section of "
-        << filePath
-        << "... usually this means the executable or DSO in question has changed "
-           "since the stack trace was generated"
-        << endl;
+    cerr << "Trying to look up an address that's outside of the range of the text section of "
+         << filePath
+         << "... usually this means the executable or DSO in question has changed "
+            "since the stack trace was generated"
+         << endl;
   } else {
-    bfd_find_nearest_line(abfd, textSection, symbolTable, symbolOffset,
-                          &fileName, &funcName, &lineno);
+    bfd_find_nearest_line(abfd, textSection, symbolTable, symbolOffset, &fileName, &funcName,
+                          &lineno);
   }
 
   return make_pair(fileName, lineno);
@@ -393,17 +379,16 @@ const char *BfdWrapper::getFunctionForAddress(const int64_t runtimeAddr) {
 
   if (!INRANGE(static_cast<int64_t>(0) <=, symbolOffset,
                <= static_cast<int64_t>(textSection_size))) {
-    cerr
-        << "Trying to look up an address that's outside of the range of the text section of "
-        << filePath
-        << "... usually this means the executable or DSO in question has changed "
-           "since the stack trace was generated"
-        << endl;
+    cerr << "Trying to look up an address that's outside of the range of the text section of "
+         << filePath
+         << "... usually this means the executable or DSO in question has changed "
+            "since the stack trace was generated"
+         << endl;
     return funcName;
   }
 
-  bfd_find_nearest_line(abfd, textSection, symbolTable, symbolOffset, &fileName,
-                        &funcName, &lineno);
+  bfd_find_nearest_line(abfd, textSection, symbolTable, symbolOffset, &fileName, &funcName,
+                        &lineno);
   return funcName;
 }
 

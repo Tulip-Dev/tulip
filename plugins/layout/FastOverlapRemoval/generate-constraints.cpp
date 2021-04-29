@@ -10,16 +10,16 @@
  * Released under GNU LGPL.  Read the file 'COPYING' for more information.
  */
 
+#include <set>
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
-#include <set>
 
-#include <tulip/ParallelTools.h>
 #include <tulip/tulipconf.h>
+#include <tulip/ParallelTools.h>
 
-#include "constraint.h"
 #include "generate-constraints.h"
+#include "constraint.h"
 #include "isnan.h" /* Include last */
 
 using std::set;
@@ -28,13 +28,11 @@ using namespace tlp;
 
 namespace vpsc {
 std::ostream &operator<<(std::ostream &os, const Rectangle &r) {
-  os << "{" << r.minX << "," << r.maxX << "," << r.minY << "," << r.maxY
-     << "},";
+  os << "{" << r.minX << "," << r.maxX << "," << r.minY << "," << r.maxY << "},";
   return os;
 }
 
-Rectangle::Rectangle(double x, double X, double y, double Y, double xb,
-                     double yb)
+Rectangle::Rectangle(double x, double X, double y, double Y, double xb, double yb)
     : minX(x), maxX(X), minY(y), maxY(Y), xBorder(xb), yBorder(yb) {
   assert(x <= X);
   assert(y <= Y);
@@ -62,8 +60,12 @@ struct Node {
     delete leftNeighbours;
     delete rightNeighbours;
   }
-  void addLeftNeighbour(Node *u) { leftNeighbours->insert(u); }
-  void addRightNeighbour(Node *u) { rightNeighbours->insert(u); }
+  void addLeftNeighbour(Node *u) {
+    leftNeighbours->insert(u);
+  }
+  void addRightNeighbour(Node *u) {
+    rightNeighbours->insert(u);
+  }
   void setNeighbours(NodeSet *left, NodeSet *right) {
     leftNeighbours = left;
     rightNeighbours = right;
@@ -189,13 +191,12 @@ int compare_events(const void *a, const void *b) {
 }
 
 /**
- * Prepares constraints in order to apply VPSC horizontally.  Assumes variables
- * have already been created. useNeighbourLists determines whether or not a
- * heuristic is used to deciding whether to resolve all overlap in the x pass,
- * or leave some overlaps for the y pass.
+ * Prepares constraints in order to apply VPSC horizontally.  Assumes variables have already been
+ * created.
+ * useNeighbourLists determines whether or not a heuristic is used to deciding whether to resolve
+ * all overlap in the x pass, or leave some overlaps for the y pass.
  */
-int ConstraintsGenerator::generateXConstraints(Rectangle rs[], Variable vars[],
-                                               Constraint **&cs,
+int ConstraintsGenerator::generateXConstraints(Rectangle rs[], Variable vars[], Constraint **&cs,
                                                const bool useNeighbourLists) {
   TLP_PARALLEL_MAP_INDICES(n, [&](unsigned int i) {
     vars[i].desiredPosition = rs[i].getCentreX();
@@ -204,8 +205,8 @@ int ConstraintsGenerator::generateXConstraints(Rectangle rs[], Variable vars[],
     events[2 * i + 1] = new Event(Close, v, rs[i].getMaxY());
   });
 
-  qsort(reinterpret_cast<Event *>(events), static_cast<size_t>(2 * n),
-        sizeof(Event *), compare_events);
+  qsort(reinterpret_cast<Event *>(events), static_cast<size_t>(2 * n), sizeof(Event *),
+        compare_events);
 
   NodeSet scanline;
   vector<Constraint *> constraints;
@@ -218,8 +219,7 @@ int ConstraintsGenerator::generateXConstraints(Rectangle rs[], Variable vars[],
       scanline.insert(v);
 
       if (useNeighbourLists) {
-        v->setNeighbours(getLeftNeighbours(scanline, v),
-                         getRightNeighbours(scanline, v));
+        v->setNeighbours(getLeftNeighbours(scanline, v), getRightNeighbours(scanline, v));
       } else {
         NodeSet::iterator it = scanline.find(v);
 
@@ -240,16 +240,15 @@ int ConstraintsGenerator::generateXConstraints(Rectangle rs[], Variable vars[],
     } else {
       // Close event
       if (useNeighbourLists) {
-        for (NodeSet::iterator i = v->leftNeighbours->begin();
-             i != v->leftNeighbours->end(); ++i) {
+        for (NodeSet::iterator i = v->leftNeighbours->begin(); i != v->leftNeighbours->end(); ++i) {
           Node *u = *i;
           double sep = (v->r->width() + u->r->width()) / 2.0;
           constraints.push_back(new Constraint(u->v, v->v, sep));
           u->rightNeighbours->erase(v);
         }
 
-        for (NodeSet::iterator i = v->rightNeighbours->begin();
-             i != v->rightNeighbours->end(); ++i) {
+        for (NodeSet::iterator i = v->rightNeighbours->begin(); i != v->rightNeighbours->end();
+             ++i) {
           Node *u = *i;
           double sep = (v->r->width() + u->r->width()) / 2.0;
           constraints.push_back(new Constraint(v->v, u->v, sep));
@@ -287,8 +286,7 @@ int ConstraintsGenerator::generateXConstraints(Rectangle rs[], Variable vars[],
 /**
  * Prepares constraints in order to apply VPSC vertically to remove ALL overlap.
  */
-int ConstraintsGenerator::generateYConstraints(Rectangle rs[], Variable vars[],
-                                               Constraint **&cs) {
+int ConstraintsGenerator::generateYConstraints(Rectangle rs[], Variable vars[], Constraint **&cs) {
 
   TLP_PARALLEL_MAP_INDICES(n, [&](unsigned int i) {
     vars[i].desiredPosition = rs[i].getCentreY();
@@ -297,8 +295,8 @@ int ConstraintsGenerator::generateYConstraints(Rectangle rs[], Variable vars[],
     events[2 * i + 1] = new Event(Close, v, rs[i].getMaxX());
   });
 
-  qsort(reinterpret_cast<Event *>(events), static_cast<size_t>(2 * n),
-        sizeof(Event *), compare_events);
+  qsort(reinterpret_cast<Event *>(events), static_cast<size_t>(2 * n), sizeof(Event *),
+        compare_events);
   NodeSet scanline;
   vector<Constraint *> constraints;
 

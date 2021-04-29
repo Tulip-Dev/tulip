@@ -18,23 +18,22 @@
  */
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
+#include <tulip/Size.h>
+#include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/TulipViewSettings.h>
+#include <tulip/TulipIconicFont.h>
+#include <tulip/GlLabel.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/GlLabel.h>
-#include <tulip/Glyph.h>
-#include <tulip/Size.h>
-#include <tulip/TulipIconicFont.h>
-#include <tulip/TulipViewSettings.h>
 
 using namespace std;
 using namespace tlp;
 
-void drawTree(const Color &color, const Color &outlineColor,
-              const float outlineSize, const std::string &texture) {
+void drawTree(const Color &color, const Color &outlineColor, const float outlineSize,
+              const std::string &texture) {
   static GlLabel label;
-  label.setFontNameSizeAndColor(TulipIconicFont::getTTFLocation("fa-tree"), 18,
-                                color);
+  label.setFontNameSizeAndColor(TulipIconicFont::getTTFLocation("fa-tree"), 18, color);
   label.setPosition(Coord(0, 0, 0));
   label.setSize(Size(1, 1, 0));
   label.setUseLODOptimisation(false);
@@ -53,25 +52,20 @@ void drawTree(const Color &color, const Color &outlineColor,
  */
 class ChristmasTree : public NoShaderGlyph {
 public:
-  GLYPHINFORMATION("2D - ChristmasTree", "Morgan Mathiaut", "16/12/2008",
-                   "Christmas tree", "1.0", NodeShape::ChristmasTree)
+  GLYPHINFORMATION("2D - ChristmasTree", "Morgan Mathiaut", "16/12/2008", "Christmas tree", "1.0",
+                   NodeShape::ChristmasTree)
   ChristmasTree(const tlp::PluginContext *context = nullptr);
   void draw(node n, float lod) override;
 };
 PLUGIN(ChristmasTree)
 
-ChristmasTree::ChristmasTree(const tlp::PluginContext *context)
-    : NoShaderGlyph(context) {}
+ChristmasTree::ChristmasTree(const tlp::PluginContext *context) : NoShaderGlyph(context) {}
 void ChristmasTree::draw(node n, float) {
-  const tlp::Color &nodeColor =
-      glGraphInputData->getElementColor()->getNodeValue(n);
-  const tlp::Color &nodeBorderColor =
-      glGraphInputData->getElementBorderColor()->getNodeValue(n);
-  float nodeBorderWidth =
-      glGraphInputData->getElementBorderWidth()->getNodeValue(n);
-  const std::string &nodeTexture =
-      glGraphInputData->parameters->getTexturePath() +
-      glGraphInputData->getElementTexture()->getNodeValue(n);
+  const tlp::Color &nodeColor = glGraphInputData->getElementColor()->getNodeValue(n);
+  const tlp::Color &nodeBorderColor = glGraphInputData->getElementBorderColor()->getNodeValue(n);
+  float nodeBorderWidth = glGraphInputData->getElementBorderWidth()->getNodeValue(n);
+  const std::string &nodeTexture = glGraphInputData->parameters->getTexturePath() +
+                                   glGraphInputData->getElementTexture()->getNodeValue(n);
 
   drawTree(nodeColor, nodeBorderColor, nodeBorderWidth, nodeTexture);
 }

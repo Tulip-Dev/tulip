@@ -23,16 +23,13 @@ using namespace std;
 
 namespace tlp {
 
-GlNominativeAxis::GlNominativeAxis(const string &axisName,
-                                   const Coord &axisBaseCoord,
-                                   const float axisLength,
-                                   const AxisOrientation &axisOrientation,
+GlNominativeAxis::GlNominativeAxis(const string &axisName, const Coord &axisBaseCoord,
+                                   const float axisLength, const AxisOrientation &axisOrientation,
                                    const Color &axisColor)
     : GlAxis(axisName, axisBaseCoord, axisLength, axisOrientation, axisColor) {}
 
-void GlNominativeAxis::setAxisGraduationsLabels(
-    const std::vector<std::string> &axisGradsLabels,
-    const LabelPosition &labelsPos) {
+void GlNominativeAxis::setAxisGraduationsLabels(const std::vector<std::string> &axisGradsLabels,
+                                                const LabelPosition &labelsPos) {
   labelsOrder = axisGradsLabels;
   axisLabelsPosition = labelsPos;
 }
@@ -44,12 +41,10 @@ void GlNominativeAxis::buildAxisGraduations() {
   for (unsigned int i = 0; i < labelsOrder.size(); ++i) {
     if (axisOrientation == HORIZONTAL_AXIS) {
       labelsCoord[labelsOrder[i]] =
-          Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads,
-                axisBaseCoord.getY());
+          Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads, axisBaseCoord.getY());
     } else if (axisOrientation == VERTICAL_AXIS) {
       labelsCoord[labelsOrder[i]] =
-          Coord(axisBaseCoord.getX(),
-                axisBaseCoord.getY() + i * spaceBetweenAxisGrads);
+          Coord(axisBaseCoord.getX(), axisBaseCoord.getY() + i * spaceBetweenAxisGrads);
     }
   }
 }

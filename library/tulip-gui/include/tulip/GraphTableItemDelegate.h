@@ -21,16 +21,16 @@
 #ifndef TULIPTABLEWIDGETITEMDELEGATE_H_
 #define TULIPTABLEWIDGETITEMDELEGATE_H_
 
-#include <tulip/TulipItemDelegate.h>
 #include <tulip/tulipconf.h>
+#include <tulip/TulipItemDelegate.h>
 
 class QStyleOptionViewItem;
 
 namespace tlp {
 
 /**
- * @brief QItemDelegate to display and edit data from a GraphTableModel in the
- *Qt model/view architecture.
+ * @brief QItemDelegate to display and edit data from a GraphTableModel in the Qt model/view
+ *architecture.
  **/
 class TLP_QT_SCOPE GraphTableItemDelegate : public TulipItemDelegate {
   Q_OBJECT

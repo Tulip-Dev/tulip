@@ -20,9 +20,9 @@
 #ifndef NEIGHBOURHOODHIGHLIGHTERINTERACTOR_H_
 #define NEIGHBOURHOODHIGHLIGHTERINTERACTOR_H_
 
-#include "../../utils/StandardInteractorPriority.h"
 #include "NeighborhoodHighlighterConfigWidget.h"
 #include "NodeNeighborhoodView.h"
+#include "../../utils/StandardInteractorPriority.h"
 
 #include <QObject>
 
@@ -39,17 +39,15 @@ class AdditionalGlSceneAnimation;
 /** \file
  *  \brief  Tulip Node Neighbourhood Highlighter
 
- * This interactor plugin allow to get information regarding the neighbourhood
- of a node by highlighting
- * the nodes connected to it. A "Bring and Go" feature is also implemented
- allowing to navigate
+ * This interactor plugin allow to get information regarding the neighbourhood of a node by
+ highlighting
+ * the nodes connected to it. A "Bring and Go" feature is also implemented allowing to navigate
  */
 class NeighborhoodHighlighterInteractor : public GLInteractorComposite {
 
 public:
-  PLUGININFORMATION("NeighborhoodHighlighterInteractor", "Antoine Lambert",
-                    "19/05/2009", "Node neighborhood highlighter", "1.0",
-                    "Navigation")
+  PLUGININFORMATION("NeighborhoodHighlighterInteractor", "Antoine Lambert", "19/05/2009",
+                    "Node neighborhood highlighter", "1.0", "Navigation")
 
   NeighborhoodHighlighterInteractor(const PluginContext *);
 
@@ -57,7 +55,9 @@ public:
 
   void construct() override;
 
-  QWidget *configurationWidget() const override { return configWidget; }
+  QWidget *configurationWidget() const override {
+    return configWidget;
+  }
 
   unsigned int priority() const override {
     return StandardInteractorPriority::NeighborhoodHighlighter;
@@ -76,8 +76,7 @@ class NeighborhoodHighlighter : public GLInteractorComponent {
 public:
   NeighborhoodHighlighter();
 
-  NeighborhoodHighlighter(
-      const NeighborhoodHighlighter &neighborhoodHighlighter);
+  NeighborhoodHighlighter(const NeighborhoodHighlighter &neighborhoodHighlighter);
 
   ~NeighborhoodHighlighter() override;
 
@@ -104,13 +103,11 @@ private:
 
   void computeNeighborhoodGraphCircleLayout();
 
-  float
-  computeNeighborhoodGraphRadius(LayoutProperty *neighborhoodGraphLayoutProp);
+  float computeNeighborhoodGraphRadius(LayoutProperty *neighborhoodGraphLayoutProp);
 
   void cleanupNeighborhoodGraph();
 
-  bool selectInAugmentedDisplayGraph(const int x, const int y,
-                                     SelectedEntity &);
+  bool selectInAugmentedDisplayGraph(const int x, const int y, SelectedEntity &);
 
   void updateNeighborhoodGraphLayoutAndColors();
 
@@ -118,12 +115,10 @@ private:
 
   void computeNeighborhoodGraphBoundingBoxes();
 
-  void
-  performZoomAndPan(const BoundingBox &destBB,
-                    AdditionalGlSceneAnimation *additionalAnimation = nullptr);
+  void performZoomAndPan(const BoundingBox &destBB,
+                         AdditionalGlSceneAnimation *additionalAnimation = nullptr);
 
-  void morphCircleAlpha(unsigned char startAlpha, unsigned endAlpha,
-                        int nbAnimationSteps = 40);
+  void morphCircleAlpha(unsigned char startAlpha, unsigned endAlpha, int nbAnimationSteps = 40);
 
   void checkIfGraphHasChanged();
 
@@ -149,8 +144,7 @@ private:
 
   NeighborhoodHighlighterConfigWidget *configWidget;
 
-  BoundingBox neighborhoodGraphCircleLayoutBB,
-      neighborhoodGraphOriginalLayoutBB;
+  BoundingBox neighborhoodGraphCircleLayoutBB, neighborhoodGraphOriginalLayoutBB;
 
   unsigned char circleAlphaValue;
   unsigned char startAlpha, endAlpha;

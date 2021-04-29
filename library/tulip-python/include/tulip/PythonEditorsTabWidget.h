@@ -21,8 +21,8 @@
 #define PYTHONEDITORSTABWIDGET_H
 
 #include <QMap>
-#include <QTabBar>
 #include <QTabWidget>
+#include <QTabBar>
 
 #include <tulip/tulipconf.h>
 

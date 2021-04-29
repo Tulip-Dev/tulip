@@ -18,9 +18,9 @@
  */
 
 #include <tulip/DoubleProperty.h>
-#include <tulip/ParallelTools.h>
 #include <tulip/StaticProperty.h>
 #include <tulip/TlpTools.h>
+#include <tulip/ParallelTools.h>
 #include <tulip/vectorgraph.h>
 
 using namespace std;
@@ -42,14 +42,12 @@ using namespace tlp;
  * <b> HISTORY</b>
  *
  * - 25/02/2011 Version 1.0: Initial release (François Queyroi)
- * - 13/05/2011 Version 2.0 (Bruno Pinaud): Change plugin type from General
- *Algorithm to DoubleAlgorithm, code cleaning and fix some memory leaks.
- * - 09/06/2015 Version 2.1 (Patrick Mary) full rewrite according the updated
- *version of the original source code available at
- *https://sites.google.com/site/findcommunities/
+ * - 13/05/2011 Version 2.0 (Bruno Pinaud): Change plugin type from General Algorithm to
+ *DoubleAlgorithm, code cleaning and fix some memory leaks.
+ * - 09/06/2015 Version 2.1 (Patrick Mary) full rewrite according the updated version of the
+ *original source code available at  https://sites.google.com/site/findcommunities/
  *
- * \note A threshold for modularity improvement is used here, its value is
- *0.000001
+ * \note A threshold for modularity improvement is used here, its value is 0.000001
  *
  * \author Patrick Mary, Labri
  *
@@ -109,8 +107,7 @@ private:
 
   // return the weighted degree and selfloops of a node
   // of the current quotient graph
-  void get_weighted_degree_and_selfloops(unsigned int n, double &wdg,
-                                         double &nsl) {
+  void get_weighted_degree_and_selfloops(unsigned int n, double &wdg, double &nsl) {
     wdg = nsl = 0;
     const std::vector<edge> &edges = quotient->star(node(n));
 
@@ -133,12 +130,12 @@ private:
   // [(In(comm)+2d(node,comm))/2m - ((tot(comm)+deg(node))/2m)^2]-
   // [In(comm)/2m - (tot(comm)/2m)^2 - (deg(node)/2m)^2]
   // where In(comm)    = number of half-links strictly inside comm
-  //       Tot(comm)   = number of half-links inside or outside comm
-  //       (sum(degrees)) d(node,com) = number of links from node to comm
+  //       Tot(comm)   = number of half-links inside or outside comm (sum(degrees))
+  //       d(node,com) = number of links from node to comm
   //       deg(node)   = node degree
   //       m           = number of links
-  inline double modularity_gain(unsigned int /*node*/, unsigned int comm,
-                                double dnode_comm, double w_degree) {
+  inline double modularity_gain(unsigned int /*node*/, unsigned int comm, double dnode_comm,
+                                double w_degree) {
     return (dnode_comm - tot[comm] * w_degree * ootw);
   }
 
@@ -184,8 +181,7 @@ private:
   }
 
   // generates the quotient graph of communities as computed by one_level
-  void partitionToQuotient(VectorGraph *new_quotient,
-                           EdgeProperty<double> *new_weights) {
+  void partitionToQuotient(VectorGraph *new_quotient, EdgeProperty<double> *new_weights) {
     // Renumber communities
     vector<int> renumber(nb_qnodes, -1);
 
@@ -200,9 +196,8 @@ private:
         renumber[i] = final++;
 
     // update clustering
-    TLP_PARALLEL_MAP_INDICES(nb_nodes, [&](unsigned int i) {
-      (*clusters)[i] = renumber[n2c[(*clusters)[i]]];
-    });
+    TLP_PARALLEL_MAP_INDICES(
+        nb_nodes, [&](unsigned int i) { (*clusters)[i] = renumber[n2c[(*clusters)[i]]]; });
 
     // Compute weighted graph
     new_quotient->addNodes(final);
@@ -215,8 +210,7 @@ private:
       unsigned int src_comm = renumber[n2c[src]];
       unsigned int tgt_comm = renumber[n2c[tgt]];
       double weight = (*weights)[e];
-      edge e_comm =
-          new_quotient->existEdge(node(src_comm), node(tgt_comm), false);
+      edge e_comm = new_quotient->existEdge(node(src_comm), node(tgt_comm), false);
       total_weight += weight;
       double *weight_comm = nullptr;
 
@@ -286,8 +280,7 @@ private:
         double best_increase = 0.;
 
         for (unsigned int i = 0; i < neigh_last; i++) {
-          double increase = modularity_gain(n, neigh_pos[i],
-                                            neigh_weight[neigh_pos[i]], n_wdg);
+          double increase = modularity_gain(n, neigh_pos[i], neigh_weight[neigh_pos[i]], n_wdg);
 
           if (increase > best_increase ||
               // keep the best cluster with the minimum id
@@ -355,8 +348,7 @@ LouvainClustering::LouvainClustering(const tlp::PluginContext *context)
   addInParameter<NumericProperty *>("metric", paramHelp[0], "", false);
   addInParameter<double>("precision", paramHelp[1], "0.000001", false);
   addOutParameter<double>("modularity", "The computed modularity");
-  addOutParameter<unsigned int>("#communities",
-                                "The number of communities found");
+  addOutParameter<unsigned int>("#communities", "The number of communities found");
 }
 //========================================================================================
 bool LouvainClustering::run() {
@@ -378,8 +370,7 @@ bool LouvainClustering::run() {
 
   clusters = new NodeStaticProperty<int>(graph);
 
-  TLP_PARALLEL_MAP_INDICES(nb_nodes,
-                           [&](unsigned int i) { (*clusters)[i] = i; });
+  TLP_PARALLEL_MAP_INDICES(nb_nodes, [&](unsigned int i) { (*clusters)[i] = i; });
 
   weights = new EdgeProperty<double>();
   quotient->alloc(*weights);

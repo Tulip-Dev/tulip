@@ -18,11 +18,11 @@
  */
 
 #include <cmath>
-#include <string>
-#include <tulip/Graph.h>
 #include <tulip/ImportModule.h>
 #include <tulip/PluginProgress.h>
+#include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
+#include <string>
 
 using namespace std;
 using namespace tlp;
@@ -52,12 +52,11 @@ static const char *paramHelp[] = {
  *
  */
 struct WattsStrogatzModel : public ImportModule {
-  PLUGININFORMATION(
-      "Watts Strogatz Model", "Arnaud Sallaberry", "21/02/2011",
-      "Randomly generates a small world graph using the model described in<br/>D. J. "
-      "Watts and S. H. Strogatz.<br/><b>Collective dynamics of small-world "
-      "networks.</b><br/>Nature 393, 440 (1998).",
-      "1.0", "Social network")
+  PLUGININFORMATION("Watts Strogatz Model", "Arnaud Sallaberry", "21/02/2011",
+                    "Randomly generates a small world graph using the model described in<br/>D. J. "
+                    "Watts and S. H. Strogatz.<br/><b>Collective dynamics of small-world "
+                    "networks.</b><br/>Nature 393, 440 (1998).",
+                    "1.0", "Social network")
 
   WattsStrogatzModel(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "200");
@@ -81,18 +80,15 @@ struct WattsStrogatzModel : public ImportModule {
 
     // check arguments
     if (p < 0 || p > 1) {
-      pluginProgress->setError(
-          "p is not a probability,\nit does not belong to [0, 1]");
+      pluginProgress->setError("p is not a probability,\nit does not belong to [0, 1]");
       return false;
     }
     if (k >= nbNodes) {
-      pluginProgress->setError(
-          "The k parameter cannot be greater than the number of nodes.");
+      pluginProgress->setError("The k parameter cannot be greater than the number of nodes.");
       return false;
     }
     if (original_model && (nbNodes >= log(float(k)))) {
-      pluginProgress->setError(
-          "The number of nodes cannot be greater than ln(k)");
+      pluginProgress->setError("The number of nodes cannot be greater than ln(k)");
       return false;
     }
 

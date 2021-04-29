@@ -27,8 +27,7 @@
 using namespace tlp;
 using namespace std;
 
-CSVImportParameters::CSVImportParameters(unsigned int fromLine,
-                                         unsigned int toLine,
+CSVImportParameters::CSVImportParameters(unsigned int fromLine, unsigned int toLine,
                                          const vector<CSVColumn *> &columns)
     : fromLine(fromLine), toLine(toLine), columns(columns) {}
 
@@ -62,16 +61,14 @@ string CSVImportParameters::getColumnDataType(unsigned int column) const {
   }
 }
 
-char CSVImportParameters::getColumnMultiValueSeparator(
-    unsigned int column) const {
+char CSVImportParameters::getColumnMultiValueSeparator(unsigned int column) const {
   if (column < columns.size())
     return columns[column]->getMultiValueSeparator();
   return 0;
 }
 
-CSVColumn::Action
-CSVImportParameters::getColumnActionForToken(unsigned int column,
-                                             const std::string &token) const {
+CSVColumn::Action CSVImportParameters::getColumnActionForToken(unsigned int column,
+                                                               const std::string &token) const {
   if (column < columns.size())
     return columns[column]->getActionForToken(token);
   return CSVColumn::Action::SKIP_ROW;
@@ -81,12 +78,16 @@ bool CSVImportParameters::importRow(unsigned int row) const {
   return row >= fromLine && row <= toLine;
 }
 
-unsigned int CSVImportParameters::getFirstLineIndex() const { return fromLine; }
-unsigned int CSVImportParameters::getLastLineIndex() const { return toLine; }
+unsigned int CSVImportParameters::getFirstLineIndex() const {
+  return fromLine;
+}
+unsigned int CSVImportParameters::getLastLineIndex() const {
+  return toLine;
+}
 
-AbstractCSVToGraphDataMapping::AbstractCSVToGraphDataMapping(
-    Graph *graph, ElementType type, const vector<unsigned int> &colIds,
-    const vector<string> &propertyNames)
+AbstractCSVToGraphDataMapping::AbstractCSVToGraphDataMapping(Graph *graph, ElementType type,
+                                                             const vector<unsigned int> &colIds,
+                                                             const vector<string> &propertyNames)
     : graph(graph), type(type), columnIds(colIds) {
   assert(graph != nullptr);
 
@@ -124,8 +125,7 @@ void AbstractCSVToGraphDataMapping::init(unsigned int) {
 }
 
 pair<ElementType, vector<unsigned int>>
-AbstractCSVToGraphDataMapping::getElementsForRow(
-    const vector<vector<string>> &tokens) {
+AbstractCSVToGraphDataMapping::getElementsForRow(const vector<vector<string>> &tokens) {
   unsigned int result;
 
   bool idsOK = true;
@@ -181,9 +181,8 @@ CSVToNewNodeIdMapping::getElementsForRow(const vector<vector<string>> &) {
   return pair<ElementType, vector<unsigned int>>(NODE, {graph->addNode().id});
 }
 
-CSVToGraphNodeIdMapping::CSVToGraphNodeIdMapping(
-    Graph *graph, const vector<unsigned int> &colIds,
-    const vector<string> &propNames, bool createNode)
+CSVToGraphNodeIdMapping::CSVToGraphNodeIdMapping(Graph *graph, const vector<unsigned int> &colIds,
+                                                 const vector<string> &propNames, bool createNode)
     : AbstractCSVToGraphDataMapping(graph, NODE, colIds, propNames),
       createMissingNodes(createNode) {}
 
@@ -196,9 +195,7 @@ void CSVToGraphNodeIdMapping::init(unsigned int rowNumber) {
   }
 }
 
-unsigned int
-CSVToGraphNodeIdMapping::buildIndexForRow(unsigned int,
-                                          const vector<string> &keys) {
+unsigned int CSVToGraphNodeIdMapping::buildIndexForRow(unsigned int, const vector<string> &keys) {
   if (createMissingNodes && keys.size() == keyProperties.size()) {
     node newNode = graph->addNode();
 
@@ -211,20 +208,17 @@ CSVToGraphNodeIdMapping::buildIndexForRow(unsigned int,
   }
 }
 
-CSVToGraphEdgeIdMapping::CSVToGraphEdgeIdMapping(
-    Graph *graph, const vector<unsigned int> &colIds,
-    const vector<string> &propNames)
+CSVToGraphEdgeIdMapping::CSVToGraphEdgeIdMapping(Graph *graph, const vector<unsigned int> &colIds,
+                                                 const vector<string> &propNames)
     : AbstractCSVToGraphDataMapping(graph, EDGE, colIds, propNames) {}
 
-unsigned int CSVToGraphEdgeIdMapping::buildIndexForRow(unsigned int,
-                                                       const vector<string> &) {
+unsigned int CSVToGraphEdgeIdMapping::buildIndexForRow(unsigned int, const vector<string> &) {
   return UINT_MAX;
 }
 
 CSVToGraphEdgeSrcTgtMapping::CSVToGraphEdgeSrcTgtMapping(
-    Graph *graph, const vector<unsigned int> &srcColIds,
-    const vector<unsigned int> &tgtColIds, const vector<string> &srcPropNames,
-    const vector<string> &tgtPropNames, bool createMissinNodes)
+    Graph *graph, const vector<unsigned int> &srcColIds, const vector<unsigned int> &tgtColIds,
+    const vector<string> &srcPropNames, const vector<string> &tgtPropNames, bool createMissinNodes)
     : graph(graph), srcColumnIds(srcColIds), tgtColumnIds(tgtColIds),
       sameSrcTgtProperties(srcPropNames.size() == tgtPropNames.size()),
       buildMissingElements(createMissinNodes) {
@@ -238,8 +232,7 @@ CSVToGraphEdgeSrcTgtMapping::CSVToGraphEdgeSrcTgtMapping(
   for (unsigned int i = 0; i < tgtPropNames.size(); ++i) {
     assert(graph->existProperty(tgtPropNames[i]));
     tgtProperties.push_back(graph->getProperty(tgtPropNames[i]));
-    sameSrcTgtProperties =
-        sameSrcTgtProperties && (tgtPropNames[i] == srcPropNames[i]);
+    sameSrcTgtProperties = sameSrcTgtProperties && (tgtPropNames[i] == srcPropNames[i]);
   }
 }
 
@@ -276,8 +269,7 @@ void CSVToGraphEdgeSrcTgtMapping::init(unsigned int rowNumber) {
 }
 
 pair<ElementType, vector<unsigned int>>
-CSVToGraphEdgeSrcTgtMapping::getElementsForRow(
-    const vector<vector<string>> &tokens) {
+CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<vector<string>> &tokens) {
   vector<node> srcs;
   vector<node> tgts;
 
@@ -325,14 +317,12 @@ CSVToGraphEdgeSrcTgtMapping::getElementsForRow(
       for (unsigned int j = 0; j < keyTokens[i].size(); ++j)
         key.append(keyTokens[i][j]);
 
-      std::unordered_map<string, unsigned int>::iterator it =
-          srcValueToId.find(key);
+      std::unordered_map<string, unsigned int>::iterator it = srcValueToId.find(key);
 
       // token exists in the map
       if (it != srcValueToId.end()) {
         srcs.emplace_back(it->second);
-      } else if (buildMissingElements &&
-                 srcProperties.size() == keyTokens[i].size()) {
+      } else if (buildMissingElements && srcProperties.size() == keyTokens[i].size()) {
         node src = graph->addNode();
         srcs.push_back(src);
 
@@ -389,14 +379,12 @@ CSVToGraphEdgeSrcTgtMapping::getElementsForRow(
       for (unsigned int j = 0; j < keyTokens[i].size(); ++j)
         key.append(keyTokens[i][j]);
 
-      std::unordered_map<string, unsigned int>::iterator it =
-          valueToId.find(key);
+      std::unordered_map<string, unsigned int>::iterator it = valueToId.find(key);
 
       // token exists in the map
       if (it != valueToId.end()) {
         tgts.emplace_back(it->second);
-      } else if (buildMissingElements &&
-                 tgtProperties.size() == keyTokens[i].size()) {
+      } else if (buildMissingElements && tgtProperties.size() == keyTokens[i].size()) {
         node tgt = graph->addNode();
         tgts.push_back(tgt);
 
@@ -423,15 +411,13 @@ CSVToGraphEdgeSrcTgtMapping::getElementsForRow(
   return pair<ElementType, vector<unsigned int>>(EDGE, std::move(results));
 }
 
-CSVImportColumnToGraphPropertyMappingProxy::
-    CSVImportColumnToGraphPropertyMappingProxy(
-        Graph *graph, const CSVImportParameters &importParameters,
-        QWidget *parent)
+CSVImportColumnToGraphPropertyMappingProxy::CSVImportColumnToGraphPropertyMappingProxy(
+    Graph *graph, const CSVImportParameters &importParameters, QWidget *parent)
     : graph(graph), importParameters(importParameters), parent(parent) {}
 
 PropertyInterface *
-CSVImportColumnToGraphPropertyMappingProxy::generateApproximateProperty(
-    const std::string &name, const std::string &type) {
+CSVImportColumnToGraphPropertyMappingProxy::generateApproximateProperty(const std::string &name,
+                                                                        const std::string &type) {
   // loop to generate a non existing approximate name
   std::ostringstream nameBuf;
   unsigned int nb = 1;
@@ -446,8 +432,8 @@ CSVImportColumnToGraphPropertyMappingProxy::generateApproximateProperty(
 }
 
 PropertyInterface *
-CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(
-    unsigned int column, const string &) {
+CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int column,
+                                                                 const string &) {
   std::unordered_map<unsigned int, PropertyInterface *>::iterator it =
       propertiesBuffer.find(column);
 
@@ -458,8 +444,8 @@ CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(
 
     // If auto detection fail set to default type : string.
     if (propertyType.empty()) {
-      qWarning() << __PRETTY_FUNCTION__ << " No type for the column "
-                 << propertyName << " set to string";
+      qWarning() << __PRETTY_FUNCTION__ << " No type for the column " << propertyName
+                 << " set to string";
       propertyType = "string";
     }
 
@@ -476,13 +462,10 @@ CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(
             overwritePropertiesButton != QMessageBox::NoToAll) {
           overwritePropertiesButton = QMessageBox::question(
               parent, parent->tr("Property already exists"),
-              parent->tr("A property named \"") +
-                  tlpStringToQString(propertyName) +
-                  parent->tr(
-                      "\" already exists.\nDo you want to use it ?\nIf not, a property with "
-                      "an approximate name will be generated."),
-              QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No |
-                  QMessageBox::NoToAll,
+              parent->tr("A property named \"") + tlpStringToQString(propertyName) +
+                  parent->tr("\" already exists.\nDo you want to use it ?\nIf not, a property with "
+                             "an approximate name will be generated."),
+              QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::NoToAll,
               QMessageBox::Yes);
         }
 
@@ -495,13 +478,10 @@ CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(
       } else {
         // If the properties are not compatible
         // generate a new property with an approximate name
-        QMessageBox::critical(
-            parent, parent->tr("Property already existing"),
-            parent->tr("A property named \"") +
-                tlpStringToQString(propertyName) +
-                parent->tr(
-                    "\" already exists with a different type. A property "
-                    "with an approximate name will be generated."));
+        QMessageBox::critical(parent, parent->tr("Property already existing"),
+                              parent->tr("A property named \"") + tlpStringToQString(propertyName) +
+                                  parent->tr("\" already exists with a different type. A property "
+                                             "with an approximate name will be generated."));
         interf = generateApproximateProperty(propertyName, propertyType);
       }
     } else {
@@ -515,16 +495,13 @@ CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(
   }
 }
 
-CSVGraphImport::CSVGraphImport(
-    CSVToGraphDataMapping *mapping,
-    CSVImportColumnToGraphPropertyMapping *properties,
-    const CSVImportParameters &importParameters)
-    : mapping(mapping), propertiesManager(properties),
-      importParameters(importParameters) {}
+CSVGraphImport::CSVGraphImport(CSVToGraphDataMapping *mapping,
+                               CSVImportColumnToGraphPropertyMapping *properties,
+                               const CSVImportParameters &importParameters)
+    : mapping(mapping), propertiesManager(properties), importParameters(importParameters) {}
 CSVGraphImport::~CSVGraphImport() {}
 bool CSVGraphImport::begin() {
-  mapping->init(importParameters.getLastLineIndex() -
-                importParameters.getFirstLineIndex() + 1);
+  mapping->init(importParameters.getLastLineIndex() - importParameters.getFirstLineIndex() + 1);
   return true;
 }
 
@@ -598,8 +575,7 @@ bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
               importParameters.getColumnMultiValueSeparator(column), '\0');
           // check tokens actions
           for (const std::string &tok : tokens[column]) {
-            auto tokAction =
-                importParameters.getColumnActionForToken(column, tok);
+            auto tokAction = importParameters.getColumnActionForToken(column, tok);
             if (tokAction == CSVColumn::Action::SKIP_ROW) {
               action = tokAction;
               break;
@@ -619,8 +595,7 @@ bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
   }
 
   // Compute the element id associated to the line
-  pair<ElementType, vector<unsigned int>> &&elements =
-      mapping->getElementsForRow(tokens);
+  pair<ElementType, vector<unsigned int>> &&elements = mapping->getElementsForRow(tokens);
 
   for (size_t column = 0; column < lineTokens.size(); ++column) {
     PropertyInterface *property = props[column];
@@ -635,35 +610,27 @@ bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
             continue;
 
           if (!(isVectorProperty
-                    ? static_cast<VectorPropertyInterface *>(property)
-                          ->setNodeStringValueAsVector(node(elements.second[i]),
-                                                       tokens[column])
-                    : property->setNodeStringValue(node(elements.second[i]),
-                                                   tokens[column][0]))) {
-            // We add one to the row number as in the configuration widget we
-            // start from row 1 not row 0
-            qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__
-                       << " error when importing token \"" << lineTokens[column]
-                       << "\" in property \"" << property->getName()
-                       << "\" of type \"" << property->getTypename()
-                       << "\" at line " << row + 1;
+                    ? static_cast<VectorPropertyInterface *>(property)->setNodeStringValueAsVector(
+                          node(elements.second[i]), tokens[column])
+                    : property->setNodeStringValue(node(elements.second[i]), tokens[column][0]))) {
+            // We add one to the row number as in the configuration widget we start from row 1 not
+            // row 0
+            qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__ << " error when importing token \""
+                       << lineTokens[column] << "\" in property \"" << property->getName()
+                       << "\" of type \"" << property->getTypename() << "\" at line " << row + 1;
           }
         }
       } else {
         for (size_t i = 0; i < elements.second.size(); ++i) {
           if (!(isVectorProperty
-                    ? static_cast<VectorPropertyInterface *>(property)
-                          ->setEdgeStringValueAsVector(edge(elements.second[i]),
-                                                       tokens[column])
-                    : property->setEdgeStringValue(edge(elements.second[i]),
-                                                   tokens[column][0]))) {
-            // We add one to the row number as in the configuration widget we
-            // start from row 1 not row 0
-            qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__
-                       << " error when importing token \"" << lineTokens[column]
-                       << "\" in property \"" << property->getName()
-                       << "\" of type \"" << property->getTypename()
-                       << "\" at line " << row + 1;
+                    ? static_cast<VectorPropertyInterface *>(property)->setEdgeStringValueAsVector(
+                          edge(elements.second[i]), tokens[column])
+                    : property->setEdgeStringValue(edge(elements.second[i]), tokens[column][0]))) {
+            // We add one to the row number as in the configuration widget we start from row 1 not
+            // row 0
+            qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__ << " error when importing token \""
+                       << lineTokens[column] << "\" in property \"" << property->getName()
+                       << "\" of type \"" << property->getTypename() << "\" at line " << row + 1;
           }
         }
       }
@@ -673,4 +640,6 @@ bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
   return true;
 }
 
-bool CSVGraphImport::end(unsigned int, unsigned int) { return true; }
+bool CSVGraphImport::end(unsigned int, unsigned int) {
+  return true;
+}

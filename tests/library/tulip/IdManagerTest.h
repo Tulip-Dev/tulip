@@ -36,8 +36,12 @@ class IdManagerTest : public CppUnit::TestFixture {
   CPPUNIT_TEST_SUITE_END();
 
 public:
-  void setUp() override { idManager = new IdManager(); }
-  void tearDown() override { delete idManager; }
+  void setUp() override {
+    idManager = new IdManager();
+  }
+  void tearDown() override {
+    delete idManager;
+  }
   void testIsFree();
   void testFragmentation();
   void testGetFree();

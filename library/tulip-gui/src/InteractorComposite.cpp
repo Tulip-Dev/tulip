@@ -27,20 +27,29 @@ void InteractorComponent::setView(tlp::View *view) {
   _view = view;
   viewChanged(view);
 }
-tlp::View *InteractorComponent::view() const { return _view; }
+tlp::View *InteractorComponent::view() const {
+  return _view;
+}
 void InteractorComponent::init() {}
-bool InteractorComponent::eventFilter(QObject *, QEvent *) { return false; }
+bool InteractorComponent::eventFilter(QObject *, QEvent *) {
+  return false;
+}
 // *******************************
 
 InteractorComposite::InteractorComposite(const QIcon &icon, const QString &text)
-    : Interactor(), _action(new QAction(icon, text, this)), _view(nullptr),
-      _lastTarget(nullptr) {}
+    : Interactor(), _action(new QAction(icon, text, this)), _view(nullptr), _lastTarget(nullptr) {}
 
-InteractorComposite::~InteractorComposite() { qDeleteAll(_components); }
+InteractorComposite::~InteractorComposite() {
+  qDeleteAll(_components);
+}
 
-QCursor InteractorComposite::cursor() const { return QCursor(); }
+QCursor InteractorComposite::cursor() const {
+  return QCursor();
+}
 
-tlp::View *InteractorComposite::view() const { return _view; }
+tlp::View *InteractorComposite::view() const {
+  return _view;
+}
 
 void InteractorComposite::undoIsDone() {}
 
@@ -48,8 +57,7 @@ void InteractorComposite::setLastTarget(QObject *target) {
   _lastTarget = target;
 
   if (_lastTarget)
-    connect(_lastTarget, SIGNAL(destroyed()), this,
-            SLOT(lastTargetDestroyed()));
+    connect(_lastTarget, SIGNAL(destroyed()), this, SLOT(lastTargetDestroyed()));
 }
 
 void InteractorComposite::lastTargetDestroyed() {
@@ -57,12 +65,13 @@ void InteractorComposite::lastTargetDestroyed() {
     _lastTarget = nullptr;
 }
 
-QObject *InteractorComposite::lastTarget() const { return _lastTarget; }
+QObject *InteractorComposite::lastTarget() const {
+  return _lastTarget;
+}
 
 void InteractorComposite::setView(tlp::View *view) {
   _view = view;
-  // no need to call construct when view is nullptr (called with a nullptr from
-  // View::~View())
+  // no need to call construct when view is nullptr (called with a nullptr from View::~View())
   if (view != nullptr)
     construct();
 
@@ -70,8 +79,7 @@ void InteractorComposite::setView(tlp::View *view) {
     i->setView(view);
 }
 
-bool InteractorComposite::showContextMenu(const QPoint &point,
-                                          const QPointF &scenePoint) {
+bool InteractorComposite::showContextMenu(const QPoint &point, const QPointF &scenePoint) {
   for (auto i : _components)
     if (i->showContextMenu(point, scenePoint))
       return true;
@@ -116,4 +124,6 @@ void InteractorComposite::uninstall() {
   install(nullptr);
 }
 
-QAction *InteractorComposite::action() const { return _action; }
+QAction *InteractorComposite::action() const {
+  return _action;
+}

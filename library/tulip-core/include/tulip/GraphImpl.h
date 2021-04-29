@@ -23,14 +23,15 @@
 
 #include <set>
 
+#include <vector>
 #include <list>
 #include <tulip/GraphAbstract.h>
 #include <tulip/GraphStorage.h>
 #include <tulip/IdManager.h>
-#include <vector>
 
 namespace tlp {
-template <class itType> struct Iterator;
+template <class itType>
+struct Iterator;
 class GraphView;
 class GraphUpdatesRecorder;
 
@@ -48,9 +49,10 @@ public:
   inline bool isElement(const node n) const override {
     return storage.isElement(n);
   }
-  bool isElement(const edge e) const override { return storage.isElement(e); }
-  edge existEdge(const node source, const node target,
-                 bool directed = true) const override;
+  bool isElement(const edge e) const override {
+    return storage.isElement(e);
+  }
+  edge existEdge(const node source, const node target, bool directed = true) const override;
   node addNode() override;
   void addNodes(unsigned int nb) override;
   void addNodes(unsigned int nb, std::vector<node> &addedNodes) override;
@@ -67,8 +69,7 @@ public:
   inline void setEdgeOrder(const node n, const std::vector<edge> &v) override {
     storage.setEdgeOrder(n, v);
   }
-  inline void swapEdgeOrder(const node n, const edge e1,
-                            const edge e2) override {
+  inline void swapEdgeOrder(const node n, const edge e1, const edge e2) override {
     storage.swapEdgeOrder(n, e1, e2);
   }
   //=========================================================================
@@ -94,9 +95,8 @@ public:
   Iterator<edge> *getInOutEdges(const node) const override;
   std::vector<edge> getEdges(const node source, const node target,
                              bool directed = true) const override;
-  bool getEdges(const node source, const node target, bool directed,
-                std::vector<edge> &edges, const Graph *sg = nullptr,
-                bool onlyFirst = false) const {
+  bool getEdges(const node source, const node target, bool directed, std::vector<edge> &edges,
+                const Graph *sg = nullptr, bool onlyFirst = false) const {
     return storage.getEdges(source, target, directed, edges, sg, onlyFirst);
   }
   inline const std::vector<edge> &allEdges(const node n) const override {
@@ -148,12 +148,13 @@ public:
   inline unsigned int numberOfNodes() const override {
     return storage.numberOfNodes();
   }
-  inline void sortElts() override { storage.sortElts(); }
+  inline void sortElts() override {
+    storage.sortElts();
+  }
   //=======================================================================
   // updates management
   void push(bool unpopAllowed = true,
-            std::vector<PropertyInterface *> *propertiesToPreserveOnPop =
-                nullptr) override;
+            std::vector<PropertyInterface *> *propertiesToPreserveOnPop = nullptr) override;
   void pop(bool unpopAllowed = true) override;
   void popIfNoUpdates() override;
   void unpop() override;

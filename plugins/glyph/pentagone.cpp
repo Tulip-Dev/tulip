@@ -18,12 +18,12 @@
  */
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
+#include <tulip/Size.h>
+#include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/GlPentagon.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/GlPentagon.h>
-#include <tulip/Glyph.h>
-#include <tulip/Size.h>
 #include <tulip/TulipViewSettings.h>
 
 using namespace std;
@@ -31,9 +31,8 @@ using namespace tlp;
 
 namespace tlp {
 
-static void drawPentagon(const Color &fillColor, const Color &borderColor,
-                         float borderWidth, const std::string &textureName,
-                         float lod, bool mode) {
+static void drawPentagon(const Color &fillColor, const Color &borderColor, float borderWidth,
+                         const std::string &textureName, float lod, bool mode) {
   static GlPentagon pentagon(Coord(0, 0, 0), Size(.5, .5, 0));
   pentagon.setLightingMode(mode);
   pentagon.setFillColor(fillColor);
@@ -60,8 +59,8 @@ static void drawPentagon(const Color &fillColor, const Color &borderColor,
  */
 class Pentagon : public Glyph {
 public:
-  GLYPHINFORMATION("2D - Pentagon", "David Auber", "09/07/2002",
-                   "Textured Pentagon", "1.0", NodeShape::Pentagon)
+  GLYPHINFORMATION("2D - Pentagon", "David Auber", "09/07/2002", "Textured Pentagon", "1.0",
+                   NodeShape::Pentagon)
   Pentagon(const tlp::PluginContext *context = nullptr);
   ~Pentagon() override;
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
@@ -82,31 +81,25 @@ void Pentagon::draw(node n, float lod) {
 
   drawPentagon(glGraphInputData->getElementColor()->getNodeValue(n),
                glGraphInputData->getElementBorderColor()->getNodeValue(n),
-               glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-               textureName, lod, true);
+               glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod, true);
 }
 
 class EEPentagon : public EdgeExtremityGlyph {
 public:
   GLYPHINFORMATION("2D - Pentagon extremity", "David Auber", "09/07/2002",
-                   "Textured Pentagon for edge extremities", "1.0",
-                   EdgeExtremityShape::Pentagon)
+                   "Textured Pentagon for edge extremities", "1.0", EdgeExtremityShape::Pentagon)
 
   EEPentagon(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
 
-  void draw(edge e, node, const Color &glyphColor, const Color &borderColor,
-            float lod) override {
-    string textureName =
-        edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) override {
+    string textureName = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
     if (!textureName.empty())
-      textureName =
-          edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
+      textureName = edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
 
-    drawPentagon(
-        glyphColor, borderColor,
-        edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-        textureName, lod, false);
+    drawPentagon(glyphColor, borderColor,
+                 edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), textureName,
+                 lod, false);
   }
 };
 PLUGIN(EEPentagon)

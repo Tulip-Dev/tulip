@@ -24,8 +24,8 @@
 
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include <tulip/GlSimpleEntity.h>
 #include <tulip/Size.h>
+#include <tulip/GlSimpleEntity.h>
 
 #include <tulip/OpenGlIncludes.h>
 
@@ -34,8 +34,7 @@ namespace tlp {
 /**
  * @ingroup OpenGL
  * @brief class to create a abstract polygon
- * @warning You don't have to use this class, it's only a base class for some
- * others entities
+ * @warning You don't have to use this class, it's only a base class for some others entities
  */
 class TLP_GL_SCOPE GlAbstractPolygon : public GlSimpleEntity {
 public:
@@ -151,14 +150,12 @@ public:
   ///@cond DOXYGEN_HIDDEN
 
   /**
-   * Get the lod outline value, below this lod value outline will not be
-   * displayed
+   * Get the lod outline value, below this lod value outline will not be displayed
    */
   float getHideOutlineLod();
 
   /**
-   * Set the lod outline value, below this lod value outline will not be
-   * displayed
+   * Set the lod outline value, below this lod value outline will not be displayed
    */
   void setHideOutlineLod(float lod);
 
@@ -195,8 +192,7 @@ public:
   /**
    * Function to set data with inString (in XML format)
    */
-  void setWithXML(const std::string &outString,
-                  unsigned int &currentPosition) override;
+  void setWithXML(const std::string &outString, unsigned int &currentPosition) override;
 
   ///@endcond
 

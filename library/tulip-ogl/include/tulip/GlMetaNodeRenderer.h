@@ -21,8 +21,8 @@
 #ifndef Tulip_GLMETANODERENDERER_H
 #define Tulip_GLMETANODERENDERER_H
 
-#include <tulip/Observable.h>
 #include <tulip/tulipconf.h>
+#include <tulip/Observable.h>
 #include <unordered_map>
 
 namespace tlp {

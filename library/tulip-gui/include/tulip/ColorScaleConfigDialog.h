@@ -40,8 +40,7 @@ class TLP_QT_SCOPE ColorScaleConfigDialog : public QDialog {
   Q_OBJECT
 
 public:
-  ColorScaleConfigDialog(const ColorScale &colorScale = ColorScale(),
-                         QWidget *parent = nullptr);
+  ColorScaleConfigDialog(const ColorScale &colorScale = ColorScale(), QWidget *parent = nullptr);
   ~ColorScaleConfigDialog() override;
   void setColorScale(const ColorScale &colorScale);
   const ColorScale &getColorScale() const;
@@ -85,8 +84,7 @@ private:
   static std::map<QString, std::vector<Color>> tulipImageColorScales;
   static void loadTulipImageColorScales();
   static void loadImageColorScalesFromDir(const QString &colorScalesDir);
-  static std::vector<Color>
-  getColorScaleFromImageFile(const QString &imageFilePath);
+  static std::vector<Color> getColorScaleFromImageFile(const QString &imageFilePath);
 };
 } // namespace tlp
 

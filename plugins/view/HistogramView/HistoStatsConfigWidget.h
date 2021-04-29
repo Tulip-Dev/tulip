@@ -38,8 +38,7 @@ public:
   HistoStatsConfigWidget(QWidget *parent = nullptr);
   ~HistoStatsConfigWidget() override;
 
-  void setMinMaxMeanAndSd(double min, double max, double mean,
-                          double standardDeviation);
+  void setMinMaxMeanAndSd(double min, double max, double mean, double standardDeviation);
   bool densityEstimation() const;
   double getSampleStep() const;
   double getBandwidth() const;

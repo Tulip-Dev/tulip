@@ -20,13 +20,13 @@
 
 #include <sstream>
 
+#include <tulip/GlTextureManager.h>
+#include <tulip/GlOpenUniformCubicBSpline.h>
+#include <tulip/GlTools.h>
 #include <tulip/Curves.h>
 #include <tulip/GlBezierCurve.h>
-#include <tulip/GlOpenUniformCubicBSpline.h>
-#include <tulip/GlShaderProgram.h>
-#include <tulip/GlTextureManager.h>
-#include <tulip/GlTools.h>
 #include <tulip/ParametricCurves.h>
+#include <tulip/GlShaderProgram.h>
 
 using namespace std;
 
@@ -83,34 +83,28 @@ static string bSplineSpecificShaderCode =
 const unsigned int curveDegree = 3;
 
 GlOpenUniformCubicBSpline::GlOpenUniformCubicBSpline()
-    : AbstractGlCurve("open uniform cubic bspline vertex shader",
-                      bSplineSpecificShaderCode) {}
+    : AbstractGlCurve("open uniform cubic bspline vertex shader", bSplineSpecificShaderCode) {}
 
-GlOpenUniformCubicBSpline::GlOpenUniformCubicBSpline(
-    const vector<Coord> &controlPoints, const Color &startColor,
-    const Color &endColor, const float startSize, const float endSize,
-    const unsigned int nbCurvePoints)
-    : AbstractGlCurve("open uniform cubic bspline vertex shader",
-                      bSplineSpecificShaderCode, controlPoints, startColor,
-                      endColor, startSize, endSize, nbCurvePoints) {}
+GlOpenUniformCubicBSpline::GlOpenUniformCubicBSpline(const vector<Coord> &controlPoints,
+                                                     const Color &startColor, const Color &endColor,
+                                                     const float startSize, const float endSize,
+                                                     const unsigned int nbCurvePoints)
+    : AbstractGlCurve("open uniform cubic bspline vertex shader", bSplineSpecificShaderCode,
+                      controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints) {}
 
 GlOpenUniformCubicBSpline::~GlOpenUniformCubicBSpline() {}
 
-void GlOpenUniformCubicBSpline::
-    setCurveVertexShaderRenderingSpecificParameters() {
+void GlOpenUniformCubicBSpline::setCurveVertexShaderRenderingSpecificParameters() {
   curveShaderProgram->setUniformFloat("stepKnots", stepKnots);
 }
 
 void GlOpenUniformCubicBSpline::drawCurve(std::vector<Coord> &controlPoints,
-                                          const Color &startColor,
-                                          const Color &endColor,
-                                          const float startSize,
-                                          const float endSize,
+                                          const Color &startColor, const Color &endColor,
+                                          const float startSize, const float endSize,
                                           const unsigned int nbCurvePoints) {
 
   nbKnots = controlPoints.size() + curveDegree + 1;
-  stepKnots = 1.0f / ((float(nbKnots) - 2.0f * (float(curveDegree) + 1.0f)) +
-                      2.0f - 1.0f);
+  stepKnots = 1.0f / ((float(nbKnots) - 2.0f * (float(curveDegree) + 1.0f)) + 2.0f - 1.0f);
 
   if (controlPoints.size() < (curveDegree + 1)) {
     static GlBezierCurve curve;
@@ -123,23 +117,21 @@ void GlOpenUniformCubicBSpline::drawCurve(std::vector<Coord> &controlPoints,
     curve.setTexture(texture);
     curve.setBillboardCurve(billboardCurve);
     curve.setLookDir(lookDir);
-    curve.drawCurve(controlPoints, startColor, endColor, startSize, endSize,
-                    nbCurvePoints);
+    curve.drawCurve(controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
   } else {
-    AbstractGlCurve::drawCurve(controlPoints, startColor, endColor, startSize,
-                               endSize, nbCurvePoints);
+    AbstractGlCurve::drawCurve(controlPoints, startColor, endColor, startSize, endSize,
+                               nbCurvePoints);
   }
 }
 
-Coord GlOpenUniformCubicBSpline::computeCurvePointOnCPU(
-    const std::vector<Coord> &controlPoints, float t) {
+Coord GlOpenUniformCubicBSpline::computeCurvePointOnCPU(const std::vector<Coord> &controlPoints,
+                                                        float t) {
   return computeOpenUniformBsplinePoint(controlPoints, t, curveDegree);
 }
 
-void GlOpenUniformCubicBSpline::computeCurvePointsOnCPU(
-    const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints,
-    unsigned int nbCurvePoints) {
-  computeOpenUniformBsplinePoints(controlPoints, curvePoints, curveDegree,
-                                  nbCurvePoints);
+void GlOpenUniformCubicBSpline::computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints,
+                                                        std::vector<Coord> &curvePoints,
+                                                        unsigned int nbCurvePoints) {
+  computeOpenUniformBsplinePoints(controlPoints, curvePoints, curveDegree, nbCurvePoints);
 }
 } // namespace tlp

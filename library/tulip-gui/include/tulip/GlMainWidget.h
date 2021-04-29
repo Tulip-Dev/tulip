@@ -22,9 +22,9 @@
 
 #include <QOpenGLWidget>
 
+#include <tulip/tulipconf.h>
 #include <tulip/GlScene.h>
 #include <tulip/Graph.h>
-#include <tulip/tulipconf.h>
 
 class QOpenGLFramebufferObject;
 
@@ -34,8 +34,7 @@ class View;
 class GlCompositeHierarchyManager;
 
 /** @ingroup OpenGL
- * @brief This widget provide a simple system to visualize data/graph with
- * OpenGL 3D engine
+ * @brief This widget provide a simple system to visualize data/graph with OpenGL 3D engine
  *
  * This widget is an interface between Qt Widget system and tulip OpenGL engine
  * The central object of GlMainWidget is the GlScene member
@@ -70,14 +69,12 @@ public:
    * @see render
    **/
   enum RenderingOption {
-    RenderScene = 0x1, /** Force to render the graph even if there is a previous
-                          buffered render. You need to call this option if the
-                          graph is updated to regenerate the buffer. If not set
-                          try to use the last buffered graph render, if there is
+    RenderScene = 0x1, /** Force to render the graph even if there is a previous buffered render.
+                          You need to call this option if the graph is updated to regenerate the
+                          buffer. If not set try to use the last buffered graph render, if there is
                           no valid buffer this flag is forced. **/
-    SwapBuffers = 0x2  /** Call the swapBuffer functions at the end of the
-                          rendering process. If the  disabled  it's up to you to
-                          call the swapBuffer function. **/
+    SwapBuffers = 0x2  /** Call the swapBuffer functions at the end of the rendering process. If the
+                          disabled  it's up to you to call the swapBuffer function. **/
   };
   Q_DECLARE_FLAGS(RenderingOptions, RenderingOption)
 
@@ -86,8 +83,7 @@ public:
    *
    * Create a GlMainWidget with the GlScene associated to it
    * @param parent Qt Widget parent system
-   * @param view if you want to link this GlMainWidget to a view : use this
-   * parameter
+   * @param view if you want to link this GlMainWidget to a view : use this parameter
    */
   GlMainWidget(QWidget *parent = nullptr, View *view = nullptr);
   ~GlMainWidget() override;
@@ -100,30 +96,27 @@ public:
    * @see GlScene::createLayer(const std::string &name)
    * @see GlLayer::addGlEntity(GlSimpleEntity *entity,const std::string& name)
    */
-  tlp::GlScene *getScene() { return &scene; }
+  tlp::GlScene *getScene() {
+    return &scene;
+  }
 
   /** @brief Select nodes and edges in a region of the screen
    *
-   *  Select all nodes and edges lying in the area of the screen of given width
-   * and height, and with its upper-left corner at (x,y)
-   *  @param selectedNodes filled by the method with the nodes found in the
-   * region
-   *  @param selectedEdges filled by the method with the edges found in the
-   * region
+   *  Select all nodes and edges lying in the area of the screen of given width and height,
+   *  and with its upper-left corner at (x,y)
+   *  @param selectedNodes filled by the method with the nodes found in the region
+   *  @param selectedEdges filled by the method with the edges found in the region
    *  @param layer specify the layer in which to perform the picking
    *  @param pickNodes enable or disable the picking of nodes
    *  @param pickEdges enable or disable the picking of edges
    */
-  void pickNodesEdges(const int x, const int y, const int width,
-                      const int height,
+  void pickNodesEdges(const int x, const int y, const int width, const int height,
                       std::vector<SelectedEntity> &selectedNodes,
-                      std::vector<SelectedEntity> &selectedEdges,
-                      tlp::GlLayer *layer = nullptr, bool pickNodes = true,
-                      bool pickEdges = true);
+                      std::vector<SelectedEntity> &selectedEdges, tlp::GlLayer *layer = nullptr,
+                      bool pickNodes = true, bool pickEdges = true);
 
   /** @brief Select a node or edge at a screen point
-   *  Try to select at point (x,y) a node in the first place then if no result
-   * try to select an edge
+   *  Try to select at point (x,y) a node in the first place then if no result try to select an edge
    *  @param type tells what has been found: NODE, EDGE
    *  @param layer specify the layer in which to perform the picking
    *  @param pickNodes enable or disable the picking of nodes
@@ -131,15 +124,16 @@ public:
    *  @return true if something has been found, false otherwise
    */
   bool pickNodesEdges(const int x, const int y, SelectedEntity &selectedEntity,
-                      tlp::GlLayer *layer = nullptr, bool pickNodes = true,
-                      bool pickEdges = true);
+                      tlp::GlLayer *layer = nullptr, bool pickNodes = true, bool pickEdges = true);
 
   /**
    * @brief convert a screen measure into a viewport measure
    * @param a measure in screen coordinates specified as an integer
    * @return the converted measure in viewport coordinates as an integer
    */
-  inline int screenToViewport(int l) const { return l * devicePixelRatio(); }
+  inline int screenToViewport(int l) const {
+    return l * devicePixelRatio();
+  }
 
   /**
    * @brief convert a screen measure into a viewport measure
@@ -181,8 +175,8 @@ public:
 
   /**
    * @brief Compute texture size in power of two with given height and width
-   * For example if you set width to 94 and height to 256, this function set
-   * textureRealWidth to 128 and textureRealHeight to 256
+   * For example if you set width to 94 and height to 256, this function set textureRealWidth to 128
+   * and textureRealHeight to 256
    */
   static void getTextureRealSize(int width, int height, int &textureRealWidth,
                                  int &textureRealHeight);
@@ -191,18 +185,15 @@ public:
    * @brief Take a snapshot of the Widget and put it in a picture
    * @param width size
    * @param height size
-   * @param center if true this function calls a centerScene() before picture
-   * output
+   * @param center if true this function calls a centerScene() before picture output
    */
-  void createPicture(const std::string &pictureName, int width, int height,
-                     bool center = true);
+  void createPicture(const std::string &pictureName, int width, int height, bool center = true);
 
   /**
    * Take a snapshot of the Widget and return it
    * @param width size
    * @param height size
-   * @param center if true this function calls a centerScene() before picture
-   * output
+   * @param center if true this function calls a centerScene() before picture output
    * @param format indicates the format of the created image
    */
   QImage createPicture(int width, int height, bool center = true,
@@ -215,26 +206,20 @@ public:
    * @param y screen coordinates
    * @param width screen size
    * @param height screen size
-   * @param pickedEntities filled with entity under the selection screen
-   * rectangle
+   * @param pickedEntities filled with entity under the selection screen rectangle
    * @param layer if you want to do the selection only on one GlLayer
    */
-  bool pickGlEntities(const int x, const int y, const int width,
-                      const int height,
-                      std::vector<SelectedEntity> &pickedEntities,
-                      tlp::GlLayer *layer = nullptr);
+  bool pickGlEntities(const int x, const int y, const int width, const int height,
+                      std::vector<SelectedEntity> &pickedEntities, tlp::GlLayer *layer = nullptr);
   /**
    * @brief Function to do picking on entities.
-   * It just calls selectEntities on the GlScene instance with a small window of
-   * twelve pixels.
+   * It just calls selectEntities on the GlScene instance with a small window of twelve pixels.
    * @param x screen coordinates
    * @param y screen coordinates
-   * @param pickedEntities filled with entity under the selection screen
-   * rectangle
+   * @param pickedEntities filled with entity under the selection screen rectangle
    * @param layer if you want to do the selection only on one GlLayer
    */
-  bool pickGlEntities(const int x, const int y,
-                      std::vector<SelectedEntity> &pickedEntities,
+  bool pickGlEntities(const int x, const int y, std::vector<SelectedEntity> &pickedEntities,
                       tlp::GlLayer *layer = nullptr);
 
   /**
@@ -266,17 +251,15 @@ public:
 
   /**
    * @brief This function performs all the rendering process of the graph.
-   * Use this function only for advanced purpose, if you want to perform simple
-   *rendering use the draw or redraw functions instead.
-   * @param options Configure the rendering process, see the RenderingOption
-   *documentation for more information on each rendering option effect.
+   * Use this function only for advanced purpose, if you want to perform simple rendering use the
+   *draw or redraw functions instead.
+   * @param options Configure the rendering process, see the RenderingOption documentation for more
+   *information on each rendering option effect.
    * @see RenderingOption
-   * @param checkVisibility If check visibility is true : the engine check if
-   *GlMainWidget QWidget is visible. If false: the engine renders the scene in
-   *all cases
+   * @param checkVisibility If check visibility is true : the engine check if GlMainWidget
+   *QWidget is visible. If false: the engine renders the scene in all cases
    **/
-  void render(RenderingOptions options = RenderingOptions(RenderScene |
-                                                          SwapBuffers),
+  void render(RenderingOptions options = RenderingOptions(RenderScene | SwapBuffers),
               bool checkVisibility = true);
 
   /**
@@ -311,20 +294,20 @@ public slots:
    */
   void draw(bool graphChanged = true);
   /**
-   * This function is given for optimisation purpose only. If the hardware
-   * allows it, it enables to redraw only the Augmented display and the
-   * interactors and not the graph it is really useful for interactors such as
-   * zoom box etc.. Warning, if you change the graph or the properties of
-   * element (Colors, size, etc...) applying that function will not display the
-   * change, in that case, use the draw function.
+   * This function is given for optimisation purpose only. If the hardware allows it,
+   * it enables to redraw only the Augmented display and the interactors and not the graph
+   * it is really useful for interactors such as zoom box etc..
+   * Warning, if you change the graph or the properties of element (Colors, size, etc...)
+   * applying that function will not display the change, in that case, use the draw function.
    */
   void redraw();
 
   void closeEvent(QCloseEvent *e) override;
 
   /**
-   * @brief Convenience function that calls center function on the current
-   *scene, applies a zoom (if needed) and draws the view. Same thing than
+   * @brief Convenience function that calls center function on the current scene, applies a zoom (if
+   *needed) and draws the view.
+   * Same thing than
    * @code
    * getScene()->centerScene();
    * getScene()->zoomFactor();

@@ -20,31 +20,28 @@
 #ifndef INPUTSAMPLE_H_
 #define INPUTSAMPLE_H_
 
-#include "DynamicVector.h"
-#include <tulip/Graph.h>
-#include <tulip/NumericProperty.h>
-#include <tulip/Observable.h>
 #include <unordered_map>
 #include <vector>
+#include <tulip/Graph.h>
+#include <tulip/Observable.h>
+#include <tulip/NumericProperty.h>
+#include "DynamicVector.h"
 
 /**
- * Handle all the the samples data used to train the SOM. Take a graph and a
- *vector of NumericProperties to use it as sample data. This object can handle
- *standard or normalized values.
+ * Handle all the the samples data used to train the SOM. Take a graph and a vector of
+ *NumericProperties to use it as sample data.
+ * This object can handle standard or normalized values.
  **/
 namespace tlp {
 class InputSample : public tlp::Observable {
 public:
   InputSample(tlp::Graph *graph = nullptr);
-  InputSample(tlp::Graph *graph,
-              const std::vector<std::string> &propertiesToListen);
+  InputSample(tlp::Graph *graph, const std::vector<std::string> &propertiesToListen);
 
   void setGraph(tlp::Graph *graph);
-  void setGraph(tlp::Graph *graph,
-                const std::vector<std::string> &propertiesToListen);
+  void setGraph(tlp::Graph *graph, const std::vector<std::string> &propertiesToListen);
 
-  void
-  setPropertiesToListen(const std::vector<std::string> &propertiesToListen);
+  void setPropertiesToListen(const std::vector<std::string> &propertiesToListen);
   std::vector<std::string> getListenedProperties();
   ~InputSample() override;
 
@@ -60,7 +57,9 @@ public:
   inline unsigned int getDimensionOfSample() const {
     return propertiesList.size();
   }
-  inline tlp::Graph *getGraph() { return rootGraph; }
+  inline tlp::Graph *getGraph() {
+    return rootGraph;
+  }
 
   void update(std::set<tlp::Observable *>::iterator begin,
               std::set<tlp::Observable *>::iterator end);
@@ -81,8 +80,7 @@ public:
    **/
   unsigned findIndexForProperty(const std::string &propertyName) const;
 
-  // recover normalized value for val according to meanProperties[propNum] and
-  // sdProperties[propNum]
+  // recover normalized value for val according to meanProperties[propNum] and sdProperties[propNum]
   double normalize(double val, unsigned propNum);
   // convenient function
   double normalize(double val, const std::string &propertyName) {
@@ -104,17 +102,13 @@ protected:
 
   void buildPropertyVector(const std::vector<std::string> &propertiesToListen);
 
-  // Compute the mean value of propertiesList[i] and store it in
-  // meanProperties[i]
+  // Compute the mean value of propertiesList[i] and store it in meanProperties[i]
   void updateMeanValue(unsigned int);
-  // Compute the standard deviation value of propertiesList[i] and store it in
-  // sdProperties[i]
+  // Compute the standard deviation value of propertiesList[i] and store it in sdProperties[i]
   void updateSDValue(unsigned int);
-  // Compute the mean values of all propertiesList and store them in
-  // meanProperties
+  // Compute the mean values of all propertiesList and store them in meanProperties
   void updateAllMeanValues();
-  // Compute the standard deviation values of all propertiesList and store them
-  // in sdProperties
+  // Compute the standard deviation values of all propertiesList and store them in sdProperties
   void updateAllSDValues();
 
   // void buildNodeVector(unsigned int i);

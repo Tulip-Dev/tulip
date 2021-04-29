@@ -19,20 +19,18 @@
 
 #ifndef QUADTREE_H
 #define QUADTREE_H
-#include <tulip/DrawingTools.h>
-#include <tulip/Graph.h>
-#include <tulip/Vector.h>
 #include <unordered_map>
 #include <vector>
+#include <tulip/Graph.h>
+#include <tulip/Vector.h>
+#include <tulip/DrawingTools.h>
 
 class QuadTreeBundle {
 public:
-  static void compute(tlp::Graph *graph, double splitRatio,
-                      tlp::LayoutProperty *layout = nullptr,
+  static void compute(tlp::Graph *graph, double splitRatio, tlp::LayoutProperty *layout = nullptr,
                       tlp::SizeProperty *size = nullptr);
   //=====================================
-  static bool isIn(const tlp::Coord &p, const tlp::Coord &a,
-                   const tlp::Coord &b);
+  static bool isIn(const tlp::Coord &p, const tlp::Coord &a, const tlp::Coord &b);
 
 protected:
   void createQuadTree(tlp::Graph *graph, tlp::LayoutProperty *layout = nullptr,
@@ -54,10 +52,10 @@ private:
   tlp::node splitEdge(tlp::node a, tlp::node b);
   //=====================================
   void elmentSplitting(const tlp::Coord &a, const tlp::Coord &b,
-                       const std::vector<tlp::node> &input,
-                       std::vector<tlp::node> &in, std::vector<tlp::node> &out);
+                       const std::vector<tlp::node> &input, std::vector<tlp::node> &in,
+                       std::vector<tlp::node> &out);
   //=====================================
-  void recQuad(const tlp::node a, const tlp::node b, const tlp::node c,
-               const tlp::node d, const std::vector<tlp::node> &input);
+  void recQuad(const tlp::node a, const tlp::node b, const tlp::node c, const tlp::node d,
+               const std::vector<tlp::node> &input);
 };
 #endif // QUADTREE_H

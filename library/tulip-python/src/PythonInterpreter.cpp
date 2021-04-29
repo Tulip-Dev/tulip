@@ -22,25 +22,25 @@
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
 
+#include "tulip/PythonIncludes.h"
 #include "tulip/PythonInterpreter.h"
 #include "ConsoleHandlers.h"
-#include "tulip/PythonIncludes.h"
 
 #include <sstream>
 
-#include <QApplication>
-#include <QDir>
-#include <QElapsedTimer>
-#include <QLibrary>
 #include <QMessageBox>
-#include <QMutex>
+#include <QApplication>
+#include <QLibrary>
+#include <QElapsedTimer>
 #include <QTextStream>
+#include <QMutex>
 #include <QWaitCondition>
+#include <QDir>
 
+#include <tulip/TulipRelease.h>
+#include <tulip/TlpTools.h>
 #include <tulip/PythonVersionChecker.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/TlpTools.h>
-#include <tulip/TulipRelease.h>
 
 #include <cstdio>
 #ifndef WIN32
@@ -108,8 +108,12 @@ class SleepSimulator {
   QWaitCondition sleepSimulator;
 
 public:
-  SleepSimulator() { localMutex.lock(); }
-  ~SleepSimulator() { localMutex.unlock(); }
+  SleepSimulator() {
+    localMutex.lock();
+  }
+  ~SleepSimulator() {
+    localMutex.unlock();
+  }
 
   void sleep(unsigned long sleepMS) {
     sleepSimulator.wait(&localMutex, sleepMS);
@@ -118,7 +122,9 @@ public:
 
 static SleepSimulator ss;
 
-void tlp::decrefPyObject(PyObject *obj) { Py_XDECREF(obj); }
+void tlp::decrefPyObject(PyObject *obj) {
+  Py_XDECREF(obj);
+}
 
 int tracefunc(PyObject *, PyFrameObject *, int what, PyObject *) {
 
@@ -142,37 +148,34 @@ int tracefunc(PyObject *, PyFrameObject *, int what, PyObject *) {
   return 0;
 }
 
-const QString PythonInterpreter::pythonPluginsPath(
-    tlpStringToQString(tlp::TulipLibDir) + "tulip/python/");
+const QString PythonInterpreter::pythonPluginsPath(tlpStringToQString(tlp::TulipLibDir) +
+                                                   "tulip/python/");
 
-const QString PythonInterpreter::pythonPluginsPathHome(
-    QDir::homePath() + "/.Tulip-" + TULIP_MM_VERSION + "/plugins/python");
+const QString PythonInterpreter::pythonPluginsPathHome(QDir::homePath() + "/.Tulip-" +
+                                                       TULIP_MM_VERSION + "/plugins/python");
 
 const char PythonInterpreter::pythonReservedCharacters[] = {
     '#', '%',  '/', '+',  '-', '&', '*', '<', '>', '|', '~', '^', '=', ',', '$',
     '!', '\'', '`', '\"', '{', '}', '(', ')', '[', ']', '.', ':', '@', 0};
 
-const std::vector<QString> PythonInterpreter::pythonAccentuatedCharacters = {
-    "é", "è", "ù", "à", "ç"};
+const std::vector<QString> PythonInterpreter::pythonAccentuatedCharacters = {"é", "è", "ù", "à",
+                                                                             "ç"};
 
-const std::vector<QString>
-    PythonInterpreter::pythonAccentuatedCharactersReplace = {"e", "e", "u", "a",
-                                                             "c"};
+const std::vector<QString> PythonInterpreter::pythonAccentuatedCharactersReplace = {"e", "e", "u",
+                                                                                    "a", "c"};
 
 const char *PythonInterpreter::pythonKeywords[] = {
-    "def",    "class",  "from",   "in",    "and",      "or",    "not",
-    "is",     "with",   "assert", "for",   "while",    "if",    "elif",
-    "import", "True",   "False",  "pass",  "exec",     "else",  "None",
-    "print",  "global", "return", "break", "continue", "as",    "lambda",
-    "del",    "try",    "except", "raise", "finally",  "yield", "async",
-    "await",  nullptr};
+    "def",     "class",    "from",  "in",     "and",  "or",    "not",    "is",
+    "with",    "assert",   "for",   "while",  "if",   "elif",  "import", "True",
+    "False",   "pass",     "exec",  "else",   "None", "print", "global", "return",
+    "break",   "continue", "as",    "lambda", "del",  "try",   "except", "raise",
+    "finally", "yield",    "async", "await",  nullptr};
 
 static PythonInterpreter *_instance = nullptr;
 
 #ifdef _MSC_VER
 extern "C" {
-BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call,
-                      LPVOID lpReserved) {
+BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) {
   switch (ul_reason_for_call) {
   case DLL_PROCESS_ATTACH:
 
@@ -196,8 +199,8 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call,
 #endif
 
 PythonInterpreter::PythonInterpreter()
-    : _wasInit(false), _runningScript(false), _defaultConsoleWidget(nullptr),
-      _outputEnabled(true), _errorOutputEnabled(true) {
+    : _wasInit(false), _runningScript(false), _defaultConsoleWidget(nullptr), _outputEnabled(true),
+      _errorOutputEnabled(true) {
 
   if (Py_IsInitialized()) {
     _wasInit = true;
@@ -215,9 +218,9 @@ PythonInterpreter::PythonInterpreter()
 
 // Fix for GDB debugging on windows when compiling with MinGW.
 // GDB contains an embedded Python interpreter that messes up Python Home value.
-// When Tulip is compiled with a version of Python different from the one
-// embedded in GDB, it crashes at startup when running it through GDB. So reset
-// correct one to be able to debug it.
+// When Tulip is compiled with a version of Python different from the one embedded in GDB,
+// it crashes at startup when running it through GDB.
+// So reset correct one to be able to debug it.
 #ifdef __MINGW32__
     QString pythonHome = PythonVersionChecker::getPythonHome();
 
@@ -249,18 +252,17 @@ PythonInterpreter::PythonInterpreter()
   PyObject *pMainModule = PyImport_Import(pName);
   decrefPyObject(pName);
   PyObject *pMainDict = PyModule_GetDict(pMainModule);
-  PyObject *pVersion =
-      PyRun_String("str(sys.version_info[0])+\".\"+str(sys.version_info[1])",
-                   Py_eval_input, pMainDict, pMainDict);
+  PyObject *pVersion = PyRun_String("str(sys.version_info[0])+\".\"+str(sys.version_info[1])",
+                                    Py_eval_input, pMainDict, pMainDict);
 
   _pythonVersion = convertPythonUnicodeObjectToQString(pVersion);
 
   // checking if a QApplication is instantiated before creating any QWidget
-  // allow to avoid segfaults when trying to instantiate a plugin outside the
-  // Tulip GUI (for instance, with tulip_check_pl)
+  // allow to avoid segfaults when trying to instantiate a plugin outside the Tulip GUI (for
+  // instance, with tulip_check_pl)
   if (QApplication::instance() && !_wasInit) {
-// hack for linux in order to be able to load dynamic python modules installed
-// on the system (like numpy, matplotlib and other cool stuffs)
+// hack for linux in order to be able to load dynamic python modules installed on the system (like
+// numpy, matplotlib and other cool stuffs)
 #ifndef WIN32
     QString libPythonName = QString("libpython") + _pythonVersion;
 #ifdef __APPLE__
@@ -269,8 +271,7 @@ PythonInterpreter::PythonInterpreter()
     libPythonName += QString(".so.1.0");
 #endif
 
-    if (!dlopen(QStringToTlpString(libPythonName).c_str(),
-                RTLD_LAZY | RTLD_GLOBAL)) {
+    if (!dlopen(QStringToTlpString(libPythonName).c_str(), RTLD_LAZY | RTLD_GLOBAL)) {
 
       // for Python 3.2
       libPythonName = QString("libpython") + _pythonVersion + QString("mu");
@@ -280,8 +281,7 @@ PythonInterpreter::PythonInterpreter()
       libPythonName += QString(".so.1.0");
 #endif
 
-      if (!dlopen(QStringToTlpString(libPythonName).c_str(),
-                  RTLD_LAZY | RTLD_GLOBAL)) {
+      if (!dlopen(QStringToTlpString(libPythonName).c_str(), RTLD_LAZY | RTLD_GLOBAL)) {
         // for Python 3.3
         libPythonName = QString("libpython") + _pythonVersion + QString("m");
 #ifdef __APPLE__
@@ -289,8 +289,7 @@ PythonInterpreter::PythonInterpreter()
 #else
         libPythonName += QString(".so.1.0");
 #endif
-        dlopen(QStringToTlpString(libPythonName).c_str(),
-               RTLD_LAZY | RTLD_GLOBAL);
+        dlopen(QStringToTlpString(libPythonName).c_str(), RTLD_LAZY | RTLD_GLOBAL);
       }
     }
 
@@ -306,28 +305,26 @@ PythonInterpreter::PythonInterpreter()
       addModuleSearchPath(pythonPluginsPathHome);
 
 #if defined(__APPLE__)
-      addModuleSearchPath(
-          tlpStringToQString(tlp::TulipLibDir) + "../lib/tulip/python", true);
+      addModuleSearchPath(tlpStringToQString(tlp::TulipLibDir) + "../lib/tulip/python", true);
 #else
-      addModuleSearchPath(
-          tlpStringToQString(tlp::TulipLibDir) + "/tulip/python", true);
+      addModuleSearchPath(tlpStringToQString(tlp::TulipLibDir) + "/tulip/python", true);
 #endif
 
       // Try to import site package manually
       // otherwise Py_InitializeEx can crash if Py_NoSiteFlag is not set
       // and if the site module is not present on the host system
-      // Disable output while trying to import the module to not confuse the
-      // user
+      // Disable output while trying to import the module to not confuse the user
       runString("import site");
       runString("site.main()");
       runString("from tulip import tlp");
       runString("from tulipgui import tlpgui");
 
       // When importing the tulip module, Tulip Python plugins and
-      // startup scripts will be possibly loaded and other Python modules can be
-      // loaded as a side effect. Some external modules (like numpy) overrides
-      // the SIGINT handler at import, so reinstall the default one, otherwise
-      // Tulip can not be interrupted by hitting Ctrl-C in a console
+      // startup scripts will be possibly loaded and other Python modules can be loaded as a side
+      // effect.
+      // Some external modules (like numpy) overrides the SIGINT handler at import,
+      // so reinstall the default one, otherwise Tulip can not be interrupted by hitting Ctrl-C in a
+      // console
       setDefaultSIGINTHandler();
 
       runString(printObjectDictFunction);
@@ -386,10 +383,8 @@ void PythonInterpreter::initConsoleOutput() {
   consoleOuputHandler = new ConsoleOutputHandler();
   consoleOuputEmitter = new ConsoleOutputEmitter();
   QObject::connect(
-      consoleOuputEmitter,
-      SIGNAL(consoleOutput(QAbstractScrollArea *, const QString &, bool)),
-      consoleOuputHandler,
-      SLOT(writeToConsole(QAbstractScrollArea *, const QString &, bool)));
+      consoleOuputEmitter, SIGNAL(consoleOutput(QAbstractScrollArea *, const QString &, bool)),
+      consoleOuputHandler, SLOT(writeToConsole(QAbstractScrollArea *, const QString &, bool)));
 }
 
 bool PythonInterpreter::interpreterInit() {
@@ -403,13 +398,13 @@ bool PythonInterpreter::importModule(const QString &moduleName) {
   return runString(QString("import ") + moduleName);
 }
 
-bool PythonInterpreter::registerNewModuleFromString(
-    const QString &moduleName, const QString &moduleSrcCode) {
+bool PythonInterpreter::registerNewModuleFromString(const QString &moduleName,
+                                                    const QString &moduleSrcCode) {
   bool ret = true;
   holdGIL();
-  PyObject *pycomp = Py_CompileString(
-      QStringToTlpString(moduleSrcCode).c_str(),
-      QStringToTlpString(moduleName + ".py").c_str(), Py_file_input);
+  PyObject *pycomp =
+      Py_CompileString(QStringToTlpString(moduleSrcCode).c_str(),
+                       QStringToTlpString(moduleName + ".py").c_str(), Py_file_input);
 
   if (pycomp == nullptr) {
     PyErr_Print();
@@ -417,8 +412,8 @@ bool PythonInterpreter::registerNewModuleFromString(
     ret = false;
   } else {
 
-    PyObject *pmod = PyImport_ExecCodeModule(
-        const_cast<char *>(QStringToTlpString(moduleName).c_str()), pycomp);
+    PyObject *pmod =
+        PyImport_ExecCodeModule(const_cast<char *>(QStringToTlpString(moduleName).c_str()), pycomp);
 
     if (pmod == nullptr) {
       PyErr_Print();
@@ -431,23 +426,19 @@ bool PythonInterpreter::registerNewModuleFromString(
   return ret;
 }
 
-bool PythonInterpreter::functionExists(const QString &moduleName,
-                                       const QString &functionName) {
+bool PythonInterpreter::functionExists(const QString &moduleName, const QString &functionName) {
   holdGIL();
-  PyObject *pName =
-      PyUnicode_FromString(QStringToTlpString(moduleName).c_str());
+  PyObject *pName = PyUnicode_FromString(QStringToTlpString(moduleName).c_str());
   PyObject *pModule = PyImport_Import(pName);
   decrefPyObject(pName);
   PyObject *pDict = PyModule_GetDict(pModule);
-  PyObject *pFunc =
-      PyDict_GetItemString(pDict, QStringToTlpString(functionName).c_str());
+  PyObject *pFunc = PyDict_GetItemString(pDict, QStringToTlpString(functionName).c_str());
   bool ret = (pFunc != nullptr && PyCallable_Check(pFunc));
   releaseGIL();
   return ret;
 }
 
-bool PythonInterpreter::runString(const QString &pythonCode,
-                                  const QString &scriptFilePath) {
+bool PythonInterpreter::runString(const QString &pythonCode, const QString &scriptFilePath) {
   if (!scriptFilePath.isEmpty())
     mainScriptFileName = scriptFilePath;
 
@@ -469,8 +460,7 @@ bool PythonInterpreter::runString(const QString &pythonCode,
   return ret != -1;
 }
 
-PyObject *PythonInterpreter::evalPythonStatement(const QString &pythonStatement,
-                                                 bool singleInput) {
+PyObject *PythonInterpreter::evalPythonStatement(const QString &pythonStatement, bool singleInput) {
   holdGIL();
   PyObject *pName = PyUnicode_FromString("__main__");
   PyObject *pMainModule = PyImport_Import(pName);
@@ -478,8 +468,7 @@ PyObject *PythonInterpreter::evalPythonStatement(const QString &pythonStatement,
   PyObject *pMainDict = PyModule_GetDict(pMainModule);
 
   PyObject *ret = PyRun_String(QStringToTlpString(pythonStatement).c_str(),
-                               singleInput ? Py_single_input : Py_eval_input,
-                               pMainDict, pMainDict);
+                               singleInput ? Py_single_input : Py_eval_input, pMainDict, pMainDict);
 
   if (PyErr_Occurred()) {
     PyErr_Print();
@@ -491,10 +480,8 @@ PyObject *PythonInterpreter::evalPythonStatement(const QString &pythonStatement,
   return ret;
 }
 
-PyObject *
-PythonInterpreter::callPythonFunction(const QString &module,
-                                      const QString &function,
-                                      const tlp::DataSet &parameters) {
+PyObject *PythonInterpreter::callPythonFunction(const QString &module, const QString &function,
+                                                const tlp::DataSet &parameters) {
   holdGIL();
   PyObject *ret = nullptr;
   PyObject *pName = PyUnicode_FromString(QStringToTlpString(module).c_str());
@@ -505,15 +492,13 @@ PythonInterpreter::callPythonFunction(const QString &module,
   PyObject *pDict = PyModule_GetDict(pModule);
   decrefPyObject(pModule);
 
-  PyObject *pFunc =
-      PyDict_GetItemString(pDict, QStringToTlpString(function).c_str());
+  PyObject *pFunc = PyDict_GetItemString(pDict, QStringToTlpString(function).c_str());
 
   if (PyCallable_Check(pFunc)) {
     PyObject *argTup = PyTuple_New(parameters.size());
     int idx = 0;
     bool paramError = false;
-    for (const std::pair<std::string, DataType *> &param :
-         parameters.getValues()) {
+    for (const std::pair<std::string, DataType *> &param : parameters.getValues()) {
       PyObject *pyParam = getPyObjectFromDataType(param.second);
 
       if (!pyParam) {
@@ -540,8 +525,7 @@ PythonInterpreter::callPythonFunction(const QString &module,
   return ret;
 }
 
-bool PythonInterpreter::callFunction(const QString &module,
-                                     const QString &function,
+bool PythonInterpreter::callFunction(const QString &module, const QString &function,
                                      const tlp::DataSet &parameters) {
   holdGIL();
   bool ok = false;
@@ -556,8 +540,7 @@ bool PythonInterpreter::callFunction(const QString &module,
   return ok;
 }
 
-void PythonInterpreter::addModuleSearchPath(const QString &path,
-                                            const bool beforeOtherPaths) {
+void PythonInterpreter::addModuleSearchPath(const QString &path, const bool beforeOtherPaths) {
   if (_currentImportPaths.find(path) == _currentImportPaths.end()) {
     QString pythonCode;
     QTextStream oss(&pythonCode);
@@ -574,10 +557,8 @@ void PythonInterpreter::addModuleSearchPath(const QString &path,
   }
 }
 
-bool PythonInterpreter::runGraphScript(const QString &module,
-                                       const QString &function,
-                                       tlp::Graph *graph,
-                                       const QString &scriptFilePath) {
+bool PythonInterpreter::runGraphScript(const QString &module, const QString &function,
+                                       tlp::Graph *graph, const QString &scriptFilePath) {
 
   if (!scriptFilePath.isEmpty())
     mainScriptFileName = scriptFilePath;
@@ -588,8 +569,8 @@ bool PythonInterpreter::runGraphScript(const QString &module,
 
   clearTracebacks();
 
-  // ensure to reset the trace function in order to be able to pause a script
-  // (need that call for that feature to work on windows platform)
+  // ensure to reset the trace function in order to be able to pause a script (need that call for
+  // that feature to work on windows platform)
   PyEval_SetTrace(tracefunc, nullptr);
 
   bool ret = true;
@@ -601,8 +582,9 @@ bool PythonInterpreter::runGraphScript(const QString &module,
   PyObject *pModule = PyImport_Import(pName);
   decrefPyObject(pName);
 
-  // If the module is not __main__, reload it (needed to avoid errors when
-  // calling the runGraphScript function from Python)
+  // If the module is not __main__, reload it (needed to avoid errors when calling the
+  // runGraphScript
+  // function from Python)
   if (module != "__main__") {
     PyObject *pModuleReloaded = PyImport_ReloadModule(pModule);
     decrefPyObject(pModule);
@@ -613,14 +595,12 @@ bool PythonInterpreter::runGraphScript(const QString &module,
   PyObject *pDict = PyModule_GetDict(pModule);
 
   // pFunc is also a borrowed reference
-  PyObject *pFunc =
-      PyDict_GetItemString(pDict, QStringToTlpString(function).c_str());
+  PyObject *pFunc = PyDict_GetItemString(pDict, QStringToTlpString(function).c_str());
 
   if (PyCallable_Check(pFunc)) {
 
     if (sipAPI() == nullptr) {
-      QMessageBox::critical(QApplication::activeWindow(),
-                            "Failed to initialize Python",
+      QMessageBox::critical(QApplication::activeWindow(), "Failed to initialize Python",
                             "SIP could not be initialized (sipApi is null)");
       return false;
     }
@@ -643,13 +623,11 @@ bool PythonInterpreter::runGraphScript(const QString &module,
       PyObject_CallObject(pFunc, argTup);
     } catch (std::exception &e) {
       std::ostringstream oss;
-      oss << "A C++ exception (" << e.what()
-          << ") has been thrown while executing the script";
+      oss << "A C++ exception (" << e.what() << ") has been thrown while executing the script";
       PyErr_SetString(PyExc_Exception, oss.str().c_str());
     } catch (...) {
-      PyErr_SetString(
-          PyExc_Exception,
-          "A C++ exception has been thrown while executing the script");
+      PyErr_SetString(PyExc_Exception,
+                      "A C++ exception has been thrown while executing the script");
     }
 
     _runningScript = false;
@@ -763,14 +741,13 @@ void PythonInterpreter::setDefaultSIGINTHandler() {
 
 QString PythonInterpreter::getPythonShellBanner() {
   holdGIL();
-  QString ret = QString("Python ") + QString(Py_GetVersion()) +
-                QString(" on ") + QString(Py_GetPlatform());
+  QString ret =
+      QString("Python ") + QString(Py_GetVersion()) + QString(" on ") + QString(Py_GetPlatform());
   releaseGIL();
   return ret;
 }
 
-QVector<QString>
-PythonInterpreter::getGlobalDictEntries(const QString &prefixFilter) {
+QVector<QString> PythonInterpreter::getGlobalDictEntries(const QString &prefixFilter) {
   QVector<QString> ret;
   QSet<QString> publicMembersSorted;
   setOutputEnabled(false);
@@ -797,8 +774,7 @@ PythonInterpreter::getGlobalDictEntries(const QString &prefixFilter) {
 
   QSet<QString>::iterator it;
 
-  for (it = publicMembersSorted.begin(); it != publicMembersSorted.end();
-       ++it) {
+  for (it = publicMembersSorted.begin(); it != publicMembersSorted.end(); ++it) {
     ret.push_back(*it);
   }
 
@@ -825,9 +801,8 @@ QString PythonInterpreter::getVariableType(const QString &varName) {
     return "";
 }
 
-QVector<QString>
-PythonInterpreter::getObjectDictEntries(const QString &objectName,
-                                        const QString &prefixFilter) {
+QVector<QString> PythonInterpreter::getObjectDictEntries(const QString &objectName,
+                                                         const QString &prefixFilter) {
   QVector<QString> ret;
   QSet<QString> publicMembersSorted;
   setOutputEnabled(false);
@@ -856,8 +831,7 @@ PythonInterpreter::getObjectDictEntries(const QString &objectName,
 
     QSet<QString>::iterator it;
 
-    for (it = publicMembersSorted.begin(); it != publicMembersSorted.end();
-         ++it) {
+    for (it = publicMembersSorted.begin(); it != publicMembersSorted.end(); ++it) {
       ret.push_back(*it);
     }
   }
@@ -872,8 +846,7 @@ QVector<QString> PythonInterpreter::getImportedModulesList() {
   setOutputEnabled(false);
   setErrorOutputEnabled(false);
   consoleOuputString = "";
-  if (runString(
-          "import sys\nfor mod in sorted(sys.modules.keys()): print(mod)")) {
+  if (runString("import sys\nfor mod in sorted(sys.modules.keys()): print(mod)")) {
     QStringList modulesList = consoleOuputString.split("\n");
 
     for (int i = 0; i < modulesList.count(); ++i) {
@@ -892,8 +865,7 @@ QVector<QString> PythonInterpreter::getImportedModulesList() {
   return ret;
 }
 
-QVector<QString>
-PythonInterpreter::getBaseTypesForType(const QString &typeName) {
+QVector<QString> PythonInterpreter::getBaseTypesForType(const QString &typeName) {
   QVector<QString> ret;
   setOutputEnabled(false);
   setErrorOutputEnabled(false);
@@ -959,10 +931,11 @@ void PythonInterpreter::pauseCurrentScript(const bool pause) {
   }
 }
 
-bool PythonInterpreter::isScriptPaused() const { return scriptPaused; }
+bool PythonInterpreter::isScriptPaused() const {
+  return scriptPaused;
+}
 
-void PythonInterpreter::setProcessQtEventsDuringScriptExecution(
-    bool processEvents) {
+void PythonInterpreter::setProcessQtEventsDuringScriptExecution(bool processEvents) {
   processQtEvents = processEvents;
 }
 
@@ -970,7 +943,9 @@ void PythonInterpreter::setOutputEnabled(const bool enableOutput) {
   _outputEnabled = enableOutput;
 }
 
-bool PythonInterpreter::outputEnabled() const { return _outputEnabled; }
+bool PythonInterpreter::outputEnabled() const {
+  return _outputEnabled;
+}
 
 void PythonInterpreter::setErrorOutputEnabled(const bool enableOutput) {
   _errorOutputEnabled = enableOutput;
@@ -992,8 +967,7 @@ QString PythonInterpreter::getPythonFullVersionStr() const {
   return QString(version.data());
 }
 
-void PythonInterpreter::sendOutputToConsole(const QString &output,
-                                            bool stdErr) {
+void PythonInterpreter::sendOutputToConsole(const QString &output, bool stdErr) {
   bool textOutput = false;
 
   if (consoleOuputEmitter) {
@@ -1005,8 +979,7 @@ void PythonInterpreter::sendOutputToConsole(const QString &output,
         QString tmp(output);
         tmp.append("\nWarning!!! You are currently executing Python ");
         tmp.append(getPythonVersionStr());
-        tmp.append(
-            " embedded in Tulip appimage.\nNo module can be added to this version.");
+        tmp.append(" embedded in Tulip appimage.\nNo module can be added to this version.");
         consoleOuputEmitter->sendOutputToConsole(tmp, stdErr);
       } else
 #endif

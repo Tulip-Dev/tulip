@@ -16,35 +16,35 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <cmath>
-#include <fstream>
 #include <iostream>
+#include <fstream>
+#include <cmath>
 
-#include <tulip/ColorProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/GlGraphComposite.h>
-#include <tulip/GlLabel.h>
-#include <tulip/GlLayer.h>
-#include <tulip/GlMainWidget.h>
 #include <tulip/Graph.h>
-#include <tulip/IntegerProperty.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/GlGraphComposite.h>
+#include <tulip/GlLayer.h>
+#include <tulip/GlLabel.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/Perspective.h>
-#include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
-#include <tulip/TlpQtTools.h>
-#include <tulip/ViewGraphPropertiesSelectionWidget.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/SizeProperty.h>
 #include <tulip/tulipconf.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/Perspective.h>
+#include <tulip/ViewGraphPropertiesSelectionWidget.h>
 
 #include "PixelOrientedInteractors.h"
 #include "PixelOrientedView.h"
 #include "PixelOrientedViewQuickAccessBar.h"
 
 #include <QApplication>
-#include <QGraphicsProxyWidget>
 #include <QGraphicsView>
-#include <QMainWindow>
+#include <QGraphicsProxyWidget>
 #include <QMessageBox>
+#include <QMainWindow>
 #include <QProgressDialog>
 #include <QTimer>
 
@@ -67,25 +67,21 @@ static void setGraphView(tlp::GlGraphComposite *glGraph, bool displayNodes) {
 
 const string propertiesTypes[] = {"double", "int"};
 const unsigned int nbPropertiesTypes = sizeof(propertiesTypes) / sizeof(string);
-const vector<string> propertiesTypesFilter(propertiesTypes,
-                                           propertiesTypes + nbPropertiesTypes);
+const vector<string> propertiesTypesFilter(propertiesTypes, propertiesTypes + nbPropertiesTypes);
 
 namespace tlp {
 
 PLUGIN(PixelOrientedView)
 
 PixelOrientedView::PixelOrientedView(const PluginContext *)
-    : GlMainView(true), pixelOrientedGraph(nullptr), graphComposite(nullptr),
-      mainLayer(nullptr), overviewsComposite(nullptr), optionsWidget(nullptr),
-      propertiesSelectionWidget(nullptr), pixelOrientedMediator(nullptr),
-      lastNbNodes(0), overviewWidth(0), overviewHeight(0), minWidth(0),
-      refSize(0), hilbertLayout(nullptr), squareLayout(nullptr),
-      spiralLayout(new SpiralLayout()), zorderLayout(nullptr),
-      tulipNodeColorMapping(nullptr), smallMultiplesView(true),
-      sceneRadiusBak(0.0), zoomFactorBak(0.0), detailViewLabel(nullptr),
-      detailOverview(nullptr), newGraphSet(false),
-      smallMultiplesNeedUpdate(false), lastViewWindowWidth(0),
-      lastViewWindowHeight(0), center(false), isConstruct(false) {}
+    : GlMainView(true), pixelOrientedGraph(nullptr), graphComposite(nullptr), mainLayer(nullptr),
+      overviewsComposite(nullptr), optionsWidget(nullptr), propertiesSelectionWidget(nullptr),
+      pixelOrientedMediator(nullptr), lastNbNodes(0), overviewWidth(0), overviewHeight(0),
+      minWidth(0), refSize(0), hilbertLayout(nullptr), squareLayout(nullptr),
+      spiralLayout(new SpiralLayout()), zorderLayout(nullptr), tulipNodeColorMapping(nullptr),
+      smallMultiplesView(true), sceneRadiusBak(0.0), zoomFactorBak(0.0), detailViewLabel(nullptr),
+      detailOverview(nullptr), newGraphSet(false), smallMultiplesNeedUpdate(false),
+      lastViewWindowWidth(0), lastViewWindowHeight(0), center(false), isConstruct(false) {}
 
 PixelOrientedView::~PixelOrientedView() {
   if (isConstruct) {
@@ -135,16 +131,14 @@ void PixelOrientedView::setColorFunction(pocore::ColorFunction *colorFunction) {
   pixelOrientedMediator->setColorFunction(colorFunction);
 }
 
-void PixelOrientedView::setLayoutFunction(
-    pocore::LayoutFunction *layoutFunction) {
+void PixelOrientedView::setLayoutFunction(pocore::LayoutFunction *layoutFunction) {
   pixelOrientedMediator->setLayoutFunction(layoutFunction);
 }
 
 void PixelOrientedView::graphicsViewResized(int w, int h) {
   if (isConstruct && noPropertyMsgBox->isVisible()) {
-    noPropertyMsgBox->setPos(
-        w / 2 - noPropertyMsgBox->sceneBoundingRect().width() / 2,
-        h / 2 - noPropertyMsgBox->sceneBoundingRect().height() / 2);
+    noPropertyMsgBox->setPos(w / 2 - noPropertyMsgBox->sceneBoundingRect().width() / 2,
+                             h / 2 - noPropertyMsgBox->sceneBoundingRect().height() / 2);
   }
 }
 
@@ -163,12 +157,11 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
     qgrItem->setPen(QPen(Qt::transparent));
     graphicsView()->scene()->addItem(qgrItem);
 
-    QMessageBox *msgBox =
-        new QMessageBox(QMessageBox::Warning, "",
-                        "<b><font size=\"+1\">"
-                        "No graph properties selected.</font></b><br/><br/>"
-                        "Open the <b>Properties</b> configuration tab<br/>"
-                        "to proceed.");
+    QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning, "",
+                                          "<b><font size=\"+1\">"
+                                          "No graph properties selected.</font></b><br/><br/>"
+                                          "Open the <b>Properties</b> configuration tab<br/>"
+                                          "to proceed.");
     msgBox->setModal(false);
     // set a specific name before applying style sheet
     msgBox->setObjectName("needConfigurationMessageBox");
@@ -206,8 +199,7 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
     }
   }
 
-  if (lastGraph != nullptr &&
-      lastGraph->getRoot() != pixelOrientedGraph->getRoot()) {
+  if (lastGraph != nullptr && lastGraph->getRoot() != pixelOrientedGraph->getRoot()) {
     overviewGenMap.clear();
     detailOverviewPropertyName = "";
   }
@@ -215,8 +207,7 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
   dataSet.get("lastViewWindowWidth", lastViewWindowWidth);
   dataSet.get("lastViewWindowHeight", lastViewWindowHeight);
 
-  propertiesSelectionWidget->setWidgetParameters(pixelOrientedGraph,
-                                                 propertiesTypesFilter);
+  propertiesSelectionWidget->setWidgetParameters(pixelOrientedGraph, propertiesTypesFilter);
 
   Color backgroundColor(255, 255, 255);
   dataSet.get("background color", backgroundColor);
@@ -226,8 +217,7 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
 
   DataSet selectedGraphPropertiesDataSet;
 
-  if (dataSet.get("selected graph properties",
-                  selectedGraphPropertiesDataSet)) {
+  if (dataSet.get("selected graph properties", selectedGraphPropertiesDataSet)) {
     haveSelectedGraphProperties = true;
     int i = 0;
     ostringstream oss;
@@ -304,19 +294,18 @@ DataSet PixelOrientedView::state() const {
   return dataSet;
 }
 
-void PixelOrientedView::graphChanged(Graph *) { setState(DataSet()); }
+void PixelOrientedView::graphChanged(Graph *) {
+  setState(DataSet());
+}
 
 void PixelOrientedView::initLayoutFunctions() {
   delete hilbertLayout;
   delete squareLayout;
   delete zorderLayout;
 
-  hilbertLayout = new HilbertLayout(
-      int(ceil(log(pixelOrientedGraph->numberOfNodes()) / log(4))));
-  squareLayout =
-      new SquareLayout(int(ceil(sqrt(pixelOrientedGraph->numberOfNodes()))));
-  zorderLayout = new ZorderLayout(
-      int(ceil(log(pixelOrientedGraph->numberOfNodes()) / log(4))));
+  hilbertLayout = new HilbertLayout(int(ceil(log(pixelOrientedGraph->numberOfNodes()) / log(4))));
+  squareLayout = new SquareLayout(int(ceil(sqrt(pixelOrientedGraph->numberOfNodes()))));
+  zorderLayout = new ZorderLayout(int(ceil(log(pixelOrientedGraph->numberOfNodes()) / log(4))));
   layoutFunctionsMap["Zorder"] = zorderLayout;
   layoutFunctionsMap["Peano"] = hilbertLayout;
   layoutFunctionsMap["Square"] = squareLayout;
@@ -351,17 +340,14 @@ void PixelOrientedView::initPixelView() {
 
   overviewsComposite->reset(false);
 
-  selectedGraphProperties =
-      propertiesSelectionWidget->getSelectedGraphProperties();
+  selectedGraphProperties = propertiesSelectionWidget->getSelectedGraphProperties();
 
   if (selectedGraphProperties.empty())
     return;
 
   float squareRoot = sqrt(float(selectedGraphProperties.size()));
   const unsigned int N =
-      uint(squareRoot) +
-      (fmod(float(selectedGraphProperties.size()), squareRoot) == 0.f ? 0u
-                                                                      : 1u);
+      uint(squareRoot) + (fmod(float(selectedGraphProperties.size()), squareRoot) == 0.f ? 0u : 1u);
 
   for (size_t i = 0; i < selectedGraphProperties.size(); ++i) {
     const string &prop = selectedGraphProperties[i];
@@ -375,10 +361,9 @@ void PixelOrientedView::initPixelView() {
     unsigned int row = i / N;
     unsigned int col = i % N;
 
-    Coord overviewBLCorner(col * (overviewWidth + spaceBetweenOverviews),
-                           -(labelHeight + row * (labelHeight + overviewHeight +
-                                                  spaceBetweenOverviews)),
-                           0);
+    Coord overviewBLCorner(
+        col * (overviewWidth + spaceBetweenOverviews),
+        -(labelHeight + row * (labelHeight + overviewHeight + spaceBetweenOverviews)), 0);
     ostringstream oss;
     oss << "pixel oriented overview for dimension " << prop;
 
@@ -386,8 +371,7 @@ void PixelOrientedView::initPixelView() {
     auto ito = overviewsMap.find(prop);
     if (ito == overviewsMap.end()) {
       pixelOrientedOverview = new PixelOrientedOverview(
-          dataMap[prop], pixelOrientedMediator, overviewBLCorner, prop,
-          backgroundColor, textColor);
+          dataMap[prop], pixelOrientedMediator, overviewBLCorner, prop, backgroundColor, textColor);
       pixelOrientedOverview->computePixelView();
       overviewsMap.emplace(prop, pixelOrientedOverview);
 
@@ -431,9 +415,9 @@ void PixelOrientedView::destroyOverviewsIfNeeded() {
   }
 
   for (auto &prop : propertiesToRemove) {
-    selectedGraphProperties.erase(remove(selectedGraphProperties.begin(),
-                                         selectedGraphProperties.end(), prop),
-                                  selectedGraphProperties.end());
+    selectedGraphProperties.erase(
+        remove(selectedGraphProperties.begin(), selectedGraphProperties.end(), prop),
+        selectedGraphProperties.end());
   }
 }
 
@@ -445,8 +429,7 @@ void PixelOrientedView::destroyData() {
   dataMap.clear();
 }
 
-void PixelOrientedView::generatePixelOverview(
-    PixelOrientedOverview *pixelOverview) {
+void PixelOrientedView::generatePixelOverview(PixelOrientedOverview *pixelOverview) {
   pixelOverview->computePixelView();
   overviewGenMap[pixelOverview->getDimensionName()] = true;
 }
@@ -471,8 +454,7 @@ void PixelOrientedView::draw() {
   unsigned int lastNbDimensionsSelected = selectedGraphProperties.size();
   destroyOverviewsIfNeeded();
 
-  if (pixelOrientedGraph->numberOfNodes() >=
-      2) // We stop the creation of pixel overviews if we
+  if (pixelOrientedGraph->numberOfNodes() >= 2) // We stop the creation of pixel overviews if we
     // have less than 2 nodes as we need at least two
     // to compute sizes for overview
     initPixelView();
@@ -495,15 +477,13 @@ void PixelOrientedView::draw() {
     center = true;
   }
 
-  if (!smallMultiplesView && lastNbDimensionsSelected == 1 &&
-      selectedGraphProperties.size() > 1) {
+  if (!smallMultiplesView && lastNbDimensionsSelected == 1 && selectedGraphProperties.size() > 1) {
     switchFromDetailViewToSmallMultiples();
   } else if (selectedGraphProperties.size() == 1) {
     glw->makeCurrent();
     overviewsMap[selectedGraphProperties[0]]->computePixelView();
     overviewGenMap[selectedGraphProperties[0]] = true;
-    switchFromSmallMultiplesToDetailView(
-        overviewsMap[selectedGraphProperties[0]]);
+    switchFromSmallMultiplesToDetailView(overviewsMap[selectedGraphProperties[0]]);
   } else if (!smallMultiplesView && detailOverview != nullptr) {
     detailOverview->computePixelView();
     smallMultiplesNeedUpdate = true;
@@ -531,9 +511,13 @@ void PixelOrientedView::draw() {
   }
 }
 
-void PixelOrientedView::refresh() { getGlMainWidget()->redraw(); }
+void PixelOrientedView::refresh() {
+  getGlMainWidget()->redraw();
+}
 
-void PixelOrientedView::init() { emit drawNeeded(); }
+void PixelOrientedView::init() {
+  emit drawNeeded();
+}
 
 Color PixelOrientedView::getTextColor() const {
   Color backgroundColor = optionsWidget->getBackgroundColor();
@@ -553,14 +537,13 @@ Color PixelOrientedView::getTextColor() const {
 void PixelOrientedView::centerView(bool) {
   if (!getGlMainWidget()->isVisible()) {
     if (lastViewWindowWidth != 0 && lastViewWindowHeight != 0) {
-      getGlMainWidget()->getScene()->adjustSceneToSize(lastViewWindowWidth,
-                                                       lastViewWindowHeight);
+      getGlMainWidget()->getScene()->adjustSceneToSize(lastViewWindowWidth, lastViewWindowHeight);
     } else {
       getGlMainWidget()->getScene()->centerScene();
     }
   } else {
-    getGlMainWidget()->getScene()->adjustSceneToSize(
-        getGlMainWidget()->width(), getGlMainWidget()->height());
+    getGlMainWidget()->getScene()->adjustSceneToSize(getGlMainWidget()->width(),
+                                                     getGlMainWidget()->height());
   }
 
   // we apply a zoom factor to preserve a 50 px margin height
@@ -598,9 +581,8 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
     progress.setValue(0);
 
     for (auto &it : overviewsMap) {
-      if (std::find(selectedGraphProperties.begin(),
-                    selectedGraphProperties.end(),
-                    it.first) != selectedGraphProperties.end()) {
+      if (std::find(selectedGraphProperties.begin(), selectedGraphProperties.end(), it.first) !=
+          selectedGraphProperties.end()) {
         if (updateAll || overviewGenMap[it.first]) {
           (it.second)->computePixelView();
           overviewGenMap[it.first] = true;
@@ -631,9 +613,8 @@ vector<PixelOrientedOverview *> PixelOrientedView::getOverviews() {
   vector<PixelOrientedOverview *> ret;
 
   for (auto &it : overviewsMap) {
-    if (std::find(selectedGraphProperties.begin(),
-                  selectedGraphProperties.end(),
-                  it.first) != selectedGraphProperties.end()) {
+    if (std::find(selectedGraphProperties.begin(), selectedGraphProperties.end(), it.first) !=
+        selectedGraphProperties.end()) {
       ret.push_back(it.second);
     }
   }
@@ -648,14 +629,11 @@ QuickAccessBar *PixelOrientedView::getQuickAccessBarImpl() {
   return _bar;
 }
 
-void PixelOrientedView::switchFromSmallMultiplesToDetailView(
-    PixelOrientedOverview *pixelOverview) {
+void PixelOrientedView::switchFromSmallMultiplesToDetailView(PixelOrientedOverview *pixelOverview) {
 
   if (smallMultiplesView) {
-    sceneRadiusBak =
-        getGlMainWidget()->getScene()->getGraphCamera().getSceneRadius();
-    zoomFactorBak =
-        getGlMainWidget()->getScene()->getGraphCamera().getZoomFactor();
+    sceneRadiusBak = getGlMainWidget()->getScene()->getGraphCamera().getSceneRadius();
+    zoomFactorBak = getGlMainWidget()->getScene()->getGraphCamera().getZoomFactor();
     eyesBak = getGlMainWidget()->getScene()->getGraphCamera().getEyes();
     centerBak = getGlMainWidget()->getScene()->getGraphCamera().getCenter();
     upBak = getGlMainWidget()->getScene()->getGraphCamera().getUp();
@@ -675,8 +653,7 @@ void PixelOrientedView::switchFromSmallMultiplesToDetailView(
   delete detailViewLabel;
   detailViewLabel = new GlLabel(
       Coord((graphBoundingBox[0][0] + graphBoundingBox[1][0]) / 2.f,
-            graphBoundingBox[0][1] -
-                (graphBoundingBox[1][1] - graphBoundingBox[0][1]) / 8.f),
+            graphBoundingBox[0][1] - (graphBoundingBox[1][1] - graphBoundingBox[0][1]) / 8.f),
       Size((graphBoundingBox[1][0] - graphBoundingBox[0][0]),
            (graphBoundingBox[1][1] - graphBoundingBox[0][1]) / 4.f),
       getTextColor());
@@ -707,8 +684,7 @@ void PixelOrientedView::switchFromDetailViewToSmallMultiples() {
   setGraphView(graphComposite, false);
   mainLayer->deleteGlEntity(detailViewLabel);
   mainLayer->addGlEntity(overviewsComposite, "overviews composite");
-  getGlMainWidget()->getScene()->getGraphCamera().setSceneRadius(
-      sceneRadiusBak);
+  getGlMainWidget()->getScene()->getGraphCamera().setSceneRadius(sceneRadiusBak);
   getGlMainWidget()->getScene()->getGraphCamera().setZoomFactor(zoomFactorBak);
   getGlMainWidget()->getScene()->getGraphCamera().setEyes(eyesBak);
   getGlMainWidget()->getScene()->getGraphCamera().setCenter(centerBak);
@@ -732,8 +708,7 @@ void PixelOrientedView::interactorsInstalled(const QList<tlp::Interactor *> &) {
 }
 
 void PixelOrientedView::toggleInteractors(const bool activate) {
-  View::toggleInteractors(activate,
-                          {InteractorName::PixelOrientedInteractorNavigation});
+  View::toggleInteractors(activate, {InteractorName::PixelOrientedInteractorNavigation});
 }
 
 void PixelOrientedView::registerTriggers() {
@@ -749,8 +724,7 @@ void PixelOrientedView::registerTriggers() {
 }
 
 void PixelOrientedView::applySettings() {
-  if (propertiesSelectionWidget->configurationChanged() ||
-      optionsWidget->configurationChanged()) {
+  if (propertiesSelectionWidget->configurationChanged() || optionsWidget->configurationChanged()) {
     updateOverviews(true);
     draw();
 
@@ -765,12 +739,10 @@ void PixelOrientedView::applySettings() {
 
       detailViewLabel->setPosition(
           Coord((graphBoundingBox[0][0] + graphBoundingBox[1][0]) / 2.f,
-                graphBoundingBox[0][1] -
-                    (graphBoundingBox[1][1] - graphBoundingBox[0][1]) / 8.f));
+                graphBoundingBox[0][1] - (graphBoundingBox[1][1] - graphBoundingBox[0][1]) / 8.f));
 
-      detailViewLabel->setSize(
-          Size((graphBoundingBox[1][0] - graphBoundingBox[0][0]),
-               (graphBoundingBox[1][1] - graphBoundingBox[0][1]) / 4.f));
+      detailViewLabel->setSize(Size((graphBoundingBox[1][0] - graphBoundingBox[0][0]),
+                                    (graphBoundingBox[1][1] - graphBoundingBox[0][1]) / 4.f));
 
       mainLayer->addGlEntity(detailViewLabel, "dimension label");
       centerView();

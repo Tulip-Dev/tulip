@@ -19,9 +19,9 @@
 
 #include "ReachableSubGraphSelection.h"
 
+#include <tulip/StringCollection.h>
 #include <tulip/GraphTools.h>
 #include <tulip/StableIterator.h>
-#include <tulip/StringCollection.h>
 
 using namespace tlp;
 
@@ -42,22 +42,17 @@ static const char *directionValuesDescription =
     "input edges : <i>follow input edges (reverse-directed)</i><br>"
     "all edges   : <i>all edges (undirected)</i>";
 
-static const char *edgesDirectionLabels[] = {"output edges", "input edges",
-                                             "all edges"};
+static const char *edgesDirectionLabels[] = {"output edges", "input edges", "all edges"};
 
-ReachableSubGraphSelection::ReachableSubGraphSelection(
-    const tlp::PluginContext *context)
+ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PluginContext *context)
     : BooleanAlgorithm(context) {
   addInParameter<StringCollection>("edge direction", paramHelp[0],
                                    "output edges;input edges;all edges", true,
                                    directionValuesDescription);
-  addInParameter<BooleanProperty>("starting nodes", paramHelp[1],
-                                  "viewSelection");
+  addInParameter<BooleanProperty>("starting nodes", paramHelp[1], "viewSelection");
   addInParameter<int>("distance", paramHelp[2], "5");
-  addOutParameter<unsigned int>("#edges selected",
-                                "The number of newly selected edges");
-  addOutParameter<unsigned int>("#nodes selected",
-                                "The number of newly selected nodes");
+  addOutParameter<unsigned int>("#edges selected", "The number of newly selected edges");
+  addOutParameter<unsigned int>("#nodes selected", "The number of newly selected nodes");
   // old name
   declareDeprecatedName("Reachable Sub-Graph");
 }
@@ -67,8 +62,7 @@ bool ReachableSubGraphSelection::run() {
   unsigned int maxDistance = 5;
   StringCollection edgeDirectionCollecion;
   EDGE_TYPE edgeDirection = DIRECTED;
-  BooleanProperty *startNodes =
-      graph->getProperty<BooleanProperty>("viewSelection");
+  BooleanProperty *startNodes = graph->getProperty<BooleanProperty>("viewSelection");
 
   if (dataSet != nullptr) {
     dataSet->get("distance", maxDistance);
@@ -79,19 +73,15 @@ bool ReachableSubGraphSelection::run() {
     if (dataSet->get("edge direction", edgeDirectionCollecion))
       found = true;
     else
-      found = dataSet->get("edges direction",
-                           edgeDirectionCollecion); // former buggy parameter
-                                                    // name
+      found = dataSet->get("edges direction", edgeDirectionCollecion); // former buggy parameter
+                                                                       // name
 
     if (found) {
-      if (edgeDirectionCollecion.getCurrentString() ==
-          edgesDirectionLabels[0]) {
+      if (edgeDirectionCollecion.getCurrentString() == edgesDirectionLabels[0]) {
         edgeDirection = DIRECTED;
-      } else if (edgeDirectionCollecion.getCurrentString() ==
-                 edgesDirectionLabels[1]) {
+      } else if (edgeDirectionCollecion.getCurrentString() == edgesDirectionLabels[1]) {
         edgeDirection = INV_DIRECTED;
-      } else if (edgeDirectionCollecion.getCurrentString() ==
-                 edgesDirectionLabels[2]) {
+      } else if (edgeDirectionCollecion.getCurrentString() == edgesDirectionLabels[2]) {
         edgeDirection = UNDIRECTED;
       }
     } else {
@@ -122,14 +112,12 @@ bool ReachableSubGraphSelection::run() {
   unsigned num_nodes = 0, num_edges = 0;
 
   if (startNodes) {
-    // as the input selection property and the result property can be the same
-    // one, if needed, use a stable iterator to keep a copy of the input
-    // selected nodes as all values of the result property are reset to false
-    // below deletion is done by the for loop
-    Iterator<node> *itN =
-        (result == startNodes)
-            ? stableIterator(startNodes->getNodesEqualTo(true))
-            : startNodes->getNodesEqualTo(true);
+    // as the input selection property and the result property can be the same one,
+    // if needed, use a stable iterator to keep a copy of the input selected nodes as all values
+    // of the result property are reset to false below
+    // deletion is done by the for loop
+    Iterator<node> *itN = (result == startNodes) ? stableIterator(startNodes->getNodesEqualTo(true))
+                                                 : startNodes->getNodesEqualTo(true);
 
     std::unordered_map<node, bool> reachables;
 
@@ -139,8 +127,7 @@ bool ReachableSubGraphSelection::run() {
     // iterate on startNodes add them and their reachables
     for (const node &current : itN) {
       reachables[current] = true;
-      markReachableNodes(graph, current, reachables, maxDistance,
-                         edgeDirection);
+      markReachableNodes(graph, current, reachables, maxDistance, edgeDirection);
     }
 
     std::unordered_map<node, bool>::const_iterator itr = reachables.begin();
@@ -157,8 +144,7 @@ bool ReachableSubGraphSelection::run() {
     for (const edge &e : graph->edges()) {
       const std::pair<node, node> &ends = graph->ends(e);
 
-      if ((reachables.find(ends.first) != ite) &&
-          (reachables.find(ends.second) != ite)) {
+      if ((reachables.find(ends.first) != ite) && (reachables.find(ends.second) != ite)) {
         result->setEdgeValue(e, true);
         ++num_edges;
       }

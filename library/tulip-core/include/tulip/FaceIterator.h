@@ -23,10 +23,10 @@
 
 #include <vector>
 
-#include <tulip/Edge.h>
-#include <tulip/Face.h>
 #include <tulip/Iterator.h>
+#include <tulip/Face.h>
 #include <tulip/Node.h>
+#include <tulip/Edge.h>
 
 //============================================================
 /// Face iterator for PlanarConMap

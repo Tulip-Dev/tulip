@@ -28,7 +28,9 @@ ComputeSOMWidget::ComputeSOMWidget(QWidget *parent)
   _ui->setupUi(this);
 }
 
-ComputeSOMWidget::~ComputeSOMWidget() { delete _ui; }
+ComputeSOMWidget::~ComputeSOMWidget() {
+  delete _ui;
+}
 
 unsigned ComputeSOMWidget::number() const {
   return _ui->iterationNumberSpinBox->value();
@@ -46,13 +48,10 @@ vector<string> ComputeSOMWidget::getSelectedProperties() {
   return _ui->propertiesConfigurationWidget->getSelectedProperties();
 }
 
-void ComputeSOMWidget::setWidgetParameters(Graph *g,
-                                           vector<string> &propertyFilterType) {
-  _ui->propertiesConfigurationWidget->setWidgetParameters(g,
-                                                          propertyFilterType);
+void ComputeSOMWidget::setWidgetParameters(Graph *g, vector<string> &propertyFilterType) {
+  _ui->propertiesConfigurationWidget->setWidgetParameters(g, propertyFilterType);
 }
 
-void ComputeSOMWidget::setOutputPropertiesList(
-    std::vector<std::string> &properties) {
+void ComputeSOMWidget::setOutputPropertiesList(std::vector<std::string> &properties) {
   _ui->propertiesConfigurationWidget->setOutputPropertiesList(properties);
 }

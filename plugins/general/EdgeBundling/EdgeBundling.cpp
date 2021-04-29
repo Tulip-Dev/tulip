@@ -17,22 +17,23 @@
  *
  */
 
+#include <tulip/TulipException.h>
+#include <tulip/GraphTools.h>
+#include <tulip/DrawingTools.h>
+#include <tulip/StableIterator.h>
+#include <tulip/MutableContainer.h>
+#include <tulip/LayoutProperty.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/DrawingTools.h>
-#include <tulip/GraphTools.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/MutableContainer.h>
-#include <tulip/ParallelTools.h>
 #include <tulip/Rectangle.h>
 #include <tulip/SimpleTest.h>
-#include <tulip/StableIterator.h>
-#include <tulip/TulipException.h>
+#include <tulip/ParallelTools.h>
 
-#include "BendsTools.h"
-#include "Dijkstra.h"
 #include "EdgeBundling.h"
-#include "OctreeBundle.h"
 #include "QuadTree.h"
+#include "OctreeBundle.h"
+#include "Dijkstra.h"
+#include "BendsTools.h"
 #include "SphereUtils.h"
 
 #include <sstream>
@@ -99,8 +100,7 @@ EdgeBundling::EdgeBundling(const PluginContext *context) : Algorithm(context) {
 class SortNodes {
 public:
   static NodeStaticProperty<double> *dist;
-  bool operator()(const node a,
-                  const node b) const { // sort in deceresing order;
+  bool operator()(const node a, const node b) const { // sort in deceresing order;
     double da, db;
 
     if ((da = dist->getNodeValue(a)) == (db = dist->getNodeValue(b)))
@@ -116,10 +116,9 @@ void updateLayout(node src, edge e, Graph *graph, LayoutProperty *layout,
   if (nBends.size() < 3)
     return;
 
-  // if source and target nodes are at the same position, don't set bends to
-  // avoid visual artifacts when rendering the graph
-  if (layout->getNodeValue(nBends.front())
-          .dist(layout->getNodeValue(nBends.back())) < 1e-5) {
+  // if source and target nodes are at the same position, don't set bends to avoid visual artifacts
+  // when rendering the graph
+  if (layout->getNodeValue(nBends.front()).dist(layout->getNodeValue(nBends.back())) < 1e-5) {
     return;
   }
 
@@ -146,12 +145,13 @@ void updateLayout(node src, edge e, Graph *graph, LayoutProperty *layout,
       --i;
   }
 
-  TLP_LOCK_SECTION(LAYOUT) { layout->setEdgeValue(e, bends); }
+  TLP_LOCK_SECTION(LAYOUT) {
+    layout->setEdgeValue(e, bends);
+  }
   TLP_UNLOCK_SECTION(LAYOUT);
 }
 //============================================
-// fix all graph edge to 1 and all grid edge to 0 graph-grid edge 2 edge on the
-// contour of a node 3
+// fix all graph edge to 1 and all grid edge to 0 graph-grid edge 2 edge on the contour of a node 3
 void EdgeBundling::fixEdgeType(EdgeStaticProperty<unsigned int> &ntype) {
   TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, [&](edge e, unsigned int i) {
     if (oriGraph->isElement(e)) {
@@ -169,8 +169,7 @@ void EdgeBundling::fixEdgeType(EdgeStaticProperty<unsigned int> &ntype) {
 //============================================
 static void computeDik(Dijkstra &dijkstra, const Graph *const vertexCoverGraph,
                        const Graph *const oriGraph, const node n,
-                       const EdgeStaticProperty<double> &mWeights,
-                       unsigned int optimizatioLevel) {
+                       const EdgeStaticProperty<double> &mWeights, unsigned int optimizatioLevel) {
   set<node> focus;
 
   if (optimizatioLevel > 0) {
@@ -182,8 +181,8 @@ static void computeDik(Dijkstra &dijkstra, const Graph *const vertexCoverGraph,
 }
 //==========================================================================
 void EdgeBundling::computeDistances() {
-  TLP_PARALLEL_MAP_NODES_AND_INDICES(
-      oriGraph, [&](node n, unsigned int i) { computeDistance(n, i); });
+  TLP_PARALLEL_MAP_NODES_AND_INDICES(oriGraph,
+                                     [&](node n, unsigned int i) { computeDistance(n, i); });
 }
 //==========================================================================
 void EdgeBundling::computeDistance(node n, unsigned int i) {
@@ -245,11 +244,10 @@ bool EdgeBundling::run() {
     auto lMin = layout->getMin(graph);
     auto lMax = layout->getMax(graph);
     if (lMin.z() != lMax.z()) {
-      pluginProgress->setError(
-          "A 3D input layout has been detected while the default behavior "
-          "is to consider a 2D input layout. "
-          "You must set the \"3D_layout\" parameter to "
-          "\"true\" to explicitely use 3D edge bundling.");
+      pluginProgress->setError("A 3D input layout has been detected while the default behavior "
+                               "is to consider a 2D input layout. "
+                               "You must set the \"3D_layout\" parameter to "
+                               "\"true\" to explicitely use 3D edge bundling.");
       return false;
     }
   }
@@ -287,8 +285,9 @@ bool EdgeBundling::run() {
         addSphereGraph(graph, dist - 0.2 * dist);
       }
     } else {
-      // Preprocess the graph to ensure that two nodes does not have the same
-      // position otherwise the quad tree computation will fail clone graph
+      // Preprocess the graph to ensure that two nodes does not have the same position
+      // otherwise the quad tree computation will fail
+      // clone graph
       Graph *workGraph = graph->addCloneSubGraph();
       // we use a hash map to ease the retrieve of the vector of the nodes
       // having the same position
@@ -303,8 +302,8 @@ bool EdgeBundling::run() {
         // instead of relying on the x, y exact values
         std::string key = tlp::PointType::toString(coord);
 
-        std::unordered_map<std::string, std::pair<node, unsigned int>>::iterator
-            it = clusters.find(key);
+        std::unordered_map<std::string, std::pair<node, unsigned int>>::iterator it =
+            clusters.find(key);
 
         if (it == clusters.end())
           // register the first node at position represented by key
@@ -479,12 +478,10 @@ bool EdgeBundling::run() {
       stringstream strm;
       strm << "Computing iteration " << iteration + 1 << "/" << MAX_ITER;
       pluginProgress->setComment(strm.str());
-      unsigned int i =
-          oriGraph->numberOfEdges() - vertexCoverGraph->numberOfEdges();
+      unsigned int i = oriGraph->numberOfEdges() - vertexCoverGraph->numberOfEdges();
 
       if (((i % 10) == 0) &&
-          (pluginProgress->progress(i, oriGraph->numberOfEdges()) !=
-           TLP_CONTINUE)) {
+          (pluginProgress->progress(i, oriGraph->numberOfEdges()) != TLP_CONTINUE)) {
         oriGraph->delSubGraph(vertexCoverGraph);
         return pluginProgress->state() != TLP_CANCEL;
       }
@@ -515,8 +512,7 @@ bool EdgeBundling::run() {
             toTreatByThreads.push_back(n);
 
             if ((optimizationLevel == 3) &&
-                (toTreatByThreads.size() <
-                 ThreadManager::getNumberOfThreads())) {
+                (toTreatByThreads.size() < ThreadManager::getNumberOfThreads())) {
               for (auto tmp : vertexCoverGraph->getInOutNodes(n))
                 blockNodes.insert(tmp);
             }
@@ -547,11 +543,9 @@ bool EdgeBundling::run() {
           Dijkstra dijkstra;
 
           if (edgeNodeOverlap)
-            computeDik(dijkstra, vertexCoverGraph, nullptr, n, mWeights,
-                       optimizationLevel);
+            computeDik(dijkstra, vertexCoverGraph, nullptr, n, mWeights, optimizationLevel);
           else
-            computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights,
-                       optimizationLevel);
+            computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights, optimizationLevel);
 
           // for each edge of n compute the shortest paths in the grid
           for (auto e : vertexCoverGraph->getInOutEdges(n)) {
@@ -582,11 +576,9 @@ bool EdgeBundling::run() {
           Dijkstra dijkstra;
 
           if (edgeNodeOverlap)
-            computeDik(dijkstra, vertexCoverGraph, nullptr, n, mWeights,
-                       optimizationLevel);
+            computeDik(dijkstra, vertexCoverGraph, nullptr, n, mWeights, optimizationLevel);
           else
-            computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights,
-                       optimizationLevel);
+            computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights, optimizationLevel);
 
           // for each edge of n compute the shortest paths in the grid
           for (auto e : vertexCoverGraph->getInOutEdges(n)) {
@@ -680,8 +672,7 @@ bool EdgeBundling::run() {
     }
   }
 
-  // If sphere mode, move the edge bends to the closest point on the sphere
-  // surface
+  // If sphere mode, move the edge bends to the closest point on the sphere surface
   if (sphereLayout) {
     moveBendsToSphere(oriGraph, dist, layout);
   }

@@ -23,12 +23,12 @@
 
 #include <algorithm>
 #include <climits>
-#include <iostream>
 #include <set>
-#include <tulip/MutableContainer.h>
-#include <tulip/ParallelTools.h>
-#include <tulip/StlIterator.h>
 #include <vector>
+#include <iostream>
+#include <tulip/MutableContainer.h>
+#include <tulip/StlIterator.h>
+#include <tulip/ParallelTools.h>
 
 namespace tlp {
 
@@ -46,7 +46,8 @@ struct IdManagerState {
 
 // define a class to iterate through the non free ids
 // of an IdManagerState
-template <typename TYPE> class IdManagerIterator : public Iterator<TYPE> {
+template <typename TYPE>
+class IdManagerIterator : public Iterator<TYPE> {
 
 private:
   unsigned int current;
@@ -56,8 +57,7 @@ private:
 
 public:
   IdManagerIterator(const IdManagerState &info)
-      : current(info.firstId), last(info.nextId), freeIds(info.freeIds),
-        it(freeIds.begin()) {
+      : current(info.firstId), last(info.nextId), freeIds(info.freeIds), it(freeIds.begin()) {
 #ifdef TLP_NO_IDS_REUSE
     std::set<unsigned int>::const_reverse_iterator itr;
     itr = freeIds.rbegin();
@@ -71,7 +71,9 @@ public:
   }
   ~IdManagerIterator() override {}
 
-  bool hasNext() override { return (current < last); }
+  bool hasNext() override {
+    return (current < last);
+  }
 
   TYPE next() override {
     unsigned int tmp = current;
@@ -112,9 +114,7 @@ public:
 #ifdef TLP_NO_IDS_REUSE
     return state.nextId++;
 #else
-    return state.firstId
-               ? --state.firstId
-               : (state.freeIds.empty() ? state.nextId++ : getFreeId());
+    return state.firstId ? --state.firstId : (state.freeIds.empty() ? state.nextId++ : getFreeId());
 #endif
   }
   /**
@@ -141,17 +141,22 @@ public:
   /**
    * return the current state of the Id manager
    */
-  const IdManagerState &getState() { return state; }
+  const IdManagerState &getState() {
+    return state;
+  }
   /**
    * restore a saved state, used by push/pop
    */
-  void restoreState(const IdManagerState &info) { state = info; }
+  void restoreState(const IdManagerState &info) {
+    state = info;
+  }
   /**
    * Returns an iterator on all the used ids. Warning, if
    * the idManager is modified (free, get) this iterator
    * will be invalid.
    */
-  template <typename TYPE> Iterator<TYPE> *getIds() const {
+  template <typename TYPE>
+  Iterator<TYPE> *getIds() const {
     return new IdManagerIterator<TYPE>(state);
   }
 
@@ -170,11 +175,17 @@ class TLP_SCOPE IdContainer : public std::vector<ID_TYPE> {
   // the position of the ids
   std::vector<unsigned int> pos;
 
-  inline ID_TYPE *&beginPtr() { return reinterpret_cast<ID_TYPE **>(this)[0]; }
+  inline ID_TYPE *&beginPtr() {
+    return reinterpret_cast<ID_TYPE **>(this)[0];
+  }
 
-  inline ID_TYPE *&sizePtr() { return reinterpret_cast<ID_TYPE **>(this)[1]; }
+  inline ID_TYPE *&sizePtr() {
+    return reinterpret_cast<ID_TYPE **>(this)[1];
+  }
 
-  inline void setSize(unsigned int size) { sizePtr() = beginPtr() + size; }
+  inline void setSize(unsigned int size) {
+    sizePtr() = beginPtr() + size;
+  }
 
 public:
   IdContainer() : std::vector<ID_TYPE>(), nbFree(0) {}
@@ -193,10 +204,14 @@ public:
   }
 
   // return whether there is free ids or not
-  inline bool hasFree() const { return nbFree > 0; }
+  inline bool hasFree() const {
+    return nbFree > 0;
+  }
 
   // return the number of elts in the free storage
-  inline unsigned int numberOfFree() const { return nbFree; }
+  inline unsigned int numberOfFree() const {
+    return nbFree;
+  }
 
   // return whether the id exist or not
   inline bool isElement(ID_TYPE elt) const {
@@ -206,9 +221,8 @@ public:
 
   // return an iterator on the existing elts
   inline Iterator<ID_TYPE> *getElts() const {
-    return new StlIterator<ID_TYPE,
-                           typename std::vector<ID_TYPE>::const_iterator>(
-        this->begin(), this->end());
+    return new StlIterator<ID_TYPE, typename std::vector<ID_TYPE>::const_iterator>(this->begin(),
+                                                                                   this->end());
   }
 
   // return the position of an existing elt
@@ -316,8 +330,7 @@ public:
   // recompute elts positions
   void reIndex() {
     unsigned int nbElts = this->size();
-    TLP_PARALLEL_MAP_INDICES(nbElts,
-                             [&](unsigned int i) { pos[(*this)[i]] = i; });
+    TLP_PARALLEL_MAP_INDICES(nbElts, [&](unsigned int i) { pos[(*this)[i]] = i; });
   }
 
   // ascending sort
@@ -334,7 +347,9 @@ class SGraphIdContainer : public std::vector<ID_TYPE> {
   MutableContainer<unsigned int> pos;
 
 public:
-  SGraphIdContainer() { pos.setAll(UINT_MAX); }
+  SGraphIdContainer() {
+    pos.setAll(UINT_MAX);
+  }
   inline bool isElement(ID_TYPE elt) const {
     return (pos.get(elt) != UINT_MAX);
   }

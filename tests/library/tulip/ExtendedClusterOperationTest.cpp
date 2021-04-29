@@ -64,10 +64,9 @@ void ExtendedClusterOperationTest::tearDown() {
 }
 //==========================================================
 void ExtendedClusterOperationTest::testCreateMetaNode() {
-  tlp::warning()
-      << endl
-      << "L'erreur à suivre sur createMetaNode fait partie de testCreateMetaNode"
-      << endl;
+  tlp::warning() << endl
+                 << "L'erreur à suivre sur createMetaNode fait partie de testCreateMetaNode"
+                 << endl;
   meta = graph->createMetaNode(group);
   CPPUNIT_ASSERT(!meta.isValid());
 

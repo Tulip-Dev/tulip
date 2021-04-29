@@ -23,16 +23,16 @@
 
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include <tulip/DrawingTools.h>
+#include <tulip/Size.h>
+#include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/GlGraphInputData.h>
-#include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlTools.h>
-#include <tulip/Glyph.h>
-#include <tulip/OpenGlConfigManager.h>
-#include <tulip/Size.h>
+#include <tulip/GlGraphInputData.h>
+#include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/DrawingTools.h>
+#include <tulip/OpenGlConfigManager.h>
 
 using namespace std;
 using namespace tlp;
@@ -49,8 +49,7 @@ static void drawRing() {
   if (ringVertices.empty()) {
     const unsigned int numberOfSides = 30;
     ringVertices = computeRegularPolygon(30, Coord(0, 0, 0), Size(0.5, 0.5));
-    vector<Coord> tmp =
-        computeRegularPolygon(numberOfSides, Coord(0, 0, 0), Size(0.25, 0.25));
+    vector<Coord> tmp = computeRegularPolygon(numberOfSides, Coord(0, 0, 0), Size(0.25, 0.25));
     ringVertices.insert(ringVertices.end(), tmp.begin(), tmp.end());
 
     for (unsigned int i = 0; i < numberOfSides - 1; ++i) {
@@ -84,26 +83,23 @@ static void drawRing() {
     ringOutlineIndices.push_back(numberOfSides);
 
     for (size_t i = 0; i < ringVertices.size(); ++i) {
-      ringTexCoords.push_back(
-          Vec2f(ringVertices[i][0] + 0.5, ringVertices[i][1] + 0.5));
+      ringTexCoords.push_back(Vec2f(ringVertices[i][0] + 0.5, ringVertices[i][1] + 0.5));
     }
 
     buffers.resize(4);
     glGenBuffers(4, &buffers[0]);
 
     glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-    glBufferData(GL_ARRAY_BUFFER, ringVertices.size() * 3 * sizeof(float),
-                 &ringVertices[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-    glBufferData(GL_ARRAY_BUFFER, ringTexCoords.size() * 2 * sizeof(float),
-                 &ringTexCoords[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                 ringIndices.size() * sizeof(unsigned short), &ringIndices[0],
+    glBufferData(GL_ARRAY_BUFFER, ringVertices.size() * 3 * sizeof(float), &ringVertices[0],
                  GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+    glBufferData(GL_ARRAY_BUFFER, ringTexCoords.size() * 2 * sizeof(float), &ringTexCoords[0],
+                 GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, ringIndices.size() * sizeof(unsigned short),
+                 &ringIndices[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                 ringOutlineIndices.size() * sizeof(unsigned short),
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, ringOutlineIndices.size() * sizeof(unsigned short),
                  &ringOutlineIndices[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
   }
@@ -118,8 +114,7 @@ static void drawRing() {
   glTexCoordPointer(2, GL_FLOAT, 0, BUFFER_OFFSET(0));
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
-  glDrawElements(GL_TRIANGLES, ringIndices.size(), GL_UNSIGNED_SHORT,
-                 BUFFER_OFFSET(0));
+  glDrawElements(GL_TRIANGLES, ringIndices.size(), GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));
 
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -135,8 +130,7 @@ static void drawRingBorder() {
   glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
-  glDrawElements(GL_LINES, ringOutlineIndices.size(), GL_UNSIGNED_SHORT,
-                 BUFFER_OFFSET(0));
+  glDrawElements(GL_LINES, ringOutlineIndices.size(), GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));
 
   glDisableClientState(GL_VERTEX_ARRAY);
 
@@ -144,9 +138,8 @@ static void drawRingBorder() {
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-static void drawGlyph(const Color &glyphColor, const string &texture,
-                      const string &texturePath, double borderWidth,
-                      const Color &borderColor, float lod) {
+static void drawGlyph(const Color &glyphColor, const string &texture, const string &texturePath,
+                      double borderWidth, const Color &borderColor, float lod) {
 
   setMaterial(glyphColor);
 
@@ -178,12 +171,14 @@ static void drawGlyph(const Color &glyphColor, const string &texture,
  */
 class Ring : public Glyph {
 public:
-  GLYPHINFORMATION("2D - Ring", "David Auber", "09/07/2002", "Textured Ring",
-                   "1.0", NodeShape::Ring)
+  GLYPHINFORMATION("2D - Ring", "David Auber", "09/07/2002", "Textured Ring", "1.0",
+                   NodeShape::Ring)
   Ring(const tlp::PluginContext *context = nullptr);
   ~Ring() override;
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
-  virtual string getName() { return string("Ring"); }
+  virtual string getName() {
+    return string("Ring");
+  }
   void draw(node n, float lod) override;
 };
 PLUGIN(Ring)
@@ -204,19 +199,15 @@ void Ring::draw(node n, float lod) {
 class EERing : public EdgeExtremityGlyph {
 public:
   GLYPHINFORMATION("2D - Ring extremity", "David Auber", "09/07/2002",
-                   "Textured Ring for edge extremities", "1.0",
-                   EdgeExtremityShape::Ring)
+                   "Textured Ring for edge extremities", "1.0", EdgeExtremityShape::Ring)
 
   EERing(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
 
-  void draw(edge e, node, const Color &glyphColor, const Color &borderColor,
-            float lod) override {
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) override {
     glDisable(GL_LIGHTING);
-    drawGlyph(glyphColor,
-              edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
+    drawGlyph(glyphColor, edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
               edgeExtGlGraphInputData->parameters->getTexturePath(),
-              edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-              borderColor, lod);
+              edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), borderColor, lod);
   }
 };
 PLUGIN(EERing)

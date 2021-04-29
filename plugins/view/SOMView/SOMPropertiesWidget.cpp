@@ -18,15 +18,15 @@
  */
 
 #include "SOMPropertiesWidget.h"
-#include "ColorScalePreview.h"
 #include "SOMView.h"
 #include "ui_SOMPropertiesWidget.h"
+#include "ColorScalePreview.h"
 
-#include <QButtonGroup>
-#include <QDoubleValidator>
 #include <QIntValidator>
-#include <QPushButton>
+#include <QDoubleValidator>
 #include <QRadioButton>
+#include <QPushButton>
+#include <QButtonGroup>
 
 #include <tulip/ColorScalesManager.h>
 #include <tulip/PropertyTypes.h>
@@ -53,8 +53,7 @@ SOMPropertiesWidget::SOMPropertiesWidget(SOMView *view, QWidget *parent)
   noNodeSizeMappingRadioButton = new QRadioButton("No size mapping");
   sizeMappingButtonGroup->addButton(noNodeSizeMappingRadioButton);
   sizeMappingLayout->addWidget(noNodeSizeMappingRadioButton);
-  realNodeSizeMappingRadioButton =
-      new QRadioButton("Map node size on real node size");
+  realNodeSizeMappingRadioButton = new QRadioButton("Map node size on real node size");
   sizeMappingButtonGroup->addButton(realNodeSizeMappingRadioButton);
   sizeMappingLayout->layout()->addWidget(realNodeSizeMappingRadioButton);
   realNodeSizeMappingRadioButton->setChecked(true);
@@ -92,8 +91,7 @@ unsigned SOMPropertiesWidget::getConnectivityIndex() const {
 }
 
 bool SOMPropertiesWidget::getOppositeConnected() const {
-  return _ui->opposedConnectedCheckBox->checkState() == Qt::Checked ? true
-                                                                    : false;
+  return _ui->opposedConnectedCheckBox->checkState() == Qt::Checked ? true : false;
 }
 
 double SOMPropertiesWidget::getLearningRateValue() const {
@@ -136,8 +134,7 @@ void SOMPropertiesWidget::clearpropertiesConfigurationWidget() {
   dimensionConfigurationWidget->clearLists();
 }
 
-void SOMPropertiesWidget::addfilter(Graph *g,
-                                    vector<string> &propertyFilterType) {
+void SOMPropertiesWidget::addfilter(Graph *g, vector<string> &propertyFilterType) {
   dimensionConfigurationWidget->setWidgetParameters(g, propertyFilterType);
 }
 
@@ -175,13 +172,11 @@ void SOMPropertiesWidget::graphChanged(tlp::Graph *graph) {
   gradientManager.init(props);
 }
 
-tlp::ColorScale *
-SOMPropertiesWidget::getPropertyColorScale(const std::string &) {
+tlp::ColorScale *SOMPropertiesWidget::getPropertyColorScale(const std::string &) {
   return defaultScale;
 }
 
-SOMPropertiesWidget::SizeMappingType
-SOMPropertiesWidget::getSizeMapping() const {
+SOMPropertiesWidget::SizeMappingType SOMPropertiesWidget::getSizeMapping() const {
   if (noNodeSizeMappingRadioButton->isChecked())
     return NoSizeMapping;
   else
@@ -211,8 +206,7 @@ DataSet SOMPropertiesWidget::getData() const {
   data.set("learningRate", getLearningRateValue());
 
   // Diffusion rate properties.
-  data.set("diffusionMethod",
-           _ui->diffusionRateComputationMethodComboBox->currentIndex());
+  data.set("diffusionMethod", _ui->diffusionRateComputationMethodComboBox->currentIndex());
   data.set("maxDistance", getMaxDistanceValue());
   data.set("diffusionRate", getDiffusionRateValue());
 
@@ -221,16 +215,14 @@ DataSet SOMPropertiesWidget::getData() const {
   data.set("linkColors", getLinkColor());
 
   // SizeMapping
-  data.set("useSizeMapping",
-           getSizeMapping() == SOMPropertiesWidget::RealNodeSizeMapping);
+  data.set("useSizeMapping", getSizeMapping() == SOMPropertiesWidget::RealNodeSizeMapping);
 
   // Animation
   data.set("withAnimation", useAnimation());
   data.set("animationDuration", getAnimationDuration());
 
   // Save current properties.
-  vector<string> &&properties =
-      dimensionConfigurationWidget->getSelectedProperties();
+  vector<string> &&properties = dimensionConfigurationWidget->getSelectedProperties();
 
   if (!properties.empty()) {
     // Use QStringList class to store a list in a string
@@ -321,8 +313,7 @@ void SOMPropertiesWidget::setData(const DataSet &data) {
 #else
     auto skipEmpty = Qt::SkipEmptyParts;
 #endif
-    QStringList list =
-        tlpStringToQString(propertiesString).split(";", skipEmpty);
+    QStringList list = tlpStringToQString(propertiesString).split(";", skipEmpty);
     vector<string> properties;
 
     for (const QString &s : list) {
@@ -345,8 +336,7 @@ void SOMPropertiesWidget::setData(const DataSet &data) {
   QStringList colorStringList = colorListQString.split(";");
   vector<Color> colors;
 
-  for (QStringList::iterator it = colorStringList.begin();
-       it != colorStringList.end(); ++it) {
+  for (QStringList::iterator it = colorStringList.begin(); it != colorStringList.end(); ++it) {
     Color c;
 
     if (ColorType::fromString(c, QStringToTlpString(*it))) {

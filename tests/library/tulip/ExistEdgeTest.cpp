@@ -17,8 +17,8 @@
  *
  */
 
-#include <iostream>
 #include <string>
+#include <iostream>
 
 #include "ExistEdgeTest.h"
 
@@ -38,7 +38,9 @@ void ExistEdgeTest::setUp() {
   e3 = graph->addEdge(n2, n0);
 }
 
-void ExistEdgeTest::tearDown() { delete graph; }
+void ExistEdgeTest::tearDown() {
+  delete graph;
+}
 
 void ExistEdgeTest::testExistEdge() {
   CPPUNIT_ASSERT(graph->existEdge(n0, n0).isValid() == false);

@@ -20,13 +20,13 @@
 #ifndef CONSOLE_OUTPUT_HANDLER_H
 #define CONSOLE_OUTPUT_HANDLER_H
 
-#include <QApplication>
-#include <QDebug>
-#include <QElapsedTimer>
 #include <QPlainTextEdit>
-#include <QScrollBar>
-#include <QTextBlock>
 #include <QTextBrowser>
+#include <QTextBlock>
+#include <QApplication>
+#include <QElapsedTimer>
+#include <QScrollBar>
+#include <QDebug>
 
 #include <iostream>
 
@@ -35,12 +35,13 @@ class ConsoleOutputHandler : public QObject {
   Q_OBJECT
 
 public:
-  ConsoleOutputHandler() { timer.start(); }
+  ConsoleOutputHandler() {
+    timer.start();
+  }
 
 public slots:
 
-  void writeToConsole(QAbstractScrollArea *consoleWidget, const QString &output,
-                      bool errorOutput) {
+  void writeToConsole(QAbstractScrollArea *consoleWidget, const QString &output, bool errorOutput) {
 
     if (!consoleWidget) {
       if (!errorOutput) {
@@ -61,8 +62,7 @@ public slots:
       brush.setColor(Qt::red);
     } else {
       brush.setColor(
-          (consoleWidget->palette().color(consoleWidget->backgroundRole()) ==
-           QColor(255, 255, 255))
+          (consoleWidget->palette().color(consoleWidget->backgroundRole()) == QColor(255, 255, 255))
               ? Qt::black
               : Qt::white);
     }
@@ -90,8 +90,7 @@ public slots:
     if (textBrowser) {
       QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*$");
       QRegExp rx2("^.*File.*\"(.*)\".*line.*(\\d+).*in (.*)$");
-      cursor = textBrowser->document()->find(
-          rx, QTextCursor(textBrowser->document()->begin()));
+      cursor = textBrowser->document()->find(rx, QTextCursor(textBrowser->document()->begin()));
 
       while (!cursor.isNull()) {
         rx.indexIn(cursor.selectedText());
@@ -101,8 +100,7 @@ public slots:
           formt = cursor.charFormat();
           formt.setAnchor(true);
           formt.setUnderlineStyle(QTextCharFormat::SingleUnderline);
-          formt.setAnchorHref(
-              QUrl::toPercentEncoding(rx.cap(1) + ":" + rx.cap(2)));
+          formt.setAnchorHref(QUrl::toPercentEncoding(rx.cap(1) + ":" + rx.cap(2)));
           cursor.setCharFormat(formt);
         }
 
@@ -135,12 +133,13 @@ public:
     _consoleWidget = consoleWidget;
   }
 
-  QAbstractScrollArea *consoleWidget() const { return _consoleWidget; }
+  QAbstractScrollArea *consoleWidget() const {
+    return _consoleWidget;
+  }
 
 signals:
 
-  void consoleOutput(QAbstractScrollArea *consoleWidget, const QString &output,
-                     bool errorOutput);
+  void consoleOutput(QAbstractScrollArea *consoleWidget, const QString &output, bool errorOutput);
 
 private:
   QAbstractScrollArea *_consoleWidget;
@@ -152,14 +151,15 @@ class ConsoleInputHandler : public QObject {
 
 public:
   ConsoleInputHandler()
-      : _startReadCol(-1), _consoleWidget(nullptr), _lineRead(false),
-        _wasReadOnly(false) {}
+      : _startReadCol(-1), _consoleWidget(nullptr), _lineRead(false), _wasReadOnly(false) {}
 
   void setConsoleWidget(QAbstractScrollArea *consoleWidget) {
     _consoleWidget = consoleWidget;
   }
 
-  QAbstractScrollArea *consoleWidget() const { return _consoleWidget; }
+  QAbstractScrollArea *consoleWidget() const {
+    return _consoleWidget;
+  }
 
   void startReadLine() {
     if (_consoleWidget) {
@@ -180,8 +180,7 @@ public:
       _readPos = textBrowser->textCursor();
       _wasReadOnly = textBrowser->isReadOnly();
       textBrowser->setReadOnly(false);
-      textBrowser->verticalScrollBar()->setValue(
-          textBrowser->verticalScrollBar()->maximum());
+      textBrowser->verticalScrollBar()->setValue(textBrowser->verticalScrollBar()->maximum());
     } else if (textEdit) {
       _readPos = textEdit->textCursor();
       _wasReadOnly = textEdit->isReadOnly();
@@ -195,9 +194,13 @@ public:
     _readPos.setBlockFormat(format);
   }
 
-  bool lineRead() const { return _lineRead; }
+  bool lineRead() const {
+    return _lineRead;
+  }
 
-  QString line() const { return _line; }
+  QString line() const {
+    return _line;
+  }
 
   bool eventFilter(QObject *, QEvent *event) override {
     QTextBrowser *textBrowser = dynamic_cast<QTextBrowser *>(_consoleWidget);
@@ -214,8 +217,7 @@ public:
       QKeyEvent *kev = static_cast<QKeyEvent *>(event);
       int key = kev->key();
 
-      if ((key == Qt::Key_Enter || key == Qt::Key_Return) &&
-          kev->modifiers() == Qt::NoModifier) {
+      if ((key == Qt::Key_Enter || key == Qt::Key_Return) && kev->modifiers() == Qt::NoModifier) {
         _lineRead = true;
         _line = _readPos.block().text().mid(_startReadCol);
         _line.append("\n");

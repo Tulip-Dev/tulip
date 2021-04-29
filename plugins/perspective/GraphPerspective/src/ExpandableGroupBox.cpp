@@ -18,8 +18,8 @@
  */
 #include "ExpandableGroupBox.h"
 
-#include <QDebug>
 #include <QVBoxLayout>
+#include <QDebug>
 
 ExpandableGroupBox::ExpandableGroupBox(QWidget *parent, const QString &title)
     : QGroupBox(title, parent), _expanded(true), _widget(nullptr) {
@@ -39,8 +39,8 @@ ExpandableGroupBox::~ExpandableGroupBox() {}
 
 void ExpandableGroupBox::setExpanded(bool e) {
   _expanded = e;
-  // As told in Qt stylesheet reference, this force recomputation of stylesheet
-  // based on dynamic properties
+  // As told in Qt stylesheet reference, this force recomputation of stylesheet based on dynamic
+  // properties
   setStyleSheet(styleSheet());
 
   if (_widget) {

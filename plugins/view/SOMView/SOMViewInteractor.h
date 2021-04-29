@@ -20,24 +20,22 @@
 #ifndef SOMVIEWINTERACTOR_H_
 #define SOMVIEWINTERACTOR_H_
 
-#include "../../utils/PluginNames.h"
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
+#include "../../utils/PluginNames.h"
 
 namespace tlp {
 
 class SOMViewInteractor : public tlp::NodeLinkDiagramComponentInteractor {
 public:
-  SOMViewInteractor(const QString &iconPath, const QString &text,
-                    const unsigned int priority = 0);
+  SOMViewInteractor(const QString &iconPath, const QString &text, const unsigned int priority = 0);
 
   bool isCompatible(const std::string &viewName) const override;
 };
 
 class SOMViewNavigation : public SOMViewInteractor {
 
-  PLUGININFORMATION(InteractorName::SOMViewNavigation, "Dubois Jonathan",
-                    "02/04/2009", "Standard navigation with scale", "1.0",
-                    "Navigation")
+  PLUGININFORMATION(InteractorName::SOMViewNavigation, "Dubois Jonathan", "02/04/2009",
+                    "Standard navigation with scale", "1.0", "Navigation")
 
 public:
   SOMViewNavigation(tlp::PluginContext *);
@@ -59,8 +57,7 @@ public:
 class SOMViewProperties : public SOMViewInteractor {
 
   PLUGININFORMATION("SOMViewProperties", "Dubois Jonathan", "02/04/2009",
-                    "Standard show element info with scale", "1.0",
-                    "Information")
+                    "Standard show element info with scale", "1.0", "Information")
 
 public:
   SOMViewProperties(tlp::PluginContext *);

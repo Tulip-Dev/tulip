@@ -25,8 +25,8 @@
 
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include <tulip/GlSimpleEntity.h>
 #include <tulip/tulipconf.h>
+#include <tulip/GlSimpleEntity.h>
 
 namespace tlp {
 
@@ -85,8 +85,8 @@ public:
    */
   virtual void setLineWidth(float width);
   /**
-   * Set the style of the line (documentation can be found in OpenGL manuel of
-   * function glLineStipple)
+   * Set the style of the line (documentation can be found in OpenGL manuel of function
+   * glLineStipple)
    */
   virtual void setLineStipple(unsigned char factor, unsigned int pattern);
 
@@ -103,8 +103,7 @@ public:
   /**
    * Function to set data with inString (in XML format)
    */
-  void setWithXML(const std::string &inString,
-                  unsigned int &currentPosition) override;
+  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
 
 protected:
   std::vector<Coord> _points;

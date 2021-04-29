@@ -20,8 +20,8 @@
 #ifndef LINEARMAPPINGCOLOR_H
 #define LINEARMAPPINGCOLOR_H
 
-#include "ColorFunction.h"
 #include "potypes.h"
+#include "ColorFunction.h"
 
 namespace pocore {
 class LinearMappingColor : public ColorFunction {

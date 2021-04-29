@@ -20,10 +20,10 @@
 
 #ifndef MEMORYPOOL_H
 #define MEMORYPOOL_H
-#include <cassert>
-#include <cstdlib>
-#include <iostream>
 #include <vector>
+#include <iostream>
+#include <cstdlib>
+#include <cassert>
 
 #include <tulip/ParallelTools.h>
 
@@ -38,12 +38,10 @@ namespace tlp {
  * instance of the class. After a delete the memory is not free, and
  * will be reused at the next new of the class.
  *
- * @warning it is not recommended to inherit from an object that inherit of that
- * class
+ * @warning it is not recommended to inherit from an object that inherit of that class
  *
- * The following  code only calls malloc one time even if NBTRY object are
- * created in that example, the speedup is about 23, without MemoryPool malloc
- * is called NBTRY times
+ * The following  code only calls malloc one time even if NBTRY object are created
+ * in that example, the speedup is about 23, without MemoryPool malloc is called NBTRY times
  * @code
  * class A : public MemoryPool<A> {
  * public:
@@ -62,7 +60,8 @@ namespace tlp {
  * @endcode
  *
  */
-template <typename TYPE> class MemoryPool {
+template <typename TYPE>
+class MemoryPool {
 public:
   MemoryPool() {}
 
@@ -71,14 +70,15 @@ public:
 #else
   inline void *operator new(size_t) {
 #endif
-    assert(sizeof(TYPE) ==
-           sizeofObj); // to prevent inheritance with different size of object
+    assert(sizeof(TYPE) == sizeofObj); // to prevent inheritance with different size of object
     TYPE *t;
     t = _memoryChunkManager.getObject();
     return t;
   }
 
-  inline void operator delete(void *p) { _memoryChunkManager.releaseObject(p); }
+  inline void operator delete(void *p) {
+    _memoryChunkManager.releaseObject(p);
+  }
 
 private:
   class MemoryChunkManager {
@@ -128,8 +128,7 @@ private:
 };
 
 template <typename TYPE>
-typename MemoryPool<TYPE>::MemoryChunkManager
-    MemoryPool<TYPE>::_memoryChunkManager;
+typename MemoryPool<TYPE>::MemoryChunkManager MemoryPool<TYPE>::_memoryChunkManager;
 } // namespace tlp
 #endif // MEMORYPOOL_H
 ///@endcond

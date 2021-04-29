@@ -19,31 +19,29 @@
 
 #include <QMouseEvent>
 
-#include <tulip/Camera.h>
-#include <tulip/DrawingTools.h>
-#include <tulip/GlBoundingBoxSceneVisitor.h>
-#include <tulip/GlGraphComposite.h>
+#include <tulip/Graph.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlTools.h>
-#include <tulip/Graph.h>
-#include <tulip/MouseBoxZoomer.h>
+#include <tulip/DrawingTools.h>
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
+#include <tulip/GlBoundingBoxSceneVisitor.h>
+#include <tulip/GlGraphComposite.h>
+#include <tulip/Camera.h>
+#include <tulip/MouseBoxZoomer.h>
 
 #include <tulip/OpenGlIncludes.h>
 
 using namespace std;
 using namespace tlp;
 
-MouseBoxZoomer::MouseBoxZoomer(Qt::MouseButton button,
-                               Qt::KeyboardModifier modifier)
-    : mButton(button), kModifier(modifier), x(0), y(0), w(0), h(0),
-      started(false), graph(nullptr) {}
+MouseBoxZoomer::MouseBoxZoomer(Qt::MouseButton button, Qt::KeyboardModifier modifier)
+    : mButton(button), kModifier(modifier), x(0), y(0), w(0), h(0), started(false), graph(nullptr) {
+}
 MouseBoxZoomer::~MouseBoxZoomer() {}
 //=====================================================================
 bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   GlMainWidget *glw = static_cast<GlMainWidget *>(widget);
-  GlGraphInputData *inputData =
-      glw->getScene()->getGlGraphComposite()->getInputData();
+  GlGraphInputData *inputData = glw->getScene()->getGlGraphComposite()->getInputData();
 
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
@@ -131,10 +129,10 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
           if (abs(bbMax[0] - bbMin[0]) > 1 && abs(bbMax[1] - bbMin[1]) > 1) {
 
             BoundingBox sceneBB;
-            sceneBB.expand(glw->getScene()->getGraphCamera().viewportTo3DWorld(
-                glw->screenToViewport(bbMin)));
-            sceneBB.expand(glw->getScene()->getGraphCamera().viewportTo3DWorld(
-                glw->screenToViewport(bbMax)));
+            sceneBB.expand(
+                glw->getScene()->getGraphCamera().viewportTo3DWorld(glw->screenToViewport(bbMin)));
+            sceneBB.expand(
+                glw->getScene()->getGraphCamera().viewportTo3DWorld(glw->screenToViewport(bbMax)));
 
             QtGlSceneZoomAndPanAnimator zoomAnPan(glw, sceneBB);
             zoomAnPan.animateZoomAndPan();
@@ -153,8 +151,7 @@ bool MouseBoxZoomer::draw(GlMainWidget *glw) {
   if (!started)
     return false;
 
-  if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() !=
-      graph) {
+  if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
     graph = nullptr;
     started = false;
   }

@@ -37,8 +37,7 @@ class TLP_QT_SCOPE ColorScaleButton : public QPushButton {
 public:
   static void paintScale(QPainter *, const QRect &, const ColorScale &);
 
-  ColorScaleButton(ColorScale colorScale = ColorScale(),
-                   QWidget *parent = nullptr);
+  ColorScaleButton(ColorScale colorScale = ColorScale(), QWidget *parent = nullptr);
 
   const ColorScale &colorScale() const;
   void setColorScale(const ColorScale &) const;

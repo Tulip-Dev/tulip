@@ -24,7 +24,9 @@
 #ifdef QT_HAS_WEBENGINE
 #include <QWebChannel>
 
-void MapRefresher::refreshMap() { emit refreshMapSignal(); }
+void MapRefresher::refreshMap() {
+  emit refreshMapSignal();
+}
 
 JsCallback *JsCallback::_lastCreatedInstance = nullptr;
 #endif
@@ -248,8 +250,7 @@ void LeafletMaps::switchToBaseLayer(const char *layerName) {
   executeJavascript(code.arg(layerName));
 }
 
-void LeafletMaps::switchToCustomTileLayer(const QString &url,
-                                          const QString &attribution) {
+void LeafletMaps::switchToCustomTileLayer(const QString &url, const QString &attribution) {
   QString code = "switchToCustomTileLayer('%1', '%2')";
   executeJavascript(code.arg(url, attribution));
 }
@@ -272,8 +273,7 @@ Coord LeafletMaps::getPixelPosOnScreenForLatLng(double lat, double lng) {
   return Coord(xStr.toDouble(&ok), yStr.toDouble(&ok), 0);
 }
 
-std::pair<double, double> LeafletMaps::getLatLngForPixelPosOnScreen(int x,
-                                                                    int y) {
+std::pair<double, double> LeafletMaps::getLatLngForPixelPosOnScreen(int x, int y) {
   QString code = "map.containerPointToLatLng(L.point(%1, %2)).toString();";
   QString latLngStr = executeJavascript(code.arg(x).arg(y)).toString();
 
@@ -315,9 +315,8 @@ pair<double, double> LeafletMaps::getCurrentMapCenter() {
   return latLng;
 }
 
-void LeafletMaps::setMapBounds(
-    Graph *graph,
-    const unordered_map<node, pair<double, double>> &nodesLatLngs) {
+void LeafletMaps::setMapBounds(Graph *graph,
+                               const unordered_map<node, pair<double, double>> &nodesLatLngs) {
 
   if (!nodesLatLngs.empty()) {
 
@@ -334,12 +333,8 @@ void LeafletMaps::setMapBounds(
     }
 
     QString code = "mapBounds = [];";
-    code += QString("mapBounds.push(L.latLng(%1, %2));")
-                .arg(minLatLng.first)
-                .arg(minLatLng.second);
-    code += QString("mapBounds.push(L.latLng(%1, %2));")
-                .arg(maxLatLng.first)
-                .arg(maxLatLng.second);
+    code += QString("mapBounds.push(L.latLng(%1, %2));").arg(minLatLng.first).arg(minLatLng.second);
+    code += QString("mapBounds.push(L.latLng(%1, %2));").arg(maxLatLng.first).arg(maxLatLng.second);
     code += "setMapBounds(mapBounds);";
     executeJavascript(code);
   }

@@ -43,27 +43,23 @@ struct OcclusionTest;
 class TLP_GL_SCOPE GlGraphHighDetailsRenderer : public GlGraphRenderer {
 
 public:
-  GlGraphHighDetailsRenderer(const GlGraphInputData *inputData,
-                             GlScene *scene = nullptr);
+  GlGraphHighDetailsRenderer(const GlGraphInputData *inputData, GlScene *scene = nullptr);
 
   ~GlGraphHighDetailsRenderer() override;
 
   void draw(float lod, Camera *camera) override;
 
-  void selectEntities(Camera *camera, RenderingEntitiesFlag type, int x, int y,
-                      int w, int h,
+  void selectEntities(Camera *camera, RenderingEntitiesFlag type, int x, int y, int w, int h,
                       std::vector<SelectedEntity> &selectedEntities) override;
 
 protected:
-  void initSelectionRendering(
-      RenderingEntitiesFlag type, int x, int y, int w, int h,
-      std::unordered_map<unsigned int, SelectedEntity> &idMap,
-      unsigned int &currentId);
+  void initSelectionRendering(RenderingEntitiesFlag type, int x, int y, int w, int h,
+                              std::unordered_map<unsigned int, SelectedEntity> &idMap,
+                              unsigned int &currentId);
 
   void buildSortedList();
 
-  void drawLabelsForComplexEntities(bool drawSelected,
-                                    OcclusionTest *occlusionTest,
+  void drawLabelsForComplexEntities(bool drawSelected, OcclusionTest *occlusionTest,
                                     LayerLODUnit &layerLODUnit);
 
   GlLODCalculator *lodCalculator;

@@ -16,48 +16,45 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <QApplication>
 #include <QCheckBox>
+#include <QLabel>
+#include <QStylePainter>
+#include <QApplication>
+#include <QLinearGradient>
+#include <QPaintEvent>
 #include <QColorDialog>
+#include <QMainWindow>
 #include <QFileDialog>
 #include <QHBoxLayout>
-#include <QLabel>
-#include <QLinearGradient>
-#include <QMainWindow>
-#include <QPaintEvent>
-#include <QStylePainter>
 
+#include <tulip/TlpTools.h>
 #include <tulip/ColorScaleButton.h>
+#include <tulip/TulipMetaTypes.h>
 #include <tulip/CoordEditor.h>
-#include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/EdgeExtremityGlyphManager.h>
-#include <tulip/GlyphManager.h>
+#include <tulip/StringEditor.h>
 #include <tulip/GlyphRenderer.h>
+#include <tulip/EdgeExtremityGlyphManager.h>
+#include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/TulipFontDialog.h>
+#include <tulip/GlyphManager.h>
 #include <tulip/GraphPropertiesModel.h>
 #include <tulip/PluginLister.h>
-#include <tulip/ShapeDialog.h>
-#include <tulip/StringEditor.h>
-#include <tulip/StringsListSelectionDialog.h>
-#include <tulip/TextureFileDialog.h>
-#include <tulip/TlpTools.h>
+#include <tulip/TulipItemEditorCreators.h>
 #include <tulip/TulipFontAwesome.h>
-#include <tulip/TulipFontDialog.h>
+#include <tulip/TextureFileDialog.h>
 #include <tulip/TulipFontIconDialog.h>
 #include <tulip/TulipFontIconEngine.h>
-#include <tulip/TulipItemEditorCreators.h>
-#include <tulip/TulipMetaTypes.h>
+#include <tulip/ShapeDialog.h>
+#include <tulip/StringsListSelectionDialog.h>
 
 using namespace tlp;
 
 /*
  * Base class
  */
-bool TulipItemEditorCreator::paint(QPainter *painter,
-                                   const QStyleOptionViewItem &option,
-                                   const QVariant &,
-                                   const QModelIndex &) const {
-  if (option.state.testFlag(QStyle::State_Selected) &&
-      option.showDecorationSelected) {
+bool TulipItemEditorCreator::paint(QPainter *painter, const QStyleOptionViewItem &option,
+                                   const QVariant &, const QModelIndex &) const {
+  if (option.state.testFlag(QStyle::State_Selected) && option.showDecorationSelected) {
     painter->setBrush(option.palette.highlight());
     painter->setPen(Qt::transparent);
     painter->drawRect(option.rect);
@@ -79,12 +76,10 @@ QSize TulipItemEditorCreator::sizeHint(const QStyleOptionViewItem &option,
 // of a QColorDialog. calling QDialog::result() instead does not work
 class TulipColorDialog : public QColorDialog {
 public:
-  TulipColorDialog(QWidget *w)
-      : QColorDialog(w), previousColor(), ok(QDialog::Rejected) {
+  TulipColorDialog(QWidget *w) : QColorDialog(w), previousColor(), ok(QDialog::Rejected) {
     // do not use native dialog to ensure alpha channel can be set
     // it may not be shown when using gnome
-    setOptions(QColorDialog::ShowAlphaChannel |
-               QColorDialog::DontUseNativeDialog);
+    setOptions(QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);
   }
   ~TulipColorDialog() override {}
   tlp::Color previousColor;
@@ -106,26 +101,22 @@ public:
   ColorEditorCreator
 */
 QWidget *ColorEditorCreator::createWidget(QWidget *) const {
-  TulipColorDialog *colorDialog =
-      new TulipColorDialog(QApplication::activeWindow());
+  TulipColorDialog *colorDialog = new TulipColorDialog(QApplication::activeWindow());
   colorDialog->setModal(true);
   return colorDialog;
 }
 
-bool ColorEditorCreator::paint(QPainter *painter,
-                               const QStyleOptionViewItem &option,
-                               const QVariant &v,
-                               const QModelIndex &index) const {
+bool ColorEditorCreator::paint(QPainter *painter, const QStyleOptionViewItem &option,
+                               const QVariant &v, const QModelIndex &index) const {
   TulipItemEditorCreator::paint(painter, option, v, index);
   painter->setBrush(colorToQColor(v.value<tlp::Color>()));
   painter->setPen(Qt::black);
-  painter->drawRect(option.rect.x() + 6, option.rect.y() + 6,
-                    option.rect.width() - 12, option.rect.height() - 12);
+  painter->drawRect(option.rect.x() + 6, option.rect.y() + 6, option.rect.width() - 12,
+                    option.rect.height() - 12);
   return true;
 }
 
-void ColorEditorCreator::setEditorData(QWidget *editor, const QVariant &data,
-                                       bool, tlp::Graph *) {
+void ColorEditorCreator::setEditorData(QWidget *editor, const QVariant &data, bool, tlp::Graph *) {
   TulipColorDialog *dlg = static_cast<TulipColorDialog *>(editor);
 
   dlg->previousColor = data.value<tlp::Color>();
@@ -150,8 +141,7 @@ QWidget *BooleanEditorCreator::createWidget(QWidget *parent) const {
   return new QComboBox(parent);
 }
 
-void BooleanEditorCreator::setEditorData(QWidget *editor, const QVariant &v,
-                                         bool, tlp::Graph *) {
+void BooleanEditorCreator::setEditorData(QWidget *editor, const QVariant &v, bool, tlp::Graph *) {
   QComboBox *cb = static_cast<QComboBox *>(editor);
   cb->addItem("false");
   cb->addItem("true");
@@ -173,14 +163,12 @@ QWidget *CoordEditorCreator::createWidget(QWidget *) const {
   return new CoordEditor(QApplication::activeWindow(), editSize);
 }
 
-void CoordEditorCreator::setEditorData(QWidget *w, const QVariant &v, bool,
-                                       tlp::Graph *) {
+void CoordEditorCreator::setEditorData(QWidget *w, const QVariant &v, bool, tlp::Graph *) {
   static_cast<CoordEditor *>(w)->setCoord(v.value<tlp::Coord>());
 }
 
 QVariant CoordEditorCreator::editorData(QWidget *w, tlp::Graph *) {
-  return QVariant::fromValue<tlp::Coord>(
-      static_cast<CoordEditor *>(w)->coord());
+  return QVariant::fromValue<tlp::Coord>(static_cast<CoordEditor *>(w)->coord());
 }
 
 void CoordEditorCreator::setPropertyToEdit(tlp::PropertyInterface *prop) {
@@ -194,10 +182,8 @@ QWidget *PropertyInterfaceEditorCreator::createWidget(QWidget *parent) const {
   return new QComboBox(parent);
 }
 
-void PropertyInterfaceEditorCreator::setEditorData(QWidget *w,
-                                                   const QVariant &val,
-                                                   bool isMandatory,
-                                                   tlp::Graph *g) {
+void PropertyInterfaceEditorCreator::setEditorData(QWidget *w, const QVariant &val,
+                                                   bool isMandatory, tlp::Graph *g) {
   if (g == nullptr) {
     w->setEnabled(false);
     return;
@@ -210,8 +196,7 @@ void PropertyInterfaceEditorCreator::setEditorData(QWidget *w,
   if (isMandatory)
     model = new GraphPropertiesModel<PropertyInterface>(g, false, combo);
   else
-    model = new GraphPropertiesModel<PropertyInterface>("Select a property", g,
-                                                        false, combo);
+    model = new GraphPropertiesModel<PropertyInterface>("Select a property", g, false, combo);
 
   combo->setModel(model);
   combo->setCurrentIndex(model->rowOf(prop));
@@ -221,8 +206,7 @@ QVariant PropertyInterfaceEditorCreator::editorData(QWidget *w, tlp::Graph *) {
   QComboBox *combo = static_cast<QComboBox *>(w);
   GraphPropertiesModel<PropertyInterface> *model =
       static_cast<GraphPropertiesModel<PropertyInterface> *>(combo->model());
-  return model->data(model->index(combo->currentIndex(), 0),
-                     TulipModel::PropertyRole);
+  return model->data(model->index(combo->currentIndex(), 0), TulipModel::PropertyRole);
 }
 
 QString PropertyInterfaceEditorCreator::displayText(const QVariant &v) const {
@@ -241,9 +225,7 @@ QWidget *NumericPropertyEditorCreator::createWidget(QWidget *parent) const {
   return new QComboBox(parent);
 }
 
-void NumericPropertyEditorCreator::setEditorData(QWidget *w,
-                                                 const QVariant &val,
-                                                 bool isMandatory,
+void NumericPropertyEditorCreator::setEditorData(QWidget *w, const QVariant &val, bool isMandatory,
                                                  tlp::Graph *g) {
   if (g == nullptr) {
     w->setEnabled(false);
@@ -257,8 +239,7 @@ void NumericPropertyEditorCreator::setEditorData(QWidget *w,
   if (isMandatory)
     model = new GraphPropertiesModel<NumericProperty>(g, false, combo);
   else
-    model = new GraphPropertiesModel<NumericProperty>("Select a property", g,
-                                                      false, combo);
+    model = new GraphPropertiesModel<NumericProperty>("Select a property", g, false, combo);
 
   combo->setModel(model);
   combo->setCurrentIndex(model->rowOf(prop));
@@ -268,8 +249,7 @@ QVariant NumericPropertyEditorCreator::editorData(QWidget *w, tlp::Graph *) {
   QComboBox *combo = static_cast<QComboBox *>(w);
   GraphPropertiesModel<NumericProperty> *model =
       static_cast<GraphPropertiesModel<NumericProperty> *>(combo->model());
-  return model->data(model->index(combo->currentIndex(), 0),
-                     TulipModel::PropertyRole);
+  return model->data(model->index(combo->currentIndex(), 0), TulipModel::PropertyRole);
 }
 
 QString NumericPropertyEditorCreator::displayText(const QVariant &v) const {
@@ -289,23 +269,19 @@ QWidget *ColorScaleEditorCreator::createWidget(QWidget *parent) const {
   return new ColorScaleButton(ColorScale(), parent);
 }
 
-bool ColorScaleEditorCreator::paint(QPainter *painter,
-                                    const QStyleOptionViewItem &option,
-                                    const QVariant &var,
-                                    const QModelIndex &index) const {
+bool ColorScaleEditorCreator::paint(QPainter *painter, const QStyleOptionViewItem &option,
+                                    const QVariant &var, const QModelIndex &index) const {
   TulipItemEditorCreator::paint(painter, option, var, index);
   ColorScaleButton::paintScale(painter, option.rect, var.value<ColorScale>());
   return true;
 }
 
-void ColorScaleEditorCreator::setEditorData(QWidget *w, const QVariant &var,
-                                            bool, tlp::Graph *) {
+void ColorScaleEditorCreator::setEditorData(QWidget *w, const QVariant &var, bool, tlp::Graph *) {
   static_cast<ColorScaleButton *>(w)->editColorScale(var.value<ColorScale>());
 }
 
 QVariant ColorScaleEditorCreator::editorData(QWidget *w, tlp::Graph *) {
-  return QVariant::fromValue<ColorScale>(
-      static_cast<ColorScaleButton *>(w)->colorScale());
+  return QVariant::fromValue<ColorScale>(static_cast<ColorScaleButton *>(w)->colorScale());
 }
 
 /*
@@ -315,8 +291,7 @@ QWidget *StringCollectionEditorCreator::createWidget(QWidget *parent) const {
   return new QComboBox(parent);
 }
 
-void StringCollectionEditorCreator::setEditorData(QWidget *widget,
-                                                  const QVariant &var, bool,
+void StringCollectionEditorCreator::setEditorData(QWidget *widget, const QVariant &var, bool,
                                                   tlp::Graph *) {
   StringCollection col = var.value<StringCollection>();
   QComboBox *combo = static_cast<QComboBox *>(widget);
@@ -327,8 +302,7 @@ void StringCollectionEditorCreator::setEditorData(QWidget *widget,
   combo->setCurrentIndex(col.getCurrent());
 }
 
-QVariant StringCollectionEditorCreator::editorData(QWidget *widget,
-                                                   tlp::Graph *) {
+QVariant StringCollectionEditorCreator::editorData(QWidget *widget, tlp::Graph *) {
   QComboBox *combo = static_cast<QComboBox *>(widget);
   StringCollection col;
 
@@ -379,34 +353,27 @@ public:
 /*
   PropertiesCollectionEditorCreator
 */
-QWidget *
-PropertiesCollectionEditorCreator::createWidget(QWidget *parent) const {
+QWidget *PropertiesCollectionEditorCreator::createWidget(QWidget *parent) const {
   return new PropertiesCollectionDialog(parent);
 }
 
-void PropertiesCollectionEditorCreator::setEditorData(QWidget *widget,
-                                                      const QVariant &var, bool,
+void PropertiesCollectionEditorCreator::setEditorData(QWidget *widget, const QVariant &var, bool,
                                                       tlp::Graph *) {
   PropertiesCollection col = var.value<PropertiesCollection>();
-  PropertiesCollectionDialog *dialog =
-      static_cast<PropertiesCollectionDialog *>(widget);
+  PropertiesCollectionDialog *dialog = static_cast<PropertiesCollectionDialog *>(widget);
   dialog->previouslySelected = col.getSelected();
   dialog->setStringsList(col.getUnselected(), col.getSelected());
 }
 
-QVariant PropertiesCollectionEditorCreator::editorData(QWidget *widget,
-                                                       tlp::Graph *g) {
+QVariant PropertiesCollectionEditorCreator::editorData(QWidget *widget, tlp::Graph *g) {
   PropertiesCollection col(g);
-  PropertiesCollectionDialog *dialog =
-      static_cast<PropertiesCollectionDialog *>(widget);
-  col.setSelected(dialog->ok == QDialog::Rejected
-                      ? dialog->previouslySelected
-                      : dialog->getSelectedStringsList());
+  PropertiesCollectionDialog *dialog = static_cast<PropertiesCollectionDialog *>(widget);
+  col.setSelected(dialog->ok == QDialog::Rejected ? dialog->previouslySelected
+                                                  : dialog->getSelectedStringsList());
   return QVariant::fromValue<PropertiesCollection>(col);
 }
 
-QString
-PropertiesCollectionEditorCreator::displayText(const QVariant &var) const {
+QString PropertiesCollectionEditorCreator::displayText(const QVariant &var) const {
   PropertiesCollection col = var.value<PropertiesCollection>();
   QString text;
   auto &selected = col.getSelected();
@@ -457,8 +424,7 @@ QWidget *TulipFileDescriptorEditorCreator::createWidget(QWidget *) const {
   return dlg;
 }
 
-void TulipFileDescriptorEditorCreator::setEditorData(QWidget *w,
-                                                     const QVariant &v, bool,
+void TulipFileDescriptorEditorCreator::setEditorData(QWidget *w, const QVariant &v, bool,
                                                      tlp::Graph *) {
   TulipFileDescriptor desc = v.value<TulipFileDescriptor>();
   TulipFileDialog *dlg = static_cast<TulipFileDialog *>(w);
@@ -479,28 +445,25 @@ void TulipFileDescriptorEditorCreator::setEditorData(QWidget *w,
     dlg->setFileMode(QFileDialog::Directory);
     dlg->setOption(QFileDialog::ShowDirsOnly);
   } else
-    dlg->setFileMode(desc.mustExist ? QFileDialog::ExistingFile
-                                    : QFileDialog::AnyFile);
+    dlg->setFileMode(desc.mustExist ? QFileDialog::ExistingFile : QFileDialog::AnyFile);
 
   dlg->setModal(true);
   dlg->move(QCursor::pos() - QPoint(150, 200));
 }
 
-QVariant TulipFileDescriptorEditorCreator::editorData(QWidget *w,
-                                                      tlp::Graph *) {
+QVariant TulipFileDescriptorEditorCreator::editorData(QWidget *w, tlp::Graph *) {
   TulipFileDialog *dlg = static_cast<TulipFileDialog *>(w);
 
   int result = dlg->ok;
 
   if (result == QDialog::Rejected)
-    return QVariant::fromValue<TulipFileDescriptor>(
-        dlg->previousFileDescriptor);
+    return QVariant::fromValue<TulipFileDescriptor>(dlg->previousFileDescriptor);
 
   if (!dlg->selectedFiles().empty()) {
-    return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(
-        dlg->selectedFiles()[0], (dlg->fileMode() == QFileDialog::Directory)
-                                     ? TulipFileDescriptor::Directory
-                                     : TulipFileDescriptor::File));
+    return QVariant::fromValue<TulipFileDescriptor>(
+        TulipFileDescriptor(dlg->selectedFiles()[0], (dlg->fileMode() == QFileDialog::Directory)
+                                                         ? TulipFileDescriptor::Directory
+                                                         : TulipFileDescriptor::File));
   }
 
   return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor());
@@ -542,10 +505,8 @@ void tlp::addIconToPool(const QString &iconName, const QIcon &icon) {
   imageIconPool.iconPool[iconName] = icon;
 }
 
-bool TulipFileDescriptorEditorCreator::paint(QPainter *painter,
-                                             const QStyleOptionViewItem &option,
-                                             const QVariant &v,
-                                             const QModelIndex &index) const {
+bool TulipFileDescriptorEditorCreator::paint(QPainter *painter, const QStyleOptionViewItem &option,
+                                             const QVariant &v, const QModelIndex &index) const {
   TulipItemEditorCreator::paint(painter, option, v, index);
   QRect rect = option.rect;
   TulipFileDescriptor fileDesc = v.value<TulipFileDescriptor>();
@@ -565,13 +526,11 @@ bool TulipFileDescriptorEditorCreator::paint(QPainter *painter,
 
   int iconSize = rect.height() - 4;
 
-  painter->drawPixmap(rect.x() + 2, rect.y() + 2, iconSize, iconSize,
-                      icon.pixmap(iconSize));
+  painter->drawPixmap(rect.x() + 2, rect.y() + 2, iconSize, iconSize, icon.pixmap(iconSize));
 
   int textXPos = rect.x() + iconSize + 5;
 
-  if (option.state.testFlag(QStyle::State_Selected) &&
-      option.showDecorationSelected) {
+  if (option.state.testFlag(QStyle::State_Selected) && option.showDecorationSelected) {
     painter->setPen(option.palette.highlightedText().color());
     painter->setBrush(option.palette.highlightedText());
   } else {
@@ -579,16 +538,15 @@ bool TulipFileDescriptorEditorCreator::paint(QPainter *painter,
     painter->setBrush(option.palette.text());
   }
 
-  painter->drawText(textXPos, rect.y() + 2,
-                    rect.width() - (textXPos - rect.x()), rect.height() - 4,
+  painter->drawText(textXPos, rect.y() + 2, rect.width() - (textXPos - rect.x()), rect.height() - 4,
                     Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap,
                     QFileInfo(fileDesc.absolutePath).fileName());
 
   return true;
 }
 
-QSize TulipFileDescriptorEditorCreator::sizeHint(
-    const QStyleOptionViewItem &option, const QModelIndex &index) const {
+QSize TulipFileDescriptorEditorCreator::sizeHint(const QStyleOptionViewItem &option,
+                                                 const QModelIndex &index) const {
   QVariant data = index.model()->data(index);
   TulipFileDescriptor fileDesc = data.value<TulipFileDescriptor>();
   QFileInfo fileInfo(fileDesc.absolutePath);
@@ -597,8 +555,7 @@ QSize TulipFileDescriptorEditorCreator::sizeHint(
   if (fileInfo.isDir()) {
     QDir d1 = fileInfo.dir();
     d1.cdUp();
-    text =
-        fileInfo.absoluteFilePath().remove(0, d1.absolutePath().length() - 1);
+    text = fileInfo.absoluteFilePath().remove(0, d1.absolutePath().length() - 1);
   } else {
     text = fileInfo.fileName();
   }
@@ -607,8 +564,7 @@ QSize TulipFileDescriptorEditorCreator::sizeHint(
 
   QFontMetrics fontMetrics(option.font);
 
-  return QSize(pixmapWidth + fontMetrics.boundingRect(text).width(),
-               pixmapWidth);
+  return QSize(pixmapWidth + fontMetrics.boundingRect(text).width(), pixmapWidth);
 }
 
 /*
@@ -618,8 +574,7 @@ QWidget *TextureFileEditorCreator::createWidget(QWidget *) const {
   return new TextureFileDialog(QApplication::activeWindow());
 }
 
-void TextureFileEditorCreator::setEditorData(QWidget *w, const QVariant &v,
-                                             bool, tlp::Graph *) {
+void TextureFileEditorCreator::setEditorData(QWidget *w, const QVariant &v, bool, tlp::Graph *) {
   TextureFile desc = v.value<TextureFile>();
   TextureFileDialog *dlg = static_cast<TextureFileDialog *>(w);
   dlg->setData(desc);
@@ -630,10 +585,8 @@ QVariant TextureFileEditorCreator::editorData(QWidget *w, tlp::Graph *) {
   return QVariant::fromValue<TextureFile>(dlg->data());
 }
 
-bool TextureFileEditorCreator::paint(QPainter *painter,
-                                     const QStyleOptionViewItem &option,
-                                     const QVariant &v,
-                                     const QModelIndex &index) const {
+bool TextureFileEditorCreator::paint(QPainter *painter, const QStyleOptionViewItem &option,
+                                     const QVariant &v, const QModelIndex &index) const {
   TulipItemEditorCreator::paint(painter, option, v, index);
   QRect rect = option.rect;
   TextureFile tf = v.value<TextureFile>();
@@ -656,13 +609,11 @@ bool TextureFileEditorCreator::paint(QPainter *painter,
 
   int iconSize = rect.height() - 4;
 
-  painter->drawPixmap(rect.x() + 2, rect.y() + 2, iconSize, iconSize,
-                      icon.pixmap(iconSize));
+  painter->drawPixmap(rect.x() + 2, rect.y() + 2, iconSize, iconSize, icon.pixmap(iconSize));
 
   int textXPos = rect.x() + iconSize + 5;
 
-  if (option.state.testFlag(QStyle::State_Selected) &&
-      option.showDecorationSelected) {
+  if (option.state.testFlag(QStyle::State_Selected) && option.showDecorationSelected) {
     painter->setPen(option.palette.highlightedText().color());
     painter->setBrush(option.palette.highlightedText());
   } else {
@@ -670,8 +621,7 @@ bool TextureFileEditorCreator::paint(QPainter *painter,
     painter->setBrush(option.palette.text());
   }
 
-  painter->drawText(textXPos, rect.y() + 2,
-                    rect.width() - (textXPos - rect.x()), rect.height() - 4,
+  painter->drawText(textXPos, rect.y() + 2, rect.width() - (textXPos - rect.x()), rect.height() - 4,
                     Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap, text);
 
   return true;
@@ -690,8 +640,7 @@ QSize TextureFileEditorCreator::sizeHint(const QStyleOptionViewItem &option,
 
   QFontMetrics fontMetrics(option.font);
 
-  return QSize(pixmapWidth + fontMetrics.boundingRect(text).width() + 20,
-               pixmapWidth);
+  return QSize(pixmapWidth + fontMetrics.boundingRect(text).width() + 20, pixmapWidth);
 }
 
 /*
@@ -705,25 +654,22 @@ QWidget *TulipFontIconCreator::createWidget(QWidget *) const {
   return new TulipFontIconDialog(QApplication::activeWindow());
 }
 
-void TulipFontIconCreator::setEditorData(QWidget *w, const QVariant &v, bool,
-                                         tlp::Graph *) {
+void TulipFontIconCreator::setEditorData(QWidget *w, const QVariant &v, bool, tlp::Graph *) {
   TulipFontIconDialog *tfid = static_cast<TulipFontIconDialog *>(w);
   tfid->setSelectedIconName(v.value<TulipFontIcon>().iconName);
 }
 
 QVariant TulipFontIconCreator::editorData(QWidget *w, tlp::Graph *) {
-  return QVariant::fromValue<TulipFontIcon>(TulipFontIcon(
-      static_cast<TulipFontIconDialog *>(w)->getSelectedIconName()));
+  return QVariant::fromValue<TulipFontIcon>(
+      TulipFontIcon(static_cast<TulipFontIconDialog *>(w)->getSelectedIconName()));
 }
 
 QString TulipFontIconCreator::displayText(const QVariant &data) const {
   return data.value<TulipFontIcon>().iconName;
 }
 
-bool TulipFontIconCreator::paint(QPainter *painter,
-                                 const QStyleOptionViewItem &option,
-                                 const QVariant &v,
-                                 const QModelIndex &index) const {
+bool TulipFontIconCreator::paint(QPainter *painter, const QStyleOptionViewItem &option,
+                                 const QVariant &v, const QModelIndex &index) const {
   TulipItemEditorCreator::paint(painter, option, v, index);
 
   QString iconName = v.value<TulipFontIcon>().iconName;
@@ -758,8 +704,7 @@ QSize TulipFontIconCreator::sizeHint(const QStyleOptionViewItem &option,
   QVariant data = index.model()->data(index);
   static QSize iconSize(16, 16);
   QFontMetrics fontMetrics(option.font);
-  return QSize(iconSize.width() +
-                   fontMetrics.boundingRect(displayText(data)).width() + 20,
+  return QSize(iconSize.width() + fontMetrics.boundingRect(displayText(data)).width() + 20,
                iconSize.height());
 }
 
@@ -780,40 +725,33 @@ QWidget *NodeShapeEditorCreator::createWidget(QWidget *) const {
   return new ShapeDialog(std::move(shapes), QApplication::activeWindow());
 }
 
-void NodeShapeEditorCreator::setEditorData(QWidget *w, const QVariant &data,
-                                           bool, tlp::Graph *) {
+void NodeShapeEditorCreator::setEditorData(QWidget *w, const QVariant &data, bool, tlp::Graph *) {
   ShapeDialog *nsd = static_cast<ShapeDialog *>(w);
-  nsd->setSelectedShapeName(tlpStringToQString(
-      GlyphManager::glyphName(data.value<NodeShape::NodeShapes>())));
+  nsd->setSelectedShapeName(
+      tlpStringToQString(GlyphManager::glyphName(data.value<NodeShape::NodeShapes>())));
 }
 
 QVariant NodeShapeEditorCreator::editorData(QWidget *w, tlp::Graph *) {
   ShapeDialog *nsd = static_cast<ShapeDialog *>(w);
-  return QVariant::fromValue<NodeShape::NodeShapes>(
-      static_cast<NodeShape::NodeShapes>(GlyphManager::glyphId(
-          QStringToTlpString(nsd->getSelectedShapeName()))));
+  return QVariant::fromValue<NodeShape::NodeShapes>(static_cast<NodeShape::NodeShapes>(
+      GlyphManager::glyphId(QStringToTlpString(nsd->getSelectedShapeName()))));
 }
 
 QString NodeShapeEditorCreator::displayText(const QVariant &data) const {
-  return tlpStringToQString(
-      GlyphManager::glyphName(data.value<NodeShape::NodeShapes>()));
+  return tlpStringToQString(GlyphManager::glyphName(data.value<NodeShape::NodeShapes>()));
 }
 
 QSize NodeShapeEditorCreator::sizeHint(const QStyleOptionViewItem &option,
                                        const QModelIndex &index) const {
   QVariant data = index.model()->data(index);
-  static QPixmap pixmap =
-      GlyphRenderer::render(data.value<NodeShape::NodeShapes>());
+  static QPixmap pixmap = GlyphRenderer::render(data.value<NodeShape::NodeShapes>());
   QFontMetrics fontMetrics(option.font);
-  return QSize(pixmap.width() +
-                   fontMetrics.boundingRect(displayText(data)).width() + 20,
+  return QSize(pixmap.width() + fontMetrics.boundingRect(displayText(data)).width() + 20,
                pixmap.height());
 }
 
-bool NodeShapeEditorCreator::paint(QPainter *painter,
-                                   const QStyleOptionViewItem &option,
-                                   const QVariant &data,
-                                   const QModelIndex &index) const {
+bool NodeShapeEditorCreator::paint(QPainter *painter, const QStyleOptionViewItem &option,
+                                   const QVariant &data, const QModelIndex &index) const {
   TulipItemEditorCreator::paint(painter, option, data, index);
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 7, 0))
@@ -846,47 +784,39 @@ QWidget *EdgeExtremityShapeEditorCreator::createWidget(QWidget *) const {
   std::list<std::pair<QString, QPixmap>> shapes;
   shapes.push_back(std::make_pair(QString("NONE"), QPixmap()));
 
-  for (const auto &glyphName :
-       PluginLister::availablePlugins<EdgeExtremityGlyph>()) {
+  for (const auto &glyphName : PluginLister::availablePlugins<EdgeExtremityGlyph>()) {
     QString shapeName = tlpStringToQString(glyphName);
-    QPixmap pixmap = EdgeExtremityGlyphRenderer::render(
-        EdgeExtremityGlyphManager::glyphId(glyphName));
+    QPixmap pixmap =
+        EdgeExtremityGlyphRenderer::render(EdgeExtremityGlyphManager::glyphId(glyphName));
     shapes.emplace_back(shapeName, pixmap);
   }
 
-  ShapeDialog *shapeDialog =
-      new ShapeDialog(std::move(shapes), QApplication::activeWindow());
+  ShapeDialog *shapeDialog = new ShapeDialog(std::move(shapes), QApplication::activeWindow());
   shapeDialog->setWindowTitle("Select an edge extremity shape");
   return shapeDialog;
 }
 
-void EdgeExtremityShapeEditorCreator::setEditorData(QWidget *w,
-                                                    const QVariant &data, bool,
+void EdgeExtremityShapeEditorCreator::setEditorData(QWidget *w, const QVariant &data, bool,
                                                     tlp::Graph *) {
   ShapeDialog *nsd = static_cast<ShapeDialog *>(w);
-  nsd->setSelectedShapeName(
-      tlpStringToQString(EdgeExtremityGlyphManager::glyphName(
-          data.value<EdgeExtremityShape::EdgeExtremityShapes>())));
+  nsd->setSelectedShapeName(tlpStringToQString(
+      EdgeExtremityGlyphManager::glyphName(data.value<EdgeExtremityShape::EdgeExtremityShapes>())));
 }
 
 QVariant EdgeExtremityShapeEditorCreator::editorData(QWidget *w, tlp::Graph *) {
   ShapeDialog *nsd = static_cast<ShapeDialog *>(w);
   return QVariant::fromValue<EdgeExtremityShape::EdgeExtremityShapes>(
       static_cast<EdgeExtremityShape::EdgeExtremityShapes>(
-          EdgeExtremityGlyphManager::glyphId(
-              QStringToTlpString(nsd->getSelectedShapeName()))));
+          EdgeExtremityGlyphManager::glyphId(QStringToTlpString(nsd->getSelectedShapeName()))));
 }
 
-QString
-EdgeExtremityShapeEditorCreator::displayText(const QVariant &data) const {
-  return tlpStringToQString(EdgeExtremityGlyphManager::glyphName(
-      data.value<EdgeExtremityShape::EdgeExtremityShapes>()));
+QString EdgeExtremityShapeEditorCreator::displayText(const QVariant &data) const {
+  return tlpStringToQString(
+      EdgeExtremityGlyphManager::glyphName(data.value<EdgeExtremityShape::EdgeExtremityShapes>()));
 }
 
-bool EdgeExtremityShapeEditorCreator::paint(QPainter *painter,
-                                            const QStyleOptionViewItem &option,
-                                            const QVariant &data,
-                                            const QModelIndex &index) const {
+bool EdgeExtremityShapeEditorCreator::paint(QPainter *painter, const QStyleOptionViewItem &option,
+                                            const QVariant &data, const QModelIndex &index) const {
   TulipItemEditorCreator::paint(painter, option, data, index);
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 7, 0))
@@ -899,8 +829,8 @@ bool EdgeExtremityShapeEditorCreator::paint(QPainter *painter,
   opt.features |= QStyleOptionViewItemV2::HasDisplay;
 #endif
 
-  QPixmap pixmap = EdgeExtremityGlyphRenderer::render(
-      data.value<EdgeExtremityShape::EdgeExtremityShapes>());
+  QPixmap pixmap =
+      EdgeExtremityGlyphRenderer::render(data.value<EdgeExtremityShape::EdgeExtremityShapes>());
   opt.icon = QIcon(pixmap);
   opt.decorationSize = pixmap.size();
 
@@ -911,14 +841,13 @@ bool EdgeExtremityShapeEditorCreator::paint(QPainter *painter,
   return true;
 }
 
-QSize EdgeExtremityShapeEditorCreator::sizeHint(
-    const QStyleOptionViewItem &option, const QModelIndex &index) const {
+QSize EdgeExtremityShapeEditorCreator::sizeHint(const QStyleOptionViewItem &option,
+                                                const QModelIndex &index) const {
   QVariant data = index.model()->data(index);
-  static QPixmap pixmap = EdgeExtremityGlyphRenderer::render(
-      data.value<EdgeExtremityShape::EdgeExtremityShapes>());
+  static QPixmap pixmap =
+      EdgeExtremityGlyphRenderer::render(data.value<EdgeExtremityShape::EdgeExtremityShapes>());
   QFontMetrics fontMetrics(option.font);
-  return QSize(pixmap.width() +
-                   fontMetrics.boundingRect(displayText(data)).width() + 40,
+  return QSize(pixmap.width() + fontMetrics.boundingRect(displayText(data)).width() + 40,
                pixmap.height());
 }
 
@@ -927,45 +856,38 @@ QWidget *EdgeShapeEditorCreator::createWidget(QWidget *parent) const {
   QComboBox *combobox = new QComboBox(parent);
 
   for (int i = 0; i < GlGraphStaticData::edgeShapesCount; i++) {
-    combobox->addItem(tlpStringToQString(GlGraphStaticData::edgeShapeName(
-                          GlGraphStaticData::edgeShapeIds[i])),
-                      QVariant(GlGraphStaticData::edgeShapeIds[i]));
+    combobox->addItem(
+        tlpStringToQString(GlGraphStaticData::edgeShapeName(GlGraphStaticData::edgeShapeIds[i])),
+        QVariant(GlGraphStaticData::edgeShapeIds[i]));
   }
 
   return combobox;
 }
-void EdgeShapeEditorCreator::setEditorData(QWidget *editor,
-                                           const QVariant &data, bool,
-                                           Graph *) {
+void EdgeShapeEditorCreator::setEditorData(QWidget *editor, const QVariant &data, bool, Graph *) {
   QComboBox *combobox = static_cast<QComboBox *>(editor);
-  combobox->setCurrentIndex(
-      combobox->findData(int(data.value<EdgeShape::EdgeShapes>())));
+  combobox->setCurrentIndex(combobox->findData(int(data.value<EdgeShape::EdgeShapes>())));
 }
 
 QVariant EdgeShapeEditorCreator::editorData(QWidget *editor, Graph *) {
   QComboBox *combobox = static_cast<QComboBox *>(editor);
   return QVariant::fromValue<EdgeShape::EdgeShapes>(
-      static_cast<EdgeShape::EdgeShapes>(
-          combobox->itemData(combobox->currentIndex()).toInt()));
+      static_cast<EdgeShape::EdgeShapes>(combobox->itemData(combobox->currentIndex()).toInt()));
 }
 
 QString EdgeShapeEditorCreator::displayText(const QVariant &data) const {
-  return tlpStringToQString(
-      GlGraphStaticData::edgeShapeName(data.value<EdgeShape::EdgeShapes>()));
+  return tlpStringToQString(GlGraphStaticData::edgeShapeName(data.value<EdgeShape::EdgeShapes>()));
 }
 
 // TulipFontEditorCreator
 QWidget *TulipFontEditorCreator::createWidget(QWidget *) const {
   return new TulipFontDialog(QApplication::activeWindow());
 }
-void TulipFontEditorCreator::setEditorData(QWidget *editor,
-                                           const QVariant &data, bool,
+void TulipFontEditorCreator::setEditorData(QWidget *editor, const QVariant &data, bool,
                                            tlp::Graph *) {
   TulipFont font = data.value<TulipFont>();
   TulipFontDialog *fontWidget = static_cast<TulipFontDialog *>(editor);
   fontWidget->selectFont(font);
-  fontWidget->move(QCursor::pos() -
-                   QPoint(fontWidget->width() / 2, fontWidget->height() / 2));
+  fontWidget->move(QCursor::pos() - QPoint(fontWidget->width() / 2, fontWidget->height() / 2));
 }
 
 QVariant TulipFontEditorCreator::editorData(QWidget *editor, tlp::Graph *) {
@@ -990,27 +912,24 @@ QWidget *TulipLabelPositionEditorCreator::createWidget(QWidget *parent) const {
   QComboBox *result = new QComboBox(parent);
 
   for (const auto &i : TulipViewSettings::POSITION_LABEL_MAP) {
-    result->addItem(
-        tlp::tlpStringToQString(i.second),
-        QVariant::fromValue<LabelPosition::LabelPositions>(i.first));
+    result->addItem(tlp::tlpStringToQString(i.second),
+                    QVariant::fromValue<LabelPosition::LabelPositions>(i.first));
   }
 
   return result;
 }
-void TulipLabelPositionEditorCreator::setEditorData(QWidget *w,
-                                                    const QVariant &var, bool,
+void TulipLabelPositionEditorCreator::setEditorData(QWidget *w, const QVariant &var, bool,
                                                     tlp::Graph *) {
   QComboBox *comboBox = static_cast<QComboBox *>(w);
   comboBox->setCurrentIndex(int(var.value<LabelPosition::LabelPositions>()));
 }
 QVariant TulipLabelPositionEditorCreator::editorData(QWidget *w, tlp::Graph *) {
   return QVariant::fromValue<LabelPosition::LabelPositions>(
-      static_cast<LabelPosition::LabelPositions>(
-          static_cast<QComboBox *>(w)->currentIndex()));
+      static_cast<LabelPosition::LabelPositions>(static_cast<QComboBox *>(w)->currentIndex()));
 }
 QString TulipLabelPositionEditorCreator::displayText(const QVariant &v) const {
-  return tlp::tlpStringToQString(TulipViewSettings::POSITION_LABEL_MAP[v.value<
-      LabelPosition::LabelPositions>()]);
+  return tlp::tlpStringToQString(
+      TulipViewSettings::POSITION_LABEL_MAP[v.value<LabelPosition::LabelPositions>()]);
 }
 
 // GraphEditorCreator
@@ -1018,8 +937,7 @@ QWidget *GraphEditorCreator::createWidget(QWidget *parent) const {
   return new QLabel(parent);
 }
 
-void GraphEditorCreator::setEditorData(QWidget *w, const QVariant &var, bool,
-                                       tlp::Graph *) {
+void GraphEditorCreator::setEditorData(QWidget *w, const QVariant &var, bool, tlp::Graph *) {
   Graph *g = var.value<Graph *>();
 
   if (g != nullptr) {
@@ -1049,8 +967,7 @@ QWidget *EdgeSetEditorCreator::createWidget(QWidget *parent) const {
   return new QLabel(parent);
 }
 
-void EdgeSetEditorCreator::setEditorData(QWidget *w, const QVariant &var, bool,
-                                         tlp::Graph *) {
+void EdgeSetEditorCreator::setEditorData(QWidget *w, const QVariant &var, bool, tlp::Graph *) {
   std::set<tlp::edge> eset = var.value<std::set<tlp::edge>>();
 
   std::stringstream ss;
@@ -1078,8 +995,8 @@ QWidget *QVectorBoolEditorCreator::createWidget(QWidget *) const {
   return w;
 }
 
-void QVectorBoolEditorCreator::setEditorData(QWidget *editor, const QVariant &v,
-                                             bool, tlp::Graph *) {
+void QVectorBoolEditorCreator::setEditorData(QWidget *editor, const QVariant &v, bool,
+                                             tlp::Graph *) {
   QVector<QVariant> editorData;
   QVector<bool> vect = v.value<QVector<bool>>();
 
@@ -1087,8 +1004,7 @@ void QVectorBoolEditorCreator::setEditorData(QWidget *editor, const QVariant &v,
     editorData.push_back(QVariant::fromValue<bool>(vect[i]));
   }
 
-  static_cast<VectorEditor *>(editor)->setVector(editorData,
-                                                 qMetaTypeId<bool>());
+  static_cast<VectorEditor *>(editor)->setVector(editorData, qMetaTypeId<bool>());
 
   static_cast<VectorEditor *>(editor)->move(QCursor::pos());
 }
@@ -1111,8 +1027,7 @@ QString QVectorBoolEditorCreator::displayText(const QVariant &data) const {
     return QString();
 
   // use a DataTypeSerializer if any
-  DataTypeSerializer *dts =
-      DataSet::typenameToSerializer(std::string(typeid(v).name()));
+  DataTypeSerializer *dts = DataSet::typenameToSerializer(std::string(typeid(v).name()));
 
   if (dts) {
     DisplayVectorDataType<bool> dt(&v);
@@ -1139,8 +1054,7 @@ QWidget *QStringEditorCreator::createWidget(QWidget *) const {
   return editor;
 }
 
-void QStringEditorCreator::setEditorData(QWidget *editor, const QVariant &var,
-                                         bool, tlp::Graph *) {
+void QStringEditorCreator::setEditorData(QWidget *editor, const QVariant &var, bool, tlp::Graph *) {
   static_cast<StringEditor *>(editor)->setString(var.toString());
 }
 
@@ -1161,10 +1075,9 @@ void QStringEditorCreator::setPropertyToEdit(tlp::PropertyInterface *prop) {
 }
 
 // StdStringEditorCreator
-void StdStringEditorCreator::setEditorData(QWidget *editor, const QVariant &var,
-                                           bool, tlp::Graph *) {
-  static_cast<StringEditor *>(editor)->setString(
-      tlpStringToQString(var.value<std::string>()));
+void StdStringEditorCreator::setEditorData(QWidget *editor, const QVariant &var, bool,
+                                           tlp::Graph *) {
+  static_cast<StringEditor *>(editor)->setString(tlpStringToQString(var.value<std::string>()));
 }
 
 QVariant StdStringEditorCreator::editorData(QWidget *editor, tlp::Graph *) {
@@ -1185,8 +1098,7 @@ QWidget *QStringListEditorCreator::createWidget(QWidget *) const {
   return w;
 }
 
-void QStringListEditorCreator::setEditorData(QWidget *w, const QVariant &var,
-                                             bool, Graph *) {
+void QStringListEditorCreator::setEditorData(QWidget *w, const QVariant &var, bool, Graph *) {
   QStringList strList = var.toStringList();
   QVector<QVariant> vect(strList.length());
   int i = 0;

@@ -16,21 +16,18 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/DrawingTools.h>
 #include <tulip/GlRegularPolygon.h>
+#include <tulip/DrawingTools.h>
 
 using namespace std;
 
 namespace tlp {
 
 GlRegularPolygon::GlRegularPolygon(const Coord &position, const Size &size,
-                                   unsigned int numberOfSides,
-                                   const Color &fillColor,
-                                   const Color &outlineColor, bool filled,
-                                   bool outlined, const string &textureName,
-                                   float outlineSize)
-    : position(position), size(size), numberOfSides(numberOfSides),
-      startAngle(float(M_PI) / 2.0f) {
+                                   unsigned int numberOfSides, const Color &fillColor,
+                                   const Color &outlineColor, bool filled, bool outlined,
+                                   const string &textureName, float outlineSize)
+    : position(position), size(size), numberOfSides(numberOfSides), startAngle(float(M_PI) / 2.0f) {
   computePolygon();
 
   invertYTexture = false;
@@ -50,7 +47,9 @@ void GlRegularPolygon::setStartAngle(float angle) {
   computePolygon();
 }
 //=====================================================
-unsigned int GlRegularPolygon::getNumberOfSides() { return numberOfSides; }
+unsigned int GlRegularPolygon::getNumberOfSides() {
+  return numberOfSides;
+}
 //=====================================================
 void GlRegularPolygon::setNumberOfSides(unsigned int number) {
   numberOfSides = number;

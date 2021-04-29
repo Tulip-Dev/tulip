@@ -17,24 +17,22 @@
  *
  */
 
-#include "tulip/PythonTabWidget.h"
 #include "tulip/PythonInterpreter.h"
+#include "tulip/PythonTabWidget.h"
 
-#include <QLinearGradient>
 #include <QPainter>
 #include <QTabBar>
+#include <QLinearGradient>
 
 using namespace tlp;
 
 PythonTabWidget::PythonTabWidget(QWidget *parent)
-    : QTabWidget(parent), _drawGradient(false),
-      _textColor(QColor(100, 100, 100)) {}
+    : QTabWidget(parent), _drawGradient(false), _textColor(QColor(100, 100, 100)) {}
 
 void PythonTabWidget::paintEvent(QPaintEvent *event) {
   QTabWidget::paintEvent(event);
   static QImage pythonLogoImg(":/tulip/gui/icons/python.png");
-  static QString pythonVersion(
-      PythonInterpreter::getInstance()->getPythonFullVersionStr());
+  static QString pythonVersion(PythonInterpreter::getInstance()->getPythonFullVersionStr());
   QPainter painter(this);
   painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing |
                          QPainter::SmoothPixmapTransform);
@@ -46,8 +44,7 @@ void PythonTabWidget::paintEvent(QPaintEvent *event) {
     gradient.setColorAt(0.4, "#707070");
     gradient.setColorAt(0.401, "#636363");
     gradient.setColorAt(1.0, "#4a4a4a");
-    painter.fillRect(x(), tabBar()->pos().y(), width(), tabBar()->height(),
-                     gradient);
+    painter.fillRect(x(), tabBar()->pos().y(), width(), tabBar()->height(), gradient);
   }
 
   painter.setPen(_textColor);
@@ -59,10 +56,9 @@ void PythonTabWidget::paintEvent(QPaintEvent *event) {
   int imageWidth = int(25 * tabBar()->height() / 27.0);
   int labelWidth = int(100 * tabBar()->height() / 27.0);
   int offset = tabBar()->height() - imageWidth;
-  QRectF rect(width() - (imageWidth + labelWidth),
-              tabBar()->pos().y() + offset / 2, imageWidth, imageWidth);
-  QRectF rect2(width() - labelWidth, tabBar()->pos().y(), labelWidth,
-               tabBar()->height());
+  QRectF rect(width() - (imageWidth + labelWidth), tabBar()->pos().y() + offset / 2, imageWidth,
+              imageWidth);
+  QRectF rect2(width() - labelWidth, tabBar()->pos().y(), labelWidth, tabBar()->height());
   painter.drawImage(rect, pythonLogoImg);
   painter.drawText(rect2, Qt::AlignCenter, QString("Python ") + pythonVersion);
 }

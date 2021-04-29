@@ -35,8 +35,7 @@ public:
   virtual void satisfy();
   virtual void solve();
 
-  Solver(const unsigned n, Variable *const vs, const unsigned m,
-         Constraint *cs[]);
+  Solver(const unsigned n, Variable *const vs, const unsigned m, Constraint *cs[]);
   virtual ~Solver();
 
 protected:
@@ -62,8 +61,7 @@ public:
   void solve() override;
   void moveBlocks();
   void splitBlocks();
-  IncSolver(const unsigned n, Variable *const vs, const unsigned m,
-            Constraint *cs[]);
+  IncSolver(const unsigned n, Variable *const vs, const unsigned m, Constraint *cs[]);
 
 private:
   typedef std::vector<Constraint *> ConstraintList;

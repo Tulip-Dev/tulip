@@ -21,8 +21,8 @@
 #ifndef TULIPFONT_H
 #define TULIPFONT_H
 
-#include <QMap>
 #include <QObject>
+#include <QMap>
 
 #include <tulip/tulipconf.h>
 

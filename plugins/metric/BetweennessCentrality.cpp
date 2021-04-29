@@ -17,14 +17,14 @@
  *
  */
 
-#include <queue>
 #include <stack>
-#include <tulip/DoubleProperty.h>
-#include <tulip/GraphTools.h>
-#include <tulip/MutableContainer.h>
-#include <tulip/StaticProperty.h>
-#include <tulip/StringCollection.h>
+#include <queue>
 #include <unordered_map>
+#include <tulip/DoubleProperty.h>
+#include <tulip/StaticProperty.h>
+#include <tulip/MutableContainer.h>
+#include <tulip/GraphTools.h>
+#include <tulip/StringCollection.h>
 
 using namespace std;
 using namespace tlp;
@@ -58,8 +58,7 @@ static const char *paramHelp[] = {
 /** \addtogroup metric */
 
 /** This plugin is an implementation of betweenness centrality parameter.
- *  (see http://en.wikipedia.org/wiki/Centrality#Betweenness_centrality for more
- * details)
+ *  (see http://en.wikipedia.org/wiki/Centrality#Betweenness_centrality for more details)
  *
  *  Algorithm published by:
  *
@@ -108,14 +107,13 @@ public:
       "ul>"
       "The average path length is also computed.",
       "1.4", "Graph")
-  BetweennessCentrality(const PluginContext *context)
-      : DoubleAlgorithm(context) {
+  BetweennessCentrality(const PluginContext *context) : DoubleAlgorithm(context) {
     addInParameter<bool>("directed", paramHelp[0], "false");
     addInParameter<bool>("norm", paramHelp[1], "false", false);
     addInParameter<NumericProperty *>("weight", paramHelp[2], "", false);
     addOutParameter<double>("average path length", paramHelp[3], "");
-    addInParameter<StringCollection>(TARGET_TYPE, paramHelp[4], TARGET_TYPES,
-                                     true, "both <br> nodes <br> edges");
+    addInParameter<StringCollection>(TARGET_TYPE, paramHelp[4], TARGET_TYPES, true,
+                                     "both <br> nodes <br> edges");
     // result needs to be an inout parameter
     // in order to preserve the original values of non targeted elements
     // i.e if "target" = "nodes", the values of edges must be preserved
@@ -170,8 +168,7 @@ public:
 
     for (auto s : graph->nodes()) {
 
-      if (((++count % 50) == 0) &&
-          (pluginProgress->progress(count, nbNodes) != TLP_CONTINUE))
+      if (((++count % 50) == 0) && (pluginProgress->progress(count, nbNodes) != TLP_CONTINUE))
         break;
 
       stack<node> S;
@@ -192,8 +189,7 @@ public:
         S.pop();
 
         for (auto v : P[w]) {
-          double vd =
-              double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + wD);
+          double vd = double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + wD);
           delta.add(v.id, vd);
           edge e = graph->existEdge(v, w, directed);
 
@@ -244,8 +240,7 @@ public:
   }
 
 private:
-  void computeBFS(node s, bool directed, stack<node> &S,
-                  unordered_map<node, list<node>> &P,
+  void computeBFS(node s, bool directed, stack<node> &S, unordered_map<node, list<node>> &P,
                   MutableContainer<int> &sigma) {
     sigma.setAll(0);
     sigma.set(s.id, 1);
@@ -262,8 +257,7 @@ private:
       Q.pop();
       S.push(v);
 
-      for (auto w :
-           (directed ? graph->getOutNodes(v) : graph->getInOutNodes(v))) {
+      for (auto w : (directed ? graph->getOutNodes(v) : graph->getInOutNodes(v))) {
         int wd = d.get(w.id);
 
         if (wd < 0) {
@@ -279,14 +273,13 @@ private:
     }
   }
 
-  void computeDijkstra(node s, bool directed, NumericProperty *weight,
-                       stack<node> &S, unordered_map<node, list<node>> &P,
-                       MutableContainer<int> &sigma) {
+  void computeDijkstra(node s, bool directed, NumericProperty *weight, stack<node> &S,
+                       unordered_map<node, list<node>> &P, MutableContainer<int> &sigma) {
     EdgeStaticProperty<double> eWeights(graph);
     eWeights.copyFromNumericProperty(weight);
     NodeStaticProperty<double> nodeDistance(graph);
-    tlp::computeDijkstra(graph, s, eWeights, nodeDistance,
-                         directed ? DIRECTED : UNDIRECTED, P, &S, &sigma);
+    tlp::computeDijkstra(graph, s, eWeights, nodeDistance, directed ? DIRECTED : UNDIRECTED, P, &S,
+                         &sigma);
   }
 };
 

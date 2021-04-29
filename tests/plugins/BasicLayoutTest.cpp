@@ -18,11 +18,11 @@
  */
 #include "BasicLayoutTest.h"
 
-#include <tulip/BooleanProperty.h>
-#include <tulip/DoubleProperty.h>
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/DoubleProperty.h>
 
 using namespace std;
 using namespace tlp;
@@ -36,8 +36,7 @@ void BasicLayoutTest::initializeGraph(const string &type) {
 }
 //==========================================================
 template <typename PropType>
-bool BasicLayoutTest::computeProperty(const std::string &algorithm,
-                                      const std::string &graphType,
+bool BasicLayoutTest::computeProperty(const std::string &algorithm, const std::string &graphType,
                                       PropType *prop) {
   initializeGraph(graphType);
   bool deleteProp = prop == nullptr;
@@ -56,9 +55,13 @@ bool BasicLayoutTest::computeProperty(const std::string &algorithm,
 }
 //==========================================================
 
-void BasicLayoutTest::setUp() { graph = tlp::newGraph(); }
+void BasicLayoutTest::setUp() {
+  graph = tlp::newGraph();
+}
 
-void BasicLayoutTest::tearDown() { delete graph; }
+void BasicLayoutTest::tearDown() {
+  delete graph;
+}
 
 void BasicLayoutTest::testBubbleTree() {
   bool result = computeProperty<LayoutProperty>("Bubble Tree");
@@ -87,8 +90,7 @@ void BasicLayoutTest::testDendrogram() {
   ds.set("node size", &size);
   LayoutProperty layout(graph);
   string errorMsg;
-  bool result =
-      graph->applyPropertyAlgorithm("Dendrogram", &layout, errorMsg, &ds);
+  bool result = graph->applyPropertyAlgorithm("Dendrogram", &layout, errorMsg, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -120,8 +122,7 @@ void BasicLayoutTest::testMixedModel() {
   ds.set("node size", &size);
   LayoutProperty layout(graph);
   string errorMsg;
-  bool result =
-      graph->applyPropertyAlgorithm("Mixed Model", &layout, errorMsg, &ds);
+  bool result = graph->applyPropertyAlgorithm("Mixed Model", &layout, errorMsg, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -140,8 +141,7 @@ void BasicLayoutTest::testSquarifiedTreeMap() {
 
   LayoutProperty layout(graph);
   ds.set("metric", &metric);
-  result = graph->applyPropertyAlgorithm("Squarified Tree Map", &layout,
-                                         errorMsg, &ds);
+  result = graph->applyPropertyAlgorithm("Squarified Tree Map", &layout, errorMsg, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -152,8 +152,7 @@ void BasicLayoutTest::testTreeLeaf() {
   ds.set("node size", &size);
   LayoutProperty layout(graph);
   string errorMsg;
-  bool result =
-      graph->applyPropertyAlgorithm("Tree Leaf", &layout, errorMsg, &ds);
+  bool result = graph->applyPropertyAlgorithm("Tree Leaf", &layout, errorMsg, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -165,21 +164,18 @@ void BasicLayoutTest::testTreeRadial() {
 }
 //==========================================================
 void BasicLayoutTest::testTreeReingoldAndTilfordExtended() {
-  bool result =
-      computeProperty<LayoutProperty>("Hierarchical Tree (R-T Extended)");
+  bool result = computeProperty<LayoutProperty>("Hierarchical Tree (R-T Extended)");
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
 void BasicLayoutTest::testTutte() {
-  bool result = computeProperty<LayoutProperty>("3-Connected (Tutte)",
-                                                "Complete General Graph");
+  bool result = computeProperty<LayoutProperty>("3-Connected (Tutte)", "Complete General Graph");
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
 void BasicLayoutTest::testKruskal() {
   BooleanProperty selection(graph);
-  bool result =
-      computeProperty<BooleanProperty>("Kruskal", "Planar Graph", &selection);
+  bool result = computeProperty<BooleanProperty>("Kruskal", "Planar Graph", &selection);
   CPPUNIT_ASSERT(result);
   for (auto n : graph->nodes()) {
     CPPUNIT_ASSERT(selection.getNodeValue(n));
@@ -192,7 +188,6 @@ void BasicLayoutTest::testFastOverlapRemoval() {
   LayoutProperty layout(graph);
   ds.set("layout", &layout);
   string errorMsg;
-  bool result = graph->applyPropertyAlgorithm("Fast Overlap Removal", &layout,
-                                              errorMsg, &ds);
+  bool result = graph->applyPropertyAlgorithm("Fast Overlap Removal", &layout, errorMsg, &ds);
   CPPUNIT_ASSERT(result);
 }

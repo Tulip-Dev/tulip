@@ -17,12 +17,12 @@
  *
  */
 #include <tulip/GraphTools.h>
-#include <tulip/IntegerProperty.h>
 #include <tulip/StringCollection.h>
+#include <tulip/IntegerProperty.h>
 #include <tulip/TreeTest.h>
 
-#include "DatasetTools.h"
 #include "TreeReingoldAndTilfordExtended.h"
+#include "DatasetTools.h"
 
 PLUGIN(TreeReingoldAndTilfordExtended)
 
@@ -47,13 +47,12 @@ static const char *paramHelp[] = {
 //=============================================================================
 #define ORIENTATION "vertical;horizontal;"
 //=============================================================================
-TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(
-    const tlp::PluginContext *context)
+TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(const tlp::PluginContext *context)
     : LayoutAlgorithm(context), lengthMetric(nullptr) {
   addNodeSizePropertyParameter(this);
   addInParameter<IntegerProperty>("edge length", paramHelp[0], "", false);
-  addInParameter<StringCollection>("orientation", paramHelp[1], ORIENTATION,
-                                   true, "vertical <br> horizontal");
+  addInParameter<StringCollection>("orientation", paramHelp[1], ORIENTATION, true,
+                                   "vertical <br> horizontal");
   addInParameter<bool>("orthogonal", paramHelp[2], "true");
   addSpacingParameters(this);
   addInParameter<bool>("bounding circles", paramHelp[3], "false");
@@ -103,8 +102,7 @@ double TreeReingoldAndTilfordExtended::calcDecal(const std::list<LR> &arbreG,
   return decal;
 }
 //=============================================================================
-list<LR> *TreeReingoldAndTilfordExtended::mergeLRList(std::list<LR> *L,
-                                                      std::list<LR> *R,
+list<LR> *TreeReingoldAndTilfordExtended::mergeLRList(std::list<LR> *L, std::list<LR> *R,
                                                       double decal) {
   assert(L != nullptr);
   assert(R != nullptr);
@@ -192,8 +190,8 @@ list<LR> *TreeReingoldAndTilfordExtended::mergeLRList(std::list<LR> *L,
   return L;
 }
 //=============================================================================
-list<LR> *TreeReingoldAndTilfordExtended::TreePlace(
-    tlp::node n, std::unordered_map<tlp::node, double> *p) {
+list<LR> *TreeReingoldAndTilfordExtended::TreePlace(tlp::node n,
+                                                    std::unordered_map<tlp::node, double> *p) {
   if (tree->outdeg(n) == 0) {
     list<LR> *result = new list<LR>();
     LR tmpLR;
@@ -213,8 +211,7 @@ list<LR> *TreeReingoldAndTilfordExtended::TreePlace(
     list<LR> *leftTree, *rightTree;
     list<double> childPos;
     leftTree = TreePlace(itn, p);
-    childPos.push_back(((*(leftTree->begin())).L + (*(leftTree->begin())).R) /
-                       2.);
+    childPos.push_back(((*(leftTree->begin())).L + (*(leftTree->begin())).R) / 2.);
 
     if (useLength) {
       int tmpLength;
@@ -246,8 +243,7 @@ list<LR> *TreeReingoldAndTilfordExtended::TreePlace(
       }
 
       double decal = calcDecal(*leftTree, *rightTree);
-      double tmpL =
-          ((*(rightTree->begin())).L + (*(rightTree->begin())).R) / 2.;
+      double tmpL = ((*(rightTree->begin())).L + (*(rightTree->begin())).R) / 2.;
 
       if (mergeLRList(leftTree, rightTree, decal) == leftTree) {
         childPos.push_back(tmpL + decal);
@@ -265,8 +261,7 @@ list<LR> *TreeReingoldAndTilfordExtended::TreePlace(
     }
 
     delete it;
-    double posFather =
-        ((((*(leftTree->begin())).L + (*(leftTree->begin())).R) / 2.));
+    double posFather = ((((*(leftTree->begin())).L + (*(leftTree->begin())).R) / 2.));
     LR tmpLR;
     tmpLR.L = posFather - sizes->getNodeValue(n).getW() / 2.;
     tmpLR.R = posFather + sizes->getNodeValue(n).getW() / 2.;
@@ -285,9 +280,10 @@ list<LR> *TreeReingoldAndTilfordExtended::TreePlace(
   }
 }
 //=============================================================================
-void TreeReingoldAndTilfordExtended::TreeLevelSizing(
-    tlp::node n, std::unordered_map<int, double> &maxSize, int level,
-    std::unordered_map<tlp::node, int> &levels) {
+void TreeReingoldAndTilfordExtended::TreeLevelSizing(tlp::node n,
+                                                     std::unordered_map<int, double> &maxSize,
+                                                     int level,
+                                                     std::unordered_map<tlp::node, int> &levels) {
   levels[n] = level;
 
   if (maxSize.find(level) != maxSize.end()) {
@@ -300,8 +296,7 @@ void TreeReingoldAndTilfordExtended::TreeLevelSizing(
   if (useLength) {
     for (const edge &ite : tree->getOutEdges(n)) {
       node itn = tree->target(ite);
-      TreeLevelSizing(itn, maxSize, level + (lengthMetric->getEdgeValue(ite)),
-                      levels);
+      TreeLevelSizing(itn, maxSize, level + (lengthMetric->getEdgeValue(ite)), levels);
     }
   } else {
     for (const node &itn : tree->getOutNodes(n)) {
@@ -310,9 +305,10 @@ void TreeReingoldAndTilfordExtended::TreeLevelSizing(
   }
 }
 //=============================================================================
-void TreeReingoldAndTilfordExtended::calcLayout(
-    tlp::node n, std::unordered_map<tlp::node, double> *p, double x, double y,
-    int level, unordered_map<int, double> &maxLevelSize) {
+void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n,
+                                                std::unordered_map<tlp::node, double> *p, double x,
+                                                double y, int level,
+                                                unordered_map<int, double> &maxLevelSize) {
   Coord tmpCoord;
 
   if (!compactLayout)
@@ -346,8 +342,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(
       if (!compactLayout)
         calcLayout(itn, p, x + (*p)[n], y + spacing, level + 1, maxLevelSize);
       else
-        calcLayout(itn, p, x + (*p)[n], y + maxLevelSize[level] + spacing,
-                   level + 1, maxLevelSize);
+        calcLayout(itn, p, x + (*p)[n], y + maxLevelSize[level] + spacing, level + 1, maxLevelSize);
     }
   }
 }
@@ -439,8 +434,7 @@ bool TreeReingoldAndTilfordExtended::run() {
   // than the max of the minimum layer spacing of the tree
   if (!compactLayout) {
     for (unsigned int i = 0; i < maxSizeLevel.size() - 1; ++i) {
-      float minLayerSpacing =
-          float((maxSizeLevel[i] + maxSizeLevel[i + 1]) / 2);
+      float minLayerSpacing = float((maxSizeLevel[i] + maxSizeLevel[i + 1]) / 2);
 
       if (minLayerSpacing + nodeSpacing > spacing)
         spacing = minLayerSpacing + spacing;

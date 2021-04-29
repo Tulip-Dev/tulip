@@ -33,32 +33,28 @@ class QListWidgetItem;
 
 namespace tlp {
 
-class TLP_QT_SCOPE SimpleStringsListSelectionWidget
-    : public QWidget,
-      public StringsListSelectionWidgetInterface {
+class TLP_QT_SCOPE SimpleStringsListSelectionWidget : public QWidget,
+                                                      public StringsListSelectionWidgetInterface {
 
   Q_OBJECT
 
   Ui::SimpleStringsListSelectionData *_ui;
 
 public:
-  SimpleStringsListSelectionWidget(
-      QWidget *parent = nullptr,
-      const unsigned int maxSelectedStringsListSize = 0, bool orderable = true);
+  SimpleStringsListSelectionWidget(QWidget *parent = nullptr,
+                                   const unsigned int maxSelectedStringsListSize = 0,
+                                   bool orderable = true);
   ~SimpleStringsListSelectionWidget() override;
 
-  void setUnselectedStringsList(
-      const std::vector<std::string> &unselectedStringsList) override;
+  void setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList) override;
 
-  void setSelectedStringsList(
-      const std::vector<std::string> &selectedStringsList) override;
+  void setSelectedStringsList(const std::vector<std::string> &selectedStringsList) override;
 
   void clearUnselectedStringsList() override;
 
   void clearSelectedStringsList() override;
 
-  void setMaxSelectedStringsListSize(
-      const unsigned int maxSelectedStringsListSize) override;
+  void setMaxSelectedStringsListSize(const unsigned int maxSelectedStringsListSize) override;
 
   std::vector<std::string> getSelectedStringsList() const override;
 

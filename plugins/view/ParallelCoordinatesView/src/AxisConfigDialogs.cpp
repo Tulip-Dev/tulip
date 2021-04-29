@@ -18,37 +18,35 @@
  */
 
 #include "AxisConfigDialogs.h"
-#include "NominalParallelAxis.h"
 #include "QuantitativeParallelAxis.h"
+#include "NominalParallelAxis.h"
 
-#include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
-#include <tulip/Perspective.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/Perspective.h>
 
-#include <QCheckBox>
-#include <QComboBox>
 #include <QGridLayout>
-#include <QGroupBox>
+#include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QGroupBox>
+#include <QString>
+#include <QSpinBox>
+#include <QComboBox>
+#include <QPushButton>
+#include <QCheckBox>
 #include <QLabel>
 #include <QMainWindow>
-#include <QPushButton>
-#include <QSpinBox>
-#include <QString>
-#include <QVBoxLayout>
 
 using namespace std;
 
 namespace tlp {
 
 static QWidget *getMainWindow() {
-  return Perspective::instance() ? Perspective::instance()->mainWindow()
-                                 : nullptr;
+  return Perspective::instance() ? Perspective::instance()->mainWindow() : nullptr;
 }
 
-QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(
-    QuantitativeParallelAxis *axis)
+QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelAxis *axis)
     : QDialog(getMainWindow()), axis(axis) {
   setWindowTitle("Quantitative Axis Configuration");
 
@@ -136,11 +134,9 @@ void QuantitativeAxisConfigDialog::closeEvent(QCloseEvent *) {
   axis->setLog10Scale(log10Scale->isChecked());
 
   if (axis->getAxisDataTypeName() == "int") {
-    axis->setAxisMinMaxValues(intAxisMinValue->value(),
-                              intAxisMaxValue->value());
+    axis->setAxisMinMaxValues(intAxisMinValue->value(), intAxisMaxValue->value());
   } else {
-    axis->setAxisMinMaxValues(doubleAxisMinValue->value(),
-                              doubleAxisMaxValue->value());
+    axis->setAxisMinMaxValues(doubleAxisMinValue->value(), doubleAxisMaxValue->value());
   }
 
   axis->redraw();
@@ -158,13 +154,10 @@ NominalAxisConfigDialog::NominalAxisConfigDialog(NominalParallelAxis *axis)
 
   okButton = new QPushButton("OK");
   axisLabelsOrder = new ItemsListWidget(this);
-  QPushButton *up =
-      new QPushButton(QIcon(":/tulip/gui/icons/16/go-up.png"), "");
-  QPushButton *lexOrder =
-      new QPushButton(QString("Lexicographic") + QChar(QChar::LineSeparator) +
-                      QString("     order"));
-  QPushButton *down =
-      new QPushButton(QIcon(":/tulip/gui/icons/16/go-down.png"), "");
+  QPushButton *up = new QPushButton(QIcon(":/tulip/gui/icons/16/go-up.png"), "");
+  QPushButton *lexOrder = new QPushButton(QString("Lexicographic") + QChar(QChar::LineSeparator) +
+                                          QString("     order"));
+  QPushButton *down = new QPushButton(QIcon(":/tulip/gui/icons/16/go-down.png"), "");
 
   buttonsUpDownLayout->addWidget(up);
   buttonsUpDownLayout->addWidget(lexOrder);

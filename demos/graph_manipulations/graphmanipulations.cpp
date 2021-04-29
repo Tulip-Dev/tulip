@@ -1,10 +1,10 @@
-#include <tulip/ColorProperty.h>
-#include <tulip/DoubleProperty.h>
 #include <tulip/Graph.h>
-#include <tulip/PluginLibraryLoader.h>
-#include <tulip/PluginLoaderTxt.h>
-#include <tulip/StringProperty.h>
 #include <tulip/TlpTools.h>
+#include <tulip/PluginLoaderTxt.h>
+#include <tulip/PluginLibraryLoader.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/StringProperty.h>
+#include <tulip/DoubleProperty.h>
 
 using namespace std;
 using namespace tlp;
@@ -43,9 +43,9 @@ int main(int, char **) {
   myGraph->addEdge(c, e);
   myGraph->addEdge(d, e);
 
-  // now in color. 'viewColor' is the Tulip GUI's default color property, so
-  // when we load it we will see the color immediately If 'viewColor' did not
-  // exist before, this creates it.
+  // now in color. 'viewColor' is the Tulip GUI's default color property, so when we load it we will
+  // see the color immediately
+  // If 'viewColor' did not exist before, this creates it.
   ColorProperty *color = myGraph->getProperty<ColorProperty>("viewColor");
   color->setNodeValue(a, Color(255, 0, 0));
   color->setNodeValue(b, Color(0, 255, 0));
@@ -69,8 +69,7 @@ int main(int, char **) {
     // now compute the degree of the nodes.
     string errorMessage;
     // this calls the Tulip plugin 'Degree'.
-    bool success =
-        myGraph->applyPropertyAlgorithm("Degree", metric, errorMessage);
+    bool success = myGraph->applyPropertyAlgorithm("Degree", metric, errorMessage);
 
     if (!success) {
       std::cout << errorMessage << std::endl;

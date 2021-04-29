@@ -23,12 +23,12 @@
 
 #include <tulip/Graph.h>
 #include <tulip/GraphAbstract.h>
-#include <tulip/GraphProperty.h>
 #include <tulip/ImportModule.h>
-#include <tulip/JsonTokens.h>
 #include <tulip/PropertyInterface.h>
 #include <tulip/TlpTools.h>
+#include <tulip/JsonTokens.h>
 #include <tulip/YajlFacade.h>
+#include <tulip/GraphProperty.h>
 
 using namespace std;
 using namespace tlp;
@@ -39,38 +39,30 @@ typedef std::map<std::string, TemporaryGraphValue> TemporaryGraphProperty;
 class TlpJsonGraphParser : public YajlParseFacade {
 public:
   TlpJsonGraphParser(tlp::Graph *parentGraph, tlp::PluginProgress *progress)
-      : YajlParseFacade(progress), _parsingEdges(false), _parsingNodes(false),
-        _newEdge(false), _edgeSource(UINT_MAX), _parsingNodesIds(false),
-        _parsingEdgesIds(false), _parsingEdgesNumber(false),
-        _parsingInterval(false), _newInterval(false), _intervalSource(UINT_MAX),
-        _graph(parentGraph),
-        _dataSet(&const_cast<DataSet &>(parentGraph->getAttributes())),
-        _parsingAttributes(false), _currentAttributeName(std::string()),
-        _currentAttributeTypeName(std::string()), _parsingProperties(false),
-        _currentProperty(nullptr), _propertyName(std::string()),
+      : YajlParseFacade(progress), _parsingEdges(false), _parsingNodes(false), _newEdge(false),
+        _edgeSource(UINT_MAX), _parsingNodesIds(false), _parsingEdgesIds(false),
+        _parsingEdgesNumber(false), _parsingInterval(false), _newInterval(false),
+        _intervalSource(UINT_MAX), _graph(parentGraph),
+        _dataSet(&const_cast<DataSet &>(parentGraph->getAttributes())), _parsingAttributes(false),
+        _currentAttributeName(std::string()), _currentAttributeTypeName(std::string()),
+        _parsingProperties(false), _currentProperty(nullptr), _propertyName(std::string()),
         _currentIdentifier(UINT_MAX), _parsingPropertyType(false),
         _parsingPropertyNodeValues(false), _parsingPropertyEdgeValues(false),
-        _parsingPropertyDefaultEdgeValue(false),
-        _parsingPropertyDefaultNodeValue(false),
+        _parsingPropertyDefaultEdgeValue(false), _parsingPropertyDefaultNodeValue(false),
         _parsingPathViewProperty(false), _waitingForGraphId(false) {}
 
   void setGraphPropertiesValues() {
-    for (std::map<tlp::Graph *, TemporaryGraphProperty>::const_iterator
-             graphIterator = _graphProperties.begin();
+    for (std::map<tlp::Graph *, TemporaryGraphProperty>::const_iterator graphIterator =
+             _graphProperties.begin();
          graphIterator != _graphProperties.end(); ++graphIterator) {
-      for (TemporaryGraphProperty::const_iterator propertyIterator =
-               graphIterator->second.begin();
-           propertyIterator != graphIterator->second.end();
-           ++propertyIterator) {
+      for (TemporaryGraphProperty::const_iterator propertyIterator = graphIterator->second.begin();
+           propertyIterator != graphIterator->second.end(); ++propertyIterator) {
         tlp::GraphProperty *prop =
-            graphIterator->first->getProperty<tlp::GraphProperty>(
-                propertyIterator->first);
+            graphIterator->first->getProperty<tlp::GraphProperty>(propertyIterator->first);
 
-        for (TemporaryGraphValue::const_iterator valueIterator =
-                 propertyIterator->second.begin();
+        for (TemporaryGraphValue::const_iterator valueIterator = propertyIterator->second.begin();
              valueIterator != propertyIterator->second.end(); ++valueIterator) {
-          prop->setNodeValue(tlp::node(valueIterator->first),
-                             _clusterIndex[valueIterator->second]);
+          prop->setNodeValue(tlp::node(valueIterator->first), _clusterIndex[valueIterator->second]);
         }
       }
     }
@@ -110,8 +102,7 @@ public:
       }
     }
 
-    // if the current array was not an edge but was the array of edges, we are
-    // done parsing edges
+    // if the current array was not an edge but was the array of edges, we are done parsing edges
     if (!_newEdge && _parsingEdges) {
       _parsingEdges = false;
     }
@@ -135,9 +126,9 @@ public:
   }
 
   void parseMapKey(std::string &value) override {
-    if (_parsingProperties && !_parsingPropertyNodeValues &&
-        !_parsingPropertyEdgeValues && !_parsingPropertyDefaultEdgeValue &&
-        !_parsingPropertyDefaultNodeValue && _propertyName.empty()) {
+    if (_parsingProperties && !_parsingPropertyNodeValues && !_parsingPropertyEdgeValues &&
+        !_parsingPropertyDefaultEdgeValue && !_parsingPropertyDefaultNodeValue &&
+        _propertyName.empty()) {
       _propertyName = value;
     }
 
@@ -184,8 +175,7 @@ public:
       _parsingProperties = false;
     }
 
-    if (!_parsingPropertyNodeValues && !_parsingPropertyEdgeValues &&
-        !_propertyName.empty()) {
+    if (!_parsingPropertyNodeValues && !_parsingPropertyEdgeValues && !_propertyName.empty()) {
       _currentProperty = nullptr;
       _propertyName = string();
     }
@@ -308,9 +298,8 @@ public:
         }
 
         _currentProperty = _graph->getLocalProperty(_propertyName, value);
-        _parsingPathViewProperty =
-            (_propertyName == std::string("viewFont") ||
-             _propertyName == std::string("viewTexture"));
+        _parsingPathViewProperty = (_propertyName == std::string("viewFont") ||
+                                    _propertyName == std::string("viewTexture"));
 
         if (value == "graph") {
           _graphProperties[_graph] = TemporaryGraphProperty();
@@ -318,8 +307,8 @@ public:
         }
 
         if (!_currentProperty) {
-          tlp::error() << "The property '" << _propertyName << "' of type: '"
-                       << value << "' could not be created" << endl;
+          tlp::error() << "The property '" << _propertyName << "' of type: '" << value
+                       << "' could not be created" << endl;
         }
       }
 
@@ -351,13 +340,12 @@ public:
         }
 
         if (_parsingPropertyNodeValues) {
-          // if parsing a graphproperty, add it in the temporary buffer so the
-          // values are correctly set afterwards
+          // if parsing a graphproperty, add it in the temporary buffer so the values are correctly
+          // set afterwards
           if (_graphProperties[_graph].find(_currentProperty->getName()) !=
               _graphProperties[_graph].end()) {
             _graphProperties[_graph][_currentProperty->getName()].insert(
-                std::pair<unsigned, unsigned>(_currentIdentifier,
-                                              atoi(value.c_str())));
+                std::pair<unsigned, unsigned>(_currentIdentifier, atoi(value.c_str())));
           }
 
           assert(_currentIdentifier != UINT_MAX);
@@ -387,20 +375,18 @@ public:
               value.replace(pos, 15, TulipBitmapDir);
 
             _currentProperty->setEdgeStringValue(e, value);
-          } else if (_currentProperty->getTypename() ==
-                     GraphProperty::propertyTypename) {
+          } else if (_currentProperty->getTypename() == GraphProperty::propertyTypename) {
             // setEdgeStringValue does nothing with GraphProperty
             // (see GraphProperty.cpp), so use setEdgeValue instead
             set<edge> eEdges;
             EdgeSetType::fromString(eEdges, value);
-            static_cast<GraphProperty *>(_currentProperty)
-                ->setEdgeValue(e, eEdges);
+            static_cast<GraphProperty *>(_currentProperty)->setEdgeValue(e, eEdges);
           } else
             _currentProperty->setEdgeStringValue(e, value);
         }
       } else {
-        tlp::error() << "The property '" << _propertyName
-                     << "'was null when trying to fill it" << std::endl;
+        tlp::error() << "The property '" << _propertyName << "'was null when trying to fill it"
+                     << std::endl;
       }
     }
 
@@ -410,13 +396,11 @@ public:
         _currentAttributeTypeName = value;
       } else {
         stringstream data(value);
-        bool result = _dataSet->readData(data, _currentAttributeName,
-                                         _currentAttributeTypeName);
+        bool result = _dataSet->readData(data, _currentAttributeName, _currentAttributeTypeName);
 
         if (!result) {
-          tlp::error() << "error reading attribute: " << _currentAttributeName
-                       << " of type '" << _currentAttributeTypeName
-                       << "' and value: " << data.str() << std::endl;
+          tlp::error() << "error reading attribute: " << _currentAttributeName << " of type '"
+                       << _currentAttributeTypeName << "' and value: " << data.str() << std::endl;
         }
 
         _currentAttributeTypeName = string();
@@ -429,8 +413,7 @@ private:
   bool _parsingEdges;
   bool _parsingNodes;
   /**
-   * @brief indicates whether the parser is currently parsing an array
-   *representing an edge
+   * @brief indicates whether the parser is currently parsing an array representing an edge
    **/
   bool _newEdge;
   unsigned int _edgeSource;
@@ -473,26 +456,43 @@ private:
  **/
 class YajlProxy : public YajlParseFacade {
 public:
-  YajlProxy(tlp::PluginProgress *progress = nullptr)
-      : YajlParseFacade(progress), _proxy(nullptr) {}
-  ~YajlProxy() override { delete _proxy; }
-  void parseBoolean(bool boolVal) override { _proxy->parseBoolean(boolVal); }
+  YajlProxy(tlp::PluginProgress *progress = nullptr) : YajlParseFacade(progress), _proxy(nullptr) {}
+  ~YajlProxy() override {
+    delete _proxy;
+  }
+  void parseBoolean(bool boolVal) override {
+    _proxy->parseBoolean(boolVal);
+  }
   void parseDouble(double doubleVal) override {
     _proxy->parseDouble(doubleVal);
   }
-  void parseEndArray() override { _proxy->parseEndArray(); }
-  void parseEndMap() override { _proxy->parseEndMap(); }
+  void parseEndArray() override {
+    _proxy->parseEndArray();
+  }
+  void parseEndMap() override {
+    _proxy->parseEndMap();
+  }
   void parseInteger(long long integerVal) override {
     _proxy->parseInteger(integerVal);
   }
-  void parseMapKey(std::string &value) override { _proxy->parseMapKey(value); }
-  void parseNull() override { _proxy->parseNull(); }
+  void parseMapKey(std::string &value) override {
+    _proxy->parseMapKey(value);
+  }
+  void parseNull() override {
+    _proxy->parseNull();
+  }
   void parseNumber(const char *numberVal, size_t numberLen) override {
     _proxy->parseNumber(numberVal, numberLen);
   }
-  void parseStartArray() override { _proxy->parseStartArray(); }
-  void parseStartMap() override { _proxy->parseStartMap(); }
-  void parseString(std::string &value) override { _proxy->parseString(value); }
+  void parseStartArray() override {
+    _proxy->parseStartArray();
+  }
+  void parseStartMap() override {
+    _proxy->parseStartMap();
+  }
+  void parseString(std::string &value) override {
+    _proxy->parseString(value);
+  }
 
 protected:
   YajlParseFacade *_proxy;
@@ -500,11 +500,10 @@ protected:
 
 class TlpJsonImport : public ImportModule, YajlProxy {
 public:
-  PLUGININFORMATION(
-      "JSON Import", "Charles Huet", "18/05/2011",
-      "<p>Supported extensions: json</p><p>Imports a graph recorded in a file using "
-      "the Tulip JSON format.</p>",
-      "1.0", "File")
+  PLUGININFORMATION("JSON Import", "Charles Huet", "18/05/2011",
+                    "<p>Supported extensions: json</p><p>Imports a graph recorded in a file using "
+                    "the Tulip JSON format.</p>",
+                    "1.0", "File")
 
   std::list<std::string> fileExtensions() const override {
     std::list<std::string> l;
@@ -513,8 +512,8 @@ public:
   }
 
   TlpJsonImport(tlp::PluginContext *context) : ImportModule(context) {
-    addInParameter<std::string>(
-        "file::filename", "The pathname of the TLP JSON file to import.", "");
+    addInParameter<std::string>("file::filename", "The pathname of the TLP JSON file to import.",
+                                "");
   }
 
   std::string icon() const override {

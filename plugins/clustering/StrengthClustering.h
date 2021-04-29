@@ -20,10 +20,10 @@
 #define _StrengthClustering_H
 
 #include <string>
-#include <tulip/TulipPluginHeaders.h>
-#include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <unordered_map>
+#include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup clustering */
 
@@ -35,8 +35,7 @@
  *
  * Y. Chiricota, F. Jourdan and G. Melancon, G. \n
  * "Software components capture using graph clustering", \n
- * IWPC '03: Proceedings of the 11th IEEE International Workshop on Program
- * Comprehension, 2003
+ * IWPC '03: Proceedings of the 11th IEEE International Workshop on Program Comprehension, 2003
  *
  */
 class StrengthClustering : public tlp::DoubleAlgorithm {
@@ -56,14 +55,10 @@ public:
   bool check(std::string &) override;
 
 private:
-  void computeNodePartition(double threshold,
-                            std::vector<std::unordered_set<tlp::node>> &,
+  void computeNodePartition(double threshold, std::vector<std::unordered_set<tlp::node>> &,
                             tlp::DoubleProperty &);
-  double
-  computeMQValue(const std::vector<std::unordered_set<tlp::node>> &partition,
-                 tlp::Graph *);
-  double findBestThreshold(int numberOfSteps, bool &stopped,
-                           tlp::DoubleProperty &values);
+  double computeMQValue(const std::vector<std::unordered_set<tlp::node>> &partition, tlp::Graph *);
+  double findBestThreshold(int numberOfSteps, bool &stopped, tlp::DoubleProperty &values);
 };
 
 #endif

@@ -17,10 +17,10 @@
  *
  */
 
-#include <tulip/Graph.h>
 #include <tulip/ImportModule.h>
-#include <tulip/PluginProgress.h>
 #include <tulip/TlpTools.h>
+#include <tulip/PluginProgress.h>
+#include <tulip/Graph.h>
 
 using namespace std;
 using namespace tlp;
@@ -45,13 +45,12 @@ static const char *paramHelp[] = {
  *
  */
 struct KlemmEguiluzModel : public ImportModule {
-  PLUGININFORMATION(
-      "Klemm Eguiluz Model", "Sallaberry & Pennarun", "21/02/2011 & 08/04/2014",
-      "Randomly generates a small world graph using the model described "
-      "in<br/>Konstantin Klemm and Victor M. Eguiluz.<br/><b>Growing Scale-Free "
-      "Networks with Small World Behavior.</b><br/>Physical Review E, 65, "
-      "057102,(2002).",
-      "1.0", "Social network")
+  PLUGININFORMATION("Klemm Eguiluz Model", "Sallaberry & Pennarun", "21/02/2011 & 08/04/2014",
+                    "Randomly generates a small world graph using the model described "
+                    "in<br/>Konstantin Klemm and Victor M. Eguiluz.<br/><b>Growing Scale-Free "
+                    "Networks with Small World Behavior.</b><br/>Physical Review E, 65, "
+                    "057102,(2002).",
+                    "1.0", "Social network")
 
   KlemmEguiluzModel(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "200");
@@ -73,8 +72,7 @@ struct KlemmEguiluzModel : public ImportModule {
 
     // check arguments
     if (m > n) {
-      pluginProgress->setError(
-          "The m parameter cannot be greater than the number of nodes.");
+      pluginProgress->setError("The m parameter cannot be greater than the number of nodes.");
       return false;
     }
 
@@ -114,8 +112,7 @@ struct KlemmEguiluzModel : public ImportModule {
         if (activated[j]) {
           double proba = tlp::randomDouble();
 
-          if (proba < mu) { // rewire the edge to a random node chosen with
-                            // preferential attachment
+          if (proba < mu) { // rewire the edge to a random node chosen with preferential attachment
             pr = tlp::randomDouble();
             pr_sum = 0;
             unsigned int sn = 0;

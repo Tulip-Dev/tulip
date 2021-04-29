@@ -23,8 +23,8 @@
 
 #include <vector>
 
-#include <tulip/Coord.h>
 #include <tulip/Rectangle.h>
+#include <tulip/Coord.h>
 
 namespace tlp {
 
@@ -32,7 +32,8 @@ namespace tlp {
  *
  * This class provide QuadTree system
  */
-template <class TYPE> class QuadTreeNode {
+template <class TYPE>
+class QuadTreeNode {
 
 public:
   //======================================
@@ -94,8 +95,7 @@ public:
    * all elements inside the box are return. However
    * some elements not inside the box can be returned.
    */
-  void getElements(const tlp::Rectangle<float> &box,
-                   std::vector<TYPE> &result) const {
+  void getElements(const tlp::Rectangle<float> &box, std::vector<TYPE> &result) const {
     assert(box.isValid());
     assert(_box.isValid());
 
@@ -126,17 +126,15 @@ public:
   }
 
   /**
-   * same as getElements, however if the size of the elements are to small
-   * compare to the size of the box (equivalent to have several items at the
-   * same position on the screen) only one elements is returned for the small
-   * cells. The ratio should fixed according to the number of pixels displayed.
-   * If we have a 1000*800 screen we can merge items of box into a single item
-   * if the size of box is max(1000,800) times smaller than the box given in
-   * parameter. so the ratio should be 1000.(merge elements that are 1000 times
-   * smaller
+   * same as getElements, however if the size of the elements are to small compare
+   * to the size of the box (equivalent to have several items at the same position on the screen)
+   * only one elements is returned for the small cells.
+   * The ratio should fixed according to the number of pixels displayed.
+   * If we have a 1000*800 screen we can merge items of box into a single item if
+   * the size of box is max(1000,800) times smaller than the box given in parameter.
+   * so the ratio should be 1000.(merge elements that are 1000 times smaller
    */
-  void getElementsWithRatio(const tlp::Rectangle<float> &box,
-                            std::vector<TYPE> &result,
+  void getElementsWithRatio(const tlp::Rectangle<float> &box, std::vector<TYPE> &result,
                             float ratio = 1000.) const {
     assert(_box.isValid());
     assert(box.isValid());
@@ -168,9 +166,8 @@ public:
         if (!find) {
           for (unsigned int i = 0; i < 4; ++i) {
             if (children[i] != nullptr && children[i]->_box.intersect(box)) {
-              // if children[i]!=nullptr we are sure to find an elements in that
-              // branch of the tree thus we do not have to explore the other
-              // branches.
+              // if children[i]!=nullptr we are sure to find an elements in that branch of the tree
+              // thus we do not have to explore the other branches.
               children[i]->getElementsWithRatio(box, result, ratio);
               break;
             }

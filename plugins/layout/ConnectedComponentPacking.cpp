@@ -23,8 +23,8 @@
 #include <tulip/StringCollection.h>
 
 #include "ConnectedComponentPacking.h"
-#include "DatasetTools.h"
 #include "rectanglePackingFonctions.h"
+#include "DatasetTools.h"
 
 using namespace std;
 using namespace tlp;
@@ -45,8 +45,7 @@ static const char *paramHelp[] = {
     "Complexity of the algorithm.<br> n is the number of connected components in the graph."};
 
 //====================================================================
-ConnectedComponentPacking::ConnectedComponentPacking(
-    const tlp::PluginContext *context)
+ConnectedComponentPacking::ConnectedComponentPacking(const tlp::PluginContext *context)
     : LayoutAlgorithm(context) {
   addInParameter<LayoutProperty>("coordinates", paramHelp[0], "viewLayout");
   addNodeSizePropertyParameter(this);
@@ -110,8 +109,7 @@ bool ConnectedComponentPacking::run() {
       }
     }
 
-    BoundingBox tmp =
-        tlp::computeBoundingBox(nodes, edges, layout, size, rotation);
+    BoundingBox tmp = tlp::computeBoundingBox(nodes, edges, layout, size, rotation);
     Rectangle<float> &tmpRec = rectangles[i];
     tmpRec[1][0] = tmp[1][0] + spacing;
     tmpRec[1][1] = tmp[1][1] + spacing;
@@ -142,8 +140,7 @@ bool ConnectedComponentPacking::run() {
   }
 
   vector<Rectangle<float>> rectanglesBackup(rectangles);
-  if (!RectanglePackingLimitRectangles(rectangles, complexity.c_str(),
-                                       pluginProgress))
+  if (!RectanglePackingLimitRectangles(rectangles, complexity.c_str(), pluginProgress))
     return pluginProgress ? pluginProgress->state() != TLP_CANCEL : false;
 
   for (auto n : graph->nodes()) {
@@ -158,11 +155,9 @@ bool ConnectedComponentPacking::run() {
     Coord move(rectangles[i][0][0] - rectanglesBackup[i][0][0],
                rectangles[i][0][1] - rectanglesBackup[i][0][1], 0);
     const std::vector<node> &nodes = ccNodes[i];
-    StlIterator<node, std::vector<node>::const_iterator> itN(nodes.begin(),
-                                                             nodes.end());
+    StlIterator<node, std::vector<node>::const_iterator> itN(nodes.begin(), nodes.end());
     const std::vector<edge> &edges = ccEdges[i];
-    StlIterator<edge, std::vector<edge>::const_iterator> itE(edges.begin(),
-                                                             edges.end());
+    StlIterator<edge, std::vector<edge>::const_iterator> itE(edges.begin(), edges.end());
     result->translate(move, &itN, &itE);
   }
 

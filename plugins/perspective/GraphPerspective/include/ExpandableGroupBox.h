@@ -32,12 +32,15 @@ class ExpandableGroupBox : public QGroupBox {
   QWidget *_widget;
 
 public:
-  explicit ExpandableGroupBox(QWidget *parent = nullptr,
-                              const QString &title = QString());
+  explicit ExpandableGroupBox(QWidget *parent = nullptr, const QString &title = QString());
   ~ExpandableGroupBox() override;
-  bool expanded() const { return _expanded; }
+  bool expanded() const {
+    return _expanded;
+  }
 
-  QWidget *widget() const { return _widget; }
+  QWidget *widget() const {
+    return _widget;
+  }
   QWidget *takeWidget();
 
 public slots:

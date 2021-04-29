@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "ui_StringsListSelectionDialog.h"
 #include <tulip/StringsListSelectionDialog.h>
+#include "ui_StringsListSelectionDialog.h"
 
 using namespace std;
 
@@ -29,28 +29,24 @@ StringsListSelectionDialog::StringsListSelectionDialog(QWidget *parent)
 
 /**
  * set the look of the widget
- * \param listType this parameter defines the widget's look (see class
- * description)
+ * \param listType this parameter defines the widget's look (see class description)
  */
-void StringsListSelectionDialog::setListType(
-    const StringsListSelectionWidget::ListType listType) {
+void StringsListSelectionDialog::setListType(const StringsListSelectionWidget::ListType listType) {
   ui->stringsListSelectionWidget->setListType(listType);
 }
 
 /**
  * sets the maximum size of the selected strings list
  */
-void StringsListSelectionDialog::setMaxSelectedStringsListSize(
-    const unsigned int maxSize) {
+void StringsListSelectionDialog::setMaxSelectedStringsListSize(const unsigned int maxSize) {
   ui->stringsListSelectionWidget->setMaxSelectedStringsListSize(maxSize);
 }
 
 /**
  * sets the strings list and the already selected strings
  */
-void StringsListSelectionDialog::setStringsList(
-    const std::vector<std::string> &strList,
-    const std::vector<std::string> &selList) {
+void StringsListSelectionDialog::setStringsList(const std::vector<std::string> &strList,
+                                                const std::vector<std::string> &selList) {
   ui->stringsListSelectionWidget->setUnselectedStringsList(strList);
   ui->stringsListSelectionWidget->setSelectedStringsList(selList);
 }
@@ -58,13 +54,12 @@ void StringsListSelectionDialog::setStringsList(
 /**
  * @brief Constructs a strings list selection dialog with the given parent.
  * \param parent the widget's parent
- * \param listType this parameter defines the widget's look (see class
- *description) \param maxSelectedStringsListSize the maximum number of strings
- *that can be selected (if 0, nosize restriction)
+ * \param listType this parameter defines the widget's look (see class description)
+ * \param maxSelectedStringsListSize the maximum number of strings that can be selected (if 0,
+ *nosize restriction)
  **/
 StringsListSelectionDialog::StringsListSelectionDialog(
-    QString title, QWidget *parent,
-    const StringsListSelectionWidget::ListType listType,
+    QString title, QWidget *parent, const StringsListSelectionWidget::ListType listType,
     const unsigned int maxSize)
     : QDialog(parent), ui(new Ui::StringsListSelectionDialog) {
   ui->setupUi(this);
@@ -78,20 +73,17 @@ StringsListSelectionDialog::~StringsListSelectionDialog() {
     delete ui;
 }
 
-std::vector<std::string>
-StringsListSelectionDialog::getSelectedStringsList() const {
+std::vector<std::string> StringsListSelectionDialog::getSelectedStringsList() const {
   if (ui)
     return ui->stringsListSelectionWidget->getSelectedStringsList();
   return std::vector<std::string>();
 }
 
-void StringsListSelectionDialog::setUnselectedStringsListLabel(
-    const std::string &label) {
+void StringsListSelectionDialog::setUnselectedStringsListLabel(const std::string &label) {
   ui->stringsListSelectionWidget->setUnselectedStringsListLabel(label);
 }
 
-void StringsListSelectionDialog::setSelectedStringsListLabel(
-    const std::string &label) {
+void StringsListSelectionDialog::setSelectedStringsListLabel(const std::string &label) {
   ui->stringsListSelectionWidget->setSelectedStringsListLabel(label);
 }
 
@@ -102,17 +94,15 @@ void StringsListSelectionDialog::setSelectedStringsListLabel(
  *
  * @param title the string to display in the dialog title bar,
  * @param strList the list of strings to choose,
- * @param selList on input it indicates the already selected strings, then on
- *output the user selected strings,
+ * @param selList on input it indicates the already selected strings, then on output the user
+ *selected strings,
  * @param listType the type of display for the strings to choose,
- * @param maxSize the maximum number of strings to select. 0 means this number
- *is not limited.
+ * @param maxSize the maximum number of strings to select. 0 means this number is not limited.
  **/
-bool StringsListSelectionDialog::choose(
-    QString title, const std::vector<std::string> &strList,
-    std::vector<std::string> &selList, QWidget *parent,
-    const StringsListSelectionWidget::ListType listType,
-    const unsigned int maxSize) {
+bool StringsListSelectionDialog::choose(QString title, const std::vector<std::string> &strList,
+                                        std::vector<std::string> &selList, QWidget *parent,
+                                        const StringsListSelectionWidget::ListType listType,
+                                        const unsigned int maxSize) {
   StringsListSelectionDialog dialog(title, parent, listType, maxSize);
   dialog.setStringsList(strList, selList);
   int result = dialog.exec();

@@ -20,10 +20,10 @@
 #include "PushPopTest.h"
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/ConnectedTest.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
+#include <tulip/ConnectedTest.h>
 
 #include <tulip/StringProperty.h>
 
@@ -35,9 +35,13 @@ using namespace tlp;
 CPPUNIT_TEST_SUITE_REGISTRATION(PushPopTest);
 
 //==========================================================
-void PushPopTest::setUp() { graph = tlp::newGraph(); }
+void PushPopTest::setUp() {
+  graph = tlp::newGraph();
+}
 //==========================================================
-void PushPopTest::tearDown() { delete graph; }
+void PushPopTest::tearDown() {
+  delete graph;
+}
 //==========================================================
 void PushPopTest::testAddDel() {
   node n0 = graph->addNode();
@@ -457,8 +461,7 @@ void PushPopTest::testVectorValue() {
 
   edge e0 = graph->addEdge(n0, n1);
 
-  StringVectorProperty *sprop =
-      graph->getProperty<StringVectorProperty>("sprop");
+  StringVectorProperty *sprop = graph->getProperty<StringVectorProperty>("sprop");
   vector<std::string> svv;
   svv.push_back("a");
   svv.push_back("b");
@@ -1032,8 +1035,7 @@ void PushPopTest::testAddDelProps() {
   graph->getProperty<DoubleProperty>("double");
   CPPUNIT_ASSERT(graph->existProperty("double"));
   CPPUNIT_ASSERT(graph->isElement(n));
-  CPPUNIT_ASSERT(graph->getProperty<DoubleProperty>("double")->getNodeValue(
-                     n) != 123456789.);
+  CPPUNIT_ASSERT(graph->getProperty<DoubleProperty>("double")->getNodeValue(n) != 123456789.);
 
   graph->push();
   CPPUNIT_ASSERT(graph->existProperty("double"));
@@ -1044,8 +1046,7 @@ void PushPopTest::testAddDelProps() {
   CPPUNIT_ASSERT(!graph->existProperty("boolean"));
   CPPUNIT_ASSERT(graph->existProperty("double"));
   CPPUNIT_ASSERT(graph->isElement(n));
-  CPPUNIT_ASSERT(graph->getProperty<DoubleProperty>("double")->getNodeValue(
-                     n) != 123456789.);
+  CPPUNIT_ASSERT(graph->getProperty<DoubleProperty>("double")->getNodeValue(n) != 123456789.);
 
   graph->pop();
   CPPUNIT_ASSERT(!graph->existProperty("double"));
@@ -1137,15 +1138,21 @@ public:
 
   PropertyObserverForTest() {}
 
-  void reset() { properties.clear(); }
+  void reset() {
+    properties.clear();
+  }
 
-  unsigned int nbProperties() { return properties.size(); }
+  unsigned int nbProperties() {
+    return properties.size();
+  }
 
   bool found(PropertyInterface *prop) {
     return properties.find(prop) != properties.end();
   }
 
-  virtual void destroy(PropertyInterface *prop) { properties.insert(prop); }
+  virtual void destroy(PropertyInterface *prop) {
+    properties.insert(prop);
+  }
 
   void treatEvent(const Event &evt) override {
     PropertyInterface *prop = dynamic_cast<PropertyInterface *>(evt.sender());
@@ -1335,8 +1342,7 @@ void PushPopTest::testDeletePushPopFalse() {
   DeleteObjectsObserver delObserver;
 
   // create a new subgraph in graph and a local property to it
-  // create a new subgraph in the previously created one and a local property to
-  // it
+  // create a new subgraph in the previously created one and a local property to it
   graph->push();
   Graph *g1 = graph->addSubGraph("toto");
   g1->addListener(&delObserver);
@@ -1351,10 +1357,11 @@ void PushPopTest::testDeletePushPopFalse() {
   // and the two created properties
   graph->pop(false);
 
-  // should be equal to 4 as two delete events are sent by deleted subgraphs :
-  // the first one when the GraphUpdatesRecorder do the updates (removing the
-  // newly added subgraph from the hierarchy), the second one when the
-  // GraphUpdatedsRecorder destructor is called (as we forbid to unpop) as it
+  // should be equal to 4 as two delete events are sent by deleted subgraphs : the first one when
+  // the GraphUpdatesRecorder do the updates (removing the newly added subgraph from the
+  // hierarchy),
+  // the second one when the GraphUpdatedsRecorder destructor is called (as we forbid to unpop) as
+  // it
   // will really delete the subgraph
   CPPUNIT_ASSERT_EQUAL(size_t(4), delObserver.deletedGraphs.size());
 

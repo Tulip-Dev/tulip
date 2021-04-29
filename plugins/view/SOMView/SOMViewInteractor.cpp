@@ -18,14 +18,14 @@
  */
 
 #include "SOMViewInteractor.h"
-#include "EditColorScaleInteractor.h"
-#include "ThresholdInteractor.h"
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseSelector.h>
 #include <tulip/MouseShowElementInfo.h>
+#include "EditColorScaleInteractor.h"
+#include "ThresholdInteractor.h"
 
-#include "../../utils/PluginNames.h"
 #include "../../utils/StandardInteractorPriority.h"
+#include "../../utils/PluginNames.h"
 
 using namespace std;
 using namespace tlp;
@@ -35,8 +35,7 @@ PLUGIN(SOMViewSelection)
 PLUGIN(SOMViewProperties)
 PLUGIN(SOMViewThreshold)
 
-SOMViewInteractor::SOMViewInteractor(const QString &iconPath,
-                                     const QString &text,
+SOMViewInteractor::SOMViewInteractor(const QString &iconPath, const QString &text,
                                      const unsigned int priority)
     : NodeLinkDiagramComponentInteractor(iconPath, text, priority) {}
 

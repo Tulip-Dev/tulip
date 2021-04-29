@@ -37,8 +37,7 @@ static const char *paramHelp[] = {
 /// Random Tree - Import of a random uniform binary tree
 /** This plugin enables to create a random tree
  *
- *  User can specify the minimal/maximal numbers of nodes used to build of the
- * tree.
+ *  User can specify the minimal/maximal numbers of nodes used to build of the tree.
  */
 class RandomTree : public ImportModule {
 
@@ -67,8 +66,7 @@ class RandomTree : public ImportModule {
 
 public:
   PLUGININFORMATION("Uniform Random Binary Tree", "Auber", "16/02/2001",
-                    "Imports a new randomly generated uniform binary tree.",
-                    "1.1", "Graph")
+                    "Imports a new randomly generated uniform binary tree.", "1.1", "Graph")
   RandomTree(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("Minimum size", paramHelp[0], "50");
     addInParameter<unsigned int>("Maximum size", paramHelp[1], "60");
@@ -86,28 +84,24 @@ public:
 
     if (dataSet != nullptr) {
       if (!dataSet->get("Minimum size", minSize))
-        dataSet->get("minsize",
-                     minSize); // keep old name for backward compatibility
+        dataSet->get("minsize", minSize); // keep old name for backward compatibility
 
       if (!dataSet->get("Maximum size", maxSize))
-        dataSet->get("maxsize",
-                     maxSize); // keep old name for backward compatibility
+        dataSet->get("maxsize", maxSize); // keep old name for backward compatibility
 
       dataSet->get("tree layout", needLayout);
     }
 
     if (maxSize < 1) {
       if (pluginProgress)
-        pluginProgress->setError(
-            "Error: maximum size must be a strictly positive integer");
+        pluginProgress->setError("Error: maximum size must be a strictly positive integer");
 
       return false;
     }
 
     if (maxSize < minSize) {
       if (pluginProgress)
-        pluginProgress->setError(
-            "Error: maximum size must be greater than minimum size");
+        pluginProgress->setError("Error: maximum size must be greater than minimum size");
 
       return false;
     }
@@ -135,8 +129,7 @@ public:
       // apply Tree Leaf
       string errMsg;
       LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
-      return graph->applyPropertyAlgorithm("Tree Leaf", layout, errMsg, nullptr,
-                                           pluginProgress);
+      return graph->applyPropertyAlgorithm("Tree Leaf", layout, errMsg, nullptr, pluginProgress);
     }
 
     return true;

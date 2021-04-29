@@ -10,11 +10,11 @@
  * Released under GNU LGPL.  Read the file 'COPYING' for more information.
  */
 
-#include "solve_VPSC.h"
+#include <cassert>
+#include "constraint.h"
 #include "block.h"
 #include "blocks.h"
-#include "constraint.h"
-#include <cassert>
+#include "solve_VPSC.h"
 #include <cmath>
 #include <sstream>
 #ifdef RECTANGLE_OVERLAP_LOGGING
@@ -28,19 +28,16 @@ namespace vpsc {
 
 static const double ZERO_UPPERBOUND = -0.0000001;
 
-IncSolver::IncSolver(const unsigned n, Variable *const vs, const unsigned m,
-                     Constraint *cs[])
+IncSolver::IncSolver(const unsigned n, Variable *const vs, const unsigned m, Constraint *cs[])
     : Solver(n, vs, m, cs), splitCnt(0) {
   inactive.assign(cs, cs + m);
 
-  for (ConstraintList::iterator i = inactive.begin(); i != inactive.end();
-       ++i) {
+  for (ConstraintList::iterator i = inactive.begin(); i != inactive.end(); ++i) {
     (*i)->active = false;
   }
 }
 
-Solver::Solver(const unsigned n, Variable *const vs, const unsigned m,
-               Constraint *cs[])
+Solver::Solver(const unsigned n, Variable *const vs, const unsigned m, Constraint *cs[])
     : m(m), cs(cs), n(n), vs(vs) {
   bs = new Blocks(n, vs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
@@ -48,7 +45,9 @@ Solver::Solver(const unsigned n, Variable *const vs, const unsigned m,
 // assert(!constraintGraphIsCyclic(n,vs));
 #endif
 }
-Solver::~Solver() { delete bs; }
+Solver::~Solver() {
+  delete bs;
+}
 
 // useful in debugging
 void Solver::printBlocks() {
@@ -196,8 +195,7 @@ void IncSolver::satisfy() {
   long splitCtr = 0;
   Constraint *v = nullptr;
 
-  while ((v = mostViolated(inactive)) &&
-         (v->equality || v->slack() < ZERO_UPPERBOUND)) {
+  while ((v = mostViolated(inactive)) && (v->equality || v->slack() < ZERO_UPPERBOUND)) {
     assert(!v->active);
     Block *lb = v->left->block, *rb = v->right->block;
 
@@ -361,14 +359,12 @@ bool Solver::constraintGraphIsCyclic(const unsigned n, Variable *const vs) {
   }
 
   for (unsigned i = 0; i < n; i++) {
-    for (vector<Constraint *>::const_iterator c = vs[i].in.begin();
-         c != vs[i].in.end(); ++c) {
+    for (vector<Constraint *>::const_iterator c = vs[i].in.begin(); c != vs[i].in.end(); ++c) {
       Variable *l = (*c)->left;
       varmap[&vs[i]]->in.insert(varmap[l]);
     }
 
-    for (vector<Constraint *>::const_iterator c = vs[i].out.begin();
-         c != vs[i].out.end(); ++c) {
+    for (vector<Constraint *>::const_iterator c = vs[i].out.begin(); c != vs[i].out.end(); ++c) {
       Variable *r = (*c)->right;
       varmap[&vs[i]]->out.insert(varmap[r]);
     }

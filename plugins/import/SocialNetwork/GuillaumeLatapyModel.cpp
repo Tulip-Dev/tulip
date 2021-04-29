@@ -19,10 +19,10 @@
 
 #include <algorithm>
 #include <cmath>
-#include <tulip/Graph.h>
 #include <tulip/ImportModule.h>
-#include <tulip/PluginProgress.h>
 #include <tulip/TlpTools.h>
+#include <tulip/PluginProgress.h>
+#include <tulip/Graph.h>
 
 using namespace std;
 using namespace tlp;
@@ -62,13 +62,12 @@ struct TopNode {
  *
  */
 struct GuillaumeLatapyModel : public ImportModule {
-  PLUGININFORMATION(
-      "Guillaume Latapy Model", "Arnaud Sallaberry", "20/06/2011",
-      "Randomly generates a small word graph using the model described in<br/>J.-L. "
-      "Guillaume and M. Latapy.<br/><b>Bipartite graphs as models of complex "
-      "networks.</b><br/>In Workshop on Combinatorial and Algorithmic Aspects of "
-      "Networking (CAAN), LNCS, volume 1, 2004.",
-      "1.0", "Social network")
+  PLUGININFORMATION("Guillaume Latapy Model", "Arnaud Sallaberry", "20/06/2011",
+                    "Randomly generates a small word graph using the model described in<br/>J.-L. "
+                    "Guillaume and M. Latapy.<br/><b>Bipartite graphs as models of complex "
+                    "networks.</b><br/>In Workshop on Combinatorial and Algorithmic Aspects of "
+                    "Networking (CAAN), LNCS, volume 1, 2004.",
+                    "1.0", "Social network")
 
   GuillaumeLatapyModel(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "200");
@@ -105,8 +104,8 @@ struct GuillaumeLatapyModel : public ImportModule {
       }
 
       if (i < nbNodesScaleFree)
-        vec_bottom_nodes[i].degree = uint(
-            ceil(((nbNodes / 2.0 - 10.0) / nbNodesScaleFree / 2) * (i + 1)));
+        vec_bottom_nodes[i].degree =
+            uint(ceil(((nbNodes / 2.0 - 10.0) / nbNodesScaleFree / 2) * (i + 1)));
       else
         vec_bottom_nodes[i].degree = maxDegreeSmallWorldNodes;
 
@@ -137,10 +136,8 @@ struct GuillaumeLatapyModel : public ImportModule {
       for (j = 0; j < vec_top_nodes[i].degree; ++j) {
         int bottom_id = tlp::randomInteger(vec_bottom_nodes.size() - 1);
 
-        if (isNotNodeInVector(vec_top_nodes[i].bottom_nodes,
-                              vec_bottom_nodes[bottom_id].n))
-          vec_top_nodes[i].bottom_nodes.push_back(
-              vec_bottom_nodes[bottom_id].n);
+        if (isNotNodeInVector(vec_top_nodes[i].bottom_nodes, vec_bottom_nodes[bottom_id].n))
+          vec_top_nodes[i].bottom_nodes.push_back(vec_bottom_nodes[bottom_id].n);
 
         vec_bottom_nodes[bottom_id].degree--;
 
@@ -151,19 +148,16 @@ struct GuillaumeLatapyModel : public ImportModule {
 
     for (i = 0; i < nbNodes; ++i) {
       if (i % 100 == 0) {
-        if (pluginProgress->progress(i + 2 * nbNodes, iterations) !=
-            TLP_CONTINUE)
+        if (pluginProgress->progress(i + 2 * nbNodes, iterations) != TLP_CONTINUE)
           return pluginProgress->state() != TLP_CANCEL;
       }
 
       for (j = 0; j < vec_top_nodes[i].bottom_nodes.size(); ++j) {
         for (l = 0; l < j; ++l) {
-          if (!graph->hasEdge(vec_top_nodes[i].bottom_nodes[j],
-                              vec_top_nodes[i].bottom_nodes[l])) {
+          if (!graph->hasEdge(vec_top_nodes[i].bottom_nodes[j], vec_top_nodes[i].bottom_nodes[l])) {
             if (!graph->hasEdge(vec_top_nodes[i].bottom_nodes[l],
                                 vec_top_nodes[i].bottom_nodes[j])) {
-              graph->addEdge(vec_top_nodes[i].bottom_nodes[j],
-                             vec_top_nodes[i].bottom_nodes[l]);
+              graph->addEdge(vec_top_nodes[i].bottom_nodes[j], vec_top_nodes[i].bottom_nodes[l]);
             }
           }
         }

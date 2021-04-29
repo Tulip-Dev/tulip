@@ -16,15 +16,15 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <cassert>
 #include "WebDavManager.h"
 #include <QDomDocument>
-#include <cassert>
 #include <tulip/TlpQtTools.h>
 
 WebDavManager::WebDavManager(const QString &host, const QString &url,
                              const QString &base64credentials)
-    : _host(host), _url(url), _credentials("Basic " + base64credentials),
-      _ongoingRequests(0), _displayErrors(true) {
+    : _host(host), _url(url), _credentials("Basic " + base64credentials), _ongoingRequests(0),
+      _displayErrors(true) {
   _credentials = _credentials.replace("\012", "");
   connect(&_manager, SIGNAL(finished(QNetworkReply *)), this,
           SLOT(requestFinished(QNetworkReply *)));
@@ -56,8 +56,7 @@ bool WebDavManager::mkdir(const QString &folder) {
   _requestSucessFull = true;
   ++_ongoingRequests;
 
-  std::cout << "creating fodler " << tlp::QStringToTlpString(folder)
-            << std::endl;
+  std::cout << "creating fodler " << tlp::QStringToTlpString(folder) << std::endl;
   _manager.sendCustomRequest(initRequest(folder), QString("MKCOL").toUtf8());
 
   while (_ongoingRequests > 0) {
@@ -71,8 +70,7 @@ bool WebDavManager::putFile(const QString &filename, QIODevice *data) {
   _requestSucessFull = true;
   ++_ongoingRequests;
   std::cout << "uploading " << tlp::QStringToTlpString(filename) << std::endl;
-  _manager.sendCustomRequest(initRequest(filename), QString("PUT").toUtf8(),
-                             data);
+  _manager.sendCustomRequest(initRequest(filename), QString("PUT").toUtf8(), data);
 
   while (_ongoingRequests > 0) {
     QCoreApplication::processEvents();
@@ -92,12 +90,9 @@ void WebDavManager::requestFinished(QNetworkReply *reply) {
 
   if (reply->error() != QNetworkReply::NoError) {
     if (_displayErrors) {
-      std::cout << "error: " << tlp::QStringToTlpString(reply->errorString())
-                << std::endl;
-      std::cout << "reply: " << tlp::QStringToTlpString(reply->readAll())
-                << std::endl;
-      std::cout << "request: "
-                << tlp::QStringToTlpString(reply->request().url().toString())
+      std::cout << "error: " << tlp::QStringToTlpString(reply->errorString()) << std::endl;
+      std::cout << "reply: " << tlp::QStringToTlpString(reply->readAll()) << std::endl;
+      std::cout << "request: " << tlp::QStringToTlpString(reply->request().url().toString())
                 << std::endl;
     }
 
@@ -115,23 +110,21 @@ QUrl WebDavManager::initUrl(const QString &dest) {
   QUrl url("https://" + _host + ":" + "443" + "/" + _url + "/" + dest);
 
   if (!url.isValid()) {
-    std::cout << "URL not valid: " << tlp::QStringToTlpString(url.toString())
-              << std::endl;
+    std::cout << "URL not valid: " << tlp::QStringToTlpString(url.toString()) << std::endl;
     assert(false);
   }
 
   return url;
 }
 
-QNetworkRequest WebDavManager::initRequest(const QString &destination,
-                                           QIODevice *data, QVariant mimetype) {
+QNetworkRequest WebDavManager::initRequest(const QString &destination, QIODevice *data,
+                                           QVariant mimetype) {
   QNetworkRequest request(initUrl(destination));
   request.setRawHeader(QByteArray("Authorization"), _credentials.toLatin1());
   request.setRawHeader(QByteArray("Host"), _host.toUtf8());
 
   if (data != nullptr) {
-    request.setHeader(QNetworkRequest::ContentLengthHeader,
-                      QVariant(data->size()));
+    request.setHeader(QNetworkRequest::ContentLengthHeader, QVariant(data->size()));
   }
 
   request.setHeader(QNetworkRequest::ContentTypeHeader, mimetype);
@@ -146,8 +139,7 @@ QDomDocument *WebDavManager::getRemoteDescription() {
 
   QDomDocument *currentServerDescription = new QDomDocument();
   QString errorMsg;
-  bool result =
-      currentServerDescription->setContent(reply->readAll(), &errorMsg);
+  bool result = currentServerDescription->setContent(reply->readAll(), &errorMsg);
   std::cout << result << ":" << tlp::QStringToTlpString(errorMsg) << std::endl;
 
   reply->deleteLater();

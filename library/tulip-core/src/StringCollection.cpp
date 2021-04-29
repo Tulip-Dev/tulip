@@ -68,8 +68,7 @@ StringCollection::StringCollection(const std::string &param) : current(0) {
     _data.emplace_back(temp);
 }
 
-StringCollection::StringCollection(const std::vector<string> &vectorParam,
-                                   const int currentParam)
+StringCollection::StringCollection(const std::vector<string> &vectorParam, const int currentParam)
     : _data(vectorParam) {
   if (currentParam < int(_data.size()))
     current = currentParam;
@@ -81,8 +80,7 @@ StringCollection::StringCollection(const std::vector<string> &vectorParam,
                                    const std::string &currentString)
     : _data(vectorParam), current(0) {
 
-  for (vector<string>::const_iterator itS = _data.begin(); itS != _data.end();
-       ++itS, ++current) {
+  for (vector<string>::const_iterator itS = _data.begin(); itS != _data.end(); ++itS, ++current) {
     if ((*itS) == currentString)
       return;
   }
@@ -118,6 +116,10 @@ bool StringCollection::setCurrent(const string &param) {
   return false;
 }
 
-int StringCollection::getCurrent() const { return current; }
+int StringCollection::getCurrent() const {
+  return current;
+}
 
-const vector<string> &StringCollection::getValues() const { return _data; }
+const vector<string> &StringCollection::getValues() const {
+  return _data;
+}

@@ -20,8 +20,8 @@
 #ifndef REACHABLESUBGRAPHVIEW_H_
 #define REACHABLESUBGRAPHVIEW_H_
 
-#include <tulip/GraphDecorator.h>
 #include <unordered_map>
+#include <tulip/GraphDecorator.h>
 
 namespace tlp {
 class DoubleProperty;
@@ -36,8 +36,7 @@ public:
 
   NodeNeighborhoodView(Graph *graph, node n,
                        NeighborNodesType neighborsNodesType = IN_OUT_NEIGHBORS,
-                       unsigned int neighborhoodDist = 1,
-                       bool computeReachableSubGraph = false,
+                       unsigned int neighborhoodDist = 1, bool computeReachableSubGraph = false,
                        const std::string &propertyName = "", int nbNodes = 0);
 
   void updateWithDistance(const unsigned int dist);
@@ -56,13 +55,21 @@ public:
   Iterator<edge> *getInOutEdges(const node n) const override;
   Iterator<edge> *getInEdges(const node n) const override;
 
-  const std::vector<node> &nodes() const override { return graphViewNodes; }
+  const std::vector<node> &nodes() const override {
+    return graphViewNodes;
+  }
 
-  unsigned int numberOfNodes() const override { return graphViewNodes.size(); }
+  unsigned int numberOfNodes() const override {
+    return graphViewNodes.size();
+  }
 
-  const std::vector<edge> &edges() const override { return graphViewEdges; }
+  const std::vector<edge> &edges() const override {
+    return graphViewEdges;
+  }
 
-  unsigned int numberOfEdges() const override { return graphViewEdges.size(); }
+  unsigned int numberOfEdges() const override {
+    return graphViewEdges.size();
+  }
 
   Graph *getRoot() const override {
     return const_cast<NodeNeighborhoodView *>(this);

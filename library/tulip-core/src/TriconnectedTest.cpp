@@ -16,22 +16,20 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/BiconnectedTest.h>
 #include <tulip/Graph.h>
 #include <tulip/TriconnectedTest.h>
+#include <tulip/BiconnectedTest.h>
 
 using namespace std;
 using namespace tlp;
 //=================================================================
 class TriconnectedTestListener : public Observable {
 public:
-  // override of Observable::treatEvent to remove the cached result for a graph
-  // if it is modified.
+  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
   void treatEvent(const Event &) override;
 
   /**
-   * @brief Stored results for graphs. When a graph is updated, its entry is
-   *removed from the map.
+   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the map.
    **/
   std::unordered_map<const Graph *, bool> resultsBuffer;
 };

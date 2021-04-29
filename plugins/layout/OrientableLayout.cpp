@@ -21,8 +21,7 @@
 using namespace tlp;
 
 //====================================================================
-OrientableLayout::OrientableLayout(tlp::LayoutProperty *layoutParam,
-                                   orientationType mask) {
+OrientableLayout::OrientableLayout(tlp::LayoutProperty *layoutParam, orientationType mask) {
   layout = layoutParam;
   setOrientation(mask);
 }
@@ -60,8 +59,7 @@ void OrientableLayout::setOrientation(orientationType mask) {
 }
 
 //====================================================================
-OrientableCoord OrientableLayout::createCoord(const float x, const float y,
-                                              const float z) {
+OrientableCoord OrientableLayout::createCoord(const float x, const float y, const float z) {
   return OrientableCoord(this, x, y, z);
 }
 
@@ -127,8 +125,7 @@ OrientableLayout::LineType OrientableLayout::getEdgeDefaultValue() {
 }
 
 //====================================================================
-void OrientableLayout::setOrthogonalEdge(const Graph *tree,
-                                         float interNodeDistance) {
+void OrientableLayout::setOrthogonalEdge(const Graph *tree, float interNodeDistance) {
   for (auto currentNode : tree->nodes()) {
     OrientableCoord currentNodeCoord = getNodeValue(currentNode);
 
@@ -138,8 +135,7 @@ void OrientableLayout::setOrthogonalEdge(const Graph *tree,
 }
 
 //====================================================================
-void OrientableLayout::addControlPoints(const Graph *tree,
-                                        OrientableCoord fatherCoord, edge e,
+void OrientableLayout::addControlPoints(const Graph *tree, OrientableCoord fatherCoord, edge e,
                                         float interNodeDistance) {
   node child = tree->target(e);
   OrientableCoord childCoord = getNodeValue(child);

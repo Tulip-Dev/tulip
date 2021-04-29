@@ -20,8 +20,8 @@
 #define TLPMETAGRAPHPROXYTEST
 
 #include <string>
-#include <tulip/Graph.h>
 #include <tulip/GraphProperty.h>
+#include <tulip/Graph.h>
 
 #include "CppUnitIncludes.h"
 

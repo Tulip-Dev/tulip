@@ -46,13 +46,11 @@ public:
   virtual bool writeHeader(const tlp::BoundingBox &bb) = 0;
 
   // This method begins a graph
-  virtual bool writeGraph(const tlp::BoundingBox &bb,
-                          const tlp::Color &background,
+  virtual bool writeGraph(const tlp::BoundingBox &bb, const tlp::Color &background,
                           bool noBackground = false) = 0;
 
   // This method begins a meta-graph
-  virtual bool writeMetaGraph(const int transform_X, const int transform_Y,
-                              float scale) = 0;
+  virtual bool writeMetaGraph(const int transform_X, const int transform_Y, float scale) = 0;
 
   // This method ends a graph or a meta-graph
   virtual bool writeEndGraph() = 0;
@@ -77,39 +75,37 @@ public:
   virtual bool endNode() = 0;
 
   // This method defines the shape of a node
-  virtual bool addShape(const tlp::NodeShape::NodeShapes &,
-                        const tlp::Coord &coord, const tlp::Size &size,
-                        const tlp::Color &bordercolor, const double borderwidth,
-                        const tlp::Color &color, std::string iconName) = 0;
+  virtual bool addShape(const tlp::NodeShape::NodeShapes &, const tlp::Coord &coord,
+                        const tlp::Size &size, const tlp::Color &bordercolor,
+                        const double borderwidth, const tlp::Color &color,
+                        std::string iconName) = 0;
 
   // This method represents edges according to incoming parameters
   // No edge color interpolation
-  virtual bool exportEdge(
-      const tlp::EdgeShape::EdgeShapes &, const std::vector<tlp::Coord> &bends,
-      const tlp::Color &edgeColor, const double width,
-      const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type,
-      const unsigned id_src_shape,
-      const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type,
-      const unsigned id_tgt_shape,
-      const std::vector<tlp::Coord> &edgeVertice) = 0;
+  virtual bool exportEdge(const tlp::EdgeShape::EdgeShapes &, const std::vector<tlp::Coord> &bends,
+                          const tlp::Color &edgeColor, const double width,
+                          const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type,
+                          const unsigned id_src_shape,
+                          const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type,
+                          const unsigned id_tgt_shape,
+                          const std::vector<tlp::Coord> &edgeVertice) = 0;
   // edge color interpolation between edgeColor1 and edgeColor2
-  virtual bool exportEdge(
-      const unsigned id, const tlp::EdgeShape::EdgeShapes &,
-      const std::vector<tlp::Coord> &bends, const tlp::Color &edgeColor1,
-      const tlp::Color &edgeColor2, const double width,
-      const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type,
-      const unsigned id_src_shape,
-      const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type,
-      const unsigned id_tgt_shape,
-      const std::vector<tlp::Coord> &edgeVertice) = 0;
+  virtual bool exportEdge(const unsigned id, const tlp::EdgeShape::EdgeShapes &,
+                          const std::vector<tlp::Coord> &bends, const tlp::Color &edgeColor1,
+                          const tlp::Color &edgeColor2, const double width,
+                          const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type,
+                          const unsigned id_src_shape,
+                          const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type,
+                          const unsigned id_tgt_shape,
+                          const std::vector<tlp::Coord> &edgeVertice) = 0;
 
   // This method defines extremities of edges
-  virtual bool exportEdgeExtremity(
-      const unsigned id_src_shape, const unsigned id_tgt_shape,
-      const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type,
-      const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type,
-      const tlp::Color &color, const unsigned int id_src_gradient,
-      const unsigned int id_tgt_gradient, const std::string &iconName) = 0;
+  virtual bool
+  exportEdgeExtremity(const unsigned id_src_shape, const unsigned id_tgt_shape,
+                      const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type,
+                      const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type,
+                      const tlp::Color &color, const unsigned int id_src_gradient,
+                      const unsigned int id_tgt_gradient, const std::string &iconName) = 0;
 
   // This method represents edges according to incoming parameters
   virtual bool startEdge(const unsigned id) = 0;
@@ -122,8 +118,7 @@ public:
   virtual bool addRotation(const double rotation, const tlp::Coord &center) = 0;
 
 protected:
-  virtual bool addBorder(const tlp::Color &borderColor,
-                         const double borderwidth) = 0;
+  virtual bool addBorder(const tlp::Color &borderColor, const double borderwidth) = 0;
   virtual bool addColor(const tlp::Color &nodeColor) = 0;
 };
 

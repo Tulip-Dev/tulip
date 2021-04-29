@@ -32,14 +32,11 @@ GraphPropertiesSelectionWidget::GraphPropertiesSelectionWidget(
     : StringsListSelectionWidget(parent, listType, maxNbSelectedProperties) {}
 
 GraphPropertiesSelectionWidget::GraphPropertiesSelectionWidget(
-    Graph *graph, QWidget *parent,
-    const StringsListSelectionWidget::ListType &listType,
-    const unsigned int maxNbSelectedProperties,
-    const std::vector<std::string> &propertiesTypes,
+    Graph *graph, QWidget *parent, const StringsListSelectionWidget::ListType &listType,
+    const unsigned int maxNbSelectedProperties, const std::vector<std::string> &propertiesTypes,
     const bool includeViewProperties)
-    : StringsListSelectionWidget(parent, listType, maxNbSelectedProperties),
-      graph(graph), propertiesTypes(propertiesTypes),
-      includeViewProperties(includeViewProperties) {
+    : StringsListSelectionWidget(parent, listType, maxNbSelectedProperties), graph(graph),
+      propertiesTypes(propertiesTypes), includeViewProperties(includeViewProperties) {
   initWidget();
 }
 
@@ -70,23 +67,22 @@ void GraphPropertiesSelectionWidget::initWidget() {
   setUnselectedStringsList(inputProperties);
 }
 
-bool GraphPropertiesSelectionWidget::propertySelectable(
-    const std::string &propertyName) {
+bool GraphPropertiesSelectionWidget::propertySelectable(const std::string &propertyName) {
   bool selectProperty = false;
 
   if (propertiesTypes.size() > 0) {
     string propertyType = graph->getProperty(propertyName)->getTypename();
 
-    if (std::find(propertiesTypes.begin(), propertiesTypes.end(),
-                  propertyType) != propertiesTypes.end()) {
+    if (std::find(propertiesTypes.begin(), propertiesTypes.end(), propertyType) !=
+        propertiesTypes.end()) {
       selectProperty = true;
     }
   } else {
     selectProperty = true;
   }
 
-  if (selectProperty && !includeViewProperties &&
-      propertyName.find("view") == 0 && propertyName != "viewMetric") {
+  if (selectProperty && !includeViewProperties && propertyName.find("view") == 0 &&
+      propertyName != "viewMetric") {
     selectProperty = false;
   }
 

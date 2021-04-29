@@ -22,21 +22,20 @@
 
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
+#include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/GlTools.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/GlSphere.h>
-#include <tulip/GlTools.h>
-#include <tulip/Glyph.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/GlSphere.h>
 
 using namespace std;
 using namespace tlp;
 
 namespace tlp {
 
-static void drawGlyph(const Color &glyphColor, const string &texture,
-                      const string &texturePath) {
+static void drawGlyph(const Color &glyphColor, const string &texture, const string &texturePath) {
   static GlSphere sphere(Coord(0, 0, 0), 0.5);
 
   sphere.setColor(glyphColor);
@@ -55,8 +54,8 @@ static void drawGlyph(const Color &glyphColor, const string &texture,
  */
 class Sphere : public NoShaderGlyph {
 public:
-  GLYPHINFORMATION("3D - Sphere", "Bertrand Mathieu", "09/07/2002",
-                   "Textured sphere", "1.0", NodeShape::Sphere)
+  GLYPHINFORMATION("3D - Sphere", "Bertrand Mathieu", "09/07/2002", "Textured sphere", "1.0",
+                   NodeShape::Sphere)
   Sphere(const tlp::PluginContext *context = nullptr);
   ~Sphere() override;
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
@@ -83,16 +82,13 @@ void Sphere::draw(node n, float) {
 
 class EESphere : public EdgeExtremityGlyph {
   GLYPHINFORMATION("3D - Sphere extremity", "Bertrand Mathieu", "09/07/2002",
-                   "Textured sphere for edge extremities", "1.0",
-                   EdgeExtremityShape::Sphere)
+                   "Textured sphere for edge extremities", "1.0", EdgeExtremityShape::Sphere)
 public:
   EESphere(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
   ~EESphere() override {}
-  void draw(edge e, node, const Color &glyphColor, const Color &,
-            float) override {
+  void draw(edge e, node, const Color &glyphColor, const Color &, float) override {
     glEnable(GL_LIGHTING);
-    drawGlyph(glyphColor,
-              edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
+    drawGlyph(glyphColor, edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
               edgeExtGlGraphInputData->parameters->getTexturePath());
   }
 };

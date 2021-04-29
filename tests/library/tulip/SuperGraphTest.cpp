@@ -37,7 +37,9 @@ void SuperGraphTest::setUp() {
   graph = tlp::newGraph();
 }
 //==========================================================
-void SuperGraphTest::tearDown() { delete graph; }
+void SuperGraphTest::tearDown() {
+  delete graph;
+}
 //==========================================================
 void SuperGraphTest::build(unsigned int nbNodes, unsigned int edgeRatio) {
   vector<node> nodes;

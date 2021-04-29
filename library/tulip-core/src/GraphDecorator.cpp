@@ -20,16 +20,21 @@
 
 using namespace tlp;
 
-GraphDecorator::GraphDecorator(Graph *s) : graph_component(s) { assert(s); }
+GraphDecorator::GraphDecorator(Graph *s) : graph_component(s) {
+  assert(s);
+}
 
-GraphDecorator::~GraphDecorator() { notifyDestroy(); }
+GraphDecorator::~GraphDecorator() {
+  notifyDestroy();
+}
 
 //============================================================
-void GraphDecorator::clear() { graph_component->clear(); }
+void GraphDecorator::clear() {
+  graph_component->clear();
+}
 
 //============================================================
-Graph *GraphDecorator::addSubGraph(BooleanProperty *selection,
-                                   const std::string &name) {
+Graph *GraphDecorator::addSubGraph(BooleanProperty *selection, const std::string &name) {
   Graph *sg = graph_component->addSubGraph(selection, name);
   notifyBeforeAddSubGraph(sg);
   notifyAfterAddSubGraph(sg);
@@ -52,26 +57,22 @@ unsigned int GraphDecorator::numberOfDescendantGraphs() const {
 }
 //============================================================
 void GraphDecorator::restoreSubGraph(Graph *) {
-  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__
-                 << " ... Impossible operation" << std::endl;
+  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
 void GraphDecorator::setSubGraphToKeep(Graph *) {
-  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__
-                 << " ... Impossible operation" << std::endl;
+  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
 void GraphDecorator::removeSubGraph(Graph *) {
-  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__
-                 << " ... Impossible operation" << std::endl;
+  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
 void GraphDecorator::clearSubGraphs() {
-  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__
-                 << " ... Impossible operation" << std::endl;
+  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
@@ -87,19 +88,17 @@ Graph *GraphDecorator::getSuperGraph() const {
 }
 
 //============================================================
-node GraphDecorator::createMetaNode(const std::vector<node> &nodes,
-                                    bool multiEdges, bool delAllEdge) {
+node GraphDecorator::createMetaNode(const std::vector<node> &nodes, bool multiEdges,
+                                    bool delAllEdge) {
   return graph_component->createMetaNode(nodes, multiEdges, delAllEdge);
 }
 
-void GraphDecorator::createMetaNodes(Iterator<Graph *> *itS,
-                                     Graph *quotientGraph,
+void GraphDecorator::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
                                      std::vector<node> &metaNodes) {
   graph_component->createMetaNodes(itS, quotientGraph, metaNodes);
 }
 
-node GraphDecorator::createMetaNode(Graph *subGraph, bool multiEdges,
-                                    bool delAllEdge) {
+node GraphDecorator::createMetaNode(Graph *subGraph, bool multiEdges, bool delAllEdge) {
   return graph_component->createMetaNode(subGraph, multiEdges, delAllEdge);
 }
 
@@ -109,7 +108,9 @@ void GraphDecorator::setSuperGraph(Graph *s) {
 }
 
 //============================================================
-Graph *GraphDecorator::getRoot() const { return graph_component->getRoot(); }
+Graph *GraphDecorator::getRoot() const {
+  return graph_component->getRoot();
+}
 
 //============================================================
 Iterator<Graph *> *GraphDecorator::getSubGraphs() const {
@@ -176,14 +177,12 @@ bool GraphDecorator::hasEdge(const node n, const node m, bool directed) const {
 }
 
 //============================================================
-std::vector<edge> GraphDecorator::getEdges(const node n, const node m,
-                                           bool directed) const {
+std::vector<edge> GraphDecorator::getEdges(const node n, const node m, bool directed) const {
   return graph_component->getEdges(n, m, directed);
 }
 
 //============================================================
-edge GraphDecorator::existEdge(const node n, const node m,
-                               bool directed) const {
+edge GraphDecorator::existEdge(const node n, const node m, bool directed) const {
   return graph_component->existEdge(n, m, directed);
 }
 
@@ -269,7 +268,9 @@ unsigned int GraphDecorator::numberOfEdges() const {
 }
 
 //============================================================
-bool GraphDecorator::isEmpty() const { return graph_component->isEmpty(); }
+bool GraphDecorator::isEmpty() const {
+  return graph_component->isEmpty();
+}
 
 //============================================================
 void GraphDecorator::reserveEdges(unsigned int nbEdges) {
@@ -321,26 +322,22 @@ void GraphDecorator::addNodes(unsigned int nb, std::vector<node> &addedNodes) {
 
 //============================================================
 void GraphDecorator::addNode(const node) {
-  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__
-                 << " ... Impossible operation" << std::endl;
+  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
 void GraphDecorator::addNodes(Iterator<node> *) {
-  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__
-                 << " ... Impossible operation" << std::endl;
+  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
 void GraphDecorator::restoreNode(node) {
-  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__
-                 << " ... Impossible operation" << std::endl;
+  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
 void GraphDecorator::removeNode(const node) {
-  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__
-                 << " ... Impossible operation" << std::endl;
+  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
@@ -369,26 +366,22 @@ void GraphDecorator::addEdges(const std::vector<std::pair<node, node>> &edges,
 
 //============================================================
 void GraphDecorator::addEdge(const edge) {
-  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__
-                 << " ... Impossible operation" << std::endl;
+  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
 void GraphDecorator::addEdges(Iterator<edge> *) {
-  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__
-                 << " ... Impossible operation" << std::endl;
+  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
 void GraphDecorator::restoreEdge(edge, node, node) {
-  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__
-                 << " ... Impossible operation" << std::endl;
+  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
 void GraphDecorator::removeEdge(const edge) {
-  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__
-                 << " ... Impossible operation" << std::endl;
+  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
@@ -499,7 +492,9 @@ Iterator<edge> *GraphDecorator::getEdgeMetaInfo(const edge e) const {
   return graph_component->getEdgeMetaInfo(e);
 }
 //============================================================
-void GraphDecorator::sortElts() { return graph_component->sortElts(); }
+void GraphDecorator::sortElts() {
+  return graph_component->sortElts();
+}
 //============================================================
 DataSet &GraphDecorator::getNonConstAttributes() {
   return graph_component->getNonConstAttributes();
@@ -527,16 +522,14 @@ void GraphDecorator::delLocalProperty(const std::string &name) {
 }
 
 //============================================================
-void GraphDecorator::addLocalProperty(const std::string &name,
-                                      PropertyInterface *prop) {
+void GraphDecorator::addLocalProperty(const std::string &name, PropertyInterface *prop) {
   notifyBeforeAddLocalProperty(name);
   graph_component->addLocalProperty(name, prop);
   notifyAddLocalProperty(name);
 }
 
 //============================================================
-bool GraphDecorator::renameLocalProperty(PropertyInterface *prop,
-                                         const std::string &newName) {
+bool GraphDecorator::renameLocalProperty(PropertyInterface *prop, const std::string &newName) {
   return graph_component->renameLocalProperty(prop, newName);
 }
 
@@ -555,14 +548,12 @@ Iterator<std::string> *GraphDecorator::getProperties() const {
   return graph_component->getProperties();
 }
 //============================================================
-Iterator<PropertyInterface *> *
-GraphDecorator::getLocalObjectProperties() const {
+Iterator<PropertyInterface *> *GraphDecorator::getLocalObjectProperties() const {
   return graph_component->getLocalObjectProperties();
 }
 
 //============================================================
-Iterator<PropertyInterface *> *
-GraphDecorator::getInheritedObjectProperties() const {
+Iterator<PropertyInterface *> *GraphDecorator::getInheritedObjectProperties() const {
   return graph_component->getInheritedObjectProperties();
 }
 
@@ -571,15 +562,18 @@ Iterator<PropertyInterface *> *GraphDecorator::getObjectProperties() const {
   return graph_component->getObjectProperties();
 }
 //----------------------------------------------------------------
-bool GraphDecorator::canPop() { return graph_component->canPop(); }
-bool GraphDecorator::canUnpop() { return graph_component->canUnpop(); }
+bool GraphDecorator::canPop() {
+  return graph_component->canPop();
+}
+bool GraphDecorator::canUnpop() {
+  return graph_component->canUnpop();
+}
 bool GraphDecorator::canPopThenUnpop() {
   return graph_component->canPopThenUnpop();
 }
 //----------------------------------------------------------------
-void GraphDecorator::push(
-    bool unpopAllowed,
-    std::vector<PropertyInterface *> *propertiesToPreserveOnPop) {
+void GraphDecorator::push(bool unpopAllowed,
+                          std::vector<PropertyInterface *> *propertiesToPreserveOnPop) {
   return graph_component->push(unpopAllowed, propertiesToPreserveOnPop);
 }
 //----------------------------------------------------------------
@@ -591,7 +585,9 @@ void GraphDecorator::popIfNoUpdates() {
   return graph_component->popIfNoUpdates();
 }
 //----------------------------------------------------------------
-void GraphDecorator::unpop() { return graph_component->unpop(); }
+void GraphDecorator::unpop() {
+  return graph_component->unpop();
+}
 //----------------------------------------------------------------
 void GraphDecorator::setName(const std::string &name) {
   graph_component->setName(name);

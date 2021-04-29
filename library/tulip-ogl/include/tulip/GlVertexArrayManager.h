@@ -23,10 +23,10 @@
 
 #include <tulip/OpenGlIncludes.h>
 
-#include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include <tulip/GlSceneVisitor.h>
+#include <tulip/Color.h>
 #include <tulip/Observable.h>
+#include <tulip/GlSceneVisitor.h>
 
 #include <map>
 #include <vector>
@@ -48,8 +48,7 @@ class DoubleProperty;
  *
  * Class used to render edges/nodes with vertex array
  */
-class TLP_GL_SCOPE GlVertexArrayManager : public GlSceneVisitor,
-                                          private Observable {
+class TLP_GL_SCOPE GlVertexArrayManager : public GlSceneVisitor, private Observable {
 
 public:
   /**
@@ -77,19 +76,19 @@ public:
 
   void endOfVisit() override;
 
-  void reserveMemoryForGraphElts(unsigned int nbNodes,
-                                 unsigned int nbEdges) override;
+  void reserveMemoryForGraphElts(unsigned int nbNodes, unsigned int nbEdges) override;
 
   /**
-   * Call this function when you want to change input data used by this
-   * GlVertexArrayManager
+   * Call this function when you want to change input data used by this GlVertexArrayManager
    */
   void setInputData(GlGraphInputData *inputData);
 
   /**
    * Return if this GlVertexArrayManager is used to render entities of the scene
    */
-  inline bool renderingIsBegin() { return isBegin; }
+  inline bool renderingIsBegin() {
+    return isBegin;
+  }
 
   /**
    * Return if this GlVertexArrayManager have to compute its data
@@ -97,18 +96,15 @@ public:
   bool haveToCompute();
 
   /**
-   * Call this function if this GlVertexArrayManager have to compute colors and
-   * layout properties
+   * Call this function if this GlVertexArrayManager have to compute colors and layout properties
    */
   void setHaveToComputeAll(bool compute);
   /**
-   * Call this function if this GlVertexArrayManager have to compute layout
-   * property
+   * Call this function if this GlVertexArrayManager have to compute layout property
    */
   void setHaveToComputeLayout(bool compute);
   /**
-   * Call this function if this GlVertexArrayManager have to compute colors
-   * property
+   * Call this function if this GlVertexArrayManager have to compute colors property
    */
   void setHaveToComputeColor(bool compute);
 
@@ -125,8 +121,7 @@ public:
 
   /**
    * You can call this function to pause rendering
-   * For example this function is call in GlMetaNodeTrueRenderer to don't use
-   * GlVertexArrayManager
+   * For example this function is call in GlMetaNodeTrueRenderer to don't use GlVertexArrayManager
    */
   void pauseRendering(bool pause);
 
@@ -135,26 +130,24 @@ public:
    */
   void activate(bool act);
 
-  bool isActivated() { return activated; }
+  bool isActivated() {
+    return activated;
+  }
 
   /**
-   * This function is call when you want to activate line rendering of a
-   * specific edge
+   * This function is call when you want to activate line rendering of a specific edge
    */
   void activateLineEdgeDisplay(GlEdge *edge, bool selected);
   /**
-   * This function is call when you want to activate quad rendering of a
-   * specific edge
+   * This function is call when you want to activate quad rendering of a specific edge
    */
   void activateQuadEdgeDisplay(GlEdge *edge, bool selected);
   /**
-   * This function is call when you want to activate point rendering of a
-   * specific edge
+   * This function is call when you want to activate point rendering of a specific edge
    */
   void activatePointEdgeDisplay(GlEdge *edge, bool selected);
   /**
-   * This function is call when you want to activate point rendering of a
-   * specific node
+   * This function is call when you want to activate point rendering of a specific node
    */
   void activatePointNodeDisplay(GlNode *node, bool selected);
 
@@ -214,8 +207,7 @@ protected:
   std::vector<GLuint> quadsSelectedRenderingIndicesArray;
 
   std::map<float, std::vector<GLuint>> quadsOutlineRenderingIndicesArray;
-  std::map<float, std::vector<GLuint>>
-      quadsSelectedOutlineRenderingIndicesArray;
+  std::map<float, std::vector<GLuint>> quadsSelectedOutlineRenderingIndicesArray;
 
   std::vector<Coord> pointsCoordsArray;
   std::vector<Color> pointsColorsArray;
