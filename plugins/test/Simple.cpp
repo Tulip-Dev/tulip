@@ -48,10 +48,8 @@ PLUGIN(SimpleTest)
 class LoopTest : public tlp::GraphTest {
 public:
   PLUGININFORMATION("Self loop edges", "Tulip team", "30/04/2021",
-                    "Tests whether a graph has self loops or not.",
-                    "1.0", "Topological Test")
-  LoopTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {
-  }
+                    "Tests whether a graph has self loops or not.", "1.0", "Topological Test")
+  LoopTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {}
 
   bool test() override {
 
@@ -62,20 +60,21 @@ PLUGIN(LoopTest)
 
 class ParallelTest : public tlp::GraphTest {
 public:
-  PLUGININFORMATION("Parallel edges", "Tulip team", "30/04/2021",
-                    "Tests whether a graph has parallel edges (more than one edge between two nodes).",
-                    "1.0", "Topological Test")
-   ParallelTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {
-     addInParameter<bool>(
-            "directed", "Indicates if the graph should be considered as directed or not.", "false");
-        }
-   bool test() override {
-      bool directed = false;
-      if (dataSet) {
-            dataSet->get("directed", directed);
-      }
-     return tlp::SimpleTest::hasParallelEdges(graph, directed);
-   }
+  PLUGININFORMATION(
+      "Parallel edges", "Tulip team", "30/04/2021",
+      "Tests whether a graph has parallel edges (more than one edge between two nodes).", "1.0",
+      "Topological Test")
+  ParallelTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {
+    addInParameter<bool>(
+        "directed", "Indicates if the graph should be considered as directed or not.", "false");
+  }
+  bool test() override {
+    bool directed = false;
+    if (dataSet) {
+      dataSet->get("directed", directed);
+    }
+    return tlp::SimpleTest::hasParallelEdges(graph, directed);
+  }
 };
 PLUGIN(ParallelTest)
 

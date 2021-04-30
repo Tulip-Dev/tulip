@@ -100,15 +100,15 @@ bool SimpleTest::isSimple(const tlp::Graph *graph, const bool directed) {
 }
 
 bool SimpleTest::hasLoops(const Graph *graph) {
-    vector<edge> removed;
-    SimpleTest::simpleTest(graph, nullptr, &removed);
-    return !removed.empty();
+  vector<edge> removed;
+  SimpleTest::simpleTest(graph, nullptr, &removed);
+  return !removed.empty();
 }
 
 bool SimpleTest::hasParallelEdges(const Graph *graph, const bool directed) {
-    vector<edge> parallelEdges;
-    SimpleTest::simpleTest(graph, &parallelEdges, nullptr, directed);
-    return !parallelEdges.empty();
+  vector<edge> parallelEdges;
+  SimpleTest::simpleTest(graph, &parallelEdges, nullptr, directed);
+  return !parallelEdges.empty();
 }
 
 //**********************************************************************
