@@ -47,6 +47,21 @@ public:
    * @return bool True if the graph is simple, false otherwise.
    **/
   static bool isSimple(const Graph *graph, const bool directed = false);
+  /**
+   * @brief Checks if the graph has loops (i.e. it contains no self loops).
+   *
+   * @param graph The graph to check.
+   * @return bool True if the graph has loops, false otherwise.
+   **/
+  static bool hasLoops(const Graph *graph);
+  /**
+   * @brief Checks if the graph has parallel edges.
+   *
+   * @param graph The graph to check.
+   * @param directed Whether the graph shall be considered directed or not.
+   * @return bool True if the graph has parallel edges, false otherwise.
+   **/
+  static bool hasParallelEdges(const Graph *graph, const bool directed = false);
 
   /**
    * Makes the graph  simple by removing self loops and parallel edges if any.

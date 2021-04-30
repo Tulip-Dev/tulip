@@ -98,6 +98,19 @@ bool SimpleTest::isSimple(const tlp::Graph *graph, const bool directed) {
   graph->addListener(instance);
   return instance->resultsBuffer[graph] = simpleTest(graph, nullptr, nullptr, directed);
 }
+
+bool SimpleTest::hasLoops(const Graph *graph) {
+    vector<edge> removed;
+    SimpleTest::simpleTest(graph, nullptr, &removed);
+    return !removed.empty();
+}
+
+bool SimpleTest::hasParallelEdges(const Graph *graph, const bool directed) {
+    vector<edge> parallelEdges;
+    SimpleTest::simpleTest(graph, &parallelEdges, nullptr, directed);
+    return !parallelEdges.empty();
+}
+
 //**********************************************************************
 void SimpleTest::makeSimple(Graph *graph, vector<edge> &removed, const bool directed) {
   if (SimpleTest::isSimple(graph, directed))
