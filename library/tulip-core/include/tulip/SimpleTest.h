@@ -48,7 +48,7 @@ public:
    **/
   static bool isSimple(const Graph *graph, const bool directed = false);
   /**
-   * @brief Checks if the graph has loops (i.e. it contains no self loops).
+   * @brief Checks if the graph has self loop edges.
    *
    * @param graph The graph to check.
    * @return bool True if the graph has loops, false otherwise.
