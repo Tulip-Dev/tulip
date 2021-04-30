@@ -40,13 +40,6 @@ public:
   static std::string getTTFLocation(const std::string &iconName);
 
   /**
-   * Returns the location of the .woff font file bundled with Tulip
-   * defining the icon with the given name
-   * @param iconName the name of the icon
-   */
-  static std::string getWOFFLocation(const std::string &iconName);
-
-  /**
    * Returns the location of the .woff2 font file bundled with Tulip
    * defining the icon with the given name
    * @param iconName the name of the icon

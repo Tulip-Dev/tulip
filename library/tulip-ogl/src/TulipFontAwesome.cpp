@@ -132,12 +132,6 @@ std::string TulipFontAwesome::getTTFLocation(const std::string &iconName) {
   return string(tlp::TulipBitmapDir).append(iconFile[iconName.c_str()]).append(".ttf");
 }
 
-std::string TulipFontAwesome::getWOFFLocation(const std::string &iconName) {
-  if (iconCodePoint.empty())
-    initIconCodePoints();
-  return string(tlp::TulipBitmapDir).append(iconFile[iconName.c_str()]).append(".woff");
-}
-
 std::string TulipFontAwesome::getWOFF2Location(const std::string &iconName) {
   if (iconCodePoint.empty())
     initIconCodePoints();

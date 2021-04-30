@@ -77,11 +77,6 @@ public:
   static std::string getTTFLocation();
 
   /**
-   * Returns the location of the Material Design Icons .woff file bundled with Tulip
-   */
-  static std::string getWOFFLocation();
-
-  /**
    * Returns the location of the Material Design Icons .woff2 file bundled with Tulip
    */
   static std::string getWOFF2Location();

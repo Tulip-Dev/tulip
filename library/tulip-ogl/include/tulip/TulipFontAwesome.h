@@ -71,11 +71,6 @@ public:
   static std::string getTTFLocation(const std::string &iconName);
 
   /**
-   * Returns the location of the Font Awesome .woff file bundled with Tulip
-   */
-  static std::string getWOFFLocation(const std::string &iconName);
-
-  /**
    * Returns the location of the Font Awesome .woff2 file bundled with Tulip
    */
   static std::string getWOFF2Location(const std::string &iconName);

@@ -29,12 +29,6 @@ std::string TulipIconicFont::getTTFLocation(const std::string &iconName) {
                                      : TulipMaterialDesignIcons::getTTFLocation();
 }
 
-std::string TulipIconicFont::getWOFFLocation(const std::string &iconName) {
-  assert(isIconSupported(iconName));
-  return (iconName.find("fa-") == 0) ? TulipFontAwesome::getWOFFLocation(iconName)
-                                     : TulipMaterialDesignIcons::getWOFFLocation();
-}
-
 std::string TulipIconicFont::getWOFF2Location(const std::string &iconName) {
   assert(isIconSupported(iconName));
   return (iconName.find("fa-") == 0) ? TulipFontAwesome::getWOFF2Location(iconName)

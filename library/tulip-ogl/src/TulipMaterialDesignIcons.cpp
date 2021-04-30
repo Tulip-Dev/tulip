@@ -49,10 +49,6 @@ std::string TulipMaterialDesignIcons::getTTFLocation() {
   return string(tlp::TulipBitmapDir).append("materialdesignicons-webfont.ttf");
 }
 
-std::string TulipMaterialDesignIcons::getWOFFLocation() {
-  return string(tlp::TulipBitmapDir).append("materialdesignicons-webfont.woff");
-}
-
 std::string TulipMaterialDesignIcons::getWOFF2Location() {
   return string(tlp::TulipBitmapDir).append("materialdesignicons-webfont.woff2");
 }

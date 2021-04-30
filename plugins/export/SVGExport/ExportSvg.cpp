@@ -52,8 +52,8 @@ QString tlpAlphaColor2Opacity(const Color &color) {
 }
 } // namespace
 
-ExportSvg::ExportSvg(PluginProgress *pp, ostream &os, const bool autoformatting, const bool woff2)
-    : ExportInterface(pp, os), _res(&_out), _woff2(woff2), _gloweffectAdded(false) {
+ExportSvg::ExportSvg(PluginProgress *pp, ostream &os, const bool autoformatting)
+    : ExportInterface(pp, os), _res(&_out), _gloweffectAdded(false) {
   _res.setAutoFormatting(autoformatting);
   _res.setCodec("UTF-8");
 }
@@ -242,37 +242,8 @@ void ExportSvg::addGlowEffect() {
   }
 }
 
-/*void ExportSvg::addBase64font(const QString &fontName) {
-  if (!_base64fontAdded.contains(fontName)) {
-    _base64fontAdded[fontName] = true;
-    QString extension("woff");
-
-    if (_woff2)
-      extension = "woff2";
-
-    QFile file(tlp::tlpStringToQString(tlp::TulipBitmapDir)
-                   .append(fontName)
-                   .append("-webfont." + extension));
-
-    if (!file.open(QIODevice::ReadOnly))
-      tlp::warning() << "Cannot open " << tlp::TulipBitmapDir << QStringToTlpString(fontName)
-                     << "-webfont." << tlp::QStringToTlpString(extension) << endl;
-
-    QByteArray byteArray(file.readAll());
-    file.close();
-    _res.writeStartElement("style");
-    _res.writeAttribute("style", "text/css");
-    QString base64code(QString::fromUtf8(byteArray.toBase64().data()));
-    QString header("@font-face {font-family: \"" + fontName +
-                   "\";src: url(\"data:application/x-font-" + extension + ";base64,");
-    _res.writeCDATA(header + base64code + "\");}");
-    _res.writeEndElement();
-  }
-  }*/
-
 void ExportSvg::addWebFontFromIconName(const string &iconName) {
-  std::string fontFile = _woff2 ? TulipIconicFont::getWOFF2Location(iconName)
-                                : TulipIconicFont::getWOFFLocation(iconName);
+  std::string fontFile = TulipIconicFont::getWOFF2Location(iconName);
   if (_base64fontAdded.find(fontFile) == _base64fontAdded.end()) {
     _base64fontAdded.insert(fontFile);
 
@@ -287,8 +258,7 @@ void ExportSvg::addWebFontFromIconName(const string &iconName) {
     QString base64code(QString::fromUtf8(byteArray.toBase64().data()));
     QString header("@font-face {font-family: \"" +
                    tlpStringToQString(TulipIconicFont::getIconFamily(iconName)) +
-                   "\";src: url(\"data:application/x-font-" + (_woff2 ? "woff2" : "woff") +
-                   ";base64,");
+                   "\";src: url(\"data:application/x-font-woff2;base64,");
     _res.writeCDATA(header + base64code + "\");}");
     _res.writeEndElement();
   }
