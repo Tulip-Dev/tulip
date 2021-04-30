@@ -5,7 +5,7 @@ Tulip in Practice: Four case studies
 ************************************
 
 These tutorials are intended for users who are already familiarized with the Tulip workspace, as presented in :ref:`gui`, as well as with the basics of Tulip detailed in :ref:`first_steps`.
-Here, our purpose will be to highlight some of the possibilities offered by Tulip for data visualization and data analysis, using real-word dataset examples. 
+Here, our purpose is to highlight some of the possibilities offered by Tulip for data visualization and data analysis, using real-word dataset examples. 
 
 Some of these files can be found on the website `idvbook.com <http://www.idvbook.com/teaching-aid/data-sets/>`__, which is associated with the book:
  
@@ -26,12 +26,12 @@ A Visual Representation of the Tulip Directory
 
 .. |icon_wsm_node_shape_set| image:: ../../library/tulip-gui/resources/icons/20/set_node_shape.png
 
-This introductory tutorial will be a good opportunity to apply some of the basic features of Tulip presented in the previous sections. We will see how we can **generate a graph**, apply a **resizing algorithm**, and more.
+This introductory tutorial is be a good opportunity to apply some of the basic features of Tulip presented in the previous sections. We are going to see how we can **generate a graph**, apply a **resizing algorithm**, and more.
 
 Generating the graph
 --------------------
 
-Before anything else, we will need Tulip to **import** the graph:
+Before anything else, we need to **import** a graph:
 
 * Click on the |icon_import| **Import** icon in the toolbar on the left, or in the center of the workspace if no graph is currently opened, or select *File → Import*.
 
@@ -42,7 +42,7 @@ Before anything else, we will need Tulip to **import** the graph:
 	:width: 770
 
 
-* Select a directory. Here we will simply select the *tulip* directory and let Tulip generate a tree layout automatically. By default (see `Preferences <gui.html#preferences>`_), Tulip will display the corresponding *Spreadsheet View* on the left, and a *Node Link Diagram view* on the right.
+* Select a directory. Here we simply select the *tulip* directory and let Tulip generate a tree layout automatically. By default (see `Preferences <gui.html#preferences>`_), Tulip displays the corresponding *Spreadsheet View* on the left, and a *Node Link Diagram view* on the right.
 
 
 .. note:: The default layout algorithm applied to file system directories is the *Bubble Tree* algorithm, but other layout algorithms are available.
@@ -57,7 +57,7 @@ Before anything else, we will need Tulip to **import** the graph:
 Improving the layout
 --------------------
 
-Here the goal will be to apply a few basic algorithms to greatly improve the layout:
+Here the goal is to apply a few basic algorithms to greatly improve the layout:
 
 * The first thing we are going to do is switching to a one-panel view in order to focus on the *Node Link Diagram view*. In order to do that, we will use the icons situated at the bottom of the view: |icon_panels| 
 
