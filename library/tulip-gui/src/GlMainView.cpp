@@ -446,15 +446,14 @@ bool GlMainView::getNodeOrEdgeAtViewportPos(GlMainWidget *glw, int x, int y, nod
   return false;
 }
 
-bool GlMainView::pickNodeEdge(const int x, const int y, node &n, edge &e,
-			      bool pickNode, bool pickEdge) {
+bool GlMainView::pickNodeEdge(const int x, const int y, node &n, edge &e, bool pickNode,
+                              bool pickEdge) {
   SelectedEntity type;
   if (getGlMainWidget()->pickNodesEdges(x, y, type, nullptr, pickNode, pickEdge)) {
     if (type.getEntityType() == SelectedEntity::NODE_SELECTED) {
       n = type.getNode();
       e = edge();
-    }
-    else {
+    } else {
       e = type.getEdge();
       n = node();
     }
