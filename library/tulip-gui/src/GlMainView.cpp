@@ -437,42 +437,28 @@ bool GlMainView::eventFilter(QObject *obj, QEvent *event) {
 bool GlMainView::getNodeOrEdgeAtViewportPos(GlMainWidget *glw, int x, int y, node &n, edge &e) {
   SelectedEntity type;
   if (glw->pickNodesEdges(x, y, type)) {
-    node tmpNode;
     if (type.getEntityType() == SelectedEntity::NODE_SELECTED)
-      tmpNode = type.getNode();
-
-    if (tmpNode.isValid()) {
-      n = tmpNode;
-      return true;
-    } else {
-      edge tmpEdge;
-      if (type.getEntityType() == SelectedEntity::EDGE_SELECTED)
-        tmpEdge = type.getEdge();
-      if (tmpEdge.isValid()) {
-        e = tmpEdge;
-        return true;
-      }
-    }
+      n = type.getNode();
+    else
+      e = type.getEdge();
+    return true;
   }
   return false;
 }
 
-bool GlMainView::pickNodeEdge(const int x, const int y, node &n, edge &e, bool pickNode,
-                              bool pickEdge) {
-  SelectedEntity selectedEntity;
-  bool foundEntity =
-      getGlMainWidget()->pickNodesEdges(x, y, selectedEntity, nullptr, pickNode, pickEdge);
-  n = node();
-  e = edge();
-  if (foundEntity) {
-    if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
-      n.id = selectedEntity.getComplexEntityId();
-      return true;
+bool GlMainView::pickNodeEdge(const int x, const int y, node &n, edge &e,
+			      bool pickNode, bool pickEdge) {
+  SelectedEntity type;
+  if (getGlMainWidget()->pickNodesEdges(x, y, type, nullptr, pickNode, pickEdge)) {
+    if (type.getEntityType() == SelectedEntity::NODE_SELECTED) {
+      n = type.getNode();
+      e = edge();
     }
-    if (selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
-      e.id = selectedEntity.getComplexEntityId();
-      return true;
+    else {
+      e = type.getEdge();
+      n = node();
     }
+    return true;
   }
   return false;
 }
