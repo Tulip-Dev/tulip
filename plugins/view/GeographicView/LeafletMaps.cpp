@@ -74,7 +74,7 @@ function addEventHandlersToLayer(layer) {
 }
 function addBaseLayer(name, url, attrib, zMax = 21) {
   var layer = L.tileLayer(url, { attribution: attrib, maxZoom: zMax });
-  addEventHandlersToLayer(layer);  layer.on('tileload', refreshMapWithDelay);
+  addEventHandlersToLayer(layer);
   baseLayers[name] = layer;
   return layer;
 }
@@ -83,7 +83,7 @@ function init(lat, lng, zoom) {
     zoomControl: false
   });
   // create base layers
-  // OpenStreetMap is the default layer
+  // OpenStreetMap is the default one
   currentLayer =
     addBaseLayer('OpenStreetMap',
                  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',

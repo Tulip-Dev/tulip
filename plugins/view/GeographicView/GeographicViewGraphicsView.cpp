@@ -247,6 +247,13 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   leafletMaps->setMouseTracking(false);
   leafletMaps->resize(512, 512);
   connect(leafletMaps, SIGNAL(currentZoomChanged()), _geoView, SLOT(currentZoomChanged()));
+#ifdef QT_HAS_WEBENGINE
+  tId = 0;
+  connect(leafletMaps, SIGNAL(refreshMap()), this, SLOT(queueMapRefresh()));
+#else
+  connect(leafletMaps, SIGNAL(refreshMap()), this, SLOT(refreshMap()));
+#endif
+
   _placeholderItem = new QGraphicsRectItem(0, 0, 1, 1);
   _placeholderItem->setBrush(Qt::transparent);
   _placeholderItem->setPen(QPen(Qt::transparent));
@@ -273,13 +280,6 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   while (!leafletMaps->pageInit()) {
     QApplication::processEvents();
   }
-
-#ifdef QT_HAS_WEBENGINE
-  tId = 0;
-  connect(leafletMaps, SIGNAL(refreshMap()), this, SLOT(queueMapRefresh()));
-#else
-  connect(leafletMaps, SIGNAL(refreshMap()), this, SLOT(refreshMap()));
-#endif
 
   // re-enable user input
   tlp::enableQtUserInput();
@@ -1201,7 +1201,6 @@ void GeographicViewGraphicsView::switchViewType() {
             n, Coord(nodeLatLng[n].second * 2., latitudeToMercator(nodeLatLng[n].first * 2.), 0));
       }
     }
-    geoLayout->addListener(this);
 
     if (!edgeBendsLatLng.empty()) {
       for (auto e : graph->edges()) {
@@ -1215,6 +1214,7 @@ void GeographicViewGraphicsView::switchViewType() {
         geoLayout->setEdgeValue(e, edgeBendsCoords);
       }
     }
+    geoLayout->addListener(this);
 
     Camera &camera = glMainWidget->getScene()->getGraphCamera();
     camera.setEyes(mapCameraBackup.getEyes());
@@ -1235,6 +1235,7 @@ void GeographicViewGraphicsView::switchViewType() {
 
     if (geoLayoutComputed) {
 
+      geoLayout->addListener(this);
       SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");
 
       assert(geoLayoutBackup == nullptr);
@@ -1300,6 +1301,7 @@ void GeographicViewGraphicsView::switchViewType() {
 
         geoLayout->setEdgeValue(e, bends);
       }
+      geoLayout->addListener(this);
     }
 
     if (firstGlobeSwitch) {
