@@ -49,6 +49,8 @@
 #include <QProgressDialog>
 #include <QOpenGLFramebufferObject>
 #include <QOpenGLPaintDevice>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 using namespace std;
 
@@ -296,33 +298,45 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
     mapItems.append(_geoView->getViewNameFromType(t));
   viewTypeComboBox->addItems(mapItems);
   viewTypeComboBox->insertSeparator(1);
-
-  QGraphicsProxyWidget *comboBoxProxy = scene()->addWidget(viewTypeComboBox);
-  comboBoxProxy->setParentItem(_placeholderItem);
-  comboBoxProxy->setPos(20, 20);
-  comboBoxProxy->setZValue(1);
-
   connect(viewTypeComboBox, SIGNAL(currentIndexChanged(QString)), _geoView,
           SLOT(viewTypeChanged(QString)));
 
   // 2 push buttons
   // zoom +
-  zoomInButton = new QPushButton(QIcon(":/tulip/view/geographic/zoom+.png"), "");
-  zoomInButton->setFixedSize(29, 27);
-  zoomInButton->setContentsMargins(0, 0, 0, 0);
+  zoomInButton =
+    new QPushButton(QIcon(":/tulip/view/geographic/zoom+.png"), "");
+  zoomInButton->setFixedSize(24, 24);
   connect(zoomInButton, SIGNAL(pressed()), _geoView, SLOT(zoomIn()));
-  QGraphicsProxyWidget *buttonProxy = scene()->addWidget(zoomInButton);
-  buttonProxy->setParentItem(_placeholderItem);
-  buttonProxy->setPos(20, 50);
-
   // zoom -
-  zoomOutButton = new QPushButton(QIcon(":/tulip/view/geographic/zoom-.png"), "");
-  zoomOutButton->setFixedSize(29, 27);
-  zoomOutButton->setContentsMargins(0, 0, 0, 0);
+  zoomOutButton =
+    new QPushButton(QIcon(":/tulip/view/geographic/zoom-.png"), "");
+  zoomOutButton->setFixedSize(24, 24);
   connect(zoomOutButton, SIGNAL(pressed()), _geoView, SLOT(zoomOut()));
-  buttonProxy = scene()->addWidget(zoomOutButton);
-  buttonProxy->setParentItem(_placeholderItem);
-  buttonProxy->setPos(20, 76);
+
+  // configure a QFrame to layout map type combox and zoom buttons
+  QFrame *frame = new QFrame();
+  frame->setFrameStyle(QFrame::NoFrame);
+  Perspective::setStyleSheet(frame);
+  auto ss = Perspective::styleSheet();
+  ss.append("#geoviewFrame { background-color: transparent; }");
+  frame->setObjectName("geoviewFrame");
+  frame->setStyleSheet(ss);
+  QVBoxLayout *vLayout = new QVBoxLayout(frame);
+  vLayout->addWidget(viewTypeComboBox);
+  auto zoomLayout = new QVBoxLayout(nullptr);
+  zoomLayout->setContentsMargins(0, 0, 0, 0);
+  zoomLayout->setSpacing(0);
+  zoomLayout->addWidget(zoomInButton);
+  zoomLayout->addWidget(zoomOutButton);
+  auto hLayout = new QHBoxLayout(nullptr);
+  hLayout->addLayout(zoomLayout);
+  hLayout->insertStretch(-1);
+  vLayout->addLayout(hLayout);
+
+  QGraphicsProxyWidget *frameProxy = scene()->addWidget(frame);
+  frameProxy->setParentItem(_placeholderItem);
+  frameProxy->setPos(20, 20);
+  frameProxy->setZValue(1);
 
   QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning, "",
                                         "<font size=\"+1\"><b>The geolocated layout<br/>"
