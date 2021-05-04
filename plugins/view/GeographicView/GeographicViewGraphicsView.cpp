@@ -303,13 +303,11 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
 
   // 2 push buttons
   // zoom +
-  zoomInButton =
-    new QPushButton(QIcon(":/tulip/view/geographic/zoom+.png"), "");
+  zoomInButton = new QPushButton(QIcon(":/tulip/view/geographic/zoom+.png"), "");
   zoomInButton->setFixedSize(24, 24);
   connect(zoomInButton, SIGNAL(pressed()), _geoView, SLOT(zoomIn()));
   // zoom -
-  zoomOutButton =
-    new QPushButton(QIcon(":/tulip/view/geographic/zoom-.png"), "");
+  zoomOutButton = new QPushButton(QIcon(":/tulip/view/geographic/zoom-.png"), "");
   zoomOutButton->setFixedSize(24, 24);
   connect(zoomOutButton, SIGNAL(pressed()), _geoView, SLOT(zoomOut()));
 
