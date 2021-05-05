@@ -72,7 +72,7 @@ function addEventHandlersToLayer(layer) {
   layer.on('tileload', refreshMapWithDelay);
   layer.on('load', refreshMapWithDelay);
 }
-function addBaseLayer(name, url, attrib, zMax = 21) {
+function addBaseLayer(name, url, attrib, zMax) {
   var layer = L.tileLayer(url, { attribution: attrib, maxZoom: zMax });
   addEventHandlersToLayer(layer);
   baseLayers[name] = layer;
@@ -98,11 +98,13 @@ function init(lat, lng, zoom) {
   // Esri World Street Map
   addBaseLayer('Esri World Street Map',
                'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
-               'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012');
+               'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012',
+	       21);
   // Esri Topographic Map
   addBaseLayer('Esri Topographic Map',
                'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
-               'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community');
+               'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community',
+	       21);
   // Esri National Geographic Map
   addBaseLayer('Esri National Geographic Map',
                'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',
@@ -111,7 +113,8 @@ function init(lat, lng, zoom) {
   // Esri World Imagery
   addBaseLayer('Esri World Imagery',
                'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-               'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community');
+               'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+	       21);
   // Esri Light Gray Canvas
   addBaseLayer('Esri Light Gray Canvas',
                'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
@@ -140,7 +143,8 @@ function init(lat, lng, zoom) {
   // Wikimedia
   addBaseLayer('Wikimedia Map',
                'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png',
-               '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>');
+               '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>',
+	       21);
   map.setView(L.latLng(lat, lng), zoom);
   map.on('zoomstart', refreshMap);
   map.on('zoom', refreshMap);
