@@ -29,7 +29,6 @@
 #include <tulip/ViewActionsManager.h>
 
 #include <QGraphicsItem>
-#include <QMap>
 
 #include <map>
 
@@ -172,6 +171,7 @@ public slots:
   void zoomOut();
   void currentZoomChanged();
 
+  static const std::vector<LeafletMaps::MapLayer> &getMapLayers();
   ViewType getViewTypeFromName(const QString &name) const;
   const char *getViewNameFromType(ViewType viewType) const;
 
@@ -207,7 +207,6 @@ private:
   int mapZoomInit;
   ViewActionsManager *_viewActionsManager;
 
-  QMap<ViewType, const char *> _viewTypeToName;
   node _nodeUnderMouse;
 };
 } // namespace tlp

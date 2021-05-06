@@ -245,7 +245,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   setFrameStyle(QFrame::NoFrame);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  leafletMaps = new LeafletMaps();
+  leafletMaps = new LeafletMaps(geoView->getMapLayers());
   leafletMaps->setMouseTracking(false);
   leafletMaps->resize(512, 512);
   connect(leafletMaps, SIGNAL(currentZoomChanged()), _geoView, SLOT(currentZoomChanged()));
@@ -291,13 +291,14 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
 
   // combo box to choose the map type
   viewTypeComboBox = new QComboBox;
-  QStringList mapItems;
-  mapItems.append(_geoView->getViewNameFromType(GeographicView::OpenStreetMap));
-  for (GeographicView::ViewType t = GeographicView::OpenStreetMap; t <= GeographicView::Globe;
-       t = GeographicView::ViewType(t + 1))
-    mapItems.append(_geoView->getViewNameFromType(t));
-  viewTypeComboBox->addItems(mapItems);
+  // add view types, OpenStreetMap is the default one
+  viewTypeComboBox->addItem(_geoView->getViewNameFromType(GeographicView::OpenStreetMap));
   viewTypeComboBox->insertSeparator(1);
+  for (GeographicView::ViewType t = GeographicView::OpenStreetMap;
+       t <= GeographicView::Globe;
+       t = GeographicView::ViewType(t + 1))
+    viewTypeComboBox->addItem(_geoView->getViewNameFromType(t));
+
   connect(viewTypeComboBox, SIGNAL(currentIndexChanged(QString)), _geoView,
           SLOT(viewTypeChanged(QString)));
 
@@ -1168,7 +1169,7 @@ void GeographicViewGraphicsView::switchViewType() {
 
   default:
     enableLeafletMap = true;
-    leafletMaps->switchToBaseLayer(_geoView->getViewNameFromType(viewType));
+    leafletMaps->switchToMapLayer(_geoView->getViewNameFromType(viewType));
   }
 
   if (planisphereEntity && planisphereEntity->isVisible()) {

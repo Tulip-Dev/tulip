@@ -58,7 +58,7 @@ a {
 <script type="text/javascript">
 var map;
 var mapBounds;
-var baseLayers = {};
+var mapLayers = {};
 var currentLayer;
 function refreshMap() {
   leafletMapsQObject.refreshMap();
@@ -72,79 +72,18 @@ function addEventHandlersToLayer(layer) {
   layer.on('tileload', refreshMapWithDelay);
   layer.on('load', refreshMapWithDelay);
 }
-function addBaseLayer(name, url, attrib, zMax) {
+function addMapLayer(name, url, attrib, zMax) {
   var layer = L.tileLayer(url, { attribution: attrib, maxZoom: zMax });
   addEventHandlersToLayer(layer);
-  baseLayers[name] = layer;
-  return layer;
+  if (typeof currentLayer == "undefined")
+    currentLayer = layer;
+  mapLayers[name] = layer;
 }
 function init(lat, lng, zoom) {
   map = L.map('map_canvas', {
     zoomControl: false
   });
-  // create base layers
-  // OpenStreetMap is the default one
-  currentLayer =
-    addBaseLayer('OpenStreetMap',
-                 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                 '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                 19);
   currentLayer.addTo(map);
-  // OpenTopoMap
-  addBaseLayer('OpenTopoMap',
-               'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
-               'Map data: {attribution.OpenStreetMap}, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
-               17);
-  // Esri World Street Map
-  addBaseLayer('Esri World Street Map',
-               'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
-               'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012',
-	       21);
-  // Esri Topographic Map
-  addBaseLayer('Esri Topographic Map',
-               'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
-               'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community',
-	       21);
-  // Esri National Geographic Map
-  addBaseLayer('Esri National Geographic Map',
-               'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',
-               'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
-               16);
-  // Esri World Imagery
-  addBaseLayer('Esri World Imagery',
-               'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-               'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-	       21);
-  // Esri Light Gray Canvas
-  addBaseLayer('Esri Light Gray Canvas',
-               'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
-               'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
-               16);
-  // Esri Dark Gray Canvas
-  addBaseLayer('Esri Dark Gray Canvas',
-               'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
-               'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
-               16);
-  // CartoDB Voyager
-  addBaseLayer('CartoDB Map',
-               'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-               '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-               19);
-  // Carto DB Light Gray Map
-  addBaseLayer('CartoDB Light Map',
-               'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-               '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-               19);
-  // Carto DB Dark Gray Map
-  addBaseLayer('CartoDB Dark Map',
-               'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-               '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-               19);
-  // Wikimedia
-  addBaseLayer('Wikimedia Map',
-               'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png',
-               '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>',
-	       21);
   map.setView(L.latLng(lat, lng), zoom);
   map.on('zoomstart', refreshMap);
   map.on('zoom', refreshMap);
@@ -194,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function () {
 </html>
 )";
 
-LeafletMaps::LeafletMaps(QWidget *parent) : QWEBVIEW(parent), init(false) {
+  LeafletMaps::LeafletMaps(const std::vector<MapLayer> &mapLayers) : QWEBVIEW(nullptr), mapLayers(mapLayers), init(false) {
 #ifdef QT_HAS_WEBKIT
   // disable output of "libpng warning: iCCP: known incorrect sRGB profile"
   // due to QtWebKit ill-formed png files
@@ -243,15 +182,23 @@ void LeafletMaps::triggerLoading() {
 #ifdef QT_HAS_WEBKIT
   frame->addToJavaScriptWindowObject("leafletMapsQObject", this);
 #endif
-  // map is first centered in the Atlantic Ocean
+  // add map layers
+  for (const MapLayer &layer : mapLayers) {
+    if (layer.url != nullptr) {
+      QString code = "addMapLayer('%1', '%2', '%3', %4)";
+      executeJavascript(code.arg(layer.name).arg(layer.url).arg(layer.attrib).arg(layer.maxZoom));
+    }
+  }
+  // initialize map
+  // it is first centered in the Atlantic Ocean
   // in order to emphasize the need to configure geolocation
   executeJavascript("init(44.8084, -40, 3)");
   init = true;
 }
 
-void LeafletMaps::switchToBaseLayer(const char *layerName) {
-  QString code = "switchToLayer(baseLayers['%1'])";
-  executeJavascript(code.arg(layerName));
+void LeafletMaps::switchToMapLayer(const char* layer) {
+  QString code = "switchToLayer(mapLayers['%1'])";
+  executeJavascript(code.arg(layer));
 }
 
 void LeafletMaps::switchToCustomTileLayer(const QString &url, const QString &attribution) {

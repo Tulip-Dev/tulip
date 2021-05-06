@@ -103,7 +103,18 @@ class LeafletMaps : public QWEBVIEW {
 #endif
 
 public:
-  LeafletMaps(QWidget *parent = nullptr);
+  struct MapLayer {
+    const char *name;
+    const char *url;
+    const char *attrib;
+    int maxZoom;
+
+    MapLayer(const char *name, const char *url = nullptr,
+	     const char *attrib = nullptr, int maxZoom = 21)
+      :name(name), url(url), attrib(attrib), maxZoom(maxZoom) {}
+  };
+
+  LeafletMaps(const std::vector<MapLayer> &mapLayers);
 
   bool pageLoaded();
 
@@ -128,7 +139,7 @@ public:
   void setMapBounds(Graph *graph,
                     const std::unordered_map<node, std::pair<double, double>> &nodesLatLngs);
 
-  void switchToBaseLayer(const char *layerName);
+  void switchToMapLayer(const char* layer);
 
   void switchToCustomTileLayer(const QString &url, const QString &attrib);
 
@@ -144,6 +155,7 @@ private slots:
 private:
   QVariant executeJavascript(const QString &jsCode);
 
+  const std::vector<MapLayer> &mapLayers;
   bool init;
   QWEBFRAME *frame;
   int x, y;
