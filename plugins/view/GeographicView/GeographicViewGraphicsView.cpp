@@ -294,8 +294,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   // add view types, OpenStreetMap is the default one
   viewTypeComboBox->addItem(_geoView->getViewNameFromType(GeographicView::OpenStreetMap));
   viewTypeComboBox->insertSeparator(1);
-  for (GeographicView::ViewType t = GeographicView::OpenStreetMap;
-       t <= GeographicView::Globe;
+  for (GeographicView::ViewType t = GeographicView::OpenStreetMap; t <= GeographicView::Globe;
        t = GeographicView::ViewType(t + 1))
     viewTypeComboBox->addItem(_geoView->getViewNameFromType(t));
 

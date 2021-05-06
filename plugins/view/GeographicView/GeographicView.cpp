@@ -38,70 +38,71 @@
 using namespace std;
 using namespace tlp;
 
-static const std::vector<LeafletMaps::MapLayer> mapLayers =
-{
- // list map layers according the ViewType enum ordering
- // OpenStreetMap is the default one
- LeafletMaps::MapLayer("OpenStreetMap",
-		       "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-		       "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
-		       19),
- // OpenTopoMap
- LeafletMaps::MapLayer("OpenTopoMap",
-		       "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-		       "Map data: {attribution.OpenStreetMap}, <a href=\"http://viewfinderpanoramas.org\">SRTM</a> | Map style: &copy; <a href=\"https://opentopomap.org\">OpenTopoMap</a> (<a href=\"https://creativecommons.org/licenses/by-sa/3.0/\">CC-BY-SA</a>)",
-		       17),
- // Esri World Street Map
- LeafletMaps::MapLayer("Esri World Street Map",
-		       "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
-		       "Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012"),
- // Esri Topographic Map
- LeafletMaps::MapLayer("Esri Topographic Map",
-		       "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
-		       "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community"),
- // Esri National Geographic Map
- LeafletMaps::MapLayer("Esri National Geographic Map",
-		       "https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}",
-		       "Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC",
-		       16),
- // Esri World Imagery
- LeafletMaps::MapLayer("Esri World Imagery",
-		       "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-		       "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"),
- // Esri Light Gray Canvas
- LeafletMaps::MapLayer("Esri Light Gray Canvas",
-		       "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-		       "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ",
-		       16),
- // Esri Dark Gray Canvas
- LeafletMaps::MapLayer("Esri Dark Gray Canvas",
-		       "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-		       "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ",
-		       16),
- // CartoDB Voyager
- LeafletMaps::MapLayer("CartoDB Map",
-		       "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-		       "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a>",
-		       19),
- // Carto DB Light Gray Map
- LeafletMaps::MapLayer("CartoDB Light Map",
-		       "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-		       "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a>",
-		       19),
- // Carto DB Dark Gray Map
- LeafletMaps::MapLayer("CartoDB Dark Map",
-		       "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-		       "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a>",
-		       19),
- // Wikimedia
- LeafletMaps::MapLayer("Wikimedia Map",
-		       "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png",
-		       "<a href=\"https://wikimediafoundation.org/wiki/Maps_Terms_of_Use\">Wikimedia</a>"),
- // the one below are not really map layer
- LeafletMaps::MapLayer("Leaflet Custom Tile Layer"),
- LeafletMaps::MapLayer("Polygon"),
- LeafletMaps::MapLayer("Globe")
-};
+static const std::vector<LeafletMaps::MapLayer> mapLayers = {
+    // list map layers according the ViewType enum ordering
+    // OpenStreetMap is the default one
+    LeafletMaps::MapLayer(
+        "OpenStreetMap", "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
+        19),
+    // OpenTopoMap
+    LeafletMaps::MapLayer(
+        "OpenTopoMap", "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+        "Map data: {attribution.OpenStreetMap}, <a href=\"http://viewfinderpanoramas.org\">SRTM</a> | Map style: &copy; <a href=\"https://opentopomap.org\">OpenTopoMap</a> (<a href=\"https://creativecommons.org/licenses/by-sa/3.0/\">CC-BY-SA</a>)",
+        17),
+    // Esri World Street Map
+    LeafletMaps::MapLayer(
+        "Esri World Street Map",
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+        "Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012"),
+    // Esri Topographic Map
+    LeafletMaps::MapLayer(
+        "Esri Topographic Map",
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
+        "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community"),
+    // Esri National Geographic Map
+    LeafletMaps::MapLayer(
+        "Esri National Geographic Map",
+        "https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}",
+        "Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC",
+        16),
+    // Esri World Imagery
+    LeafletMaps::MapLayer(
+        "Esri World Imagery",
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"),
+    // Esri Light Gray Canvas
+    LeafletMaps::MapLayer(
+        "Esri Light Gray Canvas",
+        "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+        "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ", 16),
+    // Esri Dark Gray Canvas
+    LeafletMaps::MapLayer(
+        "Esri Dark Gray Canvas",
+        "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+        "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ", 16),
+    // CartoDB Voyager
+    LeafletMaps::MapLayer(
+        "CartoDB Map", "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+        "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a>",
+        19),
+    // Carto DB Light Gray Map
+    LeafletMaps::MapLayer(
+        "CartoDB Light Map", "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+        "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a>",
+        19),
+    // Carto DB Dark Gray Map
+    LeafletMaps::MapLayer(
+        "CartoDB Dark Map", "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+        "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a>",
+        19),
+    // Wikimedia
+    LeafletMaps::MapLayer(
+        "Wikimedia Map", "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png",
+        "<a href=\"https://wikimediafoundation.org/wiki/Maps_Terms_of_Use\">Wikimedia</a>"),
+    // the one below are not really map layer
+    LeafletMaps::MapLayer("Leaflet Custom Tile Layer"), LeafletMaps::MapLayer("Polygon"),
+    LeafletMaps::MapLayer("Globe")};
 
 GeographicView::GeographicView(PluginContext *)
     : geoViewGraphicsView(nullptr), geoViewConfigWidget(nullptr),
@@ -559,7 +560,7 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
 GeographicView::ViewType GeographicView::getViewTypeFromName(const QString &name) const {
   for (unsigned int i = 0; i < mapLayers.size(); ++i) {
     if (name == mapLayers[i].name)
-      return  ViewType(i);
+      return ViewType(i);
   }
   return OpenStreetMap;
 }

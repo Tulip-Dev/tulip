@@ -109,9 +109,9 @@ public:
     const char *attrib;
     int maxZoom;
 
-    MapLayer(const char *name, const char *url = nullptr,
-	     const char *attrib = nullptr, int maxZoom = 21)
-      :name(name), url(url), attrib(attrib), maxZoom(maxZoom) {}
+    MapLayer(const char *name, const char *url = nullptr, const char *attrib = nullptr,
+             int maxZoom = 21)
+        : name(name), url(url), attrib(attrib), maxZoom(maxZoom) {}
   };
 
   LeafletMaps(const std::vector<MapLayer> &mapLayers);
@@ -139,7 +139,7 @@ public:
   void setMapBounds(Graph *graph,
                     const std::unordered_map<node, std::pair<double, double>> &nodesLatLngs);
 
-  void switchToMapLayer(const char* layer);
+  void switchToMapLayer(const char *layer);
 
   void switchToCustomTileLayer(const QString &url, const QString &attrib);
 

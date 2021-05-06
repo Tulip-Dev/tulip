@@ -133,7 +133,8 @@ document.addEventListener("DOMContentLoaded", function () {
 </html>
 )";
 
-  LeafletMaps::LeafletMaps(const std::vector<MapLayer> &mapLayers) : QWEBVIEW(nullptr), mapLayers(mapLayers), init(false) {
+LeafletMaps::LeafletMaps(const std::vector<MapLayer> &mapLayers)
+    : QWEBVIEW(nullptr), mapLayers(mapLayers), init(false) {
 #ifdef QT_HAS_WEBKIT
   // disable output of "libpng warning: iCCP: known incorrect sRGB profile"
   // due to QtWebKit ill-formed png files
@@ -196,7 +197,7 @@ void LeafletMaps::triggerLoading() {
   init = true;
 }
 
-void LeafletMaps::switchToMapLayer(const char* layer) {
+void LeafletMaps::switchToMapLayer(const char *layer) {
   QString code = "switchToLayer(mapLayers['%1'])";
   executeJavascript(code.arg(layer));
 }
