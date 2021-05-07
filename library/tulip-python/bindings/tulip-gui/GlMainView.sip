@@ -137,6 +137,16 @@ Returns a tuple of 3 elements. The first one is a bool indicating if a node/edge
 :rtype: (boolean, :class:`tulip.tlp.node`, :class:`tulip.tlp.edge`)
 %End
 
+%MethodCode
+  *a2 = tlp::node();
+  *a3 = tlp::edge();
+  if (tlp::GlMainView::getNodeOrEdgeAtViewportPos(sipCpp->getGlMainWidget(), a0, a1, *a2, *a3)) {
+    if ((a4 && a2->isValid()) || (a5 && a3->isValid()))
+      sipRes = true;
+  } else
+    sipRes = false;
+%End
+
 // =======================================================
 
   void rotateCamera(int x, int y, int z);

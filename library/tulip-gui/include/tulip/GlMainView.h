@@ -119,7 +119,7 @@ public:
    *  @param pickEdge enable or disable the edge picking
    *  @return true if something has been found, false otherwise
    */
-  bool pickNodeEdge(const int x, const int y, tlp::node &n, tlp::edge &e, bool pickNode = true,
+  _DEPRECATED bool pickNodeEdge(const int x, const int y, tlp::node &n, tlp::edge &e, bool pickNode = true,
                     bool pickEdge = true);
 
   /**
