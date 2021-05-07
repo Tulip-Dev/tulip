@@ -119,8 +119,8 @@ public:
    *  @param pickEdge enable or disable the edge picking
    *  @return true if something has been found, false otherwise
    */
-  _DEPRECATED bool pickNodeEdge(const int x, const int y, tlp::node &n, tlp::edge &e, bool pickNode = true,
-                    bool pickEdge = true);
+  _DEPRECATED bool pickNodeEdge(const int x, const int y, tlp::node &n, tlp::edge &e,
+                                bool pickNode = true, bool pickEdge = true);
 
   /**
    * @brief Rotate the view camera by (x,y,z)

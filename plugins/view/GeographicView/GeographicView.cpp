@@ -126,7 +126,8 @@ void GeographicView::setupUi() {
   geoViewGraphicsView = new GeographicViewGraphicsView(this, new QGraphicsScene());
 
   geoViewConfigWidget = new GeographicViewConfigWidget();
-  connect(geoViewConfigWidget, SIGNAL(mapToPolygonSignal()), geoViewGraphicsView, SLOT(mapToPolygon()));
+  connect(geoViewConfigWidget, SIGNAL(mapToPolygonSignal()), geoViewGraphicsView,
+          SLOT(mapToPolygon()));
 
   geolocalisationConfigWidget = new GeolocalisationConfigWidget();
   connect(geolocalisationConfigWidget, SIGNAL(computeGeoLayout()), this, SLOT(computeGeoLayout()));
