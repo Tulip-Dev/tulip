@@ -292,11 +292,10 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   // combo box to choose the map type
   viewTypeComboBox = new QComboBox;
   // add view types, OpenStreetMap is the default one
-  viewTypeComboBox->addItem(_geoView->getViewNameFromType(GeographicView::OpenStreetMap));
+  viewTypeComboBox->addItem(GeographicView::getViewName(GeographicView::OpenStreetMap));
   viewTypeComboBox->insertSeparator(1);
-  for (GeographicView::ViewType t = GeographicView::OpenStreetMap; t <= GeographicView::Globe;
-       t = GeographicView::ViewType(t + 1))
-    viewTypeComboBox->addItem(_geoView->getViewNameFromType(t));
+  for (auto &layer : GeographicView::getMapLayers())
+    viewTypeComboBox->addItem(layer.name);
 
   connect(viewTypeComboBox, SIGNAL(currentIndexChanged(QString)), _geoView,
           SLOT(viewTypeChanged(QString)));
@@ -1168,7 +1167,7 @@ void GeographicViewGraphicsView::switchViewType() {
 
   default:
     enableLeafletMap = true;
-    leafletMaps->switchToMapLayer(_geoView->getViewNameFromType(viewType));
+    leafletMaps->switchToMapLayer(GeographicView::getViewName(viewType));
   }
 
   if (planisphereEntity && planisphereEntity->isVisible()) {

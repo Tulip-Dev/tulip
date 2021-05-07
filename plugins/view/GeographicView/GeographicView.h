@@ -158,10 +158,6 @@ public slots:
     i->install(geoViewGraphicsView->getGlMainWidget());
   }
 
-  void mapToPolygon() {
-    geoViewGraphicsView->mapToPolygon();
-  }
-
   void centerView();
   void centerOnNode();
 
@@ -172,8 +168,8 @@ public slots:
   void currentZoomChanged();
 
   static const std::vector<LeafletMaps::MapLayer> &getMapLayers();
-  ViewType getViewTypeFromName(const QString &name) const;
-  const char *getViewNameFromType(ViewType viewType) const;
+  static ViewType getViewType(const QString &name);
+  static const char *getViewName(ViewType viewType);
 
 protected slots:
 

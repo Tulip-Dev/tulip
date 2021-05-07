@@ -126,7 +126,7 @@ void GeographicView::setupUi() {
   geoViewGraphicsView = new GeographicViewGraphicsView(this, new QGraphicsScene());
 
   geoViewConfigWidget = new GeographicViewConfigWidget();
-  connect(geoViewConfigWidget, SIGNAL(mapToPolygonSignal()), this, SLOT(mapToPolygon()));
+  connect(geoViewConfigWidget, SIGNAL(mapToPolygonSignal()), geoViewGraphicsView, SLOT(mapToPolygon()));
 
   geolocalisationConfigWidget = new GeolocalisationConfigWidget();
   connect(geolocalisationConfigWidget, SIGNAL(computeGeoLayout()), this, SLOT(computeGeoLayout()));
@@ -236,7 +236,7 @@ void GeographicView::setState(const DataSet &dataSet) {
     _viewType = ViewType(viewType);
   }
 
-  string viewTypeName = QStringToTlpString(getViewNameFromType(_viewType));
+  string viewTypeName = QStringToTlpString(getViewName(_viewType));
 
   viewTypeChanged(viewTypeName.c_str());
 
@@ -557,7 +557,7 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
       .scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 }
 
-GeographicView::ViewType GeographicView::getViewTypeFromName(const QString &name) const {
+GeographicView::ViewType GeographicView::getViewType(const QString &name) {
   for (unsigned int i = 0; i < mapLayers.size(); ++i) {
     if (name == mapLayers[i].name)
       return ViewType(i);
@@ -565,7 +565,7 @@ GeographicView::ViewType GeographicView::getViewTypeFromName(const QString &name
   return OpenStreetMap;
 }
 
-const char *GeographicView::getViewNameFromType(GeographicView::ViewType viewType) const {
+const char *GeographicView::getViewName(GeographicView::ViewType viewType) {
   if (viewType < 0 || viewType >= mapLayers.size())
     return mapLayers[OpenStreetMap].name;
   return mapLayers[viewType].name;
