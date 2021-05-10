@@ -290,15 +290,15 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   glWidgetItem->setParentItem(_placeholderItem);
 
   // combo box to choose the map type
-  viewTypeComboBox = new QComboBox;
+  mapTypeComboBox = new QComboBox;
   // add view types, OpenStreetMap is the default one
-  viewTypeComboBox->addItem(GeographicView::getViewName(GeographicView::OpenStreetMap));
-  viewTypeComboBox->insertSeparator(1);
+  mapTypeComboBox->addItem(GeographicView::getViewName(GeographicView::OpenStreetMap));
+  mapTypeComboBox->insertSeparator(1);
   for (auto &layer : GeographicView::getMapLayers())
-    viewTypeComboBox->addItem(layer.name);
+    mapTypeComboBox->addItem(layer.name);
 
-  connect(viewTypeComboBox, SIGNAL(currentIndexChanged(QString)), _geoView,
-          SLOT(viewTypeChanged(QString)));
+  connect(mapTypeComboBox, SIGNAL(currentIndexChanged(QString)), _geoView,
+          SLOT(mapTypeChanged(QString)));
 
   // 2 push buttons
   // zoom +
@@ -319,7 +319,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   frame->setObjectName("geoviewFrame");
   frame->setStyleSheet(ss);
   QVBoxLayout *vLayout = new QVBoxLayout(frame);
-  vLayout->addWidget(viewTypeComboBox);
+  vLayout->addWidget(mapTypeComboBox);
   auto zoomLayout = new QVBoxLayout(nullptr);
   zoomLayout->setContentsMargins(0, 0, 0, 0);
   zoomLayout->setSpacing(0);
@@ -1133,14 +1133,14 @@ void GeographicViewGraphicsView::treatEvent(const Event &ev) {
   }
 }
 
-void GeographicViewGraphicsView::switchViewType() {
-  GeographicView::ViewType viewType = _geoView->viewType();
+void GeographicViewGraphicsView::switchMapType() {
+  GeographicView::MapType mapType = _geoView->mapType();
 
   bool enableLeafletMap = false;
   bool enablePolygon = false;
   bool enablePlanisphere = false;
 
-  switch (viewType) {
+  switch (mapType) {
 
   case GeographicView::LeafletCustomTileLayer: {
     enableLeafletMap = true;
@@ -1167,7 +1167,7 @@ void GeographicViewGraphicsView::switchViewType() {
 
   default:
     enableLeafletMap = true;
-    leafletMaps->switchToMapLayer(GeographicView::getViewName(viewType));
+    leafletMaps->switchToMapLayer(GeographicView::getViewName(mapType));
   }
 
   if (planisphereEntity && planisphereEntity->isVisible()) {
@@ -1197,7 +1197,7 @@ void GeographicViewGraphicsView::switchViewType() {
 
   layer->setCamera(new Camera(glMainWidget->getScene()));
 
-  if (viewType != GeographicView::Globe && geoLayoutComputed) {
+  if (mapType != GeographicView::Globe && geoLayoutComputed) {
     geoLayout->removeListener(this);
     SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");
 
@@ -1341,7 +1341,7 @@ void GeographicViewGraphicsView::switchViewType() {
     planisphereEntity->setVisible(enablePlanisphere);
 
   glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setEdge3D(
-      viewType == GeographicView::Globe);
+      mapType == GeographicView::Globe);
 
   Observable::unholdObservers();
 

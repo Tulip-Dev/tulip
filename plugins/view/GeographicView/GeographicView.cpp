@@ -38,71 +38,9 @@
 using namespace std;
 using namespace tlp;
 
-static const std::vector<LeafletMaps::MapLayer> mapLayers = {
-    // list map layers according the ViewType enum ordering
-    // OpenStreetMap is the default one
-    LeafletMaps::MapLayer(
-        "OpenStreetMap", "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
-        19),
-    // OpenTopoMap
-    LeafletMaps::MapLayer(
-        "OpenTopoMap", "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-        "Map data: {attribution.OpenStreetMap}, <a href=\"http://viewfinderpanoramas.org\">SRTM</a> | Map style: &copy; <a href=\"https://opentopomap.org\">OpenTopoMap</a> (<a href=\"https://creativecommons.org/licenses/by-sa/3.0/\">CC-BY-SA</a>)",
-        17),
-    // Esri World Street Map
-    LeafletMaps::MapLayer(
-        "Esri World Street Map",
-        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
-        "Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012"),
-    // Esri Topographic Map
-    LeafletMaps::MapLayer(
-        "Esri Topographic Map",
-        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
-        "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community"),
-    // Esri National Geographic Map
-    LeafletMaps::MapLayer(
-        "Esri National Geographic Map",
-        "https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}",
-        "Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC",
-        16),
-    // Esri World Imagery
-    LeafletMaps::MapLayer(
-        "Esri World Imagery",
-        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-        "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"),
-    // Esri Light Gray Canvas
-    LeafletMaps::MapLayer(
-        "Esri Light Gray Canvas",
-        "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-        "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ", 16),
-    // Esri Dark Gray Canvas
-    LeafletMaps::MapLayer(
-        "Esri Dark Gray Canvas",
-        "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-        "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ", 16),
-    // CartoDB Voyager
-    LeafletMaps::MapLayer(
-        "CartoDB Map", "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-        "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a>",
-        19),
-    // Carto DB Light Gray Map
-    LeafletMaps::MapLayer(
-        "CartoDB Light Map", "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-        "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a>",
-        19),
-    // Carto DB Dark Gray Map
-    LeafletMaps::MapLayer(
-        "CartoDB Dark Map", "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-        "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a>",
-        19),
-    // Wikimedia
-    LeafletMaps::MapLayer(
-        "Wikimedia Map", "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png",
-        "<a href=\"https://wikimediafoundation.org/wiki/Maps_Terms_of_Use\">Wikimedia</a>"),
-    // the one below are not really map layer
-    LeafletMaps::MapLayer("Leaflet Custom Tile Layer"), LeafletMaps::MapLayer("Polygon"),
-    LeafletMaps::MapLayer("Globe")};
+// define mapLayers constant
+#define ADD_MAPLAYERS
+#include "MapTypeAndLayers.defs"
 
 GeographicView::GeographicView(PluginContext *)
     : geoViewGraphicsView(nullptr), geoViewConfigWidget(nullptr),
@@ -111,7 +49,7 @@ GeographicView::GeographicView(PluginContext *)
       showConfPanelAction(nullptr), useSharedLayoutProperty(true), useSharedSizeProperty(true),
       useSharedShapeProperty(true), mapCenterLatitudeInit(0), mapCenterLongitudeInit(0),
       mapZoomInit(0), _viewActionsManager(nullptr) {
-  _viewType = OpenStreetMap;
+  _mapType = OpenStreetMap;
 }
 
 GeographicView::~GeographicView() {
@@ -161,22 +99,22 @@ void GeographicView::graphChanged(Graph *g) {
   }
 }
 
-void GeographicView::viewTypeChanged(QString viewTypeName) {
-  QComboBox *comboBox = geoViewGraphicsView->getViewTypeComboBox();
+void GeographicView::mapTypeChanged(QString mapTypeName) {
+  QComboBox *comboBox = geoViewGraphicsView->getMapTypeComboBox();
 
   if (comboBox == nullptr)
     return;
 
-  disconnect(comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(viewTypeChanged(QString)));
+  disconnect(comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(mapTypeChanged(QString)));
 
-  _viewType = ViewType(comboBox->currentIndex() - 2);
+  _mapType = getMapType(mapTypeName);
 
-  geoViewGraphicsView->switchViewType();
+  geoViewGraphicsView->switchMapType();
 
   comboBox->setCurrentIndex(0);
-  comboBox->setItemText(0, viewTypeName);
+  comboBox->setItemText(0, mapTypeName);
 
-  connect(comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(viewTypeChanged(QString)));
+  connect(comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(mapTypeChanged(QString)));
 }
 
 void GeographicView::fillContextMenu(QMenu *menu, const QPointF &pf) {
@@ -231,15 +169,44 @@ void GeographicView::setState(const DataSet &dataSet) {
 
   loadStoredPolyInformation(dataSet);
 
-  if (dataSet.exists("viewType")) {
-    int viewType = 0;
-    dataSet.get("viewType", viewType);
-    _viewType = ViewType(viewType);
-  }
+  int mapType = 0;
+  if (dataSet.get("viewType", mapType)) {
+    // ensure compatibility with previous version
+    switch(mapType) {
+    case OpenTopoMap: // 1
+      mapType = EsriSatellite;
+      break;
 
-  string viewTypeName = QStringToTlpString(getViewName(_viewType));
+    case EsriStreetMap: // 2
+      mapType = EsriTopoMap;
+      break;
 
-  viewTypeChanged(viewTypeName.c_str());
+    case EsriTopoMap: // 3
+      mapType = EsriLightGrayCanvas;
+      break;
+
+    case EsriNatGeoMap: // 4
+      mapType = LeafletCustomTileLayer;
+      break;
+
+    case EsriSatellite: // 5
+      mapType = Polygon;
+      break;
+
+    case EsriLightGrayCanvas: // 6
+      mapType = Globe;
+
+    default:
+      break;
+    }
+  } else
+    dataSet.get("mapType", mapType);
+
+  _mapType = MapType(mapType);
+
+  string mapTypeName = QStringToTlpString(getViewName(_mapType));
+
+  mapTypeChanged(mapTypeName.c_str());
 
   sceneLayersConfigurationWidget->setGlMainWidget(geoViewGraphicsView->getGlMainWidget());
   sceneConfigurationWidget->setGlMainWidget(geoViewGraphicsView->getGlMainWidget());
@@ -304,7 +271,7 @@ DataSet GeographicView::state() const {
   DataSet dataSet = View::state();
   DataSet configurationWidget = geoViewConfigWidget->state();
   dataSet.set("configurationWidget", configurationWidget);
-  dataSet.set("viewType", int(_viewType));
+  dataSet.set("mapType", int(_mapType));
   pair<double, double> mapCenter = geoViewGraphicsView->getLeafletMapsPage()->getCurrentMapCenter();
   dataSet.set("mapCenterLatitude", mapCenter.first);
   dataSet.set("mapCenterLongitude", mapCenter.second);
@@ -375,7 +342,7 @@ void GeographicView::computeGeoLayout() {
   updateSharedProperties();
   geoViewGraphicsView->setGeoLayoutComputed();
   // compute view layout
-  geoViewGraphicsView->switchViewType();
+  geoViewGraphicsView->switchMapType();
 }
 
 void GeographicView::centerView() {
@@ -558,18 +525,18 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
       .scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 }
 
-GeographicView::ViewType GeographicView::getViewType(const QString &name) {
+GeographicView::MapType GeographicView::getMapType(const QString &name) {
   for (unsigned int i = 0; i < mapLayers.size(); ++i) {
     if (name == mapLayers[i].name)
-      return ViewType(i);
+      return MapType(i);
   }
   return OpenStreetMap;
 }
 
-const char *GeographicView::getViewName(GeographicView::ViewType viewType) {
-  if (viewType < 0 || viewType >= mapLayers.size())
+const char *GeographicView::getViewName(GeographicView::MapType mapType) {
+  if (mapType < 0 || mapType >= mapLayers.size())
     return mapLayers[OpenStreetMap].name;
-  return mapLayers[viewType].name;
+  return mapLayers[mapType].name;
 }
 
 const vector<LeafletMaps::MapLayer> &GeographicView::getMapLayers() {

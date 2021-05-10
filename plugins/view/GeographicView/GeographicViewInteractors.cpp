@@ -156,9 +156,9 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
   GlMainWidget *g = static_cast<GlMainWidget *>(widget);
   QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
-  if (geoView->viewType() <= GeographicView::LeafletCustomTileLayer) {
+  if (geoView->mapType() <= GeographicView::LeafletCustomTileLayer) {
     return false;
-  } else if (geoView->viewType() == GeographicView::Globe) {
+  } else if (geoView->mapType() == GeographicView::Globe) {
     if (e->type() == QEvent::Wheel) {
       int vDelta = static_cast<QWheelEvent *>(e)->angleDelta().y();
       if (vDelta != 0) {

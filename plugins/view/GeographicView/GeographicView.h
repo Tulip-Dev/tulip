@@ -66,26 +66,11 @@ class GeographicView : public View {
       "latitude/longitude), they are used to layout the nodes on the maps or on the globe.</p>"
       "<p>An interactor for performing selection on graph elements is also bundled "
       "with the view.</p>",
-      "3.1", "View")
+      "3.2", "View")
 
 public:
-  enum ViewType {
-    OpenStreetMap = 0,
-    OpenTopoMap,
-    EsriStreetMap,
-    EsriTopoMap,
-    EsriNatGeoMap,
-    EsriSatellite,
-    EsriLightGrayCanvas,
-    EsriDarkGrayCanvas,
-    CartoDB,
-    CartoDBLight,
-    CartoDBDark,
-    WikimediaMap,
-    LeafletCustomTileLayer,
-    Polygon,
-    Globe
-  };
+  // declare MapType enum values
+#include "MapTypeAndLayers.defs"
 
   GeographicView(PluginContext *);
   ~GeographicView() override;
@@ -115,8 +100,8 @@ public:
 
   void registerTriggers();
 
-  ViewType viewType() {
-    return _viewType;
+  MapType mapType() {
+    return _mapType;
   }
 
   // inherited from View
@@ -161,15 +146,15 @@ public slots:
   void centerView();
   void centerOnNode();
 
-  void viewTypeChanged(QString viewTypeName);
+  void mapTypeChanged(QString mapTypeName);
 
   void zoomIn();
   void zoomOut();
   void currentZoomChanged();
 
   static const std::vector<LeafletMaps::MapLayer> &getMapLayers();
-  static ViewType getViewType(const QString &name);
-  static const char *getViewName(ViewType viewType);
+  static MapType getMapType(const QString &name);
+  static const char *getViewName(MapType mapType);
 
 protected slots:
 
@@ -193,7 +178,7 @@ private:
   QAction *centerOnNodeAction;
   QAction *showConfPanelAction;
 
-  ViewType _viewType;
+  MapType _mapType;
 
   bool useSharedLayoutProperty;
   bool useSharedSizeProperty;

@@ -113,14 +113,14 @@ public:
     return _placeholderItem;
   }
 
-  void switchViewType();
+  void switchMapType();
 
   void loadDefaultMap();
   void loadCsvFile(QString fileName);
   void loadPolyFile(QString fileName);
 
-  QComboBox *getViewTypeComboBox() {
-    return viewTypeComboBox;
+  QComboBox *getMapTypeComboBox() {
+    return mapTypeComboBox;
   }
 
   GlComposite *getPolygon() {
@@ -170,7 +170,7 @@ private:
 
   GlMainWidget *glMainWidget;
   GlMainWidgetGraphicsItem *glWidgetItem;
-  QComboBox *viewTypeComboBox;
+  QComboBox *mapTypeComboBox;
   QPushButton *zoomOutButton;
   QPushButton *zoomInButton;
 

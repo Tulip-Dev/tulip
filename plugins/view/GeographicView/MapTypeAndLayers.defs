@@ -1,0 +1,100 @@
+// In order to get a perfect coherency between the MapType enum definition
+// and the population of the LeafletMaps::MapLayer instances vector
+// we include this file in GeographicView.h and GeographicView.cpp
+
+#if !defined(ADD_MAPLAYERS)
+
+// when included in GeographicView.h
+// this first defines the MapType enum values
+#define BEGIN_MAPLAYERS() enum MapType {
+#define ADD_MAPLAYER(enum_val, name, url, attrib, maxZoom) enum_val
+#define ADD_PSEUDO_MAPLAYER(enum_val, name) enum_val
+
+#else
+#undef ADD_MAPLAYER
+#undef ADD_PSEUDO_MAPLAYER
+#undef BEGIN_MAPLAYERS
+
+// then when included in GeographicView.cpp
+// this defines the mapLayers contents
+#define BEGIN_MAPLAYERS() static const std::vector<LeafletMaps::MapLayer> mapLayers = {
+#define ADD_MAPLAYER(enum_val, name, url, attrib, maxZoom) LeafletMaps::MapLayer(name, url, attrib, maxZoom)
+#define ADD_PSEUDO_MAPLAYER(enum_val, name) LeafletMaps::MapLayer(name)
+
+#endif
+
+#define END_MAPLAYERS() };
+
+BEGIN_MAPLAYERS()
+// OpenStreetMap is the default one
+ADD_MAPLAYER(OpenStreetMap=0,
+"OpenStreetMap",
+"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+"&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
+19),
+// OpenTopoMap
+ADD_MAPLAYER(OpenTopoMap,
+"OpenTopoMap",
+"https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+"Map data: {attribution.OpenStreetMap}, <a href=\"http://viewfinderpanoramas.org\">SRTM</a> | Map style: &copy; <a href=\"https://opentopomap.org\">OpenTopoMap</a> (<a href=\"https://creativecommons.org/licenses/by-sa/3.0/\">CC-BY-SA</a>)",
+17),
+// Esri World Street Map
+ADD_MAPLAYER(EsriStreetMap,
+"Esri World Street Map",
+"https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+"Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012",
+21),
+// Esri Topographic Map
+ADD_MAPLAYER(EsriTopoMap,
+"Esri Topographic Map",
+"https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
+"Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community",
+21),
+// Esri National Geographic Map
+ADD_MAPLAYER(EsriNatGeoMap,
+"Esri National Geographic Map",
+"https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}",
+"Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC",
+16),
+// Esri World Imagery
+ADD_MAPLAYER(EsriSatellite,
+"Esri World Imagery",
+"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+"Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
+21),
+// Esri Light Gray Canvas
+ADD_MAPLAYER(EsriLightGrayCanvas,
+"Esri Light Gray Canvas",
+"https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+"Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ", 16),
+// Esri Dark Gray Canvas
+ADD_MAPLAYER(EsriDarkGrayCanvas,
+"Esri Dark Gray Canvas",
+"https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+"Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ", 16),
+// CartoDB Voyager
+ADD_MAPLAYER(CartoDB,
+"CartoDB Map", "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+"&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a>",
+19),
+// Carto DB Light Gray Map
+ADD_MAPLAYER(CartoDBLight,
+"CartoDB Light Map", "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+"&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a>",
+19),
+// Carto DB Dark Gray Map
+ADD_MAPLAYER(CartoDBDark,
+"CartoDB Dark Map", "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+"&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a>",
+19),
+// Wikimedia
+ADD_MAPLAYER(WikimediaMap,
+"Wikimedia Map", "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png",
+"<a href=\"https://wikimediafoundation.org/wiki/Maps_Terms_of_Use\">Wikimedia</a>",
+21),
+// the ones below are not really map layers
+// but are needed to populate the GeographicGraphicsView menu
+ADD_PSEUDO_MAPLAYER(LeafletCustomTileLayer, "Leaflet Custom Tile Layer"), 
+ADD_PSEUDO_MAPLAYER(Polygon, "Polygon"),
+ADD_PSEUDO_MAPLAYER(Globe, "Globe")
+END_MAPLAYERS()
