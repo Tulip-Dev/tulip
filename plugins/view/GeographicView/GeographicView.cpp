@@ -172,7 +172,7 @@ void GeographicView::setState(const DataSet &dataSet) {
   int mapType = 0;
   if (dataSet.get("viewType", mapType)) {
     // ensure compatibility with previous version
-    switch(mapType) {
+    switch (mapType) {
     case OpenTopoMap: // 1
       mapType = EsriSatellite;
       break;
