@@ -416,9 +416,9 @@ jobs:
         - sudo installer -store -pkg python-3.9.*.pkg -target /
         # setup build env
         - export CLANG_COMPILER_VERSION=10
+        - export MACPORTS_CI_CCACHE=OFF
         - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.9/bin/python3
         - export TULIP_BUILD_TESTS=OFF
-        - export MACPORTS_CI_CCACHE=OFF
         # launch macports build
         - bash -xe ./bundlers/mac/macports_build.sh
 
