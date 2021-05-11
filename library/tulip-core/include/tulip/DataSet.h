@@ -195,6 +195,19 @@ public:
 class TLP_SCOPE DataSet {
   // Internal list of key-value pairs.
   std::list<std::pair<std::string, DataType *>> data;
+
+  // list of deprecated properties
+  std::list<std::pair<std::string, std::string>> *deprecated;
+  // return the property to be used
+  inline const std::string &getUsedName(const std::string &oldName) const {
+    if (deprecated) {
+      for (const std::pair<std::string, std::string> &pp : *deprecated)
+	if (pp.first == oldName)
+	  return pp.second;
+    }
+    return oldName;
+  }
+
   /* management of data serialization
       two hashmap to retrieve data serializer from their
       type names and output type names
@@ -204,7 +217,7 @@ class TLP_SCOPE DataSet {
   static void registerDataTypeSerializer(const std::string &typeName, DataTypeSerializer *dts);
 
 public:
-  DataSet() {}
+  DataSet() :deprecated(nullptr) {}
   DataSet(const DataSet &set);
   ~DataSet();
 
@@ -315,6 +328,11 @@ public:
    * @brief Set from an untyped value
    */
   void setData(const std::string &str, const DataType *value);
+
+  /**
+   * @brief add a deprecated property name for compatibility management
+   */
+  void addDeprecated(const std::string &oldName, const std::string &newName);
 
   /**
    * @return An iterator over stored values as a std::pair name => untyped value

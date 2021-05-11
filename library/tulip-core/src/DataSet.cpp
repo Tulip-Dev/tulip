@@ -57,8 +57,13 @@ bool DataType::isTulipProperty(const std::string &typeName) {
           ISPROP(tlp::PropertyInterface) || ISPROP(tlp::GraphProperty));
 }
 
-DataSet::DataSet(const DataSet &set) {
-  *this = set;
+DataSet::DataSet(const DataSet &ds) {
+  for (const pair<string, DataType *> &p : ds.getValues()) {
+    data.emplace_back(p.first, p.second->clone());
+  }
+  deprecated = ds.deprecated ?
+    new std::list<std::pair<std::string, std::string>>(*ds.deprecated) :
+    nullptr;
 }
 
 DataSet &DataSet::operator=(const DataSet &set) {
@@ -75,8 +80,7 @@ DataSet &DataSet::operator=(const DataSet &set) {
 
 DataSet::~DataSet() {
   for (auto it = data.begin(); it != data.end(); ++it) {
-    if (it->second)
-      delete it->second;
+    delete it->second;
   }
 }
 
@@ -86,12 +90,33 @@ bool DataSet::exists(const string &str) const {
       return true;
   }
 
-  return false;
+  // check for a deprecated property
+  return deprecated && (str != getUsedName(str));
 }
 
+void DataSet::addDeprecated(const string &oldName, const string &usedName) {
+  // ensure usedName already exists
+  assert(exists(usedName));
+  if (!deprecated)
+    deprecated = new std::list<std::pair<std::string, std::string>>();
+#ifndef NDEBUG
+  else {
+    // ensure an existing deprecated name is not already mapped to usedName
+    for (const std::pair<std::string, std::string> &pp : *deprecated) {
+      assert(usedName != pp.second);
+    }
+  }
+#endif
+  // ensure oldName is not already deprecated
+  assert(getUsedName(oldName) == oldName);
+  deprecated->emplace_back(oldName, usedName);
+}
+
+
 std::string DataSet::getTypeName(const string &str) const {
+  const string &key = getUsedName(str);
   for (auto it = data.cbegin(); it != data.cend(); ++it) {
-    if (it->first == str)
+    if (it->first == key)
       return it->second->getTypeName();
   }
 
@@ -111,8 +136,9 @@ void DataSet::remove(const string &str) {
 }
 
 DataType *DataSet::getData(const string &str) const {
+  const string &key = getUsedName(str);
   for (auto it = data.cbegin(); it != data.cend(); ++it) {
-    if (it->first == str)
+    if (it->first == key)
       return it->second ? it->second->clone() : nullptr;
   }
 
@@ -120,12 +146,13 @@ DataType *DataSet::getData(const string &str) const {
 }
 
 void DataSet::setData(const std::string &str, const DataType *value) {
+  const string &key = getUsedName(str);
   DataType *val = value ? value->clone() : nullptr;
 
   for (auto it = data.begin(); it != data.end(); ++it) {
     std::pair<std::string, tlp::DataType *> &p = *it;
 
-    if (p.first == str) {
+    if (p.first == key) {
       if (p.second)
         delete p.second;
 

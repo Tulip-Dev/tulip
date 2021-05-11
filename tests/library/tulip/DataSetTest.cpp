@@ -339,3 +339,55 @@ void DataSetTest::testDataSetSerialization() {
   CPPUNIT_ASSERT(dataSet2.get("StringCollection", sc2));
   CPPUNIT_ASSERT(sc.getValues() == sc2.getValues());
 }
+
+//==========================================================
+void DataSetTest::testAddDeprecated() {
+  DataSet dSet;
+  CPPUNIT_ASSERT(!dSet.exists("boolean"));
+
+  bool b1, b2;
+  b1 = true;
+  dSet.set("boolean", b1);
+  CPPUNIT_ASSERT(dSet.get("boolean", b2));
+  CPPUNIT_ASSERT_EQUAL(b1, b2);
+
+  CPPUNIT_ASSERT(!dSet.exists("bool"));
+  dSet.addDeprecated("bool", "boolean");
+  CPPUNIT_ASSERT(dSet.exists("bool"));
+  b2 = false;
+  CPPUNIT_ASSERT(dSet.get("bool", b2));
+  CPPUNIT_ASSERT_EQUAL(b1, b2);
+  b2 = false;
+  CPPUNIT_ASSERT(dSet.get("boolean", b2));
+  CPPUNIT_ASSERT_EQUAL(b1, b2);
+  b1 = false;
+  dSet.set("bool", b1);
+  CPPUNIT_ASSERT(dSet.get("boolean", b2));
+  CPPUNIT_ASSERT_EQUAL(b1, b2);
+  b2 = true;
+  CPPUNIT_ASSERT(dSet.get("bool", b2));
+  CPPUNIT_ASSERT_EQUAL(b1, b2);
+
+  int i1, i2;
+  i1 = 77;
+  dSet.set("integer", i1);
+  CPPUNIT_ASSERT(dSet.get("integer", i2));
+  CPPUNIT_ASSERT_EQUAL(i1, i2);
+
+  CPPUNIT_ASSERT(!dSet.exists("int"));
+  dSet.addDeprecated("int", "integer");
+  CPPUNIT_ASSERT(dSet.exists("int"));
+  i2 = 777;
+  CPPUNIT_ASSERT(dSet.get("int", i2));
+  CPPUNIT_ASSERT_EQUAL(i1, i2);
+  i2 = 777;
+  CPPUNIT_ASSERT(dSet.get("integer", i2));
+  CPPUNIT_ASSERT_EQUAL(i1, i2);
+  i1 = 777;
+  dSet.set("int", i1);
+  CPPUNIT_ASSERT(dSet.get("integer", i2));
+  CPPUNIT_ASSERT_EQUAL(i1, i2);
+  i2 = 77;
+  CPPUNIT_ASSERT(dSet.get("int", i2));
+  CPPUNIT_ASSERT_EQUAL(i1, i2);
+}

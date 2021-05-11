@@ -42,6 +42,7 @@ public:
   void testSetGetString();
   void testSetGetStruct();
   void testDataSetSerialization();
+  void testAddDeprecated();
 };
 } // namespace tlp
 #endif
