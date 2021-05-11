@@ -359,7 +359,7 @@ jobs:
         - export MACPORTS_CI_CCACHE=ON
         - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.9/bin/python3
         - export TULIP_BUILD_CORE_ONLY=ON
-        - export TULIP_BUILD_TESTS=ON
+        - export TULIP_BUILD_TESTS=OFF
         # launch macports build
         - bash -xe ./bundlers/mac/macports_build.sh
 
@@ -417,9 +417,8 @@ jobs:
         # setup build env
         - export CLANG_COMPILER_VERSION=10
         - export PYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.9/bin/python3
-        - export TULIP_BUILD_TESTS=ON
-        - export TULIP_BUILD_GEOVIEW=OFF
-        - export MACPORTS_CI_CCACHE=ON
+        - export TULIP_BUILD_TESTS=OFF
+        - export MACPORTS_CI_CCACHE=OFF
         # launch macports build
         - bash -xe ./bundlers/mac/macports_build.sh
 
