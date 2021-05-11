@@ -61,9 +61,8 @@ DataSet::DataSet(const DataSet &ds) {
   for (const pair<string, DataType *> &p : ds.getValues()) {
     data.emplace_back(p.first, p.second->clone());
   }
-  deprecated = ds.deprecated ?
-    new std::list<std::pair<std::string, std::string>>(*ds.deprecated) :
-    nullptr;
+  deprecated =
+      ds.deprecated ? new std::list<std::pair<std::string, std::string>>(*ds.deprecated) : nullptr;
 }
 
 DataSet &DataSet::operator=(const DataSet &set) {
@@ -111,7 +110,6 @@ void DataSet::addDeprecated(const string &oldName, const string &usedName) {
   assert(getUsedName(oldName) == oldName);
   deprecated->emplace_back(oldName, usedName);
 }
-
 
 std::string DataSet::getTypeName(const string &str) const {
   const string &key = getUsedName(str);

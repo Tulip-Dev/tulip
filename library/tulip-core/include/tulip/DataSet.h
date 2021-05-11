@@ -202,8 +202,8 @@ class TLP_SCOPE DataSet {
   inline const std::string &getUsedName(const std::string &oldName) const {
     if (deprecated) {
       for (const std::pair<std::string, std::string> &pp : *deprecated)
-	if (pp.first == oldName)
-	  return pp.second;
+        if (pp.first == oldName)
+          return pp.second;
     }
     return oldName;
   }
@@ -217,7 +217,7 @@ class TLP_SCOPE DataSet {
   static void registerDataTypeSerializer(const std::string &typeName, DataTypeSerializer *dts);
 
 public:
-  DataSet() :deprecated(nullptr) {}
+  DataSet() : deprecated(nullptr) {}
   DataSet(const DataSet &set);
   ~DataSet();
 
