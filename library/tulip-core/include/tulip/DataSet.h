@@ -241,9 +241,9 @@ public:
   bool get(const std::string &key, T &value) const;
 
   /**
-   * @brief Returns the stored value associated with the given key or the deprecated version of the key
-   * The stored value is a copy of the original value that was set.
-   * If there is no value associated with both keys, the input value is left untouched.
+   * @brief Returns the stored value associated with the given key or the deprecated version of the
+   *key The stored value is a copy of the original value that was set. If there is no value
+   *associated with both keys, the input value is left untouched.
    *
    * @param key The key with which the data we want to retrieve is associated.
    * @param oldKey The deprecated version of the key.
@@ -276,8 +276,8 @@ public:
   void set(const std::string &key, const T &value);
 
   /**
-   * @brief Stores a copy of the given param, associated with a key and a deprected version of the key
-   * The value must have a well-formed copy constructor.
+   * @brief Stores a copy of the given param, associated with a key and a deprected version of the
+   *key The value must have a well-formed copy constructor.
    *
    * @param key The key which can be used to retrieve the data.
    * @param oldKey The deprecated version of the key.
@@ -285,8 +285,7 @@ public:
    * @return void
    **/
   template <typename T>
-  void setDeprecated(const std::string &key, const std::string &deprecatedKey,
-		     const T &value);
+  void setDeprecated(const std::string &key, const std::string &deprecatedKey, const T &value);
 
   /**
    * @brief Returns the mangled name of a type.
