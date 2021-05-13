@@ -34,6 +34,23 @@ bool tlp::DataSet::get(const std::string &str, T &value) const {
   return false;
 }
 
+// DataSet implementation
+template <typename T>
+bool tlp::DataSet::getDeprecated(const std::string &key,
+				 const std::string &oldKey, T &value) const {
+  for (std::list<std::pair<std::string, tlp::DataType *>>::const_iterator it = data.begin();
+       it != data.end(); ++it) {
+    const std::pair<std::string, tlp::DataType *> &p = *it;
+
+    if ((p.first == key) || (p.first == oldKey)) {
+      value = *(static_cast<T *>(p.second->value));
+      return true;
+    }
+  }
+
+  return false;
+}
+
 template <typename T>
 bool tlp::DataSet::getAndFree(const std::string &str, T &value) {
   for (std::list<std::pair<std::string, tlp::DataType *>>::iterator it = data.begin();
@@ -55,5 +72,12 @@ template <typename T>
 void tlp::DataSet::set(const std::string &key, const T &value) {
   TypedData<T> dtc(new T(value));
   setData(key, &dtc);
+}
+
+template <typename T>
+void tlp::DataSet::setDeprecated(const std::string &key, const std::string &oldKey, const T &value) {
+  TypedData<T> dtc(new T(value));
+  setData(key, &dtc);
+  addDeprecated(oldKey, key);
 }
 //=======================================================================

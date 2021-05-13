@@ -198,6 +198,8 @@ class TLP_SCOPE DataSet {
 
   // list of deprecated properties
   std::list<std::pair<std::string, std::string>> *deprecated;
+  // add a deprecated property name for compatibility management
+  void addDeprecated(const std::string &oldName, const std::string &usedName);
   // return the property to be used
   inline const std::string &getUsedName(const std::string &oldName) const {
     if (deprecated) {
@@ -239,6 +241,19 @@ public:
   bool get(const std::string &key, T &value) const;
 
   /**
+   * @brief Returns the stored value associated with the given key or the deprecated version of the key
+   * The stored value is a copy of the original value that was set.
+   * If there is no value associated with both keys, the input value is left untouched.
+   *
+   * @param key The key with which the data we want to retrieve is associated.
+   * @param oldKey The deprecated version of the key.
+   * @param value A variable which will be overwritten with the value to retrieve.
+   * @return bool Whether there is a value associated with one of the keys or not.
+   **/
+  template <typename T>
+  bool getDeprecated(const std::string &key, const std::string &oldKey, T &value) const;
+
+  /**
    * @brief Returns the stored value, and deletes the stored copy.
    * If no value is found, nothing is deleted.
    *
@@ -259,6 +274,19 @@ public:
    **/
   template <typename T>
   void set(const std::string &key, const T &value);
+
+  /**
+   * @brief Stores a copy of the given param, associated with a key and a deprected version of the key
+   * The value must have a well-formed copy constructor.
+   *
+   * @param key The key which can be used to retrieve the data.
+   * @param oldKey The deprecated version of the key.
+   * @param value The data to store.
+   * @return void
+   **/
+  template <typename T>
+  void setDeprecated(const std::string &key, const std::string &deprecatedKey,
+		     const T &value);
 
   /**
    * @brief Returns the mangled name of a type.
@@ -328,11 +356,6 @@ public:
    * @brief Set from an untyped value
    */
   void setData(const std::string &str, const DataType *value);
-
-  /**
-   * @brief add a deprecated property name for compatibility management
-   */
-  void addDeprecated(const std::string &oldName, const std::string &newName);
 
   /**
    * @return An iterator over stored values as a std::pair name => untyped value

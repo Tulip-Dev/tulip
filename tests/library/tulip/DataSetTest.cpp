@@ -352,7 +352,7 @@ void DataSetTest::testAddDeprecated() {
   CPPUNIT_ASSERT_EQUAL(b1, b2);
 
   CPPUNIT_ASSERT(!dSet.exists("bool"));
-  dSet.addDeprecated("bool", "boolean");
+  dSet.setDeprecated("boolean", "bool", b1);
   CPPUNIT_ASSERT(dSet.exists("bool"));
   b2 = false;
   CPPUNIT_ASSERT(dSet.get("bool", b2));
@@ -375,7 +375,7 @@ void DataSetTest::testAddDeprecated() {
   CPPUNIT_ASSERT_EQUAL(i1, i2);
 
   CPPUNIT_ASSERT(!dSet.exists("int"));
-  dSet.addDeprecated("int", "integer");
+  dSet.setDeprecated("integer", "int", i1);
   CPPUNIT_ASSERT(dSet.exists("int"));
   i2 = 777;
   CPPUNIT_ASSERT(dSet.get("int", i2));
