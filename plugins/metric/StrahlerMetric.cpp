@@ -178,7 +178,7 @@ static const char *paramHelp[] = {
     // Type
     "Sets the type of computation."};
 
-#define COMPUTATION_TYPE "Type"
+#define COMPUTATION_TYPE "type"
 #define COMPUTATION_TYPES "all;ramification;nested cycles;"
 #define ALL 0
 #define REGISTERS 1
@@ -186,9 +186,9 @@ static const char *paramHelp[] = {
 //==============================================================================
 StrahlerMetric::StrahlerMetric(const tlp::PluginContext *context)
     : DoubleAlgorithm(context), allNodes(false) {
-  addInParameter<bool>("All nodes", paramHelp[0], "false");
-  addInParameter<StringCollection>(COMPUTATION_TYPE, paramHelp[1], COMPUTATION_TYPES, true,
-                                   "all <br> ramification <br> nested cycles");
+  addInParameter<bool>("all nodes", paramHelp[0], "false");
+  addInParameter<StringCollection>("type", paramHelp[1], COMPUTATION_TYPES, true,
+                                   "all<br/>ramification<br/>nested cycles");
 }
 //==============================================================================
 bool StrahlerMetric::run() {
@@ -197,8 +197,8 @@ bool StrahlerMetric::run() {
   computationTypes.setCurrent(0);
 
   if (dataSet != nullptr) {
-    dataSet->get("All nodes", allNodes);
-    dataSet->get(COMPUTATION_TYPE, computationTypes);
+    dataSet->getDeprecated("all nodes", "All nodes", allNodes);
+    dataSet->getDeprecated("type", "Type", computationTypes);
   }
 
   std::unordered_map<node, bool> visited;

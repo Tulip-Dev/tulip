@@ -66,7 +66,7 @@ public:
       "Extended to graphs in:<br/><b>Using Strahler numbers for real time visual exploration of "
       "huge graphs</b>, D. Auber, ICCVG, International Conference on Computer Vision and Graphics, "
       "pages 56-69 (2002)",
-      "1.0", "Graph")
+      "1.1", "Graph")
   StrahlerMetric(const tlp::PluginContext *context);
   bool run() override;
 

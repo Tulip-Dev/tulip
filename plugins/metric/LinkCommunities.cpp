@@ -55,7 +55,7 @@ public:
       "It is an implementation of a fuzzy clustering procedure. First introduced in:<br>"
       " <b>Link communities reveal multiscale complexity in networks</b>, Ahn, Y.Y. and Bagrow, "
       "J.P. and Lehmann, S., Nature vol:466, 761--764 (2010)",
-      "1.0", "Clustering")
+      "1.1", "Clustering")
 
   LinkCommunities(const tlp::PluginContext *);
   ~LinkCommunities() override;
@@ -121,8 +121,8 @@ static const char *paramHelp[] = {
 LinkCommunities::LinkCommunities(const tlp::PluginContext *context)
     : DoubleAlgorithm(context), metric(nullptr) {
   addInParameter<NumericProperty *>("metric", paramHelp[0], "", false);
-  addInParameter<bool>("Group isthmus", paramHelp[1], "true", true);
-  addInParameter<unsigned int>("Number of steps", paramHelp[2], "200", true);
+  addInParameter<bool>("group isthmus", paramHelp[1], "true", true);
+  addInParameter<unsigned int>("number of steps", paramHelp[2], "200", true);
 }
 //==============================================================================================================
 LinkCommunities::~LinkCommunities() {}
@@ -134,8 +134,8 @@ bool LinkCommunities::run() {
 
   if (dataSet != nullptr) {
     dataSet->get("metric", metric);
-    dataSet->get("Group isthmus", group_isthmus);
-    dataSet->get("Number of steps", nb_steps);
+    dataSet->getDeprecated("group isthmus", "Group isthmus", group_isthmus);
+    dataSet->getDeprecated("number of steps", "Number of steps", nb_steps);
   }
 
   const std::vector<edge> &edges = graph->edges();
