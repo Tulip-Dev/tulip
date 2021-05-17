@@ -137,15 +137,12 @@ bool CsvExport::exportGraph(std::ostream &os) {
     if (dataSet->getDeprecated(ELT_TYPE, "Type of elements", eltTypes))
       eltType = eltTypes.getCurrent();
 
-    dataSet->getDeprecated(EXPORT_SELECTION, "Export selection",
-			   exportSelection);
+    dataSet->getDeprecated(EXPORT_SELECTION, "Export selection", exportSelection);
     dataSet->getDeprecated(EXPORT_ID, "Export id", exportId);
     dataSet->getDeprecated(EXPORTED_PROPERTIES, "Exported properties", propsCollection);
-    dataSet->getDeprecated(FIELD_SEPARATOR_CUSTOM, "Custom separator",
-			   fieldSeparatorCustom);
+    dataSet->getDeprecated(FIELD_SEPARATOR_CUSTOM, "Custom separator", fieldSeparatorCustom);
 
-    if (dataSet->getDeprecated(FIELD_SEPARATOR, "Field separator",
-			       fieldSeparators)) {
+    if (dataSet->getDeprecated(FIELD_SEPARATOR, "Field separator", fieldSeparators)) {
       switch (fieldSeparators.getCurrent()) {
       case COMMA_SEPARATOR:
         fieldSeparator = ',';
@@ -168,8 +165,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
       }
     }
 
-    if (dataSet->getDeprecated(STRING_DELIMITER, "String delimiter",
-			       stringDelimiters))
+    if (dataSet->getDeprecated(STRING_DELIMITER, "String delimiter", stringDelimiters))
       stringDelimiter = stringDelimiters.getCurrent() == DBL_QUOTE_DELIMITER ? '"' : '\'';
 
     if (dataSet->getDeprecated(DECIMAL_MARK, "Decimal mark", decimalMarks))

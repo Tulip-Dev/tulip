@@ -375,9 +375,9 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *p
 
   if (ds != nullptr) {
     ds->getDeprecated("edge color interpolation", "Edge color interpolation",
-		      edge_color_interpolation);
+                      edge_color_interpolation);
     ds->getDeprecated("edge size interpolation", "Edge size interpolation",
-		      edge_size_interpolation);
+                      edge_size_interpolation);
     ds->getDeprecated("edge extremities", "Edge extremities", edge_extremities);
     ds->getDeprecated("background color", "Background color", background);
     ds->getDeprecated("no background", "No background", noBackground);

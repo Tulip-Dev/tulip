@@ -55,8 +55,7 @@ public:
   Grid(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("width", paramHelp[0], "10");
     addInParameter<unsigned int>("height", paramHelp[1], "10");
-    addInParameter<StringCollection>("connectivity", paramHelp[2], "4;6;8", true,
-                                     "4<br/>6<br/>8");
+    addInParameter<StringCollection>("connectivity", paramHelp[2], "4;6;8", true, "4<br/>6<br/>8");
     addInParameter<bool>("opposite nodes connected", paramHelp[3], "false");
     addInParameter<double>("spacing", paramHelp[4], "1.0");
   }
