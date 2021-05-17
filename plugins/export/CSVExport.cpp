@@ -55,33 +55,33 @@ static const char *paramHelp[] = {
     "part of a number written in decimal form.",
 };
 
-#define ELT_TYPE "Type of elements"
+#define ELT_TYPE "type of elements"
 #define ELT_TYPES "nodes;edges;both"
 #define NODE_TYPE 0
 #define EDGE_TYPE 1
 #define BOTH_TYPES 2
 
-#define EXPORT_SELECTION "Export selection"
+#define EXPORT_SELECTION "export selection"
 
-#define EXPORT_ID "Export id"
+#define EXPORT_ID "export id"
 
-#define EXPORTED_PROPERTIES "Exported properties"
+#define EXPORTED_PROPERTIES "exported properties"
 
-#define FIELD_SEPARATOR "Field separator"
+#define FIELD_SEPARATOR "field separator"
 #define FIELD_SEPARATORS " \\; ; , ;Tab;Space;Custom"
 #define CUSTOM_SEPARATOR 4
 #define COMMA_SEPARATOR 1
 #define TAB_SEPARATOR 2
 #define SPACE_SEPARATOR 3
 #define SEMICOLON_SEPARATOR 0
-#define FIELD_SEPARATOR_CUSTOM "Custom separator"
+#define FIELD_SEPARATOR_CUSTOM "custom separator"
 #define CUSTOM_MARK ";"
 
-#define STRING_DELIMITER "String delimiter"
+#define STRING_DELIMITER "string delimiter"
 #define STRING_DELIMITERS " \" ; ' "
 #define DBL_QUOTE_DELIMITER 0
 #define QUOTE_DELIMITER 1
-#define DECIMAL_MARK "Decimal mark"
+#define DECIMAL_MARK "decimal mark"
 #define DECIMAL_MARKS " . ; , "
 
 //================================================================================
@@ -134,15 +134,18 @@ bool CsvExport::exportGraph(std::ostream &os) {
 
   // get chosen values of plugin parameters
   if (dataSet != nullptr) {
-    if (dataSet->get(ELT_TYPE, eltTypes))
+    if (dataSet->getDeprecated(ELT_TYPE, "Type of elements", eltTypes))
       eltType = eltTypes.getCurrent();
 
-    dataSet->get(EXPORT_SELECTION, exportSelection);
-    dataSet->get(EXPORT_ID, exportId);
-    dataSet->get(EXPORTED_PROPERTIES, propsCollection);
-    dataSet->get(FIELD_SEPARATOR_CUSTOM, fieldSeparatorCustom);
+    dataSet->getDeprecated(EXPORT_SELECTION, "Export selection",
+			   exportSelection);
+    dataSet->getDeprecated(EXPORT_ID, "Export id", exportId);
+    dataSet->getDeprecated(EXPORTED_PROPERTIES, "Exported properties", propsCollection);
+    dataSet->getDeprecated(FIELD_SEPARATOR_CUSTOM, "Custom separator",
+			   fieldSeparatorCustom);
 
-    if (dataSet->get(FIELD_SEPARATOR, fieldSeparators)) {
+    if (dataSet->getDeprecated(FIELD_SEPARATOR, "Field separator",
+			       fieldSeparators)) {
       switch (fieldSeparators.getCurrent()) {
       case COMMA_SEPARATOR:
         fieldSeparator = ',';
@@ -165,10 +168,11 @@ bool CsvExport::exportGraph(std::ostream &os) {
       }
     }
 
-    if (dataSet->get(STRING_DELIMITER, stringDelimiters))
+    if (dataSet->getDeprecated(STRING_DELIMITER, "String delimiter",
+			       stringDelimiters))
       stringDelimiter = stringDelimiters.getCurrent() == DBL_QUOTE_DELIMITER ? '"' : '\'';
 
-    if (dataSet->get(DECIMAL_MARK, decimalMarks))
+    if (dataSet->getDeprecated(DECIMAL_MARK, "Decimal mark", decimalMarks))
       decimalMark = decimalMarks.getCurrent() ? ',' : '.';
   }
 

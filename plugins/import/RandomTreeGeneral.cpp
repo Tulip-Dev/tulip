@@ -22,13 +22,13 @@ using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
-    // minsize
+    // minimum size
     "Minimal number of nodes in the tree.",
 
-    // maxsize
+    // maximum size
     "Maximal number of nodes in the tree.",
 
-    // maxdegree
+    // maximal degree
     "Maximal degree of the nodes.",
 
     // tree layout
@@ -72,9 +72,9 @@ public:
   PLUGININFORMATION("Random General Tree", "Auber", "16/02/2001",
                     "Imports a new randomly generated tree.", "1.1", "Graph")
   RandomTreeGeneral(tlp::PluginContext *context) : ImportModule(context) {
-    addInParameter<unsigned>("Minimum size", paramHelp[0], "10");
-    addInParameter<unsigned>("Maximum size", paramHelp[1], "100");
-    addInParameter<unsigned>("Maximal node's degree", paramHelp[2], "5");
+    addInParameter<unsigned>("minimum size", paramHelp[0], "10");
+    addInParameter<unsigned>("maximum size", paramHelp[1], "100");
+    addInParameter<unsigned>("maximal node degree", paramHelp[2], "5");
     addInParameter<bool>("tree layout", paramHelp[3], "false");
     addDependency("Tree Leaf", "1.0");
   }
@@ -89,13 +89,13 @@ public:
     bool needLayout = false;
 
     if (dataSet != nullptr) {
-      if (!dataSet->get("Minimum size", sizeMin))
+      if (!dataSet->getDeprecated("minimum size", "Minimum size", sizeMin))
         dataSet->get("minsize", sizeMin); // keep old parameter name for backward compatibility
 
-      if (!dataSet->get("Maximum size", sizeMax))
+      if (!dataSet->getDeprecated("maximum size", "Maximum size", sizeMax))
         dataSet->get("maxsize", sizeMax); // keep old parameter name for backward compatibility
 
-      if (!dataSet->get("Maximal node's degree", arityMax))
+      if (!dataSet->getDeprecated("maximal node degree", "Maximal node's degree", arityMax))
         dataSet->get("maxdegree", arityMax); // keep old parameter name for backward compatibility
 
       dataSet->get("tree layout", needLayout);

@@ -51,13 +51,13 @@ static const char *paramHelp[] = {
 class Grid : public ImportModule {
 public:
   PLUGININFORMATION("Grid", "Jonathan Dubois", "02/12/2003", "Imports a new grid structured graph.",
-                    "2.0", "Graph")
+                    "2.1", "Graph")
   Grid(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("width", paramHelp[0], "10");
     addInParameter<unsigned int>("height", paramHelp[1], "10");
     addInParameter<StringCollection>("connectivity", paramHelp[2], "4;6;8", true,
-                                     "4 <br> 6 <br> 8");
-    addInParameter<bool>("oppositeNodesConnected", paramHelp[3], "false");
+                                     "4<br/>6<br/>8");
+    addInParameter<bool>("opposite nodes connected", paramHelp[3], "false");
     addInParameter<double>("spacing", paramHelp[4], "1.0");
   }
   ~Grid() override {}
@@ -152,7 +152,7 @@ public:
     if (dataSet != nullptr) {
       dataSet->get("width", width);
       dataSet->get("height", height);
-      dataSet->get("oppositeNodesConnected", isTore);
+      dataSet->getDeprecated("opposite nodes connected", "oppositeNodesConnected", isTore);
       dataSet->get("spacing", spacing);
       dataSet->get("connectivity", connectivity);
     }

@@ -374,14 +374,16 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *p
   bool noBackground = false;
 
   if (ds != nullptr) {
-    ds->get("Edge color interpolation", edge_color_interpolation);
-    ds->get("Edge size interpolation", edge_size_interpolation);
-    ds->get("Edge extremities", edge_extremities);
-    ds->get("Background color", background);
-    ds->get("No background", noBackground);
-    ds->get("Export node labels", node_labels);
-    ds->get("Export edge labels", edge_labels);
-    ds->get("Export metanode labels", metanode_labels);
+    ds->getDeprecated("edge color interpolation", "Edge color interpolation",
+		      edge_color_interpolation);
+    ds->getDeprecated("edge size interpolation", "Edge size interpolation",
+		      edge_size_interpolation);
+    ds->getDeprecated("edge extremities", "Edge extremities", edge_extremities);
+    ds->getDeprecated("background color", "Background color", background);
+    ds->getDeprecated("no background", "No background", noBackground);
+    ds->getDeprecated("export node labels", "Export node labels", node_labels);
+    ds->getDeprecated("export edge labels", "Export edge labels", edge_labels);
+    ds->getDeprecated("export metanode labels", "Export metanode labels", metanode_labels);
   }
 
   // Finding graph size

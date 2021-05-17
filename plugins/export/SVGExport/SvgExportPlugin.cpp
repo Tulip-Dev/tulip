@@ -67,7 +67,7 @@ public:
   PLUGININFORMATION("SVG Export", "Sami Gasri, Charles-Antoine Lami, Bruno Pinaud", "16/07/2013",
                     "<p>Supported extensions: svg, svgz (compressed svg).</p><p>Exports a graph "
                     "visualization in a SVG formatted file.</p>",
-                    "1.9", "File")
+                    "1.10", "File")
 
   std::string icon() const override {
     return ":/tulip/graphperspective/icons/32/export_svg.png";
@@ -84,15 +84,15 @@ public:
   }
 
   SvgExport(tlp::PluginContext *context) : tlp::ExportModule(context) {
-    addInParameter<bool>("Edge color interpolation", paramHelp[0], "false");
-    addInParameter<bool>("Edge size interpolation", paramHelp[1], "true");
-    addInParameter<bool>("Edge extremities", paramHelp[2], "false");
-    addInParameter<Color>("Background color", paramHelp[3], "(255,255,255,255)");
-    addInParameter<bool>("No background", paramHelp[4], "false");
-    addInParameter<bool>("Makes SVG output human readable", paramHelp[5], "true");
-    addInParameter<bool>("Export node labels", paramHelp[6], "true");
-    addInParameter<bool>("Export edge labels", paramHelp[7], "false");
-    addInParameter<bool>("Export metanode labels", paramHelp[8], "false");
+    addInParameter<bool>("edge color interpolation", paramHelp[0], "false");
+    addInParameter<bool>("edge size interpolation", paramHelp[1], "true");
+    addInParameter<bool>("edge extremities", paramHelp[2], "false");
+    addInParameter<Color>("background color", paramHelp[3], "(255,255,255,255)");
+    addInParameter<bool>("no background", paramHelp[4], "false");
+    addInParameter<bool>("makes SVG output human readable", paramHelp[5], "true");
+    addInParameter<bool>("export node labels", paramHelp[6], "true");
+    addInParameter<bool>("export edge labels", paramHelp[7], "false");
+    addInParameter<bool>("export metanode labels", paramHelp[8], "false");
   }
 
   bool exportGraph(ostream &os) override {
@@ -100,7 +100,8 @@ public:
     bool autoformatting(true);
 
     if (dataSet != nullptr) {
-      dataSet->get("Makes SVG output human readable", autoformatting);
+      dataSet->getDeprecated("makes SVG output human readable",
+			     "Makes SVG output human readable", autoformatting);
     }
 
     ExportSvg svg(pluginProgress, os, autoformatting); // We call our first concrete builder

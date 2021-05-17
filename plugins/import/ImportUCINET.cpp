@@ -207,7 +207,7 @@ public:
       "(see <a "
       "href=\"http://www.analytictech.com/ucinet/documentation/reference.rtf\">http://"
       "www.analytictech.com/ucinet/documentation/reference.rtf</a>)</p>",
-      "1.0", "File")
+      "1.1", "File")
   std::list<std::string> fileExtensions() const override {
     std::list<std::string> l;
     l.push_back("txt");
@@ -218,7 +218,7 @@ public:
         current(0), dl_found(false), diagonal(true), diagonal_found(false), labels_known(false),
         title_found(false), expectedLine(DL_HEADER), embedding(DL_NONE), dataFormat(DL_FM) {
     addInParameter<string>("file::filename", paramHelp[0], "");
-    addInParameter<string>("Default metric", paramHelp[1], "weight");
+    addInParameter<string>("default metric", paramHelp[1], "weight");
   }
 
   ~ImportUCINET() override {}
@@ -931,8 +931,8 @@ public:
   bool importGraph() override {
     string filename;
 
-    dataSet->get<string>("file::filename", filename);
-    dataSet->get<string>("Default metric", defaultMetric);
+    dataSet->get("file::filename", filename);
+    dataSet->getDeprecated("default metric", "Default metric", defaultMetric);
 
     if (filename.empty()) {
       pluginProgress->setError("Filename is empty.");

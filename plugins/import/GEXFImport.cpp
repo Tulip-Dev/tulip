@@ -70,13 +70,13 @@ public:
                     "(<a "
                     "href=\"http://gexf.net/format/schema.html\">http://gexf.net/format/"
                     "schema.html</a>).</p><p>Warning: dynamic mode is not supported.</p>",
-                    "1.0", "File")
+                    "1.1", "File")
   GEXFImport(const PluginContext *context)
       : ImportModule(context), viewLayout(nullptr), viewSize(nullptr), viewColor(nullptr),
         viewLabel(nullptr), viewShape(nullptr), nodesHaveCoordinates(false) {
     // add a file parameter for the plugin
     addInParameter<string>("file::filename", paramHelp[0], "");
-    addInParameter<bool>("Curved edges", paramHelp[1], "false");
+    addInParameter<bool>("curved edges", paramHelp[1], "false");
   }
 
   ~GEXFImport() override {}
@@ -96,8 +96,8 @@ public:
     string filename;
     bool curvedEdges = false;
     // get the filename chosen by the user
-    dataSet->get<string>("file::filename", filename);
-    dataSet->get<bool>("Curved edges", curvedEdges);
+    dataSet->get("file::filename", filename);
+    dataSet->getDeprecated("curved edges", "Curved edges", curvedEdges);
 
     QString qfilename = tlpStringToQString(filename);
 

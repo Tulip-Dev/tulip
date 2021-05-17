@@ -68,10 +68,10 @@ public:
   PLUGININFORMATION("Uniform Random Binary Tree", "Auber", "16/02/2001",
                     "Imports a new randomly generated uniform binary tree.", "1.1", "Graph")
   RandomTree(tlp::PluginContext *context) : ImportModule(context) {
-    addInParameter<unsigned int>("Minimum size", paramHelp[0], "50");
-    addInParameter<unsigned int>("Maximum size", paramHelp[1], "60");
+    addInParameter<unsigned int>("minimum size", paramHelp[0], "50");
+    addInParameter<unsigned int>("maximum size", paramHelp[1], "60");
     addInParameter<bool>("tree layout", paramHelp[2], "false");
-    addDependency("Tree Leaf", "1.0");
+    addDependency("Tree Leaf", "1.2");
   }
 
   bool importGraph() override {
@@ -83,10 +83,10 @@ public:
     bool needLayout = false;
 
     if (dataSet != nullptr) {
-      if (!dataSet->get("Minimum size", minSize))
+      if (!dataSet->getDeprecated("minimum size", "Minimum size", minSize))
         dataSet->get("minsize", minSize); // keep old name for backward compatibility
 
-      if (!dataSet->get("Maximum size", maxSize))
+      if (!dataSet->getDeprecated("maximum size", "Maximum size", maxSize))
         dataSet->get("maxsize", maxSize); // keep old name for backward compatibility
 
       dataSet->get("tree layout", needLayout);
