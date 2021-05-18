@@ -113,8 +113,7 @@ public:
     tlp::Coord normal(dir[1], -dir[0]);
     normal *= factor;
 
-    if (curveType == CUBIC_VERTICAL ||
-        curveType == CUBIC_VERTICAL_DIAGONALCROSS ||
+    if (curveType == CUBIC_VERTICAL || curveType == CUBIC_VERTICAL_DIAGONALCROSS ||
         curveType == CUBIC_STRAIGHTCROSS_SOURCE) {
       dir = tlp::Coord(0, 0, 0);
     }
@@ -135,8 +134,7 @@ public:
     p2 *= -factor;
     p2 += tgtCoord;
 
-    if (curveType == CUBIC_DIAGONALCROSS ||
-        curveType == CUBIC_VERTICAL_DIAGONALCROSS) {
+    if (curveType == CUBIC_DIAGONALCROSS || curveType == CUBIC_VERTICAL_DIAGONALCROSS) {
       p2 -= normal;
     } else if (curveType != CUBIC_STRAIGHTCROSS_SOURCE) {
       p2 += normal;
@@ -154,8 +152,7 @@ public:
     float dx = std::abs(srcCoord[0] - tgtCoord[0]);
     float dy = std::abs(srcCoord[1] - tgtCoord[1]);
 
-    if (curveType == QUADRATIC_DISCRETE ||
-        curveType == QUADRATIC_DIAGONALCROSS) {
+    if (curveType == QUADRATIC_DISCRETE || curveType == QUADRATIC_DIAGONALCROSS) {
       if (dx < dy) {
         if (srcCoord[1] > tgtCoord[1]) {
           if (srcCoord[0] < tgtCoord[0]) {

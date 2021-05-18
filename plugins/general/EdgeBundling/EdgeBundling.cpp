@@ -224,8 +224,7 @@ bool EdgeBundling::run() {
     dataSet->getDeprecated("split ratio", "split_ratio", splitRatio);
     dataSet->get("iterations", MAX_ITER);
     dataSet->get("optimization", optimizationLevel);
-    dataSet->getDeprecated("edge node overlap", "edge_node_overlap",
-			   edgeNodeOverlap);
+    dataSet->getDeprecated("edge node overlap", "edge_node_overlap", edgeNodeOverlap);
     dataSet->getDeprecated("max thread", "max_thread", maxThread);
     dataSet->getDeprecated("3D layout", "3D_layout", layout3D);
     dataSet->getDeprecated("grid graph", "grid_graph", keepGrid);

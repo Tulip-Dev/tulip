@@ -110,8 +110,7 @@ public:
     addInParameter<StringCollection>(TARGET_TYPE, paramHelp[8], TARGET_TYPES, true,
                                      "nodes<br/>edges");
     addInParameter<StringCollection>("mapping proportionality", paramHelp[9],
-                                     "area/volume;dimensions", true,
-                                     "area/volume<br/>dimensions");
+                                     "area/volume;dimensions", true, "area/volume<br/>dimensions");
 
     // result needs to be an inout parameter
     // in order to preserve the original values of non targeted elements
@@ -148,8 +147,7 @@ public:
         linearType = mapping.getCurrent() == LINEAR_MAPPING;
       }
       dataSet->get(TARGET_TYPE, targetType);
-      dataSet->getDeprecated("mapping proportionality", "area proportional",
-			     proportionalType);
+      dataSet->getDeprecated("mapping proportionality", "area proportional", proportionalType);
       proportional = proportionalType.getCurrent();
       // old parameter name and behavior
       if (dataSet->exists("node/edge")) {
