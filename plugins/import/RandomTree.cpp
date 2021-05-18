@@ -66,12 +66,12 @@ class RandomTree : public ImportModule {
 
 public:
   PLUGININFORMATION("Uniform Random Binary Tree", "Auber", "16/02/2001",
-                    "Imports a new randomly generated uniform binary tree.", "1.1", "Graph")
+                    "Imports a new randomly generated uniform binary tree.", "1.2", "Graph")
   RandomTree(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("minimum size", paramHelp[0], "50");
     addInParameter<unsigned int>("maximum size", paramHelp[1], "60");
     addInParameter<bool>("tree layout", paramHelp[2], "false");
-    addDependency("Tree Leaf", "1.2");
+    addDependency("Tree Leaf", "1.1");
   }
 
   bool importGraph() override {

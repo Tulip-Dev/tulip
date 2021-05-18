@@ -43,23 +43,22 @@
 
 #include <climits>
 
-#define CURVE_TYPE "Curve Type"
 #define CURVE_TYPE_LIST                                                                            \
-  "QuadraticContinuous;QuadraticDiscrete;QuadraticDiagonalCross;\
-QuadraticStraightCross;QuadraticHorizontal;QuadraticVertical;CubicContinuous;CubicVertical;\
-CubicDiagonalCross;CubicVerticalDiagonalCross;CubicStraightCrossSource;CubicStraightCrossTarget"
-#define CURVE_TYPE_QUADRATIC_CONTINUOUS 0
-#define CURVE_TYPE_QUADRATIC_DISCRETE 1
-#define CURVE_TYPE_QUADRATIC_DIAGONALCROSS 2
-#define CURVE_TYPE_QUADRATIC_STRAIGHTCROSS 3
-#define CURVE_TYPE_QUADRATIC_HORIZONTAL 4
-#define CURVE_TYPE_QUADRATIC_VERTICAL 5
-#define CURVE_TYPE_CUBIC_CONTINUOUS 6
-#define CURVE_TYPE_CUBIC_VERTICAL 7
-#define CURVE_TYPE_CUBIC_DIAGONALCROSS 8
-#define CURVE_TYPE_CUBIC_VERTICAL_DIAGONALCROSS 9
-#define CURVE_TYPE_CUBIC_STRAIGHTCROSS_SOURCE 10
-#define CURVE_TYPE_CUBIC_STRAIGHTCROSS_TARGET 11
+  "quadratic continuous;quadratic discrete;quadratic diagonal cross;\
+quadratic straight cross;quadratic horizontal;quadratic vertical;cubic continuous;cubic vertical;\
+cubic diagonal cross;cubic vertical diagonal cross;cubic straight cross source;cubic straight cross target"
+#define QUADRATIC_CONTINUOUS 0
+#define QUADRATIC_DISCRETE 1
+#define QUADRATIC_DIAGONALCROSS 2
+#define QUADRATIC_STRAIGHTCROSS 3
+#define QUADRATIC_HORIZONTAL 4
+#define QUADRATIC_VERTICAL 5
+#define CUBIC_CONTINUOUS 6
+#define CUBIC_VERTICAL 7
+#define CUBIC_DIAGONALCROSS 8
+#define CUBIC_VERTICAL_DIAGONALCROSS 9
+#define CUBIC_STRAIGHTCROSS_SOURCE 10
+#define CUBIC_STRAIGHTCROSS_TARGET 11
 
 static const char *paramHelp[] = {
     // layout
@@ -74,18 +73,18 @@ static const char *paramHelp[] = {
     // bezier edges
     "If activated, set all edge shapes to Bezier curves."};
 
-static const char *curveTypeValues = "QuadraticContinuous <br>"
-                                     "QuadraticDiscrete <br>"
-                                     "QuadraticDiagonalCross <br>"
-                                     "QuadraticStraightCross <br>"
-                                     "QuadraticHorizontal <br>"
-                                     "QuadraticVertical <br>"
-                                     "CubicContinuous <br>"
-                                     "CubicVertical <br>"
-                                     "CubicDiagonalCross <br>"
-                                     "CubicVerticalDiagonalCross <br>"
-                                     "CubicStraightCrossSource <br>"
-                                     "CubicStraightCrossTarget";
+static const char *curveTypeValues = "quadratic continuous<br/>"
+                                     "quadratic discrete<br/>"
+                                     "quadratic diagonal cross<br/>"
+                                     "quadratic straight cross<br/>"
+                                     "quadratic horizontal<br/>"
+                                     "quadratic vertical<br/>"
+                                     "cubic continuous<br/>"
+                                     "cubic vertical<br/>"
+                                     "cubic diagonal cross<br/>"
+                                     "cubic vertical diagonal cross<br/>"
+                                     "cubic straight cross source<br/>"
+                                     "cubic straight cross target";
 
 class CurveEdges : public tlp::Algorithm {
 
@@ -114,9 +113,9 @@ public:
     tlp::Coord normal(dir[1], -dir[0]);
     normal *= factor;
 
-    if (curveType == CURVE_TYPE_CUBIC_VERTICAL ||
-        curveType == CURVE_TYPE_CUBIC_VERTICAL_DIAGONALCROSS ||
-        curveType == CURVE_TYPE_CUBIC_STRAIGHTCROSS_SOURCE) {
+    if (curveType == CUBIC_VERTICAL ||
+        curveType == CUBIC_VERTICAL_DIAGONALCROSS ||
+        curveType == CUBIC_STRAIGHTCROSS_SOURCE) {
       dir = tlp::Coord(0, 0, 0);
     }
 
@@ -124,11 +123,11 @@ public:
     p1 *= factor;
     p1 += srcCoord;
 
-    if (curveType != CURVE_TYPE_CUBIC_STRAIGHTCROSS_TARGET) {
+    if (curveType != CUBIC_STRAIGHTCROSS_TARGET) {
       p1 += normal;
     }
 
-    if (curveType == CURVE_TYPE_CUBIC_STRAIGHTCROSS_TARGET) {
+    if (curveType == CUBIC_STRAIGHTCROSS_TARGET) {
       dir = tlp::Coord(0, 0, 0);
     }
 
@@ -136,10 +135,10 @@ public:
     p2 *= -factor;
     p2 += tgtCoord;
 
-    if (curveType == CURVE_TYPE_CUBIC_DIAGONALCROSS ||
-        curveType == CURVE_TYPE_CUBIC_VERTICAL_DIAGONALCROSS) {
+    if (curveType == CUBIC_DIAGONALCROSS ||
+        curveType == CUBIC_VERTICAL_DIAGONALCROSS) {
       p2 -= normal;
-    } else if (curveType != CURVE_TYPE_CUBIC_STRAIGHTCROSS_SOURCE) {
+    } else if (curveType != CUBIC_STRAIGHTCROSS_SOURCE) {
       p2 += normal;
     }
 
@@ -155,8 +154,8 @@ public:
     float dx = std::abs(srcCoord[0] - tgtCoord[0]);
     float dy = std::abs(srcCoord[1] - tgtCoord[1]);
 
-    if (curveType == CURVE_TYPE_QUADRATIC_DISCRETE ||
-        curveType == CURVE_TYPE_QUADRATIC_DIAGONALCROSS) {
+    if (curveType == QUADRATIC_DISCRETE ||
+        curveType == QUADRATIC_DIAGONALCROSS) {
       if (dx < dy) {
         if (srcCoord[1] > tgtCoord[1]) {
           if (srcCoord[0] < tgtCoord[0]) {
@@ -176,7 +175,7 @@ public:
           }
         }
 
-        if (curveType == CURVE_TYPE_QUADRATIC_DISCRETE && dx < factor * dy) {
+        if (curveType == QUADRATIC_DISCRETE && dx < factor * dy) {
           x = srcCoord[0];
         }
       } else if (dx > dy) {
@@ -198,11 +197,11 @@ public:
           }
         }
 
-        if (curveType == CURVE_TYPE_QUADRATIC_DISCRETE && dy < factor * dx) {
+        if (curveType == QUADRATIC_DISCRETE && dy < factor * dx) {
           y = srcCoord[1];
         }
       }
-    } else if (curveType == CURVE_TYPE_QUADRATIC_STRAIGHTCROSS) {
+    } else if (curveType == QUADRATIC_STRAIGHTCROSS) {
       if (dx < dy) {
         x = srcCoord[0];
 
@@ -220,7 +219,7 @@ public:
 
         y = srcCoord[1];
       }
-    } else if (curveType == CURVE_TYPE_QUADRATIC_HORIZONTAL) {
+    } else if (curveType == QUADRATIC_HORIZONTAL) {
       if (srcCoord[0] < tgtCoord[0]) {
         x = tgtCoord[0] - (1 - factor) * dx;
       } else {
@@ -228,7 +227,7 @@ public:
       }
 
       y = srcCoord[1];
-    } else if (curveType == CURVE_TYPE_QUADRATIC_VERTICAL) {
+    } else if (curveType == QUADRATIC_VERTICAL) {
       x = srcCoord[0];
 
       if (srcCoord[1] < tgtCoord[1]) {
@@ -237,7 +236,7 @@ public:
         y = tgtCoord[1] + (1 - factor) * dy;
       }
 
-    } else { // CURVE_TYPE_QUADRATIC_CONTINUOUS
+    } else { // QUADRATIC_CONTINUOUS
       if (dx < dy) {
         if (srcCoord[1] > tgtCoord[1]) {
           if (srcCoord[0] < tgtCoord[0]) {
@@ -307,7 +306,7 @@ public:
     if (dataSet) {
       tlp::StringCollection curveTypeSc;
 
-      if (dataSet->get("curve type", curveTypeSc)) {
+      if (dataSet->getDeprecated("curve type", "Curve Type", curveTypeSc)) {
         curveType = curveTypeSc.getCurrent();
       }
 
@@ -321,7 +320,7 @@ public:
     }
 
     for (auto e : graph->edges()) {
-      if (curveType >= CURVE_TYPE_CUBIC_CONTINUOUS) {
+      if (curveType >= CUBIC_CONTINUOUS) {
         layout->setEdgeValue(e, computeCubicBezierControlPoints(e));
       } else {
         layout->setEdgeValue(e, computeQuadraticBezierControlPoints(e));

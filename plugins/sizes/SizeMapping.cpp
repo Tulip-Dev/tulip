@@ -65,15 +65,13 @@ static const char *paramHelp[] = {
     // node/edge
     "Whether sizes are computed for nodes or for edges.",
 
-    // proportional mapping
-    "The mapping can either be area/volume proportional, or square/cubic;"
-    "i.e. the areas/volumes will be proportional, or the dimensions (width, height and depth) will "
-    "be."};
+    // mapping proportionality
+    "The mapping can be either area/volume proportional, meaning that the areas/volumes will be proportional, or dimensions proportional that the width, height and depth will be."};
 
 // error msg for invalid range value
 static const string rangeSizeErrorMsg = "max size must be greater than min size";
 static const string rangeMetricErrorMsg = "All values are the same";
-static const string AREA_PROPORTIONAL = "Area Proportional";
+#define AREA_PROPORTIONAL 0
 /** \addtogroup size */
 
 /// Size Mapping - Compute size of elements according to a metric.
@@ -95,7 +93,7 @@ class MetricSizeMapping : public SizeAlgorithm {
 public:
   PLUGININFORMATION(
       "Size Mapping", "Auber", "08/08/2003",
-      "Maps the size of the graph elements onto the values of a given numeric property.", "2.1",
+      "Maps the size of the graph elements onto the values of a given numeric property.", "2.2",
       "Size")
   MetricSizeMapping(const PluginContext *context)
       : SizeAlgorithm(context), entryMetric(nullptr), entrySize(nullptr), xaxis(true), yaxis(true),
@@ -108,12 +106,12 @@ public:
     addInParameter<double>("min size", paramHelp[5], "1");
     addInParameter<double>("max size", paramHelp[6], "10");
     addInParameter<StringCollection>(MAPPING_TYPE, paramHelp[7], MAPPING_TYPES, true,
-                                     "linear <br/> uniform");
+                                     "linear<br/>uniform");
     addInParameter<StringCollection>(TARGET_TYPE, paramHelp[8], TARGET_TYPES, true,
-                                     "nodes <br/> edges");
-    addInParameter<StringCollection>("area proportional", paramHelp[9],
-                                     "Area Proportional;Quadratic/Cubic", true,
-                                     "Area Proportional <br/> Quadratic/Cubic");
+                                     "nodes<br/>edges");
+    addInParameter<StringCollection>("mapping proportionality", paramHelp[9],
+                                     "area/volume;dimensions", true,
+                                     "area/volume<br/>dimensions");
 
     // result needs to be an inout parameter
     // in order to preserve the original values of non targeted elements
@@ -126,7 +124,7 @@ public:
     xaxis = yaxis = zaxis = true;
     min = 1;
     max = 10;
-    proportional = "Area Proportional";
+    proportional = AREA_PROPORTIONAL;
     entryMetric = graph->getProperty<DoubleProperty>("viewMetric");
     entrySize = graph->getProperty<SizeProperty>("viewSize");
     linearType = true;
@@ -150,8 +148,9 @@ public:
         linearType = mapping.getCurrent() == LINEAR_MAPPING;
       }
       dataSet->get(TARGET_TYPE, targetType);
-      dataSet->get("area proportional", proportionalType);
-      proportional = proportionalType.getCurrentString();
+      dataSet->getDeprecated("mapping proportionality", "area proportional",
+			     proportionalType);
+      proportional = proportionalType.getCurrent();
       // old parameter name and behavior
       if (dataSet->exists("node/edge")) {
         bool nodeoredge = true;
@@ -252,7 +251,7 @@ private:
   double min, max;
   double range;
   double shift;
-  std::string proportional;
+  unsigned int proportional;
   StringCollection targetType;
 };
 
