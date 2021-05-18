@@ -36,15 +36,14 @@ static const char *paramHelp[] = {
     // Connected
     "If true, the resulting subgraphs are guaranteed to be connected."};
 
-#define ELT_TYPE "Type"
 #define ELT_TYPES "nodes;edges;"
 #define NODE_ELT 0
 #define EDGE_ELT 1
 //================================================================================
 EqualValueClustering::EqualValueClustering(tlp::PluginContext *context) : Algorithm(context) {
-  addInParameter<PropertyInterface *>("Property", paramHelp[0], "viewMetric");
-  addInParameter<StringCollection>(ELT_TYPE, paramHelp[1], ELT_TYPES, true, "nodes <br> edges");
-  addInParameter<bool>("Connected", paramHelp[2], "false");
+  addInParameter<PropertyInterface *>("property", paramHelp[0], "viewMetric");
+  addInParameter<StringCollection>("type", paramHelp[1], ELT_TYPES, true, "nodes <br> edges");
+  addInParameter<bool>("connected", paramHelp[2], "false");
 }
 //===============================================================================
 bool EqualValueClustering::run() {
@@ -54,9 +53,9 @@ bool EqualValueClustering::run() {
   eltTypes.setCurrent(0);
 
   if (dataSet != nullptr) {
-    dataSet->get("Property", property);
-    dataSet->get(ELT_TYPE, eltTypes);
-    dataSet->get("Connected", connected);
+    dataSet->getDeprecated("property", "Property", property);
+    dataSet->getDeprecated("type", "Type", eltTypes);
+    dataSet->getDeprecated("connected", "Connected", connected);
   }
 
   if (property == nullptr)

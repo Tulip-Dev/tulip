@@ -56,10 +56,10 @@ static const char *paramHelp[] = {
 SquarifiedTreeMap::SquarifiedTreeMap(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
   aspectRatio = DEFAULT_RATIO;
   addInParameter<NumericProperty *>("metric", paramHelp[0], "viewMetric", false);
-  addInParameter<double>("Aspect Ratio", paramHelp[1], "1.");
-  addInParameter<bool>("Treemap Type", paramHelp[2], "false");
-  addOutParameter<SizeProperty>("Node Size", paramHelp[3], "viewSize");
-  addOutParameter<IntegerProperty>("Node Shape", paramHelp[4], "viewShape");
+  addInParameter<double>("aspect ratio", paramHelp[1], "1.");
+  addInParameter<bool>("treemap type", paramHelp[2], "false");
+  addOutParameter<SizeProperty>("node dize", paramHelp[3], "viewSize");
+  addOutParameter<IntegerProperty>("node shape", paramHelp[4], "viewShape");
 }
 
 //====================================================================
@@ -103,10 +103,10 @@ bool SquarifiedTreeMap::run() {
   glyphResult = nullptr;
 
   if (dataSet != nullptr) {
-    dataSet->get("Aspect Ratio", aspectRatio);
-    dataSet->get("Treemap Type", shneidermanTreeMap);
-    dataSet->get("Node Size", sizeResult);
-    dataSet->get("Node Shape", glyphResult);
+    dataSet->getDeprecated("aspect ratio", "Aspect Ratio", aspectRatio);
+    dataSet->getDeprecated("treemap type", "Treemap Type", shneidermanTreeMap);
+    dataSet->getDeprecated("node size", "Node Size", sizeResult);
+    dataSet->getDeprecated("node shape", "Node Shape", glyphResult);
   }
 
   if (sizeResult == nullptr)

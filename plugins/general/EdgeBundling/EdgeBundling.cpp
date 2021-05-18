@@ -50,23 +50,23 @@ static const char *paramHelp[] = {
     // size
     "The input node sizes.",
 
-    // grid_graph
+    // grid graph
     "If true, a subgraph corresponding to the grid used for routing edges will be added.",
 
-    // 3D_layout
+    // 3D layout
     "If true, a 3D input layout is assumed and 3D edge bundling "
     "will be performed. Warning: the generated grid graph will be much bigger "
     "and the algorithm execution time will be slower compared to the 2D case.",
 
-    // sphere_layout
+    // sphere layout
     "If true, a spherical layout of the nodes is assumed. "
     "Edges will be then routed along the sphere surface.",
 
-    // long_edges
+    // long edges
     "indicates how long edges will be routed. A value less than 1.0 "
     "will promote paths outside dense regions of the input graph drawing.",
 
-    // split_ratio
+    // split ratio
     "indicates the granularity of the grid that will be generated for "
     "routing edges. The higher its value, the more precise the grid is.",
 
@@ -74,26 +74,26 @@ static const char *paramHelp[] = {
     "gives the number of iterations of the edge bundling process. "
     "The higher its value, the more edges will be bundled.",
 
-    // max_thread
+    // max thread
     "gives the number of threads to use for speeding up the edge bundling "
     "process. "
     "A value of 0 will use as much threads as processors on the host machine.",
 
-    // edge_node_overlap
+    // edge node overlap
     "If true, edges can be routed on original nodes."};
 
 //============================================
 EdgeBundling::EdgeBundling(const PluginContext *context) : Algorithm(context) {
   addInParameter<LayoutProperty>("layout", paramHelp[0], "viewLayout");
   addInParameter<SizeProperty>("size", paramHelp[1], "viewSize");
-  addInParameter<bool>("grid_graph", paramHelp[2], "false");
-  addInParameter<bool>("3D_layout", paramHelp[3], "false");
-  addInParameter<bool>("sphere_layout", paramHelp[4], "false");
-  addInParameter<double>("long_edges", paramHelp[5], "0.9");
-  addInParameter<double>("split_ratio", paramHelp[6], "10");
+  addInParameter<bool>("grid graph", paramHelp[2], "false");
+  addInParameter<bool>("3D layout", paramHelp[3], "false");
+  addInParameter<bool>("sphere layout", paramHelp[4], "false");
+  addInParameter<double>("long edges", paramHelp[5], "0.9");
+  addInParameter<double>("split ratio", paramHelp[6], "10");
   addInParameter<unsigned int>("iterations", paramHelp[7], "2");
-  addInParameter<unsigned int>("max_thread", paramHelp[8], "0");
-  addInParameter<bool>("edge_node_overlap", paramHelp[9], "false");
+  addInParameter<unsigned int>("max thread", paramHelp[8], "0");
+  addInParameter<bool>("edge node overlap", paramHelp[9], "false");
   addDependency("Voronoi diagram", "1.1");
 }
 //============================================
@@ -220,15 +220,16 @@ bool EdgeBundling::run() {
   layout = graph->getProperty<LayoutProperty>("viewLayout");
 
   if (dataSet != nullptr) {
-    dataSet->get("long_edges", longEdges);
-    dataSet->get("split_ratio", splitRatio);
+    dataSet->getDeprecated("long edges", "long_edges", longEdges);
+    dataSet->getDeprecated("split ratio", "split_ratio", splitRatio);
     dataSet->get("iterations", MAX_ITER);
     dataSet->get("optimization", optimizationLevel);
-    dataSet->get("edge_node_overlap", edgeNodeOverlap);
-    dataSet->get("max_thread", maxThread);
-    dataSet->get("3D_layout", layout3D);
-    dataSet->get("grid_graph", keepGrid);
-    dataSet->get("sphere_layout", sphereLayout);
+    dataSet->getDeprecated("edge node overlap", "edge_node_overlap",
+			   edgeNodeOverlap);
+    dataSet->getDeprecated("max thread", "max_thread", maxThread);
+    dataSet->getDeprecated("3D layout", "3D_layout", layout3D);
+    dataSet->getDeprecated("grid graph", "grid_graph", keepGrid);
+    dataSet->getDeprecated("sphere layout", "sphere_layout", sphereLayout);
     dataSet->get("layout", layout);
     dataSet->get("size", size);
   }

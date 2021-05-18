@@ -26,7 +26,7 @@ public:
   PLUGININFORMATION("Equal Value", "Patrick Mary", "16/04/2014",
                     "Performs a graph clusterization grouping in the same cluster the nodes or "
                     "edges having the same value for a given property.",
-                    "1.1", "Clustering")
+                    "1.2", "Clustering")
   EqualValueClustering(tlp::PluginContext *context);
   bool run() override;
   bool computeClusters(tlp::NumericProperty *prop, bool onNodes, bool connected);

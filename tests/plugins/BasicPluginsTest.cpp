@@ -315,7 +315,7 @@ void BasicPluginsTest::testMetricColorMapping() {
   CPPUNIT_ASSERT(result);
 
   DataSet ds;
-  ds.set("linear/uniform\nproperty", &metric);
+  ds.set("input property", &metric);
   ColorProperty color(graph);
   result = graph->applyPropertyAlgorithm("Color Mapping", &color, errorMsg, &ds, nullptr);
   CPPUNIT_ASSERT(result);
@@ -402,7 +402,7 @@ void BasicPluginsTest::testEqualValueClustering() {
   const std::string algorithmName = "Equal Value";
 
   DoubleProperty *metric = graph->getProperty<DoubleProperty>("metric");
-  ds.set("Property", metric);
+  ds.set("property", metric);
 
   result = graph->applyAlgorithm(algorithmName, errorMsg, &ds);
   CPPUNIT_ASSERT_MESSAGE(errorMsg, result);
@@ -456,7 +456,7 @@ void BasicPluginsTest::testQuotientClustering() {
   DataSet ds;
   bool result = graph->applyPropertyAlgorithm("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
-  ds.set("Property", &metric);
+  ds.set("property", &metric);
   result = graph->applyAlgorithm("Equal Value", errorMsg, &ds);
   CPPUNIT_ASSERT(result);
   result = graph->applyAlgorithm("Quotient Clustering", errorMsg);

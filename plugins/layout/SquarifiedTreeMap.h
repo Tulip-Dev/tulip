@@ -69,7 +69,7 @@ public:
                     " For Squarified Treemaps see:<br/> Bruls, M., Huizing, K., & van Wijk, J. J."
                     " Proc. of Joint Eurographics and IEEE TCVG Symp. on Visualization (TCVG 2000) "
                     "IEEE Press, pp. 33-42.",
-                    "2.0", "Tree")
+                    "2.1", "Tree")
   SquarifiedTreeMap(const tlp::PluginContext *context);
   ~SquarifiedTreeMap() override;
 
