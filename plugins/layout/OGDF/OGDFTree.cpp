@@ -22,18 +22,16 @@
 
 #include <tulip/StringCollection.h>
 
-#define ELT_ORIENTATION "Orientation"
-#define ELT_ORIENTATIONLIST "topToBottom;bottomToTop;leftToRight;rightToLeft"
-#define ELT_TOPTOBOTTOM 0
-#define ELT_BOTTOMTOTOP 1
-#define ELT_LEFTTORIGHT 2
-#define ELT_RIGHTTOLEFT 3
+#define ORIENTATIONLIST "top to bottom;bottom to top;left to right;right to left"
+#define TOPTOBOTTOM 0
+#define BOTTOMTOTOP 1
+#define LEFTTORIGHT 2
+#define RIGHTTOLEFT 3
 
-#define ELT_ROOTSELECTION "Root selection"
-#define ELT_ROOTSELECTIONLIST "Source;Sink;ByCoord"
-#define ELT_ROOTSOURCE 0
-#define ELT_ROOTSINK 1
-#define ELT_ROOTCOORD 2
+#define ROOTSELECTIONLIST "source;sink;by coord"
+#define ROOTSOURCE 0
+#define ROOTSINK 1
+#define ROOTCOORD 2
 
 using namespace tlp;
 using namespace ogdf;
@@ -61,16 +59,16 @@ static const char *paramHelp[] = {
     "This parameter indicates how the root is selected."};
 
 static const char *orientationValuesDescription =
-    "topToBottom <i>(Edges are oriented from top to bottom)</i><br>"
-    "bottomToTop <i>(Edges are oriented from bottom to top)</i><br>"
-    "leftToRight <i>(Edges are oriented from left to right)</i><br>"
-    "rightToLeft <i>(Edges are oriented from right to left)</i>";
+    "top to Bottom <i>(edges are oriented from top to bottom)</i><br>"
+    "bottom to top <i>(edges are oriented from bottom to top)</i><br>"
+    "left to right <i>(edges are oriented from left to right)</i><br>"
+    "right to left <i>(edges are oriented from right to left)</i>";
 
 static const char *rootSelectionValuesDescription =
-    "Source <i>(Select a source in the graph)</i><br>"
-    "Sink <i>(Select a sink in the graph)</i><br>"
-    "ByCoord <i>(Use the coordinates, e.g., select the topmost node if orientation is "
-    "topToBottom)</i>";
+    "source <i>(select a source in the graph)</i><br>"
+    "sink <i>(select a sink in the graph)</i><br>"
+    "by coord <i>(use the coordinates, e.g., select the topmost node if orientation is "
+    "top to bottom)</i>";
 
 class OGDFTree : public OGDFLayoutPluginBase {
 
@@ -78,7 +76,7 @@ public:
   PLUGININFORMATION("Improved Walker (OGDF)", "Christoph Buchheim", "12/11/2007",
                     "Implements a linear-time tree layout algorithm with straight-line or "
                     "orthogonal edge routing.",
-                    "1.5", "Tree")
+                    "1.6", "Tree")
   OGDFTree(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ogdf::TreeLayout() : nullptr) {
     addInParameter<double>("siblings distance", paramHelp[0], "20");
@@ -86,9 +84,9 @@ public:
     addInParameter<double>("levels distance", paramHelp[2], "50");
     addInParameter<double>("trees distance", paramHelp[3], "50");
     addInParameter<bool>("orthogonal layout", paramHelp[4], "false");
-    addInParameter<StringCollection>(ELT_ORIENTATION, paramHelp[5], ELT_ORIENTATIONLIST, true,
+    addInParameter<StringCollection>("orientation", paramHelp[5], ORIENTATIONLIST, true,
                                      orientationValuesDescription);
-    addInParameter<StringCollection>(ELT_ROOTSELECTION, paramHelp[6], ELT_ROOTSELECTIONLIST, true,
+    addInParameter<StringCollection>("root selection", paramHelp[6], ROOTSELECTIONLIST, true,
                                      rootSelectionValuesDescription);
   }
 
@@ -126,27 +124,34 @@ public:
       if (dataSet->get("orthogonal layout", bval))
         tree->orthogonalLayout(bval);
 
-      if (dataSet->get(ELT_ORIENTATION, sc)) {
-        if (sc.getCurrent() == ELT_TOPTOBOTTOM) {
+      if (dataSet->getDeprecated("orientation", "Orientation", sc)) {
+        switch(sc.getCurrent()) {
+	case TOPTOBOTTOM:
           // because of an ununderstanding fix
-          // in thirdparty/OGDF/src/ogdf/tree/TreeLayout.cpp
+         // in thirdparty/OGDF/src/ogdf/tree/TreeLayout.cpp
           tree->orientation(Orientation::bottomToTop);
-        } else if (sc.getCurrent() == ELT_BOTTOMTOTOP) {
+	  break;
+	case BOTTOMTOTOP:
           // same as above
           tree->orientation(Orientation::topToBottom);
-        } else if (sc.getCurrent() == ELT_LEFTTORIGHT) {
+	  break;
+	case LEFTTORIGHT:
           tree->orientation(Orientation::leftToRight);
-        } else {
+	  break;
+        default:
           tree->orientation(Orientation::rightToLeft);
         }
       }
 
-      if (dataSet->get(ELT_ROOTSELECTION, sc)) {
-        if (sc.getCurrent() == ELT_ROOTSOURCE) {
+      if (dataSet->getDeprecated("root selection", "Root selection", sc)) {
+        switch(sc.getCurrent()) {
+	case ROOTSOURCE:
           tree->rootSelection(TreeLayout::RootSelectionType::Source);
-        } else if (sc.getCurrent() == ELT_ROOTSINK) {
+	  break;
+	case ROOTSINK:
           tree->rootSelection(TreeLayout::RootSelectionType::Sink);
-        } else {
+	  break;
+        default:
           tree->rootSelection(TreeLayout::RootSelectionType::ByCoord);
         }
       }

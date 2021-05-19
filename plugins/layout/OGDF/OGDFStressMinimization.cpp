@@ -63,6 +63,10 @@ static const char *paramHelp[] = {
 
 };
 
+#define TERMINATION_CRITERIA_LIST "none;position difference;stress"
+#define POSITION_DIFFERENCE 1
+#define STRESS 2
+
 class OGDFStressMinimization : public OGDFLayoutPluginBase {
 
 public:
@@ -72,18 +76,18 @@ public:
                     "2.0", "Force Directed")
   OGDFStressMinimization(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ogdf::StressMinimization() : nullptr) {
-    addInParameter<StringCollection>("terminationCriterion", paramHelp[0],
-                                     "None;PositionDifference;Stress", true,
-                                     "None <br> PositionDifference <br> Stress");
-    addInParameter<bool>("fixXCoordinates", paramHelp[1], "false");
-    addInParameter<bool>("fixYCoordinates", paramHelp[2], "false");
-    addInParameter<bool>("fixZCoordinates", paramHelp[3], "false");
-    addInParameter<bool>("hasInitialLayout", paramHelp[4], "false");
-    addInParameter<bool>("layoutComponentsSeparately", paramHelp[5], "false");
-    addInParameter<int>("numberOfIterations", paramHelp[6], "200");
-    addInParameter<double>("edgeCosts", paramHelp[7], "100");
-    addInParameter<bool>("useEdgeCostsProperty", paramHelp[8], "false");
-    addInParameter<tlp::NumericProperty *>("edgeCostsProperty", paramHelp[9], "viewMetric");
+    addInParameter<StringCollection>("termination criterion", paramHelp[0],
+                                     TERMINATION_CRITERIA_LIST, true,
+                                     "none<br/>position difference<br/>stress");
+    addInParameter<bool>("fix x coordinates", paramHelp[1], "false");
+    addInParameter<bool>("fix y coordinates", paramHelp[2], "false");
+    addInParameter<bool>("fix z coordinates", paramHelp[3], "false");
+    addInParameter<bool>("has initial layout", paramHelp[4], "false");
+    addInParameter<bool>("layout components separately", paramHelp[5], "false");
+    addInParameter<int>("number of iterations", paramHelp[6], "200");
+    addInParameter<double>("edge costs", paramHelp[7], "100");
+    addInParameter<bool>("use edge costs property", paramHelp[8], "false");
+    addInParameter<tlp::NumericProperty *>("edge costs property", paramHelp[9], "viewMetric");
     declareDeprecatedName("Stress Majorization (OGDF)");
   }
 
@@ -99,50 +103,56 @@ public:
       StringCollection sc;
       tlp::NumericProperty *edgeCosts = graph->getProperty<tlp::DoubleProperty>("viewMetric");
 
-      if (dataSet->get("terminationCriterion", sc)) {
-        if (sc.getCurrentString() == "PositionDifference") {
-          stressm->convergenceCriterion(
-              StressMinimization::TerminationCriterion::PositionDifference);
-        } else if (sc.getCurrentString() == "Stress") {
+      if (dataSet->getDeprecated("termination criterion",
+				 "terminationCriterion", sc)) {
+	switch(sc.getCurrent()) {
+	case POSITION_DIFFERENCE:
+          stressm->convergenceCriterion(StressMinimization::TerminationCriterion::PositionDifference);
+	  break;
+        case STRESS:
           stressm->convergenceCriterion(StressMinimization::TerminationCriterion::Stress);
-        } else {
+	  break;
+        default:
           stressm->convergenceCriterion(StressMinimization::TerminationCriterion::None);
         }
       }
 
-      if (dataSet->get("fixXCoordinates", bval)) {
+      if (dataSet->getDeprecated("fix x coordinates",
+				 "fixXCoordinates", bval)) {
         stressm->fixXCoordinates(bval);
       }
 
-      if (dataSet->get("fixYCoordinates", bval)) {
+      if (dataSet->getDeprecated("fix y coordinates",
+				 "fixYCoordinates", bval)) {
         stressm->fixXCoordinates(bval);
       }
 
-      if (dataSet->get("fixZCoordinates", bval)) {
+      if (dataSet->getDeprecated("fix z coordinates",
+				 "fixZCoordinates", bval)) {
         stressm->fixZCoordinates(bval);
       }
 
-      if (dataSet->get("hasInitialLayout", bval)) {
+      if (dataSet->getDeprecated("has initial layout", "hasInitialLayout", bval)) {
         stressm->hasInitialLayout(bval);
       }
 
-      if (dataSet->get("layoutComponentsSeparately", bval)) {
+      if (dataSet->getDeprecated("layout components separately", "layoutComponentsSeparately", bval)) {
         stressm->layoutComponentsSeparately(bval);
       }
 
-      if (dataSet->get("numberOfIterations", ival)) {
+      if (dataSet->getDeprecated("number of iterations", "numberOfIterations", ival)) {
         stressm->setIterations(ival);
       }
 
-      if (dataSet->get("edgeCosts", dval)) {
+      if (dataSet->getDeprecated("edge costs", "edgeCosts", dval)) {
         stressm->setEdgeCosts(dval);
       }
 
-      if (dataSet->get("useEdgeCostsProperty", bval)) {
+      if (dataSet->getDeprecated("use edge costs property", "useEdgeCostsProperty", bval)) {
         stressm->useEdgeCostsAttribute(bval);
 
         if (bval) {
-          dataSet->get("edgeCostsProperty", edgeCosts);
+          dataSet->getDeprecated("edge costs property", "edgeCostsProperty", edgeCosts);
           tlpToOGDF->copyTlpNumericPropertyToOGDFEdgeLength(edgeCosts);
         }
       }

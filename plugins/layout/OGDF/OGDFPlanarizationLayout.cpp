@@ -30,35 +30,34 @@
 
 #include <tulip/StringCollection.h>
 
-#define ELT_EMBEDDER "Embedder"
-#define ELT_EMBEDDER_LIST                                                                          \
-  "SimpleEmbedder;EmbedderMaxFace;EmbedderMaxFaceLayers;EmbedderMinDepth;EmbedderMinDepthMaxFace;" \
-  "EmbedderMinDepthMaxFaceLayers;EmbedderMinDepthPiTa;EmbedderOptimalFlexDraw"
-#define ELT_EMBEDDER_SIMPLE 0
-#define ELT_EMBEDDER_MAXFACE 1
-#define ELT_EMBEDDER_MAXFACELAYERS 2
-#define ELT_EMBEDDER_MINDEPTH 3
-#define ELT_EMBEDDER_MINDEPTHMAXFACE 4
-#define ELT_EMBEDDER_MINDEPTHMAXFACELAYERS 5
-#define ELT_EMBEDDER_MINDEPTHPITA 6
-#define ELT_EMBEDDER_OPTIMALFLEXDRAW 7
+#define EMBEDDER "Embedder"
+#define EMBEDDER_LIST                                                                          \
+  "simple;max face;max face layers;min depth;min depth max face;" \
+  "min depth max face layers;min depth PiTa;optimal FlexDraw"
+#define EMBEDDER_MAXFACE 1
+#define EMBEDDER_MAXFACELAYERS 2
+#define EMBEDDER_MINDEPTH 3
+#define EMBEDDER_MINDEPTHMAXFACE 4
+#define EMBEDDER_MINDEPTHMAXFACELAYERS 5
+#define EMBEDDER_MINDEPTHPITA 6
+#define EMBEDDER_OPTIMALFLEXDRAW 7
 
 using namespace tlp;
 using namespace ogdf;
 
 static const char *embedderValuesDescription =
-    "SimpleEmbedder <i>(Planar graph embedding from the algorithm of Boyer and Myrvold)</i><br>"
-    "EmbedderMaxFace <i>(Planar graph embedding with maximum external face)</i><br>"
-    "EmbedderMaxFaceLayers <i>(Planar graph embedding with maximum external face, plus layers "
+    "simple <i>(embedding from the algorithm of Boyer and Myrvold)</i><br>"
+    "max face <i>(embedding with maximum external face)</i><br>"
+    "max face layers <i>(embedding with maximum external face, plus layers "
     "approach)</i><br>"
-    "EmbedderMinDepth <i>(Planar graph embedding with minimum block-nesting depth)</i><br>"
-    "EmbedderMinDepthMaxFace <i>(Planar graph embedding with minimum block-nesting depth and "
+    "min depth <i>(embedding with minimum block-nesting depth)</i><br>"
+    "min depth max face <i>(embedding with minimum block-nesting depth and "
     "maximum external face)</i><br>"
-    "EmbedderMinDepthMaxFaceLayers <i>(Planar graph embedding with minimum block-nesting depth and "
+    "min depth max face layers <i>(embedding with minimum block-nesting depth and "
     "maximum external face, plus layers approach)</i><br>"
-    "EmbedderMinDepthPiTa <i>(Planar graph embedding with minimum block-nesting depth for given "
+    "min depth PiTa <i>(embedding with minimum block-nesting depth for given "
     "embedded blocks)</i>"
-    "EmbedderOptimalFlexDraw <i>(Planar graph embedding with minimum cost)</i>";
+    "optimal FlexDraw <i>(Planar graph embedding with minimum cost)</i>";
 
 static const char *paramHelp[] = {
     // page ratio
@@ -81,13 +80,13 @@ class OGDFPlanarizationLayout : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Planarization Layout (OGDF)", "Carsten Gutwenger", "12/11/2007",
-                    "The planarization approach for drawing graphs.", "1.0", "Planar")
+                    "The planarization approach for drawing graphs.", "1.1", "Planar")
   OGDFPlanarizationLayout(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ogdf::PlanarizationLayout() : nullptr),
         pl(static_cast<ogdf::PlanarizationLayout *>(ogdfLayoutAlgo)) {
     addInParameter<double>("page ratio", paramHelp[0], "1.1");
     addInParameter<int>("minimal clique size", paramHelp[1], "3");
-    addInParameter<StringCollection>(ELT_EMBEDDER, paramHelp[2], ELT_EMBEDDER_LIST, true,
+    addInParameter<StringCollection>("embedder", paramHelp[2], EMBEDDER_LIST, true,
                                      embedderValuesDescription);
     addOutParameter<int>("number of crossings", paramHelp[3]);
   }
@@ -106,22 +105,30 @@ public:
       if (dataSet->get("minimal clique size", clique_size))
         pl->minCliqueSize(clique_size);
 
-      if (dataSet->get(ELT_EMBEDDER, sc)) {
-        if (sc.getCurrent() == ELT_EMBEDDER_MAXFACE) {
+      if (dataSet->getDeprecated("embedder", "Embedder", sc)) {
+        switch(sc.getCurrent()) {
+	case EMBEDDER_MAXFACE:
           pl->setEmbedder(new ogdf::EmbedderMaxFace());
-        } else if (sc.getCurrent() == ELT_EMBEDDER_MAXFACELAYERS) {
+	  break;
+	case EMBEDDER_MAXFACELAYERS:
           pl->setEmbedder(new ogdf::EmbedderMaxFaceLayers());
-        } else if (sc.getCurrent() == ELT_EMBEDDER_MINDEPTH) {
+	  break;
+        case EMBEDDER_MINDEPTH:
           pl->setEmbedder(new ogdf::EmbedderMinDepth());
-        } else if (sc.getCurrent() == ELT_EMBEDDER_MINDEPTHMAXFACE) {
+	  break;
+        case EMBEDDER_MINDEPTHMAXFACE:
           pl->setEmbedder(new ogdf::EmbedderMinDepthMaxFace());
-        } else if (sc.getCurrent() == ELT_EMBEDDER_MINDEPTHMAXFACELAYERS) {
+	  break;
+        case EMBEDDER_MINDEPTHMAXFACELAYERS:
           pl->setEmbedder(new ogdf::EmbedderMinDepthMaxFaceLayers());
-        } else if (sc.getCurrent() == ELT_EMBEDDER_MINDEPTHPITA) {
+	  break;
+        case EMBEDDER_MINDEPTHPITA:
           pl->setEmbedder(new ogdf::EmbedderMinDepthPiTa());
-        } else if (sc.getCurrent() == ELT_EMBEDDER_OPTIMALFLEXDRAW) {
+	  break;
+        case EMBEDDER_OPTIMALFLEXDRAW:
           pl->setEmbedder(new ogdf::EmbedderOptimalFlexDraw());
-        } else {
+	  break;
+	default:
           pl->setEmbedder(new ogdf::SimpleEmbedder());
         }
       }

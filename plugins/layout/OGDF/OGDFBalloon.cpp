@@ -37,10 +37,10 @@ public:
       "algorithm is partially based on the papers:<br/><b>On Balloon Drawings of Rooted "
       "Trees</b> by Lin and Yen<br/><b>Interacting with Huge Hierarchies: Beyond "
       "Cone Trees</b> by Carriere and Kazman. ",
-      "1.4", "Hierarchical")
+      "1.5", "Hierarchical")
   OGDFBalloon(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ogdf::ComponentSplitterLayout() : nullptr) {
-    addInParameter<bool>("Even angles", paramHelp[0], "false", false);
+    addInParameter<bool>("even angles", paramHelp[0], "false", false);
   }
 
   void beforeCall() override {
@@ -48,12 +48,12 @@ public:
         static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
     // ComponentSplitterLayout takes ownership of the BalloonLayout instance
     BalloonLayout *balloon = new BalloonLayout();
-    csl->setLayoutModule(balloon);
+    csl->setLayoutModule(new BalloonLayout());
 
     if (dataSet != nullptr) {
       bool val = false;
 
-      if (dataSet->get("Even angles", val))
+      if (dataSet->getDeprecated("even angles", "Even angles", val))
         balloon->setEvenAngles(val);
     }
   }

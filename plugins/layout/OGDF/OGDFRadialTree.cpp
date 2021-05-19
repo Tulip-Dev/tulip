@@ -22,11 +22,10 @@
 
 #include <tulip/StringCollection.h>
 
-#define ELT_ROOTSELECTION "Root selection"
-#define ELT_ROOTSELECTIONLIST "Source;Sink;Center"
-#define ELT_ROOTSOURCE 0
-#define ELT_ROOTSINK 1
-#define ELT_ROOTCENTER 2
+#define ROOTSELECTIONLIST "source;sink;center"
+#define ROOTSOURCE 0
+#define ROOTSINK 1
+#define ROOTCENTER 2
 
 using namespace tlp;
 using namespace ogdf;
@@ -38,24 +37,24 @@ static const char *paramHelp[] = {
     // trees distance
     "The minimal required horizontal distance between trees in the forest.",
 
-    // Root selection
+    // root selection
     "This parameter indicates how the root is selected."};
 
 static const char *rootSelectionValuesDescription =
-    "Source <i>(Select a source in the graph)</i><br>"
-    "Sink <i>(Select a sink in the graph)</i><br>"
-    "Center <i>(Select the center of the tree</i><br>";
+    "source <i>(Select a source in the graph)</i><br>"
+    "sink <i>(Select a sink in the graph)</i><br>"
+    "center <i>(Select the center of the tree</i><br>";
 
 class OGDFRadialTree : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Radial Tree (OGDF)", "Carsten Gutwenger", "02/02/2020",
-                    "The radial tree layout algorithm. ", "1.0", "Tree")
+                    "The radial tree layout algorithm. ", "1.1", "Tree")
   OGDFRadialTree(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ogdf::RadialTreeLayout() : nullptr) {
     addInParameter<double>("levels distance", paramHelp[0], "50");
     addInParameter<double>("trees distance", paramHelp[1], "50");
-    addInParameter<StringCollection>(ELT_ROOTSELECTION, paramHelp[2], ELT_ROOTSELECTIONLIST, true,
+    addInParameter<StringCollection>("root selection", paramHelp[2], ROOTSELECTIONLIST, true,
                                      rootSelectionValuesDescription);
   }
 
@@ -83,12 +82,15 @@ public:
       if (dataSet->get("trees distance", dval))
         layout->connectedComponentDistance(dval);
 
-      if (dataSet->get(ELT_ROOTSELECTION, sc)) {
-        if (sc.getCurrent() == ELT_ROOTSOURCE) {
+      if (dataSet->getDeprecated("root selection", "Root selection", sc)) {
+	switch(sc.getCurrent()) {
+	case ROOTSOURCE:
           layout->rootSelection(RadialTreeLayout::RootSelectionType::Source);
-        } else if (sc.getCurrent() == ELT_ROOTSINK) {
+	  break;
+        case ROOTSINK:
           layout->rootSelection(RadialTreeLayout::RootSelectionType::Sink);
-        } else {
+	  break;
+        default:
           layout->rootSelection(RadialTreeLayout::RootSelectionType::Center);
         }
       }

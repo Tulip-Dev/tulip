@@ -47,14 +47,14 @@ public:
       "Implements a circular layout based on the following publication:"
       "Ugur Dogrusöz, Brendan Madden, Patrick Madden: Circular Layout in the Graph Layout Toolkit."
       "Proc. Graph Drawing 1996, LNCS 1190, pp. 92-100, 1997.",
-      "1.4", "Basic")
+      "1.5", "Basic")
   OGDFCircular(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ogdf::CircularLayout() : nullptr) {
-    addInParameter<double>("minDistCircle", paramHelp[0], "20.0", false);
-    addInParameter<double>("minDistLevel", paramHelp[1], "20.0", false);
-    addInParameter<double>("minDistSibling", paramHelp[2], "10.0", false);
-    addInParameter<double>("minDistCC", paramHelp[3], "20.0", false);
-    addInParameter<double>("pageRatio", paramHelp[4], "1.0", false);
+    addInParameter<double>("nodes spacing", paramHelp[0], "20.0", false);
+    addInParameter<double>("levels spacing", paramHelp[1], "20.0", false);
+    addInParameter<double>("circles spacing", paramHelp[2], "10.0", false);
+    addInParameter<double>("connected components spacing", paramHelp[3], "20.0", false);
+    addInParameter<double>("page ratio", paramHelp[4], "1.0", false);
   }
   ~OGDFCircular() override {}
 
@@ -64,19 +64,20 @@ public:
     if (dataSet != nullptr) {
       double val = 0;
 
-      if (dataSet->get("minDistCircle", val))
+      if (dataSet->getDeprecated("nodes spacing", "minDistCircle", val))
         circular->minDistCircle(val);
 
-      if (dataSet->get("minDistLevel", val))
+      if (dataSet->getDeprecated("levels spacing", "minDistLevel", val))
         circular->minDistLevel(val);
 
-      if (dataSet->get("minDistSibling", val))
+      if (dataSet->getDeprecated("circles spacing", "minDistSibling", val))
         circular->minDistSibling(val);
 
-      if (dataSet->get("minDistCC", val))
+      if (dataSet->getDeprecated("connected components spacing",
+				 "minDistCC", val))
         circular->minDistCC(val);
 
-      if (dataSet->get("pageRatio", val))
+      if (dataSet->getDeprecated("page ratio", "pageRatio", val))
         circular->pageRatio(val);
     }
   }

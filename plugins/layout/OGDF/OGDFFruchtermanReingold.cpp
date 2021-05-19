@@ -20,10 +20,9 @@
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
 #include <tulip/StringCollection.h>
 
-#define ELT_COOLING "Cooling function"
-#define ELT_COOLINGLIST "Factor;Logarithmic"
-#define ELT_FACTOR 0
-#define ELT_LOGARITHMIC 1
+#define COOLINGLIST "factor;logarithmic"
+#define FACTOR 0
+#define LOGARITHMIC 1
 
 using namespace tlp;
 using namespace ogdf;
@@ -67,7 +66,7 @@ public:
                     "as:<br/><b>Graph Drawing by Force-Directed Placement</b>, Fruchterman, Thomas "
                     "M. J., Reingold, Edward M., Software – Practice & Experience (Wiley) Volume "
                     "21, Issue 11, pages 1129–1164, (1991)",
-                    "1.1", "Force Directed")
+                    "1.2", "Force Directed")
 
   OGDFFruchtermanReingold(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ogdf::SpringEmbedderFRExact() : nullptr) {
@@ -75,11 +74,11 @@ public:
     addInParameter<bool>("noise", paramHelp[1], "true");
     addInParameter<bool>("use node weights", paramHelp[2], "false");
     addInParameter<NumericProperty *>("node weights", paramHelp[3], "viewMetric");
-    addInParameter<StringCollection>(ELT_COOLING, paramHelp[4], ELT_COOLINGLIST, true,
-                                     "Factor<br> Logarithmic");
+    addInParameter<StringCollection>("cooling function", paramHelp[4], COOLINGLIST, true,
+                                     "factor<br/>logarithmic");
     addInParameter<double>("ideal edge length", paramHelp[5], "10.0");
-    addInParameter<double>("minDistCC", paramHelp[6], "20.0");
-    addInParameter<double>("pageRatio", paramHelp[7], "1.0");
+    addInParameter<double>("connected components spacing", paramHelp[6], "20.0");
+    addInParameter<double>("page ratio", paramHelp[7], "1.0");
     addInParameter<bool>("check convergence", paramHelp[8], "true");
     addInParameter<double>("convergence tolerance", paramHelp[9], "0.01");
     // old name
@@ -103,14 +102,15 @@ public:
       if (dataSet->get("noise", bval))
         sefr->noise(bval);
 
-      if (dataSet->get("minDistCC", dval))
+      if (dataSet->getDeprecated("connected components spacing",
+				 "minDistCC", dval))
         sefr->minDistCC(dval);
 
-      if (dataSet->get("pageRatio", dval))
+      if (dataSet->getDeprecated("page ratio", "pageRatio", dval))
         sefr->pageRatio(dval);
 
-      if (dataSet->get(ELT_COOLING, sc)) {
-        if (sc.getCurrent() == ELT_FACTOR) {
+      if (dataSet->getDeprecated("cooling function", "Cooling function", sc)) {
+        if (sc.getCurrent() == FACTOR) {
           sefr->coolingFunction(SpringEmbedderFRExact::CoolingFunction::Factor);
         } else {
           sefr->coolingFunction(SpringEmbedderFRExact::CoolingFunction::Logarithmic);

@@ -23,9 +23,6 @@
 
 #include <tulip/StringCollection.h>
 
-#define ELT_ATTRACTIONFORMULA "Attraction formula"
-#define ELT_ATTRACTIONFORMULALIST "Fruchterman/Reingold;GEM"
-
 static const char *paramHelp[] = {
     // number of rounds
     "The maximal number of rounds per node.",
@@ -63,7 +60,7 @@ static const char *paramHelp[] = {
     // minDistCC
     "The minimal distance between connected components.",
 
-    // pageRatio
+    // page ratio
     "The page ratio used for packing connected components."};
 
 using namespace tlp;
@@ -78,7 +75,7 @@ public:
       "Ludwig, and H. Mehldau, Graph Drawing'94, Volume 894 of Lecture Notes in "
       "Computer Science (1995), doi: <a "
       "href=\"https://doi.org/10.1007/3-540-58950-3_393\">10.1007/3-540-58950-3_393</a>",
-      "1.1", "Force Directed")
+      "1.2", "Force Directed")
   OGDFGemFrick(const tlp::PluginContext *context);
   ~OGDFGemFrick() override;
 
@@ -90,17 +87,18 @@ OGDFGemFrick::OGDFGemFrick(const tlp::PluginContext *context)
   addInParameter<int>("number of rounds", paramHelp[0], "30000");
   addInParameter<double>("minimal temperature", paramHelp[1], "0.005");
   addInParameter<double>("initial temperature", paramHelp[2], "12.0");
-  addInParameter<double>("gravitational constant", paramHelp[3], "0.0625");
+  addInParameter<double>("gravitation", paramHelp[3], "0.0625");
   addInParameter<double>("desired length", paramHelp[4], "5.0");
   addInParameter<double>("maximal disturbance", paramHelp[5], "0.0");
   addInParameter<double>("rotation angle", paramHelp[6], "1.04719755");
   addInParameter<double>("oscillation angle", paramHelp[7], "1.57079633");
   addInParameter<double>("rotation sensitivity", paramHelp[8], "0.01");
   addInParameter<double>("oscillation sensitivity", paramHelp[9], "0.3");
-  addInParameter<StringCollection>(ELT_ATTRACTIONFORMULA, paramHelp[10], ELT_ATTRACTIONFORMULALIST,
-                                   true, "Fruchterman/Reingold <br> GEM");
-  addInParameter<double>("minDistCC", paramHelp[11], "20");
-  addInParameter<double>("pageRatio", paramHelp[12], "1.0");
+  addInParameter<StringCollection>("attraction formula", paramHelp[10],
+				   "Fruchterman/Reingold;GEM",
+                                   true, "Fruchterman/Reingold<br/>GEM");
+  addInParameter<double>("connected components spacing", paramHelp[11], "20");
+  addInParameter<double>("page ratio", paramHelp[12], "1.0");
 }
 
 OGDFGemFrick::~OGDFGemFrick() {}
@@ -125,7 +123,7 @@ void OGDFGemFrick::beforeCall() {
       gem->initialTemperature(dval);
     }
 
-    if (dataSet->get("gravitational constant", dval)) {
+    if (dataSet->getDeprecated("gravitation", "gravitational constant", dval)) {
       gem->gravitationalConstant(dval);
     }
 
@@ -153,14 +151,15 @@ void OGDFGemFrick::beforeCall() {
       gem->oscillationSensitivity(dval);
     }
 
-    if (dataSet->get(ELT_ATTRACTIONFORMULA, sc)) {
+    if (dataSet->getDeprecated("attraction formula", "Attraction formula", sc)) {
       gem->attractionFormula(sc.getCurrent() + 1);
     }
 
-    if (dataSet->get("minDistCC", dval))
+    if (dataSet->getDeprecated("connected components spacing",
+			       "minDistCC", dval))
       gem->minDistCC(dval);
 
-    if (dataSet->get("pageRatio", dval))
+    if (dataSet->getDeprecated("page ratio", "pageRatio", dval))
       gem->pageRatio(dval);
   }
 }

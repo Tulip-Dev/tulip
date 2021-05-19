@@ -37,31 +37,28 @@
 
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
 
-#define ELT_RANKING "Ranking"
-#define ELT_RANKINGLIST "LongestPathRanking;OptimalRanking;CoffmanGrahamRanking"
-#define ELT_LONGESTPATHRANKING 0
-#define ELT_OPTIMALRANKING 1
-#define ELT_COFFMANGRAHAMRANKING 2
+#define RANKINGLIST "longest path;optimal;coffman graham"
+#define LONGESTPATHRANKING 0
+#define OPTIMALRANKING 1
+#define COFFMANGRAHAMRANKING 2
 
-#define ELT_TWOLAYERCROSS "Two-layer crossing minimization"
-#define ELT_TWOLAYERCROSSLIST                                                                      \
-  "BarycenterHeuristic;MedianHeuristic;SplitHeuristic;SiftingHeuristic;GreedyInsertHeuristic;"     \
-  "GreedySwitchHeuristic;GlobalSiftingHeuristic;GridSiftingHeuristic"
-#define ELT_BARYCENTER 0
-#define ELT_MEDIAN 1
-#define ELT_SPLIT 2
-#define ELT_SIFTING 3
-#define ELT_GREEDYINSERT 4
-#define ELT_GREEDYSWITCH 5
-#define ELT_GLOBALSIFTING 6
-#define ELT_GRIDSIFTING 7
+#define TWOLAYERCROSSLIST                                                                      \
+  "barycenter;median;split;sifting;greedy insert;"     \
+  "greedy switch;global sifting;grid sifting"
+#define BARYCENTER 0
+#define MEDIAN 1
+#define SPLIT 2
+#define SIFTING 3
+#define GREEDYINSERT 4
+#define GREEDYSWITCH 5
+#define GLOBALSIFTING 6
+#define GRIDSIFTING 7
 
-#define ELT_HIERARCHYLAYOUT "Layout"
-#define ELT_HIERARCHYLAYOUTLIST                                                                    \
-  "FastHierarchyLayout;FastSimpleHierarchyLayout;OptimalHierarchyLayout"
-#define ELT_FASTHIERARCHY 0
-#define ELT_FASTSIMPLEHIERARCHY 1
-#define ELT_OPTIMALHIERARCHY 2
+#define HIERARCHYLAYOUTLIST                                                                    \
+  "fast;fast simple;optimal"
+#define FASTHIERARCHY 0
+#define FASTSIMPLEHIERARCHY 1
+#define OPTIMALHIERARCHY 2
 
 using namespace tlp;
 using namespace ogdf;
@@ -84,36 +81,36 @@ static const char *paramHelp[] = {
 
     // fixed layer distance
     "If true, the distance between neighboring layers is fixed, otherwise variable (only for "
-    "FastHierarchyLayout).",
+    "fast hierarchy layout).",
 
     // transpose
     "If this option is set to true an additional fine tuning step is performed after each "
     "traversal, which tries to reduce the total number of crossings by switching adjacent vertices "
     "on the same layer.",
 
-    // arrangeCCs
+    // connected components packing
     "If set to true connected components are laid out separately and the resulting layouts are "
     "arranged afterwards using the packer module.",
 
-    // minDistCC
+    // connected components spacing
     "Specifies the spacing between connected components of the graph.",
 
-    // pageRatio
+    // page ratio
     "The page ratio used for packing connected components.",
 
-    // alignBaseClasses
+    // align base classes
     "Determines if base classes of inheritance hierarchies shall be aligned.",
 
-    // alignSiblings
-    "Sets the option alignSiblings.",
+    // align siblings
+    "Sets the option align siblings.",
 
-    // Ranking
+    // ranking
     "Sets the option for the node ranking (layer assignment).",
 
-    // Two-layer crossing minimization
+    // two-layer crossing minimization
     "Sets the module option for the two-layer crossing minimization.",
 
-    // Layout
+    // hierarchy layout
     "The hierarchy layout module that computes the final layout.",
 
     // transpose vertically
@@ -128,30 +125,30 @@ static const char *paramHelp[] = {
 };
 
 static const char *eltRankingValuesDescription =
-    "CoffmanGrahamRanking <i>(The coffman graham ranking algorithm)</i><br>"
-    "LongestPathRanking <i>(the well-known longest-path ranking algorithm)</i><br>"
-    "OptimalRanking <i>(the LP-based algorithm for computing a node ranking with minimal edge "
+    "coffman graham <i>(The coffman graham ranking algorithm)</i><br>"
+    "longest-path <i>(the well-known longest-path ranking algorithm)</i><br>"
+    "optimal <i>(the LP-based algorithm for computing a node ranking with minimal edge "
     "lengths)</i>";
 
 static const char *twoLayerCrossValuesDescription =
-    "BarycenterHeuristic <i>(the barycenter heuristic for 2-layer crossing minimization)</i><br>"
-    "GreedyInsertHeuristic <i>(The greedy-insert heuristic for 2-layer crossing "
+    "barycenter <i>(the barycenter heuristic for 2-layer crossing minimization)</i><br>"
+    "greedy-insert <i>(The greedy-insert heuristic for 2-layer crossing "
     "minimization)</i><br>"
-    "GreedySwitchHeuristic <i>(The greedy-switch heuristic for 2-layer crossing "
+    "greedy-switch <i>(The greedy-switch heuristic for 2-layer crossing "
     "minimization)</i><br>"
-    "MedianHeuristic <i>(the median heuristic for 2-layer crossing minimization)</i><br>"
-    "SiftingHeuristic <i>(The sifting heuristic for 2-layer crossing minimization)</i><br>"
-    "SplitHeuristic <i>(the split heuristic for 2-layer crossing minimization)</i><br>"
-    "GridSiftingHeuristic <i>(the grid sifting heuristic for 2-layer crossing minimization)</i><br>"
-    "GlobalSiftingHeuristic <i>(the global sifting heuristic for 2-layer crossing "
+    "median <i>(the median heuristic for 2-layer crossing minimization)</i><br>"
+    "sifting <i>(The sifting heuristic for 2-layer crossing minimization)</i><br>"
+    "split <i>(the split heuristic for 2-layer crossing minimization)</i><br>"
+    "grid sifting <i>(the grid sifting heuristic for 2-layer crossing minimization)</i><br>"
+    "global sifting <i>(the global sifting heuristic for 2-layer crossing "
     "minimization)</i>";
 
 static const char *hierarchyLayoutValuesDescription =
-    "FastHierarchyLayout <i>(Coordinate assignment phase for the Sugiyama algorithm by Buchheim et "
+    "fast <i>(Coordinate assignment phase for the Sugiyama algorithm by Buchheim et "
     "al.)</i><br>"
-    "FastSimpleHierarchyLayout <i>(Coordinate assignment phase for the Sugiyama algorithm by Ulrik "
+    "fast simple <i>(Coordinate assignment phase for the Sugiyama algorithm by Ulrik "
     "Brandes and Boris Koepf)</i><br>"
-    "OptimalHierarchyLayout <i>(The LP-based hierarchy layout algorithm)</i>";
+    "optimal <i>(The LP-based hierarchy layout algorithm)</i>";
 
 class OGDFSugiyama : public OGDFLayoutPluginBase {
   ogdf::SugiyamaLayout *sugiyama;
@@ -166,20 +163,20 @@ public:
     addInParameter<double>("layer distance", paramHelp[3], "3");
     addInParameter<bool>("fixed layer distance", paramHelp[4], "false");
     addInParameter<bool>("transpose", paramHelp[5], "true");
-    addInParameter<bool>("arrangeCCs", paramHelp[6], "true");
-    addInParameter<double>("minDistCC", paramHelp[7], "20");
-    addInParameter<double>("pageRatio", paramHelp[8], "1.0");
-    addInParameter<bool>("alignBaseClasses", paramHelp[9], "false");
-    addInParameter<bool>("alignSiblings", paramHelp[10], "false");
-    addInParameter<StringCollection>(ELT_RANKING, paramHelp[11], ELT_RANKINGLIST, true,
+    addInParameter<bool>("connected components packing", paramHelp[6], "true");
+    addInParameter<double>("connected components spacing", paramHelp[7], "20");
+    addInParameter<double>("page ratio", paramHelp[8], "1.0");
+    addInParameter<bool>("align base classes", paramHelp[9], "false");
+    addInParameter<bool>("align siblings", paramHelp[10], "false");
+    addInParameter<StringCollection>("ranking", paramHelp[11], RANKINGLIST, true,
                                      eltRankingValuesDescription);
-    addInParameter<StringCollection>(ELT_TWOLAYERCROSS, paramHelp[12], ELT_TWOLAYERCROSSLIST, true,
+    addInParameter<StringCollection>("two-layer crossing minimization", paramHelp[12], TWOLAYERCROSSLIST, true,
                                      twoLayerCrossValuesDescription);
-    addInParameter<StringCollection>(ELT_HIERARCHYLAYOUT, paramHelp[13], ELT_HIERARCHYLAYOUTLIST,
+    addInParameter<StringCollection>("hierarchy layout", paramHelp[13], HIERARCHYLAYOUTLIST,
                                      true, hierarchyLayoutValuesDescription);
     addInParameter<bool>("transpose vertically", paramHelp[14], "true");
-    addOutParameter<int>("Number of crossings", paramHelp[15]);
-    addOutParameter<int>("Number of levels/layers", paramHelp[16]);
+    addOutParameter<int>("number of crossings", paramHelp[15]);
+    addOutParameter<int>("number of levels/layers", paramHelp[16]);
   }
 
   ~OGDFSugiyama() override {}
@@ -187,7 +184,7 @@ public:
   PLUGININFORMATION("Sugiyama (OGDF)", "Carsten Gutwenger", "12/11/2007",
                     "Implements the classical layout algorithm by Sugiyama, Tagawa, and Toda. It "
                     "is a layer-based approach for producing upward drawings.",
-                    "1.7", "Hierarchical")
+                    "1.8", "Hierarchical")
 
   void beforeCall() override {
     if (dataSet != nullptr) {
@@ -202,54 +199,69 @@ public:
       if (dataSet->get("runs", ival))
         sugiyama->runs(ival);
 
-      if (dataSet->get("arrangeCCS", bval))
+      if (dataSet->getDeprecated("connected components packing",
+				 "arrangeCCs", bval))
         sugiyama->arrangeCCs(bval);
 
-      if (dataSet->get("minDistCC", dval))
+      if (dataSet->getDeprecated("connected components spacing",
+				 "minDistCC", dval))
         sugiyama->minDistCC(dval);
 
-      if (dataSet->get("pageRatio", dval))
+      if (dataSet->getDeprecated("page ratio", "pageRatio", dval))
         sugiyama->pageRatio(dval);
 
-      if (dataSet->get("alignBaseClasses", bval))
+      if (dataSet->getDeprecated("align base classes", "alignBaseClasses", bval))
         sugiyama->alignBaseClasses(bval);
 
-      if (dataSet->get("alignSiblings", bval))
+      if (dataSet->getDeprecated("align siblings", "alignSiblings", bval))
         sugiyama->alignSiblings(bval);
 
       if (dataSet->get("transpose", bval))
         sugiyama->transpose(bval);
 
-      if (dataSet->get(ELT_RANKING, sc)) {
-        if (sc.getCurrent() == ELT_LONGESTPATHRANKING) {
+      if (dataSet->getDeprecated("ranking", "Ranking", sc)) {
+        switch(sc.getCurrent()) {
+	case LONGESTPATHRANKING:
           sugiyama->setRanking(new ogdf::LongestPathRanking());
-        } else if (sc.getCurrent() == ELT_OPTIMALRANKING) {
+	  break;
+	case OPTIMALRANKING:
           sugiyama->setRanking(new ogdf::OptimalRanking());
-        } else
+	  break;
+	default:
           sugiyama->setRanking(new ogdf::CoffmanGrahamRanking());
+	}
       }
 
-      if (dataSet->get(ELT_TWOLAYERCROSS, sc)) {
-        if (sc.getCurrent() == ELT_BARYCENTER) {
+      if (dataSet->getDeprecated("two-layer crossing minimization",
+				 "Two-layer crossing minimization", sc)) {
+        switch(sc.getCurrent()) {
+	case BARYCENTER:
           sugiyama->setCrossMin(new ogdf::BarycenterHeuristic());
-        } else if (sc.getCurrent() == ELT_MEDIAN) {
+	  break;
+	case MEDIAN:
           sugiyama->setCrossMin(new ogdf::MedianHeuristic());
-        } else if (sc.getCurrent() == ELT_SPLIT) {
+	  break;
+	case SPLIT:
           sugiyama->setCrossMin(new ogdf::SplitHeuristic());
-        } else if (sc.getCurrent() == ELT_SIFTING) {
+	  break;
+	case SIFTING:
           sugiyama->setCrossMin(new ogdf::SiftingHeuristic());
-        } else if (sc.getCurrent() == ELT_GREEDYINSERT) {
+	  break;
+	case GREEDYINSERT:
           sugiyama->setCrossMin(new ogdf::GreedyInsertHeuristic());
-        } else if (sc.getCurrent() == ELT_GREEDYSWITCH) {
+	  break;
+	case GREEDYSWITCH:
           sugiyama->setCrossMin(new ogdf::GreedySwitchHeuristic());
-        } else if (sc.getCurrent() == ELT_GLOBALSIFTING) {
+	  break;
+	case GLOBALSIFTING:
           sugiyama->setCrossMin(new ogdf::GlobalSifting());
-        } else {
+	  break;
+        default:
           sugiyama->setCrossMin(new ogdf::GridSifting());
         }
       }
 
-      if (dataSet->get(ELT_HIERARCHYLAYOUT, sc)) {
+      if (dataSet->getDeprecated("hierarchy layout", "Layout", sc)) {
         double nodeDistance = 3;
         double layerDistance = 3;
         bool fixedLayerDistance = true;
@@ -257,18 +269,23 @@ public:
         dataSet->get("layer distance", layerDistance);
         dataSet->get("fixed layer distance", fixedLayerDistance);
 
-        if (sc.getCurrent() == ELT_FASTHIERARCHY) {
+        switch(sc.getCurrent()) {
+	case FASTHIERARCHY: {
           ogdf::FastHierarchyLayout *fhl = new FastHierarchyLayout();
           fhl->nodeDistance(nodeDistance);
           fhl->layerDistance(layerDistance);
           fhl->fixedLayerDistance(fixedLayerDistance);
           sugiyama->setLayout(fhl);
-        } else if (sc.getCurrent() == ELT_FASTSIMPLEHIERARCHY) {
+	  break;
+	}
+	case FASTSIMPLEHIERARCHY: {
           ogdf::FastSimpleHierarchyLayout *fshl = new ogdf::FastSimpleHierarchyLayout();
           fshl->nodeDistance(nodeDistance);
           fshl->layerDistance(layerDistance);
           sugiyama->setLayout(fshl);
-        } else {
+	  break;
+	}
+        default:
           ogdf::OptimalHierarchyLayout *ohl = new ogdf::OptimalHierarchyLayout();
           ohl->nodeDistance(nodeDistance);
           ohl->layerDistance(layerDistance);
@@ -297,8 +314,12 @@ public:
         }
       }
 
-      dataSet->set("Number of crossings", sugiyama->numberOfCrossings());
-      dataSet->set("Number of levels/layers", sugiyama->numberOfLevels());
+      dataSet->setDeprecated("number of crossings",
+			     "Number of crossings",
+			     sugiyama->numberOfCrossings());
+      dataSet->setDeprecated("number of levels/layers",
+			     "Number of levels/layers",
+			     sugiyama->numberOfLevels());
     }
   }
 };

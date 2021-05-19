@@ -22,14 +22,12 @@
 
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
 
-#define ELT_SETTINGS "Settings"
-#define ELT_SETTINGSLIST "Standard;Repulse;Planar"
+#define SETTINGSLIST "standard;repulse;planar"
 #define STANDARD_ELT 0
 #define REPULSE_ELT 1
 #define PLANAR_ELT 2
 
-#define ELT_SPEED "Speed"
-#define ELT_SPEEDLIST "Fast;Medium;HQ"
+#define SPEEDLIST "fast;medium;hq"
 #define FAST_ELT 0
 #define MEDIUM_ELT 1
 #define HQ_ELT 2
@@ -64,15 +62,15 @@ public:
                     "following publication:<br/><b>Drawing Graphs Nicely Using Simulated "
                     "Annealing</b>, Ron Davidson, David Harel,  ACM Transactions on Graphics "
                     "15(4), pp. 301-331, 1996.",
-                    "1.3", "Force Directed")
+                    "1.4", "Force Directed")
   OGDFDavidsonHarel(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ogdf::DavidsonHarelLayout() : nullptr) {
-    addInParameter<StringCollection>(ELT_SETTINGS, paramHelp[0], ELT_SETTINGSLIST, true,
-                                     "Standard <br> Repulse <br> Planar");
-    addInParameter<StringCollection>(ELT_SPEED, paramHelp[1], ELT_SPEEDLIST, true,
-                                     "Fast <br> Medium <br> HQ");
-    addInParameter<double>("preferredEdgeLength", paramHelp[2], "0.0");
-    addInParameter<double>("preferredEdgeLengthMultiplier", paramHelp[3], "2.0");
+    addInParameter<StringCollection>("settings", paramHelp[0], SETTINGSLIST, true,
+                                     "standard<br/>repulse<br/>planar");
+    addInParameter<StringCollection>("speed", paramHelp[1], SPEEDLIST, true,
+                                     "fast<br/>medium<br/>hq");
+    addInParameter<double>("edge length", paramHelp[2], "0.0");
+    addInParameter<double>("edge length multiplier", paramHelp[3], "2.0");
   }
 
   void beforeCall() override {
@@ -81,34 +79,41 @@ public:
     if (dataSet != nullptr) {
       settings.setCurrent(0);
 
-      if (dataSet->get(ELT_SETTINGS, settings)) {
-        if (settings.getCurrent() == STANDARD_ELT) {
+      if (dataSet->getDeprecated("settings", "Settings", settings)) {
+        switch(settings.getCurrent()) {
+	case STANDARD_ELT:
           davidson->fixSettings(DavidsonHarelLayout::SettingsParameter::Standard);
-        } else if (settings.getCurrent() == REPULSE_ELT) {
+	  break;
+	case REPULSE_ELT:
           davidson->fixSettings(DavidsonHarelLayout::SettingsParameter::Repulse);
-        } else {
+	  break;
+        default:
           davidson->fixSettings(DavidsonHarelLayout::SettingsParameter::Planar);
         }
       }
 
       speed.setCurrent(0);
 
-      if (dataSet->get(ELT_SPEED, speed)) {
-        if (speed.getCurrent() == FAST_ELT) {
+      if (dataSet->getDeprecated("speed", "Speed", speed)) {
+        switch(speed.getCurrent()) {
+	case FAST_ELT:
           davidson->setSpeed(DavidsonHarelLayout::SpeedParameter::Fast);
-        } else if (speed.getCurrent() == MEDIUM_ELT) {
+	  break;
+	case MEDIUM_ELT:
           davidson->setSpeed(DavidsonHarelLayout::SpeedParameter::Medium);
-        } else {
+	  break;
+        default:
           davidson->setSpeed(DavidsonHarelLayout::SpeedParameter::HQ);
         }
       }
 
       double val = 0;
 
-      if (dataSet->get("preferredEdgeLength", val))
+      if (dataSet->getDeprecated("edge length", "preferredEdgeLength", val))
         davidson->setPreferredEdgeLength(val);
 
-      if (dataSet->get("preferredEdgeLengthMultiplier", val))
+      if (dataSet->getDeprecated("edge length multiplier",
+				 "preferredEdgeLengthMultiplier", val))
         davidson->setPreferredEdgeLengthMultiplier(val);
     }
   }

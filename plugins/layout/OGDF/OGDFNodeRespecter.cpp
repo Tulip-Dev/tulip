@@ -25,11 +25,10 @@
 using namespace tlp;
 using namespace ogdf;
 
-#define ELT_POSTPROCESSING "Post Processing"
-#define ELT_POSTPROCESSINGLIST "None;KeepMultiEdgeBends;Complete"
-#define ELT_POSTPROCESSINGNONE 0
-#define ELT_POSTPROCESSINGKEEP 1
-#define ELT_POSTPROCESSINGCOMPLETE 2
+#define POSTPROCESSINGLIST "none;keep edges visible;complete"
+#define POSTPROCESSINGNONE 0
+#define POSTPROCESSINGKEEP 1
+#define POSTPROCESSINGCOMPLETE 2
 
 static const char *paramHelp[] = {
     // random initial placement
@@ -45,51 +44,51 @@ static const char *paramHelp[] = {
     "The maximum number of iterations >=0.",
 
     // Minimal Temperature
-    "The minimal Temperature >= 0",
+    "The minimal temperature >= 0",
 
     // Initial Temperature
-    "Sets the initial Temperature > Minimal Temperature.",
+    "Sets the initial temperature > minimal temperature.",
 
     // Temperature Decrease
     "Sets temperature Decrease Offset in [0...1].",
 
     // Gravitation
-    "Sets Gravitation >= 0.",
+    "Sets gravitation >= 0.",
 
     // Oscillation Angle
-    "Sets Oscillation Angle in [0...Pi].",
+    "Sets oscillation angle in [0...Pi].",
 
     // Desired Minimal Edge Length
-    "Sets desired Min Edge Length > 0.",
+    "Sets minimal edge length > 0.",
 
     // Init Dummies Per Edge
-    "Sets init Dummies Per Edge >= 0.",
+    "Sets init dummies per edge >= 0.",
 
     // Maximal Dummies Per Edge
-    "Sets Dummies Per Edge > init Dummies Per Edge.",
+    "Sets dummies per edge > init dummies per edge.",
 
     // Dummy Insertion Threshold
-    "Sets dummy Insertion Threshold >= 1.",
+    "Sets dummy insertion threshold >= 1.",
 
     // Maximum Disturbance
-    "Sets max Disturbance >= 0.",
+    "Sets max disturbance >= 0.",
 
     // Repulsion Distance
-    "Sets repulsion Distance >= 0. By default, it is the double of Desired Minimal Edge Length",
+    "Sets repulsion distance >= 0. By default, it is the double of minimal edge length",
 
     // Min Distance CC (double minDistCC)
-    "Sets min Distance between CC >= 0.",
+    "Sets minimum distance between connected components (>= 0).",
 
-    // Page Ratio
-    "Sets Page Ratio > 0."
+    // page ratio
+    "Sets page ratio > 0."
 
 };
 
-static const char *postProcesingValuesDescription =
-    "None <i>(Keep all bends. )</i><br>"
-    "KeepMultiEdgeBends <i>(Activate post-processing but keep all bends on multi-edges and "
+static const char *postProcessingValuesDescription =
+    "none <i>(Keep all bends. )</i><br>"
+    "keep edges visible <i>(Activate post-processing but keep all bends on multi-edges and "
     "self-loops (such that the corresponding edges are visible).)</i><br>"
-    "Complete <i>(Activate post-processing: Remove all bends that do not prevent edge-node "
+    "complete <i>(Activate post-processing: Remove all bends that do not prevent edge-node "
     "intersections.)</i><br>";
 
 class OGDFNodeRespecter : public OGDFLayoutPluginBase {
@@ -108,30 +107,30 @@ public:
       "bends."
       "The algorithm is documented in and was developed for the bachelor thesis: Max Ilsen: "
       "Energy-Based Layout Algorithms for Graphs with Large Nodes. University of Osnabrueck, 2017",
-      "1.0", "Force Directed")
+      "1.1", "Force Directed")
   OGDFNodeRespecter(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ogdf::NodeRespecterLayout() : nullptr) {
     addInParameter<bool>("random initial placement", paramHelp[0], "true", false);
-    addInParameter<StringCollection>(ELT_POSTPROCESSING, paramHelp[1], ELT_POSTPROCESSINGLIST,
-                                     false, postProcesingValuesDescription);
-    addInParameter<double>("Bends Normalization Angle", paramHelp[2], to_string(Math::pi), false);
+    addInParameter<StringCollection>("post processing", paramHelp[1], POSTPROCESSINGLIST,
+                                     false, postProcessingValuesDescription);
+    addInParameter<double>("bends normalization angle", paramHelp[2], to_string(Math::pi), false);
     addInParameter<int>("number of iterations", paramHelp[3], "30000", false);
-    addInParameter<double>("Minimal Temperature", paramHelp[4], "1.0", false);
-    addInParameter<double>("Initial Temperature", paramHelp[5], "10.0", false);
-    addInParameter<double>("Temperature Decrease", paramHelp[6], "0.0", false);
-    addInParameter<double>("Gravitation", paramHelp[7], "0.0625", false);
-    addInParameter<double>("Oscillation Angle", paramHelp[8], to_string(Math::pi_2), false);
-    addInParameter<double>("Desired Minimal Edge Length", paramHelp[9],
+    addInParameter<double>("minimal temperature", paramHelp[4], "1.0", false);
+    addInParameter<double>("initial temperature", paramHelp[5], "10.0", false);
+    addInParameter<double>("temperature decrease", paramHelp[6], "0.0", false);
+    addInParameter<double>("gravitation", paramHelp[7], "0.0625", false);
+    addInParameter<double>("oscillation angle", paramHelp[8], to_string(Math::pi_2), false);
+    addInParameter<double>("minimal edge length", paramHelp[9],
                            to_string(LayoutStandards::defaultNodeSeparation()), false);
-    addInParameter<int>("Init Dummies Per Edge", paramHelp[10], "1", false);
-    addInParameter<int>("Maximal Dummies Per Edge", paramHelp[11], "3", false);
-    addInParameter<double>("Dummy Insertion Threshold", paramHelp[12], "5", false);
-    addInParameter<double>("Maximum Disturbance", paramHelp[13], "0", false);
-    addInParameter<double>("Repulsion Distance", paramHelp[14],
+    addInParameter<int>("init dummies per edge", paramHelp[10], "1", false);
+    addInParameter<int>("maximal dummies per pdge", paramHelp[11], "3", false);
+    addInParameter<double>("dummy insertion threshold", paramHelp[12], "5", false);
+    addInParameter<double>("maximum disturbance", paramHelp[13], "0", false);
+    addInParameter<double>("repulsion distance", paramHelp[14],
                            to_string(2 * LayoutStandards::defaultNodeSeparation()), false);
-    addInParameter<double>("Min Distance CC", paramHelp[15],
+    addInParameter<double>("connected components spacing", paramHelp[15],
                            to_string(LayoutStandards::defaultCCSeparation()), false);
-    addInParameter<double>("Page Ratio", paramHelp[16], "1.0", false);
+    addInParameter<double>("page ratio", paramHelp[16], "1.0", false);
   }
 
   void beforeCall() override {
@@ -145,59 +144,74 @@ public:
       if (dataSet->get("random initial placement", bval))
         npl->setRandomInitialPlacement(bval);
 
-      if (dataSet->get(ELT_POSTPROCESSING, stringCollection)) {
-        if (stringCollection.getCurrent() == ELT_POSTPROCESSINGNONE) {
+      if (dataSet->getDeprecated("post processing", "Post Processing", stringCollection)) {
+        switch(stringCollection.getCurrent()) {
+	case POSTPROCESSINGNONE:
           npl->setPostProcessing(NodeRespecterLayout::PostProcessingMode::None);
-        } else if (stringCollection.getCurrent() == ELT_POSTPROCESSINGKEEP) {
+	  break;
+        case POSTPROCESSINGKEEP:
           npl->setPostProcessing(NodeRespecterLayout::PostProcessingMode::KeepMultiEdgeBends);
-        } else {
+	  break;
+        default:
           npl->setPostProcessing(NodeRespecterLayout::PostProcessingMode::Complete);
         }
       }
 
-      if (dataSet->get("Bends Normalization Angle", dval))
+      if (dataSet->getDeprecated("bends normalization angle",
+				 "Bends Normalization Angle", dval))
         npl->setBendNormalizationAngle(dval);
 
       if (dataSet->get("number of iterations", ival))
         npl->setNumberOfIterations(ival);
 
-      if (dataSet->get("Minimal Temperature", dval))
+      if (dataSet->getDeprecated("minimal temperature",
+				 "Minimal Temperature", dval))
         npl->setMinimalTemperature(dval);
 
-      if (dataSet->get("Initial Temperature", dval))
+      if (dataSet->getDeprecated("initial temperature",
+				 "Initial Temperature", dval))
         npl->setInitialTemperature(dval);
 
-      if (dataSet->get("Temperature Decrease", dval))
+      if (dataSet->getDeprecated("temperature decrease",
+				 "Temperature Decrease", dval))
         npl->setTemperatureDecreaseOffset(dval);
 
-      if (dataSet->get("Gravitation", dval))
+      if (dataSet->getDeprecated("gravitation", "Gravitation", dval))
         npl->setGravitation(dval);
 
-      if (dataSet->get("Oscillation Angle", dval))
+      if (dataSet->getDeprecated("oscillation Angle",
+				 "Oscillation Angle", dval))
         npl->setOscillationAngle(dval);
 
-      if (dataSet->get("Desired Minimal Edge Length", dval))
+      if (dataSet->getDeprecated("minimal edge length",
+				 "Desired Minimal Edge Length", dval))
         npl->setDesiredMinEdgeLength(dval);
 
-      if (dataSet->get("Init Dummies Per Edge", ival))
+      if (dataSet->getDeprecated("init dummies per edge",
+				 "Init Dummies Per Edge", ival))
         npl->setInitDummiesPerEdge(ival);
 
-      if (dataSet->get("Maximal Dummies Per Edge", ival))
+      if (dataSet->getDeprecated("maximal dummies per edge",
+				 "Maximal Dummies Per Edge", ival))
         npl->setMaxDummiesPerEdge(ival);
 
-      if (dataSet->get("Dummy Insertion Threshold", dval))
+      if (dataSet->getDeprecated("dummy insertion threshold",
+				 "Dummy Insertion Threshold", dval))
         npl->setDummyInsertionThreshold(dval);
 
-      if (dataSet->get("Maximum Disturbance", dval))
+      if (dataSet->getDeprecated("maximum disturbance",
+				 "Maximum Disturbance", dval))
         npl->setMaxDisturbance(dval);
 
-      if (dataSet->get("Repulsion Distance", dval))
+      if (dataSet->getDeprecated("repulsion distance",
+				 "Repulsion Distance", dval))
         npl->setRepulsionDistance(dval);
 
-      if (dataSet->get("Min Distance CC", dval))
+      if (dataSet->getDeprecated("connected components spacing",
+				 "Min Distance CC", dval))
         npl->setMinDistCC(dval);
 
-      if (dataSet->get("Page Ratio", dval))
+      if (dataSet->getDeprecated("page ratio", "Page Ratio", dval))
         npl->setPageRatio(dval);
     }
   }
