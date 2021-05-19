@@ -80,13 +80,13 @@ public:
       settings.setCurrent(0);
 
       if (dataSet->getDeprecated("settings", "Settings", settings)) {
-        switch(settings.getCurrent()) {
-	case STANDARD_ELT:
+        switch (settings.getCurrent()) {
+        case STANDARD_ELT:
           davidson->fixSettings(DavidsonHarelLayout::SettingsParameter::Standard);
-	  break;
-	case REPULSE_ELT:
+          break;
+        case REPULSE_ELT:
           davidson->fixSettings(DavidsonHarelLayout::SettingsParameter::Repulse);
-	  break;
+          break;
         default:
           davidson->fixSettings(DavidsonHarelLayout::SettingsParameter::Planar);
         }
@@ -95,13 +95,13 @@ public:
       speed.setCurrent(0);
 
       if (dataSet->getDeprecated("speed", "Speed", speed)) {
-        switch(speed.getCurrent()) {
-	case FAST_ELT:
+        switch (speed.getCurrent()) {
+        case FAST_ELT:
           davidson->setSpeed(DavidsonHarelLayout::SpeedParameter::Fast);
-	  break;
-	case MEDIUM_ELT:
+          break;
+        case MEDIUM_ELT:
           davidson->setSpeed(DavidsonHarelLayout::SpeedParameter::Medium);
-	  break;
+          break;
         default:
           davidson->setSpeed(DavidsonHarelLayout::SpeedParameter::HQ);
         }
@@ -112,8 +112,7 @@ public:
       if (dataSet->getDeprecated("edge length", "preferredEdgeLength", val))
         davidson->setPreferredEdgeLength(val);
 
-      if (dataSet->getDeprecated("edge length multiplier",
-				 "preferredEdgeLengthMultiplier", val))
+      if (dataSet->getDeprecated("edge length multiplier", "preferredEdgeLengthMultiplier", val))
         davidson->setPreferredEdgeLengthMultiplier(val);
     }
   }

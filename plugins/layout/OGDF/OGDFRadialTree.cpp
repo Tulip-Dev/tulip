@@ -83,13 +83,13 @@ public:
         layout->connectedComponentDistance(dval);
 
       if (dataSet->getDeprecated("root selection", "Root selection", sc)) {
-	switch(sc.getCurrent()) {
-	case ROOTSOURCE:
+        switch (sc.getCurrent()) {
+        case ROOTSOURCE:
           layout->rootSelection(RadialTreeLayout::RootSelectionType::Source);
-	  break;
+          break;
         case ROOTSINK:
           layout->rootSelection(RadialTreeLayout::RootSelectionType::Sink);
-	  break;
+          break;
         default:
           layout->rootSelection(RadialTreeLayout::RootSelectionType::Center);
         }

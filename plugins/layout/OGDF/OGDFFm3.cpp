@@ -181,9 +181,10 @@ static const char *presortValuesDescription =
     "decreasing width <i>(presort by decreasing width of components)</i><br/>"
     "none <i>(Do not presort)</i>";
 
-static const char *galaxyChoiceValuesDescription = "non uniform lower mass <i>(use non-uniform probability depending on the lower star masses)</i><br/>"
-                                                   "non uniform probability higher mass<i>(use non-uniform probability depending on the higher star masses)</i><br/>"
-                                                   "uniform probability <i>(use uniform random probability)</i>";
+static const char *galaxyChoiceValuesDescription =
+    "non uniform lower mass <i>(use non-uniform probability depending on the lower star masses)</i><br/>"
+    "non uniform probability higher mass<i>(use non-uniform probability depending on the higher star masses)</i><br/>"
+    "uniform probability <i>(use uniform random probability)</i>";
 
 static const char *maxIterChangeValuesDescription = "linearly decreasing<br/>"
                                                     "rapidly decreasing<br/>"
@@ -243,8 +244,8 @@ OGDFFm3::OGDFFm3(const tlp::PluginContext *context)
   addInParameter<StringCollection>("edge length measurement", paramHelp[8],
                                    EDGELENGTHMEASUREMENTLIST, true,
                                    edgeLengthMeasurementValuesDescription);
-  addInParameter<StringCollection>("allowed positions", paramHelp[9], ALLOWEDPOSITIONSLIST,
-                                   true, "integer<br/>exponent<br/>all");
+  addInParameter<StringCollection>("allowed positions", paramHelp[9], ALLOWEDPOSITIONSLIST, true,
+                                   "integer<br/>exponent<br/>all");
   addInParameter<StringCollection>("tip over", paramHelp[10], TIPOVERLIST, true,
                                    "no growing row<br/>always<br/>none");
   addInParameter<StringCollection>("presort", paramHelp[11], PRESORTLIST, true,
@@ -253,22 +254,20 @@ OGDFFm3::OGDFFm3(const tlp::PluginContext *context)
                                    galaxyChoiceValuesDescription);
   addInParameter<StringCollection>("max iter change", paramHelp[13], MAXITERCHANGELIST, true,
                                    maxIterChangeValuesDescription);
-  addInParameter<StringCollection>("initial placement", paramHelp[14],
-                                   INITIALPLACEMENTMULTLIST, true, "advanced<br/>simple");
+  addInParameter<StringCollection>("initial placement", paramHelp[14], INITIALPLACEMENTMULTLIST,
+                                   true, "advanced<br/>simple");
   addInParameter<StringCollection>("force model", paramHelp[15], FORCEMODELLIST, true,
                                    forceModelValuesDescription);
   addInParameter<StringCollection>("repulsive force method", paramHelp[16],
-                                   REPULSIVEFORCEMETHODLIST, true,
-                                   repulsiveForceValuesDescription);
+                                   REPULSIVEFORCEMETHODLIST, true, repulsiveForceValuesDescription);
   addInParameter<StringCollection>("initial placement forces", paramHelp[17],
                                    INITIALPLACEMENTFORCESLIST, true,
                                    initialPlacementValuesDescription);
   addInParameter<StringCollection>("reduced tree construction", paramHelp[18],
                                    REDUCEDTREECONSTRUCTIONLIST, true,
                                    "subtree by subtree<br/>path by path<br/>");
-  addInParameter<StringCollection>("smallest cell finding", paramHelp[19],
-                                   SMALLESTCELLFINDINGLIST, true,
-                                   smallestCellFindingValuesDescription);
+  addInParameter<StringCollection>("smallest cell finding", paramHelp[19], SMALLESTCELLFINDINGLIST,
+                                   true, smallestCellFindingValuesDescription);
 }
 
 OGDFFm3::~OGDFFm3() {}
@@ -279,40 +278,36 @@ void OGDFFm3::beforeCall() {
   if (dataSet != nullptr) {
     double edgeLenth = 10;
 
-    if (dataSet->getDeprecated("unit edge length",
-			       "Unit edge length", edgeLenth))
+    if (dataSet->getDeprecated("unit edge length", "Unit edge length", edgeLenth))
       fmmm->unitEdgeLength(edgeLenth);
 
     bool bval = false;
 
-    if (dataSet->getDeprecated("new initial placement",
-			       "New initial placement", bval)) {
+    if (dataSet->getDeprecated("new initial placement", "New initial placement", bval)) {
       fmmm->newInitialPlacement(bval);
     }
 
-    if (dataSet->getDeprecated("page format",
-			       "Page Format", stringCollection)) {
-      switch(stringCollection.getCurrent()) {
+    if (dataSet->getDeprecated("page format", "Page Format", stringCollection)) {
+      switch (stringCollection.getCurrent()) {
       case PORTRAIT:
         fmmm->pageFormat(FMMMOptions::PageFormatType::Portrait);
-	break;
+        break;
       case LANDSCAPE:
         fmmm->pageFormat(FMMMOptions::PageFormatType::Landscape);
-	break;
+        break;
       default:
         fmmm->pageFormat(FMMMOptions::PageFormatType::Square);
       }
     }
 
-    if (dataSet->getDeprecated("quality vs speed",
-			       "Quality vs Speed", stringCollection)) {
-      switch(stringCollection.getCurrent()) {
+    if (dataSet->getDeprecated("quality vs speed", "Quality vs Speed", stringCollection)) {
+      switch (stringCollection.getCurrent()) {
       case NICEANDINCREDIBLESPEED:
         fmmm->qualityVersusSpeed(FMMMOptions::QualityVsSpeed::NiceAndIncredibleSpeed);
-	break;
+        break;
       case GORGEOUSANDEFFICIENT:
         fmmm->qualityVersusSpeed(FMMMOptions::QualityVsSpeed::GorgeousAndEfficient);
-	break;
+        break;
       default:
         fmmm->qualityVersusSpeed(FMMMOptions::QualityVsSpeed::BeautifulAndFast);
       }
@@ -376,8 +371,8 @@ void OGDFFm3::beforeCall() {
       fmmm->threshold(dval);
     }
 
-    if (dataSet->getDeprecated("edge length measurement",
-			       "Edge Length Measurement", stringCollection)) {
+    if (dataSet->getDeprecated("edge length measurement", "Edge Length Measurement",
+                               stringCollection)) {
       if (stringCollection.getCurrent() == BOUNDINGCIRCLE) {
         fmmm->edgeLengthMeasurement(FMMMOptions::EdgeLengthMeasurement::BoundingCircle);
       } else {
@@ -385,28 +380,27 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("allowed positions",
-			       "Allowed Positions", stringCollection)) {
-      switch(stringCollection.getCurrent()) {
+    if (dataSet->getDeprecated("allowed positions", "Allowed Positions", stringCollection)) {
+      switch (stringCollection.getCurrent()) {
       case INTEGER:
         fmmm->allowedPositions(FMMMOptions::AllowedPositions::Integer);
-	break;
+        break;
       case EXPONENT:
         fmmm->allowedPositions(FMMMOptions::AllowedPositions::Exponent);
-	break;
+        break;
       default:
         fmmm->allowedPositions(FMMMOptions::AllowedPositions::All);
       }
     }
 
     if (dataSet->getDeprecated("tip over", "Tip Over", stringCollection)) {
-      switch(stringCollection.getCurrent()) {
+      switch (stringCollection.getCurrent()) {
       case NONE:
         fmmm->tipOverCCs(FMMMOptions::TipOver::None);
-	break;
+        break;
       case NOGROWINGROW:
         fmmm->tipOverCCs(FMMMOptions::TipOver::NoGrowingRow);
-	break;
+        break;
       default:
         fmmm->tipOverCCs(FMMMOptions::TipOver::Always);
       }
@@ -422,36 +416,33 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("galaxy choice",
-			       "Galaxy Choice", stringCollection)) {
-      switch(stringCollection.getCurrent()) {
+    if (dataSet->getDeprecated("galaxy choice", "Galaxy Choice", stringCollection)) {
+      switch (stringCollection.getCurrent()) {
       case UNIFORMPROB:
         fmmm->galaxyChoice(FMMMOptions::GalaxyChoice::UniformProb);
-	break;
+        break;
       case NONUNIFORMPROBLOWERMASS:
         fmmm->galaxyChoice(FMMMOptions::GalaxyChoice::NonUniformProbLowerMass);
-	break;
+        break;
       default:
         fmmm->galaxyChoice(FMMMOptions::GalaxyChoice::NonUniformProbHigherMass);
       }
     }
 
-    if (dataSet->getDeprecated("max iter change",
-			       "Max Iter Change", stringCollection)) {
-      switch(stringCollection.getCurrent()) {
+    if (dataSet->getDeprecated("max iter change", "Max Iter Change", stringCollection)) {
+      switch (stringCollection.getCurrent()) {
       case CONSTANT:
         fmmm->maxIterChange(FMMMOptions::MaxIterChange::Constant);
-	break;
+        break;
       case LINEARLYDECREASING:
         fmmm->maxIterChange(FMMMOptions::MaxIterChange::LinearlyDecreasing);
-	break;
+        break;
       default:
         fmmm->maxIterChange(FMMMOptions::MaxIterChange::RapidlyDecreasing);
       }
     }
 
-    if (dataSet->getDeprecated("initial placement",
-			       "Initial Placement Mult", stringCollection)) {
+    if (dataSet->getDeprecated("initial placement", "Initial Placement Mult", stringCollection)) {
       if (stringCollection.getCurrent() == ADVANCED) {
         fmmm->initialPlacementMult(FMMMOptions::InitialPlacementMult::Advanced);
       } else {
@@ -459,36 +450,35 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("force model",
-			       "Force Model", stringCollection)) {
-      switch(stringCollection.getCurrent()) {
+    if (dataSet->getDeprecated("force model", "Force Model", stringCollection)) {
+      switch (stringCollection.getCurrent()) {
       case FRUCHTERMANNREINGOLD:
         fmmm->forceModel(FMMMOptions::ForceModel::FruchtermanReingold);
-	break;
+        break;
       case EADES:
         fmmm->forceModel(FMMMOptions::ForceModel::Eades);
-	break;
+        break;
       default:
         fmmm->forceModel(FMMMOptions::ForceModel::New);
       }
     }
 
-    if (dataSet->getDeprecated("repulsive force method",
-			       "Repulsive Force Method", stringCollection)) {
-      switch(stringCollection.getCurrent()) {
+    if (dataSet->getDeprecated("repulsive force method", "Repulsive Force Method",
+                               stringCollection)) {
+      switch (stringCollection.getCurrent()) {
       case EXACT:
         fmmm->repulsiveForcesCalculation(FMMMOptions::RepulsiveForcesMethod::Exact);
-	break;
+        break;
       case GRIDAPPROXIMATION:
         fmmm->repulsiveForcesCalculation(FMMMOptions::RepulsiveForcesMethod::GridApproximation);
-	break;
+        break;
       default:
         fmmm->repulsiveForcesCalculation(FMMMOptions::RepulsiveForcesMethod::NMM);
       }
     }
 
-    if (dataSet->getDeprecated("initial placement forces",
-			       "Initial Placement Forces", stringCollection)) {
+    if (dataSet->getDeprecated("initial placement forces", "Initial Placement Forces",
+                               stringCollection)) {
       auto current = stringCollection.getCurrent();
       if (current != 0) {
         switch (current) {
@@ -509,8 +499,8 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("reduced tree construction",
-			       "Reduced Tree Construction", stringCollection)) {
+    if (dataSet->getDeprecated("reduced tree construction", "Reduced Tree Construction",
+                               stringCollection)) {
       if (stringCollection.getCurrent() == SUBTREEBYSUBTREE) {
         fmmm->nmTreeConstruction(FMMMOptions::ReducedTreeConstruction::SubtreeBySubtree);
       } else {
@@ -518,8 +508,8 @@ void OGDFFm3::beforeCall() {
       }
     }
 
-    if (dataSet->getDeprecated("smallest cell finding",
-			       "Smallest Cell Finding", stringCollection)) {
+    if (dataSet->getDeprecated("smallest cell finding", "Smallest Cell Finding",
+                               stringCollection)) {
       if (stringCollection.getCurrent() == ITERATIVELY) {
         fmmm->nmSmallCell(FMMMOptions::SmallestCellFinding::Iteratively);
       } else {
@@ -535,8 +525,7 @@ void OGDFFm3::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) {
 
   NumericProperty *length = nullptr;
 
-  if (dataSet->getDeprecated("edge length property",
-			     "Edge Length Property", length) && length) {
+  if (dataSet->getDeprecated("edge length property", "Edge Length Property", length) && length) {
     EdgeArray<double> edgeLength(tlpToOGDF->getOGDFGraph());
 
     const std::vector<tlp::edge> &edges = graph->edges();

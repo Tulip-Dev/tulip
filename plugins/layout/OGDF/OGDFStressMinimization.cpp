@@ -103,32 +103,29 @@ public:
       StringCollection sc;
       tlp::NumericProperty *edgeCosts = graph->getProperty<tlp::DoubleProperty>("viewMetric");
 
-      if (dataSet->getDeprecated("termination criterion",
-				 "terminationCriterion", sc)) {
-	switch(sc.getCurrent()) {
-	case POSITION_DIFFERENCE:
-          stressm->convergenceCriterion(StressMinimization::TerminationCriterion::PositionDifference);
-	  break;
+      if (dataSet->getDeprecated("termination criterion", "terminationCriterion", sc)) {
+        switch (sc.getCurrent()) {
+        case POSITION_DIFFERENCE:
+          stressm->convergenceCriterion(
+              StressMinimization::TerminationCriterion::PositionDifference);
+          break;
         case STRESS:
           stressm->convergenceCriterion(StressMinimization::TerminationCriterion::Stress);
-	  break;
+          break;
         default:
           stressm->convergenceCriterion(StressMinimization::TerminationCriterion::None);
         }
       }
 
-      if (dataSet->getDeprecated("fix x coordinates",
-				 "fixXCoordinates", bval)) {
+      if (dataSet->getDeprecated("fix x coordinates", "fixXCoordinates", bval)) {
         stressm->fixXCoordinates(bval);
       }
 
-      if (dataSet->getDeprecated("fix y coordinates",
-				 "fixYCoordinates", bval)) {
+      if (dataSet->getDeprecated("fix y coordinates", "fixYCoordinates", bval)) {
         stressm->fixXCoordinates(bval);
       }
 
-      if (dataSet->getDeprecated("fix z coordinates",
-				 "fixZCoordinates", bval)) {
+      if (dataSet->getDeprecated("fix z coordinates", "fixZCoordinates", bval)) {
         stressm->fixZCoordinates(bval);
       }
 
@@ -136,7 +133,8 @@ public:
         stressm->hasInitialLayout(bval);
       }
 
-      if (dataSet->getDeprecated("layout components separately", "layoutComponentsSeparately", bval)) {
+      if (dataSet->getDeprecated("layout components separately", "layoutComponentsSeparately",
+                                 bval)) {
         stressm->layoutComponentsSeparately(bval);
       }
 

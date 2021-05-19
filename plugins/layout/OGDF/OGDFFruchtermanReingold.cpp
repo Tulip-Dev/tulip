@@ -102,8 +102,7 @@ public:
       if (dataSet->get("noise", bval))
         sefr->noise(bval);
 
-      if (dataSet->getDeprecated("connected components spacing",
-				 "minDistCC", dval))
+      if (dataSet->getDeprecated("connected components spacing", "minDistCC", dval))
         sefr->minDistCC(dval);
 
       if (dataSet->getDeprecated("page ratio", "pageRatio", dval))

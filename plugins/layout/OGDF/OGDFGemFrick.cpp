@@ -94,8 +94,7 @@ OGDFGemFrick::OGDFGemFrick(const tlp::PluginContext *context)
   addInParameter<double>("oscillation angle", paramHelp[7], "1.57079633");
   addInParameter<double>("rotation sensitivity", paramHelp[8], "0.01");
   addInParameter<double>("oscillation sensitivity", paramHelp[9], "0.3");
-  addInParameter<StringCollection>("attraction formula", paramHelp[10],
-				   "Fruchterman/Reingold;GEM",
+  addInParameter<StringCollection>("attraction formula", paramHelp[10], "Fruchterman/Reingold;GEM",
                                    true, "Fruchterman/Reingold<br/>GEM");
   addInParameter<double>("connected components spacing", paramHelp[11], "20");
   addInParameter<double>("page ratio", paramHelp[12], "1.0");
@@ -155,8 +154,7 @@ void OGDFGemFrick::beforeCall() {
       gem->attractionFormula(sc.getCurrent() + 1);
     }
 
-    if (dataSet->getDeprecated("connected components spacing",
-			       "minDistCC", dval))
+    if (dataSet->getDeprecated("connected components spacing", "minDistCC", dval))
       gem->minDistCC(dval);
 
     if (dataSet->getDeprecated("page ratio", "pageRatio", dval))

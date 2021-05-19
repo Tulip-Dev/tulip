@@ -31,8 +31,8 @@
 #include <tulip/StringCollection.h>
 
 #define EMBEDDER "Embedder"
-#define EMBEDDER_LIST                                                                          \
-  "simple;max face;max face layers;min depth;min depth max face;" \
+#define EMBEDDER_LIST                                                                              \
+  "simple;max face;max face layers;min depth;min depth max face;"                                  \
   "min depth max face layers;min depth PiTa;optimal FlexDraw"
 #define EMBEDDER_MAXFACE 1
 #define EMBEDDER_MAXFACELAYERS 2
@@ -106,29 +106,29 @@ public:
         pl->minCliqueSize(clique_size);
 
       if (dataSet->getDeprecated("embedder", "Embedder", sc)) {
-        switch(sc.getCurrent()) {
-	case EMBEDDER_MAXFACE:
+        switch (sc.getCurrent()) {
+        case EMBEDDER_MAXFACE:
           pl->setEmbedder(new ogdf::EmbedderMaxFace());
-	  break;
-	case EMBEDDER_MAXFACELAYERS:
+          break;
+        case EMBEDDER_MAXFACELAYERS:
           pl->setEmbedder(new ogdf::EmbedderMaxFaceLayers());
-	  break;
+          break;
         case EMBEDDER_MINDEPTH:
           pl->setEmbedder(new ogdf::EmbedderMinDepth());
-	  break;
+          break;
         case EMBEDDER_MINDEPTHMAXFACE:
           pl->setEmbedder(new ogdf::EmbedderMinDepthMaxFace());
-	  break;
+          break;
         case EMBEDDER_MINDEPTHMAXFACELAYERS:
           pl->setEmbedder(new ogdf::EmbedderMinDepthMaxFaceLayers());
-	  break;
+          break;
         case EMBEDDER_MINDEPTHPITA:
           pl->setEmbedder(new ogdf::EmbedderMinDepthPiTa());
-	  break;
+          break;
         case EMBEDDER_OPTIMALFLEXDRAW:
           pl->setEmbedder(new ogdf::EmbedderOptimalFlexDraw());
-	  break;
-	default:
+          break;
+        default:
           pl->setEmbedder(new ogdf::SimpleEmbedder());
         }
       }

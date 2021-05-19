@@ -111,8 +111,8 @@ public:
   OGDFNodeRespecter(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ogdf::NodeRespecterLayout() : nullptr) {
     addInParameter<bool>("random initial placement", paramHelp[0], "true", false);
-    addInParameter<StringCollection>("post processing", paramHelp[1], POSTPROCESSINGLIST,
-                                     false, postProcessingValuesDescription);
+    addInParameter<StringCollection>("post processing", paramHelp[1], POSTPROCESSINGLIST, false,
+                                     postProcessingValuesDescription);
     addInParameter<double>("bends normalization angle", paramHelp[2], to_string(Math::pi), false);
     addInParameter<int>("number of iterations", paramHelp[3], "30000", false);
     addInParameter<double>("minimal temperature", paramHelp[4], "1.0", false);
@@ -145,70 +145,58 @@ public:
         npl->setRandomInitialPlacement(bval);
 
       if (dataSet->getDeprecated("post processing", "Post Processing", stringCollection)) {
-        switch(stringCollection.getCurrent()) {
-	case POSTPROCESSINGNONE:
+        switch (stringCollection.getCurrent()) {
+        case POSTPROCESSINGNONE:
           npl->setPostProcessing(NodeRespecterLayout::PostProcessingMode::None);
-	  break;
+          break;
         case POSTPROCESSINGKEEP:
           npl->setPostProcessing(NodeRespecterLayout::PostProcessingMode::KeepMultiEdgeBends);
-	  break;
+          break;
         default:
           npl->setPostProcessing(NodeRespecterLayout::PostProcessingMode::Complete);
         }
       }
 
-      if (dataSet->getDeprecated("bends normalization angle",
-				 "Bends Normalization Angle", dval))
+      if (dataSet->getDeprecated("bends normalization angle", "Bends Normalization Angle", dval))
         npl->setBendNormalizationAngle(dval);
 
       if (dataSet->get("number of iterations", ival))
         npl->setNumberOfIterations(ival);
 
-      if (dataSet->getDeprecated("minimal temperature",
-				 "Minimal Temperature", dval))
+      if (dataSet->getDeprecated("minimal temperature", "Minimal Temperature", dval))
         npl->setMinimalTemperature(dval);
 
-      if (dataSet->getDeprecated("initial temperature",
-				 "Initial Temperature", dval))
+      if (dataSet->getDeprecated("initial temperature", "Initial Temperature", dval))
         npl->setInitialTemperature(dval);
 
-      if (dataSet->getDeprecated("temperature decrease",
-				 "Temperature Decrease", dval))
+      if (dataSet->getDeprecated("temperature decrease", "Temperature Decrease", dval))
         npl->setTemperatureDecreaseOffset(dval);
 
       if (dataSet->getDeprecated("gravitation", "Gravitation", dval))
         npl->setGravitation(dval);
 
-      if (dataSet->getDeprecated("oscillation Angle",
-				 "Oscillation Angle", dval))
+      if (dataSet->getDeprecated("oscillation Angle", "Oscillation Angle", dval))
         npl->setOscillationAngle(dval);
 
-      if (dataSet->getDeprecated("minimal edge length",
-				 "Desired Minimal Edge Length", dval))
+      if (dataSet->getDeprecated("minimal edge length", "Desired Minimal Edge Length", dval))
         npl->setDesiredMinEdgeLength(dval);
 
-      if (dataSet->getDeprecated("init dummies per edge",
-				 "Init Dummies Per Edge", ival))
+      if (dataSet->getDeprecated("init dummies per edge", "Init Dummies Per Edge", ival))
         npl->setInitDummiesPerEdge(ival);
 
-      if (dataSet->getDeprecated("maximal dummies per edge",
-				 "Maximal Dummies Per Edge", ival))
+      if (dataSet->getDeprecated("maximal dummies per edge", "Maximal Dummies Per Edge", ival))
         npl->setMaxDummiesPerEdge(ival);
 
-      if (dataSet->getDeprecated("dummy insertion threshold",
-				 "Dummy Insertion Threshold", dval))
+      if (dataSet->getDeprecated("dummy insertion threshold", "Dummy Insertion Threshold", dval))
         npl->setDummyInsertionThreshold(dval);
 
-      if (dataSet->getDeprecated("maximum disturbance",
-				 "Maximum Disturbance", dval))
+      if (dataSet->getDeprecated("maximum disturbance", "Maximum Disturbance", dval))
         npl->setMaxDisturbance(dval);
 
-      if (dataSet->getDeprecated("repulsion distance",
-				 "Repulsion Distance", dval))
+      if (dataSet->getDeprecated("repulsion distance", "Repulsion Distance", dval))
         npl->setRepulsionDistance(dval);
 
-      if (dataSet->getDeprecated("connected components spacing",
-				 "Min Distance CC", dval))
+      if (dataSet->getDeprecated("connected components spacing", "Min Distance CC", dval))
         npl->setMinDistCC(dval);
 
       if (dataSet->getDeprecated("page ratio", "Page Ratio", dval))

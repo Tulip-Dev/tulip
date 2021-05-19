@@ -73,8 +73,7 @@ public:
       if (dataSet->getDeprecated("circles spacing", "minDistSibling", val))
         circular->minDistSibling(val);
 
-      if (dataSet->getDeprecated("connected components spacing",
-				 "minDistCC", val))
+      if (dataSet->getDeprecated("connected components spacing", "minDistCC", val))
         circular->minDistCC(val);
 
       if (dataSet->getDeprecated("page ratio", "pageRatio", val))

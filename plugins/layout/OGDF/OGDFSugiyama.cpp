@@ -42,8 +42,8 @@
 #define OPTIMALRANKING 1
 #define COFFMANGRAHAMRANKING 2
 
-#define TWOLAYERCROSSLIST                                                                      \
-  "barycenter;median;split;sifting;greedy insert;"     \
+#define TWOLAYERCROSSLIST                                                                          \
+  "barycenter;median;split;sifting;greedy insert;"                                                 \
   "greedy switch;global sifting;grid sifting"
 #define BARYCENTER 0
 #define MEDIAN 1
@@ -54,8 +54,7 @@
 #define GLOBALSIFTING 6
 #define GRIDSIFTING 7
 
-#define HIERARCHYLAYOUTLIST                                                                    \
-  "fast;fast simple;optimal"
+#define HIERARCHYLAYOUTLIST "fast;fast simple;optimal"
 #define FASTHIERARCHY 0
 #define FASTSIMPLEHIERARCHY 1
 #define OPTIMALHIERARCHY 2
@@ -170,10 +169,10 @@ public:
     addInParameter<bool>("align siblings", paramHelp[10], "false");
     addInParameter<StringCollection>("ranking", paramHelp[11], RANKINGLIST, true,
                                      eltRankingValuesDescription);
-    addInParameter<StringCollection>("two-layer crossing minimization", paramHelp[12], TWOLAYERCROSSLIST, true,
-                                     twoLayerCrossValuesDescription);
-    addInParameter<StringCollection>("hierarchy layout", paramHelp[13], HIERARCHYLAYOUTLIST,
-                                     true, hierarchyLayoutValuesDescription);
+    addInParameter<StringCollection>("two-layer crossing minimization", paramHelp[12],
+                                     TWOLAYERCROSSLIST, true, twoLayerCrossValuesDescription);
+    addInParameter<StringCollection>("hierarchy layout", paramHelp[13], HIERARCHYLAYOUTLIST, true,
+                                     hierarchyLayoutValuesDescription);
     addInParameter<bool>("transpose vertically", paramHelp[14], "true");
     addOutParameter<int>("number of crossings", paramHelp[15]);
     addOutParameter<int>("number of levels/layers", paramHelp[16]);
@@ -199,12 +198,10 @@ public:
       if (dataSet->get("runs", ival))
         sugiyama->runs(ival);
 
-      if (dataSet->getDeprecated("connected components packing",
-				 "arrangeCCs", bval))
+      if (dataSet->getDeprecated("connected components packing", "arrangeCCs", bval))
         sugiyama->arrangeCCs(bval);
 
-      if (dataSet->getDeprecated("connected components spacing",
-				 "minDistCC", dval))
+      if (dataSet->getDeprecated("connected components spacing", "minDistCC", dval))
         sugiyama->minDistCC(dval);
 
       if (dataSet->getDeprecated("page ratio", "pageRatio", dval))
@@ -220,42 +217,42 @@ public:
         sugiyama->transpose(bval);
 
       if (dataSet->getDeprecated("ranking", "Ranking", sc)) {
-        switch(sc.getCurrent()) {
-	case LONGESTPATHRANKING:
+        switch (sc.getCurrent()) {
+        case LONGESTPATHRANKING:
           sugiyama->setRanking(new ogdf::LongestPathRanking());
-	  break;
-	case OPTIMALRANKING:
+          break;
+        case OPTIMALRANKING:
           sugiyama->setRanking(new ogdf::OptimalRanking());
-	  break;
-	default:
+          break;
+        default:
           sugiyama->setRanking(new ogdf::CoffmanGrahamRanking());
-	}
+        }
       }
 
       if (dataSet->getDeprecated("two-layer crossing minimization",
-				 "Two-layer crossing minimization", sc)) {
-        switch(sc.getCurrent()) {
-	case BARYCENTER:
+                                 "Two-layer crossing minimization", sc)) {
+        switch (sc.getCurrent()) {
+        case BARYCENTER:
           sugiyama->setCrossMin(new ogdf::BarycenterHeuristic());
-	  break;
-	case MEDIAN:
+          break;
+        case MEDIAN:
           sugiyama->setCrossMin(new ogdf::MedianHeuristic());
-	  break;
-	case SPLIT:
+          break;
+        case SPLIT:
           sugiyama->setCrossMin(new ogdf::SplitHeuristic());
-	  break;
-	case SIFTING:
+          break;
+        case SIFTING:
           sugiyama->setCrossMin(new ogdf::SiftingHeuristic());
-	  break;
-	case GREEDYINSERT:
+          break;
+        case GREEDYINSERT:
           sugiyama->setCrossMin(new ogdf::GreedyInsertHeuristic());
-	  break;
-	case GREEDYSWITCH:
+          break;
+        case GREEDYSWITCH:
           sugiyama->setCrossMin(new ogdf::GreedySwitchHeuristic());
-	  break;
-	case GLOBALSIFTING:
+          break;
+        case GLOBALSIFTING:
           sugiyama->setCrossMin(new ogdf::GlobalSifting());
-	  break;
+          break;
         default:
           sugiyama->setCrossMin(new ogdf::GridSifting());
         }
@@ -269,22 +266,22 @@ public:
         dataSet->get("layer distance", layerDistance);
         dataSet->get("fixed layer distance", fixedLayerDistance);
 
-        switch(sc.getCurrent()) {
-	case FASTHIERARCHY: {
+        switch (sc.getCurrent()) {
+        case FASTHIERARCHY: {
           ogdf::FastHierarchyLayout *fhl = new FastHierarchyLayout();
           fhl->nodeDistance(nodeDistance);
           fhl->layerDistance(layerDistance);
           fhl->fixedLayerDistance(fixedLayerDistance);
           sugiyama->setLayout(fhl);
-	  break;
-	}
-	case FASTSIMPLEHIERARCHY: {
+          break;
+        }
+        case FASTSIMPLEHIERARCHY: {
           ogdf::FastSimpleHierarchyLayout *fshl = new ogdf::FastSimpleHierarchyLayout();
           fshl->nodeDistance(nodeDistance);
           fshl->layerDistance(layerDistance);
           sugiyama->setLayout(fshl);
-	  break;
-	}
+          break;
+        }
         default:
           ogdf::OptimalHierarchyLayout *ohl = new ogdf::OptimalHierarchyLayout();
           ohl->nodeDistance(nodeDistance);
@@ -314,12 +311,10 @@ public:
         }
       }
 
-      dataSet->setDeprecated("number of crossings",
-			     "Number of crossings",
-			     sugiyama->numberOfCrossings());
-      dataSet->setDeprecated("number of levels/layers",
-			     "Number of levels/layers",
-			     sugiyama->numberOfLevels());
+      dataSet->setDeprecated("number of crossings", "Number of crossings",
+                             sugiyama->numberOfCrossings());
+      dataSet->setDeprecated("number of levels/layers", "Number of levels/layers",
+                             sugiyama->numberOfLevels());
     }
   }
 };

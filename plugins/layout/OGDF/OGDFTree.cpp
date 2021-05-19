@@ -125,32 +125,32 @@ public:
         tree->orthogonalLayout(bval);
 
       if (dataSet->getDeprecated("orientation", "Orientation", sc)) {
-        switch(sc.getCurrent()) {
-	case TOPTOBOTTOM:
+        switch (sc.getCurrent()) {
+        case TOPTOBOTTOM:
           // because of an ununderstanding fix
-         // in thirdparty/OGDF/src/ogdf/tree/TreeLayout.cpp
+          // in thirdparty/OGDF/src/ogdf/tree/TreeLayout.cpp
           tree->orientation(Orientation::bottomToTop);
-	  break;
-	case BOTTOMTOTOP:
+          break;
+        case BOTTOMTOTOP:
           // same as above
           tree->orientation(Orientation::topToBottom);
-	  break;
-	case LEFTTORIGHT:
+          break;
+        case LEFTTORIGHT:
           tree->orientation(Orientation::leftToRight);
-	  break;
+          break;
         default:
           tree->orientation(Orientation::rightToLeft);
         }
       }
 
       if (dataSet->getDeprecated("root selection", "Root selection", sc)) {
-        switch(sc.getCurrent()) {
-	case ROOTSOURCE:
+        switch (sc.getCurrent()) {
+        case ROOTSOURCE:
           tree->rootSelection(TreeLayout::RootSelectionType::Source);
-	  break;
-	case ROOTSINK:
+          break;
+        case ROOTSINK:
           tree->rootSelection(TreeLayout::RootSelectionType::Sink);
-	  break;
+          break;
         default:
           tree->rootSelection(TreeLayout::RootSelectionType::ByCoord);
         }
