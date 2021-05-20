@@ -42,7 +42,8 @@ bool tlp::DataSet::getDeprecated(const std::string &key, const std::string &oldK
     bool found = (it->first == key);
 
     if (!found && (found = (it->first == oldKey)))
-      tlp::warning() << "Warning: '" << oldKey.c_str() << "' is a deprecated DataSet key. Use '" << key.c_str() << "' instead." << std::endl;
+      tlp::warning() << "Warning: '" << oldKey.c_str() << "' is a deprecated DataSet key. Use '"
+                     << key.c_str() << "' instead." << std::endl;
     if (found) {
       value = *(static_cast<T *>(it->second->value));
       return true;

@@ -219,8 +219,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
   BooleanProperty *prop = graph->getProperty<BooleanProperty>("viewSelection");
 
   if (exportSelection && dataSet != nullptr) {
-    dataSet->getDeprecated("export selection property",
-			   "Export selection property", prop);
+    dataSet->getDeprecated("export selection property", "Export selection property", prop);
   }
 
   // get global locale

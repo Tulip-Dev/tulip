@@ -87,8 +87,9 @@ const std::string &DataSet::getUsedName(const std::string &oldName) const {
   if (deprecated) {
     for (const std::pair<std::string, std::string> &pp : *deprecated)
       if (pp.first == oldName) {
-	tlp::warning() << "Warning: '" << oldName.c_str() << "' is a deprecated DataSet key. Use '" << pp.second.c_str() << "' instead." << std::endl;
-	return pp.second;
+        tlp::warning() << "Warning: '" << oldName.c_str() << "' is a deprecated DataSet key. Use '"
+                       << pp.second.c_str() << "' instead." << std::endl;
+        return pp.second;
       }
   }
   return oldName;
