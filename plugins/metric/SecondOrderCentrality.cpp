@@ -61,7 +61,7 @@ public:
       "j.comcom.2010.06.007</a>.</p>"
       "<p>This algorithm computes the standard deviation of the return time on each node of"
       " a random walker. Central nodes are those with the lower values.</p>",
-      "1.0", "Clustering")
+      "1.1", "Clustering")
   SecondOrderCentrality(const tlp::PluginContext *);
   bool run() override;
   bool check(string &err) override;
@@ -83,8 +83,8 @@ static const char *paramHelp[] = {
 
 SecondOrderCentrality::SecondOrderCentrality(const tlp::PluginContext *context)
     : DoubleAlgorithm(context) {
-  addInParameter<BooleanProperty>("Selection", paramHelp[0], "viewSelection", false);
-  addInParameter<bool>("Debug mode", paramHelp[1], "false");
+  addInParameter<BooleanProperty>("selection", paramHelp[0], "viewSelection", false);
+  addInParameter<bool>("debug mode", paramHelp[1], "false");
 }
 
 node SecondOrderCentrality::getRandomNeighbor(const node n) {
@@ -110,12 +110,12 @@ bool SecondOrderCentrality::randomWalk(NodeStaticProperty<vector<int>> &tickVect
 
   // Start: finds a node that has viewSelection to True.
   // if None, selects a node at random
-  BooleanProperty *viewSelection = graph->getProperty<BooleanProperty>("viewSelection");
+  BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
   if (dataSet != nullptr) {
-    dataSet->get("Selection", viewSelection);
+    dataSet->getDeprecated("selection", "Selection", selection);
   }
-  if (viewSelection->hasNonDefaultValuatedNodes()) {
-    auto *selNodesIt = viewSelection->getNonDefaultValuatedNodes(graph);
+  if (selection->hasNonDefaultValuatedNodes()) {
+    auto *selNodesIt = selection->getNonDefaultValuatedNodes(graph);
     while (selNodesIt->hasNext()) {
       node n = selNodesIt->next();
       // we must find a node with neighbors
@@ -211,7 +211,7 @@ bool SecondOrderCentrality::run() {
   res.copyToProperty(result);
   bool debug(false);
   if (dataSet != nullptr)
-    dataSet->get("Debug mode", debug);
+    dataSet->getDeprecated("debug mode", "Debug mode", debug);
   if (debug) {
     IntegerVectorProperty *tickprop = graph->getProperty<IntegerVectorProperty>("tickVector");
     tickVector.copyToProperty(tickprop);

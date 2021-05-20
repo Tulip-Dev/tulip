@@ -30,11 +30,11 @@ static const char *paramHelp[] = {
 class PerfectLayout : public tlp::LayoutAlgorithm {
 public:
   PLUGININFORMATION("Perfect aspect ratio", "Tulip team", "09/19/2010",
-                    "Scales the graph layout to get an aspect ratio of 1.", "1.1", "")
+                    "Scales the graph layout to get an aspect ratio of 1.", "1.2", "")
 
   PerfectLayout(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
     addInParameter<tlp::LayoutProperty>("layout", paramHelp[0], "viewLayout", false);
-    addInParameter<bool>("Subgraph only", paramHelp[1], "false");
+    addInParameter<bool>("subgraph only", paramHelp[1], "false");
   }
   bool run() override {
     tlp::LayoutProperty *layout = nullptr;
@@ -42,7 +42,7 @@ public:
 
     if (dataSet != nullptr) {
       dataSet->get("layout", layout);
-      dataSet->get("Subgraph only", subgraphOnly);
+      dataSet->getDeprecated("subgraph only", "Subgraph only", subgraphOnly);
     }
 
     if (!layout)

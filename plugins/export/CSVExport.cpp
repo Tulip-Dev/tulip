@@ -88,7 +88,7 @@ static const char *paramHelp[] = {
 CsvExport::CsvExport(const PluginContext *context) : ExportModule(context) {
   addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES);
   addInParameter<bool>(EXPORT_SELECTION, paramHelp[1], "false");
-  addInParameter<BooleanProperty>("Export selection property", paramHelp[2], "viewSelection");
+  addInParameter<BooleanProperty>("export selection property", paramHelp[2], "viewSelection");
   addInParameter<bool>(EXPORT_ID, paramHelp[3], "false");
   addInParameter<PropertiesCollection>(EXPORTED_PROPERTIES, paramHelp[4],
                                        "the user defined properties");
@@ -219,7 +219,8 @@ bool CsvExport::exportGraph(std::ostream &os) {
   BooleanProperty *prop = graph->getProperty<BooleanProperty>("viewSelection");
 
   if (exportSelection && dataSet != nullptr) {
-    dataSet->get("Export selection property", prop);
+    dataSet->getDeprecated("export selection property",
+			   "Export selection property", prop);
   }
 
   // get global locale

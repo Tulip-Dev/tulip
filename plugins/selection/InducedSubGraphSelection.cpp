@@ -35,8 +35,8 @@ static const char *paramHelp[] = {
 //=================================================================================
 InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PluginContext *context)
     : BooleanAlgorithm(context) {
-  addInParameter<BooleanProperty>("Nodes", paramHelp[0], "viewSelection");
-  addInParameter<bool>("Use edges", paramHelp[1], "false");
+  addInParameter<BooleanProperty>("nodes", paramHelp[0], "viewSelection");
+  addInParameter<bool>("use edges", paramHelp[1], "false");
   addOutParameter<unsigned int>("#edges selected", "The number of newly selected edges");
   // old name
   declareDeprecatedName("Induced Sub-Graph");
@@ -47,8 +47,8 @@ bool InducedSubGraphSelection::run() {
   bool useEdges = false;
 
   if (dataSet != nullptr) {
-    dataSet->get("Nodes", entrySelection);
-    dataSet->get("Use edges", useEdges);
+    dataSet->getDeprecated("nodes", "Nodes", entrySelection);
+    dataSet->getDeprecated("use edges", "Use edges", useEdges);
   }
 
   if (entrySelection == nullptr)
