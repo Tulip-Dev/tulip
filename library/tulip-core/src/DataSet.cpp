@@ -83,6 +83,17 @@ DataSet::~DataSet() {
   }
 }
 
+const std::string &DataSet::getUsedName(const std::string &oldName) const {
+  if (deprecated) {
+    for (const std::pair<std::string, std::string> &pp : *deprecated)
+      if (pp.first == oldName) {
+	tlp::warning() << "Warning: '" << oldName.c_str() << "' is a deprecated DataSet key. Use '" << pp.second.c_str() << "' instead." << std::endl;
+	return pp.second;
+      }
+  }
+  return oldName;
+}
+
 bool DataSet::exists(const string &str) const {
   for (auto it = data.cbegin(); it != data.cend(); ++it) {
     if (it->first == str)

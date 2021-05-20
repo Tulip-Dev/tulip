@@ -201,14 +201,7 @@ class TLP_SCOPE DataSet {
   // add a deprecated property name for compatibility management
   void addDeprecated(const std::string &oldName, const std::string &usedName);
   // return the property to be used
-  inline const std::string &getUsedName(const std::string &oldName) const {
-    if (deprecated) {
-      for (const std::pair<std::string, std::string> &pp : *deprecated)
-        if (pp.first == oldName)
-          return pp.second;
-    }
-    return oldName;
-  }
+  const std::string &getUsedName(const std::string &oldName) const;
 
   /* management of data serialization
       two hashmap to retrieve data serializer from their
