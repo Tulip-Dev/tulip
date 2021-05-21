@@ -447,12 +447,14 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
   afterRun(g, dataSet);
 
-  if (result && !outNonPropertyParams.empty()) {
-    // only show computed value of non property output parameters.
+  if ((result || (PluginLister::pluginInformation(algorithm).group() == "Topological Test")) && !outNonPropertyParams.empty()) {
+    // Only show computed value of non property output parameters.
     // output property params are not taken into account
     // because they may have been created on the fly
     // (local properties see copyToLocal function above)
-    // and thus they may be deleted further in case of undo
+    // and thus they may be deleted further in case of undo.
+    // A 'Topological test' may compute output parameters even when
+    // it failed (see Simple plugin).
     for (auto &paramName : outNonPropertyParams) {
       tlp::DataType *dataType = dataSet.getData(paramName);
       originalDataSet.setData(paramName, dataType);
