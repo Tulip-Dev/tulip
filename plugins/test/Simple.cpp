@@ -23,19 +23,21 @@
 
 class SimpleTest : public tlp::GraphTest {
 public:
-  PLUGININFORMATION("Simple", "Tulip team", "18/04/2012",
-                    "Tests whether a graph is simple or not."
-		    "<br/>An directed/undirected graph "
-                    "is simple if it has no self loops (no edges with the same node as source and target node) and no multiple edges"
-                    " (no more than one edge between any ordered pair of nodes).",
-                    "1.2", "Topological Test")
+  PLUGININFORMATION(
+      "Simple", "Tulip team", "18/04/2012",
+      "Tests whether a graph is simple or not."
+      "<br/>An directed/undirected graph "
+      "is simple if it has no self loops (no edges with the same node as source and target node) and no multiple edges"
+      " (no more than one edge between any ordered pair of nodes).",
+      "1.2", "Topological Test")
   SimpleTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {
     addInParameter<bool>(
         "directed", "Indicates if the graph should be considered as directed or not.", "false");
     addInParameter<bool>(
         "check loops", "Indicates if the existence of self loops has to be tested or not.", "true");
-    addInParameter<bool>(
-        "check multiple edges", "Indicates if the existence of multiple edges has to be tested or not.", "true");
+    addInParameter<bool>("check multiple edges",
+                         "Indicates if the existence of multiple edges has to be tested or not.",
+                         "true");
     addOutParameter<unsigned int>("#self loops", "The number of self loops found", "0");
     addOutParameter<unsigned int>("#multiple edges", "The number of multiple edges found", "0");
   }
@@ -48,7 +50,8 @@ public:
       dataSet->get("check multiple edges", checkMultiple);
     }
     if (!checkLoops && !checkMultiple) {
-      errorMsg.append("The 'check loops' and 'check multiple edges' parameters cannot be both set to 'false'");
+      errorMsg.append(
+          "The 'check loops' and 'check multiple edges' parameters cannot be both set to 'false'");
       return false;
     }
     return true;
@@ -65,11 +68,9 @@ public:
     }
     std::vector<tlp::edge> multipleEdges;
     std::vector<tlp::edge> loops;
-    bool result =
-      tlp::SimpleTest::simpleTest(graph, &multipleEdges, &loops, directed);
+    bool result = tlp::SimpleTest::simpleTest(graph, &multipleEdges, &loops, directed);
     if (!result)
-      result = (!checkLoops || loops.empty()) &&
-	(!checkMultiple || multipleEdges.empty());
+      result = (!checkLoops || loops.empty()) && (!checkMultiple || multipleEdges.empty());
     if (dataSet) {
       unsigned int nb = checkLoops ? loops.size() : 0;
       dataSet->set("#self loops", nb);

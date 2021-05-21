@@ -447,7 +447,8 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
   afterRun(g, dataSet);
 
-  if ((result || (PluginLister::pluginInformation(algorithm).group() == "Topological Test")) && !outNonPropertyParams.empty()) {
+  if ((result || (PluginLister::pluginInformation(algorithm).group() == "Topological Test")) &&
+      !outNonPropertyParams.empty()) {
     // Only show computed value of non property output parameters.
     // output property params are not taken into account
     // because they may have been created on the fly
