@@ -30,19 +30,6 @@ using namespace std;
 using namespace tlp;
 
 //================================================================
-unsigned int tlp::maxDistance(const Graph *graph, const node n,
-                              MutableContainer<unsigned int> &distance, EDGE_TYPE direction) {
-  distance.setAll(UINT_MAX);
-
-  tlp::NodeStaticProperty<unsigned int> dist(graph);
-  unsigned int result = tlp::maxDistance(graph, graph->nodePos(n), dist, direction);
-
-  for (auto n : graph->nodes())
-    distance.set(n, dist[n]);
-
-  return result;
-}
-//================================================================
 unsigned int tlp::maxDistance(const Graph *graph, unsigned int nPos,
                               tlp::NodeStaticProperty<unsigned int> &distance,
                               EDGE_TYPE direction) {
@@ -163,15 +150,6 @@ unsigned int tlp::minDegree(const Graph *graph) {
   return mindeg;
 }
 //=================================================
-void tlp::clusteringCoefficient(const Graph *graph, MutableContainer<double> &clusters,
-                                unsigned int maxDepth) {
-  tlp::NodeStaticProperty<double> vClusters(graph);
-  tlp::clusteringCoefficient(graph, vClusters, maxDepth);
-
-  TLP_MAP_NODES_AND_INDICES(graph,
-                            [&](node n, unsigned int i) { clusters.set(n.id, vClusters[i]); });
-}
-//=================================================
 void tlp::clusteringCoefficient(const Graph *graph, tlp::NodeStaticProperty<double> &clusters,
                                 unsigned int maxDepth) {
 
@@ -206,13 +184,6 @@ void tlp::clusteringCoefficient(const Graph *graph, tlp::NodeStaticProperty<doub
       clusters[i] = 0;
   });
 }
-//==================================================
-void tlp::dagLevel(const Graph *graph, MutableContainer<unsigned int> &level) {
-  tlp::NodeStaticProperty<unsigned int> tmp(graph);
-  dagLevel(graph, tmp);
-  TLP_MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) { level.set(n.id, tmp[i]); });
-}
-
 //==================================================
 void tlp::dagLevel(const Graph *graph, tlp::NodeStaticProperty<unsigned int> &level) {
   tlp::NodeStaticProperty<unsigned int> totreat(graph);

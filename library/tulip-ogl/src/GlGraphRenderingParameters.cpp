@@ -202,16 +202,6 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
     setElementOrderedDescending(b);
 }
 //====================================================
-unsigned int GlGraphRenderingParameters::getLabelsBorder() const {
-  if (_labelsDensity < 0)
-    return 100;
-  else
-    return -_labelsDensity;
-}
-void GlGraphRenderingParameters::setLabelsBorder(const unsigned int border) {
-  _labelsDensity = -int(border);
-}
-//====================================================
 bool GlGraphRenderingParameters::isViewMetaLabel() const {
   return (_viewMetaLabel);
 }

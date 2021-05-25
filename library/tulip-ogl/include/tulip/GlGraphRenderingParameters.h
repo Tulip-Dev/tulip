@@ -379,24 +379,6 @@ public:
   bool isEdge3D() const;
 
   /**
-   * @brief Get the size of the border that is added to any label when using bitmap fonts.
-   *
-   * @deprecated Use getLabelsDensity instead
-   */
-  unsigned int _DEPRECATED getLabelsBorder() const;
-
-  /**
-   * @brief Get the size of label border
-   *
-   * Get the size of the border that is added to any label when
-   * using bitmap fonts. Setting this parameter to a high value
-   * enables de reduce the label density in the final drawing.
-   * Default value is set to 2 which enables readable labels.
-   * @deprecated Use setLabelsDensity instead
-   */
-  void _DEPRECATED setLabelsBorder(const unsigned int);
-
-  /**
    * @brief set if Edge max size is block to node size
    */
   void setEdgesMaxSizeToNodesSize(const bool b);
