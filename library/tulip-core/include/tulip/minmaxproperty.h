@@ -31,7 +31,7 @@
 #define NODE_VALUE typename nodeType::RealType
 #define CONST_NODE_VALUE typename tlp::StoredType<typename nodeType::RealType>::ReturnedConstValue
 #define EDGE_VALUE typename edgeType::RealType
-#define CONST_EDGE_VALUE  typename tlp::StoredType<typename edgeType::RealType>::ReturnedConstValue
+#define CONST_EDGE_VALUE typename tlp::StoredType<typename edgeType::RealType>::ReturnedConstValue
 
 namespace tlp {
 
@@ -45,8 +45,8 @@ namespace tlp {
 template <typename nodeType, typename edgeType, typename propType = PropertyInterface>
 class MinMaxProperty : public tlp::AbstractProperty<nodeType, edgeType, propType> {
 
-  const MINMAX_PAIR(nodeType) &getNodeMinMax(const Graph *graph = nullptr);
-  const MINMAX_PAIR(edgeType) &getEdgeMinMax(const Graph *graph = nullptr);
+  const MINMAX_PAIR(nodeType) & getNodeMinMax(const Graph *graph = nullptr);
+  const MINMAX_PAIR(edgeType) & getEdgeMinMax(const Graph *graph = nullptr);
 
 public:
   /**
@@ -59,9 +59,8 @@ public:
    * @param EdgeMin The minimal value the property can take for edges (e.g. INT_MIN)
    * @param EdgeMax The maximal value the property can take for edges (e.g. INT_MIN)
    **/
-  MinMaxProperty(tlp::Graph *graph, const std::string &name, NODE_VALUE NodeMin,
-                 NODE_VALUE NodeMax, EDGE_VALUE EdgeMin,
-                 EDGE_VALUE EdgeMax);
+  MinMaxProperty(tlp::Graph *graph, const std::string &name, NODE_VALUE NodeMin, NODE_VALUE NodeMax,
+                 EDGE_VALUE EdgeMin, EDGE_VALUE EdgeMax);
 
   void treatEvent(const tlp::Event &ev) override;
 
@@ -160,8 +159,8 @@ protected:
   // this will indicate if we can stop propType::graph observation
   bool needGraphListener; // default is false
 
-  const MINMAX_PAIR(nodeType) &computeMinMaxNode(const Graph *graph);
-  const MINMAX_PAIR(edgeType) &computeMinMaxEdge(const Graph *graph);
+  const MINMAX_PAIR(nodeType) & computeMinMaxNode(const Graph *graph);
+  const MINMAX_PAIR(edgeType) & computeMinMaxEdge(const Graph *graph);
   void removeListenersAndClearNodeMap();
   void removeListenersAndClearEdgeMap();
 };

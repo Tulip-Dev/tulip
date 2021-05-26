@@ -21,15 +21,14 @@
 
 template <typename nodeType, typename edgeType, typename propType>
 tlp::MinMaxProperty<nodeType, edgeType, propType>::MinMaxProperty(
-    tlp::Graph *graph, const std::string &name,
-    NODE_VALUE NodeMin, NODE_VALUE NodeMax,
+    tlp::Graph *graph, const std::string &name, NODE_VALUE NodeMin, NODE_VALUE NodeMax,
     EDGE_VALUE EdgeMin, EDGE_VALUE EdgeMax)
     : AbstractProperty<nodeType, edgeType, propType>(graph, name), _nodeMin(NodeMin),
       _nodeMax(NodeMax), _edgeMin(EdgeMin), _edgeMax(EdgeMax), needGraphListener(false) {}
 
 template <typename nodeType, typename edgeType, typename propType>
-const MINMAX_PAIR(nodeType) &
-tlp::MinMaxProperty<nodeType, edgeType, propType>::getNodeMinMax(const tlp::Graph *graph) {
+    const MINMAX_PAIR(nodeType) & tlp::MinMaxProperty<nodeType, edgeType, propType>::getNodeMinMax(
+                                      const tlp::Graph *graph) {
   if (!graph) {
     graph = this->propType::graph;
   }
@@ -41,8 +40,8 @@ tlp::MinMaxProperty<nodeType, edgeType, propType>::getNodeMinMax(const tlp::Grap
 }
 
 template <typename nodeType, typename edgeType, typename propType>
-const MINMAX_PAIR(edgeType) &
-tlp::MinMaxProperty<nodeType, edgeType, propType>::getEdgeMinMax(const tlp::Graph *graph) {
+    const MINMAX_PAIR(edgeType) & tlp::MinMaxProperty<nodeType, edgeType, propType>::getEdgeMinMax(
+                                      const tlp::Graph *graph) {
   if (!graph) {
     graph = this->propType::graph;
   }
@@ -54,8 +53,8 @@ tlp::MinMaxProperty<nodeType, edgeType, propType>::getEdgeMinMax(const tlp::Grap
 }
 
 template <typename nodeType, typename edgeType, typename propType>
-const MINMAX_PAIR(nodeType) &
-tlp::MinMaxProperty<nodeType, edgeType, propType>::computeMinMaxNode(const Graph *graph) {
+    const MINMAX_PAIR(nodeType) &
+    tlp::MinMaxProperty<nodeType, edgeType, propType>::computeMinMaxNode(const Graph *graph) {
   if (!graph) {
     graph = this->propType::graph;
   }
@@ -93,8 +92,8 @@ tlp::MinMaxProperty<nodeType, edgeType, propType>::computeMinMaxNode(const Graph
 }
 
 template <typename nodeType, typename edgeType, typename propType>
-const MINMAX_PAIR(edgeType) &
-tlp::MinMaxProperty<nodeType, edgeType, propType>::computeMinMaxEdge(const Graph *graph) {
+    const MINMAX_PAIR(edgeType) &
+    tlp::MinMaxProperty<nodeType, edgeType, propType>::computeMinMaxEdge(const Graph *graph) {
   EDGE_VALUE maxE2 = _edgeMin, minE2 = _edgeMax;
 
   if (AbstractProperty<nodeType, edgeType, propType>::hasNonDefaultValuatedEdges(graph)) {
@@ -192,8 +191,8 @@ void tlp::MinMaxProperty<nodeType, edgeType, propType>::removeListenersAndClearE
 }
 
 template <typename nodeType, typename edgeType, typename propType>
-void tlp::MinMaxProperty<nodeType, edgeType, propType>::updateNodeValue(
-    tlp::node n, CONST_NODE_VALUE newValue) {
+void tlp::MinMaxProperty<nodeType, edgeType, propType>::updateNodeValue(tlp::node n,
+                                                                        CONST_NODE_VALUE newValue) {
   auto it = minMaxNode.begin();
 
   if (it != minMaxNode.end()) {
@@ -202,14 +201,14 @@ void tlp::MinMaxProperty<nodeType, edgeType, propType>::updateNodeValue(
     if (newValue != oldV) {
       // loop on subgraph min/max
       for (; it != minMaxNode.end(); ++it) {
-	auto sid = it->first;
-	if (sid) {
-	  // check if n belongs to current subgraph
-	  auto sg = this->graph->getDescendantGraph(sid);
-	  // sg might be null in undo/redo context
-	  if (sg && !sg->isElement(n))
-	    continue;
-	}
+        auto sid = it->first;
+        if (sid) {
+          // check if n belongs to current subgraph
+          auto sg = this->graph->getDescendantGraph(sid);
+          // sg might be null in undo/redo context
+          if (sg && !sg->isElement(n))
+            continue;
+        }
         // if min/max is ok for the current subgraph
         // check if min or max has to be updated
         CONST_NODE_VALUE minV = it->second.first;
@@ -226,8 +225,8 @@ void tlp::MinMaxProperty<nodeType, edgeType, propType>::updateNodeValue(
 }
 
 template <typename nodeType, typename edgeType, typename propType>
-void tlp::MinMaxProperty<nodeType, edgeType, propType>::updateEdgeValue(
-    tlp::edge e, CONST_EDGE_VALUE newValue) {
+void tlp::MinMaxProperty<nodeType, edgeType, propType>::updateEdgeValue(tlp::edge e,
+                                                                        CONST_EDGE_VALUE newValue) {
   auto it = minMaxEdge.begin();
 
   if (it != minMaxEdge.end()) {
@@ -236,14 +235,14 @@ void tlp::MinMaxProperty<nodeType, edgeType, propType>::updateEdgeValue(
     if (newValue != oldV) {
       // loop on subgraph min/max
       for (; it != minMaxEdge.end(); ++it) {
-	auto sid = it->first;
-	if (sid) {
-	  // check if e belongs to current subgraph
-	  // sg might be null in undo/redo context
-	  auto sg = this->graph->getDescendantGraph(sid);
-	  if (sg && !sg->isElement(e))
-	    continue;
-	}
+        auto sid = it->first;
+        if (sid) {
+          // check if e belongs to current subgraph
+          // sg might be null in undo/redo context
+          auto sg = this->graph->getDescendantGraph(sid);
+          if (sg && !sg->isElement(e))
+            continue;
+        }
         // if min/max is ok for the current subgraph
         // check if min or max has to be updated
         CONST_EDGE_VALUE minV = it->second.first;
