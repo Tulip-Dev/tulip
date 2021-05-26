@@ -30,10 +30,10 @@ namespace tlp {
 
 template <>
 void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(
-    tlp::edge e, tlp::LineType::RealType newValue);
+    tlp::edge e, const tlp::LineType::RealType &newValue);
 
 template <>
-std::pair<tlp::Coord, tlp::Coord>
+const std::pair<tlp::Coord, tlp::Coord> &
 tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(const Graph *sg);
 
 class PropertyContext;

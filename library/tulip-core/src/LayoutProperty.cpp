@@ -45,7 +45,7 @@ void minV(tlp::Coord &res, const tlp::Coord &cmp) {
  *Layout properties (they are specific in that they use the control points of the edges)
  **/
 template <>
-std::pair<tlp::Coord, tlp::Coord>
+const std::pair<tlp::Coord, tlp::Coord> &
 tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(const Graph *sg) {
 #ifndef NDEBUG
   tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
@@ -91,7 +91,7 @@ tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(const Grap
  **/
 template <>
 void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(
-    tlp::edge e, tlp::LineType::RealType newValue) {
+    tlp::edge e, const tlp::LineType::RealType &newValue) {
   std::unordered_map<unsigned int, std::pair<tlp::Coord, tlp::Coord>>::const_iterator it =
       minMaxNode.begin();
 
