@@ -222,9 +222,11 @@ bool GraphAbstract::isDescendantGraph(const Graph *g) const {
 }
 //=========================================================================
 Graph *GraphAbstract::getSubGraph(unsigned int sgId) const {
-  for (auto sg : subgraphs) {
-    if (sg->getId() == sgId)
-      return sg;
+  if (sgId) { // 0 is for root graph
+    for (auto sg : subgraphs) {
+      if (sg->getId() == sgId)
+	return sg;
+    }
   }
 
   return nullptr;
@@ -240,14 +242,16 @@ Graph *GraphAbstract::getSubGraph(const std::string &name) const {
 }
 //=========================================================================
 Graph *GraphAbstract::getDescendantGraph(unsigned int sgId) const {
-  Graph *sg = getSubGraph(sgId);
+  if (sgId) { // 0 is for root graph
+    Graph *sg = getSubGraph(sgId);
 
-  if (sg)
-    return sg;
-
-  for (auto sg : subgraphs) {
-    if ((sg = sg->getDescendantGraph(sgId)))
+    if (sg)
       return sg;
+
+    for (auto sg : subgraphs) {
+      if ((sg = sg->getDescendantGraph(sgId)))
+	return sg;
+    }
   }
 
   return nullptr;
