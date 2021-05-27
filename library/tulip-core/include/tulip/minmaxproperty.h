@@ -72,7 +72,7 @@ public:
    * @param graph The graph on which to compute.
    * @return The minimal value on this graph for this property.
    **/
-  NODE_VALUE getNodeMin(const Graph *graph = nullptr) {
+  CONST_NODE_VALUE getNodeMin(const Graph *graph = nullptr) {
     return getNodeMinMax(graph).first;
   }
 
@@ -84,7 +84,7 @@ public:
    * @param graph The graph on which to compute.
    * @return The maximal value on this graph for this property.
    **/
-  NODE_VALUE getNodeMax(const Graph *graph = nullptr) {
+  CONST_NODE_VALUE getNodeMax(const Graph *graph = nullptr) {
     return getNodeMinMax(graph).second;
   }
 
@@ -96,7 +96,7 @@ public:
    * @param graph The graph on which to compute.
    * @return The minimal value on this graph for this property.
    **/
-  EDGE_VALUE getEdgeMin(const Graph *graph = nullptr) {
+  CONST_EDGE_VALUE getEdgeMin(const Graph *graph = nullptr) {
     return getEdgeMinMax(graph).first;
   }
 
@@ -108,7 +108,7 @@ public:
    * @param graph The graph on which to compute.
    * @return The maximal value on this graph for this property.
    **/
-  EDGE_VALUE getEdgeMax(const Graph *graph = nullptr) {
+  CONST_EDGE_VALUE getEdgeMax(const Graph *graph = nullptr) {
     return getEdgeMinMax(graph).second;
   }
 

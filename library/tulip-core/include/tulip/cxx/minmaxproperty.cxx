@@ -63,15 +63,12 @@ template <typename nodeType, typename edgeType, typename propType>
 
   if (AbstractProperty<nodeType, edgeType, propType>::hasNonDefaultValuatedNodes(graph)) {
     for (auto n : graph->nodes()) {
-      NODE_VALUE tmp = this->getNodeValue(n);
+      CONST_NODE_VALUE tmp = this->getNodeValue(n);
 
-      if (tmp > maxN2) {
+      if (tmp > maxN2)
         maxN2 = tmp;
-      }
-
-      if (tmp < minN2) {
+      if (tmp < minN2)
         minN2 = tmp;
-      }
     }
   }
 
@@ -98,11 +95,10 @@ template <typename nodeType, typename edgeType, typename propType>
 
   if (AbstractProperty<nodeType, edgeType, propType>::hasNonDefaultValuatedEdges(graph)) {
     for (auto ite : graph->edges()) {
-      EDGE_VALUE tmp = this->getEdgeValue(ite);
+      CONST_EDGE_VALUE tmp = this->getEdgeValue(ite);
 
       if (tmp > maxE2)
         maxE2 = tmp;
-
       if (tmp < minE2)
         minE2 = tmp;
     }
