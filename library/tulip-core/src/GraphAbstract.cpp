@@ -225,7 +225,7 @@ Graph *GraphAbstract::getSubGraph(unsigned int sgId) const {
   if (sgId) { // 0 is for root graph
     for (auto sg : subgraphs) {
       if (sg->getId() == sgId)
-	return sg;
+        return sg;
     }
   }
 
@@ -250,7 +250,7 @@ Graph *GraphAbstract::getDescendantGraph(unsigned int sgId) const {
 
     for (auto sg : subgraphs) {
       if ((sg = sg->getDescendantGraph(sgId)))
-	return sg;
+        return sg;
     }
   }
 
