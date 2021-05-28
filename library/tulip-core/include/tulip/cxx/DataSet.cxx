@@ -37,20 +37,25 @@ bool tlp::DataSet::get(const std::string &str, T &value) const {
 template <typename T>
 bool tlp::DataSet::getDeprecated(const std::string &key, const std::string &oldKey,
                                  T &value) const {
+  bool found = false;
   for (std::list<std::pair<std::string, tlp::DataType *>>::const_iterator it = data.begin();
        it != data.end(); ++it) {
-    bool found = (it->first == key);
-
-    if (!found && (found = (it->first == oldKey)))
+    // as 'this' DataSet may have been initialized
+    // using ParametersDescriptionList::buildDefaultDataSet
+    // key and oldKey may be present
+    // so check oldKey first
+    if (it->first == oldKey) {
       tlp::warning() << "Warning: '" << oldKey.c_str() << "' is a deprecated DataSet key. Use '"
                      << key.c_str() << "' instead." << std::endl;
-    if (found) {
       value = *(static_cast<T *>(it->second->value));
       return true;
     }
+    if (it->first == key) {
+      value = *(static_cast<T *>(it->second->value));
+      found = true;
+    }
   }
-
-  return false;
+  return found;
 }
 
 template <typename T>
