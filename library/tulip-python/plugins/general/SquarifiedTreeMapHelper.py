@@ -97,11 +97,11 @@ class SquarifiedTreeMapHelper(tlp.Algorithm):
         # call the 'Squarified Tree Map' layout algorithm
         params = tlp.getDefaultPluginParameters('Squarified Tree Map',
                                                 self.graph)
-        params['Node Size'] = sizes
-        params['Node Shape'] = shapes
+        params['node size'] = sizes
+        params['node shape'] = shapes
         params['metric'] = metric
-        params['Aspect Ratio'] = aspectRatio
-        params['Treemap Type'] = treeMapType
+        params['aspect ratio'] = aspectRatio
+        params['treemap type'] = treeMapType
 
         self.graph.applyLayoutAlgorithm('Squarified Tree Map', layout, params)
 
