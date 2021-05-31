@@ -77,9 +77,11 @@ void GlQuantitativeAxis::setAxisParameters(const long long minV, const long long
   min = minV;
   long long maxVCp = maxV;
 
-  if (incrementStepV)
-    while (((maxVCp - minV) % incrementStepV) != 0)
-      ++maxVCp;
+  if (incrementStepV) {
+    auto r = (maxVCp - minV) % incrementStepV;
+    if (r > 0)
+      maxVCp += incrementStepV - r;
+  }
 
   max = maxVCp;
   incrementStep = incrementStepV;
