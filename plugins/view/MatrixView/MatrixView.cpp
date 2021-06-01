@@ -56,7 +56,6 @@ QuickAccessBar *MatrixView::getQuickAccessBarImpl() {
 }
 
 void MatrixView::setState(const DataSet &ds) {
-
   clearRedrawTriggers();
 
   setOverviewVisible(true);
@@ -114,13 +113,8 @@ void MatrixView::setState(const DataSet &ds) {
   enableEdgeColorInterpolation(status);
   _configurationWidget->setEdgeColorInterpolation(status);
 
-  bool quickAccessBarVisible = false;
-
-  if (ds.get<bool>("quickAccessBarVisible", quickAccessBarVisible)) {
-    needQuickAccessBar = true;
-    setQuickAccessBarVisible(quickAccessBarVisible);
-  } else // display quickaccessbar
-    setQuickAccessBarVisible(true);
+  setQuickAccessBarVisible(true);
+  GlMainView::setState(ds);
 }
 
 void MatrixView::showEdges(bool show) {
@@ -187,7 +181,8 @@ void MatrixView::graphChanged(Graph *) {
 }
 
 DataSet MatrixView::state() const {
-  DataSet ds;
+  DataSet ds = GlMainView::state();
+
   ds.set("show Edges", getGlMainWidget()
                            ->getScene()
                            ->getGlGraphComposite()
@@ -208,9 +203,6 @@ DataSet MatrixView::state() const {
   ds.set("Background Color", getGlMainWidget()->getScene()->getBackgroundColor());
   ds.set("ordering", _configurationWidget->orderingProperty());
   ds.set("oriented", _isOriented);
-
-  if (needQuickAccessBar)
-    ds.set("quickAccessBarVisible", quickAccessBarVisible());
 
   return ds;
 }

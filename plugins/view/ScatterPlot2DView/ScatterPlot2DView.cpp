@@ -184,8 +184,6 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     noPropertyMsgBox->setParentItem(qgrItem);
   }
 
-  GlMainView::setState(dataSet);
-
   Graph *lastGraph = scatterPlotGraph;
   scatterPlotGraph = graph();
   propertiesSelectionWidget->setWidgetParameters(scatterPlotGraph, propertiesTypesFilter);
@@ -354,13 +352,8 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
 
   registerTriggers();
 
-  bool quickAccessBarVisible = false;
-
-  if (dataSet.get<bool>("quickAccessBarVisible", quickAccessBarVisible)) {
-    needQuickAccessBar = true;
-    setQuickAccessBarVisible(quickAccessBarVisible);
-  } else // display quickaccessbar
-    setQuickAccessBarVisible(true);
+  setQuickAccessBarVisible(true);
+  GlMainView::setState(dataSet);
 }
 
 DataSet ScatterPlot2DView::state() const {
@@ -392,9 +385,6 @@ DataSet ScatterPlot2DView::state() const {
   dataSet.set("detailed scatterplot x dim", detailedScatterPlotPropertyName.first);
   dataSet.set("detailed scatterplot y dim", detailedScatterPlotPropertyName.second);
   dataSet.set("Nodes/Edges", static_cast<unsigned>(dataLocation));
-
-  if (needQuickAccessBar)
-    dataSet.set("quickAccessBarVisible", quickAccessBarVisible());
 
   return dataSet;
 }

@@ -162,8 +162,6 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
     noPropertyMsgBox->setParentItem(qgrItem);
   }
 
-  GlMainView::setState(dataSet);
-
   removeTriggers();
 
   vector<string> selectedPropertiesBak;
@@ -331,13 +329,8 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
     dataConfigWidget->setWidgetParameters(nullptr, propertiesTypesFilter);
   }
 
-  bool quickAccessBarVisible = false;
-
-  if (dataSet.get<bool>("quickAccessBarVisible", quickAccessBarVisible)) {
-    needQuickAccessBar = true;
-    setQuickAccessBarVisible(quickAccessBarVisible);
-  } else
-    setQuickAccessBarVisible(true);
+  setQuickAccessBarVisible(true);
+  GlMainView::setState(dataSet);
 
   setupAndDrawView();
 }
@@ -378,9 +371,6 @@ DataSet ParallelCoordinatesView::state() const {
   dataSet.set("linesType", int(getLinesType()));
   dataSet.set("lastViewWindowWidth", getGlMainWidget()->width());
   dataSet.set("lastViewWindowHeight", getGlMainWidget()->height());
-
-  if (needQuickAccessBar)
-    dataSet.set("quickAccessBarVisible", quickAccessBarVisible());
 
   return dataSet;
 }

@@ -188,8 +188,6 @@ void HistogramView::setState(const DataSet &dataSet) {
     noPropertyMsgBox->setParentItem(qgrItem);
   }
 
-  GlMainView::setState(dataSet);
-
   Graph *lastGraph = _histoGraph;
   _histoGraph = graph();
   destroyHistogramsIfNeeded();
@@ -371,12 +369,8 @@ void HistogramView::setState(const DataSet &dataSet) {
     switchFromSmallMultiplesToDetailedView(histo);
   }
 
-  bool quickAccessBarVisible = false;
-  if (dataSet.get<bool>("quickAccessBarVisible", quickAccessBarVisible)) {
-    needQuickAccessBar = true;
-    setQuickAccessBarVisible(quickAccessBarVisible);
-  } else
-    setQuickAccessBarVisible(true);
+  setQuickAccessBarVisible(true);
+  GlMainView::setState(dataSet);
 }
 
 DataSet HistogramView::state() const {
@@ -427,9 +421,6 @@ DataSet HistogramView::state() const {
   }
 
   dataSet.set("histo detailed name", histoDetailedNamed);
-
-  if (needQuickAccessBar)
-    dataSet.set("quickAccessBarVisible", quickAccessBarVisible());
 
   return dataSet;
 }

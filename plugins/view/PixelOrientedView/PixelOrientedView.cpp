@@ -170,8 +170,6 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
     noPropertyMsgBox->setParentItem(qgrItem);
   }
 
-  GlMainView::setState(dataSet);
-
   Graph *lastGraph = pixelOrientedGraph;
 
   if (tulipNodeColorMapping != nullptr && pixelOrientedGraph != graph()) {
@@ -256,17 +254,14 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
   registerTriggers();
 
   string detailOverviewName;
-  dataSet.get("detail overview  name", detailOverviewName);
+  dataSet.getDeprecated("detail overview name", "detail overview  name",
+			detailOverviewName);
   if (!detailOverviewName.empty()) {
     switchFromSmallMultiplesToDetailView(overviewsMap[detailOverviewName]);
   }
 
-  bool quickAccessBarVisible = false;
-  if (dataSet.get<bool>("quickAccessBarVisible", quickAccessBarVisible)) {
-    needQuickAccessBar = true;
-    setQuickAccessBarVisible(quickAccessBarVisible);
-  } else // display quickaccessbar
-    setQuickAccessBarVisible(true);
+  setQuickAccessBarVisible(true);
+  GlMainView::setState(dataSet);
 }
 
 DataSet PixelOrientedView::state() const {
@@ -285,11 +280,8 @@ DataSet PixelOrientedView::state() const {
   dataSet.set("layout", optionsWidget->getLayoutType());
   dataSet.set("lastViewWindowWidth", getGlMainWidget()->width());
   dataSet.set("lastViewWindowHeight", getGlMainWidget()->height());
-  dataSet.set("detail overview  name", detailOverviewPropertyName);
+  dataSet.set("detail overview name", detailOverviewPropertyName);
   dataSet.set("background color", optionsWidget->getBackgroundColor());
-
-  if (needQuickAccessBar)
-    dataSet.set("quickAccessBarVisible", quickAccessBarVisible());
 
   return dataSet;
 }
