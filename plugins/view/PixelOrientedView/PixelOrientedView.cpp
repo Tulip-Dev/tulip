@@ -254,8 +254,7 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
   registerTriggers();
 
   string detailOverviewName;
-  dataSet.getDeprecated("detail overview name", "detail overview  name",
-			detailOverviewName);
+  dataSet.getDeprecated("detail overview name", "detail overview  name", detailOverviewName);
   if (!detailOverviewName.empty()) {
     switchFromSmallMultiplesToDetailView(overviewsMap[detailOverviewName]);
   }
