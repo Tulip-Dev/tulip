@@ -111,8 +111,11 @@ void PixelOrientedView::initGlWidget() {
     getGlMainWidget()->getScene()->addExistingLayer(mainLayer);
   } else {
     overviewsComposite->reset(true);
+    // detailedOverview may have been deleted by previous call
     detailOverview = nullptr;
     mainLayer->getComposite()->reset(true);
+    // graphComposite may have been deleted by previous call
+    graphComposite = nullptr;
   }
   overviewsComposite = new GlComposite();
   mainLayer->addGlEntity(overviewsComposite, "overview composite");
