@@ -149,7 +149,7 @@ QList<QWidget *> ScatterPlot2DView::configurationWidgets() const {
 }
 
 void ScatterPlot2DView::graphicsViewResized(int w, int h) {
-  if (initialized && noPropertyMsgBox->isVisible()) {
+  if (initialized) {
     noPropertyMsgBox->setPos(w / 2 - noPropertyMsgBox->sceneBoundingRect().width() / 2,
                              h / 2 - noPropertyMsgBox->sceneBoundingRect().height() / 2);
   }

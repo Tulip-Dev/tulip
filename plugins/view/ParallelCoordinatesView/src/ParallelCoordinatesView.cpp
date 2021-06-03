@@ -125,7 +125,7 @@ QList<QWidget *> ParallelCoordinatesView::configurationWidgets() const {
 }
 
 void ParallelCoordinatesView::graphicsViewResized(int w, int h) {
-  if (isConstruct && noPropertyMsgBox->isVisible()) {
+  if (isConstruct) {
     noPropertyMsgBox->setPos(w / 2 - noPropertyMsgBox->sceneBoundingRect().width() / 2,
                              h / 2 - noPropertyMsgBox->sceneBoundingRect().height() / 2);
   }
