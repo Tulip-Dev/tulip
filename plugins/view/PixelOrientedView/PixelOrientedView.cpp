@@ -172,6 +172,8 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
     noPropertyMsgBox = graphicsView()->scene()->addWidget(msgBox);
     noPropertyMsgBox->setParentItem(qgrItem);
   }
+  if (!smallMultiplesView)
+    switchFromDetailViewToSmallMultiples();
 
   Graph *lastGraph = pixelOrientedGraph;
 
@@ -261,7 +263,6 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
   if (!detailOverviewName.empty()) {
     switchFromSmallMultiplesToDetailView(overviewsMap[detailOverviewName]);
   }
-
   setQuickAccessBarVisible(true);
   GlMainView::setState(dataSet);
 }
