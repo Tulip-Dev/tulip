@@ -227,6 +227,9 @@ void GeographicView::setState(const DataSet &dataSet) {
     geolocalisationConfigWidget->setEdgesPathsPropertyName(edgesPathsPropName);
 
     computeGeoLayout();
+  } else {
+    geolocalisationConfigWidget->setAddressGeoLocMethod();
+    geoViewGraphicsView->createLayoutWithAddresses();
   }
 
   GlGraphComposite *graphComposite =
@@ -251,14 +254,14 @@ void GeographicView::setState(const DataSet &dataSet) {
 
   View::setState(dataSet);
 
-  if (dataSet.exists("mapCenterLatitude")) {
+  mapCenterLatitudeInit = 44.8084;
+  mapCenterLongitudeInit = -40;
+  mapZoomInit = 3;
+  dataSet.get("mapCenterLatitude", mapCenterLatitudeInit);
+  dataSet.get("mapCenterLongitude", mapCenterLongitudeInit);
+  dataSet.get("mapZoom", mapZoomInit);
 
-    dataSet.get("mapCenterLatitude", mapCenterLatitudeInit);
-    dataSet.get("mapCenterLongitude", mapCenterLongitudeInit);
-    dataSet.get("mapZoom", mapZoomInit);
-
-    QTimer::singleShot(1500, this, SLOT(initMap()));
-  }
+  QTimer::singleShot(1500, this, SLOT(initMap()));
 }
 
 void GeographicView::initMap() {

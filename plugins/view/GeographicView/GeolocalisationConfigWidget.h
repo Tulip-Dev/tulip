@@ -44,6 +44,8 @@ public:
   void setLatLngGeoLocMethod(const std::string &latitudePropertyName,
                              const std::string &longitudePropertyName);
 
+  void setAddressGeoLocMethod();
+
   void setEdgesPathsPropertyName(const std::string &edgesPathsPropertyName);
 
   bool geolocateByAddress() const;

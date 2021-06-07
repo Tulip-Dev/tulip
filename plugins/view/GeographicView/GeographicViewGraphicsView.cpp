@@ -833,11 +833,12 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
                                                            bool createLatAndLngProps,
                                                            bool resetLatAndLngValues,
                                                            bool automaticChoice) {
-  geocodingActive = true;
   nodeLatLng.clear();
-  Observable::holdObservers();
 
   if (graph->existProperty(addressPropertyName)) {
+    geocodingActive = true;
+    Observable::holdObservers();
+
     StringProperty *addressProperty = graph->getProperty<StringProperty>(addressPropertyName);
 
     if (createLatAndLngProps) {
@@ -975,10 +976,12 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
                                QMessageBox::Yes) == QMessageBox::Yes)
         Perspective::showLogMessages();
     }
-  }
+    Observable::unholdObservers();
+    geocodingActive = false;
 
-  Observable::unholdObservers();
-  geocodingActive = false;
+  } else
+    // show msg
+    noLayoutMsgBox->setVisible(true);
 }
 
 void GeographicViewGraphicsView::createLayoutWithLatLngs(const std::string &latPropName,
@@ -1019,7 +1022,7 @@ void GeographicViewGraphicsView::resizeEvent(QResizeEvent *event) {
   leafletMaps->resize(width(), height());
   glWidgetItem->resize(width(), height());
 
-  if (noLayoutMsgBox && noLayoutMsgBox->isVisible()) {
+  if (noLayoutMsgBox) {
     noLayoutMsgBox->setPos(width() / 2 - noLayoutMsgBox->sceneBoundingRect().width() / 2,
                            height() / 2 - noLayoutMsgBox->sceneBoundingRect().height() / 2);
   }

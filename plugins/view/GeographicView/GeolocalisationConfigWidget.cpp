@@ -107,6 +107,10 @@ void GeolocalisationConfigWidget::setLatLngGeoLocMethod(const std::string &latit
   }
 }
 
+void GeolocalisationConfigWidget::setAddressGeoLocMethod() {
+  _ui->addressLocRB->setChecked(true);
+}
+
 void GeolocalisationConfigWidget::setEdgesPathsPropertyName(
     const std::string &edgesPathsPropertyName) {
   int edgesPathsPropertyIndex =
