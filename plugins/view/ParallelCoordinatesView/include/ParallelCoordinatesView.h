@@ -167,6 +167,7 @@ public slots:
 
   void applySettings() override;
   void resetHightlightedElementsSlot();
+  void showPropertiesSelectionWidget();
 
 protected slots:
 

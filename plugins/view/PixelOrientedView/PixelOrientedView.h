@@ -119,11 +119,14 @@ public:
 
 public slots:
 
+  // inherited from View
   void graphChanged(Graph *graph) override;
-  void init();
   void applySettings() override;
   // inherited from GlMainView
   void centerView(bool = false) override;
+
+  void init();
+  void showPropertiesSelectionWidget();
 
 private:
   void initPixelView();

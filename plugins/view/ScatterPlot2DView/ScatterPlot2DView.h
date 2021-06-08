@@ -153,12 +153,14 @@ public:
 
 public slots:
 
-  void init();
-  void viewConfigurationChanged();
-
+  // inherited from View
+  void applySettings() override;
   // inherited from GlMainView
   void centerView(bool graphChanged = false) override;
-  void applySettings() override;
+
+  void init();
+  void viewConfigurationChanged();
+  void showPropertiesSelectionWidget();
 
 private:
   void interactorsInstalled(const QList<tlp::Interactor *> &) override;

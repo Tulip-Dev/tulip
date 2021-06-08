@@ -26,6 +26,7 @@
 #include "ParallelCoordsDrawConfigWidget.h"
 #include "QuantitativeParallelAxis.h"
 
+#include <QAbstractButton>
 #include <QMenu>
 #include <QGraphicsView>
 #include <QGraphicsProxyWidget>
@@ -38,6 +39,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/Perspective.h>
 #include <tulip/ViewGraphPropertiesSelectionWidget.h>
+#include <tulip/WorkspacePanel.h>
 
 using namespace std;
 
@@ -153,8 +155,11 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
                                           "<b><font size=\"+1\">"
                                           "No graph properties selected.</font></b><br/><br/>"
                                           "Open the <b>Properties</b> configuration tab<br/>"
-                                          "to proceed.");
+                                          "to proceed.", QMessageBox::Ok);
     msgBox->setModal(false);
+    auto okButton = msgBox->button(QMessageBox::Ok);
+    connect(okButton, SIGNAL(released()),
+	    this, SLOT(showPropertiesSelectionWidget()));
     // set a specific name before applying style sheet
     msgBox->setObjectName("needConfigurationMessageBox");
     Perspective::setStyleSheet(msgBox);
@@ -373,6 +378,12 @@ DataSet ParallelCoordinatesView::state() const {
   dataSet.set("lastViewWindowHeight", getGlMainWidget()->height());
 
   return dataSet;
+}
+
+void ParallelCoordinatesView::showPropertiesSelectionWidget() {
+  WorkspacePanel *wp =
+    static_cast<WorkspacePanel *>(graphicsView()->parentWidget());
+  wp->showConfigurationTab("Properties");
 }
 
 void ParallelCoordinatesView::graphChanged(tlp::Graph *) {

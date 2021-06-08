@@ -28,8 +28,10 @@
 #include <tulip/TulipViewSettings.h>
 #include <tulip/Perspective.h>
 #include <tulip/ViewGraphPropertiesSelectionWidget.h>
+#include <tulip/WorkspacePanel.h>
 
 #include <QApplication>
+#include <QAbstractButton>
 #include <QMainWindow>
 #include <QGraphicsView>
 #include <QGraphicsProxyWidget>
@@ -175,8 +177,11 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
                         "<b><font size=\"+1\">"
                         "Select at least two graph properties.</font></b><br/><br/>"
                         "Open the <b>Properties</b> configuration tab<br/>"
-                        "to proceed.");
+                        "to proceed.", QMessageBox::Ok);
     msgBox->setModal(false);
+    auto okButton = msgBox->button(QMessageBox::Ok);
+    connect(okButton, SIGNAL(released()),
+	    this, SLOT(showPropertiesSelectionWidget()));
     // set a specific name before applying style sheet
     msgBox->setObjectName("needConfigurationMessageBox");
     Perspective::setStyleSheet(msgBox);
@@ -387,6 +392,12 @@ DataSet ScatterPlot2DView::state() const {
   dataSet.set("Nodes/Edges", static_cast<unsigned>(dataLocation));
 
   return dataSet;
+}
+
+void ScatterPlot2DView::showPropertiesSelectionWidget() {
+  WorkspacePanel *wp =
+    static_cast<WorkspacePanel *>(graphicsView()->parentWidget());
+  wp->showConfigurationTab("Properties");
 }
 
 Graph *ScatterPlot2DView::getScatterPlotGraph() {

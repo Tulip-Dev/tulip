@@ -140,6 +140,7 @@ public slots:
   void draw() override;
   void refresh() override;
   void applySettings() override;
+  void showPropertiesSelectionWidget();
 
 protected slots:
 

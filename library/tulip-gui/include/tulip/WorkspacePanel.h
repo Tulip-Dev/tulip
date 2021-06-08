@@ -78,6 +78,7 @@ public slots:
   void setOverlayMode(bool);
   void setHighlightMode(bool);
   bool isGraphSynchronized() const;
+  void showConfigurationTab(QString tabName);
 
 signals:
   void drawNeeded();

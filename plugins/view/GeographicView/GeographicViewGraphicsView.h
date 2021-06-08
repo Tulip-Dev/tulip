@@ -140,6 +140,7 @@ public slots:
   void queueMapRefresh();
 #endif
   void refreshMap();
+  void showGeolocationWidget();
 
 protected:
   void cleanup();

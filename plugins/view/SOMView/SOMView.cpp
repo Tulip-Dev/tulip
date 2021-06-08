@@ -39,7 +39,9 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/Perspective.h>
+#include <tulip/WorkspacePanel.h>
 
+#include <QAbstractButton>
 #include <QMenu>
 #include <QTimer>
 #include <QToolTip>
@@ -148,13 +150,22 @@ void SOMView::construct(QWidget *) {
                                         "<b><font size=\"+1\">"
                                         "No graph properties selected.</b></font><br/><br/>"
                                         "Open the <b>Properties</b> configuration tab<br/>"
-                                        "to proceed.");
+                                        "to proceed.", QMessageBox::Ok);
   msgBox->setModal(false);
+  auto okButton = msgBox->button(QMessageBox::Ok);
+  connect(okButton, SIGNAL(released()),
+	  this, SLOT(showPropertiesSelectionWidget()));
   // set a specific name before applying style sheet
   msgBox->setObjectName("needConfigurationMessageBox");
   Perspective::setStyleSheet(msgBox);
   noPropertyMsgBox = graphicsView()->scene()->addWidget(msgBox);
   noPropertyMsgBox->setParentItem(qgrItem);
+}
+
+void SOMView::showPropertiesSelectionWidget() {
+  WorkspacePanel *wp =
+    static_cast<WorkspacePanel *>(graphicsView()->parentWidget());
+  wp->showConfigurationTab("Properties");
 }
 
 void SOMView::initGlMainViews() {

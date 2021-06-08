@@ -35,12 +35,14 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/Perspective.h>
 #include <tulip/ViewGraphPropertiesSelectionWidget.h>
+#include <tulip/WorkspacePanel.h>
 
 #include "PixelOrientedInteractors.h"
 #include "PixelOrientedView.h"
 #include "PixelOrientedViewQuickAccessBar.h"
 
 #include <QApplication>
+#include <QAbstractButton>
 #include <QGraphicsView>
 #include <QGraphicsProxyWidget>
 #include <QMessageBox>
@@ -164,8 +166,11 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
                                           "<b><font size=\"+1\">"
                                           "No graph properties selected.</font></b><br/><br/>"
                                           "Open the <b>Properties</b> configuration tab<br/>"
-                                          "to proceed.");
+                                          "to proceed.", QMessageBox::Ok);
     msgBox->setModal(false);
+    auto okButton = msgBox->button(QMessageBox::Ok);
+    connect(okButton, SIGNAL(released()),
+	    this, SLOT(showPropertiesSelectionWidget()));
     // set a specific name before applying style sheet
     msgBox->setObjectName("needConfigurationMessageBox");
     Perspective::setStyleSheet(msgBox);
@@ -287,6 +292,12 @@ DataSet PixelOrientedView::state() const {
   dataSet.set("background color", optionsWidget->getBackgroundColor());
 
   return dataSet;
+}
+
+void PixelOrientedView::showPropertiesSelectionWidget() {
+  WorkspacePanel *wp =
+    static_cast<WorkspacePanel *>(graphicsView()->parentWidget());
+  wp->showConfigurationTab("Properties");
 }
 
 void PixelOrientedView::graphChanged(Graph *) {

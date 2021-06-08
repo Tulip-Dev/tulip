@@ -28,12 +28,14 @@
 #include <tulip/QuickAccessBar.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/ViewGraphPropertiesSelectionWidget.h>
+#include <tulip/WorkspacePanel.h>
 
 #include <QHelpEvent>
 #include <QApplication>
 #include <QToolTip>
 #include <QGraphicsView>
 #include <QGraphicsProxyWidget>
+#include <QAbstractButton>
 #include <QMessageBox>
 
 #include "HistogramView.h"
@@ -179,8 +181,11 @@ void HistogramView::setState(const DataSet &dataSet) {
                                           "<b><font size=\"+1\">"
                                           "No graph properties selected.</font></b><br/><br/>"
                                           "Open the <b>Properties</b> configuration tab<br/>"
-                                          "to proceed.");
+                                          "to proceed.", QMessageBox::Ok);
     msgBox->setModal(false);
+    auto okButton = msgBox->button(QMessageBox::Ok);
+    connect(okButton, SIGNAL(released()),
+	    this, SLOT(showPropertiesSelectionWidget()));
     // set a specific name before applying style sheet
     msgBox->setObjectName("needConfigurationMessageBox");
     Perspective::setStyleSheet(msgBox);
@@ -423,6 +428,12 @@ DataSet HistogramView::state() const {
   dataSet.set("histo detailed name", histoDetailedNamed);
 
   return dataSet;
+}
+
+void HistogramView::showPropertiesSelectionWidget() {
+  WorkspacePanel *wp =
+    static_cast<WorkspacePanel *>(graphicsView()->parentWidget());
+  wp->showConfigurationTab("Properties");
 }
 
 bool HistogramView::eventFilter(QObject *object, QEvent *event) {

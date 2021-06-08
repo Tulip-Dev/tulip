@@ -227,6 +227,8 @@ public slots:
   void invertMask();
 
   void applySettings() override;
+  void showPropertiesSelectionWidget();
+
 
 protected slots:
 

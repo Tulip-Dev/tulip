@@ -35,6 +35,7 @@
 #include <tulip/Perspective.h>
 #include <tulip/GlOffscreenRenderer.h>
 #include <tulip/Gl2DRect.h>
+#include <tulip/WorkspacePanel.h>
 
 #include <QPushButton>
 #include <QTextStream>
@@ -339,8 +340,11 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
                                         "<font size=\"+1\"><b>The geolocated layout<br/>"
                                         "has not been initialized yet.</b></font><br/><br/>"
                                         "Open the <b>Geolocation</b> configuration tab<br/>"
-                                        "to proceed.");
+                                        "to proceed.", QMessageBox::Ok);
   msgBox->setModal(false);
+  auto okButton = msgBox->button(QMessageBox::Ok);
+  connect(okButton, SIGNAL(released()),
+	  this, SLOT(showGeolocationWidget()));
   // set a specific name before applying style sheet
   msgBox->setObjectName("needConfigurationMessageBox");
   Perspective::setStyleSheet(msgBox);
@@ -348,6 +352,11 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   noLayoutMsgBox->setParentItem(_placeholderItem);
 
   setAcceptDrops(false);
+}
+
+void GeographicViewGraphicsView::showGeolocationWidget() {
+  WorkspacePanel *wp = static_cast<WorkspacePanel *>(parentWidget());
+  wp->showConfigurationTab("Geolocation");
 }
 
 GeographicViewGraphicsView::~GeographicViewGraphicsView() {
