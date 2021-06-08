@@ -254,6 +254,12 @@ void GraphPerspective::logMessage(QtMsgType type, const QMessageLogContext &cont
     return;
 #endif
 
+#ifdef QT_HAS_WEBKIT
+  // hide messages about not safe image formats
+  if (msg.indexOf("QTWEBKIT_IMAGEFORMAT_WHITELIST=") != -1)
+    return;
+#endif
+
   // redirect msg to standard output
   if (msg.startsWith("[Python")) {
     // remove quotes around message added by Qt
