@@ -732,7 +732,7 @@ void WorkspacePanel::toggleSynchronization(bool f) {
 
 void WorkspacePanel::showConfigurationTab(QString tabName) {
   QTabWidget *viewConfigurationTabs =
-    static_cast<QTabWidget *>(_viewConfigurationWidgets->widget());
+      static_cast<QTabWidget *>(_viewConfigurationWidgets->widget());
 
   for (int i = 0; i < viewConfigurationTabs->count(); ++i)
     if (viewConfigurationTabs->tabText(i) == tabName) {

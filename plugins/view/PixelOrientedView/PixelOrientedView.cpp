@@ -166,11 +166,11 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
                                           "<b><font size=\"+1\">"
                                           "No graph properties selected.</font></b><br/><br/>"
                                           "Open the <b>Properties</b> configuration tab<br/>"
-                                          "to proceed.", QMessageBox::Ok);
+                                          "to proceed.",
+                                          QMessageBox::Ok);
     msgBox->setModal(false);
     auto okButton = msgBox->button(QMessageBox::Ok);
-    connect(okButton, SIGNAL(released()),
-	    this, SLOT(showPropertiesSelectionWidget()));
+    connect(okButton, SIGNAL(released()), this, SLOT(showPropertiesSelectionWidget()));
     // set a specific name before applying style sheet
     msgBox->setObjectName("needConfigurationMessageBox");
     Perspective::setStyleSheet(msgBox);
@@ -295,8 +295,7 @@ DataSet PixelOrientedView::state() const {
 }
 
 void PixelOrientedView::showPropertiesSelectionWidget() {
-  WorkspacePanel *wp =
-    static_cast<WorkspacePanel *>(graphicsView()->parentWidget());
+  WorkspacePanel *wp = static_cast<WorkspacePanel *>(graphicsView()->parentWidget());
   wp->showConfigurationTab("Properties");
 }
 

@@ -229,7 +229,6 @@ public slots:
   void applySettings() override;
   void showPropertiesSelectionWidget();
 
-
 protected slots:
 
   void fillContextMenu(QMenu *menu, const QPointF &) override;
