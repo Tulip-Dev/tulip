@@ -279,7 +279,7 @@ void View::applySettings() {}
 // define a class to save/restore the View state associated
 // to a graph
 class ViewStatesMap : public tlp::Observable {
-  std::unordered_map<std::string, std::unordered_map<Graph *, DataSet> > mMap;
+  std::unordered_map<std::string, std::unordered_map<Graph *, DataSet>> mMap;
 
 public:
   void saveState(const std::string &viewName, Graph *graph, const DataSet &ds) {
@@ -303,10 +303,10 @@ public:
     while (true) {
       auto itg = vMap.find(graph);
       if (itg != vMap.cend())
-	return itg->second;
+        return itg->second;
       auto parent = graph->getSuperGraph();
       if (graph == parent)
-	return DataSet();
+        return DataSet();
       graph = parent;
     }
   }
@@ -316,22 +316,21 @@ public:
     if (ev.type() == Event::TLP_DELETE) {
       const GraphEvent *gEv = dynamic_cast<const GraphEvent *>(&ev);
       if (gEv) {
-	auto graph = gEv->getGraph();
-	// remove graph entry
-	auto itm = mMap.begin();
-	for (; itm != mMap.end(); ++itm) {
-	  auto itg = itm->second.begin();
-	  for (; itg != itm->second.end(); ++itg) {
-	    if (itg->first == graph) {
-	      itm->second.erase(graph);
-	      return;
-	    }
-	  }
-	}
+        auto graph = gEv->getGraph();
+        // remove graph entry
+        auto itm = mMap.begin();
+        for (; itm != mMap.end(); ++itm) {
+          auto itg = itm->second.begin();
+          for (; itg != itm->second.end(); ++itg) {
+            if (itg->first == graph) {
+              itm->second.erase(graph);
+              return;
+            }
+          }
+        }
       }
     }
   }
-
 };
 
 static ViewStatesMap _viewStatesMap;
