@@ -395,6 +395,19 @@ signals:
 
   void interactorsChanged();
 
+protected:
+  /**
+    @brief Save view state associated to the current graph
+  */
+  void saveState();
+  /**
+   @brief retrieve the view saved state associated to the graph
+   @note if there is no saved state for the graph,
+   the saved state of the nearest parent graph which have a saved state
+   will be returned or an empty DataSet if not.
+   */
+  DataSet getState(Graph *graph);
+
 protected slots:
   /**
     @brief Callback method after setInteractors() was called.

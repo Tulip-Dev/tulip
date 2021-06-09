@@ -157,8 +157,10 @@ Graph *View::graph() const {
   return _graph;
 }
 void View::setGraph(tlp::Graph *g) {
-  if (_graph != nullptr)
+  if (_graph != nullptr) {
     _graph->removeListener(this);
+    saveState();
+  }
 
   bool center = false;
 
@@ -273,3 +275,75 @@ void View::clearRedrawTriggers() {
 }
 
 void View::applySettings() {}
+
+// define a class to save/restore the View state associated
+// to a graph
+class ViewStatesMap : public tlp::Observable {
+  std::unordered_map<std::string, std::unordered_map<Graph *, DataSet> > mMap;
+
+public:
+  void saveState(const std::string &viewName, Graph *graph, const DataSet &ds) {
+    const auto it = mMap.find(viewName);
+    // register this as listener
+    if (it == mMap.cend() || (it->second.find(graph) == it->second.end()))
+      graph->addListener(this);
+    // associate state to graph
+    mMap[viewName][graph] = ds;
+  }
+
+  DataSet getState(const std::string &viewName, Graph *graph) const {
+    // get view map
+    const auto it = mMap.find(viewName);
+
+    if (it == mMap.cend())
+      return DataSet();
+
+    auto &vMap = it->second;
+    // look for a DataSet associated to graph or its nearest parent graph
+    while (true) {
+      auto itg = vMap.find(graph);
+      if (itg != vMap.cend())
+	return itg->second;
+      auto parent = graph->getSuperGraph();
+      if (graph == parent)
+	return DataSet();
+      graph = parent;
+    }
+  }
+
+  void treatEvent(const Event &ev) override {
+    // look for graph deletion
+    if (ev.type() == Event::TLP_DELETE) {
+      const GraphEvent *gEv = dynamic_cast<const GraphEvent *>(&ev);
+      if (gEv) {
+	auto graph = gEv->getGraph();
+	// remove graph entry
+	auto itm = mMap.begin();
+	for (; itm != mMap.end(); ++itm) {
+	  auto itg = itm->second.begin();
+	  for (; itg != itm->second.end(); ++itg) {
+	    if (itg->first == graph) {
+	      itm->second.erase(graph);
+	      return;
+	    }
+	  }
+	}
+      }
+    }
+  }
+
+};
+
+static ViewStatesMap _viewStatesMap;
+
+void View::saveState() {
+  if (_graph) {
+    _viewStatesMap.saveState(name(), _graph, state());
+  }
+}
+
+DataSet View::getState(Graph *graph) {
+  if (graph)
+    return _viewStatesMap.getState(name(), graph);
+  return DataSet();
+}

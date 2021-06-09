@@ -176,8 +176,8 @@ void MatrixView::setOriented(bool flag) {
   }
 }
 
-void MatrixView::graphChanged(Graph *) {
-  setState(DataSet());
+void MatrixView::graphChanged(Graph *g) {
+  setState(getState(g));
 }
 
 DataSet MatrixView::state() const {

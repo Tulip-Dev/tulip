@@ -85,7 +85,7 @@ void GeographicView::setupUi() {
 }
 
 void GeographicView::graphChanged(Graph *g) {
-  setState(DataSet());
+  setState(getState(g));
 
   if (g->isEmpty()) {
     // we perform an acceptable automatic configuration
