@@ -286,8 +286,8 @@ void GraphHierarchiesEditor::currentGraphChanged(Graph *graph) {
     if (selection)
       selection->addObserver(this);
     _currentSelection = selection;
-    updateSelectionInfos();
   }
+  updateSelectionInfos();
 }
 
 void GraphHierarchiesEditor::treatEvents(const std::vector<tlp::Event> &evts) {
