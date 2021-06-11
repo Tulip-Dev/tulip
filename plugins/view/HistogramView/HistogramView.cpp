@@ -560,16 +560,18 @@ void HistogramView::refresh() {
   getGlMainWidget()->redraw();
 }
 
-void HistogramView::graphChanged(Graph *) {
-  // We copy the value of "Nodes/Edges"
-  // in the new state in order to keep
-  // the user choice when changing graph
-  DataSet oldDs = state();
-  unsigned nodes = NODE;
-  oldDs.get("Nodes/Edges", nodes);
-  DataSet newDs;
-  newDs.set("Nodes/Edges", nodes);
-  setState(newDs);
+void HistogramView::graphChanged(Graph *g) {
+  DataSet ds = getState(g);
+  if (ds.empty()) {
+    // We copy the value of "Nodes/Edges"
+    // in the new state in order to keep
+    // the user choice when changing graph
+    DataSet oldDs = state();
+    unsigned nodes = NODE;
+    oldDs.get("Nodes/Edges", nodes);
+    ds.set("Nodes/Edges", nodes);
+  }
+  setState(ds);
   drawOverview();
 }
 

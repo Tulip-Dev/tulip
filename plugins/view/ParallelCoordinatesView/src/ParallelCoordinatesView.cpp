@@ -168,6 +168,7 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
   }
 
   removeTriggers();
+  dontCenterViewAfterConfLoaded = false;
 
   vector<string> selectedPropertiesBak;
 
@@ -385,9 +386,9 @@ void ParallelCoordinatesView::showPropertiesSelectionWidget() {
   wp->showConfigurationTab("Properties");
 }
 
-void ParallelCoordinatesView::graphChanged(tlp::Graph *) {
+void ParallelCoordinatesView::graphChanged(tlp::Graph *g) {
   if (isConstruct)
-    setState(DataSet());
+    setState(getState(g));
   else if (quickAccessBarVisible()) {
     _quickAccessBar->setEnabled(false);
   }
