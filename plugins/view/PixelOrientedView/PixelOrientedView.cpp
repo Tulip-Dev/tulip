@@ -115,6 +115,7 @@ void PixelOrientedView::initGlWidget() {
     overviewsComposite->reset(true);
     // detailedOverview may have been deleted by previous call
     detailOverview = nullptr;
+    overviewsMap.clear();
     mainLayer->getComposite()->reset(true);
     // graphComposite may have been deleted by previous call
     graphComposite = nullptr;
@@ -226,6 +227,7 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
   DataSet selectedGraphPropertiesDataSet;
 
   if (dataSet.get("selected graph properties", selectedGraphPropertiesDataSet)) {
+    selectedGraphProperties.clear();
     haveSelectedGraphProperties = true;
     int i = 0;
     ostringstream oss;
@@ -255,9 +257,9 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
     }
   }
 
+  center = true;
   if (haveSelectedGraphProperties) {
     updateOverviews(true);
-    getGlMainWidget()->centerScene();
   }
   draw();
 
@@ -268,6 +270,7 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
   if (!detailOverviewName.empty()) {
     switchFromSmallMultiplesToDetailView(overviewsMap[detailOverviewName]);
   }
+
   setQuickAccessBarVisible(true);
   GlMainView::setState(dataSet);
 }
@@ -299,8 +302,8 @@ void PixelOrientedView::showPropertiesSelectionWidget() {
   wp->showConfigurationTab("Properties");
 }
 
-void PixelOrientedView::graphChanged(Graph *) {
-  setState(DataSet());
+void PixelOrientedView::graphChanged(Graph *g) {
+  setState(getState(g));
 }
 
 void PixelOrientedView::initLayoutFunctions() {

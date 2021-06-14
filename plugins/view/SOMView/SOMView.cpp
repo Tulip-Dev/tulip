@@ -237,15 +237,19 @@ void SOMView::graphicsViewResized(int w, int h) {
 }
 
 void SOMView::setState(const DataSet &dataSet) {
-
   if (!isConstruct)
     construct(nullptr);
 
-  isDetailedMode = false;
+  if (isDetailedMode) {
+    properties->configurationWidgets()[0]->parentWidget()->parentWidget()->setVisible(true);
+    isDetailedMode = false;
+  }
+
   assignNewGlMainWidget(previewWidget, false);
 
   previewWidget->makeCurrent();
 
+  selection.clear();
   //  clearObservers();
   cleanSOMMap();
 
@@ -277,7 +281,7 @@ void SOMView::setState(const DataSet &dataSet) {
 
   computeSOMMap();
 
-  // Display the empty label if no properties are selected.
+  // Display the msg box if no properties are selected.
   if (properties->getSelectedProperties().empty())
     noPropertyMsgBox->show();
 
@@ -326,8 +330,8 @@ DataSet SOMView::state() const {
   return dataSet;
 }
 
-void SOMView::graphChanged(Graph *) {
-  setState(DataSet());
+void SOMView::graphChanged(Graph *g) {
+  setState(getState(g));
 }
 
 void SOMView::fillContextMenu(QMenu *menu, const QPointF &point) {

@@ -189,6 +189,9 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     noPropertyMsgBox->setParentItem(qgrItem);
   }
 
+  if (!matrixView)
+    switchFromDetailViewToMatrixView();
+
   Graph *lastGraph = scatterPlotGraph;
   scatterPlotGraph = graph();
   propertiesSelectionWidget->setWidgetParameters(scatterPlotGraph, propertiesTypesFilter);
@@ -262,7 +265,7 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     }
   }
 
-  center = lastGraph ? false : true;
+  center = true;
 
   dataSet.get("lastViewWindowWidth", lastViewWindowWidth);
   dataSet.get("lastViewWindowHeight", lastViewWindowHeight);
@@ -403,20 +406,22 @@ Graph *ScatterPlot2DView::getScatterPlotGraph() {
   return scatterPlotGraph;
 }
 
-void ScatterPlot2DView::graphChanged(Graph *) {
+void ScatterPlot2DView::graphChanged(Graph *g) {
   if (!initialized) {
     setState(DataSet());
     return;
   }
-  // We copy the value of "Nodes/Edges"
-  // in the new state in order to keep
-  // the user choice when changing graph
-  DataSet oldDs = state();
-  unsigned nodes = NODE;
-  oldDs.get("Nodes/Edges", nodes);
-  DataSet newDs;
-  newDs.set("Nodes/Edges", nodes);
-  setState(newDs);
+  DataSet ds = getState(g);
+  if (ds.empty()) {
+    // We copy the value of "Nodes/Edges"
+    // in the new state in order to keep
+    // the user choice when changing graph
+    DataSet oldDs = state();
+    unsigned nodes = NODE;
+    oldDs.get("Nodes/Edges", nodes);
+    ds.set("Nodes/Edges", nodes);
+  }
+  setState(ds);
 }
 
 void ScatterPlot2DView::toggleInteractors(const bool activate) {
