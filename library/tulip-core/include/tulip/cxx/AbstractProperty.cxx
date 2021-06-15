@@ -282,9 +282,9 @@ public:
 
       while (!_graph->isElement(_elt)) {
         if (!_it->hasNext()) {
-	  _hasnext = false;
+          _hasnext = false;
           return tmp;
-	}
+        }
         _elt = _it->next();
       }
       _hasnext = true;
@@ -327,9 +327,9 @@ public:
 
       while (_values.get(_elt.id) == _defaultValue) {
         if (!_it->hasNext()) {
-	  _hasnext = false;
+          _hasnext = false;
           return tmp;
-	}
+        }
         _elt = _it->next();
       }
       _hasnext = true;
@@ -337,9 +337,11 @@ public:
 
     return tmp;
   }
-  GraphEltNonDefaultValueIterator(tlp::Iterator<ELT_TYPE> *it, const tlp::MutableContainer<typename VALUE_TYPE::RealType> &values)
-    : _it(it), _values(values), _elt(ELT_TYPE()), _hasnext(false),
-      _defaultValue(values.getDefault()) {
+  GraphEltNonDefaultValueIterator(
+      tlp::Iterator<ELT_TYPE> *it,
+      const tlp::MutableContainer<typename VALUE_TYPE::RealType> &values)
+      : _it(it), _values(values), _elt(ELT_TYPE()), _hasnext(false),
+        _defaultValue(values.getDefault()) {
     next();
   }
 
@@ -357,7 +359,7 @@ private:
   bool _hasnext;
   typename tlp::StoredType<typename VALUE_TYPE::RealType>::ReturnedValue _defaultValue;
 };
-#define NB_THRESHOLD(nb) nb/2
+#define NB_THRESHOLD(nb) nb / 2
 ///@endcond
 //============================================================
 template <class Tnode, class Tedge, class Tprop>
@@ -371,7 +373,7 @@ tlp::AbstractProperty<Tnode, Tedge, Tprop>::getNonDefaultValuatedNodes(const Gra
   // valuated nodes, it is faster to iterate the nodeProperties container
   if (Tprop::name.empty() || (g->numberOfNodes() > NB_THRESHOLD(nb))) {
     tlp::Iterator<tlp::node> *it =
-      new tlp::UINTIterator<tlp::node>(nodeProperties.findAll(nodeDefaultValue, false));
+        new tlp::UINTIterator<tlp::node>(nodeProperties.findAll(nodeDefaultValue, false));
 
     if (Tprop::name.empty())
       // we always need to check that nodes belong to graph
@@ -453,7 +455,7 @@ tlp::AbstractProperty<Tnode, Tedge, Tprop>::getNonDefaultValuatedEdges(const Gra
   // valuated edges, it is faster to iterate the edgeProperties container
   if (Tprop::name.empty() || (g->numberOfEdges() > NB_THRESHOLD(nb))) {
     tlp::Iterator<tlp::edge> *it =
-      new tlp::UINTIterator<tlp::edge>(edgeProperties.findAll(edgeDefaultValue, false));
+        new tlp::UINTIterator<tlp::edge>(edgeProperties.findAll(edgeDefaultValue, false));
 
     if (Tprop::name.empty())
       // we always need to check that edges belong to graph
