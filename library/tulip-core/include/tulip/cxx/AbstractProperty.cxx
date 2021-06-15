@@ -266,32 +266,35 @@ int tlp::AbstractProperty<Tnode, Tedge, Tprop>::compare(const edge e1, const edg
   const typename Tedge::RealType &e2Value = getEdgeValue(e2);
   return (e1Value < e2Value) ? -1 : ((e1Value == e2Value) ? 0 : 1);
 }
+///@cond DOXYGEN_HIDDEN
 //============================================================
-// define template iterator class to iterate over graph elts
+// define a template iterator class to iterate over elts
 // belonging to a given graph instance
 // used by the two methods below
-///@cond DOXYGEN_HIDDEN
 template <typename ELT_TYPE>
 class GraphEltIterator : public tlp::Iterator<ELT_TYPE> {
 public:
   ELT_TYPE next() override {
-    ELT_TYPE tmp = curElt;
+    ELT_TYPE tmp = _elt;
 
-    if ((_hasnext = it->hasNext())) {
-      curElt = it->next();
+    if ((_hasnext = _it->hasNext())) {
+      _elt = _it->next();
 
-      while (!(_hasnext = (!graph || graph->isElement(curElt)))) {
-        if (!it->hasNext())
-          break;
-
-        curElt = it->next();
+      while (!_graph->isElement(_elt)) {
+        if (!_it->hasNext()) {
+	  _hasnext = false;
+          return tmp;
+	}
+        _elt = _it->next();
       }
+      _hasnext = true;
     }
 
     return tmp;
   }
-  GraphEltIterator(const tlp::Graph *g, tlp::Iterator<ELT_TYPE> *itN)
-      : it(itN), graph(g), curElt(ELT_TYPE()), _hasnext(false) {
+  GraphEltIterator(const tlp::Graph *g, tlp::Iterator<ELT_TYPE> *it)
+      : _it(it), _graph(g), _elt(ELT_TYPE()), _hasnext(false) {
+    assert(g);
     next();
   }
 
@@ -299,36 +302,92 @@ public:
     return (_hasnext);
   }
   ~GraphEltIterator() override {
-    delete it;
+    delete _it;
   }
 
 private:
-  tlp::Iterator<ELT_TYPE> *it;
-  const tlp::Graph *graph;
-  ELT_TYPE curElt;
+  tlp::Iterator<ELT_TYPE> *_it;
+  const tlp::Graph *_graph;
+  ELT_TYPE _elt;
   bool _hasnext;
 };
-///@endcond
 
+//============================================================
+// define a class to iterate over graph elts belonging to
+// a given graph instance and whose property associated values
+// are not the default
+template <typename ELT_TYPE, typename VALUE_TYPE>
+class GraphEltNonDefaultValueIterator : public tlp::Iterator<ELT_TYPE> {
+public:
+  ELT_TYPE next() override {
+    ELT_TYPE tmp = _elt;
+
+    if ((_hasnext = _it->hasNext())) {
+      _elt = _it->next();
+
+      while (_values.get(_elt.id) == _defaultValue) {
+        if (!_it->hasNext()) {
+	  _hasnext = false;
+          return tmp;
+	}
+        _elt = _it->next();
+      }
+      _hasnext = true;
+    }
+
+    return tmp;
+  }
+  GraphEltNonDefaultValueIterator(tlp::Iterator<ELT_TYPE> *it, const tlp::MutableContainer<typename VALUE_TYPE::RealType> &values)
+    : _it(it), _values(values), _elt(ELT_TYPE()), _hasnext(false),
+      _defaultValue(values.getDefault()) {
+    next();
+  }
+
+  bool hasNext() override {
+    return (_hasnext);
+  }
+  ~GraphEltNonDefaultValueIterator() override {
+    delete _it;
+  }
+
+private:
+  tlp::Iterator<ELT_TYPE> *_it;
+  const tlp::MutableContainer<typename VALUE_TYPE::RealType> &_values;
+  ELT_TYPE _elt;
+  bool _hasnext;
+  typename tlp::StoredType<typename VALUE_TYPE::RealType>::ReturnedValue _defaultValue;
+};
+#define NB_THRESHOLD(nb) nb/2
+///@endcond
 //============================================================
 template <class Tnode, class Tedge, class Tprop>
 tlp::Iterator<tlp::node> *
 tlp::AbstractProperty<Tnode, Tedge, Tprop>::getNonDefaultValuatedNodes(const Graph *g) const {
-  tlp::Iterator<tlp::node> *it =
+  auto nb = nodeProperties.numberOfNonDefaultValues();
+  if (g == nullptr)
+    g = Tprop::graph;
+  // if the property is not registered or if the number of graph nodes
+  // is greater then a threshold regarding the number of non default
+  // valuated nodes, it is faster to iterate the nodeProperties container
+  if (Tprop::name.empty() || (g->numberOfNodes() > NB_THRESHOLD(nb))) {
+    tlp::Iterator<tlp::node> *it =
       new tlp::UINTIterator<tlp::node>(nodeProperties.findAll(nodeDefaultValue, false));
 
-  if (Tprop::name.empty())
-    // we always need to check that nodes belong to graph
-    // for non registered properties, because deleted nodes are not erased
-    // from them
-    return new GraphEltIterator<tlp::node>(g != nullptr ? g : Tprop::graph, it);
+    if (Tprop::name.empty())
+      // we always need to check that nodes belong to graph
+      // for non registered properties, because deleted nodes are not erased
+      // from them
+      return new GraphEltIterator<tlp::node>(g, it);
 
-  return ((g == nullptr) || (g == Tprop::graph)) ? it : new GraphEltIterator<tlp::node>(g, it);
+    return (g == Tprop::graph) ? it : new GraphEltIterator<tlp::node>(g, it);
+  } else
+    // we iterate the graph nodes
+    return new GraphEltNonDefaultValueIterator<tlp::node, Tnode>(g->getNodes(), nodeProperties);
 }
 //============================================================
 template <class Tnode, class Tedge, class Tprop>
 bool tlp::AbstractProperty<Tnode, Tedge, Tprop>::hasNonDefaultValuatedNodes(const Graph *g) const {
-  if (g == nullptr) {
+  if ((g == nullptr) || ((g == Tprop::graph) && !Tprop::name.empty())) {
     return nodeProperties.hasNonDefaultValues();
   } else {
     return !tlp::iteratorEmpty(getNonDefaultValuatedNodes(g));
@@ -338,7 +397,7 @@ bool tlp::AbstractProperty<Tnode, Tedge, Tprop>::hasNonDefaultValuatedNodes(cons
 template <class Tnode, class Tedge, class Tprop>
 unsigned int
 tlp::AbstractProperty<Tnode, Tedge, Tprop>::numberOfNonDefaultValuatedNodes(const Graph *g) const {
-  if (g == nullptr) {
+  if ((g == nullptr) || ((g == Tprop::graph) && !Tprop::name.empty())) {
     return nodeProperties.numberOfNonDefaultValues();
   } else {
     return tlp::iteratorCount(getNonDefaultValuatedNodes(g));
@@ -386,21 +445,31 @@ bool tlp::AbstractProperty<Tnode, Tedge, Tprop>::readNodeValue(std::istream &iss
 template <class Tnode, class Tedge, class Tprop>
 tlp::Iterator<tlp::edge> *
 tlp::AbstractProperty<Tnode, Tedge, Tprop>::getNonDefaultValuatedEdges(const Graph *g) const {
-  tlp::Iterator<tlp::edge> *it =
+  auto nb = edgeProperties.numberOfNonDefaultValues();
+  if (g == nullptr)
+    g = Tprop::graph;
+  // if the property is not registered or if the number of graph edges
+  // is greater then a threshold regarding the number of non default
+  // valuated edges, it is faster to iterate the edgeProperties container
+  if (Tprop::name.empty() || (g->numberOfEdges() > NB_THRESHOLD(nb))) {
+    tlp::Iterator<tlp::edge> *it =
       new tlp::UINTIterator<tlp::edge>(edgeProperties.findAll(edgeDefaultValue, false));
 
-  if (Tprop::name.empty())
-    // we always need to check that edges belong to graph
-    // for non registered properties, because deleted edges are not erased
-    // from them
-    return new GraphEltIterator<tlp::edge>(g != nullptr ? g : Tprop::graph, it);
+    if (Tprop::name.empty())
+      // we always need to check that edges belong to graph
+      // for non registered properties, because deleted edges are not erased
+      // from them
+      return new GraphEltIterator<tlp::edge>(g != nullptr ? g : Tprop::graph, it);
 
-  return ((g == nullptr) || (g == Tprop::graph)) ? it : new GraphEltIterator<tlp::edge>(g, it);
+    return ((g == nullptr) || (g == Tprop::graph)) ? it : new GraphEltIterator<tlp::edge>(g, it);
+  } else
+    // we iterate the graph edges
+    return new GraphEltNonDefaultValueIterator<tlp::edge, Tedge>(g->getEdges(), edgeProperties);
 }
 //============================================================
 template <class Tnode, class Tedge, class Tprop>
 bool tlp::AbstractProperty<Tnode, Tedge, Tprop>::hasNonDefaultValuatedEdges(const Graph *g) const {
-  if (g == nullptr) {
+  if ((g == nullptr) || ((g == Tprop::graph) && !Tprop::name.empty())) {
     return edgeProperties.hasNonDefaultValues();
   } else {
     return !tlp::iteratorEmpty(getNonDefaultValuatedEdges(g));
@@ -410,7 +479,7 @@ bool tlp::AbstractProperty<Tnode, Tedge, Tprop>::hasNonDefaultValuatedEdges(cons
 template <class Tnode, class Tedge, class Tprop>
 unsigned int
 tlp::AbstractProperty<Tnode, Tedge, Tprop>::numberOfNonDefaultValuatedEdges(const Graph *g) const {
-  if (g == nullptr) {
+  if ((g == nullptr) || ((g == Tprop::graph) && !Tprop::name.empty())) {
     return edgeProperties.numberOfNonDefaultValues();
   } else {
     return tlp::iteratorCount(getNonDefaultValuatedEdges(g));
