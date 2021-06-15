@@ -166,7 +166,7 @@ void NodeLinkDiagramComponent::initRenderingParameters(GlGraphRenderingParameter
 }
 
 //==================================================
-void NodeLinkDiagramComponent::createScene(Graph *graph, DataSet dataSet) {
+void NodeLinkDiagramComponent::createScene(Graph *graph, const DataSet &dataSet) {
   if (manager) {
     delete manager;
     manager = nullptr;
@@ -276,7 +276,7 @@ void NodeLinkDiagramComponent::loadGraphOnScene(Graph *graph) {
   GlScene *scene = getGlMainWidget()->getScene();
 
   if (!scene->getLayer("Main")) {
-    createScene(graph, DataSet());
+    createScene(graph);
     return;
   }
 
@@ -287,7 +287,7 @@ void NodeLinkDiagramComponent::loadGraphOnScene(Graph *graph) {
       static_cast<GlGraphComposite *>(scene->getLayer("Main")->findGlEntity("graph"));
 
   if (!oldGraphComposite) {
-    createScene(graph, DataSet());
+    createScene(graph);
 
     return;
   }

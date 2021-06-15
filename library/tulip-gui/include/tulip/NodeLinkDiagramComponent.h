@@ -141,7 +141,7 @@ protected:
 
   void graphChanged(tlp::Graph *) override;
 
-  void createScene(Graph *graph, DataSet dataSet);
+  void createScene(Graph *graph, const DataSet &dataSet = DataSet());
   DataSet sceneData() const;
   void loadGraphOnScene(Graph *graph);
   void useHulls(bool hasHulls);
