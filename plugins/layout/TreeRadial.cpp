@@ -42,7 +42,8 @@ public:
                     "<b>MoireGraphs: Radial Focus+Context "
                     "Visualization and Interaction for Graphs with Visual Nodes</b> T. J. "
                     "Jankun-Kelly, Kwan-Liu Ma. Proc. IEEE "
-                    "Symposium on Information Visualization, INFOVIS pages 59--66 (2003).",
+                    "Symposium on Information Visualization, INFOVIS pages 59--66 (2003)."
+                    "doi: <a href=\"https://doi.org/10.1109/INFVIS.2003.1249009\">10.1109/INFVIS.2003.1249009</a>",
                     "1.0", "Tree")
   Graph *tree;
   vector<float> nRadii;
