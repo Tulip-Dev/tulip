@@ -13,7 +13,7 @@ yum -y install xz cmake3 tar gzip make wget ccache
 
 # if needed install GCC 7 as OGDF requires a quite advanced C++11 compiler
 which gcc > /dev/null 2>&1
-if [ $? -neq 0 ]; then
+if [ ! $? -eq 0 ]; then
   yum -y install centos-release-scl
   yum -y install devtoolset-7
   COMPILER_DEFINES="-DCMAKE_C_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/gcc -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/g++"
@@ -27,7 +27,7 @@ yum -y install freetype-devel glew-devel
 yum -y install fuse fuse-libs
 
 # set USR_LIB (needed to set CMAKE_PREFIX_PATH)
-if [ "$(uname -p)" = "x86_64" ]; then
+if [ "$(uname -p)" == "x86_64" ]; then
   USR_LIB=/usr/lib64
 else
   USR_LIB=/usr/lib
@@ -43,9 +43,10 @@ else
 fi
 
 # install Python 3.6 needed packages
-yum -y install rh-python36-python rh-python36-python-devel rh-python36-python-sphinx
-# use it
-PYTHON_EXECUTABLE=$(scl enable rh-python36 'which python3.6')
+if [ "$PYTHON_EXECUTABLE" == "" ]; then
+  yum -y install rh-python36-python rh-python36-python-devel rh-python36-python-sphinx
+  PYTHON_EXECUTABLE=$(scl enable rh-python36 'which python3.6')
+fi
 
 # build and install tulip
 if [ -d /tulip/build ]; then
