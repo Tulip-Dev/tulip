@@ -151,7 +151,7 @@ popd > /dev/null 2>&1
 # extend LD_LIBRARY_PATH to ensure PYTHON_LIBRARY can be found
 # even if a non standard installation is in use
 ls $(dirname @PYTHON_LIBRARY@)/libQt5*.so > /dev/null 2>&1
-if [ "$?" != "0" ]; then
+if [ ! $? -eq 0 ]; then
   export LD_LIBRARY_PATH=$(dirname @PYTHON_LIBRARY@):$LD_LIBRARY_PATH
 else
   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(dirname @PYTHON_LIBRARY@)
@@ -165,7 +165,18 @@ if [ "$PYTHON_LIB" != "" ]; then
   cp -v --preserve=mode $PYTHON_LIB $BUNDLE_LIB_DIR
   PYTHON_LIB_NAME=$(basename $PYTHON_LIB)
   PYTHON_LIB_SYMLINK_NAME=$(echo $PYTHON_LIB | sed 's/^.*libpython\(.*\.so\).*$/libpython\1/')
-  ln -s $PYTHON_LIB_NAME $BUNDLE_LIB_DIR/$PYTHON_LIB_SYMLINK_NAME
+  pushd $BUNDLE_LIB_DIR
+  # check for a non standard python lib name coming from a rh package
+  ls $PYTHON_LIB_SYMLINK_NAME.rh*
+  if [ $? -eq 0 ]; then
+    # tweak libs to have a standard python lib name
+    # this fix a crash on openSUSE Leap 15
+    mv $PYTHON_LIB_NAME $PYTHON_LIB_SYMLINK_NAME.1.0
+    ln -s $PYTHON_LIB_SYMLINK_NAME.1.0 $PYTHON_LIB_NAME
+    PYTHON_LIB_NAME=$PYTHON_LIB_SYMLINK_NAME.1.0
+  fi
+  ln -s $PYTHON_LIB_NAME $PYTHON_LIB_SYMLINK_NAME
+  popd
   PYTHON_PACKAGE_NAME=$(echo $PYTHON_LIB | sed 's/^.*libpython\(.*\).so.*$/python\1/')
   # get pythonX.Y
   PYTHON_PACKAGE_NAME=${PYTHON_PACKAGE_NAME:0:9}
@@ -176,7 +187,7 @@ if [ "$PYTHON_LIB" != "" ]; then
     PYTHON_PACKAGE_DIR=/usr/lib/$PYTHON_PACKAGE_NAME
   fi
   pushd $PYTHON_PACKAGE_DIR > /dev/null 2>&1
-  if [ "$?" != "0" ]; then
+  if [ ! $? -eq 0 ]; then
     echo "$PYTHON_PACKAGE_DIR does not exist"
     exit
   fi
