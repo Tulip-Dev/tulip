@@ -48,7 +48,7 @@ public:
         static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
     // ComponentSplitterLayout takes ownership of the BalloonLayout instance
     BalloonLayout *balloon = new BalloonLayout();
-    csl->setLayoutModule(new BalloonLayout());
+    csl->setLayoutModule(balloon);
 
     if (dataSet != nullptr) {
       bool val = false;
