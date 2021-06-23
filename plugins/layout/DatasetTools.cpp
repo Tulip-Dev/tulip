@@ -20,7 +20,7 @@
 #include <tulip/StringCollection.h>
 
 #define ORTHOGONAL "orthogonal"
-#define ORIENTATION "up to down;down to up;right to left;left to right;"
+#define ORIENTATION "top to bottom;bottom to top;right to left;left to right;"
 #define ORIENTATION_ID "orientation"
 
 using namespace tlp;
@@ -45,7 +45,7 @@ static const char *paramHelp[] = {
 void addOrientationParameters(LayoutAlgorithm *pLayout) {
   pLayout->addInParameter<StringCollection>(
       ORIENTATION_ID, paramHelp[0], ORIENTATION, true,
-      "up to down <br> down to up <br> right to left <br> left to right");
+      "top to bottom <br> bottom to top <br> right to left <br> left to right");
 }
 
 //====================================================================
