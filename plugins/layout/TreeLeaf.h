@@ -45,10 +45,10 @@ class TreeLeaf : public tlp::LayoutAlgorithm {
 public:
   PLUGININFORMATION("Tree Leaf", "David Auber", "01/12/1999",
                     "Implements a simple level-based tree layout.<br/>"
-                    "All leaves are placed at a distance one (x-coordinates) and the order"
-                    " is the one of a suffix ordering. The y coordinates is the depth in the"
+                    "All leaves are placed at a distance one (x-coordinate) and the order"
+                    " is the one of a suffix ordering. The y-coordinate is the depth in the"
                     " tree. The other nodes are placed at the center of their children"
-                    " (x-coordinates), and the y-coordinate is their depth in the tree.",
+                    " (x-coordinate), and the y-coordinate is their depth in the tree.",
                     "1.1", "Tree")
   TreeLeaf(const tlp::PluginContext *context);
   ~TreeLeaf() override;

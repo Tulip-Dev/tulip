@@ -76,7 +76,7 @@ public:
     addInParameter<unsigned>("maximum size", paramHelp[1], "100");
     addInParameter<unsigned>("maximal node degree", paramHelp[2], "5");
     addInParameter<bool>("tree layout", paramHelp[3], "false");
-    addDependency("Tree Leaf", "1.0");
+    addDependency("Tree Leaf", "1.1");
   }
 
   bool importGraph() override {
