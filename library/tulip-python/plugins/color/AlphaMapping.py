@@ -61,7 +61,7 @@ class AlphaMapping(tlp.ColorAlgorithm):
         tlp.ColorAlgorithm.__init__(self, context)
 
         self.addNumericPropertyParameter(
-            'input property',
+            'metric',
             'The input numeric property from which to compute alpha mapping',
             'viewMetric')
 
@@ -85,7 +85,10 @@ class AlphaMapping(tlp.ColorAlgorithm):
 
     def run(self):
         vColor = self.graph.getColorProperty("viewColor")
-        inputMetric = self.dataSet['input property']
+        # first check for old parameter name
+        inputMetric = self.dataSet.toDict().get('input property', None)
+        if inputMetric == None:
+            inputMetric = self.dataSet['metric']
         minAlpha = clamp(self.dataSet['min alpha'], 0, 255)
         maxAlpha = clamp(self.dataSet['max alpha'], 0, 255)
         target = self.dataSet['target']
@@ -119,6 +122,10 @@ class AlphaMapping(tlp.ColorAlgorithm):
                 color[3] = int(alpha)
                 self.result[n] = color
 
+            if self.result.getName() == '':
+                for e in self.graph.edges():
+                    self.result[e] = vColor[e]
+
         else:
             minValue = inputMetric.getEdgeDoubleMin(self.graph)
             maxValue = inputMetric.getEdgeDoubleMax(self.graph)
@@ -130,6 +137,10 @@ class AlphaMapping(tlp.ColorAlgorithm):
                 color = vColor[e]
                 color[3] = int(alpha)
                 self.result[e] = color
+
+            if self.result.getName() == '':
+               for n in self.graph.nodes():
+                   self.result[n] = vColor[n]
 
         return True
 
@@ -143,4 +154,4 @@ according to the values stored in a numeric property of a graph.
 # The line below does the magic to register the plugin into the plugin database
 # and updates the GUI to make it accessible through the menus.
 tulipplugins.registerPlugin('AlphaMapping', 'Alpha Mapping', 'Antoine Lambert',
-                            '20/04/2017', pluginDoc, '1.1')
+                            '20/04/2017', pluginDoc, '1.2')
