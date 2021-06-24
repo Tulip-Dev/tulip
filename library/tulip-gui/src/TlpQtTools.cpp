@@ -202,7 +202,15 @@ public:
     QString qFilename = tlpStringToQString(filename);
 
     if (qFilename.startsWith("http")) {
-      FileDownloader fileDownloader;
+      // the call to FileDownloader::download() is always causing a crash
+      // because the qt loading of an http file is asynchronous
+      // the fake synchronicity used in FileDownloader
+      // which involves QEventLoop
+      // causes to reenter in GlScene::draw() while loading a texture
+      tlp::error() << "Error when downloading texture from url " << filename.c_str()
+                       << std::endl;
+      return false;
+      /*FileDownloader fileDownloader;
       QByteArray imageData = fileDownloader.download(QUrl(qFilename));
 
       if (imageData.isEmpty()) {
@@ -216,7 +224,7 @@ public:
                        << std::endl;
           return false;
         }
-      }
+      }*/
     } else {
 
       QFile imageFile(qFilename);
