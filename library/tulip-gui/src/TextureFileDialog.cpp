@@ -22,6 +22,9 @@
 #include <tulip/TextureFileDialog.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/Perspective.h>
+#include <tulip/GlTextureManager.h>
+
+#include <QImageReader>
 
 using namespace tlp;
 
@@ -64,8 +67,22 @@ void TextureFileDialog::setData(const TextureFile &tf) {
 }
 
 void TextureFileDialog::browse() {
-  QString result = QFileDialog::getOpenFileName(parentWidget(), "Choose a texture file",
-                                                _data.texturePath, "Images (*.jpg *.jpeg *.png)");
+  static QString filter;
+  if (filter.isEmpty()) {
+    // allow to choose among all supported image formats
+    for (auto f : QImageReader::supportedImageFormats()) {
+      if (filter.isEmpty())
+	filter.append("Images (");
+      else
+	filter.append(' ');
+      filter.append("*.");
+      filter.append(QString(f).toLower());
+    }
+    filter.append(')');
+  }
+  QString result =
+    QFileDialog::getOpenFileName(parentWidget(), "Choose a texture file",
+				 _data.texturePath, filter);
 
   if (!result.isEmpty())
     ui->fileOrDirLineEdit->setText(result);
