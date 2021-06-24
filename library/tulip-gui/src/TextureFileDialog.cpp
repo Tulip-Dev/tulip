@@ -72,17 +72,16 @@ void TextureFileDialog::browse() {
     // allow to choose among all supported image formats
     for (auto f : QImageReader::supportedImageFormats()) {
       if (filter.isEmpty())
-	filter.append("Images (");
+        filter.append("Images (");
       else
-	filter.append(' ');
+        filter.append(' ');
       filter.append("*.");
       filter.append(QString(f).toLower());
     }
     filter.append(')');
   }
-  QString result =
-    QFileDialog::getOpenFileName(parentWidget(), "Choose a texture file",
-				 _data.texturePath, filter);
+  QString result = QFileDialog::getOpenFileName(parentWidget(), "Choose a texture file",
+                                                _data.texturePath, filter);
 
   if (!result.isEmpty())
     ui->fileOrDirLineEdit->setText(result);

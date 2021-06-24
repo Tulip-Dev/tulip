@@ -207,8 +207,7 @@ public:
       // the fake synchronicity used in FileDownloader
       // which involves QEventLoop
       // causes to reenter in GlScene::draw() while loading a texture
-      tlp::error() << "Error when downloading texture from url " << filename.c_str()
-                       << std::endl;
+      tlp::error() << "Error when downloading texture from url " << filename.c_str() << std::endl;
       return false;
       /*FileDownloader fileDownloader;
       QByteArray imageData = fileDownloader.download(QUrl(qFilename));
