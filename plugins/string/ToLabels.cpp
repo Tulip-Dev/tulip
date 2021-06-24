@@ -38,9 +38,9 @@ class ToLabels : public tlp::StringAlgorithm {
 public:
   PLUGININFORMATION("To labels", "Ludwig Fiolka", "2012/03/16",
                     "Maps the labels of the graph elements onto the values of a given property.",
-                    "1.0", "")
+                    "1.1", "")
   ToLabels(const tlp::PluginContext *context) : StringAlgorithm(context) {
-    addInParameter<PropertyInterface *>("input", paramHelp[0], "viewMetric", true);
+    addInParameter<PropertyInterface *>("property", paramHelp[0], "viewMetric", true);
     addInParameter<BooleanProperty>("selection", paramHelp[1], "", false);
     addInParameter<bool>("nodes", paramHelp[2], "true");
     addInParameter<bool>("edges", paramHelp[3], "true");
@@ -53,7 +53,7 @@ public:
     bool onEdges = true;
 
     if (dataSet != nullptr) {
-      dataSet->get("input", input);
+      dataSet->getDeprecated("property", "input", input);
       dataSet->get("selection", selection);
       dataSet->get("nodes", onNodes);
       dataSet->get("edges", onEdges);

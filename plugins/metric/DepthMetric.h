@@ -35,7 +35,7 @@ public:
                     "For each node n on an acyclic graph,"
                     "it computes the maximum path length between n and the other node."
                     "<br><b>The graph must be acyclic</b>.",
-                    "1.1", "Hierarchical")
+                    "1.2", "Hierarchical")
   DepthMetric(const tlp::PluginContext *context);
   bool run() override;
   bool check(std::string &) override;

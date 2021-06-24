@@ -98,7 +98,7 @@ public:
   MetricSizeMapping(const PluginContext *context)
       : SizeAlgorithm(context), entryMetric(nullptr), entrySize(nullptr), xaxis(true), yaxis(true),
         zaxis(true), linearType(true), min(1), max(10), range(0), shift(0) {
-    addInParameter<NumericProperty *>("property", paramHelp[0], "viewMetric");
+    addInParameter<NumericProperty *>("metric", paramHelp[0], "viewMetric");
     addInParameter<SizeProperty>("input", paramHelp[1], "viewSize");
     addInParameter<bool>("width", paramHelp[2], "true");
     addInParameter<bool>("height", paramHelp[3], "true");
@@ -132,7 +132,7 @@ public:
     targetType.setCurrent(NODES_TARGET);
 
     if (dataSet != nullptr) {
-      dataSet->get("property", entryMetric);
+      dataSet->getDeprecated("metric", "property", entryMetric);
       dataSet->get("input", entrySize);
       dataSet->get("width", xaxis);
       dataSet->get("height", yaxis);

@@ -58,7 +58,7 @@ public:
       "This is an implementation of the MCL algorithm first published as:<br/>"
       "<b>Graph Clustering by Flow Simulation</b>, Stijn van Dongen PhD Thesis, University of "
       "Utrecht (2000).",
-      "1.0", "Clustering")
+      "1.1", "Clustering")
 
   MCLClustering(const tlp::PluginContext *);
   ~MCLClustering() override;
@@ -261,7 +261,7 @@ static const char *paramHelp[] = {
     "Determines the random walk length at each step.",
 
     // weights
-    "Edge weights to use.",
+    "Defines the metric used for edge weights.",
 
     // pruning
     "Determines, for each node, the number of strongest link kept at each iteration."};
@@ -269,7 +269,7 @@ static const char *paramHelp[] = {
 MCLClustering::MCLClustering(const tlp::PluginContext *context)
     : DoubleAlgorithm(context), weights(nullptr), _r(2.0), _k(5) {
   addInParameter<double>("inflate", paramHelp[0], "2.", false);
-  addInParameter<NumericProperty *>("weights", paramHelp[1], "", false);
+  addInParameter<NumericProperty *>("metric", paramHelp[1], "", false);
   addInParameter<unsigned int>("pruning", paramHelp[2], "5", false);
 }
 //===================================================================================
@@ -298,7 +298,7 @@ bool MCLClustering::run() {
   _k = 5;
 
   if (dataSet != nullptr) {
-    dataSet->get("weights", weights);
+    dataSet->getDeprecated("metric", "weights", weights);
     dataSet->get("inflate", _r);
     dataSet->get("pruning", _k);
   }

@@ -85,7 +85,7 @@ static const char *paramHelp[] = {
 //============================================
 EdgeBundling::EdgeBundling(const PluginContext *context) : Algorithm(context) {
   addInParameter<LayoutProperty>("layout", paramHelp[0], "viewLayout");
-  addInParameter<SizeProperty>("size", paramHelp[1], "viewSize");
+  addInParameter<SizeProperty>("node size", paramHelp[1], "viewSize");
   addInParameter<bool>("grid graph", paramHelp[2], "false");
   addInParameter<bool>("3D layout", paramHelp[3], "false");
   addInParameter<bool>("sphere layout", paramHelp[4], "false");
@@ -230,7 +230,7 @@ bool EdgeBundling::run() {
     dataSet->getDeprecated("grid graph", "grid_graph", keepGrid);
     dataSet->getDeprecated("sphere layout", "sphere_layout", sphereLayout);
     dataSet->get("layout", layout);
-    dataSet->get("size", size);
+    dataSet->getDeprecated("node size", "size", size);
   }
 
   if (sphereLayout) {

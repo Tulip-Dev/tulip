@@ -31,7 +31,7 @@ using namespace tlp;
 
 static const char *paramHelp[] = {
     // type
-    "If linear, logarithmic or uniform, the input property must be a <b>numeric</b> property."
+    "If linear, logarithmic or uniform, the property must be a <b>numeric</b> property."
     "<ul><li><b> linear</b>: the minimum value is mapped to one end of the color scale, "
     "the maximum value is mapped to the other end, and a linear interpolation is used between both "
     "to compute the associated color.</li>"
@@ -44,7 +44,7 @@ static const char *paramHelp[] = {
     "are sorted, numbered, "
     "and a linear interpolation is used on those numbers "
     "(in other words, only the order is taken into account, not the actual values).</li>"
-    "<li><b>enumerated</b>: the input property can be of any type. Each possible value is "
+    "<li><b>enumerated</b>: the property can be of any type. Each possible value is "
     "mapped manually to a distinct color without any specific order.</li></ul>",
 
     // property
@@ -57,14 +57,14 @@ static const char *paramHelp[] = {
     "The color scale used to transform a node/edge property value into a color.",
 
     // override min
-    "If true override the minimum value of the input property to keep coloring consistent across "
+    "If true override the minimum value of the property to keep coloring consistent across "
     "datasets.",
 
     // min
     "That value will be used to override the minimum one of the input property.",
 
     // override max
-    "If true override the maximum value of the input property to keep coloring consistent across "
+    "If true override the maximum value of the property to keep coloring consistent across "
     "datasets.",
 
     // max
@@ -99,7 +99,7 @@ private:
 public:
   PLUGININFORMATION(
       "Color Mapping", "Mathiaut", "16/09/2010",
-      "Colorizes the nodes or edges of a graph according to the values of a given property.", "2.2",
+      "Colorizes the nodes or edges of a graph according to the values of a given property.", "2.3",
       "")
   ColorMapping(const tlp::PluginContext *context)
       : ColorAlgorithm(context), entryMetric(nullptr), eltTypes(ELT_TYPES),
@@ -108,7 +108,7 @@ public:
         overrideMinInput(false) {
     addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES, true,
                                      "linear <br> uniform <br> enumerated <br> logarithmic");
-    addInParameter<PropertyInterface *>("input property", paramHelp[1], "viewMetric");
+    addInParameter<PropertyInterface *>("property", paramHelp[1], "viewMetric");
     addInParameter<StringCollection>(TARGET_TYPE, paramHelp[2], TARGET_TYPES, true,
                                      "nodes <br> edges");
     addInParameter<ColorScale>("color scale", paramHelp[3], "");
@@ -148,7 +148,7 @@ public:
     PropertyInterface *metric = nullptr;
 
     if (dataSet != nullptr) {
-      dataSet->get("input property", metric);
+      dataSet->getDeprecated("property", "input property", metric);
       dataSet->get(ELT_TYPE, eltTypes);
       dataSet->get(TARGET_TYPE, targetType);
       dataSet->get("override minimum value", overrideMinInput);

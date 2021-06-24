@@ -32,7 +32,7 @@ static const char *paramHelp[] = {
 
 DepthMetric::DepthMetric(const tlp::PluginContext *context)
     : DoubleAlgorithm(context), edgeWeight(nullptr) {
-  addInParameter<NumericProperty *>("edge weight", paramHelp[0], "", false);
+  addInParameter<NumericProperty *>("metric", paramHelp[0], "", false);
 }
 
 // structure below is used to implement dfs loop
@@ -131,7 +131,7 @@ double DepthMetric::getNodeValue(tlp::node current) {
 //====================================================================
 bool DepthMetric::run() {
   if (dataSet != nullptr) {
-    dataSet->get("edge weight", edgeWeight);
+    dataSet->getDeprecated("metric", "edge weight", edgeWeight);
   }
 
   result->setAllEdgeValue(0);
