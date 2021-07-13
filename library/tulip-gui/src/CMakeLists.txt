@@ -89,7 +89,6 @@ SET(SRCS
   GlSimpleEntityItemModel.cpp
   PluginModel.cpp
   GraphNeedsSavingObserver.cpp
-  FileDownloader.cpp
   ColorScalesManager.cpp
   ScientificDoubleSpinBox.cpp
   AboutTulipPage.cpp
@@ -176,7 +175,6 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/DoubleStringsListSelectionWidget.h
   ../include/tulip/DownloadManager.h
   ../include/tulip/DragHandle.h
-  ../include/tulip/FileDownloader.h
   ../include/tulip/GLInteractor.h
   ../include/tulip/GlMainView.h
   ../include/tulip/GlMainWidget.h

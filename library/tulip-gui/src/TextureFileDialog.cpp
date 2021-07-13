@@ -17,14 +17,11 @@
  *
  */
 #include <QFileDialog>
+#include <QImageReader>
 
-#include <tulip/TlpTools.h>
 #include <tulip/TextureFileDialog.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/Perspective.h>
-#include <tulip/GlTextureManager.h>
-
-#include <QImageReader>
 
 using namespace tlp;
 
@@ -39,29 +36,16 @@ TextureFileDialog::~TextureFileDialog() {
 }
 
 void TextureFileDialog::done(int res) {
-  if (res) {
-    if (ui->localFilesystemRB->isChecked()) {
-      _data.texturePath = ui->fileOrDirLineEdit->text();
-    } else {
-      _data.texturePath = ui->urlLineEdit->text();
-    }
-  }
-
+  if (res)
+    _data.texturePath = ui->fileOrDirLineEdit->text();
   QDialog::done(res);
 }
 
 void TextureFileDialog::setData(const TextureFile &tf) {
   _data = tf;
   setWindowTitle("Choose a texture file");
-
-  if (tf.texturePath.startsWith("http")) {
-    ui->httpUrlRB->setChecked(true);
-    ui->urlLineEdit->setText(tf.texturePath);
-  } else {
-    ui->localFilesystemRB->setChecked(true);
-    ui->fileOrDirLineEdit->setText(tf.texturePath);
-  }
-
+  ui->fileOrDirLabel->setText("Texture file");
+  ui->fileOrDirLineEdit->setText(tf.texturePath);
   setModal(true);
   move(QCursor::pos() - QPoint(250, 40));
 }

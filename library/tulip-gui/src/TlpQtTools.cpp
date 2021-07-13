@@ -67,7 +67,6 @@
 #include <tulip/GlTextureManager.h>
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/PythonVersionChecker.h>
-#include <tulip/FileDownloader.h>
 #include <tulip/TulipItemEditorCreators.h>
 #include <tulip/GlOffscreenRenderer.h>
 /**
@@ -196,57 +195,20 @@ class GlTextureFromQImageLoader : public GlTextureLoader {
 public:
   // redefine the inherited method
   bool loadTexture(const std::string &filename, GlTexture &glTexture) override {
-
-    QImage image;
-
     QString qFilename = tlpStringToQString(filename);
+    QImage image(qFilename);
 
-    if (qFilename.startsWith("http")) {
-      // the call to FileDownloader::download() is always causing a crash
-      // because the qt loading of an http file is asynchronous
-      // the fake synchronicity used in FileDownloader
-      // which involves QEventLoop
-      // causes to reenter in GlScene::draw() while loading a texture
-      tlp::error() << "Error when downloading texture from url " << filename.c_str() << std::endl;
+    if (image.isNull()) {
+      if (!QFile(QString::fromUtf8(filename.c_str())).exists())
+        tlp::error() << "Error when loading texture, the file named \"" << filename.c_str() << "\" does not exist" << std::endl;
+      else
+        tlp::error() << "Error when loading texture from " << filename.c_str() << std::endl;
+
       return false;
-      /*FileDownloader fileDownloader;
-      QByteArray imageData = fileDownloader.download(QUrl(qFilename));
-
-      if (imageData.isEmpty()) {
-        tlp::error() << "Error when downloading texture from url " << filename.c_str() << std::endl;
-        return false;
-      } else {
-        bool imageLoaded = image.loadFromData(imageData);
-
-        if (!imageLoaded) {
-          tlp::error() << "Error when downloading texture from url " << filename.c_str()
-                       << std::endl;
-          return false;
-        }
-      }*/
-    } else {
-
-      QFile imageFile(qFilename);
-
-      if (imageFile.open(QIODevice::ReadOnly)) {
-        image.loadFromData(imageFile.readAll());
-      }
-
-      if (image.isNull()) {
-        if (!imageFile.exists())
-          tlp::error() << "Error when loading texture, the file named \"" << filename.c_str()
-                       << "\" does not exist" << std::endl;
-        else
-          tlp::error() << "Error when loading texture from " << filename.c_str() << std::endl;
-
-        return false;
-      }
     }
 
     // store icon preview of the loaded texture in the icon pool used by the Tulip spreadsheet view
-    if (!image.isNull()) {
-      addIconToPool(qFilename, QIcon(QPixmap::fromImage(image)));
-    }
+    addIconToPool(qFilename, QIcon(QPixmap::fromImage(image)));
 
     bool canUseMipmaps = OpenGlConfigManager::isExtensionSupported("GL_ARB_framebuffer_object") ||
                          OpenGlConfigManager::isExtensionSupported("GL_EXT_framebuffer_object");
