@@ -200,7 +200,8 @@ public:
 
     if (image.isNull()) {
       if (!QFile(QString::fromUtf8(filename.c_str())).exists())
-        tlp::error() << "Error when loading texture, the file named \"" << filename.c_str() << "\" does not exist" << std::endl;
+        tlp::error() << "Error when loading texture, the file named \"" << filename.c_str()
+                     << "\" does not exist" << std::endl;
       else
         tlp::error() << "Error when loading texture from " << filename.c_str() << std::endl;
 

@@ -123,11 +123,10 @@ QVariant GraphModel::headerData(int section, Qt::Orientation orientation, int ro
     else if (role == TulipModel::PropertyRole)
       return QVariant::fromValue<PropertyInterface *>(prop);
     else if (role == Qt::ToolTipRole) {
-      auto defVal = isNode()
-                      ? _graph->getProperty(prop->getName())->getNodeDefaultStringValue()
-                      : _graph->getProperty(prop->getName())->getEdgeDefaultStringValue();
+      auto defVal = isNode() ? _graph->getProperty(prop->getName())->getNodeDefaultStringValue()
+                             : _graph->getProperty(prop->getName())->getEdgeDefaultStringValue();
       if (defVal.empty())
-	defVal = "\"\"";
+        defVal = "\"\"";
       return QString(_graph->existLocalProperty(prop->getName()) ? "Local " : "Inherited ")
           .append("property <b>")
           .append(tlpStringToQString(prop->getName()))
@@ -135,7 +134,7 @@ QVariant GraphModel::headerData(int section, Qt::Orientation orientation, int ro
           .append(tlpStringToQString(prop->getTypename()))
           .append("</b><br/>default ")
           .append(isNode() ? "node value: " : "edge value: ")
-	  .append(QString("<b>%1</b>").arg(defVal.c_str()));
+          .append(QString("<b>%1</b>").arg(defVal.c_str()));
     }
   }
 
