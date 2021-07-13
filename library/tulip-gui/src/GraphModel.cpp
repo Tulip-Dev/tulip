@@ -1102,10 +1102,11 @@ QString NodesGraphModel::getNodeTooltip(Graph *graph, node n) {
   return QString("<b>Node #")
       .append(QString::number(n.id))
       .append(label.empty() ? "</b>" : "</b> (<b><i>" + tlpStringToQString(label) + "</i></b>)")
-      .append("\ninput degree: ")
+      .append("\ninput degree: <b>")
       .append(QString::number(graph->indeg(n)))
-      .append("\noutput degree: ")
-      .append(QString::number(graph->outdeg(n)));
+      .append("</b>\noutput degree: <b>")
+      .append(QString::number(graph->outdeg(n)))
+      .append("</b>");
 }
 
 void EdgesGraphModel::treatEvent(const Event &ev) {
