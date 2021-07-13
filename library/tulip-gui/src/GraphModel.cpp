@@ -123,18 +123,19 @@ QVariant GraphModel::headerData(int section, Qt::Orientation orientation, int ro
     else if (role == TulipModel::PropertyRole)
       return QVariant::fromValue<PropertyInterface *>(prop);
     else if (role == Qt::ToolTipRole) {
-      return QString(_graph->existLocalProperty(prop->getName()) ? "local " : "inherited ")
-          .append("property \"")
+      auto defVal = isNode()
+                      ? _graph->getProperty(prop->getName())->getNodeDefaultStringValue()
+                      : _graph->getProperty(prop->getName())->getEdgeDefaultStringValue();
+      if (defVal.empty())
+	defVal = "\"\"";
+      return QString(_graph->existLocalProperty(prop->getName()) ? "Local " : "Inherited ")
+          .append("property <b>")
           .append(tlpStringToQString(prop->getName()))
-          .append("\" of type ")
+          .append("</b><br/>type: <b>")
           .append(tlpStringToQString(prop->getTypename()))
-          .append("\ndefault ")
+          .append("</b><br/>default ")
           .append(isNode() ? "node value: " : "edge value: ")
-          .append(isNode()
-                      ? tlpStringToQString(
-                            _graph->getProperty(prop->getName())->getNodeDefaultStringValue())
-                      : tlpStringToQString(
-                            _graph->getProperty(prop->getName())->getEdgeDefaultStringValue()));
+	  .append(QString("<b>%1</b>").arg(defVal.c_str()));
     }
   }
 
@@ -1090,7 +1091,8 @@ void NodesGraphModel::treatEvents(const std::vector<tlp::Event> &events) {
 QVariant NodesGraphModel::headerData(int section, Qt::Orientation orientation, int role) const {
   if (orientation == Qt::Vertical) {
     if (role == Qt::ToolTipRole && (section >= 0 && section < _elements.size())) {
-      return getNodeTooltip(_graph, node(_elements[section]));
+      node n(_elements[section]);
+      return getNodeTooltip(_graph, n);
     }
   }
 
@@ -1102,9 +1104,9 @@ QString NodesGraphModel::getNodeTooltip(Graph *graph, node n) {
   return QString("<b>Node #")
       .append(QString::number(n.id))
       .append(label.empty() ? "</b>" : "</b> (<b><i>" + tlpStringToQString(label) + "</i></b>)")
-      .append("\ninput degree: <b>")
+      .append("<br/>input degree: <b>")
       .append(QString::number(graph->indeg(n)))
-      .append("</b>\noutput degree: <b>")
+      .append("</b><br/>output degree: <b>")
       .append(QString::number(graph->outdeg(n)))
       .append("</b>");
 }
@@ -1180,7 +1182,7 @@ void EdgesGraphModel::treatEvents(const std::vector<tlp::Event> &events) {
 QVariant EdgesGraphModel::headerData(int section, Qt::Orientation orientation, int role) const {
   if (orientation == Qt::Vertical) {
     if (role == Qt::ToolTipRole && (section >= 0 && section < _elements.size())) {
-      edge e = edge(_elements[section]);
+      edge e(_elements[section]);
       return getEdgeTooltip(_graph, e);
     }
   }
@@ -1198,10 +1200,10 @@ QString EdgesGraphModel::getEdgeTooltip(Graph *graph, edge e) {
   return QString("<b>Edge #")
       .append(QString::number(e.id))
       .append(label.empty() ? "</b>" : "</b> (<b><i>" + tlpStringToQString(label) + ")</b>")
-      .append("\nsource: <b>node #")
+      .append("<br/>source: <b>node #")
       .append(QString::number(extremities.first.id))
       .append(sourceLabel.empty() ? "</b>" : "</b> (" + tlpStringToQString(sourceLabel) + ")")
-      .append("\ntarget: <b>node #")
+      .append("<br/>target: <b>node #")
       .append(QString::number(extremities.second.id))
       .append(targetLabel.empty() ? "</b>" : "</b> (" + tlpStringToQString(targetLabel) + ")");
 }
