@@ -168,6 +168,8 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint &p) {
 
   if (_contextIndex.isValid()) {
     _contextGraph = _contextIndex.data(tlp::GraphHierarchiesModel::GraphRole).value<tlp::Graph *>();
+    if (_contextGraph == nullptr)
+      return;
     QMenu menu;
     tlp::Perspective::redirectStatusTipOfMenu(&menu);
     menu.addAction(tlp::Perspective::typedInstance<GraphPerspective>()->createPanelAction());
@@ -364,10 +366,11 @@ void GraphHierarchiesEditor::delGraph() {
     _model->setCurrentGraph(nullptr);
   } else {
     tlp::Graph *sg = _contextGraph->getSuperGraph();
-    _contextGraph->getSuperGraph()->delSubGraph(_contextGraph);
+    sg->delSubGraph(_contextGraph);
     _model->setCurrentGraph(sg);
   }
 
+  _ui->hierarchiesTree->selectionModel()->reset();
   _contextGraph = nullptr;
 }
 
@@ -403,10 +406,11 @@ void GraphHierarchiesEditor::delAllGraph() {
     _contextGraph->push();
     GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(_contextGraph);
     tlp::Graph *sg = _contextGraph->getSuperGraph();
-    _contextGraph->getSuperGraph()->delAllSubGraphs(_contextGraph);
+    sg->delAllSubGraphs(_contextGraph);
     _model->setCurrentGraph(sg);
   }
 
+  _ui->hierarchiesTree->selectionModel()->reset();
   _contextGraph = nullptr;
 }
 
