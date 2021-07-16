@@ -75,17 +75,6 @@ void CustomTreeView::scrollContentsBy(int dx, int dy) {
 }
 
 void CustomTreeView::setModel(QAbstractItemModel *m) {
-  if (model()) {
-    disconnect(model(), SIGNAL(rowsInserted(const QModelIndex &, int, int)), this,
-               SLOT(resizeFirstColumnToContent()));
-    disconnect(model(), SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this,
-               SLOT(resizeFirstColumnToContent()));
-  }
-
-  connect(m, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this,
-          SLOT(resizeFirstColumnToContent()));
-  connect(m, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this,
-          SLOT(resizeFirstColumnToContent()));
   QTreeView::setModel(m);
   resizeFirstColumnToContent();
 }
