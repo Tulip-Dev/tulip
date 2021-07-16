@@ -780,13 +780,13 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         }
 
         // first get needed infos to update model
-	// after sg removal
-	const Graph *sg = ge->getSubGraph();
+        // after sg removal
+        const Graph *sg = ge->getSubGraph();
         sgIndex = indexOf(sg);
         assert(sgIndex.isValid());
         parentGraph = sg->getSuperGraph();
 
-      }  else if (ge->getType() == GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH) {
+      } else if (ge->getType() == GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH) {
         // that event must only be treated on a root graph
         if (ge->getGraph() != ge->getGraph()->getRoot()) {
           return;
@@ -796,20 +796,20 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         QModelIndex parentIndex = sgIndex.parent();
         assert(parentIndex.isValid());
 
-	// update index cache for subgraphs of parent graph
+        // update index cache for subgraphs of parent graph
         int i = 0;
-	for (auto sg2 : parentGraph->subGraphs()) {
+        for (auto sg2 : parentGraph->subGraphs()) {
           if (i >= sgIndex.row())
-	    _indexCache[sg2] = createIndex(i, 0, sg2);
-	  ++i;
+            _indexCache[sg2] = createIndex(i, 0, sg2);
+          ++i;
         }
 
         // remove sg corresponding row from model
-	// and prevent dangling pointer to remain in the persistent indexes
-	beginRemoveRows(parentIndex, sgIndex.row(), sgIndex.row());
-	changePersistentIndex(sgIndex, QModelIndex());
-	_indexCache.remove(sg);
-	endRemoveRows();
+        // and prevent dangling pointer to remain in the persistent indexes
+        beginRemoveRows(parentIndex, sgIndex.row(), sgIndex.row());
+        changePersistentIndex(sgIndex, QModelIndex());
+        _indexCache.remove(sg);
+        endRemoveRows();
 
         // insert the parent graph in the graphs changed set
         // in order to update associated tree views, displaying the graphs hierarchies,
