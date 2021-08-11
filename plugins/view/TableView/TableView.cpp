@@ -674,7 +674,8 @@ bool TableView::getNodeOrEdgeAtViewportPos(int x, int y, node &n, edge &e) const
   QPoint pos = graphicsView()->viewport()->mapToGlobal(QPoint(x, y));
   if (pos.x() < propertiesEditor->mapToGlobal(QPoint(0, 0)).x()) {
     pos = graphicsView()->viewport()->mapToGlobal(
-              QPoint(0, y - _ui->table->horizontalHeader()->height())) -
+              QPoint(x - _ui->table->verticalHeader()->width(),
+		     y - _ui->table->horizontalHeader()->height())) -
           _ui->table->mapToGlobal(QPoint(0, 0));
     if (_ui->table->rowAt(pos.y()) >= 0) {
       QModelIndex idx = _ui->table->indexAt(pos);
