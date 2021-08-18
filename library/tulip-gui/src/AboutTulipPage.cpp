@@ -41,12 +41,22 @@
 #include <QNetworkReply>
 #include <QXmlStreamReader>
 
-namespace tlp {
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-extern QString getSipVersion();
+static QString getSipVersion() {
+  return SIP_VERSION;
+}
 #endif
-extern QString getTulipGitRevision();
-} // namespace tlp
+
+static QString getTulipGitRevision() {
+  QFile gitCommitFile(tlp::tlpStringToQString(tlp::TulipShareDir + "GIT_COMMIT"));
+
+  if (gitCommitFile.open(QFile::ReadOnly | QFile::Text)) {
+    QTextStream in(&gitCommitFile);
+    in.setCodec("UTF-8");
+    return in.readAll().replace("\n", "");
+  }
+  return "";
+}
 
 static const QString TulipRepoUrl = "https://github.com/Tulip-Dev/tulip";
 static const QString RSS_URL = "https://tulip.labri.fr/site/?q=newsFeed.xml";
@@ -84,32 +94,6 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
   if (openGL_OK)
     GlOffscreenRenderer::getInstance()->makeOpenGLContextCurrent();
 
-  /*  QString tulipDependenciesInfo =
-      "<p style=\"font-size:12pt\">"
-      "This open source software is powered by:"
-      "<ul>"
-      "<li><a href=\"https://www.qt.io\"><span style=\"color: #0d47f1;\">"
-      "<b>Qt</b></span></a> " + tlpStringToQString(qVersion()) +
-      "</li>"
-      "<li><a href=\"https://www.opengl.org\"><span style=\"color: #0d47f1;\">"
-      "<b>OpenGL</b></span></a> " +
-      (openGL_OK ? QString::number(OpenGlConfigManager::getOpenGLVersion()) : QString("?.?")) +
-      " (from vendor " +
-      (openGL_OK ? tlpStringToQString(OpenGlConfigManager::getOpenGLVendor())
-                 : QString("unknown")) +
-      ") </li>"
-      "<li><a href=\"http://ogdf.net/\"><span style=\"color: #0d47f1;\">"
-      "<b>OGDF</b></span></a> v" + OGDF_VERSION + "</li>"
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-      "<li><a href=\"https://www.python.org\"><span style=\"color: #0d47f1;\">"
-      "<b> Python </b></span></a> " + PythonVersionChecker::compiledVersion() +
-      "</li>"
-      "<li> <a href=\"https://www.riverbankcomputing.com/software/sip\"><span style=\"color:
-#0d47f1;\">"
-      "<b>SIP</b></span></a> " + getSipVersion() + "</li>"
-#endif
-      "</ul>"
-      "</p>";*/
   QString tulipDependenciesInfo =
       "<p style=\"font-size:12pt\">"
       "This open source software is powered by:"

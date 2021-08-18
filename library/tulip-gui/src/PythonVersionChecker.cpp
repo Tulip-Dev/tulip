@@ -250,7 +250,11 @@ QStringList PythonVersionChecker::installedVersions() {
 }
 
 QString PythonVersionChecker::compiledVersion() {
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
   return TLP_PYTHON;
+#else
+  return QString();
+#endif
 }
 
 bool PythonVersionChecker::isPythonVersionMatching() {

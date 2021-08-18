@@ -97,6 +97,7 @@ SET(SRCS
   ViewActionsManager.cpp
   ViewGraphPropertiesSelectionWidget.cpp
   ViewToolTipAndUrlManager.cpp
+  PythonVersionChecker.cpp
 )
 
 QTX_SET_INCLUDES_AND_DEFINITIONS()
@@ -113,18 +114,9 @@ IF(TULIP_BUILD_PYTHON_COMPONENTS)
   ENDIF(MSYS2_PYTHON)
   SET_SOURCE_FILES_PROPERTIES(PythonVersionChecker.cpp
                               PROPERTIES COMPILE_DEFINITIONS "${TLPGUI_PYTHON_COMPILE_DEFINITIONS}")
-  SET_SOURCE_FILES_PROPERTIES(AboutTulipPageUtils.cpp
+  SET_SOURCE_FILES_PROPERTIES(AboutTulipPage.cpp
                               PROPERTIES COMPILE_DEFINITIONS "${TLPGUI_PYTHON_COMPILE_DEFINITIONS}")
-  ADD_LIBRARY(tulip-gui-python STATIC ${PYTHON_PART_SRCS})
-  # allow the static library to be used to build shared libs
-  SET_TARGET_PROPERTIES(tulip-gui-python PROPERTIES POSITION_INDEPENDENT_CODE ON)
-  TARGET_LINK_LIBRARIES(tulip-gui-python ${QT_LIBRARIES})
 ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
-
-ADD_LIBRARY(tulip-about-page-utils STATIC AboutTulipPageUtils.cpp)
-# allow the static library to be used to build shared libs
-SET_TARGET_PROPERTIES(tulip-about-page-utils PROPERTIES POSITION_INDEPENDENT_CODE ON)
-TARGET_LINK_LIBRARIES(tulip-about-page-utils ${QT_LIBRARIES})
 
 QTX_WRAP_UI(UI_HEADERS
   ../designer/AboutTulipPage.ui
@@ -231,12 +223,6 @@ QTX_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
 INCLUDE_DIRECTORIES(${TulipGUIBuildInclude} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} ${ZLIB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${QuazipInclude} ${OGDFInclude} ${OGDFBuildInclude})
 ADD_LIBRARY(${LibTulipGUIName} SHARED ${SRCS} ${MOC_SRCS} ${RCC_SRCS} ${UI_HEADERS})
 TARGET_LINK_LIBRARIES(${LibTulipGUIName} ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOGLName} ${QuazipLibrary})
-
-IF(TULIP_BUILD_PYTHON_COMPONENTS)
-TARGET_LINK_LIBRARIES(${LibTulipGUIName} tulip-gui-python)
-ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
-
-TARGET_LINK_LIBRARIES(${LibTulipGUIName} tulip-about-page-utils)
 
 INSTALL(TARGETS ${LibTulipGUIName}
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_gui
