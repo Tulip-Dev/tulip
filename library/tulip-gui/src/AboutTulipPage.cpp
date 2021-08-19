@@ -112,17 +112,17 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       OGDF_VERSION +
       ": <a "
       "href=\"http://ogdf.net/\"><span style=\"color: #0d47f1;\">ogdf.net</span></a> </li>" +
-      (!PythonVersionChecker::compiledVersion().isNull() ?
-      QString("  <li> <b> Python </b> ") +
-      PythonVersionChecker::compiledVersion() +
-      ": <a href=\"https://www.python.org\"><span style=\"color: "
-      "#0d47f1;\">www.python.org</span></a> </li>"
-      "  <li> <b> SIP </b> " + getSipVersion() +
-      ": <a "
-      "href=\"https://www.riverbankcomputing.com/software/sip\"><span style=\"color: "
-											       "#0d47f1;\">www.riverbankcomputing.com/software/sip</span></a></li>" : "")
-      + "<li><b>Font Awesome</b> " +
-      TulipFontAwesome::getVersion().c_str() +
+      (!PythonVersionChecker::compiledVersion().isNull()
+           ? QString("  <li> <b> Python </b> ") + PythonVersionChecker::compiledVersion() +
+                 ": <a href=\"https://www.python.org\"><span style=\"color: "
+                 "#0d47f1;\">www.python.org</span></a> </li>"
+                 "  <li> <b> SIP </b> " +
+                 getSipVersion() +
+                 ": <a "
+                 "href=\"https://www.riverbankcomputing.com/software/sip\"><span style=\"color: "
+                 "#0d47f1;\">www.riverbankcomputing.com/software/sip</span></a></li>"
+           : "") +
+      "<li><b>Font Awesome</b> " + TulipFontAwesome::getVersion().c_str() +
       ": <a href=\"http://fontawesome.com\"><span style=\"color: #0d47f1;\">"
       "fontawesome.com</span></a></li>"
       "<li><b>Material Design Icons</b> " +
