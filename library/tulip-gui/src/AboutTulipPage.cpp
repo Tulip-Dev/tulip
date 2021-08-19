@@ -41,11 +41,13 @@
 #include <QNetworkReply>
 #include <QXmlStreamReader>
 
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
 static QString getSipVersion() {
+#ifdef SIP_VERSION
   return SIP_VERSION;
-}
+#else
+  return QString();
 #endif
+}
 
 static QString getTulipGitRevision() {
   QFile gitCommitFile(tlp::tlpStringToQString(tlp::TulipShareDir + "GIT_COMMIT"));
@@ -109,19 +111,17 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       "<li><b>OGDF</b> v" +
       OGDF_VERSION +
       ": <a "
-      "href=\"http://ogdf.net/\"><span style=\"color: #0d47f1;\">ogdf.net</span></a> </li>"
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-      "  <li> <b> Python </b> " +
+      "href=\"http://ogdf.net/\"><span style=\"color: #0d47f1;\">ogdf.net</span></a> </li>" +
+      (!PythonVersionChecker::compiledVersion().isNull() ?
+      QString("  <li> <b> Python </b> ") +
       PythonVersionChecker::compiledVersion() +
       ": <a href=\"https://www.python.org\"><span style=\"color: "
       "#0d47f1;\">www.python.org</span></a> </li>"
-      "  <li> <b> SIP </b> " +
-      getSipVersion() +
+      "  <li> <b> SIP </b> " + getSipVersion() +
       ": <a "
       "href=\"https://www.riverbankcomputing.com/software/sip\"><span style=\"color: "
-      "#0d47f1;\">www.riverbankcomputing.com/software/sip</span></a></li>"
-#endif
-      "<li><b>Font Awesome</b> " +
+											       "#0d47f1;\">www.riverbankcomputing.com/software/sip</span></a></li>" : "")
+      + "<li><b>Font Awesome</b> " +
       TulipFontAwesome::getVersion().c_str() +
       ": <a href=\"http://fontawesome.com\"><span style=\"color: #0d47f1;\">"
       "fontawesome.com</span></a></li>"

@@ -351,16 +351,14 @@ void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../lib/");
 #endif
 
-#if defined(__MINGW32__) && defined(TULIP_BUILD_PYTHON_COMPONENTS)
+#if defined(TULIP_BUILD_PYTHON_COMPONENTS) && defined(WIN32)
+#if defined(__MINGW32__)
   // When using MSYS2 platform to compile Tulip, force the dynamic loading of
   // OpenSSL libraries Qt was compiled against before Python initialization to
   // avoid a DLL Hell on windows
   QSslSocket::supportsSsl();
-#endif
-
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-// MS stated that SetDllDirectory only exists since WinXP SP1
-#if defined(WIN32) && (_WIN32_WINNT >= 0x0502)
+#elif (_WIN32_WINNT >= 0x0502)
+  // MS stated that SetDllDirectory only exists since WinXP SP1
 
   // Python on windows can be installed for current user only.
   // In that case, the Python dll is not located in system path but in the Python home directory.
@@ -369,7 +367,6 @@ void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
   if (tlp::PythonVersionChecker::isPythonVersionMatching()) {
     SetDllDirectory(tlp::QStringToTlpString(tlp::PythonVersionChecker::getPythonHome()).c_str());
   }
-
 #endif
 #endif
 
