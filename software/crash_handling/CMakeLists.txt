@@ -42,7 +42,7 @@ INCLUDE_DIRECTORIES(BEFORE ${TulipCoreBuildInclude} ${TulipCoreInclude})
 
 IF(UNIX)
 
-  SET(LIB_SRCS ${LIB_SRCS} UnixSignalInterposer)
+  SET(LIB_SRCS ${LIB_SRCS} UnixSignalInterposer.cpp)
 
 ENDIF(UNIX)
 
