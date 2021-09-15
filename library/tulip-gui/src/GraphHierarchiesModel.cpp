@@ -197,8 +197,6 @@ static void restoreTextureFilesFromProjectIfNeeded(tlp::Graph *g, tlp::TulipProj
     viewTexture->setAllNodeValue(QStringToTlpString(project->toAbsolutePath(textureProjectFile)));
   } else if (defaultNodeTextureFileInfo.exists()) {
     viewTexture->setAllNodeValue(QStringToTlpString(defaultNodeTextureFileInfo.absoluteFilePath()));
-  } else if (defaultNodeTextureFile.startsWith("http")) {
-    viewTexture->setAllNodeValue(QStringToTlpString(defaultNodeTextureFile));
   }
 
   // Iterate once again on non default valuated nodes
@@ -221,8 +219,6 @@ static void restoreTextureFilesFromProjectIfNeeded(tlp::Graph *g, tlp::TulipProj
       viewTexture->setNodeValue(n, QStringToTlpString(project->toAbsolutePath(textureProjectFile)));
     } else if (fileInfo.exists()) {
       viewTexture->setNodeValue(n, QStringToTlpString(fileInfo.absoluteFilePath()));
-    } else if (textureFile.startsWith("http")) {
-      viewTexture->setNodeValue(n, QStringToTlpString(textureFile));
     }
   }
 
@@ -252,8 +248,6 @@ static void restoreTextureFilesFromProjectIfNeeded(tlp::Graph *g, tlp::TulipProj
     viewTexture->setAllEdgeValue(QStringToTlpString(project->toAbsolutePath(textureProjectFile)));
   } else if (defaultEdgeTextureFileInfo.exists()) {
     viewTexture->setAllEdgeValue(QStringToTlpString(defaultEdgeTextureFileInfo.absoluteFilePath()));
-  } else if (defaultEdgeTextureFile.startsWith("http")) {
-    viewTexture->setAllEdgeValue(QStringToTlpString(defaultEdgeTextureFile));
   }
 
   // Iterate once again on non default valuated edges
@@ -276,8 +270,6 @@ static void restoreTextureFilesFromProjectIfNeeded(tlp::Graph *g, tlp::TulipProj
       viewTexture->setEdgeValue(e, QStringToTlpString(project->toAbsolutePath(textureProjectFile)));
     } else if (fileInfo.exists()) {
       viewTexture->setEdgeValue(e, QStringToTlpString(fileInfo.absoluteFilePath()));
-    } else if (textureFile.startsWith("http")) {
-      viewTexture->setEdgeValue(e, QStringToTlpString(textureFile));
     }
   }
 }
