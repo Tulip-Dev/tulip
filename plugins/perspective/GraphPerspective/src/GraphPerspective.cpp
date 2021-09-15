@@ -1385,15 +1385,12 @@ bool GraphPerspective::saveAs(const QString &path) {
     QString path = QFileDialog::getSaveFileName(_mainWindow, "Save project", QString(),
                                                 "Tulip Project (*.tlpx)");
 
-    if (!path.isEmpty()) {
-      if (!path.endsWith(".tlpx"))
-        path += ".tlpx";
+    if (path.isEmpty())
+      return false;
+    if (!path.endsWith(".tlpx"))
+      path += ".tlpx";
 
-      _project->setProjectFile(path);
-      return saveAs(path);
-    }
-
-    return false;
+    _project->setProjectFile(path);
   }
 
   SimplePluginProgressDialog progress(_mainWindow);
