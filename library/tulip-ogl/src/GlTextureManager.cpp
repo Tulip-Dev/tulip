@@ -561,8 +561,6 @@ bool GlTextureManager::activateTexture(const string &filename, unsigned int fram
   if (texturesWithError.count(filename) != 0)
     return false;
 
-  bool loadOk = true;
-
   if (!loadTexture(filename)) {
     texturesWithError.insert(filename);
     return false;
