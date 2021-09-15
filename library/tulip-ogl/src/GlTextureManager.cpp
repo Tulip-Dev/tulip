@@ -506,8 +506,6 @@ bool GlTextureManager::existsTexture(const string &filename) {
 }
 //====================================================================
 bool GlTextureManager::loadTexture(const string &filename) {
-  glEnable(GL_TEXTURE_2D);
-
   if (texturesMap.find(filename) != texturesMap.end())
     return true;
 
@@ -565,16 +563,12 @@ bool GlTextureManager::activateTexture(const string &filename, unsigned int fram
 
   bool loadOk = true;
 
-  if (texturesMap.find(filename) == texturesMap.end())
-    loadOk = loadTexture(filename);
-  else
-    glEnable(GL_TEXTURE_2D);
-
-  if (!loadOk) {
+  if (!loadTexture(filename)) {
     texturesWithError.insert(filename);
-    glDisable(GL_TEXTURE_2D);
     return false;
   }
+
+  glEnable(GL_TEXTURE_2D);
 
   unsigned int spriteNumber = texturesMap[filename].spriteNumber;
   frame = frame - (frame / spriteNumber) * spriteNumber;
