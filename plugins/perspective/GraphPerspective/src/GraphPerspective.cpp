@@ -1402,10 +1402,10 @@ bool GraphPerspective::saveAs(const QString &path) {
   if (_pythonIDE)
     _pythonIDE->savePythonFilesAndWriteToProject();
 #endif
-  bool ret = _project->write(path, &progress);
+  bool ret = _project->write(_project->projectFile(), &progress);
 
   if (ret)
-    TulipSettings::addToRecentDocuments(path);
+    TulipSettings::addToRecentDocuments(_project->projectFile());
 
   return ret;
 }
