@@ -70,8 +70,7 @@ static void copyTextureFileInProject(const QString &viewTextureValue, tlp::Tulip
 
   // If the texture file exists or a known project file corresponds
   // to it then we copy the texture in the project
-  if (fileInfo.exists() ||
-      (!projectFilePath.isEmpty() && QFileInfo(projectFilePath).exists())) {
+  if (fileInfo.exists() || (!projectFilePath.isEmpty() && QFileInfo(projectFilePath).exists())) {
     // Generate a MD5 sum from the absolute texture file path
     hasher.reset();
     hasher.addData(viewTextureValue.toUtf8());
@@ -86,9 +85,9 @@ static void copyTextureFileInProject(const QString &viewTextureValue, tlp::Tulip
         project->mkpath(textureProjectFolder);
       }
       if (fileInfo.exists())
-	project->copy(fileInfo.absoluteFilePath(), textureProjectFile);
+        project->copy(fileInfo.absoluteFilePath(), textureProjectFile);
       else
-	project->copy(projectFilePath, textureProjectFile);
+        project->copy(projectFilePath, textureProjectFile);
     } else {
       // The texture file has already been copied in the project,
       // recopy the file as it may have changed and remove texture folder and project path
@@ -172,8 +171,7 @@ static void restoreTextureFileFromProject(QString viewTextureValue, tlp::TulipPr
   // Generate a MD5 sum from the absolute texture file path
   hasher.addData(viewTextureValue.toUtf8());
   // Compute texture file path in the project
-  QString textureProjectFile =
-    TEXTURES_PATH + hasher.result().toHex() + "/" + fileInfo.fileName();
+  QString textureProjectFile = TEXTURES_PATH + hasher.result().toHex() + "/" + fileInfo.fileName();
 
   // If the texture file does not exist but is present in the project
   // register the project file as texture file if needed
@@ -187,9 +185,8 @@ static void restoreTextureFileFromProject(QString viewTextureValue, tlp::TulipPr
 // Method for restoring nodes and edges textures possibly bundled in the project if the original
 // texture files
 // are not present on the computer loading the project
-static void restoreTextureFilesFromProject(tlp::Graph *g,
-					   tlp::TulipProject *project,
-					   tlp::PluginProgress *progress) {
+static void restoreTextureFilesFromProject(tlp::Graph *g, tlp::TulipProject *project,
+                                           tlp::PluginProgress *progress) {
   if (progress) {
     progress->progress(0, 0);
     progress->setComment("Checking if texture files can be restored from project if needed ...");
@@ -640,8 +637,8 @@ void GraphHierarchiesModel::removeGraph(tlp::Graph *g) {
     if (_currentGraph == g) {
       if (_graphs.empty()) {
         _currentGraph = nullptr;
-	// registered texture files are no longer needed
-	tlp::clearRegisteredTextureFiles();
+        // registered texture files are no longer needed
+        tlp::clearRegisteredTextureFiles();
         emit currentGraphChanged(_currentGraph);
       } else
         setCurrentGraph(_graphs[0]);
