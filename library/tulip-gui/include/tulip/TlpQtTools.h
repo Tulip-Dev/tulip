@@ -136,6 +136,22 @@ TLP_QT_SCOPE void enableQtUserInput();
  * @brief convert sql like filter into an acceptable regexp
  */
 TLP_QT_SCOPE void convertLikeFilter(QString &filter);
+
+/**
+ * @brief associate a texture file path to a name
+ */
+TLP_QT_SCOPE void registerTextureFile(QString name, QString textureFilePath);
+
+/**
+ * @brief return the texture file path associated to a name
+ */
+TLP_QT_SCOPE QString getRegisteredTextureFile(QString name);
+
+/**
+ * @brief forget all registered texture files
+ */
+TLP_QT_SCOPE void clearRegisteredTextureFiles();
+
 } // namespace tlp
 
 // QDebug extension

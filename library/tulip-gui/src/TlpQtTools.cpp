@@ -189,6 +189,20 @@ QString localPluginsPath() {
   return getPluginLocalInstallationDir() + '/';
 }
 
+static QMap<QString, QString> _texFiles;
+
+void registerTextureFile(QString name, QString textureFile) {
+  _texFiles[name] = textureFile;
+}
+
+QString getRegisteredTextureFile(QString name) {
+  return _texFiles[name];
+}
+
+void clearRegisteredTextureFiles() {
+  _texFiles.clear();
+}
+
 // we define a specific GlTextureLoader allowing to load a GlTexture
 // from a QImage
 class GlTextureFromQImageLoader : public GlTextureLoader {
@@ -197,6 +211,11 @@ public:
   bool loadTexture(const std::string &filename, GlTexture &glTexture) override {
     QString qFilename = tlpStringToQString(filename);
     QImage image(qFilename);
+    if (image.isNull()) {
+      // use registered texture file if any
+      qFilename = getRegisteredTextureFile(QString::fromUtf8(filename.c_str()));
+      image.load(qFilename);
+    }
 
     if (image.isNull()) {
       if (!QFile(QString::fromUtf8(filename.c_str())).exists())
