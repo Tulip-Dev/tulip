@@ -1,4 +1,4 @@
-# Tulip [![license](https://img.shields.io/github/license/Tulip-dev/tulip.svg)](https://www.gnu.org/licenses/lgpl-3.0.html) [![GitHub last commit](https://img.shields.io/github/last-commit/Tulip-Dev/tulip.svg)]() [![Build Status](https://travis-ci.org/Tulip-Dev/tulip.svg?branch=master)](https://travis-ci.org/Tulip-Dev/tulip) [![Build Status](https://ci.appveyor.com/api/projects/status/github/tulip-dev/tulip?branch=master&svg=true)](https://ci.appveyor.com/project/tulip-dev/tulip) [![SourceForge](https://img.shields.io/sourceforge/dt/auber/tulip.svg)](https://sourceforge.net/projects/auber/files/tulip/) [![PyPI version](https://badge.fury.io/py/tulip-python.svg)](https://badge.fury.io/py/tulip-python)
+# Tulip [![license](https://img.shields.io/github/license/Tulip-dev/tulip.svg)](https://www.gnu.org/licenses/lgpl-3.0.html) [![GitHub last commit](https://img.shields.io/github/last-commit/Tulip-Dev/tulip.svg)]() [![Build Status](https://ci.appveyor.com/api/projects/status/github/tulip-dev/tulip?branch=master&svg=true)](https://ci.appveyor.com/project/tulip-dev/tulip) [![SourceForge](https://img.shields.io/sourceforge/dt/auber/tulip.svg)](https://sourceforge.net/projects/auber/files/tulip/) [![PyPI version](https://badge.fury.io/py/tulip-python.svg)](https://badge.fury.io/py/tulip-python)
 
 ![alt text](http://tulip.labri.fr/TulipDrupal/sites/default/files/logo_web.png "Tulip")
 
@@ -132,10 +132,9 @@ If you are a MacOS user, we recommend to use [MacPorts](https://www.macports.org
 If you are a Windows user, we recommend to use [MSYS2](http://www.msys2.org/) as it greatly facilitates the build of Tulip on
 that platform (notably by providing up to date compilers and precompiled dependencies).
 
-Hints on how to build Tulip for these three platforms can be found in the continuous integration setup for [TravisCI](https://travis-ci.org/) and
-[AppVeyor](https://www.appveyor.com/):
+Hints on how to build Tulip for these three platforms can be found in the old continuous integration setup for [TravisCI](https://travis-ci.org/) and the current one for [AppVeyor](https://www.appveyor.com/):
 
-  * [.travis.yml](.travis.yml)
+  * [.travis.yml](travis.yml)
   * [appveyor.yml](appveyor.yml)
   * [appveyor_msys2.bat](appveyor_msys2.bat)
   * [appveyor_msvc.bat](appveyor_msvc.bat)
