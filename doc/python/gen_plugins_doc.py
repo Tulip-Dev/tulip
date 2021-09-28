@@ -343,8 +343,11 @@ for cat in sorted(plugins.keys()):
                        '  params = tlp.getDefaultPluginParameters(\'%s\', '
                        'graph)\n') % p.name(), file=f)
         else:
-            safeprint('  params = tlp.getDefaultPluginParameters(\'%s\')\n'
-                      % p.name(), file=f)
+            safeprint(('  # for a not yet created graph\n'
+                       '  params = tlp.getDefaultPluginParameters(\'%s\')\n'
+                       '  # Warning: when importing in an existing graph, use\n'
+                       '  # params = tlp.getDefaultPluginParameters(\'%s\', graph)\n')
+                      % (p.name(), p.name()), file=f)
         if nbInParams > 0 and not(len(paramsTable) == 1 and
                                   paramsTable[0][0] == 'result'):
             safeprint('  # set any input parameter value if needed', file=f)
@@ -352,8 +355,11 @@ for cat in sorted(plugins.keys()):
                 safeprint('  # params[\'%s\'] = ...' % paramData[0], file=f)
             safeprint('', file=f)
         if p.category() == 'Import':
-            safeprint('  graph = tlp.importGraph(\'%s\', params)' % p.name(),
-                      file=f)
+            safeprint(('  # import in a newly created graph\n'
+                       '  graph = tlp.importGraph(\'%s\', params)\n'
+                       '  # Warning: when importing in an existing graph, use\n'
+                       '  # tlp.importGraph(\'%s\', params, graph)\n')
+                       % (p.name(), p.name()), file=f)
         elif p.category() == 'Export':
             safeprint('  outputFile = \'<path to a file>\'', file=f)
             safeprint(('  success = tlp.exportGraph(\'%s\', graph, outputFile,'
