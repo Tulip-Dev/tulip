@@ -109,11 +109,40 @@ if [ -d ./Frameworks/Python.framework/Versions ]; then
   export PATH="\$(pwd)/Frameworks/Python.framework/Versions/\$PY_VERSION/bin:\$PATH"
 fi
 
+# ensure execution of tulip_perspective will not be blocked
+xattr -d com.apple.quarantine ./bin/tulip_perspective
+# QTBUG-87014 workaround
+export QT_MAC_WANTS_LAYER=1
 "\$(pwd)"/bin/tulip
 
 EOF
 # make it executable
 chmod +x MacOS/Tulip
+
+# create perpective launchers
+# needed to launch perspective on Big Sur
+cat > bin/terminal_launch_perspective <<EOF
+#!/bin/bash
+cmd="tell application \"Terminal\" to do script \"\${0%/*}/launch_perspective "
+for arg in "\$@"; do
+  arg="\${arg//\\\\/\\\\\\\}"
+  cmd="\$cmd \\\\\"\${arg//\"/\\\\\"}\\\\\""
+done
+
+osascript -e "\$cmd\""
+
+EOF
+cat > bin/launch_perspective <<EOF
+#!/bin/bash
+# QTBUG-87014 workaround
+export QT_MAC_WANTS_LAYER=1
+\${0%/*}/tulip_perspective "\$@"
+osascript -e 'tell application "Terminal" to close first window' & exit
+
+EOF
+
+# make them executable
+chmod +x bin/*launch_perspective
 
 # generate dmg
 echo 'Generating DMG'

@@ -37,6 +37,9 @@
 #ifdef _WIN32
 #include <windows.h>
 #endif
+#ifdef __APPLE__
+#include <QOperatingSystemVersion>
+#endif
 
 SelectionButton::SelectionButton(QWidget *parent) : QPushButton(parent) {}
 void SelectionButton::paintEvent(QPaintEvent *e) {
@@ -107,7 +110,15 @@ void TulipPerspectiveProcessHandler::createPerspective(const QString &perspectiv
   connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this,
           SLOT(perspectiveFinished(int, QProcess::ExitStatus)));
   process->setProcessChannelMode(QProcess::ForwardedChannels);
-  process->start(appDir.absoluteFilePath("tulip_perspective"), args);
+#ifdef __APPLE__
+  auto current = QOperatingSystemVersion::current();
+  // since Big sur
+  if (current > QOperatingSystemVersion::MacOSCatalina)
+    process->start(appDir.absoluteFilePath("terminal_launch_perspective"), args);
+  else
+#endif
+    process->start(appDir.absoluteFilePath("tulip_perspective"), args);
+
   _processInfo[process] = PerspectiveProcessInfo(perspective, parameters, file, perspectiveId);
 }
 
