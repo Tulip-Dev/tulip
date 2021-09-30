@@ -34,7 +34,7 @@ using namespace std;
 using namespace tlp;
 
 PathFinderComponent::PathFinderComponent(PathFinder *parent)
-    : parent(parent), graphPopable(false) {}
+  :  lastGraph(nullptr), parent(parent), graphPopable(false) {}
 
 PathFinderComponent::~PathFinderComponent() {
   qDeleteAll(highlighters);
@@ -157,9 +157,12 @@ void PathFinderComponent::selectPath(GlMainWidget *glMainWidget, Graph *graph) {
       QMessageBox::warning(QApplication::activeWindow(), "Path finder",
                            "A path between the selected nodes cannot be found.");
 
-    } else
+    } else {
+      // register current graph
+      lastGraph = graph;
       // A path has been found: highlight it
       runHighlighters(glMainWidget, selection, src, tgt);
+    }
   } else if (src.isValid()) {
     selection->setNodeValue(src, true);
   }
@@ -171,12 +174,21 @@ void PathFinderComponent::runHighlighters(GlMainWidget *glMainWidget, BooleanPro
   graphPopable = true;
   vector<string> activeHighlighters(parent->getActiveHighlighters());
 
+  bool foundEnclosingCircle = false;
   for (vector<string>::iterator it = activeHighlighters.begin(); it != activeHighlighters.end();
        ++it) {
+    if (*it == "Enclosing circle")
+      foundEnclosingCircle = true;
+
     PathHighlighter *hler = findHighlighter(*it);
 
     if (hler)
       hler->highlight(parent, glMainWidget, selection, src, tgt);
+  }
+  if (!foundEnclosingCircle) {
+    // ensure it is cleared
+    PathHighlighter *enclosingCircle = findHighlighter("Enclosing circle");
+    enclosingCircle->clear();
   }
 }
 
@@ -214,7 +226,35 @@ QSet<PathHighlighter *> PathFinderComponent::getHighlighters() {
   return highlighters;
 }
 
+void PathFinderComponent::init() {
+  // restore enclosing circle if needed
+  auto graph = view()->graph();
+  if (lastGraph != graph) {
+    src = tgt = node();
+    return;
+  }
+  auto hls = parent->getActiveHighlighters();
+  bool needEnclosingCircle = false;
+  for (const std::string hl : hls) {
+    if ((needEnclosingCircle = (hl == "Enclosing circle")))
+      break;
+  }
+  if (needEnclosingCircle) {
+    PathHighlighter *enclosingCircle = findHighlighter("Enclosing circle");
+    if (src.isValid() && tgt.isValid()) {
+      if (graph->isElement(src) && graph->isElement(tgt)) {
+	auto glw = static_cast<GlMainView *>(view())->getGlMainWidget();
+	BooleanProperty *selection =
+          glw->getScene()->getGlGraphComposite()->getInputData()->getElementSelected();
+	if (selection->getNodeValue(src) && selection->getNodeValue(tgt))
+	  enclosingCircle->highlight(parent, glw, selection, src, tgt);
+      }
+    }
+  }
+}
+
 void PathFinderComponent::clear() {
-  GlMainView *glMainView = static_cast<GlMainView *>(view());
-  glMainView->getGlMainWidget()->setCursor(QCursor());
+  auto glw = static_cast<GlMainView *>(view())->getGlMainWidget();
+  glw->setCursor(QCursor());
+  clearHighlighters(glw);
 }

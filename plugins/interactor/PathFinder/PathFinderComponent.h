@@ -57,9 +57,11 @@ public:
    */
   QSet<PathHighlighter *> getHighlighters();
 
+  void init() override;
   void clear() override;
 
 private:
+  tlp::Graph *lastGraph;
   tlp::node src;
   tlp::node tgt;
   tlp::node tmp;
