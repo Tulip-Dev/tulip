@@ -34,7 +34,7 @@ using namespace std;
 using namespace tlp;
 
 PathFinderComponent::PathFinderComponent(PathFinder *parent)
-  :  lastGraph(nullptr), parent(parent), graphPopable(false) {}
+    : lastGraph(nullptr), parent(parent), graphPopable(false) {}
 
 PathFinderComponent::~PathFinderComponent() {
   qDeleteAll(highlighters);
@@ -243,11 +243,11 @@ void PathFinderComponent::init() {
     PathHighlighter *enclosingCircle = findHighlighter("Enclosing circle");
     if (src.isValid() && tgt.isValid()) {
       if (graph->isElement(src) && graph->isElement(tgt)) {
-	auto glw = static_cast<GlMainView *>(view())->getGlMainWidget();
-	BooleanProperty *selection =
-          glw->getScene()->getGlGraphComposite()->getInputData()->getElementSelected();
-	if (selection->getNodeValue(src) && selection->getNodeValue(tgt))
-	  enclosingCircle->highlight(parent, glw, selection, src, tgt);
+        auto glw = static_cast<GlMainView *>(view())->getGlMainWidget();
+        BooleanProperty *selection =
+            glw->getScene()->getGlGraphComposite()->getInputData()->getElementSelected();
+        if (selection->getNodeValue(src) && selection->getNodeValue(tgt))
+          enclosingCircle->highlight(parent, glw, selection, src, tgt);
       }
     }
   }
