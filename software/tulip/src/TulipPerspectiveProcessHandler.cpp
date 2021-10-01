@@ -112,8 +112,9 @@ void TulipPerspectiveProcessHandler::createPerspective(const QString &perspectiv
   process->setProcessChannelMode(QProcess::ForwardedChannels);
 #ifdef __APPLE__
   auto current = QOperatingSystemVersion::current();
-  // since Big sur
-  if (current > QOperatingSystemVersion::MacOSCatalina)
+  // since Big sur (10.16 or 11.x)
+  if ((current.majorVersion() > 10) ||
+      ((current.majorVersion() == 10) && current.minorVersion() > 15))
     process->start(appDir.absoluteFilePath("terminal_launch_perspective"), args);
   else
 #endif
