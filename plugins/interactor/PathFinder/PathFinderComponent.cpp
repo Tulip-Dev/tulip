@@ -235,7 +235,7 @@ void PathFinderComponent::init() {
   }
   auto hls = parent->getActiveHighlighters();
   bool needEnclosingCircle = false;
-  for (const std::string hl : hls) {
+  for (const std::string &hl : hls) {
     if ((needEnclosingCircle = (hl == "Enclosing circle")))
       break;
   }
