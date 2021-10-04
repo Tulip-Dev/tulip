@@ -50,10 +50,9 @@ bool DFS::computeSearchPaths(node src, BooleanProperty *visitable, DoublePropert
   if (!visitable->getNodeValue(src))
     return false;
 
-  if ((maxDist != DBL_MAX) &&
-      (((dists->getNodeValue(src) != DBL_MAX) &&
-	(currentDist + dists->getNodeValue(src) > maxDist)) ||
-       (currentDist > maxDist)))
+  if ((maxDist != DBL_MAX) && (((dists->getNodeValue(src) != DBL_MAX) &&
+                                (currentDist + dists->getNodeValue(src) > maxDist)) ||
+                               (currentDist > maxDist)))
     return false;
 
   if (src == tgt || result->getNodeValue(src)) {
@@ -71,8 +70,8 @@ bool DFS::computeSearchPaths(node src, BooleanProperty *visitable, DoublePropert
       result->setNodeValue(opposite, true);
       result->setNodeValue(nd, true);
       if (maxDist != DBL_MAX) {
-	dists->setNodeValue(nd, min<double>(distLeft, dists->getNodeValue(nd)));
-	distLeft += weights.getEdgeValue(e);
+        dists->setNodeValue(nd, min<double>(distLeft, dists->getNodeValue(nd)));
+        distLeft += weights.getEdgeValue(e);
       }
       nd = opposite;
     }

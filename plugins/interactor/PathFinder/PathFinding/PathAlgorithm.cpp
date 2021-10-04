@@ -89,8 +89,8 @@ bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation
   }
   // allow undo
   graph->push();
-  retVal =  ((pathType == AllPaths) && (tolerance == DBL_MAX)) ||
-    selectShortestPaths(graph, src, tgt, spt, weights, result);
+  retVal = ((pathType == AllPaths) && (tolerance == DBL_MAX)) ||
+           selectShortestPaths(graph, src, tgt, spt, weights, result);
   if (pathType == AllPaths && retVal && tolerance > 1) {
     EdgeStaticProperty<double> eWeights(graph);
 
@@ -99,14 +99,14 @@ bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation
       pathLength = DBL_MAX;
     else {
       if (!weights) {
-	eWeights.setAll(SMALLEST_WEIGHT);
+        eWeights.setAll(SMALLEST_WEIGHT);
       } else {
-	auto fn = [&](edge e, unsigned int i) {
-		    double val(weights->getEdgeValue(e));
+        auto fn = [&](edge e, unsigned int i) {
+          double val(weights->getEdgeValue(e));
 
-		    eWeights[i] = val ? val : SMALLEST_WEIGHT;
-		  };
-	TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, fn);
+          eWeights[i] = val ? val : SMALLEST_WEIGHT;
+        };
+        TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, fn);
       }
 
       pathLength = computePathLength(result, eWeights);
