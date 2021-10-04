@@ -87,41 +87,37 @@ bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation
       spt = ShortestPathType::OneReversedPath;
     }
   }
-  graph->push();
-  retVal = selectShortestPaths(graph, src, tgt, spt, weights, result);
-  if (pathType == AllPaths && retVal) {
+  retVal =  ((pathType == AllPaths) && (tolerance == DBL_MAX)) ||
+    selectShortestPaths(graph, src, tgt, spt, weights, result);
+  if (pathType == AllPaths && retVal && tolerance > 1) {
     EdgeStaticProperty<double> eWeights(graph);
 
-    if (!weights) {
-      eWeights.setAll(SMALLEST_WEIGHT);
-    } else {
-      auto fn = [&](edge e, unsigned int i) {
-        double val(weights->getEdgeValue(e));
-
-        eWeights[i] = val ? val : SMALLEST_WEIGHT;
-      };
-      TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, fn);
-    }
-
     double pathLength;
-
     if (tolerance == DBL_MAX)
       pathLength = DBL_MAX;
     else {
+      if (!weights) {
+	eWeights.setAll(SMALLEST_WEIGHT);
+      } else {
+	auto fn = [&](edge e, unsigned int i) {
+		    double val(weights->getEdgeValue(e));
+
+		    eWeights[i] = val ? val : SMALLEST_WEIGHT;
+		  };
+	TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, fn);
+      }
+
       pathLength = computePathLength(result, eWeights);
       pathLength *= tolerance;
     }
 
-    if (tolerance > 1) {
-      // We only compute the other paths if the tolerance is greater than 1.
-      // Meaning that the user doesn't want only the shortest path.
-      result->setAllNodeValue(false);
-      result->setAllEdgeValue(false);
-      DFS d(graph, result, tgt, eWeights, edgesOrientation, pathLength);
-      retVal = d.searchPaths(src);
-    }
+    // We only compute the other paths if the tolerance is greater than 1.
+    // Meaning that the user doesn't want only the shortest path.
+    result->setAllNodeValue(false);
+    result->setAllEdgeValue(false);
+    DFS d(graph, result, tgt, eWeights, edgesOrientation, pathLength);
+    retVal = d.searchPaths(src);
   }
-  if (!retVal)
-    graph->pop();
+
   return retVal;
 }
