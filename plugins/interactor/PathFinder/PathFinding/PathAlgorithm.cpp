@@ -87,6 +87,8 @@ bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation
       spt = ShortestPathType::OneReversedPath;
     }
   }
+  // allow undo
+  graph->push();
   retVal =  ((pathType == AllPaths) && (tolerance == DBL_MAX)) ||
     selectShortestPaths(graph, src, tgt, spt, weights, result);
   if (pathType == AllPaths && retVal && tolerance > 1) {
@@ -118,6 +120,9 @@ bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation
     DFS d(graph, result, tgt, eWeights, edgesOrientation, pathLength);
     retVal = d.searchPaths(src);
   }
+  if (!retVal)
+    // nothing to undo
+    graph->pop();
 
   return retVal;
 }
