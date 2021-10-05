@@ -22,6 +22,7 @@ DEST_DIR=$1
 SRC_DIR=@tulip_SOURCE_DIR@/bundlers/mac
 PYTHON_BUILD=@TULIP_BUILD_PYTHON_COMPONENTS@
 QT_BINARY_DIR=@QT_BINARY_DIR@
+AROBASE=$(printf "\\100")
 
 if [ "${QT_BINARY_DIR}" = "" ]
 then
@@ -86,6 +87,17 @@ mv bin/tulip MacOS/Tulip
 if [ "$PYTHON_BUILD" = "ON" ]
 then
 ${QT_BINARY_DIR}/macdeployqt ${DEST_DIR}/application/Tulip.app -executable=${DEST_DIR}/application/Tulip.app/Contents/bin/tulip_perspective -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/_tulip.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulipgui/native/_tulipgui.so
+# ensure embedded python framework will be found
+# when loading all libs related to python
+install_name_tool -change /Library/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python ${AROBASE}loader_path/../../../Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip/perspective/libGraphPerspective-*.dylib
+install_name_tool -change /Library/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python ${AROBASE}loader_path/Python.framework/Versions/@PYTHON_VERSION@/Python ${DEST_DIR}/application/Tulip*.app/Contents/Frameworks/libtulip-python-*.dylib
+install_name_tool -change /Library/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python ${AROBASE}loader_path/../../../../../Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip/python/tulip/native/_tulip.so
+install_name_tool -change /Library/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python ${AROBASE}loader_path/../../../../../Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip/python/tulip/native/sip.so
+install_name_tool -change /Library/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python ${AROBASE}loader_path/../../../../../Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip/python/tulip/native/_stl.so
+install_name_tool -change /Library/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python ${AROBASE}loader_path/../../../../../Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip/python/tulipgui/native/_tulipgui.so
+# ensure libomp will also be found
+install_name_tool -change /opt/local/lib/libomp/libomp.dylib ${AROBASE}loader_path/../../../../../Frameworks/libomp.dylib ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip/python/tulip/native/sip.so
+install_name_tool -change /opt/local/lib/libomp/libomp.dylib ${AROBASE}loader_path/../../../../../Frameworks/libomp.dylib ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip/python/tulip/native/_stl.so
 else
 ${QT_BINARY_DIR}/macdeployqt ${DEST_DIR}/application/Tulip.app -executable=${DEST_DIR}/application/Tulip.app/Contents/bin/tulip_perspective
 fi
