@@ -17,7 +17,14 @@
  *
  */
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/ImportModule.h>
+#include <tulip/PluginLister.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/StringProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/BooleanProperty.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipViewSettings.h>
 

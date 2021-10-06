@@ -161,11 +161,10 @@ public:
         myGraph.insert(tmp);
     }
 
-    graph->addNodes(nbNodes);
+    vector<node> nodes;
+    graph->addNodes(nbNodes,nodes);
 
     graph->reserveEdges(nbEdges);
-
-    const vector<node> &nodes = graph->nodes();
 
     if (density_g > MAX_DENSITY_FOR_LINEAR) {
       for (unsigned i = 0; i < nodes.size(); ++i) {

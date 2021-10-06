@@ -93,7 +93,8 @@ public:
 
     unsigned int iterations = nbNodes + nbEdges;
 
-    graph->addNodes(nbNodes);
+    vector<node> nodes;
+    graph->addNodes(nbNodes,nodes);
     graph->reserveEdges(nbEdges);
 
     NodeStaticProperty<double> pAttractProperty(graph);
@@ -110,7 +111,6 @@ public:
     }
 
     unsigned int tmpE = 0;
-    const vector<node> &nodes = graph->nodes();
 
     while (tmpE < nbEdges) {
       unsigned int i = randomInteger(nbNodes - 1);

@@ -60,12 +60,8 @@ public:
     if (pluginProgress)
       pluginProgress->showPreview(false);
 
-    vector<node> nodes(nbNodes);
-
-    graph->reserveNodes(nbNodes);
-
-    for (size_t j = 0; j < nbNodes; ++j)
-      nodes[j] = graph->addNode();
+    vector<node> nodes;
+    graph->addNodes(nbNodes,nodes);
 
     if (!directed)
       graph->reserveEdges(nbNodes - 1);

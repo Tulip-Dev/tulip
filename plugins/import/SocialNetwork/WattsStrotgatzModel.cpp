@@ -94,11 +94,8 @@ struct WattsStrogatzModel : public ImportModule {
 
     if (original_model) {
       if (k % 2 == 1) {
-        stringstream sstr(
-            "k must be an even number when used in the original model; rounding k down to ");
-        sstr << k - 1 << '.';
-        pluginProgress->setComment(sstr.str());
         k--;
+        pluginProgress->setComment("k must be an even number when used in the original model; rounding k down to"+to_string(k)+".");
       }
 
       if (k > 0) {

@@ -90,8 +90,8 @@ public:
     }
 
     // add nodes
-    graph->addNodes(nbNodes);
-    const vector<node> &nodes = graph->nodes();
+    vector<node> nodes;
+    graph->addNodes(nbNodes,nodes);
 
     unsigned i = 0;
 

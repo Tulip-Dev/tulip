@@ -72,14 +72,14 @@ public:
 
     if (nbNodes == 0) {
       if (pluginProgress)
-        pluginProgress->setError(string("Error: the number of nodes cannot be null"));
+        pluginProgress->setError("Error: the number of nodes cannot be null");
 
       return false;
     }
 
     if (avgDegree == 0) {
       if (pluginProgress)
-        pluginProgress->setError(string("Error: the average degree cannot be null"));
+        pluginProgress->setError("Error: the average degree cannot be null");
 
       return false;
     }
@@ -93,10 +93,11 @@ public:
 
     pluginProgress->showPreview(false);
 
-    graph->addNodes(nbNodes);
+    vector<node> nodes;
+    graph->addNodes(nbNodes, nodes);
     graph->reserveEdges(nbNodes * avgDegree);
 
-    const vector<node> &nodes = graph->nodes();
+
 
     for (auto n : nodes) {
       newLayout->setNodeValue(n,

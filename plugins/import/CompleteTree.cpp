@@ -71,8 +71,8 @@ public:
     }
 
     graph->reserveEdges(total);
-    graph->addNodes(total + 1);
-    const vector<node> &nodes = graph->nodes();
+    vector<node> nodes;
+    graph->addNodes(total + 1,nodes);
 
     unsigned int current = 0;
     unsigned int nextChild = 1;

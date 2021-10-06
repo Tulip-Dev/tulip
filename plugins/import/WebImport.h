@@ -35,7 +35,7 @@ public:
   std::string data;
 
   HttpContext();
-  ~HttpContext() override;
+  ~HttpContext();
   void setTimer(QTimer *timer);
   void request(const std::string &url, bool header = false);
 
