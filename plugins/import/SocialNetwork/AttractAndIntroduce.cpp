@@ -44,7 +44,7 @@ static const char *paramHelp[] = {
 /**
  * This plugin is an implementation of the "Attract and Introduce Model"
  * described in
- * J. H. Fowlera, C. T. Dawesa, N. A. Christakisb.
+ * J. H. Fowler, C. T. Dawes, N. A. Christakis.
  * Model of genetic variation in human social networks.
  * PNAS 106 (6): 1720-1724, 2009.
  *
@@ -53,9 +53,9 @@ class AttractAndIntroduce : public ImportModule {
 public:
   PLUGININFORMATION("Attract And Introduce Model", "Arnaud Sallabery & Patrick Mary", "25/03/2014",
                     "Randomly generates a graph using the Attract and Introduce Model described "
-                    "in<br/>J. H. Fowlera, C. T. Dawesa, N. A. Christakisb.<br/><b>Model of "
+                    "in<br/>J. H. Fowler, C. T. Dawes, N. A. Christakis.<br/><b>Model of "
                     "genetic variation in human social networks.</b><br/>PNAS 106 (6): 1720-1724, "
-                    "2009.",
+                    "2009. doi: <a href=\"https://doi.org/10.1073/pnas.0806746106\">10.1073/pnas.0806746106</a>",
                     "1.0", "Social network")
 
   AttractAndIntroduce(tlp::PluginContext *context) : ImportModule(context) {

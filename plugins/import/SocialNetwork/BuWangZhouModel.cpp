@@ -51,7 +51,8 @@ public:
   PLUGININFORMATION("Bu Wang Zhou Model", "sallaberry", "20/06/2011",
                     "Randomly generates a scale-free graph unsing the model described "
                     "in<br/>Shouliang Bu, Bing-Hong Wang, Tao Zhou.<br/><b>Gaining scale-free and "
-                    "high clustering complex networks.</b><br/>Physica A, 374, 864--868, 2007.",
+                    "high clustering complex networks.</b><br/>Physica A, 374, 864--868, 2007. doi: <a href=\""
+                    "10.1016/j.physa.2006.08.048\">https://doi.org/10.1016/j.physa.2006.08.048</a>",
                     "1.0", "Social network")
   BuWangZhouModel(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "200");

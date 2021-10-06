@@ -66,7 +66,8 @@ struct GuillaumeLatapyModel : public ImportModule {
                     "Randomly generates a small word graph using the model described in<br/>J.-L. "
                     "Guillaume and M. Latapy.<br/><b>Bipartite graphs as models of complex "
                     "networks.</b><br/>In Workshop on Combinatorial and Algorithmic Aspects of "
-                    "Networking (CAAN), LNCS, volume 1, 2004.",
+                    "Networking (CAAN), LNCS, volume 1, 2004. doi: <a href=\"https://doi.org/10.1016/j.physa.2006.04.047\">"
+                    "10.1016/j.physa.2006.04.047<a/>",
                     "1.0", "Social network")
 
   GuillaumeLatapyModel(PluginContext *context) : ImportModule(context) {
@@ -167,8 +168,8 @@ struct GuillaumeLatapyModel : public ImportModule {
     return pluginProgress->state() != TLP_CANCEL;
   }
 
-  bool isNotNodeInVector(vector<node> vec, node n) {
-    return std::find(vec.begin(), vec.end(), n) == vec.end();
+  bool isNotNodeInVector(const vector<node> &vec, const node n) const {
+    return std::find(vec.cbegin(), vec.cend(), n) == vec.cend();
   }
 };
 

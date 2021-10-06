@@ -49,7 +49,7 @@ struct BollobasModel : public ImportModule {
                     "Randomly generates a scale-free graph using the model described in<br/>B. "
                     "Bollobas, O.M Riordan, J. Spencer and G. Tusnady.<br/><b>The Degree Sequence "
                     "of a Scale-Free Random Graph Process.</b><br/>RSA: Random Structures & "
-                    "Algorithms, 18, 279 (2001)",
+                    "Algorithms, 18, 279 (2001). doi: <a href=\"https://doi.org/10.1002/rsa.1009\">10.1002/rsa.1009</a>",
                     "1.1", "Social network")
 
   BollobasModel(PluginContext *context) : ImportModule(context) {

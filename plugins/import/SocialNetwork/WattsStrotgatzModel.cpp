@@ -55,7 +55,7 @@ struct WattsStrogatzModel : public ImportModule {
   PLUGININFORMATION("Watts Strogatz Model", "Arnaud Sallaberry", "21/02/2011",
                     "Randomly generates a small world graph using the model described in<br/>D. J. "
                     "Watts and S. H. Strogatz.<br/><b>Collective dynamics of small-world "
-                    "networks.</b><br/>Nature 393, 440 (1998).",
+                    "networks.</b><br/>Nature 393, 440 (1998). doi: <a href=\"https://doi.org/10.1038/30918\">10.1038/30918</a>",
                     "1.0", "Social network")
 
   WattsStrogatzModel(PluginContext *context) : ImportModule(context) {

@@ -50,7 +50,8 @@ struct WangRong : public ImportModule {
                     "Randomly generates a small-world graph using the model described "
                     "in<br/>Jianwei Wang and Lili Rong.<br/><b>Evolving small-world networks based "
                     "on the modified BA model.</b><br/>International Conference on Computer "
-                    "Science and Information Technology, 0, 143-146, (2008).",
+                    "Science and Information Technology, 0, 143-146, (2008). doi: <a href=\"https://doi.org/10.1109/ICCSIT.2008.119\">"
+                    "10.1109/ICCSIT.2008.119</a>",
                     "1.0", "Social network")
 
   WangRong(PluginContext *context) : ImportModule(context) {
