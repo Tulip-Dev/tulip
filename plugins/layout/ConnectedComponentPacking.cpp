@@ -53,6 +53,7 @@ ConnectedComponentPacking::ConnectedComponentPacking(const tlp::PluginContext *c
   addInParameter<StringCollection>(
       "complexity", paramHelp[2], COMPLEXITY, true,
       "auto <br> n5 <br> n4logn <br> n4 <br> n3logn <br> n3 <br> n2logn <br> n2 <br> nlogn <br> n");
+  declareDeprecatedName("Connected Component Packing");
 }
 //====================================================================
 bool ConnectedComponentPacking::run() {

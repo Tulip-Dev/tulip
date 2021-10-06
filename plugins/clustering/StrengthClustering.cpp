@@ -132,10 +132,10 @@ void StrengthClustering::computeNodePartition(double threshold, vector<unordered
     }
   }
 
-  // Extract connected component
+  // Extract connected components
   DoubleProperty connected(tmpGraph);
   string errMsg;
-  tmpGraph->applyPropertyAlgorithm("Connected Component", &connected, errMsg);
+  tmpGraph->applyPropertyAlgorithm("Connected Components", &connected, errMsg);
 
   // Compute the node partition
   int index = 0;

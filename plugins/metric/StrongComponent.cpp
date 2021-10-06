@@ -33,17 +33,16 @@ unsigned StrongComponent::attachNumerotation(tlp::node n,
     return minAttach[n];
 
   visited[n] = true;
-  unsigned myId = id;
-  id++;
-  minAttach[n] = myId;
+  minAttach[n] = id;
   renum.push(n);
-  unsigned res = myId;
+  auto oldId = id;
+  unsigned res = id++;
 
-  for (auto tmpN : graph->getOutNodes(n)) {
+  for (auto nn : graph->getOutNodes(n)) {
 
-    if (!finished[tmpN]) {
+    if (!finished[nn]) {
       unsigned tmp =
-          attachNumerotation(tmpN, visited, finished, minAttach, id, renum, curComponent);
+          attachNumerotation(nn, visited, finished, minAttach, id, renum, curComponent);
 
       if (res > tmp)
         res = tmp;
@@ -52,18 +51,18 @@ unsigned StrongComponent::attachNumerotation(tlp::node n,
 
   minAttach[n] = res;
 
-  if (res == myId) {
-    while (renum.top() != n) {
-      node tmp = renum.top();
+  if (res == oldId) {
+    node tmp = renum.top();
+    while (tmp != n) {
       renum.pop();
       finished[tmp] = true;
       minAttach[tmp] = res;
       result->setNodeValue(tmp, curComponent);
+      tmp = renum.top();
     }
 
     finished[n] = true;
-    result->setNodeValue(n, curComponent);
-    curComponent++;
+    result->setNodeValue(n, curComponent++);
     renum.pop();
   }
 
@@ -73,6 +72,8 @@ unsigned StrongComponent::attachNumerotation(tlp::node n,
 StrongComponent::StrongComponent(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
   addOutParameter<unsigned>("#strongly connected components",
                             "Number of strongly components found");
+  // old name
+  declareDeprecatedName("Strongly Connected Component");
 }
 
 StrongComponent::~StrongComponent() {}

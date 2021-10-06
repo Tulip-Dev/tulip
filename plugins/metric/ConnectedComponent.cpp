@@ -26,7 +26,9 @@ using namespace tlp;
 ConnectedComponent::ConnectedComponent(const tlp::PluginContext *context)
     : DoubleAlgorithm(context) {
 
-  addOutParameter<unsigned>("#connected components", "Number of components found");
+  addOutParameter<unsigned>("#connected components", "Number of connected components found");
+  // old name
+  declareDeprecatedName("Connected Component");
 }
 //======================================================
 bool ConnectedComponent::run() {
@@ -41,14 +43,15 @@ bool ConnectedComponent::run() {
     }
     ++i;
   }
-
-  // propagate nodes computed value to edges
-  for (auto e : graph->edges()) {
-    result->setEdgeValue(e, result->getNodeValue(graph->source(e)));
-  }
-
   if (dataSet != nullptr)
-    dataSet->set<unsigned>("#connected components", components.size());
+    dataSet->set<unsigned>("#connected components", i);
+
+  if (i > 0) {
+    // propagate nodes computed value to edges
+    for (auto e : graph->edges()) {
+      result->setEdgeValue(e, result->getNodeValue(graph->source(e)));
+    }
+  }
 
   return true;
 }

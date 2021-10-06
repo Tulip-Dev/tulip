@@ -33,7 +33,7 @@
  */
 class ConnectedComponent : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Connected Component", "David Auber", "01/07/2002",
+  PLUGININFORMATION("Connected Components", "David Auber", "01/07/2002",
                     "Implements a decomposition in connected components. \
                     This algorithm assigns to each node a value defined as following: if two nodes are in the same \
                     connected component they have the same value else they have a different value. Edges get the value of their source node.",
