@@ -61,7 +61,7 @@ public:
       pluginProgress->showPreview(false);
 
     vector<node> nodes;
-    graph->addNodes(nbNodes,nodes);
+    graph->addNodes(nbNodes, nodes);
 
     if (!directed)
       graph->reserveEdges(nbNodes - 1);

@@ -91,7 +91,7 @@ public:
 
     // add nodes
     vector<node> nodes;
-    graph->addNodes(nbNodes,nodes);
+    graph->addNodes(nbNodes, nodes);
 
     unsigned i = 0;
 

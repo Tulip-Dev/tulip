@@ -199,7 +199,7 @@ public:
 
     // graph is predimensioned according the parameters
     vector<node> nodes;
-    graph->addNodes(height * width,nodes);
+    graph->addNodes(height * width, nodes);
 
     // compute nb edges
     unsigned int nbEdges = height * (width - 1);

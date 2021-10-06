@@ -52,11 +52,12 @@ static const char *paramHelp[] = {
  *
  */
 struct WattsStrogatzModel : public ImportModule {
-  PLUGININFORMATION("Watts Strogatz Model", "Arnaud Sallaberry", "21/02/2011",
-                    "Randomly generates a small world graph using the model described in<br/>D. J. "
-                    "Watts and S. H. Strogatz.<br/><b>Collective dynamics of small-world "
-                    "networks.</b><br/>Nature 393, 440 (1998). doi: <a href=\"https://doi.org/10.1038/30918\">10.1038/30918</a>",
-                    "1.0", "Social network")
+  PLUGININFORMATION(
+      "Watts Strogatz Model", "Arnaud Sallaberry", "21/02/2011",
+      "Randomly generates a small world graph using the model described in<br/>D. J. "
+      "Watts and S. H. Strogatz.<br/><b>Collective dynamics of small-world "
+      "networks.</b><br/>Nature 393, 440 (1998). doi: <a href=\"https://doi.org/10.1038/30918\">10.1038/30918</a>",
+      "1.0", "Social network")
 
   WattsStrogatzModel(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "200");
@@ -95,7 +96,9 @@ struct WattsStrogatzModel : public ImportModule {
     if (original_model) {
       if (k % 2 == 1) {
         k--;
-        pluginProgress->setComment("k must be an even number when used in the original model; rounding k down to"+to_string(k)+".");
+        pluginProgress->setComment(
+            "k must be an even number when used in the original model; rounding k down to" +
+            to_string(k) + ".");
       }
 
       if (k > 0) {

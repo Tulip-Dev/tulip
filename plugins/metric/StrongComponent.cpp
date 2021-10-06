@@ -41,8 +41,7 @@ unsigned StrongComponent::attachNumerotation(tlp::node n,
   for (auto nn : graph->getOutNodes(n)) {
 
     if (!finished[nn]) {
-      unsigned tmp =
-          attachNumerotation(nn, visited, finished, minAttach, id, renum, curComponent);
+      unsigned tmp = attachNumerotation(nn, visited, finished, minAttach, id, renum, curComponent);
 
       if (res > tmp)
         res = tmp;

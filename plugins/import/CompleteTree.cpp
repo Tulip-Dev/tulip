@@ -72,7 +72,7 @@ public:
 
     graph->reserveEdges(total);
     vector<node> nodes;
-    graph->addNodes(total + 1,nodes);
+    graph->addNodes(total + 1, nodes);
 
     unsigned int current = 0;
     unsigned int nextChild = 1;

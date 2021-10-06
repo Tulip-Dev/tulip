@@ -45,12 +45,13 @@ static const char *paramHelp[] = {
  *
  */
 struct HolmeKim : public ImportModule {
-  PLUGININFORMATION("Holme and Kim Model", "Sallaberry & Pennarun", "21/02/2011 & 08/04/2014",
-                    "Randomly generates a scale-free graph using the model described in<br/>Petter "
-                    "Holme and Beom Jun Kim.<br/><b>Growing scale-free networks with tunable "
-                    "clustering.</b><br/>Physical Review E, 65, 026107, (2002). doi: <a href=\"https://doi.org/10.1103/PhysRevE.65.026107\">"
-                    "https://doi.org/10.1103/PhysRevE.65.026107</a>",
-                    "1.0", "Social network")
+  PLUGININFORMATION(
+      "Holme and Kim Model", "Sallaberry & Pennarun", "21/02/2011 & 08/04/2014",
+      "Randomly generates a scale-free graph using the model described in<br/>Petter "
+      "Holme and Beom Jun Kim.<br/><b>Growing scale-free networks with tunable "
+      "clustering.</b><br/>Physical Review E, 65, 026107, (2002). doi: <a href=\"https://doi.org/10.1103/PhysRevE.65.026107\">"
+      "https://doi.org/10.1103/PhysRevE.65.026107</a>",
+      "1.0", "Social network")
 
   HolmeKim(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "300");

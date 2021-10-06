@@ -97,8 +97,6 @@ public:
     graph->addNodes(nbNodes, nodes);
     graph->reserveEdges(nbNodes * avgDegree);
 
-
-
     for (auto n : nodes) {
       newLayout->setNodeValue(n,
                               Coord(float(randomInteger(WIDTH)), float(randomInteger(HEIGHT)), 0));

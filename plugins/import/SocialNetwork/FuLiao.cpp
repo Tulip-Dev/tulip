@@ -45,12 +45,13 @@ const char *paramHelp[] = {
  *
  */
 struct FuLiao : public ImportModule {
-  PLUGININFORMATION("Fu and Liao Model", "Arnaud Sallaberry", "21/02/2011",
-                    "Randomly generates a scale-free graph using<br/>Peihua Fu and Kun "
-                    "Liao.<br/><b>An evolving scale-free network with large clustering "
-                    "coefficient.</b><br/>In ICARCV, pp. 1-4. IEEE, (2006). doi: <a href=\"https://doi.org/10.1109/ICARCV.2006.345053\">"
-                    "10.1109/ICARCV.2006.345053</a>",
-                    "1.0", "Social network")
+  PLUGININFORMATION(
+      "Fu and Liao Model", "Arnaud Sallaberry", "21/02/2011",
+      "Randomly generates a scale-free graph using<br/>Peihua Fu and Kun "
+      "Liao.<br/><b>An evolving scale-free network with large clustering "
+      "coefficient.</b><br/>In ICARCV, pp. 1-4. IEEE, (2006). doi: <a href=\"https://doi.org/10.1109/ICARCV.2006.345053\">"
+      "10.1109/ICARCV.2006.345053</a>",
+      "1.0", "Social network")
 
   FuLiao(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "300");

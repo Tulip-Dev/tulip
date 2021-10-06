@@ -162,7 +162,7 @@ public:
     }
 
     vector<node> nodes;
-    graph->addNodes(nbNodes,nodes);
+    graph->addNodes(nbNodes, nodes);
 
     graph->reserveEdges(nbEdges);
 

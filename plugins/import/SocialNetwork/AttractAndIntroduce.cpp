@@ -51,12 +51,13 @@ static const char *paramHelp[] = {
  */
 class AttractAndIntroduce : public ImportModule {
 public:
-  PLUGININFORMATION("Attract And Introduce Model", "Arnaud Sallabery & Patrick Mary", "25/03/2014",
-                    "Randomly generates a graph using the Attract and Introduce Model described "
-                    "in<br/>J. H. Fowler, C. T. Dawes, N. A. Christakis.<br/><b>Model of "
-                    "genetic variation in human social networks.</b><br/>PNAS 106 (6): 1720-1724, "
-                    "2009. doi: <a href=\"https://doi.org/10.1073/pnas.0806746106\">10.1073/pnas.0806746106</a>",
-                    "1.0", "Social network")
+  PLUGININFORMATION(
+      "Attract And Introduce Model", "Arnaud Sallabery & Patrick Mary", "25/03/2014",
+      "Randomly generates a graph using the Attract and Introduce Model described "
+      "in<br/>J. H. Fowler, C. T. Dawes, N. A. Christakis.<br/><b>Model of "
+      "genetic variation in human social networks.</b><br/>PNAS 106 (6): 1720-1724, "
+      "2009. doi: <a href=\"https://doi.org/10.1073/pnas.0806746106\">10.1073/pnas.0806746106</a>",
+      "1.0", "Social network")
 
   AttractAndIntroduce(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "750");
@@ -94,7 +95,7 @@ public:
     unsigned int iterations = nbNodes + nbEdges;
 
     vector<node> nodes;
-    graph->addNodes(nbNodes,nodes);
+    graph->addNodes(nbNodes, nodes);
     graph->reserveEdges(nbEdges);
 
     NodeStaticProperty<double> pAttractProperty(graph);

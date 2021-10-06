@@ -46,13 +46,14 @@ static const char *paramHelp[] = {
  *
  */
 struct Catanzaro : public ImportModule {
-  PLUGININFORMATION("Catanzaro and al. Model", "Arnaud Sallaberry", "21/02/2011",
-                    "Randomly generates a graph using the model described in<br/>Michele "
-                    "Catanzaro, Guido Caldarelli, and Luciano Pietronero.<br/><b>Assortative model "
-                    "for social networks.</b><br/>Physical Review E (Statistical, Nonlinear, and "
-                    "Soft Matter Physics), 70(3), (2004). doi: <a href=\"https://doi.org/10.1103/PhysRevE.70.037101\">"
-                    "10.1103/PhysRevE.70.037101</a>",
-                    "1.0", "Social network")
+  PLUGININFORMATION(
+      "Catanzaro and al. Model", "Arnaud Sallaberry", "21/02/2011",
+      "Randomly generates a graph using the model described in<br/>Michele "
+      "Catanzaro, Guido Caldarelli, and Luciano Pietronero.<br/><b>Assortative model "
+      "for social networks.</b><br/>Physical Review E (Statistical, Nonlinear, and "
+      "Soft Matter Physics), 70(3), (2004). doi: <a href=\"https://doi.org/10.1103/PhysRevE.70.037101\">"
+      "10.1103/PhysRevE.70.037101</a>",
+      "1.0", "Social network")
 
   Catanzaro(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "300");

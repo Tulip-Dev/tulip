@@ -39,13 +39,14 @@ static const char *paramHelp[] = {
  *
  */
 struct WangEtAl : public ImportModule {
-  PLUGININFORMATION("Wang et al. Model", "Arnaud Sallaberry", "21/02/2011",
-                    "Randomly generates a small world graph using the model described "
-                    "in<br/>L.Wang, F. Du, H. P. Dai, and Y. X. Sun.<br/><b>Random pseudofractal "
-                    "scale-free networks with small-world effect.</b><br/>The European Physical "
-                    "Journal B - Condensed Matter and Complex Systems, 53, 361-366, (2006). doi: "
-                    "<a href=\"https://doi.org/10.1140/epjb/e2006-00389-0\">10.1140/epjb/e2006-00389-0</a>",
-                    "1.0", "Social network")
+  PLUGININFORMATION(
+      "Wang et al. Model", "Arnaud Sallaberry", "21/02/2011",
+      "Randomly generates a small world graph using the model described "
+      "in<br/>L.Wang, F. Du, H. P. Dai, and Y. X. Sun.<br/><b>Random pseudofractal "
+      "scale-free networks with small-world effect.</b><br/>The European Physical "
+      "Journal B - Condensed Matter and Complex Systems, 53, 361-366, (2006). doi: "
+      "<a href=\"https://doi.org/10.1140/epjb/e2006-00389-0\">10.1140/epjb/e2006-00389-0</a>",
+      "1.0", "Social network")
 
   WangEtAl(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "300");

@@ -62,13 +62,14 @@ struct TopNode {
  *
  */
 struct GuillaumeLatapyModel : public ImportModule {
-  PLUGININFORMATION("Guillaume Latapy Model", "Arnaud Sallaberry", "20/06/2011",
-                    "Randomly generates a small word graph using the model described in<br/>J.-L. "
-                    "Guillaume and M. Latapy.<br/><b>Bipartite graphs as models of complex "
-                    "networks.</b><br/>In Workshop on Combinatorial and Algorithmic Aspects of "
-                    "Networking (CAAN), LNCS, volume 1, 2004. doi: <a href=\"https://doi.org/10.1016/j.physa.2006.04.047\">"
-                    "10.1016/j.physa.2006.04.047<a/>",
-                    "1.0", "Social network")
+  PLUGININFORMATION(
+      "Guillaume Latapy Model", "Arnaud Sallaberry", "20/06/2011",
+      "Randomly generates a small word graph using the model described in<br/>J.-L. "
+      "Guillaume and M. Latapy.<br/><b>Bipartite graphs as models of complex "
+      "networks.</b><br/>In Workshop on Combinatorial and Algorithmic Aspects of "
+      "Networking (CAAN), LNCS, volume 1, 2004. doi: <a href=\"https://doi.org/10.1016/j.physa.2006.04.047\">"
+      "10.1016/j.physa.2006.04.047<a/>",
+      "1.0", "Social network")
 
   GuillaumeLatapyModel(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "200");
@@ -154,11 +155,12 @@ struct GuillaumeLatapyModel : public ImportModule {
       }
 
       for (j = 0; j < vec_top_nodes[i].bottom_nodes.size(); ++j) {
-          for (l = 0; l < j; ++l) {
-              if (!graph->hasEdge(vec_top_nodes[i].bottom_nodes[j], vec_top_nodes[i].bottom_nodes[l],false)) {
-                  graph->addEdge(vec_top_nodes[i].bottom_nodes[j], vec_top_nodes[i].bottom_nodes[l]);
-              }
+        for (l = 0; l < j; ++l) {
+          if (!graph->hasEdge(vec_top_nodes[i].bottom_nodes[j], vec_top_nodes[i].bottom_nodes[l],
+                              false)) {
+            graph->addEdge(vec_top_nodes[i].bottom_nodes[j], vec_top_nodes[i].bottom_nodes[l]);
           }
+        }
       }
     }
 

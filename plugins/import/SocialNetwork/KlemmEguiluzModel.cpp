@@ -45,12 +45,13 @@ static const char *paramHelp[] = {
  *
  */
 struct KlemmEguiluzModel : public ImportModule {
-  PLUGININFORMATION("Klemm Eguiluz Model", "Sallaberry & Pennarun", "21/02/2011 & 08/04/2014",
-                    "Randomly generates a small world graph using the model described "
-                    "in<br/>Konstantin Klemm and Victor M. Eguiluz.<br/><b>Growing Scale-Free "
-                    "Networks with Small World Behavior.</b><br/>Physical Review E, 65, "
-                    "057102,(2002). doi: <a href=\"https://doi.org/10.1103/PhysRevE.65.057102\">10.1103/PhysRevE.65.057102</a>",
-                    "1.0", "Social network")
+  PLUGININFORMATION(
+      "Klemm Eguiluz Model", "Sallaberry & Pennarun", "21/02/2011 & 08/04/2014",
+      "Randomly generates a small world graph using the model described "
+      "in<br/>Konstantin Klemm and Victor M. Eguiluz.<br/><b>Growing Scale-Free "
+      "Networks with Small World Behavior.</b><br/>Physical Review E, 65, "
+      "057102,(2002). doi: <a href=\"https://doi.org/10.1103/PhysRevE.65.057102\">10.1103/PhysRevE.65.057102</a>",
+      "1.0", "Social network")
 
   KlemmEguiluzModel(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "200");
