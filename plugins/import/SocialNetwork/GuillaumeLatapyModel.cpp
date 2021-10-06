@@ -154,14 +154,11 @@ struct GuillaumeLatapyModel : public ImportModule {
       }
 
       for (j = 0; j < vec_top_nodes[i].bottom_nodes.size(); ++j) {
-        for (l = 0; l < j; ++l) {
-          if (!graph->hasEdge(vec_top_nodes[i].bottom_nodes[j], vec_top_nodes[i].bottom_nodes[l])) {
-            if (!graph->hasEdge(vec_top_nodes[i].bottom_nodes[l],
-                                vec_top_nodes[i].bottom_nodes[j])) {
-              graph->addEdge(vec_top_nodes[i].bottom_nodes[j], vec_top_nodes[i].bottom_nodes[l]);
-            }
+          for (l = 0; l < j; ++l) {
+              if (!graph->hasEdge(vec_top_nodes[i].bottom_nodes[j], vec_top_nodes[i].bottom_nodes[l],false)) {
+                  graph->addEdge(vec_top_nodes[i].bottom_nodes[j], vec_top_nodes[i].bottom_nodes[l]);
+              }
           }
-        }
       }
     }
 
