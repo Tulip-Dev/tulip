@@ -57,7 +57,10 @@ cp -r "${TULIP_DIR}"/* .
 mv lib/*.dylib Frameworks/
 rm -rf include
 rm -rf lib/cmake
-find lib/tulip/python  \( -name '*.pyc' -o -name '*.pyo' \) | xargs rm -rf
+if [ -d lib/tulip/python ]
+then
+    find lib/tulip/python  \( -name '*.pyc' -o -name '*.pyo' \) | xargs rm -rf
+fi
 
 if [ "$PYTHON_BUILD" = "ON" ]  && [ -d /Library/Frameworks/Python.framework/Versions/@PYTHON_VERSION@ ]
 then
