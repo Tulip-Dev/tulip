@@ -296,7 +296,7 @@ public:
     PropertyInterface *metric = nullptr;
 
     if (dataSet != nullptr) {
-      dataSet->get("input property", metric);
+      dataSet->getDeprecated("property", "input property", metric);
       dataSet->get(ELT_TYPE, eltTypes);
       dataSet->get(TARGET_TYPE, targetType);
 
