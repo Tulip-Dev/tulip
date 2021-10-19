@@ -134,6 +134,10 @@ void PathFinderComponent::selectPath(GlMainWidget *glMainWidget, Graph *graph) {
   BooleanProperty *selection = inputData->getElementSelected();
 
   if (src.isValid() && tgt.isValid()) { // We only select a path if source and target are valid
+    // get active window before launching paths computins
+    // as a workaround for uncorrected QMessageBox styling
+    // when paths computing is interrupted on user demand
+    auto w = QApplication::activeWindow();
     Observable::holdObservers();
     DoubleProperty *weights = nullptr;
     string weightsMetricName = parent->getWeightMetricName();
@@ -154,7 +158,7 @@ void PathFinderComponent::selectPath(GlMainWidget *glMainWidget, Graph *graph) {
       selection->setAllNodeValue(false);
       selection->setAllEdgeValue(false);
       selection->setNodeValue(src, true);
-      QMessageBox::warning(QApplication::activeWindow(), "Path finder",
+      QMessageBox::warning(w, "Path finder",
                            "A path between the selected nodes cannot be found.");
 
     } else {

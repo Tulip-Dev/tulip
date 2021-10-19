@@ -20,6 +20,8 @@
 #ifndef DFS_H_
 #define DFS_H_
 
+#include <QTime>
+
 #include <cfloat>
 #include <vector>
 
@@ -33,6 +35,7 @@ namespace tlp {
 class BooleanProperty;
 class DoubleProperty;
 class Graph;
+class PluginProgress;
 
 /**
  * @brief An implementation of the DFS algorithm to find all the existing paths between two nodes.
@@ -71,6 +74,11 @@ private:
   double currentDist;
   EdgeOrientation edgesOrientation;
   double maxDist;
+  // plugin progress management
+  PluginProgress* progress;
+  unsigned int progressStep, nbPaths;
+  QTime lastProgressTime;
+  int progressStepIncrement;
 
   bool computeSearchPaths(tlp::node src, tlp::BooleanProperty *visitable,
                           tlp::DoubleProperty *dists);

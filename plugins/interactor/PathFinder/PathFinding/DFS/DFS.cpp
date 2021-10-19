@@ -22,15 +22,20 @@
 #include <stack>
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
+#include <tulip/PluginProgress.h>
+#include <tulip/Perspective.h>
 
 using namespace tlp;
 using namespace std;
 
+#define PROGRESS_MAX_STEPS 10
+#define PROGRESS_TIME_STEP 1500
 DFS::DFS(Graph *graph, BooleanProperty *result, node tgt,
          const EdgeStaticProperty<double> &eWeights, EdgeOrientation edgesOrientation,
          double maxDist)
     : graph(graph), result(result), tgt(tgt), weights(eWeights), currentDist(0),
-      edgesOrientation(edgesOrientation), maxDist(maxDist) {
+      edgesOrientation(edgesOrientation), maxDist(maxDist),
+      progress(nullptr), progressStep(0), nbPaths(0), progressStepIncrement(1) {
 #ifndef NDEBUG
   assert(graph->getRoot() == result->getGraph()->getRoot());
 #endif /* NDEBUG */
@@ -43,7 +48,31 @@ bool DFS::searchPaths(node src) {
   BooleanProperty visitable(graph);
   visitable.setAllNodeValue(true);
 
-  return computeSearchPaths(src, &visitable, &dists);
+  // initialize plugin progress
+  progress = Perspective::instance()->progress();
+  std::ostringstream oss;
+  oss << "Searching all ";
+  switch (edgesOrientation) {
+  case Undirected:
+    oss << "undirected ";
+    break;
+
+  case Directed:
+    oss << "directed ";
+    break;
+
+  case Reversed:
+    oss << "reverse ";
+    break;
+  }
+  oss << "paths from node #" << src.id << " to node #" << tgt.id;
+  progress->setTitle(oss.str());
+  progress->setComment("No path found...");
+  progress->showPreview(false);
+  lastProgressTime = QTime::currentTime();
+  auto result = computeSearchPaths(src, &visitable, &dists);
+  delete progress;
+  return result;
 }
 
 bool DFS::computeSearchPaths(node src, BooleanProperty *visitable, DoubleProperty *dists) {
@@ -79,6 +108,14 @@ bool DFS::computeSearchPaths(node src, BooleanProperty *visitable, DoublePropert
     if (maxDist != DBL_MAX)
       dists->setNodeValue(nd, min<double>(distLeft, dists->getNodeValue(nd)));
 
+    // update the number of paths found
+    if (++nbPaths == 1)
+      progress->setComment("One path found...");
+    else {
+      std::ostringstream oss;
+      oss << nbPaths << " paths found...";
+      progress->setComment(oss.str());
+    }
     return true;
   }
 
@@ -102,15 +139,35 @@ bool DFS::computeSearchPaths(node src, BooleanProperty *visitable, DoublePropert
   }
 
   for (auto e : edgeIt) {
+    // check for progress interruption
+    if (lastProgressTime.msecsTo(QTime::currentTime()) >= PROGRESS_TIME_STEP) {
+      if (progress->progress(progressStep, PROGRESS_MAX_STEPS) != TLP_CONTINUE)
+	break;
+      if (progressStep == PROGRESS_MAX_STEPS - 1)
+	progressStepIncrement = -1;
+      else if (progressStep == 1)
+	progressStepIncrement = 1;
+      progressStep += progressStepIncrement;
+      lastProgressTime = QTime::currentTime();
+    }
     if (maxDist != DBL_MAX)
       currentDist += weights.getEdgeValue(e);
     path.push_back(e);
     res |= computeSearchPaths(graph->opposite(e, src), visitable, dists);
     path.pop_back();
+    if (progress->state() != TLP_CONTINUE)
+      break;
     if (maxDist != DBL_MAX)
       currentDist -= weights.getEdgeValue(e);
   }
 
-  visitable->setNodeValue(src, true);
+  switch (progress->state()) {
+  case TLP_CANCEL:
+    return false;
+  case TLP_STOP:
+    return result->getNodeValue(tgt);
+  default:
+    visitable->setNodeValue(src, true);
+  }
   return res;
 }
