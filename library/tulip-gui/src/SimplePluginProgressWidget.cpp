@@ -104,6 +104,10 @@ void SimplePluginProgressWidget::showStops(bool showButtons) {
     setComment("Processing in progress...");
 }
 
+void SimplePluginProgressWidget::showText(bool show) {
+  _ui->progressBar->setTextVisible(show);
+}
+
 ProgressState SimplePluginProgressWidget::state() const {
   return _state;
 }
@@ -222,6 +226,10 @@ void SimplePluginProgressDialog::showStops(bool showButtons) {
   while (!_painted)
     QApplication::processEvents();
   QApplication::processEvents();
+}
+
+void SimplePluginProgressDialog::showText(bool show) {
+  _progress->showText(show);
 }
 
 ProgressState SimplePluginProgressDialog::state() const {

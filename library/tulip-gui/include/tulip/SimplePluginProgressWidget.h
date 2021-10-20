@@ -65,6 +65,7 @@ public:
   void setPreviewMode(bool drawPreview) override;
   void showPreview(bool showPreview) override;
   void showStops(bool showButtons) override;
+  void showText(bool show) override;
 
   tlp::ProgressState state() const override;
 
@@ -104,6 +105,7 @@ public:
   void setPreviewMode(bool drawPreview) override;
   void showPreview(bool showPreview) override;
   void showStops(bool showButtons) override;
+  void showText(bool show) override;
 
   tlp::ProgressState state() const override;
 

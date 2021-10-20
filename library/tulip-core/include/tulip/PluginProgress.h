@@ -152,6 +152,15 @@ public:
   virtual void showStops(bool show) = 0;
 
   /**
+   * @brief This tells the progress if it has to show text indicating
+   * execution progression
+   *
+   * @param show Whether text has to be displayed or not
+   * @return void
+   **/
+  virtual void showText(bool /* show */) {}
+
+  /**
    * @brief Gets the current internal state of the PluginProgress.
    *
    * @return tlp::ProgressState The current state.

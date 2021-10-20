@@ -69,6 +69,7 @@ bool DFS::searchPaths(node src) {
   progress->setTitle(oss.str());
   progress->setComment("No path found...");
   progress->showPreview(false);
+  progress->showText(false);
   lastProgressTime = QTime::currentTime();
   auto result = computeSearchPaths(src, &visitable, &dists);
   delete progress;
