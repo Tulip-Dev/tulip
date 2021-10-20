@@ -28,147 +28,162 @@
 using namespace tlp;
 using namespace std;
 
-#define PROGRESS_MAX_STEPS 10
-#define PROGRESS_TIME_STEP 1500
+#define PROGRESS_TIME_STEP 1000
 DFS::DFS(Graph *graph, BooleanProperty *result, node tgt,
          const EdgeStaticProperty<double> &eWeights, EdgeOrientation edgesOrientation,
          double maxDist)
     : graph(graph), result(result), tgt(tgt), weights(eWeights), currentDist(0),
-      edgesOrientation(edgesOrientation), maxDist(maxDist), progress(nullptr), progressStep(0),
-      nbPaths(0), progressStepIncrement(1) {
+      edgesOrientation(edgesOrientation), maxDist(maxDist), progress(nullptr),
+      nbPaths(0) {
 #ifndef NDEBUG
   assert(graph->getRoot() == result->getGraph()->getRoot());
 #endif /* NDEBUG */
 }
 
-bool DFS::searchPaths(node src) {
+bool DFS::searchPaths(node n) {
   DoubleProperty dists(result->getGraph());
   dists.setAllNodeValue(DBL_MAX);
 
   BooleanProperty visitable(graph);
   visitable.setAllNodeValue(true);
 
-  // initialize plugin progress
-  progress = Perspective::instance()->progress();
-  std::ostringstream oss;
-  oss << "Searching all ";
-  switch (edgesOrientation) {
-  case Undirected:
-    oss << "undirected ";
-    break;
-
-  case Directed:
-    oss << "directed ";
-    break;
-
-  case Reversed:
-    oss << "reverse ";
-    break;
-  }
-  oss << "paths from node #" << src.id << " to node #" << tgt.id;
-  progress->setTitle(oss.str());
-  progress->setComment("No path found...");
-  progress->showPreview(false);
-  progress->showText(false);
+  // keep paths origin
+  src = n;
+  // initialize progress timer
+  // progress initialization is delayed until the first progress step
+  // has elapsed
   lastProgressTime = QTime::currentTime();
-  auto result = computeSearchPaths(src, &visitable, &dists);
+  auto result = computeSearchPaths(n, &visitable, &dists);
   delete progress;
   return result;
 }
 
-bool DFS::computeSearchPaths(node src, BooleanProperty *visitable, DoubleProperty *dists) {
-  if (!visitable->getNodeValue(src))
+bool DFS::computeSearchPaths(node n, BooleanProperty *visitable, DoubleProperty *dists) {
+  if (!visitable->getNodeValue(n))
     return false;
 
-  if ((maxDist != DBL_MAX) && (((dists->getNodeValue(src) != DBL_MAX) &&
-                                (currentDist + dists->getNodeValue(src) > maxDist)) ||
+  if ((maxDist != DBL_MAX) && (((dists->getNodeValue(n) != DBL_MAX) &&
+                                (currentDist + dists->getNodeValue(n) > maxDist)) ||
                                (currentDist > maxDist)))
     return false;
 
-  if (src == tgt || result->getNodeValue(src)) {
+  if (n == tgt || result->getNodeValue(n)) {
     double distLeft(0);
 
-    if ((maxDist != DBL_MAX) && result->getNodeValue(src))
-      distLeft = dists->getNodeValue(src);
-
-    node nd(src);
+    if ((maxDist != DBL_MAX) && result->getNodeValue(n))
+      distLeft = dists->getNodeValue(n);
 
     for (vector<edge>::reverse_iterator it = path.rbegin(); it != path.rend(); ++it) {
       edge e(*it);
-      node opposite(graph->opposite(e, nd));
+      node opposite(graph->opposite(e, n));
       result->setEdgeValue(e, true);
       result->setNodeValue(opposite, true);
-      result->setNodeValue(nd, true);
+      result->setNodeValue(n, true);
       if (maxDist != DBL_MAX) {
-        dists->setNodeValue(nd, min<double>(distLeft, dists->getNodeValue(nd)));
+        dists->setNodeValue(n, min<double>(distLeft, dists->getNodeValue(n)));
         distLeft += weights.getEdgeValue(e);
       }
-      nd = opposite;
+      n = opposite;
     }
 
     if (maxDist != DBL_MAX)
-      dists->setNodeValue(nd, min<double>(distLeft, dists->getNodeValue(nd)));
+      dists->setNodeValue(n, min<double>(distLeft, dists->getNodeValue(n)));
 
     // update the number of paths found
-    if (++nbPaths == 1)
-      progress->setComment("One path found...");
-    else {
-      std::ostringstream oss;
-      oss << nbPaths << " paths found...";
-      progress->setComment(oss.str());
-    }
+    ++nbPaths;
+    updateProgressComment();
     return true;
   }
 
   bool res = false;
-  visitable->setNodeValue(src, false);
+  visitable->setNodeValue(n, false);
 
   Iterator<edge> *edgeIt = nullptr;
 
   switch (edgesOrientation) {
   case Undirected:
-    edgeIt = graph->getInOutEdges(src);
+    edgeIt = graph->getInOutEdges(n);
     break;
 
   case Directed:
-    edgeIt = graph->getOutEdges(src);
+    edgeIt = graph->getOutEdges(n);
     break;
 
   case Reversed:
-    edgeIt = graph->getInEdges(src);
+    edgeIt = graph->getInEdges(n);
     break;
   }
 
   for (auto e : edgeIt) {
     // check for progress interruption
     if (lastProgressTime.msecsTo(QTime::currentTime()) >= PROGRESS_TIME_STEP) {
-      if (progress->progress(progressStep, PROGRESS_MAX_STEPS) != TLP_CONTINUE)
+      if (progress == nullptr) {
+	// initialize plugin progress
+	progress = Perspective::instance()->progress();
+	std::ostringstream oss;
+	oss << "Searching all ";
+	switch (edgesOrientation) {
+	case Undirected:
+	  oss << "undirected ";
+	  break;
+
+	case Directed:
+	  oss << "directed ";
+	  break;
+
+	case Reversed:
+	  oss << "reverse ";
+	  break;
+	}
+	oss << "paths from node #" << src.id << " to node #" << tgt.id;
+	progress->setTitle(oss.str());
+	updateProgressComment();
+	progress->showPreview(false);
+	progress->showText(false);
+      }
+      // (0, 0) means "show a busy progress bar"
+      if (progress->progress(0, 0) != TLP_CONTINUE)
         break;
-      if (progressStep == PROGRESS_MAX_STEPS - 1)
-        progressStepIncrement = -1;
-      else if (progressStep == 1)
-        progressStepIncrement = 1;
-      progressStep += progressStepIncrement;
       lastProgressTime = QTime::currentTime();
     }
     if (maxDist != DBL_MAX)
       currentDist += weights.getEdgeValue(e);
     path.push_back(e);
-    res |= computeSearchPaths(graph->opposite(e, src), visitable, dists);
+    res |= computeSearchPaths(graph->opposite(e, n), visitable, dists);
     path.pop_back();
-    if (progress->state() != TLP_CONTINUE)
+    if (progress && (progress->state() != TLP_CONTINUE))
       break;
     if (maxDist != DBL_MAX)
       currentDist -= weights.getEdgeValue(e);
   }
 
-  switch (progress->state()) {
-  case TLP_CANCEL:
-    return false;
-  case TLP_STOP:
-    return result->getNodeValue(tgt);
-  default:
-    visitable->setNodeValue(src, true);
+  if (progress) {
+    switch (progress->state()) {
+    case TLP_CANCEL:
+      return false;
+    case TLP_STOP:
+      return result->getNodeValue(tgt);
+    default:
+      break;
+    }
   }
+  visitable->setNodeValue(n, true);
   return res;
+}
+
+void DFS::updateProgressComment() {
+  if (progress) {
+    switch (nbPaths) {
+    case 0:
+      progress->setComment("No path found...");
+      break;
+    case 1:
+      progress->setComment("One path found...");
+      break;
+    default:
+      std::ostringstream oss;
+      oss << nbPaths << " paths found...";
+      progress->setComment(oss.str());
+    }
+  }
 }

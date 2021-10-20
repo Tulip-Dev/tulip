@@ -68,7 +68,7 @@ public:
 private:
   tlp::Graph *graph;
   tlp::BooleanProperty *result;
-  tlp::node tgt;
+  tlp::node src, tgt;
   const tlp::EdgeStaticProperty<double> &weights;
   std::vector<tlp::edge> path;
   double currentDist;
@@ -76,12 +76,12 @@ private:
   double maxDist;
   // plugin progress management
   PluginProgress *progress;
-  unsigned int progressStep, nbPaths;
+  unsigned int nbPaths;
   QTime lastProgressTime;
-  int progressStepIncrement;
 
   bool computeSearchPaths(tlp::node src, tlp::BooleanProperty *visitable,
                           tlp::DoubleProperty *dists);
+  void updateProgressComment();
 };
 } // namespace tlp
 #endif /* DFS_H_ */
