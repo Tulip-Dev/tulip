@@ -33,8 +33,7 @@ DFS::DFS(Graph *graph, BooleanProperty *result, node tgt,
          const EdgeStaticProperty<double> &eWeights, EdgeOrientation edgesOrientation,
          double maxDist)
     : graph(graph), result(result), tgt(tgt), weights(eWeights), currentDist(0),
-      edgesOrientation(edgesOrientation), maxDist(maxDist), progress(nullptr),
-      nbPaths(0) {
+      edgesOrientation(edgesOrientation), maxDist(maxDist), progress(nullptr), nbPaths(0) {
 #ifndef NDEBUG
   assert(graph->getRoot() == result->getGraph()->getRoot());
 #endif /* NDEBUG */
@@ -62,9 +61,9 @@ bool DFS::computeSearchPaths(node n, BooleanProperty *visitable, DoubleProperty 
   if (!visitable->getNodeValue(n))
     return false;
 
-  if ((maxDist != DBL_MAX) && (((dists->getNodeValue(n) != DBL_MAX) &&
-                                (currentDist + dists->getNodeValue(n) > maxDist)) ||
-                               (currentDist > maxDist)))
+  if ((maxDist != DBL_MAX) &&
+      (((dists->getNodeValue(n) != DBL_MAX) && (currentDist + dists->getNodeValue(n) > maxDist)) ||
+       (currentDist > maxDist)))
     return false;
 
   if (n == tgt || result->getNodeValue(n)) {
@@ -118,28 +117,28 @@ bool DFS::computeSearchPaths(node n, BooleanProperty *visitable, DoubleProperty 
     // check for progress interruption
     if (lastProgressTime.msecsTo(QTime::currentTime()) >= PROGRESS_TIME_STEP) {
       if (progress == nullptr) {
-	// initialize plugin progress
-	progress = Perspective::instance()->progress();
-	std::ostringstream oss;
-	oss << "Searching all ";
-	switch (edgesOrientation) {
-	case Undirected:
-	  oss << "undirected ";
-	  break;
+        // initialize plugin progress
+        progress = Perspective::instance()->progress();
+        std::ostringstream oss;
+        oss << "Searching all ";
+        switch (edgesOrientation) {
+        case Undirected:
+          oss << "undirected ";
+          break;
 
-	case Directed:
-	  oss << "directed ";
-	  break;
+        case Directed:
+          oss << "directed ";
+          break;
 
-	case Reversed:
-	  oss << "reverse ";
-	  break;
-	}
-	oss << "paths from node #" << src.id << " to node #" << tgt.id;
-	progress->setTitle(oss.str());
-	updateProgressComment();
-	progress->showPreview(false);
-	progress->showText(false);
+        case Reversed:
+          oss << "reverse ";
+          break;
+        }
+        oss << "paths from node #" << src.id << " to node #" << tgt.id;
+        progress->setTitle(oss.str());
+        updateProgressComment();
+        progress->showPreview(false);
+        progress->showText(false);
       }
       // (0, 0) means "show a busy progress bar"
       if (progress->progress(0, 0) != TLP_CONTINUE)
