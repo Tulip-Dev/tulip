@@ -34,8 +34,8 @@ DFS::DFS(Graph *graph, BooleanProperty *result, node tgt,
          const EdgeStaticProperty<double> &eWeights, EdgeOrientation edgesOrientation,
          double maxDist)
     : graph(graph), result(result), tgt(tgt), weights(eWeights), currentDist(0),
-      edgesOrientation(edgesOrientation), maxDist(maxDist),
-      progress(nullptr), progressStep(0), nbPaths(0), progressStepIncrement(1) {
+      edgesOrientation(edgesOrientation), maxDist(maxDist), progress(nullptr), progressStep(0),
+      nbPaths(0), progressStepIncrement(1) {
 #ifndef NDEBUG
   assert(graph->getRoot() == result->getGraph()->getRoot());
 #endif /* NDEBUG */
@@ -142,11 +142,11 @@ bool DFS::computeSearchPaths(node src, BooleanProperty *visitable, DoublePropert
     // check for progress interruption
     if (lastProgressTime.msecsTo(QTime::currentTime()) >= PROGRESS_TIME_STEP) {
       if (progress->progress(progressStep, PROGRESS_MAX_STEPS) != TLP_CONTINUE)
-	break;
+        break;
       if (progressStep == PROGRESS_MAX_STEPS - 1)
-	progressStepIncrement = -1;
+        progressStepIncrement = -1;
       else if (progressStep == 1)
-	progressStepIncrement = 1;
+        progressStepIncrement = 1;
       progressStep += progressStepIncrement;
       lastProgressTime = QTime::currentTime();
     }

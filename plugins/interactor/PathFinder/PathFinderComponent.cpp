@@ -158,8 +158,7 @@ void PathFinderComponent::selectPath(GlMainWidget *glMainWidget, Graph *graph) {
       selection->setAllNodeValue(false);
       selection->setAllEdgeValue(false);
       selection->setNodeValue(src, true);
-      QMessageBox::warning(w, "Path finder",
-                           "A path between the selected nodes cannot be found.");
+      QMessageBox::warning(w, "Path finder", "A path between the selected nodes cannot be found.");
 
     } else {
       // register current graph

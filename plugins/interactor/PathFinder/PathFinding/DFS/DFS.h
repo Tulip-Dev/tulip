@@ -75,7 +75,7 @@ private:
   EdgeOrientation edgesOrientation;
   double maxDist;
   // plugin progress management
-  PluginProgress* progress;
+  PluginProgress *progress;
   unsigned int progressStep, nbPaths;
   QTime lastProgressTime;
   int progressStepIncrement;
