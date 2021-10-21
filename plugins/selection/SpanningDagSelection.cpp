@@ -37,8 +37,7 @@ bool SpanningDagSelection::run() {
   for (auto n : graph->nodes())
     result->setNodeValue(n, true);
 
-  EdgeStaticProperty<bool> edgeprop(graph);
-  edgeprop.setAll(true);
+  EdgeStaticProperty<bool> edgeprop(graph, true);
 
   vector<edge> obstructions;
   AcyclicTest::acyclicTest(graph, &obstructions);

@@ -33,8 +33,7 @@ Dijkstra::Dijkstra(const Graph *const graph, node src, const EdgeStaticProperty<
   usedEdges.setAll(false);
   this->src = src;
   set<DijkstraElement *, LessDijkstraElement> dijkstraTable;
-  NodeStaticProperty<DijkstraElement *> mapDik(graph);
-  mapDik.setAll(nullptr);
+  NodeStaticProperty<DijkstraElement *> mapDik(graph, nullptr);
   if (queueNodes)
     while (!queueNodes->empty())
       queueNodes->pop();

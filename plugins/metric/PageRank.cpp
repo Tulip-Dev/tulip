@@ -101,13 +101,9 @@ public:
     }
 
     // Initialize the PageRank
-    NodeStaticProperty<double> pr(graph);
-    NodeStaticProperty<double> next_pr(graph);
     unsigned int nbNodes = graph->numberOfNodes();
-
-    double oon = 1. / nbNodes;
-
-    pr.setAll(oon);
+    NodeStaticProperty<double> pr(graph, 1. / nbNodes);
+    NodeStaticProperty<double> next_pr(graph);
 
     const double one_minus_d = (1 - d) / nbNodes;
     const unsigned int kMax = uint(15 * log(nbNodes));

@@ -29,12 +29,10 @@ class NodeStaticProperty : public std::vector<TYPE> {
   const Graph *graph;
 
 public:
-  // constructor
-  NodeStaticProperty(const Graph *g) : graph(g) {
-    assert(g);
-    // set the vector size to the number of graph nodes
-    this->resize(graph->numberOfNodes());
-  }
+  // constructors
+  NodeStaticProperty(const Graph *g) : std::vector<TYPE>(g->numberOfNodes()), graph(g) {}
+
+  NodeStaticProperty(const Graph *g, TYPE val) : std::vector<TYPE>(g->numberOfNodes(), val), graph(g) {}
 
   inline typename std::vector<TYPE>::const_reference operator[](unsigned int i) const {
     return std::vector<TYPE>::operator[](i);
@@ -106,12 +104,10 @@ class NodeStaticProperty<bool> : public std::vector<unsigned char> {
   const Graph *graph;
 
 public:
-  // constructor
-  NodeStaticProperty(const Graph *g) : graph(g) {
-    assert(g);
-    // set the vector size to the number of graph nodes
-    this->resize(graph->numberOfNodes());
-  }
+  // constructors
+  NodeStaticProperty(const Graph *g) : std::vector<unsigned char>(g->numberOfNodes()), graph(g) {}
+
+  NodeStaticProperty(const Graph *g, bool b) : std::vector<unsigned char>(g->numberOfNodes(), b), graph(g) {}
 
   inline const Graph *getGraph() const {
     return graph;
@@ -181,12 +177,9 @@ class EdgeStaticProperty : public std::vector<TYPE> {
   const Graph *graph;
 
 public:
-  // constructor
-  EdgeStaticProperty(const Graph *g) : graph(g) {
-    assert(g);
-    // set the vector size to the number of graph edges
-    this->resize(graph->numberOfEdges());
-  }
+  // constructors
+  EdgeStaticProperty(const Graph *g) : std::vector<TYPE>(g->numberOfEdges()), graph(g) {}
+  EdgeStaticProperty(const Graph *g, TYPE val) : std::vector<TYPE>(g->numberOfEdges(), val), graph(g) {}
 
   inline const Graph *getGraph() const {
     return graph;
@@ -261,12 +254,10 @@ class EdgeStaticProperty<bool> : public std::vector<unsigned char> {
   const Graph *graph;
 
 public:
-  // constructor
-  EdgeStaticProperty(const Graph *g) : graph(g) {
-    assert(g);
-    // set the vector size to the number of graph edges
-    this->resize(graph->numberOfEdges());
-  }
+  // constructors
+  EdgeStaticProperty(const Graph *g) : std::vector<unsigned char>(g->numberOfEdges()), graph(g) {}
+
+  EdgeStaticProperty(const Graph *g, bool b) : std::vector<unsigned char>(g->numberOfEdges(), b), graph(g) {}
 
   inline bool operator[](unsigned int i) const {
     return static_cast<bool>(std::vector<unsigned char>::operator[](i));

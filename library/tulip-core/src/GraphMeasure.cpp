@@ -63,8 +63,7 @@ double tlp::maxDistance(const Graph *graph, const unsigned int nPos,
                         tlp::NodeStaticProperty<double> &distance,
                         const NumericProperty *const weights, EDGE_TYPE direction) {
   if (!weights) {
-    NodeStaticProperty<unsigned int> dist_int(graph);
-    dist_int.setAll(0);
+    NodeStaticProperty<unsigned int> dist_int(graph, 0);
     unsigned int res = maxDistance(graph, nPos, dist_int, direction);
     for (auto n : graph->getNodes()) {
       distance[n] = double(dist_int[n]);

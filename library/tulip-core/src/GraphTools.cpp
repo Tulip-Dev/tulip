@@ -220,8 +220,7 @@ node graphCenterHeuristic(Graph *graph, PluginProgress *pluginProgress) {
     return node();
 
   const vector<node> &nodes = graph->nodes();
-  tlp::NodeStaticProperty<bool> toTreat(graph);
-  toTreat.setAll(true);
+  tlp::NodeStaticProperty<bool> toTreat(graph, true);
   tlp::NodeStaticProperty<unsigned int> dist(graph);
   unsigned int i = 0, n = 0, result = 0;
   unsigned int cDist = UINT_MAX - 2;
@@ -310,8 +309,7 @@ void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty,
     nbSelectedNodes = 1;
   }
 
-  EdgeStaticProperty<bool> edgeSel(graph);
-  edgeSel.setAll(true);
+  EdgeStaticProperty<bool> edgeSel(graph, true);
 
   // select all nodes
   for (auto n : graph->nodes())
@@ -770,14 +768,12 @@ bool selectShortestPaths(const Graph *const graph, node src, node tgt, ShortestP
     direction = INV_DIRECTED;
   }
 
-  EdgeStaticProperty<double> eWeights(graph);
-  if (!weights) {
-    eWeights.setAll(SMALLEST_WEIGHT);
-  } else {
+  EdgeStaticProperty<double> eWeights(graph, SMALLEST_WEIGHT);
+  if (weights) {
     auto fn = [&](edge e, unsigned int i) {
       double val(weights->getEdgeValue(e));
-
-      eWeights[i] = val ? val : SMALLEST_WEIGHT;
+      if (val)
+      eWeights[i] = val;
     };
     TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, fn);
   }

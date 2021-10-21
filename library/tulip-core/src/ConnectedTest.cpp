@@ -60,8 +60,7 @@ static bool connectedTest(const Graph *const graph) {
   if (graph->isEmpty())
     return true;
 
-  NodeStaticProperty<bool> visited(graph);
-  visited.setAll(false);
+  NodeStaticProperty<bool> visited(graph, false);
   unsigned int count = connectedTest(graph, graph->getOneNode(), visited);
   return (count == graph->numberOfNodes());
 }
@@ -78,8 +77,7 @@ bool ConnectedTest::isConnected(const tlp::Graph *const graph) {
   if (graph->numberOfEdges() < graph->numberOfNodes() - 1)
     return false;
 
-  NodeStaticProperty<bool> visited(graph);
-  visited.setAll(false);
+  NodeStaticProperty<bool> visited(graph, false);
   unsigned int count = connectedTest(graph, graph->getOneNode(), visited);
   bool result = (count == graph->numberOfNodes());
   graph->addListener(instance);
@@ -123,8 +121,7 @@ unsigned int ConnectedTest::numberOfConnectedComponents(const tlp::Graph *const 
 //======================================================================
 void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
                                                vector<vector<node>> &components) {
-  NodeStaticProperty<bool> visited(graph);
-  visited.setAll(false);
+  NodeStaticProperty<bool> visited(graph, false);
   // do a bfs traversal for each node
   TLP_MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
     // check if curNode has been already visited
@@ -171,8 +168,7 @@ void ConnectedTest::connect(const tlp::Graph *const graph, vector<node> &toLink)
   if (graph->isEmpty())
     return;
 
-  NodeStaticProperty<bool> visited(graph);
-  visited.setAll(false);
+  NodeStaticProperty<bool> visited(graph, false);
 
   TLP_MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
     if (!visited[i]) {

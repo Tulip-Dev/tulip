@@ -103,10 +103,8 @@ bool OrthoTree::run() {
     dataSet->getDeprecated("node spacing", "Node spacing", nodeSpacing);
   }
 
-  NodeStaticProperty<double> verticalSize(graph);
+  NodeStaticProperty<double> verticalSize(graph, 0);
   size = graph->getProperty<SizeProperty>("viewSize");
-
-  verticalSize.setAll(0);
 
   if (pluginProgress)
     pluginProgress->showPreview(false);

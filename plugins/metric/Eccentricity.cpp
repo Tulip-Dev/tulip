@@ -61,8 +61,7 @@ EccentricityMetric::~EccentricityMetric() {}
 //====================================================================
 double EccentricityMetric::compute(unsigned int nPos) {
 
-  NodeStaticProperty<double> distance(graph);
-  distance.setAll(0);
+  NodeStaticProperty<double> distance(graph, 0);
   double val = tlp::maxDistance(graph, nPos, distance, weight, directed ? DIRECTED : UNDIRECTED);
 
   if (!allPaths)
