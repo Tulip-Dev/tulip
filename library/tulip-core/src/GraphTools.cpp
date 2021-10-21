@@ -773,7 +773,7 @@ bool selectShortestPaths(const Graph *const graph, node src, node tgt, ShortestP
     auto fn = [&](edge e, unsigned int i) {
       double val(weights->getEdgeValue(e));
       if (val)
-      eWeights[i] = val;
+        eWeights[i] = val;
     };
     TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, fn);
   }

@@ -32,7 +32,8 @@ public:
   // constructors
   NodeStaticProperty(const Graph *g) : std::vector<TYPE>(g->numberOfNodes()), graph(g) {}
 
-  NodeStaticProperty(const Graph *g, TYPE val) : std::vector<TYPE>(g->numberOfNodes(), val), graph(g) {}
+  NodeStaticProperty(const Graph *g, TYPE val)
+      : std::vector<TYPE>(g->numberOfNodes(), val), graph(g) {}
 
   inline typename std::vector<TYPE>::const_reference operator[](unsigned int i) const {
     return std::vector<TYPE>::operator[](i);
@@ -107,7 +108,8 @@ public:
   // constructors
   NodeStaticProperty(const Graph *g) : std::vector<unsigned char>(g->numberOfNodes()), graph(g) {}
 
-  NodeStaticProperty(const Graph *g, bool b) : std::vector<unsigned char>(g->numberOfNodes(), b), graph(g) {}
+  NodeStaticProperty(const Graph *g, bool b)
+      : std::vector<unsigned char>(g->numberOfNodes(), b), graph(g) {}
 
   inline const Graph *getGraph() const {
     return graph;
@@ -179,7 +181,8 @@ class EdgeStaticProperty : public std::vector<TYPE> {
 public:
   // constructors
   EdgeStaticProperty(const Graph *g) : std::vector<TYPE>(g->numberOfEdges()), graph(g) {}
-  EdgeStaticProperty(const Graph *g, TYPE val) : std::vector<TYPE>(g->numberOfEdges(), val), graph(g) {}
+  EdgeStaticProperty(const Graph *g, TYPE val)
+      : std::vector<TYPE>(g->numberOfEdges(), val), graph(g) {}
 
   inline const Graph *getGraph() const {
     return graph;
@@ -257,7 +260,8 @@ public:
   // constructors
   EdgeStaticProperty(const Graph *g) : std::vector<unsigned char>(g->numberOfEdges()), graph(g) {}
 
-  EdgeStaticProperty(const Graph *g, bool b) : std::vector<unsigned char>(g->numberOfEdges(), b), graph(g) {}
+  EdgeStaticProperty(const Graph *g, bool b)
+      : std::vector<unsigned char>(g->numberOfEdges(), b), graph(g) {}
 
   inline bool operator[](unsigned int i) const {
     return static_cast<bool>(std::vector<unsigned char>::operator[](i));
