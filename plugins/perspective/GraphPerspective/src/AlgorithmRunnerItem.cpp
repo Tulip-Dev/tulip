@@ -53,15 +53,18 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, bool darkBackground
   _ui->setupUi(this);
   connect(_ui->favoriteCheck, SIGNAL(toggled(bool)), this, SIGNAL(favorized(bool)));
   const Plugin &plugin = PluginLister::pluginInformation(QStringToTlpString(pluginName));
+  ;
+  // a & char in a button text have to be doubled
+  // to ensure it is not indicating a shortcut key
+  QString name = pluginName;
+  name.replace('&', "&&");
   // split pluginName after the second word if needed
   QStringList words = pluginName.split(' ');
-
   if (words.size() > 3) {
-    QString name = pluginName;
     name.replace(words[1] + ' ', words[1] + '\n');
     _ui->playButton->setText(name);
   } else
-    _ui->playButton->setText(pluginName);
+    _ui->playButton->setText(name);
 
   _ui->playButton->setStyleSheet("text-align: left");
   QString tooltip(QString("<b>%1</b> <small>(%2 plugin)</small>")
