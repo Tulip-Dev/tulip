@@ -609,14 +609,10 @@ NEW-WINDOW:5,49:62914798,62914798,618,0,0,0:91x110+0+0:0,0:
 6,2,0,0,0,28,0,36997317,3,Virtual core keyboard
 7,3,0,0,0,28,0,36997366,14,AT Translated Set 2 keyboard
 6,3,0,0,0,28,0,36997366,3,Virtual core keyboard
-7,2,0,0,0,65,0,36997591,14,AT Translated Set 2 keyboard
-6,2,0,0,0,65,0,36997591,3,Virtual core keyboard
-7,3,0,0,0,65,0,36997658,14,AT Translated Set 2 keyboard
-6,3,0,0,0,65,0,36997658,3,Virtual core keyboard
-7,2,0,0,0,33,0,36998707,14,AT Translated Set 2 keyboard
-6,2,0,0,0,33,0,36998707,3,Virtual core keyboard
-7,3,0,0,0,33,0,36998780,14,AT Translated Set 2 keyboard
-6,3,0,0,0,33,0,36998780,3,Virtual core keyboard
+7,2,0,0,0,39,0,36997591,14,AT Translated Set 2 keyboard
+6,2,0,0,0,39,0,36997591,3,Virtual core keyboard
+7,3,0,0,0,39,0,36997658,14,AT Translated Set 2 keyboard
+6,3,0,0,0,39,0,36997658,3,Virtual core keyboard
 7,6,232,145,0,0,0,37000232,17,'Logitech USB Receiver'
 7,6,232,146,0,0,0,37000240,17,'Logitech USB Receiver'
 7,6,233,147,0,0,0,37000248,17,'Logitech USB Receiver'
