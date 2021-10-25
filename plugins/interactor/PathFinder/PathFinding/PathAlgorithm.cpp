@@ -50,7 +50,7 @@ static double computePathLength(BooleanProperty *result, EdgeStaticProperty<doub
 // which cannot belong to path between src and tgt, that is those
 // which belong to "dead end" paths.
 static Graph *computeAllPathsGraph(Graph *graph, node src, node tgt,
-				   PathAlgorithm::EdgeOrientation edgesOrientation) {
+                                   PathAlgorithm::EdgeOrientation edgesOrientation) {
   Graph *sg;
 
   // first step to extract the connected component owning src and tgt
@@ -68,15 +68,15 @@ static Graph *computeAllPathsGraph(Graph *graph, node src, node tgt,
       nodesQueue.pop();
       // loop on all neighbours
       for (auto nn : graph->getInOutNodes(n)) {
-	unsigned int nnPos = graph->nodePos(nn);
-	// check if neighbour has been visited
-	if (!visited[nnPos]) {
-	  // mark neighbour as already visited
-	  visited[nnPos] = true;
-	  // add in queue for further deeper exploration
-	  nodesQueue.push(nn);
-	  ++nbVisited;
-	}
+        unsigned int nnPos = graph->nodePos(nn);
+        // check if neighbour has been visited
+        if (!visited[nnPos]) {
+          // mark neighbour as already visited
+          visited[nnPos] = true;
+          // add in queue for further deeper exploration
+          nodesQueue.push(nn);
+          ++nbVisited;
+        }
       }
     }
 
@@ -89,8 +89,8 @@ static Graph *computeAllPathsGraph(Graph *graph, node src, node tgt,
 
     if (nbVisited < graph->numberOfNodes()) {
       TLP_MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
-         if (!visited[i])
-	   sg->delNode(n);
+        if (!visited[i])
+          sg->delNode(n);
       });
     }
   }
@@ -100,14 +100,14 @@ static Graph *computeAllPathsGraph(Graph *graph, node src, node tgt,
     std::vector<node> v = sg->nodes();
     for (node n : v) {
       while ((sg->deg(n) == 1) && (n != src) && (n != tgt)) {
-	// get current node's neighbour
-	auto it = sg->getInOutNodes(n);
-	node nn = it->next();
-	delete it;
-	// delete current node
-	sg->delNode(n);
-	// go further in the "dead end" path with neighbour
-	n = nn;
+        // get current node's neighbour
+        auto it = sg->getInOutNodes(n);
+        node nn = it->next();
+        delete it;
+        // delete current node
+        sg->delNode(n);
+        // go further in the "dead end" path with neighbour
+        n = nn;
       }
     }
   }
@@ -130,69 +130,69 @@ static Graph *computeAllPathsGraph(Graph *graph, node src, node tgt,
     std::vector<node> v = sg->nodes();
     for (node n : v) {
       if (!sg->isElement(n))
-	continue;
+        continue;
       // a node belongs to a "dead end" path
       // if it is a "sink" node and is different from tgt,
       if (sg->outdeg(n) == 0 && n != tgt) {
-	if (n == src)
-	  // no possible path
-	  return (graph->delSubGraph(sg), nullptr);
-	// n is the end of a "dead end" path
-	std::queue<node> deadEndPath;
-	deadEndPath.push(n);
-	while(!deadEndPath.empty()) {
-	  n = deadEndPath.front();
-	  deadEndPath.pop();
-	  // enqueue current node's in-neighbours
-	  // of which it is the only out-neighbour
-	  Iterator<node> *itn = sg->getInNodes(n);
-	  while(itn->hasNext()) {
-	    node nn = itn->next();
-	    if (nn != tgt && sg->outdeg(nn) == 1) {
-	      if (nn == src) {
-		delete itn;
-		// no possible path
-		return (graph->delSubGraph(sg), nullptr);
-	      }
-	      deadEndPath.push(nn);
-	    }
-	  }
-	  delete itn;
-	  // n can now be safely deleted
-	  sg->delNode(n);
-	}
-	continue;
+        if (n == src)
+          // no possible path
+          return (graph->delSubGraph(sg), nullptr);
+        // n is the end of a "dead end" path
+        std::queue<node> deadEndPath;
+        deadEndPath.push(n);
+        while (!deadEndPath.empty()) {
+          n = deadEndPath.front();
+          deadEndPath.pop();
+          // enqueue current node's in-neighbours
+          // of which it is the only out-neighbour
+          Iterator<node> *itn = sg->getInNodes(n);
+          while (itn->hasNext()) {
+            node nn = itn->next();
+            if (nn != tgt && sg->outdeg(nn) == 1) {
+              if (nn == src) {
+                delete itn;
+                // no possible path
+                return (graph->delSubGraph(sg), nullptr);
+              }
+              deadEndPath.push(nn);
+            }
+          }
+          delete itn;
+          // n can now be safely deleted
+          sg->delNode(n);
+        }
+        continue;
       }
       // a node belongs also to a "dead end" path
       // if it is a "source" node and is different from src,
       if (sg->indeg(n) == 0 && n != src) {
-	if (n == tgt)
-	  // no possible path
-	  return (graph->delSubGraph(sg), nullptr);
-	// n is the beginning of a dead end path
-	std::queue<node> deadEndPath;
-	deadEndPath.push(n);
-	while(!deadEndPath.empty()) {
-	  n = deadEndPath.front();
-	  deadEndPath.pop();
-	  // enqueue current node's out-neighbours
-	  // of which it is the only in-neighbour
-	  Iterator<node> *itn = sg->getOutNodes(n);
-	  while(itn->hasNext()) {
-	    node nn = itn->next();
-	    if (nn != src && sg->indeg(nn) == 1) {
-	      if (nn == tgt) {
-		delete itn;
-		// no possible path
-		return (graph->delSubGraph(sg), nullptr);
-	      }
-	      deadEndPath.push(nn);
-	    }
-	  }
-	  delete itn;
-	  // n can now be safely deleted
-	  sg->delNode(n);
-	}
+        if (n == tgt)
+          // no possible path
+          return (graph->delSubGraph(sg), nullptr);
+        // n is the beginning of a dead end path
+        std::queue<node> deadEndPath;
+        deadEndPath.push(n);
+        while (!deadEndPath.empty()) {
+          n = deadEndPath.front();
+          deadEndPath.pop();
+          // enqueue current node's out-neighbours
+          // of which it is the only in-neighbour
+          Iterator<node> *itn = sg->getOutNodes(n);
+          while (itn->hasNext()) {
+            node nn = itn->next();
+            if (nn != src && sg->indeg(nn) == 1) {
+              if (nn == tgt) {
+                delete itn;
+                // no possible path
+                return (graph->delSubGraph(sg), nullptr);
+              }
+              deadEndPath.push(nn);
+            }
+          }
+          delete itn;
+          // n can now be safely deleted
+          sg->delNode(n);
+        }
       }
     }
   }
@@ -256,17 +256,17 @@ bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation
     else {
       EdgeStaticProperty<double> eWeights(sg, SMALLEST_WEIGHT);
       if (tolerance != DBL_MAX) {
-	if (weights) {
-	  auto fn = [&](edge e, unsigned int i) {
-		      double val(weights->getEdgeValue(e));
-		      if (val)
-			eWeights[i] = val;
-		    };
-	  TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, fn);
-	}
-	tolerance *= computePathLength(result, eWeights);
-	result->setAllNodeValue(false);
-	result->setAllEdgeValue(false);
+        if (weights) {
+          auto fn = [&](edge e, unsigned int i) {
+            double val(weights->getEdgeValue(e));
+            if (val)
+              eWeights[i] = val;
+          };
+          TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, fn);
+        }
+        tolerance *= computePathLength(result, eWeights);
+        result->setAllNodeValue(false);
+        result->setAllEdgeValue(false);
       }
       // finally do a DFS
       DFS d(sg, result, tgt, eWeights, edgesOrientation, tolerance);
