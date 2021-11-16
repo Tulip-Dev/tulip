@@ -930,6 +930,10 @@ void ScatterPlot2DView::switchFromDetailViewToMatrixView() {
   optionsWidget->setWidgetEnabled(false);
   optionsWidget->resetAxisScale();
   toggleInteractors(false);
+  // select the navigator interactor
+  // allowing to choose one of the detailed views
+  if (!interactors().empty())
+    setCurrentInteractor(interactors()[0]);
   getGlMainWidget()->draw();
 }
 
