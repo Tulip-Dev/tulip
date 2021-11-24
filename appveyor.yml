@@ -56,10 +56,6 @@ skip_commits:
 build_script:
   - if defined MSYS2_ARCH ("%APPVEYOR_BUILD_FOLDER%\appveyor_msys2.bat") else ("%APPVEYOR_BUILD_FOLDER%\appveyor_msvc.bat")
 
-# get the Tulip version for deployment
-after_build:
-  - ps: "$env:TULIP_VERSION = (((Get-Content ($env:APPVEYOR_BUILD_FOLDER + '/build/library/tulip-core/include/tulip/TulipRelease.h') | %{ if ($_ -match '^#   define TULIP_VERSION.*$') { $_; } }) -replace '#   define TULIP_VERSION ', '') -replace '\"', '')"
-
 # set generated installers as artifacts to deploy
 artifacts:
   - path: build\*.exe
