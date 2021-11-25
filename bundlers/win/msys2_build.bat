@@ -1,15 +1,19 @@
 rem add the needed paths
 PATH C:\msys64\mingw64\bin;C:\msys64\usr\bin;%PATH%
 
+if not defined WORKSPACE (
+  set WORKSPACE=%USERPROFILE%
+)
+
 rem Install minimal Python 3 and pip if needed
 if not defined PYTHON3_HOME (
-  cd %USERPROFILE%\Downloads
+  cd %WORKSPACE%
   wget https://aka.ms/nugetclidl -O nuget.exe
   nuget.exe install python -Version 3.9.7 -ExcludeVersion -OutputDirectory .
   curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
   cp python\tools\python.exe python\tools\python3.exe
   python\tools\python3.exe get-pip.py
-  set PYTHON3_HOME=%USERPROFILE%\Downloads\python\tools
+  set PYTHON3_HOME=%WORKSPACE%\python\tools
 )
 rem Install sphinx for Python 3
 PATH %PYTHON3_HOME%;%PYTHON3_HOME%\Scripts;%PATH%
@@ -64,7 +68,7 @@ pacman --noconfirm -S --needed mingw-w64-x86_64-qtwebkit
 :tulip_build
 rem create build dir
 set CHERE_INVOKING=yes
-cd %HOMEPATH%
+cd %WORKSPACE%
 mkdir tulip_build
 cd tulip_build
 
