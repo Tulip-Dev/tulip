@@ -24,14 +24,11 @@ environment:
   matrix:
 
     # 64 bits GCC core build
-    - MSYS2_ARCH: x86_64
-      MSYSTEM: MINGW64
+    - TULIP_BUILD_CORE_ONLY: ON
       PYTHON3_HOME: "C:/Python39-x64"
 
     # 64 bits GCC complete build
-    - MSYS2_ARCH: x86_64
-      MSYSTEM: MINGW64
-      PYTHON3_HOME: "C:/Python39-x64"
+    - PYTHON3_HOME: "C:/Python39-x64"
 
     # 64 bits MSVC core build
     - CMAKE_VS_GENERATOR: "Visual Studio 16 2019"
@@ -52,13 +49,13 @@ environment:
 skip_commits:
   message: /\[(appimage|linux|macos|macports|homebrew|unix)-only\]$/
 
-# build script that simply call the right batch script depending on the compiler used
+# call the corresponding batch script according to the build env to be used
 build_script:
-  - if defined MSYS2_ARCH ("%APPVEYOR_BUILD_FOLDER%\appveyor_msys2.bat") else ("%APPVEYOR_BUILD_FOLDER%\appveyor_msvc.bat")
+  - if not defined MSVC_PLATFORM (set TULIP_SRC="%APPVEYOR_BUILD_FOLDER%" & "%APPVEYOR_BUILD_FOLDER%"\bundlers\win\msys2.bat) else ("%APPVEYOR_BUILD_FOLDER%\appveyor_msvc.bat")
 
 # set generated installers as artifacts to deploy
 artifacts:
-  - path: build\*.exe
+  - path: tulip_build\*.exe
     name: tulip_installers
 
 # no deployment
