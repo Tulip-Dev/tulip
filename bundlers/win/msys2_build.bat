@@ -5,6 +5,10 @@ if not defined WORKSPACE (
   set WORKSPACE=%USERPROFILE%
 )
 
+if not defined TULIP_SRC (
+  set TULIP_SRC=%WORKSPACE%
+)
+
 rem Install minimal Python 3 and pip if needed
 if not defined PYTHON3_HOME (
   cd %WORKSPACE%
