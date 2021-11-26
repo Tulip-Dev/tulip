@@ -15,10 +15,6 @@ if not defined PYTHON3_HOME (
   python\tools\python3.exe get-pip.py
   set PYTHON3_HOME=%WORKSPACE%\python\tools
 )
-rem Install sphinx for Python 3
-echo PYTHON3_HOME=%PYTHON3_HOME%
-set PATH %PYTHON3_HOME%;%PYTHON3_HOME%\Scripts;%PATH%
-%PYTHON3_HOME%\python3.exe -m pip install sphinx==1.7.9 --trusted-host pypi.org --trusted-host files.pythonhosted.org
 
 rem upgrade MSYS2 platform according https://www.msys2.org/docs/ci/#appveyor
 rem first is Core update, second is Normal update
@@ -42,17 +38,20 @@ pacman --noconfirm -S --needed mingw-w64-x86_64-yajl
 pacman --noconfirm -S --needed mingw-w64-x86_64-qhull
 pacman --noconfirm -S --needed mingw-w64-x86_64-cppunit
 
-rem Install Inetc plugin for NSIS
-if not exist "C:\Program Files (x86)\NSIS\Contrib\Inetc" (
-  unzip %TULIP_SRC%/bundlers/win/Inetc.zip -d"C:\Program Files (x86)\NSIS\"
-)
-
 if not defined TULIP_BUILD_CORE_ONLY (
   set TULIP_BUILD_CORE_ONLY=OFF
 )
 
 if "%TULIP_BUILD_CORE_ONLY%" == "OFF" (
+rem Install Inetc plugin for NSIS
+  if not exist "C:\Program Files (x86)\NSIS\Contrib\Inetc" (
+    cd %TULIP_SRC%
+    unzip bundlers/win/Inetc.zip -d"C:\Program Files (x86)\NSIS\"
+  )
   set TULIP_BUILD_DOC=-DTULIP_BUILD_DOC=ON
+rem Install sphinx for Python 3
+  set PATH %PYTHON3_HOME%;%PYTHON3_HOME%\Scripts;%PATH%
+  pip install sphinx==1.7.9 --trusted-host pypi.org --trusted-host files.pythonhosted.org
   goto install_complete_tulip_build_dependencies
 ) else (
   set TULIP_BUILD_DOC=""
