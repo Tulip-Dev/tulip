@@ -16,8 +16,9 @@ if not defined PYTHON3_HOME (
   set PYTHON3_HOME=%WORKSPACE%\python\tools
 )
 rem Install sphinx for Python 3
-PATH %PYTHON3_HOME%;%PYTHON3_HOME%\Scripts;%PATH%
-python3.exe -m pip install sphinx==1.7.9 --trusted-host pypi.org --trusted-host files.pythonhosted.org
+echo PYTHON3_HOME=%PYTHON3_HOME%
+set PATH %PYTHON3_HOME%;%PYTHON3_HOME%\Scripts;%PATH%
+%PYTHON3_HOME%\python3.exe -m pip install sphinx==1.7.9 --trusted-host pypi.org --trusted-host files.pythonhosted.org
 
 rem upgrade MSYS2 platform according https://www.msys2.org/docs/ci/#appveyor
 rem first is Core update, second is Normal update

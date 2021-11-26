@@ -51,7 +51,7 @@ skip_commits:
 
 # call the corresponding batch script according to the build env to be used
 build_script:
-  - if not defined MSVC_PLATFORM (set TULIP_SRC=%APPVEYOR_BUILD_FOLDER% & %APPVEYOR_BUILD_FOLDER%\bundlers\win\msys2_build.bat) else (%APPVEYOR_BUILD_FOLDER%\appveyor_msvc.bat)
+  - if not defined MSVC_PLATFORM (set TULIP_SRC=%APPVEYOR_BUILD_FOLDER% & SET WORKSPACE=%APPVEYOR_BUILD_FOLDER% & %APPVEYOR_BUILD_FOLDER%\bundlers\win\msys2_build.bat) else (%APPVEYOR_BUILD_FOLDER%\appveyor_msvc.bat)
 
 # set generated installers as artifacts to deploy
 artifacts:
