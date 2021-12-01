@@ -58,7 +58,7 @@ rem Install Inetc plugin for NSIS
   )
   set TULIP_BUILD_DOC=-DTULIP_BUILD_DOC=ON
 rem Install sphinx for Python 3
-  PATH %PYTHON3_HOME%;%PYTHON3_HOME%\Scripts;%PATH%
+  set PATH=%PYTHON3_HOME%;%PYTHON3_HOME%/Scripts;%PATH%
   pip install sphinx
 rem install_complete_tulip_build_dependencies
   pacman --noconfirm -S --needed mingw-w64-x86_64-freetype
