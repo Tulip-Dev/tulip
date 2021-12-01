@@ -19,8 +19,7 @@ if not defined PYTHON3_HOME (
   wget https://aka.ms/nugetclidl -O nuget.exe
   nuget.exe install python -Version 3.9.7 -ExcludeVersion -OutputDirectory .
   curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-  cp python\tools\python.exe python\tools\python3.exe
-  python\tools\python3.exe get-pip.py
+  python\tools\python.exe get-pip.py
   set PYTHON3_HOME=%WORKSPACE%\python\tools
 )
 echo PYTHON3_HOME=%PYTHON3_HOME%
@@ -28,7 +27,7 @@ echo PYTHON3_HOME=%PYTHON3_HOME%
 rem upgrade MSYS2 platform according https://www.msys2.org/docs/ci/#appveyor
 rem first is Core update, second is Normal update
 bash -lc "pacman --noconfirm -Syuu"
-bash -lc "pacman --noconfirm -Syuu"
+pacman --noconfirm -Syuu
 
 rem display pacman version
 pacman -V
@@ -60,21 +59,17 @@ rem Install Inetc plugin for NSIS
   set TULIP_BUILD_DOC=-DTULIP_BUILD_DOC=ON
 rem Install sphinx for Python 3
   PATH %PYTHON3_HOME%;%PYTHON3_HOME%\Scripts;%PATH%
-  bash -c "pip install sphinx==1.7.9 --trusted-host pypi.org --trusted-host files.pythonhosted.org"
-  goto install_complete_tulip_build_dependencies
+  pip install sphinx
+rem install_complete_tulip_build_dependencies
+  pacman --noconfirm -S --needed mingw-w64-x86_64-freetype
+  pacman --noconfirm -S --needed mingw-w64-x86_64-glew
+  pacman --noconfirm -S --needed mingw-w64-x86_64-qt5
+  pacman --noconfirm -S --needed mingw-w64-x86_64-quazip
+  pacman --noconfirm -S --needed mingw-w64-x86_64-qtwebkit
 ) else (
   set TULIP_BUILD_DOC=""
-  goto tulip_build
 )
 
-:install_complete_tulip_build_dependencies
-pacman --noconfirm -S --needed mingw-w64-x86_64-freetype
-pacman --noconfirm -S --needed mingw-w64-x86_64-glew
-pacman --noconfirm -S --needed mingw-w64-x86_64-qt5
-pacman --noconfirm -S --needed mingw-w64-x86_64-quazip
-pacman --noconfirm -S --needed mingw-w64-x86_64-qtwebkit
-
-:tulip_build
 rem create build dir
 set CHERE_INVOKING=yes
 cd %WORKSPACE%
@@ -91,10 +86,7 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 
 if "%TULIP_BUILD_CORE_ONLY%" == "OFF" (
   make bundle
-)
-
 rem Build Tulip without Python, and package it
-if "%TULIP_BUILD_CORE_ONLY%" == "OFF" (
   cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_COLOR_MAKEFILE=OFF -DCMAKE_NEED_RESPONSE=ON -DCMAKE_INSTALL_PREFIX=./install -DTULIP_BUILD_CORE_ONLY=%TULIP_BUILD_CORE_ONLY% %TULIP_BUILD_DOC% -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_PYTHON_COMPONENTS=OFF %TULIP_SRC%
   if %errorlevel% neq 0 exit /b %errorlevel%
   make -j4 install
