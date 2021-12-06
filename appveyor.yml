@@ -43,7 +43,7 @@ skip_commits:
 
 # build script that simply call the right batch script depending on the compiler used
 build_script:
-  - cmd: %APPVEYOR_BUILD_FOLDER%\appveyor_msvc.bat
+  - cmd: "%APPVEYOR_BUILD_FOLDER%\appveyor_msvc.bat"
 
 # no deployment
 deploy: off
