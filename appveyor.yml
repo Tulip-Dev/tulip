@@ -13,7 +13,6 @@ os: Visual Studio 2019
 # Appveyor cache storage is limited to 1GB, so cache should be cleared once it is exceeding this quota
 # (see https://www.appveyor.com/docs/build-cache/)
 cache:
-  - C:\msys64\home\appveyor\.ccache
   - C:\Users\appveyor\clcache
 
 init:
@@ -44,7 +43,7 @@ skip_commits:
 
 # build script that simply call the right batch script depending on the compiler used
 build_script:
-  - "%APPVEYOR_BUILD_FOLDER%\appveyor_msvc.bat"
+  - cmd: %APPVEYOR_BUILD_FOLDER%\appveyor_msvc.bat
 
 # no deployment
 deploy: off
