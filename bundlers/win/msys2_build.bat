@@ -17,7 +17,7 @@ rem Install minimal Python 3 and pip if needed
 if not defined PYTHON3_HOME (
   cd %WORKSPACE%
   wget https://aka.ms/nugetclidl -O nuget.exe
-  nuget.exe install python -Version 3.9.7 -ExcludeVersion -OutputDirectory .
+  nuget.exe install python -Version 3.9.9 -ExcludeVersion -OutputDirectory .
   curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
   python\tools\python.exe get-pip.py
   set PYTHON3_HOME=%WORKSPACE%\python\tools
@@ -26,8 +26,10 @@ echo PYTHON3_HOME=%PYTHON3_HOME%
 
 rem upgrade MSYS2 platform according https://www.msys2.org/docs/ci/#appveyor
 rem first is Core update, second is Normal update
-bash -lc "pacman --noconfirm -Syuu"
-pacman --noconfirm -Syuu
+if not defined NO_MSYS2_UPDATE (
+  bash -lc "pacman --noconfirm -Syuu"
+  pacman --noconfirm -Syuu
+)
 
 rem display pacman version
 pacman -V
@@ -71,7 +73,6 @@ rem install_complete_tulip_build_dependencies
 )
 
 rem create build dir
-set CHERE_INVOKING=yes
 cd %WORKSPACE%
 mkdir tulip_build
 cd tulip_build
