@@ -34,7 +34,7 @@ public:
 
   static bool isSimple(tlp::Graph *graph, bool directed = false);
 %Docstring
-tlp.SimpleTest.isSimple(graph,directed = false)
+tlp.SimpleTest.isSimple(graph,directed = False)
 
 Returns :const:`True` if the graph is simple (i.e. it contains no self loops or parallel edges),
 :const:`False` otherwise.
@@ -50,7 +50,7 @@ Returns :const:`True` if the graph is simple (i.e. it contains no self loops or 
 
   static void makeSimple(tlp::Graph* graph, std::vector<tlp::edge> &removed /Out/, bool directed = false) ;
 %Docstring
-tlp.SimpleTest.makeSimple(graph,directed = false)
+tlp.SimpleTest.makeSimple(graph,directed = False)
 
 Makes the graph  simple by removing self loops and parallel edges if any.
 Returns a list of removed edges.
@@ -66,7 +66,7 @@ Returns a list of removed edges.
 
   static bool simpleTest(tlp::Graph *graph, std::vector<tlp::edge> *multipleEdges /Out/, std::vector<tlp::edge> *loops /Out/, bool directed = false) /TypeHint="Tuple[bool, List[tlp.edge], List[tlp.edge]]"/;
 %Docstring
-tlp.SimpleTest.simpleTest(graph, bool directed = false)
+tlp.SimpleTest.simpleTest(graph, bool directed = False)
 
 Performs a simple test and returns a tuple with 3 elements. The first element is a boolean indicating the
 result of the test. The second element is a list of found parallel edges. The third element is a list of

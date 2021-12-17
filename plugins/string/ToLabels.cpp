@@ -17,16 +17,18 @@
  *
  */
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/PropertyAlgorithm.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/StringProperty.h>
 
 using namespace tlp;
 
 static const char *paramHelp[] = {
     // input
-    "Property to stringify values on labels.",
+    "Source property",
 
     // selection
-    "Set of elements for which to set the labels.",
+    "Set of elements for which to set the labels. if none is selected, the whole graph will be used.",
 
     // nodes
     "Sets labels on nodes.",
@@ -35,28 +37,37 @@ static const char *paramHelp[] = {
     "Set labels on edges."};
 
 class ToLabels : public tlp::StringAlgorithm {
+    bool onNodes, onEdges;
 public:
   PLUGININFORMATION("To labels", "Ludwig Fiolka", "2012/03/16",
-                    "Maps the labels of the graph elements onto the values of a given property.",
+                    "Use a string representation of the values of a given property as the labels of nodes and/or edges.",
                     "1.1", "")
-  ToLabels(const tlp::PluginContext *context) : StringAlgorithm(context) {
+  ToLabels(const tlp::PluginContext *context) : StringAlgorithm(context),onNodes(true), onEdges(true) {
     addInParameter<PropertyInterface *>("property", paramHelp[0], "viewMetric", true);
     addInParameter<BooleanProperty>("selection", paramHelp[1], "", false);
     addInParameter<bool>("nodes", paramHelp[2], "true");
     addInParameter<bool>("edges", paramHelp[3], "true");
   }
 
+  bool check(std::string &errMsg) override {
+      if (dataSet != nullptr) {
+          dataSet->get("nodes", onNodes);
+          dataSet->get("edges", onEdges);
+          if((onNodes==false)&&(onEdges==false)) {
+              errMsg="No element selected. Please select at least nodes or edges.";
+              return false;
+          }
+      }
+      return true;
+  }
+
   bool run() override {
     PropertyInterface *input = nullptr;
     BooleanProperty *selection = nullptr;
-    bool onNodes = true;
-    bool onEdges = true;
 
     if (dataSet != nullptr) {
       dataSet->getDeprecated("property", "input", input);
       dataSet->get("selection", selection);
-      dataSet->get("nodes", onNodes);
-      dataSet->get("edges", onEdges);
     }
 
     pluginProgress->showPreview(false);
