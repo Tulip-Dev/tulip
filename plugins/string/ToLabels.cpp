@@ -37,12 +37,15 @@ static const char *paramHelp[] = {
     "Set labels on edges."};
 
 class ToLabels : public tlp::StringAlgorithm {
-    bool onNodes, onEdges;
+  bool onNodes, onEdges;
+
 public:
-  PLUGININFORMATION("To labels", "Ludwig Fiolka", "2012/03/16",
-                    "Use a string representation of the values of a given property as the labels of nodes and/or edges.",
-                    "1.1", "")
-  ToLabels(const tlp::PluginContext *context) : StringAlgorithm(context),onNodes(true), onEdges(true) {
+  PLUGININFORMATION(
+      "To labels", "Ludwig Fiolka", "2012/03/16",
+      "Use a string representation of the values of a given property as the labels of nodes and/or edges.",
+      "1.1", "")
+  ToLabels(const tlp::PluginContext *context)
+      : StringAlgorithm(context), onNodes(true), onEdges(true) {
     addInParameter<PropertyInterface *>("property", paramHelp[0], "viewMetric", true);
     addInParameter<BooleanProperty>("selection", paramHelp[1], "", false);
     addInParameter<bool>("nodes", paramHelp[2], "true");
@@ -50,15 +53,15 @@ public:
   }
 
   bool check(std::string &errMsg) override {
-      if (dataSet != nullptr) {
-          dataSet->get("nodes", onNodes);
-          dataSet->get("edges", onEdges);
-          if((onNodes==false)&&(onEdges==false)) {
-              errMsg="No element selected. Please select at least nodes or edges.";
-              return false;
-          }
+    if (dataSet != nullptr) {
+      dataSet->get("nodes", onNodes);
+      dataSet->get("edges", onEdges);
+      if ((onNodes == false) && (onEdges == false)) {
+        errMsg = "No element selected. Please select at least nodes or edges.";
+        return false;
       }
-      return true;
+    }
+    return true;
   }
 
   bool run() override {
