@@ -125,10 +125,12 @@ void Workspace::closeAll() {
   // if expose mode activated, close it before closing views to prevent a crash
   hideExposeMode();
 
-  for (auto p : _panels) {
-    delete p; // beware: the destroyed signal is connected to panelDestroyed
+  QList<WorkspacePanel *> panels(_panels);
+  // iterate on a _panels clone to allow successive calls to panelDestroyed
+  // which will do the cleanup job
+  for (auto p : panels) {
+    delete p;
   }
-  _panels.clear();
   emit panelsEmpty();
 }
 
