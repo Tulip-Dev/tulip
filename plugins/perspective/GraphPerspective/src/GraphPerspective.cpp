@@ -326,16 +326,14 @@ bool GraphPerspective::terminated() {
     if (_pythonIDE->isCurrentScriptExecuting()) {
       _pythonIDE->pauseCurrentScript();
       QString message("A Python script is running.\nDo you really want to exit?");
-      QMessageBox::StandardButton answer = QMessageBox::question(
-        _mainWindow, "Exit", message,
-        QMessageBox::Yes | QMessageBox::No);
+      QMessageBox::StandardButton answer =
+          QMessageBox::question(_mainWindow, "Exit", message, QMessageBox::Yes | QMessageBox::No);
 
       if (answer == QMessageBox::No) {
         _pythonIDE->executeCurrentScript();
-	return false;
-      }
-      else
-	_pythonIDE->stopCurrentScript();
+        return false;
+      } else
+        _pythonIDE->stopCurrentScript();
     }
     _pythonIDE->savePythonFilesAndWriteToProject(true);
     _pythonIDEDialog->hide();
