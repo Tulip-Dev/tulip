@@ -100,6 +100,12 @@ public:
   void setScriptEditorsVisible(bool visible);
   void setPluginEditorsVisible(bool visible);
   void setModuleEditorsVisible(bool visible);
+  bool isCurrentScriptExecuting();
+
+public slots:
+  void executeCurrentScript();
+  void stopCurrentScript();
+  void pauseCurrentScript();
 
 protected:
   void dragEnterEvent(QDragEnterEvent *) override;
@@ -152,9 +158,6 @@ private slots:
   void loadScript();
   void saveScript();
   void saveAllScripts();
-  void executeCurrentScript();
-  void stopCurrentScript();
-  void pauseCurrentScript();
   void currentScriptPaused();
 
   void closeModuleTabRequested(int index);

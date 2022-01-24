@@ -1614,6 +1614,10 @@ void PythonIDE::currentScriptPaused() {
   _ui->progressBar->reset();
 }
 
+bool PythonIDE::isCurrentScriptExecuting() {
+  return !_ui->runScriptButton->isEnabled();
+}
+
 void PythonIDE::newScript() {
   int editorId = addMainScriptEditor();
   QString defaultScriptCode =
