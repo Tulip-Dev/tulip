@@ -13,7 +13,7 @@ if(MSVC)
 endif()
 
 # use native arch (ie, activate things like SSE)
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" AND NOT CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "arm64")
   # cannot use add_definitions() here because it does not work with check-sse3.cmake
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 endif()

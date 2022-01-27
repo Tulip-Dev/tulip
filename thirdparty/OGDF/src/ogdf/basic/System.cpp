@@ -67,7 +67,7 @@
 # include <fcntl.h>
 # include <sys/time.h>
 #endif
-#ifdef __GNUC__
+# if defined(__GNUC__) && (__x86_64__ || __i386__)
 # include <cpuid.h>
 #endif
 
@@ -81,7 +81,7 @@ static inline void cpuid(int CPUInfo[4], int infoType)
 	uint32_t c = 0;
 	uint32_t d = 0;
 
-# ifdef __GNUC__
+# if defined(__GNUC__) && (__x86_64__ || __i386__)
 	__get_cpuid(infoType, &a, &b, &c, &d);
 # endif
 
