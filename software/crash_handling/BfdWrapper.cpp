@@ -123,7 +123,7 @@ int file_exist(const std::string &filename) {
 #ifdef __MINGW32__
 static DWORD GetModuleBase(DWORD dwAddress) {
   MEMORY_BASIC_INFORMATION Buffer;
-#ifndef X86_64
+#ifndef IS_64BIT
   return VirtualQuery(reinterpret_cast<LPCVOID>(dwAddress), &Buffer, sizeof(Buffer))
              ? reinterpret_cast<DWORD>(Buffer.AllocationBase)
              : 0;

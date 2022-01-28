@@ -179,7 +179,7 @@ static QString getDefaultPythonVersionIfAny() {
       pythonProcess.waitForFinished(-1);
       QString arch = pythonProcess.readAll();
 
-#ifdef X86_64
+#ifdef IS_64BIT
 
       if (arch != "64") {
         defaultPythonVersion = "";

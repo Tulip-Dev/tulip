@@ -54,13 +54,15 @@ ENDIF(NOT MSVC AND "${CMAKE_BUILD_TYPE}" STREQUAL "")
 ## ========================================================
 ## Check processor architecture
 ## ========================================================
-STRING(COMPARE EQUAL "${CMAKE_SIZEOF_VOID_P}" "8" X86_64)
-IF(X86_64)
-  SET(PROCESSOR_ARCHITECTURE "64")
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DX86_64")
-ELSE(X86_64)
-  SET(PROCESSOR_ARCHITECTURE "32")
-ENDIF(X86_64)
+STRING(COMPARE EQUAL "${CMAKE_SIZEOF_VOID_P}" "8" IS_64BIT)
+IF(IS_64BIT)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DIS_64BIT")
+  IF(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "arm64")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DARM64")
+  ELSE()
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DX86_64")
+  ENDIF()
+ENDIF(IS_64BIT)
 
 ## ========================================================
 ## Consider *BSD as Linux
