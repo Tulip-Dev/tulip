@@ -35,6 +35,8 @@
 #define OS_ARCHITECTURE "x86_64"
 #elif defined(__i386__) || defined(_M_IX86)
 #define OS_ARCHITECTURE "x86"
+#elif defined(__arm64__)
+#define OS_ARCHITECTURE "arm64"
 #else
 #define OS_ARCHITECTURE "other"
 #endif

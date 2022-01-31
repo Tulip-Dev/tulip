@@ -132,8 +132,10 @@ void dumpStack(int sig, siginfo_t *, void *ucontext) {
   ucontext_t *uc = reinterpret_cast<ucontext_t *>(ucontext);
 #if defined(__i386__)
   void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext->__ss.__eip);
-#else
+#elif defined(__amd64__)
   void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext->__ss.__rip);
+#elif defined(__arm64__)
+  void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext->__ss.__lr);
 #endif
 
 #endif
