@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <cstring>
 
 #ifndef TULIP_BUILD_CORE_ONLY
 #include <QApplication>
@@ -71,7 +72,10 @@ int main(int argc, char **argv) {
 
   // load all plugins from the Tulip build folder
   PluginLoaderTest pLoader;
-  tlp::PluginLibraryLoader::loadPluginsFromDir(tulipPluginsDir, &pLoader);
+  if (argc > 2 && strcmp(argv[2], "build_test"))
+    tlp::PluginLibraryLoader::loadPlugins(&pLoader, tulipPluginsDir);
+  else
+    tlp::PluginLibraryLoader::loadPluginsFromDir(tulipPluginsDir, &pLoader);
 
   // create an instance of each of them, then destroy it
   std::list<std::string> pluginNames = tlp::PluginLister::availablePlugins();

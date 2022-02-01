@@ -6,11 +6,11 @@
 SET(TULIP_INSTALL_DIR "${CMAKE_SOURCE_DIR}/tulip_install")
 
 # Temporary plugins build directory
-SET(PLUGINS_BIN_DIR "${CMAKE_SOURCE_DIR}/plugins_build")
+SET(PLUGINS_BUILD_DIR "${CMAKE_SOURCE_DIR}/plugins_build")
 
 # Cleanup temporary directories
 FILE(REMOVE_RECURSE ${TULIP_INSTALL_DIR})
-FILE(REMOVE_RECURSE ${PLUGINS_BIN_DIR})
+FILE(REMOVE_RECURSE ${PLUGINS_BUILD_DIR})
 
 IF(NOT MSVC)
   # Ensure plugins loading test executable is built
@@ -47,7 +47,7 @@ GET_FILENAME_COMPONENT(PLUGINS_SRC_DIR_NAME "${PLUGINS_SRC_DIR}" NAME)
 
 # Generate plugins build files with CMake and use the freshly
 # installed Tulip to link against
-FILE(MAKE_DIRECTORY ${PLUGINS_BIN_DIR})
+FILE(MAKE_DIRECTORY ${PLUGINS_BUILD_DIR})
 EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND}
                   -G "${CMAKE_GENERATOR}"
                   -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
@@ -55,21 +55,20 @@ EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND}
                   -DCMAKE_PREFIX_PATH=${TULIP_INSTALL_DIR}/lib/cmake
                   -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                   ../${PLUGINS_SRC_DIR_NAME}
-                WORKING_DIRECTORY ${PLUGINS_BIN_DIR}
+                WORKING_DIRECTORY ${PLUGINS_BUILD_DIR}
                 RESULT_VARIABLE CMD_RESULT)
 
 # Compile and install the plugins if no error
 IF("${CMD_RESULT}" STREQUAL "0")
   EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND}
-                            --build ${PLUGINS_BIN_DIR}
+                            --build ${PLUGINS_BUILD_DIR}
                             --config ${MSVC_CONFIGURATION}
-                            --target install
                   RESULT_VARIABLE CMD_RESULT)
 ENDIF("${CMD_RESULT}" STREQUAL "0")
 
 # Try to load the plugins if no error
 IF("${CMD_RESULT}" STREQUAL "0")
-  EXECUTE_PROCESS(COMMAND ${TEST_PLUGINS_EXE} ${TULIP_INSTALL_DIR}/lib/tulip/test
+  EXECUTE_PROCESS(COMMAND ${TEST_PLUGINS_EXE} ${PLUGINS_BUILD_DIR}
                   RESULT_VARIABLE CMD_RESULT)
 ELSE()
 # Exit with error if something went wrong
@@ -104,13 +103,7 @@ IF(NOT MSVC)
   ENDIF("${CMD_RESULT}" STREQUAL "0")
 
   IF("${CMD_RESULT}" STREQUAL "0")
-    EXECUTE_PROCESS(COMMAND make install
-                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/plugins_src
-                    RESULT_VARIABLE CMD_RESULT)
-  ENDIF("${CMD_RESULT}" STREQUAL "0")
-
-  IF("${CMD_RESULT}" STREQUAL "0")
-    EXECUTE_PROCESS(COMMAND ${TEST_PLUGINS_EXE} ${TULIP_INSTALL_DIR}/lib/tulip/test
+    EXECUTE_PROCESS(COMMAND ${TEST_PLUGINS_EXE} ${CMAKE_SOURCE_DIR}/plugins_src
                     RESULT_VARIABLE CMD_RESULT)
   ENDIF("${CMD_RESULT}" STREQUAL "0")
 
