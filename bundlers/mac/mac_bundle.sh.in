@@ -1,19 +1,21 @@
 #!/bin/sh
 
 function usage {
-        echo "Usage : $0 <Bundle Destination Dir> [<Application Name>=Tulip]"
+        echo "Usage : $0 <Bundle Destination Dir> [<Application Name>=Tulip] [<suffix>]"
 }
 
 APP_NAME=Tulip
 
-if [ $# -eq 2 ]
+if [ $# -lt 1 ] || [ $# -gt 3 ]
+then
+    usage $0
+    exit 1
+elif [ $# -gt 1 ]
 then
     APP_NAME=$2
-else
-    if [ $# -ne 1 ]
+    if [ $# -eq 3 ]
     then
-        usage $0
-        exit 1
+	SUFFIX=-$3
     fi
 fi
 
@@ -111,7 +113,7 @@ ${QT_BINARY_DIR}/macdeployqt ${DEST_DIR}/application/Tulip.app -executable=${DES
 fi
 mv MacOS/Tulip bin/tulip
 # rename
-mv ${DEST_DIR}/application/Tulip.app ${DEST_DIR}/application/${APP_NAME}-@TulipVersion@.app
+mv ${DEST_DIR}/application/Tulip.app ${DEST_DIR}/application/${APP_NAME}-@TulipVersion@${SUFFIX}.app
 
 # create launcher
 cat > MacOS/Tulip <<EOF
@@ -185,14 +187,14 @@ fi
 # generate dmg
 echo 'Generating DMG'
 cd "${DEST_DIR}"
-sh "${SRC_DIR}/make_dmg.sh" ${APP_NAME} "@TulipVersion@" "${DEST_DIR}/application"
+sh "${SRC_DIR}/make_dmg.sh" ${APP_NAME} "@TulipVersion@${SUFFIX}" "${DEST_DIR}/application"
 
 # rename dmg if needed
 if [ "$PYTHON_BUILD" = "ON" ]
 then
-  DMG_NAME="${APP_NAME}-@TulipVersion@_qt@QT_VERSION@_py@PYTHON_VERSION@.dmg"
+  DMG_NAME="${APP_NAME}-@TulipVersion@${SUFFIX}_qt@QT_VERSION@_py@PYTHON_VERSION@.dmg"
 else
-  DMG_NAME="${APP_NAME}-@TulipVersion@_qt@QT_VERSION@_no_python.dmg"
+  DMG_NAME="${APP_NAME}-@TulipVersion@${SUFFIX}_qt@QT_VERSION@_no_python.dmg"
 fi
 echo "${DMG_NAME} has been correctly generated in ${DEST_DIR}"
-mv ${APP_NAME}-@TulipVersion@.dmg ${DMG_NAME}
+mv ${APP_NAME}-@TulipVersion@${SUFFIX}.dmg ${DMG_NAME}
