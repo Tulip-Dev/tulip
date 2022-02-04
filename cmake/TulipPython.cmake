@@ -49,16 +49,15 @@ UNSET(PYTHON_INCLUDE_PATH CACHE)
 # Python 3.2 library is suffixed by mu and Python >= 3.3 by m on some systems, also handle these cases
 SET(Python_ADDITIONAL_VERSIONS ${PYTHON_VERSION}mu ${PYTHON_VERSION}m ${PYTHON_VERSION})
 
-# Ensure the detection of Python library installed trough a bundle downloaded from Python.org
+GET_FILENAME_COMPONENT(PYTHON_HOME_PATH ${PYTHON_EXECUTABLE} PATH)
+
+# Ensure the detection of Python library installed through a bundle downloaded from Python.org or through a macports installation
 IF(APPLE)
-  IF(NOT "${PYTHON_EXECUTABLE}" MATCHES "^/usr/bin/python.*$" AND NOT "${PYTHON_EXECUTABLE}" MATCHES "^/System/Library/Frameworks/Python.framework/.*/python.*$")
-    SET(CMAKE_PREFIX_PATH /Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION} ${CMAKE_PREFIX_PATH})
-  ELSE()
-    SET(CMAKE_PREFIX_PATH /System/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION} ${CMAKE_PREFIX_PATH})
+  IF(NOT "${PYTHON_EXECUTABLE}" MATCHES "^/usr/bin/python.*$")
+    EXECUTE_PROCESS(COMMAND bash -c "cd ${PYTHON_HOME_PATH}/.. > /dev/null; echo -n $(pwd)" OUTPUT_VARIABLE PYTHON_DIR_PATH)
+    SET(CMAKE_PREFIX_PATH ${PYTHON_HOME_PATH}/.. ${CMAKE_PREFIX_PATH})
   ENDIF()
 ENDIF(APPLE)
-
-GET_FILENAME_COMPONENT(PYTHON_HOME_PATH ${PYTHON_EXECUTABLE} PATH)
 
 # Ensure that correct Python include path is selected by CMake on Windows
 IF(WIN32)
@@ -104,14 +103,9 @@ IF(MINGW)
 ENDIF(MINGW)
 
 # Ensure headers correspond to the ones associated to the detected Python library on MacOS
-IF(APPLE)
-  IF("${PYTHON_LIBRARY}" MATCHES "^/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}.*$")
-    SET(PYTHON_INCLUDE_DIR /Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/Headers CACHE PATH "" FORCE)
-  ENDIF()
-  IF("${PYTHON_LIBRARY}" MATCHES "^/System/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}.*$")
-    SET(PYTHON_INCLUDE_DIR /System/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/Headers CACHE PATH "" FORCE)
-  ENDIF()
-ENDIF(APPLE)
+IF(APPLE AND NOT "${PYTHON_EXECUTABLE}" MATCHES "^/usr/bin/python.*$")
+  SET(PYTHON_INCLUDE_DIR ${PYTHON_HOME_PATH}/../Headers CACHE PATH "" FORCE)
+ENDIF()
 
 SET(SIP_VERSION_THIRDPARTY 4.19.25)
 SET(SIP_OK FALSE CACHE INTERNAL "")
