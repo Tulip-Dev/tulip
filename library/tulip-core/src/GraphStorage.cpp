@@ -310,9 +310,6 @@ void GraphStorage::setEnds(const edge e, const node newSrc, const node newTgt) {
   if (src == newSrc && tgt == newTgt)
     return;
 
-  node nSrc = newSrc;
-  node nTgt = newTgt;
-
   if (newSrc.isValid() && src != newSrc) {
     assert(isElement(newSrc));
     eEnds.first = newSrc;
@@ -322,16 +319,14 @@ void GraphStorage::setEnds(const edge e, const node newSrc, const node newTgt) {
     nCtnr.outDegree += 1;
     nCtnr.edges.push_back(e);
     removeFromNodeData(sCtnr, e);
-  } else
-    nSrc = src;
+  }
 
   if (newTgt.isValid() && tgt != newTgt) {
     assert(isElement(newTgt));
     eEnds.second = newTgt;
     nodeData[newTgt.id].edges.push_back(e);
     removeFromNodeData(nodeData[tgt.id], e);
-  } else
-    nTgt = tgt;
+  }
 }
 //=======================================================
 /**
