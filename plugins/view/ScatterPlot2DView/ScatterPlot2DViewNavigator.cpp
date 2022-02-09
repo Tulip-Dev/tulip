@@ -74,7 +74,7 @@ bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
         selectedScatterPlotOverview = nullptr;
       } else if (!scatterPlot2dView->matrixViewSet()) {
         scatterPlot2dView->switchFromDetailViewToMatrixView();
-	scatterPlot2dView->zoomAndPanAnimation(scatterPlot2dView->getMatrixBoundingBox());
+        scatterPlot2dView->zoomAndPanAnimation(scatterPlot2dView->getMatrixBoundingBox());
       }
 
       return true;
