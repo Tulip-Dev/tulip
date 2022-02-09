@@ -20,7 +20,6 @@
 #include <tulip/GlRect.h>
 #include <tulip/BoundingBox.h>
 #include <tulip/TulipPluginHeaders.h>
-#include <tulip/QtGlSceneZoomAndPanAnimator.h>
 
 #include "PixelOrientedViewNavigator.h"
 
@@ -78,15 +77,12 @@ bool PixelOrientedViewNavigator::eventFilter(QObject *widget, QEvent *e) {
       pixelView->generatePixelOverview(selectedOverview);
       glWidget->draw();
     } else if (selectedOverview != nullptr && pixelView->smallMultiplesViewSet()) {
-      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, selectedOverview->getBoundingBox());
-      zoomAndPanAnimator.animateZoomAndPan();
+      pixelView->zoomAndPanAnimation(selectedOverview->getBoundingBox());
       pixelView->switchFromSmallMultiplesToDetailView(selectedOverview);
       selectedOverview = nullptr;
     } else if (!pixelView->smallMultiplesViewSet() && pixelView->getOverviews().size() > 1) {
       pixelView->switchFromDetailViewToSmallMultiples();
-      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget,
-                                                     pixelView->getSmallMultiplesViewBoundingBox());
-      zoomAndPanAnimator.animateZoomAndPan();
+      pixelView->zoomAndPanAnimation(pixelView->getSmallMultiplesViewBoundingBox());
       pixelView->centerView();
     }
 

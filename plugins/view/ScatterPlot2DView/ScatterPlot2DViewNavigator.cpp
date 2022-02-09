@@ -17,7 +17,6 @@
  *
  */
 
-#include <tulip/QtGlSceneZoomAndPanAnimator.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/Camera.h>
 
@@ -70,16 +69,12 @@ bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
         scatterPlot2dView->generateScatterPlot(selectedScatterPlotOverview);
         glWidget->draw();
       } else if (selectedScatterPlotOverview != nullptr && scatterPlot2dView->matrixViewSet()) {
-        QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(
-            glWidget, selectedScatterPlotOverview->getBoundingBox());
-        zoomAndPanAnimator.animateZoomAndPan();
+        scatterPlot2dView->zoomAndPanAnimation(selectedScatterPlotOverview->getBoundingBox());
         scatterPlot2dView->switchFromMatrixToDetailView(selectedScatterPlotOverview, true);
         selectedScatterPlotOverview = nullptr;
       } else if (!scatterPlot2dView->matrixViewSet()) {
         scatterPlot2dView->switchFromDetailViewToMatrixView();
-        QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget,
-                                                       scatterPlot2dView->getMatrixBoundingBox());
-        zoomAndPanAnimator.animateZoomAndPan();
+	scatterPlot2dView->zoomAndPanAnimation(scatterPlot2dView->getMatrixBoundingBox());
       }
 
       return true;

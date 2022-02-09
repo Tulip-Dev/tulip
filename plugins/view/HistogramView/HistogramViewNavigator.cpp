@@ -17,7 +17,6 @@
  *
  */
 
-#include <tulip/QtGlSceneZoomAndPanAnimator.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/Camera.h>
 
@@ -66,16 +65,12 @@ bool HistogramViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     return true;
   } else if (e->type() == QEvent::MouseButtonDblClick) {
     if (selectedHistoOverview != nullptr && histoView->smallMultiplesViewSet()) {
-      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget,
-                                                     selectedHistoOverview->getBoundingBox());
-      zoomAndPanAnimator.animateZoomAndPan();
+      histoView->zoomAndPanAnimation(selectedHistoOverview->getBoundingBox());
       histoView->switchFromSmallMultiplesToDetailedView(selectedHistoOverview);
       selectedHistoOverview = nullptr;
     } else if (!histoView->smallMultiplesViewSet()) {
       histoView->switchFromDetailedViewToSmallMultiples();
-      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget,
-                                                     histoView->getSmallMultiplesBoundingBox());
-      zoomAndPanAnimator.animateZoomAndPan();
+      histoView->zoomAndPanAnimation(histoView->getSmallMultiplesBoundingBox());
     }
 
     return true;

@@ -458,10 +458,8 @@ bool GlMainView::pickNodeEdge(const int x, const int y, node &n, edge &e, bool p
 }
 
 void GlMainView::zoomAndPanAnimation(const tlp::BoundingBox &boundingBox, const double duration) {
-  BoundingBox bb;
-  if (bb.isValid())
-    bb = boundingBox;
-  else {
+  BoundingBox bb(boundingBox);
+  if (!bb.isValid()) {
     auto scene = getGlMainWidget()->getScene();
     GlGraphInputData *inputData = scene->getGlGraphComposite()->getInputData();
     GlBoundingBoxSceneVisitor bbVisitor(inputData);
