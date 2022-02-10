@@ -139,7 +139,7 @@ void OctreeBundle::recQuad(const Coord fr[4], const Coord ba[4], const vector<no
     return;
   }
 
-  if (input.size() == 0 && (fr[0] - ba[2]).norm() < (minSize / (splitRatio)))
+  if (input.empty() && (fr[0] - ba[2]).norm() < (minSize / (splitRatio)))
     return;
 
   for (int i = 0; i < 4; ++i) {

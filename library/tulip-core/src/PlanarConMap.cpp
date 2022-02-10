@@ -546,7 +546,7 @@ void PlanarConMap::computeFaces() {
     for (auto n : nodes())
       nodesFaces.emplace(n, v_faces);
 
-    if (facesEdges.size() == 0) {
+    if (facesEdges.empty()) {
       vector<edge> v;
       facesEdges.emplace(f, std::move(v));
     }

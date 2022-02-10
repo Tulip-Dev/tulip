@@ -210,7 +210,7 @@ void CSVGraphMappingConfigurationWidget::selectProperties(const QString &title,
   }
 
   if (StringsListSelectionDialog::choose(title, graphProperties, selProperties, this)) {
-    if (selProperties.size() == 0) {
+    if (selProperties.empty()) {
       selProperties.push_back("viewLabel");
       button->setText("viewLabel");
     } else {
@@ -262,7 +262,7 @@ void CSVGraphMappingConfigurationWidget::selectColumns(const QString &title,
   }
 
   if (StringsListSelectionDialog::choose(title, tmpColumns, selColumns, this)) {
-    if (selColumns.size() == 0) {
+    if (selColumns.empty()) {
       columnIds.clear();
 
       for (unsigned int i = 0; i < columns.size(); ++i) {

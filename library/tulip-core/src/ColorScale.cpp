@@ -98,7 +98,7 @@ void ColorScale::setColorAtPos(const float pos, const Color &color) {
 }
 
 Color ColorScale::getColorAtPos(const float pos) const {
-  if (colorMap.size() == 0) {
+  if (colorMap.empty()) {
     return Color(255, 255, 255, 255);
   } else {
     Color startColor;

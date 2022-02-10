@@ -54,7 +54,7 @@ bool getEdgeEnclosingCircle(Circlef &circle, GlGraphInputData *inputData, edge e
   selection->setAllEdgeValue(false);
   selection->setEdgeValue(e, true);
 
-  if (inputData->getElementLayout()->getEdgeValue(e).size() == 0)
+  if (inputData->getElementLayout()->getEdgeValue(e).empty())
     return false;
 
   circle = getEnclosingCircle(inputData, selection);
