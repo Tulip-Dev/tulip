@@ -7,7 +7,7 @@
 # from a Material Design icons downladable zip archive
 # the second is the cpp file which must be copied as
 # library/tulip-ogl/src/TulipInitMaterialDesignIcons.cpp
-# The files materialdesignicons-webfont.ttf materialdesignicons-webfont.woff
+# The files materialdesignicons-webfont.ttf
 # and materialdesignicons-webfont.woff2 from the fonts sub directory
 # must be copied in library/tulip-ogl/bitmaps
 

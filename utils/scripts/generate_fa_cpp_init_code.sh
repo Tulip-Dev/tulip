@@ -7,7 +7,7 @@
 # after extracting files from a fontawesome downladable zip archive
 # the second is the cpp file which must be copied as
 # library/tulip-ogl/src/TulipInitFontAwesome.cpp
-# The files fa-[brands-400|regular-400|solid-900].[ttf|woff|woff2] from
+# The files fa-[brands-400|regular-400|solid-900].[ttf|woff2] from
 # the webfonts sub directory must be copied in library/tulip-ogl/bitmaps
 
 FA_VARIABLES_FILE=$1
