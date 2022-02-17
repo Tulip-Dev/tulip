@@ -33,6 +33,9 @@
   <key>CFBundleShortVersionString</key>
   <string>TLP_VERSION</string>
 
+  <key>LSArchitecturePriority</key>
+  <string>ARCH</string>
+
   <key>NOTE</key>
   <string>Created by LaBRI Visualization Team</string>
 
