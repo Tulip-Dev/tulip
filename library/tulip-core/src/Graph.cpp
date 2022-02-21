@@ -19,6 +19,7 @@
 
 #include <iomanip>
 #include <fstream>
+#include <sstream>
 #include <stack>
 #include <unordered_map>
 #include <unordered_set>
@@ -353,14 +354,24 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *p
     os = tlp::getOutputFileStream(filename, openMode);
   }
 
-  bool result;
-  DataSet ds;
+  bool result = false;
+  // check for open stream failure
+  if (os->fail()) {
+    std::stringstream sstr;
+    sstr << "Unable to open " << filename;
+    if (progress)
+      progress->setError(sstr.str());
 
-  if (data != nullptr)
-    ds = *data;
+    tlp::error() << exportPluginName << " failed: " << sstr.str() << std::endl;
+  } else {
+    DataSet ds;
 
-  ds.set("file", filename);
-  result = tlp::exportGraph(graph, *os, exportPluginName, ds, progress);
+    if (data != nullptr)
+      ds = *data;
+
+    ds.set("file", filename);
+    result = tlp::exportGraph(graph, *os, exportPluginName, ds, progress);
+  }
   delete os;
   return result;
 }
