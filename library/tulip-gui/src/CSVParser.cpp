@@ -155,8 +155,9 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
     return result ? handler->end(row, columnMax) : false;
   } else {
     std::stringstream ess;
-    ess << _fileName << ": " << strerror(errno);
+    ess << "Unable to open " << _fileName << ": " << strerror(errno);
     progress->setError(ess.str());
+    tlp::error() << ess.str() << std::endl;
     delete csvFile;
     return false;
   }
