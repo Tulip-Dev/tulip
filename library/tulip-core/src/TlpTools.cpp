@@ -557,7 +557,7 @@ std::ostream *tlp::getOutputFileStream(const std::string &filename,
 #endif
 }
 
-char * tlp::getStrError() {
+char *tlp::getStrError() {
   // avoid message translation
   setlocale(LC_MESSAGES, "C");
   return strerror(errno);
