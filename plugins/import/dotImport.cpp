@@ -98,7 +98,7 @@ public:
 
     if (!fd) {
       if (pluginProgress)
-        pluginProgress->setError(strerror(errno));
+        pluginProgress->setError(tlp::getStrError());
 
       return false;
     }

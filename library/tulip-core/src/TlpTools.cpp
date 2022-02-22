@@ -162,7 +162,7 @@ static void checkDirectory(std::string dir, bool tlpDirSet, bool throwEx) {
 
   if (!pathExist(dir)) {
     std::stringstream ess;
-    ess << "Error - " << dir << ":" << std::endl << strerror(errno) << std::endl;
+    ess << "Error - " << dir << ":" << std::endl << getStrError() << std::endl;
     if (tlpDirSet)
       ess << std::endl << "Check your TLP_DIR environment variable";
     if (throwEx)
@@ -555,6 +555,12 @@ std::ostream *tlp::getOutputFileStream(const std::string &filename,
   return new std::ofstream(filename.c_str(), open_mode);
 #endif
 #endif
+}
+
+char * tlp::getStrError() {
+  // avoid message translation
+  setlocale(LC_MESSAGES, "C");
+  return strerror(errno);
 }
 
 //=========================================================

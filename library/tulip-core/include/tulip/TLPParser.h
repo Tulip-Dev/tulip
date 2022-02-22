@@ -397,7 +397,7 @@ struct TLPParser {
     ess << "Error when parsing '" << value.c_str() << "' at line " << tokenParser->curLine + 1;
 
     if (errno)
-      ess << std::endl << strerror(errno);
+      ess << std::endl << tlp::getStrError();
     else if (!errorMsg.empty())
       ess << std::endl << errorMsg;
 

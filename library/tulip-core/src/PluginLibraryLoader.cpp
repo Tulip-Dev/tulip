@@ -355,7 +355,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive,
     loader->numberOfFiles(n);
 
   if (n < 0) {
-    _message += _pluginPath + " - " + std::string(strerror(errno));
+    _message += _pluginPath + " - " + std::string(tlp::getStrError());
     return false;
   }
 

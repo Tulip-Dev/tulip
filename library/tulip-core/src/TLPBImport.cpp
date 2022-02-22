@@ -76,7 +76,7 @@ bool TLPBImport::importGraph() {
 
     if (!pathExist(filename.c_str())) {
       std::stringstream ess;
-      ess << filename.c_str() << ": " << strerror(errno);
+      ess << filename.c_str() << ": " << tlp::getStrError();
       pluginProgress->setError(ess.str());
       tlp::error() << pluginProgress->getError() << std::endl;
       return errorTrap();

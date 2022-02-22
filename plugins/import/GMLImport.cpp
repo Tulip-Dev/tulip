@@ -570,7 +570,7 @@ public:
       return false;
 
     if (!pathExist(filename)) {
-      pluginProgress->setError(strerror(errno));
+      pluginProgress->setError(tlp::getStrError());
       return false;
     }
 

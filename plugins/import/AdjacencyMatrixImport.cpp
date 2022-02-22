@@ -130,7 +130,7 @@ Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E an
       return false;
 
     if (!pathExist(name2)) {
-      pluginProgress->setError(strerror(errno));
+      pluginProgress->setError(tlp::getStrError());
       return false;
     }
 

@@ -990,7 +990,7 @@ public:
 
       if (!pathExist(filename)) {
         std::stringstream ess;
-        ess << filename.c_str() << ": " << strerror(errno);
+        ess << filename.c_str() << ": " << tlp::getStrError();
         pluginProgress->setError(ess.str());
         tlp::warning() << pluginProgress->getError() << std::endl;
         return false;
