@@ -66,7 +66,7 @@ void CSVParsingConfigurationQWizardPage::parserChanged() {
   // Fill the preview widget
   int firstLine = parserConfigurationWidget->getFirstLineIndex();
   CSVParser *parser =
-      parserConfigurationWidget->buildParser(firstLine, firstLine + previewLineNumber);
+    parserConfigurationWidget->buildParser(firstLine, firstLine + previewLineNumber);
   // Force widget to clear content.
   previewTableWidget->begin();
 
@@ -75,11 +75,18 @@ void CSVParsingConfigurationQWizardPage::parserChanged() {
     SimplePluginProgressDialog progress(this);
     progress.showPreview(false);
     progress.setWindowTitle(tr("Parsing file"));
-    parser->parse(previewTableWidget, &progress);
-    unsigned int nbCommentsLines = previewTableWidget->getNbCommentsLines();
+    if (!parser->parse(previewTableWidget, &progress)) {
+      QMessageBox::critical(this,
+			    QString("CSV Parser failure"),
+			    QString(progress.getError().c_str()));
+      parserConfigurationWidget->clearFile();
+      previewTableWidget->setEnabled(false);
+    } else {
+      unsigned int nbCommentsLines = previewTableWidget->getNbCommentsLines();
 
-    if (nbCommentsLines)
-      parserConfigurationWidget->setNbIgnoredLines(nbCommentsLines);
+      if (nbCommentsLines)
+	parserConfigurationWidget->setNbIgnoredLines(nbCommentsLines);
+    }
   } else {
     previewTableWidget->setEnabled(false);
   }

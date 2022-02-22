@@ -25,6 +25,7 @@
 #include <tulip/PluginProgress.h>
 
 #include <fstream>
+#include <sstream>
 #include <cassert>
 #include <locale>
 
@@ -60,6 +61,7 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
 
   istream *csvFile = tlp::getInputFileStream(_fileName.c_str(), ifstream::in | ifstream::binary);
 
+  // check for open stream failure
   if (*csvFile) {
     // Real row number used to
     unsigned int row = 0;
@@ -152,6 +154,9 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
 
     return result ? handler->end(row, columnMax) : false;
   } else {
+    std::stringstream ess;
+    ess << _fileName << ": " << strerror(errno);
+    progress->setError(ess.str());
     delete csvFile;
     return false;
   }

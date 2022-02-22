@@ -48,6 +48,7 @@ public:
   CSVParser *buildParser(unsigned int firstLine = 0, unsigned int lastLine = UINT_MAX) const;
 
   std::string getFile() const;
+  void clearFile();
   bool isValid() const;
   QString getSeparator() const;
   char getTextSeparator() const;

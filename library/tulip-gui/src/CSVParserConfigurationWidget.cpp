@@ -187,6 +187,10 @@ void CSVParserConfigurationWidget::encodingChanged() {
 string CSVParserConfigurationWidget::getFile() const {
   return QStringToTlpString(ui->fileLineEdit->text());
 }
+void CSVParserConfigurationWidget::clearFile() {
+  ui->fileLineEdit->setText("");
+  lastOpenedFile.clear();
+}
 bool CSVParserConfigurationWidget::isValid() const {
   QString txt = ui->fileLineEdit->text();
   return !txt.isEmpty() && QFile::exists(txt);
