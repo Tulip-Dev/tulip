@@ -342,7 +342,13 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *p
   }
 
   if (gzip) {
-    os = tlp::getOgzstream(filename);
+    // ogzstream does not handle correctly open stream failures
+    // so first open a "standard" output stream
+    os = tlp::getOutputFileStream(filename, ios::out);
+    if (!os->fail()) {
+      delete os;
+      os = tlp::getOgzstream(filename);
+    }
   } else {
     std::ios_base::openmode openMode = ios::out;
 
@@ -357,11 +363,11 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *p
   // check for open stream failure
   if (os->fail()) {
     std::stringstream sstr;
-    sstr << "Unable to open " << filename;
+    sstr << "Unable to open " << filename << ": " << tlp::getStrError();
     if (progress)
       progress->setError(sstr.str());
 
-    tlp::error() << exportPluginName << " failed: " << sstr.str() << std::endl;
+    tlp::error() << exportPluginName << " failed - " << sstr.str() << std::endl;
   } else {
     DataSet ds;
 
