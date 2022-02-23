@@ -294,8 +294,7 @@ Graph *tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
   }
 
   dataSet.set("file::filename", filename);
-  Graph *graph = tlp::importGraph(importPluginName, dataSet, progress);
-  return graph;
+  return tlp::importGraph(importPluginName, dataSet, progress);
 }
 //=========================================================
 bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *progress,
@@ -414,6 +413,8 @@ Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgr
       delete graph;
 
     graph = nullptr;
+    if (!tmpProgress->getError().empty())
+      tlp::error() << tmpProgress->getError() << std::endl;
   } else {
     std::string filename;
 
