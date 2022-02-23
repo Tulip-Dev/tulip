@@ -557,10 +557,18 @@ std::ostream *tlp::getOutputFileStream(const std::string &filename,
 #endif
 }
 
+#ifndef LC_MESSAGES
+#define LC_MESSAGES LC_ALL
+#endif
 char *tlp::getStrError() {
+  // get current locale
+  auto loc = setlocale(LC_MESSAGES, nullptr);
   // avoid message translation
   setlocale(LC_MESSAGES, "C");
-  return strerror(errno);
+  auto msg = strerror(errno);
+  // restore locale
+  setlocale(LC_MESSAGES, loc);
+  return msg;
 }
 
 //=========================================================
