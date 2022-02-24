@@ -113,10 +113,18 @@ class GZSTREAM_SCOPE igzstream : public gzstreambase, public std::istream {
 public:
     igzstream() : std::istream( &buf) {} 
     igzstream( const char* name, int open_mode = std::ios::in)
-        : gzstreambase( name, open_mode), std::istream( &buf) {}  
+        : gzstreambase( name, open_mode), std::istream( &buf) {
+      // check for open failure
+      if (!buf.is_open())
+	clear(rdstate() | std::ios::badbit);
+    }
 #if defined(WIN32) && ZLIB_VERNUM >= 0x1270
     igzstream( const wchar_t* name, int open_mode = std::ios::in)
-        : gzstreambase( name, open_mode), std::istream( &buf) {}
+        : gzstreambase( name, open_mode), std::istream( &buf) {
+      // check for open failure
+      if (!buf.is_open())
+	clear(rdstate() | std::ios::badbit);
+    }
 #endif
     gzstreambuf* rdbuf() { return gzstreambase::rdbuf(); }
     void open( const char* name, int open_mode = std::ios::in) {
@@ -133,10 +141,18 @@ class GZSTREAM_SCOPE ogzstream : public gzstreambase, public std::ostream {
 public:
     ogzstream() : std::ostream( &buf) {}
     ogzstream( const char* name, int mode = std::ios::out)
-        : gzstreambase( name, mode), std::ostream( &buf) {}  
+        : gzstreambase( name, mode), std::ostream( &buf) {
+      // check for open failure
+      if (!buf.is_open())
+	clear(rdstate() | std::ios::badbit);
+    }
 #if defined(WIN32) && ZLIB_VERNUM >= 0x1270
     ogzstream( const wchar_t* name, int mode = std::ios::out)
-        : gzstreambase( name, mode), std::ostream( &buf) {}
+        : gzstreambase( name, mode), std::ostream( &buf) {
+      // check for open failure
+      if (!buf.is_open())
+	clear(rdstate() | std::ios::badbit);
+    }
 #endif
     gzstreambuf* rdbuf() { return gzstreambase::rdbuf(); }
     void open( const char* name, int open_mode = std::ios::out) {

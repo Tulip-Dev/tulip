@@ -17,7 +17,6 @@
  *
  */
 #include <fstream>
-#include <cerrno>
 #include <tulip/TLPBExportImport.h>
 #include <tulip/TlpTools.h>
 #include <tulip/GraphAbstract.h>
@@ -74,19 +73,11 @@ bool TLPBImport::importGraph() {
   if (dataSet->exists("file::filename")) {
     dataSet->get<std::string>("file::filename", filename);
 
-    if (!pathExist(filename.c_str())) {
-      std::stringstream ess;
-      ess << filename.c_str() << ": " << tlp::getStrError();
-      pluginProgress->setError(ess.str());
-      tlp::error() << pluginProgress->getError() << std::endl;
-      return errorTrap();
-    }
-
     bool gzip(false);
-    std::list<std::string> gext(gzipFileExtensions());
+    std::list<std::string> &&gexts = gzipFileExtensions();
 
-    for (std::list<std::string>::const_iterator it = gext.begin(); it != gext.end(); ++it) {
-      if (filename.rfind(*it) == (filename.length() - (*it).length())) {
+    for (const std::string &ext : gexts) {
+      if (filename.rfind(ext) == (filename.length() - ext.length())) {
         is = tlp::getIgzstream(filename);
         gzip = true;
         break;
@@ -97,8 +88,15 @@ bool TLPBImport::importGraph() {
       is = tlp::getInputFileStream(filename, std::ifstream::in | std::ifstream::binary);
   } else {
     pluginProgress->setError("No file to open: 'file::filename' parameter is missing");
-    tlp::error() << pluginProgress->getError() << std::endl;
-    return errorTrap();
+    return false;
+  }
+
+  // check for open stream failure
+  if (is->fail()) {
+    std::stringstream ess;
+    ess << "Unable to open " << filename << ": " << tlp::getStrError();
+    pluginProgress->setError(ess.str());
+    return (delete is, errorTrap());
   }
 
   pluginProgress->showPreview(false);
@@ -113,7 +111,6 @@ bool TLPBImport::importGraph() {
 
   if (!header.checkCompatibility()) {
     pluginProgress->setError("file is not in TLPB format.");
-    tlp::error() << pluginProgress->getError() << std::endl;
     return (delete is, errorTrap());
   }
 

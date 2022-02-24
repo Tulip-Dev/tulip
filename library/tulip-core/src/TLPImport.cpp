@@ -19,7 +19,6 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <cerrno>
 
 #include <tulip/GraphImpl.h>
 #include <tulip/BooleanProperty.h>
@@ -916,21 +915,6 @@ bool TLPGraphBuilder::addStruct(const std::string &structName, TLPBuilder *&newB
 }
 //================================================================================
 
-// Function to retrieve the original size of a file compressed with gzip.
-// The uncompressed file size (modulo 2^32) is stored in the last four bytes of a Gzip file.
-// So that method is unreliable if the original file size was greater than 4GB (which is pretty rare
-// for TLP files ...).
-static int getUncompressedSizeOfGzipFile(const std::string &gzipFilePath) {
-  std::istream *is = tlp::getInputFileStream(gzipFilePath.c_str(), std::ifstream::binary);
-  is->seekg(-4, is->end);
-  int uncompressedSize = 0;
-  is->read(reinterpret_cast<char *>(&uncompressedSize), 4);
-  delete is;
-  return uncompressedSize;
-}
-
-//================================================================================
-
 namespace tlp {
 
 /**
@@ -988,32 +972,48 @@ public:
     if (dataSet->exists("file::filename")) {
       dataSet->get<std::string>("file::filename", filename);
 
-      if (!pathExist(filename)) {
-        std::stringstream ess;
-        ess << filename.c_str() << ": " << tlp::getStrError();
-        pluginProgress->setError(ess.str());
-        tlp::warning() << pluginProgress->getError() << std::endl;
-        return false;
-      }
-
       std::list<std::string> &&gexts = gzipFileExtensions();
       bool gzip(false);
 
       for (const std::string &ext : gexts) {
         if (filename.rfind(ext) == (filename.length() - ext.length())) {
-          size = getUncompressedSizeOfGzipFile(filename);
-          input = tlp::getIgzstream(filename);
           gzip = true;
+          // we first open a "standard" stream to retrieve the original size
+          // of the file compressed with gzip.
+          // The uncompressed file size (modulo 2^32) is stored
+          // in the last four bytes of th gzipped file.
+          // This is unreliable if the original file size
+          // was greater than 4GB (which is pretty rare for TLP files ...)
+          input = tlp::getInputFileStream(filename, std::ifstream::binary);
+          if (input->fail())
+            break;
+          input->seekg(-4, input->end);
+          input->read(reinterpret_cast<char *>(&size), 4);
+          delete input;
+
+          input = tlp::getIgzstream(filename);
           break;
         }
       }
 
+      if (!gzip)
+        input = tlp::getInputFileStream(filename,
+					std::ifstream::in |
+					// consider file as binary
+					// to avoid pb using tellg
+					// on the input stream
+					std::ifstream::binary);
+
+      // check for open stream failure
+      if (input->fail()) {
+	std::stringstream ess;
+	ess << "Unable to open " << filename << ": " << tlp::getStrError();
+	pluginProgress->setError(ess.str());
+	delete input;
+	return false;
+      }
+
       if (!gzip) {
-        input = tlp::getInputFileStream(filename, std::ifstream::in |
-                                                      // consider file has binary
-                                                      // to avoid pb using tellg
-                                                      // on the input stream
-                                                      std::ifstream::binary);
         // get file size
         input->seekg(0, std::ios::end);
         size = input->tellg();
@@ -1034,7 +1034,6 @@ public:
 
     if (!result) {
       pluginProgress->setError(filename + ": " + pluginProgress->getError());
-      tlp::warning() << pluginProgress->getError() << std::endl;
     }
 
     delete input;
