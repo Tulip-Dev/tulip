@@ -997,20 +997,19 @@ public:
       }
 
       if (!gzip)
-        input = tlp::getInputFileStream(filename,
-					std::ifstream::in |
-					// consider file as binary
-					// to avoid pb using tellg
-					// on the input stream
-					std::ifstream::binary);
+        input = tlp::getInputFileStream(filename, std::ifstream::in |
+                                                      // consider file as binary
+                                                      // to avoid pb using tellg
+                                                      // on the input stream
+                                                      std::ifstream::binary);
 
       // check for open stream failure
       if (input->fail()) {
-	std::stringstream ess;
-	ess << "Unable to open " << filename << ": " << tlp::getStrError();
-	pluginProgress->setError(ess.str());
-	delete input;
-	return false;
+        std::stringstream ess;
+        ess << "Unable to open " << filename << ": " << tlp::getStrError();
+        pluginProgress->setError(ess.str());
+        delete input;
+        return false;
       }
 
       if (!gzip) {

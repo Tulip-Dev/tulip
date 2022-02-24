@@ -342,7 +342,7 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *p
   }
 
   if (gzip) {
-      os = tlp::getOgzstream(filename);
+    os = tlp::getOgzstream(filename);
   } else {
     std::ios_base::openmode openMode = ios::out;
 
