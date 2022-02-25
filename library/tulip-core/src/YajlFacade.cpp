@@ -104,12 +104,11 @@ static int parse_end_array(void *ctx) {
 
 void YajlParseFacade::parse(const std::string &filename) {
   // open a stream
-  std::istream *ifs = tlp::getInputFileStream(filename,
-					      std::ifstream::in |
-					      // consider file is binary
-					      // to avoid pb using tellg
-					      // on the input stream
-					      std::ifstream::binary);
+  std::istream *ifs = tlp::getInputFileStream(filename, std::ifstream::in |
+                                                            // consider file is binary
+                                                            // to avoid pb using tellg
+                                                            // on the input stream
+                                                            std::ifstream::binary);
 
   // check for open stream failure
   if (ifs->fail()) {

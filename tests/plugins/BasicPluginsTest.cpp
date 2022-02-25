@@ -232,9 +232,7 @@ void BasicPluginsTest::testImportPajek() {
   CPPUNIT_ASSERT(g == nullptr);
 
   // test all data/*.net files
-  std::vector<string> files {"data/NDactors.net",
-                             "data/NDwww.net",
-                             "data/netsience.net"};
+  std::vector<string> files{"data/NDactors.net", "data/NDwww.net", "data/netsience.net"};
 
   for (const auto &file : files) {
     ds.set("file::filename", file);
@@ -253,28 +251,28 @@ void BasicPluginsTest::testImportUCINET() {
   CPPUNIT_ASSERT(g == nullptr);
 
   // test all data/dl_*.txt files
-  std::vector<string> files {"data/dl_el1_test_labels_embedded.txt",
-                             "data/dl_el1_test_labels.txt",
-                             "data/dl_el1_test_multiple_labels_embedded.txt",
-                             "data/dl_el2_test2_labels_embedded.txt",
-                             "data/dl_el2_test_labels_embedded.txt",
-                             "data/dl_fm_test2.txt",
-                             "data/dl_fm_test3.txt",
-                             "data/dl_fm_test_labels_no_diag.txt",
-                             "data/dl_fm_test2_labels_no_diag.txt",
-                             "data/dl_fm_test_labels.txt",
-                             "data/dl_fm_test_multi_matrices.txt",
-                             "data/dl_fm_test_rect_labels_embedded.txt",
-                             "data/dl_fm_test_rect_labels.txt",
-                             "data/dl_fm_test_rect.txt",
-                             "data/dl_fm_test.txt",
-                             "data/dl_lh_test_labels_no_diag.txt",
-                             "data/dl_lh_test_labels.txt",
-                             "data/dl_nl1_test2_labels_embedded.txt",
-                             "data/dl_nl1_test2_labels.txt",
-                             "data/dl_nl1_test_labels_embedded.txt",
-                             "data/dl_nl1_test_labels.txt",
-                             "data/dl_nl2_test_row_col_labels_embedded.txt"};
+  std::vector<string> files{"data/dl_el1_test_labels_embedded.txt",
+                            "data/dl_el1_test_labels.txt",
+                            "data/dl_el1_test_multiple_labels_embedded.txt",
+                            "data/dl_el2_test2_labels_embedded.txt",
+                            "data/dl_el2_test_labels_embedded.txt",
+                            "data/dl_fm_test2.txt",
+                            "data/dl_fm_test3.txt",
+                            "data/dl_fm_test_labels_no_diag.txt",
+                            "data/dl_fm_test2_labels_no_diag.txt",
+                            "data/dl_fm_test_labels.txt",
+                            "data/dl_fm_test_multi_matrices.txt",
+                            "data/dl_fm_test_rect_labels_embedded.txt",
+                            "data/dl_fm_test_rect_labels.txt",
+                            "data/dl_fm_test_rect.txt",
+                            "data/dl_fm_test.txt",
+                            "data/dl_lh_test_labels_no_diag.txt",
+                            "data/dl_lh_test_labels.txt",
+                            "data/dl_nl1_test2_labels_embedded.txt",
+                            "data/dl_nl1_test2_labels.txt",
+                            "data/dl_nl1_test_labels_embedded.txt",
+                            "data/dl_nl1_test_labels.txt",
+                            "data/dl_nl2_test_row_col_labels_embedded.txt"};
 
   for (const auto &file : files) {
     ds.set("file::filename", file);
@@ -293,15 +291,10 @@ void BasicPluginsTest::testImportGEXF() {
   CPPUNIT_ASSERT(g == nullptr);
 
   // test all data/*.gexf files
-  std::vector<string> files {"data/basic.gexf",
-                             "data/data.gexf",
-                             "data/hierarchy1.gexf",
-                             "data/hierarchy2.gexf",
-                             "data/hierarchy3.gexf",
-                             "data/hierarchy4.gexf",
-                             "data/phylogeny.gexf",
-                             "data/viz.gexf",
-                             "data/WebAtlas_EuroSiS.gexf"};
+  std::vector<string> files{
+      "data/basic.gexf",      "data/data.gexf",       "data/hierarchy1.gexf",
+      "data/hierarchy2.gexf", "data/hierarchy3.gexf", "data/hierarchy4.gexf",
+      "data/phylogeny.gexf",  "data/viz.gexf",        "data/WebAtlas_EuroSiS.gexf"};
 
   for (const auto &file : files) {
     ds.set("file::filename", file);
