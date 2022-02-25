@@ -17,7 +17,6 @@
  *
  */
 
-#include <cerrno>
 #include <fstream>
 #include <unordered_map>
 
@@ -569,16 +568,20 @@ public:
     if (!dataSet->get<string>("file::filename", filename))
       return false;
 
-    if (!pathExist(filename)) {
-      pluginProgress->setError(tlp::getStrError());
-      return false;
+    bool result = false;
+    istream *is = tlp::getInputFileStream(filename);
+    // check for open stream failure
+    if (is->fail()) {
+      std::stringstream ess;
+      ess << "Unable to open " << filename << ": " << tlp::getStrError();
+      pluginProgress->setError(ess.str());
+    } else {
+      GMLParser<true> myParser(*is, new GMLGraphBuilder(graph));
+      myParser.parse();
+      result = true;
     }
-
-    istream *myFile = tlp::getInputFileStream(filename.c_str());
-    GMLParser<true> myParser(*myFile, new GMLGraphBuilder(graph));
-    myParser.parse();
-    delete myFile;
-    return true;
+    delete is;
+    return result;
   }
 };
 

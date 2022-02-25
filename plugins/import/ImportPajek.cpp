@@ -490,7 +490,15 @@ public:
       return false;
     }
 
-    std::istream *in = tlp::getInputFileStream(filename.c_str());
+    std::istream *in = tlp::getInputFileStream(filename);
+    // check for open stream failure
+    if (in->fail()) {
+      std::stringstream ess;
+      ess << "Unable to open " << filename << ": " << tlp::getStrError();
+      pluginProgress->setError(ess.str());
+      delete in;
+      return false;
+    }
 
     labels = graph->getProperty<StringProperty>("viewLabel");
     weights = graph->getProperty<DoubleProperty>("weights");

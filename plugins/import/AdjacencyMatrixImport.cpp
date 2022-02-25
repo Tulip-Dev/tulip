@@ -17,7 +17,6 @@
  *
  */
 
-#include <cerrno>
 #include <fstream>
 #include <sstream>
 #include <vector>
@@ -117,7 +116,6 @@ Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E an
     std::stringstream ess;
     ess << "Error parsing '" << s << "' at line :" << curLine + 1;
     pluginProgress->setError(ess.str());
-    tlp::warning() << pluginProgress->getError() << std::endl;
     return false;
   }
 
@@ -129,12 +127,16 @@ Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E an
           dataSet->get("file::name", name2)))
       return false;
 
-    if (!pathExist(name2)) {
-      pluginProgress->setError(tlp::getStrError());
+    std::istream *in = tlp::getInputFileStream(name2);
+    // check for open stream failure
+    if (in->fail()) {
+      std::stringstream ess;
+      ess << "Unable to open " << name2 << ": " << tlp::getStrError();
+      pluginProgress->setError(ess.str());
+      delete in;
       return false;
     }
 
-    std::istream *in = tlp::getInputFileStream(name2.c_str());
     unsigned int curLine = 0;
     DoubleProperty *metric = graph->getProperty<DoubleProperty>("viewMetric");
     StringProperty *stringP = graph->getProperty<StringProperty>("viewLabel");
@@ -255,7 +257,6 @@ Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E an
 
     pluginProgress->setError(std::string("The number of lines in file ") + name2 +
                              "\n is different from the number of found nodes.");
-    tlp::warning() << pluginProgress->getError() << std::endl;
     return false;
   }
 };

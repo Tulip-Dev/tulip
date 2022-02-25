@@ -939,7 +939,15 @@ public:
       return false;
     }
 
-    std::istream *in = tlp::getInputFileStream(filename.c_str());
+    std::istream *in = tlp::getInputFileStream(filename);
+    // check for open stream failure
+    if (in->fail()) {
+      std::stringstream ess;
+      ess << filename << ": " << tlp::getStrError();
+      pluginProgress->setError(ess.str());
+      delete in;
+      return false;
+    }
 
     stringstream errors;
     size_t lineNumber = 0;

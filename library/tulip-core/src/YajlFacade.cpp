@@ -24,7 +24,6 @@ extern "C" {
 #include <yajl/yajl_parse.h>
 #include <yajl/yajl_gen.h>
 }
-#include <cerrno>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
@@ -104,21 +103,22 @@ static int parse_end_array(void *ctx) {
 }
 
 void YajlParseFacade::parse(const std::string &filename) {
-  // check if file exists
-  if (!tlp::pathExist(filename)) {
+  // open a stream
+  std::istream *ifs = tlp::getInputFileStream(filename,
+					      std::ifstream::in |
+					      // consider file is binary
+					      // to avoid pb using tellg
+					      // on the input stream
+					      std::ifstream::binary);
+
+  // check for open stream failure
+  if (ifs->fail()) {
     std::stringstream ess;
-    ess << filename.c_str() << ": " << strerror(errno);
+    ess << "Unable to open " << filename << ": " << tlp::getStrError();
     _errorMessage = ess.str();
     _parsingSucceeded = false;
     return;
   }
-
-  // open a stream
-  std::istream *ifs = tlp::getInputFileStream(filename.c_str(), std::ifstream::in |
-                                                                    // consider file is binary
-                                                                    // to avoid pb using tellg
-                                                                    // on the input stream
-                                                                    std::ifstream::binary);
 
   // get length of file:
   ifs->seekg(0, std::ios::end);
