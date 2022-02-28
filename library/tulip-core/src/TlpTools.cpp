@@ -431,7 +431,7 @@ std::istream *tlp::getInputFileStream(const std::string &filename, std::ios_base
   std::wstring utf16filename;
   utf8::utf8to16(filename.begin(), filename.end(), std::back_inserter(utf16filename));
   return new std::ifstream(utf16filename.c_str(), mode);
-  #else
+#else
   // On Linux and Mac OS, UTF-8 encoded paths are supported by std::ofstream
   return new std::ifstream(filename, mode);
 #endif
