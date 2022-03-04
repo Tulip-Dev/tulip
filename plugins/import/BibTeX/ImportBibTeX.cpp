@@ -2084,7 +2084,8 @@ public:
       }
     } catch (xdkbib::parsing_error &e) {
       stringstream sstr;
-      sstr << "Error when parsing BibTex file " << filename << " at char " << e.column() << " of line " << e.line() << ": " << e.what() << std::endl;
+      sstr << "Error when parsing BibTex file " << filename << " at char " << e.column()
+           << " of line " << e.line() << ": " << e.what() << std::endl;
       pluginProgress->setError(sstr.str());
       result = false;
     }
