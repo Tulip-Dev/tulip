@@ -1482,6 +1482,8 @@ public:
     std::unordered_map<std::string, node> authorsMap;
     std::unordered_map<std::string, bool> publisMap;
 
+    bool result = true;
+
     try {
       xdkbib::File bibFile;
 
@@ -2082,10 +2084,9 @@ public:
       }
     } catch (xdkbib::parsing_error &e) {
       stringstream sstr;
-      sstr << "BibTeX file parsing error at char " << e.column() << " of line " << e.line() << ": "
-           << e.what() << std::endl;
-      tlp::error() << sstr.str();
+      sstr << "Error when parsing BibTex file " << filename << " at char " << e.column() << " of line " << e.line() << ": " << e.what() << std::endl;
       pluginProgress->setError(sstr.str());
+      result = false;
     }
 
     // remove unused properties
@@ -2097,22 +2098,24 @@ public:
         graph->delLocalProperty(labriAuthorsProp->getName());
     }
 
-    // layout graph with a bubble tree
-    if (createAuthNodes) {
-      // delete labri specific properties if not used
-      if (!labriTeamProp->hasNonDefaultValuatedNodes())
-        graph->delLocalProperty(labriTeamProp->getName());
+    if (result) {
+      // layout graph with a bubble tree
+      if (createAuthNodes) {
+        // delete labri specific properties if not used
+        if (!labriTeamProp->hasNonDefaultValuatedNodes())
+          graph->delLocalProperty(labriTeamProp->getName());
 
-      if (!fromLabriProp->hasNonDefaultValuatedNodes())
-        graph->delLocalProperty(fromLabriProp->getName());
+        if (!fromLabriProp->hasNonDefaultValuatedNodes())
+          graph->delLocalProperty(fromLabriProp->getName());
 
-      string err;
-      return graph->applyPropertyAlgorithm("FM^3 (OGDF)",
-                                           graph->getProperty<LayoutProperty>("viewLayout"), err,
-                                           nullptr, pluginProgress);
+        string err;
+        return graph->applyPropertyAlgorithm("FM^3 (OGDF)",
+                                             graph->getProperty<LayoutProperty>("viewLayout"), err,
+                                             nullptr, pluginProgress);
+      }
     }
 
-    return true;
+    return result;
   }
 };
 
