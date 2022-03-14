@@ -21,6 +21,7 @@
 #include <sstream>
 #include <string>
 #include <ctime>
+#include <unordered_map>
 
 #include <tulip/ExportModule.h>
 #include <tulip/Graph.h>
@@ -36,6 +37,24 @@
 
 using namespace std;
 using namespace tlp;
+
+// used to renumerate the hierarchy to be saved
+static unsigned int getSavedId(Graph* g = nullptr) {
+  static unsigned int nextSavedId = 0;
+  static unordered_map<unsigned int, unsigned int> ids;
+  if (g == nullptr) {
+    // reset
+    nextSavedId = 0;
+    ids.clear();
+    return 0;
+  }
+  auto id = g->getId();
+  auto it = ids.find(id);
+  if (it != ids.end())
+    return it->second;
+  ids[id] = nextSavedId;
+  return nextSavedId++;
+}
 
 static string convert(const string &tmp) {
   string newStr;
@@ -113,12 +132,12 @@ public:
     return edge(graph->edgePos(e));
   }
   //=====================================================
-  void saveGraphElements(ostream &os, Graph *g) {
+  void saveGraphElements(ostream &os, Graph *g, bool isSubGraph = true) {
     pluginProgress->setComment("Saving Graph Elements");
     pluginProgress->progress(progress, g->numberOfEdges() + g->numberOfNodes());
 
-    if (g->getSuperGraph() != g) {
-      os << "(cluster " << g->getId() << endl;
+    if (isSubGraph) {
+      os << "(cluster " << getSavedId(g) << endl;
 
       if (inGuiTestingMode())
         g->sortElts();
@@ -198,6 +217,9 @@ public:
         os << ")" << endl;
       }
     } else {
+      // ensure g is root graph
+      getSavedId(g);
+
       unsigned int nbElts = g->numberOfNodes();
 
       os << "(nb_nodes " << nbElts << ")" << endl;
@@ -248,19 +270,19 @@ public:
     for (Graph *sg : g->subGraphs())
       saveGraphElements(os, sg);
 
-    if (g->getSuperGraph() != g)
+    if (isSubGraph)
       os << ")" << endl;
   }
   //=====================================================
-  void saveLocalProperties(ostream &os, Graph *g) {
+  void saveLocalProperties(ostream &os, Graph *g, bool isSubGraph = true) {
     pluginProgress->setComment("Saving Graph Properties");
     progress = 0;
     Iterator<PropertyInterface *> *itP = nullptr;
 
-    if (g->getSuperGraph() == g) {
-      itP = g->getObjectProperties();
-    } else {
+    if (isSubGraph) {
       itP = g->getLocalObjectProperties();
+    } else {
+      itP = g->getObjectProperties();
     }
 
     int nonDefaultvaluatedElementCount = 1;
@@ -270,10 +292,10 @@ public:
       nonDefaultvaluatedElementCount += prop->numberOfNonDefaultValuatedEdges();
     }
 
-    if (g->getSuperGraph() == g) {
-      itP = g->getObjectProperties();
-    } else {
+    if (isSubGraph) {
       itP = g->getLocalObjectProperties();
+    } else {
+      itP = g->getObjectProperties();
     }
 
     for (PropertyInterface *prop : itP) {
@@ -281,13 +303,8 @@ public:
       tmp << "Saving Property [" << prop->getName() << "]";
       pluginProgress->setComment(tmp.str());
 
-      if (g->getSuperGraph() == g) {
-        os << "(property "
-           << " 0 " << prop->getTypename() << " ";
-      } else {
-        os << "(property "
-           << " " << g->getId() << " " << prop->getTypename() << " ";
-      }
+      os << "(property " << " " << getSavedId(g)
+	 << " " << prop->getTypename() << " ";
 
       os << "\"" << convert(prop->getName()) << "\"" << endl;
       string nDefault = prop->getNodeDefaultStringValue();
@@ -317,11 +334,11 @@ public:
         // sort nodes to ensure a predictable ordering of the output
         itN = new StableIterator<node>(itN, 0, true, true);
 
-      // when exporting the GraphProperty, if the exported graph
-      // is not the root graph we will have to check if the node pointed
+      // when exporting the GraphProperty
+      // we will have to check if the node pointed
       // subgraph is a descendant graph of this graph
-      bool checkForDescendantGraph =
-          (g->getId() != 0) && (prop->getTypename() == GraphProperty::propertyTypename);
+      bool checkForMetaGraph =
+        prop->getTypename() == GraphProperty::propertyTypename;
       while (itN->hasNext()) {
         auto itn = itN->next();
         if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
@@ -336,14 +353,18 @@ public:
 
           if (pos != string::npos)
             tmp.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
-        } else if (checkForDescendantGraph) {
+        } else if (checkForMetaGraph) {
           unsigned int id = strtoul(tmp.c_str(), nullptr, 10);
 
           // no need to record the current node value if
           // the pointed subgraph is not a descendant
           // of the currently exported graph
-          if (!graph->getDescendantGraph(id))
+	  auto sg = graph->getDescendantGraph(id);
+          if (!sg)
             continue;
+	  tmp.clear();
+	  // get the saved id
+	  tmp = std::to_string(getSavedId(sg));
         }
 
         os << "(node " << getNode(itn).id << " \"" << convert(tmp) << "\")" << endl;
@@ -411,8 +432,8 @@ public:
     }
   }
   //=====================================================
-  void saveProperties(ostream &os, Graph *g) {
-    saveLocalProperties(os, g);
+  void saveProperties(ostream &os, Graph *g, bool isSubGraph = true) {
+    saveLocalProperties(os, g, isSubGraph);
 
     for (Graph *sg : g->subGraphs())
       saveProperties(os, sg);
@@ -448,18 +469,13 @@ public:
         }
       }
 
-      if (g->getSuperGraph() == g) {
-        os << "(graph_attributes 0 ";
-      } else {
-        os << "(graph_attributes " << g->getId() << " ";
-      }
+      os << "(graph_attributes " << getSavedId(g) << " ";
 
       DataSet::write(os, attributes);
       os << ")" << endl;
     }
 
     // save subgraph attributes
-
     for (Graph *sg : g->subGraphs())
       saveAttributes(os, sg);
   }
@@ -471,11 +487,6 @@ public:
   }
 
   bool exportGraph(ostream &os) override {
-
-    // change graph parent in hierarchy temporarily to itself as
-    // it will be the new root of the exported hierarchy
-    Graph *superGraph = graph->getSuperGraph();
-    graph->setSuperGraph(graph);
 
     string format(TLP_FILE_VERSION);
 
@@ -512,8 +523,10 @@ public:
     // comments
     os << "(comments \"" << comments << "\")" << endl;
 
-    saveGraphElements(os, graph);
-    saveProperties(os, graph);
+    // initialize graph hierarchy ids
+    getSavedId();
+    saveGraphElements(os, graph, false);
+    saveProperties(os, graph, false);
     saveAttributes(os, graph);
 
     // Save views
@@ -522,8 +535,6 @@ public:
 
     os << ')' << endl; // end of (tlp ...
 
-    // restore original parent in hierarchy
-    graph->setSuperGraph(superGraph);
     return true;
   }
 };

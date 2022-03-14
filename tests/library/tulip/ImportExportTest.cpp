@@ -666,8 +666,6 @@ void ImportExportTest::testGraphsTopologiesAreEqual(tlp::Graph *first, tlp::Grap
     string name(firstSub->getName());
     Graph *secondSub = second->getDescendantGraph(name);
     CPPUNIT_ASSERT_MESSAGE("a subgraph is missing", secondSub != nullptr);
-    CPPUNIT_ASSERT_MESSAGE("subgraphs have not the same id",
-                           firstSub->getId() == secondSub->getId());
   }
 }
 
