@@ -30,7 +30,7 @@ using namespace tlp;
 using namespace std;
 
 // used to renumerate the hierarychy to be saved
-static unsigned int getSavedId(Graph* g = nullptr) {
+static unsigned int getSavedId(Graph *g = nullptr) {
   static unsigned int nextSavedId = 0;
   static unordered_map<unsigned int, unsigned int> ids;
   if (g == nullptr) {
@@ -325,8 +325,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       os.write(reinterpret_cast<const char *>(&size), sizeof(size));
       os.write(reinterpret_cast<const char *>(nameOrType.data()), size);
       // write graph id
-      unsigned int propGraphId =
-	(i < numGraphProperties) ? 0 : getSavedId(prop->getGraph());
+      unsigned int propGraphId = (i < numGraphProperties) ? 0 : getSavedId(prop->getGraph());
 
       os.write(reinterpret_cast<const char *>(&propGraphId), sizeof(propGraphId));
       // special treament for pathnames view properties
@@ -396,8 +395,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         // when exporting the GraphProperty
         // we will have to check if the node pointed
         // subgraph is a descendant graph of this graph
-        bool checkForMetaGraph =
-	  prop->getTypename() == GraphProperty::propertyTypename;
+        bool checkForMetaGraph = prop->getTypename() == GraphProperty::propertyTypename;
         for (auto n : prop->getNonDefaultValuatedNodes(propGraphId ? nullptr : graph)) {
           // write current node reindexed id
           size = getNode(n).id;
@@ -414,7 +412,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
           } else if (checkForMetaGraph) {
             string tmp = prop->getNodeStringValue(n);
             unsigned int id = strtoul(tmp.c_str(), nullptr, 10);
-	    auto sg = graph->getDescendantGraph(id);
+            auto sg = graph->getDescendantGraph(id);
             // record a null value if the node pointed subgraph
             // is not a descendant of the currently exported graph
             UnsignedIntegerType::writeb(s, sg ? getSavedId(sg) : 0);

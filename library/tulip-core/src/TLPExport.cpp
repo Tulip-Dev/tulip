@@ -39,7 +39,7 @@ using namespace std;
 using namespace tlp;
 
 // used to renumerate the hierarchy to be saved
-static unsigned int getSavedId(Graph* g = nullptr) {
+static unsigned int getSavedId(Graph *g = nullptr) {
   static unsigned int nextSavedId = 0;
   static unordered_map<unsigned int, unsigned int> ids;
   if (g == nullptr) {
@@ -303,8 +303,8 @@ public:
       tmp << "Saving Property [" << prop->getName() << "]";
       pluginProgress->setComment(tmp.str());
 
-      os << "(property " << " " << getSavedId(g)
-	 << " " << prop->getTypename() << " ";
+      os << "(property "
+         << " " << getSavedId(g) << " " << prop->getTypename() << " ";
 
       os << "\"" << convert(prop->getName()) << "\"" << endl;
       string nDefault = prop->getNodeDefaultStringValue();
@@ -337,8 +337,7 @@ public:
       // when exporting the GraphProperty
       // we will have to check if the node pointed
       // subgraph is a descendant graph of this graph
-      bool checkForMetaGraph =
-        prop->getTypename() == GraphProperty::propertyTypename;
+      bool checkForMetaGraph = prop->getTypename() == GraphProperty::propertyTypename;
       while (itN->hasNext()) {
         auto itn = itN->next();
         if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
@@ -359,12 +358,12 @@ public:
           // no need to record the current node value if
           // the pointed subgraph is not a descendant
           // of the currently exported graph
-	  auto sg = graph->getDescendantGraph(id);
+          auto sg = graph->getDescendantGraph(id);
           if (!sg)
             continue;
-	  tmp.clear();
-	  // get the saved id
-	  tmp = std::to_string(getSavedId(sg));
+          tmp.clear();
+          // get the saved id
+          tmp = std::to_string(getSavedId(sg));
         }
 
         os << "(node " << getNode(itn).id << " \"" << convert(tmp) << "\")" << endl;
