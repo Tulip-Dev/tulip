@@ -143,6 +143,12 @@ TulipMainWindow::~TulipMainWindow() {
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 void TulipMainWindow::checkPython() {
+#if defined(__APPLE__)
+  // no need to check when in mac bundle
+  auto appDir = QApplication::applicationDirPath();
+  if (appDir.contains(".app/Contents/"))
+    return;
+#endif
   if (!PythonVersionChecker::isPythonVersionMatching()) {
 
     QStringList installedPythons = PythonVersionChecker::installedVersions();
