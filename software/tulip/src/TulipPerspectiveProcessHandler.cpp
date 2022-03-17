@@ -105,20 +105,15 @@ void TulipPerspectiveProcessHandler::createPerspective(const QString &perspectiv
   env.insert("STDERR_NO_ANSI_ESCAPES", "1");
   process->setProcessEnvironment(env);
 #endif
+#if defined(__APPLE__)
+  appDir.cd("../bin");
+#endif
   connect(process, SIGNAL(error(QProcess::ProcessError)), this,
           SLOT(perspectiveCrashed(QProcess::ProcessError)));
   connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this,
           SLOT(perspectiveFinished(int, QProcess::ExitStatus)));
   process->setProcessChannelMode(QProcess::ForwardedChannels);
-#ifdef __APPLE__
-  auto current = QOperatingSystemVersion::current();
-  // since Big sur (10.16 or 11.x)
-  if ((current.majorVersion() > 10) ||
-      ((current.majorVersion() == 10) && current.minorVersion() > 15))
-    process->start(appDir.absoluteFilePath("terminal_launch_perspective"), args);
-  else
-#endif
-    process->start(appDir.absoluteFilePath("tulip_perspective"), args);
+  process->start(appDir.absoluteFilePath("tulip_perspective"), args);
 
   _processInfo[process] = PerspectiveProcessInfo(perspective, parameters, file, perspectiveId);
 }

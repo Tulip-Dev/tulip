@@ -91,7 +91,7 @@ mv bin/tulip MacOS/Tulip
 # they are suffixed by .so instead of .dylib)
 if [ "$PYTHON_BUILD" = "ON" ]
 then
-${QT_BINARY_DIR}/macdeployqt ${DEST_DIR}/application/Tulip.app -executable=${DEST_DIR}/application/Tulip.app/Contents/bin/tulip_perspective -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/_tulip.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulipgui/native/_tulipgui.so
+${QT_BINARY_DIR}/macdeployqt ${DEST_DIR}/application/Tulip.app -executable=${DEST_DIR}/application/Tulip.app/Contents/bin/tulip_perspective -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/_tulip.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/_stl.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/sip.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulipgui/native/_tulipgui.so -executable=${DEST_DIR}/application/Tulip.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Resources/Python.app/Contents/MacOS/Python
 # ensure embedded python framework will be found
 # when loading all libs related to python
 install_name_tool -change @PYTHON_DIR_PATH@/Python ${AROBASE}loader_path/../../../Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Python ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip/perspective/libGraphPerspective-*.dylib
@@ -105,68 +105,11 @@ install_name_tool -change @PYTHON_DIR_PATH@/Python ${AROBASE}loader_path/../../.
 # the external modules needed by the user
 install_name_tool -change @PYTHON_DIR_PATH@/Python ${AROBASE}executable_path/../Python ${DEST_DIR}/application/Tulip*.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/bin/python@PYTHON_VERSION@
 install_name_tool -change @PYTHON_DIR_PATH@/Python @executable_path/../../../../Python ${DEST_DIR}/application/Tulip*.app/Contents/Frameworks/Python.framework/Versions/@PYTHON_VERSION@/Resources/Python.app/Contents/MacOS/Python
-# ensure libomp will also be found
-install_name_tool -change /opt/local/lib/libomp/libomp.dylib ${AROBASE}loader_path/../../../../../Frameworks/libomp.dylib ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip/python/tulip/native/sip.so
-install_name_tool -change /opt/local/lib/libomp/libomp.dylib ${AROBASE}loader_path/../../../../../Frameworks/libomp.dylib ${DEST_DIR}/application/Tulip*.app/Contents/lib/tulip/python/tulip/native/_stl.so
 else
 ${QT_BINARY_DIR}/macdeployqt ${DEST_DIR}/application/Tulip.app -executable=${DEST_DIR}/application/Tulip.app/Contents/bin/tulip_perspective
 fi
-mv MacOS/Tulip bin/tulip
 # rename
 mv ${DEST_DIR}/application/Tulip.app ${DEST_DIR}/application/${APP_NAME}-@TulipVersion@${SUFFIX}.app
-
-# create launcher
-cat > MacOS/Tulip <<EOF
-#!/bin/sh
-
-wd="\${0%/*}"
-cd "\$wd/.."
-
-export DYLD_FRAMEWORK_PATH="\$(pwd)/Frameworks"
-export DYLD_FALLBACK_LIBRARY_PATH="\$(pwd)/Frameworks"
-export QT_QPA_PLATFORM_PLUGIN_PATH="\$(pwd)/PlugIns/platforms"
-export QT_PLUGIN_PATH="\$(pwd)/PlugIns"
-if [ -d ./Frameworks/Python.framework/Versions ]; then
-# ensure pip external modules can be installed and used through the gui
-  PY_VERSION=\$(ls ./Frameworks/Python.framework/Versions)
-  export PATH="\$(pwd)/Frameworks/Python.framework/Versions/\$PY_VERSION/bin:\$PATH"
-  export DYLD_LIBRARY_PATH="\$(pwd)/Frameworks/Python.framework/Versions/\$PY_VERSION/lib"
-fi
-
-# ensure execution of tulip_perspective will not be blocked
-xattr -d com.apple.quarantine ./bin/tulip_perspective
-# QTBUG-87014 workaround
-export QT_MAC_WANTS_LAYER=1
-"\$(pwd)"/bin/tulip
-
-EOF
-# make it executable
-chmod +x MacOS/Tulip
-
-# create perpective launchers
-# needed to launch perspective on Big Sur
-cat > bin/terminal_launch_perspective <<EOF
-#!/bin/bash
-cmd="tell application \"Terminal\" to do script \"\${0%/*}/launch_perspective "
-for arg in "\$@"; do
-  arg="\${arg//\\\\/\\\\\\\}"
-  cmd="\$cmd \\\\\"\${arg//\"/\\\\\"}\\\\\""
-done
-
-osascript -e "\$cmd\""
-
-EOF
-cat > bin/launch_perspective <<EOF
-#!/bin/bash
-# QTBUG-87014 workaround
-export QT_MAC_WANTS_LAYER=1
-\${0%/*}/tulip_perspective "\$@"
-osascript -e 'tell application "Terminal" to close first window' & exit
-
-EOF
-
-# make them executable
-chmod +x bin/*launch_perspective
 
 if [ "$PYTHON_BUILD" = "ON" ]
 then

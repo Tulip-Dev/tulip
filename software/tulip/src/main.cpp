@@ -41,6 +41,7 @@
 #if defined(__APPLE__)
 #include <sys/types.h>
 #include <signal.h>
+#include <tulip/PythonVersionChecker.h>
 #endif
 
 #ifdef WIN32
@@ -152,6 +153,29 @@ int main(int argc, char **argv) {
   }
 
   showAgent = showAgent || fileToOpen.isEmpty();
+
+#if defined(__APPLE__)
+  auto appDir = QApplication::applicationDirPath();
+  if (appDir.contains(".app/Contents/")) {
+    // customize env when in macOS bundle
+    auto path = appDir;
+    // ensure to find all libs needed by tulip_perspective
+    qputenv("DYLD_FRAMEWORK_PATH", path.append("/Frameworks").toLocal8Bit());
+    qputenv("DYLD_FALLBACK_LIBRARY_PATH", path.toLocal8Bit());
+    qputenv("DYLD_LIBRARY_PATH", path.toLocal8Bit());
+    path = appDir;
+    qputenv("QT_PLUGIN_PATH", path.append("/PlugIns").toLocal8Bit());
+    qputenv("QT_QPA_PLATFORM_PLUGIN_PATH=", path.append("/platforms").toLocal8Bit());
+    auto pyv = tlp::PythonVersionChecker::compiledVersion();
+    if (!pyv.isEmpty()) {
+      // ensure pip external modules can be installed and used through the gui
+      path = appDir;
+      qputenv("DYLD_LIBRARY_PATH", path.append("/Frameworks/Python.framework/Versions/").append(pyv).append("/lib:").append(qgetenv("DYLD_LIBRARY_PATH")).toLocal8Bit());
+      path = appDir;
+      qputenv("PATH", path.append("/Frameworks/Python.framework/Versions/").append(pyv).append("/bin:").append(qgetenv("PATH")).toLocal8Bit());
+    }
+  }
+#endif
 
   checkTulipRunning(perspName, fileToOpen, showAgent);
   sendUsageStatistics();
