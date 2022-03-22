@@ -43,9 +43,8 @@ using namespace std;
 /** \file
  *  \brief - Import GEXF format graph file.
  * This plugin imports a graph from a file in GEXF format,<br/>
- * as it is described in the XML Schema 1.2 specification (https://gexf.net/schema.html). Dynamic mode
- * is not yet supported.
- *  <b>HISTORY</b>
+ * as it is described in the XML Schema 1.2 specification (https://gexf.net/schema.html). Dynamic
+ * mode is not yet supported. <b>HISTORY</b>
  *
  *  - 04/06/2012 Version 1.0: Initial release
  *
@@ -64,13 +63,14 @@ static const char *paramHelp[] = {
 class GEXFImport : public ImportModule {
 
 public:
-  PLUGININFORMATION("GEXF", "Antoine LAMBERT", "05/05/2010",
-                    "<p>Supported extensions: gexf</p><p>Imports a new graph from a file in the "
-                    "GEXF input format<br/>as it is described in the XML Schema 1.2 specification<br/>"
-                    "(<a "
-                    "href=\"https://gexf.net/schema.html\">https://gexf.net/"
-                    "schema.html</a>).</p><p>Warning: dynamic mode is not supported.</p>",
-                    "1.1", "File")
+  PLUGININFORMATION(
+      "GEXF", "Antoine LAMBERT", "05/05/2010",
+      "<p>Supported extensions: gexf</p><p>Imports a new graph from a file in the "
+      "GEXF input format<br/>as it is described in the XML Schema 1.2 specification<br/>"
+      "(<a "
+      "href=\"https://gexf.net/schema.html\">https://gexf.net/"
+      "schema.html</a>).</p><p>Warning: dynamic mode is not supported.</p>",
+      "1.1", "File")
   GEXFImport(const PluginContext *context)
       : ImportModule(context), viewLayout(nullptr), viewSize(nullptr), viewColor(nullptr),
         viewLabel(nullptr), viewShape(nullptr), nodesHaveCoordinates(false) {
