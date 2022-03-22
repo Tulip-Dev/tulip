@@ -43,7 +43,7 @@ using namespace std;
 /** \file
  *  \brief - Import GEXF format graph file.
  * This plugin imports a graph from a file in GEXF format,<br/>
- * as it is described in the XML Schema 1.2draft (http://gexf.net/format/schema.html). Dynamic mode
+ * as it is described in the XML Schema 1.2 specification (https://gexf.net/schema.html). Dynamic mode
  * is not yet supported.
  *  <b>HISTORY</b>
  *
@@ -66,9 +66,9 @@ class GEXFImport : public ImportModule {
 public:
   PLUGININFORMATION("GEXF", "Antoine LAMBERT", "05/05/2010",
                     "<p>Supported extensions: gexf</p><p>Imports a new graph from a file in the "
-                    "GEXF input format<br/>as it is described in the XML Schema 1.2 draft<br/>"
+                    "GEXF input format<br/>as it is described in the XML Schema 1.2 specification<br/>"
                     "(<a "
-                    "href=\"http://gexf.net/format/schema.html\">http://gexf.net/format/"
+                    "href=\"https://gexf.net/schema.html\">https://gexf.net/"
                     "schema.html</a>).</p><p>Warning: dynamic mode is not supported.</p>",
                     "1.1", "File")
   GEXFImport(const PluginContext *context)
