@@ -125,8 +125,7 @@ void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu) {
   for (auto inheritedProp : graph->getInheritedObjectProperties()) {
     StringProperty *prop = dynamic_cast<StringProperty *>(inheritedProp);
     if (prop != nullptr) {
-      if (prop->hasNonDefaultValuatedNodes(graph) ||
-          prop->hasNonDefaultValuatedEdges(graph))
+      if (prop->hasNonDefaultValuatedNodes(graph) || prop->hasNonDefaultValuatedEdges(graph))
         props.insert(prop->getName());
     }
   }
@@ -134,8 +133,7 @@ void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu) {
   for (auto localProp : graph->getLocalObjectProperties()) {
     StringProperty *prop = dynamic_cast<StringProperty *>(localProp);
     if (prop != nullptr) {
-      if (prop->hasNonDefaultValuatedNodes(graph) ||
-          prop->hasNonDefaultValuatedEdges(graph))
+      if (prop->hasNonDefaultValuatedNodes(graph) || prop->hasNonDefaultValuatedEdges(graph))
         props.insert(prop->getName());
     }
   }
