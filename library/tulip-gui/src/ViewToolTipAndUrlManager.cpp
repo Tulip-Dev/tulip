@@ -120,19 +120,24 @@ void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu) {
   if (_urlPropName.empty())
     action->setChecked(true);
   action->setToolTip(QString("The graph elements have no associated web page"));
-  // get all existing StringProperty
+  // get all existing StringProperty with non default valuated nodes or edges
   std::set<std::string> props;
   for (auto inheritedProp : graph->getInheritedObjectProperties()) {
     StringProperty *prop = dynamic_cast<StringProperty *>(inheritedProp);
-
-    if (prop != nullptr)
-      props.insert(prop->getName());
+    if (prop != nullptr) {
+      if (prop->hasNonDefaultValuatedNodes(graph) ||
+          prop->hasNonDefaultValuatedEdges(graph))
+        props.insert(prop->getName());
+    }
   }
 
   for (auto localProp : graph->getLocalObjectProperties()) {
     StringProperty *prop = dynamic_cast<StringProperty *>(localProp);
-    if (prop != nullptr)
-      props.insert(prop->getName());
+    if (prop != nullptr) {
+      if (prop->hasNonDefaultValuatedNodes(graph) ||
+          prop->hasNonDefaultValuatedEdges(graph))
+        props.insert(prop->getName());
+    }
   }
 
   // insert the StringProperty found
