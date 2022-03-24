@@ -82,10 +82,9 @@ TulipMainWindow::TulipMainWindow(QWidget *parent)
     title += TULIP_MM_VERSION;
 
   setWindowTitle(title);
-  _ui->mainTitle->setText(
-      QString("<html><head/><body><p align=\"center\"><span style=\""
-              "font-size:18pt; font-weight:600;\">") +
-      title + "</span></p></body></html>");
+  _ui->mainTitle->setText(QString("<html><head/><body><p align=\"center\"><span style=\""
+                                  "font-size:18pt; font-weight:600;\">") +
+                          title + "</span></p></body></html>");
 
   connect(_ui->welcomePageChooser, SIGNAL(clicked()), this, SLOT(pageChooserClicked()));
   connect(_ui->pluginsPageChooser, SIGNAL(clicked()), this, SLOT(pageChooserClicked()));
