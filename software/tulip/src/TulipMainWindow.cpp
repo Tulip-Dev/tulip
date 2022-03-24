@@ -83,7 +83,7 @@ TulipMainWindow::TulipMainWindow(QWidget *parent)
 
   setWindowTitle(title);
   _ui->mainTitle->setText(
-      QString("<html><head/><body><p align=\"center\"><span style=\" font-family:'MS Shell Dlg 2'; "
+      QString("<html><head/><body><p align=\"center\"><span style=\""
               "font-size:18pt; font-weight:600;\">") +
       title + "</span></p></body></html>");
 

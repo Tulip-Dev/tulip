@@ -45,7 +45,7 @@
        <item>
         <widget class="QLabel" name="label_5">
          <property name="text">
-          <string>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:13px;&quot;&gt;Import data on&lt;/p&gt;</string>
+          <string>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:13px;&quot;&gt;Import data on&lt;/p&gt;</string>
          </property>
         </widget>
        </item>
@@ -124,8 +124,8 @@
          <item>
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:19px&quot;&gt;&lt;b&gt;Import data on new entities (nodes)&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:13px;&quot;&gt;Create a new entity (node) for each row in the file and import the data of the columns selected in the &lt;b&gt;Data selection&lt;/b&gt; page as property values of the created entities (nodes).&lt;br/&gt;&lt;br/&gt;WARNING: If you want to &lt;u&gt;remove duplicate entities&lt;/u&gt; in your data, choose &amp;quot;Existing entities (nodes)&amp;quot; in the list on the left  and check the then displayed &amp;quot;Create missing entities&amp;quot; option.&lt;/p&gt;</string>
+            <string>&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:19px&quot;&gt;&lt;b&gt;Import data on new entities (nodes)&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:13px;&quot;&gt;Create a new entity (node) for each row in the file and import the data of the columns selected in the &lt;b&gt;Data selection&lt;/b&gt; page as property values of the created entities (nodes).&lt;br/&gt;&lt;br/&gt;WARNING: If you want to &lt;u&gt;remove duplicate entities&lt;/u&gt; in your data, choose &amp;quot;Existing entities (nodes)&amp;quot; in the list on the left  and check the then displayed &amp;quot;Create missing entities&amp;quot; option.&lt;/p&gt;</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -164,8 +164,8 @@
             </size>
            </property>
            <property name="text">
-            <string>&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size: 19px;&quot;&gt;&lt;b&gt;Import data on new relations (edges)&lt;/b&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:13px;&quot;&gt;Create a new relation (edge) for each row between a source entity(node) and a destination entity(node) and import the row data of the columns selected in the &lt;b&gt;Data selection&lt;/b&gt; page on the created relation.&lt;/p&gt;</string>
+            <string>&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size: 19px;&quot;&gt;&lt;b&gt;Import data on new relations (edges)&lt;/b&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:13px;&quot;&gt;Create a new relation (edge) for each row between a source entity(node) and a destination entity(node) and import the row data of the columns selected in the &lt;b&gt;Data selection&lt;/b&gt; page on the created relation.&lt;/p&gt;</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -216,7 +216,7 @@
               </size>
              </property>
              <property name="text">
-              <string>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:13px;&quot;&gt;The above selected columns specify the identifiers of the source and destination entities.&lt;br/&gt;For each row, values in the 'Source/Destination columns' are compared, respectively, to the values in the 'Source/Destination properties' (see below) for existing node entities and mapped to the first matching node.&lt;br/&gt;&lt;/p&gt;</string>
+              <string>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:13px;&quot;&gt;The above selected columns specify the identifiers of the source and destination entities.&lt;br/&gt;For each row, values in the 'Source/Destination columns' are compared, respectively, to the values in the 'Source/Destination properties' (see below) for existing node entities and mapped to the first matching node.&lt;br/&gt;&lt;/p&gt;</string>
              </property>
              <property name="wordWrap">
               <bool>true</bool>
@@ -320,7 +320,7 @@
          <item>
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:19px; font-weight:600;&quot;&gt;Import data on existing entities (nodes)&lt;/span&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:19px;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:13px;&quot;&gt;Import the row data of the columns selected in the &lt;/span&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:13px; font-weight:600;&quot;&gt;Data selection&lt;/span&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:13px;&quot;&gt; page on existing entities (nodes). &lt;br/&gt;&lt;br/&gt;For each row, values in the 'Columns identifier' are compared to the values in the 'Properties identifier' (see below) for existing node entities; the row data are then imported as property values of the first matching node entity.&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:19px; font-weight:600;&quot;&gt;Import data on existing entities (nodes)&lt;/span&gt;&lt;span style=&quot; font-size:19px;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:13px;&quot;&gt;Import the row data of the columns selected in the &lt;/span&gt;&lt;span style=&quot; font-size:13px; font-weight:600;&quot;&gt;Data selection&lt;/span&gt;&lt;span style=&quot; font-size:13px;&quot;&gt; page on existing entities (nodes). &lt;br/&gt;&lt;br/&gt;For each row, values in the 'Columns identifier' are compared to the values in the 'Properties identifier' (see below) for existing node entities; the row data are then imported as property values of the first matching node entity.&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="textFormat">
             <enum>Qt::RichText</enum>
@@ -412,8 +412,8 @@
          <item>
           <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size: 19px;&quot;&gt;&lt;b&gt;Import data on existing relations (edges)&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:13px;&quot;&gt;Import the row data of the columns selected in the previous &lt;b&gt;Data selection&lt;/b&gt; page on the existing relations (edges). &lt;br/&gt;&lt;br/&gt;For each row, values in the 'Columns identifier' are compared to the values in the 'Properties identifier' (see below) for existing relations; the row data are then imported as property values of the first matching relation.&lt;br /&gt;&lt;/p&gt;</string>
+            <string>&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size: 19px;&quot;&gt;&lt;b&gt;Import data on existing relations (edges)&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:13px;&quot;&gt;Import the row data of the columns selected in the previous &lt;b&gt;Data selection&lt;/b&gt; page on the existing relations (edges). &lt;br/&gt;&lt;br/&gt;For each row, values in the 'Columns identifier' are compared to the values in the 'Properties identifier' (see below) for existing relations; the row data are then imported as property values of the first matching relation.&lt;br /&gt;&lt;/p&gt;</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
