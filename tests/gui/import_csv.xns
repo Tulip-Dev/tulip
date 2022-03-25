@@ -1923,8 +1923,8 @@ NEW-WINDOW:688,200:65011824,65011824,27346571,0,0,0:0x0+384+487:0,0:Column impor
 7,6,915,594,0,0,0,5273688,10,'Logitech USB Optical Mouse'
 7,6,916,594,0,0,0,5273928,10,'Logitech USB Optical Mouse'
 7,6,916,595,0,0,0,5273944,10,'Logitech USB Optical Mouse'
-7,6,916,575,0,0,0,5273952,10,'Logitech USB Optical Mouse'
-7,6,916,575,0,0,0,5273968,10,'Logitech USB Optical Mouse'
+7,6,916,560,0,0,0,5273952,10,'Logitech USB Optical Mouse'
+7,6,916,560,0,0,0,5273968,10,'Logitech USB Optical Mouse'
 7,4,0,0,1,0,0,5274280,10,Logitech USB Optical Mouse
 6,4,0,0,1,0,0,5274280,2,Virtual core pointer
 0,21,0,0,0,0,0,5274301
@@ -2060,7 +2060,7 @@ NEW-WINDOW:680,315:65011836,65011836,27346697,0,0,0:0x0+400+300:0,0:Choose sourc
 7,6,931,569,0,0,0,5276432,10,'Logitech USB Optical Mouse'
 7,6,932,569,0,0,0,5276456,10,'Logitech USB Optical Mouse'
 7,6,932,549,0,0,0,5276528,10,'Logitech USB Optical Mouse'
-7,6,932,548,0,0,0,5276552,10,'Logitech USB Optical Mouse'
+7,6,932,533,0,0,0,5276552,10,'Logitech USB Optical Mouse'
 7,4,0,0,1,0,0,5276776,10,Logitech USB Optical Mouse
 6,4,0,0,1,0,0,5276776,2,Virtual core pointer
 7,5,0,0,1,0,0,5276888,10,Logitech USB Optical Mouse
@@ -2187,7 +2187,7 @@ NEW-WINDOW:680,315:65011836,65011836,27346697,0,0,0:0x0+400+300:0,0:Choose sourc
 7,6,708,474,0,0,0,5278728,10,'Logitech USB Optical Mouse'
 7,6,706,474,0,0,0,5278736,10,'Logitech USB Optical Mouse'
 7,6,705,454,0,0,0,5278744,10,'Logitech USB Optical Mouse'
-7,6,704,454,0,0,0,5278760,10,'Logitech USB Optical Mouse'
+7,6,704,444,0,0,0,5278760,10,'Logitech USB Optical Mouse'
 7,4,0,0,1,0,0,5279120,10,Logitech USB Optical Mouse
 6,4,0,0,1,0,0,5279120,2,Virtual core pointer
 7,5,0,0,1,0,0,5279224,10,Logitech USB Optical Mouse
@@ -2316,7 +2316,7 @@ NEW-WINDOW:680,315:65011836,65011836,27346697,0,0,0:0x0+400+300:0,0:Choose sourc
 7,6,1047,602,0,0,0,5280784,10,'Logitech USB Optical Mouse'
 7,6,1048,602,0,0,0,5280792,10,'Logitech USB Optical Mouse'
 7,6,1049,583,0,0,0,5280800,10,'Logitech USB Optical Mouse'
-7,6,1050,584,0,0,0,5280816,10,'Logitech USB Optical Mouse'
+7,6,1050,573,0,0,0,5280816,10,'Logitech USB Optical Mouse'
 7,4,0,0,1,0,0,5280992,10,Logitech USB Optical Mouse
 6,4,0,0,1,0,0,5280992,2,Virtual core pointer
 7,5,0,0,1,0,0,5281096,10,Logitech USB Optical Mouse
@@ -2499,7 +2499,7 @@ NEW-WINDOW:680,315:65011836,65011836,27346697,0,0,0:0x0+400+300:0,0:Choose sourc
 7,6,1099,600,0,0,0,5283016,10,'Logitech USB Optical Mouse'
 7,6,1099,599,0,0,0,5283040,10,'Logitech USB Optical Mouse'
 7,6,1099,575,0,0,0,5283056,10,'Logitech USB Optical Mouse'
-7,6,1099,575,0,0,0,5283064,10,'Logitech USB Optical Mouse'
+7,6,1099,562,0,0,0,5283064,10,'Logitech USB Optical Mouse'
 7,4,0,0,1,0,0,5283296,10,Logitech USB Optical Mouse
 6,4,0,0,1,0,0,5283296,2,Virtual core pointer
 0,21,0,0,0,0,0,5283313
@@ -2615,7 +2615,7 @@ NEW-WINDOW:680,315:65011841,65011841,27346790,0,0,0:0x0+400+300:0,0:Choose targe
 7,6,931,567,0,0,0,5284784,10,'Logitech USB Optical Mouse'
 7,6,931,566,0,0,0,5284800,10,'Logitech USB Optical Mouse'
 7,6,931,545,0,0,0,5284816,10,'Logitech USB Optical Mouse'
-7,6,931,544,0,0,0,5284936,10,'Logitech USB Optical Mouse'
+7,6,931,533,0,0,0,5284936,10,'Logitech USB Optical Mouse'
 7,4,0,0,1,0,0,5285072,10,Logitech USB Optical Mouse
 6,4,0,0,1,0,0,5285072,2,Virtual core pointer
 7,5,0,0,1,0,0,5285184,10,Logitech USB Optical Mouse
@@ -2710,7 +2710,7 @@ NEW-WINDOW:680,315:65011841,65011841,27346790,0,0,0:0x0+400+300:0,0:Choose targe
 7,6,705,474,0,0,0,5286096,10,'Logitech USB Optical Mouse'
 7,6,704,473,0,0,0,5286104,10,'Logitech USB Optical Mouse'
 7,6,703,453,0,0,0,5286112,10,'Logitech USB Optical Mouse'
-7,6,703,452,0,0,0,5286200,10,'Logitech USB Optical Mouse'
+7,6,703,443,0,0,0,5286200,10,'Logitech USB Optical Mouse'
 7,4,0,0,1,0,0,5286488,10,Logitech USB Optical Mouse
 6,4,0,0,1,0,0,5286488,2,Virtual core pointer
 7,5,0,0,1,0,0,5286592,10,Logitech USB Optical Mouse
@@ -2856,7 +2856,7 @@ NEW-WINDOW:680,315:65011841,65011841,27346790,0,0,0:0x0+400+300:0,0:Choose targe
 7,6,1044,605,0,0,0,5288176,10,'Logitech USB Optical Mouse'
 7,6,1045,605,0,0,0,5288184,10,'Logitech USB Optical Mouse'
 7,6,1046,585,0,0,0,5288200,10,'Logitech USB Optical Mouse'
-7,6,1047,585,0,0,0,5288272,10,'Logitech USB Optical Mouse'
+7,6,1047,573,0,0,0,5288272,10,'Logitech USB Optical Mouse'
 7,4,0,0,1,0,0,5288472,10,Logitech USB Optical Mouse
 6,4,0,0,1,0,0,5288472,2,Virtual core pointer
 7,5,0,0,1,0,0,5288592,10,Logitech USB Optical Mouse
