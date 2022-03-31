@@ -24,10 +24,10 @@ cd C:/tulip_dependencies && md lib
 
 rem get, compile and install zlib
 cd C:/tulip_dependencies
-curl -LO https://zlib.net/zlib1211.zip
+curl -LO https://zlib.net/zlib1212.zip
 if %errorlevel% neq 0 exit /b %errorlevel%
-7z x zlib1211.zip
-cd zlib-1.2.11
+7z x zlib1212.zip
+cd zlib-1.2.12
 md build && cd build
 cmake -G "%CMAKE_VS_GENERATOR%" -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX="C:/tulip_dependencies" ..
 if %errorlevel% neq 0 exit /b %errorlevel%
@@ -55,10 +55,10 @@ if "%TULIP_BUILD_CORE_ONLY%" == "0" (
 :install_complete_tulip_build_dependencies
 rem get, compile and install freetype
 cd C:/tulip_dependencies
-curl -LO http://download.savannah.gnu.org/releases/freetype/freetype-2.10.2.tar.gz
+curl -LO http://download.savannah.gnu.org/releases/freetype/freetype-2.11.1.tar.gz
 if %errorlevel% neq 0 exit /b %errorlevel%
-7z x freetype-2.10.2.tar.gz -so | 7z x -aoa -si -ttar
-cd freetype-2.10.2
+7z x freetype-2.11.1.tar.gz -so | 7z x -aoa -si -ttar
+cd freetype-2.11.1
 md build && cd build
 cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INSTALL_PREFIX="C:/tulip_dependencies" ..
 if %errorlevel% neq 0 exit /b %errorlevel%
