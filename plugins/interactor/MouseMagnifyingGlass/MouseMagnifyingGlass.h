@@ -26,6 +26,7 @@
 #include "../../utils/StandardInteractorPriority.h"
 
 class QOpenGLFramebufferObject;
+class QLabel;
 
 namespace tlp {
 
@@ -74,18 +75,23 @@ private:
 class MouseMagnifyingGlassInteractor : public GLInteractorComposite {
 
 public:
+  QLabel *doc;
+
   PLUGININFORMATION("MouseMagnifyingGlassInteractor", "Antoine Lambert", "19/06/2009",
-                    "Mouse Magnifying Glass Interactor Interactor", "1.0", "Visualization")
+                    "Mouse Magnifying Glass Interactor", "1.1", "Visualization")
 
   MouseMagnifyingGlassInteractor(const tlp::PluginContext *);
+
+  ~MouseMagnifyingGlassInteractor();
 
   void construct() override;
 
   unsigned int priority() const override {
     return StandardInteractorPriority::MagnifyingGlass;
   }
-  QWidget *configurationWidget() const override {
-    return nullptr;
+
+  QLabel *configurationDocWidget() const override {
+    return doc;
   }
 
   bool isCompatible(const std::string &viewName) const override;
