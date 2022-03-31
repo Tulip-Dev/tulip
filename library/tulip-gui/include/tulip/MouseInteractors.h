@@ -68,7 +68,7 @@ private:
 public:
   MouseNKeysNavigator(bool enableMouseNavigation = true)
       : currentSpecInteractorComponent(nullptr), nldc(nullptr),
-        mouseNavigationDisabled(!enableMouseNavigation) {}
+        mouseNavigationEnabled(enableMouseNavigation) {}
   ~MouseNKeysNavigator() override {}
   bool eventFilter(QObject *, QEvent *) override;
   void clear() override;
@@ -81,7 +81,7 @@ private:
   std::vector<tlp::Camera> cameraHierarchy;
   std::vector<tlp::node> nodeHierarchy;
   std::vector<float> alphaHierarchy;
-  bool mouseNavigationDisabled;
+  bool mouseNavigationEnabled;
 };
 } // namespace tlp
 #endif
