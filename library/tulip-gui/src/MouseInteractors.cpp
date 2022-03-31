@@ -382,7 +382,8 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   GlMainWidget *glmainwidget = static_cast<GlMainWidget *>(widget);
   QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
 
-  if (mouseNavigationEnabled && e->type() == QEvent::MouseButtonDblClick && qMouseEv->button() == Qt::LeftButton) {
+  if (mouseNavigationEnabled && e->type() == QEvent::MouseButtonDblClick &&
+      qMouseEv->button() == Qt::LeftButton) {
 
     Graph *graph = glmainwidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
 

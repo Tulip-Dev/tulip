@@ -44,7 +44,8 @@ using namespace std;
 using namespace tlp;
 
 MouseMagnifyingGlassInteractor::MouseMagnifyingGlassInteractor(const tlp::PluginContext *)
-  : GLInteractorComposite(QIcon(":/i_magnifying_glass.png"), "Magnifying glass"), doc(new QLabel()) {
+    : GLInteractorComposite(QIcon(":/i_magnifying_glass.png"), "Magnifying glass"),
+      doc(new QLabel()) {
   Interactor::setupConfigWidget(doc);
   doc->setWordWrap(true);
   doc->setAlignment(Qt::AlignTop);
@@ -59,13 +60,13 @@ void MouseMagnifyingGlassInteractor::construct() {
   doc->setText(
       QString("<h3>Magnifying glass</h3>") +
       "Increase/decrease size:<ul><li><b>Ctrl + Mouse wheel</b> up/down</ul></li></p>"
-	"Increase/decrease magnifying power:<ul><li><b>Shit + Mouse wheel</b> up/down</ul></li>" +
+      "Increase/decrease magnifying power:<ul><li><b>Shit + Mouse wheel</b> up/down</ul></li>" +
 #if !defined(__APPLE__)
-        "Zoom/Unzoom:<ul><li><b>Mouse wheel</b> up/down</ul></li>"
+      "Zoom/Unzoom:<ul><li><b>Mouse wheel</b> up/down</ul></li>"
 #else
-        "Zoom/Unzoom:<ul><li><b>Mouse wheel</b> down/up</ul></li>"
+      "Zoom/Unzoom:<ul><li><b>Mouse wheel</b> down/up</ul></li>"
 #endif
-);
+  );
   push_back(new MouseNKeysNavigator(false));
   push_back(new MouseMagnifyingGlassInteractorComponent());
 }
