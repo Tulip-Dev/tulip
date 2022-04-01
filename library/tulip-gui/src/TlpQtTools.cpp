@@ -215,13 +215,13 @@ public:
       // use registered texture file if any
       qFilename = getRegisteredTextureFile(QString::fromUtf8(filename.c_str()));
       if (!qFilename.isEmpty())
-	image.load(qFilename);
+        image.load(qFilename);
     }
 
     if (image.isNull()) {
       if (!QFile(QString::fromUtf8(filename.c_str())).exists())
         tlp::warning() << "Error when loading texture, the file named \"" << filename.c_str()
-                     << "\" does not exist" << std::endl;
+                       << "\" does not exist" << std::endl;
       else
         tlp::warning() << "Error when loading texture from " << filename.c_str() << std::endl;
 
