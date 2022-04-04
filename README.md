@@ -49,7 +49,7 @@ The Tulip framework offers numerous features, notably:
   efficiently generate aesthetic and interactive visualizations.
   
   * Multiple visualization components (called views in the Tulip semantics) for analyzing graph data
-  using other representations than the classical node link diagram one: matrix, histograms,
+  using other representations than the classical node-link diagram one: matrix, histograms,
   scatter plots, parallel coordinates, ...
   
   * [Python](https://www.python.org) bindings for the main Tulip C++ API, giving to Tulip scripting 

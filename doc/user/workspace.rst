@@ -1,8 +1,8 @@
 .. _workspace:
 
-***********************
-The Workspace in Detail
-***********************
+=========================
+ The Workspace in detail
+=========================
 
 As it has been seen in :ref:`gui`, the workspace is where all the visualization views, or panels, take place. 
 
@@ -142,7 +142,7 @@ Main window
     :width: 20
 .. |icon_wsm_label_font_set| image:: _images/icon_wsm_label_font_set.png
     :width: 40
-
+.. |i_tooltips_dialog| image:: _images/i_tooltips_dlg.png
 .. |i_workspace_rclick_edge| image:: _images/i_workspace_rclick_edge.png
 .. |i_workspace_rclick_node| image:: _images/i_workspace_rclick_node.png
 
@@ -225,9 +225,20 @@ By default, the options are divided in two parts: *View* et *Augmented display*.
 
   * *Show quick access bar*: display/hide the quick access bar.
 
-  * *Tooltips*: enable/disable the display of essential information about the node/edge under the mouse pointer.
+  * *Tooltips display parameters*: enable/disable the display of essential information about the node/edge under the mouse pointer.
 
-  * *Url property*: display a sub menu allowing to choose a property giving the url of the web page associated with a graph element. When moving the mouse pointer over a node or edge, the url of the associated web page is displayed; this web page can then be shown in your default web browser in typing on the space bar.
+    By clicking on this menu item a dialog box is displayed.
+
+    |i_tooltips_dialog|
+
+    It allows to activate or not the tooltips display,
+    to choose an "Image property" used to get the graph element associated
+    image, and choose an "Url property" used to get the url of an associated
+    web page.
+    At display time, the associated image, will be scaled down, if needed,
+    to fit a predefined maximum constraint size.
+    The associated web page can be shown in your default web browser in typing
+    on the space bar.
 
   * *Use Z ordering*: adapt the display priority according to the Z position.
 
@@ -271,7 +282,7 @@ Toolbar
 .. |icon_wst_magnify_glass| image:: ../../plugins/interactor/MouseMagnifyingGlass/i_magnifying_glass.png
     :width: 20
 
-This element of the node link diagram panel is located at the top of the window and is divide in three parts.
+This element of the Node Link Diagram panel is located at the top of the window and is divide in three parts.
 
 The first one, when clicked on, opens the configuration panel, giving explanations about the currently selected tool and proposing the advanced options.
 
@@ -328,7 +339,7 @@ The final element is a combo box, allowing the user to choose which graph to vis
 Scene
 -----
 
-The scene rendering settings can be opened by clicking on the **Scene** tab, in the top right corner of the node link diagram panel. The following tab then appears :
+The scene rendering settings can be opened by clicking on the **Scene** tab, in the top right corner of the Node Link Diagram panel. The following tab then appears :
 
 .. image:: _images/i_workspace_scene.png
 
@@ -367,7 +378,7 @@ The **Visible** column allows you to select the elements you want to display. Th
 FAQ
 ---
 
-The Node-Link Diagram being one of the mostly used view, it is also the one we are asked the more about. We list here some of the more frequently asked questions in order to allow you to maybe find a direct answer to your problem.
+The Node Link Diagram being one of the mostly used view, it is also the one we are asked the more about. We list here some of the more frequently asked questions in order to allow you to maybe find a direct answer to your problem.
 
 **Labels**
 
@@ -477,7 +488,7 @@ Here is the list of all the rendering properties (e: used with edges, n: used wi
 
 * *viewTgtAnchorSize*: size (along the x, y, z axis) of the target anchor (e).
 
-The spreadsheet view allows you to select the elements you want to watch by choosing *Nodes* or *Edges* in the *Show* combo box. A filter is available to pick elements depending of their selection in the *node link diagram*, or to match a given pattern in a specific column. The set of displayed columns can be restricted to those whose the name matches a given pattern.
+The Spreadsheet view allows you to select the elements you want to watch by choosing *Nodes* or *Edges* in the *Show* combo box. A filter is available to pick selected elements, or to match a given pattern in a specific column. The set of displayed columns can be restricted to those whose the name matches a given pattern.
 
 The value stored in the table can be modified by several ways. A double click on one of the cells offers to enter the value for one property and one element (edge or node). A right click in one of the cells opens the following menu :
 
@@ -525,7 +536,7 @@ This view gives you a general glimpse of the adjacency matrix of your graph.
 .. _workspace_adjacency_settings:
 
 Settings
-----------
+--------
 
 By clicking on the tab in the top right corner, you can open the display settings panel.
 
@@ -631,7 +642,7 @@ The geographic view provides different map modes. You can switch between them by
 Toolbar
 -------
 
-The tools available in this view represent a subset of those introduced in the Node-Link Diagram view earlier. You can recall the following:
+The tools available in this view represent a subset of those introduced in the Node Link Diagram view earlier. You can recall the following:
 
 * |icon_wst_navigate_graph|: navigate in graph.
 
@@ -679,7 +690,7 @@ The polygon map shape can be switched to your convenience with another one. Choo
 Scene
 -----
 
-The settings displayed in this panel are completely similar to the ones in the Node-Link Diagram's scene rendering panel. Report to :ref:`the Scene dedicated section<workspace_diagram_scene>` if you need additional information.
+The settings displayed in this panel are completely similar to the ones in the Node Link Diagram's scene rendering panel. Report to :ref:`the Scene dedicated section<workspace_diagram_scene>` if you need additional information.
 
 
 .. _workspace_geographic_layers:
@@ -986,7 +997,7 @@ In the end, by performing different mapping types on different properties, you c
 .. _workspace_selforganizing:
 
 Self Organizing Map view
-=========================
+========================
 
 As explain in the scatterplot view, we are blocked by the number of perceptible dimensions and the existing mapping when we are looking for a correlation between several properties.
 
@@ -1016,7 +1027,7 @@ Beside offering the capability to work on high-dimensionnal data, the self organ
 .. _workspace_spreadsheet_example:
 
 Example: Coloring a graph
-==========================
+=========================
 
 .. |icon_import| image:: ../../library/tulip-gui/resources/icons/64/document-import.png
     :width: 32
@@ -1047,7 +1058,7 @@ We can apply some of these new knowledges to a small example aiming at coloring 
 
 Once those are correctly set, you can launch the algorithm.
 
-* In the spreadsheet view, you can notice that the *viewMetric* column values have changed. 
+* In the Spreadsheet view, you can notice that the *viewMetric* column values have changed.
 
 * In the algorithms, under the category *Coloring*, find the *Color Mapping*. The parameters should be *viewMetric* in the input property, a *linear* progression, the *nodes* as target and any color scale. The computed colors must be sored into the *viewColor* property. Once everything is set, you can launch the color mapping.
 
