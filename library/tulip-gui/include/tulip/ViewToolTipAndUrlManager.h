@@ -29,14 +29,13 @@ class QWidget;
 #include <tulip/DataSet.h>
 
 namespace tlp {
+class StringProperty;
 
 class TLP_QT_SCOPE ViewToolTipAndUrlManager : public QObject {
   Q_OBJECT
 
   View *_view;
   QWidget *_widget;
-  bool _tooltips;
-  std::string _urlPropName;
   std::string _url, _contextMenuUrl;
 
 public:
@@ -51,12 +50,13 @@ public:
   void fillContextMenu(QMenu *menu, edge e);
 
 protected slots:
-  void displayToolTips(bool display);
-  void setUrlProp(QAction *);
+  void manageToolTips();
   void openUrl();
+  void viewGraphSet(tlp::Graph *);
 
 protected:
   bool eventFilter(QObject *, QEvent *e) override;
+  StringProperty *getAttributeProperty(const std::string &attribute);
 };
 } // namespace tlp
 

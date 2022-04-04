@@ -25,38 +25,65 @@
 #include <QKeyEvent>
 #include <QUrl>
 #include <QDesktopServices>
+#include <QBuffer>
+#include <QImage>
 
 #include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphModel.h>
 #include <tulip/StringProperty.h>
+#include "ui_ManageGraphEltTooltipDialog.h"
 
 using namespace tlp;
 using namespace std;
 
-ViewToolTipAndUrlManager::ViewToolTipAndUrlManager(tlp::View *view, QWidget *widget)
-    : _view(view), _widget(widget), _tooltips(false) {}
+#define TOOLTIPS_ENABLED "display tooltips"
+#define IMAGE_TOOLTIP_PROPERTY "img tooltip property"
+#define IMAGE_TOOLTIP_MAX_DIM "img tooltip w/h max"
+#define URL_TOOLTIP_PROPERTY "url tooltip property"
 
-void ViewToolTipAndUrlManager::setState(const tlp::DataSet &data) {
-  data.get("Tooltips", _tooltips);
-  data.get("Url property", _urlPropName);
+ViewToolTipAndUrlManager::ViewToolTipAndUrlManager(tlp::View *view, QWidget *widget)
+  : _view(view), _widget(widget) {
+  connect(_view, SIGNAL(graphSet(tlp::Graph *)), this, SLOT(viewGraphSet(tlp::Graph *)));
 }
 
-void ViewToolTipAndUrlManager::state(DataSet &data) const {
-  data.set("Tooltips", _tooltips);
-  data.set("Url property", _urlPropName);
+void ViewToolTipAndUrlManager::viewGraphSet(Graph *graph) {
+  if (graph) {
+    bool tooltips = false;
+    graph->getAttribute(TOOLTIPS_ENABLED, tooltips);
+    if (tooltips)
+      _view->graphicsView()->viewport()->installEventFilter(this);
+    else
+      _view->graphicsView()->viewport()->removeEventFilter(this);
+  } else
+    _view->graphicsView()->viewport()->removeEventFilter(this);
+}
+
+void ViewToolTipAndUrlManager::setState(const tlp::DataSet &) {
+}
+
+void ViewToolTipAndUrlManager::state(DataSet &) const {
+}
+
+StringProperty* ViewToolTipAndUrlManager::getAttributeProperty(const std::string &attribute) {
+  StringProperty *prop = nullptr;
+  std::string propName;
+  Graph *graph = _view->graph();
+  if (graph->getAttribute(attribute, propName)) {
+    if (!(prop = dynamic_cast<StringProperty *>(graph->getProperty(propName))))
+      // force attribute removal
+      graph->removeAttribute(attribute);
+  }
+  return prop;
 }
 
 void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu, node n) {
-  if (_urlPropName.empty())
+  StringProperty *urlProp = getAttributeProperty(URL_TOOLTIP_PROPERTY);
+  if (!urlProp)
     return;
 
-  Graph *graph = _view->graph();
-
-  _contextMenuUrl =
-      dynamic_cast<StringProperty *>(graph->getProperty(_urlPropName))->getNodeValue(n);
-
+  _contextMenuUrl = urlProp->getNodeValue(n);
   if (_contextMenuUrl.empty())
     return;
 
@@ -67,13 +94,11 @@ void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu, node n) {
 }
 
 void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu, edge e) {
-  if (_urlPropName.empty())
+  StringProperty *urlProp = getAttributeProperty(URL_TOOLTIP_PROPERTY);
+  if (!urlProp)
     return;
 
-  Graph *graph = _view->graph();
-
-  _contextMenuUrl =
-      dynamic_cast<StringProperty *>(graph->getProperty(_urlPropName))->getEdgeValue(e);
+  _contextMenuUrl = urlProp->getEdgeValue(e);
   if (_contextMenuUrl.empty())
     return;
 
@@ -90,36 +115,15 @@ void ViewToolTipAndUrlManager::openUrl() {
 }
 
 void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu) {
+  QAction *action = menu->addAction("Tooltips display parameters");
+  action->setToolTip(QString("Enable/disable the display of a tooltip showing "
+                             "information\nabout the graph element located under the mouse pointer"));
+  connect(action, SIGNAL(triggered(bool)), this, SLOT(manageToolTips()));
+}
+
+void ViewToolTipAndUrlManager::manageToolTips() {
   Graph *graph = _view->graph();
 
-  QAction *action = menu->addAction("Tooltips");
-  action->setToolTip(QString("When moving the mouse pointer, a tooltip is displayed with some "
-                             "information about the graph element located under the pointer"));
-  action->setCheckable(true);
-  action->setChecked(_tooltips);
-  connect(action, SIGNAL(triggered(bool)), this, SLOT(displayToolTips(bool)));
-
-  // add submenu to manage the url property choice
-  QMenu *urlPropMenu;
-  if (graph->existProperty(_urlPropName))
-    urlPropMenu = menu->addMenu(
-        QString("Url property").append(" (").append(tlpStringToQString(_urlPropName)).append(")"));
-  else {
-    urlPropMenu = menu->addMenu("Url property");
-    _urlPropName.clear();
-  }
-  urlPropMenu->setToolTip(
-      QString("Choose the property giving the web page associated with a graph element"));
-
-  QActionGroup *urlPropGroup = new QActionGroup(urlPropMenu);
-  urlPropGroup->setExclusive(true);
-  connect(urlPropMenu, SIGNAL(triggered(QAction *)), this, SLOT(setUrlProp(QAction *)));
-  action = urlPropMenu->addAction(" None ");
-  action->setCheckable(true);
-  urlPropGroup->addAction(action);
-  if (_urlPropName.empty())
-    action->setChecked(true);
-  action->setToolTip(QString("The graph elements have no associated web page"));
   // get all existing StringProperty with non default valuated nodes or edges
   std::set<std::string> props;
   for (auto inheritedProp : graph->getInheritedObjectProperties()) {
@@ -138,69 +142,124 @@ void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu) {
     }
   }
 
-  // insert the StringProperty found
+  QDialog ttDialog(_view->graphicsView()->viewport());
+  Ui::ManageGraphEltTooltipDialog ui;
+  ui.setupUi(&ttDialog);
+  // configure ui
+  bool tooltips = false;
+  graph->getAttribute(TOOLTIPS_ENABLED, tooltips);
+  ui.tooltipsGroupBox->setChecked(tooltips);
+  // configure potential img props
+  ui.imgPropCB->addItem(" None ");
+  ui.imgPropCB->setCurrentIndex(0);
+  std::string imgPropName;
+  {
+    StringProperty* imgProp = getAttributeProperty(IMAGE_TOOLTIP_PROPERTY);
+    if (imgProp)
+      imgPropName = imgProp->getName();
+  }
+  // insert the StringProperty props found
   for (auto propName : props) {
-    // among the view... properties only viewLabel is allowed
-    if (propName.find("view") != 0 || propName == "viewLabel") {
-      action = urlPropMenu->addAction(tlpStringToQString(propName));
-      action->setToolTip(
-          QString("The url of the web page associated with a graph element is given by the \"")
-              .append(tlpStringToQString(propName))
-              .append(QString("\" property value")));
-      urlPropGroup->addAction(action);
-      action->setCheckable(true);
-      if (_urlPropName == propName)
-        action->setChecked(true);
+    // among the view... properties only viewLabel and viewTexture are allowed
+    if (propName.find("view") != 0 ||
+	propName == "viewLabel" || propName == "viewTexture") {
+      auto qs = tlpStringToQString(propName);
+      ui.imgPropCB->addItem(qs);
+      if (imgPropName == propName)
+	ui.imgPropCB->setCurrentText(qs);
     }
+  }
+  // configure max dim
+  int imgMaxDim = 200;
+  graph->getAttribute(IMAGE_TOOLTIP_MAX_DIM, imgMaxDim);
+  ui.imgMaxDimSB->setMaximum(10000);
+  ui.imgMaxDimSB->setValue(imgMaxDim);
+  // configure potential url props
+  ui.urlPropCB->addItem(" None ");
+  ui.urlPropCB->setCurrentIndex(0);
+  std::string urlPropName;
+  {
+    StringProperty* urlProp = getAttributeProperty(URL_TOOLTIP_PROPERTY);
+    if (urlProp)
+      urlPropName = urlProp->getName();
+  }
+  // insert the StringProperty props found
+  for (auto propName : props) {
+    // among the view... properties only viewLabel and viewTexture are allowed
+    if (propName.find("view") != 0 || propName == "viewLabel") {
+      auto qs = tlpStringToQString(propName);
+      ui.urlPropCB->addItem(qs);
+      if (urlPropName == propName)
+	ui.urlPropCB->setCurrentText(qs);
+    }
+  }
+
+  // show dialog
+  ttDialog.setModal(true);
+  if (ttDialog.exec()) {
+    // configure tooltips parameters
+    if ((tooltips = ui.tooltipsGroupBox->isChecked()))
+      _view->graphicsView()->viewport()->installEventFilter(this);
+    else
+      _view->graphicsView()->viewport()->removeEventFilter(this);
+    graph->setAttribute(TOOLTIPS_ENABLED, tooltips);
+    imgPropName = QStringToTlpString(ui.imgPropCB->currentText());
+    if (graph->existProperty(imgPropName))
+      graph->setAttribute(IMAGE_TOOLTIP_PROPERTY, imgPropName);
+    else
+      graph->removeAttribute(IMAGE_TOOLTIP_PROPERTY);
+    imgMaxDim = ui.imgMaxDimSB->value();
+    graph->setAttribute(IMAGE_TOOLTIP_MAX_DIM, imgMaxDim);
+    urlPropName = QStringToTlpString(ui.urlPropCB->currentText());
+    if (graph->existProperty(urlPropName))
+      graph->setAttribute(URL_TOOLTIP_PROPERTY, urlPropName);
+    else
+      graph->removeAttribute(URL_TOOLTIP_PROPERTY);
   }
 }
 
-void ViewToolTipAndUrlManager::displayToolTips(bool display) {
-  if ((_tooltips = display))
-    _view->graphicsView()->viewport()->installEventFilter(this);
-  else
-    _view->graphicsView()->viewport()->removeEventFilter(this);
-}
-
-void ViewToolTipAndUrlManager::setUrlProp(QAction *action) {
-  _urlPropName = QStringToTlpString(action->text());
-  if (!_view->graph()->existProperty(_urlPropName))
-    _urlPropName.clear();
-}
-
 bool ViewToolTipAndUrlManager::eventFilter(QObject *, QEvent *event) {
+  // clear url if tooltip is no longer visible
+  if (!_url.empty() && !QToolTip::isVisible())
+    _url.clear();
+
   Graph *graph = _view->graph();
 
   if (graph == nullptr)
     return false;
 
-  // clear url if tooltip is no longer visible
-  if (!_url.empty() && !QToolTip::isVisible())
-    _url.clear();
+  bool tooltips = false;
+  graph->getAttribute(TOOLTIPS_ENABLED, tooltips);
+  // get the property holding the img associated to graph elements
+  StringProperty *imgProp = getAttributeProperty(IMAGE_TOOLTIP_PROPERTY);
+
 
   // get the property holding the urls associated to graph elements
-  StringProperty *urlProp = _urlPropName.empty()
-                                ? nullptr
-                                : dynamic_cast<StringProperty *>(graph->getProperty(_urlPropName));
+  StringProperty *urlProp = getAttributeProperty(URL_TOOLTIP_PROPERTY);
 
-  if (event->type() == QEvent::ToolTip && (_tooltips == true || urlProp != nullptr)) {
+  if (event->type() == QEvent::ToolTip && (tooltips == true || urlProp != nullptr)) {
     QHelpEvent *he = static_cast<QHelpEvent *>(event);
 
     node tmpNode;
     edge tmpEdge;
+    std::string img;
     if (_view->getNodeOrEdgeAtViewportPos(he->x(), he->y(), tmpNode, tmpEdge)) {
       QString ttip;
 
       if (tmpNode.isValid()) {
         if (urlProp)
           _url = urlProp->getNodeValue(tmpNode);
-        if (_tooltips)
+        if (tooltips)
           ttip = NodesGraphModel::getNodeTooltip(graph, tmpNode);
+	if (imgProp)
+	  img = imgProp->getNodeValue(tmpNode);
       } else if (tmpEdge.isValid()) {
         if (urlProp)
           _url = urlProp->getEdgeValue(tmpEdge);
-        if (_tooltips)
+        if (tooltips)
           ttip = EdgesGraphModel::getEdgeTooltip(graph, tmpEdge);
+	if (imgProp)
+	  img = imgProp->getEdgeValue(tmpEdge);
       }
       // only http urls are valid
       if (!_url.empty() && _url.find("http://") != 0 && _url.find("https://"))
@@ -218,9 +277,33 @@ bool ViewToolTipAndUrlManager::eventFilter(QObject *, QEvent *event) {
       }
       if (!ttip.isEmpty()) {
         // preserve current formatting
-        ttip = QString("<p style='white-space:pre'><font size=\"-1\">")
+        ttip = QString("<p style='white-space:pre'><font size='-1'>")
                    .append(ttip)
                    .append(QString("</font></p>"));
+	// show image if needed
+	if (!img.empty()) {
+	  // read image
+	  QImage qimg(img.c_str());
+	  if (!qimg.isNull()) {
+	    // get graph attribute value for IMAGE_TOOLTIP_MAX_DIM
+	    int dimMax = 200; // default value
+	    graph->getAttribute(IMAGE_TOOLTIP_MAX_DIM, dimMax);
+	    // scale qimg to fit in a dimMax max square
+	    // dimMax = 0 means no constraint
+	    if (dimMax) {
+	      auto dim = qimg.width();
+	      if (dim > dimMax)
+		qimg = qimg.scaledToWidth(dimMax, Qt::SmoothTransformation);
+	      dim = qimg.height();
+	      if (dim > dimMax)
+		qimg = qimg.scaledToHeight(dimMax, Qt::SmoothTransformation);
+	    }
+	    QByteArray bytes;
+	    QBuffer buf(&bytes);
+	    qimg.save(&buf, "png", 100);
+	    ttip = QString("<img src='data:image/png;base64, %0'/>").arg(QString(bytes.toBase64())).append(ttip);
+	  }
+	}
         QToolTip::showText(he->globalPos(), ttip, _widget);
         return true;
       }

@@ -131,6 +131,7 @@ QTX_WRAP_UI(UI_HEADERS
   ../designer/DoubleStringsListSelectionWidget.ui
   ../designer/ElementInformationWidget.ui
   ../designer/GridOptionsWidget.ui
+  ../designer/ManageGraphEltTooltipDialog.ui
   ../designer/ShapeDialog.ui
   ../designer/PropertyCreationDialog.ui
   ../designer/QuickAccessBar.ui
