@@ -87,7 +87,7 @@ void GeographicViewConfigWidget::openTilesAttributionHelp() {
                      R"(
 <p>If you need to publish some images produced by the
  <b>Geographic View</b>, these images must display the tiles
- attribution, i.e. the name(s) of the various contributors
+ attribution, i.e. the name of the various contributors
  of the tiles you are using, as indicated by the tiles
  provider and as it is automatically done for the tiles servers
  proposed by Tulip.<br/>

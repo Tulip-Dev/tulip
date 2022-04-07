@@ -34,6 +34,9 @@
      </property>
      <item>
       <widget class="QCheckBox" name="shapeCheckBox">
+       <property name="toolTip">
+        <string>enable/disable the use of the viewShape property</string>
+       </property>
        <property name="text">
         <string>Shape</string>
        </property>
@@ -44,6 +47,9 @@
      </item>
      <item>
       <widget class="QCheckBox" name="layoutCheckBox">
+       <property name="toolTip">
+        <string>enable/disable the use of the viewLayout property</string>
+       </property>
        <property name="text">
         <string>Layout</string>
        </property>
@@ -54,6 +60,9 @@
      </item>
      <item>
       <widget class="QCheckBox" name="sizeCheckBox">
+       <property name="toolTip">
+        <string>enable/disable the use of the viewSize property</string>
+       </property>
        <property name="text">
         <string>Size</string>
        </property>
@@ -295,6 +304,9 @@
      <property name="toolTip">
       <string>The url can be in the form: http://{s}.tilesprovider.org/.../{z}/{x}/{y}.png</string>
      </property>
+     <property name="placeholderText">
+      <string>http://{s}.tilesprovider.org/.../{z}/{x}/{y}.png</string>
+     </property>
     </widget>
    </item>
    <item>
@@ -329,6 +341,9 @@
     <widget class="QLineEdit" name="customTileLayerAttribution">
      <property name="toolTip">
       <string>Refer to the map tiles provider to set the tiles attribution.</string>
+     </property>
+     <property name="placeholderText">
+      <string>Tiles courtesy of tiles.provider.org ...</string>
      </property>
     </widget>
    </item>

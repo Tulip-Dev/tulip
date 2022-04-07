@@ -55,8 +55,8 @@ The creation of panels have already been presented in the previous section. Cons
 
 .. _workspace_diagram:
 
-The Node Link Diagram
-=====================
+Node Link Diagram view
+======================
 
 .. image:: _images/i_workspace-node_link_diagram.png
     :width: 600
@@ -682,7 +682,11 @@ Options
 
 .. image:: _images/i_geographic_options.png
 
+The *Shape/Layout/Size* check boxes indicate if the corresponding properties used to draw the graph on the map are the 'standard' *viewShape/viewLayout/viewSize* defined in the graph or not.
+
 The polygon map shape can be switched to your convenience with another one. Choose if you want to use the default shape, or a new one imported through a *csv* or a *poly* file. The *help* button displays additional information about the file format and the available source addresses.
+
+To display a map, it is possible to use a custom tile layer with tiles provided by a specific provider not listed among those proposed by this view, or by a server of your own. You then have to give the *Tile server url*, and the *Tiles attribution* which is mandatory if you need to publish images obtained with the *Geographic view*.
 
 
 .. _workspace_geographic_scene:
