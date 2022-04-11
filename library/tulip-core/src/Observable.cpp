@@ -479,8 +479,8 @@ void Observable::sendEvent(const Event &message) {
   for (auto obs : listenerTonotify) {
     if (obs.second == backn && message.type() == Event::TLP_DELETE) {
       tlp::warning() << "[Observable info]: An observable onlook itself Event::DELETE msg can't be "
-                      "sent to it."
-                   << endl;
+                        "sent to it."
+                     << endl;
       // treat scheduled event
       _oEventsToTreat[backn] -= 2;
       continue;
@@ -516,9 +516,10 @@ void Observable::sendEvent(const Event &message) {
 
     for (auto obs : observerTonotify) {
       if (obs.second == backn && message.type() == Event::TLP_DELETE) {
-        tlp::warning() << "[Observable info]: An observable onlook itself Event::DELETE msg can't be "
-                        "sent to it."
-                     << endl;
+        tlp::warning()
+            << "[Observable info]: An observable onlook itself Event::DELETE msg can't be "
+               "sent to it."
+            << endl;
         // treat scheduled event
         _oEventsToTreat[backn] -= 2;
         continue;
