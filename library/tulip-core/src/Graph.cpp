@@ -1187,7 +1187,6 @@ Graph *Graph::addCloneSubGraph(const std::string &name, bool addSibling,
   if (addSibling && addSiblingProperties) {
     for (PropertyInterface *prop : getLocalObjectProperties()) {
       PropertyInterface *cloneProp = prop->clonePrototype(clone, prop->getName());
-      tlp::debug() << "clone property " << prop->getName().c_str() << std::endl;
       cloneProp->copy(prop);
     }
   }
