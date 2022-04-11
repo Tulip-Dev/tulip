@@ -688,8 +688,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
     // notify its addition
     g->notifyBeforeAddSubGraph(sg);
     // restore sg as subgraph of g
-    if (undo)
-      g->setSubGraphToKeep(sg);
+    g->setSubGraphToKeep(sg);
     g->restoreSubGraph(sg);
 
     // and sg subgraphs are no longer subgraphs of g
