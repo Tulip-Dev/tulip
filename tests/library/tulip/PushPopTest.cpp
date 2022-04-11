@@ -879,7 +879,6 @@ void PushPopTest::testPushAddSubgraphsPop() {
   edge e1 = g2->addEdge(n1, n1);
   Graph *g3 = g2->addCloneSubGraph();
   // check validity of g3 id
-  CPPUNIT_ASSERT(g3->getId() != g1->getId());
   CPPUNIT_ASSERT(g3->getId() != g2->getId());
 
   graph->delEdge(e1);
