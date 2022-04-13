@@ -1050,11 +1050,11 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
       QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
       std::vector<std::pair<int, int>> indices;
       for (const auto &idx : rows)
-	indices.push_back(std::make_pair(idx.data(TulipModel::ElementIdRole).toInt(), idx.column()));
+        indices.push_back(
+            std::make_pair(idx.data(TulipModel::ElementIdRole).toInt(), idx.column()));
       _ui->table->setModel(nullptr);
       // create a new sort model
-      GraphSortFilterProxyModel *sortModel =
-	new GraphSortFilterProxyModel(_ui->table);
+      GraphSortFilterProxyModel *sortModel = new GraphSortFilterProxyModel(_ui->table);
       // first respecting _model natural ordering
       sortModel->setSourceModel(_model);
       // set it as table model
@@ -1062,8 +1062,8 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
       // restore selected rows
       auto selectionModel = _ui->table->selectionModel();
       for (auto &pIdx : indices) {
-	auto idx = _model->index(pIdx.first, pIdx.second);
-	selectionModel->select(idx, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+        auto idx = _model->index(pIdx.first, pIdx.second);
+        selectionModel->select(idx, QItemSelectionModel::Select | QItemSelectionModel::Rows);
       }
       sortModel->setFilterProperty(getFilteringProperty());
 
