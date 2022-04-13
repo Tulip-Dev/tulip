@@ -1046,16 +1046,30 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
   if (action == sortById) {
     if (_ui->table->horizontalHeader()->sortIndicatorSection() != -1) {
       _ui->table->horizontalHeader()->setSortIndicator(-1, Qt::AscendingOrder);
+      // save selected rows before resetting model
+      QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
+      std::vector<std::pair<int, int>> indices;
+      for (const auto &idx : rows)
+	indices.push_back(std::make_pair(idx.data(TulipModel::ElementIdRole).toInt(), idx.column()));
+      _ui->table->setModel(nullptr);
+      // create a new sort model
       GraphSortFilterProxyModel *sortModel =
-          static_cast<GraphSortFilterProxyModel *>(_ui->table->model());
-      QAbstractItemModel *model = sortModel->sourceModel();
-      sortModel->setSourceModel(nullptr);
-      sortModel->setSourceModel(model);
+	new GraphSortFilterProxyModel(_ui->table);
+      // first respecting _model natural ordering
+      sortModel->setSourceModel(_model);
+      // set it as table model
+      _ui->table->setModel(sortModel);
+      // restore selected rows
+      auto selectionModel = _ui->table->selectionModel();
+      for (auto &pIdx : indices) {
+	auto idx = _model->index(pIdx.first, pIdx.second);
+	selectionModel->select(idx, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+      }
       sortModel->setFilterProperty(getFilteringProperty());
 
       QSet<tlp::PropertyInterface *> visibleProperties = propertiesEditor->visibleProperties();
 
-      for (int i = 0; i < model->columnCount(); ++i) {
+      for (int i = 0; i < _model->columnCount(); ++i) {
         PropertyInterface *pi = _model->headerData(i, Qt::Horizontal, TulipModel::PropertyRole)
                                     .value<tlp::PropertyInterface *>();
 
@@ -1066,11 +1080,6 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
 
     return;
   }
-
-  /*if (action == nodesSetDefault || action == edgesSetDefault) {
-    propertiesEditor->setDefaultValue(prop, action == nodesSetDefault);
-    return;
-    }*/
 
   // hold/unhold observers
   tlp::ObserverHolder oh;
