@@ -133,11 +133,11 @@ static void checkPython(TulipMainWindow *tmw) {
     if (installedPythons.size() > 0) {
       errorMessage += "Detected version(s): ";
       for (int i = 0; i < installedPythons.size(); ++i) {
-	errorMessage += installedPythons.at(i);
+        errorMessage += installedPythons.at(i);
 
-	if (i < installedPythons.size() - 1) {
-	  errorMessage += ", ";
-	}
+        if (i < installedPythons.size() - 1) {
+          errorMessage += ", ";
+        }
       }
 
       errorMessage += ".";
