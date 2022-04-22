@@ -90,10 +90,6 @@ protected slots:
 private:
   void bringWindowToFront();
 
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  void checkPython();
-#endif
-
   enum SystemTrayMessage { NoMessage, PluginErrorMessage };
 
   Ui::TulipMainWindowData *_ui;

@@ -26,6 +26,7 @@
 #include <QStandardPaths>
 #include <QTcpSocket>
 
+#include <tulip/PythonVersionChecker.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/TulipSettings.h>
 #include <tulip/TlpQtTools.h>
@@ -110,6 +111,43 @@ void checkTulipRunning(const QString &perspName, const QString &fileToOpen, bool
   lockFile.close();
   lockFile.remove();
 }
+
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
+static void checkPython(TulipMainWindow *tmw) {
+#if defined(__APPLE__)
+  // no need to check when in mac bundle
+  auto appDir = QApplication::applicationDirPath();
+  if (appDir.contains(".app/Contents/"))
+    return;
+#endif
+  if (!tlp::PythonVersionChecker::isPythonVersionMatching()) {
+
+    QStringList installedPythons = tlp::PythonVersionChecker::installedVersions();
+
+    QString requiredPython = "Python " + tlp::PythonVersionChecker::compiledVersion();
+    requiredPython += " (64 bit)";
+
+    QString errorMessage;
+
+    errorMessage = requiredPython + " installation path cannot be found on your system.\n";
+    if (installedPythons.size() > 0) {
+      errorMessage += "Detected version(s): ";
+      for (int i = 0; i < installedPythons.size(); ++i) {
+	errorMessage += installedPythons.at(i);
+
+	if (i < installedPythons.size() - 1) {
+	  errorMessage += ", ";
+	}
+      }
+
+      errorMessage += ".";
+    }
+    QMessageBox::warning(tmw, requiredPython + " not found", errorMessage);
+
+    tmw->showErrorMessage("Python", errorMessage);
+  }
+}
+#endif
 
 int main(int argc, char **argv) {
   CrashHandling::installCrashHandler();
@@ -204,6 +242,9 @@ int main(int argc, char **argv) {
 
   mainWindow->show();
   splashScreen.finish(mainWindow);
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
+  checkPython(mainWindow);
+#endif
 
   // Treat arguments
   if (!fileToOpen.isEmpty()) { // open the file passed as argument

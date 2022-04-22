@@ -30,7 +30,6 @@
 #include <QScreen>
 
 #include <tulip/TulipRelease.h>
-#include <tulip/PythonVersionChecker.h>
 #include <tulip/PluginLister.h>
 #include <tulip/Perspective.h>
 #include <tulip/TlpTools.h>
@@ -130,65 +129,11 @@ TulipMainWindow::TulipMainWindow(QWidget *parent)
           this, SLOT(openProjectWith(QString, QString)));
   connect(TulipPerspectiveProcessHandler::instance(), SIGNAL(openPerspective(QString)), this,
           SLOT(createPerspective(QString)));
-
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  checkPython();
-#endif
 }
 
 TulipMainWindow::~TulipMainWindow() {
   delete _ui;
 }
-
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-void TulipMainWindow::checkPython() {
-#if defined(__APPLE__)
-  // no need to check when in mac bundle
-  auto appDir = QApplication::applicationDirPath();
-  if (appDir.contains(".app/Contents/"))
-    return;
-#endif
-  if (!PythonVersionChecker::isPythonVersionMatching()) {
-
-    QStringList installedPythons = PythonVersionChecker::installedVersions();
-
-    QString requiredPython = "Python " + PythonVersionChecker::compiledVersion();
-#ifdef IS_64BIT
-    requiredPython += " (64 bit)";
-#else
-    requiredPython += " (32 bit)";
-#endif
-
-    QString errorMessage;
-
-    if (installedPythons.isEmpty()) {
-      errorMessage = requiredPython + " does not seem to be installed on your system.\nPlease "
-                                      "install it in order to use Tulip.";
-    } else {
-      errorMessage =
-          "Python version mismatch. Please install " + requiredPython + " in order to use Tulip.\n";
-
-      if (installedPythons.size() == 1) {
-        errorMessage += "Detected version is " + installedPythons.at(0) + ".";
-      } else {
-        errorMessage += "Detected versions are ";
-
-        for (int i = 0; i < installedPythons.size(); ++i) {
-          errorMessage += installedPythons.at(i);
-
-          if (i < installedPythons.size() - 1) {
-            errorMessage += ", ";
-          }
-        }
-
-        errorMessage += " .";
-      }
-    }
-
-    showErrorMessage("Python", errorMessage);
-  }
-}
-#endif
 
 void TulipMainWindow::closeEvent(QCloseEvent *e) {
   _systemTrayIcon->deleteLater();
