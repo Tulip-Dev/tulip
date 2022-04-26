@@ -55,6 +55,9 @@ protected slots:
   void updateIconList();
 
   void openUrlInBrowser(const QString &url);
+
+protected:
+  bool eventFilter(QObject *, QEvent *e) override;
 };
 } // namespace tlp
 

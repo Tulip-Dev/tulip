@@ -24,8 +24,11 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
 
-#include <QRegExp>
+#include <QBuffer>
 #include <QDesktopServices>
+#include <QHelpEvent>
+#include <QRegExp>
+#include <QToolTip>
 #include <QUrl>
 
 #include "ui_TulipFontIconDialog.h"
@@ -36,7 +39,7 @@ TulipFontIconDialog::TulipFontIconDialog(QWidget *parent)
     : QDialog(parent), _ui(new Ui::TulipFontIconDialog) {
 
   _ui->setupUi(this);
-
+  _ui->iconListWidget->installEventFilter(this);
   _ui->iconsCreditLabel->setText(
       QString("<p style=\" font-size:11px;\">Special credit for the design "
               "of icons goes to:<br/><b>Font "
@@ -124,4 +127,25 @@ void TulipFontIconDialog::showEvent(QShowEvent *ev) {
 
 void TulipFontIconDialog::openUrlInBrowser(const QString &url) {
   QDesktopServices::openUrl(QUrl(url));
+}
+
+bool TulipFontIconDialog::eventFilter(QObject *, QEvent *event) {
+  if (event->type() == QEvent::ToolTip) {
+    QHelpEvent *he = static_cast<QHelpEvent *>(event);
+    auto lwi = _ui->iconListWidget->itemAt(he->x(), he->y());
+    if (lwi) {
+      // show a 48 pixel height icon
+      auto qimg = lwi->icon().pixmap(48).toImage();
+      QByteArray bytes;
+      QBuffer buf(&bytes);
+      qimg.save(&buf, "png", 100);
+      QString ttip;
+      ttip = QString("<center><img src='data:image/png;base64, %0'/></center><br/>")
+	.arg(QString(bytes.toBase64()))
+	.append(lwi->text());
+      QToolTip::showText(he->globalPos(), ttip);
+      return true;
+    }
+  }
+  return false;
 }
