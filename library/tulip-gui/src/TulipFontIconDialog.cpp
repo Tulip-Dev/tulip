@@ -141,8 +141,8 @@ bool TulipFontIconDialog::eventFilter(QObject *, QEvent *event) {
       qimg.save(&buf, "png", 100);
       QString ttip;
       ttip = QString("<center><img src='data:image/png;base64, %0'/></center><br/>")
-	.arg(QString(bytes.toBase64()))
-	.append(lwi->text());
+                 .arg(QString(bytes.toBase64()))
+                 .append(lwi->text());
       QToolTip::showText(he->globalPos(), ttip);
       return true;
     }
