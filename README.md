@@ -1,6 +1,6 @@
 # Tulip [![license](https://img.shields.io/github/license/Tulip-dev/tulip.svg)](https://www.gnu.org/licenses/lgpl-3.0.html) [![GitHub last commit](https://img.shields.io/github/last-commit/Tulip-Dev/tulip.svg)]() [![Build Status](https://ci.appveyor.com/api/projects/status/github/tulip-dev/tulip?branch=master&svg=true)](https://ci.appveyor.com/project/tulip-dev/tulip) [![SourceForge](https://img.shields.io/sourceforge/dt/auber/tulip.svg)](https://sourceforge.net/projects/auber/files/tulip/) [![PyPI version](https://badge.fury.io/py/tulip-python.svg)](https://badge.fury.io/py/tulip-python)
 
-![alt text](http://tulip.labri.fr/TulipDrupal/sites/default/files/logo_web.png "Tulip")
+![alt text](http://tulip.labri.fr/site/sites/default/files/logo_web.png "Tulip")
 
 [Tulip](http://tulip.labri.fr) is an open source, cross-platform, data visualization framework mainly dedicated to the analysis, 
 the drawing and the visualization of very large graphs (up to the million of nodes and edges).
@@ -9,7 +9,7 @@ from [LaBRI](https://www.labri.fr/) (Laboratoire Bordelais de Recherche en Infor
 and maintained over the years by an average size development team.
 Until the 5.1 release, the main Tulip code repository (subversion based) was hosted 
 on [SourceForge](https://sourceforge.net/projects/auber/).
-That repository is now in read-only mode and future development of Tulip will be hosted here.
+That repository remains the Tulip releases download repository but Tulip 5 development are now hosted here.
 
 ![alt text](screenshots/tulip_screenshot01.png "Tulip software GUI")
 
@@ -36,7 +36,7 @@ The Tulip framework offers numerous features, notably:
   graph hierarchies or cluster trees (nested subgraphs).
   
   * Several graph file formats for serializing such a model to disk, notably the 
-  [TLP format](http://tulip.labri.fr/TulipDrupal/?q=tlp-file-format) based on a 
+  [TLP format](http://tulip.labri.fr/site/?q=tlp-file-format) based on a
   Lisp syntax for easy parsing but also the TLP binary format for faster graph 
   saving and loading.
   
@@ -132,21 +132,11 @@ If you are a MacOS user, we recommend to use [MacPorts](https://www.macports.org
 If you are a Windows user, we recommend to use [MSYS2](http://www.msys2.org/) as it greatly facilitates the build of Tulip on
 that platform (notably by providing up to date compilers and precompiled dependencies). A dedicated batch file [msys2_build.bat](bundlers/win/msys2_build.bat) is available for MSYS2 build.
 
-Hints on how to build Tulip for MSVC can be found in [appveyor_msvc.bat](appveyor_msvc.bat) currently used for continuous integration on [AppVeyor](https://www.appveyor.com/):
+Hints on how to build Tulip for MSVC can be found in [appveyor_msvc.bat](appveyor_msvc.bat) currently used for continuous integration on [AppVeyor](https://www.appveyor.com/).
 
 ## References
 
-Below are some scientific publications related to Tulip (see [Tulip bibliography](http://tulip.labri.fr/TulipDrupal/?q=tulip-biblio) for more information):
-
-  * David Auber, Daniel Archambault, Romain Bourqui, Maylis Delest, Jonathan Dubois, Antoine Lambert, Patrick Mary, Morgan Mathiaut, Guy Mélançon, Bruno Pinaud, Benjamin Renoust and Jason Vallet. [TULIP 5](https://hal.archives-ouvertes.fr/hal-01654518). In Encyclopedia of Social Network Analysis and Mining, Springer, pages 1-28, 2017.
-
-  * David Auber, Romain Bourqui, Maylis Delest, Antoine Lambert, Patrick Mary, Guy Mélançon, Bruno Pinaud, Benjamin Renoust and Jason Vallet. [TULIP 4](https://hal.archives-ouvertes.fr/hal-01359308). Research report. LaBRI - Laboratoire Bordelais de Recherche en Informatique. 2016.
-
-  * David Auber, Daniel Archambault, Romain Bourqui, Antoine Lambert, Morgan Mathiaut, Patrick Mary, Maylis Delest, Jonathan Dubois, and Guy Mélançon. [The Tulip 3 Framework: A Scalable Software Library for Information Visualization Applications Based on Relational Data](https://hal.archives-ouvertes.fr/hal-00659880). Technical report RR-7860, INRIA, January 2012.
-
-  * Antoine Lambert and David Auber. [Graph analysis and visualization with Tulip-Python](https://hal.archives-ouvertes.fr/hal-00744969). EuroSciPy 2012 - 5th European meeting on Python in Science, Bruxelles.
-
-  * David Auber. [Tulip - A Huge Graph Visualization Framework](https://link.springer.com/content/pdf/10.1007%2F978-3-642-18638-7_5.pdf). Graph Drawing Software, Springer, pages 105-126. 2004.
+ [Tulip web site](https://tulip.labri.fr) has a dedicated page for [Tulip bibliography](http://tulip.labri.fr/site/?q=tulip-biblio).
 
 ## License
 
