@@ -3650,7 +3650,7 @@ The next updates will be recorded in order to be undone at the
 next call of the :meth:`tlp.Graph.pop` method. Be careful that all
 the updates are undone except those who affect the ordering of edges.
 
-:param unpopAllowed: If set to :const:`False`, the next updates could not be replayed after undone. If some previously undonevupdates exist they could no longer be replayed.
+:param unpopAllowed: If set to :const:`False`, the next updates could not be replayed after undone. If some previously undone updates exist they could no longer be replayed.
 :type unpopAllowed: boolean
 %End
 
