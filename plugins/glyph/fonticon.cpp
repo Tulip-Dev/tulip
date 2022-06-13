@@ -107,7 +107,16 @@ static FontIcon defaultFontIcon;
 static unordered_map<string, FontIcon> fontIcons;
 
 static FontIcon &getFontIcon(const string &iconName) {
-  if (iconName.empty() || !TulipIconicFont::isIconSupported(iconName)) {
+  auto it = fontIcons.find(iconName);
+  if (it == fontIcons.end())
+    it = fontIcons.emplace(iconName, iconName).first;
+  // check if icon exists
+  if (!it->second.iconCodePoint) {
+    if (iconName.empty())
+      tlp::warning() << "Warning: icon name is empty" << std::endl;
+    else
+      tlp::warning() << "Warning: no icon named " << iconName << std::endl;
+    // use defaultFontIcon
     // initialization of defaultFontIcon is delayed
     if (defaultFontIcon.iconCodePoint == 0) {
       static const std::string defaultIconName = "fa-question-circle";
@@ -116,9 +125,6 @@ static FontIcon &getFontIcon(const string &iconName) {
     }
     return defaultFontIcon;
   }
-  auto it = fontIcons.find(iconName);
-  if (it == fontIcons.end())
-    it = fontIcons.emplace(iconName, iconName).first;
   return it->second;
 }
 
