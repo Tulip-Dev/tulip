@@ -169,6 +169,10 @@ DataSet ParameterListModel::parametersValues() const {
 }
 
 void ParameterListModel::setParametersValues(const DataSet &data) {
+  // update internal data
+  // and ensure display refresh
+  beginResetModel();
   _data = data;
+  endResetModel();
 }
 } // namespace tlp
