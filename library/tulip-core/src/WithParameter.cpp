@@ -57,9 +57,9 @@ static string html_help_def(const string &A, const string &B) {
 }
 
 static string getParameterTypename(const string &name, const string &typeId) {
-  if (name.substr(0, 6) == "file::" || name.substr(0, 9) == "anyfile::") {
+  if (strncmp(name.c_str(), "file::", 6) == 0 || strncmp(name.c_str(), "anyfile::", 9) == 0) {
     return FILE_PATH_TYPE;
-  } else if (name.substr(0, 5) == "dir::") {
+  } else if (strncmp(name.c_str(), "dir::", 5) == 0) {
     return DIR_PATH_TYPE;
   } else if (typeId == typeid(bool).name()) {
     return BOOLEAN_TYPE;
@@ -84,6 +84,20 @@ static string getParameterTypename(const string &name, const string &typeId) {
     }
   }
 }
+
+#define HTML_HELP_OPEN()                                                                           \
+  "<!DOCTYPE html><html><head>\
+<style type=\"text/css\">.body { font-family: \"Segoe UI\", Candara, \"Bitstream Vera Sans\", \"DejaVu Sans\", \"Bitstream Vera Sans\", \"Trebuchet MS\", Verdana, \"Verdana Ref\", sans-serif; }\
+    .paramtable { width: 100%; border: 0px; border-bottom: 1px solid #C9C9C9; padding: 5px; }\
+    .help { font-style: italic; font-size: 90%; }\
+    .b { padding-left: 5px; }</style>\
+</head><body><table border=\"0\" class=\"paramtable\">"
+
+#define HTML_HELP_DEF(A, B) "<tr><td><b>" A "</b><td class=\"b\">" B "</td></tr>"
+
+#define HTML_HELP_BODY() "</table><p class=\"help\">"
+
+#define HTML_HELP_CLOSE() "</p></body></html>"
 
 string ParameterDescriptionList::generateParameterHTMLDocumentation(
     const string &name, const string &help, const string &type, const string &defaultValue,

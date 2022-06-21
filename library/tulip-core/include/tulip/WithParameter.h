@@ -270,20 +270,6 @@ private:
   std::vector<ParameterDescription> parameters;
 };
 
-#define HTML_HELP_OPEN()                                                                           \
-  "<!DOCTYPE html><html><head>\
-<style type=\"text/css\">.body { font-family: \"Segoe UI\", Candara, \"Bitstream Vera Sans\", \"DejaVu Sans\", \"Bitstream Vera Sans\", \"Trebuchet MS\", Verdana, \"Verdana Ref\", sans-serif; }\
-    .paramtable { width: 100%; border: 0px; border-bottom: 1px solid #C9C9C9; padding: 5px; }\
-    .help { font-style: italic; font-size: 90%; }\
-    .b { padding-left: 5px; }</style>\
-</head><body><table border=\"0\" class=\"paramtable\">"
-
-#define HTML_HELP_DEF(A, B) "<tr><td><b>" A "</b><td class=\"b\">" B "</td></tr>"
-
-#define HTML_HELP_BODY() "</table><p class=\"help\">"
-
-#define HTML_HELP_CLOSE() "</p></body></html>"
-
 /**
  * @ingroup Plugins
  * @brief This class describes parameters on a plug-in.
@@ -305,7 +291,7 @@ struct TLP_SCOPE WithParameter {
   /**
    * @brief Adds an IN parameter to the plug-in.
    *
-   * @param name The name of the parameter to add.
+   * @param name The name of the parameter to add. Three name prefixes have special meanings:  'anyfile::' means that the parameter identifies a file, 'file::' means that the parameter identifies an already existing file, 'dir::' means that the parameter identifies an alreay existing directory.
    * @param help A description of the parameter, that will be displayed to the user. Defaults to "".
    * @param defaultValue The default value the parameter should take, to be the initial value in the
    *GUI. Defaults to "".
@@ -324,7 +310,7 @@ struct TLP_SCOPE WithParameter {
   /**
    * @brief Adds an OUT parameter to the plug-in.
    *
-   * @param name The name of the parameter to add.
+   * @param name The name of the parameter to add. Three name prefixes have special meanings:  'anyfile::' means that the parameter identifies a file, 'file::' means that the parameter identifies an already existing file, 'dir::' means that the parameter identifies an alreay existing directory.
    * @param help A description of the parameter, that will be displayed to the user. Defaults to "".
    * @param defaultValue The default value the parameter should take, to be the initial value in the
    *GUI. Defaults to "".
@@ -343,7 +329,7 @@ struct TLP_SCOPE WithParameter {
   /**
    * @brief Adds an INOUT parameter to the plug-in.
    *
-   * @param name The name of the parameter to add.
+   * @param name The name of the parameter to add. Three name prefixes have special meaning:  'anyfile::' means that the parameter identifies a file, 'file::' means that the parameter identifies an already existing file, 'dir::' means taht the parameter identifies an alreay existing directory.
    * @param help A description of the parameter, that will be displayed to the user. Defaults to "".
    * @param defaultValue The default value the parameter should take, to be the initial value in the
    *GUI. Defaults to "".
