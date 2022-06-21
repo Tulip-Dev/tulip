@@ -291,7 +291,10 @@ struct TLP_SCOPE WithParameter {
   /**
    * @brief Adds an IN parameter to the plug-in.
    *
-   * @param name The name of the parameter to add. Three name prefixes have special meanings:  'anyfile::' means that the parameter identifies a file, 'file::' means that the parameter identifies an already existing file, 'dir::' means that the parameter identifies an alreay existing directory.
+   * @param name The name of the parameter to add. Three name prefixes have special meanings:
+   *'anyfile::' means that the parameter identifies a file, 'file::' means that the parameter
+   *identifies an already existing file, 'dir::' means that the parameter identifies an alreay
+   *existing directory.
    * @param help A description of the parameter, that will be displayed to the user. Defaults to "".
    * @param defaultValue The default value the parameter should take, to be the initial value in the
    *GUI. Defaults to "".
@@ -310,7 +313,10 @@ struct TLP_SCOPE WithParameter {
   /**
    * @brief Adds an OUT parameter to the plug-in.
    *
-   * @param name The name of the parameter to add. Three name prefixes have special meanings:  'anyfile::' means that the parameter identifies a file, 'file::' means that the parameter identifies an already existing file, 'dir::' means that the parameter identifies an alreay existing directory.
+   * @param name The name of the parameter to add. Three name prefixes have special meanings:
+   *'anyfile::' means that the parameter identifies a file, 'file::' means that the parameter
+   *identifies an already existing file, 'dir::' means that the parameter identifies an alreay
+   *existing directory.
    * @param help A description of the parameter, that will be displayed to the user. Defaults to "".
    * @param defaultValue The default value the parameter should take, to be the initial value in the
    *GUI. Defaults to "".
@@ -329,7 +335,10 @@ struct TLP_SCOPE WithParameter {
   /**
    * @brief Adds an INOUT parameter to the plug-in.
    *
-   * @param name The name of the parameter to add. Three name prefixes have special meaning:  'anyfile::' means that the parameter identifies a file, 'file::' means that the parameter identifies an already existing file, 'dir::' means taht the parameter identifies an alreay existing directory.
+   * @param name The name of the parameter to add. Three name prefixes have special meaning:
+   *'anyfile::' means that the parameter identifies a file, 'file::' means that the parameter
+   *identifies an already existing file, 'dir::' means taht the parameter identifies an alreay
+   *existing directory.
    * @param help A description of the parameter, that will be displayed to the user. Defaults to "".
    * @param defaultValue The default value the parameter should take, to be the initial value in the
    *GUI. Defaults to "".
