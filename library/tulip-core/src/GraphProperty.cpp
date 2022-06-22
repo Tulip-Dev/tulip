@@ -35,20 +35,6 @@ GraphProperty::GraphProperty(Graph *sg, const std::string &n)
   setAllNodeValue(nullptr);
 }
 //==============================
-GraphProperty::~GraphProperty() {
-  if (graph) {
-
-    for (auto n : graph->nodes()) {
-      if (getNodeValue(n) != nullptr)
-        getNodeValue(n)->removeListener(this);
-    }
-
-    if (getNodeDefaultValue() != nullptr) {
-      getNodeDefaultValue()->removeListener(this);
-    }
-  }
-}
-//==============================
 void GraphProperty::setAllNodeValue(tlp::StoredType<GraphType::RealType>::ReturnedConstValue g) {
   // remove all observed graphs if any
   for (auto n : getNonDefaultValuatedNodes()) {

@@ -44,7 +44,7 @@ class TLP_SCOPE GraphProperty : public AbstractGraphProperty {
 
 public:
   GraphProperty(Graph *, const std::string &n = "");
-  ~GraphProperty() override;
+  ~GraphProperty() override {}
   // override Observable::treatEvent
   void treatEvent(const Event &) override;
 
