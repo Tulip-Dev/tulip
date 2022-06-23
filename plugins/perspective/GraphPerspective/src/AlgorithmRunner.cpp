@@ -34,14 +34,16 @@ struct FavoriteBox : public ExpandableGroupBox {
   bool _droppingFavorite;
 
   explicit FavoriteBox(QWidget *parent = nullptr, const QString &title = QString())
-    : ExpandableGroupBox(parent, title), _droppingFavorite(false) {}
+      : ExpandableGroupBox(parent, title), _droppingFavorite(false) {}
 
 protected:
   void paintEvent(QPaintEvent *event) override {
     ExpandableGroupBox::paintEvent(event);
     QPainter painter(this);
     QPixmap px(_droppingFavorite ? ":/tulip/graphperspective/icons/16/favorite-hover.png"
-	       : (widget()->layout()->isEmpty() ? ":/tulip/graphperspective/icons/16/favorite-empty.png" :  ":/tulip/graphperspective/icons/16/favorite.png"));
+                                 : (widget()->layout()->isEmpty()
+                                        ? ":/tulip/graphperspective/icons/16/favorite-empty.png"
+                                        : ":/tulip/graphperspective/icons/16/favorite.png"));
     painter.drawPixmap(20, 0, px);
   }
 };
@@ -345,8 +347,10 @@ bool AlgorithmRunner::eventFilter(QObject *obj, QEvent *ev) {
     if (obj == _ui->favoritesBox->widget() && _favorites.empty()) {
       QPainter painter(_ui->favoritesBox->widget());
       QPixmap px(_ui->favoritesBox->_droppingFavorite
-		 ? ":/tulip/graphperspective/icons/32/favorite-hover.png" :
-		 (_ui->favoritesBox->widget()->layout()->isEmpty() ? ":/tulip/graphperspective/icons/16/favorite-empty.png" :  ":/tulip/graphperspective/icons/16/favorite.png"));
+                     ? ":/tulip/graphperspective/icons/32/favorite-hover.png"
+                     : (_ui->favoritesBox->widget()->layout()->isEmpty()
+                            ? ":/tulip/graphperspective/icons/16/favorite-empty.png"
+                            : ":/tulip/graphperspective/icons/16/favorite.png"));
       painter.drawPixmap(_ui->favoritesBox->widget()->width() - px.width() - 8, 8, px);
       QFont f;
       f.setItalic(true);
@@ -406,7 +410,7 @@ void AlgorithmRunner::removeFavorite(const QString &algName) {
 
   TulipSettings::removeFavoriteAlgorithm(algName);
 
-  if (_favorites. isEmpty())
+  if (_favorites.isEmpty())
     _ui->favoritesBox->widget()->setMinimumHeight(45);
 }
 
