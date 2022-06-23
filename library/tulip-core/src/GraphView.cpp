@@ -104,11 +104,6 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int sg
   }
 }
 //----------------------------------------------------------------
-GraphView::~GraphView() {
-  // notify destruction
-  observableDeleted();
-}
-//----------------------------------------------------------------
 edge GraphView::existEdge(const node src, const node tgt, bool directed) const {
   if (!isElement(src) || !isElement(tgt))
     return edge();

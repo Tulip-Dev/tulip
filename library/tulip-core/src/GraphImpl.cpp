@@ -65,9 +65,6 @@ GraphImpl::~GraphImpl() {
   }
 
   delPreviousRecorders();
-
-  // notify destruction
-  observableDeleted();
 }
 //----------------------------------------------------------------
 void GraphImpl::clear() {

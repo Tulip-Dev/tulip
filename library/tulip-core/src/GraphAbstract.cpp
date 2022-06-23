@@ -64,6 +64,9 @@ GraphAbstract::~GraphAbstract() {
 
   if (id != 0)
     static_cast<GraphImpl *>(getRoot())->freeSubGraphId(id);
+
+  // notify destruction
+  observableDeleted();
 }
 //=========================================================================
 void GraphAbstract::clear() {

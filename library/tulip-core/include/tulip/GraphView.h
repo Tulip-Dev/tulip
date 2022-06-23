@@ -58,7 +58,7 @@ class GraphView : public GraphAbstract {
 
 public:
   GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int id);
-  ~GraphView() override;
+  ~GraphView() override {}
   //========================================================================
   node addNode() override;
   void addNodes(unsigned int nb) override;
