@@ -5,7 +5,7 @@ This should only be used when packaging Tulip for a Linux distribution or MSYS2.
 
 # After finding the Python interpreter, try to find if SIP and its dev tools are installed on the host system.
 # If not, compile the SIP version located in thirdparty.
-FIND_PACKAGE(PythonInterp 3.6 REQUIRED)
+FIND_PACKAGE(PythonInterp 3.7 REQUIRED)
 
 EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} --version OUTPUT_VARIABLE PYTHON_VERSION_RAW ERROR_VARIABLE PYTHON_VERSION_RAW)
 STRING(REPLACE "\n" "" PYTHON_VERSION_RAW "${PYTHON_VERSION_RAW}")
