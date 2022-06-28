@@ -51,8 +51,9 @@ some code samples that illustrate these features::
   # The property can be deleted by the graph that has created it
   graph.delLocalProperty("myMetric")
 
-  # Anonymous properties can also be instantiated the following way
-  myOtherMetric = tlp.DoubleProperty(graph)	
+  # Anonymous properties can also be instantiated the following way;
+  # they will be deleted by the Python garbage collector, when needed.
+  myOtherMetric = graph.DoubleProperty()
 
 
 Working with graph properties

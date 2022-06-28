@@ -2377,6 +2377,21 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
+  tlp::BooleanProperty *BooleanProperty() /TransferBack, TypeHint="tlp.BooleanProperty]"/;
+%Docstring
+tlp.Graph.BooleanProperty()
+
+Returns an anonymous boolean property associated to the graph.
+
+:rtype: :class:`tlp.BooleanProperty`
+%End
+
+%MethodCode
+    sipRes = new tlp::BooleanProperty(sipCpp);
+%End
+
+//===========================================================================================
+
   tlp::BooleanVectorProperty *getBooleanVectorProperty(const std::string &name);
 %Docstring
 tlp.Graph.getBooleanVectorProperty(name)
@@ -2419,6 +2434,21 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
   } else {
     sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
   }
+%End
+
+//===========================================================================================
+
+  tlp::BooleanVectorProperty *BooleanVectorProperty() /TransferBack, TypeHint="tlp.BooleanVectorProperty]"/;
+%Docstring
+tlp.Graph.BooleanVectorProperty()
+
+Returns an anonymous vector of booleans property associated to the graph.
+
+:rtype: :class:`tlp.BooleanVectorProperty`
+%End
+
+%MethodCode
+    sipRes = new tlp::BooleanVectorProperty(sipCpp);
 %End
 
 //===========================================================================================
@@ -2469,6 +2499,21 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
+  tlp::LayoutProperty *LayoutProperty() /TransferBack, TypeHint="tlp.LayoutProperty]"/;
+%Docstring
+tlp.Graph.LayoutProperty()
+
+Returns an anonymous layout property associated to the graph.
+
+:rtype: :class:`tlp.LayoutProperty`
+%End
+
+%MethodCode
+    sipRes = new tlp::LayoutProperty(sipCpp);
+%End
+
+//===========================================================================================
+
   tlp::CoordVectorProperty *getCoordVectorProperty(const std::string &name);
 %Docstring
 tlp.Graph.getCoordVectorProperty(name)
@@ -2511,6 +2556,21 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
   } else {
     sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
   }
+%End
+
+//===========================================================================================
+
+  tlp::CoordVectorProperty *CoordVectorProperty() /TransferBack, TypeHint="tlp.CoordVectorProperty]"/;
+%Docstring
+tlp.Graph.CoordVectorProperty()
+
+Returns an anonymous vector of coords property associated to the graph.
+
+:rtype: :class:`tlp.CoordVectorProperty`
+%End
+
+%MethodCode
+    sipRes = new tlp::CoordVectorProperty(sipCpp);
 %End
 
 //===========================================================================================
@@ -2561,6 +2621,21 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
+  tlp::ColorProperty *ColorProperty() /TransferBack, TypeHint="tlp.ColorProperty]"/;
+%Docstring
+tlp.Graph.ColorProperty()
+
+Returns an anonymous color property associated to the graph.
+
+:rtype: :class:`tlp.ColorProperty`
+%End
+
+%MethodCode
+    sipRes = new tlp::ColorProperty(sipCpp);
+%End
+
+//===========================================================================================
+
   tlp::ColorVectorProperty *getColorVectorProperty(const std::string &name);
 %Docstring
 tlp.Graph.getColorVectorProperty(name)
@@ -2603,6 +2678,21 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
   } else {
     sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
   }
+%End
+
+//===========================================================================================
+
+  tlp::ColorVectorProperty *ColorVectorProperty() /TransferBack, TypeHint="tlp.ColorVectorProperty]"/;
+%Docstring
+tlp.Graph.ColorVectorProperty()
+
+Returns an anonymous vector of colors property associated to the graph.
+
+:rtype: :class:`tlp.ColorVectorProperty`
+%End
+
+%MethodCode
+    sipRes = new tlp::ColorVectorProperty(sipCpp);
 %End
 
 //===========================================================================================
@@ -2653,6 +2743,21 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
+  tlp::DoubleProperty *DoubleProperty() /TransferBack, TypeHint="tlp.DoubleProperty]"/;
+%Docstring
+tlp.Graph.DoubleProperty()
+
+Returns an anonymous double property associated to the graph.
+
+:rtype: :class:`tlp.DoubleProperty`
+%End
+
+%MethodCode
+    sipRes = new tlp::DoubleProperty(sipCpp);
+%End
+
+//===========================================================================================
+
   tlp::DoubleVectorProperty *getDoubleVectorProperty(const std::string &name);
 %Docstring
 tlp.Graph.getDoubleVectorProperty(name)
@@ -2695,6 +2800,21 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
   } else {
     sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
   }
+%End
+
+//===========================================================================================
+
+  tlp::DoubleVectorProperty *DoubleVectorProperty() /TransferBack, TypeHint="tlp.DoubleVectorProperty]"/;
+%Docstring
+tlp.Graph.DoubleVectorProperty()
+
+Returns an anonymous vector of doubles property associated to the graph.
+
+:rtype: :class:`tlp.DoubleVectorProperty`
+%End
+
+%MethodCode
+    sipRes = new tlp::DoubleVectorProperty(sipCpp);
 %End
 
 //===========================================================================================
@@ -2745,6 +2865,21 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
+  tlp::StringProperty *StringProperty() /TransferBack, TypeHint="tlp.StringProperty]"/;
+%Docstring
+tlp.Graph.StringProperty()
+
+Returns an anonymous string property associated to the graph.
+
+:rtype: :class:`tlp.StringProperty`
+%End
+
+%MethodCode
+    sipRes = new tlp::StringProperty(sipCpp);
+%End
+
+//===========================================================================================
+
   tlp::StringVectorProperty *getStringVectorProperty(const std::string &name);
 %Docstring
 tlp.Graph.getStringVectorProperty(name)
@@ -2787,6 +2922,21 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
   } else {
     sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
   }
+%End
+
+//===========================================================================================
+
+  tlp::StringVectorProperty *StringVectorProperty() /TransferBack, TypeHint="tlp.StringVectorProperty]"/;
+%Docstring
+tlp.Graph.StringVectorProperty()
+
+Returns an anonymous vector of strings property associated to the graph.
+
+:rtype: :class:`tlp.StringVectorProperty`
+%End
+
+%MethodCode
+    sipRes = new tlp::StringVectorProperty(sipCpp);
 %End
 
 //===========================================================================================
@@ -2837,6 +2987,21 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
+  tlp::SizeProperty *SizeProperty() /TransferBack, TypeHint="tlp.SizeProperty]"/;
+%Docstring
+tlp.Graph.SizeProperty()
+
+Returns an anonymous size property associated to the graph.
+
+:rtype: :class:`tlp.SizeProperty`
+%End
+
+%MethodCode
+    sipRes = new tlp::SizeProperty(sipCpp);
+%End
+
+//===========================================================================================
+
   tlp::SizeVectorProperty *getSizeVectorProperty(const std::string &name);
 %Docstring
 tlp.Graph.getSizeVectorProperty(name)
@@ -2879,6 +3044,21 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
   } else {
     sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
   }
+%End
+
+//===========================================================================================
+
+  tlp::SizeVectorProperty *SizeVectorProperty() /TransferBack, TypeHint="tlp.SizeVectorProperty]"/;
+%Docstring
+tlp.Graph.SizeVectorProperty()
+
+Returns an anonymous vector of sizes property associated to the graph.
+
+:rtype: :class:`tlp.SizeVectorProperty`
+%End
+
+%MethodCode
+    sipRes = new tlp::SizeVectorProperty(sipCpp);
 %End
 
 //===========================================================================================
@@ -2929,6 +3109,21 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
+  tlp::IntegerProperty *IntegerProperty() /TransferBack, TypeHint="tlp.IntegerProperty]"/;
+%Docstring
+tlp.Graph.IntegerProperty()
+
+Returns an anonymous integer property associated to the graph.
+
+:rtype: :class:`tlp.IntegerProperty`
+%End
+
+%MethodCode
+    sipRes = new tlp::IntegerProperty(sipCpp);
+%End
+
+//===========================================================================================
+
   tlp::IntegerVectorProperty *getIntegerVectorProperty(const std::string &name);
 %Docstring
 tlp.Graph.getIntegerVectorProperty(name)
@@ -2975,6 +3170,21 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
+  tlp::IntegerVectorProperty *IntegerVectorProperty() /TransferBack, TypeHint="tlp.IntegerVectorProperty]"/;
+%Docstring
+tlp.Graph.IntegerVectorProperty()
+
+Returns an anonymous vector of integers property associated to the graph.
+
+:rtype: :class:`tlp.IntegerVectorProperty`
+%End
+
+%MethodCode
+    sipRes = new tlp::IntegerVectorProperty(sipCpp);
+%End
+
+//===========================================================================================
+
   tlp::GraphProperty *getGraphProperty(const std::string &name);
 %Docstring
 tlp.Graph.getGraphProperty(name)
@@ -3017,6 +3227,21 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
   } else {
     sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
   }
+%End
+
+//===========================================================================================
+
+  tlp::GraphProperty *GraphProperty() /TransferBack, TypeHint="tlp.GraphProperty]"/;
+%Docstring
+tlp.Graph.GraphProperty()
+
+Returns an anonymous graph property associated to the graph.
+
+:rtype: :class:`tlp.GraphProperty`
+%End
+
+%MethodCode
+    sipRes = new tlp::GraphProperty(sipCpp);
 %End
 
 //===========================================================================================
