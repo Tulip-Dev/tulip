@@ -53,7 +53,7 @@ some code samples that illustrate these features::
 
   # Anonymous properties can also be instantiated the following way;
   # they will be deleted by the Python garbage collector, when needed.
-  myOtherMetric = graph.DoubleProperty()
+  myOtherMetric = graph.doubleProperty()
 
 
 Working with graph properties

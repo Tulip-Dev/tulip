@@ -2377,7 +2377,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
-  tlp::BooleanProperty *BooleanProperty() /TransferBack, TypeHint="tlp.BooleanProperty]"/;
+  tlp::BooleanProperty *booleanProperty() /TransferBack, TypeHint="tlp.BooleanProperty"/;
 %Docstring
 tlp.Graph.BooleanProperty()
 
@@ -2438,7 +2438,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
-  tlp::BooleanVectorProperty *BooleanVectorProperty() /TransferBack, TypeHint="tlp.BooleanVectorProperty]"/;
+  tlp::BooleanVectorProperty *booleanVectorProperty() /TransferBack, TypeHint="tlp.BooleanVectorProperty"/;
 %Docstring
 tlp.Graph.BooleanVectorProperty()
 
@@ -2499,7 +2499,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
-  tlp::LayoutProperty *LayoutProperty() /TransferBack, TypeHint="tlp.LayoutProperty]"/;
+  tlp::LayoutProperty *layoutProperty() /TransferBack, TypeHint="tlp.LayoutProperty"/;
 %Docstring
 tlp.Graph.LayoutProperty()
 
@@ -2560,7 +2560,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
-  tlp::CoordVectorProperty *CoordVectorProperty() /TransferBack, TypeHint="tlp.CoordVectorProperty]"/;
+  tlp::CoordVectorProperty *coordVectorProperty() /TransferBack, TypeHint="tlp.CoordVectorProperty"/;
 %Docstring
 tlp.Graph.CoordVectorProperty()
 
@@ -2621,7 +2621,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
-  tlp::ColorProperty *ColorProperty() /TransferBack, TypeHint="tlp.ColorProperty]"/;
+  tlp::ColorProperty *colorProperty() /TransferBack, TypeHint="tlp.ColorProperty"/;
 %Docstring
 tlp.Graph.ColorProperty()
 
@@ -2682,7 +2682,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
-  tlp::ColorVectorProperty *ColorVectorProperty() /TransferBack, TypeHint="tlp.ColorVectorProperty]"/;
+  tlp::ColorVectorProperty *colorVectorProperty() /TransferBack, TypeHint="tlp.ColorVectorProperty"/;
 %Docstring
 tlp.Graph.ColorVectorProperty()
 
@@ -2743,7 +2743,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
-  tlp::DoubleProperty *DoubleProperty() /TransferBack, TypeHint="tlp.DoubleProperty]"/;
+  tlp::DoubleProperty *doubleProperty() /TransferBack, TypeHint="tlp.DoubleProperty"/;
 %Docstring
 tlp.Graph.DoubleProperty()
 
@@ -2804,7 +2804,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
-  tlp::DoubleVectorProperty *DoubleVectorProperty() /TransferBack, TypeHint="tlp.DoubleVectorProperty]"/;
+  tlp::DoubleVectorProperty *doubleVectorProperty() /TransferBack, TypeHint="tlp.DoubleVectorProperty"/;
 %Docstring
 tlp.Graph.DoubleVectorProperty()
 
@@ -2865,7 +2865,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
-  tlp::StringProperty *StringProperty() /TransferBack, TypeHint="tlp.StringProperty]"/;
+  tlp::StringProperty *stringProperty() /TransferBack, TypeHint="tlp.StringProperty"/;
 %Docstring
 tlp.Graph.StringProperty()
 
@@ -2926,7 +2926,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
-  tlp::StringVectorProperty *StringVectorProperty() /TransferBack, TypeHint="tlp.StringVectorProperty]"/;
+  tlp::StringVectorProperty *stringVectorProperty() /TransferBack, TypeHint="tlp.StringVectorProperty"/;
 %Docstring
 tlp.Graph.StringVectorProperty()
 
@@ -2987,7 +2987,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
-  tlp::SizeProperty *SizeProperty() /TransferBack, TypeHint="tlp.SizeProperty]"/;
+  tlp::SizeProperty *sizeProperty() /TransferBack, TypeHint="tlp.SizeProperty"/;
 %Docstring
 tlp.Graph.SizeProperty()
 
@@ -3048,7 +3048,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
-  tlp::SizeVectorProperty *SizeVectorProperty() /TransferBack, TypeHint="tlp.SizeVectorProperty]"/;
+  tlp::SizeVectorProperty *sizeVectorProperty() /TransferBack, TypeHint="tlp.SizeVectorProperty"/;
 %Docstring
 tlp.Graph.SizeVectorProperty()
 
@@ -3109,7 +3109,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
-  tlp::IntegerProperty *IntegerProperty() /TransferBack, TypeHint="tlp.IntegerProperty]"/;
+  tlp::IntegerProperty *integerProperty() /TransferBack, TypeHint="tlp.IntegerProperty"/;
 %Docstring
 tlp.Graph.IntegerProperty()
 
@@ -3170,7 +3170,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
-  tlp::IntegerVectorProperty *IntegerVectorProperty() /TransferBack, TypeHint="tlp.IntegerVectorProperty]"/;
+  tlp::IntegerVectorProperty *integerVectorProperty() /TransferBack, TypeHint="tlp.IntegerVectorProperty"/;
 %Docstring
 tlp.Graph.IntegerVectorProperty()
 
@@ -3231,9 +3231,9 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 
 //===========================================================================================
 
-  tlp::GraphProperty *GraphProperty() /TransferBack, TypeHint="tlp.GraphProperty]"/;
+  tlp::GraphProperty *graphProperty() /TransferBack, TypeHint="tlp.GraphProperty"/;
 %Docstring
-tlp.Graph.GraphProperty()
+tlp.Graph.graphProperty()
 
 Returns an anonymous graph property associated to the graph.
 
