@@ -1692,14 +1692,14 @@ void PythonIDE::saveScript(int tabIdx, bool clear, bool showFileDialog, bool sav
 
       if (!tabText.startsWith("[")) {
         dir = tabText;
-	if (saveAs && dir.endsWith("*"))
-	  dir.remove(tabText.length() - 1, 1);
+        if (saveAs && dir.endsWith("*"))
+          dir.remove(tabText.length() - 1, 1);
       }
 
       fileName =
           QFileDialog::getSaveFileName(this, tr("Save main script"), dir, "Python script (*.py)");
       if (fileName.isEmpty())
-	return;
+        return;
     } else
       fileName = mainScriptFileName;
 
