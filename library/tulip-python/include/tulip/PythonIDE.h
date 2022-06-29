@@ -118,7 +118,7 @@ private:
   int addPluginEditor(const QString &fileName = "");
 
   bool loadScript(const QString &fileName, bool clear = true);
-  void saveScript(int tabIdx, bool clear = true, bool showFileDialog = false);
+  void saveScript(int tabIdx, bool clear = true, bool showFileDialog = false, bool saveAs = false);
 
   tlp::PythonCodeEditor *getCurrentMainScriptEditor() const;
   tlp::PythonCodeEditor *getMainScriptEditor(int idx) const;
@@ -157,6 +157,7 @@ private slots:
   void newScript();
   void loadScript();
   void saveScript();
+  void saveAsScript();
   void saveAllScripts();
   void currentScriptPaused();
 

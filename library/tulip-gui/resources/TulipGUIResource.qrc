@@ -107,6 +107,7 @@
         <file>icons/16/clipboard.png</file>
         <file>icons/64/document-add.png</file>
         <file>icons/64/document-export.png</file>
+        <file>icons/64/document-saveas.png</file>
         <file>icons/64/document-import.png</file>
         <file>icons/64/document-plus.png</file>
         <file>icons/arrow_two_head.png</file>

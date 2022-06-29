@@ -208,7 +208,7 @@ background-color: #A0A0A0;
               </size>
              </property>
              <property name="toolTip">
-              <string>Save main script to file</string>
+              <string>Save the current script</string>
              </property>
              <property name="text">
               <string>Save</string>
@@ -216,6 +216,44 @@ background-color: #A0A0A0;
              <property name="icon">
               <iconset>
                <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="toolButtonStyle">
+              <enum>Qt::ToolButtonTextUnderIcon</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="saveAsMainScriptButton">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>40</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>40</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Save the current script in an interactively chosen file</string>
+             </property>
+             <property name="text">
+              <string>Save as</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>:/tulip/gui/icons/64/document-saveas.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -980,13 +1018,13 @@ background-color: #A0A0A0;
             <property name="toolTip">
              <string>If checked, current graph state will be saved before the script execution
 and will be restored automatically if the script fails, or manually
-if the script succeeds by clicking on the 'Undo' button.
+if the script succeeds by clicking on the 'Undo' button in the main window.
 If unchecked, every modification performed by the script on the graph
 can not be undone but performance of the script execution will be better
 (in particular when dealing with a large graph).</string>
             </property>
             <property name="text">
-             <string>Use undo feature</string>
+             <string>enable undo</string>
             </property>
             <property name="checked">
              <bool>true</bool>
