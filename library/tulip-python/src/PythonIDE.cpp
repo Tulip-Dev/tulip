@@ -1616,7 +1616,7 @@ void PythonIDE::currentScriptPaused() {
 }
 
 bool PythonIDE::isCurrentScriptExecuting() {
-  return !_ui->runScriptButton->isEnabled();
+  return getCurrentMainScriptEditor() && !_ui->runScriptButton->isEnabled();
 }
 
 void PythonIDE::newScript() {
