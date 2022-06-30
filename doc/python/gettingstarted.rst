@@ -47,7 +47,7 @@ More sophisticated ways to write python code for graphs management purpose are p
   part of the tab is wrapped as a :class:`tlp.Graph` object and provided as parameter of the "main" function.
   The currently edited script can be launched (|icon_run| button) through the control panel located in the lower part of the tab interface.
   Once started, the script execution can be paused (|icon_pause| button) or stopped (|icon_stop| button); trigerring the update of Tulip visualizations each time.
-  All modifications performed by a script on a graph can be cancelled / replayed through the Tulip undo / redo feature.
+  All modifications performed by a script on a graph can be cancelled/replayed through the Tulip undo/redo feature if the "enable undo" box is checked.
 
 .. _fig2:
 .. figure:: tulipPythonScript.png
