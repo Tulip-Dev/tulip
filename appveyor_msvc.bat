@@ -47,18 +47,18 @@ move C:\tulip_dependencies\lib\cppunit_dll.dll C:\tulip_dependencies\bin\
 
 if "%TULIP_BUILD_CORE_ONLY%" == "0" (
   goto install_complete_tulip_build_dependencies
-) else {
+) else (
   goto tulip_build
-}
+)
 
 
 :install_complete_tulip_build_dependencies
 rem get, compile and install freetype
 cd C:/tulip_dependencies
-curl -LO http://download.savannah.gnu.org/releases/freetype/freetype-2.11.1.tar.gz
+curl -LO http://download.savannah.gnu.org/releases/freetype/freetype-2.12.1.tar.gz
 if %errorlevel% neq 0 exit /b %errorlevel%
-7z x freetype-2.11.1.tar.gz -so | 7z x -aoa -si -ttar
-cd freetype-2.11.1
+7z x freetype-2.12.1.tar.gz -so | 7z x -aoa -si -ttar
+cd freetype-2.12.1
 md build && cd build
 cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INSTALL_PREFIX="C:/tulip_dependencies" ..
 if %errorlevel% neq 0 exit /b %errorlevel%
