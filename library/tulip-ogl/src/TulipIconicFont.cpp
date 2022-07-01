@@ -52,6 +52,12 @@ std::string TulipIconicFont::getIconFamily(const std::string &iconName) {
                                      : TulipMaterialDesignIcons::getIconFamily(iconName);
 }
 
+std::string TulipIconicFont::getIconStyle(const std::string &iconName) {
+  assert(isIconSupported(iconName));
+  return (iconName.find("fa-") == 0) ? TulipFontAwesome::getIconStyle(iconName)
+                                     : TulipMaterialDesignIcons::getIconStyle(iconName);
+}
+
 std::string TulipIconicFont::getIconUtf8String(const std::string &iconName) {
   assert(isIconSupported(iconName));
   return (iconName.find("fa-") == 0) ? TulipFontAwesome::getIconUtf8String(iconName)

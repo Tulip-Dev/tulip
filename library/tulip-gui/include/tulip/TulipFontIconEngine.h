@@ -29,10 +29,10 @@
 
 class TLP_QT_SCOPE TulipFontIconEngine : public QIconEngine {
   QString iconQString;
-  QFont &font;
+  QFont font;
   bool darkMode;
 
-  QFont &init(const std::string &iconName);
+  void init(const std::string &iconName);
 
 public:
   TulipFontIconEngine(const std::string &iconName, bool darkMode = false);

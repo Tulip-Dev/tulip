@@ -86,6 +86,10 @@ std::string TulipMaterialDesignIcons::getIconFamily(const std::string &) {
   return "materialdesignicons";
 }
 
+std::string TulipMaterialDesignIcons::getIconStyle(const std::string &) {
+  return "Regular";
+}
+
 std::string TulipMaterialDesignIcons::getIconUtf8String(const std::string &iconName) {
   if (iconCodePoint.empty()) {
     initIconCodePoints();

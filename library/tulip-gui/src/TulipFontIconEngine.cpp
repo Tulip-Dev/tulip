@@ -31,8 +31,8 @@ using namespace tlp;
 std::unordered_map<std::string, QFont> qFonts;
 QFont nullFont;
 
-QFont &TulipFontIconEngine::init(const std::string &iconName) {
-  // first get iconQString
+void TulipFontIconEngine::init(const std::string &iconName) {
+  // get iconQString
   iconQString = QString(TulipIconicFont::getIconUtf8String(iconName).c_str());
   // then get font
   auto &&fontFile = TulipIconicFont::getTTFLocation(iconName);
@@ -41,7 +41,8 @@ QFont &TulipFontIconEngine::init(const std::string &iconName) {
     auto fontId = QFontDatabase::addApplicationFont(tlpStringToQString(fontFile));
     if (fontId == -1) {
       qDebug() << "Error when loading font file " << tlpStringToQString(fontFile);
-      return nullFont;
+      font = nullFont;
+      return;
     }
 
     QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
@@ -49,17 +50,23 @@ QFont &TulipFontIconEngine::init(const std::string &iconName) {
       qFonts.emplace(fontFile, fontFamilies.at(0));
     } else {
       qDebug() << "No data found when loading file" << tlpStringToQString(fontFile);
-      return nullFont;
+      font = nullFont;
+      return;
     }
   }
-  return qFonts[fontFile];
+  font = qFonts[fontFile];
+  font.setStyleName(tlpStringToQString(TulipIconicFont::getIconStyle(iconName)));
 }
 
 TulipFontIconEngine::TulipFontIconEngine(const std::string &iconName, bool dm)
-    : font(init(iconName)), darkMode(dm) {}
+    : darkMode(dm) {
+  init(iconName);
+}
 
 TulipFontIconEngine::TulipFontIconEngine(const QString &iconName, bool dm)
-    : font(init(QStringToTlpString(iconName))), darkMode(dm) {}
+    : darkMode(dm) {
+    init(QStringToTlpString(iconName));
+}
 
 void TulipFontIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mode mode,
                                 QIcon::State) {

@@ -105,6 +105,12 @@ public:
   static std::string getIconFamily(const std::string &iconName);
 
   /**
+   * Returns the font style name associated to an icon name
+   * @param iconName the name of the icon
+   */
+  static std::string getIconStyle(const std::string &iconName);
+
+  /**
    * Returns an UTF-8 encoded string of a Material Design icon
    * @param iconName a Material Design icon name
    * @return

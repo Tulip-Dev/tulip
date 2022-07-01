@@ -65,6 +65,12 @@ public:
   static std::string getIconFamily(const std::string &iconName);
 
   /**
+   * Returns the font style name associated to an icon name
+   * @param iconName the icon name
+   */
+  static std::string getIconStyle(const std::string &iconName);
+
+  /**
    * Returns an UTF-8 encoded string of a Font Awesome icon
    * @param iconName the icon name
    * @return
