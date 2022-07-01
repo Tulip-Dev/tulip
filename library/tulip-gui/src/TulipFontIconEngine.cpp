@@ -58,14 +58,12 @@ void TulipFontIconEngine::init(const std::string &iconName) {
   font.setStyleName(tlpStringToQString(TulipIconicFont::getIconStyle(iconName)));
 }
 
-TulipFontIconEngine::TulipFontIconEngine(const std::string &iconName, bool dm)
-    : darkMode(dm) {
+TulipFontIconEngine::TulipFontIconEngine(const std::string &iconName, bool dm) : darkMode(dm) {
   init(iconName);
 }
 
-TulipFontIconEngine::TulipFontIconEngine(const QString &iconName, bool dm)
-    : darkMode(dm) {
-    init(QStringToTlpString(iconName));
+TulipFontIconEngine::TulipFontIconEngine(const QString &iconName, bool dm) : darkMode(dm) {
+  init(QStringToTlpString(iconName));
 }
 
 void TulipFontIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mode mode,

@@ -45,7 +45,8 @@ static map<std::string, unsigned int> iconCodePoint;
 static unordered_map<std::string, const char *> iconFile;
 static vector<std::string> iconsNames;
 
-static void addIconCodePoint(const string &fontName, const string &iconName, unsigned int codePoint) {
+static void addIconCodePoint(const string &fontName, const string &iconName,
+                             unsigned int codePoint) {
   string name("fa-");
   name.append(iconName);
   if (fontName == "solid") {
@@ -55,9 +56,9 @@ static void addIconCodePoint(const string &fontName, const string &iconName, uns
       name.append("-o");
     iconFile[name] = "fa-regular-400";
   } else if (fontName == "brands") {
-      iconCodePoint[name] = codePoint;
-      iconFile[name] = "fa-brands-400";
-    }
+    iconCodePoint[name] = codePoint;
+    iconFile[name] = "fa-brands-400";
+  }
   iconCodePoint[name] = codePoint;
 }
 
