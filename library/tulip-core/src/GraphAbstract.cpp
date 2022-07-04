@@ -45,9 +45,10 @@ GraphAbstract::GraphAbstract(Graph *supergraph, unsigned int sgId)
 }
 //=========================================================================
 GraphAbstract::~GraphAbstract() {
+  // notify destruction
+  observableDeleted();
 
   for (Graph *sg : subgraphs) {
-
     // avoid double free
     // in a push context, a 'deleted' graph (see delSubGraph)
     // may still have a non empty list of subgraphs
@@ -64,9 +65,6 @@ GraphAbstract::~GraphAbstract() {
 
   if (id != 0)
     static_cast<GraphImpl *>(getRoot())->freeSubGraphId(id);
-
-  // notify destruction
-  observableDeleted();
 }
 //=========================================================================
 void GraphAbstract::clear() {
