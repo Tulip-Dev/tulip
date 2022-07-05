@@ -7,6 +7,8 @@ TULIP_PYTHON_TEST_WHEEL_SUFFIX=$1
 # install tulip-core wheel deps
 # yum -y install epel-release
 yum -y install zlib-devel qhull-devel python-devel ccache cmake3
+# install wheels build deps
+yum -y install libffi-devel
 
 # get tulip source dir
 if [ -d /tulip ]
@@ -33,7 +35,7 @@ for CPYBIN in /opt/python/cp*/bin
 do
   PYTHON_MAJOR_MINOR=$(${CPYBIN}/python -c "print(__import__('sys').version.split(' ')[0])" | cut -d'.' -f '1 2')
   # Python 3.5, 3.6 no longer supported and 3.11 not yet supported
-  if [[ "$PYTHON_MAJOR_MINOR" = "3.5" ]] && [[ "$PYTHON_MAJOR_MINOR" = "3.6" ]] && [[ "$PYTHON_MAJOR_MINOR" = "3.11" ]]
+  if [[ "$PYTHON_MAJOR_MINOR" = "3.5" ]] || [[ "$PYTHON_MAJOR_MINOR" = "3.6" ]] || [[ "$PYTHON_MAJOR_MINOR" = "3.11" ]]
   then
      continue
   fi
