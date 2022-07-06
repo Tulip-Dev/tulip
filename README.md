@@ -80,8 +80,7 @@ Below are some links to relevant documentation resources about the Tulip framewo
   
 ## Installing Tulip
 
-Tulip is a cross-platform framework and can be compiled or installed on [FreeBSD](https://www.freshports.org/graphics/tulip/),
-main Linux distributions ([Debian](https://packages.debian.org/search?keywords=tulip), [Fedora](https://fedora.pkgs.org/26/rpm-sphere/tulip-4.9.0-6.1.x86_64.rpm.html), [OpenSUSE](https://software.opensuse.org/download.html?project=graphics&package=tulip) or [Ubuntu](https://packages.ubuntu.com/fr/xenial/tulip), the packages provided are not necessarily in synch with latest Tulip version), MacOS and Windows.
+Tulip is a cross-platform framework and can be installed or compiled on many **Linux** distributions (Arch Linux, Debian, Fedora, Gentoo, OpenSUSE, Ubuntu...), on **MacOS** and **Windows**.
 
 ### Precompiled binaries
 
