@@ -1017,10 +1017,10 @@ background-color: #A0A0A0;
            <widget class="QCheckBox" name="useUndoCB">
             <property name="toolTip">
              <string>If checked, current graph state will be saved before the script execution
-and will be restored automatically if the script fails, or manually
-if the script succeeds by clicking on the 'Undo' button in the main window.
+and restored automatically if the script fails, or manually
+if the script succeeds by clicking on the 'Undo' button in the main Tulip window.
 If unchecked, every modification performed by the script on the graph
-can not be undone but performance of the script execution will be better
+cannot be undone but performance will be better
 (in particular when dealing with a large graph).</string>
             </property>
             <property name="text">
