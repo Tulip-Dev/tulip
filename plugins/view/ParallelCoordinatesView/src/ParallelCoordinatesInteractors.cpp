@@ -259,14 +259,14 @@ void InteractorAxisSpacer::construct() {
       QString("<html>") + "<head>" + "<title></title>" + "</head>" + "<body>" +
       "<h3>Axis spacer interactor</h3>" +
       "<p>This interactor allows to modify the space between two consecutive axis.</p>" +
-      "<p>Put the mouse pointer under an axis, a red rectangle will appear to indicate the axis is "
-      "selected. Do a left click and keep the mouse button pressed while you're dragging the axis "
-      "to modify its position. The axis can not be moved further that its neighbors.</p>" +
-      "<p>By double clicking anywhere in the view, the axis positions will be reset to the default "
-      "ones and the axis will we equally spaced.</p>" +
-      "<p>The axis positions will also be reset to default when the number of selected properties "
-      "changes.</p>" +
-      "</body>" + "</html>");
+      "<p>Put the mouse pointer under an axis, a red rectangle appears to indicate that the axis is "
+      "selected. Do a left click and keep the mouse button pressed while dragging the axis "
+      "to its new position. The axis cannot be moved further than its neighbors.</p>" +
+      "<p>By double clicking anywhere in the view, all axis will be reset to their default positions"
+      "and equally spaced between each others.</p>" +
+      "<p>Positions will also be reset when the number of selected properties "
+      "change.</p>" +
+      "</body></html>");
   push_back(new MousePanNZoomNavigator);
   push_back(new ParallelCoordsAxisSpacer());
 }
