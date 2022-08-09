@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -94,7 +94,7 @@ public:
   PLUGININFORMATION("TLP Export", "Auber David", "31/07/2001",
                     "<p>Supported extensions: tlp, tlpz (compressed), tlp.gz "
                     "(compressed)</p><p>Exports a graph in a file using the TLP format (Tulip "
-                    "Software Graph Format).<br/>See <b>http://tulip.labri.fr->Framework->TLP File "
+                    "Software Graph Format).<br/>See <b>https://tulip.labri.fr->Framework->TLP File "
                     "Format</b> for more details.</p>",
                     "1.1", "File")
 

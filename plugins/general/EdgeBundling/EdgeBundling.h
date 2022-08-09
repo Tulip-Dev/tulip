@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: Tulip development Team
  * from LaBRI, University of Bordeaux

@@ -1,8 +1,8 @@
 # Tulip [![license](https://img.shields.io/github/license/Tulip-dev/tulip.svg)](https://www.gnu.org/licenses/lgpl-3.0.html) [![GitHub last commit](https://img.shields.io/github/last-commit/Tulip-Dev/tulip.svg)]() [![Build Status](https://ci.appveyor.com/api/projects/status/github/tulip-dev/tulip?branch=master&svg=true)](https://ci.appveyor.com/project/tulip-dev/tulip) [![SourceForge](https://img.shields.io/sourceforge/dt/auber/tulip.svg)](https://sourceforge.net/projects/auber/files/tulip/) [![PyPI version](https://badge.fury.io/py/tulip-python.svg)](https://badge.fury.io/py/tulip-python)
 
-![alt text](http://tulip.labri.fr/site/sites/default/files/logo_web.png "Tulip")
+![alt text](https://tulip.labri.fr/site/sites/default/files/logo_web.png "Tulip")
 
-[Tulip](http://tulip.labri.fr) is an open source, cross-platform, data visualization framework mainly dedicated to the analysis, 
+[Tulip](https://tulip.labri.fr) is an open source, cross-platform, data visualization framework mainly dedicated to the analysis, 
 the drawing and the visualization of very large graphs (up to the million of nodes and edges).
 It has been created by [David Auber](http://www.labri.fr/perso/auber/david_auber_home_page/doku.php/start), 
 from [LaBRI](https://www.labri.fr/) (Laboratoire Bordelais de Recherche en Informatique) and [University of Bordeaux](https://www.u-bordeaux.fr/),
@@ -36,7 +36,7 @@ The Tulip framework offers numerous features, notably:
   graph hierarchies or cluster trees (nested subgraphs).
   
   * Several graph file formats for serializing such a model to disk, notably the 
-  [TLP format](http://tulip.labri.fr/site/?q=tlp-file-format) based on a
+  [TLP format](https://tulip.labri.fr/site/?q=tlp-file-format) based on a
   Lisp syntax for easy parsing but also the TLP binary format for faster graph 
   saving and loading.
   
@@ -73,10 +73,10 @@ The Tulip framework offers numerous features, notably:
 
 Below are some links to relevant documentation resources about the Tulip framework:
 
-  * [Tulip User Manual](http://tulip.labri.fr/Documentation/current/tulip-user/html/index.html)
-  * [Tulip Developer Handbook](http://tulip.labri.fr/Documentation/current/tulip-dev/html/index.html)
-  * [Tulip C++ API](http://tulip.labri.fr/Documentation/current/doxygen/html/index.html)
-  * [Tulip Python](http://tulip.labri.fr/Documentation/current/tulip-python/html/index.html)
+  * [Tulip User Manual](https://tulip.labri.fr/Documentation/current/tulip-user/html/index.html)
+  * [Tulip Developer Handbook](https://tulip.labri.fr/Documentation/current/tulip-dev/html/index.html)
+  * [Tulip C++ API](https://tulip.labri.fr/Documentation/current/doxygen/html/index.html)
+  * [Tulip Python](https://tulip.labri.fr/Documentation/current/tulip-python/html/index.html)
   
 ## Installing Tulip
 
@@ -121,8 +121,8 @@ source tree if they can not be found on your system:
   
 In order to generate the documentation, the following tools must be installed:
 
-  * [Sphinx](http://www.sphinx-doc.org/en/stable/) to build the [User Manual](http://tulip.labri.fr/Documentation/current/tulip-user/html/index.html), [Developer Handbook](http://tulip.labri.fr/Documentation/current/tulip-dev/html/index.html) and [Python bindings documentation](http://tulip.labri.fr/Documentation/current/tulip-python/html/index.html)
-  * [Doxygen](http://www.stack.nl/~dimitri/doxygen/) to build the [C++ API documentation](http://tulip.labri.fr/Documentation/current/doxygen/html/index.html)
+  * [Sphinx](http://www.sphinx-doc.org/en/stable/) to build the [User Manual](https://tulip.labri.fr/Documentation/current/tulip-user/html/index.html), [Developer Handbook](https://tulip.labri.fr/Documentation/current/tulip-dev/html/index.html) and [Python bindings documentation](https://tulip.labri.fr/Documentation/current/tulip-python/html/index.html)
+  * [Doxygen](http://www.stack.nl/~dimitri/doxygen/) to build the [C++ API documentation](https://tulip.labri.fr/Documentation/current/doxygen/html/index.html)
 
 If you are a Linux user, all these dependencies can be installed with the package manager of your distribution. The old continuous integration setup file [.travis.yml](travis.yml) can give you some hints for Tulip build on Linux platforms.
 
@@ -135,7 +135,7 @@ Hints on how to build Tulip for MSVC can be found in [appveyor_msvc.bat](appveyo
 
 ## References
 
- [Tulip web site](https://tulip.labri.fr) has a dedicated page for [Tulip bibliography](http://tulip.labri.fr/site/?q=tulip-biblio).
+ [Tulip web site](https://tulip.labri.fr) has a dedicated page for [Tulip bibliography](https://tulip.labri.fr/site/?q=tulip-biblio).
 
 ## License
 

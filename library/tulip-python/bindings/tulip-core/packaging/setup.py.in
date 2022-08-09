@@ -122,9 +122,9 @@ setup(
     description='Large graphs analysis and drawing',
     long_description=long_description,
 
-    url='http://tulip.labri.fr/',
+    url='https://tulip.labri.fr/',
     project_urls={
-        'Documentation': 'http://tulip.labri.fr/Documentation/current/tulip-python/html/index.html',
+        'Documentation': 'https://tulip.labri.fr/Documentation/current/tulip-python/html/index.html',
         'Issue Tracker': 'https://sourceforge.net/p/auber/bugs/',
         'Sources': 'https://github.com/Tulip-dev/tulip',
     },

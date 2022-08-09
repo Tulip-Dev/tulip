@@ -11,7 +11,7 @@ Before doing any of the tutorials please read the following warnings:
 	
 * you can find at the end of each tutorial, the integral source code that we used.
 	
-* If you want more details on a specific function or class please read the `Tulip API documentation <http://tulip.labri.fr/Documentation/4_4/doxygen/>`_. 
+* If you want more details on a specific function or class please read the `Tulip API documentation <https://tulip.labri.fr/Documentation/4_4/doxygen/>`_. 
 
 Tutorial compilation instructions
 =================================
@@ -252,7 +252,7 @@ To iterate all the nodes, we need to create an Iterator over the graph nodes wit
 
   Iterator<node> *itNodes = graph->getNodes();
 
-The documentation of the interface Iterator can be found `here <http://tulip.labri.fr/doxygen/tulip-lib/structtlp_1_1Iterator.html>`_.
+The documentation of the interface Iterator can be found `here <https://tulip.labri.fr/doxygen/tulip-lib/structtlp_1_1Iterator.html>`_.
 
 With the functions *template <class itType> bool tlp::Iterator<itType>::hasNext ( )* and *node next ( )*, we can iterate our graph nodes with a simple while ::
 

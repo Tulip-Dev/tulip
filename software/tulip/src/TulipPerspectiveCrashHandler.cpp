@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -91,7 +91,7 @@ void TulipPerspectiveCrashHandler::sendReport() {
   _poster->addField("os_build", _ui->archValue->text());
   _poster->addField("steps_to_reproduce", _ui->commentsEdit->toPlainText());
 
-  connect(_poster->postData("http://tulip.labri.fr/devel/tulip_crash_report.php"),
+  connect(_poster->postData("https://tulip.labri.fr/devel/tulip_crash_report.php"),
           SIGNAL(finished()), this, SLOT(reportPosted()));
 
   _ui->sendReportButton->setText("Sending report...");

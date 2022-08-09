@@ -530,7 +530,7 @@ In this section, we will go through how we can apply an algorithm such as the on
 
 The reason why we use the **Python IDE** in this particular case is because there is a limit to what the pre-existing algorithms allow us to do. On the other hand, using some simple Python code, we can apply any original algorithm a particular situation might require.
 
-.. note:: For more information on how to use the Python IDE or Python REPL, please consult the `Tulip Python Documentation <http://tulip.labri.fr/Documentation/current/tulip-python/html/index.html>`_.
+.. note:: For more information on how to use the Python IDE or Python REPL, please consult the `Tulip Python Documentation <https://tulip.labri.fr/Documentation/current/tulip-python/html/index.html>`_.
 
 The first step is to open the *Python IDE* window in clicking on the |icon_ide| **Python** button located in the left side of the Tulip GUI.
 

@@ -34,7 +34,7 @@ function find_plugin($name,$os,$arch,$category,$tulip) {
 function data_url($name,$os,$arch,$tulip) {
   $find_results = find_plugin($name,$os,$arch,"",$tulip); 
   $plugindesc = $find_results[0];
-  return 'http://tulip.labri.fr/'.dirname($_SERVER['REQUEST_URI']).'/'.$plugindesc['path'].'/data-'.$os.$arch.'.zip';
+  return 'https://tulip.labri.fr/'.dirname($_SERVER['REQUEST_URI']).'/'.$plugindesc['path'].'/data-'.$os.$arch.'.zip';
 }
 
 function fetch_plugin($name,$os,$arch,$tulip) {

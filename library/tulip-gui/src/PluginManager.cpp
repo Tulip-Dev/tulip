@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -35,9 +35,9 @@
 using namespace tlp;
 
 const QString PluginManager::STABLE_LOCATION =
-    QString("http://tulip.labri.fr/pluginserver/stable/") + TULIP_MM_VERSION;
+    QString("https://tulip.labri.fr/pluginserver/stable/") + TULIP_MM_VERSION;
 const QString PluginManager::TESTING_LOCATION =
-    QString("http://tulip.labri.fr/pluginserver/testing/") + TULIP_MM_VERSION;
+    QString("https://tulip.labri.fr/pluginserver/testing/") + TULIP_MM_VERSION;
 
 QDebug operator<<(QDebug dbg, const PluginVersionInformation &c) {
   dbg.nospace() << "(author " << c.author << ") "

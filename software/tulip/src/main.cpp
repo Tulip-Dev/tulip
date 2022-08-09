@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (http://tulip.labri.fr)
+ * This file is part of Tulip (https://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -56,7 +56,7 @@
 void sendUsageStatistics() {
   QNetworkAccessManager *mgr = new QNetworkAccessManager;
   QObject::connect(mgr, SIGNAL(finished(QNetworkReply *)), mgr, SLOT(deleteLater()));
-  mgr->get(QNetworkRequest(QUrl(QString("http://tulip.labri.fr/TulipStats/tulip_stats.php?tulip=") +
+  mgr->get(QNetworkRequest(QUrl(QString("https://tulip.labri.fr/TulipStats/tulip_stats.php?tulip=") +
                                 TULIP_VERSION + "&os=" + OS_PLATFORM)));
 }
 

@@ -1158,7 +1158,7 @@ public:
 	/**
 	 * @name TLP
 	 *
-	 * Tulip software graph format: http://tulip.labri.fr/TulipDrupal/?q=tlp-file-format
+	 * Tulip software graph format: https://tulip.labri.fr/site/?q=tlp-file-format
 	 */
 	//@{
 

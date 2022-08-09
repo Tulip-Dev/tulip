@@ -49,8 +49,8 @@ source tree if they can not be found on your system:
   
 In order to generate the documentation, the following tools must be installed:
 
-* `Sphinx <http://www.sphinx-doc.org/en/stable/>`_ to build the `User Manual <http://tulip.labri.fr/Documentation/current/tulip-user/html/index.html>`_, `Developer Handbook <http://tulip.labri.fr/Documentation/current/tulip-dev/html/index.html>`_ and `Python bindings documentation <http://tulip.labri.fr/Documentation/current/tulip-python/html/index.html>`_
-* `Doxygen <http://www.stack.nl/~dimitri/doxygen/>`_ to build the `C++ API documentation <http://tulip.labri.fr/Documentation/current/doxygen/html/index.html>`_
+* `Sphinx <http://www.sphinx-doc.org/en/stable/>`_ to build the `User Manual <https://tulip.labri.fr/Documentation/current/tulip-user/html/index.html>`_, `Developer Handbook <https://tulip.labri.fr/Documentation/current/tulip-dev/html/index.html>`_ and `Python bindings documentation <https://tulip.labri.fr/Documentation/current/tulip-python/html/index.html>`_
+* `Doxygen <http://www.stack.nl/~dimitri/doxygen/>`_ to build the `C++ API documentation <https://tulip.labri.fr/Documentation/current/doxygen/html/index.html>`_
 
 If you are a **Linux** user, all these dependencies can be installed with the package manager of your distribution. The old continuous integration setup file `.travis.yml <https://github.com/Tulip-Dev/tulip/blob/master/travis.yml>`_ can give you some hints for Tulip build on **Linux** platforms.
 
