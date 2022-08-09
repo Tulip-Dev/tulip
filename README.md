@@ -1,4 +1,4 @@
-# Tulip [![license](https://img.shields.io/badge/license-LGPL_3.0-blue)](https://www.gnu.org/licenses/lgpl-3.0.html) [![Supported platforms](https://img.shields.io/badge/platforms-Linux%2064%20|%20MacOSX%2064%20|%20Windows%2064-blue)]() [![Python supported versions](https://img.shields.io/pypi/pyversions/tulip-python)]() [![SourceForge](https://img.shields.io/sourceforge/dt/auber/tulip.svg)](https://sourceforge.net/projects/auber/files/tulip/)[![PyPI version](https://badge.fury.io/py/tulip-python.svg)](https://badge.fury.io/py/tulip-python)
+# Tulip [![license](https://img.shields.io/badge/license-LGPL_3.0-blue)](https://www.gnu.org/licenses/lgpl-3.0.html) [![Supported platforms](https://img.shields.io/badge/platforms-Linux%2064%20|%20MacOSX%2064%20|%20Windows%2064-blue)]() [![Python supported versions](https://img.shields.io/pypi/pyversions/tulip-python)]() [![SourceForge](https://img.shields.io/sourceforge/dt/auber/tulip.svg)](https://sourceforge.net/projects/auber/files/tulip/) [![PyPI version](https://badge.fury.io/py/tulip-python.svg)](https://badge.fury.io/py/tulip-python)
 
 ![alt text](https://tulip.labri.fr/site/sites/default/files/logo_web.png "Tulip")
 
