@@ -1,4 +1,4 @@
-# Tulip [![license](https://img.shields.io/github/license/Tulip-dev/tulip.svg)](https://www.gnu.org/licenses/lgpl-3.0.html) [![GitHub last commit](https://img.shields.io/github/last-commit/Tulip-Dev/tulip.svg)]() [![Build Status](https://ci.appveyor.com/api/projects/status/github/tulip-dev/tulip?branch=master&svg=true)](https://ci.appveyor.com/project/tulip-dev/tulip) [![SourceForge](https://img.shields.io/sourceforge/dt/auber/tulip.svg)](https://sourceforge.net/projects/auber/files/tulip/) [![PyPI version](https://badge.fury.io/py/tulip-python.svg)](https://badge.fury.io/py/tulip-python)
+# Tulip [![license](https://img.shields.io/badge/license-LGPL_3.0-blue)](https://www.gnu.org/licenses/lgpl-3.0.html) [![Supported platforms](https://img.shields.io/badge/platforms-Linux%2064%20|%20MacOSX%2064%20|%20Windows%2064-blue)]() [![Python supported versions](https://img.shields.io/pypi/pyversions/tulip-python)]() [![SourceForge](https://img.shields.io/sourceforge/dt/auber/tulip.svg)](https://sourceforge.net/projects/auber/files/tulip/)[![PyPI version](https://badge.fury.io/py/tulip-python.svg)](https://badge.fury.io/py/tulip-python)
 
 ![alt text](https://tulip.labri.fr/site/sites/default/files/logo_web.png "Tulip")
 
@@ -9,7 +9,7 @@ from [LaBRI](https://www.labri.fr/) (Laboratoire Bordelais de Recherche en Infor
 and maintained over the years by an average size development team.
 Until the 5.1 release, the main Tulip code repository (subversion based) was hosted 
 on [SourceForge](https://sourceforge.net/projects/auber/).
-That repository remains the Tulip releases download repository but Tulip 5 development are now hosted here.
+That repository remains the Tulip releases download repository but Tulip 6 development are now hosted here.
 
 ![alt text](screenshots/tulip_screenshot01.png "Tulip software GUI")
 
