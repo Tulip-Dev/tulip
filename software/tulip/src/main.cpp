@@ -56,8 +56,9 @@
 void sendUsageStatistics() {
   QNetworkAccessManager *mgr = new QNetworkAccessManager;
   QObject::connect(mgr, SIGNAL(finished(QNetworkReply *)), mgr, SLOT(deleteLater()));
-  mgr->get(QNetworkRequest(QUrl(QString("https://tulip.labri.fr/TulipStats/tulip_stats.php?tulip=") +
-                                TULIP_VERSION + "&os=" + OS_PLATFORM)));
+  mgr->get(
+      QNetworkRequest(QUrl(QString("https://tulip.labri.fr/TulipStats/tulip_stats.php?tulip=") +
+                           TULIP_VERSION + "&os=" + OS_PLATFORM)));
 }
 
 bool sendAgentMessage(int port, const QString &message) {
