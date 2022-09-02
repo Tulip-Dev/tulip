@@ -78,6 +78,18 @@ unsigned int TulipMaterialDesignIcons::getIconCodePoint(const std::string &iconN
 
   if (it != iconCodePoint.end())
     return (it->second);
+  else if (iconName[2] == '-') {
+    // compatibility with Tulip 5
+    // md-... => mdi-...
+    std::string name(iconName);
+    name.insert(2, 1, 'i');
+    it = iconCodePoint.find(name.c_str());
+    if (it != iconCodePoint.end()) {
+      // output deprecation warning
+      tlp::warning() << "Warning: icon name \"" << iconName << "\" is deprecated, use \"" << name << "\" instead." << std::endl;
+      return (it->second);
+    }
+  }
 
   return 0;
 }

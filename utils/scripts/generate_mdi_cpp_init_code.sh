@@ -24,7 +24,7 @@ MDI_VERSION=$(grep mdi-version ${MDI_VARIABLES_FILE} | awk -F '"' '{print $2}')
  echo "}";
  echo;
  echo "static void initIconCodePoints() {";
- grep '":' ${MDI_VARIABLES_FILE} | awk -F ',' '{print $1}' | awk -F '"' '{print $2 $3}' | awk '{print $1 $2}' | awk -F ':' '{printf "  addIconCodePoint(\"md-%s\", 0x%s);\n", $1, $2}';
+ grep '":' ${MDI_VARIABLES_FILE} | awk -F ',' '{print $1}' | awk -F '"' '{print $2 $3}' | awk '{print $1 $2}' | awk -F ':' '{printf "  addIconCodePoint(\"mdi-%s\", 0x%s);\n", $1, $2}';
  echo;
  echo "  iconsNames.reserve(iconCodePoint.size());";
  echo;
