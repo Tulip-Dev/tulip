@@ -19,6 +19,7 @@
 
 #include <tulip/TulipFontIconDialog.h>
 #include <tulip/TulipFontIconEngine.h>
+#include <tulip/TulipIconicFont.h>
 #include <tulip/TulipFontAwesome.h>
 #include <tulip/TulipMaterialDesignIcons.h>
 #include <tulip/TlpQtTools.h>
@@ -44,7 +45,7 @@ TulipFontIconDialog::TulipFontIconDialog(QWidget *parent)
       QString("<p style=\" font-size:11px;\">Special credit for the design "
               "of icons goes to:<br/><b>Font "
               "Awesome </b><a "
-              "href=\"http://fontawesome.com\"><span "
+              "href=\"https://fontawesome.com\"><span "
               "style=\"color:#0d47f1;\">fontawesome.com</span></a> "
               "(v%1)<br/><b>Material Design Icons </b>"
               "<a "
@@ -100,11 +101,27 @@ QString TulipFontIconDialog::getSelectedIconName() const {
 
 void TulipFontIconDialog::setSelectedIconName(const QString &iconName) {
   QList<QListWidgetItem *> items = _ui->iconListWidget->findItems(iconName, Qt::MatchExactly);
-
   if (!items.isEmpty()) {
     _ui->iconListWidget->setCurrentItem(items.at(0));
-    _selectedIconName = iconName;
   }
+  else {
+    items =_ui->iconListWidget->findItems(iconName.left(2).append('*').append(iconName.mid(iconName.indexOf('-') + 1)),
+					  Qt::MatchWildcard);
+    // select the one with the shortest size
+    int minSize = 256;
+    int best = 0;
+    for (int i = 0; i < items.size(); ++i) {
+      int size = items.at(i)->text().size();
+      if (size < minSize) {
+	best = i;
+	minSize = size;
+      }
+    }
+    if (minSize < 256)
+      _ui->iconListWidget->setCurrentItem(items.at(best));
+  }
+
+  _selectedIconName = iconName;
 }
 
 void TulipFontIconDialog::accept() {
@@ -117,8 +134,6 @@ void TulipFontIconDialog::accept() {
 
 void TulipFontIconDialog::showEvent(QShowEvent *ev) {
   QDialog::showEvent(ev);
-
-  _selectedIconName = _ui->iconListWidget->currentItem()->text();
 
   if (parentWidget())
     move(parentWidget()->window()->frameGeometry().topLeft() +
