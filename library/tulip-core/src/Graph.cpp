@@ -93,7 +93,7 @@ static void setViewPropertiesDefaults(Graph *g) {
 
   const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize",
                     metrics = "viewMetric", fonts = "viewFont",
-                    fontAwesomeIcon = "viewFontAwesomeIcon", fontSizes = "viewFontSize",
+                    fontSizes = "viewFontSize",
                     borderWidth = "viewBorderWidth", borderColor = "viewBorderColor",
                     tgtShape = "viewTgtAnchorShape", srcShape = "viewSrcAnchorShape",
                     icon = "viewIcon", labelColor = "viewLabelColor",
@@ -223,41 +223,8 @@ static void setViewPropertiesDefaults(Graph *g) {
   }
 
   if (!g->existProperty(icon)) {
-    g->getProperty<StringProperty>(icon)->setAllNodeValue("fa-question-circle");
-    g->getProperty<StringProperty>(icon)->setAllEdgeValue("fa-question-circle");
-  }
-
-  // for backward compatibility with Tulip < 5.0
-  if (g->existLocalProperty(fontAwesomeIcon)) {
-    StringProperty *faiProp = g->getProperty<StringProperty>(fontAwesomeIcon);
-    StringProperty *iProp = g->getProperty<StringProperty>(icon);
-
-    // transform old font awesome icon names to new ones and store them in the viewIcon
-    // property only if the content of that property is default valuated
-    if (iProp->hasNonDefaultValuatedNodes()) {
-      iProp->setAllNodeValue("fa-" + faiProp->getNodeDefaultValue());
-      for (auto n : faiProp->getNonDefaultValuatedNodes()) {
-        const string &faIconName = faiProp->getNodeValue(n);
-
-        if (!faIconName.empty()) {
-          iProp->setNodeValue(n, "fa-" + faIconName);
-        }
-      }
-      iProp->setAllEdgeValue("fa-" + faiProp->getEdgeDefaultValue());
-      for (auto e : faiProp->getNonDefaultValuatedEdges()) {
-        const string &faIconName = faiProp->getEdgeValue(e);
-
-        if (!faIconName.empty()) {
-          iProp->setEdgeValue(e, "fa-" + faIconName);
-        }
-      }
-    }
-
-    // finally delete the old property
-    // to avoid any further overwriting of the "viewIcon" property
-    // when re-executing this piece of code after
-    // a further save/load step of this graph.
-    g->delLocalProperty(fontAwesomeIcon);
+    g->getProperty<StringProperty>(icon)->setAllNodeValue("fas-circle-question");
+    g->getProperty<StringProperty>(icon)->setAllEdgeValue("fas-circle-question");
   }
 }
 

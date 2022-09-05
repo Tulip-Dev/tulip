@@ -53,7 +53,7 @@ namespace tlp {
  *    // sets the Icon glyph on all nodes
  *    viewShape->setAllNodeValue(tlp::NodeShape::Icon);
  *    // sets the "user" glyph for all nodes
- *    viewIcon->setAllNodeValue("fa-user");
+ *    viewIcon->setAllNodeValue("fas-user");
  * @endcode
  **/
 

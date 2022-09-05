@@ -10,7 +10,7 @@
 # the webfonts sub directory must be copied in library/tulip-ogl/bitmaps.
 
 FA_DIR=$1
-CPP_FILE=$2
+CPP_FILE=$(realpath $2)
 
 cd $FA_DIR
 FA_VERSION=$(grep 'Font Awesome Free' css/all.css | awk -F ' ' '{print $5}')
@@ -25,7 +25,7 @@ FA_VERSION=$(grep 'Font Awesome Free' css/all.css | awk -F ' ' '{print $5}')
  echo "static void initIconCodePoints() {";
  for FONT in solid regular brands
  do
-   grep '"],' js/$FONT.js | awk -F ']' '{sub(/\[/, "");sub(/\[.*/, "", $1); print}'| awk -F '"' "{printf \"  addIconCodePoint(\\\"$FONT\\\", \\\"%s\\\", 0x%s);\n\", \$2, \$4}"
+   grep '"],' js/$FONT.js | awk -F ']' '{sub(/\[/, "");sub(/\[.*/, "", $1); print}'| awk -F '"' "{printf \"  addIconCodePoint(\\\"fa${FONT:0:1}-%s\\\", 0x%s);\n\", \$2, \$4}"
  done
  echo;
  echo "  iconsNames.reserve(iconCodePoint.size());";

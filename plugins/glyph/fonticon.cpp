@@ -119,7 +119,7 @@ static FontIcon &getFontIcon(const string &iconName) {
     // use defaultFontIcon
     // initialization of defaultFontIcon is delayed
     if (defaultFontIcon.iconCodePoint == 0) {
-      static const std::string defaultIconName = "fa-question-circle";
+      static const std::string defaultIconName = "fas-circle-question";
       defaultFontIcon.iconCodePoint = TulipIconicFont::getIconCodePoint(defaultIconName);
       defaultFontIcon.fontFile = TulipIconicFont::getTTFLocation(defaultIconName);
     }
