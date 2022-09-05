@@ -538,9 +538,6 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
       addBorder(bordercolor, borderwidth);
   } break;
 
-  case NodeShape::ChristmasTree:
-    iconName = "fa-tree";
-
   case NodeShape::Icon: {
     addWebFontFromIconName(iconName);
 

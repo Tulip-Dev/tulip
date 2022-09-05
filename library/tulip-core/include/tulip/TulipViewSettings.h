@@ -37,7 +37,6 @@ public:
   enum NodeShapes {
     Billboard = 7,
     BottomShadowedSphere = 21,
-    ChristmasTree = 28,
     Circle = 14,
     Cone = 3,
     Cross = 8,

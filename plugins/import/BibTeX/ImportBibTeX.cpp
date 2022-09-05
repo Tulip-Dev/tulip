@@ -1532,7 +1532,7 @@ public:
           // set rendering properties
           color->setNodeValue(publi, tlp::Color::Beige);
           label->setNodeValue(publi, key);
-          icon->setNodeValue(publi, "fa-file-text");
+          icon->setNodeValue(publi, "mdi-file-document");
         }
 
         // loop of entry fields
@@ -2000,7 +2000,7 @@ public:
                   labriTeamProp->setNodeValue(author, teams[teamIndex]);
 
                 label->setNodeValue(author, aName);
-                icon->setNodeValue(author, "fa-user");
+                icon->setNodeValue(author, "fas-user");
                 countProp->setNodeValue(author, 1);
               }
 
