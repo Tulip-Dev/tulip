@@ -495,6 +495,9 @@ void tesselateFontIcon(const std::string &fontFile, unsigned int iconCodePoint,
     return;
   }
 
+  // force glyph outline flags to fix misdrawing of several
+  // font awesome v6 icons (fas-circle-info, fas-circle-user...)
+  face->glyph->outline.flags |= ft_outline_even_odd_fill;
   FTVectoriser vectoriser(face->glyph);
 
   vectoriser.MakeMesh(1.0, 1, 0.0);
