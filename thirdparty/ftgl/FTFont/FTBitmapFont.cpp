@@ -30,6 +30,7 @@
 
 #include "FTInternals.h"
 #include "FTBitmapFontImpl.h"
+#include "FTGL/FTLibrary.h"
 
 
 //
@@ -68,6 +69,14 @@ inline FTPoint FTBitmapFontImpl::RenderI(const T* string, const int len,
                                          FTPoint position, FTPoint spacing,
                                          int renderMode)
 {
+    bool LegacyOpenGLState = FTLibrary::Instance().GetLegacyOpenGLStateSet();
+    if(LegacyOpenGLState)
+      {
+        // Protect GL_BLEND
+        glPushAttrib(GL_COLOR_BUFFER_BIT);
+        glDisable(GL_BLEND);
+      }
+
     // Protect glPixelStorei() calls (also in FTBitmapGlyphImpl::RenderImpl)
     glPushClientAttrib(GL_CLIENT_PIXEL_STORE_BIT);
 
@@ -79,6 +88,8 @@ inline FTPoint FTBitmapFontImpl::RenderI(const T* string, const int len,
 
     glPopClientAttrib();
 
+    if (LegacyOpenGLState)
+      glPopAttrib();
     return tmp;
 }
 

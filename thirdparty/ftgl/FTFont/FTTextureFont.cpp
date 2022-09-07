@@ -35,6 +35,7 @@
 
 #include "../FTGlyph/FTTextureGlyphImpl.h"
 #include "./FTTextureFontImpl.h"
+#include "FTGL/FTLibrary.h"
 
 
 //
@@ -239,8 +240,29 @@ inline FTPoint FTTextureFontImpl::RenderI(const T* string, const int len,
                                           FTPoint position, FTPoint spacing,
                                           int renderMode)
 {
-    // Protect GL_TEXTURE_2D
+    // Protect GL_TEXTURE_2D and optionally GL_BLEND
     glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TEXTURE_ENV_MODE);
+
+    if(FTLibrary::Instance().GetLegacyOpenGLStateSet())
+      {
+        glEnable(GL_BLEND);
+        /*
+         * Note: This is the historic legacy behaviour.
+         *
+         * A better blending function (see
+         * https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=742469) is:
+         *
+         *   glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA,
+         *                       GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+         *
+         * To use it, set
+         *
+         *   FTLibrary::Instance().LegacyOpenGLState(false);
+         *
+         * and set GL_BLEND and the blending function yourself.
+         */
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      }
 
     glEnable(GL_TEXTURE_2D);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);

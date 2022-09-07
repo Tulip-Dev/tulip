@@ -142,22 +142,12 @@ class FTCharmap
         const FT_Face ftFace;
 
         /**
-         * Unicode contains 17 planes (continuous groups of 65,536 code points)
-         */
-        static const unsigned int MAX_UNICODE_PLANES = 17;
-        static const unsigned int UNICODE_PLANE_SIZE = 65536;
-
-        /**
          * A structure that maps glyph indices to character codes
          *
          * < character code, face glyph index>
          */
         typedef FTCharToGlyphIndexMap CharacterMap;
-
-        /**
-         * Array of CharacterMap, one for each Unicode plane
-         */
-        CharacterMap charMaps[MAX_UNICODE_PLANES];
+        CharacterMap charMap;
 
         /**
          * Precomputed font indices.

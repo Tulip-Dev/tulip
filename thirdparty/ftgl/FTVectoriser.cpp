@@ -238,7 +238,7 @@ void FTVectoriser::MakeMesh(FTGL_DOUBLE zNormal, int outsetType, float outsetSiz
 
   if(contourFlag & ft_outline_even_odd_fill) // ft_outline_reverse_fill
     {
-      windingRule = TESS_WINDING_POSITIVE;
+      windingRule = TESS_WINDING_ODD;
     }
   else
     {

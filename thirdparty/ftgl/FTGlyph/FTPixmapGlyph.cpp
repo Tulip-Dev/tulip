@@ -148,7 +148,7 @@ FTPixmapGlyphImpl::~FTPixmapGlyphImpl()
 
 
 const FTPoint& FTPixmapGlyphImpl::RenderImpl(const FTPoint& pen,
-                                             int renderMode)
+                                             int /*renderMode*/)
 {
     if(data)
     {

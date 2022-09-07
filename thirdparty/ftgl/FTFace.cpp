@@ -28,7 +28,7 @@
 
 #include "FTFace.h"
 #include "FTCleanup.h"
-#include "FTLibrary.h"
+#include "FTGL/FTLibrary.h"
 
 #include FT_TRUETYPE_TABLES_H
 

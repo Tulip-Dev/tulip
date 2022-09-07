@@ -26,12 +26,14 @@
 #ifndef     __FTLibrary__
 #define     __FTLibrary__
 
+#ifdef __cplusplus
+
 #include <ft2build.h>
 #include FT_FREETYPE_H
 //#include FT_CACHE_H
 
 #include "FTGL/ftgl.h"
-
+#include <atomic>
 
 /**
  * FTLibrary class is the global accessor for the Freetype library.
@@ -44,14 +46,14 @@
  *
  * Just because this class returns a valid <code>FTLibrary</code> object
  * doesn't mean that the Freetype Library has been successfully initialised.
- * Clients should check for errors. You can initialse the library AND check
+ * Clients should check for errors. You can initialise the library AND check
  * for errors using the following code...
  * <code>err = FTLibrary::Instance().Error();</code>
  *
  * @see "Freetype 2 Documentation"
  *
  */
-class FTGL_EXPORT FTLibrary
+class FTLibrary
 {
     public:
         /**
@@ -59,7 +61,7 @@ class FTGL_EXPORT FTLibrary
          *
          * @return  The global <code>FTLibrary</code> object.
          */
-        static const FTLibrary& Instance();
+        static FTLibrary& Instance();
 
         /**
          * Gets a pointer to the native Freetype library.
@@ -82,11 +84,23 @@ class FTGL_EXPORT FTLibrary
          */
         ~FTLibrary();
 
+        /**
+         * See README-LegacyOpenGLState
+         *
+         * Choose incompatible legacy behaviour, see commit
+         * 29603ae3fa88c5b9e079a6db23be2cdea95aef39.
+         *
+         * May only be set to the same value (but any number of times)
+         * within one program.
+         */
+        void LegacyOpenGLState(bool On);
+        bool GetLegacyOpenGLStateSet() const { return LegacyOpenGLStateHandling; }
+
     private:
         /**
          * Default constructors.
          *
-         * Made private to stop clients creating there own FTLibrary
+         * Made private to stop clients creating their own FTLibrary
          * objects.
          */
         FTLibrary();
@@ -117,6 +131,12 @@ class FTGL_EXPORT FTLibrary
          */
         FT_Error err;
 
+        /**
+         * Flag set by LegacyOpenGLState, -1 means implicitly on (default).
+         */
+        std::atomic <int> LegacyOpenGLStateHandling;
 };
+
+#endif //__cplusplus
 
 #endif  //  __FTLibrary__

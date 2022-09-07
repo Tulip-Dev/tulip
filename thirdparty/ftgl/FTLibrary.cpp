@@ -25,10 +25,11 @@
 
 #include "config.h"
 
-#include "FTLibrary.h"
+#include "FTGL/FTLibrary.h"
 #include "FTCleanup.h"
+#include <stdexcept>
 
-const FTLibrary&  FTLibrary::Instance()
+FTLibrary& FTLibrary::Instance()
 {
     static FTLibrary ftlib;
     return ftlib;
@@ -51,7 +52,8 @@ FTLibrary::~FTLibrary()
 
 FTLibrary::FTLibrary()
 :   library(0),
-    err(0)
+    err(0),
+    LegacyOpenGLStateHandling(-1)
 {
     Initialise();
 }
@@ -75,4 +77,13 @@ bool FTLibrary::Initialise()
     FTCleanup::Instance();
 
     return true;
+}
+
+
+void FTLibrary::LegacyOpenGLState(bool On)
+{
+  int Old = LegacyOpenGLStateHandling.exchange(On);
+  if (Old >= 0 && Old != On)
+    throw std::logic_error
+      ("FTGL: inconsistent LegacyOpenGLState setting, see README-LegacyOpenGLState");
 }

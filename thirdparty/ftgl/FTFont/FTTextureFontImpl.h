@@ -90,7 +90,7 @@ class FTTextureFontImpl : public FTFontImpl
         inline GLuint CreateTexture();
 
         /**
-         * The maximum texture dimension on this OpenGL implemetation
+         * The maximum texture dimension on this OpenGL implementation
          */
         GLsizei maximumGLTextureSize;
 

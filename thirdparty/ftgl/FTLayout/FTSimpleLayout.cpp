@@ -191,7 +191,7 @@ void FTSimpleLayoutImpl::Render(const wchar_t* string, const int len,
 
 
 template <typename T>
-inline void FTSimpleLayoutImpl::WrapTextI(const T *buf, const int len,
+inline void FTSimpleLayoutImpl::WrapTextI(const T *buf, const int /*len*/,
                                           FTPoint position, int renderMode,
                                           FTBBox *bounds)
 {
