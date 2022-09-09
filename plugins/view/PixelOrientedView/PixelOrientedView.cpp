@@ -56,7 +56,6 @@ using namespace pocore;
 static void setGraphView(tlp::GlGraphComposite *glGraph, bool displayNodes) {
   tlp::GlGraphRenderingParameters param = glGraph->getRenderingParameters();
   param.setAntialiasing(true);
-  param.setViewNodeLabel(true);
   param.setFontsType(2);
   param.setSelectedNodesStencil(1);
   param.setNodesStencil(0xFFFF);
