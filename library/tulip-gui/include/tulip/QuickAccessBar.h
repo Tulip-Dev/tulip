@@ -95,6 +95,7 @@ public:
     SHOWLABELS = 0x4000,
     LABELSSCALED = 0x8000,
     NODESHAPE = 0x10000,
+    NODEICON = 0x800000,
     EDGESHAPE = 0x20000,
     NODESIZE = 0x40000,
     EDGESIZE = 0x80000,
@@ -136,6 +137,7 @@ public slots:
   void setEdgeColor(const QColor &);
   void setEdgeBorderColor(const QColor &);
   void setNodeShape();
+  void setNodeIcon();
   void setEdgeShape();
   void setNodeSize();
   void setEdgeSize();

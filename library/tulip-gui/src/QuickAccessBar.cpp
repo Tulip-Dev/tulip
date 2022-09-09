@@ -190,6 +190,9 @@ QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem,
   if (!buttons.testFlag(NODESHAPE))
     _ui->nodeShapeButton->hide();
 
+  if (!buttons.testFlag(NODEICON))
+    _ui->nodeIconButton->hide();
+
   if (!buttons.testFlag(EDGESHAPE))
     _ui->edgeShapeButton->hide();
 
@@ -503,6 +506,10 @@ void QuickAccessBarImpl::setAllValues(unsigned int eltType, PropertyInterface *p
 
 void QuickAccessBarImpl::setNodeShape() {
   setAllValues(NODE, inputData()->getElementShape());
+}
+
+void QuickAccessBarImpl::setNodeIcon() {
+  setAllValues(NODE, inputData()->getElementIcon());
 }
 
 void QuickAccessBarImpl::setEdgeShape() {
