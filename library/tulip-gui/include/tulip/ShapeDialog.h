@@ -38,12 +38,13 @@ class TLP_QT_SCOPE ShapeDialog : public QDialog {
 
   Q_OBJECT
 
+  bool _forNodes;
   Ui::ShapeDialog *_ui;
   QString _selectedShapeName;
   std::list<std::pair<QString, QPixmap>> shapes;
 
 public:
-  ShapeDialog(std::list<std::pair<QString, QPixmap>> &&nodeShapes, QWidget *parent = nullptr);
+  ShapeDialog(bool forNodes, QWidget *parent = nullptr);
   ~ShapeDialog() override;
 
   QString getSelectedShapeName() const;
@@ -53,6 +54,9 @@ public:
   void accept() override;
 
   void showEvent(QShowEvent *) override;
+
+protected:
+  bool eventFilter(QObject *, QEvent *e) override;
 
 protected slots:
   void updateShapeList();

@@ -123,7 +123,7 @@ public:
    * @brief Generate a QImage from the scene. You need to call the renderScene function before this
    *function.
    **/
-  QImage getImage();
+  QImage getImage(bool alpha = false);
   /**
    * @brief Generate an open gl texture from the scene. You need to call the renderScene function
    *before this function.

@@ -216,17 +216,17 @@ bool GlOffscreenRenderer::frameBufferOk() const {
   return glFrameBuf->isValid();
 }
 
-static inline QImage convertImage(const QImage &image) {
-  return QImage(image.constBits(), image.width(), image.height(), QImage::Format_ARGB32)
-      .convertToFormat(QImage::Format_RGB32);
+static inline QImage convertImage(const QImage &image, bool alpha) {
+  QImage qimg(image.constBits(), image.width(), image.height(), QImage::Format_ARGB32);
+  return alpha ? qimg : qimg.convertToFormat(QImage::Format_RGB32);
 }
 
-QImage GlOffscreenRenderer::getImage() {
+QImage GlOffscreenRenderer::getImage(bool alpha) {
   makeOpenGLContextCurrent();
   if (!antialiasedFbo)
-    return convertImage(glFrameBuf->toImage());
+    return convertImage(glFrameBuf->toImage(), alpha);
   else
-    return convertImage(glFrameBuf2->toImage());
+    return convertImage(glFrameBuf2->toImage(), alpha);
 }
 
 GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {

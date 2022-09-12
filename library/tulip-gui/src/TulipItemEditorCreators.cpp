@@ -716,13 +716,7 @@ QWidget *NodeShapeEditorCreator::createWidget(QWidget *) const {
   // dialog with a QListWidget inside
   std::list<std::pair<QString, QPixmap>> shapes;
 
-  for (const auto &glyphName : PluginLister::availablePlugins<Glyph>()) {
-    QString shapeName = tlpStringToQString(glyphName);
-    QPixmap pixmap = GlyphRenderer::render(GlyphManager::glyphId(glyphName));
-    shapes.emplace_back(shapeName, pixmap);
-  }
-
-  return new ShapeDialog(std::move(shapes), QApplication::activeWindow());
+  return new ShapeDialog(true, QApplication::activeWindow());
 }
 
 void NodeShapeEditorCreator::setEditorData(QWidget *w, const QVariant &data, bool, tlp::Graph *) {
@@ -781,18 +775,7 @@ QWidget *EdgeExtremityShapeEditorCreator::createWidget(QWidget *) const {
   // of items in a QGraphicsScene (popup has a too large height,
   // making the scrollbars unreachable ...), we use a native
   // dialog with a QListWidget inside
-  std::list<std::pair<QString, QPixmap>> shapes;
-  shapes.push_back(std::make_pair(QString("NONE"), QPixmap()));
-
-  for (const auto &glyphName : PluginLister::availablePlugins<EdgeExtremityGlyph>()) {
-    QString shapeName = tlpStringToQString(glyphName);
-    QPixmap pixmap =
-        EdgeExtremityGlyphRenderer::render(EdgeExtremityGlyphManager::glyphId(glyphName));
-    shapes.emplace_back(shapeName, pixmap);
-  }
-
-  ShapeDialog *shapeDialog = new ShapeDialog(std::move(shapes), QApplication::activeWindow());
-  shapeDialog->setWindowTitle("Select an edge extremity shape");
+  ShapeDialog *shapeDialog = new ShapeDialog(false, QApplication::activeWindow());
   return shapeDialog;
 }
 
