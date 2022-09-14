@@ -14,9 +14,15 @@ yum -y install xz cmake3 tar gzip make wget ccache
 # if needed install GCC 7 as OGDF requires a quite advanced C++11 compiler
 which gcc > /dev/null 2>&1
 if [ ! $? -eq 0 ]; then
+    GCC_VERSION=0
+else
+    GCC_VERSION=$(gcc -dumpversion)
+fi
+
+if [ $GCC_VERSION -lt 9 ]; then
   yum -y install centos-release-scl
-  yum -y install devtoolset-7
-  COMPILER_DEFINES="-DCMAKE_C_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/gcc -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/g++"
+  yum -y install devtoolset-9
+  COMPILER_DEFINES="-DCMAKE_C_COMPILER=/opt/rh/devtoolset-9/root/usr/bin/gcc -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-9/root/usr/bin/g++"
 fi
 
 # install tulip deps
