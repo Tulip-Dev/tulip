@@ -25,6 +25,7 @@
 #include "GraphPerspective.h"
 #include "AlgorithmRunnerItem.h"
 #include "ui_AlgorithmRunnerItem.h"
+#include "ui_PluginDocDialog.h"
 
 #include <tulip/GraphTest.h>
 #include <tulip/TulipMimes.h>
@@ -533,8 +534,33 @@ bool AlgorithmRunnerItem::eventFilter(QObject *, QEvent *ev) {
   if (ev->type() == QEvent::MouseButtonRelease) {
     QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(ev);
     if (qMouseEv->button() == Qt::RightButton) {
-      QMessageBox::information(parentWidget(), this->name().append(" documentation"),
-                               _ui->playButton->toolTip());
+      // generate plugin + parameters doc
+      QString doc = _ui->playButton->toolTip();
+      if (doc.isEmpty())
+	doc = _pluginName;
+      doc = QString("<head><style type\"text/css\">a { color: #0d47f1 }</style></head>") + doc;
+
+      initModel();
+      ParameterListModel *model = static_cast<ParameterListModel *>(_ui->parameters->model());
+      auto nbParams = model->rowCount();
+      if (nbParams) {
+	doc.append("<br/><br/>The parameters are:<ul>");
+	for (int i = 0; i < nbParams; ++i) {
+	  doc.append(QString("<br/><b>-&nbsp;&quot;%1&quot;</b>%2").arg(model->getParameterName(i)).arg(model->getParameterHelp(i)));
+	}
+      }
+
+      // show doc in a simple dialog using a scrolling QTextEdit
+      QDialog pluginDocDialog(parentWidget());
+      auto ui = new Ui_PluginDocDialog();
+      ui->setupUi(&pluginDocDialog);
+      ui->pluginDocText->setReadOnly(true);
+      ui->pluginDocText->setHtml(doc);
+      connect(ui->buttonBox->button(QDialogButtonBox::Ok), SIGNAL(released()),
+	      &pluginDocDialog, SLOT(accept()));
+      pluginDocDialog.setWindowTitle(QString(name()).append(" documentation"));
+      pluginDocDialog.setModal(true);
+      pluginDocDialog.exec();
       return true;
     }
   }

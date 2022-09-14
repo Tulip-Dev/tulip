@@ -175,4 +175,13 @@ void ParameterListModel::setParametersValues(const DataSet &data) {
   _data = data;
   endResetModel();
 }
+
+QString ParameterListModel::getParameterName(int section) {
+  return tlp::tlpStringToQString(_params[section].getName());
+}
+
+QString ParameterListModel::getParameterHelp(int section) {
+  return tlp::tlpStringToQString(_params[section].getHelp());
+}
+
 } // namespace tlp

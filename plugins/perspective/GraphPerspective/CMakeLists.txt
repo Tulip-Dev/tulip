@@ -34,6 +34,7 @@ designer/ExportWizard.ui
 designer/PanelSelectionWizard.ui
 designer/PreferencesDialog.ui
 designer/SearchWidget.ui
+designer/PluginDocDialog.ui
 )
 
 IF(TULIP_BUILD_PYTHON_COMPONENTS)
