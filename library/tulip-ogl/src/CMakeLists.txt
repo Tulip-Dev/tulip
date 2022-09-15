@@ -27,7 +27,6 @@ SET(tulip-ogl_LIB_SRCS
   GlGraphComposite.cpp
   GlGraphRenderer.cpp
   GlGraphHighDetailsRenderer.cpp
-  GlGraphLowDetailsRenderer.cpp
   GlGraphInputData.cpp
   GlGraphRenderingParameters.cpp
   GlGraphStaticData.cpp
