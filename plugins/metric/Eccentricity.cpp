@@ -54,7 +54,7 @@ EccentricityMetric::EccentricityMetric(const tlp::PluginContext *context)
   addInParameter<bool>("norm", paramHelp[1], "true");
   addInParameter<bool>("directed", paramHelp[2], "false");
   addInParameter<NumericProperty *>("weight", paramHelp[3], "", false);
-  addOutParameter<double>("graph diameter", "The computed diameter (-1 if not computed)", "-1");
+  addOutParameter<double>("graph diameter", "The graph diameter computed only for eccentricity, returns -1 if not computed)", "-1");
 }
 //====================================================================
 EccentricityMetric::~EccentricityMetric() {}
@@ -133,7 +133,8 @@ bool EccentricityMetric::run() {
 
     res[i] = compute(i);
 
-    if (!allPaths && norm) {
+    //compute diameter
+    if (!allPaths) {
       TLP_LOCK_SECTION(DIAMETER) {
         if (diameter < res[i])
           diameter = res[i];
@@ -153,7 +154,7 @@ bool EccentricityMetric::run() {
   });
 
   if (dataSet != nullptr)
-    dataSet->set("graph diameter", (!allPaths && norm) ? diameter : double(-1));
+    dataSet->set("graph diameter", (!allPaths) ? diameter : double(-1));
 
   return pluginProgress->state() != TLP_CANCEL;
 }
