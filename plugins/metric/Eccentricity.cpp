@@ -54,7 +54,7 @@ EccentricityMetric::EccentricityMetric(const tlp::PluginContext *context)
   addInParameter<bool>("norm", paramHelp[1], "true");
   addInParameter<bool>("directed", paramHelp[2], "false");
   addInParameter<NumericProperty *>("weight", paramHelp[3], "", false);
-  addOutParameter<double>("graph diameter", "The graph diameter computed only for eccentricity, returns -1 if not computed)", "-1");
+  addOutParameter<double>("graph diameter", "The graph diameter computed only for eccentricity (returns -1 if not computed)", "-1");
 }
 //====================================================================
 EccentricityMetric::~EccentricityMetric() {}
