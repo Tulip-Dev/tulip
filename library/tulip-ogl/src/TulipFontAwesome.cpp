@@ -50,7 +50,7 @@ static map<const char *, unsigned int, cmpCharPtr> iconCodePoint;
 static vector<std::string> iconsNames;
 
 static string iconFile(const string &iconName) {
-  switch(iconName[2]) {
+  switch (iconName[2]) {
   case 's':
     return "fa-solid-900";
   case 'r':
@@ -63,15 +63,15 @@ static string iconFile(const string &iconName) {
       name.resize(name.size() - 2);
       name.insert(2, 1, 'r');
       if (iconCodePoint.find(name.c_str()) != iconCodePoint.end())
-	return "fa-regular-400";
+        return "fa-regular-400";
     } else {
       // fa-... => fa[s|r|b]-...
       name.insert(2, 1, 's');
       if (iconCodePoint.find(name.c_str()) != iconCodePoint.end())
-	return "fa-solid-900";
+        return "fa-solid-900";
       name[2] = 'r';
       if (iconCodePoint.find(name.c_str()) != iconCodePoint.end())
-	return "fa-regular-400";
+        return "fa-regular-400";
     }
   }
   default:
@@ -136,17 +136,18 @@ unsigned int TulipFontAwesome::getIconCodePoint(const std::string &iconName) {
       name.insert(2, 1, 's');
       it = iconCodePoint.find(name.c_str());
       if (it == iconCodePoint.end()) {
-	name[2] = 'r';
-	it = iconCodePoint.find(name.c_str());
-	if (it == iconCodePoint.end()) {
-	  name[2] = 'b';
-	  it = iconCodePoint.find(name.c_str());
-	}
+        name[2] = 'r';
+        it = iconCodePoint.find(name.c_str());
+        if (it == iconCodePoint.end()) {
+          name[2] = 'b';
+          it = iconCodePoint.find(name.c_str());
+        }
       }
     }
     if (it != iconCodePoint.end()) {
       // output deprecation warning
-      tlp::warning() << "Warning: icon name \"" << iconName << "\" is deprecated, use \"" << name << "\" instead." << std::endl;
+      tlp::warning() << "Warning: icon name \"" << iconName << "\" is deprecated, use \"" << name
+                     << "\" instead." << std::endl;
       return (it->second);
     }
   }

@@ -103,18 +103,18 @@ void TulipFontIconDialog::setSelectedIconName(const QString &iconName) {
   QList<QListWidgetItem *> items = _ui->iconListWidget->findItems(iconName, Qt::MatchExactly);
   if (!items.isEmpty()) {
     _ui->iconListWidget->setCurrentItem(items.at(0));
-  }
-  else {
-    items =_ui->iconListWidget->findItems(iconName.left(2).append('*').append(iconName.mid(iconName.indexOf('-') + 1)),
-					  Qt::MatchWildcard);
+  } else {
+    items = _ui->iconListWidget->findItems(
+        iconName.left(2).append('*').append(iconName.mid(iconName.indexOf('-') + 1)),
+        Qt::MatchWildcard);
     // select the one with the shortest size
     int minSize = 256;
     int best = 0;
     for (int i = 0; i < items.size(); ++i) {
       int size = items.at(i)->text().size();
       if (size < minSize) {
-	best = i;
-	minSize = size;
+        best = i;
+        minSize = size;
       }
     }
     if (minSize < 256)

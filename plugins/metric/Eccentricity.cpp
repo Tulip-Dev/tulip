@@ -51,8 +51,7 @@ static const char *paramHelp[] = {
     // graph diameter
     "The computed diameter; it is always computed when normalized eccentricity is required."
     "To force its computation, in non normalized eccentricity case, set its input value to 1."
-    "When not computed its output value will be set to -1."
-};
+    "When not computed its output value will be set to -1."};
 
 EccentricityMetric::EccentricityMetric(const tlp::PluginContext *context)
     : DoubleAlgorithm(context), allPaths(false), norm(true), directed(false) {
@@ -130,38 +129,38 @@ bool EccentricityMetric::run() {
   std::atomic<bool> stopfor(false);
   if (needDiameter) {
     TLP_PARALLEL_MAP_INDICES(nbNodes, [&](unsigned int i) {
-    if (stopfor.load())
-      return;
+      if (stopfor.load())
+        return;
 
-    if (ThreadManager::getThreadNumber() == 0) {
-      if (pluginProgress->progress(i, nbNodes / ThreadManager::getNumberOfThreads()) !=
-          TLP_CONTINUE) {
-        stopfor = true;
+      if (ThreadManager::getThreadNumber() == 0) {
+        if (pluginProgress->progress(i, nbNodes / ThreadManager::getNumberOfThreads()) !=
+            TLP_CONTINUE) {
+          stopfor = true;
+        }
       }
-    }
 
-    res[i] = compute(i);
+      res[i] = compute(i);
 
-    TLP_LOCK_SECTION(DIAMETER) {
-      if (diameter < res[i])
-	diameter = res[i];
-    }
-    TLP_UNLOCK_SECTION(DIAMETER);
-   });
+      TLP_LOCK_SECTION(DIAMETER) {
+        if (diameter < res[i])
+          diameter = res[i];
+      }
+      TLP_UNLOCK_SECTION(DIAMETER);
+    });
   } else {
     TLP_PARALLEL_MAP_INDICES(nbNodes, [&](unsigned int i) {
-    if (stopfor.load())
-      return;
+      if (stopfor.load())
+        return;
 
-    if (ThreadManager::getThreadNumber() == 0) {
-      if (pluginProgress->progress(i, nbNodes / ThreadManager::getNumberOfThreads()) !=
-          TLP_CONTINUE) {
-        stopfor = true;
+      if (ThreadManager::getThreadNumber() == 0) {
+        if (pluginProgress->progress(i, nbNodes / ThreadManager::getNumberOfThreads()) !=
+            TLP_CONTINUE) {
+          stopfor = true;
+        }
       }
-    }
 
-    res[i] = compute(i);
-   });
+      res[i] = compute(i);
+    });
   }
 
   if (pluginProgress->state() != TLP_CONTINUE)

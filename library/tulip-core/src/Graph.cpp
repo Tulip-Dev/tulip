@@ -92,8 +92,7 @@ ostream &operator<<(ostream &os, const Graph *graph) {
 static void setViewPropertiesDefaults(Graph *g) {
 
   const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize",
-                    metrics = "viewMetric", fonts = "viewFont",
-                    fontSizes = "viewFontSize",
+                    metrics = "viewMetric", fonts = "viewFont", fontSizes = "viewFontSize",
                     borderWidth = "viewBorderWidth", borderColor = "viewBorderColor",
                     tgtShape = "viewTgtAnchorShape", srcShape = "viewSrcAnchorShape",
                     icon = "viewIcon", labelColor = "viewLabelColor",

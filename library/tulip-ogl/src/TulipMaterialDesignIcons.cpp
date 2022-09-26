@@ -65,7 +65,8 @@ bool TulipMaterialDesignIcons::isIconSupported(const std::string &iconName) {
     name.insert(2, 1, 'i');
     if (iconCodePoint.find(iconName.c_str()) != iconCodePoint.end())
       // output deprecation warning
-      tlp::warning() << "Warning: icon name \"" << iconName << "\" is deprecated, use \"" << name << "\" instead." << std::endl;
+      tlp::warning() << "Warning: icon name \"" << iconName << "\" is deprecated, use \"" << name
+                     << "\" instead." << std::endl;
   }
   return iconCodePoint.find(iconName.c_str()) != iconCodePoint.end();
 }
@@ -95,7 +96,8 @@ unsigned int TulipMaterialDesignIcons::getIconCodePoint(const std::string &iconN
     it = iconCodePoint.find(name.c_str());
     if (it != iconCodePoint.end()) {
       // output deprecation warning
-      tlp::warning() << "Warning: icon name \"" << iconName << "\" is deprecated, use \"" << name << "\" instead." << std::endl;
+      tlp::warning() << "Warning: icon name \"" << iconName << "\" is deprecated, use \"" << name
+                     << "\" instead." << std::endl;
       return (it->second);
     }
   }

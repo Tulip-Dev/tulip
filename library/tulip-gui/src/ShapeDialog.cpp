@@ -32,7 +32,7 @@
 using namespace tlp;
 
 ShapeDialog::ShapeDialog(bool forNodes, QWidget *parent)
-  : QDialog(parent), _forNodes(forNodes), _ui(new Ui::ShapeDialog) {
+    : QDialog(parent), _forNodes(forNodes), _ui(new Ui::ShapeDialog) {
 
   _ui->setupUi(this);
   _ui->shapeListWidget->installEventFilter(this);
@@ -57,7 +57,8 @@ void ShapeDialog::updateShapeList() {
     _ui->shapeListWidget->addItem(new QListWidgetItem(QPixmap(), "NONE"));
     for (const auto &glyphName : PluginLister::availablePlugins<EdgeExtremityGlyph>()) {
       QString name = tlpStringToQString(glyphName);
-      _ui->shapeListWidget->addItem(new QListWidgetItem(EdgeExtremityGlyphRenderer::render(name), name));
+      _ui->shapeListWidget->addItem(
+          new QListWidgetItem(EdgeExtremityGlyphRenderer::render(name), name));
     }
   }
 
@@ -102,9 +103,8 @@ bool ShapeDialog::eventFilter(QObject *, QEvent *event) {
     auto lwi = _ui->shapeListWidget->itemAt(he->x(), he->y());
     if (lwi) {
       // show a 48 pixel height icon
-      auto qimg = _forNodes
-	? GlyphRenderer::render(lwi->text(), 48)
-	: EdgeExtremityGlyphRenderer::render(lwi->text(), 48);
+      auto qimg = _forNodes ? GlyphRenderer::render(lwi->text(), 48)
+                            : EdgeExtremityGlyphRenderer::render(lwi->text(), 48);
       QByteArray bytes;
       QBuffer buf(&bytes);
       qimg.save(&buf, "png", 100);
@@ -118,4 +118,3 @@ bool ShapeDialog::eventFilter(QObject *, QEvent *event) {
   }
   return false;
 }
-

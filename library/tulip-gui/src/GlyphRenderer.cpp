@@ -63,12 +63,12 @@ static QPixmap renderNodeGlyph(int glyphId, int dim) {
     if (glyphId == ALL_GLYPHS) {
       // init previews
       for (const auto &glyphName : PluginLister::availablePlugins<Glyph>()) {
-	auto glId = GlyphManager::glyphId(glyphName);
-	// Create the glyph preview
-	graph->getProperty<IntegerProperty>("viewShape")->setNodeValue(node, glId);
-	renderer->renderScene(false, true);
-	// get preview image with transparency
-	nodePreviews.emplace(glId, QPixmap::fromImage(renderer->getImage(true)));
+        auto glId = GlyphManager::glyphId(glyphName);
+        // Create the glyph preview
+        graph->getProperty<IntegerProperty>("viewShape")->setNodeValue(node, glId);
+        renderer->renderScene(false, true);
+        // get preview image with transparency
+        nodePreviews.emplace(glId, QPixmap::fromImage(renderer->getImage(true)));
       }
     } else {
       // render the glyph
@@ -92,9 +92,7 @@ QPixmap GlyphRenderer::render(int glyphId, int dim) {
   }
   auto it = nodePreviews.find(glyphId);
   if (it != nodePreviews.end())
-    return (dim ==  GLYPH_PREVIEW_DIM)
-      ? it->second
-      : renderNodeGlyph(glyphId, dim);
+    return (dim == GLYPH_PREVIEW_DIM) ? it->second : renderNodeGlyph(glyphId, dim);
   return QPixmap(":/tulip/gui/icons/i_invalid.png");
 }
 
@@ -139,7 +137,7 @@ static QPixmap renderEEGlyph(int glyphId, int dim) {
     renderer->setSceneBackgroundColor(Color(255, 255, 255, 0));
     renderer->addGraphToScene(graph);
     GlGraphRenderingParameters renderingParamerters =
-      renderer->getScene()->getGlGraphComposite()->getRenderingParameters();
+        renderer->getScene()->getGlGraphComposite()->getRenderingParameters();
     renderingParamerters.setEdgeColorInterpolate(false);
     renderingParamerters.setEdgeSizeInterpolate(false);
     renderingParamerters.setViewArrow(true);
@@ -147,19 +145,19 @@ static QPixmap renderEEGlyph(int glyphId, int dim) {
     if (glyphId == ALL_GLYPHS) {
       // init previews
       for (const auto &glyphName : PluginLister::availablePlugins<EdgeExtremityGlyph>()) {
-	const tlp::Plugin &info = PluginLister::pluginInformation(glyphName);
-	int glId = info.id();
-	// Create the glyph preview
-	graph->getProperty<IntegerProperty>("viewTgtAnchorShape")->setEdgeValue(e, glId);
-	renderer->renderScene(true);
-	eePreviews.emplace(glId, QPixmap::fromImage(renderer->getImage(true)));
+        const tlp::Plugin &info = PluginLister::pluginInformation(glyphName);
+        int glId = info.id();
+        // Create the glyph preview
+        graph->getProperty<IntegerProperty>("viewTgtAnchorShape")->setEdgeValue(e, glId);
+        renderer->renderScene(true);
+        eePreviews.emplace(glId, QPixmap::fromImage(renderer->getImage(true)));
       }
     } else {
-	// render the glyph
-	graph->getProperty<IntegerProperty>("viewTgtAnchorShape")->setEdgeValue(e, glyphId);
-	renderer->renderScene(true);
-	// get pixmap
-	pxmp = QPixmap::fromImage(renderer->getImage(true));
+      // render the glyph
+      graph->getProperty<IntegerProperty>("viewTgtAnchorShape")->setEdgeValue(e, glyphId);
+      renderer->renderScene(true);
+      // get pixmap
+      pxmp = QPixmap::fromImage(renderer->getImage(true));
     }
     renderer->clearScene(true);
   }
@@ -176,9 +174,7 @@ QPixmap EdgeExtremityGlyphRenderer::render(int glyphId, int dim) {
   }
   auto it = eePreviews.find(glyphId);
   if (it != eePreviews.end())
-    return (dim ==  GLYPH_PREVIEW_DIM)
-      ? it->second
-      : renderEEGlyph(glyphId, dim);
+    return (dim == GLYPH_PREVIEW_DIM) ? it->second : renderEEGlyph(glyphId, dim);
   return QPixmap(":/tulip/gui/icons/i_invalid.png");
 }
 

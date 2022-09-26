@@ -1714,7 +1714,7 @@ static void initIconCodePoints() {
   addIconCodePoint("fab-unsplash", 0xe07c);
   addIconCodePoint("fab-yarn", 0xf7e3);
   addIconCodePoint("fab-square-steam", 0xf1b7);
-  //addIconCodePoint("fab-500px", 0xf26e);
+  // addIconCodePoint("fab-500px", 0xf26e);
   addIconCodePoint("fab-square-vimeo", 0xf194);
   addIconCodePoint("fab-asymmetrik", 0xf372);
   addIconCodePoint("fab-font-awesome", 0xf2b4);
@@ -1843,7 +1843,7 @@ static void initIconCodePoints() {
   addIconCodePoint("fab-erlang", 0xf39d);
   addIconCodePoint("fab-cotton-bureau", 0xf89e);
   addIconCodePoint("fab-dashcube", 0xf210);
-  //addIconCodePoint("fab-42-group", 0xe080);
+  // addIconCodePoint("fab-42-group", 0xe080);
   addIconCodePoint("fab-stack-exchange", 0xf18d);
   addIconCodePoint("fab-elementor", 0xf430);
   addIconCodePoint("fab-square-pied-piper", 0xe01e);

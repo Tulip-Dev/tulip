@@ -537,17 +537,19 @@ bool AlgorithmRunnerItem::eventFilter(QObject *, QEvent *ev) {
       // generate plugin + parameters doc
       QString doc = _ui->playButton->toolTip();
       if (doc.isEmpty())
-	doc = _pluginName;
+        doc = _pluginName;
       doc = QString("<head><style type\"text/css\">a { color: #0d47f1 }</style></head>") + doc;
 
       initModel();
       ParameterListModel *model = static_cast<ParameterListModel *>(_ui->parameters->model());
       auto nbParams = model->rowCount();
       if (nbParams) {
-	doc.append("<br/><br/>The parameters are:<ul>");
-	for (int i = 0; i < nbParams; ++i) {
-	  doc.append(QString("<br/><b>-&nbsp;&quot;%1&quot;</b>%2").arg(model->getParameterName(i)).arg(model->getParameterHelp(i)));
-	}
+        doc.append("<br/><br/>The parameters are:<ul>");
+        for (int i = 0; i < nbParams; ++i) {
+          doc.append(QString("<br/><b>-&nbsp;&quot;%1&quot;</b>%2")
+                         .arg(model->getParameterName(i))
+                         .arg(model->getParameterHelp(i)));
+        }
       }
 
       // show doc in a simple dialog using a scrolling QTextEdit
@@ -556,8 +558,8 @@ bool AlgorithmRunnerItem::eventFilter(QObject *, QEvent *ev) {
       ui->setupUi(&pluginDocDialog);
       ui->pluginDocText->setReadOnly(true);
       ui->pluginDocText->setHtml(doc);
-      connect(ui->buttonBox->button(QDialogButtonBox::Ok), SIGNAL(released()),
-	      &pluginDocDialog, SLOT(accept()));
+      connect(ui->buttonBox->button(QDialogButtonBox::Ok), SIGNAL(released()), &pluginDocDialog,
+              SLOT(accept()));
       pluginDocDialog.setWindowTitle(QString(name()).append(" documentation"));
       pluginDocDialog.setModal(true);
       pluginDocDialog.exec();
