@@ -410,16 +410,16 @@ QImage GlMainWidget::createPicture(int width, int height, bool center, QImage::F
       const vector<pair<string, GlLayer *>> &layersList = scene.getLayersList();
 
       if (center) {
-	for (auto &itl : layersList) {
-	  if (!itl.second->useSharedCamera())
-	    oldCameras.push_back(itl.second->getCamera());
-	}
+        for (auto &itl : layersList) {
+          if (!itl.second->useSharedCamera())
+            oldCameras.push_back(itl.second->getCamera());
+        }
       }
 
       scene.setViewport(0, 0, width, height);
 
       if (center)
-	scene.adjustSceneToSize(width, height);
+        scene.adjustSceneToSize(width, height);
 
       computeInteractors();
       scene.draw();
@@ -430,20 +430,20 @@ QImage GlMainWidget::createPicture(int width, int height, bool center, QImage::F
       scene.setViewport(0, 0, oldWidth, oldHeight);
 
       if (center) {
-	int i = 0;
+        int i = 0;
 
-	for (auto &itl : layersList) {
-	  if (!itl.second->useSharedCamera()) {
-	    Camera &camera = itl.second->getCamera();
-	    camera.setCenter(oldCameras[i].getCenter());
-	    camera.setEyes(oldCameras[i].getEyes());
-	    camera.setSceneRadius(oldCameras[i].getSceneRadius());
-	    camera.setUp(oldCameras[i].getUp());
-	    camera.setZoomFactor(oldCameras[i].getZoomFactor());
-	  }
+        for (auto &itl : layersList) {
+          if (!itl.second->useSharedCamera()) {
+            Camera &camera = itl.second->getCamera();
+            camera.setCenter(oldCameras[i].getCenter());
+            camera.setEyes(oldCameras[i].getEyes());
+            camera.setSceneRadius(oldCameras[i].getSceneRadius());
+            camera.setUp(oldCameras[i].getUp());
+            camera.setZoomFactor(oldCameras[i].getZoomFactor());
+          }
 
-	  i++;
-	}
+          i++;
+        }
       }
     }
   }
@@ -452,8 +452,8 @@ QImage GlMainWidget::createPicture(int width, int height, bool center, QImage::F
   // right format QImage::Format_ARGB32. We need to clone the data as when the image var will be
   // destroy at the end of the function it's data will be destroyed too and the newly created image
   // object will have invalid data pointer.
-  return QImage(resultImage.constBits(), resultImage.width(),
-                resultImage.height(), QImage::Format_ARGB32)
+  return QImage(resultImage.constBits(), resultImage.width(), resultImage.height(),
+                QImage::Format_ARGB32)
       .convertToFormat(format);
 }
 
