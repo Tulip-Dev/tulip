@@ -398,69 +398,62 @@ QImage GlMainWidget::createPicture(int width, int height, bool center, QImage::F
   QOpenGLFramebufferObjectFormat fboFormat;
   fboFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
   fboFormat.setSamples(OpenGlConfigManager::maxNumberOfSamples());
-  QOpenGLFramebufferObject *frameBuf = new QOpenGLFramebufferObject(width, height, fboFormat);
-  QOpenGLFramebufferObject *frameBuf2 = new QOpenGLFramebufferObject(width, height);
+  {
+    QOpenGLFramebufferObject frameBuf(width, height, fboFormat);
 
-  if (frameBuf->isValid() && frameBuf2->isValid()) {
-    frameBuf->bind();
+    if (frameBuf.isValid()) {
+      frameBuf.bind();
 
-    int oldWidth = scene.getViewport()[2];
-    int oldHeight = scene.getViewport()[3];
-    vector<Camera> oldCameras;
-    const vector<pair<string, GlLayer *>> &layersList = scene.getLayersList();
+      int oldWidth = scene.getViewport()[2];
+      int oldHeight = scene.getViewport()[3];
+      vector<Camera> oldCameras;
+      const vector<pair<string, GlLayer *>> &layersList = scene.getLayersList();
 
-    if (center) {
-      for (auto &itl : layersList) {
-        if (!itl.second->useSharedCamera())
-          oldCameras.push_back(itl.second->getCamera());
+      if (center) {
+	for (auto &itl : layersList) {
+	  if (!itl.second->useSharedCamera())
+	    oldCameras.push_back(itl.second->getCamera());
+	}
       }
-    }
 
-    scene.setViewport(0, 0, width, height);
+      scene.setViewport(0, 0, width, height);
 
-    if (center)
-      scene.adjustSceneToSize(width, height);
+      if (center)
+	scene.adjustSceneToSize(width, height);
 
-    computeInteractors();
-    scene.draw();
-    drawInteractors();
-    frameBuf->release();
+      computeInteractors();
+      scene.draw();
+      drawInteractors();
+      frameBuf.release();
 
-    QOpenGLFramebufferObject::blitFramebuffer(frameBuf2, QRect(0, 0, width, height), frameBuf,
-                                              QRect(0, 0, width, height));
+      resultImage = frameBuf.toImage();
+      scene.setViewport(0, 0, oldWidth, oldHeight);
 
-    resultImage = frameBuf2->toImage();
+      if (center) {
+	int i = 0;
 
-    scene.setViewport(0, 0, oldWidth, oldHeight);
+	for (auto &itl : layersList) {
+	  if (!itl.second->useSharedCamera()) {
+	    Camera &camera = itl.second->getCamera();
+	    camera.setCenter(oldCameras[i].getCenter());
+	    camera.setEyes(oldCameras[i].getEyes());
+	    camera.setSceneRadius(oldCameras[i].getSceneRadius());
+	    camera.setUp(oldCameras[i].getUp());
+	    camera.setZoomFactor(oldCameras[i].getZoomFactor());
+	  }
 
-    if (center) {
-      int i = 0;
-
-      for (auto &itl : layersList) {
-        if (!itl.second->useSharedCamera()) {
-          Camera &camera = itl.second->getCamera();
-          camera.setCenter(oldCameras[i].getCenter());
-          camera.setEyes(oldCameras[i].getEyes());
-          camera.setSceneRadius(oldCameras[i].getSceneRadius());
-          camera.setUp(oldCameras[i].getUp());
-          camera.setZoomFactor(oldCameras[i].getZoomFactor());
-        }
-
-        i++;
+	  i++;
+	}
       }
     }
   }
-
-  delete frameBuf;
-  delete frameBuf2;
-
   // The QOpenGLFramebufferObject returns the wrong image format
   // QImage::Format_ARGB32_Premultiplied. We need to create an image from original data with the
   // right format QImage::Format_ARGB32. We need to clone the data as when the image var will be
   // destroy at the end of the function it's data will be destroyed too and the newly created image
   // object will have invalid data pointer.
-  return QImage(resultImage.bits(), resultImage.width(), resultImage.height(),
-                QImage::Format_ARGB32)
+  return QImage(resultImage.constBits(), resultImage.width(),
+                resultImage.height(), QImage::Format_ARGB32)
       .convertToFormat(format);
 }
 
