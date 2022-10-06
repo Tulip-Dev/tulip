@@ -37,6 +37,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/Gl2DRect.h>
 #include <tulip/ViewActionsManager.h>
+#include <tulip/TulipFontIconEngine.h>
 
 using namespace tlp;
 
@@ -185,7 +186,7 @@ void GlMainView::updateShowOverviewButton() {
   if (_showOvButton == nullptr) {
     QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget();
     _showOvButton = new QPushButton();
-    _showOvButton->setMaximumSize(10, 10);
+    _showOvButton->setMaximumSize(11, 11);
     _showOvButton->setCheckable(true);
     _showOvButton->setStyleSheet("QPushButton {font-family: Arial; font-size: 13px; border:none};");
     proxy->setWidget(_showOvButton);
@@ -202,7 +203,7 @@ void GlMainView::updateShowOverviewButton() {
     _showOvButton->blockSignals(true);
 
     if (_overviewItem && _overviewItem->isVisible()) {
-      _showOvButton->setText("x");
+      _showOvButton->setIcon(TulipFontIconEngine::icon("mdi-close-thick"));
       _showOvButton->setChecked(true);
       _showOvButton->setToolTip("Hide overview display");
       _showOvButton->move(
@@ -210,7 +211,7 @@ void GlMainView::updateShowOverviewButton() {
           rect.height() - _overviewItem->getHeight() -
               ((_quickAccessBar != nullptr) ? _quickAccessBarItem->size().height() : 0));
     } else {
-      _showOvButton->setText("<");
+      _showOvButton->setIcon(TulipFontIconEngine::icon("mdi-arrow-collapse-left"));
       _showOvButton->setChecked(false);
       _showOvButton->setToolTip("Show overview display");
       _showOvButton->move(
@@ -243,7 +244,7 @@ void GlMainView::updateShowQuickAccessBarButton() {
     if (_showQabButton == nullptr) {
       QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget();
       _showQabButton = new QPushButton();
-      _showQabButton->setMaximumSize(10, 10);
+      _showQabButton->setMaximumSize(11, 11);
       _showQabButton->setCheckable(true);
       _showQabButton->setStyleSheet(
           "QPushButton {font-family: Arial; font-size: 13px; border:none};");
@@ -258,12 +259,12 @@ void GlMainView::updateShowQuickAccessBarButton() {
     _showQabButton->blockSignals(true);
 
     if (quickAccessBarVisible()) {
-      _showQabButton->setText("x");
+      _showQabButton->setIcon(TulipFontIconEngine::icon("mdi-close-thick"));
       _showQabButton->setChecked(true);
       _showQabButton->setToolTip("Hide quick access bar");
       _showQabButton->move(0, rect.height() - _quickAccessBarItem->size().height() - 4);
     } else {
-      _showQabButton->setText("^");
+      _showQabButton->setIcon(TulipFontIconEngine::icon("mdi-arrow-collapse-up"));
       _showQabButton->setChecked(false);
       _showQabButton->setToolTip("Show quick access bar");
       _showQabButton->move(0, rect.height() - _showQabButton->height());
