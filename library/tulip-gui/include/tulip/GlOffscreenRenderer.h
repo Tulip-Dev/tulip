@@ -77,7 +77,6 @@ public:
   void setViewPortSize(const unsigned int viewPortWidth, const unsigned int viewPortHeight);
   unsigned int getViewportWidth();
   unsigned int getViewportHeight();
-  bool frameBufferOk() const;
 
   GlScene *getScene() {
     return &scene;

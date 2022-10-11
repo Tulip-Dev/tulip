@@ -212,10 +212,6 @@ void GlOffscreenRenderer::renderExternalScene(GlScene *scene, const bool antiali
   scene->setViewport(backupViewport);
 }
 
-bool GlOffscreenRenderer::frameBufferOk() const {
-  return glFrameBuf->isValid();
-}
-
 static inline QImage convertImage(const QImage &image, bool alpha) {
   QImage qimg(image.constBits(), image.width(), image.height(), QImage::Format_ARGB32);
   return alpha ? qimg : qimg.convertToFormat(QImage::Format_RGB32);

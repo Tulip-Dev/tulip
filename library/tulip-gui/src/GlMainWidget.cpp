@@ -47,7 +47,6 @@
 #include <tulip/Camera.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlOffscreenRenderer.h>
-#include <tulip/GlTextureManager.h>
 using namespace std;
 
 namespace tlp {

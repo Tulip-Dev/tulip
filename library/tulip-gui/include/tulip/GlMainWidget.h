@@ -282,7 +282,6 @@ private:
   View *view;
   int widthStored;
   int heightStored;
-  bool frameBufferStored;
   QOpenGLFramebufferObject *glFrameBuf, *glFrameBuf2;
   static bool inRendering;
   bool keepPointOfViewOnSubgraphChanging;
