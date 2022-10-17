@@ -83,9 +83,7 @@ public:
   char stringDelimiter;
   char decimalMark;
 
-  void exportString(std::ostream &os, const std::string &s) {
-    os << stringDelimiter << s << stringDelimiter;
-  }
+  void exportString(std::ostream &os, const std::string &s);
 };
 /*@}*/
 #endif // CSVEXPORT_H

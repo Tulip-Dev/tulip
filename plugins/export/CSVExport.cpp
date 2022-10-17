@@ -24,6 +24,8 @@
 #include <tulip/StringProperty.h>
 #include <tulip/BooleanProperty.h>
 
+#include <regex>
+
 PLUGIN(CsvExport)
 
 using namespace tlp;
@@ -106,6 +108,14 @@ struct decimal_comma : std::numpunct<char> {
     return ',';
   }
 };
+
+void CsvExport::exportString(std::ostream &os, const std::string &s) {
+    //do not forget to escape quotes in data
+    if (stringDelimiter == '\"')
+        os << stringDelimiter << std::regex_replace(s, std::regex("\""), "\"\"") << stringDelimiter;
+    else if (stringDelimiter == '\'')
+        os << stringDelimiter << std::regex_replace(s, std::regex("'"), "''") << stringDelimiter;
+}
 
 bool CsvExport::exportGraph(std::ostream &os) {
   // initialize parameters with default values
