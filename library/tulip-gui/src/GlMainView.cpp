@@ -189,7 +189,7 @@ void GlMainView::updateShowOverviewButton() {
     _showOvButton->setMaximumSize(11, 11);
     _showOvButton->setCheckable(true);
     _showOvButton->setStyleSheet(
-	"QPushButton {background: lightgray; font-size: 13px; border:none};");
+        "QPushButton {background: lightgray; font-size: 13px; border:none};");
     proxy->setWidget(_showOvButton);
     addToScene(proxy);
     proxy->setZValue(10);
