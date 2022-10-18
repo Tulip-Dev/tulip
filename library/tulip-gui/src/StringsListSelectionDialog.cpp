@@ -69,11 +69,11 @@ StringsListSelectionDialog::StringsListSelectionDialog(
 }
 
 StringsListSelectionDialog::~StringsListSelectionDialog() {
-    delete ui;
+  delete ui;
 }
 
 std::vector<std::string> StringsListSelectionDialog::getSelectedStringsList() const {
-    return ui->stringsListSelectionWidget->getSelectedStringsList();
+  return ui->stringsListSelectionWidget->getSelectedStringsList();
 }
 
 void StringsListSelectionDialog::setUnselectedStringsListLabel(const std::string &label) {

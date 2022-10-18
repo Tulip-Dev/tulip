@@ -174,7 +174,10 @@ bool TulipFontIconDialog::eventFilter(QObject *, QEvent *event) {
       clipboard->setText(lwi->text());
       event->accept();
       // confirm copy with a message
-      QToolTip::showText(QCursor::pos(), QString("<font size=-1><pre><b>%0</b> copied</pre></font>").arg(lwi->text()), nullptr, QRect(), 500);
+      QToolTip::showText(
+          QCursor::pos(),
+          QString("<font size=-1><pre><b>%0</b> copied</pre></font>").arg(lwi->text()), nullptr,
+          QRect(), 500);
       return true;
     }
   }
