@@ -26,8 +26,11 @@
 #include <tulip/TulipSettings.h>
 
 #include <QBuffer>
+#include <QClipboard>
+#include <QCursor>
 #include <QDesktopServices>
 #include <QHelpEvent>
+#include <QGuiApplication>
 #include <QRegExp>
 #include <QToolTip>
 #include <QUrl>
@@ -159,6 +162,19 @@ bool TulipFontIconDialog::eventFilter(QObject *, QEvent *event) {
                  .arg(QString(bytes.toBase64()))
                  .append(lwi->text());
       QToolTip::showText(he->globalPos(), ttip);
+      event->accept();
+      return true;
+    }
+  } else if (event->type() == QEvent::QEvent::KeyPress) {
+    QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+    auto lwi = _ui->iconListWidget->currentItem();
+    if (ke->matches(QKeySequence::Copy) && lwi) {
+      // copy the name of the currently selected icon to clipboard
+      QClipboard *clipboard = QGuiApplication::clipboard();
+      clipboard->setText(lwi->text());
+      event->accept();
+      // confirm copy with a message
+      QToolTip::showText(QCursor::pos(), QString("<font size=-1><pre><b>%0</b> copied</pre></font>").arg(lwi->text()), nullptr, QRect(), 500);
       return true;
     }
   }
