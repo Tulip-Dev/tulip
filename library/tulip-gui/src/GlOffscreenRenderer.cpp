@@ -289,18 +289,21 @@ void GlOffscreenRenderer::doneOpenGLContextCurrent() {
   getOpenGLContext()->doneCurrent();
 }
 
-void GlOffscreenRenderer::renderGlMainWidget(GlMainWidget *glWidget, bool redrawNeeded) {
+QImage GlOffscreenRenderer::renderGlMainWidget(GlMainWidget *glWidget, bool redrawNeeded) {
+  setViewPortSize(glWidget->screenToViewport(glWidget->width()),
+		  glWidget->screenToViewport(glWidget->height()));
   makeOpenGLContextCurrent();
   initFrameBuffers(true);
   glFrameBuf2->bind();
   glPushAttrib(GL_ALL_ATTRIB_BITS);
-  if (redrawNeeded) {
-    glWidget->render(GlMainWidget::RenderingOptions(GlMainWidget::RenderScene), false);
-  } else {
-    glWidget->render(GlMainWidget::RenderingOptions(), false);
-  }
+  glWidget->render(redrawNeeded ? GlMainWidget::RenderingOptions(GlMainWidget::RenderScene) : GlMainWidget::RenderingOptions(), false);
   glPopAttrib();
   glFrameBuf2->release();
+
+  QImage img = getImage();
+  img.setDevicePixelRatio(glWidget->devicePixelRatio());
+
+  return img;
 }
 
 } // namespace tlp

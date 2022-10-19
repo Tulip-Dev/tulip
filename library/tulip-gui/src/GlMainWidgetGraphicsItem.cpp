@@ -80,7 +80,6 @@ QRectF GlMainWidgetGraphicsItem::boundingRect() const {
 }
 
 void GlMainWidgetGraphicsItem::resize(int width, int height) {
-
   this->width = width;
   this->height = height;
   glMainWidget->resize(width, height);
@@ -107,16 +106,10 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
     emit widgetPainted(_graphChanged);
   }
 
-  GlOffscreenRenderer::getInstance()->setViewPortSize(width, height);
+  auto img = GlOffscreenRenderer::getInstance()->renderGlMainWidget(glMainWidget, _redrawNeeded);
+  _redrawNeeded = false;
 
-  if (_redrawNeeded) {
-    GlOffscreenRenderer::getInstance()->renderGlMainWidget(glMainWidget);
-    _redrawNeeded = false;
-  } else {
-    GlOffscreenRenderer::getInstance()->renderGlMainWidget(glMainWidget, false);
-  }
-
-  painter->drawImage(QRect(0, 0, width, height), GlOffscreenRenderer::getInstance()->getImage());
+  painter->drawImage(QRect(0, 0, width, height), img);
 }
 
 void GlMainWidgetGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {

@@ -30,6 +30,7 @@
 
 #include <QSurfaceFormat>
 #include <QOffscreenSurface>
+#include <QMainWindow>
 
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
@@ -47,6 +48,8 @@
 #include <tulip/Camera.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlOffscreenRenderer.h>
+#include <tulip/Perspective.h>
+
 using namespace std;
 
 namespace tlp {
@@ -93,6 +96,12 @@ GlMainWidget::GlMainWidget(QWidget *parent, View *view)
   getScene()->setViewOrtho(TulipSettings::isViewOrtho());
   OpenGlConfigManager::initExtensions();
   QOpenGLWidget::doneCurrent();
+  // To ensure devicePixelRatio() returned value is 'correct',
+  // we get it from the host window system ancestor, if there is one;
+  // if not, we get the value from the main window.
+  // By doing this the returned value remains 'correct'
+  // even if the window is moved from one screen to another.
+  wdpr = window()->windowHandle() ? window() : Perspective::instance()->mainWindow();
 }
 //==================================================
 GlMainWidget::~GlMainWidget() {
@@ -142,7 +151,6 @@ void GlMainWidget::deleteFramebuffers() {
   delete glFrameBuf2;
   glFrameBuf2 = nullptr;
 }
-
 //==================================================
 void GlMainWidget::render(RenderingOptions options, bool checkVisibility) {
 

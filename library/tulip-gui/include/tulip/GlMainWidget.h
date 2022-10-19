@@ -126,6 +126,12 @@ public:
   bool pickNodesEdges(const int x, const int y, SelectedEntity &selectedEntity,
                       tlp::GlLayer *layer = nullptr, bool pickNodes = true, bool pickEdges = true);
 
+  // devicePixelRatio() must be redefined because the inherited
+  // method returns 1 when the widget is no attached to a window
+  qreal devicePixelRatio() const {
+    return wdpr->devicePixelRatio();
+  }
+
   /**
    * @brief convert a screen measure into a viewport measure
    * @param a measure in screen coordinates specified as an integer
@@ -280,6 +286,7 @@ private:
   tlp::GlScene scene;
   QRegion _visibleArea;
   View *view;
+  QWidget *wdpr;
   int widthStored;
   int heightStored;
   QOpenGLFramebufferObject *glFrameBuf, *glFrameBuf2;

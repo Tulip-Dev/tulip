@@ -116,7 +116,7 @@ public:
 
   void renderExternalScene(GlScene *scene, const bool antialiased = false);
 
-  void renderGlMainWidget(GlMainWidget *glWidget, bool redrawNeeded = true);
+  QImage renderGlMainWidget(GlMainWidget *glWidget, bool redrawNeeded);
 
   /**
    * @brief Generate a QImage from the scene. You need to call the renderScene function before this
