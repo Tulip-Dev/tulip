@@ -291,12 +291,14 @@ void GlOffscreenRenderer::doneOpenGLContextCurrent() {
 
 QImage GlOffscreenRenderer::renderGlMainWidget(GlMainWidget *glWidget, bool redrawNeeded) {
   setViewPortSize(glWidget->screenToViewport(glWidget->width()),
-		  glWidget->screenToViewport(glWidget->height()));
+                  glWidget->screenToViewport(glWidget->height()));
   makeOpenGLContextCurrent();
   initFrameBuffers(true);
   glFrameBuf2->bind();
   glPushAttrib(GL_ALL_ATTRIB_BITS);
-  glWidget->render(redrawNeeded ? GlMainWidget::RenderingOptions(GlMainWidget::RenderScene) : GlMainWidget::RenderingOptions(), false);
+  glWidget->render(redrawNeeded ? GlMainWidget::RenderingOptions(GlMainWidget::RenderScene)
+                                : GlMainWidget::RenderingOptions(),
+                   false);
   glPopAttrib();
   glFrameBuf2->release();
 
