@@ -379,6 +379,8 @@ Information about the graph structure
 
 .. automethod:: tulip::tlp.Graph.existEdge
 
+.. automethod:: tulip::tlp.Graph.hasEdge
+
 .. automethod:: tulip::tlp.Graph.getSource
 
 .. automethod:: tulip::tlp.Graph.getSink
