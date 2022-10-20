@@ -478,10 +478,14 @@ CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int co
       } else {
         // If the properties are not compatible,
         // query if we have to use the existing one.
-        if (QMessageBox::question(parent, "Property already exists",
-                                  QString("A property named \"%0\" of type '%1' already exists.\nDo you want to use it ?\nIf not, a property with "
-                                  "an approximate name will be generated.").arg(propertyName.c_str()).arg(existingProperty->getTypename().c_str()),
-				  QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+        if (QMessageBox::question(
+                parent, "Property already exists",
+                QString(
+                    "A property named \"%0\" of type '%1' already exists.\nDo you want to use it ?\nIf not, a property with "
+                    "an approximate name will be generated.")
+                    .arg(propertyName.c_str())
+                    .arg(existingProperty->getTypename().c_str()),
+                QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
           interf = existingProperty;
         else
           interf = generateApproximateProperty(propertyName, propertyType);
