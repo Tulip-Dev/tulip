@@ -442,10 +442,10 @@ CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int co
     string propertyType = importParameters.getColumnDataType(column);
     string propertyName = importParameters.getColumnName(column);
 
-    // If auto detection fail set to default type : string.
+    // If auto detection fails, set to default type : string.
     if (propertyType.empty()) {
-      qWarning() << __PRETTY_FUNCTION__ << " No type for the column " << propertyName
-                 << " set to string";
+      qWarning() << __PRETTY_FUNCTION__ << " No type for the column \"" << propertyName
+                 << "\", set it to string";
       propertyType = "string";
     }
 
@@ -456,7 +456,7 @@ CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int co
     if (graph->existProperty(propertyName)) {
       PropertyInterface *existingProperty = graph->getProperty(propertyName);
 
-      // If the properties are compatible query if we had to use existing.
+      // If the properties are compatible, query if we have to use existing.
       if (existingProperty->getTypename().compare(propertyType) == 0) {
         if (overwritePropertiesButton != QMessageBox::YesToAll &&
             overwritePropertiesButton != QMessageBox::NoToAll) {
@@ -476,13 +476,15 @@ CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int co
           interf = graph->getProperty(propertyName);
         }
       } else {
-        // If the properties are not compatible
-        // generate a new property with an approximate name
-        QMessageBox::critical(parent, parent->tr("Property already existing"),
-                              parent->tr("A property named \"") + tlpStringToQString(propertyName) +
-                                  parent->tr("\" already exists with a different type. A property "
-                                             "with an approximate name will be generated."));
-        interf = generateApproximateProperty(propertyName, propertyType);
+        // If the properties are not compatible,
+        // query if we have to use the existing one.
+        if (QMessageBox::question(parent, "Property already exists",
+                                  QString("A property named \"%0\" of type '%1' already exists.\nDo you want to use it ?\nIf not, a property with "
+                                  "an approximate name will be generated.").arg(propertyName.c_str()).arg(existingProperty->getTypename().c_str()),
+				  QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+          interf = existingProperty;
+        else
+          interf = generateApproximateProperty(propertyName, propertyType);
       }
     } else {
       interf = graph->getProperty(propertyName, propertyType);
