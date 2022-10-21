@@ -134,7 +134,7 @@ class TLP_QT_SCOPE CSVTableWidget : public QTableWidget, public CSVContentHandle
 public:
   CSVTableWidget(QWidget *parent = nullptr);
   bool begin() override;
-  bool line(unsigned int row, const std::vector<std::string> &lineTokens) override;
+  bool line(unsigned int row, const std::vector<CSVToken> &lineTokens) override;
   bool end(unsigned int rowNumber, unsigned int columnNumber) override;
   /**
    * @brief Limit the line number of the preview. Need to parse the file again to take this limit
@@ -176,7 +176,7 @@ public:
   CSVImportConfigurationWidget(QWidget *parent = nullptr);
   ~CSVImportConfigurationWidget() override;
   bool begin() override;
-  bool line(unsigned int row, const std::vector<std::string> &lineTokens) override;
+  bool line(unsigned int row, const std::vector<CSVToken> &lineTokens) override;
   bool end(unsigned int rowNumber, unsigned int columnNumber) override;
   void setFirstLineIndex(int firstLine);
 

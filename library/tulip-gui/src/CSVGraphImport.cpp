@@ -511,7 +511,7 @@ bool CSVGraphImport::begin() {
   return true;
 }
 
-bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
+bool CSVGraphImport::line(unsigned int row, const vector<CSVToken> &lineTokens) {
   // Check if user wants to import the line.
   if (!importParameters.importRow(row)) {
     return true;
@@ -524,8 +524,8 @@ bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
   for (size_t column = 0; column < lineTokens.size(); ++column) {
     if (importParameters.importColumn(column)) {
       PropertyInterface *property = props[column] =
-          propertiesManager->getPropertyInterface(column, lineTokens[column]);
-      const string &token = lineTokens[column];
+          propertiesManager->getPropertyInterface(column, lineTokens[column].value);
+      const string &token = lineTokens[column].value;
 
       // If the property does not exists or
       // if the token is empty no need to import the value
@@ -622,7 +622,7 @@ bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
             // We add one to the row number as in the configuration widget we start from row 1 not
             // row 0
             qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__ << " error when importing token \""
-                       << lineTokens[column] << "\" in property \"" << property->getName()
+                       << lineTokens[column].value << "\" in property \"" << property->getName()
                        << "\" of type \"" << property->getTypename() << "\" at line " << row + 1;
           }
         }
@@ -635,7 +635,7 @@ bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
             // We add one to the row number as in the configuration widget we start from row 1 not
             // row 0
             qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__ << " error when importing token \""
-                       << lineTokens[column] << "\" in property \"" << property->getName()
+                       << lineTokens[column].value << "\" in property \"" << property->getName()
                        << "\" of type \"" << property->getTypename() << "\" at line " << row + 1;
           }
         }

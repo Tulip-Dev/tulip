@@ -56,6 +56,7 @@ public:
   std::string getEncoding() const;
   bool invertMatrix() const;
   bool getMergeSeparator() const;
+  bool getConsiderAsString() const;
   void initWithLastOpenedFile();
   int getFirstLineIndex() const;
   void setNbIgnoredLines(int);

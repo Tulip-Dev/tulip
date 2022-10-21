@@ -35,12 +35,13 @@ using namespace tlp;
 const string defaultRejectedChars = " \r\n";
 const string spaceChars = " \t";
 CSVSimpleParser::CSVSimpleParser(const string &fileName, const QString &separator,
-                                 const bool mergesep, char textDelimiter, char decimalMark,
+                                 const bool mergesep, char textDelimiter,
+                                 char decimalMark, bool considerAsString,
                                  const string &fileEncoding, unsigned int firstLine,
                                  unsigned int lastLine)
     : _fileName(fileName), _separator(separator), _textDelimiter(textDelimiter),
       _decimalMark(decimalMark), _fileEncoding(fileEncoding), _firstLine(firstLine),
-      _lastLine(lastLine), _mergesep(mergesep) {}
+      _lastLine(lastLine), _mergesep(mergesep), _considerAsString(considerAsString) {}
 
 CSVSimpleParser::~CSVSimpleParser() {}
 
@@ -74,7 +75,7 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
     // reset position
     csvFile->seekg(0, std::ios_base::beg);
     string line;
-    vector<string> tokens;
+    vector<CSVToken> tokens;
 
     unsigned int displayProgressEachLineNumber = 200;
 
@@ -124,7 +125,7 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
         unsigned int column = 0;
 
         for (column = 0; column < tokens.size(); ++column) {
-          tokens[column] = treatToken(tokens[column], row, column);
+          tokens[column].value = treatToken(tokens[column].value, row, column);
         }
 
         result = handler->line(row, tokens);
@@ -202,7 +203,8 @@ bool CSVSimpleParser::multiplatformgetline(istream &is, string &str) {
   return true;
 }
 
-void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const QString &delimiters,
+void CSVSimpleParser::tokenize(const string &str, vector<CSVToken> &tokens,
+                               const QString &delimiters,
                                const bool mergedelim, char textDelim, unsigned int) {
   // Skip delimiters at beginning.
   string::size_type lastPos = 0;
@@ -212,12 +214,14 @@ void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const 
   auto delim = QStringToTlpString(delimiters);
 
   while (!quit) {
+    bool considerAsString = false;
     // Don't search tokens in chars surrounded by text delimiters.
     assert(pos != string::npos);
     assert(pos < str.size());
 
     while (pos < str.length() && ((str[pos] != delim[0]) || (str.find(delim, pos) != pos))) {
       if (str[pos] == textDelim) {
+	considerAsString = _considerAsString;
         do {
           pos += 1;
           // go the the next text delimiter .
@@ -241,7 +245,7 @@ void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const 
     size_t nbExtractedChars = pos - lastPos;
 
     try {
-      tokens.push_back(str.substr(lastPos, nbExtractedChars));
+      tokens.emplace_back(str.substr(lastPos, nbExtractedChars), considerAsString);
     } catch (...) {
       // An error occur quit the line parsing.
       break;
@@ -343,7 +347,7 @@ bool CSVInvertMatrixParser::begin() {
   return true;
 }
 
-bool CSVInvertMatrixParser::line(unsigned int, const std::vector<std::string> &lineTokens) {
+bool CSVInvertMatrixParser::line(unsigned int, const std::vector<CSVToken> &lineTokens) {
   maxLineSize = max(maxLineSize, uint(lineTokens.size()));
   columns.push_back(lineTokens);
   return true;
@@ -353,13 +357,13 @@ bool CSVInvertMatrixParser::end(unsigned int, unsigned int) {
   if (!handler->begin())
     return false;
 
-  vector<string> tokens(columns.size());
+  vector<CSVToken> tokens(columns.size());
 
   // Fill the line with
   for (unsigned int line = 0; line < maxLineSize; ++line) {
     for (unsigned int i = 0; i < columns.size(); ++i) {
       // Check if the column is large enough
-      tokens[i] = columns[i].size() > line ? columns[i][line] : string();
+      tokens[i] = columns[i].size() > line ? columns[i][line] : CSVToken();
     }
 
     if (!handler->line(line, tokens))

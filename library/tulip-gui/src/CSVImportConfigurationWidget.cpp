@@ -254,7 +254,7 @@ bool CSVTableWidget::begin() {
   return true;
 }
 
-bool CSVTableWidget::line(unsigned int row, const vector<string> &lineTokens) {
+bool CSVTableWidget::line(unsigned int row, const vector<CSVToken> &lineTokens) {
 
   if ((row < firstLineIndex) || // Wait for the first line index
                                 // If the maximum line number is reached ignore the token.
@@ -262,9 +262,9 @@ bool CSVTableWidget::line(unsigned int row, const vector<string> &lineTokens) {
     return true;
 
   if (checkCommentsLines) {
-    if (lineTokens[0][0] == '#')
+    if (lineTokens[0].value[0] == '#')
       ++nbCommentsLines;
-    else if (lineTokens[0].substr(0, 2) == "//")
+    else if (lineTokens[0].value.substr(0, 2) == "//")
       ++nbCommentsLines;
     else
       checkCommentsLines = false;
@@ -281,7 +281,7 @@ bool CSVTableWidget::line(unsigned int row, const vector<string> &lineTokens) {
     }
 
     // Fill the table
-    setItem(currentRow, column, new QTableWidgetItem(tlpStringToQString(lineTokens[column])));
+    setItem(currentRow, column, new QTableWidgetItem(tlpStringToQString(lineTokens[column].value)));
   }
 
   return true;
@@ -393,7 +393,7 @@ bool CSVImportConfigurationWidget::begin() {
   return true;
 }
 
-bool CSVImportConfigurationWidget::line(unsigned int row, const vector<string> &lineTokens) {
+bool CSVImportConfigurationWidget::line(unsigned int row, const vector<CSVToken> &lineTokens) {
   ui->previewTableWidget->line(row, lineTokens);
 
   if (keepPropertyWidgets)
@@ -422,7 +422,7 @@ bool CSVImportConfigurationWidget::line(unsigned int row, const vector<string> &
       if (propertyWidgets.size() <= column) {
         QString columnName = generateColumnName(column);
         // Store the first token type
-        columnHeaderType.push_back(guessDataType(lineTokens[column]));
+        columnHeaderType.push_back(lineTokens[column].considerAsString ? StringProperty::propertyTypename : guessDataType(lineTokens[column].value));
         // Mark the column type as uninitialized
         columnType.push_back("");
         // Create the new column widget. The default type is string
@@ -431,7 +431,7 @@ bool CSVImportConfigurationWidget::line(unsigned int row, const vector<string> &
       } else {
         // If the widget is not initialized do not use the default type
         string previousPropertyType = columnType[column];
-        string propertyType = guessPropertyDataType(lineTokens[column], previousPropertyType);
+        string propertyType = lineTokens[column].considerAsString ? StringProperty::propertyTypename : guessPropertyDataType(lineTokens[column].value, previousPropertyType);
         // Store the new type
         columnType[column] = propertyType;
       }

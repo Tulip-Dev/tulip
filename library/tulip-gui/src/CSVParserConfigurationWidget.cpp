@@ -76,7 +76,7 @@ CSVParser *CSVParserConfigurationWidget::buildParser(unsigned int firstLine,
 
   if (isValid()) {
     parser = new CSVSimpleParser(getFile(), getSeparator(), getMergeSeparator(), getTextSeparator(),
-                                 getDecimalMark(), getEncoding(), firstLine, lastLine);
+                                 getDecimalMark(), getConsiderAsString(), getEncoding(), firstLine, lastLine);
 
     if (invertMatrix()) {
       parser = new CSVInvertMatrixParser(parser);
@@ -207,7 +207,9 @@ char CSVParserConfigurationWidget::getDecimalMark() const {
 bool CSVParserConfigurationWidget::getMergeSeparator() const {
   return ui->mergesep->isChecked();
 }
-
+bool CSVParserConfigurationWidget::getConsiderAsString() const {
+  return ui->considerAsString->isChecked();
+}
 bool CSVParserConfigurationWidget::invertMatrix() const {
   return ui->switchRowColumnCheckBox->isChecked();
 }

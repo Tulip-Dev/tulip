@@ -381,7 +381,7 @@ public:
                  const CSVImportParameters &importParameters);
   ~CSVGraphImport() override;
   bool begin() override;
-  bool line(unsigned int row, const std::vector<std::string> &lineTokens) override;
+  bool line(unsigned int row, const std::vector<CSVToken> &lineTokens) override;
   bool end(unsigned int rowNumber, unsigned int columnNumber) override;
 
 protected:

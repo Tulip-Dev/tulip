@@ -81,7 +81,8 @@ public:
    * @param lastLine The number of the last line to read.
    **/
   CSVSimpleParser(const std::string &fileName, const QString &separator = ";",
-                  const bool mergesep = false, char textDelimiter = '"', char delimiterMark = '.',
+                  bool mergesep = false, char textDelimiter = '"',
+                  char delimiterMark = '.', bool considerAsString = false,
                   const std::string &fileEncoding = std::string("UTF-8"),
                   unsigned int firstLine = 0, unsigned int lastLine = UINT_MAX);
 
@@ -121,8 +122,9 @@ protected:
   virtual std::string treatToken(const std::string &token, int row, int column);
 
 private:
-  void tokenize(const std::string &str, std::vector<std::string> &tokens, const QString &delimiters,
-                const bool mergedelim, char _textDelimiter, unsigned int numberOfCol);
+  void tokenize(const std::string &str, std::vector<CSVToken> &tokens,
+                const QString &delimiters, const bool mergedelim,
+                char _textDelimiter, unsigned int numberOfCol);
   std::string convertStringEncoding(const std::string &toConvert, QTextCodec *encoder);
 
   /**
@@ -139,7 +141,7 @@ private:
   std::string _fileEncoding;
   unsigned int _firstLine;
   unsigned int _lastLine;
-  bool _mergesep;
+  bool _mergesep, _considerAsString;
 };
 
 /**
@@ -158,13 +160,13 @@ public:
              bool firstLineOnly = false) override;
 
   bool begin() override;
-  bool line(unsigned int row, const std::vector<std::string> &lineTokens) override;
+  bool line(unsigned int row, const std::vector<CSVToken> &lineTokens) override;
   bool end(unsigned int rowNumber, unsigned int columnNumber) override;
 
 private:
   CSVParser *parser;
   CSVContentHandler *handler;
-  std::vector<std::vector<std::string>> columns;
+  std::vector<std::vector<CSVToken>> columns;
   unsigned int maxLineSize;
 };
 } // namespace tlp
