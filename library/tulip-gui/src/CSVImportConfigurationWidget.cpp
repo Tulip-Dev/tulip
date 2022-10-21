@@ -422,7 +422,9 @@ bool CSVImportConfigurationWidget::line(unsigned int row, const vector<CSVToken>
       if (propertyWidgets.size() <= column) {
         QString columnName = generateColumnName(column);
         // Store the first token type
-        columnHeaderType.push_back(lineTokens[column].considerAsString ? StringProperty::propertyTypename : guessDataType(lineTokens[column].value));
+        columnHeaderType.push_back(lineTokens[column].considerAsString
+                                       ? StringProperty::propertyTypename
+                                       : guessDataType(lineTokens[column].value));
         // Mark the column type as uninitialized
         columnType.push_back("");
         // Create the new column widget. The default type is string
@@ -431,7 +433,10 @@ bool CSVImportConfigurationWidget::line(unsigned int row, const vector<CSVToken>
       } else {
         // If the widget is not initialized do not use the default type
         string previousPropertyType = columnType[column];
-        string propertyType = lineTokens[column].considerAsString ? StringProperty::propertyTypename : guessPropertyDataType(lineTokens[column].value, previousPropertyType);
+        string propertyType =
+            lineTokens[column].considerAsString
+                ? StringProperty::propertyTypename
+                : guessPropertyDataType(lineTokens[column].value, previousPropertyType);
         // Store the new type
         columnType[column] = propertyType;
       }

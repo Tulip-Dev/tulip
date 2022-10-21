@@ -33,8 +33,7 @@ struct CSVToken {
   // indicate if value was surrounded by text delimiters
   bool considerAsString;
 
-  CSVToken(std::string val = "", bool flag = false) :
-    value(val), considerAsString(flag) {}
+  CSVToken(std::string val = "", bool flag = false) : value(val), considerAsString(flag) {}
 };
 
 /**
@@ -53,7 +52,7 @@ public:
    * @param row The number of the row.
    * @param lineTokens The tokens in the row
    */
-virtual bool line(unsigned int row, const std::vector<CSVToken> &lineTokens) = 0;
+  virtual bool line(unsigned int row, const std::vector<CSVToken> &lineTokens) = 0;
 
   /**
    * Function called at the end of the parsing.

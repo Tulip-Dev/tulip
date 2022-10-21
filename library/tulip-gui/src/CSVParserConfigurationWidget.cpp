@@ -76,7 +76,8 @@ CSVParser *CSVParserConfigurationWidget::buildParser(unsigned int firstLine,
 
   if (isValid()) {
     parser = new CSVSimpleParser(getFile(), getSeparator(), getMergeSeparator(), getTextSeparator(),
-                                 getDecimalMark(), getConsiderAsString(), getEncoding(), firstLine, lastLine);
+                                 getDecimalMark(), getConsiderAsString(), getEncoding(), firstLine,
+                                 lastLine);
 
     if (invertMatrix()) {
       parser = new CSVInvertMatrixParser(parser);

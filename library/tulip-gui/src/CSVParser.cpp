@@ -35,10 +35,9 @@ using namespace tlp;
 const string defaultRejectedChars = " \r\n";
 const string spaceChars = " \t";
 CSVSimpleParser::CSVSimpleParser(const string &fileName, const QString &separator,
-                                 const bool mergesep, char textDelimiter,
-                                 char decimalMark, bool considerAsString,
-                                 const string &fileEncoding, unsigned int firstLine,
-                                 unsigned int lastLine)
+                                 const bool mergesep, char textDelimiter, char decimalMark,
+                                 bool considerAsString, const string &fileEncoding,
+                                 unsigned int firstLine, unsigned int lastLine)
     : _fileName(fileName), _separator(separator), _textDelimiter(textDelimiter),
       _decimalMark(decimalMark), _fileEncoding(fileEncoding), _firstLine(firstLine),
       _lastLine(lastLine), _mergesep(mergesep), _considerAsString(considerAsString) {}
@@ -204,8 +203,8 @@ bool CSVSimpleParser::multiplatformgetline(istream &is, string &str) {
 }
 
 void CSVSimpleParser::tokenize(const string &str, vector<CSVToken> &tokens,
-                               const QString &delimiters,
-                               const bool mergedelim, char textDelim, unsigned int) {
+                               const QString &delimiters, const bool mergedelim, char textDelim,
+                               unsigned int) {
   // Skip delimiters at beginning.
   string::size_type lastPos = 0;
   string::size_type pos = 0;
@@ -221,7 +220,7 @@ void CSVSimpleParser::tokenize(const string &str, vector<CSVToken> &tokens,
 
     while (pos < str.length() && ((str[pos] != delim[0]) || (str.find(delim, pos) != pos))) {
       if (str[pos] == textDelim) {
-	considerAsString = _considerAsString;
+        considerAsString = _considerAsString;
         do {
           pos += 1;
           // go the the next text delimiter .

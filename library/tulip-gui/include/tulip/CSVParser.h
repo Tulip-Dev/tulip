@@ -81,8 +81,8 @@ public:
    * @param lastLine The number of the last line to read.
    **/
   CSVSimpleParser(const std::string &fileName, const QString &separator = ";",
-                  bool mergesep = false, char textDelimiter = '"',
-                  char delimiterMark = '.', bool considerAsString = false,
+                  bool mergesep = false, char textDelimiter = '"', char delimiterMark = '.',
+                  bool considerAsString = false,
                   const std::string &fileEncoding = std::string("UTF-8"),
                   unsigned int firstLine = 0, unsigned int lastLine = UINT_MAX);
 
@@ -122,9 +122,8 @@ protected:
   virtual std::string treatToken(const std::string &token, int row, int column);
 
 private:
-  void tokenize(const std::string &str, std::vector<CSVToken> &tokens,
-                const QString &delimiters, const bool mergedelim,
-                char _textDelimiter, unsigned int numberOfCol);
+  void tokenize(const std::string &str, std::vector<CSVToken> &tokens, const QString &delimiters,
+                const bool mergedelim, char _textDelimiter, unsigned int numberOfCol);
   std::string convertStringEncoding(const std::string &toConvert, QTextCodec *encoder);
 
   /**
