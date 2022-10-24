@@ -111,10 +111,9 @@ struct decimal_comma : std::numpunct<char> {
 
 void CsvExport::exportString(std::ostream &os, const std::string &s) {
   // do not forget to escape quotes in data
-  if (stringDelimiter == '\"')
-    os << stringDelimiter << std::regex_replace(s, std::regex("\""), "\"\"") << stringDelimiter;
-  else if (stringDelimiter == '\'')
-    os << stringDelimiter << std::regex_replace(s, std::regex("'"), "''") << stringDelimiter;
+  std::string delim(1, stringDelimiter);
+  std::string delim2(2, stringDelimiter);
+  os << stringDelimiter << std::regex_replace(s, std::regex(delim), delim2) << stringDelimiter;
 }
 
 bool CsvExport::exportGraph(std::ostream &os) {

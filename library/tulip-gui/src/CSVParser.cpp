@@ -218,7 +218,7 @@ void CSVSimpleParser::tokenize(const string &str, vector<CSVToken> &tokens,
     assert(pos != string::npos);
     assert(pos < str.size());
 
-    while (pos < str.length() && ((str[pos] != delim[0]) || (str.find(delim, pos) != pos))) {
+    while (pos < str.size() && ((str[pos] != delim[0]) || (str.find(delim, pos) != pos))) {
       if (str[pos] == textDelim) {
         considerAsString = _considerAsString;
         do {
@@ -296,11 +296,11 @@ string CSVSimpleParser::treatToken(const string &token, int, int) {
       beginPos = currentToken.find_first_of(spaceChars, beginPos + 1);
     }
   }
-  if (currentToken == "\"\"")
+  if (currentToken == std::string(2, _textDelimiter))
     return std::string();
 
-  // Treat string to remove special characters from its beginning and its end.
-  // and non needed "
+  // Treat string to remove special characters from its beginning and its end,
+  // and unneeded text delimiters
   return removeQuotesIfAny(currentToken);
 }
 
@@ -313,19 +313,18 @@ string CSVSimpleParser::removeQuotesIfAny(string &s) {
   if (pos != string::npos && pos < s.size() - 1)
     s.erase(pos + 1);
 
-  if (s[0] == _textDelimiter) {
+  // text delimited token
+  if (s[0] == _textDelimiter && s[s.size() - 1] == _textDelimiter) {
     s.erase(0, 1);
-    // treat " in " delimited string
-    if (_textDelimiter == '"') {
-      pos = 0;
-      while ((pos = s.find("\"\"", pos)) != std::string::npos) {
-        // replace double " by "
-        s.replace(pos, 2, "\"");
-        pos += 1;
-      }
+    s.erase(s.size() - 1, 1);
+    std::string delim(1, _textDelimiter);
+    std::string delim2(2, _textDelimiter);
+    pos = 0;
+    // replace double delimiter occurence by one
+    while ((pos = s.find(delim2, pos)) != std::string::npos) {
+      s.replace(pos, 2, delim);
+      pos += 1;
     }
-    if (s[s.size() - 1] == _textDelimiter)
-      s.erase(s.size() - 1, 1);
   }
   return s;
 }
