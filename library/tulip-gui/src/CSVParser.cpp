@@ -163,6 +163,37 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
   }
 }
 
+static bool isEol(istream &is, char c) {
+  // Carriage return Windows and mac
+  if (c == '\r') {
+    // Check if the next character is \n and remove it.
+    if (is.get(c) && c != '\n')
+      is.unget();
+    return true;
+  }
+  return (c == '\n');
+}
+
+bool CSVSimpleParser::checkForContiguousTdlm(std::istream &is, std::string &str,
+                                             char sep, bool tdlm) {
+  char c;
+  // check for contiguous text delimiters
+  while (is.get(c) && c == _textDelimiter) {
+    tdlm = !tdlm;
+    str.push_back(c);
+  }
+  // check for end of text delimited field
+  if (!tdlm && (c != sep) && !isEol(is, c)) {
+    // not the end of the field
+    // add a text delimiter to ensure
+    // tokenization consistency
+    str.push_back(_textDelimiter);
+    tdlm = true;
+  }
+  is.unget();
+  return tdlm;
+}
+
 bool CSVSimpleParser::multiplatformgetline(istream &is, string &str) {
   // nothing new to read.
   if (is.eof())
@@ -171,30 +202,32 @@ bool CSVSimpleParser::multiplatformgetline(istream &is, string &str) {
   str.clear();
   str.reserve(2048);
   char c;
+  // indicates if in text delimited string
   bool tdlm = false;
+  // indicates if in a field
+  bool infld = false;
+  char sep = QStringToTlpString(_separator)[0];
 
   while (is.get(c)) {
     if (c == _textDelimiter) {
-      tdlm = !tdlm;
       str.push_back(c);
+      if (!infld) {
+        // text delimiter at the beginning of a field
+        infld = true;
+        tdlm = checkForContiguousTdlm(is, str, sep, true);
+      } else if (tdlm) {
+        tdlm = false;
+        tdlm = checkForContiguousTdlm(is, str, sep, false);
+      }
       continue;
     }
 
-    // Carriage return Windows and mac
-    if (c == '\r') {
-      // Check if the next character is \n and remove it.
-      if (is.get(c) && c != '\n') {
-        is.unget();
-        c = '\r';
-      }
-
-      if (!tdlm)
-        break;
-    } else if (c == '\n' && !tdlm) {
+    if (isEol(is, c) && !tdlm) // don't change clauses ordering
       break;
-    }
 
-    // Push the character
+    if (c == sep)
+      infld = tdlm;
+    // finally add the current char
     str.push_back(c);
   }
 

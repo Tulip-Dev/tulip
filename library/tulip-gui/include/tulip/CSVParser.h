@@ -132,6 +132,7 @@ private:
    **/
   bool multiplatformgetline(std::istream &is, std::string &str);
 
+  bool checkForContiguousTdlm(std::istream &is, std::string &str, char sep, bool tdlm);
   std::string removeQuotesIfAny(std::string &s);
   std::string _fileName;
   QString _separator;
