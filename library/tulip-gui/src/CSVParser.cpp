@@ -174,8 +174,8 @@ static bool isEol(istream &is, char c) {
   return (c == '\n');
 }
 
-bool CSVSimpleParser::checkForContiguousTdlm(std::istream &is, std::string &str,
-                                             char sep, bool tdlm) {
+bool CSVSimpleParser::checkForContiguousTdlm(std::istream &is, std::string &str, char sep,
+                                             bool tdlm) {
   char c;
   // check for contiguous text delimiters
   while (is.get(c) && c == _textDelimiter) {
