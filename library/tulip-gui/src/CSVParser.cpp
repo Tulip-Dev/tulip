@@ -182,7 +182,7 @@ bool CSVSimpleParser::checkForContiguousTdlm(std::istream &is, std::string &str,
     tdlm = !tdlm;
     str.push_back(c);
   }
-  // check for end of text delimited field
+  // check for end of delimited text field
   if (!tdlm && (c != sep) && !isEol(is, c)) {
     // not the end of the field
     // add a text delimiter to ensure
@@ -202,7 +202,7 @@ bool CSVSimpleParser::multiplatformgetline(istream &is, string &str) {
   str.clear();
   str.reserve(2048);
   char c;
-  // indicates if in text delimited string
+  // indicates if in delimited text string
   bool tdlm = false;
   // indicates if in a field
   bool infld = false;
@@ -346,7 +346,7 @@ string CSVSimpleParser::removeQuotesIfAny(string &s) {
   if (pos != string::npos && pos < s.size() - 1)
     s.erase(pos + 1);
 
-  // text delimited token
+  // delimited text token
   if (s[0] == _textDelimiter && s[s.size() - 1] == _textDelimiter) {
     s.erase(0, 1);
     s.erase(s.size() - 1, 1);

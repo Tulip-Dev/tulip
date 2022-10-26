@@ -433,7 +433,7 @@
            <string>&lt;p&gt;Check the box to ensure that values between text delimiters are always considered as string values.&lt;/p&gt;</string>
           </property>
           <property name="text">
-           <string>Consider all text delimited fields as string values</string>
+           <string>Consider all delimited text fields as string values</string>
           </property>
           <property name="checked">
            <bool>false</bool>
@@ -441,7 +441,7 @@
          </widget>
         </item>
         <item>
-         <spacer name="horizontalSpacer_4">
+         <spacer name="horizontalSpacer_6">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
