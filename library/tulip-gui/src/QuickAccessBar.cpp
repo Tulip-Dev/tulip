@@ -130,11 +130,6 @@ QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem,
   setStyleSheet(ss);
   _ui->setupUi(this);
   _ui->backgroundColorButton->setDialogTitle("Choose the background color");
-  _ui->nodeColorButton->setDialogTitle("Choose the node's default color");
-  _ui->edgeColorButton->setDialogTitle("Choose the edge's default color");
-  _ui->nodeBorderColorButton->setDialogTitle("Choose the default color for the border of nodes");
-  _ui->edgeBorderColorButton->setDialogTitle("Choose the default color for the border of edges");
-  _ui->labelColorButton->setDialogTitle("Choose the default color for the label of nodes or edges");
 
   if (buttons.testFlag(ALLBUTTONS))
     return;
@@ -377,7 +372,17 @@ void QuickAccessBarImpl::setSizeInterpolation(bool f) {
   }
 }
 
-void QuickAccessBarImpl::setLabelColor(const QColor &c) {
+void QuickAccessBarImpl::setLabelColor() {
+  ColorProperty *labelColors = inputData()->getElementLabelColor();
+  ColorProperty *labelBorderColors = inputData()->getElementLabelBorderColor();
+  QVariant val = TulipItemDelegate::showEditorDialog(NODE, labelColors,
+                                                     _mainView->graph(), delegate,
+                                                     _mainView->graphicsView()->window(), UINT_MAX,
+                                                     QString("Select the label color"));
+
+  // Check if edition has been cancelled
+  if (!val.isValid())
+    return;
 
   BooleanProperty *selected = inputData()->getElementSelected();
   bool hasSelected = false;
@@ -385,10 +390,8 @@ void QuickAccessBarImpl::setLabelColor(const QColor &c) {
   _mainView->graph()->push();
 
   Observable::holdObservers();
-  ColorProperty *labelColors = inputData()->getElementLabelColor();
-  ColorProperty *labelBorderColors = inputData()->getElementLabelBorderColor();
 
-  Color color = QColorToColor(c);
+  Color color = val.value<tlp::Color>();
 
   for (auto n : selected->getNonDefaultValuatedNodes(_mainView->graph())) {
     labelColors->setNodeValue(n, color);
@@ -417,58 +420,26 @@ void QuickAccessBarImpl::setLabelColor(const QColor &c) {
   emit settingsChanged();
 }
 
-void QuickAccessBarImpl::setAllColorValues(unsigned int eltType, ColorProperty *prop,
-                                           const Color &color) {
-  BooleanProperty *selected = inputData()->getElementSelected();
-  bool hasSelected = false;
-
-  _mainView->graph()->push();
-
-  Observable::holdObservers();
-
-  if (eltType == NODE) {
-    for (auto n : selected->getNonDefaultValuatedNodes(_mainView->graph())) {
-      prop->setNodeValue(n, color);
-      hasSelected = true;
-    }
-
-    if (hasSelected == false)
-      prop->setAllNodeValue(color);
-  } else {
-    for (auto e : selected->getNonDefaultValuatedEdges(_mainView->graph())) {
-      prop->setEdgeValue(e, color);
-      hasSelected = true;
-    }
-
-    if (hasSelected == false)
-      prop->setAllEdgeValue(color);
-  }
-
-  Observable::unholdObservers();
-  _mainView->graph()->popIfNoUpdates();
-  emit settingsChanged();
+void QuickAccessBarImpl::setNodeColor() {
+  setAllValues(NODE, inputData()->getElementColor(), QString("Select the nodes color"));
 }
 
-void QuickAccessBarImpl::setNodeColor(const QColor &c) {
-  setAllColorValues(NODE, inputData()->getElementColor(), QColorToColor(c));
+void QuickAccessBarImpl::setEdgeColor() {
+  setAllValues(EDGE, inputData()->getElementColor(), QString("Select the edges color"));
 }
 
-void QuickAccessBarImpl::setEdgeColor(const QColor &c) {
-  setAllColorValues(EDGE, inputData()->getElementColor(), QColorToColor(c));
+void QuickAccessBarImpl::setNodeBorderColor() {
+  setAllValues(NODE, inputData()->getElementBorderColor(), QString("Select the nodes border color"));
 }
 
-void QuickAccessBarImpl::setNodeBorderColor(const QColor &c) {
-  setAllColorValues(NODE, inputData()->getElementBorderColor(), QColorToColor(c));
+void QuickAccessBarImpl::setEdgeBorderColor() {
+  setAllValues(EDGE, inputData()->getElementBorderColor(), QString("Select the edges border color"));
 }
 
-void QuickAccessBarImpl::setEdgeBorderColor(const QColor &c) {
-  setAllColorValues(EDGE, inputData()->getElementBorderColor(), QColorToColor(c));
-}
-
-void QuickAccessBarImpl::setAllValues(unsigned int eltType, PropertyInterface *prop) {
+void QuickAccessBarImpl::setAllValues(unsigned int eltType, PropertyInterface *prop, QString dialogTitle) {
   QVariant val = TulipItemDelegate::showEditorDialog(static_cast<tlp::ElementType>(eltType), prop,
                                                      _mainView->graph(), delegate,
-                                                     _mainView->graphicsView()->window());
+                                                     _mainView->graphicsView()->window(), UINT_MAX, dialogTitle);
 
   // Check if edition has been cancelled
   if (!val.isValid())
@@ -505,27 +476,27 @@ void QuickAccessBarImpl::setAllValues(unsigned int eltType, PropertyInterface *p
 }
 
 void QuickAccessBarImpl::setNodeShape() {
-  setAllValues(NODE, inputData()->getElementShape());
+  setAllValues(NODE, inputData()->getElementShape(), QString("Select nodes shape"));
 }
 
 void QuickAccessBarImpl::setNodeIcon() {
-  setAllValues(NODE, inputData()->getElementIcon());
+  setAllValues(NODE, inputData()->getElementIcon(), QString("Select nodes icon"));
 }
 
 void QuickAccessBarImpl::setEdgeShape() {
-  setAllValues(EDGE, inputData()->getElementShape());
+  setAllValues(EDGE, inputData()->getElementShape(), QString("Select edges shape"));
 }
 
 void QuickAccessBarImpl::setNodeSize() {
-  setAllValues(NODE, inputData()->getElementSize());
+  setAllValues(NODE, inputData()->getElementSize(), QString("Select nodes size"));
 }
 
 void QuickAccessBarImpl::setEdgeSize() {
-  setAllValues(EDGE, inputData()->getElementSize());
+  setAllValues(EDGE, inputData()->getElementSize(), QString("Select edges shape"));
 }
 
 void QuickAccessBarImpl::setNodeLabelPosition() {
-  setAllValues(NODE, inputData()->getElementLabelPosition());
+  setAllValues(NODE, inputData()->getElementLabelPosition(), QString("Nodes label position"));
 }
 
 void QuickAccessBarImpl::setEdgesVisible(bool v) {

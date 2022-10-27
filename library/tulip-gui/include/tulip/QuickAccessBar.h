@@ -123,19 +123,18 @@ protected:
   void addSeparator();
   void updateFontButtonStyle();
   void showHideCaption(CaptionItem::CaptionType captionType);
-  void setAllValues(unsigned int eltType, PropertyInterface *prop);
-  void setAllColorValues(unsigned int eltType, ColorProperty *prop, const Color &color);
+  void setAllValues(unsigned int eltType, PropertyInterface *prop, QString str = "");
 
 public slots:
   void reset() override;
 
   virtual void setBackgroundColor(const QColor &);
   virtual void setColorInterpolation(bool);
-  void setLabelColor(const QColor &);
-  void setNodeColor(const QColor &);
-  void setNodeBorderColor(const QColor &);
-  void setEdgeColor(const QColor &);
-  void setEdgeBorderColor(const QColor &);
+  void setLabelColor();
+  void setNodeColor();
+  void setNodeBorderColor();
+  void setEdgeColor();
+  void setEdgeBorderColor();
   void setNodeShape();
   void setNodeIcon();
   void setEdgeShape();

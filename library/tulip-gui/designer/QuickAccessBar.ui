@@ -481,7 +481,7 @@
     </widget>
    </item>
    <item>
-    <widget class="tlp::ChooseColorButton" name="nodeColorButton">
+    <widget class="QPushButton" name="nodeColorButton">
      <property name="minimumSize">
       <size>
        <width>26</width>
@@ -516,7 +516,7 @@
     </widget>
    </item>
    <item>
-    <widget class="tlp::ChooseColorButton" name="edgeColorButton">
+    <widget class="QPushButton" name="edgeColorButton">
      <property name="minimumSize">
       <size>
        <width>26</width>
@@ -551,7 +551,7 @@
     </widget>
    </item>
    <item>
-    <widget class="tlp::ChooseColorButton" name="nodeBorderColorButton">
+    <widget class="QPushButton" name="nodeBorderColorButton">
      <property name="minimumSize">
       <size>
        <width>26</width>
@@ -586,7 +586,7 @@
     </widget>
    </item>
    <item>
-    <widget class="tlp::ChooseColorButton" name="edgeBorderColorButton">
+    <widget class="QPushButton" name="edgeBorderColorButton">
      <property name="minimumSize">
       <size>
        <width>26</width>
@@ -796,7 +796,7 @@
     </widget>
    </item>
    <item>
-    <widget class="tlp::ChooseColorButton" name="labelColorButton">
+    <widget class="QPushButton" name="labelColorButton">
      <property name="minimumSize">
       <size>
        <width>26</width>
@@ -914,14 +914,6 @@
     <signal>colorChanged(QColor)</signal>
    </slots>
   </customwidget>
-  <customwidget>
-   <class>tlp::ChooseColorButton</class>
-   <extends>QPushButton</extends>
-   <header location="global">tulip/ColorButton.h</header>
-   <slots>
-    <signal>colorChanged(QColor)</signal>
-   </slots>
-  </customwidget>
  </customwidgets>
  <resources>
   <include location="../resources/TulipGUIResource.qrc"/>
@@ -977,9 +969,9 @@
   </connection>
   <connection>
    <sender>labelColorButton</sender>
-   <signal>colorChanged(QColor)</signal>
+   <signal>clicked()</signal>
    <receiver>QuickAccessBar</receiver>
-   <slot>setLabelColor(QColor)</slot>
+   <slot>setLabelColor()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>404</x>
@@ -1137,9 +1129,9 @@
   </connection>
   <connection>
    <sender>nodeColorButton</sender>
-   <signal>colorChanged(QColor)</signal>
+   <signal>clicked()</signal>
    <receiver>QuickAccessBar</receiver>
-   <slot>setNodeColor(QColor)</slot>
+   <slot>setNodeColor()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>353</x>
@@ -1153,9 +1145,9 @@
   </connection>
   <connection>
    <sender>edgeColorButton</sender>
-   <signal>colorChanged(QColor)</signal>
+   <signal>clicked()</signal>
    <receiver>QuickAccessBar</receiver>
-   <slot>setEdgeColor(QColor)</slot>
+   <slot>setEdgeColor()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>353</x>
@@ -1169,9 +1161,9 @@
   </connection>
   <connection>
    <sender>nodeBorderColorButton</sender>
-   <signal>colorChanged(QColor)</signal>
+   <signal>clicked()</signal>
    <receiver>QuickAccessBar</receiver>
-   <slot>setNodeBorderColor(QColor)</slot>
+   <slot>setNodeBorderColor()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>353</x>
@@ -1185,9 +1177,9 @@
   </connection>
   <connection>
    <sender>edgeBorderColorButton</sender>
-   <signal>colorChanged(QColor)</signal>
+   <signal>clicked()</signal>
    <receiver>QuickAccessBar</receiver>
-   <slot>setEdgeBorderColor(QColor)</slot>
+   <slot>setEdgeBorderColor()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>353</x>

@@ -257,7 +257,8 @@ void TulipItemDelegate::comboDataChanged() {
 
 QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType, tlp::PropertyInterface *pi,
                                              tlp::Graph *g, TulipItemDelegate *delegate,
-                                             QWidget *dialogParent, unsigned int id) {
+                                             QWidget *dialogParent, unsigned int id,
+                                             QString dialogTitle) {
   QVariant value;
   bool valid;
   if (elType == tlp::NODE) {
@@ -316,6 +317,8 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType, tlp::Prope
   }
 
   QVariant result;
+  if (!dialogTitle.isEmpty())
+    dlg->setWindowTitle(dialogTitle);
 
   if (dlg->exec() == QDialog::Accepted)
     result = creator->editorData(w, g);
