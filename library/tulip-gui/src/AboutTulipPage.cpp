@@ -49,18 +49,6 @@ static QString getSipVersion() {
 #endif
 }
 
-static QString getTulipGitRevision() {
-  QFile gitCommitFile(tlp::tlpStringToQString(tlp::TulipShareDir + "GIT_COMMIT"));
-
-  if (gitCommitFile.open(QFile::ReadOnly | QFile::Text)) {
-    QTextStream in(&gitCommitFile);
-    in.setCodec("UTF-8");
-    return in.readAll().replace("\n", "");
-  }
-  return "";
-}
-
-static const QString TulipRepoUrl = "https://github.com/Tulip-Dev/tulip";
 static const QString RSS_URL = "https://tulip.labri.fr/site/?q=newsFeed.xml";
 static const unsigned RSS_LIMIT = 3;
 
@@ -72,11 +60,6 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
 
   QString title("Tulip ");
   title += TULIP_VERSION;
-  QString git_rev(getTulipGitRevision());
-
-  if (!git_rev.isEmpty())
-    title += "<br/>(Git commit: <a href=\"" + TulipRepoUrl + "/commit/" + git_rev + "\">" +
-             "<span style=\"color: #0d47f1;\">" + git_rev.mid(0, 7) + "</span></a>)";
 
   _ui->logolabel->setPixmap(QPixmap(tlpStringToQString(TulipBitmapDir + "/welcomelogo.bmp")));
   _ui->TulipLabel->setText(
@@ -85,9 +68,6 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       "  <body>"
       "    <p align=\"center\"><span style=\" font-size:18pt; font-weight:600;\">" +
       title + "</span></p>" +
-      (!git_rev.isEmpty() ? (QString("    <p align=\"center\"><a href=\"") + TulipRepoUrl + "\">" +
-                             "<span style=\"color: #0d47f1;\">" + TulipRepoUrl + "</span></a></p>")
-                          : QString()) +
       "  </body>"
       "</html>");
 

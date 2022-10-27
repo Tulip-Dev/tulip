@@ -109,8 +109,8 @@ INCLUDE(cmake/TulipUseFile.cmake)
 ## Tulip version variables
 ## ========================================================
 SET(TulipMajorVersion 5)
-SET(TulipMinorVersion 6)
-SET(TulipReleaseVersion "3")
+SET(TulipMinorVersion 7)
+SET(TulipReleaseVersion "0")
 SET(TulipVersionSeparator .)
 IF(MSVC) #specific options for Visual Studio
   SET(TulipVersionSeparator _)
@@ -132,14 +132,6 @@ ELSE(TulipReleaseVersion MATCHES "^[0-9]+$")
   # just a hack to force the display of the full Tulip version in window title bar
   # when it contains non digit characters (like alpha, beta, dev, ...)
   SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}1")
-  INCLUDE(cmake/GetGitRevisionDescription.cmake)
-  IF(EXISTS ${PROJECT_SOURCE_DIR}/.git AND NOT TULIP_BUILD_FOR_APPIMAGE)
-    SET(TULIP_SOURCE_DIR ${PROJECT_SOURCE_DIR})
-    GET_GIT_HEAD_REVISION(TULIP_REFSPEC TULIP_GIT_REVISION)
-    CONFIGURE_FILE(utils/cmake-templates/GIT_COMMIT.in ${CMAKE_CURRENT_BINARY_DIR}/GIT_COMMIT)
-    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/GIT_COMMIT
-            DESTINATION ${TulipShareInstallDir})
-  ENDIF(EXISTS ${PROJECT_SOURCE_DIR}/.git AND NOT TULIP_BUILD_FOR_APPIMAGE)
 ENDIF(TulipReleaseVersion MATCHES "^[0-9]+$")
 
 ## ========================================================
