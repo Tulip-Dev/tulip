@@ -375,10 +375,9 @@ void QuickAccessBarImpl::setSizeInterpolation(bool f) {
 void QuickAccessBarImpl::setLabelColor() {
   ColorProperty *labelColors = inputData()->getElementLabelColor();
   ColorProperty *labelBorderColors = inputData()->getElementLabelBorderColor();
-  QVariant val = TulipItemDelegate::showEditorDialog(NODE, labelColors,
-                                                     _mainView->graph(), delegate,
-                                                     _mainView->graphicsView()->window(), UINT_MAX,
-                                                     QString("Select the label color"));
+  QVariant val = TulipItemDelegate::showEditorDialog(NODE, labelColors, _mainView->graph(),
+                                                     delegate, _mainView->graphicsView()->window(),
+                                                     UINT_MAX, QString("Select the label color"));
 
   // Check if edition has been cancelled
   if (!val.isValid())
@@ -429,17 +428,20 @@ void QuickAccessBarImpl::setEdgeColor() {
 }
 
 void QuickAccessBarImpl::setNodeBorderColor() {
-  setAllValues(NODE, inputData()->getElementBorderColor(), QString("Select the nodes border color"));
+  setAllValues(NODE, inputData()->getElementBorderColor(),
+               QString("Select the nodes border color"));
 }
 
 void QuickAccessBarImpl::setEdgeBorderColor() {
-  setAllValues(EDGE, inputData()->getElementBorderColor(), QString("Select the edges border color"));
+  setAllValues(EDGE, inputData()->getElementBorderColor(),
+               QString("Select the edges border color"));
 }
 
-void QuickAccessBarImpl::setAllValues(unsigned int eltType, PropertyInterface *prop, QString dialogTitle) {
-  QVariant val = TulipItemDelegate::showEditorDialog(static_cast<tlp::ElementType>(eltType), prop,
-                                                     _mainView->graph(), delegate,
-                                                     _mainView->graphicsView()->window(), UINT_MAX, dialogTitle);
+void QuickAccessBarImpl::setAllValues(unsigned int eltType, PropertyInterface *prop,
+                                      QString dialogTitle) {
+  QVariant val = TulipItemDelegate::showEditorDialog(
+      static_cast<tlp::ElementType>(eltType), prop, _mainView->graph(), delegate,
+      _mainView->graphicsView()->window(), UINT_MAX, dialogTitle);
 
   // Check if edition has been cancelled
   if (!val.isValid())
