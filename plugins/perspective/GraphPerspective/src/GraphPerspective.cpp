@@ -2034,10 +2034,11 @@ bool GraphPerspective::setGlMainViewPropertiesForGraph(
 }
 
 void GraphPerspective::showSearchDialog(bool f) {
+  static SearchWidget *searchPanel = nullptr;
   if (f) {
     if (_searchDialog == nullptr) {
       _searchDialog = new GraphPerspectiveDialog("Search graph elements");
-      auto searchPanel = new SearchWidget(_searchDialog);
+      searchPanel = new SearchWidget(_searchDialog);
       searchPanel->setModel(_graphs);
       QVBoxLayout *layout = new QVBoxLayout;
       _searchDialog->setMinimumWidth(600);
@@ -2048,6 +2049,8 @@ void GraphPerspective::showSearchDialog(bool f) {
     }
     _searchDialog->hide();
     _ui->searchButton->setChecked(true);
+    // select current graph
+    searchPanel->currentGraphChanged(_graphs->currentGraph());
     _searchDialog->show();
     _searchDialog->raise();
     _searchDialog->activateWindow();

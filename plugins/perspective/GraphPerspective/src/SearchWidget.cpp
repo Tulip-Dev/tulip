@@ -29,6 +29,7 @@
 #include <tulip/TulipMimes.h>
 #include <tulip/StringProperty.h>
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/TulipSettings.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/Perspective.h>
 
@@ -263,6 +264,7 @@ SearchWidget::SearchWidget(QWidget *parent)
   connect(_ui->graphCombo, SIGNAL(currentItemChanged()), this, SLOT(graphIndexChanged()));
   connect(_ui->selectionModeCombo, SIGNAL(currentIndexChanged(int)), this,
           SLOT(selectionModeChanged(int)));
+  setAcceptDrops(true);
 }
 
 SearchWidget::~SearchWidget() {
@@ -592,8 +594,17 @@ void SearchWidget::dragEnterEvent(QDragEnterEvent *dragEv) {
   const GraphMimeType *mimeType = dynamic_cast<const GraphMimeType *>(dragEv->mimeData());
 
   if (mimeType != nullptr) {
+    QColor color = palette().color(QPalette::Highlight);
+    setStyleSheet(QString("#SearchWidget {background: %0;}").arg(color.name()));
     dragEv->accept();
   }
+}
+
+void SearchWidget::dragLeaveEvent(QDragLeaveEvent *) {
+  if (TulipSettings::isDisplayInDarkMode())
+    setStyleSheet("#SearchWidget {background: #323232;}");
+  else
+    setStyleSheet("#SearchWidget {background: white;}");
 }
 
 void SearchWidget::dropEvent(QDropEvent *dropEv) {
@@ -601,6 +612,10 @@ void SearchWidget::dropEvent(QDropEvent *dropEv) {
 
   if (mimeType != nullptr) {
     currentGraphChanged(mimeType->graph());
+    if (TulipSettings::isDisplayInDarkMode())
+      setStyleSheet("#SearchWidget {background: #323232;}");
+    else
+      setStyleSheet("#SearchWidget {background: white;}");
     dropEv->accept();
   }
 }
