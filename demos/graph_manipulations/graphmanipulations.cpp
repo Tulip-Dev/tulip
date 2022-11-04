@@ -5,6 +5,7 @@
 #include <tulip/ColorProperty.h>
 #include <tulip/StringProperty.h>
 #include <tulip/DoubleProperty.h>
+#include <tulip/PluginLister.h>
 
 using namespace std;
 using namespace tlp;
