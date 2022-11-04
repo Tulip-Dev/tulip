@@ -238,9 +238,6 @@ PythonInterpreter::PythonInterpreter()
 
     PySys_SetArgv(argc, argv);
 
-#if PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION < 9
-    PyEval_InitThreads();
-#endif
     mainThreadState = PyEval_SaveThread();
   }
 
@@ -359,7 +356,6 @@ PythonInterpreter::~PythonInterpreter() {
     consoleOuputString = "";
     runString(
         "sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; sys.stdin = sys.__stdin__\n");
-    PyEval_ReleaseLock();
     PyEval_RestoreThread(mainThreadState);
 
     holdGIL();

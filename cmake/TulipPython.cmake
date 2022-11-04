@@ -45,10 +45,6 @@ UNSET(PYTHON_LIBRARY CACHE)
 UNSET(PYTHON_INCLUDE_DIR CACHE)
 UNSET(PYTHON_INCLUDE_PATH CACHE)
 
-# Find the Python library with the same version as the interpreter
-# Python 3.2 library is suffixed by mu and Python >= 3.3 by m on some systems, also handle these cases
-SET(Python_ADDITIONAL_VERSIONS ${PYTHON_VERSION}mu ${PYTHON_VERSION}m ${PYTHON_VERSION})
-
 GET_FILENAME_COMPONENT(PYTHON_HOME_PATH ${PYTHON_EXECUTABLE} PATH)
 
 # Ensure the detection of Python library installed through a bundle downloaded from Python.org or through a macports installation
