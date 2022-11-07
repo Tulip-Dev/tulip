@@ -20,6 +20,9 @@
 #include <Python.h>
 #include <datetime.h>
 #include <frameobject.h>
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 11
+#include <internal/pycore_frame.h>
+#endif
 
 #include <assert.h>
 #include <stdio.h>
