@@ -420,21 +420,21 @@ void QuickAccessBarImpl::setLabelColor() {
 }
 
 void QuickAccessBarImpl::setNodeColor() {
-  setAllValues(NODE, inputData()->getElementColor(), QString("Select the nodes color"));
+  setAllValues(NODE, inputData()->getElementColor(), QString("Select the color of nodes"));
 }
 
 void QuickAccessBarImpl::setEdgeColor() {
-  setAllValues(EDGE, inputData()->getElementColor(), QString("Select the edges color"));
+  setAllValues(EDGE, inputData()->getElementColor(), QString("Select the color of edges"));
 }
 
 void QuickAccessBarImpl::setNodeBorderColor() {
   setAllValues(NODE, inputData()->getElementBorderColor(),
-               QString("Select the nodes border color"));
+               QString("Select the border color of nodes"));
 }
 
 void QuickAccessBarImpl::setEdgeBorderColor() {
   setAllValues(EDGE, inputData()->getElementBorderColor(),
-               QString("Select the edges border color"));
+               QString("Select the border color of edges"));
 }
 
 void QuickAccessBarImpl::setAllValues(unsigned int eltType, PropertyInterface *prop,
@@ -478,27 +478,27 @@ void QuickAccessBarImpl::setAllValues(unsigned int eltType, PropertyInterface *p
 }
 
 void QuickAccessBarImpl::setNodeShape() {
-  setAllValues(NODE, inputData()->getElementShape(), QString("Select nodes shape"));
+  setAllValues(NODE, inputData()->getElementShape(), QString("Select the shape of nodes"));
 }
 
 void QuickAccessBarImpl::setNodeIcon() {
-  setAllValues(NODE, inputData()->getElementIcon(), QString("Select nodes icon"));
+  setAllValues(NODE, inputData()->getElementIcon(), QString("Select the icon of nodes"));
 }
 
 void QuickAccessBarImpl::setEdgeShape() {
-  setAllValues(EDGE, inputData()->getElementShape(), QString("Select edges shape"));
+  setAllValues(EDGE, inputData()->getElementShape(), QString("Select the shape of edges"));
 }
 
 void QuickAccessBarImpl::setNodeSize() {
-  setAllValues(NODE, inputData()->getElementSize(), QString("Select nodes size"));
+  setAllValues(NODE, inputData()->getElementSize(), QString("Select the size of nodes"));
 }
 
 void QuickAccessBarImpl::setEdgeSize() {
-  setAllValues(EDGE, inputData()->getElementSize(), QString("Select edges shape"));
+  setAllValues(EDGE, inputData()->getElementSize(), QString("Select the size of edges"));
 }
 
 void QuickAccessBarImpl::setNodeLabelPosition() {
-  setAllValues(NODE, inputData()->getElementLabelPosition(), QString("Nodes label position"));
+  setAllValues(NODE, inputData()->getElementLabelPosition(), QString("node label position"));
 }
 
 void QuickAccessBarImpl::setEdgesVisible(bool v) {
