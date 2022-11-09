@@ -64,36 +64,33 @@ bool TulipProject::openProjectFile(const QString &file, tlp::PluginProgress *pro
 
   QFileInfo fileInfo(file);
 
-  if (!fileInfo.exists()) {
-    progress->setError("File " + tlp::QStringToTlpString(file) + " not found");
-    return false;
-  }
-
-  if (fileInfo.isDir()) {
-    progress->setError(tlp::QStringToTlpString(file) + " is a directory, not a regular file");
-    return false;
-  }
-
   bool deleteProgress = false;
 
-  if (!progress) {
+  if (progress==nullptr) {
     progress = new tlp::SimplePluginProgress;
     deleteProgress = true;
   }
 
-  if (!QuaZIPFacade::unzip(rootDir(), file, progress)) {
-    progress->setError("Failed to unzip project.");
-
-    if (deleteProgress)
-      delete progress;
-
-    return false;
+  if (!QFileInfo::exists(file)) {
+    progress->setError("File " + tlp::QStringToTlpString(file) + " not found");
   }
 
-  readMetaInfo();
+  else if (fileInfo.isDir()) {
+    progress->setError(tlp::QStringToTlpString(file) + " is a directory, not a regular file");
+  }
 
-  if (deleteProgress)
-    delete progress;
+  else if (!QuaZIPFacade::unzip(rootDir(), file, progress)) {
+    progress->setError("Failed to unzip project.");
+  }
+
+  if(!progress->getError().empty()) {
+      tlp::error() << progress->getError() << std::endl;
+      if (deleteProgress)
+        delete progress;
+      return false;
+     }
+
+  readMetaInfo();
 
   _projectFile = file;
   emit projectFileChanged(file);
@@ -104,8 +101,9 @@ TulipProject *TulipProject::openProject(const QString &file, tlp::PluginProgress
   TulipProject *project = TulipProject::newProject();
 
   if (project != nullptr) {
-    if (!project->openProjectFile(file, progress)) {
-      return nullptr;
+    if (!project->openProjectFile(file, progress)) {     
+        delete project;
+        return nullptr;
     }
   }
   return project;
@@ -136,12 +134,6 @@ bool TulipProject::write(const QString &file, tlp::PluginProgress *progress) {
   emit projectFileChanged(file);
   return true;
 }
-
-// TulipProject *TulipProject::restoreProject(const QString &path) {
-//  TulipProject *project = new TulipProject(path);
-//  project->_isValid = project->readMetaInfo();
-//  return project;
-//}
 
 // ==============================
 //      FILES MANIPULATION
