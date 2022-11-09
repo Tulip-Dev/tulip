@@ -134,6 +134,11 @@ public:
   void setOutlineSize(double size);
 
   /**
+   * @brief Set if the outline is stippled or not
+   */
+  void setOutlineStippled(bool stippled);
+
+  /**
    * @brief Get fill color of GlComplexPolygon
    */
   Color getFillColor() const {
@@ -268,12 +273,11 @@ protected:
   std::vector<float> verticesData;
   std::vector<unsigned int> verticesIndices;
   int currentVector;
-  bool outlined;
+  bool outlined, outlineStippled, textured;
   Color fillColor;
   Color outlineColor;
   double outlineSize;
   std::string textureName;
-  bool textured;
   float textureZoom;
   std::vector<bool> quadBorderActivated;
   std::vector<float> quadBorderWidth;
