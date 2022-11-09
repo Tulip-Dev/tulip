@@ -59,8 +59,8 @@ void MouseLassoNodesSelectorInteractor::construct() {
 PLUGIN(MouseLassoNodesSelectorInteractor)
 
 MouseLassoNodesSelectorInteractorComponent::MouseLassoNodesSelectorInteractorComponent()
-    : drawInteractor(false), camera(nullptr), graph(nullptr), viewSelection(nullptr),
-      dragStarted(false) {}
+    : camera(nullptr), graph(nullptr), viewSelection(nullptr),
+      drawInteractor(false), dragStarted(false) {}
 
 MouseLassoNodesSelectorInteractorComponent::~MouseLassoNodesSelectorInteractorComponent() {}
 
@@ -263,7 +263,13 @@ bool MouseLassoNodesSelectorInteractorComponent::eventFilter(QObject *obj, QEven
     if (me->button() == Qt::LeftButton && polygon.size() > 10) {
       Observable::holdObservers();
 
-      if (me->modifiers() != Qt::ControlModifier) {
+      if (me->modifiers() !=
+#if defined(__APPLE__)
+      Qt::AltModifier
+#else
+      Qt::ControlModifier
+#endif
+) {
         viewSelection->setAllNodeValue(false);
         viewSelection->setAllEdgeValue(false);
       }
@@ -278,7 +284,7 @@ bool MouseLassoNodesSelectorInteractorComponent::eventFilter(QObject *obj, QEven
   return false;
 }
 
-bool MouseLassoNodesSelectorInteractorComponent::draw(GlMainWidget *glWidget) {
+bool MouseLassoNodesSelectorInteractorComponent::draw(GlMainWidget *) {
 
   if (!drawInteractor) {
     return false;
@@ -288,21 +294,12 @@ bool MouseLassoNodesSelectorInteractorComponent::draw(GlMainWidget *glWidget) {
 
     Camera camera2D(camera->getScene(), false);
 
-    Color backgroundColor = glWidget->getScene()->getBackgroundColor();
-    Color foregroundColor;
-    int bgV = backgroundColor.getV();
-
-    if (bgV < 128) {
-      foregroundColor = Color(255, 255, 255);
-    } else {
-      foregroundColor = Color(0, 0, 0);
-    }
-
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     camera2D.initGl();
-    GlComplexPolygon complexPolygon(polygon, Color(0, 255, 0, 100), Color(0, 255, 0));
+    GlComplexPolygon complexPolygon(polygon, Color(232, 232, 150, 125), Color(150, 150, 150));
+    complexPolygon.setOutlineStippled(true);
     complexPolygon.draw(0, nullptr);
   }
 

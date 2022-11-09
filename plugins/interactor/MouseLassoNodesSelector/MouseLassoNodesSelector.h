@@ -63,11 +63,10 @@ private:
 
   std::vector<Coord> polygon;
   Coord currentPointerScreenCoord;
-  bool drawInteractor;
   Camera *camera;
   Graph *graph;
   BooleanProperty *viewSelection;
-  bool dragStarted;
+  bool drawInteractor, dragStarted;
 };
 } // namespace tlp
 

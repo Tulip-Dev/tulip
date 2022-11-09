@@ -283,13 +283,13 @@ bool MouseSelector::draw(GlMainWidget *glMainWidget) {
       Qt::ControlModifier
 #endif
   ) {
-    col[0] = 1.;
+    col[0] = 0.8;
     col[1] = 0.8f;
-    col[2] = 1.;
+    col[2] = 0.4f;
   } else if (mousePressModifier == Qt::ShiftModifier) {
     col[0] = 1.;
-    col[1] = .7f;
-    col[2] = .7f;
+    col[1] = 1.;
+    col[2] = 0.7;
   } else {
     col[0] = 0.8f;
     col[1] = 0.8f;
