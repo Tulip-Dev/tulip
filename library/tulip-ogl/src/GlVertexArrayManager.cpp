@@ -665,9 +665,12 @@ void GlVertexArrayManager::visit(GlEdge *glEdge) {
     Coord srcCoord, tgtCoord;
     Size srcSize, tgtSize;
 
+      const vector<Coord> &bends = layoutProperty->getEdgeValue(e);
+      float lengthRatio =
+	bends.size() ? 1 : inputData->getEdgeLengthRatio()->getEdgeValue(e);
     vector<Coord> &vertices = eInfos.lineVertices;
     const unsigned int nbLines =
-        glEdge->getVertices(inputData, e, src, tgt, srcCoord, tgtCoord, srcSize, tgtSize, vertices);
+      glEdge->getVertices(inputData, e, src, tgt, srcCoord, tgtCoord, srcSize, tgtSize, vertices, lengthRatio);
 
     if (nbLines != 0) {
       pointsCoordsArray[glEdge->pos + nbNodes] = vertices[0];
@@ -686,9 +689,8 @@ void GlVertexArrayManager::visit(GlEdge *glEdge) {
       vector<Coord> &quadVertices = eInfos.quadVertices;
       buildCurvePoints(vertices, edgeSizes, srcCoord, tgtCoord, quadVertices);
 
-      const vector<Coord> &bends = layoutProperty->getEdgeValue(e);
       glEdge->getEdgeAnchor(inputData, src, tgt, bends, srcCoord, tgtCoord, srcSize, tgtSize,
-                            vertices[0], vertices[nbLines - 1]);
+                            vertices[0], vertices[nbLines - 1], lengthRatio);
     }
   }
 

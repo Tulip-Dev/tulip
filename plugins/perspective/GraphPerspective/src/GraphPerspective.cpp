@@ -153,6 +153,7 @@ void GraphPerspective::reserveDefaultProperties() {
   registerReservedProperty("viewTgtAnchorShape");
   registerReservedProperty("viewTgtAnchorSize");
   registerReservedProperty("viewAnimationFrame");
+  registerReservedProperty("viewLengthRatio");
 }
 
 void GraphPerspective::buildRecentDocumentsMenu() {

@@ -62,6 +62,9 @@ GlGraphInputData::~GlGraphInputData() {
   EdgeExtremityGlyphManager::clearGlyphList(&this->graph, this, extremityGlyphs);
   delete _metaNodeRenderer;
   delete _glGlyphRenderer;
+  // delete invisible properties
+  for (auto prop : _invisibleProperties)
+    delete prop;
 }
 
 // add this class to ensure proper deletion of the viewAnimationFrame property
@@ -111,8 +114,8 @@ void GlGraphInputData::reloadGraphProperties() {
     _propertiesNameMap["viewTgtAnchorShape"] = VIEW_TGTANCHORSHAPE;
     _propertiesNameMap["viewTgtAnchorSize"] = VIEW_TGTANCHORSIZE;
     _propertiesNameMap["viewAnimationFrame"] = VIEW_ANIMATIONFRAME;
-    _propertiesNameMap["viewIcon"] = VIEW_FONTAWESOMEICON;
     _propertiesNameMap["viewIcon"] = VIEW_ICON;
+    _propertiesNameMap["viewLengthRatio"] = VIEW_LENGTHRATIO;
   }
 
   if (graph) {
@@ -161,10 +164,18 @@ void GlGraphInputData::reloadGraphProperties() {
     _properties.insert(_propertiesMap[VIEW_TGTANCHORSIZE]);
     _propertiesMap[VIEW_ANIMATIONFRAME] = new GlViewAnimationFrameProperty(graph);
     _properties.insert(_propertiesMap[VIEW_ANIMATIONFRAME]);
-    _propertiesMap[VIEW_FONTAWESOMEICON] = graph->getProperty<StringProperty>("viewIcon");
-    _properties.insert(_propertiesMap[VIEW_FONTAWESOMEICON]);
     _propertiesMap[VIEW_ICON] = graph->getProperty<StringProperty>("viewIcon");
     _properties.insert(_propertiesMap[VIEW_ICON]);
+    if (graph->existProperty("viewLengthRatio"))
+      _propertiesMap[VIEW_LENGTHRATIO] = graph->getProperty<DoubleProperty>("viewLengthRatio");
+    else {
+      // use an invisible property
+      auto prop = new DoubleProperty(graph, "viewLengthRatio");
+      prop->setAllEdgeValue(1.);
+      _propertiesMap[VIEW_LENGTHRATIO] = prop;
+      _invisibleProperties.insert(prop);
+    }
+    _properties.insert(_propertiesMap[VIEW_LENGTHRATIO]);
   }
 }
 
@@ -203,12 +214,17 @@ void GlGraphInputData::treatEvent(const Event &ev) {
         graphEv->getType() == GraphEvent::TLP_ADD_INHERITED_PROPERTY ||
         graphEv->getType() == GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY) {
       if (_propertiesNameMap.count(graphEv->getPropertyName()) != 0) {
+        auto propName = graphEv->getPropertyName();
         PropertyInterface *oldProperty =
-            _propertiesMap[_propertiesNameMap[graphEv->getPropertyName()]];
+            _propertiesMap[_propertiesNameMap[propName]];
         _properties.erase(oldProperty);
-        _propertiesMap[_propertiesNameMap[graphEv->getPropertyName()]] =
-            graph->getProperty(graphEv->getPropertyName());
-        _properties.insert(_propertiesMap[_propertiesNameMap[graphEv->getPropertyName()]]);
+        if (_invisibleProperties.count(oldProperty)) {
+          delete oldProperty;
+          _invisibleProperties.erase(oldProperty);
+        }
+        _propertiesMap[_propertiesNameMap[propName]] =
+            graph->getProperty(propName);
+        _properties.insert(_propertiesMap[_propertiesNameMap[propName]]);
       }
     }
   }
