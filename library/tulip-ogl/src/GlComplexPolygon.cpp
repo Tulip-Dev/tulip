@@ -248,18 +248,17 @@ namespace tlp {
 
 GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords, Color fcolor, int polygonEdgesType,
                                    const string &textureName, bool textured)
-    : currentVector(-1), outlined(false), outlineStippled(false),
-      textured(textured), fillColor(fcolor), outlineSize(1),
-      textureName(textureName), textureZoom(1.) {
+    : currentVector(-1), outlined(false), outlineStippled(false), textured(textured),
+      fillColor(fcolor), outlineSize(1), textureName(textureName), textureZoom(1.) {
   createPolygon(coords, polygonEdgesType);
   runTesselation();
 }
 //=====================================================
 GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords, Color fcolor, Color ocolor,
                                    int polygonEdgesType, const string &textureName, bool textured)
-    : currentVector(-1), outlined(true), outlineStippled(false),
-      textured(textured), fillColor(fcolor), outlineColor(ocolor),
-      outlineSize(1), textureName(textureName), textureZoom(1.) {
+    : currentVector(-1), outlined(true), outlineStippled(false), textured(textured),
+      fillColor(fcolor), outlineColor(ocolor), outlineSize(1), textureName(textureName),
+      textureZoom(1.) {
   if (!coords.empty()) {
     createPolygon(coords, polygonEdgesType);
     runTesselation();
@@ -268,9 +267,8 @@ GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords, Color fcolor, Co
 //=====================================================
 GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord>> &coords, Color fcolor,
                                    int polygonEdgesType, const string &textureName, bool textured)
-    : currentVector(-1), outlined(false), outlineStippled(false),
-      textured(textured), fillColor(fcolor), outlineSize(1),
-      textureName(textureName), textureZoom(1.) {
+    : currentVector(-1), outlined(false), outlineStippled(false), textured(textured),
+      fillColor(fcolor), outlineSize(1), textureName(textureName), textureZoom(1.) {
   for (size_t i = 0; i < coords.size(); ++i) {
     createPolygon(coords[i], polygonEdgesType);
   }
@@ -280,9 +278,9 @@ GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord>> &coords, Color fc
 //=====================================================
 GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord>> &coords, Color fcolor, Color ocolor,
                                    int polygonEdgesType, const string &textureName, bool textured)
-    : currentVector(-1), outlined(true), outlineStippled(false),
-      textured(textured), fillColor(fcolor), outlineColor(ocolor),
-      outlineSize(1), textureName(textureName), textureZoom(1.) {
+    : currentVector(-1), outlined(true), outlineStippled(false), textured(textured),
+      fillColor(fcolor), outlineColor(ocolor), outlineSize(1), textureName(textureName),
+      textureZoom(1.) {
   for (unsigned int i = 0; i < coords.size(); ++i) {
     createPolygon(coords[i], polygonEdgesType);
   }

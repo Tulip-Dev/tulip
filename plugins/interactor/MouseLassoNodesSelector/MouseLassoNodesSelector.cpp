@@ -59,8 +59,8 @@ void MouseLassoNodesSelectorInteractor::construct() {
 PLUGIN(MouseLassoNodesSelectorInteractor)
 
 MouseLassoNodesSelectorInteractorComponent::MouseLassoNodesSelectorInteractorComponent()
-    : camera(nullptr), graph(nullptr), viewSelection(nullptr),
-      drawInteractor(false), dragStarted(false) {}
+    : camera(nullptr), graph(nullptr), viewSelection(nullptr), drawInteractor(false),
+      dragStarted(false) {}
 
 MouseLassoNodesSelectorInteractorComponent::~MouseLassoNodesSelectorInteractorComponent() {}
 
@@ -265,11 +265,11 @@ bool MouseLassoNodesSelectorInteractorComponent::eventFilter(QObject *obj, QEven
 
       if (me->modifiers() !=
 #if defined(__APPLE__)
-      Qt::AltModifier
+          Qt::AltModifier
 #else
-      Qt::ControlModifier
+          Qt::ControlModifier
 #endif
-) {
+      ) {
         viewSelection->setAllNodeValue(false);
         viewSelection->setAllEdgeValue(false);
       }

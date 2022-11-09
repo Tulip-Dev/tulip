@@ -66,7 +66,7 @@ bool TulipProject::openProjectFile(const QString &file, tlp::PluginProgress *pro
 
   bool deleteProgress = false;
 
-  if (progress==nullptr) {
+  if (progress == nullptr) {
     progress = new tlp::SimplePluginProgress;
     deleteProgress = true;
   }
@@ -83,12 +83,12 @@ bool TulipProject::openProjectFile(const QString &file, tlp::PluginProgress *pro
     progress->setError("Failed to unzip project.");
   }
 
-  if(!progress->getError().empty()) {
-      tlp::error() << progress->getError() << std::endl;
-      if (deleteProgress)
-        delete progress;
-      return false;
-     }
+  if (!progress->getError().empty()) {
+    tlp::error() << progress->getError() << std::endl;
+    if (deleteProgress)
+      delete progress;
+    return false;
+  }
 
   readMetaInfo();
 
@@ -101,9 +101,9 @@ TulipProject *TulipProject::openProject(const QString &file, tlp::PluginProgress
   TulipProject *project = TulipProject::newProject();
 
   if (project != nullptr) {
-    if (!project->openProjectFile(file, progress)) {     
-        delete project;
-        return nullptr;
+    if (!project->openProjectFile(file, progress)) {
+      delete project;
+      return nullptr;
     }
   }
   return project;

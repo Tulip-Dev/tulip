@@ -215,15 +215,13 @@ void GlGraphInputData::treatEvent(const Event &ev) {
         graphEv->getType() == GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY) {
       if (_propertiesNameMap.count(graphEv->getPropertyName()) != 0) {
         auto propName = graphEv->getPropertyName();
-        PropertyInterface *oldProperty =
-            _propertiesMap[_propertiesNameMap[propName]];
+        PropertyInterface *oldProperty = _propertiesMap[_propertiesNameMap[propName]];
         _properties.erase(oldProperty);
         if (_invisibleProperties.count(oldProperty)) {
           delete oldProperty;
           _invisibleProperties.erase(oldProperty);
         }
-        _propertiesMap[_propertiesNameMap[propName]] =
-            graph->getProperty(propName);
+        _propertiesMap[_propertiesNameMap[propName]] = graph->getProperty(propName);
         _properties.insert(_propertiesMap[_propertiesNameMap[propName]]);
       }
     }

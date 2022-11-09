@@ -205,10 +205,11 @@ void GlEdge::draw(float lod, const GlGraphInputData *data, Camera *camera) {
     return;
   }
 
-  float lengthRatio = hasBends ? 1.0 :  data->getEdgeLengthRatio()->getEdgeValue(e);
+  float lengthRatio = hasBends ? 1.0 : data->getEdgeLengthRatio()->getEdgeValue(e);
   Coord srcAnchor, tgtAnchor, beginLineAnchor, endLineAnchor;
 
-  getEdgeAnchor(data, src, tgt, bends, srcCoord, tgtCoord, srcSize, tgtSize, srcAnchor, tgtAnchor, lengthRatio);
+  getEdgeAnchor(data, src, tgt, bends, srcCoord, tgtCoord, srcSize, tgtSize, srcAnchor, tgtAnchor,
+                lengthRatio);
 
   if (data->parameters->isViewArrow()) {
     EdgeExtremityGlyph *startEdgeGlyph =
@@ -558,7 +559,8 @@ size_t GlEdge::getVertices(const GlGraphInputData *data, const edge e, const nod
   maxTgtSize = std::max(tgtSize[0], tgtSize[1]);
 
   Coord srcAnchor, tgtAnchor;
-  getEdgeAnchor(data, src, tgt, bends, srcCoord, tgtCoord, srcSize, tgtSize, srcAnchor, tgtAnchor, lengthRatio);
+  getEdgeAnchor(data, src, tgt, bends, srcCoord, tgtCoord, srcSize, tgtSize, srcAnchor, tgtAnchor,
+                lengthRatio);
 
   EdgeExtremityGlyph *startEdgeGlyph =
       data->extremityGlyphs.get(data->getElementSrcAnchorShape()->getEdgeValue(e));

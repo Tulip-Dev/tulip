@@ -108,7 +108,8 @@ public:
    */
   void getEdgeAnchor(const GlGraphInputData *data, const node src, const node tgt,
                      const LineType::RealType &bends, const Coord &srcCoord, const Coord &tgtCoord,
-                     const Size &srcSize, const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor, float lengthRatio = 1);
+                     const Size &srcSize, const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor,
+                     float lengthRatio = 1);
 
   void setSelectionDraw(bool selectDraw) {
     selectionDraw = selectDraw;
