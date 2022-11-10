@@ -126,7 +126,7 @@ setup(
     project_urls={
         'Documentation': 'https://tulip.labri.fr/Documentation/current/tulip-python/html/index.html',
         'Issue Tracker': 'https://sourceforge.net/p/auber/bugs/',
-        'Sources': 'https://github.com/Tulip-dev/tulip',
+        'Sources': 'https://sourceforge.net/projects/auber/files/tulip',
     },
 
     author='David Auber and the Tulip development team',
@@ -151,7 +151,9 @@ setup(
 
         'Operating System :: POSIX :: Linux',
         'Operating System :: MacOS :: MacOS X',
+        'Operating System :: Microsoft :: Windows :: Windows 11',
         'Operating System :: Microsoft :: Windows :: Windows 10',
+        'Operating System :: Microsoft :: Windows :: Windows 8.1',
         'Operating System :: Microsoft :: Windows :: Windows 8',
         'Operating System :: Microsoft :: Windows :: Windows 7',
 
