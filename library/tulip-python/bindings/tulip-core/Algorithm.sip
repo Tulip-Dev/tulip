@@ -69,10 +69,10 @@ tlp.Algorithm.run()
 
 This method is the entry point of the algorithm when it is called.
 Derived classes must implement it. It is a good practice to report progress through the PluginProgress.
-The PluginProgress should also be used to report errors, if any. A boolean must also be returned
+The PluginProgress should also be used to report errors, if any. A Boolean must also be returned
 to indicate if the algorithm was successful.
 
-:rtype: boolean
+:rtype: Boolean
 %End
 
   virtual bool check(std::string & /Out/) /TypeHint="Tuple[bool, str]"/;
@@ -84,7 +84,7 @@ You can perform some precondition checks here. Derived classes can reimplement i
 Must return a tuple whose first member indicates if the algorithm can be applied
 and the second one can be used to provide an error message
 
-:rtype: (boolean, string)
+:rtype: (Boolean, string)
 %End
 
   virtual std::string category() const;

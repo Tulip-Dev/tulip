@@ -30,7 +30,7 @@ class PropertyContext;
 
 /**
  * @ingroup Graph
- * @brief A graph property that maps a boolean value to graph elements.
+ * @brief A graph property that maps a Boolean value to graph elements.
  */
 class TLP_SCOPE BooleanProperty : public AbstractProperty<tlp::BooleanType, tlp::BooleanType> {
 public:

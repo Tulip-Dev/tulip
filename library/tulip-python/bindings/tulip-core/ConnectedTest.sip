@@ -47,7 +47,7 @@ between each pair of nodes), :const:`False` otherwise.
 
 :param graph: the graph on which to perform the connected test
 :type graph: :class:`tlp.Graph`
-:rtype: boolean
+:rtype: Boolean
 %End
 
 //=========================================================================================== 

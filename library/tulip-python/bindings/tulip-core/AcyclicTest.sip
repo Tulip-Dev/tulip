@@ -72,7 +72,7 @@ The result is cached (ie. the next call with the same graph is done in O(1) time
 
 :param graph: the graph on which to perform the acyclic test
 :type graph: :class:`tlp.Graph`
-:rtype: boolean
+:rtype: Boolean
 %End
 
 //===========================================================================================
@@ -97,12 +97,12 @@ of transformed self loops.
 %Docstring
 tlp.AcyclicTest.acyclicTest(graph)
 
-Returns a tuple whose first member is a boolean indicating if the graph is acyclic or not
+Returns a tuple whose first member is a Boolean indicating if the graph is acyclic or not
 and second member is a list of edges that create cycle (when the graph is not acyclic). 
 
 :param graph: the graph on which to perform the acyclic test
 :type graph: :class:`tlp.Graph`
-:rtype: (boolean, list of :class:`tlp.edge`)
+:rtype: (Boolean, list of :class:`tlp.edge`)
 %End
   
 private : 

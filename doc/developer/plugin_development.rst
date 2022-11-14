@@ -204,7 +204,7 @@ The methods of the *TypeName* Algorithm class, will be redefined in your plug-in
 Adding parameters to an algorithm
 ---------------------------------
 
-Your algorithm may need some parameters, for example a boolean or a property name, that must be filled in by the user just before being launched. In this section, we will look at the methods and techniques to do so.
+Your algorithm may need some parameters, for example a Boolean or a property name, that must be filled in by the user just before being launched. In this section, we will look at the methods and techniques to do so.
 
 The class PropertyAlgorithm provides the following methods to declare a parameter::
 

@@ -755,7 +755,7 @@ const string &CSVImportConfigurationWidget::guessDataType(const string &data) co
   bool b;
 
   if (BooleanType::fromString(b, std::string(ptr), true)) {
-    // The type is boolean
+    // The type is Boolean
     return BooleanProperty::propertyTypename;
   }
 

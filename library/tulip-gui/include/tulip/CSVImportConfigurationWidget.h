@@ -290,7 +290,7 @@ private:
   const std::string &combinePropertyDataType(const std::string &previousType,
                                              const std::string &newType) const;
   /**
-   * @brief Try to guess the type of the data. Can recognize int, double, boolean or string. If the
+   * @brief Try to guess the type of the data. Can recognize int, double, Boolean or string. If the
    *type is other return string.
    * @return The property typename of the type
    **/

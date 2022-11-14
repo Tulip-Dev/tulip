@@ -130,8 +130,8 @@ tlp.BoundingBox.isValid()
 Checks whether the bounding box's lowest point is less than it's highest point.
 "Less Than" means axis-by-axis comparison, i.e. x1 < x2 && y1 < y2 && z1 < z2.
 
-:rtype: boolean
-%End      
+:rtype: Boolean
+%End
       
   bool contains(const tlp::Vec3f& coord) const;
 %Docstring
@@ -144,7 +144,7 @@ If the bounding box is invalid the result is always :const:`False`.
 
 :param point: a point in the 3D space.
 :type point: :class:`tlp.Vec3f`
-:rtype: boolean
+:rtype: Boolean
 %End
 
   bool intersect(const tlp::BoundingBox &boundingBox) const;
@@ -158,7 +158,7 @@ If one of the bounding boxes is invalid returns :const:`False`.
 
 :param boundingBox: the bounding box on which to check intersection
 :type boundingBox: :class:`tlp.BoundingBox`
-:rtype: boolean
+:rtype: Boolean
 %End
 
   bool intersect(const tlp::Vec3f &segStart, const tlp::Vec3f &segEnd) const;
@@ -174,7 +174,7 @@ If the bounding box is invalid the result is always :const:`False`.
 :type segStart: :class:`tlp.Vec3f`
 :param segEnd: the end point of the line segment on which to check intersection
 :type segEnd: :class:`tlp.Vec3f`
-:rtype: boolean
+:rtype: Boolean
 %End
 
   tlp::Vec3f& operator[](const unsigned int i) const /NoCopy/;

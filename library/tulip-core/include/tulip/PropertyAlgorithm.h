@@ -31,7 +31,7 @@ static const std::string BOOLEAN_ALGORITHM_CATEGORY = "Selection";
 
 /**
  * @ingroup Plugins
- * @brief The boolean algorithm takes a graph as input and output its results as a
+ * @brief The Boolean algorithm takes a graph as input and output its results as a
  * tlp::BooleanProperty
  */
 class TLP_SCOPE BooleanAlgorithm : public TemplateAlgorithm<tlp::BooleanProperty> {

@@ -389,7 +389,7 @@ void BooleanVectorType::writeb(ostream &oss, const RealType &v) {
   vector<char> vc;
   vc.resize(vSize);
 
-  // loop to write boolean as char
+  // loop to write Boolean as char
   char *data = vc.data();
 
   for (unsigned int i = 0; i < vSize; ++i, ++data) {
@@ -514,7 +514,7 @@ bool BooleanVectorType::readb(istream &iss, RealType &v) {
   vector<char> vc;
   vc.resize(vSize);
 
-  // loop to write boolean as char
+  // loop to write Boolean as char
   char *data = vc.data();
 
   if (!bool(iss.read(data, vSize)))

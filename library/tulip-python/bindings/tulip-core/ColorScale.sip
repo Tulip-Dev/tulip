@@ -186,7 +186,7 @@ associates regular stop points to them.
 :param colors: The colors to use in the color scale.
 :type colors: list of :class:`tlp.Color`
 :param gradient: If set to :const:`True`, the color scale is a gradient
-:type gradient: boolean
+:type gradient: Boolean
 %End
 
 //==========================================================================================
@@ -224,7 +224,7 @@ tlp.ColorScale.isGradient()
 
 Returns :const:`True` if the color scale is a gradient.
 
-:rtype: boolean 
+:rtype: Boolean
 %End  
   
 //==========================================================================================
@@ -236,7 +236,7 @@ tlp.ColorScale.setGradient(gradient)
 Specify whether the color scale must be considered as a gradient.
 
 :param gradient: the flag value
-:type gradient: boolean
+:type gradient: Boolean
 %End
 
 //==========================================================================================
@@ -260,7 +260,7 @@ tlp.ColorScale.hasRegularStops()
 
 Returns :const:`True` if the color scale has regular stop points, meaning the distance between each consecutive stop is constant.
 
-:rtype: boolean
+:rtype: Boolean
 %End
 
 //==========================================================================================
@@ -273,7 +273,7 @@ tlp.ColorScale.colorScaleInitialized()
 
 Returns :const;`True` if the color scale is initialized, i.e. the underlying color map is not empty.
 
-:rtype: boolean
+:rtype: Boolean
 %End
 
 //==========================================================================================

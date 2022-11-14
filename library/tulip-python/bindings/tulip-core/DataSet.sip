@@ -185,7 +185,7 @@ struct DataSet /TypeHint="Dict[str, Any]", TypeHintValue="{}"/ {
 This class is used to store a set of parameters to transmit to a Tulip algorithm.
 Below is an exhaustive list of data types that can be stored in a Tulip data set:
 
-  * boolean
+  * Boolean
   * integer
   * float
   * string

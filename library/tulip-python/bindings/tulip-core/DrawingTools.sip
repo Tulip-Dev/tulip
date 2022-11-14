@@ -40,16 +40,16 @@ nodes z-rotations defined in the default double property "viewRotation" and size
 
 :param graph: the graph on which to compute its bounding box
 :type graph: :class:`tlp.Graph`
-:param selection: a boolean property to restrain the computation of the bounding box to selected elements (if provided)
+:param selection: a Boolean property to restrain the computation of the bounding box to selected elements (if provided)
 :type selection: :class:`tlp.BooleanProperty`
 :rtype: :class:`tlp.BoundingBox`
-:throws: an exception if the provided boolean property is not attached to the graph
+:throws: an exception if the provided Boolean property is not attached to the graph
 %End
 
 %MethodCode
   if (a1 && !(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0))) {
     sipIsErr = 1;
-    PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its bounding box.");
+    PyErr_SetString(PyExc_Exception, "The provided Boolean property is not attached to the graph on which to compute its bounding box.");
   } else {
     sipRes = new tlp::BoundingBox(tlp::computeBoundingBox(a0, a0->getProperty<tlp::LayoutProperty>("viewLayout"),
                                                           a0->getProperty<tlp::SizeProperty>("viewSize"),
@@ -79,7 +79,7 @@ nodes z-rotations and sizes of elements.
 :type size: :class:`tlp.SizeProperty`
 :param rotation: a double property containing the z-rotations of nodes
 :type rotation: :class:`tlp.DoubleProperty`
-:param selection: a boolean property to restrain the computation of the bounding box to selected elements (if provided)
+:param selection: a Boolean property to restrain the computation of the bounding box to selected elements (if provided)
 :type selection: :class:`tlp.BooleanProperty`
 :rtype: :class:`tlp.BoundingBox`
 :throws: an exception if the provided properties are not attached to the graph
@@ -97,7 +97,7 @@ nodes z-rotations and sizes of elements.
     PyErr_SetString(PyExc_Exception, "The provided double property is not attached to the graph on which to compute its bounding box.");
   } else if (a4 && !(a0 == a4->getGraph() || a4->getGraph()->isDescendantGraph(a0))) {
     sipIsErr = 1;
-    PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its bounding box.");
+    PyErr_SetString(PyExc_Exception, "The provided Boolean property is not attached to the graph on which to compute its bounding box.");
   } else {
     sipRes = new tlp::BoundingBox(tlp::computeBoundingBox(a0, a1, a2, a3, a4));
   }
@@ -122,17 +122,17 @@ To get the bounding radius, you have to compute the distance between the two mem
 
 :param graph: the graph on which to compute its bounding sphere
 :type graph: :class:`tlp.Graph`
-:param selection: a boolean property to restrain the computation of the bounding sphere to selected elements (if provided)
+:param selection: a Boolean property to restrain the computation of the bounding sphere to selected elements (if provided)
 :type selection: :class:`tlp.BooleanProperty`
 :rtype: (:class:`tlp.Coord`, :class:`tlp.Coord`)
-:throws: an exception if the provided boolean property is not attached to the graph
+:throws: an exception if the provided Boolean property is not attached to the graph
 
 %End
 
 %MethodCode
   if (a1 && (!(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0)))) {
     sipIsErr = 1;
-    PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its bounding sphere.");
+    PyErr_SetString(PyExc_Exception, "The provided Boolean property is not attached to the graph on which to compute its bounding sphere.");
   } else {
     sipRes = new std::pair<tlp::Coord, tlp::Coord>(tlp::computeBoundingRadius(a0, a0->getProperty<tlp::LayoutProperty>("viewLayout"),
                                                                               a0->getProperty<tlp::SizeProperty>("viewSize"),
@@ -167,7 +167,7 @@ To get the bounding radius, you have to compute the distance between the two mem
 :type size: :class:`tlp.SizeProperty`
 :param rotation: a double property containing the z-rotations of nodes
 :type rotation: :class:`tlp.DoubleProperty`
-:param selection: a boolean property to restrain the computation of the bounding sphere to selected elements (if provided)
+:param selection: a Boolean property to restrain the computation of the bounding sphere to selected elements (if provided)
 :type selection: :class:`tlp.BooleanProperty`
 :rtype: (:class:`tlp.Coord`, :class:`tlp.Coord`)
 :throws: an exception if the provided properties are not attached to the graph
@@ -186,7 +186,7 @@ To get the bounding radius, you have to compute the distance between the two mem
     PyErr_SetString(PyExc_Exception, "The provided double property is not attached to the graph on which to compute its bounding sphere.");
   } else if (a4 && !(a0 == a4->getGraph() || a4->getGraph()->isDescendantGraph(a0))) {
     sipIsErr = 1;
-    PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its bounding sphere.");
+    PyErr_SetString(PyExc_Exception, "The provided Boolean property is not attached to the graph on which to compute its bounding sphere.");
   } else {
     sipRes = new std::pair<tlp::Coord, tlp::Coord>(tlp::computeBoundingRadius(a0, a1, a2, a3, a4));
   }
@@ -223,16 +223,16 @@ Returns a list of :class:`tlp.Coord` containing the vertices of the graph convex
 
 :param graph: the graph on which to compute its convex hull
 :type graph: :class:`tlp.Graph`
-:param selection: a boolean property to restrain the computation of the convex hull to selected elements (if provided)
-:type selection: :class:`tlp.BooleanProperty`
+:param selection: a Boolean property to restrain the computation of the convex hull to selected elements (if provided)
+:type selection: :class:`tlp.booleanProperty`
 :rtype: list of :class:`tlp.Coord`
-:throws: an exception if the provided boolean property is not attached to the graph
+:throws: an exception if the provided Boolean property is not attached to the graph
 %End
 
 %MethodCode
   if (a1 && (!(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0)))) {
     sipIsErr = 1;
-    PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its convex hull.");
+    PyErr_SetString(PyExc_Exception, "The provided Boolean property is not attached to the graph on which to compute its convex hull.");
   } else {
     sipRes = new std::vector<tlp::Coord>(tlp::computeConvexHull(a0, a0->getProperty<tlp::LayoutProperty>("viewLayout"),
                                                                 a0->getProperty<tlp::SizeProperty>("viewSize"),
@@ -263,7 +263,7 @@ Returns a list of :class:`tlp.Coord` containing the vertices of the graph convex
 :type size: :class:`tlp.SizeProperty`
 :param rotation: a double property containing the z-rotations of nodes
 :type rotation: :class:`tlp.DoubleProperty`
-:param selection: a boolean property to restrain the computation of the convex hull to selected elements (if provided)
+:param selection: a Boolean property to restrain the computation of the convex hull to selected elements (if provided)
 :type selection: :class:`tlp.BooleanProperty`
 :rtype: list of :class:`tlp.Coord`
 :throws: an exception if the provided properties are not attached to the graph
@@ -281,7 +281,7 @@ Returns a list of :class:`tlp.Coord` containing the vertices of the graph convex
     PyErr_SetString(PyExc_Exception, "The provided double property is not attached to the graph on which to compute its convex hull.");
   } else if (a4 && !(a0 == a4->getGraph() || a4->getGraph()->isDescendantGraph(a0))) {
     sipIsErr = 1;
-    PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its convex hull.");
+    PyErr_SetString(PyExc_Exception, "The provided Boolean property is not attached to the graph on which to compute its convex hull.");
   } else {
     sipRes = new std::vector<tlp::Coord>(tlp::computeConvexHull(a0, a1, a2, a3, a4));
   }
@@ -299,7 +299,7 @@ tlp.computeLinesIntersection(line1, line2)
 .. versionadded:: 3.8
 
 Computes the intersection point (if any) of two 3d lines.
-Returns a tuple whose first member is a boolean indicating
+Returns a tuple whose first member is a Boolean indicating
 if the lines intersect (if :const:`False` it means that lines are parallel or skew)
 and second member is the intersection point (if any).
 
@@ -307,7 +307,7 @@ and second member is the intersection point (if any).
 :type line1: (:class:`tlp.Coord` , :class:`tlp.Coord`)
 :param line2: the coordinates of the two points defining the second line
 :type line2: (:class:`tlp.Coord` , :class:`tlp.Coord`)
-:rtype: (boolean, :class:`tlp.Coord`)
+:rtype: (Boolean, :class:`tlp.Coord`)
 
 %End
 

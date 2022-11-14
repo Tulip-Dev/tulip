@@ -58,7 +58,7 @@ tlp.edge.isValid()
 
 Returns :const:`True` if the edge is a valid one, meaning it is attached to a graph.
 
-:rtype: boolean 
+:rtype: Boolean
 %End
 
   std::string __repr__() const;

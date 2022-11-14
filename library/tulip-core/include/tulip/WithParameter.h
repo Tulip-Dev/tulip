@@ -149,7 +149,7 @@ public:
  *
  * It is used by WithParameter to store parameters.
  * Each parameter is identified by a name, has a default value, a value, a help string, and a
- *boolean indicating whether it is mandatory or optional.
+ * Boolean indicating whether it is mandatory or optional.
  **/
 struct TLP_SCOPE ParameterDescriptionList {
 

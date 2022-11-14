@@ -589,7 +589,7 @@ template<TYPE>
     return 1;
   }
 
-  // Convert Python list of booleans to a std::vector<bool>
+  // Convert Python list of Booleans to a std::vector<bool>
   std::list<bool> *v = new std::list<bool>();
   for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
     v->push_back(PyList_GET_ITEM(sipPy, i) == Py_True);

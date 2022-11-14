@@ -9,7 +9,7 @@ a graph. The class :class:`tlp.PropertyInterface` is the base interface for each
 For each data type that can be attached to graph elements, there is a specific property class. 
 Below is an exhaustive list of these classes:
 
-	* :class:`tlp.BooleanProperty` : associate boolean values to nodes and edges
+        * :class:`tlp.BooleanProperty` : associate Boolean values to nodes and edges
 	* :class:`tlp.ColorProperty` : associate colors (r,g,b,a) to nodes and edges
 	* :class:`tlp.DoubleProperty`: associate floating point values to nodes and edges
 	* :class:`tlp.IntegerProperty`: associate integer values to nodes and edges
@@ -19,7 +19,7 @@ Below is an exhaustive list of these classes:
 	
 Lists of values can also be associated to graph elements through the use of the vector property classes listed below :
 	
-	* :class:`tlp.BooleanVectorProperty` : associate lists of boolean values to nodes and edges
+        * :class:`tlp.BooleanVectorProperty` : associate lists of Boolean values to nodes and edges
 	* :class:`tlp.ColorVectorProperty` : associate lists of colors (r,g,b,a) to nodes and edges
 	* :class:`tlp.DoubleVectorProperty`: associate lists of floating point values to nodes and edges
 	* :class:`tlp.IntegerVectorProperty`: associate lists of integer values to nodes and edges
@@ -64,7 +64,7 @@ The sample code below illustrate how to set / get data on graph elements through
   # creating an integer property called "degree"
   degree = graph.getIntegerProperty("degree")
 
-  # creating a boolean property called "loop"
+  # creating a Boolean property called "loop"
   loop = graph.getBooleanProperty("loop")
 
   # filling the properties

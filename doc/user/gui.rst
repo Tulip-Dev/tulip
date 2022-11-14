@@ -211,7 +211,7 @@ Search
 
 The tool **Search** can be used in parallel of any panel. It provides a way of selecting graph's elements according to specific criteria. 
 
-First start by selecting the graph and the elements targeted and by choosing the selection mode. The result (respecting the criteria or not) is stored in a boolean property, *viewSelection* by default. Then choose the values to compare and hit the button *Search* to launch the tool.
+First start by selecting the graph and the elements targeted and by choosing the selection mode. The result (respecting the criteria or not) is stored in a Boolean property, *viewSelection* by default. Then choose the values to compare and hit the button *Search* to launch the tool.
 
 If the *viewSelection* has been selected as the result property, the selected elements are automatically enhanced in any workspace views.
 

@@ -41,7 +41,7 @@ to disconnect the graph), :const:`False` otherwise.
 
 :param graph: the graph on which to perform the biconnected test
 :type graph: :class:`tlp.Graph`
-:rtype: boolean
+:rtype: Boolean
 %End 
 
 //========================================================================================

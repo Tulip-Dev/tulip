@@ -110,7 +110,7 @@ public:
   }
 
   /**
-   * invert the boolean value set to i (do nothing for non boolean value)
+   * invert the Boolean value set to i (do nothing for non Boolean value)
    */
   void invertBooleanValue(const unsigned int i);
 

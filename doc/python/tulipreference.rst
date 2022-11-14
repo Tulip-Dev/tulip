@@ -10,141 +10,202 @@ Graph management
 ^^^^^^^^^^^^^^^^
 
 .. autofunction:: tulip::tlp.newGraph
+    :noindex:
 
 .. autofunction:: tulip::tlp.loadGraph
+    :noindex:
 
 .. autofunction:: tulip::tlp.loadGraph
+    :noindex:
 
 .. autofunction:: tulip::tlp.saveGraph
+    :noindex:
 
 .. autofunction:: tulip::tlp.saveGraph
+    :noindex:
 
 .. autofunction:: tulip::tlp.importGraph
+    :noindex:
 
 .. autofunction:: tulip::tlp.exportGraph
+    :noindex:
 
 .. autofunction:: tulip::tlp.copyToGraph
+    :noindex:
 
 .. autofunction:: tulip::tlp.removeFromGraph
+    :noindex:
 
 .. autofunction:: tulip::tlp.getRootGraphs
+    :noindex:
 
 Graph measures and functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. autofunction:: tulip::tlp.averagePathLength
+    :noindex:
 
 .. autofunction:: tulip::tlp.averageClusteringCoefficient
+    :noindex:
 
 .. autofunction:: tulip::tlp.clusteringCoefficient
+    :noindex:
 
 .. autofunction:: tulip::tlp.dagLevel
+    :noindex:
 
 .. autofunction:: tulip::tlp.minDegree
+    :noindex:
 
 .. autofunction:: tulip::tlp.maxDegree
+    :noindex:
 
 .. autofunction:: tulip::tlp.maxDistance
+    :noindex:
 
 .. autofunction:: tulip::tlp.maxDistanceWeighted
+    :noindex:
 
 .. autofunction:: tulip::tlp.reachableNodes
+    :noindex:
 
 .. autofunction:: tulip::tlp.bfs
+    :noindex:
 
 .. autofunction:: tulip::tlp.bfs
+    :noindex:
 
 .. autofunction:: tulip::tlp.dfs
+    :noindex:
 
 .. autofunction:: tulip::tlp.dfs
+    :noindex:
 
 .. autofunction:: tulip::tlp.selectShortestPaths
+    :noindex:
 
 Geometry
 ^^^^^^^^
 
 .. autofunction:: tulip::tlp.computeBoundingBox
+    :noindex:
 
 .. autofunction:: tulip::tlp.computeBoundingBox
+    :noindex:
 
 .. autofunction:: tulip::tlp.computeBoundingRadius
+    :noindex:
 
 .. autofunction:: tulip::tlp.computeBoundingRadius
+    :noindex:
 
 .. autofunction:: tulip::tlp.computeConvexHull
+    :noindex:
 
 .. autofunction:: tulip::tlp.computeConvexHull
+    :noindex:
 
 .. autofunction:: tulip::tlp.computeConvexHull
+    :noindex:
 
 .. autofunction:: tulip::tlp.convexHull2D
+    :noindex:
 
 .. autofunction:: tulip::tlp.convexHull
+    :noindex:
 
 .. autofunction:: tulip::tlp.computeLinesIntersection
+    :noindex:
 
 .. autofunction:: tulip::tlp.computePolygonCentroid
+    :noindex:
 
 .. autofunction:: tulip::tlp.delaunayTriangulation
+    :noindex:
 
 .. autoclass:: tulip::tlp.VoronoiDiagram
     :members:
 
 .. autofunction:: tulip::tlp.voronoiDiagram
+    :noindex:
 
 .. _parametric-curves:
+    :noindex:
 
 Parametric curves computation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. autofunction:: tulip::tlp.computeBezierPoint
+    :noindex:
 
 .. autofunction:: tulip::tlp.computeBezierPoints
+    :noindex:
 
 .. autofunction:: tulip::tlp.computeCatmullRomPoint
+    :noindex:
 
 .. autofunction:: tulip::tlp.computeCatmullRomPoints
+    :noindex:
 
 .. autofunction:: tulip::tlp.computeOpenUniformBsplinePoint
+    :noindex:
 
 .. autofunction:: tulip::tlp.computeOpenUniformBsplinePoints
+    :noindex:
 
 Plugins Management
 ^^^^^^^^^^^^^^^^^^
 
 .. autofunction:: tulip::tlp.getTulipRelease
+    :noindex:
 
 .. autofunction:: tulip::tlp.initTulipLib
+    :noindex:
 
 .. autofunction:: tulip::tlp.loadPlugins
+    :noindex:
 
 .. autofunction:: tulip::tlp.loadPluginsFromDir
+    :noindex:
 
 .. autofunction:: tulip::tlp.loadPlugin
+    :noindex:
 
 .. autofunction:: tulip::tlp.loadPluginsCheckDependencies
+    :noindex:
 
 .. autofunction:: tulip::tlp.getDefaultPluginParameters
+    :noindex:
 
 .. autofunction:: tulip::tlp.getImportPluginsList
+    :noindex:
 
 .. autofunction:: tulip::tlp.getExportPluginsList
+    :noindex:
 
 .. autofunction:: tulip::tlp.getAlgorithmPluginsList
+    :noindex:
 
 .. autofunction:: tulip::tlp.getBooleanAlgorithmPluginsList
+    :noindex:
 
 .. autofunction:: tulip::tlp.getColorAlgorithmPluginsList
+    :noindex:
 
 .. autofunction:: tulip::tlp.getDoubleAlgorithmPluginsList
+    :noindex:
 
 .. autofunction:: tulip::tlp.getIntegerAlgorithmPluginsList
+    :noindex:
 
 .. autofunction:: tulip::tlp.getLayoutAlgorithmPluginsList
+    :noindex:
 
 .. autofunction:: tulip::tlp.getSizeAlgorithmPluginsList
+    :noindex:
 
 .. autofunction:: tulip::tlp.getStringAlgorithmPluginsList
+    :noindex:
 
 Graph elements classes
 ----------------------------
@@ -176,50 +237,73 @@ Modification of the graph structure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automethod:: tulip::tlp.Graph.clear
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.addNode
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.addNode
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.addNodes
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.addNodes
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.addNodes
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.delNode
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.delNodes
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.delNodes
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.addEdge
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.addEdge
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.addEdges
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.addEdges
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.addEdges
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.delEdge
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.delEdges
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.delEdges
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.setEdgeOrder
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.swapEdgeOrder
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.setSource
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.setTarget
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.setEnds
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.reverse
+    :noindex:
 
 .. _graph-class.subgraphs-hierarchy:
 
@@ -227,46 +311,67 @@ Creation and Modification of the subgraph hierarchy
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automethod:: tulip::tlp.Graph.addSubGraph
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.addSubGraph
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.addCloneSubGraph
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.inducedSubGraph
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.inducedSubGraph
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.delSubGraph
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.delAllSubGraphs
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getSuperGraph
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getRoot
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.setSuperGraph
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getSubGraphs
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.isSubGraph
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.isDescendantGraph
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getSubGraph
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getSubGraph
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getDescendantGraph
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getDescendantGraph
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getNthSubGraph
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.numberOfSubGraphs
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.numberOfDescendantGraphs
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getDescendantGraphs
+    :noindex:
 
 .. _graph-class.iterators:
 
@@ -277,40 +382,58 @@ All the provided iterators are stable, meaning you can safely delete a node/edge
 from the graph while iterating on its nodes/edges/subgraphs.
 
 .. automethod:: tulip::tlp.Graph.getOneNode
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getRandomNode
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getNodes
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getInNode
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getInNodes
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getOutNode
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getOutNodes
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getInOutNodes
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.bfs
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.dfs
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getNodeMetaInfo
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getOneEdge
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getRandomEdge
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getEdges
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getOutEdges
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getInOutEdges
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getInEdges
+    :noindex:
 
 .. automethod:: tulip::tlp.Graph.getEdgeMetaInfo
+    :noindex:
 
 .. _graph-class.information:
 

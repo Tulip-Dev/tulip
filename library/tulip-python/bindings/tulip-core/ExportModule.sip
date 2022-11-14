@@ -118,12 +118,12 @@ you have to use the following syntax::
   os << self.graph.numberOfNodes() << "\n"
   os << self.graph.numberOfEdges() << "\n"
 
-A boolean must also be returned
+A Boolean must also be returned
 to indicate if the export was successful.
 
 :param os: an output file stream
 :type os: std.ostream 
-:rtype: boolean
+:rtype: Boolean
 %End 
 
   tlp::Graph *graph;

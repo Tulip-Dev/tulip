@@ -41,7 +41,7 @@ Below is a description of each parameter:
 
 	* *Property*: the input graph property of type :class:`tlp.PropertyInterface` from which to compute the partition
 	* *Type*: a :class:`tlp.StringCollection` parameter to choose the type of the elements to partition (two possible values : "nodes" or "edges")
-	* *Connected*: a boolean parameter indicating whether the output subgraphs have to be connected
+        * *Connected*: a Boolean parameter indicating whether the output subgraphs have to be connected
 
 The sample code below illustrates how to call this algorithm from Python. We assume that a Tulip graph
 is bound to a "graph" variable and this graph contains a double property called "myMetric"::
