@@ -130,7 +130,6 @@ Geometry
     :noindex:
 
 .. _parametric-curves:
-    :noindex:
 
 Parametric curves computation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

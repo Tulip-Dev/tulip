@@ -522,6 +522,59 @@ Sets the size property that defines the sizes of the extremity of the target edg
 
 // =============================================================================================
 
+    tlp::StringProperty *getElementIcon() const;
+%Docstring
+tlpgui.GlGraphInputData.getElementIcon()
+
+    .. versionadded:: 5.7
+
+Returns the string property that defines the icon names for nodes (see :class:`tlp.TulipFontAwesome` and :class:`tlp.TulipMaterialDesignIcons`).
+
+:rtype: :class:`tulip.tlp.StringProperty`
+%End
+
+// =============================================================================================
+    void setElementIcon(tlp::StringProperty *property);
+
+    %Docstring
+        .. versionadded:: 5.7
+    tlpgui.GlGraphInputData.setElementIcon(property)
+
+Sets the string property that defines the icon names for nodes (see :class:`tlp.TulipFontAwesome` and :class:`tlp.TulipMaterialDesignIcons`).
+
+:param property: a string property attached to the graph associated to this data.
+:type property: :class:`tulip.tlp.StringProperty`
+
+%End
+
+// =============================================================================================
+    tlp::DoubleProperty *getEdgeLengthRatio() const;
+%Docstring
+
+tlpgui.GlGraphInputData.getEdgeLengthRatio()
+       .. versionadded:: 5.7
+
+Returns the double property that defines the length ratios of the edges to display.
+
+:rtype: :class:`tulip.tlp.DoubleProperty`
+%End
+    // =============================================================================================
+    void setEdgeLengthRatio(tlp::DoubleProperty *property);
+
+%Docstring
+
+tlpgui.GlGraphInputData.setEdgeLengthRatio(property )
+.. versionadded:: 5.7
+
+Sets the double property that defines the length ratios of the edges to display.
+
+:param property: a double property attached to the graph associated to this data.
+:type property: :class:`tulip.tlp.DoubleProperty`
+
+%End
+
+    // =============================================================================================
+
     void reloadGraphProperties();
 %Docstring
 tlpgui.GlGraphInputData.reloadGraphProperties()
