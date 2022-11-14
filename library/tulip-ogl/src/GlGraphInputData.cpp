@@ -220,8 +220,7 @@ void GlGraphInputData::treatEvent(const Event &ev) {
           delete oldProperty;
           _invisibleProperties.erase(oldProperty);
         }
-        if ((propName == "viewLengthRatio") &&
-            !graph->existProperty(propName)) {
+        if ((propName == "viewLengthRatio") && !graph->existProperty(propName)) {
           // use an invisible property
           auto prop = new DoubleProperty(graph, "viewLengthRatio");
           _propertiesMap[VIEW_LENGTHRATIO] = prop;

@@ -886,9 +886,8 @@ void GlVertexArrayManager::activatePointNodeDisplay(GlNode *glNode, bool selecte
 void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property) {
   if (layoutProperty == property || sizeProperty == property || shapeProperty == property ||
       rotationProperty == property || lengthRatioProperty == property ||
-      srcAnchorShapeProperty == property || tgtAnchorShapeProperty == property
-      || srcAnchorSizeProperty == property ||
-      tgtAnchorSizeProperty == property) {
+      srcAnchorShapeProperty == property || tgtAnchorShapeProperty == property ||
+      srcAnchorSizeProperty == property || tgtAnchorSizeProperty == property) {
     setHaveToComputeLayout(true);
     clearLayoutData();
 
@@ -910,9 +909,9 @@ void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property) {
     layoutObserverActivated = false;
   }
 
-  if (edgesModified || layoutProperty == property ||
-      lengthRatioProperty == property || colorProperty == property ||
-      borderColorProperty == property || borderWidthProperty == property) {
+  if (edgesModified || layoutProperty == property || lengthRatioProperty == property ||
+      colorProperty == property || borderColorProperty == property ||
+      borderWidthProperty == property) {
     setHaveToComputeColor(true);
     clearColorData();
 
@@ -1133,10 +1132,8 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
     case PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE:
 
       if (layoutProperty == property || shapeProperty == property ||
-          lengthRatioProperty == property ||
-          srcAnchorShapeProperty == property ||
-          tgtAnchorShapeProperty == property ||
-          srcAnchorSizeProperty == property ||
+          lengthRatioProperty == property || srcAnchorShapeProperty == property ||
+          tgtAnchorShapeProperty == property || srcAnchorSizeProperty == property ||
           tgtAnchorSizeProperty == property) {
         edgesModified = true;
       }
