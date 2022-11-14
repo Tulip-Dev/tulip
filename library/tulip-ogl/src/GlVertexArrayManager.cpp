@@ -47,6 +47,7 @@ GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *i)
     : inputData(i), graph(inputData->getGraph()), layoutProperty(inputData->getElementLayout()),
       sizeProperty(inputData->getElementSize()), shapeProperty(inputData->getElementShape()),
       rotationProperty(inputData->getElementRotation()),
+      lengthRatioProperty(inputData->getEdgeLengthRatio()),
       colorProperty(inputData->getElementColor()),
       borderColorProperty(inputData->getElementBorderColor()),
       borderWidthProperty(inputData->getElementBorderWidth()),
@@ -92,6 +93,7 @@ void GlVertexArrayManager::setInputData(GlGraphInputData *inputData) {
   sizeProperty = inputData->getElementSize();
   shapeProperty = inputData->getElementShape();
   rotationProperty = inputData->getElementRotation();
+  lengthRatioProperty = inputData->getEdgeLengthRatio();
   colorProperty = inputData->getElementColor();
   borderColorProperty = inputData->getElementBorderColor();
   borderWidthProperty = inputData->getElementBorderWidth();
@@ -171,6 +173,18 @@ bool GlVertexArrayManager::haveToCompute() {
 
     rotationProperty = inputData->getElementRotation();
     rotationProperty->addListener(this);
+    clearLayoutData();
+    recompute = true;
+  }
+
+  // length ratio property changed
+  if (lengthRatioProperty != inputData->getEdgeLengthRatio()) {
+    if (lengthRatioProperty && layoutObserverActivated)
+      lengthRatioProperty->removeListener(this);
+
+    lengthRatioProperty = inputData->getEdgeLengthRatio();
+    lengthRatioProperty->addListener(this);
+
     clearLayoutData();
     recompute = true;
   }
@@ -666,7 +680,7 @@ void GlVertexArrayManager::visit(GlEdge *glEdge) {
     Size srcSize, tgtSize;
 
     const vector<Coord> &bends = layoutProperty->getEdgeValue(e);
-    float lengthRatio = bends.size() ? 1 : inputData->getEdgeLengthRatio()->getEdgeValue(e);
+    float lengthRatio = bends.size() ? 1 : lengthRatioProperty->getEdgeValue(e);
     vector<Coord> &vertices = eInfos.lineVertices;
     const unsigned int nbLines = glEdge->getVertices(inputData, e, src, tgt, srcCoord, tgtCoord,
                                                      srcSize, tgtSize, vertices, lengthRatio);
@@ -871,8 +885,9 @@ void GlVertexArrayManager::activatePointNodeDisplay(GlNode *glNode, bool selecte
 
 void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property) {
   if (layoutProperty == property || sizeProperty == property || shapeProperty == property ||
-      rotationProperty == property || srcAnchorShapeProperty == property ||
-      tgtAnchorShapeProperty == property || srcAnchorSizeProperty == property ||
+      rotationProperty == property || lengthRatioProperty == property ||
+      srcAnchorShapeProperty == property || tgtAnchorShapeProperty == property
+      || srcAnchorSizeProperty == property ||
       tgtAnchorSizeProperty == property) {
     setHaveToComputeLayout(true);
     clearLayoutData();
@@ -889,10 +904,14 @@ void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property) {
     if (rotationProperty)
       rotationProperty->removeListener(this);
 
+    if (lengthRatioProperty)
+      lengthRatioProperty->removeListener(this);
+
     layoutObserverActivated = false;
   }
 
-  if (edgesModified || layoutProperty == property || colorProperty == property ||
+  if (edgesModified || layoutProperty == property ||
+      lengthRatioProperty == property || colorProperty == property ||
       borderColorProperty == property || borderWidthProperty == property) {
     setHaveToComputeColor(true);
     clearColorData();
@@ -954,6 +973,7 @@ void GlVertexArrayManager::initObservers() {
     sizeProperty->addListener(this);
     shapeProperty->addListener(this);
     rotationProperty->addListener(this);
+    lengthRatioProperty->addListener(this);
     srcAnchorShapeProperty->addListener(this);
     tgtAnchorShapeProperty->addListener(this);
     srcAnchorSizeProperty->addListener(this);
@@ -988,6 +1008,9 @@ void GlVertexArrayManager::clearObservers(PropertyInterface *deletedProperty) {
 
     if (deletedProperty != rotationProperty)
       rotationProperty->removeListener(this);
+
+    if (lengthRatioProperty && (deletedProperty != lengthRatioProperty))
+      lengthRatioProperty->removeListener(this);
 
     if (deletedProperty != srcAnchorShapeProperty)
       srcAnchorShapeProperty->removeListener(this);
@@ -1054,6 +1077,9 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
       } else if (property == rotationProperty) {
         rotationProperty = nullptr;
         clearData();
+      } else if (property == lengthRatioProperty) {
+        lengthRatioProperty = nullptr;
+        clearData();
       } else if (property == borderColorProperty) {
         borderColorProperty = nullptr;
         clearColorData();
@@ -1107,8 +1133,11 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
     case PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE:
 
       if (layoutProperty == property || shapeProperty == property ||
-          srcAnchorShapeProperty == property || tgtAnchorShapeProperty == property ||
-          srcAnchorSizeProperty == property || tgtAnchorSizeProperty == property) {
+          lengthRatioProperty == property ||
+          srcAnchorShapeProperty == property ||
+          tgtAnchorShapeProperty == property ||
+          srcAnchorSizeProperty == property ||
+          tgtAnchorSizeProperty == property) {
         edgesModified = true;
       }
 

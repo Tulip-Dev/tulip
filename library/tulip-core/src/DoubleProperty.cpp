@@ -258,6 +258,9 @@ DoubleProperty::DoubleProperty(Graph *g, const std::string &n)
   } else {
     setMetaValueCalculator(&vWidthCalc);
   }
+  // force edge default value of viewLengthRatio
+  if (n == "viewLengthRatio")
+    setAllEdgeValue(1.);
 }
 
 //===============================================================

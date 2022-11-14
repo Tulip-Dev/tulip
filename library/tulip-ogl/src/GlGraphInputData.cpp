@@ -171,7 +171,6 @@ void GlGraphInputData::reloadGraphProperties() {
     else {
       // use an invisible property
       auto prop = new DoubleProperty(graph, "viewLengthRatio");
-      prop->setAllEdgeValue(1.);
       _propertiesMap[VIEW_LENGTHRATIO] = prop;
       _invisibleProperties.insert(prop);
     }
@@ -221,7 +220,14 @@ void GlGraphInputData::treatEvent(const Event &ev) {
           delete oldProperty;
           _invisibleProperties.erase(oldProperty);
         }
-        _propertiesMap[_propertiesNameMap[propName]] = graph->getProperty(propName);
+        if ((propName == "viewLengthRatio") &&
+            !graph->existProperty(propName)) {
+          // use an invisible property
+          auto prop = new DoubleProperty(graph, "viewLengthRatio");
+          _propertiesMap[VIEW_LENGTHRATIO] = prop;
+          _invisibleProperties.insert(prop);
+        } else
+          _propertiesMap[_propertiesNameMap[propName]] = graph->getProperty(propName);
         _properties.insert(_propertiesMap[_propertiesNameMap[propName]]);
       }
     }

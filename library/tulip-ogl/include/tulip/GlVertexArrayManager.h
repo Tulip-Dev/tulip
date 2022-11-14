@@ -167,7 +167,7 @@ protected:
   LayoutProperty *layoutProperty;
   SizeProperty *sizeProperty;
   IntegerProperty *shapeProperty;
-  DoubleProperty *rotationProperty;
+  DoubleProperty *rotationProperty, *lengthRatioProperty;
   ColorProperty *colorProperty;
   ColorProperty *borderColorProperty;
   DoubleProperty *borderWidthProperty;
