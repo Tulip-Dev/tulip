@@ -31,22 +31,21 @@ namespace tlp {
 class Graph;
 
 class TLP_QT_SCOPE MouseBoxZoomer : public GLInteractorComponent {
-private:
+protected:
   Qt::MouseButton mButton;
   Qt::KeyboardModifier kModifier;
+  unsigned int x, y;
+  int w, h;
+  bool started, updateViewport;
+  Graph *graph;
 
 public:
   MouseBoxZoomer(Qt::MouseButton button = Qt::LeftButton,
-                 Qt::KeyboardModifier modifier = Qt::NoModifier);
+                 Qt::KeyboardModifier modifier = Qt::NoModifier,
+                 bool updateViewport = true);
   ~MouseBoxZoomer() override;
   bool draw(GlMainWidget *) override;
   bool eventFilter(QObject *, QEvent *) override;
-
-private:
-  unsigned int x, y;
-  int w, h;
-  bool started;
-  Graph *graph;
 };
 } // namespace tlp
 #endif // MOUSEZOOMBOX_H

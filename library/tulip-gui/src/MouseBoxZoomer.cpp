@@ -34,8 +34,8 @@
 using namespace std;
 using namespace tlp;
 
-MouseBoxZoomer::MouseBoxZoomer(Qt::MouseButton button, Qt::KeyboardModifier modifier)
-    : mButton(button), kModifier(modifier), x(0), y(0), w(0), h(0), started(false), graph(nullptr) {
+MouseBoxZoomer::MouseBoxZoomer(Qt::MouseButton button, Qt::KeyboardModifier modifier, bool update)
+  : mButton(button), kModifier(modifier), x(0), y(0), w(0), h(0), started(false), updateViewport(update), graph(nullptr) {
 }
 MouseBoxZoomer::~MouseBoxZoomer() {}
 //=====================================================================
@@ -98,10 +98,12 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if (e->type() == QEvent::MouseButtonDblClick) {
-    GlBoundingBoxSceneVisitor bbVisitor(inputData);
-    glw->getScene()->getLayer("Main")->acceptVisitor(&bbVisitor);
-    QtGlSceneZoomAndPanAnimator zoomAnPan(glw, bbVisitor.getBoundingBox());
-    zoomAnPan.animateZoomAndPan();
+    if (updateViewport) {
+      GlBoundingBoxSceneVisitor bbVisitor(inputData);
+      glw->getScene()->getLayer("Main")->acceptVisitor(&bbVisitor);
+      QtGlSceneZoomAndPanAnimator zoomAnPan(glw, bbVisitor.getBoundingBox());
+      zoomAnPan.animateZoomAndPan();
+    }
     return true;
   }
 
@@ -119,7 +121,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
       if (started) {
         started = false;
 
-        if (!(w == 0 && h == 0)) {
+        if (!(w == 0 && h == 0) && updateViewport) {
           int width = glw->width();
           int height = glw->height();
 
@@ -170,7 +172,7 @@ bool MouseBoxZoomer::draw(GlMainWidget *glw) {
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
 
-  float col[4] = {0.8f, 0.8f, 0.8f, 0.2f};
+  float col[4] = {0.7f, 0.7f, 0.7f, 0.2f};
   setColor(col);
   glBegin(GL_QUADS);
   glVertex2f(x, y);

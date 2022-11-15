@@ -92,11 +92,8 @@ function init(lat, lng, zoom) {
   map.on('move', refreshMap);
   map.on('moveend', refreshMap);
 }
-function setMapBounds(latLngArray) {
-  var latLngBounds = L.latLngBounds();
-  for (var i = 0 ; i < latLngArray.length ; ++i) {
-    latLngBounds.extend(latLngArray[i]);
-  }
+function zoomOnRectangle(sw, ne) {
+  var latLngBounds = new L.latLngBounds(sw, ne);
   map.flyToBounds(latLngBounds);
 }
 function switchToLayer(layer) {
@@ -267,6 +264,12 @@ pair<double, double> LeafletMaps::getCurrentMapCenter() {
   return latLng;
 }
 
+void LeafletMaps::zoomOnRectangle(std::pair<double, double> &sw,
+                                  std::pair<double, double> &ne) {
+  QString code("zoomOnRectangle(L.latLng(%1, %2), L.latLng(%3, %4));");
+  executeJavascript(code.arg(sw.first).arg(sw.second).arg(ne.first).arg(ne.second));
+}
+
 void LeafletMaps::setMapBounds(Graph *graph,
                                const unordered_map<node, pair<double, double>> &nodesLatLngs) {
 
@@ -284,11 +287,7 @@ void LeafletMaps::setMapBounds(Graph *graph,
       }
     }
 
-    QString code = "mapBounds = [];";
-    code += QString("mapBounds.push(L.latLng(%1, %2));").arg(minLatLng.first).arg(minLatLng.second);
-    code += QString("mapBounds.push(L.latLng(%1, %2));").arg(maxLatLng.first).arg(maxLatLng.second);
-    code += "setMapBounds(mapBounds);";
-    executeJavascript(code);
+    zoomOnRectangle(minLatLng, maxLatLng);
   }
 }
 

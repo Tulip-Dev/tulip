@@ -22,6 +22,7 @@
 
 #include <tulip/GLInteractor.h>
 #include <tulip/MouseInteractors.h>
+#include <tulip/MouseBoxZoomer.h>
 #include "GeographicView.h"
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <QCursor>
@@ -40,7 +41,7 @@ class GeographicViewNavigator : public MouseNKeysNavigator {
 
 public:
   GeographicViewNavigator();
-  ~GeographicViewNavigator() override;
+  ~GeographicViewNavigator() {}
 
   bool eventFilter(QObject *, QEvent *) override;
   bool draw(GlMainWidget *) {
@@ -50,11 +51,21 @@ public:
   bool compute(GlMainWidget *) {
     return false;
   }
-  void viewChanged(View *) override;
+  void viewChanged(View *) {}
 
 protected:
   int x, y;
   bool inRotation;
+};
+
+class GeographicViewBoxZoomer : public MouseBoxZoomer {
+
+public:
+  GeographicViewBoxZoomer();
+  ~GeographicViewBoxZoomer() {}
+
+  bool eventFilter(QObject *, QEvent *) override;
+  void viewChanged(View *) {}
 };
 
 class GeographicViewInteractorNavigation : public GeographicViewInteractor {
@@ -64,6 +75,20 @@ public:
                     "Geographic View Navigation Interactor", "1.0", "Navigation")
 
   GeographicViewInteractorNavigation(const PluginContext *);
+
+  void construct() override;
+
+  QWidget *configurationWidget() const override;
+  unsigned int priority() const override;
+};
+
+class GeographicViewInteractorZoom : public GeographicViewInteractor {
+
+public:
+  PLUGININFORMATION("InteractorZoomGeographicView", "Tulip Team", "14/11/2022",
+                    "Geographic View Zoom Interactor", "1.0", "Navigation")
+
+  GeographicViewInteractorZoom(const PluginContext *);
 
   void construct() override;
 

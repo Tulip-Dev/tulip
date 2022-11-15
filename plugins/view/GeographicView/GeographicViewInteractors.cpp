@@ -54,6 +54,22 @@ QWidget *GeographicViewInteractorNavigation::configurationWidget() const {
   return nullptr;
 }
 
+GeographicViewInteractorZoom::GeographicViewInteractorZoom(const PluginContext *)
+    : GeographicViewInteractor(":/tulip/gui/icons/i_zoom.png",  "Zoom on rectangle") {}
+
+unsigned int GeographicViewInteractorZoom::priority() const {
+  return StandardInteractorPriority::ZoomOnRectangle;
+}
+
+void GeographicViewInteractorZoom::construct() {
+  push_back(new GeographicViewNavigator);
+  push_back(new GeographicViewBoxZoomer);
+}
+
+QWidget *GeographicViewInteractorZoom::configurationWidget() const {
+  return nullptr;
+}
+
 GeographicViewInteractorSelection::GeographicViewInteractorSelection(const PluginContext *)
     : GeographicViewInteractor(":/tulip/gui/icons/i_selection.png", "selection in view") {}
 
@@ -101,10 +117,6 @@ unsigned int GeographicViewInteractorSelectionEditor::priority() const {
 PLUGIN(GeographicViewInteractorSelectionEditor)
 
 GeographicViewNavigator::GeographicViewNavigator() : x(0), y(0), inRotation(false) {}
-
-GeographicViewNavigator::~GeographicViewNavigator() {}
-
-void GeographicViewNavigator::viewChanged(View *) {}
 
 void trans(Coord &c1, Coord &c2, float angle1, float angle2) {
   float rho1 = sqrt(c1[0] * c1[0] + c1[1] * c1[1] + c1[2] * c1[2]);
@@ -246,6 +258,41 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 }
 
 PLUGIN(GeographicViewInteractorNavigation)
+
+GeographicViewBoxZoomer::GeographicViewBoxZoomer()
+: MouseBoxZoomer(Qt::LeftButton, Qt::NoModifier,
+                 false /* no viewport update*/) {}
+
+bool GeographicViewBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
+  GeographicView *geoView = static_cast<GeographicView *>(view());
+
+  if (geoView->mapType() >= GeographicView::LeafletCustomTileLayer)
+    return false;
+
+  if (e->type() == QEvent::MouseButtonDblClick) {
+    geoView->centerView();
+    return true;
+  }
+
+  if (started) {
+    bool ok = MouseBoxZoomer::eventFilter(widget, e);
+
+    auto llMap = geoView->getGeographicViewGraphicsView()->getLeafletMapsPage();
+    QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
+
+    if (ok && !started && (e->type() == QEvent::MouseButtonRelease)
+        && graph && (qMouseEv->button() & mButton)) {
+      GlMainWidget *glw = static_cast<GlMainWidget *>(widget);
+      auto minBound = llMap->getLatLngForPixelPosOnScreen(x, glw->height() - y + h);
+      auto maxBound = llMap->getLatLngForPixelPosOnScreen(x + w, glw->height() - y);
+      llMap->zoomOnRectangle(minBound, maxBound);
+    }
+    return ok;
+  }
+  return MouseBoxZoomer::eventFilter(widget, e);
+}
+
+PLUGIN(GeographicViewInteractorZoom)
 
 GeographicViewInteractorAddEdges::GeographicViewInteractorAddEdges(const PluginContext *)
     : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_addedge.png", "Add nodes/edges",

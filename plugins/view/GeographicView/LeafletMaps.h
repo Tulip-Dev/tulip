@@ -139,6 +139,9 @@ public:
   void setMapBounds(Graph *graph,
                     const std::unordered_map<node, std::pair<double, double>> &nodesLatLngs);
 
+  void zoomOnRectangle(std::pair<double, double> &nw,
+                       std::pair<double, double> &se);
+
   void switchToMapLayer(const char *layer);
 
   void switchToCustomTileLayer(const QString &url, const QString &attrib);
