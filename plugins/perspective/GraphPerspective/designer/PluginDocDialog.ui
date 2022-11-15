@@ -22,7 +22,22 @@
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
-     <widget class="QTextEdit" name="pluginDocText"/>
+     <widget class="QTextBrowser" name="pluginDocText">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>487</width>
+        <height>477</height>
+       </rect>
+      </property>
+      <property name="textInteractionFlags">
+       <set>Qt::LinksAccessibleByMouse|Qt::TextEditable|Qt::TextEditorInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+      </property>
+      <property name="openExternalLinks">
+       <bool>true</bool>
+      </property>
+     </widget>
     </widget>
    </item>
    <item>

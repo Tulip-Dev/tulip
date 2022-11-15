@@ -42,7 +42,7 @@ public:
                     "first published as:<br/>"
                     "<b>Energy Models for Graph Clustering</b>, Andreas Noack., "
                     "Journal of Graph Algorithms and Applications 11(2):453-480, 2007, "
-                    "doi: <a href=\"https://dx.doi.org/10.7155/jgaa.00154\">10.7155/jgaa.00154</a>",
+                    "<br/>doi: <a href=\"https://dx.doi.org/10.7155/jgaa.00154\">10.7155/jgaa.00154</a>",
                     "1.0", "Force Directed")
 
   LinLogAlgorithm(const tlp::PluginContext *context);

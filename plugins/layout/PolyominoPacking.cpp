@@ -82,8 +82,8 @@ public:
       "<b>Disconnected Graph Layout and the Polyomino Packing Approach</b>, Freivalds Karlis, "
       "Dogrusoz Ugur and Kikusts Paulis, "
       "9th International Symposium on Graph Drawing 2001,"
-      "LNCS Vol. 2265 (2002), pp 378-391, doi: <a "
-      "href=\"https://doi.org/10.1007/3-540-45848-4_30\">https://doi.org/10.1007/3-540-45848-4_30</"
+      "LNCS Vol. 2265 (2002), pp 378-391,<br/>doi: <a "
+      "href=\"https://doi.org/10.1007/3-540-45848-4_30\">10.1007/3-540-45848-4_30</"
       "a>",
       "1.0", "Misc")
   PolyominoPacking(const tlp::PluginContext *context);

@@ -68,7 +68,7 @@ public:
       "that assigns a measure to each node of an 'hyperlinked' graph. It first appears in:"
       "<b>The anatomy of a large-scale hypertextual Web search engine</b>, Sergey Brin and "
       "Lawrence Page, "
-      "Computer Networks and ISDN Systems Journal, vol. 30, number 1, pp 107-117 (1998), "
+      "Computer Networks and ISDN Systems Journal, vol. 30, number 1, pp 107-117 (1998),<br/>"
       "doi: <a "
       "href=\"https://doi.org/10.1016/S0169-7552(98)00110-X\">10.1016/S0169-7552(98)00110-X</a>",
       "2.1", "Graph")

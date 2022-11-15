@@ -98,11 +98,11 @@ public:
       "Betweenness Centrality", "David Auber", "03/01/2005",
       "Computes the betweeness centrality as described for:<ul>"
       "<li>nodes in <b>A Faster Algorithm for Betweenness Centrality</b>, U. Brandes, Journal of "
-      "Mathematical Sociology volume 25, pages 163-177 (2001), doi: <a "
+      "Mathematical Sociology volume 25, pages 163-177 (2001),<br/>doi: <a "
       "href=\"https://doi.org/10.1080/0022250X.2001.9990249\">10.1080/0022250X.2001.9990249</a></"
       "li>"
       "<li>edges in <b>Finding and evaluating community structure in networks</b>, M. E. J. Newman "
-      "and M. Girvan, Physics Reviews E, volume 69 (2004), doi: <a "
+      "and M. Girvan, Physics Reviews E, volume 69 (2004),<br/>doi: <a "
       "href=\"https://doi.org/10.1103/PhysRevE.69.026113\">10.1103/PhysRevE.69.026113</a>.</li></"
       "ul>"
       "The average path length is also computed.",

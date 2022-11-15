@@ -46,7 +46,7 @@ public:
       "Strahler based graph clustering using convolution, "
       "D. Auber, M. Delest and Y. Chiricota, "
       "Proceedings of the Eighth International Conference on Information Visualisation, 2004. IV "
-      "2004, "
+      "2004,<br/>"
       "doi: <a href=\"https://doi.org/10.1109/IV.2004.1320123\">10.1109/IV.2004.1320123</a>",
       "2.1", "Clustering")
   ConvolutionClustering(tlp::PluginContext *context);

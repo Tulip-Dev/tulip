@@ -52,7 +52,7 @@ public:
                     "Implements the planar polyline graph drawing algorithm, the mixed model "
                     "algorithm, first published as:<br/>"
                     "<b>Planar Polyline Drawings with Good Angular Resolution</b>, C. Gutwenger "
-                    "and P. Mutzel, LNCS, Vol. 1547 pages 167--182 (1999), "
+                    "and P. Mutzel, LNCS, Vol. 1547 pages 167--182 (1999),<br/>"
                     "doi: <a "
                     "href=\"https://doi.org/10.1007/3-540-37623-2_13\">https://doi.org/10.1007/"
                     "3-540-37623-2_13</a>",

@@ -73,7 +73,7 @@ public:
       "OGDF implementation of the GEM-2d layout algorithm first published as:<br/>"
       " <b>A fast, adaptive layout algorithm for undirected graphs</b>, A. Frick, A. "
       "Ludwig, and H. Mehldau, Graph Drawing'94, Volume 894 of Lecture Notes in "
-      "Computer Science (1995), doi: <a "
+      "Computer Science (1995),<br/>doi: <a "
       "href=\"https://doi.org/10.1007/3-540-58950-3_393\">10.1007/3-540-58950-3_393</a>",
       "1.2", "Force Directed")
   OGDFGemFrick(const tlp::PluginContext *context);

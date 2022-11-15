@@ -64,7 +64,7 @@ public:
       "<b>Improving Walker’s Algorithm to Run in Linear Time.</b><br>"
       "Buchheim C., Jünger M., Leipert S. (2002), "
       "In: Goodrich M.T., Kobourov S.G. (eds) Graph Drawing (GD) 2002, "
-      "Lecture Notes in Computer Science, vol 2528. Springer, Berlin, Heidelberg. <a "
+      "Lecture Notes in Computer Science, vol 2528. Springer, Berlin, Heidelberg,<br/>doi: <a "
       "href=\"https://doi.org/10.1007/3-540-36151-0_32\">10.1007/3-540-36151-0_32</a>",
       "1.0", "Tree")
   ImprovedWalker(const tlp::PluginContext *context);

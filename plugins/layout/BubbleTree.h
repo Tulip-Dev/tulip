@@ -54,7 +54,7 @@ public:
       "<b>Bubble Tree Drawing Algorithm</b>, "
       "S. Grivet, D. Auber, J-P Domenger and Guy Melancon, "
       "Computer Vision and Graphics. Computational Imaging and Vision, vol 32, 2006. Springer, "
-      "Dordrecht, "
+      "Dordrecht,<br/>"
       "doi: <a href=\"https://doi.org/10.1007/1-4020-4179-9_91\">10.1007/1-4020-4179-9_91</a>",
       "1.1", "Tree")
   BubbleTree(const tlp::PluginContext *context);
