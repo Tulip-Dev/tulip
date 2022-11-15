@@ -55,7 +55,7 @@ QWidget *GeographicViewInteractorNavigation::configurationWidget() const {
 }
 
 GeographicViewInteractorZoom::GeographicViewInteractorZoom(const PluginContext *)
-    : GeographicViewInteractor(":/tulip/gui/icons/i_zoom.png",  "Zoom on rectangle") {}
+    : GeographicViewInteractor(":/tulip/gui/icons/i_zoom.png", "Zoom on rectangle") {}
 
 unsigned int GeographicViewInteractorZoom::priority() const {
   return StandardInteractorPriority::ZoomOnRectangle;
@@ -260,8 +260,7 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 PLUGIN(GeographicViewInteractorNavigation)
 
 GeographicViewBoxZoomer::GeographicViewBoxZoomer()
-: MouseBoxZoomer(Qt::LeftButton, Qt::NoModifier,
-                 false /* no viewport update*/) {}
+    : MouseBoxZoomer(Qt::LeftButton, Qt::NoModifier, false /* no viewport update*/) {}
 
 bool GeographicViewBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   GeographicView *geoView = static_cast<GeographicView *>(view());
@@ -280,8 +279,8 @@ bool GeographicViewBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
     auto llMap = geoView->getGeographicViewGraphicsView()->getLeafletMapsPage();
     QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
-    if (ok && !started && (e->type() == QEvent::MouseButtonRelease)
-        && graph && (qMouseEv->button() & mButton)) {
+    if (ok && !started && (e->type() == QEvent::MouseButtonRelease) && graph &&
+        (qMouseEv->button() & mButton)) {
       GlMainWidget *glw = static_cast<GlMainWidget *>(widget);
       auto minBound = llMap->getLatLngForPixelPosOnScreen(x, glw->height() - y + h);
       auto maxBound = llMap->getLatLngForPixelPosOnScreen(x + w, glw->height() - y);

@@ -41,8 +41,7 @@ protected:
 
 public:
   MouseBoxZoomer(Qt::MouseButton button = Qt::LeftButton,
-                 Qt::KeyboardModifier modifier = Qt::NoModifier,
-                 bool updateViewport = true);
+                 Qt::KeyboardModifier modifier = Qt::NoModifier, bool updateViewport = true);
   ~MouseBoxZoomer() override;
   bool draw(GlMainWidget *) override;
   bool eventFilter(QObject *, QEvent *) override;

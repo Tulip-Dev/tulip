@@ -264,8 +264,7 @@ pair<double, double> LeafletMaps::getCurrentMapCenter() {
   return latLng;
 }
 
-void LeafletMaps::zoomOnRectangle(std::pair<double, double> &sw,
-                                  std::pair<double, double> &ne) {
+void LeafletMaps::zoomOnRectangle(std::pair<double, double> &sw, std::pair<double, double> &ne) {
   QString code("zoomOnRectangle(L.latLng(%1, %2), L.latLng(%3, %4));");
   executeJavascript(code.arg(sw.first).arg(sw.second).arg(ne.first).arg(ne.second));
 }
