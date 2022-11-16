@@ -109,6 +109,11 @@ TARGET_LINK_LIBRARIES(PolyominoPacking-${TulipVersion} ${LayoutUtilsLibraryName}
 TULIP_INSTALL_PLUGIN(PolyominoPacking-${TulipVersion} ${TulipPluginsInstallDir})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+ADD_LIBRARY(EdgeSeparation-${TulipVersion} SHARED EdgeSeparation.cpp)
+TARGET_LINK_LIBRARIES(EdgeSeparation-${TulipVersion} ${LibTulipCoreName})
+TULIP_INSTALL_PLUGIN(EdgeSeparation-${TulipVersion} ${TulipPluginsInstallDir})
+
+##----------------------------------------------------------------------------------------------------------------------------
 TULIP_INSTALL_PLUGIN(MixedModel-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(ConnectedComponentPacking-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(Random-${TulipVersion} ${TulipPluginsInstallDir})
