@@ -32,8 +32,7 @@ namespace tlp {
 class GeographicViewInteractor : public NodeLinkDiagramComponentInteractor {
 
 public:
-  GeographicViewInteractor(const QString &iconPath, const QString &text,
-                           unsigned int priority = 0);
+  GeographicViewInteractor(const QString &iconPath, const QString &text, unsigned int priority = 0);
 
   bool isCompatible(const std::string &viewName) const override;
 };
@@ -52,7 +51,6 @@ public:
   bool compute(GlMainWidget *) {
     return false;
   }
-
 
 protected:
   int x, y;

@@ -32,27 +32,28 @@
 using namespace std;
 using namespace tlp;
 
-GeographicViewInteractor::GeographicViewInteractor(const QString &iconPath, const QString &text, unsigned int priority)
-  : NodeLinkDiagramComponentInteractor(iconPath, text, priority) {}
+GeographicViewInteractor::GeographicViewInteractor(const QString &iconPath, const QString &text,
+                                                   unsigned int priority)
+    : NodeLinkDiagramComponentInteractor(iconPath, text, priority) {}
 
 bool GeographicViewInteractor::isCompatible(const std::string &viewName) const {
   return (viewName == ViewName::GeographicViewName);
 }
 
 GeographicViewInteractorNavigation::GeographicViewInteractorNavigation(const PluginContext *)
-  : GeographicViewInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view", StandardInteractorPriority::Navigation) {}
+    : GeographicViewInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view",
+                               StandardInteractorPriority::Navigation) {}
 
 void GeographicViewInteractorNavigation::construct() {
-  setConfigurationWidgetText(
-      QString("<h3>Navigate on the map</h3>") +
-      "Translation: <b>Mouse left</b> down + moves<br/>" +
-      "Zoom/Unzoom: <b>Mouse wheel</b> up/down "
-  );
+  setConfigurationWidgetText(QString("<h3>Navigate on the map</h3>") +
+                             "Translation: <b>Mouse left</b> down + moves<br/>" +
+                             "Zoom/Unzoom: <b>Mouse wheel</b> up/down ");
   push_back(new GeographicViewNavigator);
 }
 
 GeographicViewInteractorZoom::GeographicViewInteractorZoom(const PluginContext *)
-  : GeographicViewInteractor(":/tulip/gui/icons/i_zoom.png", "Zoom on rectangle", StandardInteractorPriority::ZoomOnRectangle) {}
+    : GeographicViewInteractor(":/tulip/gui/icons/i_zoom.png", "Zoom on rectangle",
+                               StandardInteractorPriority::ZoomOnRectangle) {}
 
 void GeographicViewInteractorZoom::construct() {
   setConfigurationWidgetText(
@@ -60,30 +61,29 @@ void GeographicViewInteractorZoom::construct() {
       "<b>Mouse left</b> down indicates "
       "the first corner.<br/> <b>Mouse left</b> up indicates the opposite "
       "corner.<br/> <b>Mouse left Doucle click</b> to center the view.<br/><br/>" +
-      "Zoom/Unzoom: <b>Mouse wheel</b> down/up"
-  );
+      "Zoom/Unzoom: <b>Mouse wheel</b> down/up");
   push_back(new GeographicViewNavigator);
   push_back(new GeographicViewBoxZoomer);
 }
 
 GeographicViewInteractorSelection::GeographicViewInteractorSelection(const PluginContext *)
-    : GeographicViewInteractor(":/tulip/gui/icons/i_selection.png", "selection in view", StandardInteractorPriority::RectangleSelection) {}
+    : GeographicViewInteractor(":/tulip/gui/icons/i_selection.png", "selection in view",
+                               StandardInteractorPriority::RectangleSelection) {}
 
 void GeographicViewInteractorSelection::construct() {
-   setConfigurationWidgetText(
-       QString("<h3>Selection nodes/edges in a rectangle</h3>") +
-       "<u>Draw selection rectangle</u><br/><b>Mouse left</b> down indicates the first corner, "
-       "<b>Mouse "
-       "left</b> up indicates the opposite corner,<br/>all graph elements instersecting the "
-       "rectangle are selected<br/><br/>" +
+  setConfigurationWidgetText(
+      QString("<h3>Selection nodes/edges in a rectangle</h3>") +
+      "<u>Draw selection rectangle</u><br/><b>Mouse left</b> down indicates the first corner, "
+      "<b>Mouse "
+      "left</b> up indicates the opposite corner,<br/>all graph elements instersecting the "
+      "rectangle are selected<br/><br/>" +
 #if !defined(__APPLE__)
-       "Add to selection: <ul><li><b>Ctrl + Mouse left</b> down, drag and up</li></ul>" +
+      "Add to selection: <ul><li><b>Ctrl + Mouse left</b> down, drag and up</li></ul>" +
 #else
-       "Add to selection: <ul><li><b>Alt + Mouse left</b> down, drag and up</li></ul>" +
+      "Add to selection: <ul><li><b>Alt + Mouse left</b> down, drag and up</li></ul>" +
 #endif
-       "Remove from selection: <ul><li><b>Shift + Mouse left</b> down, drag and up</li></ul><br/><br/>" +
-       "Zoom/Unzoom: <b>Mouse wheel</b> down/up"
-  );
+      "Remove from selection: <ul><li><b>Shift + Mouse left</b> down, drag and up</li></ul><br/><br/>" +
+      "Zoom/Unzoom: <b>Mouse wheel</b> down/up");
   push_back(new GeographicViewNavigator);
   push_back(new MouseSelector);
 }
@@ -96,7 +96,8 @@ PLUGIN(GeographicViewInteractorSelection)
 
 GeographicViewInteractorSelectionEditor::GeographicViewInteractorSelectionEditor(
     const PluginContext *)
-: GeographicViewInteractor(":/tulip/gui/icons/i_move.png", "selection edition in view", StandardInteractorPriority::RectangleSelectionModifier) {}
+    : GeographicViewInteractor(":/tulip/gui/icons/i_move.png", "selection edition in view",
+                               StandardInteractorPriority::RectangleSelectionModifier) {}
 
 void GeographicViewInteractorSelectionEditor::construct() {
   setConfigurationWidgetText(
@@ -117,8 +118,7 @@ void GeographicViewInteractorSelectionEditor::construct() {
       "right zone</li></ul>" +
       "Align left/right/top/bottom: <ul><li><b>Mouse left</b> click on simple arrow icon in top "
       "right zone</li></ul><br/><br/>" +
-      "Zoom/Unzoom: <b>Mouse wheel</b> up/down"
-  );
+      "Zoom/Unzoom: <b>Mouse wheel</b> up/down");
   push_back(new GeographicViewNavigator);
   push_back(new MouseSelector);
   push_back(new MouseSelectionEditor);
@@ -308,8 +308,7 @@ bool GeographicViewBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 PLUGIN(GeographicViewInteractorZoom)
 
 GeographicViewInteractorAddEdges::GeographicViewInteractorAddEdges(const PluginContext *)
-    : GeographicViewInteractor(":/tulip/gui/icons/i_addedge.png",
-                               "Add nodes/edges",
+    : GeographicViewInteractor(":/tulip/gui/icons/i_addedge.png", "Add nodes/edges",
                                StandardInteractorPriority::AddNodesOrEdges) {}
 
 void GeographicViewInteractorAddEdges::construct() {
@@ -348,8 +347,7 @@ void GeographicViewInteractorEditEdgeBends::construct() {
 #else
       "Delete bend: <ul><li><b>Alt + Mouse left click</b> on a selected bend</li></ul>"
 #endif
-      + "<br/><br/>Zoom/Unzoom: <b>Mouse wheel</b> down/up"
-    );
+      + "<br/><br/>Zoom/Unzoom: <b>Mouse wheel</b> down/up");
   push_back(new GeographicViewNavigator);
   push_back(new MouseSelector);
   push_back(new MouseEdgeBendEditor);
