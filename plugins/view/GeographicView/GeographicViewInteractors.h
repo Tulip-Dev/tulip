@@ -29,10 +29,11 @@
 
 namespace tlp {
 
-class GeographicViewInteractor : public GLInteractorComposite {
+class GeographicViewInteractor : public NodeLinkDiagramComponentInteractor {
 
 public:
-  GeographicViewInteractor(const QString &iconPath, const QString &text);
+  GeographicViewInteractor(const QString &iconPath, const QString &text,
+                           unsigned int priority = 0);
 
   bool isCompatible(const std::string &viewName) const override;
 };
@@ -51,7 +52,7 @@ public:
   bool compute(GlMainWidget *) {
     return false;
   }
-  void viewChanged(View *) {}
+
 
 protected:
   int x, y;
@@ -65,7 +66,6 @@ public:
   ~GeographicViewBoxZoomer() {}
 
   bool eventFilter(QObject *, QEvent *) override;
-  void viewChanged(View *) {}
 };
 
 class GeographicViewInteractorNavigation : public GeographicViewInteractor {
@@ -77,9 +77,6 @@ public:
   GeographicViewInteractorNavigation(const PluginContext *);
 
   void construct() override;
-
-  QWidget *configurationWidget() const override;
-  unsigned int priority() const override;
 };
 
 class GeographicViewInteractorZoom : public GeographicViewInteractor {
@@ -91,9 +88,6 @@ public:
   GeographicViewInteractorZoom(const PluginContext *);
 
   void construct() override;
-
-  QWidget *configurationWidget() const override;
-  unsigned int priority() const override;
 };
 
 class GeographicViewInteractorSelection : public GeographicViewInteractor {
@@ -106,11 +100,7 @@ public:
 
   void construct() override;
 
-  QWidget *configurationWidget() const override;
-
   QCursor cursor() const override;
-
-  unsigned int priority() const override;
 };
 
 class GeographicViewInteractorSelectionEditor : public GeographicViewInteractor {
@@ -123,14 +113,10 @@ public:
 
   void construct() override;
 
-  QWidget *configurationWidget() const override;
-
   QCursor cursor() const override;
-
-  unsigned int priority() const override;
 };
 
-class GeographicViewInteractorAddEdges : public NodeLinkDiagramComponentInteractor {
+class GeographicViewInteractorAddEdges : public GeographicViewInteractor {
 
 public:
   PLUGININFORMATION("InteractorAddEdgesGeographicView", "Tulip Team", "02/06/2017",
@@ -141,11 +127,9 @@ public:
   void construct() override;
 
   QCursor cursor() const override;
-
-  bool isCompatible(const std::string &viewName) const override;
 };
 
-class GeographicViewInteractorEditEdgeBends : public NodeLinkDiagramComponentInteractor {
+class GeographicViewInteractorEditEdgeBends : public GeographicViewInteractor {
 
 public:
   PLUGININFORMATION("InteractorEditEdgeBendsGeographicView", "Tulip Team", "02/06/2017",
@@ -154,8 +138,6 @@ public:
   GeographicViewInteractorEditEdgeBends(const PluginContext *);
 
   void construct() override;
-
-  bool isCompatible(const std::string &viewName) const override;
 };
 } // namespace tlp
 
