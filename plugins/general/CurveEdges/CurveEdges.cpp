@@ -32,9 +32,6 @@
 //
 // Code was ported from Javascript to C++.
 
-#ifndef CURVEEDGES_H
-#define CURVEEDGES_H
-
 #include <tulip/Algorithm.h>
 #include <tulip/StringCollection.h>
 #include <tulip/LayoutProperty.h>
@@ -340,5 +337,3 @@ private:
 };
 
 PLUGIN(CurveEdges)
-
-#endif // CURVEEDGES_H
