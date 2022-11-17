@@ -205,6 +205,17 @@ bool GlGraphInputData::installProperties(
 }
 
 void GlGraphInputData::treatEvent(const Event &ev) {
+  Graph *g = static_cast<Graph *>(ev.sender());
+
+  if (ev.type() == Event::TLP_DELETE && g == graph) {
+    // avoid possible crash if graph is deleted before this
+    // so ensure invisible properties are removed and deleted
+    // before destructor call
+    for (auto prop : _invisibleProperties)
+      delete prop;
+    _invisibleProperties.clear();
+  }
+
   if (dynamic_cast<const GraphEvent *>(&ev) != nullptr) {
     const GraphEvent *graphEv = static_cast<const GraphEvent *>(&ev);
 
