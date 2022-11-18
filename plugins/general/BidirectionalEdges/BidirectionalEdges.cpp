@@ -26,26 +26,27 @@ using namespace std;
 
 static const char *paramHelp[] = {
     // weight
-    "The property used to compute the lenght ratio.",
+    "The property used to compute the length ratio.",
     // pairs
-    "Number of bidirectional edges found."};
+    "The number of bidirectional edges found."};
 
 class BidirectionalEdges : public tlp::Algorithm {
 
 public:
   PLUGININFORMATION(
       "Bidirectional Edges", "Bruno Pinaud", "16/11/2022",
-      "When there are two weighted edges between two nodes (on in each direction), called bidirectional edges, by default Tulip draw them one on top of the other. "
+      "When there are two weighted inverse edges between two nodes (one in each direction), called bidirectional edges, by default Tulip draw them one on top of the other. "
       "This plugin allows to compute and display only a ratio of their length based on the edge weight to enhance the visualization. "
       "The ratio of the length to display is computed by divided the weight of one edge by the sum of the weights of both edges. "
-      "The ratio of the second edge is simply computed by 1 minus the ratio of the first edge. "
+      "The ratio of the second edge is simply computed by 1 minus the ratio of the first edge.<br/>"
+      "<b>Warning</b>: the computation will failed if the ratios are not into [0, 1].<br/><br/>"
       "Do not forget to display edges extremities. They will be displayed at a distance proportional to the computed length ratio. "
-      "This plugin works only for edges without bends and when there are only two edges between a pair of nodes.",
+      "This plugin works only for edges without bends and when there are only two inverse edges between a pair of nodes.",
       "1.0", "")
 
   BidirectionalEdges(tlp::PluginContext *context) : tlp::Algorithm(context) {
-    addInParameter<tlp::DoubleProperty>("weight", paramHelp[0], "viewMetric");
-    addOutParameter<int>("number of pairs of bidirectional edges found", paramHelp[1], "0");
+    addInParameter<NumericProperty *>("edge weight", paramHelp[0], "viewMetric");
+    addOutParameter<int>("#bidirectional edges", paramHelp[1], "0");
   }
 
   bool check(string &err) override {
@@ -62,17 +63,18 @@ public:
 
   bool run() override {
 
-    DoubleProperty *weight = graph->getProperty<DoubleProperty>("viewMetric");
+    NumericProperty *weight = graph->getProperty<DoubleProperty>("viewMetric");
 
     if (dataSet != nullptr) {
-      dataSet->get("weight", weight);
+      dataSet->get("edge weight", weight);
     }
 
     DoubleProperty *ratio = graph->getProperty<DoubleProperty>("viewLengthRatio");
+    ratio->setAllEdgeValue(1);
 
     pluginProgress->showPreview(false);
     // compute ratio based on the given weight
-    int step = 0, max_step = multipleEdges.size(), idx = 0;
+    int step = 0, max_step = multipleEdges.size(), nb = 0;
 
     for (edge e : multipleEdges) {
       if ((++step % 100) == 0) {
@@ -82,19 +84,30 @@ public:
           return state != TLP_CANCEL;
       }
       auto ends = graph->ends(e);
-      // do the work only if there are two edges between the pair of nodes
+      // do the work only if there are exactly
+      // two inverse edges between the pair of nodes
       if (graph->getEdges(ends.first, ends.second, false).size() == 2) {
-        edge s_to_t_edge(graph->existEdge(ends.first, ends.second, true));
-        edge t_to_s_edge(graph->existEdge(ends.second, ends.first, true));
-        double r = weight->getEdgeValue(s_to_t_edge) /
-                   (weight->getEdgeValue(s_to_t_edge) + weight->getEdgeValue(t_to_s_edge));
-        ratio->setEdgeValue(s_to_t_edge, r);
-        ratio->setEdgeValue(t_to_s_edge, 1 - r);
-        idx++;
+        edge e_inv(graph->existEdge(ends.second, ends.first, true));
+        if (e_inv.isValid() == false)
+          continue;
+        double e_w = weight->getEdgeDoubleValue(e);
+        double r = e_w + weight->getEdgeDoubleValue(e_inv);
+        r = (r == 0) ? -1 : e_w/r;
+        // check if r is really a ratio
+        if (r < 0 || r > 1) {
+          std::ostringstream ess;
+          ess << "Error:\nRatios computed for #" << e.id << " and #" << e_inv.id << " do not belong to [0, 1].";
+          pluginProgress->setError(ess.str());
+          return false;
+        }
+
+        ratio->setEdgeValue(e, r);
+        ratio->setEdgeValue(e_inv, 1 - r);
+        ++nb;
       }
     }
 
-    dataSet->set("number of pairs of bidirectional edges found", idx);
+    dataSet->set("#bidirectional edges", nb);
     return true;
   }
 
