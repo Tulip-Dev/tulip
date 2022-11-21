@@ -123,8 +123,8 @@ public:
             std::vector<Coord> newEdge;
 
             // we add control points, or waypoints to the edge at 1/4 of its length, and another one
-            // at 3/4 (so we will see more clearly than if we used only one control point) also, this
-            // is way prettier when using bezier curves :)
+            // at 3/4 (so we will see more clearly than if we used only one control point) also,
+            // this is way prettier when using bezier curves :)
             Coord quarterControlPoint(currentNodecoord +
                                       (oppositeNodecoord - currentNodecoord) / 4.0f + normal * x);
             Coord threeQuartersControlPoint(currentNodecoord +
