@@ -660,9 +660,9 @@ NEW-WINDOW:640,406:58720748,58720748,701,640,406,0:640x406+500+71:0,0:OrthoTree
 7,6,1612,926,0,0,0,84631003,9,'VirtualBox mouse integration'
 7,6,1615,926,0,0,0,84631014,9,'VirtualBox mouse integration'
 7,6,1618,927,0,0,0,84631019,9,'VirtualBox mouse integration'
-7,6,1621,927,0,0,0,84631027,9,'VirtualBox mouse integration'
-7,6,1622,927,0,0,0,84631035,9,'VirtualBox mouse integration'
-7,6,1624,928,0,0,0,84631043,9,'VirtualBox mouse integration'
+7,6,1631,927,0,0,0,84631027,9,'VirtualBox mouse integration'
+7,6,1632,927,0,0,0,84631035,9,'VirtualBox mouse integration'
+7,6,1634,928,0,0,0,84631043,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,84631495,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,84631495,2,Virtual core pointer
 7,5,0,0,1,0,0,84631648,12,ImExPS/2 Generic Explorer Mouse
