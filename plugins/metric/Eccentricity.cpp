@@ -125,6 +125,8 @@ bool EccentricityMetric::run() {
   NodeStaticProperty<double> res(graph);
   unsigned int nbNodes = graph->numberOfNodes();
   bool needDiameter = (!allPaths && norm) || (diameter == 1);
+  // reset diameter before computation
+  diameter = -1;
 
   std::atomic<bool> stopfor(false);
   if (needDiameter) {
