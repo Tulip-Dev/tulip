@@ -12,19 +12,22 @@ static const char *paramHelp[] = {
     // gap
     "The gap between multiple edges.",
     // size
-    "The property hodling the size of nodes."};
+    "The property holding the size of edges."};
 
 class EdgeSeparation : public tlp::LayoutAlgorithm {
+  vector<edge> multipleEdges;
+
 public:
   PLUGININFORMATION(
-      "Edge Separation", "Tulip dev team", "16/11/2022",
-      "This plugin separates multiple edges between two nodes. By default, Tulip draw them one on top of the others. "
-      " This plugin separates edges by adding bends.",
+      "Multiple Edges Separation", "Tulip dev team", "16/11/2022",
+      "This plugin separates multiple edges existing between each pair of "
+      "nodes. Since, by default, multiple edges are drawn one on top of "
+      "the other, this plugin separates their drawing by adding bends.",
       "1.0", "");
 
   EdgeSeparation(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
     addInParameter<double>("gap", paramHelp[0], "0.5");
-    addInParameter<SizeProperty>("Size", paramHelp[1], "viewSize");
+    addInParameter<SizeProperty>("edge size", paramHelp[1], "viewSize");
 
     // result needs to be an inout parameter
     // in order to preserve the original values of non targeted elements
@@ -32,8 +35,11 @@ public:
   }
 
   bool check(string &err) override {
-    if (!SimpleTest::hasParallelEdges(graph, false)) {
-      err = "The graph has no multiple edges between any pair of nodes. Nothing to do.";
+    // get multiples edges
+    SimpleTest::simpleTest(graph, &multipleEdges, nullptr, false);
+
+    if (multipleEdges.empty()) {
+      err = "The graph has no multiple edges between any pair of nodes.\nNothing to do.";
       return false;
     }
 
@@ -46,115 +52,82 @@ public:
     pluginProgress->showPreview(false);
     if (dataSet != nullptr) {
       dataSet->get("gap", gap);
-      dataSet->get("Size", size);
+      dataSet->get("edge size", size);
     }
 
-    result->setAllEdgeValue(vector<Coord>());
-    NodeStaticProperty<bool> treatedNodes(graph);
-    treatedNodes.setAll(false);
+    int nbMultiples = multipleEdges.size();
+    for (int i = 0; i < nbMultiples; ++i) {
+      edge curMe = multipleEdges[i];
+      // curMe can be invalid, if i is the offset
+      // of an edge already treated.
+      // cf the end of the loop
+      if (curMe.isValid() == false)
+        continue;
+      auto ends = graph->ends(curMe);
+      // do nothing if curMe is a loop
+      if ((ends.first == ends.second))
+        continue;
+      // we get the coordinates of the current node and its opposite
+      Coord sCoord = result->getNodeValue(ends.first);
+      Coord tCoord = result->getNodeValue(ends.second);
+      // we normalize this vector, so we will be able to use the scalar product
+      // to determine the ways the edges will go
+      Coord vect = sCoord - tCoord;
+      vect /= vect.norm();
+      Coord normal(-vect.getY(), vect.getX(), vect.getZ());
 
-    // Iterate over all nodes
-    for (const auto currentNode : graph->nodes()) {
-      int step = 0, max_step = graph->numberOfNodes();
+      // initialize how far from the original edge the edges will go
+      const tlp::Size &s = size->getEdgeValue(curMe);
+      float distance = s.getW() + gap;
+      float xPlus = distance;
+      float xMinus = -distance;
 
-      // if this node has not been treated before we proceed
-      if (treatedNodes[currentNode] == false) {
+      auto edges = graph->getEdges(ends.first, ends.second, false);
+      // for each edge linking these two ends nodes, we separate the edges
+      for (auto e : edges) {
+        bool isInEdge = graph->target(e) == ends.first;
+        // if this edge is an in edge, it will go "up"
+        // else it will go "down" of the current edge.
+        float x = isInEdge ? xPlus : xMinus;
+        std::vector<Coord> bends(2);
 
-        if ((++step % 100) == 0) {
-          ProgressState state = pluginProgress->progress(step, max_step);
+        // we add control points, or waypoints to the edge at 1/4 of its length
+        // and another one at 3/4 (so we will see more clearly then
+        // if we used only one control point) this is prettier when
+        // using bezier curves
+        Coord cp1_4(sCoord + (tCoord - sCoord) / 4.0f + normal * x);
+        Coord cp3_4(sCoord + (tCoord - sCoord) * 3.0f / 4.0f + normal * x);
 
-          if (state != TLP_CONTINUE)
-            return state != TLP_CANCEL;
+        // depending which kind of edge we encountered, we increment the distance the next edge
+        // will be from the original edge.
+        if (isInEdge)
+          xPlus += 0.5;
+        else
+          xMinus -= 0.5;
+
+        // we add the control points in the right order
+        // so that we don't get an edge going to
+        // the 3/4 waypoint, then the 1/4 waypoint, then to the opposite node.
+        if (isInEdge) {
+          bends[0] = cp3_4;
+          bends[1] = cp1_4;
+        } else {
+          bends[0] = cp1_4;
+          bends[1] = cp3_4;
         }
-        // mark this node as treated
-        treatedNodes[currentNode] = true;
-
-        // this will hold the subset of edges connected to a node we are interested in.
-        // as key we have the nodes that are linked to the current node by at least one edge
-        // as value we have the set of edges linking the current node and the key node
-        map<node, set<edge>> nodesEdges;
-
-        // we iterate over all the edges of this node
-        for (auto currentEdge : graph->getInOutEdges(currentNode)) {
-          // we get the node at the other end of the current edge
-          const node opposite = graph->opposite(currentEdge, currentNode);
-          if (treatedNodes[opposite] == true) {
-            break;
-          }
-
-          // check whether a set has already been inserted, if not insert it.
-          if (nodesEdges.find(opposite) == nodesEdges.end()) {
-            std::set<edge> temp;
-            nodesEdges.insert(pair<node, std::set<edge>>(opposite, temp));
-          }
-          // add this edge to the list of edges linked to this node
-          nodesEdges.at(opposite).insert(currentEdge);
-        }
-
-        // now we look at each of these edges
-        for (const auto &mapIterator : nodesEdges) {
-          // we get the coordinates of the current node and its opposite
-          Coord currentNodecoord = result->getNodeValue(currentNode);
-          Coord oppositeNodecoord = result->getNodeValue(mapIterator.first);
-
-          // we normalize this vector, so we will be able to use the scalar product to determine the
-          // ways the edges will go
-          Coord vector = currentNodecoord - oppositeNodecoord;
-          vector /= vector.norm();
-          Coord normal(-vector.getY(), vector.getX(), vector.getY());
-
-          // initialize how far from the original edge the edges will go
-          const tlp::Size &s = size->getEdgeValue(*mapIterator.second.begin());
-
-          float distance = s.getW() + gap;
-          float xPlus = distance;
-          float xMinus = -distance;
-
-          // do nothing for one edge
-          if (mapIterator.second.size() == 1)
-            continue;
-          // for each edge linking these two nodes (the current node and the current key of the
-          // nodesEdges map), we separate the edges
-          for (const auto &processingEdge : mapIterator.second) {
-            bool isInEdge = graph->target(processingEdge) == mapIterator.first;
-            // if this edge is an in edge, it will go "up", else it will go "down" of the current
-            // edge.
-            float x = isInEdge ? xPlus : xMinus;
-            std::vector<Coord> newEdge;
-
-            // we add control points, or waypoints to the edge at 1/4 of its length, and another one
-            // at 3/4 (so we will see more clearly than if we used only one control point) also,
-            // this is way prettier when using bezier curves :)
-            Coord quarterControlPoint(currentNodecoord +
-                                      (oppositeNodecoord - currentNodecoord) / 4.0f + normal * x);
-            Coord threeQuartersControlPoint(currentNodecoord +
-                                            (oppositeNodecoord - currentNodecoord) * 3.0f / 4.0f +
-                                            normal * x);
-
-            // depending which kind of edge we encountered, we increment the distance the next edge
-            // will be from the original edge.
-            if (isInEdge)
-              xPlus += 0.5;
-            else
-              xMinus -= 0.5;
-
-            // we add the control points in the right order, so that we don't get an adge going to
-            // the 3/4 waypoint, then the 1/4 waypoint, then to the opposite node.
-            if (currentNode == graph->source(processingEdge)) {
-              newEdge.push_back(quarterControlPoint);
-              newEdge.push_back(threeQuartersControlPoint);
-            } else {
-              newEdge.push_back(threeQuartersControlPoint);
-              newEdge.push_back(quarterControlPoint);
+        // now we can finally set the value on the edge
+        result->setEdgeValue(e, bends);
+        if (e != curMe) {
+          // as e can be found in multipleEdges
+          // replace it by an invalid edge
+          for (int j = i + 1; j < nbMultiples; ++j)
+            if (e == multipleEdges[j]) {
+              multipleEdges[j] = edge();
+              break;
             }
-
-            // now we can finally set the value on the edge.
-            result->setEdgeValue(processingEdge, newEdge);
-          }
         }
       }
     }
-
     return true;
   }
 };
