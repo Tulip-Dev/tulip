@@ -18,12 +18,11 @@ class EdgeSeparation : public tlp::LayoutAlgorithm {
   vector<edge> multipleEdges;
 
 public:
-  PLUGININFORMATION(
-      "Multiple Edges Separation", "Tulip dev team", "16/11/2022",
-      "This plugin separates multiple edges existing between each pair of "
-      "nodes. Since, by default, multiple edges are drawn one on top of "
-      "the other, this plugin separates their drawing by adding bends.",
-      "1.0", "");
+  PLUGININFORMATION("Multiple Edges Separation", "Tulip dev team", "16/11/2022",
+                    "This plugin separates multiple edges existing between each pair of "
+                    "nodes. Since, by default, multiple edges are drawn one on top of "
+                    "the other, this plugin separates their drawing by adding bends.",
+                    "1.0", "");
 
   EdgeSeparation(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
     addInParameter<double>("gap", paramHelp[0], "0.5");
