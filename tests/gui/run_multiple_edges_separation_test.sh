@@ -1,0 +1,1 @@
+sh tulip_run_test.sh multiple_edges_separation multiple_edges.tlp
