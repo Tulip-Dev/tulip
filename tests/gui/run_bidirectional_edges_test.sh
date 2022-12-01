@@ -1,0 +1,1 @@
+sh tulip_run_test.sh bidirectional_edges inverse_edges.tlp
