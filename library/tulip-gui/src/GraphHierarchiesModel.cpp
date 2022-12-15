@@ -654,9 +654,8 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 
   if (e.type() == Event::TLP_DELETE && _graphs.contains(g)) { // A root graph has been deleted
     int pos = _graphs.indexOf(g);
+    _graphs.removeAt(pos);
     beginRemoveRows(QModelIndex(), pos, pos);
-
-    _graphs.removeAll(g);
     GraphNeedsSavingObserver *s = _saveNeeded.take(g);
     delete s;
 
@@ -668,7 +667,6 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 
       emit currentGraphChanged(_currentGraph);
     }
-
     endRemoveRows();
   } else if (e.type() == Event::TLP_MODIFICATION) {
     const GraphEvent *ge = dynamic_cast<const tlp::GraphEvent *>(&e);
