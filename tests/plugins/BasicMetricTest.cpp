@@ -62,7 +62,8 @@ void BasicMetricTest::testArityMetric() {
 void BasicMetricTest::testNeighborhood() {
   DataSet ds;
   ds.set("directed", true);
-  bool result = computeProperty<DoubleProperty>("Neighborhood", "Complete General Graph",nullptr,ds);
+  bool result =
+      computeProperty<DoubleProperty>("Neighborhood", "Complete General Graph", nullptr, ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================

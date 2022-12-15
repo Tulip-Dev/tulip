@@ -416,12 +416,13 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
       return true;
     } else if (qMouseEv->modifiers() ==
 #if defined(__APPLE__)
-               Qt::AltModifier || qMouseEv->modifiers() == Qt::ControlModifier
+                   Qt::AltModifier ||
+               qMouseEv->modifiers() == Qt::ControlModifier
 #else
-          Qt::ControlModifier
+               Qt::ControlModifier
 #endif
 
-               ) {
+    ) {
       if (!graphHierarchy.empty() && nldc) {
         Graph *oldGraph = graphHierarchy.back();
         graphHierarchy.pop_back();

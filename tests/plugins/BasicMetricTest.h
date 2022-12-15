@@ -51,7 +51,7 @@ private:
   tlp::Graph *graph;
   template <typename PropType>
   bool computeProperty(const std::string &algorithm, const std::string &graphType = "Planar Graph",
-                       PropType *prop = nullptr, tlp::DataSet ds=tlp::DataSet());
+                       PropType *prop = nullptr, tlp::DataSet ds = tlp::DataSet());
 
 public:
   void setUp() override;

@@ -103,7 +103,7 @@ public:
 #else
         "<li><b>⌥ or ⌘ + double Mouse left click</b> go outside the metanode</li></ul>"
 #endif
-      );
+    );
     push_back(new MouseNKeysNavigator);
     push_back(_elementInfo = new MouseShowElementInfo);
     // build configuration widget

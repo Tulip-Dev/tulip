@@ -78,8 +78,7 @@ public:
         "<u>Navigation in the graph</u><br/><br/>" +
         "Translation (if no selection): <ul><li><b>Arrow</b> keys</li></ul>" +
         "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>Pg up/Pg "
-        "down</b> keys</li></ul>"
-    );
+        "down</b> keys</li></ul>");
     push_back(new MouseNKeysNavigator(false));
     push_back(new MouseSelector);
     push_back(new MouseSelectionEditor);

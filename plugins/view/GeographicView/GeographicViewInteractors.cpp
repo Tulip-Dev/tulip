@@ -105,18 +105,18 @@ void GeographicViewInteractorSelectionEditor::construct() {
       "Resize: <ul><li><b>Mouse left</b> down on triangle + moves</li></ul>" +
       "<ul><li><b>Mouse left</b> down on square + moves</li></ul>" +
 #if !defined(__APPLE__)
-        "Only change node size: <ul><li><b>Ctrl + Mouse left</b> down on triangle + "
+      "Only change node size: <ul><li><b>Ctrl + Mouse left</b> down on triangle + "
 #else
-        "Only change node size: <ul><li><b>⌥ + Mouse left</b> down on triangle + "
+      "Only change node size: <ul><li><b>⌥ + Mouse left</b> down on triangle + "
 #endif
       "moves</li></ul>" +
       "Only change selection size: <ul><li><b>Shift + Mouse left</b> down on triangle + "
       "moves</li></ul>" +
       "Rotate: <ul><li><b>Mouse left</b> down on circle + moves</li></ul>" +
 #if !defined(__APPLE__)
-        "Only rotate nodes: <ul><li><b>Ctrl + Mouse left</b> down on circle + moves</li></ul>" +
+      "Only rotate nodes: <ul><li><b>Ctrl + Mouse left</b> down on circle + moves</li></ul>" +
 #else
-        "Only rotate nodes: <ul><li><b>⌥ + Mouse left</b> down on circle + moves</li></ul>" +
+      "Only rotate nodes: <ul><li><b>⌥ + Mouse left</b> down on circle + moves</li></ul>" +
 #endif
       "Only rotate selection: <ul><li><b>Shift + Mouse left</b> down on circle + "
       "moves</li></ul>" +

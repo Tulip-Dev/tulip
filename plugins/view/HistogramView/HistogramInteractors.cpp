@@ -63,7 +63,8 @@ void HistogramInteractorNavigation::construct() {
       "<p>Otherwise, this interactor offers the same functionnalities as the one in the \"Node "
       "Link Diagram view\". The commands are described below:</p>" +
 #if !defined(__APPLE__)
-      "<b>Ctrl + Mouse up/down</b>: zoom/unzoom<br>" + "<b>Ctrl + Mouse left/right</b>: z rotation<br>" +
+      "<b>Ctrl + Mouse up/down</b>: zoom/unzoom<br>" +
+      "<b>Ctrl + Mouse left/right</b>: z rotation<br>" +
 #else
       "<b>⌥ + Mouse up/down</b>: zoom/unzoom<br>" + "<b>⌥ + Mouse left/right</b>: z rotation<br>" +
 #endif
