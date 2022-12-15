@@ -274,7 +274,7 @@ Graph *GraphAbstract::getDescendantGraph(const string &name) const {
 //=========================================================================
 node GraphAbstract::getOneNode() const {
   const std::vector<node> &vNodes = nodes();
-  return (vNodes.size() > 0) ? vNodes[0] : node();
+  return (!vNodes.empty()) ? vNodes[0] : node();
 }
 //=========================================================================
 node GraphAbstract::getRandomNode() const {
@@ -288,7 +288,7 @@ node GraphAbstract::getRandomNode() const {
 //=========================================================================
 edge GraphAbstract::getOneEdge() const {
   const std::vector<edge> &vEdges = edges();
-  return (vEdges.size() > 0) ? vEdges[0] : edge();
+  return (!vEdges.empty()) ? vEdges[0] : edge();
 }
 //=========================================================================
 edge GraphAbstract::getRandomEdge() const {

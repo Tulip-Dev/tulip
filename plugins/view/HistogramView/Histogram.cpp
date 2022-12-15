@@ -262,10 +262,10 @@ void Histogram::computeHistogram() {
     uniformQuantificationAxisLabels.clear();
 
     for (unsigned int i = 0; i < nbHistogramBins; ++i) {
-      if (histogramBins[i].size() > 0) {
+      if (!histogramBins[i].empty()) {
         uniformQuantificationAxisLabels.push_back(getStringFromNumber(binMinMaxMap[i].first));
       } else {
-        if (histogramBins[i - 1].size() > 0) {
+        if (!histogramBins[i - 1].empty()) {
           uniformQuantificationAxisLabels.push_back(
               getStringFromNumber(binMinMaxMap[i - 1].second));
         } else {

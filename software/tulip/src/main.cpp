@@ -131,7 +131,7 @@ static void checkPython(TulipMainWindow *tmw) {
     QString errorMessage;
 
     errorMessage = requiredPython + " installation path cannot be found on your system.\n";
-    if (installedPythons.size() > 0) {
+    if (!installedPythons.empty()) {
       errorMessage += "Detected version(s): ";
       for (int i = 0; i < installedPythons.size(); ++i) {
         errorMessage += installedPythons.at(i);

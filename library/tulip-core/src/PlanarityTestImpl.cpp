@@ -57,7 +57,7 @@ bool PlanarityTestImpl::isPlanar(bool embedsg) {
     findTerminalNodes(sg, n1, listOfComponents, terminalNodes);
 
     for (auto comp : listOfComponents) {
-      if (terminalNodes[comp].size() > 0) {
+      if (!terminalNodes[comp].empty()) {
         // creates a new c-node to represent current component;
         //  tlp::warning() << "  *terminal nodes for w = " << dfsPosNum.get(n1.id) << ":\n";
         //  tlp::warning() << "    in component (" << dfsPosNum.get(comp.id) << "): ";

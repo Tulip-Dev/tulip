@@ -158,7 +158,7 @@ public:
       else {
         bool find = false;
 
-        if (entities.size() > 0) {
+        if (!entities.empty()) {
           result.push_back(entities[0]);
           find = true;
         }

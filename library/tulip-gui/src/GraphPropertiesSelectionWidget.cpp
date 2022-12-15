@@ -70,7 +70,7 @@ void GraphPropertiesSelectionWidget::initWidget() {
 bool GraphPropertiesSelectionWidget::propertySelectable(const std::string &propertyName) {
   bool selectProperty = false;
 
-  if (propertiesTypes.size() > 0) {
+  if (!propertiesTypes.empty()) {
     string propertyType = graph->getProperty(propertyName)->getTypename();
 
     if (std::find(propertiesTypes.begin(), propertiesTypes.end(), propertyType) !=

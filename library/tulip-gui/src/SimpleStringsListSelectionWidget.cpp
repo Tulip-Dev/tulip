@@ -63,7 +63,7 @@ void SimpleStringsListSelectionWidget::setUnselectedStringsList(
     QList<QListWidgetItem *> items =
         _ui->listWidget->findItems(tlpStringToQString(unselectedStringsList[i]), Qt::MatchExactly);
 
-    if (items.size() > 0) {
+    if (!items.empty()) {
       items[0]->setFlags(items[0]->flags() | Qt::ItemIsUserCheckable);
       items[0]->setCheckState(Qt::Unchecked);
     } else {
@@ -86,7 +86,7 @@ void SimpleStringsListSelectionWidget::setSelectedStringsList(
     QList<QListWidgetItem *> items =
         _ui->listWidget->findItems(tlpStringToQString(selectedStringsList[i]), Qt::MatchExactly);
 
-    if (items.size() > 0) {
+    if (!items.empty()) {
       items[0]->setFlags(items[0]->flags() | Qt::ItemIsUserCheckable);
       items[0]->setCheckState(Qt::Checked);
     } else {

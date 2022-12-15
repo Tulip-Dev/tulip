@@ -208,7 +208,7 @@ void PluginManager::markForInstallation(const QString &plugin, QObject *recv,
                                         const char *progressSlot) {
   PluginInformationList lst = listPlugins(Remote, plugin);
 
-  if (lst.size() == 0 || !lst.first().availableVersion.isValid)
+  if (lst.empty() || !lst.first().availableVersion.isValid)
     return;
 
   PluginVersionInformation version = lst.first().availableVersion;

@@ -678,13 +678,13 @@ void GlEdge::getEdgeAnchor(const GlGraphInputData *data, const node src, const n
   // compute anchor, (clip line with the glyph)
   int srcGlyphId = data->getElementShape()->getNodeValue(src);
   Glyph *srcGlyph = data->glyphs.get(srcGlyphId);
-  srcAnchor = (bends.size() > 0) ? bends.front() : tgtCoord;
+  srcAnchor = (!bends.empty()) ? bends.front() : tgtCoord;
   srcAnchor = srcGlyph->getAnchor(srcCoord, srcAnchor, srcSize, srcRot);
 
   // compute anchor, (clip line with the glyph)
   int tgtGlyphId = data->getElementShape()->getNodeValue(tgt);
   Glyph *tgtGlyph = data->glyphs.get(tgtGlyphId);
-  tgtAnchor = (bends.size() > 0) ? bends.back() : srcAnchor;
+  tgtAnchor = (!bends.empty()) ? bends.back() : srcAnchor;
   tgtAnchor = tgtGlyph->getAnchor(tgtCoord, tgtAnchor, tgtSize, tgtRot);
 
   if (lengthRatio < 1) {

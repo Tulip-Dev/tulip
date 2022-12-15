@@ -76,7 +76,7 @@ void TestAlgorithmTest::testSimple() {
   CPPUNIT_ASSERT(!SimpleTest::isSimple(graph));
   CPPUNIT_ASSERT(!SimpleTest::simpleTest(graph, &multi, &loops));
   CPPUNIT_ASSERT(multi.size() == 1);
-  CPPUNIT_ASSERT(loops.size() == 0);
+  CPPUNIT_ASSERT(loops.empty());
   CPPUNIT_ASSERT(multi[0] == e || multi[0] == e3);
 
   // directed tests

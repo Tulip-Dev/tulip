@@ -235,7 +235,7 @@ void PluginsCenter::repoAdded() {
   QString location = _ui->remoteLocationText->text();
   TulipSettings::addRemoteLocation(location);
 
-  if (_ui->remoteLocationsList->findItems(location, Qt::MatchExactly).size() == 0)
+  if (_ui->remoteLocationsList->findItems(location, Qt::MatchExactly).empty())
     _ui->remoteLocationsList->addItem(location);
 }
 
@@ -249,7 +249,7 @@ void PluginsCenter::repoRemoved() {
   TulipSettings::removeRemoteLocation(location);
   QList<QListWidgetItem *> lst = _ui->remoteLocationsList->findItems(location, Qt::MatchExactly);
 
-  if (lst.size() > 0) {
+  if (!lst.empty()) {
     for (auto i : lst) {
       delete i;
     }
