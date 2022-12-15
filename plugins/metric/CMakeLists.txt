@@ -95,6 +95,10 @@ ADD_LIBRARY(WelshPowell-${TulipVersion} SHARED WelshPowell.cpp)
 TARGET_LINK_LIBRARIES(WelshPowell-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+ADD_LIBRARY(NeighborhoodMetric-${TulipVersion} SHARED NeighborhoodMetric.cpp)
+TARGET_LINK_LIBRARIES(NeighborhoodMetric-${TulipVersion} ${LibTulipCoreName})
+
+##----------------------------------------------------------------------------------------------------------------------------
 TULIP_INSTALL_PLUGIN(Eccentricity-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(DegreeMetric-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(ClusterMetric-${TulipVersion} ${TulipPluginsInstallDir})
@@ -118,3 +122,4 @@ TULIP_INSTALL_PLUGIN(MCLClustering-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(PageRank-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(WelshPowell-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(SecondOrderCentrality-${TulipVersion} ${TulipPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(NeighborhoodMetric-${TulipVersion} ${TulipPluginsInstallDir})
