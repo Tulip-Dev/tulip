@@ -22,8 +22,6 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/SimpleTest.h>
 
-#include <unordered_set>
-
 using namespace tlp;
 
 static const char *paramHelp[] = {
@@ -69,7 +67,7 @@ bool run() override {
   case NEIGH_INOUT:
         TLP_PARALLEL_MAP_NODES_AND_INDICES(
             graph, [&](const node n, unsigned int i) {
-            std::unordered_set<node> nd;
+            std::set<node> nd;
             for (auto n2: graph->getInOutNodes(n)) {
                 if(!loops&&(n2==n)) {
                     continue;
@@ -82,7 +80,7 @@ bool run() override {
   case NEIGH_IN:
       TLP_PARALLEL_MAP_NODES_AND_INDICES(
           graph, [&](const node n, unsigned int i) {
-          std::unordered_set<node> nd;
+          std::set<node> nd;
           for (auto n2: graph->getInNodes(n)) {
               if(!loops&&(n2==n)) {
                   continue;
@@ -95,7 +93,7 @@ bool run() override {
   case NEIGH_OUT:
       TLP_PARALLEL_MAP_NODES_AND_INDICES(
           graph, [&](const node n, unsigned int i) {
-          std::unordered_set<node> nd;
+          std::set<node> nd;
           for (auto n2: graph->getOutNodes(n)) {
               if(!loops&&(n2==n)) {
                   continue;

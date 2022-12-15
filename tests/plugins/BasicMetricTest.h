@@ -20,6 +20,7 @@
 #define BASICMETRICTEST_H
 
 #include "CppUnitIncludes.h"
+#include <tulip/Graph.h>
 
 namespace tlp {
 class Graph;
@@ -28,6 +29,7 @@ class Graph;
 class BasicMetricTest : public CppUnit::TestFixture {
   CPPUNIT_TEST_SUITE(BasicMetricTest);
   CPPUNIT_TEST(testArityMetric);
+  CPPUNIT_TEST(testNeighborhood);
   CPPUNIT_TEST(testBetweennessCentrality);
   CPPUNIT_TEST(testBiconnectedComponent);
   CPPUNIT_TEST(testClusterMetric);
@@ -49,13 +51,14 @@ private:
   tlp::Graph *graph;
   template <typename PropType>
   bool computeProperty(const std::string &algorithm, const std::string &graphType = "Planar Graph",
-                       PropType *prop = nullptr);
+                       PropType *prop = nullptr, tlp::DataSet ds=tlp::DataSet());
 
 public:
   void setUp() override;
   void tearDown() override;
 
   void testArityMetric();
+  void testNeighborhood();
   void testBetweennessCentrality();
   void testBiconnectedComponent();
   void testClusterMetric();
