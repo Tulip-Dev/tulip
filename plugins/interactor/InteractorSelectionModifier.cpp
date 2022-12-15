@@ -53,12 +53,20 @@ public:
         QString("<h3>Move/Reshape rectangle selection</h3>") + "<u>Modify selection</u><br/><br/>" +
         "Resize: <ul><li><b>Mouse left</b> down on triangle + moves</li></ul>" +
         "<ul><li><b>Mouse left</b> down on square + moves</li></ul>" +
+#if !defined(__APPLE__)
         "Only change node size: <ul><li><b>Ctrl + Mouse left</b> down on triangle + "
+#else
+        "Only change node size: <ul><li><b>⌥ + Mouse left</b> down on triangle + "
+#endif
         "moves</li></ul>" +
         "Only change selection size: <ul><li><b>Shift + Mouse left</b> down on triangle + "
         "moves</li></ul>" +
         "Rotate: <ul><li><b>Mouse left</b> down on circle + moves</li></ul>" +
+#if !defined(__APPLE__)
         "Only rotate nodes: <ul><li><b>Ctrl + Mouse left</b> down on circle + moves</li></ul>" +
+#else
+        "Only rotate nodes: <ul><li><b>⌥ + Mouse left</b> down on circle + moves</li></ul>" +
+#endif
         "Only rotate selection: <ul><li><b>Shift + Mouse left</b> down on circle + "
         "moves</li></ul>" +
         "Translate: <ul><li><b>Mouse left</b> down inside rectangle + moves</li>"
@@ -69,13 +77,8 @@ public:
         "right zone</li></ul>" +
         "<u>Navigation in the graph</u><br/><br/>" +
         "Translation (if no selection): <ul><li><b>Arrow</b> keys</li></ul>" +
-#if !defined(__APPLE__)
-        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> up/down</li><li> or <b>Pg up/Pg "
-        "down</b> keys</li></ul>"
-#else
         "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>Pg up/Pg "
         "down</b> keys</li></ul>"
-#endif
     );
     push_back(new MouseNKeysNavigator(false));
     push_back(new MouseSelector);

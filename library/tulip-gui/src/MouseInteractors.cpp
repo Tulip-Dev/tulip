@@ -387,7 +387,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
 
     Graph *graph = glmainwidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
 
-    if (qMouseEv->modifiers() != Qt::ControlModifier) {
+    if (qMouseEv->modifiers() == Qt::NoModifier) {
       vector<SelectedEntity> tmpNodes;
       vector<SelectedEntity> tmpEdges;
       glmainwidget->pickNodesEdges(qMouseEv->x() - 1, qMouseEv->y() - 1, 3, 3, tmpNodes, tmpEdges);
@@ -414,7 +414,14 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
         return false;
 
       return true;
-    } else {
+    } else if (qMouseEv->modifiers() ==
+#if defined(__APPLE__)
+               Qt::AltModifier || qMouseEv->modifiers() == Qt::ControlModifier
+#else
+          Qt::ControlModifier
+#endif
+
+               ) {
       if (!graphHierarchy.empty() && nldc) {
         Graph *oldGraph = graphHierarchy.back();
         graphHierarchy.pop_back();

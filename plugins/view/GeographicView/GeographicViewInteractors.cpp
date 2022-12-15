@@ -80,7 +80,7 @@ void GeographicViewInteractorSelection::construct() {
 #if !defined(__APPLE__)
       "Add to selection: <ul><li><b>Ctrl + Mouse left</b> down, drag and up</li></ul>" +
 #else
-      "Add to selection: <ul><li><b>Alt + Mouse left</b> down, drag and up</li></ul>" +
+      "Add to selection: <ul><li><b>⌥ + Mouse left</b> down, drag and up</li></ul>" +
 #endif
       "Remove from selection: <ul><li><b>Shift + Mouse left</b> down, drag and up</li></ul><br/><br/>" +
       "Zoom/Unzoom: <b>Mouse wheel</b> down/up");
@@ -104,12 +104,20 @@ void GeographicViewInteractorSelectionEditor::construct() {
       QString("<h3>Move/Reshape rectangle selection</h3>") + "<u>Modify selection</u><br/><br/>" +
       "Resize: <ul><li><b>Mouse left</b> down on triangle + moves</li></ul>" +
       "<ul><li><b>Mouse left</b> down on square + moves</li></ul>" +
-      "Only change node size: <ul><li><b>Ctrl + Mouse left</b> down on triangle + "
+#if !defined(__APPLE__)
+        "Only change node size: <ul><li><b>Ctrl + Mouse left</b> down on triangle + "
+#else
+        "Only change node size: <ul><li><b>⌥ + Mouse left</b> down on triangle + "
+#endif
       "moves</li></ul>" +
       "Only change selection size: <ul><li><b>Shift + Mouse left</b> down on triangle + "
       "moves</li></ul>" +
       "Rotate: <ul><li><b>Mouse left</b> down on circle + moves</li></ul>" +
-      "Only rotate nodes: <ul><li><b>Ctrl + Mouse left</b> down on circle + moves</li></ul>" +
+#if !defined(__APPLE__)
+        "Only rotate nodes: <ul><li><b>Ctrl + Mouse left</b> down on circle + moves</li></ul>" +
+#else
+        "Only rotate nodes: <ul><li><b>⌥ + Mouse left</b> down on circle + moves</li></ul>" +
+#endif
       "Only rotate selection: <ul><li><b>Shift + Mouse left</b> down on circle + "
       "moves</li></ul>" +
       "Translate: <ul><li><b>Mouse left</b> down inside rectangle + moves</li>"
@@ -345,7 +353,7 @@ void GeographicViewInteractorEditEdgeBends::construct() {
 #if !defined(__APPLE__)
       "Delete bend: <ul><li><b>Ctrl + Mouse left click</b> on a selected bend</li></ul>"
 #else
-      "Delete bend: <ul><li><b>Alt + Mouse left click</b> on a selected bend</li></ul>"
+      "Delete bend: <ul><li><b>⌥ + Mouse left click</b> on a selected bend</li></ul>"
 #endif
       + "<br/><br/>Zoom/Unzoom: <b>Mouse wheel</b> down/up");
   push_back(new GeographicViewNavigator);

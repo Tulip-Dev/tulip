@@ -66,7 +66,11 @@ void ScatterPlot2DInteractorNavigation::construct() {
       "view.</p>" +
       "<p>Otherwise, this interactor offers the same functionnalities as the one in the \"Node "
       "Link Diagram view\". The commands are described below:</p>" +
-      "<b>Ctrl + Mouse up/down</b>: zoom<br>" + "<b>Ctrl + Mouse left/right</b>: z rotation<br>" +
+#if !defined(__APPLE__)
+      "<b>Ctrl + Mouse up/down</b>: zoom/unzoom<br>" + "<b>Ctrl + Mouse left/right</b>: z rotation<br>" +
+#else
+      "<b>⌥ + Mouse up/down</b>: zoom/unzoom<br>" + "<b>⌥ + Mouse left/right</b>: z rotation<br>" +
+#endif
       "<b>Shift + Mouse</b>: rotation<br>" + "<b>Key up/down</b>: up/down<br>" +
       "<b>Key left/right</b>: left/right<br>" + "<b>Key page up/down</b>: zoom<br>" +
       "<b>Key insert</b>: rotate<br>" + "</body>" + "</html>");

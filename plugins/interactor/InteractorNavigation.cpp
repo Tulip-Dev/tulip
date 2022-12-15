@@ -59,16 +59,21 @@ public:
         "+ up/down moves</li><li> or <b>Pg "
         "up/Pg down</b> keys</li></ul>"
 #else
-        "Z rotation: <ul><li><b>Alt + Mouse left</b> down + left/right moves</li><li> or "
+        "Z rotation: <ul><li><b>⌥ + Mouse left</b> down + left/right moves</li><li> or "
         "<b>Insert</b> key</li></ul>" +
         "Translation: <ul><li><b>Arrow</b> keys</li></ul>" +
-        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>Alt + Mouse left</b> down "
+        "Zoom/Unzoom: <ul><li><b>Mouse wheel</b> down/up</li><li> or <b>⌥ + Mouse left</b> down "
         "+ up/down moves</li><li> or <b>Pg up/Pg "
         "down</b> keys</li></ul>"
 #endif
         +
         "Meta node navigation: <ul><li><b>double Mouse left click</b> go inside the metanode</li>" +
-        "<li><b>Ctrl + double Mouse left click</b> go outside the metanode</li></ul>");
+#if !defined(__APPLE__)
+        "<li><b>Ctrl + double Mouse left click</b> go outside the metanode</li></ul>"
+#else
+        "<li><b>⌥ or ⌘ + double Mouse left click</b> go outside the metanode</li></ul>"
+#endif
+        );
     push_back(new MouseNKeysNavigator);
   }
 

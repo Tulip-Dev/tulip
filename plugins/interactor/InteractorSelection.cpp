@@ -56,7 +56,7 @@ public:
 #if !defined(__APPLE__)
         "Add to selection: <ul><li><b>Ctrl + Mouse left</b> down, drag and up</li></ul>" +
 #else
-        "Add to selection: <ul><li><b>Alt + Mouse left</b> down, drag and up</li></ul>" +
+        "Add to selection: <ul><li><b>⌥ + Mouse left</b> down, drag and up</li></ul>" +
 #endif
         "Remove from selection: <ul><li><b>Shift + Mouse left</b> down, drag and up</li></ul>" +
         "<u>Navigation in the graph</u><br/><br/>" +

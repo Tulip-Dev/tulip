@@ -58,7 +58,7 @@ public:
 #if !defined(__APPLE__)
         "Delete bend: <ul><li><b>Ctrl + Mouse left click</b> on a selected bend</li></ul>"
 #else
-        "Delete bend: <ul><li><b>Alt + Mouse left click</b> on a selected bend</li></ul>"
+        "Delete bend: <ul><li><b>⌥ + Mouse left click</b> on a selected bend</li></ul>"
 #endif
         + "<u>Navigation in the graph</u><br/><br/>" +
         "Translation: <ul><li><b>Arrow</b> keys</li></ul>" +
