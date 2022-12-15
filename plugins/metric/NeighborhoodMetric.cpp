@@ -41,11 +41,10 @@ static const char *paramHelp[] = {
 
 class NeighborhoodMetric : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Neighborhood", "Bruno Pinaud", "15/12/2022",
-                    "Compute the number of unique neighboor for each node "
-                    "in a graph with multipe edges between two nodes."
-                    "If the graph is simple, the Degree metric should be used instead.",
-                    "1.0", "Graph")
+
+  PLUGININFORMATION("Neighborhood", "Bruno Pinaud", "15/12/2022", "Compute the number of unique neighboor for each node "
+                                                                  "in a graph with multipe edges between two nodes. "
+                                                                  "If the graph is simple, the Degree metric should be used instead.", "1.0", "Graph")
   NeighborhoodMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
     addInParameter<StringCollection>(NEIGH_TYPE, paramHelp[0], NEIGH_TYPES, true,
                                      "InOut <br> In <br> Out");
