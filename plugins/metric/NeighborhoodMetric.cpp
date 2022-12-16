@@ -42,8 +42,10 @@ static const char *paramHelp[] = {
 
 class NeighborhoodMetric : public tlp::DoubleAlgorithm {
 public:
-
-  PLUGININFORMATION("Unique Neighbors", "Bruno Pinaud", "15/12/2022", "Compute the number of unique neighbors of each node; \"unique\" means that if multiple edges exist between two nodes, they count as one. When the graph is simple, it is equivalent to the degree computation.", "1.0", "Graph")
+  PLUGININFORMATION(
+      "Unique Neighbors", "Bruno Pinaud", "15/12/2022",
+      "Compute the number of unique neighbors of each node; \"unique\" means that if multiple edges exist between two nodes, they count as one. When the graph is simple, it is equivalent to the degree computation.",
+      "1.0", "Graph")
   NeighborhoodMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
     addInParameter<StringCollection>(NEIGH_TYPE, paramHelp[0], NEIGH_TYPES, true,
                                      "InOut <br> In <br> Out");
@@ -91,14 +93,14 @@ public:
         break;
       case NEIGH_OUT:
         TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
-        std::unordered_set<node> nd;
-        for (auto n2 : graph->getOutNodes(n)) {
-          if (!loops && (n2 == n)) {
-            continue;
+          std::unordered_set<node> nd;
+          for (auto n2 : graph->getOutNodes(n)) {
+            if (!loops && (n2 == n)) {
+              continue;
+            }
+            nd.insert(n2);
           }
-          nd.insert(n2);
-        }
-        num[i] = nd.size();
+          num[i] = nd.size();
         });
         break;
       default:

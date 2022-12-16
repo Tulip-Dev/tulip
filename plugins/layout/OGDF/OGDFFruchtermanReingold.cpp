@@ -61,12 +61,13 @@ static const char *paramHelp[] = {
 class OGDFFruchtermanReingold : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Fruchterman Reingold (OGDF)", "Stephan Hachul", "15/11/2007",
-                    "Implements the Fruchterman and Reingold layout algorithm, first published "
-                    "as:<br/><b>Graph Drawing by Force-Directed Placement</b>,<br/>Fruchterman, Thomas "
-                    "M. J., Reingold, Edward M., Software – Practice & Experience (Wiley) Volume "
-                    "21, Issue 11, pages 1129–1164, (1991)",
-                    "1.2", "Force Directed")
+  PLUGININFORMATION(
+      "Fruchterman Reingold (OGDF)", "Stephan Hachul", "15/11/2007",
+      "Implements the Fruchterman and Reingold layout algorithm, first published "
+      "as:<br/><b>Graph Drawing by Force-Directed Placement</b>,<br/>Fruchterman, Thomas "
+      "M. J., Reingold, Edward M., Software – Practice & Experience (Wiley) Volume "
+      "21, Issue 11, pages 1129–1164, (1991)",
+      "1.2", "Force Directed")
 
   OGDFFruchtermanReingold(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ogdf::SpringEmbedderFRExact() : nullptr) {

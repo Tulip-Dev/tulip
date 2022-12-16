@@ -49,7 +49,7 @@ bool PlanarityTestImpl::listEdgesUpwardT0(node n1, node n2) {
  *   by "cnode" with "RBC[cnode] contained in the boundary".
  */
 void PlanarityTestImpl::extractBoundaryCycle(Graph *sG, node cNode, list<edge> &listEdges) {
-  assert(embedList[cNode].size()>0);
+  assert(embedList[cNode].size() > 0);
   unordered_map<node, list<edge>> el;
   BmdListIt<edge> it(embedList[cNode]);
 
