@@ -60,7 +60,7 @@ public:
                     "to find a layout of minimal energy.<br/>Due to this approach, the algorithm "
                     "can only handle graphs of rather limited size.<br/>It is based on the "
                     "following publication:<br/><b>Drawing Graphs Nicely Using Simulated "
-                    "Annealing</b>, Ron Davidson, David Harel,  ACM Transactions on Graphics "
+                    "Annealing</b>,<br/>Ron Davidson, David Harel,  ACM Transactions on Graphics "
                     "15(4), pp. 301-331, 1996.",
                     "1.4", "Force Directed")
   OGDFDavidsonHarel(const tlp::PluginContext *context)

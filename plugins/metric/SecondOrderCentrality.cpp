@@ -54,9 +54,9 @@ class SecondOrderCentrality : public tlp::DoubleAlgorithm {
 public:
   PLUGININFORMATION(
       "Second Order Centrality", "Bruno Pinaud", "01/10/2020",
-      "An implementation of the Second Order centrality measure first published as:<br>"
-      "Kermarrec, A.-M., et al. (2011). \"Second order centrality: Distributed assessment of nodes "
-      "criticity in complex networks.\" Computer Communications 34(5): 619-628, <br/>doi: <a "
+      "An implementation of the Second Order centrality measure first published as:<br/>"
+      "<b>Second order centrality: Distributed assessment of nodes "
+      "criticity in complex networks</b>,<br/>Kermarrec, A.-M., et al. (2011). Computer Communications 34(5): 619-628, <br/>doi: <a "
       "href=\"https://dx.doi.org/10.1016/j.comcom.2010.06.007\">10.1016/"
       "j.comcom.2010.06.007</a>."
       "<p>This algorithm computes the standard deviation of the return time on each node of"

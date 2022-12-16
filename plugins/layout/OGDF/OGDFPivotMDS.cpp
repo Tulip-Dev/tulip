@@ -44,7 +44,7 @@ public:
                     "The Pivot MDS (multi-dimensional scaling) layout algorithm. By setting the "
                     "number of pivots to infinity this algorithm behaves just like "
                     "classical MDS. See:<br/><b>Eigensolver methods for progressive "
-                    "multidimensional scaling of large data.</b> Brandes and Pich",
+                    "multidimensional scaling of large data</b>,<br/>Brandes and Pich",
                     "1.0", "Force Directed")
   OGDFPivotMDS(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ogdf::ComponentSplitterLayout() : nullptr) {

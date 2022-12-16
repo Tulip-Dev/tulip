@@ -51,7 +51,7 @@ public:
   PLUGININFORMATION(
       "Bubble Tree", "D.Auber/S.Grivet", "16/05/2003",
       "Implement the bubble tree drawing algorithm first published as:<br>"
-      "<b>Bubble Tree Drawing Algorithm</b>, "
+      "<b>Bubble Tree Drawing Algorithm</b>,<br/>"
       "S. Grivet, D. Auber, J-P Domenger and Guy Melancon, "
       "Computer Vision and Graphics. Computational Imaging and Vision, vol 32, 2006. Springer, "
       "Dordrecht,<br/>"

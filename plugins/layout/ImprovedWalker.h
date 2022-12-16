@@ -61,7 +61,7 @@ public:
       "11/11/04",
       "It is a linear implementation of the Walker's tree layout improved algorithm "
       "published as:<br/>"
-      "<b>Improving Walker’s Algorithm to Run in Linear Time.</b><br>"
+      "<b>Improving Walker’s Algorithm to Run in Linear Time</b>,<br/>"
       "Buchheim C., Jünger M., Leipert S. (2002), "
       "In: Goodrich M.T., Kobourov S.G. (eds) Graph Drawing (GD) 2002, "
       "Lecture Notes in Computer Science, vol 2528. Springer, Berlin, Heidelberg,<br/>doi: <a "

@@ -54,7 +54,7 @@ public:
   PLUGININFORMATION("Edge bundling", "David Auber/ Romain Bourqui / Antoine Lambert", "2010-...",
                     "Edges routing algorithm, implementing the intuitive Edge Bundling technique "
                     "published as:<br/>"
-                    "<b>Winding Roads: Routing edges into bundles</b><br>,"
+                    "<b>Winding Roads: Routing edges into bundles</b>,<br/>"
                     "Antoine Lambert, Romain Bourqui and David Auber, "
                     "Computer Graphics Forum special issue on 12th Eurographics/IEEE-VGTC "
                     "Symposium on Visualization, "

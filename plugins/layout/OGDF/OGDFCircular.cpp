@@ -44,8 +44,8 @@ class OGDFCircular : public OGDFLayoutPluginBase {
 public:
   PLUGININFORMATION(
       "Circular (OGDF)", "Carsten Gutwenger", "13/11/2007",
-      "Implements a circular layout based on the following publication:"
-      "Ugur Dogrusöz, Brendan Madden, Patrick Madden: Circular Layout in the Graph Layout Toolkit."
+      "Implements a circular layout based on the following publication:<br/>"
+      "<b>Circular Layout in the Graph Layout Toolkit</b>,<br/>Ugur Dogrusöz, Brendan Madden, Patrick Madden, "
       "Proc. Graph Drawing 1996, LNCS 1190, pp. 92-100, 1997.",
       "1.5", "Basic")
   OGDFCircular(const tlp::PluginContext *context)

@@ -59,7 +59,7 @@ public:
       "Louvain", "Patrick Mary", "09/06/15",
       "Nodes partitioning measure used for community detection."
       "This is an implementation of the Louvain clustering algorithm first published in:<br/>"
-      "<b>Fast unfolding of communities in large networks</b>, Blondel, V.D. and Guillaume, J.L. "
+      "<b>Fast unfolding of communities in large networks</b>,<br/>Blondel, V.D. and Guillaume, J.L. "
       "and Lambiotte, R. and Lefebvre, E., Journal of Statistical Mechanics: Theory and "
       "Experiment, (2008),<br/>doi: <a "
       "href=\"https://doi.org/10.1088/1742-5468/2008/10/P10008\">10.1088/1742-5468/2008/10/P10008</"

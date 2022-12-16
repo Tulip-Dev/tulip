@@ -42,8 +42,8 @@ public:
   PLUGININFORMATION(
       "Convolution", "David Auber", "14/08/2001",
       "Discretization and filtering of the distribution of a node metric using a convolution "
-      "following: <br>"
-      "Strahler based graph clustering using convolution, "
+      "following: <br/>"
+      "<b>Strahler based graph clustering using convolution</b>,<br/>"
       "D. Auber, M. Delest and Y. Chiricota, "
       "Proceedings of the Eighth International Conference on Information Visualisation, 2004. IV "
       "2004,<br/>"

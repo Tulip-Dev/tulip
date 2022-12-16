@@ -45,7 +45,7 @@ public:
       "Implements a single-linkage clustering. The similarity measure used here is "
       "the Strength Metric computed on edges. The best threshold is found using MQ "
       "Quality Measure. See:<br/>"
-      "<b>Software component capture using graph clustering</b>, "
+      "<b>Software component capture using graph clustering</b>,<br/>"
       "Y. Chiricota, F.Jourdan, and G. Melancon, "
       "IWPC '03: Proceedings of the 11th IEEE International Workshop on Program Comprehension",
       "2.0", "Clustering")

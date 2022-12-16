@@ -105,8 +105,8 @@ public:
       "according to forces acting upon them,"
       "filtering out unnecessary dummy nodes, and then replacing the remaining dummy nodes by edge "
       "bends."
-      "The algorithm is documented in and was developed for the bachelor thesis: Max Ilsen: "
-      "Energy-Based Layout Algorithms for Graphs with Large Nodes. University of Osnabrueck, 2017",
+      "The algorithm is documented in and was developed for the bachelor thesis:<br/>"
+      "<b>Energy-Based Layout Algorithms for Graphs with Large Nodes</b>,<br/>Max Ilsen, University of Osnabrueck, 2017",
       "1.1", "Force Directed")
   OGDFNodeRespecter(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, context ? new ogdf::NodeRespecterLayout() : nullptr) {

@@ -53,7 +53,7 @@ public:
   PLUGININFORMATION("Hierarchical Tree (R-T Extended)", "David Auber and Romain Bourqui",
                     "24/09/2010",
                     "Implements the hierarchical tree layout algorithm first published as:<br/>"
-                    "<b>Tidier Drawings of Trees</b>, E.M. Reingold and J.S. Tilford, IEEE "
+                    "<b>Tidier Drawings of Trees</b>,<br/>E.M. Reingold and J.S. Tilford, IEEE "
                     "Transactions on Software Engineering pages 223--228 (1981),<br/>"
                     "doi: <a "
                     "href=\"https://doi.org/10.1109/TSE.1981.234519\">10.1109/TSE.1981.234519</a>.",

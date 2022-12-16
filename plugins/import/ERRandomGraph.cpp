@@ -35,7 +35,7 @@ const char *paramHelp[] = {
     "Generate self loops (an edge with source and target on the same node) with the same probability",
 
     // directed
-    "Generate a directed graph (arcs u->v and v->u have the same probability)"};
+    "Generate a directed graph (edges u->v and v->u have the same probability)"};
 }
 
 /** \addtogroup import */

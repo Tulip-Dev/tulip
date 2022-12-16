@@ -65,8 +65,8 @@ public:
       "Page Rank", "Mohamed Bouklit & David Auber", "16/12/10",
       "Nodes measure used for links analysis.<br/>"
       "First designed by Larry Page and Sergey Brin, it is a link analysis algorithm "
-      "that assigns a measure to each node of an 'hyperlinked' graph. It first appears in:"
-      "<b>The anatomy of a large-scale hypertextual Web search engine</b>, Sergey Brin and "
+      "that assigns a measure to each node of an 'hyperlinked' graph. It first appears in:<br/>"
+      "<b>The anatomy of a large-scale hypertextual Web search engine</b>,<br/>Sergey Brin and "
       "Lawrence Page, "
       "Computer Networks and ISDN Systems Journal, vol. 30, number 1, pp 107-117 (1998),<br/>"
       "doi: <a "

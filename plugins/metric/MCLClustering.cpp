@@ -56,7 +56,7 @@ public:
       "MCL Clustering", "D. Auber & R. Bourqui", "10/10/2005",
       "Nodes partitioning measure of Markov Cluster algorithm<br/>used for community detection."
       "This is an implementation of the MCL algorithm first published as:<br/>"
-      "<b>Graph Clustering by Flow Simulation</b>, Stijn van Dongen PhD Thesis, University of "
+      "<b>Graph Clustering by Flow Simulation</b>,<br/>Stijn van Dongen PhD Thesis, University of "
       "Utrecht (2000).",
       "1.1", "Clustering")
 

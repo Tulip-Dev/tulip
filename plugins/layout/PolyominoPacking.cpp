@@ -79,8 +79,7 @@ public:
   PLUGININFORMATION(
       "Connected Component Packing (Polyomino)", "Antoine Lambert", "05/05/11",
       "Implements the connected component packing algorithm published as:<br/>"
-      "<b>Disconnected Graph Layout and the Polyomino Packing Approach</b>, Freivalds Karlis, "
-      "Dogrusoz Ugur and Kikusts Paulis, "
+      "<b>Disconnected Graph Layout and the Polyomino Packing Approach</b>,<br/>Freivalds Karlis, Dogrusoz Ugur and Kikusts Paulis, "
       "9th International Symposium on Graph Drawing 2001,"
       "LNCS Vol. 2265 (2002), pp 378-391,<br/>doi: <a "
       "href=\"https://doi.org/10.1007/3-540-45848-4_30\">10.1007/3-540-45848-4_30</"
