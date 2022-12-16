@@ -31,7 +31,7 @@ const char *paramHelp[] = {
     // probability
     "Probability of having an edge between each pair of vertices in the graph.",
 
-    // self loop
+    // self loops
     "Generate self loops (an edge with source and target on the same node) with the same probability",
 
     // directed
@@ -51,11 +51,11 @@ public:
                     "positive integer n and a probability value in [0,1], define the graph G(n,p) "
                     "to be the undirected graph on n vertices whose edges are chosen as follows: "
                     "For all pairs of vertices v,w there is an edge (v,w) with probability p.",
-                    "1.1", "Graph")
+                    "1.2", "Graph")
   ERRandomGraph(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "50");
     addInParameter<double>("probability", paramHelp[1], "0.5");
-    addInParameter<bool>("self loop", paramHelp[2], "false");
+    addInParameter<bool>("self loops", paramHelp[2], "false");
     addInParameter<bool>("directed", paramHelp[3], "false");
   }
 
@@ -71,7 +71,7 @@ public:
     if (dataSet != nullptr) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("probability", proba);
-      dataSet->get("self loop", self_loop);
+      dataSet->getDeprecated("self loops", "self loop", self_loop);
       dataSet->get("directed", directed);
     }
 
