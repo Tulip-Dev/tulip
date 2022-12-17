@@ -63,7 +63,7 @@ void BasicMetricTest::testNeighborhood() {
   DataSet ds;
   ds.set("directed", true);
   bool result =
-      computeProperty<DoubleProperty>("Neighborhood", "Complete General Graph", nullptr, ds);
+      computeProperty<DoubleProperty>("Unique Neighbors", "Complete General Graph", nullptr, ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
