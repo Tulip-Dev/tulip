@@ -486,7 +486,7 @@ void HistogramStatistics::computeInteractor() {
                      map_value_less_equal<unsigned int, double>(upperBound)));
 
       while (pos != graphPropertyValueSet.end()) {
-        if (histoView->getDataLocation() == EDGE) {
+        if (histoView->getDataLocation() == NODE) {
           viewSelection->setNodeValue(node(pos->first), true);
         } else {
           viewSelection->setEdgeValue(edge(pos->first), true);
