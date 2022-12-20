@@ -29,77 +29,16 @@
 
 #include <functional>
 
-// use compose2 implementation from boost
-
-/* class for the compose_f_gx_hx adapter
- */
-template <class OP1, class OP2, class OP3>
-class compose_f_gx_hx_t
-    : public std::unary_function<typename OP2::argument_type, typename OP1::result_type> {
-private:
-  OP1 op1; // process: op1(op2(x),op3(x))
-  OP2 op2;
-  OP3 op3;
-
-public:
-  // constructor
-  compose_f_gx_hx_t(const OP1 &o1, const OP2 &o2, const OP3 &o3) : op1(o1), op2(o2), op3(o3) {}
-
-  // function call
-  typename OP1::result_type operator()(const typename OP2::argument_type &x) const {
-    return op1(op2(x), op3(x));
-  }
-};
-
-/* convenience functions for the compose_f_gx_hx adapter
- */
-template <class OP1, class OP2, class OP3>
-inline compose_f_gx_hx_t<OP1, OP2, OP3> compose_f_gx_hx(const OP1 &o1, const OP2 &o2,
-                                                        const OP3 &o3) {
-  return compose_f_gx_hx_t<OP1, OP2, OP3>(o1, o2, o3);
-}
-
-#define compose_fn compose_f_gx_hx
-
 #include "HistogramStatistics.h"
 
 using namespace std;
-
-template <class K, class V>
-class map_value_greater_equal : public unary_function<pair<K, V>, bool> {
-private:
-  V value;
-
-public:
-  map_value_greater_equal(const V &v) : value(v) {}
-
-  bool operator()(const pair<K, V> &elem) const {
-    return elem.second >= value;
-  }
-};
-
-template <class K, class V>
-class map_value_less_equal : public unary_function<pair<K, V>, bool> {
-private:
-  V value;
-
-public:
-  map_value_less_equal(const V &v) : value(v) {}
-
-  bool operator()(const pair<K, V> &elem) const {
-    return elem.second <= value;
-  }
-};
 
 namespace {
 inline double square(double x) {
   return x * x;
 }
-
-/*inline double cube(double x) {
-return x*x*x;
-}*/
 } // namespace
+
 static void drawComposite(tlp::GlComposite *composite, float lod, tlp::Camera *camera) {
   map<string, tlp::GlSimpleEntity *> glEntities = composite->getGlEntities();
 
@@ -117,96 +56,68 @@ static void drawComposite(tlp::GlComposite *composite, float lod, tlp::Camera *c
 
 namespace tlp {
 
-class UniformKernel : public KernelFunction {
-
-public:
-  double operator()(double val) override {
-    if (fabs(val) < 1) {
-      return 1. / 2.;
-    } else {
-      return 0.;
-    }
+double UniformKernel(double val) {
+  if (fabs(val) < 1) {
+    return 1. / 2.;
+  } else {
+    return 0.;
   }
-};
+}
 
-class GaussianKernel : public KernelFunction {
+double GaussianKernel(double val) {
+  return (1. / M_PI) * exp(-square(val) / 2.);
+}
 
-public:
-  double operator()(double val) override {
-    return (1. / M_PI) * exp(-square(val) / 2.);
+double TriangleKernel(double val) {
+  double valAbs = fabs(val);
+
+  if (valAbs < 1) {
+    return 1 - valAbs;
+  } else {
+    return 0.;
   }
-};
+}
 
-class TriangleKernel : public KernelFunction {
+double EpanechnikovKernel(double val) {
+  double valAbs = fabs(val);
 
-public:
-  double operator()(double val) override {
-    double valAbs = fabs(val);
-
-    if (valAbs < 1) {
-      return 1 - valAbs;
-    } else {
-      return 0.;
-    }
+  if (valAbs < 1) {
+    return (3. / 4.) * (1 - square(val));
+  } else {
+    return 0.;
   }
-};
+}
 
-class EpanechnikovKernel : public KernelFunction {
+double QuarticKernel(double val) {
+  double valAbs = fabs(val);
 
-public:
-  double operator()(double val) override {
-    double valAbs = fabs(val);
-
-    if (valAbs < 1) {
-      return (3. / 4.) * (1 - square(val));
-    } else {
-      return 0.;
-    }
+  if (valAbs < 1) {
+    return (15. / 16.) * square(1 - square(val));
+  } else {
+    return 0.;
   }
-};
+}
 
-class QuarticKernel : public KernelFunction {
+double CubicKernel(double val) {
+  double valAbs = fabs(val);
 
-public:
-  double operator()(double val) override {
-    double valAbs = fabs(val);
-
-    if (valAbs < 1) {
-      return (15. / 16.) * square(1 - square(val));
-    } else {
-      return 0.;
-    }
+  if (valAbs < 1.) {
+    double d = (35. / 32.) * pow((1. - square(val)), 3);
+    return d;
+  } else {
+    return 0.;
   }
-};
+}
 
-class CubicKernel : public KernelFunction {
+double CosineKernel(double val) {
+  double valAbs = fabs(val);
 
-public:
-  double operator()(double val) override {
-    double valAbs = fabs(val);
-
-    if (valAbs < 1.) {
-      double d = (35. / 32.) * pow((1. - square(val)), 3);
-      return d;
-    } else {
-      return 0.;
-    }
+  if (valAbs < 1) {
+    return (M_PI / 4.) * cos((M_PI / 2.) * val);
+  } else {
+    return 0.;
   }
-};
-
-class CosineKernel : public KernelFunction {
-
-public:
-  double operator()(double val) override {
-    double valAbs = fabs(val);
-
-    if (valAbs < 1) {
-      return (M_PI / 4.) * cos((M_PI / 2.) * val);
-    } else {
-      return 0.;
-    }
-  }
-};
+}
 
 HistogramStatistics::HistogramStatistics(HistoStatsConfigWidget *ConfigWidget)
     : histoView(nullptr), histoStatsConfigWidget(ConfigWidget), propertyMean(0),
@@ -228,11 +139,6 @@ HistogramStatistics::HistogramStatistics(const HistogramStatistics &histoStats)
 
 HistogramStatistics::~HistogramStatistics() {
   cleanupAxis();
-
-  for (map<QString, KernelFunction *>::iterator it = kernelFunctionsMap.begin();
-       it != kernelFunctionsMap.end(); ++it) {
-    delete it->second;
-  }
 }
 
 void HistogramStatistics::viewChanged(View *view) {
@@ -243,13 +149,13 @@ void HistogramStatistics::viewChanged(View *view) {
 }
 
 void HistogramStatistics::initKernelFunctionsMap() {
-  kernelFunctionsMap["Uniform"] = new UniformKernel();
-  kernelFunctionsMap["Gaussian"] = new GaussianKernel();
-  kernelFunctionsMap["Cubic"] = new CubicKernel();
-  kernelFunctionsMap["Quartic"] = new QuarticKernel();
-  kernelFunctionsMap["Triangle"] = new TriangleKernel();
-  kernelFunctionsMap["Epanechnikov"] = new EpanechnikovKernel();
-  kernelFunctionsMap["Cosine"] = new CosineKernel();
+  kernelFunctionsMap["Uniform"] = &UniformKernel;
+  kernelFunctionsMap["Gaussian"] = &GaussianKernel;
+  kernelFunctionsMap["Cubic"] = &CubicKernel;
+  kernelFunctionsMap["Quartic"] = &QuarticKernel;
+  kernelFunctionsMap["Triangle"] = &TriangleKernel;
+  kernelFunctionsMap["Epanechnikov"] = &EpanechnikovKernel;
+  kernelFunctionsMap["Cosine"] = &CosineKernel;
 }
 
 bool HistogramStatistics::eventFilter(QObject *, QEvent *e) {
@@ -480,10 +386,13 @@ void HistogramStatistics::computeInteractor() {
       viewSelection->setAllEdgeValue(false);
       double lowerBound = histoStatsConfigWidget->getSelectionLowerBound();
       double upperBound = histoStatsConfigWidget->getSelectionUpperBound();
-      map<unsigned int, double>::iterator pos = find_if(
-          graphPropertyValueSet.begin(), graphPropertyValueSet.end(),
-          compose_fn(logical_and<bool>(), map_value_greater_equal<unsigned int, double>(lowerBound),
-                     map_value_less_equal<unsigned int, double>(upperBound)));
+      auto val_in_bounds =
+        [lowerBound, upperBound] (const pair<unsigned int, double> &map_pair) {
+          return (map_pair.second >= lowerBound) && (map_pair.second <= upperBound);
+        };
+      map<unsigned int, double>::iterator pos =
+        find_if(graphPropertyValueSet.begin(), graphPropertyValueSet.end(),
+                val_in_bounds);
 
       while (pos != graphPropertyValueSet.end()) {
         if (histoView->getDataLocation() == NODE) {
@@ -492,10 +401,7 @@ void HistogramStatistics::computeInteractor() {
           viewSelection->setEdgeValue(edge(pos->first), true);
         }
 
-        pos = find_if(++pos, graphPropertyValueSet.end(),
-                      compose_fn(logical_and<bool>(),
-                                 map_value_greater_equal<unsigned int, double>(lowerBound),
-                                 map_value_less_equal<unsigned int, double>(upperBound)));
+        pos = find_if(++pos, graphPropertyValueSet.end(), val_in_bounds);
       }
 
       Observable::unholdObservers();

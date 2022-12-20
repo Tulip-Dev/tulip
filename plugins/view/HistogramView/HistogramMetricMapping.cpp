@@ -50,12 +50,6 @@ std::string getStringFromNumber(T number, unsigned int precision = 5) {
 
 namespace tlp {
 
-struct CoordXOrdering : public binary_function<Coord, Coord, bool> {
-  bool operator()(Coord c1, Coord c2) {
-    return c1.getX() < c2.getX();
-  }
-};
-
 Coord *computeStraightLineIntersection(const Coord line1[2], const Coord line2[2]) {
 
   Coord *intersectionPoint = nullptr;
@@ -172,7 +166,10 @@ void GlEditableCurve::init() {
 }
 
 void GlEditableCurve::draw(float lod, Camera *camera) {
-  std::sort(curvePoints.begin(), curvePoints.end(), CoordXOrdering());
+  std::sort(curvePoints.begin(), curvePoints.end(),
+            [] (const Coord &c1, const Coord &c2) {
+              return c1.getX() < c2.getX();
+            });
   camera->initGl();
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

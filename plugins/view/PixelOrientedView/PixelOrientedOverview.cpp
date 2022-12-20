@@ -116,18 +116,6 @@ PixelOrientedOverview::~PixelOrientedOverview() {
   reset(true);
 }
 
-struct NodeCoordXOrdering : public binary_function<pair<node, Coord>, pair<node, Coord>, bool> {
-  bool operator()(pair<node, Coord> p1, pair<node, Coord> p2) {
-    return p1.second.getX() < p2.second.getX();
-  }
-};
-
-struct NodeCoordYOrdering : public binary_function<pair<node, Coord>, pair<node, Coord>, bool> {
-  bool operator()(pair<node, Coord> p1, pair<node, Coord> p2) {
-    return p1.second.getY() > p2.second.getY();
-  }
-};
-
 void PixelOrientedOverview::computePixelView() {
 
   reset(false);

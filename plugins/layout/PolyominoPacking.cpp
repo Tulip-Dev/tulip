@@ -114,16 +114,6 @@ private:
 
 #define C 100
 
-class polyPerimOrdering : public binary_function<Polyomino, Polyomino, bool> {
-
-public:
-  polyPerimOrdering() {}
-
-  bool operator()(const Polyomino &ci1, const Polyomino &ci2) const {
-    return ci1.perim > ci2.perim;
-  }
-};
-
 PLUGIN(PolyominoPacking)
 
 PolyominoPacking::PolyominoPacking(const PluginContext *context) : LayoutAlgorithm(context) {
@@ -206,7 +196,10 @@ bool PolyominoPacking::run() {
       return pluginProgress->state() != TLP_CANCEL;
   }
 
-  std::sort(polyominos.begin(), polyominos.end(), polyPerimOrdering());
+  std::sort(polyominos.begin(), polyominos.end(),
+            [](const Polyomino &ci1, const Polyomino &ci2) {
+              return ci1.perim > ci2.perim;
+            });
 
   if (pluginProgress) {
     pluginProgress->setComment("Packing polyominos...");

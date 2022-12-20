@@ -53,22 +53,6 @@ namespace tlp {
 
 PLUGIN(ScatterPlot2DView)
 
-class map_pair_string_key_contains
-    : public unary_function<pair<pair<string, string>, ScatterPlot2D *>, bool> {
-
-public:
-  map_pair_string_key_contains(const string &pairValueToFind) : pairValueToFind(pairValueToFind) {}
-
-  bool operator()(const pair<pair<string, string>, ScatterPlot2D *> &elem) const {
-    string pairStringKeyFirst = elem.first.first;
-    string pairStringKeySecond = elem.first.second;
-    return (pairStringKeyFirst == pairValueToFind) || (pairStringKeySecond == pairValueToFind);
-  }
-
-private:
-  string pairValueToFind;
-};
-
 const string propertiesTypes[] = {"double", "int"};
 const unsigned int nbPropertiesTypes = sizeof(propertiesTypes) / sizeof(string);
 const vector<string> propertiesTypesFilter(propertiesTypes, propertiesTypes + nbPropertiesTypes);
@@ -731,9 +715,16 @@ void ScatterPlot2DView::destroyOverviewsIfNeeded() {
         detailedScatterPlotPropertyName = make_pair("", "");
       }
 
+      auto current_prop = selectedGraphProperties[i];
+      auto contains_current_prop =
+        [current_prop](const pair<pair<string, string>, ScatterPlot2D *> &map_pair) {
+          return ((map_pair.first.first == current_prop) ||
+                  (map_pair.first.second == current_prop));
+        };
       map<pair<string, string>, ScatterPlot2D *>::iterator overviewToDestroyIt;
-      overviewToDestroyIt = find_if(scatterPlotsMap.begin(), scatterPlotsMap.end(),
-                                    map_pair_string_key_contains(selectedGraphProperties[i]));
+      overviewToDestroyIt =
+        find_if(scatterPlotsMap.begin(), scatterPlotsMap.end(),
+                contains_current_prop);
 
       while (overviewToDestroyIt != scatterPlotsMap.end()) {
         if (overviewToDestroyIt->second == detailedScatterPlot) {
@@ -749,8 +740,9 @@ void ScatterPlot2DView::destroyOverviewsIfNeeded() {
         delete overviewToDestroyIt->second;
         scatterPlotsGenMap.erase(overviewToDestroyIt->first);
         scatterPlotsMap.erase(overviewToDestroyIt);
-        overviewToDestroyIt = find_if(scatterPlotsMap.begin(), scatterPlotsMap.end(),
-                                      map_pair_string_key_contains(selectedGraphProperties[i]));
+        overviewToDestroyIt =
+          find_if(scatterPlotsMap.begin(), scatterPlotsMap.end(),
+                  contains_current_prop);
       }
     }
   }

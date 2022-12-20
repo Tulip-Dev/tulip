@@ -86,26 +86,6 @@ private:
   LayoutProperty *srcLayout, *destLayout, *viewLayout;
 };
 
-class NeighborNodesEdgeLengthOrdering : public binary_function<node, node, bool> {
-
-public:
-  NeighborNodesEdgeLengthOrdering(node centralNode, LayoutProperty *layout)
-      : centralNode(centralNode), layout(layout) {}
-
-  bool operator()(tlp::node n1, tlp::node n2) const {
-    Coord centralNodeCoord = layout->getNodeValue(centralNode);
-    Coord n1Coord = layout->getNodeValue(n1);
-    Coord n2Coord = layout->getNodeValue(n2);
-    float centralToN1Dist = centralNodeCoord.dist(n1Coord);
-    float centralToN2Dist = centralNodeCoord.dist(n2Coord);
-    return centralToN1Dist < centralToN2Dist;
-  }
-
-private:
-  node centralNode;
-  LayoutProperty *layout;
-};
-
 class MouseEventDiscardFilter : public QObject {
 
 public:
@@ -545,8 +525,15 @@ void NeighborhoodHighlighter::computeNeighborhoodGraphCircleLayout() {
     }
   }
 
+  auto layout = neighborhoodGraphLayout;
   sort(neighborsNodes.begin(), neighborsNodes.end(),
-       NeighborNodesEdgeLengthOrdering(neighborhoodGraphCentralNode, neighborhoodGraphLayout));
+       [centralNodeCoord, layout](tlp::node n1, tlp::node n2) {
+         Coord n1Coord = layout->getNodeValue(n1);
+         Coord n2Coord = layout->getNodeValue(n2);
+         float centralToN1Dist = centralNodeCoord.dist(n1Coord);
+         float centralToN2Dist = centralNodeCoord.dist(n2Coord);
+         return centralToN1Dist < centralToN2Dist;
+       });
 
   BoundingBox centralNodeBB(Coord(centralNodeCoord.getX() - centralNodeSize.getW() / 2,
                                   centralNodeCoord.getY() - centralNodeSize.getH() / 2, 0),
