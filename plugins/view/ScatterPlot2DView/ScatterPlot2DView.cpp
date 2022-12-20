@@ -717,14 +717,13 @@ void ScatterPlot2DView::destroyOverviewsIfNeeded() {
 
       auto current_prop = selectedGraphProperties[i];
       auto contains_current_prop =
-        [current_prop](const pair<pair<string, string>, ScatterPlot2D *> &map_pair) {
-          return ((map_pair.first.first == current_prop) ||
-                  (map_pair.first.second == current_prop));
-        };
+          [current_prop](const pair<pair<string, string>, ScatterPlot2D *> &map_pair) {
+            return ((map_pair.first.first == current_prop) ||
+                    (map_pair.first.second == current_prop));
+          };
       map<pair<string, string>, ScatterPlot2D *>::iterator overviewToDestroyIt;
       overviewToDestroyIt =
-        find_if(scatterPlotsMap.begin(), scatterPlotsMap.end(),
-                contains_current_prop);
+          find_if(scatterPlotsMap.begin(), scatterPlotsMap.end(), contains_current_prop);
 
       while (overviewToDestroyIt != scatterPlotsMap.end()) {
         if (overviewToDestroyIt->second == detailedScatterPlot) {
@@ -741,8 +740,7 @@ void ScatterPlot2DView::destroyOverviewsIfNeeded() {
         scatterPlotsGenMap.erase(overviewToDestroyIt->first);
         scatterPlotsMap.erase(overviewToDestroyIt);
         overviewToDestroyIt =
-          find_if(scatterPlotsMap.begin(), scatterPlotsMap.end(),
-                  contains_current_prop);
+            find_if(scatterPlotsMap.begin(), scatterPlotsMap.end(), contains_current_prop);
       }
     }
   }

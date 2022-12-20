@@ -386,13 +386,11 @@ void HistogramStatistics::computeInteractor() {
       viewSelection->setAllEdgeValue(false);
       double lowerBound = histoStatsConfigWidget->getSelectionLowerBound();
       double upperBound = histoStatsConfigWidget->getSelectionUpperBound();
-      auto val_in_bounds =
-        [lowerBound, upperBound] (const pair<unsigned int, double> &map_pair) {
-          return (map_pair.second >= lowerBound) && (map_pair.second <= upperBound);
-        };
+      auto val_in_bounds = [lowerBound, upperBound](const pair<unsigned int, double> &map_pair) {
+        return (map_pair.second >= lowerBound) && (map_pair.second <= upperBound);
+      };
       map<unsigned int, double>::iterator pos =
-        find_if(graphPropertyValueSet.begin(), graphPropertyValueSet.end(),
-                val_in_bounds);
+          find_if(graphPropertyValueSet.begin(), graphPropertyValueSet.end(), val_in_bounds);
 
       while (pos != graphPropertyValueSet.end()) {
         if (histoView->getDataLocation() == NODE) {

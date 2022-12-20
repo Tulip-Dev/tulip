@@ -197,9 +197,7 @@ bool PolyominoPacking::run() {
   }
 
   std::sort(polyominos.begin(), polyominos.end(),
-            [](const Polyomino &ci1, const Polyomino &ci2) {
-              return ci1.perim > ci2.perim;
-            });
+            [](const Polyomino &ci1, const Polyomino &ci2) { return ci1.perim > ci2.perim; });
 
   if (pluginProgress) {
     pluginProgress->setComment("Packing polyominos...");

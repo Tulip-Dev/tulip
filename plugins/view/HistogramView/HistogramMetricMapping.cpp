@@ -167,9 +167,7 @@ void GlEditableCurve::init() {
 
 void GlEditableCurve::draw(float lod, Camera *camera) {
   std::sort(curvePoints.begin(), curvePoints.end(),
-            [] (const Coord &c1, const Coord &c2) {
-              return c1.getX() < c2.getX();
-            });
+            [](const Coord &c1, const Coord &c2) { return c1.getX() < c2.getX(); });
   camera->initGl();
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

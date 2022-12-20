@@ -34,7 +34,7 @@ class HistogramView;
 class GlAxis;
 class GlQuantitativeAxis;
 
-typedef double (KernelFunction) (double);
+typedef double(KernelFunction)(double);
 
 class HistogramStatistics : public GLInteractorComponent {
 
