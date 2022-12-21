@@ -22,8 +22,9 @@
 #include <QApplication>
 #include <QMainWindow>
 #include <QMessageBox>
-#include <QDesktopWidget>
 #include <QStandardPaths>
+#include <QGuiApplication>
+#include <QScreen>
 
 #include <CrashHandling.h>
 
@@ -349,7 +350,7 @@ int main(int argc, char **argv) {
       mainWindow->setGeometry(windowGeometry);
     } else {
       mainWindow->move(0, 0);
-      mainWindow->resize(QDesktopWidget().availableGeometry(mainWindow).size() * 0.9);
+      mainWindow->resize(QGuiApplication::primaryScreen()->availableGeometry().size() * 0.9);
     }
 
     TulipSettings::setFirstRun(false);

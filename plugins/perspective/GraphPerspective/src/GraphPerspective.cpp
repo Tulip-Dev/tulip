@@ -42,7 +42,6 @@
 #include <QByteArray>
 #include <QMainWindow>
 #include <QApplication>
-#include <QDesktopWidget>
 
 #include <tulip/TlpTools.h>
 #include <tulip/ImportModule.h>

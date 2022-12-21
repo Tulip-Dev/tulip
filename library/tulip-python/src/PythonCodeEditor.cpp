@@ -34,7 +34,6 @@
 #include <QScrollBar>
 #include <QMessageBox>
 #include <QMimeData>
-#include <QDesktopWidget>
 #include <QFileInfo>
 #include <QScreen>
 #include <QPushButton>
