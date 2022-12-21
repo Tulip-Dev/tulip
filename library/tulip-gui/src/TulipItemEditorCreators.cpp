@@ -553,7 +553,7 @@ QSize TulipFileDescriptorEditorCreator::sizeHint(const QStyleOptionViewItem &opt
   QString text;
 
   if (fileInfo.isDir()) {
-    QDir d1 = fileInfo.dir();
+    QDir d1(fileInfo.dir());
     d1.cdUp();
     text = fileInfo.absoluteFilePath().remove(0, d1.absolutePath().length() - 1);
   } else {
