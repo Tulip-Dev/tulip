@@ -447,8 +447,8 @@ void PropertiesEditor::displayedPropertiesRemoved(const QModelIndex &parent, int
 
 bool PropertiesEditor::setAllValues(PropertyInterface *prop, bool nodes, bool selectedOnly,
                                     bool graphOnly) {
-  QVariant val = TulipItemDelegate::showEditorDialog(
-      nodes ? NODE : EDGE, prop, _graph, _delegate, editorParent);
+  QVariant val = TulipItemDelegate::showEditorDialog(nodes ? NODE : EDGE, prop, _graph, _delegate,
+                                                     editorParent);
 
   // Check if edition has been cancelled
   if (!val.isValid())
@@ -481,8 +481,8 @@ bool PropertiesEditor::setAllValues(PropertyInterface *prop, bool nodes, bool se
 }
 
 void PropertiesEditor::setDefaultValue(tlp::PropertyInterface *prop, bool nodes) {
-  QVariant val = TulipItemDelegate::showEditorDialog(
-      nodes ? NODE : EDGE, prop, _graph, _delegate, editorParent);
+  QVariant val = TulipItemDelegate::showEditorDialog(nodes ? NODE : EDGE, prop, _graph, _delegate,
+                                                     editorParent);
 
   // Check if edition has been cancelled
   if (!val.isValid())
