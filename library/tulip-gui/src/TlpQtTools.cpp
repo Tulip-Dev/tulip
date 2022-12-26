@@ -415,7 +415,7 @@ void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
   tlp::GlyphManager::loadGlyphPlugins();
   tlp::EdgeExtremityGlyphManager::loadGlyphPlugins();
 
-  // Explicitely create a shared OpenGL context to
+  // Explicitly create a shared OpenGL context to
   // ensure it is initialized before using it
   GlOffscreenRenderer::getInstance()->getOpenGLContext();
 }

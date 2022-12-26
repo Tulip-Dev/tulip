@@ -38,7 +38,7 @@ static const char *paramHelp[] = {
     "<li> <b>logarithmic</b>: graph elements values are first "
     "mapped in the [1, +inf[ range. "
     "Then the log of each mapped value is computed and used to compute the associated color of the "
-    "graph element trough a linear interpolation between 0 and the log of the mapped maximum value "
+    "graph element through a linear interpolation between 0 and the log of the mapped maximum value "
     "of graph elements.</li>"
     "<li><b>uniform</b>: this is the same as logarithmic except for the interpolation: the values "
     "are sorted, numbered, "

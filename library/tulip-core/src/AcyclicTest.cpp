@@ -151,7 +151,7 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
         if (!ite->hasNext()) {
           // unstack curNode
           nodesToVisit.pop();
-          // delete & unstack neightbours iterator
+          // delete & unstack neighbours iterator
           delete neighboursToVisit.top();
           neighboursToVisit.pop();
           // mark curNode as to be skipped

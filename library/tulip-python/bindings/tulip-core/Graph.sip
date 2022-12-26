@@ -4419,7 +4419,7 @@ tlp::Graph *loadGraph(const std::string &filename) /TransferBack/;
 %Docstring
 tlp.loadGraph(fileName)
 
-Loads a graph serialized in a file trough one the available Tulip import plugins based on its extension.
+Loads a graph serialized in a file through one the available Tulip import plugins based on its extension.
 
 Since Tulip 4.8, the selection of the import plugin is based on the provided filename extension.
 The import will fail if the selected import plugin is not loaded.
@@ -4453,7 +4453,7 @@ TLP JSON (.json), GML (.gml), CSV (.csv), SVG (.svg, .svgz)
 Before Tulip 4.8 and as a fallback, this function uses the "TLP Export" export plugin
 (always loaded as it is linked into the tulip-core library).
 
-Returns whether the export was successfull or not.
+Returns whether the export was successful or not.
 
 :param graph: the graph to export
 :type graph: :class:`tlp.Graph`
@@ -4470,7 +4470,7 @@ tlp.saveGraph(graph)
 
 .. versionadded:: 4.5
 
-Saves a graph to the same file from which it has been loaded (if the ouput format is supported).
+Saves a graph to the same file from which it has been loaded (if the output format is supported).
 Returns :const:`True` if the graph has been successfully saved.
 
 :param graph: the graph to export
@@ -4673,7 +4673,7 @@ void removeFromGraph(tlp::Graph *inGraph, tlp::BooleanProperty *inSelection = 0)
 tlp.removeFromGraph(inGraph, inSelection=None)
 
 Removes the selected part of a graph (properties values, nodes and edges).
-If no selection is done, the whole graph is reseted to default value.
+If no selection is done, the whole graph is reset to default value.
 
 :param inGraph: the graph on which to remove elements
 :type inGraph: :class:`tlp.Graph`

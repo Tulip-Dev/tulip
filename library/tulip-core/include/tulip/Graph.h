@@ -59,7 +59,7 @@ enum ElementType {
  * @brief Loads a graph from a file (extension can be any of the Tulip supported input graph file
  *format).
  *
- * This function loads a graph serialized in a file trough the available Tulip import plugins.
+ * This function loads a graph serialized in a file through the available Tulip import plugins.
  * Since Tulip 4.8, the selection of the import plugin is based on the provided filename extension.
  * The import will fail if the selected import plugin is not loaded.
  * The graph file formats that can currently be imported are : TLP (*.tlp, *.tlp.gz, *.tlpz), TLP
@@ -246,7 +246,7 @@ public:
   /**
    * @brief Applies an algorithm plugin, identified by its name.
    * Algorithm plugins are subclasses of the tlp::Algorithm interface.
-   * Parameters are transmitted to the algorithm trough the DataSet.
+   * Parameters are transmitted to the algorithm through the DataSet.
    * To determine a plugin's parameters, you can either:
    *
    * * refer to its documentation

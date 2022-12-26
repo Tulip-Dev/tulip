@@ -73,7 +73,7 @@ public:
   static GlTexture getTextureInfo(const std::string &);
 
   /**
-   * Check if a texture fo the given name exists in the current context
+   * Check if a texture for the given name exists in the current context
    */
   static bool existsTexture(const std::string &filename);
   /**

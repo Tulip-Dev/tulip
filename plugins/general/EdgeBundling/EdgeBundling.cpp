@@ -239,7 +239,7 @@ bool EdgeBundling::run() {
 
   if (!layout3D) {
     // forbid edge bundling execution if the input layout is in 3D
-    // and it has not been explicitely asked to use the 3D version
+    // and it has not been explicitly asked to use the 3D version
     // of the algorithm.
     auto lMin = layout->getMin(graph);
     auto lMax = layout->getMax(graph);
@@ -247,7 +247,7 @@ bool EdgeBundling::run() {
       pluginProgress->setError("A 3D input layout has been detected while the default behavior "
                                "is to consider a 2D input layout. "
                                "You must set the \"3D_layout\" parameter to "
-                               "\"true\" to explicitely use 3D edge bundling.");
+                               "\"true\" to explicitly use 3D edge bundling.");
       return false;
     }
   }

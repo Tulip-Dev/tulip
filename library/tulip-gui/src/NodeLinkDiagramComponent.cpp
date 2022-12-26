@@ -403,7 +403,7 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
       action = selectMenu->addAction("predecessor nodes", this, SLOT(selectInNodes()));
       action->setToolTip(QString("Select the predecessors of node #") + sId);
       action = selectMenu->addAction("successor nodes", this, SLOT(selectOutNodes()));
-      action->setToolTip(QString("Select the sucessors of node #") + sId);
+      action->setToolTip(QString("Select the successors of node #") + sId);
       action = selectMenu->addAction("input edges", this, SLOT(selectInEdges()));
       action->setToolTip(QString("Select the input edges of node #") + sId);
       action = selectMenu->addAction("output edges", this, SLOT(selectOutEdges()));
@@ -433,7 +433,7 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
                          " to the current selection");
       action =
           addToSelectionMenu->addAction("successor nodes", this, SLOT(addOutNodesToSelection()));
-      action->setToolTip(QString("Add the sucessors of node #") + sId +
+      action->setToolTip(QString("Add the successors of node #") + sId +
                          " to the current selection");
       action = addToSelectionMenu->addAction("input edges", this, SLOT(addInEdgesToSelection()));
       action->setToolTip(QString("Add the input edges of node #") + sId +

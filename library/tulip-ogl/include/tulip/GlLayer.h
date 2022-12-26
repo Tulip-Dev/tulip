@@ -99,7 +99,7 @@ public:
 
   /**
    * Set the layer's camera
-   * GlLayer now use camera parameters and you have the resposibility of camera destruction
+   * GlLayer now use camera parameters and you have the responsibility of camera destruction
    */
   void setSharedCamera(Camera *camera);
 

@@ -402,9 +402,9 @@ IF(WIN32)
       SET(ENV{PATH} "${VS_IDE_DIR};${VS_VC_BIN_DIR};$ENV{PATH}")
       # Run the lib.exe command to list the content of the library file
       EXECUTE_PROCESS(COMMAND ${COMPILER_DIRECTORY}/lib.exe /list ${import_library} OUTPUT_VARIABLE LIBRARY_CONTENTS)
-      # If the library is an import library, lib.exe outputs the associated dll name instead of the object files for a static libary
+      # If the library is an import library, lib.exe outputs the associated dll name instead of the object files for a static library
       STRING(REGEX MATCH "[^\r?\n]+\\.dll" ${dll_name} ${LIBRARY_CONTENTS})
-      # Restore original PATH environement variable value
+      # Restore original PATH environment variable value
       SET(ENV{PATH} "${PATH_BACKUP}")
     ENDIF(MSVC)
   ENDMACRO(TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY)
@@ -427,7 +427,7 @@ MACRO(TULIP_COPY_TARGET_LIBRARY_POST_BUILD target_name destination)
                       VERBATIM)
   ENDIF(WIN32)
 
-  # optionnal parameters of the macro corresponds to targets that depend on the above created custom target
+  # optional parameters of the macro corresponds to targets that depend on the above created custom target
   SET(DEPENDENCIES_TARGETS ${ARGN})
 
   FOREACH(DEPENDENCY_TARGET ${DEPENDENCIES_TARGETS})

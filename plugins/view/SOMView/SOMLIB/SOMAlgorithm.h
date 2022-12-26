@@ -90,7 +90,7 @@ public:
    * sample see SOM algorithm for more details.). Training process has this order
    * while currentNumber of iteration < maxIteration :
    *    Take a random vector in the input sample.
-   *    Find the node with the less euclidian distance in the SOM.
+   *    Find the node with the less euclidean distance in the SOM.
    *    Propagate modification on the map.
    *
    * @param map The SOM
@@ -102,11 +102,11 @@ public:
              tlp::PluginProgress *pluginProgress = nullptr);
 
   /**
-   * Return a node with the smallest euclidian distance between its weight vector and the given
+   * Return a node with the smallest euclidean distance between its weight vector and the given
    * input vector. If there is one or more node with the smallest distance choose one randomly.
    * @param map The SOM.
    * @param input The input vector.
-   * @param dist The euclidian distance between input vector and selected node weight.
+   * @param dist The euclidean distance between input vector and selected node weight.
    * @return
    */
   node findBMU(SOMMap *map, const DynamicVector<double> &input, double &dist);

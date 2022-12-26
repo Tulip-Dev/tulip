@@ -519,7 +519,7 @@ void PlanarityTestImpl::obstructionEdgesPossibleObstrConfirmed(Graph *sG, node w
 void PlanarityTestImpl::obstructionEdgesCNodeCounter(Graph *sG, node cNode, node w, node jl,
                                                      node jr, node t1, node t2) {
   //  tlp::debug() << __PRETTY_FUNCTION__ << endl;
-  // seachs for a node f in RBC[cNode] between jl and jr s.t.
+  // search for a node f in RBC[cNode] between jl and jr s.t.
   // f has a descendant that is a neighbor of w in G;
   bool flag = false;
   node f = NULL_NODE, t12 = NULL_NODE, t22 = NULL_NODE;

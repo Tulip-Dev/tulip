@@ -432,7 +432,7 @@ font: 12px;
          <item>
           <widget class="QCheckBox" name="applyDrawingDefaultsCheck">
            <property name="toolTip">
-            <string>&lt;p&gt;If checked, when clicking &quot;OK&quot;, &lt;br/&gt;the drawing defaults changes will be applied to the graphs currenty loaded.&lt;/p&gt;</string>
+            <string>&lt;p&gt;If checked, when clicking &quot;OK&quot;, &lt;br/&gt;the drawing defaults changes will be applied to the graphs currently loaded.&lt;/p&gt;</string>
            </property>
            <property name="text">
             <string>Apply drawing defaults changes to loaded graphs</string>

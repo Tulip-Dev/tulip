@@ -206,7 +206,7 @@ enum ShortestPathType {
  * @param graph The graph to compute on.
  * @param src The source node of the paths
  * @param tgt The target node of the paths
- * @param pathType The type of path to consider (chosen among tlp::ShortestPathType enumation
+ * @param pathType The type of path to consider (chosen among tlp::ShortestPathType enumeration
  * values)
  * @param weights A Double property giving the edges weight if weighted paths have to be considered.
  * Can be set to null to select unweighted paths.

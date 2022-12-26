@@ -189,7 +189,7 @@ To learn how to call all these algorithms in Python, you can refer to the
 :ref:`Applying an algorithm on a graph <applyGraphAlgorithm>` section.
 The plugins documentation is ordered according to their type.
 
-.. warning:: If you use the Tulip Python bindings trough the classical Python
+.. warning:: If you use the Tulip Python bindings through the classical Python
              interpreter, some plugins (Color Mapping, Convolution Clustering,
              File System Directory, GEXF, SVG Export, Website) require the
              :mod:`tulipgui` module to be imported before they can be called

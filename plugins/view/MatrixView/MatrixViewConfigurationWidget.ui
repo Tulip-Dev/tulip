@@ -205,7 +205,7 @@ background-color: rgb(160, 160, 160);</string>
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Nodes are ordered according to a choosen property</string>
+           <string>Nodes are ordered according to a chosen property</string>
           </property>
           <property name="wordWrap">
            <bool>true</bool>

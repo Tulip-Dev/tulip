@@ -41,9 +41,10 @@ using namespace tlp;
  * if they are part of the same group.
  * The result for a node shows the number of groups to which it belongs.
  *
- * @note To create subgraphs using the result of this algortihm use "Equal Value" with parameter
+ * @note To create subgraphs using the result of this algorithm use "Equal Value" with parameter
  *Type="edges".
  *
+
  * @todo Deal with directed graphs.
  *
  **/

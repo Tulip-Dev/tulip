@@ -115,7 +115,7 @@ public:
 
     nodesHaveCoordinates = false;
 
-    // Open the GEXF file choosed by the user
+    // Open the GEXF file chosen by the user
     QFile xmlFile(qfilename);
 
     if (!xmlFile.open(QIODevice::ReadOnly | QIODevice::Text)) {

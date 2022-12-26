@@ -25,7 +25,7 @@ MACRO(UNIT_TEST)
     FILE(COPY ${PYTHON_TEST_MODULE}.py DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
     ADD_TEST(NAME ${TEST_NAME} COMMAND ${PYTHON_EXECUTABLE} -m unittest ${PYTHON_TEST_MODULE} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
   ENDIF()
-  # In order to run the tests on windows, we need to add the paths of the dll depencencies (cppunit, tulip, gzstream, yajl)
+  # In order to run the tests on windows, we need to add the paths of the dll dependencies (cppunit, tulip, gzstream, yajl)
   # in the PATH environment variable
   IF(WIN32)
     IF(MINGW)

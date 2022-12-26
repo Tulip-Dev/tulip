@@ -226,7 +226,7 @@ The class PropertyAlgorithm provides the following methods to declare a paramete
                          const std::string &defaultValue = std::string(),
                          bool isMandatory = true);
 
-The new parameters added to the plug-in are, by default, IN parameters. The OUT parameters are defined depending of the *PropertyAlgorithm* used. INOUT parameters gives the developer the abilities to extract additionnal information.
+The new parameters added to the plug-in are, by default, IN parameters. The OUT parameters are defined depending of the *PropertyAlgorithm* used. INOUT parameters gives the developer the abilities to extract additional information.
 
 This methods have to be called in the constructor of your class. Following is a description of its fields:
 

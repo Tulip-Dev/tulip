@@ -133,25 +133,25 @@ struct GMLGraphBuilder : public GMLTrue {
   }
 
   /**
-   * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
+   * Set the values of the property 2nd param on the edge 1st param, to the value 3rd param.
    */
   bool setEdgeValue(edge, const string &, string) {
     return true;
   }
   /**
-   * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
+   * Set the values of the property 2nd param on the edge 1st param, to the value 3rd param.
    */
   bool setEdgeValue(edge, const string &, int) {
     return true;
   }
   /**
-   * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
+   * Set the values of the property 2nd param on the edge 1st param, to the value 3rd param.
    */
   bool setEdgeValue(edge, const string &, bool) {
     return true;
   }
   /**
-   * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
+   * Set the values of the property 2nd param on the edge 1st param, to the value 3rd param.
    */
   bool setEdgeValue(edge, const string &, double) {
     return true;

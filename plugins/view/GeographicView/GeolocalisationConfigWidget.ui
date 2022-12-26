@@ -80,7 +80,7 @@
    <item>
     <widget class="QCheckBox" name="automaticChoiceCB">
      <property name="toolTip">
-      <string>&lt;p&gt;If checked, when multiple locations are retrieved the one whose the returned address gives the best match with the input address (i.e the one for whom the input address is found closest to its beginning) is choosen.&lt;br/&gt;If there is no possible match (the input address is not found in any of returned addresses) the first location is choosen.&lt;br/&gt;If not checked, a dialog is then displayed to allow the user to choose among the list of found locations.&lt;br/&gt;In any case, if only one location is retrieved, it is choosen.&lt;/p&gt;</string>
+      <string>&lt;p&gt;If checked, when multiple locations are retrieved the one whose the returned address gives the best match with the input address (i.e the one for whom the input address is found closest to its beginning) is chosen.&lt;br/&gt;If there is no possible match (the input address is not found in any of returned addresses) the first location is chosen.&lt;br/&gt;If not checked, a dialog is then displayed to allow the user to choose among the list of found locations.&lt;br/&gt;In any case, if only one location is retrieved, it is chosen.&lt;/p&gt;</string>
      </property>
      <property name="text">
       <string>Automatic choice</string>

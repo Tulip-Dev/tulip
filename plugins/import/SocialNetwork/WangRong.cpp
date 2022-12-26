@@ -119,7 +119,7 @@ struct WangRong : public ImportModule {
       }
 
       /*
-       * Preferencial attachment
+       * Preferential attachment
        */
       double k_sum = 2 * graph->numberOfEdges();
 

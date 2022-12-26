@@ -252,7 +252,7 @@ protected:
                                     QWidget *parent);
 
   /**
-   * @brief Compute the name of the column. Return the first token fo the column if the first lline
+   * @brief Compute the name of the column. Return the first token for the column if the first line
    *is used as header r Column_x xhere x is the column index.
    **/
   QString generateColumnName(unsigned int col) const;

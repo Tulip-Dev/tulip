@@ -52,7 +52,7 @@ Add a dependency on a boolean algorithm.
 
 :param name: the name of the algorithm
 :type name: string
-:param release: the version of the algortihm
+:param release: the version of the algorihm
 :type release: string
 %End
 

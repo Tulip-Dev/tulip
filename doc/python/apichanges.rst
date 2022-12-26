@@ -177,7 +177,7 @@ The following bugs have been corrected since the 4.10 release:
   * fix a regression in the :ref:`string collection plugin parameter improvement <deprecatedStringCollection>`
     when writing Tulip Python plugins
 
-  * fix possible crashs that could occur when a :class:`tlp.Graph` instance owned by Python and not C++
+  * fix possible crashes that could occur when a :class:`tlp.Graph` instance owned by Python and not C++
     (for instance when using :func:`tlp.newGraph()`) is garbage collected
 
   * on windows platform when using the Python IDE from the main Tulip GUI:
@@ -293,7 +293,7 @@ the following script can now be used::
 
   # creates a regular color scale going from blue to yellow to red
   colorScale = [tlp.Color.Blue, tlp.Color.Yellow, tlp.Color.Red]
-  # a dictionnary can also be used (allow to define non regular scales)
+  # a dictionary can also be used (allow to define non regular scales)
   # colorMap = {0: tlp.Color.Blue, 0.5: tlp.Color.Yellow, 1.0: tlp.Color.Red}
 
   # sets the parameters for the 'Color Mapping' color algorithm
@@ -415,7 +415,7 @@ To retrieve the path of the file selected by the user, the following instruction
 Sice this approach is not really intuitive so Tulip 4.9 introduces a more user_friendly mechanism to work
 with file / directory parameters : two new methods have been added in order to easily declare file / directory parameters
 (:meth:`tlp.WithParameter.addFileParameter`, :meth:`tlp.WithParameter.addDirectoryParameter`)
-and it is no more needed to explicitely write the "file::" prefix.
+and it is no more needed to explicitly write the "file::" prefix.
 
 So the recommended way to declare a file parameter in the plugin constructor is now the one below::
 

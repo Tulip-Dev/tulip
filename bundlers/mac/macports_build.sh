@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# set colums in terminal, required by curl
+# set columns in terminal, required by curl
 export COLUMNS=80
 
 # first install MacPorts in order to easily retrieve Tulip dependencies

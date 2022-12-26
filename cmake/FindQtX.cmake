@@ -47,7 +47,7 @@ SET(QT_HAS_WEBKIT FALSE)
 SET(QT_HAS_WEBENGINE FALSE)
 
 # Macro used to workaround a small issue with QtWebkit components on MSYS2:
-# when compling in RelWithDebInfo mode, Qt debug libraries are selected instead
+# when compiling in RelWithDebInfo mode, Qt debug libraries are selected instead
 # of the release one (this should only happen when compiling in Debug mode)
 MACRO(SETUP_QT_LIBRARIES QtModule LIBRARIES)
   IF(MINGW)

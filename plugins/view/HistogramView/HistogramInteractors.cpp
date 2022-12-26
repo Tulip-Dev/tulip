@@ -60,7 +60,7 @@ void HistogramInteractorNavigation::construct() {
       "this one is displayed in fullscreen </b> in a more detailed way and the others interactors "
       "become available. To go back to the histograms previews matrix, double click anywhere in "
       "the view.</p>" +
-      "<p>Otherwise, this interactor offers the same functionnalities as the one in the \"Node "
+      "<p>Otherwise, this interactor offers the same functionalities as the one in the \"Node "
       "Link Diagram view\". The commands are described below:</p>" +
 #if !defined(__APPLE__)
       "<b>Ctrl + Mouse up/down</b>: zoom/unzoom<br>" +

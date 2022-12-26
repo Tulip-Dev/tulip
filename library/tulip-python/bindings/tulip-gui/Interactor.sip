@@ -32,7 +32,7 @@ tlpgui.createInteractor(interactorName)
 .. versionadded:: 4.4
 
 Creates a Tulip interactor. An interactor enables to add user
-interaction (usually trough the use of mouse and keyboards) to a Tulip view.
+interaction (usually through the use of mouse and keyboards) to a Tulip view.
 Use function :func:`tlpgui.getInteractorsCompatibleWithView` to get the names
 of the interactors compatible with a particular view.
 Use method :meth:`tlpgui.View.setInteractors` to modify the default interactors

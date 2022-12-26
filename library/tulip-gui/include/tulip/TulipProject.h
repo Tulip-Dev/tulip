@@ -50,7 +50,7 @@ class PluginProgress;
   @endlist
 
   Alongside this information, one can store any kind of file into a Tulip project. Since a project
-  is meant to be associated to a specific perspective, the responisbility of those file
+  is meant to be associated to a specific perspective, the responsibility of those file
   is left to the perspective.
 
   A TulipProject DOES NOT automatically save to disk. One will have to call the write() method to

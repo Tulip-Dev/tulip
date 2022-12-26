@@ -24,7 +24,7 @@
 // +-------------------------------------------------------------------------+
 
 // Proxy class used internally allowing to automatically create graph properties
-// trough type inference by using the following syntax in Python :
+// through type inference by using the following syntax in Python :
 //      # graph is a reference to a tlp.Graph object and n to a tlp.node object
 //      # a double property named 'metric' will be automatically created
 //      # no need to call 'graph.getDoubleProperty('metric') before anymore

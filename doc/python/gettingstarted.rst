@@ -46,7 +46,7 @@ More sophisticated ways to write python code for graphs management purpose are p
   and is used as the script entry point. The graph currently selected through the combobox located in the upper
   part of the tab is wrapped as a :class:`tlp.Graph` object and provided as parameter of the "main" function.
   The currently edited script can be launched (|icon_run| button) through the control panel located in the lower part of the tab interface.
-  Once started, the script execution can be paused (|icon_pause| button) or stopped (|icon_stop| button); trigerring the update of Tulip visualizations each time.
+  Once started, the script execution can be paused (|icon_pause| button) or stopped (|icon_stop| button); triggering the update of Tulip visualizations each time.
   All modifications performed by a script on a graph can be cancelled/replayed through the Tulip undo/redo feature if the "enable undo" box is checked.
 
 .. _fig2:
@@ -86,7 +86,7 @@ work session in a portable way. Notably it contains the graphs that was loaded i
 files but also the configuration of the views and components that was opened in the software.
 
 When working with the Python IDE, the source code of the scripts, plugins and modules currently edited
-are automatically saved to the current Tulip project. Nevertheless, the Tulip project must be explicitely
+are automatically saved to the current Tulip project. Nevertheless, the Tulip project must be explicitly
 saved to a .tlpx file in order for the Python files to be included in the resulting archive.
 When reopening the project file, the previously edited scripts, plugins and modules will still be available
 in the Python IDE even if you open the file on a computer different from the one you write your code.

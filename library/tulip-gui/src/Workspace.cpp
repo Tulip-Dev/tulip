@@ -194,7 +194,7 @@ int Workspace::addPanel(tlp::View *view) {
     updatePanels();
   }
 
-  // Force the first panel's graph combo box update when underlaying model has been updated.
+  // Force the first panel's graph combo box update when underlying model has been updated.
   panel->viewGraphSet(view->graph());
   setFocusedPanel(panel);
   // Slightly delay view content centering as the panel widget
