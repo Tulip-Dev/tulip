@@ -565,14 +565,14 @@ void PropertiesEditor::toLabels(PropertyInterface *prop, bool nodes, bool edges,
   DataSet data;
   data.set("nodes", nodes);
   data.set("edges", edges);
-  data.set("input", prop);
+  data.set("property", prop);
 
   if (selectedOnly)
     data.set("selection", _graph->getProperty<BooleanProperty>("viewSelection"));
 
   std::string msg;
   // _graph->push() must be done outside of this method
-  // to allow call from TabelView.cpp
+  // to allow call from TableView.cpp
   StringProperty *result = _graph->getProperty<StringProperty>("viewLabel");
   _graph->applyPropertyAlgorithm("To labels", result, msg, &data);
 }

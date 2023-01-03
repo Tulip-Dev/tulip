@@ -43,7 +43,9 @@ using namespace tlp;
 
 TableView::TableView(tlp::PluginContext *)
     : ViewWidget(), _ui(new Ui::TableViewWidget), propertiesEditor(nullptr), _model(nullptr),
-      isNewGraph(false), filteringColumns(false), previousGraph(nullptr), minFontSize(-1) {}
+      isNewGraph(false), filteringColumns(false), previousGraph(nullptr), minFontSize(-1) {
+    addDependency("To labels", "1.1");
+}
 
 TableView::~TableView() {
   delete _ui;
