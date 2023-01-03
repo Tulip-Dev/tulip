@@ -50,6 +50,12 @@ public:
     addInParameter<BooleanProperty>("selection", paramHelp[1], "", false);
     addInParameter<bool>("nodes", paramHelp[2], "true");
     addInParameter<bool>("edges", paramHelp[3], "true");
+
+
+    // result needs to be an inout parameter
+    // in order to preserve the original values of non targeted elements
+    // i.e if "nodes" == true and "edges==false", the values of edges must be preserved
+   // parameters.setDirection("result", INOUT_PARAM);
   }
 
   bool check(std::string &errMsg) override {
@@ -71,6 +77,9 @@ public:
     if (dataSet != nullptr) {
       dataSet->getDeprecated("property", "input", input);
       dataSet->get("selection", selection);
+    } else {
+        input = graph->getProperty("viewMetric");
+        selection = graph->getProperty<BooleanProperty>("viewSelection");
     }
 
     pluginProgress->showPreview(false);
