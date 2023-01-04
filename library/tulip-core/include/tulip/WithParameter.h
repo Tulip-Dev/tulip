@@ -213,6 +213,14 @@ struct TLP_SCOPE ParameterDescriptionList {
   void setDefaultValue(const std::string &parameterName, const std::string &value);
 
   /**
+   * @brief retrieves the direction of a parameter.
+   *
+   * @param parameterName The name of the parameter to retrieve the direction of.
+   * @return The direction of the parameter
+   **/
+  ParameterDirection getDirection(const std::string &parameterName) const;
+
+  /**
    * @brief Sets the direction of a parameter.
    *
    * @param parameterName The name of the parameter to set the value of.

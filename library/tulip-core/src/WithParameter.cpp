@@ -151,6 +151,10 @@ void ParameterDescriptionList::setDefaultValue(const string &name, const string 
   getParameter(name)->setDefaultValue(val);
 }
 
+ParameterDirection ParameterDescriptionList::getDirection(const string &name) const {
+  return const_cast<ParameterDescriptionList *>(this)->getParameter(name)->getDirection();
+}
+
 void ParameterDescriptionList::setDirection(const string &name, ParameterDirection direction) {
   getParameter(name)->setDirection(direction);
 }

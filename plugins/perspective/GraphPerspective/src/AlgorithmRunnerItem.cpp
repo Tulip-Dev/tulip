@@ -141,7 +141,7 @@ tlp::Graph *AlgorithmRunnerItem::graph() const {
 }
 
 template <typename PROP>
-void asLocal(QVariant var, DataSet &data, Graph *g) {
+void asLocal(QVariant var, DataSet &data, Graph *g, bool inout) {
   if (var.userType() == qMetaTypeId<PROP *>()) {
     PROP *prop = var.value<PROP *>();
     if (!prop) {
@@ -149,34 +149,40 @@ void asLocal(QVariant var, DataSet &data, Graph *g) {
       return;
     }
     const std::string &propName = prop->getName();
-    bool hasProp = g->existLocalProperty(propName);
     PROP *local = g->getLocalProperty<PROP>(propName);
 
-    if (!hasProp) {
-      // copy default property values to ensure
-      // the inheritance of user defined property settings
-      local->setAllNodeValue(prop->getNodeDefaultValue());
-      local->setAllEdgeValue(prop->getEdgeDefaultValue());
+    if (local != prop) {
+      // copy all existing values if "result" is an inout parameter
+      if (inout)
+	*local = *prop;
+      else {
+	// copy only default property values to ensure
+	// the inheritance of user defined property settings
+	local->setAllNodeValue(prop->getNodeDefaultValue());
+	local->setAllEdgeValue(prop->getEdgeDefaultValue());
+      }
     }
 
     data.set("result", local);
   }
 }
 
-static void copyToLocal(DataSet &data, Graph *g) {
+static void initResultAsLocal(DataSet &data, Graph *g,
+			      ParameterDescriptionList &paramList) {
   if (!data.exists("result"))
     return;
 
   DataType *d = data.getData("result");
   QVariant var = TulipMetaTypes::dataTypeToQvariant(d, "");
   delete d;
-  asLocal<DoubleProperty>(var, data, g);
-  asLocal<IntegerProperty>(var, data, g);
-  asLocal<LayoutProperty>(var, data, g);
-  asLocal<SizeProperty>(var, data, g);
-  asLocal<ColorProperty>(var, data, g);
-  asLocal<BooleanProperty>(var, data, g);
-  asLocal<StringProperty>(var, data, g);
+  bool inout = paramList.getDirection("result") == INOUT_PARAM;
+  asLocal<DoubleProperty>(var, data, g, inout);
+  asLocal<IntegerProperty>(var, data, g, inout);
+  asLocal<LayoutProperty>(var, data, g, inout);
+  asLocal<SizeProperty>(var, data, g, inout);
+  asLocal<ColorProperty>(var, data, g, inout);
+  asLocal<BooleanProperty>(var, data, g, inout);
+  asLocal<StringProperty>(var, data, g, inout);
 }
 
 // simple structure to hold an output property parameter
@@ -296,7 +302,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
   g->push();
 
   if (_storeResultAsLocal)
-    copyToLocal(dataSet, g);
+    initResultAsLocal(dataSet, g, paramList);
 
   std::vector<std::string> outNonPropertyParams;
   // use temporary output properties
