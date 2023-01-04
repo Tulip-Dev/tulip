@@ -108,12 +108,12 @@ public:
       "The average path length is also computed.",
       "1.4", "Graph")
   BetweennessCentrality(const PluginContext *context)
-  // set second parameter of the constructor below to true because
-  // result needs to be an inout parameter
-  // in order to preserve the original values of non targeted elements
-  // i.e if "target" = "nodes", the values of edges must be preserved
-  // and if "target" = "edges", the values of nodes must be preserved
-  : DoubleAlgorithm(context, true) {
+      // set second parameter of the constructor below to true because
+      // result needs to be an inout parameter
+      // in order to preserve the original values of non targeted elements
+      // i.e if "target" = "nodes", the values of edges must be preserved
+      // and if "target" = "edges", the values of nodes must be preserved
+      : DoubleAlgorithm(context, true) {
     addInParameter<bool>("directed", paramHelp[0], "false");
     addInParameter<bool>("norm", paramHelp[1], "false", false);
     addInParameter<NumericProperty *>("weight", paramHelp[2], "", false);

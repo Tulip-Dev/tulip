@@ -154,12 +154,12 @@ void asLocal(QVariant var, DataSet &data, Graph *g, bool inout) {
     if (local != prop) {
       // copy all existing values if "result" is an inout parameter
       if (inout)
-	*local = *prop;
+        *local = *prop;
       else {
-	// copy only default property values to ensure
-	// the inheritance of user defined property settings
-	local->setAllNodeValue(prop->getNodeDefaultValue());
-	local->setAllEdgeValue(prop->getEdgeDefaultValue());
+        // copy only default property values to ensure
+        // the inheritance of user defined property settings
+        local->setAllNodeValue(prop->getNodeDefaultValue());
+        local->setAllEdgeValue(prop->getEdgeDefaultValue());
       }
     }
 
@@ -167,8 +167,7 @@ void asLocal(QVariant var, DataSet &data, Graph *g, bool inout) {
   }
 }
 
-static void initResultAsLocal(DataSet &data, Graph *g,
-			      ParameterDescriptionList &paramList) {
+static void initResultAsLocal(DataSet &data, Graph *g, ParameterDescriptionList &paramList) {
   if (!data.exists("result"))
     return;
 

@@ -25,10 +25,10 @@ public:
                     "1.0", "");
 
   EdgeSeparation(const tlp::PluginContext *context)
-    // set second parameter of the constructor below to true because
-    // result needs to be an inout parameter
-    // in order to preserve the original values of non targeted elements
-    : LayoutAlgorithm(context, true) {
+      // set second parameter of the constructor below to true because
+      // result needs to be an inout parameter
+      // in order to preserve the original values of non targeted elements
+      : LayoutAlgorithm(context, true) {
     addInParameter<double>("gap", paramHelp[0], "0.5");
     addInParameter<SizeProperty>("edge size", paramHelp[1], "viewSize");
 

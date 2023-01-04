@@ -45,11 +45,11 @@ public:
       "Use a string representation of the values of a given property as the labels of nodes and/or edges.",
       "1.2", "")
   ToLabels(const tlp::PluginContext *context)
-  // set second parameter of the constructor below to true because
-  // result needs to be an inout parameter
-  // in order to preserve the original values of non targeted elements
-  // i.e if "nodes" == true and "edges==false", the values of edges must be preserved
-  : StringAlgorithm(context, true), onNodes(true), onEdges(true) {
+      // set second parameter of the constructor below to true because
+      // result needs to be an inout parameter
+      // in order to preserve the original values of non targeted elements
+      // i.e if "nodes" == true and "edges==false", the values of edges must be preserved
+      : StringAlgorithm(context, true), onNodes(true), onEdges(true) {
     addInParameter<PropertyInterface *>("property", paramHelp[0], "viewMetric", true);
     addInParameter<BooleanProperty>("selection", paramHelp[1], "", false);
     addInParameter<bool>("nodes", paramHelp[2], "true");

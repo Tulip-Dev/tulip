@@ -36,14 +36,14 @@ static const char *paramHelp[] = {
 #define BOTH_TARGET 0
 
 RandomMetric::RandomMetric(const tlp::PluginContext *context)
-  // set second parameter of the constructor below to true because
-  // result needs to be an inout parameter
-  // in order to preserve the original values of non targeted elements
-  // i.e if "target" = "nodes", the values of edges must be preserved
-  // and if "target" = "edges", the values of nodes must be preserved
-  : DoubleAlgorithm(context, true) {
-  addInParameter<StringCollection>(TARGET_TYPE, paramHelp[0], TARGET_TYPES,
-				   true, "both<br/>nodes<br/>edges");
+    // set second parameter of the constructor below to true because
+    // result needs to be an inout parameter
+    // in order to preserve the original values of non targeted elements
+    // i.e if "target" = "nodes", the values of edges must be preserved
+    // and if "target" = "edges", the values of nodes must be preserved
+    : DoubleAlgorithm(context, true) {
+  addInParameter<StringCollection>(TARGET_TYPE, paramHelp[0], TARGET_TYPES, true,
+                                   "both<br/>nodes<br/>edges");
 }
 
 //===========================================
