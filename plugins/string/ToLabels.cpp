@@ -43,18 +43,17 @@ public:
   PLUGININFORMATION(
       "To labels", "Ludwig Fiolka", "2012/03/16",
       "Use a string representation of the values of a given property as the labels of nodes and/or edges.",
-      "1.1", "")
+      "1.2", "")
   ToLabels(const tlp::PluginContext *context)
-      : StringAlgorithm(context), onNodes(true), onEdges(true) {
+  // set second parameter of the constructor below to true because
+  // result needs to be an inout parameter
+  // in order to preserve the original values of non targeted elements
+  // i.e if "nodes" == true and "edges==false", the values of edges must be preserved
+  : StringAlgorithm(context, true), onNodes(true), onEdges(true) {
     addInParameter<PropertyInterface *>("property", paramHelp[0], "viewMetric", true);
     addInParameter<BooleanProperty>("selection", paramHelp[1], "", false);
     addInParameter<bool>("nodes", paramHelp[2], "true");
     addInParameter<bool>("edges", paramHelp[3], "true");
-
-    // result needs to be an inout parameter
-    // in order to preserve the original values of non targeted elements
-    // i.e if "nodes" == true and "edges==false", the values of edges must be preserved
-    // parameters.setDirection("result", INOUT_PARAM);
   }
 
   bool check(std::string &errMsg) override {

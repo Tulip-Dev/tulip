@@ -27,44 +27,46 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
 
-tlp::BooleanAlgorithm::BooleanAlgorithm(const tlp::PluginContext *context)
+#define ADD_RESULT_PARAMETER(TYPE, DEFVAL, INOUT) parameters.template add<TYPE>("result", "This parameter indicates the property to compute.", DEFVAL, true, INOUT ? INOUT_PARAM : OUT_PARAM, "")
+
+tlp::BooleanAlgorithm::BooleanAlgorithm(const tlp::PluginContext *context,
+					bool needInOutResult)
     : tlp::TemplateAlgorithm<BooleanProperty>(context) {
-  addOutParameter<tlp::BooleanProperty>(
-      "result", "This parameter indicates the property to compute.", "viewSelection");
+  ADD_RESULT_PARAMETER(tlp::BooleanProperty, "viewSelection", needInOutResult);
 }
 
-tlp::ColorAlgorithm::ColorAlgorithm(const tlp::PluginContext *context)
+tlp::ColorAlgorithm::ColorAlgorithm(const tlp::PluginContext *context,
+				    bool needInOutResult)
     : tlp::TemplateAlgorithm<ColorProperty>(context) {
-  addOutParameter<tlp::ColorProperty>("result", "This parameter indicates the property to compute.",
-                                      "viewColor");
+  ADD_RESULT_PARAMETER(tlp::ColorProperty, "viewColor", needInOutResult);
 }
 
-tlp::DoubleAlgorithm::DoubleAlgorithm(const tlp::PluginContext *context)
+tlp::DoubleAlgorithm::DoubleAlgorithm(const tlp::PluginContext *context,
+				      bool needInOutResult)
     : tlp::TemplateAlgorithm<DoubleProperty>(context) {
-  addOutParameter<tlp::DoubleProperty>(
-      "result", "This parameter indicates the property to compute.", "viewMetric");
+  ADD_RESULT_PARAMETER(tlp::DoubleProperty, "viewMetric", needInOutResult);
 }
 
-tlp::IntegerAlgorithm::IntegerAlgorithm(const tlp::PluginContext *context)
+tlp::IntegerAlgorithm::IntegerAlgorithm(const tlp::PluginContext *context,
+					bool needInOutResult)
     : tlp::TemplateAlgorithm<IntegerProperty>(context) {
-  addOutParameter<tlp::IntegerProperty>("result",
-                                        "This parameter indicates the property to compute.");
+  ADD_RESULT_PARAMETER(tlp::IntegerProperty, "", needInOutResult);
 }
 
-tlp::LayoutAlgorithm::LayoutAlgorithm(const tlp::PluginContext *context)
+tlp::LayoutAlgorithm::LayoutAlgorithm(const tlp::PluginContext *context,
+				      bool needInOutResult)
     : tlp::TemplateAlgorithm<LayoutProperty>(context) {
-  addOutParameter<tlp::LayoutProperty>(
-      "result", "This parameter indicates the property to compute.", "viewLayout");
+  ADD_RESULT_PARAMETER(tlp::LayoutProperty, "viewLayout", needInOutResult);
 }
 
-tlp::SizeAlgorithm::SizeAlgorithm(const tlp::PluginContext *context)
+tlp::SizeAlgorithm::SizeAlgorithm(const tlp::PluginContext *context,
+					bool needInOutResult)
     : tlp::TemplateAlgorithm<SizeProperty>(context) {
-  addOutParameter<tlp::SizeProperty>("result", "This parameter indicates the property to compute.",
-                                     "viewSize");
+  ADD_RESULT_PARAMETER(tlp::SizeProperty, "viewSize", needInOutResult);
 }
 
-tlp::StringAlgorithm::StringAlgorithm(const tlp::PluginContext *context)
+tlp::StringAlgorithm::StringAlgorithm(const tlp::PluginContext *context,
+				      bool needInOutResult)
     : tlp::TemplateAlgorithm<StringProperty>(context) {
-  addOutParameter<tlp::StringProperty>(
-      "result", "This parameter indicates the property to compute.", "viewLabel");
+  ADD_RESULT_PARAMETER(tlp::StringProperty, "viewLabel", needInOutResult);
 }

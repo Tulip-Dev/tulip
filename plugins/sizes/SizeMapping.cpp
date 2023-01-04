@@ -96,7 +96,12 @@ public:
       "Maps the size of the graph elements onto the values of a given numeric property.", "2.2",
       "Size")
   MetricSizeMapping(const PluginContext *context)
-      : SizeAlgorithm(context), entryMetric(nullptr), entrySize(nullptr), xaxis(true), yaxis(true),
+  // set second parameter of the constructor below to true because
+  // result needs to be an inout parameter
+  // in order to preserve the original values of non targeted elements
+  // i.e if "target" = "nodes", the values of edges must be preserved
+  // and if "target" = "edges", the values of nodes must be preserved
+  : SizeAlgorithm(context, true), entryMetric(nullptr), entrySize(nullptr), xaxis(true), yaxis(true),
         zaxis(true), linearType(true), min(1), max(10), range(0), shift(0) {
     addInParameter<NumericProperty *>("metric", paramHelp[0], "viewMetric");
     addInParameter<SizeProperty>("input", paramHelp[1], "viewSize");
@@ -111,12 +116,6 @@ public:
                                      "nodes<br/>edges");
     addInParameter<StringCollection>("mapping proportionality", paramHelp[9],
                                      "area/volume;dimensions", true, "area/volume<br/>dimensions");
-
-    // result needs to be an inout parameter
-    // in order to preserve the original values of non targeted elements
-    // i.e if "target" = "nodes", the values of edges must be preserved
-    // and if "target" = "edges", the values of nodes must be preserved
-    parameters.setDirection("result", INOUT_PARAM);
   }
 
   bool check(std::string &errorMsg) override {

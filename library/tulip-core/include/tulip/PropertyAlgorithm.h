@@ -36,7 +36,7 @@ static const std::string BOOLEAN_ALGORITHM_CATEGORY = "Selection";
  */
 class TLP_SCOPE BooleanAlgorithm : public TemplateAlgorithm<tlp::BooleanProperty> {
 protected:
-  BooleanAlgorithm(const tlp::PluginContext *);
+  BooleanAlgorithm(const tlp::PluginContext *, bool needInOutResult = false);
 
 public:
   std::string category() const override {
@@ -53,7 +53,7 @@ static const std::string COLOR_ALGORITHM_CATEGORY = "Coloring";
  */
 class TLP_SCOPE ColorAlgorithm : public TemplateAlgorithm<tlp::ColorProperty> {
 protected:
-  ColorAlgorithm(const tlp::PluginContext *);
+  ColorAlgorithm(const tlp::PluginContext *, bool needInOutResult = false);
 
 public:
   std::string category() const override {
@@ -72,7 +72,7 @@ static const std::string DOUBLE_ALGORITHM_CATEGORY = "Measure";
 class TLP_SCOPE DoubleAlgorithm : public TemplateAlgorithm<tlp::DoubleProperty> {
 protected:
   ///
-  DoubleAlgorithm(const tlp::PluginContext *);
+  DoubleAlgorithm(const tlp::PluginContext *, bool needInOutResult = false);
 
 public:
   std::string category() const override {
@@ -90,7 +90,7 @@ static const std::string INTEGER_ALGORITHM_CATEGORY = "Measure";
  */
 class TLP_SCOPE IntegerAlgorithm : public TemplateAlgorithm<tlp::IntegerProperty> {
 protected:
-  IntegerAlgorithm(const tlp::PluginContext *);
+  IntegerAlgorithm(const tlp::PluginContext *, bool needInOutResult = false);
 
 public:
   std::string category() const override {
@@ -109,7 +109,7 @@ static const std::string LAYOUT_ALGORITHM_CATEGORY = "Layout";
 class TLP_SCOPE LayoutAlgorithm : public TemplateAlgorithm<tlp::LayoutProperty> {
 protected:
   ///
-  LayoutAlgorithm(const tlp::PluginContext *);
+  LayoutAlgorithm(const tlp::PluginContext *, bool needInOutResult = false);
 
 public:
   std::string category() const override {
@@ -126,7 +126,7 @@ static const std::string SIZE_ALGORITHM_CATEGORY = "Resizing";
  */
 class TLP_SCOPE SizeAlgorithm : public TemplateAlgorithm<tlp::SizeProperty> {
 protected:
-  SizeAlgorithm(const tlp::PluginContext *);
+  SizeAlgorithm(const tlp::PluginContext *, bool needInOutResult = false);
 
 public:
   std::string category() const override {
@@ -145,7 +145,7 @@ static const std::string STRING_ALGORITHM_CATEGORY = "Labeling";
 class TLP_SCOPE StringAlgorithm : public TemplateAlgorithm<tlp::StringProperty> {
 protected:
   ///
-  StringAlgorithm(const tlp::PluginContext *);
+  StringAlgorithm(const tlp::PluginContext *, bool needInOutResult = false);
 
 public:
   std::string category() const override {

@@ -102,7 +102,12 @@ public:
       "Colorizes the nodes or edges of a graph according to the values of a given property.", "2.3",
       "")
   ColorMapping(const tlp::PluginContext *context)
-      : ColorAlgorithm(context), entryMetric(nullptr), eltTypes(ELT_TYPES),
+  // set second parameter of the constructor below to true because
+  // result needs to be an inout parameter
+  // in order to preserve the original values of non targeted elements
+  // i.e if "target" = "nodes", the values of edges must be preserved
+  // and if "target" = "edges", the values of nodes must be preserved
+  : ColorAlgorithm(context, true), entryMetric(nullptr), eltTypes(ELT_TYPES),
         maxInput(std::numeric_limits<double>::quiet_NaN()),
         minInput(std::numeric_limits<double>::quiet_NaN()), overrideMaxInput(false),
         overrideMinInput(false) {
@@ -116,12 +121,6 @@ public:
     addInParameter<double>("minimum value", paramHelp[5], "", false);
     addInParameter<bool>("override maximum value", paramHelp[6], "false", false);
     addInParameter<double>("maximum value", paramHelp[7], "", false);
-
-    // result needs to be an inout parameter
-    // in order to preserve the original values of non targeted elements
-    // i.e if "target" = "nodes", the values of edges must be preserved
-    // and if "target" = "edges", the values of nodes must be preserved
-    parameters.setDirection("result", INOUT_PARAM);
   }
 
   //=========================================================
