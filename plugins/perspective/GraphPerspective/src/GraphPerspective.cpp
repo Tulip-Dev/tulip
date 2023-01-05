@@ -1223,10 +1223,13 @@ void GraphPerspective::exportGraph(Graph *g) {
   bool result = tlp::saveGraph(g, filename, prg, &data);
 
   if (!result) {
+    auto msg = prg->getError();
+    delete prg;
     QMessageBox::critical(_mainWindow, "Export error",
                           QString("<i>") + wizard.algorithm() +
-                              "</i> failed to export graph.<br/><br/><b>" +
-                              tlp::tlpStringToQString(prg->getError()) + "</b>");
+                          "</i> failed to export graph.<br/><br/><b>" +
+                          tlp::tlpStringToQString(msg) + "</b>");
+    return;
   } else {
     // log export plugin call
     if (TulipSettings::logPluginCall() != TulipSettings::NoLog) {
@@ -1284,11 +1287,12 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
     g = tlp::importGraph(module, data, prg);
 
     if (g == nullptr) {
+      auto msg = prg->getError();
+      delete prg;
       QMessageBox::critical(_mainWindow, "Import error",
                             QString("<i>") + tlp::tlpStringToQString(module) +
                                 "</i> failed to import data.<br/><br/><b>" +
-                                tlp::tlpStringToQString(prg->getError()) + "</b>");
-      delete prg;
+                            tlp::tlpStringToQString(msg) + "</b>");
       return;
     }
 
@@ -1500,10 +1504,14 @@ void GraphPerspective::openProjectFile(const QString &path) {
         QTimer::singleShot(100, this, SLOT(initPythonIDE()));
 #endif
     } else {
+      auto msg = prg->getError();
+      delete prg;
+
       QMessageBox::critical(_mainWindow,
                             QString("Error while loading project ").append(_project->projectFile()),
                             QString("The Tulip project file is probably corrupted:<br>") +
-                                tlpStringToQString(prg->getError()));
+                                tlpStringToQString(msg));
+      return;
     }
     delete prg;
   } else {
