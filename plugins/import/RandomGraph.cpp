@@ -161,8 +161,7 @@ public:
         tmp.target = randomUnsignedInteger(nbNodes - 1);
       }
 
-      if ((multipleEdges || (myGraph.find(tmp) == myGraph.end()))
-	  && (myGraph.size() < nbEdges))
+      if ((multipleEdges || (myGraph.find(tmp) == myGraph.end())) && (myGraph.size() < nbEdges))
         myGraph.insert(tmp);
     }
 

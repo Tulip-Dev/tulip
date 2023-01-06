@@ -53,7 +53,8 @@ enum ParameterDirection { IN_PARAM = 0, OUT_PARAM = 1, INOUT_PARAM = 2 };
  *
  * A plugin parameter consists of the following information:
  * @list
- * @li A name (std::string) which can be used to retrieve the value of the parameter when running the plugin.
+ * @li A name (std::string) which can be used to retrieve the value of the parameter when running
+ *the plugin.
  * @li A type (std::string) which is the C++ typename of the parameter.
  * @li A help string (std::string) which gives additional information about the parameter and its
  *possible values.
@@ -193,7 +194,7 @@ struct TLP_SCOPE ParameterDescriptionList {
    * @param parameterName The name of the parameter.
    * @return void
    **/
-   void remove(const std::string &parameterName);
+  void remove(const std::string &parameterName);
 
   /**
    * @brief Retrieves an Iterator on the parameters.

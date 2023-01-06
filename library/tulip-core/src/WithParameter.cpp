@@ -149,13 +149,13 @@ void ParameterDescriptionList::remove(const std::string &name) {
     if (name == parameters[i].getName()) {
       --sz;
       for (; i < sz; ++i)
-	parameters[i] = parameters[i + 1];
+        parameters[i] = parameters[i + 1];
       parameters.resize(sz);
       return;
     }
   }
 #ifndef NDEBUG
-    tlp::warning() << __PRETTY_FUNCTION__ << name << " does not exists";
+  tlp::warning() << __PRETTY_FUNCTION__ << name << " does not exists";
 #endif
 }
 
