@@ -62,13 +62,18 @@ struct edgeS_comp {
 
 static const char *paramHelp[] = {
     // nodes
-    "Number of nodes in the final graph.",
+    "Number of nodes in the graph.",
 
     // edges
-    "Number of edges in the final graph.",
+    "Number of edges in the graph.",
 
     // directed
-    "If True, the graph may contain edges a->b and b->a."};
+    "If true, the graph may contain edges a->b and b->a.",
+
+    // multiple edges
+    "If true, the graph may contain multiple edges between distinct nodes.",
+
+};
 
 /** \addtogroup import */
 
@@ -84,11 +89,12 @@ static const char *paramHelp[] = {
 class RandomGraph : public ImportModule {
 public:
   PLUGININFORMATION("Random General Graph", "Auber", "16/06/2002",
-                    "Imports a new randomly generated graph.", "2.0", "Graph")
+                    "Imports a new randomly generated graph.", "2.1", "Graph")
   RandomGraph(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "500");
     addInParameter<unsigned int>("edges", paramHelp[1], "1000");
-    addInParameter<bool>("directed", paramHelp[2], "False", false);
+    addInParameter<bool>("directed", paramHelp[2], "false", false);
+    addInParameter<bool>("multiple edges", paramHelp[3], "false", false);
   }
   ~RandomGraph() override {}
 
@@ -96,45 +102,43 @@ public:
     // initialize a random sequence according the given seed
     tlp::initRandomSequence();
 
-    unsigned int nbNodes = 5;
-    unsigned int nbEdges = 9;
-    bool directed = false;
+    unsigned int nbNodes = 500;
+    unsigned int nbEdges = 1000;
+    bool directed = false, multipleEdges = false;
 
     if (dataSet != nullptr) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("edges", nbEdges);
       dataSet->get("directed", directed);
+      dataSet->get("multiple edges", multipleEdges);
     }
 
     if (nbNodes == 0) {
-      if (pluginProgress)
-        pluginProgress->setError(string("Error: the number of nodes cannot be null"));
+      pluginProgress->setError("Error: the number of nodes cannot be null");
 
       return false;
     }
 
     double density_g = (2. * nbEdges) / double(nbNodes * (nbNodes - 1));
-    if (directed)
+    if (!multipleEdges && directed)
       density_g /= 2.;
 
-    if (density_g > 1) {
-      if (directed)
-        pluginProgress->setError(string("Error: For ") + std::to_string(nbNodes) +
-                                 string(" nodes, the maximum number of edges is ") +
-                                 std::to_string(nbNodes * (nbNodes - 1)));
-      else
-        pluginProgress->setError(string("Error: For ") + std::to_string(nbNodes) +
-                                 string(" nodes, the maximum number of edges is ") +
-                                 std::to_string(nbNodes * (nbNodes - 1) / 2));
+    if (!multipleEdges && (density_g > 1)) {
+      string msg("Error: a simple ");
+      msg += std::string(directed ? "directed" : "undirected") + " graph with ";
+      msg += std::to_string(nbNodes);
+      msg += " nodes cannot have more than ";
+      msg += std::to_string(nbNodes * (nbNodes - 1) / (directed ? 1 : 2)) + " edges.";
+      pluginProgress->setError(msg);
       return false;
     }
 
-    unsigned int nb_disctint_pairs_needed = nbEdges;
-    if (density_g > MAX_DENSITY_FOR_LINEAR) {
+    unsigned int nb_distinct_pairs_needed = nbEdges;
+    if (!multipleEdges && (density_g > MAX_DENSITY_FOR_LINEAR)) {
       if (directed)
-        nb_disctint_pairs_needed = nbNodes * (nbNodes - 1) - nbEdges;
+        nb_distinct_pairs_needed = nbNodes * (nbNodes - 1) - nbEdges;
       else
-        nb_disctint_pairs_needed = nbNodes * (nbNodes - 1) / 2 - nbEdges;
+        nb_distinct_pairs_needed = nbNodes * (nbNodes - 1) / 2 - nbEdges;
     }
 
     edgeS_comp comp_e(directed);
@@ -143,9 +147,9 @@ public:
     if (pluginProgress)
       pluginProgress->showPreview(false);
 
-    while (myGraph.size() < nb_disctint_pairs_needed) {
+    while (myGraph.size() < nb_distinct_pairs_needed) {
       if (myGraph.size() % nbNodes == 1 &&
-          (pluginProgress->progress(myGraph.size(), nb_disctint_pairs_needed) != TLP_CONTINUE))
+          (pluginProgress->progress(myGraph.size(), nb_distinct_pairs_needed) != TLP_CONTINUE))
         return pluginProgress->state() != TLP_CANCEL;
 
       edgeS tmp;
@@ -157,7 +161,8 @@ public:
         tmp.target = randomUnsignedInteger(nbNodes - 1);
       }
 
-      if ((myGraph.find(tmp) == myGraph.end()) && (myGraph.size() < nbEdges))
+      if ((multipleEdges || (myGraph.find(tmp) == myGraph.end()))
+	  && (myGraph.size() < nbEdges))
         myGraph.insert(tmp);
     }
 
@@ -166,7 +171,7 @@ public:
 
     graph->reserveEdges(nbEdges);
 
-    if (density_g > MAX_DENSITY_FOR_LINEAR) {
+    if (!multipleEdges && (density_g > MAX_DENSITY_FOR_LINEAR)) {
       for (unsigned i = 0; i < nodes.size(); ++i) {
         unsigned min_j = 0;
         if (!directed)
@@ -200,18 +205,12 @@ PLUGIN(RandomGraph)
  * - 16/06/2002 Version 1.0: Initial Release (David Auber)
  * - 20/04/2019 Version 2.0: Call to more general plugin "Random General Graph"
  */
-class RandomSimpleGraph : public ImportModule {
+class RandomSimpleGraph : public RandomGraph {
 public:
   PLUGININFORMATION("Random Simple Graph", "Auber", "16/06/2002",
-                    "Imports a new randomly generated simple graph.", "1.0", "Graph")
-  RandomSimpleGraph(tlp::PluginContext *context) : ImportModule(context) {
-    addInParameter<unsigned int>("nodes", paramHelp[0], "500");
-    addInParameter<unsigned int>("edges", paramHelp[1], "1000");
-  }
-
-  bool importGraph() override {
-    // for backward compatibility
-    return tlp::importGraph("Random General Graph", *dataSet, pluginProgress, graph) != nullptr;
+                    "Imports a new randomly generated simple graph.", "1.1", "Graph")
+  RandomSimpleGraph(tlp::PluginContext *context) : RandomGraph(context) {
+    removeParameter("multiple edges");
   }
 };
 
