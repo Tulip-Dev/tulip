@@ -143,6 +143,22 @@ ParameterDescription *ParameterDescriptionList::getParameter(const string &name)
   return nullptr;
 }
 
+void ParameterDescriptionList::remove(const std::string &name) {
+  auto sz = parameters.size();
+  for (unsigned int i = 0; i < sz; ++i) {
+    if (name == parameters[i].getName()) {
+      --sz;
+      for (; i < sz; ++i)
+	parameters[i] = parameters[i + 1];
+      parameters.resize(sz);
+      return;
+    }
+  }
+#ifndef NDEBUG
+    tlp::warning() << __PRETTY_FUNCTION__ << name << " does not exists";
+#endif
+}
+
 const string &ParameterDescriptionList::getDefaultValue(const string &name) const {
   return const_cast<ParameterDescriptionList *>(this)->getParameter(name)->getDefaultValue();
 }
