@@ -17,9 +17,6 @@
  *
  */
 
-#include <utility>
-#include <limits>
-
 #include <tulip/BoundingBox.h>
 
 #define THIS_INITED (memcmp(this, &_invalidBB, sizeof(_invalidBB)) != 0)

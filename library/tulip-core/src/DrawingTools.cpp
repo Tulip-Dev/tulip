@@ -24,8 +24,6 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/ConvexHull.h>
 
-#include <climits>
-
 using namespace std;
 using namespace tlp;
 

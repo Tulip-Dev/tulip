@@ -25,7 +25,6 @@
 #include <stack>
 #include <list>
 #include <unordered_map>
-#include <climits>
 #include <functional>
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>

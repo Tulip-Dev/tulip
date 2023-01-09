@@ -18,14 +18,11 @@
  */
 
 #include <iomanip>
-#include <fstream>
 #include <sstream>
 #include <stack>
-#include <unordered_map>
 #include <unordered_set>
 
 #include <tulip/StlIterator.h>
-#include <tulip/TlpTools.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphImpl.h>
 #include <tulip/BooleanProperty.h>

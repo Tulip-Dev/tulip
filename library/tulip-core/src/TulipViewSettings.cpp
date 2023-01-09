@@ -17,7 +17,6 @@
  *
  */
 #include <tulip/TulipViewSettings.h>
-#include <tulip/TlpTools.h>
 
 namespace tlp {
 

@@ -26,7 +26,6 @@
 
 #include <tulip/tulipconf.h>
 #include <tulip/Observable.h>
-//#include <tulip/Node.h>
 #include <tulip/Edge.h>
 #include <tulip/TlpTools.h>
 

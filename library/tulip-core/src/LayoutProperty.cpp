@@ -22,7 +22,6 @@
 #include <unordered_map>
 
 #include <tulip/LayoutProperty.h>
-#include <tulip/Coord.h>
 
 using namespace std;
 using namespace tlp;

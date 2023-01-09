@@ -17,13 +17,12 @@
  *
  */
 
-#include <iostream>
 #include <algorithm>
+#include <unordered_map>
+#include <map>
 
 #include <tulip/Delaunay.h>
 #include <tulip/Matrix.h>
-#include <tulip/Graph.h>
-#include <tulip/LayoutProperty.h>
 #include <tulip/BoundingBox.h>
 #include <tulip/DrawingTools.h>
 

@@ -23,7 +23,6 @@
 #pragma warning(disable : 4355)
 #endif
 
-#include <iostream>
 #include <sstream>
 #include <map>
 #include <set>
@@ -31,7 +30,6 @@
 #include <tulip/Observable.h>
 #include <tulip/ConversionIterator.h>
 #include <tulip/FilterIterator.h>
-#include <tulip/ParallelTools.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TulipException.h>
 #include <tulip/vectorgraph.h>

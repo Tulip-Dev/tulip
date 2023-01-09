@@ -20,7 +20,6 @@
 #include <tulip/ConnectedTest.h>
 #include <tulip/ConnectedTestListener.h>
 #include <tulip/Graph.h>
-#include <tulip/MutableContainer.h>
 #include <tulip/StaticProperty.h>
 
 using namespace std;

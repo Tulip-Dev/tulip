@@ -23,8 +23,8 @@
 #include <tulip/StringCollection.h>
 #include <tulip/TulipException.h>
 
-#include <cstdint>
-#include <limits>
+#include <climits>
+#include <cfloat>
 
 using namespace std;
 using namespace tlp;

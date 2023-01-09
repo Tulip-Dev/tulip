@@ -17,14 +17,11 @@
  *
  */
 #include <cassert>
-#include <iostream>
 
 #include <tulip/Graph.h>
-#include <tulip/GraphImpl.h>
 #include <tulip/GraphView.h>
 #include <tulip/GraphIterators.h>
 #include <tulip/Observable.h>
-#include <tulip/StoredType.h>
 
 namespace tlp {
 

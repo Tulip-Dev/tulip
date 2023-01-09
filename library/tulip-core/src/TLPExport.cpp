@@ -16,9 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <iostream>
+#include <ostream>
 #include <set>
-#include <sstream>
 #include <string>
 #include <ctime>
 #include <unordered_map>
@@ -26,11 +25,6 @@
 #include <tulip/ExportModule.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphProperty.h>
-#include <tulip/TlpTools.h>
-#include <tulip/MutableContainer.h>
-#include <tulip/StringCollection.h>
-#include <tulip/TulipRelease.h>
-#include <tulip/PropertyTypes.h>
 #include <tulip/StableIterator.h>
 
 #define TLP_FILE_VERSION "2.3"

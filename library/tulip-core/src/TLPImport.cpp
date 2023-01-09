@@ -28,11 +28,8 @@
 #include <tulip/ImportModule.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/TulipRelease.h>
-#include <tulip/PropertyTypes.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
-#include <tulip/TlpTools.h>
 #include <tulip/TLPParser.h>
 
 #define TLP "tlp"

@@ -20,7 +20,6 @@
 #include <tulip/ConvexHull.h>
 #include <tulip/DrawingTools.h>
 
-#include <list>
 #include <map>
 #include <algorithm>
 

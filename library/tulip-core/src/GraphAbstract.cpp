@@ -25,7 +25,6 @@
 #include <tulip/GraphImpl.h>
 #include <tulip/ConcatIterator.h>
 #include <tulip/GraphTools.h>
-#include <tulip/TlpTools.h>
 
 using namespace std;
 using namespace tlp;

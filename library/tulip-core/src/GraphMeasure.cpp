@@ -18,7 +18,6 @@
  */
 #include <deque>
 #include <stack>
-#include <climits>
 
 #include <unordered_map>
 #include <tulip/GraphMeasure.h>

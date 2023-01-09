@@ -24,7 +24,6 @@
 
 #include <cstring>
 #include <sstream>
-#include <set>
 #include <vector>
 
 #ifdef _WIN32

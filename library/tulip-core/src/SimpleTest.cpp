@@ -17,7 +17,6 @@
  *
  */
 
-#include <vector>
 #include <tulip/Graph.h>
 #include <tulip/GraphTools.h>
 #include <tulip/SimpleTest.h>

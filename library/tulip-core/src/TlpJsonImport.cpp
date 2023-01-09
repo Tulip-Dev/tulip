@@ -17,15 +17,11 @@
  *
  */
 
-#include <cerrno>
-#include <sstream>
 #include <stack>
 
 #include <tulip/Graph.h>
 #include <tulip/GraphAbstract.h>
 #include <tulip/ImportModule.h>
-#include <tulip/PropertyInterface.h>
-#include <tulip/TlpTools.h>
 #include <tulip/JsonTokens.h>
 #include <tulip/YajlFacade.h>
 #include <tulip/GraphProperty.h>

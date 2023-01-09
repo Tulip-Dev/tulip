@@ -23,10 +23,11 @@
 
 #include <unordered_map>
 
-#include <tulip/Graph.h>
 #include <tulip/Observable.h>
 
 namespace tlp {
+
+class Graph;
 
 class ConnectedTestListener : public Observable {
 public:

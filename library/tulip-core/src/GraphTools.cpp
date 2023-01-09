@@ -18,24 +18,23 @@
  */
 
 #include <algorithm>
-#include <queue>
 #include <stack>
-#include <cmath>
 
 #include <unordered_map>
 #include <tulip/GraphTools.h>
 #include <tulip/GraphMeasure.h>
+#ifndef NDEBUG
 #include <tulip/AcyclicTest.h>
+#include <tulip/ConnectedTest.h>
+#endif
 #include <tulip/TreeTest.h>
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/NumericProperty.h>
-#include <tulip/ConnectedTest.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/Ordering.h>
-#include <tulip/PlanarConMap.h>
 #include <tulip/GraphParallelTools.h>
 #include <tulip/Dijkstra.h>
 

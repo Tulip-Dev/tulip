@@ -20,7 +20,6 @@
 #ifndef TULIP_CONNECTEDTEST_H
 #define TULIP_CONNECTEDTEST_H
 
-#include <set>
 #include <vector>
 
 #include <tulip/tulipconf.h>

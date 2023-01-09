@@ -23,7 +23,7 @@
 
 #include <set>
 #include <vector>
-#include <sstream>
+#include <iostream>
 #include <tulip/StoredType.h>
 #include <tulip/Coord.h>
 #include <tulip/Size.h>

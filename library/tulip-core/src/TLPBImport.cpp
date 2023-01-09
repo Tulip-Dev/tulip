@@ -18,7 +18,6 @@
  */
 #include <fstream>
 #include <tulip/TLPBExportImport.h>
-#include <tulip/TlpTools.h>
 #include <tulip/GraphAbstract.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>

@@ -17,7 +17,6 @@
  *
  */
 
-#include <climits>
 #include <tulip/DoubleProperty.h>
 #include <tulip/GraphTools.h>
 

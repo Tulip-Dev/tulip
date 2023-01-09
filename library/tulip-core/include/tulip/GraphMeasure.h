@@ -21,8 +21,6 @@
 #ifndef _TLPGRAPHMEASEURE_H
 #define _TLPGRAPHMEASEURE_H
 
-#include <set>
-
 #include <tulip/Node.h>
 #include <tulip/StaticProperty.h>
 #include <tulip/GraphTools.h>

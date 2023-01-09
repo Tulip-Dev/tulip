@@ -22,13 +22,9 @@
 #endif
 
 #include <algorithm>
-#include <sstream>
 
 #include <tulip/ExportModule.h>
 #include <tulip/Graph.h>
-#include <tulip/DataSet.h>
-#include <tulip/MutableContainer.h>
-#include <tulip/TlpTools.h>
 #include <tulip/YajlFacade.h>
 #include <tulip/JsonTokens.h>
 #include <tulip/GraphProperty.h>

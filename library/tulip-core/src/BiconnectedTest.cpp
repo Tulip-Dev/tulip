@@ -17,7 +17,6 @@
  *
  */
 #include <stack>
-#include <unordered_map>
 
 #include <tulip/BiconnectedTest.h>
 #include <tulip/ConnectedTest.h>

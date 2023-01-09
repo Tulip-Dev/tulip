@@ -21,11 +21,12 @@
 
 #include <tulip/ConnectedTest.h>
 #include <tulip/PlanarityTest.h>
+#ifndef NDEBUG
 #include <tulip/SimpleTest.h>
+#endif
 #include <tulip/MutableContainer.h>
 #include <tulip/MapIterator.h>
 #include <tulip/FaceIterator.h>
-#include <tulip/Face.h>
 #include <tulip/PlanarConMap.h>
 #include <tulip/TreeTest.h>
 

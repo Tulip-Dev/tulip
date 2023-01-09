@@ -18,12 +18,13 @@
  */
 
 #include <tulip/Ordering.h>
+#ifndef NDEBUG
 #include <tulip/BiconnectedTest.h>
+#endif
 #include <tulip/PlanarConMap.h>
 
 #include <cassert>
-#include <cstdlib>
-
+#
 using namespace std;
 using namespace tlp;
 
