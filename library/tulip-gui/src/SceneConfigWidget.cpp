@@ -19,14 +19,8 @@
 
 #include "tulip/SceneConfigWidget.h"
 
-#include <QDebug>
-#include <QMainWindow>
-#include <QApplication>
-
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainWidget.h>
-#include <tulip/Perspective.h>
-#include <tulip/TulipSettings.h>
 #include <tulip/GraphPropertiesModel.h>
 
 #include "ui_SceneConfigWidget.h"
@@ -127,7 +121,6 @@ void SceneConfigWidget::resetChanges() {
   else
     _ui->centerSceneRadioButton->setChecked(true);
 
-  //  QApplication::processEvents();
   _resetting = false;
 }
 

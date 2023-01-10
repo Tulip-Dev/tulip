@@ -20,18 +20,12 @@
 
 #include <QPropertyAnimation>
 #include <QGraphicsView>
-#include <QHeaderView>
-#include <QMouseEvent>
 #include <QGraphicsProxyWidget>
-#include <QSortFilterProxyModel>
 
 #include <tulip/GraphElementModel.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/GlMainView.h>
-#include <tulip/GlMainWidget.h>
-#include <tulip/GlScene.h>
 #include <tulip/MouseShowElementInfo.h>
-#include <tulip/TulipMetaTypes.h>
 #include <tulip/Perspective.h>
 
 using namespace std;

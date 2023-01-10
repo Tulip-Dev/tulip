@@ -20,16 +20,14 @@
 #include "tulip/TulipSettings.h"
 
 #include <tulip/TulipMetaTypes.h>
-#include <tulip/PropertyTypes.h>
-#include <tulip/GlGraphStaticData.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
 
-#include <QtCore/QFileInfo>
-#include <QtCore/QStringList>
+#include <QFileInfo>
+#include <QStringList>
 #ifdef __APPLE__
 #include <QProcess>
 #include <QSysInfo>

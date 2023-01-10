@@ -22,7 +22,6 @@
 
 #include <QIcon>
 
-#include <tulip/BooleanProperty.h>
 #include <tulip/Graph.h>
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/TlpQtTools.h>

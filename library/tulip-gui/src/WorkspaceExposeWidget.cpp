@@ -19,13 +19,10 @@
 
 #include "tulip/WorkspaceExposeWidget.h"
 
-#include <QEvent>
-#include <QDebug>
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
-#include <QGraphicsTextItem>
 
 #include <tulip/View.h>
 #include <tulip/WorkspacePanel.h>

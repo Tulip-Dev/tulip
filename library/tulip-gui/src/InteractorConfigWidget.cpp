@@ -20,10 +20,7 @@
 #include <tulip/InteractorConfigWidget.h>
 #include "ui_InteractorConfigWidget.h"
 
-#include <QScrollArea>
 #include <QLabel>
-#include <QHideEvent>
-#include <QShowEvent>
 
 #include <tulip/TlpQtTools.h>
 #include <tulip/Interactor.h>

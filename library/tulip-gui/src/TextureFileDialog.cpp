@@ -20,8 +20,6 @@
 #include <QImageReader>
 
 #include <tulip/TextureFileDialog.h>
-#include <tulip/TlpQtTools.h>
-#include <tulip/Perspective.h>
 
 using namespace tlp;
 

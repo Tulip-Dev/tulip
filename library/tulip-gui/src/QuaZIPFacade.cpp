@@ -19,13 +19,10 @@
 #include "tulip/QuaZIPFacade.h"
 
 #include <QDir>
-#include <QFile>
-#include <QFileInfo>
 
 #include <tulip/SimplePluginProgress.h>
 #include <tulip/TlpQtTools.h>
 
-#include <quazip.h>
 #include <quazipfile.h>
 
 // QuaZIPFacade::QuaZIPFacade() {

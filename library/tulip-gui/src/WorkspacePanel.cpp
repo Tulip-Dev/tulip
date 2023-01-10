@@ -22,16 +22,8 @@
 #include "ui_WorkspacePanel.h"
 
 #include <QGraphicsView>
-#include <QCloseEvent>
-#include <QPushButton>
-#include <QApplication>
 #include <QGraphicsProxyWidget>
-#include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
-#include <QTabWidget>
-#include <QGraphicsSceneContextMenuEvent>
-#include <QDialogButtonBox>
-#include <QVBoxLayout>
 #include <QScrollBar>
 #include <QPropertyAnimation>
 
@@ -39,7 +31,6 @@
 #include <tulip/ProcessingAnimationItem.h>
 #include <tulip/Interactor.h>
 #include <tulip/View.h>
-#include <tulip/Graph.h>
 #include <tulip/GraphHierarchiesModel.h>
 #include <tulip/PluginLister.h>
 #include <tulip/TulipMimes.h>

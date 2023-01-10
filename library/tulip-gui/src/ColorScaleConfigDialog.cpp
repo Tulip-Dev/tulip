@@ -18,13 +18,11 @@
  */
 
 #include <QFileDialog>
-#include <QHeaderView>
-#include <QLinearGradient>
 #include <QPainter>
 #include <QMessageBox>
 #include <QInputDialog>
 
-#include <algorithm>
+#include <map>
 #include <vector>
 
 #include <tulip/TlpQtTools.h>

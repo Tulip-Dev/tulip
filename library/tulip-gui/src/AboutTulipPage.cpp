@@ -18,9 +18,7 @@
  */
 #include <ogdf/basic/internal/config.h>
 #include <tulip/AboutTulipPage.h>
-#include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/GlMainWidget.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/PythonVersionChecker.h>
@@ -31,8 +29,6 @@
 #include "ui_AboutTulipPage.h"
 
 #include <QFile>
-#include <QDir>
-#include <QTextStream>
 #include <QDesktopServices>
 #include <QUrl>
 #include <QOpenGLContext>

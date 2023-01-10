@@ -20,7 +20,6 @@
 
 #include <QPainter>
 #include <QPaintEvent>
-#include <QApplication>
 
 #include <tulip/TlpQtTools.h>
 #include <tulip/ColorScaleConfigDialog.h>

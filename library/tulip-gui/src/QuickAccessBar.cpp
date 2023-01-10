@@ -20,24 +20,17 @@
 #include "tulip/QuickAccessBar.h"
 
 #include <QFontDatabase>
-#include <QComboBox>
-#include <QDebug>
 #include <QListView>
-#include <QMainWindow>
 #include <QMouseEvent>
-#include <QApplication>
 #include <QGraphicsView>
 
-#include <tulip/GraphPropertiesModel.h>
 #include <tulip/GraphModel.h>
 #include <tulip/TulipFontDialog.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/GlMainWidget.h>
 #include <tulip/GlMainView.h>
-#include <tulip/GlGraphInputData.h>
 #include <tulip/Perspective.h>
 #include <tulip/SnapshotDialog.h>
 #include <tulip/TulipItemDelegate.h>

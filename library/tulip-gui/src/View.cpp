@@ -19,13 +19,7 @@
 
 #include <tulip/View.h>
 
-#include <QDebug>
-#include <QFile>
 #include <QGraphicsView>
-#include <QGraphicsItem>
-#include <QMenu>
-#include <QMainWindow>
-#include <QStatusBar>
 
 #include <tulip/Interactor.h>
 #include <tulip/Graph.h>

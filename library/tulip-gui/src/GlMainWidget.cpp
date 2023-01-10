@@ -29,21 +29,15 @@
 #define __GLEW_H__
 
 #include <QSurfaceFormat>
-#include <QOffscreenSurface>
 #include <QMainWindow>
 
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
-#include <tulip/Graph.h>
-#include <tulip/GlTools.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/Gl2DRect.h>
 #include <tulip/GlQuadTreeLODCalculator.h>
 #include <tulip/GLInteractor.h>
 #include <tulip/GlGraphComposite.h>
-#include <tulip/Interactor.h>
-#include <tulip/GlCompositeHierarchyManager.h>
-#include <tulip/GlVertexArrayManager.h>
 #include <tulip/View.h>
 #include <tulip/Camera.h>
 #include <tulip/OpenGlConfigManager.h>

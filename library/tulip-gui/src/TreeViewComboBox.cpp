@@ -21,10 +21,6 @@
 
 #include <QHeaderView>
 #include <QStyledItemDelegate>
-#include <QPainter>
-#include <QStyleOptionViewItem>
-#include <QMouseEvent>
-#include <QTreeView>
 
 class TreeViewDelegate : public QStyledItemDelegate {
 public:

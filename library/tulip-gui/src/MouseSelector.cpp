@@ -19,14 +19,10 @@
 
 #include <QMouseEvent>
 
-#include <tulip/Graph.h>
-#include <tulip/BooleanProperty.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlTools.h>
 #include <tulip/MouseSelector.h>
 #include <tulip/GlGraphComposite.h>
-
-#include <tulip/OpenGlIncludes.h>
 
 using namespace std;
 using namespace tlp;

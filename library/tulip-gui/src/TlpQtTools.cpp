@@ -25,39 +25,21 @@
 
 #include <tulip/TlpQtTools.h>
 
-#include <ostream>
-#include <ios>
+#include <iostream>
 #include <unordered_map>
 
-#include <QDebug>
 #include <QColorDialog>
-#include <QAbstractButton>
-#include <QMessageBox>
-#include <QImage>
-#include <QEvent>
 #include <QMetaEnum>
 #include <QApplication>
 #include <QDir>
-#include <QApplication>
 #include <QStandardPaths>
 #if defined(__MINGW32__) && defined(TULIP_BUILD_PYTHON_COMPONENTS)
 #include <QSslSocket>
 #endif
 
-#include <tulip/DataSet.h>
 #include <tulip/TulipSettings.h>
 #include <tulip/Interactor.h>
-#include <tulip/View.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/GraphProperty.h>
-#include <tulip/IntegerProperty.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/StringProperty.h>
 #include <tulip/SystemDefinition.h>
-#include <tulip/TlpTools.h>
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginLister.h>
 #include <tulip/PluginManager.h>
@@ -65,7 +47,6 @@
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlTextureManager.h>
-#include <tulip/TulipMetaTypes.h>
 #include <tulip/PythonVersionChecker.h>
 #include <tulip/TulipItemEditorCreators.h>
 #include <tulip/GlOffscreenRenderer.h>

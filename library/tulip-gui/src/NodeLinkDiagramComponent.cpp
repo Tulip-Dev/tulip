@@ -19,28 +19,19 @@
 #include "ui_GridOptionsWidget.h"
 
 #include <QGraphicsView>
-#include <QActionGroup>
-#include <QDialog>
 #include <QMenu>
-#include <QString>
 
 #include <tulip/GlMetaNodeRenderer.h>
 #include <tulip/GlGrid.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/ParameterListModel.h>
-#include <tulip/GlMainWidget.h>
 #include <tulip/GlGraphComposite.h>
-#include <tulip/GlGraphInputData.h>
 #include <tulip/Gl2DRect.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlOverviewGraphicsItem.h>
-#include <tulip/Interactor.h>
-#include <tulip/TulipMetaTypes.h>
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
 #include <tulip/GlCompositeHierarchyManager.h>
-#include <tulip/TlpTools.h>
-#include <tulip/TlpQtTools.h>
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/GraphModel.h>
 #include <tulip/NumericProperty.h>

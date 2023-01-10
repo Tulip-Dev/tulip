@@ -22,9 +22,7 @@
 #include <QColorDialog>
 #include <QStylePainter>
 
-#include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/Perspective.h>
 
 using namespace tlp;
 

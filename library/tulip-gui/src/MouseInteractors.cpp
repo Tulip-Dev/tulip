@@ -17,19 +17,10 @@
  *
  */
 
-#include <QEvent>
-#include <QWheelEvent>
 #include <QPinchGesture>
-#include <QPanGesture>
 
-#include <tulip/GlNode.h>
-#include <tulip/GlMainWidget.h>
-#include <tulip/View.h>
-#include <tulip/Observable.h>
 #include <tulip/GlGraphComposite.h>
-#include <tulip/GlMainView.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
-#include <tulip/DrawingTools.h>
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/MouseInteractors.h>

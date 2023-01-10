@@ -18,10 +18,7 @@
  */
 #include "tulip/PlaceHolderWidget.h"
 
-#include <QCloseEvent>
 #include <QVBoxLayout>
-#include <QWidget>
-#include <QDebug>
 
 PlaceHolderWidget::PlaceHolderWidget(QWidget *parent) : QWidget(parent), _widget(nullptr) {
   setLayout(new QVBoxLayout);

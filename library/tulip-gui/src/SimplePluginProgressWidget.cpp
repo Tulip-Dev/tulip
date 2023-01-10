@@ -24,8 +24,6 @@
 #include <QStyle>
 #include <QVBoxLayout>
 
-#include <iostream>
-
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
 

@@ -21,7 +21,6 @@
 #include "ui_CSVImportConfigurationWidget.h"
 #include "ui_CSVPropertyDialog.h"
 
-#include <QLabel>
 #include <QPainter>
 #include <QPushButton>
 #include <QStyleOptionButton>

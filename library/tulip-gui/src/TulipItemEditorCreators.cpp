@@ -16,20 +16,11 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <QCheckBox>
-#include <QLabel>
-#include <QStylePainter>
-#include <QApplication>
-#include <QLinearGradient>
-#include <QPaintEvent>
 #include <QColorDialog>
 #include <QMainWindow>
 #include <QFileDialog>
-#include <QHBoxLayout>
 
-#include <tulip/TlpTools.h>
 #include <tulip/ColorScaleButton.h>
-#include <tulip/TulipMetaTypes.h>
 #include <tulip/CoordEditor.h>
 #include <tulip/StringEditor.h>
 #include <tulip/GlyphRenderer.h>
@@ -37,10 +28,8 @@
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/TulipFontDialog.h>
 #include <tulip/GlyphManager.h>
-#include <tulip/GraphPropertiesModel.h>
 #include <tulip/PluginLister.h>
 #include <tulip/TulipItemEditorCreators.h>
-#include <tulip/TulipFontAwesome.h>
 #include <tulip/TextureFileDialog.h>
 #include <tulip/TulipFontIconDialog.h>
 #include <tulip/TulipFontIconEngine.h>

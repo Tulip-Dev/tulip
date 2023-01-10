@@ -19,8 +19,6 @@
 
 #include "tulip/GlOverviewGraphicsItem.h"
 
-#include <QMenu>
-#include <QMessageBox>
 #include <QGraphicsSceneMouseEvent>
 #include <QPen>
 

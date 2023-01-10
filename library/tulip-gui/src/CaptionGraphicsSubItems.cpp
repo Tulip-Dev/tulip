@@ -18,11 +18,9 @@
  */
 #include "tulip/CaptionGraphicsSubItems.h"
 
-#include <QGraphicsProxyWidget>
+#include <QFont>
+#include <QBrush>
 #include <QGraphicsSceneMouseEvent>
-
-#include <tulip/DoubleProperty.h>
-#include <tulip/ColorProperty.h>
 
 using namespace std;
 

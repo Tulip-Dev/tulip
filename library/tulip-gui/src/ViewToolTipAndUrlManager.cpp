@@ -17,20 +17,15 @@
  *
  */
 #include <tulip/ViewToolTipAndUrlManager.h>
-#include <QActionGroup>
 #include <QGraphicsView>
-#include <QHelpEvent>
 #include <QToolTip>
-#include <QString>
 #include <QKeyEvent>
 #include <QUrl>
 #include <QDesktopServices>
 #include <QBuffer>
 #include <QImage>
 
-#include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/Graph.h>
 #include <tulip/GraphModel.h>
 #include <tulip/StringProperty.h>
 #include "ui_ManageGraphEltTooltipDialog.h"

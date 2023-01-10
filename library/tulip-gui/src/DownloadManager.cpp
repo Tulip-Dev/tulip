@@ -17,16 +17,8 @@
  *
  */
 
-#include <QCoreApplication>
 #include <QFile>
-#include <QFileInfo>
-#include <QList>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
 #include <QNetworkReply>
-#include <QStringList>
-#include <QTimer>
-#include <QUrl>
 
 #include <tulip/DownloadManager.h>
 

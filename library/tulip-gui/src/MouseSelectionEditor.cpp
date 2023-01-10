@@ -20,19 +20,13 @@
 #include <QMouseEvent>
 
 #include <tulip/MouseSelectionEditor.h>
-#include <tulip/Camera.h>
-#include <tulip/Graph.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/SizeProperty.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/TlpQtTools.h>
 
 #include <cmath>
-#include <climits>
+#include <cfloat>
 
 #define EPSILON 1.0
 #define EPSILON_SCREEN 50

@@ -20,8 +20,6 @@
 #include "tulip/GraphPropertiesSelectionWidget.h"
 #include "tulip/Graph.h"
 
-#include <algorithm>
-
 using namespace std;
 
 namespace tlp {

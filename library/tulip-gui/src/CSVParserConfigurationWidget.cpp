@@ -22,7 +22,6 @@
 
 #include <QTextCodec>
 #include <QFileDialog>
-#include <QKeyEvent>
 
 #include <tulip/CSVParser.h>
 #include <tulip/TlpTools.h>

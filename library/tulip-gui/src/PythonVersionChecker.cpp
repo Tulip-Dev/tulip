@@ -22,10 +22,6 @@
 #include <QProcess>
 #include <QSettings>
 
-#include <cstdlib>
-#include <iostream>
-#include <tuple>
-
 using namespace tlp;
 using namespace std;
 

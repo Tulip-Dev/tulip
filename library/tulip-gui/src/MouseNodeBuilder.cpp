@@ -21,13 +21,8 @@
 
 #include <QMouseEvent>
 
-#include <tulip/Graph.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/ColorProperty.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlGraphComposite.h>
-#include <tulip/GlMainView.h>
-#include <tulip/Camera.h>
 
 using namespace tlp;
 using namespace std;

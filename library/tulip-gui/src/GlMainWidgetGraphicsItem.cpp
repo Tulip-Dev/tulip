@@ -23,12 +23,8 @@
 #include <QApplication>
 #include <QGraphicsProxyWidget>
 #include <QContextMenuEvent>
-#include <QGraphicsScene>
 #include <QPainter>
 
-#include <tulip/GlTextureManager.h>
-#include <tulip/GlQuad.h>
-#include <tulip/GlTools.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlOffscreenRenderer.h>
 

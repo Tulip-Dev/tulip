@@ -20,12 +20,6 @@
 #include "tulip/CSVGraphMappingConfigurationWidget.h"
 #include "ui_CSVGraphMappingConfigurationWidget.h"
 
-#include <QComboBox>
-#include <QFormLayout>
-#include <QLabel>
-#include <QPushButton>
-#include <QLineEdit>
-
 #include <tulip/CSVGraphImport.h>
 #include <tulip/PropertyCreationDialog.h>
 #include <tulip/Graph.h>

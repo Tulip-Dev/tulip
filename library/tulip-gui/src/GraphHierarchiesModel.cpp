@@ -19,10 +19,6 @@
 #include "tulip/GraphHierarchiesModel.h"
 
 #include <QFont>
-#include <QSize>
-#include <QDebug>
-#include <QMimeData>
-#include <QSet>
 #include <QCryptographicHash>
 #include <QWidget>
 
@@ -30,20 +26,14 @@
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/Graph.h>
 #include <tulip/TulipProject.h>
-#include <tulip/IntegerProperty.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/DoubleProperty.h>
 #include <tulip/TulipSettings.h>
 #include <tulip/TulipMimes.h>
-#include <tulip/DrawingTools.h>
-#include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/GraphNeedsSavingObserver.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/Perspective.h>
 #include <tulip/StableIterator.h>
 
-#include <fstream>
+#include <sstream>
 
 using namespace std;
 using namespace tlp;

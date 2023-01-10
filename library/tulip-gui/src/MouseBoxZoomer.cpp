@@ -19,7 +19,6 @@
 
 #include <QMouseEvent>
 
-#include <tulip/Graph.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlTools.h>
 #include <tulip/DrawingTools.h>
@@ -28,8 +27,6 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/Camera.h>
 #include <tulip/MouseBoxZoomer.h>
-
-#include <tulip/OpenGlIncludes.h>
 
 using namespace std;
 using namespace tlp;

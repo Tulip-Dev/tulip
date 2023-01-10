@@ -20,8 +20,6 @@
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/TlpQtTools.h>
 
-#include <QColor>
-#include <QModelIndex>
 #include <QIcon>
 
 namespace tlp {

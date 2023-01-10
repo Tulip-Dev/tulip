@@ -18,14 +18,10 @@
  */
 #include "tulip/Workspace.h"
 
-#include <QPainter>
-#include <QPaintEvent>
-#include <QGraphicsView>
-#include <QGraphicsEffect>
-#include <QGraphicsSceneDragDropEvent>
+#include <QDragEnterEvent>
+#include <QDropEvent>
 #include <QTimer>
 #include <QXmlStreamWriter>
-#include <QXmlStreamReader>
 
 #include <tulip/PluginLister.h>
 #include <tulip/TulipMetaTypes.h>

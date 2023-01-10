@@ -17,20 +17,16 @@
  *
  */
 
-#include <GL/glew.h>
-
 #include "tulip/SnapshotDialog.h"
 #include "ui_SnapshotDialog.h"
 
-#include <QLabel>
-#include <QEvent>
 #include <QMessageBox>
 #include <QImageWriter>
 #include <QFileDialog>
 #include <QGraphicsItem>
 #include <QClipboard>
 #include <QGraphicsScene>
-#include <QPixmap>
+//#include <QPixmap>
 #include <QPushButton>
 
 #include <tulip/View.h>

@@ -17,14 +17,8 @@
  *
  */
 
-#include <QString>
-#include <QStringList>
-#include <QListView>
 #include <QPushButton>
 #include <QMessageBox>
-#include <QInputDialog>
-#include <QLabel>
-#include <QTabWidget>
 
 #include "ui_CopyPropertyDialog.h"
 

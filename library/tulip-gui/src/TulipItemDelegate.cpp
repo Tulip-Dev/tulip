@@ -18,18 +18,13 @@
  */
 #include "tulip/TulipItemDelegate.h"
 
-#include <QDebug>
 #include <QEvent>
-#include <QDialog>
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
 #include <QMainWindow>
 #include <QLabel>
 #include <QTableView>
 
-#include <tulip/TulipModel.h>
-#include <tulip/TulipMetaTypes.h>
-#include <tulip/TulipItemEditorCreators.h>
 #include <tulip/GraphModel.h>
 #include <tulip/Perspective.h>
 

@@ -18,13 +18,11 @@
  */
 #include <tulip/GlMainView.h>
 
-#include <QApplication>
 #include <QGraphicsProxyWidget>
 #include <QGraphicsView>
 #include <QAction>
 #include <QMenu>
 #include <QPushButton>
-#include <QTimer>
 
 #include <tulip/GlMainWidgetGraphicsItem.h>
 #include <tulip/GlMainWidget.h>

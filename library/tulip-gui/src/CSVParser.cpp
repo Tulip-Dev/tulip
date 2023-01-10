@@ -20,7 +20,6 @@
 #include <QTextCodec>
 
 #include <tulip/CSVParser.h>
-#include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/PluginProgress.h>
 

@@ -17,12 +17,10 @@
  *
  */
 
-#include <QMimeData>
 #include <QDrag>
 #include <QMouseEvent>
 #include <QApplication>
 
-#include <tulip/Edge.h>
 #include <tulip/DragHandle.h>
 #include <tulip/TulipMimes.h>
 #include <tulip/WorkspacePanel.h>

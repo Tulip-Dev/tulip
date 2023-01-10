@@ -19,10 +19,7 @@
 
 #include <tulip/GraphElementModel.h>
 #include <tulip/TulipMetaTypes.h>
-#include <QFont>
-
 #include <tulip/Graph.h>
-#include <tulip/FilterIterator.h>
 
 using namespace tlp;
 using namespace std;

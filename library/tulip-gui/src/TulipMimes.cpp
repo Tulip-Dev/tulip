@@ -19,10 +19,6 @@
 
 #include "tulip/TulipMimes.h"
 
-#include <tulip/TulipMetaTypes.h>
-#include <tulip/Perspective.h>
-#include <tulip/TlpQtTools.h>
-
 using namespace tlp;
 
 AlgorithmMimeType::AlgorithmMimeType(QString algorithmName, const DataSet &data)
