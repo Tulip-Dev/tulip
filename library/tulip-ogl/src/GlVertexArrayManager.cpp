@@ -24,9 +24,7 @@
 #include <tulip/GlEdge.h>
 #include <tulip/GlNode.h>
 #include <tulip/GlGraphInputData.h>
-#include <tulip/Graph.h>
 #include <tulip/Curves.h>
-#include <tulip/GlShaderProgram.h>
 #include <tulip/GlGraphRenderingParameters.h>
 
 using namespace std;

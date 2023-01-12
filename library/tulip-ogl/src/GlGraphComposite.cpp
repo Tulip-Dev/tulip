@@ -19,11 +19,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GraphProperty.h>
 #include <tulip/GlXMLTools.h>
-#include <tulip/GlTools.h>
-#include <tulip/GlScene.h>
-#include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
-#include <tulip/OcclusionTest.h>
 #include <tulip/GlGraphHighDetailsRenderer.h>
 
 using namespace std;

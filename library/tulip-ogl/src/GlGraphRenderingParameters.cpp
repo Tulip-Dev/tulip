@@ -16,10 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/LayoutProperty.h>
-#include <tulip/Vector.h>
 #include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/TlpTools.h>
 #include <tulip/NumericProperty.h>
 
 using namespace tlp;

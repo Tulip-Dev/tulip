@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <cassert>
 #include <tulip/GlSceneObserver.h>
 
 #include <tulip/GlScene.h>

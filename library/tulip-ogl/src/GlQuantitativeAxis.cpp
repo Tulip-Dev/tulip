@@ -18,7 +18,6 @@
  */
 
 #include <tulip/GlLine.h>
-#include <tulip/GlPolygon.h>
 #include <tulip/GlTriangle.h>
 
 #include <sstream>

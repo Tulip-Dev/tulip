@@ -17,9 +17,7 @@
  *
  */
 #include <tulip/GlCPULODCalculator.h>
-#include <tulip/GlGraphInputData.h>
 
-#include <tulip/Matrix.h>
 #include <tulip/Camera.h>
 #include <tulip/GlTools.h>
 #include <tulip/ParallelTools.h>

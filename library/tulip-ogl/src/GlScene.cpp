@@ -16,13 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <GL/glew.h>
-
-#include <algorithm>
-#include <cstdlib>
-#include <climits>
-#include <cstdio>
-
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlTools.h>

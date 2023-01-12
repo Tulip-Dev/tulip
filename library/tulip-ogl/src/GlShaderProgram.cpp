@@ -20,12 +20,10 @@
 #include <GL/glew.h>
 
 #include <iostream>
-#include <fstream>
 #include <algorithm>
 
 #include <tulip/GlShaderProgram.h>
 #include <tulip/OpenGlConfigManager.h>
-#include <tulip/TlpTools.h>
 
 using namespace std;
 

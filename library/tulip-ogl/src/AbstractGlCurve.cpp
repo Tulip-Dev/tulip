@@ -21,7 +21,6 @@
 #include <tulip/AbstractGlCurve.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/Curves.h>
-#include <tulip/TlpTools.h>
 #include <tulip/GlShaderProgram.h>
 #include <tulip/OpenGlConfigManager.h>
 

@@ -23,7 +23,6 @@
 
 #include <utf8.h>
 
-#include <algorithm>
 #include <map>
 
 using namespace std;

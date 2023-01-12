@@ -16,14 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <GL/glew.h>
-
-#include <sstream>
-
-#include <tulip/GlTextureManager.h>
 #include <tulip/GlOpenUniformCubicBSpline.h>
-#include <tulip/GlTools.h>
-#include <tulip/Curves.h>
 #include <tulip/GlBezierCurve.h>
 #include <tulip/ParametricCurves.h>
 #include <tulip/GlShaderProgram.h>

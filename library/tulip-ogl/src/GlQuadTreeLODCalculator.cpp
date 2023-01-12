@@ -24,7 +24,6 @@
 #include <tulip/QuadTree.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/Camera.h>
-#include <tulip/GlEntity.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlNode.h>

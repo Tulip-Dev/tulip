@@ -17,8 +17,6 @@
  *
  */
 
-#include <map>
-
 #include <tulip/GlColorScale.h>
 #include <tulip/ColorScale.h>
 #include <tulip/GlPolyQuad.h>

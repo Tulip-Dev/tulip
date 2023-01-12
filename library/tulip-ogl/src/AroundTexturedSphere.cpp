@@ -19,7 +19,6 @@
 #include <tulip/BoundingBox.h>
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include <tulip/TlpTools.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlRect.h>

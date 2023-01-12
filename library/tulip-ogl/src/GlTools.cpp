@@ -41,13 +41,6 @@
 
 #include <tulip/Rectangle.h>
 #include <tulip/GlTools.h>
-#include <tulip/Matrix.h>
-#include <tulip/BoundingBox.h>
-#include <tulip/TulipException.h>
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <climits>
 #include <unordered_map>
 
 using namespace std;

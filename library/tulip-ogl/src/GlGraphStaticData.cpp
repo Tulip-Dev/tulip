@@ -19,8 +19,6 @@
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/TulipViewSettings.h>
 
-#include <iostream>
-
 using namespace std;
 
 namespace tlp {

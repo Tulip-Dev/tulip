@@ -22,9 +22,6 @@
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/ParallelTools.h>
 
-#include <iostream>
-#include <sstream>
-
 //====================================================
 
 using namespace std;
@@ -47,10 +44,7 @@ string OpenGlConfigManager::getOpenGLVersionString() {
 }
 
 double OpenGlConfigManager::getOpenGLVersion() {
-  double ret = 0;
-  std::istringstream iss(getOpenGLVersionString()); //.substr(0,3));
-  iss >> ret;
-  return ret;
+  return std::stod(getOpenGLVersionString());
 }
 
 string OpenGlConfigManager::getOpenGLVendor() {

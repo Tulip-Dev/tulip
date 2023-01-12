@@ -20,21 +20,10 @@
 
 #include <tulip/GlEdge.h>
 #include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/Coord.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/StringProperty.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/IntegerProperty.h>
-#include <tulip/ColorProperty.h>
 #include <tulip/GlShaderProgram.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/Curves.h>
-#include <tulip/GlGraphStaticData.h>
-#include <tulip/GlLines.h>
-#include <tulip/OcclusionTest.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/Camera.h>
 #include <tulip/GlBezierCurve.h>
@@ -44,7 +33,6 @@
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/ParametricCurves.h>
 #include <tulip/GlGraphInputData.h>
-#include <tulip/GlScene.h>
 #include <tulip/GlGlyphRenderer.h>
 #include <tulip/TulipViewSettings.h>
 

@@ -20,17 +20,11 @@
 #include <array>
 
 #include <tulip/GlGraphHighDetailsRenderer.h>
-#include <tulip/GraphProperty.h>
-#include <tulip/NumericProperty.h>
-#include <tulip/GlTools.h>
-#include <tulip/GlScene.h>
 #include <tulip/GlVertexArrayManager.h>
-#include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/OcclusionTest.h>
 #include <tulip/GlEdge.h>
 #include <tulip/GlNode.h>
 #include <tulip/Camera.h>
-#include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGlyphRenderer.h>
 #include <tulip/OpenGlConfigManager.h>

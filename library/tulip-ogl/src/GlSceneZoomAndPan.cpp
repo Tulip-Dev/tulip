@@ -21,8 +21,6 @@
 #include <tulip/GlScene.h>
 #include <tulip/Camera.h>
 
-#include <algorithm>
-
 using namespace std;
 
 namespace tlp {

@@ -17,7 +17,6 @@
  *
  */
 
-#include <cassert>
 #include <cstring>
 
 #ifdef __GNUC__
@@ -33,9 +32,7 @@
 
 #include <utf8.h>
 
-#include <algorithm>
 #include <map>
-#include <unordered_map>
 
 using namespace std;
 

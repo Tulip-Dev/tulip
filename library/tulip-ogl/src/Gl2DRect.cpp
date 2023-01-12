@@ -20,8 +20,6 @@
 #include <tulip/Camera.h>
 #include <tulip/GlXMLTools.h>
 
-#include <limits>
-
 using namespace std;
 
 namespace tlp {

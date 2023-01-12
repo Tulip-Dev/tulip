@@ -26,8 +26,6 @@
 #include <tulip/Glyph.h>
 #include <tulip/Camera.h>
 
-#include <tulip/OpenGlIncludes.h>
-
 using namespace std;
 
 namespace tlp {

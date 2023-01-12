@@ -20,7 +20,6 @@
 #include <cstring>
 #include <GL/glew.h>
 #include <tulip/Vector.h>
-#include <tulip/TlpTools.h>
 #include <tulip/Curves.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlShaderProgram.h>
