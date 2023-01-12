@@ -41,6 +41,11 @@
 
 #include <tulip/Rectangle.h>
 #include <tulip/GlTools.h>
+
+#ifndef NDEBUG
+#include <tulip/TulipException.h>
+#endif
+
 #include <unordered_map>
 
 using namespace std;
@@ -130,7 +135,7 @@ void glTest(const string &message, int line, bool throwException) {
   unsigned int i = 1;
   GLenum error = glGetError();
 
-  stringstream errorStream;
+  string errorMsg;
   bool haveError = false, throwNeeded = false;
 
   while (error != GL_NO_ERROR) {
@@ -140,19 +145,19 @@ void glTest(const string &message, int line, bool throwException) {
       throwNeeded = true;
 
     if (i == 1) {
-      errorStream << "[OpenGL ERROR] " << message;
+      errorMsg += "[OpenGL ERROR] " + message;
       if (line > -1)
-        errorStream << ':' << line << endl;
+        errorMsg += ':' + std::to_string(line) + "\n";
     }
-    errorStream << "========> " << glGetErrorDescription(error) << endl;
+    errorMsg += "========> " + glGetErrorDescription(error) + "\n";
     error = glGetError();
     ++i;
   }
 
   if (haveError) {
     if (throwNeeded)
-      throw tlp::TulipException(errorStream.str());
-    tlp::warning() << errorStream.str();
+      throw tlp::TulipException(errorMsg);
+    tlp::warning() << errorMsg;
   }
 
 #else
