@@ -349,19 +349,11 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
   return false;
 }
 node NeighborhoodHighlighter::selectNodeInOriginalGraph(GlMainWidget *glWidget, int x, int y) {
-  node n;
-  glWidget->makeCurrent();
-  vector<SelectedEntity> selectedElements;
-  glWidget->getScene()->selectEntities(
-      static_cast<RenderingEntitiesFlag>(RenderingNodes | RenderingWithoutRemove),
-      glWidget->screenToViewport(x - 1), glWidget->screenToViewport(y - 1),
-      glWidget->screenToViewport(3), glWidget->screenToViewport(3), nullptr, selectedElements);
-
-  if (!selectedElements.empty()) {
-    n = selectedElements[0].getNode();
-  }
-
-  return n;
+  SelectedEntity entity;
+  if (glWidget->pickNodesEdges(x, y, entity, nullptr, true, false) &&
+      entity.getEntityType() == SelectedEntity::NODE_SELECTED)
+    return node(entity.getComplexEntityId());
+  return node();
 }
 
 bool NeighborhoodHighlighter::selectInAugmentedDisplayGraph(const int x, const int y,
