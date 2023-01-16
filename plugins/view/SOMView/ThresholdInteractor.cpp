@@ -324,8 +324,7 @@ bool ThresholdInteractor::eventFilter(QObject *widget, QEvent *event) {
     // Update Camera for selection
     layer->set2DMode();
     glMainWidget->getScene()->addExistingLayer(layer);
-    glMainWidget->getScene()->selectEntities(RenderingSimpleEntities, me->x(), me->y(), 0, 0, layer,
-                                             selectedEntities);
+    glMainWidget->pickGlEntities(me->x(), me->y(), selectedEntities);
     glMainWidget->getScene()->removeLayer(layer, false);
 
     if (!selectedEntities.empty()) {

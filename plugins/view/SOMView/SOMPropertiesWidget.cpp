@@ -42,8 +42,6 @@ SOMPropertiesWidget::SOMPropertiesWidget(SOMView *view, QWidget *parent)
 
   defaultScale = new ColorScale(ColorScalesManager::getLatestColorScale());
 
-  defaultScale->addObserver(this);
-
   QVBoxLayout *sizeMappingLayout = new QVBoxLayout(_ui->nodeSizeMappingFrame);
 #ifndef __APPLE__
   sizeMappingLayout->setSpacing(0);

@@ -120,13 +120,11 @@ void SOMView::construct(QWidget *) {
   mapWidget->installEventFilter(this);
 
   initGlMainViews();
-  mapWidget->installEventFilter(this);
 
   isDetailedMode = false;
 
   // Interactors update
   previewWidget->installEventFilter(&navigator);
-  previewWidget->installEventFilter(this);
 
   // Init var
   graphLayoutProperty = nullptr;
@@ -813,9 +811,7 @@ vector<SOMPreviewComposite *> SOMView::getPreviews() {
 
 void SOMView::getPreviewsAtViewportCoord(int x, int y, std::vector<SOMPreviewComposite *> &result) {
   vector<SelectedEntity> selectedEntities;
-  previewWidget->getScene()->selectEntities(RenderingSimpleEntities, x, y, 0, 0, nullptr,
-                                            selectedEntities);
-
+  previewWidget->pickGlEntities(x, y, selectedEntities);
   for (auto itEntities = selectedEntities.begin(); itEntities != selectedEntities.end();
        ++itEntities) {
     for (auto itSOM = propertyToPreviews.begin(); itSOM != propertyToPreviews.end(); ++itSOM) {
@@ -845,40 +841,22 @@ void SOMView::computeColor(SOMMap *som, tlp::NumericProperty *property, tlp::Col
 
 bool SOMView::eventFilter(QObject *obj, QEvent *event) {
 
-  if (obj == previewWidget) {
-    if (event->type() == QMouseEvent::MouseButtonDblClick) {
+  if (event->type() == QMouseEvent::MouseButtonDblClick) {
+    if (obj == previewWidget) {
       QMouseEvent *me = static_cast<QMouseEvent *>(event);
 
       if (me->button() == Qt::LeftButton) {
-        vector<SOMPreviewComposite *> properties;
-        Coord screenCoords(me->x(), me->y(), 0.0f);
-        Coord &&viewportCoords = getGlMainWidget()->screenToViewport(screenCoords);
-        getPreviewsAtViewportCoord(viewportCoords.x(), viewportCoords.y(), properties);
+	vector<SOMPreviewComposite *> properties;
 
-        if (!properties.empty()) {
-          addPropertyToSelection(properties.front()->getPropertyName());
-        }
+	getPreviewsAtViewportCoord(me->x(), me->y(), properties);
 
-        return true;
+	if (!properties.empty()) {
+	  addPropertyToSelection(properties.front()->getPropertyName());
+	}
+
+	return true;
       }
-    }
-
-    if (event->type() == QMouseEvent::ToolTip) {
-      QHelpEvent *he = static_cast<QHelpEvent *>(event);
-      vector<SOMPreviewComposite *> properties;
-      Coord screenCoords(he->x(), he->y(), 0.0f);
-      Coord &&viewportCoords = getGlMainWidget()->screenToViewport(screenCoords);
-      getPreviewsAtViewportCoord(viewportCoords.x(), viewportCoords.y(), properties);
-
-      if (!properties.empty()) {
-        QToolTip::showText(he->globalPos(),
-                           QString::fromStdString(properties.front()->getPropertyName()));
-      }
-
-      return true;
-    }
-  } else if (obj == mapWidget) {
-    if (event->type() == QMouseEvent::MouseButtonDblClick) {
+    } else if (obj == mapWidget) {
       switchToPreviewMode();
       return true;
     }
