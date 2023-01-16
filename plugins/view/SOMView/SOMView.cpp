@@ -846,15 +846,15 @@ bool SOMView::eventFilter(QObject *obj, QEvent *event) {
       QMouseEvent *me = static_cast<QMouseEvent *>(event);
 
       if (me->button() == Qt::LeftButton) {
-	vector<SOMPreviewComposite *> properties;
+        vector<SOMPreviewComposite *> properties;
 
-	getPreviewsAtViewportCoord(me->x(), me->y(), properties);
+        getPreviewsAtViewportCoord(me->x(), me->y(), properties);
 
-	if (!properties.empty()) {
-	  addPropertyToSelection(properties.front()->getPropertyName());
-	}
+        if (!properties.empty()) {
+          addPropertyToSelection(properties.front()->getPropertyName());
+        }
 
-	return true;
+        return true;
       }
     } else if (obj == mapWidget) {
       switchToPreviewMode();
