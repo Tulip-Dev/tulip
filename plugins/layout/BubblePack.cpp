@@ -285,18 +285,18 @@ bool BubblePack::run() {
     auto sz = components.size();
     if (sz > 1) {
       for (unsigned int i = 0; i < sz; ++i) {
-	Graph *tmp = graph;
-	// apply "Bubble Pack" on the subgraph induced
-	// by the current connected component
-	graph = graph->inducedSubGraph(components[i]);
-	computeCC = false;
-	run();
-	computeCC = true;
-	tmp->delSubGraph(graph);
-	// restore current graph
-	graph = tmp;
-	if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
-	  return pluginProgress->state() != TLP_CANCEL;
+        Graph *tmp = graph;
+        // apply "Bubble Pack" on the subgraph induced
+        // by the current connected component
+        graph = graph->inducedSubGraph(components[i]);
+        computeCC = false;
+        run();
+        computeCC = true;
+        tmp->delSubGraph(graph);
+        // restore current graph
+        graph = tmp;
+        if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
+          return pluginProgress->state() != TLP_CANCEL;
       }
 
       // call connected component packing
@@ -304,13 +304,12 @@ bool BubblePack::run() {
       LayoutProperty tmpLayout(graph);
       DataSet tmpdataSet;
       tmpdataSet.set("coordinates", result);
-      graph->applyPropertyAlgorithm("Connected Components Packing", &tmpLayout,
-				    err, &tmpdataSet, pluginProgress);
+      graph->applyPropertyAlgorithm("Connected Components Packing", &tmpLayout, err, &tmpdataSet,
+                                    pluginProgress);
       *result = tmpLayout;
       return true;
     }
   }
-
 
   if (!((dataSet != nullptr) && dataSet->get("node size", nodeSize))) {
     if (graph->existProperty("viewSize")) {

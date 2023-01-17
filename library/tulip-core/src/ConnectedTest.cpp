@@ -155,7 +155,7 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
       }
       // stop if graph is connected
       if (i == 0 && (component.size() == graph->numberOfNodes()))
-	return;
+        return;
     }
   });
 }
