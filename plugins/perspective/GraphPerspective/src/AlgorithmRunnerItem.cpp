@@ -563,8 +563,6 @@ bool AlgorithmRunnerItem::eventFilter(QObject *, QEvent *ev) {
       ui->setupUi(&pluginDocDialog);
       ui->pluginDocText->setReadOnly(true);
       ui->pluginDocText->setHtml(doc);
-      connect(ui->buttonBox->button(QDialogButtonBox::Ok), SIGNAL(released()), &pluginDocDialog,
-              SLOT(accept()));
       pluginDocDialog.setWindowTitle(QString(name()).append(" documentation"));
       pluginDocDialog.setModal(true);
       pluginDocDialog.exec();
