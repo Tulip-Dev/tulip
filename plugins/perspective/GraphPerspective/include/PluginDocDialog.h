@@ -27,14 +27,14 @@
 class PluginDocDialog : public QDialog {
   Ui_PluginDocDialog *ui;
 
- public:
+public:
   PluginDocDialog(QWidget *parent) : QDialog(parent) {
     ui = new Ui_PluginDocDialog();
     ui->setupUi(this);
   }
 
   static void showDoc(QWidget *parent, QString pluginName, QString pluginHelp,
-		      tlp::ParameterListModel *model);
+                      tlp::ParameterListModel *model);
 };
 
 #endif // PLUGINDOCDIALOG_H

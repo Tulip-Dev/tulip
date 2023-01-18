@@ -18,9 +18,8 @@
  */
 #include "PluginDocDialog.h"
 
-void PluginDocDialog::showDoc(QWidget *parent, QString pluginName,
-			      QString pluginHelp,
-			      tlp::ParameterListModel *model) {
+void PluginDocDialog::showDoc(QWidget *parent, QString pluginName, QString pluginHelp,
+                              tlp::ParameterListModel *model) {
   QString doc("<head><style type\"text/css\">a { color: #0d47f1 }</style></head>");
   doc += pluginHelp;
 
@@ -31,8 +30,9 @@ void PluginDocDialog::showDoc(QWidget *parent, QString pluginName,
       auto name = model->getParameterName(i);
       auto pos = name.indexOf("::");
       if (pos != -1)
-	name = name.mid(pos + 2);
-      doc.append(QString("<br/><b>-&nbsp;&quot;%1&quot;</b>%2").arg(name).arg(model->getParameterHelp(i)));
+        name = name.mid(pos + 2);
+      doc.append(
+          QString("<br/><b>-&nbsp;&quot;%1&quot;</b>%2").arg(name).arg(model->getParameterHelp(i)));
     }
   }
 

@@ -217,7 +217,8 @@ void ExportWizard::browseButtonClicked() {
 void ExportWizard::helpButtonClicked() {
   // display current import plugin documentation
   ParameterListModel *model = static_cast<ParameterListModel *>(_ui->parameters->model());
-  PluginDocDialog::showDoc(parentWidget(), _index->data().toString(), _index->data(Qt::ToolTipRole).toString(),  model);
+  PluginDocDialog::showDoc(parentWidget(), _index->data().toString(),
+                           _index->data(Qt::ToolTipRole).toString(), model);
 }
 
 bool ExportWizard::validateCurrentPage() {

@@ -545,7 +545,7 @@ bool AlgorithmRunnerItem::eventFilter(QObject *, QEvent *ev) {
         help = _pluginName;
       initModel();
       ParameterListModel *model = static_cast<ParameterListModel *>(_ui->parameters->model());
-      PluginDocDialog::showDoc(parentWidget(), _pluginName, help,  model);
+      PluginDocDialog::showDoc(parentWidget(), _pluginName, help, model);
       return true;
     }
   }
