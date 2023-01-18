@@ -306,6 +306,9 @@ ENDIF(TULIP_BUILD_GL_TEX_LOADER)
 
   # Qt
   FIND_PACKAGE(QtX)
+  # Display Qt detected version
+  MESSAGE(STATUS "Using Qt version ${QT_FULL_VERSION}")
+
 
   # Quazip
 SET(TULIP_USE_THIRDPARTY_QUAZIP ${TULIP_USE_THIRDPARTY_STATIC_LIBS} CACHE BOOL "If activated, force the use of quazip library located in thirdparty instead of trying to find it on the system.")
