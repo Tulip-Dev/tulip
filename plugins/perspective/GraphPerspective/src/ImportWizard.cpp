@@ -18,6 +18,7 @@
  */
 #include "ImportWizard.h"
 #include "ui_ImportWizard.h"
+#include "PluginDocDialog.h"
 
 #include <QAbstractButton>
 #include <QMessageBox>
@@ -148,8 +149,8 @@ tlp::DataSet ImportWizard::parameters() const {
 
 void ImportWizard::helpButtonClicked() {
   // display current import plugin documentation
-  QMessageBox::information(this, _index->data().toString().append(" documentation"),
-                           _index->data(Qt::ToolTipRole).toString());
+  ParameterListModel *model = static_cast<ParameterListModel *>(_ui->parameters->model());
+  PluginDocDialog::showDoc(parentWidget(), _index->data().toString(), _index->data(Qt::ToolTipRole).toString(),  model);
 }
 
 void ImportWizard::updateFinishButton() {

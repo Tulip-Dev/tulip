@@ -14,6 +14,7 @@ src/HeaderFrame.cpp
 src/ImportWizard.cpp
 src/OutputPanelButton.cpp
 src/PanelSelectionWizard.cpp
+src/PluginDocDialog.cpp
 src/PreferencesDialog.cpp
 src/SearchWidget.cpp
 )
