@@ -131,7 +131,7 @@
 (default "18" "18")
 )
 (property  0 string "viewIcon"
-(default "fa-question-circle" "fa-question-circle")
+(default "fas-circle-question" "fas-circle-question")
 )
 (property  0 string "viewLabel"
 (default "" "")
