@@ -21,8 +21,13 @@
 #ifndef OGDF_LAYOUT_PLUGIN_BASE
 #define OGDF_LAYOUT_PLUGIN_BASE
 
-#include <tulip/TulipPluginHeaders.h>
-#include <tulip/PropertyAlgorithm.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
 
 #include <ogdf/basic/Graph_d.h>
 #include <ogdf/basic/GraphAttributes.h>

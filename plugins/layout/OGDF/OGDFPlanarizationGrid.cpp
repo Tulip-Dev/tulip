@@ -20,8 +20,6 @@
 
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
 
-#include <tulip/StringCollection.h>
-
 using namespace tlp;
 using namespace ogdf;
 

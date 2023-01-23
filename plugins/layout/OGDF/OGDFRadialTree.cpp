@@ -21,6 +21,7 @@
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
 
 #include <tulip/StringCollection.h>
+#include <tulip/TreeTest.h>
 
 #define ROOTSELECTIONLIST "source;sink;center"
 #define ROOTSOURCE 0

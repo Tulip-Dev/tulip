@@ -21,6 +21,7 @@
 #include <tulip2ogdf/OGDFLayoutPluginBase.h>
 
 #include <tulip/StringCollection.h>
+#include <tulip/TreeTest.h>
 
 #define ORIENTATIONLIST "top to bottom;bottom to top;left to right;right to left"
 #define TOPTOBOTTOM 0
