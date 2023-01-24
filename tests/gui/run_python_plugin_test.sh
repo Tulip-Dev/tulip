@@ -7,3 +7,5 @@ cp python_plugin.py ${TULIP_PYTHON_PLUGINS_DIR}
 sh tulip_run_test.sh python_plugin grid_approximation.tlp grid_approximation.tlp
 # remove python plugin
 rm ${TULIP_PYTHON_PLUGINS_DIR}/python_plugin.py*
+# remove python cache dir to avoid to disturb following gui tests
+rm -rf *pycache*
