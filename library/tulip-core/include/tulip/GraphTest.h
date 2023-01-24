@@ -37,7 +37,7 @@ public:
       dataSet->set("result", result);
     }
 
-    return true;
+    return result;
   }
 
   virtual bool test() = 0;

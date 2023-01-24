@@ -405,25 +405,34 @@ void AlgorithmRunnerItem::run(Graph *g) {
     progress->setPreviewHandler(nullptr);
 
   if (!result) {
-    if (progress->state() == TLP_CANCEL && errorMessage.empty()) {
+    progress->setComment("Cancelling graph changes...");
+    g->pop();
+    bool cancelled = progress->state() == TLP_CANCEL && errorMessage.empty();
+    delete progress;
+    progress = nullptr;
+    if (cancelled) {
       errorMessage = "Cancelled by user";
       tlp::warning() << QStringToTlpString(name()) << ": " << errorMessage;
       QMessageBox::warning(parentWidget(), name(), errorMessage.c_str());
     } else {
-      tlp::error() << QStringToTlpString(name()) << ": " << errorMessage;
-      QMessageBox::critical(parentWidget(), name(), errorMessage.c_str());
+      std::string stdName = QStringToTlpString(name());
+      if (PluginLister::pluginExists<GraphTest>(stdName)) {
+	std::string str = "\"" + stdName + "\" test failed" + " on:\n" + g->getName() + ".";
+	tlp::warning() << str << std::endl;
+	QMessageBox::warning(parentWidget(), "Tulip test result", tlp::tlpStringToQString(str));
+      } else {
+	tlp::error() << QStringToTlpString(name()) << ": " << errorMessage;
+	QMessageBox::critical(parentWidget(), name(), errorMessage.c_str());
+      }
     }
-    progress->setComment("Cancelling graph changes...");
-    g->pop();
-  } else {
+  }
+
+  if (result) {
     if (progress->state() == TLP_STOP) {
       errorMessage = "Stopped by user";
       tlp::warning() << QStringToTlpString(name()) << ": " << errorMessage;
       QMessageBox::warning(parentWidget(), name(), errorMessage.c_str());
     }
-  }
-
-  if (result) {
     progress->setComment("Applying graph changes...");
     // copy or cleanup out properties
     for (auto &opp : outPropertyParams) {
@@ -454,6 +463,12 @@ void AlgorithmRunnerItem::run(Graph *g) {
     }
   }
 
+  if ((PluginLister::pluginInformation(algorithm).group() == "Topological Test")
+      && result) {
+    // Topological test non longer need to display progress dialog
+    delete progress;
+    progress = nullptr;
+  }
   afterRun(g, dataSet);
 
   if ((result || (PluginLister::pluginInformation(algorithm).group() == "Topological Test")) &&
@@ -616,15 +631,11 @@ void AlgorithmRunnerItem::afterRun(Graph *g, const tlp::DataSet &dataSet) {
   } else if (PluginLister::pluginExists<GraphTest>(stdName)) {
     bool result = true;
     dataSet.get<bool>("result", result);
-    std::string str = "\"" + stdName + "\" test " + (result ? "succeeded" : "failed") + " on:\n" +
-                      g->getName() + ".";
 
     if (result) {
+      std::string str = "\"" + stdName + "\" test succeeded" + " on:\n" + g->getName() + ".";
       tlp::debug() << str << std::endl;
       QMessageBox::information(parentWidget(), "Tulip test result", tlp::tlpStringToQString(str));
-    } else {
-      tlp::warning() << str << std::endl;
-      QMessageBox::warning(parentWidget(), "Tulip test result", tlp::tlpStringToQString(str));
     }
   }
 }
