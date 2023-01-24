@@ -97,8 +97,8 @@ GlComposite *readPolyFile(QString fileName) {
 
     bool findLng = false;
     bool findLat = false;
-    float lng;
-    float lat;
+    float lng = 0.;
+    float lat = 0.;
 
     for (const auto &s : strList) {
       s.toDouble(&ok);
