@@ -703,7 +703,7 @@ static string cleanupAddress(const string &addr) {
   return s;
 }
 
-void GeographicViewGraphicsView::loadFile(const bool isCSV,const QString &fileName) {
+void GeographicViewGraphicsView::loadFile(const bool isCSV, const QString &fileName) {
   bool oldPolyVisible = false;
 
   if (polygonEntity != nullptr) {
@@ -711,12 +711,12 @@ void GeographicViewGraphicsView::loadFile(const bool isCSV,const QString &fileNa
     delete polygonEntity;
   }
 
-  if(fileName.isEmpty())
-      polygonEntity = readCsvFile(":/tulip/view/geographic/MAPAGR4.txt");
-  else if(isCSV)
+  if (fileName.isEmpty())
+    polygonEntity = readCsvFile(":/tulip/view/geographic/MAPAGR4.txt");
+  else if (isCSV)
     polygonEntity = readCsvFile(fileName);
   else
-      polygonEntity = readPolyFile(fileName);
+    polygonEntity = readPolyFile(fileName);
 
   if (!polygonEntity) {
     QMessageBox::critical(Perspective::instance()->mainWindow()->centralWidget(),

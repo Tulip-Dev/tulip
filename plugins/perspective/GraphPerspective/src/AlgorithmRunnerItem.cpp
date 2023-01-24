@@ -417,12 +417,12 @@ void AlgorithmRunnerItem::run(Graph *g) {
     } else {
       std::string stdName = QStringToTlpString(name());
       if (PluginLister::pluginExists<GraphTest>(stdName)) {
-	std::string str = "\"" + stdName + "\" test failed" + " on:\n" + g->getName() + ".";
-	tlp::warning() << str << std::endl;
-	QMessageBox::warning(parentWidget(), "Tulip test result", tlp::tlpStringToQString(str));
+        std::string str = "\"" + stdName + "\" test failed" + " on:\n" + g->getName() + ".";
+        tlp::warning() << str << std::endl;
+        QMessageBox::warning(parentWidget(), "Tulip test result", tlp::tlpStringToQString(str));
       } else {
-	tlp::error() << QStringToTlpString(name()) << ": " << errorMessage;
-	QMessageBox::critical(parentWidget(), name(), errorMessage.c_str());
+        tlp::error() << QStringToTlpString(name()) << ": " << errorMessage;
+        QMessageBox::critical(parentWidget(), name(), errorMessage.c_str());
       }
     }
   }
@@ -463,8 +463,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
     }
   }
 
-  if ((PluginLister::pluginInformation(algorithm).group() == "Topological Test")
-      && result) {
+  if ((PluginLister::pluginInformation(algorithm).group() == "Topological Test") && result) {
     // Topological test non longer need to display progress dialog
     delete progress;
     progress = nullptr;

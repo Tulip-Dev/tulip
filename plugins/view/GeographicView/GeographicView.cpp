@@ -416,12 +416,12 @@ void GeographicView::updatePoly(bool force) {
   if (geoViewConfigWidget->polyOptionsChanged() || force) {
     switch (geoViewConfigWidget->polyFileType()) {
     case GeographicViewConfigWidget::CsvFile: {
-      geoViewGraphicsView->loadFile(true,geoViewConfigWidget->getCsvFile());
+      geoViewGraphicsView->loadFile(true, geoViewConfigWidget->getCsvFile());
       break;
     }
 
     case GeographicViewConfigWidget::PolyFile: {
-      geoViewGraphicsView->loadFile(false,geoViewConfigWidget->getPolyFile());
+      geoViewGraphicsView->loadFile(false, geoViewConfigWidget->getPolyFile());
       break;
     }
 

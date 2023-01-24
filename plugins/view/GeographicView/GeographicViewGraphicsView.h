@@ -116,7 +116,7 @@ public:
 
   void switchMapType();
 
-  void loadFile(const bool isCSV=false,const QString &fileName="");
+  void loadFile(const bool isCSV = false, const QString &fileName = "");
 
   QComboBox *getMapTypeComboBox() {
     return mapTypeComboBox;
