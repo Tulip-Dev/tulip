@@ -59,7 +59,7 @@ namespace tlp {
 
 const string planisphereTextureId = ":/tulip/view/geographic/planisphere.jpg";
 
-GlComposite *readPolyFile(QString fileName) {
+GlComposite *readPolyFile(const QString &fileName) {
   GlComposite *composite = new GlComposite;
 
   QFile file(fileName);
@@ -703,7 +703,7 @@ static string cleanupAddress(const string &addr) {
   return s;
 }
 
-void GeographicViewGraphicsView::loadDefaultMap() {
+void GeographicViewGraphicsView::loadFile(const bool isCSV,const QString &fileName) {
   bool oldPolyVisible = false;
 
   if (polygonEntity != nullptr) {
@@ -711,52 +711,17 @@ void GeographicViewGraphicsView::loadDefaultMap() {
     delete polygonEntity;
   }
 
-  polygonEntity = readCsvFile(":/tulip/view/geographic/MAPAGR4.txt");
-  polygonEntity->setVisible(oldPolyVisible);
-
-  GlScene *scene = glMainWidget->getScene();
-  GlLayer *layer = scene->getLayer("Main");
-  layer->addGlEntity(polygonEntity, "polygonMap");
-}
-
-void GeographicViewGraphicsView::loadCsvFile(QString fileName) {
-  bool oldPolyVisible = false;
-
-  if (polygonEntity != nullptr) {
-    oldPolyVisible = polygonEntity->isVisible();
-    delete polygonEntity;
-  }
-
-  polygonEntity = readCsvFile(fileName);
+  if(fileName.isEmpty())
+      polygonEntity = readCsvFile(":/tulip/view/geographic/MAPAGR4.txt");
+  else if(isCSV)
+    polygonEntity = readCsvFile(fileName);
+  else
+      polygonEntity = readPolyFile(fileName);
 
   if (!polygonEntity) {
     QMessageBox::critical(Perspective::instance()->mainWindow()->centralWidget(),
-                          "Can't read .poly file",
-                          "We can't read csv file: " + fileName + "\nVerify the file.");
-    return;
-  }
-
-  polygonEntity->setVisible(oldPolyVisible);
-
-  GlScene *scene = glMainWidget->getScene();
-  GlLayer *layer = scene->getLayer("Main");
-  layer->addGlEntity(polygonEntity, "polygonMap");
-}
-
-void GeographicViewGraphicsView::loadPolyFile(QString fileName) {
-  bool oldPolyVisible = false;
-
-  if (polygonEntity != nullptr) {
-    oldPolyVisible = polygonEntity->isVisible();
-    delete polygonEntity;
-  }
-
-  polygonEntity = readPolyFile(fileName);
-
-  if (!polygonEntity) {
-    QMessageBox::critical(Perspective::instance()->mainWindow()->centralWidget(),
-                          "Can't read .poly file",
-                          "We can't read .poly file: " + fileName + "\nVerify the file.");
+                          "Cannot read .poly file",
+                          "We cannot read csv file: " + fileName + "\nCheck the file.");
     return;
   }
 
