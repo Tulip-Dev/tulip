@@ -55,7 +55,8 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
     if (qMouseEv->buttons() == Qt::LeftButton) {
       if (!_started) {
-        bool result = glMainWidget->pickNodesEdges(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity);
+        bool result =
+            glMainWidget->pickNodesEdges(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity);
 
         if (result && (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED)) {
           _started = true;
@@ -67,7 +68,8 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
         return false;
       } else {
-        bool result = glMainWidget->pickNodesEdges(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity);
+        bool result =
+            glMainWidget->pickNodesEdges(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity);
 
         if (result && (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED)) {
           Observable::holdObservers();

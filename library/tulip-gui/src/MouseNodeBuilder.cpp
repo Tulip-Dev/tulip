@@ -49,7 +49,8 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
     if (e->type() == _eventType) {
       if (qMouseEv->button() == Qt::LeftButton) {
-        if (glMainWidget->pickNodesEdges(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity) &&
+        if (glMainWidget->pickNodesEdges(qMouseEv->pos().x(), qMouseEv->pos().y(),
+                                         selectedEntity) &&
             selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
           return true;
         }

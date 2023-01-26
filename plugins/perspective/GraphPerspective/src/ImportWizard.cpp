@@ -60,7 +60,8 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
 
   _ui->parameters->setItemDelegate(new TulipItemDelegate(_ui->parameters));
   _ui->parameters->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-  connect(_ui->importModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton), SLOT(click()));
+  connect(_ui->importModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton),
+          SLOT(click()));
   connect(_ui->searchBox, SIGNAL(textChanged(QString)), this, SLOT(setFilter(QString)));
   // display OK instead of Finish
   setButtonText(QWizard::FinishButton, "OK");
@@ -158,7 +159,7 @@ void ImportWizard::setFilter(QString filter) {
   bool noFilter = filter.isEmpty();
   // Be warn, that we consider only two levels (groups, plugins of groups)
   // loop on groups (File, Graph ...)
-  for (int i = 0; i <  model->rowCount(root); ++i) {
+  for (int i = 0; i < model->rowCount(root); ++i) {
     auto index = model->index(i, 1, root);
     auto name = index.data().toString();
     bool hidden = true;
@@ -169,9 +170,9 @@ void ImportWizard::setFilter(QString filter) {
       auto subIndex = model->index(j, 1, index);
       name = subIndex.data().toString();
       if (noFilter || name.contains(filter, Qt::CaseInsensitive))
-	_ui->importModules->setRowHidden(j, index, hidden = false);
+        _ui->importModules->setRowHidden(j, index, hidden = false);
       else
-	_ui->importModules->setRowHidden(j, index, true);
+        _ui->importModules->setRowHidden(j, index, true);
     }
     _ui->importModules->setRowHidden(i, root, hidden);
   }

@@ -310,8 +310,8 @@ bool MouseMove::eventFilter(QObject *widget, QEvent *e) {
     GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
 
     if (qMouseEv->pos().x() != x)
-      glMainWidget->getScene()->translateCamera(glMainWidget->screenToViewport(qMouseEv->pos().x() - x),
-                                                0, 0);
+      glMainWidget->getScene()->translateCamera(
+          glMainWidget->screenToViewport(qMouseEv->pos().x() - x), 0, 0);
 
     if (qMouseEv->pos().y() != y)
       glMainWidget->getScene()->translateCamera(
@@ -381,7 +381,8 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
     if (qMouseEv->modifiers() == Qt::NoModifier) {
       vector<SelectedEntity> tmpNodes;
       vector<SelectedEntity> tmpEdges;
-      glmainwidget->pickNodesEdges(qMouseEv->pos().x() - 1, qMouseEv->pos().y() - 1, 3, 3, tmpNodes, tmpEdges);
+      glmainwidget->pickNodesEdges(qMouseEv->pos().x() - 1, qMouseEv->pos().y() - 1, 3, 3, tmpNodes,
+                                   tmpEdges);
       node metaNode;
       bool find = false;
 
