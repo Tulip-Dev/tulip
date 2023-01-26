@@ -60,8 +60,8 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
 
   _ui->parameters->setItemDelegate(new TulipItemDelegate(_ui->parameters));
   _ui->parameters->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-  connect(_ui->importModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton),
-          SLOT(click()));
+  connect(_ui->importModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton), SLOT(click()));
+  connect(_ui->searchBox, SIGNAL(textChanged(QString)), this, SLOT(setFilter(QString)));
   // display OK instead of Finish
   setButtonText(QWizard::FinishButton, "OK");
   // Help button is used to display import plugin doc
@@ -85,7 +85,6 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
   importLabel += "<br/><br/>See <b>Edit</b> menu, then <b>Preferences</b> for more options when "
                  "importing a graph.</p></body></html>";
   _ui->label->setText(importLabel);
-
   updateFinishButton();
 }
 
@@ -102,27 +101,21 @@ void ImportWizard::algorithmSelected(const QModelIndex &index) {
   QAbstractItemModel *newModel = nullptr;
   bool isGroup = index.model()->index(0, index.column(), index).isValid();
 
-  QString categoryText("<b>Category</b>");
   QString parametersText("<b>Parameters</b>");
 
   if (!isGroup && PluginLister::pluginExists(algs)) {
     _index = &index;
     newModel = new ParameterListModel(PluginLister::getPluginParameters(algs));
     parametersText += "&nbsp;<font size=-2>[" + alg + "]</font>";
-    std::string group = PluginLister::pluginInformation(algs).group();
-
-    if (!group.empty())
-      categoryText += "&nbsp;<font size=-2>[" + tlpStringToQString(group) + "]</font>";
 
     setButtonText(QWizard::HelpButton, QString("%1 documentation").arg(alg));
     button(QWizard::HelpButton)->setVisible(true);
 
   } else {
-    categoryText += "&nbsp;<font size=-2>[" + alg + "]</font>";
     button(QWizard::HelpButton)->setVisible(false);
   }
 
-  _ui->categoryLabel->setText(categoryText);
+  //_ui->categoryLabel->setText(categoryText);
   _ui->parametersLabel->setText(parametersText);
 
   _ui->parameters->setModel(newModel);
@@ -156,4 +149,30 @@ void ImportWizard::helpButtonClicked() {
 
 void ImportWizard::updateFinishButton() {
   button(QWizard::FinishButton)->setEnabled(_ui->parameters->model() != nullptr);
+}
+
+void ImportWizard::setFilter(QString filter) {
+  auto model = _ui->importModules->model();
+  // root is the "Import" item (non visible)
+  auto root = model->index(0, 1);
+  bool noFilter = filter.isEmpty();
+  // Be warn, that we consider only two levels (groups, plugins of groups)
+  // loop on groups (File, Graph ...)
+  for (int i = 0; i <  model->rowCount(root); ++i) {
+    auto index = model->index(i, 1, root);
+    auto name = index.data().toString();
+    bool hidden = true;
+    if (name.contains(filter, Qt::CaseInsensitive))
+      hidden = false;
+    // loop on current group import plugins
+    for (int j = 0; j < model->rowCount(index); j++) {
+      auto subIndex = model->index(j, 1, index);
+      name = subIndex.data().toString();
+      if (noFilter || name.contains(filter, Qt::CaseInsensitive))
+	_ui->importModules->setRowHidden(j, index, hidden = false);
+      else
+	_ui->importModules->setRowHidden(j, index, true);
+    }
+    _ui->importModules->setRowHidden(i, root, hidden);
+  }
 }

@@ -43,7 +43,7 @@ padding: 6px;
 border: 1px solid #C9C9C9;
 }
 
-#categoryLabel, #parametersLabel {
+#parametersLabel {
 background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,
 stop:1 rgba(0,0,0,0),
 stop:0 #F0F0F0);
@@ -78,9 +78,6 @@ border: 0px;
          </sizepolicy>
         </property>
         <layout class="QVBoxLayout" name="leftLayout">
-         <property name="spacing">
-          <number>10</number>
-         </property>
          <property name="leftMargin">
           <number>0</number>
          </property>
@@ -94,20 +91,28 @@ border: 0px;
           <number>0</number>
          </property>
          <item>
-          <widget class="QLabel" name="categoryLabel">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>32</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>&lt;b&gt;Category&lt;/b&gt;</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
+           <widget class="ClearableLineEdit" name="searchBox">
+             <property name="minimumSize">
+               <size>
+		 <width>0</width>
+		 <height>32</height>
+               </size>
+             </property>
+             <property name="focusPolicy">
+               <enum>Qt::ClickFocus</enum>
+             </property>
+	     <property name="styleSheet">
+	       <string notr="true">#searchBox {
+  border-left: 1px solid #C9C9C9;
+  border-right: 0px;
+  border-top: 0px;
+  border-bottom: 1px solid #C9C9C9;
+	       }</string>
+	     </property>
+	     <property name="placeholderText">
+	       <string>Filter name...</string>
+	     </property>
+           </widget>
          </item>
          <item>
           <widget class="QTreeView" name="importModules">
@@ -255,6 +260,13 @@ border: 0px;
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ClearableLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">tulip/ClearableLineEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

@@ -48,6 +48,7 @@ protected slots:
   void algorithmSelected(const QModelIndex &index);
   void helpButtonClicked();
   void updateFinishButton();
+  void setFilter(QString filter);
 };
 
 #endif // IMPORTWIZARD_H
