@@ -60,10 +60,14 @@ MouseShowElementInfo::~MouseShowElementInfo() {
 
 void MouseShowElementInfo::showVisualProp(bool show) {
   if (show) {
-    _model->setFilterRegExp("");
+    _model->setFilterFixedString("");
   } else {
     // filter out properties whose name starts with "view"
+#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
     _model->setFilterRegExp("^(?!view[A-Z]).?");
+#else
+    _model->setFilterRegularExpression("^(?!view[A-Z]).?");
+#endif
   }
   _show = show;
 }
@@ -125,7 +129,7 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
     SelectedEntity selectedEntity;
 
     if (e->type() == QEvent::MouseMove) {
-      if (pick(qMouseEv->x(), qMouseEv->y(), selectedEntity)) {
+      if (pick(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity)) {
         glMainWidget->setCursor(Qt::WhatsThisCursor);
       } else {
         glMainWidget->setCursor(QCursor());
@@ -141,7 +145,7 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
       if (!_informationWidgetItem->isVisible()) {
 
         // Show widget if we click on node or edge
-        if (pick(qMouseEv->x(), qMouseEv->y(), selectedEntity)) {
+        if (pick(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity)) {
           if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
               selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
 

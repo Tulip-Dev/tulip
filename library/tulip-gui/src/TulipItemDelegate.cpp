@@ -118,7 +118,7 @@ QWidget *TulipItemDelegate::createEditor(QWidget *parent, const QStyleOptionView
 }
 
 QString TulipItemDelegate::displayText(const QVariant &value, const QLocale &locale) const {
-  if (value.type() == QVariant::String)
+  if (value.canConvert<QString>())
     return value.toString();
 
   TulipItemEditorCreator *c = creator(value.userType());
@@ -154,7 +154,7 @@ void TulipItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
                               const QModelIndex &index) const {
   QVariant bgColor = index.data(Qt::BackgroundRole), fgColor = index.data(Qt::ForegroundRole);
 
-  if (bgColor.isValid() && bgColor.type() == QVariant::Color)
+  if (bgColor.isValid() && bgColor.canConvert<QColor>())
     painter->setBrush(bgColor.value<QColor>());
   else {
     QTableView *tv = static_cast<QTableView *>(parent());
@@ -163,7 +163,7 @@ void TulipItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
                           : option.palette.base());
   }
 
-  if (fgColor.isValid() && fgColor.type() == QVariant::Color)
+  if (fgColor.isValid() && fgColor.canConvert<QColor>())
     painter->setPen(fgColor.value<QColor>());
   else
     painter->setPen(option.palette.windowText().color());

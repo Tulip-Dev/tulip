@@ -55,7 +55,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
     if (qMouseEv->buttons() == Qt::LeftButton) {
       if (!_started) {
-        bool result = glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity);
+        bool result = glMainWidget->pickNodesEdges(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity);
 
         if (result && (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED)) {
           _started = true;
@@ -67,7 +67,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
         return false;
       } else {
-        bool result = glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity);
+        bool result = glMainWidget->pickNodesEdges(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity);
 
         if (result && (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED)) {
           Observable::holdObservers();
@@ -81,7 +81,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
           Observable::unholdObservers();
 
         } else {
-          Coord point(glMainWidget->width() - qMouseEv->x(), qMouseEv->y(), 0);
+          Coord point(glMainWidget->width() - qMouseEv->pos().x(), qMouseEv->pos().y(), 0);
           _bends.push_back(glMainWidget->getScene()->getGraphCamera().viewportTo3DWorld(
               glMainWidget->screenToViewport(point)));
           glMainWidget->redraw();
@@ -107,7 +107,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     if (!_started) {
       SelectedEntity selectedEntity;
       bool hoveringOverNode =
-          glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) &&
+          glMainWidget->pickNodesEdges(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity) &&
           selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED;
 
       if (!hoveringOverNode) {
@@ -119,14 +119,14 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     } else {
       SelectedEntity selectedEntity;
 
-      if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) &&
+      if (glMainWidget->pickNodesEdges(qMouseEv->pos().x(), qMouseEv->pos().y(), selectedEntity) &&
           selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         glMainWidget->setCursor(QCursor(Qt::CrossCursor));
       } else {
         glMainWidget->setCursor(QCursor(Qt::ArrowCursor));
       }
 
-      Coord point(glMainWidget->width() - qMouseEv->x(), qMouseEv->y(), 0);
+      Coord point(glMainWidget->width() - qMouseEv->pos().x(), qMouseEv->pos().y(), 0);
       point = glMainWidget->getScene()->getGraphCamera().viewportTo3DWorld(
           glMainWidget->screenToViewport(point));
       _curPos.set(point[0], point[1], point[2]);

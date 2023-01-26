@@ -177,8 +177,8 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     editCenter[2] = 0;
     editCenter[1] = glMainWidget->screenToViewport(H) - editCenter[1];
     // editCenter[0] = W - editCenter[0];
-    editPosition[0] = qMouseEv->x();
-    editPosition[1] = qMouseEv->y();
+    editPosition[0] = qMouseEv->pos().x();
+    editPosition[1] = qMouseEv->pos().y();
     editPosition[2] = 0;
     editLayoutCenter = _layoutCenter;
 
@@ -347,8 +347,8 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if (e->type() == QEvent::MouseMove && qMouseEv->buttons() & Qt::LeftButton && operation != NONE) {
-    int newX = qMouseEv->x();
-    int newY = qMouseEv->y();
+    int newX = qMouseEv->pos().x();
+    int newY = qMouseEv->pos().y();
 
     switch (operation) {
     case STRETCH_X:

@@ -31,7 +31,7 @@
 #include <QDesktopServices>
 #include <QHelpEvent>
 #include <QGuiApplication>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QToolTip>
 #include <QUrl>
 
@@ -68,7 +68,7 @@ TulipFontIconDialog::TulipFontIconDialog(QWidget *parent)
 void TulipFontIconDialog::updateIconList() {
   _ui->iconListWidget->clear();
 
-  QRegExp regexp(_ui->iconNameFilterLineEdit->text());
+  QRegularExpression regexp(_ui->iconNameFilterLineEdit->text());
 
   std::vector<std::string> iconNames = TulipFontAwesome::getSupportedIcons();
   bool darkMode = TulipSettings::isDisplayInDarkMode();
@@ -76,7 +76,7 @@ void TulipFontIconDialog::updateIconList() {
   for (auto &it : iconNames) {
     QString iconName = tlpStringToQString(it);
 
-    if (regexp.indexIn(iconName) != -1) {
+    if (iconName.indexOf(regexp) != -1) {
       _ui->iconListWidget->addItem(
           new QListWidgetItem(TulipFontIconEngine::icon(it, darkMode), iconName));
     }
@@ -87,7 +87,7 @@ void TulipFontIconDialog::updateIconList() {
   for (auto &it : iconNames) {
     QString iconName = tlpStringToQString(it);
 
-    if (regexp.indexIn(iconName) != -1) {
+    if (iconName.indexOf(regexp) != -1) {
       _ui->iconListWidget->addItem(
           new QListWidgetItem(TulipFontIconEngine::icon(it, darkMode), iconName));
     }
@@ -150,7 +150,7 @@ void TulipFontIconDialog::openUrlInBrowser(const QString &url) {
 bool TulipFontIconDialog::eventFilter(QObject *, QEvent *event) {
   if (event->type() == QEvent::ToolTip) {
     QHelpEvent *he = static_cast<QHelpEvent *>(event);
-    auto lwi = _ui->iconListWidget->itemAt(he->x(), he->y());
+    auto lwi = _ui->iconListWidget->itemAt(he->pos().x(), he->pos().y());
     if (lwi) {
       // show a 48 pixel height icon
       auto qimg = lwi->icon().pixmap(48).toImage();

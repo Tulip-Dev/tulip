@@ -20,6 +20,7 @@
 
 #include <QDragEnterEvent>
 #include <QDropEvent>
+#include <QRegularExpression>
 #include <QTimer>
 #include <QXmlStreamWriter>
 
@@ -143,15 +144,16 @@ QList<tlp::View *> Workspace::panels() const {
 QString Workspace::panelTitle(tlp::WorkspacePanel *panel) const {
   int digit = 0;
 
-  QRegExp regExp("^.*(?:<([^>])*>){1}$");
+  QRegularExpression regExp("^.*(?:<([^>])*>){1}$");
 
   for (auto other : _panels) {
     if (other == panel)
       continue;
 
     if (other->viewName() == panel->viewName()) {
-      if (regExp.exactMatch(other->windowTitle()))
-        digit = std::max<int>(digit, regExp.cap(1).toInt());
+      QRegularExpressionMatch match;
+      if (other->windowTitle().indexOf(regExp, 0, &match) != -1)
+        digit = std::max<int>(digit, match.captured(1).toInt());
       else
         digit = std::max<int>(digit, 1);
     }
@@ -343,7 +345,7 @@ QVector<PlaceHolderWidget *> Workspace::currentModeSlots() const {
   return _modeToSlots[currentModeWidget()];
 }
 
-unsigned int Workspace::currentSlotsCount() const {
+int Workspace::currentSlotsCount() const {
   return currentModeSlots().size();
 }
 
@@ -375,7 +377,7 @@ void Workspace::updatePanels() {
   if (_currentPanelIndex < 0)
     _currentPanelIndex = 0;
 
-  if (uint(_currentPanelIndex) > _panels.size() - currentSlotsCount())
+  if (_currentPanelIndex > _panels.size() - currentSlotsCount())
     _currentPanelIndex = _panels.size() - currentSlotsCount();
 
   //   Fill up slots according to the current index until there is no panel to show

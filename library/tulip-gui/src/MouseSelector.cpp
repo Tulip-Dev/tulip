@@ -43,8 +43,8 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
     if (qMouseEv->buttons() == mButton &&
         (kModifier == Qt::NoModifier || qMouseEv->modifiers() & kModifier)) {
       if (!started) {
-        x = qMouseEv->x();
-        y = qMouseEv->y();
+        x = qMouseEv->pos().x();
+        y = qMouseEv->pos().y();
         w = 0;
         h = 0;
         started = true;
@@ -78,8 +78,8 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
     }
 
     if (started) {
-      int clampedX = qMouseEv->x();
-      int clampedY = qMouseEv->y();
+      int clampedX = qMouseEv->pos().x();
+      int clampedY = qMouseEv->pos().y();
 
       if (clampedX < 0)
         clampedX = 0;

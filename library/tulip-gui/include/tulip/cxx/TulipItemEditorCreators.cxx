@@ -106,7 +106,7 @@ QVariant LineEditEditorCreator<T>::editorData(QWidget *editor, tlp::Graph *) {
   typename T::RealType val;
 
   if (T::fromString(val, strVal))
-    result.setValue<typename T::RealType>(val);
+    result.setValue(val);
 
   return result;
 }
@@ -135,7 +135,7 @@ QVariant MultiLinesEditEditorCreator<T>::editorData(QWidget *editor, tlp::Graph 
   typename T::RealType val;
 
   if (T::fromString(val, strVal))
-    result.setValue<typename T::RealType>(val);
+    result.setValue(val);
 
   return result;
 }

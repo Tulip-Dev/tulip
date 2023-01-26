@@ -8,19 +8,20 @@
 #include <tulip/PropertyTypes.h>
 #include <tulip/TlpQtTools.h>
 
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QLineEdit>
 
 using namespace tlp;
 
-static QRegExp floatRe("(([+-]?\\d+(\\.\\d*)?|\\.\\d+)([eE][+-]?\\d+)?)");
+static QRegularExpression floatRe("(([+-]?\\d+(\\.\\d*)?|\\.\\d+)([eE][+-]?\\d+)?)");
 static FloatValidator floatValidator;
 
 bool validFloatString(const QString &s) {
-  int pos = floatRe.indexIn(s);
+  QRegularExpressionMatch match;
+  int pos = s.indexOf(floatRe, 0, &match);
 
   if (pos != -1) {
-    return floatRe.capturedTexts()[1] == s;
+    return match.captured(1) == s;
   } else {
     return false;
   }
@@ -31,7 +32,7 @@ QValidator::State FloatValidator::validate(QString &input, int &pos) const {
     return QValidator::Acceptable;
   }
 
-  if (input.isEmpty() || input.mid(pos - 1, 1).count(QRegExp("[e.-+]+")) == 1) {
+  if (input.isEmpty() || input.mid(pos - 1, 1).count(QRegularExpression("[e.-+]+")) == 1) {
     return QValidator::Intermediate;
   }
 
@@ -39,10 +40,11 @@ QValidator::State FloatValidator::validate(QString &input, int &pos) const {
 }
 
 void FloatValidator::fixup(QString &text) const {
-  int pos = floatRe.indexIn(text);
+  QRegularExpressionMatch match;
+  int pos = text.indexOf(floatRe, 0, &match);
 
   if (pos != -1) {
-    text = floatRe.capturedTexts()[1];
+    text = match.captured(1);
   } else {
     text = "";
   }
@@ -74,13 +76,15 @@ QString ScientificDoubleSpinBox::textFromValue(double value) const {
 
 void ScientificDoubleSpinBox::stepBy(int steps) {
   QString text = cleanText();
-  floatRe.indexIn(text);
-  QStringList groups = floatRe.capturedTexts();
-  double decimal = 0;
-  tlp::DoubleType::fromString(decimal, QStringToTlpString(groups[2]));
-  decimal += steps;
-  text = tlpStringToQString(tlp::DoubleType::toString(decimal));
-
+  QRegularExpressionMatch match;
+  text.indexOf(floatRe, 0, &match);
+  QStringList groups = match.capturedTexts();
+  if (groups.count()) {
+    double decimal = 0;
+    tlp::DoubleType::fromString(decimal, QStringToTlpString(groups[2]));
+    decimal += steps;
+    text = tlpStringToQString(tlp::DoubleType::toString(decimal));
+  }
   if (groups.count() > 4) {
     text += groups[4];
   }

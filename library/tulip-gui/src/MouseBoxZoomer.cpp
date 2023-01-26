@@ -46,8 +46,8 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
     if (qMouseEv->buttons() == mButton &&
         (kModifier == Qt::NoModifier || qMouseEv->modifiers() & kModifier)) {
       if (!started) {
-        x = qMouseEv->x();
-        y = glw->height() - qMouseEv->y();
+        x = qMouseEv->pos().x();
+        y = glw->height() - qMouseEv->pos().y();
         w = 0;
         h = 0;
         started = true;
@@ -82,11 +82,11 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
       }
 
       if (started) {
-        if ((qMouseEv->x() > 0) && (qMouseEv->x() < glw->width()))
-          w = qMouseEv->x() - x;
+        if ((qMouseEv->pos().x() > 0) && (qMouseEv->pos().x() < glw->width()))
+          w = qMouseEv->pos().x() - x;
 
-        if ((qMouseEv->y() > 0) && (qMouseEv->y() < glw->height()))
-          h = y - (glw->height() - qMouseEv->y());
+        if ((qMouseEv->pos().y() > 0) && (qMouseEv->pos().y() < glw->height()))
+          h = y - (glw->height() - qMouseEv->pos().y());
 
         glw->redraw();
         return true;

@@ -20,6 +20,7 @@
 #include <tulip/PythonVersionChecker.h>
 
 #include <QProcess>
+#include <QRegularExpression>
 #include <QSettings>
 
 using namespace tlp;
@@ -116,10 +117,11 @@ static QString getDefaultPythonVersionIfAny() {
 
     QString result = pythonProcess.readAll();
 
-    QRegExp versionRegexp(".*([0-9]*\\.[0-9]*)\\..*");
+    QRegularExpression versionRegexp(".*([0-9]*\\.[0-9]*)\\..*");
+    QRegularExpressionMatch match;
 
-    if (versionRegexp.exactMatch(result)) {
-      defaultPythonVersion = versionRegexp.cap(1);
+    if (result.indexOf(versionRegexp, 0, &match) != -1) {
+      defaultPythonVersion = match.captured(1);
 
       // Check the binary type of the python executable (32 or 64 bits)
       pythonProcess.start(

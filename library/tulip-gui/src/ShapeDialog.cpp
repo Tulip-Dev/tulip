@@ -100,7 +100,7 @@ void ShapeDialog::showEvent(QShowEvent *ev) {
 bool ShapeDialog::eventFilter(QObject *, QEvent *event) {
   if (event->type() == QEvent::ToolTip) {
     QHelpEvent *he = static_cast<QHelpEvent *>(event);
-    auto lwi = _ui->shapeListWidget->itemAt(he->x(), he->y());
+    auto lwi = _ui->shapeListWidget->itemAt(he->pos().x(), he->pos().y());
     if (lwi) {
       // show a 48 pixel height icon
       auto qimg = _forNodes ? GlyphRenderer::render(lwi->text(), 48)
