@@ -288,7 +288,8 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
   }
 }
 
-bool PythonCodeHighlighter::highlightMultilineString(const QString &text, const QRegularExpression &delimiter,
+bool PythonCodeHighlighter::highlightMultilineString(const QString &text,
+                                                     const QRegularExpression &delimiter,
                                                      const int inState,
                                                      const QTextCharFormat &style) {
   int start = -1;

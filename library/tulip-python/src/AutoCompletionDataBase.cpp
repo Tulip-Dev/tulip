@@ -545,13 +545,15 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
           QString withParamsFull = currentClassName + "." + withParams;
 
           if (!withParams.startsWith("__")) {
-            withParamsFull = withParamsFull.replace(QRegularExpression("[ \t]*self[ \t]*,[ \t]*"), "");
+            withParamsFull =
+                withParamsFull.replace(QRegularExpression("[ \t]*self[ \t]*,[ \t]*"), "");
             withParamsFull = withParamsFull.replace(QRegularExpression("[ \t]*self[ \t]*"), "");
           } else if (withParams.startsWith("__init__")) {
             _apiDb->addApiEntry(moduleName + "." + withParamsFull);
+            withParamsFull = withParamsFull.replace(
+                QRegularExpression(".__init__\\([ \t]*self[ \t]*,[ \t]*"), "(");
             withParamsFull =
-                withParamsFull.replace(QRegularExpression(".__init__\\([ \t]*self[ \t]*,[ \t]*"), "(");
-            withParamsFull = withParamsFull.replace(QRegularExpression(".__init__\\([ \t]*self[ \t]*"), "(");
+                withParamsFull.replace(QRegularExpression(".__init__\\([ \t]*self[ \t]*"), "(");
           }
 
           withParams = withParamsFull;

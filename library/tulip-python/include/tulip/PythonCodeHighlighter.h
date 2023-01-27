@@ -56,8 +56,8 @@ public:
 protected:
   void highlightBlock(const QString &text) override;
 
-  bool highlightMultilineString(const QString &text, const QRegularExpression &delimiter, const int inState,
-                                const QTextCharFormat &style);
+  bool highlightMultilineString(const QString &text, const QRegularExpression &delimiter,
+                                const int inState, const QTextCharFormat &style);
 };
 
 #endif /* PYTHONCODEHIGHLIGHTER_H_ */
