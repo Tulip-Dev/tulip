@@ -35,6 +35,7 @@
 #include <QMessageBox>
 #include <QMimeData>
 #include <QFileInfo>
+#include <QRegularExpression>
 #include <QScreen>
 #include <QPushButton>
 
@@ -348,7 +349,7 @@ bool FindReplaceDialog::doFind() {
   if (!_ui->regexpCB->isChecked()) {
     sel = _editor->document()->find(text, _editor->textCursor(), findFlags);
   } else {
-    sel = _editor->document()->find(QRegExp(text), _editor->textCursor(), findFlags);
+    sel = _editor->document()->find(QRegularExpression(text), _editor->textCursor(), findFlags);
   }
 
   bool ret = !sel.isNull();
@@ -367,7 +368,7 @@ bool FindReplaceDialog::doFind() {
     if (!_ui->regexpCB->isChecked()) {
       sel = _editor->document()->find(text, cursor, findFlags);
     } else {
-      sel = _editor->document()->find(QRegExp(text), cursor, findFlags);
+      sel = _editor->document()->find(QRegularExpression(text), cursor, findFlags);
     }
 
     ret = !sel.isNull();
@@ -1262,7 +1263,7 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
   }
 
   if (mapToGlobal(QPoint(0, bottom + _autoCompletionList->height())).y() >
-      QApplication::primaryScreen()->geometry().height())
+      screen()->geometry().height())
     _autoCompletionList->move(mapToGlobal(QPoint(pos, top - _autoCompletionList->height())));
   else
     _autoCompletionList->move(mapToGlobal(QPoint(pos, bottom)));
@@ -1303,8 +1304,8 @@ QString PythonCodeEditor::getEditedFunctionName() const {
 
   QString funcName = "global";
   QString className = "";
-  QRegExp funcRegexp("^def [A-Za-z_][A-Za-z0-9_]*\\(.*\\)[ \t]*:$");
-  QRegExp classRegexp("^class [A-Za-z_][A-Za-z0-9_]*.*:$");
+  QRegularExpression funcRegexp("^def [A-Za-z_][A-Za-z0-9_]*\\(.*\\)[ \t]*:$");
+  QRegularExpression classRegexp("^class [A-Za-z_][A-Za-z0-9_]*.*:$");
 
   QTextBlock block = textCursor().block();
   QString currentLine = block.text();
@@ -1319,7 +1320,7 @@ QString PythonCodeEditor::getEditedFunctionName() const {
       if (currentLine.startsWith('#') || currentLine.isEmpty())
         continue;
 
-      if (funcName == "global" && funcRegexp.indexIn(currentLine.trimmed()) != -1) {
+      if (funcName == "global" && currentLine.trimmed().indexOf(funcRegexp) != -1) {
         funcName = currentLine.trimmed();
         funcName = funcName.mid(4, funcName.indexOf('(') - 4);
 
@@ -1328,7 +1329,7 @@ QString PythonCodeEditor::getEditedFunctionName() const {
         }
       }
 
-      if (classRegexp.indexIn(currentLine.trimmed()) != -1) {
+      if (currentLine.trimmed().indexOf(classRegexp) != -1) {
         className = currentLine.trimmed();
 
         if (className.indexOf('(') != -1)

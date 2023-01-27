@@ -2,26 +2,6 @@
 <ui version="4.0">
  <class>PythonIDE</class>
  <widget class="QFrame" name="PythonIDE">
-  <property name="styleSheet">
-   <string notr="true">
-QToolButton {
-border-image:none;
-border-top: 1px;
-border-bottom: 1px;
-border-left: 0px;
-border-right: 0px;
-font: bold 10px;
-}
-
-QToolButton:hover {
-border: 1px solid #A0A0A0;
-}
-
-QToolButton:pressed {
-background-color: #A0A0A0;
-}
-   </string>
-  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -45,11 +25,40 @@ background-color: #A0A0A0;
   <property name="autoFillBackground">
    <bool>false</bool>
   </property>
+  <property name="styleSheet">
+   <string notr="true">
+QToolButton {
+border-image:none;
+border-top: 1px;
+border-bottom: 1px;
+border-left: 0px;
+border-right: 0px;
+font: bold 10px;
+}
+
+QToolButton:hover {
+border: 1px solid #A0A0A0;
+}
+
+QToolButton:pressed {
+background-color: #A0A0A0;
+}
+   </string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -64,14 +73,14 @@ background-color: #A0A0A0;
       <enum>Qt::Vertical</enum>
      </property>
      <widget class="PythonTabWidget" name="tabWidget">
-      <property name="styleSheet">
-       <string notr="true">QFrame { border-top: none; }</string>
-      </property>
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { border-top: none; }</string>
       </property>
       <property name="currentIndex">
        <number>0</number>
@@ -84,7 +93,16 @@ background-color: #A0A0A0;
         <property name="spacing">
          <number>0</number>
         </property>
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -111,7 +129,16 @@ background-color: #A0A0A0;
            <property name="spacing">
             <number>3</number>
            </property>
-           <property name="margin">
+           <property name="leftMargin">
+            <number>3</number>
+           </property>
+           <property name="topMargin">
+            <number>3</number>
+           </property>
+           <property name="rightMargin">
+            <number>3</number>
+           </property>
+           <property name="bottomMargin">
             <number>3</number>
            </property>
            <item>
@@ -253,7 +280,7 @@ background-color: #A0A0A0;
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>:/tulip/gui/icons/64/document-saveas.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
+               <normaloff>:/tulip/gui/icons/64/document-saveas.png</normaloff>:/tulip/gui/icons/64/document-saveas.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -344,7 +371,16 @@ background-color: #A0A0A0;
         <property name="spacing">
          <number>0</number>
         </property>
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -371,7 +407,16 @@ background-color: #A0A0A0;
            <property name="spacing">
             <number>6</number>
            </property>
-           <property name="margin">
+           <property name="leftMargin">
+            <number>3</number>
+           </property>
+           <property name="topMargin">
+            <number>3</number>
+           </property>
+           <property name="rightMargin">
+            <number>3</number>
+           </property>
+           <property name="bottomMargin">
             <number>3</number>
            </property>
            <item>
@@ -534,7 +579,16 @@ background-color: #A0A0A0;
         <property name="spacing">
          <number>0</number>
         </property>
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -561,7 +615,16 @@ background-color: #A0A0A0;
            <property name="spacing">
             <number>6</number>
            </property>
-           <property name="margin">
+           <property name="leftMargin">
+            <number>3</number>
+           </property>
+           <property name="topMargin">
+            <number>3</number>
+           </property>
+           <property name="rightMargin">
+            <number>3</number>
+           </property>
+           <property name="bottomMargin">
             <number>3</number>
            </property>
            <item>
@@ -757,7 +820,16 @@ background-color: #A0A0A0;
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -773,14 +845,20 @@ background-color: #A0A0A0;
            <property name="spacing">
             <number>0</number>
            </property>
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
             <widget class="QTextBrowser" name="consoleWidget">
-             <property name="styleSheet">
-              <string notr="true">QTextBrowser { border-top: none; }</string>
-             </property>
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
                <horstretch>0</horstretch>
@@ -792,6 +870,9 @@ background-color: #A0A0A0;
                <width>0</width>
                <height>50</height>
               </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QTextBrowser { border-top: none; }</string>
              </property>
              <property name="openLinks">
               <bool>false</bool>
@@ -839,7 +920,16 @@ background-color: #A0A0A0;
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -1090,7 +1180,16 @@ cannot be undone but performance will be better
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>

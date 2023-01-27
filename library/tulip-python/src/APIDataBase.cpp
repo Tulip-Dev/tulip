@@ -22,7 +22,7 @@
 #include <QFile>
 #include <QList>
 #include <QStringList>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QTextStream>
 
 #include <tulip/PythonInterpreter.h>
@@ -90,15 +90,15 @@ void APIDataBase::addApiEntry(const QString &apiEnt) {
   QString apiEntry(apiEnt);
   int pos = apiEntry.indexOf('.');
 
-  if (apiEntry.contains(QRegExp("^_tulipgui.*\\..+"))) {
+  if (apiEntry.contains(QRegularExpression("^_tulipgui.*\\..+"))) {
     apiEntry = apiEntry.mid(pos + 1);
   }
 
-  if (apiEntry.contains(QRegExp("^_tulip.*\\..+"))) {
+  if (apiEntry.contains(QRegularExpression("^_tulip.*\\..+"))) {
     apiEntry = apiEntry.mid(pos + 1);
   }
 
-  apiEntry.replace(QRegExp("\\?[0-9]+"), "");
+  apiEntry.replace(QRegularExpression("\\?[0-9]+"), "");
   int parenPos = apiEntry.indexOf('(');
   bool func = parenPos != -1;
   QString withoutParams = apiEntry;

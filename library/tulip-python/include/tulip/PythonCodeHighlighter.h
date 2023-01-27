@@ -20,9 +20,9 @@
 #ifndef PYTHONCODEHIGHLIGHTER_H_
 #define PYTHONCODEHIGHLIGHTER_H_
 
-#include <QSyntaxHighlighter>
-
 #include <QHash>
+#include <QRegularExpression>
+#include <QSyntaxHighlighter>
 #include <QTextCharFormat>
 
 class QTextDocument;
@@ -30,7 +30,7 @@ class QTextDocument;
 class PythonCodeHighlighter : public QSyntaxHighlighter {
 
   struct HighlightingRule {
-    QRegExp pattern;
+    QRegularExpression pattern;
     QTextCharFormat format;
   };
 
@@ -56,7 +56,7 @@ public:
 protected:
   void highlightBlock(const QString &text) override;
 
-  bool highlightMultilineString(const QString &text, const QRegExp &delimiter, const int inState,
+  bool highlightMultilineString(const QString &text, const QRegularExpression &delimiter, const int inState,
                                 const QTextCharFormat &style);
 };
 
