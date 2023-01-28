@@ -38,6 +38,7 @@
 #include <QRegularExpression>
 #include <QScreen>
 #include <QPushButton>
+#include <QWindow>
 
 #include "ui_FindReplaceDialog.h"
 
@@ -1263,7 +1264,7 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
   }
 
   if (mapToGlobal(QPoint(0, bottom + _autoCompletionList->height())).y() >
-      screen()->geometry().height())
+      _mainWindow->windowHandle()->screen()->geometry().height())
     _autoCompletionList->move(mapToGlobal(QPoint(pos, top - _autoCompletionList->height())));
   else
     _autoCompletionList->move(mapToGlobal(QPoint(pos, bottom)));
