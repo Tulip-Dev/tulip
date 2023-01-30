@@ -374,11 +374,11 @@ void Workspace::updatePanels() {
     }
   }
 
-  if (_currentPanelIndex < 0)
-    _currentPanelIndex = 0;
-
   if (_currentPanelIndex > _panels.size() - currentSlotsCount())
     _currentPanelIndex = _panels.size() - currentSlotsCount();
+
+  if (_currentPanelIndex < 0)
+    _currentPanelIndex = 0;
 
   //   Fill up slots according to the current index until there is no panel to show
   int i = _currentPanelIndex;
