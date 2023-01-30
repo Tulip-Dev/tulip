@@ -553,7 +553,6 @@ IF (NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
   IF(NOT TULIP_BUILD_CORE_ONLY)
 
     ADD_SUBDIRECTORY(bundlers)
-    # ADD_SUBDIRECTORY(deploy)
 
     IF(MSVC)
       INCLUDE(InstallRequiredSystemLibraries)
