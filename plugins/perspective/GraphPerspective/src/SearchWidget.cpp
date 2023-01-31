@@ -36,7 +36,7 @@
 #include <QDebug>
 #include <QStandardItemModel>
 #include <QDragEnterEvent>
-#include <QRegExp>
+#include <QRegularExpression>
 
 using namespace tlp;
 using namespace std;
@@ -102,14 +102,12 @@ public:
   bool compare(node n) override {
     QString a(_a->getNodeStringValue(n).c_str());
     QString b(_b->getNodeStringValue(n).c_str());
-    QRegExp regexp(b);
-    return regexp.exactMatch(a);
+    return QRegularExpression(b).match(a).hasMatch();
   }
   bool compare(edge e) override {
     QString a(_a->getEdgeStringValue(e).c_str());
     QString b(_b->getEdgeStringValue(e).c_str());
-    QRegExp regexp(b);
-    return regexp.exactMatch(a);
+    return QRegularExpression(b).match(a).hasMatch();
   }
 };
 
@@ -118,14 +116,12 @@ public:
   bool compare(node n) override {
     QString a(_a->getNodeStringValue(n).c_str());
     QString b(_b->getNodeStringValue(n).c_str());
-    QRegExp regexp(b, Qt::CaseInsensitive);
-    return regexp.exactMatch(a);
+    return QRegularExpression(b, QRegularExpression::CaseInsensitiveOption).match(a).hasMatch();
   }
   bool compare(edge e) override {
     QString a(_a->getEdgeStringValue(e).c_str());
     QString b(_b->getEdgeStringValue(e).c_str());
-    QRegExp regexp(b, Qt::CaseInsensitive);
-    return regexp.exactMatch(a);
+    return QRegularExpression(b, QRegularExpression::CaseInsensitiveOption).match(a).hasMatch();
   }
 };
 

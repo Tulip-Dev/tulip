@@ -106,8 +106,8 @@ bool MouseMagnifyingGlassInteractorComponent::eventFilter(QObject *, QEvent *e) 
 
   if (e->type() == QEvent::MouseMove) {
     QMouseEvent *me = static_cast<QMouseEvent *>(e);
-    float x = glWidget->width() - me->x();
-    float y = me->y();
+    float x = glWidget->width() - me->pos().x();
+    float y = me->pos().y();
     screenCoords = Coord(x, y, 0);
     boxCenter = camera->viewportTo3DWorld(glWidget->screenToViewport(screenCoords));
 
@@ -115,8 +115,8 @@ bool MouseMagnifyingGlassInteractorComponent::eventFilter(QObject *, QEvent *e) 
   } else if (e->type() == QEvent::Wheel) {
     QWheelEvent *wheelEvent = static_cast<QWheelEvent *>(e);
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-    float x = glWidget->width() - wheelEvent->x();
-    float y = wheelEvent->y();
+    float x = glWidget->width() - wheelEvent->pos().x();
+    float y = wheelEvent->pos().y();
 #else
     float x = glWidget->width() - wheelEvent->position().x();
     float y = wheelEvent->position().y();

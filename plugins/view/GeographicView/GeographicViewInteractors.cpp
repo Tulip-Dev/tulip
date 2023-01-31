@@ -206,8 +206,8 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 
     if (e->type() == QEvent::MouseButtonPress && !inRotation) {
       if (qMouseEv->button() == Qt::LeftButton) {
-        x = qMouseEv->x();
-        y = qMouseEv->y();
+        x = qMouseEv->pos().x();
+        y = qMouseEv->pos().y();
         inRotation = true;
         return true;
       }
@@ -225,13 +225,13 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
       Camera &camera = g->getScene()->getGraphCamera();
       Coord &&c1 = camera.getEyes() - camera.getCenter();
       Coord &&c2 = c1 + camera.getUp();
-      trans(c1, c2, -0.005 * (qMouseEv->y() - y), -0.005 * (qMouseEv->x() - x));
+      trans(c1, c2, -0.005 * (qMouseEv->pos().y() - y), -0.005 * (qMouseEv->pos().x() - x));
       camera.setCenter(Coord(0, 0, 0));
       camera.setEyes(c1);
       camera.setUp(c2 - camera.getEyes());
 
-      x = qMouseEv->x();
-      y = qMouseEv->y();
+      x = qMouseEv->pos().x();
+      y = qMouseEv->pos().y();
 
       view()->draw();
       return true;

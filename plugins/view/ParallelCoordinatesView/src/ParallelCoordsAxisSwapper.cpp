@@ -63,10 +63,10 @@ bool ParallelCoordsAxisSwapper::eventFilter(QObject *widget, QEvent *e) {
     mouseMove = true;
 
     if (!dragStarted) {
-      selectedAxis = parallelView->getAxisUnderPointer(me->x(), me->y());
+      selectedAxis = parallelView->getAxisUnderPointer(me->pos().x(), me->pos().y());
     } else {
-      x = glWidget->width() - me->x();
-      y = me->y();
+      x = glWidget->width() - me->pos().x();
+      y = me->pos().y();
       Coord screenCoords(x, y, 0);
       Coord sceneCoords(glWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(
           glWidget->screenToViewport(screenCoords)));
@@ -86,7 +86,7 @@ bool ParallelCoordsAxisSwapper::eventFilter(QObject *widget, QEvent *e) {
         selectedAxis->translate(Coord(translationVector.getX(), 0.0f, 0.0f));
       }
 
-      otherAxisToSwap = parallelView->getAxisUnderPointer(me->x(), me->y());
+      otherAxisToSwap = parallelView->getAxisUnderPointer(me->pos().x(), me->pos().y());
     }
 
     parallelView->refresh();

@@ -149,8 +149,8 @@ bool FishEyeInteractorComponent::eventFilter(QObject *obj, QEvent *e) {
       e->type() == QEvent::MouseButtonRelease) {
     activateFishEye = true;
     QMouseEvent *me = static_cast<QMouseEvent *>(e);
-    float x = glWidget->width() - me->x();
-    float y = me->y();
+    float x = glWidget->width() - me->pos().x();
+    float y = me->pos().y();
     Coord screenCoords(x, y, 0);
     fisheyeCenter = camera->viewportTo3DWorld(glWidget->screenToViewport(screenCoords));
     glWidget->redraw();

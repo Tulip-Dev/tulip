@@ -60,7 +60,7 @@ bool EditColorScaleInteractor::eventFilter(QObject *obj, QEvent *event) {
     selectionLayer->addGlEntity(colorScale, "colorScale");
 
     std::vector<SelectedEntity> entities;
-    glMainWidget->pickGlEntities(me->x(), me->y(), entities);
+    glMainWidget->pickGlEntities(me->pos().x(), me->pos().y(), entities);
     bool foundGlColorScale = false;
 
     for (auto &it : entities) {

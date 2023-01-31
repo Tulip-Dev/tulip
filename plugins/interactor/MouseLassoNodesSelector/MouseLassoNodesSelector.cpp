@@ -221,7 +221,7 @@ bool MouseLassoNodesSelectorInteractorComponent::eventFilter(QObject *obj, QEven
   graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   viewSelection = graph->getProperty<BooleanProperty>("viewSelection");
 
-  currentPointerScreenCoord = Coord(me->x(), glWidget->height() - me->y());
+  currentPointerScreenCoord = Coord(me->pos().x(), glWidget->height() - me->pos().y());
 
   if (me->type() == QEvent::MouseMove) {
     if (dragStarted) {
@@ -245,7 +245,7 @@ bool MouseLassoNodesSelectorInteractorComponent::eventFilter(QObject *obj, QEven
       } else {
         Observable::holdObservers();
         SelectedEntity selectedEntity;
-        bool result = glWidget->pickNodesEdges(me->x(), me->y(), selectedEntity);
+        bool result = glWidget->pickNodesEdges(me->pos().x(), me->pos().y(), selectedEntity);
 
         if (result && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
           bool sel = viewSelection->getNodeValue(node(selectedEntity.getComplexEntityId()));

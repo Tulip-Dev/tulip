@@ -385,12 +385,12 @@ bool ParallelCoordsAxisBoxPlot::eventFilter(QObject *widget, QEvent *e) {
 
   if (e->type() == QEvent::MouseMove) {
     QMouseEvent *me = static_cast<QMouseEvent *>(e);
-    int x = glWidget->width() - me->x();
-    int y = me->y();
+    int x = glWidget->width() - me->pos().x();
+    int y = me->pos().y();
     Coord screenCoords(x, y, 0.0f);
     Coord sceneCoords(glWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(
         glWidget->screenToViewport(screenCoords)));
-    selectedAxis = parallelView->getAxisUnderPointer(me->x(), me->y());
+    selectedAxis = parallelView->getAxisUnderPointer(me->pos().x(), me->pos().y());
 
     if (selectedAxis != nullptr) {
       QuantitativeParallelAxis *qaxis = dynamic_cast<QuantitativeParallelAxis *>(selectedAxis);

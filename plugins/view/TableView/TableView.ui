@@ -11,7 +11,16 @@
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_6">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -20,7 +29,16 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -114,7 +132,16 @@ font: bold; font-size: 22px; color: #A0A0A0A0</string>
          <property name="spacing">
           <number>5</number>
          </property>
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
@@ -468,9 +495,9 @@ sensitive</string>
        </widget>
       </item>
       <item>
-	<widget class="QFrame" name="frame_2">
-	  <property name="styleSheet">
-	    <string notr="true">
+       <widget class="QFrame" name="frame_2">
+        <property name="styleSheet">
+         <string notr="true">
 #frame_2 {
 border-right: 0px;
 }
@@ -478,46 +505,55 @@ QFrame[section] {
 border: 1px solid #D9D9D9;
 padding-top: 0px;
 }</string>
-	  </property>
-	  <property name="section" stdset="0">
-	    <bool>true</bool>
-	  </property>
-	  <layout class="QVBoxLayout" name="verticalLayout_2">
-	    <property name="spacing">
-	      <number>0</number>
-	    </property>
-	    <property name="margin">
-	      <number>0</number>
-	    </property>
-	    <item>
-	      <widget class="NavigableTableView" name="table">
-		<property name="contextMenuPolicy">
-		  <enum>Qt::CustomContextMenu</enum>
-		</property>
-		<property name="frameShape">
-		  <enum>QFrame::NoFrame</enum>
-		</property>
-		<property name="selectionBehavior">
-		  <enum>QAbstractItemView::SelectRows</enum>
-		</property>
-		<property name="sortingEnabled">
-		  <bool>true</bool>
-		</property>
-		<property name="wordWrap">
-		  <bool>false</bool>
-		</property>
-		<property name="cornerButtonEnabled">
-		  <bool>false</bool>
-		</property>
-		<attribute name="verticalHeaderMinimumSectionSize">
-		  <number>30</number>
-		</attribute>
-	      </widget>
-	    </item>
-	  </layout>
-	</widget>
+        </property>
+        <property name="section" stdset="0">
+         <bool>true</bool>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="NavigableTableView" name="table">
+           <property name="contextMenuPolicy">
+            <enum>Qt::CustomContextMenu</enum>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="selectionBehavior">
+            <enum>QAbstractItemView::SelectRows</enum>
+           </property>
+           <property name="sortingEnabled">
+            <bool>true</bool>
+           </property>
+           <property name="wordWrap">
+            <bool>false</bool>
+           </property>
+           <property name="cornerButtonEnabled">
+            <bool>false</bool>
+           </property>
+           <attribute name="verticalHeaderMinimumSectionSize">
+            <number>30</number>
+           </attribute>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </item>
-    </layout>
+     </layout>
     </widget>
    </item>
   </layout>

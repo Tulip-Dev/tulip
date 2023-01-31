@@ -49,7 +49,7 @@ bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
 
   if (event->type() == QEvent::MouseMove) {
     SelectedEntity entity;
-    if (glw->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), entity) &&
+    if (glw->pickNodesEdges(qMouseEv->pos().x(), qMouseEv->pos().y(), entity) &&
         entity.getEntityType() == SelectedEntity::NODE_SELECTED) {
       tmp.id = entity.getComplexEntityId();
       glw->setCursor(Qt::CrossCursor);

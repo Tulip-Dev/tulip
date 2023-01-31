@@ -848,7 +848,7 @@ bool SOMView::eventFilter(QObject *obj, QEvent *event) {
       if (me->button() == Qt::LeftButton) {
         vector<SOMPreviewComposite *> properties;
 
-        getPreviewsAtViewportCoord(me->x(), me->y(), properties);
+        getPreviewsAtViewportCoord(me->pos().x(), me->pos().y(), properties);
 
         if (!properties.empty()) {
           addPropertyToSelection(properties.front()->getPropertyName());

@@ -30,7 +30,6 @@ ExpandableGroupBox::ExpandableGroupBox(QWidget *parent, const QString &title)
 
   QVBoxLayout *lyt = new QVBoxLayout;
   lyt->setContentsMargins(0, 0, 0, 0);
-  lyt->setMargin(0);
   lyt->setSpacing(0);
   setLayout(lyt);
 }

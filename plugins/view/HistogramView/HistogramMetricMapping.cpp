@@ -781,15 +781,15 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
   initInteractor();
 
   if (e->type() == QEvent::MouseMove) {
-    int x = glWidget->width() - me->x();
-    int y = me->y();
+    int x = glWidget->width() - me->pos().x();
+    int y = me->pos().y();
     Coord screenCoords(x, y, 0);
     Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
         glWidget->screenToViewport(screenCoords)));
 
     if (!curveDragStarted) {
       Coord *anchor = curve->getCurveAnchorAtPointIfAny(
-          glWidget->screenToViewport(Coord(me->x(), glWidget->height() - me->y(), 0)),
+          glWidget->screenToViewport(Coord(me->pos().x(), glWidget->height() - me->pos().y(), 0)),
           &glWidget->getScene()->getLayer("Main")->getCamera());
       bool pointerColorScale = pointerUnderScale(sceneCoords);
 
@@ -824,8 +824,8 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
       delete selectedAnchor;
       selectedAnchor = nullptr;
     } else {
-      int x = glWidget->width() - me->x();
-      int y = me->y();
+      int x = glWidget->width() - me->pos().x();
+      int y = me->pos().y();
       Coord screenCoords(x, y, 0);
       Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
           glWidget->screenToViewport(screenCoords)));

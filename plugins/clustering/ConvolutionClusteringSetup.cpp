@@ -120,7 +120,7 @@ ConvolutionClusteringSetup::ConvolutionClusteringSetup(ConvolutionClustering *co
   _ui->setupUi(this);
   histogramWidget = new HistogramWidget(this, _ui->Frame3);
   QGridLayout *flayout = new QGridLayout(_ui->Frame3);
-  flayout->setMargin(1);
+  flayout->setContentsMargins(1, 1, 1, 1);
   flayout->addWidget(histogramWidget, 0, 0);
 
   int a, b, c;
