@@ -162,9 +162,9 @@ void PropertiesEditor::setPropertiesFilter(QString filter) {
       ->setFilterRegExp(QRegExp(filter, _caseSensitiveSearch));
 #else
   static_cast<QSortFilterProxyModel *>(_ui->propertiesTableView->model())
-    ->setFilterRegularExpression(filter);
+      ->setFilterRegularExpression(filter);
   static_cast<QSortFilterProxyModel *>(_ui->propertiesTableView->model())
-    ->setFilterCaseSensitivity(_caseSensitiveSearch);
+      ->setFilterCaseSensitivity(_caseSensitiveSearch);
 #endif
   filteringProperties = false;
 }

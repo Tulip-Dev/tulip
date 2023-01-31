@@ -270,7 +270,8 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
           rotateVector(sceneCoords, -(selectedAxis->getRotationAngle()), Z_ROT);
         }
 
-        selectedSlider = getSliderUnderPointer(glWidget, selectedAxis, me->pos().x(), me->pos().y());
+        selectedSlider =
+            getSliderUnderPointer(glWidget, selectedAxis, me->pos().x(), me->pos().y());
         pointerBetweenSliders =
             (sceneCoords.getY() <
              axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getY()) &&

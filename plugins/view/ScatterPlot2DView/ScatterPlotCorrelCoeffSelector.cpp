@@ -284,8 +284,9 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
         polygonEdit.push_back(currentPointerSceneCoords);
       } else {
         Coord &&startPolygonPointScr = camera.worldTo2DViewport(polygonEdit[0]);
-        Coord pointerGlViewportCoord(glWidget->screenToViewport(me->pos().x()),
-                                     glWidget->screenToViewport(glWidget->height() - me->pos().y()));
+        Coord pointerGlViewportCoord(
+            glWidget->screenToViewport(me->pos().x()),
+            glWidget->screenToViewport(glWidget->height() - me->pos().y()));
         bool underFirstPoint =
             (pointerGlViewportCoord.getX() > (startPolygonPointScr.getX() - POINT_RADIUS) &&
              pointerGlViewportCoord.getX() < (startPolygonPointScr.getX() + POINT_RADIUS) &&
