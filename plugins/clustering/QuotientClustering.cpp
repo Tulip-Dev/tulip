@@ -165,7 +165,7 @@ public:
         SizeProperty *viewSize = cluster->getProperty<SizeProperty>("viewSize");
         Size minSize = viewSize->getMin(cluster);
         Size maxSize = viewSize->getMax(cluster);
-        layoutParams.set("Unit edge length", std::max(maxSize[0], maxSize[1]) * 5.0);
+        layoutParams.set("unit edge length", std::max(maxSize[0], maxSize[1]) * 5.0);
         cluster->applyPropertyAlgorithm(layoutName,
                                         cluster->getLocalProperty<LayoutProperty>("viewLayout"),
                                         errMsg, &layoutParams);
@@ -371,7 +371,7 @@ public:
       SizeProperty *viewSize = quotientGraph->getProperty<SizeProperty>("viewSize");
       Size minSize = viewSize->getMin(quotientGraph);
       Size maxSize = viewSize->getMax(quotientGraph);
-      layoutParams.set("Unit edge length", std::max(maxSize[0], maxSize[1]) * 2.0);
+      layoutParams.set("unit edge length", std::max(maxSize[0], maxSize[1]) * 2.0);
       quotientGraph->applyPropertyAlgorithm(
           layoutName, quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg,
           &layoutParams);
