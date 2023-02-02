@@ -28,10 +28,8 @@
 bool zipDirContent(QDir &currentDir, zip_t *zipArchive, const QString &zipPath,
                    tlp::PluginProgress *progress) {
   // get currentDir entries  (. and .. are excluded)
-  QFileInfoList entries = currentDir.entryInfoList(QDir::NoDotAndDotDot |
-						   QDir::System |
-						   QDir::Hidden |
-						   QDir::AllDirs | QDir::Files,
+  QFileInfoList entries = currentDir.entryInfoList(QDir::NoDotAndDotDot | QDir::System |
+                                                       QDir::Hidden | QDir::AllDirs | QDir::Files,
                                                    QDir::DirsFirst);
   progress->setComment(
       tlp::QStringToTlpString("Compressing directory " + currentDir.absolutePath()));
@@ -42,25 +40,22 @@ bool zipDirContent(QDir &currentDir, zip_t *zipArchive, const QString &zipPath,
   for (const QFileInfo &info : entries) {
     progress->progress(i++, entries.size());
 
-    if (info.isDir()) { 
+    if (info.isDir()) {
       // Recurse in directories
       QDir childDir(info.absoluteFilePath());
-      zipDirContent(childDir, zipArchive, zipPath + info.fileName() + "/",
-		    progress);
-    }
-    else {
+      zipDirContent(childDir, zipArchive, zipPath + info.fileName() + "/", progress);
+    } else {
       auto fileName = tlp::QStringToTlpString(info.absoluteFilePath());
       auto zipFileName = tlp::QStringToTlpString(zipPath + info.fileName());
-      zip_source_t *infoSrc = zip_source_file(zipArchive, fileName.c_str(),
-					      0, 0);
+      zip_source_t *infoSrc = zip_source_file(zipArchive, fileName.c_str(), 0, 0);
       if (infoSrc == nullptr) {
-	tlp::warning() << "Failed to add file to zip: " << zip_strerror(zipArchive) << std::endl;
-	return false;
+        tlp::warning() << "Failed to add file to zip: " << zip_strerror(zipArchive) << std::endl;
+        return false;
       }
       if (zip_file_add(zipArchive, zipFileName.c_str(), infoSrc, ZIP_FL_ENC_UTF_8) < 0) {
-	zip_source_free(infoSrc);
-	tlp::warning() << "Failed to add file to zip: " << zip_strerror(zipArchive) << std::endl;
-	return false;
+        zip_source_free(infoSrc);
+        tlp::warning() << "Failed to add file to zip: " << zip_strerror(zipArchive) << std::endl;
+        return false;
       }
     }
   }
@@ -69,7 +64,7 @@ bool zipDirContent(QDir &currentDir, zip_t *zipArchive, const QString &zipPath,
 }
 
 bool ZIPFacade::zipDir(const QString &rootPath, const QString &zipPath,
-		       tlp::PluginProgress *progress) {
+                       tlp::PluginProgress *progress) {
   QFileInfo rootInfo(rootPath);
 
   if (!rootInfo.exists() || !rootInfo.isDir())
@@ -79,15 +74,15 @@ bool ZIPFacade::zipDir(const QString &rootPath, const QString &zipPath,
 
   int error;
   std::string archive = tlp::QStringToTlpString(zipPath);
-  zip_t *zipArchive = zip_open(archive.c_str(), ZIP_CREATE | ZIP_TRUNCATE,
-			       &error);
+  zip_t *zipArchive = zip_open(archive.c_str(), ZIP_CREATE | ZIP_TRUNCATE, &error);
   if (zipArchive == nullptr) {
     zip_error_t zipError;
     zip_error_init_with_code(&zipError, error);
-    tlp::warning() << "Failed to open file " << archive << ": " << zip_error_strerror(&zipError) << std::endl;
+    tlp::warning() << "Failed to open file " << archive << ": " << zip_error_strerror(&zipError)
+                   << std::endl;
     return false;
   }
-    
+
   bool deleteProgress = false;
 
   if (!progress) {
@@ -105,7 +100,7 @@ bool ZIPFacade::zipDir(const QString &rootPath, const QString &zipPath,
 }
 
 bool ZIPFacade::unzip(const QString &rootPath, const QString &archivePath,
-		      tlp::PluginProgress *progress) {
+                      tlp::PluginProgress *progress) {
 
   QFileInfo rootPathInfo(rootPath);
 
@@ -129,12 +124,12 @@ bool ZIPFacade::unzip(const QString &rootPath, const QString &archivePath,
   }
 
   int error;
-  zip_t *zipArchive = zip_open(tlp::QStringToTlpString(archivePath).c_str(),
-			       ZIP_RDONLY, &error);
+  zip_t *zipArchive = zip_open(tlp::QStringToTlpString(archivePath).c_str(), ZIP_RDONLY, &error);
   if (zipArchive == nullptr) {
     zip_error_t zipError;
     zip_error_init_with_code(&zipError, error);
-    tlp::warning() << "Failed to open file " << tlp::QStringToTlpString(archivePath) << ": " << zip_error_strerror(&zipError) << std::endl;
+    tlp::warning() << "Failed to open file " << tlp::QStringToTlpString(archivePath) << ": "
+                   << zip_error_strerror(&zipError) << std::endl;
     return false;
   }
 
@@ -179,7 +174,7 @@ bool ZIPFacade::unzip(const QString &rootPath, const QString &archivePath,
     outFile.write(data, zipInfo.size);
     free(data);
   }
-  
+
   zip_close(zipArchive);
 
   if (deleteProgress)
