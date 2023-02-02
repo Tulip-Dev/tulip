@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipGUIInclude} ${TulipOGLInclude} ${QuazipInclude})
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipGUIInclude} ${TulipOGLInclude})
 
 QTX_SET_INCLUDES_AND_DEFINITIONS()
 
@@ -17,8 +17,7 @@ TARGET_LINK_LIBRARIES(packagePlugins
                       ${LibTulipGUIName}
                       ${LibTulipOGLName}
                       ${OGDFLibrary}
-                      ${QT_LIBRARIES}
-                      ${QuazipLibrary})
+                      ${QT_LIBRARIES})
 
 IF(NOT WIN32)
   TARGET_LINK_LIBRARIES(packagePlugins pthread)

@@ -102,6 +102,7 @@ The following dependencies are required to build Tulip:
   * [FreeType](https://www.freetype.org) 
   * [zlib](http://zlib.net)
   * [Qt](https://www.qt.io) >= 5.6
+  * [libzip](https://libzip.org) >= 0.6
   * [OpenGL](https://www.opengl.org) >= 2.0
   * [GLEW](http://glew.sourceforge.net/) >= 1.4
 
@@ -116,7 +117,6 @@ The following dependencies are also needed but they will be compiled from the Tu
 source tree if they can not be found on your system:
 
   * [Qhull](http://www.qhull.org/)
-  * [QuaZIP](http://quazip.sourceforge.net/)
   * [yajl](https://lloyd.github.io/yajl/) >= 2.0
   
 In order to generate the documentation, the following tools must be installed:

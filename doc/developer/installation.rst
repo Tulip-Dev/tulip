@@ -44,7 +44,7 @@ The following dependencies are also needed but they will be compiled from the Tu
 source tree if they can not be found on your system:
 
 * `Qhull <http://www.qhull.org/>`_
-* `QuaZIP <http://quazip.sourceforge.net/>`_
+* `libzip <https://libzip.org/>`_
 * `yajl <https://lloyd.github.io/yajl/>`_ >= 2.0
   
 In order to generate the documentation, the following tools must be installed:

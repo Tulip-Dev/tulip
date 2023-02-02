@@ -27,7 +27,7 @@
 //#include <QXmlStreamReader>
 
 #include <tulip/SimplePluginProgress.h>
-#include <tulip/QuaZIPFacade.h>
+#include <tulip/ZIPFacade.h>
 #include <tulip/TlpQtTools.h>
 
 #include <fstream>
@@ -79,7 +79,7 @@ bool TulipProject::openProjectFile(const QString &file, tlp::PluginProgress *pro
     progress->setError(tlp::QStringToTlpString(file) + " is a directory, not a regular file");
   }
 
-  else if (!QuaZIPFacade::unzip(rootDir(), file, progress)) {
+  else if (!ZIPFacade::unzip(rootDir(), file, progress)) {
     progress->setError("Failed to unzip project.");
   }
 
@@ -122,7 +122,7 @@ bool TulipProject::write(const QString &file, tlp::PluginProgress *progress) {
     return false;
   }
 
-  if (!QuaZIPFacade::zipDir(rootDir(), file)) {
+  if (!ZIPFacade::zipDir(rootDir(), file)) {
     progress->setError("Failed to zip project.");
     return false;
   }

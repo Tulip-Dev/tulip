@@ -15,12 +15,6 @@ libextension=$(echo @CMAKE_SHARED_LIBRARY_SUFFIX@ | cut -d'.' -f 2)
 plugincxxflags="-fPIC -DPIC"
 pluginldflags=-shared
 pluginpath=@libdir@/tulip
-quaziplib=@QuazipLibrary@
-# unset quaziplib if it is not a shared lib
-echo $quaziplib | grep '@CMAKE_SHARED_LIBRARY_SUFFIX@' > /dev/null 2>&1
-if [ $? -ne 0 ]; then
-    unset quaziplib
-fi
 
 if [ "@CMAKE_DEBUG_MODE@" = "FALSE" ]; then
   ndebugflag=-DNDEBUG
@@ -62,11 +56,6 @@ if [ $WINDOWS -eq 0 ] ; then
     pluginpath=${prefix}/lib/tulip
     libdir=${prefix}/bin
   fi
-fi
-
-# check QuazipLibrary
-if [ "@QUAZIP_FOUND@" = "FALSE" ]; then
-   quaziplib=${libdir}lib${quaziplib}.${libextension}
 fi
 
 usage()
@@ -118,7 +107,7 @@ while test $# -gt 0; do
       OUTPUT=`echo ${OUTPUT} @GL_LDFLAGS@ @LIB_GL@`
       ;;
     --libs)
-      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} ${libdir}/libtulip-ogl-${libversion}.${libextension} ${libdir}/lib@FTGLLibrary@.${libextension} ${libdir}/libtulip-gui-${libversion}.${libextension} ${quaziplib} @CMAKE_SHARED_LINKER_FLAGS@ @OPENMP_CXX_FLAGS@`
+      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} ${libdir}/libtulip-ogl-${libversion}.${libextension} ${libdir}/lib@FTGLLibrary@.${libextension} ${libdir}/libtulip-gui-${libversion}.${libextension} @CMAKE_SHARED_LINKER_FLAGS@ @OPENMP_CXX_FLAGS@`
       ;;
     --lib_tulip)
       OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} @CMAKE_SHARED_LINKER_FLAGS@ @OPENMP_CXX_FLAGS@`

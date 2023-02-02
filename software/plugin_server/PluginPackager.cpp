@@ -30,7 +30,7 @@
 #include <tulip/PluginLister.h>
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginLoaderTxt.h>
-#include <tulip/QuaZIPFacade.h>
+#include <tulip/ZIPFacade.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/TlpTools.h>
 #include <tulip/Interactor.h>
@@ -96,8 +96,8 @@ int main(int argc, char **argv) {
     QDir pluginDir(component.absoluteFilePath());
     QDir::home().mkpath(outputDir.absoluteFilePath(component.fileName()));
 
-    if (!QuaZIPFacade::zipDir(pluginDir.absolutePath(),
-                              outputDir.absoluteFilePath(component.fileName() + QDir::separator() +
+    if (!ZIPFacade::zipDir(pluginDir.absolutePath(),
+			   outputDir.absoluteFilePath(component.fileName() + QDir::separator() +
                                                          "data-" + OS_PLATFORM + OS_ARCHITECTURE +
                                                          ".zip"))) {
       qFatal("Failed to zip archive");

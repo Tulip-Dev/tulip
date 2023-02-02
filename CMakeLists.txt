@@ -309,14 +309,17 @@ ENDIF(TULIP_BUILD_GL_TEX_LOADER)
   # Display Qt detected version
   MESSAGE(STATUS "Using Qt version ${QT_FULL_VERSION}")
 
+  # Libzip
+  IF(NOT TULIP_USE_THIRDPARTY_LIBZIP)
+    FIND_PACKAGE(libzip 1.0 QUIET)
+    IF(libzip_DIR)
+      SET(LIBZIP_FOUND TRUE)
+      MESSAGE(STATUS "Found Libzip (found version \" ${libzip_VERSION}\")")
+    ENDIF(libzip_DIR)
+  ELSE(NOT TULIP_USE_THIRDPARTY_LIBZIP)
+    UNSET(LIBZIP_FOUND CACHE)
+  ENDIF(NOT TULIP_USE_THIRDPARTY_LIBZIP)
 
-  # Quazip
-SET(TULIP_USE_THIRDPARTY_QUAZIP ${TULIP_USE_THIRDPARTY_STATIC_LIBS} CACHE BOOL "If activated, force the use of quazip library located in thirdparty instead of trying to find it on the system.")
-IF(NOT TULIP_USE_THIRDPARTY_QUAZIP)
-  FIND_PACKAGE(QuaZip)
-ELSE(NOT TULIP_USE_THIRDPARTY_QUAZIP)
-  UNSET(QUAZIP_FOUND CACHE)
-ENDIF(NOT TULIP_USE_THIRDPARTY_QUAZIP)
 ENDIF(NOT TULIP_BUILD_CORE_ONLY AND NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
 
 # Python
@@ -330,22 +333,18 @@ ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 SET(GZStreamInclude ${PROJECT_SOURCE_DIR}/thirdparty/gzstream/)
 SET(GZStreamLibrary gzstream)
 IF(NOT TULIP_BUILD_CORE_ONLY AND NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
-  IF(QUAZIP_FOUND)
-    SET(QuazipInclude ${QUAZIP_INCLUDE_DIRS})
-    SET(QuazipLibrary ${QUAZIP_LIBRARIES})
-  ELSE(QUAZIP_FOUND)
-    SET(QuazipInclude ${PROJECT_SOURCE_DIR}/thirdparty/quazip/)
-    SET(QuazipLibrary quazip)
-    # use static lib
-    ADD_DEFINITIONS(-DQUAZIP_STATIC)
-  ENDIF(QUAZIP_FOUND)
-
   SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl/)
   SET(FTGLLibrary ftgl)
   ADD_DEFINITIONS(-DFTGL_LIBRARY_STATIC)
   SET(Tess2Include ${PROJECT_SOURCE_DIR}/thirdparty/libtess2/Include)
   SET(Tess2Library tess2)
   ADD_DEFINITIONS(-DTESS2_LIBRARY_STATIC)
+  IF(LIBZIP_FOUND)
+    SET(zipLibrary zip)
+  ELSE(LIBZIP_FOUND)
+    SET(zipIncludes ${PROJECT_SOURCE_DIR}/thirdparty/libzip/lib ${PROJECT_BINARY_DIR}/thirdparty/libzip)
+    SET(zipLibrary ${PROJECT_BINARY_DIR}/thirdparty/libzip/lib/libzip.a)
+  ENDIF(LIBZIP_FOUND)
 ENDIF(NOT TULIP_BUILD_CORE_ONLY AND NOT TRAVIS_BUILD_THIRDPARTY_ONLY)
 
 SET(OGDFInclude ${PROJECT_SOURCE_DIR}/thirdparty/OGDF/include)

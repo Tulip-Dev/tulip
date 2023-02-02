@@ -29,7 +29,7 @@
 #include <tulip/PluginLister.h>
 #include <tulip/SystemDefinition.h>
 #include <tulip/YajlFacade.h>
-#include <tulip/QuaZIPFacade.h>
+#include <tulip/ZIPFacade.h>
 #include <tulip/TlpQtTools.h>
 
 using namespace tlp;
@@ -95,7 +95,7 @@ public:
     tmpOut.write(reply->readAll());
     tmpOut.close();
     reply->close();
-    QuaZIPFacade::unzip(tlp::localPluginsPath(), tmpOutPath);
+    ZIPFacade::unzip(tlp::localPluginsPath(), tmpOutPath);
     tmpOut.remove();
   }
 

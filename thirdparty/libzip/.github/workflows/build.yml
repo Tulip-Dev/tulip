@@ -1,0 +1,47 @@
+name: build
+on: [push]
+
+jobs:
+  all:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+#        os: [macos-latest, ubuntu-latest]
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: install dependencies (Linux)
+        if: ${{ runner.os == 'Linux' }}
+        run: |
+          sudo apt-get install libzstd-dev
+      - name: install dependencies (Windows)
+        if: ${{ runner.os == 'Windows' }}
+        uses: lukka/run-vcpkg@v7
+        id: runvcpkg
+        with:
+          vcpkgGitCommitId: 8bb3f9e4a08a5b71ee93a6f1bcdd7a258bb48392
+          vcpkgTriplet: x64-windows
+          vcpkgArguments: zlib bzip2 liblzma zstd
+      - name: prepare build directory
+        run: |
+          cmake -E make_directory ${{runner.workspace}}/build
+      - name: configure (Unix)
+        if: ${{ runner.os != 'Windows' }}
+        working-directory: ${{runner.workspace}}/build
+        run: |
+          cmake ${{github.workspace}}
+      - name: configure (Windows)
+        if: ${{ runner.os == 'Windows' }}
+        working-directory: ${{runner.workspace}}/build
+        run: |
+          cmake -DCMAKE_TOOLCHAIN_FILE=${{env.VCPKG_ROOT}}/scripts/buildsystems/vcpkg.cmake ${{github.workspace}}
+      - name: build
+        working-directory: ${{runner.workspace}}/build
+        run: |
+          cmake --build . --config Release
+      - name: test
+        working-directory: ${{runner.workspace}}/build
+        run: |
+          ctest -v -C Release
