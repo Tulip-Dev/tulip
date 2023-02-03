@@ -330,7 +330,7 @@ protected:
   bool _shellWidget;
   bool _moduleEditor;
 
-  QMainWindow *_mainWindow;
+  static QMainWindow *_mainWindow;
 
   QString _indentPattern;
 };

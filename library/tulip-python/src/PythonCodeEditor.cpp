@@ -446,6 +446,7 @@ void FindReplaceDialog::doReplaceAll() {
 
 AutoCompletionList *PythonCodeEditor::_autoCompletionList = nullptr;
 AutoCompletionDataBase *PythonCodeEditor::_autoCompletionDb = nullptr;
+QMainWindow *PythonCodeEditor::_mainWindow = nullptr;
 
 PythonCodeEditor::PythonCodeEditor(QWidget *parent)
     : QPlainTextEdit(parent), _highlighter(nullptr), _tooltipActive(false), _indentPattern(4, ' ') {
