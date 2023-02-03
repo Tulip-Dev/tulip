@@ -28,11 +28,11 @@ void PluginDocDialog::showDoc(QWidget *parent, QString pluginName, QString plugi
     doc.append("<br/><br/>The parameters are:<ul>");
     for (int i = 0; i < nbParams; ++i) {
       auto name = model->getParameterName(i);
+      bool mandatory = model->isMandatory(i);
       auto pos = name.indexOf("::");
       if (pos != -1)
         name = name.mid(pos + 2);
-      doc.append(
-          QString("<br/><b>-&nbsp;&quot;%1&quot;</b>%2").arg(name).arg(model->getParameterHelp(i)));
+      doc.append(QString("<br/><b>-&nbsp;&quot;%1&quot;</b>%2%3").arg(name).arg(mandatory ? "&nbsp;<i>[mandatory]</i>" : "").arg(model->getParameterHelp(i)));
     }
   }
 

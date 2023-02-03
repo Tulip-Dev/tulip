@@ -52,6 +52,7 @@ public:
   bool setData(const QModelIndex &index, const QVariant &value, int role) override;
   QString getParameterName(int section);
   QString getParameterHelp(int section);
+  bool isMandatory(int section);
 };
 } // namespace tlp
 

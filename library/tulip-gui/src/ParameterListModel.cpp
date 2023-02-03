@@ -182,4 +182,8 @@ QString ParameterListModel::getParameterHelp(int section) {
   return tlp::tlpStringToQString(_params[section].getHelp());
 }
 
+bool ParameterListModel::isMandatory(int section) {
+  return _params[section].isMandatory();
+}
+
 } // namespace tlp
