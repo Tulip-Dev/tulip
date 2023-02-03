@@ -32,7 +32,10 @@ void PluginDocDialog::showDoc(QWidget *parent, QString pluginName, QString plugi
       auto pos = name.indexOf("::");
       if (pos != -1)
         name = name.mid(pos + 2);
-      doc.append(QString("<br/><b>-&nbsp;&quot;%1&quot;</b>%2%3").arg(name).arg(mandatory ? "&nbsp;<i>[mandatory]</i>" : "").arg(model->getParameterHelp(i)));
+      doc.append(QString("<br/><b>-&nbsp;&quot;%1&quot;</b>%2%3")
+                     .arg(name)
+                     .arg(mandatory ? "&nbsp;<i>[mandatory]</i>" : "")
+                     .arg(model->getParameterHelp(i)));
     }
   }
 
