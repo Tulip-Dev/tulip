@@ -218,7 +218,7 @@ public:
   PLUGININFORMATION("FM^3 (OGDF)", "Stephan Hachul", "09/11/2007",
                     "Implements the FM³ layout algorithm by Hachul and Jünger. It is a multilevel, "
                     "force-directed layout algorithm that can be applied to very large graphs.",
-                    "1.4", "Force Directed")
+                    "1.5", "Force Directed")
   OGDFFm3(const tlp::PluginContext *context);
   ~OGDFFm3() override;
   void beforeCall() override;
@@ -231,7 +231,7 @@ PLUGIN(OGDFFm3)
 
 OGDFFm3::OGDFFm3(const tlp::PluginContext *context)
     : OGDFLayoutPluginBase(context, context ? new ogdf::FMMMLayout() : nullptr) {
-  addInParameter<NumericProperty *>("edge length property", paramHelp[0], "viewMetric", false);
+  addInParameter<NumericProperty *>("edge length property", paramHelp[0], "", false);
   addInParameter<SizeProperty>("node size", paramHelp[1], "viewSize", false);
   addInParameter<double>("unit edge length", paramHelp[2], "10.0", false);
   addInParameter<bool>("new initial placement", paramHelp[3], "true");
