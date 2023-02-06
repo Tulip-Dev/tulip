@@ -250,10 +250,10 @@ bool WorkspaceExposeWidget::eventFilter(QObject *obj, QEvent *ev) {
     if (item->shouldClose(static_cast<QGraphicsSceneMouseEvent *>(ev)->pos())) {
       // remove from _items
       for (unsigned int i = 0; i < _items.size(); ++i)
-	if (item == _items[i]) {
-	  _items.erase(_items.begin() + i);
-	  break;
-	}
+        if (item == _items[i]) {
+          _items.erase(_items.begin() + i);
+          break;
+        }
       item->panel()->close();
       item->deleteLater();
 
@@ -273,8 +273,7 @@ bool WorkspaceExposeWidget::eventFilter(QObject *obj, QEvent *ev) {
     if (ev->type() == QEvent::GraphicsSceneMouseMove) {
       QGraphicsSceneMouseEvent *mouseEv = static_cast<QGraphicsSceneMouseEvent *>(ev);
       QPointF itemPos = mouseEv->scenePos();
-      unsigned int itemPerLine =
-	floor(width() / (previewSize().width() + MARGIN));
+      unsigned int itemPerLine = floor(width() / (previewSize().width() + MARGIN));
       unsigned int nbLines = _items.size() / itemPerLine;
       unsigned int line = itemPos.y() / (previewSize().height() + MARGIN);
       line = std::min<int>(nbLines, line);
@@ -282,9 +281,9 @@ bool WorkspaceExposeWidget::eventFilter(QObject *obj, QEvent *ev) {
       unsigned int index = line * itemPerLine + col;
 
       unsigned int i = 0;
-      for(; i < _items.size(); ++i)
-	if (item == _items[i])
-	  break;
+      for (; i < _items.size(); ++i)
+        if (item == _items[i])
+          break;
       if (index != i) {
         _items.erase(_items.begin() + i);
 
@@ -317,7 +316,7 @@ bool WorkspaceExposeWidget::event(QEvent *event) {
 
 void WorkspaceExposeWidget::itemOpened() {
   PreviewItem *item = static_cast<PreviewItem *>(sender());
-  for(unsigned int i = 0; i < _items.size(); ++i)
+  for (unsigned int i = 0; i < _items.size(); ++i)
     if (item == _items[i]) {
       _currentPanelIndex = i;
       break;
