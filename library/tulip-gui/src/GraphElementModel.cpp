@@ -88,8 +88,8 @@ Qt::ItemFlags GraphElementModel::flags(const QModelIndex &index) const {
 #endif
 }
 
-QVector<PropertyInterface *> GraphElementModel::getGraphProperties() const {
-  QVector<PropertyInterface *> properties;
+std::vector<PropertyInterface *> GraphElementModel::getGraphProperties() const {
+  std::vector<PropertyInterface *> properties;
   for (PropertyInterface *prop : _graph->getObjectProperties()) {
     auto propName = prop->getName();
     // an empty set indicates that all the properties are visible
@@ -99,7 +99,7 @@ QVector<PropertyInterface *> GraphElementModel::getGraphProperties() const {
     if (propName == "viewMetaGraph")
       continue;
 #endif
-    properties.append(prop);
+    properties.push_back(prop);
   }
   return properties;
 }

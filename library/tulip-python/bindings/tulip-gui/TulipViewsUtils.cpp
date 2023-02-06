@@ -68,8 +68,7 @@ std::vector<tlp::View *> TulipViewsManager::getOpenedViews() {
   tlp::Workspace *workspace = tlpWorkspace();
 
   if (workspace) {
-    QList<tlp::View *> views = workspace->panels();
-    return views.toVector().toStdVector();
+    return workspace->panels();
   } else {
     return openedViews;
   }
@@ -148,11 +147,11 @@ std::vector<tlp::View *> TulipViewsManager::getViewsOfGraph(tlp::Graph *graph) {
   std::vector<tlp::View *> ret;
 
   if (workspace) {
-    QList<tlp::View *> views = workspace->panels();
+    std::vector<tlp::View *> views = workspace->panels();
 
-    for (int i = 0; i < views.count(); ++i) {
-      if (views.at(i)->graph() == graph) {
-        ret.push_back(views.at(i));
+    for (unsigned int i = 0; i < views.size(); ++i) {
+      if (views[i]->graph() == graph) {
+        ret.push_back(views[i]);
       }
     }
   } else {
@@ -170,11 +169,11 @@ void TulipViewsManager::closeAllViews() {
   tlp::Workspace *workspace = tlpWorkspace();
 
   if (workspace) {
-    QList<tlp::View *> views = workspace->panels();
+    std::vector<tlp::View *> views = workspace->panels();
 
     for (int i = 0; i < views.size(); ++i) {
-      if (views.at(i)->name() != "Python Script view") {
-        workspace->delView(views.at(i));
+      if (views[i]->name() != "Python Script view") {
+        workspace->delView(views[i]);
       }
     }
   } else {
@@ -190,11 +189,11 @@ void TulipViewsManager::closeViewsRelatedToGraph(tlp::Graph *graph) {
   tlp::Workspace *workspace = tlpWorkspace();
 
   if (workspace) {
-    QList<tlp::View *> views = workspace->panels();
+    std::vector<tlp::View *> views = workspace->panels();
 
-    for (int i = 0; i < views.count(); ++i) {
-      if (views.at(i)->graph() == graph) {
-        workspace->delView(views.at(i));
+    for (int i = 0; i < views.size(); ++i) {
+      if (views[i]->graph() == graph) {
+        workspace->delView(views[i]);
       }
     }
   } else {

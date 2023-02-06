@@ -134,15 +134,16 @@ WorkspaceExposeWidget::~WorkspaceExposeWidget() {
   delete scene();
 }
 
-int WorkspaceExposeWidget::currentPanelIndex() const {
+unsigned int WorkspaceExposeWidget::currentPanelIndex() const {
   return _currentPanelIndex;
 }
 
-QVector<WorkspacePanel *> WorkspaceExposeWidget::panels() const {
-  QVector<WorkspacePanel *> result;
+std::vector<WorkspacePanel *> WorkspaceExposeWidget::panels() const {
+  std::vector<WorkspacePanel *> result;
+  result.reserve(_items.size());
 
   for (auto item : _items)
-    result << item->panel();
+    result.push_back(item->panel());
 
   return result;
 }
@@ -151,10 +152,11 @@ bool WorkspaceExposeWidget::isSwitchToSingleMode() const {
   return _switchToSingleMode;
 }
 
-void WorkspaceExposeWidget::setData(const QVector<WorkspacePanel *> &panels,
-                                    int currentPanelIndex) {
+void WorkspaceExposeWidget::setData(const std::vector<WorkspacePanel *> &panels,
+                                    unsigned int currentPanelIndex) {
   scene()->clear();
   _items.clear();
+  _items.reserve(panels.size());
 
   for (auto p : panels) {
     QPixmap pixmap = p->view()
@@ -162,7 +164,7 @@ void WorkspaceExposeWidget::setData(const QVector<WorkspacePanel *> &panels,
                          .scaled(previewSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     PreviewItem *item = new PreviewItem(pixmap, p);
     scene()->addItem(item);
-    _items << item;
+    _items.push_back(item);
     item->installEventFilter(this);
     connect(item, SIGNAL(opened()), this, SLOT(itemOpened()));
   }
@@ -246,7 +248,12 @@ bool WorkspaceExposeWidget::eventFilter(QObject *obj, QEvent *ev) {
 
   if (ev->type() == QEvent::GraphicsSceneMousePress) {
     if (item->shouldClose(static_cast<QGraphicsSceneMouseEvent *>(ev)->pos())) {
-      _items.removeAll(item);
+      // remove from _items
+      for (unsigned int i = 0; i < _items.size(); ++i)
+	if (item == _items[i]) {
+	  _items.erase(_items.begin() + i);
+	  break;
+	}
       item->panel()->close();
       item->deleteLater();
 
@@ -266,23 +273,25 @@ bool WorkspaceExposeWidget::eventFilter(QObject *obj, QEvent *ev) {
     if (ev->type() == QEvent::GraphicsSceneMouseMove) {
       QGraphicsSceneMouseEvent *mouseEv = static_cast<QGraphicsSceneMouseEvent *>(ev);
       QPointF itemPos = mouseEv->scenePos();
-      int itemPerLine = floor(width() / (previewSize().width() + MARGIN));
-      int nbLines = _items.size() / itemPerLine;
-      int line = itemPos.y() / (previewSize().height() + MARGIN);
+      unsigned int itemPerLine =
+	floor(width() / (previewSize().width() + MARGIN));
+      unsigned int nbLines = _items.size() / itemPerLine;
+      unsigned int line = itemPos.y() / (previewSize().height() + MARGIN);
       line = std::min<int>(nbLines, line);
-      int col = itemPos.x() / (previewSize().width() + MARGIN);
-      int index = line * itemPerLine + col;
+      unsigned int col = itemPos.x() / (previewSize().width() + MARGIN);
+      unsigned int index = line * itemPerLine + col;
 
-      if (index != _items.indexOf(item)) {
-        _items.removeOne(item);
-
-        if (index < 0)
-          index = 0;
+      unsigned int i = 0;
+      for(; i < _items.size(); ++i)
+	if (item == _items[i])
+	  break;
+      if (index != i) {
+        _items.erase(_items.begin() + i);
 
         if (index > _items.size())
           index = _items.size();
 
-        _items.insert(index, item);
+        _items.insert(_items.begin() + index, item);
         updatePositions(false);
       }
     } else if (ev->type() == QEvent::GraphicsSceneMouseRelease) {
@@ -308,7 +317,11 @@ bool WorkspaceExposeWidget::event(QEvent *event) {
 
 void WorkspaceExposeWidget::itemOpened() {
   PreviewItem *item = static_cast<PreviewItem *>(sender());
-  _currentPanelIndex = _items.indexOf(item);
+  for(unsigned int i = 0; i < _items.size(); ++i)
+    if (item == _items[i]) {
+      _currentPanelIndex = i;
+      break;
+    }
   _switchToSingleMode = true;
   finish();
 }

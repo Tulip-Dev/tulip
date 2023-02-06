@@ -28,8 +28,6 @@
 #include <tulip/TulipModel.h>
 #include <tulip/GraphModel.h>
 
-#include <QVector>
-
 namespace tlp {
 
 class TLP_QT_SCOPE GraphElementModel : public TulipModel {
@@ -59,7 +57,7 @@ public:
   }
 
 protected:
-  QVector<PropertyInterface *> getGraphProperties() const;
+  std::vector<PropertyInterface *> getGraphProperties() const;
 
   Graph *_graph;
   unsigned int _id;
