@@ -23,13 +23,12 @@
 #include <tulip/Plugin.h>
 #include <tulip/PluginLister.h>
 
-#include <QObject>
+#include <QAction>
 #include <QCursor>
 #include <QMap>
 
 #include <string>
 
-class QAction;
 class QLabel;
 
 namespace tlp {
@@ -64,7 +63,6 @@ class TLP_QT_SCOPE Interactor : public QObject, public Plugin {
   Q_OBJECT
   Q_PROPERTY(unsigned int priority READ priority)
   Q_PROPERTY(QAction *action READ action)
-  Q_PROPERTY(tlp::View *view READ view WRITE setView)
   Q_PROPERTY(QCursor cursor READ cursor)
 
 public:

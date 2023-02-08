@@ -24,6 +24,7 @@
 #include <tulip/tulipconf.h>
 #include <tulip/TulipModel.h>
 #include <tulip/Observable.h>
+#include <tulip/Graph.h>
 
 #include <QList>
 #include <QSet>

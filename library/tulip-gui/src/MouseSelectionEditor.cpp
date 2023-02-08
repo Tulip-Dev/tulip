@@ -291,7 +291,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       break;
     }
 
-    case Qt::MidButton:
+    case Qt::MiddleButton:
       undoEdition();
       glMainWidget->setCursor(QCursor(Qt::ArrowCursor));
       break;

@@ -36,7 +36,11 @@ class TLP_QT_SCOPE TreeViewComboBox : public QComboBox {
 public:
   explicit TreeViewComboBox(QWidget *parent = nullptr);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
   void setModel(QAbstractItemModel *model);
+#else
+  void setModel(QAbstractItemModel *model) override;
+#endif
 
   void showPopup() override;
   void hidePopup() override;

@@ -173,19 +173,19 @@ void AboutTulipPage::rssReply(QNetworkReply *reply) {
     if (xmlReader.readNextStartElement()) {
       QString title, description;
 
-      if (xmlReader.name() == "item") {
+      if (xmlReader.name() == QString("item")) {
         ++i;
         _ui->rssError->setVisible(false);
         _ui->rssScroll->setVisible(true);
         QXmlStreamReader::TokenType p(xmlReader.readNext());
 
-        while (xmlReader.name() != "item" && p != QXmlStreamReader::EndElement) {
+        while (xmlReader.name() != QString("item") && p != QXmlStreamReader::EndElement) {
           xmlReader.readNextStartElement();
 
-          if (xmlReader.name() == "title")
+          if (xmlReader.name() == QString("title"))
             title = xmlReader.readElementText();
 
-          if (xmlReader.name() == "description")
+          if (xmlReader.name() == QString("description"))
             description = xmlReader.readElementText();
         }
 

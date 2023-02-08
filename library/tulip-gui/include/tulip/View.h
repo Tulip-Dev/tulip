@@ -28,6 +28,7 @@
 
 #include <tulip/tulipconf.h>
 #include <tulip/Edge.h>
+#include <tulip/Interactor.h>
 #include <tulip/Observable.h>
 #include <tulip/Plugin.h>
 
@@ -42,7 +43,6 @@ class QPoint;
 namespace tlp {
 static const std::string VIEW_CATEGORY = "Panel";
 
-class Interactor;
 class GlMainWidget;
 class ViewToolTipAndUrlManager;
 

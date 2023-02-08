@@ -107,7 +107,7 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
       cursorPos = static_cast<QWheelEvent *>(e)->position();
 #endif
     } else {
-      cursorPos = static_cast<QMouseEvent *>(e)->localPos();
+      cursorPos = static_cast<QMouseEvent *>(e)->pos();
     }
 
     if (!widgetRect.contains(cursorPos)) {

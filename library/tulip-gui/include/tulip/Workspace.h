@@ -25,6 +25,7 @@
 #include <QMap>
 
 #include <tulip/tulipconf.h>
+#include <tulip/Graph.h>
 
 class PlaceHolderWidget;
 
@@ -40,7 +41,6 @@ namespace tlp {
 class PluginProgress;
 class View;
 class WorkspacePanel;
-class Graph;
 class GraphHierarchiesModel;
 class TulipProject;
 

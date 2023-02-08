@@ -25,11 +25,11 @@
 #include <QGraphicsView>
 
 #include <tulip/tulipconf.h>
+#include <tulip/WorkspacePanel.h>
 
 class QAbstractAnimation;
 
 namespace tlp {
-class WorkspacePanel;
 
 class PreviewItem : public QGraphicsObject {
   Q_OBJECT

@@ -61,7 +61,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
       return true;
     }
 
-    if (qMouseEv->buttons() == Qt::MidButton) {
+    if (qMouseEv->buttons() == Qt::MiddleButton) {
       started = false;
       glMainWidget->redraw();
       return true;

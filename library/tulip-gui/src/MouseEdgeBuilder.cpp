@@ -93,7 +93,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
       return true;
     }
 
-    if (qMouseEv->buttons() == Qt::MidButton) {
+    if (qMouseEv->buttons() == Qt::MiddleButton) {
       _bends.clear();
       _started = false;
       _source = node();

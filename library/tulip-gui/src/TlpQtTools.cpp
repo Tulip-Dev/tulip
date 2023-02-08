@@ -163,7 +163,7 @@ QString getPluginPackageName(const QString &pluginName) {
 }
 
 QString getPluginLocalInstallationDir() {
-  return QStandardPaths::standardLocations(QStandardPaths::DataLocation).at(0) + "/plugins";
+  return QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).at(0) + "/plugins";
 }
 
 QString localPluginsPath() {
