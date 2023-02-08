@@ -129,13 +129,12 @@ QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem,
   _ui->setupUi(this);
 
   connect(_ui->backgroundColorButton, SIGNAL(colorChanged(QColor)), this,
-	  SLOT(setBackgroundColor(const QColor &)));
+          SLOT(setBackgroundColor(const QColor &)));
   connect(_ui->colorInterpolationToggle, SIGNAL(clicked(bool)), this,
           SLOT(setColorInterpolation(bool)));
   connect(_ui->sizeInterpolationToggle, SIGNAL(clicked(bool)), this,
           SLOT(setSizeInterpolation(bool)));
-  connect(_ui->labelColorButton, SIGNAL(clicked(bool)), this,
-          SLOT(setLabelColor()));
+  connect(_ui->labelColorButton, SIGNAL(clicked(bool)), this, SLOT(setLabelColor()));
   connect(_ui->nodesColorCaptionButton, SIGNAL(clicked(bool)), this,
           SLOT(showHideNodesColorCaption()));
   connect(_ui->nodesSizeCaptionButton, SIGNAL(clicked(bool)), this,
@@ -144,34 +143,21 @@ QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem,
           SLOT(showHideEdgesColorCaption()));
   connect(_ui->edgesSizeCaptionButton, SIGNAL(clicked(bool)), this,
           SLOT(showHideEdgesSizeCaption()));
-  connect(_ui->showEdgesToggle, SIGNAL(clicked(bool)), this,
-	  SLOT(setEdgesVisible(bool)));
-  connect(_ui->showLabelsToggle, SIGNAL(clicked(bool)), this,
-          SLOT(setLabelsVisible(bool)));
-  connect(_ui->labelsScaledToggle, SIGNAL(clicked(bool)), this,
-          SLOT(setLabelsScaled(bool)));
-  connect(_ui->showNodesToggle, SIGNAL(clicked(bool)), this,
-	  SLOT(setNodesVisible(bool)));
+  connect(_ui->showEdgesToggle, SIGNAL(clicked(bool)), this, SLOT(setEdgesVisible(bool)));
+  connect(_ui->showLabelsToggle, SIGNAL(clicked(bool)), this, SLOT(setLabelsVisible(bool)));
+  connect(_ui->labelsScaledToggle, SIGNAL(clicked(bool)), this, SLOT(setLabelsScaled(bool)));
+  connect(_ui->showNodesToggle, SIGNAL(clicked(bool)), this, SLOT(setNodesVisible(bool)));
   connect(_ui->fontButton, SIGNAL(clicked(bool)), this, SLOT(selectFont()));
   connect(_ui->screenshotButton, SIGNAL(clicked(bool)), this, SLOT(takeSnapshot()));
-  connect(_ui->nodeColorButton, SIGNAL(clicked(bool)), this,
-          SLOT(setNodeColor()));
-  connect(_ui->edgeColorButton, SIGNAL(clicked(bool)), this,
-          SLOT(setEdgeColor()));
-  connect(_ui->nodeBorderColorButton, SIGNAL(clicked(bool)), this,
-          SLOT(setNodeBorderColor()));
-  connect(_ui->edgeBorderColorButton, SIGNAL(clicked(bool)), this,
-          SLOT(setEdgeBorderColor()));
-  connect(_ui->nodeShapeButton, SIGNAL(clicked(bool)), this,
-	  SLOT(setNodeShape()));
-  connect(_ui->edgeShapeButton, SIGNAL(clicked(bool)), this,
-	  SLOT(setEdgeShape()));
-  connect(_ui->nodeSizeButton, SIGNAL(clicked(bool)), this,
-	  SLOT(setNodeSize()));
-  connect(_ui->edgeSizeButton, SIGNAL(clicked(bool)), this,
-	  SLOT(setEdgeSize()));
-  connect(_ui->labelPositionButton, SIGNAL(clicked(bool)), this,
-	  SLOT(setNodeLabelPosition()));
+  connect(_ui->nodeColorButton, SIGNAL(clicked(bool)), this, SLOT(setNodeColor()));
+  connect(_ui->edgeColorButton, SIGNAL(clicked(bool)), this, SLOT(setEdgeColor()));
+  connect(_ui->nodeBorderColorButton, SIGNAL(clicked(bool)), this, SLOT(setNodeBorderColor()));
+  connect(_ui->edgeBorderColorButton, SIGNAL(clicked(bool)), this, SLOT(setEdgeBorderColor()));
+  connect(_ui->nodeShapeButton, SIGNAL(clicked(bool)), this, SLOT(setNodeShape()));
+  connect(_ui->edgeShapeButton, SIGNAL(clicked(bool)), this, SLOT(setEdgeShape()));
+  connect(_ui->nodeSizeButton, SIGNAL(clicked(bool)), this, SLOT(setNodeSize()));
+  connect(_ui->edgeSizeButton, SIGNAL(clicked(bool)), this, SLOT(setEdgeSize()));
+  connect(_ui->labelPositionButton, SIGNAL(clicked(bool)), this, SLOT(setNodeLabelPosition()));
 
   _ui->backgroundColorButton->setDialogTitle("Choose the background color");
 
