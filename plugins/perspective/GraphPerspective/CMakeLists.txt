@@ -12,7 +12,6 @@ src/GraphHierarchiesEditor.cpp
 src/GraphPerspective.cpp
 src/HeaderFrame.cpp
 src/ImportWizard.cpp
-src/OutputPanelButton.cpp
 src/PanelSelectionWizard.cpp
 src/PluginDocDialog.cpp
 src/PreferencesDialog.cpp
@@ -52,7 +51,6 @@ include/GraphPerspective.h
 include/GraphPerspectiveLogger.h
 include/HeaderFrame.h
 include/ImportWizard.h
-include/OutputPanelButton.h
 include/PanelSelectionWizard.h
 include/PreferencesDialog.h
 include/SearchWidget.h

@@ -701,33 +701,6 @@ stop:0 rgb(65,65,65),
 stop:1 rgb(50,50,50));
 }
 
-#bottomFrame OutputPanelButton{
-border-image: url(:/tulip/graphperspective/ui/panel_button.png) 2 2 2 19;
-border-width: 2px 2px 2px 19px;
-padding-left: -17;
-padding-right: 4;
-}
-
-#bottomFrame OutputPanelButton:checked{
-border-image: url(:/tulip/graphperspective/ui/panel_button_checked.png) 2 2 2 19
-}
-
-#bottomFrame OutputPanelButton::menu-indicator{
-width:0; height:0
-}
-
-#bottomFrame OutputPanelButton:checked:hover{
-border-image: url(:/tulip/graphperspective/ui/panel_button_checked_hover.png) 2 2 2 19
-}
-
-#bottomFrame OutputPanelButton:pressed:hover{
-border-image: url(:/tulip/graphperspective/ui/panel_button_pressed.png) 2 2 2 19
-}
-
-#bottomFrame OutputPanelButton:hover{
-border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
-}
-
 #bottomFrame QToolButton {
 font: bold 10px;
 height:20px;
