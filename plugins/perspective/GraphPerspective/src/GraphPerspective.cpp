@@ -1285,7 +1285,7 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
     if (g->getName().empty()) {
       QString n =
           tlp::tlpStringToQString(module) + " - " + tlp::tlpStringToQString(data.toString());
-      n.replace(QRegExp("[\\w]*::"), ""); // remove words before "::"
+      n.replace(QRegularExpression("[\\w]*::"), ""); // remove words before "::"
       g->setName(tlp::QStringToTlpString(n));
     }
   } else {

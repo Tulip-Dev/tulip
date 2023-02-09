@@ -27,6 +27,7 @@
 #include "QuantitativeParallelAxis.h"
 
 #include <QAbstractButton>
+#include <QActionGroup>
 #include <QMenu>
 #include <QGraphicsView>
 #include <QGraphicsProxyWidget>

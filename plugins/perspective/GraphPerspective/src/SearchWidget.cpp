@@ -131,15 +131,13 @@ public:
     QString a(_a->getNodeStringValue(n).c_str());
     QString b(_b->getNodeStringValue(n).c_str());
     convertLikeFilter(b);
-    QRegExp regexp(b);
-    return regexp.exactMatch(a);
+    return QRegularExpression(b).match(a).hasMatch();
   }
   bool compare(edge e) override {
     QString a(_a->getEdgeStringValue(e).c_str());
     QString b(_b->getEdgeStringValue(e).c_str());
     convertLikeFilter(b);
-    QRegExp regexp(b);
-    return regexp.exactMatch(a);
+    return QRegularExpression(b).match(a).hasMatch();
   }
 };
 
@@ -149,15 +147,13 @@ public:
     QString a(_a->getNodeStringValue(n).c_str());
     QString b(_b->getNodeStringValue(n).c_str());
     convertLikeFilter(b);
-    QRegExp regexp(b, Qt::CaseInsensitive);
-    return regexp.exactMatch(a);
+    return QRegularExpression(b, QRegularExpression::CaseInsensitiveOption).match(a).hasMatch();
   }
   bool compare(edge e) override {
     QString a(_a->getEdgeStringValue(e).c_str());
     QString b(_b->getEdgeStringValue(e).c_str());
     convertLikeFilter(b);
-    QRegExp regexp(b, Qt::CaseInsensitive);
-    return regexp.exactMatch(a);
+    return QRegularExpression(b, QRegularExpression::CaseInsensitiveOption).match(a).hasMatch();
   }
 };
 

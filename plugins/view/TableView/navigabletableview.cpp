@@ -56,7 +56,14 @@ int NavigableTableView::sizeHintForRow(int row) const {
       continue;
 
     QModelIndex index = model()->index(row, column);
-    hint = qMax(hint, itemDelegate(index)->sizeHint(viewOptions(), index).height());
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    auto h = itemDelegate(index)->sizeHint(viewOptions(), index).height();
+#else
+    QStyleOptionViewItem option;
+    initViewItemOption(&option);
+    auto h = itemDelegateForIndex(index)->sizeHint(option, index).height();
+#endif
+    hint = qMax(hint, h);
   }
 
   return hint;
@@ -80,7 +87,14 @@ int NavigableTableView::sizeHintForColumn(int col) const {
 
   for (int row = top; row <= bottom; ++row) {
     QModelIndex index = model()->index(row, col);
-    hint = qMax(hint, itemDelegate(index)->sizeHint(viewOptions(), index).width());
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    auto w = itemDelegate(index)->sizeHint(viewOptions(), index).width();
+#else
+    QStyleOptionViewItem option;
+    initViewItemOption(&option);
+    auto w = itemDelegateForIndex(index)->sizeHint(option, index).width();
+#endif
+    hint = qMax(hint, w);
   }
 
   return hint;

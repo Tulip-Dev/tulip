@@ -343,8 +343,10 @@ font: 12px;
   </connection>
  </connections>
  <slots>
+  <slot>setPropsVisibility(int)</slot>
   <slot>showCustomContextMenu(QPoint)</slot>
   <slot>showSystemProperties(bool)</slot>
+  <slot>showVisualProperties(bool)</slot>
   <slot>checkAll(bool)</slot>
  </slots>
 </ui>

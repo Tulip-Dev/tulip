@@ -31,7 +31,7 @@ HeaderFrame::HeaderFrame(QWidget *parent)
     : QWidget(parent), _ui(new Ui::HeaderFrameData), _expanded(true) {
   _ui->setupUi(this);
   switchToLabel(_ui);
-  connect(_ui->menusCombo, SIGNAL(currentIndexChanged(QString)), this,
+  connect(_ui->menusCombo, SIGNAL(currentTextChanged(QString)), this,
           SIGNAL(menuChanged(QString)));
   connect(_ui->expandButton, SIGNAL(toggled(bool)), this, SLOT(setExpanded(bool)));
 }

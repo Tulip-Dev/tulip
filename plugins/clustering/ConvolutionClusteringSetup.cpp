@@ -118,6 +118,16 @@ ConvolutionClusteringSetup::ConvolutionClusteringSetup(ConvolutionClustering *co
     : QDialog(parent), _ui(new Ui::ConvolutionClusteringSetupData), convolPlugin(convolPlugin),
       useLogarithmicScale(false) {
   _ui->setupUi(this);
+
+  connect(_ui->widthSlider, SIGNAL(valueChanged()), this, SLOT(update()));
+  connect(_ui->okButton, SIGNAL(pressed()), this, SLOT(accept()));
+  connect(_ui->cancelButton, SIGNAL(pressed()), this, SLOT(reject()));
+  connect(_ui->discretizationSlider, SIGNAL(valueChanged()), this, SLOT(update()));
+  connect(_ui->discretizationSlider, SIGNAL(valueChanged()), _ui->LCDNumber1_3,
+          SLOT(display()));
+  connect(_ui->CheckBox1, SIGNAL(toggled), this, SLOT(setlog()));
+  connect(_ui->widthSlider, SIGNAL(valueChanged()), _ui->LCDNumber1, SLOT(display()));
+
   histogramWidget = new HistogramWidget(this, _ui->Frame3);
   QGridLayout *flayout = new QGridLayout(_ui->Frame3);
   flayout->setContentsMargins(1, 1, 1, 1);

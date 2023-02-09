@@ -613,6 +613,7 @@
   <slot>delGraph()</slot>
   <slot>cloneSubGraph()</slot>
   <slot>cloneSibling()</slot>
+  <slot>cloneSiblingWithProperties()</slot>
   <slot>delAllGraph()</slot>
   <slot>delAllNodes()</slot>
   <slot>delAllEdges()</slot>
@@ -624,6 +625,7 @@
   <slot>renameGraph()</slot>
   <slot>doubleClicked(QModelIndex)</slot>
   <slot>saveGraphToFile()</slot>
+  <slot>saveGraphHierarchyInTlpFile()</slot>
   <slot>addInducedSubGraph()</slot>
  </slots>
 </ui>
