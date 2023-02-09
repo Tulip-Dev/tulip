@@ -319,12 +319,12 @@ public:
         viewLayout->setNodeValue(n, Coord(x, y, z));
       }
       // parse node size
-	  else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == QString("viz:size")) {
+      else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == QString("viz:size")) {
         float size = xmlReader.attributes().value("value").toString().toFloat();
         viewSize->setNodeValue(n, Size(size, size, size));
       }
       // parse node attributes
-	  else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == QString("attvalue")) {
+      else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == QString("attvalue")) {
         string attributeId = "";
 
         if (xmlReader.attributes().hasAttribute("id")) {
@@ -341,7 +341,7 @@ public:
         }
       }
       // check for subgraph
-	  else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == QString("nodes")) {
+      else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == QString("nodes")) {
         Graph *sg = nodeToSubgraph.get(n.id);
 
         if (sg == nullptr) {
@@ -355,11 +355,11 @@ public:
 
         // create its nodes
         createNodes(xmlReader, sg);
-	  } else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == QString("edges")) {
+      } else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == QString("edges")) {
         // create its edges
         createEdges(xmlReader);
-	  } else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == QString("parents")) {
-	    while (!(xmlReader.isEndElement() && xmlReader.name() == QString("parents"))) {
+      } else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == QString("parents")) {
+        while (!(xmlReader.isEndElement() && xmlReader.name() == QString("parents"))) {
           xmlReader.readNext();
 
           // must be a parent

@@ -31,12 +31,12 @@ PathFinderConfigurationWidget::PathFinderConfigurationWidget(QWidget *parent)
   _ui->setupUi(this);
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-  #define textActivated activated
+#define textActivated activated
 #endif
   connect(_ui->weightCombo, SIGNAL(textActivated(const QString &)), this,
           SIGNAL(setWeightMetric(const QString &)));
-  connect(_ui->edgeOrientationCombo, SIGNAL(textActivated(const QString &)),
-	  this, SIGNAL(setEdgeOrientation(const QString &)));
+  connect(_ui->edgeOrientationCombo, SIGNAL(textActivated(const QString &)), this,
+          SIGNAL(setEdgeOrientation(const QString &)));
   connect(_ui->pathsTypeCombo, SIGNAL(textActivated(const QString &)), this,
           SIGNAL(setPathsType(const QString &)));
   connect(_ui->toleranceCheck, SIGNAL(clicked(bool)), this, SIGNAL(activateTolerance(bool)));
