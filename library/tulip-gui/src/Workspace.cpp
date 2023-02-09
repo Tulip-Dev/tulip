@@ -380,8 +380,6 @@ void Workspace::updatePanels() {
 
   if (_currentPanelIndex > _panels.size() - currentSlotsCount())
     _currentPanelIndex = _panels.size() - currentSlotsCount();
-  else
-    _currentPanelIndex = 0;
 
   //   Fill up slots according to the current index until there is no panel to show
   unsigned int i = _currentPanelIndex;
