@@ -298,7 +298,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   for (auto &layer : GeographicView::getMapLayers())
     mapTypeComboBox->addItem(layer.name);
 
-  connect(mapTypeComboBox, SIGNAL(currentIndexChanged(QString)), _geoView,
+  connect(mapTypeComboBox, SIGNAL(currentTextChanged(QString)), _geoView,
           SLOT(mapTypeChanged(QString)));
 
   // 2 push buttons

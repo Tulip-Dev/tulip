@@ -105,7 +105,7 @@ void GeographicView::mapTypeChanged(QString mapTypeName) {
   if (comboBox == nullptr)
     return;
 
-  disconnect(comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(mapTypeChanged(QString)));
+  disconnect(comboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(mapTypeChanged(QString)));
 
   _mapType = getMapType(mapTypeName);
 
@@ -114,7 +114,7 @@ void GeographicView::mapTypeChanged(QString mapTypeName) {
   comboBox->setCurrentIndex(0);
   comboBox->setItemText(0, mapTypeName);
 
-  connect(comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(mapTypeChanged(QString)));
+  connect(comboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(mapTypeChanged(QString)));
 }
 
 void GeographicView::fillContextMenu(QMenu *menu, const QPointF &pf) {
