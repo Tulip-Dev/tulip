@@ -395,12 +395,12 @@ PythonIDE::PythonIDE(QWidget *parent)
   connect(_ui->increaseFontSizeButton_2, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
   connect(_ui->decreaseFontSizeButton_3, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
   connect(_ui->increaseFontSizeButton_3, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
-  auto shortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Minus), _ui->tabWidget);
+  auto shortCut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Minus), _ui->tabWidget);
   connect(shortCut, SIGNAL(activated()), this, SLOT(decreaseFontSize()));
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton, "decrease font size", "-");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton_2, "decrease font size", "-");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->decreaseFontSizeButton_3, "decrease font size", "-");
-  shortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus), _ui->tabWidget);
+  shortCut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Plus), _ui->tabWidget);
   connect(shortCut, SIGNAL(activated()), this, SLOT(increaseFontSize()));
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton, "increase font size", "-");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->increaseFontSizeButton_2, "increase font size", "-");
